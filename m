@@ -2,156 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F059707DCD
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 12:15:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 780FA707DC5
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 12:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbjERKPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 06:15:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44244 "EHLO
+        id S230350AbjERKNI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 18 May 2023 06:13:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230424AbjERKPS (ORCPT
+        with ESMTP id S230269AbjERKMo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 06:15:18 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C04FD30C4;
-        Thu, 18 May 2023 03:14:41 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id 98e67ed59e1d1-24e3b69bc99so1504896a91.2;
-        Thu, 18 May 2023 03:14:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684404827; x=1686996827;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GKnnzGXKjlifoLEe2ffUscdlzM8XvwS7+Kvj9lIdVco=;
-        b=QxWSc6oOabwUF+x65pq/0ZNDCRmnnXk/P00+QMWNOg8rGYAIe/POJMvtKRZ9Gga+O/
-         WVpvMkZ3iPjjK+tpd/MAvtMhKGh04IW+1Iohf1jjpFC7RU1ZAEkehPT15cO+C8y7AXT8
-         Ubva3NCyCo0xPVqkE8Qy9hjD0+QdklCE5Ic2z1yPhn8rNNj4pd5f+W7iVruilGahhDQh
-         19vcqwU9J67nRLMUzwBUU/f3I07qShh9qtrbuG0r7ERWMY8zClHBy3TCblEFY157sY90
-         Rl/dbw3KspbIVtgxkj8AQe35dYIwNl4ss5EbRCgiYb2yDD/gNCy/RXnCFFyRflLokEeR
-         EPxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684404827; x=1686996827;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GKnnzGXKjlifoLEe2ffUscdlzM8XvwS7+Kvj9lIdVco=;
-        b=c1rI3sOFh+mXH6/lNDSWidiemQ1LzEl/SVLuM9UJPKAx6uLud08Nhdj7EW26xis9o4
-         clwgZ3GBOS/hIggbcLDEIh4ZN1UtEr06LNO6P/iRsV8gfsJXVnF9jBnk86sJ9TdXcbdW
-         z3MsrUBLuDsh1HDRamhZBiO9bHgOwNyEvuWmj+6LesZ/5FoLiJ/O718NrCkG+TgPkfM/
-         Ma2D3TggFJx/xnJEp274tKveTejKfNp1ziZhYiwvDUDdoe+v5Eq/ZKVOgXkwPdX2ESAa
-         f0pmd+bpbr7eX18aveK4nmETHeZc3cMFF4cvHkwVGatyTxIn23AjkjAhwhKoYMInWgaL
-         Yf2Q==
-X-Gm-Message-State: AC+VfDwxVhGfYL02wJ0+POMo26XY925VFomjatFg9k2HvfnbCo7lR4dc
-        2/udOGvWGlG9KNjRyoAVkhI=
-X-Google-Smtp-Source: ACHHUZ4XfDhhkXuOC1RR0g4nljcjcD2B2qaFw8mWjZZ92xIBS3E7dNySqykpzyIc2apmTF0rOqvp8Q==
-X-Received: by 2002:a17:90a:5e04:b0:24e:4231:ec6b with SMTP id w4-20020a17090a5e0400b0024e4231ec6bmr1989155pjf.21.1684404826766;
-        Thu, 18 May 2023 03:13:46 -0700 (PDT)
-Received: from localhost.localdomain ([111.201.128.95])
-        by smtp.gmail.com with ESMTPSA id q31-20020a63505f000000b0052cbd854927sm894283pgl.18.2023.05.18.03.13.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 03:13:46 -0700 (PDT)
-From:   Yeqi Fu <asuk4.q@gmail.com>
-To:     ulf.hansson@linaro.org, CLoehle@hyperstone.com,
-        adrian.hunter@intel.com, avri.altman@wdc.com, axboe@kernel.dk
-Cc:     Yeqi Fu <asuk4.q@gmail.com>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] mmc: core: Remove unnecessary error checks and change return type
-Date:   Thu, 18 May 2023 18:12:16 +0800
-Message-Id: <20230518101216.369970-1-asuk4.q@gmail.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <36e805fa-338d-a945-2621-75c5077572fc@intel.com>
-References: <36e805fa-338d-a945-2621-75c5077572fc@intel.com>
+        Thu, 18 May 2023 06:12:44 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F6D1BDA;
+        Thu, 18 May 2023 03:12:42 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id ABCAA24E212;
+        Thu, 18 May 2023 18:12:35 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 18 May
+ 2023 18:12:35 +0800
+Received: from localhost.localdomain (113.72.146.100) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 18 May
+ 2023 18:12:34 +0800
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Conor Dooley <conor@kernel.org>,
+        "Emil Renner Berthing" <kernel@esmil.dk>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        Xingyu Wu <xingyu.wu@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+Subject: [PATCH v6 00/11] Add STG/ISP/VOUT clock and reset drivers for StarFive JH7110
+Date:   Thu, 18 May 2023 18:12:23 +0800
+Message-ID: <20230518101234.143748-1-xingyu.wu@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [113.72.146.100]
+X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The error checks in mmc_blk_add_debugfs() and mmc_blk_remove_debugfs()
-are extraneous. Therefore, this patch removes all error checks from
-both functions.
-Additionally, mmc_blk_add_debugfs() has been changed to return void
-instead of an integer value that was never used. This simplifies the
-function and improves its clarity.
+This patch serises are base on the basic JH7110 SYSCRG/AONCRG
+drivers and add new partial clock drivers and reset supports
+about System-Top-Group(STG), Image-Signal-Process(ISP)
+and Video-Output(VOUT) for the StarFive JH7110 RISC-V SoC. These
+clocks and resets could be used by DMA, VIN and Display modules.
 
-Signed-off-by: Yeqi Fu <asuk4.q@gmail.com>
----
- drivers/mmc/core/block.c | 25 +++++++------------------
- 1 file changed, 7 insertions(+), 18 deletions(-)
+Patches 1 and 2 are about the System-Top-Group clock and reset
+generator(STGCRG) part. The first patch adds docunmentation to
+describe STG bindings, and the second patch adds clock driver to
+support STG clocks and resets as auxiliary device for JH7110.
 
-diff --git a/drivers/mmc/core/block.c b/drivers/mmc/core/block.c
-index 00c33edb9fb9..81f33200b893 100644
---- a/drivers/mmc/core/block.c
-+++ b/drivers/mmc/core/block.c
-@@ -2894,12 +2894,12 @@ static const struct file_operations mmc_dbg_ext_csd_fops = {
- 	.llseek		= default_llseek,
- };
- 
--static int mmc_blk_add_debugfs(struct mmc_card *card, struct mmc_blk_data *md)
-+static void mmc_blk_add_debugfs(struct mmc_card *card, struct mmc_blk_data *md)
- {
- 	struct dentry *root;
- 
- 	if (!card->debugfs_root)
--		return 0;
-+		return;
- 
- 	root = card->debugfs_root;
- 
-@@ -2908,19 +2908,13 @@ static int mmc_blk_add_debugfs(struct mmc_card *card, struct mmc_blk_data *md)
- 			debugfs_create_file_unsafe("status", 0400, root,
- 						   card,
- 						   &mmc_dbg_card_status_fops);
--		if (!md->status_dentry)
--			return -EIO;
- 	}
- 
- 	if (mmc_card_mmc(card)) {
- 		md->ext_csd_dentry =
- 			debugfs_create_file("ext_csd", S_IRUSR, root, card,
- 					    &mmc_dbg_ext_csd_fops);
--		if (!md->ext_csd_dentry)
--			return -EIO;
- 	}
--
--	return 0;
- }
- 
- static void mmc_blk_remove_debugfs(struct mmc_card *card,
-@@ -2929,22 +2923,17 @@ static void mmc_blk_remove_debugfs(struct mmc_card *card,
- 	if (!card->debugfs_root)
- 		return;
- 
--	if (!IS_ERR_OR_NULL(md->status_dentry)) {
--		debugfs_remove(md->status_dentry);
--		md->status_dentry = NULL;
--	}
-+	debugfs_remove(md->status_dentry);
-+	md->status_dentry = NULL;
- 
--	if (!IS_ERR_OR_NULL(md->ext_csd_dentry)) {
--		debugfs_remove(md->ext_csd_dentry);
--		md->ext_csd_dentry = NULL;
--	}
-+	debugfs_remove(md->ext_csd_dentry);
-+	md->ext_csd_dentry = NULL;
- }
- 
- #else
- 
--static int mmc_blk_add_debugfs(struct mmc_card *card, struct mmc_blk_data *md)
-+static void mmc_blk_add_debugfs(struct mmc_card *card, struct mmc_blk_data *md)
- {
--	return 0;
- }
- 
- static void mmc_blk_remove_debugfs(struct mmc_card *card,
+Patches 3 and 4 are about the Image-Signal-Process clock and reset
+gennerator(ISPCRG) part. The first patch adds docunmentation to
+describe ISP bindings, and the second patch adds clock driver to
+support ISP clocks and resets as auxiliary device for JH7110.
+And ISP clocks should power on and enable the SYSCRG clocks first
+before registering.
+
+Patches 5 and 6 are about the Video-Output clock and reset
+generator(VOUTCRG) part. The first patch adds docunmentation to
+describe VOUT bindings, and the second patch adds clock driver to
+support VOUT clocks and resets as auxiliary device for JH7110.
+And VOUT clocks also should power on and enable the SYSCRG clocks
+first before registering.
+
+Patch 7 adds the maintainer who take charge of the STGCRG/ISPCRG/VOUTCRG
+for JH7110.
+Patch 8 adds struct members to support STG/ISP/VOUT resets.
+Patch 9 adds pmu node for JH7110.
+Patch 10 adds external clocks which ISP and VOUT clock driver need.
+Patch 11 adds device node about STGCRG, ISPCRG and VOUTCRG to JH7110 dts.
+
+Changes since v5:
+- Rebased on the Linux 6.4-rc2.
+- Modified the reset name about VOUTCRG to fix the error with
+  CONFIG_FORTIFY_SOURCE=y
+- Added the patch about pmu node.
+
+v5: https://lore.kernel.org/all/20230424135409.6648-1-xingyu.wu@starfivetech.com/
+
+Changes since v4: 
+- Rebased on the lastest patches about fixing the basic clock and reset drivers.
+- Dropped the 'dev_set_drvdata()' in STG clock driver.
+- Modified the data with 'dev_set_drvdata()' in ISP/VOUT clock driver
+  and move the struct about the data to JH7110 header file, which both
+  ISP and VOUT clock drivers will use.
+
+v4: https://lore.kernel.org/all/20230411135558.44282-1-xingyu.wu@starfivetech.com/
+
+Changes since v3: 
+- Rebased on the lastest JH71X0 clock and reset driver of patchset[1]
+  and modified the parameters of the register reset functions.
+- The patch 1 combined three commits on STG/ISP/VOUT resets into one.
+  And Changed the auxiliary_device_id name from
+  "clk_starfive_jh71x0.reset-*" to "clk_starfive_jh7110_sys.rst-*".
+- Added a maintainer in STARFIVE JH71X0 CLOCK DRIVERS.
+
+v3: https://lore.kernel.org/all/20230314124404.117592-1-xingyu.wu@starfivetech.com/
+
+Changes since v2:
+Patch 1:
+- Dropped the modification of maintainers.
+- Modified clock and reset names in the dt-bindings header files.
+Patch 3:
+- Added 'Emil Renner Berthing' as the author.
+- Used 'default m' in Kconfig file.
+- Changed the flags of 'CLK_IGNORE_UNUSED' to 0 or 'CLK_IS_CRITICAL'.
+Patch 4:
+- Dropped the 'reset-names' property.
+- Shortened the clock and reset names in the dt-bindings header files.
+Pacth 6:
+- Used 'default m' in Kconfig file.
+- Changed the flags of 'CLK_IGNORE_UNUSED' to 0.
+- Set reset_control struct to a local variable because it just is used
+  one time in probe.
+Pacth 7:
+- Dropped the 'reset-names' property.
+Patch 9:
+- Used 'default m' in Kconfig file.
+- Set reset_control struct to a local variable because it just is used
+  one time in probe.
+Patch 10:
+- Changed the order of externel clock in alphanumerical order.
+Patch 11:
+- Dropped the 'reset-names' property in ispcrg and voutcrg node.
+
+v2: https://lore.kernel.org/all/20230221083323.302471-1-xingyu.wu@starfivetech.com/
+
+Changes since v1:
+- Modified the binding and dropped the indentation.
+- Removed the useless header files in the drivers.
+- Used an array lookup instead of a pile of conditions about parent
+  clocks' name.
+- Added clocks operation on driver remove.
+
+v1: https://lore.kernel.org/all/20230120024445.244345-1-xingyu.wu@starfivetech.com/
+
+Emil Renner Berthing (1):
+  clk: starfive: Add StarFive JH7110 System-Top-Group clock driver
+
+Walker Chen (1):
+  riscv: dts: starfive: jh7110: add pmu controller node
+
+Xingyu Wu (9):
+  dt-bindings: clock: Add StarFive JH7110 System-Top-Group clock and
+    reset generator
+  dt-bindings: clock: Add StarFive JH7110 Image-Signal-Process clock and
+    reset generator
+  clk: starfive: Add StarFive JH7110 Image-Signal-Process clock driver
+  dt-bindings: clock: Add StarFive JH7110 Video-Output clock and reset
+    generator
+  clk: starfive: Add StarFive JH7110 Video-Output clock driver
+  MAINTAINERS: Update maintainer of JH71x0 clock drivers
+  reset: starfive: jh7110: Add StarFive STG/ISP/VOUT resets support
+  riscv: dts: starfive: jh7110: Add DVP and HDMI TX pixel external
+    clocks
+  riscv: dts: starfive: jh7110: Add STGCRG/ISPCRG/VOUTCRG nodes
+
+ .../clock/starfive,jh7110-ispcrg.yaml         |  87 +++++++
+ .../clock/starfive,jh7110-stgcrg.yaml         |  82 ++++++
+ .../clock/starfive,jh7110-voutcrg.yaml        |  90 +++++++
+ MAINTAINERS                                   |   1 +
+ .../jh7110-starfive-visionfive-2.dtsi         |   8 +
+ arch/riscv/boot/dts/starfive/jh7110.dtsi      |  74 ++++++
+ drivers/clk/starfive/Kconfig                  |  33 +++
+ drivers/clk/starfive/Makefile                 |   3 +
+ .../clk/starfive/clk-starfive-jh7110-isp.c    | 232 +++++++++++++++++
+ .../clk/starfive/clk-starfive-jh7110-stg.c    | 173 +++++++++++++
+ .../clk/starfive/clk-starfive-jh7110-vout.c   | 239 ++++++++++++++++++
+ drivers/clk/starfive/clk-starfive-jh7110.h    |   6 +
+ .../reset/starfive/reset-starfive-jh7110.c    |  30 +++
+ .../dt-bindings/clock/starfive,jh7110-crg.h   |  74 ++++++
+ .../dt-bindings/reset/starfive,jh7110-crg.h   |  60 +++++
+ 15 files changed, 1192 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-ispcrg.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-stgcrg.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-voutcrg.yaml
+ create mode 100644 drivers/clk/starfive/clk-starfive-jh7110-isp.c
+ create mode 100644 drivers/clk/starfive/clk-starfive-jh7110-stg.c
+ create mode 100644 drivers/clk/starfive/clk-starfive-jh7110-vout.c
+
 -- 
-2.37.2
+2.25.1
 
