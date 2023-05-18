@@ -2,68 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F29F4707818
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 04:35:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24C9470781B
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 04:37:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbjERCfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 22:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34492 "EHLO
+        id S229643AbjERChM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 22:37:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbjERCfM (ORCPT
+        with ESMTP id S229576AbjERChL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 22:35:12 -0400
-Received: from mail-yw1-x1141.google.com (mail-yw1-x1141.google.com [IPv6:2607:f8b0:4864:20::1141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBD87271C;
-        Wed, 17 May 2023 19:35:11 -0700 (PDT)
-Received: by mail-yw1-x1141.google.com with SMTP id 00721157ae682-55a8e9e2c53so14100597b3.1;
-        Wed, 17 May 2023 19:35:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684377311; x=1686969311;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wVYu0Kdniu+LeyAgJA6DxqCaT7Y/4cXtb7QYlDhpbAo=;
-        b=aBCcK89w/zLXN5wAjxL34JR8mtN28L8xm9l1r5uF4mA68Wps5/kT5yrrRkL1hlFTT9
-         1hsdDN8tQN5uKXhXbW3A4jKYZJ+wwIseS7IDv+DbOF7BTLajLBecWJis4J94xejHLMVG
-         JoGxsHxXn9QuEbMUMullhLAu1tRbmKsYnEcsmV/DW2KbZq/PXXlRuZUYLT7RhoZoDsZ5
-         HDeDqZsoFSaa8LTvfQpztCniK9BcB6iJ8zxmcZBasvCfG1Nw9SnlAY6I6zSzkIFfKb5a
-         It/sJ7+ruku/GhIKVWSyDSA5tC79U39QcHn7Wh5guyGHFNz8XZtKe2/Gq/2x5757LeDf
-         sm2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684377311; x=1686969311;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wVYu0Kdniu+LeyAgJA6DxqCaT7Y/4cXtb7QYlDhpbAo=;
-        b=MkTRyr26jvnzgRnlaoPIEzPeWb7eY3eLuQwxtqRsJt5tAfpmUKKPgNnklPuVaOfRlX
-         4FoVLfeAxXG3ZhvYewhc43G/dwYZMHZXPrQTOCejpMKhoYUB32i76pD2+2eMZCuNhoQx
-         DpoMlo/ukWMeoUuIb0jzRLEH8hjfy4Dc1z+4p10F8bKZwPjKcbQ/Z3fQnDc46nCGutbv
-         GCM5OadEfvaMarCClNhSr0jD9OR889G3rVw6yRKPZ+oaVVXOwIxFdPAdzjH7wTh5KQe8
-         NU18QFe1v69ss9vFqrpbQv8r9GJo+hATEzMhc5DYNHt8hpUb1cG4pO+/FVXs3pMM6hqI
-         pRXg==
-X-Gm-Message-State: AC+VfDyJMreTOKItWQzAgYygT4yjRejLUtaZvNr7VIJ3yuXT0B/+3pFY
-        JjulzQs0HYYB+BaI2zfjJsIyH00AL4AyMYlJngLhYjfCXy9t+yYX
-X-Google-Smtp-Source: ACHHUZ5woWaegw7WkNe3DS8eKpU3rIA7TCmW6RrJrL9oa4rwSu5LiF7GQ59UVDeupoUBMBCnLxR8XBHmGcORNCDxtmI=
-X-Received: by 2002:a81:7d55:0:b0:54f:752e:9b63 with SMTP id
- y82-20020a817d55000000b0054f752e9b63mr194146ywc.15.1684377310756; Wed, 17 May
- 2023 19:35:10 -0700 (PDT)
+        Wed, 17 May 2023 22:37:11 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C4862D77
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 19:37:09 -0700 (PDT)
+Received: from kwepemi500009.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QMDZD482NzLqKx;
+        Thu, 18 May 2023 10:34:12 +0800 (CST)
+Received: from [10.67.110.89] (10.67.110.89) by kwepemi500009.china.huawei.com
+ (7.221.188.199) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 18 May
+ 2023 10:37:05 +0800
+Message-ID: <111fa8ed-9031-a393-401c-0266a9bf7544@huawei.com>
+Date:   Thu, 18 May 2023 10:37:05 +0800
 MIME-Version: 1.0
-References: <20230517124201.441634-1-imagedong@tencent.com>
- <20230517124201.441634-4-imagedong@tencent.com> <CANn89iKLf=V664AsUYC52h_q-xjEq9xC3KqTq8q+t262T91qVQ@mail.gmail.com>
-In-Reply-To: <CANn89iKLf=V664AsUYC52h_q-xjEq9xC3KqTq8q+t262T91qVQ@mail.gmail.com>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Thu, 18 May 2023 10:34:59 +0800
-Message-ID: <CADxym3a0gmzmD3Vwu_shoJnAHm-xjD5tJRuKwTvAXnVk_H55AA@mail.gmail.com>
-Subject: Re: [PATCH net-next 3/3] net: tcp: handle window shrink properly
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     kuba@kernel.org, davem@davemloft.net, pabeni@redhat.com,
-        dsahern@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v6] kobject: Fix global-out-of-bounds in
+ kobject_action_type()
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     <prajnoha@redhat.com>, <linux-kernel@vger.kernel.org>
+References: <20230517101957.14655-1-xiafukun@huawei.com>
+ <2023051739-shrunk-reopen-b968@gregkh>
+From:   Xia Fukun <xiafukun@huawei.com>
+In-Reply-To: <2023051739-shrunk-reopen-b968@gregkh>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.110.89]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500009.china.huawei.com (7.221.188.199)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,65 +50,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 10:47=E2=80=AFPM Eric Dumazet <edumazet@google.com>=
- wrote:
->
-> On Wed, May 17, 2023 at 2:42=E2=80=AFPM <menglong8.dong@gmail.com> wrote:
-> >
-> > From: Menglong Dong <imagedong@tencent.com>
-> >
-> > Window shrink is not allowed and also not handled for now, but it's
-> > needed in some case.
-> >
-> > In the origin logic, 0 probe is triggered only when there is no any
-> > data in the retrans queue and the receive window can't hold the data
-> > of the 1th packet in the send queue.
-> >
-> > Now, let's change it and trigger the 0 probe in such cases:
-> >
-> > - if the retrans queue has data and the 1th packet in it is not within
-> > the receive window
-> > - no data in the retrans queue and the 1th packet in the send queue is
-> > out of the end of the receive window
->
-> Sorry, I do not understand.
->
-> Please provide packetdrill tests for new behavior like that.
->
+On 2023/5/17 20:17, Greg KH wrote:
+> On Wed, May 17, 2023 at 06:19:57PM +0800, Xia Fukun wrote:
+>> --- a/include/linux/kobject.h
+>> +++ b/include/linux/kobject.h
+>> @@ -32,6 +32,9 @@
+>>  #define UEVENT_NUM_ENVP			64	/* number of env pointers */
+>>  #define UEVENT_BUFFER_SIZE		2048	/* buffer for the variables */
+>>  
+>> +/* the maximum length of the string contained in kobject_actions[] */
+>> +#define UEVENT_KACT_STRSIZE		16
+> 
+> Why does this value need to be in a global .h file when it is only used
+> in one .c file?
+> 
+> And how are you going to keep it in sync with kobject_actions if it
+> changes in the future?  And that variable isn't even in this file, how
+> would anyone know to modify this if the structure changes in a .c file?
 
-Yes. The problem can be reproduced easily.
 
-1. choose a server machine, decrease it's tcp_mem with:
-    echo '1024 1500 2048' > /proc/sys/net/ipv4/tcp_mem
-2. call listen() and accept() on a port, such as 8888. We call
-    accept() looply and without call recv() to make the data stay
-    in the receive queue.
-3. choose a client machine, and create 100 TCP connection
-    to the 8888 port of the server. Then, every connection sends
-    data about 1M.
-4. we can see that some of the connection enter the 0-probe
-    state, but some of them keep retrans again and again. As
-    the server is up to the tcp_mem[2] and skb is dropped before
-    the recv_buf full and the connection enter 0-probe state.
-    Finially, some of these connection will timeout and break.
+Your criticism is correct. UEVENT_KACT_STRSIZE should not be defined
+in the global .h file here. I will move it to that .c file.
 
-With this series, all the 100 connections will enter 0-probe
-status and connection break won't happen. And the data
-trans will recover if we increase tcp_mem or call 'recv()'
-on the sockets in the server.
 
-> Also, such fundamental change would need IETF discussion first.
-> We do not want linux to cause network collapses just because billions
-> of devices send more zero probes.
+>> --- a/lib/kobject_uevent.c
+>> +++ b/lib/kobject_uevent.c
+>> @@ -66,7 +66,8 @@ static int kobject_action_type(const char *buf, size_t count,
+>>  	enum kobject_action action;
+>>  	size_t count_first;
+>>  	const char *args_start;
+>> -	int ret = -EINVAL;
+>> +	int i, ret = -EINVAL;
+>> +	char kobj_act_buf[UEVENT_KACT_STRSIZE] = "";
+> 
+> Why does this need to be initialized?
 
-I think it maybe a good idea to make the connection enter
-0-probe, rather than drop the skb silently. What 0-probe
-meaning is to wait for space available when the buffer of the
-receive queue is full. And maybe we can also use 0-probe
-when the "buffer" of "TCP protocol" (which means tcp_mem)
-is full?
 
-Am I right?
+My initialization method has some flaws, which should be done as follows:
 
-Thanks!
-Menglong Dong
+char kobj_act_buf[UEVENT_KACT_STRSIZE] = {0};
+
+Initialize the string kobj_act_buf to "/0" and parse it
+using sysfs_match_string after subsequent copy operations.
+
+
+> And are you sure the size is correct?  If so, how?
+
+UEVENT_KACT_STRSIZE is defined as the maximum length of the string
+contained in kobject_actions[].
+
+At present, the maximum length of strings in this array is 7. Based on
+the actual meaning of these strings, these actions will not exceed 16
+if there are any subsequent changes.
+
+> And how was any of this tested?  Based on your prior submissions, we are
+> going to require some sort of proof.  What would you do if you were in
+> my position?
+
+My testing method is to apply the patch, compile the kernel image,
+and start the QEMU virtual machine. Then compile and execute the code
+mentioned in the patch that triggers out-of-bounds issues.
+
+In addition, the following operations will be performed to verify the
+functions mentioned by Peter Rajnoha <prajnoha@redhat.com>:
+
+# echo "add fe4d7c9d-b8c6-4a70-9ef1-3d8a58d18eed A=1 B=abc" >
+/sys/block/ram0/uevent
+
+# udevadm monitor --kernel --env
+monitor will print the received events for:
+KERNEL - the kernel uevent
+
+KERNEL[189.376386] add      /devices/virtual/block/ram0 (block)
+ACTION=add
+DEVPATH=/devices/virtual/block/ram0
+SUBSYSTEM=block
+SYNTH_UUID=fe4d7c9d-b8c6-4a70-9ef1-3d8a58d18eed
+SYNTH_ARG_A=1
+SYNTH_ARG_B=abc
+DEVNAME=/dev/ram0
+DEVTYPE=disk
+DISKSEQ=14
+SEQNUM=3781
+MAJOR=1
+MINOR=0
+
+> thanks,
+> 
+> greg k-h
+
+Thank you for your suggestion. My submission was indeed negligent,
+and your guidance has benefited me greatly.
