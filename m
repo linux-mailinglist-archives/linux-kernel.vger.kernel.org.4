@@ -2,128 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACB37707783
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 03:42:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DAA3707788
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 03:43:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbjERBm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 21:42:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38968 "EHLO
+        id S229686AbjERBnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 21:43:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbjERBm1 (ORCPT
+        with ESMTP id S229550AbjERBnJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 21:42:27 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC17212F
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 18:42:25 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-64ab2a37812so13614777b3a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 18:42:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684374145; x=1686966145;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pvjw77fQ/ErJLaCJSMiJ2Mn6niHh8kIyIMJpAj+Is8w=;
-        b=dfJL0x+uiW7HCq/mVm5ocC80LIodXAAhJkjZaDe8t9jsmomYEj0syfMDnaploNCaXk
-         t7CHu5+a+/02szN/sn00ijEUpgxlJN62lWCceNY8iwobuU5NrKViYr2L3MWL55WwtM87
-         eo7NiqEtSpjem6zPgChp/lKxelOt1JsIkr8pwp0o8gbe0wubIBCiWfk7udrgO03i4RdT
-         ueRGKgeizfMHYaeb4BIlOtPbCrxL0+aoKwZvXHXdY0c2HRqWc5GiPUFz8uy06irzC+ZN
-         jBkDdZ38UqW9j5Na7tscUzMAq230D4aer7h2UrzJf22gWBKsh8B/nK0kJZI8mYiAjs+L
-         35nQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684374145; x=1686966145;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=pvjw77fQ/ErJLaCJSMiJ2Mn6niHh8kIyIMJpAj+Is8w=;
-        b=ImHvqkjKeiGeT+S15SJDBIq3/GWvYW4lXAMyVa8R1cX7F7QYoQs4f0vCIns+L+qh4q
-         wMfkK2+4ivcOj4zZi/GzpUL0RQ/7UXSyqyIBwKeqrbbWEyLyN7a6QWI6ICXGuHIngpUK
-         uZNaBlN12lEN+FJcppACyjswyJAd6rJ7aczpGx1OEdyhdHhjm8CAAK8UzdT4SRloqb7Y
-         v0O6st1QEjCCeCwY38VdgiR6hngy0l4LUfj8WMowqpf/R5CaA+djd6QB5YyB0xtcv2GR
-         iuzsIXFUmZ0Xms9J0d9iUAKU0BcK2cK7N1V5PDVtCQ18MBTGP5Q1Nj/EYMAoNYFtT3WD
-         jn1w==
-X-Gm-Message-State: AC+VfDzFtyIEh2li9Peo2/ZDzscPat021vNUPHLgwcv+qcTouZE+tv23
-        eOYqxiwgJ7iXD0MAr32WtMs=
-X-Google-Smtp-Source: ACHHUZ5voyf0SZ/Qhe3EXUj4hd+AncQZuBwZ2/hJ2/4P4tl5mLWcvpjhwwo2z8kmHFYryOnWdVzAKA==
-X-Received: by 2002:a17:902:ec82:b0:1ad:b5ed:e951 with SMTP id x2-20020a170902ec8200b001adb5ede951mr532805plg.13.1684374144882;
-        Wed, 17 May 2023 18:42:24 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-73.three.co.id. [180.214.233.73])
-        by smtp.gmail.com with ESMTPSA id f5-20020a17090274c500b001ac6293577fsm47640plt.110.2023.05.17.18.42.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 18:42:24 -0700 (PDT)
-Message-ID: <b984f839-cf0a-fc25-41d5-656171774e4e@gmail.com>
-Date:   Thu, 18 May 2023 08:42:19 +0700
+        Wed, 17 May 2023 21:43:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C99BE7A
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 18:43:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EDF8A64723
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 01:43:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C21AC433D2;
+        Thu, 18 May 2023 01:43:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684374187;
+        bh=V1QyoFTT+Ee/QBXVRzPRa7RvNORRIM/WD7FTNTXvJFc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZqfaSVcCrvRNg0YPnrXy6Hiv86b0rqwYmk4gmHd7F3jBBr4HGqgRV02uNa+D5NzRc
+         9Qv4r0Lw22HKDZFEuI2o9auVMBmF1Khh91DaarMmNMoox4jq4hnUQUWwLALfbWZchc
+         JVCGO+VKK5CQdoA4ta7rLgT0TFfjufLbIIOH1dMmlRUu0w4WAETwQWJ50eEzIsohT9
+         WQu/rD7qpxvEM9JDJ+hOAxTmAjauDpjiNlW1kWIah2rUsVXP8AthxMU5RquGTtIMIw
+         2l0M8xbSvyHVXw0xnXZL+Gz7xWZJSa8VabQl3xMHTgjgc8wYCrm33L4IqRFyHLInMl
+         9oKzppjvXTv8A==
+Date:   Wed, 17 May 2023 18:43:05 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] f2fs: flush error flags in workqueue
+Message-ID: <ZGWCqZeMS/wsjg7W@google.com>
+References: <20230516145911.162431-1-chao@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     Linux Regressions <regressions@lists.linux.dev>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     Todd Brandt <todd.e.brandt@intel.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Tudor Ambarus <tudor.ambarus@linaro.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Fwd: BUG: Patch to spi-nor hangs Lenovo ThinkPad X1 Titanium with
- divide by zero
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230516145911.162431-1-chao@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-I notice a regression report on Bugzilla [1]. Quoting from it:
-
-> This is the system I'm having troubles with:
-> 
-> os-version              : Ubuntu 20.04.2 LTS
-> baseboard-manufacturer  : LENOVO
-> baseboard-product-name  : 20QA000FUS
-> baseboard-serial-number : W1KS11R111D
-> baseboard-version       : SDK0J40697 WIN
-> bios-release-date       : 05/20/2021
-> bios-vendor             : LENOVO
-> bios-version            : N2MET49W (1.14 )
-> chassis-manufacturer    : LENOVO
-> chassis-serial-number   : R911Q4MM
-> chassis-version         : None
-> processor-manufacturer  : Intel(R) Corporation
-> processor-version       : 11th Gen Intel(R) Core(TM) i7-1160G7 @ 1.20GHz
-> system-manufacturer     : LENOVO
-> system-product-name     : 20QA000FUS
-> system-serial-number    : R911Q4MM
-> system-version          : ThinkPad X1 Titanium Gen 1
-> cpucount                : 8
-> memtotal                : 15939728 kB
-> memfree                 : 8428028 kB
-> 
-> Ever since 6.4-rc1 this system has hung on every S3/S2idle suspend and shutdown during reboot. I've bisected it to a patch to the MTD: SPI-NOR subsystem about introducing the "concept of a bank"
-> Basically something about the new code is improperly handling the memory size on this machine. It's not complex but I haven't dug any deeper since I want it posted as quickly as possible. To reproduce, run any of these 3 commands and the system will hang:
-> 
-> echo freeze > /sys/power/state
-> echo mem > /sys/power/state
-> sudo reboot
+On 05/16, Chao Yu wrote:
+> In IRQ context, it wakes up workqueue to record errors into on-disk
+> superblock fields rather than in-memory fields.
 > 
 
-For the full thread, see bugzilla.
+Fixes:?
 
-Fortunately, the reporter also sent out potential fix for this regression;
-but to be sure it doesn't fall through cracks, I'm adding it to regzbot:
-
-#regzbot introduced: 9d6c5d64f0288a https://bugzilla.kernel.org/show_bug.cgi?id=217448
-#regzbot title: SPI NOR bank divide by zero on Lenovo ThinkPad X1 Titanium
-#regzbot fix: MTD SPI-NOR: BUG FIX of divide by zero in new n_banks value
-
-Thanks.
-
-[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217448
-
--- 
-An old man doll... just what I always wanted! - Clara
+> Signed-off-by: Chao Yu <chao@kernel.org>
+> ---
+> v2:
+> - make f2fs_record_errors() static.
+>  fs/f2fs/compress.c |  2 +-
+>  fs/f2fs/f2fs.h     |  1 +
+>  fs/f2fs/super.c    | 26 +++++++++++++++++++++++---
+>  3 files changed, 25 insertions(+), 4 deletions(-)
+> 
+> diff --git a/fs/f2fs/compress.c b/fs/f2fs/compress.c
+> index 10b545a1088e..75d3d99fffcc 100644
+> --- a/fs/f2fs/compress.c
+> +++ b/fs/f2fs/compress.c
+> @@ -744,7 +744,7 @@ void f2fs_decompress_cluster(struct decompress_io_ctx *dic, bool in_task)
+>  
+>  		/* Avoid f2fs_commit_super in irq context */
+>  		if (!in_task)
+> -			f2fs_save_errors(sbi, ERROR_FAIL_DECOMPRESSION);
+> +			f2fs_handle_error_async(sbi, ERROR_FAIL_DECOMPRESSION);
+>  		else
+>  			f2fs_handle_error(sbi, ERROR_FAIL_DECOMPRESSION);
+>  		goto out_release;
+> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> index 0f05c1dd633f..99edc4981edf 100644
+> --- a/fs/f2fs/f2fs.h
+> +++ b/fs/f2fs/f2fs.h
+> @@ -3563,6 +3563,7 @@ void f2fs_save_errors(struct f2fs_sb_info *sbi, unsigned char flag);
+>  void f2fs_handle_critical_error(struct f2fs_sb_info *sbi, unsigned char reason,
+>  							bool irq_context);
+>  void f2fs_handle_error(struct f2fs_sb_info *sbi, unsigned char error);
+> +void f2fs_handle_error_async(struct f2fs_sb_info *sbi, unsigned char error);
+>  int f2fs_commit_super(struct f2fs_sb_info *sbi, bool recover);
+>  int f2fs_sync_fs(struct super_block *sb, int sync);
+>  int f2fs_sanity_check_ckpt(struct f2fs_sb_info *sbi);
+> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+> index 51812f459581..17082dc3c1a3 100644
+> --- a/fs/f2fs/super.c
+> +++ b/fs/f2fs/super.c
+> @@ -3980,6 +3980,11 @@ static void f2fs_record_stop_reason(struct f2fs_sb_info *sbi)
+>  	f2fs_down_write(&sbi->sb_lock);
+>  
+>  	spin_lock_irqsave(&sbi->error_lock, flags);
+> +	if (sbi->error_dirty) {
+> +		memcpy(F2FS_RAW_SUPER(sbi)->s_errors, sbi->errors,
+> +							MAX_F2FS_ERRORS);
+> +		sbi->error_dirty = false;
+> +	}
+>  	memcpy(raw_super->s_stop_reason, sbi->stop_reason, MAX_STOP_REASON);
+>  	spin_unlock_irqrestore(&sbi->error_lock, flags);
+>  
+> @@ -4019,12 +4024,10 @@ static bool f2fs_update_errors(struct f2fs_sb_info *sbi)
+>  	return need_update;
+>  }
+>  
+> -void f2fs_handle_error(struct f2fs_sb_info *sbi, unsigned char error)
+> +static void f2fs_record_errors(struct f2fs_sb_info *sbi, unsigned char error)
+>  {
+>  	int err;
+>  
+> -	f2fs_save_errors(sbi, error);
+> -
+>  	f2fs_down_write(&sbi->sb_lock);
+>  
+>  	if (!f2fs_update_errors(sbi))
+> @@ -4038,6 +4041,23 @@ void f2fs_handle_error(struct f2fs_sb_info *sbi, unsigned char error)
+>  	f2fs_up_write(&sbi->sb_lock);
+>  }
+>  
+> +void f2fs_handle_error(struct f2fs_sb_info *sbi, unsigned char error)
+> +{
+> +	f2fs_save_errors(sbi, error);
+> +	f2fs_record_errors(sbi, error);
+> +}
+> +
+> +void f2fs_handle_error_async(struct f2fs_sb_info *sbi, unsigned char error)
+> +{
+> +	f2fs_save_errors(sbi, error);
+> +
+> +	if (!sbi->error_dirty)
+> +		return;
+> +	if (!test_bit(error, (unsigned long *)sbi->errors))
+> +		return;
+> +	schedule_work(&sbi->s_error_work);
+> +}
+> +
+>  static bool system_going_down(void)
+>  {
+>  	return system_state == SYSTEM_HALT || system_state == SYSTEM_POWER_OFF
+> -- 
+> 2.25.1
