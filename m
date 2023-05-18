@@ -2,92 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E244707B5E
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 09:50:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4227C707B60
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 09:51:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230127AbjERHu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 03:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40124 "EHLO
+        id S230207AbjERHvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 03:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbjERHux (ORCPT
+        with ESMTP id S230099AbjERHu7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 03:50:53 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7469D26BC
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 00:50:43 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-510e419d701so992616a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 00:50:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684396242; x=1686988242;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4/o9witGFEqB6mrKPmPyN7LxJga6zPVGzIsG+4CQnq8=;
-        b=w5bSqx5GpMEQCyeYAmlsIf6bauofXILA/X4zxIt4kAilYLBY+WaEsA0hieu2z8dfVj
-         rWzeJUfyeQzpa0roxxRvoAaqJyMw5DaKWMHEUwtmzfYLZhy7BxP+xWEHb/F1Cd+RSPZi
-         aQ6hIoOTdp+ZGUnMLfcrVLGlLpT6NC4k/UnD6j8I+G7jliWJRDRRdRQ/LI3BDLNV95NJ
-         qNh2ZBg/Vxrw+DxDzBXJUr1Julg7NWZsN+m7YRp26fvNLF2mHdTTn6KAZcCdvB1uPviG
-         ydUPWi0e/7n2419sZMRgWZ0Czr453YUGlSzJhcy9wpf7KWw/8mlzYBx+hMs6dRxwWrTx
-         M89g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684396242; x=1686988242;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4/o9witGFEqB6mrKPmPyN7LxJga6zPVGzIsG+4CQnq8=;
-        b=aCuR94NStheLOeF9h2YqM+tQe1oJGFDGxJvudKDMfKPCbXZ5tusXHYNExKAj8r2Amn
-         5IYxknwarkNMn7E0E6W1Oi9bQ+fnnJdVoB8Y20vr25CO25ts10VC260bhHqLPIO5YDr4
-         niIgEYDkqm0TL5EWq+a12YqhI5HYEqI5v6dHC7dDY5LnwBsjkvxf9oh9apCUs8ewPnS5
-         h7OwccGDZw3nj+O4lWgw87h4shYz4rt6kC0zhDUw8s6h+otd/yeSlqL15czxzxuGlEhk
-         VZNmKNic9o1UrBx5umfN1cNsLacRWMkbk/qUcGvXajx+7QSMU/lWa/BYrDyN+/VRN0IN
-         CNng==
-X-Gm-Message-State: AC+VfDzXXAc35aQnngsggjN9XSwbyKfjSrGdyzJWfjzk042nrt5YMnhK
-        85aavs09Ag+NhzYNFEm5XGUZBA==
-X-Google-Smtp-Source: ACHHUZ70S2nHNNnVtr6DSBNU6UZgaGprBFguEp6nw+dtOz9VHeWMa2SFrshKGj2gvhyoMBReXjNAgw==
-X-Received: by 2002:a05:6402:544:b0:510:e790:48fe with SMTP id i4-20020a056402054400b00510e79048femr865646edx.6.1684396241721;
-        Thu, 18 May 2023 00:50:41 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:a2b:c408:5834:f48e? ([2a02:810d:15c0:828:a2b:c408:5834:f48e])
-        by smtp.gmail.com with ESMTPSA id t20-20020aa7d4d4000000b00510d7152dc7sm262996edr.30.2023.05.18.00.50.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 May 2023 00:50:41 -0700 (PDT)
-Message-ID: <2048ed2a-ae6f-b425-38e4-4ba973e04398@linaro.org>
-Date:   Thu, 18 May 2023 09:50:39 +0200
+        Thu, 18 May 2023 03:50:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86ED02690
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 00:50:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D98264D75
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:50:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45A60C433EF;
+        Thu, 18 May 2023 07:50:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684396251;
+        bh=gX+Be+fV7upnPUuap1LrRfsLMGHN89kol6H009qPnqg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=adQoqBnk3GN3ctAx4FDL/usWgsVM//LCjHhS2SZS4Ffu/4RGOxmys1L3YJ33u4/uy
+         EZJ7H0s2jJ6H3MIPM6FgWvOlOr0bJ1xXajrH7gM7Jt6myBqYPs8d+RCC7iHHVMke8n
+         Zpi95wXHXNT7flHjFWPp/7pPQtU6HINshO6QwPnFJ3eMj3We3OY/pdu6Lr2joImWL9
+         guICjWCtZ5RMO6zMPLeS1By9QEHBVeEPBVlBripMWRsge6yagX4EN64vJl+ywI3Et0
+         066cgoP0ohin1XJTs7JrFnikYJLD1lB0Z05h/aF7oPQAtnE69A8rjDqAekbtNG0o2A
+         b/s9/lyInwE9w==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>,
+        Weichao Guo <guoweichao@oppo.com>
+Subject: [PATCH] f2fs: support background_gc=adjust mount option
+Date:   Thu, 18 May 2023 15:50:41 +0800
+Message-Id: <20230518075041.38786-1-chao@kernel.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH net-next v4 1/2] dt-bindings: arm: mediatek: add
- mediatek,boottrap binding
-Content-Language: en-US
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
-        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Qingfang Deng <dqfext@gmail.com>,
-        SkyLake Huang <SkyLake.Huang@mediatek.com>,
-        Simon Horman <simon.horman@corigine.com>
-References: <cover.1683813687.git.daniel@makrotopia.org>
- <f2d447d8b836cf9584762465a784185e8fcf651f.1683813687.git.daniel@makrotopia.org>
- <55f8ac31-d81d-43de-8877-6a7fac2d37b4@lunn.ch>
- <7e8d0945-dfa9-7f61-b075-679e8a89ded9@linaro.org>
- <ZGWRHeE3CXeAnQ-5@makrotopia.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ZGWRHeE3CXeAnQ-5@makrotopia.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,81 +54,311 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/05/2023 04:44, Daniel Golle wrote:
-> On Fri, May 12, 2023 at 08:54:36AM +0200, Krzysztof Kozlowski wrote:
->> On 11/05/2023 17:53, Andrew Lunn wrote:
->>> On Thu, May 11, 2023 at 04:10:20PM +0200, Daniel Golle wrote:
->>>> The boottrap is used to read implementation details from the SoC, such
->>>> as the polarity of LED pins. Add bindings for it as we are going to use
->>>> it for the LEDs connected to MediaTek built-in 1GE PHYs.
->>>
->>> What exactly is it? Fuses? Is it memory mapped, or does it need a
->>> driver to access it? How is it shared between its different users?
->>
->> Yes, looks like some efuse/OTP/nvmem, so it should probably use nvmem
->> bindings and do not look different than other in such class.
-> 
-> I've asked MediaTek and they have replied with an elaborate definition.
-> Summary:
-> The boottrap is a single 32-bit wide register at 0x1001f6f0 which can
-> be used to read back the bias of bootstrap pins from the SoC as follows:
+As JuHyung reported in [1]:
 
-Is it within some other address space? Register address suggests that.
+"In most consumer-grade blackbox SSDs, device-side GCs are handled
+automatically for various workloads. f2fs, however, leaves that
+responsibility to the userspace with conservative tuning on the
+kernel-side by default. Android handles this by init.rc tunings and a
+separate code running in vold to trigger gc_urgent.
 
-In such case you should not create a device in the middle of other
-device's address space. You punched a hole in uniform address space
-which prevents creating that other device for entire space.
+For regular Linux desktop distros, f2fs just runs on the default
+configuration set on the kernel and unless it’s running 24/7 with
+plentiful idle time, it quickly runs out of free segments and starts
+triggering foreground GC. This is giving people the wrong impression
+that f2fs slows down far drastically than other file-systems when
+that’s quite the contrary (i.e., less fragmentation overtime)."
 
-> 
-> * bit[8]: Reference CLK source && gphy port0's LED
-> If bit[8] == 0:
-> - Reference clock source is XTRL && gphy port0's LED is pulled low on board side
-> If bit[8] == 1:
-> - Reference clock source is Oscillator && gphy port0's LED is pulled high on board side
-> 
-> * bit[9]: DDR type && gphy port1's LED
-> If bit[9] == 0:
-> - DDR type is DDRx16b x2 && gphy port1's LED is pulled low on board side
-> If bit[9] == 1:
-> - DDR type is DDRx16b x1 && gphy port1's LED is pulled high on board side
-> 
-> * bit[10]: gphy port2's LED
-> If bit[10] == 0:
-> - phy port2's LED is pulled low on board side
-> If bit[10] == 1:
-> - gphy port2's LED is pulled high on board side
-> 
-> * bit[11]: gphy port3's LED
-> If bit[11] == 0:
-> - phy port3's LED is pulled low on board side
-> If bit[11] == 1:
-> - gphy port3's LED is pulled high on board side
-> 
-> If bit[10] == 0 && bit[11] == 0:
-> - BROM will boot from SPIM-NOR
-> If bit[10] == 1 && bit[11] == 0:
-> - BROM will boot from SPIM-NAND
-> If bit[10] == 0 && bit[11] == 1:
-> - BROM will boot from eMMC
-> If bit[10] == 1 && bit[11] == 1:
-> - BROM will boot from SNFI-NAND
-> 
-> The boottrap is present in many MediaTek SoCs, however, support for
-> reading it is only really needed on MT7988 due to the dual-use of some
-> bootstrap pins as PHY LEDs.
-> 
-> We could say this is some kind of read-only 'syscon' node (and hence
-> use regmap driver to access it), that would make it easy but it's not
-> very accurate. Also efuse/OTP/nvmem doesn't seem accurate, though in
-> terms of software it could work just as well.
-> 
-> I will update DT bindings to contain the gained insights.
+This patch supports background_gc=adjust mount option.
 
-If this is separate address space with one register, then boottrap
-sounds ok. If you have multiple read only registers with fused values,
-then this is efuse region, so something like nvidia,tegra20-efuse.
+If background_gc=adjust, gc will adjust its policy depends
+on conditions: speed up if there no free segments, and slow
+down if there is no free space.
 
+The main logic is as below:
 
-Best regards,
-Krzysztof
+1. performance mode
+- condition: if free_segments is less than 10 * ovp_segments and
+reclaimable_block is more than 20 * unused_user_block
+- action: reduce sleep time of GC thread based on free user block
+ratio, that is to say, the more reclaimable blocks, the less time
+thread will sleep
+
+2. lifetime mode:
+- condition: if free space is less than 90%
+- action:
+ a) reset min_sleep_time to default 30000 ms
+ b) reduce cost weight of age when cacluating cost of dirty
+ segment, so that GC may select victim which contains less blocks
+
+3. balance mode
+- condition: it is default mode
+- action: reduce min_sleep_time from 30000 ms to 10000 ms
+
+[1] https://lore.kernel.org/linux-f2fs-devel/CAD14+f3z=kS9E+NTKH7t1J2xL1PpLOVMNx=CabD_t2K6U=T9uQ@mail.gmail.com
+
+Original patch was developed by Weichao Guo, I refactor it a bit and
+rebase the code.
+
+Signed-off-by: Weichao Guo <guoweichao@oppo.com>
+Signed-off-by: Chao Yu <chao@kernel.org>
+---
+ Documentation/filesystems/f2fs.rst |  7 ++-
+ fs/f2fs/f2fs.h                     |  4 ++
+ fs/f2fs/gc.c                       | 92 +++++++++++++++++++++++++++++-
+ fs/f2fs/gc.h                       | 23 ++++++++
+ fs/f2fs/super.c                    |  4 ++
+ 5 files changed, 126 insertions(+), 4 deletions(-)
+
+diff --git a/Documentation/filesystems/f2fs.rst b/Documentation/filesystems/f2fs.rst
+index 9359978a5af2..764301f7391e 100644
+--- a/Documentation/filesystems/f2fs.rst
++++ b/Documentation/filesystems/f2fs.rst
+@@ -112,8 +112,11 @@ background_gc=%s	 Turn on/off cleaning operations, namely garbage
+ 			 collection and if background_gc=off, garbage collection
+ 			 will be turned off. If background_gc=sync, it will turn
+ 			 on synchronous garbage collection running in background.
+-			 Default value for this option is on. So garbage
+-			 collection is on by default.
++			 If background_gc=adjust, gc will adjust its policy depends
++			 on conditions: speed up if there no free segments, and slow
++			 down if there is no free space.
++			 Default value for this option is on. So garbage collection
++			 is on by default.
+ gc_merge		 When background_gc is on, this option can be enabled to
+ 			 let background GC thread to handle foreground GC requests,
+ 			 it can eliminate the sluggish issue caused by slow foreground
+diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+index 8d4eaf4d2246..4c2f65d3c208 100644
+--- a/fs/f2fs/f2fs.h
++++ b/fs/f2fs/f2fs.h
+@@ -1333,6 +1333,10 @@ enum {
+ 				 * background gc is on, migrating blocks
+ 				 * like foreground gc
+ 				 */
++	BGGC_MODE_ADJUST,	/*
++				 * background gc is on, and tune its speed
++				 * dependso n conditions
++				 */
+ };
+ 
+ enum {
+diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+index 51d7e8d29bf1..43f935c2502a 100644
+--- a/fs/f2fs/gc.c
++++ b/fs/f2fs/gc.c
+@@ -28,6 +28,67 @@ static struct kmem_cache *victim_entry_slab;
+ static unsigned int count_bits(const unsigned long *addr,
+ 				unsigned int offset, unsigned int len);
+ 
++static inline int free_user_block_ratio(struct f2fs_sb_info *sbi)
++{
++	block_t unused_user_blocks = sbi->user_block_count -
++					written_block_count(sbi);
++	return unused_user_blocks == 0 ? 100 :
++		(100 * free_user_blocks(sbi) / unused_user_blocks);
++}
++
++static bool has_few_free_segments(struct f2fs_sb_info *sbi)
++{
++	unsigned int free_segs = free_segments(sbi);
++	unsigned int ovp_segs = overprovision_segments(sbi);
++
++	return free_segs <= DEF_FEW_FREE_SEGMENT_MULTIPLE * ovp_segs;
++}
++
++static bool has_few_free_space(struct f2fs_sb_info *sbi)
++{
++	block_t total_user_block = sbi->user_block_count;
++	block_t free_user_blocks = total_user_block - written_block_count(sbi);
++
++	return 100 * free_user_blocks / total_user_block <=
++					DEF_FEW_FREE_SPACE_RATIO;
++}
++
++static bool has_enough_reclaimable_blocks(struct f2fs_sb_info *sbi)
++{
++	return 100 - free_user_block_ratio(sbi) >=
++			DEF_ENOUGH_RECLAIMABLE_BLOCK_RATIO;
++}
++
++static void adjust_gc_perference(struct f2fs_sb_info *sbi,
++						unsigned int *wait_ms)
++{
++	struct f2fs_gc_kthread *gc_th = sbi->gc_thread;
++
++	if (has_few_free_space(sbi))
++		gc_th->gc_preference = GC_LIFETIME_MODE;
++	else if (has_few_free_segments(sbi) &&
++			has_enough_reclaimable_blocks(sbi))
++		gc_th->gc_preference = GC_PERFORMANCE_MODE;
++	else
++		gc_th->gc_preference = GC_BALANCE_MODE;
++
++	switch (gc_th->gc_preference) {
++	case GC_PERFORMANCE_MODE:
++		*wait_ms = max(DEF_GC_BALANCE_MIN_SLEEP_TIME *
++					free_user_block_ratio(sbi) / 100,
++					DEF_GC_PERFORMANCE_MIN_SLEEP_TIME);
++		break;
++	case GC_LIFETIME_MODE:
++		gc_th->min_sleep_time = DEF_GC_THREAD_MIN_SLEEP_TIME;
++		break;
++	case GC_BALANCE_MODE:
++		gc_th->min_sleep_time = DEF_GC_BALANCE_MIN_SLEEP_TIME;
++		break;
++	default:
++		f2fs_bug_on(sbi, 1);
++	}
++}
++
+ static int gc_thread_func(void *data)
+ {
+ 	struct f2fs_sb_info *sbi = data;
+@@ -46,6 +107,9 @@ static int gc_thread_func(void *data)
+ 	do {
+ 		bool sync_mode, foreground = false;
+ 
++		if (F2FS_OPTION(sbi).bggc_mode == BGGC_MODE_ADJUST)
++			adjust_gc_perference(sbi, &wait_ms);
++
+ 		wait_event_interruptible_timeout(*wq,
+ 				kthread_should_stop() || freezing(current) ||
+ 				waitqueue_active(fggc_wq) ||
+@@ -109,7 +173,8 @@ static int gc_thread_func(void *data)
+ 			goto next;
+ 		}
+ 
+-		if (!is_idle(sbi, GC_TIME)) {
++		if (!is_idle(sbi, GC_TIME) &&
++			F2FS_OPTION(sbi).bggc_mode != BGGC_MODE_ADJUST) {
+ 			increase_sleep_time(gc_th, &wait_ms);
+ 			f2fs_up_write(&sbi->gc_lock);
+ 			stat_io_skip_bggc_count(sbi);
+@@ -183,6 +248,8 @@ int f2fs_start_gc_thread(struct f2fs_sb_info *sbi)
+ 	gc_th->max_sleep_time = DEF_GC_THREAD_MAX_SLEEP_TIME;
+ 	gc_th->no_gc_sleep_time = DEF_GC_THREAD_NOGC_SLEEP_TIME;
+ 
++	gc_th->gc_preference = GC_BALANCE_MODE;
++
+ 	gc_th->gc_wake = false;
+ 
+ 	sbi->gc_thread = gc_th;
+@@ -329,6 +396,23 @@ static unsigned int check_bg_victims(struct f2fs_sb_info *sbi)
+ 	return NULL_SEGNO;
+ }
+ 
++static unsigned char get_max_age(struct f2fs_sb_info *sbi)
++{
++	struct f2fs_gc_kthread *gc_th = sbi->gc_thread;
++	unsigned char max_age = 100;
++	unsigned char ratio;
++
++	if (!gc_th || gc_th->gc_preference != GC_LIFETIME_MODE)
++		goto out;
++
++	/* if free block count is less than 10%, reduce cost weight of age */
++	ratio = free_user_block_ratio(sbi);
++	if (ratio <= DEF_FEW_FREE_SEGMENT_RATIO)
++		max_age = max(10 * ratio, 1);
++out:
++	return max_age;
++}
++
+ static unsigned int get_cb_cost(struct f2fs_sb_info *sbi, unsigned int segno)
+ {
+ 	struct sit_info *sit_i = SIT_I(sbi);
+@@ -336,6 +420,7 @@ static unsigned int get_cb_cost(struct f2fs_sb_info *sbi, unsigned int segno)
+ 	unsigned int start = GET_SEG_FROM_SEC(sbi, secno);
+ 	unsigned long long mtime = 0;
+ 	unsigned int vblocks;
++	unsigned char max_age;
+ 	unsigned char age = 0;
+ 	unsigned char u;
+ 	unsigned int i;
+@@ -355,8 +440,11 @@ static unsigned int get_cb_cost(struct f2fs_sb_info *sbi, unsigned int segno)
+ 		sit_i->min_mtime = mtime;
+ 	if (mtime > sit_i->max_mtime)
+ 		sit_i->max_mtime = mtime;
++
++	max_age = get_max_age(sbi);
++
+ 	if (sit_i->max_mtime != sit_i->min_mtime)
+-		age = 100 - div64_u64(100 * (mtime - sit_i->min_mtime),
++		age = max_age - div64_u64(max_age * (mtime - sit_i->min_mtime),
+ 				sit_i->max_mtime - sit_i->min_mtime);
+ 
+ 	return UINT_MAX - ((100 * (100 - u) * age) / (100 + u));
+diff --git a/fs/f2fs/gc.h b/fs/f2fs/gc.h
+index 28a00942802c..66f6a30dd494 100644
+--- a/fs/f2fs/gc.h
++++ b/fs/f2fs/gc.h
+@@ -15,6 +15,14 @@
+ #define DEF_GC_THREAD_MAX_SLEEP_TIME	60000
+ #define DEF_GC_THREAD_NOGC_SLEEP_TIME	300000	/* wait 5 min */
+ 
++/* for BGGC_MODE_ADJUST */
++#define DEF_GC_PERFORMANCE_MIN_SLEEP_TIME	100	/* 100 ms */
++#define DEF_GC_BALANCE_MIN_SLEEP_TIME		10000	/* 10 sec */
++#define DEF_FEW_FREE_SPACE_RATIO		10	/* few free space ratio */
++#define DEF_FEW_FREE_SEGMENT_MULTIPLE		10	/* few free segments multiple */
++#define DEF_ENOUGH_RECLAIMABLE_BLOCK_RATIO	20	/* enough reclaimable block ratio */
++#define DEF_FEW_FREE_SEGMENT_RATIO		10	/* few free segment ratio */
++
+ /* choose candidates from sections which has age of more than 7 days */
+ #define DEF_GC_THREAD_AGE_THRESHOLD		(60 * 60 * 24 * 7)
+ #define DEF_GC_THREAD_CANDIDATE_RATIO		20	/* select 20% oldest sections as candidates */
+@@ -32,6 +40,19 @@
+ 
+ #define NR_GC_CHECKPOINT_SECS (3)	/* data/node/dentry sections */
+ 
++/* GC preference */
++enum {
++	GC_PERFORMANCE_MODE,		/*
++					 * speed up background gc to recycle
++					 * slack space for better performance
++					 */
++	GC_LIFETIME_MODE,		/*
++					 * slow down background gc to avoid high
++					 * WAF if there is less free space.
++					 */
++	GC_BALANCE_MODE,		/* tradeoff in between perf and lifetime */
++};
++
+ struct f2fs_gc_kthread {
+ 	struct task_struct *f2fs_gc_task;
+ 	wait_queue_head_t gc_wait_queue_head;
+@@ -42,6 +63,8 @@ struct f2fs_gc_kthread {
+ 	unsigned int max_sleep_time;
+ 	unsigned int no_gc_sleep_time;
+ 
++	unsigned char gc_preference;	/* gc perference */
++
+ 	/* for changing gc mode */
+ 	bool gc_wake;
+ 
+diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+index f19217219c3b..806c8119f021 100644
+--- a/fs/f2fs/super.c
++++ b/fs/f2fs/super.c
+@@ -693,6 +693,8 @@ static int parse_options(struct super_block *sb, char *options, bool is_remount)
+ 				F2FS_OPTION(sbi).bggc_mode = BGGC_MODE_OFF;
+ 			} else if (!strcmp(name, "sync")) {
+ 				F2FS_OPTION(sbi).bggc_mode = BGGC_MODE_SYNC;
++			} else if (!strcmp(name, "adjust")) {
++				F2FS_OPTION(sbi).bggc_mode = BGGC_MODE_ADJUST;
+ 			} else {
+ 				kfree(name);
+ 				return -EINVAL;
+@@ -1927,6 +1929,8 @@ static int f2fs_show_options(struct seq_file *seq, struct dentry *root)
+ 		seq_printf(seq, ",background_gc=%s", "on");
+ 	else if (F2FS_OPTION(sbi).bggc_mode == BGGC_MODE_OFF)
+ 		seq_printf(seq, ",background_gc=%s", "off");
++	else if (F2FS_OPTION(sbi).bggc_mode == BGGC_MODE_ADJUST)
++		seq_printf(seq, ",background_gc=%s", "adjust");
+ 
+ 	if (test_opt(sbi, GC_MERGE))
+ 		seq_puts(seq, ",gc_merge");
+-- 
+2.40.1
 
