@@ -2,244 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 380D7707712
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 02:44:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E7C707717
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 02:50:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbjERAoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 20:44:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52886 "EHLO
+        id S229662AbjERAtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 20:49:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjERAoG (ORCPT
+        with ESMTP id S229487AbjERAtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 20:44:06 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 010C13A9A
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 17:44:04 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-ba818eb96dcso1225296276.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 17:44:04 -0700 (PDT)
+        Wed, 17 May 2023 20:49:50 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF44740CE
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 17:49:27 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-51f6461af24so938960a12.2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 17:49:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684370644; x=1686962644;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eXKMOzqC/UtqsX5IYZEI7ZxYrpvsnXCXl/LYrRajGXI=;
-        b=hTiqWTp2Vbh4DYbynTTuVhSnOKuJ+ybN0yY8fDHNfQZ0Kpooe2O9U2QOat9axli8+E
-         IRILo5iXuDLZMsc0Yxnqz2eG+3Bar9+xuR+DlYraB6e3F8k9+kr3TPEJsxEfQNZGmy9x
-         BllTdLin9RAI6H3BHokLJYGVzBbe85vmfzjbyQF3F1PLf/gDGm4EYVUy61RWUmm1LItq
-         qB25bUthFrAneMvx9f9RCeTY0/2TB1UAh7Ki48NE1UcQ7d+L+R3gcS82jZJ17fWf4Why
-         i4EDqnHdimZpkDj27A+nwDuY8AoeJaikYp7XT+Z+xtHKxA6ETMiHE7ezR6BKhS2Yycjb
-         xpKA==
+        d=bytedance.com; s=google; t=1684370967; x=1686962967;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dqs7e96VU7euNkbUd3s38dZfeIV90lulRcNptau9itQ=;
+        b=irwx18AOoF/WaB2RJXI4aW0f4cVD7vyPi88o/Ve/dBK44+gMFtKbbHTz1kJvpJA39y
+         2CJ1PEfUM6p046OXGOCCIV97F0hUKMFoc4z/Lj7lTPTTFa7lBPzH9cg3wHkQLL+S3zHG
+         wI/xw+foLnsPBAa3MizYsUCx26R2G2JkzgKCzKLQUS1dmGnF0rVFnLzyau9ManMlblEL
+         vonF9cmbgmHm3FuJcNiV2dshj4qXxG4ZfmWNZ87R69R05FDlqb3VZP1Tp0uRZKKqOF+X
+         k2Rj8of2C1CuoD2t9s06R/MucCebbqFJp7u2bdjRCzgqYXe5YNFa0q0Efb0vE16Zp+Oz
+         z1CQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684370644; x=1686962644;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eXKMOzqC/UtqsX5IYZEI7ZxYrpvsnXCXl/LYrRajGXI=;
-        b=DfEkBYJAW33D+JhdhpIwOqPrnezBQoO8Lv4DPLZSd1+vH3p0k9GstgE1rOdot3mOAK
-         ifPGMxNKG6wmJ1OcMO1zfQCAYiWBiRehuyWs/hqY/z28NSMoDPHnQA6go5SX40BYJ60E
-         Xvr4aHhF3qq7RnbpfwgMXyLaPAaRBmCdPFRThc1U2PRLWxl4AGBsFfO2IzZoaBZ2Q0oc
-         F9ZqpyT5TtIUUuGEqYKBIL2uk9n2O1VMpvsQUu/p0FzAYkt4LwdO7atIqwX3N6tDv6iE
-         A3Mb/nuXd1UC5LajQm3wg+5Ch0dVjsYSRq1mzguS5uXYxhozRWoY5oEOj22fifcQ0e53
-         N97A==
-X-Gm-Message-State: AC+VfDxMqhZwxvw5BKmaXq9ZMcEfK9AXYKQg+5kbBm8hQtwn5FHKXFak
-        RzrwKjPQ0x1RAnMwj3a+h6xoK/7ff760wYJuel1gbg==
-X-Google-Smtp-Source: ACHHUZ6B0Jo5j3y6tRqThQCA05429gGG0JHEdt0NDntdUD9hG2VL1i0ANB8FRTNz2T9txPnkqsAnd5ReopjfsnFvS6k=
-X-Received: by 2002:a81:5257:0:b0:561:beec:89d3 with SMTP id
- g84-20020a815257000000b00561beec89d3mr40844ywb.6.1684370644059; Wed, 17 May
- 2023 17:44:04 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684370967; x=1686962967;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dqs7e96VU7euNkbUd3s38dZfeIV90lulRcNptau9itQ=;
+        b=aX59FwhtXR57Ne75LywjvOjfOsSwn4I6EBOiz6Bv0IHa+VNxYUN5rjKbYvG1R2QSnP
+         5w2HsXx6yHi+/TI8qROMfSjbmejAk2Sg0+VkYzt1YiT9f5M4VfgUdcjLdPJ2EUgb28AR
+         Wxk1jkRqlxk/Au6vteoQb0MIdv98dgBjQ6xR+hvCjvGo64oL3SNvTz0vXYdDwZ03iZIh
+         SHmRsY6MPg46TwGXj/Uxaa4ker+RUl2b/IU4sCPC7xbNxFWCgVi9ot2f2tmKHxq9oK3C
+         Qen79VT3SU1PuFHOcgbbm1S2hkyRTIKRJXu53D3DXOlnbTwXWwnzWjkVSo4frGvHY3ie
+         DHzw==
+X-Gm-Message-State: AC+VfDxkaP0iDlAnvUjwcbAg13qH9KW+KLWCfdX7yLChE51jQ2/WoGmE
+        wqMYa4le2oks40GDg1tfuGs0/A==
+X-Google-Smtp-Source: ACHHUZ4dyrTdh4NiyhPjMeXGqf9rfFoVdnVDL1MwIvXHP9SyWPw1WqHnaVnEtF4CgJ265mMVBHLL8A==
+X-Received: by 2002:a17:902:b598:b0:1ad:f26e:3a2e with SMTP id a24-20020a170902b59800b001adf26e3a2emr594531pls.50.1684370967323;
+        Wed, 17 May 2023 17:49:27 -0700 (PDT)
+Received: from [10.3.43.196] ([61.213.176.13])
+        by smtp.gmail.com with ESMTPSA id x2-20020a170902ea8200b001ae365072ccsm3936plb.122.2023.05.17.17.49.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 17:49:26 -0700 (PDT)
+Message-ID: <ee2a975f-0aa6-a46a-e9d2-7f82e313347f@bytedance.com>
+Date:   Thu, 18 May 2023 08:47:22 +0800
 MIME-Version: 1.0
-References: <20230511182426.1898675-1-axelrasmussen@google.com>
- <CADrL8HXFiTL-RDnETS2BUg_qH8CvcCMZiX-kutsrS1-8Uy25=w@mail.gmail.com>
- <ZGVRUeCWr8209m8d@x1n> <ZGVTMnVKNcQDM0x4@x1n> <CAJHvVcgXynHcuoS6eCfOAB2SgzqYy_zMGrRMR2kFuxOtSdUwvQ@mail.gmail.com>
-In-Reply-To: <CAJHvVcgXynHcuoS6eCfOAB2SgzqYy_zMGrRMR2kFuxOtSdUwvQ@mail.gmail.com>
-From:   Jiaqi Yan <jiaqiyan@google.com>
-Date:   Wed, 17 May 2023 17:43:53 -0700
-Message-ID: <CACw3F52MNOVv6KA5n7wRYDT2ujwYkco=aYngbo-zGA3zW1yq+w@mail.gmail.com>
-Subject: Re: [PATCH 1/3] mm: userfaultfd: add new UFFDIO_SIGBUS ioctl
-To:     Axel Rasmussen <axelrasmussen@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        James Houghton <jthoughton@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Hongchen Zhang <zhanghongchen@loongson.cn>,
-        Huang Ying <ying.huang@intel.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Shuah Khan <shuah@kernel.org>,
-        ZhangPeng <zhangpeng362@huawei.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Anish Moorthy <amoorthy@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: Re: Re: [PATCH v2 1/2] virtio: abstract virtqueue related methods
+Content-Language: en-US
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Christoph Hellwig <hch@infradead.org>, stefanha@redhat.com,
+        jasowang@redhat.com, xuanzhuo@linux.alibaba.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+References: <20230517025424.601141-1-pizhenwei@bytedance.com>
+ <20230517025424.601141-2-pizhenwei@bytedance.com>
+ <ZGSEq197W8VvOWCc@infradead.org>
+ <9e4702f2-5473-2139-3858-ae58817bc7b5@bytedance.com>
+ <ZGSGQWqbtdwGXurf@infradead.org>
+ <cc9f3aea-b8bc-f312-41bb-3fd68083aa99@bytedance.com>
+ <20230517062401-mutt-send-email-mst@kernel.org>
+From:   zhenwei pi <pizhenwei@bytedance.com>
+In-Reply-To: <20230517062401-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 3:29=E2=80=AFPM Axel Rasmussen <axelrasmussen@googl=
-e.com> wrote:
->
-> On Wed, May 17, 2023 at 3:20=E2=80=AFPM Peter Xu <peterx@redhat.com> wrot=
-e:
-> >
-> > On Wed, May 17, 2023 at 06:12:33PM -0400, Peter Xu wrote:
-> > > On Thu, May 11, 2023 at 03:00:09PM -0700, James Houghton wrote:
-> > > > On Thu, May 11, 2023 at 11:24=E2=80=AFAM Axel Rasmussen
-> > > > <axelrasmussen@google.com> wrote:
-> > > > >
-> > > > > So the basic way to use this new feature is:
-> > > > >
-> > > > > - On the new host, the guest's memory is registered with userfaul=
-tfd, in
-> > > > >   either MISSING or MINOR mode (doesn't really matter for this pu=
-rpose).
-> > > > > - On any first access, we get a userfaultfd event. At this point =
-we can
-> > > > >   communicate with the old host to find out if the page was poiso=
-ned.
-> > > > > - If so, we can respond with a UFFDIO_SIGBUS - this places a swap=
- marker
-> > > > >   so any future accesses will SIGBUS. Because the pte is now "pre=
-sent",
-> > > > >   future accesses won't generate more userfaultfd events, they'll=
- just
-> > > > >   SIGBUS directly.
-> > > >
-> > > > I want to clarify the SIGBUS mechanism here when KVM is involved,
-> > > > keeping in mind that we need to be able to inject an MCE into the
-> > > > guest for this to be useful.
-> > > >
-> > > > 1. vCPU gets an EPT violation --> KVM attempts GUP.
-> > > > 2. GUP finds a PTE_MARKER_UFFD_SIGBUS and returns VM_FAULT_SIGBUS.
-> > > > 3. KVM finds that GUP failed and returns -EFAULT.
-> > > >
-> > > > This is different than if GUP found poison, in which case KVM will
-> > > > actually queue up a SIGBUS *containing the address of the fault*, a=
-nd
-> > > > userspace can use it to inject an appropriate MCE into the guest. W=
-ith
-> > > > UFFDIO_SIGBUS, we are missing the address!
-> > > >
-> > > > I see three options:
-> > > > 1. Make KVM_RUN queue up a signal for any VM_FAULT_SIGBUS. I think
-> > > > this is pointless.
-> > > > 2. Don't have UFFDIO_SIGBUS install a PTE entry, but instead have a
-> > > > UFFDIO_WAKE_MODE_SIGBUS, where upon waking, we return VM_FAULT_SIGB=
-US
-> > > > instead of VM_FAULT_RETRY. We will keep getting userfaults on repea=
-ted
-> > > > accesses, just like how we get repeated signals for real poison.
-> > > > 3. Use this in conjunction with the additional KVM EFAULT info that
-> > > > Anish proposed (the first part of [1]).
-> > > >
-> > > > I think option 3 is fine. :)
-> > >
-> > > Or... option 4) just to use either MADV_HWPOISON or hwpoison-inject? =
-:)
-> >
-> > I just remember Axel mentioned this in the commit message, and just in =
-case
-> > this is why option 4) was ruled out:
-> >
-> >         They expect that once poisoned, pages can never become
-> >         "un-poisoned". So, when we live migrate the VM, we need to pres=
-erve
-> >         the poisoned status of these pages.
-> >
-> > Just to supplement on this point: we do have unpoison (echoing to
-> > "debug/hwpoison/hwpoison_unpoison"), or am I wrong?
+On 5/17/23 18:39, Michael S. Tsirkin wrote:
+> On Wed, May 17, 2023 at 04:35:55PM +0800, zhenwei pi wrote:
+>>
+>>
+>> On 5/17/23 15:46, Christoph Hellwig wrote:
+>>> On Wed, May 17, 2023 at 03:43:03PM +0800, zhenwei pi wrote:
+>>>> I have a plan to introduce 'Virtio Over Fabrics'(TCP&RDMA) as Virtio
+>>>> transport, as mentioned in cover letter of this series:
+>>>> 3 weeks ago, I posted a proposal 'Virtio Over Fabrics':
+>>>> https://lists.oasis-open.org/archives/virtio-comment/202304/msg00442.html
+>>>
+>>> Just don't do it.  Please define your own protocols over RDMA or TCP
+>>> for exactly the operations you need (for many they will already exist)
+>>> instead of piggyg backing on virtio and making everyone else pay the
+>>> price.
+>>>
+>>
+>> Hi
+>>
+>> 1, `virtqueue_add_inbuf` in current version:
+>> static inline int virtqueue_add_inbuf(struct virtqueue *vq,
+>>                                        struct scatterlist *sg,
+>>                                        unsigned int num,
+>>                                        void *data,
+>>                                        gfp_t gfp)
+>> {
+>>          if (likely(!vq->abstract))
+>>                  return vring_virtqueue_add_sgs(vq, &sg, num, 0, 1, data,
+>> NULL, gfp);
+>>
+>>          return vq->add_sgs(vq, &sg, num, 0, 1, data, NULL, gfp);
+>> }
+>>
+>> And disassemble 'virtinput_queue_evtbuf':
+>> static void virtinput_queue_evtbuf(struct virtio_input *vi,
+>>                                     struct virtio_input_event *evtbuf)
+>> {
+>>          struct scatterlist sg[1];
+>>
+>>          sg_init_one(sg, evtbuf, sizeof(*evtbuf));
+>>          virtqueue_add_inbuf(vi->evt, sg, 1, evtbuf, GFP_ATOMIC);
+>> }
+>>
+>> I notice that two instructions are newly added for vring like:
+>>   24d:   80 78 35 00             cmpb   $0x0,0x35(%rax)
+>>   251:   75 3f                   jne    292
+>>
+>> Is it an expensive price...
+> 
+> Can we somehow only override the kick method?
+> Then take the ring and send it over ...
+> 
 
-If I read unpoison_memory() correctly, once there is a real hardware
-memory corruption (hw_memory_failure will be set), unpoison will stop
-working and return EOPNOTSUPP.
+Could you please take a look at this code?
+https://github.com/pizhenwei/linux/blob/virtio-of-github/drivers/virtio/virtio_fabrics.c#LL861C13-L861C23
 
-I know some cloud providers evacuating VMs once a single memory error
-happens, so not supporting unpoison is probably not a big deal for
-them. BUT others do keep VM running until more errors show up later,
-which could be long after the 1st error.
+> 
+>> 2, Storage/FS specific remote protocol is quite popular, otherwise I'm not
+>> familiar with other device protocols. For example, I need a remote crypto
+>> device to accelerate HTTPS ... With Virtio Over Fabrics, I have a chance to
+>> attach a virtio-crypto device to do this work.
+>>
+>> -- 
+>> zhenwei pi
+> 
 
-> >
-> > >
-> > > Besides what James mentioned on "missing addr", I didn't quickly see =
-what's
-> > > the major difference comparing to the old hwpoison injection methods =
-even
-> > > without the addr requirement. If we want the addr for MCE then it's m=
-ore of
-> > > a question to ask.
-> > >
-> > > I also didn't quickly see why for whatever new way to inject a pte er=
-ror we
-> > > need to have it registered with uffd.  Could it be something like
-> > > MADV_PGERR (even if MADV_HWPOISON won't suffice) so you can inject ev=
-en
-> > > without an userfault context (but still usable when uffd registered)?
-> > >
-> > > And it'll be alawys nice to have a cover letter too (if there'll be a=
- new
-> > > version) explaining the bits.
->
-> I do plan a v2, if for no other reason than to update the
-> documentation. Happy to add a cover letter with it as well.
->
-> +Jiaqi back to CC, this is one piece of a larger memory poisoning /
-> recovery design Jiaqi is working on, so he may have some ideas why
-> MADV_HWPOISON or MADV_PGER will or won't work.
-
-Per https://man7.org/linux/man-pages/man2/madvise.2.html,
-MADV_HWPOISON "is available only for privileged (CAP_SYS_ADMIN)
-processes." So for a non-root VMM, MADV_HWPOISON is out of option.
-
-Another issue with MADV_HWPOISON is, it requires to first successfully
-get_user_pages_fast(). I don't think it will work if memory is not
-mapped yet.
-
-With the UFFDIO_SIGBUS feature introduced in this patchset, it may
-even be possible to free the emulated-hwpoison page back to the kernel
-so we don't lose a 4K page.
-
-I didn't find any ref/doc for MADV_PGERR. Is it something you suggest
-to build, Peter?
-
-
->
-> One idea is, at least for our use case, we have to have the range be
-> userfaultfd registered, because we need to intercept the first access
-> and check at that point whether or not it should be poisoned. But, I
-> think in principle a scheme like this could work:
->
-> 1. Intercept first access with UFFD
-> 2. Issue MADV_HWPOISON or MADV_PGERR or etc to put a pte denoting the
-> poisoned page in place
-> 3. UFFDIO_WAKE to have the faulting thread retry, see the new entry, and =
-SIGBUS
->
-> It's arguably slightly weird, since normally UFFD events are resolved
-> with UFFDIO_* operations, but I don't see why it *couldn't* work.
->
-> Then again I am not super familiar with MADV_HWPOISON, I will have to
-> do a bit of reading to understand if its semantics are the same
-> (future accesses to this address get SIGBUS).
->
->
-> > >
-> > > Thanks,
-> > >
-> > > --
-> > > Peter Xu
-> >
-> > --
-> > Peter Xu
-> >
+-- 
+zhenwei pi
