@@ -2,158 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D0AC708C93
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 02:00:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8333C708CE9
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 02:28:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjESAAm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 20:00:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48686 "EHLO
+        id S230071AbjESA2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 20:28:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjESAAk (ORCPT
+        with ESMTP id S229850AbjESA2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 20:00:40 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E57EA
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 17:00:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684454439; x=1715990439;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6P4k9NSWAM5cUfTH2rivkZplBzli7wzXPb3Fsq7Lqt8=;
-  b=g3+cDp+w4CA3iKAkOS6ZMVfzEq8QEj2T3MBO4Vb8B6D5HnrjPb2oTCEI
-   NGFPKpvWM6y3nL2y8YSvo8JkcrUVAjV8/yYZtcYw9JpwoG5zx6KxD5cy5
-   d8wCpTOFtulG7zo+diGNTS3jyDuYmbTQ5xW2IbrV00EhSTqz36ugb1Jn6
-   ttbqJY3X47QEresj7kPmtYORJ/VhchJVvCCOYPV2/0DLGpGT1ZCEyIgMi
-   a1kVVuM55HDE5glG/8GVg9nJBbsaG0TVdT5m2n9TNQTql5kiECwEgERcF
-   yuvKerW/NMncKt8vuj4AH9FGXN3hKr48QNn9lMxJoMq+mSrCzqrTpNKYZ
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="351067124"
-X-IronPort-AV: E=Sophos;i="6.00,175,1681196400"; 
-   d="scan'208";a="351067124"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 17:00:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="735299611"
-X-IronPort-AV: E=Sophos;i="6.00,175,1681196400"; 
-   d="scan'208";a="735299611"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga001.jf.intel.com with ESMTP; 18 May 2023 17:00:38 -0700
-Date:   Thu, 18 May 2023 17:03:35 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Shrikanth Hegde <sshegde@linux.vnet.ibm.com>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Ricardo Neri <ricardo.neri@intel.com>,
-        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
-        Ben Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org,
-        Srikar Dronamraju <srikar@linux.vnet.ibm.com>,
-        naveen.n.rao@linux.vnet.ibm.com,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v4 00/12] sched: Avoid unnecessary migrations within SMT
- domains
-Message-ID: <20230519000335.GB24449@ranerica-svr.sc.intel.com>
-References: <20230406203148.19182-1-ricardo.neri-calderon@linux.intel.com>
- <20230429153219.GC1495785@hirez.programming.kicks-ass.net>
- <de79bd2c-42cb-23f2-a951-5a5caab0bacf@linux.vnet.ibm.com>
+        Thu, 18 May 2023 20:28:44 -0400
+Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F416E2;
+        Thu, 18 May 2023 17:28:41 -0700 (PDT)
+Received: by mail-ot1-x333.google.com with SMTP id 46e09a7af769-6ab087111faso1112501a34.3;
+        Thu, 18 May 2023 17:28:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684456120; x=1687048120;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=xfintrOM/1fpOEzvoo+azEZAHiiUhCkQ94XfBy4YSIw=;
+        b=QVGac+UY98q0Icyx2cFtitW+fHYVtcUadgrt5aegq52aXKojnveL/fVfx2un2sgvR4
+         +MOfF5XMqH/9tVdVxWSWaCph9k28l9gQC3Qn8K+p/oBoAVzPLVNfJWRxbsUuVq73H+Fo
+         oIT8Ig4A58FDkvJWwTNRWLdSEM0YAeJdYDKi3DroIwOASst2jSwV8ZifXCQxTyGTyimH
+         0tKPhfpLLq+YS8/CTH/QW9na1K3C7XZaYNbDl6sFKCMuBAaFpkaZ/QlgA5Q1Oym/IAm7
+         63pKXQzdnzttP25rtScDKFdB7BcFOeVolFWZKJNuWul84SaUkB6V0Er2wqTvLVFLdu9A
+         YkcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684456120; x=1687048120;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xfintrOM/1fpOEzvoo+azEZAHiiUhCkQ94XfBy4YSIw=;
+        b=XaWivar3MT7dHrMQv0Zx0vOEZkEoPwJgSxJuR9v80GsGXzOsAJL7ttmTmh0hRaH0XE
+         0pqTbDtvZELwK6bQChHVJRMYtLC6gcH/I4T4QTMKY8607MpH0l93+MsJbPKxIR+dTvJC
+         sbvtmG2G1U2iElHcJJXzlQ9/Vk2Te+s+nHkNPs+HtPV4ffo+S1HDf8yXIy+WjbWoRhpt
+         ZJTebMSGAwliQZce/pHC1SUw+/M9NiLF3GTLp+QdZANgZy5GRAyI7nqTZLGDJKq3UC5E
+         ggHA5GfLyVkNfCrTUQl8rJLOdwdRqAAl8TNE9GIbp2u8vlgygnCMsXNAuxdYZVs8R/VZ
+         hmAg==
+X-Gm-Message-State: AC+VfDwDz2mRNJKo+lXLSJsRpeAlh4N1WUjdiw0xfZULwI/tPtGsmygp
+        MCqjU8KZTafoXHVhqzt3s/w=
+X-Google-Smtp-Source: ACHHUZ6cbUF6iirrzUPMVN6p7d9wmles1zdmr588mUVTivZeLy+yaI7bLU71vnyTekkSxXNRSGB76w==
+X-Received: by 2002:a9d:7a91:0:b0:6ac:8557:b0e7 with SMTP id l17-20020a9d7a91000000b006ac8557b0e7mr145266otn.32.1684456120073;
+        Thu, 18 May 2023 17:28:40 -0700 (PDT)
+Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
+        by smtp.gmail.com with ESMTPSA id j9-20020a9d7389000000b006adc8d27bdfsm1191921otk.7.2023.05.18.17.28.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 May 2023 17:28:39 -0700 (PDT)
+Message-ID: <8e42aad3-d94e-3cb4-ee59-90ded31cea9e@gmail.com>
+Date:   Thu, 18 May 2023 11:51:17 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <de79bd2c-42cb-23f2-a951-5a5caab0bacf@linux.vnet.ibm.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Subject: Re: [PATCH v1 1/7] rust: workqueue: add low-level workqueue bindings
+To:     Alice Ryhl <aliceryhl@google.com>, rust-for-linux@vger.kernel.org
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+References: <20230517203119.3160435-1-aliceryhl@google.com>
+ <20230517203119.3160435-2-aliceryhl@google.com>
+Content-Language: en-US
+In-Reply-To: <20230517203119.3160435-2-aliceryhl@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 11:53:48PM +0530, Shrikanth Hegde wrote:
+On 5/17/23 17:31, Alice Ryhl wrote:
+> Define basic low-level bindings to a kernel workqueue. The API defined
+> here can only be used unsafely. Later commits will provide safe
+> wrappers.
 > 
-> 
-> On 4/29/23 9:02 PM, Peter Zijlstra wrote:
-> > On Thu, Apr 06, 2023 at 01:31:36PM -0700, Ricardo Neri wrote:
-> >> Hi,
-> >>
-> >> This is v4 of this series. Previous versions can be found here [1], [2],
-> >> and here [3]. To avoid duplication, I do not include the cover letter of
-> >> the original submission. You can read it in [1].
-> >>
-> >> This patchset applies cleanly on today's master branch of the tip tree.
-> >>
-> >> Changes since v3:
-> >>
-> >> Nobody liked the proposed changes to the setting of prefer_sibling.
-> >> Instead, I tweaked the solution that Dietmar proposed. Now the busiest
-> >> group, not the local group, determines the setting of prefer_sibling.
-> >>
-> >> Vincent suggested improvements to the logic to decide whether to follow
-> >> asym_packing priorities. Peter suggested to wrap that in a helper function.
-> >> I added sched_use_asym_prio().
-> >>
-> >> Ionela found that removing SD_ASYM_PACKING from the SMT domain in x86
-> >> rendered sd_asym_packing NULL in SMT cores. Now highest_flag_domain()
-> >> does not assume that all child domains have the requested flag.
-> >>
-> >> Tim found that asym_active_balance() needs to also check for the idle
-> >> states of the SMT siblings of lb_env::dst_cpu. I added such check.
-> >>
-> >> I wrongly assumed that asym_packing could only be used when the busiest
-> >> group had exactly one busy CPU. This broke asym_packing balancing at the
-> >> DIE domain. I limited this check to balances between cores at the MC
-> >> level.
-> >>
-> >> As per suggestion from Dietmar, I removed sched_asym_smt_can_pull_tasks()
-> >> and placed its logic in sched_asym(). Also, sched_asym() uses
-> >> sched_smt_active() to skip checks when not needed.
-> >>
-> >> I also added a patch from Chen Yu to enable asym_packing balancing in
-> >> Meteor Lake, which has CPUs of different maximum frequency in more than
-> >> one die.
-> > 
-> > Is the actual topology of Meteor Lake already public? This patch made me
-> > wonder if we need SCHED_CLUSTER topology in the hybrid_topology thing,
-> > but I can't remember (one of the raisins why the endless calls are such
-> > a frigging waste of time) and I can't seem to find the answer using
-> > Google either.
-> > 
-> >> Hopefully, these patches are in sufficiently good shape to be merged?
-> > 
-> > Changelogs are very sparse towards the end and I had to reverse engineer
-> > some of it which is a shame. But yeah, on a first reading the code looks
-> > mostly ok. Specifically 8-10 had me WTF a bit and only at 11 did it
-> > start to make a little sense. Mostly they utterly fail to answer the
-> > very fundament "why did you do this" question.
-> > 
-> > Also, you seem to have forgotten to Cc our friends from IBM such that
-> > they might verify you didn't break their Power7 stuff -- or do you have
-> > a Power7 yourself to verify and forgot to mention that?
-> 
-> Very good patch series in addressing asym packing. Interesting discussions as
-> well. Took me quite sometime to get through to understand and do a little bit
-> of testing.
-> 
-> Tested this patch a bit on power7 with qemu. Tested with SMT=4. sched domains
-> show ASYM_PACKING present only for SMT domain.
-> 
-> We don't see any regressions/gain due to patch. SMT priorities are honored when
-> tasks are scheduled and load_balanced.
+> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
+> ---
+> [...]
+> +
+> +impl Queue {
+> +    /// Use the provided `struct workqueue_struct` with Rust.
+> +    ///
+> +    /// # Safety
+> +    ///
+> +    /// The caller must ensure that the provided raw pointer is not dangling, that it points at a
+> +    /// valid workqueue, and that it remains valid until the end of 'a.
+> +    pub unsafe fn from_raw<'a>(ptr: *const bindings::workqueue_struct) -> &'a Queue {
+> +        // SAFETY: The `Queue` type is `#[repr(transparent)]`, so the pointer cast is valid. The
+> +        // caller promises that the pointer is not dangling.
+> +        unsafe { &*(ptr as *const Queue) }
+> +    }
+> +
+> +    /// Enqueues a work item.
+> +    ///
+> +    /// This may fail if the work item is already enqueued in a workqueue.
 
-Thank you very much for your review and testing! Would you mind sharing the
-qemu command you use? I would like to test my future patches on power7.
+Wouldn't be worth to mention that, if not implied, the item it's going
+to be worked on an unbound CPU?
 
-BR,
-Ricardo
+> +    pub fn enqueue<T: WorkItem + Send + 'static>(&self, w: T) -> T::EnqueueOutput {
+> +        let queue_ptr = self.0.get();
+> [...]
+
+Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
