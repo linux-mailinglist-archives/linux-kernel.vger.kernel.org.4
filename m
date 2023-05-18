@@ -2,212 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5E3D707CB4
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:22:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A80E707CC4
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:26:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbjERJWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 05:22:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49100 "EHLO
+        id S230170AbjERJ0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 05:26:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbjERJWu (ORCPT
+        with ESMTP id S229810AbjERJ0s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 05:22:50 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A1378211B;
-        Thu, 18 May 2023 02:22:47 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8BxRPBm7mVkM84JAA--.17280S3;
-        Thu, 18 May 2023 17:22:46 +0800 (CST)
-Received: from user-pc.202.106.0.20 (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxWdJi7mVkSKFnAA--.45037S2;
-        Thu, 18 May 2023 17:22:45 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Minas Harutyunyan <hminas@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, Yinbo Zhu <zhuyinbo@loongson.cn>
-Subject: [PATCH v1] usb: dwc2: add pci_device_id driver_data parse support
-Date:   Thu, 18 May 2023 17:22:40 +0800
-Message-Id: <20230518092240.8023-1-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
+        Thu, 18 May 2023 05:26:48 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1CFC3;
+        Thu, 18 May 2023 02:26:47 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34I8iWYk017337;
+        Thu, 18 May 2023 09:26:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=qcppdkim1;
+ bh=l4eWh7+rn5/X+0JGaPIW3uUeEg7Fa2SZlqeEZEpEiks=;
+ b=LEAD5wwSE9HQJ9AycMMftYTnwwtmawYiXqE85eGs4AgcRF7WbnUd2KBnpBlTCSXkCfUf
+ ytXqLUtq9CRohao6lhKF0k2HkjLEsSEgGgLIbj/Zhh+GFd0l8gCNS2bSqjPxVyxgYt0/
+ XPllS0UVuGtQRTHSW6b9WmH2dLss3CLFYhx2X/pcFoiwwQwHUtjTj8rQTrynzuiy8fDo
+ RdkHgsib7kZj3QOa3vr1S/yf5CGXe1gJCsp1Drj9ALCHI2nP6cCNDFQjN8zmmEj7XgcR
+ /eT/gQkmwW7TXw/HUkfKWenW2Vc7QNhnhsHoVSoGRabQXtMGmEvSvLluZSUGrqpanxu+ 6w== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qn73us21x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 May 2023 09:26:21 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34I9PqFa006447
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 May 2023 09:25:52 GMT
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 18 May 2023 02:25:52 -0700
+Received: from nalasex01a.na.qualcomm.com ([fe80::5cb1:e5a2:c713:5b68]) by
+ nalasex01a.na.qualcomm.com ([fe80::5cb1:e5a2:c713:5b68%4]) with mapi id
+ 15.02.0986.042; Thu, 18 May 2023 02:25:52 -0700
+From:   "Pradeep Pragallapati (QUIC)" <quic_pragalla@quicinc.com>
+To:     Damien Le Moal <dlemoal@kernel.org>
+CC:     Yu Kuai <yukuai1@huaweicloud.com>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "yukuai (C)" <yukuai3@huawei.com>,
+        Christoph Hellwig <hch@infradead.org>
+Subject: RE: [PATCH V1] block: Fix null pointer dereference issue on struct
+ io_cq
+Thread-Topic: [PATCH V1] block: Fix null pointer dereference issue on struct
+ io_cq
+Thread-Index: AQHZiJvu5joNBe/ZIUyNvEQWRViGA69en4qAgAAGL4CAAABcAIAAAuMAgAD7kXA=
+Date:   Thu, 18 May 2023 09:25:52 +0000
+Message-ID: <7e32c001d222483394327c5802a6c985@quicinc.com>
+References: <20230517084434.18932-1-quic_pragalla@quicinc.com>
+ <07b8b870-a464-25a9-c0a6-c123fad05ff5@huaweicloud.com>
+ <a2f86cd7-776c-d7ed-8815-62683a14ba36@kernel.org>
+ <ZGScoCeOILHpc8c1@infradead.org>
+ <344bfde9-5f7e-80a2-038f-3bfc387ea678@kernel.org>
+In-Reply-To: <344bfde9-5f7e-80a2-038f-3bfc387ea678@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.217.217.238]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxWdJi7mVkSKFnAA--.45037S2
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxur4xWF13GFWrZry7Kr13XFb_yoW7Jr1DpF
-        ZrZFW0yrWktFsxCw13CF4UAFy5Zan7J34UCa47Kw1S9FZ7Ar4rXF1jkr45Cr93t390ga12
-        vF17tw48CF47J37anT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bVAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE
-        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
-        80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCj
-        c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1s
-        IEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUXVWUAwC20s026c02
-        F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GF
-        ylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
-        xVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
-        4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j5
-        HUDUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 8jhhghv1qUXGe0RYN3HCsKAQqt7O2nCV
+X-Proofpoint-GUID: 8jhhghv1qUXGe0RYN3HCsKAQqt7O2nCV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-18_07,2023-05-17_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ lowpriorityscore=0 priorityscore=1501 mlxlogscore=454 malwarescore=0
+ impostorscore=0 bulkscore=0 mlxscore=0 clxscore=1011 adultscore=0
+ spamscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305180071
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The dwc2 driver has everything we need to run in PCI mode except
-for pci_device_id driver_data parse.  With that to set Loongson
-dwc2 element and added identified as PCI_VENDOR_ID_LOONGSON
-and PCI_DEVICE_ID_LOONGSON_DWC2 in dwc2_pci_ids, the Loongson
-dwc2 controller will work.
-
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
----
- drivers/usb/dwc2/core.h   |  1 +
- drivers/usb/dwc2/params.c | 33 +++++++++++++++++++++++++++++++--
- drivers/usb/dwc2/pci.c    | 14 +-------------
- include/linux/pci_ids.h   |  2 ++
- 4 files changed, 35 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
-index 0bb4c0c845bf..c92a1da46a01 100644
---- a/drivers/usb/dwc2/core.h
-+++ b/drivers/usb/dwc2/core.h
-@@ -1330,6 +1330,7 @@ irqreturn_t dwc2_handle_common_intr(int irq, void *dev);
- /* The device ID match table */
- extern const struct of_device_id dwc2_of_match_table[];
- extern const struct acpi_device_id dwc2_acpi_match[];
-+extern const struct pci_device_id dwc2_pci_ids[];
- 
- int dwc2_lowlevel_hw_enable(struct dwc2_hsotg *hsotg);
- int dwc2_lowlevel_hw_disable(struct dwc2_hsotg *hsotg);
-diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
-index 21d16533bd2f..f7550d293c2d 100644
---- a/drivers/usb/dwc2/params.c
-+++ b/drivers/usb/dwc2/params.c
-@@ -7,6 +7,8 @@
- #include <linux/module.h>
- #include <linux/of_device.h>
- #include <linux/usb/of.h>
-+#include <linux/pci_ids.h>
-+#include <linux/pci.h>
- 
- #include "core.h"
- 
-@@ -55,6 +57,14 @@ static void dwc2_set_jz4775_params(struct dwc2_hsotg *hsotg)
- 		!device_property_read_bool(hsotg->dev, "disable-over-current");
- }
- 
-+static void dwc2_set_loongson_params(struct dwc2_hsotg *hsotg)
-+{
-+	struct dwc2_core_params *p = &hsotg->params;
-+
-+	p->phy_utmi_width = 8;
-+	p->power_down = DWC2_POWER_DOWN_PARAM_NONE;
-+}
-+
- static void dwc2_set_x1600_params(struct dwc2_hsotg *hsotg)
- {
- 	struct dwc2_core_params *p = &hsotg->params;
-@@ -281,6 +291,22 @@ const struct acpi_device_id dwc2_acpi_match[] = {
- };
- MODULE_DEVICE_TABLE(acpi, dwc2_acpi_match);
- 
-+const struct pci_device_id dwc2_pci_ids[] = {
-+	{
-+		PCI_DEVICE(PCI_VENDOR_ID_SYNOPSYS, PCI_PRODUCT_ID_HAPS_HSOTG),
-+	},
-+	{
-+		PCI_DEVICE(PCI_VENDOR_ID_STMICRO,
-+			   PCI_DEVICE_ID_STMICRO_USB_OTG),
-+	},
-+	{
-+		PCI_DEVICE(PCI_VENDOR_ID_LOONGSON, PCI_DEVICE_ID_LOONGSON_DWC2),
-+		.driver_data = (unsigned long)dwc2_set_loongson_params,
-+	},
-+	{ /* end: all zeroes */ }
-+};
-+MODULE_DEVICE_TABLE(pci, dwc2_pci_ids);
-+
- static void dwc2_set_param_otg_cap(struct dwc2_hsotg *hsotg)
- {
- 	switch (hsotg->hw_params.op_mode) {
-@@ -929,10 +955,13 @@ int dwc2_init_params(struct dwc2_hsotg *hsotg)
- 		set_params(hsotg);
- 	} else {
- 		const struct acpi_device_id *amatch;
-+		const struct pci_device_id *pmatch;
- 
- 		amatch = acpi_match_device(dwc2_acpi_match, hsotg->dev);
--		if (amatch && amatch->driver_data) {
--			set_params = (set_params_cb)amatch->driver_data;
-+		pmatch = pci_match_id(dwc2_pci_ids, to_pci_dev(hsotg->dev->parent));
-+
-+		if ((amatch && amatch->driver_data) || (pmatch && pmatch->driver_data)) {
-+			set_params = (set_params_cb)pmatch->driver_data;
- 			set_params(hsotg);
- 		}
- 	}
-diff --git a/drivers/usb/dwc2/pci.c b/drivers/usb/dwc2/pci.c
-index b7306ed8be4c..f3a1e4232a31 100644
---- a/drivers/usb/dwc2/pci.c
-+++ b/drivers/usb/dwc2/pci.c
-@@ -24,7 +24,7 @@
- #include <linux/platform_device.h>
- #include <linux/usb/usb_phy_generic.h>
- 
--#define PCI_PRODUCT_ID_HAPS_HSOTG	0xabc0
-+#include "core.h"
- 
- static const char dwc2_driver_name[] = "dwc2-pci";
- 
-@@ -122,18 +122,6 @@ static int dwc2_pci_probe(struct pci_dev *pci,
- 	return ret;
- }
- 
--static const struct pci_device_id dwc2_pci_ids[] = {
--	{
--		PCI_DEVICE(PCI_VENDOR_ID_SYNOPSYS, PCI_PRODUCT_ID_HAPS_HSOTG),
--	},
--	{
--		PCI_DEVICE(PCI_VENDOR_ID_STMICRO,
--			   PCI_DEVICE_ID_STMICRO_USB_OTG),
--	},
--	{ /* end: all zeroes */ }
--};
--MODULE_DEVICE_TABLE(pci, dwc2_pci_ids);
--
- static struct pci_driver dwc2_pci_driver = {
- 	.name = dwc2_driver_name,
- 	.id_table = dwc2_pci_ids,
-diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-index e43ab203054a..6481f648695a 100644
---- a/include/linux/pci_ids.h
-+++ b/include/linux/pci_ids.h
-@@ -157,6 +157,7 @@
- #define PCI_VENDOR_ID_PCI_SIG		0x0001
- 
- #define PCI_VENDOR_ID_LOONGSON		0x0014
-+#define PCI_DEVICE_ID_LOONGSON_DWC2	0x7a04
- 
- #define PCI_VENDOR_ID_SOLIDIGM		0x025e
- 
-@@ -2356,6 +2357,7 @@
- #define PCI_DEVICE_ID_SYNOPSYS_HAPSUSB3_AXI	0xabce
- #define PCI_DEVICE_ID_SYNOPSYS_HAPSUSB31	0xabcf
- #define PCI_DEVICE_ID_SYNOPSYS_EDDA	0xedda
-+#define PCI_PRODUCT_ID_HAPS_HSOTG       0xabc0
- 
- #define PCI_VENDOR_ID_USR		0x16ec
- 
--- 
-2.20.1
-
+SGksDQoNCi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQpGcm9tOiBEYW1pZW4gTGUgTW9hbCA8
+ZGxlbW9hbEBrZXJuZWwub3JnPiANClNlbnQ6IFdlZG5lc2RheSwgTWF5IDE3LCAyMDIzIDM6MDIg
+UE0NClRvOiBDaHJpc3RvcGggSGVsbHdpZyA8aGNoQGluZnJhZGVhZC5vcmc+DQpDYzogWXUgS3Vh
+aSA8eXVrdWFpMUBodWF3ZWljbG91ZC5jb20+OyBQcmFkZWVwIFByYWdhbGxhcGF0aSAoUVVJQykg
+PHF1aWNfcHJhZ2FsbGFAcXVpY2luYy5jb20+OyBheGJvZUBrZXJuZWwuZGs7IGxpbnV4LWJsb2Nr
+QHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgeXVrdWFpIChD
+KSA8eXVrdWFpM0BodWF3ZWkuY29tPg0KU3ViamVjdDogUmU6IFtQQVRDSCBWMV0gYmxvY2s6IEZp
+eCBudWxsIHBvaW50ZXIgZGVyZWZlcmVuY2UgaXNzdWUgb24gc3RydWN0IGlvX2NxDQoNCk9uIDUv
+MTcvMjMgMTg6MjEsIENocmlzdG9waCBIZWxsd2lnIHdyb3RlOg0KPiBPbiBXZWQsIE1heSAxNywg
+MjAyMyBhdCAwNjoyMDoxOVBNICswOTAwLCBEYW1pZW4gTGUgTW9hbCB3cm90ZToNCj4+IHR3aWNl
+IGZvciB0aGUgc2FtZSBpY3EuIFRoZSBtaXNzaW5nIHJjdSBsb2NrIGluIGlvY19leGl0X2ljcXMo
+KSANCj4+IGFscmVhZHkgd2FzIGluIGl0c2VsZiBhIGJ1ZywgYW5kIHRoZSBtaXNzaW5nIGZsYWcg
+Y2hlY2sgaXMgYW5vdGhlci4NCj4gDQo+IHNwaW5sb2NrcyBpbXBseSBhIHJjdSBjcml0aWNhbCBz
+ZWN0aW9uLCBubyBuZWVkIHRvIGR1cGxpY2F0ZSBpdC4NCg0KUmlnaHQuIEFuZCBJIG1pc3JlYWQg
+dGhlIGNvZGUuIEFzIFl1IHNhaWQsIGdpdmVuIHRoYXQgaW9jX2V4aXRfaWNxcygpIGl0ZXJhdGVz
+IHRoZSBsaXN0IG9mIGljcXMgdW5kZXIgaW9jLT5sb2NrIGFuZCB0aGUgaW9jIGlzIHJlbW92ZWQg
+ZnJvbSB0aGF0IGxpc3QgdW5kZXIgdGhlIHNhbWUgbG9jaywgaW9jX2V4aXRfaWNxcygpIHNob3Vs
+ZCBuZXZlciBzZWUgYW4gaWNxIHRoYXQgd2VudCB0aHJvdWdoIGlvY19kZXN0cm95X2ljcSgpLi4u
+DQpWZXJ5IHdlaXJkLg0KDQpUaGlzIHdlaXJkIGNhbiBiZSBwb3NzaWJsZSANCjEuIHVwZGF0aW5n
+IGljcV9oaW50IHdoaWNoIGlzIGFubm90YXRlZCBhcyBfX3JjdSB0eXBlIHdpdGhvdXQgUkNVLXBy
+b3RlY3RlZCBjb250ZXh0IGluIGlvY19kZXN0cm95X2ljcSgpLg0KTW9yZW92ZXIsIHRoaXMgd2Fz
+IHRha2VuIGNhcmUgaW4gZWxzZSBwYXJ0IG9mIGlvY19yZWxlYXNlX2ZuKCkgYnkgcmN1X3JlYWRf
+bG9jay91bmxvY2soKSBidXQgbWlzc2VkIGluIGlmIHN0YXRlbWVudCB3aGljaCBjYW4gbGVhZCB0
+byB0aGlzIHdlaXJkLg0KDQoyLiBleHRyYWN0aW5nIGljcSBmcm9tIGhsaXN0L2xpc3QgZWxlbWVu
+dHMgYXJlIGRvbmUgdXNpbmcgcmN1IGxvY2tzIHByb3RlY3RlZCBpbiBpb2NfY2xlYXJfcXVldWUo
+KSBidXQgc2FtZSB3YXMgbm90IGF0IGlvY19leGl0X2ljcXMoKS4NCg0KU28sIGZhciB3ZSBoYXZl
+IHNlZW4gMTArIGluc3RhbmNlcyBvZiB0aGlzIGNyYXNoIG9uIDYuMSBrZXJuZWwgZHVyaW5nIHN0
+YWJpbGl0eSB0ZXN0aW5nIChJbnZvbHZlcyBJTywgcmVib290cywgZGV2aWNlIHN1c3BlbmQvcmVz
+dW1lLCBhbmQgZmV3IG1vcmUpLg0KV2l0aCB0aGUgVjEgcGF0Y2gsIHdlIGRpZG4ndCBvYnNlcnZl
+IHRoZSBpc3N1ZSBmb3IgYXQgbGVhc3QgNDhocnMrIG9mIHN0YWJpbGl0eSB0ZXN0aW5nLg0KDQoN
+Ci0tDQpEYW1pZW4gTGUgTW9hbA0KV2VzdGVybiBEaWdpdGFsIFJlc2VhcmNoDQoNCg==
