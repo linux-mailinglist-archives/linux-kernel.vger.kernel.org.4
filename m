@@ -2,142 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A73C7087FC
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 20:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14BA27087EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 20:44:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbjERSuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 14:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37114 "EHLO
+        id S230004AbjERSoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 14:44:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjERSuW (ORCPT
+        with ESMTP id S229840AbjERSop (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 14:50:22 -0400
+        Thu, 18 May 2023 14:44:45 -0400
 Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8129EE4A
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 11:50:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE4FDE46
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 11:44:43 -0700 (PDT)
 Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34I6IsjN012432;
-        Thu, 18 May 2023 14:57:04 GMT
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34I6IrcY012408;
+        Thu, 18 May 2023 14:57:06 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references :
  content-transfer-encoding : content-type : mime-version;
- s=corp-2023-03-30; bh=1TdNAGujIkL2WjS4gl/cKBZ4VuW37YWu43lI8MFgl5A=;
- b=N02zp6fb9JGl3bXqiGkEXAQc0P/B0DjFegf/APscMbwKfPIe0IJBuBHEPjrSVhK14GGQ
- wRQxWqvMerQkMWYotsl1dEU+LSPG+vFLScW/BEk/M5kl2TOZKvKz9TU5WzdPOGwljh2t
- 5wA8ilLYihx5q8qNE0As99Tm1vGpjYECV9+oxkpeXDNYG39Eb+q2EtrX1JPEDDDxxgI4
- fKAVGltzmkhkCQ5Di3E+q6lHo9wWhdBY4SxgRlYvJLzI2sVEkLqfLKBViCLHGoUyWfE8
- mpe09RbDWiE9hDzRNQvGNbRybK3ox/o+d6su2TEBCujVmTq/KgU5NgLg+VWSZ0HRXkZ1 NQ== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qmxwpjrc1-1
+ s=corp-2023-03-30; bh=or0gvhiuj20PZDjQz2A9EQ37j0qVAfTsjFswHLJTGPw=;
+ b=CSWqg4nUL6VOOAxgLKYWBJUqPrEMgnAi30X2s/XfZgwf69fT2F7vGduGLbollPkTQc04
+ B37U2yN/d9Wd4oAEANtNiOvXyoXs4V7NsNhXBjqMwtpj4MvVUdDMUZtnI1pCYEorRbT6
+ uiNGrzv1zPGKghZBf7o42tJXzbTPogPGuUs7wVcBvHt011e9Sn5ZiCRgQ9xofAjbH1+h
+ BBRnPRjsUdO9ApLRrIU32JdyqzF4VUGVGtSGpU4HCcay/Rbmpia3I0ob7jPGNlPwrtfW
+ OSG/Gx9cpfN0Hbd1+vnU/ASNqlRa/7AyJt5mKnksw8+mXsIyXUXgx3bjOZGggOZwANu2 Tg== 
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qmxwpjrc6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 18 May 2023 14:57:04 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 34IEc20P033902;
-        Thu, 18 May 2023 14:57:03 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2109.outbound.protection.outlook.com [104.47.55.109])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3qj107c9df-1
+        Thu, 18 May 2023 14:57:06 +0000
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 34IDRG4I040136;
+        Thu, 18 May 2023 14:57:05 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2108.outbound.protection.outlook.com [104.47.55.108])
+        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3qj106mqvb-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 18 May 2023 14:57:03 +0000
+        Thu, 18 May 2023 14:57:05 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OcAHddjApTVvAMitlty2XWRPeyzPDENcJxM2Ii3HsDpG1BbkA3edlswsTGiTO11PeDdeA/ov9th1ZdqErEV876FB01nJD+DUibNPk+uZxRH0eOo5qKsim+cCVSKbWV7cPW7GNXT1gCTqRmgH6RMZ4Y5jJCK3CNRD/S/Hal0yJc8FTgkd9+s0lcTrjg1a+HkXBAKY3RNdbO/MVO86U7kjgzxqmHmmaliS/Lmalwf30nhNDIL8dN62xq/dKRHdIuTnNGxDz2z8phIynlLilU35wzr7x+2sc99dC8PTN2GasTbmx065u8MmGBr1B8cDmzUKzi76dkjWMB0NUEbNXd84yg==
+ b=kivZMgiCADNvPP/bnLWhfr3RKRkyLFoapxV2Ia0qdKx54mLmZ92WIISyr6zNVK6uoJ1m2MRG7JJZ6KsGrGeskg1f/CbWwWG5yVwic1Z9ZQHexDkGBlGd5hTGCiALpRH6ePF/IddfFPIv1hOPgPqHUNpcKZXdNt4TzHa2hHpp6VuA4yHGzTrkCTvppOuMzqfJqlCz5dJd2dfzi6KnF8hZfQYYBnHW7Vli8QCjutqi7shIEHUwQqLXxfn2iNC89krov9LSn10nUWRwmm3Pr0K7wCev1tuA+946hDndRGBbAwzxZxCOPwxRsFpZ8ngf/DJNrZ+G9Myhm6nsR7P4CmuDng==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1TdNAGujIkL2WjS4gl/cKBZ4VuW37YWu43lI8MFgl5A=;
- b=Btw3d+CWLOSE2mkHj7OHDBZ9kCuY3So8Xv+Gj5TqV7FigcdXYBOLC1LaL3dwmpJbvOsVzd9QHqZplDxqHJe/bNyoPCYHZdGq/PFyaQ9OeafR+n5BOdtmMISRc2sJeN6qPMv+4g8uBv+j75v2jPQZIoTd4AEA7CeP10KbOAsnn64KjbmnPbor5Mb72Q9oF2+/1PPU1qUDPBMnD8HqSXFuwrI8bqVxpNuM/vQ/qShipA+brdarCi0jId/+MENIyLOONeE9SRa7C44uHfDVS90l/PM/5j6b0cMG5CWlAi6e+4TCa1dCBAO2bZt6AUGafb1iy3e7p+wAvVrxAggnO6ESPw==
+ bh=or0gvhiuj20PZDjQz2A9EQ37j0qVAfTsjFswHLJTGPw=;
+ b=NFkpgovCiU5LN0OIWHjH50j+Jd8suDj0ot/Tm3b4qAUwEaJhtjJtKX5pzUkrwiG+tPlH73t4IxmLyUUg67VJQt2B/Zx+jZrXKTJ3fA4a//2cE12jvhNtOoNTVNfrt5VJIXlfvuutzjbvIjR9UlFg9YzrolxHL4+IlYzYzJXefxilehcY9TF5pjxwahX+Hy9uSWIeV+EtPSkIE/VZVqwiTCkpbNmklIt+aIPWT3SbigvMxDYd765YewT1z2Tq278kewyEkZ2Sns3gSuZxbhoS/0IrXsgdJYdZ8QV/4Q/EwbknlFLlit9tbULtkcQwkTdc6yjNC4az2XLXjboQVAPSwA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1TdNAGujIkL2WjS4gl/cKBZ4VuW37YWu43lI8MFgl5A=;
- b=eV56iaNUCrAnbkKRfr7s+xHTDSa+U7VX2pARgVDbdX24MdyJSkwlaDmYMQ+UC11HFOEH0zEeNpz2cx8fm2I2x1a/1yPBohDfEjxJ1deKO1hV6cS8ukQBUVDrIHZEEeoyLN77all8GThjAfRoho/GP7ZhQwjWV73QIwSDuNSYlAY=
+ bh=or0gvhiuj20PZDjQz2A9EQ37j0qVAfTsjFswHLJTGPw=;
+ b=GBFkYnvAIxBjUYAhRkSwprKBJZl+rmv07s4BnU34WE8lqSFPG1OvycKvzGksrsAE3UzCIsF/NM7mNqY5/N9GwFfePYIQQO6+zeEDwg232V2oiG/FEF3eaj2UwtIRD1pCNr1o0BT79LVKRbssqFZGOZoFRKpwgO0zwr46mNb+1No=
 Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
  by DM4PR10MB7427.namprd10.prod.outlook.com (2603:10b6:8:181::16) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.17; Thu, 18 May
- 2023 14:57:01 +0000
+ 2023 14:57:03 +0000
 Received: from SN6PR10MB3022.namprd10.prod.outlook.com
  ([fe80::998f:d221:5fb6:c67d]) by SN6PR10MB3022.namprd10.prod.outlook.com
  ([fe80::998f:d221:5fb6:c67d%7]) with mapi id 15.20.6411.017; Thu, 18 May 2023
- 14:57:01 +0000
+ 14:57:03 +0000
 From:   "Liam R. Howlett" <Liam.Howlett@oracle.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     maple-tree@lists.infradead.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org,
         "Liam R. Howlett" <Liam.Howlett@oracle.com>
-Subject: [PATCH v4 29/35] maple_tree: Relocate mas_rewalk() and mas_rewalk_if_dead()
-Date:   Thu, 18 May 2023 10:55:38 -0400
-Message-Id: <20230518145544.1722059-30-Liam.Howlett@oracle.com>
+Subject: [PATCH v4 30/35] maple_tree: Introduce mas_prev_slot() interface
+Date:   Thu, 18 May 2023 10:55:39 -0400
+Message-Id: <20230518145544.1722059-31-Liam.Howlett@oracle.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230518145544.1722059-1-Liam.Howlett@oracle.com>
 References: <20230518145544.1722059-1-Liam.Howlett@oracle.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: YT4PR01CA0002.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:d1::15) To SN6PR10MB3022.namprd10.prod.outlook.com
+X-ClientProxiedBy: YT4PR01CA0302.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:10e::7) To SN6PR10MB3022.namprd10.prod.outlook.com
  (2603:10b6:805:d8::25)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: SN6PR10MB3022:EE_|DM4PR10MB7427:EE_
-X-MS-Office365-Filtering-Correlation-Id: dd711551-0b31-4383-f603-08db57b02294
+X-MS-Office365-Filtering-Correlation-Id: c9479452-a750-486f-a4f6-08db57b023ee
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lVTT/Qc0ChiVrnwiYIG7Nz592w57fbzIRx4cEHEfYIXd4aQnFtW8xGw9yN3i7Yb3AHYxnO3vGenD6byUiMYLR0hyG/V9PijKGcjqOawU2Fcfx8vP69/7OIn7lG2UqB/N9RUCzCKV/Kqc2yhb3Y6C0JXkLT7RFnorovGCxgYlESf9QW/duP6LLAI1Q650GPEN69uwCVBmrLT4EmYUGd2uxH/Hf7xYDr2P+28jjc6Zy21DTU7urssKFP/sJ/OyZIk8uRTap0zxRN5wF8T1oXK/0fynZC9Q/zBvO5WhapoK8gQj7TQo9dY964t6UAvXs2zVmE9LaChiKMhoYu37Xs5qlkMgu6XflI209//XcVpgJVjDt44ApHcB94TDWetodU+Xp+cqJBT58Wi7JEBLqPJpx6S+tkgUXbc/mGPWXEnte5qmf3UJysuCvTD/7iyZSVj0F2VuJ3votp68XUxOAMt7//P1Mxjfjyt/CsB/MaBrBjNnBXprNlXZC0OhlcAjfhx/xeNaNixdN7QSuJKaAg4d0WmOMTlw46PJTyhPXPePNs69z2FHD6q1ybsp0AAXzBLS
+X-Microsoft-Antispam-Message-Info: G1yDEz2POcDLDu7IMjvaVrCiVWrmpyY/N0zDxhKerde7AFqJwsERgEZ8LaMDmN/ViJA0PkbOCPgV56L0ro2ddqoooBwVQ1Rv7kcypCiONX+dbSk4tg8QT95d5FnTtMeNbs9DUhF0otygo326vqySKXC7ngp9tReKos1EI3jEnJqRbp+anS2itGzp/dq/V2u5Ttp5ySwSmeosF6oZBFNUBq6XX4jUrG1vq5zUri4//bGVYpka9+kWlOZEONXxC97Hp4evM3ASXmDXd5X/t6syiYF3kabjsLJ3ZQimXNYGKzRoRfOgwsRG8qKyB+24+m6lVFiaIypS50FHebLP+pMFd3Cvs0b1mbvGQ6WROz5crWQQmlcMNmR+a8ntad+KVj3ICRzeWM2n6+sxreu4Q8lwO8T2TdkjChrgjpgU8PfV/axZqRvXr5FOz4JThWUK2JIgwaZdPTpMuCq2v068r82/kwb/xYZfaXyZIypbQ90Fan+4v8F8n2uCLkFA/9wty/x3A3V1/FehMliG7ZgadJREDBmw+Yh0qaAvSeDszm8p8uKmC62jupp6rXBMyIVegUk2
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(396003)(346002)(136003)(376002)(366004)(451199021)(8676002)(5660300002)(8936002)(4326008)(316002)(6512007)(1076003)(83380400001)(6506007)(26005)(107886003)(86362001)(186003)(38100700002)(2616005)(41300700001)(478600001)(66476007)(6666004)(66946007)(66556008)(6916009)(6486002)(36756003)(2906002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MsKkEMMUPAnC7kqhfbzLuid2joXAkuK/2l+KWKmeVZtEd/pZDddD5yRdpLBI?=
- =?us-ascii?Q?Mb81e/6sex3ne1sUwC9uUiDbfCXcmr4XEfCn0wgB4pZ/NgpqAETK5h0492k2?=
- =?us-ascii?Q?gsNRe3ErDMgtzKj9lP0mNACrSf+6YEOE9WGTb0qVblStVSGWoSak9+Yh2ndT?=
- =?us-ascii?Q?SybNyXqCeLekrgzOXi/1LUyba1UEPQuyVvGjKuRarxcyEIKOFcgs4z5UtzaU?=
- =?us-ascii?Q?SWcJsNHqwsGCEFQLstSL8SjtjXiW/6G6I5RFo0xvbX1HIeenhWjweNeuly3X?=
- =?us-ascii?Q?oLd5Sn3/RcvZka2/Q5a2Q47rUrzFbFLQd+Th/41NU+zO9m/Qzdg3t35FjP7B?=
- =?us-ascii?Q?am0eMnfRH8TkJszfltZ6S/4fm2IowGB2sLlM4xv3tBlpO02CtPG5kCZzLj16?=
- =?us-ascii?Q?Pw7izlmCO8MVxCNQtymwy7t377LTKyPmicw4teRipyeDO6n31zmsAr3x3zD7?=
- =?us-ascii?Q?PGyMTE8OBnWI+OGAw49E7tQABKLs2Knhtda/9IRMHKt/WYv7b2blGOBs373a?=
- =?us-ascii?Q?KNsBv2dG16W817J5Gw+ydyX1LvNWoRLRKS8hjQYCphDyaHVj1nTvPSZo0agr?=
- =?us-ascii?Q?H+iGPN1Q/FvhlQgZSvVEN+MmsZu76lDKMPaFECywLvkizGSfLIEd9MtZYmxh?=
- =?us-ascii?Q?ZHzo8h9nRqznmDA4uvCrYaz/wrElynFW3RlRq3Vf3IjrcAqDU6ZcRPEZ3La5?=
- =?us-ascii?Q?/Wyyj1GqCYG/Fb/pm3HQmsg00o92EUECk10TtBOMYYswXxSdpHwDA4iKJPzW?=
- =?us-ascii?Q?CJNoRiwvuqEduV1d/YhlOL6rYz2wLzjjBohNMRzfLmFQkvZgA0KcEHJ/adw3?=
- =?us-ascii?Q?2QUAqlwV9DI1ixQw1lE4u3lunv96jpfBJOU78mpopCsep2pP7eGiit5fhFdG?=
- =?us-ascii?Q?dvST5N7o1wnfDGn8K4zRLcXnDOHt8w8F77TcL5uvcgpqcwyt+3cOJD72zfK5?=
- =?us-ascii?Q?6H5yySnJZ3jQxs/lhcQEj0if3JlZelgzl849iGbxSckt9JNhIc2SKlBwIulE?=
- =?us-ascii?Q?TGf5Ra4ytvI6io1cTRUTg/kwzV1/h6369s4HxLhwZBOzOc8dCbvn87iEvdPP?=
- =?us-ascii?Q?c4ygk1asduO81rhCBIBxR01EoVonakPFn8BG8G07hZzx9Zg1BTw7j79EwNBq?=
- =?us-ascii?Q?2Y/A/7hXwMwOuKDHli8tXDwQHYQEP8iKZ3seWfPIXKElqLcO6I4kIhFBKZDF?=
- =?us-ascii?Q?xfbuqA/0QBOM6m8PCwejNk/KkH7ENcEopccx4Oa7eSOrFZ6E0ifdxUTxskIs?=
- =?us-ascii?Q?5EX11eNzvYlseROxdhhi1Em3qIIEsYIhmNnkcIayqp6iHwttA8fO3f4farKD?=
- =?us-ascii?Q?/TM1g8un3cWrhel49XNIY/ZNHtN4k25eiLm2iZiaWupqtVmjOz4fDQo6MJnl?=
- =?us-ascii?Q?CGfF0bFTHidda/gAI8Zz6i6qVVEDXX0MuItHT0kiS+gbcJTn73jNBkICtzUG?=
- =?us-ascii?Q?T5ChnIRKc2zAmJbvYWvOrSsNQL2eAZE9eBnxj4nGmWOFt66zae25drLaaO5d?=
- =?us-ascii?Q?7GcI4zhSmJcZuWHyg6g7DNQ5Ut5Fl5W+JodyVhE8rkjLrUrW1j1eJ7HRR1I5?=
- =?us-ascii?Q?a3Jpjq5sM+UDSPgHwj3GTqJqxb1QmjP/fhsqxOTG2GlmZ96mjr/bZmq5NOUa?=
- =?us-ascii?Q?nA=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0MCPEWLhyEsDB2Or1zso+damDL0TbbPnAZxqgVEbX8nUL0cMMstfE0Pku30n?=
+ =?us-ascii?Q?uLQx6QfoFURk2C9VRdnY8nQEwu47ufXCTmdCVV92TxNai8g/Ypz6AE4gQbq5?=
+ =?us-ascii?Q?KZ36vPTxgOC2dALj9NAFefNc4Prr8TjcCm+lXj+zdui+Yt/53dTkMQXqfUA6?=
+ =?us-ascii?Q?itkW4cKkzjCbAnR6mO9ojWAQ8/wabtraWaQW9YpE+1Agvfqw5NGpg/OgZca9?=
+ =?us-ascii?Q?RKkZDY/FJunBw1uGIx6lnGqv8sBBIzsGVLKdBTFXLpJmWIvt8tuxo9k9JVRq?=
+ =?us-ascii?Q?BNoqWY42wJ7dz9+8wThNQrZ9936MlvYDL0BQENIiBuBvIP2uTmTv9/aKJLJJ?=
+ =?us-ascii?Q?BGnvmu9VLKFRcWGWyF3jpDLy6IrbFcE/kzFD+PPthieVTh9yQJ8FXDS7Lj75?=
+ =?us-ascii?Q?Z4m/au8p6H9C/WMhmJ9s7EcR/BgCOvPSEAh8CdbW4A1Ttvl/wkKW17ib9J4w?=
+ =?us-ascii?Q?05VGeRfVgYF5abe1gYr6JY86E/pkxcbnjucxUj4BG7/l8QGEo60AYZtg1wBA?=
+ =?us-ascii?Q?VTE5ObgTajLerHVDeSmeMJMM464EcmBnJxIemNWuW6GpDIfgYKvmd1GMjd6+?=
+ =?us-ascii?Q?cMR6WhFdOjeSfjIizHUK4II9q3eAYCWmFMEYgvXy3eJRSXJeErkZ4sZO8bw4?=
+ =?us-ascii?Q?h6BTO9TnFr6dCapLA3Iuxz4KFgePawDjQp3oRqwmJi7NxvN6oHx6941ekPSg?=
+ =?us-ascii?Q?XGsYCFDYssFmkZY1V9T9jcC/5Td7oDA3Hkx1bYeeG5YSsD13Y24YLOXKyimP?=
+ =?us-ascii?Q?UAnhNVBURxX4fLPUdKyhKvj1IzORquiiQcLCGfCgpdGUaHc4Jznzv69LYJFS?=
+ =?us-ascii?Q?IR+U9Bvn6tYyIu7fh4Az0lIjJW114WvzWDQnqWD0lx9LVDpHPLllNoWFQ2z6?=
+ =?us-ascii?Q?JNH6ls9panZZ6c+D+4E7erwlwJAaQjGzTcD6Mtfu6zHL1bk7B7E3Ca/mtCL/?=
+ =?us-ascii?Q?VQUBZPE3mplWrdJG0dGo3Dbb9ARzwlo4ftrwyXlkpbYgl1fbWQ8b2ljpU1Zi?=
+ =?us-ascii?Q?m72L5MnjKoRx9PLUAXrf0bEGSJN6KC58VI0qKoJ5zr1BOT408fijbKK7igOm?=
+ =?us-ascii?Q?LEalfTYEVKpr2UrcN5YLaqigE5XlWkOrVndVHfTBDiCfoam4nHW62nb4RcCC?=
+ =?us-ascii?Q?FSnb/lMN1CN9KgVPxgSKcr1zltlsURfZXJaDrEnoHL0rbWAjAY/Nu+HSvLHE?=
+ =?us-ascii?Q?aqOsFxE0vKkLJy3Fjuow9S4N4iXSzZ3YLM5yNdSvh1t69GCDhVP4dsSCXLP5?=
+ =?us-ascii?Q?IBV+UNr5hbfbC86bp4Yp+6KgO/ibq4YItryaNKcDRnU1RBCFHxPoIYtPN6si?=
+ =?us-ascii?Q?ONn27AyUxlPIoSobEcR+BAjMSDmFxFcZjiLIjQkcbZRj2k5tKUDKZTs1JMM7?=
+ =?us-ascii?Q?uaUpqBnXGsdXEJYgnyAK5gxdlD/Lg3bMqZcSQzkT0Rak3UJZgJCNWL7m59f4?=
+ =?us-ascii?Q?Zv7q5EOLgLUad7zDIFQRoftCN8n4P5hROeVOWRzC54TliI/KOOLWHZSE0t7/?=
+ =?us-ascii?Q?V46p4iZT6gUbPTGKJZae5riipEYDrEH6uXFhpx6KcbedhnSNq2W6rgP4LDwv?=
+ =?us-ascii?Q?j41Y3JwKjGzfpghWjWa7813GJS8itIsUj0btG94bCFxedtMhIFH2nuVfd5Tn?=
+ =?us-ascii?Q?lQ=3D=3D?=
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: YqM7WHgn1DQ5swKStdlEp2d5VlzZ6pN7lWoyjdkxZQHYjHc0oII7B5lNRqyLTC/OKw0rxSgrojtuel9vzahhkzBj749dtdab19wgtGCqGMM2FeFUtYGpIP71EGEm1vex3GuaAa0p+aXSdQgq11gcmVDYAiOHX10FT0FopM3fWcfOPiDjBP+D0KuVZm7w7HCMK0EjExuwyTrGc/FR+SUN9KXhCFhTUwYWta7bNFEYW8OJpAEBj+R7PXj6pUWlcq1JR67R28hkrjvdoLOlUDYkeJBJPQOaiQpQ/sKOkeyUnziIYFOYdRr2PX/qlR4onX+5DWFq43j06+JQiHfYvtgkYtIX4rMFKP/g4QBAr4EFgvCNr6tpb41KWogYSWakwdiSLULoN1aoyaRSkMd5zpqknXp5q7mFCw/7Bl/nLxMb24HdWAx0TL5iAGxouhJ1Wa/tLPPVxUjrLDzy7njv6muIIegoUIkUAXNnYLv2KeljXkiGWjWl8ndwMWgrMsXg6r1PxOXbb1LYr3wcIN2E/7suErepYA5SgvqXPIaI/b5XhAtr9TKRb80sIQw3hCUIo3wd29raOpxJybbuQdgqsV7tuV0fKqWP2ECgCpzeqW741DTUjKb3LfQRmG27UybdLSvsnzwNnTTFADHhutfaS72Fp/idOBCEHH/tcw92P8umS7rhsIrWVo76EKZfEfpxV1XHk9pWs5a3xT//op5irqIjsROeTjFWWRtpOR8GbwcKgnsfKhcCEGE6OdPTypNUgFFg/dvwQVtjDP34utbR8h5FqlLxZmr+2BwvXuyd6oFv6AfbnXwVt5YJohMUrl/XgVLELFXIrdPOF2XobIHhigkn3WncrsoCjc8ZhWJ6asDiLX33gAeUUA42ZNhq9PSpbhtFZjm2TLxrTA/CFtxLvFemwQ==
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: Izqmc6ywIC5brFHk8D3kaMnX6QFaWhghxhcHTOLYGlYv6xxIX7zlrg0Qo1Ln8Ro8SR5LOnpQf75p3MRCt2Vo3Fg0lV8FtE2Bbc64+WCHp6DA5Tj4w6OoTYVCh3DwJZVJy18VM+3Pz0gD/IqqeRG51d0PmLp1FpLPU30hERgxNh4g+p6OF3PDLVgmiHTnIbXLGGe6EC8lv0yxk+Rg1hTzw4qU00oWrhFpSsJH0mawl93ZvfYuBXVT3ep/NX00xTjimCzzqcO2b+RlL4fiJx/GBCWkS+eh16kkfiTiHZDzSKci21ytsXN4GtMKmLggQJyD1GRiOic1fMqPYwCfuG4PgQnDyG4aYe1KZ30IUm5+w33Necu+mp4XajJoRUT5ekYS5BZ/tc5vNBIwm5v41af3lafnavmGO9cBwiWXKgoXJBFR5vkaK1Sp1ZEon7Ef4UvJuZgxsOB49ZW9dAMfZbJlcNQsAjSR5UV70YQjJU16TWbXZUuu53atLj7jyu8qm7xXYco6fz1JXYu57pCBD7NfhdvkOsxVE4asCdSHgf5sUqz294nEVJOi1h5XTMWEUPjf3xmBuGzUDxFPwkKM9mklGBMkonFeGQl0i/JeLsiPjVjFSMz3Cv7+iVcIhndU0fXA1ozWnDqOm7INUk186kK8cnmrxaszi9/f/1fVFFc3YGDDTlNUthGYZkqW5o/0CgCeU7ZvqSksG1ZNptVwHr2cASOGyppM+9AG1iEe70zsT4riLKY0mBEqXQhaN/wJh8FT1EDiTlKe0GorkGKN++g/z3+aUlFEQrx21HbvrRDLxTA+JDTpXPpabqajlvclvklU9cTLEmoTNX/DkouPfIMAezrjNYyf4wYcG36pG4KLHSyn0atGJMZGmRl75IH1mRpKIauzLQG13qP31nnOMxp4Vw==
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dd711551-0b31-4383-f603-08db57b02294
+X-MS-Exchange-CrossTenant-Network-Message-Id: c9479452-a750-486f-a4f6-08db57b023ee
 X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2023 14:57:01.0235
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2023 14:57:03.3059
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cMz5lKPJnnUtDJGjwhj4Eo6SzNRkN6UdiOiPBkUCs7gtLept1isA7gQSoBmC7TORe9lY/Csm9IJo9ez+67UJRA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0sb/Jw1i9iI02wjT5fKPEVvblSp5Lb0K3oiEzPRWzvDQXE6TZb8PINUk/mRrxhzPooWRRTKMA1M9x9YYiYYJ1A==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR10MB7427
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-18_11,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 spamscore=0
- bulkscore=0 suspectscore=0 mlxlogscore=999 adultscore=0 malwarescore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0 bulkscore=0
+ mlxscore=0 phishscore=0 malwarescore=0 spamscore=0 mlxlogscore=999
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
  definitions=main-2305180120
-X-Proofpoint-GUID: 0lz_w9n5r3UYf7QH4OwgEWtPkTAYBtYP
-X-Proofpoint-ORIG-GUID: 0lz_w9n5r3UYf7QH4OwgEWtPkTAYBtYP
+X-Proofpoint-GUID: 2FMAuV0vgW1Ao2acIbNdOwHuF27khLAr
+X-Proofpoint-ORIG-GUID: 2FMAuV0vgW1Ao2acIbNdOwHuF27khLAr
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -148,69 +148,328 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These functions need to move for future use.
+Sometimes the user needs to revert to the previous slot, regardless of
+if it is empty or not.  Add an interface to go to the previous slot.
+
+Since there can't be two consecutive NULLs in the tree, the mas_prev()
+function can be implemented by calling mas_prev_slot() a maximum of 2
+times.  Change the underlying interface to use mas_prev_slot() to align
+the code.
 
 Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
 ---
- lib/maple_tree.c | 38 +++++++++++++++++++-------------------
- 1 file changed, 19 insertions(+), 19 deletions(-)
+ lib/maple_tree.c | 232 ++++++++++++++++++-----------------------------
+ 1 file changed, 90 insertions(+), 142 deletions(-)
 
 diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-index b5df37be7a15..25748014fe34 100644
+index 25748014fe34..f0e9ce5b0515 100644
 --- a/lib/maple_tree.c
 +++ b/lib/maple_tree.c
-@@ -4497,6 +4497,25 @@ static inline void *mas_insert(struct ma_state *mas, void *entry)
+@@ -4531,15 +4531,19 @@ static inline int mas_prev_node(struct ma_state *mas, unsigned long min)
+ 	int offset, level;
+ 	void __rcu **slots;
+ 	struct maple_node *node;
+-	struct maple_enode *enode;
+ 	unsigned long *pivots;
++	unsigned long max;
  
- }
+-	if (mas_is_none(mas))
+-		return 0;
++	node = mas_mn(mas);
++	if (!mas->min)
++		goto no_entry;
++
++	max = mas->min - 1;
++	if (max < min)
++		goto no_entry;
  
-+static inline void mas_rewalk(struct ma_state *mas, unsigned long index)
-+{
-+retry:
-+	mas_set(mas, index);
-+	mas_state_walk(mas);
-+	if (mas_is_start(mas))
-+		goto retry;
-+}
-+
-+static inline bool mas_rewalk_if_dead(struct ma_state *mas,
-+		struct maple_node *node, const unsigned long index)
-+{
-+	if (unlikely(ma_dead_node(node))) {
-+		mas_rewalk(mas, index);
-+		return true;
-+	}
-+	return false;
-+}
-+
- /*
-  * mas_prev_node() - Find the prev non-null entry at the same level in the
-  * tree.  The prev value will be mas->node[mas->offset] or MAS_NONE.
-@@ -4676,25 +4695,6 @@ static inline int mas_next_node(struct ma_state *mas, struct maple_node *node,
+ 	level = 0;
+ 	do {
+-		node = mas_mn(mas);
+ 		if (ma_is_root(node))
+ 			goto no_entry;
+ 
+@@ -4548,64 +4552,41 @@ static inline int mas_prev_node(struct ma_state *mas, unsigned long min)
+ 			return 1;
+ 		offset = mas->offset;
+ 		level++;
++		node = mas_mn(mas);
+ 	} while (!offset);
+ 
+ 	offset--;
+ 	mt = mte_node_type(mas->node);
+-	node = mas_mn(mas);
+-	slots = ma_slots(node, mt);
+-	pivots = ma_pivots(node, mt);
+-	if (unlikely(ma_dead_node(node)))
+-		return 1;
+-
+-	mas->max = pivots[offset];
+-	if (offset)
+-		mas->min = pivots[offset - 1] + 1;
+-	if (unlikely(ma_dead_node(node)))
+-		return 1;
+-
+-	if (mas->max < min)
+-		goto no_entry_min;
+-
+ 	while (level > 1) {
+ 		level--;
+-		enode = mas_slot(mas, slots, offset);
++		slots = ma_slots(node, mt);
++		mas->node = mas_slot(mas, slots, offset);
+ 		if (unlikely(ma_dead_node(node)))
+ 			return 1;
+ 
+-		mas->node = enode;
+ 		mt = mte_node_type(mas->node);
+ 		node = mas_mn(mas);
+-		slots = ma_slots(node, mt);
+ 		pivots = ma_pivots(node, mt);
+-		offset = ma_data_end(node, mt, pivots, mas->max);
++		offset = ma_data_end(node, mt, pivots, max);
+ 		if (unlikely(ma_dead_node(node)))
+ 			return 1;
+-
+-		if (offset)
+-			mas->min = pivots[offset - 1] + 1;
+-
+-		if (offset < mt_pivots[mt])
+-			mas->max = pivots[offset];
+-
+-		if (mas->max < min)
+-			goto no_entry;
+ 	}
+ 
++	slots = ma_slots(node, mt);
+ 	mas->node = mas_slot(mas, slots, offset);
++	pivots = ma_pivots(node, mt);
+ 	if (unlikely(ma_dead_node(node)))
+ 		return 1;
+ 
++	if (likely(offset))
++		mas->min = pivots[offset - 1] + 1;
++	mas->max = max;
+ 	mas->offset = mas_data_end(mas);
+ 	if (unlikely(mte_dead_node(mas->node)))
+ 		return 1;
+ 
+ 	return 0;
+ 
+-no_entry_min:
+-	mas->offset = offset;
+-	if (offset)
+-		mas->min = pivots[offset - 1] + 1;
+ no_entry:
+ 	if (unlikely(ma_dead_node(node)))
+ 		return 1;
+@@ -4614,6 +4595,76 @@ static inline int mas_prev_node(struct ma_state *mas, unsigned long min)
  	return 0;
  }
  
--static inline void mas_rewalk(struct ma_state *mas, unsigned long index)
++/*
++ * mas_prev_slot() - Get the entry in the previous slot
++ *
++ * @mas: The maple state
++ * @max: The minimum starting range
++ *
++ * Return: The entry in the previous slot which is possibly NULL
++ */
++static void *mas_prev_slot(struct ma_state *mas, unsigned long min, bool empty)
++{
++	void *entry;
++	void __rcu **slots;
++	unsigned long pivot;
++	enum maple_type type;
++	unsigned long *pivots;
++	struct maple_node *node;
++	unsigned long save_point = mas->index;
++
++retry:
++	node = mas_mn(mas);
++	type = mte_node_type(mas->node);
++	pivots = ma_pivots(node, type);
++	if (unlikely(mas_rewalk_if_dead(mas, node, save_point)))
++		goto retry;
++
++again:
++	if (mas->min <= min) {
++		pivot = mas_safe_min(mas, pivots, mas->offset);
++
++		if (unlikely(mas_rewalk_if_dead(mas, node, save_point)))
++			goto retry;
++
++		if (pivot <= min)
++			return NULL;
++	}
++
++	if (likely(mas->offset)) {
++		mas->offset--;
++		mas->last = mas->index - 1;
++		mas->index = mas_safe_min(mas, pivots, mas->offset);
++	} else  {
++		if (mas_prev_node(mas, min)) {
++			mas_rewalk(mas, save_point);
++			goto retry;
++		}
++
++		if (mas_is_none(mas))
++			return NULL;
++
++		mas->last = mas->max;
++		node = mas_mn(mas);
++		type = mte_node_type(mas->node);
++		pivots = ma_pivots(node, type);
++		mas->index = pivots[mas->offset - 1] + 1;
++	}
++
++	slots = ma_slots(node, type);
++	entry = mas_slot(mas, slots, mas->offset);
++	if (unlikely(mas_rewalk_if_dead(mas, node, save_point)))
++		goto retry;
++
++	if (likely(entry))
++		return entry;
++
++	if (!empty)
++		goto again;
++
++	return entry;
++}
++
+ /*
+  * mas_next_node() - Get the next node at the same level in the tree.
+  * @mas: The maple state
+@@ -4798,109 +4849,6 @@ static inline void *mas_next_entry(struct ma_state *mas, unsigned long limit)
+ 	return mas_next_slot(mas, limit, false);
+ }
+ 
+-/*
+- * mas_prev_nentry() - Get the previous node entry.
+- * @mas: The maple state.
+- * @limit: The lower limit to check for a value.
+- *
+- * Return: the entry, %NULL otherwise.
+- */
+-static inline void *mas_prev_nentry(struct ma_state *mas, unsigned long limit,
+-				    unsigned long index)
 -{
+-	unsigned long pivot, min;
+-	unsigned char offset, count;
+-	struct maple_node *mn;
+-	enum maple_type mt;
+-	unsigned long *pivots;
+-	void __rcu **slots;
+-	void *entry;
+-
 -retry:
--	mas_set(mas, index);
--	mas_state_walk(mas);
--	if (mas_is_start(mas))
+-	if (!mas->offset)
+-		return NULL;
+-
+-	mn = mas_mn(mas);
+-	mt = mte_node_type(mas->node);
+-	offset = mas->offset - 1;
+-	slots = ma_slots(mn, mt);
+-	pivots = ma_pivots(mn, mt);
+-	count = ma_data_end(mn, mt, pivots, mas->max);
+-	if (unlikely(mas_rewalk_if_dead(mas, mn, index)))
 -		goto retry;
+-
+-	offset = mas->offset - 1;
+-	if (offset >= mt_slots[mt])
+-		offset = mt_slots[mt] - 1;
+-
+-	if (offset >= count) {
+-		pivot = mas->max;
+-		offset = count;
+-	} else {
+-		pivot = pivots[offset];
+-	}
+-
+-	if (unlikely(mas_rewalk_if_dead(mas, mn, index)))
+-		goto retry;
+-
+-	while (offset && !mas_slot(mas, slots, offset)) {
+-		pivot = pivots[--offset];
+-		if (pivot >= limit)
+-			break;
+-	}
+-
+-	/*
+-	 * If the slot was null but we've shifted outside the limits, then set
+-	 * the range to the last NULL.
+-	 */
+-	if (unlikely((pivot < limit) && (offset < mas->offset)))
+-		pivot = pivots[++offset];
+-
+-	min = mas_safe_min(mas, pivots, offset);
+-	entry = mas_slot(mas, slots, offset);
+-	if (unlikely(mas_rewalk_if_dead(mas, mn, index)))
+-		goto retry;
+-
+-	mas->offset = offset;
+-	mas->last = pivot;
+-	mas->index = min;
+-	return entry;
 -}
 -
--static inline bool mas_rewalk_if_dead(struct ma_state *mas,
--		struct maple_node *node, const unsigned long index)
+-static inline void *mas_prev_entry(struct ma_state *mas, unsigned long min)
 -{
--	if (unlikely(ma_dead_node(node))) {
--		mas_rewalk(mas, index);
--		return true;
+-	void *entry;
+-	struct maple_enode *prev_enode;
+-	unsigned char prev_offset;
+-
+-	if (mas->index < min)
+-		return NULL;
+-
+-retry:
+-	prev_enode = mas->node;
+-	prev_offset = mas->offset;
+-	while (likely(!mas_is_none(mas))) {
+-		entry = mas_prev_nentry(mas, min, mas->index);
+-
+-		if (likely(entry))
+-			return entry;
+-
+-		if (unlikely(mas->index <= min))
+-			return NULL;
+-
+-		if (unlikely(mas_prev_node(mas, min))) {
+-			mas_rewalk(mas, mas->index);
+-			goto retry;
+-		}
+-
+-		mas->offset++;
 -	}
--	return false;
+-
+-	mas->node = prev_enode;
+-	mas->offset = prev_offset;
+-	return NULL;
 -}
 -
  /*
-  * mas_next_slot() - Get the entry in the next slot
-  *
+  * mas_rev_awalk() - Internal function.  Reverse allocation walk.  Find the
+  * highest gap address of a given size in a given node and descend.
+@@ -6017,7 +5965,7 @@ void *mas_prev(struct ma_state *mas, unsigned long min)
+ 		}
+ 		return NULL;
+ 	}
+-	return mas_prev_entry(mas, min);
++	return mas_prev_slot(mas, min, false);
+ 
+ none:
+ 	mas->node = MAS_NONE;
+@@ -6232,8 +6180,8 @@ void *mas_find_rev(struct ma_state *mas, unsigned long min)
+ 	if (mas->index < min)
+ 		return NULL;
+ 
+-	/* Retries on dead nodes handled by mas_prev_entry */
+-	return mas_prev_entry(mas, min);
++	/* Retries on dead nodes handled by mas_prev_slot */
++	return mas_prev_slot(mas, min, false);
+ 
+ none:
+ 	mas->node = MAS_NONE;
 -- 
 2.39.2
 
