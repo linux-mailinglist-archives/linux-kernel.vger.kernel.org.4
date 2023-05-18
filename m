@@ -2,86 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C623707D44
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2576707D49
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:52:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbjERJvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 05:51:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35698 "EHLO
+        id S230125AbjERJwI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 05:52:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230112AbjERJvp (ORCPT
+        with ESMTP id S230312AbjERJwF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 05:51:45 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00AB9212D
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 02:51:33 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3F6746605943;
-        Thu, 18 May 2023 10:51:32 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684403492;
-        bh=HWIbngsvv5AKR8DXcAvoNyK+M3yOcUqvLNMDrOowmGs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=L3qPfq0QiO0uG8C7STBGUjyvPtV02pCzuTtv3AXAk3twzdMql6fes/Db2nOzfPqP9
-         50BajfffNtqzSmTb59spVnHjEeRIYOx1fFBjc5xHfWk2UPwr8ms1TnUPyL9tav+sEe
-         Mfes9qxtVnM1UeddU5EoSXqHa8PmvP0XcaAV8jJZSTnIEJiTEcro/Rf9j1Ck/5AGjz
-         0Pa1vDtrO0wW5ZdJWHH3JRxM0wtBmdjw8lC8BNL9BGymQX2Hs4W/Ld7fzROiz0Yq5D
-         nQ6ebIbu+Gxz8+3P+k782v1WXY/BkUegelf5LWL/tjZYSqgpz2bQIxvYwci8bP7hFZ
-         eDtEWtzHZlUjw==
-Message-ID: <f494ab3b-cf7b-85b6-1b4f-732d887164ca@collabora.com>
-Date:   Thu, 18 May 2023 11:51:30 +0200
+        Thu, 18 May 2023 05:52:05 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D0B91A4
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 02:52:03 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pzaIW-0000e7-ON; Thu, 18 May 2023 11:51:48 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id CDEF01C7B63;
+        Thu, 18 May 2023 09:51:46 +0000 (UTC)
+Date:   Thu, 18 May 2023 11:51:46 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Pavel Pisa <pisa@cmp.felk.cvut.cz>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Ondrej Ille <ondrej.ille@gmail.com>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH] can: ctucanfd: Remove a useless netif_napi_del() call
+Message-ID: <20230518-satisfied-smugness-dc5a06faa865-mkl@pengutronix.de>
+References: <58500052a6740806e8af199ece45e97cb5eeb1b8.1684393811.git.christophe.jaillet@wanadoo.fr>
+ <202305180932.38815.pisa@cmp.felk.cvut.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v2] regulator: mt6359: add read check for PMIC MT6359
-Content-Language: en-US
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     Sen Chu <sen.chu@mediatek.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230518040646.8730-1-sen.chu@mediatek.com>
- <b9531c67-ab85-5ba4-6d86-9fc83974df4b@collabora.com>
- <CAGXv+5H+peO6fhuE9jj2t6DS5EPRyg8m=zc3ACDGdvm8Bes+RA@mail.gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <CAGXv+5H+peO6fhuE9jj2t6DS5EPRyg8m=zc3ACDGdvm8Bes+RA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7emi62ptsndis2qr"
+Content-Disposition: inline
+In-Reply-To: <202305180932.38815.pisa@cmp.felk.cvut.cz>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 18/05/23 11:47, Chen-Yu Tsai ha scritto:
-> On Thu, May 18, 2023 at 5:32 PM AngeloGioacchino Del Regno
-> <angelogioacchino.delregno@collabora.com> wrote:
->>
->> Il 18/05/23 06:06, Sen Chu ha scritto:
->>> Add hardware version read check for PMIC MT6359
->>>
->>> Signed-off-by: Sen Chu <sen.chu@mediatek.com>
->>
->> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> 
-> No fixes tag?
 
-You're right. This one needs a fixes tag.
+--7emi62ptsndis2qr
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The right tag is
+On 18.05.2023 09:32:38, Pavel Pisa wrote:
+> Dear Christophe,
+>=20
+> On Thursday 18 of May 2023 09:10:39 Christophe JAILLET wrote:
+> > free_candev() already calls netif_napi_del(), so there is no need to ca=
+ll
+> > it explicitly. It is harmless, but useless.
+> >
+> > This makes the code mode consistent with the error handling path of
+> > ctucan_probe_common().
+>=20
+> OK, but I would suggest to consider to keep sequence in sync with
+>=20
+> linux/drivers/net/can/ctucanfd/ctucanfd_pci.c
+>=20
+> where is netif_napi_del() used as well
+>=20
+>         while ((priv =3D list_first_entry_or_null(&bdata->ndev_list_head,=
+ struct ctucan_priv,
+>                                                 peers_on_pdev)) !=3D NULL=
+) {
+>                 ndev =3D priv->can.dev;
+>=20
+>                 unregister_candev(ndev);
+>=20
+>                 netif_napi_del(&priv->napi);
+>=20
+>                 list_del_init(&priv->peers_on_pdev);
+>                 free_candev(ndev);
+>         }
+>=20
+> On the other hand, if interrupt can be called for device between
+> unregister_candev() and free_candev()
 
-Fixes: 4cfc96547512 ("regulator: mt6359: Add support for MT6359P regulator")
+At least the case of an "interrupt during ctucan_pci_remove()" is a bug,
+as there is no IRQ handler registered. The IRQ handler is registered in
+ctucan_open() and freed in ctucan_close().
 
-Cheers,
-Angelo
+> or some other callback
+> which is prevented by netif_napi_del() now then I would consider
+> to keep explicit netif_napi_del() to ensure that no callback
+> is activated to driver there.
+
+Napi itself is shut down, too, as there is a call to napi_disable() in
+ctucan_close().
+
+> And for PCI integration it is more
+> critical because list_del_init(&priv->peers_on_pdev); appears in
+> between and I would prefer that no interrupt appears when instance
+> is not on the peers list anymore. Even that would not be a problem
+> for actual CTU CAN FD implementation, peers are accessed only during
+> physical device remove, but I have worked on other controllers
+> in past, which required to coordinate with peers in interrupt
+> handling...
+>=20
+> So I would be happy for some feedback what is actual guarantee
+> when device is stopped.
+
+After a ifup; ifdown;, which corresponds to ctucan_open(),
+ctucan_close() in the driver, the device should be shut down, no
+interrupts active. You might even power down the device, although things
+get a little more complicated with HW timestamping or even PTP enabled.
+
+> May it be that it would be even more robust to run removal
+> with two loop where the first one calls unregister_candev()
+> and netif_napi_del() and only the second one removes from peers
+> and call free_candev()... But I am not sure there and it is not
+> problem in actual driver because peers are not used in any
+> other place...
+
+regards,
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--7emi62ptsndis2qr
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRl9S8ACgkQvlAcSiqK
+BOgDpAgAnI3Osy8Fx5vffOkPSdz+b193idfd/nM1NjJAYnsAaPObGXK3zWGMg58W
+Qhxr3+W28VBJU/ucksBHROZIOiAm1a2Y69y92pChXdZd2+Lrhz2xZhw2aqkwQkn8
+F1tBieRVWy0T0P3BogFsKXwdLCURMBqhSZmmLRptxx6k+H7QlqPRh21tmqun2+Dm
+1KAd4xr97px5EqOha3Jtr3HP4iWiVx7DYS6R7sFRr3ZX7lzu4YkUkO5Xg33R0cwa
+yxMOmXM49IKwr59gxjXydCoD6BwOI39fKbCVHkOtG2XRQapuDCRyyDf+uBelFQeQ
+X0nEPjuBUVtCexN5ArBdnKNxdEW1Ew==
+=rkgc
+-----END PGP SIGNATURE-----
+
+--7emi62ptsndis2qr--
