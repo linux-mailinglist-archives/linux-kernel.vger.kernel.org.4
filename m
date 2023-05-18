@@ -2,63 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4399F707729
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 03:13:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D5ED707728
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 03:10:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229622AbjERBNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 21:13:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58796 "EHLO
+        id S229602AbjERBKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 21:10:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjERBNK (ORCPT
+        with ESMTP id S229452AbjERBKC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 21:13:10 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB27D421F
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 18:13:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684372389; x=1715908389;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=pFd4A2MBW6n8v4ZN7ohmso4i6OszRE3YLaer66HYCrA=;
-  b=VqH6haNpLdb/5h2UL/uAon1LoyW7g7ncuItSDWDzLF1sn0KmMcJ1onCT
-   Bqw5YmNA9V9FUueRaPM/tTTxo7kOztPcY+Tonhq0GyDq5UMmrcJvQ8/6j
-   YfZnjE2Z9Dm1UjfjZbGAVgSFmCqM2r2WAzMGj8X8E+ZEvO+B8jN7jf+kI
-   oOU58zuXnVkybqS5XL558CDQ6eQdRMNCBGFLmUIQOFaR28Uy3fmu7Pj+J
-   YlcVim/5M6qyuOHMzUkXfvL9yn2+5DUEAW7BeD5ak1CeEDpsBcYe4zdui
-   lxdRgvOiy8+2/HC/wW2LzDiMkWyhNY2S+Wnb2HDfkQI+wHFVdhstmkS+p
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="341324964"
-X-IronPort-AV: E=Sophos;i="5.99,283,1677571200"; 
-   d="scan'208";a="341324964"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 18:13:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="826175640"
-X-IronPort-AV: E=Sophos;i="5.99,283,1677571200"; 
-   d="scan'208";a="826175640"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 18:13:06 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Khalid Aziz <khalid.aziz@oracle.com>, akpm@linux-foundation.org,
-        willy@infradead.org, steven.sistare@oracle.com,
-        mgorman@techsingularity.net, khalid@kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] mm, compaction: Skip all non-migratable pages during
- scan
-References: <20230517161555.84776-1-khalid.aziz@oracle.com>
-        <c34e3768-8a01-d155-1970-8eada8c80ba7@redhat.com>
-Date:   Thu, 18 May 2023 09:09:20 +0800
-In-Reply-To: <c34e3768-8a01-d155-1970-8eada8c80ba7@redhat.com> (David
-        Hildenbrand's message of "Wed, 17 May 2023 20:32:51 +0200")
-Message-ID: <87sfbubg3j.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 17 May 2023 21:10:02 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CEEFDC;
+        Wed, 17 May 2023 18:10:00 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QMBhz1Lltz4x3q;
+        Thu, 18 May 2023 11:09:54 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1684372196;
+        bh=bpLR1JG+REMPmB/I15ynrXTsfn9WEHkjNl9gymUgNdE=;
+        h=Date:From:To:Cc:Subject:From;
+        b=Ryhs3eHU60LuLT9WNA235EQiGtsWI1YXgt8wmsirm4yoKNnt/aQO5PgiRAkbrwNTw
+         emjlQYK5buFUPiil7IW4kFuQb4qrNAsq64mdwKeWDQghUaeGsQeqAJzdGk31CH0DdG
+         vOwQ2p4yGC+yr0/EOMOUI/PTJxBxwqLXDIxSPoeF/DoPgFR9/W2+AEpeduLCpFh1Nx
+         73aLF+y3Ve8clT3JjyWfjNNpF868U1TziorjlHJzbH7zIwMduZhmYBGgp63J8yJwE/
+         J46FQEwjBof7hbSPVMwxA1cIG35hsLKl45wRngfTnLQ5ntCqVZYYYo0VNe9BCKAa/k
+         oHoi3nUyr9aTA==
+Date:   Thu, 18 May 2023 11:09:51 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Sterba <dsterba@suse.cz>
+Cc:     Josef Bacik <josef@toxicpanda.com>,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the btrfs tree
+Message-ID: <20230518110951.275fd5b4@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: multipart/signed; boundary="Sig_/iZiXqwm3mni8nNT1MWilVuh";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,36 +52,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Hildenbrand <david@redhat.com> writes:
+--Sig_/iZiXqwm3mni8nNT1MWilVuh
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> On 17.05.23 18:15, Khalid Aziz wrote:
->> Pages pinned in memory through extra refcounts can not be migrated.
->> Currently as isolate_migratepages_block() scans pages for
->> compaction, it skips any pinned anonymous pages. All non-migratable
->> pages should be skipped and not just the anonymous pinned pages.
->> This patch adds a check for extra refcounts on a page to determine
->> if the page can be migrated.  This was seen as a real issue on a
->> customer workload where a large number of pages were pinned by vfio
->> on the host and any attempts to allocate hugepages resulted in
->> significant amount of cpu time spent in either direct compaction or
->> in kcompactd scanning vfio pinned pages over and over again that can
->> not be migrated.
->
-> How will this change affect alloc_contig_range(), such as used for CMA
-> allocations or virtio-mem? alloc_contig_range() ends up calling 
-> isolate_migratepages_range() -> isolate_migratepages_block().
+Hi all,
 
-IIUC, cc->alloc_contig can be used to distinguish contiguous allocation
-and compaction.  And, from the original commit which introduced
-anonymous pages skipping (commit 119d6d59dcc0 ("mm, compaction: avoid
-isolating pinned pages ")) and this patch, large number of migration
-failure during compaction causes real issue too.  So, I suggest to use
-cc->alloc_contig here.
+The following commits are also in the btrfs-fixes tree as different
+commits (but the same patches):
 
-> We don't want to fail early in case there is a short-term pin that
-> might go away any moment after we isolated ... that will make the
-> situation worse for these use cases, especially if MIGRATE_CMA or
-> ZONE_MOVABLE is involved.
+  192c01142492 ("btrfs: handle memory allocation failure in btrfs_csum_one_=
+bio")
+  7ebc3af5dcc0 ("btrfs: handle memory allocation failure in btrfs_csum_one_=
+bio")
+  458e1ab626a5 ("btrfs: use nofs when cleaning up aborted transactions")
+  5e66bf75ae50 ("btrfs: use nofs when cleaning up aborted transactions")
 
-Best Regards,
-Huang, Ying
+also (as you can see) they are duplicated within the btrfs tree as well.
+
+These are commits
+
+  806570c0bb7b ("btrfs: handle memory allocation failure in btrfs_csum_one_=
+bio")
+  597441b3436a ("btrfs: use nofs when cleaning up aborted transactions")
+
+in the btrfs-fixes tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/iZiXqwm3mni8nNT1MWilVuh
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRlet8ACgkQAVBC80lX
+0GzeRQgAiZKPFmR5rc7ph8zmXyz7M579mzJNZjhV0I3DjsbAMduV6J3xGF8vdHQl
+E2pZ2FpStEP+cAO5xZ+wpatcCfBNJ7Cj5gq7aA1Jsh12hTqfvItUwGYYFis/fCMg
+abwJCKMWBcIjAEGoh+OC+1LFxsHETYKTbh2w1FIHbKofhKoLpsVtqWCbUFefJ2GD
+LEv7vf5yXqr8NRC1DPhkMWhM2Vq08YKMHtNa4As6CeJSPOHQsr0fjlBrrKlIrhjM
+MEgPZSYJOJ9zZuL2kcX/h5FbFumrZbXsluCRPHKZeh9Qfq0qb8ak9janQ3F2q+UX
+6ppOh/zbm9j5ItPmlwcNTaAYvP2JIg==
+=uYNY
+-----END PGP SIGNATURE-----
+
+--Sig_/iZiXqwm3mni8nNT1MWilVuh--
