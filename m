@@ -2,185 +2,591 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C682708469
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CB4A70845F
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:56:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231281AbjERO6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 10:58:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38496 "EHLO
+        id S231925AbjERO4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 10:56:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbjERO6Q (ORCPT
+        with ESMTP id S231775AbjEROzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 10:58:16 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7699AED
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:57:46 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34I6IpcF003885;
-        Thu, 18 May 2023 14:56:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references :
- content-transfer-encoding : content-type : mime-version;
- s=corp-2023-03-30; bh=iIEqoKHCtZVIcHQcln7ub7Fr3AEamO8DkcUXBPgJVW0=;
- b=KLLtgtxuOqobTuSqI6fvrBtxKQ7Uz8G/beucSIIJX3X+tNRguA+cGpEd5kxX/ZCy58q0
- zGmyOyCxNQqXnexctByZu6vzEtCdjypZJVb+UdfhUbHH0KGXc8QbMHnPjnynztWs2Ztg
- Rbq7soGTwaWKnqulxq2Ig1PlHC007cmGxA0zmanbbvWn38KJHVEKbchZ6k0IaqRCHpjK
- Rj2ncStexZQ2YoHLhMB7AO8dLGooXZfSV79VNrgqXQKmjaH9GuptK5U0FLBKzwZcir5D
- L9xkwGVqEETFLuMPksIh4sI6WfGIEKG4TCk/55EpTFK35hdo8IVDlOepr2RWMKnaKgf7 cg== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qj33v043b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 18 May 2023 14:56:11 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 34IE9Wc4025017;
-        Thu, 18 May 2023 14:56:11 GMT
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2101.outbound.protection.outlook.com [104.47.70.101])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3qj106vkvr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 18 May 2023 14:56:10 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TSI2vh65brkq1vEIPyyT0+T2t5gbfIDrKZXmvhflfe9wkRwwKy5j93nZFISN/UR5tOgoQoRY3QNfCciNyGLM+xIFsvHp6McJP6yRDVKhUsxV646UErCkGg/f7CuQnD+U6VRDMrsRGRlSzn+Owe/PCSwBw024KtKy1wlNxbjeJDk429kIaf9OCxFuuNjRRYi3hHxlmahCJ0ZqbcjvmAfffdEM9NCtAqU1EF1Mw12zIeurvvGmmx4v1OnWBaEXl8R6xbh+pZd7lKXM9QMeDOoJlDZNgB5I2w1jHNm72QTF8OCaluymlfFjrSJcSPt8WcmVfCtfs/XcRbtT3eAWuxwfbw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iIEqoKHCtZVIcHQcln7ub7Fr3AEamO8DkcUXBPgJVW0=;
- b=WFSTtgQLvtPhD9Z6ijt4N+opsQkduyjqvn17lTL10jC6g0Ci2x6fw8EZjd8m7roheDPb4IimBq/4B4yeRs8nrWIYNI4TfAJXprt8F7sQa7o0rCvjbqZ3leTuFZonrnRmcvGbOD935bEmvOYLh+YRYmcjYDFRSC9kAd6fShoSvXnECEfvZXS0499REPfC2jrzmG2Xzsz6eznAWDYnt+CRciyINxRlBYnTcB/2jp54W15PQ/1+ouZBYZ+sY22MfmSijxGhV9T1ED1qq1JLcfG/w/G8S8DF17RmDHuJfozKvC+ZTnmejsEZHApXrT75ttEUOmVy1UiwZM+NEwV6VR7odQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iIEqoKHCtZVIcHQcln7ub7Fr3AEamO8DkcUXBPgJVW0=;
- b=AeKmOlpGsjXg3Ro4DlzUUDxuaScIM0N+BZUba5Z3lM23T7VnDQVGiuBs3hIn7bpV7cDHQ5LGwT3Ex5KO9WBZh3IJggxZV/p3NKYo81dJIBPt8DSJoCmeEbAWzYY7VP8BkmCOxID2S4sok6VhxWedKR4PBGojj38pBfuk7LMVeE4=
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
- by DM6PR10MB4347.namprd10.prod.outlook.com (2603:10b6:5:211::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19; Thu, 18 May
- 2023 14:56:08 +0000
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::998f:d221:5fb6:c67d]) by SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::998f:d221:5fb6:c67d%7]) with mapi id 15.20.6411.017; Thu, 18 May 2023
- 14:56:08 +0000
-From:   "Liam R. Howlett" <Liam.Howlett@oracle.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     maple-tree@lists.infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>
-Subject: [PATCH v4 08/35] maple_tree: Change RCU checks to WARN_ON() instead of BUG_ON()
-Date:   Thu, 18 May 2023 10:55:17 -0400
-Message-Id: <20230518145544.1722059-9-Liam.Howlett@oracle.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230518145544.1722059-1-Liam.Howlett@oracle.com>
-References: <20230518145544.1722059-1-Liam.Howlett@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: YT4PR01CA0085.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:ff::23) To SN6PR10MB3022.namprd10.prod.outlook.com
- (2603:10b6:805:d8::25)
+        Thu, 18 May 2023 10:55:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1A41B6
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:55:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 759DC64FE5
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 14:55:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBB40C433EF;
+        Thu, 18 May 2023 14:55:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684421728;
+        bh=EWN17qREk8YC1MUcrW1F8VdO7n3Z0vTPmJeNoge1tUA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=ScZ40A5phZasEfCLED6HhhkALpH9L+xuVprOBPzn9Si1l/WHV68LMnUeesVPV0nqr
+         cSJEPlPHATJ26cRs93xcE+Gp8eLTGeyqvd93aX9d0oiqz5rBAWa8sdwOjVCmQcEP6X
+         +1Z7HRKRDinrHbZowmtomCDpETrNCBoQx5L37Jb57llZiThSTz9SWk/cJZ/sIgoR/C
+         RLKL11ri69PUOvVbpywNCH6jrp2nT0TWS718VwR6pBvD1uoW7jxxsackhnotT17XRK
+         NHPecVSKMWH7vSHiYbVd6lvna8NNp2Jl3F3ZPl/cQaTkYCCQnKBXSv78M818PZhD2X
+         jJ8iaUmmjSunA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 2BF9BCE198C; Thu, 18 May 2023 07:55:23 -0700 (PDT)
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     gwml@vger.gnuweeb.org, kernel-team@meta.com, w@lwt.eu,
+        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        Willy Tarreau <w@1wt.eu>,
+        "Paul E . McKenney" <paulmck@kernel.org>
+Subject: [PATCH v2 nolibc 11/15] tools/nolibc: use C89 comment syntax
+Date:   Thu, 18 May 2023 07:55:17 -0700
+Message-Id: <20230518145521.3806117-11-paulmck@kernel.org>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <4817a4dc-69e6-4937-84d5-f2f630ff646c@paulmck-laptop>
+References: <4817a4dc-69e6-4937-84d5-f2f630ff646c@paulmck-laptop>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR10MB3022:EE_|DM6PR10MB4347:EE_
-X-MS-Office365-Filtering-Correlation-Id: e7048e49-2387-4cfe-68aa-08db57b0034f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gURmUyVULnU2pzDkWml4HZ5MjgeCIytIM5T+jd8eMcSA9+nYaOZ61jW7SMrhNhxEQ2F44Sowr1MI5UNhAuJAnsaxMJ7O+voSyWMepKTZT0KXkxBi+bcX5J3u6YHmohLHa0GA41cNcbESOl/0zR7iwiu3xKOovop1xbjetYEFbYPidwK5zm+IFH79mooz4t1/ZBsRGm1PTcd0w19cMK/Dv24dcClwQBg7rxruxA9+1krgIZZicELFiXZwvzynJ3Cb/bOYulORnd48DujABkqlB+SrpErp6Zw8K7IuMBddOT2nVR8rAK4dyw8cIIx85DIdOBvPiFM/p3hisGrlZEG+p1a/5ZOc59wNYfryjDuKUihSz0y9kETfQaHcszIPgV9rwN+Ddo4BvMVPlAlmA/qsfvY/BPjWssfGGE9YygdQOyjssyAXBhN+xcfyaDnOtm7oFGDdxnFuB66NSsPqbOVl/NC0di7OJdmMNGXIXa6ItJPBmyoWOKPeXepz45PTS2QO4rmMByDcrViSPPPKSr4Y2QbEZtW/dAELeM2JA3w3ZXbJRNP7hbFwnrar4+LBL78/
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(376002)(366004)(136003)(346002)(396003)(451199021)(86362001)(2616005)(4326008)(6666004)(26005)(6506007)(6512007)(1076003)(6486002)(6916009)(66556008)(66476007)(66946007)(316002)(38100700002)(36756003)(186003)(478600001)(8936002)(8676002)(54906003)(2906002)(4744005)(41300700001)(107886003)(83380400001)(5660300002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?AVJRa0ito6gYx+pqxxttkC0oOVguPwViDw6P3+7mZlMd0L60zvmI0jLBjP5k?=
- =?us-ascii?Q?+CFuGQSY9BeUpVKcaaU/c9z7XovBqCJ6Nd0Io4zByLyREd8bheZxnfR3/Sy5?=
- =?us-ascii?Q?amtFFNgz+Ve177XNMAWWydRdnOQfCrErVFyjwj+JCbqDy4sARnBGMn9S1C1i?=
- =?us-ascii?Q?v+ojtj7fz2qaK4Ve1ayv9hbG8yYtNWnNrNiQij3yJttwPVOJ5NqRXgLtR6hg?=
- =?us-ascii?Q?upEgRJmFW4xNTnHb0mcIpXDYQa7GZchgla04aH6Lt6w3/Lk92djrgUs6IoOq?=
- =?us-ascii?Q?GrzjcAUmdP4wX2j0+9PFUI8WAr6O8+b8BuVzkuw74SUPqHAiQKLRJ0PYMdJF?=
- =?us-ascii?Q?P/C2FRxC5ZHSeahsyoOk3v8xwGWj/ROxhsOuVp8jIOAYnMUkJgaFeiEL2A73?=
- =?us-ascii?Q?hCDZmMETm97hpRCEuDTaFcYXwNGb4m9RAL8e9OD185OD6GCp0/SOQsQINbyL?=
- =?us-ascii?Q?C8N6QTG81XkJ1mGN0b6odIsm7owGqrAi2mfSEziDOjLMO2KrfuxNYdv7G83c?=
- =?us-ascii?Q?/64nOyJt1Fp55NXme1k/CAD/WD9QK38xwLVQuCoNkEsgdbm7H7LQ3x615+3y?=
- =?us-ascii?Q?k8r3FOkq6UzFi2zzW+VK6jHtrJDqkAA6iBftdINVass4otx54pJVXvOxPdfy?=
- =?us-ascii?Q?fI13g9pYZojq//QrNWu6iRDYhSUsY4RgJjk/8gCdkzfxT0TXpZ4qfYggc1hh?=
- =?us-ascii?Q?s2Um63x/N/K4kwHmtS/lmhtKRuGApl2MJKCwZcz8uBpFS2B8bgFRJF0ZZHtd?=
- =?us-ascii?Q?O9piqSkRvNcoP0zcH6T7dzKcjyI2Qnadd34416bcu7bnPcAdXRQ3riRsbVIz?=
- =?us-ascii?Q?bIjzq9eoFY6r5m7E6O0Q/TV/U32EcX2bneGHK/cQUYbz1+/MPz3Qh3rk5o6l?=
- =?us-ascii?Q?24AS/FypXHJYPOfTNLj1jFhXzvfHnewYuoE1PaBl/HvUkqn+V6VCTYdjNdvf?=
- =?us-ascii?Q?FqMmBEPNEAOq5X/p4r6FvoA9ROagEZbXPEWZGGkiIAqNOraeEUBqEXXHpExB?=
- =?us-ascii?Q?0IrzfSBKW+x/q4mmgJ/MoB23FKkG3uF9llrF+Dj65K9pJJDi7mYw4BdzeJ77?=
- =?us-ascii?Q?lNfc+finPmIazkO3gzVYbEmXKUxBsNOfa22yO2ZdF799tHrDUx8dxIyTvbTa?=
- =?us-ascii?Q?q6LzAU8ONgFAcSwL/NPVHFKtprTPVPj0L8fuPL2CCDviRgFwwoTuRPDvZmuk?=
- =?us-ascii?Q?B/edqfLgX4neQNibG6Fm4KcNI+XQwtLqZmXyFNrnE6X28vWFzE/9zWBG/Wal?=
- =?us-ascii?Q?VbSeSLq4+b7XgftpyxQPPgGDfpBonwaS7WilN6fCoZUJbrfjvSVuWC9ZuzEO?=
- =?us-ascii?Q?06OQQTMzNVeWm5SHVeMqf2Z2NNmeMnKjz77QeQguQ1bq+F0VWEbgifh0y4O5?=
- =?us-ascii?Q?ZuuMd69KzyLBPOi9N9rcUG9KTdmbpyBXxPgPf9fZ3eBjk3oc3Gs4jaFCM3rQ?=
- =?us-ascii?Q?slWmJAWPwTw1TZ44S6DblsGEhQfLyofAhznTDddZg+xbdsr5/8Gg//iSkV3v?=
- =?us-ascii?Q?B3FEA+eVMDQZ+v5lhRi0VLwg2elZz/6mLZSIMZYdx0r/2U7ECaabnZOC+bAj?=
- =?us-ascii?Q?iqJZLnH8b3OtoPm+NtyqktbfGeBZnBBdmhe4oVs9rKO1IhPDyeZUxPurdfrm?=
- =?us-ascii?Q?jg=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: iBFIpyX72C0fecrmnGMdMAn9d/cSJNMUz1rgUlazJqrCWZJngaNdkhm9Y81v2/ku/rHH0hLj/WgbH4RU9kLvvOb6SmRDaYV6y3SeBqv+J1031aKnySG0Upyw6wombXu+jLU15+f6kIOaIEP/vd4iRKmUX8xJy0+KmXAbmC9I2y/hTVoWiDNWtQ86NwdS7WhzwB3Vii5+jEgprYatMh48hDqUSraIgdNstwMru6e0EG56bo0FvLzAB8Y+ysGgepjJDdDLQh8OpWMQH+8oFOZtMuqqmM6gWdTOpqUtkyGJx/jhxqfWn1g2XDvb3mySVnc1omm0jiP3Bqe6e7y5k82Acm8VA7ZsHWtGQwvHBt2DyFDA44yZ+inI4AdZSaCdkCpQoCfrKBbNPIZkuAl85UoapFDw6ynK4gn/MyzLUv4ja9eS+gAJ2mYVsBPfeuZzGDLNsWQvF6+m2HbSRth8d9bJ+/xKS0itcWHzAqaiPH5lKGhsBo3Gl519cCEervcPqzJf71bn/rnDJ8rxMVgx54e7KhRUPnhVq5O/XzRe/10Y9L7deeb3y8fdTVvHBOvJl3p/74aIdTug83a6sjgnBoENqodiSaSk1dqPismTvnemDztI252a4n8NGYFWufbWiLMrojpmRs/lhB7DR0nHbf0/T9EDP1j7tokvvt3gbrVB/dHgHU//fGLCFy8TdxBM5j7MJkOhzPzmozj9PtoL+jDTxUcQAOIdky5PoWOCuJmIWTkhxPgadbHWkAq+xbOQY7pOxcuioC/DrdbjJ1XS1ze3bOBzQc3mgqzfWx3E8F89NHZARd9xNykwipuLmQUMh8TbHXxNXS9dnk9eWKYUhIxe3zKLl3rzg/vCe63Hrh38+ao6ioy31pZK6VcrQhCrAgGyMPba54FMCHPOcJ90lpyjDA==
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e7048e49-2387-4cfe-68aa-08db57b0034f
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2023 14:56:08.5456
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HLzxDBgytF2pxu6pEu7v2yaCuLtmr/IAn6frAoGIqdR0RrsGXhmhSkSm6Vbs6EQJMSM2uAUSNE5vqPQoV73Uew==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB4347
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-18_11,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 phishscore=0
- mlxlogscore=999 spamscore=0 adultscore=0 malwarescore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305180120
-X-Proofpoint-GUID: 6RaQFkGPGvNa87k0dyIPuXTp7jIgsqPz
-X-Proofpoint-ORIG-GUID: 6RaQFkGPGvNa87k0dyIPuXTp7jIgsqPz
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+From: Thomas Weißschuh <linux@weissschuh.net>
 
-If RCU is enabled and the tree isn't locked, just warn the user and
-avoid crashing the kernel.
+Most of nolibc is already using C89 comments.
 
-Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+Signed-off-by: Willy Tarreau <w@1wt.eu>
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- include/linux/maple_tree.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/include/nolibc/arch-aarch64.h          | 32 +++++------
+ tools/include/nolibc/arch-arm.h              | 44 +++++++--------
+ tools/include/nolibc/arch-i386.h             | 40 +++++++-------
+ tools/include/nolibc/arch-loongarch.h        | 38 ++++++-------
+ tools/include/nolibc/arch-mips.h             | 56 ++++++++++----------
+ tools/include/nolibc/arch-riscv.h            | 40 +++++++-------
+ tools/include/nolibc/arch-s390.h             |  2 +-
+ tools/include/nolibc/arch-x86_64.h           | 34 ++++++------
+ tools/include/nolibc/stackprotector.h        |  4 +-
+ tools/include/nolibc/sys.h                   |  8 +--
+ tools/testing/selftests/nolibc/nolibc-test.c | 12 ++---
+ 11 files changed, 155 insertions(+), 155 deletions(-)
 
-diff --git a/include/linux/maple_tree.h b/include/linux/maple_tree.h
-index 204d7941a39e..ed92abf4c1fb 100644
---- a/include/linux/maple_tree.h
-+++ b/include/linux/maple_tree.h
-@@ -616,7 +616,7 @@ static inline void mt_clear_in_rcu(struct maple_tree *mt)
- 		return;
+diff --git a/tools/include/nolibc/arch-aarch64.h b/tools/include/nolibc/arch-aarch64.h
+index 383baddef701..76ef26520c85 100644
+--- a/tools/include/nolibc/arch-aarch64.h
++++ b/tools/include/nolibc/arch-aarch64.h
+@@ -176,24 +176,24 @@ const unsigned long *_auxv __attribute__((weak));
+ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
+ {
+ 	__asm__ volatile (
+-		"ldr x0, [sp]\n"     // argc (x0) was in the stack
+-		"add x1, sp, 8\n"    // argv (x1) = sp
+-		"lsl x2, x0, 3\n"    // envp (x2) = 8*argc ...
+-		"add x2, x2, 8\n"    //           + 8 (skip null)
+-		"add x2, x2, x1\n"   //           + argv
+-		"adrp x3, environ\n"          // x3 = &environ (high bits)
+-		"str x2, [x3, #:lo12:environ]\n" // store envp into environ
+-		"mov x4, x2\n"       // search for auxv (follows NULL after last env)
++		"ldr x0, [sp]\n"     /* argc (x0) was in the stack                          */
++		"add x1, sp, 8\n"    /* argv (x1) = sp                                      */
++		"lsl x2, x0, 3\n"    /* envp (x2) = 8*argc ...                              */
++		"add x2, x2, 8\n"    /*           + 8 (skip null)                           */
++		"add x2, x2, x1\n"   /*           + argv                                    */
++		"adrp x3, environ\n"          /* x3 = &environ (high bits)                  */
++		"str x2, [x3, #:lo12:environ]\n" /* store envp into environ                 */
++		"mov x4, x2\n"       /* search for auxv (follows NULL after last env)       */
+ 		"0:\n"
+-		"ldr x5, [x4], 8\n"  // x5 = *x4; x4 += 8
+-		"cbnz x5, 0b\n"      // and stop at NULL after last env
+-		"adrp x3, _auxv\n"   // x3 = &_auxv (high bits)
+-		"str x4, [x3, #:lo12:_auxv]\n" // store x4 into _auxv
+-		"and sp, x1, -16\n"  // sp must be 16-byte aligned in the callee
+-		"bl main\n"          // main() returns the status code, we'll exit with it.
+-		"mov x8, 93\n"       // NR_exit == 93
++		"ldr x5, [x4], 8\n"  /* x5 = *x4; x4 += 8                                   */
++		"cbnz x5, 0b\n"      /* and stop at NULL after last env                     */
++		"adrp x3, _auxv\n"   /* x3 = &_auxv (high bits)                             */
++		"str x4, [x3, #:lo12:_auxv]\n" /* store x4 into _auxv                       */
++		"and sp, x1, -16\n"  /* sp must be 16-byte aligned in the callee            */
++		"bl main\n"          /* main() returns the status code, we'll exit with it. */
++		"mov x8, 93\n"       /* NR_exit == 93                                       */
+ 		"svc #0\n"
+ 	);
+ 	__builtin_unreachable();
+ }
+-#endif // _NOLIBC_ARCH_AARCH64_H
++#endif /* _NOLIBC_ARCH_AARCH64_H */
+diff --git a/tools/include/nolibc/arch-arm.h b/tools/include/nolibc/arch-arm.h
+index 42499f23e73c..2eab1aef321b 100644
+--- a/tools/include/nolibc/arch-arm.h
++++ b/tools/include/nolibc/arch-arm.h
+@@ -203,34 +203,34 @@ const unsigned long *_auxv __attribute__((weak));
+ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
+ {
+ 	__asm__ volatile (
+-		"pop {%r0}\n"                 // argc was in the stack
+-		"mov %r1, %sp\n"              // argv = sp
++		"pop {%r0}\n"                 /* argc was in the stack                               */
++		"mov %r1, %sp\n"              /* argv = sp                                           */
  
- 	if (mt_external_lock(mt)) {
--		BUG_ON(!mt_lock_is_held(mt));
-+		WARN_ON(!mt_lock_is_held(mt));
- 		mt->ma_flags &= ~MT_FLAGS_USE_RCU;
- 	} else {
- 		mtree_lock(mt);
-@@ -635,7 +635,7 @@ static inline void mt_set_in_rcu(struct maple_tree *mt)
- 		return;
+-		"add %r2, %r0, $1\n"          // envp = (argc + 1) ...
+-		"lsl %r2, %r2, $2\n"          //        * 4        ...
+-		"add %r2, %r2, %r1\n"         //        + argv
+-		"ldr %r3, 1f\n"               // r3 = &environ (see below)
+-		"str %r2, [r3]\n"             // store envp into environ
++		"add %r2, %r0, $1\n"          /* envp = (argc + 1) ...                               */
++		"lsl %r2, %r2, $2\n"          /*        * 4        ...                               */
++		"add %r2, %r2, %r1\n"         /*        + argv                                       */
++		"ldr %r3, 1f\n"               /* r3 = &environ (see below)                           */
++		"str %r2, [r3]\n"             /* store envp into environ                             */
  
- 	if (mt_external_lock(mt)) {
--		BUG_ON(!mt_lock_is_held(mt));
-+		WARN_ON(!mt_lock_is_held(mt));
- 		mt->ma_flags |= MT_FLAGS_USE_RCU;
- 	} else {
- 		mtree_lock(mt);
+-		"mov r4, r2\n"                // search for auxv (follows NULL after last env)
++		"mov r4, r2\n"                /* search for auxv (follows NULL after last env)       */
+ 		"0:\n"
+-		"mov r5, r4\n"                // r5 = r4
+-		"add r4, r4, #4\n"            // r4 += 4
+-		"ldr r5,[r5]\n"               // r5 = *r5 = *(r4-4)
+-		"cmp r5, #0\n"                // and stop at NULL after last env
++		"mov r5, r4\n"                /* r5 = r4                                             */
++		"add r4, r4, #4\n"            /* r4 += 4                                             */
++		"ldr r5,[r5]\n"               /* r5 = *r5 = *(r4-4)                                  */
++		"cmp r5, #0\n"                /* and stop at NULL after last env                     */
+ 		"bne 0b\n"
+-		"ldr %r3, 2f\n"               // r3 = &_auxv (low bits)
+-		"str r4, [r3]\n"              // store r4 into _auxv
++		"ldr %r3, 2f\n"               /* r3 = &_auxv (low bits)                              */
++		"str r4, [r3]\n"              /* store r4 into _auxv                                 */
+ 
+-		"mov %r3, $8\n"               // AAPCS : sp must be 8-byte aligned in the
+-		"neg %r3, %r3\n"              //         callee, and bl doesn't push (lr=pc)
+-		"and %r3, %r3, %r1\n"         // so we do sp = r1(=sp) & r3(=-8);
+-		"mov %sp, %r3\n"              //
++		"mov %r3, $8\n"               /* AAPCS : sp must be 8-byte aligned in the            */
++		"neg %r3, %r3\n"              /*         callee, and bl doesn't push (lr=pc)         */
++		"and %r3, %r3, %r1\n"         /* so we do sp = r1(=sp) & r3(=-8);                    */
++		"mov %sp, %r3\n"
+ 
+-		"bl main\n"                   // main() returns the status code, we'll exit with it.
+-		"movs r7, $1\n"               // NR_exit == 1
++		"bl main\n"                   /* main() returns the status code, we'll exit with it. */
++		"movs r7, $1\n"               /* NR_exit == 1                                        */
+ 		"svc $0x00\n"
+-		".align 2\n"                  // below are the pointers to a few variables
++		".align 2\n"                  /* below are the pointers to a few variables           */
+ 		"1:\n"
+ 		".word environ\n"
+ 		"2:\n"
+@@ -239,4 +239,4 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
+ 	__builtin_unreachable();
+ }
+ 
+-#endif // _NOLIBC_ARCH_ARM_H
++#endif /* _NOLIBC_ARCH_ARM_H */
+diff --git a/tools/include/nolibc/arch-i386.h b/tools/include/nolibc/arch-i386.h
+index 2d98d78fd3f3..7c41897a08ce 100644
+--- a/tools/include/nolibc/arch-i386.h
++++ b/tools/include/nolibc/arch-i386.h
+@@ -194,31 +194,31 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"),no_stack_protec
+ {
+ 	__asm__ volatile (
+ #ifdef NOLIBC_STACKPROTECTOR
+-		"call __stack_chk_init\n"   // initialize stack protector
++		"call __stack_chk_init\n"   /* initialize stack protector                    */
+ #endif
+-		"pop %eax\n"                // argc   (first arg, %eax)
+-		"mov %esp, %ebx\n"          // argv[] (second arg, %ebx)
+-		"lea 4(%ebx,%eax,4),%ecx\n" // then a NULL then envp (third arg, %ecx)
+-		"mov %ecx, environ\n"       // save environ
+-		"xor %ebp, %ebp\n"          // zero the stack frame
+-		"mov %ecx, %edx\n"          // search for auxv (follows NULL after last env)
++		"pop %eax\n"                /* argc   (first arg, %eax)                      */
++		"mov %esp, %ebx\n"          /* argv[] (second arg, %ebx)                     */
++		"lea 4(%ebx,%eax,4),%ecx\n" /* then a NULL then envp (third arg, %ecx)       */
++		"mov %ecx, environ\n"       /* save environ                                  */
++		"xor %ebp, %ebp\n"          /* zero the stack frame                          */
++		"mov %ecx, %edx\n"          /* search for auxv (follows NULL after last env) */
+ 		"0:\n"
+-		"add $4, %edx\n"            // search for auxv using edx, it follows the
+-		"cmp -4(%edx), %ebp\n"      // ... NULL after last env (ebp is zero here)
++		"add $4, %edx\n"            /* search for auxv using edx, it follows the     */
++		"cmp -4(%edx), %ebp\n"      /* ... NULL after last env (ebp is zero here)    */
+ 		"jnz 0b\n"
+-		"mov %edx, _auxv\n"         // save it into _auxv
+-		"and $-16, %esp\n"          // x86 ABI : esp must be 16-byte aligned before
+-		"sub $4, %esp\n"            // the call instruction (args are aligned)
+-		"push %ecx\n"               // push all registers on the stack so that we
+-		"push %ebx\n"               // support both regparm and plain stack modes
++		"mov %edx, _auxv\n"         /* save it into _auxv                            */
++		"and $-16, %esp\n"          /* x86 ABI : esp must be 16-byte aligned before  */
++		"sub $4, %esp\n"            /* the call instruction (args are aligned)       */
++		"push %ecx\n"               /* push all registers on the stack so that we    */
++		"push %ebx\n"               /* support both regparm and plain stack modes    */
+ 		"push %eax\n"
+-		"call main\n"               // main() returns the status code in %eax
+-		"mov %eax, %ebx\n"          // retrieve exit code (32-bit int)
+-		"movl $1, %eax\n"           // NR_exit == 1
+-		"int $0x80\n"               // exit now
+-		"hlt\n"                     // ensure it does not
++		"call main\n"               /* main() returns the status code in %eax        */
++		"mov %eax, %ebx\n"          /* retrieve exit code (32-bit int)               */
++		"movl $1, %eax\n"           /* NR_exit == 1                                  */
++		"int $0x80\n"               /* exit now                                      */
++		"hlt\n"                     /* ensure it does not                            */
+ 	);
+ 	__builtin_unreachable();
+ }
+ 
+-#endif // _NOLIBC_ARCH_I386_H
++#endif /* _NOLIBC_ARCH_I386_H */
+diff --git a/tools/include/nolibc/arch-loongarch.h b/tools/include/nolibc/arch-loongarch.h
+index 029ee3cd6baf..ec3b46a991a9 100644
+--- a/tools/include/nolibc/arch-loongarch.h
++++ b/tools/include/nolibc/arch-loongarch.h
+@@ -158,7 +158,7 @@ const unsigned long *_auxv __attribute__((weak));
+ #define LONG_ADDI    "addi.w"
+ #define LONG_SLL     "slli.w"
+ #define LONG_BSTRINS "bstrins.w"
+-#else // __loongarch_grlen == 64
++#else /* __loongarch_grlen == 64 */
+ #define LONGLOG      "3"
+ #define SZREG        "8"
+ #define REG_L        "ld.d"
+@@ -173,28 +173,28 @@ const unsigned long *_auxv __attribute__((weak));
+ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
+ {
+ 	__asm__ volatile (
+-		REG_L        " $a0, $sp, 0\n"         // argc (a0) was in the stack
+-		LONG_ADDI    " $a1, $sp, "SZREG"\n"   // argv (a1) = sp + SZREG
+-		LONG_SLL     " $a2, $a0, "LONGLOG"\n" // envp (a2) = SZREG*argc ...
+-		LONG_ADDI    " $a2, $a2, "SZREG"\n"   //             + SZREG (skip null)
+-		LONG_ADD     " $a2, $a2, $a1\n"       //             + argv
++		REG_L        " $a0, $sp, 0\n"         /* argc (a0) was in the stack                          */
++		LONG_ADDI    " $a1, $sp, "SZREG"\n"   /* argv (a1) = sp + SZREG                              */
++		LONG_SLL     " $a2, $a0, "LONGLOG"\n" /* envp (a2) = SZREG*argc ...                          */
++		LONG_ADDI    " $a2, $a2, "SZREG"\n"   /*             + SZREG (skip null)                     */
++		LONG_ADD     " $a2, $a2, $a1\n"       /*             + argv                                  */
+ 
+-		"move          $a3, $a2\n"            // iterate a3 over envp to find auxv (after NULL)
+-		"0:\n"                                // do {
+-		REG_L        " $a4, $a3, 0\n"         //   a4 = *a3;
+-		LONG_ADDI    " $a3, $a3, "SZREG"\n"   //   a3 += sizeof(void*);
+-		"bne           $a4, $zero, 0b\n"      // } while (a4);
+-		"la.pcrel      $a4, _auxv\n"          // a4 = &_auxv
+-		LONG_S       " $a3, $a4, 0\n"         // store a3 into _auxv
++		"move          $a3, $a2\n"            /* iterate a3 over envp to find auxv (after NULL)      */
++		"0:\n"                                /* do {                                                */
++		REG_L        " $a4, $a3, 0\n"         /*   a4 = *a3;                                         */
++		LONG_ADDI    " $a3, $a3, "SZREG"\n"   /*   a3 += sizeof(void*);                              */
++		"bne           $a4, $zero, 0b\n"      /* } while (a4);                                       */
++		"la.pcrel      $a4, _auxv\n"          /* a4 = &_auxv                                         */
++		LONG_S       " $a3, $a4, 0\n"         /* store a3 into _auxv                                 */
+ 
+-		"la.pcrel      $a3, environ\n"        // a3 = &environ
+-		LONG_S       " $a2, $a3, 0\n"         // store envp(a2) into environ
+-		LONG_BSTRINS " $sp, $zero, 3, 0\n"    // sp must be 16-byte aligned
+-		"bl            main\n"                // main() returns the status code, we'll exit with it.
+-		"li.w          $a7, 93\n"             // NR_exit == 93
++		"la.pcrel      $a3, environ\n"        /* a3 = &environ                                       */
++		LONG_S       " $a2, $a3, 0\n"         /* store envp(a2) into environ                         */
++		LONG_BSTRINS " $sp, $zero, 3, 0\n"    /* sp must be 16-byte aligned                          */
++		"bl            main\n"                /* main() returns the status code, we'll exit with it. */
++		"li.w          $a7, 93\n"             /* NR_exit == 93                                       */
+ 		"syscall       0\n"
+ 	);
+ 	__builtin_unreachable();
+ }
+ 
+-#endif // _NOLIBC_ARCH_LOONGARCH_H
++#endif /* _NOLIBC_ARCH_LOONGARCH_H */
+diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
+index bf83432d23ed..8822f150e72f 100644
+--- a/tools/include/nolibc/arch-mips.h
++++ b/tools/include/nolibc/arch-mips.h
+@@ -183,42 +183,42 @@ const unsigned long *_auxv __attribute__((weak));
+ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) __start(void)
+ {
+ 	__asm__ volatile (
+-		//".set nomips16\n"
++		/*".set nomips16\n"*/
+ 		".set push\n"
+ 		".set    noreorder\n"
+ 		".option pic0\n"
+-		//".ent __start\n"
+-		//"__start:\n"
+-		"lw $a0,($sp)\n"        // argc was in the stack
+-		"addiu  $a1, $sp, 4\n"  // argv = sp + 4
+-		"sll $a2, $a0, 2\n"     // a2 = argc * 4
+-		"add   $a2, $a2, $a1\n" // envp = argv + 4*argc ...
+-		"addiu $a2, $a2, 4\n"   //        ... + 4
+-		"lui $a3, %hi(environ)\n"     // load environ into a3 (hi)
+-		"addiu $a3, %lo(environ)\n"   // load environ into a3 (lo)
+-		"sw $a2,($a3)\n"              // store envp(a2) into environ
+-
+-		"move $t0, $a2\n"             // iterate t0 over envp, look for NULL
+-		"0:"                          // do {
+-		"lw $a3, ($t0)\n"             //   a3=*(t0);
+-		"bne $a3, $0, 0b\n"           // } while (a3);
+-		"addiu $t0, $t0, 4\n"         // delayed slot: t0+=4;
+-		"lui $a3, %hi(_auxv)\n"       // load _auxv into a3 (hi)
+-		"addiu $a3, %lo(_auxv)\n"     // load _auxv into a3 (lo)
+-		"sw $t0, ($a3)\n"             // store t0 into _auxv
++		/*".ent __start\n"*/
++		/*"__start:\n"*/
++		"lw $a0,($sp)\n"        /* argc was in the stack                               */
++		"addiu  $a1, $sp, 4\n"  /* argv = sp + 4                                       */
++		"sll $a2, $a0, 2\n"     /* a2 = argc * 4                                       */
++		"add   $a2, $a2, $a1\n" /* envp = argv + 4*argc ...                            */
++		"addiu $a2, $a2, 4\n"   /*        ... + 4                                      */
++		"lui $a3, %hi(environ)\n"     /* load environ into a3 (hi)                     */
++		"addiu $a3, %lo(environ)\n"   /* load environ into a3 (lo)                     */
++		"sw $a2,($a3)\n"              /* store envp(a2) into environ                   */
++
++		"move $t0, $a2\n"             /* iterate t0 over envp, look for NULL           */
++		"0:"                          /* do {                                          */
++		"lw $a3, ($t0)\n"             /*   a3=*(t0);                                   */
++		"bne $a3, $0, 0b\n"           /* } while (a3);                                 */
++		"addiu $t0, $t0, 4\n"         /* delayed slot: t0+=4;                          */
++		"lui $a3, %hi(_auxv)\n"       /* load _auxv into a3 (hi)                       */
++		"addiu $a3, %lo(_auxv)\n"     /* load _auxv into a3 (lo)                       */
++		"sw $t0, ($a3)\n"             /* store t0 into _auxv                           */
+ 
+ 		"li $t0, -8\n"
+-		"and $sp, $sp, $t0\n"   // sp must be 8-byte aligned
+-		"addiu $sp,$sp,-16\n"   // the callee expects to save a0..a3 there!
+-		"jal main\n"            // main() returns the status code, we'll exit with it.
+-		"nop\n"                 // delayed slot
+-		"move $a0, $v0\n"       // retrieve 32-bit exit code from v0
+-		"li $v0, 4001\n"        // NR_exit == 4001
++		"and $sp, $sp, $t0\n"   /* sp must be 8-byte aligned                           */
++		"addiu $sp,$sp,-16\n"   /* the callee expects to save a0..a3 there!            */
++		"jal main\n"            /* main() returns the status code, we'll exit with it. */
++		"nop\n"                 /* delayed slot                                        */
++		"move $a0, $v0\n"       /* retrieve 32-bit exit code from v0                   */
++		"li $v0, 4001\n"        /* NR_exit == 4001                                     */
+ 		"syscall\n"
+-		//".end __start\n"
++		/*".end __start\n"*/
+ 		".set pop\n"
+ 	);
+ 	__builtin_unreachable();
+ }
+ 
+-#endif // _NOLIBC_ARCH_MIPS_H
++#endif /* _NOLIBC_ARCH_MIPS_H */
+diff --git a/tools/include/nolibc/arch-riscv.h b/tools/include/nolibc/arch-riscv.h
+index e197fcb10ac0..0d5f15fdedc4 100644
+--- a/tools/include/nolibc/arch-riscv.h
++++ b/tools/include/nolibc/arch-riscv.h
+@@ -181,28 +181,28 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
+ 		".option norelax\n"
+ 		"lla   gp, __global_pointer$\n"
+ 		".option pop\n"
+-		"lw    a0, 0(sp)\n"          // argc (a0) was in the stack
+-		"add   a1, sp, "SZREG"\n"    // argv (a1) = sp
+-		"slli  a2, a0, "PTRLOG"\n"   // envp (a2) = SZREG*argc ...
+-		"add   a2, a2, "SZREG"\n"    //             + SZREG (skip null)
+-		"add   a2,a2,a1\n"           //             + argv
+-
+-		"add   a3, a2, zero\n"       // iterate a3 over envp to find auxv (after NULL)
+-		"0:\n"                       // do {
+-		"ld    a4, 0(a3)\n"          //   a4 = *a3;
+-		"add   a3, a3, "SZREG"\n"    //   a3 += sizeof(void*);
+-		"bne   a4, zero, 0b\n"       // } while (a4);
+-		"lui   a4, %hi(_auxv)\n"     // a4 = &_auxv (high bits)
+-		"sd    a3, %lo(_auxv)(a4)\n" // store a3 into _auxv
+-
+-		"lui a3, %hi(environ)\n"     // a3 = &environ (high bits)
+-		"sd a2,%lo(environ)(a3)\n"   // store envp(a2) into environ
+-		"andi  sp,a1,-16\n"          // sp must be 16-byte aligned
+-		"call  main\n"               // main() returns the status code, we'll exit with it.
+-		"li a7, 93\n"                // NR_exit == 93
++		"lw    a0, 0(sp)\n"          /* argc (a0) was in the stack                          */
++		"add   a1, sp, "SZREG"\n"    /* argv (a1) = sp                                      */
++		"slli  a2, a0, "PTRLOG"\n"   /* envp (a2) = SZREG*argc ...                          */
++		"add   a2, a2, "SZREG"\n"    /*             + SZREG (skip null)                     */
++		"add   a2,a2,a1\n"           /*             + argv                                  */
++
++		"add   a3, a2, zero\n"       /* iterate a3 over envp to find auxv (after NULL)      */
++		"0:\n"                       /* do {                                                */
++		"ld    a4, 0(a3)\n"          /*   a4 = *a3;                                         */
++		"add   a3, a3, "SZREG"\n"    /*   a3 += sizeof(void*);                              */
++		"bne   a4, zero, 0b\n"       /* } while (a4);                                       */
++		"lui   a4, %hi(_auxv)\n"     /* a4 = &_auxv (high bits)                             */
++		"sd    a3, %lo(_auxv)(a4)\n" /* store a3 into _auxv                                 */
++
++		"lui a3, %hi(environ)\n"     /* a3 = &environ (high bits)                           */
++		"sd a2,%lo(environ)(a3)\n"   /* store envp(a2) into environ                         */
++		"andi  sp,a1,-16\n"          /* sp must be 16-byte aligned                          */
++		"call  main\n"               /* main() returns the status code, we'll exit with it. */
++		"li a7, 93\n"                /* NR_exit == 93                                       */
+ 		"ecall\n"
+ 	);
+ 	__builtin_unreachable();
+ }
+ 
+-#endif // _NOLIBC_ARCH_RISCV_H
++#endif /* _NOLIBC_ARCH_RISCV_H */
+diff --git a/tools/include/nolibc/arch-s390.h b/tools/include/nolibc/arch-s390.h
+index 6b0e54ed543d..c62ee2472407 100644
+--- a/tools/include/nolibc/arch-s390.h
++++ b/tools/include/nolibc/arch-s390.h
+@@ -223,4 +223,4 @@ void *sys_mmap(void *addr, size_t length, int prot, int flags, int fd,
+ 	return (void *)my_syscall1(__NR_mmap, &args);
+ }
+ #define sys_mmap sys_mmap
+-#endif // _NOLIBC_ARCH_S390_H
++#endif /* _NOLIBC_ARCH_S390_H */
+diff --git a/tools/include/nolibc/arch-x86_64.h b/tools/include/nolibc/arch-x86_64.h
+index f7f2a11d4c3b..d98f6c89d143 100644
+--- a/tools/include/nolibc/arch-x86_64.h
++++ b/tools/include/nolibc/arch-x86_64.h
+@@ -194,27 +194,27 @@ void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
+ {
+ 	__asm__ volatile (
+ #ifdef NOLIBC_STACKPROTECTOR
+-		"call __stack_chk_init\n"   // initialize stack protector
++		"call __stack_chk_init\n"   /* initialize stack protector                          */
+ #endif
+-		"pop %rdi\n"                // argc   (first arg, %rdi)
+-		"mov %rsp, %rsi\n"          // argv[] (second arg, %rsi)
+-		"lea 8(%rsi,%rdi,8),%rdx\n" // then a NULL then envp (third arg, %rdx)
+-		"mov %rdx, environ\n"       // save environ
+-		"xor %ebp, %ebp\n"          // zero the stack frame
+-		"mov %rdx, %rax\n"          // search for auxv (follows NULL after last env)
++		"pop %rdi\n"                /* argc   (first arg, %rdi)                            */
++		"mov %rsp, %rsi\n"          /* argv[] (second arg, %rsi)                           */
++		"lea 8(%rsi,%rdi,8),%rdx\n" /* then a NULL then envp (third arg, %rdx)             */
++		"mov %rdx, environ\n"       /* save environ                                        */
++		"xor %ebp, %ebp\n"          /* zero the stack frame                                */
++		"mov %rdx, %rax\n"          /* search for auxv (follows NULL after last env)       */
+ 		"0:\n"
+-		"add $8, %rax\n"            // search for auxv using rax, it follows the
+-		"cmp -8(%rax), %rbp\n"      // ... NULL after last env (rbp is zero here)
++		"add $8, %rax\n"            /* search for auxv using rax, it follows the           */
++		"cmp -8(%rax), %rbp\n"      /* ... NULL after last env (rbp is zero here)          */
+ 		"jnz 0b\n"
+-		"mov %rax, _auxv\n"         // save it into _auxv
+-		"and $-16, %rsp\n"          // x86 ABI : esp must be 16-byte aligned before call
+-		"call main\n"               // main() returns the status code, we'll exit with it.
+-		"mov %eax, %edi\n"          // retrieve exit code (32 bit)
+-		"mov $60, %eax\n"           // NR_exit == 60
+-		"syscall\n"                 // really exit
+-		"hlt\n"                     // ensure it does not return
++		"mov %rax, _auxv\n"         /* save it into _auxv                                  */
++		"and $-16, %rsp\n"          /* x86 ABI : esp must be 16-byte aligned before call   */
++		"call main\n"               /* main() returns the status code, we'll exit with it. */
++		"mov %eax, %edi\n"          /* retrieve exit code (32 bit)                         */
++		"mov $60, %eax\n"           /* NR_exit == 60                                       */
++		"syscall\n"                 /* really exit                                         */
++		"hlt\n"                     /* ensure it does not return                           */
+ 	);
+ 	__builtin_unreachable();
+ }
+ 
+-#endif // _NOLIBC_ARCH_X86_64_H
++#endif /* _NOLIBC_ARCH_X86_64_H */
+diff --git a/tools/include/nolibc/stackprotector.h b/tools/include/nolibc/stackprotector.h
+index d119cbbbc256..77e5251c4490 100644
+--- a/tools/include/nolibc/stackprotector.h
++++ b/tools/include/nolibc/stackprotector.h
+@@ -48,6 +48,6 @@ void __stack_chk_init(void)
+ 	/* a bit more randomness in case getrandom() fails */
+ 	__stack_chk_guard ^= (uintptr_t) &__stack_chk_guard;
+ }
+-#endif // defined(NOLIBC_STACKPROTECTOR)
++#endif /* defined(NOLIBC_STACKPROTECTOR) */
+ 
+-#endif // _NOLIBC_STACKPROTECTOR_H
++#endif /* _NOLIBC_STACKPROTECTOR_H */
+diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+index bea9760dbd16..1b9b91cd8b57 100644
+--- a/tools/include/nolibc/sys.h
++++ b/tools/include/nolibc/sys.h
+@@ -12,15 +12,15 @@
+ 
+ /* system includes */
+ #include <asm/unistd.h>
+-#include <asm/signal.h>  // for SIGCHLD
++#include <asm/signal.h>  /* for SIGCHLD */
+ #include <asm/ioctls.h>
+ #include <asm/mman.h>
+ #include <linux/fs.h>
+ #include <linux/loop.h>
+ #include <linux/time.h>
+ #include <linux/auxvec.h>
+-#include <linux/fcntl.h> // for O_* and AT_*
+-#include <linux/stat.h>  // for statx()
++#include <linux/fcntl.h> /* for O_* and AT_* */
++#include <linux/stat.h>  /* for statx() */
+ 
+ #include "arch.h"
+ #include "errno.h"
+@@ -322,7 +322,7 @@ static __attribute__((noreturn,unused))
+ void sys_exit(int status)
+ {
+ 	my_syscall1(__NR_exit, status & 255);
+-	while(1); // shut the "noreturn" warnings.
++	while(1); /* shut the "noreturn" warnings. */
+ }
+ 
+ static __attribute__((noreturn,unused))
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index e692be98973a..f06b38cfe38a 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -1,4 +1,4 @@
+-// SPDX-License-Identifier: GPL-2.0
++/* SPDX-License-Identifier: GPL-2.0 */
+ 
+ #define _GNU_SOURCE
+ 
+@@ -46,8 +46,8 @@ char **environ;
+ 
+ /* definition of a series of tests */
+ struct test {
+-	const char *name;              // test name
+-	int (*func)(int min, int max); // handler
++	const char *name;              /* test name */
++	int (*func)(int min, int max); /* handler */
+ };
+ 
+ #ifndef _NOLIBC_STDLIB_H
+@@ -494,7 +494,7 @@ int run_syscall(int min, int max)
+ 	euid0 = geteuid() == 0;
+ 
+ 	for (test = min; test >= 0 && test <= max; test++) {
+-		int llen = 0; // line length
++		int llen = 0; /* line length */
+ 
+ 		/* avoid leaving empty lines below, this will insert holes into
+ 		 * test numbers.
+@@ -584,7 +584,7 @@ int run_stdlib(int min, int max)
+ 	void *p1, *p2;
+ 
+ 	for (test = min; test >= 0 && test <= max; test++) {
+-		int llen = 0; // line length
++		int llen = 0; /* line length */
+ 
+ 		/* avoid leaving empty lines below, this will insert holes into
+ 		 * test numbers.
+@@ -731,7 +731,7 @@ static int run_vfprintf(int min, int max)
+ 	void *p1, *p2;
+ 
+ 	for (test = min; test >= 0 && test <= max; test++) {
+-		int llen = 0; // line length
++		int llen = 0; /* line length */
+ 
+ 		/* avoid leaving empty lines below, this will insert holes into
+ 		 * test numbers.
 -- 
-2.39.2
+2.40.1
 
