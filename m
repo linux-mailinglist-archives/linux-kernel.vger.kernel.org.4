@@ -2,241 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 065857089F2
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 22:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C11B77089E8
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 22:52:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230501AbjERU4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 16:56:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33982 "EHLO
+        id S230398AbjERUw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 16:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbjERU4E (ORCPT
+        with ESMTP id S230187AbjERUw1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 16:56:04 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 798F2121;
-        Thu, 18 May 2023 13:56:02 -0700 (PDT)
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34IKdQoA030949;
-        Thu, 18 May 2023 20:55:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=zBGca+Z6m4KATKH9WRH8wirjHmgHl03OjbEbMkI8F5g=;
- b=UotDGZgWxJwT2Vroit+gubfiz/5BcmB4mDzRB8rIrQm70zD1ygFDThMhaKjTINx+uTtV
- 0YK+9Dvjs6JjG3fs77exhrOc7k7hPeJLlV+RYXHi963KSjoLU7Qz5EW4dlyOT4GBPEJv
- p92FXXf1MZflFq9cdzDpcwmeqD7TLt62xR5ChVPp2ToTq+RKyQlGJSUWhKzGAfuqyBQ+
- YOq0ByPHarGHOjl2829joIX8rQGUJmeVCNWAh/tzhfeK9/SPK8MLm7ThSh/nFheNsyRm
- qd7z5REG7a0rjGTQROO9aQq3R1W7GnUxP5MB0jyh+rp2zopH4l8q8iSonueoYpjl6ePu Lg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qntvp11p1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 May 2023 20:55:52 +0000
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34IKnFWu004829;
-        Thu, 18 May 2023 20:55:51 GMT
-Received: from ppma01wdc.us.ibm.com (fd.55.37a9.ip4.static.sl-reverse.com [169.55.85.253])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qntvp11mk-5
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 May 2023 20:55:51 +0000
-Received: from pps.filterd (ppma01wdc.us.ibm.com [127.0.0.1])
-        by ppma01wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34IKmEh6017930;
-        Thu, 18 May 2023 20:50:38 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([9.208.130.100])
-        by ppma01wdc.us.ibm.com (PPS) with ESMTPS id 3qj265m5r9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 May 2023 20:50:38 +0000
-Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
-        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34IKobAf59310344
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 18 May 2023 20:50:38 GMT
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AFBBA58059;
-        Thu, 18 May 2023 20:50:37 +0000 (GMT)
-Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A796758058;
-        Thu, 18 May 2023 20:50:36 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.97.26])
-        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 18 May 2023 20:50:36 +0000 (GMT)
-Message-ID: <49a31515666cb0ecf78909f09d40d29eb5528e0f.camel@linux.ibm.com>
-Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM
- after writes
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Paul Moore <paul@paul-moore.com>,
-        Stefan Berger <stefanb@linux.ibm.com>
-Cc:     Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Amir Goldstein <amir73il@gmail.com>,
-        linux-integrity@vger.kernel.org, miklos@szeredi.hu,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org
-Date:   Thu, 18 May 2023 16:50:36 -0400
-In-Reply-To: <CAHC9VhSeBn-4UN48NcQWhJqLvQuydt4OvdyUsk9AXcviJ9Cqyw@mail.gmail.com>
-References: <20230407-trasse-umgearbeitet-d580452b7a9b@brauner>
-         <90a25725b4b3c96e84faefdb827b261901022606.camel@kernel.org>
-         <cbffa3dee65ecc0884dd16eb3af95c09a28f4297.camel@linux.ibm.com>
-         <CAHC9VhSeBn-4UN48NcQWhJqLvQuydt4OvdyUsk9AXcviJ9Cqyw@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: MET3yTc1BPRkB-RYn24A4bSDm9FUctmL
-X-Proofpoint-ORIG-GUID: 7ijmN70UG8VJCeGlJwSYLnVKWV7rCJ0Y
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 18 May 2023 16:52:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 160E91995
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 13:51:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 25CCA65238
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 20:51:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81BABC433A8
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 20:51:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684443082;
+        bh=Mcohg/XV/wrFIOA2dbWQp4WbXXb3DOZC5jV/ZprWGFE=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=TbsWqD+7b4kGi8NsWgROO6O/Pg+2Iwrj15TYHLq1bbeELPriTHIdqkvLswmNAS6Dj
+         SPn0mKlINpuG6hfj44KfMIItwAO/E2AkD39atTJGumGCc/SyeCHLUbSjQ/FnAJuu2c
+         wbPRCQb6Z9nGI9maqjChMf20UcDuSCN7ooLRGJDf2Q8KnkukixjTkJCQn+DeSSOwU+
+         VI7qIhIYN541GRrb3XjZZ1ynUgGVkK+N7wtfaFg9SE+9PEhazXxnf/ZHw29L55jpM+
+         +FCBp3GRPnAO/x4Mzn5t7Bygy/T5tMt1wVcx/GQCiMp7b6U2kWSDBHxmHFQjyqyAYE
+         9MmEzJ6hjv2pQ==
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2ac836f4447so26658451fa.2
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 13:51:22 -0700 (PDT)
+X-Gm-Message-State: AC+VfDw3ut3Rxq2GxkeHtq1LmhAbnl4fjRbry4woNGClcLJZ043jeydL
+        uq86n0DNBmYUETax/EbjRtdLBBuxvSHIwU56/g0=
+X-Google-Smtp-Source: ACHHUZ5OEA6kaXJKZOVU8MfSLnsAK59aRs1t/9/zhbRzGVU8wITXI6PQO0WrhEk35bpZ+lXbRRWq44o636fx3BTcX2s=
+X-Received: by 2002:a19:ad02:0:b0:4f2:509b:87ba with SMTP id
+ t2-20020a19ad02000000b004f2509b87bamr55370lfc.50.1684443080480; Thu, 18 May
+ 2023 13:51:20 -0700 (PDT)
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-18_15,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
- impostorscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=999
- mlxscore=0 bulkscore=0 phishscore=0 priorityscore=1501 malwarescore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305180169
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230308094106.227365-1-rppt@kernel.org> <20230308094106.227365-2-rppt@kernel.org>
+ <ZGWdHC3Jo7tFUC59@moria.home.lan> <20230518152354.GD4967@kernel.org>
+ <CAPhsuW541pcsMKYah=2U8mUs8is3jAiNKC8Erte=RkAUGFO9EA@mail.gmail.com>
+ <ZGZW0v3nRShO7r+Z@moria.home.lan> <CAPhsuW5BbbxinaH2aO=2Wa0aSQ3pkNwvnrgJv7fG4QcPr_j7+Q@mail.gmail.com>
+ <ZGZfLHA8vuRJwa0f@moria.home.lan> <CAPhsuW6B3O_kWjWwr+UfYO3WRkznFqBNtcecFCSECBSiZBJDsA@mail.gmail.com>
+ <CAPhsuW4Mm8z4kbVo8-sPU=QL2B1Sb32ZO7teWT8qienGNuxaeQ@mail.gmail.com> <ZGZ5PuQxDnjHlxAY@moria.home.lan>
+In-Reply-To: <ZGZ5PuQxDnjHlxAY@moria.home.lan>
+From:   Song Liu <song@kernel.org>
+Date:   Thu, 18 May 2023 13:51:08 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW4A8H00MV=tT9Gs_mtjn7o9KOzPjhwhdWDJMbY_9=9RrQ@mail.gmail.com>
+Message-ID: <CAPhsuW4A8H00MV=tT9Gs_mtjn7o9KOzPjhwhdWDJMbY_9=9RrQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/5] mm: intorduce __GFP_UNMAPPED and unmapped_alloc()
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-05-18 at 16:46 -0400, Paul Moore wrote:
-> On Fri, Apr 21, 2023 at 10:44 AM Mimi Zohar <zohar@linux.ibm.com> wrote:
-> > On Fri, 2023-04-07 at 09:29 -0400, Jeff Layton wrote:
-> > > > > > >
-> > > > > > > I would ditch the original proposal in favor of this 2-line patch shown here:
-> > > > > > >
-> > > > > > > https://lore.kernel.org/linux-integrity/a95f62ed-8b8a-38e5-e468-ecbde3b221af@linux.ibm.com/T/#m3bd047c6e5c8200df1d273c0ad551c645dd43232
+On Thu, May 18, 2023 at 12:15=E2=80=AFPM Kent Overstreet
+<kent.overstreet@linux.dev> wrote:
+>
+> On Thu, May 18, 2023 at 12:03:03PM -0700, Song Liu wrote:
+> > On Thu, May 18, 2023 at 11:47=E2=80=AFAM Song Liu <song@kernel.org> wro=
+te:
+> > >
+> > > On Thu, May 18, 2023 at 10:24=E2=80=AFAM Kent Overstreet
+> > > <kent.overstreet@linux.dev> wrote:
 > > > >
-> > > > We should cool it with the quick hacks to fix things. :)
+> > > > On Thu, May 18, 2023 at 10:00:39AM -0700, Song Liu wrote:
+> > > > > On Thu, May 18, 2023 at 9:48=E2=80=AFAM Kent Overstreet
+> > > > > <kent.overstreet@linux.dev> wrote:
+> > > > > >
+> > > > > > On Thu, May 18, 2023 at 09:33:20AM -0700, Song Liu wrote:
+> > > > > > > I am working on patches based on the discussion in [1]. I am =
+planning to
+> > > > > > > send v1 for review in a week or so.
+> > > > > >
+> > > > > > Hey Song, I was reviewing that thread too,
+> > > > > >
+> > > > > > Are you taking a different approach based on Thomas's feedback?=
+ I think
+> > > > > > he had some fair points in that thread.
+> > > > >
+> > > > > Yes, the API is based on Thomas's suggestion, like 90% from the d=
+iscussions.
+> > > > >
+> > > > > >
+> > > > > > My own feeling is that the buddy allocator is our tool for allo=
+cating
+> > > > > > larger variable sized physically contiguous allocations, so I'd=
+ like to
+> > > > > > see something based on that - I think we could do a hybrid budd=
+y/slab
+> > > > > > allocator approach, like we have for regular memory allocations=
+.
+> > > > >
+> > > > > I am planning to implement the allocator based on this (reuse
+> > > > > vmap_area logic):
 > > > >
-> > >
-> > > Yeah. It might fix this specific testcase, but I think the way it uses
-> > > the i_version is "gameable" in other situations. Then again, I don't
-> > > know a lot about IMA in this regard.
-> > >
-> > > When is it expected to remeasure? If it's only expected to remeasure on
-> > > a close(), then that's one thing. That would be a weird design though.
-> >
-> > Historical background:
-> >
-> > Prior to IMA being upstreamed there was a lot of discussion about how
-> > much/how frequently to measure files.  Re-measuring files after each
-> > write would impact performance.  Instead of re-measuring files after
-> > each write, if a file already opened for write was opened for read
-> > (open writers) or a file already opened for read was opened for write
-> > (Time of Measure/Time of Use) the IMA meausrement list was invalidated
-> > by including a violation record in the measurement list.
-> >
-> > Only the BPRM hook prevents a file from being opened for write.
-> >
-> > >
-> > > > > > >
-> > > > > > >
-> > > > > >
-> > > > > > Ok, I think I get it. IMA is trying to use the i_version from the
-> > > > > > overlayfs inode.
-> > > > > >
-> > > > > > I suspect that the real problem here is that IMA is just doing a bare
-> > > > > > inode_query_iversion. Really, we ought to make IMA call
-> > > > > > vfs_getattr_nosec (or something like it) to query the getattr routine in
-> > > > > > the upper layer. Then overlayfs could just propagate the results from
-> > > > > > the upper layer in its response.
-> > > > > >
-> > > > > > That sort of design may also eventually help IMA work properly with more
-> > > > > > exotic filesystems, like NFS or Ceph.
-> > > > > >
-> > > > > >
-> > > > > >
-> > > > >
-> > > > > Maybe something like this? It builds for me but I haven't tested it. It
-> > > > > looks like overlayfs already should report the upper layer's i_version
-> > > > > in getattr, though I haven't tested that either:
-> > > > >
-> > > > > -----------------------8<---------------------------
-> > > > >
-> > > > > [PATCH] IMA: use vfs_getattr_nosec to get the i_version
-> > > > >
-> > > > > IMA currently accesses the i_version out of the inode directly when it
-> > > > > does a measurement. This is fine for most simple filesystems, but can be
-> > > > > problematic with more complex setups (e.g. overlayfs).
-> > > > >
-> > > > > Make IMA instead call vfs_getattr_nosec to get this info. This allows
-> > > > > the filesystem to determine whether and how to report the i_version, and
-> > > > > should allow IMA to work properly with a broader class of filesystems in
-> > > > > the future.
-> > > > >
-> > > > > Reported-by: Stefan Berger <stefanb@linux.ibm.com>
-> > > > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> > > > > ---
+> > > > Ah, you're still doing vmap_area approach.
 > > > >
-> > > > So, I think we want both; we want the ovl_copyattr() and the
-> > > > vfs_getattr_nosec() change:
+> > > > Mike's approach looks like it'll be _much_ lighter weight and highe=
+r
+> > > > performance, to me. vmalloc is known to be slow compared to the bud=
+dy
+> > > > allocator, and with Mike's approach we're only modifying mappings o=
+nce
+> > > > per 2 MB chunk.
 > > > >
-> > > > (1) overlayfs should copy up the inode version in ovl_copyattr(). That
-> > > >     is in line what we do with all other inode attributes. IOW, the
-> > > >     overlayfs inode's i_version counter should aim to mirror the
-> > > >     relevant layer's i_version counter. I wouldn't know why that
-> > > >     shouldn't be the case. Asking the other way around there doesn't
-> > > >     seem to be any use for overlayfs inodes to have an i_version that
-> > > >     isn't just mirroring the relevant layer's i_version.
+> > > > I don't see anything in your code for sub-page sized allocations to=
+o, so
+> > > > perhaps I should keep going with my slab allocator.
 > > >
-> > > It's less than ideal to do this IMO, particularly with an IS_I_VERSION
-> > > inode.
+> > > The vmap_area approach handles sub-page allocations. In 5/5 of set [2=
+],
+> > > we showed that multiple BPF programs share the same page with some
+> > > kernel text (_etext).
 > > >
-> > > You can't just copy up the value from the upper. You'll need to call
-> > > inode_query_iversion(upper_inode), which will flag the upper inode for a
-> > > logged i_version update on the next write. IOW, this could create some
-> > > (probably minor) metadata write amplification in the upper layer inode
-> > > with IS_I_VERSION inodes.
+> > > > Could you share your thoughts on your approach vs. Mike's? I'm newe=
+r to
+> > > > this area of the code than you two so maybe there's an angle I've m=
+issed
+> > > > :)
 > > >
-> > >
-> > > > (2) Jeff's changes for ima to make it rely on vfs_getattr_nosec().
-> > > >     Currently, ima assumes that it will get the correct i_version from
-> > > >     an inode but that just doesn't hold for stacking filesystem.
-> > > >
-> > > > While (1) would likely just fix the immediate bug (2) is correct and
-> > > > _robust_. If we change how attributes are handled vfs_*() helpers will
-> > > > get updated and ima with it. Poking at raw inodes without using
-> > > > appropriate helpers is much more likely to get ima into trouble.
-> > >
-> > > This will fix it the right way, I think (assuming it actually works),
-> > > and should open the door for IMA to work properly with networked
-> > > filesystems that support i_version as well.
-> >
-> > On a local filesystem, there are guarantees that the calculated file
-> > hash is that of the file being used.  Reminder IMA reads a file, page
-> > size chunk at a time into a single buffer, calculating the file hash.
-> > Once the file hash is calculated, the memory is freed.
-> >
-> > There are no guarantees on a fuse filesystem, for example, that the
-> > original file read and verified is the same as the one being executed.
-> > I'm not sure that the integrity guarantees of a file on a remote
-> > filesystem will be the same as those on a local file system.
-> >
-> > >
-> > > Note that there Stephen is correct that calling getattr is probably
-> > > going to be less efficient here since we're going to end up calling
-> > > generic_fillattr unnecessarily, but I still think it's the right thing
-> > > to do.
-> > >
-> > > If it turns out to cause measurable performance regressions though,
-> > > maybe we can look at adding a something that still calls ->getattr if it
-> > > exists but only returns the change_cookie value.
-> >
-> > Sure.  For now,
-> >
-> > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> 
-> I'm going through my review queue to make sure I haven't missed
-> anything and this thread popped up ... Stefan, Mimi, did you get a fix
-> into an upstream tree somewhere?  If not, is it because you are
-> waiting on a review/merge from me into the LSM tree?
+> > > AFAICT, tree based solution (vmap_area) is more efficient than bitmap
+> > > based solution.
+>
+> Tree based requires quite a bit of overhead for the rbtree pointers, and
+> additional vmap_area structs.
+>
+> With a buddy allocator based approach, there's no additional state that
+> needs to be allocated, since it all fits in struct page.
 
-Sorry for the delay.  Between vacation and LSS, I just started testing
-Jeff Layton's patch.
+To allocate memory for text, we will allocate 2MiB, make it ROX, and then
+use it for many small allocations. IIUC, buddy allocator will use unallocat=
+ed
+parts of this page for metadata. I guess this may be a problem, as the
+whole page is ROX now, and we have to use text_poke to write to it.
 
-Mimi
+OTOH, if we allocate extra memory for metadata (tree based solution),
+all the metadata operations can be regular read/write.
 
+Thanks,
+Song
