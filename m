@@ -2,119 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4467708660
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 19:06:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A81D1708664
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 19:07:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbjERRGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 13:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45426 "EHLO
+        id S229782AbjERRHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 13:07:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjERRGc (ORCPT
+        with ESMTP id S229783AbjERRG7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 13:06:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9AE121;
-        Thu, 18 May 2023 10:06:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6AAFA64557;
-        Thu, 18 May 2023 17:06:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2548DC433D2;
-        Thu, 18 May 2023 17:06:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684429590;
-        bh=XL8Q8LxpeG+xUSW+d2Fhz16+YABT67r3plx3O+Y35ag=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SYDwNwjeRfNEkfoyIRyJq3Fohsc3ZIt3WbvX+OQ++ceTWjibgZ24NbiSU4vfGEufv
-         E7/MG8tjVbYn8mfTzAqH4bsSYhCAPy4wioXysSz9c9jyKzRIwkWR4YFCfxF+QkoWHa
-         SjilsAYEF5gzcKD+jg9x90stMTD6SLJsxPxhPjJZW0StGE3IfSLuaGFwHOy8eBK4OM
-         i59muo8WKsAEN4/0QTZOrGqA5Hx1JqDnrSJpknH+axhqo4xWAcFso0ezUz0FDXuSnL
-         xP1/Z3FypEnI8MGE/wgMHsOmzfJ6SUoZ43dLzibDtQNclaBobAMq0a6Jey31YekcNb
-         7Uu1mISU27XeQ==
-Date:   Thu, 18 May 2023 18:06:24 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>, anup@brainfault.org,
-        ajones@ventanamicro.com, Paul Walmsley <paul.walmsley@sifive.com>,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        apatel@ventanamicro.com, atishp@atishpatra.org, jrtc27@jrtc27.com,
-        rick@andestech.com, ycliang@andestech.com,
-        linux-riscv@lists.infradead.org, qemu-riscv@nongnu.org,
-        u-boot@lists.denx.de, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] dt-bindings: riscv: deprecate riscv,isa
-Message-ID: <20230518-elective-mossy-1bf147f5e9b8@spud>
-References: <20230518-hammock-doornail-478e8ea8e6a7@wendy>
- <mhng-95b99ff5-9024-4672-bb84-7599f7a05129@palmer-ri-x1c9>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="TKxZvzqyNscVPD5H"
-Content-Disposition: inline
-In-Reply-To: <mhng-95b99ff5-9024-4672-bb84-7599f7a05129@palmer-ri-x1c9>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 18 May 2023 13:06:59 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB8E199
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 10:06:57 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-51b7810ec2cso1327740a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 10:06:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684429616; x=1687021616;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ha8ZfG9WtE0dPySJ/+ise1++4XlMqEuz3CNRHMvVR+0=;
+        b=qzfeyf3TraFs/hFscOCnvXugA2E4VTI4Q3PHtq6vDUuGOQTnPx0hInkmMb/PjG8OJy
+         VYXZVZ2B22J/881K+e94rxIdxhhTyhktiCwSCM1sFJ4dsorZa2Jlmdh8gYktLew/WF2s
+         PuEoOPbZucxfKL2YafxmKGa/X1AhHnJwdjdBDZuV7HXFnsORktauKpaA2t8e52hVYA4+
+         gINZm4lxoMVTva2NXkus25VId9dRJLkLDhg+hZ5L66aQ2WZOPr5ydekR0H40s3Ilx1jS
+         9o35oqjQbu1R9jDkBUhlhMjMS7l3zszK+JyY9zz+T45hWhOHvD64X7SIywIqib/WPnGp
+         jNog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684429616; x=1687021616;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ha8ZfG9WtE0dPySJ/+ise1++4XlMqEuz3CNRHMvVR+0=;
+        b=N2D8DLFcR11g69HX9l96bFhGZgjuzO0UVZdlmdWB4pi5ZZSbXs7CWtqqmLUE8q4DbX
+         NFq2ueUtftRwl+VAjkD2axoTj2NPeX1RB1cYA37v4QGg3QguxuGcG15EWMKxSFIu1yV3
+         NofrrISKvyqsbeO7EWZ+HFDlW4UyayzsAdczGfPZ4Vw5UhgCTdiC1ma4uyGgmruTN9Ro
+         GyIo2og/dH4HeWQt9O+QPqYXCyXQgNUp5gr/oKOxCpfba1DsXA54UFBnn4D7kLf4PWiS
+         YIvTBcSemAEV+IIoLuY61uiejx4Z0Ki7rNWephW6BiX920lEnumFzYOrHfxn3YID2rs0
+         Pfww==
+X-Gm-Message-State: AC+VfDw4hncuyAAsTniGfQqQ8leYfZH2KGjyuVgCyITzxH3vHCCUDIt8
+        XJtjpvjmepW0sXE512bB3I6en9T0lZlK
+X-Google-Smtp-Source: ACHHUZ6Nhs9hYjvqI0OzmsHnESW8H7QtDtj6cOsbr3W+Idrd7doJnSDv0w619W1QPkBe0REMD4M+wzeAK7+z
+X-Received: from mizhang-super.c.googlers.com ([34.105.13.176]) (user=mizhang
+ job=sendgmr) by 2002:a63:465e:0:b0:52c:4227:aa61 with SMTP id
+ v30-20020a63465e000000b0052c4227aa61mr479850pgk.6.1684429616582; Thu, 18 May
+ 2023 10:06:56 -0700 (PDT)
+Reply-To: Mingwei Zhang <mizhang@google.com>
+Date:   Thu, 18 May 2023 17:06:53 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
+Message-ID: <20230518170653.704562-1-mizhang@google.com>
+Subject: [PATCH] KVM: SVM: Remove TSS reloading code after VMEXIT
+From:   Mingwei Zhang <mizhang@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Venkatesh Srinivas <venkateshs@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Mingwei Zhang <mizhang@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Remove TSS reloading code after VMEXIT since upstream KVM after [1] has
+already been using VMLOAD to load host segment state (including TSS).
+Therefore, reload_tss() becomes redundant. Because of that, also remove the
+relevant data field tss_desc in svm_cpu_data as well as its data structure
+definition.
 
---TKxZvzqyNscVPD5H
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+[1] commit e79b91bb3c91 ("KVM: SVM: use vmsave/vmload for saving/restoring additionalhost state")
 
-On Thu, May 18, 2023 at 07:41:17AM -0700, Palmer Dabbelt wrote:
-> On Thu, 18 May 2023 07:06:17 PDT (-0700), Conor Dooley wrote:
-> > On Thu, May 18, 2023 at 07:13:15PM +0530, Anup Patel wrote:
-> > > On Thu, May 18, 2023 at 4:02=E2=80=AFPM Andrew Jones <ajones@ventanam=
-icro.com> wrote:
-> > > > On Thu, May 18, 2023 at 09:58:30AM +0100, Conor Dooley wrote:
+Reported-by: Venkatesh Srinivas <venkateshs@google.com>
+Suggested-by: Jim Mattson <jmattson@google.com>
+Tested-by: Mingwei Zhang <mizhang@google.com>
+Signed-off-by: Mingwei Zhang <mizhang@google.com>
+---
+ arch/x86/kvm/svm/svm.c | 24 ------------------------
+ arch/x86/kvm/svm/svm.h |  1 -
+ 2 files changed, 25 deletions(-)
 
-> > > One downside of this new approach is it will increase the size of DTB.
-> > > Imaging 50 such DT properties in 46 CPU DT nodes.
-> >=20
-> > I should do a comparison between 50 extensions in riscv,isa and doing
-> > this 50 times and see what the sizes are.
->=20
-> I'm not sure how sensitive people are to DT size (presumably it'd be DTB
-> size)?
->=20
-> It's also not clear what we can do about it: RISC-V has lots of extension=
-s,
-> that's going to take encoding space.  Sticking with an ambiguous encoding
-> because it's smaller seems like a way to get burned in the long run.
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index eb308c9994f9..cfbe00360908 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -240,15 +240,6 @@ static u8 rsm_ins_bytes[] = "\x0f\xaa";
+ 
+ static unsigned long iopm_base;
+ 
+-struct kvm_ldttss_desc {
+-	u16 limit0;
+-	u16 base0;
+-	unsigned base1:8, type:5, dpl:2, p:1;
+-	unsigned limit1:4, zero0:3, g:1, base2:8;
+-	u32 base3;
+-	u32 zero1;
+-} __attribute__((packed));
+-
+ DEFINE_PER_CPU(struct svm_cpu_data, svm_data);
+ 
+ /*
+@@ -584,7 +575,6 @@ static int svm_hardware_enable(void)
+ 
+ 	struct svm_cpu_data *sd;
+ 	uint64_t efer;
+-	struct desc_struct *gdt;
+ 	int me = raw_smp_processor_id();
+ 
+ 	rdmsrl(MSR_EFER, efer);
+@@ -597,9 +587,6 @@ static int svm_hardware_enable(void)
+ 	sd->next_asid = sd->max_asid + 1;
+ 	sd->min_asid = max_sev_asid + 1;
+ 
+-	gdt = get_current_gdt_rw();
+-	sd->tss_desc = (struct kvm_ldttss_desc *)(gdt + GDT_ENTRY_TSS);
+-
+ 	wrmsrl(MSR_EFER, efer | EFER_SVME);
+ 
+ 	wrmsrl(MSR_VM_HSAVE_PA, sd->save_area_pa);
+@@ -3453,14 +3440,6 @@ static int svm_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
+ 	return svm_invoke_exit_handler(vcpu, exit_code);
+ }
+ 
+-static void reload_tss(struct kvm_vcpu *vcpu)
+-{
+-	struct svm_cpu_data *sd = per_cpu_ptr(&svm_data, vcpu->cpu);
+-
+-	sd->tss_desc->type = 9; /* available 32/64-bit TSS */
+-	load_TR_desc();
+-}
+-
+ static void pre_svm_run(struct kvm_vcpu *vcpu)
+ {
+ 	struct svm_cpu_data *sd = per_cpu_ptr(&svm_data, vcpu->cpu);
+@@ -4064,9 +4043,6 @@ static __no_kcsan fastpath_t svm_vcpu_run(struct kvm_vcpu *vcpu)
+ 
+ 	svm_vcpu_enter_exit(vcpu, spec_ctrl_intercepted);
+ 
+-	if (!sev_es_guest(vcpu->kvm))
+-		reload_tss(vcpu);
+-
+ 	if (!static_cpu_has(X86_FEATURE_V_SPEC_CTRL))
+ 		x86_spec_ctrl_restore_host(svm->virt_spec_ctrl);
+ 
+diff --git a/arch/x86/kvm/svm/svm.h b/arch/x86/kvm/svm/svm.h
+index f44751dd8d5d..18af7e712a5a 100644
+--- a/arch/x86/kvm/svm/svm.h
++++ b/arch/x86/kvm/svm/svm.h
+@@ -303,7 +303,6 @@ struct svm_cpu_data {
+ 	u32 max_asid;
+ 	u32 next_asid;
+ 	u32 min_asid;
+-	struct kvm_ldttss_desc *tss_desc;
+ 
+ 	struct page *save_area;
+ 	unsigned long save_area_pa;
+-- 
+2.40.1.698.g37aff9b760-goog
 
-I did actually go an look at this. I cheated a little and renamed the
-properties to "riscv,isa-ext-foo", which is about as communicative IMO
-as the longer name I currently have, but may seem more agreeable to the
-size conscious.
-I added 30 cpu nodes to mpfs.dtsi, each with 100 extensions of 6 chars
-long. With just the string, containing "rv64imafdc_zabcde_...", it was
-unreadable, but "only" took up 46k.
-I then removed the multiletter extensions from riscv,isa & switched to
-riscv,isa-base & 100 booleans. IMO it was more readable (although still
-quite bad!), but took up 62k.
-Removing all of the boolean properties, leaving me with 30 addtional harts
-with "rv64imafdc" only, was 26k.
-
-I think the generic limit for dtb files is 2 MiB? To me the size
-increase doesn't sound like a bit problem.
-
---TKxZvzqyNscVPD5H
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGZbEAAKCRB4tDGHoIJi
-0s2UAQC3dbtneTDqOvEpuMHz7vzTT/qCO/nEAhYVxRjH0MasoQD+IWeuh0pZj7Y/
-NPtfbaq3ryBkiGdWFoAC2ls1S9xcNAo=
-=0mwD
------END PGP SIGNATURE-----
-
---TKxZvzqyNscVPD5H--
