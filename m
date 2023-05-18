@@ -2,81 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 148E5707972
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 07:12:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA082707973
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 07:13:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbjERFMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 01:12:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48414 "EHLO
+        id S229808AbjERFM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 01:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjERFMQ (ORCPT
+        with ESMTP id S229513AbjERFM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 01:12:16 -0400
-Received: from mx6.didiglobal.com (mx6.didiglobal.com [111.202.70.123])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2195E1981;
-        Wed, 17 May 2023 22:12:13 -0700 (PDT)
-Received: from mail.didiglobal.com (unknown [10.79.71.36])
-        by mx6.didiglobal.com (Maildata Gateway V2.8) with ESMTPS id 20503110078005;
-        Thu, 18 May 2023 13:12:12 +0800 (CST)
-Received: from ZJY03-ACTMBX-05.didichuxing.com (10.79.71.35) by
- ZJY03-ACTMBX-06.didichuxing.com (10.79.71.36) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 18 May 2023 13:12:11 +0800
-Received: from ZJY03-ACTMBX-05.didichuxing.com ([fe80::7d7d:d727:7a02:e909])
- by ZJY03-ACTMBX-05.didichuxing.com ([fe80::7d7d:d727:7a02:e909%7]) with mapi
- id 15.01.2507.021; Thu, 18 May 2023 13:12:11 +0800
-X-MD-Sfrom: chengkaitao@didiglobal.com
-X-MD-SrcIP: 10.79.71.36
-From:   =?utf-8?B?56iL5Z6y5rabIENoZW5na2FpdGFvIENoZW5n?= 
-        <chengkaitao@didiglobal.com>
-To:     Yosry Ahmed <yosryahmed@google.com>
-CC:     "tj@kernel.org" <tj@kernel.org>,
-        "lizefan.x@bytedance.com" <lizefan.x@bytedance.com>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "mhocko@kernel.org" <mhocko@kernel.org>,
-        "roman.gushchin@linux.dev" <roman.gushchin@linux.dev>,
-        "shakeelb@google.com" <shakeelb@google.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "muchun.song@linux.dev" <muchun.song@linux.dev>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
-        "chengzhihao1@huawei.com" <chengzhihao1@huawei.com>,
-        "pilgrimtao@gmail.com" <pilgrimtao@gmail.com>,
-        "haolee.swjtu@gmail.com" <haolee.swjtu@gmail.com>,
-        "yuzhao@google.com" <yuzhao@google.com>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "vasily.averin@linux.dev" <vasily.averin@linux.dev>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "surenb@google.com" <surenb@google.com>,
-        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
-        "mcgrof@kernel.org" <mcgrof@kernel.org>,
-        "feng.tang@intel.com" <feng.tang@intel.com>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        David Rientjes <rientjes@google.com>
-Subject: Re: [PATCH v4 0/2] memcontrol: support cgroup level OOM protection
-Thread-Topic: [PATCH v4 0/2] memcontrol: support cgroup level OOM protection
-Thread-Index: AQHZiG6QYuA8nkfOmkSWHm0JCEvXOa9dgyoAgACXf4D//3xFAIAApWQAgAAs0QCAARSZgA==
-Date:   Thu, 18 May 2023 05:12:11 +0000
-Message-ID: <B66FDA24-50C6-444D-BD84-124E68A2AEEE@didiglobal.com>
-In-Reply-To: <CAJD7tkaOMeeGNqm6nFyHgPhd9VpnCVqCAYCY725NoTohTMAnmw@mail.gmail.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.79.71.101]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <979D7504BF289D4BA11C323B85EB0DF5@didichuxing.com>
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        Thu, 18 May 2023 01:12:57 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932561981;
+        Wed, 17 May 2023 22:12:56 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 4AE32226D0;
+        Thu, 18 May 2023 05:12:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1684386775; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OmO37DvP4UrQhaPjWX+79UtSaADTqvbeHrY+J312Cv8=;
+        b=KyyZX/81dQDVV43sNXuxFzpRZ+QWcCUN20/R+aCkeHVw6DJOFvTQQkakENvSNJdrZx37Ai
+        M8GqAXMTf3iKu7M2Sxwd8NXggRrebhHXqqmDQDPrZ9lzXJwrn7ZYJ8yVukGXwjkjMMp2zS
+        JfwzwMQ0zPGvO/ix/2wCuQBZnNMCdUs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1684386775;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OmO37DvP4UrQhaPjWX+79UtSaADTqvbeHrY+J312Cv8=;
+        b=lv9oiRk6o+Oy9nR16MSfeIAvW58O5YcxeWUrCMkrK6V22+eufGO3Qb/rHVVKlyxKQYP12C
+        z2UQdx/oqIrYpxAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1EF92138F5;
+        Thu, 18 May 2023 05:12:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id e9hEBtezZWSxZwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Thu, 18 May 2023 05:12:55 +0000
+Date:   Thu, 18 May 2023 07:12:54 +0200
+Message-ID: <87y1lmz0h5.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH][next] ALSA: mixart: Replace one-element arrays with simple object declarations
+In-Reply-To: <ZGVlcpuvx1rSOMP8@work>
+References: <ZGVlcpuvx1rSOMP8@work>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -85,96 +70,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-QXQgMjAyMy0wNS0xOCAwNDo0MjoxMiwgIllvc3J5IEFobWVkIiA8eW9zcnlhaG1lZEBnb29nbGUu
-Y29tPiB3cm90ZToNCj5PbiBXZWQsIE1heSAxNywgMjAyMyBhdCAzOjAx4oCvQU0g56iL5Z6y5rab
-IENoZW5na2FpdGFvIENoZW5nDQo+PGNoZW5na2FpdGFvQGRpZGlnbG9iYWwuY29tPiB3cm90ZToN
-Cj4+DQo+PiBBdCAyMDIzLTA1LTE3IDE2OjA5OjUwLCAiWW9zcnkgQWhtZWQiIDx5b3NyeWFobWVk
-QGdvb2dsZS5jb20+IHdyb3RlOg0KPj4gPk9uIFdlZCwgTWF5IDE3LCAyMDIzIGF0IDE6MDHigK9B
-TSDnqIvlnrLmtpsgQ2hlbmdrYWl0YW8gQ2hlbmcNCj4+ID48Y2hlbmdrYWl0YW9AZGlkaWdsb2Jh
-bC5jb20+IHdyb3RlOg0KPj4gPj4NCj4+ID4+IEF0IDIwMjMtMDUtMTcgMTQ6NTk6MDYsICJZb3Ny
-eSBBaG1lZCIgPHlvc3J5YWhtZWRAZ29vZ2xlLmNvbT4gd3JvdGU6DQo+PiA+PiA+K0RhdmlkIFJp
-ZW50amVzDQo+PiA+PiA+DQo+PiA+PiA+T24gVHVlLCBNYXkgMTYsIDIwMjMgYXQgODoyMOKAr1BN
-IGNoZW5na2FpdGFvIDxjaGVuZ2thaXRhb0BkaWRpZ2xvYmFsLmNvbT4gd3JvdGU6DQo+PiA+PiA+
-Pg0KPj4gPj4gVGhhbmsgeW91IGZvciBwcm92aWRpbmcgYSBuZXcgYXBwbGljYXRpb24gc2NlbmFy
-aW8uIFlvdSBoYXZlIGRlc2NyaWJlZCBhDQo+PiA+PiBuZXcgcGVyLW1lbWNnIGFwcHJvYWNoLCBi
-dXQgYSBzaW1wbGUgaW50cm9kdWN0aW9uIGNhbm5vdCBleHBsYWluIHRoZQ0KPj4gPj4gZGV0YWls
-cyBvZiB5b3VyIGFwcHJvYWNoIGNsZWFybHkuIElmIHlvdSBjb3VsZCBjb21wYXJlIGFuZCBhbmFs
-eXplIG15DQo+PiA+PiBwYXRjaGVzIGZvciBwb3NzaWJsZSBkZWZlY3RzLCBvciBpZiB5b3VyIG5l
-dyBhcHByb2FjaCBoYXMgYWR2YW50YWdlcw0KPj4gPj4gdGhhdCBteSBwYXRjaGVzIGRvIG5vdCBo
-YXZlLCBJIHdvdWxkIGdyZWF0bHkgYXBwcmVjaWF0ZSBpdC4NCj4+ID4NCj4+ID5Tb3JyeSBpZiBJ
-IHdhcyBub3QgY2xlYXIsIEkgYW0gbm90IGltcGx5aW5nIGluIGFueSB3YXkgdGhhdCB0aGUNCj4+
-ID5hcHByb2FjaCBJIGFtIGRlc2NyaWJpbmcgaXMgYmV0dGVyIHRoYW4geW91ciBwYXRjaGVzLiBJ
-IGFtIGd1aWx0eSBvZg0KPj4gPm5vdCBjb25kdWN0aW5nIHRoZSBwcm9wZXIgYW5hbHlzaXMgeW91
-IGFyZSByZXF1ZXN0aW5nLg0KPj4NCj4+IFRoZXJlIGlzIG5vIHBlcmZlY3QgYXBwcm9hY2ggaW4g
-dGhlIHdvcmxkLCBhbmQgSSBhbHNvIHNlZWsgeW91ciBhZHZpY2Ugd2l0aA0KPj4gYSBsZWFybmlu
-ZyBhdHRpdHVkZS4gWW91IGRvbid0IG5lZWQgdG8gc2F5IHNvcnJ5LCBJIHNob3VsZCBzYXkgdGhh
-bmsgeW91Lg0KPj4NCj4+ID5JIGp1c3Qgc2F3IHRoZSB0aHJlYWQgYW5kIHRob3VnaHQgaXQgbWln
-aHQgYmUgaW50ZXJlc3RpbmcgdG8geW91IG9yDQo+PiA+b3RoZXJzIHRvIGtub3cgdGhlIGFwcHJv
-YWNoIHRoYXQgd2UgaGF2ZSBiZWVuIHVzaW5nIGZvciB5ZWFycyBpbiBvdXINCj4+ID5wcm9kdWN0
-aW9uLiBJIGd1ZXNzIHRoZSB0YXJnZXQgaXMgdGhlIHNhbWUsIGJlIGFibGUgdG8gdGVsbCB0aGUg
-T09NDQo+PiA+a2lsbGVyIHdoaWNoIG1lbWNncy9wcm9jZXNzZXMgYXJlIG1vcmUgaW1wb3J0YW50
-IHRvIHByb3RlY3QuIFRoZQ0KPj4gPmZ1bmRhbWVudGFsIGRpZmZlcmVuY2UgaXMgdGhhdCBpbnN0
-ZWFkIG9mIHR1bmluZyB0aGlzIGJhc2VkIG9uIHRoZQ0KPj4gPm1lbW9yeSB1c2FnZSBvZiB0aGUg
-bWVtY2cgKHlvdXIgYXBwcm9hY2gpLCB3ZSBlc3NlbnRpYWxseSBnaXZlIHRoZSBPT00NCj4+ID5r
-aWxsZXIgdGhlIG9yZGVyaW5nIGluIHdoaWNoIHdlIHdhbnQgbWVtY2dzL3Byb2Nlc3NlcyB0byBi
-ZSBPT00NCj4+ID5raWxsZWQuIFRoaXMgbWFwcyB0byBqb2JzIHByaW9yaXRpZXMgZXNzZW50aWFs
-bHkuDQo+Pg0KPj4gS2lsbGluZyBwcm9jZXNzZXMgaW4gb3JkZXIgb2YgbWVtb3J5IHVzYWdlIGNh
-bm5vdCBlZmZlY3RpdmVseSBwcm90ZWN0DQo+PiBpbXBvcnRhbnQgcHJvY2Vzc2VzLiBLaWxsaW5n
-IHByb2Nlc3NlcyBpbiBhIHVzZXItZGVmaW5lZCBwcmlvcml0eSBvcmRlcg0KPj4gd2lsbCByZXN1
-bHQgaW4gYSBsYXJnZSBudW1iZXIgb2YgT09NIGV2ZW50cyBhbmQgc3RpbGwgbm90IGJlaW5nIGFi
-bGUgdG8NCj4+IHJlbGVhc2UgZW5vdWdoIG1lbW9yeS4gSSBoYXZlIGJlZW4gc2VhcmNoaW5nIGZv
-ciBhIGJhbGFuY2UgYmV0d2Vlbg0KPj4gdGhlIHR3byBtZXRob2RzLCBzbyB0aGF0IHRoZWlyIHNo
-b3J0Y29taW5ncyBhcmUgbm90IHRvbyBvYnZpb3VzLg0KPj4gVGhlIGJpZ2dlc3QgYWR2YW50YWdl
-IG9mIG1lbWNnIGlzIGl0cyB0cmVlIHRvcG9sb2d5LCBhbmQgSSBhbHNvIGhvcGUNCj4+IHRvIG1h
-a2UgZ29vZCB1c2Ugb2YgaXQuDQo+DQo+Rm9yIHVzLCBraWxsaW5nIHByb2Nlc3NlcyBpbiBhIHVz
-ZXItZGVmaW5lZCBwcmlvcml0eSBvcmRlciB3b3JrcyB3ZWxsLg0KPg0KPkl0IHNlZW1zIGxpa2Ug
-dG8gdHVuZSBtZW1vcnkub29tLnByb3RlY3QgeW91IHVzZSBvb21fa2lsbF9pbmhlcml0IHRvDQo+
-b2JzZXJ2ZSBob3cgbWFueSB0aW1lcyB0aGlzIG1lbWNnIGhhcyBiZWVuIGtpbGxlZCBkdWUgdG8g
-YSBsaW1pdCBpbiBhbg0KPmFuY2VzdG9yLiBXb3VsZG4ndCBpdCBiZSBtb3JlIHN0cmFpZ2h0Zm9y
-d2FyZCB0byBzcGVjaWZ5IHRoZSBwcmlvcml0eQ0KPm9mIHByb3RlY3Rpb25zIGFtb25nIG1lbWNn
-cz8NCj4NCj5Gb3IgZXhhbXBsZSwgaWYgeW91IG9ic2VydmUgbXVsdGlwbGUgbWVtY2dzIGJlaW5n
-IE9PTSBraWxsZWQgZHVlIHRvDQo+aGl0dGluZyBhbiBhbmNlc3RvciBsaW1pdCwgeW91IHdpbGwg
-bmVlZCB0byBkZWNpZGUgd2hpY2ggb2YgdGhlbSB0bw0KPmluY3JlYXNlIG1lbW9yeS5vb20ucHJv
-dGVjdCBmb3IgbW9yZSwgYmFzZWQgb24gdGhlaXIgaW1wb3J0YW5jZS4NCj5PdGhlcndpc2UsIGlm
-IHlvdSBpbmNyZWFzZSBhbGwgb2YgdGhlbSwgdGhlbiB0aGVyZSBpcyBubyBwb2ludCBpZiBhbGwN
-Cj50aGUgbWVtb3J5IGlzIHByb3RlY3RlZCwgcmlnaHQ/DQoNCklmIGFsbCBtZW1vcnkgaW4gbWVt
-Y2cgaXMgcHJvdGVjdGVkLCBpdHMgbWVhbmluZyBpcyBzaW1pbGFyIHRvIHRoYXQgb2YgdGhlDQpo
-aWdoZXN0IHByaW9yaXR5IG1lbWNnIGluIHlvdXIgYXBwcm9hY2gsIHdoaWNoIGlzIHVsdGltYXRl
-bHkga2lsbGVkIG9yDQpuZXZlciBraWxsZWQuDQoNCj5JbiB0aGlzIGNhc2UsIHdvdWxkbid0IGl0
-IGJlIGVhc2llciB0byBqdXN0IHRlbGwgdGhlIE9PTSBraWxsZXIgdGhlDQo+cmVsYXRpdmUgcHJp
-b3JpdHkgYW1vbmcgdGhlIG1lbWNncz8NCj4NCj4+DQo+PiA+SWYgdGhpcyBhcHByb2FjaCB3b3Jr
-cyBmb3IgeW91IChvciBhbnkgb3RoZXIgYXVkaWVuY2UpLCB0aGF0J3MgZ3JlYXQsDQo+PiA+SSBj
-YW4gc2hhcmUgbW9yZSBkZXRhaWxzIGFuZCBwZXJoYXBzIHdlIGNhbiByZWFjaCBzb21ldGhpbmcg
-dGhhdCB3ZQ0KPj4gPmNhbiBib3RoIHVzZSA6KQ0KPj4NCj4+IElmIHlvdSBoYXZlIGEgZ29vZCBp
-ZGVhLCBwbGVhc2Ugc2hhcmUgbW9yZSBkZXRhaWxzIG9yIHNob3cgc29tZSBjb2RlLg0KPj4gSSB3
-b3VsZCBncmVhdGx5IGFwcHJlY2lhdGUgaXQNCj4NCj5UaGUgY29kZSB3ZSBoYXZlIG5lZWRzIHRv
-IGJlIHJlYmFzZWQgb250byBhIGRpZmZlcmVudCB2ZXJzaW9uIGFuZA0KPmNsZWFuZWQgdXAgYmVm
-b3JlIGl0IGNhbiBiZSBzaGFyZWQsIGJ1dCBlc3NlbnRpYWxseSBpdCBpcyBhcw0KPmRlc2NyaWJl
-ZC4NCj4NCj4oYSkgQWxsIHByb2Nlc3NlcyBhbmQgbWVtY2dzIHN0YXJ0IHdpdGggYSBkZWZhdWx0
-IHNjb3JlLg0KPihiKSBVc2Vyc3BhY2UgY2FuIHNwZWNpZnkgc2NvcmVzIGZvciBtZW1jZ3MgYW5k
-IHByb2Nlc3Nlcy4gQSBoaWdoZXINCj5zY29yZSBtZWFucyBoaWdoZXIgcHJpb3JpdHkgKGFrYSBs
-ZXNzIHNjb3JlIGdldHMga2lsbGVkIGZpcnN0KS4NCj4oYykgVGhlIE9PTSBraWxsZXIgZXNzZW50
-aWFsbHkgbG9va3MgZm9yIHRoZSBtZW1jZyB3aXRoIHRoZSBsb3dlc3QNCj5zY29yZXMgdG8ga2ls
-bCwgdGhlbiBhbW9uZyB0aGlzIG1lbWNnLCBpdCBsb29rcyBmb3IgdGhlIHByb2Nlc3Mgd2l0aA0K
-PnRoZSBsb3dlc3Qgc2NvcmUuIFRpZXMgYXJlIGJyb2tlbiBiYXNlZCBvbiB1c2FnZSwgc28gZXNz
-ZW50aWFsbHkgaWYNCj5hbGwgcHJvY2Vzc2VzL21lbWNncyBoYXZlIHRoZSBkZWZhdWx0IHNjb3Jl
-LCB3ZSBmYWxsYmFjayB0byB0aGUNCj5jdXJyZW50IE9PTSBiZWhhdmlvci4NCg0KSWYgbWVtb3J5
-IG92ZXJzb2xkIGlzIHNldmVyZSwgYWxsIHByb2Nlc3NlcyBvZiB0aGUgbG93ZXN0IHByaW9yaXR5
-DQptZW1jZyBtYXkgYmUga2lsbGVkIGJlZm9yZSBzZWxlY3Rpbmcgb3RoZXIgbWVtY2cgcHJvY2Vz
-c2VzLg0KSWYgdGhlcmUgYXJlIDEwMDAgcHJvY2Vzc2VzIHdpdGggYWxtb3N0IHplcm8gbWVtb3J5
-IHVzYWdlIGluDQp0aGUgbG93ZXN0IHByaW9yaXR5IG1lbWNnLCAxMDAwIGludmFsaWQga2lsbCBl
-dmVudHMgbWF5IG9jY3VyLg0KVG8gYXZvaWQgdGhpcyBzaXR1YXRpb24sIGV2ZW4gZm9yIHRoZSBs
-b3dlc3QgcHJpb3JpdHkgbWVtY2csDQpJIHdpbGwgbGVhdmUgaGltIGEgdmVyeSBzbWFsbCBvb20u
-cHJvdGVjdCBxdW90YS4NCg0KSWYgZmFjZWQgd2l0aCB0d28gbWVtY2dzIHdpdGggdGhlIHNhbWUg
-dG90YWwgbWVtb3J5IHVzYWdlIGFuZA0KcHJpb3JpdHksIG1lbWNnIEEgaGFzIG1vcmUgcHJvY2Vz
-c2VzIGJ1dCBsZXNzIG1lbW9yeSB1c2FnZSBwZXINCnNpbmdsZSBwcm9jZXNzLCBhbmQgbWVtY2cg
-QiBoYXMgZmV3ZXIgcHJvY2Vzc2VzIGJ1dCBtb3JlDQptZW1vcnkgdXNhZ2UgcGVyIHNpbmdsZSBw
-cm9jZXNzLCB0aGVuIHdoZW4gT09NIG9jY3VycywgdGhlDQpwcm9jZXNzZXMgaW4gbWVtY2cgQiBt
-YXkgY29udGludWUgdG8gYmUga2lsbGVkIHVudGlsIGFsbCBwcm9jZXNzZXMNCmluIG1lbWNnIEIg
-YXJlIGtpbGxlZCwgd2hpY2ggaXMgdW5mYWlyIHRvIG1lbWNnIEIgYmVjYXVzZSBtZW1jZyBBDQph
-bHNvIG9jY3VwaWVzIGEgbGFyZ2UgYW1vdW50IG9mIG1lbW9yeS4NCg0KRG9zZSB5b3VyIGFwcHJv
-YWNoIGhhdmUgdGhlc2UgaXNzdWVzPyBLaWxsaW5nIHByb2Nlc3NlcyBpbiBhDQp1c2VyLWRlZmlu
-ZWQgcHJpb3JpdHkgaXMgaW5kZWVkIGVhc2llciBhbmQgY2FuIHdvcmsgd2VsbCBpbiBtb3N0IGNh
-c2VzLA0KYnV0IEkgaGF2ZSBiZWVuIHRyeWluZyB0byBzb2x2ZSB0aGUgY2FzZXMgdGhhdCBpdCBj
-YW5ub3QgY292ZXIuDQoNCi0tDQpUaGFua3MgZm9yIHlvdXIgY29tbWVudCENCmNoZW5na2FpdGFv
-DQoNCg0K
+On Thu, 18 May 2023 01:38:26 +0200,
+Gustavo A. R. Silva wrote:
+> 
+> One-element arrays are deprecated, and we are replacing them with flexible
+> array members, instead. However, in this case it seems those one-element
+> arrays have never actually been used as fake flexible arrays.
+> 
+> See this code that dates from Linux-2.6.12-rc2 initial git repository build
+> (commit 1da177e4c3f4 ("Linux-2.6.12-rc2")):
+> 
+> sound/pci/mixart/mixart_core.h:
+>  215 struct mixart_stream_state_req
+>  216 {
+>  217         u32                 delayed;
+>  218         u64                 scheduler;
+>  219         u32                 reserved4np[3];
+>  220         u32                 stream_count;  /* set to 1 for instance */
+>  221         struct mixart_flow_info  stream_info;   /* could be an array[stream_cou    nt] */
+>  222 } __attribute__((packed));
+> 
+> sound/pci/mixart/mixart.c:
+>  388
+>  389         memset(&stream_state_req, 0, sizeof(stream_state_req));
+>  390         stream_state_req.stream_count = 1;
+>  391         stream_state_req.stream_info.stream_desc.uid_pipe = stream->pipe->group_uid;
+>  392         stream_state_req.stream_info.stream_desc.stream_idx = stream->substream->number;
+>  393
+> 
+> So, taking the code above as example, replace multiple one-element
+> arrays with simple object declarations, and refactor the rest of the
+> code, accordingly.
+> 
+> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+> routines on memcpy() and help us make progress towards globally
+> enabling -fstrict-flex-arrays=3 [1].
+> 
+> This results in no differences in binary output.
+> 
+> Link: https://github.com/KSPP/linux/issues/79
+> Link: https://github.com/KSPP/linux/issues/296
+> Link: https://gcc.gnu.org/pipermail/gcc-patches/2022-October/602902.html [1]
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+
+Replacing with a simple object itself is OK, but please keep the
+comment; the statement there is still valid, as it could be rather a multi-member array in theory.
+
+
+thanks,
+
+Takashi
+
+> ---
+>  sound/pci/mixart/mixart.c      | 8 ++++----
+>  sound/pci/mixart/mixart_core.h | 7 +++----
+>  2 files changed, 7 insertions(+), 8 deletions(-)
+> 
+> diff --git a/sound/pci/mixart/mixart.c b/sound/pci/mixart/mixart.c
+> index 1b078b789604..7ceaf6a7a77e 100644
+> --- a/sound/pci/mixart/mixart.c
+> +++ b/sound/pci/mixart/mixart.c
+> @@ -98,7 +98,7 @@ static int mixart_set_pipe_state(struct mixart_mgr *mgr,
+>  
+>  	memset(&group_state, 0, sizeof(group_state));
+>  	group_state.pipe_count = 1;
+> -	group_state.pipe_uid[0] = pipe->group_uid;
+> +	group_state.pipe_uid = pipe->group_uid;
+>  
+>  	if(start)
+>  		request.message_id = MSG_STREAM_START_STREAM_GRP_PACKET;
+> @@ -185,7 +185,7 @@ static int mixart_set_clock(struct mixart_mgr *mgr,
+>  	clock_properties.clock_mode = CM_STANDALONE;
+>  	clock_properties.frequency = rate;
+>  	clock_properties.nb_callers = 1; /* only one entry in uid_caller ! */
+> -	clock_properties.uid_caller[0] = pipe->group_uid;
+> +	clock_properties.uid_caller = pipe->group_uid;
+>  
+>  	dev_dbg(&mgr->pci->dev, "mixart_set_clock to %d kHz\n", rate);
+>  
+> @@ -565,8 +565,8 @@ static int mixart_set_format(struct mixart_stream *stream, snd_pcm_format_t form
+>  
+>  	stream_param.pipe_count = 1;      /* set to 1 */
+>  	stream_param.stream_count = 1;    /* set to 1 */
+> -	stream_param.stream_desc[0].uid_pipe = stream->pipe->group_uid;
+> -	stream_param.stream_desc[0].stream_idx = stream->substream->number;
+> +	stream_param.stream_desc.uid_pipe = stream->pipe->group_uid;
+> +	stream_param.stream_desc.stream_idx = stream->substream->number;
+>  
+>  	request.message_id = MSG_STREAM_SET_INPUT_STAGE_PARAM;
+>  	request.uid = (struct mixart_uid){0,0};
+> diff --git a/sound/pci/mixart/mixart_core.h b/sound/pci/mixart/mixart_core.h
+> index 2f0e29ed5d63..ac74b2133c97 100644
+> --- a/sound/pci/mixart/mixart_core.h
+> +++ b/sound/pci/mixart/mixart_core.h
+> @@ -231,7 +231,7 @@ struct mixart_group_state_req
+>  	u64           scheduler;
+>  	u32           reserved4np[2];
+>  	u32           pipe_count;    /* set to 1 for instance */
+> -	struct mixart_uid  pipe_uid[1];   /* could be an array[pipe_count] */
+> +	struct mixart_uid  pipe_uid;
+>  } __attribute__((packed));
+>  
+>  struct mixart_group_state_resp
+> @@ -314,7 +314,7 @@ struct mixart_clock_properties
+>  	u32 format;
+>  	u32 board_mask;
+>  	u32 nb_callers; /* set to 1 (see below) */
+> -	struct mixart_uid uid_caller[1];
+> +	struct mixart_uid uid_caller;
+>  } __attribute__((packed));
+>  
+>  struct mixart_clock_properties_resp
+> @@ -401,8 +401,7 @@ struct mixart_stream_param_desc
+>  	u32 reserved4np[3];
+>  	u32 pipe_count;                           /* set to 1 (array size !) */
+>  	u32 stream_count;                         /* set to 1 (array size !) */
+> -	struct mixart_txx_stream_desc stream_desc[1];  /* only one stream per command, but this could be an array */
+> -
+> +	struct mixart_txx_stream_desc stream_desc;
+>  } __attribute__((packed));
+>  
+>  
+> -- 
+> 2.34.1
+> 
