@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7CAF707DC2
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 12:13:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 621BD707DC6
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 12:13:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230385AbjERKM7 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 18 May 2023 06:12:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42944 "EHLO
+        id S230446AbjERKNK convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 18 May 2023 06:13:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbjERKMo (ORCPT
+        with ESMTP id S230309AbjERKMo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 18 May 2023 06:12:44 -0400
 Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8941BDB;
-        Thu, 18 May 2023 03:12:42 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA8D1BD3;
+        Thu, 18 May 2023 03:12:43 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
         (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 07C1624E251;
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id CB02924E257;
         Thu, 18 May 2023 18:12:41 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 18 May
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 18 May
  2023 18:12:41 +0800
 Received: from localhost.localdomain (113.72.146.100) by EXMBX061.cuchost.com
  (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 18 May
@@ -41,9 +41,9 @@ CC:     Rob Herring <robh+dt@kernel.org>,
         Hal Feng <hal.feng@starfivetech.com>,
         Xingyu Wu <xingyu.wu@starfivetech.com>,
         <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-Subject: [PATCH v6 07/11] MAINTAINERS: Update maintainer of JH71x0 clock drivers
-Date:   Thu, 18 May 2023 18:12:30 +0800
-Message-ID: <20230518101234.143748-8-xingyu.wu@starfivetech.com>
+Subject: [PATCH v6 08/11] reset: starfive: jh7110: Add StarFive STG/ISP/VOUT resets support
+Date:   Thu, 18 May 2023 18:12:31 +0800
+Message-ID: <20230518101234.143748-9-xingyu.wu@starfivetech.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230518101234.143748-1-xingyu.wu@starfivetech.com>
 References: <20230518101234.143748-1-xingyu.wu@starfivetech.com>
@@ -63,26 +63,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a new maintainer which is in charge of StarFive JH7110
-STG/ISP/VOUT clock drivers.
+Add new struct members and auxiliary_device_id of resets to support
+System-Top-Group, Image-Signal-Process and Video-Output on the StarFive
+JH7110 SoC.
 
 Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
 ---
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+ .../reset/starfive/reset-starfive-jh7110.c    | 30 +++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e0ad886d3163..2a0496448b7f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -20101,6 +20101,7 @@ F:	drivers/mmc/host/dw_mmc-starfive.c
- STARFIVE JH71X0 CLOCK DRIVERS
- M:	Emil Renner Berthing <kernel@esmil.dk>
- M:	Hal Feng <hal.feng@starfivetech.com>
-+M:	Xingyu Wu <xingyu.wu@starfivetech.com>
- S:	Maintained
- F:	Documentation/devicetree/bindings/clock/starfive,jh71*.yaml
- F:	drivers/clk/starfive/clk-starfive-jh71*
+diff --git a/drivers/reset/starfive/reset-starfive-jh7110.c b/drivers/reset/starfive/reset-starfive-jh7110.c
+index 2d26ae95c8cc..29a43f0f2ad6 100644
+--- a/drivers/reset/starfive/reset-starfive-jh7110.c
++++ b/drivers/reset/starfive/reset-starfive-jh7110.c
+@@ -31,6 +31,24 @@ static const struct jh7110_reset_info jh7110_aon_info = {
+ 	.status_offset = 0x3C,
+ };
+ 
++static const struct jh7110_reset_info jh7110_stg_info = {
++	.nr_resets = JH7110_STGRST_END,
++	.assert_offset = 0x74,
++	.status_offset = 0x78,
++};
++
++static const struct jh7110_reset_info jh7110_isp_info = {
++	.nr_resets = JH7110_ISPRST_END,
++	.assert_offset = 0x38,
++	.status_offset = 0x3C,
++};
++
++static const struct jh7110_reset_info jh7110_vout_info = {
++	.nr_resets = JH7110_VOUTRST_END,
++	.assert_offset = 0x48,
++	.status_offset = 0x4C,
++};
++
+ static int jh7110_reset_probe(struct auxiliary_device *adev,
+ 			      const struct auxiliary_device_id *id)
+ {
+@@ -58,6 +76,18 @@ static const struct auxiliary_device_id jh7110_reset_ids[] = {
+ 		.name = "clk_starfive_jh7110_sys.rst-aon",
+ 		.driver_data = (kernel_ulong_t)&jh7110_aon_info,
+ 	},
++	{
++		.name = "clk_starfive_jh7110_sys.rst-stg",
++		.driver_data = (kernel_ulong_t)&jh7110_stg_info,
++	},
++	{
++		.name = "clk_starfive_jh7110_sys.rst-isp",
++		.driver_data = (kernel_ulong_t)&jh7110_isp_info,
++	},
++	{
++		.name = "clk_starfive_jh7110_sys.rst-vo",
++		.driver_data = (kernel_ulong_t)&jh7110_vout_info,
++	},
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(auxiliary, jh7110_reset_ids);
 -- 
 2.25.1
 
