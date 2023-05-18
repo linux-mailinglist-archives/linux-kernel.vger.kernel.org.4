@@ -2,65 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEBD370877F
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 20:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D93970878A
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 20:09:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbjERSHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 14:07:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49718 "EHLO
+        id S229822AbjERSJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 14:09:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjERSHN (ORCPT
+        with ESMTP id S229454AbjERSJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 14:07:13 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5A1C2
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 11:07:12 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-518d6f87a47so1353093a12.3
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 11:07:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684433231; x=1687025231;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lTIchLKkhkuJtgpo7em2rL9kgrrw91pXkSmSWyT/RdI=;
-        b=Idp8cFqfBlWY+INgm7z9CVNp+7XJ9yFe3SFdWSgIX9fKcKk0prX9TW/XDxGotusptU
-         yXgikV4CY5oNEnDISBGqPmMqqWg+Lh01Ix5TO9Wm4909knBLRDG4zr6GoBNUrQBoQKqr
-         EeDN+COXGVbnGNOeQKpW91lsyRpyCUnAKzhxCMcj/YCYKDga4vZyC0UeHWZaft6g1Gb9
-         RcZFeipG0rG1mUUpi8lr1fZPAtC3OVW7N06LajQYKed6/4sH3oSB+nBwBIh8qROZNG+p
-         6/pN0jQLZYtlXGSsJm3Tie6D/uQWxdDQ73l6x+v5TzCB49P97EChWJ6eax0S10jBPOBE
-         7TEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684433231; x=1687025231;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lTIchLKkhkuJtgpo7em2rL9kgrrw91pXkSmSWyT/RdI=;
-        b=QwdbQiOhvLrMFMBknMNjAPp1El1usvbz+p9VpopYinERLlrtTAoGYhpNZsJc0x7Yz1
-         oDIL8YbPHaro3Uzol+tX/AmvqXu/1h94L9dQwGClmSyFTeGHlNtcLTAnrY4W8hj+EqLA
-         /dGkgBPjsJujOYMdR/vple5pHLPJDdEoYLntuQ0T79gSC2WjYRTFgcu4BnxlbCfr6lib
-         m3OHWuhhBUU4juqFxrRj4oyEkEQvKw1aZpGmyayFi8TF4CkGptKxVQ1dpQrwlSaEdcKT
-         Jf3sthYV0mTly1LfP0STyLONro6ZhdiCHWQ8aoPLRpNA/dpF6gheZ6p5RL+xd8ZFRhjU
-         vMWw==
-X-Gm-Message-State: AC+VfDyBNDJ+5grdnbQYgjA0YirgbLT59vLp4s6zAyyh5kfYm16sPd0a
-        HOxqMvQUobCrAF9q5lEVCE+HFBuSdJw=
-X-Google-Smtp-Source: ACHHUZ7txDEkWdPCv8JldSwnFXdV5NEwOXHlioAaJZ7SDPT2Qwf6R442e5501qKU1HgMkPPpNHOjyKNATcA=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a63:5864:0:b0:530:8be8:5ab6 with SMTP id
- i36-20020a635864000000b005308be85ab6mr764038pgm.8.1684433231581; Thu, 18 May
- 2023 11:07:11 -0700 (PDT)
-Date:   Thu, 18 May 2023 11:07:09 -0700
-In-Reply-To: <ZGV2vF0MQwQ+LZRX@yzhao56-desk.sh.intel.com>
-Mime-Version: 1.0
-References: <20230516093007.15234-1-yan.y.zhao@intel.com> <ZGTwaP6peRcpl+GA@google.com>
- <ZGV2vF0MQwQ+LZRX@yzhao56-desk.sh.intel.com>
-Message-ID: <ZGZpTWnnbzAr+AwN@google.com>
-Subject: Re: [PATCH] vfio/type1: check pfn valid before converting to struct page
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yan Zhao <yan.y.zhao@intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alex.williamson@redhat.com, kevin.tian@intel.com, jgg@nvidia.com
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        Thu, 18 May 2023 14:09:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1108910E
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 11:08:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684433315;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EP8NV9ONBFRX7JUAfH+hASHYoMHOz+nZ6k5QS4Ruiow=;
+        b=NKXwt7T2znLcPpW78gXch8V7O/sT+QQyF06LBsfB1jNJyMnsHmRltl8NnijrYqvt4Kb+Yq
+        GuBEJf2uS0iLuoTOeCbSbk8wGm+CiQoZ73+0393/MIB1SK42ZFQLGECS3t3sxhcPHlaI3b
+        fHJvRJ0bXSeyqXzFjEfczw6TbZtnrOo=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-634-JUfL8dQDNR-h3gj8vcQ0Lw-1; Thu, 18 May 2023 14:08:29 -0400
+X-MC-Unique: JUfL8dQDNR-h3gj8vcQ0Lw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4399D800047;
+        Thu, 18 May 2023 18:08:28 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.20])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 451BD63F8F;
+        Thu, 18 May 2023 18:08:25 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Thu, 18 May 2023 20:08:14 +0200 (CEST)
+Date:   Thu, 18 May 2023 20:08:10 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Mike Christie <michael.christie@oracle.com>, linux@leemhuis.info,
+        nicolas.dichtel@6wind.com, axboe@kernel.dk, ebiederm@xmission.com,
+        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, mst@redhat.com,
+        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com
+Subject: Re: [RFC PATCH 1/8] signal: Dequeue SIGKILL even if
+ SIGNAL_GROUP_EXIT/group_exec_task is set
+Message-ID: <20230518180809.GA5817@redhat.com>
+References: <20230518000920.191583-1-michael.christie@oracle.com>
+ <20230518000920.191583-2-michael.christie@oracle.com>
+ <20230518-kontakt-geduckt-25bab595f503@brauner>
+ <7412912a-a470-bd3d-fb1c-54c094cc01ee@oracle.com>
+ <20230518-ratgeber-erbeben-843e68b0d6ac@brauner>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230518-ratgeber-erbeben-843e68b0d6ac@brauner>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,21 +71,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023, Yan Zhao wrote:
-> On Wed, May 17, 2023 at 08:19:04AM -0700, Sean Christopherson wrote:
-> > On Tue, May 16, 2023, Yan Zhao wrote:
-> > > vfio_pin_page_external() can return a phys_pfn for vma with VM_PFNMAP,
-> > > e.g. for MMIO PFNs.
-> > > 
-> > > It's necessary to check if it's a valid pfn before calling pfn_to_page().
-> > > 
-> > > Fixes: 34a255e67615 ("vfio: Replace phys_pfn with pages for vfio_pin_pages()")
-> > 
-> > Might be worth adding a blurb to call out that this is _not_ ABI breakage.  Prior
-> Do you mean "_not_ ABI breakage" with
-> 34a255e67615 ("vfio: Replace phys_pfn with pages for vfio_pin_pages()")
-> or with this fix commit?
+On 05/18, Christian Brauner wrote:
+>
+> Yeah, but these are issues that exist with PF_IO_WORKER then too
 
-Mostly the former.  I brought it up because _if_ there was breakage in that commit,
-then this fix would be "wrong" in the sense that it wouldn't undo any breakage, and
-would likely make it harder to restore the previous behavior.
+This was my thought too but I am starting to think I was wrong.
+
+Of course I don't understand the code in io_uring/ but it seems
+that it always breaks the IO loops if get_signal() returns SIGKILL.
+
+Oleg.
+
