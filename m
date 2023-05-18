@@ -2,286 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E6A6708B91
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 00:28:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72A53708B93
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 00:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230335AbjERW2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 18:28:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43836 "EHLO
+        id S230344AbjERW2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 18:28:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbjERW2E (ORCPT
+        with ESMTP id S230001AbjERW2j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 18:28:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A262E50;
-        Thu, 18 May 2023 15:28:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 385446143A;
-        Thu, 18 May 2023 22:28:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98A4DC4339E;
-        Thu, 18 May 2023 22:28:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684448881;
-        bh=G/8xidsOmToKNzjv/dRHf15ohhDPrZ7ZXRGoLlUk1Nw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=QnGFW8qohBIqqwoI9BK7dOPO5O6Jvsa+EkXDWIOMcb6V5XZoMBEjrBCSun1vu0I55
-         nSj7+cvHTzmFMXyjqP1Uu8KODM5iN1jhLMta7NWJfXMGshfzb55QoBThdCRqXyqSpy
-         i4j/K6c/hTGwkF1NurFtZ/vs1ECpoZX1XJ4adkSPJP7gAMJBMKyV6TLDh/J+KzTNKe
-         qM00tLS5insogCopzBWp1MFxSMAT/gScEuSk9VFATbjSwsrMsLD9O4P+4oyJx8otY8
-         ThbVq9yQP+Zlij/Hng4rbEsLcJsfnRYJeImOrWytY7hDo0+xniriVzVhBczXnut6JL
-         wDWPpWfXrGQUw==
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-4f137dbaa4fso3083991e87.2;
-        Thu, 18 May 2023 15:28:01 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwBLsw/SyEq3toz4OyLWBXp8bAwxglBEWF1IbEubLumRmfk6dBm
-        XTAuWQvXhvT0h3uyTMnQ1ApxTTqQHEK3yUXIb7k=
-X-Google-Smtp-Source: ACHHUZ5H53EGiUgI/XCVnpYKMUHYnX4I+bx1MxpYz0KfKIeI5LhVs6x7BcVTXM27KGT/X3zYIK9EDZg/F7+iJHjHhqk=
-X-Received: by 2002:ac2:539a:0:b0:4ec:9df9:f11a with SMTP id
- g26-20020ac2539a000000b004ec9df9f11amr167318lfh.9.1684448879538; Thu, 18 May
- 2023 15:27:59 -0700 (PDT)
+        Thu, 18 May 2023 18:28:39 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1D6E50;
+        Thu, 18 May 2023 15:28:38 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id 46e09a7af769-6ab362d7401so2250107a34.2;
+        Thu, 18 May 2023 15:28:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684448917; x=1687040917;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KoAnS0334pHa55UnDLIrApfFGnSZeLuLWfYXXTwayDw=;
+        b=BCMFq2vl1oe0ecC6BADlEazlwI3s31Dewh+ePz6se+PjnYC12BLZfUChvj8iN0cP2k
+         FGnCyqRiS0n79mYZnTnjYBn7/JeE7T33trbXcBm+7UsBRrPZAy4MJEkuK9V+uuyJsv/f
+         dYH3dUo6I158MVsIhPFWVSQuEGqbDbl2Xs3gjTY2mOJ7EsR5PJqISj2gRcYpZ2PCUs7k
+         P8XuRH7RDK+DKev6KmVoGLlAEhQMwAfmdYKZbJexsd5bBaDSdwG+yMD1EDMp1Da02HkU
+         6iuUD2GQkNwMRouIeeNK/FSeTQ2GBrwMtBP29i0a7jaZ4Bnw+WBTqaV5CjYXaSMnHrXh
+         rbsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684448917; x=1687040917;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KoAnS0334pHa55UnDLIrApfFGnSZeLuLWfYXXTwayDw=;
+        b=XrkCl3qQnlB9eWQOvzItq6SJL/1v+/o+F7xN94ePgjawzrkWd4iTG4Tfxt4AkiFd+L
+         jW8q+v5QZQHrvLom4tuWau60U/CUJzffrYnfScHFcLQcLaszMncocgWVjbr6j5UPwLMn
+         5Iz9ukVYUa0U4XrxYkdSfpp5wf7skVUGfUm4VmSEID823AvyEzzH57wf9235AfLi6sC5
+         78BPCPjAwvz54ZKvxs9H3NhVTKGCJZTbdRMsq6vMCAsLfsh/w6ZyyE1ihEYUH8+GuxZt
+         UBhrO0zoF3E3XLJnB50/8zwKhbaoLSfxwB0mZ2e51lXRAtccdIQF5ksQvuq0NLKCywYn
+         CCZQ==
+X-Gm-Message-State: AC+VfDxROSRw/pBxOQS/Y64n/23coGmUNaBHUAKoefFdRRbGbsUZZCYY
+        xOa2r7+WyYnMvmqw1Wt6StE=
+X-Google-Smtp-Source: ACHHUZ7R7XRRWTPHhIGSF2IWt8c+RU+FP4K3X4yA2YCrymRV67DjZORWDjQSUa1vGlNSIH+AG/Yr/A==
+X-Received: by 2002:a05:6830:1352:b0:6ad:ed25:3caf with SMTP id r18-20020a056830135200b006aded253cafmr53923otq.9.1684448917618;
+        Thu, 18 May 2023 15:28:37 -0700 (PDT)
+Received: from ?IPV6:2603:8081:140c:1a00:1b3d:4b6b:e581:f922? (2603-8081-140c-1a00-1b3d-4b6b-e581-f922.res6.spectrum.com. [2603:8081:140c:1a00:1b3d:4b6b:e581:f922])
+        by smtp.gmail.com with ESMTPSA id a5-20020a9d6e85000000b0069f0a85fa36sm1095846otr.57.2023.05.18.15.28.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 May 2023 15:28:37 -0700 (PDT)
+Message-ID: <a91d00eb-babc-de12-2413-c0d6a3b4dce6@gmail.com>
+Date:   Thu, 18 May 2023 17:28:36 -0500
 MIME-Version: 1.0
-References: <20230508070330.582131-1-ardb@kernel.org> <20230508070330.582131-18-ardb@kernel.org>
- <ca76ed3b-5835-9f1b-7e10-dd417249b7bd@amd.com>
-In-Reply-To: <ca76ed3b-5835-9f1b-7e10-dd417249b7bd@amd.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 19 May 2023 00:27:48 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXE+7SKVZN3p2_NXg5VeH+hbwnqwaGTj6HLE1a89QGtraw@mail.gmail.com>
-Message-ID: <CAMj1kXE+7SKVZN3p2_NXg5VeH+hbwnqwaGTj6HLE1a89QGtraw@mail.gmail.com>
-Subject: Re: [PATCH v2 17/20] x86: efistub: Check SEV/SNP support while
- running in the firmware
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Evgeniy Baskov <baskov@ispras.ru>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Dave Young <dyoung@redhat.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH for-next v5 2/7] RDMA/rxe: Make MR functions accessible
+ from other rxe source code
+Content-Language: en-US
+To:     Daisuke Matsuda <matsuda-daisuke@fujitsu.com>,
+        linux-rdma@vger.kernel.org, leonro@nvidia.com, jgg@nvidia.com,
+        zyjzyj2000@gmail.com
+Cc:     linux-kernel@vger.kernel.org, yangx.jy@fujitsu.com,
+        lizhijian@fujitsu.com, y-goto@fujitsu.com
+References: <cover.1684397037.git.matsuda-daisuke@fujitsu.com>
+ <412a29df988820ba9b7f0e8b4198ecae5b3dc79e.1684397037.git.matsuda-daisuke@fujitsu.com>
+From:   Bob Pearson <rpearsonhpe@gmail.com>
+In-Reply-To: <412a29df988820ba9b7f0e8b4198ecae5b3dc79e.1684397037.git.matsuda-daisuke@fujitsu.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 18 May 2023 at 22:16, Tom Lendacky <thomas.lendacky@amd.com> wrote:
->
-> On 5/8/23 02:03, Ard Biesheuvel wrote:
-> > The decompressor executes in an environment with little or no access to
-> > a console, and without any ability to return an error back to the caller
-> > (the bootloader). So the only recourse we have when the SEV/SNP context
-> > is not quite what the kernel expects is to terminate the guest entirely.
-> >
-> > This is a bit harsh, and also unnecessary when booting via the EFI stub,
-> > given that it provides all the support that SEV guests need to probe the
-> > underlying platform.
-> >
-> > So let's do the SEV initialization and SNP feature check before calling
-> > ExitBootServices(), and simply return with an error if the SNP feature
-> > mask is not as expected.
->
-> My SEV-ES / SEV-SNP guests started crashing when I applied this patch.
-> Turns out that sev_es_negotiate_protocol() used to be called when no #VC
-> exceptions were being generated before a valid GHCB was setup. Because
-> of that the current GHCB MSR value was not saved/restored. But now,
-> sev_es_negotiate_protocol() is called earlier in the boot process and
-> there are still messages being issued by UEFI, e.g.:
->
-> SetUefiImageMemoryAttributes - 0x000000007F6D7000 - 0x0000000000006000 (0x0000000000000008)
->
-> Similarly, get_hv_features() didn't worry about saving the GHCB MSR value
-> and an SNP guest crashed after fixing sev_es_negotiate_protocol().
->
-
-Thanks for the clarification
-
-So the underlying assumption here is that performing these checks
-before ExitBootServices() is better because we can still return to the
-bootloader, which -like GRUB does- could simply attempt booting the
-next kernel in the list.
-
-I was obviously unaware of the complication you are hitting here. So I
-wonder what your take is on this: should we defer this check until
-after ExitBootServices(), and crash and burn like before if the test
-fails? Or is the change below reasonable in your opinion, and we can
-incorporate it? Or is there a third option, i.e., is there a SEV
-specific EFI protocol that the stub should be using to establish
-whether the underlying platform meets the kernel's expectations?
-
-
-> The following changes got me past everything:
->
-> diff --git a/arch/x86/kernel/sev-shared.c b/arch/x86/kernel/sev-shared.c
-> index 3a5b0c9c4fcc..23450628d41c 100644
-> --- a/arch/x86/kernel/sev-shared.c
-> +++ b/arch/x86/kernel/sev-shared.c
-> @@ -106,15 +106,19 @@ static void __noreturn sev_es_terminate(unsigned int set, unsigned int reason)
->    */
->   static u64 get_hv_features(void)
->   {
-> -       u64 val;
-> +       u64 val, save;
->
->         if (ghcb_version < 2)
->                 return 0;
->
-> +       save = sev_es_rd_ghcb_msr();
+On 5/18/23 03:21, Daisuke Matsuda wrote:
+> Some functions in rxe_mr.c are going to be used in rxe_odp.c, which is to
+> be created in the subsequent patch. List the declarations of the functions
+> in rxe_loc.h.
+> 
+> Signed-off-by: Daisuke Matsuda <matsuda-daisuke@fujitsu.com>
+> ---
+>  drivers/infiniband/sw/rxe/rxe_loc.h | 14 ++++++++++++++
+>  drivers/infiniband/sw/rxe/rxe_mr.c  | 18 ++++--------------
+>  2 files changed, 18 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/infiniband/sw/rxe/rxe_loc.h b/drivers/infiniband/sw/rxe/rxe_loc.h
+> index 804b15e929dd..00fedd1a4980 100644
+> --- a/drivers/infiniband/sw/rxe/rxe_loc.h
+> +++ b/drivers/infiniband/sw/rxe/rxe_loc.h
+> @@ -60,7 +60,9 @@ int rxe_mmap(struct ib_ucontext *context, struct vm_area_struct *vma);
+>  
+>  /* rxe_mr.c */
+>  u8 rxe_get_next_key(u32 last_key);
+> +void rxe_mr_init(int access, struct rxe_mr *mr);
+>  void rxe_mr_init_dma(int access, struct rxe_mr *mr);
+> +int rxe_mr_fill_pages_from_sgt(struct rxe_mr *mr, struct sg_table *sgt);
+>  int rxe_mr_init_user(struct rxe_dev *rxe, u64 start, u64 length, u64 iova,
+>  		     int access, struct rxe_mr *mr);
+>  int rxe_mr_init_fast(int max_pages, struct rxe_mr *mr);
+> @@ -71,6 +73,8 @@ int copy_data(struct rxe_pd *pd, int access, struct rxe_dma_info *dma,
+>  	      void *addr, int length, enum rxe_mr_copy_dir dir);
+>  int rxe_map_mr_sg(struct ib_mr *ibmr, struct scatterlist *sg,
+>  		  int sg_nents, unsigned int *sg_offset);
+> +int rxe_mr_copy_xarray(struct rxe_mr *mr, u64 iova, void *addr,
+> +		       unsigned int length, enum rxe_mr_copy_dir dir);
+>  int rxe_mr_do_atomic_op(struct rxe_mr *mr, u64 iova, int opcode,
+>  			u64 compare, u64 swap_add, u64 *orig_val);
+>  int rxe_mr_do_atomic_write(struct rxe_mr *mr, u64 iova, u64 value);
+> @@ -82,6 +86,16 @@ int rxe_invalidate_mr(struct rxe_qp *qp, u32 key);
+>  int rxe_reg_fast_mr(struct rxe_qp *qp, struct rxe_send_wqe *wqe);
+>  void rxe_mr_cleanup(struct rxe_pool_elem *elem);
+>  
+> +static inline unsigned long rxe_mr_iova_to_index(struct rxe_mr *mr, u64 iova)
+> +{
+> +	return (iova >> mr->page_shift) - (mr->ibmr.iova >> mr->page_shift);
+> +}
 > +
->         sev_es_wr_ghcb_msr(GHCB_MSR_HV_FT_REQ);
->         VMGEXIT();
+> +static inline unsigned long rxe_mr_iova_to_page_offset(struct rxe_mr *mr, u64 iova)
+> +{
+> +	return iova & (mr_page_size(mr) - 1);
+> +}
+> +
+>  /* rxe_mw.c */
+>  int rxe_alloc_mw(struct ib_mw *ibmw, struct ib_udata *udata);
+>  int rxe_dealloc_mw(struct ib_mw *ibmw);
+> diff --git a/drivers/infiniband/sw/rxe/rxe_mr.c b/drivers/infiniband/sw/rxe/rxe_mr.c
+> index 0e538fafcc20..ffbac6f5e828 100644
+> --- a/drivers/infiniband/sw/rxe/rxe_mr.c
+> +++ b/drivers/infiniband/sw/rxe/rxe_mr.c
+> @@ -49,7 +49,7 @@ int mr_check_range(struct rxe_mr *mr, u64 iova, size_t length)
+>  				| IB_ACCESS_REMOTE_WRITE	\
+>  				| IB_ACCESS_REMOTE_ATOMIC)
+>  
+> -static void rxe_mr_init(int access, struct rxe_mr *mr)
+> +void rxe_mr_init(int access, struct rxe_mr *mr)
+>  {
+>  	u32 lkey = mr->elem.index << 8 | rxe_get_next_key(-1);
+>  	u32 rkey = (access & IB_ACCESS_REMOTE) ? lkey : 0;
+> @@ -77,16 +77,6 @@ void rxe_mr_init_dma(int access, struct rxe_mr *mr)
+>  	mr->ibmr.type = IB_MR_TYPE_DMA;
+>  }
+>  
+> -static unsigned long rxe_mr_iova_to_index(struct rxe_mr *mr, u64 iova)
+> -{
+> -	return (iova >> mr->page_shift) - (mr->ibmr.iova >> mr->page_shift);
+> -}
 > -
->         val = sev_es_rd_ghcb_msr();
-> +
-> +       sev_es_wr_ghcb_msr(save);
-> +
->         if (GHCB_RESP_CODE(val) != GHCB_MSR_HV_FT_RESP)
->                 return 0;
->
-> @@ -139,13 +143,17 @@ static void snp_register_ghcb_early(unsigned long paddr)
->
->   static bool sev_es_negotiate_protocol(void)
->   {
-> -       u64 val;
-> +       u64 val, save;
-> +
-> +       save = sev_es_rd_ghcb_msr();
->
->         /* Do the GHCB protocol version negotiation */
->         sev_es_wr_ghcb_msr(GHCB_MSR_SEV_INFO_REQ);
->         VMGEXIT();
->         val = sev_es_rd_ghcb_msr();
->
-> +       sev_es_wr_ghcb_msr(save);
-> +
->         if (GHCB_MSR_INFO(val) != GHCB_MSR_SEV_INFO_RESP)
->                 return false;
->
->
-> Thanks,
-> Tom
->
-> >
-> > Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
-> > ---
-> >   arch/x86/boot/compressed/sev.c          | 12 ++++++++----
-> >   arch/x86/include/asm/sev.h              |  4 ++++
-> >   drivers/firmware/efi/libstub/x86-stub.c | 17 +++++++++++++++++
-> >   3 files changed, 29 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
-> > index 014b89c890887b9a..19c40873fdd209b5 100644
-> > --- a/arch/x86/boot/compressed/sev.c
-> > +++ b/arch/x86/boot/compressed/sev.c
-> > @@ -315,20 +315,24 @@ static void enforce_vmpl0(void)
-> >    */
-> >   #define SNP_FEATURES_PRESENT (0)
-> >
-> > +u64 snp_get_unsupported_features(void)
-> > +{
-> > +     if (!(sev_status & MSR_AMD64_SEV_SNP_ENABLED))
-> > +             return 0;
-> > +     return sev_status & SNP_FEATURES_IMPL_REQ & ~SNP_FEATURES_PRESENT;
-> > +}
-> > +
-> >   void snp_check_features(void)
-> >   {
-> >       u64 unsupported;
-> >
-> > -     if (!(sev_status & MSR_AMD64_SEV_SNP_ENABLED))
-> > -             return;
-> > -
-> >       /*
-> >        * Terminate the boot if hypervisor has enabled any feature lacking
-> >        * guest side implementation. Pass on the unsupported features mask through
-> >        * EXIT_INFO_2 of the GHCB protocol so that those features can be reported
-> >        * as part of the guest boot failure.
-> >        */
-> > -     unsupported = sev_status & SNP_FEATURES_IMPL_REQ & ~SNP_FEATURES_PRESENT;
-> > +     unsupported = snp_get_unsupported_features();
-> >       if (unsupported) {
-> >               if (ghcb_version < 2 || (!boot_ghcb && !early_setup_ghcb()))
-> >                       sev_es_terminate(SEV_TERM_SET_GEN, GHCB_SNP_UNSUPPORTED);
-> > diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-> > index 13dc2a9d23c1eb25..bf27b91644d0da5a 100644
-> > --- a/arch/x86/include/asm/sev.h
-> > +++ b/arch/x86/include/asm/sev.h
-> > @@ -157,6 +157,7 @@ static __always_inline void sev_es_nmi_complete(void)
-> >               __sev_es_nmi_complete();
-> >   }
-> >   extern int __init sev_es_efi_map_ghcbs(pgd_t *pgd);
-> > +extern void sev_enable(struct boot_params *bp);
-> >
-> >   static inline int rmpadjust(unsigned long vaddr, bool rmp_psize, unsigned long attrs)
-> >   {
-> > @@ -202,12 +203,14 @@ void snp_set_wakeup_secondary_cpu(void);
-> >   bool snp_init(struct boot_params *bp);
-> >   void __init __noreturn snp_abort(void);
-> >   int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, struct snp_guest_request_ioctl *rio);
-> > +u64 snp_get_unsupported_features(void);
-> >   #else
-> >   static inline void sev_es_ist_enter(struct pt_regs *regs) { }
-> >   static inline void sev_es_ist_exit(void) { }
-> >   static inline int sev_es_setup_ap_jump_table(struct real_mode_header *rmh) { return 0; }
-> >   static inline void sev_es_nmi_complete(void) { }
-> >   static inline int sev_es_efi_map_ghcbs(pgd_t *pgd) { return 0; }
-> > +static inline void sev_enable(struct boot_params *bp) { }
-> >   static inline int pvalidate(unsigned long vaddr, bool rmp_psize, bool validate) { return 0; }
-> >   static inline int rmpadjust(unsigned long vaddr, bool rmp_psize, unsigned long attrs) { return 0; }
-> >   static inline void setup_ghcb(void) { }
-> > @@ -225,6 +228,7 @@ static inline int snp_issue_guest_request(u64 exit_code, struct snp_req_data *in
-> >   {
-> >       return -ENOTTY;
-> >   }
-> > +static inline u64 snp_get_unsupported_features(void) { return 0; }
-> >   #endif
-> >
-> >   #endif
-> > diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
-> > index ce8434fce0c37982..33d11ba78f1d8c4f 100644
-> > --- a/drivers/firmware/efi/libstub/x86-stub.c
-> > +++ b/drivers/firmware/efi/libstub/x86-stub.c
-> > @@ -15,6 +15,7 @@
-> >   #include <asm/setup.h>
-> >   #include <asm/desc.h>
-> >   #include <asm/boot.h>
-> > +#include <asm/sev.h>
-> >
-> >   #include "efistub.h"
-> >
-> > @@ -714,6 +715,22 @@ static efi_status_t exit_boot_func(struct efi_boot_memmap *map,
-> >                         &p->efi->efi_memmap, &p->efi->efi_memmap_hi);
-> >       p->efi->efi_memmap_size         = map->map_size;
-> >
-> > +     /*
-> > +      * Call the SEV init code while still running with the firmware's
-> > +      * GDT/IDT, so #VC exceptions will be handled by EFI.
-> > +      */
-> > +     if (IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT)) {
-> > +             u64 unsupported;
-> > +
-> > +             sev_enable(p->boot_params);
-> > +             unsupported = snp_get_unsupported_features();
-> > +             if (unsupported) {
-> > +                     efi_err("Unsupported SEV-SNP features detected: 0x%llx\n",
-> > +                             unsupported);
-> > +                     return EFI_UNSUPPORTED;
-> > +             }
-> > +     }
-> > +
-> >       return EFI_SUCCESS;
-> >   }
-> >
+> -static unsigned long rxe_mr_iova_to_page_offset(struct rxe_mr *mr, u64 iova)
+> -{
+> -	return iova & (mr_page_size(mr) - 1);
+> -}
+> -
+>  static bool is_pmem_page(struct page *pg)
+>  {
+>  	unsigned long paddr = page_to_phys(pg);
+> @@ -96,7 +86,7 @@ static bool is_pmem_page(struct page *pg)
+>  				 IORES_DESC_PERSISTENT_MEMORY);
+>  }
+>  
+> -static int rxe_mr_fill_pages_from_sgt(struct rxe_mr *mr, struct sg_table *sgt)
+> +int rxe_mr_fill_pages_from_sgt(struct rxe_mr *mr, struct sg_table *sgt)
+>  {
+>  	XA_STATE(xas, &mr->page_list, 0);
+>  	struct sg_page_iter sg_iter;
+> @@ -247,8 +237,8 @@ int rxe_map_mr_sg(struct ib_mr *ibmr, struct scatterlist *sgl,
+>  	return ib_sg_to_pages(ibmr, sgl, sg_nents, sg_offset, rxe_set_page);
+>  }
+>  
+> -static int rxe_mr_copy_xarray(struct rxe_mr *mr, u64 iova, void *addr,
+> -			      unsigned int length, enum rxe_mr_copy_dir dir)
+> +int rxe_mr_copy_xarray(struct rxe_mr *mr, u64 iova, void *addr,
+> +		       unsigned int length, enum rxe_mr_copy_dir dir)
+>  {
+>  	unsigned int page_offset = rxe_mr_iova_to_page_offset(mr, iova);
+>  	unsigned long index = rxe_mr_iova_to_index(mr, iova);
+
+Looks good.
+
+Reviewed-by: Bob Pearson <rpearsonhpe@gmail.com>
+
