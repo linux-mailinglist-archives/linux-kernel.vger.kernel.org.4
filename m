@@ -2,541 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CD1C70782D
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 04:46:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDBE670783A
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 04:49:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229787AbjERCqK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 22:46:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36998 "EHLO
+        id S229608AbjERCtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 22:49:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229751AbjERCqD (ORCPT
+        with ESMTP id S229545AbjERCts (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 22:46:03 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D624C3C01
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 19:46:00 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0ViuseHy_1684377957;
-Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0ViuseHy_1684377957)
-          by smtp.aliyun-inc.com;
-          Thu, 18 May 2023 10:45:58 +0800
-From:   Jingbo Xu <jefflexu@linux.alibaba.com>
-To:     xiang@kernel.org, chao@kernel.org, huyue2@coolpad.com,
-        linux-erofs@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH v3 5/5] erofs: use separate xattr parsers for listxattr/getxattr
-Date:   Thu, 18 May 2023 10:45:51 +0800
-Message-Id: <20230518024551.123990-6-jefflexu@linux.alibaba.com>
-X-Mailer: git-send-email 2.19.1.6.gb485710b
-In-Reply-To: <20230518024551.123990-1-jefflexu@linux.alibaba.com>
-References: <20230518024551.123990-1-jefflexu@linux.alibaba.com>
+        Wed, 17 May 2023 22:49:48 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47431E5;
+        Wed, 17 May 2023 19:49:47 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-50bc0117683so2710748a12.1;
+        Wed, 17 May 2023 19:49:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684378186; x=1686970186;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/7liFIXx8tC5EuopqHF+4OZT7BnqM1nFKp7piVkw/qM=;
+        b=GLLrnD3CmE0XvGT+JxYZ7cQgV+1xvzVZ3Txzfjp4d0gGxnjEpPejY1rn9MygPZ3+ZD
+         I/V1uQlegefxNQba9jqi8ad8/5Yy9WkJQlhMQ6d0+huqeN5Gmbe9JxiubjKUtiEvaYX5
+         Gdm/xO0LN8lv4Ht86D77Xs/pQYkwA6mnZZma92DQrRYjkGCuwiizsWB9/h3mUEyUlGjE
+         G3UM6QEPAGQwJnQNWOjO/et4vCOjmS6O3gRh8jXFuQWCC56B/iaCunmXizBsm+LgCXqd
+         WT3d6WMhuKJBqAyIOGMy/A04umW083VL+C1uTgcEkPDv1qVysbQbNm9SyUslkbQbDYMC
+         i1aA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684378186; x=1686970186;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/7liFIXx8tC5EuopqHF+4OZT7BnqM1nFKp7piVkw/qM=;
+        b=ih6rF6ZxsHwDT1uVnBb/iskPdwq36N7e4VSPPIy8E4y3Ajs5/OmG9+j5ESDk8oVwiT
+         4N6MeMxU2mUd7H1uG+2XWINVkn0gxHsHv22QDV+5XDbdatrs+BM2CzkdRGq+DXO3CTXC
+         NzOm4R9xVuTF8MEnIXM3ZE9ztDAG5PCJfkj2fewqdpN/frLINsqNd90HD7wdKgz95+Fe
+         mJRqGZS0gMrynGRo7Txl7SqSId6EhvUODMimhS3PQOBcyXR6j7tJ3//vsRS/vERBBVKG
+         G/ecbyCiwf/nCHk43eUVwRwGbsmSCaey6f5qQz4KPLL5JIpvCQ6GtK5ZVyoFS8Rdy0sE
+         JjVw==
+X-Gm-Message-State: AC+VfDyhK6yji/2AHy2vSiwbnTUK8KEuln/C7runwkS3Od9Uy92Me3Ss
+        kPP3tEi72X1UEtTD9cd2vnCz0lpjIiiooc6WFVU=
+X-Google-Smtp-Source: ACHHUZ793GNNj1zvlruifdVIL05R5dyN2IJ6aEpAWbno+Q7MmGhMkY3LMcXR8PdR134IXAQrGeWXb+7Ql+x39U1c8z4=
+X-Received: by 2002:a05:6402:749:b0:50b:d303:d2a4 with SMTP id
+ p9-20020a056402074900b0050bd303d2a4mr4318229edy.27.1684378185524; Wed, 17 May
+ 2023 19:49:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+References: <20230517034510.15639-1-zegao@tencent.com> <20230517034510.15639-3-zegao@tencent.com>
+ <20230517232751.09126a6cec8786a954e54bcf@kernel.org>
+In-Reply-To: <20230517232751.09126a6cec8786a954e54bcf@kernel.org>
+From:   Ze Gao <zegao2021@gmail.com>
+Date:   Thu, 18 May 2023 10:49:34 +0800
+Message-ID: <CAD8CoPC5N9sNTsYof1ig_mExh9qZHY=FjMwNfqxc23N=q3J2HA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/4] fprobe: make fprobe_kprobe_handler recursion free
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>, x86@kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org,
+        Conor Dooley <conor@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Yonghong Song <yhs@fb.com>, Ze Gao <zegao@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There's a callback styled xattr parser, i.e. xattr_foreach(), which is
-shared among listxattr and getxattr.  Convert it to two separate xattr
-parsers for listxattr and getxattr.
+Glad to hear that, hooray!  :)
 
-Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
----
- fs/erofs/xattr.c | 389 +++++++++++++++++++++--------------------------
- 1 file changed, 170 insertions(+), 219 deletions(-)
+Thanks
+Ze
 
-diff --git a/fs/erofs/xattr.c b/fs/erofs/xattr.c
-index 435146628eed..111735fb6fbc 100644
---- a/fs/erofs/xattr.c
-+++ b/fs/erofs/xattr.c
-@@ -12,7 +12,7 @@ struct erofs_xattr_iter {
- 	struct erofs_buf buf;
- 	void *kaddr;
- 	erofs_blk_t blkaddr;
--	unsigned int ofs;
-+	unsigned int ofs, t_ofs;
- 
- 	char *buffer;
- 	int buffer_size, buffer_ofs;
-@@ -21,6 +21,7 @@ struct erofs_xattr_iter {
- 	struct qstr name;
- 	struct dentry *dentry;
- 	struct inode *inode;
-+	unsigned int remaining; /* size of inline xattrs to be iterated */
- 	bool getxattr;
- };
- 
-@@ -46,6 +47,28 @@ static inline int erofs_xattr_iter_fixup_aligned(struct erofs_xattr_iter *it)
- 	return erofs_xattr_iter_fixup(it);
- }
- 
-+static int erofs_xattr_iter_prep(struct erofs_xattr_iter *it)
-+{
-+	unsigned int entry_sz;
-+	int err;
-+
-+	err = erofs_xattr_iter_fixup(it);
-+	if (err)
-+		return err;
-+
-+	entry_sz = erofs_xattr_entry_size(it->kaddr + it->ofs);
-+	it->t_ofs = it->ofs + entry_sz;
-+	if (it->remaining) {
-+		/* xattr on-disk corruption: xattr entry beyond xattr_isize */
-+		if (it->remaining < entry_sz) {
-+			DBG_BUGON(1);
-+			return -EFSCORRUPTED;
-+		}
-+		it->remaining -= entry_sz;
-+	}
-+	return 0;
-+}
-+
- static int erofs_init_inode_xattrs(struct inode *inode)
- {
- 	struct erofs_inode *const vi = EROFS_I(inode);
-@@ -144,183 +167,6 @@ static int erofs_init_inode_xattrs(struct inode *inode)
- 	return ret;
- }
- 
--/*
-- * the general idea for these return values is
-- * if    0 is returned, go on processing the current xattr;
-- *       1 (> 0) is returned, skip this round to process the next xattr;
-- *    -err (< 0) is returned, an error (maybe ENOXATTR) occurred
-- *                            and need to be handled
-- */
--struct xattr_iter_handlers {
--	int (*entry)(struct erofs_xattr_iter *it, struct erofs_xattr_entry *entry);
--	int (*name)(struct erofs_xattr_iter *it, unsigned int processed, char *buf,
--		    unsigned int len);
--	int (*alloc_buffer)(struct erofs_xattr_iter *it, unsigned int value_sz);
--	void (*value)(struct erofs_xattr_iter *it, unsigned int processed, char *buf,
--		      unsigned int len);
--};
--
--/*
-- * Regardless of success or failure, `xattr_foreach' will end up with
-- * `ofs' pointing to the next xattr item rather than an arbitrary position.
-- */
--static int xattr_foreach(struct erofs_xattr_iter *it,
--			 const struct xattr_iter_handlers *op,
--			 unsigned int *tlimit)
--{
--	struct erofs_xattr_entry entry;
--	unsigned int value_sz, processed, slice;
--	int err;
--
--	/* 0. fixup blkaddr, ofs, ipage */
--	err = erofs_xattr_iter_fixup(it);
--	if (err)
--		return err;
--
--	/*
--	 * 1. read xattr entry to the memory,
--	 *    since we do EROFS_XATTR_ALIGN
--	 *    therefore entry should be in the page
--	 */
--	entry = *(struct erofs_xattr_entry *)(it->kaddr + it->ofs);
--	if (tlimit) {
--		unsigned int entry_sz = erofs_xattr_entry_size(&entry);
--
--		/* xattr on-disk corruption: xattr entry beyond xattr_isize */
--		if (*tlimit < entry_sz) {
--			DBG_BUGON(1);
--			return -EFSCORRUPTED;
--		}
--		*tlimit -= entry_sz;
--	}
--
--	it->ofs += sizeof(struct erofs_xattr_entry);
--	value_sz = le16_to_cpu(entry.e_value_size);
--
--	/* handle entry */
--	err = op->entry(it, &entry);
--	if (err) {
--		it->ofs += entry.e_name_len + value_sz;
--		goto out;
--	}
--
--	/* 2. handle xattr name (ofs will finally be at the end of name) */
--	processed = 0;
--
--	while (processed < entry.e_name_len) {
--		err = erofs_xattr_iter_fixup_aligned(it);
--		if (err)
--			goto out;
--
--		slice = min_t(unsigned int, it->sb->s_blocksize - it->ofs,
--			      entry.e_name_len - processed);
--
--		/* handle name */
--		err = op->name(it, processed, it->kaddr + it->ofs, slice);
--		if (err) {
--			it->ofs += entry.e_name_len - processed + value_sz;
--			goto out;
--		}
--
--		it->ofs += slice;
--		processed += slice;
--	}
--
--	/* 3. handle xattr value */
--	processed = 0;
--
--	if (op->alloc_buffer) {
--		err = op->alloc_buffer(it, value_sz);
--		if (err) {
--			it->ofs += value_sz;
--			goto out;
--		}
--	}
--
--	while (processed < value_sz) {
--		err = erofs_xattr_iter_fixup_aligned(it);
--		if (err)
--			goto out;
--
--		slice = min_t(unsigned int, it->sb->s_blocksize - it->ofs,
--			      value_sz - processed);
--		op->value(it, processed, it->kaddr + it->ofs, slice);
--		it->ofs += slice;
--		processed += slice;
--	}
--
--out:
--	/* xattrs should be 4-byte aligned (on-disk constraint) */
--	it->ofs = EROFS_XATTR_ALIGN(it->ofs);
--	return err < 0 ? err : 0;
--}
--
--static int erofs_xattr_long_entrymatch(struct erofs_xattr_iter *it,
--				       struct erofs_xattr_entry *entry)
--{
--	struct erofs_sb_info *sbi = EROFS_SB(it->sb);
--	struct erofs_xattr_prefix_item *pf = sbi->xattr_prefixes +
--		(entry->e_name_index & EROFS_XATTR_LONG_PREFIX_MASK);
--
--	if (pf >= sbi->xattr_prefixes + sbi->xattr_prefix_count)
--		return -ENOATTR;
--
--	if (it->index != pf->prefix->base_index ||
--	    it->name.len != entry->e_name_len + pf->infix_len)
--		return -ENOATTR;
--
--	if (memcmp(it->name.name, pf->prefix->infix, pf->infix_len))
--		return -ENOATTR;
--
--	it->infix_len = pf->infix_len;
--	return 0;
--}
--
--static int xattr_entrymatch(struct erofs_xattr_iter *it,
--			    struct erofs_xattr_entry *entry)
--{
--	/* should also match the infix for long name prefixes */
--	if (entry->e_name_index & EROFS_XATTR_LONG_PREFIX)
--		return erofs_xattr_long_entrymatch(it, entry);
--
--	if (it->index != entry->e_name_index ||
--	    it->name.len != entry->e_name_len)
--		return -ENOATTR;
--	it->infix_len = 0;
--	return 0;
--}
--
--static int xattr_namematch(struct erofs_xattr_iter *it,
--			   unsigned int processed, char *buf, unsigned int len)
--{
--	if (memcmp(buf, it->name.name + it->infix_len + processed, len))
--		return -ENOATTR;
--	return 0;
--}
--
--static int xattr_checkbuffer(struct erofs_xattr_iter *it,
--			     unsigned int value_sz)
--{
--	int err = it->buffer_size < value_sz ? -ERANGE : 0;
--
--	it->buffer_ofs = value_sz;
--	return !it->buffer ? 1 : err;
--}
--
--static void xattr_copyvalue(struct erofs_xattr_iter *it,
--			    unsigned int processed,
--			    char *buf, unsigned int len)
--{
--	memcpy(it->buffer + processed, buf, len);
--}
--
--static const struct xattr_iter_handlers find_xattr_handlers = {
--	.entry = xattr_entrymatch,
--	.name = xattr_namematch,
--	.alloc_buffer = xattr_checkbuffer,
--	.value = xattr_copyvalue
--};
--
- static bool erofs_xattr_user_list(struct dentry *dentry)
- {
- 	return test_opt(&EROFS_SB(dentry->d_sb)->opt, XATTR_USER);
-@@ -373,20 +219,74 @@ const struct xattr_handler *erofs_xattr_handlers[] = {
- 	NULL,
- };
- 
--static int xattr_entrylist(struct erofs_xattr_iter *it,
--			   struct erofs_xattr_entry *entry)
-+typedef int (*erofs_xattr_body_handler)(struct erofs_xattr_iter *it,
-+		unsigned int processed, char *buf, unsigned int len);
-+
-+static int erofs_xattr_namematch(struct erofs_xattr_iter *it,
-+		unsigned int processed, char *buf, unsigned int len)
-+{
-+	if (memcmp(buf, it->name.name + it->infix_len + processed, len))
-+		return -ENOATTR;
-+	return 0;
-+}
-+
-+static int erofs_xattr_copy(struct erofs_xattr_iter *it,
-+		unsigned int unused, char *buf, unsigned int len)
-+{
-+	memcpy(it->buffer + it->buffer_ofs, buf, len);
-+	it->buffer_ofs += len;
-+	return 0;
-+}
-+
-+static int erofs_xattr_body(struct erofs_xattr_iter *it, unsigned int len,
-+			    erofs_xattr_body_handler handler)
-+{
-+	unsigned int slice, processed = 0;
-+
-+	while (processed < len) {
-+		int err = erofs_xattr_iter_fixup_aligned(it);
-+		if (err)
-+			return err;
-+
-+		slice = min_t(unsigned int, it->sb->s_blocksize - it->ofs,
-+			      len - processed);
-+		err = handler(it, processed, it->kaddr + it->ofs, slice);
-+		if (err)
-+			return err;
-+
-+		it->ofs += slice;
-+		processed += slice;
-+	}
-+	return 0;
-+}
-+
-+/*
-+ * Wen returning 0 or ENOATTR, erofs_[list|get]xattr_foreach() will end up
-+ * with `ofs' pointing to the next xattr item rather than an arbitrary position.
-+ */
-+static int erofs_listxattr_foreach(struct erofs_xattr_iter *it)
- {
--	unsigned int base_index = entry->e_name_index;
--	unsigned int prefix_len, infix_len = 0;
-+	struct erofs_xattr_entry entry;
-+	unsigned int base_index, prefix_len, infix_len = 0;
- 	const char *prefix, *infix = NULL;
-+	int err;
-+
-+	err = erofs_xattr_iter_prep(it);
-+	if (err)
-+		return err;
-+
-+	/* 1. handle xattr entry */
-+	entry = *(struct erofs_xattr_entry *)(it->kaddr + it->ofs);
-+	it->ofs += sizeof(struct erofs_xattr_entry);
-+	base_index = entry.e_name_index;
- 
--	if (entry->e_name_index & EROFS_XATTR_LONG_PREFIX) {
-+	if (entry.e_name_index & EROFS_XATTR_LONG_PREFIX) {
- 		struct erofs_sb_info *sbi = EROFS_SB(it->sb);
- 		struct erofs_xattr_prefix_item *pf = sbi->xattr_prefixes +
--			(entry->e_name_index & EROFS_XATTR_LONG_PREFIX_MASK);
-+			(entry.e_name_index & EROFS_XATTR_LONG_PREFIX_MASK);
- 
- 		if (pf >= sbi->xattr_prefixes + sbi->xattr_prefix_count)
--			return 1;
-+			goto out;
- 		infix = pf->prefix->infix;
- 		infix_len = pf->infix_len;
- 		base_index = pf->prefix->base_index;
-@@ -394,52 +294,102 @@ static int xattr_entrylist(struct erofs_xattr_iter *it,
- 
- 	prefix = erofs_xattr_prefix(base_index, it->dentry);
- 	if (!prefix)
--		return 1;
-+		goto out;
- 	prefix_len = strlen(prefix);
- 
- 	if (!it->buffer) {
--		it->buffer_ofs += prefix_len + infix_len +
--					entry->e_name_len + 1;
--		return 1;
-+		it->buffer_ofs += prefix_len + infix_len + entry.e_name_len + 1;
-+		goto out;
- 	}
- 
- 	if (it->buffer_ofs + prefix_len + infix_len +
--		+ entry->e_name_len + 1 > it->buffer_size)
-+		entry.e_name_len + 1 > it->buffer_size)
- 		return -ERANGE;
- 
- 	memcpy(it->buffer + it->buffer_ofs, prefix, prefix_len);
- 	memcpy(it->buffer + it->buffer_ofs + prefix_len, infix, infix_len);
- 	it->buffer_ofs += prefix_len + infix_len;
--	return 0;
--}
- 
--static int xattr_namelist(struct erofs_xattr_iter *it,
--			  unsigned int processed, char *buf, unsigned int len)
--{
--	memcpy(it->buffer + it->buffer_ofs, buf, len);
--	it->buffer_ofs += len;
-+	/* 2. handle xattr name (err can't be ENOATTR) */
-+	err = erofs_xattr_body(it, entry.e_name_len, erofs_xattr_copy);
-+	if (err)
-+		return err;
-+
-+	it->buffer[it->buffer_ofs++] = '\0';
-+	it->ofs += le16_to_cpu(entry.e_value_size);
-+	it->ofs = EROFS_XATTR_ALIGN(it->ofs);
-+	return 0;
-+out:
-+	it->ofs = it->t_ofs;
- 	return 0;
- }
- 
--static int xattr_skipvalue(struct erofs_xattr_iter *it,
--			   unsigned int value_sz)
-+static int erofs_getxattr_foreach(struct erofs_xattr_iter *it)
- {
--	it->buffer[it->buffer_ofs++] = '\0';
--	return 1;
--}
-+	struct erofs_xattr_entry entry;
-+	unsigned int value_sz;
-+	int err;
- 
--static const struct xattr_iter_handlers list_xattr_handlers = {
--	.entry = xattr_entrylist,
--	.name = xattr_namelist,
--	.alloc_buffer = xattr_skipvalue,
--	.value = NULL
--};
-+	err = erofs_xattr_iter_prep(it);
-+	if (err)
-+		return err;
-+
-+	/* 1. handle xattr entry */
-+	entry = *(struct erofs_xattr_entry *)(it->kaddr + it->ofs);
-+	it->ofs += sizeof(struct erofs_xattr_entry);
-+	value_sz = le16_to_cpu(entry.e_value_size);
-+
-+	err = -ENOATTR;
-+	/* should also match the infix for long name prefixes */
-+	if (entry.e_name_index & EROFS_XATTR_LONG_PREFIX) {
-+		struct erofs_sb_info *sbi = EROFS_SB(it->sb);
-+		struct erofs_xattr_prefix_item *pf = sbi->xattr_prefixes +
-+			(entry.e_name_index & EROFS_XATTR_LONG_PREFIX_MASK);
-+
-+		if (pf >= sbi->xattr_prefixes + sbi->xattr_prefix_count)
-+			goto out;
-+
-+		if (it->index != pf->prefix->base_index ||
-+		    it->name.len != entry.e_name_len + pf->infix_len)
-+			goto out;
-+
-+		if (memcmp(it->name.name, pf->prefix->infix, pf->infix_len))
-+			goto out;
-+
-+		it->infix_len = pf->infix_len;
-+	} else {
-+		if (it->index != entry.e_name_index ||
-+		    it->name.len != entry.e_name_len)
-+			goto out;
-+		it->infix_len = 0;
-+	}
-+
-+	/* 2. handle xattr name */
-+	err = erofs_xattr_body(it, entry.e_name_len, erofs_xattr_namematch);
-+	if (err)
-+		goto out;
-+
-+	/* 3. handle xattr value */
-+	if (!it->buffer) {
-+		it->buffer_ofs = value_sz;
-+		goto out; /* err == 0 */
-+	}
-+	if (it->buffer_size < value_sz)
-+		return -ERANGE;
-+
-+	/* no need normalizing ofs on error (err can't be ENOATTR) */
-+	err = erofs_xattr_body(it, value_sz, erofs_xattr_copy);
-+	it->ofs = EROFS_XATTR_ALIGN(it->ofs);
-+	return err;
-+out:
-+	it->ofs = it->t_ofs;
-+	return err;
-+}
- 
- static int erofs_iter_inline_xattr(struct erofs_xattr_iter *it)
- {
- 	struct erofs_inode *const vi = EROFS_I(it->inode);
--	const struct xattr_iter_handlers *op;
--	unsigned int xattr_header_sz, remaining;
-+	unsigned int xattr_header_sz;
- 	erofs_off_t pos;
- 	int ret;
- 
-@@ -457,11 +407,12 @@ static int erofs_iter_inline_xattr(struct erofs_xattr_iter *it)
- 	if (IS_ERR(it->kaddr))
- 		return PTR_ERR(it->kaddr);
- 
--	remaining = vi->xattr_isize - xattr_header_sz;
--	op = it->getxattr ? &find_xattr_handlers : &list_xattr_handlers;
--
--	while (remaining) {
--		ret = xattr_foreach(it, op, &remaining);
-+	it->remaining = vi->xattr_isize - xattr_header_sz;
-+	while (it->remaining) {
-+		if (it->getxattr)
-+			ret = erofs_getxattr_foreach(it);
-+		else
-+			ret = erofs_listxattr_foreach(it);
- 		if ((it->getxattr && ret != -ENOATTR) || (!it->getxattr && ret))
- 			break;
- 	}
-@@ -472,12 +423,9 @@ static int erofs_iter_shared_xattr(struct erofs_xattr_iter *it)
- {
- 	struct erofs_inode *const vi = EROFS_I(it->inode);
- 	struct super_block *const sb = it->sb;
--	const struct xattr_iter_handlers *op;
- 	unsigned int i, xsid;
- 	int ret = -ENOATTR;
- 
--	op = it->getxattr ? &find_xattr_handlers : &list_xattr_handlers;
--
- 	for (i = 0; i < vi->xattr_shared_count; ++i) {
- 		xsid = vi->xattr_shared_xattrs[i];
- 		it->blkaddr = EROFS_SB(sb)->xattr_blkaddr +
-@@ -487,7 +435,10 @@ static int erofs_iter_shared_xattr(struct erofs_xattr_iter *it)
- 		if (IS_ERR(it->kaddr))
- 			return PTR_ERR(it->kaddr);
- 
--		ret = xattr_foreach(it, op, NULL);
-+		if (it->getxattr)
-+			ret = erofs_getxattr_foreach(it);
-+		else
-+			ret = erofs_listxattr_foreach(it);
- 		if ((it->getxattr && ret != -ENOATTR) || (!it->getxattr && ret))
- 			break;
- 	}
--- 
-2.19.1.6.gb485710b
-
+On Wed, May 17, 2023 at 10:27=E2=80=AFPM Masami Hiramatsu <mhiramat@kernel.=
+org> wrote:
+>
+> On Wed, 17 May 2023 11:45:07 +0800
+> Ze Gao <zegao2021@gmail.com> wrote:
+>
+> > Current implementation calls kprobe related functions before doing
+> > ftrace recursion check in fprobe_kprobe_handler, which opens door
+> > to kernel crash due to stack recursion if preempt_count_{add, sub}
+> > is traceable in kprobe_busy_{begin, end}.
+> >
+> > Things goes like this without this patch quoted from Steven:
+> > "
+> > fprobe_kprobe_handler() {
+> >    kprobe_busy_begin() {
+> >       preempt_disable() {
+> >          preempt_count_add() {  <-- trace
+> >             fprobe_kprobe_handler() {
+> >               [ wash, rinse, repeat, CRASH!!! ]
+> > "
+> >
+> > By refactoring the common part out of fprobe_kprobe_handler and
+> > fprobe_handler and call ftrace recursion detection at the very beginnin=
+g,
+> > the whole fprobe_kprobe_handler is free from recursion.
+> >
+> > Signed-off-by: Ze Gao <zegao@tencent.com>
+> > Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > Link: https://lore.kernel.org/linux-trace-kernel/20230516071830.8190-3-=
+zegao@tencent.com
+> > ---
+> >  kernel/trace/fprobe.c | 59 ++++++++++++++++++++++++++++++++-----------
+> >  1 file changed, 44 insertions(+), 15 deletions(-)
+> >
+> > diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
+> > index 9abb3905bc8e..097c740799ba 100644
+> > --- a/kernel/trace/fprobe.c
+> > +++ b/kernel/trace/fprobe.c
+> > @@ -20,30 +20,22 @@ struct fprobe_rethook_node {
+> >       char data[];
+> >  };
+> >
+> > -static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
+> > -                        struct ftrace_ops *ops, struct ftrace_regs *fr=
+egs)
+> > +static inline void __fprobe_handler(unsigned long ip, unsigned long
+> > +             parent_ip, struct ftrace_ops *ops, struct ftrace_regs *fr=
+egs)
+>
+> OK, I picked up this series to probes/fixes. Note that I fixed this line
+> because the "unsigned long parent_ip" was split into 2 lines.
+>
+> Thank you,
+>
+>
+> >  {
+> >       struct fprobe_rethook_node *fpr;
+> >       struct rethook_node *rh =3D NULL;
+> >       struct fprobe *fp;
+> >       void *entry_data =3D NULL;
+> > -     int bit, ret;
+> > +     int ret;
+> >
+> >       fp =3D container_of(ops, struct fprobe, ops);
+> > -     if (fprobe_disabled(fp))
+> > -             return;
+> > -
+> > -     bit =3D ftrace_test_recursion_trylock(ip, parent_ip);
+> > -     if (bit < 0) {
+> > -             fp->nmissed++;
+> > -             return;
+> > -     }
+> >
+> >       if (fp->exit_handler) {
+> >               rh =3D rethook_try_get(fp->rethook);
+> >               if (!rh) {
+> >                       fp->nmissed++;
+> > -                     goto out;
+> > +                     return;
+> >               }
+> >               fpr =3D container_of(rh, struct fprobe_rethook_node, node=
+);
+> >               fpr->entry_ip =3D ip;
+> > @@ -61,23 +53,60 @@ static void fprobe_handler(unsigned long ip, unsign=
+ed long parent_ip,
+> >               else
+> >                       rethook_hook(rh, ftrace_get_regs(fregs), true);
+> >       }
+> > -out:
+> > +}
+> > +
+> > +static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
+> > +             struct ftrace_ops *ops, struct ftrace_regs *fregs)
+> > +{
+> > +     struct fprobe *fp;
+> > +     int bit;
+> > +
+> > +     fp =3D container_of(ops, struct fprobe, ops);
+> > +     if (fprobe_disabled(fp))
+> > +             return;
+> > +
+> > +     /* recursion detection has to go before any traceable function an=
+d
+> > +      * all functions before this point should be marked as notrace
+> > +      */
+> > +     bit =3D ftrace_test_recursion_trylock(ip, parent_ip);
+> > +     if (bit < 0) {
+> > +             fp->nmissed++;
+> > +             return;
+> > +     }
+> > +     __fprobe_handler(ip, parent_ip, ops, fregs);
+> >       ftrace_test_recursion_unlock(bit);
+> > +
+> >  }
+> >  NOKPROBE_SYMBOL(fprobe_handler);
+> >
+> >  static void fprobe_kprobe_handler(unsigned long ip, unsigned long pare=
+nt_ip,
+> >                                 struct ftrace_ops *ops, struct ftrace_r=
+egs *fregs)
+> >  {
+> > -     struct fprobe *fp =3D container_of(ops, struct fprobe, ops);
+> > +     struct fprobe *fp;
+> > +     int bit;
+> > +
+> > +     fp =3D container_of(ops, struct fprobe, ops);
+> > +     if (fprobe_disabled(fp))
+> > +             return;
+> > +
+> > +     /* recursion detection has to go before any traceable function an=
+d
+> > +      * all functions called before this point should be marked as not=
+race
+> > +      */
+> > +     bit =3D ftrace_test_recursion_trylock(ip, parent_ip);
+> > +     if (bit < 0) {
+> > +             fp->nmissed++;
+> > +             return;
+> > +     }
+> >
+> >       if (unlikely(kprobe_running())) {
+> >               fp->nmissed++;
+> >               return;
+> >       }
+> > +
+> >       kprobe_busy_begin();
+> > -     fprobe_handler(ip, parent_ip, ops, fregs);
+> > +     __fprobe_handler(ip, parent_ip, ops, fregs);
+> >       kprobe_busy_end();
+> > +     ftrace_test_recursion_unlock(bit);
+> >  }
+> >
+> >  static void fprobe_exit_handler(struct rethook_node *rh, void *data,
+> > --
+> > 2.40.1
+> >
+>
+>
+> --
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
