@@ -2,85 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF56A7077A4
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 03:50:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80FFD7077AC
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 03:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229868AbjERBuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 21:50:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43484 "EHLO
+        id S229880AbjERBwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 21:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjERBuY (ORCPT
+        with ESMTP id S229453AbjERBwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 21:50:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6E3E2D7D
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 18:50:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4E7C164C40
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 01:50:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 91D37C4339E;
-        Thu, 18 May 2023 01:50:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684374621;
-        bh=6P3qFN0pUzsg+xFu4WJdAzDQLrByxRzOzEBQ1mm69iI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=hEt+kkNHD7RrBapnZKztBgIsBPqHhgP2MomnRfGqFj3hKRc3miQkfc6rRfFdU9J26
-         qdlA18xP/UH4EEAEf5DE4n2x64CDpN9gyuLBA+1zygYU90pWGkWooyQqjoUOgxMvsF
-         AoskRgD8OUs6EKebgYbrqGv+Mfe2S4zjEgzJlBakfEE5Omu/qPjmdESbtd6m4MG9jw
-         4Lt1szILdr6bo4JzgDqAfesBdU9YC+PblEdsMvQ3MoHKNrTeEltpNOqPtWunOzNlYq
-         Gu+/LwHBpChhxuvFnPPXp4bluWjH0L77l8Y8iSkBE3A1pdp3WFhWe3jM4DBoYdwb9c
-         yO9VzUiXCngLg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7642CC4166F;
-        Thu, 18 May 2023 01:50:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [f2fs-dev] [PATCH v2] f2fs: compress: fix to check validity of
- i_compress_flag field
-From:   patchwork-bot+f2fs@kernel.org
-Message-Id: <168437462148.19511.5245634211423194029.git-patchwork-notify@kernel.org>
-Date:   Thu, 18 May 2023 01:50:21 +0000
-References: <20230517034139.12879-1-chao@kernel.org>
-In-Reply-To: <20230517034139.12879-1-chao@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-Cc:     jaegeuk@kernel.org, linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 17 May 2023 21:52:16 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C779930CD
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 18:51:50 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-561a80d872dso23176727b3.3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 18:51:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684374708; x=1686966708;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=zXh/O/V/WptHcvZP+JCdTYTDP4LQ9st6a4OKh85bxLg=;
+        b=IfmQuyHqbPtqNnhVieMu9NzCq4te8XLyLb/DhJuRmnprCTKiLUdOcW6g3y2jB1dgkw
+         YFNcIF+OSbv5phj/j2mXjZK1mFlyvAe2aq1crDGN0RreDGx/deLCWh8WLU8nvJ4Gpn0x
+         ochjMURbmABoRK5v6ctPRm/1GCnTeHPXmZ6bpCP4+Il3DO8AmNxg0xbQHm0/ZovoBPe+
+         pA6kO/hvzAML1E0cPRlo4hwhaSAM0ELQy2CxzL/77SQq/Dko6cvu5yudJ7m4L03nAFUQ
+         dXAFgjMf4adYvGjw99XcYjUepdrxgpym8kGLufrd3hhSNPGeUvt8xanCRGPdyEEyPAFX
+         lNsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684374708; x=1686966708;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zXh/O/V/WptHcvZP+JCdTYTDP4LQ9st6a4OKh85bxLg=;
+        b=eYINyXa/uD+JKQVVCnxLQrZ7n5q6BftxMAxyw4Cfi24KCDTnNBodZFffrD/qr9FrFt
+         5rQWS/I9P1sVNAZxEoF/0sk6154JXMgNVL42p3daxb9ocy1S8WhnUOpEE6cxExBNo3ev
+         n4JC7RS4FaDdPUjKA+Auf+vxeUDywT2roEL9h5MpqF+bNdIJUZY80BrNSi5zS2e3BqD3
+         uhH0J1i9slu3B2SHA3HkD7uAKpO4rD3pAY3StS+af8c0o1NdnVgDOxWslnmBzDAFmwan
+         c6YUSn3sg9XC390gOA5VNO6+cdy+N18UJJC4dFQCkbLXrZxTeMajKvSO9NZbjpCoGT4l
+         EuuA==
+X-Gm-Message-State: AC+VfDwZIzc23J3TGpyHWoc1K3ZmpNJB8RNWRX1bYoD0vh6pMu4hXzbS
+        FO2KhgiwboDZc7L5onZlolZtjebMr/U=
+X-Google-Smtp-Source: ACHHUZ5YR3a7R9JsHjBo5Xw0oxDMRKd1Rw9K1kdyGq6xvpeMZdMrKgm1WLSCiFPT5VQPXfLP5Z5nDA2kPAA=
+X-Received: from pandoh.svl.corp.google.com ([2620:15c:2c5:11:2f7e:7405:7496:cdec])
+ (user=pandoh job=sendgmr) by 2002:a0d:ec09:0:b0:54c:2409:c306 with SMTP id
+ q9-20020a0dec09000000b0054c2409c306mr93492ywn.6.1684374708680; Wed, 17 May
+ 2023 18:51:48 -0700 (PDT)
+Date:   Wed, 17 May 2023 18:50:54 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
+Message-ID: <20230518015054.2223833-1-pandoh@google.com>
+Subject: [PATCH RESEND] iommu/amd: Fix domain flush size when syncing iotlb
+From:   Jon Pan-Doh <pandoh@google.com>
+To:     Joerg Roedel <joro@8bytes.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Jon Pan-Doh <pandoh@google.com>, stable@vger.kernel.org,
+        Gary Zibrat <gzibrat@google.com>,
+        Sudheer Dantuluri <dantuluris@google.com>,
+        Nadav Amit <namit@vmware.com>,
+        Vasant Hegde <vasant.hegde@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+When running on an AMD vIOMMU, we observed multiple invalidations (of
+decreasing power of 2 aligned sizes) when unmapping a single page.
 
-This patch was applied to jaegeuk/f2fs.git (dev)
-by Jaegeuk Kim <jaegeuk@kernel.org>:
+Domain flush takes gather bounds (end-start) as size param. However,
+gather->end is defined as the last inclusive address (start + size - 1).
+This leads to an off by 1 error.
 
-On Wed, 17 May 2023 11:41:39 +0800 you wrote:
-> The last valid compress related field is i_compress_flag, check its
-> validity instead of i_log_cluster_size.
-> 
-> Signed-off-by: Chao Yu <chao@kernel.org>
-> ---
-> v2:
-> - rebase the code.
->  fs/f2fs/inode.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+With this patch, verified that 1 invalidation occurs when unmapping a
+single page.
 
-Here is the summary with links:
-  - [f2fs-dev,v2] f2fs: compress: fix to check validity of i_compress_flag field
-    https://git.kernel.org/jaegeuk/f2fs/c/8a0dbd506b6d
+Fixes: a270be1b3fdf ("iommu/amd: Use only natural aligned flushes in a VM")
+Cc: <stable@vger.kernel.org> # 5.15.x
+Suggested-by: Gary Zibrat <gzibrat@google.com>
+Tested-by: Sudheer Dantuluri <dantuluris@google.com>
+Acked-by: Nadav Amit <namit@vmware.com>
+Reviewed-by: Vasant Hegde <vasant.hegde@amd.com>
+Signed-off-by: Jon Pan-Doh <pandoh@google.com>
+---
+ drivers/iommu/amd/iommu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-You are awesome, thank you!
+diff --git a/drivers/iommu/amd/iommu.c b/drivers/iommu/amd/iommu.c
+index 5a505ba5467e..da45b1ab042d 100644
+--- a/drivers/iommu/amd/iommu.c
++++ b/drivers/iommu/amd/iommu.c
+@@ -2378,7 +2378,7 @@ static void amd_iommu_iotlb_sync(struct iommu_domain *domain,
+ 	unsigned long flags;
+ 
+ 	spin_lock_irqsave(&dom->lock, flags);
+-	domain_flush_pages(dom, gather->start, gather->end - gather->start, 1);
++	domain_flush_pages(dom, gather->start, gather->end - gather->start + 1, 1);
+ 	amd_iommu_domain_flush_complete(dom);
+ 	spin_unlock_irqrestore(&dom->lock, flags);
+ }
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.40.0.634.g4ca3ef3211-goog
 
