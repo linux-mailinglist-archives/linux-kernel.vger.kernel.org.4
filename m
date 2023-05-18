@@ -2,137 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDEB8707D3F
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E93E707D40
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:50:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbjERJu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 05:50:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34434 "EHLO
+        id S230311AbjERJub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 05:50:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbjERJuY (ORCPT
+        with ESMTP id S230171AbjERJu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 05:50:24 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006A410E9;
-        Thu, 18 May 2023 02:50:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684403424; x=1715939424;
-  h=message-id:date:mime-version:from:subject:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=rPagqShIA0d1pTwUICG1O4W8vWxt4pVZ7r9/3WRbX4A=;
-  b=eBP4kPMBOY6b/KedoTQhaCTpwZEDCtWRUa5ohdljD4Ylc4vZwrhSg2im
-   4Sif/8dLdSWXXG1pesXX4/kw0r7asBnDHak7xoFEt5Cxlxd8Igm1fpPNG
-   zyABCI3kGSfblzTABvVj/eb8EKacZdzPklp6OmN1Nghr55fJeUhQ4dVnI
-   ep6FCILMUDEj3gRe0vld96vwZsxSYIl9zW4SvoGIzOe6nQuhQGQ9l+c0Z
-   6QfLFxddgRcAOGP4Tnfxp5Ffxbv3cGoB5gM2ix4yjUk6UzQVoRRMgZA4V
-   c5fX64/hkilk3Mg97+rw046Lp5mVQktr2Eh0UzvW3HgVc3Q1H6qnbn8ST
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="332392008"
-X-IronPort-AV: E=Sophos;i="5.99,285,1677571200"; 
-   d="scan'208";a="332392008"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 02:50:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="652575062"
-X-IronPort-AV: E=Sophos;i="5.99,285,1677571200"; 
-   d="scan'208";a="652575062"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.254.211.142]) ([10.254.211.142])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 02:50:20 -0700
-Message-ID: <d9be9385-4101-2e9e-c6d7-1d980697c02f@intel.com>
-Date:   Thu, 18 May 2023 17:50:17 +0800
+        Thu, 18 May 2023 05:50:26 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A4E81720;
+        Thu, 18 May 2023 02:50:24 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QMQ8Y1FwKz6J77c;
+        Thu, 18 May 2023 17:46:05 +0800 (CST)
+Received: from localhost (10.126.175.163) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 18 May
+ 2023 10:50:21 +0100
+Date:   Thu, 18 May 2023 10:50:20 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Ira Weiny <ira.weiny@intel.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        "Dave Jiang" <dave.jiang@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 3/3] tools/testing/cxl: Document test configurations
+Message-ID: <20230518105020.0000424a@Huawei.com>
+In-Reply-To: <20230426-cxl-fixes-v1-3-870c4c8b463a@intel.com>
+References: <20230426-cxl-fixes-v1-0-870c4c8b463a@intel.com>
+        <20230426-cxl-fixes-v1-3-870c4c8b463a@intel.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.1
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-Subject: Re: [RFC PATCH v2 02/11] KVM: x86: Advertise CPUID.7.2.EDX and
- RRSBA_CTRL support
-To:     Chao Gao <chao.gao@intel.com>
-Cc:     kvm@vger.kernel.org, Jiaan Lu <jiaan.lu@intel.com>,
-        Zhang Chen <chen.zhang@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-References: <20230414062545.270178-1-chao.gao@intel.com>
- <20230414062545.270178-3-chao.gao@intel.com>
- <a88b2504-b79b-83d6-383e-a948f9da662b@intel.com>
- <ZGLkvlx5W0JStTjD@chao-email>
- <9c75663c-6363-34e7-8341-d8f719365768@intel.com>
- <ZGLyEhKH+MoCY/R4@chao-email>
- <11b515b3-bb5a-bea1-ad01-caffdd151bf6@intel.com>
- <ZGNIN7O8BErVP88x@chao-email>
-Content-Language: en-US
-In-Reply-To: <ZGNIN7O8BErVP88x@chao-email>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.126.175.163]
+X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/16/2023 5:09 PM, Chao Gao wrote:
-> On Tue, May 16, 2023 at 03:03:15PM +0800, Xiaoyao Li wrote:
->> On 5/16/2023 11:01 AM, Chao Gao wrote:
->>> On Tue, May 16, 2023 at 10:22:22AM +0800, Xiaoyao Li wrote:
->>>>>> I think we need to fix this bug at first.
->>>>>
->>>>> I have no idea how to fix the "bug" without intercepting the MSR. The
->>>>> performance penalty makes me think intercepting the MSR is not a viable
->>>>> solution.
->>>>
->>>> I thought correctness always takes higher priority over performance.
->>>
->>> It is generally true. however, there are situations where we should make
->>> trade-offs between correctness and other factors (like performance):
->>>
->>> E.g., instructions without control bits, to be 100% compliant with CPU
->>> spec, in theory, VMMs can trap/decode every instruction and inject #UD
->>> if a guest tries to use some instructions it shouldn't.
->>
->> This is the virtualization hole. IMHO, they are different things.
+On Wed, 17 May 2023 14:28:12 -0700
+Ira Weiny <ira.weiny@intel.com> wrote:
+
+> The devices created, their relationship, and intended testing purpose is
+> not extremely clear, especially for those unfamiliar with cxl-test.
 > 
-> what are the differences between?
-> 1. Executing some unsupported instructions should cause #UD. But this is allowed
->     in a KVM guest.
-> 2. Setting some reserved bits in SPEC_CTRL MSR should cause #GP. But this is
->     allowed in a KVM guest.
-
-The difference is that for virtualization hole, there is no way but 
-intercept and decode every instruction if we want the correctness. It's 
-a disaster.
-
-But for MSR virtualization, we do have an option and we don't need to 
-trap every instruction. MSR interception is the designated mechanism to 
-correctly and elegantly virtualize the MSR.
-
->>
->> Pass through MSR_IA32_SPEC_CTRL was introduced in commit d28b387fb74d
->> ("KVM/VMX: Allow direct access to MSR_IA32_SPEC_CTRL"). At that time there
->> was only a few bits defined, and the changelog called out that
->>
->>   No attempt is made to handle STIBP here, intentionally. Filtering
->>   STIBP may be added in a future patch, which may require trapping all
->>   writes if we don't want to pass it through directly to the guest.
->>
->> Per my undesrstanding, it implied that we need to re-visit it when more bits
->> added instead of following the pass-through design siliently.
+> Document the purpose of each hierarchy.  Add ASCII art to show the
+> relationship of devices.  Group the device declarations together based
+> on the hierarchies.
 > 
-> I don't object to re-visiting the design. My point is that to prevent guests from
-> setting RRSBA_CTRL/BHI_CTRL when they are not advertised isn't a strong
-> justfication for intercepting the MSR. STIBP and other bits (except IBRS) have
-> the same problem. And the gain of fixing this is too small.
-> 
-> If passing through the SPEC_CTRL MSR to guests might cause security issues, I
-> would agree to intercept accesses to the MSR.
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
-I never buy it. How to interpret the security? If the user wants to hide 
-one feature from guest but KVM allows it when KVM does have a reasonable 
-way to hide it. Does it violate the security?
+Trivial nitpicks below :)
+
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
+> ---
+>  tools/testing/cxl/test/cxl.c | 75 ++++++++++++++++++++++++++++++++++++++++++--
+>  1 file changed, 73 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/cxl/test/cxl.c b/tools/testing/cxl/test/cxl.c
+> index bf00dc52fe96..bd38a5fb60ae 100644
+> --- a/tools/testing/cxl/test/cxl.c
+> +++ b/tools/testing/cxl/test/cxl.c
+> @@ -23,6 +23,31 @@ static int interleave_arithmetic;
+>  #define NR_CXL_PORT_DECODERS 8
+>  #define NR_BRIDGES (NR_CXL_HOST_BRIDGES + NR_CXL_SINGLE_HOST + NR_CXL_RCH)
+>  
+> +/*
+> + * Interleave testing
+
+Doesn't include the cfmws, which will be tricky to draw, but maybe you could
+add something to indicate they interleave over the two HB sometimes?
+
+> + *
+> + *             +---------------+                            +---------------+
+> + *             | host_bridge[0]|                            | host_bridge[1]|
+> + *             +-/---------\---+                            +--/---------\--+
+Text for host bridges is right aligned.
+> + *             /-           -\                               /-           -\
+> + *           /-               -\                           /-               -\
+> + *   +-------------+         +-------------+       +-------------+      +-------------+
+> + *   |root_port[0] |         |root_port[1] |       |root_port[2] |      |root_port[3] |
+> + *   +------|------+         +------|------+       +------|------+      +------|------+
+and root ports are left aligned.
+I'd shrink both boxes so they are same as the switches below - or expand them to give
+a space on either side of the text.
+
+
+> + *          |                       |                     |                    |
+> + *  +-------|-------+       +-------|-------+     +-------|-------+    +-------|-------+
+> + *  |switch_uport[0]|       |switch_uport[1]|     |switch_uport[2]|    |switch_uport[3]|
+> + *  +---|-------|---+       +---/-------|---+     +---/-------|---+    +---|-------\---+
+> + *      |       \              /        \            /        \            /        \
+> + * +----|----++--|------++---------++----|----++---------++----|----++----|----++---------+
+> + * |switch   ||switch   ||switch   ||switch   ||switch   ||switch   ||switch   ||switch   |
+> + * |_dport[0]||_dport[1]||_dport[2]||_dport[3]||_dport[4]||_dport[5]||_dport[6]||_dport[7]|
+> + * +----|----++--|------++----|----++----|----++----|----++----|----++----|----++----|----+
+> + *      |        |            |          |          |          |          |          |
+> + *  +---|--+   +-|----+   +---|--+   +---|--+    +--|---+  +---|--+   +---|--+   +---|--+
+> + *  |mem[0]|   |mem[1]|   |mem[2]|   |mem[3]|    |mem[4]|  |mem[5]|   |mem[6]|   |mem[7]|
+> + *  +------+   +------+   +------+   +------+    +------+  +------+   +------+   +------+
+> + */
+>  static struct platform_device *cxl_acpi;
+>  static struct platform_device *cxl_host_bridge[NR_CXL_HOST_BRIDGES];
+>  #define NR_MULTI_ROOT (NR_CXL_HOST_BRIDGES * NR_CXL_ROOT_PORTS)
+> @@ -31,16 +56,51 @@ static struct platform_device *cxl_switch_uport[NR_MULTI_ROOT];
+>  #define NR_MEM_MULTI \
+>  	(NR_CXL_HOST_BRIDGES * NR_CXL_ROOT_PORTS * NR_CXL_SWITCH_PORTS)
+>  static struct platform_device *cxl_switch_dport[NR_MEM_MULTI];
+> +struct platform_device *cxl_mem[NR_MEM_MULTI];
+>  
+> +/*
+> + * 1) Preconfigured region support (Simulated BIOS configured region)
+> + * 2) 'Pass-through' decoder
+> + *
+> + *       +---------------+
+> + *       |  hb_single    |
+> + *       +------|--------+
+> + *              |
+> + *       +------|--------+
+> + *       | root_single   |
+> + *       +------|--------+
+> + *              |
+> + *   +----------|----------+
+> + *   |     swu_single      |
+> + *   +-----|-----------|---+
+> + *         |           |
+> + *   +-----|-----+  +--|--------+
+> + *   |swd_single |  | swd_single|
+> + *   +-----|-----+  +----|------+
+> + *         |             |
+> + *  +------|-----+  +----|-------+
+> + *  |mem_single  |  |mem_single  |
+> + *  +------------+  +------------+
+mem[0] etc?  Also swd_single[0] etc?
+
+For consistency with above.
+
+> + */
+>  static struct platform_device *cxl_hb_single[NR_CXL_SINGLE_HOST];
+>  static struct platform_device *cxl_root_single[NR_CXL_SINGLE_HOST];
+>  static struct platform_device *cxl_swu_single[NR_CXL_SINGLE_HOST];
+>  #define NR_MEM_SINGLE (NR_CXL_SINGLE_HOST * NR_CXL_SWITCH_PORTS)
+>  static struct platform_device *cxl_swd_single[NR_MEM_SINGLE];
+> -
+> -struct platform_device *cxl_mem[NR_MEM_MULTI];
+>  struct platform_device *cxl_mem_single[NR_MEM_SINGLE];
+>  
+> +/*
+> + * 1) RCD
+> + * 2) Type-2 (Accelerator)
+> + *
+> + *  +-----+
+> + *  | rch |
+> + *  +--|--+
+> + *     |
+> + *   +-|--+
+> + *   |rcd |
+> + *   +----+
+> + */
+>  static struct platform_device *cxl_rch[NR_CXL_RCH];
+>  static struct platform_device *cxl_rcd[NR_CXL_RCH];
+>  
+> @@ -64,6 +124,17 @@ static inline bool is_single_bridge(struct device *dev)
+>  	return false;
+>  }
+>  
+> +/*
+> + *  +---------------+ +---------------+
+> + *  | host_bridge[0]| | host_bridge[1]|
+> + *  +---------------+ +---------------+
+> + *  +---------------+
+> + *  |  hb_single    | (host_bridge[2])
+> + *  +---------------+
+> + *  +-----+
+> + *  | rch | (host_bridge[3])
+> + *  +-----+
+> + */
+
+Not sure what this diagram is illustrating...
+
+>  static struct acpi_device acpi0017_mock;
+>  static struct acpi_device host_bridge[NR_BRIDGES] = {
+>  	[0] = {
+> 
+
