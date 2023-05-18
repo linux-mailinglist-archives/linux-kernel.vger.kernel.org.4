@@ -2,249 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4B6C70771B
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 03:00:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B35C7707721
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 03:04:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbjERBAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 21:00:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55884 "EHLO
+        id S229574AbjERBEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 21:04:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjERBAA (ORCPT
+        with ESMTP id S229452AbjERBEb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 21:00:00 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE183F9
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 17:59:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684371598; x=1715907598;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zFTEdZZ77ZfCpXoUlbcLlgEcs+1h55CyvaWi7viXnAM=;
-  b=iXGrXmifUV9Cu5gkjngQKB8oPBcph9nx5LU0kCDTkNiK3VmVQU9OYoM7
-   zTzhBBfvDQ7EB6xrDO8dM8bD8hinVonmQdbu3ls1LiRrm6jfXqVx8Rds2
-   rar3NF2LMalblMGopZMHqRVrDwoBFE+lPsY44ng7ASspkxCjyUHg5ip9F
-   qE+gh+0H4mOnNdmsSre+355sQSOm2DqB6Fdi7j8gYrDOXjpkgmRfyrwPb
-   6/Vo2/26qaoSQzLlgAqEkBHu/fLMAMjYE6aHPasq7DL8PYJLdvD0xFuqg
-   x1Q/agg6W4auX33GEc9lBjLbnaP6SHjnSESAypLhiaT7oStd3BzPsL2iq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="351942784"
-X-IronPort-AV: E=Sophos;i="5.99,283,1677571200"; 
-   d="scan'208";a="351942784"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 17:59:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="652439728"
-X-IronPort-AV: E=Sophos;i="5.99,283,1677571200"; 
-   d="scan'208";a="652439728"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by orsmga003.jf.intel.com with ESMTP; 17 May 2023 17:59:57 -0700
-Date:   Wed, 17 May 2023 18:02:54 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     K Prateek Nayak <kprateek.nayak@amd.com>
-Cc:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
-        rafael@kernel.org, sudeep.holla@arm.com, yongxuan.wang@sifive.com,
-        pierre.gondois@arm.com, vincent.chen@sifive.com,
-        greentime.hu@sifive.com, yangyicong@huawei.com,
-        prime.zeng@hisilicon.com, palmer@rivosinc.com, puwen@hygon.cn
-Subject: Re: [PATCH 0/2] drivers: base: cacheinfo: Fix shared_cpu_list
- inconsistency in event of CPU hotplug
-Message-ID: <20230518010254.GA19915@ranerica-svr.sc.intel.com>
-References: <20230508084115.1157-1-kprateek.nayak@amd.com>
+        Wed, 17 May 2023 21:04:31 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A2830F3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 18:04:30 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34HIGomr024508;
+        Thu, 18 May 2023 01:04:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2023-03-30;
+ bh=TI7/vKcs0jYMKtdMqd+jeLsNmgWrmptsvmkENJYGQNI=;
+ b=3i2shYTp7QB7x6QB66vrTaKPxZHiQmqp0fnrluq1BnbXrd4Tgm9yELa4m9UmSQ+7Dds3
+ +Q5VPSh1QuoLXv3moUFzPoDgufJHhW8Sdlboc+QvbO30LfaCSOriPSD8doobAonpEhgD
+ NZfbmTqbGKfnjybsRw0zqNjkBQia9HcV9Ndg0o916KFHDgRedOMGj/l7v2joGowPQfMl
+ bBJIjpC+YKvmsSopy4HzcEqBgGhP8YCunb3YKzbDioy1XWTFUDMKUIAZjCHl2DQQPVcy
+ oh8JbRAJOJySiA0GP1TQdJbLesrGbph91jVcM1GaMrqVDfSLb1MZCqeOtx4/j5MF0diW kg== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qmxwphf8b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 18 May 2023 01:04:16 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 34HMeOiI025080;
+        Thu, 18 May 2023 01:04:15 GMT
+Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2107.outbound.protection.outlook.com [104.47.70.107])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3qj1064uu2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 18 May 2023 01:04:15 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EvpW4jC0nZ72f5St3eiGfdu/nuir+GQLK81smGmWgBQZCUmftnWj/2fJyOpLtJYMhlptIWETbEdB1XkA+x3k31d+NpczBS3Cdc8QHWzKQ3qcr4BdIyiBO36wDDErSsenPIbHcevEBnuRtmqtkw4OPHji0hAzJ7cDk/sYshF1FokWCZF6JUnRpcf31NtbN/+odYMhmnWZ28Mzv4BveuGz0Q5RJVS1lNYYKIaGySOEA5uEn4oBB8PHly6caQRnJ1zzRVKO17HQ0RwV/0J3SaUMEyfDJ3aU2dwgdv29fvJp3YJQRcuKq41Vxgyt0/1EfWCJOIKEmXnOdt2tcJO1QBMR2g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TI7/vKcs0jYMKtdMqd+jeLsNmgWrmptsvmkENJYGQNI=;
+ b=CYqo3uutT0t+A42mkslZ9mL8vvbisXOw4NHQI2v+XyLQFm/OyHWJylQWQFQI2qh9mPkEtyeVjpOk0Ijv6FZky/Xpsu7Ujb37uaY1Bivl5752/LrCiwSOC5c5OZFrWlHVkYxd0+jVIr3wFLjHCbzwGnRoJjhFNjhLRHwj/GkDoxls/5klryFiTZKjoLSHmaIbpAxyVuraYGNhleHFNnx5u5CJx4wItv97UM0aefsll1YchKZ7iQWyPXtGDMOnd8b7nwzi3gPmy88O7MckCPTJCanZtyNeBvrFuoSJBDPf/iVMmdYr94hB+OM7WICFzWgeoIBW4rGLgVh8LOLSDvbjKg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TI7/vKcs0jYMKtdMqd+jeLsNmgWrmptsvmkENJYGQNI=;
+ b=TQt8lEb3cZj6qGLX6S4ZW7tQxND1sjvLDFoT36jd/NuB+FYKT2YL1enlL/7ifxLtBHsHIQ3DPAYTm9XVlhnTB/ynYZcs1UyiQj+K5zlWrq25DnhX3ef0IonIP1TkSUCArujPhzeqkQnEfMCsjHP3sH0ea9pVmskB8bGn/5GTdRY=
+Received: from CY8PR10MB7243.namprd10.prod.outlook.com (2603:10b6:930:7c::10)
+ by SN7PR10MB6594.namprd10.prod.outlook.com (2603:10b6:806:2aa::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33; Thu, 18 May
+ 2023 01:04:13 +0000
+Received: from CY8PR10MB7243.namprd10.prod.outlook.com
+ ([fe80::13d6:c3f3:2447:6559]) by CY8PR10MB7243.namprd10.prod.outlook.com
+ ([fe80::13d6:c3f3:2447:6559%5]) with mapi id 15.20.6411.017; Thu, 18 May 2023
+ 01:04:13 +0000
+Message-ID: <4a0506c0-ebf5-8676-6082-22ddb45dab67@oracle.com>
+Date:   Wed, 17 May 2023 20:04:11 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [RFC PATCH 8/8] fork/vhost_task: remove no_files
+Content-Language: en-US
+To:     oleg@redhat.com, linux@leemhuis.info, nicolas.dichtel@6wind.com,
+        axboe@kernel.dk, ebiederm@xmission.com,
+        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, mst@redhat.com,
+        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
+        brauner@kernel.org
+References: <20230518000920.191583-1-michael.christie@oracle.com>
+ <20230518000920.191583-9-michael.christie@oracle.com>
+From:   Mike Christie <michael.christie@oracle.com>
+In-Reply-To: <20230518000920.191583-9-michael.christie@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH2PR08CA0001.namprd08.prod.outlook.com
+ (2603:10b6:610:5a::11) To CY8PR10MB7243.namprd10.prod.outlook.com
+ (2603:10b6:930:7c::10)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230508084115.1157-1-kprateek.nayak@amd.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY8PR10MB7243:EE_|SN7PR10MB6594:EE_
+X-MS-Office365-Filtering-Correlation-Id: 12b2d0f4-07c6-4160-3677-08db573bcb78
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6y34dbaglhK7sHZMwTOQe6Y+xmONTADj+xEg9S/lcZDliXKZut2cH3pQgEvor6UQFrdwJkJoRT0m2UZdmOpgMJwOMoy0HLd7ZEjSWTdBX1G4SGT1FgSSg03uAcwwgMkGS3hVyb7eaagZTGJrCFCRJMK1kviIzk7ouBjnoN7E3WGtjatj9RpVpyVDzsrDrx6mdbSGJEWHuxiRxehvy9h5OYOYvnjJkTxtD9QCCWBY3B1VTFao2N1CwhHzoDbDmll2AEVJu7S6mmVdRhDxyMXY5OuIy7KVu+gLOXWcDSKCnWAkg+sTonAldM0yTNaYqjIFg8AgYLa4zRDSsijHUaYa7RQMfp3ITr/eTfRr86OSOk9xmbwwi+/AGNnWh/kijXrkJwrvnM/pqgBZ+rxsH7ZHVPcwPW0g8agHW4wfybxWyd4SHsDaId7eFFFaYyzp/51Im06ofY1UNKqOjEBJetlfGjbC5b/utbljQOeSAh3kLU3cuQAfm6NaFeRKdwCOtEaNg4ixLOkkQxiT/YGXRUwz1oDocb2pCXGwPOM3QdZbxk+ugQwhQX3WwJZ1ZkYB4iR+9qoc/nLGcBQu1SNNhK2yQG5f/n2LdEA3Gqo/LTp2OPD7ETJNMr9SISNtQwwfJ4GEc7QvMfzp8ybNDvUDzgZEXZMgC2xRQjt0qeDlLMNLCyo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY8PR10MB7243.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(366004)(136003)(376002)(346002)(39860400002)(451199021)(31686004)(36756003)(2906002)(7416002)(8676002)(5660300002)(8936002)(558084003)(31696002)(66556008)(41300700001)(86362001)(66476007)(66946007)(6486002)(478600001)(316002)(921005)(6506007)(53546011)(6512007)(186003)(26005)(2616005)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZjJvdDZwWGRJS0x1ZjhNL3YzQUtRMFhaanFBbHlkM2ZTYmxRcGFDSzQwbW9s?=
+ =?utf-8?B?T0laNnBWV3YyKzZYYlMzVFpRelNQWG5lb0p1c2NjUW1KWUhWWUdLSkpvOXM4?=
+ =?utf-8?B?ZUhhZGRRRU94T3V4UVE0bDF0UUJGME92emNORXFPaVZxYlZkc3JsNGFvTWpW?=
+ =?utf-8?B?Ymwzc1RhUFNYYjcxVUxhOUE1YWh4RFdFcnVDbXZrblg1ZldvZkxNNFIzQVZK?=
+ =?utf-8?B?cjRxZ2FYTm9rVkYrd3V2VTJxdnV3QVRKaG1CZDRVSUMzKzhSOHluTnJ2MWxU?=
+ =?utf-8?B?TlVLZlhJTllkZWZWUDlNVldCc2FTN2xob2pwcjg5RDBXemdtNXNuQjBwVStE?=
+ =?utf-8?B?bk1NUU1OSjUvWTJXSW4vbTZ5TTY0MlcyQ3c5TEI2QXNOM3NVS01JbW1kYnpY?=
+ =?utf-8?B?WjVHalYxY1BMMllQaFZpVnVXaTBQK2E1dnFCM3BVbXRLcUJEVHZCaFBYWGhK?=
+ =?utf-8?B?bzJZVDBqa0pvZG1uQmMwTFVEb28vcHpCVnRkWEFlMFFOUGxGS241eTJPdng1?=
+ =?utf-8?B?WUI1T1ZkcEEzZkY3MStlejQ3UDFoYzVSZHd4SXFVZ1RiV3BlcGptOXYxdUEr?=
+ =?utf-8?B?VTd2b3FNWHJtNkJaSlNXTTdpMkYvckFndFNkVTllc3VnMDdUak1xaFZMeXJU?=
+ =?utf-8?B?OWY5elJnbWpPK3ljeFlNWG5CK2ZQZ2swVEdBdWE1Y1pPZjZGMWtZK2U4NjFJ?=
+ =?utf-8?B?eEZTN1NhcGRzZENqR244S3NKNVF2eExRc3JYeWwzcDRhNjFrS29CRHRnVnk1?=
+ =?utf-8?B?cXlydFA0aUIxckZLVWpVYzl0YnBjcVZUN2ZQdTBhdmxXZlZyeWluWGtJOE9a?=
+ =?utf-8?B?ZkZzdDRNOWVxN3FRcGVqQURpdW9jR2k0a2pnNTdrVjBNWTdPS3E1L1hLTUQv?=
+ =?utf-8?B?SVhrU2YwSHgyZ1RZMzQvNTI4ZXdFUmo3UjZKeTBJUkd4dVI1R0NXaE9qZXlL?=
+ =?utf-8?B?dnFaVmQzT1VkR1RpaWYvRVZyeWQrMGtNdTlNTzZCbWtrMGxzZDFVNHZKaXRs?=
+ =?utf-8?B?emc5cmFIMXVpZk5yYUxwbjk3dVhSb1lsaTMrUUVXYTdxaERwOC84R0tGekxn?=
+ =?utf-8?B?dUljSEJvMUJZb2JmSmNjRFRRKzhVWGJKcUoxeVJNdFFFUHhzY2hsSDFuQzFk?=
+ =?utf-8?B?WWtsR3dYMXdTdFU5K1BManBOV3UrTUE5MzJPVVdhNTJZNEhKN2M0NnA2ZGZm?=
+ =?utf-8?B?MERzbEhINkkzZVhQN2RxMzhrWGF0eWs5OEg3M1UxSFRwUjRKREw5aklPSEJk?=
+ =?utf-8?B?eUd4ZTJUcEFCMGtqeUQvdkJGeU1jNGplTk50dzRvTG9tcjlsQVBPeHl4TE1B?=
+ =?utf-8?B?SkRubzF1cE9Jbk93eDdmY0xiZnViMk5ldFJWT0N2TjJROTl5KzFtNzlOVWY4?=
+ =?utf-8?B?b0xjMGg5WjlLb1JOTHlUcFhRWkF3VmdnMXdoeTN6Ty8yS2J3d0VWd3V3cGRW?=
+ =?utf-8?B?V3RnajFLWWpsajNlVXJCdWpURWczM0NIK1JrTVdKZmM5c3ZiR2tXdnJsK3VV?=
+ =?utf-8?B?VUo0QjhEM2NuSmpBVkR3YWJBbDJ4NHV3M1h4NUgzY2RieWUwYWZLMnUya0Nt?=
+ =?utf-8?B?ZUkzWURTOGloN2RBSGZtY1lPOWVXMkNuY0RKL2RnRWNIY0twL1gvdllVd3p5?=
+ =?utf-8?B?Q3Jxa3JqKzNHRGYwS3p4Um1KRm9hbk5sRTZmYVlMdEV3dUl5U0dDblRNNkFO?=
+ =?utf-8?B?aWRrcm8ybE91TERKRTcrbmlWTWlGQ1h5bjJjUWZPdjZud0lNbnhKRXFNUGJH?=
+ =?utf-8?B?UEJYajBwZENsQjhVRXYxVS96V3lJTW5WbzFMNU1adE94SzVnQy9FQUxFMmE2?=
+ =?utf-8?B?K21UVEk3VEUxTWZkUVpuNUhmcWRTUWd4QUNQREJVYS94RDd5WFdraEhJeEpt?=
+ =?utf-8?B?QjYzZlBsbnJWc3hWZzVhWUlmSmdRbjdjWEdMMjVuR0VUakFRRk1XZWI5YmpW?=
+ =?utf-8?B?UU12M1M2TDIybXphNDlEdDAwZ1hKZUlDQVRkcEJBSVhDSUdhb1dpOExIVkN1?=
+ =?utf-8?B?UWJLVkJRdFBsWUpBMFVaZjB5MHo2aHh5RDVuSmFjMFhobnUvMzJacVkzT1VF?=
+ =?utf-8?B?S3JYMUdjK3hZbklzMzBYaUJMSzRvNHJnQmdMem1XUlFsS2J1UWk5K1FKL2Nz?=
+ =?utf-8?B?YWRidHNvZXVqUVdDa2pYeXpLR1ZjRDNZd1RLWEYrd2xvem0xL1dSaGZLcEpO?=
+ =?utf-8?B?WGc9PQ==?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?S0NOWld3SHdEV2pndFFhWGkvYnVHQzR2TTFoNm9ZNFdaREN6eVQwcGlQTmJj?=
+ =?utf-8?B?SGhPTWxxMFN3TG90UjBVd00vdUkweC95ZUtKK1Y4VDZzbkx1WmZBaVZJdm8z?=
+ =?utf-8?B?d1Q2bmtFdXZjclNEZVJzajA3UVV2RXRrdmg2dGp0MkR4aGpRWXUzNjM3aTho?=
+ =?utf-8?B?bCs4em11SnpkYVFuYWJNT25hSTN1T0l0cjVtTjhWQW5TTzAyeDVZS25LRFRI?=
+ =?utf-8?B?Uml3UWhsNlpDemJKQlFFMTBTMUFwOHpSbGNFNHlRTjZ0alNhOWY1QVlVdCta?=
+ =?utf-8?B?ck9SZGcyZVZkM3k5ekVLZ3NMbjZNaFlQYjNnQ1F1eUpDckVvWDlyRFZBZk85?=
+ =?utf-8?B?NVVwMjgybG0xbDF6L3hFcW1jcC83R3BoL1RPZy9jK1B1eEJOKy9CR3NnSkRC?=
+ =?utf-8?B?SjVYKy9ub3IzK29xejdBS2tkeFpxeE1RZ2N3K1orb0hFYTFMbFhBbWdFdTVD?=
+ =?utf-8?B?Ynl0TVBLWG1GcVY5NVJndkFLQjVFT1V4ZzU1QzZSeks4UnExblpqS3ZlQTYr?=
+ =?utf-8?B?LzNJU0RxcGdTNVpiZ3VvSmZzang1RTlqa0NGUnc0NnBHQ2JGNWhwZ045aEZn?=
+ =?utf-8?B?a2puRmZGKzBiMlBOdzBlQnJOZTllYm01dHptcHluS1hVdGdyTDM0dW5RSVNX?=
+ =?utf-8?B?dXZOVzh4Z3A0MHBRc25yb1lXOVEvL0pRL2J4NW4vUTdmaWdrMjQrOVMxSGJK?=
+ =?utf-8?B?eG84K3BUQzNoL3pmaVowMTdubitST0UzVzJyOXpCY0Z1S3U1bmp4VFNLVVlJ?=
+ =?utf-8?B?d2RNVTIrZ2xuRENUSDVJL0xpaHJ3ZmU0MExUb0hQSG5KWEx6cUFVR2wyb1Rk?=
+ =?utf-8?B?M1AzcGZkd2s4TlBlejIwWmNiYmFCOVV2UzRsNHpLQ1RLcVlzREFUM3BDZDRH?=
+ =?utf-8?B?QlNtOFpjejVsZHg2UURtOGRNS2taVWtJN2JVbkZqZXJxVFlzbzJpdkNaVFV0?=
+ =?utf-8?B?ZVV2YldYYnBuQXpwZXpWWlpzK2FIL08yU010clZkOC9HYnVDNDRDbDJ6UWVK?=
+ =?utf-8?B?SldqdWdqTll4UjBrcmdhQTFrL2FGOWYzYVNqdFRiaW5IdnBBNjdUMEVsWVQr?=
+ =?utf-8?B?STg5L2RtbkNIRG5Jc21ETCt3YnZUUHpGelZIWnIwL2FUN29tYytwZCtxWHdG?=
+ =?utf-8?B?ZGVkY0hUUzUvM05CTnR1YmtJZFcxcDJiV2ZkSUZYb2NTdHFxdDRqU3ZjVWdv?=
+ =?utf-8?B?T2dsU1RhQUVzTW9Nc1YwZDNTcEc4d3B3L1liRU5PVkVrYmFrL1laR2Uxbmdp?=
+ =?utf-8?B?dkVpcFVLY1M1ZEVCMjZvS3dFQkt6MWp5M3RJQXk3NzNyeHlzQVM2cTZJMGtn?=
+ =?utf-8?B?RUo1Z3hWQWJTZFBKYmFGVlZSa3FVRGVMOXBhT0MxTDIxSDU3NitYcytqZWVk?=
+ =?utf-8?B?VVN2N3BIM2E1UEZnMHRJdFF6akcyMHZFdmtEUDZXbHcyTHBLMHMwMXNaM1pq?=
+ =?utf-8?Q?E/zvPNdG?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 12b2d0f4-07c6-4160-3677-08db573bcb78
+X-MS-Exchange-CrossTenant-AuthSource: CY8PR10MB7243.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2023 01:04:13.3660
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zuHTjklZsyuBYspAPAEUn6opQ18MTnKabTUK7wmMGFLbTce74M83dhDjjbLbVkXtrGiRZCEozWO3uFZA2edOt3Ou9PZSy24oG6cuVN0Xh7c=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR10MB6594
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-17_05,2023-05-17_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 phishscore=0
+ mlxlogscore=772 spamscore=0 adultscore=0 malwarescore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305180004
+X-Proofpoint-GUID: TzDwPEtC7r8r5nx7jW7eA3TBwfjPiZYc
+X-Proofpoint-ORIG-GUID: TzDwPEtC7r8r5nx7jW7eA3TBwfjPiZYc
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 02:11:13PM +0530, K Prateek Nayak wrote:
-> Since v6.3-rc1, the shared_cpu_list in per-cpu cacheinfo breaks in case
-> of hotplug activity on x86. This can be tracked back to two commits:
-> 
-> o commit 198102c9103f ("cacheinfo: Fix shared_cpu_map to handle shared
->   caches at different levels") that matches cache instance IDs without
->   considering if the instance IDs belong to same cache level or not.
-> 
-> o commit 5c2712387d48 ("cacheinfo: Fix LLC is not exported through
->   sysfs") which skips calling populate_cache_leaves() if
->   last_level_cache_is_valid(cpu) returns true. populate_cache_leaves()
->   on x86 would have populated the shared_cpu_map when CPU comes online,
->   which is now skipped, and the alternate path has an early bailout
->   before setting the CPU in the shared_cpu_map is even attempted.
-> 
->   On x86, populate_cache_leaves() also sets the
->   cpu_cacheinfo->cpu_map_populated flag when the cacheinfo is first
->   populated, the cache_shared_cpu_map_setup() in the driver is bypassed
->   when a thread comes back online during the hotplug activity. This leads
->   to the shared_cpu_list displaying abnormal values for the CPU that was
->   offlined and then onlined since the shared_cpu_maps are never
->   revaluated.
-> 
-> Following is the output from a dual socket 3rd Generation AMD EPYC
-> processor (2 x 64C/128T) for cachinfo when offlining and then onlining
-> CPU8:
-> 
-> o v6.3-rc5 with no changes:
-> 
->   # for i in /sys/devices/system/cpu/cpu8/cache/index*/shared_cpu_list; do echo -n "$i: "; cat $i; done
->     /sys/devices/system/cpu/cpu8/cache/index0/shared_cpu_list: 8,136
->     /sys/devices/system/cpu/cpu8/cache/index1/shared_cpu_list: 8,136
->     /sys/devices/system/cpu/cpu8/cache/index2/shared_cpu_list: 8,136
->     /sys/devices/system/cpu/cpu8/cache/index3/shared_cpu_list: 8-15,136-143
-> 
->   # echo 0 > /sys/devices/system/cpu/cpu8/online
->   # echo 1 > /sys/devices/system/cpu/cpu8/online
-> 
->   # for i in /sys/devices/system/cpu/cpu8/cache/index*/shared_cpu_list; do echo -n "$i: "; cat $i; done
->     /sys/devices/system/cpu/cpu8/cache/index0/shared_cpu_list: 8
->     /sys/devices/system/cpu/cpu8/cache/index1/shared_cpu_list: 8
->     /sys/devices/system/cpu/cpu8/cache/index2/shared_cpu_list: 8
->     /sys/devices/system/cpu/cpu8/cache/index3/shared_cpu_list: 8
-> 
->   # cat /sys/devices/system/cpu/cpu136/cache/index0/shared_cpu_list
->     136
-> 
->   # cat /sys/devices/system/cpu/cpu136/cache/index3/shared_cpu_list
->     9-15,136-143
-> 
-> o v6.3-rc5 with commit 5c2712387d48 ("cacheinfo: Fix LLC is not exported
->   through sysfs") reverted (Behavior consistent with v6.2):
-> 
->   # for i in /sys/devices/system/cpu/cpu8/cache/index*/shared_cpu_list; do echo -n "$i: "; cat $i; done
->     /sys/devices/system/cpu/cpu8/cache/index0/shared_cpu_list: 8,136
->     /sys/devices/system/cpu/cpu8/cache/index1/shared_cpu_list: 8,136
->     /sys/devices/system/cpu/cpu8/cache/index2/shared_cpu_list: 8,136
->     /sys/devices/system/cpu/cpu8/cache/index3/shared_cpu_list: 8-15,136-143
-> 
->   # echo 0 > /sys/devices/system/cpu/cpu8/online
->   # echo 1 > /sys/devices/system/cpu/cpu8/online
-> 
->   # for i in /sys/devices/system/cpu/cpu8/cache/index*/shared_cpu_list; do echo -n "$i: "; cat $i; done
->     /sys/devices/system/cpu/cpu8/cache/index0/shared_cpu_list: 8,136
->     /sys/devices/system/cpu/cpu8/cache/index1/shared_cpu_list: 8,136
->     /sys/devices/system/cpu/cpu8/cache/index2/shared_cpu_list: 8,136
->     /sys/devices/system/cpu/cpu8/cache/index3/shared_cpu_list: 8-15,136-143
-> 
->   # cat /sys/devices/system/cpu/cpu136/cache/index0/shared_cpu_list
->     8,136
-> 
->   # cat /sys/devices/system/cpu/cpu136/cache/index3/shared_cpu_list
->     8-15,136-143
-> 
-> This is not only limited to AMD processors but affects Intel processors
-> too. Following is the output from same experiment on a dual socket Intel
-> Ice Lake server (2 x 32C/64T) running kernel v6.3-rc5:
-> 
->   # for i in /sys/devices/system/cpu/cpu8/cache/index*/shared_cpu_list; do echo -n "$i: "; cat $i; done
->     /sys/devices/system/cpu/cpu8/cache/index0/shared_cpu_list: 8,72
->     /sys/devices/system/cpu/cpu8/cache/index1/shared_cpu_list: 8,72
->     /sys/devices/system/cpu/cpu8/cache/index2/shared_cpu_list: 8,72
->     /sys/devices/system/cpu/cpu8/cache/index3/shared_cpu_list: 0,2,4,6,8,10,12,14,16,18,20,22,24,
->     26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,72,74,76,78,80,82,84,86,
->     88,90,92,94,96,98,100,102,104,106,108,110,112,114,116,118,120,122,124,126
-> 
->   # echo 0 > /sys/devices/system/cpu/cpu8/online
->   # echo 1 > /sys/devices/system/cpu/cpu8/online
-> 
->   # for i in /sys/devices/system/cpu/cpu8/cache/index*/shared_cpu_list; do echo -n "$i: "; cat $i; done
->     /sys/devices/system/cpu/cpu8/cache/index0/shared_cpu_list: 8
->     /sys/devices/system/cpu/cpu8/cache/index1/shared_cpu_list: 8
->     /sys/devices/system/cpu/cpu8/cache/index2/shared_cpu_list: 8
->     /sys/devices/system/cpu/cpu8/cache/index3/shared_cpu_list: 8
-> 
->   # cat /sys/devices/system/cpu/cpu72/cache/index0/shared_cpu_list
->     72
-> 
->   # cat /sys/devices/system/cpu/cpu72/cache/index3/shared_cpu_list
->     0,2,4,6,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,
->     66,68,70,72,74,76,78,80,82,84,86,88,90,92,94,96,98,100,102,104,106,108,110,112,114,116,118,
->     120,122,124,126
-> 
-> This patch addresses two issues associated with building
-> shared_cpu_list:
-> 
-> o Patch 1 fixes an ID matching issue that can lead to cacheinfo
->   associating CPUs from different cache levels in case IDs are not
->   unique across all the different cache levels. 
-> 
-> o Patch 2 clears the cpu_cacheinfo->cpu_map_populated flag when CPU goes
->   offline and is removed from the shared_cpu_map.
-> 
-> Following are the results after applying the series on v6.3-rc5 on
-> respective x86 platforms:
-> 
-> o 3rd Generation AMD EPYC Processor (2 x 64C/128T)
-> 
->   # for i in /sys/devices/system/cpu/cpu8/cache/index*/shared_cpu_list; do echo -n "$i: "; cat $i; done
->     /sys/devices/system/cpu/cpu8/cache/index0/shared_cpu_list: 8,136
->     /sys/devices/system/cpu/cpu8/cache/index1/shared_cpu_list: 8,136
->     /sys/devices/system/cpu/cpu8/cache/index2/shared_cpu_list: 8,136
->     /sys/devices/system/cpu/cpu8/cache/index3/shared_cpu_list: 8-15,136-143
->   
->   # echo 0 > /sys/devices/system/cpu/cpu8/online
->   # echo 1 > /sys/devices/system/cpu/cpu8/online
->   
->   # for i in /sys/devices/system/cpu/cpu8/cache/index*/shared_cpu_list; do echo -n "$i: "; cat $i; done
->     /sys/devices/system/cpu/cpu8/cache/index0/shared_cpu_list: 8,136
->     /sys/devices/system/cpu/cpu8/cache/index1/shared_cpu_list: 8,136
->     /sys/devices/system/cpu/cpu8/cache/index2/shared_cpu_list: 8,136
->     /sys/devices/system/cpu/cpu8/cache/index3/shared_cpu_list: 8-15,136-143
->   
->   # cat /sys/devices/system/cpu/cpu136/cache/index0/shared_cpu_list
->     8,136
->   
->   # cat /sys/devices/system/cpu/cpu136/cache/index3/shared_cpu_list
->     8-15,136-143
-> 
-> o Intel Ice Lake Xeon (2 x 32C/128T)
-> 
->   # for i in /sys/devices/system/cpu/cpu8/cache/index*/shared_cpu_list; do echo -n "$i: "; cat $i; done
->     /sys/devices/system/cpu/cpu8/cache/index0/shared_cpu_list: 8,72
->     /sys/devices/system/cpu/cpu8/cache/index1/shared_cpu_list: 8,72
->     /sys/devices/system/cpu/cpu8/cache/index2/shared_cpu_list: 8,72
->     /sys/devices/system/cpu/cpu8/cache/index3/shared_cpu_list: 0,2,4,6,8,10,12,14,16,18,20,22,24,26,
->     28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,72,74,76,78,80,82,84,86,88,90,
->     92,94,96,98,100,102,104,106,108,110,112,114,116,118,120,122,124,126
->   
->   # echo 0 > /sys/devices/system/cpu/cpu8/online
->   # echo 1 > /sys/devices/system/cpu/cpu8/online
->   
->   # for i in /sys/devices/system/cpu/cpu8/cache/index*/shared_cpu_list; do echo -n "$i: "; cat $i; done
->     /sys/devices/system/cpu/cpu8/cache/index0/shared_cpu_list: 8,72
->     /sys/devices/system/cpu/cpu8/cache/index1/shared_cpu_list: 8,72
->     /sys/devices/system/cpu/cpu8/cache/index2/shared_cpu_list: 8,72
->     /sys/devices/system/cpu/cpu8/cache/index3/shared_cpu_list: 0,2,4,6,8,10,12,14,16,18,20,22,24,26,
->     28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,72,74,76,78,80,82,84,86,88,90,
->     92,94,96,98,100,102,104,106,108,110,112,114,116,118,120,122,124,126
->   
->   # cat /sys/devices/system/cpu/cpu72/cache/index0/shared_cpu_list
->     8,72
->   
->   # cat /sys/devices/system/cpu/cpu72/cache/index3/shared_cpu_list
->     0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,
->     68,70,72,74,76,78,80,82,84,86,88,90,92,94,96,98,100,102,104,106,108,110,112,114,116,118,120,122,
->     124,126
-> 
-> Running "grep -r 'cpu_map_populated' arch/" shows MIPS and loongarch too
-> set the cpu_cacheinfo->cpu_map_populated who might also be affected by
-> the changes in commit 5c2712387d48 ("cacheinfo: Fix LLC is not exported
-> through sysfs") and this series. Changes from Patch 1 might also affect
-> RISC-V since Yong-Xuan Wang <yongxuan.wang@sifive.com> from SiFive last
-> made changes to cache_shared_cpu_map_setup() and
-> cache_shared_cpu_map_remove() in commit 198102c9103f ("cacheinfo: Fix
-> shared_cpu_map to handle shared caches at different levels").
+On 5/17/23 7:09 PM, Mike Christie wrote:
+> +				  CLONE_THREAD | CLONE_FILES, CLONE_SIGHAND,
 
-
-I was able to reproduce the issue on an Alder Lake system (single socket).
-I also was able to verify that the this patchset fixes the issue.
-
-FWIW, Tested-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Sorry. I tried to throw this one in last second so we could see that
+we can also see that we can now use CLONE_FILES like io_uring.
+It will of course not compile.
