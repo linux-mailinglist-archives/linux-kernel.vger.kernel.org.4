@@ -2,196 +2,347 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E351708A07
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 23:04:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C94C708A11
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 23:07:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbjERVEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 17:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37520 "EHLO
+        id S229968AbjERVG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 17:06:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjERVEM (ORCPT
+        with ESMTP id S229498AbjERVG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 17:04:12 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F31127;
-        Thu, 18 May 2023 14:04:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684443850; x=1715979850;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=BKZkWqVM3TSRGEgi6QXPku0HgKD5sRN6Pggh4RMq1Xs=;
-  b=kXlQB1qE7j7rFWimfJOBEKNC8OZnKlsbJ8o+7u30W6vIILmL/u/ahlOl
-   swMvwDkdctb9dwet+MFfbrKgYwwt5kw925ox6IstbswtmbAGZRJbCUujJ
-   kMpnmlEy76YDBH4gV9OpKQ1kV+48KyFPMwTrDJ4CbegWOSDNDRhqRQHxJ
-   QEdHfOTMv3FQZmHjE3E0fXHWSZcQwI1rw1qRptSUlJ2gPn/R7UVp06dmd
-   jTsrRONT3oxU/CphaTUhRUHKACsdmF3rUr3y3/umT968SyAD/sNXx055K
-   4lFlAMjuxKx+3+SGmrr8d7kPye1h5lSeqZX/nhdV7bKri7FnLcY9dRiGf
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="355412910"
-X-IronPort-AV: E=Sophos;i="6.00,175,1681196400"; 
-   d="scan'208";a="355412910"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 14:04:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="772026268"
-X-IronPort-AV: E=Sophos;i="6.00,175,1681196400"; 
-   d="scan'208";a="772026268"
-Received: from nroy-mobl1.amr.corp.intel.com (HELO [10.209.81.123]) ([10.209.81.123])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 14:04:08 -0700
-Message-ID: <9d64c949-6d5f-06c0-47ef-caade67477e5@intel.com>
-Date:   Thu, 18 May 2023 14:04:08 -0700
+        Thu, 18 May 2023 17:06:57 -0400
+Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [IPv6:2001:4b7a:2000:18::165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A611D1A2
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 14:06:55 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 94B7A20490;
+        Thu, 18 May 2023 23:06:53 +0200 (CEST)
+Date:   Thu, 18 May 2023 23:06:52 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Subject: Re: [PATCH v3 06/12] drm/msm/dpu: Add SM6350 support
+Message-ID: <ahxy4jj56aeyorokzfuc7qmpuofml32amg5x4fgpthr6almhju@g5okcc6nsz6j>
+References: <20230411-topic-straitlagoon_mdss-v3-0-9837d6b3516d@linaro.org>
+ <20230411-topic-straitlagoon_mdss-v3-6-9837d6b3516d@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 0/6] Memory Mapping (VMA) protection using PKU - set 1
-Content-Language: en-US
-To:     Jeff Xu <jeffxu@google.com>
-Cc:     =?UTF-8?Q?Stephen_R=c3=b6ttger?= <sroettger@google.com>,
-        jeffxu@chromium.org, luto@kernel.org, jorgelo@chromium.org,
-        keescook@chromium.org, groeck@chromium.org, jannh@google.com,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        linux-hardening@vger.kernel.org
-References: <20230515130553.2311248-1-jeffxu@chromium.org>
- <2bcffc9f-9244-0362-2da9-ece230055320@intel.com>
- <CAEAAPHYdRyZEMp97919errF7SDuYBJoSrD5i1wrTx1sMdr_ZdQ@mail.gmail.com>
- <fbe53dcf-6e21-e4cf-c632-4da8369d7e83@intel.com>
- <CAEAAPHa=zYyjV5RqvPryRsW7VqY9cJC_-CJW6HKczY0iVsy-bg@mail.gmail.com>
- <d8f2d5c2-6650-c2a6-3a20-25583eee579b@intel.com>
- <CALmYWFsnGjniVseJKuhKO6eet10Onyk_C0=KNe6ZzXoCiBKZOw@mail.gmail.com>
- <b69f6809-b483-158f-8be9-4976fad918d8@intel.com>
- <CALmYWFs5Vgosz2JUYWkoc4YwDbiB0tT32MFpo-y6aX4kwuoz8Q@mail.gmail.com>
- <2b14036e-aed8-4212-bc0f-51ec4fe5a5c1@intel.com>
- <CALmYWFuSTc5Q7Hrra8FijE11+Y1KiROa=xCZWL1D3ifthrrDMQ@mail.gmail.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <CALmYWFuSTc5Q7Hrra8FijE11+Y1KiROa=xCZWL1D3ifthrrDMQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230411-topic-straitlagoon_mdss-v3-6-9837d6b3516d@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/18/23 13:20, Jeff Xu wrote:>> Here's my concern about this whole
-thing: it's headed down a rabbit hole
->> which is *highly* specialized both in the apps that will use it and the
->> attacks it will mitigate.  It probably *requires* turning off a bunch of
->> syscalls (like io_uring) that folks kinda like in general.
->>
-> ChromeOS currently disabled io_uring, but it is not required to do so.
-> io_uring supports the IORING_OP_MADVICE operation, which calls the
-> do_madvise() function. This means that io_uring will have the same
-> pkey checks as the madvice() system call.  From that perspective, we
-> will fully support io_uring for this feature.
-
-io_uring fundamentally doesn't have the same checks.  The kernel side
-work can be done from an asynchronous kernel thread.  That kernel thread
-doesn't have a meaningful PKRU value.  The register has a value, but
-it's not really related to the userspace threads that are sending it
-requests.
-
->> We're balancing that highly specialized mitigation with a feature that
->> add new ABI, touches core memory management code and signal handling.
->>
-> The ABI change uses the existing flag field in pkey_alloc() which is
-> reserved. The implementation is backward compatible with all existing
-> pkey usages in both kernel and user space.  Or do you have other
-> concerns about ABI in mind ?
-
-I'm not worried about the past, I'm worried any time we add a new ABI
-since we need to support it forever.
-
-> Yes, you are right about the risk of touching core mm code. To
-> minimize the risk, I try to control the scope of the change (it is
-> about 3 lines in mprotect, more in munmap but really just 3 effective
-> lines from syscall entry). I added new self-tests in mm to make sure
-> it doesn't regress in api behavior. I run those tests before and after
-> my kernel code change to make sure the behavior remains the same, I
-> tested it on 5.15 and 6.1 and 6.4-rc1.  Actually, the testing
-> discovered a behavior change for mprotect() between 6.1 and 6.4  (not
-> from this patch, there are refactoring works going on in mm) see this
-> thread [1]
-> I hope those steps will help to mitigate the risk.
+On 2023-05-05 23:40:32, Konrad Dybcio wrote:
+> Add SM6350 support to the DPU1 driver to enable display output.
 > 
-> Agreed on signaling handling is a tough part: what do you think about
-> the approach (modifying PKRU from saved stack after XSAVE), is there a
-> blocker ?
-
-Yes, signal entry and sigreturn are not necessarily symmetric so you
-can't really have a stack.
-
->> On the x86 side, PKRU is a painfully special snowflake.  It's exposed in
->> the "XSAVE" ABIs, but not actually managed *with* XSAVE in the kernel.
->> This would be making it an even more special snowflake because it would
+> It's worth noting that one entry dpu_qos_lut_entry was trimmed off:
 > 
-> I admit I'm quite ignorant on XSAVE  to understand the above
-> statement, and how that is related. Could you explain it to me please
-> ? And what is in your mind that might improve the situation ?
+> {.fl = 0, .lut = 0x0011223344556677 },
 
-In a nutshell: XSAVE components are classified as either user or
-supervisor.  User components can be modified from userspace and
-supervisor ones only from the kernel.  In general, user components don't
-affect the kernel; the kernel doesn't care what is in ZMM11 (an
-XSAVE-managed register).  That lets us do fun stuff like be lazy about
-when ZMM11 is saved/restored.  Being lazy is good because it give us
-things like faster context switches and KVM VMEXIT handling.
+Is this macrotile-qseed?  Not really following where this is supposed to
+sit.
 
-PKRU is a user component, but it affects the kernel when the kernel does
-copy_to/from_user() and friends.  That means that the kernel can't do
-any "fun stuff" with PKRU.  As soon as userspace provides a new value,
-the kernel needs to start respecting it.  That makes PKRU a very special
-snowflake.
-
-So, even though PKRU can be managed by XSAVE, it isn't.  It isn't kept
-in the kernel XSAVE buffer.  But it *IS* in the signal stack XSAVE
-buffer.  You *can* save/restore it with the other XSAVE components with
-ptrace().  The user<->kernel ABI pretends that PKRU is XSAVE managed
-even though it is not.
-
-All of this is special-cased.  There's a ton of code to handle this
-mess.  It's _complicated_.  I haven't even started talking about how
-this interacts with KVM and guests.
-
-How could we improve it?  A time machine would help to either change the
-architecture or have Linux ignore the fact that XSAVE knows anything
-about PKRU.
-
-So, the bar is pretty high for things that want to further muck with
-PKRU.  Add signal and sigaltstack in particular into the fray, and we've
-got a recipe for disaster.  sigaltstack and XSAVE don't really get along
-very well.  https://lwn.net/Articles/862541/
-
->> need new altstack ABI and handling.
->>
-> I thought adding protected memory support to signaling handling is an
-> independent project with its own weight. As Jann Horn points out in
-> [2]:  "we could prevent the attacker from corrupting the signal
-> context if we can protect the signal stack with a pkey."   However,
-> the kernel will send SIGSEGV when the stack is protected by PKEY,  so
-> there is a benefit to make this work.  (Maybe Jann can share some more
-> thoughts on the benefits)
 > 
-> And I believe we could do this in a way with minimum ABI change, as below:
-> - allocate PKEY with a new flag (PKEY_ALTSTACK)
-> - at sigaltstack() call, detect the memory is PKEY_ALTSTACK protected,
-> (similar as what mprotect does in this patch) and save it along with
-> stack address/size.
-> - at signaling handling, use the saved info to fill in PKRU.
-> The ABI change is similar to PKEY_ENFORCE_API, and there is no
-> backward compatibility issue.
+> due to the fact that newer SoCs dropped the .fl (fill level)-based
+> logic and don't provide real values, resulting in all entries but
+> the last one being unused.
 > 
-> Will these mentioned help our case ? What do you think ?
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>  .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_4_sm6350.h | 187 +++++++++++++++++++++
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |   5 +
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |   3 +
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c            |   1 +
+>  4 files changed, 196 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_4_sm6350.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_4_sm6350.h
+> new file mode 100644
+> index 000000000000..e8bfbd468e0a
+> --- /dev/null
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_6_4_sm6350.h
+> @@ -0,0 +1,187 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (c) 2022. Qualcomm Innovation Center, Inc. All rights reserved.
+> + * Copyright (c) 2015-2018, 2020 The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2023, Linaro Limited
+> + */
+> +
+> +#ifndef _DPU_6_4_SM6350_H
+> +#define _DPU_6_4_SM6350_H
+> +
+> +static const struct dpu_caps sm6350_dpu_caps = {
+> +	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
+> +	.max_mixer_blendstages = 0x7,
+> +	.qseed_type = DPU_SSPP_SCALER_QSEED4,
+> +	.has_src_split = true,
+> +	.has_dim_layer = true,
+> +	.has_idle_pc = true,
+> +	.max_linewidth = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
+> +	.pixel_ram_size = DEFAULT_PIXEL_RAM_SIZE,
+> +};
+> +
+> +static const struct dpu_ubwc_cfg sm6350_ubwc_cfg = {
+> +	.ubwc_version = DPU_HW_UBWC_VER_20,
+> +	.ubwc_swizzle = 6,
+> +	.highest_bank_bit = 1,
+> +};
+> +
+> +static const struct dpu_mdp_cfg sm6350_mdp[] = {
+> +	{
+> +	.name = "top_0", .id = MDP_TOP,
+> +	.base = 0x0, .len = 0x494,
+> +	.features = 0,
+> +	.clk_ctrls[DPU_CLK_CTRL_VIG0] = { .reg_off = 0x2ac, .bit_off = 0 },
+> +	.clk_ctrls[DPU_CLK_CTRL_DMA0] = { .reg_off = 0x2ac, .bit_off = 8 },
+> +	.clk_ctrls[DPU_CLK_CTRL_DMA1] = { .reg_off = 0x2b4, .bit_off = 8 },
+> +	.clk_ctrls[DPU_CLK_CTRL_DMA2] = { .reg_off = 0x2c4, .bit_off = 8 },
+> +	.clk_ctrls[DPU_CLK_CTRL_REG_DMA] = { .reg_off = 0x2bc, .bit_off = 20 },
+> +	},
+> +};
+> +
+> +static const struct dpu_ctl_cfg sm6350_ctl[] = {
+> +	{
+> +	.name = "ctl_0", .id = CTL_0,
+> +	.base = 0x1000, .len = 0x1dc,
+> +	.features = BIT(DPU_CTL_ACTIVE_CFG),
+> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 9),
+> +	},
+> +	{
+> +	.name = "ctl_1", .id = CTL_1,
+> +	.base = 0x1200, .len = 0x1dc,
+> +	.features = BIT(DPU_CTL_ACTIVE_CFG),
+> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 10),
+> +	},
+> +	{
+> +	.name = "ctl_2", .id = CTL_2,
+> +	.base = 0x1400, .len = 0x1dc,
+> +	.features = BIT(DPU_CTL_ACTIVE_CFG),
+> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 11),
+> +	},
+> +	{
+> +	.name = "ctl_3", .id = CTL_3,
+> +	.base = 0x1600, .len = 0x1dc,
+> +	.features = BIT(DPU_CTL_ACTIVE_CFG),
+> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 12),
+> +	},
+> +};
+> +
+> +static const struct dpu_sspp_cfg sm6350_sspp[] = {
+> +	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, 0x1f8, VIG_SC7180_MASK,
+> +		sc7180_vig_sblk_0, 0,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
+> +	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000, 0x1f8, DMA_SDM845_MASK,
+> +		sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
+> +	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000, 0x1f8, DMA_CURSOR_SDM845_MASK,
+> +		sdm845_dma_sblk_1, 5, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA1),
+> +	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000, 0x1f8, DMA_CURSOR_SDM845_MASK,
+> +		sdm845_dma_sblk_2, 9, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA2),
+> +};
+> +
+> +static const struct dpu_lm_cfg sm6350_lm[] = {
+> +	LM_BLK("lm_0", LM_0, 0x44000, MIXER_SDM845_MASK,
+> +		&sc7180_lm_sblk, PINGPONG_0, LM_1, DSPP_0),
+> +	LM_BLK("lm_1", LM_1, 0x45000, MIXER_SDM845_MASK,
+> +		&sc7180_lm_sblk, PINGPONG_1, LM_0, 0),
+> +};
+> +
+> +static const struct dpu_dspp_cfg sm6350_dspp[] = {
+> +	DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_SC7180_MASK,
+> +		&sm8150_dspp_sblk),
+> +};
+> +
+> +static struct dpu_pingpong_cfg sm6350_pp[] = {
+> +	PP_BLK("pingpong_0", PINGPONG_0, 0x70000, PINGPONG_SM8150_MASK, 0, sdm845_pp_sblk,
+> +		DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
+> +		-1),
+> +	PP_BLK("pingpong_1", PINGPONG_1, 0x70800, PINGPONG_SM8150_MASK, 0, sdm845_pp_sblk,
+> +		DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9),
+> +		-1),
+> +};
+> +
+> +static const struct dpu_intf_cfg sm6350_intf[] = {
+> +	INTF_BLK("intf_0", INTF_0, 0x6a000, 0x2c0, INTF_DP, 0, 35, INTF_SC7180_MASK,
+> +		DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 24),
+> +		DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 25)),
+> +	INTF_BLK_DSI_TE("intf_1", INTF_1, 0x6a800, 0x2c0, INTF_DSI, 0, 35, INTF_SC7180_MASK,
+> +		DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 26),
+> +		DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 27),
+> +		DPU_IRQ_IDX(MDP_INTF1_TEAR_INTR, 2)),
+> +};
+> +
+> +static const struct dpu_vbif_cfg sm6350_vbif[] = {
+> +	{
+> +	.name = "vbif_0", .id = VBIF_RT,
+> +	.base = 0, .len = 0x1044,
+> +	.features = BIT(DPU_VBIF_QOS_REMAP),
+> +	.xin_halt_timeout = 0x4000,
+> +	.qos_rt_tbl = {
+> +		.npriority_lvl = ARRAY_SIZE(sdm845_rt_pri_lvl),
+> +		.priority_lvl = sdm845_rt_pri_lvl,
+> +	},
+> +	.qos_nrt_tbl = {
+> +		.npriority_lvl = ARRAY_SIZE(sdm845_nrt_pri_lvl),
+> +		.priority_lvl = sdm845_nrt_pri_lvl,
+> +	},
+> +	.memtype_count = 14,
+> +	.memtype = {3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3},
+> +	},
+> +};
+> +
+> +static const struct dpu_perf_cfg sm6350_perf_data = {
+> +	.max_bw_low = 4200000,
+> +	.max_bw_high = 5100000,
+> +	.min_core_ib = 2500000,
+> +	.min_llcc_ib = 0,
+> +	.min_dram_ib = 1600000,
+> +	.min_prefill_lines = 35,
+> +	/* TODO: confirm danger_lut_tbl */
+> +	.danger_lut_tbl = {0xffff, 0xffff, 0x0, 0x0, 0xffff},
+> +	.qos_lut_tbl = {
+> +		{.nentry = ARRAY_SIZE(sm6350_qos_linear_macrotile),
+> +		.entries = sm6350_qos_linear_macrotile
+> +		},
+> +		{.nentry = ARRAY_SIZE(sm6350_qos_linear_macrotile),
+> +		.entries = sm6350_qos_linear_macrotile
+> +		},
+> +		{.nentry = ARRAY_SIZE(sc7180_qos_nrt),
+> +		.entries = sc7180_qos_nrt
+> +		},
 
-To be honest, no.
+Strangely there are only 3 entries here, for LINEAR, MACROTILE and NRT.
+Where's CWB and MACROTILE_QSEED?  Or was dpu_qos_lut_usage only extended
+to account for more entries in danger_lut_tbl?  How about safe_lut_tbl?
 
-What you've laid out here is the tip of the complexity iceberg.  There
-are a lot of pieces of the kernel that are not yet factored in.
+> +	},
+> +	.cdp_cfg = {
+> +		{.rd_enable = 1, .wr_enable = 1},
+> +		{.rd_enable = 1, .wr_enable = 0}
+> +	},
+> +	.clk_inefficiency_factor = 105,
+> +	.bw_inefficiency_factor = 120,
+> +};
+> +
+> +const struct dpu_mdss_cfg dpu_sm6350_cfg = {
+> +	.caps = &sm6350_dpu_caps,
+> +	.ubwc = &sm6350_ubwc_cfg,
+> +	.mdp_count = ARRAY_SIZE(sm6350_mdp),
+> +	.mdp = sm6350_mdp,
+> +	.ctl_count = ARRAY_SIZE(sm6350_ctl),
+> +	.ctl = sm6350_ctl,
+> +	.sspp_count = ARRAY_SIZE(sm6350_sspp),
+> +	.sspp = sm6350_sspp,
+> +	.mixer_count = ARRAY_SIZE(sm6350_lm),
+> +	.mixer = sm6350_lm,
+> +	.dspp_count = ARRAY_SIZE(sm6350_dspp),
+> +	.dspp = sm6350_dspp,
+> +	.pingpong_count = ARRAY_SIZE(sm6350_pp),
+> +	.pingpong = sm6350_pp,
+> +	.intf_count = ARRAY_SIZE(sm6350_intf),
+> +	.intf = sm6350_intf,
+> +	.vbif_count = ARRAY_SIZE(sm6350_vbif),
+> +	.vbif = sm6350_vbif,
+> +	.reg_dma_count = 1,
+> +	.dma_cfg = &sm8250_regdma,
+> +	.perf = &sm6350_perf_data,
+> +	.mdss_irqs = BIT(MDP_SSPP_TOP0_INTR) | \
+> +		     BIT(MDP_SSPP_TOP0_INTR2) | \
+> +		     BIT(MDP_SSPP_TOP0_HIST_INTR) | \
+> +		     BIT(MDP_INTF0_INTR) | \
+> +		     BIT(MDP_INTF1_INTR) | \
+> +		     BIT(MDP_INTF1_TEAR_INTR),
+> +};
+> +
+> +#endif
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> index 9daeaccc4f52..5ef1dffc27dc 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+> @@ -748,6 +748,10 @@ static const struct dpu_qos_lut_entry sc7180_qos_linear[] = {
+>  	{.fl = 0, .lut = 0x0011222222335777},
+>  };
+>  
+> +static const struct dpu_qos_lut_entry sm6350_qos_linear_macrotile[] = {
+> +	{.fl = 0, .lut = 0x0011223445566777 },
+> +};
+> +
+>  static const struct dpu_qos_lut_entry sm8150_qos_linear[] = {
+>  	{.fl = 0, .lut = 0x0011222222223357 },
+>  };
+> @@ -803,6 +807,7 @@ static const struct dpu_qos_lut_entry sc7180_qos_nrt[] = {
+>  #include "catalog/dpu_6_0_sm8250.h"
+>  #include "catalog/dpu_6_2_sc7180.h"
+>  #include "catalog/dpu_6_3_sm6115.h"
+> +#include "catalog/dpu_6_4_sm6350.h"
+>  #include "catalog/dpu_6_5_qcm2290.h"
+>  
+>  #include "catalog/dpu_7_0_sm8350.h"
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> index e9237321df77..56af77353b1e 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> @@ -320,6 +320,8 @@ enum dpu_qos_lut_usage {
+>  	DPU_QOS_LUT_USAGE_LINEAR,
+>  	DPU_QOS_LUT_USAGE_MACROTILE,
+>  	DPU_QOS_LUT_USAGE_NRT,
+> +	DPU_QOS_LUT_USAGE_CWB,
+> +	DPU_QOS_LUT_USAGE_MACROTILE_QSEED,
 
-Let's also remember: protection keys is *NOT* a security feature.  It's
-arguable that pkeys is a square peg trying to go into a round security hole.
+Because you allocated extra space for them here.  Either drop this, or
+do it in a separate patch and provide the QOS and safe LUTs in the
+catalog?
+
+- Marijn
+
+>  	DPU_QOS_LUT_USAGE_MAX,
+>  };
+>  
+> @@ -880,6 +882,7 @@ extern const struct dpu_mdss_cfg dpu_sc8180x_cfg;
+>  extern const struct dpu_mdss_cfg dpu_sm8250_cfg;
+>  extern const struct dpu_mdss_cfg dpu_sc7180_cfg;
+>  extern const struct dpu_mdss_cfg dpu_sm6115_cfg;
+> +extern const struct dpu_mdss_cfg dpu_sm6350_cfg;
+>  extern const struct dpu_mdss_cfg dpu_qcm2290_cfg;
+>  extern const struct dpu_mdss_cfg dpu_sm8350_cfg;
+>  extern const struct dpu_mdss_cfg dpu_sc7280_cfg;
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> index 0e7a68714e9e..46be7ad8d615 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
+> @@ -1286,6 +1286,7 @@ static const struct of_device_id dpu_dt_match[] = {
+>  	{ .compatible = "qcom,sc8180x-dpu", .data = &dpu_sc8180x_cfg, },
+>  	{ .compatible = "qcom,sc8280xp-dpu", .data = &dpu_sc8280xp_cfg, },
+>  	{ .compatible = "qcom,sm6115-dpu", .data = &dpu_sm6115_cfg, },
+> +	{ .compatible = "qcom,sm6350-dpu", .data = &dpu_sm6350_cfg, },
+>  	{ .compatible = "qcom,sm8150-dpu", .data = &dpu_sm8150_cfg, },
+>  	{ .compatible = "qcom,sm8250-dpu", .data = &dpu_sm8250_cfg, },
+>  	{ .compatible = "qcom,sm8350-dpu", .data = &dpu_sm8350_cfg, },
+> 
+> -- 
+> 2.40.1
+> 
