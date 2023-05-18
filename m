@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78712707CD8
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:29:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CA0A707CD9
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:29:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbjERJ3c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 05:29:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51986 "EHLO
+        id S230243AbjERJ3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 05:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbjERJ31 (ORCPT
+        with ESMTP id S230122AbjERJ31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 18 May 2023 05:29:27 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CBE9C7
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7558C211F
         for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 02:29:26 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ore@pengutronix.de>)
-        id 1pzZwj-00062t-RG; Thu, 18 May 2023 11:29:17 +0200
+        id 1pzZwj-00062u-RH; Thu, 18 May 2023 11:29:17 +0200
 Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ore@pengutronix.de>)
-        id 1pzZwh-0013Br-VZ; Thu, 18 May 2023 11:29:15 +0200
+        id 1pzZwi-0013Bs-0i; Thu, 18 May 2023 11:29:16 +0200
 Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ore@pengutronix.de>)
-        id 1pzZwh-0046MK-0M; Thu, 18 May 2023 11:29:15 +0200
+        id 1pzZwh-0046MU-14; Thu, 18 May 2023 11:29:15 +0200
 From:   Oleksij Rempel <o.rempel@pengutronix.de>
 To:     "David S. Miller" <davem@davemloft.net>,
         Andrew Lunn <andrew@lunn.ch>,
@@ -41,10 +41,12 @@ To:     "David S. Miller" <davem@davemloft.net>,
 Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         UNGLinuxDriver@microchip.com
-Subject: [PATCH net-next v3 0/2] Fine-Tune Flow Control and Speed Configurations in Microchip KSZ8xxx DSA Driver 
-Date:   Thu, 18 May 2023 11:29:11 +0200
-Message-Id: <20230518092913.977705-1-o.rempel@pengutronix.de>
+Subject: [PATCH net-next v3 1/2] net: dsa: microchip: ksz8: Make flow control, speed, and duplex on CPU port configurable
+Date:   Thu, 18 May 2023 11:29:12 +0200
+Message-Id: <20230518092913.977705-2-o.rempel@pengutronix.de>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230518092913.977705-1-o.rempel@pengutronix.de>
+References: <20230518092913.977705-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -60,36 +62,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-changes v3:
-- remove half duplex flow control configuration
-- add comments
-- s/stram/stream
+Allow flow control, speed, and duplex settings on the CPU port to be
+configurable. Previously, the speed and duplex relied on default switch
+values, which limited flexibility. Additionally, flow control was
+hardcoded and only functional in duplex mode. This update enhances the
+configurability of these parameters.
 
-changes v2:
-- split the patch to upstrean and downstream part
-- add comments
-- fix downstream register offset
-- fix cpu configuration
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+---
+ drivers/net/dsa/microchip/ksz8.h       |  4 ++
+ drivers/net/dsa/microchip/ksz8795.c    | 51 +++++++++++++++++++++++++-
+ drivers/net/dsa/microchip/ksz_common.c |  1 +
+ 3 files changed, 54 insertions(+), 2 deletions(-)
 
-This patch set focuses on enhancing the configurability of flow
-control, speed, and duplex settings in the Microchip KSZ8xxx DSA driver.
-
-The first patch allows more granular control over the CPU port's flow
-control, speed, and duplex settings. The second patch introduces a
-method for downstream port configurations, primarily concerning flow
-control based on duplex mode.
-
-Oleksij Rempel (2):
-  net: dsa: microchip: ksz8: Make flow control, speed, and duplex on CPU
-    port configurable
-  net: dsa: microchip: ksz8: Add function to configure downstream ports
-    for KSZ8xxx
-
- drivers/net/dsa/microchip/ksz8.h       |   4 +
- drivers/net/dsa/microchip/ksz8795.c    | 131 ++++++++++++++++++++++++-
- drivers/net/dsa/microchip/ksz_common.c |   1 +
- 3 files changed, 134 insertions(+), 2 deletions(-)
-
+diff --git a/drivers/net/dsa/microchip/ksz8.h b/drivers/net/dsa/microchip/ksz8.h
+index e68465fdf6b9..ec02baca726f 100644
+--- a/drivers/net/dsa/microchip/ksz8.h
++++ b/drivers/net/dsa/microchip/ksz8.h
+@@ -58,5 +58,9 @@ int ksz8_switch_detect(struct ksz_device *dev);
+ int ksz8_switch_init(struct ksz_device *dev);
+ void ksz8_switch_exit(struct ksz_device *dev);
+ int ksz8_change_mtu(struct ksz_device *dev, int port, int mtu);
++void ksz8_phylink_mac_link_up(struct ksz_device *dev, int port,
++			      unsigned int mode, phy_interface_t interface,
++			      struct phy_device *phydev, int speed, int duplex,
++			      bool tx_pause, bool rx_pause);
+ 
+ #endif
+diff --git a/drivers/net/dsa/microchip/ksz8795.c b/drivers/net/dsa/microchip/ksz8795.c
+index f56fca1b1a22..9cfe343d2214 100644
+--- a/drivers/net/dsa/microchip/ksz8795.c
++++ b/drivers/net/dsa/microchip/ksz8795.c
+@@ -1371,6 +1371,55 @@ void ksz8_config_cpu_port(struct dsa_switch *ds)
+ 	}
+ }
+ 
++/**
++ * ksz8_upstream_link_up - Configures the CPU/upstream port of the switch.
++ * @dev: The KSZ device instance.
++ * @port: The port number to configure.
++ * @speed: The desired link speed.
++ * @duplex: The desired duplex mode.
++ * @tx_pause: If true, enables transmit pause.
++ * @rx_pause: If true, enables receive pause.
++ *
++ * Description:
++ * The function configures flow control and speed settings for the CPU/upstream
++ * port of the switch based on the desired settings, current duplex mode, and
++ * speed.
++ */
++static void ksz8_upstream_link_up(struct ksz_device *dev, int port, int speed,
++				 int duplex, bool tx_pause, bool rx_pause)
++{
++	u8 ctrl = 0;
++
++	/* SW_FLOW_CTRL, SW_HALF_DUPLEX, and SW_10_MBIT bits are bootstrappable.
++	 * They can have different values depending on your board setup.
++	 */
++	if (duplex) {
++		if (tx_pause || rx_pause)
++			ctrl |= SW_FLOW_CTRL;
++	} else {
++		ctrl |= SW_HALF_DUPLEX;
++	}
++
++	/* This hardware only supports SPEED_10 and SPEED_100. For SPEED_10
++	 * we need to set the SW_10_MBIT bit. Otherwise, we can leave it 0.
++	 */
++	if (speed == SPEED_10)
++		ctrl |= SW_10_MBIT;
++
++	ksz_rmw8(dev, REG_SW_CTRL_4, SW_HALF_DUPLEX | SW_FLOW_CTRL |
++		 SW_10_MBIT, ctrl);
++}
++
++void ksz8_phylink_mac_link_up(struct ksz_device *dev, int port,
++			      unsigned int mode, phy_interface_t interface,
++			      struct phy_device *phydev, int speed, int duplex,
++			      bool tx_pause, bool rx_pause)
++{
++	if (dsa_is_upstream_port(dev->ds, port))
++		ksz8_upstream_link_up(dev, port, speed, duplex, tx_pause,
++				     rx_pause);
++}
++
+ static int ksz8_handle_global_errata(struct dsa_switch *ds)
+ {
+ 	struct ksz_device *dev = ds->priv;
+@@ -1419,8 +1468,6 @@ int ksz8_setup(struct dsa_switch *ds)
+ 	 */
+ 	ds->vlan_filtering_is_global = true;
+ 
+-	ksz_cfg(dev, S_REPLACE_VID_CTRL, SW_FLOW_CTRL, true);
+-
+ 	/* Enable automatic fast aging when link changed detected. */
+ 	ksz_cfg(dev, S_LINK_AGING_CTRL, SW_LINK_AUTO_AGING, true);
+ 
+diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
+index a4428be5f483..6e19ad70c671 100644
+--- a/drivers/net/dsa/microchip/ksz_common.c
++++ b/drivers/net/dsa/microchip/ksz_common.c
+@@ -210,6 +210,7 @@ static const struct ksz_dev_ops ksz8_dev_ops = {
+ 	.mirror_add = ksz8_port_mirror_add,
+ 	.mirror_del = ksz8_port_mirror_del,
+ 	.get_caps = ksz8_get_caps,
++	.phylink_mac_link_up = ksz8_phylink_mac_link_up,
+ 	.config_cpu_port = ksz8_config_cpu_port,
+ 	.enable_stp_addr = ksz8_enable_stp_addr,
+ 	.reset = ksz8_reset_switch,
 -- 
 2.39.2
 
