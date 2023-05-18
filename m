@@ -2,60 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 389A0707BF0
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 10:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAAD1707BF3
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 10:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbjERIZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 04:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55116 "EHLO
+        id S230031AbjERIZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 04:25:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbjERIZI (ORCPT
+        with ESMTP id S229902AbjERIZS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 04:25:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F0D30D2;
-        Thu, 18 May 2023 01:24:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4296764904;
-        Thu, 18 May 2023 08:24:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CD61C433D2;
-        Thu, 18 May 2023 08:24:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684398254;
-        bh=bthXTbRdn0p6tWozz2CFQo/ARnZN5zmu2V0n1rsAQ5Y=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=OM5lRlNpkVVzjDFq/sjddkhE/QNh6e4/zqBcwgDRC3xKn2i6gEAaADYvlcb13OJhe
-         usNdQnJuXh6m8DUwJ5XYXAI6IrCo+ZyGYMpeO3asBobK0aOfAIBsnzBL0TqecUNbGC
-         YWJrMXUntyQQFt5kqLLnn7MfJ+S73I8oYqdLhPoFj78zkA1LSeLnwHuwIKLIJHRz+W
-         NI3Jhy6e0/A6OS90DWtTms2SIS3KbtJKUMM5CX1sNnxNXxmviDHtbEcrYITmVprHZW
-         N+nCJltmo5TrNZ4+JbDLaxOC1Xtm5Fk2WJHg43Blf1mSSXx4vTqxSA3Gu8+TW6gtT9
-         +hbiecR+bVBPg==
-Message-ID: <669d7b79-71a6-e1f9-8d7a-71c4b64de28d@kernel.org>
-Date:   Thu, 18 May 2023 10:24:10 +0200
+        Thu, 18 May 2023 04:25:18 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA27122;
+        Thu, 18 May 2023 01:25:04 -0700 (PDT)
+Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QMNKQ4tGdzLmLP;
+        Thu, 18 May 2023 16:23:38 +0800 (CST)
+Received: from [10.67.103.231] (10.67.103.231) by
+ kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 18 May 2023 16:24:59 +0800
+Message-ID: <aec13381-e9be-4f3d-1834-52f32f9f8418@huawei.com>
+Date:   Thu, 18 May 2023 16:24:36 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 2/3] dt-bindings: rtc: Add Mstar SSD20xD RTC devicetree
- bindings documentation
-Content-Language: en-US
-To:     Romain Perier <romain.perier@gmail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     linux-rtc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20230517144144.365631-1-romain.perier@gmail.com>
- <20230517144144.365631-3-romain.perier@gmail.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20230517144144.365631-3-romain.perier@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.2.0
+Subject: Re: [PATCH] soc: hisilicon: Support HCCS driver on Kunpeng SoC
+To:     Sudeep Holla <sudeep.holla@arm.com>
+CC:     Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
+        <wanghuiqiang@huawei.com>, <tanxiaofei@huawei.com>,
+        <liuyonglong@huawei.com>, <huangdaode@huawei.com>,
+        <linux-acpi@vger.kernel.org>, Len Brown <lenb@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        <devicetree@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <20230425131918.5tf5vot4h7jf54xk@bogus>
+ <db6c713c-f99c-fa3f-8d38-9a5d50889cc2@huawei.com>
+ <20230515130807.pdvx7bxwjkfdsmsr@bogus>
+ <aa5b1919-74c6-1f97-78af-ab5f0904c3ce@huawei.com>
+ <20230516122931.il4ai7fyxdo5gsff@bogus>
+ <f0733521-2557-fdaf-e59b-b10d515c487c@huawei.com>
+ <20230516143530.venhj4gax6stinah@bogus>
+ <a98e3620-57da-000e-f5ee-2c2e47e97906@huawei.com>
+ <20230517093033.4jvwjxuoeic46a24@bogus>
+ <5ca49494-5a0c-4dc8-9cf5-fc4bc3b8e1b2@huawei.com>
+ <20230517131614.cwi2fcj2cngaq7dm@bogus>
+From:   "lihuisong (C)" <lihuisong@huawei.com>
+In-Reply-To: <20230517131614.cwi2fcj2cngaq7dm@bogus>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.103.231]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600004.china.huawei.com (7.193.23.242)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,87 +71,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/05/2023 16:41, Romain Perier wrote:
-> This adds the documentation for the devicetree bindings of the Mstar
-> SSD20xD RTC driver.
-> 
 
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC.  It might happen, that command when run on an older
-kernel, gives you outdated entries.  Therefore please be sure you base
-your patches on recent Linux kernel.
+在 2023/5/17 21:16, Sudeep Holla 写道:
+> On Wed, May 17, 2023 at 07:35:25PM +0800, lihuisong (C) wrote:
+>> 在 2023/5/17 17:30, Sudeep Holla 写道:
+>>> On Wed, May 17, 2023 at 03:16:12PM +0800, lihuisong (C) wrote:
+>>>
+>>> [...]
+>>>
+>>>> No. I want to use this flag to make compability between different platforms.
+>>>> This driver only use PCC OpRegion to access to the channel if platform
+>>>> support use PCC OpRegion.
+>>> What do you mean by that ? It is not correct. If there is a PCC Opregion,
+>>> then you need to make it work with drivers/acpi/acpi_pcc.c
+>>>
+>>> You need to have all the other details in the firmware(ASL). By looking
+>>> at the driver, it has no connection to PCC Opregion IMO unless I am missing
+>>> something.
+>> Driver just needs to call these APIs, such as acpi_evaluate_integer(), if
+>> want to use PCC OpRegion.
+> OK, please provide examples. I am definitely lost as it doesn't match with
+> my understanding of how PCC Opregions are/can be used.
+>
+>> I know that. I have tested PCC OpRegion before.
+> Cool, examples please.
+>
+>> You've completely misunderstood what I said.😅
+>>
+> Hmm, may be but I need examples.
+As you said below, the driver works just for PCC not PCC Opregion for now.
+not sure if we need to discuss how PCC Opregion is used here.
+>
+>> I mean that this driver plans to support both PCC and PCC OpRegion.
+>> For example,
+>> Platform A: this driver use PCC (as the current implementation)
+> Good, then just keep what it needs in the implementation nothing more
+> until you add support for something you have described below(not that
+> I agree, just want you to make progress here based on what is actually
+> required today)
+Agreed.
+>
+>> Platform B: this driver use PCC OpRegion (Currently, this patch does not
+>> implement it, but it may be available in the future.)
+> Then let us discuss that in the future, don't add unnecessary complexity
+> for some future use case today. You can always add it when you introduce
+> that feature or support in the future.
+Yes. We just need to focus on the current.
+If there are any usage problems with PCC OpRegion in the future, we can 
+discuss that later.
 
-A nit, subject: drop second/last, redundant "devicetree bindings
-documentation". The "dt-bindings" prefix is already stating that these
-are bindings. You actually repeated everything...
+My original full scheme is as follows:
+-->
+dev_flags = get_device_flags();  // to know if use PCC OpRegion
+if (USE_PCC_OPREGION_B in dev_flags is 0) {
+     chan_id = get_pcc_chan_id();
+     init_mbox_client();
+     pcc_mbox_request_channel(cl, chan_id)
+} else {
+     /* we need to return unsupport now because of no this feature in 
+this driver. */
+     do_nothing();
+}
 
-> Signed-off-by: Romain Perier <romain.perier@gmail.com>
-> ---
->  .../bindings/rtc/mstar,ssd20xd-rtc.yaml       | 37 +++++++++++++++++++
->  1 file changed, 37 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/rtc/mstar,ssd20xd-rtc.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/rtc/mstar,ssd20xd-rtc.yaml b/Documentation/devicetree/bindings/rtc/mstar,ssd20xd-rtc.yaml
-> new file mode 100644
-> index 000000000000..2acd86cce69f
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/rtc/mstar,ssd20xd-rtc.yaml
-> @@ -0,0 +1,37 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/rtc/mstar,ssd20xd-rtc.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Mstar SSD20xD RTC
-> +
-> +allOf:
-> +  - $ref: rtc.yaml#
+void get_some_info(...) {
+     if (USE_PCC_OPREGION_B in dev_flags is 0)
+         pcc_cmd_send();  // use PCC to communicate with Platform
+     else
+         acpi_evaluate_object(); // will be used in future.
+}
 
-This goes just above properties:
+As described in the pseudocode above,
+it is necessary to put "dev_flags" in this current driver first in case of
+the version driver runs on the platform which just use PCC Opregion.
+>
+>> Note:
+>> This driver selects only one of them (PCC and PCC OpRegion) to communicate
+>> with firmware on one platform.
+> Let us keep it simple(KISS). The driver works just for PCC not PCC Opregion
+> for now.
+ok.
+>
+>> We use one bit in device-flags to know which one this driver will use.
+>>
+> NACK again just to re-iterate my point if you have not yet accepted that
+> fact.
+Above is our plan. Do you still think we shouldn't add this device-flags?
+please let me know.
+>> I'm not sure if you can understand what I mean by saing that.
+>> If you're not confused about this now, can you reply to my last email
+>> again?😁
+>>
+> The example you had IIRC is use of System Memory Opregion to demonstrate
+> some _DSM. That has nothing to do with PCC Opregion.
+Yes, it doesn't matter.
+I just want to have a way to get device-flags which contains many 
+bits(every bits can be used to as one feature for expanding), rigtht?
+>
+> Commit 77e2a04745ff ("ACPI: PCC: Implement OperationRegion handler for
+> the PCC Type 3 subtype") has the example in the commit message. IIRC,
+Your example is very useful to the user.
+> you have even fixed couple of bugs in that driver. That is the reason
+> why I don't understand how you think this driver and that can or must
+Understand you, Sudeep.
+At that time, I tested it by a simple demo driver on the platform 
+supported type3.
 
-> +
-> +maintainers:
-> +  - Daniel Palmer <daniel@0x0f.com>
-> +  - Romain Perier <romain.perier@gmail.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mstar,ssd20xd-rtc
-
-Why rtc suffix? Can it be anything else?
-
-Missing blank line
-
-> +  reg:
-> +    maxItems: 1
-> +
-> +  start-year: true
-
-Drop
-
-What about interrupt line?
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-
-instead
-unevaluatedProperties: false
-
-> +
-> +examples:
-> +  - |
-> +    rtc@6800 {
-> +        compatible = "mstar,ssd20xd-rtc";
-> +        reg = <0x6800 0x200>;
-> +    };
-> +...
-
-Best regards,
-Krzysztof
-
+This driver will support multiple platforms.
+On some platforms, we can only use PCC with polling way.
+And we will add PCC Opregion way for others platforms.
+What's more, every platform just use one of them(PCC and PCC Opregion).
+> work together. At least I fail to see how ATM(examples please, by that
+> I mean ASL snippet for PCC vs PCC Opregion usage to work with this driver)
+ok!
+For PCC, ASL snippet is little.
+I will add ASL snippet when this driver addes PCC Opregion way.
+>
