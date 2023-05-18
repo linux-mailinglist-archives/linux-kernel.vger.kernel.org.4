@@ -2,124 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 802CA7083C2
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:14:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7590E7083C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:15:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231217AbjEROOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 10:14:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47552 "EHLO
+        id S231523AbjEROP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 10:15:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbjEROOo (ORCPT
+        with ESMTP id S231573AbjEROPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 10:14:44 -0400
-Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D14DC;
-        Thu, 18 May 2023 07:14:43 -0700 (PDT)
+        Thu, 18 May 2023 10:15:20 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C4B1735
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:15:16 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-965ab8ed1fcso373486066b.2
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:15:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1684419284; x=1715955284;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=/EG3kAoZFFoNmCZxjC6esPJxCN2aXyXfUCBCGN6t9H4=;
-  b=qBiCGTIDiOH5mAN/A1EqCjfnfQD5UEeF0WyP4RV2uHoX7qGpZGzf4duW
-   0yMhRbzAAmSmp0GRH0HovwkRb4cGIvtAWSK1ecn4nUm3nRjEGrVqc1lmx
-   Iw66bOVbWhiyFSGmzdzwIYgfu4WonYLO+qTOg2SJoGC/eOad/DGddivU2
-   s=;
-X-IronPort-AV: E=Sophos;i="5.99,285,1677542400"; 
-   d="scan'208";a="214654107"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1d-m6i4x-b404fda3.us-east-1.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 14:14:41 +0000
-Received: from EX19MTAUWB002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1d-m6i4x-b404fda3.us-east-1.amazon.com (Postfix) with ESMTPS id 1BC99822CA;
-        Thu, 18 May 2023 14:14:39 +0000 (UTC)
-Received: from EX19D002ANA003.ant.amazon.com (10.37.240.141) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Thu, 18 May 2023 14:14:38 +0000
-Received: from b0f1d8753182.ant.amazon.com (10.106.82.23) by
- EX19D002ANA003.ant.amazon.com (10.37.240.141) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.26;
- Thu, 18 May 2023 14:14:35 +0000
-From:   Takahiro Itazuri <itazur@amazon.com>
-To:     <kvm@vger.kernel.org>
-CC:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        <linux-kernel@vger.kernel.org>,
-        Takahiro Itazuri <zulinx86@gmail.com>,
-        Takahiro Itazuri <itazur@amazon.com>
-Subject: [RESEND PATCH v2] KVM: x86: Update KVM_GET_CPUID2 to return valid entry count
-Date:   Thu, 18 May 2023 15:14:20 +0100
-Message-ID: <20230518141420.37404-1-itazur@amazon.com>
-X-Mailer: git-send-email 2.38.0
+        d=linaro.org; s=google; t=1684419315; x=1687011315;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8IhwvEpf+iZJb/gE6b3fJNEZ3XPbuQc9an/fybW+UgQ=;
+        b=xfOYp4aPqsOpItJx8cdc4w/ThTwXyWqgq/P4jGylRK8GV3Ieqp/dMUbYtUsygArWT4
+         aQ/brrc+usF19M6n8GhD+gN6bCEyUK/sUGAqHg02a3RhtMIqC6x+LXERj0T8ztPnVyAX
+         wGQdN6Ub0ScfWSq+x2HH3s7CSGLlumZrZ086SN0163jRkXj2wlx6efwWMGCwjmb6jGCh
+         KExaWToJrsw7h0P3hsrr0vUbDoOz5z+/rTP7GopljvFM4Fu/jzMwWGWET9MRwJ90cNKE
+         x4JhbcNtLgLc62l2GZNyu7P04Ie2ZLWDN2WDOULtI73q5OEIHazLgL2m+q4A7WBVHewu
+         oVvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684419315; x=1687011315;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8IhwvEpf+iZJb/gE6b3fJNEZ3XPbuQc9an/fybW+UgQ=;
+        b=JWGyceUv+J7KuRHk1AHsU1nSbu36SttextBBA3cQlcHwozQt+XKfat1caPszBYP+sa
+         RHjvhtKXeasXVGFASgGj3VdySE4oFEkH+GpqSgghNlcKTuv59G7rSJpJvzHqSFCE84aF
+         igXa0QzqZWyAGOGNlZhMQy9MAkAQ0+R4ENh514sYJ4VE4yH4MRibNZUcxKeziMrNHhUd
+         KaCh/sTxvwu4P5wdc6slW6Q9ZEehol/7WoubkKZgHjq5QQ/YRegrjucuaCuHheXI6PV0
+         tS/5epsqNyWBad42vhaibpkC3sn/Q4D9LMU3oRqj315lvyXT1qGu65p3lXglEuxo3v/j
+         pXgw==
+X-Gm-Message-State: AC+VfDyFMFUZjftaArppADUlXl/q5sSEyjVAaNkKf5D6MQclQ21uGBh6
+        nuBWfoW7Chyt9OTLVPmJeD2q0Q==
+X-Google-Smtp-Source: ACHHUZ5wOOK+/4Zdzkn8mKF6Qord3DGh5wFhoqa1tc+QlxDQBLIOmHdccwSwVCSJ9tggUv/ST2PGNw==
+X-Received: by 2002:a17:906:58d5:b0:969:9fd0:7cee with SMTP id e21-20020a17090658d500b009699fd07ceemr34329664ejs.10.1684419314959;
+        Thu, 18 May 2023 07:15:14 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:7e24:6d1b:6bf:4249? ([2a02:810d:15c0:828:7e24:6d1b:6bf:4249])
+        by smtp.gmail.com with ESMTPSA id ju4-20020a17090798a400b0094f698073e0sm1012419ejc.123.2023.05.18.07.15.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 May 2023 07:15:14 -0700 (PDT)
+Message-ID: <3f81816a-b7a8-cc3a-0052-a2177bfb58c4@linaro.org>
+Date:   Thu, 18 May 2023 16:15:12 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v1 2/3] dt-bindings: soc: add loongson-2 pm
+Content-Language: en-US
+To:     zhuyinbo <zhuyinbo@loongson.cn>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Marc Zyngier <maz@kernel.org>,
+        Youling Tang <tangyouling@loongson.cn>,
+        Baoqi Zhang <zhangbaoqi@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>, Yun Liu <liuyun@loongson.cn>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn
+References: <20230517073149.31980-1-zhuyinbo@loongson.cn>
+ <20230517073149.31980-3-zhuyinbo@loongson.cn>
+ <d3791702-4d41-0208-1346-34738a2883b6@linaro.org>
+ <4521c591-6fcd-c96a-e2f6-f41f5c191036@loongson.cn>
+ <1bbabe6d-b013-9837-8986-205a2b04de14@linaro.org>
+ <b4bc7385-3706-8aa3-0117-d106fd47a45e@loongson.cn>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <b4bc7385-3706-8aa3-0117-d106fd47a45e@loongson.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.106.82.23]
-X-ClientProxiedBy: EX19D035UWB003.ant.amazon.com (10.13.138.85) To
- EX19D002ANA003.ant.amazon.com (10.37.240.141)
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Modify the KVM_GET_CPUID2 API to return the number of valid entries in
-nent field of kvm_cpuid2 even on success.
+On 18/05/2023 14:15, zhuyinbo wrote:
+> 
+> 
+> 在 2023/5/18 下午3:15, Krzysztof Kozlowski 写道:
+>> On 18/05/2023 05:23, zhuyinbo wrote:
+>>>
+>>>
+>>> 在 2023/5/17 下午11:00, Krzysztof Kozlowski 写道:
+>>>> On 17/05/2023 09:31, Yinbo Zhu wrote:
+>>>>> Add the Loongson-2 SoC Power Management Controller binding with DT
+>>>>> schema format using json-schema.
+>>>>>
+>>>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>>>>
+>>>> ...
+>>>>
+>>>>> +properties:
+>>>>> +  compatible:
+>>>>> +    items:
+>>>>> +      - enum:
+>>>>> +          - loongson,ls2k-pmc
+>>>>> +      - const: syscon
+>>>>> +
+>>>>> +  reg:
+>>>>> +    maxItems: 1
+>>>>> +
+>>>>> +  interrupts:
+>>>>> +    maxItems: 1
+>>>>> +
+>>>>> +  suspend-address:
+>>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>>>> +    description:
+>>>>> +      This option indicate this PM suspend address.
+>>>>
+>>>> This tells me nothing. Drop "This option indicate this" and rephrase
+>>>> everything to actually describe this property. Why would the address
+>>>> differ on given, specific SoC? It looks like you just miss compatibles.
+>>>> Anyway this needs much more explanation so we can judge whether it fits DT.
+>>>
+>>> Hi Krzysztof,
+>>>
+>>> I will add following description about "suspend-address", please review.
+>>
+>> Thanks.
+>>
+>>>
+>>> The "suspend-address" is a ACPI S3 (Suspend To RAM) firmware entry
+>>
+>> Why do we add properties for ACPI? This does not seem right. 
+> 
+> 
+> 1.  The suspend-address value was dependent on specific platform
+>      firmware code and it tends to be confiurable. if it is a fixed value
+>      that seems not friendly or the ACPI S3 will not work.
 
-Previously, the KVM_GET_CPUID2 API only updated the nent field when an
-error was returned. If the API was called with an entry count larger
-than necessary (e.g., KVM_MAX_CPUID_ENTRIES), it would succeed, but the
-nent field would continue to show a value larger than the actual number
-of entries filled by the KVM_GET_CPUID2 API. With this change, users can
-rely on the updated nent field and there is no need to traverse
-unnecessary entries and check whether an entry is valid or not.
+> 2. the PM driver need according to it to indicate that current SoC
+>     whether support ACPI S3, because some Loongson-2 SoC doesn't support
 
-Signed-off-by: Takahiro Itazuri <itazur@amazon.com>
----
-Changes
-v1 -> v2
-* Capitalize "kvm" in the commit title.
-* Remove a scratch "nent" variable.
-* Link to v1: https://lore.kernel.org/all/20230410141820.57328-1-itazur@amazon.com/
+For this you have dedicated compatibles. Which points to the fact that
+you missed them here.
 
- arch/x86/kvm/cpuid.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+>     ACPI S3 but support other ACPI mode, so the PM driver need has a
+>     check. if no this check and other ACPI mode will not work.
 
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 599aebec2d52..20d28ebdc672 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -523,18 +523,18 @@ int kvm_vcpu_ioctl_get_cpuid2(struct kvm_vcpu *vcpu,
- 			      struct kvm_cpuid2 *cpuid,
- 			      struct kvm_cpuid_entry2 __user *entries)
- {
--	int r;
-+	int r = 0;
- 
--	r = -E2BIG;
- 	if (cpuid->nent < vcpu->arch.cpuid_nent)
--		goto out;
--	r = -EFAULT;
--	if (copy_to_user(entries, vcpu->arch.cpuid_entries,
-+		r = -E2BIG;
-+	else if (copy_to_user(entries, vcpu->arch.cpuid_entries,
- 			 vcpu->arch.cpuid_nent * sizeof(struct kvm_cpuid_entry2)))
--		goto out;
--	return 0;
-+		r = -EFAULT;
- 
--out:
-+	/*
-+	 * Update "nent" even on failure, e.g. so that userspace can fix an
-+	 * -E2BIG issue by allocating a larger array.
-+	 */
- 	cpuid->nent = vcpu->arch.cpuid_nent;
- 	return r;
- }
--- 
-2.39.2
+Sure, but it is not really relevant to the bindings... or rather: should
+not be relevant. Bindings are for hardware or in this case also for
+firmware, but not for driver.
+
+> 
+> Base on the above two points, this property was necessary.
+
+I did not object in my last response...
+
+> Using this property "suspend-address" can make the firmware entry
+> address configurable, and then the kernel can also indicate whether
+> the current SoC supports S3
+> 
+> In addition, from kernel code perspective, the property
+> "suspend-address" was to initialize "loongarch_suspend_addr"
+
+Again, how does it matter what kernel does?
+
+> 
+> S3 call flow:
+> enter_state -> loongson_suspend_enter -> bios's loongarch_suspend_addr
+> 
+> SYM_FUNC_START(loongson_suspend_enter)
+>          SETUP_SLEEP
+>          bl              __flush_cache_all
+> 
+>          /* Pass RA and SP to BIOS */
+>          addi.d          a1, sp, 0
+>          la.pcrel        a0, loongson_wakeup_start
+>          la.pcrel        t0, loongarch_suspend_addr
+>          ld.d            t0, t0, 0
+>          jirl            a0, t0, 0 /* Call BIOS's STR sleep routine */
+> 
+> 
+> Please
+>> reword to skip ACPI stuff, e.g. deep sleep states (Suspend to RAM).
+> 
+> 
+> Sorry, I don't got your point.
+
+You have DT platform, so why do you use it with ACPI in the first place?
+If you have ACPI, then please drop all this and make your life easier.
+
+If this is booted without ACPI, which would justify DT, drop the
+references to ACPI. I gave you example what to use instead. If you don't
+like it, no problem, reword in different way.
+
+> 
+>>
+>>
+>>> address which was jumped from kernel and it's value was dependent on
+>>> specific platform firmware code.
+>>
+>> "entry address which was jumped" <- the address cannot jump. Please
+>> explain who is jumping here - boot CPU? each suspended CPU? I guess the
+>> first as CPUs are offlined, right?
+> 
+> The boot CPU was jumping to firmware and finish remaining process in
+> firmware that was what ACPI S3 required and other CPUs (No-boot CPU)
+> have been offline before entering firmware.
+
+Then fix the description.
+
+> 
+>>
+>>> In addition, the PM driver need
+>>> according to it to indicate that current SoC whether support ACPI S3.
+>>
+>> Skip references to driver.
+> 
+> 
+> Sorry, I don't got your point.  Could you elaborate on it?
+
+If you change driver, you change bindings? No.
+
+Bindings are for hardware, not for driver. Whatever your driver is doing
+usually does not matter for the bindings and should not be included.
+
+Best regards,
+Krzysztof
 
