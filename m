@@ -2,73 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1148D708424
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:44:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92AE1708428
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:44:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbjEROoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 10:44:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60568 "EHLO
+        id S231732AbjEROop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 10:44:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230448AbjEROob (ORCPT
+        with ESMTP id S229917AbjEROon (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 10:44:31 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A635EDB
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:44:30 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-3093a778089so1438881f8f.1
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:44:30 -0700 (PDT)
+        Thu, 18 May 2023 10:44:43 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52811E1
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:44:42 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-3f4f47336bcso11132421cf.3
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:44:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684421069; x=1687013069;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s4ZpmaXHltYze/tda0999X9vCLU/m+/R6VVx4wy1BLQ=;
-        b=niYRvEQd9ba3VJ75a8EW9xcwaGlc2xA9ZRZps5WdQx6HuR7UAP37BItNiQ+IfZ6vNt
-         dNZ/fxM71IVxtvsiJmh1Py/bsAl1phIHJHToO9mz8FfTpQ15CWmB9H0sxPlR/1pGZkNg
-         NIlfBqF9NhQTXdVr7ItJCi5+Ye0WUmcw0j+RbqkqmLWloJHsXrOiEccWvcIjqa7Ul11S
-         qR8v3ZVLC0gXbd9WWht5gjc9mePoig8WFfOhqCj8lH2xrvTo7VojT7Al7mlBs+n8DrFk
-         SHHq2zY2ycngAI6NsI0EZbeKjpSjIO5xAY8V0nVS6dpYGLgZ2BcmCZDsJSx487mEDR1W
-         r64A==
+        d=joelfernandes.org; s=google; t=1684421081; x=1687013081;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=obhgUzt9f6O2yq2OScYiSLzmPyBEa1gRm2MaMRKe5ow=;
+        b=Xhj0iznqnM9003UxxM6XKADJGQU/zEHYZmW3Aa8pXsAuPHpfiPqC0/mDD8QQPG6ZqN
+         0Y7LTj1fvE63plVXwi6gAVcWC520Y0rnqcYRtXQ/i3CqBeJo/Vpfp2LahF65MVyBrlZr
+         PIDybiXdTvDRLOLmztgSUkqooX6wim0hVkbQU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684421069; x=1687013069;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=s4ZpmaXHltYze/tda0999X9vCLU/m+/R6VVx4wy1BLQ=;
-        b=SpQc7AW20JdO/2RPWYnp6IY0vRChXsD1IZY9+BH6hmdkJ+SR9g8UFqS45FPIDLuh18
-         fhaCmb/fnA8sSpRvCsES6afwv1mNipY2TzKxD5/wQg5GmjRX/1ardOyoE8TITR6xWRSW
-         VF8vDOcoMezCzYORbrSA5kNiceeEXtUaPbPZCO0hYfyIvWSzv0xTKdEojUovz4NsBy6c
-         UwrGPibZtmfHvLTfoBvIX1HgSyTKkIHjhNsgB7BkcDlN2dD/ltStK57D8oC1Zbqs5x8C
-         PZxScX2g4k4LhOa5U53qEAzy6EUFbnACfxOnedMvv+FnMlIv2WaWfeAwppfj4F+6UdSb
-         W7ew==
-X-Gm-Message-State: AC+VfDybDvwF2981sgxBb6g+9caoE6oycMGK3f6jB6inl9epn2G6018P
-        LdPgzL7kYqConU4cNlIJL8nH/Q==
-X-Google-Smtp-Source: ACHHUZ6X/HrDmzHif0p1Tigy5zsQlElGdzGKBGwaXz1EhaWbru41LcMCDcHji00NT4wS0Ax7RcE+8g==
-X-Received: by 2002:adf:f0cc:0:b0:306:2e48:6ded with SMTP id x12-20020adff0cc000000b003062e486dedmr1791903wro.13.1684421069168;
-        Thu, 18 May 2023 07:44:29 -0700 (PDT)
-Received: from hackbox.lan ([86.121.163.20])
-        by smtp.gmail.com with ESMTPSA id i14-20020adff30e000000b002fb60c7995esm2448600wro.8.2023.05.18.07.44.27
+        d=1e100.net; s=20221208; t=1684421081; x=1687013081;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=obhgUzt9f6O2yq2OScYiSLzmPyBEa1gRm2MaMRKe5ow=;
+        b=I7xQ96NKPpkx0OS+TrwKV0y01YXvZQbUleiZO5cygk3pmcJcqhKG39HfCBRedwK5P8
+         E/XCl3igruokymcC+XFqiiLdGnEYJi0+4yD2wDVfnTXw24s9TR57xv+gAP+dnKt6Ki0z
+         RPZTwSW65IDlaPb2P3QiJ/OUX1w10t8EuwqGNsvD83qwyzwbkE38JWCupGO/zRXGDJsf
+         jPF63DbZGfcPNX6QCo4ZDlwrQZTekEvNGu7WZE129BAPEstTEfSiyiVlN8JYwtrYVCR5
+         5FgCNLVNFCeVKXev7aFUfTNkDypixEVlLM+DFovlFBloC1b0piAy34s9wKdh9xTmYSC3
+         /fRg==
+X-Gm-Message-State: AC+VfDzZwtPtOSU233kMSUJYUVmFMhPFNBPX4sA884Xi71kkloGIrD6u
+        114zg36BKpGSXZWstY9elW3XFw==
+X-Google-Smtp-Source: ACHHUZ5UEp/sYvgIRP+AfymF/lDAdCglojfb5BwU1Qm8SGU8iIjhL4zgebJdare1GtGPlXo6PtHKPw==
+X-Received: by 2002:ac8:5b88:0:b0:3f5:37eb:1fba with SMTP id a8-20020ac85b88000000b003f537eb1fbamr5443748qta.23.1684421081388;
+        Thu, 18 May 2023 07:44:41 -0700 (PDT)
+Received: from localhost (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
+        by smtp.gmail.com with ESMTPSA id b28-20020a05620a127c00b0075941df3365sm436934qkl.52.2023.05.18.07.44.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 07:44:28 -0700 (PDT)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     abelvesa@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     linux-imx@nxp.com, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH] clk: imx: drop imx_unregister_clocks
-Date:   Thu, 18 May 2023 17:44:14 +0300
-Message-Id: <168442103976.3235434.11482255749033267131.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230506090856.3599035-1-peng.fan@oss.nxp.com>
-References: <20230506090856.3599035-1-peng.fan@oss.nxp.com>
+        Thu, 18 May 2023 07:44:40 -0700 (PDT)
+Date:   Thu, 18 May 2023 14:44:40 +0000
+From:   Joel Fernandes <joel@joelfernandes.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Kirill A Shutemov <kirill@shutemov.name>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: Re: [PATCH RFC 1/4] mm/mremap: Optimize the start addresses in
+ move_page_tables()
+Message-ID: <20230518144440.GA813364@google.com>
+References: <20230518021825.712742-1-joel@joelfernandes.org>
+ <20230518021825.712742-2-joel@joelfernandes.org>
+ <CAHk-=wi20GzWeK=vUoreX6AXOEmeJKczou1McCOC9JytVO=TQg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+In-Reply-To: <CAHk-=wi20GzWeK=vUoreX6AXOEmeJKczou1McCOC9JytVO=TQg@mail.gmail.com>
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,17 +79,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Sat, 06 May 2023 17:08:56 +0800, Peng Fan (OSS) wrote:
-> There is no user using imx_unregister_clocks, so drop it.
+On Wed, May 17, 2023 at 09:12:07PM -0700, Linus Torvalds wrote:
+> On Wed, May 17, 2023 at 7:18 PM Joel Fernandes (Google)
+> <joel@joelfernandes.org> wrote:
+> >
+> > This warning will only trigger when there is mutual alignment in the
+> > move operation. A solution, as suggested by Linus Torvalds [2], is to
+> > initiate the copy process at the PMD level whenever such alignment is
+> > present.
 > 
+> So this patch is actually simpler than I thought it would be.
 > 
+> But I'm a bit nervous about it. In particular, it ends doing
+> 
+>         old_end = old_addr + len;
+>         ... expand old_addr/new_addr down to the pmd boundary ..
+>         return len + old_addr - old_end;        /* how much done */
+> 
+> doesn't that return value end up being nonsensical now?
 
-Applied, thanks!
+Aargh, Sorry to miss that. Yes, it ends up being bogus in the case where the
+loop broke out early due to failure (but only on the first PMD move failure
+AFAICS). In the success case (or failures after the first PMD move), it does
+not matter because old_addr is updated to what it was without the
+optimization.
 
-[1/1] clk: imx: drop imx_unregister_clocks
-      commit: 6077af232cf58bfa4203c2364f99e0218aac7667
+> In particular, I think it can return a *negative* value, because of
+> how old_addr was moved down, and the "now much done" might indeed be
+> "negative" in the sense that it failed the move even "before" the
+> original starting point.
+> 
+> And that negative value then ends up being a large positive one as an
+> "unsigned long", of course.
+> 
+> So I get the feeling that it wants something like
+> 
+>         if (old_addr + len < old_end)
+>                 return 0;
 
-Best regards,
--- 
-Abel Vesa <abel.vesa@linaro.org>
+I think that will fix it (thanks!). The main thing I think is to not mess up
+the second call to move_page_tables() in mremap where it tries to move the
+half-moved stuff back:
+
+  move_page_tables(new_vma, new_addr, vma, old_addr, moved_len,  true);
+
+There moved_len comes from the return value of the first call to
+move_page_tables().
+
+If we realigned, and then the first PMD alloc failed, moved_len might be
+negative as you pointed. If the first PMD move passed, then there is no
+issue as I mentioned above.
+
+I will fix this in the next revision and also add a test case for this, I am
+wondering how to test it without some kind of error-injection to make the
+first PMD copy fail. In any case, I will try to hack my local kernel to test
+that.
+
+thanks,
+
+ - Joel
+
+
+> there at the end.
+> 
+> But maybe there is something in there that guarantees that that case
+> never happens. I didn't think too deeply about it, I just felt this
+> looked odd.
+> 
+>                Linus
