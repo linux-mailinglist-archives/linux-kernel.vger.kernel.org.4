@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50D6A708B36
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 00:03:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E51C3708B43
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 00:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbjERWD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 18:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59742 "EHLO
+        id S230315AbjERWDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 18:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbjERWDQ (ORCPT
+        with ESMTP id S229798AbjERWDQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 18 May 2023 18:03:16 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB7BE56;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFDAAE5E;
         Thu, 18 May 2023 15:03:14 -0700 (PDT)
-Date:   Thu, 18 May 2023 22:03:11 -0000
+Date:   Thu, 18 May 2023 22:03:12 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1684447392;
+        s=2020; t=1684447393;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=6yOBB+dHnhueTNIEBj0qNl2Hq3gUzpZCTpbw2qcH+0Q=;
-        b=bS+LYrgodFX5yVX2CVoFfgJG1y5rm0HiGidLdLjmTfXc/bokkWFgH+mEj2lPcc1Q7NhKkv
-        EBIVauqrreXDeS4d7AG4gMWqCP7qnq1bt7Ws/cRlgJyz9nf6Rne2thtbn2xBsGTNbfAoWA
-        JcwLGFwT54tU7NdxadVNnV9EJI1MTPRk2jzcijKEtFDYCEfryGftgQkX0D9JD57rOhgus1
-        IYFIH1J3BovukBXl2L7vpA5/a+GsrbYzM3hKbYMJ5BGFzvvcKmL/yz281DrnkaMM3GOE6S
-        sH1UNa4b6PJs+iJE90AMJ2cdS3OP2IxNZeaK20uT040oYneTPR2XdWAxx3wzXQ==
+        bh=FPwDkKAMXUKs/+pkRHShHp8gERHgCWToqTFG/FEqrbw=;
+        b=UU4GMyzuYgmyqp0pLlyUlMnPFfQLv6dS5UbxFqp9qLDaxjnh8eKLCMJrZ97o8ZjD9niSh2
+        BKqRUQbhKZIX4ff9Y6HH5OCVjjbJ/um+HfIOBAK4HZ+mYm7z+9ogJjpqS/3GOICwLJagC7
+        +qfcjdA4cXBlqd07CgweSgBHyLUb9dUJG+re1BLbNDp0gc6QglABgH6jMkIm1+HbYX9ubJ
+        /y5AmWOue8ESDIqsr+Q3dRQ/0Sxrad+K5OtFZp5lvj5q5FgXo287dfRsjBps0LVIyJ3zWC
+        B2sD0bX1Mu301jV85CAkh+fpgdO068IRUaRQMkW/95fgxLZBOwP51OV0WTHnXw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1684447392;
+        s=2020e; t=1684447393;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=6yOBB+dHnhueTNIEBj0qNl2Hq3gUzpZCTpbw2qcH+0Q=;
-        b=s0i6bFdU7QlseHJShdb0OD4QwSIu5SwTmYhPAd5Y+38Y1JROfhHPmu6MBWQITSqgi8a3nu
-        mcW4YOTShPGsoICg==
+        bh=FPwDkKAMXUKs/+pkRHShHp8gERHgCWToqTFG/FEqrbw=;
+        b=XrNio2cDk6lHxuqhiiHgiM+ZXtjB8Kvtuf3LXbiFkD9dwdQhQHFIKB6Tdv0is+ghhAhcoe
+        upfdBLF3JxEx0YDQ==
 From:   "tip-bot2 for Arnd Bergmann" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cleanups] x86/platform: Avoid missing-prototype warnings for OLPC
+Subject: [tip: x86/cleanups] x86/mce: Add copy_mc_fragile_handle_tail() prototype
 Cc:     Arnd Bergmann <arnd@arndb.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Alexander Lobakin <aleksander.lobakin@intel.com>,
         x86@kernel.org, linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Message-ID: <168444739153.404.3947589482547079284.tip-bot2@tip-bot2>
+Message-ID: <168444739294.404.2460168423574239895.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -62,57 +62,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/cleanups branch of tip:
 
-Commit-ID:     454a348714954f7b626c027a90c3967278e3f93b
-Gitweb:        https://git.kernel.org/tip/454a348714954f7b626c027a90c3967278e3f93b
+Commit-ID:     e9c2a283e7d9d4e207b5ab4aa1723d62ee2ecbee
+Gitweb:        https://git.kernel.org/tip/e9c2a283e7d9d4e207b5ab4aa1723d62ee2=
+ecbee
 Author:        Arnd Bergmann <arnd@arndb.de>
-AuthorDate:    Tue, 16 May 2023 21:35:49 +02:00
+AuthorDate:    Tue, 16 May 2023 21:35:44 +02:00
 Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Thu, 18 May 2023 11:56:19 -07:00
+CommitterDate: Thu, 18 May 2023 11:56:18 -07:00
 
-x86/platform: Avoid missing-prototype warnings for OLPC
+x86/mce: Add copy_mc_fragile_handle_tail() prototype
 
-There are two functions in the olpc platform that have no prototype:
+copy_mc_fragile_handle_tail() is only called from assembler,
+but 'make W=3D1' complains about a missing prototype:
 
-arch/x86/platform/olpc/olpc_dt.c:237:13: error: no previous prototype for 'olpc_dt_fixup' [-Werror=missing-prototypes]
-arch/x86/platform/olpc/olpc-xo1-pm.c:73:26: error: no previous prototype for 'xo1_do_sleep' [-Werror=missing-prototypes]
+arch/x86/lib/copy_mc.c:26:1: warning: no previous prototype for =E2=80=98copy=
+_mc_fragile_handle_tail=E2=80=99 [-Wmissing-prototypes]
+   26 | copy_mc_fragile_handle_tail(char *to, char *from, unsigned len)
 
-The first one should just be marked 'static' as there are no other
-callers, while the second one is called from assembler and is
-just a false-positive warning that can be silenced by adding a
-prototype.
+Add the prototype to avoid the warning.
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
 Reviewed-by: Alexander Lobakin <aleksander.lobakin@intel.com>
-Link: https://lore.kernel.org/all/20230516193549.544673-21-arnd%40kernel.org
+Link: https://lore.kernel.org/all/20230516193549.544673-16-arnd%40kernel.org
 ---
- arch/x86/platform/olpc/olpc_dt.c | 2 +-
- include/linux/olpc-ec.h          | 2 ++
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ arch/x86/include/asm/mce.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/x86/platform/olpc/olpc_dt.c b/arch/x86/platform/olpc/olpc_dt.c
-index 75e3319..74ebd68 100644
---- a/arch/x86/platform/olpc/olpc_dt.c
-+++ b/arch/x86/platform/olpc/olpc_dt.c
-@@ -234,7 +234,7 @@ static int __init olpc_dt_compatible_match(phandle node, const char *compat)
- 	return 0;
- }
- 
--void __init olpc_dt_fixup(void)
-+static void __init olpc_dt_fixup(void)
- {
- 	phandle node;
- 	u32 board_rev;
-diff --git a/include/linux/olpc-ec.h b/include/linux/olpc-ec.h
-index c460236..3c2891d 100644
---- a/include/linux/olpc-ec.h
-+++ b/include/linux/olpc-ec.h
-@@ -56,6 +56,8 @@ extern int olpc_ec_sci_query(u16 *sci_value);
- 
- extern bool olpc_ec_wakeup_available(void);
- 
-+asmlinkage int xo1_do_sleep(u8 sleep_state);
+diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
+index 9646ed6..180b1cb 100644
+--- a/arch/x86/include/asm/mce.h
++++ b/arch/x86/include/asm/mce.h
+@@ -350,4 +350,7 @@ static inline void mce_amd_feature_init(struct cpuinfo_x8=
+6 *c)		{ }
+ #endif
+=20
+ static inline void mce_hygon_feature_init(struct cpuinfo_x86 *c)	{ return mc=
+e_amd_feature_init(c); }
 +
- #else
- 
- static inline int olpc_ec_cmd(u8 cmd, u8 *inbuf, size_t inlen, u8 *outbuf,
++unsigned long copy_mc_fragile_handle_tail(char *to, char *from, unsigned len=
+);
++
+ #endif /* _ASM_X86_MCE_H */
