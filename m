@@ -2,78 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3397707B2A
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 09:38:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBCF5707B2C
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 09:38:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230170AbjERHi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 03:38:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36316 "EHLO
+        id S230188AbjERHi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 03:38:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbjERHiW (ORCPT
+        with ESMTP id S230160AbjERHiZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 03:38:22 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58BC4EE
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 00:38:20 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4efe8991b8aso2091565e87.0
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 00:38:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684395498; x=1686987498;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hSdiOiuqJAHUPhwp+X6FRpLlph26hY6u/p4vVDWTCR8=;
-        b=PRgiMbTjte5lz91ZaJWBDJ7UrV1Smn/rY9qdXJueUm8so7ZxISQl86vxplMfARZU/X
-         ZlHvQFHOiEnVvLBZsrIi16I/QTP+9cWYDj63eBI2eqaQuQsQlfXg4MO5TJHpwroiDNtn
-         NfwMLWIi9PyXVMk6XeC4n8Rmaoo/O3igmCu/ZF886raR4vOGzdlrZXUUp0GQ1i7CoyxN
-         S8un+IwiT49u4phVZZ7A/6izyQkKtiKZT405r2BIqbssdGBTUJKGY+Nr1MK/Beg3aGFK
-         MIwDMMDJcp/UEuSOZ/cj/A1doRuqK0X+D+rfCMZp3tjoy7WHDZyvy6hifVEvHWQuK1h+
-         yrrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684395498; x=1686987498;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hSdiOiuqJAHUPhwp+X6FRpLlph26hY6u/p4vVDWTCR8=;
-        b=WUJ6rwrpVSaP26/VyAfBJmZ0qyRFxNTBO+iKbuWjkOcl++Zku36mzGys72EdhOmwpe
-         a5u1EyffyhK+b6LS7R/05Pf4MIFryUdgrC9+oVgfi1loq4PrEs7q0t0YLfIMXa4lr15f
-         DsgFFu2AuXYJRukJNdh7YnIbs9KgVxFbR8yypX4C5iD1XB0YyAmh9wNzjPEMk3p4liPw
-         +2a51No9xIH1wwFzBFNb4JeSo90oiMbTZfeJXBUFzdEL4k30Mdip6y9bBqq2vOp2M/rM
-         mx7U1juABTNUL+g1nvekeR6e8Kz6getzgDcMJv8iTkJgg8yqDOwa+Hg/0ZV1oEWq+TCk
-         /vyg==
-X-Gm-Message-State: AC+VfDweHUU95wTTeB+ecf1Wd9F10q1O6QPW5MOEVQCR/lDrMvIyPg/H
-        YuxSAh3CaA3N/AFCxx98Fa89rw==
-X-Google-Smtp-Source: ACHHUZ7+Z8uEZegmwf+DhedLMsy7AfPt0iUSmaMEJ01Ttpr/+H1IA+SXNLeefuGi8XN3jXgJU76W3w==
-X-Received: by 2002:a19:7407:0:b0:4ee:d8f3:1390 with SMTP id v7-20020a197407000000b004eed8f31390mr916303lfe.53.1684395498627;
-        Thu, 18 May 2023 00:38:18 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:a2b:c408:5834:f48e? ([2a02:810d:15c0:828:a2b:c408:5834:f48e])
-        by smtp.gmail.com with ESMTPSA id b17-20020ac25e91000000b004f272be230bsm149250lfq.230.2023.05.18.00.38.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 May 2023 00:38:18 -0700 (PDT)
-Message-ID: <872d0dbc-18d8-800b-4647-d362a678086d@linaro.org>
-Date:   Thu, 18 May 2023 09:38:16 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v6 2/6] dt-bindings: soc: qcom: eud: Add SM6115 / SM4250
- support
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        quic_schowdhu@quicinc.com, gregkh@linuxfoundation.org
-References: <20230517211756.2483552-1-bhupesh.sharma@linaro.org>
- <20230517211756.2483552-3-bhupesh.sharma@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230517211756.2483552-3-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Thu, 18 May 2023 03:38:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163E0ED;
+        Thu, 18 May 2023 00:38:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A75A964D6F;
+        Thu, 18 May 2023 07:38:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEE5CC4339B;
+        Thu, 18 May 2023 07:38:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684395503;
+        bh=Ceo3lyC/EwdTNGI5NUXzd4YJkOb6wd2EkIraNcTbQQc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RLB6p1ywGt+LBd2Qmq5hcPqfttFG614vnyUj1r5Ty26GytDdISZFSM9DQDaFxm1Px
+         k8BpJsUBr6Sy3j2jenlA32KO3sSxHHhswZjftoqHcHIVGiJ/Wi9VGQTqK0Uyghm0Lq
+         gWnABgKsK6ZbScOvMoYRN3PdQQaUJUrcHVWMoF9bGnlyuI7WhkHOaBYCf+vCh/p3jj
+         /V0GraVhUaJ/waydKdq97ngVY+EYInMqACdDa1LGdS0x1uHVO1KuFJGsrZWthI6SZO
+         7Z3BtXSqsNecDaP3knbL/DR0NoY4Lpzvv6zpgE17sA4pZvubSxMQ35VNzGU5ClvERL
+         7ZqcdCa7XsyXw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pzYDM-00G4j7-Op;
+        Thu, 18 May 2023 08:38:20 +0100
+Date:   Thu, 18 May 2023 08:38:20 +0100
+Message-ID: <86jzx6ks2b.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.linux.dev,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        kvm-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 0/2] KVM: Fix race between reboot and hardware enabling
+In-Reply-To: <20230512233127.804012-1-seanjc@google.com>
+References: <20230512233127.804012-1-seanjc@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: seanjc@google.com, pbonzini@redhat.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, kvmarm@lists.linux.dev, chenhuacai@kernel.org, aleksandar.qemu.devel@gmail.com, anup@brainfault.org, atishp@atishpatra.org, kvm-riscv@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,33 +75,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/05/2023 23:17, Bhupesh Sharma wrote:
-> Add dt-bindings for EUD found on Qualcomm SM6115 / SM4250 SoC.
+On Sat, 13 May 2023 00:31:25 +0100,
+Sean Christopherson <seanjc@google.com> wrote:
 > 
-> On this SoC (and derivatives) the enable bit inside 'tcsr_check_reg'
-> needs to be set first to 'enable' the eud module.
+> Fix a bug where enabling hardware virtualization can race with a forced
+> reboot, e.g. `reboot -f`, and result in virt hardware being enabled when
+> the reboot is attempted, and thus hanging the reboot.
 > 
-> So, update the dt-bindings to accommodate the third register
-> property (TCSR Base) required by the driver on these SoCs.
+> Found by inspection, confirmed by hacking the reboot flow to wait until
+> KVM loads (the problematic window is ridiculously small).
 > 
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> Fully tested only on x86, compile tested on other architectures.
+> 
+> v2:
+>  - Rename KVM's callback to kvm_shutdown() to match the hook. [Marc]
+>  - Don't add a spurious newline. [Marc]
+> 
+> v1: https://lore.kernel.org/all/20230310221414.811690-1-seanjc@google.com
+> 
+> Sean Christopherson (2):
+>   KVM: Use syscore_ops instead of reboot_notifier to hook
+>     restart/shutdown
+>   KVM: Don't enable hardware after a restart/shutdown is initiated
+> 
+>  virt/kvm/kvm_main.c | 43 +++++++++++++++++++++++++++----------------
+>  1 file changed, 27 insertions(+), 16 deletions(-)
 
-This is a friendly reminder during the review process.
+Acked-by: Marc Zyngier <maz@kernel.org>
 
-It looks like you received a tag and forgot to add it.
+	M.
 
-If you do not know the process, here is a short explanation:
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions. However, there's no need to repost patches *only* to add the
-tags. The upstream maintainer will do that for acks received on the
-version they apply.
-
-https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
-
-If a tag was not added on purpose, please state why and what changed.
-
-Also - no improvements.
-
-Best regards,
-Krzysztof
-
+-- 
+Without deviation from the norm, progress is not possible.
