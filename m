@@ -2,940 +2,319 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC7BA708115
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 14:21:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 884CD708117
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 14:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231313AbjERMVF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 08:21:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56422 "EHLO
+        id S231396AbjERMVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 08:21:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbjERMVC (ORCPT
+        with ESMTP id S229920AbjERMVi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 08:21:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4EA6E45;
-        Thu, 18 May 2023 05:20:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 69AB564EF6;
-        Thu, 18 May 2023 12:20:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D269C433D2;
-        Thu, 18 May 2023 12:20:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684412458;
-        bh=KKZPRS0xF/hTezYiAJ0wumZlpCMawfGzOrHjOXNCBJE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pKjx41j5hDow9bRVd1XazgfMgWUlbhIHTeCEhth74fQSD1cNpTFMqjGMZHDmXSH+d
-         etvyfXe+ocWbOK+uSMbZsw1w/Zs5OLd1XdE8qeqTRHUZhEejPP1RzNkEqJtv2bsWiw
-         Tidbqp+IeSOoLmMRjCfABLqyXBrYNJnsiQRLMZ1ePoATQoXRzUW0+2LD4faOieCzCB
-         qhVE7XISDh0yRmDKrkupOkq2kD8R556unNdYhHdR7AcSQHA+49WXBc8TWHcFWP1O9D
-         wcz4/Bi9XvaL6drjQFc7sCFnF5j9FVD6sV1RXZ9EiDvzm4RzPYxMxAWgZr4NhCyAB3
-         PBM28N9u4nQXg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id EE42F403B5; Thu, 18 May 2023 09:20:55 -0300 (-03)
-Date:   Thu, 18 May 2023 09:20:55 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     James Clark <james.clark@arm.com>
-Cc:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kan Liang <kan.liang@linux.intel.com>
-Subject: Re: [PATCH v1 1/2] perf test attr: Update no event/metric
- expectations
-Message-ID: <ZGYYJ/biKyeFNJjL@kernel.org>
-References: <20230517225707.2682235-1-irogers@google.com>
- <64f329a9-09a3-aa84-a354-23a919062d09@arm.com>
+        Thu, 18 May 2023 08:21:38 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11B71BD
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 05:21:34 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 5E95C24E201;
+        Thu, 18 May 2023 20:21:33 +0800 (CST)
+Received: from EXMBX065.cuchost.com (172.16.6.65) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 18 May
+ 2023 20:21:33 +0800
+Received: from EXMBX066.cuchost.com (172.16.7.66) by EXMBX065.cuchost.com
+ (172.16.6.65) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 18 May
+ 2023 20:21:32 +0800
+Received: from EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f]) by
+ EXMBX066.cuchost.com ([fe80::5947:9245:907e:339f%17]) with mapi id
+ 15.00.1497.044; Thu, 18 May 2023 20:21:32 +0800
+From:   JeeHeng Sia <jeeheng.sia@starfivetech.com>
+To:     Conor Dooley <conor.dooley@microchip.com>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>
+CC:     Anup Patel <anup@brainfault.org>,
+        Song Shuai <suagrfillet@gmail.com>,
+        "robh@kernel.org" <robh@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        "palmer@rivosinc.com" <palmer@rivosinc.com>,
+        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
+        Mason Huo <mason.huo@starfivetech.com>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        Guo Ren <guoren@kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "regressions@lists.linux.dev" <regressions@lists.linux.dev>
+Subject: RE: Bug report: kernel paniced when system hibernates
+Thread-Topic: Bug report: kernel paniced when system hibernates
+Thread-Index: AQHZh9g1UxpK4+O/SUareMzY680B/K9cONsAgAFstwCAACnDAIAAOjiAgAELsYCAABJxgIAAC4yAgAAf5oCAAKJCoA==
+Date:   Thu, 18 May 2023 12:21:32 +0000
+Message-ID: <56bd3514697c4d53a8300f58a929df83@EXMBX066.cuchost.com>
+References: <CAAYs2=gQvkhTeioMmqRDVGjdtNF_vhB+vm_1dHJxPNi75YDQ_Q@mail.gmail.com>
+ <CAHVXubgse4Lw7ucg52FkQW4c=QrNo56BXsRZ_nkCHAAPxUXUig@mail.gmail.com>
+ <CAHVXubj92O_dwGShOJgrYezqk2pA2NtFyhNFbAPyhn7=PztK6Q@mail.gmail.com>
+ <20230517-preacher-primer-f41020b3376a@wendy>
+ <CAHVXubhMLgb54_7zV2yFuGPoMKCkUXwozHbDvghc7kQqNLK-JA@mail.gmail.com>
+ <CAAhSdy3tKAk1xjinwnSWan0ivdDapcLvSb+hGNynPFZMUsoB9A@mail.gmail.com>
+ <20230518-mobilize-dipper-051dfbc41971@wendy>
+ <CAHVXubhpkkC_1sYkHJvjuHB24YhmHJJ_ZvjRhzaqvygCvfbRnw@mail.gmail.com>
+ <20230518-cauterize-game-636a6aac4871@wendy>
+In-Reply-To: <20230518-cauterize-game-636a6aac4871@wendy>
+Accept-Language: en-US, zh-CN
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [172.16.6.8]
+x-yovoleruleagent: yovoleflag
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <64f329a9-09a3-aa84-a354-23a919062d09@arm.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, May 18, 2023 at 08:50:14AM +0100, James Clark escreveu:
-> 
-> 
-> On 17/05/2023 23:57, Ian Rogers wrote:
-> > Previously hard coded events/metrics were used, update for the use of
-> > the TopdownL1 json metric group.
-> > 
-> > Fixes: 94b1a603fca7 ("perf stat: Add TopdownL1 metric as a default if present")
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/tests/attr/base-stat            |   2 +-
-> >  tools/perf/tests/attr/test-stat-default    |  80 ++++++++-----
-> >  tools/perf/tests/attr/test-stat-detailed-1 |  95 +++++++++------
-> >  tools/perf/tests/attr/test-stat-detailed-2 | 119 +++++++++++--------
-> >  tools/perf/tests/attr/test-stat-detailed-3 | 127 ++++++++++++---------
-> >  5 files changed, 249 insertions(+), 174 deletions(-)
-> > 
-> 
-> Reviewed-by: James Clark <james.clark@arm.com>
-
-Thanks, applied both patches to perf-tools.
-
-- Arnaldo
-
- 
-> > diff --git a/tools/perf/tests/attr/base-stat b/tools/perf/tests/attr/base-stat
-> > index a21fb65bc012..fccd8ec4d1b0 100644
-> > --- a/tools/perf/tests/attr/base-stat
-> > +++ b/tools/perf/tests/attr/base-stat
-> > @@ -16,7 +16,7 @@ pinned=0
-> >  exclusive=0
-> >  exclude_user=0
-> >  exclude_kernel=0|1
-> > -exclude_hv=0
-> > +exclude_hv=0|1
-> >  exclude_idle=0
-> >  mmap=0
-> >  comm=0
-> > diff --git a/tools/perf/tests/attr/test-stat-default b/tools/perf/tests/attr/test-stat-default
-> > index d8ea6a88163f..a1e2da0a9a6d 100644
-> > --- a/tools/perf/tests/attr/test-stat-default
-> > +++ b/tools/perf/tests/attr/test-stat-default
-> > @@ -40,7 +40,6 @@ fd=6
-> >  type=0
-> >  config=7
-> >  optional=1
-> > -
-> >  # PERF_TYPE_HARDWARE / PERF_COUNT_HW_STALLED_CYCLES_BACKEND
-> >  [event7:base-stat]
-> >  fd=7
-> > @@ -89,79 +88,98 @@ enable_on_exec=0
-> >  read_format=15
-> >  optional=1
-> >  
-> > -# PERF_TYPE_RAW / topdown-bad-spec (0x8100)
-> > +# PERF_TYPE_RAW / topdown-fe-bound (0x8200)
-> >  [event13:base-stat]
-> >  fd=13
-> >  group_fd=11
-> >  type=4
-> > -config=33024
-> > +config=33280
-> >  disabled=0
-> >  enable_on_exec=0
-> >  read_format=15
-> >  optional=1
-> >  
-> > -# PERF_TYPE_RAW / topdown-fe-bound (0x8200)
-> > +# PERF_TYPE_RAW / topdown-be-bound (0x8300)
-> >  [event14:base-stat]
-> >  fd=14
-> >  group_fd=11
-> >  type=4
-> > -config=33280
-> > +config=33536
-> >  disabled=0
-> >  enable_on_exec=0
-> >  read_format=15
-> >  optional=1
-> >  
-> > -# PERF_TYPE_RAW / topdown-be-bound (0x8300)
-> > +# PERF_TYPE_RAW / topdown-bad-spec (0x8100)
-> >  [event15:base-stat]
-> >  fd=15
-> >  group_fd=11
-> >  type=4
-> > -config=33536
-> > +config=33024
-> >  disabled=0
-> >  enable_on_exec=0
-> >  read_format=15
-> >  optional=1
-> >  
-> > -# PERF_TYPE_RAW / topdown-heavy-ops (0x8400)
-> > +# PERF_TYPE_RAW / INT_MISC.UOP_DROPPING
-> >  [event16:base-stat]
-> >  fd=16
-> > -group_fd=11
-> >  type=4
-> > -config=33792
-> > -disabled=0
-> > -enable_on_exec=0
-> > -read_format=15
-> > +config=4109
-> >  optional=1
-> >  
-> > -# PERF_TYPE_RAW / topdown-br-mispredict (0x8500)
-> > +# PERF_TYPE_RAW / cpu/INT_MISC.RECOVERY_CYCLES,cmask=1,edge/
-> >  [event17:base-stat]
-> >  fd=17
-> > -group_fd=11
-> >  type=4
-> > -config=34048
-> > -disabled=0
-> > -enable_on_exec=0
-> > -read_format=15
-> > +config=17039629
-> >  optional=1
-> >  
-> > -# PERF_TYPE_RAW / topdown-fetch-lat (0x8600)
-> > +# PERF_TYPE_RAW / CPU_CLK_UNHALTED.THREAD
-> >  [event18:base-stat]
-> >  fd=18
-> > -group_fd=11
-> >  type=4
-> > -config=34304
-> > -disabled=0
-> > -enable_on_exec=0
-> > -read_format=15
-> > +config=60
-> >  optional=1
-> >  
-> > -# PERF_TYPE_RAW / topdown-mem-bound (0x8700)
-> > +# PERF_TYPE_RAW / INT_MISC.RECOVERY_CYCLES_ANY
-> >  [event19:base-stat]
-> >  fd=19
-> > -group_fd=11
-> >  type=4
-> > -config=34560
-> > -disabled=0
-> > -enable_on_exec=0
-> > -read_format=15
-> > +config=2097421
-> > +optional=1
-> > +
-> > +# PERF_TYPE_RAW / CPU_CLK_UNHALTED.REF_XCLK
-> > +[event20:base-stat]
-> > +fd=20
-> > +type=4
-> > +config=316
-> > +optional=1
-> > +
-> > +# PERF_TYPE_RAW / IDQ_UOPS_NOT_DELIVERED.CORE
-> > +[event21:base-stat]
-> > +fd=21
-> > +type=4
-> > +config=412
-> > +optional=1
-> > +
-> > +# PERF_TYPE_RAW / CPU_CLK_UNHALTED.ONE_THREAD_ACTIVE
-> > +[event22:base-stat]
-> > +fd=22
-> > +type=4
-> > +config=572
-> > +optional=1
-> > +
-> > +# PERF_TYPE_RAW / UOPS_RETIRED.RETIRE_SLOTS
-> > +[event23:base-stat]
-> > +fd=23
-> > +type=4
-> > +config=706
-> > +optional=1
-> > +
-> > +# PERF_TYPE_RAW / UOPS_ISSUED.ANY
-> > +[event24:base-stat]
-> > +fd=24
-> > +type=4
-> > +config=270
-> >  optional=1
-> > diff --git a/tools/perf/tests/attr/test-stat-detailed-1 b/tools/perf/tests/attr/test-stat-detailed-1
-> > index b656ab93c5bf..1c52cb05c900 100644
-> > --- a/tools/perf/tests/attr/test-stat-detailed-1
-> > +++ b/tools/perf/tests/attr/test-stat-detailed-1
-> > @@ -90,89 +90,108 @@ enable_on_exec=0
-> >  read_format=15
-> >  optional=1
-> >  
-> > -# PERF_TYPE_RAW / topdown-bad-spec (0x8100)
-> > +# PERF_TYPE_RAW / topdown-fe-bound (0x8200)
-> >  [event13:base-stat]
-> >  fd=13
-> >  group_fd=11
-> >  type=4
-> > -config=33024
-> > +config=33280
-> >  disabled=0
-> >  enable_on_exec=0
-> >  read_format=15
-> >  optional=1
-> >  
-> > -# PERF_TYPE_RAW / topdown-fe-bound (0x8200)
-> > +# PERF_TYPE_RAW / topdown-be-bound (0x8300)
-> >  [event14:base-stat]
-> >  fd=14
-> >  group_fd=11
-> >  type=4
-> > -config=33280
-> > +config=33536
-> >  disabled=0
-> >  enable_on_exec=0
-> >  read_format=15
-> >  optional=1
-> >  
-> > -# PERF_TYPE_RAW / topdown-be-bound (0x8300)
-> > +# PERF_TYPE_RAW / topdown-bad-spec (0x8100)
-> >  [event15:base-stat]
-> >  fd=15
-> >  group_fd=11
-> >  type=4
-> > -config=33536
-> > +config=33024
-> >  disabled=0
-> >  enable_on_exec=0
-> >  read_format=15
-> >  optional=1
-> >  
-> > -# PERF_TYPE_RAW / topdown-heavy-ops (0x8400)
-> > +# PERF_TYPE_RAW / INT_MISC.UOP_DROPPING
-> >  [event16:base-stat]
-> >  fd=16
-> > -group_fd=11
-> >  type=4
-> > -config=33792
-> > -disabled=0
-> > -enable_on_exec=0
-> > -read_format=15
-> > +config=4109
-> >  optional=1
-> >  
-> > -# PERF_TYPE_RAW / topdown-br-mispredict (0x8500)
-> > +# PERF_TYPE_RAW / cpu/INT_MISC.RECOVERY_CYCLES,cmask=1,edge/
-> >  [event17:base-stat]
-> >  fd=17
-> > -group_fd=11
-> >  type=4
-> > -config=34048
-> > -disabled=0
-> > -enable_on_exec=0
-> > -read_format=15
-> > +config=17039629
-> >  optional=1
-> >  
-> > -# PERF_TYPE_RAW / topdown-fetch-lat (0x8600)
-> > +# PERF_TYPE_RAW / CPU_CLK_UNHALTED.THREAD
-> >  [event18:base-stat]
-> >  fd=18
-> > -group_fd=11
-> >  type=4
-> > -config=34304
-> > -disabled=0
-> > -enable_on_exec=0
-> > -read_format=15
-> > +config=60
-> >  optional=1
-> >  
-> > -# PERF_TYPE_RAW / topdown-mem-bound (0x8700)
-> > +# PERF_TYPE_RAW / INT_MISC.RECOVERY_CYCLES_ANY
-> >  [event19:base-stat]
-> >  fd=19
-> > -group_fd=11
-> >  type=4
-> > -config=34560
-> > -disabled=0
-> > -enable_on_exec=0
-> > -read_format=15
-> > +config=2097421
-> > +optional=1
-> > +
-> > +# PERF_TYPE_RAW / CPU_CLK_UNHALTED.REF_XCLK
-> > +[event20:base-stat]
-> > +fd=20
-> > +type=4
-> > +config=316
-> > +optional=1
-> > +
-> > +# PERF_TYPE_RAW / IDQ_UOPS_NOT_DELIVERED.CORE
-> > +[event21:base-stat]
-> > +fd=21
-> > +type=4
-> > +config=412
-> > +optional=1
-> > +
-> > +# PERF_TYPE_RAW / CPU_CLK_UNHALTED.ONE_THREAD_ACTIVE
-> > +[event22:base-stat]
-> > +fd=22
-> > +type=4
-> > +config=572
-> > +optional=1
-> > +
-> > +# PERF_TYPE_RAW / UOPS_RETIRED.RETIRE_SLOTS
-> > +[event23:base-stat]
-> > +fd=23
-> > +type=4
-> > +config=706
-> > +optional=1
-> > +
-> > +# PERF_TYPE_RAW / UOPS_ISSUED.ANY
-> > +[event24:base-stat]
-> > +fd=24
-> > +type=4
-> > +config=270
-> >  optional=1
-> >  
-> >  # PERF_TYPE_HW_CACHE /
-> >  #  PERF_COUNT_HW_CACHE_L1D                <<  0  |
-> >  # (PERF_COUNT_HW_CACHE_OP_READ            <<  8) |
-> >  # (PERF_COUNT_HW_CACHE_RESULT_ACCESS      << 16)
-> > -[event20:base-stat]
-> > -fd=20
-> > +[event25:base-stat]
-> > +fd=25
-> >  type=3
-> >  config=0
-> >  optional=1
-> > @@ -181,8 +200,8 @@ optional=1
-> >  #  PERF_COUNT_HW_CACHE_L1D                <<  0  |
-> >  # (PERF_COUNT_HW_CACHE_OP_READ            <<  8) |
-> >  # (PERF_COUNT_HW_CACHE_RESULT_MISS        << 16)
-> > -[event21:base-stat]
-> > -fd=21
-> > +[event26:base-stat]
-> > +fd=26
-> >  type=3
-> >  config=65536
-> >  optional=1
-> > @@ -191,8 +210,8 @@ optional=1
-> >  #  PERF_COUNT_HW_CACHE_LL                 <<  0  |
-> >  # (PERF_COUNT_HW_CACHE_OP_READ            <<  8) |
-> >  # (PERF_COUNT_HW_CACHE_RESULT_ACCESS      << 16)
-> > -[event22:base-stat]
-> > -fd=22
-> > +[event27:base-stat]
-> > +fd=27
-> >  type=3
-> >  config=2
-> >  optional=1
-> > @@ -201,8 +220,8 @@ optional=1
-> >  #  PERF_COUNT_HW_CACHE_LL                 <<  0  |
-> >  # (PERF_COUNT_HW_CACHE_OP_READ            <<  8) |
-> >  # (PERF_COUNT_HW_CACHE_RESULT_MISS        << 16)
-> > -[event23:base-stat]
-> > -fd=23
-> > +[event28:base-stat]
-> > +fd=28
-> >  type=3
-> >  config=65538
-> >  optional=1
-> > diff --git a/tools/perf/tests/attr/test-stat-detailed-2 b/tools/perf/tests/attr/test-stat-detailed-2
-> > index 97625090a1c4..7e961d24a885 100644
-> > --- a/tools/perf/tests/attr/test-stat-detailed-2
-> > +++ b/tools/perf/tests/attr/test-stat-detailed-2
-> > @@ -90,89 +90,108 @@ enable_on_exec=0
-> >  read_format=15
-> >  optional=1
-> >  
-> > -# PERF_TYPE_RAW / topdown-bad-spec (0x8100)
-> > +# PERF_TYPE_RAW / topdown-fe-bound (0x8200)
-> >  [event13:base-stat]
-> >  fd=13
-> >  group_fd=11
-> >  type=4
-> > -config=33024
-> > +config=33280
-> >  disabled=0
-> >  enable_on_exec=0
-> >  read_format=15
-> >  optional=1
-> >  
-> > -# PERF_TYPE_RAW / topdown-fe-bound (0x8200)
-> > +# PERF_TYPE_RAW / topdown-be-bound (0x8300)
-> >  [event14:base-stat]
-> >  fd=14
-> >  group_fd=11
-> >  type=4
-> > -config=33280
-> > +config=33536
-> >  disabled=0
-> >  enable_on_exec=0
-> >  read_format=15
-> >  optional=1
-> >  
-> > -# PERF_TYPE_RAW / topdown-be-bound (0x8300)
-> > +# PERF_TYPE_RAW / topdown-bad-spec (0x8100)
-> >  [event15:base-stat]
-> >  fd=15
-> >  group_fd=11
-> >  type=4
-> > -config=33536
-> > +config=33024
-> >  disabled=0
-> >  enable_on_exec=0
-> >  read_format=15
-> >  optional=1
-> >  
-> > -# PERF_TYPE_RAW / topdown-heavy-ops (0x8400)
-> > +# PERF_TYPE_RAW / INT_MISC.UOP_DROPPING
-> >  [event16:base-stat]
-> >  fd=16
-> > -group_fd=11
-> >  type=4
-> > -config=33792
-> > -disabled=0
-> > -enable_on_exec=0
-> > -read_format=15
-> > +config=4109
-> >  optional=1
-> >  
-> > -# PERF_TYPE_RAW / topdown-br-mispredict (0x8500)
-> > +# PERF_TYPE_RAW / cpu/INT_MISC.RECOVERY_CYCLES,cmask=1,edge/
-> >  [event17:base-stat]
-> >  fd=17
-> > -group_fd=11
-> >  type=4
-> > -config=34048
-> > -disabled=0
-> > -enable_on_exec=0
-> > -read_format=15
-> > +config=17039629
-> >  optional=1
-> >  
-> > -# PERF_TYPE_RAW / topdown-fetch-lat (0x8600)
-> > +# PERF_TYPE_RAW / CPU_CLK_UNHALTED.THREAD
-> >  [event18:base-stat]
-> >  fd=18
-> > -group_fd=11
-> >  type=4
-> > -config=34304
-> > -disabled=0
-> > -enable_on_exec=0
-> > -read_format=15
-> > +config=60
-> >  optional=1
-> >  
-> > -# PERF_TYPE_RAW / topdown-mem-bound (0x8700)
-> > +# PERF_TYPE_RAW / INT_MISC.RECOVERY_CYCLES_ANY
-> >  [event19:base-stat]
-> >  fd=19
-> > -group_fd=11
-> >  type=4
-> > -config=34560
-> > -disabled=0
-> > -enable_on_exec=0
-> > -read_format=15
-> > +config=2097421
-> > +optional=1
-> > +
-> > +# PERF_TYPE_RAW / CPU_CLK_UNHALTED.REF_XCLK
-> > +[event20:base-stat]
-> > +fd=20
-> > +type=4
-> > +config=316
-> > +optional=1
-> > +
-> > +# PERF_TYPE_RAW / IDQ_UOPS_NOT_DELIVERED.CORE
-> > +[event21:base-stat]
-> > +fd=21
-> > +type=4
-> > +config=412
-> > +optional=1
-> > +
-> > +# PERF_TYPE_RAW / CPU_CLK_UNHALTED.ONE_THREAD_ACTIVE
-> > +[event22:base-stat]
-> > +fd=22
-> > +type=4
-> > +config=572
-> > +optional=1
-> > +
-> > +# PERF_TYPE_RAW / UOPS_RETIRED.RETIRE_SLOTS
-> > +[event23:base-stat]
-> > +fd=23
-> > +type=4
-> > +config=706
-> > +optional=1
-> > +
-> > +# PERF_TYPE_RAW / UOPS_ISSUED.ANY
-> > +[event24:base-stat]
-> > +fd=24
-> > +type=4
-> > +config=270
-> >  optional=1
-> >  
-> >  # PERF_TYPE_HW_CACHE /
-> >  #  PERF_COUNT_HW_CACHE_L1D                <<  0  |
-> >  # (PERF_COUNT_HW_CACHE_OP_READ            <<  8) |
-> >  # (PERF_COUNT_HW_CACHE_RESULT_ACCESS      << 16)
-> > -[event20:base-stat]
-> > -fd=20
-> > +[event25:base-stat]
-> > +fd=25
-> >  type=3
-> >  config=0
-> >  optional=1
-> > @@ -181,8 +200,8 @@ optional=1
-> >  #  PERF_COUNT_HW_CACHE_L1D                <<  0  |
-> >  # (PERF_COUNT_HW_CACHE_OP_READ            <<  8) |
-> >  # (PERF_COUNT_HW_CACHE_RESULT_MISS        << 16)
-> > -[event21:base-stat]
-> > -fd=21
-> > +[event26:base-stat]
-> > +fd=26
-> >  type=3
-> >  config=65536
-> >  optional=1
-> > @@ -191,8 +210,8 @@ optional=1
-> >  #  PERF_COUNT_HW_CACHE_LL                 <<  0  |
-> >  # (PERF_COUNT_HW_CACHE_OP_READ            <<  8) |
-> >  # (PERF_COUNT_HW_CACHE_RESULT_ACCESS      << 16)
-> > -[event22:base-stat]
-> > -fd=22
-> > +[event27:base-stat]
-> > +fd=27
-> >  type=3
-> >  config=2
-> >  optional=1
-> > @@ -201,8 +220,8 @@ optional=1
-> >  #  PERF_COUNT_HW_CACHE_LL                 <<  0  |
-> >  # (PERF_COUNT_HW_CACHE_OP_READ            <<  8) |
-> >  # (PERF_COUNT_HW_CACHE_RESULT_MISS        << 16)
-> > -[event23:base-stat]
-> > -fd=23
-> > +[event28:base-stat]
-> > +fd=28
-> >  type=3
-> >  config=65538
-> >  optional=1
-> > @@ -211,8 +230,8 @@ optional=1
-> >  #  PERF_COUNT_HW_CACHE_L1I                <<  0  |
-> >  # (PERF_COUNT_HW_CACHE_OP_READ            <<  8) |
-> >  # (PERF_COUNT_HW_CACHE_RESULT_ACCESS      << 16)
-> > -[event24:base-stat]
-> > -fd=24
-> > +[event29:base-stat]
-> > +fd=29
-> >  type=3
-> >  config=1
-> >  optional=1
-> > @@ -221,8 +240,8 @@ optional=1
-> >  #  PERF_COUNT_HW_CACHE_L1I                <<  0  |
-> >  # (PERF_COUNT_HW_CACHE_OP_READ            <<  8) |
-> >  # (PERF_COUNT_HW_CACHE_RESULT_MISS        << 16)
-> > -[event25:base-stat]
-> > -fd=25
-> > +[event30:base-stat]
-> > +fd=30
-> >  type=3
-> >  config=65537
-> >  optional=1
-> > @@ -231,8 +250,8 @@ optional=1
-> >  #  PERF_COUNT_HW_CACHE_DTLB               <<  0  |
-> >  # (PERF_COUNT_HW_CACHE_OP_READ            <<  8) |
-> >  # (PERF_COUNT_HW_CACHE_RESULT_ACCESS      << 16)
-> > -[event26:base-stat]
-> > -fd=26
-> > +[event31:base-stat]
-> > +fd=31
-> >  type=3
-> >  config=3
-> >  optional=1
-> > @@ -241,8 +260,8 @@ optional=1
-> >  #  PERF_COUNT_HW_CACHE_DTLB               <<  0  |
-> >  # (PERF_COUNT_HW_CACHE_OP_READ            <<  8) |
-> >  # (PERF_COUNT_HW_CACHE_RESULT_MISS        << 16)
-> > -[event27:base-stat]
-> > -fd=27
-> > +[event32:base-stat]
-> > +fd=32
-> >  type=3
-> >  config=65539
-> >  optional=1
-> > @@ -251,8 +270,8 @@ optional=1
-> >  #  PERF_COUNT_HW_CACHE_ITLB               <<  0  |
-> >  # (PERF_COUNT_HW_CACHE_OP_READ            <<  8) |
-> >  # (PERF_COUNT_HW_CACHE_RESULT_ACCESS      << 16)
-> > -[event28:base-stat]
-> > -fd=28
-> > +[event33:base-stat]
-> > +fd=33
-> >  type=3
-> >  config=4
-> >  optional=1
-> > @@ -261,8 +280,8 @@ optional=1
-> >  #  PERF_COUNT_HW_CACHE_ITLB               <<  0  |
-> >  # (PERF_COUNT_HW_CACHE_OP_READ            <<  8) |
-> >  # (PERF_COUNT_HW_CACHE_RESULT_MISS        << 16)
-> > -[event29:base-stat]
-> > -fd=29
-> > +[event34:base-stat]
-> > +fd=34
-> >  type=3
-> >  config=65540
-> >  optional=1
-> > diff --git a/tools/perf/tests/attr/test-stat-detailed-3 b/tools/perf/tests/attr/test-stat-detailed-3
-> > index d555042e3fbf..e50535f45977 100644
-> > --- a/tools/perf/tests/attr/test-stat-detailed-3
-> > +++ b/tools/perf/tests/attr/test-stat-detailed-3
-> > @@ -90,89 +90,108 @@ enable_on_exec=0
-> >  read_format=15
-> >  optional=1
-> >  
-> > -# PERF_TYPE_RAW / topdown-bad-spec (0x8100)
-> > +# PERF_TYPE_RAW / topdown-fe-bound (0x8200)
-> >  [event13:base-stat]
-> >  fd=13
-> >  group_fd=11
-> >  type=4
-> > -config=33024
-> > +config=33280
-> >  disabled=0
-> >  enable_on_exec=0
-> >  read_format=15
-> >  optional=1
-> >  
-> > -# PERF_TYPE_RAW / topdown-fe-bound (0x8200)
-> > +# PERF_TYPE_RAW / topdown-be-bound (0x8300)
-> >  [event14:base-stat]
-> >  fd=14
-> >  group_fd=11
-> >  type=4
-> > -config=33280
-> > +config=33536
-> >  disabled=0
-> >  enable_on_exec=0
-> >  read_format=15
-> >  optional=1
-> >  
-> > -# PERF_TYPE_RAW / topdown-be-bound (0x8300)
-> > +# PERF_TYPE_RAW / topdown-bad-spec (0x8100)
-> >  [event15:base-stat]
-> >  fd=15
-> >  group_fd=11
-> >  type=4
-> > -config=33536
-> > +config=33024
-> >  disabled=0
-> >  enable_on_exec=0
-> >  read_format=15
-> >  optional=1
-> >  
-> > -# PERF_TYPE_RAW / topdown-heavy-ops (0x8400)
-> > +# PERF_TYPE_RAW / INT_MISC.UOP_DROPPING
-> >  [event16:base-stat]
-> >  fd=16
-> > -group_fd=11
-> >  type=4
-> > -config=33792
-> > -disabled=0
-> > -enable_on_exec=0
-> > -read_format=15
-> > +config=4109
-> >  optional=1
-> >  
-> > -# PERF_TYPE_RAW / topdown-br-mispredict (0x8500)
-> > +# PERF_TYPE_RAW / cpu/INT_MISC.RECOVERY_CYCLES,cmask=1,edge/
-> >  [event17:base-stat]
-> >  fd=17
-> > -group_fd=11
-> >  type=4
-> > -config=34048
-> > -disabled=0
-> > -enable_on_exec=0
-> > -read_format=15
-> > +config=17039629
-> >  optional=1
-> >  
-> > -# PERF_TYPE_RAW / topdown-fetch-lat (0x8600)
-> > +# PERF_TYPE_RAW / CPU_CLK_UNHALTED.THREAD
-> >  [event18:base-stat]
-> >  fd=18
-> > -group_fd=11
-> >  type=4
-> > -config=34304
-> > -disabled=0
-> > -enable_on_exec=0
-> > -read_format=15
-> > +config=60
-> >  optional=1
-> >  
-> > -# PERF_TYPE_RAW / topdown-mem-bound (0x8700)
-> > +# PERF_TYPE_RAW / INT_MISC.RECOVERY_CYCLES_ANY
-> >  [event19:base-stat]
-> >  fd=19
-> > -group_fd=11
-> >  type=4
-> > -config=34560
-> > -disabled=0
-> > -enable_on_exec=0
-> > -read_format=15
-> > +config=2097421
-> > +optional=1
-> > +
-> > +# PERF_TYPE_RAW / CPU_CLK_UNHALTED.REF_XCLK
-> > +[event20:base-stat]
-> > +fd=20
-> > +type=4
-> > +config=316
-> > +optional=1
-> > +
-> > +# PERF_TYPE_RAW / IDQ_UOPS_NOT_DELIVERED.CORE
-> > +[event21:base-stat]
-> > +fd=21
-> > +type=4
-> > +config=412
-> > +optional=1
-> > +
-> > +# PERF_TYPE_RAW / CPU_CLK_UNHALTED.ONE_THREAD_ACTIVE
-> > +[event22:base-stat]
-> > +fd=22
-> > +type=4
-> > +config=572
-> > +optional=1
-> > +
-> > +# PERF_TYPE_RAW / UOPS_RETIRED.RETIRE_SLOTS
-> > +[event23:base-stat]
-> > +fd=23
-> > +type=4
-> > +config=706
-> > +optional=1
-> > +
-> > +# PERF_TYPE_RAW / UOPS_ISSUED.ANY
-> > +[event24:base-stat]
-> > +fd=24
-> > +type=4
-> > +config=270
-> >  optional=1
-> >  
-> >  # PERF_TYPE_HW_CACHE /
-> >  #  PERF_COUNT_HW_CACHE_L1D                <<  0  |
-> >  # (PERF_COUNT_HW_CACHE_OP_READ            <<  8) |
-> >  # (PERF_COUNT_HW_CACHE_RESULT_ACCESS      << 16)
-> > -[event20:base-stat]
-> > -fd=20
-> > +[event25:base-stat]
-> > +fd=25
-> >  type=3
-> >  config=0
-> >  optional=1
-> > @@ -181,8 +200,8 @@ optional=1
-> >  #  PERF_COUNT_HW_CACHE_L1D                <<  0  |
-> >  # (PERF_COUNT_HW_CACHE_OP_READ            <<  8) |
-> >  # (PERF_COUNT_HW_CACHE_RESULT_MISS        << 16)
-> > -[event21:base-stat]
-> > -fd=21
-> > +[event26:base-stat]
-> > +fd=26
-> >  type=3
-> >  config=65536
-> >  optional=1
-> > @@ -191,8 +210,8 @@ optional=1
-> >  #  PERF_COUNT_HW_CACHE_LL                 <<  0  |
-> >  # (PERF_COUNT_HW_CACHE_OP_READ            <<  8) |
-> >  # (PERF_COUNT_HW_CACHE_RESULT_ACCESS      << 16)
-> > -[event22:base-stat]
-> > -fd=22
-> > +[event27:base-stat]
-> > +fd=27
-> >  type=3
-> >  config=2
-> >  optional=1
-> > @@ -201,8 +220,8 @@ optional=1
-> >  #  PERF_COUNT_HW_CACHE_LL                 <<  0  |
-> >  # (PERF_COUNT_HW_CACHE_OP_READ            <<  8) |
-> >  # (PERF_COUNT_HW_CACHE_RESULT_MISS        << 16)
-> > -[event23:base-stat]
-> > -fd=23
-> > +[event28:base-stat]
-> > +fd=28
-> >  type=3
-> >  config=65538
-> >  optional=1
-> > @@ -211,8 +230,8 @@ optional=1
-> >  #  PERF_COUNT_HW_CACHE_L1I                <<  0  |
-> >  # (PERF_COUNT_HW_CACHE_OP_READ            <<  8) |
-> >  # (PERF_COUNT_HW_CACHE_RESULT_ACCESS      << 16)
-> > -[event24:base-stat]
-> > -fd=24
-> > +[event29:base-stat]
-> > +fd=29
-> >  type=3
-> >  config=1
-> >  optional=1
-> > @@ -221,8 +240,8 @@ optional=1
-> >  #  PERF_COUNT_HW_CACHE_L1I                <<  0  |
-> >  # (PERF_COUNT_HW_CACHE_OP_READ            <<  8) |
-> >  # (PERF_COUNT_HW_CACHE_RESULT_MISS        << 16)
-> > -[event25:base-stat]
-> > -fd=25
-> > +[event30:base-stat]
-> > +fd=30
-> >  type=3
-> >  config=65537
-> >  optional=1
-> > @@ -231,8 +250,8 @@ optional=1
-> >  #  PERF_COUNT_HW_CACHE_DTLB               <<  0  |
-> >  # (PERF_COUNT_HW_CACHE_OP_READ            <<  8) |
-> >  # (PERF_COUNT_HW_CACHE_RESULT_ACCESS      << 16)
-> > -[event26:base-stat]
-> > -fd=26
-> > +[event31:base-stat]
-> > +fd=31
-> >  type=3
-> >  config=3
-> >  optional=1
-> > @@ -241,8 +260,8 @@ optional=1
-> >  #  PERF_COUNT_HW_CACHE_DTLB               <<  0  |
-> >  # (PERF_COUNT_HW_CACHE_OP_READ            <<  8) |
-> >  # (PERF_COUNT_HW_CACHE_RESULT_MISS        << 16)
-> > -[event27:base-stat]
-> > -fd=27
-> > +[event32:base-stat]
-> > +fd=32
-> >  type=3
-> >  config=65539
-> >  optional=1
-> > @@ -251,8 +270,8 @@ optional=1
-> >  #  PERF_COUNT_HW_CACHE_ITLB               <<  0  |
-> >  # (PERF_COUNT_HW_CACHE_OP_READ            <<  8) |
-> >  # (PERF_COUNT_HW_CACHE_RESULT_ACCESS      << 16)
-> > -[event28:base-stat]
-> > -fd=28
-> > +[event33:base-stat]
-> > +fd=33
-> >  type=3
-> >  config=4
-> >  optional=1
-> > @@ -261,8 +280,8 @@ optional=1
-> >  #  PERF_COUNT_HW_CACHE_ITLB               <<  0  |
-> >  # (PERF_COUNT_HW_CACHE_OP_READ            <<  8) |
-> >  # (PERF_COUNT_HW_CACHE_RESULT_MISS        << 16)
-> > -[event29:base-stat]
-> > -fd=29
-> > +[event34:base-stat]
-> > +fd=34
-> >  type=3
-> >  config=65540
-> >  optional=1
-> > @@ -271,8 +290,8 @@ optional=1
-> >  #  PERF_COUNT_HW_CACHE_L1D                <<  0  |
-> >  # (PERF_COUNT_HW_CACHE_OP_PREFETCH        <<  8) |
-> >  # (PERF_COUNT_HW_CACHE_RESULT_ACCESS      << 16)
-> > -[event30:base-stat]
-> > -fd=30
-> > +[event35:base-stat]
-> > +fd=35
-> >  type=3
-> >  config=512
-> >  optional=1
-> > @@ -281,8 +300,8 @@ optional=1
-> >  #  PERF_COUNT_HW_CACHE_L1D                <<  0  |
-> >  # (PERF_COUNT_HW_CACHE_OP_PREFETCH        <<  8) |
-> >  # (PERF_COUNT_HW_CACHE_RESULT_MISS        << 16)
-> > -[event31:base-stat]
-> > -fd=31
-> > +[event36:base-stat]
-> > +fd=36
-> >  type=3
-> >  config=66048
-> >  optional=1
-
--- 
-
-- Arnaldo
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogQ29ub3IgRG9vbGV5IDxj
+b25vci5kb29sZXlAbWljcm9jaGlwLmNvbT4NCj4gU2VudDogVGh1cnNkYXksIE1heSAxOCwgMjAy
+MyA2OjM1IFBNDQo+IFRvOiBBbGV4YW5kcmUgR2hpdGkgPGFsZXhnaGl0aUByaXZvc2luYy5jb20+
+DQo+IENjOiBBbnVwIFBhdGVsIDxhbnVwQGJyYWluZmF1bHQub3JnPjsgU29uZyBTaHVhaSA8c3Vh
+Z3JmaWxsZXRAZ21haWwuY29tPjsgcm9iaEBrZXJuZWwub3JnOyBBbmRyZXcgSm9uZXMNCj4gPGFq
+b25lc0B2ZW50YW5hbWljcm8uY29tPjsgcGFsbWVyQHJpdm9zaW5jLmNvbTsgSmVlSGVuZyBTaWEg
+PGplZWhlbmcuc2lhQHN0YXJmaXZldGVjaC5jb20+OyBMZXlmb29uIFRhbg0KPiA8bGV5Zm9vbi50
+YW5Ac3RhcmZpdmV0ZWNoLmNvbT47IE1hc29uIEh1byA8bWFzb24uaHVvQHN0YXJmaXZldGVjaC5j
+b20+OyBQYXVsIFdhbG1zbGV5IDxwYXVsLndhbG1zbGV5QHNpZml2ZS5jb20+OyBHdW8gUmVuDQo+
+IDxndW9yZW5Aa2VybmVsLm9yZz47IGxpbnV4LXJpc2N2QGxpc3RzLmluZnJhZGVhZC5vcmc7IGxp
+bnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IHJlZ3Jlc3Npb25zQGxpc3RzLmxpbnV4LmRldg0K
+PiBTdWJqZWN0OiBSZTogQnVnIHJlcG9ydDoga2VybmVsIHBhbmljZWQgd2hlbiBzeXN0ZW0gaGli
+ZXJuYXRlcw0KPiANCj4gT24gVGh1LCBNYXkgMTgsIDIwMjMgYXQgMTA6NDE6MTlBTSArMDIwMCwg
+QWxleGFuZHJlIEdoaXRpIHdyb3RlOg0KPiA+IE9uIFRodSwgTWF5IDE4LCAyMDIzIGF0IDEwOjAw
+4oCvQU0gQ29ub3IgRG9vbGV5DQo+ID4gPGNvbm9yLmRvb2xleUBtaWNyb2NoaXAuY29tPiB3cm90
+ZToNCj4gPiA+IE9uIFRodSwgTWF5IDE4LCAyMDIzIGF0IDEyOjIzOjU5UE0gKzA1MzAsIEFudXAg
+UGF0ZWwgd3JvdGU6DQo+ID4gPiA+IE9uIFdlZCwgTWF5IDE3LCAyMDIzIGF0IDg6MjbigK9QTSBB
+bGV4YW5kcmUgR2hpdGkgPGFsZXhnaGl0aUByaXZvc2luYy5jb20+IHdyb3RlOg0KPiA+ID4gPiA+
+IE9uIFdlZCwgTWF5IDE3LCAyMDIzIGF0IDE6MjjigK9QTSBDb25vciBEb29sZXkgPGNvbm9yLmRv
+b2xleUBtaWNyb2NoaXAuY29tPiB3cm90ZToNCj4gPiA+ID4gPiA+IE9uIFdlZCwgTWF5IDE3LCAy
+MDIzIGF0IDEwOjU4OjAyQU0gKzAyMDAsIEFsZXhhbmRyZSBHaGl0aSB3cm90ZToNCj4gPiA+ID4g
+PiA+ID4gT24gVHVlLCBNYXkgMTYsIDIwMjMgYXQgMToxMuKAr1BNIEFsZXhhbmRyZSBHaGl0aSA8
+YWxleGdoaXRpQHJpdm9zaW5jLmNvbT4gd3JvdGU6DQo+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4g
+PiA+IE9uIFR1ZSwgTWF5IDE2LCAyMDIzIGF0IDExOjI04oCvQU0gU29uZyBTaHVhaSA8c3VhZ3Jm
+aWxsZXRAZ21haWwuY29tPiB3cm90ZToNCj4gPiA+ID4gPiA+ID4gPiBJIGFjdHVhbGx5IHJlbW92
+ZWQgdGhpcyBmbGFnIGEgZmV3IHllYXJzIGFnbywgYW5kIEkgaGF2ZSB0byBhZG1pdCB0aGF0DQo+
+ID4gPiA+ID4gPiA+ID4gSSBuZWVkIHRvIGNoZWNrIGlmIHRoYXQncyBuZWNlc3Nhcnk6IHRoZSBn
+b2FsIG9mIGNvbW1pdCAzMzM1MDY4Zjg3MjENCj4gPiA+ID4gPiA+ID4gPiAoInJpc2N2OiBVc2Ug
+UFVEL1A0RC9QR0QgcGFnZXMgZm9yIHRoZSBsaW5lYXIgbWFwcGluZyIpIGlzIHRvIGV4cG9zZQ0K
+PiA+ID4gPiA+ID4gPiA+IHRoZSAicmlnaHQiIHN0YXJ0IG9mIERSQU0gc28gdGhhdCB3ZSBjYW4g
+YWxpZ24gdmlydHVhbCBhbmQgcGh5c2ljYWwNCj4gPiA+ID4gPiA+ID4gPiBhZGRyZXNzZXMgb24g
+YSAxR0IgYm91bmRhcnkuDQo+ID4gPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+ID4gPiBTbyBJIGhh
+dmUgdG8gY2hlY2sgaWYgYSBub21hcCByZWdpb24gaXMgYWN0dWFsbHkgYWRkZWQgYXMgYQ0KPiA+
+ID4gPiA+ID4gPiA+IG1lbWJsb2NrLm1lbW9yeS5yZWdpb25zW10gb3Igbm90OiBpZiB5ZXMsIHRo
+YXQncyBwZXJmZWN0LCBsZXQncyBhZGQNCj4gPiA+ID4gPiA+ID4gPiB0aGUgbm9tYXAgYXR0cmli
+dXRlcyB0byB0aGUgUE1QIHJlZ2lvbnMsIG90aGVyd2lzZSwgSSBkb24ndCB0aGluayB0aGF0DQo+
+ID4gPiA+ID4gPiA+ID4gaXMgYSBnb29kIHNvbHV0aW9uLg0KPiA+ID4gPiA+ID4gPg0KPiA+ID4g
+PiA+ID4gPiBTbyBoZXJlIGlzIHRoZSBjdXJyZW50IGxpbmVhciBtYXBwaW5nIHdpdGhvdXQgbm9t
+YXAgaW4gb3BlblNCSToNCj4gPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+ID4gLS0tWyBMaW5lYXIg
+bWFwcGluZyBdLS0tDQo+ID4gPiA+ID4gPiA+IDB4ZmY2MDAwMDAwMDAwMDAwMC0weGZmNjAwMDAw
+MDAyMDAwMDAgICAgMHgwMDAwMDAwMDgwMDAwMDAwICAgICAgICAgMk0NCj4gPiA+ID4gPiA+ID4g
+UE1EICAgICBEIEEgRyAuIC4gVyBSIFYNCj4gPiA+ID4gPiA+ID4gMHhmZjYwMDAwMDAwMjAwMDAw
+LTB4ZmY2MDAwMDAwMGUwMDAwMCAgICAweDAwMDAwMDAwODAyMDAwMDAgICAgICAgIDEyTQ0KPiA+
+ID4gPiA+ID4gPiBQTUQgICAgIEQgQSBHIC4gLiAuIFIgVg0KPiA+ID4gPiA+ID4gPg0KPiA+ID4g
+PiA+ID4gPiBBbmQgYmVsb3cgdGhlIGxpbmVhciBtYXBwaW5nIHdpdGggbm9tYXAgaW4gb3BlblNC
+SToNCj4gPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+ID4gLS0tWyBMaW5lYXIgbWFwcGluZyBdLS0t
+DQo+ID4gPiA+ID4gPiA+IDB4ZmY2MDAwMDAwMDA4MDAwMC0weGZmNjAwMDAwMDAyMDAwMDAgICAg
+MHgwMDAwMDAwMDgwMDgwMDAwICAgICAgMTUzNksNCj4gPiA+ID4gPiA+ID4gUFRFICAgICBEIEEg
+RyAuIC4gVyBSIFYNCj4gPiA+ID4gPiA+ID4gMHhmZjYwMDAwMDAwMjAwMDAwLTB4ZmY2MDAwMDAw
+MGUwMDAwMCAgICAweDAwMDAwMDAwODAyMDAwMDAgICAgICAgIDEyTQ0KPiA+ID4gPiA+ID4gPiBQ
+TUQgICAgIEQgQSBHIC4gLiAuIFIgVg0KPiA+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gPiBTbyBh
+ZGRpbmcgbm9tYXAgZG9lcyBub3QgbWlzYWxpZ24gdmlydHVhbCBhbmQgcGh5c2ljYWwgYWRkcmVz
+c2VzLCBpdA0KPiA+ID4gPiA+ID4gPiBwcmV2ZW50cyB0aGUgdXNhZ2Ugb2YgMUdCIHBhZ2UgZm9y
+IHRoaXMgYXJlYSB0aG91Z2gsIHNvIHRoYXQncyBhDQo+ID4gPiA+ID4gPiA+IHNvbHV0aW9uLCB3
+ZSBqdXN0IGxvc2UgdGhpcyAxR0IgcGFnZSBoZXJlLg0KPiA+ID4gPiA+ID4gPg0KPiA+ID4gPiA+
+ID4gPiBCdXQgZXZlbiB0aG91Z2ggdGhhdCBtYXkgYmUgdGhlIGZpeCwgSSB0aGluayB3ZSBhbHNv
+IG5lZWQgdG8gZml4IHRoYXQNCj4gPiA+ID4gPiA+ID4gaW4gdGhlIGtlcm5lbCBhcyBpdCB3b3Vs
+ZCBicmVhayBjb21wYXRpYmlsaXR5IHdpdGggY2VydGFpbiB2ZXJzaW9ucyBvZg0KPiA+ID4gPiA+
+ID4gPiBvcGVuU0JJICppZiogd2UgZml4IG9wZW5TQkkuLi5TbyBoZXJlIGFyZSBhIGZldyBzb2x1
+dGlvbnM6DQo+ID4gPiA+ID4gPiA+DQo+ID4gPiA+ID4gPiA+IDEuIHdlIGNhbiBtYXJrIGFsbCAi
+bW1vZGVfcmVzdiIgbm9kZXMgaW4gdGhlIGRldmljZSB0cmVlIGFzIG5vbWFwLA0KPiA+ID4gPiA+
+ID4gPiBiZWZvcmUgdGhlIGxpbmVhciBtYXBwaW5nIGlzIGVzdGFibGlzaGVkIChJSVVDLCB0aG9z
+ZSBub2RlcyBhcmUgYWRkZWQNCj4gPiA+ID4gPiA+ID4gYnkgb3BlblNCSSB0byBhZHZlcnRpc2Ug
+UE1QIHJlZ2lvbnMpDQo+ID4gPiA+ID4gPiA+ICAgICAtPiBUaGlzIGFtb3VudHMgdG8gdGhlIHNh
+bWUgZml4IGFzIG9wZW5zYmkgYW5kIHdlIGxvc2UgdGhlIDFHQiBodWdlcGFnZS4NCj4gPiA+ID4g
+PiA+DQo+ID4gPiA+ID4gPiBBRkFJVSwgbG9zaW5nIHRoZSAxIEdCIGh1Z2VwYWdlIGlzIGEgcmVn
+cmVzc2lvbiwgd2hpY2ggd291bGQgbWFrZSB0aGlzDQo+ID4gPiA+ID4gPiBub3QgYW4gb3B0aW9u
+LCByaWdodD8NCj4gPiA+ID4gPg0KPiA+ID4gPiA+IE5vdCBzdXJlIHRoaXMgaXMgYSByZWFsIHJl
+Z3Jlc3Npb24sIEknZCByYXRoZXIgYXZvaWQgaXQsIGJ1dCBhcw0KPiA+ID4gPiA+IG1lbnRpb25l
+ZCBpbiBteSBmaXJzdCBhbnN3ZXIsIE1pa2UgUmFwb3BvcnQgc2hvd2VkIHRoYXQgaXQgd2FzIG1h
+a2luZw0KPiA+ID4gPiA+IG5vIGRpZmZlcmVuY2UgcGVyZm9ybWFuY2Utd2lzZS4uLg0KPiA+ID4N
+Cj4gPiA+IE15IHBvaW50IHdhcyB0aGF0IGlmIHNvbWVvbmUgaGFzIGh1Z2VwYWdlcyBlbmFibGVk
+ICYgd2UgaGFuZGxlIHRoaXMgaW4gYQ0KPiA+ID4gd2F5IHRoYXQgY2F1c2VzIHRoZSBmaXJzdCBo
+dWdlcGFnZSB0byBiZSB1bnVzYWJsZSwgaXMgdGhhdCBub3QgYQ0KPiA+ID4gcmVncmVzc2lvbj8g
+V2hldGhlciBodWdlcGFnZXMgcHJvdmlkZSBhIHBlcmZvcm1hbmNlIGJlbmVmaXQgaXMgbm90DQo+
+ID4gPiByZWFsbHkgcmVsYXRlZCB0byB0aGF0IHF1ZXN0aW9uIEFGQUlDVC4NCj4gPg0KPiA+IE5v
+dCBiZWluZyBhYmxlIHRvIG1hcCBjZXJ0YWluIHJlZ2lvbnMgb2YgdGhlIGxpbmVhciBtYXBwaW5n
+IHdpdGggYSAxR0INCj4gPiBodWdlcGFnZSB3aWxsIGhhcHBlbiwgZm9yIGV4YW1wbGUgdGhlIGtl
+cm5lbCBtYXBwaW5nIGlzIHByb3RlY3RlZCBpbg0KPiA+IHRoZSBsaW5lYXIgbWFwcGluZyBzbyB0
+aGF0IGl0IGNhbid0IGJlIHdyaXR0ZW46IHNvIHdlIGNhbiBvbmx5IG1hcA0KPiA+IHRoaXMgcmVn
+aW9uIHdpdGggMk1CIGh1Z2VwYWdlcy4gQSBmaXJtd2FyZSBjb3VsZCBtYXJrIGEgcmVnaW9uIGFz
+DQo+ID4gIm5vLW1hcCIgYW5kIHRoZXJlIGFnYWluIHdlIHdvdWxkIG5vdCBiZSBhYmxlIHRvIHVz
+ZSBhIDFHQiBodWdlcGFnZS4gSQ0KPiA+IGRvbid0IHNlZSB0aGF0IGFzIGEgcmVncmVzc2lvbiBh
+cyB0aGUgaW50ZW50aW9uIGlzIG5vdCB0byAqYWx3YXlzKiB1c2UNCj4gPiAxR0IgaHVnZXBhZ2Vz
+LCBidXQgcmF0aGVyIHRvIHVzZSB0aGVtIHdoZW4gcG9zc2libGUuIERvZXMgdGhhdCBtYWtlDQo+
+ID4gc2Vuc2U/DQo+IA0KPiBBaCwgc28gaXQgd2FzIGFzIEkgZXhwZWN0ZWQgLSBJIGRvbid0L2Rp
+ZG4ndCBwcm9wZXJseSB1bmRlcnN0YW5kDQo+IGh1Z2VwYWdlcy4gVGhhbmtzLg0KPiANCj4gPiA+
+IFdlcmUgeW91IHN1Z2dlc3RpbmcgcmV2ZXJ0aW5nIGh1Z2VwYWdlIHN1cHBvcnQgZW50aXJlbHkg
+aW4geW91ciBvcmlnaW5hbA0KPiA+ID4gbWVzc2FnZT8gSWYgd2UgZW50aXJlbHkgcmVtb3ZlIGh1
+Z2VwYWdlIHN1cHBvcnQsIHRoZW4gSSBndWVzcyB0aGUgZmlyc3QNCj4gPiA+IGh1Z2VwYWdlIGNh
+bm5vdCBiZSBsb3N0Li4NCj4gPg0KPiA+IEdpdmVuIE1pa2UgUmFwb3BvcnQncyByZWNlbnQgdGFs
+aywgSSB0aGluayB0aGF0J3MgYW4gb3B0aW9uLCB5ZXMuDQo+ID4NCj4gPiA+DQo+ID4gPiA+ID4g
+PiA+IDIuIHdlIGNhbiB0d2VhayBwZm5faXNfbm9zYXZlIGZ1bmN0aW9uIHRvICpub3QqIHNhdmUg
+cGZuIGNvcnJlc3BvbmRpbmcNCj4gPiA+ID4gPiA+ID4gdG8gUE1QIHJlZ2lvbnMNCj4gPiA+ID4g
+PiA+ID4gICAgIC0+IFdlIGRvbid0IGxvc2UgdGhlIDFHQiBodWdlcGFnZSBcby8NCj4gPiA+ID4g
+PiA+ID4gMy4gd2UgY2FuIHVzZSByZWdpc3Rlcl9ub3NhdmVfcmVnaW9uKCkgdG8gbm90IHNhdmUg
+dGhlICJtbW9kZV9yZXN2Ig0KPiA+ID4gPiA+ID4gPiByZWdpb25zICh4ODYgZG9lcyB0aGF0DQo+
+ID4gPiA+ID4gPiA+IGh0dHBzOi8vZWxpeGlyLmJvb3RsaW4uY29tL2xpbnV4L3Y2LjQtcmMxL3Nv
+dXJjZS9hcmNoL3g4Ni9rZXJuZWwvZTgyMC5jI0w3NTMpDQo+ID4gPiA+ID4gPiA+ICAgICAtPiBX
+ZSBkb24ndCBsb3NlIHRoZSAxR0IgaHVnZXBhZ2UgXG8vDQo+ID4gPiA+ID4gPiA+IDQuIEdpdmVu
+IEplZUhlbmcgcG9pbnRlciB0bw0KPiA+ID4gPiA+ID4gPiBodHRwczovL2VsaXhpci5ib290bGlu
+LmNvbS9saW51eC92Ni40LXJjMS9zb3VyY2Uva2VybmVsL3Bvd2VyL3NuYXBzaG90LmMjTDEzNDAs
+DQo+ID4gPiA+ID4gPiA+IHdlIGNhbiBtYXJrIHRob3NlIHBhZ2VzIGFzIG5vbi1yZWFkYWJsZSBh
+bmQgbWFrZSB0aGUgaGliZXJuYXRpb24NCj4gPiA+ID4gPiA+ID4gcHJvY2VzcyBub3Qgc2F2ZSB0
+aG9zZSBwYWdlcw0KPiA+ID4gPiA+ID4gPiAgICAgLT4gVmVyeSBsYXRlLWluLXRoZS1kYXkgaWRl
+YSwgbm90IHN1cmUgd2hhdCBpdCdzIHdvcnRoLCB3ZSBhbHNvDQo+ID4gPiA+ID4gPiA+IGxvc2Ug
+dGhlIDFHQiBodWdlcGFnZS4uLg0KPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+IERpdHRvIGhlcmUg
+cmU6IGludHJvZHVjaW5nIGFub3RoZXIgcmVncmVzc2lvbi4NCj4gPiA+ID4gPiA+DQo+ID4gPiA+
+ID4gPiA+IFRvIG1lLCB0aGUgYmVzdCBzb2x1dGlvbiBpcyAzIGFzIGl0IHdvdWxkIHByZXBhcmUg
+Zm9yIG90aGVyIHNpbWlsYXINCj4gPiA+ID4gPiA+ID4gaXNzdWVzIGxhdGVyLCBpdCBpcyBzaW1p
+bGFyIHRvIHg4NiBhbmQgaXQgYWxsb3dzIHVzIHRvIGtlZXAgMUdCDQo+ID4gPiA+ID4gPiA+IGh1
+Z2VwYWdlcy4NCj4gPiA+ID4gPiA+ID4NCj4gPiA+ID4gPiA+ID4gSSBoYXZlIGJlZW4gdGhpbmtp
+bmcsIGFuZCB0byBtZSBub21hcCBkb2VzIG5vdCBwcm92aWRlIGFueXRoaW5nIHNpbmNlDQo+ID4g
+PiA+ID4gPiA+IHRoZSBrZXJuZWwgc2hvdWxkIG5vdCBhZGRyZXNzIHRoaXMgbWVtb3J5IHJhbmdl
+LCBzbyBpZiBpdCBkb2VzLCB3ZQ0KPiA+ID4gPiA+ID4gPiBtdXN0IGZpeCB0aGUga2VybmVsLg0K
+PiA+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gPiBMZXQgbWUga25vdyB3aGF0IHlvdSBhbGwgdGhp
+bmssIEknbGwgYmUgcHJlcGFyaW5nIGEgUG9DIG9mIDMgaW4gdGhlIG1lYW50aW1lIQ0KPiA+ID4g
+PiA+ID4NCj4gPiA+ID4gPiA+ICMzIHdvdWxkIHByb2JhYmx5IGdldCBteSB2b3RlIHRvby4gSXQg
+c2VlbXMgbGlrZSB5b3UgY291bGQgdXNlIGl0DQo+ID4gPiA+ID4gPiBkeW5hbWljYWxseSBpZiB0
+aGVyZSB3YXMgdG8gYmUgYSBmdXR1cmUgb3RoZXIgcHJvdmlkZXIgb2YgIm1tb2RlX3Jlc3YiDQo+
+ID4gPiA+ID4gPiByZWdpb25zLCByYXRoZXIgdGhhbiBkb2luZyBzb21ldGhpbmcgbG9jYXRpb24t
+c3BlY2lmaWMuDQo+ID4gPiA+ID4gPg0KPiA+ID4gPiA+ID4gV2Ugc2hvdWxkIHByb2JhYmx5IGRv
+Y3VtZW50IHRoZXNlIG9wZW5zYmkgcmVzZXJ2ZWQgbWVtb3J5IG5vZGVzIHRob3VnaA0KPiA+ID4g
+PiA+ID4gaW4gYSBkdC1iaW5kaW5nIG9yIHcvZSBpZiB3ZSBhcmUgZ29pbmcgdG8gYmUgcmVseWlu
+ZyBvbiB0aGVtIHRvIG5vdA0KPiA+ID4gPiA+ID4gY3Jhc2ghDQo+ID4gPiA+DQo+ID4gPiA+IERl
+cGVuZGluZyBvbiBhIHBhcnRpY3VsYXIgbm9kZSBuYW1lIGlzIGZyYWdpbGUuIElmIHdlIHJlYWxs
+eSBuZWVkDQo+ID4gPiA+IGluZm9ybWF0aW9uIGZyb20gRFQgdGhlbiBJIHN1Z2dlc3QgYWRkaW5n
+ICJuby1zYXZlLXJlc3RvcmUiIERUDQo+ID4gPiA+IHByb3BlcnR5IGluIHJlc2VydmVkIG1lbW9y
+eSBub2Rlcy4NCj4gPiA+DQo+ID4gPiBXZSBjYW4gYWRkIHdoYXRldmVyIHByb3BlcnRpZXMgd2Ug
+bGlrZSwgYnV0IHdoZXJlIGRvZXMgdGhhdCBsZWF2ZSB1cyBmb3INCj4gPiA+IHRoZSBzeXN0ZW1z
+IGluIHRoZSB3aWxkIHdoZXJlIHRoZWlyIHJlc2VydmVkIG1lbW9yeSBub2RlcyBkbyBub3QgY29u
+dGFpbg0KPiA+ID4gYSAibm8tc2F2ZS1yZXN0b3JlIiBwcm9wZXJ0eSBvciAibm8tbWFwIj8NCj4g
+PiA+DQo+ID4gPiBJZGVhbGx5LCB5ZXMsIHdlIGRvIG5vdCBkZXBlbmQgb24gdGhlIG5vZGUgbmFt
+ZSBhbmQgaW5zdGVhZCB1c2UgZXhwbGljaXQNCj4gPiA+IHByb3BlcnRpZXMgLSBidXQgSSB0aGlu
+ayB3ZSBtYXkgYmUgImZvcmNlZCIgdG8gZmFsbCBiYWNrIHRvIGNoZWNraW5nIHRoZQ0KPiA+ID4g
+bm9kZS1uYW1lIHRvIGNvdmVyIHRoZSBvcGVuc2JpIHZlcnNpb25zIHRoYXQgZG8gbm90IGNvbnRh
+aW4gb25lLg0KPiA+ID4gTE1LIGlmIEkgaGF2ZSBtaXNzZWQgc29tZXRoaW5nIHRoZXJlIQ0KPiA+
+DQo+ID4gWWVzIEkgYWdyZWUgd2l0aCB5b3UsIHdlIGNhbiBpbXBsZW1lbnQgQW51cCdzIHNvbHV0
+aW9uICMxLCBidXQgd2UgbmVlZA0KPiA+IHRvIGZpeCB0aGUga2VybmVsIGFueXdheSBzaW5jZSBp
+ZiB3ZSBkb24ndCwgdGhhdCB3b3VsZCBtYWtlIHRoZSBrZXJuZWwNCj4gPiBoaWJlcm5hdGlvbiBz
+dXBwb3J0IGRlcGVuZCBvbiBhIGNlcnRhaW4gdmVyc2lvbiBvZiBvcGVuU0JJLg0KPiANCj4gSXQn
+cyBub3QgdW5yZWFzb25hYmxlIHRvIGhhdmUgdGhpbmdzIGRlcGVuZCBvbiB2ZXJzaW9ucyBvZiB0
+aGUgU0JJDQo+IGltcGxlbWVudGF0aW9uLCBidXQgaXQgaXMgaWYgdGhleSdyZSBub3QgdGhpbmdz
+IHRoYXQgY2FuIGJlIHByb2JlZCB1c2luZw0KPiB0aGUgc3RhbmRhcmQgaW50ZXJmYWNlcyENCj4g
+DQo+ID4gPiA+ID4gWWVzLCB5b3UncmUgcmlnaHQsIGxldCdzIHNlZSB3aGF0IEF0aXNoIGFuZCBB
+bnVwIHRoaW5rIQ0KPiA+ID4gPg0KPiA+ID4gPiBJIHRoaW5rIHdlIGhhdmUgdHdvIHBvc3NpYmxl
+IGFwcHJvYWNoZXM6DQo+ID4gPiA+DQo+ID4gPiA+IDEpIFVwZGF0ZSBPcGVuU0JJIHRvIHNldCAi
+bm8tbWFwIiBEVCBwcm9wZXJ0eSBmb3IgZmlybXdhcmUNCj4gPiA+ID4gICAgIHJlc2VydmVkIHJl
+Z2lvbnMuIFdlIHdlcmUgZG9pbmcgdGhpcyBwcmV2aW91c2x5IGJ1dCByZW1vdmVkDQo+ID4gPiA+
+ICAgICBpdCBsYXRlciBmb3IgcGVyZm9ybWFuY2UgcmVhc29ucyBtZW50aW9uZWQgYnkgQWxleC4g
+SXQgaXMgYWxzbw0KPiA+ID4gPiAgICAgd29ydGggbWVudGlvbmluZyB0aGF0IEFSTSBUcnVzdGVk
+IEZpcm13YXJlIGFsc28gc2V0cyAibm8tbWFwIg0KPiA+ID4gPiAgICAgRFQgcHJvcGVydHkgZm9y
+IGZpcm13YXJlIHJlc2VydmVkIHJlZ2lvbnMuDQo+ID4gPiA+DQo+ID4gPiA+IDIpIEFkZCBhIG5l
+dyAibm8tc2F2ZS1yZXN0b3JlIiBEVCBwcm9wZXJ0eSBpbiB0aGUgcmVzZXJ2ZWQNCj4gPiA+ID4g
+ICAgIG1lbW9yeSBEVCBiaW5kaW5ncy4gVGhlIGhpYmVybmF0ZSBzdXBwb3J0IG9mIExpbnV4IGFy
+Y2gvcmlzY3YNCj4gPiA+ID4gICAgIHdpbGwgdXNlIHRoaXMgRFQgcHJvcGVydHkgdG8gZXhjbHVk
+ZSBtZW1vcnkgcmVnaW9ucyBmcm9tDQo+ID4gPiA+ICAgICBzYXZlLXJlc3RvcmUuIFRoZSBFRkkg
+aW1wbGVtZW50YXRpb24gb2YgRURLMiBhbmQgVS1Cb290DQo+ID4gPiA+ICAgICBzaG91bGQgZG8g
+dGhlIGZvbGxvd2luZzoNCj4gPiA+ID4gICAgIDEpIFRyZWF0IGFsbCBtZW1vcnkgaGF2aW5nICJu
+by1tYXAiIERUIHByb3BlcnR5IGFzIEVGSQ0KPiA+ID4gPiAgICAgICAgIHJlc2VydmVkIG1lbW9y
+eQ0KPiA+ID4gPiAgICAgMikgVHJlYXQgYWxsIG1lbW9yeSBub3QgaGF2aW5nICJuby1tYXAiIERU
+IHByb3BlcnR5IGFuZA0KPiA+ID4gPiAgICAgICAgIG5vdCBoYXZpbmcgIm5vLXNhdmUtcmVzdG9y
+ZSIgRFQgcHJvcGVydHkgYXMgRWZpQm9vdFNlcnZpY2VzRGF0YQ0KPiA+ID4gPiAgICAgMykgVHJl
+YXQgYWxsIG1lbW9yeSBub3QgaGF2aW5nICJuby1tYXAiIERUIHByb3BlcnR5IGFuZA0KPiA+ID4g
+PiAgICAgICAgICBoYXZpbmcgIm5vLXNhdmUtcmVzdG9yZSIgRFQgcHJvcGVydHkgYXMgRWZpUnVu
+dGltZVNlcnZpY2VEYXRhDQo+ID4gPiA+ICAgICAgICAgIChSZWZlciwNCj4gPiA+ID4gaHR0cHM6
+Ly9kZXZpY2V0cmVlLXNwZWNpZmljYXRpb24ucmVhZHRoZWRvY3MuaW8vZW4vbGF0ZXN0L2NoYXB0
+ZXIzLWRldmljZW5vZGVzLmh0bWwjcmVzZXJ2ZWQtbWVtb3J5LWFuZC11ZWZpKQ0KPiA+ID4gPg0K
+PiA+ID4gPiBQZXJzb25hbGx5LCBJIGFtIGxlYW5pbmcgdG93YXJkcyBhcHByb2FjaCMxIHNpbmNl
+IGFwcHJvYWNoIzINCj4gPiA+ID4gd2lsbCByZXF1aXJlIGNoYW5naW5nIERldmljZVRyZWUgc3Bl
+Y2lmaWNhdGlvbiBhcyB3ZWxsLg0KPiA+ID4NCj4gPiA+ICMxIGlzIGJ5IGZhciB0aGUgc2ltcGxl
+ciBvcHRpb24gb2YgdGhlIHR3bywgaWYgdGhlIGNvbnNlbnN1cyBpcyB0aGF0IHRoZQ0KPiA+ID4g
+bG9zcyBvZiB0aGUgZmlyc3QgaHVnZXBhZ2UgaXMgbm90IGEgcHJvYmxlbSAob3IgaWYgaXQgaXMg
+YSBwcm9ibGVtIHRoYXQNCj4gPiA+IHJlYWxpc3RpY2FsbHkgaXMgdW5hdm9pZGFibGUpLg0KPiA+
+DQo+ID4gVGhlICJuby1tYXAiIHByb3BlcnR5IGRvZXMgbm90IHByb3ZpZGUgbXVjaCBzZWN1cml0
+eSBhbnl3YXk6IHRoZQ0KPiA+IGtlcm5lbCBzaG91bGQgbm90IHRvdWNoIGEgcGFnZSB0aGF0IGlz
+IHJlc2VydmVkICh0aGlzIGlzIHdoZXJlIEkgbWF5DQo+ID4gYmUgd3JvbmcpLCBzbyB0aGUgcmVh
+bCBmaXggdG8gdGhpcyBpc3N1ZSBpcyB0byBtYWtlIHRoZSBoaWJlcm5hdGlvbg0KPiA+IHByb2Nl
+c3Mgbm90IHNhdmUgdGhvc2UgcGFnZXMuDQo+IA0KPiBSaWdodCwgdGhlIGtlcm5lbCBjbGVhcmx5
+IG5lZWRzIHRvIGJlIGFibGUgdG8gaGFuZGxlIHRoZSByZWdpb25zLiBJLCBhdA0KPiBsZWFzdCwg
+d2FzIGNvbW1lbnRpbmcgb24gcmUtdXNpbmcgbm8tbWFwIHZlcnN1cyBjcmVhdGluZyBuZXcgcHJv
+cGVydGllcw0KPiBmb3IgdGhpcyBzaXR1YXRpb24uDQo+IEkgd2FzIGFkdm9jYXRpbmcgZm9yIHJl
+LXVzaW5nIHRoZSBwcm9wZXJ0eSAmIGNoYW5naW5nIHRoZSBrZXJuZWwgc28gYXMNCj4gbm90IHRv
+IHRvdWNoIHRoZSByZWdpb25zIGR1cmluZyBoaWJlcm5hdGlvbi4NCj4gDQo+ID4gPiBUaGVyZSdz
+IHNvbWV0aGluZyBlbHNlIEkgdGhpbmsgSSBtaWdodCBiZSBtaXNzaW5nIGhlcmUsIGdpdmVuIHRo
+ZQ0KPiA+ID4gc2NhdHRlcmVkIG5hdHVyZSBvZiB0aGUgcmVwb3J0aW5nLiBUaGlzIGlzIG5vdCBh
+IHByb2JsZW0gZm9yIGEgc3lzdGVtDQo+ID4gPiB0aGF0IGRvZXMgbm90IGltcGxlbWVudCBoaWJl
+cm5hdGlvbiwgd2hpY2ggd2FzIG9ubHkgYWRkZWQgaW4gdjYuNC1yYzE/DQo+ID4gPg0KPiA+ID4g
+VGhhdCB3b3VsZCBtYWtlIGl0IG5vdCBhIHJlZ3Jlc3Npb24gYWZ0ZXIgYWxsLiBJIHRoaW5rIEkg
+bWlzdW5kZXJzdG9vZA0KPiA+ID4gdGhlIHJlcG9ydCBvbiBzdy1kZXYgdG8gbWVhbiB0aGF0IHRo
+aXMgd2FzIGEgcHJvYmxlbSBnZW5lcmFsbHkgYWZ0ZXINCj4gPiA+IHY2LjQtcmMxLCB3aGljaCB3
+b3VsZCBoYXZlIGJlZW4gb25lLiBDb3VsZCBzb21lb25lIHBsZWFzZSBjb25maXJtIHRoYXQ/DQo+
+ID4NCj4gPiBUaGUgcHJvYmxlbSBpcyBvbmx5IHByZXNlbnQgc2luY2UgdjYuNC1yYzEsIHRoYXQn
+cyBub3QgYSByZWdyZXNzaW9uLA0KPiA+IGl0J3MganVzdCB0aGF0IGJvdGggcGF0Y2hlcyBsYW5k
+ZWQgYXQgdGhlIHNhbWUgdGltZSBhbmQgZ2F2ZSByaXNlIHRvDQo+ID4gdGhpcyBpc3N1ZS4NCj4g
+DQo+IFNpY2suIEdsYWQgdG8gYmUgd3JvbmcgaGVyZSENCj4gDQo+ICNyZWd6Ym90IHJlc29sdmU6
+IG5vdCBhIHJlZ3Jlc3Npb24sIGZlYXR1cmUgaW50cm9kdWNlZCB0aGlzIGN5Y2xlDQo+IA0KPiA+
+ID4gSWYgaXQgb25seSBhZmZlY3RzIGhpYmVybmF0aW9uLCBhbmQgaXMgbm90IGEgcmVncmVzc2lv
+biwgc2hvdWxkIHdlIG1ha2UNCj4gPiA+IEFSQ0hfSElCRVJOQVRJT05fUE9TU0lCTEUgZGVmX2Jv
+b2wgbiBpbiBLY29uZmlnIHVudGlsIHdlIGhhdmUgYWdyZWVkIG9uDQo+ID4gPiBhIHNvbHV0aW9u
+IGZvciB0aGUgcHJvYmxlbT8NCj4gDQo+IEFueSB0aG91Z2h0cyBvbiB0aGlzIG9uZT8NCg0KSSBj
+b25jdXIgdGhhdCB0aGUgY29udmVyc2F0aW9uIHdhcyBzb21ld2hhdCBmcmFnbWVudGVkLiBBbGxv
+dyBtZSB0byByZW9yZ2FuaXplIGFuZCBzdW1tYXJpemUgaXQgYXMgZm9sbG93czoNCg0KVGhlIGlu
+aXRpYWwgcmVwb3J0LCBvcmlnaW5hdGluZyBmcm9tIHRoZSBzdy1kZXYsIHJldmVhbGVkIHRoYXQg
+dGhlIExpbnV4IFJJU0NWIG1lbW9yeSBsYXlvdXQgdW5kZXJ3ZW50IGEgY2hhbmdlIGluIHZlcnNp
+b24gdjYuNC1yYzEuIEJhc2VkIG9uIHRoZSBjb252ZXJzYXRpb24sIGl0IHdhcyBoaWdobGlnaHRl
+ZCB0aGF0IHRoZSBwaHlzaWNhbCBtZW1vcnkgcmVnaW9uIGJldHdlZW4gIDB4ODAwMDAwMDAgdG8g
+MHg4MDIwMDAwMCAoUE1QIHJlZ2lvbikgd2FzIHJlc2VydmVkIGFuZCB3YXNuJ3QgcHJlc2VudGVk
+IHRvIHRoZSBrZXJuZWwgcGFnZSB0YWJsZSBpbiBrZXJuZWwgdmVyc2lvbnMgcHJpb3IgdG8gNi40
+LXJjMS4gSG93ZXZlciwgd2l0aCBQTVAgcHJvdGVjdGlvbiBzdGlsbCBpbiBwbGFjZSBhbmQgT3Bl
+blNCSSBoYXZpbmcgbm8gY3VycmVudCBwbGFucyB0byByZW1vdmUgdGhlIFBNUCBmbGFnLCB0aGlz
+IHJlZ2lvbiBpcyBub3cgZXhwb3NlZCB0byB0aGUga2VybmVsIHBhZ2UgdGFibGUgaW4ga2VybmVs
+IHZlcnNpb24gdjYuNC1yYzEuDQoNClRoZSBzZWNvbmQgcmVwb3J0LCB3aGljaCBjYW1lIHRocm91
+Z2ggdGhlIG1haWxpbmcgbGlzdCwgaW5kaWNhdGVkIHRoYXQgdGhlIEtlcm5lbCBjcmFzaGVzIGR1
+cmluZyBoaWJlcm5hdGlvbi4gVGhlIGF1dGhvciBtYW5hZ2VkIHRvIGlzb2xhdGUgdGhlIHN1c3Bp
+Y2lvdXMgcGF0Y2hlcyBhbmQgdHJhY2VkIHRoZSByb290IGNhdXNlIHRvIHRoZSBtZW1vcnkgcmVn
+aW9uIHByb3RlY3RlZCBieSBQTVAuIFRoZSBkaXNjdXNzaW9uIGFsc28gc3VnZ2VzdGVkIHRoYXQg
+dGhlIFBNUCByZWdpb24gbmVlZHMgdG8gYmUgbWFwcGVkIHRvIHRoZSBwYWdlIHRhYmxlIHRvIGFj
+Y29tbW9kYXRlIHRoZSAxR0IgaHVnZSBwYWdlLg0KDQpJbiBlc3NlbmNlLCBib3RoIHJlcG9ydHMg
+Y29uY2VybiB0aGUgUE1QIHByb3RlY3RlZCBtZW1vcnkgcmVnaW9uIHRoYXQncyBub3cgZXhwb3Nl
+ZCB0byB0aGUgcGFnZSB0YWJsZSBpbiBrZXJuZWwgdjYuNC1yYzEuDQoNCkl0IGlzIGV2aWRlbnQg
+dGhhdCB3ZSdyZSBkZWFsaW5nIHdpdGggdHdvIGRpc3RpbmN0IGJ1dCBpbnRlcmRlcGVuZGVudCBp
+c3N1ZXM6DQoxLiBLZXJuZWwgY3Jhc2hlcyBkdXJpbmcgdGhlIGhpYmVybmF0aW9uIHByb2Nlc3Mu
+DQoyLiBQTVAgcHJvdGVjdGVkIHJlZ2lvbiBleHBvc3VyZSB0byB0aGUga2VybmVsIHBhZ2UgdGFi
+bGUuDQoNCkFzIGZvciB0aGUgZmlyc3QgcHJvYmxlbSwgd2UgaGF2ZSBhIHBvc3NpYmxlIHNvbHV0
+aW9uIG9yIHdvcmthcm91bmQgb24gaGFuZDogcHJldmVudCB0aGUgaGliZXJuYXRpb24gY29yZSBm
+cm9tIHNhdmluZyB0aGUgUE1QIHByb3RlY3RlZCBtZW1vcnkgcmVnaW9uLCB3aGljaCB0aGVuIG5l
+ZWRzIHNvbWUgdGlkeWluZyB1cCBhbmQgZGVidWcuDQoNCkluIHJlbGF0aW9uIHRvIHRoZSBzZWNv
+bmQgcHJvYmxlbSwgcG90ZW50aWFsIHNvbHV0aW9ucyBoYXZlIGJlZW4gc3VnZ2VzdGVkIGJ1dCBy
+ZXF1aXJlIGZ1cnRoZXIgZGlzY3Vzc2lvbi4gVGhlc2Ugc29sdXRpb25zIGluY2x1ZGU6DQphLiBS
+ZXRhaW4gdGhlIGV4cG9zdXJlIG9mIHRoZSBQTVAgcHJvdGVjdGVkIHJlZ2lvbiB0byB0aGUga2Vy
+bmVsIHBhZ2UgdGFibGUsIGFzIHRoZSBrZXJuZWwgZG9lc24ndCB1dGlsaXplIHRoaXMgcmVnaW9u
+Lg0KYi4gUmV2aXNlIHRoZSBPcGVuU0JJIERldmljZSBUcmVlIChEVCkgYW5kIHVwZGF0ZSB0aGUg
+ZG9jdW1lbnRhdGlvbiBmb3IgdGhlIGZpcm13YXJlIHJlc2VydmVkIHJlZ2lvbi4NCmMuIEltcGxl
+bWVudCB0aGUgbm8tbWFwIG9wdGlvbiwgd2hpY2ggY291bGQgcG90ZW50aWFsbHkgcmVzdWx0IGlu
+IGxvc2luZyB0aGUgMUdCIGh1Z2UgcGFnZSBzdXBwb3J0Lg0KZC4gQWJhbmRvbiB0aGUgMUdCIGh1
+Z2UgcGFnZSBzdXBwb3J0IGVudGlyZWx5Lg0KDQpJbiByZXNwb25zZSB0byB5b3VyIHF1ZXJ5LCBJ
+IHByb3Bvc2Ugd2UgcHJvY2VlZCB3aXRoIHRoZSBQTVAgd29ya2Fyb3VuZCBwYXRjaCwgd2hpbGUg
+Y29uY3VycmVudGx5IGNvbnRpbnVpbmcgZGlzY3Vzc2lvbnMgb24gc29sdXRpb25zIGEsIGIsIGMs
+IGFuZCBkLg0KQEFsZXgsIGZlZWwgZnJlZSB0byByZWFjaCBvdXQgdG8gbWUuDQo=
