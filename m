@@ -2,86 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3C257087FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 20:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0653708801
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 20:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbjERSt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 14:49:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36634 "EHLO
+        id S229769AbjERSuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 14:50:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbjERStY (ORCPT
+        with ESMTP id S229869AbjERSuv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 14:49:24 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661E1E4F;
-        Thu, 18 May 2023 11:49:23 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34IHuYvd009111;
-        Thu, 18 May 2023 18:48:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Ht8RdntEily+GKgk89bEEqXSuiTabzJwgELIJ8zSbaw=;
- b=ZgXnKkBrd+exeBOkx6Ik0Husd0o2bc+l2xws0yaktEkH31Sltl99c9DYHQLNbse34BfN
- kOCbydqLnPuRapEVOnpddor4HfGX4pYgdvKEdNLNajwX3c4FevlrphbBnZb8eYto4sGQ
- FNgf1ywQqPD8+OyviN5e7T0BdMsmpCqGoJpo2px2ydBRA9/G0t0B5xxN/WCxYeZZ/KQl
- bwu26We8vJvY0IVaJ6DcC6V2spGBzNytFJcZljippKO8JcesALxZRdnSgp4AihW6V5Jx
- Qc5hBZ3RDW6DHgr06RMN/NZ0VaBS0vmCop6Phlbu/fA4N9KyqZ4Tg8P8aXcifRBCUsLS iw== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qnc30swc8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 May 2023 18:48:55 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34IImrVv030047
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 May 2023 18:48:53 GMT
-Received: from [10.110.64.80] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 18 May
- 2023 11:48:52 -0700
-Message-ID: <b14475ca-95d5-a5a2-90bd-79e7b94cd8ab@quicinc.com>
-Date:   Thu, 18 May 2023 11:48:52 -0700
+        Thu, 18 May 2023 14:50:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D63E4F
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 11:50:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684435805;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=jhNH5X6r0ZKpS+GpJhPbsRYtE9hrwN2qv/IBByfk+DM=;
+        b=YBpJeJXDKTyzbUcrLi93SVH2uHaGey5+1ExQYKBXR/crFhic7w1i8naAqdSZY2vd1Eb0Hg
+        20lhhF1kxjfm0H/fImoass2G3vjzevPt/9nFLr4Ng4nbQZkxcN48kTEscctahNXmsc2aoi
+        Tv/9CmLh+e27wwWbtrAMU/jRcuClalk=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-505-vN-DZkkIPdaXZU97FiUFeg-1; Thu, 18 May 2023 14:50:04 -0400
+X-MC-Unique: vN-DZkkIPdaXZU97FiUFeg-1
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-62387e4de2bso31257916d6.2
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 11:50:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684435804; x=1687027804;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jhNH5X6r0ZKpS+GpJhPbsRYtE9hrwN2qv/IBByfk+DM=;
+        b=Ldh8Z80VPuCV4XHWDrBhIC9NuKdJGS+seJf55+7SscYI0NhZkDFgeV/bf9ekt/9AiY
+         4bZ2KXCIHBHaM+m41HRGMG2y0ZmO8+hQrNzO6lDYDU82XrMXxa1KFYzxtED4nBxCOvgD
+         DAPnqCrljKIShVHpvE0v6267f5wn9/jesQ1t7Zntx37CmzhCGrVbTFCboqr5EdpQ3hgD
+         fGAGrOioCPWaOw12sr+7mi7bFw+/+fVIMgYVHN0klOvc1gfbF6U+jWMjqgnbfIvoCy1R
+         6ayOeRYyJActIaffCXo7MmPV9bbu+aAQW1/+c/l740gF8PUvwUrKw5us4L8+joY6O9Cc
+         e33w==
+X-Gm-Message-State: AC+VfDzfsuAjU+y7SxQ2ETm8CfDR6cj0UywN9muF8VyykmejfaA3VVbX
+        u86MG4XgpHB5fYcWqhlprFS40PNTsd7DXln9WoALtR24ERaSX3ZjaqJ+TQDNWvPr/PRBqw/uwZ2
+        WfnNZLX7xX9frxJQi2+rYGdct
+X-Received: by 2002:a05:6214:2a8b:b0:5c1:fa35:fe6 with SMTP id jr11-20020a0562142a8b00b005c1fa350fe6mr44431qvb.24.1684435803861;
+        Thu, 18 May 2023 11:50:03 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5kRFTSioRtw0V5WoyySUFzvYh5S7whyTa69eUEgil2/6d/1Yxp3N2ckI4ryuPgJJXkfx7PLw==
+X-Received: by 2002:a05:6214:2a8b:b0:5c1:fa35:fe6 with SMTP id jr11-20020a0562142a8b00b005c1fa350fe6mr44404qvb.24.1684435803593;
+        Thu, 18 May 2023 11:50:03 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id h11-20020a0cedab000000b0061ac0b43a16sm703530qvr.103.2023.05.18.11.50.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 May 2023 11:50:03 -0700 (PDT)
+Date:   Thu, 18 May 2023 11:50:01 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
+Cc:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        l.sanfilippo@kunbus.com
+Subject: Re: [PATCH - for 6.4] tpm: tpm_tis: Disable interrupts for AEON
+ UPX-i11
+Message-ID: <ohdpul6hax5bj5hhsnpt7i3ejbttivufmoolzunbhipexjkczi@meg3zx2yqkc7>
+References: <20230517122931.22385-1-peter.ujfalusi@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v3 14/18] firmware: qcom_scm: provide a read-modify-write
- function
-To:     Mukesh Ojha <quic_mojha@quicinc.com>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <corbet@lwn.net>, <keescook@chromium.org>, <tony.luck@intel.com>,
-        <gpiccoli@igalia.com>, <catalin.marinas@arm.com>,
-        <will@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <robh+dt@kernel.org>, <linus.walleij@linaro.org>,
-        <linux-gpio@vger.kernel.org>, <srinivas.kandagatla@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-doc@vger.kernel.org>
-References: <1683133352-10046-1-git-send-email-quic_mojha@quicinc.com>
- <1683133352-10046-15-git-send-email-quic_mojha@quicinc.com>
-Content-Language: en-US
-From:   Trilok Soni <quic_tsoni@quicinc.com>
-In-Reply-To: <1683133352-10046-15-git-send-email-quic_mojha@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: i8RM0WpSoeg1VDYk_FS0NbrlAD0efXR1
-X-Proofpoint-ORIG-GUID: i8RM0WpSoeg1VDYk_FS0NbrlAD0efXR1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-18_13,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- suspectscore=0 mlxlogscore=856 phishscore=0 adultscore=0 bulkscore=0
- mlxscore=0 clxscore=1015 lowpriorityscore=0 impostorscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305180153
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230517122931.22385-1-peter.ujfalusi@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,54 +79,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/3/2023 10:02 AM, Mukesh Ojha wrote:
-> It was realized by Srinivas K. that there is a need of
-> read-modify-write scm exported function so that it can
-> be used by multiple clients.
+On Wed, May 17, 2023 at 03:29:31PM +0300, Peter Ujfalusi wrote:
+> The interrupts initially works on the device but they will stop arriving
+> after about 200 interrupts.
 > 
-> Let's introduce qcom_scm_io_update_field() which masks
-> out the bits and write the passed value to that
-> bit-offset. Subsequent patch will use this function.
+> On system reboot/shutdown this will cause a long wait (120000 jiffies).
 > 
-> Suggested-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> The interrupts on this device got enabled by commit
+> e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test")
+> 
+> Prior to this point the interrupts were not enabled on this machine.
+> 
+> Complements: e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test")
+> Signed-off-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
 > ---
->   drivers/firmware/qcom_scm.c            | 15 +++++++++++++++
->   include/linux/firmware/qcom/qcom_scm.h |  2 ++
->   2 files changed, 17 insertions(+)
+> Hi,
 > 
-> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-> index fde33acd..003cbcb 100644
-> --- a/drivers/firmware/qcom_scm.c
-> +++ b/drivers/firmware/qcom_scm.c
-> @@ -407,6 +407,21 @@ int qcom_scm_set_remote_state(u32 state, u32 id)
->   }
->   EXPORT_SYMBOL(qcom_scm_set_remote_state);
->   
-> +int qcom_scm_io_update_field(phys_addr_t addr, unsigned int mask, unsigned int val)
-> +{
-> +	unsigned int old, new;
-> +	int ret;
-> +
-> +	ret = qcom_scm_io_readl(addr, &old);
-> +	if (ret)
-> +		return ret;
-> +
-> +	new = (old & ~mask) | val << (ffs(mask) - 1);
-> +
-> +	return qcom_scm_io_writel(addr, new);
-> +}
-> +EXPORT_SYMBOL(qcom_scm_io_update_field);
+> This patch applies on top of mainline since 6.4-rc1 takes about 2 minutes to
+> reboot on this machine, linux-next have
+> e7d3e5c4b1dd tpm/tpm_tis: Disable interrupts for more Lenovo devices
+> 
+> I'm not sure if I shouold send this on top of next or mainline is fine, please
+> let me know the preferred way to get this to 6.4.
+> 
+> Regards,
+> Peter
+> 
+>  drivers/char/tpm/tpm_tis.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
+> index 7af389806643..aad682c2ab21 100644
+> --- a/drivers/char/tpm/tpm_tis.c
+> +++ b/drivers/char/tpm/tpm_tis.c
+> @@ -122,6 +122,13 @@ static const struct dmi_system_id tpm_tis_dmi_table[] = {
+>  			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad T490s"),
+>  		},
+>  	},
+> +	{
+> +		.callback = tpm_tis_disable_irq,
+> +		.ident = "UPX-TGL",
 
-EXPORT_SYMBOL_GPL?
+Is this the product version returned by dmidecode? If yes,
+then the entry could be made more specific by adding a
+DMI_MATCH(DMI_PRODUCT_VERSION, "UPX-TGL"), and only disable
+for this device instead of any system that matches the vendor
+AAEON.
 
-There are other symbols in this driver marked as EXPORT_SYMBOL only. Can 
-you submit a separate patch to convert them into EXPORT_SYMBOL_GPL. OR I 
-want to know why we are marking them without _GPL.
-
-checkpatch should catch this as well? By default we should have all the 
-new additions as EXPORT_SYMBOL_GPL and only few existing APIs w/ 
-exceptions?
-
----Trilok Soni
+> +		.matches = {
+> +			DMI_MATCH(DMI_SYS_VENDOR, "AAEON"),
+> +		},
+> +	},
+>  	{}
+>  };
+>  
+> -- 
+> 2.40.1
+> 
 
