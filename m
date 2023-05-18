@@ -2,138 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E852D7086C3
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 19:26:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 545D67086CC
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 19:28:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229960AbjERR0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 13:26:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55690 "EHLO
+        id S229975AbjERR2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 13:28:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbjERR02 (ORCPT
+        with ESMTP id S229712AbjERR2j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 13:26:28 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2121.outbound.protection.outlook.com [40.107.220.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65FA7136;
-        Thu, 18 May 2023 10:26:27 -0700 (PDT)
+        Thu, 18 May 2023 13:28:39 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2052.outbound.protection.outlook.com [40.107.223.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9151BC;
+        Thu, 18 May 2023 10:28:38 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=S7GTWNXpcvZePhOXjFotnYcj8lejKv0+3mbHbPzL35KFtJ2zZac0bD2TjCHehpNurefDpgMxZwG62sl7PiUH6JJZULR4tJm97mHzBnFKhoscAbn2KH7fuUcViq/4jsDD5NcIPO4wCS1tLSaxMm/PmTutwrMwX/ecb/DtxtXMAx9rSoPOiji1rD/O1gNt3M9gNsN0HaifYqnTCnJpt4SN2SpzjkuxJzYemSkhdqPJMi5giIjmv0OdR5tYNqG2UEMisCRPu0mrquu//v9WQGk8T677CCjcLm1kN+/l+fI5FVlUhAIsiCSbDKN1yhyQlthV3IVlgtgB1cIkFBKFBTRv1Q==
+ b=RFK8vYyhyH3BlzZDr9fcJ7a8in0wT3++38ZEf1Cr1ylhrY3STgO6gbbVj+OREcfjiCvP3pnfHorhss0U4H+SfZyFZLBQV2CtaHpFH+5eE2wAtiim+i7jeuzmRptuoxnWcOf2OlI7wu4QCL5BZ/HVBKa+sGYg5zzNrsTrbkU1ll/Ij3K0OTt+YITxNM+Kii3Nxs3mgNmG+dNftPRHn1OFV+QA5cbbK76ShfugAAUe/P3s5nuBcvd/reNmNFieFXhPpmJEWGtULXTmGUCbLC5wKpBTHFw1h+dOuHUNvrOQtwWv/6X/YXjAFFRdRXvOPnueB/V1x8FYm6NYljIGFpSvIg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NofiKyrLAR6E282D4kaVXdt+NtF8LEK8gL1gGJf7SDI=;
- b=O+bSmPLlUE81mXJEyzY3DavK2UnY51KVOmcR1VxkNzM9qIMZqwl3zCi9rrOeSIe/B/Sgh4/9LZd6XRHlCQA6IkwrqmJIxCPU973juD3wJGExg2l+2Zyz5d2JjM49IQtrxkk7ODRDNPKHyPyYgMqisp4r7d8m/oeKzdBCJLPe185uW5YndIx4x2TUBNwQ8wWwukLTInMpbgHEH0p50gHp85OcLO34EmIYPXNyj3/IEElwBjw0D9VKq3LYIwp1jrv+gQe50CHdA8JFvdxGGwLdlhgLBxLQnw81ZCLmznZODi6Z8+IvwFnh1gJt+xePm65MEwGGFvlYNHgXFnvGRvm7vQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ bh=m/LWIfrKalGUuvIfgcJBFdyNSY5mZeMpBOTga2nxvi0=;
+ b=j2Bo/i++oNYyS+1pYBMA/HQxCPP8kuHm4RPYD2aD5Zyeufe4FWQJ6fbegPN02Kepz41yESHUsr8oNESdBPzRvpDPRafrkjL0Hgl105WtJoM2ZYgT5WvEHolTKjHQ42QL/Avtq5G0FTwtyuB7U103az1Q5ss0ojhtch7Z+a12YslLuNzdOWowrDKQMMKwxRzqTwS18W3KDnHZ09e6WNYGDzzMmQOjE4Fp8WQKF6xsSg3Khx2DoL97ATzOKdU1BduSnp1hhVBAieXaCF+PaRRMHP+rvV+eEo0uxn9tuIvc/ebewt77iG7z7ZliPHTaCiATq8rnEZseabCg4p0VxQygCA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NofiKyrLAR6E282D4kaVXdt+NtF8LEK8gL1gGJf7SDI=;
- b=ZCrN7B49x18Qb8BaViPGlRE8IUnhlyy43tcxTTeDIFUFr1ZC9TB4HO7ZewuAmY7BFZwGiNKk7NE+upDVhQJC0/+Yj0CnQRL1ZwwcYkegbPLWA7f+iwyFyKzPDsnlZ2KDDC/X1cPsotm5OqtEv1vNiFiVH/4xFn1ziVCDsi0I0PQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by PH7PR13MB6219.namprd13.prod.outlook.com (2603:10b6:510:248::15) with
+ bh=m/LWIfrKalGUuvIfgcJBFdyNSY5mZeMpBOTga2nxvi0=;
+ b=lNzp/s8he/W/UgWmvhYC0BGzSNGrPMD3eDV4yLZ7sv/eO+QstmrAy31OoK3OqdC9+8ahjwvFVEbmJ/8p6CQEJERMG1n4DjHQgoL5I6uqunomBJTQPT9Ns9nmhcdi/71JF9fo4az/VRYgHNbLACRCCS84pBB2CCKgQxu45GMcCFY=
+Received: from MW4P220CA0023.NAMP220.PROD.OUTLOOK.COM (2603:10b6:303:115::28)
+ by SJ0PR12MB8139.namprd12.prod.outlook.com (2603:10b6:a03:4e8::5) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.17; Thu, 18 May
- 2023 17:26:23 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6411.019; Thu, 18 May 2023
- 17:26:23 +0000
-Date:   Thu, 18 May 2023 19:26:15 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Po-Hsu Lin <po-hsu.lin@canonical.com>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, roxana.nicolescu@canonical.com,
-        shuah@kernel.org, pabeni@redhat.com, kuba@kernel.org,
-        edumazet@google.com, davem@davemloft.net
-Subject: Re: [PATCHv3 net] selftests: fib_tests: mute cleanup error message
-Message-ID: <ZGZft4ydH3p2+aNU@corigine.com>
-References: <20230518043759.28477-1-po-hsu.lin@canonical.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230518043759.28477-1-po-hsu.lin@canonical.com>
-X-ClientProxiedBy: AM0PR01CA0077.eurprd01.prod.exchangelabs.com
- (2603:10a6:208:10e::18) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+ 2023 17:28:36 +0000
+Received: from CO1NAM11FT060.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:115:cafe::75) by MW4P220CA0023.outlook.office365.com
+ (2603:10b6:303:115::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19 via Frontend
+ Transport; Thu, 18 May 2023 17:28:36 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT060.mail.protection.outlook.com (10.13.175.132) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6411.20 via Frontend Transport; Thu, 18 May 2023 17:28:36 +0000
+Received: from SITE-L-T34-2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 18 May
+ 2023 12:28:34 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     <rafael@kernel.org>, <hdegoede@redhat.com>,
+        <linus.walleij@linaro.org>
+CC:     <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>,
+        <platform-driver-x86@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <Shyam-sundar.S-k@amd.com>, <Basavaraj.Natikar@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH 0/4] Add consumers for pm_pr_debug() outside of pm
+Date:   Thu, 18 May 2023 12:27:48 -0500
+Message-ID: <20230518172752.93322-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH7PR13MB6219:EE_
-X-MS-Office365-Filtering-Correlation-Id: 28805ac8-dc5c-40db-125d-08db57c5008a
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT060:EE_|SJ0PR12MB8139:EE_
+X-MS-Office365-Filtering-Correlation-Id: ee7f75c6-e0a2-434d-48af-08db57c54fda
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WzWH6dysDAhRzwIZdOkEHusVFVoO4gFzlHjwnAf8PAu71v7fc49UsiyA7iqt/om3dUaQv5DbxVTFeHrDWuhRzmSgk2E4KW4yg0OgYOncRPVkr2mPri1mhsbRASnPVTqIeFeuZ6uQtEyJtjFjEJTRpKgItQJKQDtc7uUUa/ZP29WKpUBxHdlF3ItpZ0kSu2a5MHaIJbfELrpunEEiYfgEO6wsakcRhLBDZkrTn80Xp0x3wpGHnFPkyAOOa5B9seHBs61lyoXJdKV6h4ODpVevMKFqQj/DS7IyOv3zuFoy2mESEl0WVjJETfbWnGNnp0htPrGWFE1EslZJKhKxke96U1k7ZufNAd7Lc0q3NqmAZ6v+Q2+ssKU/d1TbjPGyZZ2zGOmAZYtdOPctyHMXDjMbBUA0CFAqG39C2WFdd3H5sbI7q/CBbsjQUjK77+/5C3NUWVOlMgiMLSrz1t5IhrNq/iNWcyJpN3PoVHxviE6X1yLAoKTZZKz92Qoj/v0exq7KoUYVG+Szhl8U1Bzo5wCG1/JgwvJ9RO6RymkAqF34ltFiOakI9Scnmq++xP+PZWc+/Ch8DjB7UQ3AgUemFj5YR55oNkPEjrvyk+QaxzE0Ovo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(396003)(136003)(346002)(366004)(39840400004)(451199021)(6506007)(15650500001)(4744005)(186003)(2906002)(86362001)(6512007)(2616005)(83380400001)(36756003)(38100700002)(6666004)(6486002)(4326008)(66476007)(6916009)(316002)(41300700001)(66556008)(66946007)(478600001)(44832011)(7416002)(5660300002)(8676002)(8936002)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?0yDJF4x9V1hM3EHIvUfKKPscZq8G7v0TlY2RrwiYbhMk1xlPp3WKRR8QKLy9?=
- =?us-ascii?Q?NswTpEPBLukDHLm7DfUNOOr4ngZpF5mX6KIlsOIRneXZB95uPEOZORWUslw9?=
- =?us-ascii?Q?Q8q1QIYygWdCytx5OO/ah8SGFEnOWLTWXpnVlrF2Puk9Hcv5oukKJF6uy4Yt?=
- =?us-ascii?Q?9t0UgEvRmIHC3PAgYJywGrYwxvvR16r5y9moITBRaILirkbnRNPr5S8oN/Lr?=
- =?us-ascii?Q?hG+grlsbcTXm/CAw3gxn4cAd1Mashi0+5r0lM+/2lguUxr+IUeXnY5gYrSX3?=
- =?us-ascii?Q?0aKHTVbIKYZ6DDKzEAdH5eq/tye0vE8YmGkBlHzXobrbMkAfoXSGF2KKij5M?=
- =?us-ascii?Q?ENTn8HUsXyg8z+QuwH3U3wbXWlYtE7PoGZIoOM1J069prRXskn2KZl59bXqq?=
- =?us-ascii?Q?b3eL/rHGdyyAILOPau30g0MhC9mh1dHPfSWEifhghL88hLjycdq5EOOHUuBh?=
- =?us-ascii?Q?u2gQKdSc3s4Ws/J+wYSJcbYJVo6W58sr/Imi8nMeJoNGmlzaSKQfVbnDvL7s?=
- =?us-ascii?Q?woDCDxH1txLgzCJVXCW4UIoLcH6huiF2IbXlZVFWLXoz0BWvr9Yx4hdEl3TQ?=
- =?us-ascii?Q?smvQ0xYBWB7cSLujaHrejAsNv/nCXMBHRasRseKyBLoaJjl0kwd+yCnmT80t?=
- =?us-ascii?Q?BxkjEbE1u5754CRMk+XlOeHZLvdPNf8kUa5fn8hCX4vQcJ+dfg2EukdCeiOT?=
- =?us-ascii?Q?uUe/vtIm3rMO1UCQBsrfJciNN/n5qZbZo5+/Xeq96Y2XCDjxyI+rRprvCShV?=
- =?us-ascii?Q?wP4asre9WjSAPyR2uBgpLopuHSwrQJNXd121vuuxdy4uPwzjo32pWKr0/1qY?=
- =?us-ascii?Q?C71QYF3ubULKfTr6TGTIYIS8fDrQuAK57Hp5vSPPa1F4I4kaFe1Rs0H8aUfc?=
- =?us-ascii?Q?0NbmwV6xrBEx+QNj3nQGhP86ylk0PWfvS1IX2Dp64zwqVnLB8lzNmad5n432?=
- =?us-ascii?Q?urKVfIHtP4QmkSpdeqvXJD0Nunt7SrjTg/eWoCxcmhu2jvp5rN3EOrbF+mo0?=
- =?us-ascii?Q?ue46jmLVTjt8/iV4gAxmnaEjKIuoIe7pdX9l4ruEUHwNWcPbWh+rVBVKSAKJ?=
- =?us-ascii?Q?W6VJ2mAIyFmUeC+cQpVKOf0wUYEnq8vhs9XLFvjJ+GDsuflgM622xqzOPVOD?=
- =?us-ascii?Q?0RRzFo+5tq8Jvk2DZjFgLURkJGH2UvmZxMkqJBRpL73IxHdCYK8n4dkXr8G/?=
- =?us-ascii?Q?ZwHJwpIyrK2SlVQ2rBOVuJI3kGwE6v6fW5Y7RBut5FePw6HUmgo3wJypVpQl?=
- =?us-ascii?Q?v3FF0JwZS2JpZps34clxzvtUn9hbrEzmt5am7vUeGEW/PFhARdLwCCGmFR/K?=
- =?us-ascii?Q?RyXw+NmlIWQ+BUBivNG8LOc/Wls9bh3KvQe24E0M5q3yThBjHyDmvZIBAm3U?=
- =?us-ascii?Q?92Zj26yoMVj8+bnWEQiBvQC2DgqHATGfzpmy17/uKoKVWqT+rFYY1cic8AhA?=
- =?us-ascii?Q?eGuE1eAgIPu7hAkTUrHPCr9J6+elJuqvXMax1WBXU/drnzSd1h/afCMibDL3?=
- =?us-ascii?Q?D9aJ1e/NWvOCkbVto8hhrHDwx+rAiBOAuPUppaAxbv9YuONDSmCvPgebV6Lf?=
- =?us-ascii?Q?Uc9y74pX6UlTzEcsSmmhO9U6T5fhVFNIpIyOHfCntF1dEVL0uj9UQLn6iFem?=
- =?us-ascii?Q?nK8Q7CFJjjnaPmMYSUQmIrH1/73UhWjSeJOv34nkfn3c0NBRBStoy2BiAosD?=
- =?us-ascii?Q?65RJtQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 28805ac8-dc5c-40db-125d-08db57c5008a
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2023 17:26:23.4230
+X-Microsoft-Antispam-Message-Info: Ym+c4MB/U+6ha1erlVyfAUlq5QNvVCogaGjzqU5X4Ew6wVF70sA7b9cl27lUI/PnyhgFWeQY7qmagWFA6A1vA9moQdxqyjDpSU/Rhl8W3a47zp4Bw6/7T7TF27rsnyFGZMrBzrwgzpubLtXN8Zk9Lbtse92Xr/Gfi6nb0PO970xW5fmRxbvlbZMZxsXcF5JUn2bG31bmkL4w6s64+JucE5KL9kq098zEVumkvXlMGiLifF+rPaS8wNkScopzrQUZwaTnNzTbP1Ug37y3MpkW1cXfm+bmmSN6RHlLprjeuNiD14qtFLH+iUMen2j6P7+LVVOx+NVDL7tHhzPSf9JN3BkGds0b8kEgVcgIH/78hy+5ilK/cruvxq36c1Ng76jZpr3siLdSitzX3gKO/RvVwk/YyY5oraqMpuxtT9pUKNB/ev8RNqDJkdug4uGkLeRbBLasWz42NwrDTHcEBpgZwo/hR/gbSAvQuWXISGtCxUGG8h/2lMpaSHVhs8sJujrQ6n+Kbf757Ujw5qS/dXN2Aa4iBBFRjjWwsoZjRuakm9c3ygfphN73JlAEq3HF+JZAoSEyJcSUhn0SqyQsS2QUBV+G1WOtLqWnSjTPUN4xZxMtsMU/3gaToiAe5CsxFsyuUIKgdeBSUZBdfe1C0v0J9J7dFpAkmb4HNZrO/gRiixLe4jQDdOLywv12P9VaSO0MpXtwag0kDv+dTDz0y+a98milmG5JIUBRXDAnATvuvvek35S8ivEBuZQe6IrT9Ewv9eyGLkvJU7Dxym/ubVOkZg==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(396003)(346002)(39860400002)(451199021)(46966006)(36840700001)(40470700004)(186003)(36756003)(8936002)(40460700003)(356005)(426003)(16526019)(1076003)(81166007)(26005)(36860700001)(83380400001)(336012)(47076005)(82740400003)(82310400005)(70586007)(4326008)(316002)(8676002)(2906002)(44832011)(41300700001)(40480700001)(7696005)(5660300002)(6666004)(2616005)(86362001)(70206006)(478600001)(110136005)(54906003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2023 17:28:36.1530
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4EZm6JpjHKmde69PNrD3aEjltDRlv8xLgt3aJWZRXg6Cwn99UFj51VvdRG7361QSp0i1jTbN7VmXAwmAfTJSk2Ya62vpaqH1TSaTs8msz4s=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR13MB6219
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: ee7f75c6-e0a2-434d-48af-08db57c54fda
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT060.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB8139
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 12:37:59PM +0800, Po-Hsu Lin wrote:
-> In the end of the test, there will be an error message induced by the
-> `ip netns del ns1` command in cleanup()
-> 
->   Tests passed: 201
->   Tests failed:   0
->   Cannot remove namespace file "/run/netns/ns1": No such file or directory
-> 
-> This can even be reproduced with just `./fib_tests.sh -h` as we're
-> calling cleanup() on exit.
-> 
-> Redirect the error message to /dev/null to mute it.
-> 
-> V2: Update commit message and fixes tag.
-> V3: resubmit due to missing netdev ML in V2
-> 
-> Fixes: b60417a9f2b8 ("selftest: fib_tests: Always cleanup before exit")
-> Signed-off-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+The amd-pmc and pinctrl-amd drivers have messages that are generally
+useful for debugging power or wakeup issues, but users need to know to
+turn on dynamic debug to get them.
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Add support for using the pm_pr_debug() macro outside of pm code so
+that other drivers can use it to show messages when a user turns on
+`/sys/power/pm_debug_messages`.
+
+NOTE: There aren't hard dependencies that would make this apply to a
+single tree, but the pinctrl-amd message is in an IRQ handler.
+It shouldn't be applied unless the changes to the macro are included.
+
+Mario Limonciello (4):
+  include/linux/suspend.h: Only show pm_pr_dbg messages at
+    suspend/resume
+  ACPI: x86: Add pm_debug_messages for LPS0 _DSM state tracking
+  pinctrl: amd: Use pm_pr_dbg to show debugging messages
+  platform/x86/amd: pmc: Use pm_pr_dbg() for suspend related messages
+
+ drivers/acpi/x86/s2idle.c      | 52 ++++++++++++++++++++++++++++++----
+ drivers/pinctrl/pinctrl-amd.c  |  6 ++--
+ drivers/platform/x86/amd/pmc.c |  4 +--
+ include/linux/suspend.h        |  6 ++--
+ 4 files changed, 55 insertions(+), 13 deletions(-)
+
+
+base-commit: dac0c6388ff86af74dc6f4dd6e90a7db5a429e3d
+-- 
+2.34.1
 
