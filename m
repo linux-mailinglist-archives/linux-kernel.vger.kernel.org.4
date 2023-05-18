@@ -2,156 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0693B708A5F
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 23:24:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63203708A63
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 23:26:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbjERVYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 17:24:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45366 "EHLO
+        id S230191AbjERV0k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 17:26:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbjERVYh (ORCPT
+        with ESMTP id S229487AbjERV0i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 17:24:37 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3812E45;
-        Thu, 18 May 2023 14:24:36 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id af79cd13be357-7577ef2fa31so8553285a.0;
-        Thu, 18 May 2023 14:24:36 -0700 (PDT)
+        Thu, 18 May 2023 17:26:38 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6932E6E
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 14:26:36 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f13c577e36so3005729e87.1
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 14:26:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684445076; x=1687037076;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Fgw3h9rAgm44YkEHXCPBK7C8FU1OMPHOzKXIy/8Zym0=;
-        b=kph38xd19+bhLkS7PBNJQmjYiRXXbogSNSiH0Q5MEmL2DX8YmSJHAH0GgziFVvZn2y
-         nELH46i2vuIvVbCfpwZV4EAOP0j04cFX8eUZ4pjDhmu8cckVJgKsx72k6pkd2AXxCYKG
-         xh/t2rL50MrW8G7LR9K3CbM543nfvTW1dt4Y4j02Au+J392LYMiYjm6a5FjjmGNrB3QP
-         hYo6XtFmMqenQPqajZ8UZDrhbNQiySvVQ0SKviU8pE9siXJ0T/6KGlpE1HVuYlTdKmbU
-         Y09OVBXpsu9OWglqyM5PEERe+Ksq9amOE/6vkZPK3qDS+pGlZR56xArvN4pFdzI316i7
-         2JAg==
+        d=linaro.org; s=google; t=1684445195; x=1687037195;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=t5y+SJ44ed16wCOTDLmLDzgIx2JaLtLRHFSw4/rCRS4=;
+        b=Rdrjl1adp6g2FuL8l3mXU/M/JnPyPv9h9UaqAjcAT1BpEzKeS0JctH+d6BAHqfZpb3
+         lWJwAi1iEO16Dc5hIQyQ1dbfTkXyuiiuhpm8wn9le/4dqMpDvTfIpxJmevoMFfnfDrko
+         OHVjR2lwXz8eWHefFKwcSyJ8hOz8LOnbXxGtKeUll7PNYNQpV6zfpUelppZpZyNp8+kS
+         2d1PePsx8usr+8+inEeziFPWpHOrqNKc7l8pNiRDdkLXxyv1DyqJvl14Zju3a2QeP9iZ
+         5iBZFURpGWEHMEu9VseRhgFs5hmgpm3I2EC2MEcwRgeWXaRrULBYzhw6WQkP2pa2tYB7
+         SdEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684445076; x=1687037076;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Fgw3h9rAgm44YkEHXCPBK7C8FU1OMPHOzKXIy/8Zym0=;
-        b=FaXnZvpKzw/k8YMNRdLOHIQO4Wqmf0oPqbT5gWbTYARAjl1C0jqb81ug6cinW/Jgbb
-         3/xSxWLm7LcS9nV4s9LnjYutkvyB4UOSWk5fHDZPDF1MuoywhHGpqQ34x9uy4Ub7NsHd
-         1mu8N532Rj0MC6vHGaH7lIbwez4YCt8xpdOnHZ6JMJ6aG0MgdRp2JV5THZOMi4Yp4djJ
-         gtwSeNHmyNWbL2sE2WHFlpTrfO3qBDI3VdQB6pYwiZ17tZszH21ef1E8wLsgDH+Q4Ma9
-         nYuosYstTDHQctyd2aNYNo7jPk/9aPEibUAfVgUCxcAz+JqfNj/auZp6YpCEb/P/35mN
-         vrNw==
-X-Gm-Message-State: AC+VfDyCn3nC0od0bZNhZN4LpOSyy/QMEsLTz41fdsE3oNvrMebPpccO
-        kc2eVDZN3LZnqHzXwHx6kro=
-X-Google-Smtp-Source: ACHHUZ6N+5BKXIb2VODVQypeLfhqjkNDqfCIAEWmLr3NN4P7PZLTE382xgQF5sekxjyf/s88BGo36Q==
-X-Received: by 2002:a05:6214:20ac:b0:623:5c93:77eb with SMTP id 12-20020a05621420ac00b006235c9377ebmr1779425qvd.13.1684445075710;
-        Thu, 18 May 2023 14:24:35 -0700 (PDT)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id mm19-20020a0562145e9300b005dd8b934579sm818981qvb.17.2023.05.18.14.24.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 14:24:34 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 263C227C0054;
-        Thu, 18 May 2023 17:24:33 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Thu, 18 May 2023 17:24:34 -0400
-X-ME-Sender: <xms:kZdmZDSneEX1kXbuwH7cu7l1r8M1HUt8db6Frkudpp0mNNfR9uTNxQ>
-    <xme:kZdmZEwFfn67VVXdPXYk9iY4PbjH88G-WHeRbhwStX90GaUJ-2Hjh1kZ4lCWaNEOh
-    Yrwg45M5Z2bjAKT2A>
-X-ME-Received: <xmr:kZdmZI3h2tWjU4IKiNpWg9LRsQ2tZSns2ehPUt1miEmNbB6I04IgUWVHDfU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeifedgudeiudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
-    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
-    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
-    higihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:kZdmZDAjti1gsxVBbTEMV74nhPH0kT1V0bQ3_kIBI4lTd0NiwFnwKw>
-    <xmx:kZdmZMjfrWb_MGtilHx2tN4iZEEFIE1OCUX8F7MOVCvRjMFFAUwJKA>
-    <xmx:kZdmZHqUXCzz0aBcio3S4JSUBLrNPXV78uFU-GHUny3NKGrtU_0SaA>
-    <xmx:kZdmZLRRJh0W1aTuHOVOpklEw9kgA_IB3epWENHTHjZFpk_MCIfFuA>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 18 May 2023 17:24:32 -0400 (EDT)
-Date:   Thu, 18 May 2023 14:24:05 -0700
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Alice Ryhl <aliceryhl@google.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev
-Subject: Re: [PATCH v1 1/2] rust: specify when `ARef` is thread safe
-Message-ID: <ZGaXdS+psZoEZBMr@boqun-archlinux>
-References: <20230517095905.3548100-1-aliceryhl@google.com>
+        d=1e100.net; s=20221208; t=1684445195; x=1687037195;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=t5y+SJ44ed16wCOTDLmLDzgIx2JaLtLRHFSw4/rCRS4=;
+        b=j2RjxQfImOrW7CedMAWmqp7NDzY96jt0mip73b9NctsQLTp6zFApvuUoe97Pu4RFxX
+         gc91zi7kbaTyVbn3Yq/AxoznBlaIU+pZXjBA06s+DvJ4u+MW5sQKHQLYoc5XU9VGjkJv
+         iGioiN2LJlq2j7aGfsAsJCfxLhnSnetvIzsbgux/CmX4Z22gSlfdfpE4lvDwEx3PBvuS
+         0e+bzZvkIXNvuvXGHt8xm/izQmRnLFrxebIvL94yhCX+424yJCz/iMhxIGylfbPweS7K
+         d8muwFxeK4QJM6thML0uOsKH1QmNtd68fcDLsrHTfB1sU6Z/KWLvTMgfD5wlHgvPA6v5
+         rx4Q==
+X-Gm-Message-State: AC+VfDz9/G7lMJQBfPDKIY3ZOy/0nsfezB0hqnYLdN7QxnIdaL7jvb3f
+        D1CeQX4B2Q+ybePu1gdc4KNKoA==
+X-Google-Smtp-Source: ACHHUZ7B1k1e6l4HEpUzye5ClfUpHuPl41iqsuHkLeVuwMzkdRBYUqoCzs/IgEyza1JzSDw/IQR0HQ==
+X-Received: by 2002:ac2:4c39:0:b0:4db:964:51b5 with SMTP id u25-20020ac24c39000000b004db096451b5mr74987lfq.41.1684445195029;
+        Thu, 18 May 2023 14:26:35 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id b20-20020ac247f4000000b004eaeb0a984csm369403lfp.88.2023.05.18.14.26.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 May 2023 14:26:34 -0700 (PDT)
+Message-ID: <2c688487-a5b1-155c-f73a-69358d03e478@linaro.org>
+Date:   Fri, 19 May 2023 00:26:33 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230517095905.3548100-1-aliceryhl@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 4/4] drm/msm/dpu: drop DSPP_MSM8998_MASK from hw
+ catalog
+Content-Language: en-GB
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>
+Cc:     freedreno@lists.freedesktop.org, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, quic_jesszhan@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230428223646.23595-1-quic_abhinavk@quicinc.com>
+ <20230428223646.23595-4-quic_abhinavk@quicinc.com>
+ <kap4lpzbv5qihf2k7fdznmx72hrhpx4acjgcng45kxnshxo6ge@gzke6ruy3x6u>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <kap4lpzbv5qihf2k7fdznmx72hrhpx4acjgcng45kxnshxo6ge@gzke6ruy3x6u>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 09:59:04AM +0000, Alice Ryhl wrote:
-> An `ARef` behaves just like the `Arc` when it comes to thread safety, so
-> we can reuse the thread safety comments from `Arc` here.
+On 18/05/2023 22:41, Marijn Suijten wrote:
+> On 2023-04-28 15:36:46, Abhinav Kumar wrote:
+>> Since GC and IGC masks have now been dropped DSPP_MSM8998_MASK
+>> is same as DSPP_SC7180_MASK. Since DSPP_SC7180_MASK is used more
 > 
-> This is necessary because without this change, the Rust compiler will
-> assume that things are not thread safe even though they are.
-> 
-> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
-> ---
->  rust/kernel/types.rs | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/rust/kernel/types.rs b/rust/kernel/types.rs
-> index 29db59d6119a..9c8d94c04deb 100644
-> --- a/rust/kernel/types.rs
-> +++ b/rust/kernel/types.rs
-> @@ -321,6 +321,17 @@ pub struct ARef<T: AlwaysRefCounted> {
->      _p: PhantomData<T>,
->  }
->  
-> +// SAFETY: It is safe to send `ARef<T>` to another thread when the underlying `T` is `Sync` because
-> +// it effectively means sharing `&T` (which is safe because `T` is `Sync`); additionally, it needs
-> +// `T` to be `Send` because any thread that has an `ARef<T>` may ultimately access `T` directly, for
+> is *the* same
 
-Does the "ultimately access `T` directly" here imply mutably or
-exclusively? If so, it makes sense to me to call it out. I'm trying to
-make sure we can agree on some "common terminologies" ;-)
+And, I think, a comma is missing before DSPP_MSM8998_MASK.
 
-Regards,
-Boqun
+Note: since the English language is not native for most of the 
+developers, I usually don't nitpick on these issues provided we can 
+understand the message without too much trouble (and the mistake doesn't 
+stand out aloud, begging for it to be fixed).
 
-> +// example, when the reference count reaches zero and `T` is dropped.
-> +unsafe impl<T: AlwaysRefCounted + Sync + Send> Send for ARef<T> {}
-> +
-> +// SAFETY: It is safe to send `&ARef<T>` to another thread when the underlying `T` is `Sync` for the
-> +// same reason as above. `T` needs to be `Send` as well because a thread can clone an `&ARef<T>`
-> +// into an `ARef<T>`, which may lead to `T` being accessed by the same reasoning as above.
-> +unsafe impl<T: AlwaysRefCounted + Sync + Send> Sync for ARef<T> {}
-> +
->  impl<T: AlwaysRefCounted> ARef<T> {
->      /// Creates a new instance of [`ARef`].
->      ///
+I will fix missing articles when applying, if I don't forget.
+
 > 
-> base-commit: ac9a78681b921877518763ba0e89202254349d1b
-> -- 
-> 2.40.1.606.ga4b1b128d6-goog
+>> than DSPP_MSM8998_MASK, lets drop the latter.
+>>
+>> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+>> ---
+>>   drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h | 4 ++--
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c          | 2 --
+>>   2 files changed, 2 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+>> index bdcd554fc8a8..a4679f72a262 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+>> @@ -127,9 +127,9 @@ static const struct dpu_pingpong_cfg msm8998_pp[] = {
+>>   };
+>>   
+>>   static const struct dpu_dspp_cfg msm8998_dspp[] = {
+>> -	DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_MSM8998_MASK,
+>> +	DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_SC7180_MASK,
+>>   		 &msm8998_dspp_sblk),
+>> -	DSPP_BLK("dspp_1", DSPP_1, 0x56000, DSPP_MSM8998_MASK,
+>> +	DSPP_BLK("dspp_1", DSPP_1, 0x56000, DSPP_SC7180_MASK,
+>>   		 &msm8998_dspp_sblk),
+>>   };
+>>   
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>> index 791a6fc8bdbf..efd466f6122b 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>> @@ -91,8 +91,6 @@
+>>   
+>>   #define MERGE_3D_SM8150_MASK (0)
+>>   
+>> -#define DSPP_MSM8998_MASK BIT(DPU_DSPP_PCC)
+>> -
+>>   #define DSPP_SC7180_MASK BIT(DPU_DSPP_PCC)
 > 
+> Should we add preliminary parenthesis around this?
+> 
+> - Marijn
+> 
+>>   
+>>   #define INTF_SDM845_MASK (0)
+>> -- 
+>> 2.40.1
+>>
+
+-- 
+With best wishes
+Dmitry
+
