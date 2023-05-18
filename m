@@ -2,100 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63776708AB4
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 23:43:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9CFB708AC8
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 23:54:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbjERVns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 17:43:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53488 "EHLO
+        id S230050AbjERVyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 17:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbjERVnr (ORCPT
+        with ESMTP id S230219AbjERVxy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 17:43:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928F310C6;
-        Thu, 18 May 2023 14:43:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 22AB36116D;
-        Thu, 18 May 2023 21:43:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 893EFC433D2;
-        Thu, 18 May 2023 21:43:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684446224;
-        bh=K5xEeU1mCoS/OcrSjPJzbDiJWn0dLzXGU8F7Uq+vaiM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z8O9DHsXQ7ixpbmHAwzzZ2YY7NsU7T0laR+7Rw60X1rR66jZYjs1n8mzpc2a+bCof
-         Iihi1/FYLdZtmgRAB0K61CWx3p6JR1+Y5FoNhgaOYNCK7ZyGwB3tqOr3L15SJceHzv
-         NPGwAEsfg5hpGoLenhLr0qeLmm9X5ChldfLVDlU71tOPBa4G1C6ypJ4g6LAMRZODOG
-         PTeMzAm1hd2R1wcQcZbRinNjibK6Sb9XNPSPeVRy35cEOfgIvfwHTH0NP55sqQhs19
-         rzTnLdgCn+BO8ZcLXFM2dnanLgDfoZsDWJdfyBVcaecUsW7u4r2b+tyQdCW84/LNKG
-         f98g0Tw2Sl4KA==
-Date:   Thu, 18 May 2023 22:43:39 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     alexis.lothore@bootlin.com
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        paul.arola@telus.com, scott.roberts@telus.com
-Subject: Re: [PATCH net-next 1/2] dt-bindings: net: dsa: marvell: add
- MV88E6361 switch to compatibility list
-Message-ID: <20230518-sporting-tweezers-14cee98a4832@spud>
-References: <20230517203430.448705-1-alexis.lothore@bootlin.com>
- <20230517203430.448705-2-alexis.lothore@bootlin.com>
+        Thu, 18 May 2023 17:53:54 -0400
+X-Greylist: delayed 361 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 18 May 2023 14:53:45 PDT
+Received: from mx2.jinr.ru (mx2.jinr.ru [159.93.14.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5BCA10D8
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 14:53:45 -0700 (PDT)
+Received: from mx2.jinr.ru (localhost.localdomain [127.0.0.1])
+        by mx2.jinr.ru (Proxmox) with ESMTP id 4621B1211CA;
+        Fri, 19 May 2023 00:47:41 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jinr.ru; s=mail;
+        t=1684446460; bh=P/HTwxG7tDxJ6dVGmM9PLq7bLGbc1/kzeUuw2/tEtGM=;
+        h=Date:From:To:Reply-To:From;
+        b=RhsWwuVkEKydXMh8umaHhGSo6NRumemouneoa0VAteWk2sTjjCiiL7FEte+dUjs2z
+         /Xp2JWKwx/McneIhOVJOsPzeR5XAS+fOk1DOTBxaCxXd04bdQjrFBt3HckRumo04z5
+         ixlgTBhNUkdOekM+Sl6oKHIVylMabbtJZPRV2PYQ=
+X-Virus-Scanned: Debian amavisd-new at jinr.ru
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="l0BAS8I4h0k//Wt/"
-Content-Disposition: inline
-In-Reply-To: <20230517203430.448705-2-alexis.lothore@bootlin.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Date:   Thu, 18 May 2023 22:47:33 +0100
+From:   Rowell <usi@jinr.ru>
+To:     undisclosed-recipients:;
+Reply-To: rowellhambrick4@aol.com
+Mail-Reply-To: rowellhambrick4@aol.com
+User-Agent: JINR Webmail/1.5.3
+Message-ID: <703198d92bc42770e2d6fccac3a9da59@jinr.ru>
+X-Sender: usi@jinr.ru
+Organization: =?UTF-8?Q?=D0=A3=D0=A1=D0=98_=D0=9E=D0=98=D0=AF=D0=98?=
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: Yes, score=5.7 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,MISSING_SUBJECT,ODD_FREEM_REPTO,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5068]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [rowellhambrick4[at]aol.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  1.8 MISSING_SUBJECT Missing Subject: header
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  1.0 ODD_FREEM_REPTO Has unusual reply-to header
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Did you get my mail
 
---l0BAS8I4h0k//Wt/
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, May 17, 2023 at 10:34:29PM +0200, alexis.lothore@bootlin.com wrote:
-> From: Alexis Lothor=E9 <alexis.lothore@bootlin.com>
->=20
-> Marvell MV88E6361 is an 8-port switch derived from the
-> 88E6393X/88E9193X/88E6191X switches family. Since its functional behavior
-> is very close to switches from this family, it can benefit from existing
-> drivers for this family, so add it to the list of compatible switches
->=20
-> Signed-off-by: Alexis Lothor=E9 <alexis.lothore@bootlin.com>
-
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-
-Thanks,
-Conor.
-
---l0BAS8I4h0k//Wt/
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGacCgAKCRB4tDGHoIJi
-0pNtAP9Z3CouQuLHG/+Yypu0zs/7meyJHceLCh6LCSAsRqLvNwEA2T8Kag0bW8kh
-8+SyrKFgL5BuNOiHglfhLmXHtOciagM=
-=IO47
------END PGP SIGNATURE-----
-
---l0BAS8I4h0k//Wt/--
