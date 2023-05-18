@@ -2,87 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5427E70870F
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 19:39:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1839F708719
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 19:45:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230074AbjERRj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 13:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36388 "EHLO
+        id S229962AbjERRot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 13:44:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbjERRj0 (ORCPT
+        with ESMTP id S229519AbjERRor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 13:39:26 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE376AA
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 10:39:24 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id 6a1803df08f44-62385a3106dso10469316d6.2
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 10:39:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1684431564; x=1687023564;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ym80F6m3sCSA9zVZmaKKkeHjU+KvLOxFrDGkEBGtXJY=;
-        b=QNCUvTgtS7EnY4NPHxD+TL2v/vt5PkkUOf23yqFrvfWWMDQcKqTm7ycFuYg039uriV
-         aZRjBtnCo82xFmPPnAOpf8iCwb7z+xR9b1nY+4N7/HwVUYZgsnhOnYM3raaYXo5WyVAX
-         Hr/3Unj4CCHa//RyN+F7tgNCpxpiGbCmGOekLAYp+/rbq1k8fpwgh9UM0/MEaFzE42E7
-         8sR6NR01FP9MMWR/afrNOwXbJK/cR9DeYeXl3lvIz3O9Cg9//s1GIsiTsTX+I+A025gs
-         02bR161mpl2Xp59IIQReOl+8Ua7pP2p2jwFSU/ipFFcmg4V/yMlvyuS41Umvey6cioJ7
-         PhOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684431564; x=1687023564;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ym80F6m3sCSA9zVZmaKKkeHjU+KvLOxFrDGkEBGtXJY=;
-        b=Fm2Ccs9KLr8z5Up5JEq/jjN1pPqv9TLywsIrWMif7aFjgfYQ3wZ0cQGC8tAuzzleOb
-         NL4lsnh4oQog/LrITzzMki5QyoVDGaX0awNfro0co65u8D0/Xm/HRC5d8X2eC/KI6V4O
-         21egYWd6IZ6TC69vFnHqlRRCNYXYVJND07L87iHsDFbuVLzejtR6d4TgS6lO91Xg0cPn
-         v5f/qv0GCOLtJnVknRfysN58HQpp2RpXSNTSt9Ai3JU/oIn389DIGva+DU7CRWQD3HUa
-         ScKLRO1lVF+sPfyr8HSM8RKslgNGm8+8VGS0SJdru1jnmH3RTsS25VxI7VfDbJow1d+Q
-         fnCw==
-X-Gm-Message-State: AC+VfDzVxg+BsEOd9zaguKBqrZsRbLZj3iMgSycoibaNIWGfJoEZo5Co
-        lbytFHx41h7HofWK5OyCusVz
-X-Google-Smtp-Source: ACHHUZ4+WSpE0ffoG+ndbrGnpfTrq/93DWzMQ6pF5Iq2vQKe/z7VXKOBYVf4kpsCXn2l36cwUW5sPQ==
-X-Received: by 2002:a05:6214:29ca:b0:5a1:6212:93be with SMTP id gh10-20020a05621429ca00b005a1621293bemr597210qvb.29.1684431564046;
-        Thu, 18 May 2023 10:39:24 -0700 (PDT)
-Received: from localhost (pool-108-26-161-203.bstnma.fios.verizon.net. [108.26.161.203])
-        by smtp.gmail.com with ESMTPSA id r15-20020a0cf60f000000b005fdbcab3065sm667484qvm.72.2023.05.18.10.39.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 10:39:23 -0700 (PDT)
-Date:   Thu, 18 May 2023 13:39:23 -0400
-Message-ID: <cb8077678d0ff3192e273ef443e490ee.paul@paul-moore.com>
-From:   Paul Moore <paul@paul-moore.com>
-To:     =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>,
-        selinux@vger.kernel.org
-Cc:     Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selinux: keep context struct members in sync
-References: <20230511123148.722343-1-cgzones@googlemail.com>
-In-Reply-To: <20230511123148.722343-1-cgzones@googlemail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PP_MIME_FAKE_ASCII_TEXT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 18 May 2023 13:44:47 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1923F125;
+        Thu, 18 May 2023 10:44:45 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34IHi8Jg022615;
+        Thu, 18 May 2023 17:44:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=XN/efluNpdD7oFCNKGVzmjWSLe6zK8LpE/QIj1srQnk=;
+ b=PAZsoRNevtUKnQ2QXLYeN9c+eB7eV7G3VvQtXPakwMXnL/CqEWaJj9imMo9zFYjHfXJL
+ 1hMfAgiT6tvH8DQ3l1QdPs101jCgI+t2TbIOdGndhoLuzjYPqzOF4jo5wa5ytv4wzbRN
+ QC4M+qH73qXPVjMvCJW/HbKH5+reTU0Md57chL7iegn9r9S+SQwcXEevioRJ0lqgW4y5
+ fDLgSAGzoUfruewUIEbGJghaHdILSvFWWbzgL2hircADs4F2qtC5Vdpns1phpyVVVDU+
+ hatDOZfbCPlzxO5uBowu2vscsglQK5WO3VYpCAgHct2sLOVPSo0q2ffMrHUpckrQwZeo sA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qncbhsrqx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 May 2023 17:44:41 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34IHieVc013385
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 May 2023 17:44:40 GMT
+Received: from [10.216.41.71] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 18 May
+ 2023 10:44:32 -0700
+Message-ID: <4f6cd977-45cf-c673-1a1f-99de177cabb1@quicinc.com>
+Date:   Thu, 18 May 2023 23:14:29 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH 07/11] mailbox: qcom-apcs-ipc: Add IPQ5018 APCS IPC
+ support
+Content-Language: en-US
+To:     Kathiravan T <quic_kathirav@quicinc.com>, <agross@kernel.org>,
+        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <jassisinghbrar@gmail.com>, <mathieu.poirier@linaro.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <quic_gurus@quicinc.com>, <loic.poulain@linaro.org>,
+        <quic_eberman@quicinc.com>, <robimarko@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_arajkuma@quicinc.com>,
+        <quic_anusha@quicinc.com>, <quic_poovendh@quicinc.com>
+References: <1678164097-13247-1-git-send-email-quic_mmanikan@quicinc.com>
+ <1678164097-13247-8-git-send-email-quic_mmanikan@quicinc.com>
+ <eee85f26-722c-08ae-8e41-6bd087df58a8@quicinc.com>
+From:   Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+In-Reply-To: <eee85f26-722c-08ae-8e41-6bd087df58a8@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: eSS-9z6bbetwKiMwRmXm_GEO0oc_eC8k
+X-Proofpoint-ORIG-GUID: eSS-9z6bbetwKiMwRmXm_GEO0oc_eC8k
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-18_13,2023-05-17_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ lowpriorityscore=0 bulkscore=0 phishscore=0 adultscore=0
+ priorityscore=1501 suspectscore=0 clxscore=1015 impostorscore=0 mlxscore=0
+ malwarescore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2304280000 definitions=main-2305180144
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On May 11, 2023 =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com> wrote:
-> 
-> Commit 53f3517ae087 ("selinux: do not leave dangling pointer behind")
-> reset the `str` field of the `context` struct in an OOM error branch.
-> In this struct the fields `str` and `len` are coupled and should be kept
-> in sync.  Set the length to zero according to the string be set to NULL.
-> 
-> Fixes: 53f3517ae087 ("selinux: do not leave dangling pointer behind")
-> Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
-> ---
->  security/selinux/ss/context.h | 1 +
->  1 file changed, 1 insertion(+)
 
-Merged into selinux/next, thanks.
 
---
-paul-moore.com
+On 3/7/2023 11:37 AM, Kathiravan T wrote:
+> 
+> On 3/7/2023 10:11 AM, Manikanta Mylavarapu wrote:
+>> Enable IPQ5018 APCS IPC support by adding the compatible.
+>>
+>> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+>> ---
+>>   drivers/mailbox/qcom-apcs-ipc-mailbox.c | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/mailbox/qcom-apcs-ipc-mailbox.c 
+>> b/drivers/mailbox/qcom-apcs-ipc-mailbox.c
+>> index 6bbf87c6d60b..0b873c76fd7e 100644
+>> --- a/drivers/mailbox/qcom-apcs-ipc-mailbox.c
+>> +++ b/drivers/mailbox/qcom-apcs-ipc-mailbox.c
+>> @@ -141,6 +141,7 @@ static int qcom_apcs_ipc_remove(struct 
+>> platform_device *pdev)
+>>   /* .data is the offset of the ipc register within the global block */
+>>   static const struct of_device_id qcom_apcs_ipc_of_match[] = {
+>> +    { .compatible = "qcom,ipq5018-apcs-apps-global", .data = 
+>> &ipq6018_apcs_data },
+> 
+> With the bindings updated, you can drop this patch.
+> 
+> Thanks, Kathiravan T.
+> 
+
+Sure, I will drop this patch.
+
+Thanks & Regards,
+Manikanta.
