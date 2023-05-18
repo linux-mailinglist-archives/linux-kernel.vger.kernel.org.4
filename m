@@ -2,240 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7590E7083C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:15:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAE257083CE
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:16:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231523AbjEROP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 10:15:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48166 "EHLO
+        id S231175AbjEROQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 10:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231573AbjEROPU (ORCPT
+        with ESMTP id S230470AbjEROQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 10:15:20 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9C4B1735
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:15:16 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-965ab8ed1fcso373486066b.2
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:15:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684419315; x=1687011315;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8IhwvEpf+iZJb/gE6b3fJNEZ3XPbuQc9an/fybW+UgQ=;
-        b=xfOYp4aPqsOpItJx8cdc4w/ThTwXyWqgq/P4jGylRK8GV3Ieqp/dMUbYtUsygArWT4
-         aQ/brrc+usF19M6n8GhD+gN6bCEyUK/sUGAqHg02a3RhtMIqC6x+LXERj0T8ztPnVyAX
-         wGQdN6Ub0ScfWSq+x2HH3s7CSGLlumZrZ086SN0163jRkXj2wlx6efwWMGCwjmb6jGCh
-         KExaWToJrsw7h0P3hsrr0vUbDoOz5z+/rTP7GopljvFM4Fu/jzMwWGWET9MRwJ90cNKE
-         x4JhbcNtLgLc62l2GZNyu7P04Ie2ZLWDN2WDOULtI73q5OEIHazLgL2m+q4A7WBVHewu
-         oVvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684419315; x=1687011315;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8IhwvEpf+iZJb/gE6b3fJNEZ3XPbuQc9an/fybW+UgQ=;
-        b=JWGyceUv+J7KuRHk1AHsU1nSbu36SttextBBA3cQlcHwozQt+XKfat1caPszBYP+sa
-         RHjvhtKXeasXVGFASgGj3VdySE4oFEkH+GpqSgghNlcKTuv59G7rSJpJvzHqSFCE84aF
-         igXa0QzqZWyAGOGNlZhMQy9MAkAQ0+R4ENh514sYJ4VE4yH4MRibNZUcxKeziMrNHhUd
-         KaCh/sTxvwu4P5wdc6slW6Q9ZEehol/7WoubkKZgHjq5QQ/YRegrjucuaCuHheXI6PV0
-         tS/5epsqNyWBad42vhaibpkC3sn/Q4D9LMU3oRqj315lvyXT1qGu65p3lXglEuxo3v/j
-         pXgw==
-X-Gm-Message-State: AC+VfDyFMFUZjftaArppADUlXl/q5sSEyjVAaNkKf5D6MQclQ21uGBh6
-        nuBWfoW7Chyt9OTLVPmJeD2q0Q==
-X-Google-Smtp-Source: ACHHUZ5wOOK+/4Zdzkn8mKF6Qord3DGh5wFhoqa1tc+QlxDQBLIOmHdccwSwVCSJ9tggUv/ST2PGNw==
-X-Received: by 2002:a17:906:58d5:b0:969:9fd0:7cee with SMTP id e21-20020a17090658d500b009699fd07ceemr34329664ejs.10.1684419314959;
-        Thu, 18 May 2023 07:15:14 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:7e24:6d1b:6bf:4249? ([2a02:810d:15c0:828:7e24:6d1b:6bf:4249])
-        by smtp.gmail.com with ESMTPSA id ju4-20020a17090798a400b0094f698073e0sm1012419ejc.123.2023.05.18.07.15.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 May 2023 07:15:14 -0700 (PDT)
-Message-ID: <3f81816a-b7a8-cc3a-0052-a2177bfb58c4@linaro.org>
-Date:   Thu, 18 May 2023 16:15:12 +0200
+        Thu, 18 May 2023 10:16:43 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA22FA6;
+        Thu, 18 May 2023 07:16:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1684419394; i=deller@gmx.de;
+        bh=LwPqTfkemnXFB3jCyVxpWMsHqU0ymB2h6P0xlROe5aw=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=TtXYNe5xAOeA9y374E+iJRzY4md4Plyfpzk5MbuVwz4PYygtvSTWSyLRxfHG+49Tr
+         +xHy9hVv4x2bhoDjDM6o4qdqYUk0GAS34kiwYnbGQIaUWhBnP2IFdU6yIujinn+ENg
+         YDhjlXGXRzYPfXa5xxTU4Tw2Eko5xrgznULGzCm8X+CGyjDwaGtMoB+M7BDaMI+Pkp
+         t1BTX/e0Ba+ByPJyGJ9v9stRfMsg71f9q1LANhImQb8SWJWYKPgYmq/hVuUB4d+V81
+         zJQpjleJZodO72MMBPAJGI12okzLjTQOVnMafMY2f1cP+B5dPNEGJGvLTmiZbDFrUL
+         byMT1oUjgJtkw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([94.134.154.30]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1My36N-1qMfpl1sKt-00zYSz; Thu, 18
+ May 2023 16:16:34 +0200
+Message-ID: <be824fbc-cde4-9a2a-8fb4-1ca23f498dca@gmx.de>
+Date:   Thu, 18 May 2023 16:16:33 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v1 2/3] dt-bindings: soc: add loongson-2 pm
+ Thunderbird/102.10.0
+Subject: Re: [syzbot] [fbdev?] [usb?] WARNING in
+ dlfb_submit_urb/usb_submit_urb (2)
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     syzbot <syzbot+0e22d63dcebb802b9bc8@syzkaller.appspotmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, bernie@plugable.com,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <0000000000004a222005fbf00461@google.com>
+ <ZGXVANMhn5j/jObU@ls3530>
+ <4cd17511-2b60-4c37-baf3-c477cf6d1761@rowland.harvard.edu>
 Content-Language: en-US
-To:     zhuyinbo <zhuyinbo@loongson.cn>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Marc Zyngier <maz@kernel.org>,
-        Youling Tang <tangyouling@loongson.cn>,
-        Baoqi Zhang <zhangbaoqi@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>, Yun Liu <liuyun@loongson.cn>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-References: <20230517073149.31980-1-zhuyinbo@loongson.cn>
- <20230517073149.31980-3-zhuyinbo@loongson.cn>
- <d3791702-4d41-0208-1346-34738a2883b6@linaro.org>
- <4521c591-6fcd-c96a-e2f6-f41f5c191036@loongson.cn>
- <1bbabe6d-b013-9837-8986-205a2b04de14@linaro.org>
- <b4bc7385-3706-8aa3-0117-d106fd47a45e@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <b4bc7385-3706-8aa3-0117-d106fd47a45e@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <4cd17511-2b60-4c37-baf3-c477cf6d1761@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:pXKVZVha4wUECO7qMwhTGTdVsINqMFOlbpu1MpJn6W53oDupfEv
+ 1KnTp+8JBwTKRNhRqhvS1h4A3rWC8LUP3vbiakRhhD0JiuqgR7HPVt4tTCzzFEkkFoARBkL
+ 0v8HArqHVpNEG8Ok6rdmhqo2sD3TRkawveMV0evjEY0G1xQ9ARakyYDGb8fyywNfir3/qD+
+ vrm5ouc+9fEl33ny2IHgw==
+UI-OutboundReport: notjunk:1;M01:P0:P9sz6OUoUZE=;bHncezcc/bG0/tm7YZZlinfSFvB
+ NMhIS8paNawMRgiRfr4BCZzkvovir9IadAH7H2EQXGu7jAe+3mZK+PHICY+Jegy2n2f+gV5eu
+ L46x/n1l0HRw/xhg094dyTmtoulG73b7ykqCFE47hWqHnRZrOH8RUd3X7uN8MwLVjSdXWKovY
+ mFWVi3hgip+chTVQAHEr1nGeGOioms62x1Lmzdisfr7BndieNp4EwYGtUZWo3ePQm1XiD0qh/
+ JjxY6IIV4tNkyw753hAf//0ce2OfawBrotfl/BHf7m0MlMA0ujjI3BZNLd0m1C3smChmohDcq
+ kAuHZIFYoE6W/VyRG1AYwhEjlbZqmJ886v9wz7Cg9o5ulGPJH6fbXwpFyXUY/RcDkL5Cm3aIp
+ nWI6QUDm+h6r5gWV04D2jHHadhndv6sz/iBWza4Lp810kYf6gkFG6IMEdO6iZWTaV4HvLF2Mr
+ gA+l4yZR0/ie8lwlEuRsZgP/O3bggQKnMKa9h/ciHPjH5sHxgkLf+4MQ7nJWNi3wguHQlSSb+
+ JDHNBP2PMuIUJ4k7iyqG1dS33Fh9cTiGbp+DhztTYkoAo3x8QzlIqnlvrnFquweJFdQ+xRo3l
+ vNWAHR3WPQ92FPwsZT8N7da/rhx9iwheeaUBnVd4Fzl2Hn10HQPov6bKs3r7HINgF1142Q4gE
+ Pcag/iMhJq9V7CZvRgze1PPaIJ9f+pmYVyHf8WhZrdwwco5A8QXA3HWm/K1zFNE3x4bRDMeBM
+ b1gP+o4orrh80E/wn3jGH0/OXO/9t64y28uf+x46oODSRd02XuJhjHINi4I2n0SkUv6AyFWUJ
+ w1cqCwvKk73LBTUGM8ugpDaZ2AWFE4gGKGrWRADXPr+6zMAzDMDkitOQHMka6VjtDKio57DEw
+ rmHu/3eoGoCjgOn0mmTuwIN0YW3miqzIp5TK+oJBpjkROhwx+/EcwrHVLn5Vjo+vTC/wNCATy
+ dtGtarLkjrlaA2JJfVnucx2dE/8=
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/05/2023 14:15, zhuyinbo wrote:
-> 
-> 
-> 在 2023/5/18 下午3:15, Krzysztof Kozlowski 写道:
->> On 18/05/2023 05:23, zhuyinbo wrote:
+On 5/18/23 15:54, Alan Stern wrote:
+> On Thu, May 18, 2023 at 09:34:24AM +0200, Helge Deller wrote:
+>> * syzbot <syzbot+0e22d63dcebb802b9bc8@syzkaller.appspotmail.com>:
+>>> syzbot found the following issue on:
 >>>
+>>> HEAD commit:    a4422ff22142 usb: typec: qcom: Add Qualcomm PMIC Type-=
+C dr..
+>>> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh=
+/usb.git usb-testing
+>>> console output: https://syzkaller.appspot.com/x/log.txt?x=3D1524556628=
+0000
+>>> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D2414a945e4=
+542ec1
+>>> dashboard link: https://syzkaller.appspot.com/bug?extid=3D0e22d63dcebb=
+802b9bc8
+>>> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Bin=
+utils for Debian) 2.35.2
+>>> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D1720fd3a=
+280000
+>>> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D171a73ea28=
+0000
 >>>
->>> 在 2023/5/17 下午11:00, Krzysztof Kozlowski 写道:
->>>> On 17/05/2023 09:31, Yinbo Zhu wrote:
->>>>> Add the Loongson-2 SoC Power Management Controller binding with DT
->>>>> schema format using json-schema.
->>>>>
->>>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->>>>
->>>> ...
->>>>
->>>>> +properties:
->>>>> +  compatible:
->>>>> +    items:
->>>>> +      - enum:
->>>>> +          - loongson,ls2k-pmc
->>>>> +      - const: syscon
->>>>> +
->>>>> +  reg:
->>>>> +    maxItems: 1
->>>>> +
->>>>> +  interrupts:
->>>>> +    maxItems: 1
->>>>> +
->>>>> +  suspend-address:
->>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>>>> +    description:
->>>>> +      This option indicate this PM suspend address.
->>>>
->>>> This tells me nothing. Drop "This option indicate this" and rephrase
->>>> everything to actually describe this property. Why would the address
->>>> differ on given, specific SoC? It looks like you just miss compatibles.
->>>> Anyway this needs much more explanation so we can judge whether it fits DT.
+>>> Downloadable assets:
+>>> disk image: https://storage.googleapis.com/syzbot-assets/414817142fb7/=
+disk-a4422ff2.raw.xz
+>>> vmlinux: https://storage.googleapis.com/syzbot-assets/448dba0d344e/vml=
+inux-a4422ff2.xz
+>>> kernel image: https://storage.googleapis.com/syzbot-assets/d0ad9fe848e=
+2/bzImage-a4422ff2.xz
 >>>
->>> Hi Krzysztof,
+>>> IMPORTANT: if you fix the issue, please add the following tag to the c=
+ommit:
+>>> Reported-by: syzbot+0e22d63dcebb802b9bc8@syzkaller.appspotmail.com
 >>>
->>> I will add following description about "suspend-address", please review.
+>>> usb 1-1: Read EDID byte 0 failed: -71
+>>> usb 1-1: Unable to get valid EDID from device/display
+>>> ------------[ cut here ]------------
+>>> usb 1-1: BOGUS urb xfer, pipe 3 !=3D type 1
+>>> WARNING: CPU: 0 PID: 9 at drivers/usb/core/urb.c:504 usb_submit_urb+0x=
+ed6/0x1880 drivers/usb/core/urb.c:504
+>>> Modules linked in:
+>>> CPU: 0 PID: 9 Comm: kworker/0:1 Not tainted 6.4.0-rc1-syzkaller-00016-=
+ga4422ff22142 #0
+>>> Hardware name: Google Google Compute Engine/Google Compute Engine, BIO=
+S Google 04/28/2023
+>>> Workqueue: usb_hub_wq hub_event
+>>> RIP: 0010:usb_submit_urb+0xed6/0x1880 drivers/usb/core/urb.c:504
+>>> Code: 7c 24 18 e8 7c dc 5a fd 48 8b 7c 24 18 e8 42 ca 0b ff 41 89 d8 4=
+4 89 e1 4c 89 ea 48 89 c6 48 c7 c7 60 34 cc 86 e8 0a fa 25 fd <0f> 0b e9 5=
+8 f8 ff ff e8 4e dc 5a fd 48 81 c5 b8 05 00 00 e9 84 f7
+>>> RSP: 0018:ffffc9000009ed48 EFLAGS: 00010282
+>>> RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+>>> RDX: ffff888103650000 RSI: ffffffff81163677 RDI: 0000000000000001
+>>> RBP: ffff88810cb32940 R08: 0000000000000001 R09: 0000000000000000
+>>> R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000003
+>>> R13: ffff88810cf426b8 R14: 0000000000000003 R15: ffff888104272100
+>>> FS:  0000000000000000(0000) GS:ffff8881f6600000(0000) knlGS:0000000000=
+000000
+>>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+>>> CR2: 0000562147be3b70 CR3: 0000000110380000 CR4: 00000000003506f0
+>>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+>>> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>>> Call Trace:
+>>>   <TASK>
+>>>   dlfb_submit_urb+0x92/0x180 drivers/video/fbdev/udlfb.c:1980
+>>>   dlfb_set_video_mode+0x21f0/0x2950 drivers/video/fbdev/udlfb.c:315
+>>>   dlfb_ops_set_par+0x2a7/0x8d0 drivers/video/fbdev/udlfb.c:1111
+>>>   dlfb_usb_probe+0x149a/0x2710 drivers/video/fbdev/udlfb.c:1743
+>>>   usb_probe_interface+0x30f/0x960 drivers/usb/core/driver.c:396
+>>>   call_driver_probe drivers/base/dd.c:579 [inline]
+>>>   really_probe+0x240/0xca0 drivers/base/dd.c:658
+>>>   __driver_probe_device+0x1df/0x4b0 drivers/base/dd.c:800
+>>>   driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
+>>>   __device_attach_driver+0x1d4/0x2e0 drivers/base/dd.c:958
+>>>   bus_for_each_drv+0x149/0x1d0 drivers/base/bus.c:457
+>>>   __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1030
+>>>   bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
+>>>   device_add+0x112d/0x1a40 drivers/base/core.c:3625
+>>>   usb_set_configuration+0x1196/0x1bc0 drivers/usb/core/message.c:2211
+>>>   usb_generic_driver_probe+0xcf/0x130 drivers/usb/core/generic.c:238
+>>>   usb_probe_device+0xd8/0x2c0 drivers/usb/core/driver.c:293
+>>>   call_driver_probe drivers/base/dd.c:579 [inline]
+>>>   really_probe+0x240/0xca0 drivers/base/dd.c:658
+>>>   __driver_probe_device+0x1df/0x4b0 drivers/base/dd.c:800
+>>>   driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
+>>>   __device_attach_driver+0x1d4/0x2e0 drivers/base/dd.c:958
+>>>   bus_for_each_drv+0x149/0x1d0 drivers/base/bus.c:457
+>>>   __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1030
+>>>   bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
+>>>   device_add+0x112d/0x1a40 drivers/base/core.c:3625
+>>>   usb_new_device+0xcb2/0x19d0 drivers/usb/core/hub.c:2575
+>>>   hub_port_connect drivers/usb/core/hub.c:5407 [inline]
+>>>   hub_port_connect_change drivers/usb/core/hub.c:5551 [inline]
+>>>   port_event drivers/usb/core/hub.c:5711 [inline]
+>>>   hub_event+0x2e3d/0x4ed0 drivers/usb/core/hub.c:5793
+>>>   process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
+>>>   worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
+>>>   kthread+0x344/0x440 kernel/kthread.c:379
+>>>   ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
 >>
->> Thanks.
+>> I think this is an informational warning from the USB stack,
+>
+> It is not informational.  It is a warning that the caller has a bug.
+
+I'm not a USB expert, so I searched for such bug reports, and it seems
+people sometimes faced this warning with different USB devices.
+
+>> since the syzbot usb device doesn't behave as expected.
 >>
->>>
->>> The "suspend-address" is a ACPI S3 (Suspend To RAM) firmware entry
+>> What happens with this patch applied?
 >>
->> Why do we add properties for ACPI? This does not seem right. 
-> 
-> 
-> 1.  The suspend-address value was dependent on specific platform
->      firmware code and it tends to be confiurable. if it is a fixed value
->      that seems not friendly or the ACPI S3 will not work.
-
-> 2. the PM driver need according to it to indicate that current SoC
->     whether support ACPI S3, because some Loongson-2 SoC doesn't support
-
-For this you have dedicated compatibles. Which points to the fact that
-you missed them here.
-
->     ACPI S3 but support other ACPI mode, so the PM driver need has a
->     check. if no this check and other ACPI mode will not work.
-
-Sure, but it is not really relevant to the bindings... or rather: should
-not be relevant. Bindings are for hardware or in this case also for
-firmware, but not for driver.
-
-> 
-> Base on the above two points, this property was necessary.
-
-I did not object in my last response...
-
-> Using this property "suspend-address" can make the firmware entry
-> address configurable, and then the kernel can also indicate whether
-> the current SoC supports S3
-> 
-> In addition, from kernel code perspective, the property
-> "suspend-address" was to initialize "loongarch_suspend_addr"
-
-Again, how does it matter what kernel does?
-
-> 
-> S3 call flow:
-> enter_state -> loongson_suspend_enter -> bios's loongarch_suspend_addr
-> 
-> SYM_FUNC_START(loongson_suspend_enter)
->          SETUP_SLEEP
->          bl              __flush_cache_all
-> 
->          /* Pass RA and SP to BIOS */
->          addi.d          a1, sp, 0
->          la.pcrel        a0, loongson_wakeup_start
->          la.pcrel        t0, loongarch_suspend_addr
->          ld.d            t0, t0, 0
->          jirl            a0, t0, 0 /* Call BIOS's STR sleep routine */
-> 
-> 
-> Please
->> reword to skip ACPI stuff, e.g. deep sleep states (Suspend to RAM).
-> 
-> 
-> Sorry, I don't got your point.
-
-You have DT platform, so why do you use it with ACPI in the first place?
-If you have ACPI, then please drop all this and make your life easier.
-
-If this is booted without ACPI, which would justify DT, drop the
-references to ACPI. I gave you example what to use instead. If you don't
-like it, no problem, reword in different way.
-
-> 
+>> #syz test: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.g=
+it usb-testing
 >>
+>> diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
+>> index 9f3c54032556..dd77b9e757da 100644
+>> --- a/drivers/usb/core/urb.c
+>> +++ b/drivers/usb/core/urb.c
+>> @@ -501,7 +501,7 @@ int usb_submit_urb(struct urb *urb, gfp_t mem_flags=
+)
 >>
->>> address which was jumped from kernel and it's value was dependent on
->>> specific platform firmware code.
+>>   	/* Check that the pipe's type matches the endpoint's type */
+>>   	if (usb_pipe_type_check(urb->dev, urb->pipe))
+>> -		dev_WARN(&dev->dev, "BOGUS urb xfer, pipe %x !=3D type %x\n",
+>> +		printk("BOGUS urb xfer, pipe %x !=3D type %x (hardware misbehaviour?=
+)\n",
+>>   			usb_pipetype(urb->pipe), pipetypes[xfertype]);
 >>
->> "entry address which was jumped" <- the address cannot jump. Please
->> explain who is jumping here - boot CPU? each suspended CPU? I guess the
->> first as CPUs are offlined, right?
-> 
-> The boot CPU was jumping to firmware and finish remaining process in
-> firmware that was what ACPI S3 required and other CPUs (No-boot CPU)
-> have been offline before entering firmware.
+>>   	/* Check against a simple/standard policy */
+>
+> You can't fix a bug by changing the line that reports it from dev_WARN
+> to printk!
 
-Then fix the description.
+Of course this patch wasn't intended as "fix".
+It was intended to see how the udlfb driver behaves in this situation, e.g=
+.
+if the driver then crashes afterwards.
 
-> 
->>
->>> In addition, the PM driver need
->>> according to it to indicate that current SoC whether support ACPI S3.
->>
->> Skip references to driver.
-> 
-> 
-> Sorry, I don't got your point.  Could you elaborate on it?
+Furthermore, why does usb_submit_urb() prints this WARNING and then contin=
+ues?
+If it's a real bug, why doesn't it returns an error instead?
+So, in principle I still think this warning is kind of informational,
+which of course points to some kind of problem which should be fixed.
 
-If you change driver, you change bindings? No.
+> In this case it looks like dlfb_usb_probe() or one of the routines it
+> calls is wrong; it assumes that an endpoint has the expected type
+> without checking.  More precisely, it thinks an endpoint is BULK when
+> actually it is INTERRUPT.  That's what needs to be fixed.
 
-Bindings are for hardware, not for driver. Whatever your driver is doing
-usually does not matter for the bindings and should not be included.
+Maybe usb_submit_urb() should return an error so that drivers can
+react on it, instead of adding the same kind of checks to all drivers?
 
-Best regards,
-Krzysztof
-
+Helge
