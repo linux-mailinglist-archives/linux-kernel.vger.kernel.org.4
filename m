@@ -2,108 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 913E1707A17
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 08:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83A52707A20
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 08:14:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230042AbjERGLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 02:11:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36738 "EHLO
+        id S230045AbjERGON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 02:14:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjERGLu (ORCPT
+        with ESMTP id S229557AbjERGOM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 02:11:50 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E56E1B8
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 23:11:49 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id d75a77b69052e-3f51ea3a062so99451cf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 23:11:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684390308; x=1686982308;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YIcLsEqKC+yr+YYE2WjsmqsRDHb0wRTZZ7t3w6tiqfo=;
-        b=LZxmYM7f0rgzPxounlXLCt81a6InSzR6KuPfTwwlb/TPNCmiRHT1MuwkMDodH7wj/N
-         hSZ71XdZVDPjJFvE5OKIxlJeNzgEoBWTBgb7gbZJafHJ8tpKpblfW8kUlh3YJ2/L1V2V
-         JXunIqKl9p08LIgiEjSc87nYP3fvd3axMq4Ho=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684390308; x=1686982308;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YIcLsEqKC+yr+YYE2WjsmqsRDHb0wRTZZ7t3w6tiqfo=;
-        b=P5DNXFrYglKJfzpG8xWqRF/QRvCFCtuW+gz/juHdenowwmvaq8uVfuwJ4HUtdOGTPM
-         BSymX6gwLB427AZb8P9VRX0PHyaj+er0n+p9LyGmfD88ciM+/TX68x6+HAJG70k2Znoj
-         nU53OZjocg9mDSqB5i2Zb35oD7njTIdcnN5EM0xWhnOXdR+IEvUSYWlxcQYAhbeWIiBu
-         pZt8GV51F5Ac6iC/pFrQaglYMV2LH0OJeOvUa+nsHXpXzNS6gvJGORq6bX/2yItUkRL0
-         vrEppx/maV9ICzfmBvWR+1vIdK8hwULn2KZ2xb4BUUhR6/aKvwSLHXZntrDH8zi9cvBO
-         ocBA==
-X-Gm-Message-State: AC+VfDwzhjpGZCk2ELMl+9uErrv9BE+SfNFp09IgqQI5CFvFkBxLe+n6
-        0HPui2vd0sCKH0x68wPeIevqtkaMdFFk/Y6wsxGatg==
-X-Google-Smtp-Source: ACHHUZ7UcZ1YOkuaZFJDDRz7vpEArSW4FiyaB16wFsse5hJMzhWmGaUgqnEaO3WqQFo5JI+GGQCnACL2Sh3EitrLRkk=
-X-Received: by 2002:a05:622a:14ca:b0:3ef:343b:fe7e with SMTP id
- u10-20020a05622a14ca00b003ef343bfe7emr248479qtx.2.1684390308438; Wed, 17 May
- 2023 23:11:48 -0700 (PDT)
+        Thu, 18 May 2023 02:14:12 -0400
+X-Greylist: delayed 42739 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 17 May 2023 23:14:08 PDT
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [IPv6:2001:67c:2050:0:465::102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 514B4E52;
+        Wed, 17 May 2023 23:14:08 -0700 (PDT)
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4QMKRv56gYz9sqc;
+        Thu, 18 May 2023 08:14:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dylanvanassche.be;
+        s=MBO0001; t=1684390443;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Qj2hNQs6e7b9/J4YVNaFwfq4+eID2dfYLuBUt5E1CTQ=;
+        b=u5tpKkEM9Ko03m5ukA/ywrnNrNAPDQE+a1ees3WzNC9tuAIDpBok8xWUGMIEJIYmjG6091
+        1paXPVNfgR3m9eBjBi5jn4WnHWqhlPgEPHG9F/xdCV/Gc5nAt+lNdSaUBbFECSTdHTwsLt
+        CEvmuaKin2cAMA3qtFopZ5Lx1d9IY6VMrWN+p/wznugPeRpRvxhOL71bRoLrJdhI+S82BB
+        ABr15kzOHc2GIPLixU0/l4bPiQD4X+CKPz2x3TYUhUM6C6jSFnOCo5KzWPryqTiDNiYqLI
+        2U40TcLXMBRDB+7N8qga8C+LcnEcl44B4xv962/nliK/u9NEFAWBVuGgu9v3CQ==
+From:   Dylan Van Assche <me@dylanvanassche.be>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        amartinz@shiftphones.com, Dylan Van Assche <me@dylanvanassche.be>
+Subject: [PATCH v2 0/3] arm64: dts: qcom: pmi8998: add and enable flash LED controller
+Date:   Thu, 18 May 2023 08:13:25 +0200
+Message-Id: <20230518061328.146847-1-me@dylanvanassche.be>
 MIME-Version: 1.0
-References: <CANEJEGvKRVGLYPmD3kujg6veq5KR7J+rAu6ni92wUz72KGtyBA@mail.gmail.com>
- <20230407194645.GA3814486@bhelgaas>
-In-Reply-To: <20230407194645.GA3814486@bhelgaas>
-From:   Grant Grundler <grundler@chromium.org>
-Date:   Wed, 17 May 2023 23:11:37 -0700
-Message-ID: <CANEJEGscz3F-6cZcp7dBVekpxHMNXZWgUW2ic3xd6hm3xWH6ZQ@mail.gmail.com>
-Subject: Re: [PATCHv2 pci-next 2/2] PCI/AER: Rate limit the reporting of the
- correctable errors
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Grant Grundler <grundler@chromium.org>,
-        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-        "Oliver O 'Halloran" <oohall@gmail.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rajat Jain <rajatja@chromium.org>,
-        Rajat Khandelwal <rajat.khandelwal@linux.intel.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 7, 2023 at 12:46=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.org> =
-wrote:
-...
-> But I don't think we need output in a single step; we just need a
-> single instance of ratelimit_state (or one for CPER path and another
-> for native AER path), and that can control all the output for a single
-> error.  E.g., print_hmi_event_info() looks like this:
->
->   static void print_hmi_event_info(...)
->   {
->     static DEFINE_RATELIMIT_STATE(rs, ...);
->
->     if (__ratelimit(&rs)) {
->       printk("%s%s Hypervisor Maintenance interrupt ...");
->       printk("%s Error detail: %s\n", ...);
->       printk("%s      HMER: %016llx\n", ...);
->     }
->   }
->
-> I think it's nice that the struct ratelimit_state is explicit and
-> there's no danger of breaking it when adding another printk later.
+Qualcomm PMI8998 has support for 3 flash LEDs which got support in [1].
+Add this driver to the PMI8998 DTS and enable 2 flash LEDs in the SHIFTPHONES SHIFT6mq 
+smartphone. This smartphone has a white and yellow flash LED.
 
-Since the output is spread across at least two functions, I think your
-proposal is a better solution.
+* Changelog *
 
-I'm not happy with the patch series I sent in my previous reply as an
-attachment. It's only marginally better than the original code.
+Changes in v2:
+- Document compatible for PMI8998 to fix missing compatible in DTS.
+- Improved commit messages, following [2]
 
-I need another day or two to see if I can implement your proposal correctly=
-.
+[1] https://lore.kernel.org/all/20230507172941.364852-1-me@dylanvanassche.be
+[2] https://lore.kernel.org/all/20230516150202.188655-1-krzysztof.kozlowski@linaro.org/
 
-cheers,
-grant
+Kind regards,
+Dylan Van Assche
+
+Dylan Van Assche (3):
+  dt-bindings: leds: qcom,spmi-flash-led: add PMI8998
+  arm64: dts: qcom: pmi8998: add flash LED controller
+  arm64: dts: qcom: sdm845-shift-axolotl: enable flash LEDs
+
+ .../bindings/leds/qcom,spmi-flash-led.yaml    |  1 +
+ arch/arm64/boot/dts/qcom/pmi8998.dtsi         |  6 +++++
+ .../boot/dts/qcom/sdm845-shift-axolotl.dts    | 22 +++++++++++++++++++
+ 3 files changed, 29 insertions(+)
+
+-- 
+2.40.1
+
