@@ -2,134 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40CF87087FF
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 20:50:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59D7D708806
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 20:52:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbjERSu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 14:50:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37116 "EHLO
+        id S230078AbjERSwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 14:52:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229869AbjERSuY (ORCPT
+        with ESMTP id S229558AbjERSwT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 14:50:24 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD40EE51;
-        Thu, 18 May 2023 11:50:21 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id E3DB86018D;
-        Thu, 18 May 2023 20:50:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1684435819; bh=K8oNufpSLIVY22ScmOQ8KrTxRaX7cOkQGgVlcFXyBxo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QsO1SSqrfrrKTZHMgrcF3d1wlYs03rbOv/7UdABTD7oPgOIRAl+Gfy4GY3Atn36Ew
-         fDrHSugB0N6BrmNk5ur6FSud1XVySJgaq/yGjqBPKk++Ln16AuC8P06w7r83Zx+FgA
-         cxD2VRrbtXBFr43a8eKpOKs/rlBq1oPSZMzi9OociU4UpFl6yrhDnTFj7W6M0jjWgz
-         4dEJE7OiGxhXvKIWxw3Lfqj0NvK5wYAQunIM0OX8KDNU4tqv3OTXfvmdED+TqA7Jwq
-         iJHSilN57sRTjcGtonSIyXPlQ4M7lq7MP8qaWpjXRe2u2fh7k8W9Mm2PsemGqOI7oT
-         ihnYaxyABObZQ==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id l4Am7MWZocqH; Thu, 18 May 2023 20:50:17 +0200 (CEST)
-Received: from [192.168.1.6] (unknown [77.237.113.62])
-        by domac.alu.hr (Postfix) with ESMTPSA id DE58760189;
-        Thu, 18 May 2023 20:50:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1684435817; bh=K8oNufpSLIVY22ScmOQ8KrTxRaX7cOkQGgVlcFXyBxo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=K3ufSmqMB0cmdFpNQ4l6jwGEZIqMEu8gltlVYyjClEOtNOEMIg53LlniDCwvnFBQS
-         i5xf4wDHrpj6JLpRLTHsLLp6LIAnOXrRmhmOEkr5ImwEBOOSi0yHy4UTMDbKgIrJVu
-         cxnS5t2UYtHtUov/OIPMyaOHciEIKE3pZtQTODaAjRnoWMIPwPj/GXybj1CGhd3yw0
-         h2HLpBTxqvi+C1LydlNsHQ5SCaFb2pUoaSm7g5DiPTM/O5Q8ZN+roa0cgxZNvmNKeD
-         hwHxNLb5MkTmG1FVrPhM2L7tSeOPK/fJn/PTmDeAAibnoZ+xbSwfiHridiwoOkE4fz
-         l3WUh510xM4Cg==
-Message-ID: <d574c978-c2b8-f2e0-abc5-19899b4fefe6@alu.unizg.hr>
-Date:   Thu, 18 May 2023 20:50:16 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v5 1/1] wifi: mac80211: fortify the spinlock against
- deadlock by interrupt
-Content-Language: en-US
-To:     Johannes Berg <johannes@sipsolutions.net>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
+        Thu, 18 May 2023 14:52:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF05BC7;
+        Thu, 18 May 2023 11:52:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 89A1265119;
+        Thu, 18 May 2023 18:52:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B62FC433D2;
+        Thu, 18 May 2023 18:52:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684435938;
+        bh=ChP7EBU3iErxQg5xg1/sPCMbmF5dwTkOP9EktOEEk9Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VG48LIRP1kSQNTCB/WIxiyyXO6IeBEzYwskdHaF1sK1rBSovOhEhucxMSkGHxHxTo
+         eF7qNsnBl9auArI0zg8VrPZ2EMgV9cLDTmMumZ3MqOx+sUX6em0YChg4xrd9Hdlr51
+         9lq3ajA9cCdQkFLQFpu3C2QiTg0OvPe+GOPiotdIuQ7pHlD5tzdY3mWUe97IFn6+a+
+         ++fXuVC85DNEVb83mZojkg8wtpdqbssZDc9Dw/v157J2CvdbIPYCy5p1aklsNOMR1b
+         q1irjFkAKfeB8oNETCpW+GG86CUzoithx/d2S9C/viCPUoF6KGu/+9N9yIok2vnMz/
+         EIJe4Z2hn9q6A==
+Date:   Thu, 18 May 2023 20:52:12 +0200
+From:   Simon Horman <horms@kernel.org>
+To:     Abhijeet Rastogi <abhijeet.1989@gmail.com>
+Cc:     Simon Horman <horms@verge.net.au>, Julian Anastasov <ja@ssi.bg>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leonro@nvidia.com>
-References: <20230517213101.25617-1-mirsad.todorovac@alu.unizg.hr>
- <056e71bd6a06779bfcb1ef4518a2f67f67730fe7.camel@sipsolutions.net>
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-In-Reply-To: <056e71bd6a06779bfcb1ef4518a2f67f67730fe7.camel@sipsolutions.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        lvs-devel@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] ipvs: increase ip_vs_conn_tab_bits range for 64BIT
+Message-ID: <ZGZz3BcmSXm2KXLw@kernel.org>
+References: <20230412-increase_ipvs_conn_tab_bits-v3-1-c813278f2d24@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230412-increase_ipvs_conn_tab_bits-v3-1-c813278f2d24@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/17/23 23:34, Johannes Berg wrote:
->>
->> Fixes: 4444bc2116ae ("wifi: mac80211: Proper mark iTXQs for resumption")
->> Link: https://lore.kernel.org/all/1f58a0d1-d2b9-d851-73c3-93fcc607501c@alu.unizg.hr/
->> Reported-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
->> Link: https://lore.kernel.org/all/cdc80531-f25f-6f9d-b15f-25e16130b53a@alu.unizg.hr/
->> Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
->> Reviewed-by: Leon Romanovsky <leonro@nvidia.com>
->> ---
->>
+On Tue, May 16, 2023 at 08:08:49PM -0700, Abhijeet Rastogi wrote:
+> Current range [8, 20] is set purely due to historical reasons
+> because at the time, ~1M (2^20) was considered sufficient.
+> With this change, 27 is the upper limit for 64-bit, 20 otherwise.
 > 
-> You really should say what you changed, but anyway, it's too late - I
-> applied a previous version yesterday.
+> Previous change regarding this limit is here.
+> 
+> Link: https://lore.kernel.org/all/86eabeb9dd62aebf1e2533926fdd13fed48bab1f.1631289960.git.aclaudi@redhat.com/T/#u
+> 
+> Signed-off-by: Abhijeet Rastogi <abhijeet.1989@gmail.com>
 
-Yes. Sorry, I was following Andy's advice to resend, at the wrong
-assumption that the system ate the patch after three weeks of
-inactivity. :-/
+Acked-by: Simon Horman <horms@kernel.org>
 
-The difference is really in the mailbox containing the patch, but git
-somehow ate that, too. Beginner's errors. :-(
 
----
-v4 -> v5:
-- Some cleanup, keeping the longer stacktrace as requested
-v3 -> v4:
-- Added whole lockdep trace as advised.
-- Trimmed irrelevant line prefix.
-v2 -> v3:
-- Fix the Fixes: tag as advised.
-- Change the net: to wifi: to comply with the original patch that
-   is being fixed.
-v1 -> v2:
-- Minor rewording and clarification.
-- Cc:-ed people that replied to the original bug report (forgotten
-   in v1 by omission).
-
-  net/mac80211/tx.c | 5 +++--
-  1 file changed, 3 insertions(+), 2 deletions(-)
-
-Rest assured, the code did not change. It is a rather obvious fix
-to the interrupt caused deadlock.
-
-> Also, I suspect you just collected the reviewed-by tag here, which
-> really you shouldn't be doing a resend for.
-
-This is correct, plus cosmetic removal of Cc:s as advised.
-
-Sorry for confusion, I am really having a great time with the Intel
-Linux team and I am currently updating my homework on Wi-Fi.
-
-Provided that there will be more use of me for the wireless.
-
-But I can always justify anything used in multimedia or graphic
-rendering as my field of research. Well, almost anything :-)
-
-Best regards,
-Mirsad
