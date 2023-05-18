@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A85A2708B37
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 00:03:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3845708B3B
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 00:03:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230427AbjERWDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 18:03:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59788 "EHLO
+        id S230483AbjERWDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 18:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230288AbjERWDS (ORCPT
+        with ESMTP id S230289AbjERWDT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 18:03:18 -0400
+        Thu, 18 May 2023 18:03:19 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CEB2E5E;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C82E64;
         Thu, 18 May 2023 15:03:17 -0700 (PDT)
 Date:   Thu, 18 May 2023 22:03:14 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
@@ -21,32 +21,31 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=Q90wEZtoy57yTiX+qUnwxcIu4K08qvGduE+8ufkTtbc=;
-        b=KqJdnBj+TO//bnu55swXXJd1dg5O+GrnJZG7fiywLPEZzU1mS6N9Q647XXwsVvqcvKl6W4
-        3OdQOCfcDSlhGAIDHljN/c4Pru8bgKLBuEAkfUQuSzda11K8t2S4vD10y9/DozLt0PTNiO
-        +ancU/ok8RIJIYlUDI11EiHM2XnxFCNupNzcC4Bj+VAdXXVEflXQw6iP5PE+q1YDO/DgvV
-        Qeq5ALHGYBditW0odmSFb0zL1TlZ7VYwjaaolSN2Wb9Fw6NHAOzu4sctAAC5CaTgKjrpCr
-        RbBTqkA22YnjBK65m9Fy4QuTV5dWLAIRzXNstqFBv9A1rECAHWbX/EE5iBP73w==
+        bh=ltQ3L6tadCn4Z6Gz2ASt3C39R1RPyrwN6s8j9Dokk1M=;
+        b=LRnYcpPmqRJBkY0jXDrMSb5vt6buokv+P0xfZBaOQNCv0u/CFcsiRApuSjrk6Wn6ba4rZL
+        2exRrtQtMYioNUxp2Eho4rhF+xViUVH7bHEF6G802N9xIgOX65bQOxC/Dc+3sJkVTwVTz2
+        kLNlslzMn4gr0brSR0IGqqHFTZPlVLSIlsA9HcP7wKzvXMJD/ryYle2+IC1xLrSukXEYcR
+        GZJxkN0pMUCI2diCuFJJlwBEKKvE6Z41efEn/bsD438YOWW7MYPaUjFEDGC/sR+kJ9hqF0
+        UF8kgzxMKklKcpA6/ddbTm+gDhQMIFAgWWT6ZTy+DynJTc7rcN3bfUVoBcN39Q==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1684447394;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=Q90wEZtoy57yTiX+qUnwxcIu4K08qvGduE+8ufkTtbc=;
-        b=lPJlOjPdobLK2l94IyZBttqM4s0xuv5yUwjK6aOki1QRLxxbM4uejzx5uCio3WwjdZKrMS
-        lSDScYwmHSNQvxCA==
+        bh=ltQ3L6tadCn4Z6Gz2ASt3C39R1RPyrwN6s8j9Dokk1M=;
+        b=QMgmFnkHyjlePDJS7TkGcWAvkXG+P9wwUrf2TxwWFog6KFErf8cnKabT7JOawmUCkeTfyy
+        OhXZMnPVlFt239Cw==
 From:   "tip-bot2 for Arnd Bergmann" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cleanups] x86/quirks: Include linux/pnp.h for
- arch_pnpbios_disabled()
+Subject: [tip: x86/cleanups] x86/mm: Include asm/numa.h for set_highmem_pages_init()
 Cc:     Arnd Bergmann <arnd@arndb.de>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         Alexander Lobakin <aleksander.lobakin@intel.com>,
         x86@kernel.org, linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Message-ID: <168444739404.404.1981750002519034291.tip-bot2@tip-bot2>
+Message-ID: <168444739432.404.8341294872688326469.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -63,37 +62,37 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/cleanups branch of tip:
 
-Commit-ID:     056b44a4d10907ec8153863b2a0564e808ef1440
-Gitweb:        https://git.kernel.org/tip/056b44a4d10907ec8153863b2a0564e808ef1440
+Commit-ID:     b963d12aa66ce02b948cd69a20eea5d1d1e0137e
+Gitweb:        https://git.kernel.org/tip/b963d12aa66ce02b948cd69a20eea5d1d1e0137e
 Author:        Arnd Bergmann <arnd@arndb.de>
-AuthorDate:    Tue, 16 May 2023 21:35:38 +02:00
+AuthorDate:    Tue, 16 May 2023 21:35:37 +02:00
 Committer:     Dave Hansen <dave.hansen@linux.intel.com>
 CommitterDate: Thu, 18 May 2023 11:56:18 -07:00
 
-x86/quirks: Include linux/pnp.h for arch_pnpbios_disabled()
+x86/mm: Include asm/numa.h for set_highmem_pages_init()
 
-arch_pnpbios_disabled() is defined in architecture code on x86, but this
-does not include the appropriate header, causing a warning:
+The set_highmem_pages_init() function is declared in asm/numa.h, which
+must be included in the file that defines it to avoid a W=1 warning:
 
-arch/x86/kernel/platform-quirks.c:42:13: error: no previous prototype for 'arch_pnpbios_disabled' [-Werror=missing-prototypes]
+arch/x86/mm/highmem_32.c:7:13: error: no previous prototype for 'set_highmem_pages_init' [-Werror=missing-prototypes]
 
 Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
 Reviewed-by: Alexander Lobakin <aleksander.lobakin@intel.com>
-Link: https://lore.kernel.org/all/20230516193549.544673-10-arnd%40kernel.org
+Link: https://lore.kernel.org/all/20230516193549.544673-9-arnd%40kernel.org
 ---
- arch/x86/kernel/platform-quirks.c | 1 +
+ arch/x86/mm/highmem_32.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/x86/kernel/platform-quirks.c b/arch/x86/kernel/platform-quirks.c
-index b348a67..b525fe6 100644
---- a/arch/x86/kernel/platform-quirks.c
-+++ b/arch/x86/kernel/platform-quirks.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <linux/kernel.h>
- #include <linux/init.h>
-+#include <linux/pnp.h>
+diff --git a/arch/x86/mm/highmem_32.c b/arch/x86/mm/highmem_32.c
+index 2c54b76..d9efa35 100644
+--- a/arch/x86/mm/highmem_32.c
++++ b/arch/x86/mm/highmem_32.c
+@@ -3,6 +3,7 @@
+ #include <linux/export.h>
+ #include <linux/swap.h> /* for totalram_pages */
+ #include <linux/memblock.h>
++#include <asm/numa.h>
  
- #include <asm/setup.h>
- #include <asm/bios_ebda.h>
+ void __init set_highmem_pages_init(void)
+ {
