@@ -2,49 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8231B707D06
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAA84707D08
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbjERJgz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 05:36:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57160 "EHLO
+        id S230110AbjERJhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 05:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbjERJgx (ORCPT
+        with ESMTP id S229963AbjERJhd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 05:36:53 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EC3910F5;
-        Thu, 18 May 2023 02:36:52 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QMPrx0Kdkz689hv;
-        Thu, 18 May 2023 17:32:33 +0800 (CST)
-Received: from localhost (10.126.175.163) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 18 May
- 2023 10:36:49 +0100
-Date:   Thu, 18 May 2023 10:36:48 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Ira Weiny <ira.weiny@intel.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        "Dave Jiang" <dave.jiang@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/3] MAINTAINERS: Add additional reviewers for CXL
-Message-ID: <20230518103648.00006e93@Huawei.com>
-In-Reply-To: <20230426-cxl-fixes-v1-1-870c4c8b463a@intel.com>
-References: <20230426-cxl-fixes-v1-0-870c4c8b463a@intel.com>
-        <20230426-cxl-fixes-v1-1-870c4c8b463a@intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Thu, 18 May 2023 05:37:33 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558181733
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 02:37:32 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pza4Y-0007aE-Tw; Thu, 18 May 2023 11:37:22 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 46D281C7B4B;
+        Thu, 18 May 2023 09:37:20 +0000 (UTC)
+Date:   Thu, 18 May 2023 11:37:19 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build failure after merge of the net tree
+Message-ID: <20230518-frying-duller-be47c537367b-mkl@pengutronix.de>
+References: <20230518090634.6ec6b1e1@canb.auug.org.au>
+ <20230517214200.33398f82@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.175.163]
-X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7qwbkht7sr25n5ca"
+Content-Disposition: inline
+In-Reply-To: <20230517214200.33398f82@kernel.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
@@ -54,46 +58,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 17 May 2023 14:28:10 -0700
-Ira Weiny <ira.weiny@intel.com> wrote:
 
-> To get better coverage add Dave Jiang and Jonathan Cameron as reviewers.
-> 
-> Cc: Dave Jiang <dave.jiang@intel.com>
-> Cc: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+--7qwbkht7sr25n5ca
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+On 17.05.2023 21:42:00, Jakub Kicinski wrote:
+> On Thu, 18 May 2023 09:06:34 +1000 Stephen Rothwell wrote:
+> > Hi all,
+> >=20
+> > After merging the net tree, today's linux-next build (arm
+> > multi_v7_defconfig) failed like this:
+> >=20
+> > Error: arch/arm/boot/dts/stm32f746.dtsi:265.20-21 syntax error
+> > FATAL ERROR: Unable to parse input tree
+> > make[2]: *** [scripts/Makefile.lib:419: arch/arm/boot/dts/stm32f746-dis=
+co.dtb] Error 1
+> > Error: arch/arm/boot/dts/stm32f746.dtsi:265.20-21 syntax error
+> > FATAL ERROR: Unable to parse input tree
+> > make[2]: *** [scripts/Makefile.lib:419: arch/arm/boot/dts/stm32f769-dis=
+co.dtb] Error 1
+> > Error: arch/arm/boot/dts/stm32f746.dtsi:265.20-21 syntax error
+> > FATAL ERROR: Unable to parse input tree
+> >=20
+> > Caused by commit
+> >=20
+> >   0920ccdf41e3 ("ARM: dts: stm32: add CAN support on stm32f746")
+> >=20
+> > I have used the net tree from next-20230517 for today.
+>=20
+> Dario, Marc, can we get an immediate fix for this?
 
-One comment inline though on capitalization.
+Here you go:
 
-Thanks,
+| https://lore.kernel.org/all/20230518073241.1110453-1-mkl@pengutronix.de
 
-Jonathan
+regards,
+Marc
 
-> ---
->  MAINTAINERS | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 90abe83c02f3..6f8568ec2731 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -5169,6 +5169,8 @@ M:	Vishal Verma <vishal.l.verma@intel.com>
->  M:	Ira Weiny <ira.weiny@intel.com>
->  M:	Ben Widawsky <bwidawsk@kernel.org>
->  M:	Dan Williams <dan.j.williams@intel.com>
-> +R:	Dave Jiang <dave.jiang@intel.com>
-> +R:	Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
-For consistency go with <jonathan.cameron@huawei.com>
-which is what I'm using elsewhere in maintainers and
-matches other lower case entries here.
- 
+--7qwbkht7sr25n5ca
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
->  L:	linux-cxl@vger.kernel.org
->  S:	Maintained
->  F:	drivers/cxl/
-> 
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRl8c0ACgkQvlAcSiqK
+BOjNmQf+L2tpBHUm5pRCkEwVeAfaCydTw1pYWkB6SPzQKGO1ejkbuajs6uEr4YK1
+Krn+MgMCscrbENxL5x02/WMzX6x3xBKMyLqadtr7w7gbRjzKEX8pSLXOuDGvPIee
+xeF7kF8h/QMcfBVI13/KlIJu83Kz24nPAEqqfr3lhF3+8zui5+wntQGC1cGRIKVI
+O+y0GwkH4fD3nrQ/4Vwu2j1Is70Zsrd3DGnCy9QBlcAuwV+ZSdQPukKVv162odLL
+d61P59blCBZ5WoF+zZ2vrcjvJY5GyVsBJWx6UlWlW2X7/sflQ9ecA+BUyuHulXLg
+JUnuY0Q7XiXRYBikd7FA6f0VwwL4GQ==
+=t0LY
+-----END PGP SIGNATURE-----
 
+--7qwbkht7sr25n5ca--
