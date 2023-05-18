@@ -2,124 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A80E707CC4
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:26:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81A77707CC2
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:26:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230170AbjERJ0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 05:26:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50054 "EHLO
+        id S230160AbjERJ0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 05:26:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbjERJ0s (ORCPT
+        with ESMTP id S229810AbjERJ0Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 05:26:48 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D1CFC3;
-        Thu, 18 May 2023 02:26:47 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34I8iWYk017337;
-        Thu, 18 May 2023 09:26:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=qcppdkim1;
- bh=l4eWh7+rn5/X+0JGaPIW3uUeEg7Fa2SZlqeEZEpEiks=;
- b=LEAD5wwSE9HQJ9AycMMftYTnwwtmawYiXqE85eGs4AgcRF7WbnUd2KBnpBlTCSXkCfUf
- ytXqLUtq9CRohao6lhKF0k2HkjLEsSEgGgLIbj/Zhh+GFd0l8gCNS2bSqjPxVyxgYt0/
- XPllS0UVuGtQRTHSW6b9WmH2dLss3CLFYhx2X/pcFoiwwQwHUtjTj8rQTrynzuiy8fDo
- RdkHgsib7kZj3QOa3vr1S/yf5CGXe1gJCsp1Drj9ALCHI2nP6cCNDFQjN8zmmEj7XgcR
- /eT/gQkmwW7TXw/HUkfKWenW2Vc7QNhnhsHoVSoGRabQXtMGmEvSvLluZSUGrqpanxu+ 6w== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qn73us21x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 May 2023 09:26:21 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34I9PqFa006447
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 May 2023 09:25:52 GMT
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Thu, 18 May 2023 02:25:52 -0700
-Received: from nalasex01a.na.qualcomm.com ([fe80::5cb1:e5a2:c713:5b68]) by
- nalasex01a.na.qualcomm.com ([fe80::5cb1:e5a2:c713:5b68%4]) with mapi id
- 15.02.0986.042; Thu, 18 May 2023 02:25:52 -0700
-From:   "Pradeep Pragallapati (QUIC)" <quic_pragalla@quicinc.com>
-To:     Damien Le Moal <dlemoal@kernel.org>
-CC:     Yu Kuai <yukuai1@huaweicloud.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "yukuai (C)" <yukuai3@huawei.com>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: RE: [PATCH V1] block: Fix null pointer dereference issue on struct
- io_cq
-Thread-Topic: [PATCH V1] block: Fix null pointer dereference issue on struct
- io_cq
-Thread-Index: AQHZiJvu5joNBe/ZIUyNvEQWRViGA69en4qAgAAGL4CAAABcAIAAAuMAgAD7kXA=
-Date:   Thu, 18 May 2023 09:25:52 +0000
-Message-ID: <7e32c001d222483394327c5802a6c985@quicinc.com>
-References: <20230517084434.18932-1-quic_pragalla@quicinc.com>
- <07b8b870-a464-25a9-c0a6-c123fad05ff5@huaweicloud.com>
- <a2f86cd7-776c-d7ed-8815-62683a14ba36@kernel.org>
- <ZGScoCeOILHpc8c1@infradead.org>
- <344bfde9-5f7e-80a2-038f-3bfc387ea678@kernel.org>
-In-Reply-To: <344bfde9-5f7e-80a2-038f-3bfc387ea678@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.217.217.238]
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 18 May 2023 05:26:16 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0963211E;
+        Thu, 18 May 2023 02:26:14 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1684401972; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=Rl6R68C8H4FPS/jhpoG/Z31osMkn07jJyu2d79AfgLwKgfd294KNUbRsdLtXpyZGSw
+    Ho2eSCCRy2J3Jk1LZMKL4KTAObInXkmhfg8cdx8VeHCwlStjIFHB9cmnUSqnaSEL6sb3
+    +2QE70nh5o4Hrsik/XYYueDYQ0GvamH0C47s6BZttfSjZGqUFErNas6/MIeIjODSDGqC
+    GGt6JUPfd9yXmYwnQjOvq0TZPz/jf5mdXno8z4a4PXa5EVkOtnGeo4B4xw8f6E/I/dQN
+    mFP0oYDABlnUYxsZMWsFoaaF4KNIiUwYWv99JeFa1AmjrHzXg4iiqQpNPdwbvQTzYdC9
+    C/Tg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1684401972;
+    s=strato-dkim-0002; d=strato.com;
+    h=Cc:To:Message-Id:Subject:Date:From:Cc:Date:From:Subject:Sender;
+    bh=VQO5GZKsRP3ZSA1ItJkim0mWjRZa1duUQAzHk9XLuPY=;
+    b=NIIo/VIFja0OfqtlM4e3RXLGSwMSF2BlN3ax5U95Y1Vq14CRZqicftsRm7MN5/MZjP
+    lvgwQXc9Jo/PFn3fnfxzahTZY937ggcZbkJOGlAYbKd0YLWVECy5dWLtoQCCxTI7rXpE
+    4oUEc7fuaYxoa8KYsAtaUxEPsWu69s7+kh1fcijKL8HVVnVzQvUxOYOvbW2VBKNtDUn8
+    fBWx3BlgSKdm/bJ6ydFnBfs8svd1jHsS+JdjzQ45FKRkBVapSQG6psNWZUnvbZ3FX08s
+    9hiGw6QnttU374FQRqkoU7t1JFoklMKKgT+sQnibgsQXtd9G6pcFRbm2x8SO7o947m/9
+    WO3Q==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1684401972;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=Cc:To:Message-Id:Subject:Date:From:Cc:Date:From:Subject:Sender;
+    bh=VQO5GZKsRP3ZSA1ItJkim0mWjRZa1duUQAzHk9XLuPY=;
+    b=Aj4L2AS39FtstuOcjpg1P1jT1Bkvw0beudtYK6j9LzznPKPhXBLiCBuXG898o9Cw00
+    4SjJBaCIUP40zcOUXy+SDa3OlO6BG9qa/B2G0hGSB9nidnpD8JHvHgV8UvcI5o7JtVRx
+    Rw9aSMRITOuJOAGxtrOTW52DG9E+e7CXwznteFFpvxixtS+ilNu+E4oDQwVe0Edtw6Ih
+    jVdvwOaNcnDgwNQYRFGosd+Ixcdy2GPxjW2DFTwTaiFO7724FgtHQEVdPU+O3ZXKZlY6
+    WNvf97fwjKAiwY9LLaF4apHbdZCKPOUrub1y8ONZu/qqnwnGuPrkae+JLm5QcB/al4d9
+    Kxtg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1684401972;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=Cc:To:Message-Id:Subject:Date:From:Cc:Date:From:Subject:Sender;
+    bh=VQO5GZKsRP3ZSA1ItJkim0mWjRZa1duUQAzHk9XLuPY=;
+    b=lQcwfg74Koai6ozuU8fbsRd5/ddzfMLtsyABsfDZg/Wr8FRRCoDTcz2TIDv0jBb7JC
+    wTwvBtwk0N7MEkjrhdCQ==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQjVd4CteZ/7jYgS+mLFY+H0JAn8u4p1/zY="
+Received: from [192.168.244.3]
+    by smtp.strato.de (RZmta 49.4.0 DYNA|AUTH)
+    with ESMTPSA id j6420az4I9QBCGS
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 18 May 2023 11:26:11 +0200 (CEST)
+From:   Stephan Gerhold <stephan@gerhold.net>
+Date:   Thu, 18 May 2023 11:26:00 +0200
+Subject: [PATCH] dmaengine: qcom: bam_dma: make channels/EEs optional in DT
+ with clock
 MIME-Version: 1.0
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 8jhhghv1qUXGe0RYN3HCsKAQqt7O2nCV
-X-Proofpoint-GUID: 8jhhghv1qUXGe0RYN3HCsKAQqt7O2nCV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-18_07,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- lowpriorityscore=0 priorityscore=1501 mlxlogscore=454 malwarescore=0
- impostorscore=0 bulkscore=0 mlxscore=0 clxscore=1011 adultscore=0
- spamscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305180071
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230518-bamclk-dt-v1-1-82f738c897d9@gerhold.net>
+X-B4-Tracking: v=1; b=H4sIACfvZWQC/x2N0QqDMAxFf0XyvIDaDmW/MvaQtNkMq91odQzEf
+ zf4eC7ncjaoUlQq3JoNivy06icbdJcGwkT5JajRGPq2d+21G5FpDumNccHoPZP4gZ0bwHymKsi
+ FcpjskdeUbPwWeer/DNwf+34A1/ZNkXAAAAA=
+To:     Vinod Koul <vkoul@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Stephan Gerhold <stephan@gerhold.net>
+X-Mailer: b4 0.12.2
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGksDQoNCi0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQpGcm9tOiBEYW1pZW4gTGUgTW9hbCA8
-ZGxlbW9hbEBrZXJuZWwub3JnPiANClNlbnQ6IFdlZG5lc2RheSwgTWF5IDE3LCAyMDIzIDM6MDIg
-UE0NClRvOiBDaHJpc3RvcGggSGVsbHdpZyA8aGNoQGluZnJhZGVhZC5vcmc+DQpDYzogWXUgS3Vh
-aSA8eXVrdWFpMUBodWF3ZWljbG91ZC5jb20+OyBQcmFkZWVwIFByYWdhbGxhcGF0aSAoUVVJQykg
-PHF1aWNfcHJhZ2FsbGFAcXVpY2luYy5jb20+OyBheGJvZUBrZXJuZWwuZGs7IGxpbnV4LWJsb2Nr
-QHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgeXVrdWFpIChD
-KSA8eXVrdWFpM0BodWF3ZWkuY29tPg0KU3ViamVjdDogUmU6IFtQQVRDSCBWMV0gYmxvY2s6IEZp
-eCBudWxsIHBvaW50ZXIgZGVyZWZlcmVuY2UgaXNzdWUgb24gc3RydWN0IGlvX2NxDQoNCk9uIDUv
-MTcvMjMgMTg6MjEsIENocmlzdG9waCBIZWxsd2lnIHdyb3RlOg0KPiBPbiBXZWQsIE1heSAxNywg
-MjAyMyBhdCAwNjoyMDoxOVBNICswOTAwLCBEYW1pZW4gTGUgTW9hbCB3cm90ZToNCj4+IHR3aWNl
-IGZvciB0aGUgc2FtZSBpY3EuIFRoZSBtaXNzaW5nIHJjdSBsb2NrIGluIGlvY19leGl0X2ljcXMo
-KSANCj4+IGFscmVhZHkgd2FzIGluIGl0c2VsZiBhIGJ1ZywgYW5kIHRoZSBtaXNzaW5nIGZsYWcg
-Y2hlY2sgaXMgYW5vdGhlci4NCj4gDQo+IHNwaW5sb2NrcyBpbXBseSBhIHJjdSBjcml0aWNhbCBz
-ZWN0aW9uLCBubyBuZWVkIHRvIGR1cGxpY2F0ZSBpdC4NCg0KUmlnaHQuIEFuZCBJIG1pc3JlYWQg
-dGhlIGNvZGUuIEFzIFl1IHNhaWQsIGdpdmVuIHRoYXQgaW9jX2V4aXRfaWNxcygpIGl0ZXJhdGVz
-IHRoZSBsaXN0IG9mIGljcXMgdW5kZXIgaW9jLT5sb2NrIGFuZCB0aGUgaW9jIGlzIHJlbW92ZWQg
-ZnJvbSB0aGF0IGxpc3QgdW5kZXIgdGhlIHNhbWUgbG9jaywgaW9jX2V4aXRfaWNxcygpIHNob3Vs
-ZCBuZXZlciBzZWUgYW4gaWNxIHRoYXQgd2VudCB0aHJvdWdoIGlvY19kZXN0cm95X2ljcSgpLi4u
-DQpWZXJ5IHdlaXJkLg0KDQpUaGlzIHdlaXJkIGNhbiBiZSBwb3NzaWJsZSANCjEuIHVwZGF0aW5n
-IGljcV9oaW50IHdoaWNoIGlzIGFubm90YXRlZCBhcyBfX3JjdSB0eXBlIHdpdGhvdXQgUkNVLXBy
-b3RlY3RlZCBjb250ZXh0IGluIGlvY19kZXN0cm95X2ljcSgpLg0KTW9yZW92ZXIsIHRoaXMgd2Fz
-IHRha2VuIGNhcmUgaW4gZWxzZSBwYXJ0IG9mIGlvY19yZWxlYXNlX2ZuKCkgYnkgcmN1X3JlYWRf
-bG9jay91bmxvY2soKSBidXQgbWlzc2VkIGluIGlmIHN0YXRlbWVudCB3aGljaCBjYW4gbGVhZCB0
-byB0aGlzIHdlaXJkLg0KDQoyLiBleHRyYWN0aW5nIGljcSBmcm9tIGhsaXN0L2xpc3QgZWxlbWVu
-dHMgYXJlIGRvbmUgdXNpbmcgcmN1IGxvY2tzIHByb3RlY3RlZCBpbiBpb2NfY2xlYXJfcXVldWUo
-KSBidXQgc2FtZSB3YXMgbm90IGF0IGlvY19leGl0X2ljcXMoKS4NCg0KU28sIGZhciB3ZSBoYXZl
-IHNlZW4gMTArIGluc3RhbmNlcyBvZiB0aGlzIGNyYXNoIG9uIDYuMSBrZXJuZWwgZHVyaW5nIHN0
-YWJpbGl0eSB0ZXN0aW5nIChJbnZvbHZlcyBJTywgcmVib290cywgZGV2aWNlIHN1c3BlbmQvcmVz
-dW1lLCBhbmQgZmV3IG1vcmUpLg0KV2l0aCB0aGUgVjEgcGF0Y2gsIHdlIGRpZG4ndCBvYnNlcnZl
-IHRoZSBpc3N1ZSBmb3IgYXQgbGVhc3QgNDhocnMrIG9mIHN0YWJpbGl0eSB0ZXN0aW5nLg0KDQoN
-Ci0tDQpEYW1pZW4gTGUgTW9hbA0KV2VzdGVybiBEaWdpdGFsIFJlc2VhcmNoDQoNCg==
+If we have a BAM clock in the DT we are able to turn on the BAM
+controller while probing, so there is no need to read "num-channels"
+and "qcom,num-ees" from the DT. It can be read more accurately directly
+from the identification registers of the BAM.
+
+This simplifies setting up typical controlled-remotely BAM DMAs in the
+DT that can be turned on via a clock (e.g. the BLSP DMA).
+
+Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+---
+ drivers/dma/qcom/bam_dma.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/dma/qcom/bam_dma.c b/drivers/dma/qcom/bam_dma.c
+index 1e47d27e1f81..4c3eb972039d 100644
+--- a/drivers/dma/qcom/bam_dma.c
++++ b/drivers/dma/qcom/bam_dma.c
+@@ -1272,7 +1272,15 @@ static int bam_dma_probe(struct platform_device *pdev)
+ 	bdev->powered_remotely = of_property_read_bool(pdev->dev.of_node,
+ 						"qcom,powered-remotely");
+ 
+-	if (bdev->controlled_remotely || bdev->powered_remotely) {
++	if (bdev->controlled_remotely || bdev->powered_remotely)
++		bdev->bamclk = devm_clk_get_optional(bdev->dev, "bam_clk");
++	else
++		bdev->bamclk = devm_clk_get(bdev->dev, "bam_clk");
++
++	if (IS_ERR(bdev->bamclk))
++		return PTR_ERR(bdev->bamclk);
++
++	if (!bdev->bamclk) {
+ 		ret = of_property_read_u32(pdev->dev.of_node, "num-channels",
+ 					   &bdev->num_channels);
+ 		if (ret)
+@@ -1284,14 +1292,6 @@ static int bam_dma_probe(struct platform_device *pdev)
+ 			dev_err(bdev->dev, "num-ees unspecified in dt\n");
+ 	}
+ 
+-	if (bdev->controlled_remotely || bdev->powered_remotely)
+-		bdev->bamclk = devm_clk_get_optional(bdev->dev, "bam_clk");
+-	else
+-		bdev->bamclk = devm_clk_get(bdev->dev, "bam_clk");
+-
+-	if (IS_ERR(bdev->bamclk))
+-		return PTR_ERR(bdev->bamclk);
+-
+ 	ret = clk_prepare_enable(bdev->bamclk);
+ 	if (ret) {
+ 		dev_err(bdev->dev, "failed to prepare/enable clock\n");
+
+---
+base-commit: 1c677f238f92ba0a329b7c13220f38b396872806
+change-id: 20230518-bamclk-dt-d44bae47b337
+
+Best regards,
+-- 
+Stephan Gerhold <stephan@gerhold.net>
+
