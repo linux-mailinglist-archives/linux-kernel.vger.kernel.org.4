@@ -2,107 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69BE5708C4A
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 01:31:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E32F708C4F
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 01:34:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230135AbjERXbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 19:31:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39586 "EHLO
+        id S229917AbjERXeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 19:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjERXbw (ORCPT
+        with ESMTP id S229513AbjERXd7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 19:31:52 -0400
-Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18493C1;
-        Thu, 18 May 2023 16:31:51 -0700 (PDT)
-Received: by mail-oo1-xc2c.google.com with SMTP id 006d021491bc7-554f951e658so339823eaf.0;
-        Thu, 18 May 2023 16:31:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684452710; x=1687044710;
-        h=content-transfer-encoding:in-reply-to:cc:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eYgDPuLZiKeSPvGEjWOY9Kw5MPWojzL4LRufpH719TQ=;
-        b=IQO2fjLRAy+iPaC34snXbtkrfVQnWY04g6bmUzfpFaMHFgtdgckYGNwyiqkjLHVqei
-         d+M56JxXARfISb84dEqsW7HAX/frhxY0d1E67eqDyxKX8JiALNSH5luxfPnybUN5im28
-         Wg9P/TEDQwUub1oVvSVPIgrqbQhTFuGzPCJnCI+6OsZJ5eVdCr8yn67totj8xxtXlTvF
-         Tb1nsj8dEGgho0yp45uSoSifG97voZSAoJkchZpnclk4zlP1Trdxall1WhaGbkjYF3d6
-         4ISA2TjNgvswptaNVztlE5nb0Skan9827uqHshyLtZJPSeTlQIN3YXWnnCfep9wLzSfg
-         a7gA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684452710; x=1687044710;
-        h=content-transfer-encoding:in-reply-to:cc:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eYgDPuLZiKeSPvGEjWOY9Kw5MPWojzL4LRufpH719TQ=;
-        b=Z2leHZzuoqF2CV6HgQGavQPte2U5iU/SZPTKDgeuVK8AaR/J/lt6zUQyTtwQJ1Lwse
-         mL1A4QkzTuo/OKViRCCWQjpqbug3MRu2mHpOzwt1B9/3nUbp4fur+nyKRDEKIhH5Hw/C
-         2EDMTmOmDd1FKoBxTwqdadLYuaHXjW6ktbyghH6FPq2EXIEBl6VNjo3bWPWtvx1luHGM
-         pd9t3PVwXg7Q9kDWrFIqe8WFjlH+NxNpARj6xOpMOjaAx0AHPD1AAGykdD/Yq4a4xgUz
-         ipkwdTHacWKBrc64bI9I/kpf1FBy5vn58EfW5vADY/Blk2zBsXoIXpV02o6gcJe1FT9k
-         2r/Q==
-X-Gm-Message-State: AC+VfDzAefDBd5kA0zUzlbMVSeoTRfguQWineT1B+d6TT1MHUezRnLu8
-        r7uTQ4zyJMPLs8Nrp3pd+dL2QR+On0k=
-X-Google-Smtp-Source: ACHHUZ5FZaUANm5x68UabkwtO8tsnGuh3O1Ul5AELkv5gASaJYrr9FXsm6HWXp9lUXSQnEEq68QxvA==
-X-Received: by 2002:a4a:764a:0:b0:54c:b507:2616 with SMTP id w10-20020a4a764a000000b0054cb5072616mr18716ooe.3.1684452710343;
-        Thu, 18 May 2023 16:31:50 -0700 (PDT)
-Received: from [192.168.0.92] (cpe-70-94-157-206.satx.res.rr.com. [70.94.157.206])
-        by smtp.gmail.com with ESMTPSA id n14-20020a4abd0e000000b0052a32a952e9sm917047oop.48.2023.05.18.16.31.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 May 2023 16:31:49 -0700 (PDT)
-Message-ID: <652d32c5-4b33-ce3a-3de7-9ebc064bbdcb@gmail.com>
-Date:   Thu, 18 May 2023 18:31:47 -0500
+        Thu, 18 May 2023 19:33:59 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA56D121;
+        Thu, 18 May 2023 16:33:57 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34ILREdK012453;
+        Thu, 18 May 2023 23:33:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=mNJEPB+9yYrAneWHJKg2ozmdMD1m+JMiKjttx+AAM6w=;
+ b=ptA+NSofET/e1EEPR9AiNonN+JSUovOOVW273R03DWwZZ4p9z4vrhiGj6eviT3m7HGza
+ wshp2PjkqcyTSvDtGW+GjLcLA5j9h4zj5cZ7HiQWgVJGdL3raFd8uHRUInjteWNCKQn8
+ zSintKVul/qUAR4mu2quz8HmIrY34OVYtk3SxZuWSjwUJqRxEko7EsxSx+8qdAbDQOjl
+ 88uH8jyYXzqcrpADn4G9X7GHkhxut51szOoawYCy+W/viW6qkVAt+RmtacMRh9msxBtu
+ 5VExS0B3WVAjh/uCKLaU2CHvKdOh/wS5Ei0UtOTKVRaMPpIRnv+KGGDhFbbfVW9D4IgY Sw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qnfpw22np-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 May 2023 23:33:48 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34INXlWM005517
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 May 2023 23:33:47 GMT
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 18 May 2023 16:33:46 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
+        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
+        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <andersson@kernel.org>
+CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        <quic_abhinavk@quicinc.com>, <quic_jesszhan@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
+        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v11 0/9] add DSC 1.2 dpu supports
+Date:   Thu, 18 May 2023 16:33:27 -0700
+Message-ID: <1684452816-27848-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [ANNOUNCE] util-linux v2.39
-Content-Language: en-US
-To:     Karel Zak <kzak@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, util-linux@vger.kernel.org
-References: <20230517112242.3rubpxvxhzsc4kt2@ws.net.home>
-From:   Bruce Dubbs <bruce.dubbs@gmail.com>
-Cc:     "Douglas R. Reno" <renodr2002@gmail.com>
-In-Reply-To: <20230517112242.3rubpxvxhzsc4kt2@ws.net.home>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 81RNMfrAa60lWQueNYM1LUxfTc37b8V1
+X-Proofpoint-GUID: 81RNMfrAa60lWQueNYM1LUxfTc37b8V1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-18_16,2023-05-17_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ priorityscore=1501 mlxscore=0 suspectscore=0 clxscore=1015 bulkscore=0
+ adultscore=0 phishscore=0 mlxlogscore=904 impostorscore=0 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305180195
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/17/23 06:22, Karel Zak wrote:
-> 
-> The util-linux release v2.39 is available at
->                                    
->    http://www.kernel.org/pub/linux/utils/util-linux/v2.39
->                                    
-> Feedback and bug reports, as always, are welcomed.
+This series adds the DPU side changes to support DSC 1.2 encoder. This
+was validated with both DSI DSC 1.2 panel and DP DSC 1.2 monitor.
+The DSI and DP parts will be pushed later on top of this change.
+This seriel is rebase on [1], [2] and catalog fixes from rev-4 of [3].
 
-Karel,  I have installed util-linux v2.39 in LFS and have run into a problem with one 
-test, test_mkfds.  Actually the test passes, but does not clean up after itself. 
-What is left over is:
+[1]: https://patchwork.freedesktop.org/series/116851/
+[2]: https://patchwork.freedesktop.org/series/116615/
+[3]: https://patchwork.freedesktop.org/series/112332/
 
-tester   32245     1  0 15:43 ?        00:00:00 /sources/util-linux-2.39/test_mkfds 
--q udp 3 4 server-port=34567 client-port=23456 server-do-bind=1 client-do-bind=1 
-client-do-connect=1
-tester   32247     1  0 15:43 ?        00:00:00 /sources/util-linux-2.39/test_mkfds 
--q udp6 3 4 lite=1 server-port=34567 client-port=23456 server-do-bind=1 
-client-do-bind=1 client-do-connect=1
+Abhinav Kumar (2):
+  drm/msm/dpu: add dsc blocks to the catalog of MSM8998 and SC8180X
+  drm/msm/dpu: add DSC 1.2 hw blocks for relevant chipsets
 
-It's possible it may be due to something we are doing inside our chroot environment, 
-but we've not had this type of problem with earlier versions of util-linux.
+Kuogee Hsieh (7):
+  drm/msm/dpu: add DPU_PINGPONG_DSC feature bit for DPU < 7.0.0
+  drm/msm/dpu: Guard PINGPONG DSC ops behind DPU_PINGPONG_DSC bit
+  drm/msm/dpu: Introduce PINGPONG_NONE to disconnect DSC from PINGPONG
+  drm/msm/dpu: add support for DSC encoder v1.2 engine
+  drm/msm/dpu: always clear every individual pending flush mask
+  drm/msm/dpu: separate DSC flush update out of interface
+  drm/msm/dpu: tear down DSC data path when DSC disabled
 
-In all I do have:
+ drivers/gpu/drm/msm/Makefile                       |   1 +
+ .../drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h    |   7 +
+ .../drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h    |  11 +
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_0_sm8350.h |  14 +
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_7_2_sc7280.h |   7 +
+ .../drm/msm/disp/dpu1/catalog/dpu_8_0_sc8280xp.h   |  16 +
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_8_1_sm8450.h |  14 +
+ .../gpu/drm/msm/disp/dpu1/catalog/dpu_9_0_sm8550.h |  14 +
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c        |  51 ++-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |  24 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |  35 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c         |  34 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h         |  13 +
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c         |  14 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h         |  15 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc_1_2.c     | 387 +++++++++++++++++++++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h        |   3 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c    |   9 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c             |   7 +-
+ 19 files changed, 646 insertions(+), 30 deletions(-)
+ create mode 100644 drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc_1_2.c
 
-   All 261 tests PASSED
+-- 
+2.7.4
 
-but the left over processes interfere later when we try to remove the non-root user, 
-tester, that runs the tests.  I can work around the problem by disabling test_mkfds, 
-but thought you would like to know.
-
-   -- Bruce
