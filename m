@@ -2,131 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E2897084D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 17:28:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A4F7084DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 17:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231789AbjERP16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 11:27:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53740 "EHLO
+        id S231186AbjERPbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 11:31:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230223AbjERP14 (ORCPT
+        with ESMTP id S230049AbjERPbc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 11:27:56 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2041.outbound.protection.outlook.com [40.107.243.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8751119;
-        Thu, 18 May 2023 08:27:53 -0700 (PDT)
+        Thu, 18 May 2023 11:31:32 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2054.outbound.protection.outlook.com [40.107.220.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E95118;
+        Thu, 18 May 2023 08:31:30 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SuoY6Rf4WuQE9R5gOnuop/UOVDkeK7BDVujrwXcRGlp2U+SarHACOzc7xWk5nATfLaJqQOwvsl/7ZSxggXt9tMd2dfAZ3CMXYbXZY4pQ7T/CRWjB0kA30B6t9h1w3bQ+34s4o2bSOShhpxjUleRzDpDkLrtkJkMmFi+PWWAc7oUFFrB+uRLH8EgoY9IfXNG5af+2YQs9r7IlwP3MUCrRBvy3Y+hPCMiW7li6xnLttLNNWkKz7qCmxTewbu5xHEkDKiLbZ0B+GvQZf31z/RBLsXR7jXhdkPOB8JyXOxOumyEqgKf4PRPn/CDg2A0w6sWhUIj0rgQD2Miqpqto0C4xcw==
+ b=eaYxQ3NSmZizX3GLJ3bMOFdyY+vVJ0och1ks52vv+g7DkL1rYotNIC7FNIXRV5WVLAz+RIvRUya5uiOHHNRmel838FGHZ112HILl8YRE35mJ8/XU7UVwU2UKeEtpSbFFAmBcetXOpXEsCnBwjUfBYoPjdynMEAM8c/1Y0I67Lfmq/8xwObgkunbDsirf+e+G3xHMYY6agNAG9CkazWzeZ7dIDOQtj6a9oJ7+9uFa1MNY6k3CMKQhf/Sd4k5yetiKgHsLlOiCrkNyNogmfiOHu9sxmaB/9P3CbCh7wcMVQqJpuL36L+Z90C9BQm9otHBALbweAaEk8v3+3+6oL7Ywow==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=j8IDeOQK/fCZAR6RFCb4PKe3IkP6qRYWnBkJ1qFeuVo=;
- b=a+88gaRwx8L9CVBngwiQ7mVUH9/ZZrnBFuhrtWJbNKfMKoF5cKErYGapihYKE/4PHrJ7W8j6vASS1H8ZjUhKU1AIk1oEHRIEtUcQgEImWw4ja8lUWd25NxB7BlHDFrLrli7JxK6bfePaD05UkNXbzrILUr2w8b43dQ48pyI6+DhxNV8N7W/fbnMq6rGGHmDxiv6Ze89r/0ypLKepeV6MI7VPp1aSdA/9e1kdH5PBH9SVKRxWiYBvAdTyTq4vq+MsTH+vm41ORWZZnm/trweV8Fg3fcHJVCah/HttjkpaAoZqiXXC6MNHMDF9Bezf/6B3peKK58Mw1lxk2wW8+x+7ZA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
+ bh=rIoQV37p/6QbaZiP1wh/UtxK+62Q8n2feIMnSGavYTE=;
+ b=YWmdwSEqiSzroL3LWmHNnmyPdCtcBHNbkh+TVP4osRugL6f4wucIXPytXpOhg1nU4VYEjp6RM6WyqafaWtHseJkWevWNIZbTkkuQ+OzWumsUetII52hy3nTmefTLEjqxo+aR/uolpoPnq+j43byY61K9G/xKfTSgowrwLqVFb+99wUqu3kM6flwLqjy+l0h9TxWYqrO/63P52j2ozfb6ECU78xEX6S211Mrt3q8gcR/yHF36xv/KY8qp3YG4g1uzRA+1iQx1j9WTYzIRqqGEEo2XPiOKr+Ks1k2nXC5VPbjWtSipcAbfsFaa2pmpFrU+GRaiqPUu1Avp7Ajbun57dg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=j8IDeOQK/fCZAR6RFCb4PKe3IkP6qRYWnBkJ1qFeuVo=;
- b=Vmw3elRK9emXvHlz09iBGHmQDD00GfgbYo6mVkWwFaxzxZ2pK/ILsUe6Pd0PqshjpvzzX1/TBE7bJIpkXBYteKf3tV0yukEA7G1LFHX+MAMBmFOD5cBur4PM7j7QZMcYSSFCxsyBY2b7rlw0cGoV5JH/u0BlGMdZbp2/udpPVpc=
-Received: from MW4PR04CA0267.namprd04.prod.outlook.com (2603:10b6:303:88::32)
- by SA0PR12MB7480.namprd12.prod.outlook.com (2603:10b6:806:24b::20) with
+ bh=rIoQV37p/6QbaZiP1wh/UtxK+62Q8n2feIMnSGavYTE=;
+ b=mmF33iAJ5V0WKFKkm1UuxiqLWfBC6CH2Xs/Chxme8+Y26p85xGrw9IM6BX0W+AVQ8x67gXGARlra6uzy2zQeshBphvskImsyVVEbRryVppb3VsyzQttZaVJft7NAZcj6oWPTk31IFbynOn1ry062/NKPm79TSZnsnZrlEIoBj1E=
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by DS0PR12MB8816.namprd12.prod.outlook.com (2603:10b6:8:14f::22) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19; Thu, 18 May
- 2023 15:27:44 +0000
-Received: from CO1NAM11FT033.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:88:cafe::12) by MW4PR04CA0267.outlook.office365.com
- (2603:10b6:303:88::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19 via Frontend
- Transport; Thu, 18 May 2023 15:27:44 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT033.mail.protection.outlook.com (10.13.174.247) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6411.20 via Frontend Transport; Thu, 18 May 2023 15:27:43 +0000
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 18 May
- 2023 10:27:43 -0500
-Received: from xcbayankuma40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Thu, 18 May 2023 10:27:41 -0500
-From:   Ayan Kumar Halder <ayan.kumar.halder@amd.com>
-To:     <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <matthias.bgg@gmail.com>,
-        <angelogioacchino.delregno@collabora.com>,
-        <geert+renesas@glider.be>, <mazziesaccount@gmail.com>,
-        <conor.dooley@microchip.com>, <j@jannau.net>,
-        <mailingradian@gmail.com>, <me@iskren.info>,
-        <lpieralisi@kernel.org>, <devicetree@vger.kernel.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-renesas-soc@vger.kernel.org>,
-        Ayan Kumar Halder <ayan.kumar.halder@amd.com>
-Subject: [PATCH] dt-bindings: arm: Add Cortex-R52 to the list of enum
-Date:   Thu, 18 May 2023 16:27:30 +0100
-Message-ID: <20230518152730.82954-1-ayan.kumar.halder@amd.com>
-X-Mailer: git-send-email 2.25.1
+ 2023 15:31:28 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::3f45:358e:abba:24f5]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::3f45:358e:abba:24f5%3]) with mapi id 15.20.6411.019; Thu, 18 May 2023
+ 15:31:28 +0000
+From:   "Limonciello, Mario" <Mario.Limonciello@amd.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Greg KH <greg@kroah.com>
+CC:     "heikki.krogerus@linux.intel.com" <heikki.krogerus@linux.intel.com>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "ajayg@nvidia.com" <ajayg@nvidia.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "Quan, Evan" <Evan.Quan@amd.com>,
+        "Lazar, Lijo" <Lijo.Lazar@amd.com>,
+        "Goswami, Sanket" <Sanket.Goswami@amd.com>
+Subject: RE: [PATCH 2/2] usb: typec: ucsi: Don't create power supplies for
+ dGPUs
+Thread-Topic: [PATCH 2/2] usb: typec: ucsi: Don't create power supplies for
+ dGPUs
+Thread-Index: AQHZiCcbbwpKIMFk9EOkzitfmMss169etbKAgAAdOoCAAAQ/gIABU8TA
+Date:   Thu, 18 May 2023 15:31:27 +0000
+Message-ID: <MN0PR12MB6101BB8E0F2A2CD20BD73443E27F9@MN0PR12MB6101.namprd12.prod.outlook.com>
+References: <20230516182541.5836-1-mario.limonciello@amd.com>
+ <20230516182541.5836-3-mario.limonciello@amd.com>
+ <ZGULZU01tdqm1Xoc@smile.fi.intel.com>
+ <2023051742-guiding-footing-3527@gregkh>
+ <ZGUneSmV6dJBk7AO@smile.fi.intel.com>
+In-Reply-To: <ZGUneSmV6dJBk7AO@smile.fi.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=a1fdf1c4-ba9c-426c-a359-b7d0cc8876a2;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-05-18T15:30:04Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MN0PR12MB6101:EE_|DS0PR12MB8816:EE_
+x-ms-office365-filtering-correlation-id: f7a23ea1-2d15-4151-efb6-08db57b4f2a7
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: wNpTpHY9J7h0rwpEgXCvQdnWUADF9UztSEVJhg7IeH/NceNyhFaM2pOUA7P/ltQcZVJkH2abdYPuh4FDNcNPeZ0Qp3ouUuNRAUn0xWAcdqLEGYRRQP0zdmJV8EM36bw/kKuXQUzGzqQnKcv2o6Txm19vjGyPAufHhSsDBw73Jyz73qt8BYwvjlfiK/PM8yWd2rioVUMHcqOoJl7+/o5xvXZ6Jcr03QvIqDLtmoZ3I3ho6qqnHxIHGYnpbGFbvVWcwfMdpWnx6ynondnOdP/M5sgQ/kKVYM0tj3JRaTuwzaPw9ZkLccLthN1LioaRkWhqYTtvsHObApEssSbbO/WDH0viDAl8vAvsosbQzDBw+a4Fked3+o8RkgyHFyZPIrsIITOkfyIRHpYdAKn+/OpzX1+W95Nu+qKUUxDI1IYn7b1N129ta+LuzaM3ZOsxUrCxD35W/bWbnzyQ9xtEkayIhCxR69Y0IPkeXYjcZiC54Xam9I8QzbRweoe7Fgy4+VrhD2Ij843+8SWs+BNmDDkY3V4aadNi52aUn5/9xBBJcmFLvzcrbuRysDIeEhF+aFX73MpGO2YZmWNcwBYsh04OkUqzApWHEy4iH7rwwUjnvl2b0c0zcfO0oY1ztRLbCB+R
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(136003)(396003)(376002)(39860400002)(451199021)(53546011)(9686003)(6506007)(26005)(83380400001)(33656002)(122000001)(38100700002)(38070700005)(86362001)(186003)(55016003)(54906003)(110136005)(478600001)(2906002)(8676002)(8936002)(316002)(4326008)(41300700001)(52536014)(5660300002)(66556008)(66446008)(66476007)(64756008)(76116006)(66946007)(71200400001)(7696005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Sw9rBlR++lQOzZFB2CkbSc6LS/m9oEPZ3Xcg2SK5oB8w+COn67CfnNABGYx3?=
+ =?us-ascii?Q?s6lQA9MQSku4xj3xbtPwHpFRWJshiK4vku1bDRdYdnffIHcE1/nXj+lpR6XT?=
+ =?us-ascii?Q?fnOYStQ2TSaf4hQJhlATXEx/QbTSW8whZUJpEMrRY2A12MQ34h/0RNaY41Mv?=
+ =?us-ascii?Q?/xx8qaOG8RJe6hwQ3Jkm7fhgABRGaX+txdKduSjkkjhzdMBE1j/DzySOI98y?=
+ =?us-ascii?Q?qnrgcoPftR4AuQB+XwZxiz5KoB3jmyn7gpuMxV6rvpAs9Ut8NpEEmwK5WT3c?=
+ =?us-ascii?Q?wGynSBtPthhdxGcncpIqZ1uzGaRZy4i+SpMSPnHssgaAuZqnDjXehTcQE6jl?=
+ =?us-ascii?Q?u0HThKnYHVwjR50PsdY3jlo6h0TT084A2lHpgME6dMmPa2phCu+wiziGRbXV?=
+ =?us-ascii?Q?gxb7W/Y/GVEq81osl1G51dxZ1Bs6UtXjRLO53O8cnrD0+XwEu6eVOmbKvM3n?=
+ =?us-ascii?Q?md0lsF2Oy8J24s4WDTu1LqhBWqcXv4EXAxmXLLEhHQvhhqv8YfYhwKROYk/k?=
+ =?us-ascii?Q?p7JqgIyGM0mncmHiXGHDkTg56HGB40xlmRygH6qrenzcBbtnwHsKLZH8KPFv?=
+ =?us-ascii?Q?mUEKnyEp5AdqYNLsQbrH7wPhn96daaocmt/Ry4YG090koUwZWyvPYsGMZ3BI?=
+ =?us-ascii?Q?eFPGZ8nnu9uJDYm1Cr7Y3bSKqqa8g0kvdG2WWwhbWDyxFXWxMMqLb9Y5Bz9m?=
+ =?us-ascii?Q?Qqv+fuL+wP1OHK2dTjnK7xV7bNHUxL4YWpEF9OENg5/PsvZfU2LjCYsyTkVL?=
+ =?us-ascii?Q?Hx2BJCD+0k82uJC/qt41BN3P/5pzwHOqR78FDgkYEPDXqn9P9HpoN9ASqdEk?=
+ =?us-ascii?Q?YxnmEv3LLNefGC1rBCLJFTKd+czUWXW16BqpXfYQhov7aDZvHn0U4bDdMPqX?=
+ =?us-ascii?Q?g5LEcm3/bnIwrvQuh5Gva/cOctYCeitj5zzIzQtQ9vmc0yoRqDolLrriky18?=
+ =?us-ascii?Q?xoR7ZUkhsMzJkmR25yHutNE9r1cm5du62NUrLtZIvZriSDvw/f8guG0cV7TT?=
+ =?us-ascii?Q?RWoc0E+r5DAGeV8Ts8Rnf6GosI2mD8bkQPiCnLuYlYcpNGxLA+N1Ibw+BZnQ?=
+ =?us-ascii?Q?akvi+ti7S0DPSxsBQbEbu/z+ucO6mjo9zZxX0eAGmEBAZ19gxlRMemcvqwM8?=
+ =?us-ascii?Q?k8z76YhzgJSXx+7QrP34zOky3D2bv9m2kZAH0gPBdaDqSZFaHIfAvNNDKWTv?=
+ =?us-ascii?Q?pHtT+r6xdxrHVUQ+H7nFZR05oe/wt1GzXNfMThEBqDi4e92w7SU4+XyunvH5?=
+ =?us-ascii?Q?K3hXXDCE7AvZc+yhwvzdJUGq32EXRKTGuiOsaOTUQCtyKDBM0zdwgMayT0j7?=
+ =?us-ascii?Q?zS7xv06CnxLp3JCnAtKczx2z6JhlmQxCyW5f9wZ6dutuCfzmRM2N1p/FUBr2?=
+ =?us-ascii?Q?b8N8mqlHWMLZb15nEgENOOaVa//s31tQDxHTEnrOqb0B2PNIvu6CNaf6omKi?=
+ =?us-ascii?Q?kDoJLyBX6Y7S0BAs2OWCf9BaHhu/O3CnRW2NvVz0fnyc6JR9tSdp7yT3jmk9?=
+ =?us-ascii?Q?d39lLuDlisUZ+sjOB9mW7QzFNHd04Qa0OrUfPwvTUe+y7G2WPvovUvN61tS8?=
+ =?us-ascii?Q?6wc0KAE+BhIY6gyuz/4=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT033:EE_|SA0PR12MB7480:EE_
-X-MS-Office365-Filtering-Correlation-Id: 33ee5c76-0921-449d-591c-08db57b46d39
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: w4HAmigCsMumbKDmq9NN/ANg6N6U2pniZZ//BUOqNdmi4B6BEow8XdjDOlZvRJSr3CjrrH1S7bfmU4YaJVZpZOKJi8euYUMxBmtWqchixWpaE0z7y+Zb0COxSVmD5XLe9I5/why/HJi06ibg/qotE0BqD8aKi1HuCNxdbUxJH2yRDPrzw0e7S1bDbXfIk4YODw9zOgyUT5N1reRAPtPI7B3K/pp3Rx4tEk8RKOMLkOdErmDloqo+UKkHNI6pBiB4G7vtKCdFIZKX3VxGQU1NO/z3UIJ5gYLvM+fhRTYFjHhf8TP5uPnAw7jaUcK0FOWRvPCrrMZ8MkR/3qczUxZ3BofE1OKIUjjUnmiymtPMmM8WKK12yMUHfKKJ4OynHUqAiHXDVKWIaN0xdSokDwgfJDmthD6z71T2X6K4FJcMnWi4N63+WGjqaHL0LxaUL3qCOvLH9HrL+TbRbTstHAW506d1OOVydu0q385Hg2Yg+w9sX0FHF1J7SKHV0nMYVCm2BzoWUQekSZB42Iy2zLp/zeKzknKGXtscUCSmlbZOapu3TVUKfUBaIgUbL5MfIeLiTbu2r1dx2w1KalIo4xI7WGby1ycx91rLjt8vSRL72hhVdaaNOxCga9XyyS1cKVs4EKsOduPqKUX7VFSrL+ofgU2ghYsyuFZvCr+E9Sz4JZEKEESAegVsnVwbVX2ATdQt3oJXSeFe3efcUQ14wpK7zlVqsznknGTQKPtXPxWLWdgb/r6miR/fa1hxTazCbWtURl7ql8+/WSnw4VzSXrG7b3/IRq/h9GXv2eXD0ec9JF/Vx8TL064kCqgh//44VWoB2V3vE+t62ROy441yGn67/xZt8axf4UN+5/x+UxsJSWI=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(39860400002)(396003)(346002)(451199021)(40470700004)(46966006)(36840700001)(6666004)(40480700001)(40460700003)(1076003)(186003)(26005)(5660300002)(7416002)(82310400005)(41300700001)(8676002)(8936002)(4326008)(86362001)(82740400003)(356005)(921005)(70586007)(70206006)(103116003)(81166007)(316002)(54906003)(336012)(2616005)(426003)(36860700001)(2906002)(4744005)(36756003)(47076005)(478600001)(110136005)(781001)(2101003)(83996005)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2023 15:27:43.9543
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f7a23ea1-2d15-4151-efb6-08db57b4f2a7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 May 2023 15:31:27.9444
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 33ee5c76-0921-449d-591c-08db57b46d39
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT033.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB7480
-X-Spam-Status: No, score=1.8 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: XOGfpbWdqEQeFlwZTHzrMdyAOezN56IxgvNU/d0ysJwhK0pLu0oiI8H5dyFxtOwFMBkASxzW98T4V443gOV/jA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8816
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As a pre-requisite for porting Xen on a Cortex-R52 based System-on-chip, we
-need to add "cortex-r52" to the list of enum.
+[AMD Official Use Only - General]
 
-Signed-off-by: Ayan Kumar Halder <ayan.kumar.halder@amd.com>
----
- Documentation/devicetree/bindings/arm/cpus.yaml | 1 +
- 1 file changed, 1 insertion(+)
+> -----Original Message-----
+> From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Sent: Wednesday, May 17, 2023 2:14 PM
+> To: Greg KH <greg@kroah.com>
+> Cc: Limonciello, Mario <Mario.Limonciello@amd.com>;
+> heikki.krogerus@linux.intel.com; rafael@kernel.org; ajayg@nvidia.com; lin=
+ux-
+> i2c@vger.kernel.org; linux-pm@vger.kernel.org; linux-kernel@vger.kernel.o=
+rg;
+> linux-usb@vger.kernel.org; Quan, Evan <Evan.Quan@amd.com>; Lazar, Lijo
+> <Lijo.Lazar@amd.com>; Goswami, Sanket <Sanket.Goswami@amd.com>
+> Subject: Re: [PATCH 2/2] usb: typec: ucsi: Don't create power supplies fo=
+r
+> dGPUs
+>
+> On Wed, May 17, 2023 at 08:58:49PM +0200, Greg KH wrote:
+> > On Wed, May 17, 2023 at 08:14:13PM +0300, Andy Shevchenko wrote:
+> > > On Tue, May 16, 2023 at 01:25:41PM -0500, Mario Limonciello wrote:
+>
+> ...
+>
+> > > > +static const struct property_entry dgpu_properties[] =3D {
+> > > > +       /* USB-C doesn't power the system */
+> > > > +       PROPERTY_ENTRY_U8("scope", POWER_SUPPLY_SCOPE_DEVICE),
+> > > > +       {},
+> > >
+> > > Comma is not needed in terminator entry.
+> >
+> > But it's encouraged!
+>
+> Why?! This might lead to the subtle mistakes going unnoticed during rebas=
+es.
+> Yes, it's quite unlikely, but it might be still possible to have the empt=
+y
+> entry in the middle of the array. Why should we shoot ourselves in the fo=
+ot
+> if we can avoid it without any effort?
+>
+> Hence I can say it's discouraged.
+>
 
-diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
-index ff272e517d57..64b58238e3a1 100644
---- a/Documentation/devicetree/bindings/arm/cpus.yaml
-+++ b/Documentation/devicetree/bindings/arm/cpus.yaml
-@@ -153,6 +153,7 @@ properties:
-       - arm,cortex-r4
-       - arm,cortex-r5
-       - arm,cortex-r7
-+      - arm,cortex-r52
-       - arm,cortex-x1
-       - arm,cortex-x1c
-       - arm,cortex-x2
--- 
-2.25.1
-
+I tend to agree with Andy here, you should never be placing something after=
+ the
+terminator entry and putting a comma there means a mistake /can/ happen.
+I will pick up the tags and respin a v2 with this changed and patch 1 dropp=
+ed
+since it went through another tree.
