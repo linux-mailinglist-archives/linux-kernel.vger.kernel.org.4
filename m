@@ -2,55 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59055708B95
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 00:29:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48454708B97
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 00:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230395AbjERW3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 18:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44704 "EHLO
+        id S230304AbjERW3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 18:29:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbjERW3N (ORCPT
+        with ESMTP id S230417AbjERW3T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 18:29:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4CFEE56;
-        Thu, 18 May 2023 15:29:12 -0700 (PDT)
+        Thu, 18 May 2023 18:29:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0240DE64;
+        Thu, 18 May 2023 15:29:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FF7D651F3;
-        Thu, 18 May 2023 22:29:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0BCCC433D2;
-        Thu, 18 May 2023 22:29:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 93FC365185;
+        Thu, 18 May 2023 22:29:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBD33C43442;
+        Thu, 18 May 2023 22:29:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684448951;
-        bh=X4217yHyojVpL4UeshSX2E5v3ItNUl3PghDPgbLT3uI=;
+        s=k20201202; t=1684448958;
+        bh=/T7AEYxSdRmFaQS6UOragCbvf7lT1o8mzvCzRzQ1ruw=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=GPTFcUQRKRhu4NNyZe03+4p5+v16R2dXcU8QNZFtMbzvqYxhbDtzHFjuEnqQHzaRe
-         19rmzAZq0Yw/oZg72KkG00nOFik4XmMK/WoNdEHz2TeksdtEM/OqNehnGNIWFDnIv5
-         ifkJ/s9oDW5kkPrnFrUvZlhB2mYuXKLYrGSdmACE32zRgkkY+ijXzrEZFpRtw8K/t0
-         k8pYtYll5xtPl2pe19R9xhjWJh+xlkt/jSPX4owKgyZPl1rd8hN8LnO1lFMgt93vDp
-         kbjb8wj6ljR3BL7Qs1IpXJW+X7EsjfdqqXGu0bNwUQPa2/dKtf5E8kNrShRDGUzZFJ
-         9SRy5spwM79yA==
+        b=CPpHxPtTX7IcURQiGOLxPL7pj4AnsxElOrT5pW0WSjQ7z8TS/6sxJdNA4zfLgzgik
+         LpnFFZW3GjPKJ2Lsy8V8Y0PojLjxiot4ZPzqyZyEynaDFRONAFmoc3tFtTfkFsgslv
+         flAJtiTXBV0kQSx32L4VKiC62lGYBLRzhlKlY5N7uvCSLwvo/+9SH/kCAoXZ+PMXcS
+         sqPgNSFE1lc0uypRI8U8dKULCD1BEQ7sACM7aCFDhFz4Bkff8UsbHFoXw90MantOQw
+         IhmBG5hN76t+BfxWgl6+MmnJSuo/Q60M15zrmc8HqEq/GzU/TaRjY8b5Pb3gl/CGpQ
+         +Z4BD7QxuOEEA==
 From:   Mark Brown <broonie@kernel.org>
-To:     alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lgirdwood@gmail.com,
-        =?utf-8?q?Pawe=C5=82_Anikiel?= <pan@semihalf.com>
-Cc:     perex@perex.cz, tiwai@suse.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, dinguyen@kernel.org,
-        lars@metafoo.de, nuno.sa@analog.com, upstream@semihalf.com,
-        amstan@chromium.org
-In-Reply-To: <20230508113037.137627-1-pan@semihalf.com>
-References: <20230508113037.137627-1-pan@semihalf.com>
-Subject: Re: (subset) [PATCH v2 0/7] Add Chameleon v3 ASoC audio
-Message-Id: <168444894844.494451.621381852845902140.b4-ty@kernel.org>
-Date:   Fri, 19 May 2023 07:29:08 +0900
+To:     f.fangjian@huawei.com, Yeqi Fu <asuk4.q@gmail.com>
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ivan Orlov <ivan.orlov0322@gmail.com>
+In-Reply-To: <20230518052515.368978-1-asuk4.q@gmail.com>
+References: <20230518052515.368978-1-asuk4.q@gmail.com>
+Subject: Re: [PATCH] spi: hisi-kunpeng: Fix error checking
+Message-Id: <168444895641.494730.18173477830143130577.b4-ty@kernel.org>
+Date:   Fri, 19 May 2023 07:29:16 +0900
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13-dev-bfdf5
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,31 +55,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 08 May 2023 13:30:30 +0200, Paweł Anikiel wrote:
-> The Google Chameleon v3 is a device made for testing audio and video
-> paths of other devices. This patchset adds support for ASoC audio on
-> this device. It has two audio sources: HDMI audio from the it68051 chip
-> (RX only), and analog audio from the ssm2603 chip (RX and TX).
+On Thu, 18 May 2023 13:25:15 +0800, Yeqi Fu wrote:
+> The function debugfs_create_dir returns ERR_PTR if an error occurs,
+> and the appropriate way to verify for errors is to use the inline
+> function IS_ERR. The patch will substitute the null-comparison with
+> IS_ERR.
 > 
-> The patchset adds the ASoC platform and codec drivers, as well as some
-> changes to the existing ssm2602 codec driver.
 > 
-> [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
 Thanks!
 
-[1/7] ASoC: Add Google Chameleon v3 i2s driver
-      commit: 702648721db590b3425c31ade294000e18808345
-[2/7] ASoC: Add Google Chameleon v3 codec driver
-      commit: 61ed303496eb7e18491ee617dec2403f75d5168c
-[3/7] ASoC: dt-bindings: Add Google Chameleon v3 i2s device
-      commit: 6f2c1e7c2546f9eab0031843fb7346e49ba69102
-[4/7] ASoC: dt-bindings: Add Google Chameleon v3 audio codec
-      commit: 580bac2a2c6f7d106be6d0ee0f0f310be49368b3
+[1/1] spi: hisi-kunpeng: Fix error checking
+      commit: 120e1aa2f2e60b55f9d20c2fe1c6144739e00dc4
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
