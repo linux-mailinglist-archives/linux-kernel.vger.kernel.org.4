@@ -2,85 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EDA87078C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 06:10:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E46187078CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 06:12:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbjEREK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 00:10:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33376 "EHLO
+        id S229972AbjEREMh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 00:12:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbjEREKX (ORCPT
+        with ESMTP id S229983AbjEREMc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 00:10:23 -0400
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 468E1212F
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 21:10:21 -0700 (PDT)
-Received: by mail-vs1-xe35.google.com with SMTP id ada2fe7eead31-434834245c3so486521137.0
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 21:10:21 -0700 (PDT)
+        Thu, 18 May 2023 00:12:32 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFFF935B6
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 21:12:29 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-510d6b939bfso2343822a12.0
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 21:12:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684383020; x=1686975020;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=IDY3aDUnqqgT3t9es8nl/wZQPjrLqj0wzyc7akBZSuI=;
-        b=LOHI/t+9Ut28TNqx8a95xh2JOvdPf7ARYw1RAtKQn4kzKLkSJ3JgDS8SRdX3qpxgtE
-         L8Wp57fyk0bwgX7yl2rGLcbzPvkQfYSFHPIzK45QcAWplNKFvGQDiIEunMfbSV4tfzYz
-         X3HqMQRIsRGZ/bw72wK5swoaOR9a9ZBxNuctmJw4CXA9AK+cVGlonBQlyRySsEOnou7u
-         reip0NsPh4izp7OpiwApohJI3zD0wezN9Vmg0CBcEgq8h6f89RNxqRPPjveoDJE1+85Y
-         mrK7BPKQvImdgHJKUNHjs70/GVElVP4gfImq2IjDhSnLUu5cTQfTuiErXEFebpMAfDZd
-         KfUQ==
+        d=linux-foundation.org; s=google; t=1684383148; x=1686975148;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XBiK7zqzCv4YO32S9qrBa6a2V7ip3iodPxLIsQgbycE=;
+        b=OC3DpLAIgwgMaxu6536uxiVSMkMWAXUyAUvvt8zzh0qHAfQTnsw+BOdZRupUy8lRnD
+         Hh20CVgnPKpn+PgPJWDcgb1QLr8gClJ+Dkc1pcPBYxq30E2BhVGtwuVOOlIi6LY8LHVg
+         31i5lr+0NacNWWrKyG+0WMIzz3jqeTJ0jN/9k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684383020; x=1686975020;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IDY3aDUnqqgT3t9es8nl/wZQPjrLqj0wzyc7akBZSuI=;
-        b=eLad1N/V+2g/Ngc4zfpxidzZOx9MnWrMEfAPA7dKHjxrrBoTI3Y4B2UxBTF4+ExkPj
-         yoKIQ3ZViGKiOzB1tMHnB5qXm7MRd4ToriPo65y6C4acTwHV8JQLOM0iwZ4HIdI9msia
-         Oqh6JNCiCYFyzY95l7ImhjLF7ZSCSno2RK47oooTWf54gi8u7KSRQzTG2vzhEgTw/jq0
-         eNJbxNjVRgEj7/myFMuqpJ40h810L0bKVuX/IggvcbyLoUVgUP7iiHAG7m9oJUGFHZNg
-         nFFDrM4J8DaU9385tobI3QlJWjlL1h8HC3D6vzNY8xs0qOAfdPqg98pnpMwXRdC5pQa/
-         4UBw==
-X-Gm-Message-State: AC+VfDz1GHjPQ0SYd70lDGH7jj+qWZ74WxTqpZ/g3rVwurHeUO3munTJ
-        hvpwE0mAPNZYXD5lh2Ia2nt/qvjYjpinl5+FxWE=
-X-Google-Smtp-Source: ACHHUZ4UUWrL6/+vvjWa7rQzBupJ+su5zXu7g9l/qiwX0NhrC6z0xNnjpjA5Dusi6hNF+9HpZB8U+pR2qnZ9Uj4slP4=
-X-Received: by 2002:a67:f614:0:b0:425:9cb1:8db0 with SMTP id
- k20-20020a67f614000000b004259cb18db0mr117606vso.1.1684383020054; Wed, 17 May
- 2023 21:10:20 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684383148; x=1686975148;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XBiK7zqzCv4YO32S9qrBa6a2V7ip3iodPxLIsQgbycE=;
+        b=cj+Xt1EAPctZMVbPhfOBTnGgdrOUIL+SWzMYr8ce2Vvcmb1CQilNXy32UDerU5yA/u
+         mb14FZddHKpz1cStA8hdBkSSUdAyiNtcW51Ng2qJ167sfvGq0VTF1+jCigKruYyu022C
+         S+i8AYpezhOk11emwUcMoA+CiG+M3y7nJUxNwEGL8M4IGfWyFJjsA0U+Awefb/VTOxvH
+         vTheGEYKaWLFSuBVVUMl2nYKifqMybrflCiUbHrZYVZvz2ynMLuSw/k+4WuujB5GNW4L
+         wFXyRg7JLVFfW8H56b3MTR6/St/qEBSmktI4IFG/K4nuNuqsH1nRdK2sGQSB2oDSOuOZ
+         TPBQ==
+X-Gm-Message-State: AC+VfDz1ZGu+sraqIAcoJtPUQ7RCduFWcgs1CM4gkUEeYti9201DUJ8V
+        ihAKAA0s7IJRCitbiHO/6X9wRuh5KuigYzl2NWBQG6tE
+X-Google-Smtp-Source: ACHHUZ4cppr35lYrAGHY4fjQsdjCvU6yR3INJFSd3BJ7vEM6XOLGvw5xt46iHmSdlZHsu5R+bg6NMw==
+X-Received: by 2002:a17:907:26c8:b0:965:9f86:4fe4 with SMTP id bp8-20020a17090726c800b009659f864fe4mr36121437ejc.56.1684383147993;
+        Wed, 17 May 2023 21:12:27 -0700 (PDT)
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com. [209.85.208.53])
+        by smtp.gmail.com with ESMTPSA id z6-20020a17090655c600b0094f3e169ca5sm401122ejp.158.2023.05.17.21.12.25
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 21:12:26 -0700 (PDT)
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-50bcb4a81ceso2739714a12.2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 21:12:25 -0700 (PDT)
+X-Received: by 2002:a17:906:da8c:b0:94f:7a8:a902 with SMTP id
+ xh12-20020a170906da8c00b0094f07a8a902mr31637538ejb.14.1684383145429; Wed, 17
+ May 2023 21:12:25 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a59:8d84:0:b0:3c4:7f04:af2d with HTTP; Wed, 17 May 2023
- 21:10:19 -0700 (PDT)
-Reply-To: officialeuromillions@gmail.com
-From:   Euro Millions <samuelkellihan@gmail.com>
-Date:   Thu, 18 May 2023 05:10:19 +0100
-Message-ID: <CAMvykPM8-WsA4an_3OQHg4PBr2KbYK+seeXmyfHjnfBEbzzM2w@mail.gmail.com>
-Subject: Aw
-To:     undisclosed-recipients:;
+References: <20230518021825.712742-1-joel@joelfernandes.org> <20230518021825.712742-2-joel@joelfernandes.org>
+In-Reply-To: <20230518021825.712742-2-joel@joelfernandes.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 17 May 2023 21:12:07 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi20GzWeK=vUoreX6AXOEmeJKczou1McCOC9JytVO=TQg@mail.gmail.com>
+Message-ID: <CAHk-=wi20GzWeK=vUoreX6AXOEmeJKczou1McCOC9JytVO=TQg@mail.gmail.com>
+Subject: Re: [PATCH RFC 1/4] mm/mremap: Optimize the start addresses in move_page_tables()
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Kirill A Shutemov <kirill@shutemov.name>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Herzlichen Gl=C3=BCckwunsch, Sie haben am 16. May, 2023 =E2=82=AC650.000,00=
- bei den
-monatlichen Euro Millions/Google Promo-Gewinnspielen gewonnen.
+On Wed, May 17, 2023 at 7:18=E2=80=AFPM Joel Fernandes (Google)
+<joel@joelfernandes.org> wrote:
+>
+> This warning will only trigger when there is mutual alignment in the
+> move operation. A solution, as suggested by Linus Torvalds [2], is to
+> initiate the copy process at the PMD level whenever such alignment is
+> present.
 
-Bitte geben Sie die folgenden Informationen ein, damit Ihr
-Gewinnbetrag an Sie =C3=BCberwiesen werden kann.
-1.) Vollst=C3=A4ndiger Name:
-2.) Telefon- und Mobilfunknummern:
-3.) Postanschrift:
-4.) Beruf:
-5.) Geburtsdatum:
-6.) Geschlecht:
+So this patch is actually simpler than I thought it would be.
 
+But I'm a bit nervous about it. In particular, it ends doing
 
-Herr Anthony Deiderich
-Online-Koordinator
+        old_end =3D old_addr + len;
+        ... expand old_addr/new_addr down to the pmd boundary ..
+        return len + old_addr - old_end;        /* how much done */
+
+doesn't that return value end up being nonsensical now?
+
+In particular, I think it can return a *negative* value, because of
+how old_addr was moved down, and the "now much done" might indeed be
+"negative" in the sense that it failed the move even "before" the
+original starting point.
+
+And that negative value then ends up being a large positive one as an
+"unsigned long", of course.
+
+So I get the feeling that it wants something like
+
+        if (old_addr + len < old_end)
+                return 0;
+
+there at the end.
+
+But maybe there is something in there that guarantees that that case
+never happens. I didn't think too deeply about it, I just felt this
+looked odd.
+
+               Linus
