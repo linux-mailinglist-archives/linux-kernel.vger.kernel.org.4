@@ -2,56 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 027F9708072
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 13:52:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F8B3708075
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 13:52:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231147AbjERLw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 07:52:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42874 "EHLO
+        id S230419AbjERLwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 07:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231351AbjERLwR (ORCPT
+        with ESMTP id S230255AbjERLwr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 07:52:17 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B30F2FE
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 04:52:05 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-561bd0d31c1so16416617b3.0
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 04:52:05 -0700 (PDT)
+        Thu, 18 May 2023 07:52:47 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3592C0
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 04:52:38 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id 3f1490d57ef6-ba827a34ba8so2745855276.0
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 04:52:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google; t=1684410725; x=1687002725;
+        d=amarulasolutions.com; s=google; t=1684410758; x=1687002758;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gvfUXuQLdcRRFK6mLXbSp6TuokWZaIj2pmBfTn+gwLw=;
-        b=NxDa+2Q4bWlEhVfVP+HUsVkISRhHFxaytK65rO1w+EzNppVqwLhxiPJ+hELw0myAX/
-         dxDAZ5Gkox6VQmWtTDoJnI/DxxkYdL+aIvnfx9fv4iL8Fhd0utymtgXI63QTgzB02dCa
-         gZ0GskpxYgJXJwBkfBV1ogWjD5NubeCuPQz8w=
+        bh=mBVrcck5s6OuGtzh+rhmsWfcN2VuaI9gIbet+WEeIh0=;
+        b=IBDQjG8w9HEylhywOl9vA5UIZfMIJ+hgwPjUGH9uO2EPPc35MaAWOzPXbLXGzuGgF5
+         rnmZ/vwuvY9uQanydicMziFTcVFah8uNnePp6rPNZxtDUGKcGoQbrFF5qXACHrR37bHc
+         dF4lF06QhJ95zo/CznbKZS48Iv+Fh7kS3DbhI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684410725; x=1687002725;
+        d=1e100.net; s=20221208; t=1684410758; x=1687002758;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gvfUXuQLdcRRFK6mLXbSp6TuokWZaIj2pmBfTn+gwLw=;
-        b=i5uH2OnPAxLbSKT/ruOA23lKYO+xwcPDHF9VWPVhtrFEyMJCR++sVFsrh9AaQtK7NX
-         jx8tbrXLc97c6auBUKUQHIKTQeNzwwDUCaLtmMXwrNPE1Wv/uSK71DaUwzRwd8fI54OL
-         VhLRpTSInh7o/ZUhZfk5qbGac6Wydxc4MlRb6mVSQuUx34DQiqRaRA/T2TL4L6JEPk8o
-         lQmotdi2hikGOkE+fXu8JDbzJhD07HVtD/fhG4JG0Wx8hMMZWdLNRIPBtZMaQxY5ebrQ
-         ZkGyQbKDR9do69FgB8FxxleYIVx5byI1cARbk9jdzGTTyjcNoaHeUtgI68DU9X1LoEsI
-         0uNA==
-X-Gm-Message-State: AC+VfDy0jTpgOLTmfucisjfYkqPF3nioTIkWsN8P/WZn/hIaRqVUyEKH
-        K7+FJfyYZM50JCDHn5jPV6SZJuSxVBZgK0SfHZQzAA==
-X-Google-Smtp-Source: ACHHUZ77dNBKDAmEmByXJaKmA+9QpHEGry6uMH+jKnRdFQghZZSSaOQYgAqJHFxN0xVC7BXjZo4ohG+1pfqASYSuW1Q=
-X-Received: by 2002:a81:a211:0:b0:556:ea38:eb07 with SMTP id
- w17-20020a81a211000000b00556ea38eb07mr1055451ywg.50.1684410724873; Thu, 18
- May 2023 04:52:04 -0700 (PDT)
+        bh=mBVrcck5s6OuGtzh+rhmsWfcN2VuaI9gIbet+WEeIh0=;
+        b=GlSL2cXELCo0Kka2j6S8Gg3jbP+ncny7pcqA4uhhJqmeMgwx2eUOJA1+L6WBNQWrIw
+         +VKXkObJQdDrbwinzetk7BjkCiwLl9zLzwtH1qNQzSeKg45IqcaqcHTXwm0QW5/PnkqV
+         RBQPev3udILzi+3y3BTLaTEQf9fL54+yoq3eeb1ZRwUnhXOeu55YOt+0akP/ZzrfhjYl
+         9HzL31gIKhKtQd00PbM73/BXMktkfF0hhODqTNH0ibUbPodVvF6o6TxXXkGek4Be0Ska
+         rDEkVXZcE7O0qu1zs6qZA5RKDFvK3+NhVPlsDcv/J8frUmPtrebGjdSE6m+1bpkgYpGp
+         D2xg==
+X-Gm-Message-State: AC+VfDy970PdTbZyvYQCTjxOUj9MNevIAhonT8n5sbeRcR0MKg59Nf2X
+        fg4gyhgEg+Bcgghc0sWZjsQWW6azXzlvEAMOMkbOOg==
+X-Google-Smtp-Source: ACHHUZ548aNPyGdZgjeLL3XrPR2B6YAlN0Zu3cNB03mO7YKE5/94BhuZByCCpE5y5jDki39KJwQtDgcCv5qSvsFrCfs=
+X-Received: by 2002:a25:e70f:0:b0:b9e:3bea:ebd2 with SMTP id
+ e15-20020a25e70f000000b00b9e3beaebd2mr944887ybh.31.1684410758177; Thu, 18 May
+ 2023 04:52:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230515235713.232939-1-aford173@gmail.com> <20230515235713.232939-2-aford173@gmail.com>
-In-Reply-To: <20230515235713.232939-2-aford173@gmail.com>
+References: <20230515235713.232939-1-aford173@gmail.com> <20230515235713.232939-3-aford173@gmail.com>
+In-Reply-To: <20230515235713.232939-3-aford173@gmail.com>
 From:   Jagan Teki <jagan@amarulasolutions.com>
-Date:   Thu, 18 May 2023 17:21:52 +0530
-Message-ID: <CAMty3ZCoJP=Mk20_O_Y0Vpuuayz3k3J_dA2zg1Ls0YmU6eL0Fw@mail.gmail.com>
-Subject: Re: [PATCH V6 1/6] drm: bridge: samsung-dsim: fix blanking packet
- size calculation
+Date:   Thu, 18 May 2023 17:22:26 +0530
+Message-ID: <CAMty3ZB9xrO+LPGVCcoDfdWo9CP_DLVhaKm33y768+ix6nP7cQ@mail.gmail.com>
+Subject: Re: [PATCH V6 2/6] drm: bridge: samsung-dsim: Fix PMS Calculator on imx8m[mnp]
 To:     Adam Ford <aford173@gmail.com>
 Cc:     dri-devel@lists.freedesktop.org, aford@beaconembedded.com,
         Lucas Stach <l.stach@pengutronix.de>,
@@ -67,7 +66,7 @@ Cc:     dri-devel@lists.freedesktop.org, aford@beaconembedded.com,
         Daniel Vetter <daniel@ffwll.ch>,
         Inki Dae <inki.dae@samsung.com>,
         Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-kernel@vger.kernel.org
+        Marek Vasut <marex@denx.de>, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -83,16 +82,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Tue, May 16, 2023 at 5:27=E2=80=AFAM Adam Ford <aford173@gmail.com> wrot=
 e:
 >
-> From: Lucas Stach <l.stach@pengutronix.de>
+> According to Table 13-45 of the i.MX8M Mini Reference Manual, the min
+> and max values for M and the frequency range for the VCO_out
+> calculator were incorrect.  This information was contradicted in other
+> parts of the mini, nano and plus manuals.  After reaching out to my
+> NXP Rep, when confronting him about discrepencies in the Nano manual,
+> he responded with:
+>  "Yes it is definitely wrong, the one that is part
+>   of the NOTE in MIPI_DPHY_M_PLLPMS register table against PMS_P,
+>   PMS_M and PMS_S is not correct. I will report this to Doc team,
+>   the one customer should be take into account is the Table 13-40
+>   DPHY PLL Parameters and the Note above."
 >
-> Scale the blanking packet sizes to match the ratio between HS clock
-> and DPI interface clock. The controller seems to do internal scaling
-> to the number of active lanes, so we don't take those into account.
+> These updated values also match what is used in the NXP downstream
+> kernel.
 >
-> Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+> To fix this, make new variables to hold the min and max values of m
+> and the minimum value of VCO_out, and update the PMS calculator to
+> use these new variables instead of using hard-coded values to keep
+> the backwards compatibility with other parts using this driver.
+>
+> Fixes: 4d562c70c4dc ("drm: bridge: samsung-dsim: Add i.MX8M Mini/Nano sup=
+port")
 > Signed-off-by: Adam Ford <aford173@gmail.com>
+> Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
 > Tested-by: Chen-Yu Tsai <wenst@chromium.org>
 > Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de>
+> Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
 > ---
 
 Reviewed-by: Jagan Teki <jagan@amarulasolutions.com>
