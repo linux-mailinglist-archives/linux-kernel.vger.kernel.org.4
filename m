@@ -2,185 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AEC2708BBC
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 00:34:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AB95708BC5
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 00:37:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbjERWed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 18:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46962 "EHLO
+        id S229946AbjERWhJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 18:37:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbjERWeI (ORCPT
+        with ESMTP id S229498AbjERWhH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 18:34:08 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01EE710D0
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 15:33:59 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1ae4c5e12edso20706365ad.3
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 15:33:59 -0700 (PDT)
+        Thu, 18 May 2023 18:37:07 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5478DE66
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 15:37:05 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id af79cd13be357-7576eb88a46so236469285a.3
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 15:37:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684449239; x=1687041239;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1684449424; x=1687041424;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=D1nBFbl2kNhqRXHkgIUn6lQxv3BWL5XvL+95Aso43MI=;
-        b=JnT3Nm6byGtDawfZcACo1v8lokc0XTySqmTYShweWMVp8qL45gp07eq/6jgdwoVlR0
-         nZXUqAFvVJd7nS83y/ZXaFd7TsKRuQjPPI8JmvPWUHujsZkS7P4hHgSkTkmF2pkjGl9K
-         DSB916FWMBFpvSJ5MLATv/gve4uyaJyVrwk+M=
+        bh=kEfc9ma1f8j7tQqY19VjZCuXlgV6oSU0kGv3ixpbTuE=;
+        b=kWFa3A7ILY4qw61+vrmBTr6QKp1DufrhkX66vEQtvObqKO6K/p6G8BrQ/FDf905CR7
+         0V89+g2Hk5I0dXmG/74xSAkAUFOHcx+pa4xXvaOYGtLGoNTbXPEO61bdV2SZskKyvFxT
+         S95vbP0lTtugn6WIdlivdzYlAGQdVWKOClEM2ulVKtP+EfuM2V3hUB4QdqUORbvr/7YZ
+         XdHFitHF1XhqSmNpM526K1o6GgKuwdzptWp8jTdH21aVKlXh5YwLgcYnwAgfiBeahHCX
+         kSsE6cGWbhfLIEWBdhxvtijM3rQ8aBoQbffQm/ns19NtgZCok6+/b02vqKLhXnlDzjfR
+         Anpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684449239; x=1687041239;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1684449424; x=1687041424;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=D1nBFbl2kNhqRXHkgIUn6lQxv3BWL5XvL+95Aso43MI=;
-        b=E7upsUrw+HFGFB4xgjDpyZjlgZlbj2Qd5qsupy4Ar544iAaaJQ+9P/D+cpAPlSyc9W
-         GIW8TB2agltnPrei6uEeArdl54EBRnKgT5NT6luKqawXwIOO3yofvfEOjgGD/NIoSKtx
-         dttBMjPSDhht52UP6/Amlt54tw8Wzz9N9Z7Npx4qSYatU0QmAr50I1rnymSgADY9Frx4
-         TxK4gAJJvkDGG88mX0UuxwfiDjbwWue//HxD9TR7D6Pso9wLUDKxLiX8hR4kCKzhFeKl
-         FDs6IWp6gsyMTTommjfzmGWT6NPrYYnkfZc228xFMYEFmCKssvtjFkoy1own8Yo15UyY
-         nqvw==
-X-Gm-Message-State: AC+VfDwfijbpsAgwH3+smjqJYoubiWcsY54vFdFGDetyYnJK/YYzMr60
-        ++UZP9QCzrqrsTMt/bJpPi3u3Q==
-X-Google-Smtp-Source: ACHHUZ7zJhYjfPa+ZbTaOHzNa4SnFtqdlL9pTqh+Bv9ufbfnFBxQYSdHmDSrGjM9o2XMte6XYk8eIA==
-X-Received: by 2002:a17:903:2689:b0:1ac:8837:df8 with SMTP id jf9-20020a170903268900b001ac88370df8mr699263plb.6.1684449239382;
-        Thu, 18 May 2023 15:33:59 -0700 (PDT)
-Received: from sarthakkukreti-glaptop.corp.google.com ([100.107.238.113])
-        by smtp.gmail.com with ESMTPSA id q4-20020a170902b10400b001aafb802efbsm1996502plr.12.2023.05.18.15.33.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 15:33:59 -0700 (PDT)
-From:   Sarthak Kukreti <sarthakkukreti@chromium.org>
-To:     dm-devel@redhat.com, linux-block@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Brian Foster <bfoster@redhat.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Bart Van Assche <bvanassche@google.com>,
-        "Darrick J. Wong" <djwong@kernel.org>
-Subject: [PATCH v7 5/5] loop: Add support for provision requests
-Date:   Thu, 18 May 2023 15:33:26 -0700
-Message-ID: <20230518223326.18744-6-sarthakkukreti@chromium.org>
-X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
-In-Reply-To: <20230518223326.18744-1-sarthakkukreti@chromium.org>
-References: <20230518223326.18744-1-sarthakkukreti@chromium.org>
+        bh=kEfc9ma1f8j7tQqY19VjZCuXlgV6oSU0kGv3ixpbTuE=;
+        b=F0b+/wek4HjLB2agkheCwEfCL9Wkoq413T9hGY0LqohPKKBjiSbjWW1BLyIloogxvb
+         2taCv7TkU8gypdegP5jceMkOMdmLuNO8szrucRtjE9Jt0JxWQ8OBjADQCk++VoRDnMKj
+         S55mVwsCkp+kPjKcs+TnvURc2ejsv2p+5tbgF1Jdqm7Z6a+913HabE/yAFLG7cn6+v88
+         frX+6JAzAGe8cXFFT44v9qmgJvVmDxl8iN/JvgF4cHsroe7cMnB9eS6cp28VNPQkrJLs
+         OwUbOcXH+xdRPbmeXPUivOYAE+1z9rzgXTzTl63n8N+2W4GyrgXa9u2MTQl/fEqX2OwD
+         QHYQ==
+X-Gm-Message-State: AC+VfDxEexcP+KalKUX1UMd2E4B/PUgteR6KRVhngqDdKdc95lnoTkml
+        jFCOl3Wf7oyiT0dksCVB2Jn0EcJzr2D35dNo6PlaOw==
+X-Google-Smtp-Source: ACHHUZ5ouQKNUOrZRSfgoFcXPayagljSi/J0aDnMbpJJxW3USWQyhsr0WvRyRtIo8wYAtBsLtf+p+DLyS3DhnPGR3dY=
+X-Received: by 2002:a05:6214:1d0d:b0:616:516e:f3ea with SMTP id
+ e13-20020a0562141d0d00b00616516ef3eamr1112741qvd.51.1684449424296; Thu, 18
+ May 2023 15:37:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230517-genkey-v1-1-b887424da4a8@google.com> <202305181712.xjvv1fbD-lkp@intel.com>
+In-Reply-To: <202305181712.xjvv1fbD-lkp@intel.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Thu, 18 May 2023 15:36:53 -0700
+Message-ID: <CAKwvOd=hoKFMC40U-Pd=2dBJ4zT4P60OgJpHvNmH+zdGAd_J-Q@mail.gmail.com>
+Subject: Re: [PATCH] certs: buffer stderr from openssl unless error
+To:     Philip Li <philip.li@intel.com>
+Cc:     oe-kbuild-all@lists.linux.dev, Ard Biesheuvel <ardb@kernel.org>,
+        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for provision requests to loopback devices.
-Loop devices will configure provision support based on
-whether the underlying block device/file can support
-the provision request and upon receiving a provision bio,
-will map it to the backing device/storage. For loop devices
-over files, a REQ_OP_PROVISION request will translate to
-an fallocate mode 0 call on the backing file.
+On Thu, May 18, 2023 at 3:23=E2=80=AFAM kernel test robot <lkp@intel.com> w=
+rote:
+>
+> Hi,
+>
+> kernel test robot noticed the following build errors:
+>
+> [auto build test ERROR on f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6]
+>
+> url:    https://github.com/intel-lab-lkp/linux/commits/ndesaulniers-googl=
+e-com/certs-buffer-stderr-from-openssl-unless-error/20230518-004753
+> base:   f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6
+> patch link:    https://lore.kernel.org/r/20230517-genkey-v1-1-b887424da4a=
+8%40google.com
+> patch subject: [PATCH] certs: buffer stderr from openssl unless error
+> config: csky-randconfig-m041-20230517
+> compiler: csky-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=3D1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbi=
+n/make.cross -O ~/bin/make.cross
 
-Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
----
- drivers/block/loop.c | 34 +++++++++++++++++++++++++++++++---
- 1 file changed, 31 insertions(+), 3 deletions(-)
+^ should encourage `mkdir ~/bin`; the debian docker container doesn't
+have `~/bin`.
 
-diff --git a/drivers/block/loop.c b/drivers/block/loop.c
-index bc31bb7072a2..7fe1a6629754 100644
---- a/drivers/block/loop.c
-+++ b/drivers/block/loop.c
-@@ -311,16 +311,20 @@ static int lo_fallocate(struct loop_device *lo, struct request *rq, loff_t pos,
- {
- 	/*
- 	 * We use fallocate to manipulate the space mappings used by the image
--	 * a.k.a. discard/zerorange.
-+	 * a.k.a. discard/provision/zerorange.
- 	 */
- 	struct file *file = lo->lo_backing_file;
- 	int ret;
- 
--	mode |= FALLOC_FL_KEEP_SIZE;
-+	if (mode & (FALLOC_FL_PUNCH_HOLE | FALLOC_FL_ZERO_RANGE) &&
-+	    !bdev_max_discard_sectors(lo->lo_device))
-+		return -EOPNOTSUPP;
- 
--	if (!bdev_max_discard_sectors(lo->lo_device))
-+	if (mode == 0 && !bdev_max_provision_sectors(lo->lo_device))
- 		return -EOPNOTSUPP;
- 
-+	mode |= FALLOC_FL_KEEP_SIZE;
-+
- 	ret = file->f_op->fallocate(file, mode, pos, blk_rq_bytes(rq));
- 	if (unlikely(ret && ret != -EINVAL && ret != -EOPNOTSUPP))
- 		return -EIO;
-@@ -488,6 +492,8 @@ static int do_req_filebacked(struct loop_device *lo, struct request *rq)
- 				FALLOC_FL_PUNCH_HOLE);
- 	case REQ_OP_DISCARD:
- 		return lo_fallocate(lo, rq, pos, FALLOC_FL_PUNCH_HOLE);
-+	case REQ_OP_PROVISION:
-+		return lo_fallocate(lo, rq, pos, 0);
- 	case REQ_OP_WRITE:
- 		if (cmd->use_aio)
- 			return lo_rw_aio(lo, cmd, pos, ITER_SOURCE);
-@@ -754,6 +760,25 @@ static void loop_sysfs_exit(struct loop_device *lo)
- 				   &loop_attribute_group);
- }
- 
-+static void loop_config_provision(struct loop_device *lo)
-+{
-+	struct file *file = lo->lo_backing_file;
-+	struct inode *inode = file->f_mapping->host;
-+
-+	/*
-+	 * If the backing device is a block device, mirror its provisioning
-+	 * capability.
-+	 */
-+	if (S_ISBLK(inode->i_mode)) {
-+		blk_queue_max_provision_sectors(lo->lo_queue,
-+			bdev_max_provision_sectors(I_BDEV(inode)));
-+	} else if (file->f_op->fallocate) {
-+		blk_queue_max_provision_sectors(lo->lo_queue, UINT_MAX >> 9);
-+	} else {
-+		blk_queue_max_provision_sectors(lo->lo_queue, 0);
-+	}
-+}
-+
- static void loop_config_discard(struct loop_device *lo)
- {
- 	struct file *file = lo->lo_backing_file;
-@@ -1092,6 +1117,7 @@ static int loop_configure(struct loop_device *lo, fmode_t mode,
- 	blk_queue_io_min(lo->lo_queue, bsize);
- 
- 	loop_config_discard(lo);
-+	loop_config_provision(lo);
- 	loop_update_rotational(lo);
- 	loop_update_dio(lo);
- 	loop_sysfs_init(lo);
-@@ -1304,6 +1330,7 @@ loop_set_status(struct loop_device *lo, const struct loop_info64 *info)
- 	}
- 
- 	loop_config_discard(lo);
-+	loop_config_provision(lo);
- 
- 	/* update dio if lo_offset or transfer is changed */
- 	__loop_update_dio(lo, lo->use_dio);
-@@ -1830,6 +1857,7 @@ static blk_status_t loop_queue_rq(struct blk_mq_hw_ctx *hctx,
- 	case REQ_OP_FLUSH:
- 	case REQ_OP_DISCARD:
- 	case REQ_OP_WRITE_ZEROES:
-+	case REQ_OP_PROVISION:
- 		cmd->use_aio = false;
- 		break;
- 	default:
--- 
-2.40.1.698.g37aff9b760-goog
+>         chmod +x ~/bin/make.cross
+>         # https://github.com/intel-lab-lkp/linux/commit/0e437a41fdb41c848=
+34de6776bf38951b197792a
+>         git remote add linux-review https://github.com/intel-lab-lkp/linu=
+x
+>         git fetch --no-tags linux-review ndesaulniers-google-com/certs-bu=
+ffer-stderr-from-openssl-unless-error/20230518-004753
 
+^ holy crap that takes forever. maybe recommend `b4 shazam <lore link>`?
+
+>         git checkout 0e437a41fdb41c84834de6776bf38951b197792a
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.1.0 make.cro=
+ss W=3D1 O=3Dbuild_dir ARCH=3Dcsky olddefconfig
+
+^ should use `~/bin/make.cross` since `~/bin` may not exist in $PATH.
+
+>         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.1.0 make.cro=
+ss W=3D1 O=3Dbuild_dir ARCH=3Dcsky SHELL=3D/bin/bash
+
+Hi Philip,
+I've run into some issues with make.cross when trying to install the
+csky toolchain. Maybe you can help?
+
+```
+$ COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.1.0
+~/bin/make.cross W=3D1 O=3Dbuild_dir ARCH=3Dcsky olddefconfig
+Compiler will be installed in /root/0day
+make: gcc: No such file or directory
+lftpget -c https://download.01.org/0day-ci/cross-package/./gcc-12.1.0-nolib=
+c/x86_64-gcc-12.1.0-nolibc_csky-linux.tar.xz
+/linux
+tar Jxf /root/0day/gcc-12.1.0-nolibc/x86_64-gcc-12.1.0-nolibc_csky-linux.ta=
+r.xz
+-C /root/0day
+Please update: libc6 or glibc
+ldd /root/0day/gcc-12.1.0-nolibc/csky-linux/bin/csky-linux-gcc
+/root/0day/gcc-12.1.0-nolibc/csky-linux/bin/csky-linux-gcc:
+/lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.32' not found
+(required by /root/0day/gcc-12.1.0-nolibc/csky-linux/bin/csky-linux-gcc)
+/root/0day/gcc-12.1.0-nolibc/csky-linux/bin/csky-linux-gcc:
+/lib/x86_64-linux-gnu/libc.so.6: version `GLIBC_2.33' not found
+(required by /root/0day/gcc-12.1.0-nolibc/csky-linux/bin/csky-linux-gcc)
+setup_crosstool failed
+
+$ ldd -v /lib/x86_64-linux-gnu/libc.so.6
+/lib64/ld-linux-x86-64.so.2 (0x00007f11f3478000)
+linux-vdso.so.1 (0x00007ffcf45b2000)
+
+Version information:
+/lib/x86_64-linux-gnu/libc.so.6:
+ld-linux-x86-64.so.2 (GLIBC_2.3) =3D> /lib64/ld-linux-x86-64.so.2
+ld-linux-x86-64.so.2 (GLIBC_PRIVATE) =3D> /lib64/ld-linux-x86-64.so.2
+
+$ cat /etc/debian_version
+11.6
+```
+Perhaps I MUST update my debian container to 11.7?
+
+Are the 0day toolchains not statically linked? Can they use the ones
+from kernel.org which are?
+https://mirrors.edge.kernel.org/pub/tools/crosstool/
+
+>
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202305181712.xjvv1fbD-lkp=
+@intel.com/
+>
+> All errors (new ones prefixed by >>):
+>
+>    At main.c:152:
+>    - SSL error:FFFFFFFF80000002:system library::No such file or directory=
+: ../crypto/bio/bss_file.c:67
+>    - SSL error:10000080:BIO routines::no such file: ../crypto/bio/bss_fil=
+e.c:75
+> >> extract-cert: certs/signing_key.pem: No such file or directory
+>
+> --
+> 0-DAY CI Kernel Test Service
+> https://github.com/intel/lkp-tests/wiki
+
+
+
+--=20
+Thanks,
+~Nick Desaulniers
