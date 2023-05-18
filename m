@@ -2,169 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C972A707D51
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:54:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12B50707D4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:54:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230320AbjERJyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 05:54:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36786 "EHLO
+        id S230112AbjERJyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 05:54:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbjERJy3 (ORCPT
+        with ESMTP id S229822AbjERJx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 05:54:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 183971A4
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 02:53:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684403619;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7yINWos61yS1/Ae1KTt8I7rV0PBzJ6/BJSLEhV5ATss=;
-        b=Bf1F/n/AaN0W9dK56AY36gGylt71LQRbPtdjJOb7ANE+yDJFcJolRvveyTUq0CiB3d4HmX
-        0I3cJybCjl+U+M9BSaKnhTsxWIIFUBDYo012GfUq8K0PYIwqb9xTyUYr5kyTXA1rciess7
-        /bCOtXLnFdj+M1wd8mCSckNOmK5txZU=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-146-Gbff7KXbNvW9CLicHQ5d5Q-1; Thu, 18 May 2023 05:53:33 -0400
-X-MC-Unique: Gbff7KXbNvW9CLicHQ5d5Q-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E423A3813F37;
-        Thu, 18 May 2023 09:53:32 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.221])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C1CAA492C13;
-        Thu, 18 May 2023 09:53:29 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <93aba6cc363e94a6efe433b3c77ec1b6b54f2919.camel@redhat.com>
-References: <93aba6cc363e94a6efe433b3c77ec1b6b54f2919.camel@redhat.com> <20230515093345.396978-1-dhowells@redhat.com> <20230515093345.396978-4-dhowells@redhat.com>
-To:     Paolo Abeni <pabeni@redhat.com>
-Cc:     dhowells@redhat.com, netdev@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Chuck Lever III <chuck.lever@oracle.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH net-next v7 03/16] net: Add a function to splice pages into an skbuff for MSG_SPLICE_PAGES
+        Thu, 18 May 2023 05:53:58 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D40E10E9
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 02:53:58 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-51f6461af24so1179250a12.2
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 02:53:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684403637; x=1686995637;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ToOy6SsrGe7zKTu/1dnhsnfvtx8a3k0NpeaGTGEdvcw=;
+        b=NfO8PSfflrsk+m3I1FVbwFU5zMNr3p4Z+siTZn+5tQNdR2qqI5GAVSfonYNkeWP9uO
+         TCKOk/YNF7papCUlqmmZnyl3ih/swtbQxNnylyDvxM8nk1C593dC9/LExvL+B8RjmB63
+         2Rhi1ePmYw62JIfTh6yZNirMw5ZZkONUhlTHAG4H8s61LCo9jylLPsjpbxfRguLCP42h
+         y7CiDSrm38WK5Gadf5i/CN5FANz+vxv4Wtdl0FPURj617bOMXm0OtfMkjdgAu+YrG6/G
+         z+fCU+Ho8MM4yxv19xi97+paDg6d17MCXpUiclFqEN1I8hOvndcOPKSdCrjHPtT9DQXz
+         TN5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684403637; x=1686995637;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ToOy6SsrGe7zKTu/1dnhsnfvtx8a3k0NpeaGTGEdvcw=;
+        b=LCa7JXb35JfEhztbRevMJc/yq2SIChSuy/Nu3iQsk4SBdv2LdG75c3swN7ClQhjf60
+         SqhlP7V+W5/t1XSVNi6Y9cCil30GiO8mstXVoEMeeDhMWKKqg0WKD70KjxKHOY8MIJ4J
+         U3wGa8E5xRyNIudNt4j7GRSLMAdphkChCfPV0z5tZzpKrrT2Gc0Nm9C39QoFpxnuXhWQ
+         /F9qEDpaB+LNO0d1Jl3ShPwN/gkj0mzhi/g9RZmw6zuzRqqy1OlxnElcwkSU0u6aeeeD
+         Yf7NJk9PzzOGB9aV0uaObB1Qe96fT9Lt8a6i+skdmzD1fHANB4fbqngUfVl3GfGm1jim
+         cIJg==
+X-Gm-Message-State: AC+VfDy4eWaFDnuKVQPVcHH6G6EvuGvtPloxEdvO+eCRWl03FLCESyhE
+        R6NRGnh6kPYgm4p7HLRNuzwmEA==
+X-Google-Smtp-Source: ACHHUZ67kxU3de0WUF+4JciTkr/dX619CKjiOJxgCBiKnXnKL0LGhFvAk3UEiqDl+nRVs/mcY5VA0Q==
+X-Received: by 2002:a17:902:f7c6:b0:1ae:5d55:3bc3 with SMTP id h6-20020a170902f7c600b001ae5d553bc3mr1928476plw.48.1684403637276;
+        Thu, 18 May 2023 02:53:57 -0700 (PDT)
+Received: from leoy-yangtze.lan ([156.59.236.115])
+        by smtp.gmail.com with ESMTPSA id q20-20020a170902e31400b001ae5d21f760sm981151plc.146.2023.05.18.02.53.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 May 2023 02:53:56 -0700 (PDT)
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Leo Yan <leo.yan@linaro.org>
+Subject: [PATCH] MAINTAINERS: Remove myself as a Arm CoreSight reviewer
+Date:   Thu, 18 May 2023 17:53:45 +0800
+Message-Id: <20230518095345.1755105-1-leo.yan@linaro.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1347186.1684403608.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date:   Thu, 18 May 2023 10:53:28 +0100
-Message-ID: <1347187.1684403608@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Paolo Abeni <pabeni@redhat.com> wrote:
+I haven't done any meaningful work for a long while on Arm CoreSight and
+it's unlikely I'll be able to do related work in the future.
 
-> Minor nit: please respect the reverse x-mas tree order (there are a few
-> other occurrences around)
+Remove myself from the Arm CoreSight "Reviewers" list.
 
-I hadn't come across that.  Normally I only apply that to the types so tha=
-t
-the names aren't all over the place.  But whatever.
-
-> > +		if (space =3D=3D 0 &&
-> > +		    !skb_can_coalesce(skb, skb_shinfo(skb)->nr_frags,
-> > +				      pages[0], off)) {
-> > +			iov_iter_revert(iter, len);
-> > +			break;
-> > +		}
-> =
-
-> It looks like the above condition/checks duplicate what the later
-> skb_append_pagefrags() will perform below. I guess the above chunk
-> could be removed?
-
-Good point.  There used to be an allocation between in the case sendpage_o=
-k()
-failed and we wanted to copy the data.  I've removed that for the moment.
-
-> > +			ret =3D -EIO;
-> > +			if (!sendpage_ok(page))
-> > +				goto out;
-> =
-
-> My (limited) understanding is that the current sendpage code assumes
-> that the caller provides/uses pages suitable for such use. The existing
-> sendpage_ok() check is in place as way to try to catch possible code
-> bug - via the WARN_ONCE().
->
-> I think the same could be done here?
-
-Yeah.
-
-Okay, I made the attached changes to this patch.
-
-David
+Signed-off-by: Leo Yan <leo.yan@linaro.org>
 ---
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 56d629ea2f3d..f4a5b51aed22 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -6923,10 +6923,10 @@ static void skb_splice_csum_page(struct sk_buff *s=
-kb, struct page *page,
- ssize_t skb_splice_from_iter(struct sk_buff *skb, struct iov_iter *iter,
- 			     ssize_t maxsize, gfp_t gfp)
- {
-+	size_t frag_limit =3D READ_ONCE(sysctl_max_skb_frags);
- 	struct page *pages[8], **ppages =3D pages;
--	unsigned int i;
- 	ssize_t spliced =3D 0, ret =3D 0;
--	size_t frag_limit =3D READ_ONCE(sysctl_max_skb_frags);
-+	unsigned int i;
- =
+ MAINTAINERS | 1 -
+ 1 file changed, 1 deletion(-)
 
- 	while (iter->count > 0) {
- 		ssize_t space, nr;
-@@ -6946,20 +6946,13 @@ ssize_t skb_splice_from_iter(struct sk_buff *skb, =
-struct iov_iter *iter,
- 			break;
- 		}
- =
-
--		if (space =3D=3D 0 &&
--		    !skb_can_coalesce(skb, skb_shinfo(skb)->nr_frags,
--				      pages[0], off)) {
--			iov_iter_revert(iter, len);
--			break;
--		}
--
- 		i =3D 0;
- 		do {
- 			struct page *page =3D pages[i++];
- 			size_t part =3D min_t(size_t, PAGE_SIZE - off, len);
- =
-
- 			ret =3D -EIO;
--			if (!sendpage_ok(page))
-+			if (WARN_ON_ONCE(!sendpage_ok(page)))
- 				goto out;
- =
-
- 			ret =3D skb_append_pagefrags(skb, page, off, part,
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e0ad886d3163..342b8a3e19e3 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2102,7 +2102,6 @@ N:	digicolor
+ ARM/CORESIGHT FRAMEWORK AND DRIVERS
+ M:	Suzuki K Poulose <suzuki.poulose@arm.com>
+ R:	Mike Leach <mike.leach@linaro.org>
+-R:	Leo Yan <leo.yan@linaro.org>
+ L:	coresight@lists.linaro.org (moderated for non-subscribers)
+ L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+ S:	Maintained
+-- 
+2.39.2
 
