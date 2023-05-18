@@ -2,198 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF02F7080C5
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 14:09:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C0837080CF
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 14:11:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231345AbjERMJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 08:09:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52482 "EHLO
+        id S231202AbjERML1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 08:11:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231202AbjERMJc (ORCPT
+        with ESMTP id S231520AbjERMLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 08:09:32 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864C611B
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 05:09:29 -0700 (PDT)
-Received: (Authenticated sender: alex@ghiti.fr)
-        by mail.gandi.net (Postfix) with ESMTPSA id E57E9FF802;
-        Thu, 18 May 2023 12:09:24 +0000 (UTC)
-Message-ID: <fe8d716c-fb4f-1f3f-6c69-de1d8b9fb6af@ghiti.fr>
-Date:   Thu, 18 May 2023 14:09:24 +0200
+        Thu, 18 May 2023 08:11:22 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9A6194
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 05:11:20 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-510d8b0169fso2302422a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 05:11:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684411879; x=1687003879;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eH9Ti4nAq2PZgm6qot+MzQ9siimF1sxRnPpGSpCfOHw=;
+        b=RIBUXrHljuk/rLgpBNTWH/Wt8Vy6eMUK63vu12NMpC4cJ4FN3M5zi2onk/Iw4KYhTm
+         rP6J/j+yirrlO7lqfR9kv8QcE6GGAl+awJPjixU/XDrx15/r2MwInelsa9xHk4rmNgdm
+         FkEzMSUQ1ThUjutqAJMyHrka/ytAY3JXhVk154ofb26rEF6/U7+vVyEKUcDnGTYI8K1J
+         ojFx4daCGQQ0jcEKzcZ6chAV0qZgdIEzptZFV6Lx8YGo3mOF6k5AgQwOyxoXRmDUhjU5
+         EELFbj+tOxCM0gMyJP42SzyfUSUTaVu1OE8Y2Ol4jr2DKBoti/8WHo0oi95I0BihnWwS
+         HnFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684411879; x=1687003879;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eH9Ti4nAq2PZgm6qot+MzQ9siimF1sxRnPpGSpCfOHw=;
+        b=I3OvMKyV4w0fBEbkAc6pwl8ZSOfTAQR0HAqkjuMzC+bOENACIUBmOaDEjY+YpID6L7
+         /bRymXey8GI9TcS0VJ4f6YLPo9LH5i11aWu25m6qwG2jiqEYp6W5yZU+bNvdgAdVlwcD
+         4o1i+NfnSlQCMoWlPCuTFkJu/H/wi4axo8z4PkUDBusDG9FuQZSne+e1kIyeHiCS7jT0
+         2lYAck4sh8xK2hynl781GNd9iwj7evVJ4xpUZmM93XBIQL9x/YwaktPsc0KHM7Z5XvfE
+         HOmen+86AJvNIR1LGFEaU9GeMeVKuMJ+adwwa9cjiBMyurLL2H7JojnVuDSyU3YAeFaM
+         +rWA==
+X-Gm-Message-State: AC+VfDwsZB8x51nZBIoLC61pyUpR4U1IR97FMlOfbdiN+tPIt7AsowvS
+        ppSj/Hb4P8lSdMi1LIDL6aBvWQ==
+X-Google-Smtp-Source: ACHHUZ4c7pZWy3fky9l24pA71DBgsX/CNygp+rtQGgH6TvGPQbJhspz40DPl1raunNLanz3NzAeP1w==
+X-Received: by 2002:a05:6402:b21:b0:510:d9c8:f180 with SMTP id bo1-20020a0564020b2100b00510d9c8f180mr3745398edb.21.1684411879096;
+        Thu, 18 May 2023 05:11:19 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:a2b:c408:5834:f48e? ([2a02:810d:15c0:828:a2b:c408:5834:f48e])
+        by smtp.gmail.com with ESMTPSA id j14-20020aa7ca4e000000b00510b5051f95sm508499edt.90.2023.05.18.05.11.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 May 2023 05:11:18 -0700 (PDT)
+Message-ID: <53288f73-8271-9572-14b9-27fa34e2c9fc@linaro.org>
+Date:   Thu, 18 May 2023 14:11:17 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: Bug report: kernel paniced when system hibernates
-To:     Anup Patel <anup@brainfault.org>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Song Shuai <suagrfillet@gmail.com>, robh@kernel.org,
-        Andrew Jones <ajones@ventanamicro.com>, palmer@rivosinc.com,
-        jeeheng.sia@starfivetech.com, leyfoon.tan@starfivetech.com,
-        mason.huo@starfivetech.com,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Guo Ren <guoren@kernel.org>, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <CAAYs2=gQvkhTeioMmqRDVGjdtNF_vhB+vm_1dHJxPNi75YDQ_Q@mail.gmail.com>
- <CAHVXubgse4Lw7ucg52FkQW4c=QrNo56BXsRZ_nkCHAAPxUXUig@mail.gmail.com>
- <CAHVXubj92O_dwGShOJgrYezqk2pA2NtFyhNFbAPyhn7=PztK6Q@mail.gmail.com>
- <20230517-preacher-primer-f41020b3376a@wendy>
- <CAHVXubhMLgb54_7zV2yFuGPoMKCkUXwozHbDvghc7kQqNLK-JA@mail.gmail.com>
- <CAAhSdy3tKAk1xjinwnSWan0ivdDapcLvSb+hGNynPFZMUsoB9A@mail.gmail.com>
+Subject: Re: [PATCH v5 5/5] dt-bindings: clocks: at91sam9x5-sckc: convert to
+ yaml
 Content-Language: en-US
-From:   Alexandre Ghiti <alex@ghiti.fr>
-In-Reply-To: <CAAhSdy3tKAk1xjinwnSWan0ivdDapcLvSb+hGNynPFZMUsoB9A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+To:     Claudiu.Beznea@microchip.com
+Cc:     robh+dt@kernel.org, alexandre.belloni@bootlin.com,
+        linux-kernel@vger.kernel.org, sboyd@kernel.org,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Nicolas.Ferre@microchip.com, krzysztof.kozlowski+dt@linaro.org,
+        Conor.Dooley@microchip.com, mturquette@baylibre.com,
+        devicetree@vger.kernel.org
+References: <20230517094119.2894220-1-claudiu.beznea@microchip.com>
+ <20230517094119.2894220-6-claudiu.beznea@microchip.com>
+ <20230517141508.evb6jg5bcpjzhqve@krzk-bin>
+ <79b77cb4-1e18-3c19-15dd-66951541abdf@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <79b77cb4-1e18-3c19-15dd-66951541abdf@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/18/23 08:53, Anup Patel wrote:
-> On Wed, May 17, 2023 at 8:26 PM Alexandre Ghiti <alexghiti@rivosinc.com> wrote:
->> On Wed, May 17, 2023 at 1:28 PM Conor Dooley <conor.dooley@microchip.com> wrote:
->>> Hey Alex,
->>>
->>> On Wed, May 17, 2023 at 10:58:02AM +0200, Alexandre Ghiti wrote:
->>>> On Tue, May 16, 2023 at 1:12 PM Alexandre Ghiti <alexghiti@rivosinc.com> wrote:
->>>>> On Tue, May 16, 2023 at 11:24 AM Song Shuai <suagrfillet@gmail.com> wrote:
->>>>> I actually removed this flag a few years ago, and I have to admit that
->>>>> I need to check if that's necessary: the goal of commit 3335068f8721
->>>>> ("riscv: Use PUD/P4D/PGD pages for the linear mapping") is to expose
->>>>> the "right" start of DRAM so that we can align virtual and physical
->>>>> addresses on a 1GB boundary.
->>>>>
->>>>> So I have to check if a nomap region is actually added as a
->>>>> memblock.memory.regions[] or not: if yes, that's perfect, let's add
->>>>> the nomap attributes to the PMP regions, otherwise, I don't think that
->>>>> is a good solution.
->>>> So here is the current linear mapping without nomap in openSBI:
->>>>
->>>> ---[ Linear mapping ]---
->>>> 0xff60000000000000-0xff60000000200000    0x0000000080000000         2M
->>>> PMD     D A G . . W R V
->>>> 0xff60000000200000-0xff60000000e00000    0x0000000080200000        12M
->>>> PMD     D A G . . . R V
->>>>
->>>> And below the linear mapping with nomap in openSBI:
->>>>
->>>> ---[ Linear mapping ]---
->>>> 0xff60000000080000-0xff60000000200000    0x0000000080080000      1536K
->>>> PTE     D A G . . W R V
->>>> 0xff60000000200000-0xff60000000e00000    0x0000000080200000        12M
->>>> PMD     D A G . . . R V
->>>>
->>>> So adding nomap does not misalign virtual and physical addresses, it
->>>> prevents the usage of 1GB page for this area though, so that's a
->>>> solution, we just lose this 1GB page here.
->>>>
->>>> But even though that may be the fix, I think we also need to fix that
->>>> in the kernel as it would break compatibility with certain versions of
->>>> openSBI *if* we fix openSBI...So here are a few solutions:
->>>>
->>>> 1. we can mark all "mmode_resv" nodes in the device tree as nomap,
->>>> before the linear mapping is established (IIUC, those nodes are added
->>>> by openSBI to advertise PMP regions)
->>>>      -> This amounts to the same fix as opensbi and we lose the 1GB hugepage.
->>> AFAIU, losing the 1 GB hugepage is a regression, which would make this
->>> not an option, right?
->> Not sure this is a real regression, I'd rather avoid it, but as
->> mentioned in my first answer, Mike Rapoport showed that it was making
->> no difference performance-wise...
+On 18/05/2023 10:31, Claudiu.Beznea@microchip.com wrote:
+> On 17.05.2023 17:15, Krzysztof Kozlowski wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
 >>
->>>> 2. we can tweak pfn_is_nosave function to *not* save pfn corresponding
->>>> to PMP regions
->>>>      -> We don't lose the 1GB hugepage \o/
->>>> 3. we can use register_nosave_region() to not save the "mmode_resv"
->>>> regions (x86 does that
->>>> https://elixir.bootlin.com/linux/v6.4-rc1/source/arch/x86/kernel/e820.c#L753)
->>>>      -> We don't lose the 1GB hugepage \o/
->>>> 4. Given JeeHeng pointer to
->>>> https://elixir.bootlin.com/linux/v6.4-rc1/source/kernel/power/snapshot.c#L1340,
->>>> we can mark those pages as non-readable and make the hibernation
->>>> process not save those pages
->>>>      -> Very late-in-the-day idea, not sure what it's worth, we also
->>>> lose the 1GB hugepage...
->>> Ditto here re: introducing another regression.
+>> On Wed, 17 May 2023 12:41:19 +0300, Claudiu Beznea wrote:
+>>> Convert Atmel slow clock controller documentation to yaml.
 >>>
->>>> To me, the best solution is 3 as it would prepare for other similar
->>>> issues later, it is similar to x86 and it allows us to keep 1GB
->>>> hugepages.
->>>>
->>>> I have been thinking, and to me nomap does not provide anything since
->>>> the kernel should not address this memory range, so if it does, we
->>>> must fix the kernel.
->>>>
->>>> Let me know what you all think, I'll be preparing a PoC of 3 in the meantime!
->>> #3 would probably get my vote too. It seems like you could use it
->>> dynamically if there was to be a future other provider of "mmode_resv"
->>> regions, rather than doing something location-specific.
+>>> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+>>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>> ---
+>>>  .../devicetree/bindings/clock/at91-clock.txt  | 30 --------
+>>>  .../bindings/clock/atmel,at91sam9x5-sckc.yaml | 70 +++++++++++++++++++
+>>>  2 files changed, 70 insertions(+), 30 deletions(-)
+>>>  delete mode 100644 Documentation/devicetree/bindings/clock/at91-clock.txt
+>>>  create mode 100644 Documentation/devicetree/bindings/clock/atmel,at91sam9x5-sckc.yaml
 >>>
->>> We should probably document these opensbi reserved memory nodes though
->>> in a dt-binding or w/e if we are going to be relying on them to not
->>> crash!
-> Depending on a particular node name is fragile. If we really need
-> information from DT then I suggest adding "no-save-restore" DT
-> property in reserved memory nodes.
-
-
-I understand your point, the node name is the only thing I found that 
-would work with current opensbi: any other idea what we could use instead?
-
-
->> Yes, you're right, let's see what Atish and Anup think!
-> I think we have two possible approaches:
->
-> 1) Update OpenSBI to set "no-map" DT property for firmware
->      reserved regions. We were doing this previously but removed
->      it later for performance reasons mentioned by Alex. It is also
->      worth mentioning that ARM Trusted Firmware also sets "no-map"
->      DT property for firmware reserved regions.
->
-> 2) Add a new "no-save-restore" DT property in the reserved
->      memory DT bindings. The hibernate support of Linux arch/riscv
->      will use this DT property to exclude memory regions from
->      save-restore. The EFI implementation of EDK2 and U-Boot
->      should do the following:
->      1) Treat all memory having "no-map" DT property as EFI
->          reserved memory
->      2) Treat all memory not having "no-map" DT property and
->          not having "no-save-restore" DT property as EfiBootServicesData
->      3) Treat all memory not having "no-map" DT property and
->           having "no-save-restore" DT property as EfiRuntimeServiceData
->           (Refer,
-> https://devicetree-specification.readthedocs.io/en/latest/chapter3-devicenodes.html#reserved-memory-and-uefi)
->
-> Personally, I am leaning towards approach#1 since approach#2
-> will require changing DeviceTree specification as well.
-
-
-If needed, indeed #1 is the simplest, but I insist, to me it is not 
-needed (and we don't have it in the current opensbi), if you have 
-another opinion, I'm open to discuss it!
-
-Thanks for your quick answer Anup,
-
-Alex
-
-
->
-> Regards,
-> Anup
->
->> Thanks for your quick answers Conor and Song, really appreciated!
 >>
->> Alex
+>> Running 'make dtbs_check' with the schema in this patch gives the
+>> following warnings. Consider if they are expected or the schema is
+>> incorrect. These may not be new warnings.
 >>
->>> Thanks for working on this,
->>> Conor.
->>>
-> _______________________________________________
-> linux-riscv mailing list
-> linux-riscv@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-riscv
+>> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
+>> This will change in the future.
+>>
+>> Full log is available here: https://patchwork.ozlabs.org/patch/1782586
+>>
+>>
+>> sckc@fffffe50: '#clock-cells' is a required property
+>>         arch/arm/boot/dts/at91sam9n12ek.dtb
+>>
+>> sckc@fffffe50: 'clocks' is a required property
+>>         arch/arm/boot/dts/at91sam9n12ek.dtb
+>>
+>> sckc@fffffe50: 'slck', 'slow_osc', 'slow_rc_osc' do not match any of the regexes: 'pinctrl-[0-9]+'
+>>         arch/arm/boot/dts/at91sam9n12ek.dtb
+> 
+> Is it possible that this has been checked on a wrong base? I'm asking this
+> because:
+> - patch 3/5 in this series uses proper bindings for slow clock controller
+>   on at91sam9n12.dtsi (which includes #clock-cells and clocks bindings and
+>   removes slck, slow_osc, slow_rc_osc)
+> - patch 4/5 in this series does s/sckc@/clock-controller@/ in all AT91
+>   device trees.
+
+Yes, it is quite likely. It's up to you to investigate it or ignore if
+you are sure report is a false positive.
+
+> 
+> Moreover, I've re-checked all the individual dtsi files that describes a
+> slow clock controller and all descriptions has the "#clock-cells", "clocks"
+> property available and no slck, slow_osc, slow_rc_osc as childs of
+> sckc@fffffe50.
+> 
+> If not, could you please let me know your checker command?
+
+
+make dbts_check
+
+Best regards,
+Krzysztof
+
