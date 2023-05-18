@@ -2,126 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDBE7708549
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 17:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 600F270854F
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 17:49:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231948AbjERPrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 11:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34122 "EHLO
+        id S231519AbjERPtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 11:49:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231845AbjERPrI (ORCPT
+        with ESMTP id S230351AbjERPtM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 11:47:08 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 880A6135
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 08:47:07 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f4449fa085so14078425e9.0
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 08:47:07 -0700 (PDT)
+        Thu, 18 May 2023 11:49:12 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779EF194
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 08:49:09 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id d75a77b69052e-3f4fc2a4622so12743661cf.1
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 08:49:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684424827; x=1687016827;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1684424948; x=1687016948;
+        h=in-reply-to:content-disposition:mime-version:references:reply-to
+         :message-id:subject:cc:to:from:date:sender:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yEZKMKV3a30xjKrkkWxSisXiqQtt0sbU7lcbWPA7pl4=;
-        b=nleAiPCGTsiSqeXbC+uTlkoBeZpbHGS9vCgo5sq4Naz8KDLyD7RB40k9BHL9XLDQ9t
-         9oyDpy+g2sd39bOGg4YljSFV59hiqTX0wNNqjhN0KWXGPvVn2Mc7ue7HGcEz0G1H0px+
-         fKcS0ycFSf7rDjTvd7GUu+zpxODCjjiGd0i8negXwzcAxZHvGlgX92InvgpRYlVaQ3ls
-         HBvk7pvcef/z2QNT/Ynfi1QU3oVK3wbaoZXbnrA0cs9QzDITQcDSB/uoIRB4r57l/YtC
-         Fx1/wZMcRzwAgmpw7W7YVBPn83pJdb2OmeoMzjLChZMHmL33n85/XDNGbhSgyJC6y1HG
-         73Uw==
+        bh=W9K3/dcfFhDlfOWF8AkzlrJ8hrxfd6jNyjEB/GmUE5Q=;
+        b=YfTn2g43JVOGPLwFFhKdK2bacXhwDh/DAdp8+QJJR+ZHfTJWN4huXk9JSzsDnaIZ1W
+         fgztgmaNiYfoxyguskt5F/bEXPM3jRitCaEZCtEKuptATfSTmZ1BPm97oB2O9ychg9p/
+         kNVOhhvksDL/pFYmNVObFTgcerxfBohxuoqiveauCgSTo/7gAhvumCX+geIMZ7hD0NxJ
+         +oWdxfhw4F5dwswstiywCjJ5Mvv4mCNYHOIeCX1KBcziHh18SvR0sisBj74eMMDvWW+h
+         JQ4Fkqk6HLIWeCnQs//1RyY1q9fwt5+ssua5AvRr4jb3xlwdVTfE93BET3hhW7rmGC31
+         OOgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684424827; x=1687016827;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yEZKMKV3a30xjKrkkWxSisXiqQtt0sbU7lcbWPA7pl4=;
-        b=X8BcUbsKgKZVqEJv6CN4FoWx50Tc7fLqmbtrElctrLnt5QjhKZijZjljidbiMInNyI
-         +4v5H3aO/mk3wo4ypAPJ7Xjx4U1s7aenv35E8ZqS7mYEok98BMBCuM+QZtwXciVOzcW1
-         qFdUhX+EzuD6GtRCY8//K6wdAtznwtOPGDnxOQISFjtyOcXArqzfHYsNk1V9k6fVIO3B
-         KkmBtXeLHuHUTCmM1Sb23fHxb4DaNhy7Wy+GeIsXJ0TUGpFQXL5pxvfazqE/D3UwOaJb
-         818IURfl7S5aNaIf5EDCA5aUNGidrQJ0YmCmDBGH6Td9HMOIfS6DWDT62kRzstO6a1oB
-         dwBw==
-X-Gm-Message-State: AC+VfDzxNelouCM7R7HIEODTPUHYPFEH3V4oxo2qy+ofRNYlDeIhu41G
-        afZt7PBLSoj+CPYlJMeETsdnLOIIhg==
-X-Google-Smtp-Source: ACHHUZ7GUP+yca5L+6C1h7qrEeCjJZctko8yoihfj0SZaxAhHNsojfHnQfANkhuKysOHHNYj9Zo21A==
-X-Received: by 2002:a1c:f413:0:b0:3f4:298b:d925 with SMTP id z19-20020a1cf413000000b003f4298bd925mr1540626wma.41.1684424826922;
-        Thu, 18 May 2023 08:47:06 -0700 (PDT)
-Received: from p183.Dlink ([46.53.250.37])
-        by smtp.gmail.com with ESMTPSA id h2-20020a1ccc02000000b003f421979398sm5671769wmb.26.2023.05.18.08.47.06
+        d=1e100.net; s=20221208; t=1684424948; x=1687016948;
+        h=in-reply-to:content-disposition:mime-version:references:reply-to
+         :message-id:subject:cc:to:from:date:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=W9K3/dcfFhDlfOWF8AkzlrJ8hrxfd6jNyjEB/GmUE5Q=;
+        b=WG2UJypN8Kk+xbTx+wHQlBOKECua9C2wJdk6VR8draMDkaSpoRChAszrBylVHSvz5P
+         5MhZG20roKUQARy4ibsfr/Yf0Mc7Udt1HPq5fwI1TkJtna0BPVBhJrF0ic3H203u+wzi
+         1j5LFhW/6Bof7tgP4f8plSucW9lCTOtgCqwnpmhqd0P0B1QIccM7x7DF3qsbiJ9oYETx
+         UI4Lx4gK/IsTHd616fXEAJrqewfuCYfHvhDyNusrFehj28FeLRNHgF/zkSAhw4dMxiiJ
+         i1B+wzmTu7zWx2eYDW9g04URSh73KI0oZuKbrk4iBN9ZGVKFTHCOzvDc7aH6NRA1i4zV
+         FbKw==
+X-Gm-Message-State: AC+VfDy4bu0k03Ok4MtUGKlAmnQFA3OV5LjXr5VvJI+3IKKG2UpF43hB
+        l5nRGtSjZwS/pQ1vxVhycw==
+X-Google-Smtp-Source: ACHHUZ4N8VCB5dzCwyT9oJkzaWVOkoXAy5WTOrLHGtdGgIyJBPzbJ/dGs32bnXEi5d/+Svmq7WxFxg==
+X-Received: by 2002:a05:622a:312:b0:3f0:a108:8630 with SMTP id q18-20020a05622a031200b003f0a1088630mr163505qtw.39.1684424948287;
+        Thu, 18 May 2023 08:49:08 -0700 (PDT)
+Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
+        by smtp.gmail.com with ESMTPSA id o9-20020a05620a110900b0074dfd9283afsm472565qkk.79.2023.05.18.08.49.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 08:47:06 -0700 (PDT)
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, adobriyan@gmail.com
-Subject: [PATCH 7/8] auto: promote DIV_S64_ROUND_CLOSEST macro to function
-Date:   Thu, 18 May 2023 18:46:48 +0300
-Message-Id: <20230518154648.581643-7-adobriyan@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230518154648.581643-1-adobriyan@gmail.com>
-References: <20230518154648.581643-1-adobriyan@gmail.com>
+        Thu, 18 May 2023 08:49:07 -0700 (PDT)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from mail.minyard.net (unknown [IPv6:2001:470:b8f6:1b:9fd5:7d6d:b75c:c88d])
+        by serve.minyard.net (Postfix) with ESMTPSA id EC4EF1800B8;
+        Thu, 18 May 2023 15:49:05 +0000 (UTC)
+Date:   Thu, 18 May 2023 10:49:04 -0500
+From:   Corey Minyard <minyard@acm.org>
+To:     Yu Chen <chen.yu@easystack.cn>
+Cc:     openipmi-developer@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] watchdog: Avoid 100% CPU usage during reading watchdog
+ when a task get signal
+Message-ID: <ZGZI8Mdb7eoq9VCE@mail.minyard.net>
+Reply-To: minyard@acm.org
+References: <20230515121941.59859-1-chen.yu@easystack.cn>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230515121941.59859-1-chen.yu@easystack.cn>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-so that people don't use "auto" in it.
+On Mon, May 15, 2023 at 05:19:41AM -0700, Yu Chen wrote:
+> A simple reproducer demonstrating the problem: (use ipmi_watchdog.ko)
+> 
+> In one terminal:
+> 
+> $ cat /dev/watchdog
+> ...
+> 
+> In another terminal:
+> 
+> $ ps -aux | grep cat
+> 14755 pts/1    R+    43:00 cat /dev/watchdog
+> 51943 pts/2    S+     0:00 grep --color=auto cat
+> 
+> $ kill -9 14755
+> $
+> $ cat /proc/14755/status | grep SigPnd
+> SigPnd: 0000000000000100
+> $
+> $ top
+> 
+> Tasks: 1049 total,   2 running, 1047 sleeping,   0 stopped,   0 zombie
+> %Cpu(s): 0.0 us, 1.0 sy, 0.0 ni, 98.9 id, 0.0 wa, 0.0 hi, 0.0 si, 0.0 st
+> MiB Mem : 522594.8 total, 517241.4 free,  2922.1 used,   2431.2 buff/cache
+> MiB Swap:      0.0 total,      0.0 free,     0.0 used. 516589.2 avail Mem
+> 
+> PID USER    PR  NI    VIRT    RES    SHR S  %CPU  %MEM  TIME+ COMMAND
+> 14755 root  20   0  215552   1024    576 R 100.0  0.0  0:15.12 cat
+> 53417 root  20   0  224960   7040   3648 R   0.7  0.0  0:00.10 top
+> 11 root     20   0       0      0      0 I   0.3  0.0  0:02.85 rcu_sched
+> 1772 root   20   0  512256 387776 380800 S   0.3  0.1  0:32.05 python
+> 
+> We can see that when the cat process gets the signal, the CPU usage
+> is 100%, Since signal_pending is true, the pick_next_task function
+> in schedule always returns itself, it retries schedule indefinitely.
+> ipmi_read() will busyloop.
+> 
+> Signed-off-by: Yu Chen <chen.yu@easystack.cn>
+> ---
+>  drivers/char/ipmi/ipmi_watchdog.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/char/ipmi/ipmi_watchdog.c b/drivers/char/ipmi/ipmi_watchdog.c
+> index 0d4a8dcac..173ed4266 100644
+> --- a/drivers/char/ipmi/ipmi_watchdog.c
+> +++ b/drivers/char/ipmi/ipmi_watchdog.c
+> @@ -803,6 +803,11 @@ static ssize_t ipmi_read(struct file *file,
+>  		init_waitqueue_entry(&wait, current);
+>  		add_wait_queue(&read_q, &wait);
+>  		while (!data_to_read) {
+> +			if (signal_pending(current)) {
+> +				remove_wait_queue(&read_q, &wait);
+> +				rv = -ERESTARTSYS;
+> +				goto out;
+> +			}
 
-Both arguments are cast to specific types so it's OK to move them
-to function arguments:
+This skips the call to remove_from_wait_queue(), which is bad.  I
+already have a fix for this from someone else.
 
-	s64 __x = (dividend);
-	s32 __d = (divisor);
+-corey
 
-Delete useless () while I'm at it.
-
-Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
----
- include/linux/math64.h | 21 ++++++++++-----------
- 1 file changed, 10 insertions(+), 11 deletions(-)
-
-diff --git a/include/linux/math64.h b/include/linux/math64.h
-index 3ab235c8a94c..7ecae251b0f4 100644
---- a/include/linux/math64.h
-+++ b/include/linux/math64.h
-@@ -335,21 +335,20 @@ static inline u64 DIV_U64_ROUND_CLOSEST(u64 dividend, u32 divisor)
- 
- /**
-  * DIV_S64_ROUND_CLOSEST - signed 64bit divide with 32bit divisor rounded to nearest integer
-- * @dividend: signed 64bit dividend
-- * @divisor: signed 32bit divisor
-+ * @x: signed 64bit dividend
-+ * @d: signed 32bit divisor
-  *
-  * Divide signed 64bit dividend by signed 32bit divisor
-  * and round to closest integer.
-  *
-  * Return: dividend / divisor rounded to nearest integer
-  */
--#define DIV_S64_ROUND_CLOSEST(dividend, divisor)(	\
--{							\
--	s64 __x = (dividend);				\
--	s32 __d = (divisor);				\
--	((__x > 0) == (__d > 0)) ?			\
--		div_s64((__x + (__d / 2)), __d) :	\
--		div_s64((__x - (__d / 2)), __d);	\
--}							\
--)
-+static inline s64 DIV_S64_ROUND_CLOSEST(s64 x, s32 d)
-+{
-+	if ((x > 0) == (d > 0)) {
-+		return div_s64(x + d / 2, d);
-+	} else {
-+		return div_s64(x - d / 2, d);
-+	}
-+}
- #endif /* _LINUX_MATH64_H */
--- 
-2.40.1
-
+>  			set_current_state(TASK_INTERRUPTIBLE);
+>  			spin_unlock_irq(&ipmi_read_lock);
+>  			schedule();
+> @@ -810,10 +815,6 @@ static ssize_t ipmi_read(struct file *file,
+>  		}
+>  		remove_wait_queue(&read_q, &wait);
+>  
+> -		if (signal_pending(current)) {
+> -			rv = -ERESTARTSYS;
+> -			goto out;
+> -		}
+>  	}
+>  	data_to_read = 0;
+>  
+> -- 
+> 2.27.0
+> 
