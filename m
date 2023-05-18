@@ -2,126 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1839F708719
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 19:45:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5090770871A
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 19:45:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbjERRot (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 13:44:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37376 "EHLO
+        id S229661AbjERRpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 13:45:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjERRor (ORCPT
+        with ESMTP id S229519AbjERRpL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 13:44:47 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1923F125;
-        Thu, 18 May 2023 10:44:45 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34IHi8Jg022615;
-        Thu, 18 May 2023 17:44:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=XN/efluNpdD7oFCNKGVzmjWSLe6zK8LpE/QIj1srQnk=;
- b=PAZsoRNevtUKnQ2QXLYeN9c+eB7eV7G3VvQtXPakwMXnL/CqEWaJj9imMo9zFYjHfXJL
- 1hMfAgiT6tvH8DQ3l1QdPs101jCgI+t2TbIOdGndhoLuzjYPqzOF4jo5wa5ytv4wzbRN
- QC4M+qH73qXPVjMvCJW/HbKH5+reTU0Md57chL7iegn9r9S+SQwcXEevioRJ0lqgW4y5
- fDLgSAGzoUfruewUIEbGJghaHdILSvFWWbzgL2hircADs4F2qtC5Vdpns1phpyVVVDU+
- hatDOZfbCPlzxO5uBowu2vscsglQK5WO3VYpCAgHct2sLOVPSo0q2ffMrHUpckrQwZeo sA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qncbhsrqx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 May 2023 17:44:41 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34IHieVc013385
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 May 2023 17:44:40 GMT
-Received: from [10.216.41.71] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 18 May
- 2023 10:44:32 -0700
-Message-ID: <4f6cd977-45cf-c673-1a1f-99de177cabb1@quicinc.com>
-Date:   Thu, 18 May 2023 23:14:29 +0530
+        Thu, 18 May 2023 13:45:11 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B29E7C;
+        Thu, 18 May 2023 10:45:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684431910; x=1715967910;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=su2wUu0tkaocZZy2M3phiogxIKayXtt5EEs7IofWPF4=;
+  b=byxFPgW4T1UOX7AtUZeMVQCBbNrPOGb+lfGBt4e6tKdS+En4NksQHduy
+   m1AKbaion1ROsymjONuwJgWn7u4oxgUm4YCD9953CQwZizN4Uf8tuM8Pk
+   QnxYUz8Vli4B/JgGqEpExCU0vuigAMsF26W2eJCaxWXEoBNIeKqYbJtbc
+   G06gxyyMCYRMTdwQQsbnyUlStNA5Mvtr1Wqy5GnIIlNXMDmQluSHoOVvJ
+   phUUoZU+wm9LYQbghQMF2UZ7hr2b7m6qV+FcG2jcWizxxalHgntXMAeu9
+   uYN80ymPBsfD1sxVnAR5YycNlOU5zAOoUSpLlsuWRCnb+8pbYBL4ghGSk
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="438484665"
+X-IronPort-AV: E=Sophos;i="6.00,174,1681196400"; 
+   d="scan'208";a="438484665"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 10:45:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="792061366"
+X-IronPort-AV: E=Sophos;i="6.00,174,1681196400"; 
+   d="scan'208";a="792061366"
+Received: from linux.intel.com ([10.54.29.200])
+  by FMSMGA003.fm.intel.com with ESMTP; 18 May 2023 10:45:08 -0700
+Received: from [10.209.99.208] (kliang2-mobl1.ccr.corp.intel.com [10.209.99.208])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 552255808EF;
+        Thu, 18 May 2023 10:45:07 -0700 (PDT)
+Message-ID: <9178149c-45e8-3de4-58db-b8b8d27b3a08@linux.intel.com>
+Date:   Thu, 18 May 2023 13:45:06 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH 07/11] mailbox: qcom-apcs-ipc: Add IPQ5018 APCS IPC
- support
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v1 1/2] perf test attr: Update no event/metric
+ expectations
 Content-Language: en-US
-To:     Kathiravan T <quic_kathirav@quicinc.com>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <jassisinghbrar@gmail.com>, <mathieu.poirier@linaro.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <quic_gurus@quicinc.com>, <loic.poulain@linaro.org>,
-        <quic_eberman@quicinc.com>, <robimarko@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_arajkuma@quicinc.com>,
-        <quic_anusha@quicinc.com>, <quic_poovendh@quicinc.com>
-References: <1678164097-13247-1-git-send-email-quic_mmanikan@quicinc.com>
- <1678164097-13247-8-git-send-email-quic_mmanikan@quicinc.com>
- <eee85f26-722c-08ae-8e41-6bd087df58a8@quicinc.com>
-From:   Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
-In-Reply-To: <eee85f26-722c-08ae-8e41-6bd087df58a8@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: eSS-9z6bbetwKiMwRmXm_GEO0oc_eC8k
-X-Proofpoint-ORIG-GUID: eSS-9z6bbetwKiMwRmXm_GEO0oc_eC8k
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-18_13,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- lowpriorityscore=0 bulkscore=0 phishscore=0 adultscore=0
- priorityscore=1501 suspectscore=0 clxscore=1015 impostorscore=0 mlxscore=0
- malwarescore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2305180144
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230517225707.2682235-1-irogers@google.com>
+ <64f329a9-09a3-aa84-a354-23a919062d09@arm.com> <ZGYYJ/biKyeFNJjL@kernel.org>
+ <f753beda-2d5e-c391-520a-450b186fd4d4@linux.intel.com>
+In-Reply-To: <f753beda-2d5e-c391-520a-450b186fd4d4@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Arnaldo,
 
-
-On 3/7/2023 11:37 AM, Kathiravan T wrote:
-> 
-> On 3/7/2023 10:11 AM, Manikanta Mylavarapu wrote:
->> Enable IPQ5018 APCS IPC support by adding the compatible.
+On 2023-05-18 8:55 a.m., Liang, Kan wrote:
+> On 2023-05-18 8:20 a.m., Arnaldo Carvalho de Melo wrote:
+>> Em Thu, May 18, 2023 at 08:50:14AM +0100, James Clark escreveu:
+>>>
+>>> On 17/05/2023 23:57, Ian Rogers wrote:
+>>>> Previously hard coded events/metrics were used, update for the use of
+>>>> the TopdownL1 json metric group.
+>>>>
+>>>> Fixes: 94b1a603fca7 ("perf stat: Add TopdownL1 metric as a default if present")
+>>>> Signed-off-by: Ian Rogers <irogers@google.com>
+>>>> ---
+>>>>  tools/perf/tests/attr/base-stat            |   2 +-
+>>>>  tools/perf/tests/attr/test-stat-default    |  80 ++++++++-----
+>>>>  tools/perf/tests/attr/test-stat-detailed-1 |  95 +++++++++------
+>>>>  tools/perf/tests/attr/test-stat-detailed-2 | 119 +++++++++++--------
+>>>>  tools/perf/tests/attr/test-stat-detailed-3 | 127 ++++++++++++---------
+>>>>  5 files changed, 249 insertions(+), 174 deletions(-)
+>>>>
+>>> Reviewed-by: James Clark <james.clark@arm.com>
+>> Thanks, applied both patches to perf-tools.
 >>
->> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
->> ---
->>   drivers/mailbox/qcom-apcs-ipc-mailbox.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/mailbox/qcom-apcs-ipc-mailbox.c 
->> b/drivers/mailbox/qcom-apcs-ipc-mailbox.c
->> index 6bbf87c6d60b..0b873c76fd7e 100644
->> --- a/drivers/mailbox/qcom-apcs-ipc-mailbox.c
->> +++ b/drivers/mailbox/qcom-apcs-ipc-mailbox.c
->> @@ -141,6 +141,7 @@ static int qcom_apcs_ipc_remove(struct 
->> platform_device *pdev)
->>   /* .data is the offset of the ipc register within the global block */
->>   static const struct of_device_id qcom_apcs_ipc_of_match[] = {
->> +    { .compatible = "qcom,ipq5018-apcs-apps-global", .data = 
->> &ipq6018_apcs_data },
-> 
-> With the bindings updated, you can drop this patch.
-> 
-> Thanks, Kathiravan T.
-> 
+> Could you please hold patch 1 for a while?
 
-Sure, I will drop this patch.
+Sorry for the noise.
 
-Thanks & Regards,
-Manikanta.
+Ian has addressed my concerns. The patch looks good to me now.
+It also fixes a "Failed" on my Cascade Lake machine.
+
+Tested-by: Kan Liang <kan.liang@linux.intel.com>
+
+But for long term, we probably need a better solution to avoid keeping
+adding such non-architectural events in the test case.
+
+Thanks,
+Kan
