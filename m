@@ -2,154 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 365CB707D38
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:49:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDEB8707D3F
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:50:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbjERJtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 05:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33958 "EHLO
+        id S230304AbjERJu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 05:50:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbjERJtB (ORCPT
+        with ESMTP id S229915AbjERJuY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 05:49:01 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CF31723
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 02:48:59 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f004cc54f4so2227842e87.3
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 02:48:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684403337; x=1686995337;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2GnXEaoNLwvt/m9XpCMVWbr8cKI+gCa0zAel8TKE3gk=;
-        b=zHVieKgJXSOVBnyFh9W/eerTNjThyX64e1V7drkdNjoyMATIznYS26qilMUR+55LCu
-         sY74p+3d5lorxyJ2NJvT1fGC64nlXxzdR4zIwMj+1wbFGqueg+A5eVlChMWd2K23Lq29
-         NxF6IolN7lU2s6YT7JnVXFoIuXU901m2ah1S1nL5T6va5QKxrWnQGrEDUq060L6Iod12
-         tU9YYBV+cur5WpIE2DFlvZdcd8W9HnTwHA056AgoVuOTpwgAU36H9NgreRsabEqLTU4P
-         xIPXlW6qlOpX8s+JutTZSqxWC4LEUD0SxNg1clHhZKuOT7ZFnZnoLmJsvcFymyHkj/Mk
-         5MyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684403337; x=1686995337;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2GnXEaoNLwvt/m9XpCMVWbr8cKI+gCa0zAel8TKE3gk=;
-        b=kJmrL+E7lu7wAsRv192lkUhrpppDsxF9bzBQcjQoxng3Fy631K2jI2hGFh4h2zg5x8
-         1Xn/y31rlBH1MFPdVvR1pmmJ/m159ZylvBtryJFotxdkH218xmrevdQt/rYN7/1HESIL
-         B2fuDANMaLJlsD5cq6gvjZzKg4k/nTic2cp1aQID1I3Vr4nhdjzzN9nt+3MtH0310DDj
-         TuK5VjFoKFEm97rMPs7KVRHZIfsarEWWvUwxORM2HzPiYYt//1+H55t76mqUZJSLO8AM
-         7j9ClTjs/2dVPj/dyIjhXaFykWuEMJZfii9czfKPMSiGhsS6UkZEyHzAjAcEc426dUmW
-         FgQg==
-X-Gm-Message-State: AC+VfDxwJ9/rPsHiZg12NPS6Fkc2EiQ6FPoI3THqVlQmsYDh+9hKY7ES
-        IiK+nnXnXJQGcLOV/klUMfLFUw==
-X-Google-Smtp-Source: ACHHUZ5YnvtT2zZVHIWpogOnglFbkJr/gASlvlkb6WiG6tTP6XhEF7LQQz/4XpZ4BBnsC7mdCqwieQ==
-X-Received: by 2002:ac2:550f:0:b0:4f3:8244:95e2 with SMTP id j15-20020ac2550f000000b004f3824495e2mr1159314lfk.50.1684403337377;
-        Thu, 18 May 2023 02:48:57 -0700 (PDT)
-Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
-        by smtp.gmail.com with ESMTPSA id a15-20020a056512020f00b004ecad67a925sm196303lfo.66.2023.05.18.02.48.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 May 2023 02:48:56 -0700 (PDT)
-Message-ID: <2875f7ef-c43e-74f6-12b9-342bb2cfbaf8@linaro.org>
-Date:   Thu, 18 May 2023 11:48:55 +0200
+        Thu, 18 May 2023 05:50:24 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006A410E9;
+        Thu, 18 May 2023 02:50:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684403424; x=1715939424;
+  h=message-id:date:mime-version:from:subject:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=rPagqShIA0d1pTwUICG1O4W8vWxt4pVZ7r9/3WRbX4A=;
+  b=eBP4kPMBOY6b/KedoTQhaCTpwZEDCtWRUa5ohdljD4Ylc4vZwrhSg2im
+   4Sif/8dLdSWXXG1pesXX4/kw0r7asBnDHak7xoFEt5Cxlxd8Igm1fpPNG
+   zyABCI3kGSfblzTABvVj/eb8EKacZdzPklp6OmN1Nghr55fJeUhQ4dVnI
+   ep6FCILMUDEj3gRe0vld96vwZsxSYIl9zW4SvoGIzOe6nQuhQGQ9l+c0Z
+   6QfLFxddgRcAOGP4Tnfxp5Ffxbv3cGoB5gM2ix4yjUk6UzQVoRRMgZA4V
+   c5fX64/hkilk3Mg97+rw046Lp5mVQktr2Eh0UzvW3HgVc3Q1H6qnbn8ST
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="332392008"
+X-IronPort-AV: E=Sophos;i="5.99,285,1677571200"; 
+   d="scan'208";a="332392008"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 02:50:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="652575062"
+X-IronPort-AV: E=Sophos;i="5.99,285,1677571200"; 
+   d="scan'208";a="652575062"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.254.211.142]) ([10.254.211.142])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 02:50:20 -0700
+Message-ID: <d9be9385-4101-2e9e-c6d7-1d980697c02f@intel.com>
+Date:   Thu, 18 May 2023 17:50:17 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] mmc: sdhci-msm: Disable broken 64-bit DMA on MSM8916
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.1
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+Subject: Re: [RFC PATCH v2 02/11] KVM: x86: Advertise CPUID.7.2.EDX and
+ RRSBA_CTRL support
+To:     Chao Gao <chao.gao@intel.com>
+Cc:     kvm@vger.kernel.org, Jiaan Lu <jiaan.lu@intel.com>,
+        Zhang Chen <chen.zhang@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
+References: <20230414062545.270178-1-chao.gao@intel.com>
+ <20230414062545.270178-3-chao.gao@intel.com>
+ <a88b2504-b79b-83d6-383e-a948f9da662b@intel.com>
+ <ZGLkvlx5W0JStTjD@chao-email>
+ <9c75663c-6363-34e7-8341-d8f719365768@intel.com>
+ <ZGLyEhKH+MoCY/R4@chao-email>
+ <11b515b3-bb5a-bea1-ad01-caffdd151bf6@intel.com>
+ <ZGNIN7O8BErVP88x@chao-email>
 Content-Language: en-US
-To:     Stephan Gerhold <stephan@gerhold.net>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230518-msm8916-64bit-v1-1-5694b0f35211@gerhold.net>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230518-msm8916-64bit-v1-1-5694b0f35211@gerhold.net>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <ZGNIN7O8BErVP88x@chao-email>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 5/16/2023 5:09 PM, Chao Gao wrote:
+> On Tue, May 16, 2023 at 03:03:15PM +0800, Xiaoyao Li wrote:
+>> On 5/16/2023 11:01 AM, Chao Gao wrote:
+>>> On Tue, May 16, 2023 at 10:22:22AM +0800, Xiaoyao Li wrote:
+>>>>>> I think we need to fix this bug at first.
+>>>>>
+>>>>> I have no idea how to fix the "bug" without intercepting the MSR. The
+>>>>> performance penalty makes me think intercepting the MSR is not a viable
+>>>>> solution.
+>>>>
+>>>> I thought correctness always takes higher priority over performance.
+>>>
+>>> It is generally true. however, there are situations where we should make
+>>> trade-offs between correctness and other factors (like performance):
+>>>
+>>> E.g., instructions without control bits, to be 100% compliant with CPU
+>>> spec, in theory, VMMs can trap/decode every instruction and inject #UD
+>>> if a guest tries to use some instructions it shouldn't.
+>>
+>> This is the virtualization hole. IMHO, they are different things.
+> 
+> what are the differences between?
+> 1. Executing some unsupported instructions should cause #UD. But this is allowed
+>     in a KVM guest.
+> 2. Setting some reserved bits in SPEC_CTRL MSR should cause #GP. But this is
+>     allowed in a KVM guest.
 
+The difference is that for virtualization hole, there is no way but 
+intercept and decode every instruction if we want the correctness. It's 
+a disaster.
 
-On 18.05.2023 11:39, Stephan Gerhold wrote:
-> While SDHCI claims to support 64-bit DMA on MSM8916 it does not seem to
-> be properly functional. It is not immediately obvious because SDHCI is
-> usually used with IOMMU bypassed on this SoC, and all physical memory
-> has 32-bit addresses. But when trying to enable the IOMMU it quickly
-> fails with an error such as the following:
-> 
->   arm-smmu 1e00000.iommu: Unhandled context fault:
->     fsr=0x402, iova=0xfffff200, fsynr=0xe0000, cbfrsynra=0x140, cb=3
->   mmc1: ADMA error: 0x02000000
->   mmc1: sdhci: ============ SDHCI REGISTER DUMP ===========
->   mmc1: sdhci: Sys addr:  0x00000000 | Version:  0x00002e02
->   mmc1: sdhci: Blk size:  0x00000008 | Blk cnt:  0x00000000
->   mmc1: sdhci: Argument:  0x00000000 | Trn mode: 0x00000013
->   mmc1: sdhci: Present:   0x03f80206 | Host ctl: 0x00000019
->   mmc1: sdhci: Power:     0x0000000f | Blk gap:  0x00000000
->   mmc1: sdhci: Wake-up:   0x00000000 | Clock:    0x00000007
->   mmc1: sdhci: Timeout:   0x0000000a | Int stat: 0x00000001
->   mmc1: sdhci: Int enab:  0x03ff900b | Sig enab: 0x03ff100b
->   mmc1: sdhci: ACmd stat: 0x00000000 | Slot int: 0x00000000
->   mmc1: sdhci: Caps:      0x322dc8b2 | Caps_1:   0x00008007
->   mmc1: sdhci: Cmd:       0x0000333a | Max curr: 0x00000000
->   mmc1: sdhci: Resp[0]:   0x00000920 | Resp[1]:  0x5b590000
->   mmc1: sdhci: Resp[2]:   0xe6487f80 | Resp[3]:  0x0a404094
->   mmc1: sdhci: Host ctl2: 0x00000008
->   mmc1: sdhci: ADMA Err:  0x00000001 | ADMA Ptr: 0x0000000ffffff224
->   mmc1: sdhci_msm: ----------- VENDOR REGISTER DUMP -----------
->   mmc1: sdhci_msm: DLL sts: 0x00000000 | DLL cfg:  0x60006400 | DLL cfg2: 0x00000000
->   mmc1: sdhci_msm: DLL cfg3: 0x00000000 | DLL usr ctl:  0x00000000 | DDR cfg: 0x00000000
->   mmc1: sdhci_msm: Vndr func: 0x00018a9c | Vndr func2 : 0xf88018a8 Vndr func3: 0x00000000
->   mmc1: sdhci: ============================================
->   mmc1: sdhci: fffffffff200: DMA 0x0000ffffffffe100, LEN 0x0008, Attr=0x21
->   mmc1: sdhci: fffffffff20c: DMA 0x0000000000000000, LEN 0x0000, Attr=0x03
-> 
-> Looking closely it's obvious that only the 32-bit part of the address
-> (0xfffff200) arrives at the SMMU, the higher 16-bit (0xffff...) get
-> lost somewhere. This might not be a limitation of the SDHCI itself but
-> perhaps the bus/interconnect it is connected to, or even the connection
-> to the SMMU.
-> 
-> Work around this by setting SDHCI_QUIRK2_BROKEN_64_BIT_DMA to avoid
-> using 64-bit addresses.
-> 
-> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
-> ---
-Would using 64bit address translation not require you to use (dma-)ranges
-with a greater-than-default size, like we do on newer platforms? Did you
-test that by chance?
+But for MSR virtualization, we do have an option and we don't need to 
+trap every instruction. MSR interception is the designated mechanism to 
+correctly and elegantly virtualize the MSR.
 
-Konrad
->  drivers/mmc/host/sdhci-msm.c | 3 +++
->  1 file changed, 3 insertions(+)
+>>
+>> Pass through MSR_IA32_SPEC_CTRL was introduced in commit d28b387fb74d
+>> ("KVM/VMX: Allow direct access to MSR_IA32_SPEC_CTRL"). At that time there
+>> was only a few bits defined, and the changelog called out that
+>>
+>>   No attempt is made to handle STIBP here, intentionally. Filtering
+>>   STIBP may be added in a future patch, which may require trapping all
+>>   writes if we don't want to pass it through directly to the guest.
+>>
+>> Per my undesrstanding, it implied that we need to re-visit it when more bits
+>> added instead of following the pass-through design siliently.
 > 
-> diff --git a/drivers/mmc/host/sdhci-msm.c b/drivers/mmc/host/sdhci-msm.c
-> index 8ac81d57a3df..1877d583fe8c 100644
-> --- a/drivers/mmc/host/sdhci-msm.c
-> +++ b/drivers/mmc/host/sdhci-msm.c
-> @@ -2479,6 +2479,9 @@ static inline void sdhci_msm_get_of_property(struct platform_device *pdev,
->  		msm_host->ddr_config = DDR_CONFIG_POR_VAL;
->  
->  	of_property_read_u32(node, "qcom,dll-config", &msm_host->dll_config);
-> +
-> +	if (of_device_is_compatible(node, "qcom,msm8916-sdhci"))
-> +		host->quirks2 |= SDHCI_QUIRK2_BROKEN_64_BIT_DMA;
->  }
->  
->  static int sdhci_msm_gcc_reset(struct device *dev, struct sdhci_host *host)
+> I don't object to re-visiting the design. My point is that to prevent guests from
+> setting RRSBA_CTRL/BHI_CTRL when they are not advertised isn't a strong
+> justfication for intercepting the MSR. STIBP and other bits (except IBRS) have
+> the same problem. And the gain of fixing this is too small.
 > 
-> ---
-> base-commit: d4ebc9419afbac330e9ec0d2936108742aa4d97a
-> change-id: 20230518-msm8916-64bit-f5bcf6af7679
-> 
-> Best regards,
+> If passing through the SPEC_CTRL MSR to guests might cause security issues, I
+> would agree to intercept accesses to the MSR.
+
+I never buy it. How to interpret the security? If the user wants to hide 
+one feature from guest but KVM allows it when KVM does have a reasonable 
+way to hide it. Does it violate the security?
