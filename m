@@ -2,74 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A07B8708E7D
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 05:56:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6013E708E86
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 06:04:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229805AbjESD4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 23:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39920 "EHLO
+        id S229707AbjESEEJ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 19 May 2023 00:04:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbjESD4v (ORCPT
+        with ESMTP id S229489AbjESEEI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 23:56:51 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899CCE75;
-        Thu, 18 May 2023 20:56:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Gpsz6npDHVFSw1EWEqKvMH8wRk2QP4HwK8Cw+1qxftg=; b=QrpA83FpxqkZP75q4uAA4UsM5i
-        ZK5QFdf8ZlDSpIEgizQWJSPkNARkw1w1DcjwBX9Yy2ySEQ65c2IkAA5zMb5aOWPU2/piPiibT9MRI
-        QGGfa5Y6f62uV7f8A+tBx4kZK9yw/v4tQEJoHXRn2FKzYjL/xy5NVhbHM1SiFsbvKoQEPVxY4j8qP
-        Li5Vi2M1QkgNeI2wsl4JuTnE+6P5Kns3ky7xa6zELqMMD6H0ET0kPklo+tN01WI+vs/qD8tuiqcma
-        3hdMRtlUp22l6r+I8PDATLBMefocJNOkHrD/IhSMMwQ/zw6TJQLCT5yP2cqoZxP8MNlFvjsv4tTbo
-        OUJmdcuQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pzrEV-00Ezzp-1K;
-        Fri, 19 May 2023 03:56:47 +0000
-Date:   Thu, 18 May 2023 20:56:47 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Kelvin Cao <kelvin.cao@microchip.com>
-Cc:     vkoul@kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org, logang@deltatee.com,
-        george.ge@microchip.com, christophe.jaillet@wanadoo.fr,
-        hch@infradead.org
-Subject: Re: [PATCH v5 1/1] dmaengine: switchtec-dma: Introduce Switchtec DMA
- engine PCI driver
-Message-ID: <ZGbzf6G5OpK0mRXN@infradead.org>
-References: <20230518165920.897620-1-kelvin.cao@microchip.com>
- <20230518165920.897620-2-kelvin.cao@microchip.com>
+        Fri, 19 May 2023 00:04:08 -0400
+Received: from mail.saludzona6.gob.ec (mail.saludzona6.gob.ec [191.100.30.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05BAA10DF
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 21:04:06 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.saludzona6.gob.ec (Postfix) with ESMTP id 3531024C47DA;
+        Thu, 18 May 2023 23:01:42 -0500 (-05)
+Received: from mail.saludzona6.gob.ec ([127.0.0.1])
+        by localhost (mail.saludzona6.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id Qj1j0LJpuEp5; Thu, 18 May 2023 23:01:41 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.saludzona6.gob.ec (Postfix) with ESMTP id EDEAB24C258D;
+        Thu, 18 May 2023 22:54:59 -0500 (-05)
+X-Virus-Scanned: amavisd-new at saludzona6.gob.ec
+Received: from mail.saludzona6.gob.ec ([127.0.0.1])
+        by localhost (mail.saludzona6.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id cx2EdFIOr_Qa; Thu, 18 May 2023 22:54:59 -0500 (-05)
+Received: from [23.146.243.48] (unknown [23.146.243.48])
+        by mail.saludzona6.gob.ec (Postfix) with ESMTPSA id 22B3035A15E4;
+        Thu, 18 May 2023 05:13:48 -0500 (-05)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230518165920.897620-2-kelvin.cao@microchip.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: =?utf-8?q?Verificaci=C3=B3n_/_Actualizaci=C3=B3n?=
+To:     Recipients <maria.marin@saludzona6.gob.ec>
+From:   "@zimbra " <maria.marin@saludzona6.gob.ec>
+Date:   Thu, 18 May 2023 06:13:40 -0700
+Reply-To: webmasterzimbra1@gmail.com
+Message-Id: <20230518101349.22B3035A15E4@mail.saludzona6.gob.ec>
+X-yoursite-MailScanner: Found to be clean, Found to be clean
+X-yoursite-MailScanner-Information: Please contact the ISP for more information
+X-yoursite-MailScanner-ID: EDEAB24C258D.A4E13
+X-yoursite-MailScanner-From: maria.marin@saludzona6.gob.ec
+X-Spam-Status: No, score=2.3 required=5.0 tests=BAYES_20,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +/*
-> + * Use vender/device and class to identify the DMA function.
-> + */
-> +#define SWITCHTEC_DMA_DEVICE(device_id) \
+Su cuenta no ha pasado por el proceso de verificación / actualización. Los titulares de cuentas deben actualizar sus cuentas dentro de los 5 días hábiles posteriores a la recepción de este aviso. El incumplimiento de este aviso dentro de la fecha límite puede no ser capaz de enviar o recibir todos los mensajes y el propietario correrá el riesgo de perder su cuenta.
 
-I'd word this as:
+Confirme los detalles de la cuenta a continuación.
+_____________________________________
+1. Nombre y apellido:
+2. Correo electrónico completo en:
+3. Nombre de usuario:
+4. Contraseña:
+5. Vuelva a escribir la contraseña:
+_____________________________________
+ 
+NOTA !!! Si no actualiza su cuenta, su cuenta se eliminará automáticamente de nuestro sistema.
+ 
+Nos disculpamos por cualquier inconveniente causado.
+ 
+Sinceramente
+Atención al cliente
+Equipo de soporte técnico de Zimbra.
+ 
+Copyright © 2005-2023 Synacor, Inc. Todos los derechos reservados
 
-/*
- * Also use the class code to identify the devices, as some of the
- * device IDs are also used for other devices with other classes by
- * Microsemi.
- */
+-- 
+This message has been scanned for viruses and
+dangerous content by MailScanner, and is
+believed to be clean.
 
-to emphasis on why this macro even exists.
-
-Otherwise looks good:
-
-Reviewed-by: Christoph Hellwig <hch@lst.de>
