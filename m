@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C311B7086FE
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 19:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3898F7086FF
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 19:33:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbjERRdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 13:33:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32952 "EHLO
+        id S229888AbjERRdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 13:33:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbjERRd0 (ORCPT
+        with ESMTP id S229887AbjERRd2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 13:33:26 -0400
+        Thu, 18 May 2023 13:33:28 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DC01BF
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 10:33:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E7E10C1
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 10:33:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 20C6C65146
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 17:33:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58464C433D2;
-        Thu, 18 May 2023 17:33:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 260F36514F
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 17:33:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE560C433A1;
+        Thu, 18 May 2023 17:33:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684431204;
-        bh=O7NzANsucBQTK8Jy2JnxxwlTMprkBLa749VfrRkMdRI=;
+        s=k20201202; t=1684431206;
+        bh=8g604RQtGDYqVxRbodA1GNAzcaFUInIXvN/XS2wjnMQ=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Sfxz2DfG8apxlBN5LVVguKLk1pqhvDzMvvYS3mKO7zgrq0G0+qHEhDMOOc5Pp1e11
-         CBnogkOxMZxWzF7d+omVe9/g4fVoIdvtfpDC5Kl2rzCRAUPfYefQzLG7/TwIm4uWlj
-         A9sUwAsY9N/Cd7fMV7SLr04iMSqiX8A6vmy5xm2JVWMSpzMUDOgW16cqXU8RDyfXld
-         QhtLtfx7yw25sMsg9KXpfvn+zq27UKASBGe2sMKHYgoRriKLRxwYG2lxPRb4c82Pc7
-         ZhMFpE7H9+G8OSrktnWj1EVN6eeW5UadGSmLRx2Rm8RPDzOgP76alnm/iaAnXgvIHy
-         KpHdnV/68xcWQ==
+        b=IbQt+C8i2MSKRx23a6Y5VDsVm/DahgJApeFIijPhY0TIs9nIt4MnDfyEQ4gfXVHNC
+         V3tIw0HKx6WN8oeKORJHszstQHcsYej9unu9tcSmbpQsdr3MZoE7dwEDqdnFrjvVtZ
+         sVzN7tqmiAyv0HCbNwas8uTQa6R+0KNjL+2x6waEGifw776DT8BonXMsNdvSAY/N65
+         y70BIPcHMihq5kMVDOgqbhuaM+9kWt7/gcRJFMgp2NI9NTNoYqrk1OkVlIHj3zv6fs
+         AUddRshKbXEf7wyBbOzl4coUOOEahDUh/Pxm7o4DxLZNqDOWwtarY3yEklEfNr9jYY
+         pPxsfezlPBdnA==
 From:   Mark Brown <broonie@kernel.org>
-To:     Axel Lin <axel.lin@ingics.com>
-Cc:     =?utf-8?q?M=C3=A5rten_Lindahl?= <marten.lindahl@axis.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230516082333.466429-1-axel.lin@ingics.com>
-References: <20230516082333.466429-1-axel.lin@ingics.com>
-Subject: Re: [PATCH] regulator: tps6287x: Fix missing .n_voltages setting
-Message-Id: <168443120315.483131.2571327595680974458.b4-ty@kernel.org>
-Date:   Fri, 19 May 2023 02:33:23 +0900
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Sen Chu <sen.chu@mediatek.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+In-Reply-To: <20230518040646.8730-1-sen.chu@mediatek.com>
+References: <20230518040646.8730-1-sen.chu@mediatek.com>
+Subject: Re: [PATCH v2] regulator: mt6359: add read check for PMIC MT6359
+Message-Id: <168443120482.483131.18246545493507680908.b4-ty@kernel.org>
+Date:   Fri, 19 May 2023 02:33:24 +0900
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -56,8 +59,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 May 2023 16:23:33 +0800, Axel Lin wrote:
-> Otherwise, regulator_list_voltage() will return -EINVAL.
+On Thu, 18 May 2023 12:06:46 +0800, Sen Chu wrote:
+> Add hardware version read check for PMIC MT6359
 > 
 > 
 
@@ -67,8 +70,8 @@ Applied to
 
 Thanks!
 
-[1/1] regulator: tps6287x: Fix missing .n_voltages setting
-      commit: 15a1cd245d5b3cc6cf42ca9ceacf9a6dfc2e33b4
+[1/1] regulator: mt6359: add read check for PMIC MT6359
+      commit: a511637502b1caa135046d0f8fdabd55a31af8ef
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
