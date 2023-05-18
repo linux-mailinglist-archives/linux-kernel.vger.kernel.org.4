@@ -2,56 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9269670869F
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 19:20:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D0F67086A3
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 19:21:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbjERRU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 13:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50972 "EHLO
+        id S229881AbjERRVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 13:21:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbjERRU1 (ORCPT
+        with ESMTP id S229879AbjERRU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 13:20:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B587DE47
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 10:20:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 510876510D
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 17:20:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65487C433D2;
-        Thu, 18 May 2023 17:20:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684430424;
-        bh=DLOKbaMrOU5RlLa2tug+EkZRejY+0mDEJnMAV7PKXrQ=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=g4X4S+mjiN/yX1Ba9+Hw7K7Nmv84tLINKt6/W4jYQi78l+FOFc3Zk5g3l82TVMgM8
-         t2pnhMGmHA/jbnT5rVE68YlFUpjLBtbDiUXxliDtHsGncOmP8zZEJ+YyY8fsbO/c24
-         vuFLK72XDvoBCwuqyOTW/zowtTQcoks/BpsDDhJwT3fAkHwVhY77dCIlu1eF4F2BUe
-         XvLQ7CB9gURpCv8EYNcSxu7yPCZEvHUpat4xowYquWaelcy6kxC8d2b8QBd6Z/6ZQu
-         Tqm+lNw8yc9awZYTNKQaTqkZETYQfVDv++GkuFrpmc2M4+cM4VHamcDov/46wKlW72
-         pwV/fyNbLA/NQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Oder Chiou <oder_chiou@realtek.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230518072753.7361-1-krzysztof.kozlowski@linaro.org>
-References: <20230518072753.7361-1-krzysztof.kozlowski@linaro.org>
-Subject: Re: [RESEND PATCH 00/12] ASoC: codecs: do not store status in
- state containe
-Message-Id: <168443042102.472592.16533029797391259590.b4-ty@kernel.org>
-Date:   Fri, 19 May 2023 02:20:21 +0900
+        Thu, 18 May 2023 13:20:59 -0400
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6842110EA
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 10:20:41 -0700 (PDT)
+Received: by mail-il1-x132.google.com with SMTP id e9e14a558f8ab-331430faba8so6126235ab.3
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 10:20:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684430440; x=1687022440;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vVSxvlh7OV4WgJkuSWdWlAS0yxwMUwbwpza12fN3Oyo=;
+        b=eF4DxBhYcEzv/5dxQgfJJTfByYgKaFzDnWDv+j5fXUL0ox1dRJxp3J/LPL2pmGbMgd
+         nPCH2I9zZHm8vHxIq0gaBkHk0yHXKGY7B6Qi17oT57TdU3xaBqh5tq81TNZ7qC444io3
+         +ZRGPUCG+66O/7lyE7CXeS5J5Rwnd6FcMiOSk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684430440; x=1687022440;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vVSxvlh7OV4WgJkuSWdWlAS0yxwMUwbwpza12fN3Oyo=;
+        b=ZV0KxnYg6LsDUVuYZSwLSdGheM/njIXboXc0ChYg28Lf1tAD/s9/5IMaA1ZfFFsCzQ
+         Fgj2GxyiIt5/l/fFn6zYK2wEVOjZL1JgNJjrBYLQc/6bpsUSuBaN3BGbbqRiJkIRJT5Z
+         iAkgXqL9iFCpeY9O4aTW/WwLdexx60elHh+i9am13U+2qqrQNd+epavcCr/QoiVGybHW
+         avL1FMWxnv0kZjqOcAM2jK1LAsWrAg4D7QNcoBwc5/qjRP5cMFH8PSDIj1MBRnhAwvAC
+         6i2Iku+MNW3+hlJUTiQsrOUoFVcQSxjvobgTf4ZoRU/rhWs4BqGAuWafKVnKWjOMeJ3z
+         h+2g==
+X-Gm-Message-State: AC+VfDwOGAYQx4howQ9uPsTbX40qxrIeqlIsavk1dhW9d7uImac54VSp
+        CHHrVNh3JJOAzrBz9l3I6+oiA/V687Ky8dJWhc4fvQ==
+X-Google-Smtp-Source: ACHHUZ7BIfeS7AouCi74LtqEssczjpT7ICfhIRrBGjk8mAi/bXVB8gNf3yDX1HvrnQLoJq/kzufNAQ==
+X-Received: by 2002:a92:c150:0:b0:329:5a6e:3a18 with SMTP id b16-20020a92c150000000b003295a6e3a18mr4248855ilh.4.1684430440398;
+        Thu, 18 May 2023 10:20:40 -0700 (PDT)
+Received: from google.com (h24-56-189-219.arvdco.broadband.dynamic.tds.net. [24.56.189.219])
+        by smtp.gmail.com with ESMTPSA id d99-20020a0285ec000000b0040fc2eebb90sm564556jai.171.2023.05.18.10.20.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 May 2023 10:20:40 -0700 (PDT)
+Date:   Thu, 18 May 2023 11:20:38 -0600
+From:   Raul E Rangel <rrangel@chromium.org>
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/7] Input: libps2 - attach ps2dev instances as serio
+ port's drvdata
+Message-ID: <ZGZeZt8C8YzQLAdz@google.com>
+References: <20230511185252.386941-1-dmitry.torokhov@gmail.com>
+ <20230511185252.386941-2-dmitry.torokhov@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-bfdf5
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230511185252.386941-2-dmitry.torokhov@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,64 +69,336 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 18 May 2023 09:27:41 +0200, Krzysztof Kozlowski wrote:
-> Resend due to missing cover letter, so adding per-series tags was
-> not possible.
+On Thu, May 11, 2023 at 11:52:41AM -0700, Dmitry Torokhov wrote:
+> In preparation of having unified interrupt handler for PS/2 devices,
+> instead of attaching instances of psmouse and atkbd structures as serio's
+> driver data, switch to attaching ps2dev instances.
 > 
-> Added Rb tag.
+> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+> ---
+>  drivers/input/keyboard/atkbd.c     | 23 +++++++++++++-------
+>  drivers/input/mouse/psmouse-base.c | 35 +++++++++++++++++-------------
+>  drivers/input/mouse/psmouse.h      |  2 ++
+>  drivers/input/mouse/synaptics.c    | 10 ++++-----
+>  drivers/input/mouse/trackpoint.c   |  2 +-
+>  drivers/input/serio/libps2.c       |  1 +
+>  6 files changed, 44 insertions(+), 29 deletions(-)
 > 
-> Best regards,
-> Krzysztof
-> 
-> [...]
-
-Applied to
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-
-Thanks!
-
-[01/12] ASoC: codecs: rt1308: do not store status in state container
-        commit: cc3ff544a296b5b4bb021f4dc415b53a6955b980
-[02/12] ASoC: codecs: rt1316: do not store status in state container
-        commit: 70207b95b2245502496443475c9fc4eb72ba3b66
-[03/12] ASoC: codecs: rt1318: do not store status in state container
-        commit: 28eb1e4224c3b3ff29fe4c29bcdc011d3a0ffd07
-[04/12] ASoC: codecs: rt5682: do not store status in state container
-        commit: 758665b15acc1adb21a833c6456746ffbce07ed7
-[05/12] ASoC: codecs: rt700: do not store status in state container
-        commit: 9564c9f691128bc2dc69de02f7eed205d9b2513f
-[06/12] ASoC: codecs: rt711-sdca: do not store status in state container
-        commit: 8322947e9228ef7f8c3dd13822d32c491f9488e7
-[07/12] ASoC: codecs: rt711: do not store status in state container
-        commit: 22e15c18b4a91c71bf66de06187b8a3199bb8cad
-[08/12] ASoC: codecs: rt712-sdca-dmic: do not store status in state container
-        commit: d7a79616fc723305094fd7391085428b7a893636
-[09/12] ASoC: codecs: rt712-sdca: do not store status in state container
-        commit: 5cd02f96f49a7e6d2f8b96ddc42092776b554873
-[10/12] ASoC: codecs: rt715-sdca: do not store status in state container
-        commit: cda72c89d082f5953fab9948fc1212ca0df11d96
-[11/12] ASoC: codecs: rt715: do not store status in state container
-        commit: 0315dac5406c9c0b8e334195aa01c4ec155adf47
-[12/12] ASoC: codecs: rt722-sdca: do not store status in state container
-        commit: b932f21f6678659bd434c0d47e3bebc94bae0a51
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+> diff --git a/drivers/input/keyboard/atkbd.c b/drivers/input/keyboard/atkbd.c
+> index 246958795f60..2fb2ad73e796 100644
+> --- a/drivers/input/keyboard/atkbd.c
+> +++ b/drivers/input/keyboard/atkbd.c
+> @@ -309,12 +309,19 @@ static ssize_t atkbd_show_function_row_physmap(struct atkbd *atkbd, char *buf)
+>  	return vivaldi_function_row_physmap_show(&atkbd->vdata, buf);
+>  }
+>  
+> +static struct atkbd *atkbd_from_serio(struct serio *serio)
+> +{
+> +	struct ps2dev *ps2dev = serio_get_drvdata(serio);
+> +
+> +	return container_of(ps2dev, struct atkbd, ps2dev);
+> +}
+> +
+>  static umode_t atkbd_attr_is_visible(struct kobject *kobj,
+>  				struct attribute *attr, int i)
+>  {
+>  	struct device *dev = kobj_to_dev(kobj);
+>  	struct serio *serio = to_serio_port(dev);
+> -	struct atkbd *atkbd = serio_get_drvdata(serio);
+> +	struct atkbd *atkbd = atkbd_from_serio(serio);
+>  
+>  	if (attr == &atkbd_attr_function_row_physmap.attr &&
+>  	    !atkbd->vdata.num_function_row_keys)
+> @@ -399,7 +406,7 @@ static unsigned int atkbd_compat_scancode(struct atkbd *atkbd, unsigned int code
+>  static irqreturn_t atkbd_interrupt(struct serio *serio, unsigned char data,
+>  				   unsigned int flags)
+>  {
+> -	struct atkbd *atkbd = serio_get_drvdata(serio);
+> +	struct atkbd *atkbd = atkbd_from_serio(serio);
+>  	struct input_dev *dev = atkbd->dev;
+>  	unsigned int code = data;
+>  	int scroll = 0, hscroll = 0, click = -1;
+> @@ -909,7 +916,7 @@ static int atkbd_reset_state(struct atkbd *atkbd)
+>  
+>  static void atkbd_cleanup(struct serio *serio)
+>  {
+> -	struct atkbd *atkbd = serio_get_drvdata(serio);
+> +	struct atkbd *atkbd = atkbd_from_serio(serio);
+>  
+>  	atkbd_disable(atkbd);
+>  	ps2_command(&atkbd->ps2dev, NULL, ATKBD_CMD_RESET_DEF);
+> @@ -922,7 +929,7 @@ static void atkbd_cleanup(struct serio *serio)
+>  
+>  static void atkbd_disconnect(struct serio *serio)
+>  {
+> -	struct atkbd *atkbd = serio_get_drvdata(serio);
+> +	struct atkbd *atkbd = atkbd_from_serio(serio);
+>  
+>  	atkbd_disable(atkbd);
+>  
+> @@ -1188,7 +1195,7 @@ static void atkbd_set_device_attrs(struct atkbd *atkbd)
+>  
+>  static void atkbd_parse_fwnode_data(struct serio *serio)
+>  {
+> -	struct atkbd *atkbd = serio_get_drvdata(serio);
+> +	struct atkbd *atkbd = atkbd_from_serio(serio);
+>  	struct device *dev = &serio->dev;
+>  	int n;
+>  
+> @@ -1295,7 +1302,7 @@ static int atkbd_connect(struct serio *serio, struct serio_driver *drv)
+>  
+>  static int atkbd_reconnect(struct serio *serio)
+>  {
+> -	struct atkbd *atkbd = serio_get_drvdata(serio);
+> +	struct atkbd *atkbd = atkbd_from_serio(serio);
+>  	struct serio_driver *drv = serio->drv;
+>  	int retval = -1;
+>  
+> @@ -1389,7 +1396,7 @@ static ssize_t atkbd_attr_show_helper(struct device *dev, char *buf,
+>  				ssize_t (*handler)(struct atkbd *, char *))
+>  {
+>  	struct serio *serio = to_serio_port(dev);
+> -	struct atkbd *atkbd = serio_get_drvdata(serio);
+> +	struct atkbd *atkbd = atkbd_from_serio(serio);
+>  
+>  	return handler(atkbd, buf);
+>  }
+> @@ -1398,7 +1405,7 @@ static ssize_t atkbd_attr_set_helper(struct device *dev, const char *buf, size_t
+>  				ssize_t (*handler)(struct atkbd *, const char *, size_t))
+>  {
+>  	struct serio *serio = to_serio_port(dev);
+> -	struct atkbd *atkbd = serio_get_drvdata(serio);
+> +	struct atkbd *atkbd = atkbd_from_serio(serio);
+>  	int retval;
+>  
+>  	retval = mutex_lock_interruptible(&atkbd->mutex);
+> diff --git a/drivers/input/mouse/psmouse-base.c b/drivers/input/mouse/psmouse-base.c
+> index c9a7e87b273e..ed5376099fba 100644
+> --- a/drivers/input/mouse/psmouse-base.c
+> +++ b/drivers/input/mouse/psmouse-base.c
+> @@ -116,6 +116,13 @@ static DEFINE_MUTEX(psmouse_mutex);
+>  
+>  static struct workqueue_struct *kpsmoused_wq;
+>  
+> +struct psmouse *psmouse_from_serio(struct serio *serio)
+> +{
+> +	struct ps2dev *ps2dev = serio_get_drvdata(serio);
+> +
+> +	return container_of(ps2dev, struct psmouse, ps2dev);
+> +}
+> +
+>  void psmouse_report_standard_buttons(struct input_dev *dev, u8 buttons)
+>  {
+>  	input_report_key(dev, BTN_LEFT,   buttons & BIT(0));
+> @@ -336,7 +343,7 @@ static void psmouse_handle_oob_data(struct psmouse *psmouse, u8 data)
+>  static irqreturn_t psmouse_interrupt(struct serio *serio,
+>  				     u8 data, unsigned int flags)
+>  {
+> -	struct psmouse *psmouse = serio_get_drvdata(serio);
+> +	struct psmouse *psmouse = psmouse_from_serio(serio);
+>  
+>  	if (psmouse->state == PSMOUSE_IGNORE)
+>  		goto out;
+> @@ -1344,7 +1351,7 @@ static void psmouse_resync(struct work_struct *work)
+>  		goto out;
+>  
+>  	if (serio->parent && serio->id.type == SERIO_PS_PSTHRU) {
+> -		parent = serio_get_drvdata(serio->parent);
+> +		parent = psmouse_from_serio(serio->parent);
+>  		psmouse_deactivate(parent);
+>  	}
+>  
+> @@ -1428,13 +1435,13 @@ static void psmouse_resync(struct work_struct *work)
+>   */
+>  static void psmouse_cleanup(struct serio *serio)
+>  {
+> -	struct psmouse *psmouse = serio_get_drvdata(serio);
+> +	struct psmouse *psmouse = psmouse_from_serio(serio);
+>  	struct psmouse *parent = NULL;
+>  
+>  	mutex_lock(&psmouse_mutex);
+>  
+>  	if (serio->parent && serio->id.type == SERIO_PS_PSTHRU) {
+> -		parent = serio_get_drvdata(serio->parent);
+> +		parent = psmouse_from_serio(serio->parent);
+>  		psmouse_deactivate(parent);
+>  	}
+>  
+> @@ -1476,7 +1483,7 @@ static void psmouse_cleanup(struct serio *serio)
+>   */
+>  static void psmouse_disconnect(struct serio *serio)
+>  {
+> -	struct psmouse *psmouse = serio_get_drvdata(serio);
+> +	struct psmouse *psmouse = psmouse_from_serio(serio);
+>  	struct psmouse *parent = NULL;
+>  
+>  	mutex_lock(&psmouse_mutex);
+> @@ -1489,7 +1496,7 @@ static void psmouse_disconnect(struct serio *serio)
+>  	mutex_lock(&psmouse_mutex);
+>  
+>  	if (serio->parent && serio->id.type == SERIO_PS_PSTHRU) {
+> -		parent = serio_get_drvdata(serio->parent);
+> +		parent = psmouse_from_serio(serio->parent);
+>  		psmouse_deactivate(parent);
+>  	}
+>  
+> @@ -1588,7 +1595,7 @@ static int psmouse_connect(struct serio *serio, struct serio_driver *drv)
+>  	 * connected to this port can be successfully identified
+>  	 */
+>  	if (serio->parent && serio->id.type == SERIO_PS_PSTHRU) {
+> -		parent = serio_get_drvdata(serio->parent);
+> +		parent = psmouse_from_serio(serio->parent);
+>  		psmouse_deactivate(parent);
+>  	}
+>  
+> @@ -1604,8 +1611,6 @@ static int psmouse_connect(struct serio *serio, struct serio_driver *drv)
+>  
+>  	psmouse_set_state(psmouse, PSMOUSE_INITIALIZING);
+>  
+> -	serio_set_drvdata(serio, psmouse);
+> -
+>  	error = serio_open(serio, drv);
+>  	if (error)
+>  		goto err_clear_drvdata;
+> @@ -1676,7 +1681,7 @@ static int psmouse_connect(struct serio *serio, struct serio_driver *drv)
+>  
+>  static int __psmouse_reconnect(struct serio *serio, bool fast_reconnect)
+>  {
+> -	struct psmouse *psmouse = serio_get_drvdata(serio);
+> +	struct psmouse *psmouse = psmouse_from_serio(serio);
+>  	struct psmouse *parent = NULL;
+>  	int (*reconnect_handler)(struct psmouse *);
+>  	enum psmouse_type type;
+> @@ -1695,7 +1700,7 @@ static int __psmouse_reconnect(struct serio *serio, bool fast_reconnect)
+>  	}
+>  
+>  	if (serio->parent && serio->id.type == SERIO_PS_PSTHRU) {
+> -		parent = serio_get_drvdata(serio->parent);
+> +		parent = psmouse_from_serio(serio->parent);
+>  		psmouse_deactivate(parent);
+>  	}
+>  
+> @@ -1794,7 +1799,7 @@ ssize_t psmouse_attr_show_helper(struct device *dev, struct device_attribute *de
+>  {
+>  	struct serio *serio = to_serio_port(dev);
+>  	struct psmouse_attribute *attr = to_psmouse_attr(devattr);
+> -	struct psmouse *psmouse = serio_get_drvdata(serio);
+> +	struct psmouse *psmouse = psmouse_from_serio(serio);
+>  
+>  	if (psmouse->protocol->smbus_companion &&
+>  			devattr != &psmouse_attr_protocol.dattr)
+> @@ -1815,7 +1820,7 @@ ssize_t psmouse_attr_set_helper(struct device *dev, struct device_attribute *dev
+>  	if (retval)
+>  		goto out;
+>  
+> -	psmouse = serio_get_drvdata(serio);
+> +	psmouse = psmouse_from_serio(serio);
+>  
+>  	if (psmouse->protocol->smbus_companion &&
+>  			devattr != &psmouse_attr_protocol.dattr) {
+> @@ -1830,7 +1835,7 @@ ssize_t psmouse_attr_set_helper(struct device *dev, struct device_attribute *dev
+>  		}
+>  
+>  		if (serio->parent && serio->id.type == SERIO_PS_PSTHRU) {
+> -			parent = serio_get_drvdata(serio->parent);
+> +			parent = psmouse_from_serio(serio->parent);
+>  			psmouse_deactivate(parent);
+>  		}
+>  
+> @@ -1925,7 +1930,7 @@ static ssize_t psmouse_attr_set_protocol(struct psmouse *psmouse, void *data, co
+>  	}
+>  
+>  	if (serio->parent && serio->id.type == SERIO_PS_PSTHRU) {
+> -		parent = serio_get_drvdata(serio->parent);
+> +		parent = psmouse_from_serio(serio->parent);
+>  		if (parent->pt_deactivate)
+>  			parent->pt_deactivate(parent);
+>  	}
+> diff --git a/drivers/input/mouse/psmouse.h b/drivers/input/mouse/psmouse.h
+> index 64c3a5d3fb3e..4d8acfe0d82a 100644
+> --- a/drivers/input/mouse/psmouse.h
+> +++ b/drivers/input/mouse/psmouse.h
+> @@ -130,6 +130,8 @@ struct psmouse {
+>  	void (*pt_deactivate)(struct psmouse *psmouse);
+>  };
+>  
+> +struct psmouse *psmouse_from_serio(struct serio *serio);
+> +
+>  void psmouse_queue_work(struct psmouse *psmouse, struct delayed_work *work,
+>  		unsigned long delay);
+>  int psmouse_reset(struct psmouse *psmouse);
+> diff --git a/drivers/input/mouse/synaptics.c b/drivers/input/mouse/synaptics.c
+> index fa021af8506e..ada299ec5bba 100644
+> --- a/drivers/input/mouse/synaptics.c
+> +++ b/drivers/input/mouse/synaptics.c
+> @@ -628,7 +628,7 @@ static void synaptics_set_rate(struct psmouse *psmouse, unsigned int rate)
+>   ****************************************************************************/
+>  static int synaptics_pt_write(struct serio *serio, u8 c)
+>  {
+> -	struct psmouse *parent = serio_get_drvdata(serio->parent);
+> +	struct psmouse *parent = psmouse_from_serio(serio->parent);
+>  	u8 rate_param = SYN_PS_CLIENT_CMD; /* indicates that we want pass-through port */
+>  	int error;
+>  
+> @@ -645,7 +645,7 @@ static int synaptics_pt_write(struct serio *serio, u8 c)
+>  
+>  static int synaptics_pt_start(struct serio *serio)
+>  {
+> -	struct psmouse *parent = serio_get_drvdata(serio->parent);
+> +	struct psmouse *parent = psmouse_from_serio(serio->parent);
+>  	struct synaptics_data *priv = parent->private;
+>  
+>  	serio_pause_rx(parent->ps2dev.serio);
+> @@ -657,7 +657,7 @@ static int synaptics_pt_start(struct serio *serio)
+>  
+>  static void synaptics_pt_stop(struct serio *serio)
+>  {
+> -	struct psmouse *parent = serio_get_drvdata(serio->parent);
+> +	struct psmouse *parent = psmouse_from_serio(serio->parent);
+>  	struct synaptics_data *priv = parent->private;
+>  
+>  	serio_pause_rx(parent->ps2dev.serio);
+> @@ -672,7 +672,7 @@ static int synaptics_is_pt_packet(u8 *buf)
+>  
+>  static void synaptics_pass_pt_packet(struct serio *ptport, u8 *packet)
+>  {
+> -	struct psmouse *child = serio_get_drvdata(ptport);
+> +	struct psmouse *child = psmouse_from_serio(ptport);
+>  
+>  	if (child && child->state == PSMOUSE_ACTIVATED) {
+>  		serio_interrupt(ptport, packet[1], 0);
+> @@ -688,7 +688,7 @@ static void synaptics_pass_pt_packet(struct serio *ptport, u8 *packet)
+>  static void synaptics_pt_activate(struct psmouse *psmouse)
+>  {
+>  	struct synaptics_data *priv = psmouse->private;
+> -	struct psmouse *child = serio_get_drvdata(priv->pt_port);
+> +	struct psmouse *child = psmouse_from_serio(priv->pt_port);
+>  
+>  	/* adjust the touchpad to child's choice of protocol */
+>  	if (child) {
+> diff --git a/drivers/input/mouse/trackpoint.c b/drivers/input/mouse/trackpoint.c
+> index 4a86b3e31d3b..5f6643b69a2c 100644
+> --- a/drivers/input/mouse/trackpoint.c
+> +++ b/drivers/input/mouse/trackpoint.c
+> @@ -216,7 +216,7 @@ static umode_t trackpoint_is_attr_visible(struct kobject *kobj,
+>  {
+>  	struct device *dev = kobj_to_dev(kobj);
+>  	struct serio *serio = to_serio_port(dev);
+> -	struct psmouse *psmouse = serio_get_drvdata(serio);
+> +	struct psmouse *psmouse = psmouse_from_serio(serio);
+>  
+>  	return trackpoint_is_attr_available(psmouse, attr) ? attr->mode : 0;
+>  }
+> diff --git a/drivers/input/serio/libps2.c b/drivers/input/serio/libps2.c
+> index 3e19344eda93..764990723847 100644
+> --- a/drivers/input/serio/libps2.c
+> +++ b/drivers/input/serio/libps2.c
+> @@ -382,6 +382,7 @@ void ps2_init(struct ps2dev *ps2dev, struct serio *serio)
+>  	lockdep_set_subclass(&ps2dev->cmd_mutex, serio->depth);
+>  	init_waitqueue_head(&ps2dev->wait);
+>  	ps2dev->serio = serio;
+> +	serio_set_drvdata(serio, ps2dev);
+>  }
+>  EXPORT_SYMBOL(ps2_init);
+>  
+Reviewed-by: Raul Rangel <rrangel@chromium.org>
