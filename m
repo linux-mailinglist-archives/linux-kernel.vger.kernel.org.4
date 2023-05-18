@@ -2,216 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1FFB708418
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:41:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2504170841A
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:42:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231690AbjEROld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 10:41:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58324 "EHLO
+        id S231602AbjEROmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 10:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231602AbjEROl0 (ORCPT
+        with ESMTP id S231232AbjEROma (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 10:41:26 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A63121708
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:41:18 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-53202149ae2so1423558a12.3
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:41:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1684420878; x=1687012878;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NW9LLhYTca2cJhIK8XTt/Nh6/suVOD01pOd44VESQ5c=;
-        b=GdQCfpRE0SGkqI8Vw1uWDvMc/zSC6F72zrNhKYOwqVqPZV/RZMos7OTMzDYss7hYL8
-         PfK5imLMaQkbv4WlOsl8BqmcScUPe2jfxZoms54uoW5xrOsXUPyG/zQbU/P90MQMaZOi
-         rGlatnT1iW1m5JZ6/Vfrho2i2n91eRAqkhgCQ/Uonr6wYA8mYiKOhfS4Y1O/2kr/mKto
-         YC+5Qz9hI+y9ZnYoo6/zqZPwqUEO9QYJcK+eBaXMb8ofHT4em+rF3f2SH0ARTkzeZ5B3
-         vIRIqX2OlKm/djkHqAGmllJmSLXy59VJokCfXyOdTOf4epv65yuSWuXHxmf4p4lzsAEl
-         P2XA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684420878; x=1687012878;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NW9LLhYTca2cJhIK8XTt/Nh6/suVOD01pOd44VESQ5c=;
-        b=hTqRcBykr2JvWFK7/WmgGlPY2S8EgilKq/OtP3XRTJKB7ESRR12S2klLLWj78Jg7nb
-         1NSg5YEc/A0hkgwA3SpVX2w0ohdkP2w3uKI+nqhP2/j68DBk2LL/3RSBIyJKTmuCk5Hb
-         S4AQcHZTzJFQzVGSkYs0y3JR+Cf/uS+eS1W6we6LRs1L8gULmaRT4EGgip9TCnEGpE5d
-         Pxn2JiD6k+05jRFa3tsvcMmkm+5/iU/geOwyrgJ3gTdFQEgVJCA7Bgy2ct3kh7aBmN0r
-         gdo5U8TIIzwgHRD0EuVTwjDwY6uXOEmJtRfDgzwXYAoj8OH4sG3T7SJws3Ky9JtTGBbl
-         ve6w==
-X-Gm-Message-State: AC+VfDze0J12Di9FluVmfOxw0rmVAk/7A+RyhjNAP1KV6GaQAbK4secN
-        lkKBxL4OfGsKaPrHt0W4jLGBzg==
-X-Google-Smtp-Source: ACHHUZ6JxPhsiDataOovPdM7nE2IyeWvbCpA+HWBCPdSdabHeOsCxcgZRnCilCby2R6wCo4Qatxqpg==
-X-Received: by 2002:a17:903:41c6:b0:1ac:482e:ed4d with SMTP id u6-20020a17090341c600b001ac482eed4dmr3743263ple.18.1684420877838;
-        Thu, 18 May 2023 07:41:17 -0700 (PDT)
-Received: from localhost ([135.180.227.0])
-        by smtp.gmail.com with ESMTPSA id h5-20020a170902680500b001a245b49731sm1534690plk.128.2023.05.18.07.41.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 07:41:17 -0700 (PDT)
-Date:   Thu, 18 May 2023 07:41:17 -0700 (PDT)
-X-Google-Original-Date: Thu, 18 May 2023 07:41:15 PDT (-0700)
-Subject:     Re: [PATCH v1] dt-bindings: riscv: deprecate riscv,isa
-In-Reply-To: <20230518-hammock-doornail-478e8ea8e6a7@wendy>
-CC:     anup@brainfault.org, ajones@ventanamicro.com,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        apatel@ventanamicro.com, atishp@atishpatra.org, jrtc27@jrtc27.com,
-        rick@andestech.com, ycliang@andestech.com,
-        linux-riscv@lists.infradead.org, qemu-riscv@nongnu.org,
-        u-boot@lists.denx.de, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Message-ID: <mhng-95b99ff5-9024-4672-bb84-7599f7a05129@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 18 May 2023 10:42:30 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850FF1B8;
+        Thu, 18 May 2023 07:42:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684420941; x=1715956941;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=1dDk2w9nVCsfwQXSXvjnX7tHEsi3ciT/fsURglcGYeo=;
+  b=MOB4zSfMtDSU0NjLeekZdID+k8UvRmVkFtlKs32DZtNSaJminU2LCLDU
+   KN61WcCeHTgjHXJFFP3VDpCCNOoGxeO28/r/kfeARCjPoBBiEpf8NABH3
+   2K6Z0wn5o/AEPlpOn1S0kIXYrqA/Cw6bqU/H+YWt3Ccr95mameDu4vcBK
+   KdrluL67j81/niRwioQ0NbzHPQh6r7MNMMBEsWv2i4bZNaR2srnQZ/E10
+   XxPIWygDUaZ0ZfnTZ/hmr5bdt4gnmn5PTQu11ywR9wEPugrBdOSZtz8lk
+   x3d1aCn3rMrDmRyIZEAP6JjVfnvOzvQj71O39xSYaaNSYbxucyHzoteNT
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="350918047"
+X-IronPort-AV: E=Sophos;i="5.99,285,1677571200"; 
+   d="scan'208";a="350918047"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 07:42:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="705213341"
+X-IronPort-AV: E=Sophos;i="5.99,285,1677571200"; 
+   d="scan'208";a="705213341"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga007.fm.intel.com with ESMTP; 18 May 2023 07:42:21 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 18 May 2023 07:42:20 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 18 May 2023 07:42:20 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Thu, 18 May 2023 07:42:20 -0700
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.42) by
+ edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Thu, 18 May 2023 07:42:20 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Lyo6LGAaQq0bFDnXPNpOAvPEuIoDQznG0yMxCka0Wv2A6y3PVXF4Ck0bW/V2Rlye7hydl0qrE43VHyShhkuoW2qVErqUEXbB1KBubxIWBxxP8t8QJTUf0jsGuGJYBYOOEMTAUO3Js+HCz/nWc7WfyvzVfc3Z2/XHidTUYMRHSmfQTx0Yf1lo436uedcpkWw5ShTSP/UpNMzjI4Z2t4ONaePHcVRTdoG9sGqx+g/1NTStRFlmnL0y7eVuxSpH8pjfNVYPx8TokZQIzqv97GsapFsLKpC6sKDXVG0TS0fzQ47Jk4WYlT20mv0Flo07XxL2Y9VhayN3v8k2kG3Z3fyFIw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7iUmFBcs+1pU2L2KS143LhnPUUkwm5fkiQLaFw//1lk=;
+ b=X8oAmDICPmcspmANPbtrqflr2nQzeGnnw3HNVaHvkjSW6z6ZrSBSGSoJHG3eeEBegwf/n0N56QZNEzUR5f3yZThOWewJCfDRaqMj3ODimVpxnGuj0DZvUxQT3RnG/MjM+AqQE9RNbC1JIpKyNZ0OeOFocT4NgHhvXM9D9cR2PV4dycaEAzlsPUBk5ngv5nZtO58FyI6kTTvhXsEAML68NwsnmuI7ImWagTXTnqe3CXYEeV+ElfrI6DpBGQ73t9uDlBdSwIo1w1Og5XhwGX45yIKbNFJDbyLIkT/S2ny/1X2TJfscrDhrq4tTP67odoIYapICMGdeegdyTtD2F/yuag==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
+ by BL1PR11MB5542.namprd11.prod.outlook.com (2603:10b6:208:31d::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.18; Thu, 18 May
+ 2023 14:42:18 +0000
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::4fe2:e207:596b:d145]) by SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::4fe2:e207:596b:d145%5]) with mapi id 15.20.6411.017; Thu, 18 May 2023
+ 14:42:18 +0000
+Date:   Thu, 18 May 2023 07:42:13 -0700
+From:   Ira Weiny <ira.weiny@intel.com>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Ira Weiny <ira.weiny@intel.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        "Dave Jiang" <dave.jiang@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/3] MAINTAINERS: Add additional reviewers for CXL
+Message-ID: <646639453692d_1111d3294aa@iweiny-mobl.notmuch>
+References: <20230426-cxl-fixes-v1-0-870c4c8b463a@intel.com>
+ <20230426-cxl-fixes-v1-1-870c4c8b463a@intel.com>
+ <20230518103648.00006e93@Huawei.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230518103648.00006e93@Huawei.com>
+X-ClientProxiedBy: SJ0PR05CA0143.namprd05.prod.outlook.com
+ (2603:10b6:a03:33d::28) To SA1PR11MB6733.namprd11.prod.outlook.com
+ (2603:10b6:806:25c::17)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|BL1PR11MB5542:EE_
+X-MS-Office365-Filtering-Correlation-Id: c7a456ec-18f9-489b-dded-08db57ae1461
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: IgGCBBC6ydQ08LGwTuc55gA0JFeKNCYm8NQyMd7BlDoiPjzDtLxIyoCnOA+KNwkoRnzoPLOxzItzudp82/csu/UBTLjL4QgXe6C+KMD6k3nwrcULZXARBkNZC1hIerxz9i3jDAb41DK46hhvp+YpiQH/4ZZRQt1Rca8O85nqoW6I5v484hvol644+5wRqeiNCT032MwF2dCCplUfLc//LDp9snz282lCrMkrbnHGQ6JsNcs6qc1ZC8qrkWqNe4PDNygnIab22w1PiUWrrtEaAnCP/JS9VL2NEu2rwB50jgSOogdCQISNtUxt/DKLZkNx+I8uYruSDKjiByMwjEKCr7A2DaL456/08fSfiW+koY6A9PeRRd+w7UIqydW2sPma3F5aa35OBpsHhMwRr2fWQfhNHNup/RMOD/hmxYLrfspKPNwaNDtRtZPHRqYqtOS9rZVXWU7dd+TuKznzkT18imnBwg0hLi20FhVBfzkAABIK20TqLWy/kWgm95jVThM8eV6/QpKkkIlPSG8HSiZ+n56y/i1rBx+BPxesK2M3amsBEnEHiFjL49zJu+ngA/mD
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(366004)(346002)(376002)(39860400002)(136003)(396003)(451199021)(66476007)(66946007)(66556008)(478600001)(9686003)(54906003)(110136005)(316002)(4326008)(6486002)(6666004)(41300700001)(5660300002)(26005)(186003)(8676002)(8936002)(6506007)(44832011)(6512007)(2906002)(82960400001)(38100700002)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?prqDD0bCDAWaERbqvSMU4jsxEYbu3LX/EFM2VMbrc5pYQggOgXMuso07oOMD?=
+ =?us-ascii?Q?qjFuh7kdy/U6m4MaZunBKHHu4bo0YTCHicsffE7/foHXuOHkir8aBzBkoqCN?=
+ =?us-ascii?Q?gc1XWz+1l7/sRUi+V5s0jbAEwAiRDxyYyEWT3BnkmcvfJTxNVKX1SfBBG/ex?=
+ =?us-ascii?Q?XKYnW9uIhYiXIPERZajGXUUODEqGtaaqcm/kIQbh8Q/TgbIaMOQj/6YQzY/x?=
+ =?us-ascii?Q?sOpf05kRd1t5cZdrd7SuqvEgf8Kp+zZBB4gujdiPUaPIWcA8gMXTCcYg7vXN?=
+ =?us-ascii?Q?+RtKtWtoFIgPjt0sClFQwhzd9ofFdr8RAw6APp8Fr3Vo43DsVB5IjH/um6Lq?=
+ =?us-ascii?Q?ifYfLewVUunIgwcxv/ZFxsaiDzrRGEe0e8hi39pmm0686eiRvErG/FVF6dqq?=
+ =?us-ascii?Q?v3y6RrgPX9dbp1Mfe1Uim7gPiXzjkYVkHCjt2fAkXT8EUV57X5owSu8pkwBj?=
+ =?us-ascii?Q?18kIKh4FyoCw+kufWddRG2SUTMrBX8Tv2zn7koXF+FzXohmd2eY1P5Aec9RK?=
+ =?us-ascii?Q?iX9NZsiT4zdN21AcniifePIg533+D1PHArNjcSwhKVR6uYNZc4hF4Ok+vncb?=
+ =?us-ascii?Q?szA6HQLJc8jZkSpTYrjccqrWaCOuTeQM+XmAD1lxMsBZ1Q9a1mLUJtYnyezA?=
+ =?us-ascii?Q?FQ2/FDkS7jjOfjH1Em2Mz3K+nSxbcTL3ede4BN2H2FQzrvHeuKDwsJiEB8ZL?=
+ =?us-ascii?Q?djXzw3lijxLiwCqLQi6JN6OkdRQwYboDIFqMmh8KoN1Gil9YF5fFsyyvJ7TX?=
+ =?us-ascii?Q?tYNJmeIL2IPPy+3GHOgfm/4XOuzeIIPUZdP4o4MrM6bhhcWAlxjmsmh6jCMT?=
+ =?us-ascii?Q?+buUZ+N0Ra1Ko64aHYAkdXYPZam0DCuapcWBsmAaCjd5PLCmPlGerOCFV9SC?=
+ =?us-ascii?Q?zXmHpEhDJFQ3BiM3EmP4l/q5/OR6yE4lkQnNz31sU4rbFUOGs89pa87fc/+B?=
+ =?us-ascii?Q?hFWamjHeInk2xCwCawVTqAIqGAq4GX4Zq7V72/JWixX0NGC+Xc/GBUaONkW6?=
+ =?us-ascii?Q?0r9s/znrsK5fuChzxZhYPM8F4ydyq5ADSmWc0IHsDzK6ws1hjA9vRnUR4rX5?=
+ =?us-ascii?Q?EkQJyqt9hyDdTYaLj0xM3MDnRSvbzKYrf6a3W4Kq4S7njMZ1Og6AvA8rwLZ5?=
+ =?us-ascii?Q?XVwE0R0TcRM3be/Hu4L2/mGITMolgU/ASoNY2o2y5FM95QcdLqoeI53+ywuX?=
+ =?us-ascii?Q?mnD1F8R/nULTalZvidVmynUPiRy8GfyULrJzzoFiBMJa5nfAnxvleAB+t2Hl?=
+ =?us-ascii?Q?f7CCb8a98/NXu3wuAPk60fI5QJXUIjMh6CgVaylOGTBA55hDUxcue42tZHfS?=
+ =?us-ascii?Q?XOAt2ybUAuW2p/kisAaEK1KxRQTU92Jeh4fSIwUpWGO81SKRCsWmh/pK/ius?=
+ =?us-ascii?Q?ERDSClBGUCC/aw0q44BfDGs8yD2lhaRU65UkDEyrov8mZFuSi8u0ADoqH3U8?=
+ =?us-ascii?Q?eQBBg6xIJFcgHCPlFEXP4gZS4W59SjcHfdzX8W2voY1g9vVOGn3C3OkuKUYB?=
+ =?us-ascii?Q?zBVUqvrUbus41g7/5ySn4MUHaNneRYSy21IUFS5w2lyGIKjLHOxfI8fyK/ut?=
+ =?us-ascii?Q?kpW2Rq7U6msfHr4ncHVh6XNnYel099LrvS9gxzFL?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: c7a456ec-18f9-489b-dded-08db57ae1461
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2023 14:42:18.3785
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZDcYwM3UhldSbsi8SndrmDsciO97BnCgAOvcmdpZYFjrdibyMg3fx27L3ptJY/zOg2S2rOgQrtzvQqyA726GnA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5542
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 18 May 2023 07:06:17 PDT (-0700), Conor Dooley wrote:
-> On Thu, May 18, 2023 at 07:13:15PM +0530, Anup Patel wrote:
->> On Thu, May 18, 2023 at 4:02 PM Andrew Jones <ajones@ventanamicro.com> wrote:
->> > On Thu, May 18, 2023 at 09:58:30AM +0100, Conor Dooley wrote:
->
->> > > -  riscv,isa:
->> > > -    description:
->> > > -      Identifies the specific RISC-V instruction set architecture
->> > > -      supported by the hart.  These are documented in the RISC-V
->> > > -      User-Level ISA document, available from
->> > > -      https://riscv.org/specifications/
->> > > -
->> > > -      Due to revisions of the ISA specification, some deviations
->> > > -      have arisen over time.
->> > > -      Notably, riscv,isa was defined prior to the creation of the
->> > > -      Zicsr and Zifencei extensions and thus "i" implies
->> > > -      "zicsr_zifencei".
->> > > -
->> > > -      While the isa strings in ISA specification are case
->> > > -      insensitive, letters in the riscv,isa string must be all
->> > > -      lowercase to simplify parsing.
->> > > -    $ref: "/schemas/types.yaml#/definitions/string"
->> > > -    pattern: ^rv(?:64|32)imaf?d?q?c?b?k?j?p?v?h?(?:[hsxz](?:[a-z])+)?(?:_[hsxz](?:[a-z])+)*$
->> > > -
->> > >    # RISC-V requires 'timebase-frequency' in /cpus, so disallow it here
->> > >    timebase-frequency: false
->> > >
->> > > @@ -133,8 +117,13 @@ properties:
->> > >        DMIPS/MHz, relative to highest capacity-dmips-mhz
->> > >        in the system.
->> > >
->> > > +oneOf:
->> > > +  - required:
->> > > +      - riscv,isa
->> >
->> > This is the part Anup keeps reminding me about. We can create better ways
->> > to handle extensions in DT and ACPI, but we'll still need to parse ISA
->> > strings to handle legacy DTs and holdouts that keep creating ISA strings,
->> > at least during the deprecation period, since ISA strings are still "the
->> > way to do it" according to the spec.
->> 
->> Coming up with an alternate way in DT is fine but we can't deprecate
->> ISA strings since ISA strings are widely used:
->> 1) Various bootloaders
->
-> Aye, for the reason, as I mentioned earlier and in the RFC thread,
-> removing existing parsers isn't a good idea.
+Jonathan Cameron wrote:
+> On Wed, 17 May 2023 14:28:10 -0700
+> Ira Weiny <ira.weiny@intel.com> wrote:
+> 
+> > To get better coverage add Dave Jiang and Jonathan Cameron as reviewers.
+> > 
+> > Cc: Dave Jiang <dave.jiang@intel.com>
+> > Cc: Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+> > Signed-off-by: Ira Weiny <ira.weiny@intel.com>
+> 
+> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> 
+> One comment inline though on capitalization.
+> 
+> Thanks,
+> 
+> Jonathan
+> 
+> > ---
+> >  MAINTAINERS | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 90abe83c02f3..6f8568ec2731 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -5169,6 +5169,8 @@ M:	Vishal Verma <vishal.l.verma@intel.com>
+> >  M:	Ira Weiny <ira.weiny@intel.com>
+> >  M:	Ben Widawsky <bwidawsk@kernel.org>
+> >  M:	Dan Williams <dan.j.williams@intel.com>
+> > +R:	Dave Jiang <dave.jiang@intel.com>
+> > +R:	Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+> 
+> For consistency go with <jonathan.cameron@huawei.com>
+> which is what I'm using elsewhere in maintainers and
+> matches other lower case entries here.
 
-Removing and deprecating are different.  We can deprecate stuff.
+NP on this change.  However, FYI b4 picks up your email capitalized a lot.
+For example when you ack/review as you did above.
 
->> 2) It is part of /proc/cpuinfo
->
-> That is irrelevant.
->
->> 3) Hypervisors use it to communicate HW features to Guest/VM.
->> Hypervisors can't get away from generating ISA strings because
->> Hypervisors don't know what is running inside Guest/VM.
->
-> Generate both :) As things stand, your guests could interpret what you
-> communicate to them via riscv,isa differently!
->
->> In the case of ACPI, it is a very different situation. Like Sunil mentioned,
->> ACPI will always follow mechanisms defined by RVI (such as ISA string).
->> Other ACPI approaches such as GUID for ISA extension are simply not
->> scalable and will take a lot more memory for ACPI tables compared to
->> ISA strings.
->
-> My proposal should actually suit ACPI, at least for Linux, as it would
-> be a chance to align currently misaligned definitions. I won't speak to
-> GUIDs or whatever as that's someone else's problem :)
+Ira
 
-We talked a bit in the patchwork meeting with Drew about ACPI.  Any 
-actual spec/encoding would need to be different, of course, but 
-conceptually it seems to fit fine.  It's also broadly similar to what 
-we've done with riscv_hwprobe() for userspace, which is nice.
+>  
+> 
+> 
+> >  L:	linux-cxl@vger.kernel.org
+> >  S:	Maintained
+> >  F:	drivers/cxl/
+> > 
+> 
 
->> > Also, if we assume the wording in the spec does get shored up, then,
->> > unless I'm missing something, the list of advantages for this boolean
->> > proposal from your commit message would be
->> 
->> IMO, we should try our best to have the wordings changed in RVI spec.
->
-> Yes, doing so is beneficial for all of us regardless of what happens
-> here. I do think that it is partially orthogonal - it allows us to not
-> design an interface that needs to be capable of communicating a wide
-> variety of versions, but I don't think it solves some of the issues
-> that riscv,isa has. If I thought it did, I would not have gone to the
-> trouble of respinning this patch out of the other approach.
->
->> > * More character choices for name -- probably not a huge gain for ratified
->> >   extensions, since the boolean properties will likely still use the same
->> >   name as the ISA string (riscv,isa-extension-<name>). But, for vendor
->> >   extensions, this is indeed a major improvement, since vendor extension
->> >   boolean property names may need to be extended in unambiguous ways to
->> >   handle changes in the extension.
->> >
->> > * Simpler, more complete DT validation (but we still need a best effort
->> >   for legacy ISA strings)
->> >
->> > * Simpler DT parsing (but we still need the current parser for legacy ISA
->> >   strings)
->> >
->> > > +  - required:
->> > > +      - riscv,isa-base
->> > > +
->> > >  required:
->> > > -  - riscv,isa
->> > >    - interrupt-controller
->> > >
->> > >  additionalProperties: true
->> > > @@ -177,7 +166,13 @@ examples:
->> > >                  i-tlb-size = <32>;
->> > >                  mmu-type = "riscv,sv39";
->> > >                  reg = <1>;
->> > > -                riscv,isa = "rv64imafdc";
->> > > +                riscv,isa-base = "rv64i";
->> > > +                riscv,isa-extension-i;
->> > > +                riscv,isa-extension-m;
->> > > +                riscv,isa-extension-a;
->> > > +                riscv,isa-extension-f;
->> > > +                riscv,isa-extension-d;
->> > > +                riscv,isa-extension-c;
->> 
->> One downside of this new approach is it will increase the size of DTB.
->> Imaging 50 such DT properties in 46 CPU DT nodes.
->
-> I should do a comparison between 50 extensions in riscv,isa and doing
-> this 50 times and see what the sizes are.
 
-I'm not sure how sensitive people are to DT size (presumably it'd be DTB 
-size)?
-
-It's also not clear what we can do about it: RISC-V has lots of 
-extensions, that's going to take encoding space.  Sticking with an 
-ambiguous encoding because it's smaller seems like a way to get 
-burned in the long run.
