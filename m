@@ -2,53 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAA84707D08
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E94B4707D0D
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:38:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbjERJhf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 05:37:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57454 "EHLO
+        id S230064AbjERJiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 05:38:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbjERJhd (ORCPT
+        with ESMTP id S229887AbjERJiP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 05:37:33 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558181733
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 02:37:32 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1pza4Y-0007aE-Tw; Thu, 18 May 2023 11:37:22 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 46D281C7B4B;
-        Thu, 18 May 2023 09:37:20 +0000 (UTC)
-Date:   Thu, 18 May 2023 11:37:19 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the net tree
-Message-ID: <20230518-frying-duller-be47c537367b-mkl@pengutronix.de>
-References: <20230518090634.6ec6b1e1@canb.auug.org.au>
- <20230517214200.33398f82@kernel.org>
+        Thu, 18 May 2023 05:38:15 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D131726;
+        Thu, 18 May 2023 02:38:14 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QMPxL5Pc4z688hZ;
+        Thu, 18 May 2023 17:36:22 +0800 (CST)
+Received: from localhost (10.126.175.163) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 18 May
+ 2023 10:38:12 +0100
+Date:   Thu, 18 May 2023 10:38:11 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Ira Weiny <ira.weiny@intel.com>
+CC:     Dan Williams <dan.j.williams@intel.com>,
+        Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        "Dave Jiang" <dave.jiang@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/3] cxl/pci: Update comment
+Message-ID: <20230518103811.000015e9@Huawei.com>
+In-Reply-To: <20230426-cxl-fixes-v1-2-870c4c8b463a@intel.com>
+References: <20230426-cxl-fixes-v1-0-870c4c8b463a@intel.com>
+        <20230426-cxl-fixes-v1-2-870c4c8b463a@intel.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7qwbkht7sr25n5ca"
-Content-Disposition: inline
-In-Reply-To: <20230517214200.33398f82@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.175.163]
+X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
@@ -58,64 +54,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 17 May 2023 14:28:11 -0700
+Ira Weiny <ira.weiny@intel.com> wrote:
 
---7qwbkht7sr25n5ca
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> The existence of struct cxl_dev_id containing a single member is odd.
+> The comment made sense when I wrote it but could be clarified.
+> 
+> Update the comment and place it next to the odd looking structure.
+> 
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
-On 17.05.2023 21:42:00, Jakub Kicinski wrote:
-> On Thu, 18 May 2023 09:06:34 +1000 Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > After merging the net tree, today's linux-next build (arm
-> > multi_v7_defconfig) failed like this:
-> >=20
-> > Error: arch/arm/boot/dts/stm32f746.dtsi:265.20-21 syntax error
-> > FATAL ERROR: Unable to parse input tree
-> > make[2]: *** [scripts/Makefile.lib:419: arch/arm/boot/dts/stm32f746-dis=
-co.dtb] Error 1
-> > Error: arch/arm/boot/dts/stm32f746.dtsi:265.20-21 syntax error
-> > FATAL ERROR: Unable to parse input tree
-> > make[2]: *** [scripts/Makefile.lib:419: arch/arm/boot/dts/stm32f769-dis=
-co.dtb] Error 1
-> > Error: arch/arm/boot/dts/stm32f746.dtsi:265.20-21 syntax error
-> > FATAL ERROR: Unable to parse input tree
-> >=20
-> > Caused by commit
-> >=20
-> >   0920ccdf41e3 ("ARM: dts: stm32: add CAN support on stm32f746")
-> >=20
-> > I have used the net tree from next-20230517 for today.
->=20
-> Dario, Marc, can we get an immediate fix for this?
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-Here you go:
+> ---
+>  drivers/cxl/pci.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
+> index f7a5b8e9c102..ad7a1276fdc5 100644
+> --- a/drivers/cxl/pci.c
+> +++ b/drivers/cxl/pci.c
+> @@ -469,6 +469,10 @@ static int cxl_alloc_irq_vectors(struct pci_dev *pdev)
+>  	return 0;
+>  }
+>  
+> +/*
+> + * Threaded irq dev_id's must be globally unique.  cxl_dev_id provides a unique
+> + * wrapper object for each irq within the same cxlds.
+> + */
+>  struct cxl_dev_id {
+>  	struct cxl_dev_state *cxlds;
+>  };
+> @@ -506,7 +510,6 @@ static int cxl_event_req_irq(struct cxl_dev_state *cxlds, u8 setting)
+>  	if (FIELD_GET(CXLDEV_EVENT_INT_MODE_MASK, setting) != CXL_INT_MSI_MSIX)
+>  		return -ENXIO;
+>  
+> -	/* dev_id must be globally unique and must contain the cxlds */
+>  	dev_id = devm_kzalloc(dev, sizeof(*dev_id), GFP_KERNEL);
+>  	if (!dev_id)
+>  		return -ENOMEM;
+> 
 
-| https://lore.kernel.org/all/20230518073241.1110453-1-mkl@pengutronix.de
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---7qwbkht7sr25n5ca
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRl8c0ACgkQvlAcSiqK
-BOjNmQf+L2tpBHUm5pRCkEwVeAfaCydTw1pYWkB6SPzQKGO1ejkbuajs6uEr4YK1
-Krn+MgMCscrbENxL5x02/WMzX6x3xBKMyLqadtr7w7gbRjzKEX8pSLXOuDGvPIee
-xeF7kF8h/QMcfBVI13/KlIJu83Kz24nPAEqqfr3lhF3+8zui5+wntQGC1cGRIKVI
-O+y0GwkH4fD3nrQ/4Vwu2j1Is70Zsrd3DGnCy9QBlcAuwV+ZSdQPukKVv162odLL
-d61P59blCBZ5WoF+zZ2vrcjvJY5GyVsBJWx6UlWlW2X7/sflQ9ecA+BUyuHulXLg
-JUnuY0Q7XiXRYBikd7FA6f0VwwL4GQ==
-=t0LY
------END PGP SIGNATURE-----
-
---7qwbkht7sr25n5ca--
