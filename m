@@ -2,103 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B7207085B1
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 18:11:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C93370858B
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 18:03:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjERQLO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 12:11:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45832 "EHLO
+        id S231463AbjERQDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 12:03:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229854AbjERQLK (ORCPT
+        with ESMTP id S231163AbjERQDZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 12:11:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F24CE5E;
-        Thu, 18 May 2023 09:11:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AD05B6509D;
-        Thu, 18 May 2023 16:11:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 016A4C43443;
-        Thu, 18 May 2023 16:11:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684426268;
-        bh=+yx8G76DZdMcQ+TOxR1LsNaIds3YTBmYDcoIcqhWsms=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=INaiwJ6j1tWXc5PRvt9VriLPtLdS9H81vHAsM9ZDlTdydZXBPHmt3M6ceJ5xLjqFO
-         Nojk+sFVSHWX8ZjQqLjMCfbXQ9OijzZd3gTposYHqCEjIrW/gK4AGPAiJTVp9BxkGk
-         z4Q6MH732znret5C9S4HqnP5dJU2+2DKFJvJaSE9plYy7zY2s88YW3YRC/2y+xPaRg
-         GGFvmRUMpCGSf4rIRjnqQB5fhCb51nKDxbmA0XNy6XTQ6NO5eGCi773gkLyAOF6eZk
-         LayUvRWAQuub7QklE4Kif3bo5WPekXmqPvbTA0744i22Lho4cTsprYgQEegkuCfOcV
-         ZI4Dv9i95al/g==
-Date:   Thu, 18 May 2023 23:59:55 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-serial@vger.kernel.org,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: [PATCH v3 06/10] dt-bindings: riscv: Add bouffalolab bl808 board
- compatibles
-Message-ID: <ZGZLe6kGaD7HWQJ3@xhacker>
-References: <20230514165651.2199-1-jszhang@kernel.org>
- <20230514165651.2199-7-jszhang@kernel.org>
- <20230514-kinetic-backlog-b9573ae06507@spud>
+        Thu, 18 May 2023 12:03:25 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C073A114
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 09:03:22 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-561d611668eso24899837b3.0
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 09:03:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684425801; x=1687017801;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kFMUvSLIDQqBOAhTJWNyPBK0yCpEmZz4Rr9wUYgSBLk=;
+        b=y/zcXW7Xdbt/i1Elujs/t4VCROuOfh5xM8t/C+CPRIvhmAHKMsXASS+3Omp+iDOUJu
+         s/2H3PJNZO6B1erWI0mMHt2FWJiyjdmt7f+AcSCbxmCau0DqGg2duoV7H+4ign/x46pr
+         cKTZ3SkVcQs2DRi+cXyHfhqW7/ynScmMR6sZsHQfW8aYxTQpp6I2pO71u/a22+UZpQ1s
+         tvKLlh8/3zbWnVaT6tLHgykJXwmziXSOFJrSClHbIxF3ZsF5sh6QIybbQdyM1PXhcXiL
+         /3t7uBr6wOiyDaiGPOvBuM7ZiHUz82mBOkOhOCDHvfuTbcAHWy+dDHviJ7uXEAKXTc/x
+         UgTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684425801; x=1687017801;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kFMUvSLIDQqBOAhTJWNyPBK0yCpEmZz4Rr9wUYgSBLk=;
+        b=bQ1biBC+VwNfCMNcnsGVrgzopbg/9XIlgLEEkoXk5mceyyh7KZM0t7NCGonRyYoDyS
+         EYBDqCUTS/s48iPM6EnS8K5CakpnBdvVcx3hOMyDM/o9GhacP3/dLl89KCrocRDj81z2
+         jh8e8ghdxIPHwNbFXxbs+iXkETdNcRQaqx0oYkGZzi1B594Fg60fMs7THvVQaJK2duvU
+         DFRyPbIEqDzYk62ba9elLhU0MkKfcLmdR55HnlOieUBeD7UYydYwySjB0tvlIhDcE+n0
+         GSawFhS8xhPPTT3ZvwbXZ7aaQwhfbcx5mh9R80cb9jYeHvnKf0wqxkEoKksWPxt9z20l
+         bvPA==
+X-Gm-Message-State: AC+VfDwOLlEaqCPULwdWur6AkcM0K0gO/2nNqlIbR7yz+gkT5E/GOLX0
+        etpoMN51fKMYmL5CfRW/R9WbT8q0LSU3Wn98+EdNVw==
+X-Google-Smtp-Source: ACHHUZ66Lvjbz0wq/6JOvrKIa8YcQvWCah9jJuh8L5MNl7HOgkcoiK4jzb0eXXRMjClLL3Mv+3cibD4a0Suy5HYTK7I=
+X-Received: by 2002:a05:7500:140f:b0:105:80c8:bf47 with SMTP id
+ v15-20020a057500140f00b0010580c8bf47mr129040gaa.67.1684425800919; Thu, 18 May
+ 2023 09:03:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230514-kinetic-backlog-b9573ae06507@spud>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230517124201.441634-1-imagedong@tencent.com>
+ <20230517124201.441634-4-imagedong@tencent.com> <CANn89iKLf=V664AsUYC52h_q-xjEq9xC3KqTq8q+t262T91qVQ@mail.gmail.com>
+ <CADxym3a0gmzmD3Vwu_shoJnAHm-xjD5tJRuKwTvAXnVk_H55AA@mail.gmail.com>
+ <CADVnQynZ67511+cKF=hyiaLx5-fqPGGmpyJ-5Lk6ge-ivmAf-w@mail.gmail.com> <CADxym3ZiyYK7Vyz05qLv8jOPmNZXXepCsTbZxdkhSQxRx0cdSA@mail.gmail.com>
+In-Reply-To: <CADxym3ZiyYK7Vyz05qLv8jOPmNZXXepCsTbZxdkhSQxRx0cdSA@mail.gmail.com>
+From:   Neal Cardwell <ncardwell@google.com>
+Date:   Thu, 18 May 2023 12:03:04 -0400
+Message-ID: <CADVnQy=JQkVGRsbL0u=-oZSpdaFBpz907yX24p3uUu2pMhUjGg@mail.gmail.com>
+Subject: Re: [PATCH net-next 3/3] net: tcp: handle window shrink properly
+To:     Menglong Dong <menglong8.dong@gmail.com>
+Cc:     Eric Dumazet <edumazet@google.com>, kuba@kernel.org,
+        davem@davemloft.net, pabeni@redhat.com, dsahern@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Menglong Dong <imagedong@tencent.com>,
+        Yuchung Cheng <ycheng@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 14, 2023 at 07:39:28PM +0100, Conor Dooley wrote:
-> On Mon, May 15, 2023 at 12:56:47AM +0800, Jisheng Zhang wrote:
-> 
-> > +title: Bouffalo Lab Technology SoC-based boards
-> 
-> I know you're only propagating an existing pattern, but the "SoC-based"
-> looks rather odd!
-> 
-> > +properties:
-> > +  $nodename:
-> > +    const: '/'
-> > +  compatible:
-> > +    oneOf:
-> > +      - description: Carrier boards for the Sipeed M1s SoM
-> > +        items:
-> > +          - enum:
-> > +              - sipeed,m1s-dock
-> 
-> BTW, do you know of any other m1s compatible docks?
-> I couldn't find any other ones via Google, so maybe it is just worth
+On Thu, May 18, 2023 at 10:12=E2=80=AFAM Menglong Dong <menglong8.dong@gmai=
+l.com> wrote:
+>
+> On Thu, May 18, 2023 at 9:40=E2=80=AFPM Neal Cardwell <ncardwell@google.c=
+om> wrote:
+> >
+> > On Wed, May 17, 2023 at 10:35=E2=80=AFPM Menglong Dong <menglong8.dong@=
+gmail.com> wrote:
+> > >
+> > > On Wed, May 17, 2023 at 10:47=E2=80=AFPM Eric Dumazet <edumazet@googl=
+e.com> wrote:
+> > > >
+> > > > On Wed, May 17, 2023 at 2:42=E2=80=AFPM <menglong8.dong@gmail.com> =
+wrote:
+> > > > >
+> > > > > From: Menglong Dong <imagedong@tencent.com>
+> > > > >
+> > > > > Window shrink is not allowed and also not handled for now, but it=
+'s
+> > > > > needed in some case.
+> > > > >
+> > > > > In the origin logic, 0 probe is triggered only when there is no a=
+ny
+> > > > > data in the retrans queue and the receive window can't hold the d=
+ata
+> > > > > of the 1th packet in the send queue.
+> > > > >
+> > > > > Now, let's change it and trigger the 0 probe in such cases:
+> > > > >
+> > > > > - if the retrans queue has data and the 1th packet in it is not w=
+ithin
+> > > > > the receive window
+> > > > > - no data in the retrans queue and the 1th packet in the send que=
+ue is
+> > > > > out of the end of the receive window
+> > > >
+> > > > Sorry, I do not understand.
+> > > >
+> > > > Please provide packetdrill tests for new behavior like that.
+> > > >
+> > >
+> > > Yes. The problem can be reproduced easily.
+> > >
+> > > 1. choose a server machine, decrease it's tcp_mem with:
+> > >     echo '1024 1500 2048' > /proc/sys/net/ipv4/tcp_mem
+> > > 2. call listen() and accept() on a port, such as 8888. We call
+> > >     accept() looply and without call recv() to make the data stay
+> > >     in the receive queue.
+> > > 3. choose a client machine, and create 100 TCP connection
+> > >     to the 8888 port of the server. Then, every connection sends
+> > >     data about 1M.
+> > > 4. we can see that some of the connection enter the 0-probe
+> > >     state, but some of them keep retrans again and again. As
+> > >     the server is up to the tcp_mem[2] and skb is dropped before
+> > >     the recv_buf full and the connection enter 0-probe state.
+> > >     Finially, some of these connection will timeout and break.
+> > >
+> > > With this series, all the 100 connections will enter 0-probe
+> > > status and connection break won't happen. And the data
+> > > trans will recover if we increase tcp_mem or call 'recv()'
+> > > on the sockets in the server.
+> > >
+> > > > Also, such fundamental change would need IETF discussion first.
+> > > > We do not want linux to cause network collapses just because billio=
+ns
+> > > > of devices send more zero probes.
+> > >
+> > > I think it maybe a good idea to make the connection enter
+> > > 0-probe, rather than drop the skb silently. What 0-probe
+> > > meaning is to wait for space available when the buffer of the
+> > > receive queue is full. And maybe we can also use 0-probe
+> > > when the "buffer" of "TCP protocol" (which means tcp_mem)
+> > > is full?
+> > >
+> > > Am I right?
+> > >
+> > > Thanks!
+> > > Menglong Dong
+> >
+> > Thanks for describing the scenario in more detail. (Some kind of
+> > packetdrill script or other program to reproduce this issue would be
+> > nice, too, as Eric noted.)
+> >
+> > You mention in step (4.) above that some of the connections keep
+> > retransmitting again and again. Are those connections receiving any
+> > ACKs in response to their retransmissions? Perhaps they are receiving
+> > dupacks?
+>
+> Actually, these packets are dropped without any reply, even dupacks.
+> skb will be dropped directly when tcp_try_rmem_schedule()
+> fails in tcp_data_queue(). That's reasonable, as it's
+> useless to reply a ack to the sender, which will cause the sender
+> fast retrans the packet, because we are out of memory now, and
+> retrans can't solve the problem.
 
-FWICT, there's no other m1s compatible docks, but in theory the SoM
-can be used to build different docks, I just keep it as is since you
-are fine with it too ;)
+I'm not sure I see the problem. If retransmits can't solve the
+problem, then why are you proposing that data senders keep
+retransmitting forever (via 0-window-probes) in this kind of scenario?
 
-> swapping the enum here for another const.
-> Either is fine by me though.
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> 
-> Thanks,
-> Conor.
+A single dupack without SACK blocks will not cause the sender to fast
+retransmit. (Only 3 dupacks would trigger fast retransmit.)
 
+Three or more dupacks without SACK blocks will cause the sender to
+fast retransmit the segment above SND.UNA once if the sender doesn't
+have SACK support. But in this case AFAICT fast-retransmitting once is
+a fine strategy, since the sender should keep retrying transmits (with
+backoff) until the receiver potentially has memory available to
+receive the packet.
 
+>
+> > If so, then perhaps we could solve this problem without
+> > depending on a violation of the TCP spec (which says the receive
+> > window should not be retracted) in the following way: when a data
+> > sender suffers a retransmission timeout, and retransmits the first
+> > unacknowledged segment, and receives a dupack for SND.UNA instead of
+> > an ACK covering the RTO-retransmitted segment, then the data sender
+> > should estimate that the receiver doesn't have enough memory to buffer
+> > the retransmitted packet. In that case, the data sender should enter
+> > the 0-probe state and repeatedly set the ICSK_TIME_PROBE0 timer to
+> > call tcp_probe_timer().
+> >
+> > Basically we could try to enhance the sender-side logic to try to
+> > distinguish between two kinds of problems:
+> >
+> > (a) Repeated data packet loss caused by congestion, routing problems,
+> > or connectivity problems. In this case, the data sender uses
+> > ICSK_TIME_RETRANS and tcp_retransmit_timer(), and backs off and only
+> > retries sysctl_tcp_retries2 times before timing out the connection
+> >
+> > (b) A receiver that is repeatedly sending dupacks but not ACKing
+> > retransmitted data because it doesn't have any memory. In this case,
+> > the data sender uses ICSK_TIME_PROBE0 and tcp_probe_timer(), and backs
+> > off but keeps retrying as long as the data sender receives ACKs.
+> >
+>
+> I'm not sure if this is an ideal method, as it may be not rigorous
+> to conclude that the receiver is oom with dupacks. A packet can
+> loss can also cause multi dupacks.
+
+When a data sender suffers an RTO and retransmits a single data
+packet, it would be very rare for the data sender to receive multiple
+pure dupacks without SACKs. This would only happen in the rare case
+where (a) the connection did not have SACK enabled, and (b) there was
+a hole in the received sequence space and there were still packets in
+flight when the (spurioius) RTO fired.
+
+But if we want to be paranoid, then this new response could be written
+to only trigger if SACK is enabled (the vast, vast majority of cases).
+If SACK is enabled, and an RTO of a data packet starting at sequence
+S1 results in the receiver sending only a dupack for S1 without SACK
+blocks, then this clearly shows the issue is not packet loss but
+suggests a receiver unable to buffer the given data packet, AFAICT.
+
+thanks,
+neal
+
+>
+> Thanks!
+> Menglong Dong
+>
+> > AFAICT that would be another way to reach the happy state you mention:
+> > "all the 100 connections will enter 0-probe status and connection
+> > break won't happen", and we could reach that state without violating
+> > the TCP protocol spec and without requiring changes on the receiver
+> > side (so that this fix could help in scenarios where the
+> > memory-constrained receiver is an older stack without special new
+> > behavior).
+> >
+> > Eric, Yuchung, Menglong: do you think something like that would work?
+> >
+> > neal
