@@ -2,109 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C6FC707B9B
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 10:08:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCA5A707BA5
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 10:10:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjERIIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 04:08:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47568 "EHLO
+        id S229954AbjERIKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 04:10:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbjERIIO (ORCPT
+        with ESMTP id S229651AbjERIKq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 04:08:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A0C110D0
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 01:08:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A4093646D4
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 08:08:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27B69C433EF;
-        Thu, 18 May 2023 08:08:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684397291;
-        bh=OusTxtMih9zGfuMMoLAh2SZdg8oLmDX4HvuyhNv4jy8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Lvnw4djm+PjEeQwlFuEWvQm/nZ2O+gA2ugLE2x8w/0jKG1VqeO1aMvDlWKWXSqjG8
-         IcOaRZjApWHhk7yU4FyADQWm9AKQKVG0BPVrWB2AUhCR+x8TIT4CtKinnH1pLKUQV4
-         0qgnlKNeBfgcBOkwbPUB7jHN9DuXlhBcv+bssjKIEHiLqWETgfTrfz/Sp/cRXXCwQc
-         Fd+mECneSSDyQ/aCcCNfAA7hr6b+Y2W7OOXUfRjKjGnaC3RAB7p4W08wW5MC/2Ugbt
-         vTnEhAnFj1e8JBBoIaDrk5W72eEWoOiEEW9PSRLVSm1jFcwPY1Alq0XW//deu4rTjQ
-         tuMEkcT+OkzIA==
-Date:   Thu, 18 May 2023 10:08:04 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Mike Christie <michael.christie@oracle.com>
-Cc:     oleg@redhat.com, linux@leemhuis.info, nicolas.dichtel@6wind.com,
-        axboe@kernel.dk, ebiederm@xmission.com,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, mst@redhat.com,
-        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com
-Subject: Re: [RFC PATCH 1/8] signal: Dequeue SIGKILL even if
- SIGNAL_GROUP_EXIT/group_exec_task is set
-Message-ID: <20230518-kontakt-geduckt-25bab595f503@brauner>
-References: <20230518000920.191583-1-michael.christie@oracle.com>
- <20230518000920.191583-2-michael.christie@oracle.com>
+        Thu, 18 May 2023 04:10:46 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674BC97;
+        Thu, 18 May 2023 01:10:45 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-25368740ff6so226268a91.0;
+        Thu, 18 May 2023 01:10:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684397445; x=1686989445;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=S0YTm0IoXUd5c4n5YN9L5DUYWH7WIf1ootPhSesQtpw=;
+        b=ZcxKVWxTbbBRXRzIs4OQ4ef+VAjO+ndMZFtzZExu3rBaoSOYhiRDwTrHtb1FY0hdJG
+         HGUxEL1az8vR0xr+PEWkNyfoZC7VZmxHQS8puY4JFtyDdFdQdEYCq982C2v+7yQiHUTh
+         2CcMtV71QYcBV9Rd/bRK9tb3hDnWe8UdCiSe01V+/0u30JCDIBXYS27rsgHe3ATjCoJA
+         VK9YXNtMXWhb9c2YGvxMkJ2Y3Joq5SDZMHybJnW4WPe47EY9cGMiT9Du9pGgftpjuTf4
+         HQXcKIEsJ/dQ001VUznykafhZ8OKqYbGpZPg9PjPfzyONW9OZTc1r3x9VXJKDVRo4n9D
+         G4Yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684397445; x=1686989445;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=S0YTm0IoXUd5c4n5YN9L5DUYWH7WIf1ootPhSesQtpw=;
+        b=P2piGP6bZQ342RcgkKaHMPk1UtPjsjyLeHH5cHvvzB7yCtnXdyi+BoUjQzVJL+YBf1
+         J/VcOIO9C/WCYeVneTNlQNf3RVDx22P1VzHCQwT1eB67n2+Zw4AL6uU0n3h51uaE1IBW
+         H4wEhfezz3CUeoJVcHL2ND5ktc2PxGHsxYMQGk6+t0l3f8W32cgY/x+/CzxlapQ2WlOi
+         0rs5amt5jQ2laqMl8ORJny1CdZNLwiOte4hdrGjHUx/A3fC/DmZ/5k78LNiHwIDv6WrH
+         GCtZl8eNAdNQG3xu2or/SbCSZ5C7yMQyxX5Gx6sBxgvxFypkRAC6D83e3Zjswtp2lVMW
+         Xvhw==
+X-Gm-Message-State: AC+VfDy+Yixd7HidZ5wIyLMPwRrjlsyCJk3FOydKt2wdG0xJh9rlkW7B
+        gHlGFb51UUc0Ko4TuOKR/9LOrazpTirnItKcu3c=
+X-Google-Smtp-Source: ACHHUZ6onfAai2ygXURVPYRaxZVnlUv+nfcC3Xm7KTFlJ9Cq8cFTmGv8mjKjQj7PLNnBVWE+ADL4xKVZrtzP+tH9rm0=
+X-Received: by 2002:a17:90a:764d:b0:253:30f9:1849 with SMTP id
+ s13-20020a17090a764d00b0025330f91849mr1748821pjl.12.1684397444829; Thu, 18
+ May 2023 01:10:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230518000920.191583-2-michael.christie@oracle.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1683791148.git.haibo1.xu@intel.com> <751a84a9691c86df0e65cdb02abf1e073892d1ca.1683791148.git.haibo1.xu@intel.com>
+ <20230511-28ec368a8168342c68ca2187@orel> <CAJve8okVFr-m6go6dCg7Cf=Uq3Yt9Xmxi0Z3B2vbWvahvx4GgA@mail.gmail.com>
+ <20230518-60da3b82641bdaccec589b8b@orel>
+In-Reply-To: <20230518-60da3b82641bdaccec589b8b@orel>
+From:   Haibo Xu <xiaobo55x@gmail.com>
+Date:   Thu, 18 May 2023 16:10:33 +0800
+Message-ID: <CAJve8on1qzEZ6MsaV4ZOJoKHwymeEPtd_vmY6ki1Nq9bnUPT2g@mail.gmail.com>
+Subject: Re: [PATCH 2/2] KVM: selftests: Add riscv get-reg-list test
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Haibo Xu <haibo1.xu@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kselftest@vger.kernel.org, kvmarm@lists.linux.dev,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Sean Christopherson <seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 07:09:13PM -0500, Mike Christie wrote:
-> This has us deqeue SIGKILL even if SIGNAL_GROUP_EXIT/group_exec_task is
-> set when we are dealing with PF_USER_WORKER tasks.
-> 
-> When a vhost_task gets a SIGKILL, we could have outstanding IO in flight.
-> We can easily stop new work/IO from being queued to the vhost_task, but
-> for IO that's already been sent to something like the block layer we
-> need to wait for the response then process it. These type of IO
-> completions use the vhost_task to process the completion so we can't
-> exit immediately.
-> 
-> We need to handle wait for then handle those completions from the
-> vhost_task, but when we have a SIGKLL pending, functions like
-> schedule() return immediately so we can't wait like normal. Functions
-> like vhost_worker() degrade to just a while(1); loop.
-> 
-> This patch has get_signal drop down to the normal code path when
-> SIGNAL_GROUP_EXIT/group_exec_task is set so the caller can still detect
-> there is a SIGKILL but still perform some blocking cleanup.
-> 
-> Note that in that chunk I'm now bypassing that does:
-> 
-> sigdelset(&current->pending.signal, SIGKILL);
-> 
-> we look to be ok, because in the places we set SIGNAL_GROUP_EXIT/
-> group_exec_task we are already doing that on the threads in the
-> group.
-> 
-> Signed-off-by: Mike Christie <michael.christie@oracle.com>
-> ---
+On Thu, May 18, 2023 at 3:32=E2=80=AFPM Andrew Jones <ajones@ventanamicro.c=
+om> wrote:
+>
+> On Thu, May 18, 2023 at 12:17:18PM +0800, Haibo Xu wrote:
+> ...
+> > > The idea of these *to_str functions is to dump output that can be
+> > > copy+pasted into a reg array (hence the trailing commas in print_reg
+> > > lines). So we can't just print random lines here or return '##UNKOWN#=
+#',
+> > > as that won't compile. Instead, the default should return
+> > >
+> > >   str_with_index("KVM_REG_RISCV_CONFIG_REG(##)", reg_off)
+> > >
+> >
+> > Thanks for sharing the detailed idea, will fix it in next version!
+>
+> I guess we could also return a string like,
+>
+> "KVM_REG_RISCV_CONFIG_REG(##) /* UNKNOWN */"
+>
+> as that would still compile and also convey the message that this
+> register doesn't have a name because the test doesn't know it yet.
+>
 
-I think you just got confused by the original discussion that was split
-into two separate threads:
+Yes, that's more friendly and self explanatory. Thanks for the suggestion!
 
-(1) The discussion based on your original proposal to adjust the signal
-    handling logic to accommodate vhost workers as they are right now.
-    That's where Oleg jumped in.
-(2) My request - which you did in this series - of rewriting vhost
-    workers to behave more like io_uring workers.
+> ...
+> > > We should share all the code above, except print_reg(), with aarch64.
+> > > I'll send a patch series that splits the arch-neutral code out of
+> > > the aarch64 test that you can base this test on.
+> > >
+> >
+> > Good idea! I will rebase the patch based on your work.
+> >
+>
+> Ok, I've pushed patches to [1]. This series introduces two things to KVM
+> selftests. Primarily it splits the aarch64/get-reg-list test into a
+> cross-arch get-reg-list test and an $ARCH_DIR/get-reg-list.o object file,
+> which the cross-arch test depends on. To do that, it also introduces the
+> concept of a "split test", a test that has a cross-arch part which depend=
+s
+> on an arch-specific part. Using a split test is cleaner than the
+> #ifdeffery we usually do for cross-arch tests.
+>
+> I've added kvmarm@lists.linux.dev, Marc, Oliver, and Sean to the CC of
+> this message. You'll want to add them when you post v2 as well.
+>
 
-Both problems are orthogonal. The gist of my proposal is to avoid (1) by
-doing (2). So the only change that's needed is
-s/PF_IO_WORKER/PF_USER_WORKER/ which is pretty obvious as io_uring
-workers and vhost workers no almost fully collapse into the same
-concept.
+Sure, I will rebase your patch in v2. Thanks for your review!
 
-So forget (1). If additional signal patches are needed as discussed in
-(1) then it must be because of a bug that would affect io_uring workers
-today.
+> [1] https://github.com/jones-drew/linux/commits/arm64/kself/get-reg-list
+>
+> Thanks,
+> drew
