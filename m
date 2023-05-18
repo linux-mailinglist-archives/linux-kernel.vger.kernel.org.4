@@ -2,225 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBE0370842C
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76635708435
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:48:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231633AbjEROrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 10:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33282 "EHLO
+        id S231739AbjEROs1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 10:48:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229917AbjEROrV (ORCPT
+        with ESMTP id S231675AbjEROsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 10:47:21 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48C2E0;
-        Thu, 18 May 2023 07:47:19 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-52caed90d17so1429709a12.0;
-        Thu, 18 May 2023 07:47:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684421239; x=1687013239;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=kvgIf19oHXt3jG+3jnSR39KiE1Z6F2UkisVQ+IwSMYQ=;
-        b=j1PvAr4axI0UqISuZ0Di29AFnw9d80uWfBvFU81dpydJKPVEjEPNvKfouneurMTsOj
-         EFh0o3+LLv8rYZFJ8Omr5QxB761b1aPTk9bTMBU9fbflGXTsJGwVP8PQ8eCYZFYtWKC5
-         m+JHbnQnBSTi/v2JVIMNK9DHoRc68dzb/xTAF5gXAVQJfAZxahGLlIB9FFLUi/yOuiHJ
-         HJuFVgnwCkzdeQRZUw9U8JbymaVopkDdoeU02qRbVmcJ8lIfOeNYSv9OVtM+AUVOikHP
-         zEqfsIQSkCFUINUceUjzGMgnArkKBjY09DZmREAFWe+5h59oyMt40QVrWbn4TXhiOOAM
-         I3pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684421239; x=1687013239;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kvgIf19oHXt3jG+3jnSR39KiE1Z6F2UkisVQ+IwSMYQ=;
-        b=XrKpeZMT9KhfC2bV3VoYeVHS9i3a0wdKhZyO0vTjsqBkwMzCfTqaoTICNagIH/HBY8
-         ZwFdjFw0GwpAtmqi7yRG9LAM0kF8JJWKhVUmsx/82AE9L+m6A9fjZOoO3B2Zj8eGa6yt
-         mh/JVjVBOhvrnM0DvI3kN5EoKgqWmNmEY4c8p798nB6fBR8wQ20y3rCLIka5lv3obakq
-         lzFauJwC3eFQ/3tShVXgJ9g+xPXuOrTn4lCva3YfjBNlv/IqmM/j8/YTzI6zPmKiTLad
-         eR6aoBmVMNp2MCn4w8aWhM/IGX3+KPh22t4g4cGMu8UFeyrLi47eWCOAkIk+k+DDFATj
-         jAbA==
-X-Gm-Message-State: AC+VfDxSiD22S5XF4dQUGZ35TLqgG/FIEkBRILr7UHqnE2KPUKzkodkC
-        zP58FWrFHyYPTse5Rmi3fNupfOr+dSQXXRNants=
-X-Google-Smtp-Source: ACHHUZ5eJZWIT/VXRww7Kgr3iXlHofukzD/zJJvJphi9c7Y+8ZZhIEJKgunM/dMHUuHP42LtXRhdjUPUux89MlBU9Lc=
-X-Received: by 2002:a17:903:487:b0:1ab:107b:c127 with SMTP id
- jj7-20020a170903048700b001ab107bc127mr2665116plb.59.1684421239254; Thu, 18
- May 2023 07:47:19 -0700 (PDT)
+        Thu, 18 May 2023 10:48:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F41F2E0;
+        Thu, 18 May 2023 07:48:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C08E64FD0;
+        Thu, 18 May 2023 14:48:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B10FEC433D2;
+        Thu, 18 May 2023 14:48:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684421302;
+        bh=6hR6nJQ/Rih7qcH8pK2O1ZFy9hlR/TAHBgBtNcu7FWc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jzPN06K6wY4jUnyFcdlQfXm49l3Kc07uQK6Fd0nUEwzfmoBTM+my690NoDHWutUU9
+         Dc/6B0dZauOlRIXgEC6N8EnaGagCAajWeZ7gAsTbI7n3/ZDwNE3PT2teJXeuvCTITK
+         b0fLyo+bynqzFSzy4a0BcalMIr72hgd30izCLJtdT3hkNPsZv6YA+PWEYYQl8DCH6W
+         ZuI9z0J68WVR5V8SEZcdo7+Q+oharCrRF32tLcLw6Tnk24Y+OfqoPREuyDTKA1cqBZ
+         z4VgzU8Wqh1hofsZNZRgoAlQqJbQ8r56z9Y8g7Cgq03+v8qxs3OItGKsEVPXmLkN4s
+         ZkxL2Nh1FdWFQ==
+Date:   Thu, 18 May 2023 16:48:16 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Jan Kara <jack@suse.cz>, Andreas Gruenbacher <agruenba@redhat.com>,
+        Daniel Verkamp <dverkamp@chromium.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Jeff Xu <jeffxu@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        syzbot+ac3b41786a2d0565b6d5@syzkaller.appspotmail.com,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] pid: Replace struct pid 1-element array with flex-array
+Message-ID: <20230518-zuneigen-brombeeren-0a57cd32b1a7@brauner>
+References: <20230517225838.never.965-kees@kernel.org>
 MIME-Version: 1.0
-References: <CAO9szn18KsR0c+U8EEY1=xnmsKMxy6SEArMUic0z=aYJDVwWCQ@mail.gmail.com>
- <023f6cf9-0f08-f27e-d203-5ff78faf110f@linaro.org> <CAO9szn1EsbuPSRrOW8CLqhp+QUcL=9NE93FAwsg2n3htd_aJTw@mail.gmail.com>
- <CAMty3ZCAP6CRsJWMUZZ6+hd5igX3NgyNfhdEv2FwuDtqj4iaaA@mail.gmail.com>
- <HB0TUR.1IPEEV2C5LMB1@gmail.com> <CAMty3ZCSUx-81m4SQcJZvUq3NyhzZbe8ow+LiV7iyUmVLCmNYQ@mail.gmail.com>
-In-Reply-To: <CAMty3ZCSUx-81m4SQcJZvUq3NyhzZbe8ow+LiV7iyUmVLCmNYQ@mail.gmail.com>
-From:   Paulo Pavacic <pavacic.p@gmail.com>
-Date:   Thu, 18 May 2023 16:47:08 +0200
-Message-ID: <CAO9szn2A22KTzrCTX+24Y3goSberHpcGf-O-Czv3+_dX+pL+vQ@mail.gmail.com>
-Subject: Re: [PATCH v2] dt-bindings: display: panel: add panel-mipi-dsi-bringup
-To:     Jagan Teki <jagan@amarulasolutions.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        neil.armstrong@linaro.org, conor+dt@kernel.org,
-        devicetree@vger.kernel.org, sam@ravnborg.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230517225838.never.965-kees@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> So, the driver has to be panel-fannal-c3004.c and binding to be fannal,c3004.yaml.
+On Wed, May 17, 2023 at 03:58:42PM -0700, Kees Cook wrote:
+> For pid namespaces, struct pid uses a dynamically sized array member,
+> "numbers". This was implemented using the ancient 1-element fake flexible
+> array, which has been deprecated for decades. Replace it with a C99
+> flexible array, refactor the array size calculations to use struct_size(),
+> and address elements via indexes. Note that the static initializer (which
+> defines a single element) works as-is, and requires no special handling.
+> 
+> Without this, CONFIG_UBSAN_BOUNDS (and potentially CONFIG_FORTIFY_SOURCE)
+> will trigger bounds checks:
+> https://lore.kernel.org/lkml/20230517-bushaltestelle-super-e223978c1ba6@brauner
+> 
+> Cc: Christian Brauner <brauner@kernel.org>
+> Cc: Jan Kara <jack@suse.cz>
+> Cc: Andreas Gruenbacher <agruenba@redhat.com>
+> Cc: Daniel Verkamp <dverkamp@chromium.org>
+> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> Cc: Jeff Xu <jeffxu@google.com>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Boqun Feng <boqun.feng@gmail.com>
+> Cc: Luis Chamberlain <mcgrof@kernel.org>
+> Cc: Frederic Weisbecker <frederic@kernel.org>
+> Reported-by: syzbot+ac3b41786a2d0565b6d5@syzkaller.appspotmail.com
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+>  include/linux/pid.h    |  2 +-
+>  kernel/pid.c           | 13 ++++++++-----
+>  kernel/pid_namespace.c |  2 +-
+>  3 files changed, 10 insertions(+), 7 deletions(-)
+> 
+> diff --git a/include/linux/pid.h b/include/linux/pid.h
+> index b75de288a8c2..653a527574c4 100644
+> --- a/include/linux/pid.h
+> +++ b/include/linux/pid.h
+> @@ -67,7 +67,7 @@ struct pid
+>  	/* wait queue for pidfd notifications */
+>  	wait_queue_head_t wait_pidfd;
+>  	struct rcu_head rcu;
+> -	struct upid numbers[1];
+> +	struct upid numbers[];
+>  };
+>  
+>  extern struct pid init_struct_pid;
+> diff --git a/kernel/pid.c b/kernel/pid.c
+> index f93954a0384d..f5008146e2e4 100644
+> --- a/kernel/pid.c
+> +++ b/kernel/pid.c
+> @@ -131,7 +131,7 @@ void free_pid(struct pid *pid)
+>  
+>  	spin_lock_irqsave(&pidmap_lock, flags);
+>  	for (i = 0; i <= pid->level; i++) {
+> -		struct upid *upid = pid->numbers + i;
+> +		struct upid *upid = &pid->numbers[i];
+>  		struct pid_namespace *ns = upid->ns;
+>  		switch (--ns->pid_allocated) {
+>  		case 2:
+> @@ -265,7 +265,7 @@ struct pid *alloc_pid(struct pid_namespace *ns, pid_t *set_tid,
+>  	init_waitqueue_head(&pid->wait_pidfd);
+>  	INIT_HLIST_HEAD(&pid->inodes);
+>  
+> -	upid = pid->numbers + ns->level;
+> +	upid = &pid->numbers[ns->level];
+>  	spin_lock_irq(&pidmap_lock);
+>  	if (!(ns->pid_allocated & PIDNS_ADDING))
+>  		goto out_unlock;
+> @@ -285,7 +285,7 @@ struct pid *alloc_pid(struct pid_namespace *ns, pid_t *set_tid,
+>  out_free:
+>  	spin_lock_irq(&pidmap_lock);
+>  	while (++i <= ns->level) {
+> -		upid = pid->numbers + i;
+> +		upid = &pid->numbers[i];
+>  		idr_remove(&upid->ns->idr, upid->nr);
+>  	}
+>  
+> @@ -656,8 +656,11 @@ void __init pid_idr_init(void)
+>  
+>  	idr_init(&init_pid_ns.idr);
+>  
+> -	init_pid_ns.pid_cachep = KMEM_CACHE(pid,
+> -			SLAB_HWCACHE_ALIGN | SLAB_PANIC | SLAB_ACCOUNT);
+> +	init_pid_ns.pid_cachep = kmem_cache_create("pid",
+> +			struct_size((struct pid *)0, numbers, 1),
+> +			__alignof__(struct pid),
+> +			SLAB_HWCACHE_ALIGN | SLAB_PANIC | SLAB_ACCOUNT,
+> +			NULL);
+>  }
+>  
+>  static struct file *__pidfd_fget(struct task_struct *task, int fd)
+> diff --git a/kernel/pid_namespace.c b/kernel/pid_namespace.c
+> index b43eee07b00c..ebb20091a9da 100644
+> --- a/kernel/pid_namespace.c
+> +++ b/kernel/pid_namespace.c
+> @@ -48,7 +48,7 @@ static struct kmem_cache *create_pid_cachep(unsigned int level)
+>  		return kc;
+>  
+>  	snprintf(name, sizeof(name), "pid_%u", level + 1);
+> -	len = sizeof(struct pid) + level * sizeof(struct upid);
+> +	len = struct_size((struct pid *)0, numbers, level + 1);
 
-I believe I have covered this and all the other problems in following
-patch which I will submit as a V3 of the conversation in a patchset
-together with a driver:
-
-Add dt-bindings documentation for panel-mipi-dsi-bringup which currently
-supports fannal,c3004 panel. Also added fannal to vendor-prefixes.
-
-Signed-off-by: Paulo Pavacic <pavacic.p@gmail.com>
----
-v3 changelog:
-  - renamed yml file
-  - refactored yml file to describe fannal,c3004
-  - added matrix URI to MAINTAINERS
-v2 changelog:
-  - revised driver title, now describes purpose
-  - revised description, now describes hw
-  - revised maintainers, now has only 1 mail
-  - removed diacritics from commit/commit author
-  - properties/compatible is now enum
-  - compatible using only lowercase
-  - revised dts example
-  - modified MAINTAINERS in this commit (instead of driver commit)
-  - dt_bindings_check checked yml
-  - checkpatch warning fixed
----
- .../bindings/display/panel/fannal,c3004.yaml  | 74 +++++++++++++++++++
- .../devicetree/bindings/vendor-prefixes.yaml  |  2 +
- MAINTAINERS                                   |  6 ++
- 3 files changed, 82 insertions(+)
- create mode 100644
-Documentation/devicetree/bindings/display/panel/fannal,c3004.yaml
-
-diff --git a/Documentation/devicetree/bindings/display/panel/fannal,c3004.yaml
-b/Documentation/devicetree/bindings/display/panel/fannal,c3004.yaml
-new file mode 100644
-index 000000000000..c2eea0fa8418
---- /dev/null
-+++ b/Documentation/devicetree/bindings/display/panel/fannal,c3004.yaml
-@@ -0,0 +1,74 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/display/panel/fannal,c3004.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Fannal C3004373132019A MIPI-DSI
-+
-+maintainers:
-+  - Paulo Pavacic <pavacic.p@gmail.com>
-+
-+description: |
-+  Fannal C3004373132019A is a 480x800 panel which requires DSI DCS
-+  initialization sequences.
-+
-+allOf:
-+  - $ref: panel-common.yaml#
-+
-+properties:
-+  compatible:
-+    items:
-+      - const: fannal,c3004
-+
-+  port: true
-+  reg: true
-+  reset-gpios: true
-+
-+  vdd-supply:
-+    description: power supply voltage
-+  vddio-supply:
-+    description: power supply voltage for IO
-+
-+  width-mm:
-+    description: physical panel width [mm]
-+  height-mm:
-+    description: physical panel height [mm]
-+
-+required:
-+  - compatible
-+  - reg
-+  - reset-gpios
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    dsi {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        panel@0 {
-+            compatible = "fannal,c3004";
-+            reg = <0>;
-+            pinctrl-0 = <&pinctrl_mipi_dsi_rst>;
-+            pinctrl-names = "default";
-+            reset-gpios = <&gpio1 9 GPIO_ACTIVE_LOW>;
-+            vdd-supply = <&reg1>;
-+            vddio-supply = <&reg2>;
-+            width-mm = <93>;
-+            height-mm = <56>;
-+            panel-timing {
-+                clock-frequency = <27000000>;
-+                hactive = <480>;
-+                vactive = <800>;
-+                hfront-porch = <30>;
-+                hback-porch = <30>;
-+                hsync-len = <8>;
-+                vback-porch = <30>;
-+                vfront-porch = <30>;
-+                vsync-len = <8>;
-+            };
-+        };
-+    };
-+...
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 82d39ab0231b..f962750f630a 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -462,6 +462,8 @@ patternProperties:
-     description: Facebook
-   "^fairphone,.*":
-     description: Fairphone B.V.
-+  "^fannal,.*":
-+    description: Fannal Electronics Co., Ltd
-   "^faraday,.*":
-     description: Faraday Technology Corporation
-   "^fastrax,.*":
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e0ad886d3163..75879341dd0b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6566,6 +6566,12 @@ T:    git git://anongit.freedesktop.org/drm/drm-misc
- F:    Documentation/devicetree/bindings/display/panel/panel-mipi-dbi-spi.yaml
- F:    drivers/gpu/drm/tiny/panel-mipi-dbi.c
-
-+DRM DRIVER FOR MIPI DSI BRINGUP
-+M:    Paulo Pavacic <pavacic.p@gmail.com>
-+S:    Maintained
-+C:    matrix:r/mipi-dsi-bringup:matrix.org
-+F:    Documentation/devicetree/bindings/display/panel/panel-fannal,c3004.yaml
-+
- DRM DRIVER FOR MSM ADRENO GPU
- M:    Rob Clark <robdclark@gmail.com>
- M:    Abhinav Kumar <quic_abhinavk@quicinc.com>
--- 
-2.40.1
-
-Best regards,
-Paulo
+Having this open-coded is a bit ugly tbh, especially the visible cast
+to 0. But fine we can probably live with this since it's really only
+localized to this file.
