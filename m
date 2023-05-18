@@ -2,722 +2,1322 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3232170800E
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 13:45:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 335C870800F
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 13:45:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230489AbjERLpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 07:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40466 "EHLO
+        id S231220AbjERLpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 07:45:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231574AbjERLo4 (ORCPT
+        with ESMTP id S231236AbjERLot (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 07:44:56 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2061.outbound.protection.outlook.com [40.107.220.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4BCFA
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 04:44:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SeVIUH7q6uh2oAXO9DdK3WlwakrfYn9qdh9lr/mhy2KnMdAtfLqGsqoP+g8bG9WklY3X+sCXxPSI0C69stFEsv2fYG/06cxkcmdFmu5wdc4nyZS3ljB6Ye28bgXoXVAPLdOeyvlXADUY2VX/kYdFR7fdPnMIvgiJajVIWxhQ9UDKfo9a1jx/IGZp9jyN+lPTf2m8oo1+DMhn2spBQeGMg62N86tJVCjyFllreMzW2BZAmaK1OA+v8s3EIueRK76V4DZtLr3iI4vOzsRaY/F1vBiH0O29Nq+OZ9bucTpm9uU/3Vt8x5cd7ov7UX460wu7RAyqKW18Ax8saQ0fyINt2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Pqorrr6+6CkYRr9Vf9iqEBTvP590t856MRS1cqIY7os=;
- b=iOwmdcmf34G2XasXb1KirvoaBKGwirmSo4LpNYGUMSmT2wGpMCvE1oprD6iHptOQ1rwEP3EY8hoa3I2iviLZbyzrn0MmD9DrVzVENRbLLEASKl2JKEkfM8FZ64L/d+M3+vK2UHbBwIE5NHZWyAgzNp8WKo5duf48ORb4LkyH4ymJchLjJKvrAAS5UnAsmp2SDAkFcS1NgSseLn0ZJOOsaUepNGzSO8tW/ShHwblTXEqIGWTpCTUitBc63pFEDddWynDjOmKbxUyBsoOTGf8akEXx7Oh3W6sIAY6HFv25/HYHr0l/y5g6pK4VYrAyct130kyGuGpxweEJ2rCdN+h8TA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Pqorrr6+6CkYRr9Vf9iqEBTvP590t856MRS1cqIY7os=;
- b=25K4PNC+30s20y0GMOnnI8ArZ1M4uQImT8hVgPf+1npbFBgYmUlmf3jfxvduUnVja7ofMM8XUHaMcNwIacySJFiYZPUVoUK3j2Ll4J7CZqa/O33tVWVEAi0n/vPJQpyueqOJo7TqHPCnjKOzNrLHJdYmXbhQvJyv9pSJd7LTREU=
-Received: from DM6PR04CA0026.namprd04.prod.outlook.com (2603:10b6:5:334::31)
- by DS0PR12MB8479.namprd12.prod.outlook.com (2603:10b6:8:155::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.17; Thu, 18 May
- 2023 11:44:43 +0000
-Received: from DM6NAM11FT025.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:334:cafe::b5) by DM6PR04CA0026.outlook.office365.com
- (2603:10b6:5:334::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19 via Frontend
- Transport; Thu, 18 May 2023 11:44:43 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT025.mail.protection.outlook.com (10.13.172.197) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6411.20 via Frontend Transport; Thu, 18 May 2023 11:44:43 +0000
-Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 18 May
- 2023 06:44:41 -0500
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB08.amd.com
- (10.181.40.132) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 18 May
- 2023 04:44:40 -0700
-Received: from xhdipdslab41.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
- Transport; Thu, 18 May 2023 06:44:37 -0500
-From:   Nipun Gupta <nipun.gupta@amd.com>
-To:     <gregkh@linuxfoundation.org>, <maz@kernel.org>,
-        <tglx@linutronix.de>, <jgg@ziepe.ca>,
-        <linux-kernel@vger.kernel.org>
-CC:     <git@amd.com>, <harpreet.anand@amd.com>,
-        <pieter.jansen-van-vuuren@amd.com>, <nikhil.agarwal@amd.com>,
-        <michal.simek@amd.com>, <abhijit.gangurde@amd.com>,
-        Nipun Gupta <nipun.gupta@amd.com>
-Subject: [PATCH v2] cdx: add MSI support for CDX bus
-Date:   Thu, 18 May 2023 17:14:18 +0530
-Message-ID: <20230518114418.18025-1-nipun.gupta@amd.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 18 May 2023 07:44:49 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D953C1
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 04:44:40 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f42769a0c1so19361965e9.2
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 04:44:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684410278; x=1687002278;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ATJuBnyPcjz0r9obKunJbqkEq2z3aNppC+BwrcNAcw8=;
+        b=TXYzE7VASAT1TBTyQxiKZKi4Vb9Hii62BDtQ4g1EfvY4v5sD0wk4ijcESXdSHgbF6f
+         V89GY7uQRwwwW104TJQ57CrGDD6m8auqRBfX3GPY3jXoRshN8wi4K5Oku8sdEyVtMVi2
+         epdqSJ91zj+v+9q9FQfxEN8N/NifLvlphrFqfN9nKpBt0Vo5/SrhKBeiyJDQTrUWb06s
+         o69t0siLDlhZjNFKHwJqVJYX8Rui6ZgEAR7yZLNTWmNDyteQUubT8EETyoNjIgkqixg+
+         5GrGcwdZuogzC3/6dRPrJnkme8Z8Y9OEBwD8LYnpobGn6m6z4HTdAlsq5irjtwK1cbqU
+         CQpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684410278; x=1687002278;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ATJuBnyPcjz0r9obKunJbqkEq2z3aNppC+BwrcNAcw8=;
+        b=JQCUeEWNUDEeaNHO7bzyJhMC3yldZqDSklagIdPnZMGtDGQ47GIhGDy8jwEoC4pp90
+         weMEypw7dEUKq0binZH/54wdivcc6JD/sLYZW769nbuVAFPTZVbJsCpalFbsqcmsxcSG
+         PHVwOInXvXkBHcPB3hmV4GpZcnS+db6Jj996WUcTlCv5f64KA32EDwZfvYQUE+n6MfP+
+         nDbkX1eHED1QGbWN9D+hRWNFic5Aqeh9gPL8ll1xv+aCAPtXveYtSNNcImImcsK8Dcd6
+         8Nx+PAxdkeDCCDB0sv1fF6nD7XuOOFcxuJPtUEZbqs0FfWnwTkT0Jhzp0+4HeZ/2kp5J
+         o4vQ==
+X-Gm-Message-State: AC+VfDyV2O5vH282gGrajHXJMx55ekzT+pr/+6Gy63H1kCO1m3yKIWgM
+        N/2Pb+U99xwoBKA+KhYJBn0D1oltQ2n7qqI0hV2ovA==
+X-Google-Smtp-Source: ACHHUZ5EximauRg5BjM9T6qbOd/0zqll2/TGUtTF1nay4enbSzWs5/8UuD4JlHomDlFbCNHZzbrmXpOnMu1BVST4qe0=
+X-Received: by 2002:a05:600c:22cc:b0:3f4:2cf3:a542 with SMTP id
+ 12-20020a05600c22cc00b003f42cf3a542mr1338368wmg.6.1684410278376; Thu, 18 May
+ 2023 04:44:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT025:EE_|DS0PR12MB8479:EE_
-X-MS-Office365-Filtering-Correlation-Id: f2cdaca1-c52d-441c-2e99-08db579545e4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: E+aZWH9tyRA+A97wl3/9My8w53kYxQrEhpzGG10JNV0XlxvHW5ohiJpw1UpKu1HKB/zv55b124suSLVlEPSu6vqkxjWEjL0mcYmLAY5tyd9a4E4MAH8XQzQUZWdG1dGeePimpwAZrtqpAG+fwWe2mNiBj3hoOiJlodIXe5etUncUi/BUri6c5vvbM0teLXyyDM8nM/GHlJ1HjoprLwWRjM41MLHDy+qIi7ddOD8n9ESwsk8o0hUc3BQqE1Q6jgP6tZI7BuVJfj6yn1vj7fTV24Usnbc+NRcvSdn0sqTMUOHEaB1BY11vW7Qf+vnk/k+1HqlVrFp/5gVYJBStojUrygCyBPHUU7mU8HKZj94S+TQnF279tOA7qWMibgpG3VCbJFxM9rAGC/UFLDAWtBktWrwGD7DqiVY1WkJiOfAhfWg/qC5BHurKbdTrLmL/ZZ773q6fQefLd3YdWj904uILNeJDrxK3ldZZaf9iHPesw6YdBV3HgJssmO8k2/th7Srt/kU8q3rvX3U+a8RNb0Zp2Kpw4pM/Cj6+gH5YHsJeKMM131q7e6aJOcNPfHBHIkMgpOnQ5/6bC5mV4jYLHa6tqm/K4VfSQ6lLthMpmlfFt8Utc6qIAnJ1TZJVvZSshL3yyzofKa75nS3uF1t5VY7bmT9JSmM4+okIH+88lasBnk6kGyS6RbnV4TyWz5ZPPUHemP+qW8snmcnHfJ8s4HzqOjIr7bFyVLzjkcbR6IPqGEQjsNFw26VYiZivOgyDV6pLmtr3PaJnxnbq9TmfUPEt5w==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(376002)(396003)(39860400002)(451199021)(36840700001)(46966006)(40470700004)(36860700001)(40460700003)(81166007)(82740400003)(356005)(41300700001)(8676002)(36756003)(5660300002)(2906002)(8936002)(86362001)(316002)(4326008)(70586007)(70206006)(40480700001)(30864003)(82310400005)(47076005)(186003)(336012)(1076003)(426003)(44832011)(83380400001)(26005)(6666004)(2616005)(54906003)(110136005)(478600001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2023 11:44:43.5820
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f2cdaca1-c52d-441c-2e99-08db579545e4
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT025.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8479
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <1684409015-25196-1-git-send-email-quic_rohiagar@quicinc.com> <1684409015-25196-3-git-send-email-quic_rohiagar@quicinc.com>
+In-Reply-To: <1684409015-25196-3-git-send-email-quic_rohiagar@quicinc.com>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Thu, 18 May 2023 17:14:25 +0530
+Message-ID: <CAH=2NtyocrwJe8H_JSti97DTZqs8ho0Ct8GObbsMGSDv0Heriw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] pinctrl: qcom: Add SDX75 pincontrol driver
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linus.walleij@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        richardcochran@gmail.com, manivannan.sadhasivam@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add CDX-MSI domain per CDX controller with gic-its domain as
-a parent, to support MSI for CDX devices. CDX devices allocate
-MSIs from the CDX domain. Also, introduce APIs to alloc and free
-IRQs for CDX domain.
+On Thu, 18 May 2023 at 16:54, Rohit Agarwal <quic_rohiagar@quicinc.com> wrote:
+>
+> Add initial Qualcomm SDX75 pinctrl driver to support pin configuration
+> with pinctrl framework for SDX75 SoC.
+> While at it, reordering the SDX65 entry.
+>
+> Signed-off-by: Rohit Agarwal <quic_rohiagar@quicinc.com>
+> ---
+>  drivers/pinctrl/qcom/Kconfig         |   30 +-
+>  drivers/pinctrl/qcom/Makefile        |    3 +-
+>  drivers/pinctrl/qcom/pinctrl-sdx75.c | 1145 ++++++++++++++++++++++++++++++++++
+>  3 files changed, 1167 insertions(+), 11 deletions(-)
+>  create mode 100644 drivers/pinctrl/qcom/pinctrl-sdx75.c
+>
+> diff --git a/drivers/pinctrl/qcom/Kconfig b/drivers/pinctrl/qcom/Kconfig
+> index e52cfab..28b1945 100644
+> --- a/drivers/pinctrl/qcom/Kconfig
+> +++ b/drivers/pinctrl/qcom/Kconfig
+> @@ -378,6 +378,26 @@ config PINCTRL_SDX55
+>          Qualcomm Technologies Inc TLMM block found on the Qualcomm
+>          Technologies Inc SDX55 platform.
+>
+> +config PINCTRL_SDX65
+> +        tristate "Qualcomm Technologies Inc SDX65 pin controller driver"
+> +        depends on GPIOLIB && OF
+> +        depends on ARM || COMPILE_TEST
+> +        depends on PINCTRL_MSM
+> +        help
+> +         This is the pinctrl, pinmux, pinconf and gpiolib driver for the
+> +         Qualcomm Technologies Inc TLMM block found on the Qualcomm
+> +         Technologies Inc SDX65 platform.
+> +
+> +config PINCTRL_SDX75
+> +        tristate "Qualcomm Technologies Inc SDX75 pin controller driver"
+> +        depends on GPIOLIB && OF
+> +        depends on ARM64 || COMPILE_TEST
+> +        depends on PINCTRL_MSM
+> +        help
+> +         This is the pinctrl, pinmux, pinconf and gpiolib driver for the
+> +         Qualcomm Technologies Inc TLMM block found on the Qualcomm
+> +         Technologies Inc SDX75 platform.
+> +
+>  config PINCTRL_SM6115
+>         tristate "Qualcomm Technologies Inc SM6115,SM4250 pin controller driver"
+>         depends on GPIOLIB && OF
+> @@ -418,16 +438,6 @@ config PINCTRL_SM6375
+>          Qualcomm Technologies Inc TLMM block found on the Qualcomm
+>          Technologies Inc SM6375 platform.
+>
+> -config PINCTRL_SDX65
+> -       tristate "Qualcomm Technologies Inc SDX65 pin controller driver"
+> -       depends on GPIOLIB && OF
+> -       depends on ARM || COMPILE_TEST
+> -       depends on PINCTRL_MSM
+> -       help
+> -        This is the pinctrl, pinmux, pinconf and gpiolib driver for the
+> -        Qualcomm Technologies Inc TLMM block found on the Qualcomm
+> -        Technologies Inc SDX65 platform.
+> -
+>  config PINCTRL_SM7150
+>         tristate "Qualcomm Technologies Inc SM7150 pin controller driver"
+>         depends on OF
+> diff --git a/drivers/pinctrl/qcom/Makefile b/drivers/pinctrl/qcom/Makefile
+> index 521b021..3e1fdf4 100644
+> --- a/drivers/pinctrl/qcom/Makefile
+> +++ b/drivers/pinctrl/qcom/Makefile
+> @@ -40,11 +40,12 @@ obj-$(CONFIG_PINCTRL_SDM660)   += pinctrl-sdm660.o
+>  obj-$(CONFIG_PINCTRL_SDM670) += pinctrl-sdm670.o
+>  obj-$(CONFIG_PINCTRL_SDM845) += pinctrl-sdm845.o
+>  obj-$(CONFIG_PINCTRL_SDX55) += pinctrl-sdx55.o
+> +obj-$(CONFIG_PINCTRL_SDX65) += pinctrl-sdx65.o
+> +obj-$(CONFIG_PINCTRL_SDX75) += pinctrl-sdx75.o
+>  obj-$(CONFIG_PINCTRL_SM6115) += pinctrl-sm6115.o
+>  obj-$(CONFIG_PINCTRL_SM6125) += pinctrl-sm6125.o
+>  obj-$(CONFIG_PINCTRL_SM6350) += pinctrl-sm6350.o
+>  obj-$(CONFIG_PINCTRL_SM6375) += pinctrl-sm6375.o
+> -obj-$(CONFIG_PINCTRL_SDX65) += pinctrl-sdx65.o
+>  obj-$(CONFIG_PINCTRL_SM7150) += pinctrl-sm7150.o
+>  obj-$(CONFIG_PINCTRL_SM8150) += pinctrl-sm8150.o
+>  obj-$(CONFIG_PINCTRL_SM8250) += pinctrl-sm8250.o
+> diff --git a/drivers/pinctrl/qcom/pinctrl-sdx75.c b/drivers/pinctrl/qcom/pinctrl-sdx75.c
+> new file mode 100644
+> index 0000000..84eb586
+> --- /dev/null
+> +++ b/drivers/pinctrl/qcom/pinctrl-sdx75.c
+> @@ -0,0 +1,1145 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +#include "pinctrl-msm.h"
+> +
+> +#define REG_BASE 0x100000
+> +#define REG_SIZE 0x1000
 
-In CDX subsystem firmware is a controller for all devices and
-their configuration. CDX bus controller sends all the write_msi_msg
-commands to firmware running on RPU and the firmware interfaces with
-actual devices to pass this information to devices
+Please use TABS between a DEFINE_NAME and its VALUE.
 
-Since, CDX controller is the only way to communicate with the Firmware
-for MSI write info, CDX domain per controller required in contrast to
-having a CDX domain per device.
+> +
+> +#define PINGROUP(id, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10)          \
+> +       {                                                               \
+> +               .grp = PINCTRL_PINGROUP("gpio"#id, gpio##id##_pins,     \
+> +                       (unsigned int)ARRAY_SIZE(gpio##id##_pins)),     \
+> +               .ctl_reg = REG_BASE + REG_SIZE * id,                    \
+> +               .io_reg = REG_BASE + 0x4 + REG_SIZE * id,               \
+> +               .intr_cfg_reg = REG_BASE + 0x8 + REG_SIZE * id,         \
+> +               .intr_status_reg = REG_BASE + 0xc + REG_SIZE * id,      \
+> +               .intr_target_reg = REG_BASE + 0x8 + REG_SIZE * id,      \
+> +               .mux_bit = 2,                                           \
+> +               .pull_bit = 0,                                          \
+> +               .drv_bit = 6,                                           \
+> +               .egpio_enable = 12,                                     \
+> +               .egpio_present = 11,                                    \
+> +               .oe_bit = 9,                                            \
+> +               .in_bit = 0,                                            \
+> +               .out_bit = 1,                                           \
+> +               .intr_enable_bit = 0,                                   \
+> +               .intr_status_bit = 0,                                   \
+> +               .intr_target_bit = 5,                                   \
+> +               .intr_target_kpss_val = 3,                              \
+> +               .intr_raw_status_bit = 4,                               \
+> +               .intr_polarity_bit = 1,                                 \
+> +               .intr_detection_bit = 2,                                \
+> +               .intr_detection_width = 2,                              \
+> +               .funcs = (int[]){                                       \
+> +                       msm_mux_gpio, /* gpio mode */                   \
+> +                       msm_mux_##f1,                                   \
+> +                       msm_mux_##f2,                                   \
+> +                       msm_mux_##f3,                                   \
+> +                       msm_mux_##f4,                                   \
+> +                       msm_mux_##f5,                                   \
+> +                       msm_mux_##f6,                                   \
+> +                       msm_mux_##f7,                                   \
+> +                       msm_mux_##f8,                                   \
+> +                       msm_mux_##f9,                                   \
+> +                       msm_mux_##f10                                   \
+> +               },                                                      \
+> +               .nfuncs = 11,                                           \
+> +       }
+> +
+> +#define SDC_QDSD_PINGROUP(pg_name, ctl, pull, drv)                     \
+> +       {                                                               \
+> +               .grp = PINCTRL_PINGROUP(#pg_name, pg_name##_pins,       \
+> +                       (unsigned int)ARRAY_SIZE(pg_name##_pins)),      \
+> +               .ctl_reg = ctl,                                         \
+> +               .io_reg = 0,                                            \
+> +               .intr_cfg_reg = 0,                                      \
+> +               .intr_status_reg = 0,                                   \
+> +               .intr_target_reg = 0,                                   \
+> +               .mux_bit = -1,                                          \
+> +               .pull_bit = pull,                                       \
+> +               .drv_bit = drv,                                         \
+> +               .oe_bit = -1,                                           \
+> +               .in_bit = -1,                                           \
+> +               .out_bit = -1,                                          \
+> +               .intr_enable_bit = -1,                                  \
+> +               .intr_status_bit = -1,                                  \
+> +               .intr_target_bit = -1,                                  \
+> +               .intr_raw_status_bit = -1,                              \
+> +               .intr_polarity_bit = -1,                                \
+> +               .intr_detection_bit = -1,                               \
+> +               .intr_detection_width = -1,                             \
+> +       }
+> +
+> +static const struct pinctrl_pin_desc sdx75_pins[] = {
+> +       PINCTRL_PIN(0, "GPIO_0"),
+> +       PINCTRL_PIN(1, "GPIO_1"),
+> +       PINCTRL_PIN(2, "GPIO_2"),
+> +       PINCTRL_PIN(3, "GPIO_3"),
+> +       PINCTRL_PIN(4, "GPIO_4"),
+> +       PINCTRL_PIN(5, "GPIO_5"),
+> +       PINCTRL_PIN(6, "GPIO_6"),
+> +       PINCTRL_PIN(7, "GPIO_7"),
+> +       PINCTRL_PIN(8, "GPIO_8"),
+> +       PINCTRL_PIN(9, "GPIO_9"),
+> +       PINCTRL_PIN(10, "GPIO_10"),
+> +       PINCTRL_PIN(11, "GPIO_11"),
+> +       PINCTRL_PIN(12, "GPIO_12"),
+> +       PINCTRL_PIN(13, "GPIO_13"),
+> +       PINCTRL_PIN(14, "GPIO_14"),
+> +       PINCTRL_PIN(15, "GPIO_15"),
+> +       PINCTRL_PIN(16, "GPIO_16"),
+> +       PINCTRL_PIN(17, "GPIO_17"),
+> +       PINCTRL_PIN(18, "GPIO_18"),
+> +       PINCTRL_PIN(19, "GPIO_19"),
+> +       PINCTRL_PIN(20, "GPIO_20"),
+> +       PINCTRL_PIN(21, "GPIO_21"),
+> +       PINCTRL_PIN(22, "GPIO_22"),
+> +       PINCTRL_PIN(23, "GPIO_23"),
+> +       PINCTRL_PIN(24, "GPIO_24"),
+> +       PINCTRL_PIN(25, "GPIO_25"),
+> +       PINCTRL_PIN(26, "GPIO_26"),
+> +       PINCTRL_PIN(27, "GPIO_27"),
+> +       PINCTRL_PIN(28, "GPIO_28"),
+> +       PINCTRL_PIN(29, "GPIO_29"),
+> +       PINCTRL_PIN(30, "GPIO_30"),
+> +       PINCTRL_PIN(31, "GPIO_31"),
+> +       PINCTRL_PIN(32, "GPIO_32"),
+> +       PINCTRL_PIN(33, "GPIO_33"),
+> +       PINCTRL_PIN(34, "GPIO_34"),
+> +       PINCTRL_PIN(35, "GPIO_35"),
+> +       PINCTRL_PIN(36, "GPIO_36"),
+> +       PINCTRL_PIN(37, "GPIO_37"),
+> +       PINCTRL_PIN(38, "GPIO_38"),
+> +       PINCTRL_PIN(39, "GPIO_39"),
+> +       PINCTRL_PIN(40, "GPIO_40"),
+> +       PINCTRL_PIN(41, "GPIO_41"),
+> +       PINCTRL_PIN(42, "GPIO_42"),
+> +       PINCTRL_PIN(43, "GPIO_43"),
+> +       PINCTRL_PIN(44, "GPIO_44"),
+> +       PINCTRL_PIN(45, "GPIO_45"),
+> +       PINCTRL_PIN(46, "GPIO_46"),
+> +       PINCTRL_PIN(47, "GPIO_47"),
+> +       PINCTRL_PIN(48, "GPIO_48"),
+> +       PINCTRL_PIN(49, "GPIO_49"),
+> +       PINCTRL_PIN(50, "GPIO_50"),
+> +       PINCTRL_PIN(51, "GPIO_51"),
+> +       PINCTRL_PIN(52, "GPIO_52"),
+> +       PINCTRL_PIN(53, "GPIO_53"),
+> +       PINCTRL_PIN(54, "GPIO_54"),
+> +       PINCTRL_PIN(55, "GPIO_55"),
+> +       PINCTRL_PIN(56, "GPIO_56"),
+> +       PINCTRL_PIN(57, "GPIO_57"),
+> +       PINCTRL_PIN(58, "GPIO_58"),
+> +       PINCTRL_PIN(59, "GPIO_59"),
+> +       PINCTRL_PIN(60, "GPIO_60"),
+> +       PINCTRL_PIN(61, "GPIO_61"),
+> +       PINCTRL_PIN(62, "GPIO_62"),
+> +       PINCTRL_PIN(63, "GPIO_63"),
+> +       PINCTRL_PIN(64, "GPIO_64"),
+> +       PINCTRL_PIN(65, "GPIO_65"),
+> +       PINCTRL_PIN(66, "GPIO_66"),
+> +       PINCTRL_PIN(67, "GPIO_67"),
+> +       PINCTRL_PIN(68, "GPIO_68"),
+> +       PINCTRL_PIN(69, "GPIO_69"),
+> +       PINCTRL_PIN(70, "GPIO_70"),
+> +       PINCTRL_PIN(71, "GPIO_71"),
+> +       PINCTRL_PIN(72, "GPIO_72"),
+> +       PINCTRL_PIN(73, "GPIO_73"),
+> +       PINCTRL_PIN(74, "GPIO_74"),
+> +       PINCTRL_PIN(75, "GPIO_75"),
+> +       PINCTRL_PIN(76, "GPIO_76"),
+> +       PINCTRL_PIN(77, "GPIO_77"),
+> +       PINCTRL_PIN(78, "GPIO_78"),
+> +       PINCTRL_PIN(79, "GPIO_79"),
+> +       PINCTRL_PIN(80, "GPIO_80"),
+> +       PINCTRL_PIN(81, "GPIO_81"),
+> +       PINCTRL_PIN(82, "GPIO_82"),
+> +       PINCTRL_PIN(83, "GPIO_83"),
+> +       PINCTRL_PIN(84, "GPIO_84"),
+> +       PINCTRL_PIN(85, "GPIO_85"),
+> +       PINCTRL_PIN(86, "GPIO_86"),
+> +       PINCTRL_PIN(87, "GPIO_87"),
+> +       PINCTRL_PIN(88, "GPIO_88"),
+> +       PINCTRL_PIN(89, "GPIO_89"),
+> +       PINCTRL_PIN(90, "GPIO_90"),
+> +       PINCTRL_PIN(91, "GPIO_91"),
+> +       PINCTRL_PIN(92, "GPIO_92"),
+> +       PINCTRL_PIN(93, "GPIO_93"),
+> +       PINCTRL_PIN(94, "GPIO_94"),
+> +       PINCTRL_PIN(95, "GPIO_95"),
+> +       PINCTRL_PIN(96, "GPIO_96"),
+> +       PINCTRL_PIN(97, "GPIO_97"),
+> +       PINCTRL_PIN(98, "GPIO_98"),
+> +       PINCTRL_PIN(99, "GPIO_99"),
+> +       PINCTRL_PIN(100, "GPIO_100"),
+> +       PINCTRL_PIN(101, "GPIO_101"),
+> +       PINCTRL_PIN(102, "GPIO_102"),
+> +       PINCTRL_PIN(103, "GPIO_103"),
+> +       PINCTRL_PIN(104, "GPIO_104"),
+> +       PINCTRL_PIN(105, "GPIO_105"),
+> +       PINCTRL_PIN(106, "GPIO_106"),
+> +       PINCTRL_PIN(107, "GPIO_107"),
+> +       PINCTRL_PIN(108, "GPIO_108"),
+> +       PINCTRL_PIN(109, "GPIO_109"),
+> +       PINCTRL_PIN(110, "GPIO_110"),
+> +       PINCTRL_PIN(111, "GPIO_111"),
+> +       PINCTRL_PIN(112, "GPIO_112"),
+> +       PINCTRL_PIN(113, "GPIO_113"),
+> +       PINCTRL_PIN(114, "GPIO_114"),
+> +       PINCTRL_PIN(115, "GPIO_115"),
+> +       PINCTRL_PIN(116, "GPIO_116"),
+> +       PINCTRL_PIN(117, "GPIO_117"),
+> +       PINCTRL_PIN(118, "GPIO_118"),
+> +       PINCTRL_PIN(119, "GPIO_119"),
+> +       PINCTRL_PIN(120, "GPIO_120"),
+> +       PINCTRL_PIN(121, "GPIO_121"),
+> +       PINCTRL_PIN(122, "GPIO_122"),
+> +       PINCTRL_PIN(123, "GPIO_123"),
+> +       PINCTRL_PIN(124, "GPIO_124"),
+> +       PINCTRL_PIN(125, "GPIO_125"),
+> +       PINCTRL_PIN(126, "GPIO_126"),
+> +       PINCTRL_PIN(127, "GPIO_127"),
+> +       PINCTRL_PIN(128, "GPIO_128"),
+> +       PINCTRL_PIN(129, "GPIO_129"),
+> +       PINCTRL_PIN(130, "GPIO_130"),
+> +       PINCTRL_PIN(131, "GPIO_131"),
+> +       PINCTRL_PIN(132, "GPIO_132"),
+> +       PINCTRL_PIN(133, "SDC1_RCLK"),
+> +       PINCTRL_PIN(134, "SDC1_CLK"),
+> +       PINCTRL_PIN(135, "SDC1_CMD"),
+> +       PINCTRL_PIN(136, "SDC1_DATA"),
+> +       PINCTRL_PIN(137, "SDC2_CLK"),
+> +       PINCTRL_PIN(138, "SDC2_CMD"),
+> +       PINCTRL_PIN(139, "SDC2_DATA"),
+> +};
+> +
+> +#define DECLARE_MSM_GPIO_PINS(pin)                      \
+> +       static const unsigned int gpio##pin##_pins[] = {pin}
+> +DECLARE_MSM_GPIO_PINS(0);
+> +DECLARE_MSM_GPIO_PINS(1);
+> +DECLARE_MSM_GPIO_PINS(2);
+> +DECLARE_MSM_GPIO_PINS(3);
+> +DECLARE_MSM_GPIO_PINS(4);
+> +DECLARE_MSM_GPIO_PINS(5);
+> +DECLARE_MSM_GPIO_PINS(6);
+> +DECLARE_MSM_GPIO_PINS(7);
+> +DECLARE_MSM_GPIO_PINS(8);
+> +DECLARE_MSM_GPIO_PINS(9);
+> +DECLARE_MSM_GPIO_PINS(10);
+> +DECLARE_MSM_GPIO_PINS(11);
+> +DECLARE_MSM_GPIO_PINS(12);
+> +DECLARE_MSM_GPIO_PINS(13);
+> +DECLARE_MSM_GPIO_PINS(14);
+> +DECLARE_MSM_GPIO_PINS(15);
+> +DECLARE_MSM_GPIO_PINS(16);
+> +DECLARE_MSM_GPIO_PINS(17);
+> +DECLARE_MSM_GPIO_PINS(18);
+> +DECLARE_MSM_GPIO_PINS(19);
+> +DECLARE_MSM_GPIO_PINS(20);
+> +DECLARE_MSM_GPIO_PINS(21);
+> +DECLARE_MSM_GPIO_PINS(22);
+> +DECLARE_MSM_GPIO_PINS(23);
+> +DECLARE_MSM_GPIO_PINS(24);
+> +DECLARE_MSM_GPIO_PINS(25);
+> +DECLARE_MSM_GPIO_PINS(26);
+> +DECLARE_MSM_GPIO_PINS(27);
+> +DECLARE_MSM_GPIO_PINS(28);
+> +DECLARE_MSM_GPIO_PINS(29);
+> +DECLARE_MSM_GPIO_PINS(30);
+> +DECLARE_MSM_GPIO_PINS(31);
+> +DECLARE_MSM_GPIO_PINS(32);
+> +DECLARE_MSM_GPIO_PINS(33);
+> +DECLARE_MSM_GPIO_PINS(34);
+> +DECLARE_MSM_GPIO_PINS(35);
+> +DECLARE_MSM_GPIO_PINS(36);
+> +DECLARE_MSM_GPIO_PINS(37);
+> +DECLARE_MSM_GPIO_PINS(38);
+> +DECLARE_MSM_GPIO_PINS(39);
+> +DECLARE_MSM_GPIO_PINS(40);
+> +DECLARE_MSM_GPIO_PINS(41);
+> +DECLARE_MSM_GPIO_PINS(42);
+> +DECLARE_MSM_GPIO_PINS(43);
+> +DECLARE_MSM_GPIO_PINS(44);
+> +DECLARE_MSM_GPIO_PINS(45);
+> +DECLARE_MSM_GPIO_PINS(46);
+> +DECLARE_MSM_GPIO_PINS(47);
+> +DECLARE_MSM_GPIO_PINS(48);
+> +DECLARE_MSM_GPIO_PINS(49);
+> +DECLARE_MSM_GPIO_PINS(50);
+> +DECLARE_MSM_GPIO_PINS(51);
+> +DECLARE_MSM_GPIO_PINS(52);
+> +DECLARE_MSM_GPIO_PINS(53);
+> +DECLARE_MSM_GPIO_PINS(54);
+> +DECLARE_MSM_GPIO_PINS(55);
+> +DECLARE_MSM_GPIO_PINS(56);
+> +DECLARE_MSM_GPIO_PINS(57);
+> +DECLARE_MSM_GPIO_PINS(58);
+> +DECLARE_MSM_GPIO_PINS(59);
+> +DECLARE_MSM_GPIO_PINS(60);
+> +DECLARE_MSM_GPIO_PINS(61);
+> +DECLARE_MSM_GPIO_PINS(62);
+> +DECLARE_MSM_GPIO_PINS(63);
+> +DECLARE_MSM_GPIO_PINS(64);
+> +DECLARE_MSM_GPIO_PINS(65);
+> +DECLARE_MSM_GPIO_PINS(66);
+> +DECLARE_MSM_GPIO_PINS(67);
+> +DECLARE_MSM_GPIO_PINS(68);
+> +DECLARE_MSM_GPIO_PINS(69);
+> +DECLARE_MSM_GPIO_PINS(70);
+> +DECLARE_MSM_GPIO_PINS(71);
+> +DECLARE_MSM_GPIO_PINS(72);
+> +DECLARE_MSM_GPIO_PINS(73);
+> +DECLARE_MSM_GPIO_PINS(74);
+> +DECLARE_MSM_GPIO_PINS(75);
+> +DECLARE_MSM_GPIO_PINS(76);
+> +DECLARE_MSM_GPIO_PINS(77);
+> +DECLARE_MSM_GPIO_PINS(78);
+> +DECLARE_MSM_GPIO_PINS(79);
+> +DECLARE_MSM_GPIO_PINS(80);
+> +DECLARE_MSM_GPIO_PINS(81);
+> +DECLARE_MSM_GPIO_PINS(82);
+> +DECLARE_MSM_GPIO_PINS(83);
+> +DECLARE_MSM_GPIO_PINS(84);
+> +DECLARE_MSM_GPIO_PINS(85);
+> +DECLARE_MSM_GPIO_PINS(86);
+> +DECLARE_MSM_GPIO_PINS(87);
+> +DECLARE_MSM_GPIO_PINS(88);
+> +DECLARE_MSM_GPIO_PINS(89);
+> +DECLARE_MSM_GPIO_PINS(90);
+> +DECLARE_MSM_GPIO_PINS(91);
+> +DECLARE_MSM_GPIO_PINS(92);
+> +DECLARE_MSM_GPIO_PINS(93);
+> +DECLARE_MSM_GPIO_PINS(94);
+> +DECLARE_MSM_GPIO_PINS(95);
+> +DECLARE_MSM_GPIO_PINS(96);
+> +DECLARE_MSM_GPIO_PINS(97);
+> +DECLARE_MSM_GPIO_PINS(98);
+> +DECLARE_MSM_GPIO_PINS(99);
+> +DECLARE_MSM_GPIO_PINS(100);
+> +DECLARE_MSM_GPIO_PINS(101);
+> +DECLARE_MSM_GPIO_PINS(102);
+> +DECLARE_MSM_GPIO_PINS(103);
+> +DECLARE_MSM_GPIO_PINS(104);
+> +DECLARE_MSM_GPIO_PINS(105);
+> +DECLARE_MSM_GPIO_PINS(106);
+> +DECLARE_MSM_GPIO_PINS(107);
+> +DECLARE_MSM_GPIO_PINS(108);
+> +DECLARE_MSM_GPIO_PINS(109);
+> +DECLARE_MSM_GPIO_PINS(110);
+> +DECLARE_MSM_GPIO_PINS(111);
+> +DECLARE_MSM_GPIO_PINS(112);
+> +DECLARE_MSM_GPIO_PINS(113);
+> +DECLARE_MSM_GPIO_PINS(114);
+> +DECLARE_MSM_GPIO_PINS(115);
+> +DECLARE_MSM_GPIO_PINS(116);
+> +DECLARE_MSM_GPIO_PINS(117);
+> +DECLARE_MSM_GPIO_PINS(118);
+> +DECLARE_MSM_GPIO_PINS(119);
+> +DECLARE_MSM_GPIO_PINS(120);
+> +DECLARE_MSM_GPIO_PINS(121);
+> +DECLARE_MSM_GPIO_PINS(122);
+> +DECLARE_MSM_GPIO_PINS(123);
+> +DECLARE_MSM_GPIO_PINS(124);
+> +DECLARE_MSM_GPIO_PINS(125);
+> +DECLARE_MSM_GPIO_PINS(126);
+> +DECLARE_MSM_GPIO_PINS(127);
+> +DECLARE_MSM_GPIO_PINS(128);
+> +DECLARE_MSM_GPIO_PINS(129);
+> +DECLARE_MSM_GPIO_PINS(130);
+> +DECLARE_MSM_GPIO_PINS(131);
+> +DECLARE_MSM_GPIO_PINS(132);
+> +
+> +static const unsigned int sdc1_rclk_pins[] = {133};
+> +static const unsigned int sdc1_clk_pins[] = {134};
+> +static const unsigned int sdc1_cmd_pins[] = {135};
+> +static const unsigned int sdc1_data_pins[] = {136};
+> +static const unsigned int sdc2_clk_pins[] = {137};
+> +static const unsigned int sdc2_cmd_pins[] = {138};
+> +static const unsigned int sdc2_data_pins[] = {139};
+> +
+> +enum sdx75_functions {
+> +       msm_mux_adsp_ext,
+> +       msm_mux_atest_char,
+> +       msm_mux_audio_ref_clk,
+> +       msm_mux_bimc_dte,
+> +       msm_mux_char_exec,
+> +       msm_mux_coex_uart2,
+> +       msm_mux_coex_uart,
+> +       msm_mux_cri_trng,
+> +       msm_mux_cri_trng0,
+> +       msm_mux_cri_trng1,
+> +       msm_mux_dbg_out_clk,
+> +       msm_mux_ddr_bist,
+> +       msm_mux_ddr_pxi0,
+> +       msm_mux_ebi0_wrcdc,
+> +       msm_mux_ebi2_a,
+> +       msm_mux_ebi2_lcd,
+> +       msm_mux_ebi2_lcd_te,
+> +       msm_mux_emac0_mcg,
+> +       msm_mux_emac0_ptp,
+> +       msm_mux_emac1_mcg,
+> +       msm_mux_emac1_ptp,
+> +       msm_mux_emac_cdc,
+> +       msm_mux_emac_pps_in,
+> +       msm_mux_eth0_mdc,
+> +       msm_mux_eth0_mdio,
+> +       msm_mux_eth1_mdc,
+> +       msm_mux_eth1_mdio,
+> +       msm_mux_ext_dbg,
+> +       msm_mux_gcc_125_clk,
+> +       msm_mux_gcc_gp1_clk,
+> +       msm_mux_gcc_gp2_clk,
+> +       msm_mux_gcc_gp3_clk,
+> +       msm_mux_gcc_plltest,
+> +       msm_mux_gpio,
+> +       msm_mux_i2s_mclk,
+> +       msm_mux_jitter_bist,
+> +       msm_mux_ldo_en,
+> +       msm_mux_ldo_update,
+> +       msm_mux_m_voc,
+> +       msm_mux_mgpi_clk,
+> +       msm_mux_native_char,
+> +       msm_mux_native_tsens,
+> +       msm_mux_native_tsense,
+> +       msm_mux_nav_dr_sync,
+> +       msm_mux_nav_gpio,
+> +       msm_mux_pa_indicator,
+> +       msm_mux_pci_e,
+> +       msm_mux_pcie0_clkreq_n,
+> +       msm_mux_pcie1_clkreq_n,
+> +       msm_mux_pcie2_clkreq_n,
+> +       msm_mux_pll_bist_sync,
+> +       msm_mux_pll_clk_aux,
+> +       msm_mux_pll_ref_clk,
+> +       msm_mux_pri_mi2s,
+> +       msm_mux_prng_rosc,
+> +       msm_mux_qdss_cti,
+> +       msm_mux_qdss_gpio,
+> +       msm_mux_qlink0_b_en,
+> +       msm_mux_qlink0_b_req,
+> +       msm_mux_qlink0_l_en,
+> +       msm_mux_qlink0_l_req,
+> +       msm_mux_qlink0_wmss,
+> +       msm_mux_qlink1_l_en,
+> +       msm_mux_qlink1_l_req,
+> +       msm_mux_qlink1_wmss,
+> +       msm_mux_qup_se0,
+> +       msm_mux_qup_se1_l2_mira,
+> +       msm_mux_qup_se1_l2_mirb,
+> +       msm_mux_qup_se1_l3_mira,
+> +       msm_mux_qup_se1_l3_mirb,
+> +       msm_mux_qup_se2,
+> +       msm_mux_qup_se3,
+> +       msm_mux_qup_se4,
+> +       msm_mux_qup_se5,
+> +       msm_mux_qup_se6,
+> +       msm_mux_qup_se7,
+> +       msm_mux_qup_se8,
+> +       msm_mux_rgmii_rx_ctl,
+> +       msm_mux_rgmii_rxc,
+> +       msm_mux_rgmii_rxd,
+> +       msm_mux_rgmii_tx_ctl,
+> +       msm_mux_rgmii_txc,
+> +       msm_mux_rgmii_txd,
+> +       msm_mux_sd_card,
+> +       msm_mux_sdc1_tb,
+> +       msm_mux_sdc2_tb_trig,
+> +       msm_mux_sec_mi2s,
+> +       msm_mux_sgmii_phy_intr0_n,
+> +       msm_mux_sgmii_phy_intr1_n,
+> +       msm_mux_spmi_coex,
+> +       msm_mux_spmi_vgi,
+> +       msm_mux_tgu_ch0_trigout,
+> +       msm_mux_tmess_prng0,
+> +       msm_mux_tmess_prng1,
+> +       msm_mux_tmess_prng2,
+> +       msm_mux_tmess_prng3,
+> +       msm_mux_tri_mi2s,
+> +       msm_mux_uim1_clk,
+> +       msm_mux_uim1_data,
+> +       msm_mux_uim1_present,
+> +       msm_mux_uim1_reset,
+> +       msm_mux_uim2_clk,
+> +       msm_mux_uim2_data,
+> +       msm_mux_uim2_present,
+> +       msm_mux_uim2_reset,
+> +       msm_mux_usb2phy_ac_en,
+> +       msm_mux_vsense_trigger_mirnat,
+> +       msm_mux__,
+> +};
+> +
+> +static const char *const gpio_groups[] = {
+> +       "gpio0", "gpio1", "gpio2", "gpio3", "gpio4", "gpio5", "gpio6",
+> +       "gpio7", "gpio8", "gpio9", "gpio10", "gpio11", "gpio12", "gpio13",
+> +       "gpio14", "gpio15", "gpio16", "gpio17", "gpio18", "gpio19", "gpio20",
+> +       "gpio21", "gpio22", "gpio23", "gpio24", "gpio25", "gpio26", "gpio27",
+> +       "gpio28", "gpio29", "gpio30", "gpio31", "gpio32", "gpio33", "gpio34",
+> +       "gpio35", "gpio36", "gpio37", "gpio38", "gpio39", "gpio40", "gpio41",
+> +       "gpio42", "gpio43", "gpio44", "gpio45", "gpio46", "gpio47", "gpio48",
+> +       "gpio49", "gpio50", "gpio51", "gpio52", "gpio53", "gpio54", "gpio55",
+> +       "gpio56", "gpio57", "gpio58", "gpio59", "gpio60", "gpio61", "gpio62",
+> +       "gpio63", "gpio64", "gpio65", "gpio66", "gpio67", "gpio68", "gpio69",
+> +       "gpio70", "gpio71", "gpio72", "gpio73", "gpio74", "gpio75", "gpio76",
+> +       "gpio77", "gpio78", "gpio79", "gpio80", "gpio81", "gpio82", "gpio83",
+> +       "gpio84", "gpio85", "gpio86", "gpio87", "gpio88", "gpio89", "gpio90",
+> +       "gpio91", "gpio92", "gpio93", "gpio94", "gpio95", "gpio96", "gpio97",
+> +       "gpio98", "gpio99", "gpio100", "gpio101", "gpio102", "gpio103", "gpio104",
+> +       "gpio105", "gpio106", "gpio107", "gpio108", "gpio109", "gpio110", "gpio111",
+> +       "gpio112", "gpio113", "gpio114", "gpio115", "gpio116", "gpio117", "gpio118",
+> +       "gpio119", "gpio120", "gpio121", "gpio122", "gpio123", "gpio124", "gpio125",
+> +       "gpio126", "gpio127", "gpio128", "gpio129", "gpio130", "gpio131", "gpio132",
+> +};
+> +static const char *const adsp_ext_groups[] = {
+> +       "gpio59", "gpio68",
+> +};
+> +static const char *const atest_char_groups[] = {
+> +       "gpio24", "gpio25", "gpio26", "gpio41", "gpio63",
+> +};
+> +static const char *const audio_ref_clk_groups[] = {
+> +       "gpio126",
+> +};
+> +static const char *const bimc_dte_groups[] = {
+> +       "gpio14", "gpio15", "gpio61", "gpio59",
+> +};
+> +static const char *const char_exec_groups[] = {
+> +       "gpio6", "gpio7",
+> +};
+> +static const char *const coex_uart2_groups[] = {
+> +       "gpio48", "gpio49", "gpio90", "gpio91",
+> +};
+> +static const char *const coex_uart_groups[] = {
+> +       "gpio46", "gpio47",
+> +};
+> +static const char *const cri_trng_groups[] = {
+> +       "gpio36",
+> +};
+> +static const char *const cri_trng0_groups[] = {
+> +       "gpio31",
+> +};
+> +static const char *const cri_trng1_groups[] = {
+> +       "gpio32",
+> +};
+> +static const char *const dbg_out_clk_groups[] = {
+> +       "gpio26",
+> +};
+> +static const char *const ddr_bist_groups[] = {
+> +       "gpio46", "gpio47", "gpio48", "gpio49",
+> +};
+> +static const char *const ddr_pxi0_groups[] = {
+> +       "gpio45", "gpio46",
+> +};
+> +static const char *const ebi0_wrcdc_groups[] = {
+> +       "gpio0", "gpio2",
+> +};
+> +static const char *const ebi2_a_groups[] = {
+> +       "gpio100",
+> +};
+> +static const char *const ebi2_lcd_groups[] = {
+> +       "gpio99", "gpio101",
+> +};
+> +static const char *const ebi2_lcd_te_groups[] = {
+> +       "gpio98",
+> +};
+> +static const char *const emac0_mcg_groups[] = {
+> +       "gpio83", "gpio84", "gpio85", "gpio89",
+> +};
+> +static const char *const emac0_ptp_groups[] = {
+> +       "gpio35", "gpio83", "gpio84", "gpio85", "gpio89", "gpio119", "gpio123",
+> +};
+> +static const char *const emac1_mcg_groups[] = {
+> +       "gpio90", "gpio92", "gpio93", "gpio122",
+> +};
+> +static const char *const emac1_ptp_groups[] = {
+> +       "gpio112", "gpio113", "gpio114", "gpio115",
+> +};
+> +static const char *const emac_cdc_groups[] = {
+> +       "gpio38", "gpio39",
+> +};
+> +static const char *const emac_pps_in_groups[] = {
+> +       "gpio127",
+> +};
+> +static const char *const eth0_mdc_groups[] = {
+> +       "gpio94",
+> +};
+> +static const char *const eth0_mdio_groups[] = {
+> +       "gpio95",
+> +};
+> +static const char *const eth1_mdc_groups[] = {
+> +       "gpio106",
+> +};
+> +static const char *const eth1_mdio_groups[] = {
+> +       "gpio107",
+> +};
+> +static const char *const ext_dbg_groups[] = {
+> +       "gpio12", "gpio13", "gpio14", "gpio15",
+> +};
+> +static const char *const gcc_125_clk_groups[] = {
+> +       "gpio25",
+> +};
+> +static const char *const gcc_gp1_clk_groups[] = {
+> +       "gpio39",
+> +};
+> +static const char *const gcc_gp2_clk_groups[] = {
+> +       "gpio40",
+> +};
+> +static const char *const gcc_gp3_clk_groups[] = {
+> +       "gpio41",
+> +};
+> +static const char *const gcc_plltest_groups[] = {
+> +       "gpio81", "gpio82",
+> +};
+> +static const char *const i2s_mclk_groups[] = {
+> +       "gpio74",
+> +};
+> +static const char *const jitter_bist_groups[] = {
+> +       "gpio41",
+> +};
+> +static const char *const ldo_en_groups[] = {
+> +       "gpio8",
+> +};
+> +static const char *const ldo_update_groups[] = {
+> +       "gpio62",
+> +};
+> +static const char *const m_voc_groups[] = {
+> +       "gpio62", "gpio63", "gpio64", "gpio65", "gpio71",
+> +};
+> +static const char *const mgpi_clk_groups[] = {
+> +       "gpio39", "gpio40",
+> +};
+> +static const char *const native_char_groups[] = {
+> +       "gpio29", "gpio33", "gpio57", "gpio66", "gpio67",
+> +};
+> +static const char *const native_tsens_groups[] = {
+> +       "gpio38",
+> +};
+> +static const char *const native_tsense_groups[] = {
+> +       "gpio64", "gpio76",
+> +};
+> +static const char *const nav_dr_sync_groups[] = {
+> +       "gpio36",
+> +};
+> +static const char *const nav_gpio_groups[] = {
+> +       "gpio35", "gpio36", "gpio104",
+> +};
+> +static const char *const pa_indicator_groups[] = {
+> +       "gpio58",
+> +};
+> +static const char *const pci_e_groups[] = {
+> +       "gpio42",
+> +};
+> +static const char *const pcie0_clkreq_n_groups[] = {
+> +       "gpio43",
+> +};
+> +static const char *const pcie1_clkreq_n_groups[] = {
+> +       "gpio124",
+> +};
+> +static const char *const pcie2_clkreq_n_groups[] = {
+> +       "gpio121",
+> +};
+> +static const char *const pll_bist_sync_groups[] = {
+> +       "gpio38",
+> +};
+> +static const char *const pll_clk_aux_groups[] = {
+> +       "gpio40",
+> +};
+> +static const char *const pll_ref_clk_groups[] = {
+> +       "gpio37",
+> +};
+> +static const char *const pri_mi2s_groups[] = {
+> +       "gpio16", "gpio17", "gpio18", "gpio19",
+> +};
+> +static const char *const prng_rosc_groups[] = {
+> +       "gpio27", "gpio36", "gpio37", "gpio38",
+> +};
+> +static const char *const qdss_cti_groups[] = {
+> +       "gpio16", "gpio17", "gpio52", "gpio53", "gpio56",
+> +       "gpio57", "gpio59", "gpio60", "gpio78", "gpio79",
+> +};
+> +static const char *const qdss_gpio_groups[] = {
+> +       "gpio82", "gpio83", "gpio84", "gpio85", "gpio94",
+> +       "gpio95", "gpio96", "gpio97", "gpio110", "gpio111",
+> +       "gpio112", "gpio113", "gpio114", "gpio115", "gpio116",
+> +       "gpio117", "gpio118", "gpio119",
+> +};
+> +static const char *const qlink0_b_en_groups[] = {
+> +       "gpio40",
+> +};
+> +static const char *const qlink0_b_req_groups[] = {
+> +       "gpio41",
+> +};
+> +static const char *const qlink0_l_en_groups[] = {
+> +       "gpio37",
+> +};
+> +static const char *const qlink0_l_req_groups[] = {
+> +       "gpio38",
+> +};
+> +static const char *const qlink0_wmss_groups[] = {
+> +       "gpio39",
+> +};
+> +static const char *const qlink1_l_en_groups[] = {
+> +       "gpio26",
+> +};
+> +static const char *const qlink1_l_req_groups[] = {
+> +       "gpio27",
+> +};
+> +static const char *const qlink1_wmss_groups[] = {
+> +       "gpio28",
+> +};
+> +static const char *const qup_se0_groups[] = {
+> +       "gpio8", "gpio9", "gpio10", "gpio11",
+> +};
+> +static const char *const qup_se1_l2_mira_groups[] = {
+> +       "gpio12",
+> +};
+> +static const char *const qup_se1_l2_mirb_groups[] = {
+> +       "gpio16",
+> +};
+> +static const char *const qup_se1_l3_mira_groups[] = {
+> +       "gpio13",
+> +};
+> +static const char *const qup_se1_l3_mirb_groups[] = {
+> +       "gpio17",
+> +};
+> +static const char *const qup_se2_groups[] = {
+> +       "gpio14", "gpio15", "gpio16", "gpio17",
+> +};
+> +static const char *const qup_se3_groups[] = {
+> +       "gpio52", "gpio53", "gpio54", "gpio55",
+> +};
+> +static const char *const qup_se4_groups[] = {
+> +       "gpio64", "gpio65",
+> +};
+> +static const char *const qup_se5_groups[] = {
+> +       "gpio110", "gpio111",
+> +};
+> +static const char *const qup_se6_groups[] = {
+> +       "gpio112", "gpio113", "gpio114", "gpio115",
+> +};
+> +static const char *const qup_se7_groups[] = {
+> +       "gpio116", "gpio117", "gpio118", "gpio119",
+> +};
+> +static const char *const qup_se8_groups[] = {
+> +       "gpio124", "gpio125",
+> +};
+> +static const char *const rgmii_rx_ctl_groups[] = {
+> +       "gpio93",
+> +};
+> +static const char *const rgmii_rxc_groups[] = {
+> +       "gpio88",
+> +};
+> +static const char *const rgmii_rxd_groups[] = {
+> +       "gpio89", "gpio90", "gpio91", "gpio92",
+> +};
+> +static const char *const rgmii_tx_ctl_groups[] = {
+> +       "gpio87",
+> +};
+> +static const char *const rgmii_txc_groups[] = {
+> +       "gpio82",
+> +};
+> +static const char *const rgmii_txd_groups[] = {
+> +       "gpio83", "gpio84", "gpio85", "gpio86",
+> +};
+> +static const char *const sd_card_groups[] = {
+> +       "gpio105",
+> +};
+> +static const char *const sdc1_tb_groups[] = {
+> +       "gpio84", "gpio130",
+> +};
+> +static const char *const sdc2_tb_trig_groups[] = {
+> +       "gpio129",
+> +};
+> +static const char *const sec_mi2s_groups[] = {
+> +       "gpio20", "gpio21", "gpio22", "gpio23",
+> +};
+> +static const char *const sgmii_phy_intr0_n_groups[] = {
+> +       "gpio97",
+> +};
+> +static const char *const sgmii_phy_intr1_n_groups[] = {
+> +       "gpio109",
+> +};
+> +static const char *const spmi_coex_groups[] = {
+> +       "gpio48", "gpio49",
+> +};
+> +static const char *const spmi_vgi_groups[] = {
+> +       "gpio50", "gpio51",
+> +};
+> +static const char *const tgu_ch0_trigout_groups[] = {
+> +       "gpio55",
+> +};
+> +static const char *const tmess_prng0_groups[] = {
+> +       "gpio28",
+> +};
+> +static const char *const tmess_prng1_groups[] = {
+> +       "gpio29",
+> +};
+> +static const char *const tmess_prng2_groups[] = {
+> +       "gpio30",
+> +};
+> +static const char *const tmess_prng3_groups[] = {
+> +       "gpio31",
+> +};
+> +static const char *const tri_mi2s_groups[] = {
+> +       "gpio98", "gpio99", "gpio100", "gpio101",
+> +};
+> +static const char *const uim1_clk_groups[] = {
+> +       "gpio7",
+> +};
+> +static const char *const uim1_data_groups[] = {
+> +       "gpio4",
+> +};
+> +static const char *const uim1_present_groups[] = {
+> +       "gpio5",
+> +};
+> +static const char *const uim1_reset_groups[] = {
+> +       "gpio6",
+> +};
+> +static const char *const uim2_clk_groups[] = {
+> +       "gpio3",
+> +};
+> +static const char *const uim2_data_groups[] = {
+> +       "gpio0",
+> +};
+> +static const char *const uim2_present_groups[] = {
+> +       "gpio1",
+> +};
+> +static const char *const uim2_reset_groups[] = {
+> +       "gpio2",
+> +};
+> +static const char *const usb2phy_ac_en_groups[] = {
+> +       "gpio80",
+> +};
+> +static const char *const vsense_trigger_mirnat_groups[] = {
+> +       "gpio37",
+> +};
+> +
+> +static const struct pinfunction sdx75_functions[] = {
+> +       MSM_PIN_FUNCTION(adsp_ext),
+> +       MSM_PIN_FUNCTION(atest_char),
+> +       MSM_PIN_FUNCTION(audio_ref_clk),
+> +       MSM_PIN_FUNCTION(bimc_dte),
+> +       MSM_PIN_FUNCTION(char_exec),
+> +       MSM_PIN_FUNCTION(coex_uart2),
+> +       MSM_PIN_FUNCTION(coex_uart),
+> +       MSM_PIN_FUNCTION(cri_trng),
+> +       MSM_PIN_FUNCTION(cri_trng0),
+> +       MSM_PIN_FUNCTION(cri_trng1),
+> +       MSM_PIN_FUNCTION(dbg_out_clk),
+> +       MSM_PIN_FUNCTION(ddr_bist),
+> +       MSM_PIN_FUNCTION(ddr_pxi0),
+> +       MSM_PIN_FUNCTION(ebi0_wrcdc),
+> +       MSM_PIN_FUNCTION(ebi2_a),
+> +       MSM_PIN_FUNCTION(ebi2_lcd),
+> +       MSM_PIN_FUNCTION(ebi2_lcd_te),
+> +       MSM_PIN_FUNCTION(emac0_mcg),
+> +       MSM_PIN_FUNCTION(emac0_ptp),
+> +       MSM_PIN_FUNCTION(emac1_mcg),
+> +       MSM_PIN_FUNCTION(emac1_ptp),
+> +       MSM_PIN_FUNCTION(emac_cdc),
+> +       MSM_PIN_FUNCTION(emac_pps_in),
+> +       MSM_PIN_FUNCTION(eth0_mdc),
+> +       MSM_PIN_FUNCTION(eth0_mdio),
+> +       MSM_PIN_FUNCTION(eth1_mdc),
+> +       MSM_PIN_FUNCTION(eth1_mdio),
+> +       MSM_PIN_FUNCTION(ext_dbg),
+> +       MSM_PIN_FUNCTION(gcc_125_clk),
+> +       MSM_PIN_FUNCTION(gcc_gp1_clk),
+> +       MSM_PIN_FUNCTION(gcc_gp2_clk),
+> +       MSM_PIN_FUNCTION(gcc_gp3_clk),
+> +       MSM_PIN_FUNCTION(gcc_plltest),
+> +       MSM_PIN_FUNCTION(gpio),
+> +       MSM_PIN_FUNCTION(i2s_mclk),
+> +       MSM_PIN_FUNCTION(jitter_bist),
+> +       MSM_PIN_FUNCTION(ldo_en),
+> +       MSM_PIN_FUNCTION(ldo_update),
+> +       MSM_PIN_FUNCTION(m_voc),
+> +       MSM_PIN_FUNCTION(mgpi_clk),
+> +       MSM_PIN_FUNCTION(native_char),
+> +       MSM_PIN_FUNCTION(native_tsens),
+> +       MSM_PIN_FUNCTION(native_tsense),
+> +       MSM_PIN_FUNCTION(nav_dr_sync),
+> +       MSM_PIN_FUNCTION(nav_gpio),
+> +       MSM_PIN_FUNCTION(pa_indicator),
+> +       MSM_PIN_FUNCTION(pci_e),
+> +       MSM_PIN_FUNCTION(pcie0_clkreq_n),
+> +       MSM_PIN_FUNCTION(pcie1_clkreq_n),
+> +       MSM_PIN_FUNCTION(pcie2_clkreq_n),
+> +       MSM_PIN_FUNCTION(pll_bist_sync),
+> +       MSM_PIN_FUNCTION(pll_clk_aux),
+> +       MSM_PIN_FUNCTION(pll_ref_clk),
+> +       MSM_PIN_FUNCTION(pri_mi2s),
+> +       MSM_PIN_FUNCTION(prng_rosc),
+> +       MSM_PIN_FUNCTION(qdss_cti),
+> +       MSM_PIN_FUNCTION(qdss_gpio),
+> +       MSM_PIN_FUNCTION(qlink0_b_en),
+> +       MSM_PIN_FUNCTION(qlink0_b_req),
+> +       MSM_PIN_FUNCTION(qlink0_l_en),
+> +       MSM_PIN_FUNCTION(qlink0_l_req),
+> +       MSM_PIN_FUNCTION(qlink1_l_en),
+> +       MSM_PIN_FUNCTION(qlink1_l_req),
+> +       MSM_PIN_FUNCTION(qlink0_wmss),
+> +       MSM_PIN_FUNCTION(qlink1_wmss),
+> +       MSM_PIN_FUNCTION(qup_se0),
+> +       MSM_PIN_FUNCTION(qup_se1_l2_mira),
+> +       MSM_PIN_FUNCTION(qup_se1_l2_mirb),
+> +       MSM_PIN_FUNCTION(qup_se1_l3_mira),
+> +       MSM_PIN_FUNCTION(qup_se1_l3_mirb),
+> +       MSM_PIN_FUNCTION(qup_se2),
+> +       MSM_PIN_FUNCTION(qup_se3),
+> +       MSM_PIN_FUNCTION(qup_se4),
+> +       MSM_PIN_FUNCTION(qup_se5),
+> +       MSM_PIN_FUNCTION(qup_se6),
+> +       MSM_PIN_FUNCTION(qup_se7),
+> +       MSM_PIN_FUNCTION(qup_se8),
+> +       MSM_PIN_FUNCTION(rgmii_rx_ctl),
+> +       MSM_PIN_FUNCTION(rgmii_rxc),
+> +       MSM_PIN_FUNCTION(rgmii_rxd),
+> +       MSM_PIN_FUNCTION(rgmii_tx_ctl),
+> +       MSM_PIN_FUNCTION(rgmii_txc),
+> +       MSM_PIN_FUNCTION(rgmii_txd),
+> +       MSM_PIN_FUNCTION(sd_card),
+> +       MSM_PIN_FUNCTION(sdc1_tb),
+> +       MSM_PIN_FUNCTION(sdc2_tb_trig),
+> +       MSM_PIN_FUNCTION(sec_mi2s),
+> +       MSM_PIN_FUNCTION(sgmii_phy_intr0_n),
+> +       MSM_PIN_FUNCTION(sgmii_phy_intr1_n),
+> +       MSM_PIN_FUNCTION(spmi_coex),
+> +       MSM_PIN_FUNCTION(spmi_vgi),
+> +       MSM_PIN_FUNCTION(tgu_ch0_trigout),
+> +       MSM_PIN_FUNCTION(tmess_prng0),
+> +       MSM_PIN_FUNCTION(tmess_prng1),
+> +       MSM_PIN_FUNCTION(tmess_prng2),
+> +       MSM_PIN_FUNCTION(tmess_prng3),
+> +       MSM_PIN_FUNCTION(tri_mi2s),
+> +       MSM_PIN_FUNCTION(uim1_clk),
+> +       MSM_PIN_FUNCTION(uim1_data),
+> +       MSM_PIN_FUNCTION(uim1_present),
+> +       MSM_PIN_FUNCTION(uim1_reset),
+> +       MSM_PIN_FUNCTION(uim2_clk),
+> +       MSM_PIN_FUNCTION(uim2_data),
+> +       MSM_PIN_FUNCTION(uim2_present),
+> +       MSM_PIN_FUNCTION(uim2_reset),
+> +       MSM_PIN_FUNCTION(usb2phy_ac_en),
+> +       MSM_PIN_FUNCTION(vsense_trigger_mirnat),
+> +};
+> +
+> +static const struct msm_pingroup sdx75_groups[] = {
+> +       [0] = PINGROUP(0, uim2_data, ebi0_wrcdc, _, _, _, _, _, _, _, _),
+> +       [1] = PINGROUP(1, uim2_present, _, _, _, _, _, _, _, _, _),
+> +       [2] = PINGROUP(2, uim2_reset, ebi0_wrcdc, _, _, _, _, _, _, _, _),
+> +       [3] = PINGROUP(3, uim2_clk, _, _, _, _, _, _, _, _, _),
+> +       [4] = PINGROUP(4, uim1_data, _, _, _, _, _, _, _, _, _),
+> +       [5] = PINGROUP(5, uim1_present, _, _, _, _, _, _, _, _, _),
+> +       [6] = PINGROUP(6, uim1_reset, char_exec, _, _, _, _, _, _, _, _),
+> +       [7] = PINGROUP(7, uim1_clk, char_exec, _, _, _, _, _, _, _, _),
+> +       [8] = PINGROUP(8, qup_se0, ldo_en, _, _, _, _, _, _, _, _),
+> +       [9] = PINGROUP(9, qup_se0, _, _, _, _, _, _, _, _, _),
+> +       [10] = PINGROUP(10, qup_se0, _, _, _, _, _, _, _, _, _),
+> +       [11] = PINGROUP(11, qup_se0, _, _, _, _, _, _, _, _, _),
+> +       [12] = PINGROUP(12, qup_se1_l2_mira, ext_dbg, _, _, _, _, _, _, _, _),
+> +       [13] = PINGROUP(13, qup_se1_l3_mira, ext_dbg, _, _, _, _, _, _, _, _),
+> +       [14] = PINGROUP(14, qup_se2, ext_dbg, bimc_dte, _, _, _, _, _, _, _),
+> +       [15] = PINGROUP(15, qup_se2, ext_dbg, bimc_dte, _, _, _, _, _, _, _),
+> +       [16] = PINGROUP(16, pri_mi2s, qup_se2, qup_se1_l2_mirb, qdss_cti, qdss_cti, _, _, _, _, _),
+> +       [17] = PINGROUP(17, pri_mi2s, qup_se2, qup_se1_l3_mirb, qdss_cti, qdss_cti, _, _, _, _, _),
+> +       [18] = PINGROUP(18, pri_mi2s, _, _, _, _, _, _, _, _, _),
+> +       [19] = PINGROUP(19, pri_mi2s, _, _, _, _, _, _, _, _, _),
+> +       [20] = PINGROUP(20, sec_mi2s, _, _, _, _, _, _, _, _, _),
+> +       [21] = PINGROUP(21, sec_mi2s, _, _, _, _, _, _, _, _, _),
+> +       [22] = PINGROUP(22, sec_mi2s, _, _, _, _, _, _, _, _, _),
+> +       [23] = PINGROUP(23, sec_mi2s, _, _, _, _, _, _, _, _, _),
+> +       [24] = PINGROUP(24, _, atest_char, _, _, _, _, _, _, _, _),
+> +       [25] = PINGROUP(25, gcc_125_clk, _, atest_char, _, _, _, _, _,  _, _),
+> +       [26] = PINGROUP(26, _, _, qlink1_l_en, dbg_out_clk, atest_char, _, _, _, _, _),
+> +       [27] = PINGROUP(27, _, _, qlink1_l_req, prng_rosc, _, _, _, _,  _, _),
+> +       [28] = PINGROUP(28, _, qlink1_wmss, tmess_prng0, _, _, _, _, _, _, _),
+> +       [29] = PINGROUP(29, _, _, _, native_char, tmess_prng1, _, _, _, _, _),
+> +       [30] = PINGROUP(30, _, _, _, tmess_prng2, _, _, _, _, _, _),
+> +       [31] = PINGROUP(31, _, _, cri_trng0, _, tmess_prng3, _, _, _, _, _),
+> +       [32] = PINGROUP(32, _, _, cri_trng1, _, _, _, _, _, _, _),
+> +       [33] = PINGROUP(33, _, _, native_char, _, _, _, _, _, _, _),
+> +       [34] = PINGROUP(34, _, _, _, _, _, _, _, _, _, _),
+> +       [35] = PINGROUP(35, nav_gpio, emac0_ptp, emac0_ptp, _, _, _, _, _, _, _),
+> +       [36] = PINGROUP(36, nav_gpio, nav_dr_sync, nav_gpio, cri_trng, prng_rosc, _, _, _, _, _),
+> +       [37] = PINGROUP(37, qlink0_l_en, _, pll_ref_clk, prng_rosc, vsense_trigger_mirnat, _, _, _, _, _),
+> +       [38] = PINGROUP(38, qlink0_l_req, _, pll_bist_sync, prng_rosc, _, emac_cdc, _, native_tsens, _, _),
+> +       [39] = PINGROUP(39, qlink0_wmss, _, mgpi_clk, gcc_gp1_clk, _, emac_cdc, _, _, _, _),
+> +       [40] = PINGROUP(40, qlink0_b_en, _, mgpi_clk, pll_clk_aux, gcc_gp2_clk, _, _, _, _, _),
+> +       [41] = PINGROUP(41, qlink0_b_req, _, jitter_bist, gcc_gp3_clk, _, _, atest_char, _, _, _),
+> +       [42] = PINGROUP(42, pci_e, _, _, _, _, _, _, _, _, _),
+> +       [43] = PINGROUP(43, pcie0_clkreq_n, _, _, _, _, _, _, _, _, _),
+> +       [44] = PINGROUP(44, _, _, _, _, _, _, _, _, _, _),
+> +       [45] = PINGROUP(45, ddr_pxi0, _, _, _, _, _, _, _, _, _),
+> +       [46] = PINGROUP(46, coex_uart, ddr_bist, ddr_pxi0, _, _, _, _, _, _, _),
+> +       [47] = PINGROUP(47, coex_uart, ddr_bist, _, _, _, _, _, _, _, _),
+> +       [48] = PINGROUP(48, coex_uart2, spmi_coex, ddr_bist, _, _, _, _, _, _, _),
+> +       [49] = PINGROUP(49, coex_uart2, spmi_coex, ddr_bist, _, _, _, _, _, _, _),
+> +       [50] = PINGROUP(50, spmi_vgi, _, _, _, _, _, _, _, _, _),
+> +       [51] = PINGROUP(51, spmi_vgi, _, _, _, _, _, _, _, _, _),
+> +       [52] = PINGROUP(52, qup_se3, qdss_cti, qdss_cti, _, _, _, _, _, _, _),
+> +       [53] = PINGROUP(53, qup_se3, qdss_cti, qdss_cti, _, _, _, _, _, _, _),
+> +       [54] = PINGROUP(54, qup_se3, _, _, _, _, _, _, _, _, _),
+> +       [55] = PINGROUP(55, qup_se3, tgu_ch0_trigout, _, _, _, _, _, _, _, _),
+> +       [56] = PINGROUP(56, qdss_cti, qdss_cti, _, _, _, _, _, _, _, _),
+> +       [57] = PINGROUP(57, qdss_cti, qdss_cti, _, native_char, _, _, _, _, _, _),
+> +       [58] = PINGROUP(58, _, pa_indicator, _, _, _, _, _, _, _, _),
+> +       [59] = PINGROUP(59, adsp_ext, qdss_cti, _, bimc_dte, _, _, _, _, _, _),
+> +       [60] = PINGROUP(60, qdss_cti, _, _, _, _, _, _, _, _, _),
+> +       [61] = PINGROUP(61, _, bimc_dte, _, _, _, _, _, _, _, _),
+> +       [62] = PINGROUP(62, m_voc, ldo_update, _, _, _, _, _, _, _, _),
+> +       [63] = PINGROUP(63, m_voc, _, atest_char, _, _, _, _, _, _, _),
+> +       [64] = PINGROUP(64, qup_se4, m_voc, _, native_tsense, _, _, _, _, _, _),
+> +       [65] = PINGROUP(65, qup_se4, m_voc, _, _, _, _, _, _, _, _),
+> +       [66] = PINGROUP(66, _, native_char, _, _, _, _, _, _, _, _),
+> +       [67] = PINGROUP(67, _, native_char, _, _, _, _, _, _, _, _),
+> +       [68] = PINGROUP(68, adsp_ext, _, _, _, _, _, _, _, _, _),
+> +       [69] = PINGROUP(69, _, _, _, _, _, _, _, _, _, _),
+> +       [70] = PINGROUP(70, _, _, _, _, _, _, _, _, _, _),
+> +       [71] = PINGROUP(71, m_voc, _, _, _, _, _, _, _, _, _),
+> +       [72] = PINGROUP(72, _, _, _, _, _, _, _, _, _, _),
+> +       [73] = PINGROUP(73, _, _, _, _, _, _, _, _, _, _),
+> +       [74] = PINGROUP(74, i2s_mclk, _, _, _, _, _, _, _, _, _),
+> +       [75] = PINGROUP(75, _, _, _, _, _, _, _, _, _, _),
+> +       [76] = PINGROUP(76, native_tsense, _, _, _, _, _, _, _, _, _),
+> +       [77] = PINGROUP(77, _, _, _, _, _, _, _, _, _, _),
+> +       [78] = PINGROUP(78, qdss_cti, qdss_cti, _, _, _, _, _, _, _, _),
+> +       [79] = PINGROUP(79, qdss_cti, qdss_cti, _, _, _, _, _, _, _, _),
+> +       [80] = PINGROUP(80, usb2phy_ac_en, _, _, _, _, _, _, _, _, _),
+> +       [81] = PINGROUP(81, gcc_plltest, _, _, _, _, _, _, _, _, _),
+> +       [82] = PINGROUP(82, rgmii_txc, gcc_plltest, qdss_gpio, _, _, _, _, _, _, _),
+> +       [83] = PINGROUP(83, rgmii_txd, emac0_ptp, emac0_ptp, emac0_mcg, qdss_gpio, _, _, _, _, _),
+> +       [84] = PINGROUP(84, rgmii_txd, emac0_ptp, emac0_mcg, qdss_gpio, _, sdc1_tb, _, _, _, _),
+> +       [85] = PINGROUP(85, rgmii_txd, emac0_ptp, emac0_mcg, qdss_gpio, _, _, _, _, _, _),
+> +       [86] = PINGROUP(86, rgmii_txd, _, _, _, _, _, _, _, _, _),
+> +       [87] = PINGROUP(87, rgmii_tx_ctl, _, _, _, _, _, _, _, _, _),
+> +       [88] = PINGROUP(88, rgmii_rxc, _, _, _, _, _, _, _, _, _),
+> +       [89] = PINGROUP(89, rgmii_rxd, emac0_ptp, emac0_ptp, emac0_mcg, _, _, _, _, _, _),
+> +       [90] = PINGROUP(90, rgmii_rxd, coex_uart2, emac1_mcg, _, _, _, _, _, _, _),
+> +       [91] = PINGROUP(91, rgmii_rxd, coex_uart2, _, _, _, _, _, _, _, _),
+> +       [92] = PINGROUP(92, rgmii_rxd, emac1_mcg, _, _, _, _, _, _, _, _),
+> +       [93] = PINGROUP(93, rgmii_rx_ctl, emac1_mcg, _, _, _, _, _, _, _, _),
+> +       [94] = PINGROUP(94, eth0_mdc, qdss_gpio, _, _, _, _, _, _, _, _),
+> +       [95] = PINGROUP(95, eth0_mdio, qdss_gpio, _, _, _, _, _, _, _, _),
+> +       [96] = PINGROUP(96, qdss_gpio, _, _, _, _, _, _, _, _, _),
+> +       [97] = PINGROUP(97, sgmii_phy_intr0_n, _, qdss_gpio, _, _, _, _, _, _, _),
+> +       [98] = PINGROUP(98, tri_mi2s, ebi2_lcd_te, _, _, _, _, _, _, _, _),
+> +       [99] = PINGROUP(99, tri_mi2s, ebi2_lcd, _, _, _, _, _, _, _, _),
+> +       [100] = PINGROUP(100, tri_mi2s, ebi2_a, _, _, _, _, _, _, _, _),
+> +       [101] = PINGROUP(101, tri_mi2s, ebi2_lcd, _, _, _, _, _, _, _, _),
+> +       [102] = PINGROUP(102, _, _, _, _, _, _, _, _, _, _),
+> +       [103] = PINGROUP(103, _, _, _, _, _, _, _, _, _, _),
+> +       [104] = PINGROUP(104, nav_gpio, _, _, _, _, _, _, _, _, _),
+> +       [105] = PINGROUP(105, sd_card, _, _, _, _, _, _, _, _, _),
+> +       [106] = PINGROUP(106, eth1_mdc, _, _, _, _, _, _, _, _, _),
+> +       [107] = PINGROUP(107, eth1_mdio, _, _, _, _, _, _, _, _, _),
+> +       [108] = PINGROUP(108, _, _, _, _, _, _, _, _, _, _),
+> +       [109] = PINGROUP(109, sgmii_phy_intr1_n, _, _, _, _, _, _, _, _, _),
+> +       [110] = PINGROUP(110, qup_se5, qdss_gpio, _, _, _, _, _, _, _, _),
+> +       [111] = PINGROUP(111, qup_se5, qdss_gpio, _, _, _, _, _, _, _, _),
+> +       [112] = PINGROUP(112, qup_se6, emac1_ptp, emac1_ptp, qdss_gpio, _, _, _, _, _, _),
+> +       [113] = PINGROUP(113, qup_se6, emac1_ptp, emac1_ptp, qdss_gpio, _, _, _, _, _, _),
+> +       [114] = PINGROUP(114, qup_se6, emac1_ptp, emac1_ptp, qdss_gpio, _, _, _, _, _, _),
+> +       [115] = PINGROUP(115, qup_se6, emac1_ptp, emac1_ptp, qdss_gpio, _, _, _, _, _, _),
+> +       [116] = PINGROUP(116, qup_se7, qdss_gpio, _, _, _, _, _, _, _, _),
+> +       [117] = PINGROUP(117, qup_se7, qdss_gpio, _, _, _, _, _, _, _, _),
+> +       [118] = PINGROUP(118, qup_se7, qdss_gpio, _, _, _, _, _, _, _, _),
+> +       [119] = PINGROUP(119, qup_se7, emac0_ptp, qdss_gpio, _, _, _, _, _, _, _),
+> +       [120] = PINGROUP(120, _, _, _, _, _, _, _, _, _, _),
+> +       [121] = PINGROUP(121, pcie2_clkreq_n, _, _, _, _, _, _, _, _, _),
+> +       [122] = PINGROUP(122, emac1_mcg, _, _, _, _, _, _, _, _, _),
+> +       [123] = PINGROUP(123, emac0_ptp, emac0_ptp, emac0_ptp, emac0_ptp, _, _, _, _, _, _),
+> +       [124] = PINGROUP(124, pcie1_clkreq_n, qup_se8, _, _, _, _, _, _, _, _),
+> +       [125] = PINGROUP(125, qup_se8, _, _, _, _, _, _, _, _, _),
+> +       [126] = PINGROUP(126, audio_ref_clk, _, _, _, _, _, _, _, _, _),
+> +       [127] = PINGROUP(127, emac_pps_in, _, _, _, _, _, _, _, _, _),
+> +       [128] = PINGROUP(128, _, _, _, _, _, _, _, _, _, _),
+> +       [129] = PINGROUP(129, sdc2_tb_trig, _, _, _, _, _, _, _, _, _),
+> +       [130] = PINGROUP(130, sdc1_tb, _, _, _, _, _, _, _, _, _),
+> +       [131] = PINGROUP(131, _, _, _, _, _, _, _, _, _, _),
+> +       [132] = PINGROUP(132, _, _, _, _, _, _, _, _, _, _),
+> +       [133] = SDC_QDSD_PINGROUP(sdc1_rclk, 0x19a000, 16, 0),
+> +       [134] = SDC_QDSD_PINGROUP(sdc1_clk, 0x19a000, 14, 6),
+> +       [135] = SDC_QDSD_PINGROUP(sdc1_cmd, 0x19a000, 11, 3),
+> +       [136] = SDC_QDSD_PINGROUP(sdc1_data, 0x19a000, 9, 0),
+> +       [137] = SDC_QDSD_PINGROUP(sdc2_clk, 0x19b000, 14, 6),
+> +       [138] = SDC_QDSD_PINGROUP(sdc2_cmd, 0x19b000, 11, 3),
+> +       [139] = SDC_QDSD_PINGROUP(sdc2_data, 0x19b000, 9, 0),
+> +};
+> +
+> +static const struct msm_gpio_wakeirq_map sdx75_pdc_map[] = {
+> +       { 1, 57 }, { 2, 91 }, {5, 52 }, { 6, 109 }, { 9, 129 }, { 11, 62 },
+> +       { 13, 84 }, { 15, 87 }, { 17, 88 }, { 18, 89 }, { 19, 90 }, { 20, 92 },
+> +       { 21, 93 }, { 22, 94 }, { 23, 95 }, { 25, 96 }, { 27, 97 }, { 35, 58 },
+> +       { 36, 53 }, { 38, 98 }, { 39, 99 }, { 40, 100 }, { 41, 101 }, { 42, 54 },
+> +       { 43, 56 }, { 44, 71 }, { 46, 60 }, { 47, 61 }, { 49, 47 }, { 50, 126 },
+> +       { 51, 55 }, { 52, 102 }, { 53, 141 }, { 54, 104 }, { 55, 105 }, { 56, 106 },
+> +       { 57, 107 }, { 59, 108 }, { 60, 110 }, { 62, 111 }, { 63, 112 }, { 64, 113 },
+> +       { 65, 114 }, { 67, 115 }, { 68, 116 }, { 69, 117 }, { 70, 118 }, { 71, 119 },
+> +       { 72, 120 }, { 75, 121 }, { 76, 122 }, { 78, 123 }, { 79, 124 }, { 80, 125 },
+> +       { 81, 50 }, { 85, 127 }, { 87, 128 }, { 91, 130 }, { 92, 131 }, { 93, 132 },
+> +       { 94, 133 }, { 95, 134 }, { 97, 135 }, { 98, 136 }, { 101, 64 }, { 103, 51 },
+> +       { 105, 65 }, { 106, 66 }, { 107, 67 }, { 108, 68 }, { 109, 69 }, { 111, 70 },
+> +       { 113, 59 }, { 115, 72 }, { 116, 73 }, { 117, 74 }, { 118, 75 }, { 119, 76 },
+> +       { 120, 77 }, { 121, 78 }, { 123, 79 }, { 124, 80 }, { 125, 63 }, { 127, 81 },
+> +       { 128, 82 }, { 129, 83 }, { 130, 85 }, { 132, 86 },
+> +};
+> +
+> +static const struct msm_pinctrl_soc_data sdx75_pinctrl = {
+> +       .pins = sdx75_pins,
+> +       .npins = ARRAY_SIZE(sdx75_pins),
+> +       .functions = sdx75_functions,
+> +       .nfunctions = ARRAY_SIZE(sdx75_functions),
+> +       .groups = sdx75_groups,
+> +       .ngroups = ARRAY_SIZE(sdx75_groups),
+> +       .ngpios = 133,
+> +       .wakeirq_map = sdx75_pdc_map,
+> +       .nwakeirq_map = ARRAY_SIZE(sdx75_pdc_map),
+> +};
+> +
+> +static const struct of_device_id sdx75_pinctrl_of_match[] = {
+> +       { .compatible = "qcom,sdx75-tlmm", .data = &sdx75_pinctrl },
+> +       { }
+> +};
+> +MODULE_DEVICE_TABLE(of, sdx75_pinctrl_of_match);
+> +
+> +static int sdx75_pinctrl_probe(struct platform_device *pdev)
+> +{
+> +       const struct msm_pinctrl_soc_data *pinctrl_data;
+> +       struct device *dev = &pdev->dev;
+> +
+> +       pinctrl_data = of_device_get_match_data(dev);
 
-Co-developed-by: Nikhil Agarwal <nikhil.agarwal@amd.com>
-Signed-off-by: Nikhil Agarwal <nikhil.agarwal@amd.com>
-Co-developed-by: Abhijit Gangurde <abhijit.gangurde@amd.com>
-Signed-off-by: Abhijit Gangurde <abhijit.gangurde@amd.com>
-Signed-off-by: Nipun Gupta <nipun.gupta@amd.com>
-Reviewed-by: Pieter Jansen van Vuuren <pieter.jansen-van-vuuren@amd.com>
-Tested-by: Nikhil Agarwal <nikhil.agarwal@amd.com>
----
+Nit: you can use &pdev->dev directly here to save on a local variable.
+Its not used later in the _probe function anyways.
 
-Changes v1->v2:
-- fixed scenario where msi write was called asyncronously in
-  an atomic context, by using irq_chip_(un)lock, and using sync
-  MCDI API for write MSI message.
-- fixed broken Signed-off-by chain.
+> +       if (!pinctrl_data)
+> +               return -EINVAL;
+> +
+> +       return msm_pinctrl_probe(pdev, pinctrl_data);
+> +}
+> +
+> +static struct platform_driver sdx75_pinctrl_driver = {
+> +       .driver = {
+> +               .name = "sdx75-tlmm",
+> +               .of_match_table = sdx75_pinctrl_of_match,
+> +       },
+> +       .probe = sdx75_pinctrl_probe,
+> +       .remove = msm_pinctrl_remove,
+> +};
+> +
+> +static int __init sdx75_pinctrl_init(void)
+> +{
+> +       return platform_driver_register(&sdx75_pinctrl_driver);
+> +}
+> +arch_initcall(sdx75_pinctrl_init);
+> +
+> +static void __exit sdx75_pinctrl_exit(void)
+> +{
+> +       platform_driver_unregister(&sdx75_pinctrl_driver);
+> +}
+> +module_exit(sdx75_pinctrl_exit);
+> +
+> +MODULE_DESCRIPTION("QTI sdx75 pinctrl driver");
+> +MODULE_LICENSE("GPL");
+> \ No newline at end of file
 
- drivers/cdx/Kconfig                     |   1 +
- drivers/cdx/Makefile                    |   2 +-
- drivers/cdx/cdx.c                       |   8 ++
- drivers/cdx/cdx.h                       |  10 ++
- drivers/cdx/cdx_msi.c                   | 183 ++++++++++++++++++++++++
- drivers/cdx/controller/cdx_controller.c |  23 +++
- drivers/cdx/controller/mc_cdx_pcol.h    |  58 ++++++++
- drivers/cdx/controller/mcdi_functions.c |  19 +++
- drivers/cdx/controller/mcdi_functions.h |  20 +++
- include/linux/cdx/cdx_bus.h             |  30 ++++
- kernel/irq/msi.c                        |   1 +
- 11 files changed, 354 insertions(+), 1 deletion(-)
- create mode 100644 drivers/cdx/cdx_msi.c
+Is this intentional ^^?
 
-diff --git a/drivers/cdx/Kconfig b/drivers/cdx/Kconfig
-index a08958485e31..86df7ccb76bb 100644
---- a/drivers/cdx/Kconfig
-+++ b/drivers/cdx/Kconfig
-@@ -8,6 +8,7 @@
- config CDX_BUS
- 	bool "CDX Bus driver"
- 	depends on OF && ARM64
-+	select GENERIC_MSI_IRQ_DOMAIN
- 	help
- 	  Driver to enable Composable DMA Transfer(CDX) Bus. CDX bus
- 	  exposes Fabric devices which uses composable DMA IP to the
-diff --git a/drivers/cdx/Makefile b/drivers/cdx/Makefile
-index 0324e4914f6e..4bad79d1d188 100644
---- a/drivers/cdx/Makefile
-+++ b/drivers/cdx/Makefile
-@@ -5,4 +5,4 @@
- # Copyright (C) 2022-2023, Advanced Micro Devices, Inc.
- #
- 
--obj-$(CONFIG_CDX_BUS) += cdx.o controller/
-+obj-$(CONFIG_CDX_BUS) += cdx.o cdx_msi.o controller/
-diff --git a/drivers/cdx/cdx.c b/drivers/cdx/cdx.c
-index 38511fd36325..37bf70077c70 100644
---- a/drivers/cdx/cdx.c
-+++ b/drivers/cdx/cdx.c
-@@ -56,6 +56,7 @@
-  */
- 
- #include <linux/init.h>
-+#include <linux/irqdomain.h>
- #include <linux/kernel.h>
- #include <linux/of_device.h>
- #include <linux/slab.h>
-@@ -473,12 +474,19 @@ int cdx_device_add(struct cdx_dev_params *dev_params)
- 	cdx_dev->dev.bus = &cdx_bus_type;
- 	cdx_dev->dev.dma_mask = &cdx_dev->dma_mask;
- 	cdx_dev->dev.release = cdx_device_release;
-+	cdx_dev->msi_write_pending = false;
-+	mutex_init(&cdx_dev->irqchip_lock);
- 
- 	/* Set Name */
- 	dev_set_name(&cdx_dev->dev, "cdx-%02x:%02x",
- 		     ((cdx->id << CDX_CONTROLLER_ID_SHIFT) | (cdx_dev->bus_num & CDX_BUS_NUM_MASK)),
- 		     cdx_dev->dev_num);
- 
-+	if (cdx->msi_domain) {
-+		cdx_dev->num_msi = dev_params->num_msi;
-+		dev_set_msi_domain(&cdx_dev->dev, cdx->msi_domain);
-+	}
-+
- 	ret = device_add(&cdx_dev->dev);
- 	if (ret) {
- 		dev_err(&cdx_dev->dev,
-diff --git a/drivers/cdx/cdx.h b/drivers/cdx/cdx.h
-index c436ac7ac86f..90e2da1e320d 100644
---- a/drivers/cdx/cdx.h
-+++ b/drivers/cdx/cdx.h
-@@ -21,6 +21,7 @@
-  * @res: array of MMIO region entries
-  * @res_count: number of valid MMIO regions
-  * @req_id: Requestor ID associated with CDX device
-+ * @num_msi: Number of MSI's supported by the device
-  */
- struct cdx_dev_params {
- 	struct cdx_controller *cdx;
-@@ -31,6 +32,7 @@ struct cdx_dev_params {
- 	struct resource res[MAX_CDX_DEV_RESOURCES];
- 	u8 res_count;
- 	u32 req_id;
-+	u32 num_msi;
- };
- 
- /**
-@@ -59,4 +61,12 @@ void cdx_unregister_controller(struct cdx_controller *cdx);
-  */
- int cdx_device_add(struct cdx_dev_params *dev_params);
- 
-+/**
-+ * cdx_msi_domain_init - Init the CDX bus MSI domain.
-+ * @dev: Device of the CDX bus controller
-+ *
-+ * Return: CDX MSI domain, NULL on failure
-+ */
-+struct irq_domain *cdx_msi_domain_init(struct device *dev);
-+
- #endif /* _CDX_H_ */
-diff --git a/drivers/cdx/cdx_msi.c b/drivers/cdx/cdx_msi.c
-new file mode 100644
-index 000000000000..7bd224aa9250
---- /dev/null
-+++ b/drivers/cdx/cdx_msi.c
-@@ -0,0 +1,183 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * AMD CDX bus driver MSI support
-+ *
-+ * Copyright (C) 2022-2023, Advanced Micro Devices, Inc.
-+ */
-+
-+#include <linux/of.h>
-+#include <linux/of_device.h>
-+#include <linux/of_address.h>
-+#include <linux/of_irq.h>
-+#include <linux/irq.h>
-+#include <linux/irqdomain.h>
-+#include <linux/msi.h>
-+#include <linux/cdx/cdx_bus.h>
-+
-+#include "cdx.h"
-+
-+static void cdx_msi_write_msg(struct irq_data *irq_data,
-+			      struct msi_msg *msg)
-+{
-+	struct msi_desc *msi_desc = irq_data_get_msi_desc(irq_data);
-+	struct cdx_device *cdx_dev = to_cdx_device(msi_desc->dev);
-+
-+	/* We would not operate on msg here rather we wait for
-+	 * irq_bus_sync_unlock() to be called from preemptible
-+	 * task context.
-+	 */
-+	msi_desc->msg = *msg;
-+	cdx_dev->msi_write_pending = true;
-+}
-+
-+static void cdx_msi_write_irq_lock(struct irq_data *irq_data)
-+{
-+	struct msi_desc *msi_desc = irq_data_get_msi_desc(irq_data);
-+	struct cdx_device *cdx_dev = to_cdx_device(msi_desc->dev);
-+
-+	mutex_lock(&cdx_dev->irqchip_lock);
-+}
-+
-+static void cdx_msi_write_irq_unlock(struct irq_data *irq_data)
-+{
-+	struct msi_desc *msi_desc = irq_data_get_msi_desc(irq_data);
-+	struct cdx_device *cdx_dev = to_cdx_device(msi_desc->dev);
-+	struct cdx_controller *cdx = cdx_dev->cdx;
-+	struct cdx_device_config dev_config;
-+	int ret;
-+
-+	if (!cdx_dev->msi_write_pending) {
-+		mutex_unlock(&cdx_dev->irqchip_lock);
-+		return;
-+	}
-+
-+	cdx_dev->msi_write_pending = false;
-+	mutex_unlock(&cdx_dev->irqchip_lock);
-+
-+	dev_config.msi.msi_index = msi_desc->msi_index;
-+	dev_config.msi.data = msi_desc->msg.data;
-+	dev_config.msi.addr = ((u64)(msi_desc->msg.address_hi) << 32) |
-+			      msi_desc->msg.address_lo;
-+
-+	dev_config.type = CDX_DEV_MSI_CONF;
-+	ret = cdx->ops->dev_configure(cdx, cdx_dev->bus_num, cdx_dev->dev_num,
-+				      &dev_config);
-+	if (ret)
-+		dev_err(&cdx_dev->dev, "Write MSI failed to CDX controller\n");
-+}
-+
-+static struct irq_chip cdx_msi_irq_chip = {
-+	.name			= "CDX-MSI",
-+	.irq_mask		= irq_chip_mask_parent,
-+	.irq_unmask		= irq_chip_unmask_parent,
-+	.irq_eoi		= irq_chip_eoi_parent,
-+	.irq_set_affinity	= msi_domain_set_affinity,
-+	.irq_write_msi_msg	= cdx_msi_write_msg,
-+	.irq_bus_lock		= cdx_msi_write_irq_lock,
-+	.irq_bus_sync_unlock	= cdx_msi_write_irq_unlock
-+};
-+
-+int cdx_msi_domain_alloc_irqs(struct device *dev, unsigned int irq_count)
-+{
-+	int ret;
-+
-+	ret = msi_setup_device_data(dev);
-+	if (ret)
-+		return ret;
-+
-+	ret = msi_domain_alloc_irqs_range(dev, MSI_DEFAULT_DOMAIN,
-+					  0, irq_count - 1);
-+	if (ret)
-+		dev_err(dev, "Failed to allocate IRQs\n");
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(cdx_msi_domain_alloc_irqs);
-+
-+/* Convert an msi_desc to a globally unique identifier. */
-+static irq_hw_number_t cdx_domain_calc_hwirq(struct cdx_device *dev,
-+					     struct msi_desc *desc)
-+{
-+	return ((irq_hw_number_t)dev->req_id << 10) | desc->msi_index;
-+}
-+
-+static void cdx_msi_set_desc(msi_alloc_info_t *arg,
-+			     struct msi_desc *desc)
-+{
-+	arg->desc = desc;
-+	arg->hwirq = cdx_domain_calc_hwirq(to_cdx_device(desc->dev), desc);
-+}
-+
-+static int cdx_msi_prepare(struct irq_domain *msi_domain,
-+			   struct device *dev,
-+			   int nvec, msi_alloc_info_t *info)
-+{
-+	struct cdx_device *cdx_dev = to_cdx_device(dev);
-+	struct device *parent = dev->parent;
-+	struct msi_domain_info *msi_info;
-+	u32 dev_id = 0;
-+	int ret;
-+
-+	/* Retrieve device ID from requestor ID using parent device */
-+	ret = of_map_id(parent->of_node, cdx_dev->req_id, "msi-map",
-+			"msi-map-mask", NULL, &dev_id);
-+	if (ret) {
-+		dev_err(dev, "of_map_id failed for MSI: %d\n", ret);
-+		return ret;
-+	}
-+
-+	/* Set the device Id to be passed to the GIC-ITS */
-+	info->scratchpad[0].ul = dev_id;
-+
-+	msi_info = msi_get_domain_info(msi_domain->parent);
-+
-+	return msi_info->ops->msi_prepare(msi_domain->parent, dev, nvec, info);
-+}
-+
-+static struct msi_domain_ops cdx_msi_ops = {
-+	.msi_prepare	= cdx_msi_prepare,
-+	.set_desc	= cdx_msi_set_desc
-+};
-+
-+static struct msi_domain_info cdx_msi_domain_info = {
-+	.ops	= &cdx_msi_ops,
-+	.chip	= &cdx_msi_irq_chip,
-+	.flags	= MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS |
-+		  MSI_FLAG_ALLOC_SIMPLE_MSI_DESCS | MSI_FLAG_FREE_MSI_DESCS
-+};
-+
-+struct irq_domain *cdx_msi_domain_init(struct device *dev)
-+{
-+	struct device_node *np = dev->of_node;
-+	struct fwnode_handle *fwnode_handle;
-+	struct irq_domain *cdx_msi_domain;
-+	struct device_node *parent_node;
-+	struct irq_domain *parent;
-+
-+	fwnode_handle = of_node_to_fwnode(np);
-+
-+	parent_node = of_parse_phandle(np, "msi-map", 1);
-+	if (!parent_node) {
-+		dev_err(dev, "msi-map not present on cdx controller\n");
-+		return NULL;
-+	}
-+
-+	parent = irq_find_matching_fwnode(of_node_to_fwnode(parent_node),
-+					  DOMAIN_BUS_NEXUS);
-+	if (!parent || !msi_get_domain_info(parent)) {
-+		dev_err(dev, "unable to locate ITS domain\n");
-+		return NULL;
-+	}
-+
-+	cdx_msi_domain = msi_create_irq_domain(fwnode_handle, &cdx_msi_domain_info,
-+					       parent);
-+	if (!cdx_msi_domain) {
-+		dev_err(dev, "unable to create CDX-MSI domain\n");
-+		return NULL;
-+	}
-+
-+	dev_dbg(dev, "CDX-MSI domain created\n");
-+
-+	return cdx_msi_domain;
-+}
-+EXPORT_SYMBOL_GPL(cdx_msi_domain_init);
-diff --git a/drivers/cdx/controller/cdx_controller.c b/drivers/cdx/controller/cdx_controller.c
-index dc52f95f8978..29e8e4a3b8c1 100644
---- a/drivers/cdx/controller/cdx_controller.c
-+++ b/drivers/cdx/controller/cdx_controller.c
-@@ -8,6 +8,7 @@
- #include <linux/of_platform.h>
- #include <linux/slab.h>
- #include <linux/cdx/cdx_bus.h>
-+#include <linux/irqdomain.h>
- 
- #include "cdx_controller.h"
- #include "../cdx.h"
-@@ -49,9 +50,20 @@ static int cdx_configure_device(struct cdx_controller *cdx,
- 				u8 bus_num, u8 dev_num,
- 				struct cdx_device_config *dev_config)
- {
-+	u16 msi_index;
- 	int ret = 0;
-+	u32 data;
-+	u64 addr;
- 
- 	switch (dev_config->type) {
-+	case CDX_DEV_MSI_CONF:
-+		msi_index = dev_config->msi.msi_index;
-+		data = dev_config->msi.data;
-+		addr = dev_config->msi.addr;
-+
-+		ret = cdx_mcdi_write_msi(cdx->priv, bus_num, dev_num,
-+					 msi_index, addr, data);
-+		break;
- 	case CDX_DEV_RESET_CONF:
- 		ret = cdx_mcdi_reset_device(cdx->priv, bus_num, dev_num);
- 		break;
-@@ -154,6 +166,14 @@ static int xlnx_cdx_probe(struct platform_device *pdev)
- 	cdx->priv = cdx_mcdi;
- 	cdx->ops = &cdx_ops;
- 
-+	/* Create MSI domain */
-+	cdx->msi_domain = cdx_msi_domain_init(&pdev->dev);
-+	if (!cdx->msi_domain) {
-+		dev_err(&pdev->dev, "cdx_msi_domain_init() failed");
-+		ret = -ENODEV;
-+		goto cdx_msi_fail;
-+	}
-+
- 	ret = cdx_setup_rpmsg(pdev);
- 	if (ret) {
- 		if (ret != -EPROBE_DEFER)
-@@ -165,6 +185,8 @@ static int xlnx_cdx_probe(struct platform_device *pdev)
- 	return 0;
- 
- cdx_rpmsg_fail:
-+	irq_domain_remove(cdx->msi_domain);
-+cdx_msi_fail:
- 	kfree(cdx);
- cdx_alloc_fail:
- 	cdx_mcdi_finish(cdx_mcdi);
-@@ -181,6 +203,7 @@ static int xlnx_cdx_remove(struct platform_device *pdev)
- 
- 	cdx_destroy_rpmsg(pdev);
- 
-+	irq_domain_remove(cdx->msi_domain);
- 	kfree(cdx);
- 
- 	cdx_mcdi_finish(cdx_mcdi);
-diff --git a/drivers/cdx/controller/mc_cdx_pcol.h b/drivers/cdx/controller/mc_cdx_pcol.h
-index 4ccb7b52951b..07358d25b90b 100644
---- a/drivers/cdx/controller/mc_cdx_pcol.h
-+++ b/drivers/cdx/controller/mc_cdx_pcol.h
-@@ -562,6 +562,64 @@
- #define MC_CMD_CDX_DEVICE_CONTROL_GET_OUT_MMIO_REGIONS_ENABLE_LBN	2
- #define MC_CMD_CDX_DEVICE_CONTROL_GET_OUT_MMIO_REGIONS_ENABLE_WIDTH	1
- 
-+/***********************************/
-+/*
-+ * MC_CMD_CDX_DEVICE_WRITE_MSI_MSG
-+ * Populates the MSI message to be used by the hardware to raise the specified
-+ * interrupt vector. Versal-net implementation specific limitations are that
-+ * only 4 CDX devices with MSI interrupt capability are supported and all
-+ * vectors within a device must use the same write address. The command will
-+ * return EINVAL if any of these limitations is violated.
-+ */
-+#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG					0x9
-+#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_MSGSET				0x9
-+#undef MC_CMD_0x9_PRIVILEGE_CTG
-+
-+#define MC_CMD_0x9_PRIVILEGE_CTG SRIOV_CTG_ADMIN
-+
-+/* MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN msgrequest */
-+#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_LEN				28
-+/* Device bus number, in range 0 to BUS_COUNT-1 */
-+#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_BUS_OFST			0
-+#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_BUS_LEN			4
-+/* Device number relative to the bus, in range 0 to DEVICE_COUNT-1 for that bus */
-+#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_DEVICE_OFST			4
-+#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_DEVICE_LEN			4
-+/*
-+ * Device-relative MSI vector number. Must be < MSI_COUNT reported for the
-+ * device.
-+ */
-+#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_VECTOR_OFST		8
-+#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_VECTOR_LEN		4
-+/* Reserved (alignment) */
-+#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_RESERVED_OFST		12
-+#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_RESERVED_LEN			4
-+/*
-+ * MSI address to be used by the hardware. Typically, on ARM systems this
-+ * address is translated by the IOMMU (if enabled) and it is the responsibility
-+ * of the entity managing the IOMMU (APU kernel) to supply the correct IOVA
-+ * here.
-+ */
-+#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_ADDRESS_OFST		16
-+#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_ADDRESS_LEN		8
-+#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_ADDRESS_LO_OFST		16
-+#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_ADDRESS_LO_LEN		4
-+#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_ADDRESS_LO_LBN		128
-+#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_ADDRESS_LO_WIDTH		32
-+#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_ADDRESS_HI_OFST		20
-+#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_ADDRESS_HI_LEN		4
-+#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_ADDRESS_HI_LBN		160
-+#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_ADDRESS_HI_WIDTH		32
-+/*
-+ * MSI data to be used by the hardware. On versal-net, only the lower 16-bits
-+ * are used, the remaining bits are ignored and should be set to zero.
-+ */
-+#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_DATA_OFST		24
-+#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_DATA_LEN			4
-+
-+/* MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_OUT msgresponse */
-+#define MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_OUT_LEN				0
-+
- /***********************************/
- /* MC_CMD_V2_EXTN - Encapsulation for a v2 extended command */
- #define MC_CMD_V2_EXTN					0x7f
-diff --git a/drivers/cdx/controller/mcdi_functions.c b/drivers/cdx/controller/mcdi_functions.c
-index 0158f26533dd..c26a0d94abf1 100644
---- a/drivers/cdx/controller/mcdi_functions.c
-+++ b/drivers/cdx/controller/mcdi_functions.c
-@@ -120,10 +120,29 @@ int cdx_mcdi_get_dev_config(struct cdx_mcdi *cdx,
- 
- 	dev_params->vendor = MCDI_WORD(outbuf, CDX_BUS_GET_DEVICE_CONFIG_OUT_VENDOR_ID);
- 	dev_params->device = MCDI_WORD(outbuf, CDX_BUS_GET_DEVICE_CONFIG_OUT_DEVICE_ID);
-+	dev_params->num_msi = MCDI_DWORD(outbuf, CDX_BUS_GET_DEVICE_CONFIG_OUT_MSI_COUNT);
- 
- 	return 0;
- }
- 
-+int cdx_mcdi_write_msi(struct cdx_mcdi *cdx, u8 bus_num, u8 dev_num,
-+		       u32 msi_vector, u64 msi_address, u32 msi_data)
-+{
-+	MCDI_DECLARE_BUF(inbuf, MC_CMD_CDX_DEVICE_WRITE_MSI_MSG_IN_LEN);
-+	int ret;
-+
-+	MCDI_SET_DWORD(inbuf, CDX_DEVICE_WRITE_MSI_MSG_IN_BUS, bus_num);
-+	MCDI_SET_DWORD(inbuf, CDX_DEVICE_WRITE_MSI_MSG_IN_DEVICE, dev_num);
-+	MCDI_SET_DWORD(inbuf, CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_VECTOR, msi_vector);
-+	MCDI_SET_QWORD(inbuf, CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_ADDRESS, msi_address);
-+	MCDI_SET_DWORD(inbuf, CDX_DEVICE_WRITE_MSI_MSG_IN_MSI_DATA, msi_data);
-+
-+	ret = cdx_mcdi_rpc(cdx, MC_CMD_CDX_DEVICE_WRITE_MSI_MSG, inbuf, sizeof(inbuf),
-+			   NULL, 0, NULL);
-+
-+	return ret;
-+}
-+
- int cdx_mcdi_reset_device(struct cdx_mcdi *cdx, u8 bus_num, u8 dev_num)
- {
- 	MCDI_DECLARE_BUF(inbuf, MC_CMD_CDX_DEVICE_RESET_IN_LEN);
-diff --git a/drivers/cdx/controller/mcdi_functions.h b/drivers/cdx/controller/mcdi_functions.h
-index 7440ace5539a..35a300727f34 100644
---- a/drivers/cdx/controller/mcdi_functions.h
-+++ b/drivers/cdx/controller/mcdi_functions.h
-@@ -47,6 +47,26 @@ int cdx_mcdi_get_dev_config(struct cdx_mcdi *cdx,
- 			    u8 bus_num, u8 dev_num,
- 			    struct cdx_dev_params *dev_params);
- 
-+/**
-+ * cdx_mcdi_write_msi - Write MSI configuration for CDX device
-+ * @cdx: pointer to MCDI interface.
-+ * @bus_num: Bus number.
-+ * @dev_num: Device number.
-+ * @msi_vector: Device-relative MSI vector number.
-+ *	Must be < MSI_COUNT reported for the device.
-+ * @msi_address: MSI address to be used by the hardware. Typically, on ARM
-+ *	systems this address is translated by the IOMMU (if enabled) and
-+ *	it is the responsibility of the entity managing the IOMMU (APU kernel)
-+ *	to supply the correct IOVA here.
-+ * @msi_data: MSI data to be used by the hardware. On versal-net, only the
-+ *	lower 16-bits are used, the remaining bits are ignored and should be
-+ *	set to zero.
-+ *
-+ * Return: 0 on success, <0 on failure
-+ */
-+int cdx_mcdi_write_msi(struct cdx_mcdi *cdx, u8 bus_num, u8 dev_num,
-+		       u32 msi_vector, u64 msi_address, u32 msi_data);
-+
- /**
-  * cdx_mcdi_reset_device - Reset cdx device represented by bus_num:dev_num
-  * @cdx: pointer to MCDI interface.
-diff --git a/include/linux/cdx/cdx_bus.h b/include/linux/cdx/cdx_bus.h
-index bead71b7bc73..c1b73cef346c 100644
---- a/include/linux/cdx/cdx_bus.h
-+++ b/include/linux/cdx/cdx_bus.h
-@@ -21,11 +21,19 @@
- struct cdx_controller;
- 
- enum {
-+	CDX_DEV_MSI_CONF,
- 	CDX_DEV_RESET_CONF,
- };
- 
-+struct cdx_msi_config {
-+	u16 msi_index;
-+	u32 data;
-+	u64 addr;
-+};
-+
- struct cdx_device_config {
- 	u8 type;
-+	struct cdx_msi_config msi;
- };
- 
- typedef int (*cdx_scan_cb)(struct cdx_controller *cdx);
-@@ -62,12 +70,14 @@ struct cdx_ops {
-  * struct cdx_controller: CDX controller object
-  * @dev: Linux device associated with the CDX controller.
-  * @priv: private data
-+ * @msi_domain: MSI domain
-  * @id: Controller ID
-  * @ops: CDX controller ops
-  */
- struct cdx_controller {
- 	struct device *dev;
- 	void *priv;
-+	struct irq_domain *msi_domain;
- 	u32 id;
- 	struct cdx_ops *ops;
- };
-@@ -86,9 +96,12 @@ struct cdx_controller {
-  * @dma_mask: Default DMA mask
-  * @flags: CDX device flags
-  * @req_id: Requestor ID associated with CDX device
-+ * @num_msi: Number of MSI's supported by the device
-  * @driver_override: driver name to force a match; do not set directly,
-  *                   because core frees it; use driver_set_override() to
-  *                   set or clear it.
-+ * @irqchip_lock: lock to synchronize irq/msi configuration
-+ * @msi_write_pending: MSI write pending for this device
-  */
- struct cdx_device {
- 	struct device dev;
-@@ -102,7 +115,10 @@ struct cdx_device {
- 	u64 dma_mask;
- 	u16 flags;
- 	u32 req_id;
-+	u32 num_msi;
- 	const char *driver_override;
-+	struct mutex irqchip_lock; /* Serialize write msi configuration */
-+	bool msi_write_pending;
- };
- 
- #define to_cdx_device(_dev) \
-@@ -162,6 +178,20 @@ void cdx_driver_unregister(struct cdx_driver *cdx_driver);
- 
- extern struct bus_type cdx_bus_type;
- 
-+/**
-+ * cdx_msi_domain_alloc_irqs - Allocate MSI's for the CDX device
-+ * @dev: device pointer
-+ * @irq_count: Number of MSI's to be allocated
-+ *
-+ * Return: 0 for success, -errno on failure
-+ */
-+int cdx_msi_domain_alloc_irqs(struct device *dev, unsigned int irq_count);
-+
-+/**
-+ * cdx_msi_domain_free_irqs - Free MSI's for CDX device
-+ */
-+#define cdx_msi_domain_free_irqs msi_domain_free_irqs_all
-+
- /**
-  * cdx_dev_reset - Reset CDX device
-  * @dev: device pointer
-diff --git a/kernel/irq/msi.c b/kernel/irq/msi.c
-index 7a97bcb086bf..d9b793900931 100644
---- a/kernel/irq/msi.c
-+++ b/kernel/irq/msi.c
-@@ -1637,6 +1637,7 @@ void msi_domain_free_irqs_all(struct device *dev, unsigned int domid)
- 	msi_domain_free_irqs_all_locked(dev, domid);
- 	msi_unlock_descs(dev);
- }
-+EXPORT_SYMBOL_GPL(msi_domain_free_irqs_all);
- 
- /**
-  * msi_get_domain_info - Get the MSI interrupt domain info for @domain
--- 
-2.17.1
+Thanks,
+Bhupesh
 
+
+> --
+> 2.7.4
+>
