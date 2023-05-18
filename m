@@ -2,110 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CFF47076E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 02:23:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D20A7076E4
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 02:26:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbjERAXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 20:23:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47168 "EHLO
+        id S229610AbjERA0N convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 17 May 2023 20:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjERAXi (ORCPT
+        with ESMTP id S229476AbjERA0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 20:23:38 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B3991BDA
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 17:23:37 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9661a1ff1e9so212679166b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 17:23:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1684369416; x=1686961416;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eT8xYYCjH6ggOvHhW6+9I5mhGuzNhDu/1pBE5VbcuBw=;
-        b=gTZFVsElP150YAlaodxcujBHIj75XOb7QFcVy8eQfBGiyz9WyiVG4JNgr80YtrYelb
-         2tSCpR6WtnXBEuUlu8U7V/lsTASyGGuEEppfFsGbXBf+IsPmOztCszCQh49Fs0UCbcvJ
-         CHy7eRX74HXf0TWKJbutYbfpbMOM3XA5sUzwE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684369416; x=1686961416;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eT8xYYCjH6ggOvHhW6+9I5mhGuzNhDu/1pBE5VbcuBw=;
-        b=e07mj4toLugL5PyA6uGSgOELBOxUTIaRBI1NoPVlTQGZObO7TASnuO9/FjXe45i+M/
-         PoZaYeVh4DVbPq66HHGERxF0mtEZz0tgiaWAS5XuoCtucxFMJ2aCGkzzRBOG6sQ0aLu6
-         y/h8oNOEpQXmVaEuwmZb+OtdlzDMy9xEzHxJz5dEBX0qwb6IwIrHyhr66Bl0axn+hlEi
-         j6gxHujze/ope7DYQ3IktyS3vGJyWc2U7cX0vfPV39L749oJHYIu4TBImYv43cp0cE9W
-         M0LiFc/IlUCR8ljpgZUiTooVZjUhDrB8k650PBPQkGil/jXLvWFTff6Is3hIupmcAkts
-         ZZ9Q==
-X-Gm-Message-State: AC+VfDx6uo71vm2OjtkB/n/x+TsfEyYkyJOqrd4I/i+1i1fxiAglNyO7
-        bHShI2NtbYO+jbE9021XcMfhsSv/jOVZCgQYgMJBzBvs
-X-Google-Smtp-Source: ACHHUZ4AuI9yGQj2aCXu04GRYC6B3Zfd3ZTynpPKxWDfOVyYKi9No7Pc0mRc4ekhvUnW/ckBHg7AAw==
-X-Received: by 2002:a17:906:fe42:b0:957:28b2:560a with SMTP id wz2-20020a170906fe4200b0095728b2560amr36830109ejb.46.1684369415936;
-        Wed, 17 May 2023 17:23:35 -0700 (PDT)
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com. [209.85.208.42])
-        by smtp.gmail.com with ESMTPSA id a7-20020a1709064a4700b00965ac8f8a3dsm212708ejv.173.2023.05.17.17.23.34
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 17:23:34 -0700 (PDT)
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-50bc040c7b8so2190635a12.2
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 17:23:34 -0700 (PDT)
-X-Received: by 2002:a17:907:7dab:b0:967:a127:7e79 with SMTP id
- oz43-20020a1709077dab00b00967a1277e79mr31504240ejc.28.1684369414251; Wed, 17
- May 2023 17:23:34 -0700 (PDT)
+        Wed, 17 May 2023 20:26:11 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54CE03AA1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 17:26:07 -0700 (PDT)
+Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34HNX2NH028336
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 17:26:07 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qmrccf1gu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 17:26:06 -0700
+Received: from twshared29562.14.frc2.facebook.com (2620:10d:c085:208::f) by
+ mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 17 May 2023 17:26:06 -0700
+Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
+        id 243151DC7E500; Wed, 17 May 2023 17:25:59 -0700 (PDT)
+From:   Song Liu <song@kernel.org>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <kernel-team@meta.com>, Song Liu <song@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: [PATCH v4] watchdog: Allow nmi watchdog to use "ref-cycles" event
+Date:   Wed, 17 May 2023 17:25:55 -0700
+Message-ID: <20230518002555.1114189-1-song@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <CAHk-=wh_GEr4ehJKwMM3UA0-7CfNpVH7v_T-=1u+gq9VZD70mw@mail.gmail.com>
- <20230517172243.GA152@W11-BEAU-MD.localdomain> <CAHk-=whzzuNEW8UcV2_8OyuKcXPrk7-j_8GzOoroxz9JiZiD3w@mail.gmail.com>
- <20230517190750.GA366@W11-BEAU-MD.localdomain> <CAHk-=whTBvXJuoi_kACo3qi5WZUmRrhyA-_=rRFsycTytmB6qw@mail.gmail.com>
- <CAHk-=wi4w9bPKFFGwLULjJf9hnkL941+c4HbeEVKNzqH04wqDA@mail.gmail.com>
- <CAHk-=wiiBfT4zNS29jA0XEsy8EmbqTH1hAPdRJCDAJMD8Gxt5A@mail.gmail.com>
- <20230517230054.GA195@W11-BEAU-MD.localdomain> <CAHk-=wgQ7qZZ1ud6nhY634eFS9g6NiOz5y2aEammoFkk+5KVcw@mail.gmail.com>
- <20230517192528.043adc7a@gandalf.local.home> <20230518001422.GA254@W11-BEAU-MD.localdomain>
-In-Reply-To: <20230518001422.GA254@W11-BEAU-MD.localdomain>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 17 May 2023 17:23:17 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjU0vq8aL_VmUDqwh9_fo8nXYt65PBjihNetTMq4s8OsA@mail.gmail.com>
-Message-ID: <CAHk-=wjU0vq8aL_VmUDqwh9_fo8nXYt65PBjihNetTMq4s8OsA@mail.gmail.com>
-Subject: Re: [PATCH] tracing/user_events: Run BPF program if attached
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        David Vernet <void@manifault.com>, dthaler@microsoft.com,
-        brauner@kernel.org, hch@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: t09TYiwBNJmZYl17ebyb9vheX77SR38h
+X-Proofpoint-ORIG-GUID: t09TYiwBNJmZYl17ebyb9vheX77SR38h
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-17_04,2023-05-17_02,2023-02-09_01
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 5:14=E2=80=AFPM Beau Belgrave <beaub@linux.microsof=
-t.com> wrote:
->
-> Do you run with CONFIG_DEBUG_ATOMIC_SLEEP? It will not splat with just
-> CONFIG_PROVE_LOCKING and CONFIG_PROVE_RCU, which bit me here. I'm now
-> running all three now that I know better.
+NMI watchdog permanently consumes one hardware counters per CPU on the
+system. For systems that use many hardware counters, this causes more
+aggressive time multiplexing of perf events.
 
-I wonder if we should just make PROVE_LOCKING select DEBUG_ATOMIC_SLEEP..
+OTOH, some CPUs (mostly Intel) support "ref-cycles" event, which is rarely
+used. Add kernel cmdline arg nmi_watchdog=ref-cycles to configure the
+watchdog to use "ref-cycles" event instead of "cycles".
 
-PROVE_LOCKING is the expensive and complicated one. In contrast,
-DEBUG_ATOMIC_SLEEP is the "we've had this simplistic check for some
-very basic requirements for a long time".
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Signed-off-by: Song Liu <song@kernel.org>
 
-So DEBUG_ATOMIC_SLEEP is really just a minimal debugging thing, it
-feels a bit silly to have all the expensive "prove locking with
-lockdep and all our lock debugging", and then not test the trivial
-basics.
+---
+Changes in v4:
+Fix compile error for !CONFIG_HARDLOCKUP_DETECTOR_PERF. (kernel test bot)
 
-           Linus
+Changes in v3:
+
+Pivot the design to use kernel arg nmi_watchdog=ref-cycles (Peter)
+---
+ Documentation/admin-guide/kernel-parameters.txt | 5 +++--
+ include/linux/nmi.h                             | 2 ++
+ kernel/watchdog.c                               | 2 ++
+ kernel/watchdog_hld.c                           | 9 +++++++++
+ 4 files changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 9e5bab29685f..d378e23dad7c 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -3593,10 +3593,12 @@
+ 			Format: [state][,regs][,debounce][,die]
+ 
+ 	nmi_watchdog=	[KNL,BUGS=X86] Debugging features for SMP kernels
+-			Format: [panic,][nopanic,][num]
++			Format: [panic,][nopanic,][ref-cycles][num]
+ 			Valid num: 0 or 1
+ 			0 - turn hardlockup detector in nmi_watchdog off
+ 			1 - turn hardlockup detector in nmi_watchdog on
++			ref-cycles - configure the watchdog with perf event
++			             "ref-cycles" instead of "cycles"
+ 			When panic is specified, panic when an NMI watchdog
+ 			timeout occurs (or 'nopanic' to not panic on an NMI
+ 			watchdog, if CONFIG_BOOTPARAM_HARDLOCKUP_PANIC is set)
+@@ -7097,4 +7099,3 @@
+ 				memory, and other data can't be written using
+ 				xmon commands.
+ 			off	xmon is disabled.
+-
+diff --git a/include/linux/nmi.h b/include/linux/nmi.h
+index 048c0b9aa623..edfd1bcce0f6 100644
+--- a/include/linux/nmi.h
++++ b/include/linux/nmi.h
+@@ -102,12 +102,14 @@ extern void hardlockup_detector_perf_disable(void);
+ extern void hardlockup_detector_perf_enable(void);
+ extern void hardlockup_detector_perf_cleanup(void);
+ extern int hardlockup_detector_perf_init(void);
++extern void hardlockup_config_perf_event(const char *str);
+ #else
+ static inline void hardlockup_detector_perf_stop(void) { }
+ static inline void hardlockup_detector_perf_restart(void) { }
+ static inline void hardlockup_detector_perf_disable(void) { }
+ static inline void hardlockup_detector_perf_enable(void) { }
+ static inline void hardlockup_detector_perf_cleanup(void) { }
++static inline void hardlockup_config_perf_event(const char *str) { }
+ # if !defined(CONFIG_HAVE_NMI_WATCHDOG)
+ static inline int hardlockup_detector_perf_init(void) { return -ENODEV; }
+ static inline void arch_touch_nmi_watchdog(void) {}
+diff --git a/kernel/watchdog.c b/kernel/watchdog.c
+index 8e61f21e7e33..fed4f0be8e1a 100644
+--- a/kernel/watchdog.c
++++ b/kernel/watchdog.c
+@@ -81,6 +81,8 @@ static int __init hardlockup_panic_setup(char *str)
+ 		nmi_watchdog_user_enabled = 0;
+ 	else if (!strncmp(str, "1", 1))
+ 		nmi_watchdog_user_enabled = 1;
++	else if (!strncmp(str, "ref-cycles", 10))
++		hardlockup_config_perf_event(str);
+ 	return 1;
+ }
+ __setup("nmi_watchdog=", hardlockup_panic_setup);
+diff --git a/kernel/watchdog_hld.c b/kernel/watchdog_hld.c
+index 247bf0b1582c..4deca58ba6ed 100644
+--- a/kernel/watchdog_hld.c
++++ b/kernel/watchdog_hld.c
+@@ -294,3 +294,12 @@ int __init hardlockup_detector_perf_init(void)
+ 	}
+ 	return ret;
+ }
++
++/**
++ * hardlockup_config_perf_event - Overwrite config of wd_hw_attr
++ */
++void __init hardlockup_config_perf_event(const char *str)
++{
++	if (!strncmp(str, "ref-cycles", 10))
++		wd_hw_attr.config = PERF_COUNT_HW_REF_CPU_CYCLES;
++}
+-- 
+2.34.1
+
