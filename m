@@ -2,163 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9857A70853D
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 17:44:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 814A8708544
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 17:47:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231738AbjERPof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 11:44:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33318 "EHLO
+        id S231816AbjERPrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 11:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbjERPod (ORCPT
+        with ESMTP id S230257AbjERPrF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 11:44:33 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3482993;
-        Thu, 18 May 2023 08:44:32 -0700 (PDT)
-Received: from fpc (unknown [46.242.14.200])
-        by mail.ispras.ru (Postfix) with ESMTPSA id E431444C1015;
-        Thu, 18 May 2023 15:44:28 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru E431444C1015
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1684424669;
-        bh=4UYZ2IcmL1KklQiEztNjChNplhlI6pOuen+vw5gYh7c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kx2tqMuCqGe7yKU3/GeQZ06VhdriXeA/5nKMyfZ2/eRm8uC60sAgVtUeAfHXwW0bl
-         uLmfY2sEIfZHLxCKrYXbet5anJxGPxhak2PVLtNFYkCynQ2+zmmprL3OScahQwfarS
-         MwHq+3s0EmwsYfyqSfBy7O8XR0VN4ScmK87UtPuc=
-Date:   Thu, 18 May 2023 18:44:24 +0300
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-To:     Hillf Danton <hdanton@sina.com>
-Cc:     Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        Kalle Vallo <kvalo@kernel.org>,
-        syzbot+f2cb6e0ffdb961921e4d@syzkaller.appspotmail.com,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org
-Subject: Re: [PATCH v3 1/2] wifi: ath9k: fix races between ath9k_wmi_cmd and
- ath9k_wmi_ctrl_rx
-Message-ID: <20230518154424.62urbguy4rxetkty@fpc>
-References: <20230425192607.18015-1-pchelkin@ispras.ru>
- <20230425230708.2132-1-hdanton@sina.com>
- <20230426190206.ni2au5mpjc5oty67@fpc>
- <20230518102437.4443-1-hdanton@sina.com>
+        Thu, 18 May 2023 11:47:05 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA79FB
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 08:47:04 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f423ac6e2dso14731395e9.2
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 08:47:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684424823; x=1687016823;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ymkh61skTg1zPEDqswzbYNZ5qZ7vCuKjURUbxRjnrR4=;
+        b=Zl19tS8KTowE+6PyugbQz3d+LqX6WWctHiadQ+HtWAmvSLgBd/Ahff1iTm/M8wuNOC
+         Mwv7mqEcBwGYBnJd3yhxNI7OI6uaWSu9POQPlHErxYKjCBVsSmBXDG9ELloXSJSSLRbM
+         F1QETn0xVEPlj1YZLOc9vb9vi3it52xTGItQx7NVGruS5P9eqm8+li7IetKsuTDgz1Zc
+         KG2Pybtx34uxG35OD/dALu2xI4VsFXHyfbgb9HiFfV83wqu3NlyS+SLDe/ixqbP5kYu8
+         vuO1GMbvQ5CpoqLk8IFC4aoi4EjOTeHoGnBkEgvOu8p2oGZZSzrrSmwF7bz/BT9pE82U
+         yJ6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684424823; x=1687016823;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Ymkh61skTg1zPEDqswzbYNZ5qZ7vCuKjURUbxRjnrR4=;
+        b=SgaUwjq+VlVnXfxitzqdVobv3r67VxCDreIcC1dTlSI+wpibiPnwNZJpiod2VYUWHX
+         r+uC5B3Vv9v28UNQ0ES8qgAlWXsY1MSoqI8OELbWx7golF+7DQXoL6cC9EO4U5TNXHO9
+         0zVeGiub/HNxTn/HiIrFNXBwqxFjfP/+AVzqxJ2/hTHzHqkY34DIYGmadptxbD8AVD1O
+         0WQNDgS8+cmcOiJSY5IwLV4aQ5WKwAIjAd0f1di3pOSc4o8eesHNylodfA8KGokdHnLL
+         LZymeM4L8UeXzOqjQ9ltCzWOZM2djxkKqOafPWwEK11avFFnE21Fv6XWKLgEw5tUCzZv
+         jEzg==
+X-Gm-Message-State: AC+VfDxTI4P30cbI0eTvNcrk+lN12GIhJOn37+cEF0dlFr6c1zxUpCox
+        pFBwCZdyYI5SjQESrLigTQ==
+X-Google-Smtp-Source: ACHHUZ5NEN01uLw38HTG60bVP6CFot9CpU5K+73tZInZX3ej0M6uFNn+hq8ww8pFkeuOn28OzRM0Eg==
+X-Received: by 2002:a05:600c:210e:b0:3f5:39:240c with SMTP id u14-20020a05600c210e00b003f50039240cmr1755001wml.27.1684424822916;
+        Thu, 18 May 2023 08:47:02 -0700 (PDT)
+Received: from p183.Dlink ([46.53.250.37])
+        by smtp.gmail.com with ESMTPSA id h2-20020a1ccc02000000b003f421979398sm5671769wmb.26.2023.05.18.08.47.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 May 2023 08:47:02 -0700 (PDT)
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, adobriyan@gmail.com
+Subject: [PATCH 1/8] auto, kbuild: flatten KBUILD_CFLAGS
+Date:   Thu, 18 May 2023 18:46:42 +0300
+Message-Id: <20230518154648.581643-1-adobriyan@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230518102437.4443-1-hdanton@sina.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 06:24:37PM +0800, Hillf Danton wrote:
-> Fedor Pchelkin <pchelkin@ispras.ru> writes:
-> 
-> > On Wed, Apr 26, 2023 at 07:07:08AM +0800, Hillf Danton wrote: 
-> >> Given similar wait timeout[1], just taking lock on the waiter side is not
-> >> enough wrt fixing the race, because in case job done on the waker side,
-> >> waiter needs to wait again after timeout.
-> >> 
-> >
-> > As I understand you correctly, you mean the case when a timeout occurs
-> > during ath9k_wmi_ctrl_rx() callback execution. I suppose if a timeout has
-> > occurred on a waiter's side, it should return immediately and doesn't have
-> > to care in which state the callback has been at that moment.
-> >
-> > AFAICS, this is controlled properly with taking a wmi_lock on waiter and
-> > waker sides, and there is no data corruption.
-> >
-> > If a callback has not managed to do its work entirely (performing a
-> > completion and subsequently waking waiting thread is included here), then,
-> > well, it is considered a timeout, in my opinion.
-> >
-> > Your suggestion makes a wmi_cmd call to give a little more chance for the
-> > belated callback to complete (although timeout has actually expired). That
-> > is probably good, but increasing a timeout value makes that job, too. I
-> > don't think it makes any sense on real hardware.
-> >
-> > Or do you mean there is data corruption that is properly fixed with your patch?
-> 
-> Given complete() not paired with wait_for_completion(), what is the
-> difference after this patch?
+Make it slightly easier to see what compiler options are added and
+removed (and not worry about column limit too!)
 
-The main thing in the patch is making ath9k_wmi_ctrl_rx() release wmi_lock
-after calling ath9k_wmi_rsp_callback() which does copying data into the
-shared wmi->cmd_rsp_buf buffer. Otherwise there can occur a data
-corrupting scenario outlined in the patch description (added it here,
-too).
+Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
+---
+ Makefile | 22 +++++++++++++++++-----
+ 1 file changed, 17 insertions(+), 5 deletions(-)
 
-On Tue, 25 Apr 2023 22:26:06 +0300, Fedor Pchelkin wrote:
-> CPU0					CPU1
-> 
-> ath9k_wmi_cmd(...)
->   mutex_lock(&wmi->op_mutex)
->   ath9k_wmi_cmd_issue(...)
->   wait_for_completion_timeout(...)
->   ---
->   timeout
->   ---
-> 					/* the callback is being processed
-> 					 * before last_seq_id became zero
-> 					 */
-> 					ath9k_wmi_ctrl_rx(...)
-> 					  spin_lock_irqsave(...)
-> 					  /* wmi->last_seq_id check here
-> 					   * doesn't detect timeout yet
-> 					   */
-> 					  spin_unlock_irqrestore(...)
->   /* last_seq_id is zeroed to
->    * indicate there was a timeout
->    */
->   wmi->last_seq_id = 0
->   mutex_unlock(&wmi->op_mutex)
->   return -ETIMEDOUT
-> 
-> ath9k_wmi_cmd(...)
->   mutex_lock(&wmi->op_mutex)
->   /* the buffer is replaced with
->    * another one
->    */
->   wmi->cmd_rsp_buf = rsp_buf
->   wmi->cmd_rsp_len = rsp_len
->   ath9k_wmi_cmd_issue(...)
->     spin_lock_irqsave(...)
->     spin_unlock_irqrestore(...)
->   wait_for_completion_timeout(...)
-> 					/* the continuation of the
-> 					 * callback left after the first
-> 					 * ath9k_wmi_cmd call
-> 					 */
-> 					  ath9k_wmi_rsp_callback(...)
-> 					    /* copying data designated
-> 					     * to already timeouted
-> 					     * WMI command into an
-> 					     * inappropriate wmi_cmd_buf
-> 					     */
-> 					    memcpy(...)
-> 					    complete(&wmi->cmd_wait)
->   /* awakened by the bogus callback
->    * => invalid return result
->    */
->   mutex_unlock(&wmi->op_mutex)
->   return 0
+diff --git a/Makefile b/Makefile
+index f836936fb4d8..10fcc64fcd1f 100644
+--- a/Makefile
++++ b/Makefile
+@@ -554,11 +554,23 @@ LINUXINCLUDE    := \
+ 		$(USERINCLUDE)
+ 
+ KBUILD_AFLAGS   := -D__ASSEMBLY__ -fno-PIE
+-KBUILD_CFLAGS   := -Wall -Wundef -Werror=strict-prototypes -Wno-trigraphs \
+-		   -fno-strict-aliasing -fno-common -fshort-wchar -fno-PIE \
+-		   -Werror=implicit-function-declaration -Werror=implicit-int \
+-		   -Werror=return-type -Wno-format-security -funsigned-char \
+-		   -std=gnu11
++
++KBUILD_CFLAGS :=
++KBUILD_CFLAGS += -std=gnu11
++KBUILD_CFLAGS += -fshort-wchar
++KBUILD_CFLAGS += -funsigned-char
++KBUILD_CFLAGS += -fno-common
++KBUILD_CFLAGS += -fno-PIE
++KBUILD_CFLAGS += -fno-strict-aliasing
++KBUILD_CFLAGS += -Wall
++KBUILD_CFLAGS += -Wundef
++KBUILD_CFLAGS += -Werror=implicit-function-declaration
++KBUILD_CFLAGS += -Werror=implicit-int
++KBUILD_CFLAGS += -Werror=return-type
++KBUILD_CFLAGS += -Werror=strict-prototypes
++KBUILD_CFLAGS += -Wno-format-security
++KBUILD_CFLAGS += -Wno-trigraphs
++
+ KBUILD_CPPFLAGS := -D__KERNEL__
+ KBUILD_RUSTFLAGS := $(rust_common_flags) \
+ 		    --target=$(objtree)/scripts/target.json \
+-- 
+2.40.1
 
-So before the patch the wmi->last_seq_id check in ath9k_wmi_ctrl_rx()
-wasn't helpful in case wmi->last_seq_id value was changed during
-ath9k_wmi_rsp_callback() execution because of the next ath9k_wmi_cmd()
-call.
-
-With the proposed patch the wmi->last_seq_id check in ath9k_wmi_ctrl_rx()
-accomplishes its job as:
- - the next ath9k_wmi_cmd call changes last_seq_id value under lock so
-   it either waits for a belated ath9k_wmi_ctrl_rx() to finish or updates
-   last_seq_id value so that the timeout check in ath9k_wmi_ctrl_rx()
-   indicates that the waiter side has timeouted and we shouldn't further
-   process the callback.
- - memcopying in ath9k_wmi_rsp_callback() is made to a valid place if
-   the last_seq_id check was successful under the lock.
