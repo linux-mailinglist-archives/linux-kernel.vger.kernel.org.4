@@ -2,86 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8B7C7079BF
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 07:41:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 378417079D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 07:49:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbjERFlO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 01:41:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57096 "EHLO
+        id S229919AbjERFts (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 01:49:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229696AbjERFlM (ORCPT
+        with ESMTP id S229586AbjERFtr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 01:41:12 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6099A2D4C;
-        Wed, 17 May 2023 22:41:11 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34I3w2Qi021276;
-        Thu, 18 May 2023 05:41:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=ESj7ja+wnB0eb850UfwKQW6ufww4tlrQ4xDywmAuR8M=;
- b=OOtIWou4h+P3hiGewq1adQ9xG3q/aZgC5PoftJWYARrQ32Ea2ZCnxWf9GuTb0JrFBm0D
- zU434dJJjkX6wNZ5z1F5e4fA/E91D8OUm79GUy7e6BJoBNAEMsNzLNpApONEfvSGqdiv
- ChqzBF6kzcN0Q407qJ+KYxcCbyXkuwgVVt5WYkc9EaaMqiNHWyAqV5C6atzp8A+NPY3/
- ZCJCjPRc3UyI5iFA9p8dj/KNS9W8kSyfDSb0iRoqqUWsZ/Vx8QKbNQ/m5ShPFy56MQle
- X3u9T4CfLZlGAIlk3atp806f3I+cryHGHCjAJ5cvCNNcBGceRa5SycvARYpibEKRma4R xA== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qnc30r6fg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 May 2023 05:41:06 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34I5f5X2024891
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 May 2023 05:41:05 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 17 May 2023 22:41:00 -0700
-Date:   Thu, 18 May 2023 11:10:55 +0530
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <amitk@kernel.org>,
-        <thara.gopinath@gmail.com>, <rafael@kernel.org>,
-        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Praveenkumar I <quic_ipkumar@quicinc.com>
-Subject: Re: [PATCH v3 2/4] dt-bindings: thermal: tsens: Add ipq9574
- compatible
-Message-ID: <20230518054054.GA998@varda-linux.qualcomm.com>
-References: <cover.1684140883.git.quic_varada@quicinc.com>
- <37adcf5d8d545a076e8ed971a4fb6c6c2833ef3c.1684140883.git.quic_varada@quicinc.com>
- <b7e749ff-f4f0-0e61-9aae-876db4278fbc@linaro.org>
- <20230516120426.GA1679@varda-linux.qualcomm.com>
- <1999753b-ceee-d66c-9a48-cbcbb8e6236e@linaro.org>
- <20230517055726.GA3165@varda-linux.qualcomm.com>
- <cfba78d7-e563-4544-00f3-0991b91eb1f3@linaro.org>
+        Thu, 18 May 2023 01:49:47 -0400
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B333E1724;
+        Wed, 17 May 2023 22:49:44 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-510c734fa2dso1621773a12.0;
+        Wed, 17 May 2023 22:49:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684388983; x=1686980983;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=T2rxVNj3wVpEz9gh5N1QQBTQxKKD3sXh7yI31LQUZbA=;
+        b=YC5kzIgxgn5J1xkqHuW1Pm3jA6jqtGKaAyHaztxNcbpLCy/TkxXJOp+UiERmw82+Rp
+         9V3Yo986GdzGMPcoIQb/dSkLg3N90uAXb2B33JGap386t8+UPK3gqtY1DqOozYaFWKdP
+         DRzONCqhGXFKQy1D7eNJmV+aSv8Cxu5IVXFXTnP35g6HcOqJ8v2IeuoBToTsHDTFmK52
+         PnmTKRNKeYWeJ03083LFNB1sVfME9/EGJRBrcG0v5J/7xmaRMg1xruYz2A/wGHwp7V21
+         CZdkh6NFqgOPcjC23Gon9ml9wJYxrfEUfjRdECpmQK2EhLE9KKH4YB20Q1dzujvd7Kpb
+         K/KQ==
+X-Gm-Message-State: AC+VfDzafljl4ybAMkmglwEYqOniAKtJ588jqQQHGkVP4xhDyIVHJG/2
+        jqfZN10MckP1hRAXDJY2jUg=
+X-Google-Smtp-Source: ACHHUZ4bGnaOviuoEXOf9iiQiJhxmbfPvJyAY0ASQyO4AxZQEyfEUahNvq6bHBDeeggIfkOPDGPh9Q==
+X-Received: by 2002:a05:6402:51c9:b0:506:94db:f4fb with SMTP id r9-20020a05640251c900b0050694dbf4fbmr3329778edd.20.1684388982947;
+        Wed, 17 May 2023 22:49:42 -0700 (PDT)
+Received: from [10.223.1.187] ([195.39.106.162])
+        by smtp.gmail.com with ESMTPSA id s4-20020a056402164400b0050da1edb2e4sm166727edx.31.2023.05.17.22.49.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 22:49:42 -0700 (PDT)
+Message-ID: <b16040e8-06f4-5c0e-7379-daa8226dc2a1@kernel.org>
+Date:   Thu, 18 May 2023 07:49:41 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <cfba78d7-e563-4544-00f3-0991b91eb1f3@linaro.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: DLro9qGo7FQu15ozKjF18TO5HbrMWr6t
-X-Proofpoint-ORIG-GUID: DLro9qGo7FQu15ozKjF18TO5HbrMWr6t
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-18_03,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- suspectscore=0 mlxlogscore=794 phishscore=0 adultscore=0 bulkscore=0
- mlxscore=0 clxscore=1015 lowpriorityscore=0 impostorscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305180041
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: linux-next: Tree for May 15 (config SERIAL_CPM)
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Greg KH <gregkh@linuxfoundation.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-serial@vger.kernel.org
+References: <20230515141235.0777c631@canb.auug.org.au>
+ <1538d954-864e-3a07-594a-dfe6d3178a72@infradead.org>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <1538d954-864e-3a07-594a-dfe6d3178a72@infradead.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -90,56 +68,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 09:00:49AM +0200, Krzysztof Kozlowski wrote:
-> On 17/05/2023 07:57, Varadarajan Narayanan wrote:
-> > Part-1 is adding the 'const' entries at the beginning i.e.
-> >
-> > 	+      - const: qcom,tsens-v0_1
-> > 	+      - const: qcom,tsens-v1
-> > 	+      - const: qcom,tsens-v2
-> > 	+      - const: qcom,ipq8074-tsens
-> >
-> > Part-2 is changing from one valid syntax to another i.e.
-> >
-> > 	+        items:
-> > 	+          - enum:
-> > 	+              - qcom,ipq9574-tsens
-> > 	+          - const: qcom,ipq8074-tsens
-> >
-> > Without both of the above changes, either or both of dtbs_check
-> > & dt_binding_check fails. So, it is not possible to just add the
-> > "valid hunk" (part-2) alone.
->
-> Of course it is. All schema files work like that...
-> >
-> > If having both part-1 and part-2 in the same patch is not
-> > acceptable, shall I split them into two patches? Please let me know.
->
-> No, hunk one is not justified.
+On 16. 05. 23, 4:51, Randy Dunlap wrote:
+> 
+> 
+> On 5/14/23 21:12, Stephen Rothwell wrote:
+>> Hi all,
+>>
+>> Changes since 20230512:
+>>
+> 
+> commit e3e7b13bffae
+> Author: Jiri Slaby <jirislaby@kernel.org>
+> Date:   Thu Apr 21 12:17:08 2022 +0200
+> 
+>      serial: allow COMPILE_TEST for some drivers
 
-For the other compatibles, the enum entries and const/fallback
-entries are different. For the 9574 & 8074 case, we want to have
-qcom,ipq8074-tsens as both enum and const/fallback entry. Hence,
-if we don't have the first hunk, dtbs_check fails for 8074
-related dtbs
+That commit should be reverted. I didn't realize it wouldn't link, while 
+it compiles fine.
 
-	ipq8074-hk01.dtb: thermal-sensor@4a9000: compatible: 'oneOf' condition
-		['qcom,ipq8074-tsens'] is too short
+> See this portion of that commit:
+> 
+> --- a/drivers/tty/serial/Kconfig
+> +++ b/drivers/tty/serial/Kconfig
+> @@ -783,7 +783,7 @@ config SERIAL_PMACZILOG_CONSOLE
+>   
+>   config SERIAL_CPM
+>          tristate "CPM SCC/SMC serial port support"
+> -       depends on CPM2 || CPM1
+> +       depends on CPM2 || CPM1 || (PPC32 && COMPILE_TEST)
+> 
+> 
+> When PPC32=y and COMPILE_TEST=y but CPM1 is not set and CPM2 is not set:
+> 
+> /opt/crosstool/gcc-12.2.0-nolibc/powerpc-linux/bin/powerpc-linux-ld: drivers/tty/serial/cpm_uart/cpm_uart_core.o: in function `cpm_uart_release_port':
+> cpm_uart_core.c:(.text+0x598): undefined reference to `cpm_uart_freebuf'
+> /opt/crosstool/gcc-12.2.0-nolibc/powerpc-linux/bin/powerpc-linux-ld: drivers/tty/serial/cpm_uart/cpm_uart_core.o: in function `cpm_uart_set_termios':
+> cpm_uart_core.c:(.text+0x8e0): undefined reference to `__cpm2_setbrg'
+> /opt/crosstool/gcc-12.2.0-nolibc/powerpc-linux/bin/powerpc-linux-ld: drivers/tty/serial/cpm_uart/cpm_uart_core.o: in function `cpm_uart_break_ctl':
+> cpm_uart_core.c:(.text+0xb10): undefined reference to `cpm_line_cr_cmd'
+> /opt/crosstool/gcc-12.2.0-nolibc/powerpc-linux/bin/powerpc-linux-ld: cpm_uart_core.c:(.text+0xb6c): undefined reference to `cpm_line_cr_cmd'
+> /opt/crosstool/gcc-12.2.0-nolibc/powerpc-linux/bin/powerpc-linux-ld: drivers/tty/serial/cpm_uart/cpm_uart_core.o: in function `cpm_uart_startup':
+> cpm_uart_core.c:(.text+0x1d48): undefined reference to `cpm_line_cr_cmd'
+> /opt/crosstool/gcc-12.2.0-nolibc/powerpc-linux/bin/powerpc-linux-ld: drivers/tty/serial/cpm_uart/cpm_uart_core.o: in function `cpm_uart_request_port':
+> cpm_uart_core.c:(.text+0x1ddc): undefined reference to `cpm_uart_allocbuf'
+> /opt/crosstool/gcc-12.2.0-nolibc/powerpc-linux/bin/powerpc-linux-ld: cpm_uart_core.c:(.text+0x2170): undefined reference to `cpm_line_cr_cmd'
+> /opt/crosstool/gcc-12.2.0-nolibc/powerpc-linux/bin/powerpc-linux-ld: drivers/tty/serial/cpm_uart/cpm_uart_core.o: in function `cpm_uart_probe':
+> cpm_uart_core.c:(.text+0x2474): undefined reference to `cpm_uart_map_pram'
+> /opt/crosstool/gcc-12.2.0-nolibc/powerpc-linux/bin/powerpc-linux-ld: cpm_uart_core.c:(.text+0x2724): undefined reference to `cpm_uart_unmap_pram'
+> /opt/crosstool/gcc-12.2.0-nolibc/powerpc-linux/bin/powerpc-linux-ld: cpm_uart_core.c:(.text+0x2838): undefined reference to `cpm_uart_map_pram'
+> /opt/crosstool/gcc-12.2.0-nolibc/powerpc-linux/bin/powerpc-linux-ld: drivers/tty/serial/cpm_uart/cpm_uart_core.o: in function `cpm_uart_shutdown':
+> cpm_uart_core.c:(.text+0x2aa8): undefined reference to `cpm_line_cr_cmd'
+> /opt/crosstool/gcc-12.2.0-nolibc/powerpc-linux/bin/powerpc-linux-ld: cpm_uart_core.c:(.text+0x2ba4): undefined reference to `cpm_line_cr_cmd'
+> 
+> 
 
-	ipq8074-hk10-c2.dtb: thermal-sensor@4a9000: compatible: 'oneOf' condition
-		['qcom,ipq8074-tsens'] is too short
+-- 
+js
+suse labs
 
-	ipq8074-hk10-c1.dtb: thermal-sensor@4a9000: compatible: 'oneOf' condition
-		['qcom,ipq8074-tsens'] is too short
-
-I'm not sure of the correct solution. Having the first hunk
-solves the above dtbs_check errors, so went with it. I'm able to
-avoid dtbs_check errors with just one entry in the first hunk.
-
- 	+      - const: qcom,ipq8074-tsens
-
-Please let me know if there is a better way to resolve this or we
-can have just the 8074 entry in the first hunk.
-
-Thanks
-Varada
