@@ -2,54 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D0E17084BD
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 17:15:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A58C70855D
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 17:53:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231575AbjERPPX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 11:15:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50700 "EHLO
+        id S231348AbjERPx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 11:53:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231410AbjERPPU (ORCPT
+        with ESMTP id S230211AbjERPx1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 11:15:20 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A064ED
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 08:15:09 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pzfLK-0007MS-P5; Thu, 18 May 2023 17:15:02 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pzfLK-00172X-2o; Thu, 18 May 2023 17:15:02 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pzfLJ-005gn6-BF; Thu, 18 May 2023 17:15:01 +0200
-Date:   Thu, 18 May 2023 17:15:01 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v18 2/2] MAINTAINERS: add pwm to PolarFire SoC entry
-Message-ID: <20230518151501.axcvsv6ll4tfab6e@pengutronix.de>
-References: <20230518-reactive-nursing-23b7fe093048@wendy>
- <20230518-headrest-puppet-d6cf2e11e340@wendy>
+        Thu, 18 May 2023 11:53:27 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5066B19B;
+        Thu, 18 May 2023 08:53:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684425206; x=1715961206;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=yy5e77k3doOrxSyCFI2HBiEAmW7848CBCulkXIzrGcU=;
+  b=NRClt+o36ziN4WrPdqP0zeNJdi8bfcX5cqaPoQSLCpVsWDy+CoVFzVVl
+   jRWHLQXcL25/hWlwALbVJphYJMlRaz/r0ciN83YmcQmJXjQRGPuFZXz+N
+   dYmn3YjRCsiGWRYHTj83oGhjNsJnZ+HgCaV8CeGsPB+75QS/9mcGSfnye
+   0rE2UPsTccpmh7qzXN8n7cau4ilxmEBpXxL4TLRFjEBG1MW0C+WnZwNNk
+   j6Crxb1SJHOlxTB2vhJGV7n/3vkGNkZhhAa7ZsOeiW7iRIiBayLuTK9Ad
+   4ZK63L8jNG7d+g4QGxaw9vdLUZFThq8HucJDvKW2YHVDiFuQ6S8enG0l0
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="336692208"
+X-IronPort-AV: E=Sophos;i="5.99,285,1677571200"; 
+   d="scan'208";a="336692208"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 08:53:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="702172670"
+X-IronPort-AV: E=Sophos;i="5.99,285,1677571200"; 
+   d="scan'208";a="702172670"
+Received: from nithinks-mobl1.amr.corp.intel.com (HELO [10.209.80.104]) ([10.209.80.104])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 08:53:23 -0700
+Message-ID: <650012a3-b455-8be5-fd6d-d0775e718e6a@linux.intel.com>
+Date:   Thu, 18 May 2023 10:16:16 -0500
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tcwogrdt3dklavo2"
-Content-Disposition: inline
-In-Reply-To: <20230518-headrest-puppet-d6cf2e11e340@wendy>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH 06/10] mfd: cs42l43: Add support for cs42l43 core driver
+Content-Language: en-US
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     broonie@kernel.org, lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        tglx@linutronix.de, maz@kernel.org, linus.walleij@linaro.org,
+        vkoul@kernel.org, lgirdwood@gmail.com,
+        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
+        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
+        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
+ <20230512122838.243002-7-ckeepax@opensource.cirrus.com>
+ <73438e58-bd96-818d-1f43-5681b0d1a1de@linaro.org>
+ <20230518102442.GZ68926@ediswmail.ad.cirrus.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20230518102442.GZ68926@ediswmail.ad.cirrus.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,40 +75,32 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---tcwogrdt3dklavo2
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+>>> +	ret = regmap_register_patch(cs42l43->regmap, cs42l43_reva_patch,
+>>> +				    ARRAY_SIZE(cs42l43_reva_patch));
+>>> +	if (ret) {
+>>> +		dev_err(cs42l43->dev, "Failed to apply register patch: %d\n", ret);
+>>> +		goto err;
+>>> +	}
+>>> +
+>>> +	pm_runtime_mark_last_busy(cs42l43->dev);
+>>> +	pm_runtime_put_autosuspend(cs42l43->dev);
+>>> +
+>>> +	ret = devm_mfd_add_devices(cs42l43->dev, PLATFORM_DEVID_NONE,
+>>> +				   cs42l43_devs, ARRAY_SIZE(cs42l43_devs),
+>>
+>> I don't why adding devices is not in probe. They use the same regmap
+>> right? So there will be no problem in probing them from MFD probe.
+> 
+> Well except SoundWire is a bit of a special boy, the hardware is
+> not necessarily available in probe, the hardware is only available
+> at some point later when the device attaches. Doing it this way all
+> of the attaching (and various detach/attach cycles the device needs
+> during configuration) are over by the time the child drivers bind, so
+> they don't all need special code to handle that.
 
-Hello Conor,
+if the devices are added in the probe, then the regmap needs to be moved
+to cache-only and another special API would be needed to tell the MFD
+framework to turn the regmap cache-only off.
 
-On Thu, May 18, 2023 at 01:29:21PM +0100, Conor Dooley wrote:
-> Add the newly introduced pwm driver to the existing PolarFire SoC entry.
->=20
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-
-Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---tcwogrdt3dklavo2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmRmQPQACgkQj4D7WH0S
-/k5AlAgAjlaA+EtbFPPHn/tWfErr2QMPiIRDBQXamI2qTWzBt3YeJC2X2h+czojY
-QEJhdmbo+HL5E5/ybhvNUC9Gj9X6i0/8Qj5/UxFVugAoOTv5B+oQLMoytnsYBilF
-YfLm+4y3/UyyoiHpJd/MJRudBePC3i4UTT7FXzc4Qoy+NArdbFazOpWyUJHOOtFi
-C4utb2rWPHGXiqj/3YCSJqDCAPpiZu+W3fZ92NnpIJ+o8HkXtiL9+madBsH/fknY
-TIZrict64V7S1zyT4nAKJLYLuS5LuGZXC9M5XfIzbwn6E74u3MDV6uNYAMjav2+V
-rDPwy/8fIJH0Sk1cfmoXh6cpoNJ81Q==
-=4UxA
------END PGP SIGNATURE-----
-
---tcwogrdt3dklavo2--
+But if it's the same regmap, the regmap cache is handled in the
+SoundWire update_status callback so maybe  Krzysztof's proposal does work?
