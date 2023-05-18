@@ -2,68 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B1C6707E34
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 12:36:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6763707E3A
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 12:37:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbjERKgc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 06:36:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55720 "EHLO
+        id S230464AbjERKho (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 06:37:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbjERKga (ORCPT
+        with ESMTP id S230306AbjERKhm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 06:36:30 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D5D1BFB
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 03:36:29 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1ae4d1d35e6so14706725ad.0
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 03:36:29 -0700 (PDT)
+        Thu, 18 May 2023 06:37:42 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104C81BFC
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 03:37:40 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1ae7033f4e5so2051305ad.1
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 03:37:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1684406189; x=1686998189;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=t9GNNZL88GhoP2ldlrtLGAlDR9skCT7Cl3Bzo8udloQ=;
-        b=LPhdDAtZxcw4EH6qfOxEXr/AmBtg0+7x8y5bGclyLCywRxMFABmCuO3VyqdBo9jy++
-         DmdEjYRAYlZ7XHokI42jFl/emzId+3nK0sQp85RH50Ipt08txRzcoae/DRu69A1d0re+
-         lpiBfX/a8oTl1s6SUg0tbk1AB4rDMhI/7wv5Y=
+        d=chromium.org; s=google; t=1684406259; x=1686998259;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TN0khYDoCxGGhU5ss9Q38NY81uIy7NyfHWBZ/foWTNs=;
+        b=YL4RF+ajG6qmFtw1krWMbvmqp58K2LdZMkdN9NtDq9e7qB3xM66fR+vKPs9LqZrUI3
+         z/cPBUbxaZ4Mw/HmC/E8mx5KxEa5i6J03kQoUue1Ik904Mj84kPWUy4rLKZHni07u46x
+         Lhgt1OggQSQZKi4LXbciYoburV0kltKx9Z6vs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684406189; x=1686998189;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t9GNNZL88GhoP2ldlrtLGAlDR9skCT7Cl3Bzo8udloQ=;
-        b=jqRozjKqqxX2ugNHJRCQqYYX3axOoH6imO88jRfAPJLW0gB2DmSyld/eNr9IiuDDr9
-         JMZZKmdLMSetQmBk68wzFTSa2dKtTtyTTettWoCJTXs+uVlqSdfz4r4HSbj8EW/PhFne
-         6eUw9muU8L/Yb7ljJT0DB/pwe3PlZXstHnvNiH1ASb2MYJZI9IreWt+ivwFJpfGET1FC
-         KSWQ/3Bu5LIBEZss87086LYQvO8aMbFqAZJvKZn8eVYHj/MZdKIrLADvntBf1bkk96ei
-         w1o4x01IxDYJxyWdLO8Yx9qosZ1rhO/yoPQJxMCjXxWRTkI9BkkFxLIyPwM0qCRT0SLw
-         2laA==
-X-Gm-Message-State: AC+VfDwJbNrMEGgqt7IqZDrCYVhn0S51Bq9YlhdEE3FcImx6v0l/8Yic
-        xVbVn8VgDXR0MOp4lR4NOCEhwGnEHrb29ucRNQStow==
-X-Google-Smtp-Source: ACHHUZ4+U7UM98xR8compfDgcZFQ5vohAqB9buIIqiMeoFiIO+vRbsjxHvweKmcU3XtEU6cuth51fImPYxh9I62zkyg=
-X-Received: by 2002:a17:902:db07:b0:1ae:89a:9e with SMTP id
- m7-20020a170902db0700b001ae089a009emr2103737plx.61.1684406188648; Thu, 18 May
- 2023 03:36:28 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684406259; x=1686998259;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TN0khYDoCxGGhU5ss9Q38NY81uIy7NyfHWBZ/foWTNs=;
+        b=kz09barQzCW9T94WM82U8tAKnVy7bx3nfwnIz3IaugOsHRWSLmU3UDYfKe+C2qgtQj
+         WfVfV5gf4gUPY9oA29hx/LyC/EGz1NfpHdUEDuzEDYwU6M0HYrss4jKTCg0sCJ/x1KG5
+         h1HxZQIr1E0Rg7z/ZvICMoxbKjzKrSsC0fpo0Zs39ExHJsRdXhK/XTZg7HoRme0B/jkY
+         JObpkGq8D2QbSUlaAjr77dc4AYq5OlPmmO/ZECKih1jrJ3j/dOzYT7G2VuS0MMCwngc/
+         QfbGGwHVrkB7aN7N8S2b0kL2fDN4IECikcwkn9zqRQWMr/R8IkwUW97APG125nY00FXR
+         XIdw==
+X-Gm-Message-State: AC+VfDxpXSq56uXdzPS+T5KaAPDuGQOlHotRe0hARKSvhPv9jxHmXT70
+        NOYoLu8+sFYc+1HgeNCuD4h3wA==
+X-Google-Smtp-Source: ACHHUZ6W+zJ2HYptQYSQqBcWmDXV2Skkvr77A8XeRCPRwOALKveKfXkSKd9XHlfW112zz6NLjZUcYQ==
+X-Received: by 2002:a17:902:e889:b0:1ac:6fc3:6beb with SMTP id w9-20020a170902e88900b001ac6fc36bebmr2063035plg.9.1684406259377;
+        Thu, 18 May 2023 03:37:39 -0700 (PDT)
+Received: from chromium.org (0.223.81.34.bc.googleusercontent.com. [34.81.223.0])
+        by smtp.gmail.com with ESMTPSA id ix12-20020a170902f80c00b001ab0669d84csm1104058plb.26.2023.05.18.03.37.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 May 2023 03:37:38 -0700 (PDT)
+Date:   Thu, 18 May 2023 10:37:33 +0000
+From:   Tomasz Figa <tfiga@chromium.org>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     m.szyprowski@samsung.com, mchehab@kernel.org, ming.qian@nxp.com,
+        shijie.qin@nxp.com, eagle.zhou@nxp.com, bin.liu@mediatek.com,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        tiffany.lin@mediatek.com, andrew-ct.chen@mediatek.com,
+        yunfei.dong@mediatek.com, stanimir.k.varbanov@gmail.com,
+        quic_vgarodia@quicinc.com, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, ezequiel@vanguardiasur.com.ar,
+        p.zabel@pengutronix.de, daniel.almeida@collabora.com,
+        hverkuil-cisco@xs4all.nl, laurent.pinchart@ideasonboard.com,
+        jernel@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, kernel@collabora.com
+Subject: Re: [PATCH v2 1/8] media: videobuf2: Access vb2_queue bufs array
+ through helper functions
+Message-ID: <20230518103733.djr5zp5mac3xixxa@chromium.org>
+References: <20230321102855.346732-1-benjamin.gaignard@collabora.com>
+ <20230321102855.346732-2-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
-References: <20230518072657.1.If9539da710217ed92e764cc0ba0f3d2d246a1aee@changeid>
-In-Reply-To: <20230518072657.1.If9539da710217ed92e764cc0ba0f3d2d246a1aee@changeid>
-From:   Pavan Chebbi <pavan.chebbi@broadcom.com>
-Date:   Thu, 18 May 2023 16:06:16 +0530
-Message-ID: <CALs4sv2+Uu=Bry=B3FYzWdNrHjGWDvPCDhTFcNERVpWTjpmEyA@mail.gmail.com>
-Subject: Re: [PATCH] igb: Fix igb_down hung on surprise removal
-To:     Ying Hsu <yinghsu@chromium.org>
-Cc:     netdev@vger.kernel.org, grundler@chromium.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000008f788a05fbf560b0"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230321102855.346732-2-benjamin.gaignard@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,120 +81,332 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000008f788a05fbf560b0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Hi Benjamin,
 
-On Thu, May 18, 2023 at 12:58=E2=80=AFPM Ying Hsu <yinghsu@chromium.org> wr=
-ote:
->
-> diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethe=
-rnet/intel/igb/igb_main.c
-> index 58872a4c2540..a8b217368ca1 100644
-> --- a/drivers/net/ethernet/intel/igb/igb_main.c
-> +++ b/drivers/net/ethernet/intel/igb/igb_main.c
-> @@ -9581,6 +9581,11 @@ static pci_ers_result_t igb_io_error_detected(stru=
-ct pci_dev *pdev,
->         struct net_device *netdev =3D pci_get_drvdata(pdev);
->         struct igb_adapter *adapter =3D netdev_priv(netdev);
->
-> +       if (state =3D=3D pci_channel_io_normal) {
-> +               dev_warn(&pdev->dev, "Non-correctable non-fatal error rep=
-orted.\n");
-> +               return PCI_ERS_RESULT_CAN_RECOVER;
-> +       }
+On Tue, Mar 21, 2023 at 11:28:48AM +0100, Benjamin Gaignard wrote:
+> The first step before changing how vb2 buffers are stored into queue
+> is to avoid direct access to bufs arrays.
+> 
+> This patch adds 2 helpers functions to add and remove vb2 buffers
+> from a queue. With these 2 and vb2_get_buffer(), bufs field of
+> struct vb2_queue becomes like a private member of the structure.
+> 
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> ---
+>  .../media/common/videobuf2/videobuf2-core.c   | 84 +++++++++++--------
+>  .../media/common/videobuf2/videobuf2-v4l2.c   | 17 ++--
+>  drivers/media/platform/amphion/vpu_dbg.c      |  4 +-
+>  .../platform/mediatek/jpeg/mtk_jpeg_core.c    |  2 +-
+>  .../vcodec/vdec/vdec_vp9_req_lat_if.c         |  2 +-
+>  drivers/media/test-drivers/visl/visl-dec.c    | 16 ++--
+>  .../staging/media/atomisp/pci/atomisp_ioctl.c |  2 +-
+>  include/media/videobuf2-core.h                | 26 ++++++
+>  8 files changed, 101 insertions(+), 52 deletions(-)
+> 
+
+Sorry for being late with review and thanks a lot for working on this.
+This is a quite a long overdue functionality.
+
+[snip]
+
+> @@ -2679,7 +2689,13 @@ static int __vb2_init_fileio(struct vb2_queue *q, int read)
+>  	 * Check if plane_count is correct
+>  	 * (multiplane buffers are not supported).
+>  	 */
+> -	if (q->bufs[0]->num_planes != 1) {
+> +	vb = vb2_get_buffer(q, 0);
+> +	if (!vb) {
+> +		ret = -EBUSY;
+
+Out of curiosity, is there any reason for specifically chosing -EBUSY here?
+
+It shouldn't be possible for this to happen, but since we're
+dealing with a pointer here, a NULL check is a good thing. I guess that makes
+-EBUSY as good as any other code here.
+
+I see some other similar places in the code, with a comment "This shouldn't
+happen" and a dprinkt(). Maybe it would be good to add those here too?
+
+> +		goto err_reqbufs;
+> +	}
 > +
+> +	if (vb->num_planes != 1) {
+>  		ret = -EBUSY;
+>  		goto err_reqbufs;
+>  	}
+> @@ -2688,12 +2704,14 @@ static int __vb2_init_fileio(struct vb2_queue *q, int read)
+>  	 * Get kernel address of each buffer.
+>  	 */
+>  	for (i = 0; i < q->num_buffers; i++) {
+> -		fileio->bufs[i].vaddr = vb2_plane_vaddr(q->bufs[i], 0);
+> +		vb = vb2_get_buffer(q, i);
+> +
+> +		fileio->bufs[i].vaddr = vb2_plane_vaddr(vb, 0);
+>  		if (fileio->bufs[i].vaddr == NULL) {
+>  			ret = -EINVAL;
+>  			goto err_reqbufs;
+>  		}
+> -		fileio->bufs[i].size = vb2_plane_size(q->bufs[i], 0);
+> +		fileio->bufs[i].size = vb2_plane_size(vb, 0);
+>  	}
+>  
+>  	/*
+> @@ -2821,15 +2839,15 @@ static size_t __vb2_perform_fileio(struct vb2_queue *q, char __user *data, size_
+>  
+>  		fileio->cur_index = index;
+>  		buf = &fileio->bufs[index];
+> -		b = q->bufs[index];
+> +		b = vb2_get_buffer(q, index);
+>  
+>  		/*
+>  		 * Get number of bytes filled by the driver
+>  		 */
+>  		buf->pos = 0;
+>  		buf->queued = 0;
+> -		buf->size = read ? vb2_get_plane_payload(q->bufs[index], 0)
+> -				 : vb2_plane_size(q->bufs[index], 0);
+> +		buf->size = read ? vb2_get_plane_payload(b, 0)
+> +				 : vb2_plane_size(b, 0);
+>  		/* Compensate for data_offset on read in the multiplanar case. */
+>  		if (is_multiplanar && read &&
+>  				b->planes[0].data_offset < buf->size) {
+> @@ -2872,7 +2890,7 @@ static size_t __vb2_perform_fileio(struct vb2_queue *q, char __user *data, size_
+>  	 * Queue next buffer if required.
+>  	 */
+>  	if (buf->pos == buf->size || (!read && fileio->write_immediately)) {
+> -		struct vb2_buffer *b = q->bufs[index];
+> +		struct vb2_buffer *b = vb2_get_buffer(q, index);
+>  
+>  		/*
+>  		 * Check if this is the last buffer to read.
+> @@ -2899,7 +2917,7 @@ static size_t __vb2_perform_fileio(struct vb2_queue *q, char __user *data, size_
+>  		 */
+>  		buf->pos = 0;
+>  		buf->queued = 1;
+> -		buf->size = vb2_plane_size(q->bufs[index], 0);
+> +		buf->size = vb2_plane_size(vb2_get_buffer(q, index), 0);
+>  		fileio->q_count += 1;
+>  		/*
+>  		 * If we are queuing up buffers for the first time, then
+> @@ -2970,7 +2988,7 @@ static int vb2_thread(void *data)
+>  		 * Call vb2_dqbuf to get buffer back.
+>  		 */
+>  		if (prequeue) {
+> -			vb = q->bufs[index++];
+> +			vb = vb2_get_buffer(q, index++);
+>  			prequeue--;
+>  		} else {
+>  			call_void_qop(q, wait_finish, q);
+> @@ -2979,7 +2997,7 @@ static int vb2_thread(void *data)
+>  			call_void_qop(q, wait_prepare, q);
+>  			dprintk(q, 5, "file io: vb2_dqbuf result: %d\n", ret);
+>  			if (!ret)
+> -				vb = q->bufs[index];
+> +				vb = vb2_get_buffer(q, index);
+>  		}
+>  		if (ret || threadio->stop)
+>  			break;
+> diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+> index 1f5d235a8441..01b2bb957239 100644
+> --- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
+> +++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
+> @@ -383,7 +383,7 @@ static int vb2_queue_or_prepare_buf(struct vb2_queue *q, struct media_device *md
+>  		return -EINVAL;
+>  	}
+>  
+> -	if (q->bufs[b->index] == NULL) {
+> +	if (!vb2_get_buffer(q, b->index)) {
+>  		/* Should never happen */
+>  		dprintk(q, 1, "%s: buffer is NULL\n", opname);
+>  		return -EINVAL;
+> @@ -394,7 +394,7 @@ static int vb2_queue_or_prepare_buf(struct vb2_queue *q, struct media_device *md
+>  		return -EINVAL;
+>  	}
+>  
+> -	vb = q->bufs[b->index];
+> +	vb = vb2_get_buffer(q, b->index);
+>  	vbuf = to_vb2_v4l2_buffer(vb);
+>  	ret = __verify_planes_array(vb, b);
+>  	if (ret)
+> @@ -628,11 +628,14 @@ static const struct vb2_buf_ops v4l2_buf_ops = {
+>  struct vb2_buffer *vb2_find_buffer(struct vb2_queue *q, u64 timestamp)
+>  {
+>  	unsigned int i;
+> +	struct vb2_buffer *vb2;
+>  
+> -	for (i = 0; i < q->num_buffers; i++)
+> -		if (q->bufs[i]->copied_timestamp &&
+> -		    q->bufs[i]->timestamp == timestamp)
+> -			return vb2_get_buffer(q, i);
+> +	for (i = 0; i < q->num_buffers; i++) {
+> +		vb2 = vb2_get_buffer(q, i);
+> +		if (vb2->copied_timestamp &&
+> +		    vb2->timestamp == timestamp)
+> +			return vb2;
+> +	}
+>  	return NULL;
+>  }
+>  EXPORT_SYMBOL_GPL(vb2_find_buffer);
+> @@ -664,7 +667,7 @@ int vb2_querybuf(struct vb2_queue *q, struct v4l2_buffer *b)
+>  		dprintk(q, 1, "buffer index out of range\n");
+>  		return -EINVAL;
+>  	}
+> -	vb = q->bufs[b->index];
+> +	vb = vb2_get_buffer(q, b->index);
+>  	ret = __verify_planes_array(vb, b);
+>  	if (!ret)
+>  		vb2_core_querybuf(q, b->index, b);
+> diff --git a/drivers/media/platform/amphion/vpu_dbg.c b/drivers/media/platform/amphion/vpu_dbg.c
+> index 44b830ae01d8..8a423c1f6b55 100644
+> --- a/drivers/media/platform/amphion/vpu_dbg.c
+> +++ b/drivers/media/platform/amphion/vpu_dbg.c
+> @@ -133,7 +133,7 @@ static int vpu_dbg_instance(struct seq_file *s, void *data)
+>  
+>  	vq = v4l2_m2m_get_src_vq(inst->fh.m2m_ctx);
+>  	for (i = 0; i < vq->num_buffers; i++) {
+> -		struct vb2_buffer *vb = vq->bufs[i];
+> +		struct vb2_buffer *vb = vb2_get_buffer(vq, i);
+>  		struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
+>  
+>  		if (vb->state == VB2_BUF_STATE_DEQUEUED)
+> @@ -148,7 +148,7 @@ static int vpu_dbg_instance(struct seq_file *s, void *data)
+>  
+>  	vq = v4l2_m2m_get_dst_vq(inst->fh.m2m_ctx);
+>  	for (i = 0; i < vq->num_buffers; i++) {
+> -		struct vb2_buffer *vb = vq->bufs[i];
+> +		struct vb2_buffer *vb = vb2_get_buffer(vq, i);
+>  		struct vb2_v4l2_buffer *vbuf = to_vb2_v4l2_buffer(vb);
+>  
+>  		if (vb->state == VB2_BUF_STATE_DEQUEUED)
+> diff --git a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+> index 969516a940ba..0be07f691d9a 100644
+> --- a/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+> +++ b/drivers/media/platform/mediatek/jpeg/mtk_jpeg_core.c
+> @@ -603,7 +603,7 @@ static int mtk_jpeg_qbuf(struct file *file, void *priv, struct v4l2_buffer *buf)
+>  		return -EINVAL;
+>  	}
+>  
+> -	vb = vq->bufs[buf->index];
+> +	vb = vb2_get_buffer(vq, buf->index);
+>  	jpeg_src_buf = mtk_jpeg_vb2_to_srcbuf(vb);
+>  	jpeg_src_buf->bs_size = buf->m.planes[0].bytesused;
+>  
+> diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> index cbb6728b8a40..f5958b6d834a 100644
+> --- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> +++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_req_lat_if.c
+> @@ -1701,7 +1701,7 @@ static int vdec_vp9_slice_setup_core_buffer(struct vdec_vp9_slice_instance *inst
+>  
+>  	/* update internal buffer's width/height */
+>  	for (i = 0; i < vq->num_buffers; i++) {
+> -		if (vb == vq->bufs[i]) {
+> +		if (vb == vb2_get_buffer(vq, i)) {
+>  			instance->dpb[i].width = w;
+>  			instance->dpb[i].height = h;
+>  			break;
+> diff --git a/drivers/media/test-drivers/visl/visl-dec.c b/drivers/media/test-drivers/visl/visl-dec.c
+> index 318d675e5668..328016b456ba 100644
+> --- a/drivers/media/test-drivers/visl/visl-dec.c
+> +++ b/drivers/media/test-drivers/visl/visl-dec.c
+> @@ -290,13 +290,14 @@ static void visl_tpg_fill(struct visl_ctx *ctx, struct visl_run *run)
+>  	for (i = 0; i < out_q->num_buffers; i++) {
+>  		char entry[] = "index: %u, state: %s, request_fd: %d, ";
+>  		u32 old_len = len;
+> -		char *q_status = visl_get_vb2_state(out_q->bufs[i]->state);
+> +		struct vb2_buffer *vb2 = vb2_get_buffer(out_q, i);
+> +		char *q_status = visl_get_vb2_state(vb2->state);
+>  
+>  		len += scnprintf(&buf[len], TPG_STR_BUF_SZ - len,
+>  				 entry, i, q_status,
+> -				 to_vb2_v4l2_buffer(out_q->bufs[i])->request_fd);
+> +				 to_vb2_v4l2_buffer(vb2)->request_fd);
+>  
+> -		len += visl_fill_bytesused(to_vb2_v4l2_buffer(out_q->bufs[i]),
+> +		len += visl_fill_bytesused(to_vb2_v4l2_buffer(vb2),
+>  					   &buf[len],
+>  					   TPG_STR_BUF_SZ - len);
+>  
+> @@ -342,13 +343,14 @@ static void visl_tpg_fill(struct visl_ctx *ctx, struct visl_run *run)
+>  	len = 0;
+>  	for (i = 0; i < cap_q->num_buffers; i++) {
+>  		u32 old_len = len;
+> -		char *q_status = visl_get_vb2_state(cap_q->bufs[i]->state);
+> +		struct vb2_buffer *vb2 = vb2_get_buffer(cap_q, i);
+> +		char *q_status = visl_get_vb2_state(vb2->state);
+>  
+>  		len += scnprintf(&buf[len], TPG_STR_BUF_SZ - len,
+>  				 "index: %u, status: %s, timestamp: %llu, is_held: %d",
+> -				 cap_q->bufs[i]->index, q_status,
+> -				 cap_q->bufs[i]->timestamp,
+> -				 to_vb2_v4l2_buffer(cap_q->bufs[i])->is_held);
+> +				 vb2->index, q_status,
+> +				 vb2->timestamp,
+> +				 to_vb2_v4l2_buffer(vb2)->is_held);
+>  
+>  		tpg_gen_text(&ctx->tpg, basep, line++ * line_height, 16, &buf[old_len]);
+>  		frame_dprintk(ctx->dev, run->dst->sequence, "%s", &buf[old_len]);
+> diff --git a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
+> index d1314bdbf7d5..c7778860f3d4 100644
+> --- a/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
+> +++ b/drivers/staging/media/atomisp/pci/atomisp_ioctl.c
+> @@ -1095,7 +1095,7 @@ static int atomisp_dqbuf_wrapper(struct file *file, void *fh, struct v4l2_buffer
+>  	if (ret)
+>  		return ret;
+>  
+> -	vb = pipe->vb_queue.bufs[buf->index];
+> +	vb = vb2_get_buffer(pipe->vb_queue, buf->index);
+>  	frame = vb_to_frame(vb);
+>  
+>  	buf->reserved = asd->frame_status[buf->index];
+> diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
+> index 4b6a9d2ea372..5b1e3d801546 100644
+> --- a/include/media/videobuf2-core.h
+> +++ b/include/media/videobuf2-core.h
+> @@ -1244,6 +1244,32 @@ static inline struct vb2_buffer *vb2_get_buffer(struct vb2_queue *q,
+>  	return NULL;
+>  }
+>  
+> +/**
+> + * vb2_queue_add_buffer() - add a buffer to a queue
+> + * @q:	pointer to &struct vb2_queue with videobuf2 queue.
+> + * @vb:	pointer to &struct vb2_buffer to be added to the queue.
+> + */
+> +static inline bool vb2_queue_add_buffer(struct vb2_queue *q, struct vb2_buffer *vb)
 
-This code may be good to have. But not sure if this should be the fix
-for igb_down() synchronization.
-Intel guys may comment.
+Could we make index an argument to this function and actually assign it to
+vb->index if the operation succeeds?
+Similarly, could we assign q to vb->vb2_queue in this function as well?
 
->         netif_device_detach(netdev);
->
->         if (state =3D=3D pci_channel_io_perm_failure)
-> --
-> 2.40.1.606.ga4b1b128d6-goog
->
->
+I have plans to make the vb2_buffer struct represent a buffer, rather than
+an entry in the queue, because the memory can actually outlive the queue,
+e.g. when REQBUFS(0) happens, but an exported DMA-buf still references the
+buffer. Currently the DMA-buf object is tied to the allocator-private
+struct, but that one has a pointer to a vb2_buffer, which becomes invalid
+in such scenario with current implementation.
 
---0000000000008f788a05fbf560b0
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+> +{
+> +	if (vb->index < VB2_MAX_FRAME) {
+> +		q->bufs[vb->index] = vb;
+> +		return true;
+> +	}
+> +
+> +	return false;
+> +}
+> +
+> +/**
+> + * vb2_queue_remove_buffer() - remove a buffer from a queue
+> + * @q:	pointer to &struct vb2_queue with videobuf2 queue.
+> + * @vb:	pointer to &struct vb2_buffer to be removed from the queue.
+> + */
+> +static inline void vb2_queue_remove_buffer(struct vb2_queue *q, struct vb2_buffer *vb)
+> +{
+> +	if (vb->index < VB2_MAX_FRAME)
+> +		q->bufs[vb->index] = NULL;
 
-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
-OltyqaGBuzv+bJTUL+bmV7E4QBLIqGt4jVr1R9hJdH6KxXwJdyfHZ9C6qXmoe2NQhiFUyBOJ0wgk
-dB9Z1IU7nCwvNKYg2JMoJs93tIgbhPJg/D7pqW8gabkCAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
-BB0wG4EZcGF2YW4uY2hlYmJpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
-HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUEV6y/89alKPoFbKUaJXsvWu5
-fdowDQYJKoZIhvcNAQELBQADggEBAEHSIB6g652wVb+r2YCmfHW47Jo+5TuCBD99Hla8PYhaWGkd
-9HIyD3NPhb6Vb6vtMWJW4MFGQF42xYRrAS4LZj072DuMotr79rI09pbOiWg0FlRRFt6R9vgUgebu
-pWSH7kmwVXcPtY94XSMMak4b7RSKig2mKbHDpD4bC7eGlwl5RxzYkgrHtMNRmHmQor5Nvqe52cFJ
-25Azqtwvjt5nbrEd81iBmboNTEnLaKuxbbCtLaMEP8xKeDjAKnNOqHUMps0AsQT8c0EGq39YHpjp
-Wn1l67VU0rMShbEFsiUf9WYgE677oinpdm0t2mdCjxr35tryxptoTZXKHDxr/Yy6l6ExggJtMIIC
-aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
-EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwV/XkICjVscn4SNZMw
-DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIJjBSaXAC1r6dU5Ri9dQRNBZpBUmukbO
-W7ogh6cxwQ3NMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDUx
-ODEwMzYyOVowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
-ATANBgkqhkiG9w0BAQEFAASCAQCXlgNyXkWT4YAbsCdLIY8NPJgVf/I2RUba6li7aR1Qu47mufv9
-ME6KRDGHOLdxfg+HDGBD15vM5yOVqxsLMQUeGB7SDZzI4nOThxqo99fi6rXAdO54B456JyCGeeQG
-QyHAlI8UTAurvzWjya2dJq1tHFTF1gjdpP9wQ7kzJV+eS3+/bvAMQW3FenCK3suw0Eb1WoKhQTXP
-pbxy8J7Wwa9OLGCEf0jyWXACMNitRAVNAKqnHo/Lj/IJ20faatsg/KpA3h6xeIpenXiOE14Qanm3
-9b92/U6N6hC+oMUhZ/xA1Xo3UoJVDGNR41oO+zjI3PjS/Czg3iJnl7V1i1UocPcP
---0000000000008f788a05fbf560b0--
+Here we could also NULLify vb->vb2_queue. Right now I think the struct
+would be just kfree()d instantly after returning to the caller, but with
+the design I mentioned above, it could still stay there until the last
+reference goes away.
+
+Best regards,
+Tomasz
