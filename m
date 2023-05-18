@@ -2,115 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E8377083D7
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:19:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E11A37083DC
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:22:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231660AbjEROTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 10:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49964 "EHLO
+        id S231671AbjEROWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 10:22:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbjEROTl (ORCPT
+        with ESMTP id S231177AbjEROV7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 10:19:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ACCECA
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:18:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684419530;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=A2/iO6J14YtVUt4T4ndhV73ZmcEee58hQhg8A73F228=;
-        b=WCaA9NiE0Ob/LFLPf9H9DMhqzSsaR0bZO/Nw1TAynJUh85RStZGipe8JjwP+OZlGutr6n8
-        3pvPnyuRg45JPct7DnSrlXxLEPugCkDxpP7HKQwrcBDH3DkmwxRagvyY5XIqJ9e6tGrTBR
-        32AXFLzXfL7mATAZx1G1rizLTAaYxDk=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-552-0nGNihEvOAaXizxCXeuCIA-1; Thu, 18 May 2023 10:18:49 -0400
-X-MC-Unique: 0nGNihEvOAaXizxCXeuCIA-1
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-6239a0f15e4so1312896d6.3
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:18:49 -0700 (PDT)
+        Thu, 18 May 2023 10:21:59 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F253BF9
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:21:56 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-510d8b0169fso2523101a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:21:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684419715; x=1687011715;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GoYD1HeZqxzJnofeUMnEjY7LdMkmo1HYZ+uW66yc8zI=;
+        b=HGV4jjmlsteYJElUtUefnS224Lr+OvMC9jCbexLICYShcmDpIgspCiSW9L3B4wcnqG
+         S14/K4bLbRvOJ0myk0FjPEDsZ+ahgME0WdXiPqDWR5e7OaomNpdfh8WAsQPKQsIPHrc8
+         +Mak7u6GkCmTK64G1EFj1x1QR25nhDgk8Swj8+tBxx3pN8fnKy8izlV2Brg2N+Qd+Znq
+         jGYAUDCwVzonuMxlYhKefH/PrjKztdOOtBBPaqNah5BtMcJ3on8RryvhspF4NckTyPtw
+         IYTHwgQHHMUGedJBIz9icwn1r59Y97Ppy2/8Ub14QbM4bJpUiVqe2H7zKtisfOu+/4qN
+         BV8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684419528; x=1687011528;
-        h=content-transfer-encoding:in-reply-to:from:references:to
+        d=1e100.net; s=20221208; t=1684419715; x=1687011715;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A2/iO6J14YtVUt4T4ndhV73ZmcEee58hQhg8A73F228=;
-        b=HjFxxXy8tTVtc9A2Wajefs7NFIALvV1kUyAFxlpi6kg1iKvJO2cUZEE1ED20vMUWId
-         9zkILBOU6kR6efCR/y0Ykz85GvxrjXr5I2QHAk86V7QImBMumtLAMkCUp9AQV8owwR0A
-         vkE1Oo29emlGuxVSdpenRyCvvrO0tovUa1GkybgesI+Pl6sqqx43gqU3ByFyTlT2E4Nx
-         GCd9NgTe5tcFTM58HAHTiO8YuKfEzdirIgqbAyKmUtzfjP5KQqAw4MLSKOQLpXYWCkae
-         v5N3tMzUBz2rCxbDRf7Eg6U227ZLVweUaOqDjTcjbZ3VAjswQGbqM168S7fYgLR33v0r
-         Qkgw==
-X-Gm-Message-State: AC+VfDxF9fO3DINCfmX0o1fX2qq5H6RMckiWWymM2WpLfn+nf4Ts2B+O
-        B2U5qJTpHgIvU5Hf07eSrRVlECdTLFo7xP1oMEVO9X3eOCe5xJv8gvSmG5YTHWTT00XK3W+ccDe
-        QMUxbvRjJtvFtIhveYPio3ufTy279oLyw
-X-Received: by 2002:a05:6214:f63:b0:619:c50b:8dc5 with SMTP id iy3-20020a0562140f6300b00619c50b8dc5mr6013300qvb.49.1684419528374;
-        Thu, 18 May 2023 07:18:48 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4fXSC86dNxaLQPrCvmm9qJg09KGdf4/co2HJ+1zjym/VhIXeewvWIx/2AOsssmkoGiStYeIQ==
-X-Received: by 2002:a05:6214:f63:b0:619:c50b:8dc5 with SMTP id iy3-20020a0562140f6300b00619c50b8dc5mr6013267qvb.49.1684419528073;
-        Thu, 18 May 2023 07:18:48 -0700 (PDT)
-Received: from [192.168.1.31] (024-205-208-113.res.spectrum.com. [24.205.208.113])
-        by smtp.gmail.com with ESMTPSA id s5-20020ad45245000000b00621066bde91sm553739qvq.52.2023.05.18.07.18.46
+        bh=GoYD1HeZqxzJnofeUMnEjY7LdMkmo1HYZ+uW66yc8zI=;
+        b=WmIQxIPxDs53aZhj/M9QqMYsTpkh6qDUKrrHlPinqjMOLHOBRZU9AOWDMRKD07Z2yU
+         WyvH4NkUdd1IQiYpmNLqUub4LYUn4wYWE7rraDqSadOu1IOb2XX6zEfETEoaTGvOuJ8V
+         p+eyZhquatN1awSbnkntbieS/+HnLG0qZGeAvwlyxVbtusR03qgyw5CE3mqztoYLMx9h
+         VkXYEw4Hv8OtECYCruxKMNbhJUXnZlcyVwdDn68l7F3fBGfpdqnFssKEGciraOHbSLNO
+         4ckU7dTaFNuVqzvvXchRQjwhUxVslcDiC+HcJopDLRrDxfAmK8LxpmsGbxlzzNpYNqKd
+         L9NQ==
+X-Gm-Message-State: AC+VfDzqkbcUIcqBzsY8bYUVyufAzWIgz42jaGSPROhYIMhRn6NvQXyc
+        nwws/pGDKVJ61Nb14uelzmtFgQ==
+X-Google-Smtp-Source: ACHHUZ6iHTnxiJx111Ry47T9aO/W4rthzy+KJgvfxS5NqxK/2UvO39aB1FU69KaBi5+TDxXx0wSDzQ==
+X-Received: by 2002:a05:6402:516d:b0:50b:c971:c14b with SMTP id d13-20020a056402516d00b0050bc971c14bmr5546801ede.11.1684419715413;
+        Thu, 18 May 2023 07:21:55 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:7e24:6d1b:6bf:4249? ([2a02:810d:15c0:828:7e24:6d1b:6bf:4249])
+        by smtp.gmail.com with ESMTPSA id l16-20020aa7d950000000b0050bc9ffed66sm662448eds.53.2023.05.18.07.21.53
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 May 2023 07:18:47 -0700 (PDT)
-Message-ID: <822eda9c-6b1b-8c27-27ee-6f2855a261a5@redhat.com>
-Date:   Thu, 18 May 2023 07:18:45 -0700
+        Thu, 18 May 2023 07:21:54 -0700 (PDT)
+Message-ID: <5e0276b7-2c16-13a1-29d3-1936ffc52d23@linaro.org>
+Date:   Thu, 18 May 2023 16:21:53 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.0
-Subject: Re: [PATCH] ALSA: emu10k1: set variables emu1010_routing_info and
- emu1010_pads_info storage-class-specifier to static
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH net-next v4 1/2] dt-bindings: arm: mediatek: add
+ mediatek,boottrap binding
 Content-Language: en-US
-To:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-References: <20230518123826.925752-1-trix@redhat.com> <ZGYvG2Sf9ZeeOmL6@ugly>
-From:   Tom Rix <trix@redhat.com>
-In-Reply-To: <ZGYvG2Sf9ZeeOmL6@ugly>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Daniel Golle <daniel@makrotopia.org>, Marek Vasut <marex@denx.de>
+Cc:     Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Qingfang Deng <dqfext@gmail.com>,
+        SkyLake Huang <SkyLake.Huang@mediatek.com>,
+        Simon Horman <simon.horman@corigine.com>
+References: <cover.1683813687.git.daniel@makrotopia.org>
+ <f2d447d8b836cf9584762465a784185e8fcf651f.1683813687.git.daniel@makrotopia.org>
+ <55f8ac31-d81d-43de-8877-6a7fac2d37b4@lunn.ch>
+ <7e8d0945-dfa9-7f61-b075-679e8a89ded9@linaro.org>
+ <ZGWRHeE3CXeAnQ-5@makrotopia.org>
+ <2048ed2a-ae6f-b425-38e4-4ba973e04398@linaro.org>
+In-Reply-To: <2048ed2a-ae6f-b425-38e4-4ba973e04398@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 5/18/23 6:58 AM, Oswald Buddenhagen wrote:
-> On Thu, May 18, 2023 at 08:38:26AM -0400, Tom Rix wrote:
->> smatch reports
->  ^^^^^^ is this the best word to use here?
-
-I have been running smatch against the whole tree for a while, using 
-this preamble.
-
-Many fixes later, for the most part the tree has been cleaned of this 
-class of problems.
-
-Tom
-
->
->> sound/pci/emu10k1/emumixer.c:519:39: warning: symbol
->>  'emu1010_routing_info' was not declared. Should it be static?
->> sound/pci/emu10k1/emumixer.c:859:36: warning: symbol
->>  'emu1010_pads_info' was not declared. Should it be static?
+On 18/05/2023 09:50, Krzysztof Kozlowski wrote:
+> On 18/05/2023 04:44, Daniel Golle wrote:
+>> On Fri, May 12, 2023 at 08:54:36AM +0200, Krzysztof Kozlowski wrote:
+>>> On 11/05/2023 17:53, Andrew Lunn wrote:
+>>>> On Thu, May 11, 2023 at 04:10:20PM +0200, Daniel Golle wrote:
+>>>>> The boottrap is used to read implementation details from the SoC, such
+>>>>> as the polarity of LED pins. Add bindings for it as we are going to use
+>>>>> it for the LEDs connected to MediaTek built-in 1GE PHYs.
+>>>>
+>>>> What exactly is it? Fuses? Is it memory mapped, or does it need a
+>>>> driver to access it? How is it shared between its different users?
+>>>
+>>> Yes, looks like some efuse/OTP/nvmem, so it should probably use nvmem
+>>> bindings and do not look different than other in such class.
 >>
->> These variables are only used in their defining file, so it should be 
->> static
->                               ^^ they
+>> I've asked MediaTek and they have replied with an elaborate definition.
+>> Summary:
+>> The boottrap is a single 32-bit wide register at 0x1001f6f0 which can
+>> be used to read back the bias of bootstrap pins from the SoC as follows:
+> 
+> Is it within some other address space? Register address suggests that.
+> 
+> In such case you should not create a device in the middle of other
+> device's address space. You punched a hole in uniform address space
+> which prevents creating that other device for entire space.
+> 
 >>
->> Signed-off-by: Tom Rix <trix@redhat.com>
+>> * bit[8]: Reference CLK source && gphy port0's LED
+>> If bit[8] == 0:
+>> - Reference clock source is XTRL && gphy port0's LED is pulled low on board side
+>> If bit[8] == 1:
+>> - Reference clock source is Oscillator && gphy port0's LED is pulled high on board side
 >>
-> Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@gmx.de>
->
-> (also amending one of the still pending patches. thanks!)
->
-> regards
->
+>> * bit[9]: DDR type && gphy port1's LED
+>> If bit[9] == 0:
+>> - DDR type is DDRx16b x2 && gphy port1's LED is pulled low on board side
+>> If bit[9] == 1:
+>> - DDR type is DDRx16b x1 && gphy port1's LED is pulled high on board side
+>>
+>> * bit[10]: gphy port2's LED
+>> If bit[10] == 0:
+>> - phy port2's LED is pulled low on board side
+>> If bit[10] == 1:
+>> - gphy port2's LED is pulled high on board side
+>>
+>> * bit[11]: gphy port3's LED
+>> If bit[11] == 0:
+>> - phy port3's LED is pulled low on board side
+>> If bit[11] == 1:
+>> - gphy port3's LED is pulled high on board side
+>>
+>> If bit[10] == 0 && bit[11] == 0:
+>> - BROM will boot from SPIM-NOR
+>> If bit[10] == 1 && bit[11] == 0:
+>> - BROM will boot from SPIM-NAND
+>> If bit[10] == 0 && bit[11] == 1:
+>> - BROM will boot from eMMC
+>> If bit[10] == 1 && bit[11] == 1:
+>> - BROM will boot from SNFI-NAND
+>>
+>> The boottrap is present in many MediaTek SoCs, however, support for
+>> reading it is only really needed on MT7988 due to the dual-use of some
+>> bootstrap pins as PHY LEDs.
+>>
+>> We could say this is some kind of read-only 'syscon' node (and hence
+>> use regmap driver to access it), that would make it easy but it's not
+>> very accurate. Also efuse/OTP/nvmem doesn't seem accurate, though in
+>> terms of software it could work just as well.
+>>
+>> I will update DT bindings to contain the gained insights.
+> 
+> If this is separate address space with one register, then boottrap
+> sounds ok. If you have multiple read only registers with fused values,
+> then this is efuse region, so something like nvidia,tegra20-efuse.
+
+Please align together on some common solution. It looks like you are
+solving the same problem:
+
+https://lore.kernel.org/all/?q=%22nvmem%3A+syscon%3A+Add+syscon+backed+nvmem+driver%22
+
+Best regards,
+Krzysztof
 
