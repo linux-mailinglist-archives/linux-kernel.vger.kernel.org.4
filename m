@@ -2,155 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D62FE707DD9
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 12:16:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE961707DD2
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 12:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230164AbjERKQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 06:16:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45668 "EHLO
+        id S230498AbjERKQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 06:16:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbjERKQ1 (ORCPT
+        with ESMTP id S230489AbjERKPv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 06:16:27 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E7C1BD3;
-        Thu, 18 May 2023 03:15:58 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34I9lVQa012027;
-        Thu, 18 May 2023 10:15:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=dcN+4220TMTISoGzML+7Qx5uu4pIw0lq+Nsrz+AQF9s=;
- b=ilTWcMv6wyJ+netH2RGWfqy97ClvN0EOJAYomiN24x5o4ukGhH4YM770OvrT1Wx+jZpJ
- xRXwRU0x+7oqchh4+ZatpwMFrkKxkEL+UutrsUoe4WGZA0Ers6E+mM3AQZwf83p3rtvF
- Fz0JFQM3JSIbwT2KsJfO0ZTrbY+FURZlN7DSS70FDVMgPgyyj3Qu0j5LLi/RNnZcSLdj
- 8p1gOv4ktbx32tUTIPFTe6xfpmNO+j6FLLIjhHA615H+BBbPeyve4V9aVwDL9xxS2+V/
- /QHhcKex/ML0lhgPy8neZK7j6f8pNCdrAORxJUPuMBXx0I58rzVtW/+FRx6Yp65Dpt8d +A== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qnc30rnxq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 May 2023 10:15:52 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34IAFpFq004835
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 May 2023 10:15:51 GMT
-Received: from youghand-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Thu, 18 May 2023 03:15:49 -0700
-From:   Youghandhar Chintala <quic_youghand@quicinc.com>
-To:     <ath10k@lists.infradead.org>
-CC:     <linux-wireless@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_mpubbise@quicinc.com>,
-        Youghandhar Chintala <quic_youghand@quicinc.com>
-Subject: [PATCH] wifi: ath10k: Trigger STA disconnect after reconfig complete on hardware restart
-Date:   Thu, 18 May 2023 15:45:15 +0530
-Message-ID: <20230518101515.3820-1-quic_youghand@quicinc.com>
-X-Mailer: git-send-email 2.38.0
+        Thu, 18 May 2023 06:15:51 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21FB2724;
+        Thu, 18 May 2023 03:15:30 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-965b8a969b3so206069566b.1;
+        Thu, 18 May 2023 03:15:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684404928; x=1686996928;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rXEEerdAkr1QCgMKgcW59hKxsHfWew2NELcny5y4HhI=;
+        b=qlFV0lL8x1s7ffDaRrTahlJv0Ohi8FXZelPwblFN05HLXReYQpM24b2RnFtDWwxzbG
+         UyIenIaju9TxGDEXK7Y7jXNYthYzvMYuFVBdELr3HmTi8pNoIS1SusoKs9ZwFOgITq77
+         xymLoxEflA3tRXqQ2Hmbct9W/kuhQW8TlvVc1XYCTDyiK/P/wtOmq8OjxVpHlITJVM+J
+         8aAC6f93HpTYSVqOzAtMdBNTQw/jiiEH/vRMeFLmswSax4Gxhdbi0806PoLq6Z6NrKMK
+         LFDFDBcGT+B8jAOh/n3y5s359BXq3SNTc5UhaecMgoodA4jxTznnJQ6ye7fealBf4r9U
+         EOMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684404928; x=1686996928;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rXEEerdAkr1QCgMKgcW59hKxsHfWew2NELcny5y4HhI=;
+        b=f5NmUaq7M0+ewmQsYZg9CiRFHTkNj5MdVzF0bU4Uk2glLkALB7pC4OVmx878IXjgzT
+         F15oVBDFW7bgi11E/d0BIDDXWcZ2beRjAJnvALi/wgIj7pTgvlRuxLUnTYHgBXmVe/5f
+         Rt/hXjOr9YcK20zy+dbO8Mz6RYJdp1ILKeURHQaeDZ7aYZwB3+PAzalMN4TzaBC0frjH
+         A1HBkwrPID4q+3WKya+rW/69HOWlwZwvA+C/21OB2UJPLm/+vW/ekm8J/M77LeCPSiPY
+         Zi/MqnA4nzgFVsma+KXoOvtmeJO+gIRdjaKMs3hEXDG1+viU8YznjG4h9PzKHJSI/Qh5
+         pIWQ==
+X-Gm-Message-State: AC+VfDxg9gX2rdKgKl7uhJkVV6WPWyMEn2Bnwm5DKo9NBF9askPQ+tXU
+        eG1wfLiUukm+dswQQ5G0ORw=
+X-Google-Smtp-Source: ACHHUZ79HADNqk+3EqDSYSgjJfye72hTyyGuQDVmTo3BgZRFpTi4NahKOwRR9uvhIhuBZgV/zmGMZw==
+X-Received: by 2002:a17:907:d21:b0:94a:57d1:5539 with SMTP id gn33-20020a1709070d2100b0094a57d15539mr5235763ejc.5.1684404928407;
+        Thu, 18 May 2023 03:15:28 -0700 (PDT)
+Received: from [192.168.3.32] (dh207-97-74.xnet.hr. [88.207.97.74])
+        by smtp.gmail.com with ESMTPSA id w3-20020a170906d20300b0094ee700d8e4sm770744ejz.44.2023.05.18.03.15.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 May 2023 03:15:27 -0700 (PDT)
+Message-ID: <76943268-3982-deaf-9736-429dd51e01b0@gmail.com>
+Date:   Thu, 18 May 2023 12:15:26 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v3] firmware: qcom_scm: Clear download bit during reboot
+To:     Mukesh Ojha <quic_mojha@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1678979666-551-1-git-send-email-quic_mojha@quicinc.com>
+Content-Language: en-US
+From:   Robert Marko <robimarko@gmail.com>
+In-Reply-To: <1678979666-551-1-git-send-email-quic_mojha@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: glgPWhpa2swMSDRImm7wieI1PJNqX3a9
-X-Proofpoint-ORIG-GUID: glgPWhpa2swMSDRImm7wieI1PJNqX3a9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-18_07,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 spamscore=0
- suspectscore=0 mlxlogscore=999 phishscore=0 adultscore=0 bulkscore=0
- mlxscore=0 clxscore=1015 lowpriorityscore=0 impostorscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305180079
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, on WCN3990, the station disconnect after hardware recovery is
-not working as expected. This is because of setting the
-IEEE80211_SDATA_DISCONNECT_HW_RESTART flag very early in the hardware
-recovery process even before the driver invokes ieee80211_hw_restart().
-On the contrary, mac80211 expects this flag to be set after
-ieee80211_hw_restart() is invoked for it to trigger station disconnect.
 
-Set the IEEE80211_SDATA_DISCONNECT_HW_RESTART flag in
-ath10k_reconfig_complete() instead to fix this.
+On 16. 03. 2023. 16:14, Mukesh Ojha wrote:
+> During normal restart of a system download bit should
+> be cleared irrespective of whether download mode is
+> set or not.
+>
+> Fixes: 8c1b7dc9ba22 ("firmware: qcom: scm: Expose download-mode control")
+> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
 
-The other targets are not affected by this change, since the hardware
-params flag is not set.
+Hi, this has been backported to 5.15.111, however it seems to be 
+breaking reboot
+on IPQ4019 by causing the board to then hang in SBL with:
+root@OpenWrt:/# reboot
+root@OpenWrt:/# [   76.473541] device lan1 left promiscuous mode
+[   76.474204] br-lan: port 1(lan1) entered disabled state
+[   76.527975] device lan2 left promiscuous mode
+[   76.530301] br-lan: port 2(lan2) entered disabled state
+[   76.579376] device lan3 left promiscuous mode
+[   76.581698] br-lan: port 3(lan3) entered disabled state
+[   76.638434] device lan4 left promiscuous mode
+[   76.638777] br-lan: port 4(lan4) entered disabled state
+[   76.978489] qca8k-ipq4019 c000000.switch wan: Link is Down
+[   76.978883] device eth0 left promiscuous mode
+[   76.987077] ipqess-edma c080000.ethernet eth0: Link is Down
+[
+Format: Log Type - Time(microsec) - Message - Optional Info
+Log Type: B - Since Boot(Power On Reset),  D - Delta,  S - Statistic
+S - QC_IMAGE_VERSION_STRING=BOOT.BF.3.1.1-00123
+S - IMAGE_VARIANT_STRING=DAABANAZA
+S - OEM_IMAGE_VERSION_STRING=CRM
+S - Boot Config, 0x00000021
+S - Reset status Config, 0x00000010
+S - Core 0 Frequency, 0 MHz
+B -       261 - PBL, Start
+B -      1339 - bootable_media_detect_entry, Start
+B -      1679 - bootable_media_detect_success, Start
+B -      1693 - elf_loader_entry, Start
+B -      5076 - auth_hash_seg_entry, Start
+B -      7223 - auth_hash_seg_exit, Start
+B -    578349 - elf_segs_hash_verify_entry, Start
+B -    696356 - PBL, End
+B -    696380 - SBL1, Start
+B -    787236 - pm_device_init, Start
+D -         7 - pm_device_init, Delta
+B -    788701 - boot_flash_init, Start
+D -     52782 - boot_flash_init, Delta
+B -    845625 - boot_config_data_table_init, Start
+D -      3836 - boot_config_data_table_init, Delta - (419 Bytes)
+B -    852841 - clock_init, Start
+D -      7566 - clock_init, Delta
+B -    864883 - CDT version:2,Platform ID:9,Major ID:0,Minor ID:0,Subtype:64
+B -    868413 - sbl1_ddr_set_params, Start
+B -    873402 - cpr_init, Start
+D -         2 - cpr_init, Delta
+B -    877842 - Pre_DDR_clock_init, Start
+D -         4 - Pre_DDR_clock_init, Delta
+D -     13234 - sbl1_ddr_set_params, Delta
+B -    891155 - pm_driver_init, Start
+D -         2 - pm_driver_init, Delta
+B -    909105 - Image Load, Start
+B -   1030210 - Boot error ocuured!. Error code: 303d
 
-Tested-on: WCN3990 hw1.0 SNOC WLAN.HL.3.2.2.c10-00754-QCAHLSWMTPL-1
+Reverting the commit fixes rebooting.
 
-Fixes: 2c3fc50591ff ("ath10k: Trigger sta disconnect on hardware restart")
-Signed-off-by: Youghandhar Chintala <quic_youghand@quicinc.com>
----
- drivers/net/wireless/ath/ath10k/core.c | 9 ---------
- drivers/net/wireless/ath/ath10k/mac.c  | 8 ++++++++
- 2 files changed, 8 insertions(+), 9 deletions(-)
+Regards,
+Robert
 
-diff --git a/drivers/net/wireless/ath/ath10k/core.c b/drivers/net/wireless/ath/ath10k/core.c
-index 533ed7169e11..6cdb225b7eac 100644
---- a/drivers/net/wireless/ath/ath10k/core.c
-+++ b/drivers/net/wireless/ath/ath10k/core.c
-@@ -2504,7 +2504,6 @@ EXPORT_SYMBOL(ath10k_core_napi_sync_disable);
- static void ath10k_core_restart(struct work_struct *work)
- {
- 	struct ath10k *ar = container_of(work, struct ath10k, restart_work);
--	struct ath10k_vif *arvif;
- 	int ret;
- 
- 	set_bit(ATH10K_FLAG_CRASH_FLUSH, &ar->dev_flags);
-@@ -2543,14 +2542,6 @@ static void ath10k_core_restart(struct work_struct *work)
- 		ar->state = ATH10K_STATE_RESTARTING;
- 		ath10k_halt(ar);
- 		ath10k_scan_finish(ar);
--		if (ar->hw_params.hw_restart_disconnect) {
--			list_for_each_entry(arvif, &ar->arvifs, list) {
--				if (arvif->is_up &&
--				    arvif->vdev_type == WMI_VDEV_TYPE_STA)
--					ieee80211_hw_restart_disconnect(arvif->vif);
--			}
--		}
--
- 		ieee80211_restart_hw(ar->hw);
- 		break;
- 	case ATH10K_STATE_OFF:
-diff --git a/drivers/net/wireless/ath/ath10k/mac.c b/drivers/net/wireless/ath/ath10k/mac.c
-index 9c4bf2fdbc0f..ab12e3e0c515 100644
---- a/drivers/net/wireless/ath/ath10k/mac.c
-+++ b/drivers/net/wireless/ath/ath10k/mac.c
-@@ -8109,6 +8109,7 @@ static void ath10k_reconfig_complete(struct ieee80211_hw *hw,
- 				     enum ieee80211_reconfig_type reconfig_type)
- {
- 	struct ath10k *ar = hw->priv;
-+	struct ath10k_vif *arvif;
- 
- 	if (reconfig_type != IEEE80211_RECONFIG_TYPE_RESTART)
- 		return;
-@@ -8123,6 +8124,13 @@ static void ath10k_reconfig_complete(struct ieee80211_hw *hw,
- 		ar->state = ATH10K_STATE_ON;
- 		ieee80211_wake_queues(ar->hw);
- 		clear_bit(ATH10K_FLAG_RESTARTING, &ar->dev_flags);
-+		if (ar->hw_params.hw_restart_disconnect) {
-+			list_for_each_entry(arvif, &ar->arvifs, list) {
-+				if (arvif->is_up && arvif->vdev_type == WMI_VDEV_TYPE_STA)
-+					ieee80211_hw_restart_disconnect(arvif->vif);
-+				}
-+		}
-+
- 	}
- 
- 	mutex_unlock(&ar->conf_mutex);
--- 
-2.38.0
-
+> ---
+> Changes in v3:
+>    - Added Fixes tag.
+>    - Removed it from below patch series, as it makes sense to go this independently.
+>      https://lore.kernel.org/lkml/1677664555-30191-1-git-send-email-quic_mojha@quicinc.com/
+>
+> Changes in v2:
+>    - No change.
+>
+>   drivers/firmware/qcom_scm.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+>
+> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+> index 468d4d5..3e020d1 100644
+> --- a/drivers/firmware/qcom_scm.c
+> +++ b/drivers/firmware/qcom_scm.c
+> @@ -1506,8 +1506,7 @@ static int qcom_scm_probe(struct platform_device *pdev)
+>   static void qcom_scm_shutdown(struct platform_device *pdev)
+>   {
+>   	/* Clean shutdown, disable download mode to allow normal restart */
+> -	if (download_mode)
+> -		qcom_scm_set_download_mode(false);
+> +	qcom_scm_set_download_mode(false);
+>   }
+>   
+>   static const struct of_device_id qcom_scm_dt_match[] = {
