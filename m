@@ -2,261 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A1AE7077F8
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 04:19:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A2D4707802
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 04:23:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbjERCTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 22:19:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56084 "EHLO
+        id S229701AbjERCXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 22:23:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbjERCSy (ORCPT
+        with ESMTP id S229484AbjERCXA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 22:18:54 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35DE26B1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 19:18:48 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id af79cd13be357-7576516c81fso155721985a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 19:18:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1684376327; x=1686968327;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tGuemAvtIS/ALPtC/Ke2yJXoSr37KqjSOh21F52Z0b4=;
-        b=XjEWVFgjHhBSgx+JzMuzHzMuMMrg6ZCjBCCAdXf//YzfKBHsPOaTSvveyrxyVc63mB
-         OszLdP5qzb0tPw+Ax1TNz+UB1DuNFET/RCjILS/7u5bCzvBBR1KOj19dWdhgLKcgBzef
-         NYJtJv4KZejE9EsPY58w3IzlHS7ZNhsiLoXuY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684376327; x=1686968327;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tGuemAvtIS/ALPtC/Ke2yJXoSr37KqjSOh21F52Z0b4=;
-        b=P/BRLGB/geuPaXTI/edfVPIn+Vcvj9Z1nRpc7dNufByLG/3p5LO2Oyr/O0A+EOp3wy
-         mK/9hxMVDmKY26vlV6tubxS/9Wlj2lfkbN8yA5ER+UAT+VVyLB8P5QL1fxy7Wr0W6skq
-         Et/M+iZKCkt1LjeHGxObUv33arn1w+YrBU8xHWkB/Mbl1RrFur1DA4rp4B2YbQwVFOBm
-         jkRSeoN6VjPhhc92zQ3mDYeb4cyCWUiuXnYT7a1HUwS6FOrjrD8D4M+vmuWDV3bsV8j8
-         ovXzHTAXnCTya/OaQtbr4gmmg/c69qZm0Uhg1zCg4cPZ6DZ3XSBzXD8DmMvZYuxd4TGn
-         dglA==
-X-Gm-Message-State: AC+VfDzGTDhe1KKDsB6CCu1y7LV9WMniDndlSOGCm4V4U41zf9ggMTl+
-        mGbOblhhx0wZP82Xd+fNyc6JyXN36mZ0ZxIqdTY=
-X-Google-Smtp-Source: ACHHUZ4YcOJzn6aoVPNard/VpdQHjhpKxZ/STCMnHfkC5tH5L1a/155XBb4RZDt8EkvRYuJwqaMCWA==
-X-Received: by 2002:a05:622a:1d0:b0:3ef:366b:5afa with SMTP id t16-20020a05622a01d000b003ef366b5afamr3403956qtw.54.1684376327485;
-        Wed, 17 May 2023 19:18:47 -0700 (PDT)
-Received: from joelboxx.c.googlers.com.com (129.239.188.35.bc.googleusercontent.com. [35.188.239.129])
-        by smtp.gmail.com with ESMTPSA id j13-20020a05620a000d00b007577ccf566asm85082qki.93.2023.05.17.19.18.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 19:18:46 -0700 (PDT)
-From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Kirill A Shutemov <kirill@shutemov.name>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH RFC 4/4] selftests: mm: Add a test for remapping to area immediately after existing mapping
-Date:   Thu, 18 May 2023 02:18:25 +0000
-Message-ID: <20230518021825.712742-5-joel@joelfernandes.org>
-X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
-In-Reply-To: <20230518021825.712742-1-joel@joelfernandes.org>
-References: <20230518021825.712742-1-joel@joelfernandes.org>
+        Wed, 17 May 2023 22:23:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893A0187
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 19:22:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2439C64C6A
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 02:22:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F1E9C433D2;
+        Thu, 18 May 2023 02:22:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684376578;
+        bh=vjGtfgzPWi0Yy8xiEb2wiWA7NRdasfDWeUOUdULaHFE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=NRzVPGrdYOcGM/LrAHRVft1KcFYGIkD3Dq/VEl5CIRorIZsuqg7QBE1Y3ZEyi7fK+
+         xOT16lTJafOakjMJtfM+eUXqZmq4MzDIisLBf2ahWnXvp4plIvtg8KC47+EagnT+eG
+         v5WT652/4+KoKatD+gpC7/10Ms186C1+Lcsbst6EDOkm86qMSJtQQBAZyRzAQ7XN/V
+         5g+hXyNg9uJg35ZA8mPVt8GcksxFLQMWWx3DXG5ImFikh4nMCfPnRb35/BqncBWp5V
+         PR6+NjsUqWwFGuQ3tE+sCohPjCa9Ao7FJuE34oioFTF7iKuX1XRxjKeqvB/4igeP3u
+         Ny7R5G4iErOzQ==
+Message-ID: <99b2e506-668b-a331-0f93-6eeae1412441@kernel.org>
+Date:   Thu, 18 May 2023 10:22:55 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [f2fs-dev] [PATCH] f2fs: maintain six open zones for zoned
+ devices
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        Daeho Jeong <daehojeong@google.com>
+References: <20230505155040.87561-1-jaegeuk@kernel.org>
+ <8c91663e-dfca-4b64-dc39-5a130fbb99a7@kernel.org>
+ <ZGV9saLA+9rM4t9p@google.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <ZGV9saLA+9rM4t9p@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds support for verifying that we correctly handle the
-situation where something is already mapped before the destination of the remap.
+On 2023/5/18 9:21, Jaegeuk Kim wrote:
+> Applied the below comments. Thanks.
 
-Any realignment of destination address and PMD-copy will destroy that
-existing mapping. In such cases, we need to avoid doing the optimization.
+Reviewed-by: Chao Yu <chao@kernel.org>
 
-To test this, we map an area called the preamble before the remap
-region. Then we verify after the mremap operation that this region did not get
-corrupted.
+Thanks,
 
-Putting some prints in the kernel, I verified that we optimize
-correctly in different situations:
-
-Optimize when there is alignment and no previous mapping (this is tested
-by previous patch).
-<prints>
-check_addr_in_prev(old_vma->vm_start=2900000, old_addr=2900000, mask=-2097152): 0
-check_addr_in_prev(new_vma->vm_start=2f00000, new_addr=2f00000, mask=-2097152): 0
-=== Starting move_page_tables ===
-Doing PUD move for 2800000 -> 2e00000 of extent=200000 <-- Optimization
-Doing PUD move for 2a00000 -> 3000000 of extent=200000
-Doing PUD move for 2c00000 -> 3200000 of extent=200000
-</prints>
-
-Don't optimize when there is alignment but there is previous mapping
-(this is tested by this patch).
-Notice that check_addr_in_prev() returns 1 for the destination mapping
-as we detected there is something there.
-<prints>
-check_addr_in_prev(old_vma->vm_start=2900000, old_addr=2900000, mask=-2097152): 0
-check_addr_in_prev(new_vma->vm_start=5700000, new_addr=5700000, mask=-2097152): 1
-=== Starting move_page_tables ===
-Doing move_ptes for 2900000 -> 5700000 of extent=100000 <-- Unoptimized
-Doing PUD move for 2a00000 -> 5800000 of extent=200000
-Doing PUD move for 2c00000 -> 5a00000 of extent=200000
-</prints>
-
-Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
----
- tools/testing/selftests/mm/mremap_test.c | 57 +++++++++++++++++++++---
- 1 file changed, 52 insertions(+), 5 deletions(-)
-
-diff --git a/tools/testing/selftests/mm/mremap_test.c b/tools/testing/selftests/mm/mremap_test.c
-index 6304eb0947a3..d7366074e2a8 100644
---- a/tools/testing/selftests/mm/mremap_test.c
-+++ b/tools/testing/selftests/mm/mremap_test.c
-@@ -29,6 +29,7 @@ struct config {
- 	unsigned long long dest_alignment;
- 	unsigned long long region_size;
- 	int overlapping;
-+	int dest_preamble_size;
- };
- 
- struct test {
-@@ -283,7 +284,7 @@ static void *get_source_mapping(struct config c)
- static long long remap_region(struct config c, unsigned int threshold_mb,
- 			      char pattern_seed)
- {
--	void *addr, *src_addr, *dest_addr;
-+	void *addr, *src_addr, *dest_addr, *dest_preamble_addr;
- 	unsigned long long i;
- 	struct timespec t_start = {0, 0}, t_end = {0, 0};
- 	long long  start_ns, end_ns, align_mask, ret, offset;
-@@ -300,7 +301,7 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
- 		goto out;
- 	}
- 
--	/* Set byte pattern */
-+	/* Set byte pattern for source block. */
- 	srand(pattern_seed);
- 	for (i = 0; i < threshold; i++)
- 		memset((char *) src_addr + i, (char) rand(), 1);
-@@ -312,6 +313,9 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
- 	addr = (void *) (((unsigned long long) src_addr + c.region_size
- 			  + offset) & align_mask);
- 
-+	/* Remap after the destination block preamble. */
-+	addr += c.dest_preamble_size;
-+
- 	/* See comment in get_source_mapping() */
- 	if (!((unsigned long long) addr & c.dest_alignment))
- 		addr = (void *) ((unsigned long long) addr | c.dest_alignment);
-@@ -327,6 +331,24 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
- 		addr += c.dest_alignment;
- 	}
- 
-+	if (c.dest_preamble_size) {
-+		dest_preamble_addr = mmap((void *) addr - c.dest_preamble_size, c.dest_preamble_size,
-+					  PROT_READ | PROT_WRITE,
-+					  MAP_FIXED_NOREPLACE | MAP_ANONYMOUS | MAP_SHARED,
-+							-1, 0);
-+		if (dest_preamble_addr == MAP_FAILED) {
-+			ksft_print_msg("Failed to map dest preamble region: %s\n",
-+					strerror(errno));
-+			ret = -1;
-+			goto clean_up_src;
-+		}
-+
-+		/* Set byte pattern for the dest preamble block. */
-+		srand(pattern_seed);
-+		for (i = 0; i < c.dest_preamble_size; i++)
-+			memset((char *) dest_preamble_addr + i, (char) rand(), 1);
-+	}
-+
- 	clock_gettime(CLOCK_MONOTONIC, &t_start);
- 	dest_addr = mremap(src_addr, c.region_size, c.region_size,
- 					  MREMAP_MAYMOVE|MREMAP_FIXED, (char *) addr);
-@@ -335,7 +357,7 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
- 	if (dest_addr == MAP_FAILED) {
- 		ksft_print_msg("mremap failed: %s\n", strerror(errno));
- 		ret = -1;
--		goto clean_up_src;
-+		goto clean_up_dest_preamble;
- 	}
- 
- 	/* Verify byte pattern after remapping */
-@@ -353,6 +375,23 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
- 		}
- 	}
- 
-+	/* Verify the dest preamble byte pattern after remapping */
-+	if (c.dest_preamble_size) {
-+		srand(pattern_seed);
-+		for (i = 0; i < c.dest_preamble_size; i++) {
-+			char c = (char) rand();
-+
-+			if (((char *) dest_preamble_addr)[i] != c) {
-+				ksft_print_msg("Preamble data after remap doesn't match at offset %d\n",
-+					       i);
-+				ksft_print_msg("Expected: %#x\t Got: %#x\n", c & 0xff,
-+					       ((char *) dest_preamble_addr)[i] & 0xff);
-+				ret = -1;
-+				goto clean_up_dest;
-+			}
-+		}
-+	}
-+
- 	start_ns = t_start.tv_sec * NS_PER_SEC + t_start.tv_nsec;
- 	end_ns = t_end.tv_sec * NS_PER_SEC + t_end.tv_nsec;
- 	ret = end_ns - start_ns;
-@@ -365,6 +404,9 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
-  */
- clean_up_dest:
- 	munmap(dest_addr, c.region_size);
-+clean_up_dest_preamble:
-+	if (c.dest_preamble_size && dest_preamble_addr)
-+		munmap(dest_preamble_addr, c.dest_preamble_size);
- clean_up_src:
- 	munmap(src_addr, c.region_size);
- out:
-@@ -440,7 +482,7 @@ static int parse_args(int argc, char **argv, unsigned int *threshold_mb,
- 	return 0;
- }
- 
--#define MAX_TEST 14
-+#define MAX_TEST 15
- #define MAX_PERF_TEST 3
- int main(int argc, char **argv)
- {
-@@ -449,7 +491,7 @@ int main(int argc, char **argv)
- 	unsigned int threshold_mb = VALIDATION_DEFAULT_THRESHOLD;
- 	unsigned int pattern_seed;
- 	int num_expand_tests = 2;
--	struct test test_cases[MAX_TEST];
-+	struct test test_cases[MAX_TEST] = {};
- 	struct test perf_test_cases[MAX_PERF_TEST];
- 	int page_size;
- 	time_t t;
-@@ -510,6 +552,11 @@ int main(int argc, char **argv)
- 	test_cases[13] = MAKE_TEST(_1MB, _1MB, _5MB, NON_OVERLAPPING, EXPECT_SUCCESS,
- 				  "5MB mremap - Source 1MB-aligned, Destination 1MB-aligned");
- 
-+	/* Src and Dest addr 1MB aligned. 5MB mremap. */
-+	test_cases[14] = MAKE_TEST(_1MB, _1MB, _5MB, NON_OVERLAPPING, EXPECT_SUCCESS,
-+				  "5MB mremap - Source 1MB-aligned, Dest 1MB-aligned with 40MB Preamble");
-+	test_cases[14].config.dest_preamble_size = 10 * _4MB;
-+
- 	perf_test_cases[0] =  MAKE_TEST(page_size, page_size, _1GB, NON_OVERLAPPING, EXPECT_SUCCESS,
- 					"1GB mremap - Source PTE-aligned, Destination PTE-aligned");
- 	/*
--- 
-2.40.1.606.ga4b1b128d6-goog
-
+> 
+> On 05/17, Chao Yu wrote:
+>> On 2023/5/5 23:50, Jaegeuk Kim wrote:
+>>> From: Daeho Jeong <daehojeong@google.com>
+>>>
+>>> To keep six open zone constraints, make them not to be open over six
+>>> open zones.
+>>>
+>>> Signed-off-by: Daeho Jeong <daehojeong@google.com>
+>>> Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+>>> ---
+>>>    fs/f2fs/data.c | 57 ++++++++++++++++++++++++++++++++++++++++++++++++++
+>>>    fs/f2fs/f2fs.h |  5 +++++
+>>>    2 files changed, 62 insertions(+)
+>>>
+>>> diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+>>> index 7dd92a9028b1..bb9de0a02143 100644
+>>> --- a/fs/f2fs/data.c
+>>> +++ b/fs/f2fs/data.c
+>>> @@ -383,6 +383,17 @@ static void f2fs_write_end_io(struct bio *bio)
+>>>    	bio_put(bio);
+>>>    }
+>>> +#ifdef CONFIG_BLK_DEV_ZONED
+>>> +static void f2fs_zone_write_end_io(struct bio *bio)
+>>> +{
+>>> +	struct f2fs_bio_info *io = (struct f2fs_bio_info *)bio->bi_private;
+>>> +
+>>> +	bio->bi_private = io->bi_private;
+>>> +	complete(&io->zone_wait);
+>>> +	f2fs_write_end_io(bio);
+>>> +}
+>>> +#endif
+>>> +
+>>>    struct block_device *f2fs_target_device(struct f2fs_sb_info *sbi,
+>>>    		block_t blk_addr, sector_t *sector)
+>>>    {
+>>> @@ -639,6 +650,10 @@ int f2fs_init_write_merge_io(struct f2fs_sb_info *sbi)
+>>>    			INIT_LIST_HEAD(&sbi->write_io[i][j].io_list);
+>>>    			INIT_LIST_HEAD(&sbi->write_io[i][j].bio_list);
+>>>    			init_f2fs_rwsem(&sbi->write_io[i][j].bio_list_lock);
+>>> +#ifdef CONFIG_BLK_DEV_ZONED
+>>
+>> init_completion(&io->zone_wait);
+>>
+>>> +			sbi->write_io[i][j].zone_pending_bio = NULL;
+>>> +			sbi->write_io[i][j].bi_private = NULL;
+>>> +#endif
+>>>    		}
+>>>    	}
+>>> @@ -965,6 +980,26 @@ int f2fs_merge_page_bio(struct f2fs_io_info *fio)
+>>>    	return 0;
+>>>    }
+>>> +#ifdef CONFIG_BLK_DEV_ZONED
+>>> +static bool is_end_zone_blkaddr(struct f2fs_sb_info *sbi, block_t blkaddr)
+>>> +{
+>>> +	int devi = 0;
+>>> +
+>>> +	if (f2fs_is_multi_device(sbi)) {
+>>> +		devi = f2fs_target_device_index(sbi, blkaddr);
+>>> +		if (blkaddr < FDEV(devi).start_blk ||
+>>> +		    blkaddr > FDEV(devi).end_blk) {
+>>> +			f2fs_err(sbi, "Invalid block %x", blkaddr);
+>>> +			return false;
+>>> +		}
+>>> +		blkaddr -= FDEV(devi).start_blk;
+>>> +	}
+>>> +	return bdev_zoned_model(FDEV(devi).bdev) == BLK_ZONED_HM &&
+>>> +		f2fs_blkz_is_seq(sbi, devi, blkaddr) &&
+>>> +		(blkaddr % sbi->blocks_per_blkz == sbi->blocks_per_blkz - 1);
+>>> +}
+>>> +#endif
+>>> +
+>>>    void f2fs_submit_page_write(struct f2fs_io_info *fio)
+>>>    {
+>>>    	struct f2fs_sb_info *sbi = fio->sbi;
+>>> @@ -975,6 +1010,16 @@ void f2fs_submit_page_write(struct f2fs_io_info *fio)
+>>>    	f2fs_bug_on(sbi, is_read_io(fio->op));
+>>>    	f2fs_down_write(&io->io_rwsem);
+>>> +
+>>> +#ifdef CONFIG_BLK_DEV_ZONED
+>>> +	if (f2fs_sb_has_blkzoned(sbi) && btype < META && io->zone_pending_bio) {
+>>> +		wait_for_completion_io(&io->zone_wait);
+>>> +		bio_put(io->zone_pending_bio);
+>>> +		io->zone_pending_bio = NULL;
+>>> +		io->bi_private = NULL;
+>>> +	}
+>>> +#endif
+>>> +
+>>>    next:
+>>>    	if (fio->in_list) {
+>>>    		spin_lock(&io->io_lock);
+>>> @@ -1038,6 +1083,18 @@ void f2fs_submit_page_write(struct f2fs_io_info *fio)
+>>>    	if (fio->in_list)
+>>>    		goto next;
+>>>    out:
+>>> +#ifdef CONFIG_BLK_DEV_ZONED
+>>> +	if (f2fs_sb_has_blkzoned(sbi) && btype < META &&
+>>> +			is_end_zone_blkaddr(sbi, fio->new_blkaddr)) {
+>>> +		bio_get(io->bio);
+>>> +		init_completion(&io->zone_wait);
+>>
+>> reinit_completion(&io->zone_wait);
+>>
+>> Thanks,
+>>
+>>> +		io->bi_private = io->bio->bi_private;
+>>> +		io->bio->bi_private = io;
+>>> +		io->bio->bi_end_io = f2fs_zone_write_end_io;
+>>> +		io->zone_pending_bio = io->bio;
+>>> +		__submit_merged_bio(io);
+>>> +	}
+>>> +#endif
+>>>    	if (is_sbi_flag_set(sbi, SBI_IS_SHUTDOWN) ||
+>>>    				!f2fs_is_checkpoint_ready(sbi))
+>>>    		__submit_merged_bio(io);
+>>> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+>>> index 7afc9aef127a..0f05c1dd633f 100644
+>>> --- a/fs/f2fs/f2fs.h
+>>> +++ b/fs/f2fs/f2fs.h
+>>> @@ -1218,6 +1218,11 @@ struct f2fs_bio_info {
+>>>    	struct bio *bio;		/* bios to merge */
+>>>    	sector_t last_block_in_bio;	/* last block number */
+>>>    	struct f2fs_io_info fio;	/* store buffered io info. */
+>>> +#ifdef CONFIG_BLK_DEV_ZONED
+>>> +	struct completion zone_wait;	/* condition value for the previous open zone to close */
+>>> +	struct bio *zone_pending_bio;	/* pending bio for the previous zone */
+>>> +	void *bi_private;		/* previous bi_private for pending bio */
+>>> +#endif
+>>>    	struct f2fs_rwsem io_rwsem;	/* blocking op for bio */
+>>>    	spinlock_t io_lock;		/* serialize DATA/NODE IOs */
+>>>    	struct list_head io_list;	/* track fios */
