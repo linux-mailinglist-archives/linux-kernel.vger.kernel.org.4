@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E1F7708BDC
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 00:40:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 555B7708BDD
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 00:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230507AbjERWk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 18:40:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50654 "EHLO
+        id S231145AbjERWkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 18:40:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230417AbjERWkV (ORCPT
+        with ESMTP id S230299AbjERWkW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 18:40:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80D1E61;
-        Thu, 18 May 2023 15:40:20 -0700 (PDT)
+        Thu, 18 May 2023 18:40:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6249AE64;
+        Thu, 18 May 2023 15:40:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D876652B3;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E48BB638BE;
         Thu, 18 May 2023 22:40:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E33EC433A0;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8F0CC4339B;
         Thu, 18 May 2023 22:40:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684449619;
-        bh=pru6AOR5Vm1jRjLusfcHlb0JB0ZcJOquRSj2dOKmD7g=;
+        s=k20201202; t=1684449620;
+        bh=fecc2OUGYvaY7HhyWoq5AoCd5a8aYFQhBEm7VND8WRg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=gvGqlzOd1Ed6Aksnz0b7RZ42saJtCqIni0wD7N022+7SqFUL2WJ5+nCSFqE19Fe8M
-         JxhPHeidqqtUOLRzsy15e84LHkHlVga9S3F4s9x0tgA3HI5bOSN4ZawZ8PPnuuaU0C
-         Z8Vo3d3bD7zYiMLX36XnTbTKr0a/q+GLJD2HxAECbKKV3of+nqHTsxgecCJ7vf9UYY
-         7AiImHhPV1Mf6JrxN16OrL4VFTd7d95wc1cjkChLXcd79xN9T9F5FSJZvQ34WEupKQ
-         NJTbA69wTNwn7qsNNfVR1Tm3drppRIJVwOnibRgou/d5KLAeBwVXeCBIYfH+wcV2Pq
-         KTVEsWfPPaUbA==
+        b=P18tjltVWhrWdAx/t73MdYzudw5rAwtcgHmB/MnIe2y6gVDckQF6FTRGLFg5731sU
+         JE8gbMwtGGjpyk1PixlH1id+rzzkUnMY7HfZjyVRsUV1HP8FnjtWswBasnQXpAHtsp
+         6ir0BbvnOUsku7PcQI00Gs+RbQmLmmpQ14v5cqILduXW0oWTIcegiWs1T0oDdXfgZi
+         R27bwO9Bwj80Phs8CAWxV7dquax9Pk2BNtHDLSFke/1Fc6SO/V6pXockfnzEc//t3D
+         Kew9iJOBJow0x/qHQ/A+sccnynoNIEtq3gnQjfqjzmQxlnKsu4mtFw4A96Ynsalyfq
+         U++W4rKV2PkHQ==
 From:   SeongJae Park <sj@kernel.org>
 To:     paulmck@kernel.org
 Cc:     SeongJae Park <sj@kernel.org>, joel@joelfernandes.org,
         corbet@lwn.net, rcu@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 2/4] Docs/RCU/rculist_nulls: Assign 'obj' before use from the examples
-Date:   Thu, 18 May 2023 22:40:06 +0000
-Message-Id: <20230518224008.2468-3-sj@kernel.org>
+Subject: [PATCH 3/4] Docs/RCU/rculist_nulls: Fix hlist_head field name of 'obj'
+Date:   Thu, 18 May 2023 22:40:07 +0000
+Message-Id: <20230518224008.2468-4-sj@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230518224008.2468-1-sj@kernel.org>
 References: <20230518224008.2468-1-sj@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,36 +55,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Lookup example code snippets in rculist_nulls.rst are using 'obj'
-without assignment.  Fix the code to assign it properly.
+The example code snippets on rculist_nulls.rst are assuming 'obj' to
+have the 'hlist_head' field named 'obj_node', but a sentence is wrongly
+mentioning 'obj->obj_node.next' as 'obj->obj_next'.  Fix it.
 
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- Documentation/RCU/rculist_nulls.rst | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ Documentation/RCU/rculist_nulls.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/Documentation/RCU/rculist_nulls.rst b/Documentation/RCU/rculist_nulls.rst
-index 253ecd869fc2..94a8bfe9f560 100644
+index 94a8bfe9f560..5cd6f3f8810f 100644
 --- a/Documentation/RCU/rculist_nulls.rst
 +++ b/Documentation/RCU/rculist_nulls.rst
-@@ -54,7 +54,7 @@ but a version with an additional memory barrier (smp_rmb())
-     struct hlist_node *node, *next;
-     for (pos = rcu_dereference((head)->first);
-          pos && ({ next = pos->next; smp_rmb(); prefetch(next); 1; }) &&
--         ({ tpos = hlist_entry(pos, typeof(*tpos), member); 1; });
-+         ({ obj = hlist_entry(pos, typeof(*obj), member); 1; });
-          pos = rcu_dereference(next))
-       if (obj->key == key)
-         return obj;
-@@ -66,7 +66,7 @@ And note the traditional hlist_for_each_entry_rcu() misses this smp_rmb()::
-   struct hlist_node *node;
-   for (pos = rcu_dereference((head)->first);
-        pos && ({ prefetch(pos->next); 1; }) &&
--       ({ tpos = hlist_entry(pos, typeof(*tpos), member); 1; });
-+       ({ obj = hlist_entry(pos, typeof(*obj), member); 1; });
-        pos = rcu_dereference(pos->next))
-     if (obj->key == key)
-       return obj;
+@@ -86,7 +86,7 @@ Quoting Corey Minyard::
+ 2) Insertion algorithm
+ ----------------------
+ 
+-We need to make sure a reader cannot read the new 'obj->obj_next' value
++We need to make sure a reader cannot read the new 'obj->obj_node.next' value
+ and previous value of 'obj->key'. Otherwise, an item could be deleted
+ from a chain, and inserted into another chain. If new chain was empty
+ before the move, 'next' pointer is NULL, and lockless reader can not
 -- 
 2.25.1
 
