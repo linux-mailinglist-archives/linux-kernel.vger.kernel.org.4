@@ -2,62 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B19D7078CC
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 06:12:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16FF17078D3
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 06:12:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjEREMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 00:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33904 "EHLO
+        id S229684AbjEREMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 00:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbjEREMP (ORCPT
+        with ESMTP id S229983AbjEREMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 00:12:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167C235AE
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 21:12:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9CADE64CD7
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 04:12:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D2F1C433EF;
-        Thu, 18 May 2023 04:12:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684383133;
-        bh=qGNLvFxonxA6l6xCteXuotmOKPJ70RuXFSolajrmk2Q=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hm2c1q4KPQ2Y4wfEz64Xyu4o/4eQqP+fb6otFMaZFhdttgZtZZ4HzUV6RSJCzWL12
-         V8YPPtDhp5WvcVDkMe0l+ifFksDWYM1MTWGFRtxGOxhMVB+40FGt0vQDuTGdb5qQrM
-         NrDejuHVEeRKb/p7oqKXEYmQb1tzZoDvdVub2y//s1FqezJK5TsXtyv/phpSy79Ljq
-         mFmbZK8Vcrl0IyZS8pxN4DfKF8r0BluVJow3ceUcoXuMTQz+4ku395maKDR2MLdER6
-         lKWh9x3CwMkKvJy9LyolkgiV97k3kyYK1FlU4jZuQzg7RPGcs+sxUjorh2PUDuwdbD
-         L7kv/o5IBYgYA==
-Date:   Wed, 17 May 2023 21:12:11 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Michal Kubiak <michal.kubiak@intel.com>,
-        Larysa Zaremba <larysa.zaremba@intel.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Christoph Hellwig <hch@lst.de>, netdev@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 07/11] net: page_pool: add DMA-sync-for-CPU
- inline helpers
-Message-ID: <20230517211211.1d1bbd0b@kernel.org>
-In-Reply-To: <20230516161841.37138-8-aleksander.lobakin@intel.com>
-References: <20230516161841.37138-1-aleksander.lobakin@intel.com>
-        <20230516161841.37138-8-aleksander.lobakin@intel.com>
+        Thu, 18 May 2023 00:12:49 -0400
+Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D708A35BF
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 21:12:46 -0700 (PDT)
+Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-338414d1d09so7997245ab.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 21:12:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684383166; x=1686975166;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ad68lj4j6xqtAEDpxc6cTTyJqlISj7andYukqr+rtKQ=;
+        b=d6H8fg8584wAVbfxq2w/QH6XeeTXrAvXexbPjq+ozMhWTj9eaqMDlxpTa/yQGG7jkc
+         8fCgKj1JFHEbDCkmZWqeQbr/I74kbI4T8o6ssEVpHClYYxjrApJGj0Ppk3v+Bxk/ciWk
+         TIuKvobPgnTdYQtk6PD9Q2O2Hp3LABRK2YBonYSJca7tD0kww2TapoUvENuTMOkWSrdU
+         IgcIWa8ZRpsyHGYR+CK/WkseQRd49mdFm1u724QyR0xuhyZMNrAaWZa+jss1w2Yu4BHg
+         CxUOWXIPaFQ5HtprnC1lRh6rWiscn35w5th25ggoBnUoiufTvlwEpSM3kAyN4zPZUaeU
+         NF4g==
+X-Gm-Message-State: AC+VfDxvhSDmJQ8CfLlB1Hww/gkDbPLm68qPWu2bTxw8CYsVwTlN1F4g
+        kzSTwMWwA7Bonl19BG+/fQvhgzt7Mercj4kbXZputCYThO/9
+X-Google-Smtp-Source: ACHHUZ5u+S4OP8f/Ud+k9vjwXAsEJfXmAwXGq+cz/5NQAfGKCVRKR69HrAcQvze56oKsJKuKyiMIHraZQcL2339fMeX/WgGW6BiT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a92:d086:0:b0:335:de72:23d7 with SMTP id
+ h6-20020a92d086000000b00335de7223d7mr2485125ilh.3.1684383166240; Wed, 17 May
+ 2023 21:12:46 -0700 (PDT)
+Date:   Wed, 17 May 2023 21:12:46 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004a222005fbf00461@google.com>
+Subject: [syzbot] [fbdev?] [usb?] WARNING in dlfb_submit_urb/usb_submit_urb (2)
+From:   syzbot <syzbot+0e22d63dcebb802b9bc8@syzkaller.appspotmail.com>
+To:     bernie@plugable.com, deller@gmx.de,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,78 +56,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 May 2023 18:18:37 +0200 Alexander Lobakin wrote:
-> Each driver is responsible for syncing buffers written by HW for CPU
-> before accessing them. Almost each PP-enabled driver uses the same
-> pattern, which could be shorthanded into a static inline to make driver
-> code a little bit more compact.
-> Introduce a couple such functions. The first one takes the actual size
-> of the data written by HW and is the main one to be used on Rx. The
-> second does the same, but only if the PP performs DMA synchronizations
-> at all. The last one picks max_len from the PP params and is designed
-> for more extreme cases when the size is unknown, but the buffer still
-> needs to be synced.
-> Also constify pointer arguments of page_pool_get_dma_dir() and
-> page_pool_get_dma_addr() to give a bit more room for optimization,
-> as both of them are read-only.
+Hello,
 
-Very neat.
+syzbot found the following issue on:
 
-> diff --git a/include/net/page_pool.h b/include/net/page_pool.h
-> index 8435013de06e..f740c50b661f 100644
-> --- a/include/net/page_pool.h
-> +++ b/include/net/page_pool.h
-> @@ -32,7 +32,7 @@
->  
->  #include <linux/mm.h> /* Needed by ptr_ring */
->  #include <linux/ptr_ring.h>
-> -#include <linux/dma-direction.h>
-> +#include <linux/dma-mapping.h>
+HEAD commit:    a4422ff22142 usb: typec: qcom: Add Qualcomm PMIC Type-C dr..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=15245566280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=2414a945e4542ec1
+dashboard link: https://syzkaller.appspot.com/bug?extid=0e22d63dcebb802b9bc8
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1720fd3a280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=171a73ea280000
 
-highly nit picky - but isn't dma-mapping.h pretty heavy?
-And we include page_pool.h in skbuff.h. Not that it matters
-today, but maybe one day we'll succeed putting skbuff.h
-on a diet -- so perhaps it's better to put "inline helpers
-with non-trivial dependencies" into a new header?
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/414817142fb7/disk-a4422ff2.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/448dba0d344e/vmlinux-a4422ff2.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/d0ad9fe848e2/bzImage-a4422ff2.xz
 
->  #define PP_FLAG_DMA_MAP		BIT(0) /* Should page_pool do the DMA
->  					* map/unmap
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+0e22d63dcebb802b9bc8@syzkaller.appspotmail.com
 
-> +/**
-> + * page_pool_dma_sync_for_cpu - sync Rx page for CPU after it's written by HW
-> + * @pool: page_pool which this page belongs to
-> + * @page: page to sync
-> + * @dma_sync_size: size of the data written to the page
-> + *
-> + * Can be used as a shorthand to sync Rx pages before accessing them in the
-> + * driver. Caller must ensure the pool was created with %PP_FLAG_DMA_MAP.
-> + */
-> +static inline void page_pool_dma_sync_for_cpu(const struct page_pool *pool,
-> +					      const struct page *page,
-> +					      u32 dma_sync_size)
-> +{
-> +	dma_sync_single_range_for_cpu(pool->p.dev,
-> +				      page_pool_get_dma_addr(page),
-> +				      pool->p.offset, dma_sync_size,
-> +				      page_pool_get_dma_dir(pool));
+usb 1-1: Read EDID byte 0 failed: -71
+usb 1-1: Unable to get valid EDID from device/display
+------------[ cut here ]------------
+usb 1-1: BOGUS urb xfer, pipe 3 != type 1
+WARNING: CPU: 0 PID: 9 at drivers/usb/core/urb.c:504 usb_submit_urb+0xed6/0x1880 drivers/usb/core/urb.c:504
+Modules linked in:
+CPU: 0 PID: 9 Comm: kworker/0:1 Not tainted 6.4.0-rc1-syzkaller-00016-ga4422ff22142 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/28/2023
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:usb_submit_urb+0xed6/0x1880 drivers/usb/core/urb.c:504
+Code: 7c 24 18 e8 7c dc 5a fd 48 8b 7c 24 18 e8 42 ca 0b ff 41 89 d8 44 89 e1 4c 89 ea 48 89 c6 48 c7 c7 60 34 cc 86 e8 0a fa 25 fd <0f> 0b e9 58 f8 ff ff e8 4e dc 5a fd 48 81 c5 b8 05 00 00 e9 84 f7
+RSP: 0018:ffffc9000009ed48 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+RDX: ffff888103650000 RSI: ffffffff81163677 RDI: 0000000000000001
+RBP: ffff88810cb32940 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000003
+R13: ffff88810cf426b8 R14: 0000000000000003 R15: ffff888104272100
+FS:  0000000000000000(0000) GS:ffff8881f6600000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000562147be3b70 CR3: 0000000110380000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ dlfb_submit_urb+0x92/0x180 drivers/video/fbdev/udlfb.c:1980
+ dlfb_set_video_mode+0x21f0/0x2950 drivers/video/fbdev/udlfb.c:315
+ dlfb_ops_set_par+0x2a7/0x8d0 drivers/video/fbdev/udlfb.c:1111
+ dlfb_usb_probe+0x149a/0x2710 drivers/video/fbdev/udlfb.c:1743
+ usb_probe_interface+0x30f/0x960 drivers/usb/core/driver.c:396
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x240/0xca0 drivers/base/dd.c:658
+ __driver_probe_device+0x1df/0x4b0 drivers/base/dd.c:800
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
+ __device_attach_driver+0x1d4/0x2e0 drivers/base/dd.c:958
+ bus_for_each_drv+0x149/0x1d0 drivers/base/bus.c:457
+ __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1030
+ bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
+ device_add+0x112d/0x1a40 drivers/base/core.c:3625
+ usb_set_configuration+0x1196/0x1bc0 drivers/usb/core/message.c:2211
+ usb_generic_driver_probe+0xcf/0x130 drivers/usb/core/generic.c:238
+ usb_probe_device+0xd8/0x2c0 drivers/usb/core/driver.c:293
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x240/0xca0 drivers/base/dd.c:658
+ __driver_probe_device+0x1df/0x4b0 drivers/base/dd.c:800
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
+ __device_attach_driver+0x1d4/0x2e0 drivers/base/dd.c:958
+ bus_for_each_drv+0x149/0x1d0 drivers/base/bus.c:457
+ __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1030
+ bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
+ device_add+0x112d/0x1a40 drivers/base/core.c:3625
+ usb_new_device+0xcb2/0x19d0 drivers/usb/core/hub.c:2575
+ hub_port_connect drivers/usb/core/hub.c:5407 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5551 [inline]
+ port_event drivers/usb/core/hub.c:5711 [inline]
+ hub_event+0x2e3d/0x4ed0 drivers/usb/core/hub.c:5793
+ process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
+ worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
+ kthread+0x344/0x440 kernel/kthread.c:379
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ </TASK>
 
-Likely a dumb question but why does this exist?
-Is there a case where the "maybe" version is not safe?
 
-> +}
-> +
-> +/**
-> + * page_pool_dma_maybe_sync_for_cpu - sync Rx page for CPU if needed
-> + * @pool: page_pool which this page belongs to
-> + * @page: page to sync
-> + * @dma_sync_size: size of the data written to the page
-> + *
-> + * Performs DMA sync for CPU, but only when required (swiotlb, IOMMU etc.).
-> + */
-> +static inline void
-> +page_pool_dma_maybe_sync_for_cpu(const struct page_pool *pool,
-> +				 const struct page *page, u32 dma_sync_size)
-> +{
-> +	if (pool->p.flags & PP_FLAG_DMA_SYNC_DEV)
-> +		page_pool_dma_sync_for_cpu(pool, page, dma_sync_size);
-> +}
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
