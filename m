@@ -2,131 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFE50707B02
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 09:33:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6A0D707B0B
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 09:34:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbjERHd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 03:33:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60790 "EHLO
+        id S230076AbjERHej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 03:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbjERHdZ (ORCPT
+        with ESMTP id S230155AbjERHeg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 03:33:25 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AC4A30E0
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 00:33:05 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f423521b10so11084225e9.0
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 00:33:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1684395176; x=1686987176;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/Nr3DCNB0Ixq72umVN8Ju8XfUzmslSWPo/26RuL/v64=;
-        b=lgWrWFUqwIldB1/V3hLGpdkSWhVDPycAmU8Mb4DgAs8Kdp50VYkKtRMkBE/iO7HR6K
-         YG22U7m0sQNRC4eEWVXiAuLVpZu37bDV9Stsuo+uvxVhf3HszKROh7xNWvhlcT5VzGmn
-         Ltw6vxOCDiTdALmS//YmL9KOGZmOkdGpQJDxWxy5ocrzN2eZlhLShQtKcTUT/432p8qT
-         MU2XTtGY1N/K2fdCulWo4u/0/4v3T37U+TdX5fvFeYpldD1wtaumhvjDzTjiSPZEZ/in
-         Ac0nQnbghlggU1O6LnzFQ33nJ94VD5brGYVGvSgEpxvfBA6LvcKWlJx2fhXAWhEOlsAj
-         Bu8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684395176; x=1686987176;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/Nr3DCNB0Ixq72umVN8Ju8XfUzmslSWPo/26RuL/v64=;
-        b=gmQAvnQUicgqhBaqb5zzCbkz1b/KrgzE5TYDQcBC8/I2bYBHbOi5sBgFLOgj9ZDbkC
-         aCG3MlLC+h5XDYwCVHwZqX2XWV8CyFUNtpjERXlYldDZjr4+gMyw5+pX9PQbZZ3wieSx
-         iDM5KMUk5Wg2Z5NAE8PKwBt9X7ItnnVvhTBLaUcqSUdIjQrbJugdeUbpXhJ08TFB14xa
-         q/acDm93De2JPP9VT2I8zmnrsAow/6FV6QxhNTEp1cobV8TiSzaUkaVEuPNRT4cYDwnN
-         +KjTjCwrDcEderDPf+pG8uhWwYtKa3SCLJlVfoJokF6SQeTrtmOwZnVSeMH+ij9Wko56
-         BRXg==
-X-Gm-Message-State: AC+VfDyfNITCT7bzp7AhC+wlxChw2/c+o+OPqioOX2RkpexFfYhK536F
-        e02OOGsL8l9VvQvjGnWwGA22zb7spNgx8KefaXM=
-X-Google-Smtp-Source: ACHHUZ7xPFCjfZgnxJjwQ1q3sKhEpq9jWYbgE8XVf82gwX/CzK1u2s1hoM6OrcuqCwZHD2o13qE15g==
-X-Received: by 2002:a5d:4fce:0:b0:307:86fb:dada with SMTP id h14-20020a5d4fce000000b0030786fbdadamr818073wrw.36.1684395176400;
-        Thu, 18 May 2023 00:32:56 -0700 (PDT)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id g8-20020adfe408000000b002f9e04459desm1160629wrm.109.2023.05.18.00.32.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 00:32:56 -0700 (PDT)
-Date:   Thu, 18 May 2023 09:32:55 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Haibo Xu <xiaobo55x@gmail.com>
-Cc:     Haibo Xu <haibo1.xu@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, kvmarm@lists.linux.dev,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Sean Christopherson <seanjc@google.com>
-Subject: Re: [PATCH 2/2] KVM: selftests: Add riscv get-reg-list test
-Message-ID: <20230518-60da3b82641bdaccec589b8b@orel>
-References: <cover.1683791148.git.haibo1.xu@intel.com>
- <751a84a9691c86df0e65cdb02abf1e073892d1ca.1683791148.git.haibo1.xu@intel.com>
- <20230511-28ec368a8168342c68ca2187@orel>
- <CAJve8okVFr-m6go6dCg7Cf=Uq3Yt9Xmxi0Z3B2vbWvahvx4GgA@mail.gmail.com>
+        Thu, 18 May 2023 03:34:36 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FC1ED;
+        Thu, 18 May 2023 00:34:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1684395265; i=deller@gmx.de;
+        bh=FZgYr3T8y3cSMK+jHqEyv7QLt7tFq/0H8uVHvwVWk6M=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=MoMpQNdr5zEiwQNd7K2aK1cI0p3ThRclSOgsj66q2WiUSF4ATCDeQLPKNbFg25Pxa
+         WViYyUdePqRPGNXASfMIakglgGaIMzsAGjPJe5NKqpXZVM5og28cJrtnBpVVhpnE35
+         TLsdiVhun9nSNcsyjvnB9B+1tAypfx13ifMBianCemABMQV08ns7mTrVNFAbr5iKsR
+         NcKMmRNjLbRcFS5c7yqHngmNjjbhyZW2+GFOekGsIH1FczveHYzs1FT6HiardTQCJE
+         89EWnOgrTO3mtW57/ye+SYtrtgmxvkKEtdd0kc20IFAa7SOJGS3rijHfVh2iZPlszz
+         dzLJ3IB94J3IA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from ls3530 ([94.134.154.30]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mwfac-1qO5QR39v0-00yCpu; Thu, 18
+ May 2023 09:34:25 +0200
+Date:   Thu, 18 May 2023 09:34:24 +0200
+From:   Helge Deller <deller@gmx.de>
+To:     syzbot <syzbot+0e22d63dcebb802b9bc8@syzkaller.appspotmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Cc:     bernie@plugable.com, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [fbdev?] [usb?] WARNING in
+ dlfb_submit_urb/usb_submit_urb (2)
+Message-ID: <ZGXVANMhn5j/jObU@ls3530>
+References: <0000000000004a222005fbf00461@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAJve8okVFr-m6go6dCg7Cf=Uq3Yt9Xmxi0Z3B2vbWvahvx4GgA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <0000000000004a222005fbf00461@google.com>
+X-Provags-ID: V03:K1:zUPAArKGm/akodQZev5TT6+LSpI5YI8YKdFYXuQvLW+d25TdLpO
+ AiDNmIid9kSsAswtadv+D5hcPd2HAwUgjJMhHWJ2Lj/vvbKONOX3OgPg632rvOnlZYsqtSz
+ VXA0BX5qOQlJTQpLwxh528FF+zHjsQERAbX92PlkSSrbIBLpCQkwuUue1VqjCBbPMpPCRKL
+ O+i3QhySsy2Po63To/sdQ==
+UI-OutboundReport: notjunk:1;M01:P0:ICelvk08EVc=;6E8igwb3dFTHD/FtKRA4efw+6S1
+ PVOPtNEArRckGAnQHSJcT+eAVGKOkJo27ZCGxgCvWEFhrm3qltGr6ab1CIcQsons3EyJxwOew
+ 1WPS7i86IgE4XX7Ltl0EK81Ggq5xYOXu42iVj5AdlEzoJE6HdPm61sTeMMP74ADwil2qJcI+U
+ IrISHQyC6njvLrqGfWrve6kRWD+3ZgEZImKVIVeGsNMTU018HEMkcwGvdyGlLDxlpAhvsujI1
+ D3hSNGKJRuyiC4alwaTJJ100PyyJ1YLXLRMI1h5lz9OggxQdHrRFuu+dna42WkBZMXvW+QKxD
+ mrtLGT2pn53YI83/8KOqDJb7IrCSanYkWBn2Hc+gqgFRCvsK2Nb+UPMc+DqEYIHo4bdEpU+z6
+ nHcDJ1/E5JJ8BVcI7skdzx0Oqh3ciHGuas5hwkY6nrSPn62tpA4yBGmhGzj6tTnPsVKzLQ/X5
+ ZrgnPcOKwUNvXr8KFPy5Z95/7z8Mqt2T1rbqBhmGvXYoDR9Nz47Gp/6faPGDmK62zOBgDy156
+ SMzGh+64K1pfnixS7eRS68irtQWNwot0o04+29NjpZI0BHLimXVi1XNNM0uLCQOxUltFx65II
+ Mj4gSokE5wvWdiuz4i2WVFWBYR0JnU0H/2KzSNj9mc/YR6Z4w0kBhDnKz14P7aVOZJml2E2AT
+ ZVKjReq0nJhc+Z67idxbJKhn5JLsL4h+ng+8cxuC4nHRVtUTaYKRce/ZiF4KJjtqt++23KnEW
+ TbSm0bMVjKVEmBZu60MWhvilE2Fejovz3e69iYYY/v25otUCmollDPr+ewpZnIFf2TEj+ZauJ
+ R2u2RGN3jCH5kuiGoOs7BhUh30bpVkM8tSTQ4dPTsCye1kz811V6YEhgXClod/T5ULvfjSwsT
+ WeUDHzTRyh0kxAG+p2HFpI8p7n8l4LkqTAiytFZ38xDZadPJ4eXxAiRienPK4nr/o88uDhodz
+ lmU2vw==
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 12:17:18PM +0800, Haibo Xu wrote:
-...
-> > The idea of these *to_str functions is to dump output that can be
-> > copy+pasted into a reg array (hence the trailing commas in print_reg
-> > lines). So we can't just print random lines here or return '##UNKOWN##',
-> > as that won't compile. Instead, the default should return
-> >
-> >   str_with_index("KVM_REG_RISCV_CONFIG_REG(##)", reg_off)
-> >
-> 
-> Thanks for sharing the detailed idea, will fix it in next version!
-
-I guess we could also return a string like,
-
-"KVM_REG_RISCV_CONFIG_REG(##) /* UNKNOWN */"
-
-as that would still compile and also convey the message that this
-register doesn't have a name because the test doesn't know it yet.
-
-...
-> > We should share all the code above, except print_reg(), with aarch64.
-> > I'll send a patch series that splits the arch-neutral code out of
-> > the aarch64 test that you can base this test on.
-> >
-> 
-> Good idea! I will rebase the patch based on your work.
+* syzbot <syzbot+0e22d63dcebb802b9bc8@syzkaller.appspotmail.com>:
+> syzbot found the following issue on:
 >
+> HEAD commit:    a4422ff22142 usb: typec: qcom: Add Qualcomm PMIC Type-C =
+dr..
+> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/u=
+sb.git usb-testing
+> console output: https://syzkaller.appspot.com/x/log.txt?x=3D152455662800=
+00
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D2414a945e454=
+2ec1
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3D0e22d63dcebb80=
+2b9bc8
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binut=
+ils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D1720fd3a28=
+0000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D171a73ea2800=
+00
+>
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/414817142fb7/di=
+sk-a4422ff2.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/448dba0d344e/vmlin=
+ux-a4422ff2.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/d0ad9fe848e2/=
+bzImage-a4422ff2.xz
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the com=
+mit:
+> Reported-by: syzbot+0e22d63dcebb802b9bc8@syzkaller.appspotmail.com
+>
+> usb 1-1: Read EDID byte 0 failed: -71
+> usb 1-1: Unable to get valid EDID from device/display
+> ------------[ cut here ]------------
+> usb 1-1: BOGUS urb xfer, pipe 3 !=3D type 1
+> WARNING: CPU: 0 PID: 9 at drivers/usb/core/urb.c:504 usb_submit_urb+0xed=
+6/0x1880 drivers/usb/core/urb.c:504
+> Modules linked in:
+> CPU: 0 PID: 9 Comm: kworker/0:1 Not tainted 6.4.0-rc1-syzkaller-00016-ga=
+4422ff22142 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS =
+Google 04/28/2023
+> Workqueue: usb_hub_wq hub_event
+> RIP: 0010:usb_submit_urb+0xed6/0x1880 drivers/usb/core/urb.c:504
+> Code: 7c 24 18 e8 7c dc 5a fd 48 8b 7c 24 18 e8 42 ca 0b ff 41 89 d8 44 =
+89 e1 4c 89 ea 48 89 c6 48 c7 c7 60 34 cc 86 e8 0a fa 25 fd <0f> 0b e9 58 =
+f8 ff ff e8 4e dc 5a fd 48 81 c5 b8 05 00 00 e9 84 f7
+> RSP: 0018:ffffc9000009ed48 EFLAGS: 00010282
+> RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
+> RDX: ffff888103650000 RSI: ffffffff81163677 RDI: 0000000000000001
+> RBP: ffff88810cb32940 R08: 0000000000000001 R09: 0000000000000000
+> R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000003
+> R13: ffff88810cf426b8 R14: 0000000000000003 R15: ffff888104272100
+> FS:  0000000000000000(0000) GS:ffff8881f6600000(0000) knlGS:000000000000=
+0000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 0000562147be3b70 CR3: 0000000110380000 CR4: 00000000003506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  dlfb_submit_urb+0x92/0x180 drivers/video/fbdev/udlfb.c:1980
+>  dlfb_set_video_mode+0x21f0/0x2950 drivers/video/fbdev/udlfb.c:315
+>  dlfb_ops_set_par+0x2a7/0x8d0 drivers/video/fbdev/udlfb.c:1111
+>  dlfb_usb_probe+0x149a/0x2710 drivers/video/fbdev/udlfb.c:1743
+>  usb_probe_interface+0x30f/0x960 drivers/usb/core/driver.c:396
+>  call_driver_probe drivers/base/dd.c:579 [inline]
+>  really_probe+0x240/0xca0 drivers/base/dd.c:658
+>  __driver_probe_device+0x1df/0x4b0 drivers/base/dd.c:800
+>  driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
+>  __device_attach_driver+0x1d4/0x2e0 drivers/base/dd.c:958
+>  bus_for_each_drv+0x149/0x1d0 drivers/base/bus.c:457
+>  __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1030
+>  bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
+>  device_add+0x112d/0x1a40 drivers/base/core.c:3625
+>  usb_set_configuration+0x1196/0x1bc0 drivers/usb/core/message.c:2211
+>  usb_generic_driver_probe+0xcf/0x130 drivers/usb/core/generic.c:238
+>  usb_probe_device+0xd8/0x2c0 drivers/usb/core/driver.c:293
+>  call_driver_probe drivers/base/dd.c:579 [inline]
+>  really_probe+0x240/0xca0 drivers/base/dd.c:658
+>  __driver_probe_device+0x1df/0x4b0 drivers/base/dd.c:800
+>  driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
+>  __device_attach_driver+0x1d4/0x2e0 drivers/base/dd.c:958
+>  bus_for_each_drv+0x149/0x1d0 drivers/base/bus.c:457
+>  __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1030
+>  bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
+>  device_add+0x112d/0x1a40 drivers/base/core.c:3625
+>  usb_new_device+0xcb2/0x19d0 drivers/usb/core/hub.c:2575
+>  hub_port_connect drivers/usb/core/hub.c:5407 [inline]
+>  hub_port_connect_change drivers/usb/core/hub.c:5551 [inline]
+>  port_event drivers/usb/core/hub.c:5711 [inline]
+>  hub_event+0x2e3d/0x4ed0 drivers/usb/core/hub.c:5793
+>  process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
+>  worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
+>  kthread+0x344/0x440 kernel/kthread.c:379
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
 
-Ok, I've pushed patches to [1]. This series introduces two things to KVM
-selftests. Primarily it splits the aarch64/get-reg-list test into a
-cross-arch get-reg-list test and an $ARCH_DIR/get-reg-list.o object file,
-which the cross-arch test depends on. To do that, it also introduces the
-concept of a "split test", a test that has a cross-arch part which depends
-on an arch-specific part. Using a split test is cleaner than the
-#ifdeffery we usually do for cross-arch tests.
+I think this is an informational warning from the USB stack,
+since the syzbot usb device doesn't behave as expected.
 
-I've added kvmarm@lists.linux.dev, Marc, Oliver, and Sean to the CC of
-this message. You'll want to add them when you post v2 as well.
+What happens with this patch applied?
 
-[1] https://github.com/jones-drew/linux/commits/arm64/kself/get-reg-list
+#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git =
+usb-testing
 
-Thanks,
-drew
+diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
+index 9f3c54032556..dd77b9e757da 100644
+=2D-- a/drivers/usb/core/urb.c
++++ b/drivers/usb/core/urb.c
+@@ -501,7 +501,7 @@ int usb_submit_urb(struct urb *urb, gfp_t mem_flags)
+
+ 	/* Check that the pipe's type matches the endpoint's type */
+ 	if (usb_pipe_type_check(urb->dev, urb->pipe))
+-		dev_WARN(&dev->dev, "BOGUS urb xfer, pipe %x !=3D type %x\n",
++		printk("BOGUS urb xfer, pipe %x !=3D type %x (hardware misbehaviour?)\n=
+",
+ 			usb_pipetype(urb->pipe), pipetypes[xfertype]);
+
+ 	/* Check against a simple/standard policy */
+
+Helge
