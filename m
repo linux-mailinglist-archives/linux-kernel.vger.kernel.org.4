@@ -2,101 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25238707DF2
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 12:24:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A8B3707DF4
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 12:24:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbjERKYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 06:24:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48694 "EHLO
+        id S229816AbjERKYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 06:24:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230063AbjERKYG (ORCPT
+        with ESMTP id S230215AbjERKYT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 06:24:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B4D61BCA
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 03:23:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684405403;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OoaE5jFK5LZwELydCrj36wk2AmKJKKUJxen4DFuue90=;
-        b=i7lP0tAWalLXpesnkpoXh/NFU/bA259I8Ql2au6W5RASB278tuR0hPsofjGn76MfzHEg75
-        BCRGGtwDrmFdbeXBSvTYk6PdOEzhiElLOSOCp45zzYpW0gmu1yCy+Iqofv6ohCtNJlrRwN
-        7aHs1vcfzz6Vep49l0vpc17cMdu2AU0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-568-ctIo3PNWPp-647liTSj5Qg-1; Thu, 18 May 2023 06:23:20 -0400
-X-MC-Unique: ctIo3PNWPp-647liTSj5Qg-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 18 May 2023 06:24:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A001BF3
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 03:24:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D5C7C867942;
-        Thu, 18 May 2023 10:23:19 +0000 (UTC)
-Received: from ws.net.home (unknown [10.45.226.79])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 0D29D40C6EC4;
-        Thu, 18 May 2023 10:23:18 +0000 (UTC)
-Date:   Thu, 18 May 2023 12:23:16 +0200
-From:   Karel Zak <kzak@redhat.com>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        util-linux@vger.kernel.org
-Subject: Re: [ANNOUNCE] util-linux v2.39
-Message-ID: <20230518102316.f6s6v6xxnicx646r@ws.net.home>
-References: <20230517112242.3rubpxvxhzsc4kt2@ws.net.home>
- <20230517-mahnmal-setzen-37937c35cf78@brauner>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CBBC64138
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 10:24:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72816C433EF;
+        Thu, 18 May 2023 10:24:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684405442;
+        bh=1pGxFJKVsFgx9sHnBjgyrJFnknmvGRQVn6I6HxYpR38=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Lg/erPjB9safp6ndjCEjf2pz5kM1JFom8Dc77sjAoLssDE9lEI7/bgqcVRgShC9vK
+         929kfFg6vVdZLve4G/Ymp344fT3n7jYyVgNg9a3Kl84ehQyqaYAnu3FLgCVFz3oIXG
+         PvxnO3d5FGvYLQD+a/5oH8p7Ng3RB2bhx6wvqRTBbp3Z/5UqLA91bHLs8mdWczB4Us
+         FJtZ1F/T4B6/mXoPBvWpBgJXFLEO0VLOgLDJiJk+PdRiVqWuDvgfWp7P3U7QwRfiz6
+         zjsWEACi86yVv/a6UvTOxF3tqVCpVmVmStHrjW24kC3RWf46SGXEzCVUWVBLEjFxza
+         pEkTRsUGnwjbw==
+Date:   Thu, 18 May 2023 19:23:59 +0900
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Oder Chiou <oder_chiou@realtek.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RESEND PATCH 00/12] ASoC: codecs: do not store status in state
+ containe
+Message-ID: <ZGX8v3qjkmfMf+J1@finisterre.sirena.org.uk>
+References: <20230518072753.7361-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Vz0g0BGUIB+KZY51"
 Content-Disposition: inline
-In-Reply-To: <20230517-mahnmal-setzen-37937c35cf78@brauner>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230518072753.7361-1-krzysztof.kozlowski@linaro.org>
+X-Cookie: Avoid contact with eyes.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 03:48:54PM +0200, Christian Brauner wrote:
-> This is a very exciting release! There's good reason for us to be happy
-> imho. This is the first release of util-linux with comprehensive support
-> for the new mount api which is very exciting.
 
-We will see how many things in libmount and kernel are not ready ;-)
+--Vz0g0BGUIB+KZY51
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> A part of that is of course the support for idmapped mounts and the
-> ability to recursively change mount properties, i.e., idempotently
-> change the mount properties of a whole mount tree.
-> 
-> It's also great to see support for disk sequence numbers via the
-> BLKGETDISKSEQ ioctl and the port to util-linux to rely on
+On Thu, May 18, 2023 at 09:27:41AM +0200, Krzysztof Kozlowski wrote:
+> Hi,
+>=20
+> Resend due to missing cover letter, so adding per-series tags was
+> not possible.
 
-BLKGETDISKSEQ is supported in the blockdev command only.
+Please write proper cover letters, but don't resend for this.  You
+constantly raise small review errors in other people's submissions...
 
-Lennart has also idea to support it in libmount to verify devices
-before the filesystem is attached to VFS. 
+--Vz0g0BGUIB+KZY51
+Content-Type: application/pgp-signature; name="signature.asc"
 
-https://github.com/util-linux/util-linux/issues/1786
+-----BEGIN PGP SIGNATURE-----
 
-That's something we can work on in the next release.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRl/L4ACgkQJNaLcl1U
+h9Cexgf+KRsmqRLc+Mv6QpRpmZzZ4GsbY04hPjjRyc1gjPvhRPDs1A6sqpiY1xjL
+TWRRILxQqaJjf373PNFZ5yPrJoRLq2e50u/EqsEdpgU7XhZNP8nrPuPHM/sqXd4c
+yGAmGSJ75kCHZ913882SxrOdGeuev8D6Wkoks386HxiNZGopSEwmyhIBkAvmotm6
+eiDDUD0X/5ZTcGyAXkdG1o7cIjeNMa7JZMM3b73dNAzQHFUenOycYA1i9F8A9S7V
+QufunZzyLloK1N/CkCNNzgyMXaJLtWpE57qA3nChWEQkE5s/CpUKSLSpn0CINlyn
+armBQapnhqt7H75uI0p4oCEL5jWXSw==
+=9F8V
+-----END PGP SIGNATURE-----
 
-> statx(AT_STATX_DONT_SYNC|AT_NO_AUTOMOUNT) to avoid tripping over
-> automounts or hung network filesystems as we just recently discussed
-> this!
-> 
-> Thanks for working on this and hopefully we can add the missing pieces
-> of the new mount api in the coming months!
-
-I would like to make the v2.40 development cycle shorter. The v2.39
-cycle was excessively long and large.
-
-    Karel
-
--- 
- Karel Zak  <kzak@redhat.com>
- http://karelzak.blogspot.com
-
+--Vz0g0BGUIB+KZY51--
