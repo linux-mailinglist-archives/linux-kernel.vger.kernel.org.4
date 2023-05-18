@@ -2,254 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F36CE708AAF
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 23:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18AAF708AB1
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 23:43:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbjERVmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 17:42:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53022 "EHLO
+        id S230104AbjERVnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 17:43:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjERVmo (ORCPT
+        with ESMTP id S229533AbjERVnh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 17:42:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 760A0135;
-        Thu, 18 May 2023 14:42:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D71726160B;
-        Thu, 18 May 2023 21:42:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85CE6C433EF;
-        Thu, 18 May 2023 21:42:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684446160;
-        bh=x5I5mruh7zMCo5Zhys6Y0M8OdmsdgmVH1YsnbP5N0G4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cROkLAXx3D7DzisnvZXbe/RpC7p3ynWO5qtEVZnDCjlMCU8He9ikyvYowyWEEv26a
-         K4cdYAfilcdu5lak2CudEIf54yvGchTRFiBmj3sRaqkaHy7mE0nRQeIeAJ567ONzyb
-         6oL0iffTiSk9AnFGDcKl1+krpJrPIm2Fq71IfTMujh5KJRk8rCuN4tC5l2YKucAWox
-         ExGxWJLBmf3c6gcAPOQEA2rZ3tZxSRT5Pl7VJOzGVKFlw23cN+MgvVX6l7/+rY0HA/
-         9mRGiCSxndOnL1qhHTBCcITaadDSpdoAZDDyuyJBk/clylgU/Mkma6LuabyZ8kaHSs
-         Ci/0Wmk6nl9YA==
-Date:   Thu, 18 May 2023 22:42:34 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Anup Patel <anup@brainfault.org>,
-        Andrew Jones <ajones@ventanamicro.com>, palmer@dabbelt.com,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alistair Francis <alistair.francis@wdc.com>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Jessica Clarke <jrtc27@jrtc27.com>,
-        Rick Chen <rick@andestech.com>, Leo <ycliang@andestech.com>,
-        linux-riscv@lists.infradead.org, qemu-riscv@nongnu.org,
-        u-boot@lists.denx.de, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] dt-bindings: riscv: deprecate riscv,isa
-Message-ID: <20230518-monkhood-dispersal-6749b1228b0d@spud>
-References: <20230518-thermos-sanitary-cf3fbc777ea1@wendy>
- <20230518-4050231ca8dbe93c08cf9c9a@orel>
- <CAAhSdy07Mg_JBF+4ucGFiWdBKh-Ass5G_aUWqBqTnDSFp7S=0A@mail.gmail.com>
- <20230518-hammock-doornail-478e8ea8e6a7@wendy>
- <f7c20090-220c-2805-86ba-b174a89f65b3@seco.com>
+        Thu, 18 May 2023 17:43:37 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D97B180;
+        Thu, 18 May 2023 14:43:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684446216; x=1715982216;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=FCvlPDXlcdJACB4EQCU/Yj0sO6IJ/Dvvnamlu77Mjcs=;
+  b=LdaN1Y/g2IGsYIw63zwoBXhpb38rbFb4rd4FdtM9PqsU0Wcowg73HMrW
+   6Glzmj2qvI6B8aSSWFTUVVPOz5YBZeqPeArRp7oQBJ/hYSIvNO0SaGFXW
+   85ZgK38oQoqM+S1C5/h17NEcA+CbkStTwn/RLAXRnfoOPb/yhNP25wbGI
+   He3hhQEJpAaE6lUCfmhKoUEaYNcQ/Kt5JR1TTtVK5RyoU5pvduOOYWgwe
+   wko3GW70SMSyYcsDOJv0ockAGMV4Zdea2mYYOiJlDfa2wOQ08Fr4wtbXY
+   DNFudSLusn0S6eRN4wV4yrmBh0HnPFAJIw8HGPbLYOq8/WV9mIZvfeXqm
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="354547437"
+X-IronPort-AV: E=Sophos;i="6.00,175,1681196400"; 
+   d="scan'208";a="354547437"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 14:43:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="948850882"
+X-IronPort-AV: E=Sophos;i="6.00,175,1681196400"; 
+   d="scan'208";a="948850882"
+Received: from nroy-mobl1.amr.corp.intel.com (HELO [10.209.81.123]) ([10.209.81.123])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 14:43:26 -0700
+Message-ID: <6dbbc3da-78c9-8101-d52a-0be47da9d67e@intel.com>
+Date:   Thu, 18 May 2023 14:43:25 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="TYryGqRDcYWpb9dy"
-Content-Disposition: inline
-In-Reply-To: <f7c20090-220c-2805-86ba-b174a89f65b3@seco.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/6] PKEY: Add arch_check_pkey_enforce_api()
+Content-Language: en-US
+To:     jeffxu@chromium.org, luto@kernel.org, jorgelo@chromium.org,
+        keescook@chromium.org, groeck@chromium.org, jannh@google.com,
+        sroettger@google.com
+Cc:     akpm@linux-foundation.org, jeffxu@google.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, linux-hardening@vger.kernel.org
+References: <20230515130553.2311248-1-jeffxu@chromium.org>
+ <20230515130553.2311248-3-jeffxu@chromium.org>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230515130553.2311248-3-jeffxu@chromium.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 5/15/23 06:05, jeffxu@chromium.org wrote:
+> +static inline int __arch_check_vma_pkey_for_write(struct vm_area_struct *vma)
+> +{
+> +	int pkey = vma_pkey(vma);
+> +
+> +	if (mm_pkey_enforce_api(vma->vm_mm, pkey)) {
+> +		if (!__pkru_allows_write(read_pkru(), pkey))
+> +			return -EACCES;
+> +	}
+> +
+> +	return 0;
+> +}
 
---TYryGqRDcYWpb9dy
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Please think very carefully about what I'm about to say:
 
-On Thu, May 18, 2023 at 02:30:53PM -0400, Sean Anderson wrote:
-> On 5/18/23 10:06, Conor Dooley wrote:
-> > On Thu, May 18, 2023 at 07:13:15PM +0530, Anup Patel wrote:
-> >> On Thu, May 18, 2023 at 4:02=E2=80=AFPM Andrew Jones <ajones@ventanami=
-cro.com> wrote:
-> >> > On Thu, May 18, 2023 at 09:58:30AM +0100, Conor Dooley wrote:
-> >=20
-> >> > > -  riscv,isa:
-> >> > > -    description:
-> >> > > -      Identifies the specific RISC-V instruction set architecture
-> >> > > -      supported by the hart.  These are documented in the RISC-V
-> >> > > -      User-Level ISA document, available from
-> >> > > -      https://riscv.org/specifications/
-> >> > > -
-> >> > > -      Due to revisions of the ISA specification, some deviations
-> >> > > -      have arisen over time.
-> >> > > -      Notably, riscv,isa was defined prior to the creation of the
-> >> > > -      Zicsr and Zifencei extensions and thus "i" implies
-> >> > > -      "zicsr_zifencei".
-> >> > > -
-> >> > > -      While the isa strings in ISA specification are case
-> >> > > -      insensitive, letters in the riscv,isa string must be all
-> >> > > -      lowercase to simplify parsing.
-> >> > > -    $ref: "/schemas/types.yaml#/definitions/string"
-> >> > > -    pattern: ^rv(?:64|32)imaf?d?q?c?b?k?j?p?v?h?(?:[hsxz](?:[a-z]=
-)+)?(?:_[hsxz](?:[a-z])+)*$
-> >> > > -
-> >> > >    # RISC-V requires 'timebase-frequency' in /cpus, so disallow it=
- here
-> >> > >    timebase-frequency: false
-> >> > >
-> >> > > @@ -133,8 +117,13 @@ properties:
-> >> > >        DMIPS/MHz, relative to highest capacity-dmips-mhz
-> >> > >        in the system.
-> >> > >
-> >> > > +oneOf:
-> >> > > +  - required:
-> >> > > +      - riscv,isa
-> >> >
-> >> > This is the part Anup keeps reminding me about. We can create better=
- ways
-> >> > to handle extensions in DT and ACPI, but we'll still need to parse I=
-SA
-> >> > strings to handle legacy DTs and holdouts that keep creating ISA str=
-ings,
-> >> > at least during the deprecation period, since ISA strings are still =
-"the
-> >> > way to do it" according to the spec.
-> >>=20
-> >> Coming up with an alternate way in DT is fine but we can't deprecate
-> >> ISA strings since ISA strings are widely used:
-> >> 1) Various bootloaders
-> >=20
-> > Aye, for the reason, as I mentioned earlier and in the RFC thread,
-> > removing existing parsers isn't a good idea.
-> >=20
-> >> 2) It is part of /proc/cpuinfo
-> >=20
-> > That is irrelevant.
-> >=20
-> >> 3) Hypervisors use it to communicate HW features to Guest/VM.
-> >> Hypervisors can't get away from generating ISA strings because
-> >> Hypervisors don't know what is running inside Guest/VM.
-> >=20
-> > Generate both :) As things stand, your guests could interpret what you
-> > communicate to them via riscv,isa differently!
-> >=20
-> >> In the case of ACPI, it is a very different situation. Like Sunil ment=
-ioned,
-> >> ACPI will always follow mechanisms defined by RVI (such as ISA string).
-> >> Other ACPI approaches such as GUID for ISA extension are simply not
-> >> scalable and will take a lot more memory for ACPI tables compared to
-> >> ISA strings.
-> >=20
-> > My proposal should actually suit ACPI, at least for Linux, as it would
-> > be a chance to align currently misaligned definitions. I won't speak to
-> > GUIDs or whatever as that's someone else's problem :)
-> >=20
-> >> > Also, if we assume the wording in the spec does get shored up, then,
-> >> > unless I'm missing something, the list of advantages for this boolean
-> >> > proposal from your commit message would be
-> >>=20
-> >> IMO, we should try our best to have the wordings changed in RVI spec.
-> >=20
-> > Yes, doing so is beneficial for all of us regardless of what happens
-> > here. I do think that it is partially orthogonal - it allows us to not
-> > design an interface that needs to be capable of communicating a wide
-> > variety of versions, but I don't think it solves some of the issues
-> > that riscv,isa has. If I thought it did, I would not have gone to the
-> > trouble of respinning this patch out of the other approach.
-> >=20
-> >> > * More character choices for name -- probably not a huge gain for ra=
-tified
-> >> >   extensions, since the boolean properties will likely still use the=
- same
-> >> >   name as the ISA string (riscv,isa-extension-<name>). But, for vend=
-or
-> >> >   extensions, this is indeed a major improvement, since vendor exten=
-sion
-> >> >   boolean property names may need to be extended in unambiguous ways=
- to
-> >> >   handle changes in the extension.
-> >> >
-> >> > * Simpler, more complete DT validation (but we still need a best eff=
-ort
-> >> >   for legacy ISA strings)
-> >> >
-> >> > * Simpler DT parsing (but we still need the current parser for legac=
-y ISA
-> >> >   strings)
-> >> >
-> >> > > +  - required:
-> >> > > +      - riscv,isa-base
-> >> > > +
-> >> > >  required:
-> >> > > -  - riscv,isa
-> >> > >    - interrupt-controller
-> >> > >
-> >> > >  additionalProperties: true
-> >> > > @@ -177,7 +166,13 @@ examples:
-> >> > >                  i-tlb-size =3D <32>;
-> >> > >                  mmu-type =3D "riscv,sv39";
-> >> > >                  reg =3D <1>;
-> >> > > -                riscv,isa =3D "rv64imafdc";
-> >> > > +                riscv,isa-base =3D "rv64i";
-> >> > > +                riscv,isa-extension-i;
-> >> > > +                riscv,isa-extension-m;
-> >> > > +                riscv,isa-extension-a;
-> >> > > +                riscv,isa-extension-f;
-> >> > > +                riscv,isa-extension-d;
-> >> > > +                riscv,isa-extension-c;
-> >>=20
-> >> One downside of this new approach is it will increase the size of DTB.
-> >> Imaging 50 such DT properties in 46 CPU DT nodes.
-> >=20
-> > I should do a comparison between 50 extensions in riscv,isa and doing
-> > this 50 times and see what the sizes are.
->=20
-> Why not just have something like
->=20
-> mycpu {
-> 	...
-> 	riscv,isa {
-> 		i;
-> 		m;
-> 		a;
-> 		zicsr;
-> 		...
-> 	};
-> };
+What connects vma->vm_mm to read_pkru() here?
 
-Naming of the node aside (perhaps that could be riscv,isa-extensions)
-there's not something hitting me immediately as to why that is a no-no.
-If the size is a concern, this would certainly be more efficient & not
-like the probing would be anything other than trivial more difficult
-what I have in my proposal.
+Now think about what happens when we have kthread_use_mm() or a ptrace()
+doing get_task_mm() and working on another process's mm or VMA.
 
-Rob's AFK at the moment, and I was hoping that he would take a look at
-the idea, so I won't respin til he is back, but I'll give this a go in
-the interim.
+Look at arch_vma_access_permitted() and notice how it avoids read_pkru()
+for 'foreign' aka. 'remote' accesses:
 
-Cheers,
-Conor.
+> static inline bool arch_vma_access_permitted(struct vm_area_struct *vma,
+>                 bool write, bool execute, bool foreign)
+> {
+...
+>         if (foreign || vma_is_foreign(vma))
+>                 return true;
+>         return // check read_pkru()
+> }
 
---TYryGqRDcYWpb9dy
-Content-Type: application/pgp-signature; name="signature.asc"
+In other words, it lets all remote accesses right through.  That's
+because there is *NOTHING* that fundamentally and tightly connects the
+PKRU value in this context to the VMA or the context that initiated this
+operation.
 
------BEGIN PGP SIGNATURE-----
+If your security model depends on PKRU protection, this 'remote'
+disconnection is problematic.  The PKRU enforcement inside the kernel is
+best-effort.  That usually doesn't map into the security space very well.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGabyQAKCRB4tDGHoIJi
-0tqeAQCpsTIUwavLKPVNiJd1cmmE4LJnnxMRlq2sxMTP8zSOpQD/arxRvhO4QzlJ
-1itR13j6MTL60roBmM//fn7DprVxnwI=
-=YkDr
------END PGP SIGNATURE-----
-
---TYryGqRDcYWpb9dy--
+Do you have a solid handle on all call paths that will reach
+__arch_check_vma_pkey_for_write() and can you ensure they are all
+non-remote?
