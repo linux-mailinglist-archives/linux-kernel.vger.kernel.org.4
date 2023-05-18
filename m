@@ -2,174 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 465D9708250
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 15:13:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B407A708245
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 15:12:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231441AbjERNNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 09:13:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44874 "EHLO
+        id S230223AbjERNMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 09:12:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231436AbjERNMt (ORCPT
+        with ESMTP id S230368AbjERNML (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 09:12:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B269D19BE;
-        Thu, 18 May 2023 06:12:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 18 May 2023 09:12:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5B302102
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 06:10:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684415404;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GTuF8vICULjztdbI9Ra7D/w4MHEw9VemXTv0OLuiYcE=;
+        b=TF1kMVBFxHM6eVYxS8e/0LdMjfAbJdX3u6630ap8NnwF+32O/dsUWYIxdXHSqhbx312OrS
+        21IztKx+uU7uYzssO9FSDdFR9tmxwjrpYzY+jogsa5nqyS8c3c7g8uvnkWY+REs6198UiU
+        dZNl7zqq/7/b+SJUjP7B05U/WasQCOg=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-593-OaJ1R-89MS2CWKeq3ZymZA-1; Thu, 18 May 2023 09:09:59 -0400
+X-MC-Unique: OaJ1R-89MS2CWKeq3ZymZA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BD35864F43;
-        Thu, 18 May 2023 13:11:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03E0CC433D2;
-        Thu, 18 May 2023 13:10:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684415468;
-        bh=zy+LIqvorCsCX2M/f8auQf0yEixqHw8DL0243s77+7Q=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V33X5RSXttGRYRE6P1dvR0Tbx8vki/Mq7DswtIqCmy3ZEFQZpbBSsZILfBQdb/axC
-         fW8gACvqQA8h24X6k4404VOWLXlYEJBBMImO5nemBEJZ/61Y+K01DoawjshCys6tPR
-         CjMLoqcpJVur2iKg/LiMGQYwu0NzjCbEge5jadGCtxIk0hD9J9umPuYkHbaPKCDT9Y
-         W3Ns51Fyrr8bLqReQVKpyg3/uZPPtBkd2mljV1s+MvXTJ7mR264CEc7tQT188cPrvB
-         LeFL3fBkOwciz11llqrzSxDj2rBWzKYCoDVmv8w9JSJJWG4RoVTNoR/eGXfGTGU6TR
-         8QoIvXwrddaTw==
-From:   guoren@kernel.org
-To:     arnd@arndb.de, guoren@kernel.org, palmer@rivosinc.com,
-        tglx@linutronix.de, peterz@infradead.org, luto@kernel.org,
-        conor.dooley@microchip.com, heiko@sntech.de, jszhang@kernel.org,
-        chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, mark.rutland@arm.com, bjorn@kernel.org,
-        paul.walmsley@sifive.com, catalin.marinas@arm.com, will@kernel.org,
-        rppt@kernel.org, anup@brainfault.org, shihua@iscas.ac.cn,
-        jiawei@iscas.ac.cn, liweiwei@iscas.ac.cn, luxufan@iscas.ac.cn,
-        chunyu@iscas.ac.cn, tsu.yubo@gmail.com, wefu@redhat.com,
-        wangjunqiang@iscas.ac.cn, kito.cheng@sifive.com,
-        andy.chiu@sifive.com, vincent.chen@sifive.com,
-        greentime.hu@sifive.com, corbet@lwn.net, wuwei2016@iscas.ac.cn,
-        jrtc27@jrtc27.com
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [RFC PATCH 02/22] riscv: vdso: Remove compat_vdso/
-Date:   Thu, 18 May 2023 09:09:53 -0400
-Message-Id: <20230518131013.3366406-3-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20230518131013.3366406-1-guoren@kernel.org>
-References: <20230518131013.3366406-1-guoren@kernel.org>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3AE9480101C;
+        Thu, 18 May 2023 13:09:57 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.221])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 041062166B32;
+        Thu, 18 May 2023 13:09:54 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20230518113453.1350757-1-dhowells@redhat.com>
+References: <20230518113453.1350757-1-dhowells@redhat.com>
+Cc:     dhowells@redhat.com, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Chuck Lever III <chuck.lever@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH net-next v8 00/16] splice, net: Replace sendpage with sendmsg(MSG_SPLICE_PAGES), part 1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1521560.1684415394.1@warthog.procyon.org.uk>
+Date:   Thu, 18 May 2023 14:09:54 +0100
+Message-ID: <1521561.1684415394@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+There was a conflict with upstream net-next, so I've posted a new version that
+fixes that.
 
-After unifying vdso32 & vdso64 into vdso/, we ever needn't compat_vdso
-directory. This commit removes the whole compat_vdso/.
-
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
----
- arch/riscv/kernel/compat_vdso/.gitignore                 | 2 --
- arch/riscv/kernel/compat_vdso/compat_vdso.S              | 8 --------
- arch/riscv/kernel/compat_vdso/compat_vdso.lds.S          | 3 ---
- arch/riscv/kernel/compat_vdso/flush_icache.S             | 3 ---
- arch/riscv/kernel/compat_vdso/gen_compat_vdso_offsets.sh | 5 -----
- arch/riscv/kernel/compat_vdso/getcpu.S                   | 3 ---
- arch/riscv/kernel/compat_vdso/note.S                     | 3 ---
- arch/riscv/kernel/compat_vdso/rt_sigreturn.S             | 3 ---
- 8 files changed, 30 deletions(-)
- delete mode 100644 arch/riscv/kernel/compat_vdso/.gitignore
- delete mode 100644 arch/riscv/kernel/compat_vdso/compat_vdso.S
- delete mode 100644 arch/riscv/kernel/compat_vdso/compat_vdso.lds.S
- delete mode 100644 arch/riscv/kernel/compat_vdso/flush_icache.S
- delete mode 100755 arch/riscv/kernel/compat_vdso/gen_compat_vdso_offsets.sh
- delete mode 100644 arch/riscv/kernel/compat_vdso/getcpu.S
- delete mode 100644 arch/riscv/kernel/compat_vdso/note.S
- delete mode 100644 arch/riscv/kernel/compat_vdso/rt_sigreturn.S
-
-diff --git a/arch/riscv/kernel/compat_vdso/.gitignore b/arch/riscv/kernel/compat_vdso/.gitignore
-deleted file mode 100644
-index 19d83d846c1e..000000000000
---- a/arch/riscv/kernel/compat_vdso/.gitignore
-+++ /dev/null
-@@ -1,2 +0,0 @@
--# SPDX-License-Identifier: GPL-2.0-only
--compat_vdso.lds
-diff --git a/arch/riscv/kernel/compat_vdso/compat_vdso.S b/arch/riscv/kernel/compat_vdso/compat_vdso.S
-deleted file mode 100644
-index ffd66237e091..000000000000
---- a/arch/riscv/kernel/compat_vdso/compat_vdso.S
-+++ /dev/null
-@@ -1,8 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--
--#define	vdso_start	compat_vdso_start
--#define	vdso_end	compat_vdso_end
--
--#define	__VDSO_PATH	"arch/riscv/kernel/compat_vdso/compat_vdso.so"
--
--#include "../vdso/vdso.S"
-diff --git a/arch/riscv/kernel/compat_vdso/compat_vdso.lds.S b/arch/riscv/kernel/compat_vdso/compat_vdso.lds.S
-deleted file mode 100644
-index c7c9355d311e..000000000000
---- a/arch/riscv/kernel/compat_vdso/compat_vdso.lds.S
-+++ /dev/null
-@@ -1,3 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--
--#include "../vdso/vdso.lds.S"
-diff --git a/arch/riscv/kernel/compat_vdso/flush_icache.S b/arch/riscv/kernel/compat_vdso/flush_icache.S
-deleted file mode 100644
-index 523dd8b96045..000000000000
---- a/arch/riscv/kernel/compat_vdso/flush_icache.S
-+++ /dev/null
-@@ -1,3 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--
--#include "../vdso/flush_icache.S"
-diff --git a/arch/riscv/kernel/compat_vdso/gen_compat_vdso_offsets.sh b/arch/riscv/kernel/compat_vdso/gen_compat_vdso_offsets.sh
-deleted file mode 100755
-index 8ac070c783b3..000000000000
---- a/arch/riscv/kernel/compat_vdso/gen_compat_vdso_offsets.sh
-+++ /dev/null
-@@ -1,5 +0,0 @@
--#!/bin/sh
--# SPDX-License-Identifier: GPL-2.0
--
--LC_ALL=C
--sed -n -e 's/^[0]\+\(0[0-9a-fA-F]*\) . \(__vdso_[a-zA-Z0-9_]*\)$/\#define compat\2_offset\t0x\1/p'
-diff --git a/arch/riscv/kernel/compat_vdso/getcpu.S b/arch/riscv/kernel/compat_vdso/getcpu.S
-deleted file mode 100644
-index 10f463efe271..000000000000
---- a/arch/riscv/kernel/compat_vdso/getcpu.S
-+++ /dev/null
-@@ -1,3 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--
--#include "../vdso/getcpu.S"
-diff --git a/arch/riscv/kernel/compat_vdso/note.S b/arch/riscv/kernel/compat_vdso/note.S
-deleted file mode 100644
-index b10312907542..000000000000
---- a/arch/riscv/kernel/compat_vdso/note.S
-+++ /dev/null
-@@ -1,3 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--
--#include "../vdso/note.S"
-diff --git a/arch/riscv/kernel/compat_vdso/rt_sigreturn.S b/arch/riscv/kernel/compat_vdso/rt_sigreturn.S
-deleted file mode 100644
-index 884aada4facc..000000000000
---- a/arch/riscv/kernel/compat_vdso/rt_sigreturn.S
-+++ /dev/null
-@@ -1,3 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--
--#include "../vdso/rt_sigreturn.S"
--- 
-2.36.1
+David
 
