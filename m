@@ -2,72 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EF7F70882D
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 21:05:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0079C708831
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 21:06:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjERTFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 15:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46594 "EHLO
+        id S230217AbjERTGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 15:06:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbjERTFa (ORCPT
+        with ESMTP id S229553AbjERTGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 15:05:30 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA129A9
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 12:05:27 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64d2da69fdfso241406b3a.0
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 12:05:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684436727; x=1687028727;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qaPXZjQwpMuHucPSSvg3vCkUQc8Ay+DRE5sO9MN2VqU=;
-        b=zwveXuIfdYd/qj8tZUjdiY0xZagkmXSohLR+VJHXjIH+BQtZdirtrWdMnfi2Tntiw2
-         tNnBgNDzfxhxzJ4MlMXKjmrIFWiSEMC4k63wRhYBN3T6mfHSuzkxxGUb95lZmD1j4ptE
-         4HkcpXW02IxpKntr/WVLoZWRb1dBMqYTg9Dwb9NuNqdE3VztQzeiYmREE+HTag6uUoBB
-         GTq2m4brQDiLD5CuytB3nCe+3UEYo1w+PxLov+pKHC7m8q/3xnGE6ikvwcRvPzvpRORL
-         7jbVVdNo1Pv8ZresIgf7H9Nrh2mDcO7JqyaR8lI8wyQxW4awuwCwa8NAQerB7F7ZhF95
-         g+fQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684436727; x=1687028727;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qaPXZjQwpMuHucPSSvg3vCkUQc8Ay+DRE5sO9MN2VqU=;
-        b=AVaXevv9dZpgQeHOgLbeivKESeUDrY2USpX0+6++Zx6tH4Yn2AL3UthVlJ34a/nPFZ
-         /2eCO51sNAC/oUcat9DlHdvL9jdJvNTpcFs4Xz6A08ep6T/3O1fVEck+56nkMnckEzCh
-         w/cPbt/IgtFnyDKRmG798oz3+bytut756+ZVzSrG/cXOkQ/FicVXl6dGrrHvK+P4KKJj
-         PTctejHKBF+Nv/DseGIsMYMhJe+CMuwYii/qSDzRWB4pLuW9HB/I+XjwnwglD7Gvbg91
-         765127lnSu1hfF18Gj9pvzTKNsyA2w+AE2PxLLry4eYQ/2MKzSq256Ellmmbd+zWl4Sw
-         vVkA==
-X-Gm-Message-State: AC+VfDzQY3N5tHDf/bKJHY/0vGV9c3ZkYVCN2n8LkkPvMIkwHq+NLRVY
-        0UhaMCT31ZQzpTP151xno/LhRw==
-X-Google-Smtp-Source: ACHHUZ4mwnJuBAqtj5AknLIgnMxasaPqQbsplioZ5tOpO4rPnkfRPMamoigo1opISuywXj4AfUhF2Q==
-X-Received: by 2002:a05:6a20:4321:b0:104:3c82:38c0 with SMTP id h33-20020a056a20432100b001043c8238c0mr970876pzk.41.1684436726991;
-        Thu, 18 May 2023 12:05:26 -0700 (PDT)
-Received: from google.com (176.13.105.34.bc.googleusercontent.com. [34.105.13.176])
-        by smtp.gmail.com with ESMTPSA id q35-20020a17090a17a600b002502161b063sm8871pja.54.2023.05.18.12.05.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 12:05:26 -0700 (PDT)
-Date:   Thu, 18 May 2023 19:05:23 +0000
-From:   Mingwei Zhang <mizhang@google.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
-        Jim Mattson <jmattson@google.com>
-Subject: Re: [PATCH 9/9] KVM: x86/mmu: BUG() in rmap helpers iff
- CONFIG_BUG_ON_DATA_CORRUPTION=y
-Message-ID: <ZGZ2834xLw/woerO@google.com>
-References: <20230511235917.639770-1-seanjc@google.com>
- <20230511235917.639770-10-seanjc@google.com>
+        Thu, 18 May 2023 15:06:23 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0959FCA;
+        Thu, 18 May 2023 12:06:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1684436774; i=deller@gmx.de;
+        bh=pBy6GELUpzGIiCShn/8+5zqDsJlsfeiFiD+3uO8JbY4=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=GW3ynz/DbLLzEQGUdqVylIi+hc3P+CxSdGHqGnRDPIU7MUlCu/VYRt2psVDzp7v3c
+         EIknENG18my1GD9v4SzuuZnfDmmijFT4QR9k5SkfFqWEuWhpk9YR9xuo13dlDDKAVn
+         Jx6V9JdZxNAhmhw6eL2zL/REpW3MT4D3dVbLraqoiqKDCqbursJ+/Tgi/6KiwNtgBv
+         +Nw3c8FozrBE1ql2uybHnSzCHIBgEEb1PY4QBWFl1cbJCgbnuLDB7AdDjBkyrip8tC
+         W3G8wJcIzwVwgcbHkWv0HHG756lTimjCJ8oJ2fUo+EbC/2xSubh+wvD296U4hlGT2x
+         OllpUAsKCYchw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from ls3530 ([94.134.154.30]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N0XD2-1qKfeU2SEG-00wZAK; Thu, 18
+ May 2023 21:06:14 +0200
+Date:   Thu, 18 May 2023 21:06:12 +0200
+From:   Helge Deller <deller@gmx.de>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Cc:     syzbot <syzbot+0e22d63dcebb802b9bc8@syzkaller.appspotmail.com>,
+        bernie@plugable.com, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [fbdev?] [usb?] WARNING in
+ dlfb_submit_urb/usb_submit_urb (2)
+Message-ID: <ZGZ3JPLqxCxA2UB6@ls3530>
+References: <0000000000004a222005fbf00461@google.com>
+ <ZGXVANMhn5j/jObU@ls3530>
+ <4cd17511-2b60-4c37-baf3-c477cf6d1761@rowland.harvard.edu>
+ <be824fbc-cde4-9a2a-8fb4-1ca23f498dca@gmx.de>
+ <2905a85f-4a3b-4a4f-b8fb-a4d037d6c591@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230511235917.639770-10-seanjc@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+In-Reply-To: <2905a85f-4a3b-4a4f-b8fb-a4d037d6c591@rowland.harvard.edu>
+X-Provags-ID: V03:K1:Q3nIu3LTT7sasw5uCAZngX5+JzZttsCCWf+9S/T/gP2tfMnOCUW
+ BwpHjk/fKNMPjT4KWgBwNKfV0NExzypTNjj+eQqR5yhxduihabVfHEmzpPKMJD+9M7HP9bi
+ 24WyALeLnxpLreLUBFlgueLDTY8G6MG7pjNLF0t1Cgwx7NFBMxOsWY4xuVJL2WFELj3bQ4g
+ DKf10N5q0OIoLLX8Fnnkw==
+UI-OutboundReport: notjunk:1;M01:P0:y4zdltgRDIg=;hT62BpYCTxJ9wnrrSwFQrUxLRMP
+ KNuz5bykn4UaZIUngZnebcjA296bIc/zRl5RwesJytwxfwDe+fjBddoN401UjPTQhKx8I4qSk
+ /3ego8neUmYfVMvspZo4F2EgTnHpOjR4UA8SdcrFa/aLk/z31UfrYaFZobhFcPXbq00ZoovQc
+ Sl48QUY8soF3JantHxXEJmxvkq8iJXirhxrZ/O4d+bV1nU9KhCfs8yUMwWEtQ97egyj3rXBy+
+ KseszST5rP2rKiAgMQbVOu/XOaT4MkFGOE+KT7OiTdm6q/1d0d5tlCbCfst0Ihv4Eho7oezXh
+ 94rBavAPPbr1HtpdsLZGOqUE+7m52M9dHmxQSsdey4xaL2UM/kMgsQ/+xE8xsvQJx409a8VBu
+ oHi6h2rIoDsMVm9Ynxc6QE5N+nuxggbaUuhBt4Ow/PTtaRWkK7MH7yCwpfOrawBLW/CTCIJAK
+ BG+ytBpZCLVMCk0zbLypuHD2wqgyJ8udAoignq42MwIKJmdmBoO2kaLFMTe/WGr6BNwgDhIEM
+ 20lW14NRAvIcrq/bmIeLeyT9eGe8GORW4SVtuqFYyXue8ismouoPXyAx7ewdeZhKvhPlC97gw
+ SoO49j0sRR+ojtFJPUdtopQ01V4r7vIiKDsHBcc6DBeyQqI515/VxVl0n2gTEM6iqDrhErjYh
+ igP1sELoTYPWQhREddoszTq60/0YeSgaWJr7yNPfx3QVSRAha5hZdIreOKv+TDIZOkm0homed
+ Ks0bxp9joXqwzav4ryAOyTRoTr/nwVMvrJDeAM7A8N6xpzzxQ8+q39tzdZ0ywvGYhKEzhaZf0
+ i3GCLVqony8LJ3fgHdPYf3gDsytTukVp59dUepehu1W3Qf6F5PCFRM+obMC/+E7c4aOnQY72I
+ r1nQ1XFoPVsuQaESOIXn46IOfbu8oB1Z1QNmuDF3ZRRRQ9ZWmtKmiCoDvfk4LRj+SR5Qn4wIJ
+ WJNz/xyp7ysdprpKDGXkPz4pgSw=
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,67 +79,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023, Sean Christopherson wrote:
-> Introduce KVM_BUG_ON_DATA_CORRUPTION() and use it in the low-level rmap
-> helpers to convert the existing BUG()s to WARN_ON_ONCE() when the kernel
-> is built with CONFIG_BUG_ON_DATA_CORRUPTION=n, i.e. does NOT want to BUG()
-> on corruption of host kernel data structures.  Environments that don't
-> have infrastructure to automatically capture crash dumps, i.e. aren't
-> likely to enable CONFIG_BUG_ON_DATA_CORRUPTION=y, are typically better
-> served overall by WARN-and-continue behavior (for the kernel, the VM is
-> dead regardless), as a BUG() while holding mmu_lock all but guarantees
-> the _best_ case scenario is a panic().
-> 
-> Make the BUG()s conditional instead of removing/replacing them entirely as
-> there's a non-zero chance (though by no means a guarantee) that the damage
-> isn't contained to the target VM, e.g. if no rmap is found for a SPTE then
-> KVM may be double-zapping the SPTE, i.e. has already freed the memory the
-> SPTE pointed at and thus KVM is reading/writing memory that KVM no longer
-> owns.
-> 
-> Link: https://lore.kernel.org/all/20221129191237.31447-1-mizhang@google.com
-> Suggested-by: Mingwei Zhang <mizhang@google.com>
-> Cc: David Matlack <dmatlack@google.com>
-> Cc: Jim Mattson <jmattson@google.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-Reviewed-by: Mingwei Zhang <mizhang@google.com>
-> +/*
-> + * Note, "data corruption" refers to corruption of host kernel data structures,
-> + * not guest data.  Guest data corruption, suspected or confirmed, that is tied
-> + * and contained to a single VM should *never* BUG() and potentially panic the
-> + * host, i.e. use this variant of KVM_BUG() if and only if a KVM data structure
-> + * is corrupted and that corruption can have a cascading effect to other parts
-> + * of the hosts and/or to other VMs.
-> + */
-> +#define KVM_BUG_ON_DATA_CORRUPTION(cond, kvm)			\
-> +({								\
-> +	bool __ret = !!(cond);					\
-> +								\
-> +	if (IS_ENABLED(CONFIG_BUG_ON_DATA_CORRUPTION))		\
-> +		BUG_ON(__ret);					\
-> +	else if (WARN_ON_ONCE(__ret && !(kvm)->vm_bugged))	\
-> +		kvm_vm_bugged(kvm);				\
-> +	unlikely(__ret);					\
-> +})
-> +
-Previously, my concern was that people might abuse this feature by
-generating lots of KVM_BUG_ON_DATA_CORRUPTION() in the code, with the
-execuse that "hey, it is not a BUG_ON(), just turn off
-CONFIG_BUG_ON_DATA_CORRUPTION." In reality, especially in production, no
-one will take that risk by completely turning off the KCONFIG, so
-KVM_BUG_ON_DATA_CORRUPTION() is still a BUG_ON() but with people having
-execuses to add more.
+* Alan Stern <stern@rowland.harvard.edu>:
+> On Thu, May 18, 2023 at 04:16:33PM +0200, Helge Deller wrote:
+> > On 5/18/23 15:54, Alan Stern wrote:
+> > > On Thu, May 18, 2023 at 09:34:24AM +0200, Helge Deller wrote:
+> > > > I think this is an informational warning from the USB stack,
+> > >
+> > > It is not informational.  It is a warning that the caller has a bug.
+> >
+> > I'm not a USB expert, so I searched for such bug reports, and it seems
+> > people sometimes faced this warning with different USB devices.
+>
+> Yes.
+>
+> > > You can't fix a bug by changing the line that reports it from dev_WA=
+RN
+> > > to printk!
+> >
+> > Of course this patch wasn't intended as "fix".
+> > It was intended to see how the udlfb driver behaves in this situation,=
+ e.g.
+> > if the driver then crashes afterwards.
+> >
+> > Furthermore, why does usb_submit_urb() prints this WARNING and then co=
+ntinues?
+> > If it's a real bug, why doesn't it returns an error instead?
+> > So, in principle I still think this warning is kind of informational,
+> > which of course points to some kind of problem which should be fixed.
+>
+> Depending on the situation, the bug may or may not lead to an error.  At
+> the time the dev_WARN was added, we were less careful about these sorts
+> of checks; I did not want to cause previously working devices to stop
+> working by failing the URB submission.
 
-Later I realize that this worry is purely based on hypothesis, so I
-choose to not worry about that anymore. Overall, making BUG_ON()
-tunable is still a very good progress. Thank you and David for the
-help.
+Fair enough.
 
--Mingwei
+> > > In this case it looks like dlfb_usb_probe() or one of the routines i=
+t
+> > > calls is wrong; it assumes that an endpoint has the expected type
+> > > without checking.  More precisely, it thinks an endpoint is BULK whe=
+n
+> > > actually it is INTERRUPT.  That's what needs to be fixed.
+> >
+> > Maybe usb_submit_urb() should return an error so that drivers can
+> > react on it, instead of adding the same kind of checks to all drivers?
+>
+> Feel free to submit a patch doing this.
 
->  static inline void kvm_vcpu_srcu_read_lock(struct kvm_vcpu *vcpu)
->  {
->  #ifdef CONFIG_PROVE_RCU
-> -- 
-> 2.40.1.606.ga4b1b128d6-goog
-> 
+As you wrote above, this may break other drivers too, so I'd leave that
+discussion & decision to the USB maintainers (like you).
+
+> But the checks should be added
+> in any case; without them the drivers are simply wrong.
+
+I pushed the hackish patch below through the syz tests which gives this lo=
+g:
+(see https://syzkaller.appspot.com/text?tag=3DCrashLog&x=3D160b7509280000)
+[   77.559566][    T9] usb 1-1: Unable to get valid EDID from device/displ=
+ay
+[   77.587021][    T9] WARNING: BOGUS urb xfer, pipe 3 !=3D type 1 (fix dr=
+iver to choose correct endpoint)
+[   77.596448][    T9] usb 1-1: dlfb_urb_completion - nonzero write bulk s=
+tatus received: -115
+[   77.605308][    T9] usb 1-1: submit urb error: -22
+[   77.613225][    T9] udlfb: probe of 1-1:0.52 failed with error -22
+
+So, basically there is no urgent fix needed for the dlfb fbdev driver,
+as it will gracefully fail as is (which is correct).
+
+What do you suggest we should do with this syzkaller-bug ?
+I'd rate it as false-alarm, but it will continue to complain because of
+the dev_WARN() in urb.c
+
+Helge
+=2D--
+
+From: Helge Deller <deller@gmx.de>
+Date: Thu, 18 May 2023 19:03:56 +0200
+Subject: [PATCH] fbdev: udlfb: check endpoint type, again
+
+Temporary patch to anaylze syzbot regression:
+https://syzkaller.appspot.com/bug?extid=3D0e22d63dcebb802b9bc8
+It's not planned to apply as-is!
+
+Fixes: aaf7dbe07385 ("video: fbdev: udlfb: properly check endpoint type")
+Signed-off-by: Helge Deller <deller@gmx.de>
+
+diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
+index 9f3c54032556..bb889a1da3ef 100644
+=2D-- a/drivers/usb/core/urb.c
++++ b/drivers/usb/core/urb.c
+@@ -500,9 +500,12 @@ int usb_submit_urb(struct urb *urb, gfp_t mem_flags)
+ 	 */
+
+ 	/* Check that the pipe's type matches the endpoint's type */
+-	if (usb_pipe_type_check(urb->dev, urb->pipe))
+-		dev_WARN(&dev->dev, "BOGUS urb xfer, pipe %x !=3D type %x\n",
++	if (usb_pipe_type_check(urb->dev, urb->pipe)) {
++		/* temporarily use printk() instead of WARN() to fix bug in udlfb drive=
+r */
++		printk("WARNING: BOGUS urb xfer, pipe %x !=3D type %x (fix driver to ch=
+oose correct endpoint)\n",
+ 			usb_pipetype(urb->pipe), pipetypes[xfertype]);
++		return -EINVAL;
++	}
+
+ 	/* Check against a simple/standard policy */
+ 	allowed =3D (URB_NO_TRANSFER_DMA_MAP | URB_NO_INTERRUPT | URB_DIR_MASK |
+diff --git a/drivers/video/fbdev/udlfb.c b/drivers/video/fbdev/udlfb.c
+index 216d49c9d47e..5e56b2889c8c 100644
+=2D-- a/drivers/video/fbdev/udlfb.c
++++ b/drivers/video/fbdev/udlfb.c
+@@ -1667,8 +1667,9 @@ static int dlfb_usb_probe(struct usb_interface *intf=
+,
+ 	usb_set_intfdata(intf, dlfb);
+
+ 	retval =3D usb_find_common_endpoints(intf->cur_altsetting, NULL, &out, N=
+ULL, NULL);
+-	if (retval) {
+-		dev_err(&intf->dev, "Device should have at lease 1 bulk endpoint!\n");
++	if (retval || out =3D=3D NULL) {
++		retval =3D -ENODEV;
++		dev_err(&intf->dev, "Device should have at least one bulk endpoint!\n")=
+;
+ 		goto error;
+ 	}
+
