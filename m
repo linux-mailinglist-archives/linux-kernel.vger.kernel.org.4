@@ -2,107 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43A49707E55
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 12:44:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53A0C707E64
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 12:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbjERKoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 06:44:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57998 "EHLO
+        id S231131AbjERKqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 06:46:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230491AbjERKou (ORCPT
+        with ESMTP id S230500AbjERKo4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 06:44:50 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48FB510D8;
-        Thu, 18 May 2023 03:44:49 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id af79cd13be357-7577f03e131so104049585a.0;
-        Thu, 18 May 2023 03:44:49 -0700 (PDT)
+        Thu, 18 May 2023 06:44:56 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7C01718
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 03:44:55 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f24d4900bbso2167425e87.3
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 03:44:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684406688; x=1686998688;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ad4zvcNwIJ/Y2lxdLHrr7ZSM1z29dpOAu+LMx49JNDM=;
-        b=b2AhZYR6zvngv+IqdmflIhp7f0NhcvZ57umiQCrcz4uNi0gPFRZMtWK0up3K7NFSQK
-         EWHcOA8hX9fy4FYGI1MKal2UOgWbQtST7fCojtrKxgogfIhn5bhaG3uwIFLoKkzpQoeK
-         7nhnDs5GTO+FXw2RsSS7LuAu30LD3cmNF5zF8PXCs1QqOOm+uNUU4zGazcWBmDRUwQgL
-         XQx8XzOjLu4VZDNmmERxzWgwjD8B+C1tBl5/x6xMCdVGIYktmO+RBYD3Kr0SIJ0Y3V2D
-         jJyPo9s914C8b0WhzVm/bQ/W2raTWabMozoKzJQoc8H19feMM8uGA34lJVqg9X8RTBtv
-         keDQ==
+        d=linaro.org; s=google; t=1684406693; x=1686998693;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rCGStx9g5JG1kB8zFftBk32aBir6PoC6mFtgEzyZU0s=;
+        b=Y48HA0iOmjU8hAIV/V0BKae1TpftE+1j3scL7OxsfxxuXYhTWhheVWqOFb8+RUrzPB
+         hpHxeljof6FIR9yrmhT3ny7tpc7Or68iiS0gnxRMTNvnS71KZ/4CWc+Mm2WDGV8pfM9g
+         1ztielbQ8LIfdxxlxm2gW93cIEHsYd8nCi0KOhFdWSmCvJK+Uy8SLx2hhCvTDJPyOZs4
+         kxna6w4eB6BT6kyeBKQNR6seMIloVibRUk6bfz9wPLVaFwNsS+XqDB23rcD2Y+TYJZqw
+         MpLtxV/+rfkHyXqs4AGpJty4rV6428ZOnIVbpMuCXxDYikunJf6Rmg27qxTV+iplEPZ3
+         qabg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684406688; x=1686998688;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ad4zvcNwIJ/Y2lxdLHrr7ZSM1z29dpOAu+LMx49JNDM=;
-        b=j23IQzxt8kho69gQ4VWUIHGlWA8H2iOnQ20UrwW474Kg57zItvlCPJ2I2VWixRQM4e
-         EP0coQ+SLflkGeQfBp8p9K6C6YW8iS1eoLA2SQ5pbDBvCArKM184O7qVnoazhB/GVPfh
-         4a+EoGf4VoCe9WAoHfuHCl0Wn8XLUN6D3dzySk3r2fnCG8wRsxRvogYyNLT/zT4mBVWH
-         sC3lo3AbwGvc4EubsdoWgzKA+ZDDp6F2sN81WgAUxPCJwaxcTYoNzn3lBQ2pvIiJvPqA
-         v3OrF33gAS4GOGuooU13hjDDPBJdMkwd7RLvssBBoOddY07VMXwec6NqJqbwb7MWleR9
-         MpIQ==
-X-Gm-Message-State: AC+VfDx4jdRXV2tSkOX/5vq6/nd3KjWZkWXfyUlPukHeLKA0TQT9ToPz
-        Ol4wK3SP525lhkVnLR4ScSKi3Zeov2Ji5PW5yUg=
-X-Google-Smtp-Source: ACHHUZ4+auQIwwa/9xwdgQ6Fbzy71Bs2iS5UXlf38NxRYJCVolmxDRAUQbSyH+vxtPVwcz139sCAXC7Nz1vknB0W+TE=
-X-Received: by 2002:a05:6214:1bcb:b0:5e0:7ecb:8ffb with SMTP id
- m11-20020a0562141bcb00b005e07ecb8ffbmr4587748qvc.8.1684406688384; Thu, 18 May
- 2023 03:44:48 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684406693; x=1686998693;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rCGStx9g5JG1kB8zFftBk32aBir6PoC6mFtgEzyZU0s=;
+        b=MmOnatwm9LB206/s35sYpiM0UCdGPu3HsKTSpcIElQ44kHhhQaKev3lKrfe73l/zOb
+         /nk62+8PH2UEw5C4JHGB9TAcIMdp09NSt4nQrVcdkawKm1k0sfZbgCzWdFia5khPnhRI
+         Yv45U+Iz33hmcQmMLZmkR0bakd9M+J3tagldzv7i2W7WoRSwID40T/PcGj2BpQnaBw9Z
+         Va7U6bHniL9ntta8SHf1o+OWwNng9N+tvyghdnNiDBL+7GbRLEsyf9QHCk8ZNq2ilyc3
+         aw5ah49oD2FvRFXQQa1tgKCyeQ8uiZQVD06NhjIjj5QW3NOfkAMjEfD/mThNlRcf1/AT
+         Q2SA==
+X-Gm-Message-State: AC+VfDz0qjK9ANyxetcZTmoE5gNLhD/AGdf+c/Ax96AcUw0On7EoQ1Y+
+        xiU2Dor3jA3+zZ6xO9/6LH8D8A==
+X-Google-Smtp-Source: ACHHUZ4u4OZfOM7Ene4i2lALuClLD58G/+HPFj+5lrl+ySTSq8Be17IvLMS/gRDu3qUNY5Gd2Sa04A==
+X-Received: by 2002:a05:6512:48f:b0:4f2:5c2a:19ba with SMTP id v15-20020a056512048f00b004f25c2a19bamr1047611lfq.46.1684406693346;
+        Thu, 18 May 2023 03:44:53 -0700 (PDT)
+Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
+        by smtp.gmail.com with ESMTPSA id l26-20020a19c21a000000b004db3e330dcesm204242lfc.178.2023.05.18.03.44.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 May 2023 03:44:52 -0700 (PDT)
+Message-ID: <f785b434-2df4-c55d-2ea8-a039cd14c61c@linaro.org>
+Date:   Thu, 18 May 2023 12:44:46 +0200
 MIME-Version: 1.0
-References: <20230517195238.34069-1-mmkurbanov@sberdevices.ru> <20230517195238.34069-3-mmkurbanov@sberdevices.ru>
-In-Reply-To: <20230517195238.34069-3-mmkurbanov@sberdevices.ru>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 18 May 2023 13:44:11 +0300
-Message-ID: <CAHp75VdEc9x=v-NU4wqrg-S0vEjqc27JPqZAK0TJsNUc37ZTmg@mail.gmail.com>
-Subject: Re: [PATCH v4 2/2] leds: add aw20xx driver
-To:     Martin Kurbanov <mmkurbanov@sberdevices.ru>
-Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, kernel@sberdevices.ru
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 3/3] arm64: dts: qcom: sdm845-shift-axolotl: enable
+ flash LEDs
+Content-Language: en-US
+To:     Dylan Van Assche <me@dylanvanassche.be>, agross@kernel.org,
+        andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        amartinz@shiftphones.com
+References: <20230518061328.146847-1-me@dylanvanassche.be>
+ <20230518061328.146847-4-me@dylanvanassche.be>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230518061328.146847-4-me@dylanvanassche.be>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 10:52=E2=80=AFPM Martin Kurbanov
-<mmkurbanov@sberdevices.ru> wrote:
->
-> This commit adds support for AWINIC AW20036/AW20054/AW20072 LED driver.
-> This driver supports following AW200XX features:
->   - Individual 64-level DIM currents
 
-With or without below
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
-...
+On 18.05.2023 08:13, Dylan Van Assche wrote:
+> The SHIFT6mq (axolotl) is an SDM845-based smartphone with 2 flash LEDs.
+> One LED is white, the other one is yellow. Define both LEDs in the DTS
+> so they can be used as flash or torch and enable the flash LED
+> controller to control them in PMI8998.
+> 
+> Signed-off-by: Dylan Van Assche <me@dylanvanassche.be>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-> +static int aw200xx_probe_dt(struct device *dev, struct aw200xx *chip)
-
-_dt is not fully correct suffix, it's now firmware properties, so perhaps _=
-fw?
-
-...
-
-I would do
-
-  i =3D 0;
-
-here and drop the assignment in the definition block to be more robust
-against sudden reuse of i in between.
-
-> +       device_for_each_child_node(dev, child) {
-
-> +               i++;
-> +       }
-
---=20
-With Best Regards,
-Andy Shevchenko
+Konrad
+>  .../boot/dts/qcom/sdm845-shift-axolotl.dts    | 22 +++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts b/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
+> index 0ad891348e0c..e7fc0c3cae58 100644
+> --- a/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
+> +++ b/arch/arm64/boot/dts/qcom/sdm845-shift-axolotl.dts
+> @@ -554,6 +554,28 @@ led@5 {
+>  	};
+>  };
+>  
+> +&pmi8998_flash {
+> +	status = "okay";
+> +
+> +	led-0 {
+> +		function = LED_FUNCTION_FLASH;
+> +		color = <LED_COLOR_ID_WHITE>;
+> +		led-sources = <1>;
+> +		led-max-microamp = <180000>;
+> +		flash-max-microamp = <1000000>;
+> +		flash-max-timeout-us = <1280000>;
+> +	};
+> +
+> +	led-1 {
+> +		function = LED_FUNCTION_FLASH;
+> +		color = <LED_COLOR_ID_YELLOW>;
+> +		led-sources = <2>;
+> +		led-max-microamp = <180000>;
+> +		flash-max-microamp = <1000000>;
+> +		flash-max-timeout-us = <1280000>;
+> +	};
+> +};
+> +
+>  &qup_uart9_rx {
+>  	drive-strength = <2>;
+>  	bias-pull-up;
