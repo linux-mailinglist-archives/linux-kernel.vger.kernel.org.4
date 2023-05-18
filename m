@@ -2,66 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3595708387
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:05:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 834EF708391
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:07:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231585AbjEROFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 10:05:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43278 "EHLO
+        id S231591AbjEROG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 10:06:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230247AbjEROFv (ORCPT
+        with ESMTP id S231605AbjEROGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 10:05:51 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5BFD1B5
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:05:49 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2ac78bb48eeso21752441fa.1
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:05:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684418748; x=1687010748;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b7TdkTgtpE/I5dsPVP8TWDXytE/RrW+PwM2s8w+gwFY=;
-        b=GS7wjn4PcfDHmmm7bCvTMJ6/VxFscD+K7r2sSRTWA92AzvdGAW+mLHSZ6LQgt3becE
-         YCm/Gb1vZgOxcrPf0wjX2kToPXXJz9yKj6RJ0ONCwahGiZN279j/WDxfhzh7eSWWn8Cu
-         LAabtXv4OEQ1iG8SuhAseIrvATG+9WGVS+JoP7UoRa0Di7NVc81cPV/Yc4Cnz96rTBoi
-         j3uUmYaAGUvTcnPI55igt+XDtOZtuzZHbtYBTCd6MNDF/oG1cGxMZofUiqtBYjGcWjUX
-         xotMhzyRhMsY2Wu5+aXROPe4A8D77YP2lOfomGxpZqjqvycqK4GGoDUm2ESKMtrpTsqG
-         58FA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684418748; x=1687010748;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=b7TdkTgtpE/I5dsPVP8TWDXytE/RrW+PwM2s8w+gwFY=;
-        b=JihK6Whs4qM4Yb+f0Cehb/t6y7PRA+zc6m+//jev8pC4OhF0WxxOURu0mVZGmExSVx
-         jDs1YPxHbNKlnow0nZRxzo0FAYkkby+PBKHCmcmjrgLvHG9DNJv4gyiEpJ1RSbqrvVFI
-         BrtbxOji34nWg1zky310/+eJP600d9ErEb7m21ph/Ko5LjDjSZCyoUd1zJETt2wpG/Ie
-         sUS6zuxW+FbIgHH+Jk+juJ053MigEinEiPT8m4azSR0aDFtnQ9eLwVNYAuQ/j/zp64Bj
-         hyoF8OB4nBk39OLeM+eTPnD3wDW0JhudE5VrU60zreCJKKASgDuc/v1P+lZ+V3bYiNOC
-         pINw==
-X-Gm-Message-State: AC+VfDw4S8MFW6FXpd25Sk/yfaN5jQ3th352zOV+/CIOl4JW3eGpxMw0
-        DNAgz39NVVSZyWVNlJyF8nLZyYNaC+So3tv0zgU=
-X-Google-Smtp-Source: ACHHUZ6gAkeIlFb6/m30ztG2GkuG0Lv/Dt9j4d62CUz8C9sY+cA7/bnkyPTgGNRJcf5LpsMTOTseuRZu1v5Bqx9s4E0=
-X-Received: by 2002:a2e:3517:0:b0:2a7:a5f7:9651 with SMTP id
- z23-20020a2e3517000000b002a7a5f79651mr10655475ljz.23.1684418747549; Thu, 18
- May 2023 07:05:47 -0700 (PDT)
+        Thu, 18 May 2023 10:06:48 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A0D10E2;
+        Thu, 18 May 2023 07:06:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1684418803; x=1715954803;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+Ql81PbdPYsst1Egf8I5nhPuh1Xe/UW0zjJnF/GxGws=;
+  b=THmSrP25rA3Og1E0a2YgXH94O9uf3/cNleB1dSlSL5zt1DKyvm1Sg6UD
+   vwufVkjt9k6x9LwycVMYJTve7ig+M6K79R5p8xzM/kw4jddYsQndzbOzL
+   UQKi3pwU4x9BobbnKUQdoKrN+xaQh0nqnNW5rOhXoAXJlIGXx0jCvuRSD
+   euImVSNN3tbcIeVpoKTIibdIg2LZt9eRH4FLTnlFnt30bupVEGVnRsfAA
+   qscx6lkAWzbwJ8fnoo6HDaTKPtKJeKo3QibZEO8ummKvJoaxAVx4TdCLf
+   NC3NCpHInc7pPOXjO6uHXuU4wG+ezhLQ7B4oIn2HvWfkBV+GdfWla5cEl
+   A==;
+X-IronPort-AV: E=Sophos;i="5.99,285,1677567600"; 
+   d="asc'?scan'208";a="216119339"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 18 May 2023 07:06:41 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Thu, 18 May 2023 07:06:41 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Thu, 18 May 2023 07:06:38 -0700
+Date:   Thu, 18 May 2023 15:06:17 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Anup Patel <anup@brainfault.org>
+CC:     Andrew Jones <ajones@ventanamicro.com>, <palmer@dabbelt.com>,
+        <conor@kernel.org>, Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alistair Francis <alistair.francis@wdc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Jessica Clarke <jrtc27@jrtc27.com>,
+        Rick Chen <rick@andestech.com>, Leo <ycliang@andestech.com>,
+        <linux-riscv@lists.infradead.org>, <qemu-riscv@nongnu.org>,
+        <u-boot@lists.denx.de>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1] dt-bindings: riscv: deprecate riscv,isa
+Message-ID: <20230518-hammock-doornail-478e8ea8e6a7@wendy>
+References: <20230518-thermos-sanitary-cf3fbc777ea1@wendy>
+ <20230518-4050231ca8dbe93c08cf9c9a@orel>
+ <CAAhSdy07Mg_JBF+4ucGFiWdBKh-Ass5G_aUWqBqTnDSFp7S=0A@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230518091431.299-1-ssawgyw@gmail.com> <ab37a497-3caa-1313-90a8-328cfe99c8d3@arm.com>
-In-Reply-To: <ab37a497-3caa-1313-90a8-328cfe99c8d3@arm.com>
-From:   Yuwei Guan <ssawgyw@gmail.com>
-Date:   Thu, 18 May 2023 22:05:11 +0800
-Message-ID: <CALJQGLkLBrgtiz1f=_NHZG5jtwn2TfzqB4yCgfxxmQWXbfN7dQ@mail.gmail.com>
-Subject: Re: [PATCH v3] memblock: Add flags and nid info in memblock debugfs
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     rppt@kernel.org, akpm@linux-foundation.org, tsahu@linux.ibm.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="inIwqqp4mBpjB1FE"
+Content-Disposition: inline
+In-Reply-To: <CAAhSdy07Mg_JBF+4ucGFiWdBKh-Ass5G_aUWqBqTnDSFp7S=0A@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,150 +77,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Anshuman Khandual <anshuman.khandual@arm.com> =E4=BA=8E2023=E5=B9=B45=E6=9C=
-=8818=E6=97=A5=E5=91=A8=E5=9B=9B 18:12=E5=86=99=E9=81=93=EF=BC=9A
->
->
->
-> On 5/18/23 14:44, Yuwei Guan wrote:
-> > Currently, the memblock debugfs can display the count of memblock_type =
-and
-> > the base and end of the reg. However, when memblock_mark_*() or
-> > memblock_set_node() is executed on some range, the information in the
-> > existing debugfs cannot make it clear why the address is not consecutiv=
-e.
-> >
-> > For example,
-> > cat /sys/kernel/debug/memblock/memory
-> >    0: 0x0000000080000000..0x00000000901fffff
-> >    1: 0x0000000090200000..0x00000000905fffff
-> >    2: 0x0000000090600000..0x0000000092ffffff
-> >    3: 0x0000000093000000..0x00000000973fffff
-> >    4: 0x0000000097400000..0x00000000b71fffff
-> >    5: 0x00000000c0000000..0x00000000dfffffff
-> >    6: 0x00000000e2500000..0x00000000f87fffff
-> >    7: 0x00000000f8800000..0x00000000fa7fffff
-> >    8: 0x00000000fa800000..0x00000000fd3effff
-> >    9: 0x00000000fd3f0000..0x00000000fd3fefff
-> >   10: 0x00000000fd3ff000..0x00000000fd7fffff
-> >   11: 0x00000000fd800000..0x00000000fd901fff
-> >   12: 0x00000000fd902000..0x00000000fd909fff
-> >   13: 0x00000000fd90a000..0x00000000fd90bfff
-> >   14: 0x00000000fd90c000..0x00000000ffffffff
-> >   15: 0x0000000880000000..0x0000000affffffff
-> >
-> > So we can add flags and nid to this debugfs.
-> >
-> > For example,
-> > cat /sys/kernel/debug/memblock/memory
-> >    0: 0x0000000080000000..0x00000000901fffff     NONE    0
-> >    1: 0x0000000090200000..0x00000000905fffff    NOMAP    0
-> >    2: 0x0000000090600000..0x0000000092ffffff     NONE    0
-> >    3: 0x0000000093000000..0x00000000973fffff    NOMAP    0
-> >    4: 0x0000000097400000..0x00000000b71fffff     NONE    0
-> >    5: 0x00000000c0000000..0x00000000dfffffff     NONE    0
-> >    6: 0x00000000e2500000..0x00000000f87fffff     NONE    0
-> >    7: 0x00000000f8800000..0x00000000fa7fffff    NOMAP    0
-> >    8: 0x00000000fa800000..0x00000000fd3effff     NONE    0
-> >    9: 0x00000000fd3f0000..0x00000000fd3fefff    NOMAP    0
-> >   10: 0x00000000fd3ff000..0x00000000fd7fffff     NONE    0
-> >   11: 0x00000000fd800000..0x00000000fd901fff    NOMAP    0
-> >   12: 0x00000000fd902000..0x00000000fd909fff     NONE    0
-> >   13: 0x00000000fd90a000..0x00000000fd90bfff    NOMAP    0
-> >   14: 0x00000000fd90c000..0x00000000ffffffff     NONE    0
-> >   15: 0x0000000880000000..0x0000000affffffff     NONE    0
->
-> Although, Mike had suggested to keep these flags print last, above
-> format looks good as well.
->
-> >
-> > Signed-off-by: Yuwei Guan <ssawgyw@gmail.com>
-> > ---
-> > v3:
-> > - show string value for each memblock flag
-> > ---
-> >  mm/memblock.c | 12 +++++++++++-
-> >  1 file changed, 11 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/mm/memblock.c b/mm/memblock.c
-> > index 511d4783dcf1..5fba53f98b2d 100644
-> > --- a/mm/memblock.c
-> > +++ b/mm/memblock.c
-> > @@ -2143,13 +2143,23 @@ static int memblock_debug_show(struct seq_file =
-*m, void *private)
-> >       struct memblock_region *reg;
-> >       int i;
-> >       phys_addr_t end;
-> > +     static const char flagname[BITS_PER_LONG][8] =3D {
-> > +             [0 ... (BITS_PER_LONG-1)] =3D "?",
->
-> Minor nit -
->
-> Although checkpatch does not complain, should there be spaces between
-> the operator and operands e.g (BITS_PER_LONG - 1).
->
-> > +
-> > +             [ilog2(MEMBLOCK_HOTPLUG)] =3D "HOTPLUG",
-> > +             [ilog2(MEMBLOCK_MIRROR)] =3D "MIRROR",
-> > +             [ilog2(MEMBLOCK_NOMAP)] =3D "NOMAP",
-> > +             [ilog2(MEMBLOCK_DRIVER_MANAGED)] =3D "DRV_MNG",
-> > +     };
->
-> Also, BITS_PER_LONG sized array is really required here ? as there are
-> just four available memblock flags.
->
-Hi Anshuman,
-The main reason to use BITS_PER_LONG is to reserve.
-If the flagname buffer is (ilog2(MEMBLOCK_DRIVER_MANAGED) + 1),
-memblock_flags adds a new attribute and does not add its name in debugfs,
-it will cause an overflow.
-But BITS_PER_LONG is too wasteful, so I implement a new solution.
-Please help to check it.
+--inIwqqp4mBpjB1FE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-        struct memblock_type *type =3D m->private;
-        struct memblock_region *reg;
--       int i;
-+       int i, j;
-        phys_addr_t end;
-+       static const char *flagname[] =3D {
-+               [ilog2(MEMBLOCK_HOTPLUG)] =3D "HOTPLUG",
-+               [ilog2(MEMBLOCK_MIRROR)] =3D "MIRROR",
-+               [ilog2(MEMBLOCK_NOMAP)] =3D "NOMAP",
-+               [ilog2(MEMBLOCK_DRIVER_MANAGED)] =3D "DRV_MNG",
-+       };
+On Thu, May 18, 2023 at 07:13:15PM +0530, Anup Patel wrote:
+> On Thu, May 18, 2023 at 4:02=E2=80=AFPM Andrew Jones <ajones@ventanamicro=
+=2Ecom> wrote:
+> > On Thu, May 18, 2023 at 09:58:30AM +0100, Conor Dooley wrote:
 
-        for (i =3D 0; i < type->cnt; i++) {
-                reg =3D &type->regions[i];
-                end =3D reg->base + reg->size - 1;
+> > > -  riscv,isa:
+> > > -    description:
+> > > -      Identifies the specific RISC-V instruction set architecture
+> > > -      supported by the hart.  These are documented in the RISC-V
+> > > -      User-Level ISA document, available from
+> > > -      https://riscv.org/specifications/
+> > > -
+> > > -      Due to revisions of the ISA specification, some deviations
+> > > -      have arisen over time.
+> > > -      Notably, riscv,isa was defined prior to the creation of the
+> > > -      Zicsr and Zifencei extensions and thus "i" implies
+> > > -      "zicsr_zifencei".
+> > > -
+> > > -      While the isa strings in ISA specification are case
+> > > -      insensitive, letters in the riscv,isa string must be all
+> > > -      lowercase to simplify parsing.
+> > > -    $ref: "/schemas/types.yaml#/definitions/string"
+> > > -    pattern: ^rv(?:64|32)imaf?d?q?c?b?k?j?p?v?h?(?:[hsxz](?:[a-z])+)=
+?(?:_[hsxz](?:[a-z])+)*$
+> > > -
+> > >    # RISC-V requires 'timebase-frequency' in /cpus, so disallow it he=
+re
+> > >    timebase-frequency: false
+> > >
+> > > @@ -133,8 +117,13 @@ properties:
+> > >        DMIPS/MHz, relative to highest capacity-dmips-mhz
+> > >        in the system.
+> > >
+> > > +oneOf:
+> > > +  - required:
+> > > +      - riscv,isa
+> >
+> > This is the part Anup keeps reminding me about. We can create better wa=
+ys
+> > to handle extensions in DT and ACPI, but we'll still need to parse ISA
+> > strings to handle legacy DTs and holdouts that keep creating ISA string=
+s,
+> > at least during the deprecation period, since ISA strings are still "the
+> > way to do it" according to the spec.
+>=20
+> Coming up with an alternate way in DT is fine but we can't deprecate
+> ISA strings since ISA strings are widely used:
+> 1) Various bootloaders
 
-                seq_printf(m, "%4d: ", i);
--               seq_printf(m, "%pa..%pa\n", &reg->base, &end);
-+               seq_printf(m, "%pa..%pa ", &reg->base, &end);
-+               seq_printf(m, "%4d ", memblock_get_region_node(reg));
-+               if (reg->flags) {
-+                       for (j =3D 0; j < ARRAY_SIZE(flagname); j++) {
-+                               if (reg->flags & (1U << j)) {
-+                                       seq_printf(m, "%s\n", flagname[j]);
-+                                       break;
-+                               }
-+                       }
-+                       if (j =3D=3D ARRAY_SIZE(flagname))
-+                               seq_printf(m, "%s\n", "UNKNOWN");
-+               } else {
-+                       seq_printf(m, "%s\n", "NONE");
-+               }
-        }
+Aye, for the reason, as I mentioned earlier and in the RFC thread,
+removing existing parsers isn't a good idea.
+
+> 2) It is part of /proc/cpuinfo
+
+That is irrelevant.
+
+> 3) Hypervisors use it to communicate HW features to Guest/VM.
+> Hypervisors can't get away from generating ISA strings because
+> Hypervisors don't know what is running inside Guest/VM.
+
+Generate both :) As things stand, your guests could interpret what you
+communicate to them via riscv,isa differently!
+
+> In the case of ACPI, it is a very different situation. Like Sunil mention=
+ed,
+> ACPI will always follow mechanisms defined by RVI (such as ISA string).
+> Other ACPI approaches such as GUID for ISA extension are simply not
+> scalable and will take a lot more memory for ACPI tables compared to
+> ISA strings.
+
+My proposal should actually suit ACPI, at least for Linux, as it would
+be a chance to align currently misaligned definitions. I won't speak to
+GUIDs or whatever as that's someone else's problem :)
+
+> > Also, if we assume the wording in the spec does get shored up, then,
+> > unless I'm missing something, the list of advantages for this boolean
+> > proposal from your commit message would be
+>=20
+> IMO, we should try our best to have the wordings changed in RVI spec.
+
+Yes, doing so is beneficial for all of us regardless of what happens
+here. I do think that it is partially orthogonal - it allows us to not
+design an interface that needs to be capable of communicating a wide
+variety of versions, but I don't think it solves some of the issues
+that riscv,isa has. If I thought it did, I would not have gone to the
+trouble of respinning this patch out of the other approach.
+
+> > * More character choices for name -- probably not a huge gain for ratif=
+ied
+> >   extensions, since the boolean properties will likely still use the sa=
+me
+> >   name as the ISA string (riscv,isa-extension-<name>). But, for vendor
+> >   extensions, this is indeed a major improvement, since vendor extension
+> >   boolean property names may need to be extended in unambiguous ways to
+> >   handle changes in the extension.
 > >
-> >       for (i =3D 0; i < type->cnt; i++) {
-> >               reg =3D &type->regions[i];
-> >               end =3D reg->base + reg->size - 1;
+> > * Simpler, more complete DT validation (but we still need a best effort
+> >   for legacy ISA strings)
 > >
-> >               seq_printf(m, "%4d: ", i);
-> > -             seq_printf(m, "%pa..%pa\n", &reg->base, &end);
-> > +             seq_printf(m, "%pa..%pa ", &reg->base, &end);
-> > +             seq_printf(m, "%8s ", reg->flags ? flagname[ilog2(reg->fl=
-ags)] : "NONE");
-> > +             seq_printf(m, "%4d\n", memblock_get_region_node(reg));
-> >       }
-> >       return 0;
-> >  }
+> > * Simpler DT parsing (but we still need the current parser for legacy I=
+SA
+> >   strings)
+> >
+> > > +  - required:
+> > > +      - riscv,isa-base
+> > > +
+> > >  required:
+> > > -  - riscv,isa
+> > >    - interrupt-controller
+> > >
+> > >  additionalProperties: true
+> > > @@ -177,7 +166,13 @@ examples:
+> > >                  i-tlb-size =3D <32>;
+> > >                  mmu-type =3D "riscv,sv39";
+> > >                  reg =3D <1>;
+> > > -                riscv,isa =3D "rv64imafdc";
+> > > +                riscv,isa-base =3D "rv64i";
+> > > +                riscv,isa-extension-i;
+> > > +                riscv,isa-extension-m;
+> > > +                riscv,isa-extension-a;
+> > > +                riscv,isa-extension-f;
+> > > +                riscv,isa-extension-d;
+> > > +                riscv,isa-extension-c;
+>=20
+> One downside of this new approach is it will increase the size of DTB.
+> Imaging 50 such DT properties in 46 CPU DT nodes.
+
+I should do a comparison between 50 extensions in riscv,isa and doing
+this 50 times and see what the sizes are.
+
+--inIwqqp4mBpjB1FE
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGYw2QAKCRB4tDGHoIJi
+0hSeAP9jzSAva+PzLu6ehqVimB0Aoyoav0gV6v8bchdyV0ETdgEA0jVTNEscUYpu
+ogN+UZoE7KVethG+zRAi1/oDPc87rgo=
+=HFE9
+-----END PGP SIGNATURE-----
+
+--inIwqqp4mBpjB1FE--
