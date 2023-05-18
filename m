@@ -2,148 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20586708057
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 13:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C58B2708061
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 13:50:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231718AbjERLtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 07:49:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42242 "EHLO
+        id S231670AbjERLuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 07:50:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231431AbjERLtH (ORCPT
+        with ESMTP id S231657AbjERLuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 07:49:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1162118;
-        Thu, 18 May 2023 04:48:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 18 May 2023 07:50:18 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87FF1BF4;
+        Thu, 18 May 2023 04:49:10 -0700 (PDT)
+Received: from [192.168.2.250] (109-252-144-198.dynamic.spd-mgts.ru [109.252.144.198])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB40A64EDC;
-        Thu, 18 May 2023 11:48:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB4D1C433EF;
-        Thu, 18 May 2023 11:48:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684410490;
-        bh=5rxAU8gdxN1ANNzaz9AdhjVNTPRoenRpbGIWMsQfU4w=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=eVgA9C24n1V/7bjWNt/MFHa2FAnb+8uX24YF0bfaqI+n2uU86gaNNLvnJvTPy2h0u
-         mzmMNL4mC7Iv7AvqfwHIA9G9ibv96tTkXSQCog7/MUUVORddGN6N+tp6QRz7RVGvZa
-         0c4rrwAy4Bl9Q+gIAGIs75p0tPNaKQvgeHqryuU+BvFHe0voa9dJD3Ox4r79+jXqzp
-         E/3xSXXpUnpdfGbZWx+LUnrw6U9fuTep2qhxnuOpnZ1GCC2xnB4MaVAT5BvNzQA7oH
-         ISArStV4NaqnmwgskcuEltftzmabNRP0wSvpmQ288q/XTm+8QneDSB49jf3ayM81XP
-         z9Kt4JGRJ4IBg==
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Chuck Lever <chuck.lever@oracle.com>
-Cc:     Jan Kara <jack@suse.cz>, Amir Goldstein <amir73il@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Neil Brown <neilb@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Theodore T'so <tytso@mit.edu>, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Steve French <sfrench@samba.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Tom Talpey <tom@talpey.com>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-mm@kvack.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org
-Subject: [PATCH v4 9/9] btrfs: convert to multigrain timestamps
-Date:   Thu, 18 May 2023 07:47:42 -0400
-Message-Id: <20230518114742.128950-10-jlayton@kernel.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230518114742.128950-1-jlayton@kernel.org>
-References: <20230518114742.128950-1-jlayton@kernel.org>
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E580C6605960;
+        Thu, 18 May 2023 12:49:00 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684410541;
+        bh=OXwsteA01UCrw860jLSNiqKLBDWtvCA65iFbkrUoWCs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Ga8El9uipKqxlT7LtpgOqzFD89dm1Pi6nD9bi8IfwjAyHCoGHmvQKJC7ZO2IvVn6V
+         UwC0iPvK+u7JLBOZnRwpZM1TyDdQfpg4QujDv4KG+4FeAtdkBb+rdnZtM7W46WDpnA
+         nfTBfkD2lQASXkPl0ge0byqDrEwMqybkaiSxdVtVAZT0sOkftI1ObSqeVpBAEsy7Ld
+         qL3aXSG1bw+rRe47tPPoY/58/dVHd380LTrWsM9+VouaNZlrfDOo5wlWMK+gs1EW0Z
+         MF589vCG4unnbJXhRy5M6Zye+qweNPFtHEW13Wt3uM7Da2Zn7jU5gbxlhcpNwBur+o
+         en1Clw7qe3iwQ==
+Message-ID: <7eddaf8c-ab04-7670-fc45-15f0fce5eff2@collabora.com>
+Date:   Thu, 18 May 2023 14:48:57 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v6 5/5] mfd: tps6586x: register restart handler
+Content-Language: en-US
+To:     Benjamin Bara <bbara93@gmail.com>, Wolfram Sang <wsa@kernel.org>,
+        Lee Jones <lee@kernel.org>, rafael.j.wysocki@intel.com
+Cc:     peterz@infradead.org, jonathanh@nvidia.com,
+        richard.leitner@linux.dev, treding@nvidia.com,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-tegra@vger.kernel.org,
+        Benjamin Bara <benjamin.bara@skidata.com>
+References: <20230327-tegra-pmic-reboot-v6-0-af44a4cd82e9@skidata.com>
+ <20230327-tegra-pmic-reboot-v6-5-af44a4cd82e9@skidata.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <20230327-tegra-pmic-reboot-v6-5-af44a4cd82e9@skidata.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
----
- fs/btrfs/delayed-inode.c | 2 +-
- fs/btrfs/inode.c         | 2 +-
- fs/btrfs/super.c         | 5 +++--
- fs/btrfs/tree-log.c      | 2 +-
- 4 files changed, 6 insertions(+), 5 deletions(-)
+On 5/9/23 22:03, Benjamin Bara wrote:
+> From: Benjamin Bara <benjamin.bara@skidata.com>
+> 
+> There are a couple of boards which use a tps6586x as
+> "ti,system-power-controller", e.g. the tegra20-tamonten.dtsi.
+> For these, the only registered restart handler is the warm reboot via
+> tegra's PMC. As the bootloader of the tegra20 requires the VDE, it must
+> be ensured that VDE is enabled (which is the case after a cold reboot).
+> For the "normal reboot", this is basically the case since 8f0c714ad9be.
+> However, this workaround is not executed in case of an emergency restart.
+> In case of an emergency restart, the system now simply hangs in the
+> bootloader, as VDE is not enabled (because it is not used).
+> 
+> The TPS658629-Q1 provides a SOFT RST bit in the SUPPLYENE reg to request
+> a (cold) reboot, which takes at least 20ms (as the data sheet states).
+> This avoids the hang-up.
+> 
+> Tested on a TPS658640.
+> 
+> Signed-off-by: Benjamin Bara <benjamin.bara@skidata.com>
+> ---
+>  drivers/mfd/tps6586x.c | 26 ++++++++++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+> 
+> diff --git a/drivers/mfd/tps6586x.c b/drivers/mfd/tps6586x.c
+> index b12c9e18970a..3b8faa058e59 100644
+> --- a/drivers/mfd/tps6586x.c
+> +++ b/drivers/mfd/tps6586x.c
+> @@ -30,6 +30,7 @@
+>  #include <linux/mfd/tps6586x.h>
+>  
+>  #define TPS6586X_SUPPLYENE	0x14
+> +#define SOFT_RST_BIT		BIT(0)
+>  #define EXITSLREQ_BIT		BIT(1)
+>  #define SLEEP_MODE_BIT		BIT(3)
+>  
+> @@ -475,6 +476,24 @@ static int tps6586x_power_off_handler(struct sys_off_data *data)
+>  	return notifier_from_errno(-ETIME);
+>  }
+>  
+> +static int tps6586x_restart_handler(struct sys_off_data *data)
+> +{
+> +	int ret;
+> +
+> +	/* TPS6586X only provides a hard/cold reboot, skip others. */
+> +	if (data->mode != REBOOT_UNDEFINED && data->mode != REBOOT_COLD &&
+> +	    data->mode != REBOOT_HARD)
+> +		return NOTIFY_DONE;
 
-diff --git a/fs/btrfs/delayed-inode.c b/fs/btrfs/delayed-inode.c
-index 6b457b010cbc..8307fd69da43 100644
---- a/fs/btrfs/delayed-inode.c
-+++ b/fs/btrfs/delayed-inode.c
-@@ -1810,7 +1810,7 @@ static void fill_stack_inode_item(struct btrfs_trans_handle *trans,
- 	btrfs_set_stack_timespec_sec(&inode_item->ctime,
- 				     inode->i_ctime.tv_sec);
- 	btrfs_set_stack_timespec_nsec(&inode_item->ctime,
--				      inode->i_ctime.tv_nsec);
-+				      ctime_nsec_peek(inode));
- 
- 	btrfs_set_stack_timespec_sec(&inode_item->otime,
- 				     BTRFS_I(inode)->i_otime.tv_sec);
-diff --git a/fs/btrfs/inode.c b/fs/btrfs/inode.c
-index 2335b5e1cecc..b27d4dda6024 100644
---- a/fs/btrfs/inode.c
-+++ b/fs/btrfs/inode.c
-@@ -3970,7 +3970,7 @@ static void fill_inode_item(struct btrfs_trans_handle *trans,
- 	btrfs_set_token_timespec_sec(&token, &item->ctime,
- 				     inode->i_ctime.tv_sec);
- 	btrfs_set_token_timespec_nsec(&token, &item->ctime,
--				      inode->i_ctime.tv_nsec);
-+				      ctime_nsec_peek(inode));
- 
- 	btrfs_set_token_timespec_sec(&token, &item->otime,
- 				     BTRFS_I(inode)->i_otime.tv_sec);
-diff --git a/fs/btrfs/super.c b/fs/btrfs/super.c
-index ec18e2210602..fc6abf8b1f42 100644
---- a/fs/btrfs/super.c
-+++ b/fs/btrfs/super.c
-@@ -2144,7 +2144,7 @@ static struct file_system_type btrfs_fs_type = {
- 	.name		= "btrfs",
- 	.mount		= btrfs_mount,
- 	.kill_sb	= btrfs_kill_super,
--	.fs_flags	= FS_REQUIRES_DEV | FS_BINARY_MOUNTDATA,
-+	.fs_flags	= FS_REQUIRES_DEV | FS_BINARY_MOUNTDATA | FS_MULTIGRAIN_TS,
- };
- 
- static struct file_system_type btrfs_root_fs_type = {
-@@ -2152,7 +2152,8 @@ static struct file_system_type btrfs_root_fs_type = {
- 	.name		= "btrfs",
- 	.mount		= btrfs_mount_root,
- 	.kill_sb	= btrfs_kill_super,
--	.fs_flags	= FS_REQUIRES_DEV | FS_BINARY_MOUNTDATA | FS_ALLOW_IDMAP,
-+	.fs_flags	= FS_REQUIRES_DEV | FS_BINARY_MOUNTDATA |
-+			  FS_ALLOW_IDMAP | FS_MULTIGRAIN_TS,
- };
- 
- MODULE_ALIAS_FS("btrfs");
-diff --git a/fs/btrfs/tree-log.c b/fs/btrfs/tree-log.c
-index 9b212e8c70cc..9a4d1b2ab204 100644
---- a/fs/btrfs/tree-log.c
-+++ b/fs/btrfs/tree-log.c
-@@ -4150,7 +4150,7 @@ static void fill_inode_item(struct btrfs_trans_handle *trans,
- 	btrfs_set_token_timespec_sec(&token, &item->ctime,
- 				     inode->i_ctime.tv_sec);
- 	btrfs_set_token_timespec_nsec(&token, &item->ctime,
--				      inode->i_ctime.tv_nsec);
-+				      ctime_nsec_peek(inode));
- 
- 	/*
- 	 * We do not need to set the nbytes field, in fact during a fast fsync
+Not sure whether it's worthwhile to care about the reboot mode. If we
+would really care, then the supported modes should be a part of sys-off
+handler definition. Maybe Rafael could comment on it.
+
+Otherwise looks good.
+
+Reviewed-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+
 -- 
-2.40.1
+Best regards,
+Dmitry
 
