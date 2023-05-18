@@ -2,303 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 730DE707B86
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 10:00:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5511A707B8A
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 10:01:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229829AbjERIAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 04:00:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43722 "EHLO
+        id S230050AbjERIBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 04:01:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbjERIAr (ORCPT
+        with ESMTP id S229931AbjERIBF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 04:00:47 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B2A426AA
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 01:00:41 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-64cfb8d33a5so730993b3a.2
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 01:00:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684396840; x=1686988840;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=TgYSnMvA6ezwyyP8eCZTJXYpJzBXYDRQ57YFla6122E=;
-        b=v1AjnKj/ROhgb72wjEOK4l0EkscR9zKahVAFiz7Eqzo3NBmIw/d75o/qY+GaAHMCx1
-         4CX6PPkTGRyWikgyJ/U5JQo7w3NjDwVe/LbvKpmsP3kiOwlqC/t0cS61Uv7tFjkrqgjH
-         A3NZxc4vUUlPe0HyiVZAzm7FdbyZv1s8s1RJbP9Pr+qwP34OLl7j3NZ0WdPBMcuXGlxU
-         9E2M2PoE/SKh5FW4DhzWTOY/s9tF4Aiv2LsKKEpZ5HOwRhHAOVeUGn3lkBgMvj3GQh6f
-         V5Uw5rQuy6PfFTveoZXc4Z2o0H6F29HwcUvOq7J1T98WRBkOQG8dbwPS21NR4+kFRsLI
-         yxxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684396840; x=1686988840;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TgYSnMvA6ezwyyP8eCZTJXYpJzBXYDRQ57YFla6122E=;
-        b=TpEV/UNi/WMCxp1/66PefNt7teeeHMS5F6SH2frKRVsjPLE1yfnbzB/F3p33T1+kWQ
-         loTm1HSRHIW2HULUlWqWGo7EcQVr++4rkcERgrBEDTn5X+nWFCQFnKdtH3/vrUjLBUp4
-         1zjjcaXLLV7Px9aR3AffOSxtHu7AI2SYAmt+iSnchTJzHMBZJ17yRNrCXrQf3WPY10hB
-         LAgBn3i/qkM+OGHa8M0JXCxM4glwn71k8eUxfk2Eu4dwVuuFcUVyYCh3fasM67N6ql0d
-         FMHiVD/0H53+M8uIsNxWY+2Xw4aNfHnY/rtlam5mbe3qUjPrP6qHiFLCJefxtA4WNJaU
-         F0Zg==
-X-Gm-Message-State: AC+VfDzdjdV5En3Giw5stsRqki3s0FYoEuVcRC/IxhZY+hBahhyOYlVg
-        rOmg7SzUn9nBlJOUlCGt9L0EdQ==
-X-Google-Smtp-Source: ACHHUZ4ZG2/MI8h24ZuyOpvIlhFgQbAxt+8I+M88Y/0QT+7HPVi8prftrMVpU7oHQ9VJeHaauwrnCA==
-X-Received: by 2002:a05:6a20:4409:b0:101:2ad0:134c with SMTP id ce9-20020a056a20440900b001012ad0134cmr1543687pzb.45.1684396840408;
-        Thu, 18 May 2023 01:00:40 -0700 (PDT)
-Received: from localhost.localdomain ([2401:4900:1c60:d309:883d:817e:8e91:be39])
-        by smtp.gmail.com with ESMTPSA id t14-20020a63444e000000b0051b36aee4f6sm659358pgk.83.2023.05.18.01.00.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 01:00:40 -0700 (PDT)
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        bhupesh.sharma@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski@linaro.org, devicetree@vger.kernel.org
-Subject: [PATCH v3 1/1] arm64: dts: qcom: sm6115: Add CPU idle-states
-Date:   Thu, 18 May 2023 13:30:31 +0530
-Message-Id: <20230518080031.2509250-1-bhupesh.sharma@linaro.org>
-X-Mailer: git-send-email 2.38.1
+        Thu, 18 May 2023 04:01:05 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCD52708;
+        Thu, 18 May 2023 01:00:56 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 7B0C860173;
+        Thu, 18 May 2023 10:00:43 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1684396843; bh=d02Uw1o7ei0qXRNWctuY3MCRE3pmghS5xgEUwxNhwkg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=KgW/umBSkF0WjYdsoKHiLB45Um0cBYWtGtfmacCc5P0kQarTneXGlNvCxGy05blDN
+         Zd+MXpxIHmBLxyypsFvQKT+X1TuQwmCEEwjugJlyECYGg1R2Nd2u4Qn16XSfiRKi1S
+         R+9qea5bhc3BlgGtTJPz+RsfbzNNHyE69yTYyfdzWjHDIWp227Y5p4zNglvAoBC+f7
+         MxUqpAabJTMF13aKFucRcuehdsd72uNmjqa8a17p+0NWc2rje8RcHoSfiJTLiNuo/s
+         KkjYYoohJIMZlpN3/ZIu42AatYxGs6SLo6F4M72M3p7wsqVeNIaqDjk49Sx3SjIpaa
+         Qlzf3nvjVElDg==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id nnDtl1L0V8Vj; Thu, 18 May 2023 10:00:41 +0200 (CEST)
+Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
+        by domac.alu.hr (Postfix) with ESMTPSA id 06CF460171;
+        Thu, 18 May 2023 10:00:40 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1684396841; bh=d02Uw1o7ei0qXRNWctuY3MCRE3pmghS5xgEUwxNhwkg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ZPjM40Rc/4mmWx7D69vqErg/uOoxoDXYHTwKWyfERFES2Cz71f3w1dr+KD+LT80ME
+         VhrFYA6Zcf+BuzH6sBjCboR1EOEjVuSVPjlZ6nbcuu64COBZsqh3L/uKR4yxTI9GYI
+         2u+zROYcETgmMAGulYoqiVng8Ji9Oybuo38WLUu4/lX8bm0AD1NjHT+PlecOrL7s6g
+         VrjE80MXIKyBnVufir1OEtgSEZrmNuJJ1e9UwbTBp1cUWdK6bjBv/ATEXh9RWmJVtr
+         Hhm11XB9uva84sYKxT498v8KsJ6xKVtFcZeUVoS1crk4SJVZvJaoqQC96QUMIkoxGM
+         w8i3Nf7Xw69qQ==
+Message-ID: <b84fa328-91c2-fe02-da17-993236d91c81@alu.unizg.hr>
+Date:   Thu, 18 May 2023 10:00:36 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [BUG][NEW DATA] Kmemleak, possibly hiddev_connect(), in 6.3.0+
+ torvalds tree commit gfc4354c6e5c2
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>
+References: <f64b17fa-d509-ad30-6e8d-e4c979818047@alu.unizg.hr>
+ <2023050824-juiciness-catching-9290@gregkh>
+ <2023050854-collage-dreamt-660c@gregkh>
+ <c73471aa-522a-83a4-5614-506581604301@alu.unizg.hr>
+ <2023050958-precut-vividly-94bf@gregkh>
+ <987f9008-7eac-e2a4-31f6-8479f0e4a626@alu.unizg.hr>
+ <2023051607-sturdy-jiffy-ca99@gregkh>
+ <70dd7fa2-9a5f-9361-ebe0-bb337c523d09@alu.unizg.hr>
+ <2023051704-basket-hardcover-1a0c@gregkh>
+Content-Language: en-US, hr
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <2023051704-basket-hardcover-1a0c@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add CPU idle-state nodes and power-domains in Qualcomm sm6115 SoC dtsi.
+On 5/17/23 20:57, Greg Kroah-Hartman wrote:
 
-Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
----
+> And leaks are hard to notice, especially ones that only show up when you
+> remove a specific type of device.
+> 
+> thanks again for your help here,
 
-Changes since v2:
-- v2 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230330193303.612475-1-bhupesh.sharma@linaro.org/
-- v2 has no functional change, except I tested using debugfs/sysfs and
-  the idle states looked sane to me.
+I feel like more of a hindrance from the real issues than being helpful.
 
-Changes since v1:
-- v1 can be viewed here: https://lore.kernel.org/lkml/e5cda4cf-5c2a-a7ed-9e1d-1fe9f2cbef40@linaro.org
-- Addressed Konrad's comments on v1 and added GDHS and Power Collapse
-  cluster power states.
+Memory leaks seem easy to detect, however, building with KMEMLEAK
+debugging on can take up to 50-67% of system time, as I've noticed
+a couple of days ago ...
 
- arch/arm64/boot/dts/qcom/sm6115.dtsi | 136 +++++++++++++++++++++++++++
- 1 file changed, 136 insertions(+)
+It is obviously incurring some overhead. I did not expect a kernel compilation
+as computation-heavy process to have such an impact from memory object
+debugging.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-index 631ca327e064..0cfccde38f70 100644
---- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-@@ -47,6 +47,8 @@ CPU0: cpu@0 {
- 			enable-method = "psci";
- 			next-level-cache = <&L2_0>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
-+			power-domains = <&CPU_PD0>;
-+			power-domain-names = "psci";
- 			L2_0: l2-cache {
- 				compatible = "cache";
- 				cache-level = <2>;
-@@ -63,6 +65,8 @@ CPU1: cpu@1 {
- 			enable-method = "psci";
- 			next-level-cache = <&L2_0>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
-+			power-domains = <&CPU_PD1>;
-+			power-domain-names = "psci";
- 		};
- 
- 		CPU2: cpu@2 {
-@@ -75,6 +79,8 @@ CPU2: cpu@2 {
- 			enable-method = "psci";
- 			next-level-cache = <&L2_0>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
-+			power-domains = <&CPU_PD2>;
-+			power-domain-names = "psci";
- 		};
- 
- 		CPU3: cpu@3 {
-@@ -87,6 +93,8 @@ CPU3: cpu@3 {
- 			enable-method = "psci";
- 			next-level-cache = <&L2_0>;
- 			qcom,freq-domain = <&cpufreq_hw 0>;
-+			power-domains = <&CPU_PD3>;
-+			power-domain-names = "psci";
- 		};
- 
- 		CPU4: cpu@100 {
-@@ -99,6 +107,8 @@ CPU4: cpu@100 {
- 			dynamic-power-coefficient = <282>;
- 			next-level-cache = <&L2_1>;
- 			qcom,freq-domain = <&cpufreq_hw 1>;
-+			power-domains = <&CPU_PD4>;
-+			power-domain-names = "psci";
- 			L2_1: l2-cache {
- 				compatible = "cache";
- 				cache-level = <2>;
-@@ -115,6 +125,8 @@ CPU5: cpu@101 {
- 			enable-method = "psci";
- 			next-level-cache = <&L2_1>;
- 			qcom,freq-domain = <&cpufreq_hw 1>;
-+			power-domains = <&CPU_PD5>;
-+			power-domain-names = "psci";
- 		};
- 
- 		CPU6: cpu@102 {
-@@ -127,6 +139,8 @@ CPU6: cpu@102 {
- 			enable-method = "psci";
- 			next-level-cache = <&L2_1>;
- 			qcom,freq-domain = <&cpufreq_hw 1>;
-+			power-domains = <&CPU_PD6>;
-+			power-domain-names = "psci";
- 		};
- 
- 		CPU7: cpu@103 {
-@@ -139,6 +153,8 @@ CPU7: cpu@103 {
- 			enable-method = "psci";
- 			next-level-cache = <&L2_1>;
- 			qcom,freq-domain = <&cpufreq_hw 1>;
-+			power-domains = <&CPU_PD7>;
-+			power-domain-names = "psci";
- 		};
- 
- 		cpu-map {
-@@ -178,6 +194,68 @@ core3 {
- 				};
- 			};
- 		};
-+
-+		idle-states {
-+			entry-method = "psci";
-+
-+			LITTLE_CPU_SLEEP_0: cpu-sleep-0-0 {
-+				compatible = "arm,idle-state";
-+				idle-state-name = "silver-rail-power-collapse";
-+				arm,psci-suspend-param = <0x40000003>;
-+				entry-latency-us = <290>;
-+				exit-latency-us = <376>;
-+				min-residency-us = <1182>;
-+				local-timer-stop;
-+			};
-+
-+			BIG_CPU_SLEEP_0: cpu-sleep-1-0 {
-+				compatible = "arm,idle-state";
-+				idle-state-name = "gold-rail-power-collapse";
-+				arm,psci-suspend-param = <0x40000003>;
-+				entry-latency-us = <297>;
-+				exit-latency-us = <324>;
-+				min-residency-us = <1110>;
-+				local-timer-stop;
-+			};
-+		};
-+
-+		domain-idle-states {
-+			CLUSTER_0_SLEEP_0: cluster-sleep-0-0 {
-+				/* GDHS */
-+				compatible = "domain-idle-state";
-+				arm,psci-suspend-param = <0x40000022>;
-+				entry-latency-us = <360>;
-+				exit-latency-us = <421>;
-+				min-residency-us = <782>;
-+			};
-+
-+			CLUSTER_0_SLEEP_1: cluster-sleep-0-1 {
-+				/* Power Collapse */
-+				compatible = "domain-idle-state";
-+				arm,psci-suspend-param = <0x41000044>;
-+				entry-latency-us = <800>;
-+				exit-latency-us = <2118>;
-+				min-residency-us = <7376>;
-+			};
-+
-+			CLUSTER_1_SLEEP_0: cluster-sleep-1-0 {
-+				/* GDHS */
-+				compatible = "domain-idle-state";
-+				arm,psci-suspend-param = <0x40000042>;
-+				entry-latency-us = <314>;
-+				exit-latency-us = <345>;
-+				min-residency-us = <660>;
-+			};
-+
-+			CLUSTER_1_SLEEP_1: cluster-sleep-1-1 {
-+				/* Power Collapse */
-+				compatible = "domain-idle-state";
-+				arm,psci-suspend-param = <0x41000044>;
-+				entry-latency-us = <640>;
-+				exit-latency-us = <1654>;
-+				min-residency-us = <8094>;
-+			};
-+		};
- 	};
- 
- 	firmware {
-@@ -201,6 +279,64 @@ pmu {
- 	psci {
- 		compatible = "arm,psci-1.0";
- 		method = "smc";
-+
-+		CPU_PD0: power-domain-cpu0 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_0_PD>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
-+		};
-+
-+		CPU_PD1: power-domain-cpu1 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_0_PD>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
-+		};
-+
-+		CPU_PD2: power-domain-cpu2 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_0_PD>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
-+		};
-+
-+		CPU_PD3: power-domain-cpu3 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_0_PD>;
-+			domain-idle-states = <&LITTLE_CPU_SLEEP_0>;
-+		};
-+
-+		CPU_PD4: power-domain-cpu4 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_1_PD>;
-+			domain-idle-states = <&BIG_CPU_SLEEP_0>;
-+		};
-+
-+		CPU_PD5: power-domain-cpu5 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_1_PD>;
-+			domain-idle-states = <&BIG_CPU_SLEEP_0>;
-+		};
-+
-+		CPU_PD6: power-domain-cpu6 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_1_PD>;
-+			domain-idle-states = <&BIG_CPU_SLEEP_0>;
-+		};
-+
-+		CPU_PD7: power-domain-cpu7 {
-+			#power-domain-cells = <0>;
-+			power-domains = <&CLUSTER_1_PD>;
-+			domain-idle-states = <&BIG_CPU_SLEEP_0>;
-+		};
-+
-+		CLUSTER_0_PD: power-domain-cpu-cluster0 {
-+			#power-domain-cells = <0>;
-+			domain-idle-states = <&CLUSTER_0_SLEEP_0>, <&CLUSTER_0_SLEEP_1>;
-+		};
-+
-+		CLUSTER_1_PD: power-domain-cpu-cluster1 {
-+			#power-domain-cells = <0>;
-+			domain-idle-states = <&CLUSTER_1_SLEEP_0>, <&CLUSTER_1_SLEEP_1>;
-+		};
- 	};
- 
- 	reserved_memory: reserved-memory {
+Best regards,
+Mirsad
+
 -- 
-2.38.1
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
 
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+
+"What’s this thing suddenly coming towards me very fast? Very very fast.
+... I wonder if it will be friends with me?"
