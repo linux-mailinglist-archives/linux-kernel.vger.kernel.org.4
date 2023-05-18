@@ -2,53 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D20A7076E4
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 02:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E12CA7076E9
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 02:27:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbjERA0N convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 17 May 2023 20:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47728 "EHLO
+        id S229694AbjERA1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 20:27:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbjERA0L (ORCPT
+        with ESMTP id S229458AbjERA1t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 20:26:11 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54CE03AA1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 17:26:07 -0700 (PDT)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34HNX2NH028336
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 17:26:07 -0700
-Received: from mail.thefacebook.com ([163.114.132.120])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qmrccf1gu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 17:26:06 -0700
-Received: from twshared29562.14.frc2.facebook.com (2620:10d:c085:208::f) by
- mail.thefacebook.com (2620:10d:c085:21d::4) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Wed, 17 May 2023 17:26:06 -0700
-Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
-        id 243151DC7E500; Wed, 17 May 2023 17:25:59 -0700 (PDT)
-From:   Song Liu <song@kernel.org>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <kernel-team@meta.com>, Song Liu <song@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH v4] watchdog: Allow nmi watchdog to use "ref-cycles" event
-Date:   Wed, 17 May 2023 17:25:55 -0700
-Message-ID: <20230518002555.1114189-1-song@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Wed, 17 May 2023 20:27:49 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C39212F;
+        Wed, 17 May 2023 17:27:48 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-25344113e9bso1058583a91.3;
+        Wed, 17 May 2023 17:27:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684369667; x=1686961667;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z6TuSq6N4Ik07SdPtfy50jQBhSsVtsVbqdpHx3gygEM=;
+        b=Wrh2MEf4S3uodC6iY/NhQp26vdHjhRVTb4bWxrzC701t//m5uIlIEA1xNUsMmIjIHm
+         XGkwiIi1CL+Df32ywGLR/HHePrHogAyI3HGWiiogd/bOf0gGUIL0ij3o1M1WPPksX8NM
+         NpmA4tfmxH03RCk5qVJDADaudLJu8YgQQapx8PNsPYVmM+rKVntluAeyltkPLw95jlI3
+         J+hX2xQTtAwGFpaeDLANyDp5/lzduLrThfwLh3cn90yBi1u79fpmXRh7kkP/77deVaRW
+         1+ZnTPL3F1xWQikoMvmy8pNtuUyj1VPQWksC7wtrZWov0dlFAtdsggCBvz60/rPk735O
+         xN5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684369667; x=1686961667;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=z6TuSq6N4Ik07SdPtfy50jQBhSsVtsVbqdpHx3gygEM=;
+        b=RUGnj+UhlUBGFSsmC9TrZgyogsoPna2nUpF8glqyCrLoPNFjn4PPgb22AGi9KtoFUL
+         ps5t1/PidJ3e4jYeN936mL5IP7pg0PC4HhoPXIE37dPHxhXhkbmwgf35kwGu1KGf0t96
+         il+BZtGuQzxipXiRbKTnZ7iFCa/1XWp2Nka0TeuGKbv2UzkoDi1N9pudgMXOAf5yeF7s
+         IAf9bgfZT4Ar4+HvPurnUkWufuPhXtJ8kNe8oB3UQOwy/oYO6hEBE7DN7V7OXjv697HH
+         SGKnzf0NbMwXSrbTGkSSSYtSSgxYHbq2F7O+p8g7zlnVJZ8je5qx+PWQG8vSebpLYt3j
+         Y1gA==
+X-Gm-Message-State: AC+VfDzw+NPGUFJz1zQwpNnTb1rCadnv5KffjqLnosnxIG1UAkdHu9Bw
+        X8qmVA08e3XwfOpX+hCtV9jiBFqHiKseMGE+IME=
+X-Google-Smtp-Source: ACHHUZ6n9yAfim0C7Hg43I2JYLCV74uzeButE50fjo2hAJ73OC/j8dQUCmV5kt+RT35MZoJE96vjue3uCnihuGFmCBY=
+X-Received: by 2002:a17:90a:c981:b0:24b:8480:39d6 with SMTP id
+ w1-20020a17090ac98100b0024b848039d6mr710810pjt.0.1684369667491; Wed, 17 May
+ 2023 17:27:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-X-FB-Internal: Safe
-Content-Type: text/plain
-X-Proofpoint-GUID: t09TYiwBNJmZYl17ebyb9vheX77SR38h
-X-Proofpoint-ORIG-GUID: t09TYiwBNJmZYl17ebyb9vheX77SR38h
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-17_04,2023-05-17_02,2023-02-09_01
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20230517223007.178432-1-boerge.struempfel@gmail.com>
+ <CAOMZO5CqMMCCOsAB3YgJUUampE=iZru57d=qoX13-GkSaaC5gg@mail.gmail.com>
+ <CAEktqcuMrqiwDfGM=SAoHiKPY-hupS+jipt=6Tasr1q8VUvRQQ@mail.gmail.com> <CAOMZO5CJwwKmDYRxnny2JOrwucGn=q7+9xKqk_NSvZ_wyNSHEQ@mail.gmail.com>
+In-Reply-To: <CAOMZO5CJwwKmDYRxnny2JOrwucGn=q7+9xKqk_NSvZ_wyNSHEQ@mail.gmail.com>
+From:   =?UTF-8?B?QsO2cmdlIFN0csO8bXBmZWw=?= <boerge.struempfel@gmail.com>
+Date:   Thu, 18 May 2023 02:27:36 +0200
+Message-ID: <CAEktqcue7gFk9fXMsNPxwUsUVRxpa6GE5wCHZqU2p2dDz8WYqg@mail.gmail.com>
+Subject: Re: [PATCH v4 1/3] spi: add SPI_MOSI_IDLE_LOW mode bit
+To:     Fabio Estevam <festevam@gmail.com>
+Cc:     bstruempfel@ultratronik.de, andy.shevchenko@gmail.com,
+        amit.kumar-mahapatra@amd.com, broonie@kernel.org,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,104 +77,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-NMI watchdog permanently consumes one hardware counters per CPU on the
-system. For systems that use many hardware counters, this causes more
-aggressive time multiplexing of perf events.
+Am Do., 18. Mai 2023 um 01:53 Uhr schrieb Fabio Estevam <festevam@gmail.com=
+>:
+>
+> On Wed, May 17, 2023 at 8:20=E2=80=AFPM B=C3=B6rge Str=C3=BCmpfel
+> <boerge.struempfel@gmail.com> wrote:
+>
+> > My bad. Thanks for letting me know. Just to clarify: I put the
+> > changelog directly below
+> > the first ---? And do I then put another --- between the changelog and
+> > the following
+> > include/uapi/linux/spi/spi.h | 3 ++- line?  or is there just a
+> > new-line seperating them.
+>
+> It should look like this:
+>
+> Commit log line 1
+> Commit log line 2
+> ...
+> Commit log line n
+>
+> Signed-off-by: Your name <your@email.com>
+> ---
+> Changes since v3:
+> - Bla bla bla
+>
 
-OTOH, some CPUs (mostly Intel) support "ref-cycles" event, which is rarely
-used. Add kernel cmdline arg nmi_watchdog=ref-cycles to configure the
-watchdog to use "ref-cycles" event instead of "cycles".
+Thank you for taking the time to explain this!
 
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Signed-off-by: Song Liu <song@kernel.org>
+> > And if you don't mind my trivial questions, am I supposed to write a
+> > cover letter for
+> > the patch-stack? I seem to find contradictory answers to this question =
+online.
+>
+> Yes, for a patch series having a cover letter is helpful.
+>
 
----
-Changes in v4:
-Fix compile error for !CONFIG_HARDLOCKUP_DETECTOR_PERF. (kernel test bot)
+I will add one for the next version.
 
-Changes in v3:
+> > > Should tools/spi/spidev_test.c be changed to include this new
+> > > mosi-idle-low option?
+> >
+> > Until now I actually wasn't aware of this tool. However on first
+> > glance, it seems
+> > reasonable to add this mode bit. I can certainly add this mode bit to
+> > the spidev_test
+> > if desired.
+>
+> Yes, that would be great.
+>
 
-Pivot the design to use kernel arg nmi_watchdog=ref-cycles (Peter)
----
- Documentation/admin-guide/kernel-parameters.txt | 5 +++--
- include/linux/nmi.h                             | 2 ++
- kernel/watchdog.c                               | 2 ++
- kernel/watchdog_hld.c                           | 9 +++++++++
- 4 files changed, 16 insertions(+), 2 deletions(-)
+Okay. I have begun to implement this. During this, I noticed, that if
+I called the new option
+"--mosi-idle-low", the alignment of the help-lines (and in the c code
+itself) would break.
+Should I therefore shorten the option name by using an abbreviation
+like "--mil", which is
+probably not very helpful as a "full option name", or should I touch
+all the other lines and
+insert necessary spaces, such that they are aligned once more? (And if
+so, should I do
+this in a seperate patch, preparing the addition of the new options?)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 9e5bab29685f..d378e23dad7c 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -3593,10 +3593,12 @@
- 			Format: [state][,regs][,debounce][,die]
- 
- 	nmi_watchdog=	[KNL,BUGS=X86] Debugging features for SMP kernels
--			Format: [panic,][nopanic,][num]
-+			Format: [panic,][nopanic,][ref-cycles][num]
- 			Valid num: 0 or 1
- 			0 - turn hardlockup detector in nmi_watchdog off
- 			1 - turn hardlockup detector in nmi_watchdog on
-+			ref-cycles - configure the watchdog with perf event
-+			             "ref-cycles" instead of "cycles"
- 			When panic is specified, panic when an NMI watchdog
- 			timeout occurs (or 'nopanic' to not panic on an NMI
- 			watchdog, if CONFIG_BOOTPARAM_HARDLOCKUP_PANIC is set)
-@@ -7097,4 +7099,3 @@
- 				memory, and other data can't be written using
- 				xmon commands.
- 			off	xmon is disabled.
--
-diff --git a/include/linux/nmi.h b/include/linux/nmi.h
-index 048c0b9aa623..edfd1bcce0f6 100644
---- a/include/linux/nmi.h
-+++ b/include/linux/nmi.h
-@@ -102,12 +102,14 @@ extern void hardlockup_detector_perf_disable(void);
- extern void hardlockup_detector_perf_enable(void);
- extern void hardlockup_detector_perf_cleanup(void);
- extern int hardlockup_detector_perf_init(void);
-+extern void hardlockup_config_perf_event(const char *str);
- #else
- static inline void hardlockup_detector_perf_stop(void) { }
- static inline void hardlockup_detector_perf_restart(void) { }
- static inline void hardlockup_detector_perf_disable(void) { }
- static inline void hardlockup_detector_perf_enable(void) { }
- static inline void hardlockup_detector_perf_cleanup(void) { }
-+static inline void hardlockup_config_perf_event(const char *str) { }
- # if !defined(CONFIG_HAVE_NMI_WATCHDOG)
- static inline int hardlockup_detector_perf_init(void) { return -ENODEV; }
- static inline void arch_touch_nmi_watchdog(void) {}
-diff --git a/kernel/watchdog.c b/kernel/watchdog.c
-index 8e61f21e7e33..fed4f0be8e1a 100644
---- a/kernel/watchdog.c
-+++ b/kernel/watchdog.c
-@@ -81,6 +81,8 @@ static int __init hardlockup_panic_setup(char *str)
- 		nmi_watchdog_user_enabled = 0;
- 	else if (!strncmp(str, "1", 1))
- 		nmi_watchdog_user_enabled = 1;
-+	else if (!strncmp(str, "ref-cycles", 10))
-+		hardlockup_config_perf_event(str);
- 	return 1;
- }
- __setup("nmi_watchdog=", hardlockup_panic_setup);
-diff --git a/kernel/watchdog_hld.c b/kernel/watchdog_hld.c
-index 247bf0b1582c..4deca58ba6ed 100644
---- a/kernel/watchdog_hld.c
-+++ b/kernel/watchdog_hld.c
-@@ -294,3 +294,12 @@ int __init hardlockup_detector_perf_init(void)
- 	}
- 	return ret;
- }
-+
-+/**
-+ * hardlockup_config_perf_event - Overwrite config of wd_hw_attr
-+ */
-+void __init hardlockup_config_perf_event(const char *str)
-+{
-+	if (!strncmp(str, "ref-cycles", 10))
-+		wd_hw_attr.config = PERF_COUNT_HW_REF_CPU_CYCLES;
-+}
--- 
-2.34.1
+> > While looking through the code, I noticed, that the latest two
+> > additions to the spi->mode
+> > (SPI_3WIRE_HIZ and SPI_RX_CPHA_FLIP) are also missing from this tool. I=
+s this
+> > by design, or should they then be included as well?
+>
+> Looks like these two are missing and would be good to get them included a=
+s well.
 
+Okay. Should this be a separate patch, or should I add the support for
+all 3 mode bits in
+one commit?
