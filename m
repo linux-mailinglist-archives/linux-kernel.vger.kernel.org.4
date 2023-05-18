@@ -2,132 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7AB27076E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 02:21:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CFF47076E2
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 02:23:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229473AbjERAV1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 20:21:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46478 "EHLO
+        id S229704AbjERAXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 20:23:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjERAVX (ORCPT
+        with ESMTP id S229476AbjERAXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 20:21:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEDA33C0A
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 17:20:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684369235;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ctm+oHZ88OJx9RdDqhhRf0OhM0Skp+u6Ga9xqH4ST4w=;
-        b=G5EM1hydzjK4aiv0Zjxb/QHhDhKGZSVtSVvezitqviHaQiwDftfqXE/JnQtYlsTMCRiRHX
-        VytIXszDTyDe3erUhOtNdTmldgx1go0fe922bXwj6QWLZQakxoRLeJ65TLlFYgBNrcF308
-        HkVtDNnMDeK3nSeqj0i9xYRN7e0e2BM=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-435-NNgaTRexPzOlaiPzsE2RWA-1; Wed, 17 May 2023 20:20:34 -0400
-X-MC-Unique: NNgaTRexPzOlaiPzsE2RWA-1
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-3f38280ec63so2543731cf.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 17:20:34 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684369234; x=1686961234;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        Wed, 17 May 2023 20:23:38 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B3991BDA
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 17:23:37 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9661a1ff1e9so212679166b.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 17:23:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1684369416; x=1686961416;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ctm+oHZ88OJx9RdDqhhRf0OhM0Skp+u6Ga9xqH4ST4w=;
-        b=jCW3AlQv9q2v909go7LwXT/bqs54e3ahOUj0gBBRKMbjcDXgkznR3VUSLSBdx40myR
-         1Pf1i330EN2YHVEIsIuAY/Pn9iVyl/NWC4lK53BC2x4zaZy12y5gOI812+9H+0sanHhv
-         vD0FeXQfKAGfm3lxAoE6fW6ER9N6POX0AI+ohMpCGsT1faY+j/isKZ/+RMfmDflFqIE5
-         2yYHV4mqsbdrhABMu+QroYAWZUcY7dQ4CXCoRcCUHyatGVUFosMy/L0SzKDsIhYccvBg
-         tZncTpfCgLwNizw4uUZzd0LjAVHFnfMYs0Wf7lbqsn2iL8coi0pXPxvABBQOOXo+ZCtE
-         IugQ==
-X-Gm-Message-State: AC+VfDxAEsMIH0QCcQnIaSyt/nYT+sg88RBz5axo2HoBaaYVdTFBWXJQ
-        tzyWGXRcqNEXyydhP7VRKlHtq/E440yrUXY0TUR+iO4qxkDfM2c3kKB7jwrENLLivBgy+UGlKsb
-        3RCfgDHtIOR6wBYQ+czFVXkrl
-X-Received: by 2002:ac8:5707:0:b0:3e3:1d31:e37 with SMTP id 7-20020ac85707000000b003e31d310e37mr8013657qtw.1.1684369233896;
-        Wed, 17 May 2023 17:20:33 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5uCwwNk/Gtb9I7N6Wt9AMm8Uc3BeJUVAUIZEhidZKrahY1/OGxGLT0sKfPQ9PRHymHcL6anw==
-X-Received: by 2002:ac8:5707:0:b0:3e3:1d31:e37 with SMTP id 7-20020ac85707000000b003e31d310e37mr8013634qtw.1.1684369233657;
-        Wed, 17 May 2023 17:20:33 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
-        by smtp.gmail.com with ESMTPSA id c8-20020ac853c8000000b003e69c51cf53sm65569qtq.72.2023.05.17.17.20.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 17:20:32 -0700 (PDT)
-Date:   Wed, 17 May 2023 20:20:31 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     James Houghton <jthoughton@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Hongchen Zhang <zhanghongchen@loongson.cn>,
-        Huang Ying <ying.huang@intel.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Shuah Khan <shuah@kernel.org>,
-        ZhangPeng <zhangpeng362@huawei.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Anish Moorthy <amoorthy@google.com>,
-        Jiaqi Yan <jiaqiyan@google.com>
-Subject: Re: [PATCH 1/3] mm: userfaultfd: add new UFFDIO_SIGBUS ioctl
-Message-ID: <ZGVvTxIH3JK9KJq/@x1n>
-References: <20230511182426.1898675-1-axelrasmussen@google.com>
- <CADrL8HXFiTL-RDnETS2BUg_qH8CvcCMZiX-kutsrS1-8Uy25=w@mail.gmail.com>
- <ZGVRUeCWr8209m8d@x1n>
- <ZGVTMnVKNcQDM0x4@x1n>
- <CAJHvVcgXynHcuoS6eCfOAB2SgzqYy_zMGrRMR2kFuxOtSdUwvQ@mail.gmail.com>
+        bh=eT8xYYCjH6ggOvHhW6+9I5mhGuzNhDu/1pBE5VbcuBw=;
+        b=gTZFVsElP150YAlaodxcujBHIj75XOb7QFcVy8eQfBGiyz9WyiVG4JNgr80YtrYelb
+         2tSCpR6WtnXBEuUlu8U7V/lsTASyGGuEEppfFsGbXBf+IsPmOztCszCQh49Fs0UCbcvJ
+         CHy7eRX74HXf0TWKJbutYbfpbMOM3XA5sUzwE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684369416; x=1686961416;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eT8xYYCjH6ggOvHhW6+9I5mhGuzNhDu/1pBE5VbcuBw=;
+        b=e07mj4toLugL5PyA6uGSgOELBOxUTIaRBI1NoPVlTQGZObO7TASnuO9/FjXe45i+M/
+         PoZaYeVh4DVbPq66HHGERxF0mtEZz0tgiaWAS5XuoCtucxFMJ2aCGkzzRBOG6sQ0aLu6
+         y/h8oNOEpQXmVaEuwmZb+OtdlzDMy9xEzHxJz5dEBX0qwb6IwIrHyhr66Bl0axn+hlEi
+         j6gxHujze/ope7DYQ3IktyS3vGJyWc2U7cX0vfPV39L749oJHYIu4TBImYv43cp0cE9W
+         M0LiFc/IlUCR8ljpgZUiTooVZjUhDrB8k650PBPQkGil/jXLvWFTff6Is3hIupmcAkts
+         ZZ9Q==
+X-Gm-Message-State: AC+VfDx6uo71vm2OjtkB/n/x+TsfEyYkyJOqrd4I/i+1i1fxiAglNyO7
+        bHShI2NtbYO+jbE9021XcMfhsSv/jOVZCgQYgMJBzBvs
+X-Google-Smtp-Source: ACHHUZ4AuI9yGQj2aCXu04GRYC6B3Zfd3ZTynpPKxWDfOVyYKi9No7Pc0mRc4ekhvUnW/ckBHg7AAw==
+X-Received: by 2002:a17:906:fe42:b0:957:28b2:560a with SMTP id wz2-20020a170906fe4200b0095728b2560amr36830109ejb.46.1684369415936;
+        Wed, 17 May 2023 17:23:35 -0700 (PDT)
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com. [209.85.208.42])
+        by smtp.gmail.com with ESMTPSA id a7-20020a1709064a4700b00965ac8f8a3dsm212708ejv.173.2023.05.17.17.23.34
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 17:23:34 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-50bc040c7b8so2190635a12.2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 17:23:34 -0700 (PDT)
+X-Received: by 2002:a17:907:7dab:b0:967:a127:7e79 with SMTP id
+ oz43-20020a1709077dab00b00967a1277e79mr31504240ejc.28.1684369414251; Wed, 17
+ May 2023 17:23:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJHvVcgXynHcuoS6eCfOAB2SgzqYy_zMGrRMR2kFuxOtSdUwvQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <CAHk-=wh_GEr4ehJKwMM3UA0-7CfNpVH7v_T-=1u+gq9VZD70mw@mail.gmail.com>
+ <20230517172243.GA152@W11-BEAU-MD.localdomain> <CAHk-=whzzuNEW8UcV2_8OyuKcXPrk7-j_8GzOoroxz9JiZiD3w@mail.gmail.com>
+ <20230517190750.GA366@W11-BEAU-MD.localdomain> <CAHk-=whTBvXJuoi_kACo3qi5WZUmRrhyA-_=rRFsycTytmB6qw@mail.gmail.com>
+ <CAHk-=wi4w9bPKFFGwLULjJf9hnkL941+c4HbeEVKNzqH04wqDA@mail.gmail.com>
+ <CAHk-=wiiBfT4zNS29jA0XEsy8EmbqTH1hAPdRJCDAJMD8Gxt5A@mail.gmail.com>
+ <20230517230054.GA195@W11-BEAU-MD.localdomain> <CAHk-=wgQ7qZZ1ud6nhY634eFS9g6NiOz5y2aEammoFkk+5KVcw@mail.gmail.com>
+ <20230517192528.043adc7a@gandalf.local.home> <20230518001422.GA254@W11-BEAU-MD.localdomain>
+In-Reply-To: <20230518001422.GA254@W11-BEAU-MD.localdomain>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 17 May 2023 17:23:17 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjU0vq8aL_VmUDqwh9_fo8nXYt65PBjihNetTMq4s8OsA@mail.gmail.com>
+Message-ID: <CAHk-=wjU0vq8aL_VmUDqwh9_fo8nXYt65PBjihNetTMq4s8OsA@mail.gmail.com>
+Subject: Re: [PATCH] tracing/user_events: Run BPF program if attached
+To:     Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-trace-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        David Vernet <void@manifault.com>, dthaler@microsoft.com,
+        brauner@kernel.org, hch@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Axel,
+On Wed, May 17, 2023 at 5:14=E2=80=AFPM Beau Belgrave <beaub@linux.microsof=
+t.com> wrote:
+>
+> Do you run with CONFIG_DEBUG_ATOMIC_SLEEP? It will not splat with just
+> CONFIG_PROVE_LOCKING and CONFIG_PROVE_RCU, which bit me here. I'm now
+> running all three now that I know better.
 
-On Wed, May 17, 2023 at 03:28:36PM -0700, Axel Rasmussen wrote:
-> I do plan a v2, if for no other reason than to update the
-> documentation. Happy to add a cover letter with it as well.
-> 
-> +Jiaqi back to CC, this is one piece of a larger memory poisoning /
-> recovery design Jiaqi is working on, so he may have some ideas why
-> MADV_HWPOISON or MADV_PGER will or won't work.
-> 
-> One idea is, at least for our use case, we have to have the range be
-> userfaultfd registered, because we need to intercept the first access
-> and check at that point whether or not it should be poisoned. But, I
-> think in principle a scheme like this could work:
-> 
-> 1. Intercept first access with UFFD
-> 2. Issue MADV_HWPOISON or MADV_PGERR or etc to put a pte denoting the
-> poisoned page in place
-> 3. UFFDIO_WAKE to have the faulting thread retry, see the new entry, and SIGBUS
-> 
-> It's arguably slightly weird, since normally UFFD events are resolved
-> with UFFDIO_* operations, but I don't see why it *couldn't* work.
-> 
-> Then again I am not super familiar with MADV_HWPOISON, I will have to
-> do a bit of reading to understand if its semantics are the same
-> (future accesses to this address get SIGBUS).
+I wonder if we should just make PROVE_LOCKING select DEBUG_ATOMIC_SLEEP..
 
-Yes, it'll be great if this can be checked up before sending v2.  What you
-said match exactly what I was in mind. I hope it will already work, or we
-can always discuss what is missing.
+PROVE_LOCKING is the expensive and complicated one. In contrast,
+DEBUG_ATOMIC_SLEEP is the "we've had this simplistic check for some
+very basic requirements for a long time".
 
--- 
-Peter Xu
+So DEBUG_ATOMIC_SLEEP is really just a minimal debugging thing, it
+feels a bit silly to have all the expensive "prove locking with
+lockdep and all our lock debugging", and then not test the trivial
+basics.
 
+           Linus
