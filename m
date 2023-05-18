@@ -2,107 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0793708375
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:02:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 612227083C8
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:15:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231579AbjEROCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 10:02:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42000 "EHLO
+        id S231573AbjEROPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 10:15:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231258AbjEROCc (ORCPT
+        with ESMTP id S231575AbjEROPV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 10:02:32 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA40E51;
-        Thu, 18 May 2023 07:02:31 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-510ea8d0bb5so797599a12.0;
-        Thu, 18 May 2023 07:02:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684418549; x=1687010549;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Y2Hw87l7Ts/Jxr3HsiObApCTHPM3x3z16x4yMMIWg7U=;
-        b=UbH1d1RvF5tQKqhb7d53yj0gbmWx4JmBW7ux3rULr/Kjj0RuhefLvFoKuKO0kuGFm/
-         V0D0VT8n89q4OS2WsJqIWcEEGnQLhbvyhjaVN8TMCqRgmYZP5xKc07kNTiHAgLcgBEN5
-         t0qTXum3ZUoTrHXW7fdqxSyPbp4wH8G+W/xmC0+/VP8HHr9PIhpcIaVu0bfaZpalwmS9
-         OWPS3v9iQ6AlKx0SSIcmUEZQ8BvxeQzWx/KGKjoObMxmfzzpXCnqc3Mu4zIilMQyjhY3
-         fCiYZ5oRZ22P5VxBilzTB1TFn2XsqMNN3abIdzGxRkEIWX9b4vVgbYfdBrR4p48cnFia
-         jpqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684418549; x=1687010549;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Y2Hw87l7Ts/Jxr3HsiObApCTHPM3x3z16x4yMMIWg7U=;
-        b=SKUpUP2PehJpDex6UEG2I6Ag9j67xvU8LZlNwWGaZMw1lFe4vqVoKNOKuSffYRAo0D
-         4FNU7GNuFatrO4w8maTosttiw6a2LXw5l3kNINUP4pgKlOyVavrehxrYxrsQ+nsc+enI
-         bxvcJYO556WRfbJ3zuTR2RFOiBdwAS9ipCiXTxWmfJSa6dI465Xfwwl/sKrcyr4h8f5W
-         OI/ReeupjHQJMgIVBfUCoZ5e4yjWIozNLK152pvQeyP2y8GKQ57l1LfmLpsg/ZmE2FrV
-         15z5gPNMClOZ7SS/mwMc2MR203MP+ZDTHgEaUZV20xRRraBpiiGHnqTzlYAbRJxjMixU
-         +WZQ==
-X-Gm-Message-State: AC+VfDzvdwS0Fnpdzn7QCJ4ekXv5YRpFbC/Pocfo3hawTrpt3/crXVRC
-        hEK3SFQVeHADvad61cLvNs6cWhkyN14=
-X-Google-Smtp-Source: ACHHUZ4g1yJ2IoW8AWI40CmRxuC3p7yQTD2VvHNMhL4VhevYghbQIBuSPIaOlRiiJsnlkZZd26ikoQ==
-X-Received: by 2002:a17:906:fd8c:b0:94f:3cf5:6d7f with SMTP id xa12-20020a170906fd8c00b0094f3cf56d7fmr38420982ejb.46.1684418549192;
-        Thu, 18 May 2023 07:02:29 -0700 (PDT)
-Received: from fedora.. (cpezg-94-253-130-143-cbl.xnet.hr. [94.253.130.143])
-        by smtp.googlemail.com with ESMTPSA id m14-20020a170906258e00b0096f272206b3sm997025ejb.125.2023.05.18.07.02.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 07:02:28 -0700 (PDT)
-From:   Robert Marko <robimarko@gmail.com>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        srichara@quicinc.com
-Cc:     Robert Marko <robimarko@gmail.com>
-Subject: [RESEND,PATCH 2/2] firmware: qcom: scm: disable SDI on IPQ5018
-Date:   Thu, 18 May 2023 16:02:24 +0200
-Message-Id: <20230518140224.2248782-2-robimarko@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230518140224.2248782-1-robimarko@gmail.com>
-References: <20230518140224.2248782-1-robimarko@gmail.com>
+        Thu, 18 May 2023 10:15:21 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 434AD10EC;
+        Thu, 18 May 2023 07:15:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684419320; x=1715955320;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=vYkdZsIpPwPU/hoLLwjK73AoKA/4pu7EnNZUt2GsDOY=;
+  b=OcgaGTRQelPjw00sS60fvvQjhrL2pDOT9l+4hDKp6QwtspH0t5ppLqDm
+   bz4QtBQJRL0H05jTr8CzDsFTDlgDLNs3tGccgy5Df20wm7cWiNqmmF1OE
+   48hs9XaLGUwkTd8d52Pk8NCw4R1WN5p2bLASGvng+aDNsdyrST8amJE4O
+   NsPP3u2uN/6NWoVkjAYpKwT4FHELXQPR6UtvYMLYajcnlPlyqdHOVyMYZ
+   E45wtwvLJh1OJexA77Tx+oUlW9+cFV3f0I3sa89HGnORmow4BUXJRAP5V
+   O/IDwphL2M45xMF+BKl752uH42zPOwDptWbLmCEU1g7t3hevjqjV44+lI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="354397488"
+X-IronPort-AV: E=Sophos;i="5.99,285,1677571200"; 
+   d="scan'208";a="354397488"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 06:35:48 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="702130517"
+X-IronPort-AV: E=Sophos;i="5.99,285,1677571200"; 
+   d="scan'208";a="702130517"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orsmga002.jf.intel.com with ESMTP; 18 May 2023 06:35:48 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 18 May 2023 06:35:48 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 18 May 2023 06:35:47 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Thu, 18 May 2023 06:35:47 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.107)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Thu, 18 May 2023 06:35:47 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HOl64o5Hdr/vGESOy7x7SzwDa8dKUEGxqykIKlOtHXpVDWOzjokKXl9tQgkV63lNHGb76vVH+Bb3AMfS5KMoGP7hooppqXUMEg/9/JgzreCgU2xoH6zMbH1sCksf/6q251zXVGGbaUSI/Lu2NyX37wk+OtXUHMUJIEUw/H3Q1+pjH4jBthQq92HsrK7+x9B7YBojYgvUa/sPtO0tuuudW3gkOo8KXt+/MNc9bUZEkKfDhmGvtE7ZueTURX5AQyn1VNU4UY8wI0iF84yHpIAly3VFkO4x2Rx5nhXTIkclDCnf5snfY8gSE3bkP2NtH0QWiPJN/qMlKbtN5voKACSvSg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=J3zB+2/cojHZ5ZFUk4vOf2MBHQ2q7IN/gbBpRWHUKlw=;
+ b=XjOxkG/LRqlTd3Cikn+WafT++i+cm6i/VDJd3dlyMMQJUYIB/dVa2MV5aNlOjbRekieubfgXW9kS1mWg5x3oFRprTQ+xsNWOFef+qwe7z8LnnpjxMRRkFcTjea5kxFY6VQ5yuXNjffHywLXQtROlp/xWITdVfFlsGRPcAywQ+a3unykzb7lTI6pWfxT5gzzVVHofHuLjHEukBWYRnN65sX2+VlDdXGIMnh+OKgvN8aU4+BA4X+TC7GOtXmaN4Du+HMad1petuSeoPUBbdfHIsMd7M410m+Nz2WduVm3XC1oFUkJR5P0RfwWR1fwgjkkz9sQOk3WNMhfP+BPdNeSOFw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
+ by DM4PR11MB6261.namprd11.prod.outlook.com (2603:10b6:8:a8::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33; Thu, 18 May
+ 2023 13:35:45 +0000
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::64d9:76b5:5b43:1590]) by DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::64d9:76b5:5b43:1590%2]) with mapi id 15.20.6411.019; Thu, 18 May 2023
+ 13:35:45 +0000
+Message-ID: <f7a082ae-5ec8-484b-b602-559f6104c9d7@intel.com>
+Date:   Thu, 18 May 2023 15:34:44 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH net-next 06/11] net: page_pool: avoid calling no-op
+ externals when possible
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Magnus Karlsson <magnus.karlsson@intel.com>,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        "Ilias Apalodimas" <ilias.apalodimas@linaro.org>,
+        Christoph Hellwig <hch@lst.de>, <netdev@vger.kernel.org>,
+        <intel-wired-lan@lists.osuosl.org>, <linux-kernel@vger.kernel.org>
+References: <20230516161841.37138-1-aleksander.lobakin@intel.com>
+ <20230516161841.37138-7-aleksander.lobakin@intel.com>
+ <20230517210804.7de610bd@kernel.org>
+From:   Alexander Lobakin <aleksander.lobakin@intel.com>
+In-Reply-To: <20230517210804.7de610bd@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR0P281CA0146.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:96::20) To DM6PR11MB3625.namprd11.prod.outlook.com
+ (2603:10b6:5:13a::21)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|DM4PR11MB6261:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1d2bb44a-b6bf-49a3-5170-08db57a4c7d5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5UnVEX7YzsTVfvj2RrNRYaUk24qY6AgURRILwAg3804hGh8+ACqZ2Rjp5Zs4lTF6SWm+YxdjIV3CbOqOLNPGBZ9Wg3JtJGJ1WVJ3gqiBw9aat7axYdBtf0ILZWi+FnfXomC3IyQUeYxGls4deZSRBgxvUj4r85tCKr56n2OdLf8LYM1WtBrIm9/5FySCfTMK/1QEuFuaeCfRyQ5+F7IffpGSxDHJJTSt8gNmKsqSP7Kz7d2HALfhSAkj2mhkTFscdTDojbDHQ6EfeLed8UuV8eD/HESgZ1gHrm7Mr6FhXxRvgaYyWyAxeAqGg24ULuX2umTIl6Wr59NMmoAvpiuNXh4lK7uCJjczFqHouIXudHEcZiD97GjXwMO/GFkak1H1B1lvLI34+IxUZgIfTLWd0x1HfD+9pJY9ILB+J0t5vNMCSH1t0UqziiVY876xdyibXDSN1XXyf+E8vmEpBp38+Vmwbzgm0K7lzf6w8QgTlh/GPn0eKqW2IOxtH+aNL3mhJwxM+LXkyai/L/R3fHSTs3r2cCDnYxRrDqiujgmKzxggIqA+RwZzt5cHXFjAQJH969sflSR2TQzo4ZmVmXeijs5h3OtYeMZY49o4UBD4+IfDT8OJ/yL4XEQ/LCDklW1FPb/1SyQnDU8FOIxcKTlJ/Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(39860400002)(366004)(376002)(136003)(346002)(451199021)(31686004)(66556008)(66476007)(4326008)(478600001)(54906003)(316002)(86362001)(36756003)(6916009)(31696002)(6486002)(2616005)(6506007)(66946007)(6512007)(26005)(186003)(41300700001)(8676002)(7416002)(5660300002)(8936002)(82960400001)(2906002)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZVVOWmRlMVozTUJQYWhRYnNLK0lXSngvQ0JlWmJ0dGRSQ1E5a1JZdUZvT1pw?=
+ =?utf-8?B?emk0NDFaQTMvMFJNZTZ4ajlSZ2FvMEhKc1VJL3pFOFB4ZkFmZ0RZbUk4S29a?=
+ =?utf-8?B?aW81YzZsYmtxeEJTaVZnck1DdlBBbmVrR2VsWkNwNHB1QjliS1ZxZVZRRTBP?=
+ =?utf-8?B?SlM2SEFzTkQxSzZiaW9nNFBtT055TDUvTE9BSFE5WHpIWVNEWGdReVhoQ2NC?=
+ =?utf-8?B?bUplSHZsRWZQbTllRzhUTDFxRmhxNTFLTHJidjlQZzV2NlFqQnFFU3NFYzlM?=
+ =?utf-8?B?Y1lHU1I3RUJrNXlnZk9PaGd2N3laR3JqUTZMRm50T3VXbzRBN2JlSmRRZXk5?=
+ =?utf-8?B?NFp0b2JQRmlZdVhiWlRIQjQ1SWFBRThzd3RYb0E2Zmhoa2lQN1pXUXBxbjQ0?=
+ =?utf-8?B?b1pUSWpReDlMM3UxTG4xNGhpWi85dFZmeit5K2JLemxpZHhEUHBBNUZaNENS?=
+ =?utf-8?B?Y1cyaGVybnV1VXpoVS95MlhXVDFLbWkrQytibEdVbTdZWmpid0t3N3BUNmxz?=
+ =?utf-8?B?b2toaWZ2OXJ2QkZsYnNkbkx0aVdXUFF1TnRtd0paOTJEdG1PeWxLTVZxWVY0?=
+ =?utf-8?B?cVNpYzFDK2FQQWxibnh3VlVUUTFlSFBaN3R3U0pqcGREdjcyVTQyQmx4UUhm?=
+ =?utf-8?B?QzYzZitJUDVNaERIamYyRUE2eE0xNUQ1K1JDamJYYThRVVNmcityc0Rja3lz?=
+ =?utf-8?B?WkFjRnFvR1ZnZ2RPR1lmN2ZiSEdpTjJ3QkhhUWE2N3FJTkhVd1AzYmNGcXBC?=
+ =?utf-8?B?dmZ5V3FQYUZzekVpc1FmMEhTblYrNysyL3JEcDAzOEczZjNydmhWOHVBRGla?=
+ =?utf-8?B?YlZsc1BJQ3QvZ2hkZUdzRWZSMEpSbkFHYUE3bko4MnBnc2NsYVE5bnhsQUZq?=
+ =?utf-8?B?emc2UHFyb1YzTndRKzFiMlk0OWlYdE1kNUUvelovMnU5WS9kMS9KVEE4MVJB?=
+ =?utf-8?B?Sk5LOXl4MzF4UXlMc1FlejhKM3Y3ek8zNzE5THd5Tkc4M0c0T1pNMXZNSTE3?=
+ =?utf-8?B?Z0IyQUQ1WnQyc1FTSzhrQ3k4dEFQN1FXcjAyRDNSY3M5eUJiMmtDTEFjSlo5?=
+ =?utf-8?B?Nk9MSFo4RFZwMnB3RHErSk43M3BBTVhORFlZV2ZCQm1IdklXN1kvb0h1ck1w?=
+ =?utf-8?B?Y3dyVHBhYm9RNjhNTVFzRFJLUWluNFZqNDdUUks2MytEVEQ4cEROKzNiS3lh?=
+ =?utf-8?B?QjRhOEhlUzQ4ZHlva3oySzh0Y3MwbnYwVzdoblN1SWlzZFZrR0RncWl3K0xh?=
+ =?utf-8?B?M0J2M2dtaE9sQ2RzSFRURGRuSmUzM3pRV2JNN3RCa0lPSkN3cjJlVFV3Tzhs?=
+ =?utf-8?B?NG1ITy9ET2Era0ltUGJmMlhvWVo5TVNxdms4WlgxZExLU2hnMTlhZndNZGk2?=
+ =?utf-8?B?Q1dYMU5McnBDRlBYYVlGZ3NqSTl0Q0xZL1RrVFlBQTZUMUNVWTJ3MmhjbVpH?=
+ =?utf-8?B?cVNxY2NTSGpEU3VKdWJmMHY3NGsydEdsNVhnTlAwNU1HQXhrQThlNGE0RGI4?=
+ =?utf-8?B?OXlmWFBsQnZOVDlpZFFGdVlKM1dwWDV3dGlnQkd3WklKZFNPbUhzM1MyOExW?=
+ =?utf-8?B?WHZkOTNuR3Z4Um1mdWE5SUpjWTZhQTZjekdoeHFCQVhEUzBhRHZmY1o5WThW?=
+ =?utf-8?B?eGpWYTk5bnk1Z3R3N1JKdTg3YmRRSjQ5aW44ZExGRkhWd1FKT2IwRlZVb2wr?=
+ =?utf-8?B?MFdkaWFnQUpKRUxHUEx2UGVTSnFtdU1pSkdLSldmVFJ4anZ6ZXdqWXpha0dt?=
+ =?utf-8?B?NlpUUUo2MjVhdVpLdzJSaFZsWmpwaHVFR3lsQytUcm5ZbXNBTUt5K0p6RmRW?=
+ =?utf-8?B?d1YxdmVFVHh3LzNLN3kvUVo0OVk3cFBmYTdFR3dHZG5DR2hmZC8vU3Vqck9X?=
+ =?utf-8?B?Z3NxNEpHL1dxK2NZVkd1eFZSTFVZSE5UWEtzLzdrMGoyZ2FJTGhUZ0hLYmVr?=
+ =?utf-8?B?dTBRYjM1eG8wMWVScUJmUUJmRWw5NWRncmJ5QllDMzB4YjlFTDhXcjJLNmdr?=
+ =?utf-8?B?UGxCQS9sc095ejhhbUpxYlhQcEZKYURYamRwWGlzRnBYSHlFQ3lEU1VLRGFP?=
+ =?utf-8?B?SnNnY3hZL2ZTV2VPejk0Vk5nWEdOT3p2Nm5majl1dk5Xa3h2bVp6cGJ1aCtm?=
+ =?utf-8?B?WEM4TDllT2hvd01QWWh2MHJNQ0QrRStnUkZGNTNWVVowVGZEeWtMdXNtZllS?=
+ =?utf-8?B?UGc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1d2bb44a-b6bf-49a3-5170-08db57a4c7d5
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2023 13:35:44.9578
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +P9BXDtx3nQ2Duv6S7yejD3YIJ0wfYwm7c7qXPU/tEdk2Y/jzLRS8pJY2+bTGTA9cYogEwNGSoc96W/qxu+g+HD7whUS75k+zAl25EH6TZs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6261
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IPQ5018 seems to have SDI (Secure Debug Image) enabled by default which
-prevents normal reboot from working causing the board to just hang after
-reboot is called.
+From: Jakub Kicinski <kuba@kernel.org>
+Date: Wed, 17 May 2023 21:08:04 -0700
 
-So, let disable SDI during SCM probe for IPQ5018.
+> On Tue, 16 May 2023 18:18:36 +0200 Alexander Lobakin wrote:
+>> +		/* Try to avoid calling no-op syncs */
+>> +		pool->p.flags |= PP_FLAG_DMA_MAYBE_SYNC;
+>> +		pool->p.flags &= ~PP_FLAG_DMA_SYNC_DEV;
+>>  	}
+>>  
+>>  	if (PAGE_POOL_DMA_USE_PP_FRAG_COUNT &&
+>> @@ -323,6 +327,12 @@ static bool page_pool_dma_map(struct page_pool *pool, struct page *page)
+>>  
+>>  	page_pool_set_dma_addr(page, dma);
+>>  
+>> +	if ((pool->p.flags & PP_FLAG_DMA_MAYBE_SYNC) &&
+>> +	    dma_need_sync(pool->p.dev, dma)) {
+>> +		pool->p.flags |= PP_FLAG_DMA_SYNC_DEV;
+>> +		pool->p.flags &= ~PP_FLAG_DMA_MAYBE_SYNC;
+>> +	}
+> 
+> is it just me or does it feel cleaner to allocate a page at init,
+> and throw it into the cache, rather than adding a condition to a
+> fast(ish) path?
 
-Signed-off-by: Robert Marko <robimarko@gmail.com>
----
- drivers/firmware/qcom_scm.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+When recycling is on, not that fast -- new allocations occur relatively
+rarely and it's allocations anyway, one `if` doesn't change anything there.
 
-diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-index bdc9324d4e62..c6a38ce49fb0 100644
---- a/drivers/firmware/qcom_scm.c
-+++ b/drivers/firmware/qcom_scm.c
-@@ -1525,6 +1525,14 @@ static int qcom_scm_probe(struct platform_device *pdev)
- 	if (download_mode)
- 		qcom_scm_set_download_mode(true);
- 
-+	/* IPQ5018 seems to have SDI (Secure Debug Image) enabled by default
-+	 * which will prevent normal reboot causing the board to hang after
-+	 * making the reboot call.
-+	 * So, make a call to SCM to disable SDI.
-+	 */
-+	if (of_machine_is_compatible("qcom,ipq5018"))
-+		qcom_scm_disable_sdi();
-+
- 	return 0;
- }
- 
--- 
-2.40.1
+And seems like I didn't get the sentence regarding "allocate and throw"
+:s This condition just disables the shortcut if any new page suddenly
+requires real DMA syncs (and if it does, then the sync a line below will
+take way more time than 1 more `if`  anyway).
 
+Thanks,
+Olek
