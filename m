@@ -2,319 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 215F3708873
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 21:39:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17C07708875
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 21:39:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbjERTjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 15:39:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57412 "EHLO
+        id S229572AbjERTjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 15:39:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjERTjR (ORCPT
+        with ESMTP id S229832AbjERTjh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 15:39:17 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5A919C
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 12:39:15 -0700 (PDT)
-Received: from notapiano.myfiosgateway.com (unknown [185.254.75.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6F561660595D;
-        Thu, 18 May 2023 20:39:10 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684438753;
-        bh=Fd/pUe/TmQQfLPBep677yYaNxvOidrVU5yODI4VZ/WI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Cm8rBRKb5iWL9H9V5UMPH7giv22atdYAqxgQEDhmuUDmgbeROQY7VEgK9AH/6IAZt
-         ze15hINQkw12N+YED36gglYUO5N+MBEa/TnEmwLR2Cj/rFaAsPapsyxfc+KqYYS329
-         OyF49QitPvbJT3Tl7m/CqOSEJNwYK0+5asJW0MU3QeYF62/oX0LLB06Q1wIrZ8KI5p
-         waTDo8bq5n5aZAEI/r14Nfx2N5nJ0kn14ra8P8+e/4J61nN1DGz3NchLB2FeIOENpq
-         M4FVvWjoyCpT47iVo9LJp0CDv07OlvFpHHoI7cN567PgG91iDPr9j2KukDy/1DDwXp
-         2gKoZDpa3QhHA==
-From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-To:     Robert Foss <rfoss@kernel.org>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        Pin-yen Lin <treapking@chromium.org>,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>, Andrzej Hajda <andrzej.hajda@intel.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@gmail.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Marek Vasut <marex@denx.de>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Xin Ji <xji@analogixsemi.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        owen <qwt9588@gmail.com>
-Subject: [PATCH] drm/bridge: anx7625: Prevent endless probe loop
-Date:   Thu, 18 May 2023 15:39:02 -0400
-Message-Id: <20230518193902.891121-1-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.40.1
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+        Thu, 18 May 2023 15:39:37 -0400
+Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B711A6;
+        Thu, 18 May 2023 12:39:31 -0700 (PDT)
+Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-54f8b7a4feeso705911eaf.2;
+        Thu, 18 May 2023 12:39:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684438771; x=1687030771;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=MDn5p8Ib+y9CgNrg+FXBfqG/I7AiFjWJTabxe3lq0Yo=;
+        b=ddQyndsHKhnN9Qool3IakuTy/45mjOyoN3HA1C3RFyZFaO5e6t4ma5Opi33vCazFE8
+         lBIZUwux60FsPYYNVxBty46mHYI+zDbT5Z8sH3SJJTcOIQYloPFbd4aJSZui9Or3MW8H
+         rGz5DcwLSZrRk+3D2LQP+YomIlfWNVIdZr+neaXrsl+f8DGceEP7Dm9THnMcbpsPdljb
+         bIHr92FUuvZ47f/Q2YDPJfIVkqiM8N/8RzWWkaVjQ9Y2wKvaUAV1cnyajJeXoRR06jX4
+         qZm7MnHWFZwvUrD314jtoKPkNCm/wwpuvB1aaQ4/5AXxrMefY7d3wrgHxGK6UQPZnHJC
+         gdcg==
+X-Gm-Message-State: AC+VfDwx+mCMXYOE/sp5nI08YG5vDB8QHinRJRkL8n9L9iFzu/88lR+Z
+        Zek78e/XJDMxNLAfolQ+TsrC/ONhnA==
+X-Google-Smtp-Source: ACHHUZ6Z5ocjGCz/xPSu9pMLuSMlz+bPgbUY8RawLZcETmIHHgksQOd/VkJV/2yOqFSssJd7wa3JJg==
+X-Received: by 2002:a05:6808:308a:b0:395:df6e:a845 with SMTP id bl10-20020a056808308a00b00395df6ea845mr2002207oib.4.1684438770739;
+        Thu, 18 May 2023 12:39:30 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id i4-20020aca3b04000000b0039208555951sm983744oia.29.2023.05.18.12.39.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 May 2023 12:39:30 -0700 (PDT)
+Received: (nullmailer pid 2547178 invoked by uid 1000);
+        Thu, 18 May 2023 19:39:29 -0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     linux-riscv@lists.infradead.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Yangtao Li <frank.li@vivo.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Icenowy Zheng <uwu@icenowy.me>, Wei Fu <wefu@redhat.com>,
+        Guo Ren <guoren@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Marc Zyngier <maz@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+In-Reply-To: <20230518184541.2627-5-jszhang@kernel.org>
+References: <20230518184541.2627-1-jszhang@kernel.org>
+ <20230518184541.2627-5-jszhang@kernel.org>
+Message-Id: <168443876898.2547162.12784151548808128613.robh@kernel.org>
+Subject: Re: [PATCH v2 4/9] dt-binding: riscv: add T-HEAD CPU reset
+Date:   Thu, 18 May 2023 14:39:29 -0500
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During probe, the driver registers i2c dummy devices and populates the
-aux bus, which registers a device for the panel. After doing that, the
-driver can still defer probe if needed. This ordering of operations is
-troublesome however, because the deferred probe work will retry probing
-all pending devices every time a new device is registered. Therefore, if
-modules need to be loaded in order to satisfy the dependencies for this
-driver to complete probe, the kernel will stall, since it'll keep trying
-to probe the anx7625 driver, but never succeed, given that modules would
-only be loaded after the deferred probe work completes.
 
-Two changes are required to avoid this issue:
-* Move of_find_mipi_dsi_host_by_node(), which can defer probe, to before
-  anx7625_register_i2c_dummy_clients() and
-  devm_of_dp_aux_populate_ep_devices(), which register devices.
-* Make use of the done_probing callback when populating the aux bus,
-  so that the bridge registration is only done after the panel is
-  probed. This is required because the panel might need to defer probe,
-  but the aux bus population needs the i2c dummy devices working, so
-  this call couldn't just be moved to an earlier point in probe.
-  One caveat is that if the panel is described outside the aux bus, the
-  probe loop issue can still happen, but we don't have a way to avoid
-  it in that case since there's no callback available.
+On Fri, 19 May 2023 02:45:36 +0800, Jisheng Zhang wrote:
+> The secondary CPUs in T-HEAD SMP capable platforms need some special
+> handling. The first one is to write the warm reset entry to entry
+> register. The second one is write a SoC specific control value to
+> a SoC specific control reg. The last one is to clone some CSRs for
+> secondary CPUs to ensure these CSRs' values are the same as the
+> main boot CPU. This DT node is mainly used by opensbi firmware.
+> 
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> ---
+>  .../bindings/riscv/thead,cpu-reset.yaml       | 69 +++++++++++++++++++
+>  1 file changed, 69 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/riscv/thead,cpu-reset.yaml
+> 
 
-With this patch applied, it's possible to boot on
-mt8192-asurada-spherion with
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-CONFIG_DRM_ANALOGIX_ANX7625=y
-CONFIG_MTK_MMSYS=m
-CONFIG_BACKLIGHT_PWM=y
+yamllint warnings/errors:
 
-and also with
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/riscv/thead,cpu-reset.example.dts:18.35-25.11: Warning (unit_address_vs_reg): /example-0/cpurst@ffff019050: node has a unit name, but no reg or ranges property
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/riscv/thead,cpu-reset.example.dtb: cpurst@ffff019050: control-reg:0: [255, 4278276100] is too long
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/riscv/thead,cpu-reset.yaml
 
-CONFIG_DRM_ANALOGIX_ANX7625=y
-CONFIG_MTK_MMSYS=y
-CONFIG_BACKLIGHT_PWM=m
+doc reference errors (make refcheckdocs):
 
-Fixes: adca62ec370c ("drm/bridge: anx7625: Support reading edid through aux channel")
-Fixes: 269332997a16 ("drm/bridge: anx7625: Return -EPROBE_DEFER if the dsi host was not found")
-Reported-by: "kernelci.org bot" <bot@kernelci.org>
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230518184541.2627-5-jszhang@kernel.org
 
----
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
- drivers/gpu/drm/bridge/analogix/anx7625.c | 128 +++++++++++++++-------
- 1 file changed, 88 insertions(+), 40 deletions(-)
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-index 093e7b9a570f..c86531f7b072 100644
---- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-+++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-@@ -1686,6 +1686,14 @@ static int anx7625_parse_dt(struct device *dev,
- 	if (of_property_read_bool(np, "analogix,audio-enable"))
- 		pdata->audio_en = 1;
- 
-+	return 0;
-+}
-+
-+static int anx7625_parse_dt_panel(struct device *dev,
-+				  struct anx7625_platform_data *pdata)
-+{
-+	struct device_node *np = dev->of_node;
-+
- 	pdata->panel_bridge = devm_drm_of_get_bridge(dev, np, 1, 0);
- 	if (IS_ERR(pdata->panel_bridge)) {
- 		if (PTR_ERR(pdata->panel_bridge) == -ENODEV) {
-@@ -2031,7 +2039,7 @@ static int anx7625_register_audio(struct device *dev, struct anx7625_data *ctx)
- 	return 0;
- }
- 
--static int anx7625_attach_dsi(struct anx7625_data *ctx)
-+static int anx7625_setup_dsi_device(struct anx7625_data *ctx)
- {
- 	struct mipi_dsi_device *dsi;
- 	struct device *dev = &ctx->client->dev;
-@@ -2041,9 +2049,6 @@ static int anx7625_attach_dsi(struct anx7625_data *ctx)
- 		.channel = 0,
- 		.node = NULL,
- 	};
--	int ret;
--
--	DRM_DEV_DEBUG_DRIVER(dev, "attach dsi\n");
- 
- 	host = of_find_mipi_dsi_host_by_node(ctx->pdata.mipi_host_node);
- 	if (!host) {
-@@ -2064,14 +2069,24 @@ static int anx7625_attach_dsi(struct anx7625_data *ctx)
- 		MIPI_DSI_MODE_VIDEO_HSE	|
- 		MIPI_DSI_HS_PKT_END_ALIGNED;
- 
--	ret = devm_mipi_dsi_attach(dev, dsi);
-+	ctx->dsi = dsi;
-+
-+	return 0;
-+}
-+
-+static int anx7625_attach_dsi(struct anx7625_data *ctx)
-+{
-+	struct device *dev = &ctx->client->dev;
-+	int ret;
-+
-+	DRM_DEV_DEBUG_DRIVER(dev, "attach dsi\n");
-+
-+	ret = devm_mipi_dsi_attach(dev, ctx->dsi);
- 	if (ret) {
- 		DRM_DEV_ERROR(dev, "fail to attach dsi to host.\n");
- 		return ret;
- 	}
- 
--	ctx->dsi = dsi;
--
- 	DRM_DEV_DEBUG_DRIVER(dev, "attach dsi succeeded.\n");
- 
- 	return 0;
-@@ -2559,6 +2574,40 @@ static void anx7625_runtime_disable(void *data)
- 	pm_runtime_disable(data);
- }
- 
-+static int anx7625_link_bridge(struct drm_dp_aux *aux)
-+{
-+	struct anx7625_data *platform = container_of(aux, struct anx7625_data, aux);
-+	struct device *dev = aux->dev;
-+	int ret;
-+
-+	ret = anx7625_parse_dt_panel(dev, &platform->pdata);
-+	if (ret) {
-+		DRM_DEV_ERROR(dev, "fail to parse DT for panel : %d\n", ret);
-+		return ret;
-+	}
-+
-+	platform->bridge.funcs = &anx7625_bridge_funcs;
-+	platform->bridge.of_node = dev->of_node;
-+	if (!anx7625_of_panel_on_aux_bus(dev))
-+		platform->bridge.ops |= DRM_BRIDGE_OP_EDID;
-+	if (!platform->pdata.panel_bridge)
-+		platform->bridge.ops |= DRM_BRIDGE_OP_HPD |
-+					DRM_BRIDGE_OP_DETECT;
-+	platform->bridge.type = platform->pdata.panel_bridge ?
-+				    DRM_MODE_CONNECTOR_eDP :
-+				    DRM_MODE_CONNECTOR_DisplayPort;
-+
-+	drm_bridge_add(&platform->bridge);
-+
-+	if (!platform->pdata.is_dpi) {
-+		ret = anx7625_attach_dsi(platform);
-+		if (ret)
-+			drm_bridge_remove(&platform->bridge);
-+	}
-+
-+	return ret;
-+}
-+
- static int anx7625_i2c_probe(struct i2c_client *client)
- {
- 	struct anx7625_data *platform;
-@@ -2633,6 +2682,24 @@ static int anx7625_i2c_probe(struct i2c_client *client)
- 	platform->aux.wait_hpd_asserted = anx7625_wait_hpd_asserted;
- 	drm_dp_aux_init(&platform->aux);
- 
-+	ret = anx7625_parse_dt(dev, pdata);
-+	if (ret) {
-+		if (ret != -EPROBE_DEFER)
-+			DRM_DEV_ERROR(dev, "fail to parse DT : %d\n", ret);
-+		goto free_wq;
-+	}
-+
-+	if (!platform->pdata.is_dpi) {
-+		ret = anx7625_setup_dsi_device(platform);
-+		if (ret < 0)
-+			goto free_wq;
-+	}
-+
-+	/*
-+	 * Registering the i2c devices will retrigger deferred probe, so it
-+	 * needs to be done after calls that might return EPROBE_DEFER,
-+	 * otherwise we can get an infinite loop.
-+	 */
- 	if (anx7625_register_i2c_dummy_clients(platform, client) != 0) {
- 		ret = -ENOMEM;
- 		DRM_DEV_ERROR(dev, "fail to reserve I2C bus.\n");
-@@ -2647,13 +2714,21 @@ static int anx7625_i2c_probe(struct i2c_client *client)
- 	if (ret)
- 		goto free_wq;
- 
--	devm_of_dp_aux_populate_ep_devices(&platform->aux);
--
--	ret = anx7625_parse_dt(dev, pdata);
-+	/*
-+	 * Populating the aux bus will retrigger deferred probe, so it needs to
-+	 * be done after calls that might return EPROBE_DEFER, otherwise we can
-+	 * get an infinite loop.
-+	 */
-+	ret = devm_of_dp_aux_populate_bus(&platform->aux, anx7625_link_bridge);
- 	if (ret) {
--		if (ret != -EPROBE_DEFER)
--			DRM_DEV_ERROR(dev, "fail to parse DT : %d\n", ret);
--		goto free_wq;
-+		if (ret != -ENODEV) {
-+			DRM_DEV_ERROR(dev, "failed to populate aux bus : %d\n", ret);
-+			goto free_wq;
-+		}
-+
-+		ret = anx7625_link_bridge(&platform->aux);
-+		if (ret)
-+			goto free_wq;
- 	}
- 
- 	if (!platform->pdata.low_power_mode) {
-@@ -2666,27 +2741,6 @@ static int anx7625_i2c_probe(struct i2c_client *client)
- 	if (platform->pdata.intp_irq)
- 		queue_work(platform->workqueue, &platform->work);
- 
--	platform->bridge.funcs = &anx7625_bridge_funcs;
--	platform->bridge.of_node = client->dev.of_node;
--	if (!anx7625_of_panel_on_aux_bus(&client->dev))
--		platform->bridge.ops |= DRM_BRIDGE_OP_EDID;
--	if (!platform->pdata.panel_bridge)
--		platform->bridge.ops |= DRM_BRIDGE_OP_HPD |
--					DRM_BRIDGE_OP_DETECT;
--	platform->bridge.type = platform->pdata.panel_bridge ?
--				    DRM_MODE_CONNECTOR_eDP :
--				    DRM_MODE_CONNECTOR_DisplayPort;
--
--	drm_bridge_add(&platform->bridge);
--
--	if (!platform->pdata.is_dpi) {
--		ret = anx7625_attach_dsi(platform);
--		if (ret) {
--			DRM_DEV_ERROR(dev, "Fail to attach to dsi : %d\n", ret);
--			goto unregister_bridge;
--		}
--	}
--
- 	if (platform->pdata.audio_en)
- 		anx7625_register_audio(dev, platform);
- 
-@@ -2694,12 +2748,6 @@ static int anx7625_i2c_probe(struct i2c_client *client)
- 
- 	return 0;
- 
--unregister_bridge:
--	drm_bridge_remove(&platform->bridge);
--
--	if (!platform->pdata.low_power_mode)
--		pm_runtime_put_sync_suspend(&client->dev);
--
- free_wq:
- 	if (platform->workqueue)
- 		destroy_workqueue(platform->workqueue);
--- 
-2.40.1
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
