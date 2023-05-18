@@ -2,85 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A585C708B5E
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 00:18:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B827B708B5F
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 00:18:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230046AbjERWSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 18:18:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39714 "EHLO
+        id S230134AbjERWSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 18:18:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjERWSA (ORCPT
+        with ESMTP id S230049AbjERWSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 18:18:00 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB0B121;
-        Thu, 18 May 2023 15:17:57 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34ILTtWN006978;
-        Thu, 18 May 2023 22:17:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=sU35Cw4irTDeedB6mcA9kJsZ0lPNVJYUdIdnkJdpjUs=;
- b=kOfCXoeZrZhtZGLpea2djEINeyu9LlyQDJSIzavCuStwiZ3e6D9qZm+22En77Y7Pii1b
- hN4RYB70AsE+5JkyjoLKm+e1TVNWrrzz7sKojXDOJgj8PRBibE0WMvAZ7C8w33kdIMQ4
- 0M5aH897UXYI+rEN2UafK3moceV+Q6KXBB9zE5o5LUhfDuA6kioHyRlkIovAQfFRxKuf
- 6zYs0qv7OjSGSf9G/pYgMZR/dF9xDQsro0ELqoDX3IPNUvJ1INx/DP7js8WcB439LM80
- Bz2NJM44tqiAjmORlxi6iyrxXc0j4APlHLG1fRJtEa1cdMSI6prX53u8iWwE3iouNV4x gg== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qnb7had85-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 May 2023 22:17:49 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34IMHmx4009539
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 May 2023 22:17:48 GMT
-Received: from [10.71.110.193] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 18 May
- 2023 15:17:47 -0700
-Message-ID: <aeef04c4-7952-2b7c-d673-5c75dda19154@quicinc.com>
-Date:   Thu, 18 May 2023 15:17:47 -0700
+        Thu, 18 May 2023 18:18:45 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE87CE50
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 15:18:43 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34IIx1VI029786;
+        Thu, 18 May 2023 22:18:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2023-03-30;
+ bh=wdgf0gkw8G8jKrdHzrElNcK9t2uuTzyHqoXtihsBkn8=;
+ b=1m1VcLmu5VtfAiVcnuBtcQlnRzsYRjfcKyqZoBQBxiP+cuBEsdBTJwh2HdFufDzHjTIW
+ g5xbobwNce4aOfzsNVd4m3xdo8M7VwsSVv8afQ9yTNpBuQZ45VUycOB1HJDTnPMXTwh+
+ 3Wt6ZGxWyiDjJ1kgmyx3D42IUg2m3gcZBOE3qVI/MF7oxwTQva+e+uCaquIt3Kw06rku
+ 12oHBCimKrHNul9EqrDq0qOTx2WN8rmvWiUnFSnXiRu6EdgYUFdnibDHf+J7Fq8m8XGK
+ WjOGEb5uEefEh5uVTFllbgp3sb2Ak4gpKGQ6icKUIO3Ar51oGr5aywGiezTMHoENYHmo Pg== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qmxwpkmf8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 18 May 2023 22:18:14 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 34ILbDPp033921;
+        Thu, 18 May 2023 22:18:14 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2102.outbound.protection.outlook.com [104.47.58.102])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3qj107u7bw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 18 May 2023 22:18:13 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mt430/CbxSFzMQQpTrcS+LuAjAfmcLn1wldhx7WZq2J5fXqMmyd7MfoViKMT7vvhHBIYtE1+KuuxwxFF2tnE2O+DO0g/CB2F/ggRXWc7BlcR0lcMCa/O0R8HfCQOv/gxFF1lD3E9yjosO/AQhMaJJav7A/u538bfhiOiDJlnelj0SxZkqVTl4Aeim8uauKBAkVkuG3Y9CRAjN1o8PzuwK81qCGfhDkZ/RZ5TObTiqKwrmbHaBlPsTXcYsvQM0g3dMLbAWuIh9YmuA54uMFoRIK5+Xg9EzL1zrm6o+dUWAIRF8cxJOHNba6KZYuJ4wwHURUZkGj5TWhgEmJDHZYmKoQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wdgf0gkw8G8jKrdHzrElNcK9t2uuTzyHqoXtihsBkn8=;
+ b=Yz5eW1lld3TsFehkHIQmeTvcVWmv7jKUWRGQ5KZSfdE0I3DfEJhEhnbZgwj0PoP/+uG5PcmLMVNFbuCWqr/sZYBuz81IkjzKq7q0LNt/ERqpSRtQoLR8k4bg3YZj0nuJ23A45e5pPRAT9PWQ0eFEXSUrRr1KKklU84ZJnXJRRy/nx2gcHh9L26R8KVaGoai1J5HsaHLCAC2pYiVORjhFbgepMrtwu6cQRPJI3EGUfLv5tQ46t2RqlBvJgb76PmAl+Xciryw5HsUqx7r7arWH7g3CJXLc7+DicwXpjex4pr0VOZNv6qJ27/FIsbz0rw6aOXK8no7+B8HmCGb7e6d4Iw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wdgf0gkw8G8jKrdHzrElNcK9t2uuTzyHqoXtihsBkn8=;
+ b=eTVmmEIkmYNU3Av07JAKdz8KA5w6/FGaRrNyLQWmwOryFf/IQ/Im37CBCXzu8+BeFgQIHgp3dvo3UWWe2ZtEQuNsPrXJCaOLVrXWlSVIpKXJsPezCpPeXGMuu5Tj65Tky+r3EeolriUNOikORZitgsHO2abDCcmwSbc2DdHwe/I=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by BLAPR10MB5300.namprd10.prod.outlook.com (2603:10b6:208:334::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19; Thu, 18 May
+ 2023 22:18:11 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::ffb:de39:b76b:52eb]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::ffb:de39:b76b:52eb%3]) with mapi id 15.20.6411.019; Thu, 18 May 2023
+ 22:18:10 +0000
+Date:   Thu, 18 May 2023 15:18:08 -0700
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     Jiaqi Yan <jiaqiyan@google.com>
+Cc:     songmuchun@bytedance.com, naoya.horiguchi@nec.com,
+        shy828301@gmail.com, linmiaohe@huawei.com,
+        akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, duenwen@google.com,
+        axelrasmussen@google.com, jthoughton@google.com
+Subject: Re: [PATCH v1 2/3] hugetlbfs: improve read HWPOISON hugepage
+Message-ID: <20230518221808.GC4029@monkey>
+References: <20230517160948.811355-1-jiaqiyan@google.com>
+ <20230517160948.811355-3-jiaqiyan@google.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230517160948.811355-3-jiaqiyan@google.com>
+X-ClientProxiedBy: MW4PR03CA0128.namprd03.prod.outlook.com
+ (2603:10b6:303:8c::13) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 2/2] drm/panel: Add driver for Visionox r66451 panel
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230516-b4-r66451-panel-driver-v1-0-4210bcbb1649@quicinc.com>
- <20230516-b4-r66451-panel-driver-v1-2-4210bcbb1649@quicinc.com>
- <3cca2809-fa26-f0cf-2ccc-6737d150b43d@linaro.org>
-From:   Jessica Zhang <quic_jesszhan@quicinc.com>
-In-Reply-To: <3cca2809-fa26-f0cf-2ccc-6737d150b43d@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: O1IKZjmeWN3H1O8AkqY4Yfkf5KNB5Ysy
-X-Proofpoint-GUID: O1IKZjmeWN3H1O8AkqY4Yfkf5KNB5Ysy
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|BLAPR10MB5300:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7a6ec242-671e-4fb9-ce80-08db57edc3ce
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tddFqaBaYJU6SytqEpHWPCo5zDdEG4WdVGJBsXQ1h6ulNLn/RLwLMC6AxkyyOtiCFFg9qf6h0zXX0m4f1CWrNTtZPqaWj4gVSMD0IRwD9sAP2CulaPJjWLG4W/gpS9x6F1qvPwWgWm3iOG8nxdArbNhFgscREuctX9Myzn30Tf2nMHkCuZMYSPWoVcNTUOygrTxeALnyQCZhXiMY82GwpB/ADswBbUCvUWv/YmMsc4tGGpB8lY/xgPUMS136EnDPAlQBVn1XzF/vMH3KxUK/rRoUk06cLguMHfsp+88ieba9dE1q+E7scjGs+2Du/iXB0vzvovzWORS+jz5Lz61m3HYllvxBjCtbo3SLsLDYBS9MvitU5LkrMrNK7+R3+E9vh7HcyW74aq3jOQ2aM3d6XkrBBdo9jHM36RcB5HHTeixeiEtSZir50Zpn5wUXDk25akKbc3EOyjk9opnKi64cYgK22n1FaqXuD+JeJZwq1GO9cLdSgOfrtbO2zaGcpK8UYuDhVcaWwVnTPpM5aB79VrDhBnMLZeCIp+8CD8M6XT1NdzNPKJXlyDnzgvGSEYIx
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(396003)(366004)(39860400002)(346002)(376002)(136003)(451199021)(7416002)(8676002)(44832011)(8936002)(66556008)(66946007)(66476007)(83380400001)(33656002)(2906002)(316002)(6916009)(4326008)(5660300002)(478600001)(41300700001)(86362001)(6486002)(38100700002)(33716001)(26005)(1076003)(6512007)(53546011)(9686003)(186003)(6506007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?DekL4ktPKAWZE9Pzm/24ZVqJogDONldeeY94Ooa4amiKA5ddFD8SajYpqhDD?=
+ =?us-ascii?Q?Lee6qI5TVafyQiK/gIaZwi+ZrdzNoOj6tZbjikitfnvwmn/n9W8pU8YqFi8r?=
+ =?us-ascii?Q?bG/VfqPUd1Po9liyH1//78V0IAdbDIUX/hJSUH2qxuOjM3WZ+vPq1SiI/5Jq?=
+ =?us-ascii?Q?2IYAVUnBMrSr481n4WtbNQ3EYiaYjQqYhOMrApMNp5PNJXW/Yqw4BiADPGKz?=
+ =?us-ascii?Q?WcUOmXpUg5S0PF7RoPvrpmgIKvyzgt7Vy0mToNq14qQAb+E/iJqU8VGX15Ig?=
+ =?us-ascii?Q?E+2h3TDiof3lm0o/1xjoiRAajiiSv8ZrZHG/l+fnn2h8l7+Jx2cQ50muBJZU?=
+ =?us-ascii?Q?tP2ltQQkGDVTaudZtVW3GoblpNlPzabuvi7LHVPqCwG/rvwEgThjCnOhCCtX?=
+ =?us-ascii?Q?arOSpBqXBeuR4THoLdxBDFRle5v4Bt22kA6obgPxSiTw8qmzxd96g7yNIUM4?=
+ =?us-ascii?Q?R6OLrgLjATiYmy2coWhFAmdS1Z/sLHlX8Oi25Yg/OHIDNyaSMilpPStw/Lz+?=
+ =?us-ascii?Q?Tgzk81846kxr4G+YsMNMyk3cqB76I9qZuNtwwyZqEaZO+bSASn+OozF5jB+6?=
+ =?us-ascii?Q?ySfKAZ5JvUXZ7ELk4II5yP1lAQojYLNvAxwrzI2z2RGqUJOdQnbdJBv9u+Lu?=
+ =?us-ascii?Q?OTK1XWRLVFXlmK45eJMucMUxvOF0Y0QfgtTk4w5mHitvObIU1ojxkNeDWlAB?=
+ =?us-ascii?Q?IdPS02I7XCHTpbRBaljmscBC3lvdvtnL2zmEatUkqgNSHNgh0bu1rYiKCcwv?=
+ =?us-ascii?Q?m5Ib/PLWSIVogc0Au3vFaWxWt+P+G4VEbjJhIVr6lTTVEcxoMh7op2pmqY2l?=
+ =?us-ascii?Q?n1m0AXKU8dJgxzIueDs6GkBQRTKwBrhjEipZkpvqi32C0I6d0TdEcStL+Dm/?=
+ =?us-ascii?Q?ormrTdxd63H+dyENsYaiogwHXNPHfEC97Eb0TSHiHlSIPSZZ57IvA7jP+Xho?=
+ =?us-ascii?Q?Cpivcyh/xbbz47tKvpQbBxWm4tvxK84CqDFsCrsAjS0htqKZY5tMA0q79Zpu?=
+ =?us-ascii?Q?SMya0hRTyD0YmsgaXwYI7HgOTul7VdTblQE9UBOdG6xM3JQMF22rIG1FkXR8?=
+ =?us-ascii?Q?aPGYpa75d/HsziITdbqHbt5T1HGweSZD98Xs+PeVlORI5qdJWk1GJ7L7d4FX?=
+ =?us-ascii?Q?BWcIjR5fNndXHeyjNhFdXijqd3LrGu6nZKpzgXcp6QAh5MfqvDC3rVdbve9T?=
+ =?us-ascii?Q?DIb41kCMMzpf53V07ICbDMZWc/ijf+339Ij+PinCNdcoCqQWZaftI1NBfSUn?=
+ =?us-ascii?Q?6IxP9UL6G5vOBFgpMek41NMGXu0Cx1m+xGLAn99uypQDwrzCaCegiAX1Q2Hi?=
+ =?us-ascii?Q?4vYHrnAOR7sfD94YiK16tSzjEpUxjgY0zwupepo273ngB7steGgD/AUCWIcg?=
+ =?us-ascii?Q?/Y+HFcG0nEJjS9h1boHaOKVt0r0c2HRJxXJtBgVw14DVtJ/FFQmPTQuAFrYX?=
+ =?us-ascii?Q?R6LHzRBZoXucOMADLpdgFStUrtWGwMXXKELtJoVbfX441KpRNsFeJPibdvqa?=
+ =?us-ascii?Q?dY2J2wOXaZDlNzS8zhUaFag0TqgKEHvqO+int21EZOEHvPka2dg4DmmKqB5m?=
+ =?us-ascii?Q?aiYbXSVKL0QnkTqP28z9TM46Y5HVimN47v7LYlxT?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?w/8QVIwDc+yiCKzVXGD9NAFlWHsxCfBHllxCCGca26oHVcRfHFBq6TSx/eRn?=
+ =?us-ascii?Q?M7UIFlRUn/bBK2uGNoCzgnUv5GXj2yHttAKPxlEBoUPoLc2lm4sXitv0/YJH?=
+ =?us-ascii?Q?T/yaagocd95mtWOJi2j7N1pZMjz1Kb093SC5myEctyDBds9sW7c1q1EscSw6?=
+ =?us-ascii?Q?DgWPN0epOvqN0Z1iotyOHn22bGAFwnNIXEkXrjoNlBQGwD++V4u2/yluSUxR?=
+ =?us-ascii?Q?6hU44fyMTKVfjmNP8dHpzz9PMpCszeAd55qMSiilF1kUPlr9rBcYxgsa9d+/?=
+ =?us-ascii?Q?bLUN8aQtlm7ULrr9ZajRXD4eO7qcFouN+WnykxnsqyOJ+TM2xGx6JGEwkNzs?=
+ =?us-ascii?Q?tbQWO5WrCPfdPjdkbd8KPk5H+ahLi3qBKpGXri7hesdOWOfEWsb3lvAALWRI?=
+ =?us-ascii?Q?yVN1OWGyVaYrssQhGELtpu3Xci7JAiBGy+CHfuZnspZma3v67kKymu4SNYd2?=
+ =?us-ascii?Q?OB/oBNghJqxKL9+SQVawXMyLC/qcBXskPxeHdy0ClaUvE6qyMP5P45Jfpc7C?=
+ =?us-ascii?Q?G4R8xARgcX05gkP1rPgm2q9E5lkDsHeYoY3Rnd3XOKTyyXFr6ZVnib/aMsrd?=
+ =?us-ascii?Q?9HxB8ANraTcREhizTxCA6xrND6fUSlgIoVzd9hEQqnDC+iv2G/h9E/yXW0Xr?=
+ =?us-ascii?Q?nyR7ITmw/0HX4N0UKJPTQvjJOtCU1zIVWD0pEJYgkqNQOkIyf+bWCZ/0LN1Q?=
+ =?us-ascii?Q?5Iime5KURZDwKHWSnJo5ABOfdpw1ug3fMDfyO16UljErLsJyGf5hD579kLvK?=
+ =?us-ascii?Q?h2hDe2pNB70STA+kVojW+KWq9SIgNCnQR2VHUUXbfz+dFEw4010Wp1sDyytT?=
+ =?us-ascii?Q?8F/WmGJ26cjVn4pgvlq7DbizgTkzcqs/nfFq2yPl626zYekaV0iQle2JbbAD?=
+ =?us-ascii?Q?nG9BASwbx07ctgISQ2wvpM0y4/SWP4Hj+pnhgjAExeaJPeIrbYdEqkvAvvR7?=
+ =?us-ascii?Q?ILf+r6iewiDJubwyO8mfnWUwMPaM8Ebo5Zby1pHPrTY=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7a6ec242-671e-4fb9-ce80-08db57edc3ce
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2023 22:18:10.8963
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pc4IV/fafXq3rg0B0lP5kt9vUsF9ctegrXRWcIPuc9SxKmRIAnS9CowDFnwHDvGbOdMjhFMmXHWYlZPondheYQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5300
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-18_15,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- mlxscore=0 spamscore=0 malwarescore=0 lowpriorityscore=0 mlxlogscore=999
- adultscore=0 suspectscore=0 phishscore=0 clxscore=1015 priorityscore=1501
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 spamscore=0
+ bulkscore=0 suspectscore=0 mlxlogscore=999 adultscore=0 malwarescore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305180183
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+ definitions=main-2305180184
+X-Proofpoint-GUID: d4sM2yBmyMPMvuJaWJy6Cd_ZSZGgV0ma
+X-Proofpoint-ORIG-GUID: d4sM2yBmyMPMvuJaWJy6Cd_ZSZGgV0ma
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,532 +165,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/17/2023 5:19 PM, Dmitry Baryshkov wrote:
-> On 16/05/2023 23:20, Jessica Zhang wrote:
->> Add support for the 1080x2340 Visionox R66451 AMOLED DSI panel that
->> comes with the Qualcomm HDK8350 display expansion pack.
->>
->> The panel enables display compression (DSC v1.2) by default.
->>
->> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
->> ---
->>   drivers/gpu/drm/panel/Kconfig                 |   8 +
->>   drivers/gpu/drm/panel/Makefile                |   1 +
->>   drivers/gpu/drm/panel/panel-visionox-r66451.c | 395 
->> ++++++++++++++++++++++++++
->>   3 files changed, 404 insertions(+)
->>
->> diff --git a/drivers/gpu/drm/panel/Kconfig 
->> b/drivers/gpu/drm/panel/Kconfig
->> index 29cf5fa39ff2..9c2c36dbddf3 100644
->> --- a/drivers/gpu/drm/panel/Kconfig
->> +++ b/drivers/gpu/drm/panel/Kconfig
->> @@ -766,6 +766,14 @@ config DRM_PANEL_VISIONOX_VTDR6130
->>         Say Y here if you want to enable support for Visionox
->>         VTDR6130 1080x2400 AMOLED DSI panel.
->> +config DRM_PANEL_VISIONOX_R66451
->> +    tristate "Visionox R66451"
->> +    depends on OF
->> +    depends on DRM_MIPI_DSI
->> +    help
->> +      Say Y here if you want to enable support for Visionox
->> +      R66451 1080x2340 AMOLED DSI panel.
->> +
->>   config DRM_PANEL_WIDECHIPS_WS2401
->>       tristate "Widechips WS2401 DPI panel driver"
->>       depends on SPI && GPIOLIB
->> diff --git a/drivers/gpu/drm/panel/Makefile 
->> b/drivers/gpu/drm/panel/Makefile
->> index b3e8ba29edd3..e043a92ee676 100644
->> --- a/drivers/gpu/drm/panel/Makefile
->> +++ b/drivers/gpu/drm/panel/Makefile
->> @@ -78,5 +78,6 @@ obj-$(CONFIG_DRM_PANEL_TPO_TPG110) += 
->> panel-tpo-tpg110.o
->>   obj-$(CONFIG_DRM_PANEL_TRULY_NT35597_WQXGA) += panel-truly-nt35597.o
->>   obj-$(CONFIG_DRM_PANEL_VISIONOX_RM69299) += panel-visionox-rm69299.o
->>   obj-$(CONFIG_DRM_PANEL_VISIONOX_VTDR6130) += panel-visionox-vtdr6130.o
->> +obj-$(CONFIG_DRM_PANEL_VISIONOX_R66451) += panel-visionox-r66451.o
->>   obj-$(CONFIG_DRM_PANEL_WIDECHIPS_WS2401) += panel-widechips-ws2401.o
->>   obj-$(CONFIG_DRM_PANEL_XINPENG_XPP055C272) += 
->> panel-xinpeng-xpp055c272.o
->> diff --git a/drivers/gpu/drm/panel/panel-visionox-r66451.c 
->> b/drivers/gpu/drm/panel/panel-visionox-r66451.c
->> new file mode 100644
->> index 000000000000..e3648ead3e84
->> --- /dev/null
->> +++ b/drivers/gpu/drm/panel/panel-visionox-r66451.c
->> @@ -0,0 +1,395 @@
->> +//SPDX-License-Identifier: GPL-2.0-only
->> +//Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights 
->> reserved.
->> +
->> +#include <linux/backlight.h>
->> +#include <linux/delay.h>
->> +#include <linux/gpio/consumer.h>
->> +#include <linux/module.h>
->> +#include <linux/of.h>
->> +#include <linux/regulator/consumer.h>
->> +
->> +#include <drm/drm_mipi_dsi.h>
->> +#include <drm/drm_modes.h>
->> +#include <drm/drm_panel.h>
->> +#include <drm/display/drm_dsc.h>
->> +#include <drm/display/drm_dsc_helper.h>
->> +
->> +#include <video/mipi_display.h>
->> +
->> +struct visionox_r66451 {
->> +    struct drm_panel panel;
->> +    struct mipi_dsi_device *dsi;
->> +    struct gpio_desc *reset_gpio;
->> +    struct regulator_bulk_data supplies[2];
->> +    bool prepared, enabled;
->> +};
->> +
->> +static inline struct visionox_r66451 *to_visionox_r66451(struct 
->> drm_panel *panel)
->> +{
->> +    return container_of(panel, struct visionox_r66451, panel);
->> +}
->> +
->> +static void visionox_r66451_reset(struct visionox_r66451 *ctx)
->> +{
->> +    gpiod_set_value_cansleep(ctx->reset_gpio, 0);
->> +    usleep_range(10000, 10100);
->> +    gpiod_set_value_cansleep(ctx->reset_gpio, 1);
->> +    usleep_range(10000, 10100);
->> +    gpiod_set_value_cansleep(ctx->reset_gpio, 0);
->> +    usleep_range(10000, 10100);
->> +}
->> +
->> +static int visionox_r66451_on(struct visionox_r66451 *ctx)
->> +{
->> +    struct mipi_dsi_device *dsi = ctx->dsi;
->> +    struct device *dev = &dsi->dev;
->> +    int ret;
->> +
->> +    dsi->mode_flags |= MIPI_DSI_MODE_LPM;
->> +
->> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x00);
->> +    mipi_dsi_dcs_write_seq(dsi, 0xc2,
->> +                   0x09, 0x24, 0x0c, 0x00, 0x00, 0x0c, 0x00, 0x00, 0x00,
->> +                   0x09, 0x3c);
->> +    mipi_dsi_dcs_write_seq(dsi, 0xd7,
->> +                   0x00, 0xb9, 0x3c, 0x00, 0x40, 0x04, 0x00, 0xa0, 0x0a,
->> +                   0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x19,
->> +                   0x3c, 0x00, 0x40, 0x04, 0x00, 0xa0, 0x0a);
->> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x80);
->> +    mipi_dsi_dcs_write_seq(dsi, 0xde,
->> +                   0x40, 0x00, 0x18, 0x00, 0x18, 0x00, 0x18, 0x00, 0x18,
->> +                   0x10, 0x00, 0x18, 0x00, 0x18, 0x00, 0x18, 0x02, 
->> 0x00, 0x00);
->> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x04);
->> +    mipi_dsi_dcs_write_seq(dsi, 0xe8, 0x00, 0x02);
->> +    mipi_dsi_dcs_write_seq(dsi, 0xe4, 0x00, 0x08);
->> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x00);
->> +    mipi_dsi_dcs_write_seq(dsi, 0xc4,
->> +                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
->> +                   0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x32);
->> +    mipi_dsi_dcs_write_seq(dsi, 0xcf,
->> +                   0x64, 0x0b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08,
->> +                   0x00, 0x0b, 0x77, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
->> +                   0x02, 0x02, 0x02, 0x02, 0x02, 0x03);
->> +    mipi_dsi_dcs_write_seq(dsi, 0xd3,
->> +                   0x45, 0x00, 0x00, 0x01, 0x13, 0x15, 0x00, 0x15, 0x07,
->> +                   0x0f, 0x77, 0x77, 0x77, 0x37, 0xb2, 0x11, 0x00, 0xa0,
->> +                   0x3c, 0x9c);
->> +    mipi_dsi_dcs_write_seq(dsi, 0xd7,
->> +                   0x00, 0xb9, 0x34, 0x00, 0x40, 0x04, 0x00, 0xa0, 0x0a,
->> +                   0x00, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x19,
->> +                   0x34, 0x00, 0x40, 0x04, 0x00, 0xa0, 0x0a);
->> +    mipi_dsi_dcs_write_seq(dsi, 0xd8,
->> +                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
->> +                   0x3a, 0x00, 0x3a, 0x00, 0x3a, 0x00, 0x3a, 0x00, 0x3a,
->> +                   0x05, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
->> +                   0x00, 0x0a, 0x00, 0x0a, 0x00, 0x00, 0x00, 0x00, 0x00,
->> +                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x0a,
->> +                   0x00, 0x32, 0x00, 0x0a, 0x00, 0x22);
->> +    mipi_dsi_dcs_write_seq(dsi, 0xdf,
->> +                   0x50, 0x42, 0x58, 0x81, 0x2d, 0x00, 0x00, 0x00, 0x00,
->> +                   0x00, 0x00, 0x6b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
->> +                   0x00, 0x00, 0x01, 0x0f, 0xff, 0xd4, 0x0e, 0x00, 0x00,
->> +                   0x00, 0x00, 0x00, 0x00, 0x0f, 0x53, 0xf1, 0x00, 0x00,
->> +                   0x00, 0x00, 0x00, 0x00, 0x00, 0x00);
->> +    mipi_dsi_dcs_write_seq(dsi, 0xf7, 0x01);
->> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x80);
->> +    mipi_dsi_dcs_write_seq(dsi, 0xe4, 0x34, 0xb4, 0x00, 0x00, 0x00, 
->> 0x39, 0x04, 0x09, 0x34);
->> +    mipi_dsi_dcs_write_seq(dsi, 0xe6, 0x00);
->> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x04);
->> +    mipi_dsi_dcs_write_seq(dsi, 0xdf, 0x50, 0x40);
->> +    mipi_dsi_dcs_write_seq(dsi, 0xf3, 0x50, 0x00, 0x00, 0x00, 0x00);
->> +    mipi_dsi_dcs_write_seq(dsi, 0xf2, 0x11);
->> +    mipi_dsi_dcs_write_seq(dsi, 0xf3, 0x01, 0x00, 0x00, 0x00, 0x01);
->> +    mipi_dsi_dcs_write_seq(dsi, 0xf4, 0x00, 0x02);
->> +    mipi_dsi_dcs_write_seq(dsi, 0xf2, 0x19);
->> +    mipi_dsi_dcs_write_seq(dsi, 0xdf, 0x50, 0x42);
->> +    mipi_dsi_dcs_set_tear_on(dsi, MIPI_DSI_DCS_TEAR_MODE_VBLANK);
->> +    mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_SET_COLUMN_ADDRESS, 0x00, 
->> 0x00, 0x04, 0x37);
+On 05/17/23 16:09, Jiaqi Yan wrote:
+> When a hugepage contains HWPOISON pages, read() fails to read any byte
+> of the hugepage and returns -EIO, although many bytes in the HWPOISON
+> hugepage are readable.
 > 
-> Please use mipi_dsi_dcs_set_column_address(dsi, 0, 1080 - 1);
-
-Hi Dmitry,
-
-Acked.
-
+> Improve this by allowing hugetlbfs_read_iter returns as many bytes as
+> possible. For a requested range [offset, offset + len) that contains
+> HWPOISON page, return [offset, first HWPOISON page addr); the next read
+> attempt will fail and return -EIO.
 > 
->> +    mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_SET_PAGE_ADDRESS, 0x00, 
->> 0x00, 0x09, 0x23);
+> Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
+> ---
+>  fs/hugetlbfs/inode.c | 62 +++++++++++++++++++++++++++++++++++++++-----
+>  1 file changed, 56 insertions(+), 6 deletions(-)
 > 
-> mipi_dsi_dcs_set_page_address(dsi, 0, 2340 - 1);
+> diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+> index ecfdfb2529a3..1baa08ec679f 100644
+> --- a/fs/hugetlbfs/inode.c
+> +++ b/fs/hugetlbfs/inode.c
+> @@ -282,6 +282,46 @@ hugetlb_get_unmapped_area(struct file *file, unsigned long addr,
+>  }
+>  #endif
+>  
+> +/*
+> + * Someone wants to read @bytes from a HWPOISON hugetlb @page from @offset.
+> + * Returns the maximum number of bytes one can read without touching the 1st raw
+> + * HWPOISON subpage.
+> + *
+> + * The implementation borrows the iteration logic from copy_page_to_iter*.
+> + */
+> +static size_t adjust_range_hwpoison(struct page *page, size_t offset, size_t bytes)
+> +{
+> +	size_t n = 0;
+> +	size_t res = 0;
+> +	struct folio *folio = page_folio(page);
+> +
+> +	folio_lock(folio);
 
-Acked.
+What is the reason for taking folio_lock?
 
-> 
->> +
->> +    ret = mipi_dsi_dcs_exit_sleep_mode(dsi);
->> +    if (ret < 0) {
->> +        dev_err(dev, "Failed to exit sleep mode: %d\n", ret);
->> +        return ret;
->> +    }
->> +    msleep(120);
->> +
->> +    ret = mipi_dsi_dcs_set_display_on(dsi);
-> 
-> Should the mipi_dsi_dcs_set_display_on() (and maybe exit sleep mode) be 
-> a a part of _enable()? Correspondingly _off should IMO be a part of 
-> _disable callback().
-
-Acked. Looking at the downstream code, it seems that all the dcs on 
-commands can be sent within _enable() (and similarly for the off 
-commands with _disable()).
-
-> 
->> +    if (ret < 0) {
->> +        dev_err(dev, "Failed on set display on: %d\n", ret);
->> +        return ret;
->> +    }
->> +    msleep(20);
-> 
-> 
-> Do we need to add here the following line?
-> 
-> dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
-
-Do you mean within the return on error block?
-
- From my understanding, we should be setting the MIPI_DSI_MODE_LPM for 
-panel_on() then unsetting MODE_LPM in panel_off().
-
-> 
-> 
->> +
->> +    return 0;
->> +}
->> +
->> +static int visionox_r66451_off(struct visionox_r66451 *ctx)
->> +{
->> +    struct mipi_dsi_device *dsi = ctx->dsi;
->> +    struct device *dev = &dsi->dev;
->> +    int ret;
->> +
->> +    dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
->> +
->> +    ret = mipi_dsi_dcs_set_display_off(dsi);
->> +    if (ret < 0) {
->> +        dev_err(dev, "Failed to set display off: %d\n", ret);
->> +        return ret;
->> +    }
->> +    msleep(20);
->> +
->> +    ret = mipi_dsi_dcs_enter_sleep_mode(dsi);
->> +    if (ret < 0) {
->> +        dev_err(dev, "Failed to enter sleep mode: %d\n", ret);
->> +        return ret;
->> +    }
->> +    msleep(120);
->> +
->> +    return 0;
->> +}
->> +
->> +static int visionox_r66451_prepare(struct drm_panel *panel)
->> +{
->> +    struct visionox_r66451 *ctx = to_visionox_r66451(panel);
->> +    struct device *dev = &ctx->dsi->dev;
->> +    int ret;
->> +
->> +    if (ctx->prepared)
->> +        return 0;
->> +
->> +    ret = regulator_bulk_enable(ARRAY_SIZE(ctx->supplies),
->> +                    ctx->supplies);
->> +    if (ret < 0)
->> +        return ret;
->> +
->> +    visionox_r66451_reset(ctx);
->> +
->> +    ret = visionox_r66451_on(ctx);
->> +    if (ret < 0) {
->> +        dev_err(dev, "Failed to initialize panel: %d\n", ret);
->> +        gpiod_set_value_cansleep(ctx->reset_gpio, 1);
->> +        regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), 
->> ctx->supplies);
->> +        return ret;
->> +    }
->> +
->> +    ctx->prepared = true;
->> +    return 0;
->> +}
->> +
->> +static int visionox_r66451_unprepare(struct drm_panel *panel)
->> +{
->> +    struct visionox_r66451 *ctx = to_visionox_r66451(panel);
->> +    struct device *dev = &ctx->dsi->dev;
->> +    int ret;
->> +
->> +    if (!ctx->prepared)
->> +        return 0;
->> +
->> +    ret = visionox_r66451_off(ctx);
->> +    if (ret < 0)
->> +        dev_err(dev, "Failed to un-initialize panel: %d\n", ret);
->> +
->> +    gpiod_set_value_cansleep(ctx->reset_gpio, 1);
->> +    regulator_bulk_disable(ARRAY_SIZE(ctx->supplies), ctx->supplies);
->> +
->> +    ctx->prepared = false;
->> +    return 0;
->> +}
->> +
->> +static const struct drm_display_mode visionox_r66451_mode = {
->> +    .clock = (1080 + 95 + 1 + 40) * (2340 + 25 + 1 + 4) * 120 / 1000,
->> +    .hdisplay = 1080,
->> +    .hsync_start = 1080 + 95,
->> +    .hsync_end = 1080 + 95 + 1,
->> +    .htotal = 1080 + 95 + 1 + 40,
->> +    .vdisplay = 2340,
->> +    .vsync_start = 2340 + 25,
->> +    .vsync_end = 2340 + 25 + 1,
->> +    .vtotal = 2340 + 25 + 1 + 4,
->> +    .width_mm = 0,
->> +    .height_mm = 0,
-> 
-> Please provide real values here.
-
-Acked.
-
-> 
->> +};
->> +
->> +static int visionox_r66451_enable(struct drm_panel *panel)
->> +{
->> +    struct visionox_r66451 *ctx = to_visionox_r66451(panel);
->> +    struct mipi_dsi_device *dsi = ctx->dsi;
->> +    struct drm_dsc_picture_parameter_set pps;
->> +    int ret;
->> +
->> +    if (ctx->enabled)
->> +        return 0;
->> +
->> +    if (!dsi->dsc) {
->> +        dev_err(&dsi->dev, "DSC not attached to DSI\n");
->> +        return -ENODEV;
->> +    }
->> +
->> +    drm_dsc_pps_payload_pack(&pps, dsi->dsc);
->> +    ret = mipi_dsi_picture_parameter_set(dsi, &pps);
->> +
->> +    ctx->enabled = true;
->> +
->> +    return 0;
->> +}
->> +
->> +static int visionox_r66451_disable(struct drm_panel *panel)
->> +{
->> +    struct visionox_r66451 *ctx = to_visionox_r66451(panel);
->> +
->> +    ctx->enabled = false;
->> +
->> +    return 0;
->> +}
->> +
->> +static int visionox_r66451_get_modes(struct drm_panel *panel,
->> +                    struct drm_connector *connector)
->> +{
->> +    struct drm_display_mode *mode;
->> +
->> +    mode = drm_mode_duplicate(connector->dev, &visionox_r66451_mode);
->> +    if (!mode)
->> +        return -ENOMEM;
->> +
->> +    drm_mode_set_name(mode);
->> +
->> +    mode->type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED;
->> +    connector->display_info.width_mm = mode->width_mm;
->> +    connector->display_info.height_mm = mode->height_mm;
->> +    drm_mode_probed_add(connector, mode);
-> 
-> Can we use drm_connector_helper_get_modes_fixed() instead?
-
-Acked.
-
-> 
->> +
->> +    return 1;
->> +}
->> +
->> +static const struct drm_panel_funcs visionox_r66451_funcs = {
->> +    .prepare = visionox_r66451_prepare,
->> +    .unprepare = visionox_r66451_unprepare,
->> +    .get_modes = visionox_r66451_get_modes,
->> +    .enable = visionox_r66451_enable,
->> +    .disable = visionox_r66451_disable,
->> +};
->> +
->> +static int visionox_r66451_bl_update_status(struct backlight_device *bl)
->> +{
->> +    struct mipi_dsi_device *dsi = bl_get_data(bl);
->> +    u16 brightness = backlight_get_brightness(bl);
->> +
->> +    return mipi_dsi_dcs_set_display_brightness(dsi, 
->> cpu_to_le16(brightness));
-> 
-> mipi_dsi_dcs_set_display_brightness() already converts the brightness, 
-> so you don't need cpu_to_le16 here.
-
-Acked.
-
-Thanks,
-
-Jessica Zhang
-
-> 
->> +}
->> +
->> +static const struct backlight_ops visionox_r66451_bl_ops = {
->> +    .update_status = visionox_r66451_bl_update_status,
->> +};
->> +
->> +static struct backlight_device *
->> +visionox_r66451_create_backlight(struct mipi_dsi_device *dsi)
->> +{
->> +    struct device *dev = &dsi->dev;
->> +    const struct backlight_properties props = {
->> +        .type = BACKLIGHT_RAW,
->> +        .brightness = 255,
->> +        .max_brightness = 4095,
->> +    };
->> +
->> +    return devm_backlight_device_register(dev, dev_name(dev), dev, dsi,
->> +                          &visionox_r66451_bl_ops, &props);
->> +}
->> +
->> +static int visionox_r66451_probe(struct mipi_dsi_device *dsi)
->> +{
->> +    struct device *dev = &dsi->dev;
->> +    struct visionox_r66451 *ctx;
->> +    struct drm_dsc_config *dsc;
->> +    int ret = 0;
->> +
->> +    ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
->> +    if (!ctx)
->> +        return -ENOMEM;
->> +
->> +    dsc = devm_kzalloc(dev, sizeof(*dsc), GFP_KERNEL);
->> +    if (!dsc)
->> +        return -ENOMEM;
->> +
->> +    /* Set DSC params */
->> +    dsc->dsc_version_major = 0x1;
->> +    dsc->dsc_version_minor = 0x2;
->> +
->> +    dsc->slice_height = 20;
->> +    dsc->slice_width = 540;
->> +    dsc->slice_count = 2;
->> +    dsc->bits_per_component = 8;
->> +    dsc->bits_per_pixel = 0x8 << 4;
->> +    dsc->block_pred_enable = true;
->> +
->> +    dsi->dsc = dsc;
->> +
->> +    ctx->supplies[0].supply = "vddio";
->> +    ctx->supplies[1].supply = "vdd";
->> +
->> +    ret = devm_regulator_bulk_get(&dsi->dev, ARRAY_SIZE(ctx->supplies),
->> +            ctx->supplies);
->> +
->> +    if (ret < 0)
->> +        return ret;
->> +
->> +    ctx->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_LOW);
->> +    if (IS_ERR(ctx->reset_gpio))
->> +        return dev_err_probe(dev, PTR_ERR(ctx->reset_gpio), "Failed 
->> to get reset-gpios\n");
->> +
->> +    ctx->dsi = dsi;
->> +    mipi_dsi_set_drvdata(dsi, ctx);
->> +
->> +    dsi->lanes = 4;
->> +    dsi->format = MIPI_DSI_FMT_RGB888;
->> +    dsi->mode_flags = MIPI_DSI_MODE_LPM | MIPI_DSI_CLOCK_NON_CONTINUOUS;
->> +
->> +    drm_panel_init(&ctx->panel, dev, &visionox_r66451_funcs, 
->> DRM_MODE_CONNECTOR_DSI);
->> +    ctx->panel.backlight = visionox_r66451_create_backlight(dsi);
->> +    if (IS_ERR(ctx->panel.backlight))
->> +        return dev_err_probe(dev, PTR_ERR(ctx->panel.backlight),
->> +                "Failed to create backlight\n");
->> +
->> +    drm_panel_add(&ctx->panel);
->> +
->> +    ret = mipi_dsi_attach(dsi);
->> +    if (ret < 0) {
->> +        dev_err(dev, "Failed to attach to DSI host: %d\n", ret);
->> +        drm_panel_remove(&ctx->panel);
->> +    }
->> +
->> +    return ret;
->> +}
->> +
->> +static void visionox_r66451_remove(struct mipi_dsi_device *dsi)
->> +{
->> +    struct visionox_r66451 *ctx = mipi_dsi_get_drvdata(dsi);
->> +    int ret;
->> +
->> +    ret = mipi_dsi_detach(dsi);
->> +    if (ret < 0)
->> +        dev_err(&dsi->dev, "Failed to detach DSI host: %d\n", ret);
->> +
->> +    drm_panel_remove(&ctx->panel);
->> +}
->> +
->> +static const struct of_device_id visionox_r66451_of_match[] = {
->> +    {.compatible = "visionox,r66451"},
->> +    { /*sentinel*/ }
->> +};
->> +MODULE_DEVICE_TABLE(of, visionox_r66451_of_match);
->> +
->> +static struct mipi_dsi_driver visionox_r66451_driver = {
->> +    .probe = visionox_r66451_probe,
->> +    .remove = visionox_r66451_remove,
->> +    .driver = {
->> +        .name = "panel-visionox-r66451",
->> +        .of_match_table = visionox_r66451_of_match,
->> +    },
->> +};
->> +
->> +module_mipi_dsi_driver(visionox_r66451_driver);
->> +
->> +MODULE_AUTHOR("Jessica Zhang <quic_jesszhan@quicinc.com>");
->> +MODULE_DESCRIPTION("Panel driver for the Visionox R66451 AMOLED DSI 
->> panel");
->> +MODULE_LICENSE("GPL");
->>
-> 
+> +
+> +	/* First subpage to start the loop. */
+> +	page += offset / PAGE_SIZE;
+> +	offset %= PAGE_SIZE;
+> +	while (1) {
+> +		if (find_raw_hwp_page(folio, page) != NULL)
+> +			break;
+> +
+> +		/* Safe to read n bytes without touching HWPOISON subpage. */
+> +		n = min(bytes, (size_t)PAGE_SIZE - offset);
+> +		res += n;
+> +		bytes -= n;
+> +		if (!bytes || !n)
+> +			break;
+> +		offset += n;
+> +		if (offset == PAGE_SIZE) {
+> +			page++;
+> +			offset = 0;
+> +		}
+> +	}
+> +
+> +	folio_unlock(folio);
+> +
+> +	return res;
+> +}
+> +
+>  /*
+>   * Support for read() - Find the page attached to f_mapping and copy out the
+>   * data. This provides functionality similar to filemap_read().
+> @@ -300,7 +340,7 @@ static ssize_t hugetlbfs_read_iter(struct kiocb *iocb, struct iov_iter *to)
+>  
+>  	while (iov_iter_count(to)) {
+>  		struct page *page;
+> -		size_t nr, copied;
+> +		size_t nr, copied, want;
+>  
+>  		/* nr is the maximum number of bytes to copy from this page */
+>  		nr = huge_page_size(h);
+> @@ -328,16 +368,26 @@ static ssize_t hugetlbfs_read_iter(struct kiocb *iocb, struct iov_iter *to)
+>  		} else {
+>  			unlock_page(page);
+>  
+> -			if (PageHWPoison(page)) {
+> -				put_page(page);
+> -				retval = -EIO;
+> -				break;
+> +			if (!PageHWPoison(page))
+> +				want = nr;
+> +			else {
+> +				/*
+> +				 * Adjust how many bytes safe to read without
+> +				 * touching the 1st raw HWPOISON subpage after
+> +				 * offset.
+> +				 */
+> +				want = adjust_range_hwpoison(page, offset, nr);
+> +				if (want == 0) {
+> +					put_page(page);
+> +					retval = -EIO;
+> +					break;
+> +				}
+>  			}
+>  
+>  			/*
+>  			 * We have the page, copy it to user space buffer.
+>  			 */
+> -			copied = copy_page_to_iter(page, offset, nr, to);
+> +			copied = copy_page_to_iter(page, offset, want, to);
+>  			put_page(page);
+>  		}
+>  		offset += copied;
 > -- 
-> With best wishes
-> Dmitry
+> 2.40.1.606.ga4b1b128d6-goog
 > 
+
+Code looks fine, just wondering about that folio_lock.
+-- 
+Mike Kravetz
