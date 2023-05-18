@@ -2,263 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C3227076D3
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 02:17:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 195C87076D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 02:17:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbjERARE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 20:17:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44736 "EHLO
+        id S229545AbjERARV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 20:17:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjERARD (ORCPT
+        with ESMTP id S229568AbjERART (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 20:17:03 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DC87E8;
-        Wed, 17 May 2023 17:17:01 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-96598a7c5e0so227321466b.3;
-        Wed, 17 May 2023 17:17:01 -0700 (PDT)
+        Wed, 17 May 2023 20:17:19 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2701A3AA1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 17:17:16 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-965a68abfd4so256663666b.2
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 17:17:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684369020; x=1686961020;
+        d=linux-foundation.org; s=google; t=1684369034; x=1686961034;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Oh43Wrfv+5aBpD3zk+YIOr3pgIKi6Fm6XvjoyCfmrss=;
-        b=O2q6Qm5/BCw7eL+R4iqW2KRYtOD7PxCsAMTNdmblRTQBQ9SXxj97E+uiLaHvdw+0vH
-         IZAgUyLD9tdpA6WzvAnycAcJlidqsKRKjEyDwYPcgFRoiRvn+aGoAETE0zL7U0uecutc
-         llNmsUorv3L9LvscGZeLrSn73CHxCEwpMLc242B+rU5ye9EYoqGyqECI6UmFyVNI137l
-         BrXk4d74hq54C4WH4aTFrG6aAlMIlKYkIqfTmGGIoIU7n6R2fgdc8MiqqwfXql+JUk9B
-         mbUicBybFzH8SUZx97fcymQ4dD0Koiso43k2URk/mqAAZSJcQr2pCjX4Y8H2fcQR9saN
-         B11g==
+        bh=SghvpISWOr2Xb/wbBKmrX8f/G7elt4qY32AMimXheQA=;
+        b=IBG+nTw6a9S41RaiATt9FaOTVAM8BW0SsRpKBG70mIJk1VQkCVz9FI5ORG0C0yMpoY
+         KxRGxWy2rKXekTI0rpU+i2MyGHQo/IkfC9eD0Jsi34Kun68q4BGKjK7GrclveLWn2h+L
+         T3nYGmA4/giGGqGgCrg54sbdj8a7PPdD5Htz8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684369020; x=1686961020;
+        d=1e100.net; s=20221208; t=1684369034; x=1686961034;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Oh43Wrfv+5aBpD3zk+YIOr3pgIKi6Fm6XvjoyCfmrss=;
-        b=hGWaBkA9Nl8f1lfmM8bb2W3g+Rw7y8f1R0wFaQ+vb0ETaUqBomKp2BhZ9XCYeeShmv
-         Jazzn3PejGSIMeDaydMaQ9qm3hGP9BlqWmos1au5TYk+mLopHhSTaIxmUKks0sM0eAp+
-         DR3X8muvNP4YpUuDE3lMMlo+82nbq2uMusUmpDO2ZkNyqKF9cc+z0cWackSUkkbnbuR/
-         0jFOPB3k1PuY6l7f8JMRHLGFA/XGOnU96qid5PCQcrrXFKpEEClz0lHG5b6SsmOMSDPQ
-         1YbNSJK7BTEE9RUsz+f+AZGsWm8PksfzON00kY/WgGKWtGsqr04QfPFnWAJA1PS+RHFv
-         ohwg==
-X-Gm-Message-State: AC+VfDwzpZhuZhgNDG5lhabffeZGEEmWWNpF5YSdiF9Ld5xQXDyjImO5
-        SrTLOL1WF4wAQKCFQchCMvjaKFBykA99Jm1NztQ=
-X-Google-Smtp-Source: ACHHUZ4tffbvWb2kOWbRDAM1NZzsqQL8R1kGzCDWJgVZSv6SDwKWRnc526sFoNefgRlhM2mGaZLNKOiitqvHwbCzGkc=
-X-Received: by 2002:a17:907:7250:b0:966:b4b:eb0 with SMTP id
- ds16-20020a170907725000b009660b4b0eb0mr42160555ejc.30.1684369019531; Wed, 17
- May 2023 17:16:59 -0700 (PDT)
+        bh=SghvpISWOr2Xb/wbBKmrX8f/G7elt4qY32AMimXheQA=;
+        b=Q3mUz7Gqc74sPJFpLzPgurrUkDtXuECkOGmpaVyadHTJWFSTxQVKHu0E6JccINx2+z
+         0I498pATqKxrhA0vBW6/nbpqWLwEvnCcThrK22GpM1ELICDxwdP17dPwZJ/OSJ90s3EL
+         LUyIkqUdebAhYsf0DurrWL1OY2fyduuAWUxXv3yPcq1tg6JPdj5cf7hFD4Gs5fWlWkRm
+         QzZmX3KQjF97ZJu6LocJ1BMfJEzHHjN5OIuWgUaV6DGzWtpn9HAfpe/vikKFiWPJJ74n
+         E3DmWYLHw9Uv8MFpow9dp/NqO8UrhfM9TPwgdDxkwax8zCPDWcabyfDMJJjYaBlRbkEr
+         fqbg==
+X-Gm-Message-State: AC+VfDy4mlyUiR7UWc/T7htn7RGsldQGs1VMOEmbElm71thUwfLAQ112
+        NOGeRJ976aUTG2KenMPxuQFkjDQEXye8YQPqDwU3LN8/
+X-Google-Smtp-Source: ACHHUZ4za43Ku46LkkTdqTx2ggKoEnLHBHXvRvEGYEynO9Xb3Z2Hzfu/a1NyCe2DJNZgMlWWdtjfPw==
+X-Received: by 2002:a17:907:1c19:b0:94a:3ff1:53ad with SMTP id nc25-20020a1709071c1900b0094a3ff153admr40005965ejc.75.1684369034431;
+        Wed, 17 May 2023 17:17:14 -0700 (PDT)
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com. [209.85.218.50])
+        by smtp.gmail.com with ESMTPSA id ke25-20020a17090798f900b00965f31ff894sm207384ejc.137.2023.05.17.17.17.13
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 17:17:13 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-965e4be7541so256907566b.1
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 17:17:13 -0700 (PDT)
+X-Received: by 2002:a17:907:97c8:b0:961:b0:3dfd with SMTP id
+ js8-20020a17090797c800b0096100b03dfdmr42523477ejc.7.1684369033423; Wed, 17
+ May 2023 17:17:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230517034510.15639-1-zegao@tencent.com> <20230517034510.15639-3-zegao@tencent.com>
- <20230517232751.09126a6cec8786a954e54bcf@kernel.org>
-In-Reply-To: <20230517232751.09126a6cec8786a954e54bcf@kernel.org>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Wed, 17 May 2023 17:16:47 -0700
-Message-ID: <CAEf4BzbxRXGR8uL=gkU9A=bER-zUbYSKgBhPLju1JZBUn9LrvQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/4] fprobe: make fprobe_kprobe_handler recursion free
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Ze Gao <zegao2021@gmail.com>, Steven Rostedt <rostedt@goodmis.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>, x86@kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org,
-        Conor Dooley <conor@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Yonghong Song <yhs@fb.com>, Ze Gao <zegao@tencent.com>
+References: <20230518000920.191583-1-michael.christie@oracle.com> <20230518000920.191583-3-michael.christie@oracle.com>
+In-Reply-To: <20230518000920.191583-3-michael.christie@oracle.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 17 May 2023 17:16:56 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wga+96PqV4x8EwFAMfi--m9essdX+3uPE-AoOSAQR1ddA@mail.gmail.com>
+Message-ID: <CAHk-=wga+96PqV4x8EwFAMfi--m9essdX+3uPE-AoOSAQR1ddA@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/8] vhost/vhost_task: Hook vhost layer into signal handler
+To:     Mike Christie <michael.christie@oracle.com>
+Cc:     oleg@redhat.com, linux@leemhuis.info, nicolas.dichtel@6wind.com,
+        axboe@kernel.dk, ebiederm@xmission.com,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, mst@redhat.com,
+        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
+        brauner@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 7:28=E2=80=AFAM Masami Hiramatsu <mhiramat@kernel.o=
-rg> wrote:
+On Wed, May 17, 2023 at 5:09=E2=80=AFPM Mike Christie
+<michael.christie@oracle.com> wrote:
 >
-> On Wed, 17 May 2023 11:45:07 +0800
-> Ze Gao <zegao2021@gmail.com> wrote:
->
-> > Current implementation calls kprobe related functions before doing
-> > ftrace recursion check in fprobe_kprobe_handler, which opens door
-> > to kernel crash due to stack recursion if preempt_count_{add, sub}
-> > is traceable in kprobe_busy_{begin, end}.
-> >
-> > Things goes like this without this patch quoted from Steven:
-> > "
-> > fprobe_kprobe_handler() {
-> >    kprobe_busy_begin() {
-> >       preempt_disable() {
-> >          preempt_count_add() {  <-- trace
-> >             fprobe_kprobe_handler() {
-> >               [ wash, rinse, repeat, CRASH!!! ]
-> > "
-> >
-> > By refactoring the common part out of fprobe_kprobe_handler and
-> > fprobe_handler and call ftrace recursion detection at the very beginnin=
-g,
-> > the whole fprobe_kprobe_handler is free from recursion.
-> >
-> > Signed-off-by: Ze Gao <zegao@tencent.com>
-> > Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > Link: https://lore.kernel.org/linux-trace-kernel/20230516071830.8190-3-=
-zegao@tencent.com
-> > ---
-> >  kernel/trace/fprobe.c | 59 ++++++++++++++++++++++++++++++++-----------
-> >  1 file changed, 44 insertions(+), 15 deletions(-)
-> >
-> > diff --git a/kernel/trace/fprobe.c b/kernel/trace/fprobe.c
-> > index 9abb3905bc8e..097c740799ba 100644
-> > --- a/kernel/trace/fprobe.c
-> > +++ b/kernel/trace/fprobe.c
-> > @@ -20,30 +20,22 @@ struct fprobe_rethook_node {
-> >       char data[];
-> >  };
-> >
-> > -static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
-> > -                        struct ftrace_ops *ops, struct ftrace_regs *fr=
-egs)
-> > +static inline void __fprobe_handler(unsigned long ip, unsigned long
-> > +             parent_ip, struct ftrace_ops *ops, struct ftrace_regs *fr=
-egs)
->
-> OK, I picked up this series to probes/fixes. Note that I fixed this line
-> because the "unsigned long parent_ip" was split into 2 lines.
->
+> +       __set_current_state(TASK_RUNNING);
+> +       rc =3D get_signal(&ksig);
+> +       set_current_state(TASK_INTERRUPTIBLE);
+> +       return rc;
 
-Hey Masami,
+The games with current_state seem nonsensical.
 
-Regarding [0], I was bisecting BPF CI failures related to
-multi-kprobes, and it turned out that [0] is the fix we need. It would
-be great if you can make sure this fix gets into Linus' tree ASAP, so
-that we can get it back into bpf/bpf-next trees and fix BPF selftests
-for everyone (we mitigated this for BPF CI as a temporary workaround
-for now). Thanks!
+What are they all about? get_signal() shouldn't care, and no other
+caller does this thing. This just seems completely random.
 
-  [0] https://lore.kernel.org/all/168100731160.79534.374827110083836722.stg=
-it@devnote2/
-
-
-> Thank you,
->
->
-> >  {
-> >       struct fprobe_rethook_node *fpr;
-> >       struct rethook_node *rh =3D NULL;
-> >       struct fprobe *fp;
-> >       void *entry_data =3D NULL;
-> > -     int bit, ret;
-> > +     int ret;
-> >
-> >       fp =3D container_of(ops, struct fprobe, ops);
-> > -     if (fprobe_disabled(fp))
-> > -             return;
-> > -
-> > -     bit =3D ftrace_test_recursion_trylock(ip, parent_ip);
-> > -     if (bit < 0) {
-> > -             fp->nmissed++;
-> > -             return;
-> > -     }
-> >
-> >       if (fp->exit_handler) {
-> >               rh =3D rethook_try_get(fp->rethook);
-> >               if (!rh) {
-> >                       fp->nmissed++;
-> > -                     goto out;
-> > +                     return;
-> >               }
-> >               fpr =3D container_of(rh, struct fprobe_rethook_node, node=
-);
-> >               fpr->entry_ip =3D ip;
-> > @@ -61,23 +53,60 @@ static void fprobe_handler(unsigned long ip, unsign=
-ed long parent_ip,
-> >               else
-> >                       rethook_hook(rh, ftrace_get_regs(fregs), true);
-> >       }
-> > -out:
-> > +}
-> > +
-> > +static void fprobe_handler(unsigned long ip, unsigned long parent_ip,
-> > +             struct ftrace_ops *ops, struct ftrace_regs *fregs)
-> > +{
-> > +     struct fprobe *fp;
-> > +     int bit;
-> > +
-> > +     fp =3D container_of(ops, struct fprobe, ops);
-> > +     if (fprobe_disabled(fp))
-> > +             return;
-> > +
-> > +     /* recursion detection has to go before any traceable function an=
-d
-> > +      * all functions before this point should be marked as notrace
-> > +      */
-> > +     bit =3D ftrace_test_recursion_trylock(ip, parent_ip);
-> > +     if (bit < 0) {
-> > +             fp->nmissed++;
-> > +             return;
-> > +     }
-> > +     __fprobe_handler(ip, parent_ip, ops, fregs);
-> >       ftrace_test_recursion_unlock(bit);
-> > +
-> >  }
-> >  NOKPROBE_SYMBOL(fprobe_handler);
-> >
-> >  static void fprobe_kprobe_handler(unsigned long ip, unsigned long pare=
-nt_ip,
-> >                                 struct ftrace_ops *ops, struct ftrace_r=
-egs *fregs)
-> >  {
-> > -     struct fprobe *fp =3D container_of(ops, struct fprobe, ops);
-> > +     struct fprobe *fp;
-> > +     int bit;
-> > +
-> > +     fp =3D container_of(ops, struct fprobe, ops);
-> > +     if (fprobe_disabled(fp))
-> > +             return;
-> > +
-> > +     /* recursion detection has to go before any traceable function an=
-d
-> > +      * all functions called before this point should be marked as not=
-race
-> > +      */
-> > +     bit =3D ftrace_test_recursion_trylock(ip, parent_ip);
-> > +     if (bit < 0) {
-> > +             fp->nmissed++;
-> > +             return;
-> > +     }
-> >
-> >       if (unlikely(kprobe_running())) {
-> >               fp->nmissed++;
-> >               return;
-> >       }
-> > +
-> >       kprobe_busy_begin();
-> > -     fprobe_handler(ip, parent_ip, ops, fregs);
-> > +     __fprobe_handler(ip, parent_ip, ops, fregs);
-> >       kprobe_busy_end();
-> > +     ftrace_test_recursion_unlock(bit);
-> >  }
-> >
-> >  static void fprobe_exit_handler(struct rethook_node *rh, void *data,
-> > --
-> > 2.40.1
-> >
->
->
-> --
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
->
+      Linus
