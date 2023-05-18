@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1937D707EEA
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 13:09:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20F3E707EE7
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 13:09:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231244AbjERLJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 07:09:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43600 "EHLO
+        id S231211AbjERLJY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 07:09:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbjERLJS (ORCPT
+        with ESMTP id S231187AbjERLJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 18 May 2023 07:09:18 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3FE8213B;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4088213D;
         Thu, 18 May 2023 04:08:36 -0700 (PDT)
 Date:   Thu, 18 May 2023 11:08:03 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1684408083;
+        s=2020; t=1684408084;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5ejN/mH3LR4t0/RUCezt3x65qUEpqLMlgQXY4nbjFu8=;
-        b=XC6eLNNsAdHp2b1+A3c+pnQghTjEL3wVKhHYIY5YjHmAUd88GYRm6AG5WTglqeoArFVR2h
-        UxivzU+HIJyIjwZvNlHpo06Bq2aw6vGRhtAzUPUtQjF7QB+iqVLR9RJRTPJyfbNhnUliFu
-        hDqUlFpq+tT+xIZmZov+y1iKmkvpSSG9/bmWQGqzqPfFEkmhhKgcZuz3Cix7IW1nyXHQ+W
-        gYinMFk1gCFu+z2f9th7ZoIvMcrHuQ10fopwSBPfMxQ3f81NTWZtwPnMC6RCWcCG3wlJCY
-        zGgt9aQJaSedQdj8hMKaNa8OnehslekxEapqvhf32gRHvMWQu7RUxD50R6qYjg==
+        bh=lfkepp8n9DFZjIdQo9gJbfuMIUEXsMOcfYyoO10MrH8=;
+        b=BwJNbCj0VN6R7V2EHWwIaBgGkZCJ95UoaCEk8mvrYaJ5zA5tpyLHz7CizyzexXxYX/pWdv
+        G+taMZXycG50/IB9gQ1iPaqPyRW/4o4GFfEhmPU5ceq4GLjc8//JwU+Ov5VJ0cPsDl0WXN
+        m36wRpoXaCCm/HZs5ARVtvohuleFZk31ANN5ceiqBCBb5ZsxwfjFNG2CdNQ94qS7GD6AFR
+        YNlUVJ7Spd6SFrfZ1ZZKMaiK2Oa/j08MXIMnbIDoy11KKdDQpoAeGytGSN0B5x6ESC5K+I
+        GvZDkNcn+PR59BVuwx/myRABeF8JnOTOhETUFWY2Dvunor8osV0d0PtonkWV/g==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1684408083;
+        s=2020e; t=1684408084;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5ejN/mH3LR4t0/RUCezt3x65qUEpqLMlgQXY4nbjFu8=;
-        b=51/M3jrukm/XcJMmtDuSZIBW9GG7Y57/BG1pVdiWYWKLgYj54RmbGam1WV0cPwlL7YbrgJ
-        4wLJdsY5DeCsEJBw==
-From:   "tip-bot2 for Josh Poimboeuf" <tip-bot2@linutronix.de>
+        bh=lfkepp8n9DFZjIdQo9gJbfuMIUEXsMOcfYyoO10MrH8=;
+        b=/Wdj8QuvCS4oklEpE+zW91Cg8CTx3OU92Thcu2KWbfVmU0JW9h9V+3D6TMYhGoOp5evMKF
+        DqyI5ruMsslOT6BA==
+From:   "tip-bot2 for ndesaulniers@google.com" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: objtool/core] x86/unwind/orc: Add 'unwind_debug' cmdline option
-Cc:     Miroslav Benes <mbenes@suse.cz>,
+Subject: [tip: objtool/core] start_kernel: Omit
+ prevent_tail_call_optimization() for newer toolchains
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
         Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <6afb9e48a05fd2046bfad47e69b061b43dfd0e0e.1681331449.git.jpoimboe@kernel.org>
-References: <6afb9e48a05fd2046bfad47e69b061b43dfd0e0e.1681331449.git.jpoimboe@kernel.org>
+In-Reply-To: <20230412-no_stackp-v2-2-116f9fe4bbe7@google.com>
+References: <20230412-no_stackp-v2-2-116f9fe4bbe7@google.com>
 MIME-Version: 1.0
-Message-ID: <168440808334.404.13534074205868319070.tip-bot2@tip-bot2>
+Message-ID: <168440808364.404.15005624206596163176.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,111 +70,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the objtool/core branch of tip:
 
-Commit-ID:     89da5a69a831f20df6463fd524e1578e12a8f46f
-Gitweb:        https://git.kernel.org/tip/89da5a69a831f20df6463fd524e1578e12a8f46f
-Author:        Josh Poimboeuf <jpoimboe@redhat.com>
-AuthorDate:    Wed, 12 Apr 2023 13:31:05 -07:00
+Commit-ID:     dc1d05536f44cee16e46e86316e6718b2c0d8872
+Gitweb:        https://git.kernel.org/tip/dc1d05536f44cee16e46e86316e6718b2c0d8872
+Author:        ndesaulniers@google.com <ndesaulniers@google.com>
+AuthorDate:    Mon, 17 Apr 2023 15:00:06 -07:00
 Committer:     Josh Poimboeuf <jpoimboe@kernel.org>
-CommitterDate: Tue, 16 May 2023 06:31:50 -07:00
+CommitterDate: Tue, 16 May 2023 06:28:24 -07:00
 
-x86/unwind/orc: Add 'unwind_debug' cmdline option
+start_kernel: Omit prevent_tail_call_optimization() for newer toolchains
 
-Sometimes the one-line ORC unwinder warnings aren't very helpful.  Add a
-new 'unwind_debug' cmdline option which will dump the full stack
-contents of the current task when an error condition is encountered.
+prevent_tail_call_optimization() was added in
+commit a9a3ed1eff36 ("x86: Fix early boot crash on gcc-10, third try")
+to work around stack canaries getting inserted into functions that would
+initialize the stack canary in the first place.
 
-Reviewed-by: Miroslav Benes <mbenes@suse.cz>
-Link: https://lore.kernel.org/r/6afb9e48a05fd2046bfad47e69b061b43dfd0e0e.1681331449.git.jpoimboe@kernel.org
+Now that we have no_stack_protector function attribute (gcc-11+,
+clang-7+) and use it on start_kernel(), remove the call to
+prevent_tail_call_optimization() such that we may one day remove it
+outright.
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+Link: https://lore.kernel.org/r/20230412-no_stackp-v2-2-116f9fe4bbe7@google.com
 Signed-off-by: Josh Poimboeuf <jpoimboe@kernel.org>
 ---
- Documentation/admin-guide/kernel-parameters.txt |  6 ++-
- arch/x86/kernel/unwind_orc.c                    | 49 +++++++++++++++-
- 2 files changed, 54 insertions(+), 1 deletion(-)
+ init/main.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 9e5bab2..f922eea 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -6563,6 +6563,12 @@
- 	unknown_nmi_panic
- 			[X86] Cause panic on unknown NMI.
+diff --git a/init/main.c b/init/main.c
+index c445c1f..c0b6499 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -1088,7 +1088,13 @@ void start_kernel(void)
+ 	/* Do the rest non-__init'ed, we're now alive */
+ 	arch_call_rest_init();
  
-+	unwind_debug	[X86-64]
-+			Enable unwinder debug output.  This can be
-+			useful for debugging certain unwinder error
-+			conditions, including corrupt stacks and
-+			bad/missing unwinder metadata.
-+
- 	usbcore.authorized_default=
- 			[USB] Default USB device authorization:
- 			(default -1 = authorized except for wireless USB,
-diff --git a/arch/x86/kernel/unwind_orc.c b/arch/x86/kernel/unwind_orc.c
-index 5fbcb22..7891727 100644
---- a/arch/x86/kernel/unwind_orc.c
-+++ b/arch/x86/kernel/unwind_orc.c
-@@ -13,8 +13,14 @@
++	/*
++	 * Avoid stack canaries in callers of boot_init_stack_canary for gcc-10
++	 * and older.
++	 */
++#if !__has_attribute(__no_stack_protector__)
+ 	prevent_tail_call_optimization();
++#endif
+ }
  
- #define orc_warn_current(args...)					\
- ({									\
--	if (state->task == current && !state->error)			\
-+	static bool dumped_before;					\
-+	if (state->task == current && !state->error) {			\
- 		orc_warn(args);						\
-+		if (unwind_debug && !dumped_before) {			\
-+			dumped_before = true;				\
-+			unwind_dump(state);				\
-+		}							\
-+	}								\
- })
- 
- extern int __start_orc_unwind_ip[];
-@@ -23,8 +29,49 @@ extern struct orc_entry __start_orc_unwind[];
- extern struct orc_entry __stop_orc_unwind[];
- 
- static bool orc_init __ro_after_init;
-+static bool unwind_debug __ro_after_init;
- static unsigned int lookup_num_blocks __ro_after_init;
- 
-+static int __init unwind_debug_cmdline(char *str)
-+{
-+	unwind_debug = true;
-+
-+	return 0;
-+}
-+early_param("unwind_debug", unwind_debug_cmdline);
-+
-+static void unwind_dump(struct unwind_state *state)
-+{
-+	static bool dumped_before;
-+	unsigned long word, *sp;
-+	struct stack_info stack_info = {0};
-+	unsigned long visit_mask = 0;
-+
-+	if (dumped_before)
-+		return;
-+
-+	dumped_before = true;
-+
-+	printk_deferred("unwind stack type:%d next_sp:%p mask:0x%lx graph_idx:%d\n",
-+			state->stack_info.type, state->stack_info.next_sp,
-+			state->stack_mask, state->graph_idx);
-+
-+	for (sp = __builtin_frame_address(0); sp;
-+	     sp = PTR_ALIGN(stack_info.next_sp, sizeof(long))) {
-+		if (get_stack_info(sp, state->task, &stack_info, &visit_mask))
-+			break;
-+
-+		for (; sp < stack_info.end; sp++) {
-+
-+			word = READ_ONCE_NOCHECK(*sp);
-+
-+			printk_deferred("%0*lx: %0*lx (%pB)\n", BITS_PER_LONG/4,
-+					(unsigned long)sp, BITS_PER_LONG/4,
-+					word, (void *)word);
-+		}
-+	}
-+}
-+
- static inline unsigned long orc_ip(const int *ip)
- {
- 	return (unsigned long)ip + *ip;
+ /* Call all constructor functions linked into the kernel. */
