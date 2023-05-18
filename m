@@ -2,147 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68D5C707805
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 04:23:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E34A7077C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 04:03:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbjERCXJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 22:23:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59280 "EHLO
+        id S229783AbjERCDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 22:03:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbjERCXH (ORCPT
+        with ESMTP id S229458AbjERCDN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 22:23:07 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2084.outbound.protection.outlook.com [40.107.100.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C2533C02;
-        Wed, 17 May 2023 19:23:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KwaEM3vBTuSwXXm5Yoi4Wq82jNnDfNdPj2PoZ3Fq+aa1iTwCtd5CKg6bsWcqpuEuHT37V18fFd+0Rzur8Had4sv6t5Z31oWdLd2pB5SXU7zwLcjqcT5hyqVEjPROSY+gaI6XeGu/cRFwITrqMePZTYlMKQ4OcLaPaU+ScplwwKDnaPwfdrkJbC6t0fliNfumFvU59zvRLyhuiX1x2AF4ovXDOofA/xFah6+72H50ZKoF3cWpPAnbAfK9xxkm0IlfwVmO0Pntew+IADra2fX+22vg8mUTk2ofPhDQQ7tbhHPM8mUP36czCmvKdX8LZZk8EPk/yDcEZQBQj22BLfMkkw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lbGF+htYPBWIH+dOZaaS6XNlN1YI5wjIp9k8BvnMQ9I=;
- b=E06dZeF4dWu16TFhgSRVNup2kfqzoXEQNoCMnZb+o9eC9VQZqSRBfM9poBehBvVX/VBaslrsne+dxxpm0EjC9BksOLEgSPK2BkNOYLc6POAIQIn5ky9u8ZW3w4SK8nkQzkV0jpjHjNsAlyILw8rS8khjFzp4sB5xR1FPkoWahXJdLVxuakmH98PAbLDHA0O0Z14NY9BQ3XvkjsWX9dkAbnbhPDvpnRWH4U2XforSF9inE0ZiewvNEmCdwDe9F4Qb9snbjLkH9fJLNseKbKMpk+dhlWeLWOe24hpKo7rbgJnOSOGCHhH/aVQ9+aHBQmxgfJfphO1VFHAm5YTsMgkXfQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lbGF+htYPBWIH+dOZaaS6XNlN1YI5wjIp9k8BvnMQ9I=;
- b=HbXY45xZn5umFJD9LeNhjKvd8yCIMarctsy2/TTDP/BwFQJuFw4sqLxRHXoLrC4TIosf9LiruGQGfVaA//xOKZR3s4a6HL01naUOArPL2o67cEtnsqkB+ONd+M/1X/U647JV6+8ankxnm+vfmQDxNQ75QmdQeVzot2/F/nYM6Kg=
-Received: from DM5PR08CA0045.namprd08.prod.outlook.com (2603:10b6:4:60::34) by
- CY8PR12MB8067.namprd12.prod.outlook.com (2603:10b6:930:74::16) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6411.19; Thu, 18 May 2023 02:23:03 +0000
-Received: from DM6NAM11FT069.eop-nam11.prod.protection.outlook.com
- (2603:10b6:4:60:cafe::47) by DM5PR08CA0045.outlook.office365.com
- (2603:10b6:4:60::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.18 via Frontend
- Transport; Thu, 18 May 2023 02:23:03 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT069.mail.protection.outlook.com (10.13.173.202) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6411.18 via Frontend Transport; Thu, 18 May 2023 02:23:02 +0000
-Received: from SITE-L-T34-2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 17 May
- 2023 21:23:00 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Bjorn Helgaas <bhelgaas@google.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-CC:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "S-k Shyam-sundar" <Shyam-sundar.S-k@amd.com>,
-        Natikar Basavaraj <Basavaraj.Natikar@amd.com>,
-        Deucher Alexander <Alexander.Deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Iain Lane <iain@orangesquash.org.uk>
-Subject: [PATCH v2] PCI: Don't assume root ports from > 2015 are power manageable
-Date:   Wed, 17 May 2023 10:08:27 -0500
-Message-ID: <20230517150827.89819-1-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 17 May 2023 22:03:13 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71B6B2D7B;
+        Wed, 17 May 2023 19:03:12 -0700 (PDT)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QMCnP0TQlzqSRl;
+        Thu, 18 May 2023 09:58:49 +0800 (CST)
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Thu, 18 May 2023 10:03:10 +0800
+Message-ID: <d13b2730-bc20-3e32-a6c0-44c525ca9f0b@huawei.com>
+Date:   Thu, 18 May 2023 10:03:09 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT069:EE_|CY8PR12MB8067:EE_
-X-MS-Office365-Filtering-Correlation-Id: 67598d32-0edf-4776-bb05-08db5746ceb5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: E/8/Etjgok0L2y73BBjGZGnH0KpR0ppoD3ELSx/wNwSSTGraYb/SGKILKYPLEC8dh4sOT45pVJ1JuDs+scv9TOpiTH+Cr6yk/CjpPV/u41bnsT7fKleJYGAkYpDL3xPvkg9TomE85IjP7GiCTJQNsaoCtVxN9so90EqGGGD/FtkeRc1MjzNzQ8YxUZ+qZWjXNH28c+ex7+AvLWARQyVt0muTJIe+pOIKH4zVCCM+xAAAzROtWbC6HQW/QKuXM+pDgMzrwdlmlN0TwedfS29PQp/qiqAoVdjGW/4kb7ngYAbmLnJMvjD0qkGg/OARc7vDtnJdH5aVO5FWqNQJBxFJdEUcXCGF9JbnqvaV7UcLh3MszSexoUR9Gb17ij7LjSsa7sWaeXBYknhcyigRn6/LcsWgmbb25DptMHoOHPHKmu0BjZU20NoFO3xb3MTcKU6yu41HxudiiyXRrz5X4QmflgmcMFOyoap53lBOe96xkv6KuTJe+sjuzVIiQdNvH5yjtC7iFZAfLb6pzjFlMGRU1wmL7SawBSn6a7TjsGO87Qn6mzq7zbOqbo+RhHk5IFLn+ahMnzyDQsENWzZf9jET9yzt6qO7/fw1xCkUCsPFNq3OCfCCHtGq9sCCNSgI/ROIhVV1zCh6ukmFORGDeMNgwsOoBJWwpeIaxEMWxMCuBtOmhrtF1qwlIi8bYgug3MV5fBkuRysOGdT5JsOmBk7jw7s1kd4DE594TTs5feduDIJsjZolauNI2C5LUmal1Q+uukmo8lUXTi5ngwBNuUi7fw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(396003)(346002)(136003)(451199021)(40470700004)(36840700001)(46966006)(6666004)(7696005)(110136005)(54906003)(70586007)(70206006)(966005)(316002)(4326008)(478600001)(41300700001)(40460700003)(5660300002)(186003)(1076003)(16526019)(44832011)(8936002)(8676002)(26005)(40480700001)(426003)(336012)(83380400001)(2616005)(47076005)(36756003)(2906002)(66574015)(36860700001)(82740400003)(82310400005)(356005)(81166007)(86362001)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2023 02:23:02.9619
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 67598d32-0edf-4776-bb05-08db5746ceb5
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT069.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB8067
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] x86/mce: set MCE_IN_KERNEL_COPYIN for all MC-Safe Copy
+Content-Language: en-US
+To:     Tony Luck <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, <jane.chu@oracle.com>
+References: <20230508022233.13890-1-wangkefeng.wang@huawei.com>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <20230508022233.13890-1-wangkefeng.wang@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using an XHCI device to wakeup the system from s2idle fails when
-that XHCI device is connected to a USB-C port for an AMD USB4
-router.
+Hi Tony and all x86 maintainers, kindly ping, thanks.
 
-Due to commit 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during
-suspend") all root port go into D3 during s2idle.
-When the root ports are in D3 over s2idle it's not possible for the
-platform firmware to properly identify the wakeup source.
-
-Comparing registers between Linux and Windows 11 this behavior to put root
-ports into D3 at suspend is unique to Linux.  On an affected system
-Windows does not put the root ports into D3 over Modern Standby.
-
-Windows doesn't put the root ports into D3 because root ports are not
-power manageable; they're missing _PRW and _S0W.
-
-Linux shouldn't be assuming they support D3 just because they're newer
-than 2015, the ports should also be deemed power manageable.
-Add an extra check for this to ensure D3 isn't selected for such machines.
-
-Fixes: 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend")
-Reported-by: Iain Lane <iain@orangesquash.org.uk>
-Closes: https://forums.lenovo.com/t5/Ubuntu/Z13-can-t-resume-from-suspend-with-external-USB-keyboard/m-p/5217121
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
- drivers/pci/pci.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-index 5ede93222bc1..3fe27aef09e6 100644
---- a/drivers/pci/pci.c
-+++ b/drivers/pci/pci.c
-@@ -3010,6 +3010,9 @@ bool pci_bridge_d3_possible(struct pci_dev *bridge)
- 		if (dmi_check_system(bridge_d3_blacklist))
- 			return false;
- 
-+		if (!platform_pci_power_manageable(bridge))
-+			return false;
-+
- 		/*
- 		 * It should be safe to put PCIe ports from 2015 or newer
- 		 * to D3.
--- 
-2.34.1
-
+On 2023/5/8 10:22, Kefeng Wang wrote:
+> Both EX_TYPE_FAULT_MCE_SAFE and EX_TYPE_DEFAULT_MCE_SAFE exception
+> fixup types are used to identify fixups which allow in kernel #MC
+> recovery, that is the Machine Check Safe Copy.
+> 
+> For now, the MCE_IN_KERNEL_COPYIN flag is only set for EX_TYPE_COPY
+> and EX_TYPE_UACCESS when copy from user, and corrupted page is
+> isolated in this case, for MC-safe copy, memory_failure() is not
+> always called, some places, like __wp_page_copy_user, copy_subpage,
+> copy_user_gigantic_page and ksm_might_need_to_copy manually call
+> memory_failure_queue() to cope with such unhandled error pages,
+> recently coredump hwposion recovery support[1] is asked to do the
+> same thing, and there are some other already existed MC-safe copy
+> scenarios, eg, nvdimm, dm-writecache, dax, which has similar issue.
+> 
+> The best way to fix them is set MCE_IN_KERNEL_COPYIN to MCE_SAFE
+> exception, then kill_me_never() will be queued to call memory_failure()
+> in do_machine_check() to isolate corrupted page, which avoid calling
+> memory_failure_queue() after every MC-safe copy return.
+> 
+> [1] https://lkml.kernel.org/r/20230417045323.11054-1-wangkefeng.wang@huawei.com
+> 
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> ---
+>   arch/x86/kernel/cpu/mce/severity.c |  3 +--
+>   mm/ksm.c                           |  1 -
+>   mm/memory.c                        | 12 +++---------
+>   3 files changed, 4 insertions(+), 12 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/cpu/mce/severity.c b/arch/x86/kernel/cpu/mce/severity.c
+> index c4477162c07d..63e94484c5d6 100644
+> --- a/arch/x86/kernel/cpu/mce/severity.c
+> +++ b/arch/x86/kernel/cpu/mce/severity.c
+> @@ -293,12 +293,11 @@ static noinstr int error_context(struct mce *m, struct pt_regs *regs)
+>   	case EX_TYPE_COPY:
+>   		if (!copy_user)
+>   			return IN_KERNEL;
+> -		m->kflags |= MCE_IN_KERNEL_COPYIN;
+>   		fallthrough;
+>   
+>   	case EX_TYPE_FAULT_MCE_SAFE:
+>   	case EX_TYPE_DEFAULT_MCE_SAFE:
+> -		m->kflags |= MCE_IN_KERNEL_RECOV;
+> +		m->kflags |= MCE_IN_KERNEL_RECOV | MCE_IN_KERNEL_COPYIN;
+>   		return IN_KERNEL_RECOV;
+>   
+>   	default:
+> diff --git a/mm/ksm.c b/mm/ksm.c
+> index 0156bded3a66..7abdf4892387 100644
+> --- a/mm/ksm.c
+> +++ b/mm/ksm.c
+> @@ -2794,7 +2794,6 @@ struct page *ksm_might_need_to_copy(struct page *page,
+>   	if (new_page) {
+>   		if (copy_mc_user_highpage(new_page, page, address, vma)) {
+>   			put_page(new_page);
+> -			memory_failure_queue(page_to_pfn(page), 0);
+>   			return ERR_PTR(-EHWPOISON);
+>   		}
+>   		SetPageDirty(new_page);
+> diff --git a/mm/memory.c b/mm/memory.c
+> index 5e2c6b1fc00e..c0f586257017 100644
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -2814,10 +2814,8 @@ static inline int __wp_page_copy_user(struct page *dst, struct page *src,
+>   	unsigned long addr = vmf->address;
+>   
+>   	if (likely(src)) {
+> -		if (copy_mc_user_highpage(dst, src, addr, vma)) {
+> -			memory_failure_queue(page_to_pfn(src), 0);
+> +		if (copy_mc_user_highpage(dst, src, addr, vma))
+>   			return -EHWPOISON;
+> -		}
+>   		return 0;
+>   	}
+>   
+> @@ -5852,10 +5850,8 @@ static int copy_user_gigantic_page(struct folio *dst, struct folio *src,
+>   
+>   		cond_resched();
+>   		if (copy_mc_user_highpage(dst_page, src_page,
+> -					  addr + i*PAGE_SIZE, vma)) {
+> -			memory_failure_queue(page_to_pfn(src_page), 0);
+> +					  addr + i*PAGE_SIZE, vma))
+>   			return -EHWPOISON;
+> -		}
+>   	}
+>   	return 0;
+>   }
+> @@ -5871,10 +5867,8 @@ static int copy_subpage(unsigned long addr, int idx, void *arg)
+>   	struct copy_subpage_arg *copy_arg = arg;
+>   
+>   	if (copy_mc_user_highpage(copy_arg->dst + idx, copy_arg->src + idx,
+> -				  addr, copy_arg->vma)) {
+> -		memory_failure_queue(page_to_pfn(copy_arg->src + idx), 0);
+> +				  addr, copy_arg->vma))
+>   		return -EHWPOISON;
+> -	}
+>   	return 0;
+>   }
+>   
