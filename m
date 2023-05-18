@@ -2,232 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C229D7085B6
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 18:12:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D64D37085B9
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 18:13:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbjERQMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 12:12:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46956 "EHLO
+        id S229546AbjERQNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 12:13:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjERQMX (ORCPT
+        with ESMTP id S229445AbjERQNb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 12:12:23 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2083.outbound.protection.outlook.com [40.107.244.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E63BFE;
-        Thu, 18 May 2023 09:12:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lQe4GPW92UWe/PhCY8ixfnHQQFc+Y9KM3YOn4VzTSMzwy8E8hRMTylqEt6eeaBORwHIhrM6wJoTN8hGITzU0NpuTLz8uCI0OrscXjQQGLUQWTytWyeUXiSdCfEYxL7YHbaYIsyqSO2NYuRLIYhe4QbXqr9QV5g0jOQYLeZEd2T2aUhdgJu3b3aNzO7w0R00doC/yYYkkMqrw8NXHvYTyJx5tJVobvPT45g91TV1k9GlkNX3Z5sd5unx8mc1kJFu62lNL5mnNB2zHrbkaP1kmATt0nbx10lUoB4qfG3lWQn0sxFnHrAi0YUKx58tKYqh6ZJXzfAwa67S7UpbVO/7x1Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=p7ZcI+u5QOkEp2325OchhtpJ7Ri++tVH5Np9f5CmHK0=;
- b=LhzimnkdIjD0ppTcEv7mLzKvMuuPGFIiwLboGWJ7hBimzd0OI2767EQHNhaPaohmk+OjMigX7onMdBaIlgY7jRadIsQzpe4FeUW4Q7nAvrpve+kYfbi0QXdi83qWKbjfHDT4lBvPE15fqammYUT58rtZGUgPeRkXb1Zzv6H+peK/v8A2lyYfC9R2PIXH6L7PZ8fQaQEw42IXwjB5lOss6k5Nwv5GuxtW9aPNZrPrf+/xEpPeLs0Mt/fzXQPj2p5DdVZ6PZV4nvGdy/RMzd6kR9J/zY57EeNpFKFH8muK2I9wffpWo36OAskS7LuWkRNZVaGm6su9djS9GM8MyZsrZg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=linux.intel.com smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=p7ZcI+u5QOkEp2325OchhtpJ7Ri++tVH5Np9f5CmHK0=;
- b=5fMdWzSUp5g31ceTFPFFPlnZb3s2NqnoJCgHTeUQvS5EqAfrSK23m+mUds5MSYrHdU3z0SfV+x5i42AFH/GyP+dSBesbQoF8KYNU3sNNDLBwXGp2b/LTxkpmCZnwdvojwg5A7BkCwmfcaQ2z7CKJUbqwuEAStL71TQV6j+klIRs=
-Received: from DM6PR13CA0058.namprd13.prod.outlook.com (2603:10b6:5:134::35)
- by SJ2PR12MB7990.namprd12.prod.outlook.com (2603:10b6:a03:4c3::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.17; Thu, 18 May
- 2023 16:12:18 +0000
-Received: from DM6NAM11FT103.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:134:cafe::6b) by DM6PR13CA0058.outlook.office365.com
- (2603:10b6:5:134::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.15 via Frontend
- Transport; Thu, 18 May 2023 16:12:18 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT103.mail.protection.outlook.com (10.13.172.75) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6411.20 via Frontend Transport; Thu, 18 May 2023 16:12:18 +0000
-Received: from SITE-L-T34-2.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 18 May
- 2023 11:12:16 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     <heikki.krogerus@linux.intel.com>, <ajayg@nvidia.com>,
-        <andriy.shevchenko@linux.intel.com>
-CC:     <linux-i2c@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <Evan.Quan@amd.com>, <Lijo.Lazar@amd.com>,
-        <Sanket.Goswami@amd.com>,
-        "Mario Limonciello" <mario.limonciello@amd.com>,
-        Evan Quan <evan.quan@amd.com>
-Subject: [PATCH v2] usb: typec: ucsi: Mark dGPUs as DEVICE scope
-Date:   Thu, 18 May 2023 11:11:50 -0500
-Message-ID: <20230518161150.92959-1-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 18 May 2023 12:13:31 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8B5E56;
+        Thu, 18 May 2023 09:13:29 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f13c577e36so2659311e87.1;
+        Thu, 18 May 2023 09:13:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684426408; x=1687018408;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Weh/xg3Fwf8aOR0QMCh7viyOOc+gDq+9XGJdCqTazfo=;
+        b=kReWF3uCikxpmmDN+2hhPLjcGW7kWcc1e9CV4266Oo+nNk+1Pv3gxBHiHH7sW4t4VF
+         Djghi1LB5DEWntJgEkuZaM85dM0mqpqMv/4fyEWVEGQUDTgvu/N0uhxvzlbrTPEr2AYb
+         MI4gMxeBk1XNPGpNjDv9EeRjk4pwoqU1+p9NoY9tlYpa277kyGiVxFJjrwvYT2M49s9k
+         fliXhRRJDPMB6MnkjJcO7Q1aVdUYNEIZH2dKuepMc3nviq8XreswvW7HUpegNIjQ8g85
+         u+kbdlLoSfAQVP3Fh10+lcxaKgWdc6Tnxa92lERRL/MIbaFZyOaRe9ZaAM8LXQ5bK06R
+         Tiag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684426408; x=1687018408;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Weh/xg3Fwf8aOR0QMCh7viyOOc+gDq+9XGJdCqTazfo=;
+        b=YZYtqZoBMHmN7hzjpARtDmCb+CcjCJ+YHZEtwjTf2p6YnnTcrLqLaKqoesI5Zv1cv6
+         gffsat0yB2BHx6FE8AyuU7cJAolkDAoOe44PJoMnBhY5QW5um//Ie9xgf7Lmsz2MvZtv
+         sxqM7RG4Yfvdu7tGCfd7Lud7jbKNCwKALEoeI7K4UyCxrWgKDXdbv8SSK4uYWpZ9xnW1
+         V3vimhAPITf2ijaWToS7RLwK7oLk5stFua+kx5p3hvG1GK8STTdbi84Uxdle3Oxi0V1v
+         EMlWl2wWKBMLTwbsPNcPeH+vJaMHWTOF7+iIrN3TpOhvMyBX9UCFKTvqzvevNnHbDBFE
+         jH3Q==
+X-Gm-Message-State: AC+VfDynYt46+o/4vRH8wNE6ava7UpJUG4MtfXNOdLwbWd/iCUj7Jh3I
+        rrMnH9wp4nv0/rdP3uF6/7VzW30QBt+kmx+uZXo=
+X-Google-Smtp-Source: ACHHUZ7uTWpsHvIsiOjWcJd+GPZT8D1qjhsHgtim4Heb/HFT90on1HvcwQ3rkQIrKbzmHMBt1LocbvkOq/GKDqQztqU=
+X-Received: by 2002:a19:5214:0:b0:4f3:8269:7228 with SMTP id
+ m20-20020a195214000000b004f382697228mr1389597lfb.68.1684426407226; Thu, 18
+ May 2023 09:13:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT103:EE_|SJ2PR12MB7990:EE_
-X-MS-Office365-Filtering-Correlation-Id: 315b40a3-95a6-4aa6-64eb-08db57baa71f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: R60QjZvkUCf9HB9CMtx+W2Jsc5uGSaf8Ij9i2ZkdOdnlVYoTNKbRiiCTHI6HK+H0qNrJDnOUVgNzbQfkE6pzpVi2IBTW1e69bGm0oA4G8rWXuOkH4UuWSpXfqWsqss/16z0dt20R7LzlyeN9ZX8V6iXkRrq0P6TB/D+DcsymWmwajiamuycrTjtHVbyFMHOFa6DsKZo/KdqJPDys+atm5xufXcfoOKRQfD0cmelaLEf4u/yO5zDb66p0PYshTSGrIinw7os0OhDv/qseG/3Z3k8+sUZ1WCsuU4KchywvEmSM+L6IJxmQQBzQuHeWarju4AOdCQ6gHtHg+gGF6gbkjLUHiM9ITj8CItjFThCWI5eDBhnES2dHFb8D30FSVkz6rg6toEkYu0ONVuHrxd/fcmv7Qa1pcD0LNdDZfbYrbU6NcOFr22edxHbcsndGCr5g+QbzXB5JOyd7kDoAv4gi36mwQszjizb+Qi835vAcukAfXoCklJtzKlB7YBIM989NCdlljzYV/UPLFV5iYm8DQO9BcXNtSDRL/lbZ2dgDzomK6yX3CspvHaiVy39RUh0cHDxT/f7oklbwzy6XC0KXxRnhknm9h3Zp0sxtnW64Nem6yT2Ynu1cVmPlyX+a7VfBXJjhlR3KrE6k5mjkIjIPeFY+bIr5DcRraU4ptsLv84oqhkFHdybYzG+iVmXKkjXC76lEnPFrYRp3qozD2VWfHan2yoW4bLvHLA7fA5Q0No/lYFl9YWI3766u6tkglSXMxaNOdD9ZDL1/n+SlBZgtG0R0L5SKPy7hYoHWMGIihsY=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(39860400002)(346002)(376002)(451199021)(36840700001)(46966006)(40470700004)(86362001)(36756003)(16526019)(54906003)(316002)(4326008)(478600001)(70206006)(110136005)(70586007)(966005)(6666004)(7696005)(8676002)(8936002)(40480700001)(82310400005)(41300700001)(40460700003)(5660300002)(2906002)(44832011)(2616005)(336012)(81166007)(82740400003)(426003)(83380400001)(1076003)(26005)(186003)(36860700001)(47076005)(356005)(36900700001)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2023 16:12:18.1662
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 315b40a3-95a6-4aa6-64eb-08db57baa71f
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT103.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7990
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20230517155026.28535-1-jorge.lopez2@hp.com> <20230517155026.28535-2-jorge.lopez2@hp.com>
+ <7e5ee08c-e157-9f2c-3f87-ae88b503fc4d@infradead.org>
+In-Reply-To: <7e5ee08c-e157-9f2c-3f87-ae88b503fc4d@infradead.org>
+From:   Jorge Lopez <jorgealtxwork@gmail.com>
+Date:   Thu, 18 May 2023 11:12:55 -0500
+Message-ID: <CAOOmCE-9M6rJSC6Tcvts6Z=1k0t1nrK_9P02TVLfYnJu8yfgww@mail.gmail.com>
+Subject: Re: [PATCH v14 01/13] hp-bioscfg: Documentation
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org, thomas@t-8ch.de,
+        ilpo.jarvinen@linux.intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-power_supply_is_system_supplied() checks whether any power
-supplies are present that aren't batteries to decide whether
-the system is running on DC or AC.  Downstream drivers use
-this to make performance decisions.
+On Wed, May 17, 2023 at 6:42=E2=80=AFPM Randy Dunlap <rdunlap@infradead.org=
+> wrote:
+>
+> Hi--
+>
+> On 5/17/23 08:50, Jorge Lopez wrote:
+> > HP BIOS Configuration driver purpose is to provide a driver supporting
+> > the latest sysfs class firmware attributes framework allowing the user
+> > to change BIOS settings and security solutions on HP Inc.=E2=80=99s com=
+mercial
+> > notebooks.
+> >
+> > Many features of HP Commercial notebooks can be managed using Windows
+> > Management Instrumentation (WMI). WMI is an implementation of Web-Based
+> > Enterprise Management (WBEM) that provides a standards-based interface
+> > for changing and monitoring system settings. HP BIOSCFG driver provides
+> > a native Linux solution and the exposed features facilitates the
+> > migration to Linux environments.
+> >
+> > The Linux security features to be provided in hp-bioscfg driver enables
+> > managing the BIOS settings and security solutions via sysfs, a virtual
+> > filesystem that can be used by user-mode applications. The new
+> > documentation cover HP-specific firmware sysfs attributes such Secure
+> > Platform Management and Sure Start. Each section provides security
+> > feature description and identifies sysfs directories and files exposed
+> > by the driver.
+> >
+> > Many HP Commercial notebooks include a feature called Secure Platform
+> > Management (SPM), which replaces older password-based BIOS settings
+> > management with public key cryptography. PC secure product management
+> > begins when a target system is provisioned with cryptographic keys
+> > that are used to ensure the integrity of communications between system
+> > management utilities and the BIOS.
+> >
+> > HP Commercial notebooks have several BIOS settings that control its
+> > behaviour and capabilities, many of which are related to security.
+> > To prevent unauthorized changes to these settings, the system can
+> > be configured to use a cryptographic signature-based authorization
+> > string that the BIOS will use to verify authorization to modify the
+> > setting.
+> >
+> > Linux Security components are under development and not published yet.
+> > The only linux component is the driver (hp bioscfg) at this time.
+> > Other published security components are under Windows.
+> >
+>
+> IMO it doesn't help to have this blurb repeated in each patch.
+>
+> The commit message should describe what this patch does and why.
+>
+> > Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
+> >
+> > ---
+> > Based on the latest platform-drivers-x86.git/for-next
+> > ---
+> >   .../testing/sysfs-class-firmware-attributes   | 102 +++++++++++++++++=
+-
+> >   1 file changed, 100 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/Documentation/ABI/testing/sysfs-class-firmware-attributes =
+b/Documentation/ABI/testing/sysfs-class-firmware-attributes
+> > index 4cdba3477176..f8d6c089228b 100644
+> > --- a/Documentation/ABI/testing/sysfs-class-firmware-attributes
+> > +++ b/Documentation/ABI/testing/sysfs-class-firmware-attributes
+> > @@ -22,6 +22,11 @@ Description:
+> >                       - integer: a range of numerical values
+> >                       - string
+> >
+> > +             HP specific types
+> > +             -----------------
+> > +                     - ordered-list - a set of ordered list valid valu=
+es
+> > +
+> > +
+> >               All attribute types support the following values:
+> >
+> >               current_value:
+> > @@ -126,6 +131,22 @@ Description:
+> >                                       value will not be effective throu=
+gh sysfs until this rule is
+> >                                       met.
+> >
+> > +             HP specific class extensions
+> > +             ------------------------------
+> > +
+> > +             On HP systems the following additional attributes are ava=
+ilable:
+> > +
+> > +             "ordered-list"-type specific properties:
+> > +
+> > +             elements:
+> > +                                     A file that can be read to obtain=
+ the possible
+> > +                                     list of values of the <attr>. Val=
+ues are separated using
+> > +                                     semi-colon (``;``). The order ind=
+ividual elements are listed
+> > +                                     according to their priority.  An =
+element listed first has the
+>
+> I have trouble parsing "The order individual elements are list
+> according to their property."
 
-Navi dGPUs include an UCSI function that has been exported
-since commit 17631e8ca2d3 ("i2c: designware: Add driver
-support for AMD NAVI GPU").
+I will update the text and provide a more comprehensive statement.
+For instance...  "Values are separated using semi-colon (``;``) and
+listed according to their priority."
+>
+> > +                                     highest priority. Writing the lis=
+t in a different order to
+> > +                                     current_value alters the priority=
+ order for the particular
+> > +                                     attribute.
+> > +
+> >   What:               /sys/class/firmware-attributes/*/authentication/
+> >   Date:               February 2021
+> >   KernelVersion:      5.11
+> > @@ -206,7 +227,7 @@ Description:
+> >               Drivers may emit a CHANGE uevent when a password is set o=
+r unset
+> >               userspace may check it again.
+> >
+> > -             On Dell and Lenovo systems, if Admin password is set, the=
+n all BIOS attributes
+> > +             On Dell, Lenovo and HP systems, if Admin password is set,=
+ then all BIOS attributes
+> >               require password validation.
+> >               On Lenovo systems if you change the Admin password the ne=
+w password is not active until
+> >               the next boot.
+>
+> > @@ -364,3 +394,71 @@ Description:
+> >               use it to enable extra debug attributes or BIOS features =
+for testing purposes.
+> >
+> >               Note that any changes to this attribute requires a reboot=
+ for changes to take effect.
+> > +
+> > +
+> > +             HP specific class extensions - Secure Platform Manager (S=
+PM)
+> > +             --------------------------------
+> > +
+> > +What:                /sys/class/firmware-attributes/*/authentication/S=
+PM/kek
+> > +Date:                March 29
+>
+> Date: should be Month Year or Month Day Year according to other files
+> (although it is apparently not specified as far as my quick searching
+> found).
 
-This UCSI function registers a power supply since commit
-992a60ed0d5e ("usb: typec: ucsi: register with power_supply class")
-but this is not a system power supply.
-
-As the power supply for a dGPU is only for powering devices connected
-to dGPU, create a device property to indicate that the UCSI endpoint
-is only for the scope of `POWER_SUPPLY_SCOPE_DEVICE`.
-
-Link: https://lore.kernel.org/lkml/20230516182541.5836-2-mario.limonciello@amd.com/
-Reviewed-by: Evan Quan <evan.quan@amd.com>
-Tested-by: Evan Quan <evan.quan@amd.com>
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
-v1->v2:
- * Drop patch 1, merged into a maintainers tree
- * Fix title
- * Add tags
- * Fix terminators
----
- drivers/i2c/busses/i2c-designware-pcidrv.c | 13 ++++++++++++-
- drivers/i2c/busses/i2c-nvidia-gpu.c        |  3 +++
- drivers/usb/typec/ucsi/psy.c               | 14 ++++++++++++++
- 3 files changed, 29 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/busses/i2c-designware-pcidrv.c b/drivers/i2c/busses/i2c-designware-pcidrv.c
-index 782fe1ef3ca1..61d7a27aa070 100644
---- a/drivers/i2c/busses/i2c-designware-pcidrv.c
-+++ b/drivers/i2c/busses/i2c-designware-pcidrv.c
-@@ -20,6 +20,7 @@
- #include <linux/module.h>
- #include <linux/pci.h>
- #include <linux/pm_runtime.h>
-+#include <linux/power_supply.h>
- #include <linux/sched.h>
- #include <linux/slab.h>
- 
-@@ -234,6 +235,16 @@ static const struct dev_pm_ops i2c_dw_pm_ops = {
- 	SET_RUNTIME_PM_OPS(i2c_dw_pci_runtime_suspend, i2c_dw_pci_runtime_resume, NULL)
- };
- 
-+static const struct property_entry dgpu_properties[] = {
-+	/* USB-C doesn't power the system */
-+	PROPERTY_ENTRY_U8("scope", POWER_SUPPLY_SCOPE_DEVICE),
-+	{}
-+};
-+
-+static const struct software_node dgpu_node = {
-+	.properties = dgpu_properties,
-+};
-+
- static int i2c_dw_pci_probe(struct pci_dev *pdev,
- 			    const struct pci_device_id *id)
- {
-@@ -325,7 +336,7 @@ static int i2c_dw_pci_probe(struct pci_dev *pdev,
- 	}
- 
- 	if ((dev->flags & MODEL_MASK) == MODEL_AMD_NAVI_GPU) {
--		dev->slave = i2c_new_ccgx_ucsi(&dev->adapter, dev->irq, NULL);
-+		dev->slave = i2c_new_ccgx_ucsi(&dev->adapter, dev->irq, &dgpu_node);
- 		if (IS_ERR(dev->slave))
- 			return dev_err_probe(dev->dev, PTR_ERR(dev->slave),
- 					     "register UCSI failed\n");
-diff --git a/drivers/i2c/busses/i2c-nvidia-gpu.c b/drivers/i2c/busses/i2c-nvidia-gpu.c
-index a8b99e7f6262..26622d24bb1b 100644
---- a/drivers/i2c/busses/i2c-nvidia-gpu.c
-+++ b/drivers/i2c/busses/i2c-nvidia-gpu.c
-@@ -14,6 +14,7 @@
- #include <linux/platform_device.h>
- #include <linux/pm.h>
- #include <linux/pm_runtime.h>
-+#include <linux/power_supply.h>
- 
- #include <asm/unaligned.h>
- 
-@@ -261,6 +262,8 @@ MODULE_DEVICE_TABLE(pci, gpu_i2c_ids);
- static const struct property_entry ccgx_props[] = {
- 	/* Use FW built for NVIDIA GPU only */
- 	PROPERTY_ENTRY_STRING("firmware-name", "nvidia,gpu"),
-+	/* USB-C doesn't power the system */
-+	PROPERTY_ENTRY_U8("scope", POWER_SUPPLY_SCOPE_DEVICE),
- 	{ }
- };
- 
-diff --git a/drivers/usb/typec/ucsi/psy.c b/drivers/usb/typec/ucsi/psy.c
-index 56bf56517f75..384b42267f1f 100644
---- a/drivers/usb/typec/ucsi/psy.c
-+++ b/drivers/usb/typec/ucsi/psy.c
-@@ -27,8 +27,20 @@ static enum power_supply_property ucsi_psy_props[] = {
- 	POWER_SUPPLY_PROP_VOLTAGE_NOW,
- 	POWER_SUPPLY_PROP_CURRENT_MAX,
- 	POWER_SUPPLY_PROP_CURRENT_NOW,
-+	POWER_SUPPLY_PROP_SCOPE,
- };
- 
-+static int ucsi_psy_get_scope(struct ucsi_connector *con,
-+			      union power_supply_propval *val)
-+{
-+	u8 scope = POWER_SUPPLY_SCOPE_UNKNOWN;
-+	struct device *dev = con->ucsi->dev;
-+
-+	device_property_read_u8(dev, "scope", &scope);
-+	val->intval = scope;
-+	return 0;
-+}
-+
- static int ucsi_psy_get_online(struct ucsi_connector *con,
- 			       union power_supply_propval *val)
- {
-@@ -194,6 +206,8 @@ static int ucsi_psy_get_prop(struct power_supply *psy,
- 		return ucsi_psy_get_current_max(con, val);
- 	case POWER_SUPPLY_PROP_CURRENT_NOW:
- 		return ucsi_psy_get_current_now(con, val);
-+	case POWER_SUPPLY_PROP_SCOPE:
-+		return ucsi_psy_get_scope(con, val);
- 	default:
- 		return -EINVAL;
- 	}
--- 
-2.34.1
-
+Date format will be changed to Month Year across the file.
+Thank you.
+>
+> > +KernelVersion:       5.18
+> > +Contact:     "Jorge Lopez" <jorge.lopez2@hp.com>
+> > +Description:
+> > +             'kek' Key-Encryption-Key is a write-only file that can be=
+ used to configure the
+> > +             RSA public key that will be used by the BIOS to verify
+> > +             signatures when setting the signing key.  When written,
+> > +             the bytes should correspond to the KEK certificate
+> > +             (x509 .DER format containing an OU).  The size of the
+> > +             certificate must be less than or equal to 4095 bytes.
+> > +
+> > +What:                /sys/class/firmware-attributes/*/authentication/S=
+PM/sk
+> > +Date:                March 29
+>
+> Ditto.
+>
+> > +KernelVersion:       5.18
+> > +Contact:     "Jorge Lopez" <jorge.lopez2@hp.com>
+> > +Description:
+> > +             'sk' Signature Key is a write-only file that can be used =
+to configure the RSA
+> > +             public key that will be used by the BIOS to verify signat=
+ures
+> > +             when configuring BIOS settings and security features.  Wh=
+en
+> > +             written, the bytes should correspond to the modulus of th=
+e
+> > +             public key.  The exponent is assumed to be 0x10001.
+> > +
+> > +What:                /sys/class/firmware-attributes/*/authentication/S=
+PM/status
+> > +Date:                March 29
+>
+> Ditto.
+>
+> > +KernelVersion:       5.18
+> > +Contact:     "Jorge Lopez" <jorge.lopez2@hp.com>
+> > +Description:
+> > +             'status' is a read-only file that returns ASCII text in J=
+SON format reporting
+> > +             the status information.
+> > +
+> > +               "State": "not provisioned | provisioned | provisioning =
+in progress ",
+> > +               "Version": " Major. Minor ",
+> > +               "Nonce": <16-bit unsigned number display in base 10>,
+> > +               "FeaturesInUse": <16-bit unsigned number display in bas=
+e 10>,
+> > +               "EndorsementKeyMod": "<256 bytes in base64>",
+> > +               "SigningKeyMod": "<256 bytes in base64>"
+> > +
+> > +What:                /sys/class/firmware-attributes/*/attributes/Sure_=
+Start/audit_log_entries
+> > +Date:                March 29
+>
+> Ditto.
+>
+> > +KernelVersion:       5.18
+> > +Contact:     "Jorge Lopez" <jorge.lopez2@hp.com>
+> > +Description:
+> > +             'audit_log_entries' is a read-only file that returns the =
+events in the log.
+> > +
+> > +                     Audit log entry format
+> > +
+> > +                     Byte 0-15:   Requested Audit Log entry  (Each Aud=
+it log is 16 bytes)
+> > +                     Byte 16-127: Unused
+> > +
+> > +What:                /sys/class/firmware-attributes/*/attributes/Sure_=
+Start/audit_log_entry_count
+> > +Date:                March 29
+>
+> Ditto.
+>
+> > +KernelVersion:       5.18
+> > +Contact:     "Jorge Lopez" <jorge.lopez2@hp.com>
+> > +Description:
+> > +             'audit_log_entry_count' is a read-only file that returns =
+the number of existing
+> > +             audit log events available to be read. Values are separat=
+ed using comma (``,``)
+> > +
+> > +                     [No of entries],[log entry size],[Max number of e=
+ntries supported]
+> > +
+> > +             log entry size identifies audit log size for the current =
+BIOS version.
+> > +             The current size is 16 bytes but it can be up to 128 byte=
+s long in future BIOS
+> > +             versions.
