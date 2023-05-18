@@ -2,179 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C35A7083E6
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:25:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C63E67083EE
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:30:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231707AbjEROZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 10:25:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52038 "EHLO
+        id S230376AbjEROaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 10:30:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230376AbjEROZc (ORCPT
+        with ESMTP id S230049AbjEROaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 10:25:32 -0400
-Received: from mail-yw1-x1143.google.com (mail-yw1-x1143.google.com [IPv6:2607:f8b0:4864:20::1143])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB77BE69;
-        Thu, 18 May 2023 07:25:30 -0700 (PDT)
-Received: by mail-yw1-x1143.google.com with SMTP id 00721157ae682-5619032c026so25850897b3.1;
-        Thu, 18 May 2023 07:25:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684419930; x=1687011930;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VTZb9xwEPvqrA/j50VjQvMgiTttO1+oVgLrqOulaWSQ=;
-        b=Cie3DBeRtOyBQRKJgcR50NNynnzE/TEAWOfqObFUR8A2nC4Zw5QkCfWZG69biLFCrY
-         ivdVpj0aOtb0aqPuxEufhKQOOaZ1sjMMXIiRTB1fpZYC0iH+RTBzRgs/Xoh/Ke8MhTyo
-         Wv74c3ed9XnC9vHtxlywqfbIJVqTe4kIMNaB2WpOoZTSKg3pBorrnUGYRxCZ996iTgI4
-         1krAISt0z4/vdsQENQIgJm/JuDp29UDs5rzALcm3fgoOVbU5iTqNhRx3TWfmXi7no2zR
-         K2lBJ3S6xdED996DnHzOJ93yRxT0Wt0HiTfzcoRQd9OkuG6sVGlgJNeta7l4UWPebd8O
-         pLNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684419930; x=1687011930;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VTZb9xwEPvqrA/j50VjQvMgiTttO1+oVgLrqOulaWSQ=;
-        b=Dir7bHwepibQxG5kqf6VkS0PGXuH4CuOBjzYNIuVVSmZakJcPv3PF5sXeMDMdlLohk
-         ZMtqOavKSFSBCBQSrVay3ItIKFhZgqvNwV9rReEqgIVqHAVhWR7OBZ6EX33l0fkYTxNL
-         2AeG4E2aKIHGUZ9Vj3G2zauH7zVVbuV4ub51cl2gbG4y84DooHRRO/19LkNI6UBwnkmQ
-         iwfLm7r9QwfNUuEOYK1TI+o5urncniUyhAFBuGCvFMs6yOUwSr2WIP4svPid0vKaUVgn
-         LzpouVUHsM7IX/cXL09dL3Nkz2SmfpoLxpLG9C3UBQ2TbfeYOCu29lbzFZLRIQ3vlMA2
-         HZLA==
-X-Gm-Message-State: AC+VfDyvb0FoUsQidOsVFg1FzQW7NATDFKOul1ytXkKiCeVpozJmwvss
-        Z7MU7aXUy0TB/TWoNp8E0ZEii1+yWamq3O0JExcLGWHkQiZglJQl
-X-Google-Smtp-Source: ACHHUZ6G8i9qItBqQExzJTxNIJVwXTycXCxHQpLTsllgiBz7A9qD4SLx6IAeUYGjhT9W1MqTe/ZqRevzmTwvfAiO1WQ=
-X-Received: by 2002:a81:4854:0:b0:561:a41d:aabb with SMTP id
- v81-20020a814854000000b00561a41daabbmr1430263ywa.16.1684419929926; Thu, 18
- May 2023 07:25:29 -0700 (PDT)
+        Thu, 18 May 2023 10:30:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D034B109
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:30:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 587E764FAF
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 14:30:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B48B2C433EF;
+        Thu, 18 May 2023 14:30:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684420220;
+        bh=oiyruRYpa4OdZ9MvJ0BqTaOPeX7abBj/V2ECuKiAHTQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kQCyNToQWA0PBkCIvHDJvOFlnHYSAqhzue0w3F9toZhIybNycO+hhOe+qhjkg6pE0
+         KE99qKFA4NlHCer8lpuT12QZ0gUmMMHCr8lKSm7dS0dmgYApd9E7BAX87jMNVujFik
+         hsOjmMVGKPhDUtWyWWYUcArN8eTryMFHAZPCbDd4TGo6Tq4J4QdNiz7S1QnLb0P8ej
+         Gx8sl8S8X8bwlvBiY6RnOS0l05eXzqIoxSX1jfuhr3mjK0v5gwtGmyF/bqvgovFEXE
+         2va2f3UYVwgo4wiPAeovhBcYw6NG3+AvvLoWJlMd4Ghli+NQS05ssFb6LPPf/SHDK1
+         /0y4f+ZLioLaw==
+Date:   Thu, 18 May 2023 16:30:14 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Mike Christie <michael.christie@oracle.com>
+Cc:     oleg@redhat.com, linux@leemhuis.info, nicolas.dichtel@6wind.com,
+        axboe@kernel.dk, ebiederm@xmission.com,
+        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, mst@redhat.com,
+        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com
+Subject: Re: [RFC PATCH 0/8] vhost_tasks: Use CLONE_THREAD/SIGHAND
+Message-ID: <20230518-abserviert-netzwerk-fe9e028846f5@brauner>
+References: <20230518000920.191583-1-michael.christie@oracle.com>
+ <20230518-appetit-aufsicht-238e950b97d6@brauner>
 MIME-Version: 1.0
-References: <20230517124201.441634-1-imagedong@tencent.com>
- <20230517124201.441634-3-imagedong@tencent.com> <CANn89iKGTPHK5wMyP4oRoAuv8f56VY-RrrMPBSb8jRMJSiL5Qg@mail.gmail.com>
-In-Reply-To: <CANn89iKGTPHK5wMyP4oRoAuv8f56VY-RrrMPBSb8jRMJSiL5Qg@mail.gmail.com>
-From:   Menglong Dong <menglong8.dong@gmail.com>
-Date:   Thu, 18 May 2023 22:25:18 +0800
-Message-ID: <CADxym3YTpzfsB9JB8qwrm4ffMrXs_+mfe3-oO5=UhivuFXq+4g@mail.gmail.com>
-Subject: Re: [PATCH net-next 2/3] net: tcp: send zero-window when no memory
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     kuba@kernel.org, davem@davemloft.net, pabeni@redhat.com,
-        dsahern@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230518-appetit-aufsicht-238e950b97d6@brauner>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 10:45=E2=80=AFPM Eric Dumazet <edumazet@google.com>=
- wrote:
->
-> On Wed, May 17, 2023 at 2:42=E2=80=AFPM <menglong8.dong@gmail.com> wrote:
-> >
-> > From: Menglong Dong <imagedong@tencent.com>
-> >
-> > For now, skb will be dropped when no memory, which makes client keep
-> > retrans util timeout and it's not friendly to the users.
->
-> Yes, networking needs memory. Trying to deny it is recipe for OOM.
->
-> >
-> > Therefore, now we force to receive one packet on current socket when
-> > the protocol memory is out of the limitation. Then, this socket will
-> > stay in 'no mem' status, util protocol memory is available.
-> >
->
-> I think you missed one old patch.
->
-> commit ba3bb0e76ccd464bb66665a1941fabe55dadb3ba    tcp: fix
-> SO_RCVLOWAT possible hangs under high mem pressure
->
->
->
-> > When a socket is in 'no mem' status, it's receive window will become
-> > 0, which means window shrink happens. And the sender need to handle
-> > such window shrink properly, which is done in the next commit.
-> >
-> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
-> > ---
-> >  include/net/sock.h    |  1 +
-> >  net/ipv4/tcp_input.c  | 12 ++++++++++++
-> >  net/ipv4/tcp_output.c |  7 +++++++
-> >  3 files changed, 20 insertions(+)
-> >
-> > diff --git a/include/net/sock.h b/include/net/sock.h
-> > index 5edf0038867c..90db8a1d7f31 100644
-> > --- a/include/net/sock.h
-> > +++ b/include/net/sock.h
-> > @@ -957,6 +957,7 @@ enum sock_flags {
-> >         SOCK_XDP, /* XDP is attached */
-> >         SOCK_TSTAMP_NEW, /* Indicates 64 bit timestamps always */
-> >         SOCK_RCVMARK, /* Receive SO_MARK  ancillary data with packet */
-> > +       SOCK_NO_MEM, /* protocol memory limitation happened */
-> >  };
-> >
-> >  #define SK_FLAGS_TIMESTAMP ((1UL << SOCK_TIMESTAMP) | (1UL << SOCK_TIM=
-ESTAMPING_RX_SOFTWARE))
-> > diff --git a/net/ipv4/tcp_input.c b/net/ipv4/tcp_input.c
-> > index a057330d6f59..56e395cb4554 100644
-> > --- a/net/ipv4/tcp_input.c
-> > +++ b/net/ipv4/tcp_input.c
-> > @@ -5047,10 +5047,22 @@ static void tcp_data_queue(struct sock *sk, str=
-uct sk_buff *skb)
-> >                 if (skb_queue_len(&sk->sk_receive_queue) =3D=3D 0)
-> >                         sk_forced_mem_schedule(sk, skb->truesize);
->
-> I think you missed this part : We accept at least one packet,
-> regardless of memory pressure,
-> if the queue is empty.
->
-> So your changelog is misleading.
->
-> >                 else if (tcp_try_rmem_schedule(sk, skb, skb->truesize))=
- {
-> > +                       if (sysctl_tcp_wnd_shrink)
->
-> We no longer add global sysctls for TCP. All new sysctls must per net-ns.
->
-> > +                               goto do_wnd_shrink;
-> > +
-> >                         reason =3D SKB_DROP_REASON_PROTO_MEM;
-> >                         NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPRCVQDR=
-OP);
-> >                         sk->sk_data_ready(sk);
-> >                         goto drop;
-> > +do_wnd_shrink:
-> > +                       if (sock_flag(sk, SOCK_NO_MEM)) {
-> > +                               NET_INC_STATS(sock_net(sk),
-> > +                                             LINUX_MIB_TCPRCVQDROP);
-> > +                               sk->sk_data_ready(sk);
-> > +                               goto out_of_window;
-> > +                       }
-> > +                       sk_forced_mem_schedule(sk, skb->truesize);
->
-> So now we would accept two packets per TCP socket, and yet EPOLLIN
-> will not be sent in time ?
->
-> packets can consume about 45*4K each, I do not think it is wise to
-> double receive queue sizes.
->
-> What you want instead is simply to send EPOLLIN sooner (when the first
-> packet is queued instead when the second packet is dropped)
-> by changing sk_forced_mem_schedule() a bit.
->
-> This might matter for applications using SO_RCVLOWAT, but not for
-> other applications.
+On Thu, May 18, 2023 at 10:25:11AM +0200, Christian Brauner wrote:
+> On Wed, May 17, 2023 at 07:09:12PM -0500, Mike Christie wrote:
+> > This patch allows the vhost and vhost_task code to use CLONE_THREAD,
+> > CLONE_SIGHAND and CLONE_FILES. It's a RFC because I didn't do all the
+> > normal testing, haven't coverted vsock and vdpa, and I know you guys
+> > will not like the first patch. However, I think it better shows what
+> 
+> Just to summarize the core idea behind my proposal is that no signal
+> handling changes are needed unless there's a bug in the current way
+> io_uring workers already work. All that should be needed is
+> s/PF_IO_WORKER/PF_USER_WORKER/ in signal.c.
+> 
+> If you follow my proposal than vhost and io_uring workers should almost
+> collapse into the same concept. Specifically, io_uring workers and vhost
+> workers should behave the same when it comes ot handling signals.
+> 
+> See 
+> https://lore.kernel.org/lkml/20230518-kontakt-geduckt-25bab595f503@brauner
+> 
+> 
+> > we need from the signal code and how we can support signals in the
+> > vhost_task layer.
+> > 
+> > Note that I took the super simple route and kicked off some work to
+> > the system workqueue. We can do more invassive approaches:
+> > 1. Modify the vhost drivers so they can check for IO completions using
+> > a non-blocking interface. We then don't need to run from the system
+> > workqueue and can run from the vhost_task.
+> > 
+> > 2. We could drop patch 1 and just say we are doing a polling type
+> > of approach. We then modify the vhost layer similar to #1 where we
+> > can check for completions using a non-blocking interface and use
+> > the vhost_task task.
+> 
+> My preference would be to do whatever is the minimal thing now and has
+> the least bug potential and is the easiest to review for us non-vhost
+> experts. Then you can take all the time to rework and improve the vhost
+> infra based on the possibilities that using user workers offers. Plus,
+> that can easily happen in the next kernel cycle.
+> 
+> Remember, that we're trying to fix a regression here. A regression on an
+> unreleased kernel but still.
 
-To be more clear, what I talk about here is not to send EPOLLIN
-sooner, but try to make the TCP connection, which has a "hang"
-receiver and in TCP protocol memory pressure, entry 0-probe
-state. And this commit is the first step: make the receiver
-shrink the window by sending a zero-window ack.
+Just two more thoughts:
 
-Thanks!
-Menglong Dong
+The following places currently check for PF_IO_WORKER:
+
+arch/x86/include/asm/fpu/sched.h: !(current->flags & (PF_KTHREAD | PF_IO_WORKER))) {
+arch/x86/kernel/fpu/context.h:    if (WARN_ON_ONCE(current->flags & (PF_KTHREAD | PF_IO_WORKER)))
+arch/x86/kernel/fpu/core.c:       if (!(current->flags & (PF_KTHREAD | PF_IO_WORKER)) &&
+
+Both PF_KTHREAD and PF_IO_WORKER don't need TIF_NEED_FPU_LOAD because
+they never return to userspace. But that's not specific to
+PF_IO_WORKERs. Please generalize this to just check for PF_USER_WORKER
+via a simple s/PF_IO_WORKER/PF_USER_WORKER/g in these places.
+
+Another thing, in the sched code we have hooks into sched_submit_work()
+and sched_update_worker() specific to PF_IO_WORKERs. But again, I don't
+think this needs to be special to PF_IO_WORKERS. This might be
+generally useful for PF_USER_WORKER. So we should probably generalize
+this and have a generic user_worker_sleeping() and user_worker_running()
+helper that figures out internally what specific helper to call. That's
+not something that needs to be done right now though since I don't think
+vhost needs this functionality.
+
+But we should generalize this for the next development cycle so we have
+this all nice and clean when someone actually needs this. Overall this
+will mean that there would only be a single place left where
+PF_IO_WORKER would need to be checked and that's in io_uring code
+itself. And if we do things just right we might not even need that
+PF_IO_WORKER flag anymore at all. But again, that's just notes for next
+cycle.
+
+Thoughts? Rotten apples?
