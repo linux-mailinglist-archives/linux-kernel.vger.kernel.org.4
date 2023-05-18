@@ -2,300 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 787AE707842
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 04:56:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC08707845
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 05:01:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229534AbjERC4m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 22:56:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40624 "EHLO
+        id S229750AbjERDBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 23:01:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbjERC4k (ORCPT
+        with ESMTP id S229453AbjERDAt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 22:56:40 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C379E19BC;
-        Wed, 17 May 2023 19:56:36 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.170])
-        by gateway (Coremail) with SMTP id _____8Cx_erjk2VkeboJAA--.16835S3;
-        Thu, 18 May 2023 10:56:35 +0800 (CST)
-Received: from [10.20.42.170] (unknown [10.20.42.170])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxBMXfk2VkcCBnAA--.45731S3;
-        Thu, 18 May 2023 10:56:31 +0800 (CST)
-Message-ID: <02f07d8e-e1c2-2ec0-59c3-f5b4ef0463dc@loongson.cn>
-Date:   Thu, 18 May 2023 10:56:31 +0800
+        Wed, 17 May 2023 23:00:49 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 069AF121
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 20:00:48 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-64d18d772bdso217301b3a.3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 20:00:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684378847; x=1686970847;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=vJGjatlH1NfRn1Vu6yLURwI+5U/cA1qG/lnoi/95mX8=;
+        b=aGYiOxlBHHc4Zi1tIwdd/WrteX+p12v6ezrS0GwgSPhFJF2ZqtrsUrQJmK5zFKGxZI
+         mxse6lYnkHJVk8P2b36sv4SjGLNk7B2X757fQWNmfvkK0A8Kq0C/sX5iAntbrv46tWSz
+         Rp8bNJBv0MXfjqNBqY7NsWRn4R9Z4hUIZn20H735bMXKW1OFGjV9iBZkSKRgARLyEgvh
+         eZteJMzIj2PMI/vpepmkbKKLuGlZ1lHR9rrBhuHTYlDUsl1S7nN13rEN0adWZMNKsd5p
+         vDRNaiEipL4c9LJq8wqJsUlBSAfo2tIx/2IsttpVmTRB2UDLtmxEH51oOQQe+XMoSFjz
+         Bywg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684378847; x=1686970847;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vJGjatlH1NfRn1Vu6yLURwI+5U/cA1qG/lnoi/95mX8=;
+        b=MFr+pL3dCtEYCTnBf32YuND4AF6uW3bOj4czmRBt73tTITXDW8zB1iXOvQF8YnVftV
+         Kud3dRz+yqRjE48RYioLCvS8d+N+pwnsSAIAhWxi+ugz8Vu5eDr1XC55D1fj7+SYawiO
+         3CGXKRVcVYUYozV9bYif3Rv/GAp+CnALdssJPUyIUO8m63H0+yW9OtUc3MdfkIbYvQAk
+         DUWH/gYsfiLdy3em+uJRi/6YS0vt3zJsf5nMinDJ+oXtG5CNYFyg/2nuC4hl4WHvR1xa
+         L6TvVlELfCZIEAsVe2kbfDqzSY1FFfQPQzt0oIej/U5wMYkcsGglV8OkJJlY7h70MthU
+         CVYQ==
+X-Gm-Message-State: AC+VfDwuoALjRK4tuN/o32FI+k4R3eovDRGYAWdud+w/5sAh696UkLli
+        LR7BwqSEVfOoQS1bkCdrQk5S/zN6PT0=
+X-Google-Smtp-Source: ACHHUZ7UKXSI8sFHaoW9bwHEu8GpoZl2KE3EtsQxpQs/mkUsZYa/JhIMzE+IaG7yobGe6wPSgJeCNA==
+X-Received: by 2002:a05:6a00:a14:b0:64a:ea46:3b7d with SMTP id p20-20020a056a000a1400b0064aea463b7dmr2499141pfh.23.1684378847099;
+        Wed, 17 May 2023 20:00:47 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:1c2f])
+        by smtp.gmail.com with ESMTPSA id p22-20020a62ab16000000b0064867dc8719sm226697pff.118.2023.05.17.20.00.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 May 2023 20:00:46 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+From:   Tejun Heo <tj@kernel.org>
+To:     jiangshanlai@gmail.com
+Cc:     torvalds@linux-foundation.org, peterz@infradead.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com
+Subject: [PATCHSET v4 wq/for-6.5] workqueue: Implement automatic CPU intensive detection and add monitoring
+Date:   Wed, 17 May 2023 17:00:26 -1000
+Message-Id: <20230518030033.4163274-1-tj@kernel.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v10 00/30] Add KVM LoongArch support
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     WANG Xuerui <kernel@xen0n.name>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Xi Ruoyao <xry111@xry111.site>,
-        Tianrui Zhao <zhaotianrui@loongson.cn>
-References: <20230515021522.2445551-1-zhaotianrui@loongson.cn>
-Content-Language: en-US
-From:   maobibo <maobibo@loongson.cn>
-In-Reply-To: <20230515021522.2445551-1-zhaotianrui@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxBMXfk2VkcCBnAA--.45731S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWfGr1UJr4xCrWxWFW8JF1rtFb_yoWkAryrpF
-        W7urn8Grs5Grsaqws3K3s7ur98XF1xGrWaq3Wa9348CrW2qrykZrykKr9FyF9rA3yrJr10
-        qr1rKw1ag3WUAaDanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
-        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
-        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
-        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8Dl1DUUUUU==
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paolo & Huacai,
+Hello,
 
-Sorry to bother you, I do not know flow of kernel code reviewing and merging.
+The only meaningful change is the use of printk_deferred() in 0006 which was
+posted in the v3 thread. I'm applying this version to wq/for-6.5. Posting
+for the record.
 
-I want to know who should give a reviewed-by comments for these piece of code
-about loongarch kvm patch. It should be kvm maintainer or LoongArch maintianer?
-And any suggestion is welcome.
+v4: * 0006-workqueue-Report-work-funcs-that-trigger-automatic-C.patch
+      updated to use printk_deferred() instead of custom bouncing which was
+      broken and didn't resolve the deadlock possibility anyway.
 
+    * Documentation updates.
 
-Regards
-Bibo, Mao
+v3: * Switched to hooking into scheduler_tick() instead of scheduling paths
+      as suggested by Peter. It's less gnarly and works well in general;
+      however, as the mechanism is now sampling based, there can be
+      contrived cases where detection can be temporarily avoided. Also, it
+      wouldn't work on nohz_full CPUs. Neither is critical especially given
+      that common offenders are likely to be weeded out with the debug
+      reporting over time.
 
-在 2023/5/15 10:14, Tianrui Zhao 写道:
-> This series adds KVM LoongArch support. Loongson 3A5000 supports hardware
-> assisted virtualization. With cpu virtualization, there are separate
-> hw-supported user mode and kernel mode in guest mode. With memory
-> virtualization, there are two-level hw mmu table for guest mode and host
-> mode. Also there is separate hw cpu timer with consant frequency in
-> guest mode, so that vm can migrate between hosts with different freq.
-> Currently, we are able to boot LoongArch Linux Guests.
-> 
-> Few key aspects of KVM LoongArch added by this series are:
-> 1. Enable kvm hardware function when kvm module is loaded.
-> 2. Implement VM and vcpu related ioctl interface such as vcpu create,
->    vcpu run etc. GET_ONE_REG/SET_ONE_REG ioctl commands are use to
->    get general registers one by one.
-> 3. Hardware access about MMU, timer and csr are emulated in kernel.
-> 4. Hardwares such as mmio and iocsr device are emulated in user space
->    such as APIC, IPI, pci devices etc.
-> 
-> The running environment of LoongArch virt machine:
-> 1. Cross tools to build kernel and uefi:
->    $ wget https://github.com/loongson/build-tools/releases/download/2022.09.06/loongarch64-clfs-6.3-cross-tools-gcc-glibc.tar.xz
->    tar -vxf loongarch64-clfs-6.3-cross-tools-gcc-glibc.tar.xz  -C /opt
->    export PATH=/opt/cross-tools/bin:$PATH
->    export LD_LIBRARY_PATH=/opt/cross-tools/lib:$LD_LIBRARY_PATH
->    export LD_LIBRARY_PATH=/opt/cross-tools/loongarch64-unknown-linux-gnu/lib/:$LD_LIBRARY_PATH
-> 2. This series is based on the linux source code:
->    https://github.com/loongson/linux-loongarch-kvm
->    Build command:
->    git checkout kvm-loongarch
->    make ARCH=loongarch CROSS_COMPILE=loongarch64-unknown-linux-gnu- loongson3_defconfig
->    make ARCH=loongarch CROSS_COMPILE=loongarch64-unknown-linux-gnu-
-> 3. QEMU hypervisor with LoongArch supported:
->    https://github.com/loongson/qemu
->    Build command:
->    git checkout kvm-loongarch
->    ./configure --target-list="loongarch64-softmmu"  --enable-kvm
->    make
-> 4. Uefi bios of LoongArch virt machine:
->    Link: https://github.com/tianocore/edk2-platforms/tree/master/Platform/Loongson/LoongArchQemuPkg#readme
-> 5. you can also access the binary files we have already build:
->    https://github.com/yangxiaojuan-loongson/qemu-binary
-> The command to boot loongarch virt machine:
->    $ qemu-system-loongarch64 -machine virt -m 4G -cpu la464 \
->    -smp 1 -bios QEMU_EFI.fd -kernel vmlinuz.efi -initrd ramdisk \
->    -serial stdio   -monitor telnet:localhost:4495,server,nowait \
->    -append "root=/dev/ram rdinit=/sbin/init console=ttyS0,115200" \
->    --nographic
-> 
-> Changes for v10:
-> 1. Fix grammatical problems in LoongArch documentation.
-> 2. It is not necessary to save or restore the LOONGARCH_CSR_PGD when
-> vcpu put and vcpu load, so we remove it.
-> 
-> Changes for v9:
-> 1. Apply the new defined interrupt number macros in loongarch.h to kvm,
-> such as INT_SWI0, INT_HWI0, INT_TI, INT_IPI, etc. And remove the
-> previous unused macros.
-> 2. Remove unused variables in kvm_vcpu_arch, and reorder the variables
-> to make them more standard.
-> 
-> Changes for v8:
-> 1. Adjust the cpu_data.guest.options structure, add the ases flag into
-> it, and remove the previous guest.ases. We do this to keep consistent
-> with host cpu_data.options structure.
-> 2. Remove the "#include <asm/kvm_host.h>" in some files which also
-> include the "<linux/kvm_host.h>". As linux/kvm_host.h already include
-> the asm/kvm_host.h.
-> 3. Fix some unstandard spelling and grammar errors in comments, and
-> improve a little code format to make it easier and standard.
-> 
-> Changes for v7:
-> 1. Fix the kvm_save/restore_hw_gcsr compiling warnings reported by
-> kernel test robot. The report link is:
-> https://lore.kernel.org/oe-kbuild-all/202304131526.iXfLaVZc-lkp@intel.com/
-> 2. Fix loongarch kvm trace related compiling problems.
-> 
-> Changes for v6:
-> 1. Fix the Documentation/virt/kvm/api.rst compile warning about
-> loongarch parts.
-> 
-> Changes for v5:
-> 1. Implement get/set mp_state ioctl interface, and only the
-> KVM_MP_STATE_RUNNABLE state is supported now, and other states
-> will be completed in the future. The state is also used when vcpu
-> run idle instruction, if vcpu state is changed to RUNNABLE, the
-> vcpu will have the possibility to be woken up.
-> 2. Supplement kvm document about loongarch-specific part, such as add
-> api introduction for GET/SET_ONE_REG, GET/SET_FPU, GET/SET_MP_STATE,
-> etc.
-> 3. Improve the kvm_switch_to_guest function in switch.S, remove the
-> previous tmp,tmp1 arguments and replace it with t0,t1 reg.
-> 
-> Changes for v4:
-> 1. Add a csr_need_update flag in _vcpu_put, as most csr registers keep
-> unchanged during process context switch, so we need not to update it
-> every time. We can do this only if the soft csr is different form hardware.
-> That is to say all of csrs should update after vcpu enter guest, as for
-> set_csr_ioctl, we have written soft csr to keep consistent with hardware.
-> 2. Improve get/set_csr_ioctl interface, we set SW or HW or INVALID flag
-> for all csrs according to it's features when kvm init. In get/set_csr_ioctl,
-> if csr is HW, we use gcsrrd/ gcsrwr instruction to access it, else if csr is
-> SW, we use software to emulate it, and others return false.
-> 3. Add set_hw_gcsr function in csr_ops.S, and it is used in set_csr_ioctl.
-> We have splited hw gcsr into three parts, so we can calculate the code offset
-> by gcsrid and jump here to run the gcsrwr instruction. We use this function to
-> make the code easier and avoid to use the previous SET_HW_GCSR(XXX) interface.
-> 4. Improve kvm mmu functions, such as flush page table and make clean page table
-> interface.
-> 
-> Changes for v3:
-> 1. Remove the vpid array list in kvm_vcpu_arch and use a vpid variable here,
-> because a vpid will never be recycled if a vCPU migrates from physical CPU A
-> to B and back to A.
-> 2. Make some constant variables in kvm_context to global such as vpid_mask,
-> guest_eentry, enter_guest, etc.
-> 3. Add some new tracepoints, such as kvm_trace_idle, kvm_trace_cache,
-> kvm_trace_gspr, etc.
-> 4. There are some duplicate codes in kvm_handle_exit and kvm_vcpu_run,
-> so we move it to a new function kvm_pre_enter_guest.
-> 5. Change the RESUME_HOST, RESUME_GUEST value, return 1 for resume guest
-> and "<= 0" for resume host.
-> 6. Fcsr and fpu registers are saved/restored together.
-> 
-> Changes for v2:
-> 1. Seprate the original patch-01 and patch-03 into small patches, and the
-> patches mainly contain kvm module init, module exit, vcpu create, vcpu run,
-> etc.
-> 2. Remove the original KVM_{GET,SET}_CSRS ioctl in the kvm uapi header,
-> and we use the common KVM_{GET,SET}_ONE_REG to access register.
-> 3. Use BIT(x) to replace the "1 << n_bits" statement.
-> 
-> Tianrui Zhao (30):
->   LoongArch: KVM: Add kvm related header files
->   LoongArch: KVM: Implement kvm module related interface
->   LoongArch: KVM: Implement kvm hardware enable, disable interface
->   LoongArch: KVM: Implement VM related functions
->   LoongArch: KVM: Add vcpu related header files
->   LoongArch: KVM: Implement vcpu create and destroy interface
->   LoongArch: KVM: Implement vcpu run interface
->   LoongArch: KVM: Implement vcpu handle exit interface
->   LoongArch: KVM: Implement vcpu get, vcpu set registers
->   LoongArch: KVM: Implement vcpu ENABLE_CAP ioctl interface
->   LoongArch: KVM: Implement fpu related operations for vcpu
->   LoongArch: KVM: Implement vcpu interrupt operations
->   LoongArch: KVM: Implement misc vcpu related interfaces
->   LoongArch: KVM: Implement vcpu load and vcpu put operations
->   LoongArch: KVM: Implement vcpu status description
->   LoongArch: KVM: Implement update VM id function
->   LoongArch: KVM: Implement virtual machine tlb operations
->   LoongArch: KVM: Implement vcpu timer operations
->   LoongArch: KVM: Implement kvm mmu operations
->   LoongArch: KVM: Implement handle csr excption
->   LoongArch: KVM: Implement handle iocsr exception
->   LoongArch: KVM: Implement handle idle exception
->   LoongArch: KVM: Implement handle gspr exception
->   LoongArch: KVM: Implement handle mmio exception
->   LoongArch: KVM: Implement handle fpu exception
->   LoongArch: KVM: Implement kvm exception vector
->   LoongArch: KVM: Implement vcpu world switch
->   LoongArch: KVM: Implement probe virtualization when LoongArch cpu init
->   LoongArch: KVM: Enable kvm config and add the makefile
->   LoongArch: KVM: Supplement kvm document about LoongArch-specific part
-> 
->  Documentation/virt/kvm/api.rst             |  71 +-
->  arch/loongarch/Kbuild                      |   1 +
->  arch/loongarch/Kconfig                     |   2 +
->  arch/loongarch/configs/loongson3_defconfig |   2 +
->  arch/loongarch/include/asm/cpu-features.h  |  22 +
->  arch/loongarch/include/asm/cpu-info.h      |  10 +
->  arch/loongarch/include/asm/inst.h          |  16 +
->  arch/loongarch/include/asm/kvm_csr.h       |  57 ++
->  arch/loongarch/include/asm/kvm_host.h      | 252 ++++++
->  arch/loongarch/include/asm/kvm_types.h     |  11 +
->  arch/loongarch/include/asm/kvm_vcpu.h      |  97 +++
->  arch/loongarch/include/asm/loongarch.h     | 211 ++++-
->  arch/loongarch/include/uapi/asm/kvm.h      | 107 +++
->  arch/loongarch/kernel/asm-offsets.c        |  32 +
->  arch/loongarch/kernel/cpu-probe.c          |  53 ++
->  arch/loongarch/kvm/Kconfig                 |  38 +
->  arch/loongarch/kvm/Makefile                |  22 +
->  arch/loongarch/kvm/csr_ops.S               |  76 ++
->  arch/loongarch/kvm/exit.c                  | 707 +++++++++++++++++
->  arch/loongarch/kvm/interrupt.c             | 126 +++
->  arch/loongarch/kvm/main.c                  | 339 ++++++++
->  arch/loongarch/kvm/mmu.c                   | 729 +++++++++++++++++
->  arch/loongarch/kvm/switch.S                | 301 +++++++
->  arch/loongarch/kvm/timer.c                 | 266 +++++++
->  arch/loongarch/kvm/tlb.c                   |  31 +
->  arch/loongarch/kvm/trace.h                 | 168 ++++
->  arch/loongarch/kvm/vcpu.c                  | 880 +++++++++++++++++++++
->  arch/loongarch/kvm/vm.c                    |  78 ++
->  arch/loongarch/kvm/vmid.c                  |  64 ++
->  include/uapi/linux/kvm.h                   |   9 +
->  30 files changed, 4764 insertions(+), 14 deletions(-)
->  create mode 100644 arch/loongarch/include/asm/kvm_csr.h
->  create mode 100644 arch/loongarch/include/asm/kvm_host.h
->  create mode 100644 arch/loongarch/include/asm/kvm_types.h
->  create mode 100644 arch/loongarch/include/asm/kvm_vcpu.h
->  create mode 100644 arch/loongarch/include/uapi/asm/kvm.h
->  create mode 100644 arch/loongarch/kvm/Kconfig
->  create mode 100644 arch/loongarch/kvm/Makefile
->  create mode 100644 arch/loongarch/kvm/csr_ops.S
->  create mode 100644 arch/loongarch/kvm/exit.c
->  create mode 100644 arch/loongarch/kvm/interrupt.c
->  create mode 100644 arch/loongarch/kvm/main.c
->  create mode 100644 arch/loongarch/kvm/mmu.c
->  create mode 100644 arch/loongarch/kvm/switch.S
->  create mode 100644 arch/loongarch/kvm/timer.c
->  create mode 100644 arch/loongarch/kvm/tlb.c
->  create mode 100644 arch/loongarch/kvm/trace.h
->  create mode 100644 arch/loongarch/kvm/vcpu.c
->  create mode 100644 arch/loongarch/kvm/vm.c
->  create mode 100644 arch/loongarch/kvm/vmid.c
-> 
+    * As the above means that workqueue is no longer obersving all
+      scheduling events, it can't track the CPU time being consumed by the
+      workers on its own and thus can't use global clocks (e.g. jiffies).
+      The CPU time consumption tracking is still done with
+      p->se.sum_exec_runtime.
+
+    * The mechanism was incorrectly monitoring the entire CPU time a given
+      work item has consumed instead of each stretch without intervening
+      sleeps. Fixed.
+
+    * CPU time monitoring is now tick sampling based. The previous
+      p->se.sum_exec_runtime implementation was missing CPU time consumed
+      between the last scheduling event the work item finished and the
+      completion, so, e.g., work items that never schedule would always be
+      accounted as zero CPU time. While the sampling based implementation
+      isn't very accurate, this is good enough for getting the overall
+      picture of workqueues that consume a lot of CPU cycles.
+
+    * Patches reordered so that the visibility one can be applied first.
+      Documentation improved.
+
+v2: * Lai pointed out that !SM_NONE cases should also be notified. 0001 and
+      0004 are updated accordingly.
+
+    * PeterZ suggested reporting on work items that trigger the auto CPU
+      intensive mechanism. 0006 adds reporting of work functions that
+      trigger the mechanism repeatedly with exponential backoff.
+
+To reduce the number of concurrent worker threads, workqueue holds back
+starting per-cpu work items while the previous work item stays in the
+RUNNING state. As such a per-cpu work item which consumes a lot of CPU
+cycles, even if it has cond_resched()'s in the right places, can stall other
+per-cpu work items.
+
+To support per-cpu work items that may occupy the CPU for a substantial
+period of time, workqueue has WQ_CPU_INTENSIVE flag which exempts work items
+issued through the marked workqueue from concurrency management - they're
+started immediately and don't block other work items. While this works, it's
+error-prone in that a workqueue user can easily forget to set the flag or
+set it unnecessarily. Furthermore, the impacts of the wrong flag setting can
+be rather indirect and challenging to root-cause.
+
+This patchset makes workqueue auto-detect CPU intensive work items based on
+CPU consumption. If a work item consumes more than the threshold (10ms by
+default) of CPU time, it's automatically marked as CPU intensive when it
+gets scheduled out which unblocks starting of pending per-cpu work items.
+
+The mechanism isn't foolproof in that the detection delays can add up if
+many CPU-hogging work items are queued at the same time. However, in such
+situations, the bigger problem likely is the CPU being saturated with
+per-cpu work items and the solution would be making them UNBOUND. Future
+changes will make UNBOUND workqueues more attractive by improving their
+locality behaviors and configurability. We might eventually remove the
+explicit WQ_CPU_INTENSIVE flag.
+
+While at it, add statistics and a monitoring script. Lack of visibility has
+always been a bit of pain point when debugging workqueue related issues and
+with this change and more drastic ones planned for workqueue, this is a good
+time to address the shortcoming.
+
+This patchset was born out of the discussion in the following thread:
+
+ https://lkml.kernel.org/r/CAHk-=wgE9kORADrDJ4nEsHHLirqPCZ1tGaEPAZejHdZ03qCOGg@mail.gmail.com
+
+and contains the following patches:
+
+ 0001-workqueue-Add-pwq-stats-and-a-monitoring-script.patch
+ 0002-workqueue-Re-order-struct-worker-fields.patch
+ 0003-workqueue-Move-worker_set-clr_flags-upwards.patch
+ 0004-workqueue-Improve-locking-rule-description-for-worke.patch
+ 0005-workqueue-Automatically-mark-CPU-hogging-work-items-.patch
+ 0006-workqueue-Report-work-funcs-that-trigger-automatic-C.patch
+ 0007-workqueue-Track-and-monitor-per-workqueue-CPU-time-u.patch
+
+and also available in the following git branch:
+
+ git://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git auto-cpu-intensive-v4
+
+diffstat follows. Thanks.
+
+ Documentation/admin-guide/kernel-parameters.txt |   12 +
+ Documentation/core-api/workqueue.rst            |   32 +++++
+ kernel/sched/core.c                             |    3
+ kernel/workqueue.c                              |  302 ++++++++++++++++++++++++++++++++++++++++----------
+ kernel/workqueue_internal.h                     |   24 ++-
+ lib/Kconfig.debug                               |   13 ++
+ tools/workqueue/wq_monitor.py                   |  168 +++++++++++++++++++++++++++
+ 7 files changed, 483 insertions(+), 71 deletions(-)
+
+--
+tejun
 
