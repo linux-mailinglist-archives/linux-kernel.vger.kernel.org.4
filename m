@@ -2,243 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34C2B707C68
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 10:59:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E04C3707C6D
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:01:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230072AbjERI7W convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 18 May 2023 04:59:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40464 "EHLO
+        id S230081AbjERJBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 05:01:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbjERI7S (ORCPT
+        with ESMTP id S229931AbjERJBE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 04:59:18 -0400
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B811FE3
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 01:59:12 -0700 (PDT)
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1ae507af2e5so7314955ad.1
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 01:59:12 -0700 (PDT)
+        Thu, 18 May 2023 05:01:04 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B681FCC
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 02:01:02 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f42769a0c1so17758335e9.2
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 02:01:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684400461; x=1686992461;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4EkpLtrQu6Wc5CurlBolghKtZarCo31NeGGAhO+Vwdo=;
+        b=zGCY0nu2lDFLcoz+k0LgvMJUPENDjUIXY00RK5+1tmvyQ52k317q45G55KSkN0kPK7
+         /M/Cge6lHiY7Ch8lez2leNgwA2Zp4IbgEdI0nUvXxgzACypvRS56cI0DET7W4Sb/Flcg
+         YAqQ3cpFjiiRACuHnyPdPdDBO9rXCbdYY8oARx5PLmnEU1pSslBVwQn58nbScnY68mDO
+         t7z77WknCLRpz1lKKh0cxytt99JLiSKHYRvIpKj343qwIHx0GRRdUBiqBetviiMqVqTa
+         CPEzCnm3uCx8trtQ34OAxYrpLcZmYImW2v0CVyiuvGQDavemLmo9VP8TO9aBZfPHghcL
+         yUsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684400352; x=1686992352;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=L1v0qOA/M0aDdZzJFdBTNmWpUEfkhwiWQC7dh6d94jA=;
-        b=jrCbBnTQAkq831dpt4D7F//khQLgpydlIu+f98JqJ/yz6D8sI6cCLTY9ikCJEtt42W
-         bq/ojJ+ZxEhArjj+/3JPdNsBKCcnxXM3jiZJe005Z9E5fs/kOwwk7XjJQd9O3U6hzYU9
-         QIVAS3A1Wn0U91KNPht4ceGSnRz2BF7plbM+eboGRgmkzdHPUhDz0WHnthVC/EpOctbl
-         CjhhX/vPxnhgcEmbokR2/AUhrfs3N/oasCmITX6Sf43e6++G/gizSZ8/6FeoF9x/gCvY
-         DNaiNP6FyB0B8KZNNoma0jzTFwhqMIDujvV2PMwcURy2sZY2yEMVf1+70Zsoje4jx+VQ
-         +URA==
-X-Gm-Message-State: AC+VfDyytHg3jkqWwum6L3MQc/SapfmRx+0+W9yEURIca39NmUDHEDEX
-        uogU0jm+SghIH5zewIXd7H/Et0Owoiqnfml0bM8=
-X-Google-Smtp-Source: ACHHUZ5P6G1gy98xyVi+zXSmuHX7PZ/rG3vhLuwQM8JBe+5SbfCm69FasSRrm0j2ytqebL6T9ZjOkoaVojzkvMZED/U=
-X-Received: by 2002:a17:902:e889:b0:1ac:6fc3:6beb with SMTP id
- w9-20020a170902e88900b001ac6fc36bebmr1769508plg.9.1684400351844; Thu, 18 May
- 2023 01:59:11 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684400461; x=1686992461;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4EkpLtrQu6Wc5CurlBolghKtZarCo31NeGGAhO+Vwdo=;
+        b=MLChHVlIyELnmYP6WB/+IJiUeavvLvroEJd3JEkPl9jDyCaaSMdpgbp7E4yRXnnoRj
+         I0y+sSDxTx1prVdrRN2WrjpgbX+ReEtEI1AVzKNTOwc7Y9+FwFhlBUNYPYJMFHU/sMRD
+         ec9eqIBREmGBe5SVIML4MLHW4davQjOBdzv0VNwRIrLYAxWlVanZ4hVrGUMiXcFG7zSP
+         nXoE2VYfKKYMez6vQH9VUpBnPHkRS63QKeASnuhvj7OUFTlOpwNxnxiERl6XpBFJsrXC
+         s1bphrk2oFyZ1WGxwHpINJhucg03sUJC0betc5HtMjeNMG9Jyis3SLR3EBi7Os776xoR
+         E2pQ==
+X-Gm-Message-State: AC+VfDzw8DwBkgih/Mebpu66BAE84vzoqtcJfIXuak7t+sXO02SziqdQ
+        MJQGtkcUMrUFlV4lGEGjJ4w+HUAar6ZpZW770uZaeQ==
+X-Google-Smtp-Source: ACHHUZ79A3p+DFYRGklrYuoZfFl+7T7BZItlVzgHOnwtl24lipXH9tiXm5WsYwNPO9ldSNuZeHa/XamBLS371hTK+Jc=
+X-Received: by 2002:a1c:f20b:0:b0:3f4:2438:e201 with SMTP id
+ s11-20020a1cf20b000000b003f42438e201mr911283wmc.21.1684400461190; Thu, 18 May
+ 2023 02:01:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230414101052.11012-1-ihuguet@redhat.com> <20230516130437.14753-1-mailhol.vincent@wanadoo.fr>
- <CACT4ouc=VfUtZCGr0+y2sGDyWAnagT-zTMv3C2fkgfYXTJtRhA@mail.gmail.com>
-In-Reply-To: <CACT4ouc=VfUtZCGr0+y2sGDyWAnagT-zTMv3C2fkgfYXTJtRhA@mail.gmail.com>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Thu, 18 May 2023 17:59:00 +0900
-Message-ID: <CAMZ6RqKs0wBPYE4h3HsxDS0F2ZSvDDb3BrOuwtuBERtEGHy6dg@mail.gmail.com>
-Subject: Re: [PATCH v3] Add .editorconfig file for basic formatting
-To:     =?UTF-8?B?w43DsWlnbyBIdWd1ZXQ=?= <ihuguet@redhat.com>
-Cc:     corbet@lwn.net, danny@kdrag0n.dev, jgg@nvidia.com, joe@perches.com,
-        linux-kernel@vger.kernel.org, linux@rasmusvillemoes.dk,
-        masahiroy@kernel.org, mic@digikod.net, ojeda@kernel.org,
-        willy@infradead.org
+References: <20230517211756.2483552-1-bhupesh.sharma@linaro.org>
+ <20230517211756.2483552-3-bhupesh.sharma@linaro.org> <872d0dbc-18d8-800b-4647-d362a678086d@linaro.org>
+In-Reply-To: <872d0dbc-18d8-800b-4647-d362a678086d@linaro.org>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Thu, 18 May 2023 14:30:49 +0530
+Message-ID: <CAH=2Ntw2nAAsddNBULeoHM6F0dpX1ef31LDbBH7AiHeeyDJWgw@mail.gmail.com>
+Subject: Re: [PATCH v6 2/6] dt-bindings: soc: qcom: eud: Add SM6115 / SM4250 support
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, linux-kernel@vger.kernel.org,
+        bhupesh.linux@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, quic_schowdhu@quicinc.com,
+        gregkh@linuxfoundation.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu. 18 May 2023 at 16:53, Íñigo Huguet <ihuguet@redhat.com> wrote:
-> Hi Vincent,
+Hi Krzysztof,
+
+On Thu, 18 May 2023 at 13:08, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
-> On Tue, May 16, 2023 at 3:05 PM Vincent Mailhol
-> <mailhol.vincent@wanadoo.fr> wrote:
+> On 17/05/2023 23:17, Bhupesh Sharma wrote:
+> > Add dt-bindings for EUD found on Qualcomm SM6115 / SM4250 SoC.
 > >
-> > Hi Íñigo,
+> > On this SoC (and derivatives) the enable bit inside 'tcsr_check_reg'
+> > needs to be set first to 'enable' the eud module.
 > >
-> > Thank you very much for this patch. I would really love to see .editorconfig
-> > added to the Linux tree.
+> > So, update the dt-bindings to accommodate the third register
+> > property (TCSR Base) required by the driver on these SoCs.
 > >
-> > I need to work on different project and so, since last year, I applied the v2 of
-> > this series to my local tree and it works great.
-> >
-> > On Fri, Apr 14, 2023 at 12:11 PM Íñigo Huguet <ihuguet@redhat.com> wrote:
-> > > EditorConfig is a specification to define the most basic code formatting
-> > > stuff, and it's supported by many editors and IDEs, either directly or
-> > > via plugins, including VSCode/VSCodium, Vim, emacs and more.
-> > >
-> > > It allows to define formatting style related to indentation, charset,
-> > > end of lines and trailing whitespaces. It also allows to apply different
-> > > formats for different files based on wildcards, so for example it is
-> > > possible to apply different configs to *.{c,h}, *.py and *.rs.
-> > >
-> > > In linux project, defining a .editorconfig might help to those people
-> > > that work on different projects with different indentation styles, so
-> > > they cannot define a global style. Now they will directly see the
-> > > correct indentation on every fresh clone of the project.
-> > >
-> > > See https://editorconfig.org
-> > >
-> > > Link: https://lore.kernel.org/lkml/20200703073143.423557-1-danny@kdrag0n.dev/
-> > > Link: https://lore.kernel.org/lkml/20230404075540.14422-1-ihuguet@redhat.com/
-> > > Co-developed-by: Danny Lin <danny@kdrag0n.dev>
-> > > Signed-off-by: Danny Lin <danny@kdrag0n.dev>
-> > > Signed-off-by: Íñigo Huguet <ihuguet@redhat.com>
-> > > ---
-> > > v2:
-> > >  - added special rule for patch files so it doesn't remove
-> > >    trailing whitespaces, making them unusable.
-> > > v3:
-> > >  - moved all rules from [*] section to all the individual
-> > >    sections so they doesn't affect to unexpected files.
-> >
-> > I understand from from the past discussions that trim_trailing_whitespace or the
-> > default indentation can not be apply broadly to all files. But what about those
-> > three parameters?
-> >
-> >   [*]
-> >   charset = utf-8
-> >   end_of_line = lf
-> >   insert_final_newline = true
-> >
-> > Those looks safe to me. Are there files for which we do not want utf-8 or for
-> > which we do not what a final empty newline?
+> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
 >
-> Yes, I think that they are probably safe to use, but Miguel thought it
-> was better to be more cautious, and I agree. We can expand adding more
-> file formats when we detect those that are not covered.
-
-I think you are referring to this message from Miguel:
-
-  While UTF-8 and LF are probably OK for all files, I am not 100% sure about:
-
-  +insert_final_newline = true
-  +indent_style = tab
-  +indent_size = 8
-
-Link: https://lore.kernel.org/lkml/CANiq72k2rrByxzj1c4azAVJq-V7BqQcmBwtm3XM9T8r3r3-ysQ@mail.gmail.com/
-
-So it seems that we all agree on the UTF-8 and LF. Or did I miss
-another message?
-
-Regardless, with or without my nitpick addressed, it looks good to me:
-
-Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Tested-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-
-> With v3, the most used files are covered, and since there are
-> thousands of files with many different purposes, it's very difficult
-> to answer if there are files where we don't want these settings.
+> This is a friendly reminder during the review process.
 >
-> For example, if there are a few files that, who knows why, need a
-> different encoding, we can silently corrupt the file and cause a bad
-> debugging time for a developer. For the end of line and final newline,
-> we already saw that there are files where they are undesired, like
-> patch files. There might be more.
+> It looks like you received a tag and forgot to add it.
 >
-> >
-> > >  - added some extensions and files from a patch from Danny
-> > >    Lin that didn't get to be merged:
-> > >    https://lore.kernel.org/lkml/20200703073143.423557-1-danny@kdrag0n.dev/
-> > >    However, the following file types hasn't been added
-> > >    because they don't have a clear common style:
-> > >    rst,pl,cocci,tc,bconf,svg,xsl,manual pages
-> > > ---
-> > >  .editorconfig                          | 30 ++++++++++++++++++++++++++
-> > >  .gitignore                             |  1 +
-> > >  Documentation/process/4.Coding.rst     |  4 ++++
-> > >  Documentation/process/coding-style.rst |  4 ++++
-> > >  4 files changed, 39 insertions(+)
-> > >  create mode 100644 .editorconfig
-> > >
-> > > diff --git a/.editorconfig b/.editorconfig
-> > > new file mode 100644
-> > > index 000000000000..dce20d45c246
-> > > --- /dev/null
-> > > +++ b/.editorconfig
-> > > @@ -0,0 +1,30 @@
-> > > +# SPDX-License-Identifier: GPL-2.0-only
-> > > +
-> > > +root = true
-> > > +
-> > > +# 8 width tabs
-> > > +[{*.{c,h},Kconfig,Makefile,Makefile.*,*.mk}]
-> > > +charset = utf-8
-> > > +end_of_line = lf
-> > > +trim_trailing_whitespace = true
-> > > +insert_final_newline = true
-> > > +indent_style = tab
-> > > +indent_size = 8
-> > > +
-> > > +# 4 spaces
-> > > +[{*.{json,pm,py,rs},tools/perf/scripts/*/bin/*}]
-> > > +charset = utf-8
-> > > +end_of_line = lf
-> > > +trim_trailing_whitespace = true
-> > > +insert_final_newline = true
-> > > +indent_style = space
-> > > +indent_size = 4
-> > > +
-> > > +# 2 spaces
-> > > +[{*.{rb,yaml},.clang-format}]
-> > > +charset = utf-8
-> > > +end_of_line = lf
-> > > +trim_trailing_whitespace = true
-> > > +insert_final_newline = true
-> > > +indent_style = space
-> > > +indent_size = 2
-> > > diff --git a/.gitignore b/.gitignore
-> > > index 70ec6037fa7a..e4b3fe1d029b 100644
-> > > --- a/.gitignore
-> > > +++ b/.gitignore
-> > > @@ -100,6 +100,7 @@ modules.order
-> > >  #
-> > >  !.clang-format
-> > >  !.cocciconfig
-> > > +!.editorconfig
-> > >  !.get_maintainer.ignore
-> > >  !.gitattributes
-> > >  !.gitignore
-> > > diff --git a/Documentation/process/4.Coding.rst b/Documentation/process/4.Coding.rst
-> > > index 1f0d81f44e14..c2046dec0c2f 100644
-> > > --- a/Documentation/process/4.Coding.rst
-> > > +++ b/Documentation/process/4.Coding.rst
-> > > @@ -66,6 +66,10 @@ for aligning variables/macros, for reflowing text and other similar tasks.
-> > >  See the file :ref:`Documentation/process/clang-format.rst <clangformat>`
-> > >  for more details.
-> > >
-> > > +Some basic editor settings, such as indentation and line endings, will be
-> > > +set automatically if you are using an editor that is compatible with
-> > > +EditorConfig. See the official EditorConfig website for more information:
-> > > +https://editorconfig.org/
-> > >
-> > >  Abstraction layers
-> > >  ******************
-> > > diff --git a/Documentation/process/coding-style.rst b/Documentation/process/coding-style.rst
-> > > index 007e49ef6cec..ec96462fa8be 100644
-> > > --- a/Documentation/process/coding-style.rst
-> > > +++ b/Documentation/process/coding-style.rst
-> > > @@ -735,6 +735,10 @@ for aligning variables/macros, for reflowing text and other similar tasks.
-> > >  See the file :ref:`Documentation/process/clang-format.rst <clangformat>`
-> > >  for more details.
-> > >
-> > > +Some basic editor settings, such as indentation and line endings, will be
-> > > +set automatically if you are using an editor that is compatible with
-> > > +EditorConfig. See the official EditorConfig website for more information:
-> > > +https://editorconfig.org/
-> > >
-> > >  10) Kconfig configuration files
-> > >  -------------------------------
-> > > --
+> If you do not know the process, here is a short explanation:
+> Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+> versions. However, there's no need to repost patches *only* to add the
+> tags. The upstream maintainer will do that for acks received on the
+> version they apply.
+>
+> https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+>
+> If a tag was not added on purpose, please state why and what changed.
+>
+> Also - no improvements.
+
+Oops, seems I missed your review on v5 due to a label filter for
+'linux-usb' list.
+I will take care in future versions.
+
+Please let me know if the R-B tag is still valid though :)
+
+Thanks.
