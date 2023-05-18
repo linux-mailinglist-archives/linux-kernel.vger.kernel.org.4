@@ -2,167 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EABB37083D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:18:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E8377083D7
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:19:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230216AbjEROSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 10:18:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49762 "EHLO
+        id S231660AbjEROTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 10:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229884AbjEROSg (ORCPT
+        with ESMTP id S229884AbjEROTl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 10:18:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED305C1
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:18:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8067361450
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 14:18:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7B62C433EF;
-        Thu, 18 May 2023 14:18:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684419514;
-        bh=iWDdKnmjocdvHCNiTsa1fW7ngWcP357j0OZ2zcoz0pc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SK0i2xBIUnt3AMnH7oo3goI1inz5U6aC3oRDchzPWX5OFyVMop8fxMc1wLmRLa1F5
-         43/DtDzuHgeEFi9WxJPn/4TxauZVwQDXOrdVHSneVfoPD8QfdLi7N5UWUOC5es+W16
-         MZ5cjH9ICj6yjihrMOVcQ/bNcfKx5SPviWbkOB5bH38e925Ti0dPVzQFu9xuf/AUKB
-         Khb/EGOnWQAPODxoYQoMQSjFVOuUrL1YrUHcLSiDpWobnPVIWND1f1nY/2XCgzjq1c
-         LlhOl+1iff3ukd1hrXWDf8z62CQCjv2gD1yF7BfNRadS0Go3NLoJQHTBFMzhAzLi07
-         5bryCoGBt4kVw==
-Date:   Thu, 18 May 2023 16:18:28 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Mike Christie <michael.christie@oracle.com>
-Cc:     oleg@redhat.com, linux@leemhuis.info, nicolas.dichtel@6wind.com,
-        axboe@kernel.dk, ebiederm@xmission.com,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, mst@redhat.com,
-        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com
-Subject: Re: [RFC PATCH 5/8] vhost: Add callback that stops new work and
- waits on running ones
-Message-ID: <20230518-lokomotive-aufziehen-dbc432136b76@brauner>
-References: <20230518000920.191583-1-michael.christie@oracle.com>
- <20230518000920.191583-6-michael.christie@oracle.com>
+        Thu, 18 May 2023 10:19:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ACCECA
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:18:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684419530;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=A2/iO6J14YtVUt4T4ndhV73ZmcEee58hQhg8A73F228=;
+        b=WCaA9NiE0Ob/LFLPf9H9DMhqzSsaR0bZO/Nw1TAynJUh85RStZGipe8JjwP+OZlGutr6n8
+        3pvPnyuRg45JPct7DnSrlXxLEPugCkDxpP7HKQwrcBDH3DkmwxRagvyY5XIqJ9e6tGrTBR
+        32AXFLzXfL7mATAZx1G1rizLTAaYxDk=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-552-0nGNihEvOAaXizxCXeuCIA-1; Thu, 18 May 2023 10:18:49 -0400
+X-MC-Unique: 0nGNihEvOAaXizxCXeuCIA-1
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-6239a0f15e4so1312896d6.3
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:18:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684419528; x=1687011528;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=A2/iO6J14YtVUt4T4ndhV73ZmcEee58hQhg8A73F228=;
+        b=HjFxxXy8tTVtc9A2Wajefs7NFIALvV1kUyAFxlpi6kg1iKvJO2cUZEE1ED20vMUWId
+         9zkILBOU6kR6efCR/y0Ykz85GvxrjXr5I2QHAk86V7QImBMumtLAMkCUp9AQV8owwR0A
+         vkE1Oo29emlGuxVSdpenRyCvvrO0tovUa1GkybgesI+Pl6sqqx43gqU3ByFyTlT2E4Nx
+         GCd9NgTe5tcFTM58HAHTiO8YuKfEzdirIgqbAyKmUtzfjP5KQqAw4MLSKOQLpXYWCkae
+         v5N3tMzUBz2rCxbDRf7Eg6U227ZLVweUaOqDjTcjbZ3VAjswQGbqM168S7fYgLR33v0r
+         Qkgw==
+X-Gm-Message-State: AC+VfDxF9fO3DINCfmX0o1fX2qq5H6RMckiWWymM2WpLfn+nf4Ts2B+O
+        B2U5qJTpHgIvU5Hf07eSrRVlECdTLFo7xP1oMEVO9X3eOCe5xJv8gvSmG5YTHWTT00XK3W+ccDe
+        QMUxbvRjJtvFtIhveYPio3ufTy279oLyw
+X-Received: by 2002:a05:6214:f63:b0:619:c50b:8dc5 with SMTP id iy3-20020a0562140f6300b00619c50b8dc5mr6013300qvb.49.1684419528374;
+        Thu, 18 May 2023 07:18:48 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4fXSC86dNxaLQPrCvmm9qJg09KGdf4/co2HJ+1zjym/VhIXeewvWIx/2AOsssmkoGiStYeIQ==
+X-Received: by 2002:a05:6214:f63:b0:619:c50b:8dc5 with SMTP id iy3-20020a0562140f6300b00619c50b8dc5mr6013267qvb.49.1684419528073;
+        Thu, 18 May 2023 07:18:48 -0700 (PDT)
+Received: from [192.168.1.31] (024-205-208-113.res.spectrum.com. [24.205.208.113])
+        by smtp.gmail.com with ESMTPSA id s5-20020ad45245000000b00621066bde91sm553739qvq.52.2023.05.18.07.18.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 May 2023 07:18:47 -0700 (PDT)
+Message-ID: <822eda9c-6b1b-8c27-27ee-6f2855a261a5@redhat.com>
+Date:   Thu, 18 May 2023 07:18:45 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230518000920.191583-6-michael.christie@oracle.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.0
+Subject: Re: [PATCH] ALSA: emu10k1: set variables emu1010_routing_info and
+ emu1010_pads_info storage-class-specifier to static
+Content-Language: en-US
+To:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+References: <20230518123826.925752-1-trix@redhat.com> <ZGYvG2Sf9ZeeOmL6@ugly>
+From:   Tom Rix <trix@redhat.com>
+In-Reply-To: <ZGYvG2Sf9ZeeOmL6@ugly>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 07:09:17PM -0500, Mike Christie wrote:
-> When the vhost_task gets a SIGKILL we want to stop new work from being
-> queued and also wait for and handle completions for running work. For the
-> latter, we still need to use the vhost_task to handle the completing work
-> so we can't just exit right away. But, this has us kick off the stopping
-> and flushing/stopping of the device/vhost_task/worker to the system work
-> queue while the vhost_task handles completions. When all completions are
-> done we will then do vhost_task_stop and we will exit.
-> 
-> Signed-off-by: Mike Christie <michael.christie@oracle.com>
-> ---
->  drivers/vhost/net.c   |  2 +-
->  drivers/vhost/scsi.c  |  4 ++--
->  drivers/vhost/test.c  |  3 ++-
->  drivers/vhost/vdpa.c  |  2 +-
->  drivers/vhost/vhost.c | 48 ++++++++++++++++++++++++++++++++++++-------
->  drivers/vhost/vhost.h | 10 ++++++++-
->  drivers/vhost/vsock.c |  4 ++--
->  7 files changed, 58 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
-> index 8557072ff05e..90c25127b3f8 100644
-> --- a/drivers/vhost/net.c
-> +++ b/drivers/vhost/net.c
-> @@ -1409,7 +1409,7 @@ static int vhost_net_open(struct inode *inode, struct file *f)
->  	vhost_dev_init(dev, vqs, VHOST_NET_VQ_MAX,
->  		       UIO_MAXIOV + VHOST_NET_BATCH,
->  		       VHOST_NET_PKT_WEIGHT, VHOST_NET_WEIGHT, true,
-> -		       NULL);
-> +		       NULL, NULL);
->  
->  	vhost_poll_init(n->poll + VHOST_NET_VQ_TX, handle_tx_net, EPOLLOUT, dev);
->  	vhost_poll_init(n->poll + VHOST_NET_VQ_RX, handle_rx_net, EPOLLIN, dev);
-> diff --git a/drivers/vhost/scsi.c b/drivers/vhost/scsi.c
-> index bb10fa4bb4f6..40f9135e1a62 100644
-> --- a/drivers/vhost/scsi.c
-> +++ b/drivers/vhost/scsi.c
-> @@ -1820,8 +1820,8 @@ static int vhost_scsi_open(struct inode *inode, struct file *f)
->  		vqs[i] = &vs->vqs[i].vq;
->  		vs->vqs[i].vq.handle_kick = vhost_scsi_handle_kick;
->  	}
-> -	vhost_dev_init(&vs->dev, vqs, nvqs, UIO_MAXIOV,
-> -		       VHOST_SCSI_WEIGHT, 0, true, NULL);
-> +	vhost_dev_init(&vs->dev, vqs, nvqs, UIO_MAXIOV, VHOST_SCSI_WEIGHT, 0,
-> +		       true, NULL, NULL);
->  
->  	vhost_scsi_init_inflight(vs, NULL);
->  
-> diff --git a/drivers/vhost/test.c b/drivers/vhost/test.c
-> index 42c955a5b211..11a2823d7532 100644
-> --- a/drivers/vhost/test.c
-> +++ b/drivers/vhost/test.c
-> @@ -120,7 +120,8 @@ static int vhost_test_open(struct inode *inode, struct file *f)
->  	vqs[VHOST_TEST_VQ] = &n->vqs[VHOST_TEST_VQ];
->  	n->vqs[VHOST_TEST_VQ].handle_kick = handle_vq_kick;
->  	vhost_dev_init(dev, vqs, VHOST_TEST_VQ_MAX, UIO_MAXIOV,
-> -		       VHOST_TEST_PKT_WEIGHT, VHOST_TEST_WEIGHT, true, NULL);
-> +		       VHOST_TEST_PKT_WEIGHT, VHOST_TEST_WEIGHT, true, NULL,
-> +		       NULL);
->  
->  	f->private_data = n;
->  
-> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> index 8c1aefc865f0..de9a83ecb70d 100644
-> --- a/drivers/vhost/vdpa.c
-> +++ b/drivers/vhost/vdpa.c
-> @@ -1279,7 +1279,7 @@ static int vhost_vdpa_open(struct inode *inode, struct file *filep)
->  		vqs[i]->handle_kick = handle_vq_kick;
->  	}
->  	vhost_dev_init(dev, vqs, nvqs, 0, 0, 0, false,
-> -		       vhost_vdpa_process_iotlb_msg);
-> +		       vhost_vdpa_process_iotlb_msg, NULL);
->  
->  	r = vhost_vdpa_alloc_domain(v);
->  	if (r)
-> diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
-> index 1ba9e068b2ab..4163c86db50c 100644
-> --- a/drivers/vhost/vhost.c
-> +++ b/drivers/vhost/vhost.c
-> @@ -336,6 +336,7 @@ static void vhost_vq_reset(struct vhost_dev *dev,
->  static int vhost_worker(void *data)
->  {
->  	struct vhost_worker *worker = data;
-> +	struct vhost_dev *dev = worker->dev;
->  	struct vhost_work *work, *work_next;
->  	struct llist_node *node;
->  
-> @@ -352,12 +353,13 @@ static int vhost_worker(void *data)
->  		if (!node) {
->  			schedule();
->  			/*
-> -			 * When we get a SIGKILL our release function will
-> -			 * be called. That will stop new IOs from being queued
-> -			 * and check for outstanding cmd responses. It will then
-> -			 * call vhost_task_stop to exit us.
-> +			 * When we get a SIGKILL we kick off a work to
-> +			 * run the driver's helper to stop new work and
-> +			 * handle completions. When they are done they will
-> +			 * call vhost_task_stop to tell us to exit.
->  			 */
-> -			vhost_task_get_signal();
-> +			if (vhost_task_get_signal())
-> +				schedule_work(&dev->destroy_worker);
->  		}
 
-I'm pretty sure you still need to actually call exit here. Basically
-mirror what's done in io_worker_exit() minus the io specific bits.
+On 5/18/23 6:58 AM, Oswald Buddenhagen wrote:
+> On Thu, May 18, 2023 at 08:38:26AM -0400, Tom Rix wrote:
+>> smatch reports
+>  ^^^^^^ is this the best word to use here?
+
+I have been running smatch against the whole tree for a while, using 
+this preamble.
+
+Many fixes later, for the most part the tree has been cleaned of this 
+class of problems.
+
+Tom
+
+>
+>> sound/pci/emu10k1/emumixer.c:519:39: warning: symbol
+>>  'emu1010_routing_info' was not declared. Should it be static?
+>> sound/pci/emu10k1/emumixer.c:859:36: warning: symbol
+>>  'emu1010_pads_info' was not declared. Should it be static?
+>>
+>> These variables are only used in their defining file, so it should be 
+>> static
+>                               ^^ they
+>>
+>> Signed-off-by: Tom Rix <trix@redhat.com>
+>>
+> Reviewed-by: Oswald Buddenhagen <oswald.buddenhagen@gmx.de>
+>
+> (also amending one of the still pending patches. thanks!)
+>
+> regards
+>
+
