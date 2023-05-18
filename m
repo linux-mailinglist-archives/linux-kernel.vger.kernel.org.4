@@ -2,341 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 450DB7089A7
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 22:38:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B7767089B6
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 22:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbjERUiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 16:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53006 "EHLO
+        id S229662AbjERUpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 16:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbjERUis (ORCPT
+        with ESMTP id S230035AbjERUo4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 16:38:48 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D45C9192
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 13:38:46 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id 6a1803df08f44-61b58779b93so22593396d6.0
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 13:38:46 -0700 (PDT)
+        Thu, 18 May 2023 16:44:56 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F38E7D
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 13:44:55 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-96f50e26b8bso101771166b.2
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 13:44:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684442326; x=1687034326;
+        d=linux-foundation.org; s=google; t=1684442693; x=1687034693;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XVJjM3dZpBhYfdGEBjBsaY6bzKlLzf09nB2ohjvenyQ=;
-        b=KC7zVJFnzmuXe7Xk2yjmyLWy+hXYZY12nh9dr5q+Klm00Z8PULFOs9h7jquNULU94j
-         RP9LceDzWnbdvq5glgB9cue3MEl9uHZBlbSLvQsIkuIsJUYJpxgatOkeKPvm5MVueo9X
-         X64e8QhblAYabyyvk/XTwPqRwXZNnC/lCpaXEo2jDguMLoyYlAvltn5QQT1/78CNtmdZ
-         3LfOVNLKlIHD0OWtJxk6dvlRLJaKL410nVxUdrN1tBrfNN2dFEcrSHP0ItVe09zB9vnt
-         AcoR7ycs0H9WKt4wJxAP/6OZPWNS8XV/0sqPqcYyZcM2tFgTz5PzMhiNy3Bs2IpyGhuo
-         HDxg==
+        bh=yxp/usaVw20e5cr4YAHYGVQhvDy/fYNeFaw790wIOpk=;
+        b=VHyuu4CSMDkGakMg4WkM/wF0RvPw/rtrAvZX8raWPvw2JvRPZ/SviD1y7Z9ocx4bO7
+         kp4l2zQMthmzz7i6hFdTxpC2JKbSyhCz/3JDVBHUi8U1JaZF5HIPM3Sbl5ACDLS0jUC8
+         fUvHL6PQl5Z46BkocMc7+BavaTadgGW+qIatE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684442326; x=1687034326;
+        d=1e100.net; s=20221208; t=1684442693; x=1687034693;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XVJjM3dZpBhYfdGEBjBsaY6bzKlLzf09nB2ohjvenyQ=;
-        b=LdXPQj2YVdvovzTyP2VfiL4wIsmsyABz5sdt/n5pJCJTqZxGk5coWSa9FBx5HPLgbs
-         lIza5uDDB7JICbRauO+3+WJoeCgBIaX838QoZaAy/2jiMCHBQsL3hnZNEO8rdLsb64lh
-         q4rlkc4ZKLabMyJpwPGh4knCBNBmTBSkhFveKyVsoIoyjOP7VO7fj8xaA5uwagHj50cR
-         kcgoT0IYbVhz/JJqJ7JhC0Qtd4scp008CxY2LStbR4oYKw5zf6o3dHudmfBqFKbW7rye
-         2tAPidT9VaJjJVUimRP76Nuq72Lz40QKWRsd+Xu7wwJeZS4yF64+12WlKGn5zKNOPm4e
-         sqbw==
-X-Gm-Message-State: AC+VfDyNXDBguk3ExKMDCs6GrE+XMlQElhIQBiWvi0KQiDbimHrLlWzR
-        c5vVugMya4AJaqavKS3SK9+1QkANfOpEyq5p64t/Iw==
-X-Google-Smtp-Source: ACHHUZ5Qh/UxkjKvgP+YRldrEYd7/1rN5xFOnFYDtVx1M5nnlkgpk8xsm5tUVmt/LqR35coaGu/l5CblGt8MPq9NDLI=
-X-Received: by 2002:a05:6214:202f:b0:61b:5b9f:f5fd with SMTP id
- 15-20020a056214202f00b0061b5b9ff5fdmr571446qvf.41.1684442325664; Thu, 18 May
- 2023 13:38:45 -0700 (PDT)
+        bh=yxp/usaVw20e5cr4YAHYGVQhvDy/fYNeFaw790wIOpk=;
+        b=WEBmdAhdSBw6+z1bBxo3WMQttulindoPFoJvyWlFZQRmhKkC4fhNm7kipRmWbb2MIN
+         Ix8XKbXfnSCO9n1P9lFZ4OJL2uKT54MITKReYwhjM++oNgIWpQ5rACFSk22rldyCYeo/
+         wZ8gjzqrLVDRlvwz2C4Jv9HEpiTZev1EJKdDffplj79VADqEGxRHHzuCghMwnCUE19wi
+         67kPOXEZyMwST1jId2eC88NHH7vbmwlT0m0/8ioxcKugdRvfaoc/IWnR91sonzkLGjhx
+         eXZ5OWW/pOouw0Qmqry2/yaRuDfHFDyfyCl9KAzStL/5r8o3k7RL3KV3cQoGcV6Z94Ek
+         AyPw==
+X-Gm-Message-State: AC+VfDxX48jWVzESlVbaQyv61RemIAr4J/mh/rHEPXCLfuLC4gRmKdAd
+        WLIKn26WWgiROq2XGVIhxkl6ni0Ge/7j7rQI3KecK1vq
+X-Google-Smtp-Source: ACHHUZ5bfjUYBhUXawnVjA7b7OEvutbwnmIXARqaKAB5jlz1fUYUD+QA3dJgrAbPgmWx+B5qoR8Lig==
+X-Received: by 2002:a17:906:4789:b0:96a:ee54:9f19 with SMTP id cw9-20020a170906478900b0096aee549f19mr429906ejc.48.1684442693605;
+        Thu, 18 May 2023 13:44:53 -0700 (PDT)
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com. [209.85.218.44])
+        by smtp.gmail.com with ESMTPSA id dx26-20020a170906a85a00b0096a1ba4e0d1sm1406352ejb.32.2023.05.18.13.44.52
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 May 2023 13:44:52 -0700 (PDT)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-96aae59bbd6so474521666b.3
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 13:44:52 -0700 (PDT)
+X-Received: by 2002:a17:907:3e2a:b0:96f:5f44:ea02 with SMTP id
+ hp42-20020a1709073e2a00b0096f5f44ea02mr438181ejc.8.1684442691873; Thu, 18 May
+ 2023 13:44:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230511182426.1898675-1-axelrasmussen@google.com>
- <CADrL8HXFiTL-RDnETS2BUg_qH8CvcCMZiX-kutsrS1-8Uy25=w@mail.gmail.com>
- <ZGVRUeCWr8209m8d@x1n> <ZGVTMnVKNcQDM0x4@x1n> <CAJHvVcgXynHcuoS6eCfOAB2SgzqYy_zMGrRMR2kFuxOtSdUwvQ@mail.gmail.com>
- <CACw3F52MNOVv6KA5n7wRYDT2ujwYkco=aYngbo-zGA3zW1yq+w@mail.gmail.com> <ZGZMtK6PzoTuLZ1b@x1n>
-In-Reply-To: <ZGZMtK6PzoTuLZ1b@x1n>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Thu, 18 May 2023 13:38:09 -0700
-Message-ID: <CAJHvVcgcYPu-G3RDVrkrM_J48NUiUY0SH0G1sd+=X9BDgnQEuQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] mm: userfaultfd: add new UFFDIO_SIGBUS ioctl
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Jiaqi Yan <jiaqiyan@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Hongchen Zhang <zhanghongchen@loongson.cn>,
-        Huang Ying <ying.huang@intel.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Shuah Khan <shuah@kernel.org>,
-        ZhangPeng <zhangpeng362@huawei.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Anish Moorthy <amoorthy@google.com>
+References: <ZElaVmxDsOkZj2DK@debian> <51cff63a-3a04-acf5-8264-bb19b0bee8a3@leemhuis.info>
+ <CAHk-=wgzU8_dGn0Yg+DyX7ammTkDUCyEJ4C=NvnHRhxKWC7Wpw@mail.gmail.com> <a9a9017cceb65aeca285a06c7b46970788301ce8.camel@ndufresne.ca>
+In-Reply-To: <a9a9017cceb65aeca285a06c7b46970788301ce8.camel@ndufresne.ca>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 18 May 2023 13:44:35 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjypw2PL-w5ZBxY97SgRWd21f2V2Cuyw-ebsiTpSNQjBg@mail.gmail.com>
+Message-ID: <CAHk-=wjypw2PL-w5ZBxY97SgRWd21f2V2Cuyw-ebsiTpSNQjBg@mail.gmail.com>
+Subject: Re: mainline build failure due to cf21f328fcaf ("media: nxp: Add
+ i.MX8 ISI driver")
+To:     Nicolas Dufresne <nicolas@ndufresne.ca>
+Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 9:05=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote:
+On Thu, May 18, 2023 at 12:53=E2=80=AFPM Nicolas Dufresne <nicolas@ndufresn=
+e.ca> wrote:
 >
-> On Wed, May 17, 2023 at 05:43:53PM -0700, Jiaqi Yan wrote:
-> > On Wed, May 17, 2023 at 3:29=E2=80=AFPM Axel Rasmussen <axelrasmussen@g=
-oogle.com> wrote:
-> > >
-> > > On Wed, May 17, 2023 at 3:20=E2=80=AFPM Peter Xu <peterx@redhat.com> =
-wrote:
-> > > >
-> > > > On Wed, May 17, 2023 at 06:12:33PM -0400, Peter Xu wrote:
-> > > > > On Thu, May 11, 2023 at 03:00:09PM -0700, James Houghton wrote:
-> > > > > > On Thu, May 11, 2023 at 11:24=E2=80=AFAM Axel Rasmussen
-> > > > > > <axelrasmussen@google.com> wrote:
-> > > > > > >
-> > > > > > > So the basic way to use this new feature is:
-> > > > > > >
-> > > > > > > - On the new host, the guest's memory is registered with user=
-faultfd, in
-> > > > > > >   either MISSING or MINOR mode (doesn't really matter for thi=
-s purpose).
-> > > > > > > - On any first access, we get a userfaultfd event. At this po=
-int we can
-> > > > > > >   communicate with the old host to find out if the page was p=
-oisoned.
-> > > > > > > - If so, we can respond with a UFFDIO_SIGBUS - this places a =
-swap marker
-> > > > > > >   so any future accesses will SIGBUS. Because the pte is now =
-"present",
-> > > > > > >   future accesses won't generate more userfaultfd events, the=
-y'll just
-> > > > > > >   SIGBUS directly.
-> > > > > >
-> > > > > > I want to clarify the SIGBUS mechanism here when KVM is involve=
-d,
-> > > > > > keeping in mind that we need to be able to inject an MCE into t=
-he
-> > > > > > guest for this to be useful.
-> > > > > >
-> > > > > > 1. vCPU gets an EPT violation --> KVM attempts GUP.
-> > > > > > 2. GUP finds a PTE_MARKER_UFFD_SIGBUS and returns VM_FAULT_SIGB=
-US.
-> > > > > > 3. KVM finds that GUP failed and returns -EFAULT.
-> > > > > >
-> > > > > > This is different than if GUP found poison, in which case KVM w=
-ill
-> > > > > > actually queue up a SIGBUS *containing the address of the fault=
-*, and
-> > > > > > userspace can use it to inject an appropriate MCE into the gues=
-t. With
-> > > > > > UFFDIO_SIGBUS, we are missing the address!
-> > > > > >
-> > > > > > I see three options:
-> > > > > > 1. Make KVM_RUN queue up a signal for any VM_FAULT_SIGBUS. I th=
-ink
-> > > > > > this is pointless.
-> > > > > > 2. Don't have UFFDIO_SIGBUS install a PTE entry, but instead ha=
-ve a
-> > > > > > UFFDIO_WAKE_MODE_SIGBUS, where upon waking, we return VM_FAULT_=
-SIGBUS
-> > > > > > instead of VM_FAULT_RETRY. We will keep getting userfaults on r=
-epeated
-> > > > > > accesses, just like how we get repeated signals for real poison=
-.
-> > > > > > 3. Use this in conjunction with the additional KVM EFAULT info =
-that
-> > > > > > Anish proposed (the first part of [1]).
-> > > > > >
-> > > > > > I think option 3 is fine. :)
-> > > > >
-> > > > > Or... option 4) just to use either MADV_HWPOISON or hwpoison-inje=
-ct? :)
-> > > >
-> > > > I just remember Axel mentioned this in the commit message, and just=
- in case
-> > > > this is why option 4) was ruled out:
-> > > >
-> > > >         They expect that once poisoned, pages can never become
-> > > >         "un-poisoned". So, when we live migrate the VM, we need to =
-preserve
-> > > >         the poisoned status of these pages.
-> > > >
-> > > > Just to supplement on this point: we do have unpoison (echoing to
-> > > > "debug/hwpoison/hwpoison_unpoison"), or am I wrong?
-> >
-> > If I read unpoison_memory() correctly, once there is a real hardware
-> > memory corruption (hw_memory_failure will be set), unpoison will stop
-> > working and return EOPNOTSUPP.
-> >
-> > I know some cloud providers evacuating VMs once a single memory error
-> > happens, so not supporting unpoison is probably not a big deal for
-> > them. BUT others do keep VM running until more errors show up later,
-> > which could be long after the 1st error.
->
-> We're talking about postcopy migrating a VM has poisoned page on src,
-> rather than on dst host, am I right?  IOW, the dest hwpoison should be
-> fake.
->
-> If so, then I would assume that's the case where all the pages on the des=
-t
-> host is still all good (so hw_memory_failure not yet set, or I doubt the
-> judgement of being a migration target after all)?
->
-> The other thing is even if dest host has hw poisoned page, I'm not sure
-> whether hw_memory_failure is the only way to solve this.
->
-> I saw that this is something got worked on before from Zhenwei, David use=
-d
-> to have some reasoning on why it was suggested like using a global knob:
->
-> https://lore.kernel.org/all/d7927214-e433-c26d-7a9c-a291ced81887@redhat.c=
-om/
->
-> Two major issues here afaics:
->
->   - Zhenwei's approach only considered x86 hwpoison - it relies on kpte
->     having !present in entries but that's x86 specific rather than generi=
-c
->     to memory_failure.c.
->
->   - It is _assumed_ that hwpoison injection is for debugging only.
->
-> I'm not sure whether you can fix 1) by some other ways, e.g., what if the
-> host just remember all the hardware poisoned pfns (or remember
-> soft-poisoned ones, but then here we need to be careful on removing them
-> from the list when it's hwpoisoned for real)?  It sounds like there's
-> opportunity on providing a generic solution rather than relying on
-> !pte_present().
->
-> For 2) IMHO that's not a big issue, you can declare it'll be used in !deb=
-ug
-> but production systems so as to boost the feature importance with a real
-> use case.
->
-> So far I'd say it'll be great to leverage what it's already there in linu=
-x
-> and make it as generic as possible. The only issue is probably
-> CAP_ADMIN... not sure whether we can have some way to provide !ADMIN
-> somehow, or you can simply work around this issue.
+> I'm expected to be flamed for getting in the way, but whatever. To me thi=
+s
+> decision lacks any kind of consideration toward who will be affected. Thi=
+s will
+> hit those that makes the new features and are working hard to convince th=
+eir
+> customers to go mainline first.
 
-As you mention below I think the key distinction is the scope - I
-think MADV_HWPOISON affects the whole system, including other
-processes.
+I think the solution may be for those affected people to help Mauro & co.
 
-For our purposes, we really just want to "poison" this particular
-virtual address (the HVA, from the VM's perspective), not even other
-mappings of the same shared memory. I think that behavior is different
-from MADV_HWPOISON, at least.
+Clearly the media maintenance doesn't have enough time. I'm not going
+to pull from a tree where I know that it then may take six *weeks* and
+one whole release for simple bugs to be fixed.
 
->
-> >
-> > > >
-> > > > >
-> > > > > Besides what James mentioned on "missing addr", I didn't quickly =
-see what's
-> > > > > the major difference comparing to the old hwpoison injection meth=
-ods even
-> > > > > without the addr requirement. If we want the addr for MCE then it=
-'s more of
-> > > > > a question to ask.
-> > > > >
-> > > > > I also didn't quickly see why for whatever new way to inject a pt=
-e error we
-> > > > > need to have it registered with uffd.  Could it be something like
-> > > > > MADV_PGERR (even if MADV_HWPOISON won't suffice) so you can injec=
-t even
-> > > > > without an userfault context (but still usable when uffd register=
-ed)?
-> > > > >
-> > > > > And it'll be alawys nice to have a cover letter too (if there'll =
-be a new
-> > > > > version) explaining the bits.
-> > >
-> > > I do plan a v2, if for no other reason than to update the
-> > > documentation. Happy to add a cover letter with it as well.
-> > >
-> > > +Jiaqi back to CC, this is one piece of a larger memory poisoning /
-> > > recovery design Jiaqi is working on, so he may have some ideas why
-> > > MADV_HWPOISON or MADV_PGER will or won't work.
-> >
-> > Per https://man7.org/linux/man-pages/man2/madvise.2.html,
-> > MADV_HWPOISON "is available only for privileged (CAP_SYS_ADMIN)
-> > processes." So for a non-root VMM, MADV_HWPOISON is out of option.
->
-> It makes sense to me especially when the page can be shared with other
-> tasks.
->
-> >
-> > Another issue with MADV_HWPOISON is, it requires to first successfully
-> > get_user_pages_fast(). I don't think it will work if memory is not
-> > mapped yet.
->
-> Fair point, so probably current MADV_HWPOISON got ruled out.
-> hwpoison-inject seems fine where only the PFN is needed rather than the
-> pte. But same issue on CAP_ADMIN indeed.
->
-> >
-> > With the UFFDIO_SIGBUS feature introduced in this patchset, it may
-> > even be possible to free the emulated-hwpoison page back to the kernel
-> > so we don't lose a 4K page.
-> >
-> > I didn't find any ref/doc for MADV_PGERR. Is it something you suggest
-> > to build, Peter?
->
-> That's something I made up just to show my question on why such an
-> interface (even if wanted) needs to be bound to userfaultfd, e.g. a
-> madvise() seems working if someone sololy want to install a poisoned pte.
+That is literally what happened. And if it had been once, that would
+be one thing. But when the same thing starts happening again the very
+next release, it's no longer a one-off. It's a pattern.
 
-I look at it a bit differently...
+> Punishment and shame is not something I encourage or think is nice in gen=
+eral.
 
-Even existing UFFDIO_* operations could technically be separated from
-userfaultfd. You could imagine a MADV_MAP_PAGE instead of
-UFFDIO_CONTINUE. UFFDIO_COPY is a bit trickier since it takes an
-argument, but it could be done with process_madvise(). (Granted, I'm
-not sure this would be useful... But this is equally true for
-UFFDIO_SIGBUS; it seems non-live-migration use cases could use
-MADV_HWPOISON, and for live migration use cases we will be using
-UFFD.)
+This is NOT about punishment.,
 
-We've sort of setup a convention with userfaultfd where at a high
-level users are supposed to:
+It's very simple: if I cannot trust the tree to be maintained, I'm not
+going to pull it.
 
-1. Receive events from the uffd
-2. Resolve those events with UFFDIO_* ioctls
-3. Wake up with UFFDIO_WAKE to retry the fault that generated the
-original event (can be combined with step 2 of course)
+That's not punishment, that is simply about kernel maintenance.
 
-So for me, even if MADV_PGERR or similar existed, I would be tempted
-to add a UFFDIO_SIGBUS as well, even if it just calls the same
-underlying function to do the same thing, if only for consistency
-(with the idea "UFFD events are resolved by UFFD ioctls") from the
-user's perspective.
+If you want to help fix the media maintenance issue, then by all means
+help. But as things are now, if I cannot rely on the media tree
+getting even simple build fixes in a timely manner, then I'm not
+pulling it.
 
+Please realize: to misquote Shakespeare, I have two options: to pull
+or not to pull. And in order to pull a tree, I need to know that I can
+expect any problems from that pull to be fixed.
 
->
-> IIUC even with an madvise one may not need CAP_ADMIN since we can limit t=
-he
-> op to current mm only, I assume it's safe.
->
-> Here you'd want to return VM_FAULT_HWPOISON for whatever swap pte you'd
-> like to install (in do_swap_page) with whatever new interface (assuming
-> still a new madvise). As James mentioned, I think KVM liked that to
-> recognize -EHWPOISON from -EFAULT.  I'd say we can even consider reusing
-> PTE_MARKER_SWAPIN_ERROR to let it just return VM_FAULT_HWPOISON directly =
-if
-> so.
->
-> Thanks,
->
-> --
-> Peter Xu
->
+Would you expect me to pull known-buggy trees? I sure hope you don't
+expect that. Not pulling buggy trees isn't "punishment". It's the only
+sane thing to do.
+
+And the exact same thing is true when a tree isn't maintained
+properly. Bugs happen. That's inevitable. And sometimes bugs can be
+hard to find, or hard to fix. But when the maintainer has been sent a
+fix, and that fix doesn't get handled for SIX WEEKS, then that tree is
+buggy.
+
+Something is very rotten in the state of media. It needs to get fixed.
+Until it is fixed, I don't want to take random new code.
+
+The fix *may* be as simple as more testing, and better automation. But
+really, the thing that annoyed me enormously was that these bugs were
+all found by automation and testing. And still they were left to rot.
+
+                 Linus
