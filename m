@@ -2,132 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3F75707C13
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 10:30:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A5F3707C14
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 10:30:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbjERIaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 04:30:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58466 "EHLO
+        id S229599AbjERIaU convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 18 May 2023 04:30:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230192AbjERIaK (ORCPT
+        with ESMTP id S230210AbjERIaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 18 May 2023 04:30:10 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37FB91BD0;
-        Thu, 18 May 2023 01:30:08 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34I5Nwlg010670;
-        Thu, 18 May 2023 08:30:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=GMMvJnkAxm8s6BWfqwfRdT244uW3bNSbKXIRt2O+RY0=;
- b=VETbeLKJm5K72lRLikx/pktKIHoJw6Q169QDmVQmw/QNO4Izz53EqknaLjoHO0ns4xLo
- 2PydKfa5JQCFKf4tTULbKjwxlt8uyEf5lhH7dFcRf5tDK0eYKSzZb2thKRHnvfFGQkNX
- SrOPVi0b+LZMubhgV5yUGuYnIdRuQassWJNfN1/Ac1y5E240sLhmWvj+AqszTHJTmU+0
- AVmOaHl5NMukKVieEey870sB8DgAa3sePA7J3ZEXIa1mxvd4LeptK4Bg8/h7iOI2k/pa
- DtZhSomZgOS8WIUK/3LWDbVbcFldXtq5H3aSzIIwKWVCwOwjRThVP92/xjNe/MkABFba Vg== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qn73urxmw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 May 2023 08:30:04 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34I8U23A024037
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 May 2023 08:30:02 GMT
-Received: from kathirav-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Thu, 18 May 2023 01:29:59 -0700
-From:   Kathiravan T <quic_kathirav@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Kathiravan T <quic_kathirav@quicinc.com>
-Subject: [PATCH V2 3/3] arm64: dts: qcom: ipq5332: add few more reserved memory region
-Date:   Thu, 18 May 2023 13:59:34 +0530
-Message-ID: <20230518082934.24129-4-quic_kathirav@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230518082934.24129-1-quic_kathirav@quicinc.com>
-References: <20230518082934.24129-1-quic_kathirav@quicinc.com>
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F92D198A;
+        Thu, 18 May 2023 01:30:06 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 3F3347FFD;
+        Thu, 18 May 2023 16:29:58 +0800 (CST)
+Received: from EXMBX062.cuchost.com (172.16.6.62) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 18 May
+ 2023 16:29:58 +0800
+Received: from [192.168.120.43] (171.223.208.138) by EXMBX062.cuchost.com
+ (172.16.6.62) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 18 May
+ 2023 16:29:57 +0800
+Message-ID: <492b3874-7fcd-f7c1-bbe1-594c2d795854@starfivetech.com>
+Date:   Thu, 18 May 2023 16:29:55 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 5Q8gr6HBz1bUEKdp1HkJpq0sCK7y74Bc
-X-Proofpoint-GUID: 5Q8gr6HBz1bUEKdp1HkJpq0sCK7y74Bc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-18_06,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- lowpriorityscore=0 priorityscore=1501 mlxlogscore=561 malwarescore=0
- impostorscore=0 bulkscore=0 mlxscore=0 clxscore=1015 adultscore=0
- spamscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305180062
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 2/2] net: phy: motorcomm: Add pad drive strength cfg
+ support
+Content-Language: en-US
+From:   Guo Samin <samin.guo@starfivetech.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <netdev@vger.kernel.org>, Peter Geis <pgwipeout@gmail.com>,
+        Frank <Frank.Sae@motor-comm.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>
+References: <20230505090558.2355-1-samin.guo@starfivetech.com>
+ <20230505090558.2355-3-samin.guo@starfivetech.com>
+ <fc516e65-cde2-4a65-a3c5-bd8c939e7eb1@lunn.ch>
+ <f2b54fc5-81a6-45ae-0218-193a993333ab@starfivetech.com>
+In-Reply-To: <f2b54fc5-81a6-45ae-0218-193a993333ab@starfivetech.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX062.cuchost.com
+ (172.16.6.62)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In IPQ SoCs, U-boot will collect the system RAM contents upon crash for
-the post morterm analysis. If we don't reserve the memory region used by
-U-boot, obviously linux will consume it and upon next boot on crash, uboot
-will be loaded in the same region, which will lead to loose some of the
-data, sometimes we may miss out critical information. So lets reserve the
-region used by the U-boot.
+Re: [PATCH v2 2/2] net: phy: motorcomm: Add pad drive strength cfg support
+From: Guo Samin <samin.guo@starfivetech.com>
+to: Andrew Lunn <andrew@lunn.ch>
+data: 2023/5/6
 
-Similarly SBL copies some data into the reserved region and it will be
-used in the crash scenario. So reserve 1MB for SBL as well.
+> 
+> Re: [PATCH v2 2/2] net: phy: motorcomm: Add pad drive strength cfg support
+> From: Andrew Lunn <andrew@lunn.ch>
+> to: Samin Guo <samin.guo@starfivetech.com>
+> data: 2023/5/5
+> 
+>>>  #define YTPHY_DTS_OUTPUT_CLK_DIS		0
+>>> @@ -1495,6 +1504,7 @@ static int yt8531_config_init(struct phy_device *phydev)
+>>>  {
+>>>  	struct device_node *node = phydev->mdio.dev.of_node;
+>>>  	int ret;
+>>> +	u32 ds, val;
+>>
+>> Reverse Christmas tree.  Sort these longest first, shortest last.
+>>
+> Thanks, will fix.
+>> Otherwise this looks O.K.
+>>
+>> The only open question is if real unit should be used, uA, not some
+>> magic numbers. Lets see what the DT Maintainers say.
+>>
+>>       Andrew
+> 
+> Hi Andrew,
+> 
+> As I communicated with Frank, Motorcomm doesn't give specific units on their datasheet, except for magic numbers.
+> Tried to ask Motorcomm last week, but it seems that they themselves do not know what the unit is and have no response so far.
+> 
+> 
+> Below is all the relevant information I found：
+> 
+> Pad Drive Strength Cfg (EXT_0xA010)
+> 
+> Bit   |  Symbol           |  Access |  Default |  Description
+> 15:13 |  Rgmii_sw_dr_rx   |  RW     |  0x3     |  Drive strenght of rx_clk pad.
+>                                                |  3'b111: strongest; 3'b000: weakest.
+> 
+> 12    |  Rgmii_sw_dr[2]   |  RW     |  0x0     |  Bit 2 of Rgmii_sw_dr[2:0], refer to ext A010[5:4]
+> 
+> 5:4   |  Rgmii_sw_dr[1:0] |  RW     |  0x3     |  Bit 1 and 0 of Rgmii_sw_dr, Drive strenght of rxd/rx_ctl rgmii pad.
+>                                                |  3'b111: strongest; 3'b000: weakest
+> 
+> 
+> 
+> Best regards,
+> Samin
 
-While at it, drop the size padding in the smem memory region.
+Hi Andrew,
 
-Signed-off-by: Kathiravan T <quic_kathirav@quicinc.com>
----
-Changes in V2:
-	- Dropped the size padding in smem memory region
+We tried contacting motorcomm again, but so far we haven't been able to get any more information about unit.
+Also, I found a similar configuration in Documentation/devicetree/bindings/net/qca,ar803x.yaml, and they also
+used the 'magic numbers':
 
- arch/arm64/boot/dts/qcom/ipq5332.dtsi | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+  qca,clk-out-strength:
+    description: Clock output driver strength.
+    $ref: /schemas/types.yaml#/definitions/uint32
+    enum: [0, 1, 2]
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq5332.dtsi b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-index 753581e60604..7e0a2a674f09 100644
---- a/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq5332.dtsi
-@@ -114,6 +114,16 @@
- 		#size-cells = <2>;
- 		ranges;
- 
-+		uboot@4a100000 {
-+			reg = <0x0 0x4a100000 0x0 0x400000>;
-+			no-map;
-+		};
-+
-+		sbl@4a500000 {
-+			reg = <0x0 0x4a500000 0x0 0x100000>;
-+			no-map;
-+		};
-+
- 		tz_mem: tz@4a600000 {
- 			reg = <0x0 0x4a600000 0x0 0x200000>;
- 			no-map;
-@@ -121,7 +131,7 @@
- 
- 		smem@4a800000 {
- 			compatible = "qcom,smem";
--			reg = <0x0 0x4a800000 0x0 0x00100000>;
-+			reg = <0x0 0x4a800000 0x0 0x100000>;
- 			no-map;
- 
- 			hwlocks = <&tcsr_mutex 0>;
--- 
-2.17.1
 
+Best regards,
+Samin
