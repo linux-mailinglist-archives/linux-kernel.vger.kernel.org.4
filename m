@@ -2,92 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11C1B707E05
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 12:26:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AF6E707DFE
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 12:25:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230389AbjERK0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 06:26:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49860 "EHLO
+        id S230339AbjERKZp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 06:25:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbjERK0K (ORCPT
+        with ESMTP id S230230AbjERKZk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 06:26:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22A721BE3
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 03:25:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684405520;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6xmnqCUmlj/I0BvrHuTlZLbsSYHg9a6q/upj2RAlWxA=;
-        b=Jyjwqoe029YaoGYSqOz23CGHAQANcb4CorIfKKdqZAhWpE7ZVXzjZgqPP2E2fi4Uo5HxSO
-        OWoOEcO5DGQtszrjF18t01yjxQHOYv7Iqh2lmrHsoHBInlPqBHyT9gGjoUimbCZewj9Ibn
-        urHeryIBttAUMehRBntF/dwEp/x5eDc=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-575-0wCEA4A8PYm_sJM7J3tupw-1; Thu, 18 May 2023 06:25:19 -0400
-X-MC-Unique: 0wCEA4A8PYm_sJM7J3tupw-1
-Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-3f39195e7e5so3794731cf.0
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 03:25:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684405518; x=1686997518;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6xmnqCUmlj/I0BvrHuTlZLbsSYHg9a6q/upj2RAlWxA=;
-        b=gQsjvHpSOT/AthjDl0/OD0l/5UbM/tI+MqroQGZCeROOQY/QO27xXSRLJ+A04PalaZ
-         kDW7yyeBtEjl6mm4U0Gl6LBxfgORiQrt3V8UObcDa64PiNYnxNN4O+dRtrQsrq9Rcusn
-         +1zSOQdPVSmMJPo3Uw4Ie1SmF9IlBZPyTR9S7O28vx4ZwgdQuAZ0BYIQsd2cfPCro2mH
-         npaBGItk9JcEfyvNKACnzf1JCCtCkl7meJYkPX3v57LqHDJn/n65HtcjRUHKh5f6K7sA
-         lm8syzk1eCcl8zWepNuc2gH9QBAs6W/H/ZD6z6FTTMjuyehGaVU/S45EbWH4rGfUlmmE
-         +wAA==
-X-Gm-Message-State: AC+VfDzFoNIT6onjKcXbEf6bVwou1XfIOBU4TnEa3xFDVTengkc2+sB5
-        KSDwgERMuKEXcNI4q6McS0inVkK3VXIqofu4SNiSTTIPiupktgbARqBlh2fH0q7z2GI197o6gcF
-        h0/XsmKUVBug0gKNQuTjvPFr8
-X-Received: by 2002:a05:622a:189e:b0:3f5:99e:d7d4 with SMTP id v30-20020a05622a189e00b003f5099ed7d4mr9488883qtc.1.1684405518580;
-        Thu, 18 May 2023 03:25:18 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5vVUy4XQOlJynE8YysOcW2S/5uZ+qJZq+mNZLAgczr7XKKTu5+UffO+tItf8IX5m/BZmFVTg==
-X-Received: by 2002:a05:622a:189e:b0:3f5:99e:d7d4 with SMTP id v30-20020a05622a189e00b003f5099ed7d4mr9488859qtc.1.1684405518248;
-        Thu, 18 May 2023 03:25:18 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-239-175.dyn.eolo.it. [146.241.239.175])
-        by smtp.gmail.com with ESMTPSA id m7-20020a05620a13a700b00759342c9e77sm311947qki.16.2023.05.18.03.25.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 03:25:17 -0700 (PDT)
-Message-ID: <47caea363e844bf716867c6a128d374cae4a5772.camel@redhat.com>
-Subject: Re: [PATCH net-next v7 03/16] net: Add a function to splice pages
- into an skbuff for MSG_SPLICE_PAGES
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Chuck Lever III <chuck.lever@oracle.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Date:   Thu, 18 May 2023 12:25:13 +0200
-In-Reply-To: <1347187.1684403608@warthog.procyon.org.uk>
-References: <93aba6cc363e94a6efe433b3c77ec1b6b54f2919.camel@redhat.com>
-         <20230515093345.396978-1-dhowells@redhat.com>
-         <20230515093345.396978-4-dhowells@redhat.com>
-         <1347187.1684403608@warthog.procyon.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Thu, 18 May 2023 06:25:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE96C1BCA
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 03:25:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 49CF7612D3
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 10:25:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3F10C4339B;
+        Thu, 18 May 2023 10:25:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684405538;
+        bh=horsSNtaATRHh7WRspe0LOv/cMkQnBJ+gC4dIJ6oeec=;
+        h=From:To:Cc:Subject:Date:From;
+        b=UiNQg/eYb4x6iZ1LdMXXHsaZn1Hr98TWOyCGSu9FBy5Ds0nuEkQfNm6ik1cJeiNNe
+         l7maUw/oEBkmnXL/pYk+c20+krnLrWuFhLUccIpf+cZQi9NknqACLbF48gcTSEi8XA
+         ZFm/9h7p54dfnkUFW9AhVQjJaglr3UEuukO/C8D/thR1BCU/nNnnnHyalO77axp1Kh
+         qBpQQi2sjzYaTylk1l+nfsn9LgtSUFTFXwfzDmbaQSwMSHRU4c6Ik+3drjWr/GXaYb
+         /jOpcxP5WoZEXEEBnSfXNPTWHgI4fZU60kh9/NOMZQyCCE8OQhc0k2+F/7NjCcVptu
+         U/l9sIALbzAwg==
+From:   Will Deacon <will@kernel.org>
+To:     bpf@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Will Deacon <will@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Krzesimir Nowak <krzesimir@kinvolk.io>,
+        Andrey Ignatov <rdna@fb.com>, Yonghong Song <yhs@fb.com>
+Subject: [PATCH v2] bpf: Fix mask generation for 32-bit narrow loads of 64-bit fields
+Date:   Thu, 18 May 2023 11:25:28 +0100
+Message-Id: <20230518102528.1341-1-will@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,94 +57,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-05-18 at 10:53 +0100, David Howells wrote:
-> Paolo Abeni <pabeni@redhat.com> wrote:
->=20
-> > Minor nit: please respect the reverse x-mas tree order (there are a few
-> > other occurrences around)
->=20
-> I hadn't come across that.  Normally I only apply that to the types so th=
-at
-> the names aren't all over the place.  But whatever.
->=20
-> > > +		if (space =3D=3D 0 &&
-> > > +		    !skb_can_coalesce(skb, skb_shinfo(skb)->nr_frags,
-> > > +				      pages[0], off)) {
-> > > +			iov_iter_revert(iter, len);
-> > > +			break;
-> > > +		}
-> >=20
-> > It looks like the above condition/checks duplicate what the later
-> > skb_append_pagefrags() will perform below. I guess the above chunk
-> > could be removed?
->=20
-> Good point.  There used to be an allocation between in the case sendpage_=
-ok()
-> failed and we wanted to copy the data.  I've removed that for the moment.
->=20
-> > > +			ret =3D -EIO;
-> > > +			if (!sendpage_ok(page))
-> > > +				goto out;
-> >=20
-> > My (limited) understanding is that the current sendpage code assumes
-> > that the caller provides/uses pages suitable for such use. The existing
-> > sendpage_ok() check is in place as way to try to catch possible code
-> > bug - via the WARN_ONCE().
-> >=20
-> > I think the same could be done here?
->=20
-> Yeah.
->=20
-> Okay, I made the attached changes to this patch.
->=20
-> David
-> ---
-> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-> index 56d629ea2f3d..f4a5b51aed22 100644
-> --- a/net/core/skbuff.c
-> +++ b/net/core/skbuff.c
-> @@ -6923,10 +6923,10 @@ static void skb_splice_csum_page(struct sk_buff *=
-skb, struct page *page,
->  ssize_t skb_splice_from_iter(struct sk_buff *skb, struct iov_iter *iter,
->  			     ssize_t maxsize, gfp_t gfp)
->  {
-> +	size_t frag_limit =3D READ_ONCE(sysctl_max_skb_frags);
->  	struct page *pages[8], **ppages =3D pages;
-> -	unsigned int i;
->  	ssize_t spliced =3D 0, ret =3D 0;
-> -	size_t frag_limit =3D READ_ONCE(sysctl_max_skb_frags);
-> +	unsigned int i;
-> =20
->  	while (iter->count > 0) {
->  		ssize_t space, nr;
-> @@ -6946,20 +6946,13 @@ ssize_t skb_splice_from_iter(struct sk_buff *skb,=
- struct iov_iter *iter,
->  			break;
->  		}
-> =20
-> -		if (space =3D=3D 0 &&
-> -		    !skb_can_coalesce(skb, skb_shinfo(skb)->nr_frags,
-> -				      pages[0], off)) {
-> -			iov_iter_revert(iter, len);
-> -			break;
-> -		}
-> -
->  		i =3D 0;
->  		do {
->  			struct page *page =3D pages[i++];
->  			size_t part =3D min_t(size_t, PAGE_SIZE - off, len);
-> =20
->  			ret =3D -EIO;
-> -			if (!sendpage_ok(page))
-> +			if (WARN_ON_ONCE(!sendpage_ok(page)))
+A narrow load from a 64-bit context field results in a 64-bit load
+followed potentially by a 64-bit right-shift and then a bitwise AND
+operation to extract the relevant data.
 
-FWIS the current TCP code also has a 'IS_ENABLED(CONFIG_DEBUG_VM) &&'
-guard, but I guess the plain WARN_ON_ONCE should be ok.
+In the case of a 32-bit access, an immediate mask of 0xffffffff is used
+to construct a 64-bit BPP_AND operation which then sign-extends the mask
+value and effectively acts as a glorified no-op. For example:
 
-Side node: we need the whole series alltogether, you need to repost
-even the unmodified patches.
+0:	61 10 00 00 00 00 00 00	r0 = *(u32 *)(r1 + 0)
 
-Thanks!
+results in the following code generation for a 64-bit field:
 
-Paolo
+	ldr	x7, [x7]	// 64-bit load
+	mov	x10, #0xffffffffffffffff
+	and	x7, x7, x10
+
+Fix the mask generation so that narrow loads always perform a 32-bit AND
+operation:
+
+	ldr	x7, [x7]	// 64-bit load
+	mov	w10, #0xffffffff
+	and	w7, w7, w10
+
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: Krzesimir Nowak <krzesimir@kinvolk.io>
+Cc: Andrey Ignatov <rdna@fb.com>
+Acked-by: Yonghong Song <yhs@fb.com>
+Fixes: 31fd85816dbe ("bpf: permits narrower load from bpf program context fields")
+Signed-off-by: Will Deacon <will@kernel.org>
+---
+
+v2: Improve commit message and add Acked-by.
+
+ kernel/bpf/verifier.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index fbcf5a4e2fcd..5871aa78d01a 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -17033,7 +17033,7 @@ static int convert_ctx_accesses(struct bpf_verifier_env *env)
+ 					insn_buf[cnt++] = BPF_ALU64_IMM(BPF_RSH,
+ 									insn->dst_reg,
+ 									shift);
+-				insn_buf[cnt++] = BPF_ALU64_IMM(BPF_AND, insn->dst_reg,
++				insn_buf[cnt++] = BPF_ALU32_IMM(BPF_AND, insn->dst_reg,
+ 								(1ULL << size * 8) - 1);
+ 			}
+ 		}
+-- 
+2.40.1.698.g37aff9b760-goog
 
