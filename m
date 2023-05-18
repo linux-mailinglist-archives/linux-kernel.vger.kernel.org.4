@@ -2,102 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19AF5705FB2
-	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 08:00:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AE3A705E86
+	for <lists+linux-kernel@lfdr.de>; Wed, 17 May 2023 06:03:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232012AbjEQGAr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 02:00:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57018 "EHLO
+        id S229509AbjEQEDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 00:03:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjEQGAp (ORCPT
+        with ESMTP id S229517AbjEQEDM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 02:00:45 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 156D126A1;
-        Tue, 16 May 2023 23:00:44 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id C43D85C01C7;
-        Wed, 17 May 2023 02:00:40 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Wed, 17 May 2023 02:00:40 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1684303240; x=1684389640; bh=b+5PKyknPkYcK
-        IktJykWfMQ2ZNruWkKZ/Da362HiLq4=; b=Jtvf/z12zJDb6on6nsKKmmBiKQYCU
-        nNU9ppaj1CPOFF4USYlfmYG2VIyCjx9n9SPkDAsyvWdf3GuoZYlFd4ySoCdz5lSB
-        aICT6PEKjh6dXBl+bneqo8pSd8ZRdp2f9x32vDzznGfMWRpLC3b9HhacFHIP9JRZ
-        3md7AXmLUmFK1O5HQ+D6f9kGAeTLOHNIojTwWhX02X1jlnJDrNDLL4JOgzop27tw
-        gJDSldHJdaQrbsM7D4bThzx42CHUeZmQk8Wupqy9FNXNqrGntcm0wroJ50g8basa
-        TSrIn2cmHALT1tmeC3DDCWepN3PvgEeUXHwLk3oDCrrxBOeBHPcqjVNmQ==
-X-ME-Sender: <xms:iG1kZH0Tnbe-77abz2dcGS08XOkF1iAQ_HE_DzPkk6gnd2oer3MAVw>
-    <xme:iG1kZGG2lfIcuD4Mufj7JG37MUrej7Dyd4wZ0n_0vpYBO7CBoYunITJzoP999vLan
-    VonVD5AqylvuHg>
-X-ME-Received: <xmr:iG1kZH4lZgJVly8P1GOnoyW44UtDlk2vwqUhYaSVzyn7PstjCD0XYGywaGKPV_ux_7gME_fq98cwUFqbFX4b36j8M4g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeitddgleeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtuggjsehttd
-    ertddttddvnecuhfhrohhmpefkughoucfutghhihhmmhgvlhcuoehiughoshgthhesihgu
-    ohhstghhrdhorhhgqeenucggtffrrghtthgvrhhnpeehhfdtjedviefffeduuddvffegte
-    eiieeguefgudffvdfftdefheeijedthfejkeenucffohhmrghinhepkhgvrhhnvghlrdho
-    rhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepih
-    guohhstghhsehiughoshgthhdrohhrgh
-X-ME-Proxy: <xmx:iG1kZM2WOORpdKZxsXNPo9pfToo8xX2JNm4ctTnAs3I6sM2DxWd0YA>
-    <xmx:iG1kZKEn1AoBp0yjNFts8kaiUUioIhJIfAShWugx_siDtJ540XscSw>
-    <xmx:iG1kZN8hQt-ycQo4TwNFPdr4WPS5RWjC6DfVf7VXChki9YcERGPJ5g>
-    <xmx:iG1kZN2azbljODst3GA4GACfvpbSRXSop0xNU-6sQeJk3USPMH5CPA>
-Feedback-ID: i494840e7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 17 May 2023 02:00:39 -0400 (EDT)
-Date:   Wed, 17 May 2023 09:00:37 +0300
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Po-Hsu Lin <po-hsu.lin@canonical.com>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, dsahern@gmail.com, shuah@kernel.org,
-        pabeni@redhat.com, kuba@kernel.org, edumazet@google.com,
-        davem@davemloft.net
-Subject: Re: [PATCH] selftests: fib_tests: mute cleanup error message
-Message-ID: <ZGRthdt5u88zs6xy@shredder>
-References: <20230517041119.202072-1-po-hsu.lin@canonical.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230517041119.202072-1-po-hsu.lin@canonical.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 17 May 2023 00:03:12 -0400
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 84B6A3A9C
+        for <linux-kernel@vger.kernel.org>; Tue, 16 May 2023 21:03:10 -0700 (PDT)
+Received: from localhost.localdomain (unknown [219.141.250.2])
+        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id B2F4D180120CD7;
+        Wed, 17 May 2023 12:03:00 +0800 (CST)
+X-MD-Sfrom: zeming@nfschina.com
+X-MD-SrcIP: 219.141.250.2
+From:   Li zeming <zeming@nfschina.com>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com
+Cc:     linux-kernel@vger.kernel.org, Li zeming <zeming@nfschina.com>
+Subject: [PATCH] sched: core: Simplify cpuset_cpumask_can_shrink()
+Date:   Fri, 19 May 2023 04:34:16 +0800
+Message-Id: <20230518203416.3323-1-zeming@nfschina.com>
+X-Mailer: git-send-email 2.18.2
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_24_48,
+        RDNS_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 12:11:19PM +0800, Po-Hsu Lin wrote:
-> In the end of the test, there will be an error message induced by the
-> `ip netns del ns1` command in cleanup()
-> 
->   Tests passed: 201
->   Tests failed:   0
->   Cannot remove namespace file "/run/netns/ns1": No such file or directory
-> 
-> Redirect the error message to /dev/null to mute it.
-> 
-> Fixes: a0e11da78f48 ("fib_tests: Add tests for metrics on routes")
+Remove useless intermediate variable "ret" and its initialization.
+Directly return dl_cpuset_cpumask_can_shrink() result.
 
-I don't think this tag is correct. More likely that this is caused by
-commit b60417a9f2b8 ("selftest: fib_tests: Always cleanup before exit").
+Signed-off-by: Li zeming <zeming@nfschina.com>
+---
+ kernel/sched/core.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-You can even reproduce it with '-h':
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index a66960da3f5c..f3f2ece26291 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -9273,14 +9273,10 @@ void __init init_idle(struct task_struct *idle, int cpu)
+ int cpuset_cpumask_can_shrink(const struct cpumask *cur,
+ 			      const struct cpumask *trial)
+ {
+-	int ret = 1;
+-
+ 	if (cpumask_empty(cur))
+-		return ret;
+-
+-	ret = dl_cpuset_cpumask_can_shrink(cur, trial);
++		return 1;
+ 
+-	return ret;
++	return dl_cpuset_cpumask_can_shrink(cur, trial);
+ }
+ 
+ int task_can_attach(struct task_struct *p,
+-- 
+2.18.2
 
-# ./fib_tests.sh -h
-usage: fib_tests.sh OPTS
-[...]
-Cannot remove namespace file "/var/run/netns/ns1": No such file or directory
-
-Reverting the commit I mentioned makes it go away.
-
-Also, please use "PATCH net" prefix:
-https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html#tl-dr
