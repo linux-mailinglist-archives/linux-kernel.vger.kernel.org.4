@@ -2,97 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08718708BFE
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 01:01:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 942E5708BFF
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 01:03:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230328AbjERXBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 19:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57036 "EHLO
+        id S231159AbjERXDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 19:03:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjERXBT (ORCPT
+        with ESMTP id S229485AbjERXDm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 19:01:19 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 618C6E66
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 16:01:18 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-5144a9c11c7so2376407a12.2
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 16:01:18 -0700 (PDT)
+        Thu, 18 May 2023 19:03:42 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B00C518D
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 16:03:41 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id af79cd13be357-7577f03e131so152020885a.0
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 16:03:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1684450878; x=1687042878;
-        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ie90D8uCYcXSxP4H5O3MpetsqkPPCv/txEDriSZXr8g=;
-        b=eo77KuGgVMMW+GgUQcr6vSSBnKsN+2xhw/t2cjajrOXmxQ6n2I8f8Jb88WU6BQW5FX
-         KOG7etSvSOJilmeDeaom15Mj7M0pLxczY09yv1eDMIMs32o59dvwmsgrFbwQelAgJZlv
-         MrXvxDT6RlFT4WVpagUgxnNLJSlYidKaZ7rrg=
+        d=broadcom.com; s=google; t=1684451020; x=1687043020;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=g3BItyXjl/Jt4Egu9nAoazFBvhCw83RjdizK8MtGVq0=;
+        b=Vhl3DCLSrb8jfl6Y6gDTNEGb9D7+ZOktPwkBmYkCzCdITRbxcesJ6tM/pajJkeFw2h
+         ZueBKCZHu8FKHxtaJ0bkMej34957ef3cx5bTi5uQ9N4ns/cZUNJWM2Xou5mrNNvcICnq
+         shnqL0U9QPFnGlwMXDH7ZpYrw2MoCnuoNporQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684450878; x=1687042878;
-        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ie90D8uCYcXSxP4H5O3MpetsqkPPCv/txEDriSZXr8g=;
-        b=jz4YDnmkH3gYntQbWXo/tnoQgEoJHQoiFLd/TDuL0PA8FZQ7MiWjqdt0bTyHEvLA1z
-         d33hsz8oU6DeIV35MYVbkrOaiJoUKQbFvRi7eaBM1kjWcqniVZQ7Y+zkCAkmMoPbUByh
-         lvjcM2sw6DwexvWTW82tSuacXKm7uABaU9n6P/AS2utKjfhPp2nN5il3LUSZt3xHWhsq
-         GgMllUn/8cwnom5AGNMWDl4xqC+wVpga8C7HVGiV9n+8aVBxoXYz5GtMUjJE3kTRz0S8
-         G8zCnxTEs4+ClicD4a68fiFZ/7/heXVOCo5uYWaX7Yaibr6rGgbMaT0Gol55AHO81mBu
-         6JTg==
-X-Gm-Message-State: AC+VfDwkziA/jHNNwILnT80+QmnBqcM2cR3sPKQtlQN95t1KhnBPbs2k
-        2tsIAIIXHkKCeLJi/oc4hWc/eQ==
-X-Google-Smtp-Source: ACHHUZ4D2eWsN1oNcvN3IdMFRS3O9f2Y+xA9ebD4wYXCoZGOYpl+s6f28MRvnR8ROB+9atFVQRv5uA==
-X-Received: by 2002:a17:903:2343:b0:1ac:a9c1:b61d with SMTP id c3-20020a170903234300b001aca9c1b61dmr781860plh.11.1684450877772;
-        Thu, 18 May 2023 16:01:17 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id i14-20020a170902c94e00b001ab01b909c9sm1996278pla.120.2023.05.18.16.01.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 16:01:17 -0700 (PDT)
-From:   Florian Fainelli <florian.fainelli@broadcom.com>
-To:     bcm-kernel-feedback-list@broadcom.com,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: soc: bcm: add missing dt-binding document for bcm23550-cdc
-Date:   Thu, 18 May 2023 16:01:15 -0700
-Message-Id: <20230518230115.3044460-1-florian.fainelli@broadcom.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230508135930.GA27583@standask-GA-A55M-S2HP>
-References: <20230508135930.GA27583@standask-GA-A55M-S2HP>
+        d=1e100.net; s=20221208; t=1684451020; x=1687043020;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=g3BItyXjl/Jt4Egu9nAoazFBvhCw83RjdizK8MtGVq0=;
+        b=LN9YMupaXfIc8V8f+ST3w6bfZeYlsQW+O3aQN0DaJCnTf/f7rbjGTaPFb9+D2V8ytv
+         XGXut3sDyzK3jakLsgmBX98d6tugu3a3qaieidUlHgnzP6V2YgYTZlNSzZqZqvqf97rl
+         M2vXKAHfK/lwt/soT1mIEnGAopgqM3mdCPG2UzSwKqVAwa8U9vw6YHtxc2MmLGoxMelT
+         mGZS2jy4pFfaLuMp4/hJgkGpC7+bo2j/cCjcofJzHXauV6yfDwQ+8hKsl96RPm3cmhQa
+         gwHafRL1dRh33dkPlmqMp+C1iRgUx/7DKajbm/V29qqrCk0KAXsLcGsCO0sDYOyGw4nl
+         ViJg==
+X-Gm-Message-State: AC+VfDwV0A1Txq+bBbEV7mRCPN8VP+GxM3lMMKRXS8eurdnyVHVOxBej
+        kTVIJFRB5WsTK6uIUDhNzHBlWKxEkwKIL0GVjNcElAbzfZlMyaSKjoy+2JsrgXBnlFkvqxPr5hK
+        1SU6Xl+Go3SguiE07D4y+VcPMzlSitz1+8BgZA1ZibaXr3Zml+Rnx/hvmVqYATmvh4nZEWrO24n
+        Sjin6a70+W0BkTgSX7AQ==
+X-Google-Smtp-Source: ACHHUZ6WNOq3ylF2YSlmFFMgnRSRgoTuQVEMTai63kSJlRqhaTOyQSWvHZXasndXkcHnPJvv4wjNXQ==
+X-Received: by 2002:ac8:7dcd:0:b0:3f3:8c37:f1ee with SMTP id c13-20020ac87dcd000000b003f38c37f1eemr220773qte.53.1684451020386;
+        Thu, 18 May 2023 16:03:40 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id o9-20020a05620a110900b0074dfd9283afsm713506qkk.79.2023.05.18.16.03.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 May 2023 16:03:39 -0700 (PDT)
+Message-ID: <ea10af39-d78c-677a-34fe-a8706a0ca5f8@broadcom.com>
+Date:   Thu, 18 May 2023 16:03:37 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] MAINTAINERS: Replace my email address
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com
+References: <20230516232806.2922593-1-florian.fainelli@broadcom.com>
+From:   Florian Fainelli <florian.fainelli@broadcom.com>
+In-Reply-To: <20230516232806.2922593-1-florian.fainelli@broadcom.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000003bb6af05fbffc859"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        boundary="000000000000bc39f105fbffd0b6"
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---0000000000003bb6af05fbffc859
-Content-Transfer-Encoding: 8bit
+--000000000000bc39f105fbffd0b6
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Florian Fainelli <f.fainelli@gmail.com>
-
-On Mon, 8 May 2023 15:59:30 +0200, Stanislav Jakubek <stano.jakubek@gmail.com> wrote:
-> Broadcom BCM23550 has a Cluster Dormant Control block that keeps the CPU
-> in idle state. A command needs to be sent to this block to bring the CPU
-> into running state.
+On 5/16/23 16:28, Florian Fainelli wrote:
+> Switch to the corporate email address for Broadcom related entries.
 > 
-> This has been in use in mainline Linux since ~2016, but was never
-> documented. Add a dt-binding document for it.
-> 
-> Signed-off-by: Stanislav Jakubek <stano.jakubek@gmail.com>
+> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
 > ---
 
-Applied to https://github.com/Broadcom/stblinux/commits/devicetree/next, thanks!
---
+Applied
+-- 
 Florian
 
---0000000000003bb6af05fbffc859
+
+--000000000000bc39f105fbffd0b6
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -163,14 +159,14 @@ kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
 NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
 AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
 LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
-/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEID5dQI17iy80vS54
-ZSIsAcKdQ4Qi3DMCyu+xBKEoA+0mMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
-AQkFMQ8XDTIzMDUxODIzMDExOFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIPU01xbXtfQOmEL1
+Fyv63+5zhbwa2Pnd4Ql9YtkwgtnmMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMDUxODIzMDM0MFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
 AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
-MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAoqpP41lK7Uq4luAMQDnOOiByG2yVPuFNj
-EWXQc7znSzmm3iN9165n6g92zervi8xRFc/J29XTMrZggBlPh6uO8lmemqPWL8ogRqKkbBKbrgZP
-cGVq/JyX7WICB9O8XvQY5a54hpK0ttvyG1BHI0eSi9/kAIZ4+HwH/IRbYXOP1JBgat/FiI5CSQV+
-q+3T9n+wa8yirX7zmLme8RRTm+wJtmLvPbQoJ8C727kWLwZlrCZaXqcEQhIuwuXpb48jk1b1FKJZ
-vt0S2byaCkjUY+aNwItuh0rpYCITMw0syPn50KG0uIwpSqH3bbC6Xp6bJ7NIc7wqxZ1ZTKdvelab
-zTw3
---0000000000003bb6af05fbffc859--
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBZ72/xaHEJyn+Eybmu2I1OpPfvPYn3xMLc
+TzAqBoDTNHPvbmLqxU0wxeBYfXsDSXXVPXvjeLXIOSnC2MR8saKw3zY30CF6QhsNQox++L1mqggz
+ovdEfNwD3MpFjtH+LWk7P17A7yTWbYkpZInNVrsZnRlehj4quxaT+CeH+pG9FFSJXcxfxsOXsO+g
+9BUgVwaRvy1L1YcxCeU1jP6sNkWx03NKfNNBljWcVvjdhloMbYWBxUjCL1p/bHTHuAnAUcMRKuGW
+V7v+Vp9y2tDGWAC/VpnBhNYPeybiXfdj1wLLoyiqUqi1h39SUaNP03dCGWz4EL1Ncti1JYro6ALB
+Q0ND
+--000000000000bc39f105fbffd0b6--
