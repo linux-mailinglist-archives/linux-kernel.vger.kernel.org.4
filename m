@@ -2,248 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C93370858B
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 18:03:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B83B170858C
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 18:05:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231463AbjERQDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 12:03:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40752 "EHLO
+        id S231177AbjERQFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 12:05:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231163AbjERQDZ (ORCPT
+        with ESMTP id S229693AbjERQFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 12:03:25 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C073A114
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 09:03:22 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-561d611668eso24899837b3.0
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 09:03:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684425801; x=1687017801;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kFMUvSLIDQqBOAhTJWNyPBK0yCpEmZz4Rr9wUYgSBLk=;
-        b=y/zcXW7Xdbt/i1Elujs/t4VCROuOfh5xM8t/C+CPRIvhmAHKMsXASS+3Omp+iDOUJu
-         s/2H3PJNZO6B1erWI0mMHt2FWJiyjdmt7f+AcSCbxmCau0DqGg2duoV7H+4ign/x46pr
-         cKTZ3SkVcQs2DRi+cXyHfhqW7/ynScmMR6sZsHQfW8aYxTQpp6I2pO71u/a22+UZpQ1s
-         tvKLlh8/3zbWnVaT6tLHgykJXwmziXSOFJrSClHbIxF3ZsF5sh6QIybbQdyM1PXhcXiL
-         /3t7uBr6wOiyDaiGPOvBuM7ZiHUz82mBOkOhOCDHvfuTbcAHWy+dDHviJ7uXEAKXTc/x
-         UgTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684425801; x=1687017801;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kFMUvSLIDQqBOAhTJWNyPBK0yCpEmZz4Rr9wUYgSBLk=;
-        b=bQ1biBC+VwNfCMNcnsGVrgzopbg/9XIlgLEEkoXk5mceyyh7KZM0t7NCGonRyYoDyS
-         EYBDqCUTS/s48iPM6EnS8K5CakpnBdvVcx3hOMyDM/o9GhacP3/dLl89KCrocRDj81z2
-         jh8e8ghdxIPHwNbFXxbs+iXkETdNcRQaqx0oYkGZzi1B594Fg60fMs7THvVQaJK2duvU
-         DFRyPbIEqDzYk62ba9elLhU0MkKfcLmdR55HnlOieUBeD7UYydYwySjB0tvlIhDcE+n0
-         GSawFhS8xhPPTT3ZvwbXZ7aaQwhfbcx5mh9R80cb9jYeHvnKf0wqxkEoKksWPxt9z20l
-         bvPA==
-X-Gm-Message-State: AC+VfDwOLlEaqCPULwdWur6AkcM0K0gO/2nNqlIbR7yz+gkT5E/GOLX0
-        etpoMN51fKMYmL5CfRW/R9WbT8q0LSU3Wn98+EdNVw==
-X-Google-Smtp-Source: ACHHUZ66Lvjbz0wq/6JOvrKIa8YcQvWCah9jJuh8L5MNl7HOgkcoiK4jzb0eXXRMjClLL3Mv+3cibD4a0Suy5HYTK7I=
-X-Received: by 2002:a05:7500:140f:b0:105:80c8:bf47 with SMTP id
- v15-20020a057500140f00b0010580c8bf47mr129040gaa.67.1684425800919; Thu, 18 May
- 2023 09:03:20 -0700 (PDT)
+        Thu, 18 May 2023 12:05:00 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2080.outbound.protection.outlook.com [40.107.93.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54A5EE
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 09:04:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VJTbaV3VFrz16Gj3hy5X9fKe4ZvWdcBE/WNmI5B96l3woHjZ1gdOA5FFM+SHT/h9TxSfcKlQ680RsKHGsJhDe8RE74ENNQMQQ8ntz4J0xPjWJA1vZu3tlAbJ1zi5a70huqBVOD2lEvIBSp0c8SH/12xT7qcQxnmYS4EUQNuFw4rp7viFwSpZ1aRMtaNKnKRuMlqxnRCaCiRa7qqxhrrA/THEMRxGtqwP4AaYZY+XoUK+EchxjfW5fDrna6qyyGv+j7/C0bi92CFz/1pdPt4aTwpFHGCjeqRhAF4l2JAsFaTCl/hEDjeuGgAjGVPvtnr/8tKGWaaU8/5PWfXx/RjuhA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nmhS94bxiHLSG4J3NiUv4NWIfPkxrNFuBj+ppQLgHTI=;
+ b=F1snaCqFDU/Q8Rb3E7yo95oJdyVNrTp3XGgoBt25db3cHKqco9Qayx5/lNG9SaqRcGGwoPoUM5XbjQlKN5NTnmrA1brIkMeqJCBRWhiTJxvHGzxH5JvC/08Vn07Tc6VmvoZm/f7qTw6P+fmkMHylUMCIAfWo/YlPr9g3cYJXeI1UFOiGDOcxp57niCFv6kMaZa1ttw/CIuH/obsjyRjfVSnXnSXD1xqjok843454icwQOKhn0TbabxIYtRed+ahDaHiXxBj5qlz8AB2s3B9We50qjOueaLvkopF5w41zpHWUdClvDeE6td34MU7SzDppv0YE+uamR1TzshRh+2BW2g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nmhS94bxiHLSG4J3NiUv4NWIfPkxrNFuBj+ppQLgHTI=;
+ b=kqvM062ARY7M1h6rjoLHTubAxprlq2yaJiL1vcmCBYT0FygKaWirTzWB9HMN1fHFeRbRDDH/94rM7ifU/P/Eklekm4Iv9Az9WElq6mONYszRIog8iEYK5t8r6Nf67pmcdVCjWr3ITVmZyolZujXPe+7f821j0DPi5AEOepST+xI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM8PR12MB5445.namprd12.prod.outlook.com (2603:10b6:8:24::7) by
+ PH0PR12MB8798.namprd12.prod.outlook.com (2603:10b6:510:28d::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19; Thu, 18 May
+ 2023 16:04:56 +0000
+Received: from DM8PR12MB5445.namprd12.prod.outlook.com
+ ([fe80::5a2a:9873:3192:6c1e]) by DM8PR12MB5445.namprd12.prod.outlook.com
+ ([fe80::5a2a:9873:3192:6c1e%4]) with mapi id 15.20.6411.019; Thu, 18 May 2023
+ 16:04:56 +0000
+Message-ID: <81b4010d-d8c6-0915-2408-e6454e4d501d@amd.com>
+Date:   Thu, 18 May 2023 23:04:44 +0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH 3/5] iommu/amd: Introduce Disable IRTE Caching Support
+Content-Language: en-US
+To:     Alejandro Jimenez <alejandro.j.jimenez@oracle.com>,
+        linux-kernel@vger.kernel.org, iommu@lists.linux-foundation.org
+Cc:     joro@8bytes.org, joao.m.martins@oracle.com,
+        boris.ostrovsky@oracle.com, jon.grimm@amd.com,
+        santosh.shukla@amd.com, vasant.hegde@amd.com,
+        kishon.vijayabraham@amd.com
+References: <20230509111646.369661-1-suravee.suthikulpanit@amd.com>
+ <20230509111646.369661-4-suravee.suthikulpanit@amd.com>
+ <2d0ab154-596e-437f-1575-3d25fe421b86@oracle.com>
+From:   "Suthikulpanit, Suravee" <suravee.suthikulpanit@amd.com>
+In-Reply-To: <2d0ab154-596e-437f-1575-3d25fe421b86@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SG2PR02CA0135.apcprd02.prod.outlook.com
+ (2603:1096:4:188::23) To DM8PR12MB5445.namprd12.prod.outlook.com
+ (2603:10b6:8:24::7)
 MIME-Version: 1.0
-References: <20230517124201.441634-1-imagedong@tencent.com>
- <20230517124201.441634-4-imagedong@tencent.com> <CANn89iKLf=V664AsUYC52h_q-xjEq9xC3KqTq8q+t262T91qVQ@mail.gmail.com>
- <CADxym3a0gmzmD3Vwu_shoJnAHm-xjD5tJRuKwTvAXnVk_H55AA@mail.gmail.com>
- <CADVnQynZ67511+cKF=hyiaLx5-fqPGGmpyJ-5Lk6ge-ivmAf-w@mail.gmail.com> <CADxym3ZiyYK7Vyz05qLv8jOPmNZXXepCsTbZxdkhSQxRx0cdSA@mail.gmail.com>
-In-Reply-To: <CADxym3ZiyYK7Vyz05qLv8jOPmNZXXepCsTbZxdkhSQxRx0cdSA@mail.gmail.com>
-From:   Neal Cardwell <ncardwell@google.com>
-Date:   Thu, 18 May 2023 12:03:04 -0400
-Message-ID: <CADVnQy=JQkVGRsbL0u=-oZSpdaFBpz907yX24p3uUu2pMhUjGg@mail.gmail.com>
-Subject: Re: [PATCH net-next 3/3] net: tcp: handle window shrink properly
-To:     Menglong Dong <menglong8.dong@gmail.com>
-Cc:     Eric Dumazet <edumazet@google.com>, kuba@kernel.org,
-        davem@davemloft.net, pabeni@redhat.com, dsahern@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Menglong Dong <imagedong@tencent.com>,
-        Yuchung Cheng <ycheng@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM8PR12MB5445:EE_|PH0PR12MB8798:EE_
+X-MS-Office365-Filtering-Correlation-Id: c96daee5-1d31-402d-f674-08db57b99f48
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 58C/j8uGgYuO9ilGjkLJB+Nbc4eBQ8OQIjUNMTXWQGACzy+RyanHPdo7BavyDZnzQtx+srAIdwnK0LD+Frbv5WTEaq3mgl5vvYFKATveIs+dRfCJq5x8TE7cZGxZnSMHmzdEtIKvN1bvUw25np6FIASH7hB2ilitDbRi7CQ4r26wAXumd06TAgIqwiJw8Sq1DCbsTKvxIGKUdiVZ2aOeqIQSxB3MQ6u9TgX46A1nx7THc/kI3HPL7u5mrbz29rWG7bmc1YKRi2MACwI54lo0ewfHCWHMHKf4IR5HsZyVx5qS0RMMX6lNIOYSNLdvrnuGgKkHYcMcFVjy0dGmH05pp17VfvJxWEkWKPNyha/o+SsSkeDq3VeoBi/7WfdbwDNvqDhKr+i+ymRwn4X6h4xhtEMfifRQiZMnGqr9+wfv7SMccYjca2CkH9ZvIo7WEz7M7/qQm2vZo417ySt3wvvubXQRcOJl0eGxoXefK9bDWkx0FXniAbw393STHYptMd3h0YZlfOpyg+WRTDarllO5T3InY7U11oGiNIhoIIRYpAkZ39OkNhjkVIE1DAkGZyxS6U1yWUa04AG+3ksR1c3GCcZmmYpB/XpgXN7v0qkaBGN+DFRo2TRb4b72d8WSqU6X17M0dMu8aPGXHVJG/FyUXA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR12MB5445.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(39860400002)(346002)(396003)(366004)(451199021)(2906002)(478600001)(41300700001)(8936002)(8676002)(31686004)(316002)(6486002)(6666004)(4326008)(66946007)(66476007)(66556008)(5660300002)(6512007)(53546011)(6506007)(26005)(186003)(83380400001)(36756003)(86362001)(2616005)(31696002)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QUdmRnZac0FaSm03ODhkVldDdi9uZCs1YzU5cHBhK2RyN2ljVWJWVXYvQWp5?=
+ =?utf-8?B?cWZKNVNHb0RBQ2VxWXBwb2cxRUNseDRQMWZRRDRReFJjV2c5VU8yOS9weTkx?=
+ =?utf-8?B?cHg5cGpCbmlJUzVWVjFrTzQyZkNWUlM1RHJCQlNXUHl5U1N1MUFKR3pXdWtk?=
+ =?utf-8?B?b3dDb3l5WFRNb1ppb3JCTDJiaUNyOXQ5L1lOK0habmpPU3l5Um1HRzNOUUJz?=
+ =?utf-8?B?b3FzZ1c4cnpnc1pGOW45cURwVlM2Z1lweVFMYXl3ZHo0d2lnMkxRSGpFR1Vy?=
+ =?utf-8?B?d3F3UFBUZWV0LzVjd0cyclJNVW45cGJiQVo1Ry8yWkZOdU1DUy8rSU92ZjY5?=
+ =?utf-8?B?dDZSMG1hTnhGSDFKSEllV0Z3c21qQmQrdjhtaWxYTm1PZnMvY2dUdnc4OE42?=
+ =?utf-8?B?R2IvcFBOdy9OZUEzaHFOeGVzNitjUXBJUk5qK0NyNEdHa2ZDbklldWRHd0ZF?=
+ =?utf-8?B?am1HamFvNzE0dnEwVjg5cm03aStyK0pzUXZVRm5mRlFpaVhZNUswVUFFSEhK?=
+ =?utf-8?B?Yy9uZWlDZUR1T2FMcXZLbjlGR1VJS1lwQ2VWOWZJcmJnRWUwNmxMZnZldDRQ?=
+ =?utf-8?B?YVhQbkZtbm9IaWVpNml6bWtITWpaaGxKbm9tQ2diekpQMzVkQlFhakxlUXNm?=
+ =?utf-8?B?S3ZvSkZKUE9zd0pXV2JJeDBOWW9XYVZmV3M5RU8yZEc0RXNWMWliVUdZNGhH?=
+ =?utf-8?B?T01kNERTUXI1R2E5Wm5tNzNrSFBUalJ1eGw1R0t3blBERU0vQXd0eXZ6MFp0?=
+ =?utf-8?B?WGkrMGNkSnZYRkk4ODVQZnk4Ull5aStLbHpWQW5pQjlqOGRHT05pdVpYTjhC?=
+ =?utf-8?B?K2xBKzRiY1NNR3RPQVZwZUhjOGFxMGpCb2dPWkNrcHphM2tWQk1rTXU2ajNP?=
+ =?utf-8?B?M0NJUDdEY2xQTk0zcW8rYktJdllPSlJybit2cXZxQytKQ0dqa05oZzF2UGxo?=
+ =?utf-8?B?bkt4MDQvS3JLV0ZzZlZrcmtvT0dNVlN1ZjZKWXR1ZGNYbmxwOTZBV0JwZUlH?=
+ =?utf-8?B?dHhjNnBrQU0zMjB6eGphSFJPNk9wb0ppSmt6akx0T1ZlS1F4ZGxqeUpRYkI0?=
+ =?utf-8?B?Y3ZWcmJxRHVLNmJ0UWdUQ2hqSHZVQzhGc0JaZnhsQzFzZnE2bnZtb2M2RGtV?=
+ =?utf-8?B?RlpuUXdjb3REeVhsMzhkZFIrVUVUV1NVQlk0dlRIenROa0xrb01XZ1B6V2Vp?=
+ =?utf-8?B?UDIrN2ZBUm55OEc5L0k3THgrTGQ3NWV3S056QmZhVnBiaThXa1ZQU1VXNEw5?=
+ =?utf-8?B?bmNEQ2x1dVBDaW4yVkxLZUQ3dU9DNTVzUGt3ZzI5UUptSG42SEFudXZPanhx?=
+ =?utf-8?B?SkEvL3JPRFB2RnZURVJPVWkzMGMrakVycGc4aFU3WEdXY0lqaWZBVGdmZHhV?=
+ =?utf-8?B?WUZXMUtMVEFwanY4NFlMM1M4NGQ3WmlaZDlkZWdUNkFKdFp3ZldVNnFFazJq?=
+ =?utf-8?B?bU1vUXZPdU96UjhoNDBuUE5XVVkzenlKNUlQMnU4RjVDUzJHSE5xaXlmcHdz?=
+ =?utf-8?B?WHdTVGMyR0I1NHFVdnM0cnUxRXdhaXZGbXBCTkp5WTFDVktUb0tJTHVjNUpu?=
+ =?utf-8?B?SlJES1dpUU9ITkRuZGhhR2Z5L3Jxdllvd3J5bEp5MnRjNEROL0JGekdEYUhV?=
+ =?utf-8?B?ZGtWUVJkYmdIZWw3NmR1ZjF4Rkpoa2FiVTRsSWMrdjVJdmxySW8rWWgzZkR4?=
+ =?utf-8?B?R1kyWXh0OTEzRnBjQmJYQkoyQlF1Y3VQM3p6azFTMHNYZkh2QTd1L2w1M2hG?=
+ =?utf-8?B?S0hVZjJhcDhNYm9OaFlNYnBHSWlVNFdYQTgrUEpxYVFtS1VhZ3N4NDRyZ2FB?=
+ =?utf-8?B?MEkxVjRwWjVEZDZMbHBwVE5Sbm9QQ2dwL0ZEWUVJM2ZmTnJLS2VrbGRQWElu?=
+ =?utf-8?B?dHA0WGo0eGViQUdTc21CNUg0OFRVNkE4ay9aci9VeGYzU1B0TU8zUlcwSDlS?=
+ =?utf-8?B?SVI3YUYwWUlxdkpQZXc2T21JU2crK1NHdjEzakpxelNGNU1QUjVoUEpzb05Y?=
+ =?utf-8?B?eWpoblByTXkvRUxRZERwKzcwL0pVRjlscUx4M3laWVhoMkU1QVR2QkJhNG5i?=
+ =?utf-8?B?UUVmajE4b1dBUlAxYXF6ajdabUplQW1mU2ZidDU1L081cXNaQkxGS0lqL3dm?=
+ =?utf-8?Q?sgUNQdoq4I1qJW04FyAoMO7/C?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c96daee5-1d31-402d-f674-08db57b99f48
+X-MS-Exchange-CrossTenant-AuthSource: DM8PR12MB5445.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2023 16:04:56.0269
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3MqZ/xd+Spj3X3cx0DjhkQhxlod3iw9PN/iUrIBbQInvOgczU/rrofzPd24Jm7YjrJwLVRFHULhdg+ghV34vSA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB8798
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 10:12=E2=80=AFAM Menglong Dong <menglong8.dong@gmai=
-l.com> wrote:
->
-> On Thu, May 18, 2023 at 9:40=E2=80=AFPM Neal Cardwell <ncardwell@google.c=
-om> wrote:
-> >
-> > On Wed, May 17, 2023 at 10:35=E2=80=AFPM Menglong Dong <menglong8.dong@=
-gmail.com> wrote:
-> > >
-> > > On Wed, May 17, 2023 at 10:47=E2=80=AFPM Eric Dumazet <edumazet@googl=
-e.com> wrote:
-> > > >
-> > > > On Wed, May 17, 2023 at 2:42=E2=80=AFPM <menglong8.dong@gmail.com> =
-wrote:
-> > > > >
-> > > > > From: Menglong Dong <imagedong@tencent.com>
-> > > > >
-> > > > > Window shrink is not allowed and also not handled for now, but it=
-'s
-> > > > > needed in some case.
-> > > > >
-> > > > > In the origin logic, 0 probe is triggered only when there is no a=
-ny
-> > > > > data in the retrans queue and the receive window can't hold the d=
-ata
-> > > > > of the 1th packet in the send queue.
-> > > > >
-> > > > > Now, let's change it and trigger the 0 probe in such cases:
-> > > > >
-> > > > > - if the retrans queue has data and the 1th packet in it is not w=
-ithin
-> > > > > the receive window
-> > > > > - no data in the retrans queue and the 1th packet in the send que=
-ue is
-> > > > > out of the end of the receive window
-> > > >
-> > > > Sorry, I do not understand.
-> > > >
-> > > > Please provide packetdrill tests for new behavior like that.
-> > > >
-> > >
-> > > Yes. The problem can be reproduced easily.
-> > >
-> > > 1. choose a server machine, decrease it's tcp_mem with:
-> > >     echo '1024 1500 2048' > /proc/sys/net/ipv4/tcp_mem
-> > > 2. call listen() and accept() on a port, such as 8888. We call
-> > >     accept() looply and without call recv() to make the data stay
-> > >     in the receive queue.
-> > > 3. choose a client machine, and create 100 TCP connection
-> > >     to the 8888 port of the server. Then, every connection sends
-> > >     data about 1M.
-> > > 4. we can see that some of the connection enter the 0-probe
-> > >     state, but some of them keep retrans again and again. As
-> > >     the server is up to the tcp_mem[2] and skb is dropped before
-> > >     the recv_buf full and the connection enter 0-probe state.
-> > >     Finially, some of these connection will timeout and break.
-> > >
-> > > With this series, all the 100 connections will enter 0-probe
-> > > status and connection break won't happen. And the data
-> > > trans will recover if we increase tcp_mem or call 'recv()'
-> > > on the sockets in the server.
-> > >
-> > > > Also, such fundamental change would need IETF discussion first.
-> > > > We do not want linux to cause network collapses just because billio=
-ns
-> > > > of devices send more zero probes.
-> > >
-> > > I think it maybe a good idea to make the connection enter
-> > > 0-probe, rather than drop the skb silently. What 0-probe
-> > > meaning is to wait for space available when the buffer of the
-> > > receive queue is full. And maybe we can also use 0-probe
-> > > when the "buffer" of "TCP protocol" (which means tcp_mem)
-> > > is full?
-> > >
-> > > Am I right?
-> > >
-> > > Thanks!
-> > > Menglong Dong
-> >
-> > Thanks for describing the scenario in more detail. (Some kind of
-> > packetdrill script or other program to reproduce this issue would be
-> > nice, too, as Eric noted.)
-> >
-> > You mention in step (4.) above that some of the connections keep
-> > retransmitting again and again. Are those connections receiving any
-> > ACKs in response to their retransmissions? Perhaps they are receiving
-> > dupacks?
->
-> Actually, these packets are dropped without any reply, even dupacks.
-> skb will be dropped directly when tcp_try_rmem_schedule()
-> fails in tcp_data_queue(). That's reasonable, as it's
-> useless to reply a ack to the sender, which will cause the sender
-> fast retrans the packet, because we are out of memory now, and
-> retrans can't solve the problem.
+Hi Alejandro,
 
-I'm not sure I see the problem. If retransmits can't solve the
-problem, then why are you proposing that data senders keep
-retransmitting forever (via 0-window-probes) in this kind of scenario?
+On 5/10/2023 5:47 AM, Alejandro Jimenez wrote:
+> Hi Suravee,
+> 
+> A couple of additional comments below:
+> 
+> On 5/9/2023 7:16 AM, Suravee Suthikulpanit wrote:
+>> An Interrupt Remapping Table (IRT) stores interrupt remapping 
+>> configuration
+>> for each device. In a normal operation, the AMD IOMMU caches the table
+>> to optimize subsequent data accesses. This requires the IOMMU driver to
+>> invalidate IRT whenever it updates the table. The invalidation process
+>> includes issuing an INVALIDATE_INTERRUPT_TABLE command following by
+>> a COMPLETION_WAIT command.
+>>
+>> However, there are cases in which the IRT is updated at a high rate.
+>> For example, for IOMMU AVIC, the IRTE[IsRun] bit is updated on every
+>> vcpu scheduling (i.e. amd_iommu_update_ga()). On system with large
+>> amount of vcpus and VFIO PCI pass-through devices, the invalidation
+>> process could potentially become a performance bottleneck.
+>>
+>> Introducing a new kernel boot option:
+>>
+>>      amd_iommu=irtcachedis
+>>
+>> which disables IRTE caching by setting the IRTCachedis bit in each IOMMU
+>> Control register, and bypass the IRT invalidation process.
+>>
+>> Co-developed-by: Alejandro Jimenez <alejandro.j.jimenez@oracle.com>
+>> [Awaiting sign-off-by Alejandro]
+>> Signed-off-by: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+>> ---
+>>   .../admin-guide/kernel-parameters.txt         |  1 +
+>>   drivers/iommu/amd/amd_iommu_types.h           |  4 +++
+>>   drivers/iommu/amd/init.c                      | 25 +++++++++++++++++++
+>>   3 files changed, 30 insertions(+)
+> [snip]
+>> diff --git a/drivers/iommu/amd/init.c b/drivers/iommu/amd/init.c
+>> index fd487c33b28a..01d131e75de4 100644
+>> --- a/drivers/iommu/amd/init.c
+>> +++ b/drivers/iommu/amd/init.c
+>> @@ -160,6 +160,7 @@ static int amd_iommu_xt_mode = IRQ_REMAP_XAPIC_MODE;
+>>   static bool amd_iommu_detected;
+>>   static bool amd_iommu_disabled __initdata;
+>>   static bool amd_iommu_force_enable __initdata;
+>> +static bool amd_iommu_irtcachedis __initdata;
+> Lets drop the __initdata attribute above, since amd_iommu_irtcachedis is 
+> used by early_enable_iommus(), which is in .text (causes modpost warning).
 
-A single dupack without SACK blocks will not cause the sender to fast
-retransmit. (Only 3 dupacks would trigger fast retransmit.)
+Good point.
 
-Three or more dupacks without SACK blocks will cause the sender to
-fast retransmit the segment above SND.UNA once if the sender doesn't
-have SACK support. But in this case AFAICT fast-retransmitting once is
-a fine strategy, since the sender should keep retrying transmits (with
-backoff) until the receiver potentially has memory available to
-receive the packet.
+> [snip]
+>> +static void iommu_enable_irtcachedis(struct amd_iommu *iommu)
+>> +{
+>> +    u64 ctrl;
+>> +
+>> +    if (amd_iommu_irtcachedis) {
+>> +        /*
+>> +         * Note:
+>> +         * The support for IRTCacheDis feature is dertermined by
+>> +         * checking if the bit is writable.
+>> +         */
+>> +        iommu_feature_enable(iommu, CONTROL_IRTCACHEDIS);
+>> +        ctrl = readq(iommu->mmio_base +  MMIO_CONTROL_OFFSET);
+>> +        ctrl &= (1ULL << CONTROL_IRTCACHEDIS);
+>> +        if (ctrl)
+>> +            iommu->irtcachedis_enabled = true;
+>> +        pr_info("iommu%d (%#06x) : IRT cache is %s\n",
+>> +            iommu->index, iommu->devid,
+>> +            iommu->irtcachedis_enabled ? "disabled" : "enabled");
+>> +    }
+>> +}
+>> +
+>>   static void early_enable_iommu(struct amd_iommu *iommu)
+>>   {
+>>       iommu_disable(iommu);
+>> @@ -2710,6 +2732,7 @@ static void early_enable_iommu(struct amd_iommu 
+>> *iommu)
+>>       iommu_set_exclusion_range(iommu);
+>>       iommu_enable_ga(iommu);
+>>       iommu_enable_xt(iommu);
+>> +    iommu_enable_irtcachedis(iommu);
+>>       iommu_enable(iommu);
+>>       iommu_flush_all_caches(iommu);
+>>   }
+> I need to understand better the code flow around kdump, and it is not 
+> clear from my reading of the spec that this is required, but shouldn't 
+> iommu_enable_irtcachedis() also be called in the else{} block of 
+> early_enable_iommus()?
 
->
-> > If so, then perhaps we could solve this problem without
-> > depending on a violation of the TCP spec (which says the receive
-> > window should not be retracted) in the following way: when a data
-> > sender suffers a retransmission timeout, and retransmits the first
-> > unacknowledged segment, and receives a dupack for SND.UNA instead of
-> > an ACK covering the RTO-retransmitted segment, then the data sender
-> > should estimate that the receiver doesn't have enough memory to buffer
-> > the retransmitted packet. In that case, the data sender should enter
-> > the 0-probe state and repeatedly set the ICSK_TIME_PROBE0 timer to
-> > call tcp_probe_timer().
-> >
-> > Basically we could try to enhance the sender-side logic to try to
-> > distinguish between two kinds of problems:
-> >
-> > (a) Repeated data packet loss caused by congestion, routing problems,
-> > or connectivity problems. In this case, the data sender uses
-> > ICSK_TIME_RETRANS and tcp_retransmit_timer(), and backs off and only
-> > retries sysctl_tcp_retries2 times before timing out the connection
-> >
-> > (b) A receiver that is repeatedly sending dupacks but not ACKing
-> > retransmitted data because it doesn't have any memory. In this case,
-> > the data sender uses ICSK_TIME_PROBE0 and tcp_probe_timer(), and backs
-> > off but keeps retrying as long as the data sender receives ACKs.
-> >
->
-> I'm not sure if this is an ideal method, as it may be not rigorous
-> to conclude that the receiver is oom with dupacks. A packet can
-> loss can also cause multi dupacks.
+Actually, you are correct. There are a few things that I missed.
 
-When a data sender suffers an RTO and retransmits a single data
-packet, it would be very rare for the data sender to receive multiple
-pure dupacks without SACKs. This would only happen in the rare case
-where (a) the connection did not have SACK enabled, and (b) there was
-a hole in the received sequence space and there were still packets in
-flight when the (spurioius) RTO fired.
+First, we need to ensure that the bit is cleared when disable the IOMMU 
+when the system is shutting down. Otherwise, when we do kexec, the bit 
+might still be set unintentionally.
 
-But if we want to be paranoid, then this new response could be written
-to only trigger if SACK is enabled (the vast, vast majority of cases).
-If SACK is enabled, and an RTO of a data packet starting at sequence
-S1 results in the receiver sending only a dupack for S1 without SACK
-blocks, then this clearly shows the issue is not packet loss but
-suggests a receiver unable to buffer the given data packet, AFAICT.
+When booting into kdump kernel, we need to evaluate the variable 
+amd_iommu_irtcachedis and setup the CONTROL_IRTCACHEDIS bit in control 
+register accordingly.  Otherwise, we could end up with a situation where 
+the CONTROL_IRTCACHEDIS bit is inconsistent with the 
+amd_iommu_irtcachedis in the kdump kernel causing the kdump kernel to 
+skip IRT invalidation process when it is needed.
 
-thanks,
-neal
+I'll fix this and send out v2.
 
->
-> Thanks!
-> Menglong Dong
->
-> > AFAICT that would be another way to reach the happy state you mention:
-> > "all the 100 connections will enter 0-probe status and connection
-> > break won't happen", and we could reach that state without violating
-> > the TCP protocol spec and without requiring changes on the receiver
-> > side (so that this fix could help in scenarios where the
-> > memory-constrained receiver is an older stack without special new
-> > behavior).
-> >
-> > Eric, Yuchung, Menglong: do you think something like that would work?
-> >
-> > neal
+Thanks,
+Suravee
