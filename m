@@ -2,107 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED13E7086E7
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 19:29:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAC997086EB
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 19:31:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbjERR3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 13:29:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57224 "EHLO
+        id S229612AbjERRb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 13:31:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbjERR3Q (ORCPT
+        with ESMTP id S229570AbjERRbZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 13:29:16 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60E510F8;
-        Thu, 18 May 2023 10:28:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684430940; x=1715966940;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=YbB0ITNWC6W+DKq+pyGIH80h6yd4xEjccS7jew/3CTQ=;
-  b=LvgOCBPppG56F7c62H+OqHCOLayG5MSgAP7pjnVJmAVRoe8ymVZg/7HW
-   OXdAsRuXNnXbphEGwy8OLEdPFt9UCpjQGWIrgNAkTK1a/tUVuU3PaKppv
-   KR5rTNtDJxYikVk6lOHp2cenrRpo4rXwTbkyHjNo2IfmXaa28VQ57vZeo
-   7vJh3lq5M9L95dDhKwdf7StfZZD/8FscmggqN0QcYHRhWbCn12XX4l0tE
-   0lsvmtuiY2BkHOkiTmpL9edIjlLbi5JyeEHFlfej4k82yLkTeQozm6BZl
-   jfVslEHNeLHTKFXBiJbgwtiZw6BIOgdqnqwS0a+IbABS/M87FTFp8vnq9
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="354474558"
-X-IronPort-AV: E=Sophos;i="6.00,174,1681196400"; 
-   d="scan'208";a="354474558"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 10:28:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="702214993"
-X-IronPort-AV: E=Sophos;i="6.00,174,1681196400"; 
-   d="scan'208";a="702214993"
-Received: from nroy-mobl1.amr.corp.intel.com (HELO [10.209.81.123]) ([10.209.81.123])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 10:28:58 -0700
-Message-ID: <cabdd839-71d5-aabb-aee6-d37ebcabf2ab@intel.com>
-Date:   Thu, 18 May 2023 10:28:58 -0700
+        Thu, 18 May 2023 13:31:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 682FD10C3
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 10:31:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 049FE65125
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 17:31:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9169EC433D2;
+        Thu, 18 May 2023 17:31:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684431066;
+        bh=+5h/6N8I0UV/l06NAtCmeaQnePCeUKDhjroTzI85C4U=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=UyCONONYRD7xFmaZobBaYzr3h53pKq6TKE/mJ9CLm97V9nCbkH2GSJY5V/wVFuLDU
+         NfoUw1EyeldIQPWq1FDRsvhBgUMAs8zaGHpHbNimdLNUVM8Dt+8Y1Lz6UN7ZQgToZw
+         CEVEuvH+EsPsF4qmI8M8Zb3LyoDcFeyYf/Xk+WWgD1KR5jOGqoMcmq0auvfBeZQrka
+         jxaK+JvOr5wxot37R5ER4ClVdZcoX5MJB0fuNgddNuGj8hc0bCYI6W0dq/G899ejcB
+         SwJGJBM32phimhm5p3ABV0N56nn/nvrmz7U4L3+xGhc0JpFemTh6F4j1VPCxAUpPwG
+         MTOYTKN4msMhA==
+From:   Mark Brown <broonie@kernel.org>
+To:     Ravulapati Vishnu Vardhan Rao <quic_visr@quicinc.com>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Banajit Goswami <bgoswami@quicinc.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        "moderated list:QCOM AUDIO (ASoC) DRIVERS" 
+        <alsa-devel@alsa-project.org>,
+        open list <linux-kernel@vger.kernel.org>
+In-Reply-To: <20230511112532.16106-1-quic_visr@quicinc.com>
+References: <20230511112532.16106-1-quic_visr@quicinc.com>
+Subject: Re: [PATCH v2] ASoC:codecs: lpass: Fix for KASAN use_after_free
+ out of bounds
+Message-Id: <168443106443.480335.16812738995271810180.b4-ty@kernel.org>
+Date:   Fri, 19 May 2023 02:31:04 +0900
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 10/20] x86: xen: add missing prototypes
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>, x86@kernel.org
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Juergen Gross <jgross@suse.com>,
-        "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
-        Alexey Makhalov <amakhalov@vmware.com>,
-        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-pci@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-pm@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20230516193549.544673-1-arnd@kernel.org>
- <20230516193549.544673-11-arnd@kernel.org>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20230516193549.544673-11-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Mailer: b4 0.13-dev-bfdf5
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/16/23 12:35, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Thu, 11 May 2023 16:55:32 +0530, Ravulapati Vishnu Vardhan Rao wrote:
+> When we run syzkaller we get below Out of Bounds error.
 > 
-> arch/x86/xen/enlighten_pv.c:1233:34: error: no previous prototype for 'xen_start_kernel' [-Werror=missing-prototypes]
-> arch/x86/xen/irq.c:22:14: error: no previous prototype for 'xen_force_evtchn_callback' [-Werror=missing-prototypes]
-> arch/x86/xen/mmu_pv.c:358:20: error: no previous prototype for 'xen_pte_val' [-Werror=missing-prototypes]
-> arch/x86/xen/mmu_pv.c:366:20: error: no previous prototype for 'xen_pgd_val' [-Werror=missing-prototypes]
+> "KASAN: slab-out-of-bounds Read in regcache_flat_read"
+> 
+> Below is the backtrace of the issue:
+> 
+> BUG: KASAN: slab-out-of-bounds in regcache_flat_read+0x10c/0x110
+> Read of size 4 at addr ffffff8088fbf714 by task syz-executor.4/14144
+> CPU: 6 PID: 14144 Comm: syz-executor.4 Tainted: G        W
+> Hardware name: Qualcomm Technologies, Inc. sc7280 CRD platform (rev5+) (DT)
+> Call trace:
+> dump_backtrace+0x0/0x4ec
+> show_stack+0x34/0x50
+> dump_stack_lvl+0xdc/0x11c
+> print_address_description+0x30/0x2d8
+> kasan_report+0x178/0x1e4
+> __asan_report_load4_noabort+0x44/0x50
+> regcache_flat_read+0x10c/0x110
+> regcache_read+0xf8/0x5a0
+> _regmap_read+0x45c/0x86c
+> _regmap_update_bits+0x128/0x290
+> regmap_update_bits_base+0xc0/0x15c
+> snd_soc_component_update_bits+0xa8/0x22c
+> snd_soc_component_write_field+0x68/0xd4
+> tx_macro_put_dec_enum+0x1d0/0x268
+> snd_ctl_elem_write+0x288/0x474
+> 
+> [...]
 
-What's the deal with this one?
+Applied to
 
-The patch is doing a bunch functions on top of the ones from the commit
-message.  Were you just showing a snippet of what the actual set of
-warnings is?
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-Also, fwiw, it would be nice to have actual words in the changelog, even
-for these maddeningly repetitive series.  Even something like:
+Thanks!
 
-	Xen has a bunch of these because of how the paravirt code uses
-	inline assembly.
+[1/1] ASoC:codecs: lpass: Fix for KASAN use_after_free out of bounds
+      commit: 75e5fab7db0cecb6e16b22c34608f0b40a4c7cd1
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
