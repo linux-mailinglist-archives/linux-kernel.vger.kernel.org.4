@@ -2,66 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBB1E7079DD
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 07:51:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 531187079E1
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 07:51:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229931AbjERFvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 01:51:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58784 "EHLO
+        id S230011AbjERFvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 01:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjERFvC (ORCPT
+        with ESMTP id S229524AbjERFvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 01:51:02 -0400
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA431721;
-        Wed, 17 May 2023 22:51:01 -0700 (PDT)
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-50bc22805d3so2484609a12.1;
-        Wed, 17 May 2023 22:51:01 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684389060; x=1686981060;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=t9ckLhnT7f+F5f3sVepp4DQEBBJBxBHHs0SvNprQsj4=;
-        b=RNY4Og7jh8aVEHHzTra3xoE0FwFfQlSPP8WQ/9ay+ojMHWYEqCCStgWrDwEKC+BFtl
-         p8UK6pbQfnq2TqVGkf6rpc6v5LV5Y8pYl8qf1O2vPr1YQ+dZRWqrVYqghcNN9+N+lFVC
-         4w7ynnuKBud3V3v1sVqJHvZ/mYhIOLm07GLHPYgWSWacdFKcfDlFqnrPORzZVV2c/Ggl
-         Sggo10KXYpzg0CtKjrvEZv1pv8RtK3AVN3PeO9LMYrU9rUXMc93NBcUXVfTwdd598bVP
-         GcIlmhxgscEispxdbAG1z6JylXCBST9ypb0HVIDmxMaRss0YkgCownZ2HSmL1g5/gKmC
-         eFsA==
-X-Gm-Message-State: AC+VfDy/wl9FAEzyCB41RDlmMYuC60BlmAVYwKtsGQgdqbcWjRdmVtW2
-        4CZzBQ5FrYMQ+OQA8759RMgTEz/G5wc=
-X-Google-Smtp-Source: ACHHUZ6SeENPZQmXvKbPQCSUWG18HqX6WXVzr7ylZjN/dq04S1fNOF6M9F6G9W4A7vw2OZ+Hk7UdWw==
-X-Received: by 2002:a17:907:6e9e:b0:931:ad32:79ed with SMTP id sh30-20020a1709076e9e00b00931ad3279edmr48768760ejc.12.1684389060358;
-        Wed, 17 May 2023 22:51:00 -0700 (PDT)
-Received: from [10.223.1.187] ([195.39.106.162])
-        by smtp.gmail.com with ESMTPSA id fx11-20020a170906b74b00b00969e9fef151sm496332ejb.97.2023.05.17.22.50.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 22:50:59 -0700 (PDT)
-Message-ID: <c6074764-c254-e6f2-2cac-39081e3593a9@kernel.org>
-Date:   Thu, 18 May 2023 07:50:59 +0200
+        Thu, 18 May 2023 01:51:47 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C671FE49;
+        Wed, 17 May 2023 22:51:45 -0700 (PDT)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34HMFhCh013340;
+        Wed, 17 May 2023 22:51:39 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=pfpt0220; bh=h5TMO00ETrLOVoBuYc6APgA6+967xXROx72pRVl/BCw=;
+ b=ft+wGllask5CelhJOQnES51gHxWPsB6OCtrUohTiNU68utqWlix96I08NBmWnF3p/65m
+ syyR3IE/TYKjhZSPxbUR/MiKKYAVLFRssDmygaXTUzOHoZVJsCaNlJ6Eko0w1dX53LaS
+ NMS+t/BjEnokG/O0eMwsnUgcS6vGCqJrGKK1MG4P5c9Ts0BMg3lae/w56KZ0IFEzW2MR
+ M/yklt6LA5NOu9UQ9P9RKZHbKml6ncZPmTS9JENjWworfXpZc/ywovauQJJCEvjxMoWa
+ UhvvspINp91EN1XxRdPSxwymvK2+smMjWT80IYsVa7OsPpoqEhMSNHLLs2vHe7MgLFLl cg== 
+Received: from dc5-exch01.marvell.com ([199.233.59.181])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3qn7jb9a0p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Wed, 17 May 2023 22:51:39 -0700
+Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 17 May
+ 2023 22:51:37 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
+ (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.48 via Frontend
+ Transport; Wed, 17 May 2023 22:51:37 -0700
+Received: from localhost.localdomain (unknown [10.28.36.165])
+        by maili.marvell.com (Postfix) with ESMTP id 74C793F7062;
+        Wed, 17 May 2023 22:51:34 -0700 (PDT)
+From:   Ratheesh Kannoth <rkannoth@marvell.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <sgoutham@marvell.com>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <sbhatta@marvell.com>, <gakula@marvell.com>, <schalla@marvell.com>,
+        <hkelam@marvell.com>, "Ratheesh Kannoth" <rkannoth@marvell.com>
+Subject: [PATCH net-next v2] octeontx2-pf: Add support for page pool
+Date:   Thu, 18 May 2023 11:21:29 +0530
+Message-ID: <20230518055129.3129897-1-rkannoth@marvell.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: linux-next: Tree for May 15 (config SERIAL_CPM)
-Content-Language: en-US
-From:   Jiri Slaby <jirislaby@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-serial@vger.kernel.org
-References: <20230515141235.0777c631@canb.auug.org.au>
- <1538d954-864e-3a07-594a-dfe6d3178a72@infradead.org>
- <b16040e8-06f4-5c0e-7379-daa8226dc2a1@kernel.org>
-In-Reply-To: <b16040e8-06f4-5c0e-7379-daa8226dc2a1@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain
+X-Proofpoint-GUID: Kwynbs7gz7UZrJDaItNOCnhPctI0n_Uj
+X-Proofpoint-ORIG-GUID: Kwynbs7gz7UZrJDaItNOCnhPctI0n_Uj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-18_03,2023-05-17_02,2023-02-09_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,27 +67,363 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18. 05. 23, 7:49, Jiri Slaby wrote:
-> On 16. 05. 23, 4:51, Randy Dunlap wrote:
->>
->>
->> On 5/14/23 21:12, Stephen Rothwell wrote:
->>> Hi all,
->>>
->>> Changes since 20230512:
->>>
->>
->> commit e3e7b13bffae
->> Author: Jiri Slaby <jirislaby@kernel.org>
->> Date:   Thu Apr 21 12:17:08 2022 +0200
->>
->>      serial: allow COMPILE_TEST for some drivers
-> 
-> That commit should be reverted
+Page pool for each rx queue enhance rx side performance
+by reclaiming buffers back to each queue specific pool. DMA
+mapping is done only for first allocation of buffers.
+As subsequent buffers allocation avoid DMA mapping,
+it results in performance improvement.
 
-* partially. The rest appears to be OK. I will send a fix shortly.
+Image        |  Performance with Linux kernel Packet Generator
+------------ | -----------------------------------------------
+Vannila      |   3Mpps
+             |
+with this    |   42Mpps
+change	     |
+-------------------------------------------------------------
 
+Signed-off-by: Ratheesh Kannoth <rkannoth@marvell.com>
+---
+
+ChangeLog
+v1 -> v2:
+ * Removed GFP_DMA flag
+ * Returned correct err value
+
+v0 -> v1:
+ * Removed CONFIG_PAGE_POOL #ifdefs in code
+ * Used compound page APIs
+ * Replaced page_pool_put_page API with page_pool_put_full_page API
+---
+ .../net/ethernet/marvell/octeontx2/Kconfig    |  1 +
+ .../marvell/octeontx2/nic/otx2_common.c       | 75 ++++++++++++++++---
+ .../marvell/octeontx2/nic/otx2_common.h       |  6 +-
+ .../ethernet/marvell/octeontx2/nic/otx2_pf.c  | 11 ++-
+ .../marvell/octeontx2/nic/otx2_txrx.c         | 19 +++--
+ .../marvell/octeontx2/nic/otx2_txrx.h         |  1 +
+ .../ethernet/marvell/octeontx2/nic/qos_sq.c   |  2 +-
+ 7 files changed, 93 insertions(+), 22 deletions(-)
+
+diff --git a/drivers/net/ethernet/marvell/octeontx2/Kconfig b/drivers/net/ethernet/marvell/octeontx2/Kconfig
+index 993ac180a5db..a32d85d6f599 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/Kconfig
++++ b/drivers/net/ethernet/marvell/octeontx2/Kconfig
+@@ -32,6 +32,7 @@ config OCTEONTX2_PF
+ 	tristate "Marvell OcteonTX2 NIC Physical Function driver"
+ 	select OCTEONTX2_MBOX
+ 	select NET_DEVLINK
++	select PAGE_POOL
+ 	depends on (64BIT && COMPILE_TEST) || ARM64
+ 	select DIMLIB
+ 	depends on PCI
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+index f9286648e45c..60476fd413e7 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
+@@ -518,11 +518,32 @@ void otx2_config_irq_coalescing(struct otx2_nic *pfvf, int qidx)
+ 		     (pfvf->hw.cq_ecount_wait - 1));
+ }
+ 
++static int otx2_alloc_pool_buf(struct otx2_nic *pfvf, struct otx2_pool *pool,
++			       dma_addr_t *dma)
++{
++	unsigned int offset = 0;
++	struct page *page;
++	size_t sz;
++
++	sz = SKB_DATA_ALIGN(pool->rbsize);
++	sz = ALIGN(sz, OTX2_ALIGN);
++
++	page = page_pool_alloc_frag(pool->page_pool, &offset, sz, GFP_ATOMIC);
++	if (unlikely(!page))
++		return -ENOMEM;
++
++	*dma = page_pool_get_dma_addr(page) + offset;
++	return 0;
++}
++
+ static int __otx2_alloc_rbuf(struct otx2_nic *pfvf, struct otx2_pool *pool,
+ 			     dma_addr_t *dma)
+ {
+ 	u8 *buf;
+ 
++	if (pool->page_pool)
++		return otx2_alloc_pool_buf(pfvf, pool, dma);
++
+ 	buf = napi_alloc_frag_align(pool->rbsize, OTX2_ALIGN);
+ 	if (unlikely(!buf))
+ 		return -ENOMEM;
+@@ -1205,10 +1226,28 @@ void otx2_sq_free_sqbs(struct otx2_nic *pfvf)
+ 	}
+ }
+ 
++void otx2_free_bufs(struct otx2_nic *pfvf, struct otx2_pool *pool,
++		    u64 iova, int size)
++{
++	u64 pa = otx2_iova_to_phys(pfvf->iommu_domain, iova);
++	struct page *page = virt_to_head_page(phys_to_virt(pa));
++
++	if (pool->page_pool) {
++		page_pool_put_full_page(pool->page_pool, page, true);
++	} else {
++		dma_unmap_page_attrs(pfvf->dev, iova, size,
++				     DMA_FROM_DEVICE,
++				     DMA_ATTR_SKIP_CPU_SYNC);
++
++		put_page(page);
++	}
++}
++
+ void otx2_free_aura_ptr(struct otx2_nic *pfvf, int type)
+ {
+ 	int pool_id, pool_start = 0, pool_end = 0, size = 0;
+-	u64 iova, pa;
++	struct otx2_pool *pool;
++	u64 iova;
+ 
+ 	if (type == AURA_NIX_SQ) {
+ 		pool_start = otx2_get_pool_idx(pfvf, type, 0);
+@@ -1224,15 +1263,13 @@ void otx2_free_aura_ptr(struct otx2_nic *pfvf, int type)
+ 	/* Free SQB and RQB pointers from the aura pool */
+ 	for (pool_id = pool_start; pool_id < pool_end; pool_id++) {
+ 		iova = otx2_aura_allocptr(pfvf, pool_id);
++		pool = &pfvf->qset.pool[pool_id];
+ 		while (iova) {
+ 			if (type == AURA_NIX_RQ)
+ 				iova -= OTX2_HEAD_ROOM;
+ 
+-			pa = otx2_iova_to_phys(pfvf->iommu_domain, iova);
+-			dma_unmap_page_attrs(pfvf->dev, iova, size,
+-					     DMA_FROM_DEVICE,
+-					     DMA_ATTR_SKIP_CPU_SYNC);
+-			put_page(virt_to_page(phys_to_virt(pa)));
++			otx2_free_bufs(pfvf, pool, iova, size);
++
+ 			iova = otx2_aura_allocptr(pfvf, pool_id);
+ 		}
+ 	}
+@@ -1250,6 +1287,8 @@ void otx2_aura_pool_free(struct otx2_nic *pfvf)
+ 		pool = &pfvf->qset.pool[pool_id];
+ 		qmem_free(pfvf->dev, pool->stack);
+ 		qmem_free(pfvf->dev, pool->fc_addr);
++		page_pool_destroy(pool->page_pool);
++		pool->page_pool = NULL;
+ 	}
+ 	devm_kfree(pfvf->dev, pfvf->qset.pool);
+ 	pfvf->qset.pool = NULL;
+@@ -1333,8 +1372,9 @@ int otx2_aura_init(struct otx2_nic *pfvf, int aura_id,
+ }
+ 
+ int otx2_pool_init(struct otx2_nic *pfvf, u16 pool_id,
+-		   int stack_pages, int numptrs, int buf_size)
++		   int stack_pages, int numptrs, int buf_size, int type)
+ {
++	struct page_pool_params pp_params = { 0 };
+ 	struct npa_aq_enq_req *aq;
+ 	struct otx2_pool *pool;
+ 	int err;
+@@ -1378,6 +1418,22 @@ int otx2_pool_init(struct otx2_nic *pfvf, u16 pool_id,
+ 	aq->ctype = NPA_AQ_CTYPE_POOL;
+ 	aq->op = NPA_AQ_INSTOP_INIT;
+ 
++	if (type != AURA_NIX_RQ) {
++		pool->page_pool = NULL;
++		return 0;
++	}
++
++	pp_params.flags = PP_FLAG_PAGE_FRAG | PP_FLAG_DMA_MAP;
++	pp_params.pool_size = numptrs;
++	pp_params.nid = NUMA_NO_NODE;
++	pp_params.dev = pfvf->dev;
++	pp_params.dma_dir = DMA_FROM_DEVICE;
++	pool->page_pool = page_pool_create(&pp_params);
++	if (IS_ERR(pool->page_pool)) {
++		netdev_err(pfvf->netdev, "Creation of page pool failed\n");
++		return PTR_ERR(pool->page_pool);
++	}
++
+ 	return 0;
+ }
+ 
+@@ -1412,7 +1468,7 @@ int otx2_sq_aura_pool_init(struct otx2_nic *pfvf)
+ 
+ 		/* Initialize pool context */
+ 		err = otx2_pool_init(pfvf, pool_id, stack_pages,
+-				     num_sqbs, hw->sqb_size);
++				     num_sqbs, hw->sqb_size, AURA_NIX_SQ);
+ 		if (err)
+ 			goto fail;
+ 	}
+@@ -1475,7 +1531,7 @@ int otx2_rq_aura_pool_init(struct otx2_nic *pfvf)
+ 	}
+ 	for (pool_id = 0; pool_id < hw->rqpool_cnt; pool_id++) {
+ 		err = otx2_pool_init(pfvf, pool_id, stack_pages,
+-				     num_ptrs, pfvf->rbsize);
++				     num_ptrs, pfvf->rbsize, AURA_NIX_RQ);
+ 		if (err)
+ 			goto fail;
+ 	}
+@@ -1659,7 +1715,6 @@ int otx2_nix_config_bp(struct otx2_nic *pfvf, bool enable)
+ 	req->bpid_per_chan = 0;
+ #endif
+ 
+-
+ 	return otx2_sync_mbox_msg(&pfvf->mbox);
+ }
+ EXPORT_SYMBOL(otx2_nix_config_bp);
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
+index b2267c8bec37..a9ed15d1793a 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.h
+@@ -976,7 +976,7 @@ int otx2_alloc_rbuf(struct otx2_nic *pfvf, struct otx2_pool *pool,
+ int otx2_rxtx_enable(struct otx2_nic *pfvf, bool enable);
+ void otx2_ctx_disable(struct mbox *mbox, int type, bool npa);
+ int otx2_nix_config_bp(struct otx2_nic *pfvf, bool enable);
+-void otx2_cleanup_rx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq);
++void otx2_cleanup_rx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq, int qidx);
+ void otx2_cleanup_tx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq);
+ int otx2_sq_init(struct otx2_nic *pfvf, u16 qidx, u16 sqb_aura);
+ int otx2_sq_aq_init(void *dev, u16 qidx, u16 sqb_aura);
+@@ -984,7 +984,7 @@ int cn10k_sq_aq_init(void *dev, u16 qidx, u16 sqb_aura);
+ int otx2_alloc_buffer(struct otx2_nic *pfvf, struct otx2_cq_queue *cq,
+ 		      dma_addr_t *dma);
+ int otx2_pool_init(struct otx2_nic *pfvf, u16 pool_id,
+-		   int stack_pages, int numptrs, int buf_size);
++		   int stack_pages, int numptrs, int buf_size, int type);
+ int otx2_aura_init(struct otx2_nic *pfvf, int aura_id,
+ 		   int pool_id, int numptrs);
+ 
+@@ -1054,6 +1054,8 @@ u16 otx2_get_max_mtu(struct otx2_nic *pfvf);
+ int otx2_handle_ntuple_tc_features(struct net_device *netdev,
+ 				   netdev_features_t features);
+ int otx2_smq_flush(struct otx2_nic *pfvf, int smq);
++void otx2_free_bufs(struct otx2_nic *pfvf, struct otx2_pool *pool,
++		    u64 iova, int size);
+ 
+ /* tc support */
+ int otx2_init_tc(struct otx2_nic *nic);
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
+index e1883c3edda3..db3fcab1c8cd 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_pf.c
+@@ -1555,7 +1555,9 @@ static void otx2_free_hw_resources(struct otx2_nic *pf)
+ 	struct nix_lf_free_req *free_req;
+ 	struct mbox *mbox = &pf->mbox;
+ 	struct otx2_cq_queue *cq;
++	struct otx2_pool *pool;
+ 	struct msg_req *req;
++	int pool_id;
+ 	int qidx;
+ 
+ 	/* Ensure all SQE are processed */
+@@ -1584,7 +1586,7 @@ static void otx2_free_hw_resources(struct otx2_nic *pf)
+ 	for (qidx = 0; qidx < qset->cq_cnt; qidx++) {
+ 		cq = &qset->cq[qidx];
+ 		if (cq->cq_type == CQ_RX)
+-			otx2_cleanup_rx_cqes(pf, cq);
++			otx2_cleanup_rx_cqes(pf, cq, qidx);
+ 		else
+ 			otx2_cleanup_tx_cqes(pf, cq);
+ 	}
+@@ -1594,6 +1596,13 @@ static void otx2_free_hw_resources(struct otx2_nic *pf)
+ 	/* Free RQ buffer pointers*/
+ 	otx2_free_aura_ptr(pf, AURA_NIX_RQ);
+ 
++	for (qidx = 0; qidx < pf->hw.rx_queues; qidx++) {
++		pool_id = otx2_get_pool_idx(pf, AURA_NIX_RQ, qidx);
++		pool = &pf->qset.pool[pool_id];
++		page_pool_destroy(pool->page_pool);
++		pool->page_pool = NULL;
++	}
++
+ 	otx2_free_cq_res(pf);
+ 
+ 	/* Free all ingress bandwidth profiles allocated */
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
+index e288f46b23a8..37d4e4b73816 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
+@@ -217,9 +217,6 @@ static bool otx2_skb_add_frag(struct otx2_nic *pfvf, struct sk_buff *skb,
+ 		skb_add_rx_frag(skb, skb_shinfo(skb)->nr_frags, page,
+ 				va - page_address(page) + off,
+ 				len - off, pfvf->rbsize);
+-
+-		otx2_dma_unmap_page(pfvf, iova - OTX2_HEAD_ROOM,
+-				    pfvf->rbsize, DMA_FROM_DEVICE);
+ 		return true;
+ 	}
+ 
+@@ -382,6 +379,8 @@ static void otx2_rcv_pkt_handler(struct otx2_nic *pfvf,
+ 	if (pfvf->netdev->features & NETIF_F_RXCSUM)
+ 		skb->ip_summed = CHECKSUM_UNNECESSARY;
+ 
++	skb_mark_for_recycle(skb);
++
+ 	napi_gro_frags(napi);
+ }
+ 
+@@ -1186,11 +1185,13 @@ bool otx2_sq_append_skb(struct net_device *netdev, struct otx2_snd_queue *sq,
+ }
+ EXPORT_SYMBOL(otx2_sq_append_skb);
+ 
+-void otx2_cleanup_rx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq)
++void otx2_cleanup_rx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq, int qidx)
+ {
+ 	struct nix_cqe_rx_s *cqe;
+ 	int processed_cqe = 0;
+-	u64 iova, pa;
++	struct otx2_pool *pool;
++	u16 pool_id;
++	u64 iova;
+ 
+ 	if (pfvf->xdp_prog)
+ 		xdp_rxq_info_unreg(&cq->xdp_rxq);
+@@ -1198,6 +1199,9 @@ void otx2_cleanup_rx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq)
+ 	if (otx2_nix_cq_op_status(pfvf, cq) || !cq->pend_cqe)
+ 		return;
+ 
++	pool_id = otx2_get_pool_idx(pfvf, AURA_NIX_RQ, qidx);
++	pool = &pfvf->qset.pool[pool_id];
++
+ 	while (cq->pend_cqe) {
+ 		cqe = (struct nix_cqe_rx_s *)otx2_get_next_cqe(cq);
+ 		processed_cqe++;
+@@ -1210,9 +1214,8 @@ void otx2_cleanup_rx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq)
+ 			continue;
+ 		}
+ 		iova = cqe->sg.seg_addr - OTX2_HEAD_ROOM;
+-		pa = otx2_iova_to_phys(pfvf->iommu_domain, iova);
+-		otx2_dma_unmap_page(pfvf, iova, pfvf->rbsize, DMA_FROM_DEVICE);
+-		put_page(virt_to_page(phys_to_virt(pa)));
++
++		otx2_free_bufs(pfvf, pool, iova, pfvf->rbsize);
+ 	}
+ 
+ 	/* Free CQEs to HW */
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.h b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.h
+index 7ab6db9a986f..b5d689eeff80 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.h
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.h
+@@ -118,6 +118,7 @@ struct otx2_cq_poll {
+ struct otx2_pool {
+ 	struct qmem		*stack;
+ 	struct qmem		*fc_addr;
++	struct page_pool	*page_pool;
+ 	u16			rbsize;
+ };
+ 
+diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/qos_sq.c b/drivers/net/ethernet/marvell/octeontx2/nic/qos_sq.c
+index d96ed29c1567..9d887bfc3108 100644
+--- a/drivers/net/ethernet/marvell/octeontx2/nic/qos_sq.c
++++ b/drivers/net/ethernet/marvell/octeontx2/nic/qos_sq.c
+@@ -63,7 +63,7 @@ static int otx2_qos_sq_aura_pool_init(struct otx2_nic *pfvf, int qidx)
+ 
+ 	/* Initialize pool context */
+ 	err = otx2_pool_init(pfvf, pool_id, stack_pages,
+-			     num_sqbs, hw->sqb_size);
++			     num_sqbs, hw->sqb_size, AURA_NIX_SQ);
+ 	if (err)
+ 		goto aura_free;
+ 
 -- 
-js
-suse labs
+2.25.1
 
