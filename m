@@ -2,152 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E12CA7076E9
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 02:27:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F170A7076EC
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 02:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbjERA1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 20:27:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48332 "EHLO
+        id S229745AbjERA3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 20:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjERA1t (ORCPT
+        with ESMTP id S229458AbjERA3U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 20:27:49 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25C39212F;
-        Wed, 17 May 2023 17:27:48 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-25344113e9bso1058583a91.3;
-        Wed, 17 May 2023 17:27:48 -0700 (PDT)
+        Wed, 17 May 2023 20:29:20 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD2F26B6
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 17:29:19 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2ad714536cfso15302891fa.0
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 17:29:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684369667; x=1686961667;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z6TuSq6N4Ik07SdPtfy50jQBhSsVtsVbqdpHx3gygEM=;
-        b=Wrh2MEf4S3uodC6iY/NhQp26vdHjhRVTb4bWxrzC701t//m5uIlIEA1xNUsMmIjIHm
-         XGkwiIi1CL+Df32ywGLR/HHePrHogAyI3HGWiiogd/bOf0gGUIL0ij3o1M1WPPksX8NM
-         NpmA4tfmxH03RCk5qVJDADaudLJu8YgQQapx8PNsPYVmM+rKVntluAeyltkPLw95jlI3
-         J+hX2xQTtAwGFpaeDLANyDp5/lzduLrThfwLh3cn90yBi1u79fpmXRh7kkP/77deVaRW
-         1+ZnTPL3F1xWQikoMvmy8pNtuUyj1VPQWksC7wtrZWov0dlFAtdsggCBvz60/rPk735O
-         xN5A==
+        d=linaro.org; s=google; t=1684369757; x=1686961757;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pMLuQJkkWUIG735JKAhMLw4oEj/3anAW1mVncUC7mjw=;
+        b=H7z5cBIXpN5FTsSanBfGOB4kpl2eaokFry+HmgUTCbqdbsMplob9BgYmIsblq6MO0e
+         QycaO+g7ndT18ra6EiX+xig90XMcM8mIr5Rf1CpvcBDmXvSGhIz9byb9RS0H9xZnD+R0
+         yMwe0pWpw3tJ+A+MH5V/lEIbxUoH8I9Mr5n8w43yk7mG6mUPvHQB/5NVCqhXaA6f0+UL
+         H7UYywEJIb6qj56HnsJ2HGnZs39gLXk27KWQLxVKnVu0Fok1ifLmaHeprLcGTLlMqBlI
+         f1gsmAlsC5ddBSKJgUXTrQHcwUaP2osfa3Q4kHKhwQMpm6BRpvEvWNy6cQQp67Dts5+B
+         F+1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684369667; x=1686961667;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=z6TuSq6N4Ik07SdPtfy50jQBhSsVtsVbqdpHx3gygEM=;
-        b=RUGnj+UhlUBGFSsmC9TrZgyogsoPna2nUpF8glqyCrLoPNFjn4PPgb22AGi9KtoFUL
-         ps5t1/PidJ3e4jYeN936mL5IP7pg0PC4HhoPXIE37dPHxhXhkbmwgf35kwGu1KGf0t96
-         il+BZtGuQzxipXiRbKTnZ7iFCa/1XWp2Nka0TeuGKbv2UzkoDi1N9pudgMXOAf5yeF7s
-         IAf9bgfZT4Ar4+HvPurnUkWufuPhXtJ8kNe8oB3UQOwy/oYO6hEBE7DN7V7OXjv697HH
-         SGKnzf0NbMwXSrbTGkSSSYtSSgxYHbq2F7O+p8g7zlnVJZ8je5qx+PWQG8vSebpLYt3j
-         Y1gA==
-X-Gm-Message-State: AC+VfDzw+NPGUFJz1zQwpNnTb1rCadnv5KffjqLnosnxIG1UAkdHu9Bw
-        X8qmVA08e3XwfOpX+hCtV9jiBFqHiKseMGE+IME=
-X-Google-Smtp-Source: ACHHUZ6n9yAfim0C7Hg43I2JYLCV74uzeButE50fjo2hAJ73OC/j8dQUCmV5kt+RT35MZoJE96vjue3uCnihuGFmCBY=
-X-Received: by 2002:a17:90a:c981:b0:24b:8480:39d6 with SMTP id
- w1-20020a17090ac98100b0024b848039d6mr710810pjt.0.1684369667491; Wed, 17 May
- 2023 17:27:47 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684369757; x=1686961757;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pMLuQJkkWUIG735JKAhMLw4oEj/3anAW1mVncUC7mjw=;
+        b=ebxr0k3WLK7+8nek200I1+YvMwDQepS4L2vzx3ggKAzNJlZT4jIAS79U/nglBH/MYQ
+         BgQ2vMiHhfz1nXccif6Dcbk97u6elOTJCLfJmEDySTjZs3wjV/Vyu9LYBqPcqXKkawlH
+         XFwqzrqsaP+auidHLMNGmfcr97KBQEXfbD1uZsASYjtVftIUCjnNPNOjpxuIYKU8YH2v
+         8xr4OxFQ7A8bfLhE6DVA+rn7e3Lemmzgg+gqW637cndvDxi5n08xLOhiQp5c1+R8S8j+
+         TOO8bAoAJrUSEEiFyrSlBNU0IE/Cy7E7mVu8Z6sth2BcvwWEbCYkfSe4u7k23Rc15Njc
+         +YoA==
+X-Gm-Message-State: AC+VfDyX7xcDOnewlEoP1hDjuNzuRYqJr0KoEfQ2YiOPINyxSKWOlv4s
+        yFvWV98yxssVOTN24m4UIvbEyA==
+X-Google-Smtp-Source: ACHHUZ4egjksffobtvh370QPgDyVzW0IVj9dAA8nRwiQGzhHSKt2nIOlgjpfefT1edJmhhnt1zgM5w==
+X-Received: by 2002:a19:7005:0:b0:4f2:6a9d:9a31 with SMTP id h5-20020a197005000000b004f26a9d9a31mr577428lfc.51.1684369757439;
+        Wed, 17 May 2023 17:29:17 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id h3-20020ac25963000000b004f2543be9dbsm64733lfp.5.2023.05.17.17.29.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 17 May 2023 17:29:16 -0700 (PDT)
+Message-ID: <4f8807d7-f16f-2a5c-c319-c7cdea56d737@linaro.org>
+Date:   Thu, 18 May 2023 03:29:16 +0300
 MIME-Version: 1.0
-References: <20230517223007.178432-1-boerge.struempfel@gmail.com>
- <CAOMZO5CqMMCCOsAB3YgJUUampE=iZru57d=qoX13-GkSaaC5gg@mail.gmail.com>
- <CAEktqcuMrqiwDfGM=SAoHiKPY-hupS+jipt=6Tasr1q8VUvRQQ@mail.gmail.com> <CAOMZO5CJwwKmDYRxnny2JOrwucGn=q7+9xKqk_NSvZ_wyNSHEQ@mail.gmail.com>
-In-Reply-To: <CAOMZO5CJwwKmDYRxnny2JOrwucGn=q7+9xKqk_NSvZ_wyNSHEQ@mail.gmail.com>
-From:   =?UTF-8?B?QsO2cmdlIFN0csO8bXBmZWw=?= <boerge.struempfel@gmail.com>
-Date:   Thu, 18 May 2023 02:27:36 +0200
-Message-ID: <CAEktqcue7gFk9fXMsNPxwUsUVRxpa6GE5wCHZqU2p2dDz8WYqg@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] spi: add SPI_MOSI_IDLE_LOW mode bit
-To:     Fabio Estevam <festevam@gmail.com>
-Cc:     bstruempfel@ultratronik.de, andy.shevchenko@gmail.com,
-        amit.kumar-mahapatra@amd.com, broonie@kernel.org,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v10 3/8] drm/msm/dpu: Guard PINGPONG DSC ops behind
+ DPU_PINGPONG_DSC bit
+Content-Language: en-GB
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, andersson@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_jesszhan@quicinc.com,
+        quic_sbillaka@quicinc.com, marijn.suijten@somainline.org,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <1684360919-28458-1-git-send-email-quic_khsieh@quicinc.com>
+ <1684360919-28458-4-git-send-email-quic_khsieh@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1684360919-28458-4-git-send-email-quic_khsieh@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Do., 18. Mai 2023 um 01:53 Uhr schrieb Fabio Estevam <festevam@gmail.com=
->:
->
-> On Wed, May 17, 2023 at 8:20=E2=80=AFPM B=C3=B6rge Str=C3=BCmpfel
-> <boerge.struempfel@gmail.com> wrote:
->
-> > My bad. Thanks for letting me know. Just to clarify: I put the
-> > changelog directly below
-> > the first ---? And do I then put another --- between the changelog and
-> > the following
-> > include/uapi/linux/spi/spi.h | 3 ++- line?  or is there just a
-> > new-line seperating them.
->
-> It should look like this:
->
-> Commit log line 1
-> Commit log line 2
-> ...
-> Commit log line n
->
-> Signed-off-by: Your name <your@email.com>
+On 18/05/2023 01:01, Kuogee Hsieh wrote:
+> DPU < 7.0.0 has DPU_PINGPONG_DSC feature bit set to indicate it requires
+> both dpu_hw_pp_setup_dsc() and dpu_hw_pp_dsc_{enable,disable}() to be
+> executed to complete DSC configuration if DSC hardware block is present.
+> Hence test DPU_PINGPONG_DSC feature bit and assign DSC related functions
+> to the ops of PINGPONG block accordingly if DPU_PINGPONG_DSC bit is set.
+> 
+> Changes in v6:
+> -- split patches, this patch has function handles DPU_PINGPONG_DSC bit
+> 
+> Changes in v9:
+> -- the original code of assigning dsc related functions to the ops of pingpong
+
+line too long
+
+>     block without testing the DPU_PINGPONG_DSC feature bit was restored back
+>     due to rebase error which defeat the purpose of this patch. Remove those
+>     error code.
+> 
+> Changes in v10:
+> -- change commit title
+> -- correct texts at changes in v9
+> 
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
 > ---
-> Changes since v3:
-> - Bla bla bla
->
+>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c | 9 ++++++---
+>   1 file changed, 6 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
+> index 79e4576..437d9e6 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
+> @@ -291,9 +291,12 @@ static void _setup_pingpong_ops(struct dpu_hw_pingpong *c,
+>   		c->ops.get_line_count = dpu_hw_pp_get_line_count;
+>   		c->ops.disable_autorefresh = dpu_hw_pp_disable_autorefresh;
+>   	}
+> -	c->ops.setup_dsc = dpu_hw_pp_setup_dsc;
+> -	c->ops.enable_dsc = dpu_hw_pp_dsc_enable;
+> -	c->ops.disable_dsc = dpu_hw_pp_dsc_disable;
+> +
+> +	if (test_bit(DPU_PINGPONG_DSC, &features)) {
+> +		c->ops.setup_dsc = dpu_hw_pp_setup_dsc;
+> +		c->ops.enable_dsc = dpu_hw_pp_dsc_enable;
+> +		c->ops.disable_dsc = dpu_hw_pp_dsc_disable;
+> +	}
+>   
+>   	if (test_bit(DPU_PINGPONG_DITHER, &features))
+>   		c->ops.setup_dither = dpu_hw_pp_setup_dither;
 
-Thank you for taking the time to explain this!
+-- 
+With best wishes
+Dmitry
 
-> > And if you don't mind my trivial questions, am I supposed to write a
-> > cover letter for
-> > the patch-stack? I seem to find contradictory answers to this question =
-online.
->
-> Yes, for a patch series having a cover letter is helpful.
->
-
-I will add one for the next version.
-
-> > > Should tools/spi/spidev_test.c be changed to include this new
-> > > mosi-idle-low option?
-> >
-> > Until now I actually wasn't aware of this tool. However on first
-> > glance, it seems
-> > reasonable to add this mode bit. I can certainly add this mode bit to
-> > the spidev_test
-> > if desired.
->
-> Yes, that would be great.
->
-
-Okay. I have begun to implement this. During this, I noticed, that if
-I called the new option
-"--mosi-idle-low", the alignment of the help-lines (and in the c code
-itself) would break.
-Should I therefore shorten the option name by using an abbreviation
-like "--mil", which is
-probably not very helpful as a "full option name", or should I touch
-all the other lines and
-insert necessary spaces, such that they are aligned once more? (And if
-so, should I do
-this in a seperate patch, preparing the addition of the new options?)
-
-> > While looking through the code, I noticed, that the latest two
-> > additions to the spi->mode
-> > (SPI_3WIRE_HIZ and SPI_RX_CPHA_FLIP) are also missing from this tool. I=
-s this
-> > by design, or should they then be included as well?
->
-> Looks like these two are missing and would be good to get them included a=
-s well.
-
-Okay. Should this be a separate patch, or should I add the support for
-all 3 mode bits in
-one commit?
