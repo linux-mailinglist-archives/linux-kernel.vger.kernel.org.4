@@ -2,95 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CB9C707AE9
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 09:31:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 293AE707AED
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 09:32:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbjERHbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 03:31:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58658 "EHLO
+        id S230053AbjERHcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 03:32:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjERHb3 (ORCPT
+        with ESMTP id S229936AbjERHcg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 03:31:29 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D8EB213A;
-        Thu, 18 May 2023 00:30:09 -0700 (PDT)
-Received: from booty (unknown [77.244.183.192])
-        (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7F2251BF204;
-        Thu, 18 May 2023 07:28:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1684394930;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6/pMkDHqpQee7Q5QnzaROcishnayyd/TZbSD01jovy8=;
-        b=Tx7Z33B3eVZShtKikhLKhfxKEn0I3M0zPi6qXKlztvv0WPqWAUnDaTGJ/vuKHs+/5YQ9MR
-        dUhfbCwqVN+7iXFC4I1x+qhAAdkMj+073xPwYtjpzOFNfsGcYJZRAhwll5VmEyRnKI+O9c
-        7KCWfqBtXqrUbC6bsTE0Ysih9q1tgPc9hu9J5ldSdgidhf7Inr5oCuNsJMY4lEfuizt6YS
-        ay/in2/LvjycUMlmTIIXeJjhS9uZ2KF9Q7vfyd3yWrgjSS+Rsm7bNCsIMvgMs8VXIy2DpI
-        1iygqIKW5xgKTvf19jdlDw+mP1d+cjWhbPzC8XNJw0727qxXe4y8gRM2dpIDYQ==
-Date:   Thu, 18 May 2023 09:28:46 +0200
-From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
-To:     Uwe =?UTF-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jean Delvare <jdelvare@suse.com>,
-        Eric Piel <eric.piel@tremplin-utc.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Wolfram Sang <wsa@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Justin Stitt <justinstitt@google.com>,
-        Yuan Can <yuancan@huawei.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Adrien Grassein <adrien.grassein@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Petr Machata <petrm@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-Subject: Re: [PATCH] misc: Switch i2c drivers back to use .probe()
-Message-ID: <20230518092846.2012482c@booty>
-In-Reply-To: <20230517220135.170379-1-u.kleine-koenig@pengutronix.de>
-References: <20230517220135.170379-1-u.kleine-koenig@pengutronix.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 18 May 2023 03:32:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579FE211D
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 00:32:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A81964B8B
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:30:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6DE9C433D2;
+        Thu, 18 May 2023 07:30:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684395045;
+        bh=hTlEdPj67IrmcUHD6iCX3p6gyeN8z+Z5BNTRRu7a0U0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=mB1glrViRgEAI3XP1lsGftyAXtqMgmXl/QjJXm68RlPf0vk0F1/xCHwyU3HSRFVFy
+         wFQkFoVpx6m5H/mUqyuFje3HbF1iYUzdKxiGj/vDEXGbELdnMV4VNl3F031Gta2p+g
+         1QpU5q++n5pZG77X3lp70qYmet2+mHLXXRQ6kRsVyTZd/zQhgUKLjMVQMJ9Yr2TAg6
+         VJj+4k6UG9rcteFrK0wMgpqrAob3h4BG+ttcwP6R5kNkAKMfgZsIVN8fM7WmFLG6jw
+         oFfFeSM+1xiQ/XvSj93gkqong39d6TD/3g0XZkPnHRNmJqEaCSkRYmVSn2VwYbNsyc
+         Vr7EK1ZggB09w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pzY5z-00G4a4-9X;
+        Thu, 18 May 2023 08:30:43 +0100
+Date:   Thu, 18 May 2023 08:30:42 +0100
+Message-ID: <86lehmksf1.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Oliver Upton <oliver.upton@linux.dev>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Shaoqin Huang <shahuang@redhat.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Gavin Shan <gshan@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: kvm: avoid overflow in integer division
+In-Reply-To: <20230517202352.793673-1-arnd@kernel.org>
+References: <20230517202352.793673-1-arnd@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: arnd@kernel.org, oliver.upton@linux.dev, catalin.marinas@arm.com, will@kernel.org, shahuang@redhat.com, ricarkol@google.com, gshan@redhat.com, arnd@arndb.de, james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, cohuck@redhat.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Uwe,
+On Wed, 17 May 2023 21:23:39 +0100,
+Arnd Bergmann <arnd@kernel.org> wrote:
+> 
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> The newly added kvm_mmu_split_nr_page_tables() function uses DIV_ROUND_DOWN_ULL()
+> to divide 64-bit addresses, but this requires a 32-bit divisior, and PUD_SIZE
+> may exceed that when 64KB pages are used:
+> 
+> arch/arm64/kvm/mmu.c: In function 'kvm_mmu_split_nr_page_tables':
+> include/linux/math.h:42:64: error: conversion from 'long unsigned int' to 'u32' {aka 'unsigned int'} changes value from '68719476736' to '0' [-Werror=overflow]
+>    42 |         DIV_ROUND_DOWN_ULL((unsigned long long)(ll) + (d) - 1, (d))
+>       |                                                                ^~~
+> include/linux/math.h:39:47: note: in definition of macro 'DIV_ROUND_DOWN_ULL'
+>    39 | #define DIV_ROUND_DOWN_ULL(ll, d) div_u64(ll, d)
+>       |                                               ^
+> arch/arm64/kvm/mmu.c:95:22: note: in expansion of macro 'DIV_ROUND_UP_ULL'
+>    95 |                 n += DIV_ROUND_UP_ULL(range, PUD_SIZE);
+>       |                      ^~~~~~~~~~~~~~~~
+> 
+> Since this code is only used on 64-bit targets, DIV_ROUND_UP() can deal with this
+> more easily, as it already takes 64-bit arguments.
+> 
+> Fixes: e7bf7a490c68 ("KVM: arm64: Split huge pages when dirty logging is enabled")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/arm64/kvm/mmu.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
+> index 3386bd28d267..6db9ef288ec3 100644
+> --- a/arch/arm64/kvm/mmu.c
+> +++ b/arch/arm64/kvm/mmu.c
+> @@ -92,8 +92,8 @@ static int kvm_mmu_split_nr_page_tables(u64 range)
+>  	int n = 0;
+>  
+>  	if (KVM_PGTABLE_MIN_BLOCK_LEVEL < 2)
+> -		n += DIV_ROUND_UP_ULL(range, PUD_SIZE);
+> -	n += DIV_ROUND_UP_ULL(range, PMD_SIZE);
+> +		n += DIV_ROUND_UP(range, PUD_SIZE);
+> +	n += DIV_ROUND_UP(range, PMD_SIZE);
+>  	return n;
+>  }
 
-On Thu, 18 May 2023 00:01:35 +0200
-Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de> wrote:
+This is against -next, right? Oliver, I assume you'll take this as a
+fix for Ricardo's series?
 
-> After commit b8a1a4cd5a98 ("i2c: Provide a temporary .probe_new()
-> call-back type"), all drivers being converted to .probe_new() and then
-> 03c835f498b5 ("i2c: Switch .probe() to not take an id parameter") convert
-> back to (the new) .probe() to be able to eventually drop .probe_new() from
-> struct i2c_driver.
->=20
-> While touching these drivers, fix alignment in apds990x.c and bh1770glc.c.
->=20
-> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+Thanks,
 
-It's finally happening, thanks! \o/
+	M.
 
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-
---=20
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+-- 
+Without deviation from the norm, progress is not possible.
