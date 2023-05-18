@@ -2,109 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49F1A707AC5
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 09:23:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6E91707AC6
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 09:24:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbjERHXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 03:23:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55514 "EHLO
+        id S230086AbjERHYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 03:24:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbjERHXN (ORCPT
+        with ESMTP id S229527AbjERHYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 03:23:13 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 08B252113;
-        Thu, 18 May 2023 00:23:10 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 17BF81FB;
-        Thu, 18 May 2023 00:23:55 -0700 (PDT)
-Received: from [192.168.1.3] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AF24A3F73F;
-        Thu, 18 May 2023 00:23:08 -0700 (PDT)
-Message-ID: <8d6b615e-0999-59d2-e123-5a2570f12cf5@arm.com>
-Date:   Thu, 18 May 2023 08:23:03 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH v1 2/2] perf test attr: Fix deprecation warning
-Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>
-References: <20230517225707.2682235-1-irogers@google.com>
- <20230517225707.2682235-2-irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kan Liang <kan.liang@linux.intel.com>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <20230517225707.2682235-2-irogers@google.com>
+        Thu, 18 May 2023 03:24:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4588F2113
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 00:23:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D6A1260C6B
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:23:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43250C433D2;
+        Thu, 18 May 2023 07:23:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684394638;
+        bh=QceqSedZuifDelaQ8QhfFP+zC2XgAEjTm+cUUEQzzkw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=mkN/2z7/I41L7W3zxc1cUKM3v+czSx1HQSygyYHJPh3uJn01IXgOWTM1idmnI7v6C
+         pE1KFdrtve7Qka/21ddWjzX5GmEzATDVK/6UXy53rPuU147/xXLGNpebAN+fqYOtx3
+         hEvCBRJPXdh5IlpbR5aguwW2/g7qL3AitZXGeg7eD7RrY9aEqiho7UHRZhbOCJVlMy
+         nWmeBWWo5k8u4SC9FcNLRtQZ7eDfyXTBjSiEjA8CtjZfdk58KcqSqJd8BEY6wHjX9p
+         JcAuWfKK0zpz47I+/3MyH6EQWUjrEs1yZdf6TyMePsEFCcy5BP5s0BeRBVqldoI2D5
+         p54vS3oqIq5Ag==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pzXzQ-00G4V1-04;
+        Thu, 18 May 2023 08:23:56 +0100
+Date:   Thu, 18 May 2023 08:23:55 +0100
+Message-ID: <86mt22ksqc.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Yan =?UTF-8?B?WmhlbmfvvIjkuKXmlL/vvIk=?= <zhengyan@asrmicro.com>
+Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Gao =?UTF-8?B?TWVpdGFv77yI6auY546r5rab77yJ?= 
+        <meitaogao@asrmicro.com>,
+        =?UTF-8?B?Ilpob3UgUWlhbyjlkajkvqgpIg==?= <qiaozhou@asrmicro.com>,
+        =?UTF-8?B?IlpoYW5nIFpoaXpob3Uo5byg5rK75rSyKSI=?= 
+        <zhizhouzhang@asrmicro.com>
+Subject: Re: [PATCH] irqchip/gic-v3: workaround for ASR8601 when reading mpidr
+In-Reply-To: <05d97f210e484a07887f1e476fa4cae5@exch03.asrmicro.com>
+References: <20230517075500.43516-1-zhengyan@asrmicro.com>
+        <86ttwbl5nq.wl-maz@kernel.org>
+        <9dcef1c9343041c49a92ec8cd40d6331@exch03.asrmicro.com>
+        <86sfbvktas.wl-maz@kernel.org>
+        <05d97f210e484a07887f1e476fa4cae5@exch03.asrmicro.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: zhengyan@asrmicro.com, tglx@linutronix.de, linux-kernel@vger.kernel.org, meitaogao@asrmicro.com, qiaozhou@asrmicro.com, zhizhouzhang@asrmicro.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 18 May 2023 04:15:54 +0100,
+Yan Zheng=EF=BC=88=E4=B8=A5=E6=94=BF=EF=BC=89 <zhengyan@asrmicro.com> wrote:
+>=20
+>=20
+>=20
+> > -----Original Message-----
+> > From: Marc Zyngier [mailto:maz@kernel.org]
+> > Sent: Wednesday, May 17, 2023 8:59 PM
+> > To: Yan Zheng=EF=BC=88=E4=B8=A5=E6=94=BF=EF=BC=89 <zhengyan@asrmicro.co=
+m>
+> > Cc: tglx@linutronix.de; linux-kernel@vger.kernel.org; Gao Meitao=EF=BC=
+=88=E9=AB=98=E7=8E=AB=E6=B6=9B=EF=BC=89
+> > <meitaogao@asrmicro.com>; Zhou Qiao(=E5=91=A8=E4=BE=A8) <qiaozhou@asrmi=
+cro.com>;
+> > Zhang Zhizhou(=E5=BC=A0=E6=B2=BB=E6=B4=B2) <zhizhouzhang@asrmicro.com>
+> > Subject: Re: [PATCH] irqchip/gic-v3: workaround for ASR8601 when reading
+> > mpidr
+> >=20
+> > On Wed, 17 May 2023 11:45:22 +0100,
+> > Yan Zheng=EF=BC=88=E4=B8=A5=E6=94=BF=EF=BC=89 <zhengyan@asrmicro.com> w=
+rote:
+> > >
+> > >
+> > >
+> > > > -----Original Message-----
+> > > > From: Marc Zyngier [mailto:maz@kernel.org]
+> > > > Sent: Wednesday, May 17, 2023 4:32 PM
+> > > > To: Yan Zheng=EF=BC=88=E4=B8=A5=E6=94=BF=EF=BC=89 <zhengyan@asrmicr=
+o.com>
+> > > > Cc: tglx@linutronix.de; linux-kernel@vger.kernel.org; Gao
+> > > > Meitao=EF=BC=88=E9=AB=98=E7=8E=AB=E6=B6=9B=EF=BC=89
+> > > > <meitaogao@asrmicro.com>; Zhou Qiao(=E5=91=A8=E4=BE=A8) <qiaozhou@a=
+srmicro.com>;
+> > > > Zhang Zhizhou(=E5=BC=A0=E6=B2=BB=E6=B4=B2) <zhizhouzhang@asrmicro.c=
+om>
+> > > > Subject: Re: [PATCH] irqchip/gic-v3: workaround for ASR8601 when
+> > > > reading mpidr
+> > > >
+> > > > On Wed, 17 May 2023 08:55:00 +0100,
+> > > > zhengyan <zhengyan@asrmicro.com> wrote:
+> > > > >
+> > > > > This patch add workaround for ASR8601, which uses an armv8.2
+> > > > > processor with a gic-500. ARMv8.2 uses Multiprocessor Affinity
+> > > > > Register to identify the logical address of the core by
+> > > > > | cluster | core | thread |.
+> > > >
+> > > > Not quite. The ARMv8.2 architecture doesn't say *any* of that. It is
+> > > > ARM's
+> > > > *implementations* that follow this scheme.
+> > > >
+> > >
+> > > Really thank you for rapid response,
+> > > Yes, as arm documents
+> > > https://developer.arm.com/docuentation/ka002107/latest said
+> >=20
+> > This page doesn't exist.
+> >=20
+>=20
+> Sorry for my mistake,
+> https://developer.arm.com/documentation/ka002107/latest
+> extract from the docs:
+> The Arm-v8.0 CPUs use affinity 0 for a CPU and affinity 1 for a cluster. =
 
+> All Arm-v8.2 CPUs use affinity 2 for a cluster, 1 for a CPU, and 0 for a =
+thread.
+> The GIC-500 does not support affinity 2. Therefore, the GIC-500 cannot ro=
+ute=20
+> Shared Peripheral Interrupts (SPIs) or Software Generated Interrupts (SGI=
+s)=20
+> correctly for Arm-v8.2 CPUs.=20
+> The GIC-500 does not have correct buses to connect the system together.
 
-On 17/05/2023 23:57, Ian Rogers wrote:
-> Address the warning:
-> ```
-> tests/attr.py:155: DeprecationWarning: The SafeConfigParser class has
->   been renamed to ConfigParser in Python 3.2. This alias will be
->   removed in Python 3.12. Use ConfigParser directly instead.
-> parser = configparser.SafeConfigParser()
-> ```
-> by removing the word 'Safe'.
-> 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/tests/attr.py | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/perf/tests/attr.py b/tools/perf/tests/attr.py
-> index ccfef861e931..e890c261ad26 100644
-> --- a/tools/perf/tests/attr.py
-> +++ b/tools/perf/tests/attr.py
-> @@ -152,7 +152,7 @@ def parse_version(version):
->  #   - expected values assignments
->  class Test(object):
->      def __init__(self, path, options):
-> -        parser = configparser.SafeConfigParser()
-> +        parser = configparser.ConfigParser()
->          parser.read(path)
->  
->          log.warning("running '%s'" % path)
-> @@ -247,7 +247,7 @@ class Test(object):
->          return True
->  
->      def load_events(self, path, events):
-> -        parser_event = configparser.SafeConfigParser()
-> +        parser_event = configparser.ConfigParser()
->          parser_event.read(path)
->  
->          # The event record section header contains 'event' word,
-> @@ -261,7 +261,7 @@ class Test(object):
->              # Read parent event if there's any
->              if (':' in section):
->                  base = section[section.index(':') + 1:]
-> -                parser_base = configparser.SafeConfigParser()
-> +                parser_base = configparser.ConfigParser()
->                  parser_base.read(self.test_dir + '/' + base)
->                  base_items = parser_base.items('event')
->  
+All these are implementations. Nothing to do with the architecture
+(which only mentions the notion of 'cluster' when talking about
+caches).
 
-Reviewed-by: James Clark <james.clark@arm.com>
+Anyway, let's move on.
 
-I thought I also did this a while ago but it must have gotten lost or I
-didn't send it.
+>
+> > > It comes from armv8.2 get 3 types for affinity (arm v8.0 cpus only get
+> > > 2 types) And it's an implementations issue.
+> >=20
+> > Again, this has nothing to do with the ARMv8.2 architecture. Nor the
+> > ARMv8.0 architecture. Please read the ARM ARM, which says absolutely
+> > *nothing* of what the various affinity levels are for.
+> >=20
+>=20
+> As the extract from pervious part mentioned,
+> It seems like this issue related to that? I just want to mention that
+> this issue is cause by HW choice in the commit message.
+
+You can say that GIC500 is incompatible with ARMv8.2 implementations
+from ARM, and that a workaround is needed for that.
+
+Thanks,
+
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.
