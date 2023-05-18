@@ -2,143 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E005707CF2
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBFB7707CFA
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:33:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbjERJcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 05:32:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54328 "EHLO
+        id S230245AbjERJdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 05:33:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230027AbjERJcj (ORCPT
+        with ESMTP id S230112AbjERJcx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 05:32:39 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF741990;
-        Thu, 18 May 2023 02:32:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684402356; x=1715938356;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ufC3GRA8nPg5qrCMUy5LcfZUCIfhhLVoJdgjOUeXBI0=;
-  b=aedFIOrwH6fDk4Y6PpJj4Y2A4UxzBemDge7EQ+3QT5lsjx8HxPeacNVx
-   t4mAJdPwXlitE/oz2NPL8CXQm83y6m6XA06e1kV7etZRHwJTIwQ9zV8/F
-   Og3ueWtNNGaIWTWi31Hl1aryQ+wF3rhzBa0LFod7mxUtwfERMAaZWwJp/
-   d+RmLCIZOsTHgUVLG16PqUIA4skmdhUk1OGHBQeR3vlT34wHKOfKhUrj6
-   AVlrw/3ZTxf0CG0K/05dFbveAanSvmAZN90n8FKSRNnVF2CioyhQ/4QOs
-   3rYassVzV3hgI7nBY0tt1riwehiKMRwSLPf4crj8RbGXF7RT36eTh+Lyx
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="350854788"
-X-IronPort-AV: E=Sophos;i="5.99,284,1677571200"; 
-   d="scan'208";a="350854788"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 02:32:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="771809523"
-X-IronPort-AV: E=Sophos;i="5.99,284,1677571200"; 
-   d="scan'208";a="771809523"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.254.211.142]) ([10.254.211.142])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 02:32:33 -0700
-Message-ID: <b472b58d-0469-8a55-985c-1d966ce66419@intel.com>
-Date:   Thu, 18 May 2023 17:32:31 +0800
+        Thu, 18 May 2023 05:32:53 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984A9212C
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 02:32:50 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pzZzx-0006ms-R8; Thu, 18 May 2023 11:32:37 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id C14F71C7B3D;
+        Thu, 18 May 2023 09:32:36 +0000 (UTC)
+Date:   Thu, 18 May 2023 11:32:36 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Arun Ramadoss <arun.ramadoss@microchip.com>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        UNGLinuxDriver@microchip.com, linux-kernel@vger.kernel.org,
+        kernel@pengutronix.de, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next v3 0/2] Fine-Tune Flow Control and Speed
+ Configurations in Microchip KSZ8xxx DSA Driver
+Message-ID: <20230518-tutu-wildland-b48f1bd3f79e-mkl@pengutronix.de>
+References: <20230518092913.977705-1-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.1
-Subject: Re: [PATCH] KVM: x86: Track supported ARCH_CAPABILITIES in kvm_caps
-Content-Language: en-US
-To:     Chao Gao <chao.gao@intel.com>, kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-References: <20230506030435.80262-1-chao.gao@intel.com>
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20230506030435.80262-1-chao.gao@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vumhte6bwemi33ou"
+Content-Disposition: inline
+In-Reply-To: <20230518092913.977705-1-o.rempel@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/6/2023 11:04 AM, Chao Gao wrote:
-> to avoid computing the supported value at runtime every time.
-> 
-> No functional change intended.
 
-the value of kvm_get_arch_capabilities() can be changed due to
+--vumhte6bwemi33ou
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-	if (l1tf_vmx_mitigation != VMENTER_L1D_FLUSH_NEVER)
-		data |= ARCH_CAP_SKIP_VMENTRY_L1DFLUSH;
+On 18.05.2023 11:29:11, Oleksij Rempel wrote:
+> changes v3:
+> - remove half duplex flow control configuration
+> - add comments
+> - s/stram/stream
+>=20
+> changes v2:
+> - split the patch to upstrean and downstream part
+                              ^m
+> - add comments
+> - fix downstream register offset
+> - fix cpu configuration
+>=20
+> This patch set focuses on enhancing the configurability of flow
+> control, speed, and duplex settings in the Microchip KSZ8xxx DSA driver.
+>=20
+> The first patch allows more granular control over the CPU port's flow
+> control, speed, and duplex settings. The second patch introduces a
+> method for downstream port configurations, primarily concerning flow
+> control based on duplex mode.
 
-and l1tf_vmx_mitigation can be runtime changed by vmentry_l1d_flush 
-module param.
+regards,
+Marc
 
-We need a detailed analysis that in no real case can 
-ARCH_CAP_SKIP_VMENTRY_L1DFLUSH bit change runtime.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
-> Signed-off-by: Chao Gao <chao.gao@intel.com>
-> ---
-> 
-> A new call site of kvm_get_arch_capabilities() is added by [1]. It should be
-> replaced with the cached value in kvm_caps.
-> 
-> [1] https://lore.kernel.org/all/20230504181827.130532-1-mizhang@google.com/
-> 
-> 
->   arch/x86/kvm/x86.c | 5 +++--
->   arch/x86/kvm/x86.h | 1 +
->   2 files changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 523c39a03c00..94aa70ec169c 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -1670,7 +1670,7 @@ static int kvm_get_msr_feature(struct kvm_msr_entry *msr)
->   {
->   	switch (msr->index) {
->   	case MSR_IA32_ARCH_CAPABILITIES:
-> -		msr->data = kvm_get_arch_capabilities();
-> +		msr->data = kvm_caps.supported_arch_cap;
->   		break;
->   	case MSR_IA32_PERF_CAPABILITIES:
->   		msr->data = kvm_caps.supported_perf_cap;
-> @@ -9523,6 +9523,7 @@ static int __kvm_x86_vendor_init(struct kvm_x86_init_ops *ops)
->   		kvm_caps.max_guest_tsc_khz = max;
->   	}
->   	kvm_caps.default_tsc_scaling_ratio = 1ULL << kvm_caps.tsc_scaling_ratio_frac_bits;
-> +	kvm_caps.supported_arch_cap = kvm_get_arch_capabilities();
->   	kvm_init_msr_lists();
->   	return 0;
->   
-> @@ -11879,7 +11880,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
->   	if (r)
->   		goto free_guest_fpu;
->   
-> -	vcpu->arch.arch_capabilities = kvm_get_arch_capabilities();
-> +	vcpu->arch.arch_capabilities = kvm_caps.supported_arch_cap;
->   	vcpu->arch.msr_platform_info = MSR_PLATFORM_INFO_CPUID_FAULT;
->   	kvm_xen_init_vcpu(vcpu);
->   	kvm_vcpu_mtrr_init(vcpu);
-> diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
-> index c544602d07a3..d3e524bcc169 100644
-> --- a/arch/x86/kvm/x86.h
-> +++ b/arch/x86/kvm/x86.h
-> @@ -29,6 +29,7 @@ struct kvm_caps {
->   	u64 supported_xcr0;
->   	u64 supported_xss;
->   	u64 supported_perf_cap;
-> +	u64 supported_arch_cap;
->   };
->   
->   void kvm_spurious_fault(void);
-> 
-> base-commit: b3c98052d46948a8d65d2778c7f306ff38366aac
+--vumhte6bwemi33ou
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRl8LEACgkQvlAcSiqK
+BOi9sAgAhMea8TDC3ZJkou+IQfm0QSmZAshM232Ma/QANCf/GPbaUXJ+u9nBHuHS
+bvZd4jZ3v1mcYdTGoDjAk++lcSDgAMDi3QI7nup2oavzo86PAdFovS26/P/p6XZo
+OUOq2O8jONQkB0KKZ3Oqgg4pd+/6gcl2EZxyu/Gn6zfpNHBw0G6PELsNEEHmbwJF
+FQSkMonZ/iUj+a97mD8YacLHJDScCGCr8+YPGd2OnqB8QGgTmmE194M1gUSbZt6U
+EPlclwzQeHiWwOMkJfh2t1qnS6qloDUNUe+nVBjtL0n/URs4BWvXrYeSxIWNXbcM
+F9/1nKZWk6h9twgLYhu9M6AlcrN8DA==
+=oRYF
+-----END PGP SIGNATURE-----
+
+--vumhte6bwemi33ou--
