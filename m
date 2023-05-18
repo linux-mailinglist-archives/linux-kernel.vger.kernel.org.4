@@ -2,198 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6A0D707B0B
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 09:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68503707B16
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 09:36:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbjERHej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 03:34:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33860 "EHLO
+        id S230088AbjERHgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 03:36:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230155AbjERHeg (ORCPT
+        with ESMTP id S229524AbjERHgD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 03:34:36 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38FC1ED;
-        Thu, 18 May 2023 00:34:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1684395265; i=deller@gmx.de;
-        bh=FZgYr3T8y3cSMK+jHqEyv7QLt7tFq/0H8uVHvwVWk6M=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=MoMpQNdr5zEiwQNd7K2aK1cI0p3ThRclSOgsj66q2WiUSF4ATCDeQLPKNbFg25Pxa
-         WViYyUdePqRPGNXASfMIakglgGaIMzsAGjPJe5NKqpXZVM5og28cJrtnBpVVhpnE35
-         TLsdiVhun9nSNcsyjvnB9B+1tAypfx13ifMBianCemABMQV08ns7mTrVNFAbr5iKsR
-         NcKMmRNjLbRcFS5c7yqHngmNjjbhyZW2+GFOekGsIH1FczveHYzs1FT6HiardTQCJE
-         89EWnOgrTO3mtW57/ye+SYtrtgmxvkKEtdd0kc20IFAa7SOJGS3rijHfVh2iZPlszz
-         dzLJ3IB94J3IA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from ls3530 ([94.134.154.30]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mwfac-1qO5QR39v0-00yCpu; Thu, 18
- May 2023 09:34:25 +0200
-Date:   Thu, 18 May 2023 09:34:24 +0200
-From:   Helge Deller <deller@gmx.de>
-To:     syzbot <syzbot+0e22d63dcebb802b9bc8@syzkaller.appspotmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Cc:     bernie@plugable.com, linux-usb@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [fbdev?] [usb?] WARNING in
- dlfb_submit_urb/usb_submit_urb (2)
-Message-ID: <ZGXVANMhn5j/jObU@ls3530>
-References: <0000000000004a222005fbf00461@google.com>
+        Thu, 18 May 2023 03:36:03 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on0608.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe0d::608])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E757ED;
+        Thu, 18 May 2023 00:36:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kegWUeNPS+HXNDNGYD5+YPwNEuKMPRd4k2Ns1A0KvkFRW8z6uCtVx4QGP7t1+dA2t8pYtWGD4Ms3BPBWUzgV2r9B2pYiofFGwrLZ1qOhwpXJR4IP0uM4nnit6sl0CutqkbEUOTUSfLZO3EtwDLNZt6mW7EEa3Nx6w4peUlu6NQx0110eeLhGw1kTaE7xw4KNq2WvuJix7nXYva2sjXdT79hYf+dTBmOgKLgOG2rhJVst5sD5ArgE+iVeZA+wdekTfPX+TCFXXZKo/Tju22krWzeFFpgVDbJLnscfXrMX/WdeDA6iyf5ZQ6Fk0qBbvyLOCdOqsHUIk/O9wACMwQq1Tg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=bS50jy+6G8Uh542JhoewOgeV0UOOmnlryHQvEDD+l6E=;
+ b=Kc6n7lvn5vxZ0EXKwmD4DwObsFnxamsC/x1sBjiC0gsmn86j15n3tV1nsOpfFJyV+spplKK5agwv37liMmqRNX+qANUxuRzuBTzVmNuIzB2xLvr6QbOeCyTKilRg5Enfs0EwTfHWR+MmkQ1U46gzSRZe8H+W20nkkRvA1iaFhiBdfT6biA0AvWiIWVs4gyxfO5t3VAZguKx6lWriZvWi7aUkA9BU/OtYSu7+NMQgNoQxX60KDaDu2FFMN4x2Nscf4h5BvCAIGTtMJVYC1fXQar6N2pJQOsUkpu9nOLShWQVHulce122k7lmOSVwfHzj4U//qVxGLhHPJEXoglmXz6g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=bS50jy+6G8Uh542JhoewOgeV0UOOmnlryHQvEDD+l6E=;
+ b=i7VD8MxuA3rMUwWNEeReNnpOU+225ZyITt8uMvxZB5QYKonowMOFJwFlsM0673VNbRIsSA122MaS1LGpd/2OzP0QSbb+pzPMaswRdcV8i5sIhoSUc9v3ohCuntyqeH9OBh9X1gSRjPsq1S9V6iL6UjmahmbvhdPW4C0KX//0+N0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM9PR04MB8603.eurprd04.prod.outlook.com (2603:10a6:20b:43a::10)
+ by AS1PR04MB9479.eurprd04.prod.outlook.com (2603:10a6:20b:4d7::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33; Thu, 18 May
+ 2023 07:35:58 +0000
+Received: from AM9PR04MB8603.eurprd04.prod.outlook.com
+ ([fe80::9dc3:f8ac:24c4:9f49]) by AM9PR04MB8603.eurprd04.prod.outlook.com
+ ([fe80::9dc3:f8ac:24c4:9f49%6]) with mapi id 15.20.6411.019; Thu, 18 May 2023
+ 07:35:58 +0000
+From:   Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
+To:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        ilpo.jarvinen@linux.intel.com
+Cc:     linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        amitkumar.karwar@nxp.com, rohit.fule@nxp.com, sherry.sun@nxp.com,
+        neeraj.sanjaykale@nxp.com
+Subject: [PATCH v2] Bluetooth: btnxpuart: Fix compiler warnings
+Date:   Thu, 18 May 2023 13:05:40 +0530
+Message-Id: <20230518073540.2473673-1-neeraj.sanjaykale@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2P153CA0050.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c6::19)
+ To AM9PR04MB8603.eurprd04.prod.outlook.com (2603:10a6:20b:43a::10)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000004a222005fbf00461@google.com>
-X-Provags-ID: V03:K1:zUPAArKGm/akodQZev5TT6+LSpI5YI8YKdFYXuQvLW+d25TdLpO
- AiDNmIid9kSsAswtadv+D5hcPd2HAwUgjJMhHWJ2Lj/vvbKONOX3OgPg632rvOnlZYsqtSz
- VXA0BX5qOQlJTQpLwxh528FF+zHjsQERAbX92PlkSSrbIBLpCQkwuUue1VqjCBbPMpPCRKL
- O+i3QhySsy2Po63To/sdQ==
-UI-OutboundReport: notjunk:1;M01:P0:ICelvk08EVc=;6E8igwb3dFTHD/FtKRA4efw+6S1
- PVOPtNEArRckGAnQHSJcT+eAVGKOkJo27ZCGxgCvWEFhrm3qltGr6ab1CIcQsons3EyJxwOew
- 1WPS7i86IgE4XX7Ltl0EK81Ggq5xYOXu42iVj5AdlEzoJE6HdPm61sTeMMP74ADwil2qJcI+U
- IrISHQyC6njvLrqGfWrve6kRWD+3ZgEZImKVIVeGsNMTU018HEMkcwGvdyGlLDxlpAhvsujI1
- D3hSNGKJRuyiC4alwaTJJ100PyyJ1YLXLRMI1h5lz9OggxQdHrRFuu+dna42WkBZMXvW+QKxD
- mrtLGT2pn53YI83/8KOqDJb7IrCSanYkWBn2Hc+gqgFRCvsK2Nb+UPMc+DqEYIHo4bdEpU+z6
- nHcDJ1/E5JJ8BVcI7skdzx0Oqh3ciHGuas5hwkY6nrSPn62tpA4yBGmhGzj6tTnPsVKzLQ/X5
- ZrgnPcOKwUNvXr8KFPy5Z95/7z8Mqt2T1rbqBhmGvXYoDR9Nz47Gp/6faPGDmK62zOBgDy156
- SMzGh+64K1pfnixS7eRS68irtQWNwot0o04+29NjpZI0BHLimXVi1XNNM0uLCQOxUltFx65II
- Mj4gSokE5wvWdiuz4i2WVFWBYR0JnU0H/2KzSNj9mc/YR6Z4w0kBhDnKz14P7aVOZJml2E2AT
- ZVKjReq0nJhc+Z67idxbJKhn5JLsL4h+ng+8cxuC4nHRVtUTaYKRce/ZiF4KJjtqt++23KnEW
- TbSm0bMVjKVEmBZu60MWhvilE2Fejovz3e69iYYY/v25otUCmollDPr+ewpZnIFf2TEj+ZauJ
- R2u2RGN3jCH5kuiGoOs7BhUh30bpVkM8tSTQ4dPTsCye1kz811V6YEhgXClod/T5ULvfjSwsT
- WeUDHzTRyh0kxAG+p2HFpI8p7n8l4LkqTAiytFZ38xDZadPJ4eXxAiRienPK4nr/o88uDhodz
- lmU2vw==
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM9PR04MB8603:EE_|AS1PR04MB9479:EE_
+X-MS-Office365-Filtering-Correlation-Id: b71a3dba-8f00-4ad4-de82-08db5772853b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: bwuMQ2z/L2vpiLOqNIPCiBOgviHILEH3Ebr0WIJVrwRd+DAMXsZKXWlkLDMOriDb1WhRBBnHo6IjUvNml3JnUE6oznk/UfP1RX5VTnAXO8PGcCORfe0KyUuNErEsAz8vyFRE8eaQb59TJz6CczJN+SC92CeLNib5ztozYunhSnLyqy6w4cvB2Ex7oDimNuiNSXxgBOEPvnBqPGThcTeMQFd+EhsdeVffQanTHV2PEXMWD9WcmVlFVPCTvkBSnZV5PSQiNCeqC8H84NEcRlRMkjNmsZ02fKzG/L9PelrSrLKEVngBLIhqsCoRqA1jmgNchJO1y14hjoSilTZdknuVqx01p9mPUae7Vc1oQECrK+zZfo3eYsWojg7TVuwtTgIrteNLS02r8j0zTFA7aFSXxD9Ir6tUo37FoBJqTh7dvTZJT8RNQOUKPdGNENPitrc8bS0kUc+KsEgcpyIPYNc7SCSemk/gRUZf57hu9JoLrphBL4mdurbC5XlulZ9eUEg2wZoGDqA1nlMdfBzP7jfUkxAbx84oTw4/50CRcNTryBLeMtiVyKqpQDOZcC7L64xOlI4bPQyyplRdsuRU12nEpzdyE42sexD4avGestROme8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8603.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(346002)(376002)(39860400002)(366004)(451199021)(52116002)(316002)(66946007)(478600001)(66476007)(66556008)(966005)(4326008)(86362001)(6486002)(36756003)(83380400001)(26005)(6506007)(6512007)(2616005)(186003)(1076003)(2906002)(5660300002)(6666004)(8936002)(4744005)(8676002)(38100700002)(38350700002)(41300700001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?JKaDF4ztM50DlSqeEUoAgqikzHdjWjxKWz8oF8mvP2t3WLXqAnOQxYwf63ew?=
+ =?us-ascii?Q?Ukp9ZJsnFPJBM1HzuOwqhNnTbczbnNSakv1uRRtY05O50BLFSU9WWS4Gba+z?=
+ =?us-ascii?Q?tXnX8lL0woKN1YsL85dsQN+2dpJCOHNZMaOz32rFN7dU/xQR9uBEQ6U56g4b?=
+ =?us-ascii?Q?gQD2Zlr2ZnYwP0VYXSfqYCGHN6TAg/n4ETiDGkT9NolkO2H0vkVghucUjnwW?=
+ =?us-ascii?Q?qV23ysoo8VDVWRNKcoZNNxBsfvDBQcGkOER0DlHk+naPgiGR4e9alNsmiXS6?=
+ =?us-ascii?Q?QV5PLcLitGakjBKgSS/t5ovNuElF94DhbMULjc7bkTJqP3sgo8IWoHpb/nzS?=
+ =?us-ascii?Q?sIzdYG8npgTiQ/SFowIb5L1xv9LZrT5EiyPpTpzzpgsd5sgR7iv4LiSzBQR/?=
+ =?us-ascii?Q?85wIgzSmhjUmVeVIxYlqY8kU04oY/iHvFCKxUmqhBGGUNVay+jKNRzu4PKNg?=
+ =?us-ascii?Q?/OiqGfgfZAHal1BO93shquf+8I+6tAVLw/c7zRF2uUUK8RyApD3maYbtO9De?=
+ =?us-ascii?Q?WRjykAmUx2dKPG0bkAy4wvJpB63U7X2athzxYlC582R5muIvDcq4IAMP3KY8?=
+ =?us-ascii?Q?oXYNUkgpd9SGZog1Qr+/RJ4GukqOFCKBrAHXK6tKqpPOBSmw/L1QfXo1yAVZ?=
+ =?us-ascii?Q?l2AS0mvadWb9gi45GCR46qq/U0LiNqOBpmPTloozUa+Grm7JcSN7RT4lvvmV?=
+ =?us-ascii?Q?vfbYYyJ/fLEKZsyQG16s9P4Krp8PAJlT5SfSS5IVezBl1I6S/yxgN9C3yxm7?=
+ =?us-ascii?Q?FhtxL9riE55iN8Uw7jXSYNjzYXsebjpfX4jmSps4ALwZDplU4rQx8r4qEmdv?=
+ =?us-ascii?Q?nuJvL3P4hx+1ut15kPP9VdoLjJKl3rTRubEHCiLBQ1HEl/PZIo/Nzu0+51fD?=
+ =?us-ascii?Q?9IJ9V4lv9grOP/tRoXaJw4GCulWrHaZuwc98SC2Ay+5+lkAZm4SLfApScnse?=
+ =?us-ascii?Q?OJZaKhoU17BECfy0aPDeVXLpiEL8pzIRe7Zk3D8clrVJTqgszQr0CJLMp0Q2?=
+ =?us-ascii?Q?lsIqeRqfzDuR8SPOGlI+feWhKDJMHa+ujnwDMRC5kmzh8mdOjkxnaPTYlSDA?=
+ =?us-ascii?Q?JZEhAJGaUtCxoR6aXuBZKU40VOHNPnk9ICV7H3wsDE1mtgi1zE88oGN6xvL7?=
+ =?us-ascii?Q?IQpbviwdYy7L7WCvjr87Ac9K+ugji0UEECnSxHDG6YjhdvwYYtAdpSHzHfJK?=
+ =?us-ascii?Q?kwY7Zf228XFQ3lHB/Cpmty4aL2ONUJx+Fv1X8GiWJj0UM0AoiU0xJb8va/tq?=
+ =?us-ascii?Q?U5nj0yrrUSRlbfblbef1wnXZFz4rCE+hEI5RWOZPbAUHeGlE8rY4sIcwdZwi?=
+ =?us-ascii?Q?vhWRXbckWZq8mVK5NGSeuI9E9RLJQpUBvRahwa8YYRcHz96IyEq7X186CYN9?=
+ =?us-ascii?Q?A4YVFRUQqPcyuBJtFzJNHOomg5xy3UvopwS0WEYSuDQwRyqiXh4htgPQJ4Dn?=
+ =?us-ascii?Q?WX9WzT3Ia3ZLY/dmHKuu26+12Yde4rLKWWiozudDRDcIkqmzF6A9dbridSjv?=
+ =?us-ascii?Q?syw6udnoE+gB13iU0XosyfcgimzsqO/AdMZjlo2+AbqrD0s4bee3xmc2eAbi?=
+ =?us-ascii?Q?Al1tGcnswRAInfbAa9bE20ZqWyOVvvJdxCfpVhhsxtjPvw2RD57TJdguBQGg?=
+ =?us-ascii?Q?3g=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b71a3dba-8f00-4ad4-de82-08db5772853b
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8603.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2023 07:35:57.9821
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5Fr/zb/uJ/HHFTezDnP3lsaPLYR+AWbpZ8PivHwfceFNAOgV7DTGHTY3damKI38GhXAPum4hoSuLiaCWTj6zdnFqXVo9ej8gZ7g+6T1oHqA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR04MB9479
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* syzbot <syzbot+0e22d63dcebb802b9bc8@syzkaller.appspotmail.com>:
-> syzbot found the following issue on:
->
-> HEAD commit:    a4422ff22142 usb: typec: qcom: Add Qualcomm PMIC Type-C =
-dr..
-> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/u=
-sb.git usb-testing
-> console output: https://syzkaller.appspot.com/x/log.txt?x=3D152455662800=
-00
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D2414a945e454=
-2ec1
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3D0e22d63dcebb80=
-2b9bc8
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binut=
-ils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D1720fd3a28=
-0000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D171a73ea2800=
-00
->
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/414817142fb7/di=
-sk-a4422ff2.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/448dba0d344e/vmlin=
-ux-a4422ff2.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/d0ad9fe848e2/=
-bzImage-a4422ff2.xz
->
-> IMPORTANT: if you fix the issue, please add the following tag to the com=
-mit:
-> Reported-by: syzbot+0e22d63dcebb802b9bc8@syzkaller.appspotmail.com
->
-> usb 1-1: Read EDID byte 0 failed: -71
-> usb 1-1: Unable to get valid EDID from device/display
-> ------------[ cut here ]------------
-> usb 1-1: BOGUS urb xfer, pipe 3 !=3D type 1
-> WARNING: CPU: 0 PID: 9 at drivers/usb/core/urb.c:504 usb_submit_urb+0xed=
-6/0x1880 drivers/usb/core/urb.c:504
-> Modules linked in:
-> CPU: 0 PID: 9 Comm: kworker/0:1 Not tainted 6.4.0-rc1-syzkaller-00016-ga=
-4422ff22142 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS =
-Google 04/28/2023
-> Workqueue: usb_hub_wq hub_event
-> RIP: 0010:usb_submit_urb+0xed6/0x1880 drivers/usb/core/urb.c:504
-> Code: 7c 24 18 e8 7c dc 5a fd 48 8b 7c 24 18 e8 42 ca 0b ff 41 89 d8 44 =
-89 e1 4c 89 ea 48 89 c6 48 c7 c7 60 34 cc 86 e8 0a fa 25 fd <0f> 0b e9 58 =
-f8 ff ff e8 4e dc 5a fd 48 81 c5 b8 05 00 00 e9 84 f7
-> RSP: 0018:ffffc9000009ed48 EFLAGS: 00010282
-> RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
-> RDX: ffff888103650000 RSI: ffffffff81163677 RDI: 0000000000000001
-> RBP: ffff88810cb32940 R08: 0000000000000001 R09: 0000000000000000
-> R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000003
-> R13: ffff88810cf426b8 R14: 0000000000000003 R15: ffff888104272100
-> FS:  0000000000000000(0000) GS:ffff8881f6600000(0000) knlGS:000000000000=
-0000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000562147be3b70 CR3: 0000000110380000 CR4: 00000000003506f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  dlfb_submit_urb+0x92/0x180 drivers/video/fbdev/udlfb.c:1980
->  dlfb_set_video_mode+0x21f0/0x2950 drivers/video/fbdev/udlfb.c:315
->  dlfb_ops_set_par+0x2a7/0x8d0 drivers/video/fbdev/udlfb.c:1111
->  dlfb_usb_probe+0x149a/0x2710 drivers/video/fbdev/udlfb.c:1743
->  usb_probe_interface+0x30f/0x960 drivers/usb/core/driver.c:396
->  call_driver_probe drivers/base/dd.c:579 [inline]
->  really_probe+0x240/0xca0 drivers/base/dd.c:658
->  __driver_probe_device+0x1df/0x4b0 drivers/base/dd.c:800
->  driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
->  __device_attach_driver+0x1d4/0x2e0 drivers/base/dd.c:958
->  bus_for_each_drv+0x149/0x1d0 drivers/base/bus.c:457
->  __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1030
->  bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
->  device_add+0x112d/0x1a40 drivers/base/core.c:3625
->  usb_set_configuration+0x1196/0x1bc0 drivers/usb/core/message.c:2211
->  usb_generic_driver_probe+0xcf/0x130 drivers/usb/core/generic.c:238
->  usb_probe_device+0xd8/0x2c0 drivers/usb/core/driver.c:293
->  call_driver_probe drivers/base/dd.c:579 [inline]
->  really_probe+0x240/0xca0 drivers/base/dd.c:658
->  __driver_probe_device+0x1df/0x4b0 drivers/base/dd.c:800
->  driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
->  __device_attach_driver+0x1d4/0x2e0 drivers/base/dd.c:958
->  bus_for_each_drv+0x149/0x1d0 drivers/base/bus.c:457
->  __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1030
->  bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
->  device_add+0x112d/0x1a40 drivers/base/core.c:3625
->  usb_new_device+0xcb2/0x19d0 drivers/usb/core/hub.c:2575
->  hub_port_connect drivers/usb/core/hub.c:5407 [inline]
->  hub_port_connect_change drivers/usb/core/hub.c:5551 [inline]
->  port_event drivers/usb/core/hub.c:5711 [inline]
->  hub_event+0x2e3d/0x4ed0 drivers/usb/core/hub.c:5793
->  process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
->  worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
->  kthread+0x344/0x440 kernel/kthread.c:379
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+This fixes a compiler warning reported by kernel test robot.
 
-I think this is an informational warning from the USB stack,
-since the syzbot usb device doesn't behave as expected.
+Signed-off-by: Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/oe-kbuild-all/202305161345.eClvTYQ9-lkp@intel.com/
+---
+ drivers/bluetooth/btnxpuart.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-What happens with this patch applied?
+diff --git a/drivers/bluetooth/btnxpuart.c b/drivers/bluetooth/btnxpuart.c
+index 3a34d7c1475b..ba8093367f9a 100644
+--- a/drivers/bluetooth/btnxpuart.c
++++ b/drivers/bluetooth/btnxpuart.c
+@@ -1319,6 +1319,7 @@ static void nxp_serdev_remove(struct serdev_device *serdev)
+ 	hci_free_dev(hdev);
+ }
+ 
++#ifdef CONFIG_OF
+ static struct btnxpuart_data w8987_data = {
+ 	.helper_fw_name = NULL,
+ 	.fw_name = FIRMWARE_W8987,
+@@ -1335,6 +1336,7 @@ static const struct of_device_id nxpuart_of_match_table[] = {
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, nxpuart_of_match_table);
++#endif
+ 
+ static struct serdev_device_driver nxp_serdev_driver = {
+ 	.probe = nxp_serdev_probe,
+-- 
+2.34.1
 
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git =
-usb-testing
-
-diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
-index 9f3c54032556..dd77b9e757da 100644
-=2D-- a/drivers/usb/core/urb.c
-+++ b/drivers/usb/core/urb.c
-@@ -501,7 +501,7 @@ int usb_submit_urb(struct urb *urb, gfp_t mem_flags)
-
- 	/* Check that the pipe's type matches the endpoint's type */
- 	if (usb_pipe_type_check(urb->dev, urb->pipe))
--		dev_WARN(&dev->dev, "BOGUS urb xfer, pipe %x !=3D type %x\n",
-+		printk("BOGUS urb xfer, pipe %x !=3D type %x (hardware misbehaviour?)\n=
-",
- 			usb_pipetype(urb->pipe), pipetypes[xfertype]);
-
- 	/* Check against a simple/standard policy */
-
-Helge
