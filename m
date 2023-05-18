@@ -2,145 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AA20707C86
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:13:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74A5E707C8C
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:15:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230041AbjERJNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 05:13:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44738 "EHLO
+        id S230108AbjERJPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 05:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbjERJNa (ORCPT
+        with ESMTP id S229985AbjERJPB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 05:13:30 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F30A1FE6;
-        Thu, 18 May 2023 02:13:28 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7DD8B6605942;
-        Thu, 18 May 2023 10:13:25 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684401206;
-        bh=8uYZao2Gz/azmiXJrOpzRQOcMD2LDe0Wm+O2Lm2g7iQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=TkJkfi/ThVubzoWNirgKKz5OWpZRClL0L32odQhqkK+CicD/6VpS1ppZbjUw9+d4A
-         E2VK/TtBwzqtMbPaltZDLQQKAganjQWKb/4sXU6RVOajVOTAI/NjS5dXOsVKq/6TUn
-         0BH76JtPMHqUyFGuQSFxlh2Emrz1w54SN4mG5TGSGM+Crdfuyq11AjZroujKvFAeD5
-         Wli8zM/wssawdhRe0Zm3LSIGgJNHJTYuRdlmSG5+P53jYc90E3MXL6qXo+xGt4uGHg
-         dhaLW3HwSfJTigc5+j7curd6xZV9fTMX+hcoBxu7HmVoMH10oxt+hyjmdffSpWe1ZU
-         UesehU5oMYX2g==
-Message-ID: <0df3968e-da34-b36c-4cb4-92d66508a46a@collabora.com>
-Date:   Thu, 18 May 2023 11:13:22 +0200
+        Thu, 18 May 2023 05:15:01 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0F81FDC
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 02:15:00 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1ae454844edso13732955ad.1
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 02:15:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684401300; x=1686993300;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AEruk6lgv2UDdUrR3IRiS7raiUqRukdhzsBT0y7QWd8=;
+        b=ncwIvPQ3tpE5ajVR5XQ9ZcmF3F9Lx43OHj/zr3p2G6dINoM6/uTDxjVkP3ILiSxU3s
+         m5kzXXYADsCz5VHt+Z0yAi/YqcTYSC7gHPof3iAv8cwJCEcHtxo+w90JmhmvxjFY+W80
+         7RXmwGKpYjyCodNhLI4k6IsugXMbIrX9+iP9V4+sggfWyjPHclN3cT46Lkm69qI9F2Ry
+         l3tAHFHXJ/k4hHqcv8+YzkpFuiddRQFlikw11Jlg1wJQ6Wrvlq6PdRDnOiDBgqYLlVvn
+         6rkChuhF85AgL3WgKUgnQT/Cn87I7mY0bHgeR6WqLnQm6n/CT7/X96L0yi3qQausmjV9
+         3ijw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684401300; x=1686993300;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AEruk6lgv2UDdUrR3IRiS7raiUqRukdhzsBT0y7QWd8=;
+        b=g8/ajyCTSTtc2RbjXDNxl016GsENgjEPP9SyNs4oixZee3CBbR+OhJnRgWbVf+nlrz
+         320fiB3jwTx0ZCqcEXskbvBPZo3yoc32OY5RgAON4a6JWtMNE8mVbx0v2M2FqV2gZ0Tp
+         exAgSzWklojqtLzNZSC7rgNafVVt4B5j6KIb9RwQb7MRgC4GZOG7o+7XfoL1m/G7XUTn
+         SHHDN70FDAyqSf+6CXPpCwkrNmJId9l/Rl2/1MmSHlgLAuC/dIIHOUIJUKs2J+KYIzm3
+         Z/Ev32T9lehcmXf/qkS3ZUIxrLT+jDx+jsow56kArO9dTksdqztXqUTTn0SMz/fmcpa3
+         8Fww==
+X-Gm-Message-State: AC+VfDz7Gwtt8bP3a8u663gjIszI+7yToFN7VIXr5b1Zg0Z8b5bn0xlu
+        azPpKIwPgmLpAsnbmULkEWsP2V2vkf4=
+X-Google-Smtp-Source: ACHHUZ64T69OZGxvcLDXuWD9MHO2gQBxdaNNrGFsoDTvXmb5t5tX/2op+M9sjq47xxxrxPO1JHzvag==
+X-Received: by 2002:a17:902:ced1:b0:1ad:e099:fbf9 with SMTP id d17-20020a170902ced100b001ade099fbf9mr1805522plg.42.1684401300135;
+        Thu, 18 May 2023 02:15:00 -0700 (PDT)
+Received: from localhost.localdomain ([45.43.34.98])
+        by smtp.gmail.com with ESMTPSA id 12-20020a170902c14c00b001ae4c498d29sm862165plj.265.2023.05.18.02.14.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 May 2023 02:14:59 -0700 (PDT)
+From:   Yuwei Guan <ssawgyw@gmail.com>
+To:     rppt@kernel.org, akpm@linux-foundation.org, tsahu@linux.ibm.com,
+        anshuman.khandual@arm.com
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Yuwei Guan <ssawgyw@gmail.com>
+Subject: [PATCH v3] memblock: Add flags and nid info in memblock debugfs
+Date:   Thu, 18 May 2023 17:14:31 +0800
+Message-Id: <20230518091431.299-1-ssawgyw@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v2] mmc: mtk-sd: reduce CIT for better performance
-To:     Wenbin Mei <wenbin.mei@mediatek.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Chaotian Jing <chaotian.jing@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20230510015851.11830-1-wenbin.mei@mediatek.com>
-Content-Language: en-US
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230510015851.11830-1-wenbin.mei@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 10/05/23 03:58, Wenbin Mei ha scritto:
-> CQHCI_SSC1 indicates to CQE the polling period to use when using periodic
-> SEND_QUEUE_STATUS(CMD13) polling.
-> The default value 0x1000 that corresponds to 150us, let's decrease it to
+Currently, the memblock debugfs can display the count of memblock_type and
+the base and end of the reg. However, when memblock_mark_*() or
+memblock_set_node() is executed on some range, the information in the
+existing debugfs cannot make it clear why the address is not consecutive.
 
-The default value 0x1000 (4096) corresponds to 4096 * 52.08uS = 231.33uS
-...so the default is not 150uS.
+For example,
+cat /sys/kernel/debug/memblock/memory
+   0: 0x0000000080000000..0x00000000901fffff
+   1: 0x0000000090200000..0x00000000905fffff
+   2: 0x0000000090600000..0x0000000092ffffff
+   3: 0x0000000093000000..0x00000000973fffff
+   4: 0x0000000097400000..0x00000000b71fffff
+   5: 0x00000000c0000000..0x00000000dfffffff
+   6: 0x00000000e2500000..0x00000000f87fffff
+   7: 0x00000000f8800000..0x00000000fa7fffff
+   8: 0x00000000fa800000..0x00000000fd3effff
+   9: 0x00000000fd3f0000..0x00000000fd3fefff
+  10: 0x00000000fd3ff000..0x00000000fd7fffff
+  11: 0x00000000fd800000..0x00000000fd901fff
+  12: 0x00000000fd902000..0x00000000fd909fff
+  13: 0x00000000fd90a000..0x00000000fd90bfff
+  14: 0x00000000fd90c000..0x00000000ffffffff
+  15: 0x0000000880000000..0x0000000affffffff
 
-If I'm wrong, this means that the CQCAP field is not 0, which would mean
-that the expected 3uS would be wrong.
+So we can add flags and nid to this debugfs.
 
-Also, since the calculation can be done dynamically, this is what we should
-actually do in the driver, as this gives information to the next engineer
-checking this piece of code.
+For example,
+cat /sys/kernel/debug/memblock/memory
+   0: 0x0000000080000000..0x00000000901fffff     NONE    0
+   1: 0x0000000090200000..0x00000000905fffff    NOMAP    0
+   2: 0x0000000090600000..0x0000000092ffffff     NONE    0
+   3: 0x0000000093000000..0x00000000973fffff    NOMAP    0
+   4: 0x0000000097400000..0x00000000b71fffff     NONE    0
+   5: 0x00000000c0000000..0x00000000dfffffff     NONE    0
+   6: 0x00000000e2500000..0x00000000f87fffff     NONE    0
+   7: 0x00000000f8800000..0x00000000fa7fffff    NOMAP    0
+   8: 0x00000000fa800000..0x00000000fd3effff     NONE    0
+   9: 0x00000000fd3f0000..0x00000000fd3fefff    NOMAP    0
+  10: 0x00000000fd3ff000..0x00000000fd7fffff     NONE    0
+  11: 0x00000000fd800000..0x00000000fd901fff    NOMAP    0
+  12: 0x00000000fd902000..0x00000000fd909fff     NONE    0
+  13: 0x00000000fd90a000..0x00000000fd90bfff    NOMAP    0
+  14: 0x00000000fd90c000..0x00000000ffffffff     NONE    0
+  15: 0x0000000880000000..0x0000000affffffff     NONE    0
 
-Apart from this, by just writing 0x40 to the CQHCI_SSC1 register, you are
-assuming that the CQCAP value requirement is fullfilled, but you cannot
-assume that the bootloader has set the CQCAP's ITCFVAL and ITCFMUL fields
-as you expect on all platforms: this means that implementing this takes
-a little more effort.
+Signed-off-by: Yuwei Guan <ssawgyw@gmail.com>
+---
+v3:
+- show string value for each memblock flag
+---
+ mm/memblock.c | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-You have two ways to implement this:
-  *** First ***
-  1. Read ITCFMUL and ITCFVAL, then:
-     tclk_mul = itcfmul_to_mhz(ITCFMUL); /* pseudo function interprets reg value*/
-     tclk = ITCFVAL * tclk_mul;
-
-  2. Set SSC1 so that we get 3nS:
-     #define CQHCI_SSC1_CIT GENMASK(15, 0)
-     poll_time = cit_time_ns_to_regval(3);
-     sscit = FIELD_PREP(CQHCI_SSC1_CIT, poll_time)
-     cqhci_writel( ... )
-
-  *** Second **
-
-  1. Pre-set ITCFMUL and ITCFVAL to
-     ITCFVAL = 192 (decimal)
-     ITCFMUL = 2 (where 2 == 0.1MHz)
-
-  2. Set SSC1 so that we get 3nS:
-     #define CQHCI_SSC1_CIT GENMASK(15, 0)
-     poll_time = cit_time_ns_to_regval(3);
-     sscit = FIELD_PREP(CQHCI_SSC1_CIT, poll_time)
-     cqhci_writel( ... )
-
-I would implement the first way, as it paves the way to extend this to different
-tclk values if needed in the future.
-
-Regards,
-Angelo
-
-> 0x40 that corresponds to 3us, which can improve the performance of some
-> eMMC devices.
-> 
-> Signed-off-by: Wenbin Mei <wenbin.mei@mediatek.com>
-> ---
->   drivers/mmc/host/mtk-sd.c | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/mmc/host/mtk-sd.c b/drivers/mmc/host/mtk-sd.c
-> index edade0e54a0c..ffeccddcd028 100644
-> --- a/drivers/mmc/host/mtk-sd.c
-> +++ b/drivers/mmc/host/mtk-sd.c
-> @@ -2453,6 +2453,7 @@ static void msdc_hs400_enhanced_strobe(struct mmc_host *mmc,
->   static void msdc_cqe_enable(struct mmc_host *mmc)
->   {
->   	struct msdc_host *host = mmc_priv(mmc);
-> +	struct cqhci_host *cq_host = mmc->cqe_private;
->   
->   	/* enable cmdq irq */
->   	writel(MSDC_INT_CMDQ, host->base + MSDC_INTEN);
-> @@ -2462,6 +2463,9 @@ static void msdc_cqe_enable(struct mmc_host *mmc)
->   	msdc_set_busy_timeout(host, 20 * 1000000000ULL, 0);
->   	/* default read data timeout 1s */
->   	msdc_set_timeout(host, 1000000000ULL, 0);
-> +
-> +	/* decrease the send status command idle timer to 3us */
-> +	cqhci_writel(cq_host, 0x40, CQHCI_SSC1);
->   }
->   
->   static void msdc_cqe_disable(struct mmc_host *mmc, bool recovery)
+diff --git a/mm/memblock.c b/mm/memblock.c
+index 511d4783dcf1..5fba53f98b2d 100644
+--- a/mm/memblock.c
++++ b/mm/memblock.c
+@@ -2143,13 +2143,23 @@ static int memblock_debug_show(struct seq_file *m, void *private)
+ 	struct memblock_region *reg;
+ 	int i;
+ 	phys_addr_t end;
++	static const char flagname[BITS_PER_LONG][8] = {
++		[0 ... (BITS_PER_LONG-1)] = "?",
++
++		[ilog2(MEMBLOCK_HOTPLUG)] = "HOTPLUG",
++		[ilog2(MEMBLOCK_MIRROR)] = "MIRROR",
++		[ilog2(MEMBLOCK_NOMAP)] = "NOMAP",
++		[ilog2(MEMBLOCK_DRIVER_MANAGED)] = "DRV_MNG",
++	};
+ 
+ 	for (i = 0; i < type->cnt; i++) {
+ 		reg = &type->regions[i];
+ 		end = reg->base + reg->size - 1;
+ 
+ 		seq_printf(m, "%4d: ", i);
+-		seq_printf(m, "%pa..%pa\n", &reg->base, &end);
++		seq_printf(m, "%pa..%pa ", &reg->base, &end);
++		seq_printf(m, "%8s ", reg->flags ? flagname[ilog2(reg->flags)] : "NONE");
++		seq_printf(m, "%4d\n", memblock_get_region_node(reg));
+ 	}
+ 	return 0;
+ }
+-- 
+2.34.1
 
