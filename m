@@ -2,209 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B251707815
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 04:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F29F4707818
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 04:35:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbjERCel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 22:34:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34162 "EHLO
+        id S229652AbjERCfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 22:35:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjERCek (ORCPT
+        with ESMTP id S229591AbjERCfM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 22:34:40 -0400
-Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E5CE2708
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 19:34:38 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:48126)
-        by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1pzTTO-00E22Y-OV; Wed, 17 May 2023 20:34:34 -0600
-Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:42960 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1pzTTN-00BSST-AS; Wed, 17 May 2023 20:34:34 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Mike Christie <michael.christie@oracle.com>
-Cc:     oleg@redhat.com, linux@leemhuis.info, nicolas.dichtel@6wind.com,
-        axboe@kernel.dk, torvalds@linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, mst@redhat.com,
-        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
-        brauner@kernel.org
-References: <20230518000920.191583-1-michael.christie@oracle.com>
-        <20230518000920.191583-2-michael.christie@oracle.com>
-Date:   Wed, 17 May 2023 21:34:01 -0500
-In-Reply-To: <20230518000920.191583-2-michael.christie@oracle.com> (Mike
-        Christie's message of "Wed, 17 May 2023 19:09:13 -0500")
-Message-ID: <87mt22l65i.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 17 May 2023 22:35:12 -0400
+Received: from mail-yw1-x1141.google.com (mail-yw1-x1141.google.com [IPv6:2607:f8b0:4864:20::1141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBD87271C;
+        Wed, 17 May 2023 19:35:11 -0700 (PDT)
+Received: by mail-yw1-x1141.google.com with SMTP id 00721157ae682-55a8e9e2c53so14100597b3.1;
+        Wed, 17 May 2023 19:35:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684377311; x=1686969311;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wVYu0Kdniu+LeyAgJA6DxqCaT7Y/4cXtb7QYlDhpbAo=;
+        b=aBCcK89w/zLXN5wAjxL34JR8mtN28L8xm9l1r5uF4mA68Wps5/kT5yrrRkL1hlFTT9
+         1hsdDN8tQN5uKXhXbW3A4jKYZJ+wwIseS7IDv+DbOF7BTLajLBecWJis4J94xejHLMVG
+         JoGxsHxXn9QuEbMUMullhLAu1tRbmKsYnEcsmV/DW2KbZq/PXXlRuZUYLT7RhoZoDsZ5
+         HDeDqZsoFSaa8LTvfQpztCniK9BcB6iJ8zxmcZBasvCfG1Nw9SnlAY6I6zSzkIFfKb5a
+         It/sJ7+ruku/GhIKVWSyDSA5tC79U39QcHn7Wh5guyGHFNz8XZtKe2/Gq/2x5757LeDf
+         sm2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684377311; x=1686969311;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wVYu0Kdniu+LeyAgJA6DxqCaT7Y/4cXtb7QYlDhpbAo=;
+        b=MkTRyr26jvnzgRnlaoPIEzPeWb7eY3eLuQwxtqRsJt5tAfpmUKKPgNnklPuVaOfRlX
+         4FoVLfeAxXG3ZhvYewhc43G/dwYZMHZXPrQTOCejpMKhoYUB32i76pD2+2eMZCuNhoQx
+         DpoMlo/ukWMeoUuIb0jzRLEH8hjfy4Dc1z+4p10F8bKZwPjKcbQ/Z3fQnDc46nCGutbv
+         GCM5OadEfvaMarCClNhSr0jD9OR889G3rVw6yRKPZ+oaVVXOwIxFdPAdzjH7wTh5KQe8
+         NU18QFe1v69ss9vFqrpbQv8r9GJo+hATEzMhc5DYNHt8hpUb1cG4pO+/FVXs3pMM6hqI
+         pRXg==
+X-Gm-Message-State: AC+VfDyJMreTOKItWQzAgYygT4yjRejLUtaZvNr7VIJ3yuXT0B/+3pFY
+        JjulzQs0HYYB+BaI2zfjJsIyH00AL4AyMYlJngLhYjfCXy9t+yYX
+X-Google-Smtp-Source: ACHHUZ5woWaegw7WkNe3DS8eKpU3rIA7TCmW6RrJrL9oa4rwSu5LiF7GQ59UVDeupoUBMBCnLxR8XBHmGcORNCDxtmI=
+X-Received: by 2002:a81:7d55:0:b0:54f:752e:9b63 with SMTP id
+ y82-20020a817d55000000b0054f752e9b63mr194146ywc.15.1684377310756; Wed, 17 May
+ 2023 19:35:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1pzTTN-00BSST-AS;;;mid=<87mt22l65i.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=pass
-X-XM-AID: U2FsdGVkX18mx5PgcJMNNWl7RPzJ+HESs6gEuy+ye7o=
-X-SA-Exim-Connect-IP: 68.110.29.46
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+References: <20230517124201.441634-1-imagedong@tencent.com>
+ <20230517124201.441634-4-imagedong@tencent.com> <CANn89iKLf=V664AsUYC52h_q-xjEq9xC3KqTq8q+t262T91qVQ@mail.gmail.com>
+In-Reply-To: <CANn89iKLf=V664AsUYC52h_q-xjEq9xC3KqTq8q+t262T91qVQ@mail.gmail.com>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Thu, 18 May 2023 10:34:59 +0800
+Message-ID: <CADxym3a0gmzmD3Vwu_shoJnAHm-xjD5tJRuKwTvAXnVk_H55AA@mail.gmail.com>
+Subject: Re: [PATCH net-next 3/3] net: tcp: handle window shrink properly
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     kuba@kernel.org, davem@davemloft.net, pabeni@redhat.com,
+        dsahern@kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Menglong Dong <imagedong@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa07 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: **;Mike Christie <michael.christie@oracle.com>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 839 ms - load_scoreonly_sql: 0.05 (0.0%),
-        signal_user_changed: 10 (1.2%), b_tie_ro: 8 (1.0%), parse: 1.19 (0.1%),
-         extract_message_metadata: 6 (0.7%), get_uri_detail_list: 3.4 (0.4%),
-        tests_pri_-2000: 3.5 (0.4%), tests_pri_-1000: 2.5 (0.3%),
-        tests_pri_-950: 1.24 (0.1%), tests_pri_-900: 1.04 (0.1%),
-        tests_pri_-200: 0.85 (0.1%), tests_pri_-100: 8 (1.0%), tests_pri_-90:
-        375 (44.7%), check_bayes: 372 (44.4%), b_tokenize: 10 (1.2%),
-        b_tok_get_all: 8 (1.0%), b_comp_prob: 3.0 (0.4%), b_tok_touch_all: 347
-        (41.4%), b_finish: 0.94 (0.1%), tests_pri_0: 407 (48.5%),
-        check_dkim_signature: 0.57 (0.1%), check_dkim_adsp: 2.7 (0.3%),
-        poll_dns_idle: 1.02 (0.1%), tests_pri_10: 3.2 (0.4%), tests_pri_500:
-        10 (1.2%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [RFC PATCH 1/8] signal: Dequeue SIGKILL even if
- SIGNAL_GROUP_EXIT/group_exec_task is set
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mike Christie <michael.christie@oracle.com> writes:
-
-> This has us deqeue SIGKILL even if SIGNAL_GROUP_EXIT/group_exec_task is
-> set when we are dealing with PF_USER_WORKER tasks.
-
-> When a vhost_task gets a SIGKILL, we could have outstanding IO in flight.
-> We can easily stop new work/IO from being queued to the vhost_task, but
-> for IO that's already been sent to something like the block layer we
-> need to wait for the response then process it. These type of IO
-> completions use the vhost_task to process the completion so we can't
-> exit immediately.
-
-
-I understand the concern.
-
-> We need to handle wait for then handle those completions from the
-> vhost_task, but when we have a SIGKLL pending, functions like
-> schedule() return immediately so we can't wait like normal. Functions
-> like vhost_worker() degrade to just a while(1); loop.
+On Wed, May 17, 2023 at 10:47=E2=80=AFPM Eric Dumazet <edumazet@google.com>=
+ wrote:
 >
-> This patch has get_signal drop down to the normal code path when
-> SIGNAL_GROUP_EXIT/group_exec_task is set so the caller can still detect
-> there is a SIGKILL but still perform some blocking cleanup.
+> On Wed, May 17, 2023 at 2:42=E2=80=AFPM <menglong8.dong@gmail.com> wrote:
+> >
+> > From: Menglong Dong <imagedong@tencent.com>
+> >
+> > Window shrink is not allowed and also not handled for now, but it's
+> > needed in some case.
+> >
+> > In the origin logic, 0 probe is triggered only when there is no any
+> > data in the retrans queue and the receive window can't hold the data
+> > of the 1th packet in the send queue.
+> >
+> > Now, let's change it and trigger the 0 probe in such cases:
+> >
+> > - if the retrans queue has data and the 1th packet in it is not within
+> > the receive window
+> > - no data in the retrans queue and the 1th packet in the send queue is
+> > out of the end of the receive window
 >
-> Note that in that chunk I'm now bypassing that does:
+> Sorry, I do not understand.
 >
-> sigdelset(&current->pending.signal, SIGKILL);
+> Please provide packetdrill tests for new behavior like that.
 >
-> we look to be ok, because in the places we set SIGNAL_GROUP_EXIT/
-> group_exec_task we are already doing that on the threads in the
-> group.
 
-What you are doing does not make any sense to me.
+Yes. The problem can be reproduced easily.
 
-First there is the semantic non-sense, of queuing something that
-is not a signal.   The per task SIGKILL bit is used as a flag with
-essentially the same meaning as SIGNAL_GROUP_EXIT, reporting that
-the task has been scheduled for exit.
+1. choose a server machine, decrease it's tcp_mem with:
+    echo '1024 1500 2048' > /proc/sys/net/ipv4/tcp_mem
+2. call listen() and accept() on a port, such as 8888. We call
+    accept() looply and without call recv() to make the data stay
+    in the receive queue.
+3. choose a client machine, and create 100 TCP connection
+    to the 8888 port of the server. Then, every connection sends
+    data about 1M.
+4. we can see that some of the connection enter the 0-probe
+    state, but some of them keep retrans again and again. As
+    the server is up to the tcp_mem[2] and skb is dropped before
+    the recv_buf full and the connection enter 0-probe state.
+    Finially, some of these connection will timeout and break.
 
-More so is what happens afterwards.
+With this series, all the 100 connections will enter 0-probe
+status and connection break won't happen. And the data
+trans will recover if we increase tcp_mem or call 'recv()'
+on the sockets in the server.
 
-As I read your patch it is roughly equivalent to doing:
+> Also, such fundamental change would need IETF discussion first.
+> We do not want linux to cause network collapses just because billions
+> of devices send more zero probes.
 
-	if ((current->flags & PF_USER_WORKER) &&
-       	    fatal_signal_pending(current)) {
-		sigdelset(&current->pending.signal, SIGKILL);
-	        clear_siginfo(&ksig->info);
-                ksig->info.si_signo = SIGKILL;
-                ksig->info.si_code = SI_USER;
-                recalc_sigpending();
-		trace_signal_deliver(SIGKILL, &ksig->info,
-			&sighand->action[SIGKILL - 1]);
-                goto fatal;
-	}
+I think it maybe a good idea to make the connection enter
+0-probe, rather than drop the skb silently. What 0-probe
+meaning is to wait for space available when the buffer of the
+receive queue is full. And maybe we can also use 0-probe
+when the "buffer" of "TCP protocol" (which means tcp_mem)
+is full?
 
-Before the "(SIGNAL_GROUP_EXIT || signal->group_exec_task)" test.
+Am I right?
 
-To get that code I stripped the active statements out of the
-dequeue_signal path the code executes after your change below.
-
-I don't get why you are making it though because the code you
-are opting out of does:
-
-		/* Has this task already been marked for death? */
-		if ((signal->flags & SIGNAL_GROUP_EXIT) ||
-		     signal->group_exec_task) {
-			clear_siginfo(&ksig->info);
-			ksig->info.si_signo = signr = SIGKILL;
-			sigdelset(&current->pending.signal, SIGKILL);
-			trace_signal_deliver(SIGKILL, SEND_SIG_NOINFO,
-				&sighand->action[SIGKILL - 1]);
-			recalc_sigpending();
-			goto fatal;
-		}
-
-I don't see what in practice changes, other than the fact that by going
-through the ordinary dequeue_signal path that other signals can be
-processed after a SIGKILL has arrived.  Of course those signal all
-should be blocked.
-
-
-
-
-The trailing bit that expands the PF_IO_WORKER test to be PF_USER_WORKER
-appears reasonable, and possibly needed.
-
-Eric
-
-
-> Signed-off-by: Mike Christie <michael.christie@oracle.com>
-> ---
->  kernel/signal.c | 19 ++++++++++++++-----
->  1 file changed, 14 insertions(+), 5 deletions(-)
->
-> diff --git a/kernel/signal.c b/kernel/signal.c
-> index 8f6330f0e9ca..ae4972eea5db 100644
-> --- a/kernel/signal.c
-> +++ b/kernel/signal.c
-> @@ -2705,9 +2705,18 @@ bool get_signal(struct ksignal *ksig)
->  		struct k_sigaction *ka;
->  		enum pid_type type;
->  
-> -		/* Has this task already been marked for death? */
-> -		if ((signal->flags & SIGNAL_GROUP_EXIT) ||
-> -		     signal->group_exec_task) {
-> +		/*
-> +		 * Has this task already been marked for death?
-> +		 *
-> +		 * If this is a PF_USER_WORKER then the task may need to do
-> +		 * extra work that requires waiting on running work, so we want
-> +		 * to dequeue the signal below and tell the caller its time to
-> +		 * start its exit procedure. When the work has completed then
-> +		 * the task will exit.
-> +		 */
-> +		if (!(current->flags & PF_USER_WORKER) &&
-> +		    ((signal->flags & SIGNAL_GROUP_EXIT) ||
-> +		     signal->group_exec_task)) {
->  			clear_siginfo(&ksig->info);
->  			ksig->info.si_signo = signr = SIGKILL;
->  			sigdelset(&current->pending.signal, SIGKILL);
-> @@ -2861,11 +2870,11 @@ bool get_signal(struct ksignal *ksig)
->  		}
->  
->  		/*
-> -		 * PF_IO_WORKER threads will catch and exit on fatal signals
-> +		 * PF_USER_WORKER threads will catch and exit on fatal signals
->  		 * themselves. They have cleanup that must be performed, so
->  		 * we cannot call do_exit() on their behalf.
->  		 */
-> -		if (current->flags & PF_IO_WORKER)
-> +		if (current->flags & PF_USER_WORKER)
->  			goto out;
->  
->  		/*
+Thanks!
+Menglong Dong
