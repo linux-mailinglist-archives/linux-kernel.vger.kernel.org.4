@@ -2,97 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02092707809
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 04:24:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 635B570780B
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 04:26:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbjERCXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 22:23:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59898 "EHLO
+        id S229549AbjERCZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 22:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbjERCXi (ORCPT
+        with ESMTP id S229552AbjERCZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 22:23:38 -0400
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDE633C26;
-        Wed, 17 May 2023 19:23:23 -0700 (PDT)
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1ae50da739dso10847985ad.1;
-        Wed, 17 May 2023 19:23:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684376603; x=1686968603;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A0HO+zrjQx0EnGmBwSxKYED9w5RWjcQswIihNrV1+/s=;
-        b=Zf9NCC82DJeZNg02XdyvqXmBF684gctyWcQQKNwhZMh17HIJqYx/ZGyfz9BBLuBQKy
-         AQjAuUWs5qoObQJkj9o0yuMLXj+4YeDL6D6SFK4akpzFJRNiSlfrE2FzzcAsxVhWksd6
-         O/+bO9sM0oebqBoTgE97ooA+yYsyhUHWGbGd7ryB2emK4gRLEPCiH6EU5R4FL0v/MPZi
-         ZMmEwgu8wbAxL+QUYyIraYfmMxoKvdQP1r9q+OD2eDhXAgVbyyPBh2EkvhdDng6kfnlA
-         jnpGuAOXYSlbBU7je3PVZA/w0/ZaoswpajWfYwpK6SXINon2DMlzO1DXUkIj1/bhjym2
-         WuLQ==
-X-Gm-Message-State: AC+VfDw3wjxm1bpU3HQOWT+OjB7GpQj9Mv7CHHF4U9BqzOgGInmH8DDI
-        D/ZUPCwPixlVIOWEcGyBlXKpKGOCbQ8=
-X-Google-Smtp-Source: ACHHUZ5v65/veJm9sVIzAkJDP7o32IKI922Z1/Q9bxhyqCvGbAvUdzZp8moIlHPKev+trVh+zhXN6g==
-X-Received: by 2002:a17:902:d48c:b0:1a6:ebc1:c54c with SMTP id c12-20020a170902d48c00b001a6ebc1c54cmr1275890plg.1.1684376603188;
-        Wed, 17 May 2023 19:23:23 -0700 (PDT)
-Received: from [192.168.51.14] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id q3-20020a170902dac300b001ac2c3e436asm69404plx.186.2023.05.17.19.23.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 19:23:22 -0700 (PDT)
-Message-ID: <66906bd5-d73f-af96-bf38-c6aee576fa73@acm.org>
-Date:   Wed, 17 May 2023 19:23:20 -0700
+        Wed, 17 May 2023 22:25:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBABA3C01
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 19:25:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 49A62638BE
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 02:25:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD157C433D2
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 02:25:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684376729;
+        bh=BJ+zBtzidStymX1Xdsl4tnDX+vPeQYRYOTB0T2LRp38=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=WCHPlaknHiGRj9rCq7F41vWTl8o2TVPqZvzvbk5putWNtJGCX/vmNJXK2lW5EO8ZZ
+         9kJo1ZQSpY14g+6QnNC2+k2SClB04WQo8ful1DGFfkXR9pdJ1RVanKpfBfVGpG7+Yh
+         RXuhdSKCHVXyg0LWChtiwxtHnwHyvA4SnUqB2eiRYxGpFB/K6KLpGtG/a9VIvvpp6l
+         dAJ/DtABSenooroFbzCf5jBkWzuFBueeGc1TQ1UOMNX0M2//GKvYCNPEVOJZDd460w
+         zKBpzltZSi9KIa7CP4Osi6uWQ4Ut8/9TnzUAGmwJ0/Kc3wboUdMqVSkcORbi4ckS+Y
+         V7BL8HMeZG6rw==
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-510b4e488e4so2674510a12.3
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 19:25:29 -0700 (PDT)
+X-Gm-Message-State: AC+VfDz9BxQURIDHTDIFkZV4GjyLj7LdSD7MP+MHQPmoCzz/G0dcQfBk
+        M31Mb/YxYX55i1KnYHUa3JdGPKllCd8ck0K+fVI=
+X-Google-Smtp-Source: ACHHUZ5drE9lWsneoeKrXat+THfTJNpI734MDx9OZr8skaG5GNqzYL2Tdyq+myp5Z5grM9LWYhtFo+Kn2wep9HM61Ls=
+X-Received: by 2002:a17:907:2d90:b0:966:40ad:3aec with SMTP id
+ gt16-20020a1709072d9000b0096640ad3aecmr36796716ejc.6.1684376727891; Wed, 17
+ May 2023 19:25:27 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 2/2] ufs: don't use the fair tag sharings
-Content-Language: en-US
-To:     Yu Kuai <yukuai1@huaweicloud.com>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     Ed Tsai <ed.tsai@mediatek.com>, axboe@kernel.dk,
-        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, martin.petersen@oracle.com,
-        stanley.chu@mediatek.com, peter.wang@mediatek.com,
-        chun-hung.wu@mediatek.com, alice.chao@mediatek.com,
-        powen.kao@mediatek.com, naomi.chu@mediatek.com,
-        wsd_upstream@mediatek.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230509065230.32552-1-ed.tsai@mediatek.com>
- <20230509065230.32552-3-ed.tsai@mediatek.com>
- <ZF0K7A6G2cYBjSgn@infradead.org>
- <aa9af9ae-62a4-6469-244c-b5d9106bb044@acm.org>
- <ZF5G5ztMng8Xbd1W@infradead.org>
- <2740ee82-e35f-1cbf-f5d0-373f94eb14a5@acm.org>
- <de3f41a0-b13d-d4f6-765a-19b857bce53e@huaweicloud.com>
- <86065501-ab2e-09b4-71cd-c0b18ede00ed@acm.org>
- <a26e28a6-91e0-e803-749e-2ce957711c64@huaweicloud.com>
- <097caed2-10b3-7cd1-7c06-90f983e5c720@acm.org>
- <f9ccab59-91a1-69d5-6d20-2c6ea0e24b5a@huaweicloud.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <f9ccab59-91a1-69d5-6d20-2c6ea0e24b5a@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <1684292580-2455-1-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1684292580-2455-1-git-send-email-yangtiezhu@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Thu, 18 May 2023 10:25:16 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6wtsFX+EUqzgseNmEW7FJk4b7b_PmcxKBiYu0qdHGwJQ@mail.gmail.com>
+Message-ID: <CAAhV-H6wtsFX+EUqzgseNmEW7FJk4b7b_PmcxKBiYu0qdHGwJQ@mail.gmail.com>
+Subject: Re: [PATCH] LoongArch: Add support to clone a time namespace
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     WANG Xuerui <kernel@xen0n.name>,
+        Christian Brauner <brauner@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/17/23 18:49, Yu Kuai wrote:
-> Currently, fair share from hctx_may_queue() requires two
-> atomic_read(active_queues and active_requests), I think this smoothing
-> method can be placed into get_tag fail path, for example, the more times
-> a disk failed to get tag in a period of time, the more tag this disk can
-> get, and all the information can be updated here(perhaps directly
-> record how many tags a disk can get, then hctx_may_queue() still only
-> require 2 atomic_read()).
+Hi, Tiezhu,
 
-That sounds interesting to me. Do you perhaps plan to implement this 
-approach and to post it as a patch?
+The layout of vdso data (loongarch_vdso_data):
 
-Thanks,
+       struct vdso_pcpu_data pdata[NR_CPUS];
+       struct vdso_data data[CS_BASES];
 
-Bart.
+VDSO_DATA_SIZE is the page aligned size of loongarch_vdso_data, and in
+memory, vdso code is above vdso data.
 
+Then, get_vdso_base() returns the start of vdso code, and
+get_vdso_data() returns the start of vdso data.
+
+In your patch, __arch_get_timens_vdso_data() returns get_vdso_data() +
+PAGE_SIZE, but you don't increase the size of loongarch_vdso_data. The
+result is it returns an address in vdso code.
+
+Now, do you know what the problem is? Or still insist that "I have tested"?
+
+Huacai
+
+On Wed, May 17, 2023 at 11:03=E2=80=AFAM Tiezhu Yang <yangtiezhu@loongson.c=
+n> wrote:
+>
+> When execute the following command to test clone3 on LoongArch:
+>
+>   # cd tools/testing/selftests/clone3 && make && ./clone3
+>
+> we can see the following error info:
+>
+>   # [5719] Trying clone3() with flags 0x80 (size 0)
+>   # Invalid argument - Failed to create new process
+>   # [5719] clone3() with flags says: -22 expected 0
+>   not ok 18 [5719] Result (-22) is different than expected (0)
+>
+> This is because if CONFIG_TIME_NS is not set, but the flag
+> CLONE_NEWTIME (0x80) is used to clone a time namespace, it
+> will return -EINVAL in copy_time_ns().
+>
+> Here is the related code in include/linux/time_namespace.h:
+>
+>   #ifdef CONFIG_TIME_NS
+>   ...
+>   struct time_namespace *copy_time_ns(unsigned long flags,
+>                                       struct user_namespace *user_ns,
+>                                       struct time_namespace *old_ns);
+>   ...
+>   #else
+>   ...
+>   static inline
+>   struct time_namespace *copy_time_ns(unsigned long flags,
+>                                       struct user_namespace *user_ns,
+>                                       struct time_namespace *old_ns)
+>   {
+>           if (flags & CLONE_NEWTIME)
+>                   return ERR_PTR(-EINVAL);
+>
+>           return old_ns;
+>   }
+>   ...
+>   #endif
+>
+> Here is the complete call stack:
+>
+>   clone3()
+>     kernel_clone()
+>       copy_process()
+>         copy_namespaces()
+>           create_new_namespaces()
+>             copy_time_ns()
+>               clone_time_ns()
+>
+> Because CONFIG_TIME_NS depends on GENERIC_VDSO_TIME_NS, select
+> GENERIC_VDSO_TIME_NS to enable CONFIG_TIME_NS to build the real
+> implementation of copy_time_ns() in kernel/time/namespace.c.
+>
+> Additionally, it needs to define some arch dependent functions
+> such as __arch_get_timens_vdso_data(), arch_get_vdso_data() and
+> vdso_join_timens(), then the failed test can be fixed.
+>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+>
+> This is based on 6.4-rc2
+>
+>  arch/loongarch/Kconfig                         |  1 +
+>  arch/loongarch/include/asm/vdso/gettimeofday.h |  7 ++++++
+>  arch/loongarch/kernel/vdso.c                   | 32 ++++++++++++++++++++=
+++++++
+>  3 files changed, 40 insertions(+)
+>
+> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> index d38b066..93b167f 100644
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -80,6 +80,7 @@ config LOONGARCH
+>         select GENERIC_SCHED_CLOCK
+>         select GENERIC_SMP_IDLE_THREAD
+>         select GENERIC_TIME_VSYSCALL
+> +       select GENERIC_VDSO_TIME_NS
+>         select GPIOLIB
+>         select HAS_IOPORT
+>         select HAVE_ARCH_AUDITSYSCALL
+> diff --git a/arch/loongarch/include/asm/vdso/gettimeofday.h b/arch/loonga=
+rch/include/asm/vdso/gettimeofday.h
+> index 7b2cd37..1af88ac 100644
+> --- a/arch/loongarch/include/asm/vdso/gettimeofday.h
+> +++ b/arch/loongarch/include/asm/vdso/gettimeofday.h
+> @@ -94,6 +94,13 @@ static __always_inline const struct vdso_data *__arch_=
+get_vdso_data(void)
+>         return get_vdso_data();
+>  }
+>
+> +#ifdef CONFIG_TIME_NS
+> +static __always_inline
+> +const struct vdso_data *__arch_get_timens_vdso_data(const struct vdso_da=
+ta *vd)
+> +{
+> +       return get_vdso_data() + PAGE_SIZE;
+> +}
+> +#endif
+>  #endif /* !__ASSEMBLY__ */
+>
+>  #endif /* __ASM_VDSO_GETTIMEOFDAY_H */
+> diff --git a/arch/loongarch/kernel/vdso.c b/arch/loongarch/kernel/vdso.c
+> index eaebd2e..cf62103 100644
+> --- a/arch/loongarch/kernel/vdso.c
+> +++ b/arch/loongarch/kernel/vdso.c
+> @@ -14,6 +14,7 @@
+>  #include <linux/random.h>
+>  #include <linux/sched.h>
+>  #include <linux/slab.h>
+> +#include <linux/time_namespace.h>
+>  #include <linux/timekeeper_internal.h>
+>
+>  #include <asm/page.h>
+> @@ -73,6 +74,37 @@ static int __init init_vdso(void)
+>  }
+>  subsys_initcall(init_vdso);
+>
+> +#ifdef CONFIG_TIME_NS
+> +struct vdso_data *arch_get_vdso_data(void *vvar_page)
+> +{
+> +       return (struct vdso_data *)(vvar_page);
+> +}
+> +
+> +/*
+> + * The vvar mapping contains data for a specific time namespace, so when=
+ a
+> + * task changes namespace we must unmap its vvar data for the old namesp=
+ace.
+> + * Subsequent faults will map in data for the new namespace.
+> + *
+> + * For more details see timens_setup_vdso_data().
+> + */
+> +int vdso_join_timens(struct task_struct *task, struct time_namespace *ns=
+)
+> +{
+> +       struct mm_struct *mm =3D task->mm;
+> +       struct vm_area_struct *vma;
+> +
+> +       VMA_ITERATOR(vmi, mm, 0);
+> +
+> +       mmap_read_lock(mm);
+> +       for_each_vma(vmi, vma) {
+> +               if (vma_is_special_mapping(vma, &vdso_info.data_mapping))
+> +                       zap_vma_pages(vma);
+> +       }
+> +       mmap_read_unlock(mm);
+> +
+> +       return 0;
+> +}
+> +#endif
+> +
+>  static unsigned long vdso_base(void)
+>  {
+>         unsigned long base =3D STACK_TOP;
+> --
+> 2.1.0
+>
