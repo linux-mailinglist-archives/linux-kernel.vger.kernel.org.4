@@ -2,130 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38F79708631
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 18:47:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59208708633
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 18:47:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbjERQrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 12:47:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38106 "EHLO
+        id S229691AbjERQrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 12:47:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjERQrR (ORCPT
+        with ESMTP id S229445AbjERQrj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 12:47:17 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6401CF0;
-        Thu, 18 May 2023 09:47:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684428436; x=1715964436;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=eZIiTyret7MDus74XojVEWyZ/KiqME39bi31YIWnNnw=;
-  b=FpD284i00jMAhHPpFqJE6HWk/5e/78BvJ4mL+gXbVgSgrYJDXSI5FDtA
-   AIOVl8sw3PDusym5vDaKJWLh73qhPXK1hCg/RNJ4f8+6i+838p5NqpBRy
-   xZbQgEef6jrylsFfwOUWtE6wgDv6ngg/Ypyj+jxyje8wGo5qDGYAA4QvF
-   Ig5b5bTixORgCvpU3Fi1oyPkzye9WNzvQ7ZCvUXgopfZzFwl2pUlP/hSA
-   DGBwduNKkoLgCNRPbIGlHLxrmDB6Ii+tLsQXI2EMVVW0kiz0AkasTJ41A
-   B8cOtlBX82I3kYEOj+1wNgOJmieU5qdiNlJugn9fGdslRozDQLFmhHgsC
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="354457514"
-X-IronPort-AV: E=Sophos;i="6.00,285,1681196400"; 
-   d="scan'208";a="354457514"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 09:47:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="735164963"
-X-IronPort-AV: E=Sophos;i="6.00,285,1681196400"; 
-   d="scan'208";a="735164963"
-Received: from nithinks-mobl1.amr.corp.intel.com (HELO [10.209.80.104]) ([10.209.80.104])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 09:47:13 -0700
-Message-ID: <3fd73def-4765-d43c-4c2c-e0fb0e2e0516@linux.intel.com>
-Date:   Thu, 18 May 2023 11:47:12 -0500
+        Thu, 18 May 2023 12:47:39 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270C0E6A
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 09:47:35 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-3f39600f9b8so11489721cf.3
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 09:47:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684428454; x=1687020454;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EO246ZqiVBRxZDxMtJpAios9D2U+bi/JcOcYKYzfYJ8=;
+        b=C0SkUL7LTPqYi++TtcB64tB2yY2rMEzGkd4D9JFvGhePfWVTDkxBuKx/m+Hi4c+sDI
+         hthy6WeL3lc3ehF7bnAH2sXSAyXRLjoRbfpr0fYpkylrx6wNHoDwqSJVFZPj9RkEKkbh
+         2/FmwnPZrd/lh5lbL8RpbmOjKrPaqlsOOUbPw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684428454; x=1687020454;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EO246ZqiVBRxZDxMtJpAios9D2U+bi/JcOcYKYzfYJ8=;
+        b=eT+MaQW38WQ6+AYvj0Qf7gW9DMRBGO0ws4NhYM9WYM5fD9u52d8QI3NZ4KakYtmZkv
+         B8fxTwwRkZBz/aiyV3uGdHfs+aBkoSgiq16UDbV1zkACrdFy4IxEVgio5WvSXxAhplU0
+         YApEKtebugjI+EEN5vpWjimYDgcafzQ0oDYkJEH84oUESe3bRkBynQIttM2yDnBnCVCj
+         IwT+nyppD1e0f09Tru5W/vGIf5/R/bDI7afVBoH38qyE3VKv8ncVP1llv+bRh5/Q8nlv
+         I3pwihbkjFFBRV9FULhN052V8pjVJCnbL9UDvaf+OQvOnkTUY1zTvGxODMz8avHZxBuP
+         h7hw==
+X-Gm-Message-State: AC+VfDzGIwJlL2qyfzJnThVOOO4IrpH5StNAdOHyVVEvGb30gWoUluo4
+        iwHy07Y6IOIQu+H1XGVa01LkRPV14VqX5XplxmLg2w==
+X-Google-Smtp-Source: ACHHUZ5C8U/4R0hjO7Jl5obKdU8v3+0pW5C3Prfqf33Ma5bKHHByD+VEYyCANUA7CHqRjEdt9Y7ADQpAwi48muRxbW0=
+X-Received: by 2002:a05:622a:189e:b0:3e6:2e9e:58f1 with SMTP id
+ v30-20020a05622a189e00b003e62e9e58f1mr434517qtc.59.1684428454207; Thu, 18 May
+ 2023 09:47:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH 06/10] mfd: cs42l43: Add support for cs42l43 core driver
-Content-Language: en-US
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>,
-        Charles Keepax <ckeepax@opensource.cirrus.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     broonie@kernel.org, lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        tglx@linutronix.de, maz@kernel.org, linus.walleij@linaro.org,
-        vkoul@kernel.org, lgirdwood@gmail.com,
-        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
-        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
- <20230512122838.243002-7-ckeepax@opensource.cirrus.com>
- <73438e58-bd96-818d-1f43-5681b0d1a1de@linaro.org>
- <20230518102442.GZ68926@ediswmail.ad.cirrus.com>
- <650012a3-b455-8be5-fd6d-d0775e718e6a@linux.intel.com>
- <049c2470-536a-1b1c-9828-7acb4d483309@opensource.cirrus.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <049c2470-536a-1b1c-9828-7acb4d483309@opensource.cirrus.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230515142552.1.I17cae37888be3a8683911991602f18e482e7a621@changeid>
+ <ZGQ9Y+vqWhQLHAQh@google.com> <CAMaBtwHxaevxLY7zWNDU8zbyWx=puLkeeRAjFtovvrA5pjtJ4w@mail.gmail.com>
+ <ZGWBhEMmo2lStTg9@google.com>
+In-Reply-To: <ZGWBhEMmo2lStTg9@google.com>
+From:   Tim Van Patten <timvp@chromium.org>
+Date:   Thu, 18 May 2023 10:47:23 -0600
+Message-ID: <CAMaBtwFtE=vjuhVy7rw9zCe9WV0dRyeBWj88JH2j3bkbh2BkXA@mail.gmail.com>
+Subject: Re: [PATCH] [v9] platform/chrome: cros_ec_lpc: Move host command to prepare/complete
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, robbarnes@google.com,
+        lalithkraj@google.com, rrangel@chromium.org,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        chrome-platform@lists.linux.dev, Garrick Evans <garrick@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 17, 2023 at 7:38=E2=80=AFPM Tzung-Bi Shih <tzungbi@kernel.org> =
+wrote:
+>
+> On Wed, May 17, 2023 at 09:56:59AM -0600, Tim Van Patten wrote:
+> > > I can understand the patch wants to notify EC earlier/later when the =
+system
+> > suspend/resume.  But what is the issue addressed?  What happens if the
+> > measurement of suspend/resume duration is not that accurate?
+> >
+> > Please see the following:
+> > - b/206860487
+> > - https://docs.google.com/document/d/1AgaZmG70bAKhZb-ZMbZT-TyY49zPoKuDD=
+bD61dDBSTQ/edit?disco=3DAAAAws1enlw&usp_dm=3Dfalse
+>
+> I have no permission to access the doc.
 
+Since you work at Google, please request permission to access it, so
+the owners can grant it.
 
-On 5/18/23 11:15, Richard Fitzgerald wrote:
-> 
-> 
-> On 18/05/2023 16:16, Pierre-Louis Bossart wrote:
->>
->>>>> +    ret = regmap_register_patch(cs42l43->regmap, cs42l43_reva_patch,
->>>>> +                    ARRAY_SIZE(cs42l43_reva_patch));
->>>>> +    if (ret) {
->>>>> +        dev_err(cs42l43->dev, "Failed to apply register patch:
->>>>> %d\n", ret);
->>>>> +        goto err;
->>>>> +    }
->>>>> +
->>>>> +    pm_runtime_mark_last_busy(cs42l43->dev);
->>>>> +    pm_runtime_put_autosuspend(cs42l43->dev);
->>>>> +
->>>>> +    ret = devm_mfd_add_devices(cs42l43->dev, PLATFORM_DEVID_NONE,
->>>>> +                   cs42l43_devs, ARRAY_SIZE(cs42l43_devs),
->>>>
->>>> I don't why adding devices is not in probe. They use the same regmap
->>>> right? So there will be no problem in probing them from MFD probe.
->>>
->>> Well except SoundWire is a bit of a special boy, the hardware is
->>> not necessarily available in probe, the hardware is only available
->>> at some point later when the device attaches. Doing it this way all
->>> of the attaching (and various detach/attach cycles the device needs
->>> during configuration) are over by the time the child drivers bind, so
->>> they don't all need special code to handle that.
->>
->> if the devices are added in the probe, then the regmap needs to be moved
->> to cache-only and another special API would be needed to tell the MFD
->> framework to turn the regmap cache-only off.
->>
->> But if it's the same regmap, the regmap cache is handled in the
->> SoundWire update_status callback so maybe  Krzysztof's proposal does
->> work?
-> 
-> But you still can't access the hardware in probe(). So you'd have all
-> the child drivers probing but not able to talk to the hardware. The
-> child drivers would have to hook into the update_status() somehow so
-> they know when the peripheral has enumerated.
-> It's simpler to add them after the hardware has enumerated - they will
-> be able to access the hardware in their probe().
+> Please put the context in the commit
+> message.
 
-It depends on what you mean by 'access the hardware'. If the only
-interface is regmap and regmap is in cache-only, then the child drivers
-could "access the hardware" without anything happening until after
-regmap is no longer cache-only.
+Done in the next patchset.
 
-But yeah, I realize it's a long shot.
+> It's usually helpful if you could put the corresponding EC FW
+> changes.
+
+Why are you assuming there is EC FW with this change? Any and all of
+the EC changes related to this have (obviously) landed long ago.
+
+> > The issue is that we need the EC aware of the AP being in the process
+> > of suspend/resume from start to finish, so we can accurately
+> > determine:
+> > - How long the process took to better gauge we're meeting ChromeOS requ=
+irements.
+> > - When the AP failed to complete the process, so we can collect data
+> > and perform error recovery.
+>
+> Is it a new feature?
+
+No, it's not.
+
+> How could the *error* recovery do?
+
+I don't understand what this is asking.
+
+> > > What about other interfaces (i2c, spi, uart)?  Do they also need to c=
+hange
+> > the callbacks?
+> >
+> > We aren't concerned about those devices, because they aren't being
+> > used on the devices we're seeing issues with. If devices using those
+> > ECs want this change, they can pick it up as well, but we don't have
+> > any way to test changes on those devices (whatever they may be).
+>
+> This doesn't sound good.  As I would suppose you are adding some new EC F=
+W
+> features regarding to EC_CMD_HOST_SLEEP_EVENT, you should consider the
+> existing systems too.
+
+Again, why are you assuming there is new EC FW for this? This is only
+changing when an already-existing host command is being sent. Nothing
+is being added or removed.
+
+> What happens if a system uses older kernel (without this patch) to
+> communicate with new EC FW via LPC?
+
+The message is being sent regardless of whether this patch lands or
+not. This patch just changes when they are sent, so there is no risk
+from that perspective.
+
+> How about adding a new EC host command for your purpose so that it won't
+> affect the existing systems?  I knew this was discussed in some older ser=
+ies
+> but I didn't follow the thread.
+>
+
+No. The necessary host command already exists and is being sent. There
+is no additional command being sent with this change. It is only
+changing when the command is being sent.
