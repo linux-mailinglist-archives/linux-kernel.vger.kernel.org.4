@@ -2,155 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A32C2707BA0
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 10:10:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 524CD707B93
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 10:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbjERIKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 04:10:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47948 "EHLO
+        id S229804AbjERIF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 04:05:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbjERIJ6 (ORCPT
+        with ESMTP id S229669AbjERIF0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 04:09:58 -0400
-X-Greylist: delayed 1198 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 18 May 2023 01:09:57 PDT
-Received: from mx-8.mail.web4u.cz (smtp7.web4u.cz [81.91.87.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551A297;
-        Thu, 18 May 2023 01:09:57 -0700 (PDT)
-Received: from mx-8.mail.web4u.cz (localhost [IPv6:::1])
-        by mx-8.mail.web4u.cz (Postfix) with ESMTP id 7630C1FF4E0;
-        Thu, 18 May 2023 09:32:39 +0200 (CEST)
-Received: from baree.pikron.com (unknown [89.103.131.245])
-        (Authenticated sender: ppisa@pikron.com)
-        by mx-8.mail.web4u.cz (Postfix) with ESMTPA id 2D4981FF4D8;
-        Thu, 18 May 2023 09:32:39 +0200 (CEST)
-From:   Pavel Pisa <pisa@cmp.felk.cvut.cz>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH] can: ctucanfd: Remove a useless netif_napi_del() call
-Date:   Thu, 18 May 2023 09:32:38 +0200
-User-Agent: KMail/1.9.10
-Cc:     Ondrej Ille <ondrej.ille@gmail.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        "Marc Kleine-Budde" <mkl@pengutronix.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org
-References: <58500052a6740806e8af199ece45e97cb5eeb1b8.1684393811.git.christophe.jaillet@wanadoo.fr>
-In-Reply-To: <58500052a6740806e8af199ece45e97cb5eeb1b8.1684393811.git.christophe.jaillet@wanadoo.fr>
-X-KMail-QuotePrefix: > 
+        Thu, 18 May 2023 04:05:26 -0400
+Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 063842100
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 01:05:24 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VivzZ6G_1684397108;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0VivzZ6G_1684397108)
+          by smtp.aliyun-inc.com;
+          Thu, 18 May 2023 16:05:22 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] mm: page_owner: make some functions static
+Date:   Thu, 18 May 2023 16:05:07 +0800
+Message-Id: <20230518080507.97556-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: Text/Plain;
-  charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Content-Disposition: inline
-Message-Id: <202305180932.38815.pisa@cmp.felk.cvut.cz>
-X-W4U-Auth: 59c178831a6430d3fd87e564e9d84dd1bf4afcea
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Christophe,
+These functions are not used outside the file page_owner.c, so the
+modification is defined as static.
 
-On Thursday 18 of May 2023 09:10:39 Christophe JAILLET wrote:
-> free_candev() already calls netif_napi_del(), so there is no need to call
-> it explicitly. It is harmless, but useless.
->
-> This makes the code mode consistent with the error handling path of
-> ctucan_probe_common().
+mm/page_owner.c:748:5: warning: no previous prototype for ‘page_owner_threshold_get’.
+mm/page_owner.c:754:5: warning: no previous prototype for ‘page_owner_threshold_set’.
 
-OK, but I would suggest to consider to keep sequence in sync with
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=5235
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+---
+ mm/page_owner.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-linux/drivers/net/can/ctucanfd/ctucanfd_pci.c
+diff --git a/mm/page_owner.c b/mm/page_owner.c
+index 28c519fc9372..bbec66cd1b72 100644
+--- a/mm/page_owner.c
++++ b/mm/page_owner.c
+@@ -745,13 +745,13 @@ const struct file_operations page_owner_stack_operations = {
+ 
+ unsigned long page_owner_stack_threshold;
+ 
+-int page_owner_threshold_get(void *data, u64 *val)
++static int page_owner_threshold_get(void *data, u64 *val)
+ {
+ 	*val = page_owner_stack_threshold;
+ 	return 0;
+ }
+ 
+-int page_owner_threshold_set(void *data, u64 val)
++static int page_owner_threshold_set(void *data, u64 val)
+ {
+ 	page_owner_stack_threshold = val;
+ 	return 0;
+-- 
+2.20.1.7.g153144c
 
-where is netif_napi_del() used as well
-
-        while ((priv = list_first_entry_or_null(&bdata->ndev_list_head, struct ctucan_priv,
-                                                peers_on_pdev)) != NULL) {
-                ndev = priv->can.dev;
-
-                unregister_candev(ndev);
-
-                netif_napi_del(&priv->napi);
-
-                list_del_init(&priv->peers_on_pdev);
-                free_candev(ndev);
-        }
-
-On the other hand, if interrupt can be called for device between
-unregister_candev() and free_candev() or some other callback
-which is prevented by netif_napi_del() now then I would consider
-to keep explicit netif_napi_del() to ensure that no callback
-is activated to driver there. And for PCI integration it is more
-critical because list_del_init(&priv->peers_on_pdev); appears in
-between and I would prefer that no interrupt appears when instance
-is not on the peers list anymore. Even that would not be a problem
-for actual CTU CAN FD implementation, peers are accessed only during
-physical device remove, but I have worked on other controllers
-in past, which required to coordinate with peers in interrupt
-handling...
-
-So I would be happy for some feedback what is actual guarantee
-when device is stopped.
-
-May it be that it would be even more robust to run removal
-with two loop where the first one calls unregister_candev()
-and netif_napi_del() and only the second one removes from peers
-and call free_candev()... But I am not sure there and it is not
-problem in actual driver because peers are not used in any
-other place...
-
-> While at it, remove a wrong comment about the return value of this
-> function.
-
-OK, this has been caused probably by prototype change.
-
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> The comment went wrong after 45413bf75919 ("can: ctucanfd: Convert to
-> platform remove callback returning void") ---
->  drivers/net/can/ctucanfd/ctucanfd_platform.c | 2 --
->  1 file changed, 2 deletions(-)
->
-> diff --git a/drivers/net/can/ctucanfd/ctucanfd_platform.c
-> b/drivers/net/can/ctucanfd/ctucanfd_platform.c index
-> 55bb10b157b4..8fe224b8dac0 100644
-> --- a/drivers/net/can/ctucanfd/ctucanfd_platform.c
-> +++ b/drivers/net/can/ctucanfd/ctucanfd_platform.c
-> @@ -84,7 +84,6 @@ static int ctucan_platform_probe(struct platform_device
-> *pdev) * @pdev:	Handle to the platform device structure
->   *
->   * This function frees all the resources allocated to the device.
-> - * Return: 0 always
->   */
->  static void ctucan_platform_remove(struct platform_device *pdev)
->  {
-> @@ -95,7 +94,6 @@ static void ctucan_platform_remove(struct platform_device
-> *pdev)
->
->  	unregister_candev(ndev);
->  	pm_runtime_disable(&pdev->dev);
-> -	netif_napi_del(&priv->napi);
->  	free_candev(ndev);
->  }
-
-Best wishes,
-
-                Pavel Pisa
-    phone:      +420 603531357
-    e-mail:     pisa@cmp.felk.cvut.cz
-    Department of Control Engineering FEE CVUT
-    Karlovo namesti 13, 121 35, Prague 2
-    university: http://control.fel.cvut.cz/
-    personal:   http://cmp.felk.cvut.cz/~pisa
-    projects:   https://www.openhub.net/accounts/ppisa
-    CAN related:http://canbus.pages.fel.cvut.cz/
-    RISC-V education: https://comparch.edu.cvut.cz/
-    Open Technologies Research Education and Exchange Services
-    https://gitlab.fel.cvut.cz/otrees/org/-/wikis/home
