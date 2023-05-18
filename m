@@ -2,99 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B39A708AA8
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 23:39:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F36CE708AAF
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 23:42:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbjERVjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 17:39:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52218 "EHLO
+        id S229867AbjERVmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 17:42:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjERVjM (ORCPT
+        with ESMTP id S229533AbjERVmo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 17:39:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F39BCFA
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 14:38:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684445899;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fF16NozMTAGkjTJVbzcLd4pKW6g0WKeMa5ciTZoyR8I=;
-        b=C0wIZKNA0vCUPWGgZiw/ElXmIvQ/wABRkpP/nyfxLb4hcKCCPLr5/fNOk73RYrFiPvIu8q
-        m6HpkMn8qhY0AfPW/stufna+Bjf8deBNSOai6foXEjsQI7GKQqA2/0ndNpGXQqANeMuqI1
-        7Cf+BpAgqVNekmQqEFLCFtL3tzv/aB8=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-185-o110ajw_MACyLC3tL7PKvg-1; Thu, 18 May 2023 17:38:18 -0400
-X-MC-Unique: o110ajw_MACyLC3tL7PKvg-1
-Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-3f386bb966cso2370121cf.1
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 14:38:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684445898; x=1687037898;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fF16NozMTAGkjTJVbzcLd4pKW6g0WKeMa5ciTZoyR8I=;
-        b=kSFf+RlVKXEW6agwuACs3Xx1BQ0LOXc+TtqbGeGQ/IS5w1qgMR8WdH4Ddz0Cs/tvlS
-         RswoTxamO0wAIZWao1BQoQaPk0XHZH5LxKaOXx0cxTmXuR77Sadl3EwlyL++eCCVycOl
-         aJHjNWFH0cWHG1Wuvhla1FoCk6TrsGtr4Oqq3Mrbp4ZLwGPdVfPmAC1QxXsosA5OUV4/
-         PnCQTZXjRae66fVmhzGReoM5Tnd1mJuwbuOxb/FwEdBwab9wMrzStTu4iDyB7o0Lu2Aa
-         dBlUZThV6WWswFpBl3cLNG5DXjdT5lnt0KDL/3PfOE6D1ipivl73w2oP7xsQIVViRgY2
-         +q5g==
-X-Gm-Message-State: AC+VfDzElMa2cC6TnQlnY1Ynn8Mo4qai/IgzduVwkbjVlHwOpH/6P8M1
-        U4l/AB/+raNp3F7sUScUvYmE2h13n+5NPpm+XDxTimlf5f6hh0FEFoJRQ+R4ix6EYmLKzEnv6au
-        SyKGWbpax4HxckjQFHZnekQg/
-X-Received: by 2002:a05:622a:1801:b0:3ef:4614:d0e9 with SMTP id t1-20020a05622a180100b003ef4614d0e9mr33327qtc.5.1684445897745;
-        Thu, 18 May 2023 14:38:17 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4F7YYadNy4hNwuBEtJHsszBONmAwTnm70nfw8WkvP5XXBIxqCTLfGirE7l4DCLZRdFzwOonA==
-X-Received: by 2002:a05:622a:1801:b0:3ef:4614:d0e9 with SMTP id t1-20020a05622a180100b003ef4614d0e9mr33285qtc.5.1684445897332;
-        Thu, 18 May 2023 14:38:17 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
-        by smtp.gmail.com with ESMTPSA id x5-20020ae9e905000000b0075931950b5esm670407qkf.74.2023.05.18.14.38.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 14:38:16 -0700 (PDT)
-Date:   Thu, 18 May 2023 17:38:14 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Jiaqi Yan <jiaqiyan@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Hongchen Zhang <zhanghongchen@loongson.cn>,
-        Huang Ying <ying.huang@intel.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Shuah Khan <shuah@kernel.org>,
-        ZhangPeng <zhangpeng362@huawei.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Anish Moorthy <amoorthy@google.com>
-Subject: Re: [PATCH 1/3] mm: userfaultfd: add new UFFDIO_SIGBUS ioctl
-Message-ID: <ZGaaxjS4jWUio+f6@x1n>
-References: <20230511182426.1898675-1-axelrasmussen@google.com>
- <CADrL8HXFiTL-RDnETS2BUg_qH8CvcCMZiX-kutsrS1-8Uy25=w@mail.gmail.com>
- <ZGVRUeCWr8209m8d@x1n>
- <ZGVTMnVKNcQDM0x4@x1n>
- <CAJHvVcgXynHcuoS6eCfOAB2SgzqYy_zMGrRMR2kFuxOtSdUwvQ@mail.gmail.com>
- <CACw3F52MNOVv6KA5n7wRYDT2ujwYkco=aYngbo-zGA3zW1yq+w@mail.gmail.com>
- <ZGZMtK6PzoTuLZ1b@x1n>
- <CAJHvVcgcYPu-G3RDVrkrM_J48NUiUY0SH0G1sd+=X9BDgnQEuQ@mail.gmail.com>
+        Thu, 18 May 2023 17:42:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 760A0135;
+        Thu, 18 May 2023 14:42:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D71726160B;
+        Thu, 18 May 2023 21:42:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85CE6C433EF;
+        Thu, 18 May 2023 21:42:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684446160;
+        bh=x5I5mruh7zMCo5Zhys6Y0M8OdmsdgmVH1YsnbP5N0G4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cROkLAXx3D7DzisnvZXbe/RpC7p3ynWO5qtEVZnDCjlMCU8He9ikyvYowyWEEv26a
+         K4cdYAfilcdu5lak2CudEIf54yvGchTRFiBmj3sRaqkaHy7mE0nRQeIeAJ567ONzyb
+         6oL0iffTiSk9AnFGDcKl1+krpJrPIm2Fq71IfTMujh5KJRk8rCuN4tC5l2YKucAWox
+         ExGxWJLBmf3c6gcAPOQEA2rZ3tZxSRT5Pl7VJOzGVKFlw23cN+MgvVX6l7/+rY0HA/
+         9mRGiCSxndOnL1qhHTBCcITaadDSpdoAZDDyuyJBk/clylgU/Mkma6LuabyZ8kaHSs
+         Ci/0Wmk6nl9YA==
+Date:   Thu, 18 May 2023 22:42:34 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Anup Patel <anup@brainfault.org>,
+        Andrew Jones <ajones@ventanamicro.com>, palmer@dabbelt.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alistair Francis <alistair.francis@wdc.com>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Jessica Clarke <jrtc27@jrtc27.com>,
+        Rick Chen <rick@andestech.com>, Leo <ycliang@andestech.com>,
+        linux-riscv@lists.infradead.org, qemu-riscv@nongnu.org,
+        u-boot@lists.denx.de, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] dt-bindings: riscv: deprecate riscv,isa
+Message-ID: <20230518-monkhood-dispersal-6749b1228b0d@spud>
+References: <20230518-thermos-sanitary-cf3fbc777ea1@wendy>
+ <20230518-4050231ca8dbe93c08cf9c9a@orel>
+ <CAAhSdy07Mg_JBF+4ucGFiWdBKh-Ass5G_aUWqBqTnDSFp7S=0A@mail.gmail.com>
+ <20230518-hammock-doornail-478e8ea8e6a7@wendy>
+ <f7c20090-220c-2805-86ba-b174a89f65b3@seco.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="TYryGqRDcYWpb9dy"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJHvVcgcYPu-G3RDVrkrM_J48NUiUY0SH0G1sd+=X9BDgnQEuQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <f7c20090-220c-2805-86ba-b174a89f65b3@seco.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,229 +71,185 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 01:38:09PM -0700, Axel Rasmussen wrote:
-> On Thu, May 18, 2023 at 9:05 AM Peter Xu <peterx@redhat.com> wrote:
-> >
-> > On Wed, May 17, 2023 at 05:43:53PM -0700, Jiaqi Yan wrote:
-> > > On Wed, May 17, 2023 at 3:29 PM Axel Rasmussen <axelrasmussen@google.com> wrote:
-> > > >
-> > > > On Wed, May 17, 2023 at 3:20 PM Peter Xu <peterx@redhat.com> wrote:
-> > > > >
-> > > > > On Wed, May 17, 2023 at 06:12:33PM -0400, Peter Xu wrote:
-> > > > > > On Thu, May 11, 2023 at 03:00:09PM -0700, James Houghton wrote:
-> > > > > > > On Thu, May 11, 2023 at 11:24 AM Axel Rasmussen
-> > > > > > > <axelrasmussen@google.com> wrote:
-> > > > > > > >
-> > > > > > > > So the basic way to use this new feature is:
-> > > > > > > >
-> > > > > > > > - On the new host, the guest's memory is registered with userfaultfd, in
-> > > > > > > >   either MISSING or MINOR mode (doesn't really matter for this purpose).
-> > > > > > > > - On any first access, we get a userfaultfd event. At this point we can
-> > > > > > > >   communicate with the old host to find out if the page was poisoned.
-> > > > > > > > - If so, we can respond with a UFFDIO_SIGBUS - this places a swap marker
-> > > > > > > >   so any future accesses will SIGBUS. Because the pte is now "present",
-> > > > > > > >   future accesses won't generate more userfaultfd events, they'll just
-> > > > > > > >   SIGBUS directly.
-> > > > > > >
-> > > > > > > I want to clarify the SIGBUS mechanism here when KVM is involved,
-> > > > > > > keeping in mind that we need to be able to inject an MCE into the
-> > > > > > > guest for this to be useful.
-> > > > > > >
-> > > > > > > 1. vCPU gets an EPT violation --> KVM attempts GUP.
-> > > > > > > 2. GUP finds a PTE_MARKER_UFFD_SIGBUS and returns VM_FAULT_SIGBUS.
-> > > > > > > 3. KVM finds that GUP failed and returns -EFAULT.
-> > > > > > >
-> > > > > > > This is different than if GUP found poison, in which case KVM will
-> > > > > > > actually queue up a SIGBUS *containing the address of the fault*, and
-> > > > > > > userspace can use it to inject an appropriate MCE into the guest. With
-> > > > > > > UFFDIO_SIGBUS, we are missing the address!
-> > > > > > >
-> > > > > > > I see three options:
-> > > > > > > 1. Make KVM_RUN queue up a signal for any VM_FAULT_SIGBUS. I think
-> > > > > > > this is pointless.
-> > > > > > > 2. Don't have UFFDIO_SIGBUS install a PTE entry, but instead have a
-> > > > > > > UFFDIO_WAKE_MODE_SIGBUS, where upon waking, we return VM_FAULT_SIGBUS
-> > > > > > > instead of VM_FAULT_RETRY. We will keep getting userfaults on repeated
-> > > > > > > accesses, just like how we get repeated signals for real poison.
-> > > > > > > 3. Use this in conjunction with the additional KVM EFAULT info that
-> > > > > > > Anish proposed (the first part of [1]).
-> > > > > > >
-> > > > > > > I think option 3 is fine. :)
-> > > > > >
-> > > > > > Or... option 4) just to use either MADV_HWPOISON or hwpoison-inject? :)
-> > > > >
-> > > > > I just remember Axel mentioned this in the commit message, and just in case
-> > > > > this is why option 4) was ruled out:
-> > > > >
-> > > > >         They expect that once poisoned, pages can never become
-> > > > >         "un-poisoned". So, when we live migrate the VM, we need to preserve
-> > > > >         the poisoned status of these pages.
-> > > > >
-> > > > > Just to supplement on this point: we do have unpoison (echoing to
-> > > > > "debug/hwpoison/hwpoison_unpoison"), or am I wrong?
-> > >
-> > > If I read unpoison_memory() correctly, once there is a real hardware
-> > > memory corruption (hw_memory_failure will be set), unpoison will stop
-> > > working and return EOPNOTSUPP.
-> > >
-> > > I know some cloud providers evacuating VMs once a single memory error
-> > > happens, so not supporting unpoison is probably not a big deal for
-> > > them. BUT others do keep VM running until more errors show up later,
-> > > which could be long after the 1st error.
-> >
-> > We're talking about postcopy migrating a VM has poisoned page on src,
-> > rather than on dst host, am I right?  IOW, the dest hwpoison should be
-> > fake.
-> >
-> > If so, then I would assume that's the case where all the pages on the dest
-> > host is still all good (so hw_memory_failure not yet set, or I doubt the
-> > judgement of being a migration target after all)?
-> >
-> > The other thing is even if dest host has hw poisoned page, I'm not sure
-> > whether hw_memory_failure is the only way to solve this.
-> >
-> > I saw that this is something got worked on before from Zhenwei, David used
-> > to have some reasoning on why it was suggested like using a global knob:
-> >
-> > https://lore.kernel.org/all/d7927214-e433-c26d-7a9c-a291ced81887@redhat.com/
-> >
-> > Two major issues here afaics:
-> >
-> >   - Zhenwei's approach only considered x86 hwpoison - it relies on kpte
-> >     having !present in entries but that's x86 specific rather than generic
-> >     to memory_failure.c.
-> >
-> >   - It is _assumed_ that hwpoison injection is for debugging only.
-> >
-> > I'm not sure whether you can fix 1) by some other ways, e.g., what if the
-> > host just remember all the hardware poisoned pfns (or remember
-> > soft-poisoned ones, but then here we need to be careful on removing them
-> > from the list when it's hwpoisoned for real)?  It sounds like there's
-> > opportunity on providing a generic solution rather than relying on
-> > !pte_present().
-> >
-> > For 2) IMHO that's not a big issue, you can declare it'll be used in !debug
-> > but production systems so as to boost the feature importance with a real
-> > use case.
-> >
-> > So far I'd say it'll be great to leverage what it's already there in linux
-> > and make it as generic as possible. The only issue is probably
-> > CAP_ADMIN... not sure whether we can have some way to provide !ADMIN
-> > somehow, or you can simply work around this issue.
-> 
-> As you mention below I think the key distinction is the scope - I
-> think MADV_HWPOISON affects the whole system, including other
-> processes.
-> 
-> For our purposes, we really just want to "poison" this particular
-> virtual address (the HVA, from the VM's perspective), not even other
-> mappings of the same shared memory. I think that behavior is different
-> from MADV_HWPOISON, at least.
-> 
-> >
-> > >
-> > > > >
-> > > > > >
-> > > > > > Besides what James mentioned on "missing addr", I didn't quickly see what's
-> > > > > > the major difference comparing to the old hwpoison injection methods even
-> > > > > > without the addr requirement. If we want the addr for MCE then it's more of
-> > > > > > a question to ask.
-> > > > > >
-> > > > > > I also didn't quickly see why for whatever new way to inject a pte error we
-> > > > > > need to have it registered with uffd.  Could it be something like
-> > > > > > MADV_PGERR (even if MADV_HWPOISON won't suffice) so you can inject even
-> > > > > > without an userfault context (but still usable when uffd registered)?
-> > > > > >
-> > > > > > And it'll be alawys nice to have a cover letter too (if there'll be a new
-> > > > > > version) explaining the bits.
-> > > >
-> > > > I do plan a v2, if for no other reason than to update the
-> > > > documentation. Happy to add a cover letter with it as well.
-> > > >
-> > > > +Jiaqi back to CC, this is one piece of a larger memory poisoning /
-> > > > recovery design Jiaqi is working on, so he may have some ideas why
-> > > > MADV_HWPOISON or MADV_PGER will or won't work.
-> > >
-> > > Per https://man7.org/linux/man-pages/man2/madvise.2.html,
-> > > MADV_HWPOISON "is available only for privileged (CAP_SYS_ADMIN)
-> > > processes." So for a non-root VMM, MADV_HWPOISON is out of option.
-> >
-> > It makes sense to me especially when the page can be shared with other
-> > tasks.
-> >
-> > >
-> > > Another issue with MADV_HWPOISON is, it requires to first successfully
-> > > get_user_pages_fast(). I don't think it will work if memory is not
-> > > mapped yet.
-> >
-> > Fair point, so probably current MADV_HWPOISON got ruled out.
-> > hwpoison-inject seems fine where only the PFN is needed rather than the
-> > pte. But same issue on CAP_ADMIN indeed.
-> >
-> > >
-> > > With the UFFDIO_SIGBUS feature introduced in this patchset, it may
-> > > even be possible to free the emulated-hwpoison page back to the kernel
-> > > so we don't lose a 4K page.
-> > >
-> > > I didn't find any ref/doc for MADV_PGERR. Is it something you suggest
-> > > to build, Peter?
-> >
-> > That's something I made up just to show my question on why such an
-> > interface (even if wanted) needs to be bound to userfaultfd, e.g. a
-> > madvise() seems working if someone sololy want to install a poisoned pte.
-> 
-> I look at it a bit differently...
-> 
-> Even existing UFFDIO_* operations could technically be separated from
-> userfaultfd. You could imagine a MADV_MAP_PAGE instead of
-> UFFDIO_CONTINUE. UFFDIO_COPY is a bit trickier since it takes an
-> argument, but it could be done with process_madvise(). (Granted, I'm
-> not sure this would be useful... But this is equally true for
-> UFFDIO_SIGBUS; it seems non-live-migration use cases could use
-> MADV_HWPOISON, and for live migration use cases we will be using
-> UFFD.)
-> 
-> We've sort of setup a convention with userfaultfd where at a high
-> level users are supposed to:
-> 
-> 1. Receive events from the uffd
-> 2. Resolve those events with UFFDIO_* ioctls
-> 3. Wake up with UFFDIO_WAKE to retry the fault that generated the
-> original event (can be combined with step 2 of course)
-> 
-> So for me, even if MADV_PGERR or similar existed, I would be tempted
-> to add a UFFDIO_SIGBUS as well, even if it just calls the same
-> underlying function to do the same thing, if only for consistency
-> (with the idea "UFFD events are resolved by UFFD ioctls") from the
-> user's perspective.
 
-I don't worry too much on "consistency", but I'm trying to understand
-whether it's more beneficial to combine it with uffd or being generic.
+--TYryGqRDcYWpb9dy
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-One thing I was thinking is if I have a library that manages some memory
-for the user, the library can use such madvise()/... to poison specific
-small pages (without registering uffd with sigbus mode, also no lose on
-page faults of other normal pages) so when illegal access it can trap it
-for current mm rather than silently happen (e.g. use after free).  Unpoison
-is also easy there, we can simply DONTNEED it.
+On Thu, May 18, 2023 at 02:30:53PM -0400, Sean Anderson wrote:
+> On 5/18/23 10:06, Conor Dooley wrote:
+> > On Thu, May 18, 2023 at 07:13:15PM +0530, Anup Patel wrote:
+> >> On Thu, May 18, 2023 at 4:02=E2=80=AFPM Andrew Jones <ajones@ventanami=
+cro.com> wrote:
+> >> > On Thu, May 18, 2023 at 09:58:30AM +0100, Conor Dooley wrote:
+> >=20
+> >> > > -  riscv,isa:
+> >> > > -    description:
+> >> > > -      Identifies the specific RISC-V instruction set architecture
+> >> > > -      supported by the hart.  These are documented in the RISC-V
+> >> > > -      User-Level ISA document, available from
+> >> > > -      https://riscv.org/specifications/
+> >> > > -
+> >> > > -      Due to revisions of the ISA specification, some deviations
+> >> > > -      have arisen over time.
+> >> > > -      Notably, riscv,isa was defined prior to the creation of the
+> >> > > -      Zicsr and Zifencei extensions and thus "i" implies
+> >> > > -      "zicsr_zifencei".
+> >> > > -
+> >> > > -      While the isa strings in ISA specification are case
+> >> > > -      insensitive, letters in the riscv,isa string must be all
+> >> > > -      lowercase to simplify parsing.
+> >> > > -    $ref: "/schemas/types.yaml#/definitions/string"
+> >> > > -    pattern: ^rv(?:64|32)imaf?d?q?c?b?k?j?p?v?h?(?:[hsxz](?:[a-z]=
+)+)?(?:_[hsxz](?:[a-z])+)*$
+> >> > > -
+> >> > >    # RISC-V requires 'timebase-frequency' in /cpus, so disallow it=
+ here
+> >> > >    timebase-frequency: false
+> >> > >
+> >> > > @@ -133,8 +117,13 @@ properties:
+> >> > >        DMIPS/MHz, relative to highest capacity-dmips-mhz
+> >> > >        in the system.
+> >> > >
+> >> > > +oneOf:
+> >> > > +  - required:
+> >> > > +      - riscv,isa
+> >> >
+> >> > This is the part Anup keeps reminding me about. We can create better=
+ ways
+> >> > to handle extensions in DT and ACPI, but we'll still need to parse I=
+SA
+> >> > strings to handle legacy DTs and holdouts that keep creating ISA str=
+ings,
+> >> > at least during the deprecation period, since ISA strings are still =
+"the
+> >> > way to do it" according to the spec.
+> >>=20
+> >> Coming up with an alternate way in DT is fine but we can't deprecate
+> >> ISA strings since ISA strings are widely used:
+> >> 1) Various bootloaders
+> >=20
+> > Aye, for the reason, as I mentioned earlier and in the RFC thread,
+> > removing existing parsers isn't a good idea.
+> >=20
+> >> 2) It is part of /proc/cpuinfo
+> >=20
+> > That is irrelevant.
+> >=20
+> >> 3) Hypervisors use it to communicate HW features to Guest/VM.
+> >> Hypervisors can't get away from generating ISA strings because
+> >> Hypervisors don't know what is running inside Guest/VM.
+> >=20
+> > Generate both :) As things stand, your guests could interpret what you
+> > communicate to them via riscv,isa differently!
+> >=20
+> >> In the case of ACPI, it is a very different situation. Like Sunil ment=
+ioned,
+> >> ACPI will always follow mechanisms defined by RVI (such as ISA string).
+> >> Other ACPI approaches such as GUID for ISA extension are simply not
+> >> scalable and will take a lot more memory for ACPI tables compared to
+> >> ISA strings.
+> >=20
+> > My proposal should actually suit ACPI, at least for Linux, as it would
+> > be a chance to align currently misaligned definitions. I won't speak to
+> > GUIDs or whatever as that's someone else's problem :)
+> >=20
+> >> > Also, if we assume the wording in the spec does get shored up, then,
+> >> > unless I'm missing something, the list of advantages for this boolean
+> >> > proposal from your commit message would be
+> >>=20
+> >> IMO, we should try our best to have the wordings changed in RVI spec.
+> >=20
+> > Yes, doing so is beneficial for all of us regardless of what happens
+> > here. I do think that it is partially orthogonal - it allows us to not
+> > design an interface that needs to be capable of communicating a wide
+> > variety of versions, but I don't think it solves some of the issues
+> > that riscv,isa has. If I thought it did, I would not have gone to the
+> > trouble of respinning this patch out of the other approach.
+> >=20
+> >> > * More character choices for name -- probably not a huge gain for ra=
+tified
+> >> >   extensions, since the boolean properties will likely still use the=
+ same
+> >> >   name as the ISA string (riscv,isa-extension-<name>). But, for vend=
+or
+> >> >   extensions, this is indeed a major improvement, since vendor exten=
+sion
+> >> >   boolean property names may need to be extended in unambiguous ways=
+ to
+> >> >   handle changes in the extension.
+> >> >
+> >> > * Simpler, more complete DT validation (but we still need a best eff=
+ort
+> >> >   for legacy ISA strings)
+> >> >
+> >> > * Simpler DT parsing (but we still need the current parser for legac=
+y ISA
+> >> >   strings)
+> >> >
+> >> > > +  - required:
+> >> > > +      - riscv,isa-base
+> >> > > +
+> >> > >  required:
+> >> > > -  - riscv,isa
+> >> > >    - interrupt-controller
+> >> > >
+> >> > >  additionalProperties: true
+> >> > > @@ -177,7 +166,13 @@ examples:
+> >> > >                  i-tlb-size =3D <32>;
+> >> > >                  mmu-type =3D "riscv,sv39";
+> >> > >                  reg =3D <1>;
+> >> > > -                riscv,isa =3D "rv64imafdc";
+> >> > > +                riscv,isa-base =3D "rv64i";
+> >> > > +                riscv,isa-extension-i;
+> >> > > +                riscv,isa-extension-m;
+> >> > > +                riscv,isa-extension-a;
+> >> > > +                riscv,isa-extension-f;
+> >> > > +                riscv,isa-extension-d;
+> >> > > +                riscv,isa-extension-c;
+> >>=20
+> >> One downside of this new approach is it will increase the size of DTB.
+> >> Imaging 50 such DT properties in 46 CPU DT nodes.
+> >=20
+> > I should do a comparison between 50 extensions in riscv,isa and doing
+> > this 50 times and see what the sizes are.
+>=20
+> Why not just have something like
+>=20
+> mycpu {
+> 	...
+> 	riscv,isa {
+> 		i;
+> 		m;
+> 		a;
+> 		zicsr;
+> 		...
+> 	};
+> };
 
-One defect of such general solution for your case is we need one more
-UFFDIO_WAKE, but since we're talking about real poisoned pages on src, so I
-guess it's not a concern (unlike most of the rest ioctls).
+Naming of the node aside (perhaps that could be riscv,isa-extensions)
+there's not something hitting me immediately as to why that is a no-no.
+If the size is a concern, this would certainly be more efficient & not
+like the probing would be anything other than trivial more difficult
+what I have in my proposal.
 
-I've no strong opinion if you still want to do that with an userfault
-ioctl.  After all, I can't provide a solid example but just some rough
-ideas.  But I hope I explained why I think it's still different from other
-ioctls (e.g., an "atomic update a page" operation doesn't sound reasonable
-at all as generic operation for any !uffd context, so that definitely
-suites more as an uffd specific ioctl).
+Rob's AFK at the moment, and I was hoping that he would take a look at
+the idea, so I won't respin til he is back, but I'll give this a go in
+the interim.
 
-If with uffd, perhaps avoid calling it sigbus? As we have FEATURE_SIGBUS
-and I'm afraid it'll cause confusion.  UFFDIO_HWPOISON may sound more
-suitable?
+Cheers,
+Conor.
 
-Thanks,
+--TYryGqRDcYWpb9dy
+Content-Type: application/pgp-signature; name="signature.asc"
 
--- 
-Peter Xu
+-----BEGIN PGP SIGNATURE-----
 
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGabyQAKCRB4tDGHoIJi
+0tqeAQCpsTIUwavLKPVNiJd1cmmE4LJnnxMRlq2sxMTP8zSOpQD/arxRvhO4QzlJ
+1itR13j6MTL60roBmM//fn7DprVxnwI=
+=YkDr
+-----END PGP SIGNATURE-----
+
+--TYryGqRDcYWpb9dy--
