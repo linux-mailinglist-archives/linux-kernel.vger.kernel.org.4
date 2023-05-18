@@ -2,55 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C3A7708452
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:55:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3931708450
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231760AbjEROzd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 10:55:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35870 "EHLO
+        id S231751AbjEROz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 10:55:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231658AbjEROz0 (ORCPT
+        with ESMTP id S231584AbjEROz0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 18 May 2023 10:55:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F3E12E
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E74F119
         for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:55:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0259764FD9
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3585964FDB
         for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 14:55:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 633CFC4339B;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 831C3C433D2;
         Thu, 18 May 2023 14:55:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1684421723;
-        bh=Ks2BcB2HxSbBY7mPbJIjN33LPo2/4OOsJWgK+op14zY=;
+        bh=cN3q9iCF/gJ/uPtCwHUQPd6CHzRDYrNdYVOXcOrOK64=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bNS+TekKDdkvsHrj3RcZ9hgMDDRdzgoHGGrErRzo9MA2Zow+POuD6WovfiWP2Jgsp
-         PQUbyODWIX8J72tFeD7CV80O0qTjvIPGu2Gzz8mQ9EUiWTt/DaM86rHWlcaEzhzC2G
-         GnjfrAlJl6ebtRnFELp9cPQdUPCmI2H82de93QX4C38jLPyGuOgO7wFMbg3V+C2tOZ
-         37Vof3pSyINO9knyDddsfeZ41kWd6UbNJ0+xCY0CYme0lBQr4BPlMSJmLZWR1HVwX2
-         LeTPM5goZ+1HPI5+rLZXOS3ouLPB3F4j3N6DHbcAz7Bzt3WQ04rdPIhkRS+32U0REI
-         YH5IRbqHugzmA==
+        b=nIszTSbiME0wYc4lQI+izSXixJxHzChuLf1c44BLHb0D/luq4shcZvg3I3ene9INJ
+         W7nZZsO8avz6UWnWwKnZ/MZIpC+GSkFTdu+8ix8oN1Ooubl9aPlO0k316F5C+Xtl56
+         f4WcwcAR2W0vcwTWrnd2IM7rCO6jn8Z2Mu8pPokfpNT/MHgv8hjwWuYLXHu0WHFa1K
+         FIWjcWaGyfaxECLgmLQKnxLe0PclvkpCtPsmeSrWhsfn6fOzCGsN7BUUq0FqnjNcLh
+         Ax6NSN+g5QQ5ytfwCRf1WwPZHwzWhJqop1vBBtA8d1THkhjadn6IfRNCsYUjrivOmi
+         noHbkT1fB3jOg==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 159FBCE04B0; Thu, 18 May 2023 07:55:23 -0700 (PDT)
+        id 17F46CE0FED; Thu, 18 May 2023 07:55:23 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     gwml@vger.gnuweeb.org, kernel-team@meta.com, w@lwt.eu,
-        Willy Tarreau <w@1wt.eu>,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        Willy Tarreau <w@1wt.eu>, Vincent Dagonneau <v@vda.io>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH v2 nolibc 02/15] tools/nolibc: tests: fix build on non-c99 compliant compilers
-Date:   Thu, 18 May 2023 07:55:08 -0700
-Message-Id: <20230518145521.3806117-2-paulmck@kernel.org>
+Subject: [PATCH v2 nolibc 03/15] tools/nolibc: fix build of the test case using glibc
+Date:   Thu, 18 May 2023 07:55:09 -0700
+Message-Id: <20230518145521.3806117-3-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <4817a4dc-69e6-4937-84d5-f2f630ff646c@paulmck-laptop>
 References: <4817a4dc-69e6-4937-84d5-f2f630ff646c@paulmck-laptop>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,36 +59,31 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Willy Tarreau <w@1wt.eu>
 
-Commit 9735716830f2 ("tools/nolibc: tests: add test for -fstack-protector")
-brought a declaration inside the initialization statement of a for loop,
-which breaks the build on compilers that do not default to c99
-compatibility, making it more difficult to validate that the lib still
-builds on such compilers. The fix is trivial, so let's move the
-declaration to the variables block of the function instead. No backport
-is needed.
+Some extra tests for various integer types and limits were added by
+commit d1209597ff00 ("tools/nolibc: add tests for the integer limits
+in stdint.h"), but we forgot to retest with glibc. Stddef and stdint
+are now needed for the program to build there.
 
-Cc: Thomas Weißschuh <linux@weissschuh.net>
+Cc: Vincent Dagonneau <v@vda.io>
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/nolibc/nolibc-test.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 47013b78972e..6f2f109569a3 100644
+index 6f2f109569a3..1bafbd8da6af 100644
 --- a/tools/testing/selftests/nolibc/nolibc-test.c
 +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -671,8 +671,9 @@ static int smash_stack(void)
- {
- 	char buf[100];
- 	volatile char *ptr = buf;
-+	size_t i;
- 
--	for (size_t i = 0; i < 200; i++)
-+	for (i = 0; i < 200; i++)
- 		ptr[i] = 'P';
- 
- 	return 1;
+@@ -34,6 +34,8 @@
+ #include <sched.h>
+ #include <signal.h>
+ #include <stdarg.h>
++#include <stddef.h>
++#include <stdint.h>
+ #include <unistd.h>
+ #endif
+ #endif
 -- 
 2.40.1
 
