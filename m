@@ -2,131 +2,315 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92AC8707A3C
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 08:23:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11D3D707A41
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 08:25:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbjERGXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 02:23:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40750 "EHLO
+        id S229794AbjERGZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 02:25:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjERGXV (ORCPT
+        with ESMTP id S229819AbjERGZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 02:23:21 -0400
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0255198
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 23:23:19 -0700 (PDT)
-Received: by mail-vs1-xe2c.google.com with SMTP id ada2fe7eead31-436750830efso504027137.3
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 23:23:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684390998; x=1686982998;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=749dNWMKtBMpR9cyBLSBqEA+If7g3taC0uv4e/bxAE8=;
-        b=Z1QN6Yo0GQ5urzF72Gls7MS9N02snqrN0bCdSIwwrirAaFNxHoKd4yhGLcJjtp2kPH
-         KoCQMwFmKI0Pb4Cg/UaMvKZRA1jTUdfq4pyofigadmUeYvW0pVd4gnYoRgQ64ETsW+6p
-         yCwsEBVkK0p20L/8/T/XHSn1KA7JhGREW4I0G1j2Dj+brtmB3a8iuvOz6nHxqxNtVvoT
-         zcsCi4uQKLLFVqRVecdmcxYTolwH/pkUY01RiMWMylSHeeV7X0kNatIChZkLHmvsG+lM
-         FIIVmLdv8UjOf2d+yB+FJMprihlAGOYf0/5oZcDZmOMmfR+TKXUPWBgK9l2ta0w69elz
-         KVMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684390998; x=1686982998;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=749dNWMKtBMpR9cyBLSBqEA+If7g3taC0uv4e/bxAE8=;
-        b=YQCYInESYaREJQFmVRww7qV+rVFasxKJkyLYOL4Wx0DSXo8E8nvD2qYYuukqMAdCel
-         xoLmPBWWFpxEUWEkm1v1Pv9cQyxWhhmDOmCm4T+ZEtr3xR8zxEDh7arbNZSJdpK+kfjU
-         v00HcvK/u6at6T2/A9bXp8SuFqypG+bi8YDXAjt3I7uUICDCcDUzut4XlFp6dWrgMiDY
-         PXFsBmkCle7YJscN18+o9pIqKLEJ+IBqAqkoJp5iV/Q2R/eWK9EbzklTzC1e9kT5KaGe
-         R23OpzRYwpprMUTCq4CkxDBwOjBMoGJZWqscNwsFhRpeLZnKd4mCvc7wv0P4Y93TYEtE
-         NOAw==
-X-Gm-Message-State: AC+VfDwcB9KgZlnjVWAhDn6dILOoqvzNBGhEqNSX6AufR53Y2d2cVLwL
-        cnpslGTGKsN1L0bTbu2KACiAdzsn2bpDzsK0BYprWg==
-X-Google-Smtp-Source: ACHHUZ6zG5GZLWWLE8HvKQB9FTouw62j2S54wMHGyuRs26XJPyvfN6pyDORkMK6l5oWORGfKZ0Kf2HZ79TdDYXBM2Ps=
-X-Received: by 2002:a67:f419:0:b0:434:47ea:b02 with SMTP id
- p25-20020a67f419000000b0043447ea0b02mr178156vsn.10.1684390998542; Wed, 17 May
- 2023 23:23:18 -0700 (PDT)
+        Thu, 18 May 2023 02:25:27 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0098A198
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 23:25:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1684391125; x=1715927125;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=k2ASCXTUiR6CdVuxJ/NidGjmihaBal4ilojdkFQY0ZE=;
+  b=oxPAtE7K8+MSrkQRy2VVnz1ldkCMODNmNKa9feuwU0g7mdY91A6VVrlA
+   i1gjGOMiHv+zWqAvObItRjOtFrq5djDncP4Lo5ibsXklMxgL/wueayDrk
+   nV4kX31TCAfo4HnYH2mCLnu418bsvJcosM9k/acj5+Y0jMZ1pwVqSgZRH
+   WOAKE/YvJAw2Q5UubtoLTeFXdUKVlUYhVbvE5htXmkW8q1nPVchl3mxBW
+   p9JgQowgplkLPWAegwBsejVFs0LtfDxeCC9IL+M0i8YNPk605lRx9n0Kz
+   Xtk7JdKy5ZtGK6tuiBiCaKOQLVjExU0WYmXRSTQ/2NYQklMur8VEEv0YB
+   w==;
+X-IronPort-AV: E=Sophos;i="5.99,284,1677567600"; 
+   d="scan'208";a="216039913"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 17 May 2023 23:25:24 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Wed, 17 May 2023 23:25:23 -0700
+Received: from m18063-ThinkPad-T460p.mchp-main.com (10.10.115.15) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Wed, 17 May 2023 23:25:21 -0700
+From:   Claudiu Beznea <claudiu.beznea@microchip.com>
+To:     <nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+        <linux@armlinux.org.uk>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Subject: [PATCH] ARM: at91: pm: fix imbalanced reference counter for ethernet devices
+Date:   Thu, 18 May 2023 09:25:11 +0300
+Message-ID: <20230518062511.2988500-1-claudiu.beznea@microchip.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230516125111.2690204-1-etienne.carriere@linaro.org> <20230516125111.2690204-5-etienne.carriere@linaro.org>
-In-Reply-To: <20230516125111.2690204-5-etienne.carriere@linaro.org>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Thu, 18 May 2023 11:53:07 +0530
-Message-ID: <CAFA6WYMyJrW25sdZRkQHDje72+tLDw4T+bjB6tmVf8XH0De1RQ@mail.gmail.com>
-Subject: Re: [PATCH v8 4/4] firmware: arm_scmi: optee: use optee system invocation
-To:     Etienne Carriere <etienne.carriere@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        op-tee@lists.trustedfirmware.org,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 May 2023 at 18:24, Etienne Carriere
-<etienne.carriere@linaro.org> wrote:
->
-> Changes SCMI optee transport to call tee_client_system_session()
-> to request optee driver to provision an entry context in OP-TEE
-> for processing OP-TEE messages. This prevents possible deadlock
-> in case OP-TEE threads are all consumed while these may be waiting
-> for a clock or regulator to be enable which SCMI OP-TEE service which
-> requires a free thread context to execute.
->
-> Acked-by: Sudeep Holla <sudeep.holla@arm.com>
-> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-> ---
-> No change since v7
->
+The of_find_device_by_node() function is returning a struct platform_device
+object with the embedded struct device member's reference counter
+incremented. This needs to be dropped when done with the platform device
+returned by of_find_device_by_node().
 
-Reviewed-by: Sumit Garg <sumit.garg@linaro.org>
+at91_pm_eth_quirk_is_valid() calls of_find_device_by_node() on
+suspend and resume path. On suspend it calls of_find_device_by_node() and
+on resume and failure paths it drops the counter of
+struct platform_device::dev.
 
--Sumit
+In case ethernet device may not wakeup there is a put_device() on
+at91_pm_eth_quirk_is_valid() which is wrong as it colides with
+put_device() on resume path leading to the reference counter of struct
+device embedded in struct platform_device to be messed, the following
+stack trace to be displayed (after 5 consecutive suspend/resume cycles)
+and the execution to hang:
 
-> No change since v6
->
-> Changes since v5:
-> - Applied Sudeep's review tag
->
-> Changes since v4:
-> - Updated to new API function tee_client_system_session() introduced
->   in patch v5 2/3.
->
-> No change since v3
->
-> Changes since v2:
-> - Fixed syntax issues (missing ';' chars), reported by kernel test robot.
->
-> Changes since v1:
-> - Updated to use new tee API functions tee_client_request_system_context()
->   and tee_client_release_system_context().
-> ---
->  drivers/firmware/arm_scmi/optee.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/firmware/arm_scmi/optee.c b/drivers/firmware/arm_scmi/optee.c
-> index e123de6e8c67..25bfb465484d 100644
-> --- a/drivers/firmware/arm_scmi/optee.c
-> +++ b/drivers/firmware/arm_scmi/optee.c
-> @@ -440,6 +440,10 @@ static int scmi_optee_chan_setup(struct scmi_chan_info *cinfo, struct device *de
->         if (ret)
->                 goto err_free_shm;
->
-> +       ret = tee_client_system_session(scmi_optee_private->tee_ctx, channel->tee_session);
-> +       if (ret)
-> +               dev_warn(dev, "Could not switch to system session, do best effort\n");
-> +
->         ret = get_channel(channel);
->         if (ret)
->                 goto err_close_sess;
-> --
-> 2.25.1
->
+WARNING: CPU: 0 PID: 378 at lib/refcount.c:25 0xc07ffc08
+refcount_t: addition on 0; use-after-free.
+Modules linked in:
+CPU: 0 PID: 378 Comm: sh Not tainted 6.1.22-linux4microchip-2023.04-rc3+ #7
+Hardware name: Microchip SAMA7
+Function entered at [<c010c134>] from [<c010993c>]
+Function entered at [<c010993c>] from [<c0823754>]
+Function entered at [<c0823754>] from [<c01162ac>]
+Function entered at [<c01162ac>] from [<c0116340>]
+Function entered at [<c0116340>] from [<c07ffc08>]
+Function entered at [<c07ffc08>] from [<c045fe88>]
+Function entered at [<c045fe88>] from [<c046004c>]
+Function entered at [<c046004c>] from [<c0141e94>]
+Function entered at [<c0141e94>] from [<c0142448>]
+Function entered at [<c0142448>] from [<c0140da8>]
+Function entered at [<c0140da8>] from [<c023dba0>]
+Function entered at [<c023dba0>] from [<c01d0700>]
+Function entered at [<c01d0700>] from [<c01d092c>]
+Function entered at [<c01d092c>] from [<c0100060>]
+Exception stack(0xe0e81fa8 to 0xe0e81ff0)
+1fa0:                   00000004 0057c668 00000001 0057c668 00000004 00000000
+1fc0: 00000004 0057c668 b6ecaba0 00000004 b6f4c0e0 b6ecb15c 00000000 00000000
+1fe0: 005456f0 beb3a788 b6dcfac4 b6e3bab8
+---[ end trace 0000000000000000 ]---
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 378 at lib/refcount.c:28 0xc045fef4
+refcount_t: underflow; use-after-free.
+Modules linked in:
+CPU: 0 PID: 378 Comm: sh Tainted: G        W          6.1.22-linux4microchip-2023.04-rc3+ #7
+Hardware name: Microchip SAMA7
+Function entered at [<c010c134>] from [<c010993c>]
+Function entered at [<c010993c>] from [<c0823754>]
+Function entered at [<c0823754>] from [<c01162ac>]
+Function entered at [<c01162ac>] from [<c0116340>]
+Function entered at [<c0116340>] from [<c045fef4>]
+Function entered at [<c045fef4>] from [<c046004c>]
+Function entered at [<c046004c>] from [<c0141e94>]
+Function entered at [<c0141e94>] from [<c0142448>]
+Function entered at [<c0142448>] from [<c0140da8>]
+Function entered at [<c0140da8>] from [<c023dba0>]
+Function entered at [<c023dba0>] from [<c01d0700>]
+Function entered at [<c01d0700>] from [<c01d092c>]
+Function entered at [<c01d092c>] from [<c0100060>]
+Exception stack(0xe0e81fa8 to 0xe0e81ff0)
+1fa0:                   00000004 0057c668 00000001 0057c668 00000004 00000000
+1fc0: 00000004 0057c668 b6ecaba0 00000004 b6f4c0e0 b6ecb15c 00000000 00000000
+1fe0: 005456f0 beb3a788 b6dcfac4 b6e3bab8
+---[ end trace 0000000000000000 ]---
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 378 at lib/refcount.c:22 0xc07ffbf4
+refcount_t: saturated; leaking memory.
+Modules linked in:
+CPU: 0 PID: 378 Comm: sh Tainted: G        W          6.1.22-linux4microchip-2023.04-rc3+ #7
+Hardware name: Microchip SAMA7
+Function entered at [<c010c134>] from [<c010993c>]
+Function entered at [<c010993c>] from [<c0823754>]
+Function entered at [<c0823754>] from [<c01162ac>]
+Function entered at [<c01162ac>] from [<c0116340>]
+Function entered at [<c0116340>] from [<c07ffbf4>]
+Function entered at [<c07ffbf4>] from [<c045eaa0>]
+Function entered at [<c045eaa0>] from [<c045fcc4>]
+Function entered at [<c045fcc4>] from [<c045fee4>]
+Function entered at [<c045fee4>] from [<c046004c>]
+Function entered at [<c046004c>] from [<c0141e94>]
+Function entered at [<c0141e94>] from [<c0142448>]
+Function entered at [<c0142448>] from [<c0140da8>]
+Function entered at [<c0140da8>] from [<c023dba0>]
+Function entered at [<c023dba0>] from [<c01d0700>]
+Function entered at [<c01d0700>] from [<c01d092c>]
+Function entered at [<c01d092c>] from [<c0100060>]
+Exception stack(0xe0e81fa8 to 0xe0e81ff0)
+1fa0:                   00000004 0057c668 00000001 0057c668 00000004 00000000
+1fc0: 00000004 0057c668 b6ecaba0 00000004 b6f4c0e0 b6ecb15c 00000000 00000000
+1fe0: 005456f0 beb3a788 b6dcfac4 b6e3bab8
+---[ end trace 0000000000000000 ]---
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 378 at kernel/irq/chip.c:241 0xc014be2c
+Modules linked in:
+CPU: 0 PID: 378 Comm: sh Tainted: G        W          6.1.22-linux4microchip-2023.04-rc3+ #7
+Hardware name: Microchip SAMA7
+Function entered at [<c010c134>] from [<c010993c>]
+Function entered at [<c010993c>] from [<c0823754>]
+Function entered at [<c0823754>] from [<c01162ac>]
+Function entered at [<c01162ac>] from [<c011637c>]
+Function entered at [<c011637c>] from [<c014be2c>]
+Function entered at [<c014be2c>] from [<c014f808>]
+Function entered at [<c014f808>] from [<c0460050>]
+Function entered at [<c0460050>] from [<c0141e94>]
+Function entered at [<c0141e94>] from [<c0142448>]
+Function entered at [<c0142448>] from [<c0140da8>]
+Function entered at [<c0140da8>] from [<c023dba0>]
+Function entered at [<c023dba0>] from [<c01d0700>]
+Function entered at [<c01d0700>] from [<c01d092c>]
+Function entered at [<c01d092c>] from [<c0100060>]
+Exception stack(0xe0e81fa8 to 0xe0e81ff0)
+1fa0:                   00000004 0057c668 00000001 0057c668 00000004 00000000
+1fc0: 00000004 0057c668 b6ecaba0 00000004 b6f4c0e0 b6ecb15c 00000000 00000000
+1fe0: 005456f0 beb3a788 b6dcfac4 b6e3bab8
+---[ end trace 0000000000000000 ]---
+at_xdmac e1200000.dma-controller: controller in mem2mem mode.
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 378 at lib/kobject.c:634 0xc07ffbe8
+kobject: '$���"����L��L��' (a3ba4c7d): is not initialized, yet kobject_get() is being called.
+Modules linked in:
+CPU: 0 PID: 378 Comm: sh Tainted: G        W          6.1.22-linux4microchip-2023.04-rc3+ #7
+Hardware name: Microchip SAMA7
+Function entered at [<c010c134>] from [<c010993c>]
+Function entered at [<c010993c>] from [<c0823754>]
+Function entered at [<c0823754>] from [<c01162ac>]
+Function entered at [<c01162ac>] from [<c0116340>]
+Function entered at [<c0116340>] from [<c07ffbe8>]
+Function entered at [<c07ffbe8>] from [<c0460300>]
+Function entered at [<c0460300>] from [<c0460634>]
+Function entered at [<c0460634>] from [<c0141ed4>]
+Function entered at [<c0141ed4>] from [<c0142448>]
+Function entered at [<c0142448>] from [<c0140da8>]
+Function entered at [<c0140da8>] from [<c023dba0>]
+Function entered at [<c023dba0>] from [<c01d0700>]
+Function entered at [<c01d0700>] from [<c01d092c>]
+Function entered at [<c01d092c>] from [<c0100060>]
+Exception stack(0xe0e81fa8 to 0xe0e81ff0)
+1fa0:                   00000004 0057c668 00000001 0057c668 00000004 00000000
+1fc0: 00000004 0057c668 b6ecaba0 00000004 b6f4c0e0 b6ecb15c 00000000 00000000
+1fe0: 005456f0 beb3a788 b6dcfac4 b6e3bab8
+---[ end trace 0000000000000000 ]---
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 378 at lib/kobject.c:728 0xc07ffd7c
+kobject: '$���"����L��L��' (a3ba4c7d): is not initialized, yet kobject_put() is being called.
+Modules linked in:
+CPU: 0 PID: 378 Comm: sh Tainted: G        W          6.1.22-linux4microchip-2023.04-rc3+ #7
+Hardware name: Microchip SAMA7
+Function entered at [<c010c134>] from [<c010993c>]
+Function entered at [<c010993c>] from [<c0823754>]
+Function entered at [<c0823754>] from [<c01162ac>]
+Function entered at [<c01162ac>] from [<c0116340>]
+Function entered at [<c0116340>] from [<c07ffd7c>]
+Function entered at [<c07ffd7c>] from [<c0460384>]
+Function entered at [<c0460384>] from [<c0460634>]
+Function entered at [<c0460634>] from [<c0141ed4>]
+Function entered at [<c0141ed4>] from [<c0142448>]
+Function entered at [<c0142448>] from [<c0140da8>]
+Function entered at [<c0140da8>] from [<c023dba0>]
+Function entered at [<c023dba0>] from [<c01d0700>]
+Function entered at [<c01d0700>] from [<c01d092c>]
+Function entered at [<c01d092c>] from [<c0100060>]
+Exception stack(0xe0e81fa8 to 0xe0e81ff0)
+1fa0:                   00000004 0057c668 00000001 0057c668 00000004 00000000
+1fc0: 00000004 0057c668 b6ecaba0 00000004 b6f4c0e0 b6ecb15c 00000000 00000000
+1fe0: 005456f0 beb3a788 b6dcfac4 b6e3bab8
+---[ end trace 0000000000000000 ]---
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 378 at lib/kobject.c:634 0xc07ffbe8
+kobject: '�Z����@Ą�?��8�H�Ĕ����UC�' (6407eb2a): is not initialized, yet kobject_get() is being called.
+Modules linked in:
+CPU: 0 PID: 378 Comm: sh Tainted: G        W          6.1.22-linux4microchip-2023.04-rc3+ #7
+Hardware name: Microchip SAMA7
+Function entered at [<c010c134>] from [<c010993c>]
+Function entered at [<c010993c>] from [<c0823754>]
+Function entered at [<c0823754>] from [<c01162ac>]
+Function entered at [<c01162ac>] from [<c0116340>]
+Function entered at [<c0116340>] from [<c07ffbe8>]
+Function entered at [<c07ffbe8>] from [<c0460300>]
+Function entered at [<c0460300>] from [<c0460634>]
+Function entered at [<c0460634>] from [<c0141ed4>]
+Function entered at [<c0141ed4>] from [<c0142448>]
+Function entered at [<c0142448>] from [<c0140da8>]
+Function entered at [<c0140da8>] from [<c023dba0>]
+Function entered at [<c023dba0>] from [<c01d0700>]
+Function entered at [<c01d0700>] from [<c01d092c>]
+Function entered at [<c01d092c>] from [<c0100060>]
+Exception stack(0xe0e81fa8 to 0xe0e81ff0)
+1fa0:                   00000004 0057c668 00000001 0057c668 00000004 00000000
+1fc0: 00000004 0057c668 b6ecaba0 00000004 b6f4c0e0 b6ecb15c 00000000 00000000
+1fe0: 005456f0 beb3a788 b6dcfac4 b6e3bab8
+---[ end trace 0000000000000000 ]---
+
+Along with this the error path of at91_pm_config_quirks() had been also
+adapted to decrement propertly the reference counter of struct device
+embedded in struct platform_device.
+
+Fixes: b7fc72c63399 ("ARM: at91: pm: add quirks for pm")
+Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+---
+ arch/arm/mach-at91/pm.c | 20 +++++++++-----------
+ 1 file changed, 9 insertions(+), 11 deletions(-)
+
+diff --git a/arch/arm/mach-at91/pm.c b/arch/arm/mach-at91/pm.c
+index 60dc56d8acfb..437dd0352fd4 100644
+--- a/arch/arm/mach-at91/pm.c
++++ b/arch/arm/mach-at91/pm.c
+@@ -334,16 +334,14 @@ static bool at91_pm_eth_quirk_is_valid(struct at91_pm_quirk_eth *eth)
+ 		pdev = of_find_device_by_node(eth->np);
+ 		if (!pdev)
+ 			return false;
++		/* put_device(eth->dev) is called at the end of suspend. */
+ 		eth->dev = &pdev->dev;
+ 	}
+ 
+ 	/* No quirks if device isn't a wakeup source. */
+-	if (!device_may_wakeup(eth->dev)) {
+-		put_device(eth->dev);
++	if (!device_may_wakeup(eth->dev))
+ 		return false;
+-	}
+ 
+-	/* put_device(eth->dev) is called at the end of suspend. */
+ 	return true;
+ }
+ 
+@@ -439,14 +437,14 @@ static int at91_pm_config_quirks(bool suspend)
+ 				pr_err("AT91: PM: failed to enable %s clocks\n",
+ 				       j == AT91_PM_G_ETH ? "geth" : "eth");
+ 			}
+-		} else {
+-			/*
+-			 * Release the reference to eth->dev taken in
+-			 * at91_pm_eth_quirk_is_valid().
+-			 */
+-			put_device(eth->dev);
+-			eth->dev = NULL;
+ 		}
++
++		/*
++		 * Release the reference to eth->dev taken in
++		 * at91_pm_eth_quirk_is_valid().
++		 */
++		put_device(eth->dev);
++		eth->dev = NULL;
+ 	}
+ 
+ 	return ret;
+-- 
+2.34.1
+
