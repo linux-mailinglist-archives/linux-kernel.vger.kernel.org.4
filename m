@@ -2,152 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59208708633
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 18:47:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E10BA708634
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 18:48:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbjERQrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 12:47:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38400 "EHLO
+        id S229696AbjERQs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 12:48:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjERQrj (ORCPT
+        with ESMTP id S229599AbjERQs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 12:47:39 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270C0E6A
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 09:47:35 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-3f39600f9b8so11489721cf.3
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 09:47:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684428454; x=1687020454;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EO246ZqiVBRxZDxMtJpAios9D2U+bi/JcOcYKYzfYJ8=;
-        b=C0SkUL7LTPqYi++TtcB64tB2yY2rMEzGkd4D9JFvGhePfWVTDkxBuKx/m+Hi4c+sDI
-         hthy6WeL3lc3ehF7bnAH2sXSAyXRLjoRbfpr0fYpkylrx6wNHoDwqSJVFZPj9RkEKkbh
-         2/FmwnPZrd/lh5lbL8RpbmOjKrPaqlsOOUbPw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684428454; x=1687020454;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EO246ZqiVBRxZDxMtJpAios9D2U+bi/JcOcYKYzfYJ8=;
-        b=eT+MaQW38WQ6+AYvj0Qf7gW9DMRBGO0ws4NhYM9WYM5fD9u52d8QI3NZ4KakYtmZkv
-         B8fxTwwRkZBz/aiyV3uGdHfs+aBkoSgiq16UDbV1zkACrdFy4IxEVgio5WvSXxAhplU0
-         YApEKtebugjI+EEN5vpWjimYDgcafzQ0oDYkJEH84oUESe3bRkBynQIttM2yDnBnCVCj
-         IwT+nyppD1e0f09Tru5W/vGIf5/R/bDI7afVBoH38qyE3VKv8ncVP1llv+bRh5/Q8nlv
-         I3pwihbkjFFBRV9FULhN052V8pjVJCnbL9UDvaf+OQvOnkTUY1zTvGxODMz8avHZxBuP
-         h7hw==
-X-Gm-Message-State: AC+VfDzGIwJlL2qyfzJnThVOOO4IrpH5StNAdOHyVVEvGb30gWoUluo4
-        iwHy07Y6IOIQu+H1XGVa01LkRPV14VqX5XplxmLg2w==
-X-Google-Smtp-Source: ACHHUZ5C8U/4R0hjO7Jl5obKdU8v3+0pW5C3Prfqf33Ma5bKHHByD+VEYyCANUA7CHqRjEdt9Y7ADQpAwi48muRxbW0=
-X-Received: by 2002:a05:622a:189e:b0:3e6:2e9e:58f1 with SMTP id
- v30-20020a05622a189e00b003e62e9e58f1mr434517qtc.59.1684428454207; Thu, 18 May
- 2023 09:47:34 -0700 (PDT)
+        Thu, 18 May 2023 12:48:27 -0400
+Received: from out-45.mta0.migadu.com (out-45.mta0.migadu.com [91.218.175.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E616410E
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 09:48:25 -0700 (PDT)
+Date:   Thu, 18 May 2023 12:48:18 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1684428504;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=1BJyFti2GSK6Ojcdhf1oqrHvjDqy4qKVqOaagfZXbM8=;
+        b=B69OOOf99KKPTXqHA+bgu5GeyBKcn9r6JhoMGiKzX+giLnBWWwnzh2gd+oX0gtR1U9F5N3
+        JPdn5RZdQDHj93zYae1uGFPgQWS+XGqALy1GJDVdowHGLeilE//EZ5Cm/Sanj+u2fymPxM
+        e/NCrNvkFDq3i1jNiBH71I5vS36UZ9Q=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Song Liu <song@kernel.org>
+Cc:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
+        x86@kernel.org
+Subject: Re: [RFC PATCH 1/5] mm: intorduce __GFP_UNMAPPED and unmapped_alloc()
+Message-ID: <ZGZW0v3nRShO7r+Z@moria.home.lan>
+References: <20230308094106.227365-1-rppt@kernel.org>
+ <20230308094106.227365-2-rppt@kernel.org>
+ <ZGWdHC3Jo7tFUC59@moria.home.lan>
+ <20230518152354.GD4967@kernel.org>
+ <CAPhsuW541pcsMKYah=2U8mUs8is3jAiNKC8Erte=RkAUGFO9EA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230515142552.1.I17cae37888be3a8683911991602f18e482e7a621@changeid>
- <ZGQ9Y+vqWhQLHAQh@google.com> <CAMaBtwHxaevxLY7zWNDU8zbyWx=puLkeeRAjFtovvrA5pjtJ4w@mail.gmail.com>
- <ZGWBhEMmo2lStTg9@google.com>
-In-Reply-To: <ZGWBhEMmo2lStTg9@google.com>
-From:   Tim Van Patten <timvp@chromium.org>
-Date:   Thu, 18 May 2023 10:47:23 -0600
-Message-ID: <CAMaBtwFtE=vjuhVy7rw9zCe9WV0dRyeBWj88JH2j3bkbh2BkXA@mail.gmail.com>
-Subject: Re: [PATCH] [v9] platform/chrome: cros_ec_lpc: Move host command to prepare/complete
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, robbarnes@google.com,
-        lalithkraj@google.com, rrangel@chromium.org,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev, Garrick Evans <garrick@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPhsuW541pcsMKYah=2U8mUs8is3jAiNKC8Erte=RkAUGFO9EA@mail.gmail.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 7:38=E2=80=AFPM Tzung-Bi Shih <tzungbi@kernel.org> =
-wrote:
->
-> On Wed, May 17, 2023 at 09:56:59AM -0600, Tim Van Patten wrote:
-> > > I can understand the patch wants to notify EC earlier/later when the =
-system
-> > suspend/resume.  But what is the issue addressed?  What happens if the
-> > measurement of suspend/resume duration is not that accurate?
-> >
-> > Please see the following:
-> > - b/206860487
-> > - https://docs.google.com/document/d/1AgaZmG70bAKhZb-ZMbZT-TyY49zPoKuDD=
-bD61dDBSTQ/edit?disco=3DAAAAws1enlw&usp_dm=3Dfalse
->
-> I have no permission to access the doc.
+On Thu, May 18, 2023 at 09:33:20AM -0700, Song Liu wrote:
+> I am working on patches based on the discussion in [1]. I am planning to
+> send v1 for review in a week or so.
 
-Since you work at Google, please request permission to access it, so
-the owners can grant it.
+Hey Song, I was reviewing that thread too,
 
-> Please put the context in the commit
-> message.
+Are you taking a different approach based on Thomas's feedback? I think
+he had some fair points in that thread.
 
-Done in the next patchset.
+My own feeling is that the buddy allocator is our tool for allocating
+larger variable sized physically contiguous allocations, so I'd like to
+see something based on that - I think we could do a hybrid buddy/slab
+allocator approach, like we have for regular memory allocations.
 
-> It's usually helpful if you could put the corresponding EC FW
-> changes.
+I started on a slab allocator for executable memory allocations the
+other day (very minimal, but tested it for bcachefs and it works).
 
-Why are you assuming there is EC FW with this change? Any and all of
-the EC changes related to this have (obviously) landed long ago.
+But I'd love to hear more about your current approach as well.
 
-> > The issue is that we need the EC aware of the AP being in the process
-> > of suspend/resume from start to finish, so we can accurately
-> > determine:
-> > - How long the process took to better gauge we're meeting ChromeOS requ=
-irements.
-> > - When the AP failed to complete the process, so we can collect data
-> > and perform error recovery.
->
-> Is it a new feature?
-
-No, it's not.
-
-> How could the *error* recovery do?
-
-I don't understand what this is asking.
-
-> > > What about other interfaces (i2c, spi, uart)?  Do they also need to c=
-hange
-> > the callbacks?
-> >
-> > We aren't concerned about those devices, because they aren't being
-> > used on the devices we're seeing issues with. If devices using those
-> > ECs want this change, they can pick it up as well, but we don't have
-> > any way to test changes on those devices (whatever they may be).
->
-> This doesn't sound good.  As I would suppose you are adding some new EC F=
-W
-> features regarding to EC_CMD_HOST_SLEEP_EVENT, you should consider the
-> existing systems too.
-
-Again, why are you assuming there is new EC FW for this? This is only
-changing when an already-existing host command is being sent. Nothing
-is being added or removed.
-
-> What happens if a system uses older kernel (without this patch) to
-> communicate with new EC FW via LPC?
-
-The message is being sent regardless of whether this patch lands or
-not. This patch just changes when they are sent, so there is no risk
-from that perspective.
-
-> How about adding a new EC host command for your purpose so that it won't
-> affect the existing systems?  I knew this was discussed in some older ser=
-ies
-> but I didn't follow the thread.
->
-
-No. The necessary host command already exists and is being sent. There
-is no additional command being sent with this change. It is only
-changing when the command is being sent.
+Cheers,
+Kent
