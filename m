@@ -2,160 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD06707EC3
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 13:04:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0EEF707EB3
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 13:02:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbjERLEN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 07:04:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40740 "EHLO
+        id S230141AbjERLCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 07:02:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbjERLEM (ORCPT
+        with ESMTP id S230090AbjERLCE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 07:04:12 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E57E8
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 04:03:46 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1a516fb6523so18604155ad.3
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 04:03:46 -0700 (PDT)
+        Thu, 18 May 2023 07:02:04 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181D9E8;
+        Thu, 18 May 2023 04:02:03 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-52cb78647ecso1249939a12.1;
+        Thu, 18 May 2023 04:02:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1684407826; x=1686999826;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=L8wUobxEGLI2p/DjIP+xJqCqQPQ2167f6CpUfP5l0e4=;
-        b=L/z29TYptPB+dKSNb3mEL33qDf2zvq+L0/3Z2CVEjBTqugDsEWs4MwCo5ccH0uwpL2
-         AvGAMh7gnwX3UthjGXJv4Cg8sPuRyiIteL58u2eUEKt8LTGjf0Afwk/DmajdKGxekkoU
-         KYUZWBlXieZm0Pi8ecFqz2JfXx46KJUIGMbpDXk8FcYGg2OzUUrnv3s7Vb/DtuWYrhhm
-         CBEnpAB563A60MUjfailaf0/PpGx3yHkXNXQSQSVj9op61WUVu7XgfOqWYbc7N5oCXCl
-         kqRmWgC1aglb0CFUUG+hapCkb8YOtKlcOoyyDnM2rBjdev+O/LWdwDhH9N6t/OOENpdk
-         CKXw==
+        d=gmail.com; s=20221208; t=1684407722; x=1686999722;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZHadosSVP1nYeUYor3LYCwEiSQu4WLzAMj39s4WmEiE=;
+        b=b2cQDMUYRU9sxfpMR/P4TVHYY/bVcXfROWLkpgM+keixBcZ0W7q+pABMmJekvpJccq
+         9BqAxS22ZtWWAzt35MCNz4Rzf7FYIJ3ut1MwIgmSDrVVCN3nPfCxEN52az9nHhWje+n/
+         +hwHfViwXxX4HWvdZorfM5/kb1EeAfI57NZfZEHkdPjXEWzdnrZMhUKWR8rsDgQXuMVF
+         HBQp3ClIR+GlF/s/dwxCeiIRbh2Rsj9yJpVoLTrudVrrIEAX4psuzGgEDT3PrGGvExh5
+         ew+zw6IrrNs45JW+MJXI2uLZ4Di4R42vYzr1Ztcx5GdNFcA6VKopMeyD21sCaNndNw81
+         wiqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684407826; x=1686999826;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=L8wUobxEGLI2p/DjIP+xJqCqQPQ2167f6CpUfP5l0e4=;
-        b=lqS0fnHPyB1p7DqGrDSwFZr7V74ml/MKHtLZ/vlkDJgaDm6jaYJUqXvY0Zi+t8+1Ik
-         zbgozVSzqirR8Ubtw8yMuHDyv9D0uwZgCir4AZaYRD0ciUbJClz6uL9vhBGD9LNepnHM
-         OV88Obwmn8KbmYcUoN9ueHY6khxkmtlOPu5kQfgFyMx/gLD2z9h8YkIoK7+oCBxCtTP5
-         nGJZkyfT7GVq3UdCMbeGZ1EAih62qTr3yfbs+r8JGdfdyzNN5unQ5NuBQYVXBwPKOqDb
-         uzqb/udHsOPqvXbQwrfbDET50vMfNS2Z+Xj6du9t/Mhy1GpmeJ697g/lZZFeOh9GHd9S
-         dXuQ==
-X-Gm-Message-State: AC+VfDwJegTOh632ah1hq89C7YeKF7fiKuGM+kGXWjFVJ4oI95/u2/xT
-        xsssVJZFnEzFWQIzxhCXnpuNkQ==
-X-Google-Smtp-Source: ACHHUZ6qEky0lbIh7SGpL1S6SNPIGEpyyuqz6caX9PGmjpQo/xjkVek+4gHTCYfNOHYvwcR5n+qSlg==
-X-Received: by 2002:a17:903:1205:b0:1ae:14d:8d0a with SMTP id l5-20020a170903120500b001ae014d8d0amr2459581plh.29.1684407825895;
-        Thu, 18 May 2023 04:03:45 -0700 (PDT)
-Received: from [10.3.43.196] ([61.213.176.8])
-        by smtp.gmail.com with ESMTPSA id h8-20020a170902ac8800b001a194df5a58sm1141310plr.167.2023.05.18.04.03.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 May 2023 04:03:45 -0700 (PDT)
-Message-ID: <f16b8f56-8890-a4ae-0108-ff5667350fbc@bytedance.com>
-Date:   Thu, 18 May 2023 19:01:40 +0800
+        d=1e100.net; s=20221208; t=1684407722; x=1686999722;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZHadosSVP1nYeUYor3LYCwEiSQu4WLzAMj39s4WmEiE=;
+        b=coDEYRQqnac01uqiRlAnFJ6RVEXDWu2ubUYwt22oSAWQcLqqupxOHI25YA7jUTm7rF
+         c8goGiGAzonYmjMVn2lSUQ13beyJ+qd+bW7UVogwuBQcqJV/+9EdxcY6DmjeDdHeynVl
+         cK7spQfNXIqOnhwUN9BSGUiXUCBaSy4q/4F5M59n/2f/3Ipfp5JbhrrjrQFWXSuNNcYt
+         Fqvk8kQO3ZIeqMrxW+qBGCdODjosYf2S4SVYqMNZ8uiNpYurFZzRjt0S+6+IImmPGCuR
+         v9XfbHfYw/mFF9UvLw2WoSFEIooZHrcxkn6n+OJqph29ZG6W/Bge8SDoGd4dVI5GyGDR
+         fJEQ==
+X-Gm-Message-State: AC+VfDxiJnaVcjLikdtNXPxo8aoVOnvy1kaLHrVCA9Nm2Tw2OhEqD8mX
+        Axa5MVHwjXHRVlkWujiykCU9BUyZirU4ja6zbug=
+X-Google-Smtp-Source: ACHHUZ6QeMDKQ8o8d5u/L+MqMx0fcWHl7nyy9+bo9SijSMzn68BRMxKaYwM2W5mQz6LVCG+qibygS5qbq1DqOw2Xc5M=
+X-Received: by 2002:a17:902:7b8f:b0:1ae:2e0f:1cf6 with SMTP id
+ w15-20020a1709027b8f00b001ae2e0f1cf6mr2036475pll.36.1684407722440; Thu, 18
+ May 2023 04:02:02 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: Re: Re: Re: [PATCH v2 1/2] virtio: abstract virtqueue related
- methods
-Content-Language: en-US
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Christoph Hellwig <hch@infradead.org>, stefanha@redhat.com,
-        jasowang@redhat.com, xuanzhuo@linux.alibaba.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-References: <20230517025424.601141-1-pizhenwei@bytedance.com>
- <20230517025424.601141-2-pizhenwei@bytedance.com>
- <ZGSEq197W8VvOWCc@infradead.org>
- <9e4702f2-5473-2139-3858-ae58817bc7b5@bytedance.com>
- <ZGSGQWqbtdwGXurf@infradead.org>
- <cc9f3aea-b8bc-f312-41bb-3fd68083aa99@bytedance.com>
- <20230517062401-mutt-send-email-mst@kernel.org>
- <ee2a975f-0aa6-a46a-e9d2-7f82e313347f@bytedance.com>
- <20230518060656-mutt-send-email-mst@kernel.org>
-From:   zhenwei pi <pizhenwei@bytedance.com>
-In-Reply-To: <20230518060656-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1678979666-551-1-git-send-email-quic_mojha@quicinc.com>
+ <76943268-3982-deaf-9736-429dd51e01b0@gmail.com> <052bacf7-756b-5f63-965b-9a8480a9acf5@quicinc.com>
+In-Reply-To: <052bacf7-756b-5f63-965b-9a8480a9acf5@quicinc.com>
+From:   Robert Marko <robimarko@gmail.com>
+Date:   Thu, 18 May 2023 13:01:51 +0200
+Message-ID: <CAOX2RU4WcNXu42W6_459wKzyo+6onNRhE+=3usmSRB9AEF3MtA@mail.gmail.com>
+Subject: Re: [PATCH v3] firmware: qcom_scm: Clear download bit during reboot
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 18 May 2023 at 12:44, Mukesh Ojha <quic_mojha@quicinc.com> wrote:
+>
+>
+>
+> On 5/18/2023 3:45 PM, Robert Marko wrote:
+> >
+> > On 16. 03. 2023. 16:14, Mukesh Ojha wrote:
+> >> During normal restart of a system download bit should
+> >> be cleared irrespective of whether download mode is
+> >> set or not.
+> >>
+> >> Fixes: 8c1b7dc9ba22 ("firmware: qcom: scm: Expose download-mode control")
+> >> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> >
+> > Hi, this has been backported to 5.15.111, however it seems to be
+> > breaking reboot
+>
+> Thanks for reporting the issue, by any chance enabling
+> CONFIG_QCOM_SCM_DOWNLOAD_MODE_DEFAULT + reboot works on
+> IPQ4019 ?
 
+Unfortunately not, the board still hangs in SBL.
 
-On 5/18/23 18:09, Michael S. Tsirkin wrote:
-> On Thu, May 18, 2023 at 08:47:22AM +0800, zhenwei pi wrote:
->> On 5/17/23 18:39, Michael S. Tsirkin wrote:
->>> On Wed, May 17, 2023 at 04:35:55PM +0800, zhenwei pi wrote:
->>>>
->>>>
->>>> On 5/17/23 15:46, Christoph Hellwig wrote:
->>>>> On Wed, May 17, 2023 at 03:43:03PM +0800, zhenwei pi wrote:
->>>>>> I have a plan to introduce 'Virtio Over Fabrics'(TCP&RDMA) as Virtio
->>>>>> transport, as mentioned in cover letter of this series:
->>>>>> 3 weeks ago, I posted a proposal 'Virtio Over Fabrics':
->>>>>> https://lists.oasis-open.org/archives/virtio-comment/202304/msg00442.html
->>>>>
->>>>> Just don't do it.  Please define your own protocols over RDMA or TCP
->>>>> for exactly the operations you need (for many they will already exist)
->>>>> instead of piggyg backing on virtio and making everyone else pay the
->>>>> price.
->>>>>
->>>>
->>>> Hi
->>>>
->>>> 1, `virtqueue_add_inbuf` in current version:
->>>> static inline int virtqueue_add_inbuf(struct virtqueue *vq,
->>>>                                         struct scatterlist *sg,
->>>>                                         unsigned int num,
->>>>                                         void *data,
->>>>                                         gfp_t gfp)
->>>> {
->>>>           if (likely(!vq->abstract))
->>>>                   return vring_virtqueue_add_sgs(vq, &sg, num, 0, 1, data,
->>>> NULL, gfp);
->>>>
->>>>           return vq->add_sgs(vq, &sg, num, 0, 1, data, NULL, gfp);
->>>> }
->>>>
->>>> And disassemble 'virtinput_queue_evtbuf':
->>>> static void virtinput_queue_evtbuf(struct virtio_input *vi,
->>>>                                      struct virtio_input_event *evtbuf)
->>>> {
->>>>           struct scatterlist sg[1];
->>>>
->>>>           sg_init_one(sg, evtbuf, sizeof(*evtbuf));
->>>>           virtqueue_add_inbuf(vi->evt, sg, 1, evtbuf, GFP_ATOMIC);
->>>> }
->>>>
->>>> I notice that two instructions are newly added for vring like:
->>>>    24d:   80 78 35 00             cmpb   $0x0,0x35(%rax)
->>>>    251:   75 3f                   jne    292
->>>>
->>>> Is it an expensive price...
->>>
->>> Can we somehow only override the kick method?
->>> Then take the ring and send it over ...
->>>
->>
->> Could you please take a look at this code?
->> https://github.com/pizhenwei/linux/blob/virtio-of-github/drivers/virtio/virtio_fabrics.c#LL861C13-L861C23
-> 
-> what am I looking at here?
-> 
-> Looks like at least vof_handle_vq duplicates some code from vringh.
-> But besides that yes, that's the idea.
-> 
+Regards,
+Robert
 
-OK, I'd drop this series.
-
-Cc Jason & Stefan.
-
-
--- 
-zhenwei pi
+>
+> > on IPQ4019 by causing the board to then hang in SBL with:
+> > root@OpenWrt:/# reboot
+> > root@OpenWrt:/# [   76.473541] device lan1 left promiscuous mode
+> > [   76.474204] br-lan: port 1(lan1) entered disabled state
+> > [   76.527975] device lan2 left promiscuous mode
+> > [   76.530301] br-lan: port 2(lan2) entered disabled state
+> > [   76.579376] device lan3 left promiscuous mode
+> > [   76.581698] br-lan: port 3(lan3) entered disabled state
+> > [   76.638434] device lan4 left promiscuous mode
+> > [   76.638777] br-lan: port 4(lan4) entered disabled state
+> > [   76.978489] qca8k-ipq4019 c000000.switch wan: Link is Down
+> > [   76.978883] device eth0 left promiscuous mode
+> > [   76.987077] ipqess-edma c080000.ethernet eth0: Link is Down
+> > [
+> > Format: Log Type - Time(microsec) - Message - Optional Info
+> > Log Type: B - Since Boot(Power On Reset),  D - Delta,  S - Statistic
+> > S - QC_IMAGE_VERSION_STRING=BOOT.BF.3.1.1-00123
+> > S - IMAGE_VARIANT_STRING=DAABANAZA
+> > S - OEM_IMAGE_VERSION_STRING=CRM
+> > S - Boot Config, 0x00000021
+> > S - Reset status Config, 0x00000010
+> > S - Core 0 Frequency, 0 MHz
+> > B -       261 - PBL, Start
+> > B -      1339 - bootable_media_detect_entry, Start
+> > B -      1679 - bootable_media_detect_success, Start
+> > B -      1693 - elf_loader_entry, Start
+> > B -      5076 - auth_hash_seg_entry, Start
+> > B -      7223 - auth_hash_seg_exit, Start
+> > B -    578349 - elf_segs_hash_verify_entry, Start
+> > B -    696356 - PBL, End
+> > B -    696380 - SBL1, Start
+> > B -    787236 - pm_device_init, Start
+> > D -         7 - pm_device_init, Delta
+> > B -    788701 - boot_flash_init, Start
+> > D -     52782 - boot_flash_init, Delta
+> > B -    845625 - boot_config_data_table_init, Start
+> > D -      3836 - boot_config_data_table_init, Delta - (419 Bytes)
+> > B -    852841 - clock_init, Start
+> > D -      7566 - clock_init, Delta
+> > B -    864883 - CDT version:2,Platform ID:9,Major ID:0,Minor
+> > ID:0,Subtype:64
+> > B -    868413 - sbl1_ddr_set_params, Start
+> > B -    873402 - cpr_init, Start
+> > D -         2 - cpr_init, Delta
+> > B -    877842 - Pre_DDR_clock_init, Start
+> > D -         4 - Pre_DDR_clock_init, Delta
+> > D -     13234 - sbl1_ddr_set_params, Delta
+> > B -    891155 - pm_driver_init, Start
+> > D -         2 - pm_driver_init, Delta
+> > B -    909105 - Image Load, Start
+> > B -   1030210 - Boot error ocuured!. Error code: 303d
+> >
+> > Reverting the commit fixes rebooting.
+> >
+> > Regards,
+> > Robert
+> >
+> >> ---
+> >> Changes in v3:
+> >>    - Added Fixes tag.
+> >>    - Removed it from below patch series, as it makes sense to go this
+> >> independently.
+> >>
+> >> https://lore.kernel.org/lkml/1677664555-30191-1-git-send-email-quic_mojha@quicinc.com/
+> >>
+> >> Changes in v2:
+> >>    - No change.
+> >>
+> >>   drivers/firmware/qcom_scm.c | 3 +--
+> >>   1 file changed, 1 insertion(+), 2 deletions(-)
+> >>
+> >> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+> >> index 468d4d5..3e020d1 100644
+> >> --- a/drivers/firmware/qcom_scm.c
+> >> +++ b/drivers/firmware/qcom_scm.c
+> >> @@ -1506,8 +1506,7 @@ static int qcom_scm_probe(struct platform_device
+> >> *pdev)
+> >>   static void qcom_scm_shutdown(struct platform_device *pdev)
+> >>   {
+> >>       /* Clean shutdown, disable download mode to allow normal restart */
+> >> -    if (download_mode)
+> >> -        qcom_scm_set_download_mode(false);
+> >> +    qcom_scm_set_download_mode(false);
+> >>   }
+> >>   static const struct of_device_id qcom_scm_dt_match[] = {
