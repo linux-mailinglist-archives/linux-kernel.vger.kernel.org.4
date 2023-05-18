@@ -2,143 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A64D70778B
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 03:43:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E606370778D
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 03:44:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbjERBnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 21:43:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40092 "EHLO
+        id S229792AbjERBoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 21:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbjERBnt (ORCPT
+        with ESMTP id S229586AbjERBof (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 21:43:49 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D30E2681
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 18:43:47 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1ae64580e9fso55945ad.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 18:43:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684374227; x=1686966227;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0PO3eq+1UMnnMiki2DRBn6QhtFhDNQwR095O3RPt+vk=;
-        b=Xyb4IV2yKjuyhUFulVfh1VhwAYVwEXQinkiQqGn8wFptaWJo1BWiSJKj9OoD4r719t
-         HDp1HdJDXJP3f4Idq2CdJSZ6NpqhBqyza5VbiO8uL7qjOGDkgPh1JZkXhvWqrhTGhBCH
-         kl4EjebJWT4evqzEVpg0SlSXBaf1aqNngGuK+reeotEiJLtIhW+3w2phujs0ygIebN6p
-         erXfuM/BBYtCq854TvjGS3i3vf29y3Bae+9mhjYG32vGR1t8xZZFuvJxHtbwnYp1fCYF
-         vCl55tMNz4sV+l17USlBnbBT7hy6FZhOFBlBfl+E//etH0VW93bj5XvoYvcWeDDyrC7c
-         WW+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684374227; x=1686966227;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0PO3eq+1UMnnMiki2DRBn6QhtFhDNQwR095O3RPt+vk=;
-        b=SCo/Es6bmSUs8h4EOmrcYuGizOqxRF2AubjxU6U4B9lTUWfAcEJ9/R74PvnDjc2lwi
-         tIUThUfv6AlG2AV//L8qeELkI1EAeyAFDlNurwm17fSpTpt0z4GKp1+R/AVhc2yr7h1L
-         51bYmiQ1es5GKGorpUZHgvehr88mYq1jIiKax39NXxl67J+uyhgKDVmZ8zL7C0RQx9wr
-         iJu6Oi4M6mrzYImJoR/7Ma2d3N4P4mq48upA3f+mz0jccEztZLw0LWgvXkIA0uvUyJjE
-         qF+WmMUG6wo75XpI/XlOdYMAPgxGsyX4gI1bP8J2u1Ay7sO46AkQywrKVSt1r6X+c54A
-         XPgA==
-X-Gm-Message-State: AC+VfDxrpaZZfuxXf6q1RxDGMLsbi6EgnvJnKMsXVaFwQCFY0hAraGlU
-        izlJxAgxKzPeE+4DF69no+670g==
-X-Google-Smtp-Source: ACHHUZ7WrXIOfi7pj20d8229kwsHD0XmSF6t0UxpkiubnJvSpHmsolgFW3CTTquOxk9F5x2iiCPhcg==
-X-Received: by 2002:a17:902:f352:b0:1ae:4008:5404 with SMTP id q18-20020a170902f35200b001ae40085404mr80291ple.0.1684374226600;
-        Wed, 17 May 2023 18:43:46 -0700 (PDT)
-Received: from google.com (25.11.145.34.bc.googleusercontent.com. [34.145.11.25])
-        by smtp.gmail.com with ESMTPSA id d14-20020a17090ae28e00b00247601ce2aesm2280427pjz.20.2023.05.17.18.43.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 May 2023 18:43:46 -0700 (PDT)
-Date:   Thu, 18 May 2023 01:43:43 +0000
-From:   Fangrui Song <maskray@google.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     kasan-dev@googlegroups.com, Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Mukesh Ojha <quic_mojha@quicinc.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ubsan: add prototypes for internal functions
-Message-ID: <20230518014343.32kht5dmthjuly34@google.com>
-References: <20230517125102.930491-1-arnd@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20230517125102.930491-1-arnd@kernel.org>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 17 May 2023 21:44:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8CE3123;
+        Wed, 17 May 2023 18:44:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DB1E64C27;
+        Thu, 18 May 2023 01:44:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDB7EC4339B;
+        Thu, 18 May 2023 01:44:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684374273;
+        bh=oY7desyUrZgSVYNn22bstmMUQskNjZg8hcfa694Nb08=;
+        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+        b=o6ouGPbZgFhaaAQIuTiOa6FBz+lfwnBc2X1T9mIW8NyLxORR634k6PKL3tiSaXcrt
+         r5iSKkTulhFlc1m68HFxkGRhe4ga5D6g8rW+dQoDhll49DZFVmYf0kE/J0o/LpMEa+
+         pRtPh8Q5lMYqhJNbEnV1qrlJUofcRbltGNoymy6DbBgjb/qcfs0B0ilHNDQFChFhxk
+         9ywWMrP8HxNwOkpcm/cELdYto2IaDB/Rj60rO4c+fXRrNnsc7WWU967sxrrRU5HdYg
+         tj18QYixSsHS1yRpgNYIRZOmxZq7s8WafS1HZuNFabUaCh1kKbgAe5/1KVOAk9NeU9
+         IdMDoTFF1tPXg==
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 18 May 2023 04:44:30 +0300
+Message-Id: <CSP0UHKU4XI8.1K46P5P0N5451@wks-101042-mac.ad.tuni.fi>
+Cc:     "Peter Huewe" <peterhuewe@gmx.de>,
+        "Jason Gunthorpe" <jgg@ziepe.ca>,
+        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [GIT PULL] tpmdd: three bug fixes for v6.4-rc2
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Linus Torvalds" <torvalds@linux-foundation.org>
+X-Mailer: aerc 0.15.2
+References: <20230516000208.4008443-1-jarkko@kernel.org>
+ <CAHk-=wiEYewsSM0SbdBbdX2DhUNcaZptvS8NPKZES41vr_H=bA@mail.gmail.com>
+In-Reply-To: <CAHk-=wiEYewsSM0SbdBbdX2DhUNcaZptvS8NPKZES41vr_H=bA@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-17, Arnd Bergmann wrote:
->From: Arnd Bergmann <arnd@arndb.de>
+On Wed May 17, 2023 at 7:52 PM EEST, Linus Torvalds wrote:
+> On Mon, May 15, 2023 at 5:02=E2=80=AFPM Jarkko Sakkinen <jarkko@kernel.or=
+g> wrote:
+> >
+> > are available in the Git repository at:
+> >
+> >   git://git.kernel.org/pub/scm/linux/kernel/git/jarkkojs/linux-tpmdd.gi=
+t/ tpmdd-v6.4-rc2
 >
->Most of the functions in ubsan that are only called from generated
->code don't have a prototype, which W=1 builds warn about:
+> That didn't work at all.
 >
->lib/ubsan.c:226:6: error: no previous prototype for '__ubsan_handle_divrem_overflow' [-Werror=missing-prototypes]
->lib/ubsan.c:307:6: error: no previous prototype for '__ubsan_handle_type_mismatch' [-Werror=missing-prototypes]
->lib/ubsan.c:321:6: error: no previous prototype for '__ubsan_handle_type_mismatch_v1' [-Werror=missing-prototypes]
->lib/ubsan.c:335:6: error: no previous prototype for '__ubsan_handle_out_of_bounds' [-Werror=missing-prototypes]
->lib/ubsan.c:352:6: error: no previous prototype for '__ubsan_handle_shift_out_of_bounds' [-Werror=missing-prototypes]
->lib/ubsan.c:394:6: error: no previous prototype for '__ubsan_handle_builtin_unreachable' [-Werror=missing-prototypes]
->lib/ubsan.c:404:6: error: no previous prototype for '__ubsan_handle_load_invalid_value' [-Werror=missing-prototypes]
+> That "jarkkojs" part of the path seems to be just wrong, and it should
+> be - like always before - just "jarkko".
 >
->Add prototypes for all of these to lib/ubsan.h, and remove the
->one that was already present in ubsan.c.
+> I pulled it from the correct location, but I don't know how you messed
+> that up - maybe just a fat-fingered mistaken edit, or maybe something
+> else.
 >
->Signed-off-by: Arnd Bergmann <arnd@arndb.de>
->---
-> lib/ubsan.c |  3 ---
-> lib/ubsan.h | 11 +++++++++++
-> 2 files changed, 11 insertions(+), 3 deletions(-)
+> So you might try to see what went wrong...
 >
->diff --git a/lib/ubsan.c b/lib/ubsan.c
->index e2cc4a799312..3f90810f9f42 100644
->--- a/lib/ubsan.c
->+++ b/lib/ubsan.c
->@@ -423,9 +423,6 @@ void __ubsan_handle_load_invalid_value(void *_data, void *val)
-> }
-> EXPORT_SYMBOL(__ubsan_handle_load_invalid_value);
->
->-void __ubsan_handle_alignment_assumption(void *_data, unsigned long ptr,
->-					 unsigned long align,
->-					 unsigned long offset);
-> void __ubsan_handle_alignment_assumption(void *_data, unsigned long ptr,
-> 					 unsigned long align,
-> 					 unsigned long offset)
->diff --git a/lib/ubsan.h b/lib/ubsan.h
->index cc5cb94895a6..5d99ab81913b 100644
->--- a/lib/ubsan.h
->+++ b/lib/ubsan.h
->@@ -124,4 +124,15 @@ typedef s64 s_max;
-> typedef u64 u_max;
-> #endif
->
->+void __ubsan_handle_divrem_overflow(void *_data, void *lhs, void *rhs);
->+void __ubsan_handle_type_mismatch(struct type_mismatch_data *data, void *ptr);
->+void __ubsan_handle_type_mismatch_v1(void *_data, void *ptr);
->+void __ubsan_handle_out_of_bounds(void *_data, void *index);
->+void __ubsan_handle_shift_out_of_bounds(void *_data, void *lhs, void *rhs);
->+void __ubsan_handle_builtin_unreachable(void *_data);
->+void __ubsan_handle_load_invalid_value(void *_data, void *val);
->+void __ubsan_handle_alignment_assumption(void *_data, unsigned long ptr,
->+					 unsigned long align,
->+					 unsigned long offset);
->+
-> #endif
->-- 
->2.39.2
+>               Linus
 
-Thanks. I've checked that these signatures match the definitions in
-lib/ubsan.c and the order matches as well.
+Oops, I'm sorry. I'll address this.
 
-Reviewed-by: Fangrui Song <maskray@google.com>
+BR, Jarkko
