@@ -2,95 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 195C87076D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 02:17:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A48687076D9
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 02:19:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbjERARV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 20:17:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45006 "EHLO
+        id S229655AbjERATY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 20:19:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjERART (ORCPT
+        with ESMTP id S229568AbjERATW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 20:17:19 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2701A3AA1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 17:17:16 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-965a68abfd4so256663666b.2
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 17:17:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1684369034; x=1686961034;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SghvpISWOr2Xb/wbBKmrX8f/G7elt4qY32AMimXheQA=;
-        b=IBG+nTw6a9S41RaiATt9FaOTVAM8BW0SsRpKBG70mIJk1VQkCVz9FI5ORG0C0yMpoY
-         KxRGxWy2rKXekTI0rpU+i2MyGHQo/IkfC9eD0Jsi34Kun68q4BGKjK7GrclveLWn2h+L
-         T3nYGmA4/giGGqGgCrg54sbdj8a7PPdD5Htz8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684369034; x=1686961034;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SghvpISWOr2Xb/wbBKmrX8f/G7elt4qY32AMimXheQA=;
-        b=Q3mUz7Gqc74sPJFpLzPgurrUkDtXuECkOGmpaVyadHTJWFSTxQVKHu0E6JccINx2+z
-         0I498pATqKxrhA0vBW6/nbpqWLwEvnCcThrK22GpM1ELICDxwdP17dPwZJ/OSJ90s3EL
-         LUyIkqUdebAhYsf0DurrWL1OY2fyduuAWUxXv3yPcq1tg6JPdj5cf7hFD4Gs5fWlWkRm
-         QzZmX3KQjF97ZJu6LocJ1BMfJEzHHjN5OIuWgUaV6DGzWtpn9HAfpe/vikKFiWPJJ74n
-         E3DmWYLHw9Uv8MFpow9dp/NqO8UrhfM9TPwgdDxkwax8zCPDWcabyfDMJJjYaBlRbkEr
-         fqbg==
-X-Gm-Message-State: AC+VfDy4mlyUiR7UWc/T7htn7RGsldQGs1VMOEmbElm71thUwfLAQ112
-        NOGeRJ976aUTG2KenMPxuQFkjDQEXye8YQPqDwU3LN8/
-X-Google-Smtp-Source: ACHHUZ4za43Ku46LkkTdqTx2ggKoEnLHBHXvRvEGYEynO9Xb3Z2Hzfu/a1NyCe2DJNZgMlWWdtjfPw==
-X-Received: by 2002:a17:907:1c19:b0:94a:3ff1:53ad with SMTP id nc25-20020a1709071c1900b0094a3ff153admr40005965ejc.75.1684369034431;
-        Wed, 17 May 2023 17:17:14 -0700 (PDT)
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com. [209.85.218.50])
-        by smtp.gmail.com with ESMTPSA id ke25-20020a17090798f900b00965f31ff894sm207384ejc.137.2023.05.17.17.17.13
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 17 May 2023 17:17:13 -0700 (PDT)
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-965e4be7541so256907566b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 17:17:13 -0700 (PDT)
-X-Received: by 2002:a17:907:97c8:b0:961:b0:3dfd with SMTP id
- js8-20020a17090797c800b0096100b03dfdmr42523477ejc.7.1684369033423; Wed, 17
- May 2023 17:17:13 -0700 (PDT)
+        Wed, 17 May 2023 20:19:22 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 070EAE8;
+        Wed, 17 May 2023 17:19:21 -0700 (PDT)
+Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 3B5A420F32C8;
+        Wed, 17 May 2023 17:19:20 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3B5A420F32C8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1684369160;
+        bh=S9M1alb9uVliozl8bLTgpyAqeJ7VivwcVSxNbnWDzAs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GO6GItu+7HwEA3QvXmgxHBYe0idt/BW4ZpMAqoNVT5SGXc3SUAJNXSnu3BaT/oiDw
+         pDL3gkCZakdBm0H1FtDO51gaZAuQuI1c7TghktL45OyC9cqESxZalztH+hPhrDw0S7
+         jTSL4AiN2LsFcjxS4c0Y4tb0gFo7/lOMe5PXtXMw=
+Date:   Wed, 17 May 2023 17:19:16 -0700
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-trace-kernel@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
+        David Vernet <void@manifault.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Dave Thaler <dthaler@microsoft.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>
+Subject: Re: [PATCH] tracing/user_events: Run BPF program if attached
+Message-ID: <20230518001916.GB254@W11-BEAU-MD.localdomain>
+References: <20230508163751.841-1-beaub@linux.microsoft.com>
+ <CAADnVQLYL-ZaP_2vViaktw0G4UKkmpOK2q4ZXBa+f=M7cC25Rg@mail.gmail.com>
+ <20230509130111.62d587f1@rorschach.local.home>
+ <20230509163050.127d5123@rorschach.local.home>
+ <20230515165707.hv65ekwp2djkjj5i@MacBook-Pro-8.local>
+ <20230515192407.GA85@W11-BEAU-MD.localdomain>
+ <20230517003628.aqqlvmzffj7fzzoj@MacBook-Pro-8.local>
+ <20230516212658.2f5cc2c6@gandalf.local.home>
+ <20230517165028.GA71@W11-BEAU-MD.localdomain>
+ <CAADnVQK3-NBLSVRVsgArUEjqsuY2S_8mWsWmLEAtTzo+U49CKQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230518000920.191583-1-michael.christie@oracle.com> <20230518000920.191583-3-michael.christie@oracle.com>
-In-Reply-To: <20230518000920.191583-3-michael.christie@oracle.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 17 May 2023 17:16:56 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wga+96PqV4x8EwFAMfi--m9essdX+3uPE-AoOSAQR1ddA@mail.gmail.com>
-Message-ID: <CAHk-=wga+96PqV4x8EwFAMfi--m9essdX+3uPE-AoOSAQR1ddA@mail.gmail.com>
-Subject: Re: [RFC PATCH 2/8] vhost/vhost_task: Hook vhost layer into signal handler
-To:     Mike Christie <michael.christie@oracle.com>
-Cc:     oleg@redhat.com, linux@leemhuis.info, nicolas.dichtel@6wind.com,
-        axboe@kernel.dk, ebiederm@xmission.com,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, mst@redhat.com,
-        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
-        brauner@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQK3-NBLSVRVsgArUEjqsuY2S_8mWsWmLEAtTzo+U49CKQ@mail.gmail.com>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 5:09=E2=80=AFPM Mike Christie
-<michael.christie@oracle.com> wrote:
->
-> +       __set_current_state(TASK_RUNNING);
-> +       rc =3D get_signal(&ksig);
-> +       set_current_state(TASK_INTERRUPTIBLE);
-> +       return rc;
+On Wed, May 17, 2023 at 05:10:47PM -0700, Alexei Starovoitov wrote:
+> On Wed, May 17, 2023 at 9:50 AM Beau Belgrave <beaub@linux.microsoft.com> wrote:
+> > >
+> > > >
+> > > > Looks like user events were designed with intention to be unprivileged.
+> > > > When I looked at kernel/trace/trace_events_user.c I assumed root.
+> > > > I doubt other people reviewed it from security perspective.
+> > > >
+> > > > Recommending "chmod a+rw /sys/kernel/tracing/user_events_data" doesn't sound like a good idea.
+> > > >
+> > > > For example, I think the following is possible:
+> > > > fd = open("/sys/kernel/tracing/user_events_data")
+> > > > ioclt(fd, DIAG_IOCSDEL)
+> > > >   user_events_ioctl_del
+> > > >      delete_user_event(info->group, name);
+> > > >
+> > > > 'info' is different for every FD, but info->group is the same for all users/processes/fds,
+> > > > because only one global init_group is created.
+> > > > So one user can unregister other user event by knowing 'name'.
+> > > > A security hole, no?
+> 
+> ...
+> 
+> > Regarding deleting events, only users that are given access can delete
+> > events. They must know the event name, just like users with access to
+> > delete files must know a path (and have access to it). Since the
+> > write_index and other details are per-process, unless the user has
+> > access to either /sys/kernel/tracing/events/user_events/* or
+> > /sys/kernel/tracing/user_events_status, they do not know which names are
+> > being used.
+> >
+> > If that is not enough, we could require CAP_SYSADMIN to be able to
+> > delete events even when they have access to the file. Users can also
+> > apply SELinux policies per-file to achieve further isolation, if
+> > required.
+> 
+> Whether /sys/kernel/tracing/user_events_status gets g+rw
+> or it gets a+rw (as your documentation recommends)
+> it is still a security issue.
+> The "event name" is trivial to find out by looking at the source code
+> of the target process or just "string target_binary".
 
-The games with current_state seem nonsensical.
+I guess, if they have access to the binary, etc.
+So they need both access to the binary and to the tracefs directory.
+We would not give them access like this in any normal setup other than a
+developer environment.
 
-What are they all about? get_signal() shouldn't care, and no other
-caller does this thing. This just seems completely random.
+> Restricting to cap_sysadmin is not the answer, since you want unpriv.
 
-      Linus
+We do not need unpriv to delete events, only to write and create events.
+
+We allow unregistering call-sites, which would still work unpriv with
+this requirement.
+
+> SElinux is not the answer either.
+> Since it's unpriv, different processes should not be able to mess with
+> user events of other processes.
+
+How is this different than uprobes if we give a user access to
+/sys/kernel/tracing/dynamic_events? Users can delete those as well. I
+don't see a difference here.
+
+In our production environments we are not giving out wide security to
+this file.
+
+> It's a fundamental requirement of any kernel api.
+> This has to be fixed before any bpf discussion.
+> If it means that you need to redesign user_events do it now and
+> excuses like "it's uapi now, so we cannot fix it" are not going to fly.
+
+Thanks,
+-Beau
