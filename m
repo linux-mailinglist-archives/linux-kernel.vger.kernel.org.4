@@ -2,65 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE36770885F
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 21:35:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29348708866
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 21:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjERTfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 15:35:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54662 "EHLO
+        id S230084AbjERTgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 15:36:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjERTfA (ORCPT
+        with ESMTP id S230006AbjERTgv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 15:35:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A704CB5;
-        Thu, 18 May 2023 12:34:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4494B6147B;
-        Thu, 18 May 2023 19:34:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 566DAC433D2;
-        Thu, 18 May 2023 19:34:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684438498;
-        bh=7ujIWrAt84CAZqQbL29G5T7eA+bKtP7cAoWHbXBRRSA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KMQutcyQydYIMUy+S4sHDOHbFI3j3EoUAuB0fK97AryoNM3b2FTsoc0xFzqMB4OPw
-         OhEDOzmqLZ+Rl4EHLUYB6geNVB2QAj9vaODRla6CGbujnpL9629f14msjWwjvoGbVb
-         A9XwhsBdQmI34fbiR/TQ5SD0ZuK8F8XpTA3HPVhhVFqvkkXf1WrJhrpmukZT5U0DQe
-         w5V9rY6TAvkqOjpUDupOXGC74qLFnUm6zrnlPnH44eHFegwsZyflWQkJFgonXSHrrH
-         Jlro1LIyXFu60QWNyci6+URTT4xuHAkmO4AJFk8wvkn9ty0rgTuyT24aCNGHtnjw1U
-         opZOZ5LleonIQ==
-Date:   Thu, 18 May 2023 20:34:52 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
+        Thu, 18 May 2023 15:36:51 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61D9EEE;
+        Thu, 18 May 2023 12:36:49 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34IJaEN3076166;
+        Thu, 18 May 2023 14:36:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1684438574;
+        bh=SD8y2gafDdujxzLm4oJ2xXRRLyYIT05sQjn7ZYJf0F0=;
+        h=From:To:CC:Subject:Date;
+        b=O7Yrnd3bekefKOuBiqiQOz88aaxMDd6rO7jOn2bKJtSOCrYnxIuvuT5/Nl9M5ttQA
+         jHq4qrZ5KEuYkdUYDlcIUiBJEIt4uBlQIv56NgNoyl+JN8/RPUhqs8MyM/8Jhr34/u
+         c6g24smKDDzbzVc/WGAZuQgruZW7jCZzsbCzk7VQ=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34IJaE4E002970
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 18 May 2023 14:36:14 -0500
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 18
+ May 2023 14:36:13 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 18 May 2023 14:36:13 -0500
+Received: from a0498204.dal.design.ti.com (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34IJaDvT053146;
+        Thu, 18 May 2023 14:36:13 -0500
+From:   Judith Mendez <jm@ti.com>
+To:     Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
+        <linux-can@vger.kernel.org>
+CC:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Schuyler Patton <spatton@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: [PATCH v4 03/10] dt-bindings: serial: add documentation for
- Bouffalolab UART Driver
-Message-ID: <20230518-wish-duplicity-a280b19d9dcf@spud>
-References: <20230518152244.2178-1-jszhang@kernel.org>
- <20230518152244.2178-4-jszhang@kernel.org>
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Conor Dooley <conor+dt@kernel.org>
+Subject: [PATCH v6 0/2] Enable multiple MCAN on AM62x
+Date:   Thu, 18 May 2023 14:36:11 -0500
+Message-ID: <20230518193613.15185-1-jm@ti.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="rVUuxQlCNvY2DQNY"
-Content-Disposition: inline
-In-Reply-To: <20230518152244.2178-4-jszhang@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,100 +74,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On AM62x there are two MCANs in MCU domain. The MCANs in MCU domain
+were not enabled since there is no hardware interrupt routed to A53
+GIC interrupt controller. Therefore A53 Linux cannot be interrupted
+by MCU MCANs.
 
---rVUuxQlCNvY2DQNY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This solution instantiates a hrtimer with 1 ms polling interval
+for MCAN device when there is no hardware interrupt property in
+DTB MCAN node. The hrtimer generates a recurring software interrupt
+which allows to call the isr. The isr will check if there is pending
+transaction by reading a register and proceed normally if there is.
+MCANs with hardware interrupt routed to A53 Linux will continue to
+use the hardware interrupt as expected.
 
-On Thu, May 18, 2023 at 11:22:37PM +0800, Jisheng Zhang wrote:
-> Add bindings doc for Bouffalolab UART Driver
->=20
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+Timer polling method was tested on both classic CAN and CAN-FD
+at 125 KBPS, 250 KBPS, 1 MBPS and 2.5 MBPS with 4 MBPS bitrate
+switching.
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Letency and CPU load benchmarks were tested on 3x MCAN on AM62x.
+1 MBPS timer polling interval is the better timer polling interval
+since it has comparable latency to hardware interrupt with the worse
+case being 1ms + CAN frame propagation time and CPU load is not
+substantial. Latency can be improved further with less than 1 ms
+polling intervals, howerver it is at the cost of CPU usage since CPU
+load increases at 0.5 ms.
 
-As I said previously, happy to grab the non-serial parts of the series
-once Greg (or Jiri?) pick the serial bits.
+Note that in terms of power, enabling MCU MCANs with timer-polling
+implementation might have negative impact since we will have to wake
+up every 1 ms whether there are CAN packets pending in the RX FIFO or
+not. This might prevent the CPU from entering into deeper idle states
+for extended periods of time.
 
-Cheers,
-Conor.
+v5:
+Link: https://lore.kernel.org/linux-can/20230510202952.27111-1-jm@ti.com/T/#t
 
-> ---
->  .../serial/bouffalolab,bl808-uart.yaml        | 47 +++++++++++++++++++
->  1 file changed, 47 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/serial/bouffalolab,=
-bl808-uart.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/serial/bouffalolab,bl808-u=
-art.yaml b/Documentation/devicetree/bindings/serial/bouffalolab,bl808-uart.=
-yaml
-> new file mode 100644
-> index 000000000000..0ef858e50efb
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/serial/bouffalolab,bl808-uart.yaml
-> @@ -0,0 +1,47 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +# Copyright (C) 2022 Jisheng Zhang <jszhang@kernel.org>
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/serial/bouffalolab,bl808-uart.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Bouffalolab UART Controller
-> +
-> +maintainers:
-> +  - Jisheng Zhang <jszhang@kernel.org>
-> +
-> +allOf:
-> +  - $ref: serial.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: bouffalolab,bl808-uart
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    uart0: serial@30002000 {
-> +        compatible =3D "bouffalolab,bl808-uart";
-> +        reg =3D <0x30002000 0x1000>;
-> +        interrupts =3D <53 IRQ_TYPE_LEVEL_HIGH>;
-> +        clocks =3D <&xtal>;
-> +    };
-> +...
-> --=20
-> 2.40.0
->=20
+v4:
+Link: https://lore.kernel.org/linux-can/c3395692-7dbf-19b2-bd3f-31ba86fa4ac9@linaro.org/T/#t
 
---rVUuxQlCNvY2DQNY
-Content-Type: application/pgp-signature; name="signature.asc"
+v2:
+Link: https://lore.kernel.org/linux-can/20230424195402.516-1-jm@ti.com/T/#t
 
------BEGIN PGP SIGNATURE-----
+V1:
+Link: https://lore.kernel.org/linux-can/19d8ae7f-7b74-a869-a818-93b74d106709@ti.com/T/#t
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGZ93AAKCRB4tDGHoIJi
-0teFAP46CSNElMa0c7OcjRrJ/GQ7TOxHpbogOcpZFdwwTXKeNgEAzNPSSkAc4/dK
-dd5WbA7VZXyjq0zpoa8VCbEssGLkTQY=
-=T+6e
------END PGP SIGNATURE-----
+RFC:
+Link: https://lore.kernel.org/linux-can/52a37e51-4143-9017-42ee-8d17c67028e3@ti.com/T/#t
 
---rVUuxQlCNvY2DQNY--
+v6:
+- Move hrtimer stop/start function calls to m_can_open and m_can_close to
+support power suspend/resume
+
+v5:
+- Remove poll-interval in bindings
+- Change dev_dbg to dev_info if hardware int exists and polling
+is enabled
+
+v4:
+- Wrong patches sent
+
+v3:
+- Update binding poll-interval description
+- Add oneOf to select either interrupts/interrupt-names or poll-interval
+- Create a define for 1 ms polling interval
+- Change plarform_get_irq to optional to not print error msg
+
+v2:
+- Add poll-interval property to bindings and MCAN DTB node
+- Add functionality to check for 'poll-interval' property in MCAN node 
+- Bindings: add an example using poll-interval
+- Add 'polling' flag in driver to check if device is using polling method
+- Check for timer polling and hardware interrupt cases, default to
+hardware interrupt method
+- Change ns_to_ktime() to ms_to_ktime()
+
+Judith Mendez (2):
+  dt-bindings: net: can: Remove interrupt properties for MCAN
+  can: m_can: Add hrtimer to generate software interrupt
+
+ .../bindings/net/can/bosch,m_can.yaml         | 20 +++++++++--
+ drivers/net/can/m_can/m_can.c                 | 31 +++++++++++++++-
+ drivers/net/can/m_can/m_can.h                 |  4 +++
+ drivers/net/can/m_can/m_can_platform.c        | 35 +++++++++++++++++--
+ 4 files changed, 84 insertions(+), 6 deletions(-)
+
+
+base-commit: 798d276b39e984345d52b933a900a71fa0815928
+-- 
+2.17.1
+
