@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E21AA7084A5
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 17:08:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EC287084A8
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 17:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231481AbjERPIE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 11:08:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47252 "EHLO
+        id S231264AbjERPIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 11:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230424AbjERPIA (ORCPT
+        with ESMTP id S231559AbjERPIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 11:08:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6749EE53;
-        Thu, 18 May 2023 08:07:38 -0700 (PDT)
+        Thu, 18 May 2023 11:08:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE6C9C2;
+        Thu, 18 May 2023 08:07:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D78DD60A52;
-        Thu, 18 May 2023 15:07:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2EA7C433D2;
-        Thu, 18 May 2023 15:07:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 52EC564FF5;
+        Thu, 18 May 2023 15:07:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08307C433D2;
+        Thu, 18 May 2023 15:07:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684422438;
-        bh=f3/XO3tDI8cfHGYDZ0syLZXznG3gRLsg5/8oiovlAlw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=b65lab1T8wpBHsy2Y2smM1BJXot5gzW8RwUxtLcHJyIfcPxEysEJI+woubyBe90gs
-         +XiCFESETIjIRwBeWGduHLQSG1nrx085/0mLgSYGcWjDrrAySFMKCDa7AlRxpboSVq
-         gfH3CS9NSm6DGntlsY/qqcFNPfd4OiX65b14GW4Rb7LmQ3aUsdvPuzXLVqbSZWuuZr
-         IRtsm4M9qWx9sQqQGoY/0e9plL3+1ndFC1xDDzTGULk0mVhdJdyxdSKN3OlOGnMPv9
-         cTxFBr1O4pEw6Cdb8XImH+RJ7YrXjGJpH9WXIi7dyBFMsRLGv4UDWBwZnQSB2ogW4y
-         biwzmuuk0yEyg==
-From:   Christian Brauner <brauner@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        Daniel Verkamp <dverkamp@chromium.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Jeff Xu <jeffxu@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        syzbot+ac3b41786a2d0565b6d5@syzkaller.appspotmail.com,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] pid: Replace struct pid 1-element array with flex-array
-Date:   Thu, 18 May 2023 17:07:09 +0200
-Message-Id: <20230518-jemand-ehrte-80f8b538ca03@brauner>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230517225838.never.965-kees@kernel.org>
-References: <20230517225838.never.965-kees@kernel.org>
+        s=k20201202; t=1684422470;
+        bh=S5LxrHUIaUTyAXU/DFJLNgQy/pqLZCXVf3Xe+g9Z0Gg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Mj3r787E7r8yuMQTlUaHpcUlXBy6asQYYDzcPRrj/Cvkmn/Y4JqnZmUzgLbLVJzIb
+         wFxaLTFh/361G1YnLLcQamt8pAX2poK/JTASzvrF20JO7wmnI1uKwh1IVsm8qwRhTu
+         QMZncwIraKZ54uatY9Ouydl2YKsKJIXgkiK/giuqXNSyZ5y5Zn3u1NBoaXnOp+gnry
+         q5saPfzUVfNK/6JcDJlEX37nRFT5pdNpfte4Jsnj/0/411ENSv9ZsieHTF2q+eVKIF
+         QNWBfYnJ4jVeJ6wTLbNykTZfoA4XMopqz9d94QFlQdOgNOVpYxCpTUHGHMxDPW4kJ1
+         MWw1HooFiqx1g==
+Date:   Thu, 18 May 2023 16:07:40 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Julien Panis <jpanis@baylibre.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, corbet@lwn.net, arnd@arndb.de,
+        gregkh@linuxfoundation.org, derek.kiernan@xilinx.com,
+        dragan.cvetic@xilinx.com, macro@orcam.me.uk,
+        baolu.lu@linux.intel.com, yi.l.liu@intel.com, jirislaby@kernel.org,
+        rostedt@goodmis.org, revest@chromium.org, gehao@kylinos.cn,
+        akpm@linux-foundation.org, jgg@ziepe.ca, razor@blackwall.org,
+        stephen@networkplumber.org, prabhakar.csengg@gmail.com,
+        contact@emersion.fr, alex.williamson@redhat.com,
+        akrowiak@linux.ibm.com, mark.rutland@arm.com,
+        ye.xingchen@zte.com.cn, ojeda@kernel.org, me@kloenk.de,
+        milan@mdaverde.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        sterzik@ti.com, u-kumar1@ti.com, eblanc@baylibre.com,
+        jneanne@baylibre.com, aseketeli@baylibre.com
+Subject: Re: [PATCH v7 2/6] mfd: tps6594: Add driver for TI TPS6594 PMIC
+Message-ID: <20230518150740.GN404509@google.com>
+References: <20230511095126.105104-1-jpanis@baylibre.com>
+ <20230511095126.105104-3-jpanis@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1163; i=brauner@kernel.org; h=from:subject:message-id; bh=f3/XO3tDI8cfHGYDZ0syLZXznG3gRLsg5/8oiovlAlw=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaSk2UuULTvN+XNF2oQSr7aEYzY9bm0XHnYe4+Tye++5zmyn ndHKjlIWBjEuBlkxRRaHdpNwueU8FZuNMjVg5rAygQxh4OIUgIkcf83IsCf40+eqLNN7t5y72fU/+1 azxSY8+cmelWG46peyTc4VA4b/KVyL91a/ermM+4cOY5eF9Pzzj9QU7TVPpph5HNq5RK6EEwA=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230511095126.105104-3-jpanis@baylibre.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,27 +69,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 17 May 2023 15:58:42 -0700, Kees Cook wrote:
-> For pid namespaces, struct pid uses a dynamically sized array member,
-> "numbers". This was implemented using the ancient 1-element fake flexible
-> array, which has been deprecated for decades. Replace it with a C99
-> flexible array, refactor the array size calculations to use struct_size(),
-> and address elements via indexes. Note that the static initializer (which
-> defines a single element) works as-is, and requires no special handling.
+On Thu, 11 May 2023, Julien Panis wrote:
+
+> This patch adds support for TPS6594 PMIC MFD core. It provides
+> communication through the I2C and SPI interfaces, and supports
+> protocols with embedded CRC data fields for safety applications.
 > 
-> [...]
+> Signed-off-by: Julien Panis <jpanis@baylibre.com>
+> Acked-for-MFD-by: Lee Jones <lee@kernel.org>
+> ---
+>  drivers/mfd/Kconfig         |   32 ++
+>  drivers/mfd/Makefile        |    3 +
+>  drivers/mfd/tps6594-core.c  |  462 ++++++++++++++++
+>  drivers/mfd/tps6594-i2c.c   |  244 +++++++++
+>  drivers/mfd/tps6594-spi.c   |  129 +++++
+>  include/linux/mfd/tps6594.h | 1020 +++++++++++++++++++++++++++++++++++
+>  6 files changed, 1890 insertions(+)
+>  create mode 100644 drivers/mfd/tps6594-core.c
+>  create mode 100644 drivers/mfd/tps6594-i2c.c
+>  create mode 100644 drivers/mfd/tps6594-spi.c
+>  create mode 100644 include/linux/mfd/tps6594.h
 
-Applied to the kernel.fork branch of the brauner/linux.git tree.
-Patches in the kernel.fork branch should appear in linux-next soon.
+Applied - current being build tested.
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
+Once complete, I'll send out a pull-request for the other maintainers.
 
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
-
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/brauner/linux.git
-branch: kernel.fork
-
-[1/1] pid: Replace struct pid 1-element array with flex-array
-      https://git.kernel.org/brauner/linux/c/ad0ff58dc959
+-- 
+Lee Jones [李琼斯]
