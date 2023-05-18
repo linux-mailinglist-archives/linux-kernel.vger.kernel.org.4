@@ -2,79 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC3D07084E6
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 17:32:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCE5B70851C
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 17:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231470AbjERPb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 11:31:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54832 "EHLO
+        id S230373AbjERPh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 11:37:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbjERPby (ORCPT
+        with ESMTP id S230036AbjERPhz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 11:31:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32177F9;
-        Thu, 18 May 2023 08:31:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BB72161127;
-        Thu, 18 May 2023 15:31:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD10BC433EF;
-        Thu, 18 May 2023 15:31:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684423909;
-        bh=QR4Dg1YX8B3ucH22ew4CZd/iXu3GjZRKYDWVOpx+evE=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=hkdFwcBJVE9dIN6CfKsxNXSd9p1Dtcr1QSDfC8aMAvKedIePfHDxUlpwmozTZzfAP
-         TLCpcZOxGKz5VlEpgPrgpr5t3YzKML/wC+aJreAjz3GtZlHuoNi30y34bKkaomgG+X
-         Yy9zcWXpi6PGfMYcOZ3z6O8VqBMQf8pvec+lwb6DaGTqCS3CRxKjPqps536opGcEvy
-         TAJgkl6XBfgrbZe5ZkFzqgubsFE59jd2MfqCUK6kqij4NFXrre+7zIPhMXng2Ms9Z4
-         JvY0rdmps06AX+Bqn9hYd6YD6k8r0RJk2reKh6o2ga0ZDkvPqjI+YpWD2wcKBcIlkx
-         adWAjdBLXM3Sw==
-Message-ID: <b046f7e3c86d1c9dd45e932d3f25785fce921f4a.camel@kernel.org>
-Subject: Re: [PATCH v4 4/9] nfsd: ensure we use ctime_peek to grab the
- inode->i_ctime
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Chuck Lever III <chuck.lever@oracle.com>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Chinner <david@fromorbit.com>, Jan Kara <jack@suse.cz>,
-        Amir Goldstein <amir73il@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Neil Brown <neilb@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Theodore T'so <tytso@mit.edu>, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Steve French <sfrench@samba.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Tom Talpey <tom@talpey.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-XFS <linux-xfs@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>
-Date:   Thu, 18 May 2023 11:31:45 -0400
-In-Reply-To: <2B6A4DDD-0356-4765-9CED-B22A29767254@oracle.com>
-References: <20230518114742.128950-1-jlayton@kernel.org>
-         <20230518114742.128950-5-jlayton@kernel.org>
-         <2B6A4DDD-0356-4765-9CED-B22A29767254@oracle.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
+        Thu, 18 May 2023 11:37:55 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E36E123;
+        Thu, 18 May 2023 08:37:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684424274; x=1715960274;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Z8XR62TLbLJfdA4SZDksnAzekPNNuRvRVdCm1RoqboE=;
+  b=exF7QXgaHhCXF2x0xEDoyF18czKv63XQmiBdnOxPIs3D1DAkVz6+ST/S
+   zEJJUVito1s2g29lkmyIL7nSg0pzRJ9KqsgUNeVyn0zQnP8AflmQlFoba
+   yvm00VsSV15huvpVoUSvTd45Xuzg5ujR+rtxhGxNk3eJqVHRIUROXINZ2
+   TanaJl1kuynwbA7OHBc7ix/zL3Lbr7ET47cFJ8q+Ge5qUNKSJUol9TDpB
+   ghpWKnbBRTNvUdoM1C3R1F+vmCMY4IYnHORbgopY+vVLYT/n40da80FIA
+   DOL9xxd9gAxek2nAgt780FHBJJvQpFq4QiugOgDJlaIa+5UkcbOcGQSEz
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="336686063"
+X-IronPort-AV: E=Sophos;i="5.99,285,1677571200"; 
+   d="scan'208";a="336686063"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 08:37:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="826428246"
+X-IronPort-AV: E=Sophos;i="5.99,285,1677571200"; 
+   d="scan'208";a="826428246"
+Received: from nroy-mobl1.amr.corp.intel.com (HELO [10.209.81.123]) ([10.209.81.123])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 08:37:52 -0700
+Message-ID: <2b14036e-aed8-4212-bc0f-51ec4fe5a5c1@intel.com>
+Date:   Thu, 18 May 2023 08:37:53 -0700
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 0/6] Memory Mapping (VMA) protection using PKU - set 1
+Content-Language: en-US
+To:     Jeff Xu <jeffxu@google.com>
+Cc:     =?UTF-8?Q?Stephen_R=c3=b6ttger?= <sroettger@google.com>,
+        jeffxu@chromium.org, luto@kernel.org, jorgelo@chromium.org,
+        keescook@chromium.org, groeck@chromium.org, jannh@google.com,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        linux-hardening@vger.kernel.org
+References: <20230515130553.2311248-1-jeffxu@chromium.org>
+ <2bcffc9f-9244-0362-2da9-ece230055320@intel.com>
+ <CAEAAPHYdRyZEMp97919errF7SDuYBJoSrD5i1wrTx1sMdr_ZdQ@mail.gmail.com>
+ <fbe53dcf-6e21-e4cf-c632-4da8369d7e83@intel.com>
+ <CAEAAPHa=zYyjV5RqvPryRsW7VqY9cJC_-CJW6HKczY0iVsy-bg@mail.gmail.com>
+ <d8f2d5c2-6650-c2a6-3a20-25583eee579b@intel.com>
+ <CALmYWFsnGjniVseJKuhKO6eet10Onyk_C0=KNe6ZzXoCiBKZOw@mail.gmail.com>
+ <b69f6809-b483-158f-8be9-4976fad918d8@intel.com>
+ <CALmYWFs5Vgosz2JUYWkoc4YwDbiB0tT32MFpo-y6aX4kwuoz8Q@mail.gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <CALmYWFs5Vgosz2JUYWkoc4YwDbiB0tT32MFpo-y6aX4kwuoz8Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,56 +76,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-05-18 at 13:43 +0000, Chuck Lever III wrote:
->=20
-> > On May 18, 2023, at 7:47 AM, Jeff Layton <jlayton@kernel.org> wrote:
-> >=20
-> > If getattr fails, then nfsd can end up scraping the time values directl=
-y
-> > out of the inode for pre and post-op attrs. This may or may not be the
-> > right thing to do, but for now make it at least use ctime_peek in this
-> > situation to ensure that the QUERIED flag is masked.
->=20
-> That code comes from:
->=20
-> commit 39ca1bf624b6b82cc895b0217889eaaf572a7913
-> Author:     Amir Goldstein <amir73il@gmail.com>
-> AuthorDate: Wed Jan 3 17:14:35 2018 +0200
-> Commit:     J. Bruce Fields <bfields@redhat.com>
-> CommitDate: Thu Feb 8 13:40:17 2018 -0500
->=20
->     nfsd: store stat times in fill_pre_wcc() instead of inode times
->=20
->     The time values in stat and inode may differ for overlayfs and stat t=
-ime
->     values are the correct ones to use. This is also consistent with the =
-fact
->     that fill_post_wcc() also stores stat time values.
->=20
->     This means introducing a stat call that could fail, where previously =
-we
->     were just copying values out of the inode.  To be conservative about
->     changing behavior, we fall back to copying values out of the inode in
->     the error case.  It might be better just to clear fh_pre_saved (thoug=
-h
->     note the BUG_ON in set_change_info).
->=20
->     Signed-off-by: Amir Goldstein <amir73il@gmail.com>
->     Signed-off-by: J. Bruce Fields <bfields@redhat.com>
->=20
-> I was thinking it might have been added to handle odd corner
-> cases around re-exporting NFS mounts, but that does not seem
-> to be the case.
->=20
-> The fh_getattr() can fail for legitimate reasons -- like the
-> file is in the middle of being deleted or renamed over -- I
-> would think. This code should really deal with that by not
-> adding pre-op attrs, since they are optional.
->=20
+On 5/17/23 16:48, Jeff Xu wrote:
+> However, there are a few challenges I have not yet worked through.
+> First, the code needs to track when the first signaling entry occurs
+> (saving the PKRU register to the thread struct) and when it is last
+> returned (restoring the PKRU register from the thread struct). 
 
-That sounds fine to me. I'll plan to drop this patch from the series and
-I'll send a separate patch to just remove those branches altogether
-(which should DTRT).
+Would tracking signal "depth" work in the face of things like siglongjmp?
 
---=20
-Jeff Layton <jlayton@kernel.org>
+Taking a step back...
+
+Here's my concern about this whole thing: it's headed down a rabbit hole
+which is *highly* specialized both in the apps that will use it and the
+attacks it will mitigate.  It probably *requires* turning off a bunch of
+syscalls (like io_uring) that folks kinda like in general.
+
+We're balancing that highly specialized mitigation with a feature that
+add new ABI, touches core memory management code and signal handling.
+
+On the x86 side, PKRU is a painfully special snowflake.  It's exposed in
+the "XSAVE" ABIs, but not actually managed *with* XSAVE in the kernel.
+This would be making it an even more special snowflake because it would
+need new altstack ABI and handling.
+
+I'm just not sure the gain is worth the pain.
