@@ -2,140 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D79B5707EFB
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 13:14:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B2B3707F00
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 13:15:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbjERLOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 07:14:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48046 "EHLO
+        id S230245AbjERLPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 07:15:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230192AbjERLOS (ORCPT
+        with ESMTP id S230113AbjERLPh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 07:14:18 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D1CEB7
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 04:14:17 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-3063afa2372so1817717f8f.0
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 04:14:17 -0700 (PDT)
+        Thu, 18 May 2023 07:15:37 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65E0B8;
+        Thu, 18 May 2023 04:15:35 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id 4fb4d7f45d1cf-510d6e1f1b2so3034508a12.3;
+        Thu, 18 May 2023 04:15:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684408455; x=1687000455;
+        d=gmail.com; s=20221208; t=1684408534; x=1687000534;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xHOBxalE1e/537sbv6IwDm7KN7soNMg/ORaL113xwuA=;
-        b=wmMjkHUMu70UpxU+bZpEWltBosU11MS71pmdYI73ZPyK/M5dOi+wQislBXNJ5n0gju
-         5Dc4doDZtU3br8D2Evu5/tCFcN9ledwdMFoQkqwLn5EC6vXnks4LV2DZ8DUeVCnXRECC
-         fSzPWnHm5Ray1apP6dIfueLWdr3jo2sQxnYLbFg3ut1ncra129ZZanGUrU1wFiVp+vVH
-         tNNqtyHT5z2ySLCgxroIFIbs2GS3KNZe14S5hZ1Mnhf/rmdrPsG7q9zlINpd5dWydV6W
-         AM6SZn+lL0P9J2de7tU9MwTo1FNy6WOz9TZgbq+shIeIFUax4T3dTEln0U2H/PgGp7PR
-         P3AA==
+        bh=vurKMc/YYUUVzVXRRGSKlq0dOEViCUdOrU3bCkWvudc=;
+        b=LN+h7cb/nb0qiowQAIxQ7xI9Ql/JJl7xtJkMwlLkMQ910mYH8m8Brox5PwyRnbSxfB
+         5+lnat8wwGw0RzEHwcTza0xxVhxxHw8q6kVVze9lUMrbAVFC8/aBAY9nIa5qYFEFUop3
+         fXERp8YrhlnfMY+1DjtzVpifKAyPQCvGbwqqOTLNZT+H3beOGi6mxIbF/8va+8xk/SFj
+         9jSsXsoUp4WldbChB2x4425bJhc6XkioOur+ciFdghtzUGAjobxmsRTBzJ4eza8Dk7S/
+         e3VCyFku6YZyNwbYoeuNv5Q/YfbB7pLJbYJrzpR1zoQD+esapujWGlbrbwUGe/K+ZNcG
+         rRAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684408455; x=1687000455;
+        d=1e100.net; s=20221208; t=1684408534; x=1687000534;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xHOBxalE1e/537sbv6IwDm7KN7soNMg/ORaL113xwuA=;
-        b=gnl/Lbq01BmR3iRDaKRE0GdSWo3j57WFvcMqyt699iuUD29Fc/07vyjWt7p0/2YMXh
-         VSptOnshSWrYwWwn8knSvVpjU1b+TfGhvGgWc0Z9uCDYsuVYoaifj9LBefSMa5CQSAFC
-         sCVGcFkxe9/Grm8pDWfV9UG+EpLw1MvMVFPIaD/QgMpmP9DK5U+SImZFfQQ4oQgUK6Ib
-         rYCfCOT4GzOvq3uiusz4PKrtKxEBXDl8QwmM0kQWydocz7fgjOcgimglZw15vJOkNHCy
-         ZgTD+LYLNmbya3jNPiy4kEnakgC9sCG3xaLT7gdaLowVD2jEVjmYiFQZuBG9odmNSlZW
-         Ae/A==
-X-Gm-Message-State: AC+VfDww62ECRYy9Otx6jjs1LAC1TkuUg806Kzyrx0Xc0ED6ZeS5kNXj
-        6K/km5GrVyAOmvda544/9MT6XXfz9xv4XoryS5DNmA==
-X-Google-Smtp-Source: ACHHUZ7cUQyXn53VkV1XCKcibqrUF0XPZ3SAbqlKk/hiCWPVchdeg2dw8VBSMBdWWb49Wzi0JqYjmwdFrWT9Z620ssw=
-X-Received: by 2002:adf:fd0d:0:b0:307:94fb:3a44 with SMTP id
- e13-20020adffd0d000000b0030794fb3a44mr1416865wrr.52.1684408455616; Thu, 18
- May 2023 04:14:15 -0700 (PDT)
+        bh=vurKMc/YYUUVzVXRRGSKlq0dOEViCUdOrU3bCkWvudc=;
+        b=GPDt6/F3YePFotVxESoztven1tKBfZ79pvBEpdHTWhoraV0FuzrFZtqdoVayf8K3MM
+         OF9u7Y79V0HBirW4et1rzRIHrMmgmkuGgcJc3UJlXRiUd2y0sftXoVXlD+n8A0e24kbA
+         RSgA2U8YJ7KEd4oT/dBBJu10uf+jnW1ei88B0yBek9TdOHtfYREoavVAp0gjc6X7xVH6
+         tduLD7/NIN/HEWans2Qk9DJA0cRv6BP+WRxgWjmtQR2bS+xnbcP9sTPniVR8DiDRc7xK
+         wDqvTS2xAqqdC30H4N7S6LhQiETkpv4d+YBxqrRrLQdK8xWzmMH9LT7AM+8MuHGCb+sG
+         NHTQ==
+X-Gm-Message-State: AC+VfDxXY8lOdf+eYtIL3mxS+BoX+IcVx9ItsMkblBCPN4kciVhdaTy9
+        NBrT4LKoLz9lyEt17GGLwu871ZLY+P2fsztENH4=
+X-Google-Smtp-Source: ACHHUZ6LQIkFPtBuZ0OyrS0HcgDd5vy9Wd9TjPUnd3b977BjmOzsfKRTH3S3mxrsqyBgZR7aECDlwm1IozoHKr5kRuo=
+X-Received: by 2002:a50:fb9a:0:b0:50c:3dc:2262 with SMTP id
+ e26-20020a50fb9a000000b0050c03dc2262mr4443211edq.39.1684408533952; Thu, 18
+ May 2023 04:15:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230518-bamclk-dt-v1-1-82f738c897d9@gerhold.net>
-In-Reply-To: <20230518-bamclk-dt-v1-1-82f738c897d9@gerhold.net>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Thu, 18 May 2023 16:43:57 +0530
-Message-ID: <CAH=2Ntya7bqHVri_F8BOUJ6kJxtG2_usV08do+=OgkaoVJvxBQ@mail.gmail.com>
-Subject: Re: [PATCH] dmaengine: qcom: bam_dma: make channels/EEs optional in
- DT with clock
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <20230327-tegra-pmic-reboot-v6-0-af44a4cd82e9@skidata.com>
+ <20230327-tegra-pmic-reboot-v6-4-af44a4cd82e9@skidata.com> <20230518094340.GC404509@google.com>
+In-Reply-To: <20230518094340.GC404509@google.com>
+From:   Benjamin Bara <bbara93@gmail.com>
+Date:   Thu, 18 May 2023 13:15:22 +0200
+Message-ID: <CAJpcXm6p4xL8XGfxbfKf8sXd6Qh8euO5FiWqhzqiLbaeYpe85g@mail.gmail.com>
+Subject: Re: [PATCH v6 4/5] mfd: tps6586x: use devm-based power off handler
+To:     Lee Jones <lee@kernel.org>
+Cc:     Wolfram Sang <wsa@kernel.org>, rafael.j.wysocki@intel.com,
+        dmitry.osipenko@collabora.com, peterz@infradead.org,
+        jonathanh@nvidia.com, richard.leitner@linux.dev,
+        treding@nvidia.com, linux-kernel@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-tegra@vger.kernel.org,
+        Benjamin Bara <benjamin.bara@skidata.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Stephan,
+On Thu, 18 May 2023 at 11:43, Lee Jones <lee@kernel.org> wrote:
+> Do the 2 MFD patches depend on the others?
 
-On Thu, 18 May 2023 at 14:56, Stephan Gerhold <stephan@gerhold.net> wrote:
->
-> If we have a BAM clock in the DT we are able to turn on the BAM
-> controller while probing, so there is no need to read "num-channels"
-> and "qcom,num-ees" from the DT. It can be read more accurately directly
-> from the identification registers of the BAM.
->
-> This simplifies setting up typical controlled-remotely BAM DMAs in the
-> DT that can be turned on via a clock (e.g. the BLSP DMA).
+They depend on 3/5, which is an extension to [1] and makes the
+respective device available to its sys-off handler.
 
-Can you please list which qcom board(s) you tested this patch on?
+1/5 and 2/5 avoid a warning which is shown if the handler is called from
+an emergency restart (e.g. panic()). The reason behind it is that the
+i2c transfer currently doesn't recognize that it should be atomic in
+this phase and utilizes the DMA instead, which schedules out while
+waiting for completion ("Voluntary context switch within RCU read-side
+critical section!").
 
-Thanks,
-Bhupesh
-
-> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
-> ---
->  drivers/dma/qcom/bam_dma.c | 18 +++++++++---------
->  1 file changed, 9 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/dma/qcom/bam_dma.c b/drivers/dma/qcom/bam_dma.c
-> index 1e47d27e1f81..4c3eb972039d 100644
-> --- a/drivers/dma/qcom/bam_dma.c
-> +++ b/drivers/dma/qcom/bam_dma.c
-> @@ -1272,7 +1272,15 @@ static int bam_dma_probe(struct platform_device *pdev)
->         bdev->powered_remotely = of_property_read_bool(pdev->dev.of_node,
->                                                 "qcom,powered-remotely");
->
-> -       if (bdev->controlled_remotely || bdev->powered_remotely) {
-> +       if (bdev->controlled_remotely || bdev->powered_remotely)
-> +               bdev->bamclk = devm_clk_get_optional(bdev->dev, "bam_clk");
-> +       else
-> +               bdev->bamclk = devm_clk_get(bdev->dev, "bam_clk");
-> +
-> +       if (IS_ERR(bdev->bamclk))
-> +               return PTR_ERR(bdev->bamclk);
-> +
-> +       if (!bdev->bamclk) {
->                 ret = of_property_read_u32(pdev->dev.of_node, "num-channels",
->                                            &bdev->num_channels);
->                 if (ret)
-> @@ -1284,14 +1292,6 @@ static int bam_dma_probe(struct platform_device *pdev)
->                         dev_err(bdev->dev, "num-ees unspecified in dt\n");
->         }
->
-> -       if (bdev->controlled_remotely || bdev->powered_remotely)
-> -               bdev->bamclk = devm_clk_get_optional(bdev->dev, "bam_clk");
-> -       else
-> -               bdev->bamclk = devm_clk_get(bdev->dev, "bam_clk");
-> -
-> -       if (IS_ERR(bdev->bamclk))
-> -               return PTR_ERR(bdev->bamclk);
-> -
->         ret = clk_prepare_enable(bdev->bamclk);
->         if (ret) {
->                 dev_err(bdev->dev, "failed to prepare/enable clock\n");
->
-> ---
-> base-commit: 1c677f238f92ba0a329b7c13220f38b396872806
-> change-id: 20230518-bamclk-dt-d44bae47b337
->
-> Best regards,
-> --
-> Stephan Gerhold <stephan@gerhold.net>
->
+[1] https://lore.kernel.org/lkml/20220509233235.995021-4-dmitry.osipenko@collabora.com/
