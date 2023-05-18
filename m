@@ -2,103 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1585D7083A3
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:12:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D30B7083A2
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:12:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbjEROMR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 10:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45362 "EHLO
+        id S231453AbjEROMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 10:12:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230288AbjEROMM (ORCPT
+        with ESMTP id S230288AbjEROMG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 10:12:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E15A6
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:11:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684419086;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=iQwVdHv6Lw8dEb3HJ22Fi/mr3hZkypY/pgo/f+VOrUI=;
-        b=Lr3q9aOK/SvN56bWisCTQbcY0L5SLUaSy+7/QwhdqAHtnVvuZWL93g8IcRVnm3QNERGF5+
-        7GJclvh4coLzigpFzTwkRFtghurnOqwPderNbBvQLNgvAQr39jUQ/boySYHUGzy9/Ldx5O
-        L8Zbbk/do0oAv+f8a7TCMUJSwAdn9f0=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-319-E4oEOimmOEWsAD37Yw1kIw-1; Thu, 18 May 2023 10:11:24 -0400
-X-MC-Unique: E4oEOimmOEWsAD37Yw1kIw-1
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-6213569ba95so30181476d6.1
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:11:24 -0700 (PDT)
+        Thu, 18 May 2023 10:12:06 -0400
+Received: from mail-yb1-xb43.google.com (mail-yb1-xb43.google.com [IPv6:2607:f8b0:4864:20::b43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34A4DC;
+        Thu, 18 May 2023 07:12:03 -0700 (PDT)
+Received: by mail-yb1-xb43.google.com with SMTP id 3f1490d57ef6-ba6d024a196so1780307276.2;
+        Thu, 18 May 2023 07:12:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684419123; x=1687011123;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yZgWXPTe1ZG4Sw/b1mpfq3+D2E79rsdzVUg9Htd0C1I=;
+        b=nQCx1Fb704okQyK869FxXTPFNzbbbeXJPFjY3YNtSJiJ34R7ANcOTfOCBTBxgUz1v/
+         4lgpnWaSBMlfJ6UugEXUL590pNC3ehvBBnc33W9HiUAEw6LtA6ZMx73aQ/8lDU7eA4VK
+         s92KHROyZwH6VM2K34So3/2NIhfg7RJcEeBvDEwrKw3MWognZMwmxWKhmeaWMb+sW1OM
+         2WAyuyD3ma4nv0RENopUIE6qO1Yog3kehphCTKeEqJEtOzllT1ety04HqDyoRp0buMTw
+         N/EVads6jSmThIQxvJHMMcG2a2IdHC1+rQNnuznQjGtY7qVuaHSUokkP0befQc0IAZuL
+         1FRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684419084; x=1687011084;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iQwVdHv6Lw8dEb3HJ22Fi/mr3hZkypY/pgo/f+VOrUI=;
-        b=h3+XdM7V3rriEVMLE8FTCjsDUFgtrknlz7fj/x0zRg550eOgphIZX6n+hHJYo1hswm
-         fCItmze6dRf8Wo3binxYNYW/dMI3cEnh5AKXTarXeAY1GxUuxOgW4VXH6hRfqMsxRLlQ
-         Qps5XYE9s/Skf9tKoj3hh651f9daEWfLZVZ6zwMleoFCvBgKxOMMXCPj/oCLL86PffN5
-         BMKYuN6VmYPHhY84eec1tNW3MdXlXojsHZo/MadXCwADqUSgNK7/e+njbLVUCsjjjvZW
-         damQpCS5qSj4uGfRltBy9ks7XftZYt3ZBlCBdOt4hOVVDLtq8nl9vzlDGJylQFarAf1n
-         tM9w==
-X-Gm-Message-State: AC+VfDwE9R7Shqwmx72A3+pCV5xm8TFofdrh1xIgIOu5JuEwrxED7NJ/
-        sVgsarIMStfkgoWXd1VGtdOy6fgXLK3iuirXgLuiniitNAzHWANKb19P26rml9Qph8ALiniEoX9
-        SmZBTQY/A88w/bIAifb4gZRGW2KU/+pbS
-X-Received: by 2002:a05:6214:2aa1:b0:607:e40:c7c3 with SMTP id js1-20020a0562142aa100b006070e40c7c3mr5780674qvb.6.1684419084102;
-        Thu, 18 May 2023 07:11:24 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4sS63L/DaE4MyDckM9sjRqG00t/bCBaKB4ljyhbTxnxCkkUDcnixiQgVZxf3I21eHBiXouFw==
-X-Received: by 2002:a05:6214:2aa1:b0:607:e40:c7c3 with SMTP id js1-20020a0562142aa100b006070e40c7c3mr5780650qvb.6.1684419083864;
-        Thu, 18 May 2023 07:11:23 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id dc9-20020a056214174900b0061b7c0ff41dsm549620qvb.34.2023.05.18.07.11.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 07:11:23 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] mm: page_alloc: set sysctl_lowmem_reserve_ratio storage-class-specifier to static
-Date:   Thu, 18 May 2023 10:11:19 -0400
-Message-Id: <20230518141119.927074-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        d=1e100.net; s=20221208; t=1684419123; x=1687011123;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yZgWXPTe1ZG4Sw/b1mpfq3+D2E79rsdzVUg9Htd0C1I=;
+        b=M+AOeAjll1MPDSfijaz5CePIepiY+A0JxxwpjubhOoP0kZl/NzxKuGEIlz4WKaC4/Z
+         284Bdk3NRgHLpUCsIM0ScQfilfGtMXwUydUE4CPVw7eVSU4XQfWYhzzmWnWRaDOCq6XU
+         6H7QU9txLgNb0b5ME/LBzb8zMHCEUg2zqSNUDc6pPwOq3AT6f0zuPQg7xJvlXamju9Pb
+         JStU0qSHZCpBMHfZ3vpGn5fYtm/GFeaolB+88H5OuyjKFgA0g3VcVEyJlljZfbYGBczA
+         TfsG4/Q47Uw5uX2uVoJAtI9YdjEzTyqJ9klOsjy7tkSBEyNYH1/59ZqxV+fkXBhLNteu
+         sSwQ==
+X-Gm-Message-State: AC+VfDwiQgRi7OiWX6FXdhkBYz9bQGJmrE9tysK6ksxf5K54TnDOOwj2
+        KmFq9jO6TE6njc5xp5vWsoO6DnfOCswPoMm8QKU=
+X-Google-Smtp-Source: ACHHUZ7Wg8xb1JH8XfeIc9gUmaEmZ1QQYbmXEsgYarNjqa8kvVLA8Lmw4xYSh9xP4U0j3obrgMp+czHwKDBtVv/H2Us=
+X-Received: by 2002:a25:460a:0:b0:b9a:6cb6:b942 with SMTP id
+ t10-20020a25460a000000b00b9a6cb6b942mr1368503yba.54.1684419122859; Thu, 18
+ May 2023 07:12:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230517124201.441634-1-imagedong@tencent.com>
+ <20230517124201.441634-4-imagedong@tencent.com> <CANn89iKLf=V664AsUYC52h_q-xjEq9xC3KqTq8q+t262T91qVQ@mail.gmail.com>
+ <CADxym3a0gmzmD3Vwu_shoJnAHm-xjD5tJRuKwTvAXnVk_H55AA@mail.gmail.com> <CADVnQynZ67511+cKF=hyiaLx5-fqPGGmpyJ-5Lk6ge-ivmAf-w@mail.gmail.com>
+In-Reply-To: <CADVnQynZ67511+cKF=hyiaLx5-fqPGGmpyJ-5Lk6ge-ivmAf-w@mail.gmail.com>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Thu, 18 May 2023 22:11:51 +0800
+Message-ID: <CADxym3ZiyYK7Vyz05qLv8jOPmNZXXepCsTbZxdkhSQxRx0cdSA@mail.gmail.com>
+Subject: Re: [PATCH net-next 3/3] net: tcp: handle window shrink properly
+To:     Neal Cardwell <ncardwell@google.com>
+Cc:     Eric Dumazet <edumazet@google.com>, kuba@kernel.org,
+        davem@davemloft.net, pabeni@redhat.com, dsahern@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Menglong Dong <imagedong@tencent.com>,
+        Yuchung Cheng <ycheng@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-smatch reports
-mm/page_alloc.c:247:5: warning: symbol
-  'sysctl_lowmem_reserve_ratio' was not declared. Should it be static?
+On Thu, May 18, 2023 at 9:40=E2=80=AFPM Neal Cardwell <ncardwell@google.com=
+> wrote:
+>
+> On Wed, May 17, 2023 at 10:35=E2=80=AFPM Menglong Dong <menglong8.dong@gm=
+ail.com> wrote:
+> >
+> > On Wed, May 17, 2023 at 10:47=E2=80=AFPM Eric Dumazet <edumazet@google.=
+com> wrote:
+> > >
+> > > On Wed, May 17, 2023 at 2:42=E2=80=AFPM <menglong8.dong@gmail.com> wr=
+ote:
+> > > >
+> > > > From: Menglong Dong <imagedong@tencent.com>
+> > > >
+> > > > Window shrink is not allowed and also not handled for now, but it's
+> > > > needed in some case.
+> > > >
+> > > > In the origin logic, 0 probe is triggered only when there is no any
+> > > > data in the retrans queue and the receive window can't hold the dat=
+a
+> > > > of the 1th packet in the send queue.
+> > > >
+> > > > Now, let's change it and trigger the 0 probe in such cases:
+> > > >
+> > > > - if the retrans queue has data and the 1th packet in it is not wit=
+hin
+> > > > the receive window
+> > > > - no data in the retrans queue and the 1th packet in the send queue=
+ is
+> > > > out of the end of the receive window
+> > >
+> > > Sorry, I do not understand.
+> > >
+> > > Please provide packetdrill tests for new behavior like that.
+> > >
+> >
+> > Yes. The problem can be reproduced easily.
+> >
+> > 1. choose a server machine, decrease it's tcp_mem with:
+> >     echo '1024 1500 2048' > /proc/sys/net/ipv4/tcp_mem
+> > 2. call listen() and accept() on a port, such as 8888. We call
+> >     accept() looply and without call recv() to make the data stay
+> >     in the receive queue.
+> > 3. choose a client machine, and create 100 TCP connection
+> >     to the 8888 port of the server. Then, every connection sends
+> >     data about 1M.
+> > 4. we can see that some of the connection enter the 0-probe
+> >     state, but some of them keep retrans again and again. As
+> >     the server is up to the tcp_mem[2] and skb is dropped before
+> >     the recv_buf full and the connection enter 0-probe state.
+> >     Finially, some of these connection will timeout and break.
+> >
+> > With this series, all the 100 connections will enter 0-probe
+> > status and connection break won't happen. And the data
+> > trans will recover if we increase tcp_mem or call 'recv()'
+> > on the sockets in the server.
+> >
+> > > Also, such fundamental change would need IETF discussion first.
+> > > We do not want linux to cause network collapses just because billions
+> > > of devices send more zero probes.
+> >
+> > I think it maybe a good idea to make the connection enter
+> > 0-probe, rather than drop the skb silently. What 0-probe
+> > meaning is to wait for space available when the buffer of the
+> > receive queue is full. And maybe we can also use 0-probe
+> > when the "buffer" of "TCP protocol" (which means tcp_mem)
+> > is full?
+> >
+> > Am I right?
+> >
+> > Thanks!
+> > Menglong Dong
+>
+> Thanks for describing the scenario in more detail. (Some kind of
+> packetdrill script or other program to reproduce this issue would be
+> nice, too, as Eric noted.)
+>
+> You mention in step (4.) above that some of the connections keep
+> retransmitting again and again. Are those connections receiving any
+> ACKs in response to their retransmissions? Perhaps they are receiving
+> dupacks?
 
-This variable is only used in its defining file, so it should be static
+Actually, these packets are dropped without any reply, even dupacks.
+skb will be dropped directly when tcp_try_rmem_schedule()
+fails in tcp_data_queue(). That's reasonable, as it's
+useless to reply a ack to the sender, which will cause the sender
+fast retrans the packet, because we are out of memory now, and
+retrans can't solve the problem.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- mm/page_alloc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> If so, then perhaps we could solve this problem without
+> depending on a violation of the TCP spec (which says the receive
+> window should not be retracted) in the following way: when a data
+> sender suffers a retransmission timeout, and retransmits the first
+> unacknowledged segment, and receives a dupack for SND.UNA instead of
+> an ACK covering the RTO-retransmitted segment, then the data sender
+> should estimate that the receiver doesn't have enough memory to buffer
+> the retransmitted packet. In that case, the data sender should enter
+> the 0-probe state and repeatedly set the ICSK_TIME_PROBE0 timer to
+> call tcp_probe_timer().
+>
+> Basically we could try to enhance the sender-side logic to try to
+> distinguish between two kinds of problems:
+>
+> (a) Repeated data packet loss caused by congestion, routing problems,
+> or connectivity problems. In this case, the data sender uses
+> ICSK_TIME_RETRANS and tcp_retransmit_timer(), and backs off and only
+> retries sysctl_tcp_retries2 times before timing out the connection
+>
+> (b) A receiver that is repeatedly sending dupacks but not ACKing
+> retransmitted data because it doesn't have any memory. In this case,
+> the data sender uses ICSK_TIME_PROBE0 and tcp_probe_timer(), and backs
+> off but keeps retrying as long as the data sender receives ACKs.
+>
 
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 1023f41de2fb..8032fffa425a 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -244,7 +244,7 @@ static void __free_pages_ok(struct page *page, unsigned int order,
-  * TBD: should special case ZONE_DMA32 machines here - in those we normally
-  * don't need any ZONE_NORMAL reservation
-  */
--int sysctl_lowmem_reserve_ratio[MAX_NR_ZONES] = {
-+static int sysctl_lowmem_reserve_ratio[MAX_NR_ZONES] = {
- #ifdef CONFIG_ZONE_DMA
- 	[ZONE_DMA] = 256,
- #endif
--- 
-2.27.0
+I'm not sure if this is an ideal method, as it may be not rigorous
+to conclude that the receiver is oom with dupacks. A packet can
+loss can also cause multi dupacks.
 
+Thanks!
+Menglong Dong
+
+> AFAICT that would be another way to reach the happy state you mention:
+> "all the 100 connections will enter 0-probe status and connection
+> break won't happen", and we could reach that state without violating
+> the TCP protocol spec and without requiring changes on the receiver
+> side (so that this fix could help in scenarios where the
+> memory-constrained receiver is an older stack without special new
+> behavior).
+>
+> Eric, Yuchung, Menglong: do you think something like that would work?
+>
+> neal
