@@ -2,274 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C282F707887
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 05:40:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E973707888
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 05:42:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbjERDj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 23:39:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51258 "EHLO
+        id S229756AbjERDmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 23:42:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjERDjz (ORCPT
+        with ESMTP id S229496AbjERDmS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 23:39:55 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D861E30E6;
-        Wed, 17 May 2023 20:39:53 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34I2h5xl009943;
-        Thu, 18 May 2023 03:39:50 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=xtTAAKV3hSs6ELus/BUwU96wEEsWJrZQVqHbjjhYcD4=;
- b=WaITjESaognvRPyvdl7i0hZDASM33vuE4OtRF0RlzBkl1a4ppCQAz7Osia/YloPClkqn
- s5eiwLJzsExwUX2jcLeWjOlmvuVdIGA1+8JMsyrASWTY2kUhkoe2erE0NLTknl2LSw6N
- +aNAh0yGdGh+RPYw3xbbHpgAL1FThPK7tkMOiDSEoAc/WcwAsk7OrJVyIsbpDJjE+dFp
- NQZLMsf1yj34AGBDfy3cVTAWO/6N1pXfEFLx0H8g4GafLQVhwIhIT8XQJ1/jxS8amGC1
- zHKhjdS7eyme81crEnx6Gcy+8gmfBmLLHzzvv6yBnQXG9vurFlDkMGquVP8iNcVZjiNb BA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qn73urfrf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 May 2023 03:39:50 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34I3dnox015592
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 18 May 2023 03:39:49 GMT
-Received: from tjiang-gv.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+        Wed, 17 May 2023 23:42:18 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB72A30E8
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 20:42:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684381337; x=1715917337;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=qVZTJDeU2Minncpt34dtRmxyKt7MyI3eJ9CImYKwhUw=;
+  b=NCWrE4TehcY3d1j/dBMayw7YNVZjwrsX7OU3YwtwAJMyfHnFbhJo0cBM
+   DgLwRUgcbb5AxC1Var32A3BT1c+cxGGmTJBzGnG+aRcVxbPbShkMQjsbO
+   t71AyPWYYoH7f9EyYinTbmRGAn3B2BWfuNsQX4FWS9vKRQdo48vnHyph9
+   fK5qR8eRC6fGXdxPWy53nniOWx5wqGjkIlpSDpJoZ5aYK6O01JWLCxJDt
+   jwz3hD41+hj8tAo/TDrybyBrMgp739Qr+oPJnmQZ+E20aMcq0neCqgkng
+   LD+iD5XQxJL3fP9VPOkJzNbqB3R2GqAR+2vs9usH8h/k1gWLTsOXc+Uvr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="336517326"
+X-IronPort-AV: E=Sophos;i="5.99,284,1677571200"; 
+   d="scan'208";a="336517326"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 May 2023 20:42:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10713"; a="814159717"
+X-IronPort-AV: E=Sophos;i="5.99,284,1677571200"; 
+   d="scan'208";a="814159717"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga002.fm.intel.com with ESMTP; 17 May 2023 20:42:16 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 17 May 2023 20:42:16 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 17 May 2023 20:42:16 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Wed, 17 May 2023 20:42:15 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.173)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 17 May 2023 20:39:46 -0700
-From:   Tim Jiang <quic_tjiang@quicinc.com>
-To:     <marcel@holtmann.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-bluetooth@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <quic_tjiang@quicinc.com>,
-        <quic_bgodavar@quicinc.com>, <quic_hemantg@quicinc.com>,
-        <mka@chromium.org>
-Subject: [PATCH v5] Bluetooth: hci_qca: Add support for Qualcomm Bluetooth SoC QCA2066
-Date:   Thu, 18 May 2023 11:39:35 +0800
-Message-ID: <20230518033935.11428-1-quic_tjiang@quicinc.com>
-X-Mailer: git-send-email 2.17.1
+ 15.1.2507.23; Wed, 17 May 2023 20:42:15 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Bz0pALDyWZ6UmBJlwTT8RuAo38gk8EwLmZze6dKclcJmbVpBHyNgE1XnXKcyASx0CvqswZQhkwGsORaHTE5lncvIYDIFPJLAxM2aKBR+YgrMrILE/1wti7n38Mm/g4ZfTZcQVZRQoJ35odcusKzZefgt4qjlaVRxHLMIw7vb6sXK4WnIPWVK+fAk8sq+eiLkyon+waEJOIues4IcbyEvl/GsPAbUAIoI9LMSvrpRy5Em3kw4V0cmNEC+HiNaWC6AMgbnG7sMem9jIR8ThMN7ja8RaXICQk342aU/s/jaHwMUqme1vIDhAlE8KvXM7TehmkZ9CbnMqkUdVB+VGHbQpg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2HQSwL/VjwZLKzTnkymt6h6GrZNTHsaTma9Ttb6GZUQ=;
+ b=OIKQHBzfAkYEob/7ze+2TWGPHl5OvNIvXkXaFOOKgvoBQLkFh5seEN/FpnrT5BV22yjL8JVDg10cUtjkm4PvCgNFbGrmmZSVDU0fnFPRxBwppll41y6KYZycPM1iy4VdQHnQKgplviIDVuWEoqgB0RBSG1romWBBuz6jiXgpDBoWCpBCsr3dZmFiaCe0ZXeCCWo0DaxKHhdtwKiog5XWTs8ohAvimi/Ih8xen9FHT3DY3DN0DE3zsobQKp03GiB8R3Qo0ouxV4k914lXO2Veifq130s4e4gmSgexIM8ppv8ysYE/hwQZl8LiEyCDzFeGkuwzB1YgtT7Imm5Bskdvtg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6206.namprd11.prod.outlook.com (2603:10b6:208:3c6::8)
+ by CO1PR11MB5076.namprd11.prod.outlook.com (2603:10b6:303:90::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.17; Thu, 18 May
+ 2023 03:42:13 +0000
+Received: from MN0PR11MB6206.namprd11.prod.outlook.com
+ ([fe80::c219:56e8:1243:2a5d]) by MN0PR11MB6206.namprd11.prod.outlook.com
+ ([fe80::c219:56e8:1243:2a5d%3]) with mapi id 15.20.6387.032; Thu, 18 May 2023
+ 03:42:13 +0000
+Date:   Thu, 18 May 2023 11:41:55 +0800
+From:   Chen Yu <yu.c.chen@intel.com>
+To:     Mike Galbraith <efault@gmx.de>
+CC:     Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Tim Chen <tim.c.chen@intel.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        K Prateek Nayak <kprateek.nayak@amd.com>,
+        Abel Wu <wuyun.abel@bytedance.com>,
+        Yicong Yang <yangyicong@hisilicon.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+        Len Brown <len.brown@intel.com>,
+        Chen Yu <yu.chen.surf@gmail.com>,
+        Arjan Van De Ven <arjan.van.de.ven@intel.com>,
+        Aaron Lu <aaron.lu@intel.com>, Barry Song <baohua@kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH] sched/fair: Introduce SIS_PAIR to wakeup task on
+ local idle core first
+Message-ID: <ZGWeg6UaZ3WJ6ykI@chenyu5-mobl1>
+References: <20230516011159.4552-1-yu.c.chen@intel.com>
+ <19664c68f77f5b23a86e5636a17ad2cbfa073f78.camel@gmx.de>
+ <ZGNBt7vWJ3fDs5Sc@chenyu5-mobl1>
+ <795a6d9475ecb444d219a9d36dc93b48a69e960e.camel@gmx.de>
+ <ZGUHa+Si4dJbdsZN@chenyu5-mobl1>
+ <a2a4cd5b398390dcf01b800c964b80c6eba89d18.camel@gmx.de>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a2a4cd5b398390dcf01b800c964b80c6eba89d18.camel@gmx.de>
+X-ClientProxiedBy: SG2PR06CA0205.apcprd06.prod.outlook.com
+ (2603:1096:4:68::13) To MN0PR11MB6206.namprd11.prod.outlook.com
+ (2603:10b6:208:3c6::8)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: qgdmJnoPmjCSGXF6xCZ5kMW7snRnIgRt
-X-Proofpoint-GUID: qgdmJnoPmjCSGXF6xCZ5kMW7snRnIgRt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-18_01,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- lowpriorityscore=0 priorityscore=1501 mlxlogscore=999 malwarescore=0
- impostorscore=0 bulkscore=0 mlxscore=0 clxscore=1015 adultscore=0
- spamscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305180024
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6206:EE_|CO1PR11MB5076:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3d0caf9e-79c8-44ec-c668-08db5751ddbd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0dUAYw3lfaS7+CFflhg4A6QEcNwr8xw7SIOejFMorop7P47oHGW3y657LFlnZwq9KyvCvXixGbI6PHCGNCyTDEkqzg58BZ2DmM5u8LYHITSQ5L4uf9G9q/o2Do3Lq0QZQp0MKMKp61baFRJd35rMHQ1ivizj+sKkEN09OsbiiO1dDm72LqAOnY4C+lKjnOHBsCpVvKAFmhCndTpMkk4HYRqVE0/vf5S1B9OXmJCrsLyxH00SPAmyNk6kstSDodcDb/x+5DAMqLd1HRzi4uld7ADxMEQJtE3Xt+uYEBKWAgTVfCyGwz5wkHleMm+n7NCMnuIlATd+RBL3gSg0ypc5WzVAVA1P8E9AicPEuqLix+q8jBxTfRxL/XSzLdWEduk2zwgmdV9/D2AlNn0Uy6h+f3pjn3VKv8klQvXCsW8QqvRQDbxLCsnhz13BcAzQcpPvG44AWasKbZfom2BjKrt4TcpDUlMRQlBTTsko9htKG4YXRYeL+DheYTEgu8utInG9sFYg9Tuy1crRiGUhC4yV16mC2n14Ihn1/nctsletorz+oPFD2G6RDHZyDzRbl6Cr
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6206.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(136003)(346002)(396003)(376002)(366004)(39860400002)(451199021)(83380400001)(6486002)(478600001)(54906003)(6666004)(186003)(6506007)(53546011)(6512007)(9686003)(26005)(8936002)(5660300002)(8676002)(7416002)(82960400001)(41300700001)(6916009)(38100700002)(66556008)(66476007)(4326008)(2906002)(66946007)(316002)(33716001)(86362001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?AikNVUaAYHlEAYt4csl7sKunlhWTAvcz/dCl/KmlJib1cGkSPdD2r+f/ga?=
+ =?iso-8859-1?Q?Utw8NjWhG6Jx0eXxhxOAPCNgbmNutRJVeovFG0GNoa6kICZmsgNpX5ZTey?=
+ =?iso-8859-1?Q?gkrR7jOsDQ8csJ9CKHA7VLW5j178TG0Xr33lu1uABADGYOvXBOOYTop5+b?=
+ =?iso-8859-1?Q?ZNnEjSsgnkUyubLOm5ETTm6o2xNQkaT+53E3oRp0Jg2oBEhWeGOByuowIO?=
+ =?iso-8859-1?Q?MAYyAHJATO7QHtWS1VodBiXcI3zNeUx1tQcnoWMqVZzcC5P+qxDdBTU9SB?=
+ =?iso-8859-1?Q?Tu6iXmhdedkeQ2k/woRD6mWj0r7J3XfUvql1NPzomRXYiUaM3Z9M29NaJO?=
+ =?iso-8859-1?Q?GdUJ5I+flDP42HnEjE3dSy2eem5rK8aiwwrOVe4rXTMV4Coe2AOB6r7r2/?=
+ =?iso-8859-1?Q?fds4fWMXHOc409+/STDTRsWrqOlM1DqPV85Ub+ifim7n+c02qLkM/IE/Ah?=
+ =?iso-8859-1?Q?QIn3UJCLIBSGuYfYy0ZuDDLs2NgRnHBLb9W7UMDCYfTsUVlQ+5DzNsguUj?=
+ =?iso-8859-1?Q?uVEjBMlCUOLg+D7H1u2MXZcrzOtuecVPaV2WDdp9bz7WMnes7LUZfXNwhx?=
+ =?iso-8859-1?Q?SJwqP0FVDiQBQG+OnpzI7XBsdKtr1jtlunv0oFYZBo05mGPea4jpUhK6/z?=
+ =?iso-8859-1?Q?BNnKYlmDsUXfQAK8xPwe1bCVmg0Yq1gSLKmqKuN2CyEq/e92LsfDjpPszP?=
+ =?iso-8859-1?Q?5C8wuqtJyQUQCWyuN/MqD/7BBCwgmPLJeSE5vJ+zRbFr4B4r4HXp6CS/Wl?=
+ =?iso-8859-1?Q?rO5Y2TVGwQq7BJp4V2/PAfIf8k/fT0DquvSr5iuNLqVDF+V2SHcOuif54Q?=
+ =?iso-8859-1?Q?XnceZ6wR53Oyc5pKOkprJmWEXEfEnQre13McoeAQSQrorWsNhA/Y4vQ6/R?=
+ =?iso-8859-1?Q?RZe9ENRzcVPMWmfE1OvGxC/IWuSlgo3gVt3i9sWzGmM2pqk95bbzlwr0HY?=
+ =?iso-8859-1?Q?pIfI5ZguEJb+mCXXbBwbvoV5uRAt3uVrrmuYX5lx6G1ftYvFbpllkZRbHI?=
+ =?iso-8859-1?Q?iJry5WDc7NBiEd7a+0lomIaDiX/PK7SU/fVZ3qKI4xixZzsqxUi+6J2T8k?=
+ =?iso-8859-1?Q?lCKLjQMq7231CydR+nIB+Ke43FygfvGIUcWxvN8YKbMNfhrJ6MTPN6COoq?=
+ =?iso-8859-1?Q?YBHtHIIutMQYSTfkyQ/sB/TES5Zk1LcIn89/0IFZhxqUtow87bQrDaPFdK?=
+ =?iso-8859-1?Q?zy3RtdnNsmhIj3oDpyYJcGSK7Wu9ToshVx7Zzilj5spsW3KtIQ5OfrpONL?=
+ =?iso-8859-1?Q?tL1jALPpTXhhYcxmiyVTFxvnCet6YKHn95Cl8ZegvVsqnktj86SMbPSw7b?=
+ =?iso-8859-1?Q?ddbGG4q6AGuqTSapG1qkiz+J3d3vECIpNIhmc38awxGJjU+kXiDOpKjXth?=
+ =?iso-8859-1?Q?eZbgva/1pu70cuCkeqrltxpn6fZh0wD8RSSZKD1yc959s1a1U5u6jHZyFn?=
+ =?iso-8859-1?Q?kaYZFhjisV4OFVSnSlcs3dzY1jOu6LJZgL6NEctVFnzxQPQ1lQOJ2q0FFQ?=
+ =?iso-8859-1?Q?Fh3Xf8kHy7jhXTyqGZ5XXBsNnsAm9nsqjEHFzohd6DnUKpx4U7sueRVlof?=
+ =?iso-8859-1?Q?6XAIgduXHfFw7Z+bPX1yAokPUpNw9xeETQ/57BjD8MfSngJQ6MOKbc0iXs?=
+ =?iso-8859-1?Q?/9JU9qUpDFTUan5MH2kGB9APdFEvbeb+vC?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3d0caf9e-79c8-44ec-c668-08db5751ddbd
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6206.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2023 03:42:13.1460
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: XAzJP/7kDtigZJCFYJe3zU5EOJvlp0JGZVjxCtwUY6OrEgtCXldyIirME1XZfqhOAzIUSlJIGd1/BHc+nd6mFA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB5076
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds support for QCA2066 firmware patch and nvm downloading.
-as the RF performance of qca2066 soc chip from different foundries will
-be difference, so we use different nvm to configure them by according
-to board id.
+On 2023-05-17 at 21:52:21 +0200, Mike Galbraith wrote:
+> On Thu, 2023-05-18 at 00:57 +0800, Chen Yu wrote:
+> > >
+> > I'm thinking of two directions based on current patch:
+> >
+> > 1. Check the task duration, if it is a high speed ping-pong pair, let the
+> >    wakee search for an idle SMT sibling on current core.
+> >
+> >    This strategy give the best overall performance improvement, but
+> >    the short task duration tweak based on online CPU number would be
+> >    an obstacle.
+> 
+> Duration is pretty useless, as it says nothing about concurrency.
+> Taking the 500us metric as an example, one pipe ping-pong can meet
+> that, and toss up to nearly 50% of throughput out the window if you
+> stack based only on duration.
+> 
+> > Or
+> >
+> > 2. Honors the idle core.
+> >    That is to say, if there is an idle core in the system, choose that
+> >    idle core first. Otherwise, fall back to searching for an idle smt
+> >    sibling rather than choosing a idle CPU in a random half-busy core.
+> >
+> >    This strategy could partially mitigate the C2C overhead, and not
+> >    breaking the idle-core-first strategy. So I had a try on it, with
+> >    above change, I did see some improvement when the system is around
+> >    half busy(afterall, the idle_has_core has to be false):
+> 
+> If mitigation is the goal, and until the next iteration of socket
+> growth that's not a waste of effort, continuing to honor idle core is
+> the only option that has a ghost of a chance.
+> 
+> That said, I don't like the waker/wakee have met heuristic much either,
+> because tasks waking one another before can just as well mean they met
+> at a sleeping lock, it does not necessarily imply latency bound IPC.
+>
+Yes, for a sleeping lock case, it does not matter whether it is woken up
+on sibling idle, or an idle CPU on another half-busy core. But for the
+pair sharing data, it could bring benefit. 
+> I haven't met a heuristic I like, and that includes the ones I invent.
+> The smarter you try to make them, the more precious fast path cycles
+> they eat, and there's a never ending supply of holes in the damn things
+> that want plugging.  A prime example was the SIS_CURRENT heuristic self
+> destructing in my box, rendering that patch a not quite free noop :)
+>
+Yes.. SIS_CURRENT is not a universal win.
 
-Signed-off-by: Tim Jiang <quic_tjiang@quicinc.com>
----
- drivers/bluetooth/btqca.c   | 76 ++++++++++++++++++++++++++++++++++++-
- drivers/bluetooth/btqca.h   |  4 ++
- drivers/bluetooth/hci_qca.c |  8 +++-
- 3 files changed, 86 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/bluetooth/btqca.c b/drivers/bluetooth/btqca.c
-index fd0941fe8608..a278a58cb6fa 100644
---- a/drivers/bluetooth/btqca.c
-+++ b/drivers/bluetooth/btqca.c
-@@ -205,6 +205,48 @@ static int qca_send_reset(struct hci_dev *hdev)
- 	return 0;
- }
- 
-+static int qca_read_fw_board_id(struct hci_dev *hdev, u16 *bid)
-+{
-+	u8 cmd;
-+	struct sk_buff *skb;
-+	struct edl_event_hdr *edl;
-+	int err = 0;
-+	int bid_len;
-+
-+	bt_dev_dbg(hdev, "QCA read board ID");
-+
-+	cmd = EDL_GET_BID_REQ_CMD;
-+	skb = __hci_cmd_sync_ev(hdev, EDL_PATCH_CMD_OPCODE, EDL_PATCH_CMD_LEN,
-+				&cmd, 0, HCI_INIT_TIMEOUT);
-+	if (IS_ERR(skb)) {
-+		err = PTR_ERR(skb);
-+		bt_dev_err(hdev, "Reading QCA board ID failed (%d)", err);
-+		return err;
-+	}
-+
-+	edl = skb_pull_data(skb, sizeof(*edl));
-+	if (!edl) {
-+		bt_dev_err(hdev, "QCA read board ID with no header");
-+		err = -EILSEQ;
-+		goto out;
-+	}
-+
-+	if (edl->cresp != EDL_CMD_REQ_RES_EVT ||
-+	    edl->rtype != EDL_GET_BID_REQ_CMD) {
-+		bt_dev_err(hdev, "QCA Wrong packet: %d %d", edl->cresp, edl->rtype);
-+		err = -EIO;
-+		goto out;
-+	}
-+
-+	bid_len = edl->data[0];
-+	*bid = (edl->data[1] << 8) + edl->data[2];
-+	bt_dev_info(hdev, "%s: bid len = %x, bid = %x", __func__, bid_len, *bid);
-+
-+out:
-+	kfree_skb(skb);
-+	return err;
-+}
-+
- int qca_send_pre_shutdown_cmd(struct hci_dev *hdev)
- {
- 	struct sk_buff *skb;
-@@ -574,6 +616,29 @@ int qca_set_bdaddr_rome(struct hci_dev *hdev, const bdaddr_t *bdaddr)
- }
- EXPORT_SYMBOL_GPL(qca_set_bdaddr_rome);
- 
-+static void qca_generate_nvm_name(struct hci_dev *hdev, char *fwname,
-+		   size_t max_size, struct qca_btsoc_version ver, u16 bid)
-+{
-+	u8 rom_ver = 0;
-+	u32 soc_ver;
-+	const char *variant;
-+
-+	soc_ver = get_soc_ver(ver.soc_id, ver.rom_ver);
-+	rom_ver = ((soc_ver & 0x00000f00) >> 0x04) | (soc_ver & 0x0000000f);
-+
-+	if ((le32_to_cpu(ver.soc_id) & 0x0000ff00) == QCA_HSP_GF_SOC_ID)  /* hsp gf chip */
-+		variant = "g";
-+	else
-+		variant = "";
-+
-+	if (bid == 0x0)
-+		snprintf(fwname, max_size, "qca/hpnv%02x%s.bin", rom_ver, variant);
-+	else
-+		snprintf(fwname, max_size, "qca/hpnv%02x%s.%x", rom_ver, variant, bid);
-+
-+	bt_dev_info(hdev, "%s: nvm name is %s", __func__, fwname);
-+}
-+
- int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
- 		   enum qca_btsoc_type soc_type, struct qca_btsoc_version ver,
- 		   const char *firmware_name)
-@@ -582,6 +647,7 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
- 	int err;
- 	u8 rom_ver = 0;
- 	u32 soc_ver;
-+	u16 boardid = 0;
- 
- 	bt_dev_dbg(hdev, "QCA setup on UART");
- 
-@@ -604,6 +670,9 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
- 	if (qca_is_wcn399x(soc_type)) {
- 		snprintf(config.fwname, sizeof(config.fwname),
- 			 "qca/crbtfw%02x.tlv", rom_ver);
-+	} else if (soc_type == QCA_QCA2066) {
-+		snprintf(config.fwname, sizeof(config.fwname),
-+			 "qca/hpbtfw%02x.tlv", rom_ver);
- 	} else if (soc_type == QCA_QCA6390) {
- 		snprintf(config.fwname, sizeof(config.fwname),
- 			 "qca/htbtfw%02x.tlv", rom_ver);
-@@ -631,6 +700,9 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
- 	/* Give the controller some time to get ready to receive the NVM */
- 	msleep(10);
- 
-+	if (soc_type == QCA_QCA2066)
-+		qca_read_fw_board_id(hdev, &boardid);
-+
- 	/* Download NVM configuration */
- 	config.type = TLV_TYPE_NVM;
- 	if (firmware_name)
-@@ -644,7 +716,9 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
- 			snprintf(config.fwname, sizeof(config.fwname),
- 				 "qca/crnv%02x.bin", rom_ver);
- 		}
--	}
-+	} else if (soc_type == QCA_QCA2066)
-+		qca_generate_nvm_name(hdev, config.fwname, sizeof(config.fwname),
-+				ver, boardid);
- 	else if (soc_type == QCA_QCA6390)
- 		snprintf(config.fwname, sizeof(config.fwname),
- 			 "qca/htnv%02x.bin", rom_ver);
-diff --git a/drivers/bluetooth/btqca.h b/drivers/bluetooth/btqca.h
-index b884095bcd9d..7c9b3464ae4a 100644
---- a/drivers/bluetooth/btqca.h
-+++ b/drivers/bluetooth/btqca.h
-@@ -13,6 +13,7 @@
- #define EDL_PATCH_TLV_REQ_CMD		(0x1E)
- #define EDL_GET_BUILD_INFO_CMD		(0x20)
- #define EDL_NVM_ACCESS_SET_REQ_CMD	(0x01)
-+#define EDL_GET_BID_REQ_CMD		(0x23)
- #define EDL_PATCH_CONFIG_CMD		(0x28)
- #define MAX_SIZE_PER_TLV_SEGMENT	(243)
- #define QCA_PRE_SHUTDOWN_CMD		(0xFC08)
-@@ -48,6 +49,8 @@
- 
- #define QCA_FW_BUILD_VER_LEN		255
- 
-+#define QCA_HSP_GF_SOC_ID		0x1200
-+
- 
- enum qca_baudrate {
- 	QCA_BAUDRATE_115200 	= 0,
-@@ -145,6 +148,7 @@ enum qca_btsoc_type {
- 	QCA_WCN3990,
- 	QCA_WCN3998,
- 	QCA_WCN3991,
-+	QCA_QCA2066,
- 	QCA_QCA6390,
- 	QCA_WCN6750,
- 	QCA_WCN6855,
-diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
-index 1b064504b388..2fba72e0f8bf 100644
---- a/drivers/bluetooth/hci_qca.c
-+++ b/drivers/bluetooth/hci_qca.c
-@@ -1729,7 +1729,7 @@ static int qca_setup(struct hci_uart *hu)
- 	bt_dev_info(hdev, "setting up %s",
- 		qca_is_wcn399x(soc_type) ? "wcn399x" :
- 		(soc_type == QCA_WCN6750) ? "wcn6750" :
--		(soc_type == QCA_WCN6855) ? "wcn6855" : "ROME/QCA6390");
-+		(soc_type == QCA_WCN6855) ? "wcn6855" : "ROME/QCA6390/QCA2066");
- 
- 	qca->memdump_state = QCA_MEMDUMP_IDLE;
- 
-@@ -1874,6 +1874,11 @@ static const struct qca_device_data qca_soc_data_qca6390 __maybe_unused = {
- 	.num_vregs = 0,
- };
- 
-+static const struct qca_device_data qca_soc_data_qca2066 __maybe_unused = {
-+	.soc_type = QCA_QCA2066,
-+	.num_vregs = 0,
-+};
-+
- static const struct qca_device_data qca_soc_data_wcn6750 __maybe_unused = {
- 	.soc_type = QCA_WCN6750,
- 	.vregs = (struct qca_vreg []) {
-@@ -2356,6 +2361,7 @@ static SIMPLE_DEV_PM_OPS(qca_pm_ops, qca_suspend, qca_resume);
- 
- #ifdef CONFIG_OF
- static const struct of_device_id qca_bluetooth_of_match[] = {
-+	{ .compatible = "qcom,qca2066-bt", .data = &qca_soc_data_qca2066},
- 	{ .compatible = "qcom,qca6174-bt" },
- 	{ .compatible = "qcom,qca6390-bt", .data = &qca_soc_data_qca6390},
- 	{ .compatible = "qcom,qca9377-bt" },
--- 
-2.17.1
-
+thanks,
+Chenyu 
