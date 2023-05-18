@@ -2,114 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18AAF708AB1
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 23:43:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63776708AB4
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 23:43:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbjERVnj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 17:43:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53382 "EHLO
+        id S230203AbjERVns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 17:43:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjERVnh (ORCPT
+        with ESMTP id S230186AbjERVnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 17:43:37 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D97B180;
-        Thu, 18 May 2023 14:43:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684446216; x=1715982216;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=FCvlPDXlcdJACB4EQCU/Yj0sO6IJ/Dvvnamlu77Mjcs=;
-  b=LdaN1Y/g2IGsYIw63zwoBXhpb38rbFb4rd4FdtM9PqsU0Wcowg73HMrW
-   6Glzmj2qvI6B8aSSWFTUVVPOz5YBZeqPeArRp7oQBJ/hYSIvNO0SaGFXW
-   85ZgK38oQoqM+S1C5/h17NEcA+CbkStTwn/RLAXRnfoOPb/yhNP25wbGI
-   He3hhQEJpAaE6lUCfmhKoUEaYNcQ/Kt5JR1TTtVK5RyoU5pvduOOYWgwe
-   wko3GW70SMSyYcsDOJv0ockAGMV4Zdea2mYYOiJlDfa2wOQ08Fr4wtbXY
-   DNFudSLusn0S6eRN4wV4yrmBh0HnPFAJIw8HGPbLYOq8/WV9mIZvfeXqm
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="354547437"
-X-IronPort-AV: E=Sophos;i="6.00,175,1681196400"; 
-   d="scan'208";a="354547437"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 14:43:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="948850882"
-X-IronPort-AV: E=Sophos;i="6.00,175,1681196400"; 
-   d="scan'208";a="948850882"
-Received: from nroy-mobl1.amr.corp.intel.com (HELO [10.209.81.123]) ([10.209.81.123])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 14:43:26 -0700
-Message-ID: <6dbbc3da-78c9-8101-d52a-0be47da9d67e@intel.com>
-Date:   Thu, 18 May 2023 14:43:25 -0700
+        Thu, 18 May 2023 17:43:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928F310C6;
+        Thu, 18 May 2023 14:43:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 22AB36116D;
+        Thu, 18 May 2023 21:43:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 893EFC433D2;
+        Thu, 18 May 2023 21:43:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684446224;
+        bh=K5xEeU1mCoS/OcrSjPJzbDiJWn0dLzXGU8F7Uq+vaiM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Z8O9DHsXQ7ixpbmHAwzzZ2YY7NsU7T0laR+7Rw60X1rR66jZYjs1n8mzpc2a+bCof
+         Iihi1/FYLdZtmgRAB0K61CWx3p6JR1+Y5FoNhgaOYNCK7ZyGwB3tqOr3L15SJceHzv
+         NPGwAEsfg5hpGoLenhLr0qeLmm9X5ChldfLVDlU71tOPBa4G1C6ypJ4g6LAMRZODOG
+         PTeMzAm1hd2R1wcQcZbRinNjibK6Sb9XNPSPeVRy35cEOfgIvfwHTH0NP55sqQhs19
+         rzTnLdgCn+BO8ZcLXFM2dnanLgDfoZsDWJdfyBVcaecUsW7u4r2b+tyQdCW84/LNKG
+         f98g0Tw2Sl4KA==
+Date:   Thu, 18 May 2023 22:43:39 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     alexis.lothore@bootlin.com
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
+        paul.arola@telus.com, scott.roberts@telus.com
+Subject: Re: [PATCH net-next 1/2] dt-bindings: net: dsa: marvell: add
+ MV88E6361 switch to compatibility list
+Message-ID: <20230518-sporting-tweezers-14cee98a4832@spud>
+References: <20230517203430.448705-1-alexis.lothore@bootlin.com>
+ <20230517203430.448705-2-alexis.lothore@bootlin.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 2/6] PKEY: Add arch_check_pkey_enforce_api()
-Content-Language: en-US
-To:     jeffxu@chromium.org, luto@kernel.org, jorgelo@chromium.org,
-        keescook@chromium.org, groeck@chromium.org, jannh@google.com,
-        sroettger@google.com
-Cc:     akpm@linux-foundation.org, jeffxu@google.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, linux-hardening@vger.kernel.org
-References: <20230515130553.2311248-1-jeffxu@chromium.org>
- <20230515130553.2311248-3-jeffxu@chromium.org>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20230515130553.2311248-3-jeffxu@chromium.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="l0BAS8I4h0k//Wt/"
+Content-Disposition: inline
+In-Reply-To: <20230517203430.448705-2-alexis.lothore@bootlin.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/15/23 06:05, jeffxu@chromium.org wrote:
-> +static inline int __arch_check_vma_pkey_for_write(struct vm_area_struct *vma)
-> +{
-> +	int pkey = vma_pkey(vma);
-> +
-> +	if (mm_pkey_enforce_api(vma->vm_mm, pkey)) {
-> +		if (!__pkru_allows_write(read_pkru(), pkey))
-> +			return -EACCES;
-> +	}
-> +
-> +	return 0;
-> +}
 
-Please think very carefully about what I'm about to say:
+--l0BAS8I4h0k//Wt/
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-What connects vma->vm_mm to read_pkru() here?
+On Wed, May 17, 2023 at 10:34:29PM +0200, alexis.lothore@bootlin.com wrote:
+> From: Alexis Lothor=E9 <alexis.lothore@bootlin.com>
+>=20
+> Marvell MV88E6361 is an 8-port switch derived from the
+> 88E6393X/88E9193X/88E6191X switches family. Since its functional behavior
+> is very close to switches from this family, it can benefit from existing
+> drivers for this family, so add it to the list of compatible switches
+>=20
+> Signed-off-by: Alexis Lothor=E9 <alexis.lothore@bootlin.com>
 
-Now think about what happens when we have kthread_use_mm() or a ptrace()
-doing get_task_mm() and working on another process's mm or VMA.
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-Look at arch_vma_access_permitted() and notice how it avoids read_pkru()
-for 'foreign' aka. 'remote' accesses:
+Thanks,
+Conor.
 
-> static inline bool arch_vma_access_permitted(struct vm_area_struct *vma,
->                 bool write, bool execute, bool foreign)
-> {
-...
->         if (foreign || vma_is_foreign(vma))
->                 return true;
->         return // check read_pkru()
-> }
+--l0BAS8I4h0k//Wt/
+Content-Type: application/pgp-signature; name="signature.asc"
 
-In other words, it lets all remote accesses right through.  That's
-because there is *NOTHING* that fundamentally and tightly connects the
-PKRU value in this context to the VMA or the context that initiated this
-operation.
+-----BEGIN PGP SIGNATURE-----
 
-If your security model depends on PKRU protection, this 'remote'
-disconnection is problematic.  The PKRU enforcement inside the kernel is
-best-effort.  That usually doesn't map into the security space very well.
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGacCgAKCRB4tDGHoIJi
+0pNtAP9Z3CouQuLHG/+Yypu0zs/7meyJHceLCh6LCSAsRqLvNwEA2T8Kag0bW8kh
+8+SyrKFgL5BuNOiHglfhLmXHtOciagM=
+=IO47
+-----END PGP SIGNATURE-----
 
-Do you have a solid handle on all call paths that will reach
-__arch_check_vma_pkey_for_write() and can you ensure they are all
-non-remote?
+--l0BAS8I4h0k//Wt/--
