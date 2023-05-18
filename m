@@ -2,279 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33FD1708892
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 21:47:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3F817088A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 21:51:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230165AbjERTrc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 15:47:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33040 "EHLO
+        id S230262AbjERTvG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 15:51:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbjERTra (ORCPT
+        with ESMTP id S230252AbjERTvE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 15:47:30 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 326D0E67;
-        Thu, 18 May 2023 12:47:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684439249; x=1715975249;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=9caYYmPafBroM32BqFYVElb6P+CxhxuZ14TrqGfddUo=;
-  b=GRFs9XJJitfM41Vg43ZHwV3tlOhAUjzkKOtOokwRWoXquZ6etrUs/Dxi
-   LniNCJUYuTucwrcPIIxtR0aP25LdIzFtHXDPjTi6gQHtGL9sek1gilWM2
-   5U915bi8j9sVDhwDaecO6dXZri2eS0sd91pB2QBCnk11vmyL82E8xS5dF
-   QC1Y8FvjVJv21/hNyYdI8DNxUNWxG7Ei2N/2PFcq23JnkB64wJRp8AfGw
-   aIRBfcGYiA6Cj3jVxVj8sAA9ongcQPbQOeWhaH4H+9iHdau8HqJWU1KcB
-   u90pnOiH6TSiXIi9MWT8Qs2An6gMwqqtO1ISE1qdZKXlyAQgZflPKd5BL
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="415635044"
-X-IronPort-AV: E=Sophos;i="6.00,175,1681196400"; 
-   d="scan'208";a="415635044"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 12:47:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="876556715"
-X-IronPort-AV: E=Sophos;i="6.00,175,1681196400"; 
-   d="scan'208";a="876556715"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga005.jf.intel.com with ESMTP; 18 May 2023 12:47:28 -0700
-Received: from [10.209.99.208] (kliang2-mobl1.ccr.corp.intel.com [10.209.99.208])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 286A7580BE4;
-        Thu, 18 May 2023 12:47:26 -0700 (PDT)
-Message-ID: <2abe618d-a2c4-3b22-ac9d-37bc91d05d41@linux.intel.com>
-Date:   Thu, 18 May 2023 15:47:25 -0400
+        Thu, 18 May 2023 15:51:04 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2065.outbound.protection.outlook.com [40.107.220.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E43BDE6D;
+        Thu, 18 May 2023 12:51:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Z8yWA45AjZGd7Wku0k0t4Z2gZudEzppmMTQmxmZVtG+6vA2Mc/N/qxXtYaNGiFERvpHr4MLHQ73ukYeOlTIulg9I8f3id6GnT4DnsE1a/yIHDr1KTgKccKuz8xZJchQfdpFVurQ7xBKHppKEj5YlCpYbmhzFGxlLajkrs/EDaxzLBhv/Sf5hO4yvEVF3LPyCkODDx1fkQAFEFP8/7h3JrlA1bE3+PjEOXRP7TXkSJhvjjqPfjpjiIdZAuPZii5skWkHOhGsX8GwRSrX2Z6+gylK8FyHvbExSEIHVffvJfl8oVCw4EPoibvdfqQcFWbI9aSdqzpre3T6bSc+d1GDVzA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=m7fBIhCoyq8ZaDvAZ1+zTUyTyDQkQzr/8pBunfZXGQk=;
+ b=OgYqaRpeLzvsxEwpcgUmM5MOX8Z/oEMcvyg6Y1mlVEykD2hSaaGX3bms1tcjReSu7/dgQhjkwBwThb64SeEDDg3Y/CgJcMQrD406KQ5YShjnisT7muEZODBofMY98hW1oKlfj7HlrWcAIl21voH4RQwQVd/4ECu0igoyDn9CCLA5qR9k+HrT9xjBi7GWWykhyB9uZgO0jXpd8ztLfvA4/z/toZMp9cBO55WPTcp2OdC3IPu8Q8WMo7v5Y/JpPef73B+cOMah4wxzNNHj8qH6OUNoHcbV4ICTDlor2MuBcGgSPXfMqgepu3ikkT5xKXndv4mXTN1oZ/0p84OYpRXzJQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=m7fBIhCoyq8ZaDvAZ1+zTUyTyDQkQzr/8pBunfZXGQk=;
+ b=FoZYgfUBJIylq7U0O5H6FJ6hhi++sOfF95E9qWS8yMYWRuf3agRiqiCW6juZ3xwIJV7fOtIupyqTjspET8VHEBWLb4KKLHTKBVaogtZ3ridL0G4dksl8HL6cmEc/SRUWYWzd/d6FW5nxRnARIyYk/Apze8dWrtpkd/gwuYvNRYg=
+Received: from BL1PR13CA0144.namprd13.prod.outlook.com (2603:10b6:208:2bb::29)
+ by DM4PR12MB6566.namprd12.prod.outlook.com (2603:10b6:8:8d::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19; Thu, 18 May
+ 2023 19:50:59 +0000
+Received: from BL02EPF000145B9.namprd05.prod.outlook.com
+ (2603:10b6:208:2bb:cafe::8f) by BL1PR13CA0144.outlook.office365.com
+ (2603:10b6:208:2bb::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.6 via Frontend
+ Transport; Thu, 18 May 2023 19:50:59 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL02EPF000145B9.mail.protection.outlook.com (10.167.241.209) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6411.11 via Frontend Transport; Thu, 18 May 2023 19:50:59 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 18 May
+ 2023 14:50:58 -0500
+Date:   Thu, 18 May 2023 14:50:22 -0500
+From:   Michael Roth <michael.roth@amd.com>
+To:     Sean Christopherson <seanjc@google.com>
+CC:     <kvm@vger.kernel.org>, Paolo Bonzini <pbonzini@redhat.com>,
+        Sagi Shahar <sagis@google.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Anish Ghulati <aghulati@google.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Houghton <jthoughton@google.com>,
+        Anish Moorthy <amoorthy@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Babu Moger <babu.moger@amd.com>, Chao Gao <chao.gao@intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Chenyi Qiang <chenyi.qiang@intel.com>,
+        "David Woodhouse" <dwmw@amazon.co.uk>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        Gavin Shan <gshan@redhat.com>,
+        Guang Zeng <guang.zeng@intel.com>,
+        Hou Wenlong <houwenlong.hwl@antgroup.com>,
+        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
+        Jim Mattson <jmattson@google.com>,
+        Jing Liu <jing2.liu@intel.com>,
+        Junaid Shahid <junaids@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Leonardo Bras <leobras@redhat.com>,
+        Like Xu <like.xu.linux@gmail.com>,
+        Li RongQing <lirongqing@baidu.com>,
+        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Michal Luczaj <mhal@rbox.co>,
+        Mingwei Zhang <mizhang@google.com>,
+        Nikunj A Dadhania <nikunj@amd.com>,
+        Paul Durrant <pdurrant@amazon.com>,
+        Peng Hao <flyingpenghao@gmail.com>,
+        Peter Gonda <pgonda@google.com>, Peter Xu <peterx@redhat.com>,
+        Robert Hoo <robert.hu@linux.intel.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Wei Wang <wei.w.wang@intel.com>,
+        "Xiaoyao Li" <xiaoyao.li@intel.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Fuad Tabba <tabba@google.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Qinglan Xiang <qinglan.xiang@intel.com>,
+        "Kai Svahn" <kai.svahn@intel.com>,
+        Margarita Maroto <margarita.maroto@intel.com>,
+        Anil Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        Nagareddy Reddy <nspreddy@google.com>,
+        <linux-kernel@vger.kernel.org>, <Dhaval.Giani@amd.com>
+Subject: Re: [ANNOUNCE / RFC] Periodic Upstream Call for KVM
+Message-ID: <20230518195022.osqj2b34vijvrfrm@amd.com>
+References: <20230512231026.799267-1-seanjc@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v1 1/2] perf expr: Make the evaluation of & and | logical
- and lazy
-Content-Language: en-US
-To:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        James Clark <james.clark@arm.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Ahmad Yasin <ahmad.yasin@intel.com>,
-        Stephane Eranian <eranian@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Samantha Alt <samantha.alt@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Weilin Wang <weilin.wang@intel.com>,
-        Edward Baker <edward.baker@intel.com>
-References: <20230504195803.3331775-1-irogers@google.com>
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-In-Reply-To: <20230504195803.3331775-1-irogers@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230512231026.799267-1-seanjc@google.com>
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF000145B9:EE_|DM4PR12MB6566:EE_
+X-MS-Office365-Filtering-Correlation-Id: e43c1d9a-7af9-45d1-b9e9-08db57d933de
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: PVSoziAU0uVC5XQz5iPEKG/BpprgNZShSrPcoNCRtDtioOtHAwLWnPswLiRmHBZK5tqspIWRMFKQdWrsNCjzHiTl1Q86gZIKsulAX+QAe76CZtT5B6E6UF1gFCEt1IbtvZAqHG+C9vHShrVvHex1a5MVpVrbJsRKEtZcsORbIlT+/WCoOdTtrJt3uZ3bl8uWvBMH/YEZhRnpfOaUl7W6Zx9U6Y7rW6oSlMSyKUCaFEUB6gaKipJD435lttv3yZmmj4jbRjPqAkC7GavDYBTdvbABpQIRWjxyxWql2PsMEI7nzNH3qDk+72Acq4hEdzFb12XWNvUm3hYGplvXa3gisppjcTkYoMogJidMYzHVae8dJc958xxjWUeVvp7lsZWRtd3lTO+Z16DHU1SMQrJ5FOpQn+C1tK8RRJWjoOj4so+hal+yYlDbLj57RpQ1GaKsHIYTOMHvHBu0rHYfEPmbAxkd9JxQQb39F0aI2Xphh9UWApQEPqRYM6EuYztNvIwmmtRWBzxKnXOlAQlzkg4gTYY3cz8Dz37dNJrIZDFYjmDRV0wObcyTbZ7/UKGlfSvI9te0B6qvgZoPLxSEbhXSs60VEYElAdAv/ObABsE5vkWUsUpJpF7TFfJVhpt520dPmaN/dT2u5iSn45aM8Lp+Iy6qTvI8GzzrFXrBTUqCUENP2jxkx0cOBWI0wejY316Mqy4A/ZEerz5nIjNHfcIB/WMuvmtfH6+o9LPHNQ89ZooHLjR1+FhkJwd1eTerOHC7G1VLW959hv3OQVgL5Eit9Q==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(396003)(39860400002)(346002)(451199021)(40470700004)(46966006)(36840700001)(44832011)(86362001)(36756003)(7366002)(8936002)(356005)(40480700001)(82310400005)(8676002)(7416002)(7406005)(82740400003)(81166007)(47076005)(2616005)(426003)(336012)(40460700003)(6666004)(16526019)(83380400001)(2906002)(36860700001)(41300700001)(70206006)(186003)(26005)(1076003)(70586007)(4326008)(316002)(54906003)(5660300002)(6916009)(478600001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2023 19:50:59.2186
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e43c1d9a-7af9-45d1-b9e9-08db57d933de
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF000145B9.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6566
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023-05-04 3:58 p.m., Ian Rogers wrote:
-> Currently the & and | operators are only used in metric thresholds
-> like (from the tma_retiring metric):
-> tma_retiring > 0.7 | tma_heavy_operations > 0.1
+On Fri, May 12, 2023 at 04:10:27PM -0700, Sean Christopherson wrote:
+> I am "officially" announcing a Periodic Upstream Call for KVM, a.k.a. PUCK.
+> The intent of the PUCK is to provide a vehicle for having "in-person" technical
+> discussions of features, designs, problems, etc. that are cumbersome to discuss
+> asynchronously on-list, e.g. because something is too complex, too large, etc.
 > 
-> Thresholds are always computed when present, but a lack events may
-> mean the threshold can't be computed. This happens with the option
-> --metric-no-threshold for say the metric tma_retiring on Tigerlake
-> model CPUs. To fully compute the threshold tma_heavy_operations is
-> needed and it needs the extra events of IDQ.MS_UOPS,
-> UOPS_DECODED.DEC0, cpu/UOPS_DECODED.DEC0,cmask=1/ and
-> IDQ.MITE_UOPS. So --metric-no-threshold is a useful option to reduce
-> the number of events needed and potentially multiplexing of events.
+> Exact details are TBD, and obviously can be adapted as needed.  Proposal:
 > 
-> Rather than just fail threshold computations like this, we may know a
-> result from just the left or right-hand side. So, for tma_retiring if
-> its value is "> 0.7" we know it is over the threshold. This allows the
-> metric to have the threshold coloring, when possible, without all the
-> counters being programmed.
+>   Frequency: Weekly
+>   Time:      Wednesday, 6:00am Pacific Time
+>   Duration:  60 minutes
+>   Software:  ???
 > 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
-
-The patch works well on my machine.
-
-Tested-by: Kan Liang <kan.liang@linux.intel.com>
-
-Thanks,
-Kan
->  tools/perf/tests/expr.c | 40 +++++++++++++++++++
->  tools/perf/util/expr.y  | 86 +++++++++++++++++++++++++++++++++--------
->  2 files changed, 109 insertions(+), 17 deletions(-)
+> My thinking for weekly versus fortnightly (every other week) is that we can always
+> cancel meetings if there are no agenda items, and bump down to fortnightly if we
+> are constantly canceling.  On the flip side, if we go with fortnightly, it'd be
+> more difficult to clear the backlog if PUCK gets booked out multiple sessions, and
+> PUCK would be less useful for discussing urgent issues.
 > 
-> diff --git a/tools/perf/tests/expr.c b/tools/perf/tests/expr.c
-> index cbf0e0c74906..45c7fedb797a 100644
-> --- a/tools/perf/tests/expr.c
-> +++ b/tools/perf/tests/expr.c
-> @@ -184,6 +184,46 @@ static int test__expr(struct test_suite *t __maybe_unused, int subtest __maybe_u
->  			NULL, ctx) == 0);
->  	TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 0);
->  
-> +	/* The expression is a constant 0.0 without needing to evaluate EVENT1. */
-> +	expr__ctx_clear(ctx);
-> +	TEST_ASSERT_VAL("find ids",
-> +			expr__find_ids("0 & EVENT1 > 0", NULL, ctx) == 0);
-> +	TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 0);
-> +	expr__ctx_clear(ctx);
-> +	TEST_ASSERT_VAL("find ids",
-> +			expr__find_ids("EVENT1 > 0 & 0", NULL, ctx) == 0);
-> +	TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 0);
-> +	expr__ctx_clear(ctx);
-> +	TEST_ASSERT_VAL("find ids",
-> +			expr__find_ids("1 & EVENT1 > 0", NULL, ctx) == 0);
-> +	TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 1);
-> +	TEST_ASSERT_VAL("find ids", hashmap__find(ctx->ids, "EVENT1", &val_ptr));
-> +	expr__ctx_clear(ctx);
-> +	TEST_ASSERT_VAL("find ids",
-> +			expr__find_ids("EVENT1 > 0 & 1", NULL, ctx) == 0);
-> +	TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 1);
-> +	TEST_ASSERT_VAL("find ids", hashmap__find(ctx->ids, "EVENT1", &val_ptr));
-> +
-> +	/* The expression is a constant 1.0 without needing to evaluate EVENT1. */
-> +	expr__ctx_clear(ctx);
-> +	TEST_ASSERT_VAL("find ids",
-> +			expr__find_ids("1 | EVENT1 > 0", NULL, ctx) == 0);
-> +	TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 0);
-> +	expr__ctx_clear(ctx);
-> +	TEST_ASSERT_VAL("find ids",
-> +			expr__find_ids("EVENT1 > 0 | 1", NULL, ctx) == 0);
-> +	TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 0);
-> +	expr__ctx_clear(ctx);
-> +	TEST_ASSERT_VAL("find ids",
-> +			expr__find_ids("0 | EVENT1 > 0", NULL, ctx) == 0);
-> +	TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 1);
-> +	TEST_ASSERT_VAL("find ids", hashmap__find(ctx->ids, "EVENT1", &val_ptr));
-> +	expr__ctx_clear(ctx);
-> +	TEST_ASSERT_VAL("find ids",
-> +			expr__find_ids("EVENT1 > 0 | 0", NULL, ctx) == 0);
-> +	TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 1);
-> +	TEST_ASSERT_VAL("find ids", hashmap__find(ctx->ids, "EVENT1", &val_ptr));
-> +
->  	/* Test toplogy constants appear well ordered. */
->  	expr__ctx_clear(ctx);
->  	TEST_ASSERT_VAL("#num_cpus", expr__parse(&num_cpus, ctx, "#num_cpus") == 0);
-> diff --git a/tools/perf/util/expr.y b/tools/perf/util/expr.y
-> index 250e444bf032..6b110f9f95c9 100644
-> --- a/tools/perf/util/expr.y
-> +++ b/tools/perf/util/expr.y
-> @@ -123,20 +123,6 @@ static struct ids handle_id(struct expr_parse_ctx *ctx, char *id,
->   * constant value using OP. Its invariant that there are no ids.  If computing
->   * ids for non-constants union the set of IDs that must be computed.
->   */
-> -#define BINARY_LONG_OP(RESULT, OP, LHS, RHS)				\
-> -	if (!compute_ids || (is_const(LHS.val) && is_const(RHS.val))) { \
-> -		assert(LHS.ids == NULL);				\
-> -		assert(RHS.ids == NULL);				\
-> -		if (isnan(LHS.val) || isnan(RHS.val)) {			\
-> -			RESULT.val = NAN;				\
-> -		} else {						\
-> -			RESULT.val = (long)LHS.val OP (long)RHS.val;	\
-> -		}							\
-> -		RESULT.ids = NULL;					\
-> -	} else {							\
-> -	        RESULT = union_expr(LHS, RHS);				\
-> -	}
-> -
->  #define BINARY_OP(RESULT, OP, LHS, RHS)					\
->  	if (!compute_ids || (is_const(LHS.val) && is_const(RHS.val))) { \
->  		assert(LHS.ids == NULL);				\
-> @@ -213,9 +199,75 @@ expr: NUMBER
->  }
->  | ID				{ $$ = handle_id(ctx, $1, compute_ids, /*source_count=*/false); }
->  | SOURCE_COUNT '(' ID ')'	{ $$ = handle_id(ctx, $3, compute_ids, /*source_count=*/true); }
-> -| expr '|' expr { BINARY_LONG_OP($$, |, $1, $3); }
-> -| expr '&' expr { BINARY_LONG_OP($$, &, $1, $3); }
-> -| expr '^' expr { BINARY_LONG_OP($$, ^, $1, $3); }
-> +| expr '|' expr
-> +{
-> +	if (is_const($1.val) && is_const($3.val)) {
-> +		assert($1.ids == NULL);
-> +		assert($3.ids == NULL);
-> +		$$.ids = NULL;
-> +		$$.val = (fpclassify($1.val) == FP_ZERO && fpclassify($3.val) == FP_ZERO) ? 0 : 1;
-> +	} else if (is_const($1.val)) {
-> +		assert($1.ids == NULL);
-> +		if (fpclassify($1.val) == FP_ZERO) {
-> +			$$ = $3;
-> +		} else {
-> +			$$.val = 1;
-> +			$$.ids = NULL;
-> +			ids__free($3.ids);
-> +		}
-> +	} else if (is_const($3.val)) {
-> +		assert($3.ids == NULL);
-> +		if (fpclassify($3.val) == FP_ZERO) {
-> +			$$ = $1;
-> +		} else {
-> +			$$.val = 1;
-> +			$$.ids = NULL;
-> +			ids__free($1.ids);
-> +		}
-> +	} else {
-> +		$$ = union_expr($1, $3);
-> +	}
-> +}
-> +| expr '&' expr
-> +{
-> +	if (is_const($1.val) && is_const($3.val)) {
-> +		assert($1.ids == NULL);
-> +		assert($3.ids == NULL);
-> +		$$.val = (fpclassify($1.val) != FP_ZERO && fpclassify($3.val) != FP_ZERO) ? 1 : 0;
-> +		$$.ids = NULL;
-> +	} else if (is_const($1.val)) {
-> +		assert($1.ids == NULL);
-> +		if (fpclassify($1.val) != FP_ZERO) {
-> +			$$ = $3;
-> +		} else {
-> +			$$.val = 0;
-> +			$$.ids = NULL;
-> +			ids__free($3.ids);
-> +		}
-> +	} else if (is_const($3.val)) {
-> +		assert($3.ids == NULL);
-> +		if (fpclassify($3.val) != FP_ZERO) {
-> +			$$ = $1;
-> +		} else {
-> +			$$.val = 0;
-> +			$$.ids = NULL;
-> +			ids__free($1.ids);
-> +		}
-> +	} else {
-> +		$$ = union_expr($1, $3);
-> +	}
-> +}
-> +| expr '^' expr
-> +{
-> +	if (is_const($1.val) && is_const($3.val)) {
-> +		assert($1.ids == NULL);
-> +		assert($3.ids == NULL);
-> +		$$.val = (fpclassify($1.val) == FP_ZERO) != (fpclassify($3.val) == FP_ZERO) ? 1 : 0;
-> +		$$.ids = NULL;
-> +	} else {
-> +		$$ = union_expr($1, $3);
-> +	}
-> +}
->  | expr '<' expr { BINARY_OP($$, <, $1, $3); }
->  | expr '>' expr { BINARY_OP($$, >, $1, $3); }
->  | expr '+' expr { BINARY_OP($$, +, $1, $3); }
+> As for the time, 6am Pacific Time was the least awful (and still quite awful IMO)
+> time I could find that gives the majority of the community a reasonable chance of
+> attending.  I know we have developers in at least the below time zones (and probably
+> more, though I don't think anyone works from Hawaii, and if someone does work from
+> Hawaii then they have nothing to complain about :-) ).
+> 
+>   PT   (6am)
+>   MT   (7am)
+>   CT   (8am)
+>   ET   (9am)
+>   WET  (2pm)
+>   CET  (3pm)
+>   EET  (4pm)
+>   EST  (5pm)
+>   CST  (9pm)
+>   NZST (1am)
+> 
+> The obvious alternative would be to invert the schedule and have the sync be in
+> the evening/night for Pacific Time, but to get 6am for ARM folks, we end up with:
+> 
+>   PT   (10pm)
+>   MT   (11pm)
+>   CT   (12pm)
+>   ET   (1am)
+>   WET  (6am)
+>   CET  (7am)
+>   EET  (8am)
+>   EST  (9am)
+>   CST  (1pm)
+>   NZST (5pm)
+> 
+> which is quite unreasonable for pretty much everyone based in the US.  Earlier
+> than 6am for WET is likewise unreasonable and will result in people not attending.
+> 9pm for China is also unreasonable, but I hope that it's not completely ridiculous
+> and is doable enough that people can at least attend on an as-needed basis.  Sorry
+> Kai, as the sole representative from New Zealand, you get hosed :-(
+> 
+> Wednesday because holidays and (short) vacations most often land at the beginning
+> and end of the week.
+> 
+> 60 minutes because I'm not waking up at dawn for anything less, and anything
+> more will likely have dimishing returns, especially for folks on the edges of
+> the time zone table.
+> 
+> Lastly, the big unknown is which video communication software to use.  My default
+> is obviously Google Meet, but I've been told that Meet is unusable in some
+> countries. :-/  My only requirements (beyond basic, obvious functionality) are
+> that (a) there's a web interface (no install required) and that (b) the calls can
+> be recorded.
+> 
+> To kick things off, I am leaning toward a "launch" date of May 24th (Pacific),
+> with KVM guest private mem (a.k.a. UPM) as the first topic.
+
+Hi Sean,
+
+Seems like a great idea to me.
+
+We have a number of people at AMD interested in joining for the UPM topic. Is
+the proposed 6am Pacific slot still the plan? No objections to using Google
+Meet on our end.
+
+-Mike
+
+> 
+> Please chime in with thoughts and ideas!
+> 
+> 
+> P.S. This is an open invite, feel free to forward at will.  The Cc list is by no
+> means intended to be definitive.
