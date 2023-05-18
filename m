@@ -2,78 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5090770871A
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 19:45:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B07E70871C
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 19:45:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbjERRpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 13:45:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37540 "EHLO
+        id S229519AbjERRpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 13:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjERRpL (ORCPT
+        with ESMTP id S229829AbjERRp2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 13:45:11 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23B29E7C;
-        Thu, 18 May 2023 10:45:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684431910; x=1715967910;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=su2wUu0tkaocZZy2M3phiogxIKayXtt5EEs7IofWPF4=;
-  b=byxFPgW4T1UOX7AtUZeMVQCBbNrPOGb+lfGBt4e6tKdS+En4NksQHduy
-   m1AKbaion1ROsymjONuwJgWn7u4oxgUm4YCD9953CQwZizN4Uf8tuM8Pk
-   QnxYUz8Vli4B/JgGqEpExCU0vuigAMsF26W2eJCaxWXEoBNIeKqYbJtbc
-   G06gxyyMCYRMTdwQQsbnyUlStNA5Mvtr1Wqy5GnIIlNXMDmQluSHoOVvJ
-   phUUoZU+wm9LYQbghQMF2UZ7hr2b7m6qV+FcG2jcWizxxalHgntXMAeu9
-   uYN80ymPBsfD1sxVnAR5YycNlOU5zAOoUSpLlsuWRCnb+8pbYBL4ghGSk
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="438484665"
-X-IronPort-AV: E=Sophos;i="6.00,174,1681196400"; 
-   d="scan'208";a="438484665"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 10:45:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="792061366"
-X-IronPort-AV: E=Sophos;i="6.00,174,1681196400"; 
-   d="scan'208";a="792061366"
-Received: from linux.intel.com ([10.54.29.200])
-  by FMSMGA003.fm.intel.com with ESMTP; 18 May 2023 10:45:08 -0700
-Received: from [10.209.99.208] (kliang2-mobl1.ccr.corp.intel.com [10.209.99.208])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Thu, 18 May 2023 13:45:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1964810CE;
+        Thu, 18 May 2023 10:45:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 552255808EF;
-        Thu, 18 May 2023 10:45:07 -0700 (PDT)
-Message-ID: <9178149c-45e8-3de4-58db-b8b8d27b3a08@linux.intel.com>
-Date:   Thu, 18 May 2023 13:45:06 -0400
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 92DD5650D3;
+        Thu, 18 May 2023 17:45:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1E47C433D2;
+        Thu, 18 May 2023 17:45:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684431925;
+        bh=lrNR3Kj8pwFUL4gmGaZGPGna/6gQVw84egS4nJteM9A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jsAPYUpOGrJjow4IZQA8Vn9fegedOfdXtFRGY1bmYYo19X1SUsnAOamSK1TdB/aIg
+         em2keJtu12XgSiWFyoWI5s41Vvsq+e4tKQ1nmZlbjjevZYT+eRUMZZ4IWLKbFVq4o2
+         B6N+W/CZKnGp9ACxHnWwjaEjeiXWMrIotVilRL1r8WayjPpbDd8EguOaV7aWYt99lG
+         NcWuWTuaweS6Hn+2CLAYH4KOCTHD+iVXW4pt/RT02SImUgE3xfGYDypUaPyIKztjbD
+         SNddghEDcllERzPdhV/BWqeX453R8n/1nUS5ukBAwnK0TE68QIbgD8m/XM5gbVThDZ
+         Q63PWwsg6sUuQ==
+Date:   Thu, 18 May 2023 13:45:23 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Alexandre Ghiti <alex@ghiti.fr>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH AUTOSEL 6.3 5/7] riscv: Unconditionnally select
+ KASAN_VMALLOC if KASAN
+Message-ID: <ZGZkM98lOHUEF4mA@sashalap>
+References: <20230509035455.59524-1-sashal@kernel.org>
+ <20230509035455.59524-5-sashal@kernel.org>
+ <bea1128b-903c-a7d0-9929-d9667999bb6d@ghiti.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v1 1/2] perf test attr: Update no event/metric
- expectations
-Content-Language: en-US
-From:   "Liang, Kan" <kan.liang@linux.intel.com>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230517225707.2682235-1-irogers@google.com>
- <64f329a9-09a3-aa84-a354-23a919062d09@arm.com> <ZGYYJ/biKyeFNJjL@kernel.org>
- <f753beda-2d5e-c391-520a-450b186fd4d4@linux.intel.com>
-In-Reply-To: <f753beda-2d5e-c391-520a-450b186fd4d4@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <bea1128b-903c-a7d0-9929-d9667999bb6d@ghiti.fr>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,40 +62,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnaldo,
-
-On 2023-05-18 8:55 a.m., Liang, Kan wrote:
-> On 2023-05-18 8:20 a.m., Arnaldo Carvalho de Melo wrote:
->> Em Thu, May 18, 2023 at 08:50:14AM +0100, James Clark escreveu:
->>>
->>> On 17/05/2023 23:57, Ian Rogers wrote:
->>>> Previously hard coded events/metrics were used, update for the use of
->>>> the TopdownL1 json metric group.
->>>>
->>>> Fixes: 94b1a603fca7 ("perf stat: Add TopdownL1 metric as a default if present")
->>>> Signed-off-by: Ian Rogers <irogers@google.com>
->>>> ---
->>>>  tools/perf/tests/attr/base-stat            |   2 +-
->>>>  tools/perf/tests/attr/test-stat-default    |  80 ++++++++-----
->>>>  tools/perf/tests/attr/test-stat-detailed-1 |  95 +++++++++------
->>>>  tools/perf/tests/attr/test-stat-detailed-2 | 119 +++++++++++--------
->>>>  tools/perf/tests/attr/test-stat-detailed-3 | 127 ++++++++++++---------
->>>>  5 files changed, 249 insertions(+), 174 deletions(-)
->>>>
->>> Reviewed-by: James Clark <james.clark@arm.com>
->> Thanks, applied both patches to perf-tools.
+On Fri, May 12, 2023 at 11:51:03AM +0200, Alexandre Ghiti wrote:
+>Hi Sasha,
+>
+>On 5/9/23 05:54, Sasha Levin wrote:
+>>From: Alexandre Ghiti <alexghiti@rivosinc.com>
 >>
-> Could you please hold patch 1 for a while?
+>>[ Upstream commit 864046c512c2cd8418dc928b91981fb12a80396c ]
+>>
+>>If KASAN is enabled, VMAP_STACK depends on KASAN_VMALLOC so enable
+>>KASAN_VMALLOC with KASAN so that we can enable VMAP_STACK by default.
+>>
+>>Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+>>Reviewed-by: Björn Töpel <bjorn@rivosinc.com>
+>>Link: https://lore.kernel.org/r/20230203075232.274282-7-alexghiti@rivosinc.com
+>>Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+>>Signed-off-by: Sasha Levin <sashal@kernel.org>
+>>---
+>>  arch/riscv/Kconfig | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>>diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+>>index eb7f29a412f87..d6aad84efb95e 100644
+>>--- a/arch/riscv/Kconfig
+>>+++ b/arch/riscv/Kconfig
+>>@@ -118,6 +118,7 @@ config RISCV
+>>  	select HAVE_SYSCALL_TRACEPOINTS
+>>  	select IRQ_DOMAIN
+>>  	select IRQ_FORCED_THREADING
+>>+	select KASAN_VMALLOC if KASAN
+>>  	select MODULES_USE_ELF_RELA if MODULES
+>>  	select MODULE_SECTIONS if MODULES
+>>  	select OF
+>
+>
+>KASAN_VMALLOC is broken for any kernel < 6.4, so this one should not 
+>be backported to any kernel (5.15, 6.1, 6.2, 6.3).
 
-Sorry for the noise.
+Ack, dropped. Thanks!
 
-Ian has addressed my concerns. The patch looks good to me now.
-It also fixes a "Failed" on my Cascade Lake machine.
-
-Tested-by: Kan Liang <kan.liang@linux.intel.com>
-
-But for long term, we probably need a better solution to avoid keeping
-adding such non-architectural events in the test case.
-
+-- 
 Thanks,
-Kan
+Sasha
