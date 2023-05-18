@@ -2,180 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E11A37083DC
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 846EC7083DF
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:23:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231671AbjEROWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 10:22:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50856 "EHLO
+        id S231349AbjEROXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 10:23:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231177AbjEROV7 (ORCPT
+        with ESMTP id S230031AbjEROXT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 10:21:59 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F253BF9
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:21:56 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-510d8b0169fso2523101a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:21:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684419715; x=1687011715;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GoYD1HeZqxzJnofeUMnEjY7LdMkmo1HYZ+uW66yc8zI=;
-        b=HGV4jjmlsteYJElUtUefnS224Lr+OvMC9jCbexLICYShcmDpIgspCiSW9L3B4wcnqG
-         S14/K4bLbRvOJ0myk0FjPEDsZ+ahgME0WdXiPqDWR5e7OaomNpdfh8WAsQPKQsIPHrc8
-         +Mak7u6GkCmTK64G1EFj1x1QR25nhDgk8Swj8+tBxx3pN8fnKy8izlV2Brg2N+Qd+Znq
-         jGYAUDCwVzonuMxlYhKefH/PrjKztdOOtBBPaqNah5BtMcJ3on8RryvhspF4NckTyPtw
-         IYTHwgQHHMUGedJBIz9icwn1r59Y97Ppy2/8Ub14QbM4bJpUiVqe2H7zKtisfOu+/4qN
-         BV8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684419715; x=1687011715;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GoYD1HeZqxzJnofeUMnEjY7LdMkmo1HYZ+uW66yc8zI=;
-        b=WmIQxIPxDs53aZhj/M9QqMYsTpkh6qDUKrrHlPinqjMOLHOBRZU9AOWDMRKD07Z2yU
-         WyvH4NkUdd1IQiYpmNLqUub4LYUn4wYWE7rraDqSadOu1IOb2XX6zEfETEoaTGvOuJ8V
-         p+eyZhquatN1awSbnkntbieS/+HnLG0qZGeAvwlyxVbtusR03qgyw5CE3mqztoYLMx9h
-         VkXYEw4Hv8OtECYCruxKMNbhJUXnZlcyVwdDn68l7F3fBGfpdqnFssKEGciraOHbSLNO
-         4ckU7dTaFNuVqzvvXchRQjwhUxVslcDiC+HcJopDLRrDxfAmK8LxpmsGbxlzzNpYNqKd
-         L9NQ==
-X-Gm-Message-State: AC+VfDzqkbcUIcqBzsY8bYUVyufAzWIgz42jaGSPROhYIMhRn6NvQXyc
-        nwws/pGDKVJ61Nb14uelzmtFgQ==
-X-Google-Smtp-Source: ACHHUZ6iHTnxiJx111Ry47T9aO/W4rthzy+KJgvfxS5NqxK/2UvO39aB1FU69KaBi5+TDxXx0wSDzQ==
-X-Received: by 2002:a05:6402:516d:b0:50b:c971:c14b with SMTP id d13-20020a056402516d00b0050bc971c14bmr5546801ede.11.1684419715413;
-        Thu, 18 May 2023 07:21:55 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:7e24:6d1b:6bf:4249? ([2a02:810d:15c0:828:7e24:6d1b:6bf:4249])
-        by smtp.gmail.com with ESMTPSA id l16-20020aa7d950000000b0050bc9ffed66sm662448eds.53.2023.05.18.07.21.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 May 2023 07:21:54 -0700 (PDT)
-Message-ID: <5e0276b7-2c16-13a1-29d3-1936ffc52d23@linaro.org>
-Date:   Thu, 18 May 2023 16:21:53 +0200
+        Thu, 18 May 2023 10:23:19 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D1E10D
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:23:18 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2a0c:5a83:9203:ad00:b00e:5f04:110d:a967])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: rcn)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A01046605941;
+        Thu, 18 May 2023 15:23:16 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684419796;
+        bh=xPO1unEEJVJK0T2OHZBtJMRAKEmESNmxmqAwbWmk0IM=;
+        h=From:To:Cc:Subject:References:In-reply-to:Date:From;
+        b=UZS18BmKRQMiohEWgPcA4RWHECb14V6w64eSrDuN9tKWNbUk22TMBHDX+9QVK/Q7Q
+         SYCxCuNWHV7LuLpZ+Ev3T0RajaYu8YseXPs+rpaB/ToBUGrPW9DPxu7Kjp6xC0N1FP
+         g4JOBtd+jww/UWoYRkR2rKGUA3ceSLy6USSLE/MdWs9UYGVYybN777OI2zQjFgz/qv
+         doxGD+iRX8PUE8nITSPtE61/xoFPlae/utTC/gBSnxPfyPzXDTwx8C5J120RGlD3zQ
+         lFfzjRS7mrGNv75xzoOJP91upfb+yp7n+ZNVKPFU0S37ATMUKWf5GEJ1Fsj6i1+PAs
+         bUKiJNgBPTnyw==
+From:   Ricardo =?utf-8?Q?Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Shreeya Patel <shreeya.patel@collabora.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Bill Wendling <morbo@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        regressions@lists.linux.dev,
+        "gustavo.padovan\@collabora.com" <gustavo.padovan@collabora.com>,
+        Guillaume Charles Tucker <guillaume.tucker@collabora.com>,
+        denys.f@collabora.com, kernelci@lists.linux.dev
+Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with compiler-specific macros
+References: <CAK7LNAT_cMLGLBz7ugaLpJD3QmZmY8FK56x9nihvWeYhJpi2ag@mail.gmail.com> <20220919170828.3718437-1-ndesaulniers@google.com> <597ef55f-e7c1-ab60-b4aa-0071ff4b5e0e@collabora.com> <CAKwvOdmSrAxx-YY1Na3BSdYuxXCPKK+F0K5V6i+adTn_bVJEsw@mail.gmail.com> <89961dfc-d40f-78e4-5d34-b86b7d152182@collabora.com> <CAKwvOd=4hBcU4fAkddU0b-GOZc9FzTZoj3PFW6ZZrX0jS8x+bg@mail.gmail.com> <17c91d37-7d9c-0df4-2438-2b30ca0b5777@collabora.com> <CAKwvOdk4QO8x_bs64fFRCsMu__AjhXd4Ew2KfgzQOb9Q3FMqSA@mail.gmail.com> <b5d0cf82-0e42-f6a1-c9f5-c145fdc4c622@collabora.com> <CAKwvOdkFxu9hYSL_RCXadpR0dQd1+dZmAUVXdfFiLUfxg4D_Xw@mail.gmail.com>
+In-reply-to: <CAKwvOdkFxu9hYSL_RCXadpR0dQd1+dZmAUVXdfFiLUfxg4D_Xw@mail.gmail.com>
+Date:   Thu, 18 May 2023 16:23:13 +0200
+Message-ID: <878rdlk9bi.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH net-next v4 1/2] dt-bindings: arm: mediatek: add
- mediatek,boottrap binding
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Daniel Golle <daniel@makrotopia.org>, Marek Vasut <marex@denx.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>, devicetree@vger.kernel.org,
-        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Qingfang Deng <dqfext@gmail.com>,
-        SkyLake Huang <SkyLake.Huang@mediatek.com>,
-        Simon Horman <simon.horman@corigine.com>
-References: <cover.1683813687.git.daniel@makrotopia.org>
- <f2d447d8b836cf9584762465a784185e8fcf651f.1683813687.git.daniel@makrotopia.org>
- <55f8ac31-d81d-43de-8877-6a7fac2d37b4@lunn.ch>
- <7e8d0945-dfa9-7f61-b075-679e8a89ded9@linaro.org>
- <ZGWRHeE3CXeAnQ-5@makrotopia.org>
- <2048ed2a-ae6f-b425-38e4-4ba973e04398@linaro.org>
-In-Reply-To: <2048ed2a-ae6f-b425-38e4-4ba973e04398@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/05/2023 09:50, Krzysztof Kozlowski wrote:
-> On 18/05/2023 04:44, Daniel Golle wrote:
->> On Fri, May 12, 2023 at 08:54:36AM +0200, Krzysztof Kozlowski wrote:
->>> On 11/05/2023 17:53, Andrew Lunn wrote:
->>>> On Thu, May 11, 2023 at 04:10:20PM +0200, Daniel Golle wrote:
->>>>> The boottrap is used to read implementation details from the SoC, such
->>>>> as the polarity of LED pins. Add bindings for it as we are going to use
->>>>> it for the LEDs connected to MediaTek built-in 1GE PHYs.
->>>>
->>>> What exactly is it? Fuses? Is it memory mapped, or does it need a
->>>> driver to access it? How is it shared between its different users?
->>>
->>> Yes, looks like some efuse/OTP/nvmem, so it should probably use nvmem
->>> bindings and do not look different than other in such class.
->>
->> I've asked MediaTek and they have replied with an elaborate definition.
->> Summary:
->> The boottrap is a single 32-bit wide register at 0x1001f6f0 which can
->> be used to read back the bias of bootstrap pins from the SoC as follows:
-> 
-> Is it within some other address space? Register address suggests that.
-> 
-> In such case you should not create a device in the middle of other
-> device's address space. You punched a hole in uniform address space
-> which prevents creating that other device for entire space.
-> 
->>
->> * bit[8]: Reference CLK source && gphy port0's LED
->> If bit[8] == 0:
->> - Reference clock source is XTRL && gphy port0's LED is pulled low on board side
->> If bit[8] == 1:
->> - Reference clock source is Oscillator && gphy port0's LED is pulled high on board side
->>
->> * bit[9]: DDR type && gphy port1's LED
->> If bit[9] == 0:
->> - DDR type is DDRx16b x2 && gphy port1's LED is pulled low on board side
->> If bit[9] == 1:
->> - DDR type is DDRx16b x1 && gphy port1's LED is pulled high on board side
->>
->> * bit[10]: gphy port2's LED
->> If bit[10] == 0:
->> - phy port2's LED is pulled low on board side
->> If bit[10] == 1:
->> - gphy port2's LED is pulled high on board side
->>
->> * bit[11]: gphy port3's LED
->> If bit[11] == 0:
->> - phy port3's LED is pulled low on board side
->> If bit[11] == 1:
->> - gphy port3's LED is pulled high on board side
->>
->> If bit[10] == 0 && bit[11] == 0:
->> - BROM will boot from SPIM-NOR
->> If bit[10] == 1 && bit[11] == 0:
->> - BROM will boot from SPIM-NAND
->> If bit[10] == 0 && bit[11] == 1:
->> - BROM will boot from eMMC
->> If bit[10] == 1 && bit[11] == 1:
->> - BROM will boot from SNFI-NAND
->>
->> The boottrap is present in many MediaTek SoCs, however, support for
->> reading it is only really needed on MT7988 due to the dual-use of some
->> bootstrap pins as PHY LEDs.
->>
->> We could say this is some kind of read-only 'syscon' node (and hence
->> use regmap driver to access it), that would make it easy but it's not
->> very accurate. Also efuse/OTP/nvmem doesn't seem accurate, though in
->> terms of software it could work just as well.
->>
->> I will update DT bindings to contain the gained insights.
-> 
-> If this is separate address space with one register, then boottrap
-> sounds ok. If you have multiple read only registers with fused values,
-> then this is efuse region, so something like nvidia,tegra20-efuse.
 
-Please align together on some common solution. It looks like you are
-solving the same problem:
+Hi Nick,
 
-https://lore.kernel.org/all/?q=%22nvmem%3A+syscon%3A+Add+syscon+backed+nvmem+driver%22
+On mi=C3=A9, may 17 2023 at 09:27:41, Nick Desaulniers <ndesaulniers@google=
+.com> wrote:
+> Shreeya mentioned upthread that `qemu_arm-virt-gicv3-uefi` was
+> failing, so I assume others should be able to repro in qemu. I'd guess
+> that LAVA lets you have VMs adjacent to physical hardware.  Having the
+> qemu command line, kernel config, and perhaps the initramfs are going
+> to be the three most useful things for any similar bug report.
 
-Best regards,
-Krzysztof
+Sure, I'm using LAVA because that's the safest way to match exactly the
+same setup from the original test, but anyone can try to reproduce it on
+their own. You can get the job info and setup from any of the related
+LAVA jobs. This one for example:
+https://lava.collabora.dev/scheduler/job/10373216
 
+Trying to reproduce this type of setups is not as straightforward as
+we'd like, specially for people not familiar with KernelCI, but we're
+putting in some effort to improve that so that anyone can pick up a
+regression report and work on it right away.
+
+By the way, I found a breaking point in the commit right after the one
+that the bisector reported:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?=
+id=3D5750121ae7382ebac8d47ce6d68012d6cd1d7926
+but I can't find anything there either that makes the boot hang,
+specifically for configs including kernel/configs/debug.config. I
+wouldn't rule out a problem with the qemu configuration.
+
+Anyway, this is not a critical problem in any way, although it'd be
+interesting to find the cause in case we can use the findings to improve
+the test setups.
+
+Cheers,
+Ricardo
