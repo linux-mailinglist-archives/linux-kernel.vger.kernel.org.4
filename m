@@ -2,123 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8262708A2F
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 23:11:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06AEE708A33
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 23:12:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230171AbjERVK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 17:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40742 "EHLO
+        id S230204AbjERVMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 17:12:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjERVK6 (ORCPT
+        with ESMTP id S229761AbjERVMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 17:10:58 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25BE19B;
-        Thu, 18 May 2023 14:10:56 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-510d9218506so244133a12.1;
-        Thu, 18 May 2023 14:10:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684444255; x=1687036255;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GI4smLlSJQa1VUvNaW8lamLC6dslVSxDe/wJI7MniGI=;
-        b=hItu/BGU0+PVAlYm6Nh0rvKnuIveJYvyGEWRQPr/b+IEZ7iGXUmd9aQ8W3FdDfGtQS
-         rxxqgy+leUxEePBq4hRv8BBi0qwDkWlso61yVgclPuPFdEiRH0om8VivCurHbvla2KTf
-         60wIUBu2UBHHOuAMZ7jW2vv6VuopgHCahmO/6tjyfxklEteVhDfAkb8PpvQ2FfqqDzhA
-         TC4qnVOsgwlroXwo7Z4ZgcQHYJnuwXgGI8vb8I/RchoWnUzcrDur6H83h//qg8WqV1HM
-         vDm+bClF98Er2njckzbBlfLDPhY6oHEaLXGKUyYydc8qJxMuf1owB5Ygq6ofSfIsHR/1
-         kFfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684444255; x=1687036255;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GI4smLlSJQa1VUvNaW8lamLC6dslVSxDe/wJI7MniGI=;
-        b=ZfA4h1JftliNYC0jKUGl2j+SjyFfUWIxjpvfozKSt3A+Xez3Ep8ZRlfBzDwZtOFk8P
-         odz/OX4nP81UQ8/eLR/GFT3LQDFIdy8FO3VlBq7c20TycHZWNg8+nXuQkVI9lknBVFRu
-         rErpWAPeqxNfsncBI4EOpOmIpVFEEuYwPALea4DJG5A6AXj2sFKh2SRIBsklZ54VA51e
-         d2fSpkPumzAFt0leey8i6Ta0Nqr20VdT4Yi6VzCPXqsmh1QBBK8/pmdQg9kkqGfJ1cpy
-         Yq5U/60eu1/DcgN097SSG5Dln8+Bt9Uk+aCla3Q56xR9qGZSZdal3ubVj0Jp7oS6mjth
-         zbjw==
-X-Gm-Message-State: AC+VfDzAjVyVtr5kLCIo9dUR5y9mhzivbWnytKSXa1QOSf1k3QnSvZum
-        E3Vj0Vg8qsGQ73TiZy3Ukzc=
-X-Google-Smtp-Source: ACHHUZ6DRTl8lUvOL7gbwUgr1bTmPBUj3TbeE9SqccluLW00wGjdEREweB6x3b1roF7SFmjuLSEFVQ==
-X-Received: by 2002:a05:6402:274e:b0:510:e8dc:f2a7 with SMTP id z14-20020a056402274e00b00510e8dcf2a7mr3498982edd.7.1684444255247;
-        Thu, 18 May 2023 14:10:55 -0700 (PDT)
-Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
-        by smtp.gmail.com with ESMTPSA id dy1-20020a05640231e100b0050bc4600d38sm960823edb.79.2023.05.18.14.10.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 14:10:54 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     samuel@sholland.org, wens@csie.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, andre.przywara@arm.com,
-        Ludwig Kormann <ludwig.kormann@ict42.de>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 0/2] arm: dts: sunxi: Add ICnova A20 ADB4006 board support
-Date:   Thu, 18 May 2023 23:10:53 +0200
-Message-ID: <1850875.tdWV9SEqCh@jernej-laptop>
-In-Reply-To: <20230510111528.2155582-1-ludwig.kormann@ict42.de>
-References: <20230510111528.2155582-1-ludwig.kormann@ict42.de>
+        Thu, 18 May 2023 17:12:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64191B6;
+        Thu, 18 May 2023 14:12:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B95761A5F;
+        Thu, 18 May 2023 21:12:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FE0BC433D2;
+        Thu, 18 May 2023 21:12:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684444335;
+        bh=9rao59iF0/hlenFI47AMwa2g21Ybabeem4OOm8CS2U0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ML3zP+bavZh8i0EG9Yp7C4Eq7IW+IXoy0jCSRQaKWC4qrvb9GCWkEsmXHqI70VRHF
+         ZSxOaNHEkDtLXh5ZXLsUj3oHYZ5IkdazLGJUFfLKdxlSYQ2UkxS0E6nEqC3sH13wpc
+         DWwndznU6e0JdmbqRSrMvFeNjGnB9NJzgUwHKNV5kF7oqPSlEtFFWab4uNyqzu3ik7
+         b3EiCswKAMS59KhA/OcrkNFd4DHZ3vigul/oFx9v4HryifmoGYUJu1xtwnfAZS8UrY
+         vTWsNwYuRAD99GZR+qBptjq1S6aaN0t9zNtQz53D0qzklQ29c8Zbgwv51qgMYkFNUj
+         Oh97pDdAguZxw==
+Date:   Thu, 18 May 2023 22:12:11 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: interrupt-controller: sifive,plic: Sort
+ compatible values
+Message-ID: <20230518-landless-reoccupy-efd52921a51e@spud>
+References: <9cbf54da1ace03d7a45f28230fd99954d8c0d141.1683725029.git.geert+renesas@glider.be>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="SbjnggWnJTqUrTqs"
+Content-Disposition: inline
+In-Reply-To: <9cbf54da1ace03d7a45f28230fd99954d8c0d141.1683725029.git.geert+renesas@glider.be>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne sreda, 10. maj 2023 ob 13:15:26 CEST je Ludwig Kormann napisal(a):
-> Add board support for ICnova A20 SomPi compute module on
-> ICnova ADB4006 development board.
-> 
-> I rebased the series on v6.4-rc1, I'm also using a new
-> mail address because of bouncing issues.
-> 
-> v4:
-> - rebase on v6.4-rc1
-> 
-> v3:
-> - drop stray blank lines at end of files
-> - separate patch for bindings
-> - update licensing to "GPL-2.0 OR MIT"
-> - fix typo: ICNova -> ICnova
-> 
-> v2:
-> - use short licensing header
-> - remove deprecated elements from led nodes
-> - disable csi power supply
-> - add missing pins in usbphy node
-> - split dts into SoM dtsi and carrier board dts
-> 
-> v1 of this patch was sent to the uboot mailing list [1].
-> 
-> [1] https://lists.denx.de/pipermail/u-boot/2023-April/514605.html
-> 
-> Ludwig Kormann (2):
->   dt-bindings: arm: sunxi: add ICnova A20 ADB4006 binding
->   arm: dts: sunxi: Add ICnova A20 ADB4006 board
-> 
->  .../devicetree/bindings/arm/sunxi.yaml        |   6 +
->  arch/arm/boot/dts/Makefile                    |   1 +
->  .../boot/dts/sun7i-a20-icnova-a20-adb4006.dts | 137 ++++++++++++++++++
->  arch/arm/boot/dts/sun7i-a20-icnova-a20.dtsi   |  62 ++++++++
->  4 files changed, 206 insertions(+)
->  create mode 100644 arch/arm/boot/dts/sun7i-a20-icnova-a20-adb4006.dts
->  create mode 100644 arch/arm/boot/dts/sun7i-a20-icnova-a20.dtsi
-> 
-> 
 
-Applied, thanks!
+--SbjnggWnJTqUrTqs
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Jernej
+On Wed, May 10, 2023 at 03:26:00PM +0200, Geert Uytterhoeven wrote:
+> Restore alphabetical sort order of the supported SiFive-compatible
+> values.
+>=20
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
+Palmer has assigned this one to me on the RISC-V patchwork, any objections
+to me taking it via the riscv-dt tree Marc? There's some other patches for
+a new platform that's almost ready touching the file too, so if you don't
+mind I'd like to grab this one.
 
+Cheers,
+Conor.
 
+--SbjnggWnJTqUrTqs
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGaUqgAKCRB4tDGHoIJi
+0mQnAQC9UM3Eld08kXNym4VNUQFo9XIzMCJIShrHL56NnpCPxQEAsam87/5wbbL1
+qXGirmvYqHj44ZA4RmNZgzPvtCszUwQ=
+=8EvR
+-----END PGP SIGNATURE-----
+
+--SbjnggWnJTqUrTqs--
