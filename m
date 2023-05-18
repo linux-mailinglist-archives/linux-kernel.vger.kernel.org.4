@@ -2,192 +2,285 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ED59707CDD
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:29:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78138707CD6
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 11:29:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbjERJ3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 05:29:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52002 "EHLO
+        id S230110AbjERJ3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 05:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230148AbjERJ32 (ORCPT
+        with ESMTP id S230072AbjERJ3X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 05:29:28 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B482123
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 02:29:26 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pzZwj-00062v-RG; Thu, 18 May 2023 11:29:17 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pzZwi-0013Bx-33; Thu, 18 May 2023 11:29:16 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1pzZwh-0046Me-1w; Thu, 18 May 2023 11:29:15 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Arun Ramadoss <arun.ramadoss@microchip.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        UNGLinuxDriver@microchip.com
-Subject: [PATCH net-next v3 2/2] net: dsa: microchip: ksz8: Add function to configure downstream ports for KSZ8xxx
-Date:   Thu, 18 May 2023 11:29:13 +0200
-Message-Id: <20230518092913.977705-3-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230518092913.977705-1-o.rempel@pengutronix.de>
-References: <20230518092913.977705-1-o.rempel@pengutronix.de>
+        Thu, 18 May 2023 05:29:23 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14C5211E
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 02:29:21 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8AB0B6605861;
+        Thu, 18 May 2023 10:29:19 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684402160;
+        bh=nO1qbDSDKeG4upZYJigwBkYn0wg3Z18pIrTau60pRpQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=NlxO0kvnAnt4rAqVLGHRALxbE9Npm3bdEo/S6HFWhtZ/wyKmU3EN3mR2ldnm9TiQu
+         hetmFjAQqdN1Vtn+tf5vnQFJllN0AIK3KgnHrqhiB4/53dn9n1NsyKrwCtvLbodE1x
+         nTFlicbGA4yt6qSNBXxWrSCPuZZ01Gg04v6xYf5Aqjquf5d71ybyA3O0/ypY9jqPkd
+         qxn4MMrorLli6Cywk0sYW1X1Ij6Dh7ok0HK0Lp7zoQ1t+t7iSTzUGyxHilxLScL5Us
+         O8N23b/Lk7BURDYMiipCS+N7jHO5ofdhyY6wnEVjI+aNHNT2T9o+Hl3sPl2a5C1R1Y
+         NVjwCQioqFDTA==
+Message-ID: <4ebdee84-9c02-b8fc-9f52-2da91fd3c82c@collabora.com>
+Date:   Thu, 18 May 2023 11:29:17 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v3 1/2] drm/mediatek: Add ability to support dynamic
+ connector selection
+Content-Language: en-US
+To:     "Jason-JH.Lin" <jason-jh.lin@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Alexandre Mergnat <amergnat@baylibre.com>
+Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        Jason-ch Chen <jason-ch.chen@mediatek.com>,
+        Johnson Wang <johnson.wang@mediatek.com>,
+        Singo Chang <singo.chang@mediatek.com>,
+        Nancy Lin <nancy.lin@mediatek.com>,
+        Shawn Sung <shawn.sung@mediatek.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Nathan Lu <nathan.lu@mediatek.com>
+References: <20230509150737.8075-1-jason-jh.lin@mediatek.com>
+ <20230509150737.8075-2-jason-jh.lin@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230509150737.8075-2-jason-jh.lin@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch introduces the function 'ksz8_downstream_link_up' to the
-Microchip KSZ8xxx driver. This function configures the flow control settings
-for the downstream ports of the switch based on desired settings and the
-current duplex mode.
+Il 09/05/23 17:07, Jason-JH.Lin ha scritto:
+> 1. Move output drm connector from each ddp_path array to connector array.
+> 2. Add dynamic select available connector flow in crtc create and enable.
+> 
+> Signed-off-by: Nancy Lin <nancy.lin@mediatek.com>
+> Signed-off-by: Nathan Lu <nathan.lu@mediatek.com>
+> Signed-off-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
+> ---
+>   drivers/gpu/drm/mediatek/mtk_disp_drv.h     |   1 +
+>   drivers/gpu/drm/mediatek/mtk_dpi.c          |   9 ++
+>   drivers/gpu/drm/mediatek/mtk_drm_crtc.c     | 111 +++++++++++++++++++-
+>   drivers/gpu/drm/mediatek/mtk_drm_crtc.h     |   5 +-
+>   drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c |  27 +++++
+>   drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h |   8 ++
+>   drivers/gpu/drm/mediatek/mtk_drm_drv.c      |  44 ++++++--
+>   drivers/gpu/drm/mediatek/mtk_drm_drv.h      |   8 ++
+>   8 files changed, 202 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_drv.h b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+> index 2254038519e1..72c57442f965 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+> +++ b/drivers/gpu/drm/mediatek/mtk_disp_drv.h
+> @@ -44,6 +44,7 @@ void mtk_dither_set_common(void __iomem *regs, struct cmdq_client_reg *cmdq_reg,
+>   
+>   void mtk_dpi_start(struct device *dev);
+>   void mtk_dpi_stop(struct device *dev);
+> +int mtk_dpi_encoder_index(struct device *dev);
+>   
+>   void mtk_dsi_ddp_start(struct device *dev);
+>   void mtk_dsi_ddp_stop(struct device *dev);
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dpi.c b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> index 948a53f1f4b3..765fc976e41f 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dpi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dpi.c
+> @@ -782,6 +782,15 @@ void mtk_dpi_stop(struct device *dev)
+>   	mtk_dpi_power_off(dpi);
+>   }
+>   
+> +int mtk_dpi_encoder_index(struct device *dev)
+> +{
+> +	struct mtk_dpi *dpi = dev_get_drvdata(dev);
+> +	int encoder_index = drm_encoder_index(&dpi->encoder);
+> +
+> +	dev_dbg(dev, "encoder index:%d", encoder_index);
+> +	return encoder_index;
+> +}
+> +
+>   static int mtk_dpi_bind(struct device *dev, struct device *master, void *data)
+>   {
+>   	struct mtk_dpi *dpi = dev_get_drvdata(dev);
+> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+> index d40142842f85..54d48932b833 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.c
+> @@ -60,8 +60,12 @@ struct mtk_drm_crtc {
+>   	struct device			*mmsys_dev;
+>   	struct device			*dma_dev;
+>   	struct mtk_mutex		*mutex;
+> +	unsigned int			ddp_comp_nr_ori;
+> +	unsigned int			max_ddp_comp_nr;
+>   	unsigned int			ddp_comp_nr;
+>   	struct mtk_ddp_comp		**ddp_comp;
+> +	unsigned int			conn_route_nr;
 
-The KSZ8795 switch, unlike the KSZ8873, supports asynchronous pause control.
-However, a single bit controls both RX and TX pause, so we can't enforce
-asynchronous pause control. The flow control can be set based on the
-auto-negotiation process, depending on the capabilities of both link partners.
+`num_conn_routes` is clearer.
 
-For the KSZ8873, the PORT_FORCE_FLOW_CTRL bit can be set by the hardware
-bootstrap, ignoring the auto-negotiation result. Therefore, even in
-auto-negotiation mode, we need to ensure that the PORT_FORCE_FLOW_CTRL bit is
-correctly set.
+> +	const struct mtk_drm_route	*conn_routes;
+>   
+>   	/* lock for display hardware access */
+>   	struct mutex			hw_lock;
+> @@ -649,6 +653,84 @@ static void mtk_drm_crtc_disable_vblank(struct drm_crtc *crtc)
+>   	mtk_ddp_comp_disable_vblank(comp);
+>   }
+>   
+> +static unsigned int mtk_drm_crtc_max_num_route_comp(struct mtk_drm_crtc *mtk_crtc)
+> +{
+> +	unsigned int max_num = 0;
+> +	unsigned int i;
+> +
+> +	if (!mtk_crtc->conn_route_nr)
+> +		return 0;
+> +
+> +	for (i = 0; i < mtk_crtc->conn_route_nr; i++)
+> +		max_num = max(mtk_crtc->conn_routes[i].route_len, max_num);
 
-In the absence of auto-negotiation, we will enforce synchronous pause control
-for the KSZ8795 switch.
+If we rename this to `num_routes` or `max_routes` it becomes a bit more
+understandable.
 
-Note: It is currently not possible to force disable flow control on a port if
-we still advertise pause support. This configuration is not currently supported
-by Linux, and it may not make practical sense. However, it's essential to
-understand this limitation when working with the KSZ8873 and similar devices.
+> +
+> +	return max_num;
+> +}
+> +
+> +static int mtk_drm_crtc_update_output(struct drm_crtc *crtc,
+> +				      struct drm_atomic_state *state)
+> +{
+> +	const struct mtk_drm_route *conn_routes;
+> +	int crtc_index = drm_crtc_index(crtc);
+> +	int i;
+> +	struct device *dev;
+> +	struct drm_crtc_state *crtc_state = state->crtcs[crtc_index].new_state;
+> +	struct mtk_drm_crtc *mtk_crtc = to_mtk_crtc(crtc);
+> +	struct mtk_drm_private *priv = crtc->dev->dev_private;
+> +	unsigned int comp_id;
+> +	unsigned int encoder_mask = crtc_state->encoder_mask;
+> +	unsigned int route_len = 0, route_index = 0;
+> +
+> +	if (!mtk_crtc->conn_route_nr)
+> +		return 0;
+> +
+> +	priv = priv->all_drm_private[crtc_index];
+> +	dev = priv->dev;
+> +
+> +	dev_dbg(dev, "connector change:%d, encoder mask0x%x for crtc%d",
+> +		crtc_state->connectors_changed, encoder_mask, crtc_index);
+> +
+> +	if (!crtc_state->connectors_changed)
+> +		return 0;
+> +
+> +	conn_routes = mtk_crtc->conn_routes;
+> +
+> +	for (i = 0; i < mtk_crtc->conn_route_nr; i++) {
+> +		route_len = conn_routes[i].route_len;
+> +		if (route_len > 0) {
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- drivers/net/dsa/microchip/ksz8795.c | 80 +++++++++++++++++++++++++++++
- 1 file changed, 80 insertions(+)
+route_len is unsigned, it can never be < 0, so...
 
-diff --git a/drivers/net/dsa/microchip/ksz8795.c b/drivers/net/dsa/microchip/ksz8795.c
-index 9cfe343d2214..6d7b6a337d1c 100644
---- a/drivers/net/dsa/microchip/ksz8795.c
-+++ b/drivers/net/dsa/microchip/ksz8795.c
-@@ -1371,6 +1371,84 @@ void ksz8_config_cpu_port(struct dsa_switch *ds)
- 	}
- }
- 
-+/**
-+ * ksz8_downstream_link_up - Configures the downstream port of the switch.
-+ * @dev: The KSZ device instance.
-+ * @port: The port number to configure.
-+ * @duplex: The desired duplex mode.
-+ * @tx_pause: If true, enables transmit pause.
-+ * @rx_pause: If true, enables receive pause.
-+ *
-+ * Description:
-+ * The function configures flow control settings for a given port based on the
-+ * desired settings and current duplex mode.
-+ *
-+ * According to the KSZ8873 datasheet, the PORT_FORCE_FLOW_CTRL bit in the
-+ * Port Control 2 register (0x1A for Port 1, 0x22 for Port 2, 0x32 for Port 3)
-+ * determines how flow control is handled on the port:
-+ *    "1 = will always enable full-duplex flow control on the port, regardless
-+ *         of AN result.
-+ *     0 = full-duplex flow control is enabled based on AN result."
-+ *
-+ * This means that the flow control behavior depends on the state of this bit:
-+ * - If PORT_FORCE_FLOW_CTRL is set to 1, the switch will ignore AN results and
-+ *   force flow control on the port.
-+ * - If PORT_FORCE_FLOW_CTRL is set to 0, the switch will enable or disable
-+ *   flow control based on the AN results.
-+ *
-+ * However, there is a potential limitation in this configuration. It is
-+ * currently not possible to force disable flow control on a port if we still
-+ * advertise pause support. While such a configuration is not currently
-+ * supported by Linux, and may not make practical sense, it's important to be
-+ * aware of this limitation when working with the KSZ8873 and similar devices.
-+ */
-+static void ksz8_downstream_link_up(struct ksz_device *dev, int port,
-+				   int duplex, bool tx_pause, bool rx_pause)
-+{
-+	const u16 *regs = dev->info->regs;
-+	u8 ctrl = 0;
-+	int ret;
-+
-+	/*
-+	 * The KSZ8795 switch differs from the KSZ8873 by supporting
-+	 * asynchronous pause control. However, since a single bit is used to
-+	 * control both RX and TX pause, we can't enforce asynchronous pause
-+	 * control - both TX and RX pause will be either enabled or disabled
-+	 * together.
-+	 *
-+	 * If auto-negotiation is enabled, we usually allow the flow control to
-+	 * be determined by the auto-negotiation process based on the
-+	 * capabilities of both link partners. However, for KSZ8873, the
-+	 * PORT_FORCE_FLOW_CTRL bit may be set by the hardware bootstrap,
-+	 * ignoring the auto-negotiation result. Thus, even in auto-negotiatio
-+	 * mode, we need to ensure that the PORT_FORCE_FLOW_CTRL bit is
-+	 * properly cleared.
-+	 *
-+	 * In the absence of auto-negotiation, we will enforce synchronous
-+	 * pause control for both variants of switches - KSZ8873 and KSZ8795.
-+	 */
-+	if (duplex) {
-+		bool aneg_en = false;
-+
-+		ret = ksz_pread8(dev, port, regs[P_FORCE_CTRL], &ctrl);
-+		if (ret)
-+			return;
-+
-+		if (ksz_is_ksz88x3(dev)) {
-+			if ((ctrl & PORT_AUTO_NEG_ENABLE))
-+				aneg_en = true;
-+		} else {
-+			if (!(ctrl & PORT_AUTO_NEG_DISABLE))
-+				aneg_en = true;
-+		}
-+
-+		if (!aneg_en && (tx_pause || rx_pause))
-+			ctrl |= PORT_FORCE_FLOW_CTRL;
-+	}
-+
-+	ksz_prmw8(dev, port, regs[P_STP_CTRL], PORT_FORCE_FLOW_CTRL, ctrl);
-+}
-+
- /**
-  * ksz8_upstream_link_up - Configures the CPU/upstream port of the switch.
-  * @dev: The KSZ device instance.
-@@ -1418,6 +1496,8 @@ void ksz8_phylink_mac_link_up(struct ksz_device *dev, int port,
- 	if (dsa_is_upstream_port(dev->ds, port))
- 		ksz8_upstream_link_up(dev, port, speed, duplex, tx_pause,
- 				     rx_pause);
-+	else
-+		ksz8_downstream_link_up(dev, port, duplex, tx_pause, rx_pause);
- }
- 
- static int ksz8_handle_global_errata(struct dsa_switch *ds)
--- 
-2.39.2
+		if (route_len) {
+
+> +			comp_id = conn_routes[i].route_ddp[route_len - 1];
+> +			if (priv->comp_node[comp_id]) {
+> +				if ((1 << priv->ddp_comp[comp_id].encoder_index) == encoder_mask) {
+
+This is effectively BIT().
+
+if (encoder_mask == BIT(priv->ddp_comp[comp_id].encoder_index)) {
+
+P.S.: Are you sure that this shouldn't be (encoder_mask & BIT(encoder_index))??
+
+> +					route_index = i;
+> +					break;
+> +				}
+> +			}
+> +		}
+> +	}
+> +
+
+..snip..
+
+> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_crtc.h b/drivers/gpu/drm/mediatek/mtk_drm_crtc.h
+> index 3e9046993d09..672b9c7afee6 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_drm_crtc.h
+> +++ b/drivers/gpu/drm/mediatek/mtk_drm_crtc.h
+> @@ -8,6 +8,7 @@
+>   
+>   #include <drm/drm_crtc.h>
+>   #include "mtk_drm_ddp_comp.h"
+> +#include "mtk_drm_drv.h"
+>   #include "mtk_drm_plane.h"
+>   
+>   #define MTK_LUT_SIZE	512
+> @@ -18,7 +19,9 @@ void mtk_drm_crtc_commit(struct drm_crtc *crtc);
+>   int mtk_drm_crtc_create(struct drm_device *drm_dev,
+>   			const unsigned int *path,
+>   			unsigned int path_len,
+> -			int priv_data_index);
+> +			int priv_data_index,
+> +			const struct mtk_drm_route *conn_routes,
+> +			unsigned int conn_routes_num);
+
+num_conn_routes looks better.
+
+>   int mtk_drm_crtc_plane_check(struct drm_crtc *crtc, struct drm_plane *plane,
+>   			     struct mtk_plane_state *state);
+>   void mtk_drm_crtc_async_update(struct drm_crtc *crtc, struct drm_plane *plane,
+> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
+> index f114da4d36a9..fe20ce26b19f 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.c
+
+..snip..
+
+> diff --git a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
+> index febcaeef16a1..1c1d670cfe41 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
+> +++ b/drivers/gpu/drm/mediatek/mtk_drm_ddp_comp.h
+> @@ -80,6 +80,7 @@ struct mtk_ddp_comp_funcs {
+>   	void (*disconnect)(struct device *dev, struct device *mmsys_dev, unsigned int next);
+>   	void (*add)(struct device *dev, struct mtk_mutex *mutex);
+>   	void (*remove)(struct device *dev, struct mtk_mutex *mutex);
+> +	int (*encoder_index)(struct device *dev);
+
+drm_encoder_index returns an unsigned int type, so this one can never be negative:
+please change the return value of this function to unsigned int type.
+
+>   };
+>   
+>   struct mtk_ddp_comp {
+> @@ -87,6 +88,7 @@ struct mtk_ddp_comp {
+>   	int irq;
+>   	unsigned int id;
+>   	const struct mtk_ddp_comp_funcs *funcs;
+> +	int encoder_index;
+
+Same here, unsigned int.
+
+>   };
+>   
+>   static inline int mtk_ddp_comp_clk_enable(struct mtk_ddp_comp *comp)
+
+Regards,
+Angelo
 
