@@ -2,233 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAE257083CE
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:16:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EABB37083D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 16:18:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbjEROQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 10:16:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48860 "EHLO
+        id S230216AbjEROSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 10:18:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230470AbjEROQn (ORCPT
+        with ESMTP id S229884AbjEROSg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 10:16:43 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA22FA6;
-        Thu, 18 May 2023 07:16:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1684419394; i=deller@gmx.de;
-        bh=LwPqTfkemnXFB3jCyVxpWMsHqU0ymB2h6P0xlROe5aw=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=TtXYNe5xAOeA9y374E+iJRzY4md4Plyfpzk5MbuVwz4PYygtvSTWSyLRxfHG+49Tr
-         +xHy9hVv4x2bhoDjDM6o4qdqYUk0GAS34kiwYnbGQIaUWhBnP2IFdU6yIujinn+ENg
-         YDhjlXGXRzYPfXa5xxTU4Tw2Eko5xrgznULGzCm8X+CGyjDwaGtMoB+M7BDaMI+Pkp
-         t1BTX/e0Ba+ByPJyGJ9v9stRfMsg71f9q1LANhImQb8SWJWYKPgYmq/hVuUB4d+V81
-         zJQpjleJZodO72MMBPAJGI12okzLjTQOVnMafMY2f1cP+B5dPNEGJGvLTmiZbDFrUL
-         byMT1oUjgJtkw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([94.134.154.30]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1My36N-1qMfpl1sKt-00zYSz; Thu, 18
- May 2023 16:16:34 +0200
-Message-ID: <be824fbc-cde4-9a2a-8fb4-1ca23f498dca@gmx.de>
-Date:   Thu, 18 May 2023 16:16:33 +0200
+        Thu, 18 May 2023 10:18:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED305C1
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 07:18:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8067361450
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 14:18:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7B62C433EF;
+        Thu, 18 May 2023 14:18:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684419514;
+        bh=iWDdKnmjocdvHCNiTsa1fW7ngWcP357j0OZ2zcoz0pc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SK0i2xBIUnt3AMnH7oo3goI1inz5U6aC3oRDchzPWX5OFyVMop8fxMc1wLmRLa1F5
+         43/DtDzuHgeEFi9WxJPn/4TxauZVwQDXOrdVHSneVfoPD8QfdLi7N5UWUOC5es+W16
+         MZ5cjH9ICj6yjihrMOVcQ/bNcfKx5SPviWbkOB5bH38e925Ti0dPVzQFu9xuf/AUKB
+         Khb/EGOnWQAPODxoYQoMQSjFVOuUrL1YrUHcLSiDpWobnPVIWND1f1nY/2XCgzjq1c
+         LlhOl+1iff3ukd1hrXWDf8z62CQCjv2gD1yF7BfNRadS0Go3NLoJQHTBFMzhAzLi07
+         5bryCoGBt4kVw==
+Date:   Thu, 18 May 2023 16:18:28 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Mike Christie <michael.christie@oracle.com>
+Cc:     oleg@redhat.com, linux@leemhuis.info, nicolas.dichtel@6wind.com,
+        axboe@kernel.dk, ebiederm@xmission.com,
+        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, mst@redhat.com,
+        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com
+Subject: Re: [RFC PATCH 5/8] vhost: Add callback that stops new work and
+ waits on running ones
+Message-ID: <20230518-lokomotive-aufziehen-dbc432136b76@brauner>
+References: <20230518000920.191583-1-michael.christie@oracle.com>
+ <20230518000920.191583-6-michael.christie@oracle.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [syzbot] [fbdev?] [usb?] WARNING in
- dlfb_submit_urb/usb_submit_urb (2)
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     syzbot <syzbot+0e22d63dcebb802b9bc8@syzkaller.appspotmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, bernie@plugable.com,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-References: <0000000000004a222005fbf00461@google.com>
- <ZGXVANMhn5j/jObU@ls3530>
- <4cd17511-2b60-4c37-baf3-c477cf6d1761@rowland.harvard.edu>
-Content-Language: en-US
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <4cd17511-2b60-4c37-baf3-c477cf6d1761@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:pXKVZVha4wUECO7qMwhTGTdVsINqMFOlbpu1MpJn6W53oDupfEv
- 1KnTp+8JBwTKRNhRqhvS1h4A3rWC8LUP3vbiakRhhD0JiuqgR7HPVt4tTCzzFEkkFoARBkL
- 0v8HArqHVpNEG8Ok6rdmhqo2sD3TRkawveMV0evjEY0G1xQ9ARakyYDGb8fyywNfir3/qD+
- vrm5ouc+9fEl33ny2IHgw==
-UI-OutboundReport: notjunk:1;M01:P0:P9sz6OUoUZE=;bHncezcc/bG0/tm7YZZlinfSFvB
- NMhIS8paNawMRgiRfr4BCZzkvovir9IadAH7H2EQXGu7jAe+3mZK+PHICY+Jegy2n2f+gV5eu
- L46x/n1l0HRw/xhg094dyTmtoulG73b7ykqCFE47hWqHnRZrOH8RUd3X7uN8MwLVjSdXWKovY
- mFWVi3hgip+chTVQAHEr1nGeGOioms62x1Lmzdisfr7BndieNp4EwYGtUZWo3ePQm1XiD0qh/
- JjxY6IIV4tNkyw753hAf//0ce2OfawBrotfl/BHf7m0MlMA0ujjI3BZNLd0m1C3smChmohDcq
- kAuHZIFYoE6W/VyRG1AYwhEjlbZqmJ886v9wz7Cg9o5ulGPJH6fbXwpFyXUY/RcDkL5Cm3aIp
- nWI6QUDm+h6r5gWV04D2jHHadhndv6sz/iBWza4Lp810kYf6gkFG6IMEdO6iZWTaV4HvLF2Mr
- gA+l4yZR0/ie8lwlEuRsZgP/O3bggQKnMKa9h/ciHPjH5sHxgkLf+4MQ7nJWNi3wguHQlSSb+
- JDHNBP2PMuIUJ4k7iyqG1dS33Fh9cTiGbp+DhztTYkoAo3x8QzlIqnlvrnFquweJFdQ+xRo3l
- vNWAHR3WPQ92FPwsZT8N7da/rhx9iwheeaUBnVd4Fzl2Hn10HQPov6bKs3r7HINgF1142Q4gE
- Pcag/iMhJq9V7CZvRgze1PPaIJ9f+pmYVyHf8WhZrdwwco5A8QXA3HWm/K1zFNE3x4bRDMeBM
- b1gP+o4orrh80E/wn3jGH0/OXO/9t64y28uf+x46oODSRd02XuJhjHINi4I2n0SkUv6AyFWUJ
- w1cqCwvKk73LBTUGM8ugpDaZ2AWFE4gGKGrWRADXPr+6zMAzDMDkitOQHMka6VjtDKio57DEw
- rmHu/3eoGoCjgOn0mmTuwIN0YW3miqzIp5TK+oJBpjkROhwx+/EcwrHVLn5Vjo+vTC/wNCATy
- dtGtarLkjrlaA2JJfVnucx2dE/8=
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230518000920.191583-6-michael.christie@oracle.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/18/23 15:54, Alan Stern wrote:
-> On Thu, May 18, 2023 at 09:34:24AM +0200, Helge Deller wrote:
->> * syzbot <syzbot+0e22d63dcebb802b9bc8@syzkaller.appspotmail.com>:
->>> syzbot found the following issue on:
->>>
->>> HEAD commit:    a4422ff22142 usb: typec: qcom: Add Qualcomm PMIC Type-=
-C dr..
->>> git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh=
-/usb.git usb-testing
->>> console output: https://syzkaller.appspot.com/x/log.txt?x=3D1524556628=
-0000
->>> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D2414a945e4=
-542ec1
->>> dashboard link: https://syzkaller.appspot.com/bug?extid=3D0e22d63dcebb=
-802b9bc8
->>> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Bin=
-utils for Debian) 2.35.2
->>> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D1720fd3a=
-280000
->>> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D171a73ea28=
-0000
->>>
->>> Downloadable assets:
->>> disk image: https://storage.googleapis.com/syzbot-assets/414817142fb7/=
-disk-a4422ff2.raw.xz
->>> vmlinux: https://storage.googleapis.com/syzbot-assets/448dba0d344e/vml=
-inux-a4422ff2.xz
->>> kernel image: https://storage.googleapis.com/syzbot-assets/d0ad9fe848e=
-2/bzImage-a4422ff2.xz
->>>
->>> IMPORTANT: if you fix the issue, please add the following tag to the c=
-ommit:
->>> Reported-by: syzbot+0e22d63dcebb802b9bc8@syzkaller.appspotmail.com
->>>
->>> usb 1-1: Read EDID byte 0 failed: -71
->>> usb 1-1: Unable to get valid EDID from device/display
->>> ------------[ cut here ]------------
->>> usb 1-1: BOGUS urb xfer, pipe 3 !=3D type 1
->>> WARNING: CPU: 0 PID: 9 at drivers/usb/core/urb.c:504 usb_submit_urb+0x=
-ed6/0x1880 drivers/usb/core/urb.c:504
->>> Modules linked in:
->>> CPU: 0 PID: 9 Comm: kworker/0:1 Not tainted 6.4.0-rc1-syzkaller-00016-=
-ga4422ff22142 #0
->>> Hardware name: Google Google Compute Engine/Google Compute Engine, BIO=
-S Google 04/28/2023
->>> Workqueue: usb_hub_wq hub_event
->>> RIP: 0010:usb_submit_urb+0xed6/0x1880 drivers/usb/core/urb.c:504
->>> Code: 7c 24 18 e8 7c dc 5a fd 48 8b 7c 24 18 e8 42 ca 0b ff 41 89 d8 4=
-4 89 e1 4c 89 ea 48 89 c6 48 c7 c7 60 34 cc 86 e8 0a fa 25 fd <0f> 0b e9 5=
-8 f8 ff ff e8 4e dc 5a fd 48 81 c5 b8 05 00 00 e9 84 f7
->>> RSP: 0018:ffffc9000009ed48 EFLAGS: 00010282
->>> RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
->>> RDX: ffff888103650000 RSI: ffffffff81163677 RDI: 0000000000000001
->>> RBP: ffff88810cb32940 R08: 0000000000000001 R09: 0000000000000000
->>> R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000003
->>> R13: ffff88810cf426b8 R14: 0000000000000003 R15: ffff888104272100
->>> FS:  0000000000000000(0000) GS:ffff8881f6600000(0000) knlGS:0000000000=
-000000
->>> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>> CR2: 0000562147be3b70 CR3: 0000000110380000 CR4: 00000000003506f0
->>> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->>> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->>> Call Trace:
->>>   <TASK>
->>>   dlfb_submit_urb+0x92/0x180 drivers/video/fbdev/udlfb.c:1980
->>>   dlfb_set_video_mode+0x21f0/0x2950 drivers/video/fbdev/udlfb.c:315
->>>   dlfb_ops_set_par+0x2a7/0x8d0 drivers/video/fbdev/udlfb.c:1111
->>>   dlfb_usb_probe+0x149a/0x2710 drivers/video/fbdev/udlfb.c:1743
->>>   usb_probe_interface+0x30f/0x960 drivers/usb/core/driver.c:396
->>>   call_driver_probe drivers/base/dd.c:579 [inline]
->>>   really_probe+0x240/0xca0 drivers/base/dd.c:658
->>>   __driver_probe_device+0x1df/0x4b0 drivers/base/dd.c:800
->>>   driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
->>>   __device_attach_driver+0x1d4/0x2e0 drivers/base/dd.c:958
->>>   bus_for_each_drv+0x149/0x1d0 drivers/base/bus.c:457
->>>   __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1030
->>>   bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
->>>   device_add+0x112d/0x1a40 drivers/base/core.c:3625
->>>   usb_set_configuration+0x1196/0x1bc0 drivers/usb/core/message.c:2211
->>>   usb_generic_driver_probe+0xcf/0x130 drivers/usb/core/generic.c:238
->>>   usb_probe_device+0xd8/0x2c0 drivers/usb/core/driver.c:293
->>>   call_driver_probe drivers/base/dd.c:579 [inline]
->>>   really_probe+0x240/0xca0 drivers/base/dd.c:658
->>>   __driver_probe_device+0x1df/0x4b0 drivers/base/dd.c:800
->>>   driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:830
->>>   __device_attach_driver+0x1d4/0x2e0 drivers/base/dd.c:958
->>>   bus_for_each_drv+0x149/0x1d0 drivers/base/bus.c:457
->>>   __device_attach+0x1e4/0x4b0 drivers/base/dd.c:1030
->>>   bus_probe_device+0x17c/0x1c0 drivers/base/bus.c:532
->>>   device_add+0x112d/0x1a40 drivers/base/core.c:3625
->>>   usb_new_device+0xcb2/0x19d0 drivers/usb/core/hub.c:2575
->>>   hub_port_connect drivers/usb/core/hub.c:5407 [inline]
->>>   hub_port_connect_change drivers/usb/core/hub.c:5551 [inline]
->>>   port_event drivers/usb/core/hub.c:5711 [inline]
->>>   hub_event+0x2e3d/0x4ed0 drivers/usb/core/hub.c:5793
->>>   process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
->>>   worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
->>>   kthread+0x344/0x440 kernel/kthread.c:379
->>>   ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
->>
->> I think this is an informational warning from the USB stack,
->
-> It is not informational.  It is a warning that the caller has a bug.
+On Wed, May 17, 2023 at 07:09:17PM -0500, Mike Christie wrote:
+> When the vhost_task gets a SIGKILL we want to stop new work from being
+> queued and also wait for and handle completions for running work. For the
+> latter, we still need to use the vhost_task to handle the completing work
+> so we can't just exit right away. But, this has us kick off the stopping
+> and flushing/stopping of the device/vhost_task/worker to the system work
+> queue while the vhost_task handles completions. When all completions are
+> done we will then do vhost_task_stop and we will exit.
+> 
+> Signed-off-by: Mike Christie <michael.christie@oracle.com>
+> ---
+>  drivers/vhost/net.c   |  2 +-
+>  drivers/vhost/scsi.c  |  4 ++--
+>  drivers/vhost/test.c  |  3 ++-
+>  drivers/vhost/vdpa.c  |  2 +-
+>  drivers/vhost/vhost.c | 48 ++++++++++++++++++++++++++++++++++++-------
+>  drivers/vhost/vhost.h | 10 ++++++++-
+>  drivers/vhost/vsock.c |  4 ++--
+>  7 files changed, 58 insertions(+), 15 deletions(-)
+> 
+> diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
+> index 8557072ff05e..90c25127b3f8 100644
+> --- a/drivers/vhost/net.c
+> +++ b/drivers/vhost/net.c
+> @@ -1409,7 +1409,7 @@ static int vhost_net_open(struct inode *inode, struct file *f)
+>  	vhost_dev_init(dev, vqs, VHOST_NET_VQ_MAX,
+>  		       UIO_MAXIOV + VHOST_NET_BATCH,
+>  		       VHOST_NET_PKT_WEIGHT, VHOST_NET_WEIGHT, true,
+> -		       NULL);
+> +		       NULL, NULL);
+>  
+>  	vhost_poll_init(n->poll + VHOST_NET_VQ_TX, handle_tx_net, EPOLLOUT, dev);
+>  	vhost_poll_init(n->poll + VHOST_NET_VQ_RX, handle_rx_net, EPOLLIN, dev);
+> diff --git a/drivers/vhost/scsi.c b/drivers/vhost/scsi.c
+> index bb10fa4bb4f6..40f9135e1a62 100644
+> --- a/drivers/vhost/scsi.c
+> +++ b/drivers/vhost/scsi.c
+> @@ -1820,8 +1820,8 @@ static int vhost_scsi_open(struct inode *inode, struct file *f)
+>  		vqs[i] = &vs->vqs[i].vq;
+>  		vs->vqs[i].vq.handle_kick = vhost_scsi_handle_kick;
+>  	}
+> -	vhost_dev_init(&vs->dev, vqs, nvqs, UIO_MAXIOV,
+> -		       VHOST_SCSI_WEIGHT, 0, true, NULL);
+> +	vhost_dev_init(&vs->dev, vqs, nvqs, UIO_MAXIOV, VHOST_SCSI_WEIGHT, 0,
+> +		       true, NULL, NULL);
+>  
+>  	vhost_scsi_init_inflight(vs, NULL);
+>  
+> diff --git a/drivers/vhost/test.c b/drivers/vhost/test.c
+> index 42c955a5b211..11a2823d7532 100644
+> --- a/drivers/vhost/test.c
+> +++ b/drivers/vhost/test.c
+> @@ -120,7 +120,8 @@ static int vhost_test_open(struct inode *inode, struct file *f)
+>  	vqs[VHOST_TEST_VQ] = &n->vqs[VHOST_TEST_VQ];
+>  	n->vqs[VHOST_TEST_VQ].handle_kick = handle_vq_kick;
+>  	vhost_dev_init(dev, vqs, VHOST_TEST_VQ_MAX, UIO_MAXIOV,
+> -		       VHOST_TEST_PKT_WEIGHT, VHOST_TEST_WEIGHT, true, NULL);
+> +		       VHOST_TEST_PKT_WEIGHT, VHOST_TEST_WEIGHT, true, NULL,
+> +		       NULL);
+>  
+>  	f->private_data = n;
+>  
+> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> index 8c1aefc865f0..de9a83ecb70d 100644
+> --- a/drivers/vhost/vdpa.c
+> +++ b/drivers/vhost/vdpa.c
+> @@ -1279,7 +1279,7 @@ static int vhost_vdpa_open(struct inode *inode, struct file *filep)
+>  		vqs[i]->handle_kick = handle_vq_kick;
+>  	}
+>  	vhost_dev_init(dev, vqs, nvqs, 0, 0, 0, false,
+> -		       vhost_vdpa_process_iotlb_msg);
+> +		       vhost_vdpa_process_iotlb_msg, NULL);
+>  
+>  	r = vhost_vdpa_alloc_domain(v);
+>  	if (r)
+> diff --git a/drivers/vhost/vhost.c b/drivers/vhost/vhost.c
+> index 1ba9e068b2ab..4163c86db50c 100644
+> --- a/drivers/vhost/vhost.c
+> +++ b/drivers/vhost/vhost.c
+> @@ -336,6 +336,7 @@ static void vhost_vq_reset(struct vhost_dev *dev,
+>  static int vhost_worker(void *data)
+>  {
+>  	struct vhost_worker *worker = data;
+> +	struct vhost_dev *dev = worker->dev;
+>  	struct vhost_work *work, *work_next;
+>  	struct llist_node *node;
+>  
+> @@ -352,12 +353,13 @@ static int vhost_worker(void *data)
+>  		if (!node) {
+>  			schedule();
+>  			/*
+> -			 * When we get a SIGKILL our release function will
+> -			 * be called. That will stop new IOs from being queued
+> -			 * and check for outstanding cmd responses. It will then
+> -			 * call vhost_task_stop to exit us.
+> +			 * When we get a SIGKILL we kick off a work to
+> +			 * run the driver's helper to stop new work and
+> +			 * handle completions. When they are done they will
+> +			 * call vhost_task_stop to tell us to exit.
+>  			 */
+> -			vhost_task_get_signal();
+> +			if (vhost_task_get_signal())
+> +				schedule_work(&dev->destroy_worker);
+>  		}
 
-I'm not a USB expert, so I searched for such bug reports, and it seems
-people sometimes faced this warning with different USB devices.
-
->> since the syzbot usb device doesn't behave as expected.
->>
->> What happens with this patch applied?
->>
->> #syz test: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.g=
-it usb-testing
->>
->> diff --git a/drivers/usb/core/urb.c b/drivers/usb/core/urb.c
->> index 9f3c54032556..dd77b9e757da 100644
->> --- a/drivers/usb/core/urb.c
->> +++ b/drivers/usb/core/urb.c
->> @@ -501,7 +501,7 @@ int usb_submit_urb(struct urb *urb, gfp_t mem_flags=
-)
->>
->>   	/* Check that the pipe's type matches the endpoint's type */
->>   	if (usb_pipe_type_check(urb->dev, urb->pipe))
->> -		dev_WARN(&dev->dev, "BOGUS urb xfer, pipe %x !=3D type %x\n",
->> +		printk("BOGUS urb xfer, pipe %x !=3D type %x (hardware misbehaviour?=
-)\n",
->>   			usb_pipetype(urb->pipe), pipetypes[xfertype]);
->>
->>   	/* Check against a simple/standard policy */
->
-> You can't fix a bug by changing the line that reports it from dev_WARN
-> to printk!
-
-Of course this patch wasn't intended as "fix".
-It was intended to see how the udlfb driver behaves in this situation, e.g=
-.
-if the driver then crashes afterwards.
-
-Furthermore, why does usb_submit_urb() prints this WARNING and then contin=
-ues?
-If it's a real bug, why doesn't it returns an error instead?
-So, in principle I still think this warning is kind of informational,
-which of course points to some kind of problem which should be fixed.
-
-> In this case it looks like dlfb_usb_probe() or one of the routines it
-> calls is wrong; it assumes that an endpoint has the expected type
-> without checking.  More precisely, it thinks an endpoint is BULK when
-> actually it is INTERRUPT.  That's what needs to be fixed.
-
-Maybe usb_submit_urb() should return an error so that drivers can
-react on it, instead of adding the same kind of checks to all drivers?
-
-Helge
+I'm pretty sure you still need to actually call exit here. Basically
+mirror what's done in io_worker_exit() minus the io specific bits.
