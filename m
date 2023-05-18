@@ -2,70 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 064C770865E
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 19:05:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4467708660
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 19:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbjERRFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 13:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44314 "EHLO
+        id S229770AbjERRGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 13:06:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbjERRFY (ORCPT
+        with ESMTP id S229506AbjERRGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 13:05:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F03D10FA
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 10:04:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684429463;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pZ7Kv25n2l/rgGBMQe8NyD9v4RBua/FQCAYmOFizbRM=;
-        b=Z4vsiFUSG9gfh09i/6uDv/3kAvSl+LVNIK58l3QfWjqudCy8/dSry3VdKZBnl81dMmHW1J
-        9NXjSAf7/Q91x15x5xuhN7IDUdoYlrznXMDNVAuAD1zpZ93AuDC9k+QMtmC/vPXCghS0zr
-        N73zbmH5C5LBquxnrr8Y680UIfBf1j8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-367-oX24YEzFMHeZcFcVgyOA3A-1; Thu, 18 May 2023 13:04:20 -0400
-X-MC-Unique: oX24YEzFMHeZcFcVgyOA3A-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 18 May 2023 13:06:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9AE121;
+        Thu, 18 May 2023 10:06:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 865E73806633;
-        Thu, 18 May 2023 17:04:18 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.20])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 4FC7440C2063;
-        Thu, 18 May 2023 17:04:15 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Thu, 18 May 2023 19:04:04 +0200 (CEST)
-Date:   Thu, 18 May 2023 19:04:00 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Mike Christie <michael.christie@oracle.com>
-Cc:     "Eric W. Biederman" <ebiederm@xmission.com>, linux@leemhuis.info,
-        nicolas.dichtel@6wind.com, axboe@kernel.dk,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, mst@redhat.com,
-        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
-        brauner@kernel.org
-Subject: Re: [RFC PATCH 1/8] signal: Dequeue SIGKILL even if
- SIGNAL_GROUP_EXIT/group_exec_task is set
-Message-ID: <20230518170359.GC20779@redhat.com>
-References: <20230518000920.191583-1-michael.christie@oracle.com>
- <20230518000920.191583-2-michael.christie@oracle.com>
- <87ednei9is.fsf@email.froward.int.ebiederm.org>
- <ab7d07ba-5dc3-95c0-aa7c-c2575d03f429@oracle.com>
- <20230518162508.GB20779@redhat.com>
- <05236dee-59b7-f394-db3d-cbb4d4163ce8@oracle.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6AAFA64557;
+        Thu, 18 May 2023 17:06:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2548DC433D2;
+        Thu, 18 May 2023 17:06:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684429590;
+        bh=XL8Q8LxpeG+xUSW+d2Fhz16+YABT67r3plx3O+Y35ag=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SYDwNwjeRfNEkfoyIRyJq3Fohsc3ZIt3WbvX+OQ++ceTWjibgZ24NbiSU4vfGEufv
+         E7/MG8tjVbYn8mfTzAqH4bsSYhCAPy4wioXysSz9c9jyKzRIwkWR4YFCfxF+QkoWHa
+         SjilsAYEF5gzcKD+jg9x90stMTD6SLJsxPxhPjJZW0StGE3IfSLuaGFwHOy8eBK4OM
+         i59muo8WKsAEN4/0QTZOrGqA5Hx1JqDnrSJpknH+axhqo4xWAcFso0ezUz0FDXuSnL
+         xP1/Z3FypEnI8MGE/wgMHsOmzfJ6SUoZ43dLzibDtQNclaBobAMq0a6Jey31YekcNb
+         7Uu1mISU27XeQ==
+Date:   Thu, 18 May 2023 18:06:24 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>, anup@brainfault.org,
+        ajones@ventanamicro.com, Paul Walmsley <paul.walmsley@sifive.com>,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        apatel@ventanamicro.com, atishp@atishpatra.org, jrtc27@jrtc27.com,
+        rick@andestech.com, ycliang@andestech.com,
+        linux-riscv@lists.infradead.org, qemu-riscv@nongnu.org,
+        u-boot@lists.denx.de, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] dt-bindings: riscv: deprecate riscv,isa
+Message-ID: <20230518-elective-mossy-1bf147f5e9b8@spud>
+References: <20230518-hammock-doornail-478e8ea8e6a7@wendy>
+ <mhng-95b99ff5-9024-4672-bb84-7599f7a05129@palmer-ri-x1c9>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="TKxZvzqyNscVPD5H"
 Content-Disposition: inline
-In-Reply-To: <05236dee-59b7-f394-db3d-cbb4d4163ce8@oracle.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <mhng-95b99ff5-9024-4672-bb84-7599f7a05129@palmer-ri-x1c9>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,61 +63,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/18, Mike Christie wrote:
->
-> On 5/18/23 11:25 AM, Oleg Nesterov wrote:
-> > I too do not understand the 1st change in this patch ...
-> >
-> > On 05/18, Mike Christie wrote:
-> >>
-> >> In the other patches we do:
-> >>
-> >> if (get_signal(ksig))
-> >> 	start_exit_cleanup_by_stopping_newIO()
-> >> 	flush running IO()
-> >> 	exit()
-> >>
-> >> But to do the flush running IO() part of this I need to wait for it so
-> >> that's why I wanted to be able to dequeue the SIGKILL and clear the
-> >> TIF_SIGPENDING bit.
-> >
-> > But get_signal() will do what you need, dequeue SIGKILL and clear SIGPENDING ?
-> >
-> > 	if ((signal->flags & SIGNAL_GROUP_EXIT) ||
-> > 	     signal->group_exec_task) {
-> > 		clear_siginfo(&ksig->info);
-> > 		ksig->info.si_signo = signr = SIGKILL;
-> > 		sigdelset(&current->pending.signal, SIGKILL);
-> >
-> > this "dequeues" SIGKILL,
 
-OOPS. this doesn't remove SIGKILL from current->signal->shared_pending
+--TKxZvzqyNscVPD5H
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> >
-> > 		trace_signal_deliver(SIGKILL, SEND_SIG_NOINFO,
-> > 			&sighand->action[SIGKILL - 1]);
-> > 		recalc_sigpending();
-> >
-> > this clears TIF_SIGPENDING.
+On Thu, May 18, 2023 at 07:41:17AM -0700, Palmer Dabbelt wrote:
+> On Thu, 18 May 2023 07:06:17 PDT (-0700), Conor Dooley wrote:
+> > On Thu, May 18, 2023 at 07:13:15PM +0530, Anup Patel wrote:
+> > > On Thu, May 18, 2023 at 4:02=E2=80=AFPM Andrew Jones <ajones@ventanam=
+icro.com> wrote:
+> > > > On Thu, May 18, 2023 at 09:58:30AM +0100, Conor Dooley wrote:
 
-No, I was wrong, recalc_sigpending() won't clear TIF_SIGPENDING if
-SIGKILL is in signal->shared_pending
+> > > One downside of this new approach is it will increase the size of DTB.
+> > > Imaging 50 such DT properties in 46 CPU DT nodes.
+> >=20
+> > I should do a comparison between 50 extensions in riscv,isa and doing
+> > this 50 times and see what the sizes are.
+>=20
+> I'm not sure how sensitive people are to DT size (presumably it'd be DTB
+> size)?
+>=20
+> It's also not clear what we can do about it: RISC-V has lots of extension=
+s,
+> that's going to take encoding space.  Sticking with an ambiguous encoding
+> because it's smaller seems like a way to get burned in the long run.
 
-> I see what you guys meant. TIF_SIGPENDING isn't getting cleared.
-> I'll dig into why.
+I did actually go an look at this. I cheated a little and renamed the
+properties to "riscv,isa-ext-foo", which is about as communicative IMO
+as the longer name I currently have, but may seem more agreeable to the
+size conscious.
+I added 30 cpu nodes to mpfs.dtsi, each with 100 extensions of 6 chars
+long. With just the string, containing "rv64imafdc_zabcde_...", it was
+unreadable, but "only" took up 46k.
+I then removed the multiletter extensions from riscv,isa & switched to
+riscv,isa-base & 100 booleans. IMO it was more readable (although still
+quite bad!), but took up 62k.
+Removing all of the boolean properties, leaving me with 30 addtional harts
+with "rv64imafdc" only, was 26k.
 
-See above, sorry for confusion.
+I think the generic limit for dtb files is 2 MiB? To me the size
+increase doesn't sound like a bit problem.
 
+--TKxZvzqyNscVPD5H
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
-And again, there is another problem with SIGSTOP. To simplify, suppose
-a PF_IO_WORKER thread does something like
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGZbEAAKCRB4tDGHoIJi
+0s2UAQC3dbtneTDqOvEpuMHz7vzTT/qCO/nEAhYVxRjH0MasoQD+IWeuh0pZj7Y/
+NPtfbaq3ryBkiGdWFoAC2ls1S9xcNAo=
+=0mwD
+-----END PGP SIGNATURE-----
 
-	while (signal_pending(current))
-		get_signal(...);
-
-this will loop forever if (SIGNAL_GROUP_EXIT || group_exec_task) and
-SIGSTOP is pending.
-
-Oleg.
-
+--TKxZvzqyNscVPD5H--
