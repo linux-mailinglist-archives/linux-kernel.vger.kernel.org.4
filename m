@@ -2,64 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5FBF7086B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 19:22:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5738F7086B9
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 19:23:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbjERRW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 13:22:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53386 "EHLO
+        id S229871AbjERRX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 13:23:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbjERRWz (ORCPT
+        with ESMTP id S229920AbjERRXY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 13:22:55 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC4710F0
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 10:22:41 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id e9e14a558f8ab-335394455ecso17163805ab.1
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 10:22:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684430560; x=1687022560;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VFLMLMERcEPK6KOnVaGUjiqkf6TsA+5MfFDEx73WR84=;
-        b=OXOR7pnbPYbtMUAlrzeCis++Hfoa2wq4NAbk7jUUIi/D3CAWfK+phs/y/sR/JHeQ3V
-         xjhZccK/irzbSF0rTFkxML0IAjlT3kefSFGd4nAdFPBYZHCigE5WqRRG1V3K0vxp1rPk
-         TeIg1wza43XKlzE65MkR+TEry7pKQSx589pYI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684430560; x=1687022560;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VFLMLMERcEPK6KOnVaGUjiqkf6TsA+5MfFDEx73WR84=;
-        b=I9U8PGWjtiVhZ9go67KY/q4GRlZjDioAtSpEJXhdcpOQShspxtJh3ADPEYf0KzQKia
-         lgOOcZ6VuCwCphrvOLDMxUSLLB8o6ams6bX2SM233mMfwfjQWCQM6uZuK4qpkDQnB018
-         SR/u8FDsXPS6IY/UJ3TGDCYEOFoR0MR1Mbaz6S+kxxMjMT1Ey2YcKrckrNLPgDi9qH4r
-         J1/qkWi80HhlgfPn1fbcQpsPsNThTek1Hzboy9jf96JLLsAc6d+zLzi+amTghCbWDVR2
-         LXBFw7XxjeMFZyGwDhBCX1NxHuovffN4B+OXB04imNB7l3YWf4dpXI5UKldF6f5Sz0JP
-         PIZA==
-X-Gm-Message-State: AC+VfDwUqIZ6P0ZQRQ4XRaFehbEQOLzksFUvlky2Ye3OzkrLXejH2Jvm
-        152CfzJB5PJLrMmGXYqqC/3CIw==
-X-Google-Smtp-Source: ACHHUZ7S49f/5T/VMnCw1zuDDI08sWTBjU4Y8jpBXNCnl7cK7MadQiBmiyb8lUBTYlHkhboBHMyc4g==
-X-Received: by 2002:a92:d402:0:b0:334:e918:323b with SMTP id q2-20020a92d402000000b00334e918323bmr5367240ilm.8.1684430560375;
-        Thu, 18 May 2023 10:22:40 -0700 (PDT)
-Received: from google.com (h24-56-189-219.arvdco.broadband.dynamic.tds.net. [24.56.189.219])
-        by smtp.gmail.com with ESMTPSA id z11-20020a92d6cb000000b0033126f7bfb0sm464100ilp.1.2023.05.18.10.22.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 10:22:40 -0700 (PDT)
-Date:   Thu, 18 May 2023 11:22:38 -0600
-From:   Raul E Rangel <rrangel@chromium.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/7] Input: libps2 - introduce common interrupt handler
-Message-ID: <ZGZe3hZReU7RYa8n@google.com>
-References: <20230511185252.386941-1-dmitry.torokhov@gmail.com>
- <20230511185252.386941-7-dmitry.torokhov@gmail.com>
+        Thu, 18 May 2023 13:23:24 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7503CE45;
+        Thu, 18 May 2023 10:23:13 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34IH0mYe003596;
+        Thu, 18 May 2023 17:23:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : from : to : cc : references : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=O8HEiSCW/u0hKWJysdd7Wg0OVFA5fwb3W6UiYdFa50I=;
+ b=MqHhh/EGt/6yUOvFW5I/WMZz0O4z8W2NBvciQjygKl8EdC+rI7yhZbMBA68UOUWp+QkC
+ Mde6cxeIkcQnjJqP7OKPESXlK/oMfGvOp/V22ok3+B59JDFlV/WgsEjctBxdaWsoIn/Q
+ 3bo9hWuOKWnQuaoGxBa4pmJw1VknoFzlFRoWUfo4wE8UIez4bLgF/Nw5ftCCihid4JlJ
+ 3zYEn2+ebhOPMsqokSzu34D/Krdswnh8T77ecwVr1Ev7xcmyr0F/CsUCbFaTiq3dDJ03
+ d2f6xelAxyWN6QY4tioKjGYBfOpb79GGjeCYcBqzf07dJkxlhUg3AIgPwtt+I8HEaS+o Tg== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qned31gmt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 May 2023 17:23:07 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34IHN6vP021936
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 18 May 2023 17:23:06 GMT
+Received: from [10.216.41.71] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 18 May
+ 2023 10:22:58 -0700
+Message-ID: <4669eed6-b76c-8e68-74b1-36ea52a4bd5b@quicinc.com>
+Date:   Thu, 18 May 2023 22:52:54 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230511185252.386941-7-dmitry.torokhov@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [PATCH 01/11] dt-bindings: remoteproc: qcom: Add support for
+ multipd model
+Content-Language: en-US
+From:   Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <jassisinghbrar@gmail.com>,
+        <mathieu.poirier@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <quic_gurus@quicinc.com>,
+        <loic.poulain@linaro.org>, <quic_eberman@quicinc.com>,
+        <robimarko@gmail.com>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-clk@vger.kernel.org>
+CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_poovendh@quicinc.com>
+References: <1678164097-13247-1-git-send-email-quic_mmanikan@quicinc.com>
+ <1678164097-13247-2-git-send-email-quic_mmanikan@quicinc.com>
+ <38a5a268-7d8a-6e61-4272-8e9155df0034@linaro.org>
+ <790496d7-98dc-c92e-dedc-1c89395a1ad8@quicinc.com>
+In-Reply-To: <790496d7-98dc-c92e-dedc-1c89395a1ad8@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: uKpqpV2T6LA6dKYBQgNOkGxKEeJZ8HGO
+X-Proofpoint-GUID: uKpqpV2T6LA6dKYBQgNOkGxKEeJZ8HGO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-18_13,2023-05-17_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 malwarescore=0 suspectscore=0 bulkscore=0 phishscore=0
+ mlxlogscore=999 priorityscore=1501 clxscore=1015 mlxscore=0 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305180140
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,757 +94,425 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 11:52:46AM -0700, Dmitry Torokhov wrote:
-> Instead of exposing inner workings of libps2 to drivers such as atkbd and
-> psmouse, have them define pre-receive and receive callbacks, and provide a
-> common handler that can be used with underlying serio port.
+
+
+On 5/8/2023 7:15 PM, Manikanta Mylavarapu wrote:
 > 
-> While at this add kerneldoc to the module.
 > 
-> Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-> ---
->  drivers/input/keyboard/atkbd.c     |  73 +++++-----
->  drivers/input/mouse/psmouse-base.c |  53 +++----
->  drivers/input/serio/libps2.c       | 226 ++++++++++++++++++++---------
->  include/linux/libps2.h             |  61 +++++---
->  4 files changed, 259 insertions(+), 154 deletions(-)
+> On 3/7/2023 8:47 PM, Krzysztof Kozlowski wrote:
+>> On 07/03/2023 05:41, Manikanta Mylavarapu wrote:
+>>> Add new binding document for multipd model remoteproc.
+>>> IPQ5018, IPQ9574 follows multipd model.
+>>>
+>>> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+>>> ---
+>>>   .../bindings/remoteproc/qcom,multipd-pil.yaml | 282 ++++++++++++++++++
+>>>   1 file changed, 282 insertions(+)
+>>>   create mode 100644 
+>>> Documentation/devicetree/bindings/remoteproc/qcom,multipd-pil.yaml
+>>>
+>>> diff --git 
+>>> a/Documentation/devicetree/bindings/remoteproc/qcom,multipd-pil.yaml 
+>>> b/Documentation/devicetree/bindings/remoteproc/qcom,multipd-pil.yaml
+>>> new file mode 100644
+>>> index 000000000000..b788607f5abd
+>>> --- /dev/null
+>>> +++ b/Documentation/devicetree/bindings/remoteproc/qcom,multipd-pil.yaml
+>>> @@ -0,0 +1,282 @@
+>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>>> +%YAML 1.2
+>>> +---
+>>> +$id: http://devicetree.org/schemas/remoteproc/qcom,multipd-pil.yaml#
+>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>> +
+>>> +title: Qualcomm Multipd Secure Peripheral Image Loader
+>>> +
+>>> +maintainers:
+>>> +  - Bjorn Andersson <andersson@kernel.org>
+>>> +  - Mathieu Poirier <mathieu.poirier@linaro.org>
+>>> +
+>>> +description:
+>>> +  Multipd Peripheral Image Loader loads firmware and boots Q6 pd, 
+>>> WCSS pd
+>>> +  remoteproc's on the Qualcomm IPQ5018, IPQ9574 SoC.
+>>
+>> What is a "pd"?
+>>
+> Pd means protection domain.
+> It's similar to process in Linux. Here QDSP6 processor runs each wifi 
+> radio functionality on a separate process. One process can't access 
+> other process resources, so this is termed as PD i.e protection domain.
+> Here we have two pd's called root and user pd. We can correlate Root pd
+> as root and user pd as user in linux. Root pd has more privileges than
+> user pd.
+>  From remoteproc driver perspective, root pd corresponds to QDSP6 
+> processor bring up and user pd corresponds to Wifi radio (WCSS) bring up.
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    enum:
+>>> +      - qcom,ipq5018-q6-mpd
+>>> +      - qcom,ipq9574-q6-mpd
+>>> +
+>>> +  '#address-cells': true
+>>> +
+>>> +  '#size-cells': true
+>>
+>> Why do you need both?
+>>
+>> If really needed, these should be const. >
+> It's not required. I am going to remove it.
+>>> +
+>>> +  'ranges': true
+>>> +
+>>
+>> Same question - why do you need it?
+>>
+> It's not required. I am going to remove it.
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +  interrupts-extended:
+>>
+>> Instead interrupts
+>>
+> Sure. I will use 'interrupts'.
 > 
-> diff --git a/drivers/input/keyboard/atkbd.c b/drivers/input/keyboard/atkbd.c
-> index 2fb2ad73e796..8ef663a589b3 100644
-> --- a/drivers/input/keyboard/atkbd.c
-> +++ b/drivers/input/keyboard/atkbd.c
-> @@ -398,47 +398,49 @@ static unsigned int atkbd_compat_scancode(struct atkbd *atkbd, unsigned int code
->  	return code;
->  }
->  
-> -/*
-> - * atkbd_interrupt(). Here takes place processing of data received from
-> - * the keyboard into events.
-> - */
-> -
-> -static irqreturn_t atkbd_interrupt(struct serio *serio, unsigned char data,
-> -				   unsigned int flags)
-> +static enum ps2_disposition atkbd_pre_receive_byte(struct ps2dev *ps2dev,
-> +						   u8 data, unsigned int flags)
->  {
-> -	struct atkbd *atkbd = atkbd_from_serio(serio);
-> -	struct input_dev *dev = atkbd->dev;
-> -	unsigned int code = data;
-> -	int scroll = 0, hscroll = 0, click = -1;
-> -	int value;
-> -	unsigned short keycode;
-> +	struct serio *serio = ps2dev->serio;
->  
->  	dev_dbg(&serio->dev, "Received %02x flags %02x\n", data, flags);
->  
->  #if !defined(__i386__) && !defined (__x86_64__)
-> -	if ((flags & (SERIO_FRAME | SERIO_PARITY)) && (~flags & SERIO_TIMEOUT) && !atkbd->resend && atkbd->write) {
-> -		dev_warn(&serio->dev, "Frame/parity error: %02x\n", flags);
-> -		serio_write(serio, ATKBD_CMD_RESEND);
-> -		atkbd->resend = true;
-> -		goto out;
-> +	if ((flags & (SERIO_FRAME | SERIO_PARITY)) &&
-> +	    (~flags & SERIO_TIMEOUT)) {
-> +		struct atkbd *atkbd = container_of(ps2dev, struct atkbd,
-> +						   ps2dev);
-> +
-> +		if (!atkbd->resend && atkbd->write) {
-> +			dev_warn(&serio->dev,
-> +				 "Frame/parity error: %02x\n", flags);
-> +			serio_write(serio, ATKBD_CMD_RESEND);
-> +			atkbd->resend = true;
-> +			return PS2_IGNORE;
-> +		}
->  	}
->  
->  	if (!flags && data == ATKBD_RET_ACK)
->  		atkbd->resend = false;
->  #endif
->  
-> -	if (unlikely(atkbd->ps2dev.flags & PS2_FLAG_ACK))
-> -		if  (ps2_handle_ack(&atkbd->ps2dev, data))
-> -			goto out;
-> +	return PS2_PROCESS;
-> +}
->  
-> -	if (unlikely(atkbd->ps2dev.flags & PS2_FLAG_CMD))
-> -		if  (ps2_handle_response(&atkbd->ps2dev, data))
-> -			goto out;
-> +static void atkbd_receive_byte(struct ps2dev *ps2dev, u8 data)
-> +{
-> +	struct serio *serio = ps2dev->serio;
-> +	struct atkbd *atkbd = container_of(ps2dev, struct atkbd, ps2dev);
-> +	struct input_dev *dev = atkbd->dev;
-> +	unsigned int code = data;
-> +	int scroll = 0, hscroll = 0, click = -1;
-> +	int value;
-> +	unsigned short keycode;
->  
->  	pm_wakeup_event(&serio->dev, 0);
->  
->  	if (!atkbd->enabled)
-> -		goto out;
-> +		return;
->  
->  	input_event(dev, EV_MSC, MSC_RAW, code);
->  
-> @@ -460,16 +462,16 @@ static irqreturn_t atkbd_interrupt(struct serio *serio, unsigned char data,
->  	case ATKBD_RET_BAT:
->  		atkbd->enabled = false;
->  		serio_reconnect(atkbd->ps2dev.serio);
-> -		goto out;
-> +		return;
->  	case ATKBD_RET_EMUL0:
->  		atkbd->emul = 1;
-> -		goto out;
-> +		return;
->  	case ATKBD_RET_EMUL1:
->  		atkbd->emul = 2;
-> -		goto out;
-> +		return;
->  	case ATKBD_RET_RELEASE:
->  		atkbd->release = true;
-> -		goto out;
-> +		return;
->  	case ATKBD_RET_ACK:
->  	case ATKBD_RET_NAK:
->  		if (printk_ratelimit())
-> @@ -477,18 +479,18 @@ static irqreturn_t atkbd_interrupt(struct serio *serio, unsigned char data,
->  				 "Spurious %s on %s. "
->  				 "Some program might be trying to access hardware directly.\n",
->  				 data == ATKBD_RET_ACK ? "ACK" : "NAK", serio->phys);
-> -		goto out;
-> +		return;
->  	case ATKBD_RET_ERR:
->  		atkbd->err_count++;
->  		dev_dbg(&serio->dev, "Keyboard on %s reports too many keys pressed.\n",
->  			serio->phys);
-> -		goto out;
-> +		return;
->  	}
->  
->  	code = atkbd_compat_scancode(atkbd, code);
->  
->  	if (atkbd->emul && --atkbd->emul)
-> -		goto out;
-> +		return;
->  
->  	keycode = atkbd->keycode[code];
->  
-> @@ -564,8 +566,6 @@ static irqreturn_t atkbd_interrupt(struct serio *serio, unsigned char data,
->  	}
->  
->  	atkbd->release = false;
-> -out:
-> -	return IRQ_HANDLED;
->  }
->  
->  static int atkbd_set_repeat_rate(struct atkbd *atkbd)
-> @@ -1229,7 +1229,8 @@ static int atkbd_connect(struct serio *serio, struct serio_driver *drv)
->  		goto fail1;
->  
->  	atkbd->dev = dev;
-> -	ps2_init(&atkbd->ps2dev, serio);
-> +	ps2_init(&atkbd->ps2dev, serio,
-> +		 atkbd_pre_receive_byte, atkbd_receive_byte);
->  	INIT_DELAYED_WORK(&atkbd->event_work, atkbd_event_work);
->  	mutex_init(&atkbd->mutex);
->  
-> @@ -1385,7 +1386,7 @@ static struct serio_driver atkbd_drv = {
->  	},
->  	.description	= DRIVER_DESC,
->  	.id_table	= atkbd_serio_ids,
-> -	.interrupt	= atkbd_interrupt,
-> +	.interrupt	= ps2_interrupt,
->  	.connect	= atkbd_connect,
->  	.reconnect	= atkbd_reconnect,
->  	.disconnect	= atkbd_disconnect,
-> diff --git a/drivers/input/mouse/psmouse-base.c b/drivers/input/mouse/psmouse-base.c
-> index ed5376099fba..a0aac76b1e41 100644
-> --- a/drivers/input/mouse/psmouse-base.c
-> +++ b/drivers/input/mouse/psmouse-base.c
-> @@ -336,17 +336,14 @@ static void psmouse_handle_oob_data(struct psmouse *psmouse, u8 data)
->  	}
->  }
->  
-> -/*
-> - * psmouse_interrupt() handles incoming characters, either passing them
-> - * for normal processing or gathering them as command response.
-> - */
-> -static irqreturn_t psmouse_interrupt(struct serio *serio,
-> -				     u8 data, unsigned int flags)
-> +static enum ps2_disposition psmouse_pre_receive_byte(struct ps2dev *ps2dev,
-> +						     u8 data,
-> +						     unsigned int flags)
->  {
-> -	struct psmouse *psmouse = psmouse_from_serio(serio);
-> +	struct psmouse *psmouse = container_of(ps2dev, struct psmouse, ps2dev);
->  
->  	if (psmouse->state == PSMOUSE_IGNORE)
-> -		goto out;
-> +		return PS2_IGNORE;
->  
->  	if (unlikely((flags & SERIO_TIMEOUT) ||
->  		     ((flags & SERIO_PARITY) &&
-> @@ -357,27 +354,25 @@ static irqreturn_t psmouse_interrupt(struct serio *serio,
->  				     "bad data from KBC -%s%s\n",
->  				     flags & SERIO_TIMEOUT ? " timeout" : "",
->  				     flags & SERIO_PARITY ? " bad parity" : "");
-> -		ps2_cmd_aborted(&psmouse->ps2dev);
-> -		goto out;
-> +		return PS2_ERROR;
->  	}
->  
->  	if (flags & SERIO_OOB_DATA) {
->  		psmouse_handle_oob_data(psmouse, data);
-> -		goto out;
-> +		return PS2_IGNORE;
->  	}
->  
-> -	if (unlikely(psmouse->ps2dev.flags & PS2_FLAG_ACK))
-> -		if  (ps2_handle_ack(&psmouse->ps2dev, data))
-> -			goto out;
-> +	return PS2_PROCESS;
-> +}
->  
-> -	if (unlikely(psmouse->ps2dev.flags & PS2_FLAG_CMD))
-> -		if  (ps2_handle_response(&psmouse->ps2dev, data))
-> -			goto out;
-> +static void psmouse_receive_byte(struct ps2dev *ps2dev, u8 data)
-> +{
-> +	struct psmouse *psmouse = container_of(ps2dev, struct psmouse, ps2dev);
->  
-> -	pm_wakeup_event(&serio->dev, 0);
-> +	pm_wakeup_event(&ps2dev->serio->dev, 0);
->  
->  	if (psmouse->state <= PSMOUSE_RESYNCING)
-> -		goto out;
-> +		return;
->  
->  	if (psmouse->state == PSMOUSE_ACTIVATED &&
->  	    psmouse->pktcnt && time_after(jiffies, psmouse->last + HZ/2)) {
-> @@ -386,7 +381,7 @@ static irqreturn_t psmouse_interrupt(struct serio *serio,
->  		psmouse->badbyte = psmouse->packet[0];
->  		__psmouse_set_state(psmouse, PSMOUSE_RESYNCING);
->  		psmouse_queue_work(psmouse, &psmouse->resync_work, 0);
-> -		goto out;
-> +		return;
->  	}
->  
->  	psmouse->packet[psmouse->pktcnt++] = data;
-> @@ -395,21 +390,21 @@ static irqreturn_t psmouse_interrupt(struct serio *serio,
->  	if (unlikely(psmouse->packet[0] == PSMOUSE_RET_BAT && psmouse->pktcnt <= 2)) {
->  		if (psmouse->pktcnt == 1) {
->  			psmouse->last = jiffies;
-> -			goto out;
-> +			return;
->  		}
->  
->  		if (psmouse->packet[1] == PSMOUSE_RET_ID ||
->  		    (psmouse->protocol->type == PSMOUSE_HGPK &&
->  		     psmouse->packet[1] == PSMOUSE_RET_BAT)) {
->  			__psmouse_set_state(psmouse, PSMOUSE_IGNORE);
-> -			serio_reconnect(serio);
-> -			goto out;
-> +			serio_reconnect(ps2dev->serio);
-> +			return;
->  		}
->  
->  		/* Not a new device, try processing first byte normally */
->  		psmouse->pktcnt = 1;
->  		if (psmouse_handle_byte(psmouse))
-> -			goto out;
-> +			return;
->  
->  		psmouse->packet[psmouse->pktcnt++] = data;
->  	}
-> @@ -424,14 +419,11 @@ static irqreturn_t psmouse_interrupt(struct serio *serio,
->  		psmouse->badbyte = psmouse->packet[0];
->  		__psmouse_set_state(psmouse, PSMOUSE_RESYNCING);
->  		psmouse_queue_work(psmouse, &psmouse->resync_work, 0);
-> -		goto out;
-> +		return;
->  	}
->  
->  	psmouse->last = jiffies;
->  	psmouse_handle_byte(psmouse);
-> -
-> - out:
-> -	return IRQ_HANDLED;
->  }
->  
->  /*
-> @@ -1604,7 +1596,8 @@ static int psmouse_connect(struct serio *serio, struct serio_driver *drv)
->  	if (!psmouse || !input_dev)
->  		goto err_free;
->  
-> -	ps2_init(&psmouse->ps2dev, serio);
-> +	ps2_init(&psmouse->ps2dev, serio,
-> +		 psmouse_pre_receive_byte, psmouse_receive_byte);
->  	INIT_DELAYED_WORK(&psmouse->resync_work, psmouse_resync);
->  	psmouse->dev = input_dev;
->  	snprintf(psmouse->phys, sizeof(psmouse->phys), "%s/input0", serio->phys);
-> @@ -1786,7 +1779,7 @@ static struct serio_driver psmouse_drv = {
->  	},
->  	.description	= DRIVER_DESC,
->  	.id_table	= psmouse_serio_ids,
-> -	.interrupt	= psmouse_interrupt,
-> +	.interrupt	= ps2_interrupt,
->  	.connect	= psmouse_connect,
->  	.reconnect	= psmouse_reconnect,
->  	.fast_reconnect	= psmouse_fast_reconnect,
-> diff --git a/drivers/input/serio/libps2.c b/drivers/input/serio/libps2.c
-> index 09eb605364bb..7c5fc853072a 100644
-> --- a/drivers/input/serio/libps2.c
-> +++ b/drivers/input/serio/libps2.c
-> @@ -19,9 +19,22 @@
->  
->  #define DRIVER_DESC	"PS/2 driver library"
->  
-> -MODULE_AUTHOR("Dmitry Torokhov <dtor@mail.ru>");
-> -MODULE_DESCRIPTION("PS/2 driver library");
-> -MODULE_LICENSE("GPL");
-> +#define PS2_CMD_SETSCALE11	0x00e6
-> +#define PS2_CMD_SETRES		0x10e8
-> +#define PS2_CMD_GETID		0x02f2
-> +#define PS2_CMD_RESET_BAT	0x02ff
-> +
-> +#define PS2_RET_BAT		0xaa
-> +#define PS2_RET_ID		0x00
-> +#define PS2_RET_ACK		0xfa
-> +#define PS2_RET_NAK		0xfe
-> +#define PS2_RET_ERR		0xfc
-> +
-> +#define PS2_FLAG_ACK		BIT(0)	/* Waiting for ACK/NAK */
-> +#define PS2_FLAG_CMD		BIT(1)	/* Waiting for a command to finish */
-> +#define PS2_FLAG_CMD1		BIT(2)	/* Waiting for the first byte of command response */
-> +#define PS2_FLAG_WAITID		BIT(3)	/* Command executing is GET ID */
-> +#define PS2_FLAG_NAK		BIT(4)	/* Last transmission was NAKed */
->  
->  static int ps2_do_sendbyte(struct ps2dev *ps2dev, u8 byte,
->  			   unsigned int timeout, unsigned int max_attempts)
-> @@ -76,14 +89,17 @@ static int ps2_do_sendbyte(struct ps2dev *ps2dev, u8 byte,
->  	return error;
->  }
->  
-> -/*
-> - * ps2_sendbyte() sends a byte to the device and waits for acknowledge.
-> - * It doesn't handle retransmission, the caller is expected to handle
-> +/**
-> + * ps2_sendbyte - sends a byte to the device and wait for acknowledgement
-> + * @ps2dev: a PS/2 device to send the data to
-> + * @byte: data to be sent to the device
-> + * @timeout: timeout for sending the data and receiving an acknowledge
-> + *
-> + * The function doesn't handle retransmission, the caller is expected to handle
->   * it when needed.
->   *
->   * ps2_sendbyte() can only be called from a process context.
->   */
-> -
->  int ps2_sendbyte(struct ps2dev *ps2dev, u8 byte, unsigned int timeout)
->  {
->  	int retval;
-> @@ -99,6 +115,13 @@ int ps2_sendbyte(struct ps2dev *ps2dev, u8 byte, unsigned int timeout)
->  }
->  EXPORT_SYMBOL(ps2_sendbyte);
->  
-> +/**
-> + * ps2_begin_command - mark beginning of execution of a complex command
-> + * @ps2dev: a PS/2 device executing the command
-> + *
-> + * Serializes a complex/compound command. Once command is finished
-> + * ps2_end_command() should be called.
-> + */
->  void ps2_begin_command(struct ps2dev *ps2dev)
->  {
->  	struct mutex *m = ps2dev->serio->ps2_cmd_mutex ?: &ps2dev->cmd_mutex;
-> @@ -107,6 +130,10 @@ void ps2_begin_command(struct ps2dev *ps2dev)
->  }
->  EXPORT_SYMBOL(ps2_begin_command);
->  
-> +/**
-> + * ps2_end_command - mark end of execution of a complex command
-> + * @ps2dev: a PS/2 device executing the command
-> + */
->  void ps2_end_command(struct ps2dev *ps2dev)
->  {
->  	struct mutex *m = ps2dev->serio->ps2_cmd_mutex ?: &ps2dev->cmd_mutex;
-> @@ -115,11 +142,13 @@ void ps2_end_command(struct ps2dev *ps2dev)
->  }
->  EXPORT_SYMBOL(ps2_end_command);
->  
-> -/*
-> - * ps2_drain() waits for device to transmit requested number of bytes
-> - * and discards them.
-> +/**
-> + * ps2_drain - waits for device to transmit requested number of bytes
-> + * and discards them
-> + * @ps2dev: the PS/2 device that should be drained
-> + * @maxbytes: maximum number of bytes to be drained
-> + * @timeout: time to drain the device
->   */
-> -
->  void ps2_drain(struct ps2dev *ps2dev, size_t maxbytes, unsigned int timeout)
->  {
->  	if (maxbytes > sizeof(ps2dev->cmdbuf)) {
-> @@ -142,11 +171,11 @@ void ps2_drain(struct ps2dev *ps2dev, size_t maxbytes, unsigned int timeout)
->  }
->  EXPORT_SYMBOL(ps2_drain);
->  
-> -/*
-> - * ps2_is_keyboard_id() checks received ID byte against the list of
-> - * known keyboard IDs.
-> +/**
-> + * ps2_is_keyboard_id - checks received ID byte against the list of
-> + *   known keyboard IDs
-> + * @id_byte: data byte that should be checked
->   */
-> -
->  bool ps2_is_keyboard_id(u8 id_byte)
->  {
->  	static const u8 keyboard_ids[] = {
-> @@ -167,7 +196,6 @@ EXPORT_SYMBOL(ps2_is_keyboard_id);
->   * response and tries to reduce remaining timeout to speed up command
->   * completion.
->   */
-> -
->  static int ps2_adjust_timeout(struct ps2dev *ps2dev,
->  			      unsigned int command, unsigned int timeout)
->  {
-> @@ -217,13 +245,19 @@ static int ps2_adjust_timeout(struct ps2dev *ps2dev,
->  	return timeout;
->  }
->  
-> -/*
-> - * ps2_command() sends a command and its parameters to the mouse,
-> - * then waits for the response and puts it in the param array.
-> +/**
-> + * __ps2_command - send a command to PS/2 device
-> + * @ps2dev: the PS/2 device that should execute the command
-> + * @param: a buffer containing parameters to be sent along with the command,
-> + *   or place where the results of the command execution will be deposited,
-> + *   or both
-> + * @command: command word that encodes the command itself, as well as number of
-> + *   additional parameter bytes that should be sent to the device and expected
-> + *   length of the command response
->   *
-> - * ps2_command() can only be called from a process context
-> + * Not serialized. Callers should use ps2_begin_command() and ps2_end_command()
-> + * to ensure proper serialization for complex commands.
->   */
-> -
->  int __ps2_command(struct ps2dev *ps2dev, u8 *param, unsigned int command)
->  {
->  	unsigned int timeout;
-> @@ -327,6 +361,20 @@ int __ps2_command(struct ps2dev *ps2dev, u8 *param, unsigned int command)
->  }
->  EXPORT_SYMBOL(__ps2_command);
->  
-> +/**
-> + * ps2_command - send a command to PS/2 device
-> + * @ps2dev: the PS/2 device that should execute the command
-> + * @param: a buffer containing parameters to be sent along with the command,
-> + *   or place where the results of the command execution will be deposited,
-> + *   or both
-> + * @command: command word that encodes the command itself, as well as number of
-> + *   additional parameter bytes that should be sent to the device and expected
-> + *   length of the command response
-> + *
-> + * Note: ps2_command() serializes the command execution so that only one
-> + * command can be executed at a time for either individual port or the entire
-> + * 8042 controller.
-> + */
->  int ps2_command(struct ps2dev *ps2dev, u8 *param, unsigned int command)
->  {
->  	int rc;
-> @@ -339,14 +387,16 @@ int ps2_command(struct ps2dev *ps2dev, u8 *param, unsigned int command)
->  }
->  EXPORT_SYMBOL(ps2_command);
->  
-> -/*
-> - * ps2_sliced_command() sends an extended PS/2 command to the mouse
-> - * using sliced syntax, understood by advanced devices, such as Logitech
-> - * or Synaptics touchpads. The command is encoded as:
-> +/**
-> + * ps2_sliced_command - sends an extended PS/2 command to a mouse
-> + * @ps2dev: the PS/2 device that should execute the command
-> + * @command: command byte
-> + *
-> + * The command is sent using "sliced" syntax understood by advanced devices,
-> + * such as Logitech or Synaptics touchpads. The command is encoded as:
->   * 0xE6 0xE8 rr 0xE8 ss 0xE8 tt 0xE8 uu where (rr*64)+(ss*16)+(tt*4)+uu
->   * is the command.
->   */
-> -
->  int ps2_sliced_command(struct ps2dev *ps2dev, u8 command)
->  {
->  	int i;
-> @@ -372,12 +422,22 @@ int ps2_sliced_command(struct ps2dev *ps2dev, u8 command)
->  }
->  EXPORT_SYMBOL(ps2_sliced_command);
->  
-> -/*
-> - * ps2_init() initializes ps2dev structure
-> +/**
-> + * ps2_init - initializes ps2dev structure
-> + * @ps2dev: structure to be initialized
-> + * @serio: serio port associated with the PS/2 device
-> + * @pre_receive_handler: validation handler to check basic communication state
-> + * @receive_handler: main protocol handler
-> + *
-> + * Prepares ps2dev structure for use in drivers for PS/2 devices.
->   */
-> -
-> -void ps2_init(struct ps2dev *ps2dev, struct serio *serio)
-> +void ps2_init(struct ps2dev *ps2dev, struct serio *serio,
-> +	      ps2_pre_receive_handler_t pre_receive_handler,
-> +	      ps2_receive_handler_t receive_handler)
->  {
-> +	ps2dev->pre_receive_handler = pre_receive_handler;
-> +	ps2dev->receive_handler = receive_handler;
-> +
->  	mutex_init(&ps2dev->cmd_mutex);
->  	lockdep_set_subclass(&ps2dev->cmd_mutex, serio->depth);
->  	init_waitqueue_head(&ps2dev->wait);
-> @@ -387,11 +447,35 @@ void ps2_init(struct ps2dev *ps2dev, struct serio *serio)
->  EXPORT_SYMBOL(ps2_init);
->  
->  /*
-> - * ps2_handle_ack() is supposed to be used in interrupt handler
-> - * to properly process ACK/NAK of a command from a PS/2 device.
-> + * ps2_handle_response() stores device's response to a command and notifies
-> + * the process waiting for completion of the command. Note that there is a
-> + * distinction between waiting for the first byte of the response, and
-> + * waiting for subsequent bytes. It is done so that callers could shorten
-> + * timeouts once first byte of response is received.
->   */
-> +static void ps2_handle_response(struct ps2dev *ps2dev, u8 data)
-> +{
-> +	if (ps2dev->cmdcnt)
-> +		ps2dev->cmdbuf[--ps2dev->cmdcnt] = data;
->  
-> -bool ps2_handle_ack(struct ps2dev *ps2dev, u8 data)
-> +	if (ps2dev->flags & PS2_FLAG_CMD1) {
-> +		ps2dev->flags &= ~PS2_FLAG_CMD1;
-> +		if (ps2dev->cmdcnt)
-> +			wake_up(&ps2dev->wait);
-> +	}
-> +
-> +	if (!ps2dev->cmdcnt) {
-> +		ps2dev->flags &= ~PS2_FLAG_CMD;
-> +		wake_up(&ps2dev->wait);
-> +	}
-> +}
-> +
-> +/*
-> + * ps2_handle_ack() processes ACK/NAK of a command from a PS/2 device,
-> + * possibly applying workarounds for mice not acknowledging the "get ID"
-> + * command.
-> + */
-> +static void ps2_handle_ack(struct ps2dev *ps2dev, u8 data)
->  {
->  	switch (data) {
->  	case PS2_RET_ACK:
-> @@ -436,53 +520,25 @@ bool ps2_handle_ack(struct ps2dev *ps2dev, u8 data)
->  		 */
->  		dev_dbg(&ps2dev->serio->dev, "unexpected %#02x\n", data);
->  		ps2dev->flags &= ~PS2_FLAG_WAITID;
-> -		return true;
-> +		return;
->  	}
->  
->  	if (!ps2dev->nak)
->  		ps2dev->flags &= ~PS2_FLAG_NAK;
->  
->  	ps2dev->flags &= ~PS2_FLAG_ACK;
-> -	wake_up(&ps2dev->wait);
->  
->  	if (!ps2dev->nak && data != PS2_RET_ACK)
->  		ps2_handle_response(ps2dev, data);
-> -
-> -	return true;
-> -}
-> -EXPORT_SYMBOL(ps2_handle_ack);
-> -
-> -/*
-> - * ps2_handle_response() is supposed to be used in interrupt handler
-> - * to properly store device's response to a command and notify process
-> - * waiting for completion of the command.
-> - */
-> -
-> -bool ps2_handle_response(struct ps2dev *ps2dev, u8 data)
-> -{
-> -	if (ps2dev->cmdcnt)
-> -		ps2dev->cmdbuf[--ps2dev->cmdcnt] = data;
-> -
-> -	if (ps2dev->flags & PS2_FLAG_CMD1) {
-> -		ps2dev->flags &= ~PS2_FLAG_CMD1;
-> -		if (ps2dev->cmdcnt)
-> -			wake_up(&ps2dev->wait);
-> -	}
-> -
-> -	if (!ps2dev->cmdcnt) {
-> -		ps2dev->flags &= ~PS2_FLAG_CMD;
-> +	else
->  		wake_up(&ps2dev->wait);
-> -	}
-> -
-> -	return true;
->  }
-> -EXPORT_SYMBOL(ps2_handle_response);
->  
->  /*
->   * Clears state of PS/2 device after communication error by resetting majority
->   * of flags and waking up waiters, if any.
->   */
-> -void ps2_cmd_aborted(struct ps2dev *ps2dev)
-> +static void ps2_cleanup(struct ps2dev *ps2dev)
->  {
->  	unsigned long old_flags = ps2dev->flags;
->  
-> @@ -494,6 +550,46 @@ void ps2_cmd_aborted(struct ps2dev *ps2dev)
->  
->  	if (old_flags & (PS2_FLAG_ACK | PS2_FLAG_CMD))
->  		wake_up(&ps2dev->wait);
-> +}
->  
-> +/**
-> + * ps2_interrupt - common interrupt handler for PS/2 devices
-> + * @serio: serio port for the device
-> + * @data: a data byte received from the device
-> + * @flags: flags such as %SERIO_PARITY or %SERIO_TIMEOUT indicating state of
-> + *   the data transfer
-> + *
-> + * ps2_interrupt() invokes pre-receive handler, optionally handles command
-> + * acknowledgement and response from the device, and finally passes the data
-> + * to the main protocol handler for future processing.
-> + */
-> +irqreturn_t ps2_interrupt(struct serio *serio, u8 data, unsigned int flags) {
-> +	struct ps2dev *ps2dev = serio_get_drvdata(serio);
-> +	enum ps2_disposition rc;
-> +
-> +	rc = ps2dev->pre_receive_handler(ps2dev, data, flags);
-> +	switch (rc) {
-> +	case PS2_ERROR:
-> +		ps2_cleanup(ps2dev);
-> +		break;
-> +
-> +	case PS2_IGNORE:
-> +		break;
-> +
-> +	case PS2_PROCESS:
-> +		if (ps2dev->flags & PS2_FLAG_ACK)
-> +			ps2_handle_ack(ps2dev, data);
-> +		else if (ps2dev->flags & PS2_FLAG_CMD)
-> +			ps2_handle_response(ps2dev, data);
-> +		else
-> +			ps2dev->receive_handler(ps2dev, data);
-> +		break;
-> +	}
-> +
-> +	return IRQ_HANDLED;
->  }
-> -EXPORT_SYMBOL(ps2_cmd_aborted);
-> +EXPORT_SYMBOL(ps2_interrupt);
-> +
-> +MODULE_AUTHOR("Dmitry Torokhov <dtor@mail.ru>");
-> +MODULE_DESCRIPTION("PS/2 driver library");
-> +MODULE_LICENSE("GPL");
-> diff --git a/include/linux/libps2.h b/include/linux/libps2.h
-> index 193dd53ad18b..9ca9ce4e6e64 100644
-> --- a/include/linux/libps2.h
-> +++ b/include/linux/libps2.h
-> @@ -8,43 +8,59 @@
->   */
->  
->  #include <linux/bitops.h>
-> +#include <linux/interrupt.h>
->  #include <linux/mutex.h>
->  #include <linux/types.h>
->  #include <linux/wait.h>
->  
-> -#define PS2_CMD_SETSCALE11	0x00e6
-> -#define PS2_CMD_SETRES		0x10e8
-> -#define PS2_CMD_GETID		0x02f2
-> -#define PS2_CMD_RESET_BAT	0x02ff
-> +struct ps2dev;
->  
-> -#define PS2_RET_BAT		0xaa
-> -#define PS2_RET_ID		0x00
-> -#define PS2_RET_ACK		0xfa
-> -#define PS2_RET_NAK		0xfe
-> -#define PS2_RET_ERR		0xfc
-> +/**
-> + * enum ps2_disposition - indicates how received byte should be handled
-> + * @PS2_PROCESS: pass to the main protocol handler, process normally
-> + * @PS2_IGNORE: skip the byte
-> + * @PS2_ERROR: do not process the byte, abort command in progress
-> + */
-> +enum ps2_disposition {
-> +	PS2_PROCESS,
-> +	PS2_IGNORE,
-> +	PS2_ERROR,
-> +};
->  
-> -#define PS2_FLAG_ACK		BIT(0)	/* Waiting for ACK/NAK */
-> -#define PS2_FLAG_CMD		BIT(1)	/* Waiting for a command to finish */
-> -#define PS2_FLAG_CMD1		BIT(2)	/* Waiting for the first byte of command response */
-> -#define PS2_FLAG_WAITID		BIT(3)	/* Command executing is GET ID */
-> -#define PS2_FLAG_NAK		BIT(4)	/* Last transmission was NAKed */
-> +typedef enum ps2_disposition (*ps2_pre_receive_handler_t)(struct ps2dev *, u8,
-> +							  unsigned int);
-> +typedef void (*ps2_receive_handler_t)(struct ps2dev *, u8);
->  
-> +/**
-> + * struct ps2dev - represents a device using PS/2 protocol
-> + * @serio: a serio port used by the PS/2 device
-> + * @cmd_mutex: a mutex ensuring that only one command is executing at a time
-> + * @wait: a waitqueue used to signal completion from the serio interrupt handler
-> + * @flags: various internal flags indicating stages of PS/2 command execution
-> + * @cmdbuf: buffer holding command response
-> + * @cmdcnt: outstanding number of bytes of the command response
-> + * @nak: a byte transmitted by the device when it refuses command
-> + * @pre_receive_handler: checks communication errors and returns disposition
-> + * (&enum ps2_disposition) of the received data byte
-> + * @receive_handler: main handler of particular PS/2 protocol, such as keyboard
-> + *   or mouse protocol
-> + */
->  struct ps2dev {
->  	struct serio *serio;
-> -
-> -	/* Ensures that only one command is executing at a time */
->  	struct mutex cmd_mutex;
-> -
-> -	/* Used to signal completion from interrupt handler */
->  	wait_queue_head_t wait;
-> -
->  	unsigned long flags;
->  	u8 cmdbuf[8];
->  	u8 cmdcnt;
->  	u8 nak;
-> +
-> +	ps2_pre_receive_handler_t pre_receive_handler;
-> +	ps2_receive_handler_t receive_handler;
->  };
->  
-> -void ps2_init(struct ps2dev *ps2dev, struct serio *serio);
-> +void ps2_init(struct ps2dev *ps2dev, struct serio *serio,
-> +	      ps2_pre_receive_handler_t pre_receive_handler,
-> +	      ps2_receive_handler_t receive_handler);
->  int ps2_sendbyte(struct ps2dev *ps2dev, u8 byte, unsigned int timeout);
->  void ps2_drain(struct ps2dev *ps2dev, size_t maxbytes, unsigned int timeout);
->  void ps2_begin_command(struct ps2dev *ps2dev);
-> @@ -52,9 +68,8 @@ void ps2_end_command(struct ps2dev *ps2dev);
->  int __ps2_command(struct ps2dev *ps2dev, u8 *param, unsigned int command);
->  int ps2_command(struct ps2dev *ps2dev, u8 *param, unsigned int command);
->  int ps2_sliced_command(struct ps2dev *ps2dev, u8 command);
-> -bool ps2_handle_ack(struct ps2dev *ps2dev, u8 data);
-> -bool ps2_handle_response(struct ps2dev *ps2dev, u8 data);
-> -void ps2_cmd_aborted(struct ps2dev *ps2dev);
->  bool ps2_is_keyboard_id(u8 id);
->  
-> +irqreturn_t ps2_interrupt(struct serio *serio, u8 data, unsigned int flags);
-> +
->  #endif /* _LIBPS2_H */
-Reviewed-by: Raul E Rangel <rrangel@chromium.org>
+Please discard my previous reply. Here i couldn't able to use 
+'interrupts' because i am using interrupts from two different interrupt 
+controllers. Sorry for previous wrong reply.
+>>> +    items:
+>>> +      - description: Watchdog interrupt
+>>> +      - description: Fatal interrupt
+>>> +      - description: Ready interrupt
+>>> +      - description: Handover interrupt
+>>> +      - description: Stop acknowledge interrupt
+>>> +
+>>> +  interrupt-names:
+>>> +    items:
+>>> +      - const: wdog
+>>> +      - const: fatal
+>>> +      - const: ready
+>>> +      - const: handover
+>>> +      - const: stop-ack
+>>> +
+>>> +  clocks:
+>>> +    minItems: 25
+>>> +    maxItems: 25
+>>
+>> Drop both and instead describe the items. Anyway minItems are not needed
+>> here.
+>>
+> Sure. I will drop min & max items and describe clocks.
+> 
+>>> +
+>>> +  clock-names:
+>>> +    minItems: 25
+>>> +    maxItems: 25
+>>
+>> Drop both and instead list the names.
+>>
+> Sure. I will drop.
+> 
+>>> +
+>>> +  assigned-clocks:
+>>> +    minItems: 13
+>>> +    maxItems: 13
+>>
+>> Drop, they do not have to be mentioned in the binding. If you think they
+>> need to, then why?
+>>
+>>> +
+>>> +  assigned-clock-rates:
+>>> +    minItems: 13
+>>> +    maxItems: 13
+>>
+>> Ditto
+>>
+>>> +
+>>> +  qcom,smem-states:
+>>> +    $ref: /schemas/types.yaml#/definitions/phandle-array
+>>> +    description: States used by the AP to signal the remoteprocessor
+>>> +    items:
+>>> +      - description: Shutdown Q6
+>>> +      - description: Stop Q6
+>>> +
+>>> +  qcom,smem-state-names:
+>>> +    description:
+>>> +      Names of the states used by the AP to signal the remoteprocessor
+>>> +    items:
+>>> +      - const: shutdown
+>>> +      - const: stop
+>>> +
+>>> +  memory-region:
+>>> +    items:
+>>> +      - description: Q6 pd reserved region
+>>> +
+>>> +  glink-edge:
+>>> +    $ref: /schemas/remoteproc/qcom,glink-edge.yaml#
+>>
+>> unevaluatedProperties: false
+>>
+> Sure, will add.
+>>> +    description:
+>>> +      Qualcomm G-Link subnode which represents communication edge, 
+>>> channels
+>>> +      and devices related to the Modem.
+>>> +
+>>> +patternProperties:
+>>> +  "^remoteproc_pd1|remoteproc_pd2|remoteproc_pd3":
+>>
+>> No, underscores are not allowed. Also, what is pd?
+>>
+> Sure, will remove underscores.
+>>> +    type: object
+>>> +    description:
+>>> +      In Multipd model, WCSS pd depends on Q6 pd i.e Q6 pd should be 
+>>> up before
+>>> +      WCSS. It can be achieved by keeping wcss pd node as subnode of Q6
+>>> +      device node.
+>>> +
+>>> +    properties:
+>>> +      compatible:
+>>> +        enum:
+>>> +          - "qcom,ipq5018-wcss-ahb-mpd"
+>>> +          - "qcom,ipq9574-wcss-ahb-mpd"
+>>> +          - "qcom,ipq5018-wcss-pcie-mpd"
+>>
+>> Drop quotes
+> Sure, will remove it.
+>>
+>>> +
+>>> +      interrupts-extended:
+>>
+>> Same as before
+>>
+> Sure, will use 'interrupts'.
+Please discard my previous reply.Here i couldn't able to use 
+'interrupts' because i am using interrupts from other interrupt
+controller than inherited one. Sorry for previous wrong reply.
+
+Thanks & Regards,
+Manikanta.
+>>> +        items:
+>>> +          - description: Fatal interrupt
+>>> +          - description: Ready interrupt
+>>> +          - description: Spawn acknowledge interrupt
+>>> +          - description: Stop acknowledge interrupt
+>>> +
+>>> +      interrupt-names:
+>>> +        items:
+>>> +          - const: fatal
+>>> +          - const: ready
+>>> +          - const: spawn-ack
+>>> +          - const: stop-ack
+>>> +
+>>> +      qcom,smem-states:
+>>> +        $ref: /schemas/types.yaml#/definitions/phandle-array
+>>> +        description: States used by the AP to signal the 
+>>> remoteprocessor
+>>> +        items:
+>>> +          - description: Shutdown WCSS pd
+>>> +          - description: Stop WCSS pd
+>>> +          - description: Spawn WCSS pd
+>>> +
+>>> +      qcom,smem-state-names:
+>>> +        description:
+>>> +          Names of the states used by the AP to signal the 
+>>> remoteprocessor
+>>
+>> remote processor
+>>
+> I will update.
+> 
+>>> +        items:
+>>> +          - const: shutdown
+>>> +          - const: stop
+>>> +          - const: spawn
+>>
+>> This is confusing. Why your children have the same properties as parent?
+>>
+> Here both parent & child considered as remote processor. So once they 
+> powered up/power down/crashed, they used to do some handshaking with 
+> APPS processor. So interrupts are common between parent i.e root pd and 
+> child i.e user pd
+>>> +
+>>> +    required:
+>>> +      - compatible
+>>> +
+>>> +    additionalProperties: false
+>>> +
+>>> +required:
+>>> +  - compatible
+>>> +  - reg
+>>> +  - interrupts-extended
+>>
+>> interrupts
+>>
+> Sure. I will use 'interrupts' instead of interrupts-extended
+>>> +  - interrupt-names
+>>> +  - qcom,smem-states
+>>> +  - qcom,smem-state-names
+>>> +  - memory-region
+>>> +
+>>> +additionalProperties: false
+>>> +
+>>> +allOf:
+>>> +  - if:
+>>> +      properties:
+>>> +        compatible:
+>>> +          enum:
+>>> +            - qcom,ipq9574-q6-mpd
+>>> +    then:
+>>> +      properties:
+>>> +        assigned-clocks:
+>>> +          items:
+>>> +            - description: Phandle, clock specifier of 
+>>> GCC_ANOC_WCSS_AXI_M_CLK
+>>> +            - description: Phandle, clock specifier of 
+>>> GCC_WCSS_AHB_S_CLK
+>>> +            - description: Phandle, clock specifier of 
+>>> GCC_WCSS_ECAHB_CLK
+>>> +            - description: Phandle, clock specifier of 
+>>> GCC_WCSS_ACMT_CLK
+>>> +            - description: Phandle, clock specifier of 
+>>> GCC_WCSS_AXI_M_CLK
+>>> +            - description: Phandle, clock specifier of GCC_Q6_AXIM_CLK
+>>> +            - description: Phandle, clock specifier of GCC_Q6_AXIM2_CLK
+>>> +            - description: Phandle, clock specifier of GCC_Q6_AHB_CLK
+>>> +            - description: Phandle, clock specifier of GCC_Q6_AHB_S_CLK
+>>> +            - description: Phandle, clock specifier of 
+>>> GCC_Q6SS_BOOT_CLK
+>>> +            - description: Phandle, clock specifier of 
+>>> GCC_MEM_NOC_Q6_AXI_CLK
+>>> +            - description: Phandle, clock specifier of 
+>>> GCC_WCSS_Q6_TBU_CLK
+>>> +            - description: Phandle, clock specifier of 
+>>> GCC_SYS_NOC_WCSS_AHB_CLK
+>>
+>> Eh, so here they are. But Why? Do you expect different clocks for
+>> others? If so, where are they?
+>>
+>> Anyway, drop useless "Phandle, clock specifier of". Clocks cannot be
+>> anything else than phandle and a clock specifier. Instead of using some
+>> cryptic ACRONYM_OR_SOME_CLK, describe them. Just like we do for other
+>> bindings. You have plenty of good examples, so please start from them.
+>>
+>>
+>>> +        assigned-clock-rates:
+>>> +          items:
+>>> +            - description: Must be 266666667 HZ
+>>> +            - description: Must be 133333333 HZ
+>>> +            - description: Must be 133333333 HZ
+>>> +            - description: Must be 133333333 HZ
+>>> +            - description: Must be 266666667 HZ
+>>> +            - description: Must be 533000000 HZ
+>>> +            - description: Must be 342857143 HZ
+>>> +            - description: Must be 133333333 HZ
+>>> +            - description: Must be 133333333 HZ
+>>> +            - description: Must be 342857143 HZ
+>>> +            - description: Must be 533000000 HZ
+>>> +            - description: Must be 533000000 HZ
+>>> +            - description: Must be 133333333 HZ
+>>
+>> ???
+>>
+>> If these are fixed, why this is in DT? DT is for variable and
+>> non-discoverable pieces and you do not have here anything variable, but
+>> fixed.
+>>
+>>> +
+>>> +examples:
+>>> +  - |
+>>> +        #include <dt-bindings/interrupt-controller/arm-gic.h>
+>>> +        #include <dt-bindings/clock/qcom,gcc-ipq5018.h>
+>>> +        #include <dt-bindings/reset/qcom,gcc-ipq5018.h>
+>>
+>> Use 4 spaces for example indentation.
+>>
+> Sure, will use 4 spaces.
+>>> +
+>>> +        q6v5_wcss: remoteproc@cd00000 {
+>>> +                compatible = "qcom,ipq5018-q6-mpd";
+>>> +                #address-cells = <1>;
+>>> +                #size-cells = <1>;
+>>> +                ranges;
+>>> +                reg = <0x0cd00000 0x4040>;
+>>> +                interrupts-extended = <&intc GIC_SPI 291 
+>>> IRQ_TYPE_EDGE_RISING>,
+>>> +                                <&wcss_smp2p_in 0 0>,
+>>
+>> Wrong alignment of indentation
+>>
+> Sure, will update alignment.
+>>> +                                <&wcss_smp2p_in 1 0>,
+>>> +                                <&wcss_smp2p_in 2 0>,
+>>> +                                <&wcss_smp2p_in 3 0>;
+>>> +                interrupt-names = "wdog",
+>>> +                                  "fatal",
+>>> +                                  "ready",
+>>> +                                  "handover",
+>>> +                                  "stop-ack";
+>>> +
+>>> +                qcom,smem-states = <&wcss_smp2p_out 0>,
+>>> +                                   <&wcss_smp2p_out 1>;
+>>> +                qcom,smem-state-names = "shutdown",
+>>> +                                        "stop";
+>>> +
+>>> +                memory-region = <&q6_region>;
+>>> +
+>>> +                glink-edge {
+>>> +                        interrupts = <GIC_SPI 179 
+>>> IRQ_TYPE_EDGE_RISING>;
+>>> +                        label = "rtr";
+>>> +                        qcom,remote-pid = <1>;
+>>> +                        mboxes = <&apcs_glb 8>;
+>>> +                };
+>>> +
+>>> +                q6_wcss_pd1: remoteproc_pd1 {
+>>> +                        compatible = "qcom,ipq5018-wcss-ahb-mpd";
+>>> +                        interrupts-extended = <&wcss_smp2p_in 8 0>,
+>>> +                                        <&wcss_smp2p_in 9 0>,
+>>> +                                        <&wcss_smp2p_in 12 0>,
+>>> +                                        <&wcss_smp2p_in 11 0>;
+>>> +                        interrupt-names = "fatal",
+>>> +                                          "ready",
+>>> +                                          "spawn-ack",
+>>> +                                          "stop-ack";
+>>> +                        qcom,smem-states = <&wcss_smp2p_out 8>,
+>>> +                                           <&wcss_smp2p_out 9>,
+>>> +                                           <&wcss_smp2p_out 10>;
+>>> +                        qcom,smem-state-names = "shutdown",
+>>> +                                                "stop",
+>>> +                                                "spawn";
+>>> +                };
+>>> +
+>>> +                q6_wcss_pd2: remoteproc_pd2 {
+>>> +                        compatible = "qcom,ipq5018-wcss-pcie-mpd";
+>>> +                        interrupts-extended = <&wcss_smp2p_in 16 0>,
+>>> +                                        <&wcss_smp2p_in 17 0>,
+>>> +                                        <&wcss_smp2p_in 20 0>,
+>>> +                                        <&wcss_smp2p_in 19 0>;
+>>> +                        interrupt-names = "fatal",
+>>> +                                          "ready",
+>>> +                                          "spawn-ack",
+>>> +                                          "stop-ack";
+>>> +
+>>> +                        qcom,smem-states = <&wcss_smp2p_out 16>,
+>>> +                                           <&wcss_smp2p_out 17>,
+>>> +                                           <&wcss_smp2p_out 18>;
+>>> +                        qcom,smem-state-names = "shutdown",
+>>> +                                                "stop",
+>>> +                                                "spawn";
+>>> +                        status = "okay";
+>>
+>> Drop statuses from the example.
+>>
+> Sure, will drop status property.
+>>
+>> Best regards,
+>> Krzysztof
+>>
+> 
+> Thanks & Regards,
+> Manikanta.
