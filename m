@@ -2,124 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FB75708329
+	by mail.lfdr.de (Postfix) with ESMTP id 15592708328
 	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 15:48:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231501AbjERNs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 09:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35134 "EHLO
+        id S231226AbjERNsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 09:48:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231668AbjERNsR (ORCPT
+        with ESMTP id S231604AbjERNsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 09:48:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64AB1E61
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 06:47:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684417654;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=y/zMvJoA0jxELE6MkSwxZtfc5VUZ8p2ZHnGCxRaD2+0=;
-        b=OYG+X0/HrbM3LRn8iQTJY0jyVy1gWj9zuNG8bVWgD2zTBMrJGWxP4cvp06Dt5bP4rkmxRA
-        Ob0OaYibo6tdHQk7cLRqfGxXJcc9Yxp1wPFvrkeStFuDAisWFAXPPTYFEfOviUGdwjVO7h
-        fK4Q4lAb8efdiwAYOJpqwtepSaxTC4g=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-376-X9M6VkabOaikvyhZ66Pz6A-1; Thu, 18 May 2023 09:47:33 -0400
-X-MC-Unique: X9M6VkabOaikvyhZ66Pz6A-1
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-62115d818ecso29908556d6.0
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 06:47:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684417653; x=1687009653;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=y/zMvJoA0jxELE6MkSwxZtfc5VUZ8p2ZHnGCxRaD2+0=;
-        b=cYAqbyvX02/yM7DXIjvNRto1F0c0SKseF0H1FYHl929fzJlYnQv+7J8eHAfVF6HLyX
-         d+d6rSHM6aomDae2m8xf6oU/2lVtQ+pBzmqtKK4OZw3yB/4OFSs3RWueKi96lW5BSjLY
-         D/q53BRLr22Im5pqSCZ4Behc08SZo13tpc+sb0wEdtkOTyYsKD11A3XDvbtoG/DTZib8
-         bvU6QUrihjBSYdOpmiy8D1KTyty/31pVsbRa04oWFp7UHJ/jwlWI8bqJXe0q3YV4C773
-         mUBAze0ne6RYcce2wtvU/n9rQwgiIaDMgJhWZCX0qUNXY9Su+J1NUCe3KznFOjzg0UTV
-         x/WQ==
-X-Gm-Message-State: AC+VfDwfQncidlhbGSjPu/tdbQkfrmRHw8rVxvygxu0wKhfBYKCMlZMH
-        WBI86oH6uxh3rIGxobQLYyGFdEhLMJY1P4rycOn4vLKtZcK1UPUforlZ1/8OigCTDN1OaNwDDcb
-        pfzYpWyXhgP5HfYNVW1pulpPF
-X-Received: by 2002:a05:6214:21e9:b0:5df:47e2:8df5 with SMTP id p9-20020a05621421e900b005df47e28df5mr5299265qvj.31.1684417652950;
-        Thu, 18 May 2023 06:47:32 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6NaKD0GJKZBq33VNwx7c38UKOXjG19K19hCC/BkDDOBeGLqN73Np5MduQXiNAKqj5O8kgPww==
-X-Received: by 2002:a05:6214:21e9:b0:5df:47e2:8df5 with SMTP id p9-20020a05621421e900b005df47e28df5mr5299219qvj.31.1684417652372;
-        Thu, 18 May 2023 06:47:32 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id dm13-20020ad44e2d000000b006238b37fb05sm521737qvb.119.2023.05.18.06.47.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 06:47:32 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] mm/page_owner: set page_owner_* storage-class-specifier to static
-Date:   Thu, 18 May 2023 09:47:18 -0400
-Message-Id: <20230518134718.926663-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Thu, 18 May 2023 09:48:09 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 115E5E75
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 06:48:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=278tUrwM0ypNiOb8pgGS7TOvecJeprbi5y1J+57X7ug=; b=ZQiC5mwOK9iFCQYNYCs/K5vZVS
+        zKL9z/6wIqg5DKcatooe/vWTvS4/eqdD7tHBHhCZRkggqsvLkm7bSVscr95ke5+nxi1Q9JGOAd5IC
+        nNHkG5X0hoAikRoTugWtACi+jATSvJ3DsSp6qoYdTROT4KyEds9TmqMpnGd5m/2OhpXADXk3XgTat
+        noy6L2fvRvnmxbmOYgX+HgpF/dV5vGUVRHDoKSxVCKlpYrKnHzjA/zwd5ruO2KRcDXswM357M35EA
+        YfA68qw293k18QZlbenpx3SD9axi6Ebz7POVQGxuz9BRSxisPa/0SucYc8jOlcnc4IxxjBSMV7QYd
+        JOLmrZRQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pzdyu-00EplW-1C;
+        Thu, 18 May 2023 13:47:48 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BA85D30072F;
+        Thu, 18 May 2023 15:47:46 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 772C0241C9363; Thu, 18 May 2023 15:47:46 +0200 (CEST)
+Date:   Thu, 18 May 2023 15:47:46 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Phil Auld <pauld@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Juri Lelli <juri.lelli@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Ben Segall <bsegall@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>
+Subject: Re: [PATCH RESEND] sched/nohz: Add HRTICK_BW for using cfs bandwidth
+ with nohz_full
+Message-ID: <20230518134746.GB2860939@hirez.programming.kicks-ass.net>
+References: <20230518132038.3534728-1-pauld@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230518132038.3534728-1-pauld@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-smatch reports
-mm/page_owner.c:739:30: warning: symbol
-  'page_owner_stack_operations' was not declared. Should it be static?
-mm/page_owner.c:748:5: warning: symbol
-  'page_owner_threshold_get' was not declared. Should it be static?
-mm/page_owner.c:754:5: warning: symbol
-  'page_owner_threshold_set' was not declared. Should it be static?
+On Thu, May 18, 2023 at 09:20:38AM -0400, Phil Auld wrote:
+> CFS bandwidth limits and NOHZ full don't play well together.  Tasks
+> can easily run well past their quotas before a remote tick does
+> accounting.  This leads to long, multi-period stalls before such
+> tasks can run again.  Use the hrtick mechanism to set a sched
+> tick to fire at remaining_runtime in the future if we are on
+> a nohz full cpu, if the task has quota and if we are likely to
+> disable the tick (nr_running == 1).  This allows for bandwidth
+> accounting before tasks go too far over quota.
+> 
+> A number of container workloads use a dynamic number of real
+> nohz tasks but also have other work that is limited which ends
+> up running on the "spare" nohz cpus.  This is an artifact of
+> having to specify nohz_full cpus at boot. Adding this hrtick
+> resolves the issue of long stalls on these tasks.
+> 
+> Add the sched_feat HRTICK_BW off by default to allow users to
+> enable this only when needed.
 
-This variable and functions are only used in their defining file,
-so it should be static
-
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- mm/page_owner.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/mm/page_owner.c b/mm/page_owner.c
-index 28c519fc9372..f37c0b722b51 100644
---- a/mm/page_owner.c
-+++ b/mm/page_owner.c
-@@ -736,7 +736,7 @@ static int page_owner_stack_open(struct inode *inode, struct file *file)
- 				sizeof(unsigned long));
- }
- 
--const struct file_operations page_owner_stack_operations = {
-+static const struct file_operations page_owner_stack_operations = {
- 	.open           = page_owner_stack_open,
- 	.read           = seq_read,
- 	.llseek         = seq_lseek,
-@@ -745,13 +745,13 @@ const struct file_operations page_owner_stack_operations = {
- 
- unsigned long page_owner_stack_threshold;
- 
--int page_owner_threshold_get(void *data, u64 *val)
-+static int page_owner_threshold_get(void *data, u64 *val)
- {
- 	*val = page_owner_stack_threshold;
- 	return 0;
- }
- 
--int page_owner_threshold_set(void *data, u64 val)
-+static int page_owner_threshold_set(void *data, u64 val)
- {
- 	page_owner_stack_threshold = val;
- 	return 0;
--- 
-2.27.0
-
+OMG; so because NOHZ_FULL configuration sucks, we add hacks on?
