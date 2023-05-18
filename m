@@ -2,349 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E123707A4E
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 08:40:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 017B2707A50
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 08:40:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbjERGkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 02:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43676 "EHLO
+        id S229913AbjERGko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 02:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbjERGkO (ORCPT
+        with ESMTP id S229881AbjERGkm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 02:40:14 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2084.outbound.protection.outlook.com [40.107.7.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 282462D48
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 23:40:12 -0700 (PDT)
+        Thu, 18 May 2023 02:40:42 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BDFD2D7D
+        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 23:40:31 -0700 (PDT)
+X-UUID: dee6efa6f54611ed9cb5633481061a41-20230518
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=ddmr7Q9GMaGgccWNRDYcOI0cNYg7s7wsWXW2eGvDXDg=;
+        b=jEn4VsZ7ErPW1gmKS4ZZDSlSLF3ypi/xbB8tFh/zCL1BqsAMJxRcDWhaK/LGNuJthS+gcwt9rtXLLZUa97q7EXGvLx+3CsdzI8lPvwskyYqpefqy2W8j6ebsKr38+75B6QbAc/FRzS+7sUtwJBDXYPuJulJguioHNavdxAeTQyk=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.25,REQID:09d178cd-fccf-494e-ae9d-a420da791481,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+        release,TS:0
+X-CID-META: VersionHash:d5b0ae3,CLOUDID:9a34356c-2f20-4998-991c-3b78627e4938,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-UUID: dee6efa6f54611ed9cb5633481061a41-20230518
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw01.mediatek.com
+        (envelope-from <xiaoming.ding@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 992742874; Thu, 18 May 2023 14:40:25 +0800
+Received: from mtkmbs10n2.mediatek.inc (172.21.101.183) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 18 May 2023 14:40:24 +0800
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (172.21.101.237)
+ by mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Thu, 18 May 2023 14:40:23 +0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Xm6BTXPc91+F/9291rmksD+ffkTIeVYrfKBZ+aO7PLMSxS9ifi6bYBhUKlvMjMCEPH/+Ni7xenUh1VhHCxk136NgwlpEw1aq7NcI+MDG9eXOoZi6uH/mFKxCSNdmql1LOllZtI585pyIqNw+sfQdfKDI35Las+g7n8hc8FcihLyTc/MGZmy005EyFzVxOVv3YlQ5Ojps+NPrHkM/Nzcnc99vDg0EvTuXRD/admN1z+ffDgeKyYS+bJKbkWHXTxrcoaRon9ePrHERPAw4uZ48kDoE5xB+0MiAQnhPUdqHKgThbSqyC6BLmdp9V77P/XZKYkrky473G2T3oewVwaKOIg==
+ b=JUaykpI9AVSvJHMevOd/PGsq6gQOIgd231px+iuvSHWU6qETXt5lJ1Qkx9vsjQUo8DlZXOu8yzase6BEyuplpgxzcw1trECl246eZejmu9RetCPcgOM+M2o20SJ8SgpXgCQmg806b3hxgifAulEf6+s+v24baSmpj0PJXc7LknxAXxpJzzoUAlOKBKVDsPXGEh6SLUTRKNYM7fxfVOJUI/qUeb1rTeeXRd7kTCCXJQl/oZD0PZve7kWvVXQLl84gp1ptgXlzKfjA7gdUjRm/BW7BLvzuydQG5NfbCV+pGfD+ajruSNGXkW1ni8zYHXzZZBMkrbkI9dFb60l80kwYyw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ir2DKUFZEcefDZ35B6POWH+gumwGO22kLIyV+zlmFo8=;
- b=FnB11vGh+4bBI/sWzyoz9On5gA5XW3cvsJ12j+n2noMyRgVspICGDcUcTEuD26alrdCO0W475yWlL3yPtzWtpZrSZrMUxbqmN5ruGdBjR/HrQ6w0kg3bGNO1aswn73+dkGWARy/zoib49fWyIl5ftHnl7M7zc1fN3E6m7kaNTcCPgI9h80y37HDS3f/07KUZgK5buubQNPwTqS5nxibJWolWIIz6oQWolxKskSQEjxbZ0KFZerNGXTOG7lHT81jmzO0MPZnLE9AsiHgwsfNaQlmPTVNuaFsb+pGUoTGHHCwnqWMPcOPn0yDxr7koMsqz4pQJvBUdfNKZ+vQYs45dMg==
+ bh=ddmr7Q9GMaGgccWNRDYcOI0cNYg7s7wsWXW2eGvDXDg=;
+ b=EF1mqzealXBgW+OpycnASCvffsis08n+ytIL+Fe7k6z3vC0WxK0qYnTONnrMyzkol4cd4u4fkRXFeUZNwKTkGWwO28nH+WPmW565eB4Xmwc9yjCECbeLdEIRjl0DijmUKoGG192b+pXl4XDhCvwIagnMZAHEoQ1C31KZrZGxU8Flt+6HZ3tr6/nLS8qNlTpd9YiSk81C86Jlix/Z9yznBlHsmm4g96ruJH9E8gOqPiEnobJqKOPnu6k4Oivcd/23ARqPAONarqZoAiNTiEGiyskUmrtWc1Q6zX/sq+V3aMriIHnZ89fgq0v3iWmBwrziGyGubMG7byX9U/de/wOJzw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
+ dkim=pass header.d=mediatek.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ir2DKUFZEcefDZ35B6POWH+gumwGO22kLIyV+zlmFo8=;
- b=RSZfXwjvh0eH4ZTEbJbAESua+YBvSbLof9mcpXm+JEZxkqEvot1PDLOE6ize7FvdlpHvFLmrx0QXfYKQvr4e3vMXvIDeeCA4PzBx9+0xKM0Y2RVAwFDk+ti4dBaFfkCuvx71esLy6b2pDIXoiS0Iglzo0ObPx1d6HC/SIP5rzXI=
-Received: from AM9PR04MB8603.eurprd04.prod.outlook.com (2603:10a6:20b:43a::10)
- by AM0PR04MB7075.eurprd04.prod.outlook.com (2603:10a6:208:19e::8) with
+ bh=ddmr7Q9GMaGgccWNRDYcOI0cNYg7s7wsWXW2eGvDXDg=;
+ b=HZey3vw8HKJXxuWcvu57JMm6vhKAr2y61fHVofkqIORw/6k3p8iMazQq0H0LcCNdGPEjqmQfk0LuGtDv7GZp3FM+l0+mJa3ExTBuWcsZgAsCbD8E3UcoDAajcbQwMJt8vytmvMtH0cRYjpehOexH9fzeETs/B7Z2FZADlwKx1Co=
+Received: from SI2PR03MB5369.apcprd03.prod.outlook.com (2603:1096:4:10a::14)
+ by KL1PR03MB7125.apcprd03.prod.outlook.com (2603:1096:820:df::5) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.17; Thu, 18 May
- 2023 06:40:09 +0000
-Received: from AM9PR04MB8603.eurprd04.prod.outlook.com
- ([fe80::9dc3:f8ac:24c4:9f49]) by AM9PR04MB8603.eurprd04.prod.outlook.com
- ([fe80::9dc3:f8ac:24c4:9f49%6]) with mapi id 15.20.6411.019; Thu, 18 May 2023
- 06:40:09 +0000
-From:   Neeraj sanjay kale <neeraj.sanjaykale@nxp.com>
-To:     Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
-CC:     "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
-        "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19; Thu, 18 May
+ 2023 06:40:21 +0000
+Received: from SI2PR03MB5369.apcprd03.prod.outlook.com
+ ([fe80::b0c2:cc68:d340:fab]) by SI2PR03MB5369.apcprd03.prod.outlook.com
+ ([fe80::b0c2:cc68:d340:fab%6]) with mapi id 15.20.6411.018; Thu, 18 May 2023
+ 06:40:21 +0000
+From:   =?utf-8?B?WGlhb21pbmcgRGluZyAo5LiB5pmT5piOKQ==?= 
+        <Xiaoming.Ding@mediatek.com>
+To:     "hch@infradead.org" <hch@infradead.org>,
+        "sumit.garg@linaro.org" <sumit.garg@linaro.org>
+CC:     =?utf-8?B?RmVpIFh1ICjlvpDpo54p?= <Fei.Xu@mediatek.com>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?iso-8859-1?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        kernel test robot <lkp@intel.com>,
-        Amitkumar Karwar <amitkumar.karwar@nxp.com>,
-        Rohit Fule <rohit.fule@nxp.com>,
-        Sherry Sun <sherry.sun@nxp.com>
-Subject: RE: [EXT] drivers/bluetooth/btnxpuart.c:1277:34: warning: unused
- variable 'nxpuart_of_match_table'
-Thread-Topic: [EXT] drivers/bluetooth/btnxpuart.c:1277:34: warning: unused
- variable 'nxpuart_of_match_table'
-Thread-Index: AQHZerlGnsBF2dFvJU61HbSi8s377a9fr+qw
-Date:   Thu, 18 May 2023 06:40:09 +0000
-Message-ID: <AM9PR04MB8603C3ED782FA38EB07C7056E77F9@AM9PR04MB8603.eurprd04.prod.outlook.com>
-References: <202304300014.vFGw6Dr0-lkp@intel.com>
-In-Reply-To: <202304300014.vFGw6Dr0-lkp@intel.com>
-Accept-Language: en-US
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "srv_heupstream@mediatek.com" <srv_heupstream@mediatek.com>,
+        "jens.wiklander@linaro.org" <jens.wiklander@linaro.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>
+Subject: Re: [PATCH] tee: add FOLL_LONGTERM for CMA case when alloc shm
+Thread-Topic: [PATCH] tee: add FOLL_LONGTERM for CMA case when alloc shm
+Thread-Index: AQHZiG5Ti2msX8Qf8EyhdjKxcboKPK9eE0uAgAAFAYCAAARtAIAAFamAgAACxoCAAAv5AIABVT0A
+Date:   Thu, 18 May 2023 06:40:20 +0000
+Message-ID: <781d993204fbbdf30a6ca495b59b3b0aa7a2e496.camel@mediatek.com>
+References: <20230517031856.19660-1-xiaoming.ding@mediatek.com>
+         <ZGSDoVKKVqCkbaCB@infradead.org>
+         <CAFA6WYO+AvnbuAdWyBAQ8HkLaOno7PXdsPb9SubxrGNvAm4UnQ@mail.gmail.com>
+         <ZGSLiiK/JzD5KMd7@infradead.org>
+         <CAFA6WYPOMwmrA3J84AHzoD2eAtNkpMxr754qHpc-j6XRkgFFvQ@mail.gmail.com>
+         <ZGSgCZrg+RjAbGO1@infradead.org>
+         <CAFA6WYO+EpiECFxdVgmd-Ey9jq1Ybt78WupK_bW5+oDcW-soVQ@mail.gmail.com>
+In-Reply-To: <CAFA6WYO+EpiECFxdVgmd-Ey9jq1Ybt78WupK_bW5+oDcW-soVQ@mail.gmail.com>
+Accept-Language: zh-CN, en-US
 Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
+ header.d=none;dmarc=none action=none header.from=mediatek.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM9PR04MB8603:EE_|AM0PR04MB7075:EE_
-x-ms-office365-filtering-correlation-id: d6f297c4-d632-4a70-57d6-08db576ab95b
+x-ms-traffictypediagnostic: SI2PR03MB5369:EE_|KL1PR03MB7125:EE_
+x-ms-office365-filtering-correlation-id: 2bc0a026-17a0-4537-2aff-08db576ac06f
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: //Ww1py/95iOPe+7NPmt9EUz4n7eYzX24sNXJnFHjRs14S2LIfR+Ew0/VHjzLtsKKJDuCJYgJQq4lSSxvt+1P9W4iBymmGWIzZh37STqmoDgv1dcSH/mcoWJNrNREJTfhTFKiQgmkegvtvcDgqhgYF8DfoeusWmVHqxRnoHYPfHwC51iVtmEqs2Q+V21YAGsoIIEYRyZ6dvdTgD1JG3Xoxl6wlmHPkohyXSTKN3hOCaoTLh58c1ymIopSq6yaJlhInoa6iyvAhp1p83I4EnHqxeND6saosXl+vp5FLG/sWcHbZGMYVbg1TP1ODE0m8uNi4MX1WLtkDwcUKpNUMs0UUoS7Qg+09nYU2sDLB6n1WniuUrWlv5lyGrV4R4rLkVh6nJMx1TS+a5uWGGewZe6tw7lxOXtqGAY0OwOgW5svneEhNoFTWnjA2cruaSSR6rtMt6JNrq5QQidK5UkQeLv+wcPE6B3yjX7BCIfeCKf4aunOndcpo+95O4yXLHLhddutL+rVI8ElcMIm9/tSDlNlRfsj7t+hPIkaJ/JMBWe9cdczIpfygJBfFgGWNPlcElvNXPVNc4Tm1S3Iqo0RKqqRXL+YGb02TtjrLIxupvm6CnZYLGUK1OgcZt9ES9ycGtbA+P0BzZzPTTYtsMSbkh3SA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8603.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(346002)(376002)(39860400002)(396003)(451199021)(38100700002)(55016003)(38070700005)(54906003)(66574015)(66946007)(83380400001)(66556008)(66446008)(66476007)(7696005)(64756008)(76116006)(4326008)(316002)(45080400002)(53546011)(6916009)(966005)(478600001)(6506007)(9686003)(2906002)(5660300002)(71200400001)(41300700001)(26005)(52536014)(8676002)(186003)(8936002)(122000001)(86362001)(33656002);DIR:OUT;SFP:1101;
+x-microsoft-antispam-message-info: DvslF5rrxJrp37gG9DpxEtJXPXF3phnMYJfVcmZnyHrfDTqSukePm7nJs9SpNFS6kK4dmVr6UAlPz2B8lqyzKI82QvmfoFPxw+5iAAhdpl19OZgM+YpiLEu9leK+YR975SxLiOVD1NHtztsmI6LzbTqhDuhuKoHrO6pnlIppdOHILZRJw79VJ0kyRZJYYk99Fs5OG1vG+vWMn0wP/xlgvp3XX9JBPbKtYJvilXgTMUYkxgie5KvdJor5YlVZpXJVUXt6moxEKGC4NH+fr6pmKw71rnE6iJnublfFzUC+06tHn6FRmDFI6WKcX2OKGMCY2qGytZXZZNIrzwRRi+zEbpU66X2QS9orR+PN2lMr0vbYxJnqsBtMYOYpY7rYn05ECNJYaTmIQlKpaf4t1nkt8ylvE5cx++NRv6UMm0mp+G4lx4z/Tu3xp65R/lFleuDA/RLdJlC+dOLov+R5VXkNllfwjy2jM864kp6okSTMfkBkJu5zCmUm8Peo1NQWuShW1xtQYe0mldCEIWQ3QvyAYB6iGG2kkXO/8gOp+aSWY1UbP4TsXS2W37KJNgUpoEKbthgCKJZfOYnhtYLl5VMaPApczgEswEUzPAGKvaRwT6xufD+2nCGDCMMYv0luDfW7NE4aMH+Jp3IGijKGmApw+gzftO0+utThd3dTPGQ397U=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SI2PR03MB5369.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(136003)(376002)(39860400002)(346002)(451199021)(2906002)(316002)(478600001)(41300700001)(8676002)(8936002)(4326008)(6486002)(54906003)(110136005)(7416002)(71200400001)(64756008)(66446008)(66476007)(66556008)(76116006)(66946007)(91956017)(5660300002)(53546011)(6512007)(6506007)(26005)(38100700002)(186003)(83380400001)(2616005)(36756003)(85182001)(38070700005)(86362001)(122000001);DIR:OUT;SFP:1102;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?hajs0emd8adaXn4KovI+datdro1sHDp+rWXIAwHOzV8Z+b3CGSan3+JvIK?=
- =?iso-8859-1?Q?/6tjspN1u5hi9phnLTMQPAWZQ8hpFXiIzvhMDvyZ0U+l6crMIkHsGoYf3w?=
- =?iso-8859-1?Q?8U1ut0jZ7hT0SSm7soXHCJaKeJPiEYS/qhZ8YeICc1Tna6WAKTX1W6QzZB?=
- =?iso-8859-1?Q?fpXWjOja+XrAZaG8PJZp4vdo5Mgo7TxzJr1SVzw0oi+CIw7S0o7u1TFzR9?=
- =?iso-8859-1?Q?jZ2M6NVYnEooFmKGUlCAIp2dBp4r1DybHgP6ystc37bxl8HTAy6TK8hvJR?=
- =?iso-8859-1?Q?Ve1zyjyrVicxuYCbBh+kAnuNgWFHuLbbuYpXbeemC6ACSsVmR1/DW/CkF9?=
- =?iso-8859-1?Q?9ks3WHCCr6fpVkIqO5kXYJfxvFAYxas7iIKPR0x+WYy1XWt0zTTQWKkAEl?=
- =?iso-8859-1?Q?rRKX1u8GDnOLSjaS8/hFdRf3bUHdk3p9r7HkXkYd6jxZoksdCZCStq3/TD?=
- =?iso-8859-1?Q?5eS4+At0LSCB/e0oBzAkznJsOT1ajETpRkF+rHMFluWINOtSvoqABFrXnN?=
- =?iso-8859-1?Q?xsyQ4Era3IFzs4V6PTpUh32nkm37BXA9iZFTleMgr32ZKAIZoBzNpWYVtL?=
- =?iso-8859-1?Q?OqrWO3bRqKfrKxEOTljyrIcdZiHb5sjf+lTu5+FN+WqqMKpTPoXthB4QIh?=
- =?iso-8859-1?Q?waId4tLUKl7fSV7DGqTmpEL3l8Ao3V6cNfCG6Uv5OGs+/GihfFo3ZG17cR?=
- =?iso-8859-1?Q?Q40MduiZr8/QHU054QJ1EWi0FOhzSQPLZz7L0Zv/PdSquEOPeyVh2nj2nA?=
- =?iso-8859-1?Q?EWhZ5FZXsvfNdm/obwwZmAjFlWhcKVtoYI+L+jsRIUvWyNSb58NQ7prRrh?=
- =?iso-8859-1?Q?CjfL6yKYwojKNWG0yCHneb1R8lLocM+gdQ/hpJXSqvialY+HL8cDHVHlz5?=
- =?iso-8859-1?Q?z7zI8E2hYVTyqmFDY1PhBo4Cm08Ix1Kf90DDza7QD8PJSwTYz4Hf765OyP?=
- =?iso-8859-1?Q?BUyb/lKfP+YybepMlcY/1mJHofTyLEO5W/906/NXjIqDwi1VFr+JdxwrRX?=
- =?iso-8859-1?Q?VHkPHMo/5wZubAzpuDUpPgEDOQmXZSsB2Cvo/YtjP9uTn2VpAckcn5rSCV?=
- =?iso-8859-1?Q?fVeQrX/laE9tbZRsfz8MdaajxB/WqaTnkqWIzbH5qSsZktZjONKpqqE5RX?=
- =?iso-8859-1?Q?6T367O6PbTi+yYW/NkrlWfM+SEBve/FofBM5EAMBhSJH7jaazgNfUZvSqm?=
- =?iso-8859-1?Q?sz0QEqCn63l5tJNt+MO4QGWpPUA8BJdI9Ko1gObeT5gy5Qjlqg2xldvjKi?=
- =?iso-8859-1?Q?JB29CXlPTbWrm9/BVOT1HbdtoMtm+4H2YMs0coKx7rljsF9I6TiC1P5STb?=
- =?iso-8859-1?Q?GU/NAvEiLTjnkzlgGmpLjRkJ7tTthFoZlFHBGNO88yttjZNIqpGoMSQfey?=
- =?iso-8859-1?Q?1+1ry714/1+6+J4J0U8NiI4L24LYRM8j8DlsjQVEk4Q4oZBZcBzvFH+TAC?=
- =?iso-8859-1?Q?+Ze1Bun2gZ7Bu/Kw55+6dcLCbrp4X1tTC0MjuRbi4Rjf58yYkyU62lhSGJ?=
- =?iso-8859-1?Q?KyBSB4imuWglg4wyOevLCoz4yYxfFR8ZEOBwzZ3tkkaQeMYiFT0374MnU4?=
- =?iso-8859-1?Q?AWNriqmIOXlBRRtHgQ2Y2vObQLJFQtSHS2ksw7NuGCIsQQcbGJQkOYqz77?=
- =?iso-8859-1?Q?jgZw5thlIOjhCQfHZx2XkOmGfHcmtWozTr?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aTVPc29CSnZxMDVuRHdwa2xzdFhuN1dpSmtJTm5oaS9MVkRYWTQ0b3dlYncx?=
+ =?utf-8?B?OXJ3RFE4bGpReVJWTzBuQ0FWN0hQME50RllHOVZSQWNIMDJaczNuQnlhMVlM?=
+ =?utf-8?B?cnY2TUcvelE5Mzc4TkF1eHdKMkRTUTI2QzJUZXRad2E2R0tyekhoNmhCWExM?=
+ =?utf-8?B?NHZZTXhYSmZwS2hkZVM2TVpMLy9ZVGdxTS80d1Nsc1VOd3h5U2UxWS9KS0NN?=
+ =?utf-8?B?dzE0cnVhb0x0c3luMlV6RTVEZitIZ0NtV1VOUmdKWmkzbnE0Um9MUEUzZTVk?=
+ =?utf-8?B?bW1PVzdLV21IQ0diZGJpbjVQeFRVZ01xa2xMWVNQdDdSbWhPNmtzMGs1QUtC?=
+ =?utf-8?B?S0cwSCtxN3Y3MU5RSXV0N1F0d0lvVzZ0T1NHeGdmdVZmL25YWU52SmtRaEFl?=
+ =?utf-8?B?c2dtNitXZ3JPcVU3NUxuOFpVZ2NRTitDV2dwa0Y4N1VMdUpFbWdiM0w0N2Vk?=
+ =?utf-8?B?SzdLWVdReVRiREplSmIvZWRpV2k1a0VpM014YVVpOFMyT2lJaGJ1QmxiUW5r?=
+ =?utf-8?B?RlZOTWdsU2FmQnhCV1hUZ2VVc0c1ck55dXJGQklzVE93eDhzZ3VuSTI5SHZz?=
+ =?utf-8?B?WlRRaU1xc3QzbEtPZXhkZXVkd3JiNWZsM0U4YW42UGYxMk5pVHF6bkJLTWlI?=
+ =?utf-8?B?SExyMitMa3VvRVpseFdMOGQxNnRkSU8yMzlZYXJUSTRRREZRNEYyOERsVlN0?=
+ =?utf-8?B?TmQvdXVTcmh5TmFkK3U3ekY4V1l0RFBrUzN1NzFFTTRPOFdFSmkxQjBiUlR3?=
+ =?utf-8?B?VDBRWWVqMDU3ZitHRVVMdzZGVlRJSVZ3QTlrNVo5UmlMcFYrSmdNa0pva0l1?=
+ =?utf-8?B?VGlIVi9aT2Ura3RKZWhTanZDU2o4dkpOVlBTdnh0S25tbHVUdTRWL1p1YStp?=
+ =?utf-8?B?QXJVamswUzBCN3IrL2lhT3NZNjVleU9INkY5d3JuY1ZxMzdGYmN5MkQ3TU9U?=
+ =?utf-8?B?cERmY3lzbkR1RkhSaE9UaGYyZnFsMCtHd2cvaTAvVDFBcVJTV2VKMGFjSTJI?=
+ =?utf-8?B?UVMrR0NKOVh6c3FiR1pkdGhTMkFEaUsySGE0VUtwa05XTC9INHZvc0g0Skpi?=
+ =?utf-8?B?dmtuZ2ZPYUZkSEN3NVhXUVFtcVhQYm9nOXNPT0ZOOU1hRm1TcUVnZjRXZFht?=
+ =?utf-8?B?SFVjdmswM1Nuazk3WllGR2FCUS8yMk9BN2l3cnRQRHUraXdxNWlLbGlBU1Fp?=
+ =?utf-8?B?bDFFT2w4UzlrYm5IQ3hVbVFIMzVhRG0vZElXdFdXb3dOWWx6VXliVmFwQ0Vn?=
+ =?utf-8?B?SG10aGtpV1YzVUw1MVFYb201V0NMbkxIc1RtVFVjMXR3b1plcHErVTZjV1Ra?=
+ =?utf-8?B?d3I4NHlkS1RvMitDQ0I5VTk3WlVMRkx4My9RaVFFVmllQlorSmtBRW1Jc3NX?=
+ =?utf-8?B?UWE1UDNTWHVneGJISWJRUFF1MWp0YTQxZXV3dkxlYlQrSWNuRjhJVk52c05m?=
+ =?utf-8?B?V2xMVDAxSUJRTUdieVo2UDRYZUw1c0NuWXhwVmY4bGhseUgvZ2VJbVUybnJ3?=
+ =?utf-8?B?UmhYTzA5bWhWbWVpb2tqVnB5NWttd1F4dmk3bXh0c2ZTZ2tBRmNxQiswSFVl?=
+ =?utf-8?B?N3dOT05majhyZ1NaZ2I5dzhhMnBWQWNqUzZWY2cyZzZZcFo2akUzUlBwOHMz?=
+ =?utf-8?B?eHBxSjlCVkQ5N3lXZ1plY1ZRK2VVV1o5OHZnd1A5b0NPU3lrdXlFUGtQTElD?=
+ =?utf-8?B?cmdCK2FBWjkzb3dNcVlSeksyN1FlSHpkQmViRmF1eEYya1ZjSE5ld0Z0aDBN?=
+ =?utf-8?B?VXhCT0JJUVJLSHRYVUZEN3llMDNJZjBWVXVkZVlmRUpVUStnTG1RNDFCLzk1?=
+ =?utf-8?B?WXF2NmFvbVNoM0VwRUhDeEtROER2UjZ5NE01QVkxZzRMZmd6THRCeVNJWkp1?=
+ =?utf-8?B?T2pMYU5YRmwrQVEyS3prVkxiUGIydUplMG45R05WZnN5SFpDVEE5MUx6amdX?=
+ =?utf-8?B?Uno2TGNiTnQ4dnpwMjRWVzhMdTg2NE1td2lzaEd3VDFQd1NaUUxZbG5aZGdk?=
+ =?utf-8?B?UUV3UGgwMGlNQXNLTnJLaG5pM1hud0VhNXF4SDdlMVpHanVzTWsxUUo5TWFx?=
+ =?utf-8?B?L1BZdm5iRWlYV2EzMkcxbG1Ka2ZrYkF3Y0RCUEpacG9qKzZVdXMvQ2htQk1R?=
+ =?utf-8?B?MTBZSTFuZ3NHN1pqWTlMZGVXRG1jT2V0VDZpVjlpbS90ekFPdGRwY2FINnB1?=
+ =?utf-8?B?dWc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <C00584D1C4818E4BA64BA1603015766C@apcprd03.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8603.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d6f297c4-d632-4a70-57d6-08db576ab95b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 May 2023 06:40:09.0464
+X-MS-Exchange-CrossTenant-AuthSource: SI2PR03MB5369.apcprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2bc0a026-17a0-4537-2aff-08db576ac06f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 May 2023 06:40:20.9293
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: KRi9DS+/3v9me3Eb+Xb/1opafZLEqdQ/is6wiuIy3otaxD2yS0+jTejm0M3hTqM80k82WVmsuYgAAeKJnNbLGRcfeWTkCl0As9POnEO9ubk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB7075
+X-MS-Exchange-CrossTenant-userprincipalname: gD8Hq9fmQJa+JUmCyGaXSUd+VPmdpng0ayR+++TdavH8lAchnNGNuzbvKB7YRxRMsIV0QSXWH7mgeiRNcnBHBqlV9M5yoMOgLG3flRoyLEs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR03MB7125
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luiz,
-
-Below warning is resolved with following code change:
-
-diff --git a/drivers/bluetooth/btnxpuart.c b/drivers/bluetooth/btnxpuart.c
-index 5f641466d695..fa6ac4dacd1d 100644
---- a/drivers/bluetooth/btnxpuart.c
-+++ b/drivers/bluetooth/btnxpuart.c
-@@ -1264,6 +1264,7 @@ static void nxp_serdev_remove(struct serdev_device *s=
-erdev)
-        hci_free_dev(hdev);
- }
-
-+#ifdef CONFIG_OF
- static struct btnxpuart_data w8987_data =3D {
-        .fw_download_3M_baudrate =3D true,
-        .fw_name =3D FIRMWARE_W8987,
-@@ -1280,6 +1281,7 @@ static const struct of_device_id nxpuart_of_match_tab=
-le[] =3D {
-        { }
- };
- MODULE_DEVICE_TABLE(of, nxpuart_of_match_table);
-+#endif
-
-However, I was asked to remove this '#ifdef CONFIG_OF' in V2 patch by Rob, =
-as this driver only supports DT.
-https://patchwork.kernel.org/project/bluetooth/patch/20230130180504.2029440=
--4-neeraj.sanjaykale@nxp.com/
-
-Please let me know if I should add it back to resolve this warning.
-
-Thanks,
-Neeraj
-
-> -----Original Message-----
-> From: kernel test robot <lkp@intel.com>
-> Sent: Saturday, April 29, 2023 10:10 PM
-> To: Neeraj sanjay kale <neeraj.sanjaykale@nxp.com>
-> Cc: llvm@lists.linux.dev; oe-kbuild-all@lists.linux.dev; linux-
-> kernel@vger.kernel.org; Luiz Augusto von Dentz <luiz.von.dentz@intel.com>=
-;
-> Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
-> Subject: [EXT] drivers/bluetooth/btnxpuart.c:1277:34: warning: unused
-> variable 'nxpuart_of_match_table'
->
-> Caution: This is an external email. Please take care when clicking links =
-or
-> opening attachments. When in doubt, report the message using the 'Report
-> this email' button
->
->
-> tree:
-> https://git.ker/
-> nel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Ftorvalds%2Flinux.git&da
-> ta=3D05%7C01%7Cneeraj.sanjaykale%40nxp.com%7C11316289cf9545181d0108
-> db48d0676b%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C638183
-> 832151571141%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJ
-> QIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdat
-> a=3D4l684I87hYaEh5cUL%2Bq15Vded2F4OQ3DgIugH4zWUJw%3D&reserved=3D0
-> master
-> head:   89d77f71f493a3663b10fa812d17f472935d24be
-> commit: 689ca16e523278470c38832a3010645a78c544d8 Bluetooth: NXP: Add
-> protocol support for NXP Bluetooth chipsets
-> date:   6 days ago
-> config: hexagon-randconfig-r045-20230428
-> (https://dow/
-> nload.01.org%2F0day-
-> ci%2Farchive%2F20230430%2F202304300014.vFGw6Dr0-
-> lkp%40intel.com%2Fconfig&data=3D05%7C01%7Cneeraj.sanjaykale%40nxp.co
-> m%7C11316289cf9545181d0108db48d0676b%7C686ea1d3bc2b4c6fa92cd99c
-> 5c301635%7C0%7C0%7C638183832151571141%7CUnknown%7CTWFpbGZsb
-> 3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0
-> %3D%7C3000%7C%7C%7C&sdata=3DeIEMVERAnzpSUne5cHVZ4E%2F4J%2BDI0
-> yWQv0muvQCHGx4%3D&reserved=3D0)
-> compiler: clang version 17.0.0
-> (https://githu/
-> b.com%2Fllvm%2Fllvm-
-> project&data=3D05%7C01%7Cneeraj.sanjaykale%40nxp.com%7C11316289cf954
-> 5181d0108db48d0676b%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0
-> %7C638183832151727365%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLj
-> AwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%
-> 7C%7C&sdata=3DqPIgkv4%2FfQT%2FaNq5p9oGoU6bcdlA7Afgk5EcmmzAUDE%
-> 3D&reserved=3D0 437b7602e4a998220871de78afcb020b9c14a661)
-> reproduce (this is a W=3D1 build):
->         wget
-> https://raw.gi/
-> thubusercontent.com%2Fintel%2Flkp-
-> tests%2Fmaster%2Fsbin%2Fmake.cross&data=3D05%7C01%7Cneeraj.sanjaykal
-> e%40nxp.com%7C11316289cf9545181d0108db48d0676b%7C686ea1d3bc2b4
-> c6fa92cd99c5c301635%7C0%7C0%7C638183832151727365%7CUnknown%7C
-> TWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiL
-> CJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=3DOb0AKmINs53NPoF%2B6MI4
-> %2Bco1dbRThKLdfqWeon%2F5G%2Bs%3D&reserved=3D0 -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         #
-> https://git.ker/
-> nel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Ftorvalds%2Flinux.git%2F
-> commit%2F%3Fid%3D689ca16e523278470c38832a3010645a78c544d8&data=3D
-> 05%7C01%7Cneeraj.sanjaykale%40nxp.com%7C11316289cf9545181d0108db
-> 48d0676b%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C63818383
-> 2151727365%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIj
-> oiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=3D
-> Gr95jXMcCmzeEhCJbbUaz05ng1APFM3Go0CtIK6VLdk%3D&reserved=3D0
->         git remote add linus
-> https://git.ker/
-> nel.org%2Fpub%2Fscm%2Flinux%2Fkernel%2Fgit%2Ftorvalds%2Flinux.git&da
-> ta=3D05%7C01%7Cneeraj.sanjaykale%40nxp.com%7C11316289cf9545181d0108
-> db48d0676b%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C638183
-> 832151727365%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJ
-> QIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdat
-> a=3DGqQ70C15HhFspSctvuCHHbJliFN2mv94%2Faw%2BrBjUlB4%3D&reserved=3D
-> 0
->         git fetch --no-tags linus master
->         git checkout 689ca16e523278470c38832a3010645a78c544d8
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross
-> W=3D1 O=3Dbuild_dir ARCH=3Dhexagon olddefconfig
->         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dclang make.cross
-> W=3D1 O=3Dbuild_dir ARCH=3Dhexagon SHELL=3D/bin/bash drivers/bluetooth/
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link:
-> https://lore.k/
-> ernel.org%2Foe-kbuild-all%2F202304300014.vFGw6Dr0-
-> lkp%40intel.com%2F&data=3D05%7C01%7Cneeraj.sanjaykale%40nxp.com%7C1
-> 1316289cf9545181d0108db48d0676b%7C686ea1d3bc2b4c6fa92cd99c5c3016
-> 35%7C0%7C0%7C638183832151727365%7CUnknown%7CTWFpbGZsb3d8eyJ
-> WIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%
-> 7C3000%7C%7C%7C&sdata=3DfuRUTaxTT04M2tT6SUVJDRWbTo3lAkdxgSTk4ov
-> enh8%3D&reserved=3D0
->
-> All warnings (new ones prefixed by >>):
->
->    In file included from drivers/bluetooth/btnxpuart.c:10:
->    In file included from include/linux/serdev.h:10:
->    In file included from include/linux/iopoll.h:14:
->    In file included from include/linux/io.h:13:
->    In file included from arch/hexagon/include/asm/io.h:334:
->    include/asm-generic/io.h:547:31: warning: performing pointer arithmeti=
-c
-> on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->            val =3D __raw_readb(PCI_IOBASE + addr);
->                              ~~~~~~~~~~ ^
->    include/asm-generic/io.h:560:61: warning: performing pointer arithmeti=
-c
-> on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->            val =3D __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE +
-> addr));
->                                                            ~~~~~~~~~~ ^
->    include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded fro=
-m
-> macro '__le16_to_cpu'
->    #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
->                                                      ^
->    In file included from drivers/bluetooth/btnxpuart.c:10:
->    In file included from include/linux/serdev.h:10:
->    In file included from include/linux/iopoll.h:14:
->    In file included from include/linux/io.h:13:
->    In file included from arch/hexagon/include/asm/io.h:334:
->    include/asm-generic/io.h:573:61: warning: performing pointer arithmeti=
-c
-> on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->            val =3D __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE +=
- addr));
->                                                            ~~~~~~~~~~ ^
->    include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded fro=
-m
-> macro '__le32_to_cpu'
->    #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
->                                                      ^
->    In file included from drivers/bluetooth/btnxpuart.c:10:
->    In file included from include/linux/serdev.h:10:
->    In file included from include/linux/iopoll.h:14:
->    In file included from include/linux/io.h:13:
->    In file included from arch/hexagon/include/asm/io.h:334:
->    include/asm-generic/io.h:584:33: warning: performing pointer arithmeti=
-c
-> on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->            __raw_writeb(value, PCI_IOBASE + addr);
->                                ~~~~~~~~~~ ^
->    include/asm-generic/io.h:594:59: warning: performing pointer arithmeti=
-c
-> on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->            __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + add=
-r);
->                                                          ~~~~~~~~~~ ^
->    include/asm-generic/io.h:604:59: warning: performing pointer arithmeti=
-c
-> on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
->            __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + add=
-r);
->                                                          ~~~~~~~~~~ ^
-> >> drivers/bluetooth/btnxpuart.c:1277:34: warning: unused variable
-> 'nxpuart_of_match_table' [-Wunused-const-variable]
->    static const struct of_device_id nxpuart_of_match_table[] =3D {
->                                     ^
->    7 warnings generated.
->
->
-> vim +/nxpuart_of_match_table +1277 drivers/bluetooth/btnxpuart.c
->
->   1276
-> > 1277  static const struct of_device_id nxpuart_of_match_table[] =3D {
->   1278          { .compatible =3D "nxp,88w8987-bt", .data =3D &w8987_data=
- },
->   1279          { .compatible =3D "nxp,88w8997-bt", .data =3D &w8997_data=
- },
->   1280          { }
->   1281  };
->   1282  MODULE_DEVICE_TABLE(of, nxpuart_of_match_table);
->   1283
->
-> --
-> 0-DAY CI Kernel Test Service
-> https://github/
-> .com%2Fintel%2Flkp-
-> tests&data=3D05%7C01%7Cneeraj.sanjaykale%40nxp.com%7C11316289cf9545
-> 181d0108db48d0676b%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%
-> 7C638183832151727365%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjA
-> wMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7
-> C%7C&sdata=3DkT8SZ3zL7FhnwCwY3eSxuj8y0uZCJx4RpYjGSPBL%2BjE%3D&res
-> erved=3D0
+RnJvbSAzNWZkMDYyZDVjYmM0ZDE4MmVlZTAxODM4NDNjZDYzNTBkMTI2Nzg4IE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQ0KRnJvbTogWGlhb21pbmcgRGluZyA8eGlhb21pbmcuZGluZ0BtZWRpYXRl
+ay5jb20+DQpEYXRlOiBXZWQsIDEwIE1heSAyMDIzIDEwOjE1OjIzICswODAwDQpTdWJqZWN0OiBb
+UEFUQ0ggdjJdIHRlZTogYWRkIEZPTExfTE9OR1RFUk0gZm9yIENNQSBjYXNlIHdoZW4gYWxsb2Mg
+c2htDQoNCkNNQSBpcyB3aWRlbHkgdXNlZCBvbiBpbnN1ZmZpY2llbnQgbWVtb3J5IHBsYXRmb3Jt
+IGZvciANCnNlY3VyZSBtZWRpYSBwbGF5YmFjayBjYXNlLCBhbmQgRk9MTF9MT05HVEVSTSB3aWxs
+IA0KYXZvaWQgdGVlX3NobSBhbGxvYyBwYWdlcyBmcm9tIENNQSByZWdpb24uDQp3aXRob3V0IEZP
+TExfTE9OR1RFUk0sIENNQSByZWdpb24gbWF5IGFsbG9jIGZhaWxlZCBzaW5jZSANCnRlZV9zaG0g
+aGFzIGEgY2hhbmNlIHRvIHVzZSBpdCBpbiBhZHZhbmNlLg0KDQptb2RpZnkgaXMgdmVyaWZpZWQg
+b24gT1BURUUgWFRFU1QgYW5kIGtpbmRzIG9mIHNlY3VyZSArIGNsZWFyIHBsYXliYWNrIA0KDQoN
+CkZpeGVzOiAwMzNkZGYxMmJjZjUgKCJ0ZWU6IGFkZCByZWdpc3RlciB1c2VyIG1lbW9yeSIpDQpT
+aWduZWQtb2ZmLWJ5OiBYaWFvbWluZyBEaW5nIDx4aWFvbWluZy5kaW5nQG1lZGlhdGVrLmNvbT4N
+Ci0tLQ0KdjEgLT4gdjI6IHRha2Ugb2ZmIHRoZSBpZmRlZiBhbmQgYXBwbHkgRk9MTF9MT05HVEVS
+TSBieSBkZWZhdWx0DQoNCiBkcml2ZXJzL3RlZS90ZWVfc2htLmMgfCAyICstDQogMSBmaWxlIGNo
+YW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0pDQoNCmRpZmYgLS1naXQgYS9kcml2
+ZXJzL3RlZS90ZWVfc2htLmMgYi9kcml2ZXJzL3RlZS90ZWVfc2htLmMNCmluZGV4IDY3M2NmMDM1
+OTQ5NC4uMzg4NzhlNTQ5Y2E0IDEwMDY0NA0KLS0tIGEvZHJpdmVycy90ZWUvdGVlX3NobS5jDQor
+KysgYi9kcml2ZXJzL3RlZS90ZWVfc2htLmMNCkBAIC0yNTcsNyArMjU3LDcgQEAgcmVnaXN0ZXJf
+c2htX2hlbHBlcihzdHJ1Y3QgdGVlX2NvbnRleHQgKmN0eCwNCnVuc2lnbmVkIGxvbmcgYWRkciwN
+CiAJfQ0KIA0KIAlpZiAoZmxhZ3MgJiBURUVfU0hNX1VTRVJfTUFQUEVEKQ0KLQkJcmMgPSBwaW5f
+dXNlcl9wYWdlc19mYXN0KHN0YXJ0LCBudW1fcGFnZXMsIEZPTExfV1JJVEUsDQorCQlyYyA9IHBp
+bl91c2VyX3BhZ2VzX2Zhc3Qoc3RhcnQsIG51bV9wYWdlcywgRk9MTF9XUklURSB8DQpGT0xMX0xP
+TkdURVJNLA0KIAkJCQkJIHNobS0+cGFnZXMpOw0KIAllbHNlDQogCQlyYyA9IHNobV9nZXRfa2Vy
+bmVsX3BhZ2VzKHN0YXJ0LCBudW1fcGFnZXMsIHNobS0NCj5wYWdlcyk7DQotLSANCjIuMTguMA0K
+DQpPbiBXZWQsIDIwMjMtMDUtMTcgYXQgMTU6NDkgKzA1MzAsIFN1bWl0IEdhcmcgd3JvdGU6DQo+
+IEV4dGVybmFsIGVtYWlsIDogUGxlYXNlIGRvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFj
+aG1lbnRzIHVudGlsDQo+IHlvdSBoYXZlIHZlcmlmaWVkIHRoZSBzZW5kZXIgb3IgdGhlIGNvbnRl
+bnQuDQo+IA0KPiANCj4gT24gV2VkLCAxNyBNYXkgMjAyMyBhdCAxNTowNiwgQ2hyaXN0b3BoIEhl
+bGx3aWcgPGhjaEBpbmZyYWRlYWQub3JnPg0KPiB3cm90ZToNCj4gPiANCj4gPiBPbiBXZWQsIE1h
+eSAxNywgMjAyMyBhdCAwMjo1NjoxM1BNICswNTMwLCBTdW1pdCBHYXJnIHdyb3RlOg0KPiA+ID4g
+RG8geW91IG1lYW4gYSBwaW5uZWQgdXNlci1zcGFjZSBwYWdlIGNhbiBiZSBwYWdlZCBvdXQNCj4g
+PiA+IGF1dG9tYXRpY2FsbHk/DQo+ID4gDQo+ID4gTm8sIHBpbm5lZCBwYWdlcyBjYW4ndCBiZSBw
+YWdlZCBvdXQuDQo+ID4gDQo+ID4gQnV0IGEgc2hvcnQgdGVybSBwaW4gaW1wbGllcyBpdCB3aWxs
+IGJlIHJlbGVhc2UgYWZ0ZXIgYSBzaG9ydA0KPiA+IGRlbGF5LA0KPiA+IGFuZCBpdCBpcyBmZWFz
+aWJsZSBmb3Igd2FpdCBmb3IgdGhlIHBpbiB0byBnbyBhd2F5Lg0KPiANCj4gT2theSwgSSBzZWUu
+IEkgd291bGQgYmUgaW50ZXJlc3RlZCB0byBrbm93IHRoZSByYW5nZXMgZm9yIHRoYXQgc2hvcnQN
+Cj4gZGVsYXkuIEkgZ3Vlc3MgaXQgbWF5IGRlcGVuZCBvbiBob3cgbXVjaCBtZW1vcnkgcHJlc3N1
+cmUgdGhlcmUgaXMuLi4NCj4gDQo+ID4gDQo+ID4gRm9yIGEgbG9uZyB0ZXJtIHBpbiB3YWl0aW5n
+IGlzIG5vdCBhbiBvcHRpb24sIGFuZCBhbnlvbmUgd2FudGluZyB0bw0KPiA+IGRvIHNvbWV0aGlu
+ZyB3aXRoIHRoZSBwaW5uZWQgcGFnZSB0aGF0IHJlcXVpcmVzIGl0IHRvIG5vdCBiZSBwaW5uZWQN
+Cj4gPiBtdXN0IHNpbXBseSBnaXZlIHVwLg0KPiA+IA0KPiA+ID4gSnVzdCBGWUksIHRoZSB1bmRl
+cmx5aW5nIHVzZS1jYXNlIGZvciBURUUgcmVnaXN0ZXJlZCBzaGFyZWQNCj4gPiA+IG1lbW9yeSBp
+cw0KPiA+ID4gdGhhdCB0aGUgcmVmZXJlbmNlcyB0byBwaW5uZWQgcGFnZXMgYXJlIHByb3ZpZGVk
+IHRvIFRFRQ0KPiA+ID4gaW1wbGVtZW50YXRpb24NCj4gPiA+IHRvIG9wZXJhdGUgdXBvbi4gVGhp
+cyBjYW4gaGFwcGVuIG92ZXIgbXVsdGlwbGUgc3lzY2FsbHMgYW5kIHdlDQo+ID4gPiB3YW50DQo+
+ID4gPiB0aGUgcGlubmVkIHBhZ2VzIHRvIGJlIGFsd2F5cyBpbiBSQU0gYXMgb3RoZXJ3aXNlIHRo
+ZSBwaHlzaWNhbA0KPiA+ID4gYWRkcmVzc2VzIG1heSBjaGFuZ2UgaWYgdGhleSBhcmUgcGFnZWQg
+b3V0IGluIGJldHdlZW4uDQo+ID4gDQo+ID4gVGhhdCdzIGEgdmVyeSB1c2UgY2xlYXIgY2FzZSBm
+b3IgYSBsb25nIHRlcm0gcGluLg0KPiANCj4gLi4uaG93ZXZlciwgdGhhbmtzIGZvciB0aGUgaW5z
+aWdodHMuDQo+IA0KPiBAWGlhb21pbmcsDQo+IA0KPiBQbGVhc2UgdXNlIHRoZSBmb2xsb3dpbmcg
+Zml4ZXMgdGFnIGZvciB0aGUgdjIgYWxvbmcgd2l0aCBleHRlbmRpbmcNCj4gdGhlDQo+IGNvbW1p
+dCBkZXNjcmlwdGlvbiByZWdhcmRpbmcgdGhlIHJlbGlhYmlsaXR5IHByb3ZpZGVkIGJ5IHRoZSBs
+b25nDQo+IHRlcm0NCj4gZmxhZy4NCj4gDQo+IEZpeGVzOiAwMzNkZGYxMmJjZjUgKCJ0ZWU6IGFk
+ZCByZWdpc3RlciB1c2VyIG1lbW9yeSIpDQo+IA0KPiAtU3VtaXQNCg==
