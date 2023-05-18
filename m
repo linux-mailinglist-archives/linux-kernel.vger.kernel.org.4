@@ -2,193 +2,342 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B35C7707721
-	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 03:04:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34C90707723
+	for <lists+linux-kernel@lfdr.de>; Thu, 18 May 2023 03:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229574AbjERBEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 17 May 2023 21:04:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56966 "EHLO
+        id S229608AbjERBFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 17 May 2023 21:05:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjERBEb (ORCPT
+        with ESMTP id S229452AbjERBFt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 17 May 2023 21:04:31 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A2830F3
-        for <linux-kernel@vger.kernel.org>; Wed, 17 May 2023 18:04:30 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34HIGomr024508;
-        Thu, 18 May 2023 01:04:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : to : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2023-03-30;
- bh=TI7/vKcs0jYMKtdMqd+jeLsNmgWrmptsvmkENJYGQNI=;
- b=3i2shYTp7QB7x6QB66vrTaKPxZHiQmqp0fnrluq1BnbXrd4Tgm9yELa4m9UmSQ+7Dds3
- +Q5VPSh1QuoLXv3moUFzPoDgufJHhW8Sdlboc+QvbO30LfaCSOriPSD8doobAonpEhgD
- NZfbmTqbGKfnjybsRw0zqNjkBQia9HcV9Ndg0o916KFHDgRedOMGj/l7v2joGowPQfMl
- bBJIjpC+YKvmsSopy4HzcEqBgGhP8YCunb3YKzbDioy1XWTFUDMKUIAZjCHl2DQQPVcy
- oh8JbRAJOJySiA0GP1TQdJbLesrGbph91jVcM1GaMrqVDfSLb1MZCqeOtx4/j5MF0diW kg== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qmxwphf8b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 18 May 2023 01:04:16 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 34HMeOiI025080;
-        Thu, 18 May 2023 01:04:15 GMT
-Received: from nam10-bn7-obe.outbound.protection.outlook.com (mail-bn7nam10lp2107.outbound.protection.outlook.com [104.47.70.107])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3qj1064uu2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 18 May 2023 01:04:15 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EvpW4jC0nZ72f5St3eiGfdu/nuir+GQLK81smGmWgBQZCUmftnWj/2fJyOpLtJYMhlptIWETbEdB1XkA+x3k31d+NpczBS3Cdc8QHWzKQ3qcr4BdIyiBO36wDDErSsenPIbHcevEBnuRtmqtkw4OPHji0hAzJ7cDk/sYshF1FokWCZF6JUnRpcf31NtbN/+odYMhmnWZ28Mzv4BveuGz0Q5RJVS1lNYYKIaGySOEA5uEn4oBB8PHly6caQRnJ1zzRVKO17HQ0RwV/0J3SaUMEyfDJ3aU2dwgdv29fvJp3YJQRcuKq41Vxgyt0/1EfWCJOIKEmXnOdt2tcJO1QBMR2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TI7/vKcs0jYMKtdMqd+jeLsNmgWrmptsvmkENJYGQNI=;
- b=CYqo3uutT0t+A42mkslZ9mL8vvbisXOw4NHQI2v+XyLQFm/OyHWJylQWQFQI2qh9mPkEtyeVjpOk0Ijv6FZky/Xpsu7Ujb37uaY1Bivl5752/LrCiwSOC5c5OZFrWlHVkYxd0+jVIr3wFLjHCbzwGnRoJjhFNjhLRHwj/GkDoxls/5klryFiTZKjoLSHmaIbpAxyVuraYGNhleHFNnx5u5CJx4wItv97UM0aefsll1YchKZ7iQWyPXtGDMOnd8b7nwzi3gPmy88O7MckCPTJCanZtyNeBvrFuoSJBDPf/iVMmdYr94hB+OM7WICFzWgeoIBW4rGLgVh8LOLSDvbjKg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TI7/vKcs0jYMKtdMqd+jeLsNmgWrmptsvmkENJYGQNI=;
- b=TQt8lEb3cZj6qGLX6S4ZW7tQxND1sjvLDFoT36jd/NuB+FYKT2YL1enlL/7ifxLtBHsHIQ3DPAYTm9XVlhnTB/ynYZcs1UyiQj+K5zlWrq25DnhX3ef0IonIP1TkSUCArujPhzeqkQnEfMCsjHP3sH0ea9pVmskB8bGn/5GTdRY=
-Received: from CY8PR10MB7243.namprd10.prod.outlook.com (2603:10b6:930:7c::10)
- by SN7PR10MB6594.namprd10.prod.outlook.com (2603:10b6:806:2aa::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.33; Thu, 18 May
- 2023 01:04:13 +0000
-Received: from CY8PR10MB7243.namprd10.prod.outlook.com
- ([fe80::13d6:c3f3:2447:6559]) by CY8PR10MB7243.namprd10.prod.outlook.com
- ([fe80::13d6:c3f3:2447:6559%5]) with mapi id 15.20.6411.017; Thu, 18 May 2023
- 01:04:13 +0000
-Message-ID: <4a0506c0-ebf5-8676-6082-22ddb45dab67@oracle.com>
-Date:   Wed, 17 May 2023 20:04:11 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [RFC PATCH 8/8] fork/vhost_task: remove no_files
-Content-Language: en-US
-To:     oleg@redhat.com, linux@leemhuis.info, nicolas.dichtel@6wind.com,
-        axboe@kernel.dk, ebiederm@xmission.com,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, mst@redhat.com,
-        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
-        brauner@kernel.org
-References: <20230518000920.191583-1-michael.christie@oracle.com>
- <20230518000920.191583-9-michael.christie@oracle.com>
-From:   Mike Christie <michael.christie@oracle.com>
-In-Reply-To: <20230518000920.191583-9-michael.christie@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH2PR08CA0001.namprd08.prod.outlook.com
- (2603:10b6:610:5a::11) To CY8PR10MB7243.namprd10.prod.outlook.com
- (2603:10b6:930:7c::10)
+        Wed, 17 May 2023 21:05:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67C0530F3;
+        Wed, 17 May 2023 18:05:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2711647DC;
+        Thu, 18 May 2023 01:05:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2F79C433EF;
+        Thu, 18 May 2023 01:05:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684371946;
+        bh=xt3Hpg03EBIFU3chzx2Jv3j7LizWB5huuXLL7P52kpk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IqbmavJ6p11BKKgn4KbdAJYTzhGnsJZ3UOSx1FIny0IW3zrT+E67LdN7X9N0oSu1F
+         GppMo4U8FepLYTQ5J/zSYLlAg7Tkte9q9U8fby8vItPR50lplvXSr/1dDhKcJepqkI
+         VkKF7zXcnY2fxB77uWZ2aiYt6OCCUY6klIVsPnxdtkyMkUn214Op5eBWiWlZb0+Gfk
+         jn1mlySe8oS31P8Qklrt9atGqG+MdUH5ZisXPMJ52Uu0m0IlJ+xFIrAOswWt4lFNrQ
+         sbBMEsVEJpEOzYMtSBtcBDGctxAYobaT92+OGvRnX38a8cdWcgzITCm+Ru9ePuIjMd
+         M9q0LK3k57DGg==
+Date:   Wed, 17 May 2023 18:05:44 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Daejun Park <daejun7.park@samsung.com>
+Cc:     "chao@kernel.org" <chao@kernel.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "linux-f2fs-devel@lists.sourceforge.net" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-trace-kernel@vger.kernel.org" 
+        <linux-trace-kernel@vger.kernel.org>,
+        Seokhwan Kim <sukka.kim@samsung.com>,
+        Yonggil Song <yonggil.song@samsung.com>,
+        beomsu kim <beomsu7.kim@samsung.com>
+Subject: Re: (2) [PATCH v6] f2fs: add async reset zone command support
+Message-ID: <ZGV56DEz54529znm@google.com>
+References: <ZFqWr3sSYMsHtHAC@google.com>
+ <20230508081042epcms2p8a637deae7de1829f54614e09d5fde5e5@epcms2p8>
+ <CGME20230508081042epcms2p8a637deae7de1829f54614e09d5fde5e5@epcms2p6>
+ <20230511052416epcms2p617838faa71a203da6978c89ffd216e91@epcms2p6>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY8PR10MB7243:EE_|SN7PR10MB6594:EE_
-X-MS-Office365-Filtering-Correlation-Id: 12b2d0f4-07c6-4160-3677-08db573bcb78
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6y34dbaglhK7sHZMwTOQe6Y+xmONTADj+xEg9S/lcZDliXKZut2cH3pQgEvor6UQFrdwJkJoRT0m2UZdmOpgMJwOMoy0HLd7ZEjSWTdBX1G4SGT1FgSSg03uAcwwgMkGS3hVyb7eaagZTGJrCFCRJMK1kviIzk7ouBjnoN7E3WGtjatj9RpVpyVDzsrDrx6mdbSGJEWHuxiRxehvy9h5OYOYvnjJkTxtD9QCCWBY3B1VTFao2N1CwhHzoDbDmll2AEVJu7S6mmVdRhDxyMXY5OuIy7KVu+gLOXWcDSKCnWAkg+sTonAldM0yTNaYqjIFg8AgYLa4zRDSsijHUaYa7RQMfp3ITr/eTfRr86OSOk9xmbwwi+/AGNnWh/kijXrkJwrvnM/pqgBZ+rxsH7ZHVPcwPW0g8agHW4wfybxWyd4SHsDaId7eFFFaYyzp/51Im06ofY1UNKqOjEBJetlfGjbC5b/utbljQOeSAh3kLU3cuQAfm6NaFeRKdwCOtEaNg4ixLOkkQxiT/YGXRUwz1oDocb2pCXGwPOM3QdZbxk+ugQwhQX3WwJZ1ZkYB4iR+9qoc/nLGcBQu1SNNhK2yQG5f/n2LdEA3Gqo/LTp2OPD7ETJNMr9SISNtQwwfJ4GEc7QvMfzp8ybNDvUDzgZEXZMgC2xRQjt0qeDlLMNLCyo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY8PR10MB7243.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(366004)(136003)(376002)(346002)(39860400002)(451199021)(31686004)(36756003)(2906002)(7416002)(8676002)(5660300002)(8936002)(558084003)(31696002)(66556008)(41300700001)(86362001)(66476007)(66946007)(6486002)(478600001)(316002)(921005)(6506007)(53546011)(6512007)(186003)(26005)(2616005)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZjJvdDZwWGRJS0x1ZjhNL3YzQUtRMFhaanFBbHlkM2ZTYmxRcGFDSzQwbW9s?=
- =?utf-8?B?T0laNnBWV3YyKzZYYlMzVFpRelNQWG5lb0p1c2NjUW1KWUhWWUdLSkpvOXM4?=
- =?utf-8?B?ZUhhZGRRRU94T3V4UVE0bDF0UUJGME92emNORXFPaVZxYlZkc3JsNGFvTWpW?=
- =?utf-8?B?Ymwzc1RhUFNYYjcxVUxhOUE1YWh4RFdFcnVDbXZrblg1ZldvZkxNNFIzQVZK?=
- =?utf-8?B?cjRxZ2FYTm9rVkYrd3V2VTJxdnV3QVRKaG1CZDRVSUMzKzhSOHluTnJ2MWxU?=
- =?utf-8?B?TlVLZlhJTllkZWZWUDlNVldCc2FTN2xob2pwcjg5RDBXemdtNXNuQjBwVStE?=
- =?utf-8?B?bk1NUU1OSjUvWTJXSW4vbTZ5TTY0MlcyQ3c5TEI2QXNOM3NVS01JbW1kYnpY?=
- =?utf-8?B?WjVHalYxY1BMMllQaFZpVnVXaTBQK2E1dnFCM3BVbXRLcUJEVHZCaFBYWGhK?=
- =?utf-8?B?bzJZVDBqa0pvZG1uQmMwTFVEb28vcHpCVnRkWEFlMFFOUGxGS241eTJPdng1?=
- =?utf-8?B?WUI1T1ZkcEEzZkY3MStlejQ3UDFoYzVSZHd4SXFVZ1RiV3BlcGptOXYxdUEr?=
- =?utf-8?B?VTd2b3FNWHJtNkJaSlNXTTdpMkYvckFndFNkVTllc3VnMDdUak1xaFZMeXJU?=
- =?utf-8?B?OWY5elJnbWpPK3ljeFlNWG5CK2ZQZ2swVEdBdWE1Y1pPZjZGMWtZK2U4NjFJ?=
- =?utf-8?B?eEZTN1NhcGRzZENqR244S3NKNVF2eExRc3JYeWwzcDRhNjFrS29CRHRnVnk1?=
- =?utf-8?B?cXlydFA0aUIxckZLVWpVYzl0YnBjcVZUN2ZQdTBhdmxXZlZyeWluWGtJOE9a?=
- =?utf-8?B?ZkZzdDRNOWVxN3FRcGVqQURpdW9jR2k0a2pnNTdrVjBNWTdPS3E1L1hLTUQv?=
- =?utf-8?B?SVhrU2YwSHgyZ1RZMzQvNTI4ZXdFUmo3UjZKeTBJUkd4dVI1R0NXaE9qZXlL?=
- =?utf-8?B?dnFaVmQzT1VkR1RpaWYvRVZyeWQrMGtNdTlNTzZCbWtrMGxzZDFVNHZKaXRs?=
- =?utf-8?B?emc5cmFIMXVpZk5yYUxwbjk3dVhSb1lsaTMrUUVXYTdxaERwOC84R0tGekxn?=
- =?utf-8?B?dUljSEJvMUJZb2JmSmNjRFRRKzhVWGJKcUoxeVJNdFFFUHhzY2hsSDFuQzFk?=
- =?utf-8?B?WWtsR3dYMXdTdFU5K1BManBOV3UrTUE5MzJPVVdhNTJZNEhKN2M0NnA2ZGZm?=
- =?utf-8?B?MERzbEhINkkzZVhQN2RxMzhrWGF0eWs5OEg3M1UxSFRwUjRKREw5aklPSEJk?=
- =?utf-8?B?eUd4ZTJUcEFCMGtqeUQvdkJGeU1jNGplTk50dzRvTG9tcjlsQVBPeHl4TE1B?=
- =?utf-8?B?SkRubzF1cE9Jbk93eDdmY0xiZnViMk5ldFJWT0N2TjJROTl5KzFtNzlOVWY4?=
- =?utf-8?B?b0xjMGg5WjlLb1JOTHlUcFhRWkF3VmdnMXdoeTN6Ty8yS2J3d0VWd3V3cGRW?=
- =?utf-8?B?V3RnajFLWWpsajNlVXJCdWpURWczM0NIK1JrTVdKZmM5c3ZiR2tXdnJsK3VV?=
- =?utf-8?B?VUo0QjhEM2NuSmpBVkR3YWJBbDJ4NHV3M1h4NUgzY2RieWUwYWZLMnUya0Nt?=
- =?utf-8?B?ZUkzWURTOGloN2RBSGZtY1lPOWVXMkNuY0RKL2RnRWNIY0twL1gvdllVd3p5?=
- =?utf-8?B?Q3Jxa3JqKzNHRGYwS3p4Um1KRm9hbk5sRTZmYVlMdEV3dUl5U0dDblRNNkFO?=
- =?utf-8?B?aWRrcm8ybE91TERKRTcrbmlWTWlGQ1h5bjJjUWZPdjZud0lNbnhKRXFNUGJH?=
- =?utf-8?B?UEJYajBwZENsQjhVRXYxVS96V3lJTW5WbzFMNU1adE94SzVnQy9FQUxFMmE2?=
- =?utf-8?B?K21UVEk3VEUxTWZkUVpuNUhmcWRTUWd4QUNQREJVYS94RDd5WFdraEhJeEpt?=
- =?utf-8?B?QjYzZlBsbnJWc3hWZzVhWUlmSmdRbjdjWEdMMjVuR0VUakFRRk1XZWI5YmpW?=
- =?utf-8?B?UU12M1M2TDIybXphNDlEdDAwZ1hKZUlDQVRkcEJBSVhDSUdhb1dpOExIVkN1?=
- =?utf-8?B?UWJLVkJRdFBsWUpBMFVaZjB5MHo2aHh5RDVuSmFjMFhobnUvMzJacVkzT1VF?=
- =?utf-8?B?S3JYMUdjK3hZbklzMzBYaUJMSzRvNHJnQmdMem1XUlFsS2J1UWk5K1FKL2Nz?=
- =?utf-8?B?YWRidHNvZXVqUVdDa2pYeXpLR1ZjRDNZd1RLWEYrd2xvem0xL1dSaGZLcEpO?=
- =?utf-8?B?WGc9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?S0NOWld3SHdEV2pndFFhWGkvYnVHQzR2TTFoNm9ZNFdaREN6eVQwcGlQTmJj?=
- =?utf-8?B?SGhPTWxxMFN3TG90UjBVd00vdUkweC95ZUtKK1Y4VDZzbkx1WmZBaVZJdm8z?=
- =?utf-8?B?d1Q2bmtFdXZjclNEZVJzajA3UVV2RXRrdmg2dGp0MkR4aGpRWXUzNjM3aTho?=
- =?utf-8?B?bCs4em11SnpkYVFuYWJNT25hSTN1T0l0cjVtTjhWQW5TTzAyeDVZS25LRFRI?=
- =?utf-8?B?Uml3UWhsNlpDemJKQlFFMTBTMUFwOHpSbGNFNHlRTjZ0alNhOWY1QVlVdCta?=
- =?utf-8?B?ck9SZGcyZVZkM3k5ekVLZ3NMbjZNaFlQYjNnQ1F1eUpDckVvWDlyRFZBZk85?=
- =?utf-8?B?NVVwMjgybG0xbDF6L3hFcW1jcC83R3BoL1RPZy9jK1B1eEJOKy9CR3NnSkRC?=
- =?utf-8?B?SjVYKy9ub3IzK29xejdBS2tkeFpxeE1RZ2N3K1orb0hFYTFMbFhBbWdFdTVD?=
- =?utf-8?B?Ynl0TVBLWG1GcVY5NVJndkFLQjVFT1V4ZzU1QzZSeks4UnExblpqS3ZlQTYr?=
- =?utf-8?B?LzNJU0RxcGdTNVpiZ3VvSmZzang1RTlqa0NGUnc0NnBHQ2JGNWhwZ045aEZn?=
- =?utf-8?B?a2puRmZGKzBiMlBOdzBlQnJOZTllYm01dHptcHluS1hVdGdyTDM0dW5RSVNX?=
- =?utf-8?B?dXZOVzh4Z3A0MHBRc25yb1lXOVEvL0pRL2J4NW4vUTdmaWdrMjQrOVMxSGJK?=
- =?utf-8?B?eG84K3BUQzNoL3pmaVowMTdubitST0UzVzJyOXpCY0Z1S3U1bmp4VFNLVVlJ?=
- =?utf-8?B?d2RNVTIrZ2xuRENUSDVJL0xpaHJ3ZmU0MExUb0hQSG5KWEx6cUFVR2wyb1Rk?=
- =?utf-8?B?M1AzcGZkd2s4TlBlejIwWmNiYmFCOVV2UzRsNHpLQ1RLcVlzREFUM3BDZDRH?=
- =?utf-8?B?QlNtOFpjejVsZHg2UURtOGRNS2taVWtJN2JVbkZqZXJxVFlzbzJpdkNaVFV0?=
- =?utf-8?B?ZVV2YldYYnBuQXpwZXpWWlpzK2FIL08yU010clZkOC9HYnVDNDRDbDJ6UWVK?=
- =?utf-8?B?SldqdWdqTll4UjBrcmdhQTFrL2FGOWYzYVNqdFRiaW5IdnBBNjdUMEVsWVQr?=
- =?utf-8?B?STg5L2RtbkNIRG5Jc21ETCt3YnZUUHpGelZIWnIwL2FUN29tYytwZCtxWHdG?=
- =?utf-8?B?ZGVkY0hUUzUvM05CTnR1YmtJZFcxcDJiV2ZkSUZYb2NTdHFxdDRqU3ZjVWdv?=
- =?utf-8?B?T2dsU1RhQUVzTW9Nc1YwZDNTcEc4d3B3L1liRU5PVkVrYmFrL1laR2Uxbmdp?=
- =?utf-8?B?dkVpcFVLY1M1ZEVCMjZvS3dFQkt6MWp5M3RJQXk3NzNyeHlzQVM2cTZJMGtn?=
- =?utf-8?B?RUo1Z3hWQWJTZFBKYmFGVlZSa3FVRGVMOXBhT0MxTDIxSDU3NitYcytqZWVk?=
- =?utf-8?B?VVN2N3BIM2E1UEZnMHRJdFF6akcyMHZFdmtEUDZXbHcyTHBLMHMwMXNaM1pq?=
- =?utf-8?Q?E/zvPNdG?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 12b2d0f4-07c6-4160-3677-08db573bcb78
-X-MS-Exchange-CrossTenant-AuthSource: CY8PR10MB7243.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 May 2023 01:04:13.3660
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zuHTjklZsyuBYspAPAEUn6opQ18MTnKabTUK7wmMGFLbTce74M83dhDjjbLbVkXtrGiRZCEozWO3uFZA2edOt3Ou9PZSy24oG6cuVN0Xh7c=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR10MB6594
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-17_05,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 phishscore=0
- mlxlogscore=772 spamscore=0 adultscore=0 malwarescore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305180004
-X-Proofpoint-GUID: TzDwPEtC7r8r5nx7jW7eA3TBwfjPiZYc
-X-Proofpoint-ORIG-GUID: TzDwPEtC7r8r5nx7jW7eA3TBwfjPiZYc
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230511052416epcms2p617838faa71a203da6978c89ffd216e91@epcms2p6>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/17/23 7:09 PM, Mike Christie wrote:
-> +				  CLONE_THREAD | CLONE_FILES, CLONE_SIGHAND,
+On 05/11, Daejun Park wrote:
+> > Sender : Jaegeuk Kim <jaegeuk@kernel.org>
+> > Date : 2023-05-10 03:53 (GMT+9)
+> > Title : Re: [PATCH v6] f2fs: add async reset zone command support
+> > To : 박대준<daejun7.park@samsung.com>
+> > CC : chao@kernel.org<chao@kernel.org>, rostedt@goodmis.org<rostedt@goodmis.org>, mhiramat@kernel.org<mhiramat@kernel.org>, linux-f2fs-devel@lists.sourceforge.net<linux-f2fs-devel@lists.sourceforge.net>, linux-kernel@vger.kernel.org<linux-kernel@vger.kernel.org>, linux-trace-kernel@vger.kernel.org<linux-trace-kernel@vger.kernel.org>, 김석환<sukka.kim@samsung.com>, 송용길<yonggil.song@samsung.com>, 김범수<beomsu7.kim@samsung.com>
+> >  
+> > On 05/08, Daejun Park wrote:
+> > > v5 -> v6
+> > > Added trace_f2fs_iostat support for zone reset command.
+> > > 
+> > > v4 -> v5
+> > > Added f2fs iostat for zone reset command.
+> > > 
+> > > v3 -> v4
+> > > Fixed build error caused by unused function.
+> > > 
+> > > v2 -> v3
+> > > Modified arguments to be correct for ftrace parameter.
+> > > Changed __submit_zone_reset_cmd to void return.
+> > > Refactored the f2fs_wait_discard_bio function.
+> > > Fixed code that was previously incorrectly merged.
+> > > 
+> > > v1 -> v2
+> > > Changed to apply the optional async reset write pointer by default.
+> > 
+> > Don't add the history in the patch description.
+> 
+> OK, I will do.
+> 
+> > > 
+> > > This patch enables submit reset zone command asynchornously. It helps
+> > > decrease average latency of write IOs in high utilization scenario by
+> > > faster checkpointing.
+> > > 
+> > > Signed-off-by: Daejun Park <daejun7.park@samsung.com>
+> > > ---
+> > >  fs/f2fs/f2fs.h              |  1 +
+> > >  fs/f2fs/iostat.c            |  1 +
+> > >  fs/f2fs/segment.c           | 84 +++++++++++++++++++++++++++++++++++--
+> > >  include/trace/events/f2fs.h | 24 +++++++++--
+> > >  4 files changed, 104 insertions(+), 6 deletions(-)
+> > > 
+> > > diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> > > index d211ee89c158..51b68a629814 100644
+> > > --- a/fs/f2fs/f2fs.h
+> > > +++ b/fs/f2fs/f2fs.h
+> > > @@ -1175,6 +1175,7 @@ enum iostat_type {
+> > >          /* other */
+> > >          FS_DISCARD_IO,                        /* discard */
+> > >          FS_FLUSH_IO,                        /* flush */
+> > > +        FS_ZONE_RESET_IO,                /* zone reset */
+> > >          NR_IO_TYPE,
+> > >  };
+> > >  
+> > > diff --git a/fs/f2fs/iostat.c b/fs/f2fs/iostat.c
+> > > index 3d5bfb1ad585..f8703038e1d8 100644
+> > > --- a/fs/f2fs/iostat.c
+> > > +++ b/fs/f2fs/iostat.c
+> > > @@ -80,6 +80,7 @@ int __maybe_unused iostat_info_seq_show(struct seq_file *seq, void *offset)
+> > >          seq_puts(seq, "[OTHER]\n");
+> > >          IOSTAT_INFO_SHOW("fs discard", FS_DISCARD_IO);
+> > >          IOSTAT_INFO_SHOW("fs flush", FS_FLUSH_IO);
+> > > +        IOSTAT_INFO_SHOW("fs zone reset", FS_ZONE_RESET_IO);
+> > >  
+> > >          return 0;
+> > >  }
+> > > diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+> > > index 6db410f1bb8c..4802b05a795b 100644
+> > > --- a/fs/f2fs/segment.c
+> > > +++ b/fs/f2fs/segment.c
+> > > @@ -1196,6 +1196,45 @@ static void __init_discard_policy(struct f2fs_sb_info *sbi,
+> > >  static void __update_discard_tree_range(struct f2fs_sb_info *sbi,
+> > >                                  struct block_device *bdev, block_t lstart,
+> > >                                  block_t start, block_t len);
+> > > +
+> > > +#ifdef CONFIG_BLK_DEV_ZONED
+> > > +static void __submit_zone_reset_cmd(struct f2fs_sb_info *sbi,
+> > 
+> > Why can't we use __f2fs_issue_discard_zone()?
+> 
+> In my understanding, __f2fs_issue_discard_zone is used to queue the zone reset command.
+> Which point do you think is the issue?
 
-Sorry. I tried to throw this one in last second so we could see that
-we can also see that we can now use CLONE_FILES like io_uring.
-It will of course not compile.
+That actually calls blkdev_zone_mgmt() which is doing the same thing.
+
+> 
+> > 
+> > > +                                   struct discard_cmd *dc, blk_opf_t flag,
+> > > +                                   struct list_head *wait_list,
+> > > +                                   unsigned int *issued)
+> > > +{
+> > > +        struct discard_cmd_control *dcc = SM_I(sbi)->dcc_info;
+> > > +        struct block_device *bdev = dc->bdev;
+> > > +        struct bio *bio = bio_alloc(bdev, 0, REQ_OP_ZONE_RESET | flag, GFP_NOFS);
+> > > +        unsigned long flags;
+> > > +
+> > > +        trace_f2fs_issue_reset_zone(bdev, dc->di.start);
+> > > +
+> > > +        spin_lock_irqsave(&dc->lock, flags);
+> > > +        dc->state = D_SUBMIT;
+> > > +        dc->bio_ref++;
+> > > +        spin_unlock_irqrestore(&dc->lock, flags);
+> > > +
+> > > +        if (issued)
+> > > +                (*issued)++;
+> > > +
+> > > +        atomic_inc(&dcc->queued_discard);
+> > > +        dc->queued++;
+> > > +        list_move_tail(&dc->list, wait_list);
+> > > +
+> > > +        /* sanity check on discard range */
+> > > +        __check_sit_bitmap(sbi, dc->di.lstart, dc->di.lstart + dc->di.len);
+> > > +
+> > > +        bio->bi_iter.bi_sector = SECTOR_FROM_BLOCK(dc->di.start);
+> > > +        bio->bi_private = dc;
+> > > +        bio->bi_end_io = f2fs_submit_discard_endio;
+> > > +        submit_bio(bio);
+> > > +
+> > > +        atomic_inc(&dcc->issued_discard);
+> > > +        f2fs_update_iostat(sbi, NULL, FS_ZONE_RESET_IO, dc->di.len * F2FS_BLKSIZE);
+> > > +}
+> > > +#endif
+> > > +
+> > >  /* this function is copied from blkdev_issue_discard from block/blk-lib.c */
+> > >  static int __submit_discard_cmd(struct f2fs_sb_info *sbi,
+> > >                                  struct discard_policy *dpolicy,
+> > > @@ -1217,6 +1256,13 @@ static int __submit_discard_cmd(struct f2fs_sb_info *sbi,
+> > >          if (is_sbi_flag_set(sbi, SBI_NEED_FSCK))
+> > >                  return 0;
+> > >  
+> > > +#ifdef CONFIG_BLK_DEV_ZONED
+> > > +        if (f2fs_sb_has_blkzoned(sbi) && bdev_is_zoned(bdev)) {
+> > > +                __submit_zone_reset_cmd(sbi, dc, flag, wait_list, issued);
+> > > +                return 0;
+> > > +        }
+> > > +#endif
+> > > +
+> > >          trace_f2fs_issue_discard(bdev, dc->di.start, dc->di.len);
+> > >  
+> > >          lstart = dc->di.lstart;
+> > > @@ -1461,6 +1507,19 @@ static void __update_discard_tree_range(struct f2fs_sb_info *sbi,
+> > >          }
+> > >  }
+> > >  
+> > > +#ifdef CONFIG_BLK_DEV_ZONED
+> > > +static void __queue_zone_reset_cmd(struct f2fs_sb_info *sbi,
+> > > +                struct block_device *bdev, block_t blkstart, block_t lblkstart,
+> > > +                block_t blklen)
+> > > +{
+> > > +        trace_f2fs_queue_reset_zone(bdev, blkstart);
+> > > +
+> > > +        mutex_lock(&SM_I(sbi)->dcc_info->cmd_lock);
+> > > +        __insert_discard_cmd(sbi, bdev, lblkstart, blkstart, blklen);
+> > > +        mutex_unlock(&SM_I(sbi)->dcc_info->cmd_lock);
+> > > +}
+> > > +#endif
+> > > +
+> > >  static void __queue_discard_cmd(struct f2fs_sb_info *sbi,
+> > >                  struct block_device *bdev, block_t blkstart, block_t blklen)
+> > >  {
+> > > @@ -1724,6 +1783,19 @@ static void f2fs_wait_discard_bio(struct f2fs_sb_info *sbi, block_t blkaddr)
+> > >  
+> > >          mutex_lock(&dcc->cmd_lock);
+> > >          dc = __lookup_discard_cmd(sbi, blkaddr);
+> > > +#ifdef CONFIG_BLK_DEV_ZONED
+> > > +        if (dc && f2fs_sb_has_blkzoned(sbi) && bdev_is_zoned(dc->bdev)) {
+> > > +                /* force submit zone reset */
+> > > +                if (dc->state == D_PREP)
+> > > +                        __submit_zone_reset_cmd(sbi, dc, REQ_SYNC,
+> > > +                                                &dcc->wait_list, NULL);
+> > > +                dc->ref++;
+> > > +                mutex_unlock(&dcc->cmd_lock);
+> > > +                /* wait zone reset */
+> > > +                __wait_one_discard_bio(sbi, dc);
+> > > +                return;
+> > > +        }
+> > > +#endif
+> > >          if (dc) {
+> > >                  if (dc->state == D_PREP) {
+> > >                          __punch_discard_cmd(sbi, dc, blkaddr);
+> > > @@ -1876,9 +1948,15 @@ static int __f2fs_issue_discard_zone(struct f2fs_sb_info *sbi,
+> > >                                   blkstart, blklen);
+> > >                          return -EIO;
+> > >                  }
+> > > -                trace_f2fs_issue_reset_zone(bdev, blkstart);
+> > > -                return blkdev_zone_mgmt(bdev, REQ_OP_ZONE_RESET,
+> > > -                                        sector, nr_sects, GFP_NOFS);
+> > > +
+> > > +                if (unlikely(is_sbi_flag_set(sbi, SBI_POR_DOING))) {
+> > > +                        trace_f2fs_issue_reset_zone(bdev, blkstart);
+> > > +                        return blkdev_zone_mgmt(bdev, REQ_OP_ZONE_RESET,
+> > > +                                                sector, nr_sects, GFP_NOFS);
+> > > +                }
+> > > +
+> > > +                __queue_zone_reset_cmd(sbi, bdev, blkstart, lblkstart, blklen);
+> > > +                return 0;
+> > >          }
+> > >  
+> > >          /* For conventional zones, use regular discard if supported */
+> > > diff --git a/include/trace/events/f2fs.h b/include/trace/events/f2fs.h
+> > > index 99cbc5949e3c..793f82cc1515 100644
+> > > --- a/include/trace/events/f2fs.h
+> > > +++ b/include/trace/events/f2fs.h
+> > > @@ -1512,7 +1512,7 @@ DEFINE_EVENT(f2fs_discard, f2fs_remove_discard,
+> > >          TP_ARGS(dev, blkstart, blklen)
+> > >  );
+> > >  
+> > > -TRACE_EVENT(f2fs_issue_reset_zone,
+> > > +DECLARE_EVENT_CLASS(f2fs_reset_zone,
+> > >  
+> > >          TP_PROTO(struct block_device *dev, block_t blkstart),
+> > >  
+> > > @@ -1528,11 +1528,25 @@ TRACE_EVENT(f2fs_issue_reset_zone,
+> > >                  __entry->blkstart = blkstart;
+> > >          ),
+> > >  
+> > > -        TP_printk("dev = (%d,%d), reset zone at block = 0x%llx",
+> > > +        TP_printk("dev = (%d,%d), zone at block = 0x%llx",
+> > >                  show_dev(__entry->dev),
+> > >                  (unsigned long long)__entry->blkstart)
+> > >  );
+> > >  
+> > > +DEFINE_EVENT(f2fs_reset_zone, f2fs_queue_reset_zone,
+> > > +
+> > > +        TP_PROTO(struct block_device *dev, block_t blkstart),
+> > > +
+> > > +        TP_ARGS(dev, blkstart)
+> > > +);
+> > > +
+> > > +DEFINE_EVENT(f2fs_reset_zone, f2fs_issue_reset_zone,
+> > > +
+> > > +        TP_PROTO(struct block_device *dev, block_t blkstart),
+> > > +
+> > > +        TP_ARGS(dev, blkstart)
+> > > +);
+> > > +
+> > >  TRACE_EVENT(f2fs_issue_flush,
+> > >  
+> > >          TP_PROTO(struct block_device *dev, unsigned int nobarrier,
+> > > @@ -1979,6 +1993,7 @@ TRACE_EVENT(f2fs_iostat,
+> > >                  __field(unsigned long long,        fs_nrio)
+> > >                  __field(unsigned long long,        fs_mrio)
+> > >                  __field(unsigned long long,        fs_discard)
+> > > +                __field(unsigned long long,        fs_reset_zone)
+> > >          ),
+> > >  
+> > >          TP_fast_assign(
+> > > @@ -2010,12 +2025,14 @@ TRACE_EVENT(f2fs_iostat,
+> > >                  __entry->fs_nrio        = iostat[FS_NODE_READ_IO];
+> > >                  __entry->fs_mrio        = iostat[FS_META_READ_IO];
+> > >                  __entry->fs_discard        = iostat[FS_DISCARD_IO];
+> > > +                __entry->fs_reset_zone        = iostat[FS_ZONE_RESET_IO];
+> > >          ),
+> > >  
+> > >          TP_printk("dev = (%d,%d), "
+> > >                  "app [write=%llu (direct=%llu, buffered=%llu), mapped=%llu, "
+> > >                  "compr(buffered=%llu, mapped=%llu)], "
+> > > -                "fs [data=%llu, cdata=%llu, node=%llu, meta=%llu, discard=%llu], "
+> > > +                "fs [data=%llu, cdata=%llu, node=%llu, meta=%llu, discard=%llu, "
+> > > +                "reset_zone=%llu], "
+> > >                  "gc [data=%llu, node=%llu], "
+> > >                  "cp [data=%llu, node=%llu, meta=%llu], "
+> > >                  "app [read=%llu (direct=%llu, buffered=%llu), mapped=%llu], "
+> > > @@ -2026,6 +2043,7 @@ TRACE_EVENT(f2fs_iostat,
+> > >                  __entry->app_bio, __entry->app_mio, __entry->app_bcdio,
+> > >                  __entry->app_mcdio, __entry->fs_dio, __entry->fs_cdio,
+> > >                  __entry->fs_nio, __entry->fs_mio, __entry->fs_discard,
+> > > +                __entry->fs_reset_zone,
+> > >                  __entry->fs_gc_dio, __entry->fs_gc_nio, __entry->fs_cp_dio,
+> > >                  __entry->fs_cp_nio, __entry->fs_cp_mio,
+> > >                  __entry->app_rio, __entry->app_drio, __entry->app_brio,
+> > > -- 
+> > > 2.25.1
