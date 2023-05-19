@@ -2,79 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8548708CF3
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 02:29:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C577708CD9
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 02:25:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231209AbjESA3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 20:29:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36448 "EHLO
+        id S229714AbjESAZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 20:25:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231356AbjESA3r (ORCPT
+        with ESMTP id S229643AbjESAZt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 20:29:47 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9BFE198B;
-        Thu, 18 May 2023 17:29:16 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-19a08412723so2153334fac.0;
-        Thu, 18 May 2023 17:29:16 -0700 (PDT)
+        Thu, 18 May 2023 20:25:49 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFDB810FC;
+        Thu, 18 May 2023 17:25:32 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64d18d772bdso1569052b3a.3;
+        Thu, 18 May 2023 17:25:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684456152; x=1687048152;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EbAo41j9dwaocJzq5AJ7mE2sUYUnT4TmOl4fPIqDs6s=;
-        b=kTOQ732NQvlCQq8Zzwc9xoIYIcSmprkzUZG30JzSBdEgY2MmtaPfV0f3oysoGflmm/
-         acHaoeFG/jlLweltf2uVCVj5AulWWpl27cfd/70YzZQc2p/+ok93tpzXCPwU/U7MmIiq
-         /C/fmMzbXvca+xixezrYHLNyFW/2EXxmbmHCA3XPG0eR1EAKTrULfDAZwrqiRO+I/xJ1
-         ISEWQhIRibpp5HlMeDBYu0wuUV6ihxFTG883bJgbUexDaBY0rUXKz0mJO04Ty5cwUzVR
-         NA3krUtJ9U/mc0K6fOgkEQLE1gY6+flTFftaFQ3SM920uMXopx07txrBlP0BL/N752yb
-         1RBg==
+        d=gmail.com; s=20221208; t=1684455931; x=1687047931;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=X7LSztTgvuTG/1LRG7rLGwi1XpsK273SzAIspcW50Sw=;
+        b=r5g0rd74gzmwM9IK6Pm4C1P66N8ea4c0hLbvF8+Kw11dnEnGuJjnrsUvV8iXMI1m4E
+         yzkwWbNbBo7IWy7BNZYjdx28A23ZWhbyX1yQPACdK/rfjOxPV+KCiDE1++Lwdf2RPbix
+         P75kxZMOEMr0FsCLspJcxMhIV56lHHfs/pBvBudhO9rzIEsHG0/AMjCAaQaeGLWGmNEL
+         eNe9RQd0lLpHTyDB0XqYRf2Y+/licUOj/P5N8ZiSywTKEUIVfDbl4jOktqFaq+UsJfhK
+         D4ppWsAdYNpQlRttSZhZq04x5eUTNp/rb06JYuQVBXlry3MNG2FqXSF2JFsD22nz5ATo
+         TAqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684456152; x=1687048152;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EbAo41j9dwaocJzq5AJ7mE2sUYUnT4TmOl4fPIqDs6s=;
-        b=Lz5USSi4xKJKS36UUnmEwSY1pDiazKkwnePWMjGVwV7o26UAgRKYKwEcNf9FyWwEfu
-         9FG2n9ZEAM4vz6VazljuXT5Z/uXWnPaajId/s3aiTsReKt9jPQAplRL1awJdrnrE3R7c
-         vdUydNteblBEXOqBll5DzdOg9xnfixArU3pjA/8zXMoUHdJkclhPIvkONEJ1kGw/eAEk
-         PS8AeyWFFTjCDeSdirxtRqE6DJurRhgUElEK3avmATWKLKPpTN8Jlu2Qwdxxcxah5HNk
-         ZuwGBmhRtIMe1FZ9J5unMB0emHj2uDBlhRCzh9oEXdt7LErmhTvNiPsTxXIPLH1UUMg1
-         mMpA==
-X-Gm-Message-State: AC+VfDyFW+T6NaKk5VksDkzxoWOnvYZHqGpAKp3qg1oJBOYtD7ykFeky
-        me7dEUgb36aEdJT8ul5R24s=
-X-Google-Smtp-Source: ACHHUZ7R0NSRLuks3+Tvx1V18EGuJSFwkjrX+Vq0Aw9bVeQUXZre/pcYUkY2csM5F5hPc5AXhjt8kQ==
-X-Received: by 2002:a05:6871:721:b0:196:331a:b8f5 with SMTP id f33-20020a056871072100b00196331ab8f5mr326266oap.3.1684456152497;
-        Thu, 18 May 2023 17:29:12 -0700 (PDT)
-Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id oh16-20020a0568702c9000b0017ae1aede32sm1376614oab.46.2023.05.18.17.29.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 18 May 2023 17:29:12 -0700 (PDT)
-Message-ID: <85aca422-6799-a2dd-cff7-99e0ec564ff4@gmail.com>
-Date:   Thu, 18 May 2023 21:22:33 -0300
+        d=1e100.net; s=20221208; t=1684455931; x=1687047931;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=X7LSztTgvuTG/1LRG7rLGwi1XpsK273SzAIspcW50Sw=;
+        b=cus/Iv+A8nHoYnSjTZXQH2M46+t2hNXW9k/MRTjH0j/CY+zZLWRSaNnwErWXbYee1+
+         GGSfFU2e91EWbjvOJIkk/7BAHF052l9fUUuSfGw9AiZ5BVWI5DCQOCxpUyT5Mmr4iDmL
+         2nRpOFEieG9oX41Ltb1h4UYthHw62ISTOoiXQsJNVE3ZM90kB1TsWGaCSmDP5Bv5ztOq
+         AP2cwxKD96x8g558ioWeQ/1KARcKJSB9C6eFuwSkeyHfveVlIMnMagj1IupM83o7gLiq
+         Qi742rsjIMtUi9czodTud9/1fHDwMfDFg0z1dcI+wDWChgO/4+j/xyKG1YFiqE3OnEUs
+         KUSg==
+X-Gm-Message-State: AC+VfDxdgWXoPANDYrQj4CWkaz/guZIdF8Xp91TlHBo1noULSKqpviti
+        COVCeXuQ1+bTuUwNEXMv7eI=
+X-Google-Smtp-Source: ACHHUZ6Cp9812QVrJ99pDHsU2f7yl3xWCuWgrcVsItIUf0yvdilus/B0BzdVR5+viHcZ1+7jwCVZJA==
+X-Received: by 2002:a05:6a21:33a6:b0:105:b75e:9e0d with SMTP id yy38-20020a056a2133a600b00105b75e9e0dmr319961pzb.1.1684455931481;
+        Thu, 18 May 2023 17:25:31 -0700 (PDT)
+Received: from ubuntu777.domain.name (36-228-97-28.dynamic-ip.hinet.net. [36.228.97.28])
+        by smtp.gmail.com with ESMTPSA id m8-20020aa79008000000b00643889e30c2sm1864056pfo.180.2023.05.18.17.25.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 May 2023 17:25:31 -0700 (PDT)
+From:   Min-Hua Chen <minhuadotchen@gmail.com>
+To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc:     Min-Hua Chen <minhuadotchen@gmail.com>, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] net: stmmac: use le32_to_cpu for p->des0 and p->des1
+Date:   Fri, 19 May 2023 08:25:21 +0800
+Message-Id: <20230519002522.3648-1-minhuadotchen@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v1 7/7] rust: workqueue: add `try_spawn` helper method
-Content-Language: en-US
-To:     Alice Ryhl <aliceryhl@google.com>, rust-for-linux@vger.kernel.org
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Tejun Heo <tj@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=c3=b6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        Benno Lossin <benno.lossin@proton.me>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-References: <20230517203119.3160435-1-aliceryhl@google.com>
- <20230517203119.3160435-8-aliceryhl@google.com>
-From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-In-Reply-To: <20230517203119.3160435-8-aliceryhl@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,13 +77,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/17/23 17:31, Alice Ryhl wrote:
-> This adds a convenience method that lets you spawn a closure for
-> execution on a workqueue. This will be the most convenient way to use
-> workqueues, but it is fallible because it needs to allocate memory.
-> 
-> Signed-off-by: Alice Ryhl <aliceryhl@google.com>
-> ---
-> [...]
+Use le32_to_cpu for p->des0 and p->des1 to fix the
+following sparse warnings:
 
-Reviewed-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+drivers/net/ethernet/stmicro/stmmac/dwxgmac2_descs.c:110:23: sparse: warning: restricted __le32 degrades to integer
+drivers/net/ethernet/stmicro/stmmac/dwxgmac2_descs.c:110:50: sparse: warning: restricted __le32 degrades to integer
+
+Signed-off-by: Min-Hua Chen <minhuadotchen@gmail.com>
+---
+ drivers/net/ethernet/stmicro/stmmac/dwxgmac2_descs.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwxgmac2_descs.c b/drivers/net/ethernet/stmicro/stmmac/dwxgmac2_descs.c
+index 13c347ee8be9..3d094d83e975 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwxgmac2_descs.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwxgmac2_descs.c
+@@ -107,7 +107,8 @@ static int dwxgmac2_rx_check_timestamp(void *desc)
+ 	ts_valid = !(rdes3 & XGMAC_RDES3_TSD) && (rdes3 & XGMAC_RDES3_TSA);
+ 
+ 	if (likely(desc_valid && ts_valid)) {
+-		if ((p->des0 == 0xffffffff) && (p->des1 == 0xffffffff))
++		if ((le32_to_cpu(p->des0) == 0xffffffff) &&
++		    (le32_to_cpu(p->des1) == 0xffffffff))
+ 			return -EINVAL;
+ 		return 0;
+ 	}
+-- 
+2.34.1
+
