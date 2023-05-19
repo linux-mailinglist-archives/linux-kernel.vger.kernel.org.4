@@ -2,251 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD1DA709C86
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 18:37:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE82A709C8C
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 18:38:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231130AbjESQhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 12:37:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58894 "EHLO
+        id S229714AbjESQiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 12:38:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjESQhP (ORCPT
+        with ESMTP id S229675AbjESQiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 12:37:15 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2626C1;
-        Fri, 19 May 2023 09:37:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684514234; x=1716050234;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=CrHuy7/kg+MjhE4rcZsROuwkyTgzNozSyNjaMwGVlyQ=;
-  b=gZii3ZBJ45Re8zJAToXqNhEN++e2nG2bwsBo6aM7smVp1TzIhLqy+3ea
-   iXCwZjwpy8mTg8dExwS+8N3Ik+Yfhkn0FAbs9xhZpw9OdBWcvi3el67MT
-   L+ziP+jRSFNNqR6HgCfXOA7nNkpZog5b7h4LQp3ebhR3ZfYXfqFWXOrj/
-   DkW8I+Y5oVao/JpaOCKDgvQFfP0M7UulaVk/1rnP9wUlRmosUZ2sOf0GQ
-   tntHhIM3DVcYT3Ysrybw5/Saja0lERdbc63CO3mybDBWHaPLcejaTdXTT
-   FQCTIEceZqg9qquvojVcSoxpM20aMa92XmNlIhEZ6p5aAj4qOSUe1zmBm
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10715"; a="354774285"
-X-IronPort-AV: E=Sophos;i="6.00,177,1681196400"; 
-   d="scan'208";a="354774285"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2023 09:37:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10715"; a="733357344"
-X-IronPort-AV: E=Sophos;i="6.00,177,1681196400"; 
-   d="scan'208";a="733357344"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga008.jf.intel.com with ESMTP; 19 May 2023 09:37:01 -0700
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 19 May 2023 09:37:00 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Fri, 19 May 2023 09:37:00 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.108)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Fri, 19 May 2023 09:37:00 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SVHegnM5iDaYuqTDPep2PztU26gdcbqQJ0IBJDxlGboryrNyJu3PglzfncjbOyoEnl40r4hHDxeptFBuhCjqFUsJoTA8N00sXP/oUTPi7mcM1YEYkW8NlbRpFZH5OQv4hPxhMq/I9xJ5DFTYu236NEbxJLKfgrbvc6gDVAzsQltrh2HiUJaw95wUqk5x0PUE30VzaZeb6GkIRw7OO59POqcG8+uyiiSurOlotz0TbngZRZ2S/cU/BxQbPsURxls4oldrQfhGZFLhoRGo8tJ5+vKWcxrcPtIWwfH61n1BiZ6iN6vtcogNAKytr7yquP2etbopwIyb80TA4Fr0loW/2w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gTf2u9h11Fwy4FTjWvptSzX9VI6pT+c6a3nau4ud3lQ=;
- b=bMJY64LW0DAmTLeQ3Hx6aPKCzNE0gO3LzreFLA3bK+IEkeKpmUM6NblzfW2lK+SkhBWoUdlP8898K08ShWU7mMnTwXVrfI4x6mx1+NP5VGvvq7kp4n3K8UJ9Cn4/x3nQf4SbZi6s0BN1/mO0CC2LtG8epJmAmB7CVtSxPx983ge7RtXisBAgeyvf0BDbr1V0y4EzcW7dsr93ggVkEvGeN1QtM5Uyi5ju1ms/fJSmnfOkm2kY46jAWkBteM4v/X5bPYwgICvKio0piDfop5YSYEpQzBLOjbOaAQo5072HZ7aTAsPNSMBdBA+wHh5e91l1A83eramwpW+iQLFkWhcFng==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
- by BY1PR11MB7981.namprd11.prod.outlook.com (2603:10b6:a03:52f::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19; Fri, 19 May
- 2023 16:36:56 +0000
-Received: from DM6PR11MB3625.namprd11.prod.outlook.com
- ([fe80::64d9:76b5:5b43:1590]) by DM6PR11MB3625.namprd11.prod.outlook.com
- ([fe80::64d9:76b5:5b43:1590%2]) with mapi id 15.20.6411.019; Fri, 19 May 2023
- 16:36:56 +0000
-Message-ID: <5b817d49-eefa-51c9-3b51-01f1dba17d42@intel.com>
-Date:   Fri, 19 May 2023 18:35:44 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH RESEND bpf-next 14/15] net, xdp: allow metadata > 32
-Content-Language: en-US
-To:     Jesper Dangaard Brouer <jbrouer@redhat.com>
-CC:     Larysa Zaremba <larysa.zaremba@intel.com>, <brouer@redhat.com>,
-        <bpf@vger.kernel.org>, Stanislav Fomichev <sdf@google.com>,
-        "Alexei Starovoitov" <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "Andrii Nakryiko" <andrii@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Martin KaFai Lau" <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Anatoly Burakov <anatoly.burakov@intel.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Magnus Karlsson <magnus.karlsson@gmail.com>,
-        Maryam Tahhan <mtahhan@redhat.com>,
-        <xdp-hints@xdp-project.net>, <netdev@vger.kernel.org>,
-        <intel-wired-lan@lists.osuosl.org>, <linux-kernel@vger.kernel.org>
-References: <20230512152607.992209-1-larysa.zaremba@intel.com>
- <20230512152607.992209-15-larysa.zaremba@intel.com>
- <ee1ad4f2-34ab-4377-14d5-532cb0687180@redhat.com> <ZGJnFxzDTV2qE4zZ@lincoln>
- <b9a879b2-bb62-ba18-0bdd-5c126a1086a9@intel.com>
- <a37db72f-2e83-c838-7c81-8f01a5a0df32@redhat.com>
-From:   Alexander Lobakin <aleksander.lobakin@intel.com>
-In-Reply-To: <a37db72f-2e83-c838-7c81-8f01a5a0df32@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: LO2P265CA0426.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:a0::30) To DM6PR11MB3625.namprd11.prod.outlook.com
- (2603:10b6:5:13a::21)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|BY1PR11MB7981:EE_
-X-MS-Office365-Filtering-Correlation-Id: 55b8c19c-cd85-4ffb-6b86-08db588741f4
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: H2AhOgOrOI8Cq1cBjXY3lk6d7xIExUrkt1LyF2sJIwbtIlBDVmc4Q4Qupy32ssFm+D/IYRSTKzxBnELkpTZeqUCGKm5Df/i8KwR3dOr3FlTFIra2sgVPjyH+22HE1UvlyPwUFkOkh5yRNzWgYkwqcPaOwIGxZcOrjPYrzG0S/1r95fkUTUeUa5Nn3HpJZVAHPJrDKUQM4NnXL/ZJb/8BkUVgHL1JL4vyHn4IwdbZyPRz8dTIS9Lg5atfAKhFmw3BeYp5WjkFsgHgCmO4xlNPyRvMDdkBVYTVPT8UjpxcWvGje8WSAzw0bU7jgm5aFKpSp9R1/zhjirnzLqE4eE0A7/SKzVzKDjNZSKnkvIbtOb/y4YCChgU+Jj7KnvAzo9emcDh2RsmEQjnM52XVC/22J7DskzjQt+8jgc/vqd7gzEcgHo9taqr0uKYo4HnbHLy14NeNvYISCj+td5buUmDmlE/CUrEejJHi8PnD7XiiXWJedEe9Htblh9iH/V+srUsDrHKGB0nNDjK80JU4LtiKSO5aA/Em9Nsmt35t8+pI1yJvmDVPgkzEw1W39tzZ6MtpGEFR/aNzQKgCsGTv4gdBQ9QjXhGUCvEPiLloTsa3JON2rXtcVb5vsE24QDsCHS4wTj5SuKk8vwBAngrfLn0F/g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(396003)(136003)(346002)(376002)(366004)(451199021)(6512007)(26005)(6506007)(36756003)(2616005)(31696002)(86362001)(83380400001)(38100700002)(186003)(82960400001)(6486002)(54906003)(7416002)(478600001)(316002)(31686004)(2906002)(4326008)(8936002)(6916009)(8676002)(41300700001)(5660300002)(66476007)(66556008)(66946007)(6666004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a2MwNzNyejBkdWxWdm5jOS9qeDlVSmJtd3hzUnlOTUNFaytoMkRjcmxTcmJC?=
- =?utf-8?B?OWI0QTIzOWxnaWlNZTdIN2NmUEZJN2NqbjhFYXhWazZFWDUxbHFNY2RPd0dj?=
- =?utf-8?B?MUNzWW94L2h6N21lVUJ2aFQvL2g4OXByVDFvMlYrNEFRRVpGOXhWL2NEaWli?=
- =?utf-8?B?QmltRk5CYnhOY2NxeUlUTDdkWFNlZ3BuQW5Ja2hxOGN5Yk5lODVVZG0xa2RD?=
- =?utf-8?B?WGMxcXhERWswT0lONUs4Sk43NkRPSUd2a1FVdTgyZVRHM0hhNXpEKzBzTWhQ?=
- =?utf-8?B?T1lRc3BKSFAxRVZQRTBpRnJUTVhhd3RIeWxGK3pZNlQ4T3ZqMGt6OUd5TXho?=
- =?utf-8?B?MkJsVi83WC80K2xOMVZXZUQ3eTZneXBQOGhZTWRlNVZubS9yM0RhMEQxZEE1?=
- =?utf-8?B?K1R3SUh2N0pjN0E0bVJYS0t2QjlvTlQ4cFUvMHdhMDBpc2Nmbk9EeFptT0tX?=
- =?utf-8?B?Q0J0NFRpdXJnZklwT2I1UGUyTmtkc3V1dDdhTjhmdHdUUy9pamN1eGNkVnlu?=
- =?utf-8?B?OXZPQ1FaRXpDSmpFK3FxUGJTNGtLTEk1OVdoeTRXRG10bWc4Q0NKbTk1cGwv?=
- =?utf-8?B?RG1EcVQwektBVC9zamdMcmhGS0ZORGo0RlM4MjFZR1ZLRTA2YXdFWElRZG9y?=
- =?utf-8?B?TkRiNk1WWWVXZVl2UXpRYm81OHh1ZGszVGM2L3F6VHY4Ym5CVUhVL2kyaFcy?=
- =?utf-8?B?cWIxOUVwTEpsa1VnZjgybUFUZzlKU0l3SnRQK2pxTWZqOFVCMEZsazNGekhz?=
- =?utf-8?B?a3R6SmJjdHIvWXVxbkNiSm5VSFFDZTl4dWdsV3dDTklCdmMwd2x3dk8vcUdL?=
- =?utf-8?B?SDQzTDJZWnQ4cGRxK1lBbkFEaGRFQ0ZGeDlURHI3Mkh1RGQ2U3RQcG9wY29O?=
- =?utf-8?B?QmNKdlJIR1g3R2dFdUxGc01qenBFRDRhaHp5SVZQS3l2dzFRdmlubkVqWS9P?=
- =?utf-8?B?enVES2FYcWdzSHJCQjdRbkcxVUxOYW11NGJVcVF4ZCtScTd1NUFLbThtS0VI?=
- =?utf-8?B?TVhZb08rREN2RHpScld2YkZYLytJc3JxOGVOWHIrOEphc3Qzc1k0K2R2cjFJ?=
- =?utf-8?B?eXVNa2ZoQS9TM3hJaHVoUkZiSU1GdFoyS21HYU02RjFGcWF5OUZXRDJMOEIy?=
- =?utf-8?B?RWVWUXFReXQrdFUyTDJSRkQ4ZXNYdFp1aDhObjJTK29yby8zdms0ODRGMENi?=
- =?utf-8?B?dHVPMVlSV2RvUkhNbFdtaTJLd0pKUE1pQ0RUb2M4bEJTUXFDZWQvVzR5UTJ1?=
- =?utf-8?B?dGJwS2pmbkdNWDJIejl1TE5KUXM5UUs0VVdwalNQU3Q5bDQ3R3ZjdSt5TnJj?=
- =?utf-8?B?dmtNZnZiTlR4c3FNbGRQYUdNdXN5QnB5VnpUYktmTHhCRVVUdW44ZkV1VG9p?=
- =?utf-8?B?MXRNdVN2WE9nRnhQZ21iZjQvMk1vVXBadlpiVy8yTm55ajJQNUE1eDZvdzRY?=
- =?utf-8?B?enZmYUxiTVN5T3ZFVzRWd2F3MlNEc1dtL2RVV0I1OCtvU0hPdVUxRzR6MEp3?=
- =?utf-8?B?UGNlcUIvMkxqOEJDWE5CMUlNcDUzWllKUXR3Ums4TFVaNW5KN01ZYU9UNlRE?=
- =?utf-8?B?eGRGNWdEU28vU2IzTGRERXVZV21SckJWN1JYTXgvcGpaNzlIS2JOOHNIU1Jl?=
- =?utf-8?B?K0JJS2NUclhQZmZ0K2QvaE9uTHUwUUtvU3F6YXYrSHluV3VEWUFTUWRuTTFr?=
- =?utf-8?B?VllMaFphSlU4cE1Lak1pTGNGOEd0bGhIV1BmM3Q0RVNSUlVUTlJ0VWhyMjZN?=
- =?utf-8?B?L3lTTHBCSHdGQkRNSlBKeDNjMXFhamFWeE00SFptVTlxdVBocGViNS9kMUVq?=
- =?utf-8?B?UCtHL0VVdWxhcFhWdE1WWE8xRjVNSDVETG5DZ0RMbnpOYWFNSTViMnM5K2xI?=
- =?utf-8?B?K1VYVXAvbDRBcHo4NGF4N1Bmc0I4NVVIeWxMYXdlQnRSL3hOQWZwMVdJa244?=
- =?utf-8?B?dlpUUVp0eDdqVmpWTlQ4LzVCanlMakRoS1pPenhVSkNWZGFsVXZKd3VqbzBL?=
- =?utf-8?B?NnZ6VkowWFFpbDRtRU4waWQ5V2ZLM3ZFaU4vMnBrOTE0RG1GOWtSeW02TFBF?=
- =?utf-8?B?SWs0cVNhRWRpbnl6dFNGNGlXUC9CbXhzckNxaWlqbGdjNTJTUVhzTnBBMzcx?=
- =?utf-8?B?YWh2aXZWNTBibEZRMFpCVW9VN0s1T0d6QTJoYjJwMnRPL2xtWWk4T1Z2U3hB?=
- =?utf-8?B?N3c9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 55b8c19c-cd85-4ffb-6b86-08db588741f4
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2023 16:36:55.8372
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MHNCpTHq3icYlnW9IxzWlOaXOQpm8744qj7BFK4KIYUwOazOwvBVBtVuhqemPG3fuxy3Vc5KX2It6vNQxnPuYjRrvXX9mL/KYH1/lDm8738=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY1PR11MB7981
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 19 May 2023 12:38:16 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1081C9;
+        Fri, 19 May 2023 09:38:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=76cJ0skIhyy+1lAVyE9zLl1oSMyjfPpd1OdLSw6ObVk=; b=kKMsTSMkgH22P7SpQbWgBIhDYc
+        fvaUobOsWFVP5k+E42KOXobO6mUqqHSX1Et1ejNHolG3i3qoTj0rat96vNQW4O9zefv/U09WLC2HB
+        SbRwMOswx29sNJfsiDVLABVRebjXVfWRnMr6Dfb8oxZrHVd/guvAKp1SxzVLQwyqERng=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:55206 helo=pettiford)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1q037B-000584-Fq; Fri, 19 May 2023 12:38:02 -0400
+Date:   Fri, 19 May 2023 12:38:01 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Lech Perczak <lech.perczak@camlingroup.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Lech Perczak <l.perczak@camlintechnologies.com>,
+        Tomasz =?UTF-8?Q?Mo=C5=84?= <tomasz.mon@camlingroup.com>,
+        linux-gpio@vger.kernel.org,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <20230519123801.e1123cab701b6cb0ffbf367f@hugovil.com>
+In-Reply-To: <849ac3f6-82e6-fb9e-a693-b78edd3e5f2b@camlingroup.com>
+References: <20230518132905.4182265-1-hugo@hugovil.com>
+        <20230518132905.4182265-2-hugo@hugovil.com>
+        <3a8cf0e2-b11c-d2f3-081e-a43bdad66224@camlingroup.com>
+        <20230519093031.9c35c8ee5387e1fc4bdf79f1@hugovil.com>
+        <849ac3f6-82e6-fb9e-a693-b78edd3e5f2b@camlingroup.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
+Subject: Re: [RFC PATCH v2 2/2] serial: sc16is7xx: fix regression with GPIO
+ configuration
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jesper Dangaard Brouer <jbrouer@redhat.com>
-Date: Tue, 16 May 2023 17:35:27 +0200
+On Fri, 19 May 2023 18:00:54 +0200
+Lech Perczak <lech.perczak@camlingroup.com> wrote:
 
-> 
-> 
-> On 16/05/2023 14.37, Alexander Lobakin wrote:
->> From: Larysa Zaremba<larysa.zaremba@intel.com>
->> Date: Mon, 15 May 2023 19:08:39 +0200
->>
->>> On Mon, May 15, 2023 at 06:17:02PM +0200, Jesper Dangaard Brouer wrote:
->>>>
->>>> On 12/05/2023 17.26, Larysa Zaremba wrote:
->>>>> From: Aleksander Lobakin<aleksander.lobakin@intel.com>
->>>>>
->>>>> When using XDP hints, metadata sometimes has to be much bigger
->>>>> than 32 bytes. Relax the restriction, allow metadata larger than 32
->>>>> bytes
->>>>> and make __skb_metadata_differs() work with bigger lengths.
->>>>>
->>>>> Now size of metadata is only limited by the fact it is stored as u8
->>>>> in skb_shared_info, so maximum possible value is 255.
->>>>
->>>> I'm confused, IIRC the metadata area isn't stored "in skb_shared_info".
->>>> The maximum possible size is limited by the XDP headroom, which is also
->>>> shared/limited with/by xdp_frame.  I must be reading the sentence
->>>> wrong,
->>>> somehow.
->>
->> skb_shared_info::meta_size  is u8. Since metadata gets carried from
->> xdp_buff to skb, this check is needed (it's compile-time constant
->> anyway).
->> Check for headroom is done separately already (two sentences below).
->>
-> 
-> Damn, argh, for SKBs the "meta_len" is stored in skb_shared_info, which
-> is located on another cacheline.
-> That is a sure way to KILL performance! :-(
+>=20
+> W dniu 19.05.2023 o=A015:30, Hugo Villeneuve pisze:
+> > On Fri, 19 May 2023 15:00:58 +0200
+> > Lech Perczak <lech.perczak@camlingroup.com> wrote:
+> >
+> >> Hello Hugo,
+> >>
+> >> A couple of remarks inline.
+> >>
+> >> W dniu 18.05.2023 o 15:29, Hugo Villeneuve pisze:
+> >>> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> >>>
+> >>> Commit 679875d1d880 ("sc16is7xx: Separate GPIOs from modem control li=
+nes")
+> >>> and commit 21144bab4f11 ("sc16is7xx: Handle modem status lines")
+> >>> changed the function of the GPIOs pins to act as modem control
+> >>> lines without any possibility of selecting GPIO function.
+> >>>
+> >>> As a consequence, applications that depends on GPIO lines configured
+> >>> by default as GPIO pins no longer work as expected.
+> >>>
+> >>> Also, the change to select modem control lines function was done only
+> >>> for channel A of dual UART variants (752/762). This was not documented
+> >>> in the log message.
+> >>>
+> >>> This new patch allows to specify GPIO or modem control line function
+> >>> in the device tree, and for each of the ports (A or B).
+> >>>
+> >>> This is done by using the new device-tree property named
+> >>> "modem-control-line-ports" (property added in separate patch).
+> >>>
+> >>> Boards that need to have GPIOS configured as modem control lines
+> >>> should add that property to their device tree. Here is a list of
+> >>> boards using the sc16is7xx driver in their device tree and that may
+> >>> need to be modified:
+> >>>     arm64/boot/dts/freescale/fsl-ls1012a-frdm.dts
+> >>>     mips/boot/dts/ingenic/cu1830-neo.dts
+> >>>     mips/boot/dts/ingenic/cu1000-neo.dts
+> >>>
+> >>> Fixes: 679875d1d880 ("sc16is7xx: Separate GPIOs from modem control li=
+nes")
+> >>> Fixes: 21144bab4f11 ("sc16is7xx: Handle modem status lines")
+> >>> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> >>> ---
+> >>> v1 -> v2: Rebase because original patch did not apply properly
+> >>>           Add git base-commit
+> >>>
+> >>>  drivers/tty/serial/sc16is7xx.c | 42 ++++++++++++++++++++------------=
+--
+> >>>  1 file changed, 25 insertions(+), 17 deletions(-)
+> >>>
+> >>> diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16=
+is7xx.c
+> >>> index abad091baeea..4e3d2325ef6e 100644
+> >>> --- a/drivers/tty/serial/sc16is7xx.c
+> >>> +++ b/drivers/tty/serial/sc16is7xx.c
+> >>> @@ -236,7 +236,8 @@
+> >>>
+> >>>  /* IOControl register bits (Only 750/760) */
+> >>>  #define SC16IS7XX_IOCONTROL_LATCH_BIT  (1 << 0) /* Enable input latc=
+hing */
+> >>> -#define SC16IS7XX_IOCONTROL_MODEM_BIT  (1 << 1) /* Enable GPIO[7:4] =
+as modem pins */
+> >>> +#define SC16IS7XX_IOCONTROL_MODEM_A_BIT        (1 << 1) /* Enable GP=
+IO[7:4] as modem A pins */
+> >>> +#define SC16IS7XX_IOCONTROL_MODEM_B_BIT        (1 << 2) /* Enable GP=
+IO[3:0] as modem B pins */
+> >>>  #define SC16IS7XX_IOCONTROL_SRESET_BIT (1 << 3) /* Software Reset */
+> >>>
+> >>>  /* EFCR register bits */
+> >>> @@ -306,7 +307,6 @@ struct sc16is7xx_devtype {
+> >>>         char    name[10];
+> >>>         int     nr_gpio;
+> >>>         int     nr_uart;
+> >>> -       int     has_mctrl;
+> >>>  };
+> >>>
+> >>>  #define SC16IS7XX_RECONF_MD            (1 << 0)
+> >>> @@ -447,35 +447,30 @@ static const struct sc16is7xx_devtype sc16is74x=
+_devtype =3D {
+> >>>         .name           =3D "SC16IS74X",
+> >>>         .nr_gpio        =3D 0,
+> >>>         .nr_uart        =3D 1,
+> >>> -       .has_mctrl      =3D 0,
+> >>>  };
+> >>>
+> >>>  static const struct sc16is7xx_devtype sc16is750_devtype =3D {
+> >>>         .name           =3D "SC16IS750",
+> >>> -       .nr_gpio        =3D 4,
+> >>> +       .nr_gpio        =3D 8,
+> >>>         .nr_uart        =3D 1,
+> >>> -       .has_mctrl      =3D 1,
+> >>>  };
+> >>>
+> >>>  static const struct sc16is7xx_devtype sc16is752_devtype =3D {
+> >>>         .name           =3D "SC16IS752",
+> >>> -       .nr_gpio        =3D 0,
+> >>> +       .nr_gpio        =3D 8,
+> >>>         .nr_uart        =3D 2,
+> >>> -       .has_mctrl      =3D 1,
+> >>>  };
+> >>>
+> >>>  static const struct sc16is7xx_devtype sc16is760_devtype =3D {
+> >>>         .name           =3D "SC16IS760",
+> >>> -       .nr_gpio        =3D 4,
+> >>> +       .nr_gpio        =3D 8,
+> >>>         .nr_uart        =3D 1,
+> >>> -       .has_mctrl      =3D 1,
+> >>>  };
+> >>>
+> >>>  static const struct sc16is7xx_devtype sc16is762_devtype =3D {
+> >>>         .name           =3D "SC16IS762",
+> >>> -       .nr_gpio        =3D 0,
+> >>> +       .nr_gpio        =3D 8,
+> >>>         .nr_uart        =3D 2,
+> >>> -       .has_mctrl      =3D 1,
+> >>>  };
+> >>>
+> >>>  static bool sc16is7xx_regmap_volatile(struct device *dev, unsigned i=
+nt reg)
+> >>> @@ -1456,12 +1451,6 @@ static int sc16is7xx_probe(struct device *dev,
+> >>>                                      SC16IS7XX_EFCR_RXDISABLE_BIT |
+> >>>                                      SC16IS7XX_EFCR_TXDISABLE_BIT);
+> >>>
+> >>> -               /* Use GPIO lines as modem status registers */
+> >>> -               if (devtype->has_mctrl)
+> >>> -                       sc16is7xx_port_write(&s->p[i].port,
+> >>> -                                            SC16IS7XX_IOCONTROL_REG,
+> >>> -                                            SC16IS7XX_IOCONTROL_MODE=
+M_BIT);
+> >>> -
+> >>>                 /* Initialize kthread work structs */
+> >>>                 kthread_init_work(&s->p[i].tx_work, sc16is7xx_tx_proc=
+);
+> >>>                 kthread_init_work(&s->p[i].reg_work, sc16is7xx_reg_pr=
+oc);
+> >>> @@ -1497,6 +1486,25 @@ static int sc16is7xx_probe(struct device *dev,
+> >>>                                          prop, p, u)
+> >>>                         if (u < devtype->nr_uart)
+> >>>                                 s->p[u].irda_mode =3D true;
+> >>> +
+> >>> +               val =3D 0;
+> >>> +
+> >>> +               of_property_for_each_u32(dev->of_node, "nxp,modem-con=
+trol-line-ports",
+> >>> +                                        prop, p, u)
+> >> The general idea looks solid to me.
+> >> I think, that with this property set, we should also reduce number of =
+GPIOs exported by gpiochip.
+> > OK, I will look into that.
+> >
+> >>> +                       if (u < devtype->nr_uart) {
+> >>> +                               /* Use GPIO lines as modem control li=
+nes */
+> >>> +                               if (u =3D=3D 0)
+> >>> +                                       val |=3D SC16IS7XX_IOCONTROL_=
+MODEM_A_BIT;
+> >>> +                               else if (u =3D=3D 1)
+> >>> +                                       val |=3D SC16IS7XX_IOCONTROL_=
+MODEM_B_BIT;
+> >>> +                       }
+> >>> +
+> >>> +               if (val)
+> >>> +                       regmap_update_bits(
+> >>> +                               s->regmap,
+> >>> +                               SC16IS7XX_IOCONTROL_REG << SC16IS7XX_=
+REG_SHIFT,
+> >>> +                               SC16IS7XX_IOCONTROL_MODEM_A_BIT |
+> >>> +                               SC16IS7XX_IOCONTROL_MODEM_B_BIT, val);
+> >> I just had a chance to test this on my hardware (with SC16IS760), and =
+something still doesn't work.
+> >> When looking into /sys/kernel/debug/regmap/<device>/registers,
+> >> it seems like the proper bits are set, also taking the regmap shift in=
+to account.
+> >> For reference - I did my test basing on v6.4-rc2.
+> >>
+> >> I used a loopback plug and statserial to perform the test.
+> >> Without your patch, when DTR is set, all other pins (DCD, DSR, RI) are=
+ set. With it - they are cleared, according to statserial.
+> > It is strange, because the only conceptual change is the moment in time=
+ when we set the IOControl register. Before, IOControl was set within the f=
+or/loop for initializing each port. Now it is done after.
+> >
+> > Maybe you could try to put the section that reads the DT property just =
+after resetting the device.
+> >
+> > While suggesting this, I just noticed that when the device is reset, we=
+ do not wait before initiating communication with the device. Thefore, I wo=
+uld suggest the following change (that I will submit as a separate patch):
+> >
+> >         regmap_write(s->regmap, SC16IS7XX_IOCONTROL_REG << SC16IS7XX_RE=
+G_SHIFT,
+> >                         SC16IS7XX_IOCONTROL_SRESET_BIT);
+> >
+> > +       /* After reset, the host must wait at least 3us before initiali=
+zing a
+> > +        * communication with the device: */
+> > +       usleep_range(3, 5);
+> >
+> > Then like I said, insert the code that read the modem-control-line-port=
+ DT property right after that to see if it helps.
+> >
+> > Hugo.
+>=20
+> Hello,
+>=20
+> I tried those suggestions, together with the patch you mentioned in the o=
+ther email - all to no avail.
+> I added a debug print to confirm, that the property is detected, and regm=
+ap access is executed - and it is. This is so strange.
+> Maybe the offsets in regmap are still wrong, for some reason?
+> I also double checked if it was possible to alter and check GPIO states t=
+hrough GPIO subsystem - it is.
 
-Have you read the code? I use type_max(typeof_member(shinfo, meta_len)),
-what performance are you talking about?
+Then it seems that the remaining difference is the number of GPIOs that are=
+ configured, which for the moment is always the value set in constant nr_gp=
+io (for each device).
 
-The whole xdp_metalen_invalid() gets expanded into:
+I already implemented and tested your suggestion of lowering the number of =
+GPIOs exported when using some pins as modem status lines. It seems to be w=
+orking good, altough I have only tested that the correct number of GPIOs ar=
+e now exported.
 
-	return (metalen % 4) || metalen > 255;
+I will send you the test patch and let me know if it helps.
 
-at compile-time. All those typeof shenanigans are only to not open-code
-meta_len's type/size/max.
-
-> 
-> But only use for SKBs that gets created from xdp with metadata, right?
-> 
-> 
-> 
->>> It's not 'metadata is stored as u8', it's 'metadata size is stored as
->>> u8' :)
->>> Maybe I should rephrase it better in v2.
-> 
-> Yes, a rephrase will be good.
-> 
-> --Jesper
-> 
-> 
-> 
-> static inline u8 skb_metadata_len(const struct sk_buff *skb)
-> {
->     return skb_shinfo(skb)->meta_len;
-> }
-> 
-
-Thanks,
-Olek
+Hugo.
