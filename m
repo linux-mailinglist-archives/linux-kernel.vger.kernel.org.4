@@ -2,70 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F74470A158
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 23:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F8F870A15B
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 23:14:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230497AbjESVLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 17:11:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45582 "EHLO
+        id S230192AbjESVOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 17:14:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjESVLh (ORCPT
+        with ESMTP id S229579AbjESVOb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 17:11:37 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A100E49
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 14:11:26 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-ba865ac594bso4994109276.0
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 14:11:26 -0700 (PDT)
+        Fri, 19 May 2023 17:14:31 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC9397
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 14:14:30 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-64a9335a8e7so954240b3a.0
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 14:14:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1684530685; x=1687122685;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1684530869; x=1687122869;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=u+uaRp35edSG069t4QPppFZtHmznzJV890/JpydoWIU=;
-        b=BoAQWGg0fziT/zVOVPWH8PYtpVitBPaeeLVUk6R+L4oeMGFKwW6WTKJ2ZDypPIE3bt
-         J4WVeUN5h4QgL2ors+1VSujBWlV+PnUarViclLLYozjpkzUGoTsnJvL380CWK8Y/L+N3
-         DLCbDZg/BiXn9VdPtJFsDPyXubDjRGGde3mKYPr5jvA+vdJrcLjl/G78IoSpk4DCBEnw
-         KLh+wxbi0evsny8MySXRD4wMDEdsvSFHaRNU9BBBXzSOnyHXajoATGr8RDIRXzKKPfq4
-         1J7K73sdoKIEAQvsUPGqkR5o32uS6Zs0n9mblErc+1+fUQeTVGixsnaoxna613FD86ls
-         WBOg==
+        bh=DIrenhBfdJ9S1GglddRp7FAjwWj6W9avRM9R/GOtq4o=;
+        b=S6JW210SimyXQteMWDUCvnrjqHSMWR9FlhpN6Gfp8JzEhWQsc/oawiq3wLPDUZA9vK
+         fBzaGKtIlZ1TIUeiQOm/SdN98MjUGkNdW6mOGMb0VAT6a0zyW2oHeScXhM0vALh+Q9U3
+         00mdNeGsdjXBsYWyVisypxU/dTZ9sqejCiOYtl8Yoo1qeB34jnmBlQc7G8w4j360jsvZ
+         F9J0YoUVbuFUPYidnTyV4facw2EVUg69OJ7nZPF3ksqC+/ZCqa/GPlgzFKVbuQvzC0xB
+         o32Kl9kUzd/oXbLVJgkO4+94p4BtGxG8bunOphyLZtgzG8WhvpNbFFFqUEFCv0HgftpS
+         QnDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684530685; x=1687122685;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1684530869; x=1687122869;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=u+uaRp35edSG069t4QPppFZtHmznzJV890/JpydoWIU=;
-        b=P15HI6nnbzNLhBk/jMiNX+RsmNc7PYvkUFG/8zZ+W72q715eXY0SGCdfsmhXEYO9vL
-         gPO1xnw1XZg7CZ1dy1dNGn4UWwrtf6QJQaI+45mTch+Ru5MlRkh0gWqyIqpCK1dzFm2s
-         W0tdg1EtI12mQ96DkdQQOJzQeizuG91A5Q+AmhB6JmF85bi+wIVGA7Jhji3xsgktoAfd
-         iYORv3n60NY0JV5LYU8gWyf6ytxNM2IhkZwDscwpFgL2czUbGtanls+Z2oFN7pqOM/Iz
-         SSuVpUTuD4no+ZPAHtQ2Oayn78XToBLVzrP13LrSqUNNo1R6HcYw0kjCB8V8bBAahNq/
-         xkfw==
-X-Gm-Message-State: AC+VfDzbU1kYHTLQ6WPvgN7vrwnVKOSSiS4LqelVaqCzYz9kjghzEp/A
-        KQ/aqQT1t3f4fBPfsBXAIYKqMQxdWVr0JH2yg2Of
-X-Google-Smtp-Source: ACHHUZ4f7bhfrf+CH5u40Igxst9OQUQGConCJcAscKSMQL/ATBnkacZF2ihDM40uCMIzetmJwXGL548xnpiUd+tsV7E=
-X-Received: by 2002:a25:da91:0:b0:ba7:ddd2:9909 with SMTP id
- n139-20020a25da91000000b00ba7ddd29909mr3054255ybf.33.1684530685318; Fri, 19
- May 2023 14:11:25 -0700 (PDT)
+        bh=DIrenhBfdJ9S1GglddRp7FAjwWj6W9avRM9R/GOtq4o=;
+        b=boEzHpX6RfQXdrUwYDEbOX6lrfIKm+LteWGowncs611cOpoIYt9obZzk6tOUFbOdGZ
+         5J9cNQpEQa1ItZU6nMa9setWgkuwBiNT+DZFA7NcIk3MGLRQcRvAsOqdpZXfvVG+t5gB
+         LXl1BHZSMsZxf56B95U8Uc9Q06Jk92fOr/uZ4JRbCf93eb6yfBT4QUqabbUabqp4BhYu
+         9L6W35vVeNnqSs2AMp2UIuWScdXJoJrq1Tli8Z6KPq28U81o20wszjFrXlpNo4EslTvQ
+         mSV8vuQWkIedtZKXPO+ezqTkFhTsQc5/6JEuDHxwSeWoAS8EELnEpyaOcYV3LvssLroZ
+         qffw==
+X-Gm-Message-State: AC+VfDycBavRsdZCMLi9iKWaDlv9a8gIe4vxDNinHM+Hl0psQD5Pcgt8
+        cnl+k41bWwZVB3S9ho5PuDc=
+X-Google-Smtp-Source: ACHHUZ4dMVRliZxns6wTFOga0mP6iABSlp+aoUohWPu+fMi/VXG6CHEbD8VZs/+6Pm/X/5KPWjTHJg==
+X-Received: by 2002:a17:903:183:b0:1af:98e:5b9b with SMTP id z3-20020a170903018300b001af098e5b9bmr673080plg.10.1684530869217;
+        Fri, 19 May 2023 14:14:29 -0700 (PDT)
+Received: from ubuntu777.domain.name (36-228-97-28.dynamic-ip.hinet.net. [36.228.97.28])
+        by smtp.gmail.com with ESMTPSA id z2-20020a1709028f8200b001ab0159b9edsm54318plo.250.2023.05.19.14.14.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 May 2023 14:14:28 -0700 (PDT)
+From:   Min-Hua Chen <minhuadotchen@gmail.com>
+To:     broonie@kernel.org
+Cc:     alsa-devel@alsa-project.org, lgirdwood@gmail.com,
+        linux-kernel@vger.kernel.org, minhuadotchen@gmail.com,
+        perex@perex.cz, peter.ujfalusi@gmail.com, tiwai@suse.com
+Subject: Re: [PATCH] ALSA: ti: Use pcm_for_each_format() macro for PCM format iteration
+Date:   Sat, 20 May 2023 05:14:24 +0800
+Message-Id: <20230519211424.3381-1-minhuadotchen@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <ZGV9m6KbuIMWOX13@finisterre.sirena.org.uk>
+References: <ZGV9m6KbuIMWOX13@finisterre.sirena.org.uk>
 MIME-Version: 1.0
-References: <20230518041513.1669386-1-azeemshaikh38@gmail.com> <CSPLMMXED66E.AMJRQGTPHKIS@suppilovahvero>
-In-Reply-To: <CSPLMMXED66E.AMJRQGTPHKIS@suppilovahvero>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 19 May 2023 17:11:14 -0400
-Message-ID: <CAHC9VhT6qfX9B=nhZNeyOsiaA-vg4bBm=rx8BGiVPCTK1g-L7g@mail.gmail.com>
-Subject: Re: [PATCH] KEYS: Replace all non-returning strlcpy with strscpy
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Azeem Shaikh <azeemshaikh38@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        linux-hardening@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org, James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,48 +73,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 2:01=E2=80=AFPM Jarkko Sakkinen <jarkko@kernel.org>=
- wrote:
-> On Thu May 18, 2023 at 7:15 AM EEST, Azeem Shaikh wrote:
-> > strlcpy() reads the entire source buffer first.
-> > This read may exceed the destination size limit.
-> > This is both inefficient and can lead to linear read
-> > overflows if a source string is not NUL-terminated [1].
-> > In an effort to remove strlcpy() completely [2], replace
-> > strlcpy() here with strscpy().
-> > No return values were used, so direct replacement is safe.
-> >
-> > [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strl=
-cpy
-> > [2] https://github.com/KSPP/linux/issues/89
-> >
-> > Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
-> > ---
-> >  security/keys/request_key_auth.c |    2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/security/keys/request_key_auth.c b/security/keys/request_k=
-ey_auth.c
-> > index 41e9735006d0..8f33cd170e42 100644
-> > --- a/security/keys/request_key_auth.c
-> > +++ b/security/keys/request_key_auth.c
-> > @@ -178,7 +178,7 @@ struct key *request_key_auth_new(struct key *target=
-, const char *op,
-> >       if (!rka->callout_info)
-> >               goto error_free_rka;
-> >       rka->callout_len =3D callout_len;
-> > -     strlcpy(rka->op, op, sizeof(rka->op));
-> > +     strscpy(rka->op, op, sizeof(rka->op));
-> >
-> >       /* see if the calling process is already servicing the key reques=
-t of
-> >        * another process */
->
->
-> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Hi Mark,
 
-Since you maintain this code Jarkko, are you planning to merge this
-into your tree or would you prefer the KSPP folks merge it?
+>On Thu, May 18, 2023 at 07:42:15AM +0800, Min-Hua Chen wrote:
+>
+>> Thanks for your comment. I think the subject should be changed to:=20
+>> "ASoC: ti: davinci-mcasp: Use pcm_for_each_format() macro".
+>
+>Yes.
 
---=20
-paul-moore.com
+
+ok, I will submit v2 for this.
+
+
+cheers,
+Min-Hua
