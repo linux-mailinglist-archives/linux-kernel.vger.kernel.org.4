@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86F69709C2F
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 18:14:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B2F1709C31
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 18:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbjESQOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 12:14:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45456 "EHLO
+        id S229576AbjESQOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 12:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjESQON (ORCPT
+        with ESMTP id S230104AbjESQOS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 12:14:13 -0400
+        Fri, 19 May 2023 12:14:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1295B1B0;
-        Fri, 19 May 2023 09:14:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8EA10DD;
+        Fri, 19 May 2023 09:14:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7F331658E3;
-        Fri, 19 May 2023 16:14:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D8AEC433EF;
-        Fri, 19 May 2023 16:14:03 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5762365905;
+        Fri, 19 May 2023 16:14:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22FFAC433EF;
+        Fri, 19 May 2023 16:14:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684512843;
-        bh=pqzdTNgUwHqgceYCq0XJCIoUPvNv3LVkJxE36qND4w4=;
+        s=k20201202; t=1684512846;
+        bh=DazjSu0p439CX/aFG0CP+vx6931tX9hLexv94jEHTmo=;
         h=From:To:Cc:Subject:Date:From;
-        b=T7P29H1Jls7cGSJ22+jhRTC7sp9bcSjX8vLZr+5/iq861QuM9Ab1W7DJBEAcufu8a
-         Z2RW2xCFFRycdozWsm/1aXt6F4WFv256/3ZEGHnkzsEFidfrK/LhkJI6E1w6xAr4Yh
-         CB6sXNaxQ9NV9yWdQkbS99eSOXjO0bG+HOBy1bfcjpX+xJZ/qPfwBDjPNTyXLuFs74
-         5G8FtUIeXOVOjIQNVVezapKMkX3VgtXyX266RiY8IoPtWL3MFM6KbO6M1PISYMU9hj
-         rYt2rOoPKCU4Rwt+YlpwsHtEFClSCtPy0baaNGjL6sXHUnpIKp93+YNIxSytZUYGJN
-         CDKMVPKVt9aKQ==
+        b=tHAu7idGKo4VEDxhXTHOkeFRm61j7leOD+13gHi6emQ++oTvwrJQiMR50++QfBcoY
+         VPSvAj7mYEgWeGj8X90sk9BrAOrNJYK9HZGAqydNnTy+TWLT16f9wPx47EeBfvmNVx
+         GxJI0dZYmtCvamf3X5UCp9MK9LaXU90ckOgWO/8BTiZWf4qWUhHcND5D4kLxNJG8hP
+         S3VmhnJIHxve1zGy7g2SYrJeJYZ1eaxjQw6OvMpwWX85O998LFP+uJPPi1IpOIn/up
+         6hXDQ5A9thUcGrIjXw0unCH6snEtQoG65FSQ1auegE9G6/FuQv1FMTnLj++n7g/Aau
+         db99J0k57xeYw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Lee Jones <lee@kernel.org>,
         Jassi Brar <jaswinder.singh@linaro.org>,
         Sasha Levin <sashal@kernel.org>, jassisinghbrar@gmail.com
-Subject: [PATCH AUTOSEL 5.4] mailbox: mailbox-test: Fix potential double-free in mbox_test_message_write()
-Date:   Fri, 19 May 2023 12:14:01 -0400
-Message-Id: <20230519161401.2755201-1-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19] mailbox: mailbox-test: Fix potential double-free in mbox_test_message_write()
+Date:   Fri, 19 May 2023 12:14:04 -0400
+Message-Id: <20230519161404.2756494-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 X-stable: review
@@ -137,10 +137,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 7 insertions(+)
 
 diff --git a/drivers/mailbox/mailbox-test.c b/drivers/mailbox/mailbox-test.c
-index 4555d678fadda..6dd5b9614452b 100644
+index 129b3656c453a..c7ff9653223bf 100644
 --- a/drivers/mailbox/mailbox-test.c
 +++ b/drivers/mailbox/mailbox-test.c
-@@ -12,6 +12,7 @@
+@@ -16,6 +16,7 @@
  #include <linux/kernel.h>
  #include <linux/mailbox_client.h>
  #include <linux/module.h>
@@ -148,15 +148,15 @@ index 4555d678fadda..6dd5b9614452b 100644
  #include <linux/of.h>
  #include <linux/platform_device.h>
  #include <linux/poll.h>
-@@ -38,6 +39,7 @@ struct mbox_test_device {
+@@ -43,6 +44,7 @@ struct mbox_test_device {
  	char			*signal;
  	char			*message;
  	spinlock_t		lock;
 +	struct mutex		mutex;
  	wait_queue_head_t	waitq;
  	struct fasync_struct	*async_queue;
- 	struct dentry		*root_debugfs_dir;
-@@ -110,6 +112,8 @@ static ssize_t mbox_test_message_write(struct file *filp,
+ };
+@@ -114,6 +116,8 @@ static ssize_t mbox_test_message_write(struct file *filp,
  		return -EINVAL;
  	}
  
@@ -165,7 +165,7 @@ index 4555d678fadda..6dd5b9614452b 100644
  	tdev->message = kzalloc(MBOX_MAX_MSG_LEN, GFP_KERNEL);
  	if (!tdev->message)
  		return -ENOMEM;
-@@ -144,6 +148,8 @@ static ssize_t mbox_test_message_write(struct file *filp,
+@@ -148,6 +152,8 @@ static ssize_t mbox_test_message_write(struct file *filp,
  	kfree(tdev->message);
  	tdev->signal = NULL;
  
@@ -174,7 +174,7 @@ index 4555d678fadda..6dd5b9614452b 100644
  	return ret < 0 ? ret : count;
  }
  
-@@ -392,6 +398,7 @@ static int mbox_test_probe(struct platform_device *pdev)
+@@ -396,6 +402,7 @@ static int mbox_test_probe(struct platform_device *pdev)
  	platform_set_drvdata(pdev, tdev);
  
  	spin_lock_init(&tdev->lock);
