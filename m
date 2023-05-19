@@ -2,109 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0AD4708C92
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 02:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A324C708C8B
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 01:58:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbjESAAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 20:00:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48354 "EHLO
+        id S230021AbjERX6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 19:58:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjESAAE (ORCPT
+        with ESMTP id S229487AbjERX6b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 20:00:04 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41EFAEA;
-        Thu, 18 May 2023 17:00:03 -0700 (PDT)
+        Thu, 18 May 2023 19:58:31 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 470A4EA
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 16:58:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684454403; x=1715990403;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=5t/LbPMDhw3OuvazmSL5YCXrk6Z1rz2sQn9LegvfpFw=;
-  b=OqZQrbWcEh7sjE/ph87CEn3UDaDnG9jWwgtLprotujV3EaKyHxTwQI2y
-   ZQ04cv6qXXRGmuoARpBynnNLo/9fy0gOOEr35gy/7noN27UlfVy20lOP1
-   1Lc9eRXJdxfaxaImgFZ9owa/3KEh9TsdMdTZTks5SIBut4BO6h8Y9lEeS
-   cvDFMstPX8Rc3ZTeb8Avd2pgnBFFMIitqD/45ID5nEDxLTAz2I9q1JYaY
-   u1myV+OXd64fCFWSdC0nQdY9n9d84mj/Vpckzdk+67kdjAr55d628qb+P
-   L+X3DLr4N4V9EkqUnn049NGRxhnPun9i0InuIs0Bh+oKXgKD2Xlyp6DCI
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="352246432"
+  t=1684454310; x=1715990310;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=j8yGiICk61w++obRlnYB3sOYUpEpXHCdxLIrJ8Rqerk=;
+  b=DvwOh1iwqylvWUQ7bQYJSGZNEf6HKuRZv9FYT86O9IYTGvhXzmqCPSns
+   nzPgMHsfQzdI+7/pKDoLig9Tx6vMP5m8OxoiIZ5m43PpgDJVKh9nRveDC
+   MX7ZXBvRUMcxgyMnVUjzo3xO7WWKwYDr+FFGgPqeRDmGUCsdpXdfD4I5T
+   +0D1HnPbDvNmR5Bk52uRKmEEew2XGhAr7wj9YSFIqTdIfIJ/TChNHP36E
+   ZCqhXKxxU34H/PQcArd2spRgT+TFu23z27oKJ+2PsTxbBtqUyPPMz7C6m
+   p2b0p6DVdImLKA6lmGZX41+H5SWiSUpabme6Wsn8BCu1g7oXpil10CjHg
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="438580081"
 X-IronPort-AV: E=Sophos;i="6.00,175,1681196400"; 
-   d="scan'208";a="352246432"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 17:00:02 -0700
+   d="scan'208";a="438580081"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 16:58:29 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="792144716"
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="705367859"
 X-IronPort-AV: E=Sophos;i="6.00,175,1681196400"; 
-   d="scan'208";a="792144716"
-Received: from mkim1-mobl.amr.corp.intel.com (HELO [10.209.118.171]) ([10.209.118.171])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 17:00:02 -0700
-Message-ID: <c53c03e8-529f-5b72-42ab-f32f50aaab35@intel.com>
-Date:   Thu, 18 May 2023 17:00:01 -0700
+   d="scan'208";a="705367859"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by fmsmga007.fm.intel.com with ESMTP; 18 May 2023 16:58:29 -0700
+Date:   Thu, 18 May 2023 17:01:26 -0700
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Shrikanth Hegde <sshegde@linux.vnet.ibm.com>
+Cc:     Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Tim C . Chen" <tim.c.chen@intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+Subject: Re: [PATCH v4 05/12] sched/fair: Keep a fully_busy SMT sched group
+ as busiest
+Message-ID: <20230519000126.GA24449@ranerica-svr.sc.intel.com>
+References: <20230406203148.19182-1-ricardo.neri-calderon@linux.intel.com>
+ <20230406203148.19182-6-ricardo.neri-calderon@linux.intel.com>
+ <431faa39-4f5c-0087-7ce5-16796ca1a9e1@linux.vnet.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 2/6] PKEY: Add arch_check_pkey_enforce_api()
-Content-Language: en-US
-To:     Jeff Xu <jeffxu@google.com>
-Cc:     jeffxu@chromium.org, luto@kernel.org, jorgelo@chromium.org,
-        keescook@chromium.org, groeck@chromium.org, jannh@google.com,
-        sroettger@google.com, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, linux-hardening@vger.kernel.org
-References: <20230515130553.2311248-1-jeffxu@chromium.org>
- <20230515130553.2311248-3-jeffxu@chromium.org>
- <6dbbc3da-78c9-8101-d52a-0be47da9d67e@intel.com>
- <CALmYWFtu-WzOTEs2aWU3zMW=KZUjaaL7OTE7hQtHjfwQfQNyEA@mail.gmail.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <CALmYWFtu-WzOTEs2aWU3zMW=KZUjaaL7OTE7hQtHjfwQfQNyEA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <431faa39-4f5c-0087-7ce5-16796ca1a9e1@linux.vnet.ibm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/18/23 15:51, Jeff Xu wrote:
->> Do you have a solid handle on all call paths that will reach
->> __arch_check_vma_pkey_for_write() and can you ensure they are all
->> non-remote?
-> Is this about the attack scenario where the attacker uses ptrace()
-> into the chrome process ? if so it is not in our threat model, and
-> that is more related to sandboxing on the host.
+On Sat, May 13, 2023 at 12:11:45AM +0530, Shrikanth Hegde wrote:
+> 
+> 
+> On 4/7/23 2:01 AM, Ricardo Neri wrote:
+> > When comparing two fully_busy scheduling groups, keep the current busiest
+> > group if it represents an SMT core. Tasks in such scheduling group share
+> > CPU resources and need more help than tasks in a non-SMT fully_busy group.
+> >
+> > Cc: Ben Segall <bsegall@google.com>
+> > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> > Cc: Ionela Voinescu <ionela.voinescu@arm.com>
+> > Cc: Len Brown <len.brown@intel.com>
+> > Cc: Mel Gorman <mgorman@suse.de>
+> > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> > Cc: Steven Rostedt <rostedt@goodmis.org>
+> > Cc: Tim C. Chen <tim.c.chen@intel.com>
+> > Cc: Valentin Schneider <vschneid@redhat.com>
+> > Cc: x86@kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Tested-by: Zhang Rui <rui.zhang@intel.com>
+> > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> > ---
+> > Changes since v3:
+> >  * None
+> >
+> > Changes since v2:
+> >  * Introduced this patch.
+> >
+> > Changes since v1:
+> >  * N/A
+> > ---
+> >  kernel/sched/fair.c | 16 ++++++++++++++--
+> >  1 file changed, 14 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > index b151e93ec316..ea23a5163bfa 100644
+> > --- a/kernel/sched/fair.c
+> > +++ b/kernel/sched/fair.c
+> > @@ -9566,10 +9566,22 @@ static bool update_sd_pick_busiest(struct lb_env *env,
+> >  		 * contention when accessing shared HW resources.
+> >  		 *
+> >  		 * XXX for now avg_load is not computed and always 0 so we
+> > -		 * select the 1st one.
+> > +		 * select the 1st one, except if @sg is composed of SMT
+> > +		 * siblings.
+> >  		 */
+> > -		if (sgs->avg_load <= busiest->avg_load)
+> > +
+> > +		if (sgs->avg_load < busiest->avg_load)
+> >  			return false;
+> > +
+> > +		if (sgs->avg_load == busiest->avg_load) {
+> > +			/*
+> > +			 * SMT sched groups need more help than non-SMT groups.
+> > +			 * If @sg happens to also be SMT, either choice is good.
+> > +			 */
+> > +			if (sds->busiest->flags & SD_SHARE_CPUCAPACITY)
+> > +				return false;
+> > +		}
+> > +
+> >  		break;
+> 
 
-The attacker would use *some* remote interface.  ptrace() is just one of
-those remote interfaces.
+Thank you very much for your review!
 
-> Or is this about io_uring? Yes, io_uring kernel thread breaks our
-> expectations of PKRU & user space threads, however I thought the break
-> is not just for this - any syscall involved in memory operation will
-> break after into io_uring ?
+> IIUC,
+> 
+> Earlier, we used to go to out_balanced if sgs->avg_load <= busiest->avg_load.
+> Now we go only if it is less.
 
-I'm not quite following.
+In this particular case we are comparing to fully_busy groups. Both
+sgs->avg_load and busiest->avg_load are equal to zero 0.
 
-Please just do me a favor: have the io_uring maintainers look at your
-proposal.  Make sure that the defenses you are building can work in a
-process where io_uring is in use by the benign threads.
+> lets say sgs->avg_load == busiest->avg_load,
+> then we will return true in MC,DIE domain. This might end up traversing
+> multiple such group's and pick the last one as the busiest instead of
+> first.
 
-Those same folks are pretty familiar with the other, more traditional
-I/O syscalls that have in-memory descriptors that control syscall
-behavior like readv/writev.  Those also need a close look.
+Yes, that is correct. But we traverse all sched groups from
+update_sd_lb_stats() anyway. We are here because both sgs and busiest are
+of type fully_busy and we need to break a tie. Previously we always kept
+on selecting sgs as busiest.
 
-> Other than those, yes, I try to ensure the check is only used at the
-> beginning of syscall entry in all cases, which should be non-remote I
-> hope.
+> I guess eventually any load balance if exists will be fixed.  But
+> this might cause slight overhead. would it?
+> 
+> 
+> 
+> nit: There is typo in [2/12]  if the whole core is repeated.
+> +	 * CPUs. When done between cores, do it only if the whole core if the
+> +	 * whole core is idle.
+> 
+> Mentioning in this reply instead, to avoid sending another mail reply for this.
 
-You're right that synchronous, shallow syscall paths are usually
-non-remote.  But those aren't the problem.  The problem is that there
-*ARE* remote accesses and those are a potential hole for this whole
-mechanism.
+Ah! I read my patches dozens of times and I still missed this. Thank you
+for noting. I will post a trivial patch to fix it.
 
-Can they be closed?  I don't know.  I honestly don't have a great grasp
-on how widespread these things are.  You'll need a much more complete
-grasp on them than I have before this thing can go forward.
+Thanks and BR,
+Ricardo
