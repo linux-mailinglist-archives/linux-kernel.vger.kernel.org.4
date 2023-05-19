@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6708709EE9
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 20:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39DB5709EEA
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 20:09:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231915AbjESSJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 14:09:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58002 "EHLO
+        id S231992AbjESSJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 14:09:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231663AbjESSJ2 (ORCPT
+        with ESMTP id S231758AbjESSJb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 14:09:28 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A63C5139;
-        Fri, 19 May 2023 11:09:27 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-510d92184faso5472452a12.1;
-        Fri, 19 May 2023 11:09:27 -0700 (PDT)
+        Fri, 19 May 2023 14:09:31 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75515121;
+        Fri, 19 May 2023 11:09:29 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-94a342f7c4cso678047466b.0;
+        Fri, 19 May 2023 11:09:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684519766; x=1687111766;
+        d=gmail.com; s=20221208; t=1684519768; x=1687111768;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+d7PbSuYoLaRDWMlMC+jLFLlA199/veHtp6NNGsVDoc=;
-        b=gcQTbnmDPp2/Gb2su0qH27Cgs0F2g1Thm8mh9FNIKJm0oVuWfADVDmYW4S0L/BK8+o
-         a3kVhiDBd4o54uoRD7sp0IrRDfs3pfeg/SNyFKjAdblu6Ht4gb3IPvd2GMeO02U3gysx
-         B7ZE8QxzdS0Mec6P1B8zNcr+Fh8yiAoPQMJ1yYGqpUy19Wptg2PvOGX2y5mQt8Mll+aR
-         XBvSXRbCkp/SVV6ti/QWRr4WHfxvz+fdSWMLN02t2+823/rE6XWCLu1ag1HeoW4jVgbG
-         K7Ko9Ct/ypYjQZOP7mkZyEVgV59MYRy59bdLdpyRUEOObSce6eGRgyKDjmZ4RQQPTpu7
-         qUHQ==
+        bh=MF33tdMj9iVHCsjXUVoEa1ZEru2AhDHukTYWsA8encE=;
+        b=bm7RAQh6sbBla4vNjrqGC5WqJ+/w35iby80F2IEn4lfhiajLAQZK8zrOwn+VUdYVc1
+         5vr8TZGpub1V6modDXJzHvOZm0KbrmORsP201upDRJncrMrqBosCAR+X9RgXdNHqmb+g
+         rHSuzRcNajsuOLEms/pFWpK1/OApbZ5gCIsILsO62ev4+PcjrKnb+Hcgzstco3XI3iSH
+         IBhm3MZq1H9zNQACcIOfw8whprOqQPTb8ueGk5h/YB4wHDMqc9f/TkAnINdLJAP+TBZX
+         HrtkKrictRIJZnCHsUinUGfIYj8HkDYfcdU5oj/Py6Gojc0cZMXl12wyiArGpvkIo43Y
+         31fA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684519766; x=1687111766;
+        d=1e100.net; s=20221208; t=1684519768; x=1687111768;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+d7PbSuYoLaRDWMlMC+jLFLlA199/veHtp6NNGsVDoc=;
-        b=eeoqfylw8CzuKL1DH1bAeMkn+B26pZs0ir+Xa67awYwE+5jZjx8ScDyR6aLQIIyZB1
-         omcDliZjQHw5ZTa/xQpSqJYFvnLRGgGl54SJ0/WnTzeQO0aoebI/TIvSz/nIG//dfA3N
-         Z4ZC3SsVAIUYwwGPqJKL4ldWlS/arWWA7S3PyO9uqdM0jAp7/jwkUqU+AwNIwZdW2GXY
-         odrwLB7G2xLPnxhS38fe8iI2Qco6e47ZIJkUEcB5dsHRrm5LpSAM7eLuENtDIGJcKrjG
-         dwMSAUMg662e6n6ECyNU/CdJvLAkAU0IJ8/63HVvLw08/7aKJXp9c5/vKHSYYMzxkXl7
-         qepQ==
-X-Gm-Message-State: AC+VfDzb16rr3wHpFVtbkwiYShZS8q+PxvqA2IQM+dUCpWBMmMGB5eeO
-        oj9id/grdh644x6XV9VXaOY=
-X-Google-Smtp-Source: ACHHUZ7rLnbizAEqYNWScE2PGJGpJKPdJtBcR0QqvyY0pfJthrs/TixsUA/eAKRegeklwChoSIzfNw==
-X-Received: by 2002:aa7:d8d8:0:b0:50d:bb87:247c with SMTP id k24-20020aa7d8d8000000b0050dbb87247cmr2359065eds.1.1684519765877;
-        Fri, 19 May 2023 11:09:25 -0700 (PDT)
+        bh=MF33tdMj9iVHCsjXUVoEa1ZEru2AhDHukTYWsA8encE=;
+        b=KU4YXpDm7vrO7kjR8EIXWiwdG641LLHs/fciMXpA6h9KhZyEvZc5zqOoIeEFrym9bc
+         HGt2e7RV1rXYO/30FKeJJ0XKHApMSYUFT9HiYWlzaGNEqNlVaSSOuoKE46RgUvLkC6iq
+         fRFpDyWePQbSp885aqjmJD6EFJH/jNSsJx5oIe0V7v7oNcCsDQ7jMyepPlvfK7osSw1m
+         ju5HzweRCNY38pDt8BMfQmmuF+AfY96ESgCqf++fO4wLaqXGMUbDli8Q7jlcgmWNT9qT
+         1giDoddDH/tEYkmgI5sbqTHZ68wJ8DjxO2sU2ZeKQwSGOxqNLIhlk4sVqM+M3VcT+oya
+         z4oA==
+X-Gm-Message-State: AC+VfDwsk6wUgCV5ucdeRCpNHjCKQw5vgwZa2WmMSOHR+LA6kIrfw2rL
+        umqlWOGSzz6tVaBof1RMkqk=
+X-Google-Smtp-Source: ACHHUZ6SJoTanHKm7kR2LK1v+KjCScFJDXFOZCH/ufqcyH+1iKc+sO94xdQxG9FrUnCxyLb6Q97YqQ==
+X-Received: by 2002:a17:906:fe41:b0:96a:138:c1a0 with SMTP id wz1-20020a170906fe4100b0096a0138c1a0mr2982368ejb.9.1684519767821;
+        Fri, 19 May 2023 11:09:27 -0700 (PDT)
 Received: from localhost.my.domain (83.11.222.198.ipv4.supernova.orange.pl. [83.11.222.198])
-        by smtp.gmail.com with ESMTPSA id g26-20020aa7c85a000000b0050690bc07a3sm19824edt.18.2023.05.19.11.09.24
+        by smtp.gmail.com with ESMTPSA id g26-20020aa7c85a000000b0050690bc07a3sm19824edt.18.2023.05.19.11.09.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 11:09:25 -0700 (PDT)
+        Fri, 19 May 2023 11:09:27 -0700 (PDT)
 From:   Artur Weber <aweber.kernel@gmail.com>
 To:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
@@ -69,9 +69,9 @@ Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
         linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
         linux-fbdev@vger.kernel.org, linux-pwm@vger.kernel.org,
         ~postmarketos/upstreaming@lists.sr.ht
-Subject: [PATCH v2 3/4] ARM: dts: adapt to LP855X bindings changes
-Date:   Fri, 19 May 2023 20:07:27 +0200
-Message-Id: <20230519180728.2281-4-aweber.kernel@gmail.com>
+Subject: [PATCH v2 4/4] arm64: dts: adapt to LP855X bindings changes
+Date:   Fri, 19 May 2023 20:07:28 +0200
+Message-Id: <20230519180728.2281-5-aweber.kernel@gmail.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230519180728.2281-1-aweber.kernel@gmail.com>
 References: <20230519180728.2281-1-aweber.kernel@gmail.com>
@@ -91,88 +91,36 @@ Change underscores in ROM node names to dashes, and remove deprecated
 pwm-period property.
 
 Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
-Reviewed-by: Luca Weiss <luca@z3ntu.xyz>
 ---
- .../dts/qcom-apq8026-samsung-matisse-wifi.dts |  1 -
- ...-msm8974pro-sony-xperia-shinano-castor.dts | 23 ++++++++++---------
- 2 files changed, 12 insertions(+), 12 deletions(-)
+ arch/arm64/boot/dts/nvidia/tegra210-p2371-2180.dts | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts b/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
-index 91b860e24681..884d99297d4c 100644
---- a/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
-+++ b/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
-@@ -99,7 +99,6 @@ backlight@2c {
- 
+diff --git a/arch/arm64/boot/dts/nvidia/tegra210-p2371-2180.dts b/arch/arm64/boot/dts/nvidia/tegra210-p2371-2180.dts
+index 38f4ff229bef..a6a58e51822d 100644
+--- a/arch/arm64/boot/dts/nvidia/tegra210-p2371-2180.dts
++++ b/arch/arm64/boot/dts/nvidia/tegra210-p2371-2180.dts
+@@ -58,19 +58,17 @@ backlight: backlight@2c {
  			dev-ctrl = /bits/ 8 <0x80>;
- 			init-brt = /bits/ 8 <0x3f>;
--			pwm-period = <100000>;
+ 			init-brt = /bits/ 8 <0xff>;
  
- 			pwms = <&backlight_pwm 0 100000>;
- 			pwm-names = "lp8556";
-diff --git a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
-index 04bc58d87abf..2396253f953a 100644
---- a/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
-+++ b/arch/arm/boot/dts/qcom-msm8974pro-sony-xperia-shinano-castor.dts
-@@ -150,47 +150,48 @@ lp8566_wled: backlight@2c {
- 		bl-name = "backlight";
- 		dev-ctrl = /bits/ 8 <0x05>;
- 		init-brt = /bits/ 8 <0x3f>;
--		rom_a0h {
-+
-+		rom-a0h {
- 			rom-addr = /bits/ 8 <0xa0>;
- 			rom-val = /bits/ 8 <0xff>;
- 		};
--		rom_a1h {
-+		rom-a1h {
- 			rom-addr = /bits/ 8 <0xa1>;
- 			rom-val = /bits/ 8 <0x3f>;
- 		};
--		rom_a2h {
-+		rom-a2h {
- 			rom-addr = /bits/ 8 <0xa2>;
- 			rom-val = /bits/ 8 <0x20>;
- 		};
--		rom_a3h {
-+		rom-a3h {
- 			rom-addr = /bits/ 8 <0xa3>;
- 			rom-val = /bits/ 8 <0x5e>;
- 		};
--		rom_a4h {
-+		rom-a4h {
- 			rom-addr = /bits/ 8 <0xa4>;
- 			rom-val = /bits/ 8 <0x02>;
- 		};
--		rom_a5h {
-+		rom-a5h {
- 			rom-addr = /bits/ 8 <0xa5>;
- 			rom-val = /bits/ 8 <0x04>;
- 		};
--		rom_a6h {
-+		rom-a6h {
- 			rom-addr = /bits/ 8 <0xa6>;
- 			rom-val = /bits/ 8 <0x80>;
- 		};
--		rom_a7h {
-+		rom-a7h {
- 			rom-addr = /bits/ 8 <0xa7>;
- 			rom-val = /bits/ 8 <0xf7>;
- 		};
--		rom_a9h {
-+		rom-a9h {
- 			rom-addr = /bits/ 8 <0xa9>;
- 			rom-val = /bits/ 8 <0x80>;
- 		};
--		rom_aah {
-+		rom-aah {
- 			rom-addr = /bits/ 8 <0xaa>;
- 			rom-val = /bits/ 8 <0x0f>;
- 		};
--		rom_aeh {
-+		rom-aeh {
- 			rom-addr = /bits/ 8 <0xae>;
- 			rom-val = /bits/ 8 <0x0f>;
- 		};
+-			pwm-period = <29334>;
+-
+ 			pwms = <&pwm 0 29334>;
+ 			pwm-names = "lp8557";
+ 
+ 			/* boost frequency 1 MHz */
+-			rom_13h {
++			rom-13h {
+ 				rom-addr = /bits/ 8 <0x13>;
+ 				rom-val = /bits/ 8 <0x01>;
+ 			};
+ 
+ 			/* 3 LED string */
+-			rom_14h {
++			rom-14h {
+ 				rom-addr = /bits/ 8 <0x14>;
+ 				rom-val = /bits/ 8 <0x87>;
+ 			};
 -- 
 2.40.1
 
