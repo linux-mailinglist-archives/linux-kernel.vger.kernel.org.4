@@ -2,62 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C65970A131
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 23:05:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99FAE70A134
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 23:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbjESVFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 17:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41738 "EHLO
+        id S229559AbjESVFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 17:05:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjESVFN (ORCPT
+        with ESMTP id S229528AbjESVFx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 17:05:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D4E41A5;
-        Fri, 19 May 2023 14:05:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E5A6A6586C;
-        Fri, 19 May 2023 21:05:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53ED6C433EF;
-        Fri, 19 May 2023 21:05:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684530311;
-        bh=Mj5v+bpL8vpGksGf9GHZnKOEt24+6uxqfaVWrmt99z8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=O9C5sQA1fDVpT+LsSe6nmDSMALaYALFtdGjIibPahT/bWTZ9K/xCEuNlBdPX/AtHx
-         3d/exTbXTnvIIrdEdTJp+DNh+eNUTwXqBE/RNAqItKss1L6kdlKgCOC9vXzLxP3blc
-         XmfvhhYwEdz9t6V79+qDDEOKbHzZKuEGMD0myTBn3aHA0VNnt4gXaifMKukZRjJwst
-         iFm+v3xC35EAVmkv8tdQH6mQmEqpK1x1AHveHnA6SwPOAU8f4BtYnpkBbDZX9/Cigm
-         VAi3C9LccQwq+TTvbk2nY2R59V3oEET05a++9ydhgupKTatXvLc1Xa85eDuvutVWKO
-         TaA6k5Gv7ibYg==
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2af0eb50b4aso37010011fa.2;
-        Fri, 19 May 2023 14:05:11 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxBYiHpam6pEVV3uvUSbZBqqInFqdPmK60RTBlArrrJ4wQF+/YJ
-        Z80PGi4q77eBuFPvUhNMb3lJV/T23quoiQYRRgc=
-X-Google-Smtp-Source: ACHHUZ4jw1PMyxXnSvxtaMA7rkyc5F4RHCYVII+V34XXlLmUd4u0r/g6rFga4jqR4jMd1MqD1HSrTtcaQA5xaBi/zro=
-X-Received: by 2002:a05:651c:10d:b0:2af:1681:2993 with SMTP id
- a13-20020a05651c010d00b002af16812993mr1121072ljb.49.1684530309331; Fri, 19
- May 2023 14:05:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230517132220.937200-1-arnd@kernel.org>
-In-Reply-To: <20230517132220.937200-1-arnd@kernel.org>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 19 May 2023 14:04:57 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW5aThPSitkHf+BD_bzsSGitwJt34ZWApT-6MnqaMWmCtg@mail.gmail.com>
-Message-ID: <CAPhsuW5aThPSitkHf+BD_bzsSGitwJt34ZWApT-6MnqaMWmCtg@mail.gmail.com>
-Subject: Re: [PATCH] raid6: neon: add missing prototypes
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>, linux-raid@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Fri, 19 May 2023 17:05:53 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F6C81A4;
+        Fri, 19 May 2023 14:05:52 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 8B46432009AA;
+        Fri, 19 May 2023 17:05:49 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 19 May 2023 17:05:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1684530349; x=1684616749; bh=Xr
+        THEyJu1Ni599Pw9MkGcF8SgZL4/WA/RkzXdqbqqVk=; b=cxrKgkURIaZOGGwbJ1
+        WJj8/uOqVm1Zq17L3xVPbZWnLLJ2eWblh37yZAPNLDF+aT2Y3VtT1JBGIsoQlb5P
+        OqifYhhFqcWxeBey3qoWg5Gwde18xNFC8F2BOpNGN8YDwq+8T0lInJbCR9X2HeZE
+        bm6EcncD9CdLFWXJffXyfCa3afIi8e4GAif0L1JXIMzKoyEQ4VDgPe1ew3TEhZAR
+        Sr+CeY2W/EeFDLn8w6RBsazxXPD1kFQGWvt2vb3JIDZv20rQi8oSbgFf2jdmbzTg
+        lIimmNFlsVW9Fjih+C30OCSOsSFwwWCMdFEoxy3I3FV8xwA08Ida1bVWy8r0Uhsk
+        FgSw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684530349; x=1684616749; bh=XrTHEyJu1Ni59
+        9Pw9MkGcF8SgZL4/WA/RkzXdqbqqVk=; b=cmfsSoVVA6cL0NnDAuWL/58VOPscJ
+        8++7h6MRZv0Davqkumh9w4QvAwzLF8KrwcszevUPGbeCs4ZnsubAmGETOJ442pLp
+        p7K6ijWRcoIooRiX3eosNfIklCVsynai2Z1RZkaiWY/etEBO8P+EhLO5ETchhHz8
+        iuLKRnRJuSTlMc0aJfKsmV8VY80crs8Z3cbZOFvXYk+Nf32YlPMylWLEgKvYrXqt
+        TBL1UV3vDLZU4jFHXQ6d9pUgs9HQz8zcrb112Xgblw9m0BjEZfjJLNGxLNMbUzyy
+        HYpxXT/YSU8KJWcUjfItXvVaTRVBr6vK51QfsoaWJ9l0wvyhLKh/Ehqrw==
+X-ME-Sender: <xms:rORnZOXE6nMakSfyaImY2XgebGe3k2uVibDh0M45f99nYHHCjdKZHQ>
+    <xme:rORnZKmv7ajOEab8AF3V2aF-4TeU47E_0Qa4QwMG0lwXDvZauiA3PNl3rK-d5SFol
+    7YcZASiH-ZvU01O0wY>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeihedgudehjecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:rORnZCb5Me427u9H4BrdQmdsYN5XnCf5vssiNlKJhKE2Fe_g-Tg0tw>
+    <xmx:rORnZFWlCjnC5zYIdh4PfmfQ9uWALoyVbaVErxBbdsj3ZID0-a_h4g>
+    <xmx:rORnZImHsjaR9okEhHXeFM8gAU0XbfZjvwSYI-XtbeMTih6Jp1NLIQ>
+    <xmx:reRnZJD_Udob72N_Nzm-OtbWo5LIZdnkCQDCrt1gzA1I92AF824E-g>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 9163AB6008D; Fri, 19 May 2023 17:05:48 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-431-g1d6a3ebb56-fm-20230511.001-g1d6a3ebb
+Mime-Version: 1.0
+Message-Id: <dae342ed-8999-4fa5-b719-322182580025@app.fastmail.com>
+In-Reply-To: <20230519195135.79600-1-jiaxun.yang@flygoat.com>
+References: <20230519195135.79600-1-jiaxun.yang@flygoat.com>
+Date:   Fri, 19 May 2023 23:05:15 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Jiaxun Yang" <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "Baoquan He" <bhe@redhat.com>,
+        "Huacai Chen" <chenhuacai@kernel.org>
+Subject: Re: [PATCH v4] mips: add <asm-generic/io.h> including
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,140 +87,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 6:22=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wro=
-te:
+On Fri, May 19, 2023, at 21:51, Jiaxun Yang wrote:
+> With the adding, some default ioremap_xx methods defined in
+> asm-generic/io.h can be used. E.g the default ioremap_uc() returning
+> NULL.
 >
-> From: Arnd Bergmann <arnd@arndb.de>
+> We also massaged various headers to avoid nested includes.
 >
-> The raid6 syndrome functions are generated for different sizes and have
-> no generic prototype, while in the inner functions have a prototype
-> in a header that cannot be included from the correct file. In both
-> cases, the compiler warns about missing prototypes:
->
-> lib/raid6/recov_neon_inner.c:27:6: warning: no previous prototype for '__=
-raid6_2data_recov_neon' [-Wmissing-prototypes]
-> lib/raid6/recov_neon_inner.c:77:6: warning: no previous prototype for '__=
-raid6_datap_recov_neon' [-Wmissing-prototypes]
-> lib/raid6/neon1.c:56:6: warning: no previous prototype for 'raid6_neon1_g=
-en_syndrome_real' [-Wmissing-prototypes]
-> lib/raid6/neon1.c:86:6: warning: no previous prototype for 'raid6_neon1_x=
-or_syndrome_real' [-Wmissing-prototypes]
-> lib/raid6/neon2.c:56:6: warning: no previous prototype for 'raid6_neon2_g=
-en_syndrome_real' [-Wmissing-prototypes]
-> lib/raid6/neon2.c:97:6: warning: no previous prototype for 'raid6_neon2_x=
-or_syndrome_real' [-Wmissing-prototypes]
-> lib/raid6/neon4.c:56:6: warning: no previous prototype for 'raid6_neon4_g=
-en_syndrome_real' [-Wmissing-prototypes]
-> lib/raid6/neon4.c:119:6: warning: no previous prototype for 'raid6_neon4_=
-xor_syndrome_real' [-Wmissing-prototypes]
-> lib/raid6/neon8.c:56:6: warning: no previous prototype for 'raid6_neon8_g=
-en_syndrome_real' [-Wmissing-prototypes]
-> lib/raid6/neon8.c:163:6: warning: no previous prototype for 'raid6_neon8_=
-xor_syndrome_real' [-Wmissing-prototypes]
->
-> Add a new header file that contains the prototypes for both to avoid
-> the warnings.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-
-Applied to md-next. Thanks!
-
-Song
-
+> Signed-off-by: Baoquan He <bhe@redhat.com>
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> [jiaxun.yang@flygoat.com: Massage more headers, fix ioport defines]
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Huacai Chen <chenhuacai@kernel.org>
+> Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> Cc: linux-mips@vger.kernel.org
 > ---
->  lib/raid6/neon.h             | 22 ++++++++++++++++++++++
->  lib/raid6/neon.uc            |  1 +
->  lib/raid6/recov_neon.c       |  8 +-------
->  lib/raid6/recov_neon_inner.c |  1 +
->  4 files changed, 25 insertions(+), 7 deletions(-)
->  create mode 100644 lib/raid6/neon.h
->
-> diff --git a/lib/raid6/neon.h b/lib/raid6/neon.h
-> new file mode 100644
-> index 000000000000..2ca41ee9b499
-> --- /dev/null
-> +++ b/lib/raid6/neon.h
-> @@ -0,0 +1,22 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
+> Tested against qemu malta 34Kf, boston I6500, Loongson64, hopefully
+> everything is fine now.
+
+Thanks a lot for figuring this out!
+> 
+> @@ -44,6 +42,11 @@
+>  # define __raw_ioswabq(a, x)	(x)
+>  # define ____raw_ioswabq(a, x)	(x)
+> 
+> +# define _ioswabb ioswabb
+> +# define _ioswabw ioswabw
+> +# define _ioswabl ioswabl
+> +# define _ioswabq ioswabq
 > +
-> +void raid6_neon1_gen_syndrome_real(int disks, unsigned long bytes, void =
-**ptrs);
-> +void raid6_neon1_xor_syndrome_real(int disks, int start, int stop,
-> +                                   unsigned long bytes, void **ptrs);
-> +void raid6_neon2_gen_syndrome_real(int disks, unsigned long bytes, void =
-**ptrs);
-> +void raid6_neon2_xor_syndrome_real(int disks, int start, int stop,
-> +                                   unsigned long bytes, void **ptrs);
-> +void raid6_neon4_gen_syndrome_real(int disks, unsigned long bytes, void =
-**ptrs);
-> +void raid6_neon4_xor_syndrome_real(int disks, int start, int stop,
-> +                                   unsigned long bytes, void **ptrs);
-> +void raid6_neon8_gen_syndrome_real(int disks, unsigned long bytes, void =
-**ptrs);
-> +void raid6_neon8_xor_syndrome_real(int disks, int start, int stop,
-> +                                   unsigned long bytes, void **ptrs);
-> +void __raid6_2data_recov_neon(int bytes, uint8_t *p, uint8_t *q, uint8_t=
- *dp,
-> +                             uint8_t *dq, const uint8_t *pbmul,
-> +                             const uint8_t *qmul);
-> +
-> +void __raid6_datap_recov_neon(int bytes, uint8_t *p, uint8_t *q, uint8_t=
- *dq,
-> +                             const uint8_t *qmul);
-> +
-> +
-> diff --git a/lib/raid6/neon.uc b/lib/raid6/neon.uc
-> index b7c68030da4f..355270af0cd6 100644
-> --- a/lib/raid6/neon.uc
-> +++ b/lib/raid6/neon.uc
-> @@ -25,6 +25,7 @@
->   */
->
->  #include <arm_neon.h>
-> +#include "neon.h"
->
->  typedef uint8x16_t unative_t;
->
-> diff --git a/lib/raid6/recov_neon.c b/lib/raid6/recov_neon.c
-> index d6fba8bf8c0a..1bfc14174d4d 100644
-> --- a/lib/raid6/recov_neon.c
-> +++ b/lib/raid6/recov_neon.c
-> @@ -8,6 +8,7 @@
->
->  #ifdef __KERNEL__
->  #include <asm/neon.h>
-> +#include "neon.h"
->  #else
->  #define kernel_neon_begin()
->  #define kernel_neon_end()
-> @@ -19,13 +20,6 @@ static int raid6_has_neon(void)
->         return cpu_has_neon();
->  }
->
-> -void __raid6_2data_recov_neon(int bytes, uint8_t *p, uint8_t *q, uint8_t=
- *dp,
-> -                             uint8_t *dq, const uint8_t *pbmul,
-> -                             const uint8_t *qmul);
-> -
-> -void __raid6_datap_recov_neon(int bytes, uint8_t *p, uint8_t *q, uint8_t=
- *dq,
-> -                             const uint8_t *qmul);
-> -
->  static void raid6_2data_recov_neon(int disks, size_t bytes, int faila,
->                 int failb, void **ptrs)
+
+I'm missing something here, what are these macros used for in addition
+to the non-underscore versions?
+
+> +#define memset_io memset_io
+>  static inline void memset_io(volatile void __iomem *addr, unsigned 
+> char val, int count)
 >  {
-> diff --git a/lib/raid6/recov_neon_inner.c b/lib/raid6/recov_neon_inner.c
-> index 90eb80d43790..f9e7e8f5a151 100644
-> --- a/lib/raid6/recov_neon_inner.c
-> +++ b/lib/raid6/recov_neon_inner.c
-> @@ -5,6 +5,7 @@
->   */
->
->  #include <arm_neon.h>
-> +#include "neon.h"
->
->  #ifdef CONFIG_ARM
->  /*
-> --
-> 2.39.2
->
+>  	memset((void __force *) addr, val, count);
+>  }
+> +#define memcpy_fromio memcpy_fromio
+>  static inline void memcpy_fromio(void *dst, const volatile void 
+> __iomem *src, int count)
+>  {
+>  	memcpy(dst, (void __force *) src, count);
+>  }
+> +#define memcpy_toio memcpy_toio
+>  static inline void memcpy_toio(volatile void __iomem *dst, const void 
+> *src, int count)
+>  {
+>  	memcpy((void __force *) dst, src, count);
+
+These three could probably go away now, as they are identical
+to the asm-generic version. Not important though.
+
+> @@ -549,6 +555,47 @@ extern void (*_dma_cache_inv)(unsigned long start, 
+> unsigned long size);
+>  #define csr_out32(v, a) (*(volatile u32 *)((unsigned long)(a) + 
+> __CSR_32_ADJUST) = (v))
+>  #define csr_in32(a)    (*(volatile u32 *)((unsigned long)(a) + 
+> __CSR_32_ADJUST))
+> 
+> +
+> +#define __raw_readb __raw_readb
+> +#define __raw_readw __raw_readw
+> +#define __raw_readl __raw_readl
+> +#define __raw_readq __raw_readq
+> +#define __raw_writeb __raw_writeb
+> +#define __raw_writew __raw_writew
+> +#define __raw_writel __raw_writel
+> +#define __raw_writeq __raw_writeq
+> +
+> +#define readb readb
+> +#define readw readw
+> +#define readl readl
+> +#define writeb writeb
+> +#define writew writew
+> +#define writel writel
+> +
+> +#define readsb readsb
+> +#define readsw readsw
+> +#define readsl readsl
+> +#define readsq readsq
+> +#define writesb writesb
+> +#define writesw writesw
+> +#define writesl writesl
+> +#define writesq writesq
+
+As far as I can tell, the readsq()/writesq() helpers are currently
+only defined on 64-bit, it's probably best to leave it that way.
+
+On most other architectures, we also don't define __raw_readq()
+and __raw_writeq() on 32-bit because they lose the atomicity that
+might be required for FIFO accesses, but the existing MIPS version
+has them, so changing those should be a separate patch after it
+can be shown to not break anything.
+
+     Arnd
