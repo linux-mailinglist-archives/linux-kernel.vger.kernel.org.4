@@ -2,200 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC996709C11
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 18:10:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6511709C12
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 18:11:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbjESQK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 12:10:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42588 "EHLO
+        id S229783AbjESQLT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 12:11:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbjESQKz (ORCPT
+        with ESMTP id S229747AbjESQLP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 12:10:55 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9018FC9;
-        Fri, 19 May 2023 09:10:53 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-94a342f7c4cso654119366b.0;
-        Fri, 19 May 2023 09:10:53 -0700 (PDT)
+        Fri, 19 May 2023 12:11:15 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 634681AB
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 09:11:12 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-561bcd35117so43846967b3.3
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 09:11:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684512652; x=1687104652;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+        d=gmail.com; s=20221208; t=1684512671; x=1687104671;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=shR9tZ5xiaUJ9C4wWURqYuO7Qqx5kQ3Rtd+uNyelifI=;
-        b=OfjoobpT9uQF4m5zhukOOavH5dDTVfys7/MeRv7VK28aAKRy30BShQ6lKs58R4kMmc
-         MnbpOOTGl0ETnKxnSQaBQl5JDgw8g5zP9JWEQdSMOeAiTsyjCb8sqezzCxjN3OEtDEN2
-         QPPU/2dtmEw9lNinyhObJiQHj14y6YdeIhL8PGuVpei3GjrV9t+ZLXo95fP11FXowRdO
-         Dt8CpxJ5xUk3LPpXVDd1VtZ/PwCd/NZGKu/PkmHgVZpth2mvfH6dTwYeGUDuYhgv2i4A
-         5vNcpC8AZg3ieGBPB5s0dwUlWTl1oF3M1TIIphc7BC0VVVWJgncW17df8uMYjUs1yY7Y
-         /iqg==
+        bh=MAMP5T5pfCs0g8WwRKcMxs6XnL4M1eIwb310ADtqdX4=;
+        b=sVqJOMav7Wn+PB0kChvCod48x7MpzOFPxykLZl5/nFlbZrdRrSzpoNU3JE10/vsjnY
+         Tsn+tukpIJOQfutuX057fJjAm1Tu7zuj9aDMbQrLlEB+3hUPSj9AlE3C6k2tqoDD2kEG
+         sSh6BPhACj8Ge7beBNfAfywG99PTU39YJYmebjanofYisAI+LMmZoBvgiB1X8n3AmtEg
+         nMctmaZfXIiPKwrl8proBZQVrA1J/iWtUrP4fZ5G0tk57uDeAdjHdTlKo+Rd3J2akVnW
+         aJrRx6sJj21fNxiRi/9Ul+xctWhtwmsI2hJrSfMTR4C/JBYdSfDTfmg9YMzDK9MguxFv
+         lFuQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684512652; x=1687104652;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1684512671; x=1687104671;
+        h=to:subject:message-id:date:from:sender:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=shR9tZ5xiaUJ9C4wWURqYuO7Qqx5kQ3Rtd+uNyelifI=;
-        b=dv/gstk9BzmawAzDKT982xl7/Wn3ub9EpHvfsrAY00sDgKBHQ0RcGup2AbmzT6klbF
-         vV7oYdZ09o+RgyJN2hs5YW/1O3d7ZpASb5arl3dr6UhJLR24nvX7RFNZd+ZrvoRS4t/r
-         GZ9woVh0v4FPCv3vtERStQTGbgsm3jFiBiP7fptHYfwWAHxrnDO7AkgZP6lCgb57UGjz
-         kBT/8TZpahZ0dRcPN11jrFQ8s7C1o2U/54d7ZvRyJ4sD8VgDyJQj0hbUYJnrOx7bRhQm
-         8+kr0WwPe2tIgIhVSjs+i8Qf5FuMpefp9/IpX/H4Mvh7yBDcMFk187Zvh/EpEaDRZzKD
-         mrzg==
-X-Gm-Message-State: AC+VfDwJ4ArcQtlgvMCd9PrOLLQtPcm1vlT7KseYIRAyTw/fO5B8w58O
-        A1ux8xqSy1HvIivn6u27aBk=
-X-Google-Smtp-Source: ACHHUZ51F8Of6ajEOG4kC19Rjv1qy/hiNer8vMIgrh6QrItztf/4VfKsyoLOjahdva0jY3U7GQ+jug==
-X-Received: by 2002:a17:907:3fa8:b0:960:ddba:e5c5 with SMTP id hr40-20020a1709073fa800b00960ddbae5c5mr3186651ejc.11.1684512651750;
-        Fri, 19 May 2023 09:10:51 -0700 (PDT)
-Received: from ?IPV6:2a01:c23:c53c:ab00:54b1:eb24:1f4e:3a15? (dynamic-2a01-0c23-c53c-ab00-54b1-eb24-1f4e-3a15.c23.pool.telefonica.de. [2a01:c23:c53c:ab00:54b1:eb24:1f4e:3a15])
-        by smtp.googlemail.com with ESMTPSA id e20-20020a170906845400b0096f7b7b6f11sm508427ejy.106.2023.05.19.09.10.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 May 2023 09:10:51 -0700 (PDT)
-Message-ID: <573d96df-7b08-4fa2-668b-58ff674a314e@gmail.com>
-Date:   Fri, 19 May 2023 18:10:50 +0200
+        bh=MAMP5T5pfCs0g8WwRKcMxs6XnL4M1eIwb310ADtqdX4=;
+        b=Qy+gmwfPd/SoniVG2sCE+gz5I3hL9pdlxsIrQ2/twC145DxRpjuAJvJ89wM10yeT7p
+         OEmwLtwf5OUp5VaBNGlQeEHJPFh6G6XWdW5B+t91dPUnozQoKZScYatAynDvN3PKl1Pu
+         7OYA/bwH0FFdKBJc1TtEIK/UIXejNqjaCIS6HXpF72DP+RH01LoXRaF79TcmRbRhhWbW
+         XpVdpYUddAUSlmEYgwva3mi2cdMQ8veizTjEt61phwWQMzY5XLxZkrIrzMrP5RKDLjgz
+         B+/6Hhc+llo637VNBpUpJWKJnxdjM7UKdGi+aEyb0kWkzeBWsymdZMeUU68IkaroOK69
+         QIzQ==
+X-Gm-Message-State: AC+VfDwE1QVmTBMf9eJuM2lsgBgu/hvgcbkcwt0E2/bkOo8SkRnbVNFw
+        mPNLIR59wFEIEuEEnNzeGfCSgsG1VBGhYq6Hur8=
+X-Google-Smtp-Source: ACHHUZ7L7eQ2lv55fqEFG4U+8JE2H76UVGIxmjme4S2ZyZPoYSkCGZp5ZVe00S7oX49j95LYxsNVEleS3YGFRAOJtbc=
+X-Received: by 2002:a81:d548:0:b0:561:949d:f9a7 with SMTP id
+ l8-20020a81d548000000b00561949df9a7mr2981009ywj.20.1684512671004; Fri, 19 May
+ 2023 09:11:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Cc:     neil.armstrong@linaro.org, jbrunet@baylibre.com,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, khilman@baylibre.com,
-        jian.hu@amlogic.com, kernel@sberdevices.ru, rockosov@gmail.com,
-        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230426095805.15338-1-ddrokosov@sberdevices.ru>
- <20230426095805.15338-7-ddrokosov@sberdevices.ru>
- <CAFBinCA2OhtVaCJDi8ZfAFLSE4oUgxYBDScaP_WW63curEK8Mg@mail.gmail.com>
- <20230512140630.qd33rwzaalmadpmk@CAB-WSD-L081021>
- <CAFBinCA8e9evk+9hTEgoNOD_+3DBst6vYDcradmr2c996jdUmw@mail.gmail.com>
- <20230517103456.p3sjxzbepvg7cr2r@CAB-WSD-L081021>
- <CAFBinCCPf+asVakAxeBqV-jhsZp=i2zbShByTCXfYYAQ6cCnHg@mail.gmail.com>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH v14 6/6] clk: meson: a1: add Amlogic A1 Peripherals clock
- controller driver
-In-Reply-To: <CAFBinCCPf+asVakAxeBqV-jhsZp=i2zbShByTCXfYYAQ6cCnHg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Sender: bamounipatrick@gmail.com
+Received: by 2002:a05:7108:9c94:b0:301:574f:69d7 with HTTP; Fri, 19 May 2023
+ 09:11:10 -0700 (PDT)
+From:   neemakimjohn <neemakimjohn@gmail.com>
+Date:   Fri, 19 May 2023 09:11:10 -0700
+X-Google-Sender-Auth: tD1BZeNH0VDaXLiCl1_aE7a0Xs0
+Message-ID: <CAD+XN97tYhquhoF+pHAKrXR-GsUGPzSHDDK0VBAPPzjjtd7s6A@mail.gmail.com>
+Subject: Hello,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.3 required=5.0 tests=ADVANCE_FEE_5_NEW_MONEY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_FROM,LOTS_OF_MONEY,MONEY_FRAUD_8,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:112e listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [bamounipatrick[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
+        *  3.0 ADVANCE_FEE_5_NEW_MONEY Advance Fee fraud and lots of money
+        *  2.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18.05.2023 22:04, Martin Blumenstingl wrote:
-> Hi Dmitry,
-> 
-> On Wed, May 17, 2023 at 12:34 PM Dmitry Rokosov
-> <ddrokosov@sberdevices.ru> wrote:
-> [...]
->>>> Additionally, the CCF determines the best ancestor based on how close
->>>> its rate is to the given one, based on arithmetic calculations. However,
->>>> we have independent knowledge that a certain clock would be better, with
->>>> less jitter and fewer intermediaries, which will likely improve energy
->>>> efficiency. Sadly, the CCF cannot take this into account.
->>> I agree that the implementation in CCF is fairly simple. There's ways
->>> to trick it though: IIRC if there are multiple equally suitable clocks
->>> it picks the first one. For me all of this has worked so far which is
->>> what makes me curious in this case (not saying that anything is wrong
->>> with your approach).
->>>
->>> Do you have a (real world) example where the RTC clock should be
->>> preferred over another clock?
->>>
->>
->> Yes, a real-life example is the need for a 32Khz clock for an external
->> wifi chip. There is one option to provide this clock with high
->> precision, which is RTC + GENCLK.
->>
->>> I'm thinking about the following scenario.
->>> PWM parents:
->>> - XTAL: 24MHz
->>> - sys: not sure - let's say 166.67MHz
->>> - RTC: 32kHz
->>>
->>> Then after that there's a divider and a gate.
->>>
->>> Let's say the PWM controller needs a 1MHz clock: it can take that from
->>> XTAL or sys. Since XTAL is evenly divisible to 1MHz CCF will pick that
->>> and use the divider.
->>> But let's say the PWM controller needs a 32kHz clock: CCF would
->>> automatically pick the RTC clock.
->>> So is your implementation there to cover let's say 1kHz where
->>> mathematically 24MHz can be divided evenly to 1kHz (and thus should
->>> not result in any jitter) but RTC gives better precision in the real
->>> world (even though it's off by 24Hz)?
->>>
->>
->> I don't think so. The highest precision that RTC can provide is from a
->> 32KHz rate only. However, I believe that a 1kHz frequency can also be
->> achieved by using xtal 24MHz with a divider, which can provide high
->> precision as well.
-> Thank you again for the great discussion on IRC today.
-> Here's my short summary so I don't forget before you'll follow up on this.
-> 
-> In general there's two known cases where the RTC clock needs to be used:
-> a) When using the GENCLK output of the SoC to output the 32kHz RTC
-> clock and connect that to an SDIO WiFi chip clock input (this seems
-> useful in my understanding because the RTC clock provides high
-> precision)
-> b) When using the PWM controller to output a 32kHz clock signal. In
-> this case my understanding is that using the RTC clock as input to the
-> PWM controller results in the best possible signal
-> 
-> The second case won't be supported with Heiner's patches [0] that use
-> CCF (common clock framework) in the PWM controller driver.
-> In this series the parent clock is calculated using:
->   freq = div64_u64(NSEC_PER_SEC * (u64)0xffff, period);
-> 
-> A 32kHz clock means a PWM period of 30518ns. So with the above
+Hello,
 
-To be precise: 30517,578125ns
-What means that the PWM framework can't say "I want 32768Hz",
-but just "I want something being very close to 32768Hz".
-So what you need is some simple heuristic to interpret the
-PWM request -> "PWM requests 30518ns, but supposedly it wants
-32768Hz"
+  CHARITY DONATION Please read carefully, I know it is true that this
+letter may come to you as a surprise. i came across your e-mail
+contact through a private search while in need of your assistance. i'm
+writing this mail to you with heavy sorrow in my heart, I have chose
+to reach out to you through internet because it still remains the
+fastest medium of communication, I sent this mail praying it will
+found you in a good condition of health, since I myself are in a very
+critical health condition in which I sleep every night without knowing
+if I may be alive to see the next day,
 
-NSEC_PER_SEC / 30518 = 32767 (rounded down from 32767,547)
-clk_round_rate(channel->clk, 32767) would return 0 (I *think*),
-because it tries to find the next lower clock.
+i'M Mrs.Neema John Carlsen, wife of late Mr John Carlsen, a widow
+suffering from long time illness. I have some funds I inherited from
+my late husband, the sum of ($11.000.000,eleven million dollars) my
+Doctor told me recently that I have serious sickness which is cancer
+problem. What disturbs me most is my stroke sickness. Having known my
+condition, I decided to donate this fund to a good person that will
+utilize it the way i'm going to instruct herein. I need a very honest
+and God fearing person who can claim this money and use it for Charity
+works, for orphanages, widows and also build schools for less
+privileges that will be named after my late husband if possible and to
+promote the word of God and the effort that the house of God is
+maintained,
 
-The SoC families I'm familiar with have fclkin2 as PWM parent.
-That's 1 GHz in my case, what results in a frequency of 32.767,547Hz
-for period = 30518n.
-What you're saying is that newer generations don't have PWM parents
->24MHz any longer?
+I do not want a situation where this money will be used in an ungodly
+manners. That's why i'm taking this decision. i'm not afraid of death
+so I know where i'm going. I accept this decision because I do not
+have any child who will inherit this money after I die. Please I want
+your sincerely and urgent answer to know if you will be able to
+execute this project, and I will give you more information on how the
+fund will be transferred to your bank account. i'm waiting for your
+reply,
 
-
-> calculation the PWM driver is asking for a clock rate of >=2GHz.
-> We concluded that letting the common clock framework choose the best
-> possible parent (meaning: removing CLK_SET_RATE_NO_REPARENT here) can
-> be a way forward.
-> But this means that the PWM controller driver must try to find the
-> best possible parent somehow. The easiest way we came up with
-> (pseudo-code):
->   freq = NSEC_PER_SEC / period;
->   fin_freq = clk_round_rate(channel->clk, freq);
->   if (fin_freq != freq) {
->     freq = div64_u64(NSEC_PER_SEC * (u64)0xffff, period);
->     fin_freq = clk_round_rate(channel->clk, freq);
->   }
-> 
-> The idea is: for a requested 32kHz signal the PWM period is 30518ns.
-> The updated logic would find that there's a matching clock input and
-> use that directly. If not: use the original logic as suggested by
-> Heiner.
-> 
-> 
-> Best regards,
-> Martin
-> 
-> 
-> [0] https://lore.kernel.org/linux-amlogic/9faca2e6-b7a1-4748-7eb0-48f8064e323e@gmail.com/
-
+Best Regards,
+Mrs.Neema John Carlsen,
