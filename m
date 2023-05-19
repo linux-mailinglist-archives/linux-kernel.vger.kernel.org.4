@@ -2,149 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49C347091CC
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 10:40:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23F8E7091D1
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 10:42:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230303AbjESIkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 04:40:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33816 "EHLO
+        id S230377AbjESImK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 04:42:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjESIks (ORCPT
+        with ESMTP id S230367AbjESImI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 04:40:48 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D5CE5D;
-        Fri, 19 May 2023 01:40:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684485647; x=1716021647;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=uquxl4LqumwWhgaqOjFC3r5NVVh5ga2ulg7e5s0QI9U=;
-  b=iY6NwD8cRKYCl8PNIEdgsZLMf0q+lLzuI7jobeD/vYTg5VxnaqyiS70a
-   vOjl5qzhIMWiSOMBwBLC9JqEtfE3voMWCbWfneZDoVngGq3VDblPp9AWF
-   gsRhULsfTzZ+z4Lq/t15iSb6qj4OQbZ59tCYdqRQlas2CQ3evxQEBj0la
-   mCu3eSPCS9dJ4thmWtGjK6ebg/Ic/VMUKfRnSXtIjZSEs2mf9g7XkpCCC
-   xJ92+st5Xwee2srsAN7mfhop1hc8VYrjj9Eszr5JWDUNlOaZ3putKYKGP
-   BDi3G8k1C4g7sHEVWN2aGvKj5Fco5DZcfQ7pty++5vQOK7VDWWiUv0AJu
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="349833590"
-X-IronPort-AV: E=Sophos;i="6.00,176,1681196400"; 
-   d="scan'208";a="349833590"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2023 01:40:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="652975371"
-X-IronPort-AV: E=Sophos;i="6.00,176,1681196400"; 
-   d="scan'208";a="652975371"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga003.jf.intel.com with ESMTP; 19 May 2023 01:40:46 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 19 May 2023 01:40:45 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Fri, 19 May 2023 01:40:45 -0700
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.175)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Fri, 19 May 2023 01:40:45 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R5rWmc/tK/2kW8JNIou48J3HCbUBKA6IlKMOa51j/imJAy2l/8StUA1IfkvUrXfcfLHCprAfI3Q7fajuRjiOIySf1NjwL8lnFUNQlVpWrx2h09OK8V+N81sej2bFp31oP0krN5QbWEz49J2jtP4bY2+4C61Etkiu9kuuoJ3DJNbPEgcAUFkYEGYBD4wPHuKS6jA+0un+C9nFaNgEWv0quaLwFFHwJdRwhORQPw9eqPh1nwSr3FY0V/ovvSz1rj/c/usjLJLbng762UV78kIMnw+2l0ec5lYQKOZJ+tOMG6MrOHS4jEBqo+t7EpIlFbjlgCuqWdDStxpeUTN+p3GPYA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bnY7GxBVKvp6BtS96EB2awJPXY37LEJxEBUOG5zuCP0=;
- b=d4Hg7NRrrR45/2h7cmVKRZxpcXKVd/WYtbWQBTbWaXyYiBev6wRiRrO5Pe05PKRZsaUOvcqb8MhgWO84qXKqaglPemI1HDBAQJD9Z1gIgXFb+bP3OtzkaYiDfqk/ekPFoQh4V4FYEP1wCf/x8cHBLU8FuHz+C0W752QaKcFePvN5bqNkld1pfcmTq268NGJ/TuizNyrw+PawydxIHlHLRv0iVYv4tWXby1x4VAGmT/H0mo1uY+ilhXozn0zTMpTAsUbDPky0m5pxRnqvVvq3ptp2oO6ROTlLlsIpOA4Zo1UIirc8hWFxNzBpjcmOSYdWJtsj49VxqUNKbh0hdBR3Fw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH8PR11MB6780.namprd11.prod.outlook.com (2603:10b6:510:1cb::11)
- by DM4PR11MB5229.namprd11.prod.outlook.com (2603:10b6:5:39f::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19; Fri, 19 May
- 2023 08:40:42 +0000
-Received: from PH8PR11MB6780.namprd11.prod.outlook.com
- ([fe80::b4cb:1f70:7e2a:c4f5]) by PH8PR11MB6780.namprd11.prod.outlook.com
- ([fe80::b4cb:1f70:7e2a:c4f5%2]) with mapi id 15.20.6411.019; Fri, 19 May 2023
- 08:40:42 +0000
-Date:   Fri, 19 May 2023 16:40:30 +0800
-From:   Chao Gao <chao.gao@intel.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        <pawan.kumar.gupta@linux.intel.com>
-CC:     Xiaoyao Li <xiaoyao.li@intel.com>, <kvm@vger.kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, <linux-kernel@vger.kernel.org>,
-        Jim Mattson <jmattson@google.com>
-Subject: Re: [PATCH] KVM: x86: Track supported ARCH_CAPABILITIES in kvm_caps
-Message-ID: <ZGc1/lwk5BAdRyOi@chao-email>
-References: <20230506030435.80262-1-chao.gao@intel.com>
- <b472b58d-0469-8a55-985c-1d966ce66419@intel.com>
- <ZGZhW/x5OWPmx1qD@google.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ZGZhW/x5OWPmx1qD@google.com>
-X-ClientProxiedBy: SGAP274CA0024.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b6::36)
- To PH8PR11MB6780.namprd11.prod.outlook.com (2603:10b6:510:1cb::11)
+        Fri, 19 May 2023 04:42:08 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC07E7
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 01:42:06 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f004cc54f4so3601000e87.3
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 01:42:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684485725; x=1687077725;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5255kXpZcvDfSbdEjjfj0wDzDYeZl9Iyd3E1JVL9e4M=;
+        b=NNKcIZCOcfAL1PGgsRH7yRmuawCJbPolKfHcrOE8wSVubVMg/Wl03r6qGzKy32w2gL
+         wlSJ3He2N5zgBzzw6KLTKxZqI+huyCi/7kf3eBCG/t2995mw8urZlF7SL2lTIgy+yW/9
+         08+AZajAipppqJSfXjE+Jj6355rU/DoWHUOkmZ+UJml/6nIxK3wxY4wI6PKABEpfakS2
+         BLfYfpF/ZvB9gVgNbmXGtih/oTexIVNDKLfTvNK1JIFyX1HII9xK0CQai04SlX8EuiWF
+         uiC3sNmfdf4j77T5tFLxuc4iY7RuPbLX9bT/dPRNufj8IBzYPvtruE6jZgezqWTOMfoT
+         g09g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684485725; x=1687077725;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5255kXpZcvDfSbdEjjfj0wDzDYeZl9Iyd3E1JVL9e4M=;
+        b=jpmNRpSx1M05YgSyW/iUHce0LZi37F+ZUoT1R0jJs7FaOkCCsHL56/dMeF/Q0tZN2K
+         o8pdI50ZdwohsF0QqgRHKycZxTmM+dxrbTI6j/OQ9I0QhVv/WZRCsWqkVX503H6A7Rxk
+         /G2IRtTuQFT5/Xf24MsOszSgevIYn/84mMHgnryGKjh9HaW42LoggKYICDpFcl7Bl8sw
+         IVMjLyj3tLqvlLtohOf4yqsKz+yMOKxj79GJXIQFr0vVbu7cEqXqghc24HYPCVAQ06SI
+         FbJTjdmBPyvo5rH59WkgQ1xzdJHHqqukUGosxFa7aZvmQ9VAe2211VkZIOxhloOpJOHG
+         0yrg==
+X-Gm-Message-State: AC+VfDx9DMfWunNFu9mD//3BnV0+4CBivltBssEmMZPYelFd1WXON1sb
+        YRCAhx+5GfxfvNaw9b73M/AQpZqHKMdXMCN5GIc=
+X-Google-Smtp-Source: ACHHUZ7MDVMgzAyPCUOAhics8HdICRUpTwMecIekZUumpEfCWXG5H/yhNcDNfxhjdaOZwmtG3bz/f+7DQsU/3xURbc4=
+X-Received: by 2002:ac2:4c8a:0:b0:4f3:78e5:fe93 with SMTP id
+ d10-20020ac24c8a000000b004f378e5fe93mr629179lfl.6.1684485724534; Fri, 19 May
+ 2023 01:42:04 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR11MB6780:EE_|DM4PR11MB5229:EE_
-X-MS-Office365-Filtering-Correlation-Id: b9b98a29-4b11-4586-6437-08db5844babd
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3VDaadALSvnUz7vaKtAL+kr6fSnnym3hRQt4YUORqmPMcseth3I9/sEXY1TQ4o44OhIH0imA3WSHOxemTIG4QWJDJrLg/yH8xHIjt9pWgzPEoiznk0w9YtYjN073+1avPakuF5b/V2JjE/rgtS8ryoe1sR7zAABOQQivkdJuYwb8hJJoJo8lcfw1crJUhTG2grP2IBYQYh1C5Bu13E5NNydnpPffJaCFIrWuIOUSafPD3EEMfL+mVGzJ+kyTe2Wle+cKv42wtFn+mU76ttURMPFYUrjdVzSNx3YE5hOoUT6pSXERoG2BK4RtkBTy7w/DnQuebB3rWx5GU8fc/PZ+J2H3Ts7JmqUcGY3yg+7ijIWkrOOGteTQp4rAXLDRvriJBfcyMhyBG3TwBFmqAGLC5gObqNKUolX66Q2/WluZYXW9wutVaHPH7cMeCYkZ3maRm4uhnOLr8uHUDz1dMbWUm4uCLf5fAxFcyQq4d5q2G0jntSkDFJcMnCwzoTKbtMaFyYA7KcfP+t93Qc+Ua+jJw8zoVlYG70I6rVEClbJFK3I5eyPLQUXeqTptBUgxidAW
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB6780.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(39860400002)(396003)(346002)(366004)(136003)(376002)(451199021)(6666004)(83380400001)(5660300002)(2906002)(8676002)(8936002)(44832011)(7416002)(9686003)(6506007)(26005)(53546011)(186003)(82960400001)(66946007)(86362001)(54906003)(6512007)(33716001)(6486002)(4326008)(316002)(41300700001)(478600001)(38100700002)(66556008)(66476007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?FnV7dAM+SdtCtw8I9WOUt/TuUvEL3hDF3wO3c7W1XcN6n8vWhiA0gdWJTpKc?=
- =?us-ascii?Q?LuMsjcd7Q+oi2mhzd5Q+5p9hy+AEDmf0eQP/CubxV5fWdK1gNK0bqomYWEao?=
- =?us-ascii?Q?nvu5WgsMKOLf7B6l386JzF1X2WotX7hcNanRnUC7DPcgFQAcfc4t91ZDqlKn?=
- =?us-ascii?Q?25zUCLblJFVYRWk2a4GEEh4pNkJB6aMzjqNw4F/2m8eIjuvMue2barJj8766?=
- =?us-ascii?Q?lZaGkm4co+hzOMOXsXXtt8TO9EQ+Iel2J+JQhY6sPTY9z6aj9RCkg6qzym+k?=
- =?us-ascii?Q?x4bZxKO6wObKds8/hwkBf4/NZC6Ey4bzgTIw0S+UkQfS/bo7t30U/YIwkyxQ?=
- =?us-ascii?Q?aY0I2oiDs32AEhHDdbUn8bpr4PBfR7ksxc01O8bI4ChXbOB02Xt9CToM//Kr?=
- =?us-ascii?Q?QfkCL+qFjfCW+GwrsgRopK2BuPhMPGJjrykXUwpTu9XVOCNdCt9F2JGW1e1u?=
- =?us-ascii?Q?LdPBp7SkaFFvFwUJZgw89OG9qkyiBol9h/5susbJQ37OG9JHVE4n/4d4z68b?=
- =?us-ascii?Q?SeK02MZIxZbqu36+idUfhnsyMcGJgZoFHZCCO/MFuOYm3V6IeeR5+6IE9q7e?=
- =?us-ascii?Q?ae6FwuDcVUvSkDn6gr1cCSqel8cdJ7vxQYyfVPcmSR8j11uA8VCC37q/VjTb?=
- =?us-ascii?Q?AvKnA7p+WnJXc6fJgcxdXp8kUi8tggndrnhna3IlCJDBK2XXT6uFVyHKoVyK?=
- =?us-ascii?Q?o18ztHdsN0KEnK8UyF2mYYhzLpJNsjiasiCDkRjXuUdnwJKjX0o+dPNrtPPr?=
- =?us-ascii?Q?QUuUEcspbltQmyZJZP2z3EK5ya4O7Vcxtir3tpaMtmKBN61epqM8qrnz7K+Y?=
- =?us-ascii?Q?J689sQVCGLqP/PJ8G4YJX/Q/kktv39iHTJoJm6tYIEJnOWwS1VhxtdssC22R?=
- =?us-ascii?Q?w+6gNz4oXJgJw2D5pefhYd2kPCCpKpyXmEIPOmgeyEIXph4sWCLBHtdfPOg7?=
- =?us-ascii?Q?n0bDDa4HUv0mIx/hqaUu/3TYEdumS+ZcxZjnwOy+LgPpLHWsVH9ImL0bvL7J?=
- =?us-ascii?Q?rgLB66ktwX6rSZcKXzCR6jGCL4q6Vnujym4lwX12oSGncwBMxbl/klNhIav0?=
- =?us-ascii?Q?NUKR1ecTd9rp7HYFepnS0A+7XQGdCcOi03ZDoNo0/fSshzWq+16zT/RPhgqE?=
- =?us-ascii?Q?/nAClB6H9AK3jmFazrCub/oHCZU1N4u3PqPuF/G4nDepit0F1ka9PaYR1Ho3?=
- =?us-ascii?Q?i+FToMt1jaI3k4HcrTYNjPgYGVxzbyIJuPBy24D/i9PvM84A+W689jbw2DcF?=
- =?us-ascii?Q?wWimlPYjM4+n5F5qradOv0ZrIi+UeGgGBx+nc//dLRJJ+re+pOTKyL34/kU0?=
- =?us-ascii?Q?SYpYX96koEQpZh/VqV7qdYhzUAWC77nv0YtRUkK7daR5OERfsSJ+WALvretC?=
- =?us-ascii?Q?e22/nfPfMatdYAkUZr/ltHGMwfXp4tCqvSxLjFyGXTfSh8UyJPaWLeYHfsIS?=
- =?us-ascii?Q?2UziVi1/y8hZA7uKQDZfuTObBIxFWB/zrhcSUoRhuRL0bVAJ2nic/08991ZU?=
- =?us-ascii?Q?s216RYHArKjUxq91YSlFiP2Gdc+3GXvOL2UIWDfK9VwyXhcDzEkwOcf4l7v0?=
- =?us-ascii?Q?PsBdJzTIAesHaSiVYfW8OKop39m1boJEj6cGxFCH?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: b9b98a29-4b11-4586-6437-08db5844babd
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB6780.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2023 08:40:42.0581
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MGRVeL4WT3uQ4MoZY2oXbTZ9DmXy2yu795fVcWDzC3H452x03JbHyUWSwHegDq1Lmqb/bMZ0bWUqTYRTBGed5A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5229
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <1684143495-12872-1-git-send-email-zhaoyang.huang@unisoc.com>
+In-Reply-To: <1684143495-12872-1-git-send-email-zhaoyang.huang@unisoc.com>
+From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
+Date:   Fri, 19 May 2023 16:41:41 +0800
+Message-ID: <CAGWkznFVeCYUCXg4JZ78pjXp9gBUWAUzyGntVT+kkPRydxmS6A@mail.gmail.com>
+Subject: Re: [Resend PATCHv2] mm: skip CMA pages when they are not available
+To:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Minchan Kim <minchan@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ke.wang@unisoc.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -152,137 +72,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Pawan, could you share your thoughts on questions about FB_CLEAR?
+any comments?
 
-On Thu, May 18, 2023 at 10:33:15AM -0700, Sean Christopherson wrote:
->+Jim
+On Mon, May 15, 2023 at 5:40=E2=80=AFPM zhaoyang.huang
+<zhaoyang.huang@unisoc.com> wrote:
 >
->On Thu, May 18, 2023, Xiaoyao Li wrote:
->> On 5/6/2023 11:04 AM, Chao Gao wrote:
->> > to avoid computing the supported value at runtime every time.
->> > 
->> > No functional change intended.
->> 
->> the value of kvm_get_arch_capabilities() can be changed due to
->> 
->> 	if (l1tf_vmx_mitigation != VMENTER_L1D_FLUSH_NEVER)
->> 		data |= ARCH_CAP_SKIP_VMENTRY_L1DFLUSH;
->> 
->> and l1tf_vmx_mitigation can be runtime changed by vmentry_l1d_flush module
->> param.
-
-Thanks for pointing this out. I noticed l1tf_vmx_mitigation and analyzed if
-it could be changed at runtime. Obviously I did a wrong analysis.
-
+> From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
 >
->Nice catch!
+> This patch fixes unproductive reclaiming of CMA pages by skipping them wh=
+en they
+> are not available for current context. It is arise from bellowing OOM iss=
+ue, which
+> caused by large proportion of MIGRATE_CMA pages among free pages. There h=
+as been
+> commit(168676649) to fix it by trying CMA pages first instead of fallback=
+ in
+> rmqueue. I would like to propose another one from reclaiming perspective.
 >
->> We need a detailed analysis that in no real case can
->> ARCH_CAP_SKIP_VMENTRY_L1DFLUSH bit change runtime.
+> 04166 < 4> [   36.172486] [03-19 10:05:52.172] ActivityManager: page allo=
+cation failure: order:0, mode:0xc00(GFP_NOIO), nodemask=3D(null),cpuset=3Df=
+oreground,mems_allowed=3D0
+> 0419C < 4> [   36.189447] [03-19 10:05:52.189] DMA32: 0*4kB 447*8kB (C) 2=
+17*16kB (C) 124*32kB (C) 136*64kB (C) 70*128kB (C) 22*256kB (C) 3*512kB (C)=
+ 0*1024kB 0*2048kB 0*4096kB =3D 35848kB
+> 0419D < 4> [   36.193125] [03-19 10:05:52.193] Normal: 231*4kB (UMEH) 49*=
+8kB (MEH) 14*16kB (H) 13*32kB (H) 8*64kB (H) 2*128kB (H) 0*256kB 1*512kB (H=
+) 0*1024kB 0*2048kB 0*4096kB =3D 3236kB
+>         ......
+> 041EA < 4> [   36.234447] [03-19 10:05:52.234] SLUB: Unable to allocate m=
+emory on node -1, gfp=3D0xa20(GFP_ATOMIC)
+> 041EB < 4> [   36.234455] [03-19 10:05:52.234] cache: ext4_io_end, object=
+ size: 64, buffer size: 64, default order: 0, min order: 0
+> 041EC < 4> [   36.234459] [03-19 10:05:52.234] node 0: slabs: 53,objs: 33=
+92, free: 0
 >
->No, the fact that it _can_ be modified by a writable module param is enough to
->make this patch buggy.
+> Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> ---
+> v2: update commit message and fix build error when CONFIG_CMA is not set
+> ---
+> ---
+>  mm/vmscan.c | 15 +++++++++++++--
+>  1 file changed, 13 insertions(+), 2 deletions(-)
 >
->I do like snapshotting and then updating the value, even though there's likely no
->meaningful performance benefit, as that would provide a place to document that
->the "supported" value is dynamic.  Though the fact that it's dynamic is arguably a bug
->in its own right, e.g. if userspace isn't careful, a VM can have vCPUs with different
->values for ARCH_CAPABILITIES.  But fixing that is probably a fool's errand.  So
-
-I am not sure if fixing it is fool. There would be some other problem:
-
-KVM enables L1DLFUSH and creates a guest. Then ARCH_CAP_SKIP_VMENTRY_L1DFLUSH is
-exposed to the guest. If L1DFLUSH is disabled at runtime in KVM, the guest
-doesn't know this change and won't do L1DFLUSH when entering L2. Then L2 may use
-L1TF to leak some secrets of L1.
-
->I vote to snapshot the value and toggle the ARCH_CAP_SKIP_VMENTRY_L1DFLUSH bit
->when l1tf_vmx_mitigation is modified.
-
-Sure. Will do.
-
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index bd6637f..19fb445 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -2225,10 +2225,16 @@ static unsigned long isolate_lru_folios(unsigned =
+long nr_to_scan,
+>         unsigned long nr_skipped[MAX_NR_ZONES] =3D { 0, };
+>         unsigned long skipped =3D 0;
+>         unsigned long scan, total_scan, nr_pages;
+> +       bool cma_cap =3D true;
+> +       struct page *page;
+>         LIST_HEAD(folios_skipped);
 >
->On a somewhat related topic, what in the absolute #$#$ is going on with FB_CLEAR_DIS!?!?
->I made the mistake of digging into why KVM doesn't advertise ARCH_CAP_FB_CLEAR_CTRL...
+>         total_scan =3D 0;
+>         scan =3D 0;
+> +       if ((IS_ENABLED(CONFIG_CMA)) && !current_is_kswapd()
+> +               && (gfp_migratetype(sc->gfp_mask) !=3D MIGRATE_MOVABLE))
+> +               cma_cap =3D false;
+> +
+>         while (scan < nr_to_scan && !list_empty(src)) {
+>                 struct list_head *move_to =3D src;
+>                 struct folio *folio;
+> @@ -2239,12 +2245,17 @@ static unsigned long isolate_lru_folios(unsigned =
+long nr_to_scan,
+>                 nr_pages =3D folio_nr_pages(folio);
+>                 total_scan +=3D nr_pages;
 >
->  1. I see *nothing* in commit 027bbb884be0 ("KVM: x86/speculation: Disable Fill
->     buffer clear within guests") that justifies 1x RDMSR and 2x WRMSR on every
->     entry+exit.
+> -               if (folio_zonenum(folio) > sc->reclaim_idx) {
+> +               page =3D &folio->page;
+> +
+> +               if ((folio_zonenum(folio) > sc->reclaim_idx)
+> +#ifdef CONFIG_CMA
+> +                       || (get_pageblock_migratetype(page) =3D=3D MIGRAT=
+E_CMA && !cma_cap)
+> +#endif
+> +               ) {
+>                         nr_skipped[folio_zonenum(folio)] +=3D nr_pages;
+>                         move_to =3D &folios_skipped;
+>                         goto move;
+>                 }
+> -
+>                 /*
+>                  * Do not count skipped folios because that makes the fun=
+ction
+>                  * return with no isolated folios if the LRU mostly conta=
+ins
+> --
+> 1.9.1
 >
->  2. I'm pretty sure conditioning mmio_stale_data_clear on kvm_arch_has_assigned_device()
->     is a bug.  AIUI, the vulnerability applies to _any_ MMIO accesses.  Assigning
->     a device is necessary to let the device DMA into the guest, but it's not
->     necessary to let the guest access MMIO addresses, that's done purely via
->     memslots.
->
->  3. Irrespective of whether or not there is a performance benefit, toggling the
->     MSR on every entry+exit is completely unnecessary if KVM won't do VERW before
->     VM-Enter, i.e. if (!mds_user_clear && !mmio_stale_data_clear), then the
->     toggling can be done in vmx_prepare_switch_to_{guest,host}().  This probably
->     isn't worth pursuing though, as #4 below is more likely, especially since
->     X86_BUG_MSBDS_ONLY is limited to Atom (and MIC, lol) CPUs.
->
->  4. If the host will will _never_ do VERW, i.e. #3 + !X86_BUG_MSBDS_ONLY, then
->     KVM just needs to context switch the MSR between guests since the value that's
->     loaded while running in the host is irrelevant.  E.g. use a percpu cache to
->     track the current value.
-
-Agreed.
-
-Looks VERW can be used in CPL3, should we restore the MSR on returning
-to userspace i.e., leverage uret mechanism?
-
->
->  5. MSR_IA32_MCU_OPT_CTRL is not modified by the host after a CPU is brought up,
->     i.e. the host's desired value is effectively static post-boot, and barring
->     a buggy configuration (running KVM as a guest), the boot CPU's value will be
->     the same as every other CPU.
->
->  6. Performance aside, KVM should not be speculating (ha!) on what the guest
->     will and will not do, and should instead honor whatever behavior is presented
->     to the guest.  If the guest CPU model indicates that VERW flushes buffers,
->     then KVM damn well needs to let VERW flush buffers.
->
->  7. Why on earth did Intel provide a knob that affects both the host and guest,
->     since AFAICT the intent of the MSR is purely to suppress FB clearing for an
->     unsuspecting (or misconfigured?) guest!?!?!
-
-I doubt it is purely for guests. Any chance userspace application may use VERW?
-
-And I don't think the original patch is for misconfigured guest. IIUC, it is
-about migrating a guest from a vulnerable host to an invulnerable host.
-
->
->FWIW, this trainwreck is another reason why I'm not going to look at the proposed
->"Intel IA32_SPEC_CTRL Virtualization" crud until external forces dictate that I
->do so. I have zero confidence that a paravirt interface defined by hardware
->vendors to fiddle with mitigations will be sane, flexible, and extensible.
->
->Anyways, can someone from Intel do some basic performance analysis to justify
->doing RDMSR + WRMSRx2 on every transition?  Unless someone provides numbers that
-
-Pawan, could you help to answer this question?
-
->show a clear, meaningful benefit to the aggressive toggling, I'm inclined to have
->KVM do #4, e.g. end up with something like:
->
->	/* L1D Flush includes CPU buffer clear to mitigate MDS */
->	if (static_branch_unlikely(&vmx_l1d_should_flush)) {
->		vmx_l1d_flush(vcpu);
->	} else if (static_branch_unlikely(&mds_user_clear) ||
->		   static_branch_unlikely(&mmio_stale_data_clear)) {
->		mds_clear_cpu_buffers();
->	} else if (static_branch_unlikely(&kvm_toggle_fb_clear) {
->		bool enable_fb_clear = !!(vcpu->arch.arch_capabilities & ARCH_CAP_FB_CLEAR);
->
->		if (this_cpu_read(kvm_fb_clear_enabled) != enable_fb_clear) {
->			u64 mcu_opt_ctrl = host_mcu_opt_ctrl;
->
->			if (enable_fb_clear)
->				mcu_opt_ctrl &= ~FB_CLEAR_DIS;
->			else
->				mcu_opt_ctrl |= FB_CLEAR_DIS;
->			native_wrmsrl(MSR_IA32_MCU_OPT_CTRL, mcu_opt_ctrl);
->			this_cpu_write(kvm_fb_clear_enabled, enable_fb_clear);
->		}
->	}
