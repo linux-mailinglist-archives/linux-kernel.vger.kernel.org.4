@@ -2,310 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 532D9708FE4
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 08:29:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D486708FE7
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 08:31:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbjESG32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 02:29:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43096 "EHLO
+        id S229850AbjESGbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 02:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjESG30 (ORCPT
+        with ESMTP id S229436AbjESGbC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 02:29:26 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69221AD;
-        Thu, 18 May 2023 23:29:24 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id B6C955C017D;
-        Fri, 19 May 2023 02:29:21 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 19 May 2023 02:29:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1684477761; x=1684564161; bh=i/
-        I47qKuqB4bMU6D9p4VPqhlV7pgkdTqCfilS1kyhrk=; b=cvQhoQ+6+7tyHLQX+f
-        OGY0l2YqyKen3c5oGftHNW1t9NnH6CVH/e9N7MJQMFCzRokvVu1B8GIR149GY9Bz
-        hKh7ayxfkFNP6je0N/MPetnp189QzqRt461h66qbXYuh8S5myoJfV60E3rNtV3Qa
-        XvCS4XzmrwB839XmiS5K4S8z2i4ViwqSAQI6gLtc/S6Ed05JqJ1kVHhFnqNYoctJ
-        4vsUikfelL/0Tb/Cdu/JEnMG0P08tnB2dGrA6k/BDoaNktfJitOExP5nAEG3FQVt
-        4dpDBGu0qdIUlHm19H0Disid5MlsPLDYxfG6qR84X9s5Ybf77oO+xD7IvLYElNud
-        ghVA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1684477761; x=1684564161; bh=i/I47qKuqB4bM
-        U6D9p4VPqhlV7pgkdTqCfilS1kyhrk=; b=EQBnp+xYFByLFoZ23C2+Yit24Oawm
-        21NupXM0wkTiv5lPNJ/jvcsdY6n1YzhhOBCQbfIOeMDW+rQ0Ma+zcQ34BMTzca0m
-        YlmfDHwydRbiqDT3MVjhZklIVKGh8LuXDQVkXj6TBog7Va9uS6tFsGE+FPDZb918
-        2rY/o5olqLLKmTvAR9XJnwjhBCne+G2TQUOP7S4uGHKrIRCIPPbmrhd2bQEjc//f
-        P5tR7Ecn5wgGqmW+/PkDe78Nyyt8ps6WhgXi7qp0u8kYe1Qj0FbwQlPIeai8JEaX
-        UsDouVvMsNUqDw6F6X38o00KNh6mhPZPbL4qe4UOHyZ1f96qwKmiongLQ==
-X-ME-Sender: <xms:QBdnZBvrlhL4t0XWh-nHfmnIYF3TNDlSS3fp_MP1aiPLlC_jakdNFg>
-    <xme:QBdnZKd4VvC8vOhh5fJhODHOCfNZ5Lfkk1XVk9dNIKEhMvx19xG2jRGyk9VLoA0d6
-    TB_TGxxJwzNv6bXVBA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeigedguddtlecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:QBdnZEzBiwjQzoBhJBWoRDRMvEXQ3_mVRyfArBaVnV3Gbwyeu_qq9g>
-    <xmx:QBdnZIMBH5KcspvFPzoElf4y8gwzs3Q8wNGfR1JN6OOvTA56E39CkQ>
-    <xmx:QBdnZB8bl03HM0VghrSpjYgJiTD2-okPXDqTZZMed8rJFlczgz3F1g>
-    <xmx:QRdnZIg9y_xyUFUXTuVs55XzKaeMOJWbaV4XmFE0R3Qrkk3bF70fgA>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id F0459B60086; Fri, 19 May 2023 02:29:19 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-431-g1d6a3ebb56-fm-20230511.001-g1d6a3ebb
-Mime-Version: 1.0
-Message-Id: <ed53d7d6-78e7-45af-a441-1c87fba4d420@app.fastmail.com>
-In-Reply-To: <20230519045825.28369-2-stanley_chang@realtek.com>
-References: <20230519045825.28369-1-stanley_chang@realtek.com>
- <20230519045825.28369-2-stanley_chang@realtek.com>
-Date:   Fri, 19 May 2023 08:28:59 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Stanley Chang" <stanley_chang@realtek.com>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     "Vinod Koul" <vkoul@kernel.org>,
-        "Kishon Vijay Abraham I" <kishon@kernel.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Conor Dooley" <conor+dt@kernel.org>,
-        "Alan Stern" <stern@rowland.harvard.edu>,
-        "Ray Chi" <raychi@google.com>,
-        "Bagas Sanjaya" <bagasdotme@gmail.com>,
-        "Eugeniu Rosca" <erosca@de.adit-jv.com>,
-        "Michael Grzeschik" <m.grzeschik@pengutronix.de>,
-        "Matthias Kaehlcke" <mka@chromium.org>,
-        "Flavio Suligoi" <f.suligoi@asem.it>,
-        "Mathias Nyman" <mathias.nyman@linux.intel.com>,
-        "Bhuvanesh Surachari" <Bhuvanesh_Surachari@mentor.com>,
-        "Paul Cercueil" <paul@crapouillou.net>,
-        "Linus Walleij" <linus.walleij@linaro.org>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v1 2/3] usb: phy: Add driver for the Realtek SoC USB 2.0/3.0 PHY
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 19 May 2023 02:31:02 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC3171AD
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 23:31:01 -0700 (PDT)
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34J6EjlJ028489;
+        Fri, 19 May 2023 06:30:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=Nfs66LzAnHvE57Xngnbd2IkZW7oKWssPmRiExjFJzfk=;
+ b=inB3dteEUEKMgzA6LbKk+fSk0LjAKZjmf3QG5CgePkH3eBC+oC9n9Rp6c41sggminxvD
+ 18g8QPL2MB4K39Q1gR3VKQxn99C7+asuun+ihRfvmUuhjyjqW8l1zhn+WTpAiUPsSF2E
+ F34/LgKYw4bxapDDUY+JX2O+zwJPHvsnlR8kH+DehtT8N2qFAFAQUFE/bYn5G01ZWkB0
+ JwdT3N6k/PWTeGwSdvlKEXm8fNzkeAeAaIzVdvRpYRWKafggM0N3dS1/o+Si0dTm4YrW
+ RqJaR6nV27x/mjUTSunbh/L2GEHvdp6ONABou8bG7Rn4Qix/86QgMW99jMIqP9zHj7lD zA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qp2vysen6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 May 2023 06:30:06 +0000
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34J6GPOI001298;
+        Fri, 19 May 2023 06:30:06 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qp2vysej1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 May 2023 06:30:05 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34J3tih4031373;
+        Fri, 19 May 2023 06:30:02 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3qj264u139-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 May 2023 06:30:02 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34J6TxZ010420934
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 19 May 2023 06:29:59 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5AA2420043;
+        Fri, 19 May 2023 06:29:59 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5D27220040;
+        Fri, 19 May 2023 06:29:58 +0000 (GMT)
+Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 19 May 2023 06:29:58 +0000 (GMT)
+Received: from [10.61.2.107] (haven.au.ibm.com [9.192.254.114])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 514E2600A8;
+        Fri, 19 May 2023 16:29:55 +1000 (AEST)
+Message-ID: <d63250048e4b224973b5a8d50e4c92547d4a9c34.camel@linux.ibm.com>
+Subject: Re: [PATCH] mm: kfence: Fix false positives on big endian
+From:   Benjamin Gray <bgray@linux.ibm.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Laight <David.Laight@ACULAB.COM>
+Cc:     "zhangpeng.00@bytedance.com" <zhangpeng.00@bytedance.com>,
+        "elver@google.com" <elver@google.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "glider@google.com" <glider@google.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Date:   Fri, 19 May 2023 16:29:43 +1000
+In-Reply-To: <87o7mgzyw1.fsf@mail.lhotse>
+References: <20230505035127.195387-1-mpe@ellerman.id.au>
+         <826f836f41db41eeb0fc32061994ac39@AcuMS.aculab.com>
+         <20230517152028.86b6d2d5afa4541b4269131b@linux-foundation.org>
+         <87o7mgzyw1.fsf@mail.lhotse>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: p0t0azZCbbe8nBx9wVLF6WwuwZif2W3Z
+X-Proofpoint-GUID: 2e0BP1duRbj9IgAbPgXGuR7mm33ijuw0
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-19_03,2023-05-17_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 adultscore=0
+ suspectscore=0 priorityscore=1501 malwarescore=0 mlxscore=0
+ impostorscore=0 lowpriorityscore=0 mlxlogscore=999 spamscore=0 bulkscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305190052
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023, at 06:58, Stanley Chang wrote:
-> +struct rtk_usb_phy {
-> +	struct usb_phy phy;
-> +	struct device *dev;
-> +	struct regmap *usb_regs;
-> +	struct regmap *mac_regs;
-> +	struct regmap *usb_ctrl_regs;
-> +
-> +	int port_index;
-> +	int phyN;
-> +	void *reg_addr;
-> +	void *phy_data;
-> +
-> +#ifdef CONFIG_DEBUG_FS
-> +	struct dentry *debug_dir;
+On Fri, 2023-05-19 at 15:14 +1000, Michael Ellerman wrote:
+> Andrew Morton <akpm@linux-foundation.org> writes:
+> > On Fri, 5 May 2023 16:02:17 +0000 David Laight
+> > <David.Laight@ACULAB.COM> wrote:
+> >=20
+> > > From: Michael Ellerman
+> > > > Sent: 05 May 2023 04:51
+> > > >=20
+> > > > Since commit 1ba3cbf3ec3b ("mm: kfence: improve the performance
+> > > > of
+> > > > __kfence_alloc() and __kfence_free()"), kfence reports failures
+> > > > in
+> > > > random places at boot on big endian machines.
+> > > >=20
+> > > > The problem is that the new KFENCE_CANARY_PATTERN_U64 encodes
+> > > > the
+> > > > address of each byte in its value, so it needs to be byte
+> > > > swapped on big
+> > > > endian machines.
+> > > >=20
+> > > > The compiler is smart enough to do the le64_to_cpu() at compile
+> > > > time, so
+> > > > there is no runtime overhead.
+> > > >=20
+> > > > Fixes: 1ba3cbf3ec3b ("mm: kfence: improve the performance of
+> > > > __kfence_alloc() and __kfence_free()")
+> > > > Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+> > > > ---
+> > > > =C2=A0mm/kfence/kfence.h | 2 +-
+> > > > =C2=A01 file changed, 1 insertion(+), 1 deletion(-)
+> > > >=20
+> > > > diff --git a/mm/kfence/kfence.h b/mm/kfence/kfence.h
+> > > > index 2aafc46a4aaf..392fb273e7bd 100644
+> > > > --- a/mm/kfence/kfence.h
+> > > > +++ b/mm/kfence/kfence.h
+> > > > @@ -29,7 +29,7 @@
+> > > > =C2=A0 * canary of every 8 bytes is the same. 64-bit memory can be
+> > > > filled and checked
+> > > > =C2=A0 * at a time instead of byte by byte to improve performance.
+> > > > =C2=A0 */
+> > > > -#define KFENCE_CANARY_PATTERN_U64 ((u64)0xaaaaaaaaaaaaaaaa ^
+> > > > (u64)(0x0706050403020100))
+> > > > +#define KFENCE_CANARY_PATTERN_U64 ((u64)0xaaaaaaaaaaaaaaaa ^
+> > > > (u64)(le64_to_cpu(0x0706050403020100)))
+> > >=20
+> > > What at the (u64) casts for?
+> > > The constants should probably have a ul (or ull) suffix.
+> > >=20
+> >=20
+> > I tried that, didn't fix the sparse warnings described at
+> > https://lkml.kernel.org/r/202305132244.DwzBUcUd-lkp@intel.com.
+> >=20
+> > Michael, have you looked into this?
+>=20
+> I haven't sorry, been chasing other bugs.
+>=20
+> > I'll merge it upstream - I guess we can live with the warnings for
+> > a while.
+>=20
+> Thanks, yeah spurious WARNs are more of a pain than some sparse
+> warnings.
+>=20
+> Maybe using le64_to_cpu() is too fancy, could just do it with an
+> ifdef? eg.
+>=20
+> diff --git a/mm/kfence/kfence.h b/mm/kfence/kfence.h
+> index 392fb273e7bd..510355a5382b 100644
+> --- a/mm/kfence/kfence.h
+> +++ b/mm/kfence/kfence.h
+> @@ -29,7 +29,11 @@
+> =C2=A0 * canary of every 8 bytes is the same. 64-bit memory can be filled
+> and checked
+> =C2=A0 * at a time instead of byte by byte to improve performance.
+> =C2=A0 */
+> -#define KFENCE_CANARY_PATTERN_U64 ((u64)0xaaaaaaaaaaaaaaaa ^
+> (u64)(le64_to_cpu(0x0706050403020100)))
+> +#ifdef __LITTLE_ENDIAN__
+> +#define KFENCE_CANARY_PATTERN_U64 (0xaaaaaaaaaaaaaaaaULL ^
+> 0x0706050403020100ULL)
+> +#else
+> +#define KFENCE_CANARY_PATTERN_U64 (0xaaaaaaaaaaaaaaaaULL ^
+> 0x0001020304050607ULL)
 > +#endif
-> +};
+> =C2=A0
+> =C2=A0/* Maximum stack depth for reports. */
+> =C2=A0#define KFENCE_STACK_DEPTH 64
+>=20
+>=20
+> cheers
 
-I'd avoid the #ifdefs here and just leave the debugfs
-code in unconditionally in favor of readability. When
-debugfs is disabled, everything except for the one pointer
-value should get optimized out.
+(for the sparse errors)
 
-> +#define phy_read(addr) __raw_readl(addr)
-> +#define phy_write(addr, val) do { \
-> +	/* Do smp_wmb */ \
-> +	smp_wmb(); __raw_writel(val, addr); \
-> +} while (0)
+As I understand, we require memory to look like "00 01 02 03 04 05 06
+07" such that iterating byte-by-byte gives 00, 01, etc. (with
+everything XORed with aaa...)
 
-Using __raw_readl()/__raw_writel() in a driver is almost never
-the right interface, it does not guarantee atomicity of the
-access, has the wrong byte-order on big-endian kernels and misses
-the barriers to serialize against DMA accesses. smp_wmb()
-should have no effect here since this only serializes access to
-memory against another CPU if it's paired with an smp_rmb(), but
-not on MMIO registers.
+I think it would be most semantically correct to use cpu_to_le64 on
+KFENCE_CANARY_PATTERN_U64 and annotate the values being compared
+against it as __le64.=C2=A0This is because we want the integer literal
+0x0706050403020100 to be stored as "00 01 02 03 04 05 06 07", which is
+the definition of little endian.
 
-> +#define PHY_IO_TIMEOUT_MSEC		(50)
-> +
-> +static inline int utmi_wait_register(void __iomem *reg, u32 mask, u32 
-> result)
-> +{
-> +	unsigned long timeout = jiffies + 
-> msecs_to_jiffies(PHY_IO_TIMEOUT_MSEC);
-> +
-> +	while (time_before(jiffies, timeout)) {
-> +		/* Do smp_rmb */
-> +		smp_rmb();
-> +		if ((phy_read(reg) & mask) == result)
-> +			return 0;
-> +		udelay(100);
-> +	}
-> +	pr_err("\033[0;32;31m can't program USB phy \033[m\n");
-> +
-> +	return -ETIMEDOUT;
-> +}
+Masking this with an #ifdef leaves the type as cpu endian, which could
+result in future issues.
 
-This should just use read_poll_timeout() or possibly
-read_poll_timeout_atomic(), but not an open-coded version.
-
-I don't think I've seen escape sequences in a printk
-in any other driver, so please don't start that now.
-
-> +#define DEFAULT_CHIP_REVISION 0xA00
-> +#define MAX_CHIP_REVISION 0xC00
-> +
-> +static inline int __get_chip_revision(void)
-> +{
-> +	int chip_revision = 0xFFF;
-> +	char revision[] = "FFF";
-> +	struct soc_device_attribute soc_att[] = {{.revision = revision}, {}};
-
-You should probably check that you are actually on the right
-SoC type here as well, not just the right revision of
-an arbitrary chip.
-
-Ideally I think the revision check should be based off a DT proporty
-if that's possible, so you can have this code in the boot loader.
-
-> +#define RTK_USB2PHY_NAME "rtk-usb2phy"
-
-Better avoid hiding the driver name like this, it makes it harder
-to grep the source tree for particular driver names.
-
-> +	/* rmb for reg read */
-> +	smp_rmb();
-> +	regVal = phy_read(reg_gusb2phyacc0);
-
-I would expect that you don't need barriers like this, especially
-if you change the phy_read() helper to use the proper readl().
-
-If you do need to serialize against other CPUs, still, there should
-be a longer explanation about that, since it's so unexpected.
-
-> +
-> +static void do_rtk_usb2_phy_toggle(struct rtk_usb_phy *rtk_phy,
-> +	    int index, bool isConnect);
-
-It's best to sort your function definitions in a way that avoids
-forward declarations. This makes it easier to read and shows that
-there are no obvious recursions in the source. If you do have
-an intentional recursion, make sure that there is a way to
-prevent unbounded stack usage, and explain that in a comment.
-
-> +static int do_rtk_usb_phy_init(struct rtk_usb_phy *rtk_phy, int index)
-> +{
-> +	struct reg_addr *regAddr;
-> +	struct phy_data *phy_data;
-> +	struct phy_parameter *phy_page_setting;
-> +	int i;
-> +
-> +	if (!rtk_phy) {
-> +		pr_err("%s, rtk_phy is NULL\n", __func__);
-> +		return -EINVAL;
-> +	}
-> +
-> +	dev_dbg(rtk_phy->dev, "%s: init phy#%d\n", __func__, index);
-...
-> +	if (!phy_data) {
-> +		pr_err("%s, phy_data is NULL\n", __func__);
-> +		return -EINVAL;
-> +	}
-
-You can probably remove most of the debugging prints.
-
-> +	regAddr = &((struct reg_addr *)rtk_phy->reg_addr)[index];
-> +	phy_data = &((struct phy_data *)rtk_phy->phy_data)[index];
-
-Why do you need the casts here? It looks like regAddr should
-be an __iomem pointer. Please build your driver with 'make C=1'
-to see if there are any incorrect address space annotations.
-
-> +static int __get_phy_parameter_by_efuse(struct rtk_usb_phy *rtk_phy,
-> +	    struct phy_data *phy_data, int index)
-> +{
-> +	u8 value = 0;
-> +	struct nvmem_cell *cell;
-> +	struct soc_device_attribute rtk_soc_groot[] = {
-> +			{ .family = "Realtek Groot",},
-> +			{ /* empty */ }
-> +		};
-> +	struct soc_device_attribute rtk_soc_hank[] = {
-> +			{ .family = "Realtek Hank",},
-> +			{ /* empty */ }
-> +		};
-> +	struct soc_device_attribute rtk_soc_efuse_v1[] = {
-> +			{ .family = "Realtek Phoenix",},
-> +			{ .family = "Realtek Kylin",},
-> +			{ .family = "Realtek Hercules",},
-> +			{ .family = "Realtek Thor",},
-> +			{ .family = "Realtek Hank",},
-> +			{ .family = "Realtek Groot",},
-> +			{ .family = "Realtek Stark",},
-> +			{ .family = "Realtek Parker",},
-> +			{ /* empty */ }
-> +		};
-> +	struct soc_device_attribute rtk_soc_dis_level_at_page0[] = {
-> +			{ .family = "Realtek Phoenix",},
-> +			{ .family = "Realtek Kylin",},
-> +			{ .family = "Realtek Hercules",},
-> +			{ .family = "Realtek Thor",},
-> +			{ .family = "Realtek Hank",},
-> +			{ .family = "Realtek Groot",},
-> +			{ /* empty */ }
-> +		};
-> +
-> +	if (soc_device_match(rtk_soc_efuse_v1)) {
-> +		dev_dbg(rtk_phy->dev, "Use efuse v1 to updated phy parameter\n");
-> +		phy_data->check_efuse_version = CHECK_EFUSE_V1;
-
-I'm not entirely sure what you are trying to do here, but
-it looks the purpose is to tell the difference between implementations
-of the phy device by looking at which SoC it's in. You should
-only need that very rarely when this information cannot be
-passed through the DT, but you literally already have the
-per-SoC compatible strings below, so just use those, or add other
-DT properties in the binding for specific quirks or capabilities.
-
-> +#ifdef CONFIG_OF
-> +static const struct of_device_id usbphy_rtk_dt_match[] = {
-> +	{ .compatible = "realtek,usb3phy", },
-> +	{ .compatible = "realtek,rtd-usb3phy", },
-> +	{ .compatible = "realtek,rtd1295-usb3phy", },
-> +	{ .compatible = "realtek,rtd1619-usb3phy", },
-> +	{ .compatible = "realtek,rtd1319-usb3phy", },
-> +	{ .compatible = "realtek,rtd1619b-usb3phy", },
-> +	{ .compatible = "realtek,rtd1319d-usb3phy", },
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(of, usbphy_rtk_dt_match);
-> +#endif
-> +
-> +static struct platform_driver rtk_usb3phy_driver = {
-> +	.probe		= rtk_usb3phy_probe,
-> +	.remove		= rtk_usb3phy_remove,
-> +	.driver		= {
-> +		.name	= RTK_USB3PHY_NAME,
-> +		.owner	= THIS_MODULE,
-> +		.of_match_table = of_match_ptr(usbphy_rtk_dt_match),
-> +	},
-> +};
-
-Remove that of_match_ptr() and ifdef CONFIG_OF check here, new drivers
-should no longer use static platform device definitions and just assume
-that CONFIG_OF is used.
-
-     Arnd
+(or I've just misunderstood and can disregard this)
