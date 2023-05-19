@@ -2,144 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E55417094D4
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 12:32:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31CDC7094DA
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 12:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231910AbjESKc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 06:32:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52932 "EHLO
+        id S231265AbjESKdx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 06:33:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbjESKcy (ORCPT
+        with ESMTP id S231911AbjESKdv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 06:32:54 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2041.outbound.protection.outlook.com [40.107.243.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5D7E66;
-        Fri, 19 May 2023 03:32:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=E4CgYiEtWt+RAaT+DEpruhiNPPPIn9lOxpBIZYyh8RqHihNFdPItnuHJd9LFJIHiG1+rwzvZLgU3PUlogB9kCNXVYxmWBm2+8VYs3c3RPGUyvXuySIqjkFYWWaMeqzCvwB5lRZgyBNS88kvFZtsya+u0CV4X3K39RN5tWfPGdZkVnp4oFhBee/c4Dj+NoPjO3Q3/1JjCYQN+Xwuo0xzLbpjXRUTTh0ZUUkPc/BbI08WNoBqOp/TXDco7blhMEDSBRujvEbYk7d8YnUzOfCHyjgUbCiKsH23l3Y06TsPlbHi0wtphgza42FkqfKE13X01bkg38eRPcgWQ7+rKfFmbUQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FWQJu2T43YyHtjgCZdIDWouC5oLWu6GppEerJQ4kabU=;
- b=H1pbISKpYU/nd7kt1q6LNM/HESpacUEmMBVnSdpAzu9zczCPR3k0Wv3XfKTPfASx7F2tSLhK2Kasy78zBH62Ylj3LSSZ3I0dQYSobsEvKLzMvz+y3C8w7bfQX7+jzwz9nR9eC/OIGPszo1djbGtC/ae8nWmA0npJcI50PJb9kmcABPnuCjg9EkS4Bq3k14nIaX4i52TCbNDXBT/eb4XyljbsDwTSA+DSbpCrBZfoWngjKay/IXEF2+KBEtpAUARt8McHjLWwwgTGaBAv5zMdQrgt9GWs+1tJJxP2dkmvUa7ZJEvFM5yiVH1Hj7GVwAUrId436l0BQHWcMMBCRL3+WQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FWQJu2T43YyHtjgCZdIDWouC5oLWu6GppEerJQ4kabU=;
- b=11eBNdrpV/AolUW542s2swMuQ4cnL946k5+E6apm3nU4DwB21dppgmDSSQ1ObbB7jF9JcCwWT7hZQ4vB2YPm4QTSXOehh2TZlFZNobLeY2/s0dJncjIHgbjHRd54h3rcix6mh/NIx7pj0IIjLrm0mIGh0zqtmJKcJRekmguV5Vk=
-Received: from MW4PR04CA0292.namprd04.prod.outlook.com (2603:10b6:303:89::27)
- by SA3PR12MB9177.namprd12.prod.outlook.com (2603:10b6:806:39d::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.21; Fri, 19 May
- 2023 10:32:50 +0000
-Received: from CO1NAM11FT010.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:89:cafe::81) by MW4PR04CA0292.outlook.office365.com
- (2603:10b6:303:89::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19 via Frontend
- Transport; Fri, 19 May 2023 10:32:49 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT010.mail.protection.outlook.com (10.13.175.88) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6411.21 via Frontend Transport; Fri, 19 May 2023 10:32:49 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 19 May
- 2023 05:32:46 -0500
-From:   Nava kishore Manne <nava.kishore.manne@amd.com>
-To:     <mdf@kernel.org>, <hao.wu@intel.com>, <yilun.xu@intel.com>,
-        <trix@redhat.com>, <michal.simek@amd.com>,
-        <linux-fpga@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     Alfonso Rodriguez <alfonso.rodriguezm@upm.es>
-Subject: [PATCH] fpga: zynq-fpga: Ensure proper xCAP interface switch
-Date:   Fri, 19 May 2023 16:02:32 +0530
-Message-ID: <20230519103232.3009096-1-nava.kishore.manne@amd.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 19 May 2023 06:33:51 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23CC6E73
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:33:47 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f41d087b3bso30813335e9.0
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:33:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684492425; x=1687084425;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=JqbUf5iW4pm4MKo8jBbYutuoKVMlMmpyWEErz/xJUGs=;
+        b=KivDySRPsicV5/FrEu0tr3IZUifQsAq8K8u1LZnR/d/Yp9Vqvq9BfR1Uh6PZZ2g4h+
+         gJBGyDL8p1mo42t8bleHQrEkMgfaSpOMENQO/b7k33Mjygb9b5kpO8xmiEPMVPMazOMC
+         vdVOc+aFXIl+xboZaPzYBR0+frnQT8gs2RnmWLkPddzw1uBKZjFoNv3dvWVZWx7N8Day
+         XiEDgN9JdzUh9Klmm7MRjDp3rmqhu2myTtQMUkO0ZWMptHBVi23izyfMBfIuE9Ss0YXQ
+         dFJxL84i1z3s6jbsTM7ADgJYrO+zNeuDdnHAk18twff+uHmVmXsc4IAreOhrxJKqy8yW
+         sW3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684492425; x=1687084425;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JqbUf5iW4pm4MKo8jBbYutuoKVMlMmpyWEErz/xJUGs=;
+        b=RoasFzpwLkElsw7P1DeWo9ltSQwHavMXkSGClf6R227eZJ7c5FviSSvAW/gGXyIKc5
+         VP9PLzOybnRjcEABdrBNghn5Kkko1Vc6R/U3yIUcclzYLEWV5KBYrD+7ig+3Ff52G/mE
+         R+834REgzhZNwzwjxX1AiAtcOYI0U13cgj33FkWtRnriycVUt01o5OMMXT7ejKNWz6RH
+         VSU/8jnY99O3LNg8W56EzR0I9U2T5jJ1irDreQM9tWfJpx6zaZ3Mx5jrwQyj3QjGv76p
+         ghrTPGN7TUzKP3MiAK71Wn5fHyVZNsDT7469N92LGQEDxVgudAx3TyjnGnO/svM+zLC2
+         /Tfg==
+X-Gm-Message-State: AC+VfDynHE3Z0vPV+3wu7QckNtpygSCwxFFSFjSrSzcRgTCwzNVwn0i/
+        dUGtJNA62tCNxl0wnWuMMWyosCecCxxC3iFLqvwuJg==
+X-Google-Smtp-Source: ACHHUZ6qCct8NWnq2Z2uNVkhKGDHqSymbTeeEMJ6pmXav96yYUtEcUzXrp16xnYXtT4NJoEFK4X4OAUUXgJHUbfifdc=
+X-Received: by 2002:a5d:564a:0:b0:306:2fd3:2edb with SMTP id
+ j10-20020a5d564a000000b003062fd32edbmr1186052wrw.61.1684492425513; Fri, 19
+ May 2023 03:33:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT010:EE_|SA3PR12MB9177:EE_
-X-MS-Office365-Filtering-Correlation-Id: e7499261-05d0-427c-9275-08db585464ad
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: n08S1QJUpgSJQRBZ7yFuAGBytdjoCqdZ5ap0vt0hySTUf/9LZ2kSR9afzLy4tZMkdBqytx6oaik7yXtqJesJWO3zOPV0JIy/pKuyBb8kRixL83XfD86PGMpZQKx4oViBz1ArGmPgcJgcD5FSOF7ouXGMNf6IAcYpRxBGJXKLJXupY3EN24wdgcizhzhDfZySEQo+zjjwHeHsS2lcqC+TwbFVr8yHykvV4PMqSrVKqI++Bseu7yfT/uPMj/9o4THMeJlJjSMOLwsqrgAuA9tjOLP3w5ATq1SETcnTUbYWj1+9RTOzA/ahx61M0bTSgudp9cfQ1VNNDsVoFBWmw6c1ag6tL/XPR+uu1JthDS86E3IcSfCVBox6wW8PygRsH9oP3pCiCyBc8e1JVecm87op0YK4JfBGI4kBnvk7QNt1BRhY70FyBUK3bI5Dy2y50qgJRHrX8huA8KFlbFjABbixsITUyIRHUXGnh+vWRWxgnGPARCNta/A6UTRq2MU1gyVohVn55Khnkc8cNJ+spD643QJ8DdRUFH4+r5Tfk9NgFO5ns2KTiuqPh2jSbXFyNrHlS6DB8RuQ0l+tVh6yLI984qpuiQmVkdx78BuYDI9Ts6CGGf/BnMUT3YVzZwj49nGfz3m9vONs70aKgkVSLi9mVGcVHk/eDMKlMIM73xdgmLFXkAEs6OCsUv0om45G6fFTKnlFXd6BjqeILlgTCJ2MpWVvdP6bpmTo1RyphQGySmSxb+oKzXnrZxgLe0CqGcyGZrtQ9vF4k7UvdljoPSm+gjwGCYexE2zJnt5uSKdz6ow=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(396003)(39860400002)(346002)(451199021)(46966006)(40470700004)(36840700001)(478600001)(316002)(5660300002)(8936002)(8676002)(41300700001)(4326008)(110136005)(2906002)(40460700003)(70206006)(70586007)(36860700001)(36756003)(103116003)(40480700001)(6666004)(16526019)(1076003)(186003)(26005)(82740400003)(86362001)(47076005)(2616005)(356005)(81166007)(336012)(82310400005)(426003)(83380400001)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2023 10:32:49.1088
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e7499261-05d0-427c-9275-08db585464ad
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT010.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB9177
-X-Spam-Status: No, score=1.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+References: <20230405072836.1690248-1-bhupesh.sharma@linaro.org>
+ <20230405072836.1690248-9-bhupesh.sharma@linaro.org> <9ecbea6a-d7bd-0f4d-e94f-dd1130e578c7@linaro.org>
+In-Reply-To: <9ecbea6a-d7bd-0f4d-e94f-dd1130e578c7@linaro.org>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Fri, 19 May 2023 16:03:34 +0530
+Message-ID: <CAH=2NtymHsMY3MOaSw9oy6h6PSA8WNi9xawmH2A86NWTMZLVNQ@mail.gmail.com>
+Subject: Re: [PATCH v6 08/11] arm64: dts: qcom: sm8150: Add Crypto Engine support
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        agross@kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, andersson@kernel.org,
+        bhupesh.linux@gmail.com, krzysztof.kozlowski@linaro.org,
+        robh+dt@kernel.org, vladimir.zapolskiy@linaro.org,
+        rfoss@kernel.org, neil.armstrong@linaro.org, djakov@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alfonso Rodriguez <alfonso.rodriguezm@upm.es>
+Hi Konrad,
 
-Ensure that the low-level fpga-manager driver for Zynq-7000 devices
-switches between reconfiguration interfaces as specified in the TRM
-(section 6.5.1: "Ensure that all outstanding transactions are completed
-before changing interfaces"); device (re)configuration may fail otherwise
+Sorry for the late reply, but I wanted to look at the latest
+downstream code before responding.
 
-Signed-off-by: Alfonso Rodriguez <alfonso.rodriguezm@upm.es>
-Tested-by: Nava kishore Manne <nava.kishore.manne@amd.com>
----
- drivers/fpga/zynq-fpga.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+On Thu, 6 Apr 2023 at 19:28, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>
+> On 5.04.2023 09:28, Bhupesh Sharma wrote:
+> > Add crypto engine (CE) and CE BAM related nodes and definitions to
+> > 'sm8150.dtsi'.
+> >
+> > Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+> > ---
+> >  arch/arm64/boot/dts/qcom/sm8150.dtsi | 22 ++++++++++++++++++++++
+> >  1 file changed, 22 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/sm8150.dtsi b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+> > index 9491be4a6bf0..c104d0b12dc6 100644
+> > --- a/arch/arm64/boot/dts/qcom/sm8150.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sm8150.dtsi
+> > @@ -2081,6 +2081,28 @@ ufs_mem_phy_lanes: phy@1d87400 {
+> >                       };
+> >               };
+> >
+> > +             cryptobam: dma-controller@1dc4000 {
+> > +                     compatible = "qcom,bam-v1.7.4", "qcom,bam-v1.7.0";
+> > +                     reg = <0 0x01dc4000 0 0x24000>;
+> > +                     interrupts = <GIC_SPI 272 IRQ_TYPE_LEVEL_HIGH>;
+> > +                     #dma-cells = <1>;
+> > +                     qcom,ee = <0>;
+> > +                     qcom,controlled-remotely;
+> > +                     iommus = <&apps_smmu 0x514 0x0011>,
+> > +                              <&apps_smmu 0x516 0x0011>;
+> > +             };
+> > +
+> > +             crypto: crypto@1dfa000 {
+> > +                     compatible = "qcom,sm8150-qce", "qcom,qce";
+> > +                     reg = <0 0x01dfa000 0 0x6000>;
+> > +                     dmas = <&cryptobam 4>, <&cryptobam 5>;
+> > +                     dma-names = "rx", "tx";
+> > +                     iommus = <&apps_smmu 0x514 0x0011>,
+> > +                              <&apps_smmu 0x516 0x0011>;
+> Downstream uses these (sid, mask) combos:
+>
+> qcedev:
+> 0x0506 0x0011
+> 0x0516 0x0011 // equal to 0x506 0x11
+>
+> qcom_cedev_ns_cb:
+> 0x512 0
+> 0x518 0
+> 0x519 0
+> 0x51f 0
+>
+> Shouldn't we use them too?
 
-diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
-index ae0da361e6c6..88db9ac36887 100644
---- a/drivers/fpga/zynq-fpga.c
-+++ b/drivers/fpga/zynq-fpga.c
-@@ -493,15 +493,16 @@ static int zynq_fpga_ops_write_complete(struct fpga_manager *mgr,
- 	if (err)
- 		return err;
- 
--	/* Release 'PR' control back to the ICAP */
--	zynq_fpga_write(priv, CTRL_OFFSET,
--		zynq_fpga_read(priv, CTRL_OFFSET) & ~CTRL_PCAP_PR_MASK);
--
- 	err = zynq_fpga_poll_timeout(priv, INT_STS_OFFSET, intr_status,
- 				     intr_status & IXR_PCFG_DONE_MASK,
- 				     INIT_POLL_DELAY,
- 				     INIT_POLL_TIMEOUT);
- 
-+	/* Release 'PR' control back to the ICAP */
-+	zynq_fpga_write(priv, CTRL_OFFSET,
-+			zynq_fpga_read(priv, CTRL_OFFSET)
-+			& ~CTRL_PCAP_PR_MASK);
-+
- 	clk_disable(priv->clk);
- 
- 	if (err)
--- 
-2.25.1
+Sure, but the following are the latest values used in the downstream
+.dtsi, so I used them in the latest version and tested with the same
+on sa8115p-adp and sm8150-mtp without any issues:
 
+qcedev:
+0x0502 0x0641
+0x0504 0x0011
+
+qcom_cedev_ns_cb:
+0x0506 0x0011
+0x0508 0x0011
+0x0512 0x0000
+
+I dropped:
+0x0514 0x0011 // equal to 0x504 0x11
+0x0516 0x0011 // equal to 0x506 0x11
+0x0518 0x0011 // equal to 0x508 0x11
+
+Thanks for pointing this out.
+
+Regards,
+Bhupesh
