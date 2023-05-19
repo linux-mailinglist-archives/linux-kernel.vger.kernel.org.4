@@ -2,169 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB97D709260
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 11:01:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECC12709268
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 11:02:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbjESJBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 05:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47670 "EHLO
+        id S230274AbjESJCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 05:02:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbjESJBU (ORCPT
+        with ESMTP id S229681AbjESJCn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 05:01:20 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2103.outbound.protection.outlook.com [40.107.100.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E667E56;
-        Fri, 19 May 2023 02:01:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eaq5QfgqRYmgrt3VJke18xJLg8fDQYyT4Z4mB4n3hSNowdSluKaP3xBshWGXLQK4ESrK93Bw9MQSvg4XGLjzcMbsjzCkgtw/LV+LvYFz7mH7J9xPBlDn2JOeOdnmwv6DmxprLxafx6tPUC29fKaOHT5+vH1zW7xf50evEwgRt8FMujOmbwpmzeV9j1fNK7FjBrSbyGn9XreO4FeGEMRMNQOabnmYqNtu5dD8OHsJSJOi/jKhxpevkl3HKuyLhDo+TjSV8zdSaGKThoWAddfitwztIcWELQtWH/tMY92hiuEV0F4cYzydirk29f1lsEqSD2+vLh/RX+9M8V1jnoE+Tw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9cTXMQjxCbsf8OJ4PdCQtrzXacOYRxjN+ow4tfwd9MI=;
- b=eZ4quRo3fSjSZSGTZ/VJuUEn2HiZGmUGs4Kg0Pox+hwPDM1wYNxvptq9vou4J+e7Il2/yRf5JkD3od8PG5K+wnaKJdSPev5EzJCRxucrb9wydry0ZmHDddGz+xA0jkb1xbI2d6i+gx6z+1yUMK9l1Lzp4N0HeTySkrKZON+ESxXbMb91Ame8Z5Vi7OZU1tJ79KQMD85zNmME8kn576NptyOTo9jergJD0jfz+bGilD0CemteAa/Y9gYplXokML0NWKv5fy4e6Ehcl7rup98Qcp0VPByxSAzBdxVteLNQ8YjRl+fsUnzqKwn37uAP6BQqCiI3mFZqZLN8wDo+CG8kVA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Fri, 19 May 2023 05:02:43 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA6BFB
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 02:02:41 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-64d11974b45so1344539b3a.2
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 02:02:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9cTXMQjxCbsf8OJ4PdCQtrzXacOYRxjN+ow4tfwd9MI=;
- b=vCHT3Ub/kgzMluAv65m+O4K2kn68neWwahXqusrAosw7PtL89ZsrAJbXTDl7M/H7i+ebVpiH6tFWmQPKvBf71RsoA+JkcEAU02kemyJNicxD7uo0PTjSeFYrKjTEjCTkGahwgOQd81Px0IO5DjPkxLoKsXj8hmHx3pJSB8/7LE8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by CH0PR13MB5169.namprd13.prod.outlook.com (2603:10b6:610:ea::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.21; Fri, 19 May
- 2023 09:01:15 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6411.021; Fri, 19 May 2023
- 09:01:15 +0000
-Date:   Fri, 19 May 2023 11:01:07 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Arun Ramadoss <arun.ramadoss@microchip.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net-next v3 1/2] net: dsa: microchip: ksz8: Make flow
- control, speed, and duplex on CPU port configurable
-Message-ID: <ZGc603g8Pjp4Umke@corigine.com>
-References: <20230518092913.977705-1-o.rempel@pengutronix.de>
- <20230518092913.977705-2-o.rempel@pengutronix.de>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230518092913.977705-2-o.rempel@pengutronix.de>
-X-ClientProxiedBy: AS4P191CA0015.EURP191.PROD.OUTLOOK.COM
- (2603:10a6:20b:5d5::12) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=huaqin-corp-partner-google-com.20221208.gappssmtp.com; s=20221208; t=1684486960; x=1687078960;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dgyhdD0Z5uIMOVTz0Ju4X2/oVNPW1i/oYYXsh7N4X4M=;
+        b=OWYBiz6WlIh1V/l9X/Gdf+xPSgBsF7e7sXV6UyuHEndXrapxhmrB3TkC8R3zfq/hCB
+         3z1Q1aBMLMESjZAzDRx7Fh+BF0rEqnRHgzz5uOvdWZ4uvQAK7lp95KBQdSKKsfs+YH/m
+         paaxoRemHtRz+QfjeLSxWOHRgbF+QdNq7CjbMhxHIn8lIjjDCXynHoJDi58uoqzKNgFW
+         tkTVDKAoA/kBReaBp0KaewU/1eYhT+5kRq0V9jQjW0VxL2hI8oqlMQFyfGHbCuB5DE3G
+         q9UO7sUdKNhlxskD0bSC80KJPycUjuPk7oU92vWmsykPaF+RaTr0FMys670hQoP9Aizb
+         sx4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684486960; x=1687078960;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dgyhdD0Z5uIMOVTz0Ju4X2/oVNPW1i/oYYXsh7N4X4M=;
+        b=ljtT7bYr9QMu/v5P0jRfsRB49iIYojjUtP+/LYZpn3MEIwa1EPKQIgGY4CEJnf8eW1
+         j4wdEb15a350EKMt7qQmmXNbx62LZNLZ9QderUzIkRT4R1LPjT3DEqP37meDb5QJJ08d
+         c169Bot/FZxNvOsHWMw+JGZm8fc23IFmt8BC/DdI5OhNaRDoBLFZ+27vE3Xbb7l6uME5
+         WJugyprRQSq5PlH9ddDQ4OZbntu4zDHQ1IFYAKbaojgj9DQJnf6VnQn9e3Bf72DvDQev
+         Nr/6tNMDWF5iP+FUkRXXv4EDOdHfSSc+jK7+LjJWYBSORAaONSlcjvKTBfEOf1+rGehe
+         xKbQ==
+X-Gm-Message-State: AC+VfDzoEKdcXPh2N7dzfRq5luqqxCDsJjvB8/i8V0YofnEvvRANHgiQ
+        O7U1bYB0u3tBIKO6HEVJ8CPYWg==
+X-Google-Smtp-Source: ACHHUZ7wFFt/rKk0Cxr4ucwSXRW4PIJaDmBYFThv9U1k7G56FqIDDwZ4dNN/aLv5j+zmomsAxW5B7A==
+X-Received: by 2002:a05:6a00:8c7:b0:64d:1215:a0f5 with SMTP id s7-20020a056a0008c700b0064d1215a0f5mr2448868pfu.34.1684486960613;
+        Fri, 19 May 2023 02:02:40 -0700 (PDT)
+Received: from yc.huaqin.com ([101.78.151.214])
+        by smtp.gmail.com with ESMTPSA id c24-20020aa78e18000000b00622e01989cbsm2649274pfr.176.2023.05.19.02.02.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 May 2023 02:02:40 -0700 (PDT)
+From:   Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+To:     jikos@kernel.org, benjamin.tissoires@redhat.com,
+        dianders@chromium.org, mka@chromium.org, dmitry.torokhov@gmail.com,
+        hsinyi@google.com
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+Subject: [PATCH] HID: i2c-hid: goodix: Add ili9882t timing
+Date:   Fri, 19 May 2023 17:01:49 +0800
+Message-Id: <20230519090149.4407-1-yangcong5@huaqin.corp-partner.google.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CH0PR13MB5169:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3aa84249-89f7-43e6-b71a-08db5847993a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6+pR6K7mfH3uEtLU3/zamEy0gjIReyQO/sEoObKS7rqxJQeogKVsGSiOqao/JsyZP+88LRvkhuXWakGg+KjduHhF4wEWJyI0r8SlBqJNDQdBsM7rI+fsUdPwfMre3tEV+AgqtZ9AkwBjm/BlrkYbM5iERaemPKW27jFn9XVZi30rjAXlOeMVikmsHjtzOABmI7Iayv56VnvZhgaIu09Bsgu2ccOYPCfuAzdd0wAxE2ffFWmJ3qUN7oPovUOHVdrFsWdG+U/jLrwEOh6MrU7LEwy+Ci/ZY1UmNFv6eJ7wxIK91tkp2StemuoOtdG3ERWea4rMhNMeJHwa8eLq4QfqX7FTC2VA+/8whvExqvsvfRGoBTY9hYPYh2VAThssWLhbSWhlYk0ZhTJ+Ft3q6rDBvg4nTJ38X0UpF0+vKvy/RXkmMQ5xTBxjaeE0SD0QLCAlB5musDHJRCAurKzaJmjMQwkH1xZ7fbMJARZc/WsaC6BdZVItw9e3iJVdFBJXJuo/n+g7bryfxRfbWOjI6x/QMVmF0c4CvifWmAKwiLzvcsj853Orer6GOmxdY7pmual8
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(366004)(39840400004)(396003)(376002)(451199021)(4326008)(6916009)(66946007)(66556008)(66476007)(478600001)(54906003)(316002)(86362001)(36756003)(83380400001)(6512007)(6506007)(2616005)(186003)(41300700001)(5660300002)(8936002)(8676002)(7416002)(44832011)(6486002)(2906002)(6666004)(38100700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bnaslNdFfxDprebzc/Qc7cy6tcT600XZP4Qqm2k8p9m1Hub05wK55/Dlb3Rn?=
- =?us-ascii?Q?IywLGlHSOrvoJZYasq9S6SrzK/ZZTcc1hUdztte1boY/+jdlF/Ghq8FaJ4+Q?=
- =?us-ascii?Q?j4JDbBT3AqriqDF/fynCR7PHYXmpdPT5C93brbfQnV7DMxDg8RI61r0OQx+7?=
- =?us-ascii?Q?DIYfe0hYer/bcWmKZCtIGsA+RNLn57Zsia7EBCyCAtfnJ6s7JaELUrjzYE2b?=
- =?us-ascii?Q?UsZaRMSo5TQ2dK88whtXq+E8uufCY2iBPxdRRTmAv5OhlOMWu9G6ZmEoRWeQ?=
- =?us-ascii?Q?M0tBwEYBgK0PEJT3wJPfFiAe9KfVlSPlmmhKwJjA2LVxD0WaEX0JhueJLf7l?=
- =?us-ascii?Q?cGdyISCYRBDFgOzxVEpoQ+9ZXh6rHIMx54FJKo9HUG0C2/7MYQEevNy4BoAF?=
- =?us-ascii?Q?8O4UUHbpVVFsss6YYOmk37cA497xbI0MJretKJHfF6V63Hv+eEnnXpXB98Pb?=
- =?us-ascii?Q?6kfcLFmbM7FxApPvQpcKUxmeFurB0tDHZFBeQ8/u+vmolbJp2oUVx5LVPwHK?=
- =?us-ascii?Q?bFkx8Shc6Eaw7NLhv7dsOBuhfqWOiTREnXNrO0e12JGl30sQ8UcVxLdoFiEe?=
- =?us-ascii?Q?jfY0Du0ECeLxviuU4P9PUsle52xtbbJz947J2MWvULkbZr/S0Fg/J0APj+ST?=
- =?us-ascii?Q?FzVnqGws4Trf4iNLb7roa5q1NVIbk61fayUlIu28Zu63GZYo46gLGhoTYHzf?=
- =?us-ascii?Q?9Qo0DmrongXG2mxlOdvK+UuJaMdqEgethQ1dTEfZX9L/a+ECUXnvlW/M7WlJ?=
- =?us-ascii?Q?RktwHpwmN2WtzxomuM+Ef8jW2eKnI7YgHus0bHM61Bq6n6O2XQyQrPBslE0y?=
- =?us-ascii?Q?y/0a6+nU3IRa+eYZ3xbkD6Y/F5h4MZ0nTGjWLRX1y+DIJ9QQi83QvGu8RZK9?=
- =?us-ascii?Q?bXaf4DsZIQhFSLQni3j9f6etD+zX/ke3zNjgemIwsauPKwys9QqWqdS8DgsH?=
- =?us-ascii?Q?8fj5uhGTvn/KomFgGSh5cO9k4v3bwMzMfNEKyyf5SHI26eIBU1r110X/RxXd?=
- =?us-ascii?Q?qxiyWhVXNS2/J5BdvQbYxg/9j7YfMaVwu84Q+Z7awxQUgR7Bo2Qhhq8JarnZ?=
- =?us-ascii?Q?Dw9zjSWIeuxaqh+4MpQ4Et88rTNitBfZ4FCOXuDGY4wsl+HWc/5v2GCNhIvm?=
- =?us-ascii?Q?8OCsI1cQGjCabBx7HYJytSB7MgKyGppkgNl5ihO4O4HoUpamtdwJDuFQvb5v?=
- =?us-ascii?Q?ju9A8+5me1YsZwaQ6hTmD91/oaJi2uVnqKWz8kcc/bG4LmjiJBdN8I7tjnj2?=
- =?us-ascii?Q?eICcM0t0jFsWy92kym1R6py9rIw44QDkGgHY8MRS/9Q/xewUa3TXPSVnrb1w?=
- =?us-ascii?Q?gd4NOurfJHPMH9DdIEwQx6BjvqSckWgfADgVS2me/eBMk5r1efHdeIZ91ENY?=
- =?us-ascii?Q?2a5gm4ma1LxaKyWHMRknPVa3kqcf2DrUZYsPBauOL9tyq2PY6I83+ts2vSqC?=
- =?us-ascii?Q?O2p9kVB9/R0Juqe0VPgySStZsGJCqiYniQGhCkNsKURWZpbA8OqKCavocjB5?=
- =?us-ascii?Q?zvKRsRzoZkjeeOeKGjSKVIHCKXagLfesr2Fxmz/M4Kv97pC09jvTreuRUGKg?=
- =?us-ascii?Q?/fmpJNADWJFr3vnSo1H3E2Ut6KwV08byT1jrlS4GPlTzOvZ7Zpl4x7u/VH+a?=
- =?us-ascii?Q?H+BKVr9R+61PY9zVWv1TuhZfDhsyJpbE7o/vfEdjxNKNmB9RAUMbQAaHbEJb?=
- =?us-ascii?Q?30rTcg=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3aa84249-89f7-43e6-b71a-08db5847993a
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2023 09:01:15.1876
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IFbRGvRcZbsMMeWN4F0vm5t0mEkCflhH7zkz90TZemPNLKxd4K8KAC4/1EeYpJ/aDIN+JUuyOb6RudvY2S4Kw/7juJJ8wtvDowYQe4co40U=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR13MB5169
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 11:29:12AM +0200, Oleksij Rempel wrote:
-> Allow flow control, speed, and duplex settings on the CPU port to be
-> configurable. Previously, the speed and duplex relied on default switch
-> values, which limited flexibility. Additionally, flow control was
-> hardcoded and only functional in duplex mode. This update enhances the
-> configurability of these parameters.
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+The ili9882t is a TDDI IC ((Touch with Display Driver)). It requires the
+panel reset gpio to be high before i2c commands. Use a longer delay in
+post_power_delay_ms to ensure the poweron sequence.
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Signed-off-by: Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+---
+ drivers/hid/i2c-hid/i2c-hid-of-goodix.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-...
+diff --git a/drivers/hid/i2c-hid/i2c-hid-of-goodix.c b/drivers/hid/i2c-hid/i2c-hid-of-goodix.c
+index 0060e3dcd775..c5870b683a26 100644
+--- a/drivers/hid/i2c-hid/i2c-hid-of-goodix.c
++++ b/drivers/hid/i2c-hid/i2c-hid-of-goodix.c
+@@ -101,8 +101,14 @@ static const struct goodix_i2c_hid_timing_data goodix_gt7375p_timing_data = {
+ 	.post_gpio_reset_delay_ms = 180,
+ };
+ 
++static const struct goodix_i2c_hid_timing_data ilitek_ili9882t_timing_data = {
++	.post_power_delay_ms = 200,
++	.post_gpio_reset_delay_ms = 180,
++};
++
+ static const struct of_device_id goodix_i2c_hid_of_match[] = {
+ 	{ .compatible = "goodix,gt7375p", .data = &goodix_gt7375p_timing_data },
++	{ .compatible = "ilitek,ili9882t", .data = &ilitek_ili9882t_timing_data },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(of, goodix_i2c_hid_of_match);
+-- 
+2.25.1
 
-> diff --git a/drivers/net/dsa/microchip/ksz8795.c b/drivers/net/dsa/microchip/ksz8795.c
-> index f56fca1b1a22..9cfe343d2214 100644
-> --- a/drivers/net/dsa/microchip/ksz8795.c
-> +++ b/drivers/net/dsa/microchip/ksz8795.c
-> @@ -1371,6 +1371,55 @@ void ksz8_config_cpu_port(struct dsa_switch *ds)
->  	}
->  }
->  
-> +/**
-> + * ksz8_upstream_link_up - Configures the CPU/upstream port of the switch.
-> + * @dev: The KSZ device instance.
-> + * @port: The port number to configure.
-> + * @speed: The desired link speed.
-> + * @duplex: The desired duplex mode.
-> + * @tx_pause: If true, enables transmit pause.
-> + * @rx_pause: If true, enables receive pause.
-> + *
-> + * Description:
-> + * The function configures flow control and speed settings for the CPU/upstream
-> + * port of the switch based on the desired settings, current duplex mode, and
-> + * speed.
-> + */
-> +static void ksz8_upstream_link_up(struct ksz_device *dev, int port, int speed,
-+				 int duplex, bool tx_pause, bool rx_pause)
-
-nit: there seems to be an off-by-one error in the indentation of the line
-     above.
-
-...
