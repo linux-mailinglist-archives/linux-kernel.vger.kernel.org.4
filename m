@@ -2,179 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08930709FCC
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 21:19:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11AED709FD1
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 21:21:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230120AbjESTTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 15:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34678 "EHLO
+        id S230150AbjESTVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 15:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbjESTTX (ORCPT
+        with ESMTP id S229559AbjESTVy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 15:19:23 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2044.outbound.protection.outlook.com [40.107.93.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D5DED;
-        Fri, 19 May 2023 12:19:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mz2y/C3KEpr+pprEoDjs+e03OBLrlD3zu1173DotaXP1hpPxT6HDgpmZAcBsabVWJkFZuKsJF6mIwtxRYWz139hghCjTVP8lM8wiJk8knHIoUMxAKkDr8iSYRzfjr8tdUcpzOhw+MS3ylJ7guN/vaPCIOEtXMRAga/NAgsq4lAwH7HCrdTA14M4eFeF2V58CvlTZ/eewo4UrlQtL2gnZKu3QGfTQU/n9jQM3EqEO5iozs+yWcaao70wxnm925KObRJrnjGuXdrffBlXq9d0LbyTlAZ7qBi5At0z/eoksU6JnA/Q71TkTUC1hXldfFU08HS7AcwHQUVg4boxmi4PF3Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k4OrkYlFkJ6O7FcGH9EZKiNZlB6Ae47orp5csS8Ee+Q=;
- b=iLJfde2e9aFq5oznYuLuBlS4UZNUIzqROJEQNEpolcW7wEvlSZXFa0A1yF1qPm4iiSFOO9A+fkJb7hkkrMnKfTYQ42DXH3YBZbS601aBb8tBLHJNnIdMKce6ThKR8sMjtQWst65mz0TAl2ojUJOYcatFank03QlHRJjqW/bgmOdgvoUyzKsIQsc0+q7yXWfIDZgPwdiN5t9PnZ/SseHyaSSmBazEXwKll9dasVh3Fm3oTi1Q9kBAgFYnqoZ42gtuhtG3YJa9STdA9SdT/WuVRvJf5VeJXDR6xKMf0VNWM6HmFzGZtOvERWDX+rT3k+ANzOsXjXfKw2/WkDFgvlFf/g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k4OrkYlFkJ6O7FcGH9EZKiNZlB6Ae47orp5csS8Ee+Q=;
- b=AIRyIaWlMTJ89WKIJF7NoSIGS/CpVm+v5leTImyuO7jN5+6841RPUUBl15DKi4c5r74wzLiQeGO+D9C2/hwRj7PiWHSiSXZY7z1RDGIpVdcJttT6wToXkkXSCIWWdGmVmElytNr/pcH9zPZg499ZFTmdyw4S/zFAvMbs5JlstQg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BL1PR12MB5995.namprd12.prod.outlook.com (2603:10b6:208:39b::20)
- by MW6PR12MB7069.namprd12.prod.outlook.com (2603:10b6:303:238::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.21; Fri, 19 May
- 2023 19:19:20 +0000
-Received: from BL1PR12MB5995.namprd12.prod.outlook.com
- ([fe80::38dc:9789:e0:aef6]) by BL1PR12MB5995.namprd12.prod.outlook.com
- ([fe80::38dc:9789:e0:aef6%5]) with mapi id 15.20.6387.030; Fri, 19 May 2023
- 19:19:20 +0000
-Date:   Fri, 19 May 2023 14:19:10 -0500
-From:   John Allen <john.allen@amd.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Tom Lendacky <thomas.lendacky@amd.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH 3/3] crypto: ccp - Add support for PCI device 0x156E
-Message-ID: <ZGfLrtmVOcCYiWFW@johallen-workstation>
-References: <20230519032414.94247-1-mario.limonciello@amd.com>
- <20230519032414.94247-4-mario.limonciello@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230519032414.94247-4-mario.limonciello@amd.com>
-X-ClientProxiedBy: YQZPR01CA0130.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:87::15) To BL1PR12MB5995.namprd12.prod.outlook.com
- (2603:10b6:208:39b::20)
+        Fri, 19 May 2023 15:21:54 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8FF115
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 12:21:52 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-5112cae8d82so1566878a12.2
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 12:21:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1684524110; x=1687116110;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R3UOfbb4Sozljqzvq4nyP3R59tkdsUwJloQlEWrn99E=;
+        b=TufFSf/w57t3rdGZZ9k6NrvIRRg0IOJU214TyZ65AkRlDZn5JY0ZSEgAy6ko17UGvN
+         hORZlxyJMmAIdywEHHMZYr/bOWwvfL83yYW425at2d5hb1512YCLonwpz23h4NT6OyPZ
+         qloGnG+htrWYlevBiv+vP5NSrMJ5r7DnNDAk0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684524110; x=1687116110;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R3UOfbb4Sozljqzvq4nyP3R59tkdsUwJloQlEWrn99E=;
+        b=brT36xkQS5iHoKrm6mvuvl/juhSLrrMTkJeGnl4C7puCPAKp4AR75Ed2a/qS7mBnCT
+         hDta2W5e5b4t29joNe4m4/wC+LE0nPlZkJWZ5gUeJZTuNkxrVYg1yEYeyHoX/no1xDE+
+         4YliaB318Fx6Ll2IDNnSac5ulHdxigI1NeYKDqdgMhR8yo2/Hsg9UpuWtFuQ7Ki3kfv7
+         DPgxTUwARsAe7UokEWx/LnTbA8mkBLEWUcrWWBCN65wZZVAaECbNUI3XbuWIvI8h442R
+         vjdeWtmZyapp1KU/SqfqwMGpF+CLZmIV4AfGU6XMsTb1XfRPMYeLzoOYVodTm4MlqAkX
+         i9IQ==
+X-Gm-Message-State: AC+VfDx4V1N10sbW5vgczx36ajqE6Ryh9fWJji7wrfcYZDiKvd7S+bXs
+        2iyzIoTRgo2F5zx5DfOeE4HpAyLfqvFjvdsX45vZ63QW
+X-Google-Smtp-Source: ACHHUZ7/jUMBu7zKuVi5J1KMJGjZ8tr+xAjlaMMyii8/iiGvUtOqGDdDiz5eZgByNWYYMv1UKbGPhA==
+X-Received: by 2002:a05:6402:514e:b0:504:a248:3741 with SMTP id n14-20020a056402514e00b00504a2483741mr2726081edd.14.1684524110598;
+        Fri, 19 May 2023 12:21:50 -0700 (PDT)
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com. [209.85.208.51])
+        by smtp.gmail.com with ESMTPSA id z5-20020aa7c645000000b0050bc6983041sm62934edr.96.2023.05.19.12.21.49
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 May 2023 12:21:49 -0700 (PDT)
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-510d8b0169fso4814040a12.1
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 12:21:49 -0700 (PDT)
+X-Received: by 2002:a17:907:26ca:b0:962:46d7:c8fc with SMTP id
+ bp10-20020a17090726ca00b0096246d7c8fcmr2445592ejc.21.1684524109262; Fri, 19
+ May 2023 12:21:49 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5995:EE_|MW6PR12MB7069:EE_
-X-MS-Office365-Filtering-Correlation-Id: fdf14d23-f2b4-4d36-d340-08db589df21d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YRw++EcJnF6wzWaizMXBuqZgFfqprivaSlHAgb14vUA4KmWOVBNj5v/RO0WV3t9eLZzCP6CnTSIzOisiodKjzE99st7fP1prJj87PuDLLbiUqH1j6EWwSYLqb8b2QaSKU+0llUGhetgtzP5WiqiM/Yx5Ri8ctjgeKgVsDZ3sDgie8A78Z7hYMCj8jSVhnWsM/fCHhOv0VTm5+HC/K8xslp0DS74O6c4dqmjcehxmPu/i+TAhs7mqMLtRi3gPzbL4h6o0A0xDUZxzECrphGLdVSN40YPu4mz27R4i66f7lgplGeK+lEfDiTGYbirKFbdvS7kw/Ltk+kg4YrzSV4Lzs87Vmul2GbPHaNcBHoIUNMof+e2bCZ5Ju4Aj47UxUIRDEHflbVI5d0Jbw1OqTKFd0/2SwkV6vxXaHkXcMVxg4ImRA0o7MkYdbnpmX0OBfQWw+nrPrknu/nr7nTDs5rMfkXmS/coLhGidfn1kmUs7SYYc/mvtinY/hTm2b8aunBEclB5D+9ZtqS0W45ctQ7lw3ELAZwtfT9VZMM3It8jrDLXe8WeaiiAv0uZFKPKkclB9
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5995.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(7916004)(39860400002)(396003)(136003)(376002)(346002)(366004)(451199021)(66946007)(66476007)(66556008)(6916009)(4326008)(8676002)(8936002)(316002)(54906003)(478600001)(41300700001)(6666004)(86362001)(2906002)(9686003)(6506007)(26005)(6512007)(6486002)(44832011)(33716001)(38100700002)(186003)(5660300002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Rxv8GyDZBxzis5rONnwt9bwXXtp8lFuNKGb00UqcQbF7Qvb54rFiet8DeLbS?=
- =?us-ascii?Q?+F2QBPQrCUyxcViV6AsNdGBCMpkVHke3rv/F7P2RQ26kCaTXnhBlAB/z/aSz?=
- =?us-ascii?Q?0glHNgg8No4rTOk3SmN2IsfB/9Z/GVFcF9m3Q56G8iKKBF0ZUN5VER9bh+vP?=
- =?us-ascii?Q?Ly4UEHh4DBf49+zOFhB9VfsnOFGDDNqTV1IDevU7HiJUvSIoP1a+Xt4t8/vS?=
- =?us-ascii?Q?waLDY7IBJT2w9uGBYPDwFkBUAhlA9myNzf7nPYXGrnrKVzgZXEbAMpFg5Aor?=
- =?us-ascii?Q?nKICPoOK2SuErb9AEvUL4rN2HhqFGY7U3bbmePwpX6lXEv7MZshnDoAMN0kE?=
- =?us-ascii?Q?asfQZZB9tpGb4MEG8vqxS1tUCiHZvujO1nScZUWFXWei1Ptf2prfU+WhUkYC?=
- =?us-ascii?Q?g0YE6OrQ4QIG2dqLljTq13803Yqx3564PV9zaj4VIEJte96WZ660B+mwaRE3?=
- =?us-ascii?Q?V0zFpMObZ1amXKxq1tKhiHAnFmjih56EFrGEVeruvnu9CYRmAeBdmZAiMC8b?=
- =?us-ascii?Q?xFlUMSBzdsBENBslmxc99zx4B71k7jCRczchCZopjH29d7QDqXOP7DZ/MKkl?=
- =?us-ascii?Q?m35Sirp5xPEVxXAyAllgFotFrpo+2Y9eS0CVe6JaBix0tu/H8NqwW0AC4HHj?=
- =?us-ascii?Q?98SLGErV89UQhSLLxQwbsx+TvA9jS6Yx1nNcBPTYDFHxWga1El+5lKqdEpCm?=
- =?us-ascii?Q?6vZSoMDB9nOG+UdwW8SinijT7u62PK+3CmiwpdNj66s/tNR33JE1pdC1/jjN?=
- =?us-ascii?Q?+cRypHoA/TDlG1GpQTzwdZchUCIWOSZgWq0YKcuxOT529NZhpnDspRAAt3PZ?=
- =?us-ascii?Q?0MsigAIXk3Q0fAIGRgLvfrorbaDk+uQW4dDKy8Vc6I/ncUY5rVfbRn+0i0Wx?=
- =?us-ascii?Q?iTVwbIyk8LSFOZzpLNZ1frLW8cjYYVzB+Pa1N7uw3zuddU1hNKswR4jK+gp2?=
- =?us-ascii?Q?9tlQxRuCgQ1c99Acw10xjSypjNBjGEAZhgS0ROvtQ6ubuvPopyP1kuNpTZyJ?=
- =?us-ascii?Q?cqpYUc966zBxEY/gnB6PiM6aQQzdeuJuYxrM2hgtFiEO3VnynEkzANpFXdYB?=
- =?us-ascii?Q?qyx+bEv63nnMbSBIPuWwti1ERJ26d5g6Q+o38UUgmqisjqCjA04BDwJm1DZ2?=
- =?us-ascii?Q?g6A3DzFZBetR+bxi57VilLyMKk3AwQ4FNGejpIZc+cGKEhXRCCnfeG1r6YKl?=
- =?us-ascii?Q?3g/CqETQgAimDUfDqFWGbYeE9t6JpfoOZ66tU1A+7q2OWPq8aioslPB8ZCBm?=
- =?us-ascii?Q?KN2X9ceY/daaXyMCbjRDXJslhsGGWweMR4XYv9Dgi2tJq9kHXDNg9riGd5Se?=
- =?us-ascii?Q?g0AqpA2A/XN7NIi4e/RvIc5ps6kuV+xnlJD3BAj06zwKd3clsaA6bC38AIEM?=
- =?us-ascii?Q?VoAKcrxCHDs4TtB3gtsQZdti7vMS20vDZjmUHTmU2/Yy4FE8mpSXPPcJeKgU?=
- =?us-ascii?Q?iUO9rSNEeeGBhPxM0m6YLxf7meYLkiSpbUMUCHRG1i2YLNEXv2qd+wF8LLU0?=
- =?us-ascii?Q?srGIgFcJXRUk7JeNB9WKppiacETqXz/uUMlFplkoJ8R7jV0iznJ2Y3CYAHjZ?=
- =?us-ascii?Q?xcPaX45RcydSRzoBa7+DKcOsZZ31HjxycHTeAVaE?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fdf14d23-f2b4-4d36-d340-08db589df21d
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5995.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2023 19:19:20.0092
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2+tjXWwK8M3XCOQLEVeGSvR8souhi8WT5LndWMpp7Mvvb3Gv/nJJs9WJvIia7/CzQrMRJ3PLnmpxZ2zwprXBlg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB7069
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20230519190934.339332-1-joel@joelfernandes.org> <20230519190934.339332-2-joel@joelfernandes.org>
+In-Reply-To: <20230519190934.339332-2-joel@joelfernandes.org>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 19 May 2023 12:21:32 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whoajP4bZMbZC_VYmBhmhCpXsBesszwWUH0i6SpK_dAtw@mail.gmail.com>
+Message-ID: <CAHk-=whoajP4bZMbZC_VYmBhmhCpXsBesszwWUH0i6SpK_dAtw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] mm/mremap: Optimize the start addresses in move_page_tables()
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Kirill A Shutemov <kirill@shutemov.name>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 10:24:14PM -0500, Mario Limonciello wrote:
-> From: John Allen <john.allen@amd.com>
-> 
-> Add a new CCP/PSP PCI device ID and new PSP register offsets.
-> 
-> Signed-off-by: John Allen <john.allen@amd.com>
-
-Hi Herbert,
-
-Please hold off on applying this patch for now. I need to do a little
-bit more testing.
-
-Thanks,
-John
-
-> ---
->  drivers/crypto/ccp/sp-pci.c | 15 +++++++++++++++
->  1 file changed, 15 insertions(+)
-> 
-> diff --git a/drivers/crypto/ccp/sp-pci.c b/drivers/crypto/ccp/sp-pci.c
-> index d0d70af0c4c0..b603ad9b8341 100644
-> --- a/drivers/crypto/ccp/sp-pci.c
-> +++ b/drivers/crypto/ccp/sp-pci.c
-> @@ -420,6 +420,14 @@ static const struct psp_vdata pspv5 = {
->  	.intsts_reg		= 0x10514,	/* P2CMSG_INTSTS */
->  };
->  
-> +static const struct psp_vdata pspv6 = {
-> +	.sev                    = &sevv2,
-> +	.tee                    = &teev2,
-> +	.feature_reg            = 0x109fc,	/* C2PMSG_63 */
-> +	.inten_reg              = 0x10510,	/* P2CMSG_INTEN */
-> +	.intsts_reg             = 0x10514,	/* P2CMSG_INTSTS */
-> +};
+On Fri, May 19, 2023 at 12:09=E2=80=AFPM Joel Fernandes (Google)
+<joel@joelfernandes.org> wrote:
+>
+> +static bool check_addr_in_prev(struct vm_area_struct *vma, unsigned long=
+ addr,
+> +                              unsigned long mask)
+> +{
+> +       int addr_masked =3D addr & mask;
+> +       struct vm_area_struct *prev =3D NULL, *cur =3D NULL;
 > +
->  #endif
->  
->  static const struct sp_dev_vdata dev_vdata[] = {
-> @@ -478,6 +486,12 @@ static const struct sp_dev_vdata dev_vdata[] = {
->  		.bar = 2,
->  #ifdef CONFIG_CRYPTO_DEV_SP_PSP
->  		.psp_vdata = &pspv5,
-> +#endif
-> +	},
-> +	{	/* 8 */
-> +		.bar = 2,
-> +#ifdef CONFIG_CRYPTO_DEV_SP_PSP
-> +		.psp_vdata = &pspv6,
->  #endif
->  	},
->  };
-> @@ -491,6 +505,7 @@ static const struct pci_device_id sp_pci_table[] = {
->  	{ PCI_VDEVICE(AMD, 0x15C7), (kernel_ulong_t)&dev_vdata[6] },
->  	{ PCI_VDEVICE(AMD, 0x1649), (kernel_ulong_t)&dev_vdata[6] },
->  	{ PCI_VDEVICE(AMD, 0x17E0), (kernel_ulong_t)&dev_vdata[7] },
-> +	{ PCI_VDEVICE(AMD, 0x156E), (kernel_ulong_t)&dev_vdata[8] },
->  	/* Last entry must be zero */
->  	{ 0, }
->  };
-> -- 
-> 2.34.1
-> 
+> +       /* If the masked address is within vma, there is no prev mapping =
+of concern. */
+> +       if (vma->vm_start <=3D addr_masked)
+> +               return false;
+
+Hmm.
+
+I should have caught this last time, but I didn't.
+
+That test smells bad to me. Or maybe it's just the comment.
+
+I *suspect* that the test is literally just for the stack movement
+case by execve, where it catches the case where we're doing the
+movement entirely within the one vma we set up.
+
+But in the *general* case I think the above is horribly wrong: if you
+want to move pages within an existing mapping, the page moving code
+can't just randomly say "I'll expand the area you wanted to move".
+
+Again, in that general mremap() case (as opposed to the special stack
+moving case for execve), I *think* that the caller has already split
+the vma's at the point of the move, and this test simply cannot ever
+trigger.
+
+So I think the _code_ works, but I think the comment in particular is
+questionable, and I'm a bit surprised about the code too,. because I
+thought execve() only expanded to exactly the moving area.
+
+End result: I think the patch on the whole looks nice, and smaller
+than I expected. I also suspect it works in practice, but I'd like
+that test clarified. Does it *actually* trigger for the stack moving
+case? Because I think it must (never* trigger for the mremap case?
+
+And maybe I'm the one confused here, and all I really need is an
+explanation with small words and simple grammar starting with "No,
+Linus, this is for case xyz"
+
+                  Linus
