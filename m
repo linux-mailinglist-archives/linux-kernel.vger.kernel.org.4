@@ -2,63 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C54EC709678
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 13:24:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39CE870967C
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 13:25:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbjESLY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 07:24:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58190 "EHLO
+        id S231440AbjESLZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 07:25:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbjESLYZ (ORCPT
+        with ESMTP id S231739AbjESLZR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 07:24:25 -0400
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A16F11B7;
-        Fri, 19 May 2023 04:24:18 -0700 (PDT)
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-        id CAE0892009E; Fri, 19 May 2023 13:24:17 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by angie.orcam.me.uk (Postfix) with ESMTP id C3C2892009B;
-        Fri, 19 May 2023 12:24:17 +0100 (BST)
-Date:   Fri, 19 May 2023 12:24:17 +0100 (BST)
-From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH 2/2] x86/PCI: Slightly simplify
- pirq_convert_irt_table()
-In-Reply-To: <84bf047b01452a72642dbe355b02ef016c985a91.1683356951.git.christophe.jaillet@wanadoo.fr>
-Message-ID: <alpine.DEB.2.21.2305190334330.50034@angie.orcam.me.uk>
-References: <bc8422a8bf3ff99809413eb62dd12aacc85a9950.1683356951.git.christophe.jaillet@wanadoo.fr> <84bf047b01452a72642dbe355b02ef016c985a91.1683356951.git.christophe.jaillet@wanadoo.fr>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+        Fri, 19 May 2023 07:25:17 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B9910C6;
+        Fri, 19 May 2023 04:25:15 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1ae3ed1b0d6so22939965ad.3;
+        Fri, 19 May 2023 04:25:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684495514; x=1687087514;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6BlLLSb4t/MYbESNdbnlmX8aWP0pTO6ZrGYiXtEq3JU=;
+        b=AdTJK5Yy8ERyK+67dFz4QkLtifLll3Mh81VfJnwH6n2WmKtkscqtfrb18kd61SrlMk
+         rEYjInP3g6CL/QzhLYXKtHy2rqbRnLySMQrx4d9+Fa4+g4V0YPPWaFM9nUOoh/LumoFy
+         OZUIYQAtJn04uQJu4aXzlS8VovVRqEy9YvQFR2hJL2P2Wkum21BlJljtPLghAKEiQrGn
+         B8CT2s+owWDQYOnyySWTIjmu0ZDxrz/bD5FNvUxlZvffgK9XHjUI/Mt84CyrqHvcomQj
+         z7kWdqKBUw5VLgIxiSL4YkDb+E6Qc7SWy8cMy4oV3arBSAFbRqVN9I21cxzZ56OkPKbp
+         qdUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684495514; x=1687087514;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6BlLLSb4t/MYbESNdbnlmX8aWP0pTO6ZrGYiXtEq3JU=;
+        b=EUn/bFIty/0Pw4ObYols6O/T02bqFszEi3hqzywGNB647lxdfOTZj9fySIIF5M8DHr
+         Onuj8X5jDkQsEmo5OXmT2rS5XIpoWAgnZlfe37vcsv31AuTx5NKWTvIojnHKGI7c0yPM
+         5OTmUf7745r5bf4zXLn7uZZ7qjrj+jEUQHktg+R6WQcr/24E7wmgrdpS4HmRRF1U7z3C
+         vNmihkIdsIs+JYoSSoVJehKBnUdCVS03bk4mkmYpa6y2ngKHrVyW4EXgmjIyBK63XMih
+         5ybivHfPdZ0Nj61QC254+YWyFVmUdC/U2rqEZK12YDdi+DpjeNihszsZYhIs/PjsW6vS
+         emVA==
+X-Gm-Message-State: AC+VfDyq4xQuJ+uEA29SHd4bXYDFFxaS5I3MAMP5ZbapDCeqKTJu6ITu
+        QMlCFKet6diMMNuaIzbcI3c=
+X-Google-Smtp-Source: ACHHUZ64CiYvdspneYPeXoJ9FG78ZZve8AsKQbiHpjWwuP8+rb6oiNv3DRb2T5J8X8D5z9uBuDDoiQ==
+X-Received: by 2002:a17:903:2343:b0:1a9:9a18:3458 with SMTP id c3-20020a170903234300b001a99a183458mr2800765plh.31.1684495514183;
+        Fri, 19 May 2023 04:25:14 -0700 (PDT)
+Received: from ubuntu777.domain.name (36-228-97-28.dynamic-ip.hinet.net. [36.228.97.28])
+        by smtp.gmail.com with ESMTPSA id a7-20020a170902ecc700b001ac95be5081sm3170111plh.307.2023.05.19.04.25.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 May 2023 04:25:13 -0700 (PDT)
+From:   Min-Hua Chen <minhuadotchen@gmail.com>
+To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>
+Cc:     Min-Hua Chen <minhuadotchen@gmail.com>, netdev@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] net: stmmac: compare p->des0 and p->des1 with __le32 type values
+Date:   Fri, 19 May 2023 19:25:08 +0800
+Message-Id: <20230519112509.40973-1-minhuadotchen@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 6 May 2023, Christophe JAILLET wrote:
+Use cpu_to_le32 to convert the constants to __le32 type
+before comparing them with p->des0 and p->des1 (they are __le32 type)
+and to fix following sparse warnings:
 
-> 'size' if computed twice. *ir and *it being the same, the result is the
-> same as well.
+drivers/net/ethernet/stmicro/stmmac/dwxgmac2_descs.c:110:23: sparse: warning: restricted __le32 degrades to integer
+drivers/net/ethernet/stmicro/stmmac/dwxgmac2_descs.c:110:50: sparse: warning: restricted __le32 degrades to integer
 
- There is no `it' data object in this function; I presume you meant `rt'. 
-Then `*ir' and `*rt' are of a different type each, hence the calculations 
-are not the same.  If they were the same, the function wouldn't be needed 
-at all in the first place.  Therefore, NAK.
+Signed-off-by: Min-Hua Chen <minhuadotchen@gmail.com>
+---
+ drivers/net/ethernet/stmicro/stmmac/dwxgmac2_descs.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> While at it, also use struct_size() which is less verbose, more robust and
-> more informative.
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwxgmac2_descs.c b/drivers/net/ethernet/stmicro/stmmac/dwxgmac2_descs.c
+index 13c347ee8be9..eefbeea04964 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwxgmac2_descs.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwxgmac2_descs.c
+@@ -107,7 +107,8 @@ static int dwxgmac2_rx_check_timestamp(void *desc)
+ 	ts_valid = !(rdes3 & XGMAC_RDES3_TSD) && (rdes3 & XGMAC_RDES3_TSA);
+ 
+ 	if (likely(desc_valid && ts_valid)) {
+-		if ((p->des0 == 0xffffffff) && (p->des1 == 0xffffffff))
++		if ((p->des0 == cpu_to_le32(0xffffffff)) &&
++		    (p->des1 == cpu_to_le32(0xffffffff)))
+ 			return -EINVAL;
+ 		return 0;
+ 	}
+-- 
+2.34.1
 
- This might be a valuable clean-up, thank you, please submit separately.
-
-  Maciej
