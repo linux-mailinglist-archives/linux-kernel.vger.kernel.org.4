@@ -2,107 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE457094A8
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 12:20:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73ED27094AA
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 12:21:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231829AbjESKUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 06:20:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46582 "EHLO
+        id S231827AbjESKVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 06:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231812AbjESKUS (ORCPT
+        with ESMTP id S231822AbjESKVD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 06:20:18 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8CB1AD
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:20:16 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-5208be24dcbso2139545a12.1
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:20:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684491616; x=1687083616;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wba1YArvykmSZksSn+PRwHxHWmhMmfjRVISgjVjCTk4=;
-        b=de0+lVs7fkMKCXKZN1Uo3v1hZWz7Q0rLROV5fVLqv8ZK4RiAwZ4ihjvw9OXZc0TjWZ
-         /zXm+CgtQcIJ9lctzjY613itfA6hAd10/oaQX+Uim+w8FDQey/YmF6rmFEEb0mYbeO8S
-         PDKb2qdfHgSlBS+LD2+OcTziblsjhcIZP44+9ZPqUvPDcxqPnCYsWA5pIA8uFbmn2YGX
-         jXnkaJA/Nk0gPNdc80IbR5sKerOv512segljfyJCBc5XqQKOx/Luksx+uEp/cNwcIh+y
-         tSTXMOuqaTHfSPxKIBjS98V1MKWJXtinmIwKWXU9LoW3lnE2PLBoYJXCVL0r6G402lzb
-         ZolQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684491616; x=1687083616;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wba1YArvykmSZksSn+PRwHxHWmhMmfjRVISgjVjCTk4=;
-        b=VRatWi/cRcnEcp1/98WFZpwIZRfTz98HWhhvIY/qh5JsuRFlZ7iJmDaV6CM65MGhEo
-         2CEtpM8kFZtroutzlvrIXBxx2QrD5I66ZjVowrovU7l5Oz+3uUOa44ZqpE4+UeVslmNl
-         9k1o46WtNl8JBSRe/rIzgKou7m6vjXTaxVNPqQo5kDpYxA5KlXyjU16/BMf7vpMG6oHP
-         HQ1cxLYI4SlIMM2b526+KJBSg+ibwSQf2dT2ReQgvOA1N+IJsN7d6lmhA+QecL57pZuG
-         M/fgeJ+DHgMzPyuHkxPv1UsNzsLo07K0DJVJDkaNnbzcqb/6w0NRl1qoF9L0eHBvZDWv
-         nqeg==
-X-Gm-Message-State: AC+VfDxYL0KegJ/tj/HxyecIwmyb3got6oozLAR2vmYAo3KLqFQjoKFl
-        qYFY+OxsxEBtzSppVJUfDlA=
-X-Google-Smtp-Source: ACHHUZ4iDDAHgVYfvn93q6kUTIsh196jK6e4uGk1QBRgVFTeo4UoDjg08LB76NZrjlzPoz0t7WrbyQ==
-X-Received: by 2002:a17:90a:8c10:b0:250:1905:ae78 with SMTP id a16-20020a17090a8c1000b002501905ae78mr1651705pjo.15.1684491615776;
-        Fri, 19 May 2023 03:20:15 -0700 (PDT)
-Received: from localhost.localdomain ([2405:201:682f:3808:92bc:26c4:ce02:816b])
-        by smtp.gmail.com with ESMTPSA id t7-20020a17090a3b4700b0025374fedab4sm1239643pjf.22.2023.05.19.03.20.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 03:20:15 -0700 (PDT)
-From:   Deepanshu Kartikey <kartikey406@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Deepanshu Kartikey <kartikey406@gmail.com>
-Subject: [PATCH v2] Staging: rts5208: rtsx: Moved else statement to same line with else if
-Date:   Fri, 19 May 2023 15:49:20 +0530
-Message-Id: <20230519101920.27342-2-kartikey406@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230519101920.27342-1-kartikey406@gmail.com>
-References: <20230519101920.27342-1-kartikey406@gmail.com>
+        Fri, 19 May 2023 06:21:03 -0400
+Received: from out-3.mta1.migadu.com (out-3.mta1.migadu.com [IPv6:2001:41d0:203:375::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 853501B8
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:21:01 -0700 (PDT)
+Message-ID: <e13270a2-c149-6194-b283-06fc38efbd9b@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1684491657;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=f2/x6o647fvkKRQ4lSsMEFjqh2VPCvaHWpW8KsvuUhc=;
+        b=udnu0OVvT3ytoawjOfIe1810YEwd+/YchbDwaeS9LLPAfJdSgSv7Fl97genyHxEdc96kNe
+        EalU2SNzYTM70jEQB16CBfoI2denCGZHl/8Vm3EAphdtIBbbAf8Hb6oYHlI/qQ3sUE4lvz
+        g+ULGmlGlNDa2YB2/gt54yw/v2xjMF4=
+Date:   Fri, 19 May 2023 18:20:47 +0800
 MIME-Version: 1.0
+Subject: Re: [PATCH for-next v5 0/7] On-Demand Paging on SoftRoCE
+Content-Language: en-US
+To:     "Daisuke Matsuda (Fujitsu)" <matsuda-daisuke@fujitsu.com>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "leonro@nvidia.com" <leonro@nvidia.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "zyjzyj2000@gmail.com" <zyjzyj2000@gmail.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "rpearsonhpe@gmail.com" <rpearsonhpe@gmail.com>,
+        "Xiao Yang (Fujitsu)" <yangx.jy@fujitsu.com>,
+        "Zhijian Li (Fujitsu)" <lizhijian@fujitsu.com>,
+        "Yasunori Gotou (Fujitsu)" <y-goto@fujitsu.com>
+References: <cover.1684397037.git.matsuda-daisuke@fujitsu.com>
+ <0f12adcd-0112-3b0e-57b5-ecf707670bc0@linux.dev>
+ <TYCPR01MB8455648A5C9DFFB37FFB172FE57C9@TYCPR01MB8455.jpnprd01.prod.outlook.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Guoqing Jiang <guoqing.jiang@linux.dev>
+In-Reply-To: <TYCPR01MB8455648A5C9DFFB37FFB172FE57C9@TYCPR01MB8455.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Moved else statement to same line with else if,
-this warning was given by checkpatch.pl
 
-Signed-off-by: Deepanshu Kartikey <kartikey406@gmail.com>
 
----
-Changes in V2:
-            - Moved else to the same line with else if
-            - Moved comment on else statement to inside of it
----
- drivers/staging/rts5208/rtsx.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+On 5/19/23 17:57, Daisuke Matsuda (Fujitsu) wrote:
+> On Fri, May 19, 2023 3:42 PM Guoqing Jiang wrote:
+>> Hello,
+>>
+>> On 5/18/23 16:21, Daisuke Matsuda wrote:
+>>> [2] [PATCH for-next v3 0/7] On-Demand Paging on SoftRoCE
+>>> https://lore.kernel.org/lkml/cover.1671772917.git.matsuda-daisuke@fujitsu.com/
+>> Quote from above link
+>>
+>> "There is a problem that data on DAX-enabled filesystem cannot be
+>> duplicated with
+>> software RAID or other hardware methods."
+>>
+>> Could you elaborate a bit more about the problem or any links about it?
+>> Thank you.
+> I am not an expert of Pmems, but my understanding is as follows:
+>
+> Pmem (Persistent memory) is detected as memory device during boot process.
+> Physical addresses are allocated to them just like other memory in DIMM slots,
+> so system have to treat them differently from traditional storage devices like HDD/SSD.
+>
+> It may be technically possible to duplicate data using multiple Pmems, but the duplication
+> is practically not useful. For traditional storage devices, you can hot-remove and hot-add
+> them easily on failure. However, Pmems are not attached to hot-pluggable slots. You have
+> to halt the system and open the cabinet to change out the Pmem. This means availability
+> of the system is not improved with data duplication on the same host.
 
-diff --git a/drivers/staging/rts5208/rtsx.c b/drivers/staging/rts5208/rtsx.c
-index 2284a96abcff..47dacef0aaf8 100644
---- a/drivers/staging/rts5208/rtsx.c
-+++ b/drivers/staging/rts5208/rtsx.c
-@@ -399,10 +399,8 @@ static int rtsx_control_thread(void *__dev)
- 				chip->srb->device->id,
- 				(u8)chip->srb->device->lun);
- 			chip->srb->result = DID_BAD_TARGET << 16;
--		}
--
--		/* we've got a command, let's do it! */
--		else {
-+		} else {
-+			/* we've got a command, let's do it! */
- 			scsi_show_command(chip);
- 			rtsx_invoke_transport(chip->srb, chip);
- 		}
--- 
-2.25.1
+I guess pmem with block translation table type would be fine since it 
+can be used
+like normal storage device, but I am not pmem expert as well 😁.
 
+Thanks,
+Guoqing
