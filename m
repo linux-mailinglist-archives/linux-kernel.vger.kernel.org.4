@@ -2,102 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7456270A2AF
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 00:08:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BF3B70A2B3
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 00:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231648AbjESWIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 18:08:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44484 "EHLO
+        id S231707AbjESWKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 18:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjESWIx (ORCPT
+        with ESMTP id S229503AbjESWKK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 18:08:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80E6124;
-        Fri, 19 May 2023 15:08:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 495D865B54;
-        Fri, 19 May 2023 22:08:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2998C433EF;
-        Fri, 19 May 2023 22:08:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684534131;
-        bh=A862GEbtFBEgeb5HWFNn49oFai0Kv8zFpjOdOO5uVr8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=jQDPPo10njg0MuoDZXS7ZW9p99kR4BgmYagm2KgH/+O9zJrjpnTF/VvqSDdzJhvkv
-         mQxbzU4Xc/jckpyRxpicecttFMK6mOM6H+olovTVrwhR7QANozdc/MuUGfaOxZqKem
-         8Y/HUDJxaJfR1sEMzDL0lQW3EY2e+90WIXirUwoRDPwHCfQD842TWxOQ+BKoK34dYL
-         NWP24JGwNwRScsEUJGrs/nJmSCj4fR5pyK3hGKkOuD2Vo6GVXZRjdiGgAcrO0cTsY7
-         JrrrGgHgzWkbDK8R4v91ateC71gjwQwBCtSCN6kgSyo7RhsS6O4m98p5WInHsCgcGV
-         6SHz61RBMISAQ==
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2af290cf9b7so9125991fa.3;
-        Fri, 19 May 2023 15:08:51 -0700 (PDT)
-X-Gm-Message-State: AC+VfDyrGAYG/deV3N6Loi32/l+vh1asOx/2/ojV0cWt3tl4O5sUUkTh
-        pm2K2ztRjRFOjT9DHU/tLYyG38D1rzwmfQYdbDs=
-X-Google-Smtp-Source: ACHHUZ5+SDjgOAbfgBoDywViw0xTfhfRuUsUgx4RdMJjHNDfUxirps8DEQnixHNvfDms4sbCmrlgqpHnvcStbQ4cPNc=
-X-Received: by 2002:ac2:485c:0:b0:4f2:40dd:e2cf with SMTP id
- 28-20020ac2485c000000b004f240dde2cfmr1142411lfy.55.1684534129761; Fri, 19 May
- 2023 15:08:49 -0700 (PDT)
+        Fri, 19 May 2023 18:10:10 -0400
+Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3C6189;
+        Fri, 19 May 2023 15:10:09 -0700 (PDT)
+Received: by mail-vk1-xa2b.google.com with SMTP id 71dfb90a1353d-4572a528cefso316845e0c.0;
+        Fri, 19 May 2023 15:10:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684534209; x=1687126209;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gyfmWjt1VTCSjEVbZNcL2tFnvyTBlxMVg1mjX07QoOk=;
+        b=HuqVrHcIazlUiRSIb8fAEfdnHq/RzLyc/Altx4qWmXass7Tml/ynZuTYQt00iiZUhM
+         BRGbiXN4KogjSr01b1jWtSks2+m/EJRNsWdhy3SP/PNG8D03BzTBIg/8A7AZ5mzf8MD+
+         U5XuFtLvT8iuEexfhBYsri6fcGAulgnpVNMHUYoVfhBJkZxK9PdNwEVuHlLuvnBGs6OT
+         hpz4njpSffhfS+tEBpCx+poGKyuG6uk+yyLvuZWYFa2jLCFSnTTbHymrUEIleI/lXNYp
+         sqXslBL3PcxCesRRNsIsrdvsqd4VIVgJTneJNGHAjfimt3WT1kQhcnEiudtfwbrLAO4J
+         dBAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684534209; x=1687126209;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gyfmWjt1VTCSjEVbZNcL2tFnvyTBlxMVg1mjX07QoOk=;
+        b=dTyaspIhvwp1fGGBGkzx93kaEaJ11UQocLKpF5G7KM7wWJ90s8WcSAO5A0a+/Aq96t
+         KgXAa5jwHeI2Gjg2qmjomV5WZZkK2LQsL+9sb9mjn07E5qa3YzSh98Uk+AkVJY77hWvX
+         51uj2PPyVlw3AcccrhirGbGjQCcPIbfZ2hdPYXoeN79JwEot5h+iT0w1ug+j7oyLFlnb
+         91EmfsbXfQkEJMXRCPx/890H0dRtojbuSHq0SW1hz35hAocYFRgjTOJqT3w2TkWQ4n0/
+         hCbjlDaqwosJbqnmMqU68TYhMvjWnijFQaI8ipST4lJMaS95nbGO+4NUvdgw8uMsBH1u
+         Xt4w==
+X-Gm-Message-State: AC+VfDwQsafApZds5Pm9bum/7jDQZhwwhYVzEGkMXy0mAWmYe8R4PHaa
+        ZSvHUD/9aDRX19v4m8ykJfNiSUsD5R/lotccczk=
+X-Google-Smtp-Source: ACHHUZ6udFa8fDirOYyi4r78zSwj7dD2Pe6HxOKp+hdVt7UaRlTAzbr80JAQ7Aig0vByD6RfXheFKqIBKauvLEZux/k=
+X-Received: by 2002:a05:6102:cd:b0:42c:543a:ab2a with SMTP id
+ u13-20020a05610200cd00b0042c543aab2amr272687vsp.35.1684534208774; Fri, 19 May
+ 2023 15:10:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230515134808.3936750-1-linan666@huaweicloud.com> <CAPhsuW7m5hFY2L=2_FA-Qq3Yxr0a4r_QHdXSeZQ8kLgXMvj1sA@mail.gmail.com>
-In-Reply-To: <CAPhsuW7m5hFY2L=2_FA-Qq3Yxr0a4r_QHdXSeZQ8kLgXMvj1sA@mail.gmail.com>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 19 May 2023 15:08:37 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW7xWOcX8jOpyzTV2hVFj8XXwH0frgYx9r8xD6VNndPDng@mail.gmail.com>
-Message-ID: <CAPhsuW7xWOcX8jOpyzTV2hVFj8XXwH0frgYx9r8xD6VNndPDng@mail.gmail.com>
-Subject: Re: [PATCH OLK-5.10 v3 0/4] md: bugfix of writing raid sysfs
-To:     linan666@huaweicloud.com
-Cc:     neilb@suse.de, Rob.Becker@riverbed.com, linux-raid@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linan122@huawei.com,
-        yukuai3@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
-        yangerkun@huawei.com
+References: <20230518130713.1515729-1-dhowells@redhat.com> <20230518130713.1515729-17-dhowells@redhat.com>
+In-Reply-To: <20230518130713.1515729-17-dhowells@redhat.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Fri, 19 May 2023 18:09:31 -0400
+Message-ID: <CAF=yD-J8KGX5gjGBK6OO2SuoVa8s07Cm-oKxwmvBmRXY7XscBQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v9 16/16] unix: Convert udp_sendpage() to use MSG_SPLICE_PAGES
+To:     David Howells <dhowells@redhat.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Chuck Lever III <chuck.lever@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Kuniyuki Iwashima <kuniyu@amazon.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Btw, what does "OLK-5.10" mean?
-
-Song
-
-
-On Fri, May 19, 2023 at 3:07=E2=80=AFPM Song Liu <song@kernel.org> wrote:
+On Thu, May 18, 2023 at 9:08=E2=80=AFAM David Howells <dhowells@redhat.com>=
+ wrote:
 >
-> On Mon, May 15, 2023 at 6:49=E2=80=AFAM <linan666@huaweicloud.com> wrote:
-> >
-> > From: Li Nan <linan122@huawei.com>
-> >
-> > The patch series fix the bug of writing raid sysfs.
-> >
-> > Changes in v2:
-> >  - in patch 1, move check out of md_bitmap_checkpage().
-> >  - in patch 2, use div64_u64() and DIV64_U64_ROUND_UP() instead of dire=
-ctly
-> >    '/', and chang old_delay/old_delay to unsigned int.
-> >  - in patch 4, use 'goto' to make changes more readable.
-> >
-> > Changes in v2:
-> >  - add patch "md/raid10: optimize check_decay_read_errors()".
-> >  - in patch 2, return ret-value of strict_strtoul_scaled if error occur=
-s.
-> >  - in patch 3, optimize format.
-> >
-> > Li Nan (4):
-> >   md/raid10: fix slab-out-of-bounds in md_bitmap_get_counter
-> >   md/raid10: fix overflow in safe_delay_store
-> >   md/raid10: fix wrong setting of max_corr_read_errors
-> >   md/raid10: optimize check_decay_read_errors()
+> Convert unix_stream_sendpage() to use sendmsg() with MSG_SPLICE_PAGES
+> rather than directly splicing in the pages itself.
 >
-> I applied 1/4 to md-next.
+> This allows ->sendpage() to be replaced by something that can handle
+> multiple multipage folios in a single transaction.
 >
-> Thanks,
-> Song
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: "David S. Miller" <davem@davemloft.net>
+> cc: Eric Dumazet <edumazet@google.com>
+> cc: Jakub Kicinski <kuba@kernel.org>
+> cc: Paolo Abeni <pabeni@redhat.com>
+> cc: Kuniyuki Iwashima <kuniyu@amazon.com>
+> cc: Jens Axboe <axboe@kernel.dk>
+> cc: Matthew Wilcox <willy@infradead.org>
+> cc: netdev@vger.kernel.org
+
+tiny nit: subject s/udp_sendpage/unix_stream_sendpage/
+
+no other comments on this patch series from me
