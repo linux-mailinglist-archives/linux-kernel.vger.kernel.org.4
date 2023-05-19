@@ -2,246 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E80470A1BD
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 23:25:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1271A70A1C1
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 23:25:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231384AbjESVZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 17:25:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53510 "EHLO
+        id S231574AbjESVZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 17:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjESVZh (ORCPT
+        with ESMTP id S229449AbjESVZo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 17:25:37 -0400
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1903DCF;
-        Fri, 19 May 2023 14:25:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1684531529;
-        bh=094Puwu8vIezV8RK/4d0Dgvl5Ma8uw6FQGF92DXq06Q=;
-        h=Message-ID:Subject:From:To:Date:From;
-        b=QEeTAToK4iZo36U9cWzSZbJA1+hpdoCE7fOllsscIQG+2wAz0bC6PsbzfEVHWPY3y
-         C/ojGyuRVybUu1Z0HWKD4LUSeOaX+Jvv7Ora79qmmj3E9S0gvUnxbmAOX8nT2xdlTo
-         t1ta3RUmVSxBJ7m82SCPZT/AVEsTjAU2SlKWrJqE=
-Received: from localhost (localhost [127.0.0.1])
-        by bedivere.hansenpartnership.com (Postfix) with ESMTP id F1AD81289E47;
-        Fri, 19 May 2023 17:25:29 -0400 (EDT)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id 3rvcKCwLSxje; Fri, 19 May 2023 17:25:29 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-        d=hansenpartnership.com; s=20151216; t=1684531529;
-        bh=094Puwu8vIezV8RK/4d0Dgvl5Ma8uw6FQGF92DXq06Q=;
-        h=Message-ID:Subject:From:To:Date:From;
-        b=QEeTAToK4iZo36U9cWzSZbJA1+hpdoCE7fOllsscIQG+2wAz0bC6PsbzfEVHWPY3y
-         C/ojGyuRVybUu1Z0HWKD4LUSeOaX+Jvv7Ora79qmmj3E9S0gvUnxbmAOX8nT2xdlTo
-         t1ta3RUmVSxBJ7m82SCPZT/AVEsTjAU2SlKWrJqE=
-Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 54F611289E43;
-        Fri, 19 May 2023 17:25:29 -0400 (EDT)
-Message-ID: <2238c5b07fdbaca34f4fdba4ad6c79ee3d214c7c.camel@HansenPartnership.com>
-Subject: [GIT PULL] SCSI fixes for 6.4-rc2
-From:   James Bottomley <James.Bottomley@HansenPartnership.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Date:   Fri, 19 May 2023 17:25:27 -0400
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 
+        Fri, 19 May 2023 17:25:44 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4315DBC
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 14:25:43 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-75773a7bd66so399878485a.1
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 14:25:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1684531542; x=1687123542;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=ohYS0lG27nHiCdBib6qc5qCwws6ruGwX80CD3u1FbkI=;
+        b=bavH1DsW67ExteqErUfx7TFAnT7MFKqPdbHO5mO9Pfuy/emkG595hPB9s0/EenOiJN
+         qkOj9au+5l3i7mQI8I1wCsDIH40NkQiwsF5A9AVL4XRHxyt3zFVpRkMk8XzJtUBPT9UB
+         atSfrb9Kd1RlnexFG0xNHycx7Ds2HNQMTQGXc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684531542; x=1687123542;
+        h=in-reply-to:from:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ohYS0lG27nHiCdBib6qc5qCwws6ruGwX80CD3u1FbkI=;
+        b=AIKdYIOrzEcF/iRokFS4ifHBhTvO4bIoymgk4XeCQm4X5JLBZga+kz47YT58gZHGMg
+         6prZdOV+553j+KH6bULwVxDk01OQB6OvH2KgKh0FJnMjj3OwOHoDDntIyrUvenXLi+mu
+         NDjV1QhK1PhpBsPN68YCORetIJIRv21M1rWtfb9cZ01Ro06LQS997HMkXHXGVaNw4Qdq
+         pRA91v1f800FZMGczJoCGfx7QrIGi090YM0Ah7pJdOPAki3NCCwQxspHBDc9au4ViAP4
+         kL6juy1HZYhVCOhK04K5yN3Mz52IQy/bNiveII9OHlzzci33WLwjZVJBHKp91MNuoBYf
+         Rm1Q==
+X-Gm-Message-State: AC+VfDxtzGKPt9NMSi6R17OGbwkb6KOIKugxCm/eXkLTptOgkJ4SojzZ
+        23OCZSz/ItsdfV7w58LJZAY0oQ==
+X-Google-Smtp-Source: ACHHUZ6/H+kPiNY3Jh0D7KNGuIn6g+6AjoybV4T/QrddT3RIJAjCHo6NJG9LEbNc8qorQDuVWKNQqg==
+X-Received: by 2002:a05:6214:f07:b0:5b4:1d9a:75e7 with SMTP id gw7-20020a0562140f0700b005b41d9a75e7mr6902539qvb.13.1684531542404;
+        Fri, 19 May 2023 14:25:42 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id z17-20020a0cf011000000b0061a68b5a8c4sm71715qvk.134.2023.05.19.14.25.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 May 2023 14:25:41 -0700 (PDT)
+Message-ID: <dd6a7287-26a5-14a1-1c9e-8db4210c679c@broadcom.com>
+Date:   Fri, 19 May 2023 14:25:37 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 4/7] mips: update a reference to a moved Arm Document
+To:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+References: <20230519164607.38845-1-corbet@lwn.net>
+ <20230519164607.38845-5-corbet@lwn.net>
+From:   Florian Fainelli <florian.fainelli@broadcom.com>
+In-Reply-To: <20230519164607.38845-5-corbet@lwn.net>
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000036971005fc1290b7"
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Six small fixes.  Four in drivers and the two core changes should be
-read together as a correction to a prior iorequest_cnt fix that exposed
-us to a potential use after free. 
+--00000000000036971005fc1290b7
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The patch is available here:
+On 5/19/23 09:46, Jonathan Corbet wrote:
+> Arm documentation has moved to Documentation/arch/arm; update a reference
+> in arch/mips/bmips/setup.c to match.
+> 
+> Cc: Florian Fainelli <f.fainelli@gmail.com>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: linux-mips@vger.kernel.org
+> Signed-off-by: Jonathan Corbet <corbet@lwn.net>
 
-git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi.git scsi-fixes
+Acked-by: Florian Fainelli <florian.fainelli@broadcom.com>
+-- 
+Florian
 
-The short changelog is:
 
-Michael Kelley (1):
-      scsi: storvsc: Don't pass unused PFNs to Hyper-V host
+--00000000000036971005fc1290b7
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-Po-Wen Kao (3):
-      scsi: ufs: core: Fix MCQ nr_hw_queues
-      scsi: ufs: core: Rename symbol sizeof_utp_transfer_cmd_desc()
-      scsi: ufs: core: Fix MCQ tag calculation
-
-Wenchao Hao (2):
-      scsi: core: Decrease scsi_device's iorequest_cnt if dispatch failed
-      scsi: Revert "scsi: core: Do not increase scsi_device's iorequest_cnt if dispatch failed"
-
-And the diffstat:
-
- drivers/scsi/scsi_lib.c    |  5 ++++-
- drivers/scsi/storvsc_drv.c |  8 ++++----
- drivers/ufs/core/ufs-mcq.c |  5 +++--
- drivers/ufs/core/ufshcd.c  | 10 +++++-----
- include/ufs/ufshcd.h       |  2 +-
- 5 files changed, 17 insertions(+), 13 deletions(-)
-
-With full diff below.
-
-James
-
----
-
-diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
-index b7c569a42aa4..0226c9279cef 100644
---- a/drivers/scsi/scsi_lib.c
-+++ b/drivers/scsi/scsi_lib.c
-@@ -1463,6 +1463,8 @@ static int scsi_dispatch_cmd(struct scsi_cmnd *cmd)
- 	struct Scsi_Host *host = cmd->device->host;
- 	int rtn = 0;
- 
-+	atomic_inc(&cmd->device->iorequest_cnt);
-+
- 	/* check if the device is still usable */
- 	if (unlikely(cmd->device->sdev_state == SDEV_DEL)) {
- 		/* in SDEV_DEL we error all commands. DID_NO_CONNECT
-@@ -1483,6 +1485,7 @@ static int scsi_dispatch_cmd(struct scsi_cmnd *cmd)
- 		 */
- 		SCSI_LOG_MLQUEUE(3, scmd_printk(KERN_INFO, cmd,
- 			"queuecommand : device blocked\n"));
-+		atomic_dec(&cmd->device->iorequest_cnt);
- 		return SCSI_MLQUEUE_DEVICE_BUSY;
- 	}
- 
-@@ -1515,6 +1518,7 @@ static int scsi_dispatch_cmd(struct scsi_cmnd *cmd)
- 	trace_scsi_dispatch_cmd_start(cmd);
- 	rtn = host->hostt->queuecommand(host, cmd);
- 	if (rtn) {
-+		atomic_dec(&cmd->device->iorequest_cnt);
- 		trace_scsi_dispatch_cmd_error(cmd, rtn);
- 		if (rtn != SCSI_MLQUEUE_DEVICE_BUSY &&
- 		    rtn != SCSI_MLQUEUE_TARGET_BUSY)
-@@ -1761,7 +1765,6 @@ static blk_status_t scsi_queue_rq(struct blk_mq_hw_ctx *hctx,
- 		goto out_dec_host_busy;
- 	}
- 
--	atomic_inc(&cmd->device->iorequest_cnt);
- 	return BLK_STS_OK;
- 
- out_dec_host_busy:
-diff --git a/drivers/scsi/storvsc_drv.c b/drivers/scsi/storvsc_drv.c
-index d9ce379c4d2e..e6bc622954cf 100644
---- a/drivers/scsi/storvsc_drv.c
-+++ b/drivers/scsi/storvsc_drv.c
-@@ -1780,7 +1780,7 @@ static int storvsc_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *scmnd)
- 
- 	length = scsi_bufflen(scmnd);
- 	payload = (struct vmbus_packet_mpb_array *)&cmd_request->mpb;
--	payload_sz = sizeof(cmd_request->mpb);
-+	payload_sz = 0;
- 
- 	if (scsi_sg_count(scmnd)) {
- 		unsigned long offset_in_hvpg = offset_in_hvpage(sgl->offset);
-@@ -1789,10 +1789,10 @@ static int storvsc_queuecommand(struct Scsi_Host *host, struct scsi_cmnd *scmnd)
- 		unsigned long hvpfn, hvpfns_to_add;
- 		int j, i = 0, sg_count;
- 
--		if (hvpg_count > MAX_PAGE_BUFFER_COUNT) {
-+		payload_sz = (hvpg_count * sizeof(u64) +
-+			      sizeof(struct vmbus_packet_mpb_array));
- 
--			payload_sz = (hvpg_count * sizeof(u64) +
--				      sizeof(struct vmbus_packet_mpb_array));
-+		if (hvpg_count > MAX_PAGE_BUFFER_COUNT) {
- 			payload = kzalloc(payload_sz, GFP_ATOMIC);
- 			if (!payload)
- 				return SCSI_MLQUEUE_DEVICE_BUSY;
-diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
-index 202ff71e1b58..51b3c6ae781d 100644
---- a/drivers/ufs/core/ufs-mcq.c
-+++ b/drivers/ufs/core/ufs-mcq.c
-@@ -150,7 +150,8 @@ static int ufshcd_mcq_config_nr_queues(struct ufs_hba *hba)
- 	u32 hba_maxq, rem, tot_queues;
- 	struct Scsi_Host *host = hba->host;
- 
--	hba_maxq = FIELD_GET(MAX_QUEUE_SUP, hba->mcq_capabilities);
-+	/* maxq is 0 based value */
-+	hba_maxq = FIELD_GET(MAX_QUEUE_SUP, hba->mcq_capabilities) + 1;
- 
- 	tot_queues = UFS_MCQ_NUM_DEV_CMD_QUEUES + read_queues + poll_queues +
- 			rw_queues;
-@@ -265,7 +266,7 @@ static int ufshcd_mcq_get_tag(struct ufs_hba *hba,
- 	addr = (le64_to_cpu(cqe->command_desc_base_addr) & CQE_UCD_BA) -
- 		hba->ucdl_dma_addr;
- 
--	return div_u64(addr, sizeof(struct utp_transfer_cmd_desc));
-+	return div_u64(addr, ufshcd_get_ucd_size(hba));
- }
- 
- static void ufshcd_mcq_process_cqe(struct ufs_hba *hba,
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 45fd374fe56c..e7e79f515e14 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -2849,10 +2849,10 @@ static void ufshcd_map_queues(struct Scsi_Host *shost)
- static void ufshcd_init_lrb(struct ufs_hba *hba, struct ufshcd_lrb *lrb, int i)
- {
- 	struct utp_transfer_cmd_desc *cmd_descp = (void *)hba->ucdl_base_addr +
--		i * sizeof_utp_transfer_cmd_desc(hba);
-+		i * ufshcd_get_ucd_size(hba);
- 	struct utp_transfer_req_desc *utrdlp = hba->utrdl_base_addr;
- 	dma_addr_t cmd_desc_element_addr = hba->ucdl_dma_addr +
--		i * sizeof_utp_transfer_cmd_desc(hba);
-+		i * ufshcd_get_ucd_size(hba);
- 	u16 response_offset = offsetof(struct utp_transfer_cmd_desc,
- 				       response_upiu);
- 	u16 prdt_offset = offsetof(struct utp_transfer_cmd_desc, prd_table);
-@@ -3761,7 +3761,7 @@ static int ufshcd_memory_alloc(struct ufs_hba *hba)
- 	size_t utmrdl_size, utrdl_size, ucdl_size;
- 
- 	/* Allocate memory for UTP command descriptors */
--	ucdl_size = sizeof_utp_transfer_cmd_desc(hba) * hba->nutrs;
-+	ucdl_size = ufshcd_get_ucd_size(hba) * hba->nutrs;
- 	hba->ucdl_base_addr = dmam_alloc_coherent(hba->dev,
- 						  ucdl_size,
- 						  &hba->ucdl_dma_addr,
-@@ -3861,7 +3861,7 @@ static void ufshcd_host_memory_configure(struct ufs_hba *hba)
- 	prdt_offset =
- 		offsetof(struct utp_transfer_cmd_desc, prd_table);
- 
--	cmd_desc_size = sizeof_utp_transfer_cmd_desc(hba);
-+	cmd_desc_size = ufshcd_get_ucd_size(hba);
- 	cmd_desc_dma_addr = hba->ucdl_dma_addr;
- 
- 	for (i = 0; i < hba->nutrs; i++) {
-@@ -8452,7 +8452,7 @@ static void ufshcd_release_sdb_queue(struct ufs_hba *hba, int nutrs)
- {
- 	size_t ucdl_size, utrdl_size;
- 
--	ucdl_size = sizeof(struct utp_transfer_cmd_desc) * nutrs;
-+	ucdl_size = ufshcd_get_ucd_size(hba) * nutrs;
- 	dmam_free_coherent(hba->dev, ucdl_size, hba->ucdl_base_addr,
- 			   hba->ucdl_dma_addr);
- 
-diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-index f7553293ba98..df1d04f7a542 100644
---- a/include/ufs/ufshcd.h
-+++ b/include/ufs/ufshcd.h
-@@ -1133,7 +1133,7 @@ static inline size_t ufshcd_sg_entry_size(const struct ufs_hba *hba)
- 	({ (void)(hba); BUILD_BUG_ON(sg_entry_size != sizeof(struct ufshcd_sg_entry)); })
- #endif
- 
--static inline size_t sizeof_utp_transfer_cmd_desc(const struct ufs_hba *hba)
-+static inline size_t ufshcd_get_ucd_size(const struct ufs_hba *hba)
- {
- 	return sizeof(struct utp_transfer_cmd_desc) + SG_ALL * ufshcd_sg_entry_size(hba);
- }
-
+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
+riBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGj
+QjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5N
+UPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEAS0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigH
+M8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9ubG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmU
+Y/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaMld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V
+14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcy
+a5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/fhO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/
+XzCCBVgwggRAoAMCAQICDBP8P9hKRVySg3Qv5DANBgkqhkiG9w0BAQsFADBbMQswCQYDVQQGEwJC
+RTEZMBcGA1UEChMQR2xvYmFsU2lnbiBudi1zYTExMC8GA1UEAxMoR2xvYmFsU2lnbiBHQ0MgUjMg
+UGVyc29uYWxTaWduIDIgQ0EgMjAyMDAeFw0yMjA5MTAxMjE4MTFaFw0yNTA5MTAxMjE4MTFaMIGW
+MQswCQYDVQQGEwJJTjESMBAGA1UECBMJS2FybmF0YWthMRIwEAYDVQQHEwlCYW5nYWxvcmUxFjAU
+BgNVBAoTDUJyb2FkY29tIEluYy4xGTAXBgNVBAMTEEZsb3JpYW4gRmFpbmVsbGkxLDAqBgkqhkiG
+9w0BCQEWHWZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tMIIBIjANBgkqhkiG9w0BAQEFAAOC
+AQ8AMIIBCgKCAQEA+oi3jMmHltY4LMUy8Up5+1zjd1iSgUBXhwCJLj1GJQF+GwP8InemBbk5rjlC
+UwbQDeIlOfb8xGqHoQFGSW8p9V1XUw+cthISLkycex0AJ09ufePshLZygRLREU0H4ecNPMejxCte
+KdtB4COST4uhBkUCo9BSy1gkl8DJ8j/BQ1KNUx6oYe0CntRag+EnHv9TM9BeXBBLfmMRnWNhvOSk
+nSmRX0J3d9/G2A3FIC6WY2XnLW7eAZCQPa1Tz3n2B5BGOxwqhwKLGLNu2SRCPHwOdD6e0drURF7/
+Vax85/EqkVnFNlfxtZhS0ugx5gn2pta7bTdBm1IG4TX+A3B1G57rVwIDAQABo4IB3jCCAdowDgYD
+VR0PAQH/BAQDAgWgMIGjBggrBgEFBQcBAQSBljCBkzBOBggrBgEFBQcwAoZCaHR0cDovL3NlY3Vy
+ZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3J0MEEG
+CCsGAQUFBzABhjVodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWdu
+MmNhMjAyMDBNBgNVHSAERjBEMEIGCisGAQQBoDIBKAowNDAyBggrBgEFBQcCARYmaHR0cHM6Ly93
+d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wCQYDVR0TBAIwADBJBgNVHR8EQjBAMD6gPKA6
+hjhodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNy
+bDAoBgNVHREEITAfgR1mbG9yaWFuLmZhaW5lbGxpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggr
+BgEFBQcDBDAfBgNVHSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUUwwfJ6/F
+KL0fRdVROal/Lp4lAF0wDQYJKoZIhvcNAQELBQADggEBAKBgfteDc1mChZjKBY4xAplC6uXGyBrZ
+kNGap1mHJ+JngGzZCz+dDiHRQKGpXLxkHX0BvEDZLW6LGOJ83ImrW38YMOo3ZYnCYNHA9qDOakiw
+2s1RH00JOkO5SkYdwCHj4DB9B7KEnLatJtD8MBorvt+QxTuSh4ze96Jz3kEIoHMvwGFkgObWblsc
+3/YcLBmCgaWpZ3Ksev1vJPr5n8riG3/N4on8gO5qinmmr9Y7vGeuf5dmZrYMbnb+yCBalkUmZQwY
+NxADYvcRBA0ySL6sZpj8BIIhWiXiuusuBmt2Mak2eEv0xDbovE6Z6hYyl/ZnRadbgK/ClgbY3w+O
+AfUXEZ0xggJtMIICaQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52
+LXNhMTEwLwYDVQQDEyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwT
+/D/YSkVckoN0L+QwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIFYy7pVuFsxsdC54
+zI0SSndVq6Vu9JxmQqWk9abvBavwMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcN
+AQkFMQ8XDTIzMDUxOTIxMjU0MlowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZI
+AWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEH
+MAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBgBKXIboWLYzMfm4JwL2M4qiUvNWT0e7Dd
+mg3FRpuQXcYxD2MPab7L3YLLCN8wd/I2WE8S1Ld/obDDO/KR2LSFkVV5IfZyXUVmVp1bkLVvnNB1
+DW6mtLqpZVXTcjglk8l7PElmIwvgpkfUn1VQsrUupvT6CwWpmhbJgcLGQzk+ozhI7Xc/BILgUez9
+NKhwglhvJXqlQPdz8YNdep0uufu2PDHSURcJSKz6qwOLz5VsobmFaGbsdvLJVs2QvJ/RkxfvFCJv
+IBQQZBVokR0crP5BWSPWflgxMj9NFbmL9JuoHBCDBrvSox6MNrcuW4UXk1A/j6ojMeXJDuA0LjWx
+Dr34
+--00000000000036971005fc1290b7--
