@@ -2,58 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75383709721
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 14:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A7F1709733
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 14:20:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231180AbjESMPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 08:15:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48892 "EHLO
+        id S231324AbjESMTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 08:19:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230522AbjESMPL (ORCPT
+        with ESMTP id S229458AbjESMTt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 08:15:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE12192
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 05:15:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0496161760
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 12:15:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFA66C4339B;
-        Fri, 19 May 2023 12:15:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684498509;
-        bh=VTGX2OX7+uxXQDH3wTNN0vLi9cF62gFXdXsTqtCJTac=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=fK+xUpikHVk7SLGvhUmZ/eIe/LYtPJ+bfRAvQVAABqfteacqCyZYUJTvPKSB69UFF
-         s6wqd2q0tFtPAeLWT5A6/uiN4sbm8/FkB1g4HWziYSJNqAKRbVENpv/yUwHPYtwIC+
-         EOvs9TcRbaOlxiNmBX+/KVBx6KTkbf7BCGojiCPhYRJq8lM7g/pQQxJ1HIAgjnZMHU
-         IZXN1ULEkl3BMaOh+BZ2qE/uZb/zTbp69ILfMWEkOgtRM5yEwVdzONXTqC/d6B7E34
-         CymmGbwFthyPCVN1wX9OGqd6BpiOTpGFVvW92tu+hf+Lsx18Qz8TgikZn32G/pqv7X
-         XLMQ/diS6+/TQ==
-Date:   Fri, 19 May 2023 14:15:02 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Mike Christie <michael.christie@oracle.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     oleg@redhat.com, linux@leemhuis.info, nicolas.dichtel@6wind.com,
-        axboe@kernel.dk, ebiederm@xmission.com,
-        linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, mst@redhat.com,
-        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
-        Linux kernel regressions list <regressions@lists.linux.dev>,
-        hch@infradead.org, konrad.wilk@oracle.com
-Subject: Re: [RFC PATCH 0/8] vhost_tasks: Use CLONE_THREAD/SIGHAND
-Message-ID: <20230519-vormittag-dschungel-83607e9d2255@brauner>
+        Fri, 19 May 2023 08:19:49 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC28E199;
+        Fri, 19 May 2023 05:19:47 -0700 (PDT)
+Received: from [192.168.88.20] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 08AEDAF3;
+        Fri, 19 May 2023 14:19:29 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1684498771;
+        bh=gU37gYT5LJCo87RVuye14TUUNZjM/v0Qd/6iCFvpPPo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=s1nDjSOze+Tpni8CpAkhe/SkyL65XWaEolPMnwfTQi9U83jN6VCled2YJ3wKA8rCS
+         2UUB31z2gz8JwOf19MgMZzlnynhtXsvdyh9PAQn6hQhwF03MswFI6cJDzo5WNB23zd
+         Nt7iHfwl0wBesha3dJk7j8I281KNw2Uif0JOLjvA=
+Message-ID: <e3c18904-4681-27be-827b-f64ebb036157@ideasonboard.com>
+Date:   Fri, 19 May 2023 15:19:40 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230518-appetit-aufsicht-238e950b97d6@brauner>
- <20230516-weltmeere-backofen-27f12ae2c9e0@brauner>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v13 6/8] media: i2c: add DS90UB960 driver
+To:     Ludwig Zenz <lzenz@dh-electronics.com>
+Cc:     "Matti.Vaittinen@fi.rohmeurope.com" 
+        <Matti.Vaittinen@fi.rohmeurope.com>,
+        "andriy.shevchenko@intel.com" <andriy.shevchenko@intel.com>,
+        "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "hverkuil@xs4all.nl" <hverkuil@xs4all.nl>,
+        "khalasa@piap.pl" <khalasa@piap.pl>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "laurent.pinchart+renesas@ideasonboard.com" 
+        <laurent.pinchart+renesas@ideasonboard.com>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "luca.ceresoli@bootlin.com" <luca.ceresoli@bootlin.com>,
+        "m.tretter@pengutronix.de" <m.tretter@pengutronix.de>,
+        "marex@denx.de" <marex@denx.de>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "mpagano@gentoo.org" <mpagano@gentoo.org>,
+        "peda@axentia.se" <peda@axentia.se>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "sakari.ailus@linux.intel.com" <sakari.ailus@linux.intel.com>,
+        "satish.nagireddy@getcruise.com" <satish.nagireddy@getcruise.com>,
+        "wsa@kernel.org" <wsa@kernel.org>
+References: <5abbcb606e4c4a49821be5d107d9ddfc@dh-electronics.com>
+Content-Language: en-US
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <5abbcb606e4c4a49821be5d107d9ddfc@dh-electronics.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,138 +75,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 10:25:11AM +0200, Christian Brauner wrote:
-> On Wed, May 17, 2023 at 07:09:12PM -0500, Mike Christie wrote:
-> > This patch allows the vhost and vhost_task code to use CLONE_THREAD,
-> > CLONE_SIGHAND and CLONE_FILES. It's a RFC because I didn't do all the
-> > normal testing, haven't coverted vsock and vdpa, and I know you guys
-> > will not like the first patch. However, I think it better shows what
+On 16/05/2023 22:05, Ludwig Zenz wrote:
+>> On 16/05/2023 16:32, Ludwig Zenz wrote:
+>>>> Hi,
+>>>>
+>>>> On 16/05/2023 15:35, Ludwig Zenz wrote:
+>>>>> On Wed, 26 Apr 2023 14:51:12 +0300, Tomi Valkeinen wrote:
+>>>>>
+>>>>> [...]
+>>>>>
+>>>>>>     +static int ub960_configure_ports_for_streaming(struct ub960_data *priv,
+>>>>>>     +                                         struct v4l2_subdev_state *state)
+>>>>>>     +{
+>>>>>>     +  u8 fwd_ctl;
+>>>>>>     +  struct {
+>>>>>>     +          u32 num_streams;
+>>>>>>     +          u8 pixel_dt;
+>>>>>>     +          u8 meta_dt;
+>>>>>>     +          u32 meta_lines;
+>>>>>>     +          u32 tx_port;
+>>>>>>     +  } rx_data[UB960_MAX_RX_NPORTS] = {};
+>>>>>>     +  u8 vc_map[UB960_MAX_RX_NPORTS] = {};
+>>>>>>     +  struct v4l2_subdev_route *route;
+>>>>>>     +  unsigned int nport;
+>>>>>>     +  int ret;
+>>>>>>     +
+>>>>>>     +  ret = ub960_validate_stream_vcs(priv);
+>>>>>>     +  if (ret)
+>>>>>>     +          return ret;
+>>>>>>     +
+>>>>>>     +  ub960_get_vc_maps(priv, state, vc_map);
+>>>>>>     +
+>>>>>>     +  for_each_active_route(&state->routing, route) {
+>>>>>>     +          struct ub960_rxport *rxport;
+>>>>>>     +          struct ub960_txport *txport;
+>>>>>>     +          struct v4l2_mbus_framefmt *fmt;
+>>>>>>     +          const struct ub960_format_info *ub960_fmt;
+>>>>>>     +          unsigned int nport;
+>>>>>>     +
+>>>>>>     +          nport = ub960_pad_to_port(priv, route->sink_pad);
+>>>>>>     +
+>>>>>>     +          rxport = priv->rxports[nport];
+>>>>>>     +          if (!rxport)
+>>>>>>     +                  return -EINVAL;
+>>>>>>     +
+>>>>>>     +          txport = priv->txports[ub960_pad_to_port(priv, route->source_pad)];
+>>>>>>     +          if (!txport)
+>>>>>>     +                  return -EINVAL;
+>>>>>>     +
+>>>>>>     +          rx_data[nport].tx_port = ub960_pad_to_port(priv, route->source_pad);
+>>>>>>     +
+>>>>>>     +          rx_data[nport].num_streams++;
+>>>>>>     +
+>>>>>>     +          /* For the rest, we are only interested in parallel busses */
+>>>>>>     +          if (rxport->rx_mode == RXPORT_MODE_CSI2_SYNC ||
+>>>>>>     +              rxport->rx_mode == RXPORT_MODE_CSI2_ASYNC)
+>>>>>>     +                  continue;
+>>>>>>     +
+>>>>>>     +          if (rx_data[nport].num_streams > 2)
+>>>>>>     +                  return -EPIPE;
+>>>>>>     +
+>>>>>>     +          fmt = v4l2_subdev_state_get_stream_format(state,
+>>>>>>     +                                                    route->sink_pad,
+>>>>>>     +                                                    route->sink_stream);
+>>>>>>     +          if (!fmt)
+>>>>>>     +                  return -EPIPE;
+>>>>>>     +
+>>>>>>     +          ub960_fmt = ub960_find_format(fmt->code);
+>>>>>>     +          if (!ub960_fmt)
+>>>>>>     +                  return -EPIPE;
+>>>>>>     +
+>>>>>>     +          if (ub960_fmt->meta) {
+>>>>>>     +                  if (fmt->height > 3) {
+>>>>>>     +                          dev_err(&priv->client->dev,
+>>>>>>     +                                  "rx%u: unsupported metadata height %u\n",
+>>>>>>     +                                  nport, fmt->height);
+>>>>>>     +                          return -EPIPE;
+>>>>>>     +                  }
+>>>>>>     +
+>>>>>>     +                  rx_data[nport].meta_dt = ub960_fmt->datatype;
+>>>>>>     +                  rx_data[nport].meta_lines = fmt->height;
+>>>>>>     +          } else {
+>>>>>>     +                  rx_data[nport].pixel_dt = ub960_fmt->datatype;
+>>>>>>     +          }
+>>>>>>     +  }
+>>>>>>     +
+>>>>>>     +  /* Configure RX ports */
+>>>>>>     +
+>>>>>>     +  fwd_ctl = 0;
+>>>>>
+>>>>> Hello, I have only used the first RX port in my setup (ds90ub933 to ds90ub964). The logic for activating/deactivating the Rx ports did not work for me. My suggestion is:
+>>>>>
+>>>> Why doesn't it work? What happens?
+>>>>
+>>>>    Tomi
+>>>
+>>> Hello Tomi,
+>>>
+>>> the port rx0 which I need was disabled and the other ports rx1 to rx3 were enabled. In other words, the exact inverse of the required selection.
+>>>
+>>>>>>    +                /* Forwarding */
+>>>>>>    +
+>>>>>>    +                fwd_ctl |= BIT(4 + nport); /* forward disable */
+>>> According to the data sheet, a set bit4-7 in fwd_ctl means that the channel is disabled. So the comment 'forward disable' is correct. While debugging, however, this code was only reached for the ports to be enabled but not for the ones which should be disabled.
 > 
-> Just to summarize the core idea behind my proposal is that no signal
-> handling changes are needed unless there's a bug in the current way
-> io_uring workers already work. All that should be needed is
-> s/PF_IO_WORKER/PF_USER_WORKER/ in signal.c.
+>> This is just a setup phase, where we initialize the registers for the ports we want to use. The forwarding is then enabled later, in ub960_enable_rx_port, and even later disabled in ub960_disable_rx_port.
 > 
-> If you follow my proposal than vhost and io_uring workers should almost
-> collapse into the same concept. Specifically, io_uring workers and vhost
-> workers should behave the same when it comes ot handling signals.
+> Thank you for the clarification. I had misinterpreted the intention of the code here.
 > 
-> See 
-> https://lore.kernel.org/lkml/20230518-kontakt-geduckt-25bab595f503@brauner
+>> This assumes that the forwarding is disabled in the registers by default (which it is in UB960).
+>>
+>> I need to try this on my HW to verify my understanding is correct, but looking at the code, it is indeed a bit buggy.
+>>
+>> At this setup phase we disable the forwarding for ports we'll use, and enable the forwarding for ports we don't use (which doesn't make sense).
+>> Later, when the streaming is started for that port, we enable the forwarding. So here we should just always disable the forwarding for all ports.
+>>
 > 
+> The unused Rx ports were not disabled in my tests. Disabling all ports here should also work for my setup.
 > 
-> > we need from the signal code and how we can support signals in the
-> > vhost_task layer.
-> > 
-> > Note that I took the super simple route and kicked off some work to
-> > the system workqueue. We can do more invassive approaches:
-> > 1. Modify the vhost drivers so they can check for IO completions using
-> > a non-blocking interface. We then don't need to run from the system
-> > workqueue and can run from the vhost_task.
-> > 
-> > 2. We could drop patch 1 and just say we are doing a polling type
-> > of approach. We then modify the vhost layer similar to #1 where we
-> > can check for completions using a non-blocking interface and use
-> > the vhost_task task.
+>> Saying "disable the forwarding" is perhaps a bit confusing here, as the the forwarding should already be disabled in the HW here anyway. But as we write the UB960_SR_FWD_CTL1, we need to set that bit.
+>>
+>> So. You should see the rx0 getting enabled (later, in ub960_enable_rx_port), and I'm curious why you don't see that.
 > 
-> My preference would be to do whatever is the minimal thing now and has
-> the least bug potential and is the easiest to review for us non-vhost
-> experts. Then you can take all the time to rework and improve the vhost
-> infra based on the possibilities that using user workers offers. Plus,
-> that can easily happen in the next kernel cycle.
-> 
-> Remember, that we're trying to fix a regression here. A regression on an
-> unreleased kernel but still.
+> I will have another look at that next week. It could well be that in the end only the enabled but unused ports are the problem.
 
-On Tue, May 16, 2023 at 10:40:01AM +0200, Christian Brauner wrote:
-> On Mon, May 15, 2023 at 05:23:12PM -0500, Mike Christie wrote:
-> > On 5/15/23 10:44 AM, Linus Torvalds wrote:
-> > > On Mon, May 15, 2023 at 7:23 AM Christian Brauner <brauner@kernel.org> wrote:
-> > >>
-> > >> So I think we will be able to address (1) and (2) by making vhost tasks
-> > >> proper threads and blocking every signal except for SIGKILL and SIGSTOP
-> > >> and then having vhost handle get_signal() - as you mentioned - the same
-> > >> way io uring already does. We should also remove the ingore_signals
-> > >> thing completely imho. I don't think we ever want to do this with user
-> > >> workers.
-> > > 
-> > > Right. That's what IO_URING does:
-> > > 
-> > >         if (args->io_thread) {
-> > >                 /*
-> > >                  * Mark us an IO worker, and block any signal that isn't
-> > >                  * fatal or STOP
-> > >                  */
-> > >                 p->flags |= PF_IO_WORKER;
-> > >                 siginitsetinv(&p->blocked, sigmask(SIGKILL)|sigmask(SIGSTOP));
-> > >         }
-> > > 
-> > > and I really think that vhost should basically do exactly what io_uring does.
-> > > 
-> > > Not because io_uring fundamentally got this right - but simply because
-> > > io_uring had almost all the same bugs (and then some), and what the
-> > > io_uring worker threads ended up doing was to basically zoom in on
-> > > "this works".
-> > > 
-> > > And it zoomed in on it largely by just going for "make it look as much
-> > > as possible as a real user thread", because every time the kernel
-> > > thread did something different, it just caused problems.
-> > > 
-> > > So I think the patch should just look something like the attached.
-> > > Mike, can you test this on whatever vhost test-suite?
-> > 
-> > I tried that approach already and it doesn't work because io_uring and vhost
-> > differ in that vhost drivers implement a device where each device has a vhost_task
-> > and the drivers have a file_operations for the device. When the vhost_task's
-> > parent gets signal like SIGKILL, then it will exit and call into the vhost
-> > driver's file_operations->release function. At this time, we need to do cleanup
-> 
-> But that's no reason why the vhost worker couldn't just be allowed to
-> exit on SIGKILL cleanly similar to io_uring. That's just describing the
-> current architecture which isn't a necessity afaict. And the helper
-> thread could e.g., crash.
-> 
-> > like flush the device which uses the vhost_task. There is also the case where if
-> > the vhost_task gets a SIGKILL, we can just exit from under the vhost layer.
-> 
-> In a way I really don't like the patch below. Because this should be
-> solvable by adapting vhost workers. Right now, vhost is coming from a
-> kthread model and we ported it to a user worker model and the whole
-> point of this excercise has been that the workers behave more like
-> regular userspace processes. So my tendency is to not massage kernel
-> signal handling to now also include a special case for user workers in
-> addition to kthreads. That's just the wrong way around and then vhost
-> could've just stuck with kthreads in the first place.
-> 
-> So I'm fine with skipping over the freezing case for now but SIGKILL
-> should be handled imho. Only init and kthreads should get the luxury of
-> ignoring SIGKILL.
-> 
-> So, I'm afraid I'm asking some work here of you but how feasible would a
-> model be where vhost_worker() similar to io_wq_worker() gracefully
-> handles SIGKILL. Yes, I see there's
-> 
-> net.c:   .release = vhost_net_release
-> scsi.c:  .release = vhost_scsi_release
-> test.c:  .release = vhost_test_release
-> vdpa.c:  .release = vhost_vdpa_release
-> vsock.c: .release = virtio_transport_release
-> vsock.c: .release = vhost_vsock_dev_release
-> 
-> but that means you have all the basic logic in place and all of those
-> drivers also support the VHOST_RESET_OWNER ioctl which also stops the
-> vhost worker. I'm confident that a lof this can be leveraged to just
-> cleanup on SIGKILL.
-> 
-> So it feels like this should be achievable by adding a callback to
-> struct vhost_worker that get's called when vhost_worker() gets SIGKILL
-> and that all the users of vhost workers are forced to implement.
-> 
-> Yes, it is more work but I think that's the right thing to do and not to
-> complicate our signal handling.
-> 
-> Worst case if this can't be done fast enough we'll have to revert the
-> vhost parts. I think the user worker parts are mostly sane and are
+This should fix the issue:
 
-As mentioned, if we can't settle this cleanly before -rc4 we should
-revert the vhost parts unless Linus wants to have it earlier.
+@ -2486,7 +2488,7 @@ static int ub960_configure_ports_for_streaming(struct ub960_data *priv,
+  
+         /* Configure RX ports */
+  
+-       fwd_ctl = 0;
++       fwd_ctl = GENMASK(7, 4);
+  
+         for (nport = 0; nport < priv->hw_data->num_rxports; nport++) {
+                 struct ub960_rxport *rxport = priv->rxports[nport];
+@@ -2536,8 +2538,6 @@ static int ub960_configure_ports_for_streaming(struct ub960_data *priv,
+  
+                 /* Forwarding */
+  
+-               fwd_ctl |= BIT(4 + nport); /* forward disable */
+-
+                 if (rx_data[nport].tx_port == 1)
+                         fwd_ctl |= BIT(nport); /* forward to TX1 */
+                 else
+
+
+  Tomi
+
+
