@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3838C709F6C
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 20:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43920709F72
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 20:53:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbjESSuw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 14:50:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46002 "EHLO
+        id S229691AbjESSxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 14:53:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbjESSuu (ORCPT
+        with ESMTP id S229504AbjESSxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 14:50:50 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7DF1E72
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 11:50:30 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1q05BC-0000rT-Ex; Fri, 19 May 2023 20:50:18 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1q05B9-00025q-TE; Fri, 19 May 2023 20:50:15 +0200
-Date:   Fri, 19 May 2023 20:50:15 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Arun Ramadoss <arun.ramadoss@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
-        Eric Dumazet <edumazet@google.com>, kernel@pengutronix.de,
-        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH net-next v4 1/2] net: dsa: microchip: ksz8: Make flow
- control, speed, and duplex on CPU port configurable
-Message-ID: <20230519185015.GA18246@pengutronix.de>
-References: <20230519124700.635041-1-o.rempel@pengutronix.de>
- <20230519124700.635041-2-o.rempel@pengutronix.de>
- <20230519143004.luvz73jiyvnqxk4y@skbuf>
+        Fri, 19 May 2023 14:53:03 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D869E45
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 11:53:02 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-561bb2be5f8so46448157b3.0
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 11:53:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1684522381; x=1687114381;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IvuKY+QiDOSLvpXbndNJuNB4TnmV65tz5O+BwirwJsE=;
+        b=cQEFC8tuad0qBhxqpwtvv0nLTlTibMvPJDQnyjusclVn14+QH4ihHQrIqRw2DEz+JK
+         BJ0+YvvKq+psiSFOyfBxFnwWmf1LpJdJMSyEogWaGJEbHIiyCUspbIhPjVEe26EUEFeq
+         ozsT9vTGWhambTmSQsW53Rg+POo8Tp4eyXBOY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684522381; x=1687114381;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IvuKY+QiDOSLvpXbndNJuNB4TnmV65tz5O+BwirwJsE=;
+        b=Q3KIfZr+nS8uMDbFpgKc5979BtaAtGyBD3Qj14+OQzGRQdafcMquviRTybMRLgu3Yc
+         uxm2NkpyVFazjrG6kcAKX2Y6vaZ/IudAel06RDPFbWsD+HbsO4qTw17vZbK4JntZROxT
+         ptlTzmn2XiXNlZaVPWa5eo1zCwTe/Mxl0RsrDQvyo9NGKbrcllNDE5s6T+T7ZGErnxq4
+         FaZr166gtFANDgJyTbVVs7G28xapssrJ2a4B5qgbPJIaVKT7Q2BSkRLEbNNz5+C8yQMC
+         A+eSOwXr6rpFmGPN+J4dg5GbzHaoBiIiOBjSj0N3G1SPIqc5pRKJUR2h4s3vcoTJXm/5
+         PnLg==
+X-Gm-Message-State: AC+VfDzTd0+fNdVNJz37m0v+/DPrTcJCDlPKcjgj5PftR3wSdwYK4enc
+        yn4UlHmevNONV8/5w9EuOvMQkIVv9SW5t5b6u/LNmQ==
+X-Google-Smtp-Source: ACHHUZ52j3pJFuWwa8N8k1bNDWUmJfHV19FIYtf6A4VcQe3nEXJuM97t5ReUFUuGS1iExkCOEK1Q0+8kfZ/fHjlGj2I=
+X-Received: by 2002:a0d:d44f:0:b0:55d:aff9:975b with SMTP id
+ w76-20020a0dd44f000000b0055daff9975bmr3126455ywd.12.1684522381325; Fri, 19
+ May 2023 11:53:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230519143004.luvz73jiyvnqxk4y@skbuf>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+References: <20230518224008.2468-1-sj@kernel.org> <20230518224008.2468-5-sj@kernel.org>
+In-Reply-To: <20230518224008.2468-5-sj@kernel.org>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Fri, 19 May 2023 14:52:50 -0400
+Message-ID: <CAEXW_YQFqW2QcAuHZEhc_GaUaB-=QOS0WgUOizd=FYwtFQ8vag@mail.gmail.com>
+Subject: Re: [PATCH 4/4] Docs/RCU/rculist_nulls: Drop unnecessary '_release'
+ in insert function
+To:     SeongJae Park <sj@kernel.org>
+Cc:     paulmck@kernel.org, corbet@lwn.net, rcu@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,47 +67,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vladimir,
+On Thu, May 18, 2023 at 6:40=E2=80=AFPM SeongJae Park <sj@kernel.org> wrote=
+:
+>
+> The document says we can avoid extra smp_rmb() in lockless_lookup() and
+> extra _release() in insert function when hlist_nulls is used.  However,
+> the example code snippet for the insert function is still using the
+> extra _release().  Drop it.
+>
+> Signed-off-by: SeongJae Park <sj@kernel.org>
+> ---
+>  Documentation/RCU/rculist_nulls.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/Documentation/RCU/rculist_nulls.rst b/Documentation/RCU/rcul=
+ist_nulls.rst
+> index 5cd6f3f8810f..463270273d89 100644
+> --- a/Documentation/RCU/rculist_nulls.rst
+> +++ b/Documentation/RCU/rculist_nulls.rst
+> @@ -191,7 +191,7 @@ scan the list again without harm.
+>    obj =3D kmem_cache_alloc(cachep);
+>    lock_chain(); // typically a spin_lock()
+>    obj->key =3D key;
+> -  atomic_set_release(&obj->refcnt, 1); // key before refcnt
+> +  atomic_set(&obj->refcnt, 1);
+>    /*
+>     * insert obj in RCU way (readers might be traversing chain)
+>     */
 
-On Fri, May 19, 2023 at 05:30:04PM +0300, Vladimir Oltean wrote:
-> On Fri, May 19, 2023 at 02:46:59PM +0200, Oleksij Rempel wrote:
-> > +void ksz8_phylink_mac_link_up(struct ksz_device *dev, int port,
-> > +			      unsigned int mode, phy_interface_t interface,
-> > +			      struct phy_device *phydev, int speed, int duplex,
-> > +			      bool tx_pause, bool rx_pause)
-> > +{
-> > +	/* If the port is the CPU port, apply special handling. Only the CPU
-> > +	 * port is configured via global registers.
-> > +	 */
-> > +	if (dev->cpu_port == port)
-> > +		ksz8_cpu_port_link_up(dev, speed, duplex, tx_pause, rx_pause);
-> > +}
-> 
-> I'm sorry, but this is also baking in assumptions related to the
-> topology of the tree (that the xMII port is used as a CPU port).
-> The ksz8 driver may make this assumption in other places too,
-> but I don't want to make it even worse to fix. Is the
-> !dev->info->internal_phy[port] condition not enough here?
+If write to ->refcnt of 1 is reordered with setting of ->key, what
+prevents the 'lookup algorithm' from doing a key match (obj->key =3D=3D
+key) before the refcount has been initialized?
 
-Thank you for your feedback. I see your point. 
+Are we sure the reordering mentioned in the document is the same as
+the reordering prevented by the atomic_set_release()?
 
-We need to remember that the KSZ switch series has different types of
-ports. Specifically, for the KSZ8 series, there's a unique port. This
-port is unique because it's the only one that can be configured with
-global registers, and it is only one supports tail tagging. This special
-port is already referenced in the driver by "dev->cpu_port", so I continued
-using it in my patch.
+For the other 3 patches, feel free to add:
+Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 
-It is important to note that while this port has an xMII interface, it
-is not the only port that could have an xMII interface. Therefore, using
-"dev->info->internal_phy" may not be the best way to identify this port,
-because there can be ports that are not global/cpu, have an xMII
-interface, but don't have an internal PHY.
+thanks,
 
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+ - Joel
