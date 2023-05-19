@@ -2,102 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3037E709EA3
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 19:57:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DF9B709EB4
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 20:03:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231387AbjESR5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 13:57:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54524 "EHLO
+        id S229694AbjESSDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 14:03:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231411AbjESR47 (ORCPT
+        with ESMTP id S229519AbjESSDT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 13:56:59 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CC87139
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 10:56:57 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1ae763f9c0bso13307165ad.2
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 10:56:57 -0700 (PDT)
+        Fri, 19 May 2023 14:03:19 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD7F107;
+        Fri, 19 May 2023 11:03:18 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4eff4ea8e39so3934914e87.1;
+        Fri, 19 May 2023 11:03:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684519017; x=1687111017;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lt+R66SZsjACqQLQDsP1T/1PH804jTRmZ4JzbbwpO0U=;
-        b=f8+SMr3t2qPVQOmEi/6pwbqCUOu+FC7kgupDjZbbgRp/Bju1XiEyEROvnrzIeAPIcP
-         ptNQFmQF4OEsozJNoUP8LqyhLYk1oGQlOlbBPofaDerSBfIUBnO6R5Jd83TmqVtWTv47
-         aIptasIq4EtXD3ibEpGgZXhzXlDc0usDHTBzB7QygCySo1+puz1Ju9yhtlRHSax8YyEU
-         PAZGU05VOZGzPtVu861CMp2L16Pnfn7JMNmlk+yxoV1pxiZhiFkDlSYGbAJGGPOK3KQp
-         BvlFnFqJEgL8s31SpQyhgf/w4bGuatySyK6UHtRDBALdkPUn5B8TKVN5Hr5jTL9ZBuol
-         odzg==
+        d=gmail.com; s=20221208; t=1684519397; x=1687111397;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=khFg+a2ReqaiRTxpoq6SkxqkDB49wgafJiFpqI5YKbQ=;
+        b=PeoHFGMqx/4ake57D2CCDDH+d94OtdA/5oF9fjO3V0hsfCJu32yUHrMCcZ4y4KwKwg
+         oNkpMOoOmUw0Hun067YjyZM2WAgdP7+OTdw/U26KOuoUSv51KCJrYIoiGVaHJRP/NZwT
+         bRNt6adNtfwgtoFZEjlk8VeOPJLo7EuGrnldrRSEJogdAvzzL+qWs1QCzdsmQT4qRIt6
+         PwIrE+1dqqDLwfj9UNRAFiKeGDO8DbuNGsqVSxaxEHpKJoG+Q02Cvjhhu0PfS30Rq/Gh
+         OAa1QURm3yEGqA6SkZ6LdszMWgTrJce9oEj3bKMb+Cew4SPUWdgQ4w/Tt6cncRdC2bqs
+         +jhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684519017; x=1687111017;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lt+R66SZsjACqQLQDsP1T/1PH804jTRmZ4JzbbwpO0U=;
-        b=VeXHcZndrwfLs+EkNo2Rbspx9sdUFVGS+MVTWQeh/zDxdQbHhFDPiVZgLbec02dDRN
-         4KYg+qAuMdyDGE3sIcWBRrwdmTydcs3jrlpVytBvm7Rth3O8Uaxvwl82xoDzyH37H8Um
-         fB2NVwsJ+9IwA3D2Pbn3/YcKPvntHWKTF6b0I6RTLVIqYgMw4EuhmYQGnWbO2aaBf4VK
-         HMexZp05TIbMmthfOpC3nrVXrlPMtrNUf4EF/YglIcpxvKOryXyk034UcsWBuMJvQwql
-         brHyQrKvXuYFJUhjQ4F8mAov5hq5S9F/8Rw1gGB5R6yce/GRskJ0IizV92d2VAEZpckd
-         Bpjw==
-X-Gm-Message-State: AC+VfDxCALki0alWw1X+vXcjYcaOIxLmayjSkj+gccgP2t/bz8BDvram
-        NT73ZT/St/TfoBNvvxi4lq9gjg==
-X-Google-Smtp-Source: ACHHUZ5XErCDTH4azEKBxRjdnDnNN3sfrlswrYkchau1PsP2au5OzmCr1ocMI4VOVLvqOHd0cSpp4w==
-X-Received: by 2002:a17:903:2287:b0:1ad:b5f4:dfd5 with SMTP id b7-20020a170903228700b001adb5f4dfd5mr3851080plh.32.1684519016686;
-        Fri, 19 May 2023 10:56:56 -0700 (PDT)
-Received: from localhost (63-228-113-140.tukw.qwest.net. [63.228.113.140])
-        by smtp.gmail.com with ESMTPSA id ft24-20020a17090b0f9800b0024e268985b1sm1763401pjb.9.2023.05.19.10.56.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 10:56:56 -0700 (PDT)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Prathu Baronia <quic_pbaronia@quicinc.com>,
-        Kevin Hilman <khilman@kernel.org>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Janusz Krzysztofik <jmkrzyszt@gmail.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Prathu Baronia <quic_pbaronia@quicinc.com>
-Subject: Re: [PATCH] arm: omap1: replace printk() with pr_err macro
-In-Reply-To: <20230518103324.881394-1-quic_pbaronia@quicinc.com>
-References: <20230518103324.881394-1-quic_pbaronia@quicinc.com>
-Date:   Fri, 19 May 2023 10:56:55 -0700
-Message-ID: <7ho7mgyzko.fsf@baylibre.com>
+        d=1e100.net; s=20221208; t=1684519397; x=1687111397;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=khFg+a2ReqaiRTxpoq6SkxqkDB49wgafJiFpqI5YKbQ=;
+        b=N6TSwTU6eK9SL9duksAEpm75Fi+7uvk/wx4PQ5GkRuh/wihpfu88SJhwgbFAomr9U8
+         i3GRH9XKmpt4Uhz7bcdd53rzC04b6YDU0YiFAmnz7rP9XDa7aFntXetWLrwmaiHLc3Qx
+         HCMGmNlCiHGCwZqqoFA7+AUdEqyQ5tr8+fmR8HTanPP6nzLEFn002ZTYYs9R5xvnKZ5u
+         lAnHgrmenqhGMqZWBZLl7K0xuGyG4k+0FVacQX1dqL+Bb3alcIxLfxirEEtOhppF4t64
+         J9VyonJ2mMTiRz/uVPHI6kHo+QJ2ksVIGfYwYhH6OTx4A82yTvWWu9gvQH2WcKtdmise
+         4QcA==
+X-Gm-Message-State: AC+VfDzLZZv4SEg79ee8Q5NCMy4D8uGx1A6Vun+p11QnItwd8092smql
+        9jUCKtH161p7T99oBeft2j5Ph1CcjYlnDAxrLFjkuEiL
+X-Google-Smtp-Source: ACHHUZ5c2K26pp+aHKpDrTfilVtVngVk3N5Rssi8pdIxz/72es30cg9wfp+NaLDsgvIZSZOxCwQRkGa8HO6Jtn5tvQ4=
+X-Received: by 2002:a05:6512:510:b0:4f3:8196:80c8 with SMTP id
+ o16-20020a056512051000b004f3819680c8mr1047319lfb.1.1684519396705; Fri, 19 May
+ 2023 11:03:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230518102528.1341-1-will@kernel.org>
+In-Reply-To: <20230518102528.1341-1-will@kernel.org>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 19 May 2023 11:03:05 -0700
+Message-ID: <CAADnVQKh7GYfbvZ1vyY93DcpyKzoUHozmYTV360_0LFrNYUiog@mail.gmail.com>
+Subject: Re: [PATCH v2] bpf: Fix mask generation for 32-bit narrow loads of
+ 64-bit fields
+To:     Will Deacon <will@kernel.org>
+Cc:     bpf <bpf@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Krzesimir Nowak <krzesimir@kinvolk.io>,
+        Andrey Ignatov <rdna@fb.com>, Yonghong Song <yhs@fb.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prathu Baronia <quic_pbaronia@quicinc.com> writes:
-
-> Use pr_err() macro instead of printk(KERN_ERR "...").
+On Thu, May 18, 2023 at 3:25=E2=80=AFAM Will Deacon <will@kernel.org> wrote=
+:
 >
-> Signed-off-by: Prathu Baronia <quic_pbaronia@quicinc.com>
-
-Acked-by: Kevin Hilman <khilman@baylibre.com>
-
-> ---
->  arch/arm/mach-omap1/pm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> A narrow load from a 64-bit context field results in a 64-bit load
+> followed potentially by a 64-bit right-shift and then a bitwise AND
+> operation to extract the relevant data.
 >
-> diff --git a/arch/arm/mach-omap1/pm.c b/arch/arm/mach-omap1/pm.c
-> index 9761d8404949..6a5815aa05e6 100644
-> --- a/arch/arm/mach-omap1/pm.c
-> +++ b/arch/arm/mach-omap1/pm.c
-> @@ -632,7 +632,7 @@ static int __init omap_pm_init(void)
->  
->  	error = sysfs_create_file(power_kobj, &sleep_while_idle_attr.attr);
->  	if (error)
-> -		printk(KERN_ERR "sysfs_create_file failed: %d\n", error);
-> +		pr_err("sysfs_create_file failed: %d\n", error);
->  
->  	if (cpu_is_omap16xx()) {
->  		/* configure LOW_PWR pin */
-> -- 
-> 2.25.1
+> In the case of a 32-bit access, an immediate mask of 0xffffffff is used
+> to construct a 64-bit BPP_AND operation which then sign-extends the mask
+> value and effectively acts as a glorified no-op. For example:
+>
+> 0:      61 10 00 00 00 00 00 00 r0 =3D *(u32 *)(r1 + 0)
+>
+> results in the following code generation for a 64-bit field:
+>
+>         ldr     x7, [x7]        // 64-bit load
+>         mov     x10, #0xffffffffffffffff
+>         and     x7, x7, x10
+>
+> Fix the mask generation so that narrow loads always perform a 32-bit AND
+> operation:
+>
+>         ldr     x7, [x7]        // 64-bit load
+>         mov     w10, #0xffffffff
+>         and     w7, w7, w10
+>
+> Cc: Alexei Starovoitov <ast@kernel.org>
+> Cc: Daniel Borkmann <daniel@iogearbox.net>
+> Cc: John Fastabend <john.fastabend@gmail.com>
+> Cc: Krzesimir Nowak <krzesimir@kinvolk.io>
+> Cc: Andrey Ignatov <rdna@fb.com>
+> Acked-by: Yonghong Song <yhs@fb.com>
+> Fixes: 31fd85816dbe ("bpf: permits narrower load from bpf program context=
+ fields")
+> Signed-off-by: Will Deacon <will@kernel.org>
+
+Thanks for the fix! Applied to bpf tree.
