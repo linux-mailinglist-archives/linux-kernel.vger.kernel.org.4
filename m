@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E5C770A063
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 22:13:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D6F170A065
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 22:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229501AbjESUNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 16:13:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50340 "EHLO
+        id S231518AbjESUOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 16:14:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbjESUNV (ORCPT
+        with ESMTP id S229933AbjESUNW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 16:13:21 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0BB10C6;
+        Fri, 19 May 2023 16:13:22 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0644210E2;
         Fri, 19 May 2023 13:13:15 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-199bcf78252so2764581fac.3;
-        Fri, 19 May 2023 13:13:14 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-18b1c643219so1527119fac.2;
+        Fri, 19 May 2023 13:13:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684527194; x=1687119194;
+        d=gmail.com; s=20221208; t=1684527195; x=1687119195;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=KkV+QeXA+7PnvpFM72D5N/uT9T4jnBUlhzxCsIMWNss=;
-        b=O8ZXMG0bdnU8eyp0mAhVWZS0Ohk4HzqOtLyNoh8UiP0cy3yq05zwkS3rc91/6DRcGc
-         A+CfROC6jLUxU65amyQgYyKDXRvzCwZLlVYdrl78cHZai4cCRUz8nsiN3oaDgFHkdtq1
-         LK7TOkLBmNlLP8QBmZIX5MBXAY3o4efR2t0rnKUjZhExgpYkEdros5T9ti1x+FxO/2q/
-         ++QpRdTL308YTC573p6j6kSnchQdWdaPVW4C7RgvnjS/klknIZHac1XTdIjixAYqRTMO
-         XJ5fS8zZadKv2Iljo4OGdKaz1QfpphooUL8ozIHhIaFKc18L4nWEi/JvoQHlROE7TQ+c
-         SPoQ==
+        bh=nyFMP/6OFZeTM83vwUJOErQ+JrxpPbaie3LCiQYLuP4=;
+        b=Xak66iaNi/aBjtfe9xgayfBehsGsbLh8hExN4m7bWIF34zmJnWg78vjlJuTKBt1RmP
+         VpHVBIhn5bxt2OUVbWRymU6Ah/FIByI9H9il+ctrTNmw0CmtT4+i8NULYVL5aVasm7vt
+         REj1FrVM32WtJ6M/93lcO905zq9DluIIw1N42pqqC+qImXLhiOyvG3aT3MxzyN9ihbQa
+         KJrviWtuiwG4f2EU4dsIU6EJneIaZ/hExPngIk8UmSxWvP6/DwL0quupOHYLu3B53kbg
+         lwQvDfdcl9VBxycQPHLjGdnl52sMiXu+K1+aospxlrhMtuPCyLwiwrSvT8nHKVHa2DX+
+         jQqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684527194; x=1687119194;
+        d=1e100.net; s=20221208; t=1684527195; x=1687119195;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KkV+QeXA+7PnvpFM72D5N/uT9T4jnBUlhzxCsIMWNss=;
-        b=Sk5sUFHjTUwITaTF2U9BE61AcEPP68iAlOB6jVAWJ2Y9fqq9u1iqhSKhRWZwDv5uYL
-         o9I1WlfxQQpqJXU1o/tnCgUGn/BjoDTsIbCeuo/XqtfuBe71UkflfhyOg/bFe/+Mkza9
-         DlQROOKBCJsOSDEaZPvNlQIkOnCF//RMOMe7rZ7mkLMwoerQImSPJlQkwY4CaBYHS37s
-         mfLEn3fOXJFiPOUoqLllwTj5D9NuOezmpqyBCFkUmL+ql5PVq/mpzQ7KsYQesSR6ANDo
-         w2ztgnoe4wmqRyEzEGWjl1zLa4Bg/MgymocxVni5aMw+MfwHmoPwLQhq3cRxjRtZlGYu
-         ethA==
-X-Gm-Message-State: AC+VfDx+vXQyYu0vCJVE1i+INK5MP1Fmiv40Ox7PmieA1x/P29weK59C
-        stDRENAtGpn3hDSk5lPs28w=
-X-Google-Smtp-Source: ACHHUZ5yYkIsWoilClbfwTRNDkut1SIOzx10rEVvd8u2E50sPGxpysEuZ66z8WDzDthwcpWNOgGKYA==
-X-Received: by 2002:a05:6870:4416:b0:187:c066:a39a with SMTP id u22-20020a056870441600b00187c066a39amr1524419oah.16.1684527194182;
-        Fri, 19 May 2023 13:13:14 -0700 (PDT)
+        bh=nyFMP/6OFZeTM83vwUJOErQ+JrxpPbaie3LCiQYLuP4=;
+        b=Ncvb0lvpLtwSFQxnkbIovV5jwHlOvKVt0KQTGqlfRNF55/vSDUYCu0chWnBzSDwtZO
+         dbDSKR9sOsRhKPdr0Xv+z2OOD0m7i2HjFnc9Dow5T9gaG2nbBzY3r32yXmWXzY3RWTgW
+         PXuzW/CPkFN+Bhluuqm7zB9Kbp5+FCn4rZlTbsCotdj3n+9U2VhcI1P5aBW2NjpYIyWs
+         L56h85x2nIA2i97rkp+414SWQ8GbanuJNMpcp382Ii5YJYp36NFE3UXoZwAv/MSEDnaB
+         mUhjxALmQW9CbwZe/+qkN6jIs07NXmHccJ0OJ0Qd696rHMkRCdV9OEeWba4QSZFPKzvp
+         wOQw==
+X-Gm-Message-State: AC+VfDxL8JVT7kNa13Sw4eIfrBxX548dPKKXnxH2PgIcaOgUaJtdDsCU
+        Dno0q3quNQwh/wsdaQ2x4nv4pKLnfUU=
+X-Google-Smtp-Source: ACHHUZ7VNuC1+OeDWVFCloLq5ijv3FxyNYxICXNWQPDJ/k39SqcnaO0HOO6IwA/25qqgVAOFosP8Sw==
+X-Received: by 2002:a05:6870:85c6:b0:19a:6e17:87a with SMTP id g6-20020a05687085c600b0019a6e17087amr585662oal.33.1684527195069;
+        Fri, 19 May 2023 13:13:15 -0700 (PDT)
 Received: from grumpy-VECTOR.hsd1.tx.comcast.net ([2601:2c3:480:7390:e6dc:4936:31b7:d3d0])
-        by smtp.gmail.com with ESMTPSA id g4-20020a056870d20400b001964dc3dadesm2325239oac.45.2023.05.19.13.13.12
+        by smtp.gmail.com with ESMTPSA id g4-20020a056870d20400b001964dc3dadesm2325239oac.45.2023.05.19.13.13.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 13:13:13 -0700 (PDT)
+        Fri, 19 May 2023 13:13:14 -0700 (PDT)
 From:   Jorge Lopez <jorgealtxwork@gmail.com>
 X-Google-Original-From: Jorge Lopez <jorge.lopez2@hp.com>
 To:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
         linux-kernel@vger.kernel.org, thomas@t-8ch.de,
         ilpo.jarvinen@linux.intel.com
-Subject: [PATCH v15 10/13] hp-bioscfg: string-attributes
-Date:   Fri, 19 May 2023 15:12:57 -0500
-Message-Id: <20230519201300.12964-11-jorge.lopez2@hp.com>
+Subject: [PATCH v15 11/13] hp-bioscfg: surestart-attributes
+Date:   Fri, 19 May 2023 15:12:58 -0500
+Message-Id: <20230519201300.12964-12-jorge.lopez2@hp.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230519201300.12964-1-jorge.lopez2@hp.com>
 References: <20230519201300.12964-1-jorge.lopez2@hp.com>
@@ -117,419 +117,147 @@ Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
 ---
 Based on the latest platform-drivers-x86.git/for-next
 ---
- .../x86/hp/hp-bioscfg/string-attributes.c     | 404 ++++++++++++++++++
- 1 file changed, 404 insertions(+)
- create mode 100644 drivers/platform/x86/hp/hp-bioscfg/string-attributes.c
+ .../x86/hp/hp-bioscfg/surestart-attributes.c  | 132 ++++++++++++++++++
+ 1 file changed, 132 insertions(+)
+ create mode 100644 drivers/platform/x86/hp/hp-bioscfg/surestart-attributes.c
 
-diff --git a/drivers/platform/x86/hp/hp-bioscfg/string-attributes.c b/drivers/platform/x86/hp/hp-bioscfg/string-attributes.c
+diff --git a/drivers/platform/x86/hp/hp-bioscfg/surestart-attributes.c b/drivers/platform/x86/hp/hp-bioscfg/surestart-attributes.c
 new file mode 100644
-index 000000000000..39209171662b
+index 000000000000..b57e42f29282
 --- /dev/null
-+++ b/drivers/platform/x86/hp/hp-bioscfg/string-attributes.c
-@@ -0,0 +1,404 @@
++++ b/drivers/platform/x86/hp/hp-bioscfg/surestart-attributes.c
+@@ -0,0 +1,132 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Functions corresponding to string type attributes under
-+ * HP_WMI_BIOS_STRING_GUID for use with hp-bioscfg driver.
++ * Functions corresponding to sure start object type attributes under
++ * BIOS for use with hp-bioscfg driver
 + *
 + * Copyright (c) 2022 HP Development Company, L.P.
 + */
 +
 +#include "bioscfg.h"
++#include <linux/types.h>
 +
-+#define WMI_STRING_TYPE "HPBIOS_BIOSString"
-+
-+GET_INSTANCE_ID(string);
-+
-+static ssize_t current_value_show(struct kobject *kobj, struct kobj_attribute *attr, char *buf)
-+{
-+	int instance_id = get_string_instance_id(kobj);
-+
-+	if (instance_id < 0)
-+		return -EIO;
-+
-+	return  sysfs_emit(buf, "%s\n",
-+			 bioscfg_drv.string_data[instance_id].current_value);
-+}
-+
-+/**
-+ * validate_string_input() -
-+ * Validate input of current_value against min and max lengths
-+ *
-+ * @instance_id: The instance on which input is validated
-+ * @buf: Input value
++/* Maximum number of log entries supported when log entry size is 16
++ * bytes. This value is calculated by dividing 4096 (page size) by
++ * log entry size.
 + */
-+static int validate_string_input(int instance_id, const char *buf)
++#define LOG_MAX_ENTRIES		254
++
++/*
++ * Current Log entry size. This value size will change in the
++ * future. The driver reads a total of 128 bytes for each log entry
++ * provided by BIOS but only the first 16 bytes are used/read.
++ */
++#define LOG_ENTRY_SIZE		16
++
++/*
++ * audit_log_entry_count_show - Reports the number of
++ *				existing audit log entries available
++ *				to be read
++ */
++static ssize_t audit_log_entry_count_show(struct kobject *kobj,
++					  struct kobj_attribute *attr, char *buf)
 +{
-+	int in_len = strlen(buf);
-+	struct string_data *string_data = &bioscfg_drv.string_data[instance_id];
++	int ret;
++	u32 count = 0;
 +
-+	/* BIOS treats it as a read only attribute */
-+	if (string_data->common.is_readonly)
-+		return -EIO;
++	ret = hp_wmi_perform_query(HPWMI_SURESTART_GET_LOG_COUNT,
++				   HPWMI_SURESTART,
++				   &count, 1, sizeof(count));
 +
-+	if (in_len < string_data->min_length || in_len > string_data->max_length)
-+		return -ERANGE;
++	if (ret < 0)
++		return ret;
 +
-+	return 0;
-+}
-+
-+static void update_string_value(int instance_id, char *attr_value)
-+{
-+	struct string_data *string_data = &bioscfg_drv.string_data[instance_id];
-+
-+	/* Write settings to BIOS */
-+	strscpy(string_data->current_value, attr_value, sizeof(string_data->current_value));
++	return sysfs_emit(buf, "%d,%d,%d\n", count, LOG_ENTRY_SIZE,
++			  LOG_MAX_ENTRIES);
 +}
 +
 +/*
-+ * ATTRIBUTE_S_COMMON_PROPERTY_SHOW(display_name_language_code, string);
-+ * static struct kobj_attribute string_display_langcode =
-+ *	__ATTR_RO(display_name_language_code);
++ * audit_log_entries_show() - Return all entries found in log file
 + */
-+
-+ATTRIBUTE_S_COMMON_PROPERTY_SHOW(display_name, string);
-+static struct kobj_attribute string_display_name =
-+	__ATTR_RO(display_name);
-+
-+ATTRIBUTE_PROPERTY_STORE(current_value, string);
-+static struct kobj_attribute string_current_val =
-+	__ATTR_RW_MODE(current_value, 0644);
-+
-+ATTRIBUTE_N_PROPERTY_SHOW(min_length, string);
-+static struct kobj_attribute string_min_length =
-+	__ATTR_RO(min_length);
-+
-+ATTRIBUTE_N_PROPERTY_SHOW(max_length, string);
-+static struct kobj_attribute string_max_length =
-+	__ATTR_RO(max_length);
-+
-+static ssize_t type_show(struct kobject *kobj, struct kobj_attribute *attr,
-+			 char *buf)
++static ssize_t audit_log_entries_show(struct kobject *kobj,
++				      struct kobj_attribute *attr, char *buf)
 +{
-+	return sysfs_emit(buf, "string\n");
++	int ret;
++	int i;
++	u32 count = 0;
++	u8 audit_log_buffer[128];
++
++	// Get the number of event logs
++	ret = hp_wmi_perform_query(HPWMI_SURESTART_GET_LOG_COUNT,
++				   HPWMI_SURESTART,
++				   &count, 1, sizeof(count));
++
++	if (ret < 0)
++		return ret;
++
++	/*
++	 * The show() api will not work if the audit logs ever go
++	 * beyond 4KB
++	 */
++	if (count * LOG_ENTRY_SIZE > PAGE_SIZE)
++		return -EIO;
++
++	/*
++	 * We are guaranteed the buffer is 4KB so today all the event
++	 * logs will fit
++	 */
++	for (i = 0; i < count; i++) {
++		audit_log_buffer[0] = i + 1;
++
++		/*
++		 * read audit log entry at a time. 'buf' input value
++		 * provides the audit log entry to be read. On
++		 * input, Byte 0 = Audit Log entry number from
++		 * beginning (1..254)
++		 * Entry number 1 is the newest entry whereas the
++		 * highest entry number (number of entries) is the
++		 * oldest entry.
++		 */
++		ret = hp_wmi_perform_query(HPWMI_SURESTART_GET_LOG,
++					   HPWMI_SURESTART,
++					   audit_log_buffer, 1, 128);
++
++		if (ret < 0 || (LOG_ENTRY_SIZE * i) > PAGE_SIZE) {
++			/*
++			 * Encountered a failure while reading
++			 * individual logs. Only a partial list of
++			 * audit log will be returned.
++			 */
++			break;
++		} else {
++			memcpy(buf, audit_log_buffer, LOG_ENTRY_SIZE);
++			buf += LOG_ENTRY_SIZE;
++		}
++	}
++
++	return i * LOG_ENTRY_SIZE;
 +}
 +
-+static struct kobj_attribute string_type =
-+	__ATTR_RO(type);
++static struct kobj_attribute sure_start_audit_log_entry_count = __ATTR_RO(audit_log_entry_count);
++static struct kobj_attribute sure_start_audit_log_entries = __ATTR_RO(audit_log_entries);
 +
-+static struct kobj_attribute common_display_langcode =
-+	__ATTR_RO(display_name_language_code);
-+
-+static struct attribute *string_attrs[] = {
-+	&common_display_langcode.attr,
-+	&string_display_name.attr,
-+	&string_current_val.attr,
-+	&string_min_length.attr,
-+	&string_max_length.attr,
-+	&string_type.attr,
++static struct attribute *sure_start_attrs[] = {
++	&sure_start_audit_log_entry_count.attr,
++	&sure_start_audit_log_entries.attr,
 +	NULL
 +};
 +
-+static const struct attribute_group string_attr_group = {
-+	.attrs = string_attrs,
++static const struct attribute_group sure_start_attr_group = {
++	.attrs = sure_start_attrs,
 +};
 +
-+int hp_alloc_string_data(void)
++void hp_exit_sure_start_attributes(void)
 +{
-+	bioscfg_drv.string_instances_count = hp_get_instance_count(HP_WMI_BIOS_STRING_GUID);
-+	bioscfg_drv.string_data = kcalloc(bioscfg_drv.string_instances_count,
-+					  sizeof(*bioscfg_drv.string_data), GFP_KERNEL);
-+	if (!bioscfg_drv.string_data) {
-+		bioscfg_drv.string_instances_count = 0;
-+		return -ENOMEM;
-+	}
-+	return 0;
++	sysfs_remove_group(bioscfg_drv.sure_start_attr_kobj,
++			   &sure_start_attr_group);
 +}
 +
-+/* Expected Values types associated with each element */
-+static const acpi_object_type expected_string_types[] = {
-+	[NAME] = ACPI_TYPE_STRING,
-+	[VALUE] = ACPI_TYPE_STRING,
-+	[PATH] = ACPI_TYPE_STRING,
-+	[IS_READONLY] = ACPI_TYPE_INTEGER,
-+	[DISPLAY_IN_UI] = ACPI_TYPE_INTEGER,
-+	[REQUIRES_PHYSICAL_PRESENCE] = ACPI_TYPE_INTEGER,
-+	[SEQUENCE] = ACPI_TYPE_INTEGER,
-+	[PREREQUISITES_SIZE] = ACPI_TYPE_INTEGER,
-+	[PREREQUISITES] = ACPI_TYPE_STRING,
-+	[SECURITY_LEVEL] = ACPI_TYPE_INTEGER,
-+	[STR_MIN_LENGTH] = ACPI_TYPE_INTEGER,
-+	[STR_MAX_LENGTH] = ACPI_TYPE_INTEGER,
-+};
-+
-+static int hp_populate_string_elements_from_package(union acpi_object *string_obj,
-+						    int string_obj_count,
-+						    int instance_id)
++int hp_populate_sure_start_data(struct kobject *attr_name_kobj)
 +{
-+	char *str_value = NULL;
-+	int value_len;
-+	int ret = 0;
-+	u32 int_value;
-+	int elem;
-+	int reqs;
-+	int eloc;
-+	int size;
-+	struct string_data *string_data = &bioscfg_drv.string_data[instance_id];
-+
-+	if (!string_obj)
-+		return -EINVAL;
-+
-+	for (elem = 1, eloc = 1; elem < string_obj_count; elem++, eloc++) {
-+		/* ONLY look at the first STRING_ELEM_CNT elements */
-+		if (eloc == STR_ELEM_CNT)
-+			goto exit_string_package;
-+
-+		switch (string_obj[elem].type) {
-+		case ACPI_TYPE_STRING:
-+			if (elem != PREREQUISITES) {
-+				ret = hp_convert_hexstr_to_str(string_obj[elem].string.pointer,
-+							       string_obj[elem].string.length,
-+							       &str_value, &value_len);
-+
-+				if (ret)
-+					continue;
-+			}
-+			break;
-+		case ACPI_TYPE_INTEGER:
-+			int_value = (u32)string_obj[elem].integer.value;
-+			break;
-+		default:
-+			pr_warn("Unsupported object type [%d]\n", string_obj[elem].type);
-+			continue;
-+		}
-+
-+		/* Check that both expected and read object type match */
-+		if (expected_string_types[eloc] != string_obj[elem].type) {
-+			pr_err("Error expected type %d for elem %d, but got type %d instead\n",
-+			       expected_string_types[eloc], elem, string_obj[elem].type);
-+			return -EIO;
-+		}
-+
-+		/* Assign appropriate element value to corresponding field*/
-+		switch (eloc) {
-+		case VALUE:
-+			strscpy(string_data->current_value,
-+				str_value, sizeof(string_data->current_value));
-+			break;
-+		case PATH:
-+			strscpy(string_data->common.path, str_value,
-+				sizeof(string_data->common.path));
-+			break;
-+		case IS_READONLY:
-+			string_data->common.is_readonly = int_value;
-+			break;
-+		case DISPLAY_IN_UI:
-+			string_data->common.display_in_ui = int_value;
-+			break;
-+		case REQUIRES_PHYSICAL_PRESENCE:
-+			string_data->common.requires_physical_presence = int_value;
-+			break;
-+		case SEQUENCE:
-+			string_data->common.sequence = int_value;
-+			break;
-+		case PREREQUISITES_SIZE:
-+			string_data->common.prerequisites_size = int_value;
-+
-+			if (string_data->common.prerequisites_size > MAX_PREREQUISITES_SIZE)
-+				pr_warn("Prerequisites size value exceeded the maximum number of elements supported or data may be malformed\n");
-+			/*
-+			 * This HACK is needed to keep the expected
-+			 * element list pointing to the right obj[elem].type
-+			 * when the size is zero. PREREQUISITES
-+			 * object is omitted by BIOS when the size is
-+			 * zero.
-+			 */
-+			if (string_data->common.prerequisites_size == 0)
-+				eloc++;
-+			break;
-+		case PREREQUISITES:
-+			size = min_t(u32, string_data->common.prerequisites_size,
-+				     MAX_PREREQUISITES_SIZE);
-+
-+			for (reqs = 0; reqs < size; reqs++) {
-+				if (elem >= string_obj_count) {
-+					pr_err("Error elem-objects package is too small\n");
-+					return -EINVAL;
-+				}
-+
-+				ret = hp_convert_hexstr_to_str(string_obj[elem + reqs].string.pointer,
-+							       string_obj[elem + reqs].string.length,
-+							       &str_value, &value_len);
-+
-+				if (ret)
-+					continue;
-+
-+				strscpy(string_data->common.prerequisites[reqs],
-+					str_value,
-+					sizeof(string_data->common.prerequisites[reqs]));
-+				kfree(str_value);
-+			}
-+			break;
-+
-+		case SECURITY_LEVEL:
-+			string_data->common.security_level = int_value;
-+			break;
-+		case STR_MIN_LENGTH:
-+			string_data->min_length = int_value;
-+			break;
-+		case STR_MAX_LENGTH:
-+			string_data->max_length = int_value;
-+			break;
-+		default:
-+			pr_warn("Invalid element: %d found in String attribute or data may be malformed\n", elem);
-+			break;
-+		}
-+
-+		kfree(str_value);
-+	}
-+
-+exit_string_package:
-+	kfree(str_value);
-+	return 0;
-+}
-+
-+/**
-+ * hp_populate_string_package_data() -
-+ * Populate all properties of an instance under string attribute
-+ *
-+ * @string_obj: ACPI object with string data
-+ * @instance_id: The instance to enumerate
-+ * @attr_name_kobj: The parent kernel object
-+ */
-+int hp_populate_string_package_data(union acpi_object *string_obj,
-+				    int instance_id,
-+				    struct kobject *attr_name_kobj)
-+{
-+	struct string_data *string_data = &bioscfg_drv.string_data[instance_id];
-+
-+	string_data->attr_name_kobj = attr_name_kobj;
-+
-+	hp_populate_string_elements_from_package(string_obj,
-+						 string_obj->package.count,
-+						 instance_id);
-+
-+	hp_update_attribute_permissions(string_data->common.is_readonly,
-+					&string_current_val);
-+	hp_friendly_user_name_update(string_data->common.path,
-+				     attr_name_kobj->name,
-+				     string_data->common.display_name,
-+				     sizeof(string_data->common.display_name));
-+	return sysfs_create_group(attr_name_kobj, &string_attr_group);
-+}
-+
-+static int hp_populate_string_elements_from_buffer(u8 *buffer_ptr, u32 *buffer_size,
-+						   int instance_id)
-+{
-+	int reqs;
-+	struct string_data *string_data = &bioscfg_drv.string_data[instance_id];
-+
-+	// VALUE:
-+	hp_get_string_from_buffer(&buffer_ptr, buffer_size, string_data->current_value,
-+				  sizeof(string_data->current_value));
-+
-+	// PATH:
-+	hp_get_string_from_buffer(&buffer_ptr, buffer_size, string_data->common.path,
-+				  sizeof(string_data->common.path));
-+
-+	// IS_READONLY:
-+	hp_get_integer_from_buffer(&buffer_ptr, buffer_size,
-+				   &string_data->common.is_readonly);
-+
-+	//DISPLAY_IN_UI:
-+	hp_get_integer_from_buffer(&buffer_ptr, buffer_size,
-+				   &string_data->common.display_in_ui);
-+
-+	// REQUIRES_PHYSICAL_PRESENCE:
-+	hp_get_integer_from_buffer(&buffer_ptr, buffer_size,
-+				   &string_data->common.requires_physical_presence);
-+
-+	// SEQUENCE:
-+	hp_get_integer_from_buffer(&buffer_ptr, buffer_size,
-+				   &string_data->common.sequence);
-+
-+	// PREREQUISITES_SIZE:
-+	hp_get_integer_from_buffer(&buffer_ptr, buffer_size,
-+				   &string_data->common.prerequisites_size);
-+
-+	if (string_data->common.prerequisites_size > MAX_PREREQUISITES_SIZE) {
-+		/* Report a message and limit prerequisite size to maximum value */
-+		pr_warn("String Prerequisites size value exceeded the maximum number of elements supported or data may be malformed\n");
-+		string_data->common.prerequisites_size = MAX_PREREQUISITES_SIZE;
-+	}
-+
-+	// PREREQUISITES:
-+	for (reqs = 0; reqs < string_data->common.prerequisites_size; reqs++)
-+		hp_get_string_from_buffer(&buffer_ptr, buffer_size,
-+					  string_data->common.prerequisites[reqs],
-+					  sizeof(string_data->common.prerequisites[reqs]));
-+
-+	// SECURITY_LEVEL:
-+	hp_get_integer_from_buffer(&buffer_ptr, buffer_size,
-+				   &string_data->common.security_level);
-+
-+	// STR_MIN_LENGTH:
-+	hp_get_integer_from_buffer(&buffer_ptr, buffer_size,
-+				   &string_data->min_length);
-+
-+	// STR_MAX_LENGTH:
-+	hp_get_integer_from_buffer(&buffer_ptr, buffer_size,
-+				   &string_data->max_length);
-+
-+	return 0;
-+}
-+
-+/**
-+ * hp_populate_string_buffer_data() -
-+ * Populate all properties of an instance under string attribute
-+ *
-+ * @buffer_ptr: Buffer pointer
-+ * @buffer_size: Buffer size
-+ * @instance_id: The instance to enumerate
-+ * @attr_name_kobj: The parent kernel object
-+ */
-+int hp_populate_string_buffer_data(u8 *buffer_ptr, u32 *buffer_size,
-+				   int instance_id,
-+				   struct kobject *attr_name_kobj)
-+{
-+	struct string_data *string_data = &bioscfg_drv.string_data[instance_id];
-+
-+	string_data->attr_name_kobj = attr_name_kobj;
-+
-+	hp_populate_string_elements_from_buffer(buffer_ptr, buffer_size,
-+						instance_id);
-+
-+	hp_update_attribute_permissions(string_data->common.is_readonly,
-+					&string_current_val);
-+	hp_friendly_user_name_update(string_data->common.path,
-+				     attr_name_kobj->name,
-+				     string_data->common.display_name,
-+				     sizeof(string_data->common.display_name));
-+
-+	return sysfs_create_group(attr_name_kobj, &string_attr_group);
-+}
-+
-+/**
-+ * hp_exit_string_attributes() - Clear all attribute data
-+ *
-+ * Clears all data allocated for this group of attributes
-+ */
-+void hp_exit_string_attributes(void)
-+{
-+	int instance_id;
-+
-+	for (instance_id = 0; instance_id < bioscfg_drv.string_instances_count;
-+	     instance_id++) {
-+		struct kobject *attr_name_kobj =
-+			bioscfg_drv.string_data[instance_id].attr_name_kobj;
-+
-+		if (attr_name_kobj)
-+			sysfs_remove_group(attr_name_kobj, &string_attr_group);
-+	}
-+	bioscfg_drv.string_instances_count = 0;
-+
-+	kfree(bioscfg_drv.string_data);
-+	bioscfg_drv.string_data = NULL;
++	bioscfg_drv.sure_start_attr_kobj = attr_name_kobj;
++	return sysfs_create_group(attr_name_kobj, &sure_start_attr_group);
 +}
 -- 
 2.34.1
