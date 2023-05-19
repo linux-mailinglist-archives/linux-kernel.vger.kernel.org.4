@@ -2,72 +2,649 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B6377091C4
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 10:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7C7D7091CA
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 10:40:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230002AbjESIjJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 04:39:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32882 "EHLO
+        id S230018AbjESIkL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 19 May 2023 04:40:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjESIjH (ORCPT
+        with ESMTP id S229533AbjESIkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 04:39:07 -0400
-Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 548AEE5A;
-        Fri, 19 May 2023 01:39:05 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046049;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0Vj-4ra6_1684485529;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0Vj-4ra6_1684485529)
-          by smtp.aliyun-inc.com;
-          Fri, 19 May 2023 16:39:02 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     jesse.brandeburg@intel.com
-Cc:     anthony.l.nguyen@intel.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] iavf: Remove useless else if
-Date:   Fri, 19 May 2023 16:38:48 +0800
-Message-Id: <20230519083848.58828-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Fri, 19 May 2023 04:40:08 -0400
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E80B8107;
+        Fri, 19 May 2023 01:40:05 -0700 (PDT)
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-643990c5373so3016499b3a.1;
+        Fri, 19 May 2023 01:40:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684485605; x=1687077605;
+        h=content-transfer-encoding:fcc:content-language:user-agent
+         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=z/UOchxxUnmXIMoyxuk1iTxwCG4937jStQaVujCO6JY=;
+        b=FdZ1bGYpNoKEPA8eHdKFn1SgKG6CUHUFy34FznmRETNluaEWz1Lvcxd1aghDLehnnv
+         ncNGEwmR44Zn97W/UVaivjiL9l7dd5osGgAfl4+FEuyovTKf+30c+y3px4qnjFCtOynP
+         UXLAzFmXw3qMUzBVAnnIuE121qaH58yZK4JfmTQOceEKkf0cGYge50lkuo6RlicUr5OU
+         TnHIOS/t9sUTswzyYBnzHPcCq26c1CIYGhsPFLgMM7aES48HJahOxtb4Maj05nEV1o44
+         8lU6AXiT+qe1wrO10W8XbFN2GyzBka5oTkIqop13NC2PH5iPBDtHRCC+4+JQfJcKg7y4
+         PPWQ==
+X-Gm-Message-State: AC+VfDwA4sGdiGf43SKJjwtjfjdtY/9uJ8k5FOlQ5QUfi/Adez/fbPl9
+        oey1XF1Yri/lXb0fUBrcjB9nHfSYex9ZNvFO
+X-Google-Smtp-Source: ACHHUZ6GYQZlYvHe/szDTDmTqCUzzwH881NyUk/HVYvJVZBdmWPNDwiE2VQ6Rodfx9b3roRFYXTCyw==
+X-Received: by 2002:a05:6a21:6d95:b0:ff:d437:13fb with SMTP id wl21-20020a056a216d9500b000ffd43713fbmr1434517pzb.49.1684485605116;
+        Fri, 19 May 2023 01:40:05 -0700 (PDT)
+Received: from localhost ([116.128.244.169])
+        by smtp.gmail.com with ESMTPSA id v12-20020a17090a4ecc00b00252b3328ad8sm970042pjl.0.2023.05.19.01.40.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 May 2023 01:40:04 -0700 (PDT)
+From:   Hongyu Xie <xiehongyu1@kylinos.cn>
+To:     rdunlap@infradead.org, linux@armlinux.org.uk,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org
+Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xy521521@gmail.com, Hongyu Xie <xiehongyu1@kylinos.cn>
+Subject: Re: [RFC PATCH v2 -next] tty: serial: add panic serial helper
+Date:   Fri, 19 May 2023 16:40:01 +0800
+Message-Id: <0507937d-33ed-9396-2efd-c749acdcefc7@kylinos.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <a8c0f2b3-fcc3-ee94-16b5-ef37b4ec37a9@infradead.org>
+References: <20230518102903.1179581-1-xiehongyu1@kylinos.cn> <a8c0f2b3-fcc3-ee94-16b5-ef37b4ec37a9@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_BLOCKED,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Thunderbird/102.11.0
+Content-Language: en-US
+X-Mozilla-Draft-Info: internal/draft; vcard=0; receipt=0; DSN=0; uuencode=0; attachmentreminder=0; deliveryformat=1
+X-Identity-Key: id1
+Fcc:    imap://xiehongyu1%40kylinos.cn@imap.kylinos.cn/Sent
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The assignment of the else and if branches is the same, so the if else
-here is redundant, so we remove it.
+Hi,
 
-./drivers/net/ethernet/intel/iavf/iavf_main.c:2203:6-8: WARNING: possible condition with no effect (if == else).
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=5255
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- drivers/net/ethernet/intel/iavf/iavf_main.c | 2 --
- 1 file changed, 2 deletions(-)
+在 2023/5/19 13:33, Randy Dunlap 写道:
+> Hi--
+> 
+> On 5/18/23 03:29, Hongyu Xie wrote:
+>> It was inspired by kgdboc.
+>>
+>> This is a debug module that allows you to get all kernel logs
+>> after panic.
+>>
+>> Normally you need to attach a USB-to-UART tool or enable kdump
+>> before panic happens to get log from kernel after panic. If you
+>> didn't do that and kdump is not working, you can't get any log to
+>> know what happened before panic. If you have a USB-to-UART tool
+>> and the uart port on your computer is working. This module helps
+>> you to get all kernel log after panic() is called.
+>>
+>> To use this, see Documentation/dev-tools/panic_serial_helper.rst.
+>>
+>> Tested on arm64, x86 device.
+>>
+>> Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
+>> ---
+>>
+>> v2:
+>>   1. add a doc file
+>>   2. remove the password thing
+>>
+>>   .../dev-tools/panic_serial_helper.rst         | 143 +++++
+> 
+> This file name (panic_serial_helper) also needs to be added to
+> Documentation/dev-tools/index.rst.
+> 
+>>   MAINTAINERS                                   |   5 +
+>>   drivers/tty/serial/Kconfig                    |  46 ++
+>>   drivers/tty/serial/Makefile                   |   1 +
+>>   drivers/tty/serial/panic_serial_helper.c      | 571 ++++++++++++++++++
+>>   include/linux/panic.h                         |   1 +
+>>   kernel/panic.c                                |  12 +
+>>   7 files changed, 779 insertions(+)
+>>   create mode 100644 Documentation/dev-tools/panic_serial_helper.rst
+>>   create mode 100644 drivers/tty/serial/panic_serial_helper.c
+>>
+>> diff --git a/Documentation/dev-tools/panic_serial_helper.rst b/Documentation/dev-tools/panic_serial_helper.rst
+>> new file mode 100644
+>> index 000000000000..adbc4026fbe4
+>> --- /dev/null
+>> +++ b/Documentation/dev-tools/panic_serial_helper.rst
+>> @@ -0,0 +1,143 @@
+>> +.. SPDX-License-Identifier: GPL-2.0
+>> +
+> 
+> The "===...===" lines here must be at least as long as the heading.
+> 
+>> +=================================================
+>> +Using panic serial helper to get kernel logs after panic
+>> +=================================================
+> 
+>> +========================================================
+>> +Using panic serial helper to get kernel logs after panic
+>> +========================================================
+> 
+>> +
+>> +:Author: Hongyu Xie <xiehongyu1@kylinos.cn>
+>> +
+>> +What is this?
+>> +============
+> 
+>     =============
+> 
+>> +
+>> +A debug module inspired by kgdboc that allows you to get all kernel logs
+>> +after panic.
+>> +
+>> +When do you need it and why?
+>> +============
+> 
+>     =============================
+> 
+>> +
+>> +When
+>> +--------------
+>> +
+>> +Didn't enable debugging tool like Kdump and didn't connect a USB-to-UART
+>> +tool to the debug uart port on your PC before panic.
+>> +
+>> +Why
+>> +--------------
+>> +
+>> +There are many debugging methods to know what was going on before panic.
+>> +
+>> +Kdump, for example. If Kdump is enabled, you can get a core image after
+>> +panic. Then use GDB or Crash to debug that core image to know what happened
+>> +before panic(see ``Documentation/admin-guide/kdump/kdump.rst`` for more
+> 
+>     before panice (see
+> 
+>> +information about Kdump).
+>> +
+>> +Another way is to connect the UART side of a USB-to-UART tool to the
+> 
+> Please use "UART" consistently (not "uart").
+> 
+>> +debugging uart port(normally a 3 pin slot on the motherborad or a RS232
+> 
+>     debugging UART port (normally a 3-pin            motherboard or an RS232
+> 
+>> +port on the back panel of your PC) before panic happens. Then connect the
+> 
+> I wish I had a PC with a serial port so that I could test/use this.
+> 
+>> +USB side of a USB-to-UART tool to another PC. You can read all the kernel
+>> +logs coming from that uart port through apps like minicom on another PC.
+>> +So when panic happens you'll know what was going on.
+>> +
+>> +What if Kdump hasn't been enabled? And in production environment you don't
+>> +always connect a USB-to-UART tool before panic happens.
+>> +
+>> +So if Kdump is not enabled, you can use this module to get all the kernel
+>> +logs after panic.
+> 
+> if this module is loaded prior to the panic.
+> 
+>> +
+>> +How to use it?
+>> +============
+> 
+>     ===============
+>> +
+>> +Prerequisites
+>> +--------------
+>> +
+>> +1. Same as kgdboc, the UART driver must implement two callbacks in the
+>> +struct uart_ops. See ``Documentation/dev-tools/kgdb.rst`` section
+>> +``kgdboc and uarts``
+>> +
+>> +2. Your PC has an uart port and it's working.
+>> +
+>> +How
+>> +--------------
+>> +
+>> +First you need to enable ``CONFIG_PANIC_SERIAL_HELPER`` in your
+>> +config. To enable ``CONFIG_PANIC_SERIAL_HELPER`` you should look under
+>> +:menuselection:
+>> +`Device Drivers
+>> +  --> Character devices
+>> +    --> Enable TTY (TTY [=y])
+>> +      --> Serial drivers`
+>> +and select
+>> +:menuselection:`debug through uart after panic`.
+>> +
+>> +Second, build and update the kernel image. Then wait for panic.
+>> +
+>> +After panic, you need to do the following,
+> 
+>                                     following:
+> 
+>> +1. connect the uart side of an USB-to-UART tool to any uart
+>> +  port on your device(PC, server, Laptop, etc...) after panic.
+> 
+>                    device (PC,                etc.).
+> 
+> You have already said "after panic".
+> 
+>> +  Connect the USB side of that tool to another PC. Open
+>> +  minicom(or other app) on that PC, and set "/dev/ttyUSB0"(or
+> 
+>       minicom (or                                     ttyUSB0" (or
+> 
+>> +  "/dev/ttyUSB1 if there is already another USB-to-UART tool
+>> +  connected to your device) with "115200 8N1".
+>> +
+>> +  It automatically selects the port where you first pressing the
+> 
+>                                                   first press the
+> 
+>> +  "Enter"(some keyboard labeled with "Return")
+> 
+>       "Enter" key (some keyboards label this with "Return").
+> 
+>> +
+>> +2. press "Enter"(some keyboard labeled with "Return") in that
+> 
+>              "Enter" (or "Return") in that
+> 
+>> +  minicom window, you'll get a help menu,
+> 
+>       minicom window; you'll get a help meu:
+> 
+>> +  "
+>> +  help:
+>> +      -a      show all kernel msg
+>> +      -3      show S3 msg
+>> +      -4      show S4 msg
+>> +      -filter-[string]        show msg contains [string]
+> 
+>                                            containing
+> 
+>> +      -q-     quit
+>> +  "
+>> +
+>> +see ``Help menu options`` for details.
+>> +
+>> +3. finally, type 'a', '3', '4', 'q' or "filter-xxx" then press
+>> + "Enter" to get what you want.
+>> +
+>> +Help menu options
+>> +--------------
+>> +Available options:
+>> +
+>> + - a
+>> +
+>> +   Show all the messages starting from ``Booting Linux on ...``
+>> +
+>> + - 3
+>> +
+>> +   If STR happened before panic, this will show messages starting from
+> 
+> What "STR" is this?
+Suspend to ram, also known as S3.
+> 
+>> +   ``PM: suspend entry...``
+>> +
+>> + - 4
+>> +
+>> +   If STD happened before panic, this will show messages starting from
+> 
+> Is this "STD" or "STR"?
+STD, suspend to disk, also known as S4.
+> 
+>> +   ``PM: hibernation entry...``
+>> +
+>> + - filter-[string]
+>> +
+>> +   Only show messages that contain ``string``. For example, if you're only
+>> +   interesting in message lines that contain ``CPU``, you just input
+>> +   ``filter-CPU``.
+>> +   Here is an output example for fitering ``CPU``::
+> 
+>                                      filtering
+> 
+> It might be nice to provide case-ignored filter matching, e.g.,
+> find "CPU" or "cpu".
+Ok, it'll be in v3.
+> 
+>> +
+>> +   <6>[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x701f6633
+>> +   <6>[    0.000000] Detected PIPT I-cache on CPU0
+>> +   <6>[    0.000000] CPU features: detected: Kernel page table isolation (K
+>> +   ...
+>> +   <6>[    0.000000] GICv3: CPU0: using allocated LPI pending table @0x0000
+>> +   <6>[    0.002411] smp: Bringing up secondary CPUs ...
+>> +   <6>[    0.039105] Detected PIPT I-cache on CPU1
+>> +   ...
+>> +   <4>[    6.432129] CPU: 3 PID: 392 Comm: (crub_all) Tainted: G        W
+>> +   <4>[    6.560279] CPU: 2 PID: 478 Comm: (ostnamed) Tainted: G        W
+>> +   ...
+>> +   <4>[  225.297828] CPU: 4 PID: 0 Comm: swapper/4 Tainted: G        W
+>> +   <2>[  225.297909] SMP: stopping secondary CPUs
+>> +   <0>[  225.297919] CPU features: 0x000000,02000800,0400421b
+>> +
+>> + - q-
+>> +
+>> +   return to help menu.
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 5bd0f510f744..951c6804b3cb 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -11552,6 +11552,11 @@ F:	include/linux/kgdb.h
+>>   F:	kernel/debug/
+>>   F:	kernel/module/kdb.c
+>>   
+>> +PANIC SERIAL CONSOLE
+>> +M:	Hongyu Xie <xiehongyu1@kylinos.cn>
+>> +F:	drivers/tty/serial/panic_serial_helper.c
+>> +F:	drivers/tty/serial/panic_serial_helper.h
+>> +
+> 
+> This is the wrong place for "PANIC SERIAL CONSOLE".
+> The MAINTAINERS file should remain in alphabetical order.
+> Please move this to after
+> PANASONIC LAPTOP ACPI EXTRAS DRIVER
+> Thanks.
+> 
+>>   KHADAS MCU MFD DRIVER
+>>   M:	Neil Armstrong <neil.armstrong@linaro.org>
+>>   L:	linux-amlogic@lists.infradead.org
+>> diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+>> index 398e5aac2e77..66cc7bddf561 100644
+>> --- a/drivers/tty/serial/Kconfig
+>> +++ b/drivers/tty/serial/Kconfig
+>> @@ -198,6 +198,52 @@ config SERIAL_KGDB_NMI
+>>   
+>>   	  If unsure, say N.
+>>   
+> 
+> I have comments here and similar ones in the documentation file.
+> It would be quite OK to make the Kconfig help text shorter and refer
+> to the Documentation file for more detailed help.
+> 
+>> +config PANIC_SERIAL_HELPER
+>> +	tristate "debug through uart after panic"
+>> +	depends on PANIC_TIMEOUT=0
+>> +	select CONSOLE_POLL
+>> +	help
+>> +	  This is a debug module that allows you to get all kernel logs
+>> +	  after panic.
+>> +
+>> +	  Normally you need to attach a USB-to-UART tool or enable kdump
+>> +	  before panic happens to get log from kernel after panic. If you
+>> +	  didn't do that and kdump is not working, you can't get any log to
+>> +	  know what happened before panic. If you have a USB-to-UART tool
+>> +	  and the uart port on your computer is working. This module helps
+> 
+> 	                                     is working, this module helps
+> 
+>> +	  you to get all kernel log after panic() is called.
+>> +
+>> +	  This module use serial port in poll mode, so it's more stable
+> 
+> 	              uses
+> 
+>> +	  than other debugging methods.
+>> +
+>> +	  To use this, you need to do the following after panic,
+>> +	    1. connect the uart side of an USB-to-UART tool to any uart
+>> +	    port on your device(PC, server, Laptop, etc...) after panic.
+> 
+> 	                 device (PC,                etc.).
+> 
+>> +	    Connect the USB side of that tool to another PC. Open
+>> +	    minicom(or other app) on that PC, and set "/dev/ttyUSB0"(or
+> 
+> 	    minicom (or                                     ttyUSB0" (or
+> 
+>> +	    "/dev/ttyUSB1 if there is already another USB-to-UART tool
+>> +	    connected to your device) with "115200 8N1".
+>> +
+>> +	    It automatically selects the port where you first pressing the
+> 
+> 	                                                first press the
+> 
+>> +	    "Enter"(some keyboard labeled with "Return")
+> 
+> 	    "Enter" key (some keyboards label this as "Return").
+> 
+>> +
+>> +	    2.press "Enter"(some keyboard labeled with "Return") in that
+> 
+> 	    2. press "Enter" (or "Return") in that
+> 
+>> +	    minicom window, you'll get a help menu,
+> 
+> 	            window; you'll get a help menu:
+> 
+>> +	    "
+>> +	    help:
+>> +	        -a      show all kernel msg
+>> +	        -3      show S3 msg
+>> +	        -4      show S4 msg
+>> +	        -filter-[string]        show msg contains [string]
+> 
+> 	                                         containing
+> 
+>> +	        -q-     quit
+>> +	    "
+>> +
+>> +	   3.Finally, type 'a', '3', '4', 'q' or "filter-xxx" then press
+> 
+> 	   3. Finally,
+> 
+>> +	   "Enter" to get what you want.
+>> +
+>> +	  Say Y if you have an UART port that is working.  If unsure, say N
+> 
+> 	                                                              say N.
+> 
+>> +	  Say M if you want add this as a module driver.
+> 
+> 	  The moudul will be called panic_serial_helper.
+> 
+>> +
+>>   config SERIAL_MESON
+>>   	tristate "Meson serial port support"
+>>   	depends on ARCH_MESON || COMPILE_TEST
+>> diff --git a/drivers/tty/serial/panic_serial_helper.c b/drivers/tty/serial/panic_serial_helper.c
+>> new file mode 100644
+>> index 000000000000..59863f777331
+>> --- /dev/null
+>> +++ b/drivers/tty/serial/panic_serial_helper.c
+>> @@ -0,0 +1,571 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * panic_serial_helper.c Debug through uart when panic.
+>> + *
+>> + * Copyright (C) 2023 Xie Hongyu <xiehongyu1@kylinos.cn>
+>> + *
+>> + * Inspired by kgdboc.
+>> + *
+>> + */
+>> +
+>> +#define MODULE_NAME "panic_seial_helper"
+> 
+>                                serial
+> 
+>> +#define pr_fmt(fmt) MODULE_NAME ": " fmt
+>> +
+>> +#include <linux/kmsg_dump.h>
+>> +#include <linux/bsearch.h>
+>> +#include <linux/slab.h>
+>> +#include <linux/delay.h>
+>> +#include <linux/module.h>
+>> +#include <linux/tty_driver.h>
+>> +#include <linux/serial_core.h>
+>> +
+>> +#define S3_ENTRY "PM: suspend entry"
+>> +#define S3_EXIT "PM: suspend exit"
+>> +#define S4_ENTRY "PM: hibernation entry"
+>> +#define S4_EXIT "PM: hibernation exit"
+>> +
+>> +/* list to store msg lines */
+>> +static LIST_HEAD(psh_list);
+>> +
+>> +/* msg line prototype */
+>> +struct dmesg_lines {
+>> +	struct list_head entry;
+>> +	char *buf;
+>> +	int size;
+>> +};
+>> +
+>> +/* panic serial helper status*/
+>> +enum PSHS {
+>> +	PSHS_INIT,
+>> +	PSHS_WAIT_HELP_INPUT,
+>> +};
+>> +
+>> +/* panic serial helper msg type */
+>> +enum PSHM_TYPE {
+>> +	PSHM_TYPE_ALL,
+>> +	PSHM_TYPE_S3,
+>> +	PSHM_TYPE_S4,
+>> +	PSHM_TYPE_STRINGS,
+>> +	PSHM_TYPE_QUIT,
+>> +};
+>> +
+>> +/* whether uart is dumping msg */
+>> +static bool dumping_msg;
+>> +
+>> +/* to filter msg */
+>> +static char filter[256] = {0};
+>> +
+>> +struct psh_buf {
+>> +#define PSH_BUF_SIZE 256
+>> +	char buf[PSH_BUF_SIZE];
+>> +	int cur;
+>> +};
+>> +
+>> +static const char psh_tty_types[][32] = {
+>> +	{"ttyAMA"},
+>> +	{"ttyS"},
+>> +	{"ttyPS"},
+>> +	{"ttyLP"},
+>> +	{"ttyARC"},
+>> +	{"ttyAL"},
+>> +	{"ttyUL"},
+>> +};
+>> +
+>> +#define TTY_OPS "115200n8n"
+> 
+> Other places here say "115200 8N1". Is there a typo above?
+Not a typo, the order that uart_parse_options parse is parity, bits, 
+flow. "115200 8N1" shows in minicom setting window.
+> 
+>> +
+>> +struct psh_serial_dev {
+>> +	struct list_head entry;
+>> +	struct tty_driver *drv;
+>> +	struct psh_buf buf;
+>> +	enum PSHS psh_status;
+>> +	enum PSHM_TYPE psh_msg_type;
+>> +	int line;
+>> +};
+>> +
+>> +struct psh_serial_dev *psh_dev;
+>> +
+>> +/* char handle prototype */
+> 
+> s/handle/handler/ IMO
+> and in other places also.
+> 
+>> +struct c_handle {
+>> +	char c;
+>> +	int (*handler)(struct psh_serial_dev *dev, void *d);
+>> +};
+>> +
+> 
+> [snip]
+What does "[snip]" mean? Can't find it on Bing or Google.
+> 
+>> +
+>> +static void psh_help(struct psh_serial_dev *dev)
+>> +{
+>> +	static const char help[] = "\nhelp:\n";
+>> +	static const char show_all[] = "\t-a\tshow all kernel msg\n";
+>> +	static const char show_s3[] = "\t-3\tshow S3 msg\n";
+>> +	static const char show_s4[] = "\t-4\tshow S4 msg\n";
+>> +	static const char _filter[] =
+>> +		"\t-filter-[string]\tshow msg contains [string]\n";
+> 
+> 		                              containing
+> 
+>> +	static const char _quit[] = "\t-q-\tquit\n";
+>> +
+>> +	psh_put_strings(dev, help, strlen(help));
+>> +	psh_put_strings(dev, show_all, strlen(show_all));
+>> +	psh_put_strings(dev, show_s3, strlen(show_s3));
+>> +	psh_put_strings(dev, show_s4, strlen(show_s4));
+>> +	psh_put_strings(dev, _filter, strlen(_filter));
+>> +	psh_put_strings(dev, _quit, strlen(_quit));
+>> +}
+>> +
+> 
+> [snip]
+> 
+>> +
+>> +/* try all uart port under the same driver */
+>> +static int psh_try_all_uart_port(struct uart_driver *drv)
+>> +{
+>> +	struct psh_serial_dev *dev = NULL;
+>> +	struct uart_driver *driver = NULL;
+>> +	char drv_name[64] = {0};
+>> +	int count = 10000;
+>> +	int i = 0, nr = drv->nr;
+>> +
+>> +	for (i = 0; i < nr; i++) {
+>> +		memset(drv_name, 0, sizeof(drv_name));
+>> +		snprintf(drv_name, sizeof(drv_name), "%s%d,%s",
+>> +			drv->driver_name,
+>> +			i, TTY_OPS);
+>> +
+>> +		driver = psh_find_uart_driver(drv_name);
+>> +		if (!driver)
+>> +			continue;
+>> +
+>> +		dev = create_psh_serial_dev(driver, i);
+>> +		if (!dev) {
+>> +			tty_driver_kref_put(driver->tty_driver);
+>> +			driver = NULL;
+>> +			continue;
+>> +		}
+>> +
+>> +		count = 10000;
+> 
+> Already init-ed to 10000 above...
+Need it here. Out side of while loop is a for loop.
+> 
+>> +		while (count-- > 0) {
+>> +			psh_wait_for_input(dev);
+>> +
+>> +			if (psh_dev)
+>> +				return 0;
+>> +		}
+>> +
+>> +		tty_driver_kref_put(driver->tty_driver);
+>> +		driver = NULL;
+>> +		kfree(dev);
+>> +		dev = NULL;
+>> +	}
+>> +
+>> +	return -1;
+>> +}
+> 
+> 
+> Thanks.
+Thanks for your kind reply. I'll send v3 asap.
 
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c b/drivers/net/ethernet/intel/iavf/iavf_main.c
-index 2de4baff4c20..cf8538cebfe0 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_main.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
-@@ -2200,8 +2200,6 @@ iavf_set_vlan_offload_features(struct iavf_adapter *adapter,
- 		vlan_ethertype = ETH_P_8021Q;
- 	else if (prev_features & (NETIF_F_HW_VLAN_STAG_RX | NETIF_F_HW_VLAN_STAG_TX))
- 		vlan_ethertype = ETH_P_8021AD;
--	else if (prev_features & (NETIF_F_HW_VLAN_CTAG_RX | NETIF_F_HW_VLAN_CTAG_TX))
--		vlan_ethertype = ETH_P_8021Q;
- 	else
- 		vlan_ethertype = ETH_P_8021Q;
- 
--- 
-2.20.1.7.g153144c
-
+Hongyu Xie
