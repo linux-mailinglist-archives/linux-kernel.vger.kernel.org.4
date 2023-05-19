@@ -2,138 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A39708E70
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 05:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E748708E73
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 05:51:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbjESDr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 23:47:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37956 "EHLO
+        id S229904AbjESDvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 23:51:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbjESDry (ORCPT
+        with ESMTP id S229452AbjESDvQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 23:47:54 -0400
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0759183;
-        Thu, 18 May 2023 20:47:51 -0700 (PDT)
-X-UUID: db552eac63e74346acb950bb270ce840-20230519
-X-CID-O-RULE: Release_Ham
-X-CID-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.22,REQID:e8bff93f-6c4d-476a-9c4c-5a3306c8d5a1,IP:20,
-        URL:0,TC:0,Content:-25,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,AC
-        TION:release,TS:-20
-X-CID-INFO: VERSION:1.1.22,REQID:e8bff93f-6c4d-476a-9c4c-5a3306c8d5a1,IP:20,UR
-        L:0,TC:0,Content:-25,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-        ON:release,TS:-20
-X-CID-META: VersionHash:120426c,CLOUDID:1c0a58c1-e32c-4c97-918d-fbb3fc224d4e,B
-        ulkID:2305191142541VNJAY6F,BulkQuantity:1,Recheck:0,SF:24|17|19|44|102,TC:
-        nil,Content:0,EDM:-3,IP:-2,URL:0,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0,OSI
-        :0,OSA:0,AV:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-UUID: db552eac63e74346acb950bb270ce840-20230519
-X-User: lijun01@kylinos.cn
-Received: from localhost.localdomain [(210.12.40.82)] by mailgw
-        (envelope-from <lijun01@kylinos.cn>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1480332580; Fri, 19 May 2023 11:47:39 +0800
-From:   lijun <lijun01@kylinos.cn>
-To:     robert.moore@intel.com, rafael.j.wysocki@intel.com
-Cc:     linux-acpi@vger.kernel.org, evel@acpica.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] acpi: add a new line after ACPI_STATE_COMMON
-Date:   Fri, 19 May 2023 11:47:36 +0800
-Message-Id: <20230519034736.3006661-1-lijun01@kylinos.cn>
-X-Mailer: git-send-email 2.34.1
+        Thu, 18 May 2023 23:51:16 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B0BD183;
+        Thu, 18 May 2023 20:51:15 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 75B4532008FB;
+        Thu, 18 May 2023 23:51:13 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Thu, 18 May 2023 23:51:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1684468273; x=1684554673; bh=4ecmHSmtpaMehpa+G3raIzuSZ3nRd9Ghq9g
+        2WcWGtXY=; b=Bca11Fcs0kSlKYIPuv2YpWZ9GJJRanWjT8QE2bT0Rl366OooonO
+        iD29iKWvvpkzT1JSrJbRnFsZ5m+UmL8k9A0fvgIr7j2a4B1rh76qwu1yJ0YphDgC
+        syWHq3GrDemYVCOEXYQxUK8PjDGsqJxg+GxAP2RZMlCCfaaHsuj/wAsv7yLhP++N
+        0lxn5h1FAwWQexge6VGW03jLmiSIcynpU5+QAmZGdw5WOm3glHLjukxk0FQGGQ88
+        0Q1JV0SgpiGtpDyG5XVHKwCdxWVqevewoXEBAPCKGkIBaLIHu6uOeAgIAJLxNizG
+        raSYXEphI8TmqvoM99ZNcz+EmFQipaeug2A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1684468273; x=1684554673; bh=4ecmHSmtpaMehpa+G3raIzuSZ3nRd9Ghq9g
+        2WcWGtXY=; b=D0UpIsf0zihnnkP/P9K6Em33imMuvchuQa4sj6g9N+CKDPtSYtD
+        IXKWm9lIN0I7sKZs3okM40wy8Nm30Z2Z9GWLw0082toSBnE1ylShpsSb7UfZJ1j2
+        JOzqwtID67Kmtg5PRqUAHi1cveJR+GBTnXCPz9zkR8GFdPBf7VjWhN8EXpIKr6tt
+        1UwF1zrSin0CMupkbjzj7dcmUB9djZNhIOGrW4lbXTACecmdzi5c929YdSsMAIPh
+        ACBUmHhGbMjgXfFD430xRBLOkUhDgI20KyaJdx/dJQ5fZBdVHnwfU6MFsKamVguP
+        Qxtj8B7uB/8fYlDanKYsge1PGlezwAHlplg==
+X-ME-Sender: <xms:MPJmZDrYnw1bwY4EvVwyivz5Wm0VA6aQESGfI0yEELH6kQMcabiSCw>
+    <xme:MPJmZNpIwVL29h5HbgrfnR3alu3lG2l6uannRfy1TmuTyKt5JX5in5Z6Sk71CCjtM
+    4TDDJN63LtvbK6dbQ>
+X-ME-Received: <xmr:MPJmZAM5GBC69vZAr8MTHmOoXuaHtAgqtvcaRt6f20EYQaTbCyAyZPdz8qI-zAZF-NbKwboQYu7LPbc8DI86DC6KlwLtv4QGKCVYhti_zXWYbpqEiuQvR1IBow>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeigedgjeeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfvfevfhfhufgjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
+    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpeduueeugfelledugeeugedvgefghfevjefgieeljeevgeeihfff
+    veeiffeivdekheenucffohhmrghinhepghhithhhuhgsrdgtohhmnecuvehluhhsthgvrh
+    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshgrmhhuvghlsehshhholhhl
+    rghnugdrohhrgh
+X-ME-Proxy: <xmx:MPJmZG5kMAtHd05KPf6MfRSgQf9YZrTIf6Y9nhF11O4rK48tPprLPw>
+    <xmx:MPJmZC5bgXOG0CQsw0Gq035YheAIv65t2eXnSNG4MdbKnzdk-r6hcg>
+    <xmx:MPJmZOjCTdk-u1fCHnvD4PljGYnNTq-eUt-v41yATKdXlhD9fIgyUg>
+    <xmx:MfJmZBSM6qgbBdmi7kiMe98K5lJX7Pd0T_NIJe7_1HVXHOdaf4sXqw>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 18 May 2023 23:51:11 -0400 (EDT)
+Message-ID: <accfadfc-6aea-2376-9cf4-1a989626eaf0@sholland.org>
+Date:   Thu, 18 May 2023 22:51:09 -0500
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Content-Language: en-US
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+References: <20230518152244.2178-1-jszhang@kernel.org>
+ <20230518152244.2178-8-jszhang@kernel.org>
+From:   Samuel Holland <samuel@sholland.org>
+Subject: Re: [PATCH v4 07/10] riscv: dts: bouffalolab: add the bl808 SoC base
+ device tree
+In-Reply-To: <20230518152244.2178-8-jszhang@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-when i read here ,the "ACPI_STATE_COMMON" before the "u8", I feel confused,
-"ACPI_STATE_COMMON" and "u8" in a same line ，just looks cleaner,
-but causing poor readability.
+Hi Jisheng,
 
-Signed-off-by: lijun <lijun01@kylinos.cn>
----
- drivers/acpi/acpica/aclocal.h | 21 ++++++++++++++-------
- 1 file changed, 14 insertions(+), 7 deletions(-)
+On 5/18/23 10:22, Jisheng Zhang wrote:
+> Add a baisc dtsi for the bouffalolab bl808 SoC.
+> 
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+> ---
+>  arch/riscv/boot/dts/bouffalolab/bl808.dtsi | 73 ++++++++++++++++++++++
+>  1 file changed, 73 insertions(+)
+>  create mode 100644 arch/riscv/boot/dts/bouffalolab/bl808.dtsi
+> 
+> diff --git a/arch/riscv/boot/dts/bouffalolab/bl808.dtsi b/arch/riscv/boot/dts/bouffalolab/bl808.dtsi
+> new file mode 100644
+> index 000000000000..87906fe51db5
+> --- /dev/null
+> +++ b/arch/riscv/boot/dts/bouffalolab/bl808.dtsi
+> @@ -0,0 +1,73 @@
+> +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
+> +/*
+> + * Copyright (C) 2022 Jisheng Zhang <jszhang@kernel.org>
+> + */
+> +
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +/ {
+> +	compatible = "bouffalolab,bl808";
+> +	#address-cells = <1>;
+> +	#size-cells = <1>;
+> +
+> +	cpus {
+> +		timebase-frequency = <1000000>;
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		cpu0: cpu@0 {
+> +			compatible = "thead,c906", "riscv";
+> +			device_type = "cpu";
+> +			reg = <0>;
+> +			d-cache-block-size = <64>;
+> +			d-cache-sets = <256>;
+> +			d-cache-size = <32768>;
+> +			i-cache-block-size = <64>;
+> +			i-cache-sets = <128>;
+> +			i-cache-size = <32768>;
+> +			mmu-type = "riscv,sv39";
+> +			riscv,isa = "rv64imafdc";
+> +
+> +			cpu0_intc: interrupt-controller {
+> +				compatible = "riscv,cpu-intc";
+> +				interrupt-controller;
+> +				#address-cells = <0>;
+> +				#interrupt-cells = <1>;
+> +			};
+> +		};
+> +	};
+> +
+> +	xtal: xtal-clk {
+> +		compatible = "fixed-clock";
+> +		#clock-cells = <0>;
+> +		/* This value must be overridden by the board */
+> +		clock-frequency = <0>;
+> +	};
+> +
+> +	soc {
+> +		compatible = "simple-bus";
+> +		ranges;
+> +		interrupt-parent = <&plic>;
+> +		dma-noncoherent;
+> +		#address-cells = <1>;
+> +		#size-cells = <1>;
+> +
+> +		uart3: serial@30002000 {
+> +			compatible = "bouffalolab,bl808-uart";
+> +			reg = <0x30002000 0x1000>;
+> +			interrupts = <20 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&xtal>;
 
-diff --git a/drivers/acpi/acpica/aclocal.h b/drivers/acpi/acpica/aclocal.h
-index 12d4a024f029..439b7bca4d75 100644
---- a/drivers/acpi/acpica/aclocal.h
-+++ b/drivers/acpi/acpica/aclocal.h
-@@ -571,14 +571,16 @@ ACPI_STATE_COMMON};
-  * Update state - used to traverse complex objects such as packages
-  */
- struct acpi_update_state {
--	ACPI_STATE_COMMON union acpi_operand_object *object;
-+	ACPI_STATE_COMMON
-+	union acpi_operand_object *object;
- };
- 
- /*
-  * Pkg state - used to traverse nested package structures
-  */
- struct acpi_pkg_state {
--	ACPI_STATE_COMMON u32 index;
-+	ACPI_STATE_COMMON
-+	u32 index;
- 	union acpi_operand_object *source_object;
- 	union acpi_operand_object *dest_object;
- 	struct acpi_walk_state *walk_state;
-@@ -591,7 +593,8 @@ struct acpi_pkg_state {
-  * Allows nesting of these constructs
-  */
- struct acpi_control_state {
--	ACPI_STATE_COMMON u16 opcode;
-+	ACPI_STATE_COMMON
-+	u16 opcode;
- 	union acpi_parse_object *predicate_op;
- 	u8 *aml_predicate_start;	/* Start of if/while predicate */
- 	u8 *package_end;	/* End of if/while block */
-@@ -602,11 +605,13 @@ struct acpi_control_state {
-  * Scope state - current scope during namespace lookups
-  */
- struct acpi_scope_state {
--	ACPI_STATE_COMMON struct acpi_namespace_node *node;
-+	ACPI_STATE_COMMON
-+	struct acpi_namespace_node *node;
- };
- 
- struct acpi_pscope_state {
--	ACPI_STATE_COMMON u32 arg_count;	/* Number of fixed arguments */
-+	ACPI_STATE_COMMON
-+	u32 arg_count;	/* Number of fixed arguments */
- 	union acpi_parse_object *op;	/* Current op being parsed */
- 	u8 *arg_end;		/* Current argument end */
- 	u8 *pkg_end;		/* Current package end */
-@@ -618,7 +623,8 @@ struct acpi_pscope_state {
-  * states are created when there are nested control methods executing.
-  */
- struct acpi_thread_state {
--	ACPI_STATE_COMMON u8 current_sync_level;	/* Mutex Sync (nested acquire) level */
-+	ACPI_STATE_COMMON
-+	u8 current_sync_level;	/* Mutex Sync (nested acquire) level */
- 	struct acpi_walk_state *walk_state_list;	/* Head of list of walk_states for this thread */
- 	union acpi_operand_object *acquired_mutex_list;	/* List of all currently acquired mutexes */
- 	acpi_thread_id thread_id;	/* Running thread ID */
-@@ -652,7 +658,8 @@ struct acpi_global_notify_handler {
-  * handler/dispatcher.
-  */
- struct acpi_notify_info {
--	ACPI_STATE_COMMON u8 handler_list_id;
-+	ACPI_STATE_COMMON
-+	u8 handler_list_id;
- 	struct acpi_namespace_node *node;
- 	union acpi_operand_object *handler_list_head;
- 	struct acpi_global_notify_handler *global;
--- 
-2.25.1
+This isn't strictly accurate, and gives you the right frequency if you
+are using the vendor "low_load" bootloader. Without that (e.g. when
+loading U-Boot directly from the boot ROM), the routing is:
+
+ MM_MUXPLL_160M / 1 => MM_BCLK1X
+ MM_BCLK1X / 1 => MM_UART
+
+So this UART module clock is 160 MHz, not 40 MHz.
+
+The way to make this work reliably is to add drivers for the clock tree
+(from the preliminary work at [1][2], we'll need at least five of them),
+but that is a huge effort, so I'm not sure what we want to do for now.
+
+Regards,
+Samuel
+
+[1]: https://github.com/openbouffalo/u-boot/commit/3ca800850f30
+[2]: https://github.com/openbouffalo/u-boot/commits/bl808/clk-reset
+
+> +			status = "disabled";
+> +		};
+> +
+> +		plic: interrupt-controller@e0000000 {
+> +			compatible = "bouffalolab,bl808-plic", "thead,c900-plic";
+> +			reg = <0xe0000000 0x4000000>;
+> +			interrupts-extended = <&cpu0_intc 11>, <&cpu0_intc 9>;
+> +			interrupt-controller;
+> +			#address-cells = <0>;
+> +			#interrupt-cells = <2>;
+> +			riscv,ndev = <82>;
+> +		};
+> +	};
+> +};
 
