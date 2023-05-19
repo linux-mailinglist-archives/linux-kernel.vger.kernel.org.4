@@ -2,78 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28145709A53
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 16:47:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5196D709A59
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 16:48:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231320AbjESOrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 10:47:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34926 "EHLO
+        id S232016AbjESOse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 10:48:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbjESOre (ORCPT
+        with ESMTP id S230356AbjESOsZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 10:47:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB318C2
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 07:46:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684507606;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mSlH9yed2+egztC1235eRiYpBNaIcoimkdcsVGFGI0o=;
-        b=ORXElE425COH1r8J/0IRwlGRwon6vcnakJzOOHRx1ZMkP5dZFG956pbM4qwd+iLTy68zwC
-        mg5ZXZErDr1U+KHBXPPnEMkxFJsItebJTY4mANgvh1m9OJW03W8cekNEt8FGXt7fXPXRRj
-        MVVz3ktTVkW1zofFAZKtRd5kaCVQX74=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-134-WSCmofTKPDmBcItrXgwKLQ-1; Fri, 19 May 2023 10:46:45 -0400
-X-MC-Unique: WSCmofTKPDmBcItrXgwKLQ-1
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-3f508c2b301so3469995e9.0
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 07:46:45 -0700 (PDT)
+        Fri, 19 May 2023 10:48:25 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30CFD187
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 07:48:24 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-96649b412easo532730266b.0
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 07:48:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684507702; x=1687099702;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4Pi3Rw8sgVO8xNLiFOSc3vh8jvsieIJmukGipCTTKtY=;
+        b=msg2K7jeMevFEiMSN8QJQ/3c/dYy37lA8oHNZqtHi2kDelQ3Ar1DrcDAHBEHqiSFit
+         uYkUcdH7QTIRUnajGapBzF1iozq//DsG4gEDw3uGf9IUdvwMgVv0AbKqAB35yYQ+dNHA
+         O3tLZxHzcwjRNtoZhpEuhaA+BSYcaRmHDz+TU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684507604; x=1687099604;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mSlH9yed2+egztC1235eRiYpBNaIcoimkdcsVGFGI0o=;
-        b=ZiP0qC1xr3zukLKO4dU+vUMhpRx4M0HLKZIKk1XwNRzG8op38GuDYHhm83EsLIlfGI
-         y1BDAcHoQ0VmazveuFliZI83j2JoRsR+4V4qMdyJRmuQQjA61WUJD3ntcGVGrDpfxHW5
-         Lo24BmOT40XACz14oyaeZ3ixHDOseDJY7NC3a3XsIKhvGBpTjK6QYAahgJk9a965/0Gy
-         zfxSExMJZ/X5uBZOwmCOb7LQkyVEH+do+Lnq4WOOLPNb+QU63Z/ee/ILdVOuBFB7wZ6E
-         3vj7zISFgnz3lyanp+NzLrQRofqcNXEptE5Hqf0D1hU/IJ2VWcJzzm5bU9PdRVhsc81T
-         3Owg==
-X-Gm-Message-State: AC+VfDyP4GncFwiTKmCfuTGuUspZKKpNbBeRV0c6a1MCw4TnCfb9JQxe
-        a6Q3Yt5LqPkW3NZYMzMcQIXt57zAhRm4A/R223UQurpiPTB57vEFKpYg35Y8+WhjWqm0AnezV3d
-        wHa+HLCV/rXMTj+wbz3Yc/fm9
-X-Received: by 2002:a5d:4b4a:0:b0:307:5561:5eec with SMTP id w10-20020a5d4b4a000000b0030755615eecmr1603020wrs.0.1684507604325;
-        Fri, 19 May 2023 07:46:44 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5C903d6ahLAiz8d0kKQA1HiJ8aJs3uxoW70pAdOmb9Ign7FpFP2GnVquoogPSXHNEO9bUbaA==
-X-Received: by 2002:a5d:4b4a:0:b0:307:5561:5eec with SMTP id w10-20020a5d4b4a000000b0030755615eecmr1603008wrs.0.1684507604009;
-        Fri, 19 May 2023 07:46:44 -0700 (PDT)
-Received: from gerbillo.redhat.com (146-241-235-104.dyn.eolo.it. [146.241.235.104])
-        by smtp.gmail.com with ESMTPSA id n6-20020adff086000000b002f6176cc6desm5423908wro.110.2023.05.19.07.46.42
+        d=1e100.net; s=20221208; t=1684507702; x=1687099702;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4Pi3Rw8sgVO8xNLiFOSc3vh8jvsieIJmukGipCTTKtY=;
+        b=T4irPVEgg12FgHIQwn84qPdHfJRCizfOuLrCv8WokYVDQzgu9KV/+HgBwGl6UQY+yh
+         nshxxSda2+fpQAtYdqFZCezmAGh4hryxgbdupWTsAVckqc21uAI3aobphaBLR1xytM7L
+         G2bKDQvh3oxFNtmfjWvJzlpGSlcjXi5LtkN/5ijAhx3E2wcP24qa64GlAODq2T329dk0
+         jMbAEVusz1epYyChGBBixq9LZOWWP0xg6C3Iw/E/EWuUewPYR0RUwoYP/WzHl/8BgepC
+         0IIy7R/c1GRhg/youeuvFvHFuqCaVTzvIJIBmsVZ8bRGyPQXKDa0BRO6/EXg3QXkXYde
+         7fmg==
+X-Gm-Message-State: AC+VfDzFf4WT5Qb1iVYRx7IQHv5Isv5hHqmrJXMPE5+/U/RH/s2guMJ/
+        9FklKAjxwUC4HVeiyvu1yVF5HQ==
+X-Google-Smtp-Source: ACHHUZ5MUiw26m3rCs8XC1mrIu74pUR1qli+EK5QOjHWaKOChgchSRO6OKsp0cMc1uGVgjtxdYp2FA==
+X-Received: by 2002:a17:907:7b98:b0:965:ff38:2fb3 with SMTP id ne24-20020a1709077b9800b00965ff382fb3mr2160890ejc.74.1684507702682;
+        Fri, 19 May 2023 07:48:22 -0700 (PDT)
+Received: from alco.roam.corp.google.com ([2620:0:1059:10:62fd:274b:c2ab:69bb])
+        by smtp.gmail.com with ESMTPSA id a2-20020a17090680c200b0096a68648329sm2349437ejx.214.2023.05.19.07.48.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 07:46:43 -0700 (PDT)
-Message-ID: <7f189d22226841168eb46b7be8939e2d06fa476c.camel@redhat.com>
-Subject: Re: memory leak in ipv6_sock_ac_join
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     =?UTF-8?Q?=E8=8C=83=E4=BF=8A=E6=9D=B0?= <junjie2020@iscas.ac.cn>,
-        davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     syzkaller-bugs@googlegroups.com
-Date:   Fri, 19 May 2023 16:46:42 +0200
-In-Reply-To: <13e257b8.6869.18833286427.Coremail.junjie2020@iscas.ac.cn>
-References: <13e257b8.6869.18833286427.Coremail.junjie2020@iscas.ac.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Fri, 19 May 2023 07:48:22 -0700 (PDT)
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Subject: [PATCH v7 0/4] kexec: Fix kexec_file_load for llvm16 with PGO
+Date:   Fri, 19 May 2023 16:47:35 +0200
+Message-Id: <20230321-kexec_clang16-v7-0-b05c520b7296@chromium.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAeMZ2QC/33QwWrDMAwA0F8pPs/Dsi3b6Wn/McZIZKUxSxNw1
+ rBR8u9TdxxZTkISehK6q4Vr4UWdT3dVeS1LmSdJ4tNJ0dBOF9YlS66ssc44C/qDv5jeaZQeBO0
+ RDFmXwTakZKZrF9ZdbScaZGq6jaMUh7J8zvX7d8cKEl7/41bQRrcxpJ4sRfL5hYY6X8vt+jzXi
+ 3oTbLWHgBUgg2HMCDGFZgdwh4ATAHsDgVI2nOIO4A8BLwA4bxBS3yTeuwAPAXxcgMF1vXwAots
+ BwiEQHk+0FpETtJ3HP8C2bT8j1I769wEAAA==
+To:     Eric Biederman <ebiederm@xmission.com>,
+        Philipp Rudo <prudo@linux.vnet.ibm.com>,
+        Dave Young <dyoung@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     Baoquan He <bhe@redhat.com>, Philipp Rudo <prudo@redhat.com>,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Ross Zwisler <zwisler@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Simon Horman <horms@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        llvm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org,
+        Ricardo Ribalda <ribalda@chromium.org>, stable@vger.kernel.org,
+        Palmer Dabbelt <palmer@rivosinc.com>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2021; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=/xaeieVFQ6xdVDAz17gKeKb/9LFf3JIRAWtpj04iWQs=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBkZ4wblqq2vLEoov6/zQ06eVyMdiDERAJkV5+vM
+ 0Kb8EQIujWJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCZGeMGwAKCRDRN9E+zzrE
+ iGc6D/9Uc+9TyN5zpqQv/iPV4DIP0EzzJIG/jXsFC25ZH9GGK0P96Opd5J5JN/UBqzVN1pPqTG8
+ whwLcR1HGsHebM96si7noWhhoeQFYNZsfECVOBnJrtr5+Tgxi3gbHmt9SbQK/ooI8sCV2fE9OLO
+ +6jUrRN8J2/GnSXGouHOTiHbDvSA1pJk0b9fKMnYWKf/lYNFuIO9Ol6T8wD35b3IP2eW0pUKlmE
+ 4DjAr09BunIB/vGH5dzsxU4gBzL5PAuyoEXRI1hwItqrkkYg9BDfir75GxJRAGnXhbd3je5gB7w
+ GQWCdkOsOtKMG/aGAsrGVq+zJZ0IoiB8C6yOOgHM4pKwlGW8+dIr+mXf2oVCu6ARy7RSPU5SuC5
+ JAiNIJ6RnJfqXbFoL/qSGqKXwj5MD7lDnA9j420LvaDbvnyAaA5kqh+CTg3iBRmQSZlPYzjf962
+ lYpA3mDeFRUnH/0F9ADI43vIzU0OhBL82x5IdqlKa53O+slulwrIu6A4jbqHOzcG0B2t3wbMZYu
+ 14UaQd3qxdzkYwDNz54i/nrQ5aRZfXFy1POrJyVK+Ot4AWdWvANYRQ4AT2kdOh89qMvSsGY27ik
+ a2Xm5HkapVpv0I+1+r5A3tNL2x39NooxsWrVmMyMO0+ke+HCx6m8/KbxNZcxxP9vzqf2SGxCVDj
+ TgRqej+1SpCQ5XA==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,78 +111,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hi,
+When upreving llvm I realised that kexec stopped working on my test
+platform.
 
-Please use plain-text when sending messages to a kernel devel mailing
-list.
+The reason seems to be that due to PGO there are multiple .text sections
+on the purgatory, and kexec does not supports that.
 
-On Fri, 2023-05-19 at 16:37 +0800, =E8=8C=83=E4=BF=8A=E6=9D=B0 wrote:
-> Our modified=C2=A0tool found a new bug=C2=A0BUG: unable to handle kernel =
-NULL
-> pointer dereference in scsi_queue_rq=C2=A0
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+---
+Changes in v7:
+- Fix $SUBJECT of riscv patch
+- Rename PGO as Profile-guided optimization
+- Link to v6: https://lore.kernel.org/r/20230321-kexec_clang16-v6-0-a2255e81ab45@chromium.org
 
-What you mention above is different from what you actually reports
-below.
+Changes in v6:
+- Replace linker script with Makefile rule. Thanks Nick
+- Link to v5: https://lore.kernel.org/r/20230321-kexec_clang16-v5-0-5563bf7c4173@chromium.org
 
-> in=C2=A0Kernel=C2=A0commit v5.14.=C2=A0
+Changes in v5:
+- Add warning when multiple text sections are found. Thanks Simon!
+- Add Fixes tag.
+- Link to v4: https://lore.kernel.org/r/20230321-kexec_clang16-v4-0-1340518f98e9@chromium.org
 
-That is not exactly new.
+Changes in v4:
+- Add Cc: stable
+- Add linker script for x86
+- Add a warning when the kernel image has overlapping sections.
+- Link to v3: https://lore.kernel.org/r/20230321-kexec_clang16-v3-0-5f016c8d0e87@chromium.org
 
-> The report is as below and this bug don't have a repro C program
-> until now.=C2=A0Please inform me if you confirm this is a=C2=A0reproducib=
-le
-> bug.
+Changes in v3:
+- Fix initial value. Thanks Ross!
+- Link to v2: https://lore.kernel.org/r/20230321-kexec_clang16-v2-0-d10e5d517869@chromium.org
 
-I think the above expectation is quite beyond what you could get. When
-you reports a bug _you_ are supposed to try to reproduce it.
+Changes in v2:
+- Fix if condition. Thanks Steven!.
+- Update Philipp email. Thanks Baoquan.
+- Link to v1: https://lore.kernel.org/r/20230321-kexec_clang16-v1-0-a768fc2c7c4d@chromium.org
 
-> =C2=A0---
-> =C2=A0BUG: memory leak
-> unreferenced object 0xffff8ad4e16c5760 (size 32):
-> =C2=A0 comm "syz-executor.2", pid 17137, jiffies 4295510146 (age 7.862s)
-> =C2=A0 hex dump (first 32 bytes):
-> =C2=A0 =C2=A0 fe 80 00 00 00 00 00 00 00 00 00 00 00 00 00 bb=C2=A0 .....=
-...........
-> =C2=A0 =C2=A0 01 00 00 00 d4 8a ff ff 00 00 00 00 00 00 00 00=C2=A0 .....=
-...........
-> =C2=A0 backtrace:
-> =C2=A0 =C2=A0 [<00000000033cd1b4>] kmalloc include/linux/slab.h:605 [inli=
-ne]
-> =C2=A0 =C2=A0 [<00000000033cd1b4>] sock_kmalloc+0x48/0x80 net/core/sock.c=
-:2563
-> =C2=A0 =C2=A0 [<00000000724962dc>] ipv6_sock_ac_join+0xf0/0x2d0
-> net/ipv6/anycast.c:86
-> =C2=A0 =C2=A0 [<0000000027291f90>] do_ipv6_setsockopt.isra.14+0x1e23/0x21=
-a0
-> net/ipv6/ipv6_sockglue.c:868
-> =C2=A0 =C2=A0 [<00000000bb6b5160>] ipv6_setsockopt+0xa9/0xf0
-> net/ipv6/ipv6_sockglue.c:1021
-> =C2=A0 =C2=A0 [<0000000057fe6cc3>] udpv6_setsockopt+0x53/0xa0
-> net/ipv6/udp.c:1652
-> =C2=A0 =C2=A0 [<0000000023dcd6bb>] __sys_setsockopt+0xb6/0x160
-> net/socket.c:2259
-> =C2=A0 =C2=A0 [<0000000081a16a2e>] __do_sys_setsockopt net/socket.c:2270
-> [inline]
-> =C2=A0 =C2=A0 [<0000000081a16a2e>] __se_sys_setsockopt net/socket.c:2267
-> [inline]
-> =C2=A0 =C2=A0 [<0000000081a16a2e>] __x64_sys_setsockopt+0x22/0x30
-> net/socket.c:2267
-> =C2=A0 =C2=A0 [<0000000075aec224>] do_syscall_x64 arch/x86/entry/common.c=
-:50
-> [inline]
-> =C2=A0 =C2=A0 [<0000000075aec224>] do_syscall_64+0x37/0x80
-> arch/x86/entry/common.c:80
-> =C2=A0 =C2=A0 [<000000006cd4d12f>] entry_SYSCALL_64_after_hwframe+0x46/0x=
-b0
->=20
-> BUG: leak checking failed
+---
+Ricardo Ribalda (4):
+      kexec: Support purgatories with .text.hot sections
+      x86/purgatory: Remove PGO flags
+      powerpc/purgatory: Remove PGO flags
+      riscv/purgatory: Remove PGO flags
 
-This was probably addressed by:
+ arch/powerpc/purgatory/Makefile |  5 +++++
+ arch/riscv/purgatory/Makefile   |  5 +++++
+ arch/x86/purgatory/Makefile     |  5 +++++
+ kernel/kexec_file.c             | 14 +++++++++++++-
+ 4 files changed, 28 insertions(+), 1 deletion(-)
+---
+base-commit: 58390c8ce1bddb6c623f62e7ed36383e7fa5c02f
+change-id: 20230321-kexec_clang16-4510c23d129c
 
-8c0de6e96c97 ("ipv6: fix memory leaks on IPV6_ADDRFORM path")=C2=A0
-
-
-Cheers,
-
-Paolo
+Best regards,
+-- 
+Ricardo Ribalda Delgado <ribalda@chromium.org>
 
