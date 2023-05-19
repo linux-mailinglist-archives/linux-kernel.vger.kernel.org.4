@@ -2,296 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE82A709C8C
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 18:38:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6A6F709C99
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 18:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbjESQiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 12:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59258 "EHLO
+        id S230103AbjESQkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 12:40:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjESQiQ (ORCPT
+        with ESMTP id S231400AbjESQjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 12:38:16 -0400
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1081C9;
-        Fri, 19 May 2023 09:38:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
-        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=76cJ0skIhyy+1lAVyE9zLl1oSMyjfPpd1OdLSw6ObVk=; b=kKMsTSMkgH22P7SpQbWgBIhDYc
-        fvaUobOsWFVP5k+E42KOXobO6mUqqHSX1Et1ejNHolG3i3qoTj0rat96vNQW4O9zefv/U09WLC2HB
-        SbRwMOswx29sNJfsiDVLABVRebjXVfWRnMr6Dfb8oxZrHVd/guvAKp1SxzVLQwyqERng=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:55206 helo=pettiford)
-        by mail.hugovil.com with esmtpa (Exim 4.92)
-        (envelope-from <hugo@hugovil.com>)
-        id 1q037B-000584-Fq; Fri, 19 May 2023 12:38:02 -0400
-Date:   Fri, 19 May 2023 12:38:01 -0400
-From:   Hugo Villeneuve <hugo@hugovil.com>
-To:     Lech Perczak <lech.perczak@camlingroup.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Lech Perczak <l.perczak@camlintechnologies.com>,
-        Tomasz =?UTF-8?Q?Mo=C5=84?= <tomasz.mon@camlingroup.com>,
-        linux-gpio@vger.kernel.org,
-        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <20230519123801.e1123cab701b6cb0ffbf367f@hugovil.com>
-In-Reply-To: <849ac3f6-82e6-fb9e-a693-b78edd3e5f2b@camlingroup.com>
-References: <20230518132905.4182265-1-hugo@hugovil.com>
-        <20230518132905.4182265-2-hugo@hugovil.com>
-        <3a8cf0e2-b11c-d2f3-081e-a43bdad66224@camlingroup.com>
-        <20230519093031.9c35c8ee5387e1fc4bdf79f1@hugovil.com>
-        <849ac3f6-82e6-fb9e-a693-b78edd3e5f2b@camlingroup.com>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        Fri, 19 May 2023 12:39:53 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B21D1
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 09:39:48 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34JDR7Qo024834;
+        Fri, 19 May 2023 16:39:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=kgDDoBNwxvR277BxCyv7koD/uI+FCD5MDKi5umWHI6A=;
+ b=V1TRaFijUqb9pIF08MD+X/VzNEF2oT9EwZ5DQn5rCzgO+V0ilO7nyjLut6Do6qw+/4+H
+ fYBtaqKVSxs7I3otNk2DAp3y2pbH9Ur8qBznQON58s3i15pHE7HPIwVnIMNNRHEQG4Ui
+ 1gsDYQJYK7jk7YNPAIgOUKiYnmPcIKR1e2IcM/InkP1SKbX5lOWNCGo/JTVKUhM58i9m
+ 8Lfq+Fd8UmK91kQ3jOSStCMJKvXRfq3bX0xOGLzpJ1v6LshmnduopCchRQtysOuL7Yq7
+ VLfmk9/gI0sbQL8iiykKyWaeOiQMMxxYfob+NmJQC2wLX10SjBEJghFT1KfksXa2dnWX 9A== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qnwk4j0dc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 May 2023 16:39:21 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34JGdL0m001824
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 May 2023 16:39:21 GMT
+Received: from jhugo-lnx.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Fri, 19 May 2023 09:39:20 -0700
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+To:     <mani@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <mhi@lists.linux.dev>, Jeffrey Hugo <quic_jhugo@quicinc.com>
+Subject: [PATCH v2 0/2] Add MHI quirk for QAIC
+Date:   Fri, 19 May 2023 10:39:00 -0600
+Message-ID: <20230519163902.4170-1-quic_jhugo@quicinc.com>
+X-Mailer: git-send-email 2.40.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Gy5WM1UCc3CbqIwU-6Q00Cn-2tX_UmbJ
+X-Proofpoint-ORIG-GUID: Gy5WM1UCc3CbqIwU-6Q00Cn-2tX_UmbJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-19_11,2023-05-17_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
+ clxscore=1015 impostorscore=0 mlxscore=0 phishscore=0 priorityscore=1501
+ malwarescore=0 lowpriorityscore=0 adultscore=0 mlxlogscore=732 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305190142
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
-Subject: Re: [RFC PATCH v2 2/2] serial: sc16is7xx: fix regression with GPIO
- configuration
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 May 2023 18:00:54 +0200
-Lech Perczak <lech.perczak@camlingroup.com> wrote:
+With the QAIC driver in -next, I'd like to suggest some MHI changes that
+specific to AIC100 devices, but perhaps provide a framework for other
+device oddities.
 
->=20
-> W dniu 19.05.2023 o=A015:30, Hugo Villeneuve pisze:
-> > On Fri, 19 May 2023 15:00:58 +0200
-> > Lech Perczak <lech.perczak@camlingroup.com> wrote:
-> >
-> >> Hello Hugo,
-> >>
-> >> A couple of remarks inline.
-> >>
-> >> W dniu 18.05.2023 o 15:29, Hugo Villeneuve pisze:
-> >>> From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> >>>
-> >>> Commit 679875d1d880 ("sc16is7xx: Separate GPIOs from modem control li=
-nes")
-> >>> and commit 21144bab4f11 ("sc16is7xx: Handle modem status lines")
-> >>> changed the function of the GPIOs pins to act as modem control
-> >>> lines without any possibility of selecting GPIO function.
-> >>>
-> >>> As a consequence, applications that depends on GPIO lines configured
-> >>> by default as GPIO pins no longer work as expected.
-> >>>
-> >>> Also, the change to select modem control lines function was done only
-> >>> for channel A of dual UART variants (752/762). This was not documented
-> >>> in the log message.
-> >>>
-> >>> This new patch allows to specify GPIO or modem control line function
-> >>> in the device tree, and for each of the ports (A or B).
-> >>>
-> >>> This is done by using the new device-tree property named
-> >>> "modem-control-line-ports" (property added in separate patch).
-> >>>
-> >>> Boards that need to have GPIOS configured as modem control lines
-> >>> should add that property to their device tree. Here is a list of
-> >>> boards using the sc16is7xx driver in their device tree and that may
-> >>> need to be modified:
-> >>>     arm64/boot/dts/freescale/fsl-ls1012a-frdm.dts
-> >>>     mips/boot/dts/ingenic/cu1830-neo.dts
-> >>>     mips/boot/dts/ingenic/cu1000-neo.dts
-> >>>
-> >>> Fixes: 679875d1d880 ("sc16is7xx: Separate GPIOs from modem control li=
-nes")
-> >>> Fixes: 21144bab4f11 ("sc16is7xx: Handle modem status lines")
-> >>> Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> >>> ---
-> >>> v1 -> v2: Rebase because original patch did not apply properly
-> >>>           Add git base-commit
-> >>>
-> >>>  drivers/tty/serial/sc16is7xx.c | 42 ++++++++++++++++++++------------=
---
-> >>>  1 file changed, 25 insertions(+), 17 deletions(-)
-> >>>
-> >>> diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16=
-is7xx.c
-> >>> index abad091baeea..4e3d2325ef6e 100644
-> >>> --- a/drivers/tty/serial/sc16is7xx.c
-> >>> +++ b/drivers/tty/serial/sc16is7xx.c
-> >>> @@ -236,7 +236,8 @@
-> >>>
-> >>>  /* IOControl register bits (Only 750/760) */
-> >>>  #define SC16IS7XX_IOCONTROL_LATCH_BIT  (1 << 0) /* Enable input latc=
-hing */
-> >>> -#define SC16IS7XX_IOCONTROL_MODEM_BIT  (1 << 1) /* Enable GPIO[7:4] =
-as modem pins */
-> >>> +#define SC16IS7XX_IOCONTROL_MODEM_A_BIT        (1 << 1) /* Enable GP=
-IO[7:4] as modem A pins */
-> >>> +#define SC16IS7XX_IOCONTROL_MODEM_B_BIT        (1 << 2) /* Enable GP=
-IO[3:0] as modem B pins */
-> >>>  #define SC16IS7XX_IOCONTROL_SRESET_BIT (1 << 3) /* Software Reset */
-> >>>
-> >>>  /* EFCR register bits */
-> >>> @@ -306,7 +307,6 @@ struct sc16is7xx_devtype {
-> >>>         char    name[10];
-> >>>         int     nr_gpio;
-> >>>         int     nr_uart;
-> >>> -       int     has_mctrl;
-> >>>  };
-> >>>
-> >>>  #define SC16IS7XX_RECONF_MD            (1 << 0)
-> >>> @@ -447,35 +447,30 @@ static const struct sc16is7xx_devtype sc16is74x=
-_devtype =3D {
-> >>>         .name           =3D "SC16IS74X",
-> >>>         .nr_gpio        =3D 0,
-> >>>         .nr_uart        =3D 1,
-> >>> -       .has_mctrl      =3D 0,
-> >>>  };
-> >>>
-> >>>  static const struct sc16is7xx_devtype sc16is750_devtype =3D {
-> >>>         .name           =3D "SC16IS750",
-> >>> -       .nr_gpio        =3D 4,
-> >>> +       .nr_gpio        =3D 8,
-> >>>         .nr_uart        =3D 1,
-> >>> -       .has_mctrl      =3D 1,
-> >>>  };
-> >>>
-> >>>  static const struct sc16is7xx_devtype sc16is752_devtype =3D {
-> >>>         .name           =3D "SC16IS752",
-> >>> -       .nr_gpio        =3D 0,
-> >>> +       .nr_gpio        =3D 8,
-> >>>         .nr_uart        =3D 2,
-> >>> -       .has_mctrl      =3D 1,
-> >>>  };
-> >>>
-> >>>  static const struct sc16is7xx_devtype sc16is760_devtype =3D {
-> >>>         .name           =3D "SC16IS760",
-> >>> -       .nr_gpio        =3D 4,
-> >>> +       .nr_gpio        =3D 8,
-> >>>         .nr_uart        =3D 1,
-> >>> -       .has_mctrl      =3D 1,
-> >>>  };
-> >>>
-> >>>  static const struct sc16is7xx_devtype sc16is762_devtype =3D {
-> >>>         .name           =3D "SC16IS762",
-> >>> -       .nr_gpio        =3D 0,
-> >>> +       .nr_gpio        =3D 8,
-> >>>         .nr_uart        =3D 2,
-> >>> -       .has_mctrl      =3D 1,
-> >>>  };
-> >>>
-> >>>  static bool sc16is7xx_regmap_volatile(struct device *dev, unsigned i=
-nt reg)
-> >>> @@ -1456,12 +1451,6 @@ static int sc16is7xx_probe(struct device *dev,
-> >>>                                      SC16IS7XX_EFCR_RXDISABLE_BIT |
-> >>>                                      SC16IS7XX_EFCR_TXDISABLE_BIT);
-> >>>
-> >>> -               /* Use GPIO lines as modem status registers */
-> >>> -               if (devtype->has_mctrl)
-> >>> -                       sc16is7xx_port_write(&s->p[i].port,
-> >>> -                                            SC16IS7XX_IOCONTROL_REG,
-> >>> -                                            SC16IS7XX_IOCONTROL_MODE=
-M_BIT);
-> >>> -
-> >>>                 /* Initialize kthread work structs */
-> >>>                 kthread_init_work(&s->p[i].tx_work, sc16is7xx_tx_proc=
-);
-> >>>                 kthread_init_work(&s->p[i].reg_work, sc16is7xx_reg_pr=
-oc);
-> >>> @@ -1497,6 +1486,25 @@ static int sc16is7xx_probe(struct device *dev,
-> >>>                                          prop, p, u)
-> >>>                         if (u < devtype->nr_uart)
-> >>>                                 s->p[u].irda_mode =3D true;
-> >>> +
-> >>> +               val =3D 0;
-> >>> +
-> >>> +               of_property_for_each_u32(dev->of_node, "nxp,modem-con=
-trol-line-ports",
-> >>> +                                        prop, p, u)
-> >> The general idea looks solid to me.
-> >> I think, that with this property set, we should also reduce number of =
-GPIOs exported by gpiochip.
-> > OK, I will look into that.
-> >
-> >>> +                       if (u < devtype->nr_uart) {
-> >>> +                               /* Use GPIO lines as modem control li=
-nes */
-> >>> +                               if (u =3D=3D 0)
-> >>> +                                       val |=3D SC16IS7XX_IOCONTROL_=
-MODEM_A_BIT;
-> >>> +                               else if (u =3D=3D 1)
-> >>> +                                       val |=3D SC16IS7XX_IOCONTROL_=
-MODEM_B_BIT;
-> >>> +                       }
-> >>> +
-> >>> +               if (val)
-> >>> +                       regmap_update_bits(
-> >>> +                               s->regmap,
-> >>> +                               SC16IS7XX_IOCONTROL_REG << SC16IS7XX_=
-REG_SHIFT,
-> >>> +                               SC16IS7XX_IOCONTROL_MODEM_A_BIT |
-> >>> +                               SC16IS7XX_IOCONTROL_MODEM_B_BIT, val);
-> >> I just had a chance to test this on my hardware (with SC16IS760), and =
-something still doesn't work.
-> >> When looking into /sys/kernel/debug/regmap/<device>/registers,
-> >> it seems like the proper bits are set, also taking the regmap shift in=
-to account.
-> >> For reference - I did my test basing on v6.4-rc2.
-> >>
-> >> I used a loopback plug and statserial to perform the test.
-> >> Without your patch, when DTR is set, all other pins (DCD, DSR, RI) are=
- set. With it - they are cleared, according to statserial.
-> > It is strange, because the only conceptual change is the moment in time=
- when we set the IOControl register. Before, IOControl was set within the f=
-or/loop for initializing each port. Now it is done after.
-> >
-> > Maybe you could try to put the section that reads the DT property just =
-after resetting the device.
-> >
-> > While suggesting this, I just noticed that when the device is reset, we=
- do not wait before initiating communication with the device. Thefore, I wo=
-uld suggest the following change (that I will submit as a separate patch):
-> >
-> >         regmap_write(s->regmap, SC16IS7XX_IOCONTROL_REG << SC16IS7XX_RE=
-G_SHIFT,
-> >                         SC16IS7XX_IOCONTROL_SRESET_BIT);
-> >
-> > +       /* After reset, the host must wait at least 3us before initiali=
-zing a
-> > +        * communication with the device: */
-> > +       usleep_range(3, 5);
-> >
-> > Then like I said, insert the code that read the modem-control-line-port=
- DT property right after that to see if it helps.
-> >
-> > Hugo.
->=20
-> Hello,
->=20
-> I tried those suggestions, together with the patch you mentioned in the o=
-ther email - all to no avail.
-> I added a debug print to confirm, that the property is detected, and regm=
-ap access is executed - and it is. This is so strange.
-> Maybe the offsets in regmap are still wrong, for some reason?
-> I also double checked if it was possible to alter and check GPIO states t=
-hrough GPIO subsystem - it is.
+AIC100 devices technically violate the MHI spec in two ways. Sadly, these
+issues comes from the device hardware, so host SW needs to work around
+them.
 
-Then it seems that the remaining difference is the number of GPIOs that are=
- configured, which for the moment is always the value set in constant nr_gp=
-io (for each device).
+Thie first issue, presented in this series, has to do with the
+SOC_HW_VERSION register. This register is suposed to be initialized by the
+hardware prior to the MHI being accessable by the host to contain a
+version string for the SoC of the device. This could be used by the host
+MHI controller software to identify and handle version to version changes.
+The AIC100 hardware does not initialize this register, and thus it
+contains garbage.
 
-I already implemented and tested your suggestion of lowering the number of =
-GPIOs exported when using some pins as modem status lines. It seems to be w=
-orking good, altough I have only tested that the correct number of GPIOs ar=
-e now exported.
+This would not be much of a problem normally - the QAIC driver would just
+never use it. However the MHI stack uses this register as part of the init
+sequence and if the controller reports that the register is inaccessable
+then the init sequence fails.  On some AIC100 cards, the garbage value
+ends up being 0xFFFFFFFF which is PCIe spec defined to be a special value
+indicating the access failed.  The MHI controller cannot tell if that
+value is a PCIe link issue, or just garbage.
 
-I will send you the test patch and let me know if it helps.
+QAIC needs a way to tell MHI not to use this register. Other buses have a
+quirk mechanism - a way to describe oddities in a particular
+implementation that have some kind of workaround. Since this seems to be
+the first need for such a thing in MHI, introduce a quirk framework.
 
-Hugo.
+The second issue AIC100 has involves the PK Hash registers. A solution for
+this is expected to be proposed in the near future and is anticipated to
+make use of the quirk framework proposed here. With PK Hash, there are two
+oddities to handle. AIC100 does not initialize these registers until the
+SBL is running, which is later than the spec indicates, and in practice
+is after MHI reads/caches them. Also, AIC100 does not have enough
+registers defined to fully report the 5 PK Hash slots, so a custom
+reporting format is defined by the device.
+
+v2:
+-Fix build error
+-Fix typo in commit text
+
+Jeffrey Hugo (2):
+  bus: mhi: host: Add quirk framework and initial quirk
+  accel/qaic: Add MHI_QUIRK_SOC_HW_VERSION_UNRELIABLE
+
+ drivers/accel/qaic/mhi_controller.c |  1 +
+ drivers/bus/mhi/host/init.c         | 13 +++++++++----
+ include/linux/mhi.h                 | 18 ++++++++++++++++++
+ 3 files changed, 28 insertions(+), 4 deletions(-)
+
+-- 
+2.40.1
+
