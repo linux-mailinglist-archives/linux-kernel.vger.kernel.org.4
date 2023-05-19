@@ -2,96 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6E7709706
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 14:04:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B334F709707
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 14:05:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231390AbjESMEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 08:04:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
+        id S231491AbjESMEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 08:04:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231435AbjESMEp (ORCPT
+        with ESMTP id S231567AbjESMEq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 08:04:45 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED2C8F5;
-        Fri, 19 May 2023 05:04:43 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-195ee1be418so2468951fac.2;
-        Fri, 19 May 2023 05:04:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684497883; x=1687089883;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0jmpizCaVOeCP1r1p2VyeIJckntY5BckfPqM9Nsz8n4=;
-        b=V/Yn4/NxgQPXvWF8hVm4JaNB0A7WHvHdopqNl/U/yuGD4//t6lFyb0d6MhEuhy41Z6
-         BS8LJsvDFBbOUxV/1EQzeCx8Wc6vIMIU6THXj2CUofkjq722/e+L/q1DhdiUac2x2HuN
-         twqL5w6vzUTTycYx0gbjfrTpx5FuB0LZG1uOVO27oizvAmX34QlXMtwjf8aOMkdnH1zS
-         lglD5aoNF65wVXriGzrJ0acuJYeLdWzzhjfBKYTyWdwQnQINA1KyJC+JfvAspTfSVAVj
-         99P11UrSB46FDXp7rU+uF1qKhXXcSc2g1BLQ5C3AnBBCqUU1zjTFi5BPwS9fnnw7DG+v
-         Sg+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684497883; x=1687089883;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0jmpizCaVOeCP1r1p2VyeIJckntY5BckfPqM9Nsz8n4=;
-        b=M1+npcdxeuyC9QpwLoYDpskzaFvreg4Srm0EnTls9f/4CQGYt8gsSVJSmADJWfGEWW
-         tlmyJo5GZaW7QM5MPpdAEOXa5zoFuqtmcHq5eBibBia8+FzN4SqalMZidJGMDzWNXy5v
-         EasqJR5anNlMJIM4WLFQrzJccx2IQfo+FkR/2mxv1RLZ6UXjiHwey4IFIS4+icsVWvrw
-         KcJKrOZQn7gzRGePz4wav0bzcDylIjC+uxN1YyIzml58t+nAjPKizGrrZC448m9VVW5U
-         hqBaxbXcvbG8nnH9a4MoD+/7pnQYjODct1uwyrlOiJAUFTwZIF2maYT+Woa3mUdogu3A
-         hqeA==
-X-Gm-Message-State: AC+VfDxj3b7RSBsU2L+Ge6Zyvmg2TUg8oSREDLFGzkpaIGt1YWGwWcUi
-        Pc8s01HvRuyTpqgRGL24T5c=
-X-Google-Smtp-Source: ACHHUZ6jWONxjseiTxpvmAU7vOOx9nwPIKW7k7HlSt6MQyAC7YvKhLNkrZPKsdvwRNbVhk+geIoX+g==
-X-Received: by 2002:a05:6870:7406:b0:18e:2f29:1099 with SMTP id x6-20020a056870740600b0018e2f291099mr869338oam.53.1684497883167;
-        Fri, 19 May 2023 05:04:43 -0700 (PDT)
-Received: from [192.168.54.90] (static.220.238.itcsa.net. [190.15.220.238])
-        by smtp.gmail.com with ESMTPSA id b1-20020a05687061c100b00199be6e2b75sm1832109oah.41.2023.05.19.05.04.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 May 2023 05:04:42 -0700 (PDT)
-Message-ID: <beb2932e-7f16-e368-9cb5-edbe115fcb67@gmail.com>
-Date:   Fri, 19 May 2023 09:04:38 -0300
+        Fri, 19 May 2023 08:04:46 -0400
+Received: from m-r1.th.seeweb.it (m-r1.th.seeweb.it [IPv6:2001:4b7a:2000:18::170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B10518F
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 05:04:44 -0700 (PDT)
+Received: from SoMainline.org (82-72-63-87.cable.dynamic.v4.ziggo.nl [82.72.63.87])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id B44081F97E;
+        Fri, 19 May 2023 14:04:40 +0200 (CEST)
+Date:   Fri, 19 May 2023 14:04:38 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, andersson@kernel.org, quic_abhinavk@quicinc.com,
+        quic_jesszhan@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v10 6/8] drm/msm/dpu: separate DSC flush update out of
+ interface
+Message-ID: <ku27atp4yqkpmz7g4ttylvzd43jmu4cwcs76nqgzramgxetjna@bu76f4c73724>
+References: <1684360919-28458-1-git-send-email-quic_khsieh@quicinc.com>
+ <1684360919-28458-7-git-send-email-quic_khsieh@quicinc.com>
+ <evkla3rkf4tge6gln4lgtulj7q5gt6vef3i2yqupc5lj2oszfx@7ttyxzlmvet5>
+ <8e9feb23-a5f0-7cd8-ebff-8e9097ff0ca1@quicinc.com>
+ <b2fcc9f5-ca11-ab87-e40b-9c6d2662325b@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v1 1/7] rust: workqueue: add low-level workqueue bindings
-Content-Language: en-US
-To:     Alice Ryhl <aliceryhl@google.com>
-Cc:     alex.gaynor@gmail.com, benno.lossin@proton.me,
-        bjorn3_gh@protonmail.com, boqun.feng@gmail.com, gary@garyguo.net,
-        jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
-        ojeda@kernel.org, patches@lists.linux.dev,
-        rust-for-linux@vger.kernel.org, tj@kernel.org, wedsonaf@gmail.com
-References: <8e42aad3-d94e-3cb4-ee59-90ded31cea9e@gmail.com>
- <20230519094042.3432952-1-aliceryhl@google.com>
-From:   Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-In-Reply-To: <20230519094042.3432952-1-aliceryhl@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b2fcc9f5-ca11-ab87-e40b-9c6d2662325b@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/19/23 06:40, Alice Ryhl wrote:
-> On 5/18/23 16:51, Martin Rodriguez Reboredo wrote:
->> On 5/17/23 17:31, Alice Ryhl wrote:
->>> +    /// Enqueues a work item.
->>> +    ///
->>> +    /// This may fail if the work item is already enqueued in a workqueue.
->>
->> Wouldn't be worth to mention that, if not implied, the item it's going
->> to be worked on an unbound CPU?
+On 2023-05-19 01:40:19, Dmitry Baryshkov wrote:
 > 
-> I'm not really sure what you mean. Can you elaborate?
+> On 19/05/2023 01:09, Kuogee Hsieh wrote:
+> > 
+> > On 5/17/2023 3:31 PM, Marijn Suijten wrote:
+> >>
+> >>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+> >>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+> >>> @@ -139,6 +139,11 @@ static inline void 
+> >>> dpu_hw_ctl_trigger_flush_v1(struct dpu_hw_ctl *ctx)
+> >>>                   CTL_DSPP_n_FLUSH(dspp - DSPP_0),
+> >>>                   ctx->pending_dspp_flush_mask[dspp - DSPP_0]);
+> >>>           }
+> >>> +
+> >>> +    if (ctx->pending_flush_mask & BIT(DSC_IDX))
+> >>> +        DPU_REG_WRITE(&ctx->hw, CTL_DSC_FLUSH,
+> >>> +                  ctx->pending_dsc_flush_mask);
+> >> Again, when do we reset this mask to 0?  (v8 review)
+> > 
+> > can not find it.
+> > 
+> > let me add a separate  patch to fix this.
 > 
-> Alice
+> The pending_dsc_flush_mask was added in this patch, so the reset should 
+> be a part of this patch too.
 
-I've meant that if it's good to mention that `queue_work_on` is going
-to be called with `WORK_CPU_UNBOUND` so that API users know about it.
+Yes, same patch.
+
+Related question I asked in v8: only the global pending_flush_mask and
+pending_dspp_flush_mask are reset in dpu_hw_ctl_clear_pending_flush().
+Shall I send a patch to clear the other missing ones (e.g. merge_3d etc)
+as well?
+
+> >>> +
+> >>>       DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, ctx->pending_flush_mask);
+> >>>   }
+> >>> @@ -285,6 +290,13 @@ static void 
+> >>> dpu_hw_ctl_update_pending_flush_merge_3d_v1(struct dpu_hw_ctl *ctx,
+> >>>       ctx->pending_flush_mask |= BIT(MERGE_3D_IDX);
+> >>>   }
+> >>> +static void dpu_hw_ctl_update_pending_flush_dsc_v1(struct dpu_hw_ctl 
+> >>> *ctx,
+> >>> +                           enum dpu_dsc dsc_num)
+> >>> +{
+> >>> +    ctx->pending_dsc_flush_mask |= BIT(dsc_num - DSC_0);
+> >>> +    ctx->pending_flush_mask |= BIT(DSC_IDX);
+> >>> +}
+> >>> +
+> >>>   static void dpu_hw_ctl_update_pending_flush_dspp(struct dpu_hw_ctl 
+> >>> *ctx,
+> >>>       enum dpu_dspp dspp, u32 dspp_sub_blk)
+> >>>   {
+> >>> @@ -502,9 +514,6 @@ static void dpu_hw_ctl_intf_cfg_v1(struct 
+> >>> dpu_hw_ctl *ctx,
+> >>>       if ((test_bit(DPU_CTL_VM_CFG, &ctx->caps->features)))
+> >>>           mode_sel = CTL_DEFAULT_GROUP_ID  << 28;
+> >>> -    if (cfg->dsc)
+> >>> -        DPU_REG_WRITE(&ctx->hw, CTL_DSC_FLUSH, cfg->dsc);
+> >>> -
+> >>>       if (cfg->intf_mode_sel == DPU_CTL_MODE_SEL_CMD)
+> >>>           mode_sel |= BIT(17);
+> >>> @@ -524,10 +533,9 @@ static void dpu_hw_ctl_intf_cfg_v1(struct 
+> >>> dpu_hw_ctl *ctx,
+> >>>       if (cfg->merge_3d)
+> >>>           DPU_REG_WRITE(c, CTL_MERGE_3D_ACTIVE,
+> >>>                     BIT(cfg->merge_3d - MERGE_3D_0));
+> >>> -    if (cfg->dsc) {
+> >>> -        DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, DSC_IDX);
+> >> Again, this bugfix of now wrapping DSC_IDX in BIT() should go in a
+> >> separate Fixes: patch to have this semantic change documented.  (v8
+> >> review)
+> > That will be this patch. let me add Fixes at this patch
+> 
+> _separate_ patch.
+
+Separate patch, and documenting clearly what happens and why.  Kuogee, I
+can send this as well if it makes things more clear, since it doesn't
+seem (from the patch description) that anyone noticed the
+implication/bugfix in this change as a drive-by effect of porting
+sde_hw_ctl_update_bitmask_dsc_v1() from downstream.
+
+- Marijn
+
+<snip>
