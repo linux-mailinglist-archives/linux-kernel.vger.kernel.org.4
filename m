@@ -2,142 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FE3C709AE9
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 17:10:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E4A8709AF0
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 17:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232203AbjESPKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 11:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44982 "EHLO
+        id S232250AbjESPK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 11:10:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231893AbjESPKB (ORCPT
+        with ESMTP id S232248AbjESPKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 11:10:01 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E1E109;
-        Fri, 19 May 2023 08:09:59 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 78D6E5C01E4;
-        Fri, 19 May 2023 11:09:57 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 19 May 2023 11:09:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1684508997; x=1684595397; bh=Hd
-        AFOpP4Mmpj8sP8nf+XQRyuNt5e1ngGbSBEuPLR87Y=; b=K78d4ZcA+QFwcBlStc
-        cQQ4iYXDop4aIpgBuKqwKvLt25kPy3BtCpKOgNfoIFMw7PGm8cZ9BjQmPuHlVBt5
-        MUihYz2EDPttZvPEQKzYhWoFzJ4osztmjl6rOwuW4eXQuP/YMYZ2XCZNSxU2iyaU
-        Sxil6LPHtoVjM+CoOmHmqU6k++qMY10ZHJK4jwT2iSt9Hupfr+wuAIEuhsycZwFV
-        8EcUoeeZ7INOot/zOejk2HazHxI7B+Lop4oIoyVU0isx1e+bhUbHj1yFQlYZPacW
-        XuuqUeaAEoqNaydIRHBXL0Y2QO8UfG7SJ1Hva14MAtfxfdJ7vsrurQFbhz5OG7Y7
-        XIvA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1684508997; x=1684595397; bh=HdAFOpP4Mmpj8
-        sP8nf+XQRyuNt5e1ngGbSBEuPLR87Y=; b=ftIfzBI9DALcM4R1kBB4Wvk+fT0eA
-        jH509uhYkuKVC234j+xnAggzTeQXyOFTKSYxQBSlHbEKI7HrZECONql3zCZ/nEzK
-        OO52dzJKuab34buXQH2Kq1smsfapoWBdYToodvYgdZig7e0v3/2G5isnIvmoXXwy
-        802paETXLUhfJcfK+kgpNIQK4ZJDJulv+UxTjapN+L+jHfYTHOVXskB+dE1/eOF9
-        lZdtNDgfCdNvuFOF11obm4BnzWPRjUHTCS5wvp+RBTgjBA8yy6tC2a2GCdTHoYuo
-        OIe8U2MCwqLwM2JigAoGdxDvb0BWamTTzjJ7d09CsN8bCcgIyYjVXyvgQ==
-X-ME-Sender: <xms:RJFnZHS89Hj16UM_F99yHs48njGmqYQr5CvroH6rwPxYGCl_lC1esg>
-    <xme:RJFnZIyRavwJy2cy_851haydXIjG6Yg79riSbLKvha4bvHB-JcEn37AKbyZw4lUSD
-    -TSQIxeHuJwgyaLjF8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeihedgkeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:RJFnZM0YlMQyprx2zulWaohyJeS-vc1nBKMpUo22yygmgELnIGXsWg>
-    <xmx:RJFnZHApNqkGugKQnUoKCcthTGm1TvdBwMM71KHG4S91TP2Ss_klVQ>
-    <xmx:RJFnZAgJzkTevp3oWYlUQATh6BrWCAmopVix-Lwc9Rs_2HeliyyXTA>
-    <xmx:RZFnZMyz6tATHWyAf7aoW__TOaF0d2KWH7YuNZYhPrEsLweByPC1uw>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 39E83B6008D; Fri, 19 May 2023 11:09:56 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-431-g1d6a3ebb56-fm-20230511.001-g1d6a3ebb
-Mime-Version: 1.0
-Message-Id: <7d7ddc48-5985-4678-9f87-6e9b574a24d9@app.fastmail.com>
-In-Reply-To: <5b071f65-7f87-4a7b-a76a-f4a1c1568ae7@lucifer.local>
-References: <20230519093953.10972-1-arnd@kernel.org>
- <5b071f65-7f87-4a7b-a76a-f4a1c1568ae7@lucifer.local>
-Date:   Fri, 19 May 2023 17:09:35 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Lorenzo Stoakes" <lstoakes@gmail.com>,
-        "Arnd Bergmann" <arnd@kernel.org>
-Cc:     "Andrew Morton" <akpm@linux-foundation.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Ingo Molnar" <mingo@redhat.com>,
-        "Arnaldo Carvalho de Melo" <acme@kernel.org>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
-        "Jiri Olsa" <jolsa@kernel.org>,
-        "Namhyung Kim" <namhyung@kernel.org>,
-        "Ian Rogers" <irogers@google.com>,
-        "Adrian Hunter" <adrian.hunter@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH] [suggestion] mm/gup: avoid IS_ERR_OR_NULL
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 19 May 2023 11:10:23 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB299E52;
+        Fri, 19 May 2023 08:10:18 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QN9Gq38kWz67fpR;
+        Fri, 19 May 2023 23:09:07 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 19 May
+ 2023 16:10:15 +0100
+Date:   Fri, 19 May 2023 16:10:14 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Davidlohr Bueso <dave@stgolabs.net>
+CC:     LiuLele <liu.lele@qq.com>, <dave.jiang@intel.com>,
+        <alison.schofield@intel.com>, <bhelgaas@google.com>,
+        <bwidawsk@kernel.org>, <dan.j.williams@intel.com>,
+        <helgaas@kernel.org>, <ira.weiny@intel.com>,
+        <linux-acpi@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <rostedt@goodmis.org>, <vishal.l.verma@intel.com>
+Subject: Re: CXL memory device not created correctly
+Message-ID: <20230519161014.00003002@Huawei.com>
+In-Reply-To: <gbsxrcjtnf67jxpqmbn57nqoslpmjtuk2ycatmau3vfsmpvbrd@c2umpofn2hti>
+References: <cec6a8f5-a284-4f46-1ada-4edd625a9a2e@intel.com>
+        <tencent_D9D9D358330CA573E23D490C6EE13E0DC105@qq.com>
+        <gbsxrcjtnf67jxpqmbn57nqoslpmjtuk2ycatmau3vfsmpvbrd@c2umpofn2hti>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023, at 16:51, Lorenzo Stoakes wrote:
-> Given you are sharply criticising the code I authored here, is it too much
-> to ask for you to cc- me, the author on commentaries like this? Thanks.
+On Thu, 18 May 2023 18:38:46 -0700
+Davidlohr Bueso <dave@stgolabs.net> wrote:
 
-My mistake, I expected this to get added automatically based on
-the "Fixes:" tag, I probably dropped you by accident in the end.
+> On Fri, 19 May 2023, LiuLele wrote:
+> 
+> >In my testing CXL device /sys/bus/cxl/devices/mem0  not created, and the get error messages :
+> >
+> >```
+> >cxl_pci 0000:0d:00.0: Failed to get interrupt for event Info log
+> >```
+> >
+> >My test environment is a qemu CXL emulator with qemu v8.0.0, Linux kernel v6.3.0.
+> >While with kernel 5.9.13,  /sys/bus/cxl/devices/mem0  can be created.  
+> 
+> Yes, this can be annoying and would argue the probe should not error out.
+> Regardless, the actual qemu support is in Jonathan's tree:
+> 
+> https://gitlab.com/jic23/qemu/-/commit/a04e6476df363d1f6bc160577b30dda6564d3f67
 
-> On Fri, May 19, 2023 at 11:39:13AM +0200, Arnd Bergmann wrote:
->> From: Arnd Bergmann <arnd@arndb.de>
->>
->> While looking at an unused-variable warning, I noticed a new interface coming
->> in that requires the use of IS_ERR_OR_NULL(), which tends to indicate bad
->> interface design and is usually surprising to users.
->
-> I am not sure I understand your reasoning, why does it 'tend to indicate
-> bad interface design'? You say that as if it is an obvious truth. Not
-> obvious to me at all.
->
-> There are 3 possible outcomes from the function - an error, the function
-> failing to pin a page, or it succeeding in doing so. For some of the
-> callers that results in an error, for others it is not an error.
->
-> Overloading EIO on the assumption that gup will never, ever return this
-> indicating an error seems to me a worse solution.
+That just failed to make it into an upstream pull request today due to some
+bugs in a the poison list set that came before it :( 
 
-The problem is that we have inconsistent error handling in functions
-that return an object, about half of them use NULL to indicate an error,
-and the other half use ERR_PTR(), and users frequently get those
-wrong by picking the wrong one. Functions that can return both make
-this worse because whichever of the two normal ways a user expects,
-they still get it wrong.
+v6 or poison list and events support are both on list now and hopefully will make
+this QEMU cycle so be in 8.1
 
-> Not a fan at all of this patch, it doesn't achieve anything useful, is in
-> service of some theoretical improvement, and actually introduces a new
-> class of bug (differentiating EIO and failing to pin).
+Jonathan
 
-Having another -EIO return code is a problem, so I agree that
-my patch wouldn't be good either. Maybe separating the error return
-from the page pointer by passing a 'struct page **p' argument that
-gets filled would help?
 
-    Arnd
+> 
+> Thanks,
+> Davidlohr
+
