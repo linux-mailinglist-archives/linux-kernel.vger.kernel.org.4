@@ -2,93 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5AD07099F5
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 16:36:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F7247099F7
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 16:36:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232030AbjESOga (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 10:36:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56640 "EHLO
+        id S232143AbjESOgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 10:36:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230443AbjESOg2 (ORCPT
+        with ESMTP id S230443AbjESOgc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 10:36:28 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC144E0;
-        Fri, 19 May 2023 07:36:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=2dyBL/Fjcpdnrl1DjY+duNlpsL/FPfmgPnyC6R2mRwU=; b=EX7d1FS7qgljmZ4f3EJkiNKgtA
-        PkEEBAgGrv0szuPDIrhdV/Y3tzug8HgelGJdbRvVNmJ36nqrwflOZf5I+X6c0soPvT2+BHYsEbc7E
-        9aDNavtp2RAwzK/MYTBJe2EKRqTyYaiLBHRpLJ0Vio7Y7NUYkXzx3125wzOFLhMPUYaYPiMeJmehk
-        l/zIj0DrUJkq6uFuuh+FiJFdgX0DQ3HNTkX55holcHjKaQDUSR+hWHvyctNti7BZWLWm1xvkwFnZz
-        nvOxxr8d5BEQNovP2ptoPtwBoqEWGB4vh4imtusJTJXHfZWQN0dM2L+gJUy2apTAiGw/yRAs7u/+S
-        wGzxveFg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:58212)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1q01DI-00030Q-IO; Fri, 19 May 2023 15:36:12 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1q01DE-0004gY-9o; Fri, 19 May 2023 15:36:08 +0100
-Date:   Fri, 19 May 2023 15:36:08 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     alexis.lothore@bootlin.com
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        thomas.petazzoni@bootlin.com, paul.arola@telus.com,
-        scott.roberts@telus.com,
-        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
-Subject: Re: [PATCH net-next v2 2/7] net: dsa: mv88e6xxx: pass directly chip
- structure to mv88e6xxx_phy_is_internal
-Message-ID: <ZGeJWCacgrCDfIsP@shell.armlinux.org.uk>
-References: <20230519141303.245235-1-alexis.lothore@bootlin.com>
- <20230519141303.245235-3-alexis.lothore@bootlin.com>
+        Fri, 19 May 2023 10:36:32 -0400
+Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2066099;
+        Fri, 19 May 2023 07:36:31 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id ABB1E7C0;
+        Fri, 19 May 2023 14:36:30 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net ABB1E7C0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1684506990; bh=v5msYPZ8MfU03mnhJ5WlE1hAE0QORWOcmar/Ec4pGAY=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=f50H3s0lUEV0Xs4leFUXJTQ+C+zxRunJqDfi8+tJRXRx84RZ4khmvGYyrSSxk8s8Y
+         Jg5aJhdqtBVbWpdrNmc0SryfxVa1jHGxzk8ckoWSq3qkWhjP+JddGKZ2vtLpikCvci
+         usX45qdPowiLREaBUMDvgox/nTYFysM+E3mP9ptG/rqS96bNprqgPKYMI5tv01dL/n
+         WxfFXdHBcHoZwjy6HotLx5pgLr1ZEpbHav4ap7a/vaiNUk2mTn/D60l+wX7vbYK/U3
+         H0DrTyQbEhae1xUgFEm/FNM5fczvBIbwCdNr7jfjuQYVYmZyRFGQtasQclfLtAm8Py
+         e7pxTH2oDY6NA==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Natesh Sharma <nsharma@redhat.com>, chenhuacai@kernel.org,
+        dave.hansen@linux.intel.com, geert@linux-m68k.org, axboe@kernel.dk,
+        linux@zary.sk
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Natesh Sharma <nsharma@redhat.com>
+Subject: Re: [PATCH] docs: admin-guide: Add information about intel_pstate
+ active mode
+In-Reply-To: <20230427083706.49882-1-nsharma@redhat.com>
+References: <20230427083706.49882-1-nsharma@redhat.com>
+Date:   Fri, 19 May 2023 08:36:29 -0600
+Message-ID: <87o7mgo0b6.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230519141303.245235-3-alexis.lothore@bootlin.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 04:12:58PM +0200, alexis.lothore@bootlin.com wrote:
-> From: Alexis Lothoré <alexis.lothore@bootlin.com>
-> 
-> Since this function is a simple helper, we do not need to pass a full
-> dsa_switch structure, we can directly pass the mv88e6xxx_chip structure.
-> Doing so will allow to share this function with any other function
-> not manipulating dsa_switch structure but needing info about number of
-> internal phys
-> 
-> Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
+Natesh Sharma <nsharma@redhat.com> writes:
 
-Reviewed-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> Information about intel_pstate active mode is added in the doc.
+> This operation mode could be used to set on the hardware when it's
+> not activated. Status of the mode could be checked from sysfs file
+> i.e., /sys/devices/system/cpu/intel_pstate/status.
+> The information is already available in cpu-freq/intel-pstate.txt
+> documentation.
+>
+> Link: https://www.kernel.org/doc/Documentation/cpu-freq/intel-pstate.txt
+>
+> Signed-off-by: Natesh Sharma <nsharma@redhat.com>
+> ---
+>  Documentation/admin-guide/kernel-parameters.txt | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 
-Thanks!
+I have applied this - after reformatting the new text to stay within 80
+columns and removing the obsolete documentation link.
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+Thanks,
+
+jon
