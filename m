@@ -2,74 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 117C57092FC
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 11:25:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 183BE709302
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 11:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230307AbjESJZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 05:25:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34420 "EHLO
+        id S230393AbjESJ2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 05:28:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbjESJZf (ORCPT
+        with ESMTP id S229644AbjESJ2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 05:25:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6278199
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 02:24:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684488296;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pfV01EUVDAMlcQXaMvsw0JKN2NbqBChEQxXiVek1+Jc=;
-        b=bCxenVNmJsSWYuI3GXcNQvL0PeX9wJdWA0s2zOWf5aKYvhVuocCIyiEmoTSqcebEoikzpY
-        TMQlbPou4dMyGBtfIDP9NsDXPs8B4PRB30WIK8Hk4ewE4QzGYCXWbj9FndV8mIDK5NLBy7
-        6hOdhQJ3V1OKzPpFxFhoE96ENw5NdHs=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-619-10XT3QEBNXKSe4Iyf6x2aw-1; Fri, 19 May 2023 05:24:52 -0400
-X-MC-Unique: 10XT3QEBNXKSe4Iyf6x2aw-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Fri, 19 May 2023 05:28:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A5319A
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 02:28:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0901F185A791;
-        Fri, 19 May 2023 09:24:52 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.221])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 027F540D1B60;
-        Fri, 19 May 2023 09:24:48 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <c1fd63b9-42ea-fa83-ecb1-9af715e37ffa@redhat.com>
-References: <c1fd63b9-42ea-fa83-ecb1-9af715e37ffa@redhat.com> <20230519074047.1739879-1-dhowells@redhat.com> <20230519074047.1739879-14-dhowells@redhat.com>
-To:     Xiubo Li <xiubli@redhat.com>
-Cc:     dhowells@redhat.com, Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B36336558D
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 09:28:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B8DBC433EF;
+        Fri, 19 May 2023 09:28:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684488501;
+        bh=oqaxusc9buD7w2Ddys91pietI0uocG68+c+khpbA3To=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RSXpt6Iby9HAjPxnV5GqCjOfqn643OHr3L4k3vxbYnukfGCAjM8QvcsWOHa7GEPGd
+         VmOzown06OswYEEihZXC1G30nLZA/aHpwM8SDpNdo7bO+cwPACVkrQy4nz/yizbGXw
+         0G4UvKWb07imYX+alpJ8DYT1n3rQk7VL8XH6fS0cS+3wi0SAk7mo9PtYiR7za2OshX
+         LlKTQRtQAmBzc0zF3s1N4J8jdEX1tktBv6yvysz42HZCIldxKsBAEZGL4/kGg8zuLo
+         HANvZ3FDY+b/Hw5CttK0f7sRDyfP/H5k2OZAzTBQfGupho9LQ/vW58DGGuS73rQYTN
+         TKi+vOzAyre4w==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Oscar Salvador <osalvador@suse.de>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
         David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Christoph Hellwig <hch@lst.de>,
-        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org
-Subject: Re: [PATCH v20 13/32] ceph: Provide a splice-read stub
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] mm,page_owner: mark page_owner_threshold helpers as static
+Date:   Fri, 19 May 2023 11:27:43 +0200
+Message-Id: <20230519092800.3772196-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <1743655.1684488288.1@warthog.procyon.org.uk>
-Date:   Fri, 19 May 2023 10:24:48 +0100
-Message-ID: <1743656.1684488288@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,25 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Xiubo Li <xiubli@redhat.com> wrote:
+From: Arnd Bergmann <arnd@arndb.de>
 
-> > +	ret = ceph_get_caps(in, CEPH_CAP_FILE_RD, want, -1, &got);
-> > +	if (ret < 0) {
-> > +		ceph_end_io_read(inode);
-> > +		return ret;
-> > +	}
-> > +
-> > +	if ((got & (CEPH_CAP_FILE_CACHE | CEPH_CAP_FILE_LAZYIO)) == 0) {
-> > +		dout("splice_read/sync %p %llx.%llx %llu~%zu got cap refs on %s\n",
-> > +		     inode, ceph_vinop(inode), *ppos, len,
-> > +		     ceph_cap_string(got));
-> > +
-> > +		ceph_end_io_read(inode);
-> > +		return direct_splice_read(in, ppos, pipe, len, flags);
-> 
-> Shouldn't we release cap ref before returning here ?
+The newly added functions have no prototype:
 
-Ummm...  Even if we got no caps?
+mm/page_owner.c:748:5: error: no previous prototype for 'page_owner_threshold_get' [-Werror=missing-prototypes]
+mm/page_owner.c:754:5: error: no previous prototype for 'page_owner_threshold_set' [-Werror=missing-prototypes]
 
-David
+Evidently they are only meant to be used locally, so just mark them static.
+
+Fixes: daed0e400a81 ("mm,page_owner: filter out stacks by a threshold counter")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ mm/page_owner.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/mm/page_owner.c b/mm/page_owner.c
+index 28c519fc9372..bbec66cd1b72 100644
+--- a/mm/page_owner.c
++++ b/mm/page_owner.c
+@@ -745,13 +745,13 @@ const struct file_operations page_owner_stack_operations = {
+ 
+ unsigned long page_owner_stack_threshold;
+ 
+-int page_owner_threshold_get(void *data, u64 *val)
++static int page_owner_threshold_get(void *data, u64 *val)
+ {
+ 	*val = page_owner_stack_threshold;
+ 	return 0;
+ }
+ 
+-int page_owner_threshold_set(void *data, u64 val)
++static int page_owner_threshold_set(void *data, u64 val)
+ {
+ 	page_owner_stack_threshold = val;
+ 	return 0;
+-- 
+2.39.2
 
