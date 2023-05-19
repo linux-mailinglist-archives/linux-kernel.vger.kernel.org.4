@@ -2,139 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DB0F709903
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 16:09:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B51570991E
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 16:13:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232055AbjESOJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 10:09:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41148 "EHLO
+        id S232070AbjESONI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 10:13:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230116AbjESOJD (ORCPT
+        with ESMTP id S230116AbjESONE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 10:09:03 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5B5B114
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 07:09:00 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-64d2981e3abso1131509b3a.1
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 07:09:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684505339; x=1687097339;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nO2IMSaci1mLkURs2Rerjvjr6e18HL0QFWSpDQYnXvg=;
-        b=U2U4r2IfK1jqKF/mNm2KBqvjWNjdQTp0YZz6jcDMwgeHMql/r0VVaJW2RthUbcW0ax
-         BMCxfExFR9p+czfqKl5v/pNtRk1gq+UPKYyDNdm9IaFkXAmx4bAWzZS3KqgM/whKTF3F
-         YzxcIGVt7VJPpvqqLQrpK3Cni8Y+R8aeYnlh0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684505339; x=1687097339;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nO2IMSaci1mLkURs2Rerjvjr6e18HL0QFWSpDQYnXvg=;
-        b=c0Uz1v2c9TDLvLANU41IIQjtdKliaafdfumB+1Xv11qYcrr6Gyrdt3Ue3aJDz4ccC3
-         iTK2CnkudugrAMHpX4xhdeZ74KpLo/VIDYw4dGuFdQPivp3B4mhQ+wDkhGpA0YooLxQO
-         PHI2d7r7fiEtGYHOor4nLzp8ah4FxOKO9z+e107PaSBzZPbCHW2dlJQaCvckFIIgLRbk
-         7xLMQDpOImT7kqnwTPYEt/kEqCfMpNaA5vmnJeDn4jM7SxBf7jQS3SiW1xF3a1KzWvev
-         mNIRF87VTeJIMjIyZeKBMXYNy7J5iP64vAR4am+J4rofPADMtnBSXnDEbE2YPbLMEsUH
-         JmLQ==
-X-Gm-Message-State: AC+VfDzgOuXCkFnplKhwvs9WWvfxwW1OqmnYXHJp2iRRjU1xxEdwjKj0
-        qwHwCWduNyMsCiAoRsEf7B8aV++ntYhpokqJzUU=
-X-Google-Smtp-Source: ACHHUZ5GvtQs3BDrv0cFxfBXmIqg5W3selCgo3jv4chMzfr3j1R0us2gFTaOyJzZG/QwhI7xc4PDOw==
-X-Received: by 2002:a05:6a00:181f:b0:643:2559:80f3 with SMTP id y31-20020a056a00181f00b00643255980f3mr4360076pfa.2.1684505339336;
-        Fri, 19 May 2023 07:08:59 -0700 (PDT)
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com. [209.85.214.178])
-        by smtp.gmail.com with ESMTPSA id h11-20020a62b40b000000b0063d29df1589sm3031959pfn.136.2023.05.19.07.08.58
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 May 2023 07:08:58 -0700 (PDT)
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-1ac65ab7432so153165ad.0
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 07:08:58 -0700 (PDT)
-X-Received: by 2002:a17:902:dad2:b0:198:af50:e4de with SMTP id
- q18-20020a170902dad200b00198af50e4demr206507plx.4.1684505337704; Fri, 19 May
- 2023 07:08:57 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230427035656.1962698-1-fshao@chromium.org>
-In-Reply-To: <20230427035656.1962698-1-fshao@chromium.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 19 May 2023 07:08:46 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XVubT-ozs7JssBPz+9UcsZb+q0My8Aq6HNs-nFiJnogg@mail.gmail.com>
-Message-ID: <CAD=FV=XVubT-ozs7JssBPz+9UcsZb+q0My8Aq6HNs-nFiJnogg@mail.gmail.com>
-Subject: Re: [PATCH v4 0/2] Fix Goodix touchscreen power leakage for MT8186 boards
-To:     Fei Shao <fshao@chromium.org>
-Cc:     Jeff LaBundy <jeff@labundy.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Fri, 19 May 2023 10:13:04 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7EC192;
+        Fri, 19 May 2023 07:13:00 -0700 (PDT)
+Received: (Authenticated sender: alexis.lothore@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id B6E69E000C;
+        Fri, 19 May 2023 14:12:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1684505579;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=hNOWLwZhohqqCv++hyHHKNma3nLjTIdFany2731ha0U=;
+        b=PQx2oP1A1g1UHKp0oSO4ocOP25FfBY43imsJdUNEXikVPyEyKgFMqUaTXPbK481EZfNaAK
+        xanp4U3sYWNcgc36H5pEf5prYuMrh6cLKkKDSkSPzJvb2nl0U30MaxHWGPEJ+W9r8L7mrB
+        VKdKLJOD4nW3PF7LiILdk8fddZnNilY3+Y4hLotCCfgMXi5WwHNXjffbzyhdIqQxVXMXWq
+        1xJUrSfogvg6NlFStl9x2dL50IDQwu+xJFedVDvZngjDUKqV1QseR/x+MQqd1g4mHE5Im6
+        ebRdszPtTgdylld2CKabKbqrH/LgA70jHFllQSaLX0jsVSv+sqBVLKo9dSe51w==
+From:   alexis.lothore@bootlin.com
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
-        linux-mediatek <linux-mediatek@lists.infradead.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jiri Kosina <jikos@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Stephen Kitt <steve@sk2.org>, devicetree@vger.kernel.org,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Conor Dooley <conor+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
+        paul.arola@telus.com, scott.roberts@telus.com,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+        =?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Subject: [PATCH net-next v2 0/7] net: dsa: mv88e6xxx: add 88E6361 support
+Date:   Fri, 19 May 2023 16:12:56 +0200
+Message-Id: <20230519141303.245235-1-alexis.lothore@bootlin.com>
+X-Mailer: git-send-email 2.40.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Alexis Lothoré <alexis.lothore@bootlin.com>
 
-On Wed, Apr 26, 2023 at 8:57=E2=80=AFPM Fei Shao <fshao@chromium.org> wrote=
-:
->
-> These changes are based on the series in [1], which modified the
-> i2c-hid-of-goodix driver and removed the workaround for a power leakage
-> issue, so the issue revisits on Mediatek MT8186 boards (Steelix).
->
-> The root cause is that the touchscreen can be powered in different ways
-> depending on the hardware designs, and it's not as easy to come up with
-> a solution that is both simple and elegant for all the known designs.
->
-> To address the issue, I ended up adding a new boolean property for the
-> driver so that we can control the power up/down sequence depending on
-> that.
->
-> Adding a new property might not be the cleanest approach for this, but
-> at least the intention would be easy enough to understand, and it
-> introduces relatively small change to the code and fully preserves the
-> original control flow.
-> I hope this is something acceptable, and I'm open to any better
-> approaches.
->
-> [1] https://lore.kernel.org/all/20230207024816.525938-1-dianders@chromium=
-.org/
->
-> Changes in v4:
-> - Minor coding style improvement
->
-> Changes in v3:
-> - In power-down, only skip the GPIO but not the regulator calls if the
->   flag is set
->
-> Changes in v2:
-> - Use a more accurate property name and with "goodix," prefix.
-> - Do not change the regulator_enable logic during power-up.
->
-> Fei Shao (2):
->   dt-bindings: input: goodix: Add "goodix,no-reset-during-suspend"
->     property
->   HID: i2c-hid: goodix: Add support for "goodix,no-reset-during-suspend"
->     property
->
->  .../bindings/input/goodix,gt7375p.yaml           |  9 +++++++++
->  drivers/hid/i2c-hid/i2c-hid-of-goodix.c          | 16 +++++++++++++++-
->  2 files changed, 24 insertions(+), 1 deletion(-)
+This series brings initial support for Marvell 88E6361 switch.
 
-Just double-checking if there is any work needed on this series. I
-think it's ready to land but I wanted to double-check.
+MV88E6361 is a 8 ports switch with 5 integrated Gigabit PHYs and 3
+2.5Gigabit SerDes interfaces. It is in fact a new variant in the
+88E639X/88E6193X/88E6191X family with a subset of existing features:
+- port 0: MII, RMII, RGMII, 1000BaseX, 2500BaseX
+- port 3 to 7: triple speed internal phys
+- port 9 and 10: 1000BaseX, 25000BaseX
 
-Thanks!
+Since said family is already well supported in mv88e6xxx driver, adding
+initial support for this new switch mostly consists in finding the ID
+exposed in its identification register, adding a proper description
+in switch description tables in mv88e6xxx driver, and enforcing 88E6361
+specificities in mv88e6393x_XXX methods.
 
--Doug
+- first 4 commits introduce an internal phy offset field for switches which
+  have internal phys but not starting from port 0
+- 5th commit is a fix on existing switches based on first commits
+- 6th commit is a slight modification to prepare 886361 support
+- last commit introduces 88E6361 support in 88E6393X family
+
+This initial support has been tested with two samples of a custom board
+with the following hardware configuration:
+- a main CPU connected to MV88E6361 using port 0 as CPU port
+- port 9 wired to a SFP cage
+- port 10 wired to a G.Hn transceiver
+
+The following setup was used:
+PC <-ethernet-> (copper SFP) - Board 1 - (G.hn) <-phone line(RJ11)-> (G.hn) Board 2
+
+The unit 1 has been configured to bridge SFP port and G.hn port together,
+which allowed to successfully ping Board 2 from PC.
+
+Now that this series brings fixes for existing switches, I am not sure if
+a split into two series is desirable. If so, please let me know. Also, my
+current testing hardware does not use ports with internal PHYs, so further
+feedback/testing on 6393X family would be highly appreciated
+
+Changes since v1:
+- rework mv88e6xxx_port_ppu_updates to use internal helper
+- add internal phys offset field to manage switches which do not have
+  internal PHYs right on first ports
+- fix 88E639X/88E6193X/88E6191X internal phy layout
+- enforce 88E6361 features in mv88e6393x_port_set_speed_duplex
+- enforce 88E6361 features in mv88e6393x_port_max_speed_mode
+- enforce 88E6361 features in mv88e6393x_phylink_get_caps
+- add Reviewed-By and Acked-By on untouched patch
+
+Alexis Lothoré (7):
+  dt-bindings: net: dsa: marvell: add MV88E6361 switch to compatibility
+    list
+  net: dsa: mv88e6xxx: pass directly chip structure to
+    mv88e6xxx_phy_is_internal
+  net: dsa: mv88e6xxx: use mv88e6xxx_phy_is_internal in
+    mv88e6xxx_port_ppu_updates
+  net: dsa: mv88e6xxx: add field to specify internal phys layout
+  net: dsa: mv88e6xxx: fix 88E6393X family internal phys layout
+  net: dsa: mv88e6xxx: pass mv88e6xxx_chip structure to
+    port_max_speed_mode
+  net: dsa: mv88e6xxx: enable support for 88E6361 switch
+
+ .../devicetree/bindings/net/dsa/marvell.txt   |  2 +-
+ drivers/net/dsa/mv88e6xxx/chip.c              | 69 ++++++++++++++-----
+ drivers/net/dsa/mv88e6xxx/chip.h              | 11 ++-
+ drivers/net/dsa/mv88e6xxx/global2.c           |  6 +-
+ drivers/net/dsa/mv88e6xxx/port.c              | 23 +++++--
+ drivers/net/dsa/mv88e6xxx/port.h              | 13 ++--
+ 6 files changed, 94 insertions(+), 30 deletions(-)
+
+-- 
+2.40.1
+
