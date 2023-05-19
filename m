@@ -2,81 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09E9170976F
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 14:44:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43A65709773
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 14:45:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230216AbjESMoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 08:44:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57414 "EHLO
+        id S230468AbjESMpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 08:45:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjESMoK (ORCPT
+        with ESMTP id S229464AbjESMpD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 08:44:10 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F29ED;
-        Fri, 19 May 2023 05:44:09 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34JAuCPT012675;
-        Fri, 19 May 2023 12:43:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=JinEieFTQH14LquFwxeJXj4Iare8Kdc9Tc6QwV3ep0E=;
- b=Tcuo+6f152hMzArmyYZr0mvm2dzQ29UJ5sGNU6WAdyTtTIYZLnaTbuzqMRxJKply1uA7
- jTcQFYdheNcR3Nat+Pqt6y6FM7C0mycULYRMjb18f+AyzWfMcPwTOxh587lIMT3WIRgo
- KyGlfw7czGT/5LCLhw69Ddd8scm46nSI6d/U3RiapRa1P39eyeINbQ6oUL62wEkPl5wM
- 4HpZQ7ytK1Y/pXp7t07PNX7zezuCLvUmdHhuEyVNO3BANi9YsLSXR8pgoLZeW3ZUU9z0
- NxA5WXWsUlU/KPWocISoom8WHTh+VhQ+kO+0Cgq8std8QmtFpViXoOmQHNAO8mEhvjDB QA== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qp4ccrmd1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 May 2023 12:43:57 +0000
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34JChvdm030562
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 May 2023 12:43:57 GMT
-Received: from [10.216.23.115] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 19 May
- 2023 05:43:48 -0700
-Message-ID: <36fd2413-8a2a-5b7e-c4a0-64e0ac4622ed@quicinc.com>
-Date:   Fri, 19 May 2023 18:13:43 +0530
+        Fri, 19 May 2023 08:45:03 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2FF9DED;
+        Fri, 19 May 2023 05:45:01 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C36211FB;
+        Fri, 19 May 2023 05:45:45 -0700 (PDT)
+Received: from [10.57.73.119] (unknown [10.57.73.119])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 757123F762;
+        Fri, 19 May 2023 05:44:58 -0700 (PDT)
+Message-ID: <ac98770b-ad94-1cce-ebe2-d21d5619be9b@arm.com>
+Date:   Fri, 19 May 2023 13:44:57 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH 4/8] PCI: qcom: Do not advertise hotplug capability for
- IPs v2.3.3 and v2.9.0
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        <lpieralisi@kernel.org>, <kw@linux.com>, <bhelgaas@google.com>
-CC:     <robh@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <linux-pci@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <steev@kali.org>
-References: <20230506073139.8789-1-manivannan.sadhasivam@linaro.org>
- <20230506073139.8789-5-manivannan.sadhasivam@linaro.org>
-From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
-In-Reply-To: <20230506073139.8789-5-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH V3 4/6] coresight: etm4x: Change etm4_platform_driver
+ driver for MMIO devices
+To:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        coresight@lists.linaro.org
+Cc:     Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
+        Steve Clevenger <scclevenger@os.amperecomputing.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>, devicetree@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+References: <20230519052149.1367814-1-anshuman.khandual@arm.com>
+ <20230519052149.1367814-5-anshuman.khandual@arm.com>
+From:   Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20230519052149.1367814-5-anshuman.khandual@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: eGBtQREnCqHrhpbjufzBGFO-PTTkqSuE
-X-Proofpoint-ORIG-GUID: eGBtQREnCqHrhpbjufzBGFO-PTTkqSuE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-19_08,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
- lowpriorityscore=0 adultscore=0 impostorscore=0 spamscore=0 bulkscore=0
- phishscore=0 mlxlogscore=959 suspectscore=0 malwarescore=0 clxscore=1011
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305190107
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,48 +60,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/6/2023 1:01 PM, Manivannan Sadhasivam wrote:
-> SoCs making use of Qcom PCIe controller IPs v2.3.3 and v2.9.0 do not
-> support hotplug functionality. But the hotplug capability bit is set by
-> default in the hardware. This causes the kernel PCI core to register
-> hotplug service for the controller and send hotplug commands to it. But
-> those commands will timeout generating messages as below during boot
-> and suspend/resume.
+On 19/05/2023 06:21, Anshuman Khandual wrote:
+> Add support for handling MMIO based devices via platform driver. We need to
+> make sure that :
 > 
-> [    5.782159] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x03c0 (issued 2020 msec ago)
-> [    5.810161] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x03c0 (issued 2048 msec ago)
-> [    7.838162] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x07c0 (issued 2020 msec ago)
-> [    7.870159] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x07c0 (issued 2052 msec ago)
+> 1) The APB clock, if present is enabled at probe and via runtime_pm ops
+> 2) Use the ETM4x architecture or CoreSight architecture registers to
+>     identify a device as CoreSight ETM4x, instead of relying a white list of
+>     "Peripheral IDs"
 > 
-> This not only spams the console output but also induces a delay of a
-> couple of seconds. To fix this issue, let's not set the HPC bit in
-> PCI_EXP_SLTCAP register as a part of the post init sequence to not
-> advertise the hotplug capability for the controller.
+> The driver doesn't get to handle the devices yet, until we wire the ACPI
+> changes to move the devices to be handled via platform driver than the
+> etm4_amba driver.
 > 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Cc: Mathieu Poirier <mathieu.poirier@linaro.org>
+> Cc: Suzuki K Poulose <suzuki.poulose@arm.com>
+> Cc: Mike Leach <mike.leach@linaro.org>
+> Cc: Leo Yan <leo.yan@linaro.org>
+> Cc: coresight@lists.linaro.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 > ---
->   drivers/pci/controller/dwc/pcie-qcom.c | 1 -
->   1 file changed, 1 deletion(-)
+>   .../coresight/coresight-etm4x-core.c          | 62 +++++++++++++++++--
+>   drivers/hwtracing/coresight/coresight-etm4x.h |  4 ++
+>   include/linux/coresight.h                     | 47 ++++++++++++++
+>   3 files changed, 109 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-> index 00246726c21d..3d5b3ce9e2da 100644
-> --- a/drivers/pci/controller/dwc/pcie-qcom.c
-> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-> @@ -140,7 +140,6 @@
->   						PCI_EXP_SLTCAP_AIP | \
->   						PCI_EXP_SLTCAP_PIP | \
->   						PCI_EXP_SLTCAP_HPS | \
-> -						PCI_EXP_SLTCAP_HPC | \
->   						PCI_EXP_SLTCAP_EIP | \
->   						PCIE_CAP_SLOT_POWER_LIMIT_VAL | \
->   						PCIE_CAP_SLOT_POWER_LIMIT_SCALE)
+> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-core.c b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> index 914ef6eb85d1..807b3a5a0eda 100644
+> --- a/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> +++ b/drivers/hwtracing/coresight/coresight-etm4x-core.c
+> @@ -30,6 +30,7 @@
+>   #include <linux/platform_device.h>
+>   #include <linux/pm_runtime.h>
+>   #include <linux/property.h>
+> +#include <linux/clk/clk-conf.h>
+>   
+>   #include <asm/barrier.h>
+>   #include <asm/sections.h>
+> @@ -1073,11 +1074,21 @@ static bool etm4_init_sysreg_access(struct etmv4_drvdata *drvdata,
+>   	return true;
+>   }
+>   
+> +static bool is_devtype_cpu_trace(void __iomem *base)
+> +{
+> +	u32 devtype = readl(base + TRCDEVTYPE);
+> +
+> +	return (devtype == CS_DEVTYPE_PE_TRACE);
+> +}
+> +
+>   static bool etm4_init_iomem_access(struct etmv4_drvdata *drvdata,
+>   				   struct csdev_access *csa)
+>   {
+>   	u32 devarch = readl_relaxed(drvdata->base + TRCDEVARCH);
+>   
+> +	if (!is_coresight_device(drvdata->base) || !is_devtype_cpu_trace(drvdata->base))
+> +		return false;
+> +
+>   	/*
+>   	 * All ETMs must implement TRCDEVARCH to indicate that
+>   	 * the component is an ETMv4. Even though TRCIDR1 also
+> @@ -2135,6 +2146,7 @@ static int etm4_probe_amba(struct amba_device *adev, const struct amba_id *id)
+>   
+>   static int etm4_probe_platform_dev(struct platform_device *pdev)
+>   {
+> +	struct resource *res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>   	struct etmv4_drvdata *drvdata;
+>   	int ret;
+>   
+> @@ -2142,7 +2154,18 @@ static int etm4_probe_platform_dev(struct platform_device *pdev)
+>   	if (!drvdata)
+>   		return -ENOMEM;
+>   
+> -	drvdata->base = NULL;
+> +	drvdata->pclk = coresight_get_enable_apb_pclk(&pdev->dev);
+> +	if (IS_ERR(drvdata->pclk))
+> +		return -ENODEV;
+> +
+> +	if (res) {
+> +		drvdata->base = devm_ioremap_resource(&pdev->dev, res);
+> +		if (IS_ERR(drvdata->base)) {
+> +			clk_put(drvdata->pclk);
+> +			return PTR_ERR(drvdata->base);
+> +		}
+> +	}
+> +
+>   	dev_set_drvdata(&pdev->dev, drvdata);
+>   	pm_runtime_get_noresume(&pdev->dev);
+>   	pm_runtime_set_active(&pdev->dev);
+> @@ -2188,7 +2211,7 @@ static struct amba_cs_uci_id uci_id_etm4[] = {
+>   		/*  ETMv4 UCI data */
+>   		.devarch	= ETM_DEVARCH_ETMv4x_ARCH,
+>   		.devarch_mask	= ETM_DEVARCH_ID_MASK,
+> -		.devtype	= 0x00000013,
+> +		.devtype	= CS_DEVTYPE_PE_TRACE,
+>   	}
+>   };
+>   
+> @@ -2246,6 +2269,10 @@ static int __exit etm4_remove_platform_dev(struct platform_device *pdev)
+>   
+>   	if (drvdata)
+>   		ret = etm4_remove_dev(drvdata);
+> +
+> +	if (drvdata->pclk)
+> +		clk_put(drvdata->pclk);
+> +
 
-  Tested this in ipq9574 board and the 'timeout' messages go away with
-  this.
+Shouldn't this be done *after* pm_runtime_disable() below ?
 
-   Tested-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+>   	pm_runtime_disable(&pdev->dev);
 
-Regards,
-  Sricharan
+>   	return ret;
+>   }
+> @@ -2286,7 +2313,33 @@ static struct amba_driver etm4x_amba_driver = {
+>   	.id_table	= etm4_ids,
+>   };
+>   
+> -static const struct of_device_id etm4_sysreg_match[] = {
+> +#ifdef CONFIG_PM
+> +static int etm4_runtime_suspend(struct device *dev)
+> +{
+> +	struct etmv4_drvdata *drvdata = dev_get_drvdata(dev);
+> +
+> +	if (!IS_ERR(drvdata->pclk))
+> +		clk_disable_unprepare(drvdata->pclk);
+> +
+> +	return 0;
+> +}
+> +
+> +static int etm4_runtime_resume(struct device *dev)
+> +{
+> +	struct etmv4_drvdata *drvdata = dev_get_drvdata(dev);
+> +
+> +	if (!IS_ERR(drvdata->pclk))
+> +		clk_prepare_enable(drvdata->pclk);
+> +
+> +	return 0;
+> +}
+> +#endif
+> +
+> +static const struct dev_pm_ops etm4_dev_pm_ops = {
+> +	SET_RUNTIME_PM_OPS(etm4_runtime_suspend, etm4_runtime_resume, NULL)
+> +};
+> +
+> +static const struct of_device_id etm4_match[] = {
+
+minor nit: This is still only for the system instruction based
+etms, so this renaming is going to confuse. Please leave it
+unchanged.
+
+Suzuki
+
+
