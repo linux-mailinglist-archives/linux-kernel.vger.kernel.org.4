@@ -2,204 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7900B709B79
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 17:39:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E6F9709B7C
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 17:40:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232161AbjESPjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 11:39:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56822 "EHLO
+        id S232013AbjESPkx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 11:40:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjESPjJ (ORCPT
+        with ESMTP id S229546AbjESPkv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 11:39:09 -0400
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C54C19F;
-        Fri, 19 May 2023 08:39:07 -0700 (PDT)
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-30948709b3cso1544237f8f.3;
-        Fri, 19 May 2023 08:39:07 -0700 (PDT)
+        Fri, 19 May 2023 11:40:51 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCB1B19F
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 08:40:50 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-53425d37fefso2030941a12.3
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 08:40:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684510850; x=1687102850;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GnWC4mQ/WMnZdD3b8JUdPNh8r1zjJNTS2dZ7JBLK+Wc=;
+        b=jQL1RgzePRb6CE0wG/sVkfkt4rd8Wt2jrN77gaN9Htf9eQKNrA7qB2VPAxmi6pdSeg
+         Su5u8NcwmRuwZx7bH1F9TmDvrwv+LISAqTOzpx5Qf8pRfXQxw0YiAhK1QcYrFztzcGmD
+         wyJ+ZfzmhgFX33tO0WQdnj/AY9WDFrn/92ljHE9AX9bENwh/95skpiuqJV9wVOXhVs1i
+         sb0fKjBpw5LA2Ck792zWmzLpLTaDjOtrm/fq7AYmIZO5ZRrt1AM3o4fW1Ir/9pKh9v7e
+         5ejgJVZ6w07KYeFXkx4s1L32hmXMjmVFijle+uT7TuvSundmfzLB+7cCUo5p5yQUJA3f
+         59LQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684510746; x=1687102746;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q+3zLRO6P1z7EWxNec705aXZXE4sUCnWuvzNCkJyTRs=;
-        b=dlv5GoTaZ9MJ/6FGPXwm4eqiGfA1guakro49j+iuFuioqjgPE+IsH8hINVrocwny4r
-         M11167U7oPfhEQZCHaj/tVI6Bg4rCaSnfnrMQefegouPZkhCokOrt+h3qJ+KyrQ5vBer
-         XHekxQRxGhy9+t5M+obGuDosthpA7HTrXYvO7T9QlsNsEIY4e5zqwRBhiHrjEnu9p7/L
-         kMi/mQ79X/fv4zuoc6m6JZqUOKpAM30Z0MQTaLZqPlgXiu83CtmZJIYMRzdYl+3Gyyt+
-         r5xhya6473Sj4teBm7vVCEEW0YbES4luJkUEOruSCrX6tAkbvFMAYtngJR/HvOBuZ2AI
-         ChXg==
-X-Gm-Message-State: AC+VfDwCOfmKf8ofgo1JzSWTujaLEBRkKBp8xIzx8Z0LAaqIPQSUhwvG
-        FQN6wT8GdxKW/9+f8PYXIOs=
-X-Google-Smtp-Source: ACHHUZ7r8qvUEprMwUVyjYpon9esilwB6U0xvA31i7GU0SJAUOGNcni7PWZwPXxBEiFwiUI3A2Eo6A==
-X-Received: by 2002:adf:f049:0:b0:309:3d00:7d4f with SMTP id t9-20020adff049000000b003093d007d4fmr2293928wro.28.1684510745725;
-        Fri, 19 May 2023 08:39:05 -0700 (PDT)
-Received: from gmail.com (fwdproxy-cln-041.fbsv.net. [2a03:2880:31ff:29::face:b00c])
-        by smtp.gmail.com with ESMTPSA id v12-20020a05600c214c00b003f50237bd9csm2792189wml.19.2023.05.19.08.39.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 08:39:05 -0700 (PDT)
-Date:   Fri, 19 May 2023 08:39:03 -0700
-From:   Breno Leitao <leitao@debian.org>
-To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc:     axboe@kernel.dk, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, courmisch@gmail.com,
-        nhorman@tuxdriver.com, asml.silence@gmail.com,
-        alex.aring@gmail.com, dccp@vger.kernel.org, mptcp@lists.linux.dev,
-        linux-kernel@vger.kernel.org, matthieu.baerts@tessares.net,
-        marcelo.leitner@gmail.com, linux-wpan@vger.kernel.org,
-        linux-sctp@vger.kernel.org, leit@fb.com, David.Laight@aculab.com,
-        dsahern@kernel.org
-Subject: Re: [PATCH 1/1] net: ioctl: Use kernel memory on protocol ioctl
- callbacks
-Message-ID: <ZGeYF+pp8Ukbo4p5@gmail.com>
-References: <20230519135821.922326-1-leitao@debian.org>
- <20230519135821.922326-2-leitao@debian.org>
- <CAF=yD-Jj6dvyOskL+F52_aaaCovVTcpoYSCeMY7xH=FK7r3Jiw@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAF=yD-Jj6dvyOskL+F52_aaaCovVTcpoYSCeMY7xH=FK7r3Jiw@mail.gmail.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1684510850; x=1687102850;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GnWC4mQ/WMnZdD3b8JUdPNh8r1zjJNTS2dZ7JBLK+Wc=;
+        b=kss/R8+FOYevEVkRSueUAnS4hkNJ329dStz7csxyRR8X9u47bfwAkDx1FzDajMK9xV
+         dVwvGAQIMVz/r/0Oe59lAl0gP9EAMfbmiKJwzsex2ywWd5RjsZTzIxZaCeVBL6iwlCf1
+         7MU3SVDEfhys3u4xJbB0krqX1DMQ9p4jFzK/d+Y+lmaOIBXrh0mzYzYM7ywrlxiuCG6F
+         yuA9Ngn/flXp2ZgdaeQ4A8bS768oB3j3wpsIP4o209nVkcvnCrA/aIkuy+NmP1KX59yA
+         lFzaktK1OdZRFk3n53cqXmntkI/HgeHPEEKKSXJ+k+Da7p5JKK7hXDZrZ1tqW9vUXHua
+         6C+Q==
+X-Gm-Message-State: AC+VfDzNPcWT3henExQQ2VZfUXNMEKxtKSIwrGGNJvQINJ4v0+GxgMRT
+        n4vJ7SIvlXP6ddU2OHsOtLc/V32inH0=
+X-Google-Smtp-Source: ACHHUZ7VuSIVLy+nWtnXiTAGMOugz5axqsHZhuYhiKJAa7IHVutOk8mzE7pcpv8HAXmFLe9XB/ks3dGHHoY=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a63:fa50:0:b0:530:70cb:6da9 with SMTP id
+ g16-20020a63fa50000000b0053070cb6da9mr534975pgk.10.1684510850201; Fri, 19 May
+ 2023 08:40:50 -0700 (PDT)
+Date:   Fri, 19 May 2023 08:40:48 -0700
+In-Reply-To: <ZAn34D3hXR7dp8KC@kernel.org>
+Mime-Version: 1.0
+References: <20230308094106.227365-1-rppt@kernel.org> <e48a7fb1f8ab8d670b0884fd2a5d1e8c1c20e712.camel@intel.com>
+ <ZAn34D3hXR7dp8KC@kernel.org>
+Message-ID: <ZGeYgKCFOkzP2fub@google.com>
+Subject: Re: [RFC PATCH 0/5] Prototype for direct map awareness in page allocator
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Rick P Edgecombe <rick.p.edgecombe@intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "song@kernel.org" <song@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 11:09:29AM -0400, Willem de Bruijn wrote:
-> On Fri, May 19, 2023 at 9:59 AM Breno Leitao <leitao@debian.org> wrote:
-> >
-> > Most of the ioctls to net protocols operates directly on userspace
-> > argument (arg). Usually doing get_user()/put_user() directly in the
-> > ioctl callback.  This is not flexible, because it is hard to reuse these
-> > functions without passing userspace buffers.
-> >
-> > Change the "struct proto" ioctls to avoid touching userspace memory and
-> > operate on kernel buffers, i.e., all protocol's ioctl callbacks is
-> > adapted to operate on a kernel memory other than on userspace (so, no
-> > more {put,get}_user() and friends being called in the ioctl callback).
-> >
-> > This changes the "struct proto" ioctl format in the following way:
-> >
-> >     int                     (*ioctl)(struct sock *sk, int cmd,
-> > -                                        unsigned long arg);
-> > +                                        int *karg);
-> >
-> > So, the "karg" argument, which is passed to the ioctl callback, is a
-> > pointer allocated to kernel space memory (inside a function wrapper -
-> > sock_skprot_ioctl()). This buffer (karg) may contain input argument
-> > (copied from userspace in a prep function) and it might return a
-> > value/buffer, which is copied back to userspace if necessary. There is
-> > not one-size-fits-all format (that is I am using 'may' above), but
-> > basically, there are three type of ioctls:
-> >
-> > 1) Do not read from userspace, returns a result to userspace
-> > 2) Read an input parameter from userspace, and does not return anything
-> >   to userspace
-> > 3) Read an input from userspace, and return a buffer to userspace.
-> >
-> > The default case (1) (where no input parameter is given, and an "int" is
-> > returned to userspace) encompasses more than 90% of the cases, but there
-> > are two other exceptions. Here is a list of exceptions:
-> >
-> > * Protocol RAW:
-> >    * cmd = SIOCGETVIFCNT:
-> >      * input and output = struct sioc_vif_req
-> >    * cmd = SIOCGETSGCNT
-> >      * input and output = struct sioc_sg_req
-> >    * Explanation: for the SIOCGETVIFCNT case, userspace passes the input
-> >      argument, which is struct sioc_vif_req. Then the callback populates
-> >      the struct, which is copied back to userspace.
-> >
-> > * Protocol RAW6:
-> >    * cmd = SIOCGETMIFCNT_IN6
-> >      * input and output = struct sioc_mif_req6
-> >    * cmd = SIOCGETSGCNT_IN6
-> >      * input and output = struct sioc_sg_req6
-> >
-> > * Protocol PHONET:
-> >   * cmd == SIOCPNADDRESOURCE | SIOCPNDELRESOURCE
-> >      * input int (4 bytes)
-> >   * Nothing is copied back to userspace.
-> >
-> > For the exception cases, functions sock_skproto_ioctl_in{out}() will
-> > copy the userspace input, and copy it back to kernel space.
-> >
-> > The wrapper that prepares the buffer and puts the buffer back to user is
-> > sock_skprot_ioctl(), so, instead of calling sk->sk_prot->ioctl(), the
-> > callee now calls sock_skprot_ioctl().
-> >
-> > Signed-off-by: Breno Leitao <leitao@debian.org>
+On Thu, Mar 09, 2023, Mike Rapoport wrote:
+> On Thu, Mar 09, 2023 at 01:59:00AM +0000, Edgecombe, Rick P wrote:
+> > On Wed, 2023-03-08 at 11:41 +0200, Mike Rapoport wrote:
+> > > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> > > 
+> > > Hi,
+> > > 
+> > > This is a third attempt to make page allocator aware of the direct
+> > > map
+> > > layout and allow grouping of the pages that must be unmapped from
+> > > the direct map.
+> > > 
+> > > This a new implementation of __GFP_UNMAPPED, kinda a follow up for
+> > > this set:
+> > > 
+> > > https://lore.kernel.org/all/20220127085608.306306-1-rppt@kernel.org
+> > > 
+> > > but instead of using a migrate type to cache the unmapped pages, the
+> > > current implementation adds a dedicated cache to serve __GFP_UNMAPPED
+> > > allocations.
+> > 
+> > It seems a downside to having a page allocator outside of _the_ page
+> > allocator is you don't get all of the features that are baked in there.
+> > For example does secretmem care about numa? I guess in this
+> > implementation there is just one big cache for all nodes.
+> > 
+> > Probably most users would want __GFP_ZERO. Would secretmem care about
+> > __GFP_ACCOUNT?
 > 
-> Overall this looks great to me.
+> The intention was that the pages in cache are always zeroed, so __GFP_ZERO
+> is always implicitly there, at least should have been.
 
-Thanks for the guidance and quick review!
-
-> 
-> Thanks for the detailed commit message that lists all exceptions, Bruno.
-> 
-> Since that is a limited well understood list, I'm not in favor of the
-> suggestion to add an explicit length argument that then needs to be
-> checked in each callee.
-> 
-> > +/* Copy 'size' bytes from userspace and return `size` back to userspace */
-> > +int sock_skproto_ioctl_inout(struct sock *sk, unsigned int cmd,
-> > +                            void __user *arg, size_t size)
-> > +{
-> > +       void *ptr;
-> > +       int ret;
-> > +
-> > +       ptr = kmalloc(size, GFP_KERNEL);
-> > +       if (!ptr)
-> > +               return -ENOMEM;
-> 
-> > +/* A wrapper around sock ioctls, which copies the data from userspace
-> > + * (depending on the protocol/ioctl), and copies back the result to userspace.
-> > + * The main motivation for this function is to pass kernel memory to the
-> > + * protocol ioctl callsback, instead of userspace memory.
-> > + */
-> > +int sock_skprot_ioctl(struct sock *sk, unsigned int cmd,
-> > +                     void __user *arg)
-> > +{
-> > +#ifdef CONFIG_IP_MROUTE
-> > +       if (!strcmp(sk->sk_prot->name, "RAW")) {
-> 
-> This must check both sk_family and sk_protocol. That is preferable
-> over string match.
-> 
-> For these exception cases, instead of having sock_skproto_ioctl_inout
-> dynamically allocate the struct, how about stack allocating them here
-> and passing to the function?
-
-Should I stack allocate all the 4 structures sock_skprot_ioctl and pass
-them to sock_skproto_ioctl_inout() together with the size? (using the
-original name to avoid confusion - will rename in V2)
-
-I mean, writing something as:
-
-int sock_skprot_ioctl(struct sock *sk, unsigned int cmd
-                     void __user *arg`
-{
-	struct sioc_vif_req sioc_vif_req_arg;
-	struct sioc_sg_req sioc_sg_req_arg;
-	struct sioc_mif_req6 sioc_mif_req6_arg;
-	struct sioc_sg_req6 sioc_sg_req6_arg;
-
-	..
-
-	if (!strcmp(sk->sk_prot->name, "RAW6")) {
-        switch (cmd) {
-               case SIOCGETMIFCNT_IN6:
-                       return sock_skproto_ioctl_inout(sk, cmd,
-                               arg, &sioc_mif_req6_arg, sizeof(sioc_mif_req6_arg);
-               case SIOCGETSGCNT_IN6:
-                       return sock_skproto_ioctl_inout(sk, cmd,
-                               arg, &sioc_sg_req6_arg, sizeof(sioc_sg_req6_arg));
-               }
-       }
-       ...
-}
+Would it be possible to drop that assumption/requirement, i.e. allow allocation of
+__GFP_UNMAPPED without __GFP_ZERO?  At a glance, __GFP_UNMAPPED looks like it would
+be a great fit for backing guest memory, in particular for confidential VMs.  And
+for some flavors of CoCo, i.e. TDX, the trusted intermediary is responsible for
+zeroing/initializing guest memory as the untrusted host (kernel/KVM) doesn't have
+access to the guest's encryption key.  In other words, zeroing in the kernel would
+be unnecessary work.
