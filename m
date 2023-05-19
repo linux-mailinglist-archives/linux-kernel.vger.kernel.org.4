@@ -2,131 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF4C9709535
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 12:39:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78422709538
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 12:40:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231472AbjESKjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 06:39:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58588 "EHLO
+        id S231858AbjESKkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 06:40:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231602AbjESKjR (ORCPT
+        with ESMTP id S231281AbjESKkO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 06:39:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BDF419BA;
-        Fri, 19 May 2023 03:38:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2312D65665;
-        Fri, 19 May 2023 10:37:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 355FBC433EF;
-        Fri, 19 May 2023 10:36:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684492625;
-        bh=wml5FX+iifwiN9GWfcWZwLOn5yYaW+2EgAm1pGQ4wag=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LesqHPpJFvmUzFRNKNrXorR1EYqX2OH4PzpfMnfkwpXBNMAdG0ZQ2/EhXWk4IygXG
-         2SChx7zSoJ0YLPAx8NLZvJ6SOzp1REqqg2W4zVp5wbwe7o+dIDPVWUoxCl/qyUoiC6
-         Hc8K5v1h61MJ/2+pFTwgJ2RbfpliI2uZCFdccGPMr9bJ2ILACO3fq5ktbLX9Ih9mt7
-         borB3WCTF8vBovAIwJK2NJXzqkEsDom9vEZ+pqPWJpam+HPFNvtn25M8aQT5NRfCtp
-         AGEEcDIESrx+0PUP4SCR9bC6eWarMtHEgUXfuLLSvsE0ZBK7mZlQH/I+SzX7bqFsFt
-         94cgCHIsObdWA==
-Date:   Fri, 19 May 2023 12:36:51 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Chuck Lever III <chuck.lever@oracle.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Chinner <david@fromorbit.com>, Jan Kara <jack@suse.cz>,
-        Amir Goldstein <amir73il@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Neil Brown <neilb@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Theodore T'so <tytso@mit.edu>, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Steve French <sfrench@samba.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Tom Talpey <tom@talpey.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-XFS <linux-xfs@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>
-Subject: Re: [PATCH v4 4/9] nfsd: ensure we use ctime_peek to grab the
- inode->i_ctime
-Message-ID: <20230519-zierde-legieren-e769c19a29cb@brauner>
-References: <20230518114742.128950-1-jlayton@kernel.org>
- <20230518114742.128950-5-jlayton@kernel.org>
- <2B6A4DDD-0356-4765-9CED-B22A29767254@oracle.com>
- <b046f7e3c86d1c9dd45e932d3f25785fce921f4a.camel@kernel.org>
+        Fri, 19 May 2023 06:40:14 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 261BCE7F;
+        Fri, 19 May 2023 03:39:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1684492696; i=deller@gmx.de;
+        bh=ms3RDIelSxdWVnz+v+z9XPddozX1qPFluv8VIGAgkDE=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=T02R7bIGOTjrA0+bwrttwkuIhtYTzk0tJZNRAXFCIz+zOaqee8vviwJSA95WJs7qc
+         xNxYASFkiRIf8V6K1R439W0HsdShTw4Tt3L7JgQ5/gCSro9OfW1rS7KCykCXmhudt2
+         by3Q/pwiHvN/faSpC0j6lT8pOSRG11vi7rIT0XD6U/QjZmKH6CRKS7xzowreF9KG3y
+         2PvYYHR/DOS3pqT7La7ok4tNegNa3iRduGEwQPewcF93UeM3eiLPQrXjp1HxY+DPNb
+         X3OqUUPmyOtUajxkkhJeIFDyW9hVBu0iwx9S3hKzXPLGHAgcf7HMlLWPsRC4LOj52E
+         cLOWRHqKIRA5w==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([94.134.152.232]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N0XCw-1qKuey0oT6-00wT8I; Fri, 19
+ May 2023 12:38:16 +0200
+Message-ID: <6e93305a-2d70-d411-3e36-c536449295dd@gmx.de>
+Date:   Fri, 19 May 2023 12:38:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <b046f7e3c86d1c9dd45e932d3f25785fce921f4a.camel@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [syzbot] [fbdev?] [usb?] WARNING in
+ dlfb_submit_urb/usb_submit_urb (2)
+Content-Language: en-US
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        syzbot <syzbot+0e22d63dcebb802b9bc8@syzkaller.appspotmail.com>,
+        bernie@plugable.com, linux-usb@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+References: <0000000000004a222005fbf00461@google.com>
+ <ZGXVANMhn5j/jObU@ls3530>
+ <4cd17511-2b60-4c37-baf3-c477cf6d1761@rowland.harvard.edu>
+ <be824fbc-cde4-9a2a-8fb4-1ca23f498dca@gmx.de>
+ <2905a85f-4a3b-4a4f-b8fb-a4d037d6c591@rowland.harvard.edu>
+ <ZGZ3JPLqxCxA2UB6@ls3530>
+ <c7b8e69a-cabe-4e17-a511-66179259d1d7@rowland.harvard.edu>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <c7b8e69a-cabe-4e17-a511-66179259d1d7@rowland.harvard.edu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:ZXXu5QJebCOL1y2vAej2hv25kqaBHNpllfPqeQk61VVfGfN0uxj
+ rDbNuPXhmZwoO8Bh77jibdYml7o85GpkNC7HYIrxf/4FEbTPQVnh1opEZf98chq3X+aR6ev
+ LkejgSggZvP+FjMllSTwWbL8ZouKcGtCaN/sWsDCnzz/Yp1NXMqrBrpSPVwidXHKOHdCBiS
+ 8+iqe/D/ZWJug/U5YVTNQ==
+UI-OutboundReport: notjunk:1;M01:P0:uqAs2hR1cdI=;axiGn9AtPsyxX55BDtk41QN+dea
+ aio/2fcCaOf+DcmhcJkyiQ7+En7Aq3W1TAU2aqDa/wrP+J+JpisZwaqQdi44sstBvclOwdbi2
+ zb4vKVdGG15AZktv2D1hv2Zw/ouNMD71FMYhyUsXXrMta409xPlNvaE0pIN5npEfnB01rkhmL
+ 4ixo1Gcz0242fgSwcj7KQlGEMr/TBnWdlDc9H57rAfK6jFEy+IiHa9yDUtySZ2LvyP8VyywRu
+ dFsiMAgapHiKB90cPBTXUPVJboVMnr11qtHxmb6Ku7NZk1pYbExcMUOG5BvY6U481sruYSZDJ
+ WBOiRRA5MJtcNmahBpSOnzZePkABldMJ8LPBVhl7RX1Zwn/LKRqy+pdKs+Qevivjz3d8hqpsG
+ nj1PlPXZLT09NEuUks9eCGhVJEHciuszQL+NJ5h9E0IL1l6j8ceYby2XnS48YTp2MNlr99GnH
+ zcx9WFG9cu5OAv5PvHggwg+1YnktKRvyKAbOwQFsgSSBE6gqh8wPAnaFZiu1ltII9QPKskHqn
+ Nb7Rf4Wm22JRCEb5w/FP77CmvrEKAkUmXdAmM5YXwhPtAZbK2XcUoy83WNKTbNv+nwDUpYnvY
+ 42Zw/A4aGCw75ea2kNfVN8XvSuvKhh72SxwGvFI4e2bs6QEl7G8U93JRqXzIywyMpyne/kjxs
+ QoSXyNK8RMwxQWdv626drSD3A5pGfyvsS29i9MxoKRhhszX1bANb58P4WsrI+YZoxXVHx/inU
+ Zu6YB6LVTKZstsPyC6F0eTUtKiolPMwXqjpLhZN2DQ4HQWNa5tKJ31x/gVUSmQTRr7ge+mI76
+ y66ip4z5emYhIaJ7iVKkxPuKd59KfjzYM1sZTEmu0AP0fjZi5baPCC+ciNQJjZEdTAEw+88R/
+ bpMsCjIv5pKW0IbkcX7obAGJz7WOds8IG8Os1lSVsZNG3yyLI+PYFcDna6uBtPXW6fBFCrDo+
+ ioeVbg==
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 11:31:45AM -0400, Jeff Layton wrote:
-> On Thu, 2023-05-18 at 13:43 +0000, Chuck Lever III wrote:
-> > 
-> > > On May 18, 2023, at 7:47 AM, Jeff Layton <jlayton@kernel.org> wrote:
-> > > 
-> > > If getattr fails, then nfsd can end up scraping the time values directly
-> > > out of the inode for pre and post-op attrs. This may or may not be the
-> > > right thing to do, but for now make it at least use ctime_peek in this
-> > > situation to ensure that the QUERIED flag is masked.
-> > 
-> > That code comes from:
-> > 
-> > commit 39ca1bf624b6b82cc895b0217889eaaf572a7913
-> > Author:     Amir Goldstein <amir73il@gmail.com>
-> > AuthorDate: Wed Jan 3 17:14:35 2018 +0200
-> > Commit:     J. Bruce Fields <bfields@redhat.com>
-> > CommitDate: Thu Feb 8 13:40:17 2018 -0500
-> > 
-> >     nfsd: store stat times in fill_pre_wcc() instead of inode times
-> > 
-> >     The time values in stat and inode may differ for overlayfs and stat time
-> >     values are the correct ones to use. This is also consistent with the fact
-> >     that fill_post_wcc() also stores stat time values.
-> > 
-> >     This means introducing a stat call that could fail, where previously we
-> >     were just copying values out of the inode.  To be conservative about
-> >     changing behavior, we fall back to copying values out of the inode in
-> >     the error case.  It might be better just to clear fh_pre_saved (though
-> >     note the BUG_ON in set_change_info).
-> > 
-> >     Signed-off-by: Amir Goldstein <amir73il@gmail.com>
-> >     Signed-off-by: J. Bruce Fields <bfields@redhat.com>
-> > 
-> > I was thinking it might have been added to handle odd corner
-> > cases around re-exporting NFS mounts, but that does not seem
-> > to be the case.
-> > 
-> > The fh_getattr() can fail for legitimate reasons -- like the
-> > file is in the middle of being deleted or renamed over -- I
-> > would think. This code should really deal with that by not
-> > adding pre-op attrs, since they are optional.
-> > 
-> 
-> That sounds fine to me. I'll plan to drop this patch from the series and
-> I'll send a separate patch to just remove those branches altogether
-> (which should DTRT).
+On 5/18/23 22:35, Alan Stern wrote:
+> On Thu, May 18, 2023 at 09:06:12PM +0200, Helge Deller wrote:
+>> * Alan Stern <stern@rowland.harvard.edu>:
+>>> On Thu, May 18, 2023 at 04:16:33PM +0200, Helge Deller wrote:
+>>>> On 5/18/23 15:54, Alan Stern wrote:
+>>>>> In this case it looks like dlfb_usb_probe() or one of the routines i=
+t
+>>>>> calls is wrong; it assumes that an endpoint has the expected type
+>>>>> without checking.  More precisely, it thinks an endpoint is BULK whe=
+n
+>>>>> actually it is INTERRUPT.  That's what needs to be fixed.
+>>>>
+>>>> Maybe usb_submit_urb() should return an error so that drivers can
+>>>> react on it, instead of adding the same kind of checks to all drivers=
+?
+>>>
+>>> Feel free to submit a patch doing this.
+>>
+>> As you wrote above, this may break other drivers too, so I'd leave that
+>> discussion & decision to the USB maintainers (like you).
+>>
+>>> But the checks should be added
+>>> in any case; without them the drivers are simply wrong.
+>>
+>> I pushed the hackish patch below through the syz tests which gives this=
+ log:
+>> (see https://syzkaller.appspot.com/text?tag=3DCrashLog&x=3D160b75092800=
+00)
+>> [   77.559566][    T9] usb 1-1: Unable to get valid EDID from device/di=
+splay
+>> [   77.587021][    T9] WARNING: BOGUS urb xfer, pipe 3 !=3D type 1 (fix=
+ driver to choose correct endpoint)
+>> [   77.596448][    T9] usb 1-1: dlfb_urb_completion - nonzero write bul=
+k status received: -115
+>> [   77.605308][    T9] usb 1-1: submit urb error: -22
+>> [   77.613225][    T9] udlfb: probe of 1-1:0.52 failed with error -22
+>>
+>> So, basically there is no urgent fix needed for the dlfb fbdev driver,
+>> as it will gracefully fail as is (which is correct).
+>>
+>> What do you suggest we should do with this syzkaller-bug ?
+>> I'd rate it as false-alarm, but it will continue to complain because of
+>> the dev_WARN() in urb.c
+>
+> Let's try this patch instead.  It might contain a stupid error because I
+> haven't even tried to compile it, but it ought to fix the real problem.
 
-I'll wait with reviewing this until you send the next version then.
+Patch looks good and survived the test.
+
+Will you send a proper patch to the fbdev mailing list, so that I can
+include it?
+
+Helge
+
+>
+> #syz test: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.gi=
+t a4422ff22142
+>
+> Index: usb-devel/drivers/video/fbdev/udlfb.c
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> --- usb-devel.orig/drivers/video/fbdev/udlfb.c
+> +++ usb-devel/drivers/video/fbdev/udlfb.c
+> @@ -1652,7 +1652,7 @@ static int dlfb_usb_probe(struct usb_int
+>   	struct fb_info *info;
+>   	int retval;
+>   	struct usb_device *usbdev =3D interface_to_usbdev(intf);
+> -	struct usb_endpoint_descriptor *out;
+> +	static u8 out_ep[] =3D {1 + USB_DIR_OUT, 0};
+>
+>   	/* usb initialization */
+>   	dlfb =3D kzalloc(sizeof(*dlfb), GFP_KERNEL);
+> @@ -1666,9 +1666,9 @@ static int dlfb_usb_probe(struct usb_int
+>   	dlfb->udev =3D usb_get_dev(usbdev);
+>   	usb_set_intfdata(intf, dlfb);
+>
+> -	retval =3D usb_find_common_endpoints(intf->cur_altsetting, NULL, &out,=
+ NULL, NULL);
+> -	if (retval) {
+> -		dev_err(&intf->dev, "Device should have at lease 1 bulk endpoint!\n")=
+;
+> +	if (!usb_check_bulk_endpoints(intf, out_ep)) {
+> +		dev_err(&intf->dev, "Invalid DisplayLink device!\n");
+> +		retval =3D -EINVAL;
+>   		goto error;
+>   	}
+>
+
