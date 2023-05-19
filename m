@@ -2,81 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 516D3709B4E
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 17:28:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C71709B50
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 17:28:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230154AbjESP2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 11:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52608 "EHLO
+        id S232343AbjESP2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 11:28:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230440AbjESP2a (ORCPT
+        with ESMTP id S230440AbjESP2f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 11:28:30 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E11F7106
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 08:28:29 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-54c2999fdc7so65226387b3.2
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 08:28:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684510109; x=1687102109;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ssI0QgWrOzpdZEqEXNriLfX+2/FsqkrD0LkZmCm7WLw=;
-        b=onAdflqTz+yMPS1MbQlrK5cYj+CJxUD5Nzpora8A9Wh1WWGEkuGMFCuXjSL/BseIbS
-         tnm3LJ4jWSk8b5bcsA55GpzqqXDdxMT+t6HEjjWGvVr+WzEP6E5OqWgX7owNLMx0KEv7
-         kNkKxXbD/ofipeddS+NDyKS8s42cTnNFMz4mjh42AUVnc9QNpZAnEU00+A39v+gmJ/iH
-         DBvggO78eIrbDRg4AXk9U5ntmmMXsNMVQfMiuaJSM+ySbo1iMNB5qW1Bap1aLdO6qKP9
-         M9QmEGX/Vi2mnBE51iufsuFvnMSjgmlJil3qoz8R4qup/gzh2Gj7Bcd0FtiuEhac/3bQ
-         hzbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684510109; x=1687102109;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ssI0QgWrOzpdZEqEXNriLfX+2/FsqkrD0LkZmCm7WLw=;
-        b=ia7ZFxCbT0Vm373pA7sVtXtVLTe4y8Hx+S7JAtwPrBBASR/BcsWpBreeJaXUssBpG9
-         Fq7g2CIRwV+CshPhb7buWKuccgX9pfWKJAGcNjScqqMYeWtU9IHeD0U+NVxyhxnJE8bR
-         WK6ZkRflzu1ByZhEchEph6RhBJ1+PHhyONekxDEAnB9CmXkvHq/r5WM1f0icypBetMAP
-         xcCnwHlSmct/EkdU2/EPsWFAD7KF4jldbHnKJMASPn/gAJ/j4pldFbzZK0D6hs7Vkej8
-         cdZPhuaxcbxn2BurOQJsFNdGi0Gn20OLxQvaGV/rgx0n95IzbK5pdVur4qgmVrVFv5Cw
-         +NDw==
-X-Gm-Message-State: AC+VfDyUlypNBdDwrjgiU26iE/gSW/tvwMLnTNVsB2HtAEnyYE9GCZcS
-        QfGrVdzZqQGwGKkpyFuXHu33geAbWJ0=
-X-Google-Smtp-Source: ACHHUZ7gIzlTQK6bPAG0bDa9af9CVMYOxkUdodPE3pltahEFyT/lQ5rC4UoHh7QM25CpYFBUCdXgPrtDQ88=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:e50d:0:b0:561:8c16:2b65 with SMTP id
- s13-20020a81e50d000000b005618c162b65mr1439960ywl.3.1684510109155; Fri, 19 May
- 2023 08:28:29 -0700 (PDT)
-Date:   Fri, 19 May 2023 08:28:27 -0700
-In-Reply-To: <4d9397fe-1098-dedb-0f35-d3535040e65f@amd.com>
-Mime-Version: 1.0
-References: <20230411125718.2297768-1-aik@amd.com> <6a0cde0a-e1a4-9119-75fd-12b7c921b5f2@amd.com>
- <ZEFM735qNFOCGbnL@google.com> <4d9397fe-1098-dedb-0f35-d3535040e65f@amd.com>
-Message-ID: <ZGeVm48+GeZAnFrm@google.com>
-Subject: Re: [PATCH kernel v5 0/6] KVM: SEV: Enable AMD SEV-ES DebugSwap
-From:   Sean Christopherson <seanjc@google.com>
-To:     Alexey Kardashevskiy <aik@amd.com>
-Cc:     kvm@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Pankaj Gupta <pankaj.gupta@amd.com>,
-        Nikunj A Dadhania <nikunj@amd.com>,
-        Santosh Shukla <santosh.shukla@amd.com>,
-        Carlos Bilbao <carlos.bilbao@amd.com>,
-        Borislav Petkov <bp@alien8.de>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 19 May 2023 11:28:35 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA82106;
+        Fri, 19 May 2023 08:28:33 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ms.lwn.net (Postfix) with ESMTPSA id 982157C0;
+        Fri, 19 May 2023 15:28:32 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 982157C0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1684510112; bh=ypzbLdEgSgVU1CkpDITC1d6zG9XwYC1dqvAA2QZn0LY=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=eDsN4W2vF0m4WFO6UzXjf9b7dm0et8JUuedojt1TFB66cvkW8NWnwXGiNeHIORINN
+         0ynYPZeCKF6juv4ZqvzR6Jlq66OSLOB9qIycCy800f5G4PYctWl6UrNTHnGTdpdEpB
+         2uGDzKhKQLHUcH7f0Yyrsksb6+pXCXePtK6OfoiMcO3Xzjl+WarNjKB9guR2byflDJ
+         oIU17QKrBIOg3Zz4VVrN/LMcMGc9pNSdoI7PU5G7YCMmypgAej4neCCwH/to1xQ+/U
+         evy7j6l1RREi31Wh2TvWA+I9RScqc7vyaiQPuNQ2df/laIc8TtjQpfpS8Ftxt8VkUo
+         0bzJAmHBazLgQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Rong Tao <rtoax@foxmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Zhangfei Gao <zhangfei.gao@foxmail.com>,
+        linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tyler Hicks <code@tyhicks.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Matthieu Baerts <matthieu.baerts@tessares.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Xujun Leng <lengxujun2007@126.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] docs: submitting-patches: Discuss interleaved replies
+In-Reply-To: <20230511184131.gonna.399-kees@kernel.org>
+References: <20230511184131.gonna.399-kees@kernel.org>
+Date:   Fri, 19 May 2023 09:28:31 -0600
+Message-ID: <87ttw8mjc0.fsf@meer.lwn.net>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023, Alexey Kardashevskiy wrote:
-> Hi Sean,
-> 
-> is that still on the list? Just checking :) Thanks,
+Kees Cook <keescook@chromium.org> writes:
 
-Yes, sorry for the long delay, I'm getting a late start on reviews this cycle for
-a variety of reasons.
+> Top-posting has been strongly discouraged in Linux development, but this
+> was actually not written anywhere in the common documentation about
+> sending patches and replying to reviews. Add a section about trimming
+> and interleaved replies.
+>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: Thorsten Leemhuis <linux@leemhuis.info>
+> Cc: Rong Tao <rtoax@foxmail.com>
+> Cc: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> Cc: Zhangfei Gao <zhangfei.gao@foxmail.com>
+> Cc: linux-doc@vger.kernel.org
+> Cc: linux-hardening@vger.kernel.org
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+> v2:
+>  - rewrite 2.Process.rst to be postive and link to new section.
+>  - fix typos and phrasing (Thorsten)
+>  - add missing "::" for block quotes
+>  - add Greg's Ack
+> v1: https://lore.kernel.org/lkml/20230510183423.never.877-kees@kernel.org
+> ---
+>  Documentation/process/2.Process.rst          |  7 +++---
+>  Documentation/process/submitting-patches.rst | 25 ++++++++++++++++++++
+>  2 files changed, 29 insertions(+), 3 deletions(-)
+
+Applied, thanks.
+
+jon
