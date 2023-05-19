@@ -2,50 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F4F708D72
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 03:41:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF6AB708D7B
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 03:46:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbjESBlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 21:41:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34424 "EHLO
+        id S229828AbjESBq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 21:46:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjESBld (ORCPT
+        with ESMTP id S229678AbjESBqZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 21:41:33 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D16510C2;
-        Thu, 18 May 2023 18:41:32 -0700 (PDT)
-Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QMqFv5DGjzqSMN;
-        Fri, 19 May 2023 09:37:07 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 19 May
- 2023 09:41:30 +0800
-Subject: Re: [PATCH net-next v2] octeontx2-pf: Add support for page pool
-To:     Ratheesh Kannoth <rkannoth@marvell.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <sgoutham@marvell.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <sbhatta@marvell.com>, <gakula@marvell.com>, <schalla@marvell.com>,
-        <hkelam@marvell.com>
-References: <20230518055129.3129897-1-rkannoth@marvell.com>
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <9b576dd4-6083-9fab-5859-875287831d0a@huawei.com>
-Date:   Fri, 19 May 2023 09:41:30 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        Thu, 18 May 2023 21:46:25 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5476E72
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 18:46:24 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-b9a6eec8611so502823276.0
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 18:46:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684460784; x=1687052784;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mRnoeSreGadiB9OVFL5oCBNcNTPO+fzcoPwxWhqIGcg=;
+        b=m/EKtTwTMCvRUghPbTZ0aLtHJy5wYPNjmfShebx8gh0Ah746OQAyDiF/KhBP9nBO5q
+         /TOeepsJT2xGTdCeohn7tT6Am1m2UH65mH27EiAkOnWDaaPXvAFAwbc2BSZoYPXwVDwN
+         60ps19MyNd0Snmvlzz7WaOtShYk5Yvvtfe0PI6cY5GGVSaoFE+wlmWfO7wWmpa4a/1Rv
+         rLpJDopWLH8dDlg+DWF2BV8LP/we5EcBvYQ7u4BRd3LR9B5uYk3LTJvYb2XA+y1FF5Xg
+         SrOcDqxyEZ2Jh/yExanCmbqP7ksD96dvYEVTtN+1AajtZp7mf8t79xaadD6A7S66YEvF
+         upSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684460784; x=1687052784;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mRnoeSreGadiB9OVFL5oCBNcNTPO+fzcoPwxWhqIGcg=;
+        b=ZM0NHr/WAO9RX274luNV//bV1YQ4psesUt0vflUF1/JgWs/d0fH5P6wya9bGpU11Zl
+         7BIyFQ4VkDQAuuHh1y8FOkmBUUb5jzTQGo4/47fZDfD211A4xEgPz6q1TQ1hjCcDXV0+
+         Czv3llUTc/ygdyGjRPbpWuwUvt5WCFrPdmc14bmNmRV5DPY8uvxUkn21whBzhPCEK8In
+         1/oMNBeoZ6LE7+d8op2qXFU1hbZXdOAj7CyYKrCUiHbOM5kG5+hWrPQo3lmHq6cO34bk
+         R1TG0l5Cvrz+GQ+8+FO/DwSvSPP8AQAz5n7aMJS3go3KQl71oGGADQDK4kS5qQs9JPg+
+         F2Hg==
+X-Gm-Message-State: AC+VfDxbjZUnebXEfX1nxHKt68/dqEt8+laj4Z/m/2lRP5MO9qyQA8Qp
+        1INzWUhdWugqyu/DbPW1cBia3w==
+X-Google-Smtp-Source: ACHHUZ5esT/785s6QhSuTQVf2a5lnrzyIuiXiyyvpytcpb/6xWEtPZjGg8NzuB3lqxsqrT87kZ4kdw==
+X-Received: by 2002:a25:b123:0:b0:ba7:46b3:5c91 with SMTP id g35-20020a25b123000000b00ba746b35c91mr270954ybj.2.1684460783920;
+        Thu, 18 May 2023 18:46:23 -0700 (PDT)
+Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id w33-20020a25ac21000000b00b9b1d09ed18sm728200ybi.33.2023.05.18.18.46.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 May 2023 18:46:23 -0700 (PDT)
+Date:   Thu, 18 May 2023 21:46:21 -0400
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     Vladislav Efanov <VEfanov@ispras.ru>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Rene Herman <rene.herman@keyaccess.nl>,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: Re: [PATCH] isa: Remove unnecessary checks
+Message-ID: <ZGbU7YQgzGelwiGy@fedora>
+References: <20230517125025.434005-1-VEfanov@ispras.ru>
 MIME-Version: 1.0
-In-Reply-To: <20230518055129.3129897-1-rkannoth@marvell.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4EKlEO7L5rYoZBuz"
+Content-Disposition: inline
+In-Reply-To: <20230517125025.434005-1-VEfanov@ispras.ru>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,60 +74,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/18 13:51, Ratheesh Kannoth wrote:
-> Page pool for each rx queue enhance rx side performance
-> by reclaiming buffers back to each queue specific pool. DMA
-> mapping is done only for first allocation of buffers.
-> As subsequent buffers allocation avoid DMA mapping,
-> it results in performance improvement.
-> 
-> Image        |  Performance with Linux kernel Packet Generator
 
-Is there any more detailed info for the performance data?
-'kernel Packet Generator' means using pktgen module in the
-net/core/pktgen.c? it seems pktgen is more for tx, is there
-any abvious reason why the page pool optimization for rx have
-brought about ten times improvement?
+--4EKlEO7L5rYoZBuz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> ------------ | -----------------------------------------------
-> Vannila      |   3Mpps
->              |
-> with this    |   42Mpps
-> change	     |
-> -------------------------------------------------------------
-> 
+On Wed, May 17, 2023 at 03:50:25PM +0300, Vladislav Efanov wrote:
+> The isa_dev->dev.platform_data is initialized with incoming
+> parameter isa_driver. After it isa_dev->dev.platform_data is
+> checked for NULL, but incoming parameter isa_driver is not
+> NULL since it is dereferenced many times before this check.
+>=20
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+>=20
+> Fixes: a5117ba7da37 ("[PATCH] Driver model: add ISA bus")
+> Signed-off-by: Vladislav Efanov <VEfanov@ispras.ru>
 
-...
+I don't think the Fixes line is needed because this is removing a
+superfluous check rather than fixing a bug. Regardless, here's my Ack
+for Greg as the patch itself makes sense.
 
->  static int __otx2_alloc_rbuf(struct otx2_nic *pfvf, struct otx2_pool *pool,
->  			     dma_addr_t *dma)
->  {
->  	u8 *buf;
->  
-> +	if (pool->page_pool)
-> +		return otx2_alloc_pool_buf(pfvf, pool, dma);
-> +
->  	buf = napi_alloc_frag_align(pool->rbsize, OTX2_ALIGN);
->  	if (unlikely(!buf))
->  		return -ENOMEM;
+Acked-by: William Breathitt Gray <william.gray@linaro.org>
 
-It seems the above is dead code when using 'select PAGE_POOL', as
-PAGE_POOL config is always selected by the driver?
-
-> @@ -1205,10 +1226,28 @@ void otx2_sq_free_sqbs(struct otx2_nic *pfvf)
+> ---
+>  drivers/base/isa.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/drivers/base/isa.c b/drivers/base/isa.c
+> index 55e3ee2da98f..675ad3139224 100644
+> --- a/drivers/base/isa.c
+> +++ b/drivers/base/isa.c
+> @@ -149,11 +149,8 @@ int isa_register_driver(struct isa_driver *isa_drive=
+r, unsigned int ndev)
+>  			break;
+>  		}
+> =20
+> -		if (isa_dev->dev.platform_data) {
+> -			isa_dev->next =3D isa_driver->devices;
+> -			isa_driver->devices =3D &isa_dev->dev;
+> -		} else
+> -			device_unregister(&isa_dev->dev);
+> +		isa_dev->next =3D isa_driver->devices;
+> +		isa_driver->devices =3D &isa_dev->dev;
 >  	}
->  }
->  
+> =20
+>  	if (!error && !isa_driver->devices)
+> --=20
+> 2.34.1
+>=20
 
-...
+--4EKlEO7L5rYoZBuz
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> @@ -1659,7 +1715,6 @@ int otx2_nix_config_bp(struct otx2_nic *pfvf, bool enable)
->  	req->bpid_per_chan = 0;
->  #endif
->  
-> -
+-----BEGIN PGP SIGNATURE-----
 
-Nit: unrelated change here.
+iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZGbU7QAKCRC1SFbKvhIj
+Ky5IAQCiRVaj1Srg0+u3ajag42dujk+UQQsqAb8BYYJven/kHgEA7+pycPHYjXw5
+xwWzhVadqLfbQJpdO29ogoYxQUtbnQ4=
+=kz4u
+-----END PGP SIGNATURE-----
 
->  	return otx2_sync_mbox_msg(&pfvf->mbox);
->  }
+--4EKlEO7L5rYoZBuz--
