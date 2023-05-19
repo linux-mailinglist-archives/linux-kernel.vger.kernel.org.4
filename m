@@ -2,323 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F194708D9C
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 04:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D15D708DAB
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 04:11:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbjESCDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 22:03:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40656 "EHLO
+        id S230263AbjESCLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 22:11:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbjESCC5 (ORCPT
+        with ESMTP id S229707AbjESCLh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 22:02:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F8F192
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 19:02:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684461730;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3LxIDwxX5oZ/H5qgJAleyIOOnzzqbniVCDVAXDLMI3E=;
-        b=Cv7iYu6SVyp9e5//Tgd4aAWT1hqw+IfHCcSqqw30L1fcaGxRbYxbdPlBV+uaXR28RLVXTT
-        CG+a1IE5qIK0javueS90sH0Qk8YEY0GTLkn/nDCLnrQ7QvU6NwIF0KtKKNzPZYqmvskXMr
-        9pjT19ftr4Sj4nlmuqcqE+58n/kvI7U=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-594-KvoNogk4OLKgDOxjwQKxiw-1; Thu, 18 May 2023 22:02:09 -0400
-X-MC-Unique: KvoNogk4OLKgDOxjwQKxiw-1
-Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-4f3a7765189so749137e87.0
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 19:02:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684461727; x=1687053727;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3LxIDwxX5oZ/H5qgJAleyIOOnzzqbniVCDVAXDLMI3E=;
-        b=EnP1ZZIU7vpyAr0IQg68Dpc1AzTAI1SXRJzF512qSMHclc8sBYqa7V2F9v2BH7ugzB
-         MTsoguCZsyITSUsHHfk1vAYluPCdTvJvJRnXm2hyd17HWRnq0kjcOifMZPe0GM+acKgi
-         9+MDLTG0yb1zO5aQ2bR9nhqRW1NU/UYvLbLfnCfCqHGJ3WWj7gWrhCh/qv+uy2kE24Fm
-         N+SSqbu3mkH+UcTteGRTFjvNeLuN43MCVpj3oXijvPOz3f4CyCu+hNw+dTscIl+Y+Zg5
-         902Y11ge/93LdH4hm4YwEDyePrkn3u3V5JiZvUv6UUuR1N0c7IFpB1aBZqBLAMED5EOJ
-         YGTg==
-X-Gm-Message-State: AC+VfDzKV9YIMaX8w+5DfQus51Ql7X+FK2xqWi34JmpsauGIoazgUj7j
-        CT1x4yF43QNs8dRtb9fT8azeYmAoRN5ZRlyZAibPjNVzfST5QYQzyFJYqnKMpDrEvjj6Iix+J/D
-        ZeU6ohmgTqEwMg9VjxXvfkuTI4utGfONecb2b607R
-X-Received: by 2002:ac2:5612:0:b0:4ed:c7cc:6f12 with SMTP id v18-20020ac25612000000b004edc7cc6f12mr210041lfd.34.1684461727672;
-        Thu, 18 May 2023 19:02:07 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6whPVX/g3XA9o+83szsoUPp5+C2dXI1+p+PRYV3K9auvebjDWKokwY1L4+4bJUpr/8bEe0yh4W3U++26R9dqQ=
-X-Received: by 2002:ac2:5612:0:b0:4ed:c7cc:6f12 with SMTP id
- v18-20020ac25612000000b004edc7cc6f12mr210035lfd.34.1684461727327; Thu, 18 May
- 2023 19:02:07 -0700 (PDT)
+        Thu, 18 May 2023 22:11:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD7610CE
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 19:11:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 327A565386
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 02:11:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C1AAC433D2;
+        Fri, 19 May 2023 02:11:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684462295;
+        bh=rmHKqH8zxYo4eJ1ktNK0fLKbM+QLDQELMHv0JI70ggs=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=M9Hb/wNDB1sy5CEJgylLQz3lLVIVULdi8EsR4lVxsACj46ZjbG5GrR6P+0qqeO9r2
+         VnGAz4BXy8MRBUsnm8l5NxcV7fE5Q5uJWCT/5mTLRehoshP26gpD98M4OKsKDQWrTd
+         iMbE6QbNWzTy5R7u9PpdSNdmJ8kblQsShCecAeDksUz/IbvgR3Bz6xV5U+5o6jTe26
+         K5gYAg8utNvyCtV7ImvgBSqVCBSRYc3xzOHci07e0WokfwdYD5qcX7Fd75H8o/TUGO
+         Xuqq3WOTr4x/O3taVPb71ibzkLacaHp3JZ65xBnBXPR5hX26VW6gf9mhM3w+uQG3lf
+         tXTpoCA2L5xIw==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 064AFCE0CC0; Thu, 18 May 2023 19:11:33 -0700 (PDT)
+Date:   Thu, 18 May 2023 19:11:33 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [paulmck-rcu:rcu/next 19/19] kernel/rcu/rcuscale.c:340:20:
+ error: use of undeclared identifier 'get_rcu_tasks_trace_gp_kthread'; did
+ you mean 'show_rcu_tasks_trace_gp_kthread'?
+Message-ID: <e51237d6-5b10-424d-a0d3-afe8ee24f530@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <202305190259.Rm6JC6Nz-lkp@intel.com>
 MIME-Version: 1.0
-References: <20230427104428.862643-1-mie@igel.co.jp> <20230427104428.862643-4-mie@igel.co.jp>
- <CACGkMEsjH8fA2r=0CacK8WK_sUTAcTK7SQ_VwkJpa1rSgDP0dg@mail.gmail.com>
- <CANXvt5r7eha_xnExsdS_4yMW8xTJxVzYhMVrXyQkGQe-_ZURBg@mail.gmail.com> <ad3dd4ef-3489-683c-c9e1-2592621687f7@igel.co.jp>
-In-Reply-To: <ad3dd4ef-3489-683c-c9e1-2592621687f7@igel.co.jp>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Fri, 19 May 2023 10:01:56 +0800
-Message-ID: <CACGkMEvdVHQEcDD74TpeWgmHQ+J9aMpv5ui=iwT8E_SDZoY7EA@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 3/3] PCI: endpoint: Add EP function driver to
- provide virtio-console functionality
-To:     Shunsuke Mie <mie@igel.co.jp>
-Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>, Frank Li <Frank.Li@nxp.com>,
-        Jon Mason <jdmason@kudzu.us>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Ren Zhijie <renzhijie2@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        virtualization@lists.linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202305190259.Rm6JC6Nz-lkp@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 5:54=E2=80=AFPM Shunsuke Mie <mie@igel.co.jp> wrote=
-:
->
-> Gentle ping ...
->
->
-> Thanks,
->
-> Shunsuke.
->
-> On 2023/05/10 12:17, Shunsuke Mie wrote:
-> > Hi Json,
-> > 2023=E5=B9=B45=E6=9C=888=E6=97=A5(=E6=9C=88) 13:03 Jason Wang <jasowang=
-@redhat.com>:
-> >> On Thu, Apr 27, 2023 at 6:44=E2=80=AFPM Shunsuke Mie <mie@igel.co.jp> =
-wrote:
-> >>> Add a new PCIe endpoint function driver that works as a pci virtio-co=
-nsole
-> >>> device. The console connect to endpoint side console. It enables to
-> >>> communicate PCIe host and endpoint.
-> >>>
-> >>> Architecture is following:
-> >>>
-> >>>   =E2=94=8C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=90         =E2=94=
-=8C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=AC=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=90
-> >>>   =E2=94=82virtioe     =E2=94=82         =E2=94=82                   =
-   =E2=94=82virtio      =E2=94=82
-> >>>   =E2=94=82console drv =E2=94=82         =E2=94=9C=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=90      =E2=94=82console d=
-rv =E2=94=82
-> >>>   =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=A4         =E2=94=
-=82(virtio console=E2=94=82      =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=A4
-> >>>   =E2=94=82 virtio bus =E2=94=82         =E2=94=82 device)       =E2=
-=94=82=E2=97=84=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=96=BA=E2=94=82 virti=
-o bus =E2=94=82
-> >>>   =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=A4         =E2=94=
-=9C---------------=E2=94=A4      =E2=94=94=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=A4
-> >>>   =E2=94=82            =E2=94=82         =E2=94=82 pci ep virtio =E2=
-=94=82                   =E2=94=82
-> >>>   =E2=94=82  pci bus   =E2=94=82         =E2=94=82  console drv  =E2=
-=94=82                   =E2=94=82
-> >>>   =E2=94=82            =E2=94=82  pcie   =E2=94=9C=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=A4                   =E2=
-=94=82
-> >>>   =E2=94=82            =E2=94=82 =E2=97=84=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=96=BA =E2=94=82  pci ep Bus   =E2=94=82              =
-     =E2=94=82
-> >>>   =E2=94=94=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=98         =E2=94=
-=94=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=B4=E2=
-=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
-=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
-=E2=94=80=E2=94=80=E2=94=98
-> >>>     PCIe Root              PCIe Endpoint
-> >>>
-> >> I think it might only works for peer devices like:
-> >>
-> >> net, console or vsock.
-> > Could you tell me what "peer devices" means?
+On Fri, May 19, 2023 at 02:30:11AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
+> head:   9bb839a83e1bbbfd4f7f20827aafd0a39fad00c7
+> commit: 9bb839a83e1bbbfd4f7f20827aafd0a39fad00c7 [19/19] rcuscale: Measure grace-period kthread CPU time
+> config: x86_64-randconfig-a001
+> compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?id=9bb839a83e1bbbfd4f7f20827aafd0a39fad00c7
+>         git remote add paulmck-rcu https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
+>         git fetch --no-tags paulmck-rcu rcu/next
+>         git checkout 9bb839a83e1bbbfd4f7f20827aafd0a39fad00c7
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash kernel/rcu/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202305190259.Rm6JC6Nz-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> kernel/rcu/rcuscale.c:340:20: error: use of undeclared identifier 'get_rcu_tasks_trace_gp_kthread'; did you mean 'show_rcu_tasks_trace_gp_kthread'?
+>            .rso_gp_kthread = get_rcu_tasks_trace_gp_kthread,
+>                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>                              show_rcu_tasks_trace_gp_kthread
+>    kernel/rcu/rcu.h:642:20: note: 'show_rcu_tasks_trace_gp_kthread' declared here
+>    static inline void show_rcu_tasks_trace_gp_kthread(void) {}
+>                       ^
+> >> kernel/rcu/rcuscale.c:340:20: error: incompatible function pointer types initializing 'struct task_struct *(*)(void)' with an expression of type 'void (void)' [-Werror,-Wincompatible-function-pointer-types]
+>            .rso_gp_kthread = get_rcu_tasks_trace_gp_kthread,
+>                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>    2 errors generated.
 
-I meant, for example we know in the case of virtio-net, TX can talk
-with RX belonging to another device directly.
+Apologies for the hassle!  Does the diff below help at your end?
 
-But this is not the case for other devices like virito-blk.
+						Thaxn, Paul
 
-> >
-> >> So there're many choices here, I'd like to know what's the reason for
-> >> you to implement a mediation.
-> >>
-> >> An alternative is to implement a dedicated net, console and vsock
-> >> driver for vringh (CAIF somehow works like this). This would have
-> >> better performance.
-> > Does it mean that the driver also functions as a network driver directl=
-y?
+------------------------------------------------------------------------
 
-I meant, e.g in the case of networking, you can have a dedicated
-driver with two vringh in the endpoint side.
-
-The benefit is the performance, no need for the (datapath) mediation.
-
-But if we don't care about the performance, this proposal seems to be fine.
-
-Thanks
-
-> >>
-> >>> This driver has two roles. The first is as a PCIe endpoint virtio con=
-sole
-> >>> function, which is implemented using the PCIe endpoint framework and =
-PCIe
-> >>> EP virtio helpers. The second is as a virtual virtio console device
-> >>> connected to the virtio bus on PCIe endpoint Linux.
-> >>>
-> >>> Communication between the two is achieved by copying the virtqueue da=
-ta
-> >>> between PCIe root and endpoint, respectively.
-> >>>
-> >>> This is a simple implementation and does not include features of
-> >>> virtio-console such as MULTIPORT, EMERG_WRITE, etc. As a result, each
-> >>> virtio console driver only displays /dev/hvc0.
-> >>>
-> >>> As an example of usage, by setting getty to /dev/hvc0, it is possible=
- to
-> >>> login to another host.
-> >>>
-> >>> Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
-> >>> ---
-> >>> Changes from v2:
-> >>> - Change to use copy functions between kiovs of pci-epf-virtio.
-> >>>
-> >>>   drivers/pci/endpoint/functions/Kconfig        |  12 +
-> >>>   drivers/pci/endpoint/functions/Makefile       |   1 +
-> >>>   drivers/pci/endpoint/functions/pci-epf-vcon.c | 596 +++++++++++++++=
-+++
-> >>>   3 files changed, 609 insertions(+)
-> >>>   create mode 100644 drivers/pci/endpoint/functions/pci-epf-vcon.c
-> >>>
-> >>> diff --git a/drivers/pci/endpoint/functions/Kconfig b/drivers/pci/end=
-point/functions/Kconfig
-> >>> index fa1a6a569a8f..9ce2698b67e1 100644
-> >>> --- a/drivers/pci/endpoint/functions/Kconfig
-> >>> +++ b/drivers/pci/endpoint/functions/Kconfig
-> >>> @@ -44,3 +44,15 @@ config PCI_EPF_VIRTIO
-> >>>          select VHOST_RING_IOMEM
-> >>>          help
-> >>>            Helpers to implement PCI virtio Endpoint function
-> >>> +
-> >>> +config PCI_EPF_VCON
-> >>> +       tristate "PCI Endpoint virito-console driver"
-> >>> +       depends on PCI_ENDPOINT
-> >>> +       select VHOST_RING
-> >>> +       select PCI_EPF_VIRTIO
-> >>> +       help
-> >>> +         PCIe Endpoint virtio-console function implementatino. This =
-module
-> >>> +         enables to show the virtio-console as pci device to PCIe ho=
-st side, and
-> >>> +         another virtual virtio-console device registers to endpoint=
- system.
-> >>> +         Those devices are connected virtually and can communicate e=
-ach other.
-> >>> +
-> >>> diff --git a/drivers/pci/endpoint/functions/Makefile b/drivers/pci/en=
-dpoint/functions/Makefile
-> >>> index a96f127ce900..b4056689ce33 100644
-> >>> --- a/drivers/pci/endpoint/functions/Makefile
-> >>> +++ b/drivers/pci/endpoint/functions/Makefile
-> >>> @@ -7,3 +7,4 @@ obj-$(CONFIG_PCI_EPF_TEST)              +=3D pci-epf-=
-test.o
-> >>>   obj-$(CONFIG_PCI_EPF_NTB)              +=3D pci-epf-ntb.o
-> >>>   obj-$(CONFIG_PCI_EPF_VNTB)             +=3D pci-epf-vntb.o
-> >>>   obj-$(CONFIG_PCI_EPF_VIRTIO)           +=3D pci-epf-virtio.o
-> >>> +obj-$(CONFIG_PCI_EPF_VCON)             +=3D pci-epf-vcon.o
-> >>> diff --git a/drivers/pci/endpoint/functions/pci-epf-vcon.c b/drivers/=
-pci/endpoint/functions/pci-epf-vcon.c
-> >>> new file mode 100644
-> >>> index 000000000000..31f4247cd10f
-> >>> --- /dev/null
-> >>> +++ b/drivers/pci/endpoint/functions/pci-epf-vcon.c
-> >>> @@ -0,0 +1,596 @@
-> >>> +// SPDX-License-Identifier: GPL-2.0
-> >>> +/*
-> >>> + * PCI Endpoint function driver to impliment virtio-console device
-> >>> + * functionality.
-> >>> + */
-> >>> +#include <linux/pci-epf.h>
-> >>> +#include <linux/virtio_ids.h>
-> >>> +#include <linux/virtio_pci.h>
-> >>> +#include <linux/virtio_console.h>
-> >>> +#include <linux/virtio_ring.h>
-> >>> +
-> >>> +#include "pci-epf-virtio.h"
-> >>> +
-> >>> +static int virtio_queue_size =3D 0x100;
-> >>> +module_param(virtio_queue_size, int, 0444);
-> >>> +MODULE_PARM_DESC(virtio_queue_size, "A length of virtqueue");
-> >>> +
-> >>> +struct epf_vcon {
-> >>> +       /* To access virtqueues on remote host */
-> >>> +       struct epf_virtio evio;
-> >>> +       struct vringh_kiov *rdev_iovs;
-> >>> +
-> >>> +       /* To register a local virtio bus */
-> >>> +       struct virtio_device vdev;
-> >>> +
-> >>> +       /* To access virtqueus of local host driver */
-> >>> +       struct vringh *vdev_vrhs;
-> >>> +       struct vringh_kiov *vdev_iovs;
-> >>> +       struct virtqueue **vdev_vqs;
-> >>> +
-> >>> +       /* For transportation and notification */
-> >>> +       struct workqueue_struct *task_wq;
-> >>> +       struct work_struct raise_irq_work, rx_work, tx_work;
-> >>> +
-> >>> +       /* To retain virtio features. It is commonly used local and r=
-emote. */
-> >>> +       u64 features;
-> >>> +
-> >>> +       /* To show a status whether this driver is ready and the remo=
-te is connected */
-> >>> +       bool connected;
-> >>> +};
-> >>> +
-> >>> +enum {
-> >>> +       VCON_VIRTQUEUE_RX,
-> >>> +       VCON_VIRTQUEUE_TX,
-> >>> +       // Should be end of enum
-> >>> +       VCON_VIRTQUEUE_NUM
-> >>> +};
-> >> It would be better if we can split the console specific thing out,
-> >> then it allows us to do ethernet and vsock in the future.
-> > I'm planning to implement each virtio device in a separate file.
-> > https://lwn.net/Articles/922124/
-> >
-> >
-> >
-> >> Thanks
-> >>
-> > Best regards,
-> > Shunsuke
->
-
+diff --git a/include/linux/rcupdate_trace.h b/include/linux/rcupdate_trace.h
+index 3a5a322939b6..eda493200663 100644
+--- a/include/linux/rcupdate_trace.h
++++ b/include/linux/rcupdate_trace.h
+@@ -87,9 +87,7 @@ static inline void rcu_read_unlock_trace(void)
+ void call_rcu_tasks_trace(struct rcu_head *rhp, rcu_callback_t func);
+ void synchronize_rcu_tasks_trace(void);
+ void rcu_barrier_tasks_trace(void);
+-# ifdef CONFIG_RCU_SCALE_TEST
+ struct task_struct *get_rcu_tasks_trace_gp_kthread(void);
+-# endif
+ #else
+ /*
+  * The BPF JIT forms these addresses even when it doesn't call these
