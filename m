@@ -2,177 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34EF07095B1
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 13:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D162F7095D3
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 13:03:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231859AbjESLCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 07:02:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43990 "EHLO
+        id S232003AbjESLDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 07:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231852AbjESLCD (ORCPT
+        with ESMTP id S231340AbjESLDi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 07:02:03 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE0510E9;
-        Fri, 19 May 2023 04:01:30 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f25d79f6bfso3623761e87.2;
-        Fri, 19 May 2023 04:01:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684494088; x=1687086088;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3uZYfx3hyEjD6ZwDLsclbF5cJ3UWQoHkrfkUlHvER1Q=;
-        b=Z6kLA7vTKbxFSDOMqZKgtyNJf/K2T5B6giEMZkKi7A4J0oLrNav4PeYS1WrKXy8SJK
-         78XRFMmBmcI6AfiG4WmThsz/ljFdM3PcKHxxjEKWZD8WoeFyrIExnwp59JbxjgtPIWnx
-         vbVdkQJibk+praCD00yW32Q76wblErU9g3SqL64WJjcQJbZQH7J5fgQJTAzU68jq+UwS
-         YbueoxSZ5Adug0+7+tqsfTweR9LyvKnkh60sJnITM1oa3/kSyZoTgredrWBvVia/B2Mn
-         Z60SuEbq0S+LB+86MtQHY7NjiK6X9T1+2ointvwW/tJvkM4SSz6gykNxIbyniPJPblge
-         XEjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684494088; x=1687086088;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3uZYfx3hyEjD6ZwDLsclbF5cJ3UWQoHkrfkUlHvER1Q=;
-        b=AincygZoWEAIKdMxuN+WZYowsy3Md5AZSSHnBkSp5+258B6i9YmWMt+NBA32onbWHY
-         X/sgrommy+MxzfzYHPAQilt3GrMfESHM1gQtb4FYMa6B2Pv97mBAGzT0AwerAgRuz0Aw
-         /OKDBtapSF3Z9gdT6+4m8QSWXfWrhw4ivTfLeWSWJ9Bkw/1SGQrqcofT2hGScU4wgE/S
-         pHN4xEKHxO4ozcM0r9LRzYxXRwf42aF+YgFJdOkKQp9kB4pgjFXfLFuK+KSH7KHLi96F
-         Ey4KsHcbwX7WIbzlXk4C3Qd7bx5MBg/T5fKvBLI+hYWM8v7lU2kCXqXj/zaC2V9zK72B
-         8Pqw==
-X-Gm-Message-State: AC+VfDwhS1oVXiOscdMOe6d3SZ30ct4kAEwzqTGparxzmx+79JyCZxfc
-        1seyO+UZ7AQus4oXv6v5QDQ=
-X-Google-Smtp-Source: ACHHUZ6+keknVQA72YsdN5ExkPnf5lEpWalgfq0ryHX5h2KQYWZbvJIuX2pBx99C5haGKbUWtIfiqg==
-X-Received: by 2002:ac2:484a:0:b0:4d5:a689:7f9d with SMTP id 10-20020ac2484a000000b004d5a6897f9dmr708885lfy.57.1684494088176;
-        Fri, 19 May 2023 04:01:28 -0700 (PDT)
-Received: from fedora (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id 12-20020ac2482c000000b004f1288434easm554827lft.292.2023.05.19.04.01.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 04:01:27 -0700 (PDT)
-Date:   Fri, 19 May 2023 14:01:23 +0300
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Andreas Klinger <ak@it-klinger.de>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, netdev@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Subject: [PATCH v5 2/8] iio: mb1232: relax return value check for IRQ get
-Message-ID: <05636b651b9a3b13aa3a3b7d3faa00f2a8de6bca.1684493615.git.mazziesaccount@gmail.com>
-References: <cover.1684493615.git.mazziesaccount@gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="yAqnyeIsXokB1xoj"
-Content-Disposition: inline
-In-Reply-To: <cover.1684493615.git.mazziesaccount@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 19 May 2023 07:03:38 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9FF19A2;
+        Fri, 19 May 2023 04:03:12 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id D343A5C00E3;
+        Fri, 19 May 2023 07:02:56 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 19 May 2023 07:02:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm3; t=
+        1684494176; x=1684580576; bh=gV73rdtQgxipqFYPyr3Q/D+7HTlx1vCuwWY
+        Zk9rvHV0=; b=cHyg654mmAsroWePFnZ4kSZFalqsGFUxLofrdI2FilESWopT1gF
+        9WDo3dFq+m1KF0E8Cn9aitPx9WUpDVN81x9kAXAKqKyVz2Mbx0mBxDd1uAJlGNWN
+        X1exX1FSeo3eqYNWnw/VYtsUi/hYXApTZjKMTelAdYPxoldKg97AD3OMexQO+CX/
+        ovxURSu7yXoPeQmh6zvxmuE2YUcK+enznzzjudTOpe+zWEOwc2F7CsnUDTpvqeJa
+        MW7+wSbFZ0IoWm6ALbf33tJQYpd/sDhs9Zwe+lCXLF3wI5BHxRQLaUhrB2v5KyL/
+        2++FHFYrxtWY173DXSPXEOJoUk/kkrxLdSw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1684494176; x=1684580576; bh=gV73rdtQgxipqFYPyr3Q/D+7HTlx1vCuwWY
+        Zk9rvHV0=; b=ar8m4LrRthd6WGP71fd/XRn6S0kUGl+1IKGZ9kFDGlbl+IJpExg
+        w51qsJwcarK2nosxYsFe1r2W1BprUsvUftc8bB4PNuvpChqCUpvjI/9bUp3A2J9K
+        8SRi7xXoRPhaBuxqmcVh8A9rYIq9TnYnHDconSLB8Sys/zwbGDIyT7gNA9rqTVpd
+        HSwUHJNQsTgBO/kH9cWyvt2GvvVyYB6kc+zoHlC8w8gUl6ytpK95+rsZjtdsSm0c
+        etUPqLda/TS7Js9NCFce8Cv+VX3TD7Vh0LHIzX+/LYCWT3A/D7IZTAqbVdbtYru+
+        YndQqJECqnX5TYrLU4iEGQ6rgLGqjNOZxrA==
+X-ME-Sender: <xms:XldnZGmSsdjYFrdAmDUF_egWsB5Ix4xTX2zZNbPMxYdje0KfgI2NJA>
+    <xme:XldnZN3I5xtCZ5Z7W8MHJX_QkGFstAGSJazP94JUB1fSCb0BDr5fNnnMoY3aS7iAG
+    _g2WEpa9CkrGdJKylc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeihedgfeeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeegfeejhedvledvffeijeeijeeivddvhfeliedvleevheejleetgedukedt
+    gfejveenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:XldnZEpsQ-lwiW8sq8jV0ndfTGWpQTavssQ8RIj6aTQRdsOd7SBmjQ>
+    <xmx:XldnZKkDGyrajy25oCrceVR0m0gL9mXTv9btSFFVMD_NA9qZ9FheWg>
+    <xmx:XldnZE0p2ly206V0K_-_EfCtc5SStU6s_ty6kSyDLz0utv9DhHtODg>
+    <xmx:YFdnZF65EvsJldBBS3b8yrM0B-ENKp_u5YodP-WIbzSvz6Fs921SCQ>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 66707B60086; Fri, 19 May 2023 07:02:54 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-431-g1d6a3ebb56-fm-20230511.001-g1d6a3ebb
+Mime-Version: 1.0
+Message-Id: <f7edea0c-dbfe-4c16-8134-0656411a837d@app.fastmail.com>
+In-Reply-To: <0ee8a26205a041cab9a787ec29201a9f@realtek.com>
+References: <20230519045825.28369-1-stanley_chang@realtek.com>
+ <20230519045825.28369-2-stanley_chang@realtek.com>
+ <0d165c7efbb71a65803abddc364e1c5252b8b939.camel@crapouillou.net>
+ <0ee8a26205a041cab9a787ec29201a9f@realtek.com>
+Date:   Fri, 19 May 2023 13:01:34 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Stanley Chang" <stanley_chang@realtek.com>,
+        "Paul Cercueil" <paul@crapouillou.net>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     "Vinod Koul" <vkoul@kernel.org>,
+        "Kishon Vijay Abraham I" <kishon@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Conor Dooley" <conor+dt@kernel.org>,
+        "Alan Stern" <stern@rowland.harvard.edu>,
+        "Ray Chi" <raychi@google.com>,
+        "Bagas Sanjaya" <bagasdotme@gmail.com>,
+        "Eugeniu Rosca" <erosca@de.adit-jv.com>,
+        "Michael Grzeschik" <m.grzeschik@pengutronix.de>,
+        "Matthias Kaehlcke" <mka@chromium.org>,
+        "Flavio Suligoi" <f.suligoi@asem.it>,
+        "Mathias Nyman" <mathias.nyman@linux.intel.com>,
+        "Bhuvanesh Surachari" <Bhuvanesh_Surachari@mentor.com>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v1 2/3] usb: phy: Add driver for the Realtek SoC USB 2.0/3.0 PHY
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, May 19, 2023, at 12:58, Stanley Chang[=E6=98=8C=E8=82=B2=E5=BE=B7=
+] wrote:
+>>=20
+>> I'm pretty sure that drivers/usb/phy/ is deprecated now...
+>>=20
+>> New drivers should be written for the generic PHY subsystem in
+>> drivers/phy/.
 
---yAqnyeIsXokB1xoj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Indeed, I missed that in my review.
 
-fwnode_irq_get() was changed to not return 0 anymore.
+> Thanks for your reminder.
+> Will drivers/usb/phy be removed?
+> Is it not allowed to add new drivers?
+>
+> In our application, driver/phy is not suitable.
+> We need to notify the phy driver when the USB hub port status changes.
+> However, generic PHY drivers are designed for various device's PHY.
+> And it seems inappropriate to add this function. So we choose to use=20
+> driver/usb/phy.=20
 
-Drop check for return value 0.
+If you run into something that works in the old usbphy layer
+but can't be done in drivers/phy, I think the better solution
+would be to change the drivers/phy/ code to add this.
 
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-
----
-Revsion history:
-v4 =3D> v5:
- - drop unnecessary data->irqnr =3D -1 assignment
-
-The first patch of the series changes the fwnode_irq_get() so this depends
-on the first patch of the series and should not be applied alone.
----
- drivers/iio/proximity/mb1232.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
-
-diff --git a/drivers/iio/proximity/mb1232.c b/drivers/iio/proximity/mb1232.c
-index e70cac8240af..3ae226297a00 100644
---- a/drivers/iio/proximity/mb1232.c
-+++ b/drivers/iio/proximity/mb1232.c
-@@ -76,7 +76,7 @@ static s16 mb1232_read_distance(struct mb1232_data *data)
- 		goto error_unlock;
- 	}
-=20
--	if (data->irqnr >=3D 0) {
-+	if (data->irqnr > 0) {
- 		/* it cannot take more than 100 ms */
- 		ret =3D wait_for_completion_killable_timeout(&data->ranging,
- 									HZ/10);
-@@ -212,10 +212,7 @@ static int mb1232_probe(struct i2c_client *client)
- 	init_completion(&data->ranging);
-=20
- 	data->irqnr =3D fwnode_irq_get(dev_fwnode(&client->dev), 0);
--	if (data->irqnr <=3D 0) {
--		/* usage of interrupt is optional */
--		data->irqnr =3D -1;
--	} else {
-+	if (data->irqnr > 0) {
- 		ret =3D devm_request_irq(dev, data->irqnr, mb1232_handle_irq,
- 				IRQF_TRIGGER_FALLING, id->name, indio_dev);
- 		if (ret < 0) {
---=20
-2.40.1
-
-
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---yAqnyeIsXokB1xoj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRnVwMACgkQeFA3/03a
-ocWx8wf/SZhPLICGA2ctdRPjftLJaB0DYTxdKSrpiMt6wgeBNbAcmfkeLIm6QiWo
-TejAiHYV1SDtSjcyuPb17gm/pCu0WHlS2Tmzp+t6oDEP8MN7QWB44GPm7DhCl+Ul
-l78kuAlqLywHS0mGH1GnvuYdymy/dw2FA6YsSTXVwfuzTF0wP/VQWRPHZfevW/7R
-Sc5eLe2kR/vTWy3DEfc5c8Gb71RrujlvQZcM198tt258BPDwyFa+V7sVy/FKPwMK
-qhkWzXrwiUjEbWbV3BbmaOibSw+vuoKnMD3esBlKaVtuc/i6LtGvGdOCUNhhLzZS
-kZwc3XvGRsUvPU054RVPj4OulqPILA==
-=R0S3
------END PGP SIGNATURE-----
-
---yAqnyeIsXokB1xoj--
+      Arnd
