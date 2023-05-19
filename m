@@ -2,91 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE678709606
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 13:15:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BF6D70960A
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 13:17:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231356AbjESLPp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 07:15:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52292 "EHLO
+        id S231430AbjESLQ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 07:16:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjESLPn (ORCPT
+        with ESMTP id S230242AbjESLQ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 07:15:43 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB679107
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 04:15:42 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f41dceb9d4so30050705e9.1
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 04:15:42 -0700 (PDT)
+        Fri, 19 May 2023 07:16:56 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B281A113
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 04:16:54 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-96649b412easo496389966b.0
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 04:16:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684494941; x=1687086941;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5c4ty46BvJfw5n+WQXNqxdOzyvhYQj2lS/o5S3NUabU=;
-        b=gCgs4y5Y76wNOd3v5ENX1M97HG7iTU4N0D1XXLXCiW2Dahw6xjjO8Uz8VhYvKL/owf
-         yY6izNLepEPal9uDWeNiBEi47hRk+2RX5WFPzvEDWLoJX371r8fLn/QwVYVtAIMG6SWz
-         uQww68eFLAOE4iXykJoKk8LXbWF3Iu9GmVVO15edm4J7W7svCpmth1q7Azez6N+40xkE
-         QqZO2Qlw9sExtyJISfGSC4hC9wMqLS4YZhwRc7wQIcIeADApdiXTIeJtufoa/EFG8qfU
-         mzUeUeE5CsbRt6+f5P+mS70NILLO/ZZkXj1/iek69HTogCG5f+uATcvSzjKhyyJNkUrW
-         Yawg==
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1684495013; x=1687087013;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=10duq/iSi0SrgAic2oFa0MSpSchsNelGTHibEkYiEYo=;
+        b=mKz7GTssxphaehQ0POFeVEdVoWd4z55up137j0GfnPI88ZJwsrdzxQmls/Ks6d5OEk
+         kJoRUnEWqNELsjiIbUjoKKNkLz6gDg7lTM6oDqlnramFhWpP3W4TSQCfUcdsYS65wcjl
+         GIYJi68ZN5+VLfGQEDg5J0xrSy2Tmy+uHHzIZvRUcL5//5JkZ6MhjFasNQLvlIyZ8OEA
+         FiAkPTtmbeD66T9etAa5C238TdyHP5ow8FYjITf/q4JLz4qSY/6n+zLyG9/1/9ZdAKI6
+         QHnBI2Yn3CcGECj1jCQ0SB2NDA9867HQmBtArryEYUyukzgYBNrQxcSfCtSbyRHGGEvB
+         QRrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684494941; x=1687086941;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5c4ty46BvJfw5n+WQXNqxdOzyvhYQj2lS/o5S3NUabU=;
-        b=SPdRf1FGj7kXI7PpSKwwCVfm4smYgY5gfz5pDOeurPVrxkR70gZf6bu6pCct3z/kHd
-         t1l/d5VYxQqzD3RBtlH63iKRhQoXsag9EzT2HrN4yn4zkDjPIOemkivkHKcmaLU5eY6Z
-         L9Z+5ej0VdDsue40XgcW2+YsoZKJa6d206zThc30VCr6uzLcL3OHH4AcFYLtXXkQjlOc
-         6udE0jaRvd+OMTS1ncf3NxeNf4SNjnYucOHePqun0j6xA1zQV/44rHP0J+n6WRzUWv4B
-         VXNcOP4QnOzLap5FfxIJmJ6VurQNRBI9KXTVGRGm2isiijlknwPxpUM/a1pnjHn92oe9
-         iduQ==
-X-Gm-Message-State: AC+VfDw5QnJyJmxsD3ODK9AKsIW4b+aktiei1G3I7Cwpg/LpayhZBYUI
-        h88oTndDnYJ7RavyWiTsTwvZcFtbUA==
-X-Google-Smtp-Source: ACHHUZ6zeOwMJdajQJb+0Q5VwQ+IpfOoaMbJGZbHTnHZpwScrL+3j1XcvmjZiUuIC7T/wzkuDEeZoA==
-X-Received: by 2002:a1c:f30a:0:b0:3f4:f012:5cae with SMTP id q10-20020a1cf30a000000b003f4f0125caemr1085622wmq.20.1684494940957;
-        Fri, 19 May 2023 04:15:40 -0700 (PDT)
-Received: from p183 ([46.53.249.116])
-        by smtp.gmail.com with ESMTPSA id u3-20020a7bc043000000b003f4f89bc48dsm2066538wmc.15.2023.05.19.04.15.40
+        d=1e100.net; s=20221208; t=1684495013; x=1687087013;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=10duq/iSi0SrgAic2oFa0MSpSchsNelGTHibEkYiEYo=;
+        b=g5Zhr1PNURFfk5gytQmQGZwvLYayYWw7T4gXDfCod7feQvA93vPyoGDzuB9ey9dFqS
+         m0PD+nUjxWDNyj9FHB4k8EmQrd4/VvBJSJQxSHvsAu93JEiWKeU9sI5zGIZDcP3j9VF/
+         a7JNLnl/eHx6HubmFL9nvn8oByLrZmiiF6gRgoBhlyp7/8OXZDZ0hDzY4xxi5S/CIAL7
+         9MaC944Q7LFzEtHEpC3rOdioqH/DuzKcD6ECJ/90TpHcfJorRIIkJ1JWwThcmz7mgjuj
+         BFasKnoCpkE9MuecfXCWNYan8o+ZjhkTeCN+cRKX1IxddzNiWlEnRWJploIInvurlAN6
+         KmXQ==
+X-Gm-Message-State: AC+VfDzRhu6T6NYUoE4Awa1z0k57B6lAN1RoyrAuN0/hB5n5nOHNJKNK
+        qyHe54dcmR+ewlbVl1vO3iiKig==
+X-Google-Smtp-Source: ACHHUZ40QJHLQgWD3+zwLtMoGb2m9aCvrWRlNSFM9kTEHw69TlY/Ivppd2NBGoA5omT4uFnyrvGIqg==
+X-Received: by 2002:a17:907:9955:b0:947:ebd5:c798 with SMTP id kl21-20020a170907995500b00947ebd5c798mr1092652ejc.54.1684495013024;
+        Fri, 19 May 2023 04:16:53 -0700 (PDT)
+Received: from localhost ([2a02:8070:6389:7d40:e266:3092:9afb:a7b1])
+        by smtp.gmail.com with ESMTPSA id t17-20020a17090605d100b0094edfbd475csm2127441ejt.127.2023.05.19.04.16.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 04:15:40 -0700 (PDT)
-Date:   Fri, 19 May 2023 14:15:38 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
+        Fri, 19 May 2023 04:16:52 -0700 (PDT)
+From:   Johannes Weiner <hannes@cmpxchg.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/8] auto, kbuild: flatten KBUILD_CFLAGS
-Message-ID: <0c693356-b26e-4e3e-a043-33580dd1294b@p183>
-References: <20230518154648.581643-1-adobriyan@gmail.com>
- <20230518133732.ee586408921d6f77c3a96bdf@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com
+Subject: [PATCH] mm: page_isolation: write proper kerneldoc
+Date:   Fri, 19 May 2023 13:16:52 +0200
+Message-Id: <20230519111652.40658-1-hannes@cmpxchg.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230518133732.ee586408921d6f77c3a96bdf@linux-foundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 01:37:32PM -0700, Andrew Morton wrote:
-> On Thu, 18 May 2023 18:46:42 +0300 Alexey Dobriyan <adobriyan@gmail.com> wrote:
-> 
-> > Make it slightly easier to see what compiler options are added and
-> > removed (and not worry about column limit too!)
-> 
-> I wish you'd cc'ed Linus.
-> 
-> Turning those four upper-cased macros into upper-cased inline functions
-> is just sad.  If we're going to do this we surely should go around and
-> make them lower-case.
+And remove the incorrect header comments.
 
-I always wanted to rewrite division functions and get rid of our
-countless variants:
+Signed-off-by: Johannes Weiner <hannes@cmpxchg.org>
+---
+ include/linux/page-isolation.h | 24 ++++++------------------
+ mm/page_isolation.c            | 29 ++++++++++++++++++++++++-----
+ 2 files changed, 30 insertions(+), 23 deletions(-)
 
-	q = kdiv(n, d);
-	q = kdiv3(n, d, &r);
+diff --git a/include/linux/page-isolation.h b/include/linux/page-isolation.h
+index 5456b7be38ae..0ab089e89db4 100644
+--- a/include/linux/page-isolation.h
++++ b/include/linux/page-isolation.h
+@@ -37,24 +37,12 @@ void set_pageblock_migratetype(struct page *page, int migratetype);
+ int move_freepages_block(struct zone *zone, struct page *page,
+ 				int migratetype, int *num_movable);
+ 
+-/*
+- * Changes migrate type in [start_pfn, end_pfn) to be MIGRATE_ISOLATE.
+- */
+-int
+-start_isolate_page_range(unsigned long start_pfn, unsigned long end_pfn,
+-			 int migratetype, int flags, gfp_t gfp_flags);
+-
+-/*
+- * Changes MIGRATE_ISOLATE to MIGRATE_MOVABLE.
+- * target range is [start_pfn, end_pfn)
+- */
+-void
+-undo_isolate_page_range(unsigned long start_pfn, unsigned long end_pfn,
+-			int migratetype);
+-
+-/*
+- * Test all pages in [start_pfn, end_pfn) are isolated or not.
+- */
++int start_isolate_page_range(unsigned long start_pfn, unsigned long end_pfn,
++			     int migratetype, int flags, gfp_t gfp_flags);
++
++void undo_isolate_page_range(unsigned long start_pfn, unsigned long end_pfn,
++			     int migratetype);
++
+ int test_pages_isolated(unsigned long start_pfn, unsigned long end_pfn,
+ 			int isol_flags);
+ 
+diff --git a/mm/page_isolation.c b/mm/page_isolation.c
+index c6f3605e37ab..e7d7685104de 100644
+--- a/mm/page_isolation.c
++++ b/mm/page_isolation.c
+@@ -481,8 +481,7 @@ static int isolate_single_pageblock(unsigned long boundary_pfn, int flags,
+ }
+ 
+ /**
+- * start_isolate_page_range() - make page-allocation-type of range of pages to
+- * be MIGRATE_ISOLATE.
++ * start_isolate_page_range() - mark page range MIGRATE_ISOLATE
+  * @start_pfn:		The lower PFN of the range to be isolated.
+  * @end_pfn:		The upper PFN of the range to be isolated.
+  * @migratetype:	Migrate type to set in error recovery.
+@@ -571,8 +570,14 @@ int start_isolate_page_range(unsigned long start_pfn, unsigned long end_pfn,
+ 	return 0;
+ }
+ 
+-/*
+- * Make isolated pages available again.
++/**
++ * undo_isolate_page_range - undo effects of start_isolate_page_range()
++ * @start_pfn:		The lower PFN of the isolated range
++ * @end_pfn:		The upper PFN of the isolated range
++ * @migratetype:	New migrate type to set on the range
++ *
++ * This finds every MIGRATE_ISOLATE page block in the given range
++ * and switches it to @migratetype.
+  */
+ void undo_isolate_page_range(unsigned long start_pfn, unsigned long end_pfn,
+ 			    int migratetype)
+@@ -631,7 +636,21 @@ __test_page_isolated_in_pageblock(unsigned long pfn, unsigned long end_pfn,
+ 	return pfn;
+ }
+ 
+-/* Caller should ensure that requested range is in a single zone */
++/**
++ * test_pages_isolated - check if pageblocks in range are isolated
++ * @start_pfn:		The first PFN of the isolated range
++ * @end_pfn:		The first PFN *after* the isolated range
++ * @isol_flags:		Testing mode flags
++ *
++ * This tests if all in the specified range are free.
++ *
++ * If %MEMORY_OFFLINE is specified in @flags, it will consider
++ * poisoned and offlined pages free as well.
++ *
++ * Caller must ensure the requested range doesn't span zones.
++ *
++ * Returns 0 if true, -EBUSY if one or more pages are in use.
++ */
+ int test_pages_isolated(unsigned long start_pfn, unsigned long end_pfn,
+ 			int isol_flags)
+ {
+-- 
+2.40.0
 
-if it gets in they will be renamed again :-)
