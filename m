@@ -2,94 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A9CB709700
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 14:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19136709728
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 14:17:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230362AbjESMCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 08:02:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44744 "EHLO
+        id S231362AbjESMRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 08:17:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbjESMCb (ORCPT
+        with ESMTP id S229458AbjESMRi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 08:02:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF6C18F;
-        Fri, 19 May 2023 05:02:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 852B565714;
-        Fri, 19 May 2023 12:02:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 441D7C433EF;
-        Fri, 19 May 2023 12:02:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684497748;
-        bh=aUS8W90dTjFtHRr5ELiJEI3YIx95XhkEyqi9qJUIPf0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nsLYf9h3VKVvflYL7lhrEMVuy931qaFIru5NBh429e/ULynt2sWUkpSwykjNaN0zD
-         BJPSmzqsYRs6eLCb35SSGOHx1gVzVkPdmvtaIqlB/S/0LLAo/6eAYIMMKfljMlGUHr
-         dOBZ3ahBiDeL0P8YYnrY2K8gpGAGl/so9UZsbHzbywsaLwSboq4mMEFwAQzVxizGsn
-         6dgDKIEnNpRaw5951EzV/3U9N3MetZdwCPNUhUGuDiZ8bZDVIVFbwxwzRP2SGDrO+g
-         q6mkYPqYYUIBctcbwcMIHDJJUHs2oGy78pT8AuUx8MjZYBABAIv92mDOHHh2wJb8sw
-         IsQE4FbELGTEw==
-Date:   Fri, 19 May 2023 14:02:23 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Ondrej Valousek <ondrej.valousek.xm@renesas.com>
-Cc:     Theodore Ts'o <tytso@mit.edu>, Jeff Layton <jlayton@kernel.org>,
-        "trondmy@hammerspace.com" <trondmy@hammerspace.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: A pass-through support for NFSv4 style ACL
-Message-ID: <20230519-verfrachten-gurte-a648ebd0a2fa@brauner>
-References: <20230516124655.82283-1-jlayton@kernel.org>
- <20230516-notorisch-geblickt-6b591fbd77c1@brauner>
- <TYXPR01MB18549D3A5B0BE777D7F6B284D9799@TYXPR01MB1854.jpnprd01.prod.outlook.com>
- <cc4317d9cb8f10aa0b3750bdb6db8b4e77ff26f8.camel@kernel.org>
- <20230517-herstellen-zitat-21eeccd36558@brauner>
- <20230517123914.GA4578@mit.edu>
- <20230519-allzu-aufmerksam-c3098b5ecf0d@brauner>
- <TYXPR01MB185439828CC7CEC40425065BD97C9@TYXPR01MB1854.jpnprd01.prod.outlook.com>
+        Fri, 19 May 2023 08:17:38 -0400
+X-Greylist: delayed 1799 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 19 May 2023 05:17:36 PDT
+Received: from vps-vb.mhejs.net (vps-vb.mhejs.net [37.28.154.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D908199;
+        Fri, 19 May 2023 05:17:36 -0700 (PDT)
+Received: from MUA
+        by vps-vb.mhejs.net with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <mail@maciej.szmigiero.name>)
+        id 1pzyFc-0005jV-AN; Fri, 19 May 2023 13:26:24 +0200
+From:   "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+To:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Maxim Levitsky <mlevitsk@redhat.com>,
+        Santosh Shukla <santosh.shukla@amd.com>, vkuznets@redhat.com,
+        jmattson@google.com, thomas.lendacky@amd.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: SVM: vNMI pending bit is V_NMI_PENDING_MASK not V_NMI_BLOCKING_MASK
+Date:   Fri, 19 May 2023 13:26:18 +0200
+Message-Id: <be4ca192eb0c1e69a210db3009ca984e6a54ae69.1684495380.git.maciej.szmigiero@oracle.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <TYXPR01MB185439828CC7CEC40425065BD97C9@TYXPR01MB1854.jpnprd01.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 11:38:30AM +0000, Ondrej Valousek wrote:
-> > 
-> > I'll note most of this complexity is only necessary if you want to 
-> > have local file access to the file system work with similar semantics 
-> > as what would get exported via NFSv4.  If you didn't, you could just 
-> > store the Windows-style ACL in an xattr and just let it be set via the 
-> > remote file system, and return it when the remote file system queries 
-> > it.  The problem comes when you want to have "RichACLs" actually 
-> > influence the local Linux permissions check.
-> 
-> > Yeah, I'm already scared enough.
-> 
-> Well I do not think it's that difficult. As I said, just take a look how OmniOS does things, very nice - you can set up a VM with it in just a half an hour and you get a system with ZFS and native NFSv4 working.
-> True it's not Richacl, but just NFSv4 style acl - even better.
-> 
-> As for the implementation, lot of code could be presumably taken from Samba which is already doing Windows style-ACL to NFSv4 translation.
-> 
-> To me interesting bit was that the original path from Andreas was not accepted largely because it would add another piece of mess to the already messy code in the kernel, I did not know that.
-> I hoped that  now that Christian cleaned the code recently, it would perhaps allow us to reconsider things, but maybe I am too naive here 😊
+From: "Maciej S. Szmigiero" <maciej.szmigiero@oracle.com>
 
-Noo one is going to stop you from writing the code and posting it on the
-list. But I think none of us here will be very eager to implement it. If
-it can be done cleanly without performance regressions or unwiedly
-complications in the generic lookup and permission checking code and
-both posix acls and these nfs4 style acls can be abstracted away nicely
-in a single file, and have well-defined semantics and there's a clear
-use-case that isn't just someone's hobby project then it might be
-considered. But it might also mean you've spent significant effort just
-to hear a no in the end.
+While testing Hyper-V enabled Windows Server 2019 guests on Zen4 hardware
+I noticed that with vCPU count large enough (> 16) they sometimes froze at
+boot.
+With vCPU count of 64 they never booted successfully - suggesting some kind
+of a race condition.
+
+Since adding "vnmi=0" module parameter made these guests boot successfully
+it was clear that the problem is most likely (v)NMI-related.
+
+Running kvm-unit-tests quickly showed failing NMI-related tests cases, like
+"multiple nmi" and "pending nmi" from apic-split, x2apic and xapic tests
+and the NMI parts of eventinj test.
+
+The issue was that once one NMI was being serviced no other NMI was allowed
+to be set pending (NMI limit = 0), which was traced to
+svm_is_vnmi_pending() wrongly testing for the "NMI blocked" flag rather
+than for the "NMI pending" flag.
+
+Fix this by testing for the right flag in svm_is_vnmi_pending().
+Once this is done, the NMI-related kvm-unit-tests pass successfully and
+the Windows guest no longer freezes at boot.
+
+Fixes: fa4c027a7956 ("KVM: x86: Add support for SVM's Virtual NMI")
+Signed-off-by: Maciej S. Szmigiero <maciej.szmigiero@oracle.com>
+---
+
+It's a bit sad that no-one apparently tested the vNMI patchset with
+kvm-unit-tests on an actual vNMI-enabled hardware...
+
+ arch/x86/kvm/svm/svm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+index ca32389f3c36..54089f990c8f 100644
+--- a/arch/x86/kvm/svm/svm.c
++++ b/arch/x86/kvm/svm/svm.c
+@@ -3510,7 +3510,7 @@ static bool svm_is_vnmi_pending(struct kvm_vcpu *vcpu)
+ 	if (!is_vnmi_enabled(svm))
+ 		return false;
+ 
+-	return !!(svm->vmcb->control.int_ctl & V_NMI_BLOCKING_MASK);
++	return !!(svm->vmcb->control.int_ctl & V_NMI_PENDING_MASK);
+ }
+ 
+ static bool svm_set_vnmi_pending(struct kvm_vcpu *vcpu)
