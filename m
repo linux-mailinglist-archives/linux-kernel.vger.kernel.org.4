@@ -2,124 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1476F70A2DF
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 00:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A548470A2E4
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 00:47:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbjESWoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 18:44:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54808 "EHLO
+        id S231219AbjESWq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 18:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjESWoE (ORCPT
+        with ESMTP id S229579AbjESWq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 18:44:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1821BD
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 15:43:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684536197;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Lx3FRv/9ZViNHJYNb7K17j7599eHUYCX31V7AD9qU0o=;
-        b=UGpCEjhiRpOs2d6b74IH6aop9RasQr15jdXZ+rpzSTuNNsiMYiHSZTTvIYQ4Ygeh8dRjhW
-        vLueqAKZ+AnfoC5/IcEu8WpkFyMCrpbeNHMxMOCwgr5hOaqyz9OtfkrBVFAVdwp0AIy23P
-        hE7bK9l/HrK2SNbKy9ukzjnAurOfz2I=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-267-aVXYRF4TPMKGIaqCHUms0w-1; Fri, 19 May 2023 18:43:15 -0400
-X-MC-Unique: aVXYRF4TPMKGIaqCHUms0w-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 532BF185A78E;
-        Fri, 19 May 2023 22:43:15 +0000 (UTC)
-Received: from localhost (unknown [10.67.24.76])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D62284F2DE2;
-        Fri, 19 May 2023 22:43:12 +0000 (UTC)
-Date:   Sat, 20 May 2023 07:43:11 +0900 (JST)
-Message-Id: <20230520.074311.642413213582621319.yamato@redhat.com>
-To:     bruce.dubbs@gmail.com
-Cc:     kzak@redhat.com, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, util-linux@vger.kernel.org,
-        renodr2002@gmail.com
-Subject: Re: [ANNOUNCE] util-linux v2.39
-From:   Masatake YAMATO <yamato@redhat.com>
-In-Reply-To: <652d32c5-4b33-ce3a-3de7-9ebc064bbdcb@gmail.com>
-References: <20230517112242.3rubpxvxhzsc4kt2@ws.net.home>
-        <652d32c5-4b33-ce3a-3de7-9ebc064bbdcb@gmail.com>
-Organization: Red Hat Japan, K.K.
-Mime-Version: 1.0
-Content-Type: Text/Plain; charset=us-ascii
+        Fri, 19 May 2023 18:46:58 -0400
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 647FAFE;
+        Fri, 19 May 2023 15:46:57 -0700 (PDT)
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1ae85b71141so9461265ad.0;
+        Fri, 19 May 2023 15:46:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684536417; x=1687128417;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lDYo2RuaT7h147GhvjSkJ6eFYV+ISM/8wq3TGBb7iAc=;
+        b=PWk7Sj2RZr+H3qQE2eg7VhPhroykdYlQvAwbQvBsAIlADCFeIrmUG/OjEeau1C3uAp
+         YkJPkCr8uFqm7akRBvUaNkuAaW+M6uHvag3PFuFWYSSjyNHY5irPCrctt7zxLIQ6dMK3
+         7XpgPAIun4R4rAS9TY+lb+ZEMeUlLo2w1Mr+sWWWIkMqvpfk6aTVG0XWt9YW5zAsX6Sn
+         4vdFDapsnLG01/n1Q5VdE7zDYsGcknP8AIm6ufXwK2FIsxec3VaL3vneI4KTocsS2cmR
+         Suux+iYMUlB6QBlZotIygCXGRV48bAEIhPr4q6mlSA2vx88mpndmgICNHU17tVnehqgE
+         4arA==
+X-Gm-Message-State: AC+VfDwksU73O/dP59blwMw5YXf1VodmB82lgzlkK4uV/hs0gxTiNczM
+        Bm+ymEtdwUOdmilfHlWgyYk=
+X-Google-Smtp-Source: ACHHUZ7B2eX0aQ1+ZttqtH64J7o4NS1g6keQAyRMbbNX7ydsGZZCigPnu0PEI0vCAly3aqX4QbltGQ==
+X-Received: by 2002:a17:902:680d:b0:1a5:5e7:a1cc with SMTP id h13-20020a170902680d00b001a505e7a1ccmr3495810plk.58.1684536416808;
+        Fri, 19 May 2023 15:46:56 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:102a:f960:4ec2:663d? ([2620:15c:211:201:102a:f960:4ec2:663d])
+        by smtp.gmail.com with ESMTPSA id iw10-20020a170903044a00b001ac2f98e953sm123652plb.216.2023.05.19.15.46.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 May 2023 15:46:55 -0700 (PDT)
+Message-ID: <2f695901-c099-b286-a874-5cfdf9a0d7d7@acm.org>
+Date:   Fri, 19 May 2023 15:46:53 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v5 1/7] ufs: core: Combine 32-bit
+ command_desc_base_addr_lo/hi
+Content-Language: en-US
+To:     "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
+        quic_asutoshd@quicinc.com, quic_cang@quicinc.com, mani@kernel.org,
+        stanley.chu@mediatek.com, adrian.hunter@intel.com,
+        beanhuo@micron.com, avri.altman@wdc.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Kiwoong Kim <kwmad.kim@samsung.com>,
+        Eric Biggers <ebiggers@google.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <cover.1683872601.git.quic_nguyenb@quicinc.com>
+ <7dec3a486501d9e30dfb5a70eed7c7661187b8c9.1683872601.git.quic_nguyenb@quicinc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <7dec3a486501d9e30dfb5a70eed7c7661187b8c9.1683872601.git.quic_nguyenb@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bruce,
+On 5/11/23 23:28, Bao D. Nguyen wrote:
+> The UTP command descriptor base address is a 57-bit field in the
+> UTP transfer request descriptor. Combine the two 32-bit
+> command_desc_base_addr_lo/hi fields into a 64-bit for better handling
+> of this field.
 
-> On 5/17/23 06:22, Karel Zak wrote:
->> The util-linux release v2.39 is available at
->>                                       http://www.kernel.org/pub/linux/utils/util-linux/v2.39
->>                                    Feedback and bug reports, as always, are welcomed.
-> 
-> Karel, I have installed util-linux v2.39 in LFS and have run into a
-> problem with one test, test_mkfds.  Actually the test passes, but does
-> not clean up after itself. What is left over is:
-> 
-> tester 32245 1 0 15:43 ?  00:00:00 /sources/util-linux-2.39/test_mkfds
-> -q udp 3 4 server-port=34567 client-port=23456 server-do-bind=1
-> client-do-bind=1 client-do-connect=1
-> tester 32247 1 0 15:43 ?  00:00:00 /sources/util-linux-2.39/test_mkfds
-> -q udp6 3 4 lite=1 server-port=34567 client-port=23456
-> server-do-bind=1 client-do-bind=1 client-do-connect=1
-> 
-> It's possible it may be due to something we are doing inside our
-> chroot environment, but we've not had this type of problem with
-> earlier versions of util-linux.
-> 
-> In all I do have:
-> 
->   All 261 tests PASSED
-> 
-> but the left over processes interfere later when we try to remove the
-> non-root user, tester, that runs the tests.  I can work around the
-> problem by disabling test_mkfds, but thought you would like to know.
-
-Thank you for reporting.
-Reproduced on my PC. I found two processes were not killed properly.
-
-Could you try the following change?
-
-diff --git a/tests/ts/lsfd/option-inet b/tests/ts/lsfd/option-inet
-index 21e66f700..70cc3798d 100755
---- a/tests/ts/lsfd/option-inet
-+++ b/tests/ts/lsfd/option-inet
-@@ -84,14 +84,10 @@ ts_cd "$TS_OUTDIR"
-                   -o ASSOC,TYPE,NAME \
-                   -Q "(PID == $PID0) or (PID == $PID1) or (PID == $PID2) or (PID == $PID3) or (PID == $PID4)"
- 
--    kill -CONT "${PID0}"
--    wait "${PID0}"
--
--    kill -CONT "${PID1}"
--    wait "${PID1}"
--
--    kill -CONT "${PID2}"
--    wait "${PID2}"
-+    for pid in "${PID0}" "${PID1}" "${PID2}" "${PID3}" "${PID4}"; do
-+       kill -CONT "${pid}"
-+       wait "${pid}"
-+    done
- } > "$TS_OUTPUT" 2>&1
- 
- ts_finalize
-
+Reviewed-by: Bart Van Assche <bvanassche@acm.org>
