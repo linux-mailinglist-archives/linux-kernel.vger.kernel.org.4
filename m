@@ -2,62 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6117870A29B
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 00:02:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3131D70A2A0
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 00:03:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230409AbjESWB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 18:01:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40282 "EHLO
+        id S229819AbjESWCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 18:02:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjESWB5 (ORCPT
+        with ESMTP id S231220AbjESWCn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 18:01:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA0DB8;
-        Fri, 19 May 2023 15:01:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF1D665AF2;
-        Fri, 19 May 2023 22:01:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C376C4339C;
-        Fri, 19 May 2023 22:01:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684533716;
-        bh=zP5YbzLCW3H0+E9nltMtNoB/5VTVg3nEDMBHv7bodmA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=bsV1NvDfvlFGN6APD8QVM8hE+rypkD09e2/VlWPZdED6Qp6dqxNZE1rxZJYzxCpFV
-         9oVE8jUCYY95Te4GcNIoE1td5uN91V6EzfEdIAD/08zds04vYu6AUpKN/qZ/5orvBB
-         KqIOtCGuoJBBL/8pyRH1+rZU06mXvHW4MucelwUs3vf+pi3jVIzP9F3B4vutUvJVTb
-         K6KahXfBHmEbEN0OV7hfsot3XhkM8FSmPAiQRECczdesMGBNRE4YNMQo1O/RprNMCf
-         Y4ahONiGYF7CEtwgeejjeoh+E5hx9jLiiDr2fAa3t86eAY9MTXI8H98poBe6+002K/
-         YRaigv7zSz1Yg==
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-4efe8b3f3f7so4271911e87.2;
-        Fri, 19 May 2023 15:01:56 -0700 (PDT)
-X-Gm-Message-State: AC+VfDza118GaZuIZBNO9s/noqkDBlmQaYZ0/wxH+3M8PUsdS23CMY33
-        9fbuqcZ1EUAJmLT2WKWKo+j6CXgZXPoi+7vZkQE=
-X-Google-Smtp-Source: ACHHUZ61GFQXgASCQYjDCJyi45K5KlKEUFmHKNXXkbtTeByodchdOGGwTLqGV1P53cPWhRppnf/U/xGLBeSFZhVbX/g=
-X-Received: by 2002:ac2:547c:0:b0:4ef:f01d:5a96 with SMTP id
- e28-20020ac2547c000000b004eff01d5a96mr1016203lfn.21.1684533714316; Fri, 19
- May 2023 15:01:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230515134808.3936750-1-linan666@huaweicloud.com> <20230515134808.3936750-3-linan666@huaweicloud.com>
-In-Reply-To: <20230515134808.3936750-3-linan666@huaweicloud.com>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 19 May 2023 15:01:42 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW53EAK406k+PoLWi2z6SPLJBWa8r4rgXqoYKFRXm-kPSg@mail.gmail.com>
-Message-ID: <CAPhsuW53EAK406k+PoLWi2z6SPLJBWa8r4rgXqoYKFRXm-kPSg@mail.gmail.com>
-Subject: Re: [PATCH OLK-5.10 v3 2/4] md/raid10: fix overflow in safe_delay_store
-To:     linan666@huaweicloud.com
-Cc:     neilb@suse.de, Rob.Becker@riverbed.com, linux-raid@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linan122@huawei.com,
-        yukuai3@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
-        yangerkun@huawei.com
+        Fri, 19 May 2023 18:02:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60EFC125
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 15:02:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684533726;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=9Fz8oD8SeEi0X0FetXkpDXCUncDXsExXWOBUZVu30QA=;
+        b=IfU8RJtogPJ5w8X2qHYTQ/i93afKb5azZpjY69XEsC2u3cOH5YOO4mXj4sn+P8n6JDFLWi
+        KZsEGmABUEZtk3H1kx3cSMeGAyy2P4ozh/AhAcYOwTCxLlSzOADREvLDLreDlrTohA5lTI
+        QHdS8pxngyYVE7sWGtAYxxdrmthgqMc=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-257-vP_iopFnNPSM4QzMo_0Lyw-1; Fri, 19 May 2023 18:02:05 -0400
+X-MC-Unique: vP_iopFnNPSM4QzMo_0Lyw-1
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-6239a184651so13324886d6.2
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 15:02:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684533724; x=1687125724;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9Fz8oD8SeEi0X0FetXkpDXCUncDXsExXWOBUZVu30QA=;
+        b=YohZNesuoKeiCu+m3tbtsbCrp4u6/TZh8Hhh8Vcg6p+UzTMQlir+nq0y7nV5zyTEE6
+         Fyng00qCUj3WOxq+89kLnNZhCpTjtaqMZgLdhJkiVQoa2bLVr2xtVKWfCx8OkGycS8r/
+         eOq5rlGGuVZJZLgl1/EQxYYbox5wQahXgmuB5X7gJ7Mfh3kZznuNefwIwmQ8ggGJ5XYg
+         8FEaDNh7SkWEdusztbN1FSOAHS6YLHKvxoFh/gd3ShhNmHwkA8b1Wb71DLBhr8H7J9H+
+         Dkl5IPWr0zML3J6Vra462+woABoINunVVnDLOQYnAGUzQR7s6t6t8G0h4mTXcxzvzuBc
+         oGsA==
+X-Gm-Message-State: AC+VfDyocf2Xr64stJck6Rtb2eT8it4zQ1nZd3GjqkbqSLAkROJPQUZR
+        G+K/zVxNBh8a4dZDU5ci+cxM9zpVJpXssflaMhNTn1bHCCP/WQBEXq5mcPA14JsCyBiEQdn0wLv
+        nrbIoAJ6EYTC+2n9YaUt+p9SH4vysAiHa
+X-Received: by 2002:a05:622a:354:b0:3f5:4292:4ce8 with SMTP id r20-20020a05622a035400b003f542924ce8mr5295819qtw.8.1684533724175;
+        Fri, 19 May 2023 15:02:04 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4Mt53H4iQwzI1D2lNsu2LLMAIoLcw8qn589H2uxtmd69AEaI+GNRnNJfxUNZFRD08CfKnRPg==
+X-Received: by 2002:a05:622a:354:b0:3f5:4292:4ce8 with SMTP id r20-20020a05622a035400b003f542924ce8mr5295791qtw.8.1684533723908;
+        Fri, 19 May 2023 15:02:03 -0700 (PDT)
+Received: from thinkpad-p1.localdomain (cpe00fc8d79db03-cm00fc8d79db00.cpe.net.fido.ca. [72.137.118.218])
+        by smtp.gmail.com with ESMTPSA id w19-20020ac843d3000000b003f4fa14decbsm159980qtn.52.2023.05.19.15.02.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 May 2023 15:02:03 -0700 (PDT)
+Message-ID: <d3a8ecce64a35c13dd60d942f2c4762e99775aef.camel@redhat.com>
+Subject: Re: [PATCH v4 1/3] cacheinfo: Add arch specific early level
+ initializer
+From:   Radu Rendec <rrendec@redhat.com>
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Pierre Gondois <Pierre.Gondois@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+Date:   Fri, 19 May 2023 18:02:02 -0400
+In-Reply-To: <20230519214430.GA3116@ranerica-svr.sc.intel.com>
+References: <20230412185759.755408-1-rrendec@redhat.com>
+         <20230412185759.755408-2-rrendec@redhat.com>
+         <20230510191207.GA18514@ranerica-svr.sc.intel.com>
+         <b49e241d3ea8c679b81134e22c908ca64aeca18c.camel@redhat.com>
+         <20230511000058.GD18514@ranerica-svr.sc.intel.com>
+         <9020807789b70db0d84d142cbfed2bd8868f366a.camel@redhat.com>
+         <20230519214430.GA3116@ranerica-svr.sc.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,23 +90,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 6:49=E2=80=AFAM <linan666@huaweicloud.com> wrote:
->
-> From: Li Nan <linan122@huawei.com>
->
-> There is no input check when echo md/safe_mode_delay and overflow will
-> occur. There is risk of overflow in strict_strtoul_scaled(), too. Fix it
-> by using kstrtoul instead of parsing word one by one.
->
-> Fixes: 72e02075a33f ("md: factor out parsing of fixed-point numbers")
-> Signed-off-by: Li Nan <linan122@huawei.com>
-> Reviewed-by: Yu Kuai <yukuai3@huawei.com>
-> ---
->  drivers/md/md.c | 76 +++++++++++++++++++++++++++++++------------------
->  1 file changed, 48 insertions(+), 28 deletions(-)
+Hi Ricardo,
 
-This patch adds more complexity, which I don't really think is necessary.
-Can we just check for overflow in safe_delay_store()?
+On Fri, 2023-05-19 at 14:44 -0700, Ricardo Neri wrote:
+> On Thu, May 11, 2023 at 03:55:18PM -0400, Radu Rendec wrote:
+> > On Wed, 2023-05-10 at 17:00 -0700, Ricardo Neri wrote:
+> > > On Wed, May 10, 2023 at 04:44:49PM -0400, Radu Rendec wrote:
+> > > > On Wed, 2023-05-10 at 12:12 -0700, Ricardo Neri wrote:
+> > > > > On Wed, Apr 12, 2023 at 02:57:57PM -0400, Radu Rendec wrote:
+> > > > > > This patch gives architecture specific code the ability to init=
+ialize
+> > > > > > the cache level and allocate cacheinfo memory early, when cache=
+ level
+> > > > > > initialization runs on the primary CPU for all possible CPUs.
+> > > > [cut]
+> > > > > > -int detect_cache_attributes(unsigned int cpu)
+> > > > > > +static inline int init_level_allocate_ci(unsigned int cpu)
+> > > > > > =C2=A0{
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int ret;
+> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0unsigned int early_l=
+eaves =3D cache_leaves(cpu);
+> > > > > > =C2=A0
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Since early =
+initialization/allocation of the cacheinfo is allowed
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * via fetch_ca=
+che_info() and this also gets called as CPU hotplug
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * callbacks vi=
+a cacheinfo_cpu_online, the init/alloc can be skipped
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * as it will h=
+appen only once (the cacheinfo memory is never freed).
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Just populate the=
+ cacheinfo.
+> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Just populate the=
+ cacheinfo. However, if the cacheinfo has been
+> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * allocated early t=
+hrough the arch-specific early_cache_level() call,
+> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * there is a chance=
+ the info is wrong (this can happen on arm64). In
+> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * that case, call i=
+nit_cache_level() anyway to give the arch-specific
+> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * code a chance to =
+make things right.
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (per_cpu_cacheinf=
+o(cpu))
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0goto populate_leaves;
+> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (per_cpu_cacheinf=
+o(cpu) && !ci_cacheinfo(cpu)->early_ci_levels)
+> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
+> > > > > > =C2=A0
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (init_cache_=
+level(cpu) || !cache_leaves(cpu))
+> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return -ENOENT;
+> > > > > > =C2=A0
+> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret =3D allocate_cac=
+he_info(cpu);
+> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*
+> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Now that we have =
+properly initialized the cache level info, make
+> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * sure we don't try=
+ to do that again the next time we are called
+> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * (e.g. as CPU hotp=
+lug callbacks).
+> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ci_cacheinfo(cpu)->e=
+arly_ci_levels =3D false;
+> > > > > > +
+> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (cache_leaves(cpu=
+) <=3D early_leaves)
+> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
+> > > > > > +
+> > > > >=20
+> > > > > I had posted a patchset[1] for x86 that initializes
+> > > > > ci_cacheinfo(cpu)->num_leaves during SMP boot.
+> > > > >=20
+> > > > > This means that early_leaves and a late cache_leaves() are equal =
+but
+> > > > > per_cpu_cacheinfo(cpu) is never allocated. Currently, x86 does no=
+t use
+> > > > > fetch_cache_info().
+> > > > >=20
+> > > > > I think that we should check here that per_cpu_cacheinfo() has be=
+en allocated to
+> > > > > take care of the case in which early and late cache leaves remain=
+ the same:
+> > > > >=20
+> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (cache_leaves(cpu) <=3D =
+early_leaves)
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (cache_leaves(cpu) <=3D =
+early_leaves && per_cpu_cacheinfo(cpu))
+> > > > >=20
+> > > > > Otherwise, in v6.4-rc1 + [1] I observe a NULL pointer dereference=
+ from
+> > > > > last_level_cache_is_valid().
+> > > > >=20
+> > > > > I can post a patch with this fix if it makes sense.
+> > > > >=20
+> > > > > [1]. https://lore.kernel.org/all/20230424001956.21434-3-ricardo.n=
+eri-calderon@linux.intel.com/
+> > > >=20
+> > > > Thanks for bringing this to my attention. I need to run some tests =
+on
+> > > > x86 (I did all that work/testing on arm64) and wrap my head around =
+it.
+> > > >=20
+> > > > While I don't see any problem with the fix you're proposing, I'm af=
+raid
+> > > > it may circle back to the other problem I tried to fix initially. H=
+ave
+> > > > you tested this on an RT kernel by any chance?
+> > >=20
+> > > That is a good point. I did not test on an RT kernel. I'll try that.
+> >=20
+> > It looks like the flow is much simpler on x86: detect_cache_attributes(=
+)
+> > is called only once for each CPU, and it's called in kthread context.
+> >=20
+> > I haven't tested on an RT kernel but I think it should be fine. I put a
+> > msleep() there and saw no issues, which means kmalloc() on RT should be
+> > fine as well.
+>=20
+> I booted the realtime kernel [3] with CONFIG_PREEMPT_RT and did not obser=
+ve
+> the BUG splat. I tried before your patchset. Were you able to reproduce o=
+n
+> x86? Also, I was not able to reproduce the BUG splat after your changes +
+> [1] + my earlier suggested patch in this thread.
 
-Thanks,
-Song
+Thanks for trying this out. I think the BUG splat cannot be reproduced
+on x86, either with or without my fix because detect_cache_attributes()
+is always called in kthread context, and that makes kmalloc() happy on
+RT kernels.
+
+At the time when I first asked you about the RT kernel, I hadn't looked
+closely at the x86 code yet, and I was unaware of the (much simpler)
+flow and the kthread context. Sorry for the confusion!
+
+In any case, your test on the RT kernel validates the conclusion that
+we already came to, and eliminates any trace of doubt. FWIW, I was
+testing on arm64 when I found the bug and created the fix. Things are
+much more complicated there, and detect_cache_attributes() is called
+twice for each CPU (the second time with preemption disabled).
+
+Best regards,
+Radu
+
