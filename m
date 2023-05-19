@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A0F709C64
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 18:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E069A709C66
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 18:25:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbjESQZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 12:25:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51828 "EHLO
+        id S229765AbjESQZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 12:25:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbjESQZJ (ORCPT
+        with ESMTP id S229711AbjESQZi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 12:25:09 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2047.outbound.protection.outlook.com [40.107.244.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24043E54
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 09:25:03 -0700 (PDT)
+        Fri, 19 May 2023 12:25:38 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on20605.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe59::605])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AEED171E
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 09:25:17 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZcVM+mOc44rMOeLEHRGoYx9rdvOdQa/smUNa/4E9KV+IJeIY39eu+PyC/mkGSzb/t4PzwQNd6SzL3Itv+Jj3zSusgETTSdLQZsufH2yQVu//6nKU68CzpOPsSEA1Lqs4s0oe588ajfdnhxRAYhoPEe3Av6bq1sj7R0FMK1pk/J5IBKinfDZ2WuBrZCRmrWSiBIbpvdm2XtxYaABYAF2nLj9xLk1cuPGLANBxgp3iAgB/D1bUEpMpoGbl0XvcSwQHhtJ9Ga91IW1cgRRNInZMubx72RLJU3mwLj7eaH5fxfkU40GPa5dCahWPXHbyxMFktGs6yHrqsjgBXVD6DbAFCQ==
+ b=cYkSCImi+aqxX4pjTxZeiaXO6prF1dAwHB6SzMW1HHu8BkhpjyQF323xV8inXrvL5T+GIW1o1hhdl0bB6pXw/MGWXN87aDYD0YpYK0kLvQEUWnRS/D9nRCOXejkwmDlHXsfJPI2ZDbawEJ8wuTF2zfBryVPuwdXNDm4evbQO5d6mQV84sEafkhP/9mbW+cQE0YxlzWUD9p1oPh6tzYZe8cOP+AVMUznxarwqSSK/FUC1Xpo9lEK/HZUZ06KFNi68M/JCPTI/lTo161DlLJ6RRY5sKPzJs8QlFF5xWnxCUx+cLYYutxs/hSnlZlS5iO0hROHKyz1pHNZLp5MFQdfipA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=blqlGSo1u7qyUOO+G4REHTh7X/rBN0iZH9kWG9Z8W9U=;
- b=CYn6hdCKgUPxxm6rVGrsc9nSBpb/i4FOyEzLd0fdpxjWHGMIYsAYOA+ifsl5LqjZzTP+ZG2zNGNz4jnecGTxEcliZGnWiciKAifIGZy9kG8mP+BWEJcygDJm7hUiyzg1CvpV538F5QsxosGzqtdajc3wvQAhntnR1E8IL2nlZLCBF9wdjDkLx+PJzLRe//34xfVTPETOKIWUfRMg88AnHA6VJQhkzKAhLKKlZsVEtfw6seOYipTOvkc/WhHWB+vP/WYey3aDaysOc+WALESDUeXjp7l2Y7yDkuZce+kwXAWhzMEtg/cDFZXKK1azBg3Z9QI5lpv7XuP34P/fy1L7Wg==
+ bh=MRl98XliT95INHRWHlCFvP+XcTziK7Bl8ILB8nXUGFo=;
+ b=QlXCHxysixqyjC49NMHx8F96lE4P4vP8xxumZx1+KLlOoElhLfHC7/RIWeqOfsGtxQCxVpu56GuKnbpzH6F3Ev3a7SSN0VpddJZt65ni53hYhZHbMx7gRukHNKTxELM2IigxAuKUjSoKnb5AFcsyRQUu3zayZe0r00et6EQll0B6JyWaK+0ze2LX8N/7wB/4iWm4PoZ7nXmtYtnxtng6slr5fJMP00CToFQTpWsHcaVBePyCc8+0FjiF30GPu+bwmtfu+aUF4Q2DiFQdy/QdPsfxdY8CYj1whqOj2voEf81/c/7vRsMVit+SO9FaUSmnLiEsPVTMxBU11KB/QyjSRQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=blqlGSo1u7qyUOO+G4REHTh7X/rBN0iZH9kWG9Z8W9U=;
- b=c0bm19etJOSc5E7mwdVRCCTQVjMv+TpQTcIFeWuTEzlsxmtoVRkjkR40gBn4jBPMyxBrmncW9kro33/UcpjbrJffq5WP+hkt/fJ74OSTHG9vZy1GZIQPf2n3tY8IhmoeEjReGneOa7cU4lbFtM9tabgCoBF0qbj9o++tEcS3Gx8=
-Received: from MW4PR04CA0203.namprd04.prod.outlook.com (2603:10b6:303:86::28)
- by CH3PR12MB7548.namprd12.prod.outlook.com (2603:10b6:610:144::12) with
+ bh=MRl98XliT95INHRWHlCFvP+XcTziK7Bl8ILB8nXUGFo=;
+ b=FoC68mvC4ymU+P0vroxuuPNP91GjxOmNTHbROR/tik/syNTjuzsacQZ9w8yCBosFb7Vv1gdZrldvfmPt/A5b5TQmTkjAKEYNLRklk5lQ/1V3oZ8BWkbsOhPzPpXFjz/1kQTl7+FvhxTZMsOjSkY/wduP0+7rg3ukGVNAevoaSSo=
+Received: from MW2PR2101CA0026.namprd21.prod.outlook.com (2603:10b6:302:1::39)
+ by MN0PR12MB6002.namprd12.prod.outlook.com (2603:10b6:208:37e::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19; Fri, 19 May
- 2023 16:25:00 +0000
-Received: from CO1NAM11FT058.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:86:cafe::4f) by MW4PR04CA0203.outlook.office365.com
- (2603:10b6:303:86::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.21 via Frontend
- Transport; Fri, 19 May 2023 16:24:59 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Fri, 19 May
+ 2023 16:25:12 +0000
+Received: from CO1NAM11FT010.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:302:1:cafe::dc) by MW2PR2101CA0026.outlook.office365.com
+ (2603:10b6:302:1::39) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.7 via Frontend
+ Transport; Fri, 19 May 2023 16:25:12 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,13 +47,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT058.mail.protection.outlook.com (10.13.174.164) with Microsoft SMTP
+ CO1NAM11FT010.mail.protection.outlook.com (10.13.175.88) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6411.21 via Frontend Transport; Fri, 19 May 2023 16:24:59 +0000
+ 15.20.6411.21 via Frontend Transport; Fri, 19 May 2023 16:25:11 +0000
 Received: from tlendack-t1.amdoffice.net (10.180.168.240) by
  SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.34; Fri, 19 May 2023 11:24:57 -0500
+ 15.1.2375.34; Fri, 19 May 2023 11:25:07 -0500
 From:   Tom Lendacky <thomas.lendacky@amd.com>
 To:     <linux-kernel@vger.kernel.org>, <x86@kernel.org>
 CC:     Thomas Gleixner <tglx@linutronix.de>,
@@ -66,9 +66,9 @@ CC:     Thomas Gleixner <tglx@linutronix.de>,
         Dionna Glaze <dionnaglaze@google.com>,
         Andy Lutomirski <luto@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>
-Subject: [PATCH 4/6] x86/sev: Use large PSC requests if applicable
-Date:   Fri, 19 May 2023 11:24:15 -0500
-Message-ID: <c5448163eea57a878d9aeae504bf46ad52f9a879.1684513457.git.thomas.lendacky@amd.com>
+Subject: [PATCH 5/6] x86/sev: Add SNP-specific unaccepted memory support
+Date:   Fri, 19 May 2023 11:24:16 -0500
+Message-ID: <262831c7c519fedb1bdb3b51bf3019d49e68ff9e.1684513457.git.thomas.lendacky@amd.com>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230518231434.26080-1-kirill.shutemov@linux.intel.com>
 References: <20230518231434.26080-1-kirill.shutemov@linux.intel.com>
@@ -80,97 +80,273 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT058:EE_|CH3PR12MB7548:EE_
-X-MS-Office365-Filtering-Correlation-Id: 12ecbcf4-cbc7-4b8a-3b97-08db58859763
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT010:EE_|MN0PR12MB6002:EE_
+X-MS-Office365-Filtering-Correlation-Id: b8be37b3-58a1-48e7-71eb-08db58859ecf
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: szENTl/GmerTTlxyoxr3onBiHsWk6iFPMAqGdcnPlDu+37xbteXNru7RkWb9Ga5khWri4aSnH49EwvhAvhWwIYyCdO6gx1KBPXI+XsOzaZehbGOC5X/fgWxRT+ioFppUiVZUbo/lkJ4uFbK6Pjgg8g8oOd7Lgxg1fd+P0w1V1+gCAgK008b14LyRrmi5wHjBzvwafRv/GBqAbwsm4Ab69jBjiu/rEDoPhuP+oPkLsv1tX3QS7WwzGpi5ZpFbq59MqxyrASuvOI+kDgh1Zl8D9G7fXtw6A6KXYtyk4DCEOyuM6JH6Wsz09/2t5U9L5HdE/gmMaGr4E8c53+HUvFzTD1hMeVDxwY4vLnAQyWeqOlAuqyBYFWyl1fuNrZsePwBduDVu/vEdqVt54Ul87KlLM/i8qxUOS9yVBTyF90kk8OerO/WTHPjFO9Xx6hI6BGohKsoL+zu2/0cH5V+bck6//e2TU/51yDUIYqm9YouGidfEokYywz+E+YUeFphTWzf7xKubMoe+f1hAEDonPfzSyd8Sci7/qTL8gJRiCZo+NM1O1P/nUIjNcbr28qumcLEoa/FyO8QVSSN/nTT1cPxhUrcwZc0NJwrs7j3UpPfPzWSYNS+iLgdCiMzzl9DoRx65KI6DC8hHRWe+dq88hsWRXNKYyWs+9l5KC6hBV988BaJhTCwpt7VfqlI/h+c+jKp/5pBBt26GhkBc8TU5JwcCF+S5WeRLZHdkcAVG0aBUvyJEYBiyJcdHjOQUpyAPofyTNERIfkGfvWoaZtJTW/XSxw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(376002)(396003)(346002)(451199021)(36840700001)(46966006)(40470700004)(70206006)(478600001)(70586007)(5660300002)(2906002)(8936002)(316002)(8676002)(54906003)(110136005)(4326008)(41300700001)(6666004)(7416002)(26005)(40460700003)(36860700001)(356005)(16526019)(186003)(82740400003)(336012)(47076005)(40480700001)(426003)(36756003)(2616005)(83380400001)(86362001)(82310400005)(81166007)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: VDQkAp83j9w1hkr7sYih/eWIBTSA5p+tfsct5yEejNTVuFG9AOGbwLtPRxrrFj/mQGJ1mUoDWuwpl9+uvnkVO577EvlUEg4ksQhnvU2eMmRjCl0dXHvqz5wL2b6pettyoyHEZRc3vtZJzFLO27ynC+JAsoFP4xd7F2aEJVb+so8OE6AcBcZ9nr6k5vtlcVuDbHzHvH848niEIZf0XpnHWCcA3eQMuKNs2vQwaV72jVHmBdM3bIlYpA3W1Z1zyxg9uODQNjnURwA3+FEaRVLBNVLwse0LbTFWQKMII5I5xGeUhufywqICiQgzTBKjALVAJiHkkmomopATNlSUz2z2em6Rm7DktiCMIRcYTxupVbsiplktgQwogNq9TMFVUWOlUCVGdIo4eBEWNcAj7xrbN+wgdbzydJ/opPgMt2S28dS/BU7kLDynT41razMFaHoSrSl9zhKMP5zEW0/DVmLoWX3qVF6KtL5W4efV4QF3lOrlH0ZSzxig1PPM6y3DDbpWltdv55BaTbg9CVqkHzxTBWXD0LS/GG+u/CMpFiT1QVtGyt8G4SqIKzwPpuEDlfrwMXD7vqSY8NWl6+HfUE8QpFKKN5WRdUoF9eCnQw9KDyrPMu755hW4/NAmOkrnpxmJO6qnbIHlhbCTj0i2wEWSK8fSEQuhETBxxsBt/QN80zMIi0hJUzvlKmP+bcMsHICZ6wdDGerTierhICCr8XTAd7EaFOnICgSje4TuxdlC4gp1dln7Elwt+x9un8lXmPA9ZXfewMnvbuTa4n8wjh+Cwg==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(376002)(136003)(39860400002)(451199021)(36840700001)(40470700004)(46966006)(82310400005)(83380400001)(47076005)(426003)(336012)(36860700001)(81166007)(2906002)(82740400003)(316002)(41300700001)(356005)(4326008)(70586007)(478600001)(5660300002)(70206006)(40480700001)(2616005)(40460700003)(26005)(54906003)(8676002)(86362001)(16526019)(8936002)(30864003)(7416002)(110136005)(186003)(36756003)(6666004)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2023 16:24:59.5408
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2023 16:25:11.9784
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 12ecbcf4-cbc7-4b8a-3b97-08db58859763
+X-MS-Exchange-CrossTenant-Network-Message-Id: b8be37b3-58a1-48e7-71eb-08db58859ecf
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT058.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT010.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB7548
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6002
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
+        SPF_NONE,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In advance of providing support for unaccepted memory, request 2M Page
-State Change (PSC) requests when the address range allows for it. By using
-a 2M page size, more PSC operations can be handled in a single request to
-the hypervisor. The hypervisor will determine if it can accommodate the
-larger request by checking the mapping in the nested page table. If mapped
-as a large page, then the 2M page request can be performed, otherwise the
-2M page request will be broken down into 512 4K page requests. This is
-still more efficient than having the guest perform multiple PSC requests
-in order to process the 512 4K pages.
+Add SNP-specific hooks to the unaccepted memory support in the boot
+path (__accept_memory()) and the core kernel (accept_memory()) in order
+to support booting SNP guests when unaccepted memory is present. Without
+this support, SNP guests will fail to boot and/or panic() when unaccepted
+memory is present in the EFI memory map.
 
-In conjunction with the 2M PSC requests, attempt to perform the associated
-PVALIDATE instruction of the page using the 2M page size. If PVALIDATE
-fails with a size mismatch, then fallback to validating 512 4K pages. To
-do this, page validation is modified to work with the PSC structure and
-not just a virtual address range.
+The process of accepting memory under SNP involves invoking the hypervisor
+to perform a page state change for the page to private memory and then
+issuing a PVALIDATE instruction to accept the page.
+
+Since the boot path and the core kernel paths perform similar operations,
+move the pvalidate_pages() and vmgexit_psc() functions into sev-shared.c
+to avoid code duplication.
+
+Create the new header file arch/x86/boot/compressed/sev.h because adding
+the function declaration to any of the existing SEV related header files
+pulls in too many other header files, causing the build to fail.
 
 Signed-off-by: Tom Lendacky <thomas.lendacky@amd.com>
 ---
- arch/x86/include/asm/sev.h |   4 ++
- arch/x86/kernel/sev.c      | 125 ++++++++++++++++++++++++-------------
- 2 files changed, 84 insertions(+), 45 deletions(-)
+ arch/x86/Kconfig                         |   2 +
+ arch/x86/boot/compressed/mem.c           |   3 +
+ arch/x86/boot/compressed/sev.c           |  54 ++++++++++-
+ arch/x86/boot/compressed/sev.h           |  23 +++++
+ arch/x86/include/asm/sev.h               |   3 +
+ arch/x86/include/asm/unaccepted_memory.h |   3 +
+ arch/x86/kernel/sev-shared.c             | 103 +++++++++++++++++++++
+ arch/x86/kernel/sev.c                    | 112 +++--------------------
+ 8 files changed, 204 insertions(+), 99 deletions(-)
+ create mode 100644 arch/x86/boot/compressed/sev.h
 
-diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
-index 7ca5c9ec8b52..e21e1c5397c1 100644
---- a/arch/x86/include/asm/sev.h
-+++ b/arch/x86/include/asm/sev.h
-@@ -80,11 +80,15 @@ extern void vc_no_ghcb(void);
- extern void vc_boot_ghcb(void);
- extern bool handle_vc_boot_ghcb(struct pt_regs *regs);
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 5c72067c06d4..b9c451f75d5e 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -1543,11 +1543,13 @@ config X86_MEM_ENCRYPT
+ config AMD_MEM_ENCRYPT
+ 	bool "AMD Secure Memory Encryption (SME) support"
+ 	depends on X86_64 && CPU_SUP_AMD
++	depends on EFI_STUB
+ 	select DMA_COHERENT_POOL
+ 	select ARCH_USE_MEMREMAP_PROT
+ 	select INSTRUCTION_DECODER
+ 	select ARCH_HAS_CC_PLATFORM
+ 	select X86_MEM_ENCRYPT
++	select UNACCEPTED_MEMORY
+ 	help
+ 	  Say yes to enable support for the encryption of system memory.
+ 	  This requires an AMD processor that supports Secure Memory
+diff --git a/arch/x86/boot/compressed/mem.c b/arch/x86/boot/compressed/mem.c
+index 8df3d988ae69..c8f2353f6894 100644
+--- a/arch/x86/boot/compressed/mem.c
++++ b/arch/x86/boot/compressed/mem.c
+@@ -3,6 +3,7 @@
+ #include "error.h"
+ #include "misc.h"
+ #include "tdx.h"
++#include "sev.h"
+ #include <asm/shared/tdx.h>
  
-+/* PVALIDATE return codes */
-+#define PVALIDATE_FAIL_SIZEMISMATCH	6
-+
- /* Software defined (when rFlags.CF = 1) */
- #define PVALIDATE_FAIL_NOUPDATE		255
+ /*
+@@ -36,6 +37,8 @@ void arch_accept_memory(phys_addr_t start, phys_addr_t end)
+ 	/* Platform-specific memory-acceptance call goes here */
+ 	if (early_is_tdx_guest())
+ 		tdx_accept_memory(start, end);
++	else if (sev_snp_enabled())
++		snp_accept_memory(start, end);
+ 	else
+ 		error("Cannot accept memory: unknown platform\n");
+ }
+diff --git a/arch/x86/boot/compressed/sev.c b/arch/x86/boot/compressed/sev.c
+index 014b89c89088..09dc8c187b3c 100644
+--- a/arch/x86/boot/compressed/sev.c
++++ b/arch/x86/boot/compressed/sev.c
+@@ -115,7 +115,7 @@ static enum es_result vc_read_mem(struct es_em_ctxt *ctxt,
+ /* Include code for early handlers */
+ #include "../../kernel/sev-shared.c"
  
- /* RMP page size */
- #define RMP_PG_SIZE_4K			0
-+#define RMP_PG_SIZE_2M			1
- 
- #define RMPADJUST_VMSA_PAGE_BIT		BIT(16)
- 
-diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
-index 973756c89dac..8802a75e1c20 100644
---- a/arch/x86/kernel/sev.c
-+++ b/arch/x86/kernel/sev.c
-@@ -657,32 +657,58 @@ static u64 __init get_jump_table_addr(void)
- 	return ret;
+-static inline bool sev_snp_enabled(void)
++bool sev_snp_enabled(void)
+ {
+ 	return sev_status & MSR_AMD64_SEV_SNP_ENABLED;
+ }
+@@ -181,6 +181,58 @@ static bool early_setup_ghcb(void)
+ 	return true;
  }
  
--static void pvalidate_pages(unsigned long vaddr, unsigned long npages, bool validate)
-+static void pvalidate_pages(struct snp_psc_desc *desc)
++static phys_addr_t __snp_accept_memory(struct snp_psc_desc *desc,
++				       phys_addr_t pa, phys_addr_t pa_end)
++{
++	struct psc_hdr *hdr;
++	struct psc_entry *e;
++	unsigned int i;
++
++	hdr = &desc->hdr;
++	memset(hdr, 0, sizeof(*hdr));
++
++	e = desc->entries;
++
++	i = 0;
++	while (pa < pa_end && i < VMGEXIT_PSC_MAX_ENTRY) {
++		hdr->end_entry = i;
++
++		e->gfn = pa >> PAGE_SHIFT;
++		e->operation = SNP_PAGE_STATE_PRIVATE;
++		if (IS_ALIGNED(pa, PMD_SIZE) && (pa_end - pa) >= PMD_SIZE) {
++			e->pagesize = RMP_PG_SIZE_2M;
++			pa += PMD_SIZE;
++		} else {
++			e->pagesize = RMP_PG_SIZE_4K;
++			pa += PAGE_SIZE;
++		}
++
++		e++;
++		i++;
++	}
++
++	if (vmgexit_psc(boot_ghcb, desc))
++		sev_es_terminate(SEV_TERM_SET_LINUX, GHCB_TERM_PSC);
++
++	pvalidate_pages(desc);
++
++	return pa;
++}
++
++void snp_accept_memory(phys_addr_t start, phys_addr_t end)
++{
++	struct snp_psc_desc desc = {};
++	unsigned int i;
++	phys_addr_t pa;
++
++	if (!boot_ghcb && !early_setup_ghcb())
++		sev_es_terminate(SEV_TERM_SET_LINUX, GHCB_TERM_PSC);
++
++	pa = start;
++	while (pa < end)
++		pa = __snp_accept_memory(&desc, pa, end);
++}
++
+ void sev_es_shutdown_ghcb(void)
  {
--	unsigned long vaddr_end;
+ 	if (!boot_ghcb)
+diff --git a/arch/x86/boot/compressed/sev.h b/arch/x86/boot/compressed/sev.h
+new file mode 100644
+index 000000000000..fc725a981b09
+--- /dev/null
++++ b/arch/x86/boot/compressed/sev.h
+@@ -0,0 +1,23 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * AMD SEV header for early boot related functions.
++ *
++ * Author: Tom Lendacky <thomas.lendacky@amd.com>
++ */
++
++#ifndef BOOT_COMPRESSED_SEV_H
++#define BOOT_COMPRESSED_SEV_H
++
++#ifdef CONFIG_AMD_MEM_ENCRYPT
++
++bool sev_snp_enabled(void);
++void snp_accept_memory(phys_addr_t start, phys_addr_t end);
++
++#else
++
++static inline bool sev_snp_enabled(void) { return false; }
++static inline void snp_accept_memory(phys_addr_t start, phys_addr_t end) { }
++
++#endif
++
++#endif
+diff --git a/arch/x86/include/asm/sev.h b/arch/x86/include/asm/sev.h
+index e21e1c5397c1..86e1296e87f5 100644
+--- a/arch/x86/include/asm/sev.h
++++ b/arch/x86/include/asm/sev.h
+@@ -206,6 +206,7 @@ void snp_set_wakeup_secondary_cpu(void);
+ bool snp_init(struct boot_params *bp);
+ void __init __noreturn snp_abort(void);
+ int snp_issue_guest_request(u64 exit_code, struct snp_req_data *input, struct snp_guest_request_ioctl *rio);
++void snp_accept_memory(phys_addr_t start, phys_addr_t end);
+ #else
+ static inline void sev_es_ist_enter(struct pt_regs *regs) { }
+ static inline void sev_es_ist_exit(void) { }
+@@ -229,6 +230,8 @@ static inline int snp_issue_guest_request(u64 exit_code, struct snp_req_data *in
+ {
+ 	return -ENOTTY;
+ }
++
++static inline void snp_accept_memory(phys_addr_t start, phys_addr_t end) { }
+ #endif
+ 
+ #endif
+diff --git a/arch/x86/include/asm/unaccepted_memory.h b/arch/x86/include/asm/unaccepted_memory.h
+index 72b354f992bb..ed3fcd3ac9dd 100644
+--- a/arch/x86/include/asm/unaccepted_memory.h
++++ b/arch/x86/include/asm/unaccepted_memory.h
+@@ -3,12 +3,15 @@
+ 
+ #include <linux/efi.h>
+ #include <asm/tdx.h>
++#include <asm/sev.h>
+ 
+ static inline void arch_accept_memory(phys_addr_t start, phys_addr_t end)
+ {
+ 	/* Platform-specific memory-acceptance call goes here */
+ 	if (cpu_feature_enabled(X86_FEATURE_TDX_GUEST)) {
+ 		tdx_accept_memory(start, end);
++	} else if (cc_platform_has(CC_ATTR_GUEST_SEV_SNP)) {
++		snp_accept_memory(start, end);
+ 	} else {
+ 		panic("Cannot accept memory: unknown platform\n");
+ 	}
+diff --git a/arch/x86/kernel/sev-shared.c b/arch/x86/kernel/sev-shared.c
+index 3a5b0c9c4fcc..be312db48a49 100644
+--- a/arch/x86/kernel/sev-shared.c
++++ b/arch/x86/kernel/sev-shared.c
+@@ -12,6 +12,9 @@
+ #ifndef __BOOT_COMPRESSED
+ #define error(v)	pr_err(v)
+ #define has_cpuflag(f)	boot_cpu_has(f)
++#else
++#undef WARN
++#define WARN(condition, format...) (!!(condition))
+ #endif
+ 
+ /* I/O parameters for CPUID-related helpers */
+@@ -991,3 +994,103 @@ static void __init setup_cpuid_table(const struct cc_blob_sev_info *cc_info)
+ 			cpuid_ext_range_max = fn->eax;
+ 	}
+ }
++
++static void pvalidate_pages(struct snp_psc_desc *desc)
++{
 +	struct psc_entry *e;
 +	unsigned long vaddr;
 +	unsigned int size;
 +	unsigned int i;
 +	bool validate;
- 	int rc;
- 
--	vaddr = vaddr & PAGE_MASK;
--	vaddr_end = vaddr + (npages << PAGE_SHIFT);
++	int rc;
++
 +	for (i = 0; i <= desc->hdr.end_entry; i++) {
 +		e = &desc->entries[i];
 +
@@ -188,210 +364,216 @@ index 973756c89dac..8802a75e1c20 100644
 +					break;
 +			}
 +		}
- 
--	while (vaddr < vaddr_end) {
--		rc = pvalidate(vaddr, RMP_PG_SIZE_4K, validate);
- 		if (WARN(rc, "Failed to validate address 0x%lx ret %d", vaddr, rc))
- 			sev_es_terminate(SEV_TERM_SET_LINUX, GHCB_TERM_PVALIDATE);
--
--		vaddr = vaddr + PAGE_SIZE;
- 	}
- }
- 
--static void early_set_pages_state(unsigned long paddr, unsigned long npages, enum psc_op op)
-+static void early_set_pages_state(unsigned long vaddr, unsigned long paddr,
-+				  unsigned long npages, enum psc_op op)
- {
- 	unsigned long paddr_end;
- 	u64 val;
-+	int ret;
 +
-+	vaddr = vaddr & PAGE_MASK;
- 
- 	paddr = paddr & PAGE_MASK;
- 	paddr_end = paddr + (npages << PAGE_SHIFT);
- 
- 	while (paddr < paddr_end) {
-+		if (op == SNP_PAGE_STATE_SHARED) {
-+			/* Page validation must be rescinded before changing to shared */
-+			ret = pvalidate(vaddr, RMP_PG_SIZE_4K, false);
-+			if (WARN(ret, "Failed to validate address 0x%lx ret %d", paddr, ret))
-+				goto e_term;
++		if (rc) {
++			WARN(1, "Failed to validate address 0x%lx ret %d", vaddr, rc);
++			sev_es_terminate(SEV_TERM_SET_LINUX, GHCB_TERM_PVALIDATE);
++		}
++	}
++}
++
++static int vmgexit_psc(struct ghcb *ghcb, struct snp_psc_desc *desc)
++{
++	int cur_entry, end_entry, ret = 0;
++	struct snp_psc_desc *data;
++	struct es_em_ctxt ctxt;
++
++	vc_ghcb_invalidate(ghcb);
++
++	/* Copy the input desc into GHCB shared buffer */
++	data = (struct snp_psc_desc *)ghcb->shared_buffer;
++	memcpy(ghcb->shared_buffer, desc, min_t(int, GHCB_SHARED_BUF_SIZE, sizeof(*desc)));
++
++	/*
++	 * As per the GHCB specification, the hypervisor can resume the guest
++	 * before processing all the entries. Check whether all the entries
++	 * are processed. If not, then keep retrying. Note, the hypervisor
++	 * will update the data memory directly to indicate the status, so
++	 * reference the data->hdr everywhere.
++	 *
++	 * The strategy here is to wait for the hypervisor to change the page
++	 * state in the RMP table before guest accesses the memory pages. If the
++	 * page state change was not successful, then later memory access will
++	 * result in a crash.
++	 */
++	cur_entry = data->hdr.cur_entry;
++	end_entry = data->hdr.end_entry;
++
++	while (data->hdr.cur_entry <= data->hdr.end_entry) {
++		ghcb_set_sw_scratch(ghcb, (u64)__pa(data));
++
++		/* This will advance the shared buffer data points to. */
++		ret = sev_es_ghcb_hv_call(ghcb, &ctxt, SVM_VMGEXIT_PSC, 0, 0);
++
++		/*
++		 * Page State Change VMGEXIT can pass error code through
++		 * exit_info_2.
++		 */
++		if (WARN(ret || ghcb->save.sw_exit_info_2,
++			 "SNP: PSC failed ret=%d exit_info_2=%llx\n",
++			 ret, ghcb->save.sw_exit_info_2)) {
++			ret = 1;
++			goto out;
 +		}
 +
- 		/*
- 		 * Use the MSR protocol because this function can be called before
- 		 * the GHCB is established.
-@@ -703,7 +729,15 @@ static void early_set_pages_state(unsigned long paddr, unsigned long npages, enu
- 			 paddr, GHCB_MSR_PSC_RESP_VAL(val)))
- 			goto e_term;
- 
--		paddr = paddr + PAGE_SIZE;
-+		if (op == SNP_PAGE_STATE_PRIVATE) {
-+			/* Page validation must be performed after changing to private */
-+			ret = pvalidate(vaddr, RMP_PG_SIZE_4K, true);
-+			if (WARN(ret, "Failed to validate address 0x%lx ret %d", paddr, ret))
-+				goto e_term;
++		/* Verify that reserved bit is not set */
++		if (WARN(data->hdr.reserved, "Reserved bit is set in the PSC header\n")) {
++			ret = 1;
++			goto out;
 +		}
 +
-+		vaddr += PAGE_SIZE;
-+		paddr += PAGE_SIZE;
- 	}
- 
- 	return;
-@@ -728,10 +762,7 @@ void __init early_snp_set_memory_private(unsigned long vaddr, unsigned long padd
- 	  * Ask the hypervisor to mark the memory pages as private in the RMP
- 	  * table.
- 	  */
--	early_set_pages_state(paddr, npages, SNP_PAGE_STATE_PRIVATE);
--
--	/* Validate the memory pages after they've been added in the RMP table. */
--	pvalidate_pages(vaddr, npages, true);
-+	early_set_pages_state(vaddr, paddr, npages, SNP_PAGE_STATE_PRIVATE);
- }
- 
- void __init early_snp_set_memory_shared(unsigned long vaddr, unsigned long paddr,
-@@ -746,11 +777,8 @@ void __init early_snp_set_memory_shared(unsigned long vaddr, unsigned long paddr
- 	if (!(sev_status & MSR_AMD64_SEV_SNP_ENABLED))
- 		return;
- 
--	/* Invalidate the memory pages before they are marked shared in the RMP table. */
--	pvalidate_pages(vaddr, npages, false);
--
- 	 /* Ask hypervisor to mark the memory pages shared in the RMP table. */
--	early_set_pages_state(paddr, npages, SNP_PAGE_STATE_SHARED);
-+	early_set_pages_state(vaddr, paddr, npages, SNP_PAGE_STATE_SHARED);
- }
- 
- void __init snp_prep_memory(unsigned long paddr, unsigned int sz, enum psc_op op)
-@@ -834,10 +862,11 @@ static int vmgexit_psc(struct ghcb *ghcb, struct snp_psc_desc *desc)
++		/*
++		 * Sanity check that entry processing is not going backwards.
++		 * This will happen only if hypervisor is tricking us.
++		 */
++		if (WARN(data->hdr.end_entry > end_entry || cur_entry > data->hdr.cur_entry,
++"SNP: PSC processing going backward, end_entry %d (got %d) cur_entry %d (got %d)\n",
++			 end_entry, data->hdr.end_entry, cur_entry, data->hdr.cur_entry)) {
++			ret = 1;
++			goto out;
++		}
++	}
++
++out:
++	return ret;
++}
+diff --git a/arch/x86/kernel/sev.c b/arch/x86/kernel/sev.c
+index 8802a75e1c20..ea2546e5130f 100644
+--- a/arch/x86/kernel/sev.c
++++ b/arch/x86/kernel/sev.c
+@@ -657,38 +657,6 @@ static u64 __init get_jump_table_addr(void)
  	return ret;
  }
  
--static void __set_pages_state(struct snp_psc_desc *data, unsigned long vaddr,
--			      unsigned long vaddr_end, int op)
-+static unsigned long __set_pages_state(struct snp_psc_desc *data, unsigned long vaddr,
-+				       unsigned long vaddr_end, int op)
- {
- 	struct ghcb_state state;
-+	bool use_large_entry;
- 	struct psc_hdr *hdr;
- 	struct psc_entry *e;
- 	unsigned long flags;
-@@ -851,27 +880,37 @@ static void __set_pages_state(struct snp_psc_desc *data, unsigned long vaddr,
- 	memset(data, 0, sizeof(*data));
- 	i = 0;
- 
--	while (vaddr < vaddr_end) {
--		if (is_vmalloc_addr((void *)vaddr))
-+	while (vaddr < vaddr_end && i < ARRAY_SIZE(data->entries)) {
-+		hdr->end_entry = i;
-+
-+		if (is_vmalloc_addr((void *)vaddr)) {
- 			pfn = vmalloc_to_pfn((void *)vaddr);
--		else
-+			use_large_entry = false;
-+		} else {
- 			pfn = __pa(vaddr) >> PAGE_SHIFT;
-+			use_large_entry = true;
-+		}
- 
- 		e->gfn = pfn;
- 		e->operation = op;
--		hdr->end_entry = i;
- 
--		/*
--		 * Current SNP implementation doesn't keep track of the RMP page
--		 * size so use 4K for simplicity.
--		 */
--		e->pagesize = RMP_PG_SIZE_4K;
-+		if (use_large_entry && IS_ALIGNED(vaddr, PMD_SIZE) &&
-+		    (vaddr_end - vaddr) >= PMD_SIZE) {
-+			e->pagesize = RMP_PG_SIZE_2M;
-+			vaddr += PMD_SIZE;
-+		} else {
-+			e->pagesize = RMP_PG_SIZE_4K;
-+			vaddr += PAGE_SIZE;
-+		}
- 
--		vaddr = vaddr + PAGE_SIZE;
- 		e++;
- 		i++;
- 	}
- 
-+	/* Page validation must be rescinded before changing to shared */
-+	if (op == SNP_PAGE_STATE_SHARED)
-+		pvalidate_pages(data);
-+
- 	local_irq_save(flags);
- 
- 	if (sev_cfg.ghcbs_initialized)
-@@ -879,6 +918,7 @@ static void __set_pages_state(struct snp_psc_desc *data, unsigned long vaddr,
- 	else
- 		ghcb = boot_ghcb;
- 
-+	/* Invoke the hypervisor to perform the page state changes */
- 	if (!ghcb || vmgexit_psc(ghcb, data))
- 		sev_es_terminate(SEV_TERM_SET_LINUX, GHCB_TERM_PSC);
- 
-@@ -886,29 +926,28 @@ static void __set_pages_state(struct snp_psc_desc *data, unsigned long vaddr,
- 		__sev_put_ghcb(&state);
- 
- 	local_irq_restore(flags);
-+
-+	/* Page validation must be performed after changing to private */
-+	if (op == SNP_PAGE_STATE_PRIVATE)
-+		pvalidate_pages(data);
-+
-+	return vaddr;
- }
- 
- static void set_pages_state(unsigned long vaddr, unsigned long npages, int op)
- {
--	unsigned long vaddr_end, next_vaddr;
- 	struct snp_psc_desc desc;
-+	unsigned long vaddr_end;
- 
- 	/* Use the MSR protocol when a GHCB is not available. */
- 	if (!boot_ghcb)
--		return early_set_pages_state(__pa(vaddr), npages, op);
-+		return early_set_pages_state(vaddr, __pa(vaddr), npages, op);
- 
- 	vaddr = vaddr & PAGE_MASK;
- 	vaddr_end = vaddr + (npages << PAGE_SHIFT);
- 
--	while (vaddr < vaddr_end) {
--		/* Calculate the last vaddr that fits in one struct snp_psc_desc. */
--		next_vaddr = min_t(unsigned long, vaddr_end,
--				   (VMGEXIT_PSC_MAX_ENTRY * PAGE_SIZE) + vaddr);
+-static void pvalidate_pages(struct snp_psc_desc *desc)
+-{
+-	struct psc_entry *e;
+-	unsigned long vaddr;
+-	unsigned int size;
+-	unsigned int i;
+-	bool validate;
+-	int rc;
 -
--		__set_pages_state(&desc, vaddr, next_vaddr, op);
+-	for (i = 0; i <= desc->hdr.end_entry; i++) {
+-		e = &desc->entries[i];
 -
--		vaddr = next_vaddr;
+-		vaddr = (unsigned long)pfn_to_kaddr(e->gfn);
+-		size = e->pagesize ? RMP_PG_SIZE_2M : RMP_PG_SIZE_4K;
+-		validate = (e->operation == SNP_PAGE_STATE_PRIVATE) ? true : false;
+-
+-		rc = pvalidate(vaddr, size, validate);
+-		if (rc == PVALIDATE_FAIL_SIZEMISMATCH && size == RMP_PG_SIZE_2M) {
+-			unsigned long vaddr_end = vaddr + PMD_SIZE;
+-
+-			for (; vaddr < vaddr_end; vaddr += PAGE_SIZE) {
+-				rc = pvalidate(vaddr, RMP_PG_SIZE_4K, validate);
+-				if (rc)
+-					break;
+-			}
+-		}
+-
+-		if (WARN(rc, "Failed to validate address 0x%lx ret %d", vaddr, rc))
+-			sev_es_terminate(SEV_TERM_SET_LINUX, GHCB_TERM_PVALIDATE);
 -	}
-+	while (vaddr < vaddr_end)
-+		vaddr = __set_pages_state(&desc, vaddr, vaddr_end, op);
- }
- 
- void snp_set_memory_shared(unsigned long vaddr, unsigned long npages)
-@@ -916,8 +955,6 @@ void snp_set_memory_shared(unsigned long vaddr, unsigned long npages)
- 	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
- 		return;
- 
--	pvalidate_pages(vaddr, npages, false);
+-}
 -
- 	set_pages_state(vaddr, npages, SNP_PAGE_STATE_SHARED);
+ static void early_set_pages_state(unsigned long vaddr, unsigned long paddr,
+ 				  unsigned long npages, enum psc_op op)
+ {
+@@ -796,72 +764,6 @@ void __init snp_prep_memory(unsigned long paddr, unsigned int sz, enum psc_op op
+ 		WARN(1, "invalid memory op %d\n", op);
  }
  
-@@ -927,8 +964,6 @@ void snp_set_memory_private(unsigned long vaddr, unsigned long npages)
- 		return;
- 
+-static int vmgexit_psc(struct ghcb *ghcb, struct snp_psc_desc *desc)
+-{
+-	int cur_entry, end_entry, ret = 0;
+-	struct snp_psc_desc *data;
+-	struct es_em_ctxt ctxt;
+-
+-	vc_ghcb_invalidate(ghcb);
+-
+-	/* Copy the input desc into GHCB shared buffer */
+-	data = (struct snp_psc_desc *)ghcb->shared_buffer;
+-	memcpy(ghcb->shared_buffer, desc, min_t(int, GHCB_SHARED_BUF_SIZE, sizeof(*desc)));
+-
+-	/*
+-	 * As per the GHCB specification, the hypervisor can resume the guest
+-	 * before processing all the entries. Check whether all the entries
+-	 * are processed. If not, then keep retrying. Note, the hypervisor
+-	 * will update the data memory directly to indicate the status, so
+-	 * reference the data->hdr everywhere.
+-	 *
+-	 * The strategy here is to wait for the hypervisor to change the page
+-	 * state in the RMP table before guest accesses the memory pages. If the
+-	 * page state change was not successful, then later memory access will
+-	 * result in a crash.
+-	 */
+-	cur_entry = data->hdr.cur_entry;
+-	end_entry = data->hdr.end_entry;
+-
+-	while (data->hdr.cur_entry <= data->hdr.end_entry) {
+-		ghcb_set_sw_scratch(ghcb, (u64)__pa(data));
+-
+-		/* This will advance the shared buffer data points to. */
+-		ret = sev_es_ghcb_hv_call(ghcb, &ctxt, SVM_VMGEXIT_PSC, 0, 0);
+-
+-		/*
+-		 * Page State Change VMGEXIT can pass error code through
+-		 * exit_info_2.
+-		 */
+-		if (WARN(ret || ghcb->save.sw_exit_info_2,
+-			 "SNP: PSC failed ret=%d exit_info_2=%llx\n",
+-			 ret, ghcb->save.sw_exit_info_2)) {
+-			ret = 1;
+-			goto out;
+-		}
+-
+-		/* Verify that reserved bit is not set */
+-		if (WARN(data->hdr.reserved, "Reserved bit is set in the PSC header\n")) {
+-			ret = 1;
+-			goto out;
+-		}
+-
+-		/*
+-		 * Sanity check that entry processing is not going backwards.
+-		 * This will happen only if hypervisor is tricking us.
+-		 */
+-		if (WARN(data->hdr.end_entry > end_entry || cur_entry > data->hdr.cur_entry,
+-"SNP: PSC processing going backward, end_entry %d (got %d) cur_entry %d (got %d)\n",
+-			 end_entry, data->hdr.end_entry, cur_entry, data->hdr.cur_entry)) {
+-			ret = 1;
+-			goto out;
+-		}
+-	}
+-
+-out:
+-	return ret;
+-}
+-
+ static unsigned long __set_pages_state(struct snp_psc_desc *data, unsigned long vaddr,
+ 				       unsigned long vaddr_end, int op)
+ {
+@@ -966,6 +868,20 @@ void snp_set_memory_private(unsigned long vaddr, unsigned long npages)
  	set_pages_state(vaddr, npages, SNP_PAGE_STATE_PRIVATE);
--
--	pvalidate_pages(vaddr, npages, true);
  }
  
++void snp_accept_memory(phys_addr_t start, phys_addr_t end)
++{
++	unsigned long vaddr;
++	unsigned int npages;
++
++	if (!cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
++		return;
++
++	vaddr = (unsigned long)__va(start);
++	npages = (end - start) >> PAGE_SHIFT;
++
++	set_pages_state(vaddr, npages, SNP_PAGE_STATE_PRIVATE);
++}
++
  static int snp_set_vmsa(void *va, bool vmsa)
+ {
+ 	u64 attrs;
 -- 
 2.40.0
 
