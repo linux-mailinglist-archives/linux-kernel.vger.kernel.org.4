@@ -2,111 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FC2F70A369
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 01:38:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C41070A36B
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 01:38:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbjESXh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 19:37:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47598 "EHLO
+        id S230204AbjESXiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 19:38:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbjESXh5 (ORCPT
+        with ESMTP id S229452AbjESXiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 19:37:57 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B146EA;
-        Fri, 19 May 2023 16:37:55 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-53202149ae2so2632002a12.3;
-        Fri, 19 May 2023 16:37:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684539475; x=1687131475;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vTSgTvbcd9Uv0YqNm3TopjpN1/V/dzNRUy9h9I2dqAs=;
-        b=pUqAr6S8oHzGpF07TWZ48KQ7idSEEq2fB4EOOi638V6mtxDW/DRejoGfETv1qEvU+U
-         UfQbjDAQwMRWzTG7l1pNAYaEcYqaaxQwIJwFogMCXIh97ymfTH7zzmW+qXOGmxo2zNoQ
-         F9Ue6k7NSXhJwdPZ0rf9RIfe1caEC7gpAREFtclNuaczXUre9Vy31IZa/yBaMJZiFaB2
-         c8kdcjqzKuMX01aA3Qt7PTzmMyi+ry/wsVwyOZc2VZ1CBbxpyu9VBoQ5bplDUPEkM0n2
-         pzsB4CbvgXkIzNDEsrrXztqw7kJ08CwtauFNIBCFU4I4N4l+oe4QeRVss8FOqfJEjIeF
-         uBVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684539475; x=1687131475;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vTSgTvbcd9Uv0YqNm3TopjpN1/V/dzNRUy9h9I2dqAs=;
-        b=Z27WpMlLKqRCKQt91BttQrU5LQ2PVryOJYxVHk4OmzW8hWZHss292Bq5Aib//nFNNr
-         Vn9x+qcn5xOpPemusuzt/wLVf+QxSUZlZTz93ZLLhDeShsUE3haR++vDHkZ9YRK9wJCT
-         9fZhiOvAOpI0dcx7mp+MBQlD7iZn6/6ZLehiLJSHjdsEh4kY9BkdfLE7bnoLo2whZzvv
-         fqbzgXwZv3rIa6NpeP847YFMFoNTmXFl4JLgMXTVwgbWKfoisu4OTBnQ+fIIUHUn/RBw
-         u42bpN4ZiahdUjBWTcKTH8wDmligX0rSUkPCz5txwEOrsZBMpuNTYxooVp9Oy/8PQrBM
-         wkeA==
-X-Gm-Message-State: AC+VfDyhM8dF5JmoQ3MyTz1Zl98egE7Tl0VSZiuWf446ToFne8Vf2LpL
-        dqeNAh3XBxZqieH2RY2P9z9KRspjZrNowE9qm16nyn4Qt2jDDw==
-X-Google-Smtp-Source: ACHHUZ5sVSxoI8yS4ei1lKiZQs4g2JBMGZQBQQOVlSEZN/nH1tT7oqLfj+RPt0EB02J+LkUG/rAvUmkC+elRuHvPn64=
-X-Received: by 2002:a17:903:26cb:b0:1ae:7421:82b5 with SMTP id
- jg11-20020a17090326cb00b001ae742182b5mr4243200plb.45.1684539474593; Fri, 19
- May 2023 16:37:54 -0700 (PDT)
+        Fri, 19 May 2023 19:38:13 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 906DCE5D;
+        Fri, 19 May 2023 16:38:10 -0700 (PDT)
+Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
+        by linux.microsoft.com (Postfix) with ESMTPSA id CF87F20FB427;
+        Fri, 19 May 2023 16:38:09 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com CF87F20FB427
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1684539489;
+        bh=+lcHrgoSxmM497pz+TvQKuSRuTtCUUpNGUvG+0pEOv4=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=mxMQg95KWD5Ywkw+JWITI8rnrc6BphwJR354XYudgBQOououTKGcYIPrGAfNnMgW/
+         OGSHr1GX6gtWT/K8WNv4BiLgPoVXdKrbiw2xEuD6YyNisigQHVZNrzXBV3fVFg6srE
+         6mrwts482xxTGfXCyBl+eQavZmtVKtRw2uHCiqPA=
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     sunliming@kylinos.cn
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        mhiramat@kernel.org, rostedt@goodmis.org
+Subject: Re: [PATCH RESEND] tracing/user_events: Prevent same name event per process
+Date:   Fri, 19 May 2023 16:38:04 -0700
+Message-Id: <20230519233804.863-1-beaub@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230519083740.232401-1-sunliming@kylinos.cn>
+References: <20230519083740.232401-1-sunliming@kylinos.cn>
 MIME-Version: 1.0
-References: <CAABZP2wiPdij+q_Nms08e8KbT9+CgXuoU+MO3dyoujG_1PPHAQ@mail.gmail.com>
- <073cf884-e191-e323-1445-b79c86759557@linux.dev>
-In-Reply-To: <073cf884-e191-e323-1445-b79c86759557@linux.dev>
-From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
-Date:   Sat, 20 May 2023 07:37:43 +0800
-Message-ID: <CAABZP2yjONcZNVKT88JXq_QyVzuDnu12nD8APT0XJ45dOtSFrQ@mail.gmail.com>
-Subject: Re: a small question about bpftool struct_ops
-To:     Martin KaFai Lau <martin.lau@linux.dev>
-Cc:     bpf@vger.kernel.org, linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you for responding so quickly ;-)
+> User processes register name_args for events. If the same name are registered
+> multiple times in the same process, it can cause undefined behavior. Because
+> the same name may be used for a diffrent event. If this event has the same
+> format as the original event, it is impossible to distinguish the trace output
+> of these two events. If the event has a different format from the original event,
+> the trace output of the new event is incorrect.
+> 
+> Return EADDRINUSE back to the user process if the same event has being registered
+> in the same process.
+> 
+> Signed-off-by: sunliming <sunliming@kylinos.cn>
+> ---
 
-On Sat, May 20, 2023 at 3:01=E2=80=AFAM Martin KaFai Lau <martin.lau@linux.=
-dev> wrote:
->
-> On 5/19/23 5:07 AM, Zhouyi Zhou wrote:
-> > Dear developers:
-> > I compiled bpftool and bpf tests in mainline (2d1bcbc6cd70),
-> > but when I invoke:
-> > bpftool struct_ops register bpf_cubic.bpf.o
-> >
-> > the command line fail with:
-> > libbpf: struct_ops init_kern: struct tcp_congestion_ops data is not
-> > found in struct bpf_struct_ops_tcp_congestion_ops
->
-> At the machine trying to register the bpf_cubic, please dump the vmlinux =
-btf and
-> search for bpf_struct_ops_tcp_congestion_ops and paste it here:
->
-> For example:
-> #> bpftool btf dump file /sys/kernel/btf/vmlinux
->
-> ...
->
-> [74578] STRUCT 'bpf_struct_ops_tcp_congestion_ops' size=3D256 vlen=3D3
->          'refcnt' type_id=3D145 bits_offset=3D0
->          'state' type_id=3D74569 bits_offset=3D32
->          'data' type_id=3D6241 bits_offset=3D512
-OK
-[214398] STRUCT 'bpf_struct_ops_tcp_congestion_ops' size=3D256 vlen=3D3
-        'refcnt' type_id=3D298 bits_offset=3D0
-        'state' type_id=3D214224 bits_offset=3D32
-        'data' type_id=3D213704 bits_offset=3D512
+Thank you for the patch, a few comments.
 
-Please tell me if I could provide any further information.
+>  kernel/trace/trace_events_user.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
+> index b1ecd7677642..4ef6bdb5c07c 100644
+> --- a/kernel/trace/trace_events_user.c
+> +++ b/kernel/trace/trace_events_user.c
+> @@ -1996,7 +1996,7 @@ static int user_events_ref_add(struct user_event_file_info *info,
+>  
+>  		for (i = 0; i < count; ++i)
+>  			if (refs->events[i] == user)
+> -				return i;
+> +				return -EADDRINUSE;
 
-You are of great help
+The ABI currently allows this to allow for shared libraries to share a common write
+FD. Do you feel strongly that this should not be allowed?
 
-Thank you very much
-Zhouyi
->
+If you and others feel this should not be allowed, I'd kindly ask you to also update
+the self-tests at tools/testing/selftests/user_events/ in the tree and ensure they
+pass fully.
+
+For example, see ftrace_test.c at the above tree location:
+...
+
+TEST_F(user, register_events) {
+
+...
+
+
+	/* Multiple registers to the same addr + bit should fail */
+	ASSERT_EQ(-1, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
+	ASSERT_EQ(EADDRINUSE, errno);
+
+	/* Multiple registers to same name should result in same index */
+	reg.enable_bit = 30;
+	ASSERT_EQ(0, ioctl(self->data_fd, DIAG_IOCSREG, &reg));
+	ASSERT_EQ(0, reg.write_index);
+
+...
+
+Thanks,
+-Beau
+
+>  	}
+>  
+>  	size = struct_size(refs, events, count + 1);
+> -- 
+> 2.25.1
