@@ -2,80 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6704D70A366
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 01:36:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FC2F70A369
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 01:38:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbjESXgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 19:36:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47084 "EHLO
+        id S230178AbjESXh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 19:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjESXgT (ORCPT
+        with ESMTP id S229832AbjESXh5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 19:36:19 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1AFEA;
-        Fri, 19 May 2023 16:36:17 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-969f90d71d4so588707966b.3;
-        Fri, 19 May 2023 16:36:17 -0700 (PDT)
+        Fri, 19 May 2023 19:37:57 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B146EA;
+        Fri, 19 May 2023 16:37:55 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-53202149ae2so2632002a12.3;
+        Fri, 19 May 2023 16:37:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684539376; x=1687131376;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1o4S7TLQJdG0vUVlIlsfVbzWeohoViWnpGpu2q/BU0E=;
-        b=NBv9pLhYFf383wZEJBorDj2D+d6JCSiuQ9A6wql5ijUYffNyf5bG8D4GxgBwuJ8fnh
-         APnBhZEetEOOBRCO31yh+noi3/r/9Zip0IDA8Skx+PFjr0R5imxxltqt7VNekH+6RuoH
-         A7PG04j7mBgCnGucSMkD2TqPyXmJMIhAOjmyYPtw5v9pZr7an5C8ZckuvgY05RdQ9mKn
-         8LT3Oo3WMPjeaRbJLL8ATXETnO9g41qOf2Goc5GJw8ULiFvi1us0VhMsDGg1nAxjMvyK
-         kjQ/mibCqdgExB90i8clIxpiewa5QzBLdsnR1U/FmbdY4SvgA/+zsjNo+ZEozi22m0LM
-         cGMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684539376; x=1687131376;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1684539475; x=1687131475;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1o4S7TLQJdG0vUVlIlsfVbzWeohoViWnpGpu2q/BU0E=;
-        b=HUWzC8QPyqFsNLoNVZcK9dseQUZR73ox93ciQYxpd0p2SFE/DUtyj9pGPNfM2Wv2R7
-         190KyKGdoN8R0rhO2zHq52hQJ3r64/JB0joCg9TbCEoSLrjO+7puIIEwyJ6MJ1PCw12F
-         wKR5a7TsU6bBpmKiIyUYKYTHrqdFTNt+5tLPC32XO8CRJizMczCkJGuMdGHMG1ET0F62
-         YhEdC8VwN68VsB+/D5mZQ9mP668zpzLLPEQ38yIRERSGcqpI/JPLb1CSdcHZvaPDZ9Rk
-         TBbbAVpgUFvxz0fV36y6Z1zJoPN5ENxSfCD8ZFLfLSegO1AjvIJzfiI5Ie4wJBq0EkUD
-         SKtA==
-X-Gm-Message-State: AC+VfDxdfo9qG2FHQ37978sC+TTkzU2VBpPmGK8xD1M+VpNEf12/COx2
-        FbL9S/EeqEBh+iTeizMVQ8c=
-X-Google-Smtp-Source: ACHHUZ7KXB9ZogpXmaJ0seP4leCF2fwX8PNZ2SdaDQEMYlbnlh8Z5j7alZgFSgcLdYk9PeQ7OGWzeQ==
-X-Received: by 2002:a17:907:8a20:b0:96a:861:a2ac with SMTP id sc32-20020a1709078a2000b0096a0861a2acmr3587865ejc.0.1684539376027;
-        Fri, 19 May 2023 16:36:16 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id p12-20020a17090635cc00b0096a2eaa508asm154969ejb.168.2023.05.19.16.36.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 16:36:15 -0700 (PDT)
-Date:   Sat, 20 May 2023 02:36:13 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Arun Ramadoss <arun.ramadoss@microchip.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Simon Horman <simon.horman@corigine.com>,
-        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net-next v4 2/2] net: dsa: microchip: ksz8: Add function
- to configure ports with integrated PHYs
-Message-ID: <20230519233613.op7ziqzy5wu6zjv6@skbuf>
-References: <20230519124700.635041-1-o.rempel@pengutronix.de>
- <20230519124700.635041-1-o.rempel@pengutronix.de>
- <20230519124700.635041-3-o.rempel@pengutronix.de>
- <20230519124700.635041-3-o.rempel@pengutronix.de>
+        bh=vTSgTvbcd9Uv0YqNm3TopjpN1/V/dzNRUy9h9I2dqAs=;
+        b=pUqAr6S8oHzGpF07TWZ48KQ7idSEEq2fB4EOOi638V6mtxDW/DRejoGfETv1qEvU+U
+         UfQbjDAQwMRWzTG7l1pNAYaEcYqaaxQwIJwFogMCXIh97ymfTH7zzmW+qXOGmxo2zNoQ
+         F9Ue6k7NSXhJwdPZ0rf9RIfe1caEC7gpAREFtclNuaczXUre9Vy31IZa/yBaMJZiFaB2
+         c8kdcjqzKuMX01aA3Qt7PTzmMyi+ry/wsVwyOZc2VZ1CBbxpyu9VBoQ5bplDUPEkM0n2
+         pzsB4CbvgXkIzNDEsrrXztqw7kJ08CwtauFNIBCFU4I4N4l+oe4QeRVss8FOqfJEjIeF
+         uBVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684539475; x=1687131475;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vTSgTvbcd9Uv0YqNm3TopjpN1/V/dzNRUy9h9I2dqAs=;
+        b=Z27WpMlLKqRCKQt91BttQrU5LQ2PVryOJYxVHk4OmzW8hWZHss292Bq5Aib//nFNNr
+         Vn9x+qcn5xOpPemusuzt/wLVf+QxSUZlZTz93ZLLhDeShsUE3haR++vDHkZ9YRK9wJCT
+         9fZhiOvAOpI0dcx7mp+MBQlD7iZn6/6ZLehiLJSHjdsEh4kY9BkdfLE7bnoLo2whZzvv
+         fqbzgXwZv3rIa6NpeP847YFMFoNTmXFl4JLgMXTVwgbWKfoisu4OTBnQ+fIIUHUn/RBw
+         u42bpN4ZiahdUjBWTcKTH8wDmligX0rSUkPCz5txwEOrsZBMpuNTYxooVp9Oy/8PQrBM
+         wkeA==
+X-Gm-Message-State: AC+VfDyhM8dF5JmoQ3MyTz1Zl98egE7Tl0VSZiuWf446ToFne8Vf2LpL
+        dqeNAh3XBxZqieH2RY2P9z9KRspjZrNowE9qm16nyn4Qt2jDDw==
+X-Google-Smtp-Source: ACHHUZ5sVSxoI8yS4ei1lKiZQs4g2JBMGZQBQQOVlSEZN/nH1tT7oqLfj+RPt0EB02J+LkUG/rAvUmkC+elRuHvPn64=
+X-Received: by 2002:a17:903:26cb:b0:1ae:7421:82b5 with SMTP id
+ jg11-20020a17090326cb00b001ae742182b5mr4243200plb.45.1684539474593; Fri, 19
+ May 2023 16:37:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230519124700.635041-3-o.rempel@pengutronix.de>
- <20230519124700.635041-3-o.rempel@pengutronix.de>
+References: <CAABZP2wiPdij+q_Nms08e8KbT9+CgXuoU+MO3dyoujG_1PPHAQ@mail.gmail.com>
+ <073cf884-e191-e323-1445-b79c86759557@linux.dev>
+In-Reply-To: <073cf884-e191-e323-1445-b79c86759557@linux.dev>
+From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
+Date:   Sat, 20 May 2023 07:37:43 +0800
+Message-ID: <CAABZP2yjONcZNVKT88JXq_QyVzuDnu12nD8APT0XJ45dOtSFrQ@mail.gmail.com>
+Subject: Re: a small question about bpftool struct_ops
+To:     Martin KaFai Lau <martin.lau@linux.dev>
+Cc:     bpf@vger.kernel.org, linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -86,152 +69,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 02:47:00PM +0200, Oleksij Rempel wrote:
-> This patch introduces the function 'ksz8_phy_port_link_up' to the
-> Microchip KSZ8xxx driver. This function is responsible for setting up
-> flow control and duplex settings for the ports that are integrated with
-> PHYs.
-> 
-> The KSZ8795 switch supports asynchronous pause control, which can't be
+Thank you for responding so quickly ;-)
 
-s/asynchronous/asymmetric/
+On Sat, May 20, 2023 at 3:01=E2=80=AFAM Martin KaFai Lau <martin.lau@linux.=
+dev> wrote:
+>
+> On 5/19/23 5:07 AM, Zhouyi Zhou wrote:
+> > Dear developers:
+> > I compiled bpftool and bpf tests in mainline (2d1bcbc6cd70),
+> > but when I invoke:
+> > bpftool struct_ops register bpf_cubic.bpf.o
+> >
+> > the command line fail with:
+> > libbpf: struct_ops init_kern: struct tcp_congestion_ops data is not
+> > found in struct bpf_struct_ops_tcp_congestion_ops
+>
+> At the machine trying to register the bpf_cubic, please dump the vmlinux =
+btf and
+> search for bpf_struct_ops_tcp_congestion_ops and paste it here:
+>
+> For example:
+> #> bpftool btf dump file /sys/kernel/btf/vmlinux
+>
+> ...
+>
+> [74578] STRUCT 'bpf_struct_ops_tcp_congestion_ops' size=3D256 vlen=3D3
+>          'refcnt' type_id=3D145 bits_offset=3D0
+>          'state' type_id=3D74569 bits_offset=3D32
+>          'data' type_id=3D6241 bits_offset=3D512
+OK
+[214398] STRUCT 'bpf_struct_ops_tcp_congestion_ops' size=3D256 vlen=3D3
+        'refcnt' type_id=3D298 bits_offset=3D0
+        'state' type_id=3D214224 bits_offset=3D32
+        'data' type_id=3D213704 bits_offset=3D512
 
-> fully utilized since a single bit controls both RX and TX pause. Despite
-> this, the flow control can be adjusted based on the auto-negotiation
-> process, taking into account the capabilities of both link partners.
-> 
-> On the other hand, the KSZ8873's PORT_FORCE_FLOW_CTRL bit can be set by
-> the hardware bootstrap, which ignores the auto-negotiation result.
-> Therefore, even in auto-negotiation mode, we need to ensure that this
-> bit is correctly set.
-> 
-> When auto-negotiation isn't in use, we enforce synchronous pause control
+Please tell me if I could provide any further information.
 
-s/synchronous/symmetric/
+You are of great help
 
-> for the KSZ8795 switch.
-> 
-> Please note, forcing flow control disable on a port while still
-> advertising pause support isn't possible. While this scenario
-> might not be practical or desired, it's important to be aware of this
-> limitation when working with the KSZ8873 and similar devices.
-> 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> Reviewed-by: Simon Horman <simon.horman@corigine.com>
-> ---
->  drivers/net/dsa/microchip/ksz8795.c | 79 +++++++++++++++++++++++++++++
->  1 file changed, 79 insertions(+)
-> 
-> diff --git a/drivers/net/dsa/microchip/ksz8795.c b/drivers/net/dsa/microchip/ksz8795.c
-> index 9eedccbf5b7c..148a93f79538 100644
-> --- a/drivers/net/dsa/microchip/ksz8795.c
-> +++ b/drivers/net/dsa/microchip/ksz8795.c
-> @@ -1371,6 +1371,83 @@ void ksz8_config_cpu_port(struct dsa_switch *ds)
->  	}
->  }
->  
-> +/**
-> + * ksz8_phy_port_link_up - Configures ports with integrated PHYs
-> + * @dev: The KSZ device instance.
-> + * @port: The port number to configure.
-> + * @duplex: The desired duplex mode.
-> + * @tx_pause: If true, enables transmit pause.
-> + * @rx_pause: If true, enables receive pause.
-> + *
-> + * Description:
-> + * The function configures flow control settings for a given port based on the
-> + * desired settings and current duplex mode.
-> + *
-> + * According to the KSZ8873 datasheet, the PORT_FORCE_FLOW_CTRL bit in the
-> + * Port Control 2 register (0x1A for Port 1, 0x22 for Port 2, 0x32 for Port 3)
-> + * determines how flow control is handled on the port:
-> + *    "1 = will always enable full-duplex flow control on the port, regardless
-> + *         of AN result.
-> + *     0 = full-duplex flow control is enabled based on AN result."
-> + *
-> + * This means that the flow control behavior depends on the state of this bit:
-> + * - If PORT_FORCE_FLOW_CTRL is set to 1, the switch will ignore AN results and
-> + *   force flow control on the port.
-> + * - If PORT_FORCE_FLOW_CTRL is set to 0, the switch will enable or disable
-> + *   flow control based on the AN results.
-> + *
-> + * However, there is a potential limitation in this configuration. It is
-> + * currently not possible to force disable flow control on a port if we still
-> + * advertise pause support. While such a configuration is not currently
-> + * supported by Linux, and may not make practical sense, it's important to be
-> + * aware of this limitation when working with the KSZ8873 and similar devices.
-> + */
-> +static void ksz8_phy_port_link_up(struct ksz_device *dev, int port, int duplex,
-> +				  bool tx_pause, bool rx_pause)
-> +{
-> +	const u16 *regs = dev->info->regs;
-> +	u8 ctrl = 0;
-> +	int ret;
-> +
-> +	/* The KSZ8795 switch differs from the KSZ8873 by supporting
-> +	 * asynchronous pause control. However, since a single bit is used to
-
-same
-
-> +	 * control both RX and TX pause, we can't enforce asynchronous pause
-
-same
-
-> +	 * control - both TX and RX pause will be either enabled or disabled
-> +	 * together.
-> +	 *
-> +	 * If auto-negotiation is enabled, we usually allow the flow control to
-> +	 * be determined by the auto-negotiation process based on the
-> +	 * capabilities of both link partners. However, for KSZ8873, the
-> +	 * PORT_FORCE_FLOW_CTRL bit may be set by the hardware bootstrap,
-> +	 * ignoring the auto-negotiation result. Thus, even in auto-negotiatio
-
-auto-negotiation
-
-> +	 * mode, we need to ensure that the PORT_FORCE_FLOW_CTRL bit is
-> +	 * properly cleared.
-> +	 *
-> +	 * In the absence of auto-negotiation, we will enforce synchronous
-
-same
-
-> +	 * pause control for both variants of switches - KSZ8873 and KSZ8795.
-> +	 */
-> +	if (duplex) {
-> +		bool aneg_en = false;
-> +
-> +		ret = ksz_pread8(dev, port, regs[P_FORCE_CTRL], &ctrl);
-> +		if (ret)
-> +			return;
-> +
-> +		if (ksz_is_ksz88x3(dev)) {
-> +			if ((ctrl & PORT_AUTO_NEG_ENABLE))
-> +				aneg_en = true;
-> +		} else {
-> +			if (!(ctrl & PORT_AUTO_NEG_DISABLE))
-> +				aneg_en = true;
-> +		}
-> +
-> +		if (!aneg_en && (tx_pause || rx_pause))
-> +			ctrl |= PORT_FORCE_FLOW_CTRL;
-> +	}
-> +
-> +	ksz_prmw8(dev, port, regs[P_STP_CTRL], PORT_FORCE_FLOW_CTRL, ctrl);
-> +}
-> +
->  /**
->   * ksz8_cpu_port_link_up - Configures the CPU port of the switch.
->   * @dev: The KSZ device instance.
-> @@ -1420,6 +1497,8 @@ void ksz8_phylink_mac_link_up(struct ksz_device *dev, int port,
->  	 */
->  	if (dev->cpu_port == port)
->  		ksz8_cpu_port_link_up(dev, speed, duplex, tx_pause, rx_pause);
-> +	else if (dev->info->internal_phy[port])
-> +		ksz8_phy_port_link_up(dev, port, duplex, tx_pause, rx_pause);
->  }
->  
->  static int ksz8_handle_global_errata(struct dsa_switch *ds)
-> -- 
-> 2.39.2
-> 
-
+Thank you very much
+Zhouyi
+>
