@@ -2,100 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C502708DAE
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 04:12:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7976D708DA2
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 04:05:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230339AbjESCME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 22:12:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43000 "EHLO
+        id S230298AbjESCFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 22:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230308AbjESCMB (ORCPT
+        with ESMTP id S229522AbjESCFr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 22:12:01 -0400
-Received: from bird.elm.relay.mailchannels.net (bird.elm.relay.mailchannels.net [23.83.212.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1419FE4A;
-        Thu, 18 May 2023 19:11:59 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 5170B540B3A;
-        Fri, 19 May 2023 02:11:59 +0000 (UTC)
-Received: from pdx1-sub0-mail-a208.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id B909554189B;
-        Fri, 19 May 2023 02:11:58 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1684462318; a=rsa-sha256;
-        cv=none;
-        b=lFVuP0UoAneulIb7AnLiKzB/VWkoxfjRvq9wDf/gk5bJ0/rcRTYyHpH/RCpPhJl1iALLig
-        jIq5PhCKmV8jrX5yowgbfX8NvUPZqRuxH0cNB6YdORheHKeCOn5J547NAy4R0ogBvUAMYJ
-        u5GuLicKDmbbqa6WitM6R+0KA7BG9wwNdZ8E29aDbyL6NPNYU/GljD6b7v/zbkAWCqW6Hl
-        hqsSRd1pLvsFcOms537k03oRCdCjSkEyBkl9xH0bcXJFiZCkgSCYpaCPCadPbnCx7gfiOP
-        k4LSsgJE8zgAVzEseCnCWupQTZKhwh5O9p7tqtu8EOPXOUXqU7gQ9kd/AcwGYA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1684462318;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=UGS5YSwf/rGU2XZSGVPlNsADHYegr/4g6swrqUfHy7s=;
-        b=7mShLIeClaqzPUCKIdjphAH2oWfX+GzrU/n0YYf5GZwnx6vBJGOz6Ud4sISM2FFCG8sl8Q
-        6fA0t67d5XFZfEXlDgYKMRLtCiJTpLTzN7kWn7491KZ3Pl2u+AEaNvK34mXB711KlBME9t
-        xeEGsFs5xgo2bLOw8lYwP11WKZq4TxmmwcrG2pccP/TTsJspxpaOopzyO52TBYIma1edIh
-        uZ3rlsz3A3ndwiMOx/xgkMjJwidIzYl45rMtn6/mFjUOmuU4y7m/osfsrNZIrj3EibazMi
-        TnR9uo4NkkvwQJAYBDmtnqSSOHK29gc80eTbecqV+m2fbBWL3ePRuYpWfgkA4A==
-ARC-Authentication-Results: i=1;
-        rspamd-5cdf8fd7d9-fw8rh;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Stupid-Trouble: 64a12e39217dfb73_1684462319114_247395351
-X-MC-Loop-Signature: 1684462319113:2194989952
-X-MC-Ingress-Time: 1684462319113
-Received: from pdx1-sub0-mail-a208.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.127.59.19 (trex/6.8.1);
-        Fri, 19 May 2023 02:11:59 +0000
-Received: from offworld (unknown [104.36.25.8])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a208.dreamhost.com (Postfix) with ESMTPSA id 4QMr255946z9r;
-        Thu, 18 May 2023 19:11:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1684462318;
-        bh=UGS5YSwf/rGU2XZSGVPlNsADHYegr/4g6swrqUfHy7s=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=edgYCx8RTxJ0QaKA/sRny6kjo4yI+ie8V3T3tW3Jox9IGLLgUlCkCUW7GsXlG+fQt
-         Dy7yqwu9j4WqawEvohkJsvU0mOTsv9Qd7SadnukmYuHAiZSmWE1qX5A6PuM/zoRbpm
-         TBTJE4UzsqXG2EvTEN7GtbvfDe72pql0hx847aZO0IeAYYn6+ybr8QvRB4b8yJ4UiH
-         vlCaeg3n9I70PEXabo2MdA9a7+MdQYUl8MiZukvF+LO9FKWqmHJY5CZ3vlLgqLzcFj
-         w8FI+Ir/NVi31hL9ajSsQdWVlirdm4NCVOUg+SAuLbduizTKIzR134trbKguCnkJ5n
-         kfq78sUTFUMdw==
-Date:   Thu, 18 May 2023 18:38:46 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     LiuLele <liu.lele@qq.com>
-Cc:     dave.jiang@intel.com, Jonathan.Cameron@huawei.com,
-        alison.schofield@intel.com, bhelgaas@google.com,
-        bwidawsk@kernel.org, dan.j.williams@intel.com, helgaas@kernel.org,
-        ira.weiny@intel.com, linux-acpi@vger.kernel.org,
-        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, rostedt@goodmis.org,
-        vishal.l.verma@intel.com
-Subject: Re: CXL memory device not created correctly
-Message-ID: <gbsxrcjtnf67jxpqmbn57nqoslpmjtuk2ycatmau3vfsmpvbrd@c2umpofn2hti>
-References: <cec6a8f5-a284-4f46-1ada-4edd625a9a2e@intel.com>
- <tencent_D9D9D358330CA573E23D490C6EE13E0DC105@qq.com>
+        Thu, 18 May 2023 22:05:47 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2053.outbound.protection.outlook.com [40.107.22.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08DA194;
+        Thu, 18 May 2023 19:05:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=g2V9ciIbDLLW2/NvHDI/YBQQm098HEEHj2L+O/G2sIAPC3A/Poh32R9ZxtoC5zWmkrJv8J0Bp/+fHmsVklHqC1lSLYZWLzfRDTmF8KYSFuRJvm44QIJnzJl0Qk4s4XOwkwMMwO5I271S3IC0JpBaVqes1voqQekQA0g+YFzD9f7LGpko/rPEFfVZs9pAmhB5UN30Abl2mtFp3OOU4nnRYZf+/lMVRRH3H+LP/5kGrTrhbFasva5nomdVRzLFUW27TYWq0XeFKmSPtuTyBOgGvKkSDYCXxaujoH9OWJwSdDWxp4GRAA/+2ekT2RebiGXhJNKxKqvJxzkRCefrAHcYwQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pI7RMzzQIfplPS8sT705zsU+WpFrFiAugm+rGZViQNE=;
+ b=LjhA5GKq+Y77fxaPbjbBExOjQ+xjE1qZrtlSDnEhnki8ak3P2f0d8LFS8qu0Ga+gr+B728Z3EtysVf/6ePCdgy885IfH5JxEL0V0Xi1MIm4Ih46hEYG26hQidrKRtHi529O0ezXul67qjUfLOnqlWwRg3RXG4i1I5IJxBPUk0XAnUVhr1RblBKG2s+19GBuTihkaim9/neB6bOi5kPXlf2cRRbvIDmntAYsowZ8JDywdYarYuomG8STfyGQp33L0T/7wpTszV2JDIiC+PVn4myXbTXkPh3wrJWxbxopvn5QXXXveFHhAJu0SNleErRNIjZnSX9d/mIdptPqqXYhfQA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pI7RMzzQIfplPS8sT705zsU+WpFrFiAugm+rGZViQNE=;
+ b=fT4VAST/OYgzv40XymrZANFOWwpVxOSI2vd/hw4tjyJZSzSV4MB6UcVlsilQJcy1j6CzQbIJ1CNA4MHR3+SAcrhGTSxJs3nBxZwioSCuXQeww7MniP8csh0u6zDOqjZZZZfdjE4LZpR9nHNnwlsIAx5DwGs751sVRM2Vs93oN4M=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM5PR04MB3139.eurprd04.prod.outlook.com (2603:10a6:206:8::20)
+ by PA4PR04MB7664.eurprd04.prod.outlook.com (2603:10a6:102:f1::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.17; Fri, 19 May
+ 2023 02:05:43 +0000
+Received: from AM5PR04MB3139.eurprd04.prod.outlook.com
+ ([fe80::682b:185:581f:7ea2]) by AM5PR04MB3139.eurprd04.prod.outlook.com
+ ([fe80::682b:185:581f:7ea2%4]) with mapi id 15.20.6411.021; Fri, 19 May 2023
+ 02:05:43 +0000
+From:   wei.fang@nxp.com
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, Frank.Li@freescale.com, shenwei.wang@nxp.com,
+        xiaoning.wang@nxp.com, simon.horman@corigine.com,
+        netdev@vger.kernel.org
+Cc:     linux-imx@nxp.com, linux-kernel@vger.kernel.org
+Subject: [PATCH V2 net-next] net: fec: remove useless fec_enet_reset_skb()
+Date:   Fri, 19 May 2023 10:01:13 +0800
+Message-Id: <20230519020113.1670786-1-wei.fang@nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR02CA0138.apcprd02.prod.outlook.com
+ (2603:1096:4:188::12) To AM5PR04MB3139.eurprd04.prod.outlook.com
+ (2603:10a6:206:8::20)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <tencent_D9D9D358330CA573E23D490C6EE13E0DC105@qq.com>
-User-Agent: NeoMutt/20230407
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM5PR04MB3139:EE_|PA4PR04MB7664:EE_
+X-MS-Office365-Filtering-Correlation-Id: 436f0903-81c3-4545-a277-08db580d8d17
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: y1jQPMCHDXjYVUAlN8REyN5xcdO1pYW74x8jgc1NHm50k0cKYX+WCHDuvagRww5EsMx/kC6/N0krkf0Hre3B4m3bjXeAdlK3qHtsaWMFZ4nhPhjUl7XrURjHDFduRDeT/4TdUiB2cPto4NGlDfZN6Zmhkw0fxv6J9lgtjXDPM/SEtVLNTpJlAaG7WJe6mF4K4TEpjq6JKjY4dQa9NNwgo/Y6eJousQBtcX/Nq5WVRpldFXWKgkpLzstVyo1o5JVjaFymv+GIKxfGRLP5rIVblcar8djrBoVg/M6j1CPx/O1zwnmUh/HlVg0B3U6hkAAOPH0JglaFX0tOn6wq3L7RkWo90MIdqxrvyS7mSkSvW47PCAgpjYhcIPRocVyiZ5mlipeV2ucjOZkNlybIiWigwGgZvo6LmNmrpTflcbumDKeJrCiNxtyF7u2d99d1EsrvhzlfzFgi3DbL5eXticvK9/asPqfl/8BLIdN4PfB/ayLHXIz2F0/xyBYDC9gARHAA3FeVdf3R5K+YFifv4U4/CNpP50mg7RiAo6Bq7yOGQBxHqWAnAKikUdnRgeVYxhoSPKGDNzORCegcv/ZDKpE56UR7u6keUxJzWoH0T3oscD3bTfcYNVDlhdRyvdVefKn8
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM5PR04MB3139.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(39860400002)(136003)(376002)(366004)(451199021)(66946007)(2906002)(5660300002)(83380400001)(8936002)(8676002)(66556008)(6666004)(52116002)(41300700001)(66476007)(4326008)(478600001)(36756003)(316002)(6486002)(186003)(26005)(9686003)(6512007)(6506007)(2616005)(86362001)(38100700002)(38350700002)(1076003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dSap+fJMtCgpNxD8hE+juN03rtD7ycF2ZAZm+hHzRKlUSXSQainS40a7u7Y+?=
+ =?us-ascii?Q?yEL4ZkPzk4NuyWgEpFIOvYADWIiOD0WlbdpC4TqVAXS0MQvAQtIaA7PRhA/R?=
+ =?us-ascii?Q?MVnvNRriIpPuCaSTmnSmil0OQruba3c3Ycg4LwRVhuKzuguu/ackuT0Rt0hO?=
+ =?us-ascii?Q?Cq8t6a+1PQpdmA/YyrWS3w1YP8wZPWG5/v/SnN1A4xLDo2nOOBMbjAxI/X2G?=
+ =?us-ascii?Q?ePg9yDcKlyyqdE9a4qDDGasxiPcbAv9+NNVsUPVimyz3dmLm7pZXZM7rTBI0?=
+ =?us-ascii?Q?3IocT5XFDWa7Ug+7qlXP5Y/hgEq2GTq5LHmHnfoss6OiOzsK2gWDNE21fWHw?=
+ =?us-ascii?Q?yFYGQDEa8jhfge+QgCxP1Yl5r2lYgOajyi53Hmhpw9rxPlwg4jSI1WCyk8/C?=
+ =?us-ascii?Q?2cmzfUdL8rND6c0xZ3I4//hymBHru3mIuxM9aCyTqaYSketxCbpZnC+h1jYX?=
+ =?us-ascii?Q?nW5f9dXTvK1R2tHbbHnpoag6TpBc9MCCRnCxDdEbvLUuZbK94ZukqNaCv59u?=
+ =?us-ascii?Q?fEoE0xTas+f7ZxOldKXvt4dRWY0bjROcbJhZKJGWdMZ7JeMDfu1fDlprgNYt?=
+ =?us-ascii?Q?uirRIxhsTNN83WEjMyj4DpMjqrrqjH+QVUGamAi7YmI00+ZVPC1Su4Lc+LsG?=
+ =?us-ascii?Q?fFI8DaPQuCsnawjZmxerh7kI8JPVPYyHY866QJSt34F3RnMpN5Rt+iFhZ8q2?=
+ =?us-ascii?Q?lsczgAPSHFmu37wZi2WnyoXA5qE2QCS0gMPJ5y5nBqz//ZxxFxDrbbu2cMW6?=
+ =?us-ascii?Q?v0/gGU59h9bbHDac1nosvVYlAK3nwlJnjBJe6CUkAPycz8S5zqyXBEtlBujT?=
+ =?us-ascii?Q?F43rn5v7+o5Gc41gGBdpvMPbJ9v1BrGrfxW1YxyItRyKJhoJ6kR4bY3kQK23?=
+ =?us-ascii?Q?ih6AOTuXsLIb+kxswFYtqABipBWoLbSoBmrD9mAf6f4ja9Pgo61NA5fQ/Gpo?=
+ =?us-ascii?Q?AbIkWdJQvoW693ziOmlcS3wMrFnAMgwwciJy2BOPrVqYHYN+5YQUf9t0vE8N?=
+ =?us-ascii?Q?/wKDBURlfAT927M/x5KHPVIXRdN2K8QcRkgG8YvFkMlJmsJLXzsvMQlcifFb?=
+ =?us-ascii?Q?7WofMM5RdPsGyKJg0PR7XnT31I9TopEmtO4sQ4H8c5u6zhmBFGYjHgs19qQ9?=
+ =?us-ascii?Q?HtPaZHHfw+h2zbSkWsimcULyZeQJpkncao3e2MKISDF74xsjYGHb8CQuLfVx?=
+ =?us-ascii?Q?50+7JNtaVgbmb/U+m29A10oFeafglQiHVyQb8TIako9Xi4asqj6rdNvOZbtb?=
+ =?us-ascii?Q?93pbTB5RZFDKq8GyOCW3gyoefTk+Ua1Ta9s+df2pPaT3dvtbt/lZtrgvj5Rr?=
+ =?us-ascii?Q?X1nqcc6A5u5yI/Rtq3eZnAl3tTHa86Ld0l7CQ/B3f+prXMvXDNow65AfbZyS?=
+ =?us-ascii?Q?HM9BYprdnlQRrWhXNFhQ/31uLppiHpjZpTEPa1Role8Ebz7/UUkLmNWCxNJl?=
+ =?us-ascii?Q?WcjLtq7kMHKi/6SYXNRmX88mNIBr3MTgojkjjoUM78M9/fdARh56n5eNlPPq?=
+ =?us-ascii?Q?54e+LTBn87iD5vMqXVs8tY/J7hI1vemC8LmXjz44XBqHK9FOmLqfCPqSO4za?=
+ =?us-ascii?Q?ZiEFsCWP2Te424G2Kktr5uApXFTLjatdRShrgG1K?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 436f0903-81c3-4545-a277-08db580d8d17
+X-MS-Exchange-CrossTenant-AuthSource: AM5PR04MB3139.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2023 02:05:42.9760
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: boUYd3vxQz2l44OPmumXdEJ/a1+l9hf5UXPNkDTPnQogLI3ka9uh++3sZHJrsm74AfbnlRJGRkmW8Ekkc3vmQg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB7664
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,21 +113,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 May 2023, LiuLele wrote:
+From: Wei Fang <wei.fang@nxp.com>
 
->In my testing CXL device /sys/bus/cxl/devices/mem0  not created, and the get error messages :
->
->```
->cxl_pci 0000:0d:00.0: Failed to get interrupt for event Info log
->```
->
->My test environment is a qemu CXL emulator with qemu v8.0.0, Linux kernel v6.3.0.
->While with kernel 5.9.13,  /sys/bus/cxl/devices/mem0  can be created.
+This patch is a cleanup for fec driver. The fec_enet_reset_skb()
+is used to free skb buffers for tx queues and is only invoked in
+fec_restart(). However, fec_enet_bd_init() also resets skb buffers
+and is invoked in fec_restart() too. So fec_enet_reset_skb() is
+redundant and useless.
 
-Yes, this can be annoying and would argue the probe should not error out.
-Regardless, the actual qemu support is in Jonathan's tree:
+Signed-off-by: Wei Fang <wei.fang@nxp.com>
+---
+V2 change:
+According to Simon Horman's suggestion, it's just a cleanup and without
+user-visible problem, so change the target tree from net to net-next.
+---
+ drivers/net/ethernet/freescale/fec_main.c | 21 ---------------------
+ 1 file changed, 21 deletions(-)
 
-https://gitlab.com/jic23/qemu/-/commit/a04e6476df363d1f6bc160577b30dda6564d3f67
+diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
+index 10cb5ad2d758..e1975a3c7234 100644
+--- a/drivers/net/ethernet/freescale/fec_main.c
++++ b/drivers/net/ethernet/freescale/fec_main.c
+@@ -1011,24 +1011,6 @@ static void fec_enet_enable_ring(struct net_device *ndev)
+ 	}
+ }
+ 
+-static void fec_enet_reset_skb(struct net_device *ndev)
+-{
+-	struct fec_enet_private *fep = netdev_priv(ndev);
+-	struct fec_enet_priv_tx_q *txq;
+-	int i, j;
+-
+-	for (i = 0; i < fep->num_tx_queues; i++) {
+-		txq = fep->tx_queue[i];
+-
+-		for (j = 0; j < txq->bd.ring_size; j++) {
+-			if (txq->tx_skbuff[j]) {
+-				dev_kfree_skb_any(txq->tx_skbuff[j]);
+-				txq->tx_skbuff[j] = NULL;
+-			}
+-		}
+-	}
+-}
+-
+ /*
+  * This function is called to start or restart the FEC during a link
+  * change, transmit timeout, or to reconfigure the FEC.  The network
+@@ -1071,9 +1053,6 @@ fec_restart(struct net_device *ndev)
+ 
+ 	fec_enet_enable_ring(ndev);
+ 
+-	/* Reset tx SKB buffers. */
+-	fec_enet_reset_skb(ndev);
+-
+ 	/* Enable MII mode */
+ 	if (fep->full_duplex == DUPLEX_FULL) {
+ 		/* FD enable */
+-- 
+2.25.1
 
-Thanks,
-Davidlohr
