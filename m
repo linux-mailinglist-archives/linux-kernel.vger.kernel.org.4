@@ -2,95 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75018708D05
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 02:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3658708D08
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 02:43:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230449AbjESAmt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 20:42:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42034 "EHLO
+        id S230154AbjESAnX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 20:43:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjESAmr (ORCPT
+        with ESMTP id S229557AbjESAnV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 20:42:47 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 204EABC;
-        Thu, 18 May 2023 17:42:47 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1ae4c5e12edso21359645ad.3;
-        Thu, 18 May 2023 17:42:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684456966; x=1687048966;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2YJeCVahMakSFFIeHkE0L5vaAYWzeS9qst+vBo++bi0=;
-        b=FhVbqUWSfKoK65eksBcMm+T/anGwzJ7feZxDU9sQLJuv5vpIWmfyiQXDcuurFsNM/Z
-         tXNZIdpE0ugAni5joL8Y7T7mQ1R1AsMH/ro19c3opgXo/WWdLFunhUgeC0VVh7ZgxeTH
-         vbVwkoIvoVDjE1G+OV7XcxQ9lGNbB8Kovpny75gaQMi0vQqwpV+rfLP76tRJwDWTVJZQ
-         oJZwadsywzFEpRnAENSS5y955l7Vve6MI6Igo85hFz3ZjRIFgbPP++oy125CiMpBVqdr
-         f3QQkqRgwuzHoJKYxSKUTSZfpaKqD7OgDNRJQK4m+tdu9RPRF9KYVIWlRwgzTuFyC+bJ
-         CrNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684456966; x=1687048966;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2YJeCVahMakSFFIeHkE0L5vaAYWzeS9qst+vBo++bi0=;
-        b=GkP5Q9owsj7p5wmEQ8Fpr0j8HjQOaXsSo3cU7IOZ6yr7nS/QXJIeKMvi/n1sLFrx5v
-         /2mOqsqknVd1+EXyRasc4SeODTcI/7i6W1r0eq37MczpTrifEV1IK4bSSDei3QSUxd1Q
-         4JV3RR7W3Czjn9MQwqiwU1no84i9I+3+7+iUFlVKIQS+1ZiwIYaNpfVPhu0CGT4n7ph+
-         ozRD9IfYqSTZwaj1qxVcjjotZvuzT1w+t6ZTjMw1efvpYwJ8T/+DOogzCwk2JJXJImj3
-         Cwi5w5HNuk1CfU9e58HFQ6hfWyWGOsEC/MroHAPh0w92oP8m11g9mOKkVDith2R0V7xN
-         bvVw==
-X-Gm-Message-State: AC+VfDzzoSQ92NGQTdn/eXmnk8ySUz9aV2zoDYg2vhemBqzmubVjznJ6
-        YSNrnV63uI/n9OasrlV8cuc=
-X-Google-Smtp-Source: ACHHUZ7uGgeA0JSUHZOioCuEkISbTecVbqi5XMFhJ+uP4uwWKkKBFlNJvWeibygfrTk2BCH5gq2FcA==
-X-Received: by 2002:a17:902:ced0:b0:1a9:a478:66c5 with SMTP id d16-20020a170902ced000b001a9a47866c5mr880974plg.63.1684456966374;
-        Thu, 18 May 2023 17:42:46 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id n4-20020a170903110400b0019ef86c2574sm2033106plh.270.2023.05.18.17.42.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 17:42:45 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 18 May 2023 14:42:44 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     jiangshanlai@gmail.com
-Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Arnaud Ebalard <arno@natisbad.org>,
-        Srujana Challa <schalla@marvell.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        Shijith Thotton <sthotton@marvell.com>,
-        Vladis Dronov <vdronov@redhat.com>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Alexander Lobakin <alobakin@pm.me>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        linux-crypto@vger.kernel.org
-Subject: Re: [PATCH 11/13] crypto: octeontx2: Use alloc_ordered_workqueue()
- to create ordered workqueues
-Message-ID: <ZGbGBCA6NGCcSNgC@slm.duckdns.org>
-References: <20230509015032.3768622-1-tj@kernel.org>
- <20230509015032.3768622-12-tj@kernel.org>
+        Thu, 18 May 2023 20:43:21 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DCA3BC;
+        Thu, 18 May 2023 17:43:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684457000; x=1715993000;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=8/K+FKtfU5ptt8CUslFmSHuuIq82VJWzkwwU9cWQ8sQ=;
+  b=Pm6bQBXebQA3dOr8L8EtO9iHBJhCYl0+gImN/gm1mnYujKuNei1rjVdt
+   tmO4/fSUcrYPt/tgmaWIG9JWESDF4v1rXoIxbrGPlOHbbtlXmUHmeMtE+
+   GQQpW+pFmzltfVq3n0tl0pOwG6371iReTlwQdYoxXeR1kwW3irdEHDdt4
+   CulixJAYQOnghk8TnDh6Im18x2ip6KthK04Fx5EmYvjHDPXk6n66BKXpy
+   2GTKWjyq2fFEW2TkeAkR+momBKk8T5cG4JxlDTjfLHlN9efAC/a7GRG/N
+   Qfks2+mf/CXvQWhwXImgIKGvDZQ/p7HryqnrgG6b3ZN5iLYGVhtWR3tyv
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="380446268"
+X-IronPort-AV: E=Sophos;i="6.00,175,1681196400"; 
+   d="scan'208";a="380446268"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 17:43:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="792155452"
+X-IronPort-AV: E=Sophos;i="6.00,175,1681196400"; 
+   d="scan'208";a="792155452"
+Received: from mkim1-mobl.amr.corp.intel.com (HELO [10.209.118.171]) ([10.209.118.171])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 17:43:15 -0700
+Message-ID: <f2467d69-882b-3439-b082-bcaf591a9892@intel.com>
+Date:   Thu, 18 May 2023 17:43:14 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230509015032.3768622-12-tj@kernel.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 1/2] x86/numa: Introduce numa_fill_memblks()
+Content-Language: en-US
+To:     Alison Schofield <alison.schofield@intel.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Dave Jiang <dave.jiang@intel.com>, x86@kernel.org,
+        linux-cxl@vger.kernel.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <cover.1684448934.git.alison.schofield@intel.com>
+ <e365f4dfa7fa974118eb4e59aebc7cc423cf19a1.1684448934.git.alison.schofield@intel.com>
+ <8dc725c8-613a-b51b-6cc1-80d2275ca130@intel.com>
+ <ZGbCG4gRGow0VCmQ@aschofie-mobl2>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <ZGbCG4gRGow0VCmQ@aschofie-mobl2>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied to wq/for-6.5-cleanup-ordered.
+On 5/18/23 17:26, Alison Schofield wrote:
+> On Thu, May 18, 2023 at 05:08:16PM -0700, Dave Hansen wrote:
+>> On 5/18/23 17:04, alison.schofield@intel.com wrote:
+>>> The initial use case is the ACPI driver that needs to extend
+>>> SRAT defined proximity domains to an entire CXL CFMWS Window[1].
+>>
+>> Dumb question time: Why didn't the SRAT just cover this sucker in the
+>> first place?  Are we fixing up a BIOS bug or is there a legitimate
+>> reason that the SRAT didn't cover it up front?
+>>
+> There is no requirement that the BIOS describe (in the SRAT) all the
+> HPA assigned to a CFMWS Window. The HPA range may not actually map to
+> any memory at boot time. It can be persistent capacity or may be there
+> to enable hot-plug. IIUC BIOS can pick and choose and define volatile
+> regions wherever it pleases.
 
-Thanks.
+I understand that it _can_ do this.  I'm trying to get to the reasoning
+of why.
 
--- 
-tejun
+Is this essentially so that the physical address space doesn't have to
+be *committed* to a single use up front?  For RAM, I guess this wasn't a
+problem because there was only a finite amount of RAM that could get
+hotplugged into a single node.
+
+But with these fancy schmancy new devices, it's really hard to figure
+out how much space will show up and what performance it will have until
+you actually start poking at it.  The firmware wasn't _quite_ sure how
+it wanted to burn the physical address space at the time the SRAT was
+created.  But, now it knows, and this is handling the case where the
+firmware only expands an adjacent chunk of physical address space.
+
+Close?
