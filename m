@@ -2,82 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1EF8708FFA
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 08:44:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B19FE70900A
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 08:52:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbjESGoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 02:44:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46460 "EHLO
+        id S230037AbjESGwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 02:52:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjESGow (ORCPT
+        with ESMTP id S229999AbjESGww (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 02:44:52 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2325912C;
-        Thu, 18 May 2023 23:44:51 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34IIwuPT031081;
-        Fri, 19 May 2023 06:44:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2023-03-30; bh=4oNhK5bI3ELvlGqoTiZpXVakPRt4I4zhn01DypkCTuU=;
- b=vHpJsLtOCuGjDVvI+Grka5J69Lq73Mo5k1ajAMUbJlV6/cigVbSQDK9PwrdCaXhcQ2Zq
- Ep/RqTrmUhXvU/AtokzjlzJNidDEsJM3aRfTPZzFxRrUQV7fEq1DjboyRJUFUWMoE/x4
- yyalZGSFJTxL9lau1Xo1tHpCE1RzbatfQ+44pv7ax0qYQu/sQZGh4rpd1b3Mz+/owabY
- 4pnVZeH1pW9+lipLHGLoPwQh/ke8jW5R4lqb+kXs9PJrfCCQDbOueioD0QDl3CXN+6nv
- u7qBCd/xn0yRdbpuHYbXGlHtOCt9BIAt43k4gdVHRTOGpdE250T2/QG9rZrjBXaHyrAg HQ== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qj0ye9dw8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 19 May 2023 06:44:11 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 34J4sQX0032130;
-        Fri, 19 May 2023 06:44:10 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3qj10ds5s0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 19 May 2023 06:44:10 +0000
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34J6i9Sp020634;
-        Fri, 19 May 2023 06:44:09 GMT
-Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3qj10ds5rg-1;
-        Fri, 19 May 2023 06:44:09 +0000
-From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Rander Wang <rander.wang@intel.com>,
-        Jyri Sarha <jyri.sarha@intel.com>,
-        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Cc:     harshit.m.mogalapalli@oracle.com, error27@gmail.com,
-        dan.carpenter@linaro.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH next] ASoC: SOF: Intel: hda-dai: Fix locking in hda_ipc4_pre_trigger()
-Date:   Thu, 18 May 2023 23:44:01 -0700
-Message-Id: <20230519064404.1659637-1-harshit.m.mogalapalli@oracle.com>
-X-Mailer: git-send-email 2.40.0
+        Fri, 19 May 2023 02:52:52 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7922E5C;
+        Thu, 18 May 2023 23:52:49 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8Cxd+nAHGdk_BcKAA--.17607S3;
+        Fri, 19 May 2023 14:52:48 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxoOS9HGdk73hpAA--.47775S3;
+        Fri, 19 May 2023 14:52:46 +0800 (CST)
+Subject: Re: [PATCH v1 2/3] dt-bindings: soc: add loongson-2 pm
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Marc Zyngier <maz@kernel.org>,
+        Youling Tang <tangyouling@loongson.cn>,
+        Baoqi Zhang <zhangbaoqi@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>, Yun Liu <liuyun@loongson.cn>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230517073149.31980-1-zhuyinbo@loongson.cn>
+ <20230517073149.31980-3-zhuyinbo@loongson.cn>
+ <d3791702-4d41-0208-1346-34738a2883b6@linaro.org>
+ <4521c591-6fcd-c96a-e2f6-f41f5c191036@loongson.cn>
+ <1bbabe6d-b013-9837-8986-205a2b04de14@linaro.org>
+ <b4bc7385-3706-8aa3-0117-d106fd47a45e@loongson.cn>
+ <3f81816a-b7a8-cc3a-0052-a2177bfb58c4@linaro.org>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <9c49fd36-2b87-b25a-c799-c5845718def6@loongson.cn>
+Date:   Fri, 19 May 2023 14:52:45 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
+In-Reply-To: <3f81816a-b7a8-cc3a-0052-a2177bfb58c4@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-19_04,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
- malwarescore=0 mlxscore=0 spamscore=0 bulkscore=0 phishscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305190057
-X-Proofpoint-ORIG-GUID: wCdIePPxMFhs_7bZc9g6lp4a3Jb7qIx4
-X-Proofpoint-GUID: wCdIePPxMFhs_7bZc9g6lp4a3Jb7qIx4
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-CM-TRANSID: AQAAf8BxoOS9HGdk73hpAA--.47775S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3WrW7tFyxJF18Xr4DuFyfWFg_yoW7GFy8pa
+        yUKF4qyrWDJr1Syw48tw18C3yFvrWkKFW5Wrn8XryxCw4qvr1Iyr17KF15u342kr1xJw12
+        9Fyjy397CF45AFJanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bDAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY
+        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
+        C2j2WlYx0E2Ix0cI8IcVAFwI0_JF0_Jw1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
+        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
+        v26r1q6r43MxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
+        7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I
+        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAI
+        cVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcV
+        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jUManUUUUU=
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,49 +85,182 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hda_ipc4_pre_trigger() has two issues:
- 1. In the default case, we are returning without unlocking the mutex.
- 2. In case SNDRV_PCM_TRIGGER_STOP: when ret is less than zero it goes
-    to out, unlocks but returns zero instead of a negative value.
 
-Fix this by changing the final return value to 'ret' instead of zero,
-and initialize 'ret' to zero in the start of the function.
 
-Fixes: 225f37b578a9 ("ASoC: SOF: ipc4-pcm: reset all pipelines during FE DAI hw_free")
-Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
----
-Only compile tested. This is found using static anlysis with Smatch.
----
- sound/soc/sof/intel/hda-dai-ops.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+在 2023/5/18 下午10:15, Krzysztof Kozlowski 写道:
+> On 18/05/2023 14:15, zhuyinbo wrote:
+>>
+>>
+>> 在 2023/5/18 下午3:15, Krzysztof Kozlowski 写道:
+>>> On 18/05/2023 05:23, zhuyinbo wrote:
+>>>>
+>>>>
+>>>> 在 2023/5/17 下午11:00, Krzysztof Kozlowski 写道:
+>>>>> On 17/05/2023 09:31, Yinbo Zhu wrote:
+>>>>>> Add the Loongson-2 SoC Power Management Controller binding with DT
+>>>>>> schema format using json-schema.
+>>>>>>
+>>>>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+>>>>>
+>>>>> ...
+>>>>>
+>>>>>> +properties:
+>>>>>> +  compatible:
+>>>>>> +    items:
+>>>>>> +      - enum:
+>>>>>> +          - loongson,ls2k-pmc
+>>>>>> +      - const: syscon
+>>>>>> +
+>>>>>> +  reg:
+>>>>>> +    maxItems: 1
+>>>>>> +
+>>>>>> +  interrupts:
+>>>>>> +    maxItems: 1
+>>>>>> +
+>>>>>> +  suspend-address:
+>>>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>>>>> +    description:
+>>>>>> +      This option indicate this PM suspend address.
+>>>>>
+>>>>> This tells me nothing. Drop "This option indicate this" and rephrase
+>>>>> everything to actually describe this property. Why would the address
+>>>>> differ on given, specific SoC? It looks like you just miss compatibles.
+>>>>> Anyway this needs much more explanation so we can judge whether it fits DT.
+>>>>
+>>>> Hi Krzysztof,
+>>>>
+>>>> I will add following description about "suspend-address", please review.
+>>>
+>>> Thanks.
+>>>
+>>>>
+>>>> The "suspend-address" is a ACPI S3 (Suspend To RAM) firmware entry
+>>>
+>>> Why do we add properties for ACPI? This does not seem right.
+>>
+>>
+>> 1.  The suspend-address value was dependent on specific platform
+>>       firmware code and it tends to be confiurable. if it is a fixed value
+>>       that seems not friendly or the ACPI S3 will not work.
+> 
+>> 2. the PM driver need according to it to indicate that current SoC
+>>      whether support ACPI S3, because some Loongson-2 SoC doesn't support
+> 
+> For this you have dedicated compatibles. Which points to the fact that
+> you missed them here.
 
-diff --git a/sound/soc/sof/intel/hda-dai-ops.c b/sound/soc/sof/intel/hda-dai-ops.c
-index 5a508e118e3d..1e58256c8003 100644
---- a/sound/soc/sof/intel/hda-dai-ops.c
-+++ b/sound/soc/sof/intel/hda-dai-ops.c
-@@ -183,7 +183,7 @@ static int hda_ipc4_pre_trigger(struct snd_sof_dev *sdev, struct snd_soc_dai *cp
- 	struct sof_ipc4_pipeline *pipeline;
- 	struct snd_sof_widget *swidget;
- 	struct snd_soc_dapm_widget *w;
--	int ret;
-+	int ret = 0;
- 
- 	w = snd_soc_dai_get_widget(cpu_dai, substream->stream);
- 	swidget = w->dobj.private;
-@@ -208,11 +208,11 @@ static int hda_ipc4_pre_trigger(struct snd_sof_dev *sdev, struct snd_soc_dai *cp
- 		break;
- 	default:
- 		dev_err(sdev->dev, "unknown trigger command %d\n", cmd);
--		return -EINVAL;
-+		ret = -EINVAL;
- 	}
- out:
- 	mutex_unlock(&ipc4_data->pipeline_state_mutex);
--	return 0;
-+	return ret;
- }
- 
- static int hda_trigger(struct snd_sof_dev *sdev, struct snd_soc_dai *cpu_dai,
--- 
-2.31.1
+
+Sorry, I may not have explained it clearly before. In fact, this is a
+consideration for the future, and currently all SoC supports s3.
+Add corresponding compatibles as needed in the future.
+
+> 
+>>      ACPI S3 but support other ACPI mode, so the PM driver need has a
+>>      check. if no this check and other ACPI mode will not work.
+> 
+> Sure, but it is not really relevant to the bindings... or rather: should
+> not be relevant. Bindings are for hardware or in this case also for
+> firmware, but not for driver.
+
+okay, I got it.
+
+> 
+>>
+>> Base on the above two points, this property was necessary.
+> 
+> I did not object in my last response...
+
+
+Yes, but I misunderstood your meaning before.
+
+> 
+>> Using this property "suspend-address" can make the firmware entry
+>> address configurable, and then the kernel can also indicate whether
+>> the current SoC supports S3
+>>
+>> In addition, from kernel code perspective, the property
+>> "suspend-address" was to initialize "loongarch_suspend_addr"
+> 
+> Again, how does it matter what kernel does?
+
+
+okay, I got it.
+
+> 
+>>
+>> S3 call flow:
+>> enter_state -> loongson_suspend_enter -> bios's loongarch_suspend_addr
+>>
+>> SYM_FUNC_START(loongson_suspend_enter)
+>>           SETUP_SLEEP
+>>           bl              __flush_cache_all
+>>
+>>           /* Pass RA and SP to BIOS */
+>>           addi.d          a1, sp, 0
+>>           la.pcrel        a0, loongson_wakeup_start
+>>           la.pcrel        t0, loongarch_suspend_addr
+>>           ld.d            t0, t0, 0
+>>           jirl            a0, t0, 0 /* Call BIOS's STR sleep routine */
+>>
+>>
+>> Please
+>>> reword to skip ACPI stuff, e.g. deep sleep states (Suspend to RAM).
+>>
+>>
+>> Sorry, I don't got your point.
+> 
+> You have DT platform, so why do you use it with ACPI in the first place?
+> If you have ACPI, then please drop all this and make your life easier.
+
+
+okay, I got it, I will reword to skip ACPI stuff in bindings for 
+"suspend-address" property description.
+
+> 
+> If this is booted without ACPI, which would justify DT, drop the
+> references to ACPI. I gave you example what to use instead. If you don't
+> like it, no problem, reword in different way.
+
+okay, I got it.
+
+> 
+>>
+>>>
+>>>
+>>>> address which was jumped from kernel and it's value was dependent on
+>>>> specific platform firmware code.
+>>>
+>>> "entry address which was jumped" <- the address cannot jump. Please
+>>> explain who is jumping here - boot CPU? each suspended CPU? I guess the
+>>> first as CPUs are offlined, right?
+>>
+>> The boot CPU was jumping to firmware and finish remaining process in
+>> firmware that was what ACPI S3 required and other CPUs (No-boot CPU)
+>> have been offline before entering firmware.
+> 
+> Then fix the description.
+
+okay, I got it.
+
+> 
+>>
+>>>
+>>>> In addition, the PM driver need
+>>>> according to it to indicate that current SoC whether support ACPI S3.
+>>>
+>>> Skip references to driver.
+>>
+>>
+>> Sorry, I don't got your point.  Could you elaborate on it?
+> 
+> If you change driver, you change bindings? No.
+> 
+> Bindings are for hardware, not for driver. Whatever your driver is doing
+> usually does not matter for the bindings and should not be included.
+
+
+okay, I got it. I will skip references to driver in bindings for 
+"suspend-address" property description.
+
+Thanks.
 
