@@ -2,131 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06795709715
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 14:09:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 245FE709719
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 14:10:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231460AbjESMJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 08:09:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47006 "EHLO
+        id S229963AbjESMJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 08:09:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjESMJn (ORCPT
+        with ESMTP id S229929AbjESMJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 19 May 2023 08:09:43 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1BD128;
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE73192
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 05:09:39 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4eed764a10cso3679500e87.0
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 05:09:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684498178; x=1687090178;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=b7UdFp5GhAiSV0XORaYQNKiXNz/+Czt3HESIc1RiAg8=;
+        b=SsTsyfOr21l+ewnUtIgEk7T27S/itlGotkVd0LvcJPueUZVCtnepavisOdEOzdjeXz
+         hAg9fj7Vh0xUzAHeuuCRN8Lx1r0Fx6o1RbCZx5xblVRJTRMx4/zR2EJjUbOB+PRSXnXt
+         uJLJssYxU3MxSSj+NjzRyk9tK3qomv+1GH45+LpYOImEIlmMcvL/RT0PJSzK3LQCvsY9
+         iS3oXXMFXZCpVEZjpWnqy4zoJZzx1DR2qK3cr0gNTjN/qfD1XF2NpZ3OHiK0EWfarwcu
+         wZNS0OXn0qAW8bafFMKhre7LZQxW92UIBUubNy7MRrDHP7CDhS+pgLthZ2w6ZCKVwmh5
+         LCjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684498178; x=1687090178;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=b7UdFp5GhAiSV0XORaYQNKiXNz/+Czt3HESIc1RiAg8=;
+        b=OQsnSgakfE75NVvrdjXgJrX8OA1AikJtugqeq6EJCD9j8L4Fgy9Vvny+eOmLakY2sA
+         frRvdw/HSGGnwxyLEkmZXZqgJkZ2leGzhIHld4IIMeWj4jMCAWkfiMSVKp6ccBmzPyQO
+         r1psRpz8hSOcjhjDQQpUiEcy6DImSJ4F+qrV9jE++cgs6rx3gqGDRf7djjSaY7LSi1vZ
+         gSdQstwvlTp+I75FrmPQ7SYZPI1ZN2Yo+ikvJ14TRCxo2iWNA40PNK5R6poUZhJOZj81
+         XnDZ32QuRykuBdvYPWumWiG6V/kQV0ne/6VKWWTKYze2RWVrR07HyY5bk9hAm7r//7nK
+         8EdQ==
+X-Gm-Message-State: AC+VfDwmox8NJSkKPLmp10dAXdheIM/LSGY5GIDLItw2iXMV5BEt4jI6
+        oW4T5mR+IHykBbi3JoQ3wdo=
+X-Google-Smtp-Source: ACHHUZ6chS+j6ik3EDwUZbqAeKYmkhlSk/4VlNyw4JPRLbolGOF1i2zWinXwEYOmyW0qHqk9zFDXSA==
+X-Received: by 2002:ac2:5fe6:0:b0:4ed:c639:54cd with SMTP id s6-20020ac25fe6000000b004edc63954cdmr633908lfg.35.1684498177856;
         Fri, 19 May 2023 05:09:37 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id AC3AD5C0208;
-        Fri, 19 May 2023 08:09:33 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Fri, 19 May 2023 08:09:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1684498173; x=1684584573; bh=Mx
-        aybIo+rxpirmU88Zvah8XfxfWvwDtpl+cNoSkys6I=; b=Q0MlMmxTzyw4pVVcJT
-        vRqaslXkNToR2VaA4IHp2uzwMBULCK8c/Sxfynl9jnpFU5Oeb/24g73/8G2VcEMe
-        GHJz37cuzeUD0J8zSy96C0q06yH5b0NYLYhaWn1Gw0LDYgl3zuB8ruBcheCitHnb
-        oEz9J2qJ4iS/mhfdVw1BhrWZyZbuaN92Wd4Ns1DOvhwXE0dZEf387chWc1qNPvA7
-        H6LeV3AEaLZ3wIAIievFk9VXl4/o5oNpipBDcCmKN05sLL2BwTEPCmjK2IV/OmoV
-        ehq/Hcy4ULr/4ilyo7AGGTveSq5qN9w/6o90ZYcpQhCvG1Fc5t2twZRNORTKjrk+
-        i6Vg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1684498173; x=1684584573; bh=MxaybIo+rxpir
-        mU88Zvah8XfxfWvwDtpl+cNoSkys6I=; b=rt1BNYexiUNroHAALgEkYqfePno/6
-        XwxxgFiiA/Wbfk6hTu/XlsXLpj2AHFEuRDmj8gEVhc6SQdZ+PpfN5LOu72VUeQ9+
-        y6HkzIq9c2aK8wyOuJTxVTj9nErufpZ5PcVxle9HXA9TfrFSnW+uaPpPlyO2Ceid
-        Nq2uMrvdwvogH385uqOMUcv+nw9gADpplGLQQvcHLwSkeghzTZwikd2RghzmIra5
-        kT91kkOSEcJ3Cm2ptafQldBC85kh7Ch2Nsk9MatlA38qTzcYrL6g4GF9GsbeeEAL
-        pjztTxP5cRHtNfbhFK7i7HyixdZzM2u3vpo0Ij/FyoEjhsgGDuAN+0LPw==
-X-ME-Sender: <xms:_GZnZJnWZB2IyypOr_yRnE0D3CvKXbEq05w1xtt0PEPHojUtrJ9MMQ>
-    <xme:_GZnZE3xvucdo-tfM8QW2EAJZB2cLg5FK-b55YHFAak6yQxPgdokQkFRcuORdo1-b
-    j0iVbQuppIa6aIaKBA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeihedggeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:_GZnZPpDdGmXZCCb7m59J49-q5TnDSqQBwV6B31eJLU3NxqW9Mifmg>
-    <xmx:_GZnZJn57hY2WDzP4ha-F1l54B-WWf1X7xyQqCE9g3bQ7QrrPpXeig>
-    <xmx:_GZnZH2AT3tC_hFcIMFDqo84dtlpJ0mh489IMmq_BtxdyO71BrapSA>
-    <xmx:_WZnZLLmQYCUSB-Wfx2NvnHGRoXma16YUbBHKSLs0RdQMpJEHg4p2w>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 147E1B6008D; Fri, 19 May 2023 08:09:31 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-431-g1d6a3ebb56-fm-20230511.001-g1d6a3ebb
-Mime-Version: 1.0
-Message-Id: <9aaed1c3-9a7d-4348-b15f-2bb9be654bef@app.fastmail.com>
-In-Reply-To: <a78d9dcd-0bc1-7e98-a8f1-e5d6cd0c09a3@intel.com>
-References: <20230516193549.544673-1-arnd@kernel.org>
- <a78d9dcd-0bc1-7e98-a8f1-e5d6cd0c09a3@intel.com>
-Date:   Fri, 19 May 2023 14:09:11 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Dave Hansen" <dave.hansen@intel.com>,
-        "Arnd Bergmann" <arnd@kernel.org>, x86@kernel.org
-Cc:     "Thomas Gleixner" <tglx@linutronix.de>,
-        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
-        "Dave Hansen" <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Andy Lutomirski" <luto@kernel.org>,
-        "Steven Rostedt" <rostedt@goodmis.org>,
-        "Masami Hiramatsu" <mhiramat@kernel.org>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        "Juergen Gross" <jgross@suse.com>,
-        "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
-        "Alexey Makhalov" <amakhalov@vmware.com>,
-        "VMware PV-Drivers Reviewers" <pv-drivers@vmware.com>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        "Darren Hart" <dvhart@infradead.org>,
-        "Andy Shevchenko" <andy@infradead.org>,
-        "Boris Ostrovsky" <boris.ostrovsky@oracle.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-pci@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-pm@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH 00/20] x86: address -Wmissing-prototype warnings
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_TEMPERROR,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: from pc636 (host-90-235-19-70.mobileonline.telia.com. [90.235.19.70])
+        by smtp.gmail.com with ESMTPSA id n7-20020ac242c7000000b004f24cb9ef14sm582963lfl.47.2023.05.19.05.09.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 May 2023 05:09:37 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Fri, 19 May 2023 14:09:34 +0200
+To:     Ryan Roberts <ryan.roberts@arm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        SeongJae Park <sj@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Uladzislau Rezki <urezki@gmail.com>, Zi Yan <ziy@nvidia.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        damon@lists.linux.dev, Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH v2 1/5] mm: vmalloc must set pte via arch code
+Message-ID: <ZGdm/hz7HP5iJWny@pc636>
+References: <20230518110727.2106156-1-ryan.roberts@arm.com>
+ <20230518110727.2106156-2-ryan.roberts@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230518110727.2106156-2-ryan.roberts@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023, at 23:56, Dave Hansen wrote:
-> On 5/16/23 12:35, Arnd Bergmann wrote:
->> 
->> All of the warnings have to be addressed in some form before the warning
->> can be enabled by default.
->
-> I picked up the ones that were blatantly obvious, but left out 03, 04,
-> 10, 12 and 19 for the moment.
+On Thu, May 18, 2023 at 12:07:23PM +0100, Ryan Roberts wrote:
+> It is bad practice to directly set pte entries within a pte table.
+> Instead all modifications must go through arch-provided helpers such as
+> set_pte_at() to give the arch code visibility and allow it to check
+> (and potentially modify) the operation.
+> 
+> Fixes: 3e9a9e256b1e ("mm: add a vmap_pfn function")
+> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+> Reviewed-by: Zi Yan <ziy@nvidia.com>
+> Acked-by: Lorenzo Stoakes <lstoakes@gmail.com>
+> Reviewed-by: Christoph Hellwig <hch@lst.de>
+> ---
+>  mm/vmalloc.c | 10 ++++++++--
+>  1 file changed, 8 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index 9683573f1225..48202ec5f79a 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -2899,10 +2899,16 @@ struct vmap_pfn_data {
+>  static int vmap_pfn_apply(pte_t *pte, unsigned long addr, void *private)
+>  {
+>  	struct vmap_pfn_data *data = private;
+> +	unsigned long pfn = data->pfns[data->idx];
+> +	pte_t ptent;
+>  
+> -	if (WARN_ON_ONCE(pfn_valid(data->pfns[data->idx])))
+> +	if (WARN_ON_ONCE(pfn_valid(pfn)))
+>  		return -EINVAL;
+> -	*pte = pte_mkspecial(pfn_pte(data->pfns[data->idx++], data->prot));
+> +
+> +	ptent = pte_mkspecial(pfn_pte(pfn, data->prot));
+> +	set_pte_at(&init_mm, addr, pte, ptent);
+> +
+> +	data->idx++;
+>  	return 0;
+>  }
+>  
+> -- 
+> 2.25.1
+> 
+Reviewed-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
 
-Ok, thanks!
-
-I've already sent a fixed version of patch 10, let me know if you
-need anything else for the other ones.
-
-> BTW, I think the i386 allyesconfig is getting pretty lightly tested
-> these days.  I think you and I hit the same mlx4 __bad_copy_from()
-> compile issue.
-
-I did all my testing on randconfig builds, so I probably caught a lot
-of the more obscure corner cases, but it doesn't always hit everything
-that is in allyesconfig/allmodconfig.
-
-       Arnd
+--
+Uladzislau Rezki
