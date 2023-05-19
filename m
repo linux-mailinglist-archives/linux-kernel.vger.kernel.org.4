@@ -2,88 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB2B1709E6E
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 19:42:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2F5E709E69
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 19:42:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231403AbjESRmy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 13:42:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47730 "EHLO
+        id S229794AbjESRmW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 13:42:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230110AbjESRmt (ORCPT
+        with ESMTP id S229545AbjESRmU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 13:42:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F90E107
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 10:42:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684518122;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IPvHfXA4AeF8oU0t2aOUngrckD2YwBip/YH9aUYlKr0=;
-        b=hwkF5lJeno24HZFcpavdHnvouPTX3ri/HzUpNchagHqZvjcFsplG1AcKVdTaLQYibcf7zv
-        ptPOCoP+q+/XQpYGxyfzPRRR2hmK4CCEZNNuGDn44j/nUZDefi9v2rpXooidCygDVpGq1m
-        hxSzG0PRTdsssJrnCNVegXvTSe+1NkY=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-146-ECupW8CpNauYbPUvP5XjZw-1; Fri, 19 May 2023 13:42:00 -0400
-X-MC-Unique: ECupW8CpNauYbPUvP5XjZw-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-96f4f1bb838so170008366b.3
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 10:42:00 -0700 (PDT)
+        Fri, 19 May 2023 13:42:20 -0400
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4533FFA;
+        Fri, 19 May 2023 10:42:19 -0700 (PDT)
+Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-759413d99afso53462385a.1;
+        Fri, 19 May 2023 10:42:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684518119; x=1687110119;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IPvHfXA4AeF8oU0t2aOUngrckD2YwBip/YH9aUYlKr0=;
-        b=Vg10aKS704yeu7mvoh9P1QzO61dT0COTpyeqI8GEhItUuXkrKYMcqm3xWxJ2TQhjOc
-         KDq5tkx5gSviM8b8Svfc6Sk8UVBjZMK4u+SHcNmhWM92q7/vzRD/82NpzUz+SRKh6ADA
-         TjlJLVdUprKntTtZClHvN/XH1NhXUDnYSh7GWlPr+smO5z0lbhXu21CBk6drfx7idM8B
-         EauJK/zUvflnyDDLEmysMnY7XhIu93vgmveTROZCT+ikDU2LUHGlNiIFLS1GmKpOc3eL
-         WqA5W++tTXQhRMRT02FIVicogOag70hcUd2PbgPGAcqU5mVkz9jRLF5wDnKJ5nZHBB5S
-         8xUA==
-X-Gm-Message-State: AC+VfDwW+odpq9u5Jm8LUAbmem4Mwj0zl/SqtgQj1Q+uAtuvf/V+OMIM
-        fqmFsq33OuaWXhp+tCZKwwLW2lUhtZAD/HXMuvw107sF+N+xtvodRnv0G7ouiv8zJhYxoG0rL4X
-        v4HUdyR9Qi1eHhg9hieXCp84S
-X-Received: by 2002:a17:907:7f26:b0:966:4e84:d82d with SMTP id qf38-20020a1709077f2600b009664e84d82dmr2635888ejc.3.1684518119334;
-        Fri, 19 May 2023 10:41:59 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4OyOatoK1f1B3VZIVP533ki2ItaPx3mIwrd17+o/dg6ejlgF+lc7kz4qMM3KmEXtzZ1sXGew==
-X-Received: by 2002:a17:907:7f26:b0:966:4e84:d82d with SMTP id qf38-20020a1709077f2600b009664e84d82dmr2635866ejc.3.1684518119017;
-        Fri, 19 May 2023 10:41:59 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id p16-20020a170906a01000b00965e68b8df5sm2530428ejy.76.2023.05.19.10.41.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 May 2023 10:41:58 -0700 (PDT)
-Message-ID: <c4d8e54e-28da-f788-5569-e5274b19c34e@redhat.com>
-Date:   Fri, 19 May 2023 19:41:57 +0200
+        d=1e100.net; s=20221208; t=1684518138; x=1687110138;
+        h=user-agent:in-reply-to:content-transfer-encoding
+         :content-disposition:mime-version:references:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MVBXORYA5fI/Y7ZPBzQO5l0Wm2EiovEm+KKQqG7za60=;
+        b=G4gN9ZN+ovP33yjiR/vYliMLpmjjuBLfhXTMxYpLN+7GoOa8DdFe2rdEIA9y1Bwf8W
+         OZHijvwy4zPFpbcE1dWlXA4yksk341FQoL7cbF7b6eCVM7FenvSuCTS9yyLAWHN8MlBX
+         NW/uU/7mmbvb9mEU5C9vzEDtWzFNy9nn69Ev5np/phmVXpm1RothX3W9H6fP4Lf0kmPR
+         hAKpeM0WmRDHxxpRXbhGS8FyjXQGII8f0+W46fg9Gd3Pt+tVVmvM0ZeSXaapcq/fVuBh
+         AH1q951FnfeVXPaohMQKLjLD0P/PxmTFJB5djLPCevfd/yLNzjr0CQMVRIorZi2JxVCG
+         qNPw==
+X-Gm-Message-State: AC+VfDzL8wXCVtA8jccqc4bKRu67ob1UUoGRf4ThRVjf+Jd1SumtJ7lA
+        3Wbkqraye1lPKZCLFGyqjWA=
+X-Google-Smtp-Source: ACHHUZ57aYaLkvcxZAWErCGtmjwOeb/l4TV4esRxYZQRZFbcTv3wtC3AKblwR/M8FCpNJSwkvBfpag==
+X-Received: by 2002:a05:6214:240c:b0:5ef:512d:2d47 with SMTP id fv12-20020a056214240c00b005ef512d2d47mr6116917qvb.19.1684518138069;
+        Fri, 19 May 2023 10:42:18 -0700 (PDT)
+Received: from maniforge ([2620:10d:c091:400::5:311e])
+        by smtp.gmail.com with ESMTPSA id s1-20020a05621412c100b006166d870243sm1475313qvv.43.2023.05.19.10.42.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 May 2023 10:42:17 -0700 (PDT)
+Date:   Fri, 19 May 2023 12:42:15 -0500
+From:   David Vernet <void@manifault.com>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: [tip: objtool/core] start_kernel: Add __no_stack_protector
+ function attribute
+Message-ID: <20230519174215.GA2158284@maniforge>
+References: <20230412-no_stackp-v2-1-116f9fe4bbe7@google.com>
+ <168440808395.404.16801982965854981978.tip-bot2@tip-bot2>
+ <20230519171120.GA1939377@maniforge>
+ <CAKwvOd=ywPnLS40HNUnXH1nqm3Ke3sMtomSgL+rVOoSjXvQB=A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 0/2] KVM: Fix race between reboot and hardware enabling
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.linux.dev,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        kvm-riscv@lists.infradead.org
-References: <20230512233127.804012-1-seanjc@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20230512233127.804012-1-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKwvOd=ywPnLS40HNUnXH1nqm3Ke3sMtomSgL+rVOoSjXvQB=A@mail.gmail.com>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,34 +74,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/13/23 01:31, Sean Christopherson wrote:
-> Fix a bug where enabling hardware virtualization can race with a forced
-> reboot, e.g. `reboot -f`, and result in virt hardware being enabled when
-> the reboot is attempted, and thus hanging the reboot.
+On Fri, May 19, 2023 at 10:18:40AM -0700, Nick Desaulniers wrote:
+> On Fri, May 19, 2023 at 10:11 AM David Vernet <void@manifault.com> wrote:
+> >
+> > On Thu, May 18, 2023 at 11:08:03AM -0000, tip-bot2 for ndesaulniers@google.com wrote:
+> > > The following commit has been merged into the objtool/core branch of tip:
+> > >
+> > > Commit-ID:     514ca14ed5444b911de59ed3381dfd195d99fe4b
+> > > Gitweb:        https://git.kernel.org/tip/514ca14ed5444b911de59ed3381dfd195d99fe4b
+> > > Author:        ndesaulniers@google.com <ndesaulniers@google.com>
+> > > AuthorDate:    Mon, 17 Apr 2023 15:00:05 -07:00
+> > > Committer:     Josh Poimboeuf <jpoimboe@kernel.org>
+> >
+> > Hi Nick, Josh, Peter,
+> >
+> > Do you have an ETA for when this will make its way to Linus' tree?
+> > clang-17 built kernels have failed to boot since [0], so it would be
+> > nice to get this in sooner rather than later if possible.
 > 
-> Found by inspection, confirmed by hacking the reboot flow to wait until
-> KVM loads (the problematic window is ridiculously small).
-> 
-> Fully tested only on x86, compile tested on other architectures.
-> 
-> v2:
->   - Rename KVM's callback to kvm_shutdown() to match the hook. [Marc]
->   - Don't add a spurious newline. [Marc]
-> 
-> v1: https://lore.kernel.org/all/20230310221414.811690-1-seanjc@google.com
-> 
-> Sean Christopherson (2):
->    KVM: Use syscore_ops instead of reboot_notifier to hook
->      restart/shutdown
->    KVM: Don't enable hardware after a restart/shutdown is initiated
-> 
->   virt/kvm/kvm_main.c | 43 +++++++++++++++++++++++++++----------------
->   1 file changed, 27 insertions(+), 16 deletions(-)
-> 
-> 
-> base-commit: b3c98052d46948a8d65d2778c7f306ff38366aac
+> David,
+> Can you confirm that your version of clang-17 is updated? clang-17 is
+> unreleased; ToT will become clang-17.
+>
+> https://reviews.llvm.org/rGfc4494dffa5422b2be5442c235554e76bed79c8a
+> should have fixed any boot failures related to stack protectors.  That
+> is to say that Josh's series is irrelevant to anyone using either an
+> existing release of clang, or something closer to ToT than April 13.
 
-Queued, thanks.
+Thanks for the quick reply, Nick. The latest clang-17 does indeed fix
+the issue. Apologies for not trying that first -- I was using the only
+tagged verson of clang-17 (which admittedly is not a released version),
+and figured it wasn't a compiler bug given that the assembly looked
+sane, compilers are allowed to do all sorts of interesting things with
+__noreturn, and that [1] removes -fstack-protector from start_kernel()
+altogether.
 
-Paolo
+[1]: https://lore.kernel.org/lkml/20230412-no_stackp-v1-1-46a69b507a4b@google.com/
 
+> LLVM commit fc4494dffa54 ("[StackProtector] don't check stack
+> protector before calling nounwind functions")
+> landed April 13, so please check that your build of clang-17 is after that date.
+> 
+> Either way, thanks for testing with clang, and the report. You can
+> always file a bug at our issue tracker:
+> https://github.com/ClangBuiltLinux/linux/issues or see our page for
+> more ways to get in touch:
+> https://clangbuiltlinux.github.io/
+> We're very active on our mailing list, and on IRC.
+
+Ack, thanks for letting me know for next time.
+
+- David
