@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2593709335
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 11:32:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22664709337
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 11:32:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229626AbjESJct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 05:32:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38422 "EHLO
+        id S231725AbjESJc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 05:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231571AbjESJb6 (ORCPT
+        with ESMTP id S231607AbjESJcO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 05:31:58 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381A11730
+        Fri, 19 May 2023 05:32:14 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED2D5198B
         for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 02:31:45 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id BDD7E222AD;
-        Fri, 19 May 2023 09:31:43 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 59A1F1FE3F;
+        Fri, 19 May 2023 09:31:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1684488703; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1684488704; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=s9zSH66PKLZSek1+f7HTHKq9RrcGGPrH4bCfODwVZUA=;
-        b=puVqaIdpkndJ4oA4wXhPx+DOkqA8RV+EXSSWdoay/mdCcqlJeEuRKSNA1caza+fTvRgCRB
-        vH4iXTYSYSQruGVuMLKvjxUYgcZLaFYP3UdrNI9KklvbYSBf52OfHSPi11AaERrweKTRDe
-        C+Ef1vh8yFVDUNyz+/gp61uuyuth5Qo=
+        bh=gnvkrKuKamk+X6G1mrfxAl6VZ46bMQ81zwHtcqfR8us=;
+        b=Tutxh/pWz2WTB5cynGQss3JslRrbwAOM1GjmhhmfJ8k6BaTm62RaOUGfvN0u27Dbr8Ydka
+        0afQCEPRISt2YuxQrU2+f9mQUmsXn8uXuzNUEDChITRCawvQJZMdyZfHGWXSaD5W986huT
+        4OYpaPqzRguRYe9rUCtlatvSEKhVoI8=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1684488703;
+        s=susede2_ed25519; t=1684488704;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=s9zSH66PKLZSek1+f7HTHKq9RrcGGPrH4bCfODwVZUA=;
-        b=IAp+Cs3hGxBko9eYTQtT+Szcb6c5FYciTjzlMnvMueuHu9yNp1VLNrwZ1mpNsfWIU51s+r
-        sRDCu9l0QZNF2ADg==
+        bh=gnvkrKuKamk+X6G1mrfxAl6VZ46bMQ81zwHtcqfR8us=;
+        b=CtYDVmU3mVx1J3tfVnXWAU5LYA/d7ImJupI9/eFLysm69GrubkHxyngz8zXSiRNRoaJ5Uv
+        MX0zqLloGs6vT6Cg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9928A13A12;
-        Fri, 19 May 2023 09:31:43 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3478713A12;
+        Fri, 19 May 2023 09:31:44 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id KGCAJP9BZ2RXJAAAMHmgww
-        (envelope-from <tiwai@suse.de>); Fri, 19 May 2023 09:31:43 +0000
+        id SI5LCwBCZ2RXJAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 19 May 2023 09:31:44 +0000
 From:   Takashi Iwai <tiwai@suse.de>
 To:     alsa-devel@alsa-project.org
 Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH 23/36] ALSA: seq: Introduce SNDRV_SEQ_IOCTL_USER_PVERSION ioctl
-Date:   Fri, 19 May 2023 11:31:01 +0200
-Message-Id: <20230519093114.28813-24-tiwai@suse.de>
+Subject: [PATCH 24/36] ALSA: seq: Add UMP support
+Date:   Fri, 19 May 2023 11:31:02 +0200
+Message-Id: <20230519093114.28813-25-tiwai@suse.de>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20230519093114.28813-1-tiwai@suse.de>
 References: <20230519093114.28813-1-tiwai@suse.de>
@@ -70,90 +70,615 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the future extension of ALSA sequencer ABI, introduce a new ioctl
-SNDRV_SEQ_IOCTL_USER_PVERSION.  This is similar like the ioctls used
-in PCM and other interfaces, for an application to specify its
-supporting ABI version.
+Starting from this commit, we add the basic support of UMP (Universal
+MIDI Packet) events on ALSA sequencer infrastructure.  The biggest
+change here is that, for transferring UMP packets that are up to 128
+bits, we extend the data payload of ALSA sequencer event record when
+the client is declared to support for the new UMP events.
 
-The use of this ioctl will be mandatory for the upcoming UMP support.
+A new event flag bit, SNDRV_SEQ_EVENT_UMP, is defined and it shall be
+set for the UMP packet events that have the larger payload of 128
+bits, defined as struct snd_seq_ump_event.
+
+For applications that want to access the UMP packets, first of all, a
+sequencer client has to declare the user-protocol to match with the
+latest one via the new SNDRV_SEQ_IOCTL_USER_PVERSION; otherwise it's
+treated as if a legacy client without UMP support.
+
+Then the client can switch to the new UMP mode (MIDI 1.0 or MIDI 2.0)
+with a new field, midi_version, in snd_seq_client_info.  When switched
+to UMP mode (midi_version = 1 or 2), the client can write the UMP
+events with SNDRV_SEQ_EVENT_UMP flag.  For reads, the alignment size
+is changed from snd_seq_event (28 bytes) to snd_seq_ump_event (32
+bytes).  When a UMP sequencer event is delivered to a legacy sequencer
+client, it's ignored or handled as an error.
+
+Conceptually, ALSA sequencer client and port correspond to the UMP
+Endpoint and Group, respectively; each client may have multiple ports
+and each port has the fixed number (16) of channels, total up to 256
+channels.
+
+As of this commit, ALSA sequencer core just sends and receives the UMP
+events as-is from/to clients.  The automatic conversions between the
+legacy events and the new UMP events will be implemented in a later
+patch.
+
+Along with this commit, bump the sequencer protocol version to 1.0.3.
 
 Signed-off-by: Takashi Iwai <tiwai@suse.de>
 ---
- include/uapi/sound/asequencer.h | 1 +
- sound/core/seq/seq_clientmgr.c  | 8 ++++++++
- sound/core/seq/seq_clientmgr.h  | 1 +
- sound/core/seq/seq_compat.c     | 1 +
- 4 files changed, 11 insertions(+)
+ include/sound/asequencer.h      |   4 +
+ include/sound/seq_kernel.h      |   8 ++
+ include/uapi/sound/asequencer.h |  53 +++++++----
+ sound/core/seq/Kconfig          |   7 ++
+ sound/core/seq/seq_clientmgr.c  | 156 +++++++++++++++++++++++---------
+ sound/core/seq/seq_clientmgr.h  |   1 +
+ sound/core/seq/seq_memory.c     |  10 +-
+ sound/core/seq/seq_memory.h     |  19 +++-
+ 8 files changed, 194 insertions(+), 64 deletions(-)
 
+diff --git a/include/sound/asequencer.h b/include/sound/asequencer.h
+index 18d4bc3ee0b7..ddbb6bf801bb 100644
+--- a/include/sound/asequencer.h
++++ b/include/sound/asequencer.h
+@@ -65,6 +65,10 @@
+ #define snd_seq_ev_is_abstime(ev)	(snd_seq_ev_timemode_type(ev) == SNDRV_SEQ_TIME_MODE_ABS)
+ #define snd_seq_ev_is_reltime(ev)	(snd_seq_ev_timemode_type(ev) == SNDRV_SEQ_TIME_MODE_REL)
+ 
++/* check whether the given event is a UMP event */
++#define snd_seq_ev_is_ump(ev) \
++	(IS_ENABLED(CONFIG_SND_SEQ_UMP) && ((ev)->flags & SNDRV_SEQ_EVENT_UMP))
++
+ /* queue sync port */
+ #define snd_seq_queue_sync_port(q)	((q) + 16)
+ 
+diff --git a/include/sound/seq_kernel.h b/include/sound/seq_kernel.h
+index 527e7f8ad661..c8621671fa70 100644
+--- a/include/sound/seq_kernel.h
++++ b/include/sound/seq_kernel.h
+@@ -75,6 +75,14 @@ int snd_seq_expand_var_event_at(const struct snd_seq_event *event, int count,
+ int snd_seq_dump_var_event(const struct snd_seq_event *event,
+ 			   snd_seq_dump_func_t func, void *private_data);
+ 
++/* size of the event packet; it can be greater than snd_seq_event size */
++static inline size_t snd_seq_event_packet_size(struct snd_seq_event *ev)
++{
++	if (snd_seq_ev_is_ump(ev))
++		return sizeof(struct snd_seq_ump_event);
++	return sizeof(struct snd_seq_event);
++}
++
+ /* interface for OSS emulation */
+ int snd_seq_set_queue_tempo(int client, struct snd_seq_queue_tempo *tempo);
+ 
 diff --git a/include/uapi/sound/asequencer.h b/include/uapi/sound/asequencer.h
-index 00d2703e8fca..4a3c5a718bae 100644
+index 4a3c5a718bae..b87950cbfb79 100644
 --- a/include/uapi/sound/asequencer.h
 +++ b/include/uapi/sound/asequencer.h
-@@ -561,6 +561,7 @@ struct snd_seq_query_subs {
- #define SNDRV_SEQ_IOCTL_CLIENT_ID	_IOR ('S', 0x01, int)
- #define SNDRV_SEQ_IOCTL_SYSTEM_INFO	_IOWR('S', 0x02, struct snd_seq_system_info)
- #define SNDRV_SEQ_IOCTL_RUNNING_MODE	_IOWR('S', 0x03, struct snd_seq_running_info)
-+#define SNDRV_SEQ_IOCTL_USER_PVERSION	_IOW('S', 0x04, int)
+@@ -10,7 +10,7 @@
+ #include <sound/asound.h>
  
- #define SNDRV_SEQ_IOCTL_GET_CLIENT_INFO	_IOWR('S', 0x10, struct snd_seq_client_info)
- #define SNDRV_SEQ_IOCTL_SET_CLIENT_INFO	_IOW ('S', 0x11, struct snd_seq_client_info)
+ /** version of the sequencer */
+-#define SNDRV_SEQ_VERSION SNDRV_PROTOCOL_VERSION(1, 0, 2)
++#define SNDRV_SEQ_VERSION SNDRV_PROTOCOL_VERSION(1, 0, 3)
+ 
+ /**
+  * definition of sequencer event types
+@@ -174,6 +174,7 @@ struct snd_seq_connect {
+ #define SNDRV_SEQ_PRIORITY_HIGH		(1<<4)	/* event should be processed before others */
+ #define SNDRV_SEQ_PRIORITY_MASK		(1<<4)
+ 
++#define SNDRV_SEQ_EVENT_UMP		(1<<5)	/* event holds a UMP packet */
+ 
+ 	/* note event */
+ struct snd_seq_ev_note {
+@@ -252,6 +253,19 @@ struct snd_seq_ev_quote {
+ 	struct snd_seq_event *event;		/* quoted event */
+ } __attribute__((packed));
+ 
++union snd_seq_event_data { /* event data... */
++	struct snd_seq_ev_note note;
++	struct snd_seq_ev_ctrl control;
++	struct snd_seq_ev_raw8 raw8;
++	struct snd_seq_ev_raw32 raw32;
++	struct snd_seq_ev_ext ext;
++	struct snd_seq_ev_queue_control queue;
++	union snd_seq_timestamp time;
++	struct snd_seq_addr addr;
++	struct snd_seq_connect connect;
++	struct snd_seq_result result;
++	struct snd_seq_ev_quote quote;
++};
+ 
+ 	/* sequencer event */
+ struct snd_seq_event {
+@@ -262,25 +276,27 @@ struct snd_seq_event {
+ 	unsigned char queue;		/* schedule queue */
+ 	union snd_seq_timestamp time;	/* schedule time */
+ 
+-
+ 	struct snd_seq_addr source;	/* source address */
+ 	struct snd_seq_addr dest;	/* destination address */
+ 
+-	union {				/* event data... */
+-		struct snd_seq_ev_note note;
+-		struct snd_seq_ev_ctrl control;
+-		struct snd_seq_ev_raw8 raw8;
+-		struct snd_seq_ev_raw32 raw32;
+-		struct snd_seq_ev_ext ext;
+-		struct snd_seq_ev_queue_control queue;
+-		union snd_seq_timestamp time;
+-		struct snd_seq_addr addr;
+-		struct snd_seq_connect connect;
+-		struct snd_seq_result result;
+-		struct snd_seq_ev_quote quote;
+-	} data;
++	union snd_seq_event_data data;
+ };
+ 
++	/* (compatible) event for UMP-capable clients */
++struct snd_seq_ump_event {
++	snd_seq_event_type_t type;	/* event type */
++	unsigned char flags;		/* event flags */
++	char tag;
++	unsigned char queue;		/* schedule queue */
++	union snd_seq_timestamp time;	/* schedule time */
++	struct snd_seq_addr source;	/* source address */
++	struct snd_seq_addr dest;	/* destination address */
++
++	union {
++		union snd_seq_event_data data;
++		unsigned int ump[4];
++	};
++};
+ 
+ /*
+  * bounce event - stored as variable size data
+@@ -344,9 +360,14 @@ struct snd_seq_client_info {
+ 	int event_lost;			/* number of lost events */
+ 	int card;			/* RO: card number[kernel] */
+ 	int pid;			/* RO: pid[user] */
+-	char reserved[56];		/* for future use */
++	unsigned int midi_version;	/* MIDI version */
++	char reserved[52];		/* for future use */
+ };
+ 
++/* MIDI version numbers in client info */
++#define SNDRV_SEQ_CLIENT_LEGACY_MIDI		0	/* Legacy client */
++#define SNDRV_SEQ_CLIENT_UMP_MIDI_1_0		1	/* UMP MIDI 1.0 */
++#define SNDRV_SEQ_CLIENT_UMP_MIDI_2_0		2	/* UMP MIDI 2.0 */
+ 
+ /* client pool size */
+ struct snd_seq_client_pool {
+diff --git a/sound/core/seq/Kconfig b/sound/core/seq/Kconfig
+index f84718a44980..c69d8beb09fa 100644
+--- a/sound/core/seq/Kconfig
++++ b/sound/core/seq/Kconfig
+@@ -60,4 +60,11 @@ config SND_SEQ_MIDI_EMUL
+ config SND_SEQ_VIRMIDI
+ 	tristate
+ 
++config SND_SEQ_UMP
++	bool "Support for UMP events"
++	help
++	  Say Y here to enable the support for handling UMP (Universal MIDI
++	  Packet) events via ALSA sequencer infrastructure, which is an
++	  essential feature for enabling MIDI 2.0 support.
++
+ endif # SND_SEQUENCER
 diff --git a/sound/core/seq/seq_clientmgr.c b/sound/core/seq/seq_clientmgr.c
-index 0f26f20596d7..89a8d14df83b 100644
+index 89a8d14df83b..801d5eee21eb 100644
 --- a/sound/core/seq/seq_clientmgr.c
 +++ b/sound/core/seq/seq_clientmgr.c
-@@ -1056,6 +1056,12 @@ static int snd_seq_ioctl_pversion(struct snd_seq_client *client, void *arg)
+@@ -387,6 +387,15 @@ static int snd_seq_release(struct inode *inode, struct file *file)
  	return 0;
  }
  
-+static int snd_seq_ioctl_user_pversion(struct snd_seq_client *client, void *arg)
++static bool event_is_compatible(const struct snd_seq_client *client,
++				const struct snd_seq_event *ev)
 +{
-+	client->user_pversion = *(unsigned int *)arg;
-+	return 0;
++	if (snd_seq_ev_is_ump(ev) && !client->midi_version)
++		return false;
++	if (snd_seq_ev_is_ump(ev) && snd_seq_ev_is_variable(ev))
++		return false;
++	return true;
 +}
-+
- static int snd_seq_ioctl_client_id(struct snd_seq_client *client, void *arg)
+ 
+ /* handle client read() */
+ /* possible error values:
+@@ -400,6 +409,7 @@ static ssize_t snd_seq_read(struct file *file, char __user *buf, size_t count,
  {
- 	int *client_id = arg;
-@@ -1985,6 +1991,7 @@ static const struct ioctl_handler {
- 	int (*func)(struct snd_seq_client *client, void *arg);
- } ioctl_handlers[] = {
- 	{ SNDRV_SEQ_IOCTL_PVERSION, snd_seq_ioctl_pversion },
-+	{ SNDRV_SEQ_IOCTL_USER_PVERSION, snd_seq_ioctl_user_pversion },
- 	{ SNDRV_SEQ_IOCTL_CLIENT_ID, snd_seq_ioctl_client_id },
- 	{ SNDRV_SEQ_IOCTL_SYSTEM_INFO, snd_seq_ioctl_system_info },
- 	{ SNDRV_SEQ_IOCTL_RUNNING_MODE, snd_seq_ioctl_running_mode },
-@@ -2125,6 +2132,7 @@ int snd_seq_create_kernel_client(struct snd_card *card, int client_index,
- 	client->accept_input = 1;
- 	client->accept_output = 1;
- 	client->data.kernel.card = card;
-+	client->user_pversion = SNDRV_SEQ_VERSION;
- 		
- 	va_start(args, name_fmt);
- 	vsnprintf(client->name, sizeof(client->name), name_fmt, args);
+ 	struct snd_seq_client *client = file->private_data;
+ 	struct snd_seq_fifo *fifo;
++	size_t aligned_size;
+ 	int err;
+ 	long result = 0;
+ 	struct snd_seq_event_cell *cell;
+@@ -431,43 +441,54 @@ static ssize_t snd_seq_read(struct file *file, char __user *buf, size_t count,
+ 	err = 0;
+ 	snd_seq_fifo_lock(fifo);
+ 
++	if (client->midi_version > 0)
++		aligned_size = sizeof(struct snd_seq_ump_event);
++	else
++		aligned_size = sizeof(struct snd_seq_event);
++
+ 	/* while data available in queue */
+-	while (count >= sizeof(struct snd_seq_event)) {
++	while (count >= aligned_size) {
+ 		int nonblock;
+ 
+ 		nonblock = (file->f_flags & O_NONBLOCK) || result > 0;
+ 		err = snd_seq_fifo_cell_out(fifo, &cell, nonblock);
+ 		if (err < 0)
+ 			break;
++		if (!event_is_compatible(client, &cell->event)) {
++			snd_seq_cell_free(cell);
++			cell = NULL;
++			continue;
++		}
+ 		if (snd_seq_ev_is_variable(&cell->event)) {
+-			struct snd_seq_event tmpev;
+-			tmpev = cell->event;
++			struct snd_seq_ump_event tmpev;
++
++			memcpy(&tmpev, &cell->event, aligned_size);
+ 			tmpev.data.ext.len &= ~SNDRV_SEQ_EXT_MASK;
+-			if (copy_to_user(buf, &tmpev, sizeof(struct snd_seq_event))) {
++			if (copy_to_user(buf, &tmpev, aligned_size)) {
+ 				err = -EFAULT;
+ 				break;
+ 			}
+-			count -= sizeof(struct snd_seq_event);
+-			buf += sizeof(struct snd_seq_event);
++			count -= aligned_size;
++			buf += aligned_size;
+ 			err = snd_seq_expand_var_event(&cell->event, count,
+ 						       (char __force *)buf, 0,
+-						       sizeof(struct snd_seq_event));
++						       aligned_size);
+ 			if (err < 0)
+ 				break;
+ 			result += err;
+ 			count -= err;
+ 			buf += err;
+ 		} else {
+-			if (copy_to_user(buf, &cell->event, sizeof(struct snd_seq_event))) {
++			if (copy_to_user(buf, &cell->event, aligned_size)) {
+ 				err = -EFAULT;
+ 				break;
+ 			}
+-			count -= sizeof(struct snd_seq_event);
+-			buf += sizeof(struct snd_seq_event);
++			count -= aligned_size;
++			buf += aligned_size;
+ 		}
+ 		snd_seq_cell_free(cell);
+ 		cell = NULL; /* to be sure */
+-		result += sizeof(struct snd_seq_event);
++		result += aligned_size;
+ 	}
+ 
+ 	if (err < 0) {
+@@ -665,15 +686,17 @@ static int deliver_to_subscribers(struct snd_seq_client *client,
+ {
+ 	struct snd_seq_subscribers *subs;
+ 	int err, result = 0, num_ev = 0;
+-	struct snd_seq_event event_saved;
+ 	struct snd_seq_client_port *src_port;
++	union __snd_seq_event event_saved;
++	size_t saved_size;
+ 	struct snd_seq_port_subs_info *grp;
+ 
+ 	src_port = snd_seq_port_use_ptr(client, event->source.port);
+ 	if (src_port == NULL)
+ 		return -EINVAL; /* invalid source port */
+ 	/* save original event record */
+-	event_saved = *event;
++	saved_size = snd_seq_event_packet_size(event);
++	memcpy(&event_saved, event, saved_size);
+ 	grp = &src_port->c_src;
+ 	
+ 	/* lock list */
+@@ -700,14 +723,13 @@ static int deliver_to_subscribers(struct snd_seq_client *client,
+ 		}
+ 		num_ev++;
+ 		/* restore original event record */
+-		*event = event_saved;
++		memcpy(event, &event_saved, saved_size);
+ 	}
+ 	if (atomic)
+ 		read_unlock(&grp->list_lock);
+ 	else
+ 		up_read(&grp->list_mutex);
+-	*event = event_saved; /* restore */
+-	snd_seq_port_unlock(src_port);
++	memcpy(event, &event_saved, saved_size);
+ 	return (result < 0) ? result : num_ev;
+ }
+ 
+@@ -769,7 +791,8 @@ int snd_seq_dispatch_event(struct snd_seq_event_cell *cell, int atomic, int hop)
+ 		return -EINVAL;
+ 	}
+ 
+-	if (cell->event.type == SNDRV_SEQ_EVENT_NOTE) {
++	if (!snd_seq_ev_is_ump(&cell->event) &&
++	    cell->event.type == SNDRV_SEQ_EVENT_NOTE) {
+ 		/* NOTE event:
+ 		 * the event cell is re-used as a NOTE-OFF event and
+ 		 * enqueued again.
+@@ -793,7 +816,7 @@ int snd_seq_dispatch_event(struct snd_seq_event_cell *cell, int atomic, int hop)
+ 		/* add the duration time */
+ 		switch (ev->flags & SNDRV_SEQ_TIME_STAMP_MASK) {
+ 		case SNDRV_SEQ_TIME_STAMP_TICK:
+-			ev->time.tick += ev->data.note.duration;
++			cell->event.time.tick += ev->data.note.duration;
+ 			break;
+ 		case SNDRV_SEQ_TIME_STAMP_REAL:
+ 			/* unit for duration is ms */
+@@ -850,7 +873,8 @@ static int snd_seq_client_enqueue_event(struct snd_seq_client *client,
+ 
+ 	/* direct event processing without enqueued */
+ 	if (snd_seq_ev_is_direct(event)) {
+-		if (event->type == SNDRV_SEQ_EVENT_NOTE)
++		if (!snd_seq_ev_is_ump(event) &&
++		    event->type == SNDRV_SEQ_EVENT_NOTE)
+ 			return -EINVAL; /* this event must be enqueued! */
+ 		return snd_seq_deliver_event(client, event, atomic, hop);
+ 	}
+@@ -920,7 +944,8 @@ static ssize_t snd_seq_write(struct file *file, const char __user *buf,
+ 	struct snd_seq_client *client = file->private_data;
+ 	int written = 0, len;
+ 	int err, handled;
+-	struct snd_seq_event event;
++	union __snd_seq_event __event;
++	struct snd_seq_event *ev = &__event.legacy;
+ 
+ 	if (!(snd_seq_file_flags(file) & SNDRV_SEQ_LFLG_OUTPUT))
+ 		return -ENXIO;
+@@ -946,49 +971,66 @@ static ssize_t snd_seq_write(struct file *file, const char __user *buf,
+ 	err = -EINVAL;
+ 	while (count >= sizeof(struct snd_seq_event)) {
+ 		/* Read in the event header from the user */
+-		len = sizeof(event);
+-		if (copy_from_user(&event, buf, len)) {
++		len = sizeof(struct snd_seq_event);
++		if (copy_from_user(ev, buf, len)) {
+ 			err = -EFAULT;
+ 			break;
+ 		}
+-		event.source.client = client->number;	/* fill in client number */
++		/* read in the rest bytes for UMP events */
++		if (snd_seq_ev_is_ump(ev)) {
++			if (count < sizeof(struct snd_seq_ump_event))
++				break;
++			if (copy_from_user((char *)ev + len, buf + len,
++					   sizeof(struct snd_seq_ump_event) - len)) {
++				err = -EFAULT;
++				break;
++			}
++			len = sizeof(struct snd_seq_ump_event);
++		}
++
++		ev->source.client = client->number;	/* fill in client number */
+ 		/* Check for extension data length */
+-		if (check_event_type_and_length(&event)) {
++		if (check_event_type_and_length(ev)) {
++			err = -EINVAL;
++			break;
++		}
++
++		if (!event_is_compatible(client, ev)) {
+ 			err = -EINVAL;
+ 			break;
+ 		}
+ 
+ 		/* check for special events */
+-		if (event.type == SNDRV_SEQ_EVENT_NONE)
+-			goto __skip_event;
+-		else if (snd_seq_ev_is_reserved(&event)) {
+-			err = -EINVAL;
+-			break;
++		if (!snd_seq_ev_is_ump(ev)) {
++			if (ev->type == SNDRV_SEQ_EVENT_NONE)
++				goto __skip_event;
++			else if (snd_seq_ev_is_reserved(ev)) {
++				err = -EINVAL;
++				break;
++			}
+ 		}
+ 
+-		if (snd_seq_ev_is_variable(&event)) {
+-			int extlen = event.data.ext.len & ~SNDRV_SEQ_EXT_MASK;
++		if (snd_seq_ev_is_variable(ev)) {
++			int extlen = ev->data.ext.len & ~SNDRV_SEQ_EXT_MASK;
+ 			if ((size_t)(extlen + len) > count) {
+ 				/* back out, will get an error this time or next */
+ 				err = -EINVAL;
+ 				break;
+ 			}
+ 			/* set user space pointer */
+-			event.data.ext.len = extlen | SNDRV_SEQ_EXT_USRPTR;
+-			event.data.ext.ptr = (char __force *)buf
+-						+ sizeof(struct snd_seq_event);
++			ev->data.ext.len = extlen | SNDRV_SEQ_EXT_USRPTR;
++			ev->data.ext.ptr = (char __force *)buf + len;
+ 			len += extlen; /* increment data length */
+ 		} else {
+ #ifdef CONFIG_COMPAT
+-			if (client->convert32 && snd_seq_ev_is_varusr(&event)) {
+-				void *ptr = (void __force *)compat_ptr(event.data.raw32.d[1]);
+-				event.data.ext.ptr = ptr;
+-			}
++			if (client->convert32 && snd_seq_ev_is_varusr(ev))
++				ev->data.ext.ptr =
++					(void __force *)compat_ptr(ev->data.raw32.d[1]);
+ #endif
+ 		}
+ 
+ 		/* ok, enqueue it */
+-		err = snd_seq_client_enqueue_event(client, &event, file,
++		err = snd_seq_client_enqueue_event(client, ev, file,
+ 						   !(file->f_flags & O_NONBLOCK),
+ 						   0, 0, &client->ioctl_mutex);
+ 		if (err < 0)
+@@ -1146,6 +1188,7 @@ static void get_client_info(struct snd_seq_client *cptr,
+ 	else
+ 		info->card = -1;
+ 
++	info->midi_version = cptr->midi_version;
+ 	memset(info->reserved, 0, sizeof(info->reserved));
+ }
+ 
+@@ -1180,12 +1223,19 @@ static int snd_seq_ioctl_set_client_info(struct snd_seq_client *client,
+ 	if (client->type != client_info->type)
+ 		return -EINVAL;
+ 
++	/* check validity of midi_version field */
++	if (client->user_pversion >= SNDRV_PROTOCOL_VERSION(1, 0, 3) &&
++	    client_info->midi_version > SNDRV_SEQ_CLIENT_UMP_MIDI_2_0)
++		return -EINVAL;
++
+ 	/* fill the info fields */
+ 	if (client_info->name[0])
+ 		strscpy(client->name, client_info->name, sizeof(client->name));
+ 
+ 	client->filter = client_info->filter;
+ 	client->event_lost = client_info->event_lost;
++	if (client->user_pversion >= SNDRV_PROTOCOL_VERSION(1, 0, 3))
++		client->midi_version = client_info->midi_version;
+ 	memcpy(client->event_filter, client_info->event_filter, 32);
+ 
+ 	return 0;
+@@ -2181,10 +2231,12 @@ int snd_seq_kernel_client_enqueue(int client, struct snd_seq_event *ev,
+ 	if (snd_BUG_ON(!ev))
+ 		return -EINVAL;
+ 
+-	if (ev->type == SNDRV_SEQ_EVENT_NONE)
+-		return 0; /* ignore this */
+-	if (ev->type == SNDRV_SEQ_EVENT_KERNEL_ERROR)
+-		return -EINVAL; /* quoted events can't be enqueued */
++	if (!snd_seq_ev_is_ump(ev)) {
++		if (ev->type == SNDRV_SEQ_EVENT_NONE)
++			return 0; /* ignore this */
++		if (ev->type == SNDRV_SEQ_EVENT_KERNEL_ERROR)
++			return -EINVAL; /* quoted events can't be enqueued */
++	}
+ 
+ 	/* fill in client number */
+ 	ev->source.client = client;
+@@ -2376,6 +2428,19 @@ static void snd_seq_info_dump_ports(struct snd_info_buffer *buffer,
+ 	mutex_unlock(&client->ports_mutex);
+ }
+ 
++static const char *midi_version_string(unsigned int version)
++{
++	switch (version) {
++	case SNDRV_SEQ_CLIENT_LEGACY_MIDI:
++		return "Legacy";
++	case SNDRV_SEQ_CLIENT_UMP_MIDI_1_0:
++		return "UMP MIDI1";
++	case SNDRV_SEQ_CLIENT_UMP_MIDI_2_0:
++		return "UMP MIDI2";
++	default:
++		return "Unknown";
++	}
++}
+ 
+ /* exported to seq_info.c */
+ void snd_seq_info_clients_read(struct snd_info_entry *entry, 
+@@ -2400,9 +2465,10 @@ void snd_seq_info_clients_read(struct snd_info_entry *entry,
+ 			continue;
+ 		}
+ 
+-		snd_iprintf(buffer, "Client %3d : \"%s\" [%s]\n",
++		snd_iprintf(buffer, "Client %3d : \"%s\" [%s %s]\n",
+ 			    c, client->name,
+-			    client->type == USER_CLIENT ? "User" : "Kernel");
++			    client->type == USER_CLIENT ? "User" : "Kernel",
++			    midi_version_string(client->midi_version));
+ 		snd_seq_info_dump_ports(buffer, client);
+ 		if (snd_seq_write_pool_allocated(client)) {
+ 			snd_iprintf(buffer, "  Output pool :\n");
 diff --git a/sound/core/seq/seq_clientmgr.h b/sound/core/seq/seq_clientmgr.h
-index f05704e45ab4..abe0ceadf3da 100644
+index abe0ceadf3da..5657f8091835 100644
 --- a/sound/core/seq/seq_clientmgr.h
 +++ b/sound/core/seq/seq_clientmgr.h
 @@ -35,6 +35,7 @@ struct snd_seq_client {
  	snd_seq_client_type_t type;
  	unsigned int accept_input: 1,
  		accept_output: 1;
-+	unsigned int user_pversion;
++	unsigned int midi_version;
+ 	unsigned int user_pversion;
  	char name[64];		/* client name */
  	int number;		/* client number */
- 	unsigned int filter;	/* filter flags */
-diff --git a/sound/core/seq/seq_compat.c b/sound/core/seq/seq_compat.c
-index 54723566ce24..c0ce6236dc7f 100644
---- a/sound/core/seq/seq_compat.c
-+++ b/sound/core/seq/seq_compat.c
-@@ -81,6 +81,7 @@ static long snd_seq_ioctl_compat(struct file *file, unsigned int cmd, unsigned l
+diff --git a/sound/core/seq/seq_memory.c b/sound/core/seq/seq_memory.c
+index a8d2db439f86..174585bf59d2 100644
+--- a/sound/core/seq/seq_memory.c
++++ b/sound/core/seq/seq_memory.c
+@@ -340,6 +340,7 @@ int snd_seq_event_dup(struct snd_seq_pool *pool, struct snd_seq_event *event,
+ 	int ncells, err;
+ 	unsigned int extlen;
+ 	struct snd_seq_event_cell *cell;
++	int size;
  
- 	switch (cmd) {
- 	case SNDRV_SEQ_IOCTL_PVERSION:
-+	case SNDRV_SEQ_IOCTL_USER_PVERSION:
- 	case SNDRV_SEQ_IOCTL_CLIENT_ID:
- 	case SNDRV_SEQ_IOCTL_SYSTEM_INFO:
- 	case SNDRV_SEQ_IOCTL_GET_CLIENT_INFO:
+ 	*cellp = NULL;
+ 
+@@ -357,7 +358,12 @@ int snd_seq_event_dup(struct snd_seq_pool *pool, struct snd_seq_event *event,
+ 		return err;
+ 
+ 	/* copy the event */
+-	cell->event = *event;
++	size = snd_seq_event_packet_size(event);
++	memcpy(&cell->ump, event, size);
++#if IS_ENABLED(CONFIG_SND_SEQ_UMP)
++	if (size < sizeof(cell->event))
++		cell->ump.raw.extra = 0;
++#endif
+ 
+ 	/* decompose */
+ 	if (snd_seq_ev_is_variable(event)) {
+@@ -375,7 +381,7 @@ int snd_seq_event_dup(struct snd_seq_pool *pool, struct snd_seq_event *event,
+ 		tail = NULL;
+ 
+ 		while (ncells-- > 0) {
+-			int size = sizeof(struct snd_seq_event);
++			size = sizeof(struct snd_seq_event);
+ 			if (len < size)
+ 				size = len;
+ 			err = snd_seq_cell_alloc(pool, &tmp, nonblock, file,
+diff --git a/sound/core/seq/seq_memory.h b/sound/core/seq/seq_memory.h
+index 7d7ff80f915e..7f7a2c0b187d 100644
+--- a/sound/core/seq/seq_memory.h
++++ b/sound/core/seq/seq_memory.h
+@@ -11,9 +11,26 @@
+ 
+ struct snd_info_buffer;
+ 
++/* aliasing for legacy and UMP event packet handling */
++union __snd_seq_event {
++	struct snd_seq_event legacy;
++#if IS_ENABLED(CONFIG_SND_SEQ_UMP)
++	struct snd_seq_ump_event ump;
++#endif
++	struct {
++		struct snd_seq_event event;
++#if IS_ENABLED(CONFIG_SND_SEQ_UMP)
++		u32 extra;
++#endif
++	} __packed raw;
++};
++
+ /* container for sequencer event (internal use) */
+ struct snd_seq_event_cell {
+-	struct snd_seq_event event;
++	union {
++		struct snd_seq_event event;
++		union __snd_seq_event ump;
++	};
+ 	struct snd_seq_pool *pool;				/* used pool */
+ 	struct snd_seq_event_cell *next;	/* next cell */
+ };
 -- 
 2.35.3
 
