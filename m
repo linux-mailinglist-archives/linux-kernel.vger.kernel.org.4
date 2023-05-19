@@ -2,80 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2061708E9D
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 06:09:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 066EA708EB4
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 06:13:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229949AbjESEJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 00:09:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43304 "EHLO
+        id S229964AbjESENX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 00:13:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbjESEJf (ORCPT
+        with ESMTP id S229694AbjESENT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 00:09:35 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05645170F;
-        Thu, 18 May 2023 21:09:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=xzy+7KhOHTYSA4CtafhLIF5YC3n5rnuXXYt0z/SE3Pg=; b=bAI/XGsMPM6Nx5XdWERnAHXqt7
-        bL9E5Ls4MDgM7CQztyiTznJoDJZElD7xm6gzy7rLlDnyq43U+6H9FlB3zGUwDDo2Y2lnucwCpX5jW
-        XfQHKTmOMMGEDRUKboc54I1Ul6MvU2DpSJ0XeqQxx51XYFrfHBjAGeyFRBreVbiZs5BGWpwebbHJQ
-        nLNwKxtYde3hAHNLGKRWCf+KAuw1YcxTtxIYCRNNfOrWIzMkKT1joQOopLAT+DNTvp1qtXlFxIHlK
-        cVw8ZvrSyd59Hjd9t9RUU2XhQ8hiVHNj3vY0J3XGJcDiTfkdzKls82lJC1ch6M4zXOf0US/Fi9v4A
-        eXWQmbjA==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pzrQo-00F1Rp-2E;
-        Fri, 19 May 2023 04:09:30 +0000
-Date:   Thu, 18 May 2023 21:09:30 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Sarthak Kukreti <sarthakkukreti@chromium.org>
-Cc:     dm-devel@redhat.com, linux-block@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Brian Foster <bfoster@redhat.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Bart Van Assche <bvanassche@google.com>,
-        "Darrick J. Wong" <djwong@kernel.org>, stable@vger.kernel.org
-Subject: Re: [PATCH v7 1/5] block: Don't invalidate pagecache for invalid
- falloc modes
-Message-ID: <ZGb2ej6H12hFogPM@infradead.org>
-References: <20230518223326.18744-1-sarthakkukreti@chromium.org>
- <20230518223326.18744-2-sarthakkukreti@chromium.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230518223326.18744-2-sarthakkukreti@chromium.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 19 May 2023 00:13:19 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6903B10EA;
+        Thu, 18 May 2023 21:13:18 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-9659f452148so529294666b.1;
+        Thu, 18 May 2023 21:13:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684469597; x=1687061597;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LrcvNl9atwbaW1k9X95ljqmJldbIG/iywgMh4yMoDfM=;
+        b=GGodfivCHSnFwM5Axova+wchu7kt4iW3YiEJKx8JonToADWamINBlFj4STqUZU1Xy4
+         IGl/uoXkPfPzzGxTcoO1omSUWWoJtSVxe/J3v/Hg8q7PsObEo4riWksAdYiYNG8O6Cax
+         fEReM7ol/DUAAUxioHOxe3ZOt8eRZHXTrtoioN3yl6cRMKupVD/GtNp1OrotfZDlAQfK
+         /SnbwlSbpgpLiOEvtYY0SW0T1xUi15y559v3XaL6A08c411E3J2VdiWjQT25YYvRyLTn
+         T7N8qmcFtq3upi/kEcWQ+2tF37//n9En0KRi2OZExg5MrnIQ4tMwQfrL8W7dbRAj+HuU
+         M+hA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684469597; x=1687061597;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LrcvNl9atwbaW1k9X95ljqmJldbIG/iywgMh4yMoDfM=;
+        b=R1sMc4pmZQ7szIuueyYLvLpsmfHfPOXmDL0i+FceyKIqLZL6me8CFls/M7iyQggjfS
+         p03GAR8kL42nYP2VwmYxqBVcrINg1BzsA9MW67KIh8xw51Rl8MHg9L5uoTE9fKHp1f7P
+         fuMt23W/4iT9rrZ18qyQaYkLtYCdYGoo9SALiMWOq687D68UiYdYjVNGSgLWQ7fz2IhI
+         5BaLo7xraExHVydMShKW1wKWToamdgFq3QGgCUp/awKjQ20lH65F13dKVDPzDEPynVAr
+         mp8jhf75SdGWwRcHL2EoLrBqQ3x67gUi7EHTuKTHaBagUgP5BJvZcAOxeR/dYv4z9bXb
+         AXBA==
+X-Gm-Message-State: AC+VfDwq9oIKPdYqsBRf/xhBJQeoa379dcPht3WZgQFOlTj5Lz4nye1P
+        tfIDY5WfUTNRxJ2xdH7bHqnFVDlBUyw=
+X-Google-Smtp-Source: ACHHUZ60TyXBhznQXFeygSMzxImdpYgfWzTepX/yEGme4rJ4Bq27UeQq+Ukv+TPSOx9yHx91zjsHhQ==
+X-Received: by 2002:a17:907:9614:b0:966:2fdf:f66c with SMTP id gb20-20020a170907961400b009662fdff66cmr605789ejc.3.1684469596509;
+        Thu, 18 May 2023 21:13:16 -0700 (PDT)
+Received: from felia.fritz.box ([2a02:810d:7e40:14b0:cd27:98d3:5e2d:5b95])
+        by smtp.gmail.com with ESMTPSA id s9-20020a1709066c8900b0094f124a37c4sm1799505ejr.18.2023.05.18.21.13.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 May 2023 21:13:15 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MAINTAINERS: remove broken entries in QUALCOMM TYPEC PORT MANAGER DRIVER
+Date:   Fri, 19 May 2023 06:13:07 +0200
+Message-Id: <20230519041307.32322-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 03:33:22PM -0700, Sarthak Kukreti wrote:
-> Only call truncate_bdev_range() if the fallocate mode is
-> supported. This fixes a bug where data in the pagecache
-> could be invalidated if the fallocate() was called on the
-> block device with an invalid mode.
-> 
-> Fixes: 25f4c41415e5 ("block: implement (some of) fallocate for block devices")
-> Cc: stable@vger.kernel.org
-> Reported-by: Darrick J. Wong <djwong@kernel.org>
-> Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
+Commit a4422ff22142 ("usb: typec: qcom: Add Qualcomm PMIC Type-C driver")
+adds the section QUALCOMM TYPEC PORT MANAGER DRIVER in MAINTAINERS with
+two file entries for header files in include/dt-bindings/usb/typec/.
 
-Looks good:
+However, these files are not added to the repository with this commit or
+any commit in the related patch series. Probably, these file entries are
+just needless leftover after the work went through some refactoring.
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
+Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about a
+broken reference.
+
+Remove the two file entries for non-existent header files.
+
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+Bryan, please ack.
+
+Greg, please pick this minor cleanup patch on your usb-next tree.
+
+ MAINTAINERS | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 3182992769aa..a987ed462d64 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17559,8 +17559,6 @@ L:	linux-usb@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/usb/qcom,pmic-*.yaml
+ F:	drivers/usb/typec/tcpm/qcom/
+-F:	include/dt-bindings/usb/typec/qcom,pmic-pdphy.h
+-F:	include/dt-bindings/usb/typec/qcom,pmic-typec.h
+ 
+ QUALCOMM VENUS VIDEO ACCELERATOR DRIVER
+ M:	Stanimir Varbanov <stanimir.k.varbanov@gmail.com>
+-- 
+2.17.1
+
