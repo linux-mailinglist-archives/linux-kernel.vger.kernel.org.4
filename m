@@ -2,106 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 151D37092C1
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 11:11:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18BA97092C4
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 11:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231355AbjESJLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 05:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54202 "EHLO
+        id S231398AbjESJNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 05:13:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231516AbjESJK4 (ORCPT
+        with ESMTP id S231371AbjESJNE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 05:10:56 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D8CA1BD6
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 02:10:34 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f42c86543bso19467435e9.3
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 02:10:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684487433; x=1687079433;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=m4PUn3laZkjlv9r91VlagRE7SeQ4y7zfvRtcaATbBto=;
-        b=tPPNaiTO8lJ5jKQV6OBH0hubdfYT6e0g5een+CNh5ZVnoqtMivb80X9jt62BmL7Ntc
-         JmDTguBRtWeMmeWge9aFO2HntpQSdodBZm/+Bk5lRIzSoCNh6vAi8eupqFAh9LXyq/av
-         mqb/xGE2oU0pXdzRbXi6jBqk9jQj2FCBBKMSVhMYeAHY7KTU9fNZZweDD4jivvMWtQrj
-         OENV18nIItD13qed13rPXMEVGHvBz7PVZ5m4CA4oa5LRABnMxGoPL0J7t8A0zq94JhVp
-         hXc9a81Ra8u+zRHvw9la+GPmwDtH70uD0C2A8Dgcu+vmuDYVDVWK0L5Gt0RgSYf0hcyL
-         pd/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684487433; x=1687079433;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=m4PUn3laZkjlv9r91VlagRE7SeQ4y7zfvRtcaATbBto=;
-        b=UmbDzGoAEOfHq+LhM2EhmL3JSsq1NX4Z/uVRnvJo2WIpOx1mCdwtHAiHdT3yTPZ9DW
-         nUvN5666R4J7W2M2FScwm3iMk4rWvfpkhyImsd6lxW68EIozyBSU/xh7qSi6KPE16NkJ
-         EuEaSeZJCqTexlQCAK8CWI6wwAPhT65VzCqtulJwB3tEZPGpRVjnqMY7r8stbHnkx/r5
-         nvotot9lMM1MH11EBm64eOxrq09xxiYcmVoje2I9JZAWHvszdlB8krIRwddfdBJ589aK
-         LaPwnyjdiqig70ZtDMIWgkY554HHPDEA+aPrVACI4Joe1ycFGT9OFM0dD5vT9S/vn1x5
-         jBXg==
-X-Gm-Message-State: AC+VfDwxyh197il2r9OSdn3e4ehewx+zU9deA0Z0twdbMghL4dQQYVuJ
-        8q+RJ7rRDGRXDPdC7JWGaGVGCXsHyhSK+P5W1B6NmA==
-X-Google-Smtp-Source: ACHHUZ6Ls/fxuZgcyZ694cYOnC1gqFmjt2rYX4qoLImFgpcP92r4Yt0cObiHBFfjDzWMPfy6SRBwmNGjFRTCq9koXeo=
-X-Received: by 2002:a5d:6388:0:b0:309:492a:bb07 with SMTP id
- p8-20020a5d6388000000b00309492abb07mr1162243wru.26.1684487432711; Fri, 19 May
- 2023 02:10:32 -0700 (PDT)
+        Fri, 19 May 2023 05:13:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF95199
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 02:11:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684487477;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=PCesx1f1Kkzq5Nsvw/sAXia132RTyPCKbP3kHUNcvUk=;
+        b=HoSVYKhSXM/PGthUKvJ5XHLQ9jLPnBiuVrGPx6B13sfV7mxcZE60FwbMnzdlXrRy7SCGTy
+        +bUQN5E8aBUyPVnbHybTFterwDUHe2BwFg5ckGOcbbQKK5ufXyk41WSv6VFpS9QvISZD0s
+        FUOKEhJRRWi7xV0/nv8nBfdMCHMU9vU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-225-A3b6K_yYMKSsyPSyag3TOQ-1; Fri, 19 May 2023 05:11:13 -0400
+X-MC-Unique: A3b6K_yYMKSsyPSyag3TOQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A735A185A791;
+        Fri, 19 May 2023 09:11:12 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.221])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 04420492B0B;
+        Fri, 19 May 2023 09:11:09 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <ZGcuHrOvlM3yJ0dy@infradead.org>
+References: <ZGcuHrOvlM3yJ0dy@infradead.org> <20230519074047.1739879-1-dhowells@redhat.com> <20230519074047.1739879-2-dhowells@redhat.com>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     dhowells@redhat.com, Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Steve French <stfrench@microsoft.com>,
+        Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: Re: [PATCH v20 01/32] splice: Fix filemap of a blockdev
 MIME-Version: 1.0
-References: <20230518-bamclk-dt-v1-1-82f738c897d9@gerhold.net>
- <CAH=2Ntya7bqHVri_F8BOUJ6kJxtG2_usV08do+=OgkaoVJvxBQ@mail.gmail.com> <ZGYKQkgRrBqO2rsx@gerhold.net>
-In-Reply-To: <ZGYKQkgRrBqO2rsx@gerhold.net>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Fri, 19 May 2023 14:40:21 +0530
-Message-ID: <CAH=2Ntw0BZH=RGp14mYLhX7D6jV5O5eDKRQbby=uCy85xMDU_g@mail.gmail.com>
-Subject: Re: [PATCH] dmaengine: qcom: bam_dma: make channels/EEs optional in
- DT with clock
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1743090.1684487469.1@warthog.procyon.org.uk>
+Date:   Fri, 19 May 2023 10:11:09 +0100
+Message-ID: <1743091.1684487469@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 18 May 2023 at 16:51, Stephan Gerhold <stephan@gerhold.net> wrote:
->
-> On Thu, May 18, 2023 at 04:43:57PM +0530, Bhupesh Sharma wrote:
-> > On Thu, 18 May 2023 at 14:56, Stephan Gerhold <stephan@gerhold.net> wrote:
-> > >
-> > > If we have a BAM clock in the DT we are able to turn on the BAM
-> > > controller while probing, so there is no need to read "num-channels"
-> > > and "qcom,num-ees" from the DT. It can be read more accurately directly
-> > > from the identification registers of the BAM.
-> > >
-> > > This simplifies setting up typical controlled-remotely BAM DMAs in the
-> > > DT that can be turned on via a clock (e.g. the BLSP DMA).
-> >
-> > Can you please list which qcom board(s) you tested this patch on?
-> >
->
-> It works fine at least on MSM8916/DB410c (for blsp_dma) and MDM9607
-> (blsp_dma and qpic_dma (for NAND)). More testing would be much
-> appreciated of course!
+Christoph Hellwig <hch@infradead.org> wrote:
 
-I tested this yesterday on RB1/RB2, RB5 and saw no improvement, so was wondering
-why exactly is this needed and which platforms are impacted.
+> 
+> But this really needs to be sent standalone so that it can get picked
+> up for 6.4 and -stable.
 
-> Personally I don't see much of a risk: If enabling the clock doesn't
-> actually enable the BAM controller, then the clock probably does not
-> belong to the BAM in the first place... :)
+Note that only cifs is actually using that code at the moment.
 
-Right, but I think the commit message needs a bit more clarity to
-reflect that it is now proposed to check for the bam_clk presence
-earlier in the _probe flow (as compared to earlier).
+David
 
-Thanks.
