@@ -2,59 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F3DC709F1C
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 20:33:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC133709F20
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 20:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbjESSc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 14:32:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37658 "EHLO
+        id S229980AbjESSel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 14:34:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231449AbjESSct (ORCPT
+        with ESMTP id S229673AbjESSei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 14:32:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6524D1A7;
-        Fri, 19 May 2023 11:32:48 -0700 (PDT)
+        Fri, 19 May 2023 14:34:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 073DF1A6;
+        Fri, 19 May 2023 11:34:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EEED56185C;
-        Fri, 19 May 2023 18:32:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 61DD9C4339B;
-        Fri, 19 May 2023 18:32:47 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 85FE165A5E;
+        Fri, 19 May 2023 18:34:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24FF6C433D2;
+        Fri, 19 May 2023 18:34:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684521167;
-        bh=CoISHt31iYAlqISghLuNoM0/CkoTCdegKa7NTEObgvE=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=LlLKbGzZEvPE2taIBm6D9xvMcHNaLRBKPWJN4t2MWcjAg/3H4DwmHrBSrcST80aqo
-         +8u9VH3Id4sMyJWV5PlLYFD71RLtcVv1qlB7eE8urejmXCoduaiw8pe3yBifJyRyOA
-         ayrPuwPAE4js7vPwMJl8kYUApYncc5D47MTthAA0z46EDBz+R2gJwBJt5EvizPbub4
-         dT8hs2qRpegWuXPukq/64H0t77FsEMVwnBiYtju/iMS8OGcHSjqLenO0oJtKhPYK6n
-         adaeGKC6IxBvkIi6THgITP2CVRn/MwLOrg0EO7q7ge2XJROTtERBg3t8xUlFOueJKS
-         dDsXwbsG3IuoQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4CC6EC3959E;
-        Fri, 19 May 2023 18:32:47 +0000 (UTC)
-Subject: Re: [GIT PULL] s390 updates for 6.4-rc3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <ZGd9KHlUSFgg+NHq@tuxmaker.boeblingen.de.ibm.com>
-References: <ZGd9KHlUSFgg+NHq@tuxmaker.boeblingen.de.ibm.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZGd9KHlUSFgg+NHq@tuxmaker.boeblingen.de.ibm.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-6.4-2
-X-PR-Tracked-Commit-Id: 0f1cbf941d5949110adf70725a9614e622de8d99
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: ac92c27935c759ff8b3cc9f761b086b15145c901
-Message-Id: <168452116731.23824.34372407816903188.pr-tracker-bot@kernel.org>
-Date:   Fri, 19 May 2023 18:32:47 +0000
-To:     Alexander Gordeev <agordeev@linux.ibm.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        s=k20201202; t=1684521276;
+        bh=eeko69CoO8ZrCLhtBQPdoKb6TrEQeWu0O7r9Z4y9WyI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JlJEz5/fnfTeVT2F9T0JGJYwTG5ZOKk0uPVzkWYsehaV7usdCNAIu2Z2/r8v8s+rH
+         u8HYQSvGExfEQDNk26ID9aVGrlaAEU+ax0gjbdULERwkzpYY/wHz1XhhM73074LkRb
+         PGQGQGL+QXufYkxcwom4NzC4/OQwDL/kJOnVUpxF0fEtwneheu4roB5C++12c44qH2
+         Z2VVcTnO2ni7jAtcXuWBWBnZmzbsONKr9ikIFEBbBBE9LWrK2v9Nqpsh1OnclfukSM
+         pZwD3NCNzvarD3kereEo8SlKMybREFlwaFMkz8oLho7oYT3ot5sNTva9jwZfuXUhKQ
+         u4b1Onax2BMdQ==
+Date:   Fri, 19 May 2023 19:34:31 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Artur Weber <aweber.kernel@gmail.com>
+Cc:     thierry.reding@gmail.com, Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Nikita Travkin <nikita@trvn.ru>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Subject: Re: [PATCH v5 1/3] dt-bindings: display: panel: Add Samsung S6D7AA0
+ LCD panel controller
+Message-ID: <20230519-catatonic-swimmer-80b086ae0586@spud>
+References: <20230519170354.29610-1-aweber.kernel@gmail.com>
+ <20230519170354.29610-2-aweber.kernel@gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ZbsHYCLMrj/q3z3Z"
+Content-Disposition: inline
+In-Reply-To: <20230519170354.29610-2-aweber.kernel@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,15 +66,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Fri, 19 May 2023 15:44:08 +0200:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-6.4-2
+--ZbsHYCLMrj/q3z3Z
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/ac92c27935c759ff8b3cc9f761b086b15145c901
+On Fri, May 19, 2023 at 07:03:52PM +0200, Artur Weber wrote:
+> Add bindings for the S6D7AA0 LCD panel controller, including the
+> S6D7AA0-LSL080AL02 panel used in the Samsung Galaxy Tab 3 8.0 family
+> of tablets, and the S6D7AA0-LSL080AL03 and S6D7AA0-LTL101AT01 panels
+> used in the Samsung Galaxy Tab A 8.0 and 9.7 2015.
+>=20
+> Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
+> ---
+> Changed in v2:
+>  - Updated commit message
+>  - Added reg to required properties
+>  - Reordered required properties
+> Changed in v3:
+>  - Fixed patch that didn't apply
+> Changed in v4:
+>  - Added LSL080AL03, LTL101AT01 compatibles
+>  - Added description to reset-gpios
+>  - Added vmipi-supply, renamed enable-supply to power-supply
+> Changed in v5:
+>  - Changed compatibles to avoid concatenating multiple model numbers
+>  - Removed '|' from multiline descriptions
+>  - Fixed license
 
-Thank you!
+Looks like you've resolved the things Krzysztof and Rob took issue with.
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Thanks,
+Conor.
+
+--ZbsHYCLMrj/q3z3Z
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGfBNwAKCRB4tDGHoIJi
+0u0GAP9naF1Vwzu/CY4ARw7Njk+TP9o/o4hxhuUWXHEbiUuBlwEAoblSB3j14JWx
+NEOpn/W7lrzZa4Ggt66sk+s2FdulmwY=
+=/BPW
+-----END PGP SIGNATURE-----
+
+--ZbsHYCLMrj/q3z3Z--
