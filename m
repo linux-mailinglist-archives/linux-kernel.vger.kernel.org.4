@@ -2,90 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 072487091C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 10:37:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EA577091C5
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 10:39:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbjESIht (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 04:37:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60590 "EHLO
+        id S230261AbjESIjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 04:39:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjESIhr (ORCPT
+        with ESMTP id S230147AbjESIjQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 04:37:47 -0400
-Received: from mail-pf1-f194.google.com (mail-pf1-f194.google.com [209.85.210.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689B8C2;
-        Fri, 19 May 2023 01:37:45 -0700 (PDT)
-Received: by mail-pf1-f194.google.com with SMTP id d2e1a72fcca58-64d2467d640so1597603b3a.1;
-        Fri, 19 May 2023 01:37:45 -0700 (PDT)
+        Fri, 19 May 2023 04:39:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA11107
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 01:38:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684485514;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=tX9NkuaMfOfCKs1FCdEqGfDAsl8Ds/2jqifxpDMQKog=;
+        b=D561lFdafay1NhkBb2dY5VSEopkbivV0wVlMjM2FUN4R9i+vG/RKCdF8PIDm4N5dXwrXUM
+        P3MtwE0klO9m6NKPCyPgWWZVqXZX8QU1OaEDXc+29BFc3tnzBZl2U8aahZCoPSHc3z+hdG
+        VSYTgO8h66KyfxhQdysTG8+By1y5z7s=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-618-sLNp-pmOMySFQ8XDc7KhzA-1; Fri, 19 May 2023 04:38:33 -0400
+X-MC-Unique: sLNp-pmOMySFQ8XDc7KhzA-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f4f2f5098bso17272905e9.1
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 01:38:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684485465; x=1687077465;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1684485512; x=1687077512;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :content-language:references:cc:to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=987mpInVG0PZHy5kjEzU+JieR5EpUHHUhR1GenDgCYU=;
-        b=MsUT7WZUb5YdMB5UfmC224fC0FcSpWPwUn+VOdC71Yk7vcxkoB+8m8HeLvHxy0EOAn
-         1ZKX+222RbQ9cGGTBPReXrOajSp+QZpc07NlxT/lJMdr42i17FauBHwUqOKIZTYO6a3b
-         xShKoqGyDR/fFBhKVafBGXswrxRt/s2U7SjyO5A+oerwqGwTIk3qt7fCdcLR36mdN3ml
-         XrxEFFdhP2Z2S3MrPs6GODGhqap+4wf5goXHy1FulernUtIj7qFaEQ7WBedIul5iK8ER
-         +Ro/dpuDNxoKd6cwGI7z5em4qMFtZpzVZrpMlKzdcDmng9fu5GpPEPsu3Rgz5JNwH1Bj
-         J0Rg==
-X-Gm-Message-State: AC+VfDzUzDRiq1fMBaPM6oANNFqIEE4MaOpx2lfTmWEZwQPxUQ7W05bK
-        VGwelgKLbgyJN2Ks1DCDDg==
-X-Google-Smtp-Source: ACHHUZ58aIFVREO0uE6opjgnkNbCYwTgasZHWRUgSz/Ah30xUr81YOqzO9z/t7t7gtw51A8uAeAYBg==
-X-Received: by 2002:a05:6a20:3950:b0:100:9969:8cf with SMTP id r16-20020a056a20395000b00100996908cfmr1488553pzg.49.1684485464718;
-        Fri, 19 May 2023 01:37:44 -0700 (PDT)
-Received: from localhost.localdomain ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id h4-20020a63c004000000b005346b9a7fe5sm2565367pgg.22.2023.05.19.01.37.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 01:37:44 -0700 (PDT)
-From:   sunliming <sunliming@kylinos.cn>
-To:     rostedt@goodmis.org, mhiramat@kernel.org, sunliming@kylinos.cn
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: [PATCH RESEND] tracing/user_events: Prevent same name event per process
-Date:   Fri, 19 May 2023 16:37:40 +0800
-Message-Id: <20230519083740.232401-1-sunliming@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        bh=tX9NkuaMfOfCKs1FCdEqGfDAsl8Ds/2jqifxpDMQKog=;
+        b=IHVeLo/157F9RMHaKlI10cT+Yasw8iwL1X4FHYX8XhzASGKl+WZz/U9lraoDGR4sWD
+         pYzgC/beeaY8uyMJyiIG4a58S2D4SgCYra0VrayuHp6RmhDJ6wrBaxYf0wh/om3D36fS
+         20HyjBlUtSj66/sjREsEh6GSEZcrCQsixr7z1ftDNBIvLdvDk0gey4n+rhZrz3ecX+rU
+         Nl3X85t573AdV8Yb2TixIpUYWYx8pBOa1Ybvz7avU8wbswjAI93njpNX2x9kf92/vGCC
+         DPDtE2aZGSSONv3minBW11kBEJ6msf9Yt7aIPQKVfBoDk2x1GvbKyqriCPEWnpvAyx9/
+         nBLg==
+X-Gm-Message-State: AC+VfDzsL54H6xH87RICxE2JKtjKEgGokzDXwpbhaBstN34aPZcB+ZC+
+        d+Tfl/p5mvVoBemS/eD2nfbx3CuaW7DJuZvI+qE64VjrQ8OJyJ8F5sgLdXk9U+78ciCcvBVz9IB
+        lf0dqDXi2r3lnHz/zzlero2Qo
+X-Received: by 2002:a7b:c39a:0:b0:3f4:2198:dc2b with SMTP id s26-20020a7bc39a000000b003f42198dc2bmr693572wmj.37.1684485511863;
+        Fri, 19 May 2023 01:38:31 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7LtglJFB9R2JhDU+tff4uPwmts/Q/Nk8YQIEhGQ9liamKeS2OKMjiL1/ZjRuXRD48OUaDpuA==
+X-Received: by 2002:a7b:c39a:0:b0:3f4:2198:dc2b with SMTP id s26-20020a7bc39a000000b003f42198dc2bmr693547wmj.37.1684485511344;
+        Fri, 19 May 2023 01:38:31 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c722:9d00:7421:54d8:9227:a3e8? (p200300cbc7229d00742154d89227a3e8.dip0.t-ipconnect.de. [2003:cb:c722:9d00:7421:54d8:9227:a3e8])
+        by smtp.gmail.com with ESMTPSA id q28-20020a056000137c00b003093a412310sm4570816wrz.92.2023.05.19.01.38.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 May 2023 01:38:30 -0700 (PDT)
+Message-ID: <32fdc2c8-b86b-92f3-1d5e-64db6be29126@redhat.com>
+Date:   Fri, 19 May 2023 10:38:29 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+To:     Axel Rasmussen <axelrasmussen@google.com>,
+        Peter Xu <peterx@redhat.com>
+Cc:     Jiaqi Yan <jiaqiyan@google.com>,
+        James Houghton <jthoughton@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Huang Ying <ying.huang@intel.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        Nadav Amit <namit@vmware.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Shuah Khan <shuah@kernel.org>,
+        ZhangPeng <zhangpeng362@huawei.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Anish Moorthy <amoorthy@google.com>
+References: <20230511182426.1898675-1-axelrasmussen@google.com>
+ <CADrL8HXFiTL-RDnETS2BUg_qH8CvcCMZiX-kutsrS1-8Uy25=w@mail.gmail.com>
+ <ZGVRUeCWr8209m8d@x1n> <ZGVTMnVKNcQDM0x4@x1n>
+ <CAJHvVcgXynHcuoS6eCfOAB2SgzqYy_zMGrRMR2kFuxOtSdUwvQ@mail.gmail.com>
+ <CACw3F52MNOVv6KA5n7wRYDT2ujwYkco=aYngbo-zGA3zW1yq+w@mail.gmail.com>
+ <ZGZMtK6PzoTuLZ1b@x1n>
+ <CAJHvVcgcYPu-G3RDVrkrM_J48NUiUY0SH0G1sd+=X9BDgnQEuQ@mail.gmail.com>
+Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH 1/3] mm: userfaultfd: add new UFFDIO_SIGBUS ioctl
+In-Reply-To: <CAJHvVcgcYPu-G3RDVrkrM_J48NUiUY0SH0G1sd+=X9BDgnQEuQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-User processes register name_args for events. If the same name are registered
-multiple times in the same process, it can cause undefined behavior. Because
-the same name may be used for a diffrent event. If this event has the same
-format as the original event, it is impossible to distinguish the trace output
-of these two events. If the event has a different format from the original event,
-the trace output of the new event is incorrect.
+On 18.05.23 22:38, Axel Rasmussen wrote:
+> On Thu, May 18, 2023 at 9:05 AM Peter Xu <peterx@redhat.com> wrote:
+>>
+>> On Wed, May 17, 2023 at 05:43:53PM -0700, Jiaqi Yan wrote:
+>>> On Wed, May 17, 2023 at 3:29 PM Axel Rasmussen <axelrasmussen@google.com> wrote:
+>>>>
+>>>> On Wed, May 17, 2023 at 3:20 PM Peter Xu <peterx@redhat.com> wrote:
+>>>>>
+>>>>> On Wed, May 17, 2023 at 06:12:33PM -0400, Peter Xu wrote:
+>>>>>> On Thu, May 11, 2023 at 03:00:09PM -0700, James Houghton wrote:
+>>>>>>> On Thu, May 11, 2023 at 11:24 AM Axel Rasmussen
+>>>>>>> <axelrasmussen@google.com> wrote:
+>>>>>>>>
+>>>>>>>> So the basic way to use this new feature is:
+>>>>>>>>
+>>>>>>>> - On the new host, the guest's memory is registered with userfaultfd, in
+>>>>>>>>    either MISSING or MINOR mode (doesn't really matter for this purpose).
+>>>>>>>> - On any first access, we get a userfaultfd event. At this point we can
+>>>>>>>>    communicate with the old host to find out if the page was poisoned.
+>>>>>>>> - If so, we can respond with a UFFDIO_SIGBUS - this places a swap marker
+>>>>>>>>    so any future accesses will SIGBUS. Because the pte is now "present",
+>>>>>>>>    future accesses won't generate more userfaultfd events, they'll just
+>>>>>>>>    SIGBUS directly.
+>>>>>>>
+>>>>>>> I want to clarify the SIGBUS mechanism here when KVM is involved,
+>>>>>>> keeping in mind that we need to be able to inject an MCE into the
+>>>>>>> guest for this to be useful.
+>>>>>>>
+>>>>>>> 1. vCPU gets an EPT violation --> KVM attempts GUP.
+>>>>>>> 2. GUP finds a PTE_MARKER_UFFD_SIGBUS and returns VM_FAULT_SIGBUS.
+>>>>>>> 3. KVM finds that GUP failed and returns -EFAULT.
+>>>>>>>
+>>>>>>> This is different than if GUP found poison, in which case KVM will
+>>>>>>> actually queue up a SIGBUS *containing the address of the fault*, and
+>>>>>>> userspace can use it to inject an appropriate MCE into the guest. With
+>>>>>>> UFFDIO_SIGBUS, we are missing the address!
+>>>>>>>
+>>>>>>> I see three options:
+>>>>>>> 1. Make KVM_RUN queue up a signal for any VM_FAULT_SIGBUS. I think
+>>>>>>> this is pointless.
+>>>>>>> 2. Don't have UFFDIO_SIGBUS install a PTE entry, but instead have a
+>>>>>>> UFFDIO_WAKE_MODE_SIGBUS, where upon waking, we return VM_FAULT_SIGBUS
+>>>>>>> instead of VM_FAULT_RETRY. We will keep getting userfaults on repeated
+>>>>>>> accesses, just like how we get repeated signals for real poison.
+>>>>>>> 3. Use this in conjunction with the additional KVM EFAULT info that
+>>>>>>> Anish proposed (the first part of [1]).
+>>>>>>>
+>>>>>>> I think option 3 is fine. :)
+>>>>>>
+>>>>>> Or... option 4) just to use either MADV_HWPOISON or hwpoison-inject? :)
+>>>>>
+>>>>> I just remember Axel mentioned this in the commit message, and just in case
+>>>>> this is why option 4) was ruled out:
+>>>>>
+>>>>>          They expect that once poisoned, pages can never become
+>>>>>          "un-poisoned". So, when we live migrate the VM, we need to preserve
+>>>>>          the poisoned status of these pages.
+>>>>>
+>>>>> Just to supplement on this point: we do have unpoison (echoing to
+>>>>> "debug/hwpoison/hwpoison_unpoison"), or am I wrong?
+>>>
+>>> If I read unpoison_memory() correctly, once there is a real hardware
+>>> memory corruption (hw_memory_failure will be set), unpoison will stop
+>>> working and return EOPNOTSUPP.
+>>>
+>>> I know some cloud providers evacuating VMs once a single memory error
+>>> happens, so not supporting unpoison is probably not a big deal for
+>>> them. BUT others do keep VM running until more errors show up later,
+>>> which could be long after the 1st error.
+>>
+>> We're talking about postcopy migrating a VM has poisoned page on src,
+>> rather than on dst host, am I right?  IOW, the dest hwpoison should be
+>> fake.
+>>
+>> If so, then I would assume that's the case where all the pages on the dest
+>> host is still all good (so hw_memory_failure not yet set, or I doubt the
+>> judgement of being a migration target after all)?
+>>
+>> The other thing is even if dest host has hw poisoned page, I'm not sure
+>> whether hw_memory_failure is the only way to solve this.
+>>
+>> I saw that this is something got worked on before from Zhenwei, David used
+>> to have some reasoning on why it was suggested like using a global knob:
+>>
+>> https://lore.kernel.org/all/d7927214-e433-c26d-7a9c-a291ced81887@redhat.com/
+>>
+>> Two major issues here afaics:
+>>
+>>    - Zhenwei's approach only considered x86 hwpoison - it relies on kpte
+>>      having !present in entries but that's x86 specific rather than generic
+>>      to memory_failure.c.
+>>
+>>    - It is _assumed_ that hwpoison injection is for debugging only.
+>>
+>> I'm not sure whether you can fix 1) by some other ways, e.g., what if the
+>> host just remember all the hardware poisoned pfns (or remember
+>> soft-poisoned ones, but then here we need to be careful on removing them
+>> from the list when it's hwpoisoned for real)?  It sounds like there's
+>> opportunity on providing a generic solution rather than relying on
+>> !pte_present().
+>>
+>> For 2) IMHO that's not a big issue, you can declare it'll be used in !debug
+>> but production systems so as to boost the feature importance with a real
+>> use case.
+>>
+>> So far I'd say it'll be great to leverage what it's already there in linux
+>> and make it as generic as possible. The only issue is probably
+>> CAP_ADMIN... not sure whether we can have some way to provide !ADMIN
+>> somehow, or you can simply work around this issue.
+> 
+> As you mention below I think the key distinction is the scope - I
+> think MADV_HWPOISON affects the whole system, including other
+> processes.
+> 
+> For our purposes, we really just want to "poison" this particular
+> virtual address (the HVA, from the VM's perspective), not even other
+> mappings of the same shared memory. I think that behavior is different
+> from MADV_HWPOISON, at least.
 
-Return EADDRINUSE back to the user process if the same event has being registered
-in the same process.
+MADV_HWPOISON really is the wrong interface to use. See "man madvise".
 
-Signed-off-by: sunliming <sunliming@kylinos.cn>
----
- kernel/trace/trace_events_user.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+We don't want to allow arbitrary users to hwpoison+offline absolutely 
+healthy physical memory, which is what MADV_HWPOISON is all about.
 
-diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-index b1ecd7677642..4ef6bdb5c07c 100644
---- a/kernel/trace/trace_events_user.c
-+++ b/kernel/trace/trace_events_user.c
-@@ -1996,7 +1996,7 @@ static int user_events_ref_add(struct user_event_file_info *info,
- 
- 		for (i = 0; i < count; ++i)
- 			if (refs->events[i] == user)
--				return i;
-+				return -EADDRINUSE;
- 	}
- 
- 	size = struct_size(refs, events, count + 1);
+As you say, we want to turn an unpopulated (!present) virtual address to 
+mimic like we had a MCE on a page that would have been previously mapped 
+here: install a hwpoison marker without actually poisoning any present 
+page. In fact, we'd even want to fail if there *is* something mapped.
+
+Sure, one could teach MADV_HWPOISON to allow unprivileged users to do 
+that for !present PTE entries, and fail for unprivileged users if there 
+is a present PTE entry. I'm not sure if that's the cleanest approach, 
+though, and a new MADV as suggested in this thread would eventually be 
+cleaner.
+
 -- 
-2.25.1
+Thanks,
+
+David / dhildenb
 
