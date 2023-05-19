@@ -2,125 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EB96708CF4
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 02:29:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B45AB708CFA
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 02:37:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231320AbjESA3y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 20:29:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36526 "EHLO
+        id S229747AbjESAhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 20:37:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231238AbjESA3v (ORCPT
+        with ESMTP id S229543AbjESAhB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 20:29:51 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE47E10D2
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 17:29:21 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-5344d45bfb0so213370a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 17:29:21 -0700 (PDT)
+        Thu, 18 May 2023 20:37:01 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3673EE5A;
+        Thu, 18 May 2023 17:36:58 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1ae4be0b1f3so20041025ad.0;
+        Thu, 18 May 2023 17:36:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684456155; x=1687048155;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Pr3i+0Z+ZK4Cpnq2h97UEX/Scj/M44+Ofcjn0kFKHFs=;
-        b=mPAnsbEXf1UYEqdXdn4+wpQQw+xZDdHa0dyi7WxOJXtBiNOaPxQb43QbrVIRmc7CIp
-         9oPX1lW/Ct+jJb+mKvDH3oMvlChYRxz9uyZ8DWNRH5EmVpvQv7dh7pRngmyXRCd4Ciu+
-         9CSylPc+9x+T6uzAdkP/JRGg8aKC/iRzBxvHCtdM1PKBc/QdP7wkMwhBbEizGwxRKC8+
-         qUDsHWXOD9pXbP4khaGr1xfA7FqdVBi5ZbgLwSFC3+Y7hfL8UEBOd7KIOxgGipwdkEyC
-         e8T+H6lBHZFHg6ATlhwdTEp4tDnI2GuMgZWIGpFzeXAhZSLZ6/lzwTdbOZHJzVgFGpHL
-         n1hg==
+        d=gmail.com; s=20221208; t=1684456617; x=1687048617;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sJgSzGtgikyMjdsd1BSJ/7i+WEAYOWc3x+UR966c4LU=;
+        b=Y+UAGCe7cLK92GhY6jl+kEGjDFxbxZ/KfX3qZTCxudL6DxuVvRm4s5XSZ1vXJuR7B2
+         Yqt3GULH3mZ2NY7RNidCre5jRZnpnxFj/+pqGKeBMdZZiTaLSHtZFnCzTC2T7ndZialz
+         FAL0AbL18+a2/1x7DKzmm2fWDfjaDaQBmWVCqAL7cLwIyayVcS9Nu5q4bMJAeE2F6oib
+         bLVpZCHmRxxJW/25zA3k3uvDRfJ0Z2WBzGvLY4Mo4XsvqQJP1AEtvYVvzaW7E4b/OR6d
+         RvNVq9cZDbQ09G+Hx6jeMbou0HzpE1i93tKWvQSp/2Lyl4clrJnDwv2zOKtQgUrbnOtD
+         sANg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684456155; x=1687048155;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1684456617; x=1687048617;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Pr3i+0Z+ZK4Cpnq2h97UEX/Scj/M44+Ofcjn0kFKHFs=;
-        b=S4g440efAwwzxwY934GGa4YLQHPJ2DUTuY0u0jhTP4Rcf/tKV9b2poTQtGs9hA92t0
-         Aphi2Ros2WfAk18gmr6eWq1o/QNk4+d88CrB73OGkd0HeLoB0RZO1W/z8wiluX/btH9c
-         YxEpvl+Dp2UfxYnCd7m/FeQAfpq6j5cangTBlMZNtJT8QgMYdcLWQP5xNWZQ5MLUR3SX
-         45EBItpfc+QkpIvPwvGVZlV6Ob9M3HtdpjUpoZX9UdXtLGiFB2iz7p5KVOHbQnHilm6C
-         PbecqP3GhkSoEF1xt62YC0+/agCmSMVUPWv5G6ynqRF8YgIgS/Gc74V1WkWzeY1SKU9s
-         UNMg==
-X-Gm-Message-State: AC+VfDx4tI7VzweojWGCR4b4+zCp0By8xGRVbVwKHnequrANoqLDBm5N
-        pvuC7JRZRNiuZj/UnPcr6KjfxywgFHZZmxvFNU8=
-X-Google-Smtp-Source: ACHHUZ70Qai1vCCNiurb0hcuikboFL3KM/5UVQJk243hXkVtRUDJMd+9BM+dS1BQR4BddBatuTpGzxu0SlVHa6oEvhI=
-X-Received: by 2002:a17:90b:4c45:b0:250:9af3:4f89 with SMTP id
- np5-20020a17090b4c4500b002509af34f89mr469279pjb.4.1684456154724; Thu, 18 May
- 2023 17:29:14 -0700 (PDT)
+        bh=sJgSzGtgikyMjdsd1BSJ/7i+WEAYOWc3x+UR966c4LU=;
+        b=iwNRtLoLPYTJjiWQT5mq6IwD4o15z4xWvmhbfmO6QMTMnuBY6svVtzd21D30K+lbdY
+         VfDtH1Q5FN+DW45kkfhsamz9EdsbK2ED26hc0dr14cuQGWkc+1LwUvlsbwxo4W7Sditd
+         BWn2ZuB+330/o4nbd8f6A+pSYSkh9zhulb23xXYkKJvZTVX8KBWOJZGkS9FnUiYYKPIs
+         G/ZebW1cm7Txb2goFDzeFZznvrSQS40R45iatqdpgmMmoL2p0tLv60VjkXkzL7oAj+Fm
+         Hv4IKZjRAlAa0qsCnyS7qQZHu2024VyjDd2C0+Vm+WC94Jo4mOkWDK6JxQBMZR2oVGA4
+         fz4A==
+X-Gm-Message-State: AC+VfDxZlXTHuFNCYtg/Vjs81XsnJ7yHS+aY9L8ror2KijiWt2VS+Wkg
+        FmMCo+deSW17XFSAHCHf0UIfgSdIa8M=
+X-Google-Smtp-Source: ACHHUZ4+/TArAWN3BndzVZerlnFGVtVemG6aevDvPcQBvkAKGW8/QfS9QeeM+QywIFyBmBcjpcL5EA==
+X-Received: by 2002:a17:902:7448:b0:1a6:dd9a:62c5 with SMTP id e8-20020a170902744800b001a6dd9a62c5mr964259plt.10.1684456617383;
+        Thu, 18 May 2023 17:36:57 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id u2-20020a170902b28200b001ac7c6fd12asm2066109plr.104.2023.05.18.17.36.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 18 May 2023 17:36:56 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Thu, 18 May 2023 14:36:55 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     jiangshanlai@gmail.com
+Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        Amitkumar Karwar <amitkarwar@gmail.com>,
+        Ganapathi Bhat <ganapathi017@gmail.com>,
+        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
+        Xinming Hu <huxinming820@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 02/13] wifi: mwifiex: Use default @max_active for
+ workqueues
+Message-ID: <ZGbEp3CTOgg8HxlV@slm.duckdns.org>
+References: <20230509015032.3768622-1-tj@kernel.org>
+ <20230509015032.3768622-3-tj@kernel.org>
 MIME-Version: 1.0
-References: <20230518230626.404068-1-aford173@gmail.com>
-In-Reply-To: <20230518230626.404068-1-aford173@gmail.com>
-From:   Fabio Estevam <festevam@gmail.com>
-Date:   Thu, 18 May 2023 21:29:03 -0300
-Message-ID: <CAOMZO5DBefFuLWi39txu2RiU5vdHVx-0T48Fua6M5Y6Fr9PGNg@mail.gmail.com>
-Subject: Re: [PATCH V7 0/6] drm: bridge: samsung-dsim: Support variable clocking
-To:     Adam Ford <aford173@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>, aford@beaconembedded.com,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        linux-kernel@vger.kernel.org,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Lucas Stach <l.stach@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230509015032.3768622-3-tj@kernel.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adam,
+On Mon, May 08, 2023 at 03:50:21PM -1000, Tejun Heo wrote:
+> These workqueues only host a single work item and thus doen't need explicit
+> concurrency limit. Let's use the default @max_active. This doesn't cost
+> anything and clearly expresses that @max_active doesn't matter.
 
-On Thu, May 18, 2023 at 8:06=E2=80=AFPM Adam Ford <aford173@gmail.com> wrot=
-e:
->
-> This series fixes the blanking pack size and the PMS calculation.  It the=
-n
-> adds support to allows the DSIM to dynamically DPHY clocks, and support
-> non-burst mode while allowing the removal of the hard-coded clock values
-> for the PLL for imx8m mini/nano/plus, and it allows the removal of the
-> burst-clock device tree entry when burst-mode isn't supported by connecte=
-d
-> devices like an HDMI brige.  In that event, the HS clock is set to the
-> value requested by the bridge chip.
->
-> This has been tested on both an i.MX8M Nano and i.MX8M Plus, and should
-> work on i.MX8M Mini as well. Marek Szyprowski has tested it on various
-> Exynos boards.
->
-> Adam Ford (5):
->   drm: bridge: samsung-dsim: Fix PMS Calculator on imx8m[mnp]
->   drm: bridge: samsung-dsim: Fetch pll-clock-frequency automatically
->   drm: bridge: samsung-dsim: Select GENERIC_PHY_MIPI_DPHY
->   drm: bridge: samsung-dsim: Dynamically configure DPHY timing
->   drm: bridge: samsung-dsim: Support non-burst mode
->
-> Lucas Stach (1):
->   drm: bridge: samsung-dsim: fix blanking packet size calculation
->
->  drivers/gpu/drm/bridge/Kconfig        |   1 +
->  drivers/gpu/drm/bridge/samsung-dsim.c | 142 +++++++++++++++++++++-----
->  include/drm/bridge/samsung-dsim.h     |   4 +
->  3 files changed, 124 insertions(+), 23 deletions(-)
->
-> V7:  Move messages indicating the optional device tree items are going
->      to be automatically read elsewhere was move to dev_dbg instead of
->      dev_info.  Cleaned up some of the comments to be a bit more clear.
->      Eliminated a double variable assignement accidentally introduced
->      in V6 when some of the items were moved from patch 6 to patch 5.
+Applied to wq/for-6.5-cleanup-ordered.
 
-It seems you missed addressing one previous comment from Lucas:
+Thanks.
 
-"Same as with the earlier patch, this needs to be documented in the DT
-binding by moving "samsung,burst-clock-frequency" to be a optional
-property."
+-- 
+tejun
