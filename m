@@ -2,182 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA9AA709DB7
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 19:18:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA7FC709DC9
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 19:20:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231573AbjESRSz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 13:18:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57794 "EHLO
+        id S230242AbjESRU4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 13:20:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230167AbjESRSx (ORCPT
+        with ESMTP id S230085AbjESRUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 13:18:53 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCF8C9E
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 10:18:50 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1ae40dcdc18so26043965ad.2
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 10:18:50 -0700 (PDT)
+        Fri, 19 May 2023 13:20:49 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2675C1A1
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 10:20:43 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4f14468ef54so4028047e87.0
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 10:20:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1684516730; x=1687108730;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8cP/N2yy0In7+4hR77Af8fl+Cq9omuuz9NP4NSMstSE=;
-        b=oJTQ1xH2esTZ6dC0S08xSuynOquMOIpWw1CET3mwKZJZ8qSJiu/xdMNUmu1Ll9fuEI
-         agp84ATECKi0z/b6nnuCgXbY5J2tqimno5Gh/r3t+myryOlD62xe7Lss9IhEofCPYGbo
-         IiUiugJsTiCYcKfPh97SVrDkxOen0BTWvk7idHnbSRBMnpt9mRJzgnzWl2wDz7lBvpgX
-         MmxRhTbbAfSXRp4Z5BlCiHkgqY9/UCJ/pBjZZ3U+HfI4dqSuluRYnrUwBzMKNx2xfnUb
-         9dTB/SeJAQqLg9vyLIc77IRzb5dBFrUQxS18GPNeIeNSmi69qCL/jgaLRJpromRjbqLN
-         eK6Q==
+        d=linaro.org; s=google; t=1684516841; x=1687108841;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aI4Ct9ZNbQ/SUl5JzXHU1ru0q3U69oZVlCThA9I8H3I=;
+        b=lBSmxER24QeX7xwpniQr4N70VZBB0FbHwfoJ1IdDtkGHPUnW/6jPw6qRbVa590f0cs
+         9RaAUk9JZOvoET83pb5t7t/QgZaQtKmsWNQWHeBtxkY+x3Sclu1C098f262ugb7UQ5WC
+         0tVCs+mMTOBdPBJA56fycgDyyoQyEeOnyPaPv1HcXuU1NHjJVdnfEJdtGfTcawzXv+wn
+         Z3QXMf19Z7mo8jhHJsBSwzZARvKANsjpu1KLCXexbascw+RUV37bNc7yS1kgfx0KV9LY
+         yY8f21Uv5yn/YSKfggdhGYWuil7v+hR4Z3ZE4ZwHPFzvpnf+r8tKSW94hpfC+4YU1OVm
+         Mc6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684516730; x=1687108730;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8cP/N2yy0In7+4hR77Af8fl+Cq9omuuz9NP4NSMstSE=;
-        b=QwdWQui0JgrPSLed22+GGtySUolmaCiaaOWt8gw4J6B5g1pWlUIBsgVjodajp9t8T9
-         c4+cBUyEsyFKmQi8/TwxlIuNSsbnSjwKH7vmccgJfweF/4r8+eUEgoI9tdmF5tI+E8jq
-         Xmyn6RtYb2ks81SJcqnBx0OfNbWB0Bw8j1Bto51Om10iLxbq+o3/c6tVP7SdIvzn89rb
-         uXZxsw5YGnEKj1JA6YKoUCsMEZYbbgkdPGPfY2LSkmWcWqhgBrg0Hu9DPLVP4cvpXDAV
-         cEUCipsipI5AXgA+Yl11EpJHzP49TtWX8xtWEmQhnnSQbcHtQruCew4nVL7qB9iwtyjk
-         4Qdg==
-X-Gm-Message-State: AC+VfDw3o673Lc9DuVIAmUa404lvoVymhb0K7WFPlwuXdRNC0laDF92m
-        szj57tz4b2NBBy1ZMXBUPya7Ew==
-X-Google-Smtp-Source: ACHHUZ6sQqE4NgE4qAtzws4MDh/hCDsJ1+5Bk0BQ/KXNoITPF6sDFxlqLTzrK+z/++9G9i9iakUrMA==
-X-Received: by 2002:a17:902:cecb:b0:1ae:8b4b:3273 with SMTP id d11-20020a170902cecb00b001ae8b4b3273mr1666308plg.23.1684516730147;
-        Fri, 19 May 2023 10:18:50 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id p10-20020a170902e74a00b001aae64e9b36sm3694651plf.114.2023.05.19.10.18.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 10:18:49 -0700 (PDT)
-Date:   Fri, 19 May 2023 10:18:49 -0700 (PDT)
-X-Google-Original-Date: Fri, 19 May 2023 10:18:25 PDT (-0700)
-Subject:     Re: [RFC PATCH 00/22] riscv: s64ilp32: Running 32-bit Linux kernel on 64-bit supervisor mode
-In-Reply-To: <a9fcf1ad-a387-42a7-957a-e5a6a36fb3d7@app.fastmail.com>
-CC:     guoren@kernel.org, tglx@linutronix.de, peterz@infradead.org,
-        luto@kernel.org, Conor Dooley <conor.dooley@microchip.com>,
-        heiko@sntech.de, jszhang@kernel.org, chenhuacai@kernel.org,
-        apatel@ventanamicro.com, atishp@atishpatra.org,
-        Mark Rutland <mark.rutland@arm.com>, bjorn@kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, rppt@kernel.org,
-        anup@brainfault.org, shihua@iscas.ac.cn, jiawei@iscas.ac.cn,
-        liweiwei@iscas.ac.cn, luxufan@iscas.ac.cn, chunyu@iscas.ac.cn,
-        tsu.yubo@gmail.com, wefu@redhat.com, wangjunqiang@iscas.ac.cn,
-        kito.cheng@sifive.com, andy.chiu@sifive.com,
-        vincent.chen@sifive.com, greentime.hu@sifive.com, corbet@lwn.net,
-        wuwei2016@iscas.ac.cn, jrtc27@jrtc27.com,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, guoren@linux.alibaba.com
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Message-ID: <mhng-073cb75e-0f8d-40b7-9e1c-8cfad53351df@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1684516841; x=1687108841;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aI4Ct9ZNbQ/SUl5JzXHU1ru0q3U69oZVlCThA9I8H3I=;
+        b=Gry4APqjg3SJB5VdMtgS8K0td29XquZI9SOwnvYvoYV1voc+mZuMuuRQLugXr5WH0B
+         7Sh6ClrIrN3F32B9E1AoL02Z96BkB7HyamcHBS5jTwDkyKHx4y8uBHJLWvtIMLqIgqdR
+         7/5C1A560pctjodpH4hsw1bp/7hs1nUCEEcMzPFYbJS8Ta8Rz3LvR4ywcgI5xyhFPwti
+         G8BGXn8g0Wv0wSFa0NuEis/sl+qqc46tuC2j7XKvNcJDW0HvT/PtEKeDlsEFEEzp1Jeo
+         5NxbffJqf3TS99r6fkgJsA9LDlyuFNw8baGUfxAG2j1dgF+rL7+Hm0vcspWXlIBMjM0K
+         bYxw==
+X-Gm-Message-State: AC+VfDxYz1/EtlSOh97uMdy6Ez/EcDJHltLC22ULYSriWrx8Muq9nQrr
+        L2PK/W84nu0NWx0Fd6lXg320lA==
+X-Google-Smtp-Source: ACHHUZ4ZtY87AlYLqMzZMI/H+YwCz8aUIUg1BGHjMQhVZ85fHr9UboDnwYj4WsgHwUHkUQsLv0exag==
+X-Received: by 2002:ac2:4182:0:b0:4f3:93d6:377b with SMTP id z2-20020ac24182000000b004f393d6377bmr843159lfh.37.1684516841069;
+        Fri, 19 May 2023 10:20:41 -0700 (PDT)
+Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
+        by smtp.gmail.com with ESMTPSA id y19-20020ac24473000000b004eff0bcb276sm670552lfl.7.2023.05.19.10.20.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 May 2023 10:20:40 -0700 (PDT)
+Message-ID: <470651fb-e4d1-2576-df6c-ded60d0b1242@linaro.org>
+Date:   Fri, 19 May 2023 19:20:39 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/2] scsi: ufs: ufs-qcom: add basic interconnect support
+Content-Language: en-US
+To:     Brian Masney <bmasney@redhat.com>, andersson@kernel.org
+Cc:     agross@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+References: <20221117104957.254648-1-bmasney@redhat.com>
+ <20221117104957.254648-2-bmasney@redhat.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20221117104957.254648-2-bmasney@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 May 2023 09:53:35 PDT (-0700), Arnd Bergmann wrote:
-> On Fri, May 19, 2023, at 17:31, Guo Ren wrote:
->> On Fri, May 19, 2023 at 2:29 AM Arnd Bergmann <arnd@arndb.de> wrote:
->>> On Thu, May 18, 2023, at 17:38, Palmer Dabbelt wrote:
->>> > On Thu, 18 May 2023 06:09:51 PDT (-0700), guoren@kernel.org wrote:
->>>
->>> If for some crazy reason you'd still want the 64ilp32 ABI in user
->>> space, running the kernel this way is probably still a bad idea,
->>> but that one is less clear. There is clearly a small memory
->>> penalty of running a 64-bit kernel for larger data structures
->>> (page, inode, task_struct, ...) and vmlinux, and there is no
->> I don't think it's a small memory penalty, our measurement is about
->> 16% with defconfig, see "Why 32-bit Linux?" section.
->>
->> This patch series doesn't add 64ilp32 userspace abi, but it seems you
->> also don't like to run 32-bit Linux kernel on 64-bit hardware, right?
->
-> Ok, I'm sorry for missing the important bit here. So if this can
-> still use the normal 32-bit user space, the cost of this patch set
-> is not huge, and it's something that can be beneficial in a few
-> cases, though I suspect most users are still better off running
-> 64-bit kernels.
 
-Running a normal 32-bit userspace would require HW support for the 
-32-bit mode switch for userspace, though (rv32 isn't a subset of rv64, 
-so there's nothing we can do to make those binaries function correctly 
-with uABI).  The userspace-only mode switch is a bit simpler than the 
-user+supervisor switch, but it seems like vendors who really want the 
-memory savings would just implement both mode switches.
 
->> The motivation of s64ilp32 (running 32-bit Linux kernel on 64-bit s-mode):
->>  - The target hardware (Canaan Kendryte k230) only supports MXL=64,
->> SXL=64, UXL=64/32.
->>  - The 64-bit Linux + compat 32-bit app can't satisfy the 64/128MB scenarios.
->>
->>> huge additional maintenance cost on top of the ABI itself
->>> that you'd need either way, but using a 64-bit address space
->>> in the kernel has some important advantages even when running
->>> 32-bit userland: processes can use the entire 4GB virtual
->>> space, while the kernel can address more than 768MB of lowmem,
->>> and KASLR has more bits to work with for randomization. On
->>> RISCV, some additional features (VMAP_STACK, KASAN, KFENCE,
->>> ...) depend on 64-bit kernels even though they don't
->>> strictly need that.
->>
->> I agree that the 64-bit linux kernel has more functionalities, but:
->>  - What do you think about linux on a 64/128MB SoC? Could it be
->> affordable to VMAP_STACK, KASAN, KFENCE?
->
-> I would definitely recommend VMAP_STACK, but that can be implemented
-> and is used on other 32-bit architectures (ppc32, arm32) without a
-> huge cost. The larger virtual user address space can help even on
-> machines with 128MB, though most applications probably don't care at
-> that point.
+On 17.11.2022 11:49, Brian Masney wrote:
+> The firmware on the Qualcomm platforms expects the interconnect votes to
+> be present. Let's add very basic support where the maximum throughput is
+> requested to match what's done in a few other drivers.
+> 
+> This will not break boot on systems where the interconnects and
+> interconnect-names properties are not specified in device tree for UFS
+> since the interconnect framework will silently return.
+> 
+> Signed-off-by: Brian Masney <bmasney@redhat.com>
+> ---
+Hi everyone!
 
-At least having them as an option seems reasonable.  Historically we 
-haven't gated new base systems on having every feature the others do, 
-though (!MMU, rv32, etc).
+This was never merged, but it's actually strictly necessary!
 
->>  - I think 32-bit Linux & RTOS have monopolized this market (64/128MB
->> scenarios), right?
->
-> The minimum amount of RAM that makes a system usable for Linux is
-> constantly going up, so I think with 64MB, most new projects are
-> already better off running some RTOS kernel instead of Linux.
-> The ones that are still usable today probably won't last a lot
-> of distro upgrades before the bloat catches up with them, but I
-> can see how your patch set can give them a few extra years of
-> updates.
+For example UFS dies on SM8450 if we add sync_state to its interconnect
+driver, as there's no votes cast.
 
-We also have 32-bit kernel support.  Systems that have tens of MB of RAM 
-tend to end up with some memory technology that doesn't scale to 
-gigabytes these days, and since that's fixed when the chip is built it 
-seems like those folks would be better off just having HW support for 
-32-bit kernels (and maybe not even bothering with HW support for 64-bit 
-kernels).
+Can we look into this again?
 
-> For the 256MB+ systems, I would expect the sensitive kernel
-> allocations to be small enough that the series makes little
-> difference. The 128MB systems are the most interesting ones
-> here, and I'm curious to see where you spot most of the
-> memory usage differences, I'll also reply to your initial
-> mail for that.
-
-Thanks.  I agree we need to see some real systems that benefit from 
-this, as it's a pretty big support cost.  Just defconfig sizes doesn't 
-mean a whole lot, as users on these very constrained systems aren't 
-likely to run defconfig anyway.
-
-If someone's going to use it then I'm fine taking the code, it just 
-seems like a very thin set of possible use cases.  We've already got 
-almost no users in RISC-V land, I've got a feeling this is esoteric 
-enough to actually have zero.
-
->
->        Arnd
+Konrad
+>  drivers/ufs/host/ufs-qcom.c | 25 +++++++++++++++++++++++++
+>  1 file changed, 25 insertions(+)
+> 
+> diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
+> index 8ad1415e10b6..55bf8dd88985 100644
+> --- a/drivers/ufs/host/ufs-qcom.c
+> +++ b/drivers/ufs/host/ufs-qcom.c
+> @@ -7,6 +7,7 @@
+>  #include <linux/time.h>
+>  #include <linux/clk.h>
+>  #include <linux/delay.h>
+> +#include <linux/interconnect.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+>  #include <linux/platform_device.h>
+> @@ -936,6 +937,22 @@ static const struct reset_control_ops ufs_qcom_reset_ops = {
+>  	.deassert = ufs_qcom_reset_deassert,
+>  };
+>  
+> +static int ufs_qcom_icc_init(struct device *dev, char *pathname)
+> +{
+> +	struct icc_path *path;
+> +	int ret;
+> +
+> +	path = devm_of_icc_get(dev, pathname);
+> +	if (IS_ERR(path))
+> +		return dev_err_probe(dev, PTR_ERR(path), "failed to acquire interconnect path\n");
+> +
+> +	ret = icc_set_bw(path, 0, UINT_MAX);
+> +	if (ret < 0)
+> +		return dev_err_probe(dev, ret, "failed to set bandwidth request\n");
+> +
+> +	return 0;
+> +}
+> +
+>  /**
+>   * ufs_qcom_init - bind phy with controller
+>   * @hba: host controller instance
+> @@ -991,6 +1008,14 @@ static int ufs_qcom_init(struct ufs_hba *hba)
+>  			err = dev_err_probe(dev, PTR_ERR(host->generic_phy), "Failed to get PHY\n");
+>  			goto out_variant_clear;
+>  		}
+> +
+> +		err = ufs_qcom_icc_init(dev, "ufs-ddr");
+> +		if (err)
+> +			goto out_variant_clear;
+> +
+> +		err = ufs_qcom_icc_init(dev, "cpu-ufs");
+> +		if (err)
+> +			goto out_variant_clear;
+>  	}
+>  
+>  	host->device_reset = devm_gpiod_get_optional(dev, "reset",
