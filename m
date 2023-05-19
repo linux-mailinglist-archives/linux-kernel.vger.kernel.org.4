@@ -2,94 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC617709480
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 12:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75954709482
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 12:10:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231753AbjESKKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 06:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40398 "EHLO
+        id S230416AbjESKKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 06:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231809AbjESKJr (ORCPT
+        with ESMTP id S231760AbjESKKJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 06:09:47 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E041510DC
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:09:38 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f41dceb9d1so29474195e9.1
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:09:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684490977; x=1687082977;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=qJlEOvjOYMzVHa6nkNTyqakYgS1PMcSlu4GwECBSsAg=;
-        b=IVx5j+UggibN8TcmUU1ozNMKzNQaoHNCQhDJFR/dFNQVgevyOIMwL5Taw6dhV4lKJu
-         OnRQ6UdEgtosHxufuS/2w+qouJ3OJqS6TxVBJ9CftfqbSiNEb4sINRpB4eqehULeIs1A
-         +eQLCSMzy9NldqcWwXjNlnGQXhSW2fV+d2sTXFQsLWhqqHlcRDxcFh3rgoLStL/o6SKF
-         ubRB3qoxxPPy/VmF459/b8krXol1OXV8JTrf6wh03tHUbsAhdScCb4R4wLk4l2CgnrrU
-         l+6URWDZ046rxebSPuFqFis9oWUv+rdE84HVm3fK2ZFPD9mC5MsQ13LD0d8rmel6Sj+o
-         7A/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684490977; x=1687082977;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qJlEOvjOYMzVHa6nkNTyqakYgS1PMcSlu4GwECBSsAg=;
-        b=ZbshDx5VdhARQEJ6sZa08m3egkbpJOczHRr7L9t7wsvT94DcSlwhdvhjPqokhVQzjw
-         D2nbZwQyPqI6tmNcIAx5Y29D4BaSw7D5Y0Nm5RcRd7p3TB5Dsy+TWw2nC70bGBvseLAr
-         q1AjqQyTo7+WO0d/oOXmTmsnzYQG1dVc0P0+6+40/7O4Hp8kP7NRlBQaJzduHsrri7M8
-         REW0k3TuYGebY3dj4bVTC7E89VosXhlZkd0dXEdvwj+stXBffR8VhTMFfRJ61GylBJGl
-         Tevfn8GWagLqVo+qRSvp/QbGgkopMExmQ6ZFOIor3D5V4aTmoByQ7/dOiLGm7tWXE+/m
-         dFlw==
-X-Gm-Message-State: AC+VfDwAZjlk1wJ/mAjG/b/MF9hf82tS8csowtoau259TmV0Mge0g1pd
-        H/UDFUVEP9r70UkD9TiixFS5iw==
-X-Google-Smtp-Source: ACHHUZ5WGSwQQ7EEO1V31pVH0j2pTxUgl+1Bv1Lk9gY0K2gUi29/J53PK5LFtcZKjUtEBt74c42wwQ==
-X-Received: by 2002:a1c:7908:0:b0:3f4:2254:bd86 with SMTP id l8-20020a1c7908000000b003f42254bd86mr999177wme.8.1684490977014;
-        Fri, 19 May 2023 03:09:37 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id n8-20020a1c7208000000b003f50876905dsm1920690wmc.6.2023.05.19.03.09.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 03:09:35 -0700 (PDT)
-Date:   Fri, 19 May 2023 13:09:32 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Deepanshu Kartikey <kartikey406@gmail.com>
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-staging@lists.linux.dev
-Subject: Re: [PATCH] [PATCH v2] Staging: rts5208: rtsx: Moved else statement
- to same line with else if
-Message-ID: <f82a3d65-8c01-4537-9ec6-bd6fca5d84c9@kili.mountain>
-References: <20230519100119.25482-1-kartikey406@gmail.com>
+        Fri, 19 May 2023 06:10:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB2BE5A;
+        Fri, 19 May 2023 03:10:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 89D3861B47;
+        Fri, 19 May 2023 10:10:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A23EC433EF;
+        Fri, 19 May 2023 10:10:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684491002;
+        bh=SH3Ai0VIsZ5Tro1m/lUwyde5P3oV+8XIW0LuSqw/h3Y=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=u6ErOHLWzIPaOsxk0ez6lwUx1hQa61M6PBaSMEA+rrC8v0EZKh/abMt0tfqHkZcsW
+         +I1A6daUGRlOKPBRgr3c6MmbP/2nOmh9yemPsu5YGOGe5no4fvYfH1qjoEGSqkAXlN
+         ysUui50ICNt7jCIiT64aMSUif+aPaySt6M6urvZ+zyBtwKkknMShxDdn/ZFVw5W9H/
+         rbWMCWEJuOmWuehgWUNHxy73TF0Q62Plgofd9CRF0F86RUpTTP/eA+K/ZiS3YIuJBy
+         atf5zlAqhuCmhNpgN5kfBDQPQIDoDMQURmrXzFjoW8t5pqeiccKbyILRuXkPqZClS5
+         hwiNtPfvt5PRw==
+Message-ID: <f281d4b831d71ebe86e48c0f45b82b05276bc655.camel@kernel.org>
+Subject: Re: [PATCH] nfsd: make a copy of struct iattr before calling
+ notify_change
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Chuck Lever <chuck.lever@oracle.com>
+Cc:     Zhi Li <yieli@redhat.com>, linux-nfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Fri, 19 May 2023 06:10:01 -0400
+In-Reply-To: <20230517162645.254512-1-jlayton@kernel.org>
+References: <20230517162645.254512-1-jlayton@kernel.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230519100119.25482-1-kartikey406@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 03:31:19PM +0530, Deepanshu Kartikey wrote:
-> Moved else statement to same line with else if,
-> this warning was given by checkpatch.pl
-> 
-> Signed-off-by: Deepanshu Kartikey <kartikey406@gmail.com>
-> 
-> ...
-> Changes in V2:
->     - Moved else to the same line with else if
->     - Moved comment on else statement to inside of it
+On Wed, 2023-05-17 at 12:26 -0400, Jeff Layton wrote:
+> notify_change can modify the iattr structure. In particular it can can
+> end up setting ATTR_MODE when ATTR_KILL_SUID is already set, causing a
+> BUG() if the same iattr is passed to notify_change more than once.
+>=20
+> Make a copy of the struct iattr before calling notify_change.
+>=20
+> Fixes: 34b91dda7124 NFSD: Make nfsd4_setattr() wait before returning NFS4=
+ERR_DELAY
+> Link: https://bugzilla.redhat.com/show_bug.cgi?id=3D2207969
+> Reported-by: Zhi Li <yieli@redhat.com>
+> Signed-off-by: Jeff Layton <jlayton@kernel.org>
 > ---
->  drivers/staging/rts5208/rtsx.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
+>  fs/nfsd/vfs.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/fs/nfsd/vfs.c b/fs/nfsd/vfs.c
+> index c4ef24c5ffd0..ad0c5cd900b1 100644
+> --- a/fs/nfsd/vfs.c
+> +++ b/fs/nfsd/vfs.c
+> @@ -538,7 +538,9 @@ nfsd_setattr(struct svc_rqst *rqstp, struct svc_fh *f=
+hp,
+> =20
+>  	inode_lock(inode);
+>  	for (retries =3D 1;;) {
+> -		host_err =3D __nfsd_setattr(dentry, iap);
+> +		struct iattr attrs =3D *iap;
+> +
+> +		host_err =3D __nfsd_setattr(dentry, &attrs);
+>  		if (host_err !=3D -EAGAIN || !retries--)
+>  			break;
+>  		if (!nfsd_wait_for_delegreturn(rqstp, inode))
 
-Please read my blog about how to resend a patch.
+Zhi Li tested the test kernel for this today and this seems to have
+fixed the issue. I think you can add:
 
-https://staticthinking.wordpress.com/2022/07/27/how-to-send-a-v2-patch/
+Tested-by: Zhi Li <yieli@redhat.com>
 
-regards,
-dan carpenter
-
+Cheers,
+Jeff
