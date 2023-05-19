@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D0BC70A2AC
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 00:07:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B96570A2AD
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 00:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231335AbjESWHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 18:07:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43578 "EHLO
+        id S231616AbjESWHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 18:07:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbjESWHD (ORCPT
+        with ESMTP id S229807AbjESWHq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 18:07:03 -0400
+        Fri, 19 May 2023 18:07:46 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A826124;
-        Fri, 19 May 2023 15:07:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74055121;
+        Fri, 19 May 2023 15:07:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B14D965B90;
-        Fri, 19 May 2023 22:07:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C22CC433EF;
-        Fri, 19 May 2023 22:07:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0DB3161B8E;
+        Fri, 19 May 2023 22:07:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F60FC433D2;
+        Fri, 19 May 2023 22:07:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684534021;
-        bh=s/YsWicazEt1ByNo2ZhYLVzSTqCXreOks8GOVcWPROY=;
+        s=k20201202; t=1684534064;
+        bh=cwtMKNc7g+u1PEhQvV8b9nMBwF20gi4zaYJxK0R+El8=;
         h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=efoboCyzRZJCCM07UJr0jDQo8eJTh5LmaRW8B55khgreWd4m98kkBHvzENNRVGnbp
-         sM5ceL9coNiSwwj7IquGZC1ZLVe1qI4TSJejWg/iz5lI5eGU+ZWLVhjEeTbjP51c1F
-         J34SNjMzqDqQeMs9yNJKjtXmatKeEyrMxb7tcMi2vwmKBK6lGUJA7kWWMpFTAPw2en
-         g9imorb7PUNtQVhyl/3ogbuXeA5o7by174wGB2rVGCcDVYp1psEpjZ6ScGQRQsKXZn
-         VpdZcVENXXTW7hZhrkS8KBz9PDjojPp3thZR/QpKkElcq/LCCBbZ21A8Bk3s1+kjSI
-         b9R/EpYh+aoGA==
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2af24ee004dso13887771fa.0;
-        Fri, 19 May 2023 15:07:00 -0700 (PDT)
-X-Gm-Message-State: AC+VfDyO91cQ7eqcgvcWf5GDW/EVZPSsl7mXw9XF+PUpD9Rt/5xjFYLI
-        O6Wq9z6n31CpSPuLpyQq8V7N43DuVxswp147aJA=
-X-Google-Smtp-Source: ACHHUZ6oO6BudlVQL4HrnAu94lpFnEfpI1CggEtQkEwqnCLkv/OdOdtBPpLot2I9WeDELfDJBD7zXb+mK/AhHjQRROE=
-X-Received: by 2002:a2e:97c3:0:b0:2ac:e66c:e91 with SMTP id
- m3-20020a2e97c3000000b002ace66c0e91mr1355985ljj.19.1684534019079; Fri, 19 May
- 2023 15:06:59 -0700 (PDT)
+        b=aq0ulOkABWyvoL4xYBYd6VvTLtimaPXaFXs3fKhXQQKCGlM+A61Iseea1v+snyKev
+         A5R4IzpXKmymazXLT2U2j4Au14pmQDd2D+qpkCv3RtxGdf7hA8DqAmvF1d2XiB2kLS
+         ls21Wo3M43OzoI2mGZAdZzlJ2v+QOLhjLzNtS8K9E1dzq1x1WmBMk5PnTms7dvGIfU
+         X7HScaO7gmnbkv20/E1bXt8XQxrRRI2fPT2yyE+h3JzbQO83OXq5uCtRxLJLHlmv6B
+         ag4mt4GCHpxLLWIwGiaUx5ut8bXlTPybJ56/gYhgJVand9tdBfa2ymz46XkIFKIhji
+         i2zNMp0/Wkm3w==
+Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2af2696fd1cso12229171fa.2;
+        Fri, 19 May 2023 15:07:44 -0700 (PDT)
+X-Gm-Message-State: AC+VfDybvtTT5BG2ZPcQaIttoscvJHnJao+FazINsKrY5hB7wqyirQpf
+        yS6Vnc3T9mEXSHMNDVmoRAq7IFW6Xih5BCG/fso=
+X-Google-Smtp-Source: ACHHUZ7XIWxxaERb03rLpuOsmhZ3XsiBSvWSkxnf/3UdjvDEEgtu0D42KIzPNPCVtgdwk4uuAeYPkqsrD5CRuOcxjds=
+X-Received: by 2002:ac2:5333:0:b0:4ed:d2cf:857b with SMTP id
+ f19-20020ac25333000000b004edd2cf857bmr1237996lfh.5.1684534062506; Fri, 19 May
+ 2023 15:07:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230515134808.3936750-1-linan666@huaweicloud.com> <20230515134808.3936750-4-linan666@huaweicloud.com>
-In-Reply-To: <20230515134808.3936750-4-linan666@huaweicloud.com>
+References: <20230515134808.3936750-1-linan666@huaweicloud.com>
+In-Reply-To: <20230515134808.3936750-1-linan666@huaweicloud.com>
 From:   Song Liu <song@kernel.org>
-Date:   Fri, 19 May 2023 15:06:45 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4SweXwqCN-_z926CSw4+i0-nHKj8wNooKBvV-1YJ1moQ@mail.gmail.com>
-Message-ID: <CAPhsuW4SweXwqCN-_z926CSw4+i0-nHKj8wNooKBvV-1YJ1moQ@mail.gmail.com>
-Subject: Re: [PATCH OLK-5.10 v3 3/4] md/raid10: fix wrong setting of max_corr_read_errors
+Date:   Fri, 19 May 2023 15:07:30 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW7m5hFY2L=2_FA-Qq3Yxr0a4r_QHdXSeZQ8kLgXMvj1sA@mail.gmail.com>
+Message-ID: <CAPhsuW7m5hFY2L=2_FA-Qq3Yxr0a4r_QHdXSeZQ8kLgXMvj1sA@mail.gmail.com>
+Subject: Re: [PATCH OLK-5.10 v3 0/4] md: bugfix of writing raid sysfs
 To:     linan666@huaweicloud.com
 Cc:     neilb@suse.de, Rob.Becker@riverbed.com, linux-raid@vger.kernel.org,
         linux-kernel@vger.kernel.org, linan122@huawei.com,
@@ -69,70 +69,27 @@ On Mon, May 15, 2023 at 6:49=E2=80=AFAM <linan666@huaweicloud.com> wrote:
 >
 > From: Li Nan <linan122@huawei.com>
 >
-> max_corr_read_errors should not be negative number. Change it to
-> unsigned int where use it.
+> The patch series fix the bug of writing raid sysfs.
 >
-> Fixes: 1e50915fe0bb ("raid: improve MD/raid10 handling of correctable rea=
-d errors.")
-> Signed-off-by: Li Nan <linan122@huawei.com>
-> Reviewed-by: Yu Kuai <yukuai3@huawei.com>
-> ---
->  drivers/md/md.c     | 2 +-
->  drivers/md/raid10.c | 5 +++--
->  2 files changed, 4 insertions(+), 3 deletions(-)
+> Changes in v2:
+>  - in patch 1, move check out of md_bitmap_checkpage().
+>  - in patch 2, use div64_u64() and DIV64_U64_ROUND_UP() instead of direct=
+ly
+>    '/', and chang old_delay/old_delay to unsigned int.
+>  - in patch 4, use 'goto' to make changes more readable.
 >
-> diff --git a/drivers/md/md.c b/drivers/md/md.c
-> index 5bba071ea907..b69ddfb1662a 100644
-> --- a/drivers/md/md.c
-> +++ b/drivers/md/md.c
-> @@ -4484,7 +4484,7 @@ __ATTR_PREALLOC(array_state, S_IRUGO|S_IWUSR, array=
-_state_show, array_state_stor
+> Changes in v2:
+>  - add patch "md/raid10: optimize check_decay_read_errors()".
+>  - in patch 2, return ret-value of strict_strtoul_scaled if error occurs.
+>  - in patch 3, optimize format.
 >
->  static ssize_t
->  max_corrected_read_errors_show(struct mddev *mddev, char *page) {
-> -       return sprintf(page, "%d\n",
-> +       return sprintf(page, "%u\n",
->                        atomic_read(&mddev->max_corr_read_errors));
->  }
+> Li Nan (4):
+>   md/raid10: fix slab-out-of-bounds in md_bitmap_get_counter
+>   md/raid10: fix overflow in safe_delay_store
+>   md/raid10: fix wrong setting of max_corr_read_errors
+>   md/raid10: optimize check_decay_read_errors()
 
-max_corr_read_errors is atomic_t, so a signed integer. So these
-signed =3D> unsigned changes are pretty error prone. Can we just
-add check in max_corrected_read_errors_store() so we never store
-a negative value?
+I applied 1/4 to md-next.
 
 Thanks,
 Song
-
->
-> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-> index 4fcfcb350d2b..4d615fcc6a50 100644
-> --- a/drivers/md/raid10.c
-> +++ b/drivers/md/raid10.c
-> @@ -2727,7 +2727,8 @@ static void fix_read_error(struct r10conf *conf, st=
-ruct mddev *mddev, struct r10
->         int sect =3D 0; /* Offset from r10_bio->sector */
->         int sectors =3D r10_bio->sectors;
->         struct md_rdev *rdev;
-> -       int max_read_errors =3D atomic_read(&mddev->max_corr_read_errors)=
-;
-> +       unsigned int max_read_errors =3D
-> +                       atomic_read(&mddev->max_corr_read_errors);
->         int d =3D r10_bio->devs[r10_bio->read_slot].devnum;
->
->         /* still own a reference to this rdev, so it cannot
-> @@ -2743,7 +2744,7 @@ static void fix_read_error(struct r10conf *conf, st=
-ruct mddev *mddev, struct r10
->         check_decay_read_errors(mddev, rdev);
->         atomic_inc(&rdev->read_errors);
->         if (atomic_read(&rdev->read_errors) > max_read_errors) {
-> -               pr_notice("md/raid10:%s: %pg: Raid device exceeded read_e=
-rror threshold [cur %d:max %d]\n",
-> +               pr_notice("md/raid10:%s: %pg: Raid device exceeded read_e=
-rror threshold [cur %u:max %u]\n",
->                           mdname(mddev), rdev->bdev,
->                           atomic_read(&rdev->read_errors), max_read_error=
-s);
->                 pr_notice("md/raid10:%s: %pg: Failing raid device\n",
-> --
-> 2.31.1
->
