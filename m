@@ -2,238 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB8D270A2D5
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 00:34:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73C6B70A2D7
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 00:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231411AbjESWek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 18:34:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52500 "EHLO
+        id S231482AbjESWfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 18:35:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjESWei (ORCPT
+        with ESMTP id S229557AbjESWfc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 18:34:38 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F0161BD;
-        Fri, 19 May 2023 15:34:35 -0700 (PDT)
-Received: (Authenticated sender: didi.debian@cknow.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7B3EA240002;
-        Fri, 19 May 2023 22:34:30 +0000 (UTC)
-From:   Diederik de Haas <didi.debian@cknow.org>
-To:     Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Nicolas Dufresne <nicolas.dufresne@collabora.com>
-Cc:     p.zabel@pengutronix.de, mchehab@kernel.org,
-        m.szyprowski@samsung.com, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-Subject: Re: [PATCH v2] media: verisilicon: Fix crash when probing encoder
-Date:   Sat, 20 May 2023 00:34:20 +0200
-Message-ID: <4995215.LvFx2qVVIh@bagend>
-Organization: Connecting Knowledge
-In-Reply-To: <403ea30e55a9667684cd1f8d2d3a641efda9976f.camel@collabora.com>
-References: <20230413104756.356695-1-benjamin.gaignard@collabora.com>
- <CAAEAJfBHOMpWT2E4w+Zu=f8QCg+YiDU_9gY4bpJSGBLMnC8B9A@mail.gmail.com>
- <403ea30e55a9667684cd1f8d2d3a641efda9976f.camel@collabora.com>
+        Fri, 19 May 2023 18:35:32 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A572E43
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 15:35:28 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-25372604818so1340517a91.2
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 15:35:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684535728; x=1687127728;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JHCKFr6f+LZMrurz1uw2tkflY43AEvXG6kJYVc5RlKk=;
+        b=ZTaj7Xzb8Lr81gcjj93/DsC83OXMkv7GWOibZycLcwa7PuyxZVbeeCbGUsEwnflrUi
+         l/nJn1CyO+r86w8ekA/gijEh5xCLUhzd5a7Jw5jCvjF+8tien4ZhfDV/Dlqe7/vfpWUz
+         sPu4+UrcIo1fqg/spvZQ4RzGg9gjo9RHcKrZ5ca5Ukfi4VcyuTD+0wiqUIdTg++foQXJ
+         NbZrc+uFHej/Z8oIR0mnrtyktFoqrL9li+yH7xH3oG3nEn0wv+VqA3J7jLPmlg9RWjMw
+         uVAC/2v1a+Ew1XqD3t729BD2/MrhDuRbBwfCcoiDjjYGPk+vWTP7g4GXCJBDWOK8V3/2
+         NC+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684535728; x=1687127728;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JHCKFr6f+LZMrurz1uw2tkflY43AEvXG6kJYVc5RlKk=;
+        b=LHk0tG9rkrFdlX23wKi1I/DpBPpl5xYa7Njwv60NrtRXTM2C6GSI/gtCFI6sBSQLmO
+         msxURAYZ+kFPCBjpCHSI1WPw++3zutNk626rCOFZgC6X02pLZaSPI5CRBOxZ+qW/74NL
+         Vpdad7P2ne8dLA3ymKNIjocVcxIRrFgQPIExJMqUmq/sWqnJDd5KlFg747YNM6nsV2Bh
+         vyQrnr0Ma1C1/jlvGm8qE7ed1gJxpzFHq0fvqQCRl86p0iMOqxI+dhnQkYT+mZGfOjsf
+         xLJf1LmGTlKMQdRbjz0y4H5OGZBi0rjdDJNhxxVxAH6kOcTtDb3sNgjRGdpDDQ16g8bY
+         glFw==
+X-Gm-Message-State: AC+VfDzZi52JB2vSpvaGmiAupYoHV8rftueNvc7YSsYq7yPDy/Ocw+TZ
+        1M+QZP4f0iU4Q9+jUixjk28=
+X-Google-Smtp-Source: ACHHUZ5OqNHDufMpATdKpQiBGa/7crW94K9fjAO1vJFM+QC5orGb1L9cueVZ14KkMdGcGIdDKmJUig==
+X-Received: by 2002:a17:90a:f68a:b0:253:70b7:18d1 with SMTP id cl10-20020a17090af68a00b0025370b718d1mr3477303pjb.34.1684535727568;
+        Fri, 19 May 2023 15:35:27 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id q6-20020a17090a430600b0024e268985b1sm131115pjg.9.2023.05.19.15.35.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 May 2023 15:35:27 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Fri, 19 May 2023 12:35:25 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     jiangshanlai@gmail.com, peterz@infradead.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        joshdon@google.com, brho@google.com, briannorris@chromium.org,
+        nhuck@google.com, agk@redhat.com, snitzer@kernel.org,
+        void@manifault.com
+Subject: Re: [PATCHSET v1 wq/for-6.5] workqueue: Improve unbound workqueue
+ execution locality
+Message-ID: <ZGf5rfESYhKYzPSY@slm.duckdns.org>
+References: <20230519001709.2563-1-tj@kernel.org>
+ <CAHk-=whA2ztAcVrgsqj39j30LJYhjBSkk6Dju6TY16zGpXpkZQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart2794546.ElGaqSPkdT";
- micalg="pgp-sha256"; protocol="application/pgp-signature"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=whA2ztAcVrgsqj39j30LJYhjBSkk6Dju6TY16zGpXpkZQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---nextPart2794546.ElGaqSPkdT
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset="iso-8859-1"; protected-headers="v1"
-From: Diederik de Haas <didi.debian@cknow.org>
-Date: Sat, 20 May 2023 00:34:20 +0200
-Message-ID: <4995215.LvFx2qVVIh@bagend>
-Organization: Connecting Knowledge
-MIME-Version: 1.0
+Hello, Linus.
 
-SGksCgpPbiBUaHVyc2RheSwgMTMgQXByaWwgMjAyMyAyMTo1Mjo1MCBDRVNUIE5pY29sYXMgRHVm
-cmVzbmUgd3JvdGU6Cj4gTGUgamV1ZGkgMTMgYXZyaWwgMjAyMyDgIDEwOjEwIC0wMzAwLCBFemVx
-dWllbCBHYXJjaWEgYSDpY3JpdCA6Cj4gPiBCZW5qYW1pbiwKPiA+IAo+ID4gUGxlYXNlIGluY2x1
-ZGUgdGhlIGNyYXNoIHN0cmFja3RyYWNlIGluIHRoZSBjb21taXQuCj4gCj4gQ2FyZWZ1bCB3aXRo
-IEhUTUwgbWVzc2FnZSwgdGhleSBkb24ndCBhbHdheXMgbWFrZSBpdCBpbiB0aGVzZSBNTCBhbmQg
-dG9vbGluZwo+IG1pZ2h0IG5vdCBwbGF5IHdlbGwgd2l0aCB0aGUgdG9vbGluZy4gUGVyaGFwcyBp
-dCBjYW4gYmUgZWRpdGVkIHdoaWxlCj4gcHVsbGluZyA/IEhlcmUncyB0aGUgaW5mbyBmcm9tIE1h
-cmVrJ3MgYnVnIHJlcG9ydDoKPiAKPiBoYW50cm8tdnB1IGZkZWEwMDAwLnZpZGVvLWNvZGVjOiBB
-ZGRpbmcgdG8gaW9tbXUgZ3JvdXAgMAo+IGhhbnRyby12cHUgZmRlYTAwMDAudmlkZW8tY29kZWM6
-IHJlZ2lzdGVyZWQgcm9ja2NoaXAscmszNTY4LXZwdS1kZWMgYXMKPiAvZGV2L3ZpZGVvMAo+IGhh
-bnRyby12cHUgZmRlZTAwMDAudmlkZW8tY29kZWM6IEFkZGluZyB0byBpb21tdSBncm91cCAxCj4g
-aGFudHJvLXZwdSBmZGVlMDAwMC52aWRlby1jb2RlYzogcmVnaXN0ZXJlZCByb2NrY2hpcCxyazM1
-NjgtdmVwdS1lbmMgYXMKPiAvZGV2L3ZpZGVvMQo+IFVuYWJsZSB0byBoYW5kbGUga2VybmVsIE5V
-TEwgcG9pbnRlciBkZXJlZmVyZW5jZSBhdCB2aXJ0dWFsIGFkZHJlc3MKPiAwMDAwMDAwMDAwMDAw
-MDA4Cj4gTWVtIGFib3J0IGluZm86Cj4gICAgRVNSID0gMHgwMDAwMDAwMDk2MDAwMDA0Cj4gICAg
-RUMgPSAweDI1OiBEQUJUIChjdXJyZW50IEVMKSwgSUwgPSAzMiBiaXRzCj4gICAgU0VUID0gMCwg
-Rm5WID0gMAo+ICAgIEVBID0gMCwgUzFQVFcgPSAwCj4gICAgRlNDID0gMHgwNDogbGV2ZWwgMCB0
-cmFuc2xhdGlvbiBmYXVsdAo+IERhdGEgYWJvcnQgaW5mbzoKPiAgICBJU1YgPSAwLCBJU1MgPSAw
-eDAwMDAwMDA0Cj4gICAgQ00gPSAwLCBXblIgPSAwCj4gdXNlciBwZ3RhYmxlOiA0ayBwYWdlcywg
-NDgtYml0IFZBcywgcGdkcD0wMDAwMDAwMWY0NDZmMDAwCj4gWzAwMDAwMDAwMDAwMDAwMDhdIHBn
-ZD0wMDAwMDAwMDAwMDAwMDAwLCBwNGQ9MDAwMDAwMDAwMDAwMDAwMAo+IEludGVybmFsIGVycm9y
-OiBPb3BzOiAwMDAwMDAwMDk2MDAwMDA0IFsjMV0gUFJFRU1QVCBTTVAKPiBNb2R1bGVzIGxpbmtl
-ZCBpbjogaGFudHJvX3ZwdSB2NGwyX3ZwOSB2NGwyX2gyNjQgdjRsMl9tZW0ybWVtCj4gdmlkZW9i
-dWYyX2RtYV9jb250aWcgc25kX3NvY19zaW1wbGVfY2FyZCBkaXNwbGF5X2Nvbm5lY3Rvcgo+IHNu
-ZF9zb2Nfc2ltcGxlX2NhcmRfdXRpbHMgdmlkZW9idWYyX21lbW9wcyBjcmN0MTBkaWZfY2UgZHdt
-YWNfcmsKPiByb2NrY2hpcF90aGVybWFsIHZpZGVvYnVmMl92NGwyIHN0bW1hY19wbGF0Zm9ybSBy
-b2NrY2hpcF9zYXJhZGMKPiBpbmR1c3RyaWFsaW9fdHJpZ2dlcmVkX2J1ZmZlciBrZmlmb19idWYg
-c3RtbWFjIHZpZGVvZGV2IHBjc194cGNzCj4gcnRjX3JrODA4IHZpZGVvYnVmMl9jb21tb24gcm9j
-a2NoaXBkcm0gcGFuZnJvc3QgbWMgZHJtX3NobWVtX2hlbHBlcgo+IGFuYWxvZ2l4X2RwIGdwdV9z
-Y2hlZCBkd19taXBpX2RzaSBkd19oZG1pIGRybV9kaXNwbGF5X2hlbHBlciBpcF90YWJsZXMKPiB4
-X3RhYmxlcyBpcHY2Cj4gQ1BVOiAzIFBJRDogMTcxIENvbW06IHY0bF9pZCBOb3QgdGFpbnRlZCA2
-LjMuMC1yYzIrICMxMzQ3OAo+IEhhcmR3YXJlIG5hbWU6IEhhcmRrZXJuZWwgT0RST0lELU0xIChE
-VCkKPiBwc3RhdGU6IDYwNDAwMDA5IChuWkN2IGRhaWYgK1BBTiAtVUFPIC1UQ08gLURJVCAtU1NC
-UyBCVFlQRT0tLSkKPiBwYyA6IGhhbnRyb190cnlfZm10KzB4YjQvMHgyODAgW2hhbnRyb192cHVd
-Cj4gbHIgOiBoYW50cm9fdHJ5X2ZtdCsweGE4LzB4MjgwIFtoYW50cm9fdnB1XQo+IC4uLgo+IENh
-bGwgdHJhY2U6Cj4gICBoYW50cm9fdHJ5X2ZtdCsweGI0LzB4MjgwIFtoYW50cm9fdnB1XQo+ICAg
-aGFudHJvX3NldF9mbXRfb3V0KzB4M2MvMHgyNzggW2hhbnRyb192cHVdCj4gICBoYW50cm9fcmVz
-ZXRfcmF3X2ZtdCsweDk0LzB4YjQgW2hhbnRyb192cHVdCj4gICBoYW50cm9fc2V0X2ZtdF9jYXAr
-MHgyM2MvMHgyNTAgW2hhbnRyb192cHVdCj4gICBoYW50cm9fcmVzZXRfZm10cysweDk0LzB4Y2Mg
-W2hhbnRyb192cHVdCj4gICBoYW50cm9fb3BlbisweGQ0LzB4MjBjIFtoYW50cm9fdnB1XQo+ICAg
-djRsMl9vcGVuKzB4ODAvMHgxMjAgW3ZpZGVvZGV2XQo+ICAgY2hyZGV2X29wZW4rMHhjMC8weDIy
-Ywo+ICAgZG9fZGVudHJ5X29wZW4rMHgxM2MvMHg0OTAKPiAgIHZmc19vcGVuKzB4MmMvMHgzOAo+
-ICAgcGF0aF9vcGVuYXQrMHg1NTAvMHg5MzgKPiAgIGRvX2ZpbHBfb3BlbisweDgwLzB4MTJjCj4g
-ICBkb19zeXNfb3BlbmF0MisweGI0LzB4MTZjCj4gICBfX2FybTY0X3N5c19vcGVuYXQrMHg2NC8w
-eGFjCj4gICBpbnZva2Vfc3lzY2FsbCsweDQ4LzB4MTE0Cj4gICBlbDBfc3ZjX2NvbW1vbi5jb25z
-dHByb3AuMCsweGZjLzB4MTFjCj4gICBkb19lbDBfc3ZjKzB4MzgvMHhhNAo+ICAgZWwwX3N2Yysw
-eDQ4LzB4YjgKPiAgIGVsMHRfNjRfc3luY19oYW5kbGVyKzB4YjgvMHhiYwo+ICAgZWwwdF82NF9z
-eW5jKzB4MTkwLzB4MTk0Cj4gQ29kZTogOTdmZTcyNmMgZjk0MGFhODAgNTI4NjRhNjEgNzJhNjg2
-YzEgKGI5NDAwODAwKQo+IC0tLVsgZW5kIHRyYWNlIDAwMDAwMDAwMDAwMDAwMDAgXS0tLQoKV2hl
-biBJIGJvb3RlZCBpbnRvIG15IDYuNC1yYzEgKGJ1dCBhbHNvIHJjMikga2VybmVsIG9uIG15ClBp
-bmU2NCBRdWFydHo2NCBNb2RlbCBBLCBJIG5vdGljZWQgYSBjcmFzaCB3aGljaCBzZWVtcyB0aGUg
-c2FtZSBhcwphYm92ZSwgYnV0IEkgZGlkbid0IGhhdmUgc3VjaCBhIGNyYXNoIHdpdGggbXkgNi4z
-IGtlcm5lbC4KU2VhcmNoaW5nIGZvciAnaGFudHJvJyBsZWQgbWUgdG8gdGhpcyBjb21taXQgYXMg
-dGhlIG1vc3QgbGlrZWx5IGN1bHByaXQKYnV0IHdoZW4gSSBidWlsZCBhIG5ldyA2LjQtcmNYIGtl
-cm5lbCB3aXRoIHRoaXMgY29tbWl0IHJldmVydGVkLApJIHN0aWxsIGhhZCB0aGlzIGNyYXNoLgpE
-byB5b3UgaGF2ZSBzdWdnZXN0aW9ucyB3aGljaCBjb21taXQgd291bGQgdGhlbiBiZSB0aGUgbGlr
-ZWx5IGN1bHByaXQ/CgpDaGVlcnMsCiAgRGllZGVyaWsKCkZvciBjb21wbGV0ZW5lc3MsIHRoaXMg
-aXMgdGhlIGVycm9yIEkgZ290IHdpdGggNi40LXJjWDoKClsgICAyNi45NzY3NjZdIHBhbmZyb3N0
-IGZkZTYwMDAwLmdwdTogY2xvY2sgcmF0ZSA9IDU5NDAwMDAwMApbICAgMjYuOTc3Mjk3XSBwYW5m
-cm9zdCBmZGU2MDAwMC5ncHU6IGJ1c19jbG9jayByYXRlID0gNTAwMDAwMDAwClsgICAyNi45OTYw
-MTJdIHJhbmRvbTogY3JuZyBpbml0IGRvbmUKWyAgIDI3LjA3MjQzOF0gdmlkZW9kZXY6IExpbnV4
-IHZpZGVvIGNhcHR1cmUgaW50ZXJmYWNlOiB2Mi4wMApbICAgMjcuMTE5MDEyXSBSZWdpc3RlcmVk
-IElSIGtleW1hcCByYy1jZWMKWyAgIDI3LjEyNTE2MV0gcmMgcmMwOiBkd19oZG1pIGFzIC9kZXZp
-Y2VzL3BsYXRmb3JtL2ZlMGEwMDAwLmhkbWkvcmMvcmMwClsgICAyNy4xMjU0MjddIHBhbmZyb3N0
-IGZkZTYwMDAwLmdwdTogbWFsaS1nNTIgaWQgMHg3NDAyIG1ham9yIDB4MSBtaW5vciAweDAgc3Rh
-dHVzIDB4MApbICAgMjcuMTI1OTA1XSBpbnB1dDogZHdfaGRtaSBhcyAvZGV2aWNlcy9wbGF0Zm9y
-bS9mZTBhMDAwMC5oZG1pL3JjL3JjMC9pbnB1dDEKWyAgIDI3LjEyNjQyN10gcGFuZnJvc3QgZmRl
-NjAwMDAuZ3B1OiBmZWF0dXJlczogMDAwMDAwMDAsMDAwMDBjZjcsIGlzc3VlczogMDAwMDAwMDAs
-MDAwMDA0MDAKWyAgIDI3LjEyNzc4NV0gcGFuZnJvc3QgZmRlNjAwMDAuZ3B1OiBGZWF0dXJlczog
-TDI6MHgwNzExMDIwNiBTaGFkZXI6MHgwMDAwMDAwMiBUaWxlcjoweDAwMDAwMjA5IE1lbToweDEg
-TU1VOjB4MDAwMDI4MjMgQVM6MHhmZiBKUzoweDcKWyAgIDI3LjEyODk1NF0gcGFuZnJvc3QgZmRl
-NjAwMDAuZ3B1OiBzaGFkZXJfcHJlc2VudD0weDEgbDJfcHJlc2VudD0weDEKWyAgIDI3LjE0ODky
-MF0gZ3Bpby1mYW4gZ3Bpb19mYW46IEdQSU8gZmFuIGluaXRpYWxpemVkClsgICAyNy4xOTExMzFd
-IFtkcm1dIEluaXRpYWxpemVkIHBhbmZyb3N0IDEuMi4wIDIwMTgwOTA4IGZvciBmZGU2MDAwMC5n
-cHUgb24gbWlub3IgMQpbICAgMjcuMjY1OTIwXSBoYW50cm8tdnB1IGZkZWEwMDAwLnZpZGVvLWNv
-ZGVjOiBBZGRpbmcgdG8gaW9tbXUgZ3JvdXAgMApbICAgMjcuMjY3NTM1XSBoYW50cm8tdnB1IGZk
-ZWEwMDAwLnZpZGVvLWNvZGVjOiByZWdpc3RlcmVkIHJvY2tjaGlwLHJrMzU2OC12cHUtZGVjIGFz
-IC9kZXYvdmlkZW8wClsgICAyNy4yNzA2NjhdIGhhbnRyby12cHUgZmRlZTAwMDAudmlkZW8tY29k
-ZWM6IEFkZGluZyB0byBpb21tdSBncm91cCAxClsgICAyNy4yNzI1OTBdIGhhbnRyby12cHUgZmRl
-ZTAwMDAudmlkZW8tY29kZWM6IHJlZ2lzdGVyZWQgcm9ja2NoaXAscmszNTY4LXZlcHUtZW5jIGFz
-IC9kZXYvdmlkZW8xClsgICAyNy41NzM0MTddIFVuYWJsZSB0byBoYW5kbGUga2VybmVsIE5VTEwg
-cG9pbnRlciBkZXJlZmVyZW5jZSBhdCB2aXJ0dWFsIGFkZHJlc3MgMDAwMDAwMDAwMDAwMDAwOApb
-ICAgMjcuNTc0MjM4XSBNZW0gYWJvcnQgaW5mbzoKWyAgIDI3LjU3NDQ5OV0gICBFU1IgPSAweDAw
-MDAwMDAwOTYwMDAwMDQKWyAgIDI3LjU3NDgzNl0gICBFQyA9IDB4MjU6IERBQlQgKGN1cnJlbnQg
-RUwpLCBJTCA9IDMyIGJpdHMKWyAgIDI3LjU3NTMxMF0gICBTRVQgPSAwLCBGblYgPSAwClsgICAy
-Ny41NzU1ODZdICAgRUEgPSAwLCBTMVBUVyA9IDAKWyAgIDI3LjU3NTg2OF0gICBGU0MgPSAweDA0
-OiBsZXZlbCAwIHRyYW5zbGF0aW9uIGZhdWx0ClsgICAyNy41NzYzNjhdIERhdGEgYWJvcnQgaW5m
-bzoKWyAgIDI3LjU3NjYzN10gICBJU1YgPSAwLCBJU1MgPSAweDAwMDAwMDA0ClsgICAyNy41NzY5
-ODBdICAgQ00gPSAwLCBXblIgPSAwClsgICAyNy41NzcyNDddIHVzZXIgcGd0YWJsZTogNGsgcGFn
-ZXMsIDQ4LWJpdCBWQXMsIHBnZHA9MDAwMDAwMDEwNzE4YjAwMApbICAgMjcuNTc3ODE4XSBbMDAw
-MDAwMDAwMDAwMDAwOF0gcGdkPTAwMDAwMDAwMDAwMDAwMDAsIHA0ZD0wMDAwMDAwMDAwMDAwMDAw
-ClsgICAyNy41Nzg0MzBdIEludGVybmFsIGVycm9yOiBPb3BzOiAwMDAwMDAwMDk2MDAwMDA0IFsj
-MV0gU01QClsgICAyNy41Nzg5MzRdIE1vZHVsZXMgbGlua2VkIGluOiBwb2x5dmFsX2dlbmVyaWMo
-RSspIGdoYXNoX2NlKEUpIGdmMTI4bXVsKEUpIHNuZF9zb2NfaGRtaV9jb2RlYyhFKykgc2hhMl9j
-ZShFKSBlY2RoX2dlbmVyaWMoRSspIHNoYTI1Nl9hcm02NChFKSBzaGExX2NlKEUpIHJma2lsbChF
-KSBzbmRfc29jX3NwZGlmX3R4KEUpIGVjYyhFKSBsZWRzX2dwaW8oRSkgc25kX3NvY19zaW1wbGVf
-Y2FyZChFKSBzbmRfc29jX3NpbXBsZV9jYXJkX3V0aWxzKEUpIGRpc3BsYXlfY29ubmVjdG9yKEUp
-IGdwaW9fZmFuKEUpIGhhbnRyb192cHUoRSkgdjRsMl92cDkoRSkgc25kX3NvY19yb2NrY2hpcF9p
-MnNfdGRtKEUpIHY0bDJfaDI2NChFKSB2aWRlb2J1ZjJfZG1hX2NvbnRpZyhFKSBzbmRfc29jX3Jv
-Y2tjaGlwX3NwZGlmKEUpIHNuZF9zb2Nfcms4MTcoRSkgdjRsMl9tZW0ybWVtKEUpIHZpZGVvYnVm
-Ml9tZW1vcHMoRSkgZ292ZXJub3Jfc2ltcGxlb25kZW1hbmQoRSkgcm9ja2NoaXBfdGhlcm1hbChF
-KSB2aWRlb2J1ZjJfdjRsMihFKSBkd193ZHQoRSkgc25kX3NvY19jb3JlKEUpIGR3X2hkbWlfaTJz
-X2F1ZGlvKEUpIGR3X2hkbWlfY2VjKEUpIHZpZGVvZGV2KEUpIHNuZF9wY21fZG1hZW5naW5lKEUp
-IHBhbmZyb3N0KEUpIHZpZGVvYnVmMl9jb21tb24oRSkgc25kX3BjbShFKSByazgwNV9wd3JrZXko
-RSkgc25kX3RpbWVyKEUpIGdwdV9zY2hlZChFKSBzbmQoRSkgc291bmRjb3JlKEUpIG1jKEUpIGRy
-bV9zaG1lbV9oZWxwZXIoRSkgY3B1ZnJlcV9kdChFKSBsb29wKEUpIGZ1c2UoRSkgZWZpX3BzdG9y
-ZShFKSBkbV9tb2QoRSkgZGF4KEUpIGNvbmZpZ2ZzKEUpIGlwX3RhYmxlcyhFKSB4X3RhYmxlcyhF
-KSBhdXRvZnM0KEUpIGV4dDQoRSkgY3JjMTYoRSkgbWJjYWNoZShFKSBqYmQyKEUpIGNyYzMyY19n
-ZW5lcmljKEUpIHhoY2lfcGxhdF9oY2QoRSkgeGhjaV9oY2QoRSkgbW90b3Jjb21tKEUpIHJrODA4
-X3JlZ3VsYXRvcihFKSBmYW41MzU1NShFKSBncGlvX3JvY2tjaGlwKEUpIGR3bWFjX3JrKEUpIHN0
-bW1hY19wbGF0Zm9ybShFKQpbICAgMjcuNTc5MTA4XSAgY3JjdDEwZGlmX2NlKEUpIHN0bW1hYyhF
-KSBwY3NfeHBjcyhFKSBjcmN0MTBkaWZfY29tbW9uKEUpIHBoeWxpbmsoRSkgZml4ZWQoRSkgb2Zf
-bWRpbyhFKSBwaW5jdHJsX3JvY2tjaGlwKEUpIHBoeV9yb2NrY2hpcF9pbm5vX3VzYjIoRSkgZml4
-ZWRfcGh5KEUpIHNkaGNpX29mX2R3Y21zaGMoRSkgZHdfbW1jX3JvY2tjaGlwKEUpIGZ3bm9kZV9t
-ZGlvKEUpIHNkaGNpX3BsdGZtKEUpIHBoeV9yb2NrY2hpcF9uYW5lbmdfY29tYnBoeShFKSBkd19t
-bWNfcGx0Zm0oRSkgc2RoY2koRSkgZHdfbW1jKEUpIHBsMzMwKEUpIGxpYnBoeShFKSByb2NrY2hp
-cGRybShFKSBwdHAoRSkgZHJtX2RtYV9oZWxwZXIoRSkgYW5hbG9naXhfZHAoRSkgZHdfaGRtaShF
-KSBjZWMoRSkgcmNfY29yZShFKSBkcm1fZGlzcGxheV9oZWxwZXIoRSkgZHdfbWlwaV9kc2koRSkg
-cHBzX2NvcmUoRSkgZHJtX2ttc19oZWxwZXIoRSkgb2hjaV9wbGF0Zm9ybShFKSBvaGNpX2hjZChF
-KSBlaGNpX3BsYXRmb3JtKEUpIGlvX2RvbWFpbihFKSBlaGNpX2hjZChFKSBkd2MzKEUpIGkyY19y
-azN4KEUpIHVkY19jb3JlKEUpIHVzYmNvcmUoRSkgcm9sZXMoRSkgdWxwaShFKSBkcm0oRSkgdXNi
-X2NvbW1vbihFKQpbICAgMjcuNTkxNzU4XSBDUFU6IDEgUElEOiA0MDcgQ29tbTogdjRsX2lkIFRh
-aW50ZWQ6IEcgICAgICAgICAgICBFICAgICAgNi40LjAtMC1waW5lNjQtYXJtNjQgIzEgIERlYmlh
-biA2LjR+cmMyLTF+cGluZTY0ClsgICAyNy41OTI3MDVdIEhhcmR3YXJlIG5hbWU6IFBpbmU2NCBS
-SzM1NjYgUXVhcnR6NjQtQSBCb2FyZCAoRFQpClsgICAyNy41OTMyMjNdIHBzdGF0ZTogNjA0MDAw
-MDkgKG5aQ3YgZGFpZiArUEFOIC1VQU8gLVRDTyAtRElUIC1TU0JTIEJUWVBFPS0tKQpbICAgMjcu
-NTkzODQzXSBwYyA6IGhhbnRyb190cnlfZm10KzB4YjgvMHgyOTAgW2hhbnRyb192cHVdClsgICAy
-Ny41OTQzMzZdIGxyIDogaGFudHJvX3RyeV9mbXQrMHhhYy8weDI5MCBbaGFudHJvX3ZwdV0KWyAg
-IDI3LjU5NDgxMV0gc3AgOiBmZmZmODAwMDBhYTliNjcwClsgICAyNy41OTUxMDddIHgyOTogZmZm
-ZjgwMDAwYWE5YjY3MCB4Mjg6IGZmZmY4MDAwMGFhOWJiNjAgeDI3OiAwMDAwMDAwMDAwMDAwMDAw
-ClsgICAyNy41OTU3NDZdIHgyNjogMDAwMDAwMDAwMDAwMDAwMCB4MjU6IGZmZmYwMDAxMDgzODAw
-MDggeDI0OiBmZmZmODAwMDAxNGViYWMwClsgICAyNy41OTYzODNdIHgyMzogMDAwMDAwMDAwMDAw
-MDAwMSB4MjI6IGZmZmYwMDAxMDgzODAwMDAgeDIxOiAwMDAwMDAwMDAwMDAwMDAwClsgICAyNy41
-OTcwMTldIHgyMDogZmZmZjgwMDAwMTRmMTBmMCB4MTk6IGZmZmY4MDAwMGFhOWI3MDggeDE4OiAw
-MDAwMDAwMDAwMDAwMDEwClsgICAyNy41OTc2NTddIHgxNzogMDAwMDAwMDAwMDAwMDAwMCB4MTY6
-IDAwMDAwMDAwMDAwMDAwMDAgeDE1OiBmZmZmODAwMDBhYTliNmEwClsgICAyNy41OTgyOTJdIHgx
-NDogZmZmZjAwMDEwNDNmZTI4MCB4MTM6IDAwMDAwMDAwMDAwMDAwMDEgeDEyOiAwMDAwMDAwMDAw
-MDAwMDAxClsgICAyNy41OTg5MjddIHgxMTogMDAwMDAwMDAwMDAwMDAwMiB4MTA6IDAwMDAwMDAw
-MDAwMDAwMDMgeDkgOiAwMDAwMDAwMDAwMDAwMDAyClsgICAyNy41OTk1NjNdIHg4IDogMDAwMDAw
-MDAwMDAwMDAxZiB4NyA6IDAwMDAwMDAwMDAwMDAwNWYgeDYgOiAwMDAwMDAwMDAwMDAwMDAzClsg
-ICAyNy42MDAxOTldIHg1IDogZmZmZjgwMDAwMTNlMjU4MyB4NCA6IGZmZmY4MDAwMDEzZTI1ODAg
-eDMgOiAwMDAwMDAwMGZmZmZmZmZmClsgICAyNy42MDA4MzRdIHgyIDogMDAwMDAwMDAwMDAwMDAx
-MCB4MSA6IDAwMDAwMDAwMDAwMDAwMDAgeDAgOiAwMDAwMDAwMDM0MzYzMjUzClsgICAyNy42MDE0
-NzBdIENhbGwgdHJhY2U6ClsgICAyNy42MDE2OTNdICBoYW50cm9fdHJ5X2ZtdCsweGI4LzB4Mjkw
-IFtoYW50cm9fdnB1XQpbICAgMjcuNjAyMTQzXSAgaGFudHJvX3NldF9mbXRfb3V0KzB4NDQvMHgz
-ODggW2hhbnRyb192cHVdClsgICAyNy42MDI2MTddICBoYW50cm9fcmVzZXRfcmF3X2ZtdCsweDdj
-LzB4ZTAgW2hhbnRyb192cHVdClsgICAyNy42MDMwOTZdICBoYW50cm9fc2V0X2ZtdF9jYXArMHgy
-OWMvMHgyYjggW2hhbnRyb192cHVdClsgICAyNy42MDM1NzVdICBoYW50cm9fcmVzZXRfZW5jb2Rl
-ZF9mbXQrMHg4MC8weGMwIFtoYW50cm9fdnB1XQpbICAgMjcuNjA0MDg2XSAgaGFudHJvX3Jlc2V0
-X2ZtdHMrMHgyMC8weDQ4IFtoYW50cm9fdnB1XQpbICAgMjcuNjA0NTQ1XSAgaGFudHJvX29wZW4r
-MHhlMC8weDIwOCBbaGFudHJvX3ZwdV0KWyAgIDI3LjYwNDk2NV0gIHY0bDJfb3BlbisweDg0LzB4
-MTMwIFt2aWRlb2Rldl0KWyAgIDI3LjYwNTM4OV0gIGNocmRldl9vcGVuKzB4ZDgvMHgyZDgKWyAg
-IDI3LjYwNTcxMl0gIGRvX2RlbnRyeV9vcGVuKzB4MWJjLzB4NDkwClsgICAyNy42MDYwNjBdICB2
-ZnNfb3BlbisweDM0LzB4NDAKWyAgIDI3LjYwNjM0NV0gIHBhdGhfb3BlbmF0KzB4OWM4LzB4ZjIw
-ClsgICAyNy42MDY2NzBdICBkb19maWxwX29wZW4rMHhhNC8weDE2MApbICAgMjcuNjA2OTkxXSAg
-ZG9fc3lzX29wZW5hdDIrMHhjOC8weDE4OApbICAgMjcuNjA3MzI3XSAgX19hcm02NF9zeXNfb3Bl
-bmF0KzB4NmMvMHhiOApbICAgMjcuNjA3Njg3XSAgaW52b2tlX3N5c2NhbGwrMHg3OC8weDEwOApb
-ICAgMjcuNjA4MDI5XSAgZWwwX3N2Y19jb21tb24uY29uc3Rwcm9wLjArMHhkNC8weDEwMApbICAg
-MjcuNjA4NDU2XSAgZG9fZWwwX3N2YysweDQwLzB4YTgKWyAgIDI3LjYwODc1NV0gIGVsMF9zdmMr
-MHgzNC8weGQ4ClsgICAyNy42MDkwMzZdICBlbDB0XzY0X3N5bmNfaGFuZGxlcisweGY0LzB4MTIw
-ClsgICAyNy42MDk0MjBdICBlbDB0XzY0X3N5bmMrMHgxOTAvMHgxOTgKWyAgIDI3LjYwOTc1M10g
-Q29kZTogOTdmYmM4ZTIgZjk0MDU2YzEgNTI4NjRhNjAgNzJhNjg2YzAgKGI5NDAwODIxKSAKWyAg
-IDI3LjYxMDI5N10gLS0tWyBlbmQgdHJhY2UgMDAwMDAwMDAwMDAwMDAwMCBdLS0tCg==
+On Thu, May 18, 2023 at 05:41:29PM -0700, Linus Torvalds wrote:
+...
+> That commit f959325e6ac3 ("fsverity: Remove WQ_UNBOUND from fsverity
+> read workqueue") really talks about startup costs. They are about
+> things like "page in the executable", which is all almost 100%
+> serialized with no parallelism at all. Even read-ahead ends up being
+> serial, in that it's likely one single contiguous IO.
+
+I should have explained my thought process better here. I don't think the
+fsverity and other similar recent reports on heterogeneous ARM CPUs are
+caused directly by workqueue. Please take a look at the following message
+from Brian Norris.
+
+ https://lore.kernel.org/all/ZFvpJb9Dh0FCkLQA@google.com/T/#u
+
+While it's difficult to tell anything definitive from the message, the
+reported performance ordering is
+
+ 4.19 > pinning worker to a CPU >> fixating CPU freq > kthread_worker
+
+where the difference between 4.19 and pinning to one CPU is pretty small.
+So, it does line up with other reports in that the source of higher
+latencies and lower performance are from work items getting sprayed across
+CPUs.
+
+However, the two kernel versions tested are 4.19 and 5.15. I audited the
+commits in-between and didn't spot anything which would materially change
+unbound workers' affinities or how unbound work items would be assigned to
+them.
+
+Also, f959325e6ac3 ("fsverity: Remove WQ_UNBOUND from fsverity read
+workqueue") is reporting 30 fold increase in scheduler latency, which I take
+to be the time from work item being queued to start of exectuion. That's
+unlikely to be just from crossing a cache boundary. There must be other
+interactions (e.g. with some powersaving state transitions).
+
+That said, workqueue, by spraying work items across cache boundaries, does
+provide a condition in which this sort of problems can be significantly
+amplified. workqueue isn't and can't fix the root cause of these problems;
+however,
+
+* The current workqueue behavior is silly on machines with multiple L3
+  caches such as recent AMD CPUs w/ chiplets and heterogeneous ARM ones.
+  Improving workqueue locality is likely to lessen the severity of the
+  recently reported latency problems, possibly to the extent that it won't
+  matter anymore.
+
+* The fact that the remedy people are going for is switching to percpu
+  workqueue is bad. That is going to hurt other use cases, often severely,
+  and their only solution would be reverting back to unbound workqueues.
+
+So, my expectation with the posted patchset is that most of the severe
+chrome problems will go away, hopefully. Even in the case that that's not
+sufficient, unbound workqueues now provide enough flexibility to work around
+these problems without resorting to switching to per-cpu workqueues thus
+avoiding affecting other use cases negatively.
+
+The performance benchmarks are not directed towards the reported latency
+problems. The reported magnitude seems very hardware specific to me and I
+have no way of reproducing. The benchmarks are more to justify switching the
+default boundaries from NUMA to cache.
+
+> Yes, latency tends to be harder to benchmark than throughput, but I
+> really think latency trumps throughput 95% of the time. And all your
+> benchmark loads looked like throughput loads to me: they just weren't
+> using *all* the CPU capacity you had.
+> 
+> Yes, writeback can have lovely throughput behavior and saturate the IO
+> because you have lots of parallelism. But reads are often 100% serial
+> for one thread, and often you don't *have* more than one thread.
+> 
+> So I think your "not enough work to saturate" is still ludicrously
+> over-the-top. You should not aim for "not enough work to saturate 24
+> threads". You should aim for "basically completely single-threaded".
+> Judging by your "CPU utilization of 60-70%", I think your "LOW" is off
+> by at least an order of magnitude.
 
 
---nextPart2794546.ElGaqSPkdT
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
+More Experiments
+================
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQT1sUPBYsyGmi4usy/XblvOeH7bbgUCZGf5bAAKCRDXblvOeH7b
-bskWAQDAuuFjUBKLrefPNnW0elUlJpq4GaIjeKjX6z1zrsQG9AEA9RFyXUBhFR5y
-a1//gBELDfhreUYrvW8ZyMdDmgwF4QM=
-=9Hbi
------END PGP SIGNATURE-----
-
---nextPart2794546.ElGaqSPkdT--
+I ran several more test sets. An extra workqueue configuration CPU+STRICT is
+added which is very similar to using CPU_INTENSIVE per-cpu workqueues. Also,
+CPU util is now per-single-CPU, ie. 100% indicates using one full CPU rather
+than all CPUs because otherwise the numbers were too small. The tests are
+run against dm-crypt on a tmpfs backed loop device.
 
 
+4. LLOW
 
+Similar benchmark as before but --bs is now 512 bytes and --iodepth and
+--numjobs are dialed down to 4 and 1, respectively. Compared to LOW, both IO
+size and concurrency are 64 times lower.
+
+  taskset 0x8 fio --filename=/dev/dm-1 --direct=1 --rw=randrw --bs=512 \
+	--ioengine=libaio --iodepth=4 --runtime=60 --numjobs=1 \
+	--time_based --group_reporting --name=iops-test-job --verify=sha512
+
+Note that fio is pinned to one CPU because otherwise I was getting random
+bi-modal behaviors depending on what the scheduler was doing making
+comparisons difficult.
+
+                  Bandwidth (MiBps)    CPU util (%)    vs. SYSTEM BW (%)
+  ----------------------------------------------------------------------
+  SYSTEM               55.08  ±0.29    290.80 ±0.64                 0.00
+  CACHE                64.42  ±0.47    291.51 ±0.30               +16.96
+  CACHE+STRICT         65.18  ±1.14    303.74 ±1.79               +18.34
+  CPU+STRICT           32.86  ±0.34    159.05 ±0.37               -48.99
+  SYSTEM+LOCAL         56.76  ±0.30    286.78 ±0.50                +3.05
+  CACHE+LOCAL          57.74  ±0.11    291.65 ±0.80                +4.83 
+
+The polarities of +LOCAL's relative BWs flipped showing gains over SYSTEM.
+However, the fact that they're significantly worse than CACHE didn't change.
+
+This is 4 in-flight 512 byte IOs, entirely plausible in any size systems.
+Even at this low level of concurrency, the downside of using per-cpu
+workqueue (CPU+STRICT) is clear.
+
+
+5. SYNC
+
+Let's push it further. It's now single threaded synchronous read/write(2)'s
+w/ 512 byte blocks. If we're going to be able to extract meaningful gains
+from localizing to the issuing CPU, this should show it.
+
+  taskset 0x8 fio --filename=/dev/dm-1 --direct=1 --rw=randrw --bs=512 \
+	--ioengine=io_uring --iodepth=1 --runtime=60 --numjobs=1 \
+	--time_based --group_reporting --name=iops-test-job --verify=sha512
+
+                  Bandwidth (MiBps)    CPU util (%)    vs. SYSTEM BW (%)
+  ----------------------------------------------------------------------
+  SYSTEM               18.64  ±0.19     88.41 ±0.47                 0.00
+  CACHE                21.46  ±0.11     91.39 ±0.26               +15.13
+  CACHE+STRICT         20.80  ±0.23     90.68 ±0.15               +11.59
+  CPU+STRICT           21.12  ±0.61     95.29 ±0.51                -1.58
+  SYSTEM+LOCAL         20.80  ±0.20     90.12 ±0.34               +11.59
+  CACHE+LOCAL          21.46  ±0.09     93.18 ±0.04               +15.13
+
+Now +LOCAL's are doing quite a bit better than SYSTEM but still can't beat
+CACHE. Interestingly, CPU+STRICT performs noticeably worse than others while
+occupying CPU for longer. I haven't thought too much why this would be,
+maybe because the benefits of using resources on other CPUs beat the
+overhead of doing so?
+
+
+Summary
+=======
+
+The overall conclusion doesn't change much. +LOCAL's fare better with lower
+concurrency but still can't beat CACHE. I tried other combinations and
+against SSD too. Nothing significantly deviates from the overall pattern.
+
+I'm sure we can concoct a workload which uses significantly less than one
+full CPU (so that utilizing other CPU's resources don't bring enough gain)
+and can stay within L1/2 to maximize the benefit of not having to go through
+L3, but it looks like that's going to take some stretching. At least on the
+CPU I'm testing, it looks like letting loose in each L3 domain is the right
+thing to do.
+
+And, ARM folks, AFAICS, workqueue is unlikely to be the root cause of the
+significant regressions observed after switching to recent kernel. However,
+this patchset should hopefully alleviate the symptoms significantly, or,
+failing that, at least make working around a lot easier. So, please test and
+please don't switch CPU-heavy unbound workqueues to per-cpu. That's
+guaranteed to hurt other heavier-weight usages.
+
+Thanks.
+
+-- 
+tejun
