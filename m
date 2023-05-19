@@ -2,442 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B00B7709349
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 11:34:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC7E9709336
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 11:32:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231683AbjESJeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 05:34:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39342 "EHLO
+        id S231610AbjESJcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 05:32:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231567AbjESJdS (ORCPT
+        with ESMTP id S231523AbjESJcD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 05:33:18 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9B081FD6
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 02:32:03 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Fri, 19 May 2023 05:32:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5AB3173F;
+        Fri, 19 May 2023 02:31:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 2F2E01FE57;
-        Fri, 19 May 2023 09:31:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1684488712; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sZA3kIrfdmPnENfZxyQ6MIT8WXKqjGxwBJP4mthrOSU=;
-        b=FVUFCm/a9y039RwIj1iYatVo9P7gFE+g04/3MwJ0TnNcONBGrFoafSv5Mj6fj9q8SfrpXf
-        cQ3YYpfq9ictB+EiOyRqaJc4USJHgVLAxKs5x+TFHrWEEHnu383WNnoOpEwzps73DIYIwI
-        pgc/weZUYsMuXLRUjBvvgsJt8JHBG9E=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1684488712;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=sZA3kIrfdmPnENfZxyQ6MIT8WXKqjGxwBJP4mthrOSU=;
-        b=Y/5pcPukVi9OPpE+dzjKBgs8PBtg7KIkQyBHvKmx3NUN8AsDMIx6Wbl7viHdOUjfTyEn+C
-        vviYbXMMutCNruAw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E5F4D13A12;
-        Fri, 19 May 2023 09:31:51 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id iOM0NwdCZ2RXJAAAMHmgww
-        (envelope-from <tiwai@suse.de>); Fri, 19 May 2023 09:31:51 +0000
-From:   Takashi Iwai <tiwai@suse.de>
-To:     alsa-devel@alsa-project.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH 36/36] ALSA: docs: Add MIDI 2.0 documentation
-Date:   Fri, 19 May 2023 11:31:14 +0200
-Message-Id: <20230519093114.28813-37-tiwai@suse.de>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20230519093114.28813-1-tiwai@suse.de>
-References: <20230519093114.28813-1-tiwai@suse.de>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F16464CDE;
+        Fri, 19 May 2023 09:31:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 677DCC433EF;
+        Fri, 19 May 2023 09:31:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684488704;
+        bh=Wo6aGM9cMseGU3T2MfA5XaiUStVvCxymzAqjTPuQrOc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=jQPVl6A2pn0VQIrA1hVc1PlCbtNaL0uZhzqZNUzJwSWKH+Ic92iBAtIzk3CLt8qp5
+         +iaiLUHZv01bLmM3eUtVSJmUsB3MtvJDjGNibAmqqtF67kWMPEfEecnp7iqsnL8+vM
+         xdBSA4o2KZPbkXs15rDyAg7mgLbX+FNZ3DFcUQfehCeDMl5C7jHVke2XdCPzdB26FE
+         jWmoVpIzLR6UIWvAZVuP42wbiop4lB1XswWmdjPKUn/Zw7yLLWNB2rnvIEWnCetrss
+         TB1F5JJ81ZEJWG6jGMfnw25IlqqZDjkfIFJTJjOpw37U0HK7H5iD2aosJjSwr3l3T5
+         p/9zBfQVMQxjQ==
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-4f27977aed6so3408683e87.2;
+        Fri, 19 May 2023 02:31:43 -0700 (PDT)
+X-Gm-Message-State: AC+VfDz8gBZ0V1H49dzS1URe8wQcytUVM/N73dVg7gViqqNw3G1FkF3S
+        uwtjkcjOzX6R5WPl2RvvhBnlBoHVihsro8UJSvU=
+X-Google-Smtp-Source: ACHHUZ5YHw31xc+H7E05DkWGGdkgHKQ45BBiWSUzd7O64DAUqT19DMJBcQtsqj+slsJOdFkPrwkiDdynE120Hq8wA3Q=
+X-Received: by 2002:ac2:519c:0:b0:4ef:efb5:bfea with SMTP id
+ u28-20020ac2519c000000b004efefb5bfeamr668495lfi.37.1684488701391; Fri, 19 May
+ 2023 02:31:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <ZGcyuyjJwZhdYS/G@gondor.apana.org.au> <E1pzvTZ-00AnMQ-5M@formenos.hmeau.com>
+ <CAMj1kXGwS03zUBTGb7jmk1-6r+=a-HH+A-S9ZFTYRyJSzN0Xcg@mail.gmail.com> <ZGc7hCaDrnEFG8Lr@gondor.apana.org.au>
+In-Reply-To: <ZGc7hCaDrnEFG8Lr@gondor.apana.org.au>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 19 May 2023 11:31:30 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXEkz1QvkXWc8dCGhU_MPf+1M3P2+rAiLciuixnKCmRESg@mail.gmail.com>
+Message-ID: <CAMj1kXEkz1QvkXWc8dCGhU_MPf+1M3P2+rAiLciuixnKCmRESg@mail.gmail.com>
+Subject: Re: [PATCH] crypto: shash - Allow cloning on algorithms with no init_tfm
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Dmitry Safonov <dima@arista.com>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Bob Gilligan <gilligan@arista.com>,
+        Dan Carpenter <error27@gmail.com>,
+        David Laight <David.Laight@aculab.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Francesco Ruggeri <fruggeri05@gmail.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Ivan Delalande <colona@arista.com>,
+        Leonard Crestez <cdleonard@gmail.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the brief document for describing the MIDI 2.0 implementation on
-Linux kernel.  Both rawmidi and sequencer API extensions are
-described.
+On Fri, 19 May 2023 at 11:04, Herbert Xu <herbert@gondor.apana.org.au> wrote:
+>
+> On Fri, May 19, 2023 at 10:54:11AM +0200, Ard Biesheuvel wrote:
+> >
+> > Does this imply that the cmac-aes-ce and cmac-aes-neon implementations
+> > for arm64 need a similar treatment?
+>
+> Good catch.  Since these don't have init functions we can deal
+> with them at a higher level:
+>
+> ---8<---
+> Some shash algorithms are so simple that they don't have an init_tfm
+> function.  These can be cloned trivially.  Check this before failing
+> in crypto_clone_shash.
+>
 
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
----
- Documentation/sound/designs/index.rst    |   1 +
- Documentation/sound/designs/midi-2.0.rst | 342 +++++++++++++++++++++++
- 2 files changed, 343 insertions(+)
- create mode 100644 Documentation/sound/designs/midi-2.0.rst
+OK. So IIUC, cloning a keyless hash just shares the TFM and bumps the
+refcount, but here we must actually allocate a new TFM referring to
+the same algo, and this new TFM needs its key to be set before use, as
+it doesn't inherit it from the clonee, right? And this works in the
+same way as cloning an instance of the generic HMAC template, as this
+will just clone the inner shash too, and will also leave the key
+unset.
 
-diff --git a/Documentation/sound/designs/index.rst b/Documentation/sound/designs/index.rst
-index 1eb08e7bae52..b79db9ad8732 100644
---- a/Documentation/sound/designs/index.rst
-+++ b/Documentation/sound/designs/index.rst
-@@ -15,3 +15,4 @@ Designs and Implementations
-    oss-emulation
-    seq-oss
-    jack-injection
-+   midi-2.0
-diff --git a/Documentation/sound/designs/midi-2.0.rst b/Documentation/sound/designs/midi-2.0.rst
-new file mode 100644
-index 000000000000..91634b2fafdc
---- /dev/null
-+++ b/Documentation/sound/designs/midi-2.0.rst
-@@ -0,0 +1,342 @@
-+=================
-+MIDI 2.0 on Linux
-+=================
-+
-+General
-+=======
-+
-+MIDI 2.0 is an extended protocol for providing higher resolutions and
-+more fine controls over the legacy MIDI 1.0.  The fundamental changes
-+introduced for supporting MIDI 2.0 are:
-+
-+- Support of Universal MIDI Packet (UMP)
-+- Support of MIDI 2.0 protocol messages
-+- Transparent conversions between UMP and legacy MIDI 1.0 byte stream
-+- MIDI-CI for property and profile configurations
-+
-+UMP is a new container format to hold all MIDI protocol 1.0 and MIDI
-+2.0 protocol messages.  Unlike the former byte stream, it's 32bit
-+aligned, and each message can be put in a single packet.  UMP can send
-+the events up to 16 "UMP Groups", where each UMP Group contain up to
-+16 MIDI channels.
-+
-+MIDI 2.0 protocol is an extended protocol to achieve the higher
-+resolution and more controls over the old MIDI 1.0 protocol.
-+
-+MIDI-CI is a high-level protocol that can talk with the MIDI device
-+for the flexible profiles and configurations.  It's represented in the
-+form of special SysEx.
-+
-+For Linux implementations, the kernel supports the UMP transport and
-+the encoding/decoding of MIDI protocols on UMP, while MIDI-CI is
-+supported in user-space over the standard SysEx.
-+
-+As of this writing, only USB MIDI device supports the UMP and Linux
-+2.0 natively.  The UMP support itself is pretty generic, hence it
-+could be used by other transport layers, although it could be
-+implemented differently (e.g. as a ALSA sequencer client), too.
-+
-+The access to UMP devices are provided in two ways: the access via
-+rawmidi device and the access via ALSA sequencer API.
-+
-+ALSA sequencer API was extended to allow the payload of UMP packets.
-+It's allowed to connect freely between MIDI 1.0 and MIDI 2.0 sequencer
-+clients, and the events are converted transparently.
-+
-+
-+Kernel Configuration
-+====================
-+
-+The following new configs are added for supporting MIDI 2.0:
-+`CONFIG_SND_UMP`, `CONFIG_SND_UMP_LEGACY_RAWMIDI`,
-+`CONFIG_SND_SEQ_UMP`, `CONFIG_SND_SEQ_UMP_CLIENT`, and
-+`CONFIG_SND_USB_AUDIO_MIDI_V2`.  The first visible one is
-+`CONFIG_SND_USB_AUDIO_MIDI_V2`, and when you choose it (to set `=y`),
-+the core support for UMP (`CONFIG_SND_UMP`) and the sequencer binding
-+(`CONFIG_SND_SEQ_UMP_CLIENT`) will be automatically selected.
-+
-+Additionally, `CONFIG_SND_UMP_LEGACY_RAWMIDI=y` will enable the
-+support for the legacy raw MIDI device for UMP Endpoints.
-+
-+
-+Rawmidi Device with USB MIDI 2.0
-+================================
-+
-+When a device supports MIDI 2.0, the USB-audio driver probes and uses
-+the MIDI 2.0 interface (that is found always at the altset 1) as
-+default instead of the MIDI 1.0 interface (at altset 0).  You can
-+switch back to the binding with the old MIDI 1.0 interface by passing
-+`midi2_enable=0` option to snd-usb-audio driver module, too.
-+
-+When the MIDI 2.0 device is probed, the kernel creates a rawmidi
-+device for each UMP Endpoint of the device.  Its device name is
-+`/dev/snd/umpC*D*` and different from the standard rawmidi device name
-+`/dev/snd/midiC*D*` for MIDI 1.0, in order to avoid confusing the
-+legacy applications accessing mistakenly to UMP devices.
-+
-+You can read and write UMP packet data directly from/to this UMP
-+rawmidi device.  For example, reading via `hexdump` like below will
-+show the incoming UMP packets of the card 0 device 0 in the hex
-+format::
-+
-+  % hexdump -C /dev/snd/umpC0D0
-+  00000000  01 07 b0 20 00 07 b0 20  64 3c 90 20 64 3c 80 20  |... ... d<. d<. |
-+
-+Unlike the MIDI 1.0 byte stream, UMP is a 32bit packet, and the size
-+for reading or writing the device is also aligned to 32bit (which is 4
-+bytes).
-+
-+The 32-bit words in the UMP packet payload are always in CPU native
-+endianness.  Transport drivers are responsible to convert UMP words
-+from / to system endianness to required transport endianness / byte
-+order.
-+
-+When `CONFIG_SND_UMP_LEGACY_RAWMIDI` is set, the driver creates
-+another standard raw MIDI device additionally as `/dev/snd/midiC*D*`.
-+This contains 16 substreams, and each substream corresponds to a
-+(0-based) UMP Group.  Legacy applications can access to the specified
-+group via each substream in MIDI 1.0 byte stream format.  With the
-+ALSA rawmidi API, you can open the arbitrary substream, while just
-+opening `/dev/snd/midiC*D*` will end up with opening the first
-+substream.
-+
-+Each UMP Endpoint can provide the additional information, constructed
-+from USB MIDI 2.0 descriptors.  And a UMP Endpoint may contain one or
-+more UMP Blocks, where UMP Block is an abstraction introduced in the
-+ALSA UMP implementations to represent the associations among UMP
-+Groups.  UMP Block corresponds to Group Terminal Block (GTB) in USB
-+MIDI 2.0 specifications but provide a few more generic information.
-+The information of UMP Endpoints and UMP Blocks are found in the proc
-+file `/proc/asound/card*/midi*`.  For example::
-+  % cat /proc/asound/card1/midi0
-+  ProtoZOA MIDI
-+  
-+  Type: UMP
-+  EP Name: ProtoZOA
-+  EP Product ID: ABCD12345678
-+  UMP Version: 0x0000
-+  Protocol Caps: 0x00000100
-+  Protocol: 0x00000100
-+  Num Blocks: 3
-+  
-+  Block 0 (ProtoZOA Main)
-+    Direction: bidirection
-+    Active: Yes
-+    Groups: 1-1
-+    Is MIDI1: No
-+
-+  Block 1 (ProtoZOA Ext IN)
-+    Direction: output
-+    Active: Yes
-+    Groups: 2-2
-+    Is MIDI1: Yes (Low Speed)
-+  ....
-+
-+Note that `Groups` field shown in the proc file above indicates the
-+1-based UMP Group numbers (from-to).
-+
-+Those additional UMP Endpoint and UMP Block information can be
-+obtained via the new ioctls `SNDRV_UMP_IOCTL_ENDPOINT_INFO` and
-+`SNDRV_UMP_IOCTL_BLOCK_INFO`, respectively.
-+
-+The rawmidi name and the UMP Endpoint name are usually identical, and
-+in the case of USB MIDI, it's taken from `iInterface` of the
-+corresponding USB MIDI interface descriptor.  If it's not provided,
-+it's copied from `iProduct` of the USB device descriptor as a
-+fallback.
-+
-+The Endpoint Product ID is a string field and supposed to be unique.
-+It's copied from `iSerialNumber` of the device for USB MIDI.
-+
-+The protocol capabilities and the actual protocol bits are defined in
-+`asound.h`.
-+
-+
-+ALSA Sequencer with USB MIDI 2.0
-+================================
-+
-+In addition to the rawmidi interfaces, ALSA sequencer interface
-+supports the new UMP MIDI 2.0 device, too.  Now, each ALSA sequencer
-+client may set its MIDI version (0, 1 or 2) to declare itself being
-+either the legacy, UMP MIDI 1.0 or UMP MIDI 2.0 device, respectively.
-+The first, legacy client is the one that sends/receives the old
-+sequencer event as was.  Meanwhile, UMP MIDI 1.0 and 2.0 clients send
-+and receive in the extended event record for UMP.  The MIDI version is
-+seen in the new `midi_version` field of `snd_seq_client_info`.
-+
-+A UMP packet can be sent/received in a sequencer event embedded by
-+specifying the new event flag bit `SNDRV_SEQ_EVENT_UMP`.  When this
-+flag is set, the event has 16 byte (128 bit) data payload for holding
-+the UMP packet.  Without the `SNDRV_SEQ_EVENT_UMP` bit flag, the event
-+is treated as a legacy event as it was (with max 12 byte data
-+payload).
-+
-+With `SNDRV_SEQ_EVENT_UMP` flag set, the type field of a UMP sequencer
-+event is ignored (but it should be set to 0 as default).
-+
-+The type of each client can be seen in `/proc/asound/seq/clients`.
-+For example::
-+  % cat /proc/asound/seq/clients
-+  Client info
-+    cur  clients : 3
-+  ....
-+  Client  14 : "Midi Through" [Kernel Legacy]
-+    Port   0 : "Midi Through Port-0" (RWe-)
-+  Client  20 : "ProtoZOA" [Kernel UMP MIDI1]
-+    UMP Endpoint: ProtoZOA
-+    UMP Block 0: ProtoZOA Main [Active]
-+      Groups: 1-1
-+    UMP Block 1: ProtoZOA Ext IN [Active]
-+      Groups: 2-2
-+    UMP Block 2: ProtoZOA Ext OUT [Active]
-+      Groups: 3-3
-+    Port   0 : "MIDI 2.0" (RWeX) [In/Out]
-+    Port   1 : "ProtoZOA Main" (RWeX) [In/Out]
-+    Port   2 : "ProtoZOA Ext IN" (-We-) [Out]
-+    Port   3 : "ProtoZOA Ext OUT" (R-e-) [In]
-+
-+Here you can find two types of kernel clients, "Legacy" for client 14,
-+and "UMP MIDI1" for client 20, which is a USB MIDI 2.0 device.
-+A USB MIDI 2.0 client gives always the port 0 as "MIDI 2.0" and the
-+rest ports from 1 for each UMP Group (e.g. port 1 for Group 1).
-+In this example, the device has three active groups (Main, Ext IN and
-+Ext OUT), and those are exposed as sequencer ports from 1 to 3.
-+The "MIDI 2.0" port is for a UMP Endpoint, and its difference from
-+other UMP Group ports is that UMP Endpoint port sends the events from
-+the all ports on the device ("catch-all"), while each UMP Group port
-+sends only the events from the given UMP Group.
-+
-+Note that, although each UMP sequencer client usually creates 16
-+ports, those ports that don't belong to any UMP Blocks (or belonging
-+to inactive UMP Blocks) are marked as inactive, and they don't appear
-+in the proc outputs.  In the example above, the sequencer ports from 4
-+to 16 are present but not shown there.
-+
-+The proc file above shows the UMP Block information, too.  The same
-+entry (but with more detailed information) is found in the rawmidi
-+proc output.
-+
-+When clients are connected between different MIDI versions, the events
-+are translated automatically depending on the client's version, not
-+only between the legacy and the UMP MIDI 1.0/2.0 types, but also
-+between UMP MIDI 1.0 and 2.0 types, too.  For example, running
-+`aseqdump` program on the ProtoZOA Main port in the legacy mode will
-+give you the output like::
-+
-+  % aseqdump -p 20:1
-+  Waiting for data. Press Ctrl+C to end.
-+  Source  Event                  Ch  Data
-+   20:1   Note on                 0, note 60, velocity 100
-+   20:1   Note off                0, note 60, velocity 100
-+   20:1   Control change          0, controller 11, value 4
-+
-+When you run `aseqdump` in MIDI 2.0 mode, it'll receive the high
-+precision data like::
-+
-+  % aseqdump -u 2 -p 20:1
-+  Waiting for data. Press Ctrl+C to end.
-+  Source  Event                  Ch  Data
-+   20:1   Note on                 0, note 60, velocity 0xc924, attr type = 0, data = 0x0
-+   20:1   Note off                0, note 60, velocity 0xc924, attr type = 0, data = 0x0
-+   20:1   Control change          0, controller 11, value 0x2000000
-+
-+while the data is automatically converted by ALSA sequencer core.
-+
-+
-+Rawmidi API Extensions
-+======================
-+
-+* The additional UMP Endpoint information can be obtained via the new
-+  ioctl `SNDRV_UMP_IOCTL_ENDPOINT_INFO`.  It contains the associated
-+  card and device numbers, the bit flags, the protocols, the number of
-+  UMP Blocks, the name string of the endpoint, etc.
-+
-+  The protocols are specified in two field, the protocol capabilities
-+  and the current protocol.  Both contain the bit flags specifying the
-+  MIDI protocol version (`SNDRV_UMP_EP_INFO_PROTO_MIDI1` or
-+  `SNDRV_UMP_EP_INFO_PROTO_MIDI2`) in the upper byte and the jitter
-+  reduction timestamp (`SNDRV_UMP_EP_INFO_PROTO_JRTS_TX` and
-+  `SNDRV_UMP_EP_INFO_PROTO_JRTS_RX`) in the lower byte.
-+
-+  A UMP Endpoint may contain up to 32 UMP Blocks, and the number of
-+  the currently assigned blocks are shown in the Endpoint information.
-+
-+* Each UMP Block information can be obtained via another new ioctl
-+  `SNDRV_UMP_IOCTL_BLOCK_INFO`.  The block ID number (0-based) has to
-+  be passed for the block to query.  The received data contains the
-+  associated the direction of the block, the first associated group ID
-+  (0-based) and the number of groups, the name string of the block,
-+  etc.
-+
-+  The direction is either `SNDRV_UMP_DIR_INPUT`,
-+  `SNDRV_UMP_DIR_OUTPUT` or `SNDRV_UMP_DIR_BIDIRECTION`.
-+
-+
-+Control API Extensions
-+======================
-+
-+* The new ioctl `SNDRV_CTL_IOCTL_UMP_NEXT_DEVICE` is introduced for
-+  querying the next UMP rawmidi device, while the existing ioctl
-+  `SNDRV_CTL_IOCTL_RAWMIDI_NEXT_DEVICE` queries only the legacy
-+  rawmidi devices.
-+
-+  For setting the subdevice (substream number) to be opened, use the
-+  ioctl `SNDRV_CTL_IOCTL_RAWMIDI_PREFER_SUBDEVICE` like the normal
-+  rawmidi.
-+
-+
-+Sequencer API Extensions
-+========================
-+
-+* `midi_version` field is added to `snd_seq_client_info` to indicate
-+  the current MIDI version (either 0, 1 or 2) of each client.
-+  When `midi_version` is 1 or 2, the alignment of read from a UMP
-+  sequencer client is also changed from the former 28 bytes to 32
-+  bytes for the extended payload.  The alignment size for the write
-+  isn't changed, but each event size may differ depending on the new
-+  bit flag below.
-+
-+* `SNDRV_SEQ_EVENT_UMP` flag bit is added for each sequencer event
-+  flags.  When this bit flag is set, the sequencer event is extended
-+  to have a larger payload of 16 bytes instead of the legacy 12
-+  bytes, and the event contains the UMP packet in the payload.
-+
-+* The new sequencer port type bit (`SNDRV_SEQ_PORT_TYPE_MIDI_UMP`)
-+  indicates the port being UMP-capable.
-+
-+* The sequencer ports have new capability bits to indicate the
-+  inactive ports (`SNDRV_SEQ_PORT_CAP_INACTIVE`) and the UMP Endpoint
-+  port (`SNDRV_SEQ_PORT_CAP_UMP_ENDPOINT`).
-+
-+* The event conversion of ALSA sequencer clients can be suppressed the
-+  new filter bit `SNDRV_SEQ_FILTER_NO_CONVERT` set to the client info.
-+  For example, the kernel pass-through client (`snd-seq-dummy`) sets
-+  this flag internally.
-+
-+* The port information gained the new field `direction` to indicate
-+  the direction of the port (either `SNDRV_SEQ_PORT_DIR_INPUT`,
-+  `SNDRV_SEQ_PORT_DIR_OUTPUT` or `SNDRV_SEQ_PORT_DIR_BIDIRECTION`).
-+
-+* Another additional field for the port information is `ump_group`
-+  which specifies the associated UMP Group Number (1-based).
-+  When it's non-zero, the UMP group field in the UMP packet updated
-+  upon delivery to the specified group (corrected to be 0-based).
-+  Each sequencer port is supposed to set this field if it's a port to
-+  specific to a certain UMP group.
-+
-+* Each client may set the additional event filter for UMP Groups in
-+  `group_filter` bitmap.  The filter consists of bitmap from 1-based
-+  Group numbers.  For example, when the bit 1 is set, messages from
-+  Group 1 (i.e. the very first group) are filtered and not delivered.
-+  The bit 0 is reserved for future use.
-+
-+* Two new ioctls are added for UMP-capable clients:
-+  `SNDRV_SEQ_IOCTL_GET_CLIENT_UMP_INFO` and
-+  `SNDRV_SEQ_IOCTL_SET_CLIENT_UMP_INFO`.  They are used to get and set
-+  either `snd_ump_endpoint_info` or `snd_ump_block_info` data
-+  associated with the sequencer client.  The USB MIDI driver provides
-+  those information from the underlying UMP rawmidi, while a
-+  user-space client may provide its own data via `*_SET` ioctl.
-+  For an Endpoint data, pass 0 to the `type` field, while for a Block
-+  data, pass the block number + 1 to the `type` field.
-+  Setting the data for a kernel client shall result in an error.
--- 
-2.35.3
+If so,
 
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
+
+If not, could you explain it to me again? :-)
+
+
+> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+>
+> diff --git a/crypto/shash.c b/crypto/shash.c
+> index 717b42df3495..1fadb6b59bdc 100644
+> --- a/crypto/shash.c
+> +++ b/crypto/shash.c
+> @@ -597,7 +597,7 @@ struct crypto_shash *crypto_clone_shash(struct crypto_shash *hash)
+>                 return hash;
+>         }
+>
+> -       if (!alg->clone_tfm)
+> +       if (!alg->clone_tfm && (alg->init_tfm || alg->base.cra_init))
+>                 return ERR_PTR(-ENOSYS);
+>
+>         nhash = crypto_clone_tfm(&crypto_shash_type, tfm);
+> @@ -606,10 +606,12 @@ struct crypto_shash *crypto_clone_shash(struct crypto_shash *hash)
+>
+>         nhash->descsize = hash->descsize;
+>
+> -       err = alg->clone_tfm(nhash, hash);
+> -       if (err) {
+> -               crypto_free_shash(nhash);
+> -               return ERR_PTR(err);
+> +       if (alg->clone_tfm) {
+> +               err = alg->clone_tfm(nhash, hash);
+> +               if (err) {
+> +                       crypto_free_shash(nhash);
+> +                       return ERR_PTR(err);
+> +               }
+>         }
+>
+>         return nhash;
+> --
+> Email: Herbert Xu <herbert@gondor.apana.org.au>
+> Home Page: http://gondor.apana.org.au/~herbert/
+> PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
