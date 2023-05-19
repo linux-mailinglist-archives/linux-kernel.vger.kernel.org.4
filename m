@@ -2,99 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 142F6709B0B
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 17:17:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02BB1709B10
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 17:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232281AbjESPRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 11:17:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48462 "EHLO
+        id S232290AbjESPRc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 11:17:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229532AbjESPRC (ORCPT
+        with ESMTP id S229532AbjESPRa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 11:17:02 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9300DCF;
-        Fri, 19 May 2023 08:17:01 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        Fri, 19 May 2023 11:17:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D000CF;
+        Fri, 19 May 2023 08:17:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 3DABE536;
-        Fri, 19 May 2023 15:17:01 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 3DABE536
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1684509421; bh=CK6rRcjDmy59SAWk5ogUPHgX/+aOB52LGzE5tSHwm6g=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=bLWvdKK+WFSXvmaz58gi3ugXKzO6raXMduOFBnX5WxH+sXHsYkkuVqBftrLqH/1Zi
-         eOBvoE4iLqIUYodItyE7dy43AIxlOObiCNjxaMcMaybS3r8N2BGWPXcWQ7Z3xHBi2O
-         SUjwLlvVfuvWzakgDuDHGe+QsmhZq0rz9q2YDSAivHExqq1xjJ2xyYrjPGCuRKshGw
-         2JeeuczENBfFoDHk3B4pTusxr+oxch9VlwzS+oiYC6xzFNs57JmNb49+DZ5KJjOVwc
-         N/J21spsvRqR5duNeBIeJxWUfWrU7k0Hl6hHaLb23gVtN0KJo7162XBsmz8t8tz8jL
-         WABbANxwWcDqQ==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     torvalds@linux-foundation.org, linux-doc@vger.kernel.org,
-        workflows@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: Re: [RFC] MAINTAINERS: direct process doc changes to a dedicated ML
-In-Reply-To: <20230511020204.910178-1-kuba@kernel.org>
-References: <20230511020204.910178-1-kuba@kernel.org>
-Date:   Fri, 19 May 2023 09:17:00 -0600
-Message-ID: <87353snyfn.fsf@meer.lwn.net>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EDD9C61D3F;
+        Fri, 19 May 2023 15:17:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 510EBC433D2;
+        Fri, 19 May 2023 15:17:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684509448;
+        bh=47KTQ+HxzwYC6TsbUYOQ6aOmK4jjWb0xI6ebbOh8XlY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=eBoUzUHnDSgsYrzw4so+d/v46+i/P/j4IUxwDsjTYBdtazJ9gFSlAlsy35dOA5dAB
+         98fZ0hSNCK8E3Ff/VyQXKQQ3x9hFwiD2w4hM2rYENyWeXPhVkugepOyzLnDFBB8/4H
+         51nzDK1yxzVdxXU3YJHR5VQXEaPxtVRp5EvpcQmfKDCue9AB+ShL0CvP1iDdSpglh6
+         MWmF7J8rXBCAZpQQkpn7BgBq+HJMv7Fp//dscLwf5L6VeL4ftPDmRESHT3py5aPQBA
+         83lsfrl7iLOXfgQUZ201RO+WG5WlYpLgr3CrPJjOST6Yxp0lgO7nkcDAd11UtSuqfi
+         qklM9iSrUgaOQ==
+Date:   Fri, 19 May 2023 08:17:27 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Sarthak Kukreti <sarthakkukreti@chromium.org>
+Cc:     dm-devel@redhat.com, linux-block@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Brian Foster <bfoster@redhat.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Bart Van Assche <bvanassche@google.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v7 1/5] block: Don't invalidate pagecache for invalid
+ falloc modes
+Message-ID: <20230519151727.GD11642@frogsfrogsfrogs>
+References: <20230518223326.18744-1-sarthakkukreti@chromium.org>
+ <20230518223326.18744-2-sarthakkukreti@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230518223326.18744-2-sarthakkukreti@chromium.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jakub Kicinski <kuba@kernel.org> writes:
+On Thu, May 18, 2023 at 03:33:22PM -0700, Sarthak Kukreti wrote:
+> Only call truncate_bdev_range() if the fallocate mode is
+> supported. This fixes a bug where data in the pagecache
+> could be invalidated if the fallocate() was called on the
+> block device with an invalid mode.
+> 
+> Fixes: 25f4c41415e5 ("block: implement (some of) fallocate for block devices")
+> Cc: stable@vger.kernel.org
+> Reported-by: Darrick J. Wong <djwong@kernel.org>
+> Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
 
-> It's hard to keep track of changes to the process docs.
-> Subsystem maintainers should probably know what's going on,
-> to ensure reasonably uniform developer experience across
-> trees.
->
-> We also need a place where process discussions can be held
-> (i.e. designated mailing list which can be CCed on naturally
-> arising discussions). I'm using workflows@ in this RFC,
-> but a new list may be better.
->
-> No change to the patch flow intended.
->
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Thanks for fixing this,
+
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
+
+--D
+
 > ---
-> I've been pondering the lack of cross-maintainer communication
-> as the kernel grows, and I hope this could help bring us together
-> a little. Plus twice over the last 2 weeks someone popped up on
-> netdev with what I personally considered incorrect interpretation
-> of the process docs, so it'd be nice to CC a list on my replies
-> so I can be corrected, in case I'm wrong.
->
-> Opinions more than welcome!
-> ---
->  MAINTAINERS | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 1c78e61a3387..58239fbc7007 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -6223,6 +6223,12 @@ X:	Documentation/power/
->  X:	Documentation/spi/
->  X:	Documentation/userspace-api/media/
+>  block/fops.c | 21 ++++++++++++++++-----
+>  1 file changed, 16 insertions(+), 5 deletions(-)
+> 
+> diff --git a/block/fops.c b/block/fops.c
+> index d2e6be4e3d1c..4c70fdc546e7 100644
+> --- a/block/fops.c
+> +++ b/block/fops.c
+> @@ -648,24 +648,35 @@ static long blkdev_fallocate(struct file *file, int mode, loff_t start,
 >  
-> +DOCUMENTATION PROCESS
-> +M:	Jonathan Corbet <corbet@lwn.net>
-> +S:	Maintained
-> +F:	Documentation/process/
-> +L:	workflows@vger.kernel.org
+>  	filemap_invalidate_lock(inode->i_mapping);
+>  
+> -	/* Invalidate the page cache, including dirty pages. */
+> -	error = truncate_bdev_range(bdev, file->f_mode, start, end);
+> -	if (error)
+> -		goto fail;
+> -
+> +	/*
+> +	 * Invalidate the page cache, including dirty pages, for valid
+> +	 * de-allocate mode calls to fallocate().
+> +	 */
+>  	switch (mode) {
+>  	case FALLOC_FL_ZERO_RANGE:
+>  	case FALLOC_FL_ZERO_RANGE | FALLOC_FL_KEEP_SIZE:
+> +		error = truncate_bdev_range(bdev, file->f_mode, start, end);
+> +		if (error)
+> +			goto fail;
 > +
-
-Applied, thanks.
-
-jon
+>  		error = blkdev_issue_zeroout(bdev, start >> SECTOR_SHIFT,
+>  					     len >> SECTOR_SHIFT, GFP_KERNEL,
+>  					     BLKDEV_ZERO_NOUNMAP);
+>  		break;
+>  	case FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE:
+> +		error = truncate_bdev_range(bdev, file->f_mode, start, end);
+> +		if (error)
+> +			goto fail;
+> +
+>  		error = blkdev_issue_zeroout(bdev, start >> SECTOR_SHIFT,
+>  					     len >> SECTOR_SHIFT, GFP_KERNEL,
+>  					     BLKDEV_ZERO_NOFALLBACK);
+>  		break;
+>  	case FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE | FALLOC_FL_NO_HIDE_STALE:
+> +		error = truncate_bdev_range(bdev, file->f_mode, start, end);
+> +		if (error)
+> +			goto fail;
+> +
+>  		error = blkdev_issue_discard(bdev, start >> SECTOR_SHIFT,
+>  					     len >> SECTOR_SHIFT, GFP_KERNEL);
+>  		break;
+> -- 
+> 2.40.1.698.g37aff9b760-goog
+> 
