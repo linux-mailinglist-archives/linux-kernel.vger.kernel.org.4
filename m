@@ -2,209 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B84270A1E7
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 23:41:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E8F70A1F1
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 23:48:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229789AbjESVlh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 17:41:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59230 "EHLO
+        id S229839AbjESVsm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 17:48:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjESVlf (ORCPT
+        with ESMTP id S229611AbjESVse (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 17:41:35 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F3661B0
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 14:41:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684532494; x=1716068494;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=YAFT8fMrl0VSOoxAls3ESDXviySfbeFgHcFQlHgN72Q=;
-  b=nt9KyCSarmE7/O39oeIVlYjVZbl41o/vEZU+OzTN4Qkvo5eB9VbmNll4
-   VUL7Y4YWNYjsQFJ+QWItCs95mFVaTn6sfLUqPHQYhJ9c7BqBFRF9cyhos
-   lvs74LwP1AO5XIe2cHvLEOKKxOU70nXb6LnHOoy1hmQvefmsvbVr6QxLm
-   Vlnz9BkmMSmesSieKeBxpIl4CHOX4FdeFwEyIqHihTXr9e9zVSQSftHIW
-   FdlRdxTwtFO1c1ATAnftOP8Yw4O0m0TzX63TjjfEZEBioRcnZFaYJ0X8I
-   ry0ym9qGZfXmrAJzof1r8KBNFVfemhIEL1KZJBHjs7ebLZS0q0SJ5TW5g
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10715"; a="341938792"
-X-IronPort-AV: E=Sophos;i="6.00,177,1681196400"; 
-   d="scan'208";a="341938792"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2023 14:41:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10715"; a="814876993"
-X-IronPort-AV: E=Sophos;i="6.00,178,1681196400"; 
-   d="scan'208";a="814876993"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga002.fm.intel.com with ESMTP; 19 May 2023 14:41:32 -0700
-Date:   Fri, 19 May 2023 14:44:30 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Radu Rendec <rrendec@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Pierre Gondois <Pierre.Gondois@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v4 1/3] cacheinfo: Add arch specific early level
- initializer
-Message-ID: <20230519214430.GA3116@ranerica-svr.sc.intel.com>
-References: <20230412185759.755408-1-rrendec@redhat.com>
- <20230412185759.755408-2-rrendec@redhat.com>
- <20230510191207.GA18514@ranerica-svr.sc.intel.com>
- <b49e241d3ea8c679b81134e22c908ca64aeca18c.camel@redhat.com>
- <20230511000058.GD18514@ranerica-svr.sc.intel.com>
- <9020807789b70db0d84d142cbfed2bd8868f366a.camel@redhat.com>
+        Fri, 19 May 2023 17:48:34 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 968A51B0
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 14:48:32 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-64d3491609fso802242b3a.3
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 14:48:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684532912; x=1687124912;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zau2qsQhDV1bV+FMZBbLle6RPe9ivNDcr7IgnOjplHE=;
+        b=IMAwsr9+5YpQkpjpZW1wfxFE419+51fvECkQ//gzJPWu+Ym5syz5uYmop1IrWnHqdX
+         OXTkDjceuLKn/gxeZFArNWe0DqX2O3IQuJ6gzbhP2S6HDfdPUmTtIDyUxe7tAjgYlsf3
+         iEW0ApPGQekcmHedcd1pzdR1DgEtlvos/27mjFIM/vvPDUbWY98OPGu/0qEoT15Kf5x5
+         mTCqQROwCJKhPauYPn80TvWK7lXJD8dW7B1XXP17ou0xUiBwwL42H/qwdZfNicRB/cow
+         ETp4P7vhaS4JQDesCY54+cd9h5mkgno+3+rKrAyIJtJQDYrC7284UNacABL9c0PXGdeD
+         ieKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684532912; x=1687124912;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Zau2qsQhDV1bV+FMZBbLle6RPe9ivNDcr7IgnOjplHE=;
+        b=Q77gvKxEgFvh4E95Wz1lwmTRLlpxIg52vNJJK5JZO++C1cqk6eQdwuIf9hTI2tQPhc
+         i6RDLw89xxtJFJJZCQuvjiFhuSBHeKr1D5KjdILuaouNEBvVmWXLtli/fpXbvcbkXJtx
+         EQ/Lhr68T2dJCV6GhZBOe9JguA+fOR8DWySpaSTvhRsdxA+FVtC0V2JBhPtwwaOXBMYX
+         uk3EUiv2V6cOl4lSM6z+B5nomy7Fy6nsu9Qy8qLwRSbmZMS/O1BbMS0+FHXms+WufG0/
+         H97Yi+m/bSkPTx2QXfjuAd75Fjt6GrqEGtvzssSyhQtWBFCPLm0jjpSznYwDItjXgo+J
+         3QAQ==
+X-Gm-Message-State: AC+VfDzG4XydSPVK35JYk9hTaZ1SAF4syE08Z6Bx+Q9SHpN4+MVaC708
+        BWxy7+VCXZyOFTFWsgmEGYdzyA==
+X-Google-Smtp-Source: ACHHUZ4h5q/mZRzPyIqULeKtyzgLrq5KYlThiD42UFvTU6gxmHsk/Wh1DL4/bZlqVwqR2vaYQWZyDQ==
+X-Received: by 2002:a05:6a00:2d90:b0:64d:2487:5b3c with SMTP id fb16-20020a056a002d9000b0064d24875b3cmr4608384pfb.29.1684532911929;
+        Fri, 19 May 2023 14:48:31 -0700 (PDT)
+Received: from localhost.localdomain ([2401:4900:1c60:d309:883d:817e:8e91:be39])
+        by smtp.gmail.com with ESMTPSA id n14-20020aa7904e000000b006470a6ef529sm144891pfo.88.2023.05.19.14.48.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 May 2023 14:48:31 -0700 (PDT)
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, andersson@kernel.org,
+        bhupesh.sharma@linaro.org, bhupesh.linux@gmail.com,
+        krzysztof.kozlowski@linaro.org, robh+dt@kernel.org,
+        konrad.dybcio@linaro.org, vladimir.zapolskiy@linaro.org,
+        rfoss@kernel.org, neil.armstrong@linaro.org, djakov@kernel.org,
+        stephan@gerhold.net
+Subject: [PATCH v7 00/11] arm64: qcom: Enable Crypto Engine for a few Qualcomm SoCs
+Date:   Sat, 20 May 2023 03:18:02 +0530
+Message-Id: <20230519214813.2593271-1-bhupesh.sharma@linaro.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <9020807789b70db0d84d142cbfed2bd8868f366a.camel@redhat.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 03:55:18PM -0400, Radu Rendec wrote:
-> On Wed, 2023-05-10 at 17:00 -0700, Ricardo Neri wrote:
-> > On Wed, May 10, 2023 at 04:44:49PM -0400, Radu Rendec wrote:
-> > > On Wed, 2023-05-10 at 12:12 -0700, Ricardo Neri wrote:
-> > > > On Wed, Apr 12, 2023 at 02:57:57PM -0400, Radu Rendec wrote:
-> > > > > This patch gives architecture specific code the ability to initialize
-> > > > > the cache level and allocate cacheinfo memory early, when cache level
-> > > > > initialization runs on the primary CPU for all possible CPUs.
-> > > [cut]
-> > > > > -int detect_cache_attributes(unsigned int cpu)
-> > > > > +static inline int init_level_allocate_ci(unsigned int cpu)
-> > > > >  {
-> > > > > -       int ret;
-> > > > > +       unsigned int early_leaves = cache_leaves(cpu);
-> > > > >  
-> > > > >         /* Since early initialization/allocation of the cacheinfo is allowed
-> > > > >          * via fetch_cache_info() and this also gets called as CPU hotplug
-> > > > >          * callbacks via cacheinfo_cpu_online, the init/alloc can be skipped
-> > > > >          * as it will happen only once (the cacheinfo memory is never freed).
-> > > > > -        * Just populate the cacheinfo.
-> > > > > +        * Just populate the cacheinfo. However, if the cacheinfo has been
-> > > > > +        * allocated early through the arch-specific early_cache_level() call,
-> > > > > +        * there is a chance the info is wrong (this can happen on arm64). In
-> > > > > +        * that case, call init_cache_level() anyway to give the arch-specific
-> > > > > +        * code a chance to make things right.
-> > > > >          */
-> > > > > -       if (per_cpu_cacheinfo(cpu))
-> > > > > -               goto populate_leaves;
-> > > > > +       if (per_cpu_cacheinfo(cpu) && !ci_cacheinfo(cpu)->early_ci_levels)
-> > > > > +               return 0;
-> > > > >  
-> > > > >         if (init_cache_level(cpu) || !cache_leaves(cpu))
-> > > > >                 return -ENOENT;
-> > > > >  
-> > > > > -       ret = allocate_cache_info(cpu);
-> > > > > +       /*
-> > > > > +        * Now that we have properly initialized the cache level info, make
-> > > > > +        * sure we don't try to do that again the next time we are called
-> > > > > +        * (e.g. as CPU hotplug callbacks).
-> > > > > +        */
-> > > > > +       ci_cacheinfo(cpu)->early_ci_levels = false;
-> > > > > +
-> > > > > +       if (cache_leaves(cpu) <= early_leaves)
-> > > > > +               return 0;
-> > > > > +
-> > > > 
-> > > > I had posted a patchset[1] for x86 that initializes
-> > > > ci_cacheinfo(cpu)->num_leaves during SMP boot.
-> > > > 
-> > > > This means that early_leaves and a late cache_leaves() are equal but
-> > > > per_cpu_cacheinfo(cpu) is never allocated. Currently, x86 does not use
-> > > > fetch_cache_info().
-> > > > 
-> > > > I think that we should check here that per_cpu_cacheinfo() has been allocated to
-> > > > take care of the case in which early and late cache leaves remain the same:
-> > > > 
-> > > > -       if (cache_leaves(cpu) <= early_leaves)
-> > > > +       if (cache_leaves(cpu) <= early_leaves && per_cpu_cacheinfo(cpu))
-> > > > 
-> > > > Otherwise, in v6.4-rc1 + [1] I observe a NULL pointer dereference from
-> > > > last_level_cache_is_valid().
-> > > > 
-> > > > I can post a patch with this fix if it makes sense.
-> > > > 
-> > > > [1]. https://lore.kernel.org/all/20230424001956.21434-3-ricardo.neri-calderon@linux.intel.com/
-> > > 
-> > > Thanks for bringing this to my attention. I need to run some tests on
-> > > x86 (I did all that work/testing on arm64) and wrap my head around it.
-> > > 
-> > > While I don't see any problem with the fix you're proposing, I'm afraid
-> > > it may circle back to the other problem I tried to fix initially. Have
-> > > you tested this on an RT kernel by any chance?
-> > 
-> > That is a good point. I did not test on an RT kernel. I'll try that.
-> 
-> It looks like the flow is much simpler on x86: detect_cache_attributes()
-> is called only once for each CPU, and it's called in kthread context.
-> 
-> I haven't tested on an RT kernel but I think it should be fine. I put a
-> msleep() there and saw no issues, which means kmalloc() on RT should be
-> fine as well.
+Changes since v6:
+-----------------
+- v6 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230405072836.1690248-1-bhupesh.sharma@linaro.org/
+- Collected Acks, R-Bs and Tested-by for various patches.
+- Addressed Konrad's comment about iommu sids for sm8150 and sm8250
+  crypto node entries.
+- Addressed Konrad's and Stephan's comments about adding RPM clock for
+  crypto blocks on qcm2290 and sm6115.
 
-I booted the realtime kernel [3] with CONFIG_PREEMPT_RT and did not observe
-the BUG splat. I tried before your patchset. Were you able to reproduce on
-x86? Also, I was not able to reproduce the BUG splat after your changes +
-[1] + my earlier suggested patch in this thread.
+Changes since v5:
+-----------------
+- v5 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230402100509.1154220-1-bhupesh.sharma@linaro.org/
+- Collected Ack from Rob for [PATCH 01/11].
+- Addressed Georgi's comment about interconnect cells in [PATCH 10/11].
 
-> 
-> > > I'm thinking that if we end up in init_level_allocate_ci() without the
-> > > cacheinfo memory having been allocated earlier, we're up for a "BUG"
-> > > splat on RT kernels.
-> > > 
-> > > If early_leaves has the right value at that point, the cacheinfo memory
-> > > should be allocated early (on the primary CPU), so perhaps there's a
-> > > different problem somewhere else.
-> > 
-> > That can work for x86, IMO. Not sure about other archs. As you mention,
-> > other archs still want the chance to correct the early cache info.
-> 
-> You're right. I got confused for a moment because I was used to the
-> arm64 flow. On x86, there is no "early" cache info per se because, as I
-> already mentioned, detect_cache_attributes() is called only once for
-> each CPU.
+Changes since v4:
+-----------------
+- v4 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230331164323.729093-1-bhupesh.sharma@linaro.org/
+- Collected R-Bs from Konrad for a couple of patches sent in v4.
+- Fixed incorrect email IDs for a couple of patches sent in v3, which I used for
+  some patches created on a different work machine.
+- No functional changes since v3.
 
-Indeed.
+Changes since v3:
+-----------------
+- v3 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230328092815.292665-1-bhupesh.sharma@linaro.org/
+- Collected Acks from Krzysztof for a couple of patches sent in v3.
+- Fixed review comments from Krzysztof regarding DMA binding document
+  and also added a couple of new patches which are required to fix the
+  'dtbs_check' errors highlighted after this fix.
 
-> 
-> I was intrigued about how this worked without your changes, and I
-> looked closer. Between the initialization of the early_leaves variable
-> at the beginning of init_level_allocate_ci() and the comparison of
-> cache_leaves(cpu) and early_leaves, init_cache_level() gets called.
-> Before your changes, (struct cpu_cacheinfo).num_leaves was initialized
-> to 0 and then changed in init_cache_level(). That way, early_leaves
-> ended up as 0, which made the comparison evaluate to false.
+Changes since v2:
+-----------------
+- v2 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230322114519.3412469-1-bhupesh.sharma@linaro.org/
+- No functional change since v2. As the sdm845 patch from v1 was accepted in linux-next,
+  dropped it from this version.
 
-Yes my changes aim to use (struct cpu_cacheinfo).num_leaves directly.
+Changes since v1:
+-----------------
+- v1 can be viewed here: https://lore.kernel.org/linux-arm-msm/20230321190118.3327360-1-bhupesh.sharma@linaro.org/
+- Folded the BAM DMA dt-binding change.
+  (sent earlier as: https://lore.kernel.org/linux-arm-msm/20230321184811.3325725-1-bhupesh.sharma@linaro.org/)
+- Folded the QCE dt-binding change.
+  (sent earlier as: https://lore.kernel.org/linux-arm-msm/20230320073816.3012198-1-bhupesh.sharma@linaro.org/)
+- Folded Neil's SM8450 dts patch in this series.
+- Addressed review comments from Rob, Stephan and Konrad.
+- Collected Konrad's R-B for [PATCH 5/9].
 
-> 
-> At this point I think the patch you proposed is the right way to fix
-> this. I don't see any reason why it would interfere with other archs
-> that really use early allocation. This new patch should probably be
-> added to your series, since otherwise your other patches would
-> basically "introduce" a null-pointer deref.
-> 
-> My only suggestion would be to add a short comment before the
-> comparison, to explain that on x86 detect_cache_attributes() is called
-> only once for each CPU and so early allocation is not possible but
-> (struct cpu_cacheinfo).num_leaves is already initialized by the time
-> detect_cache_attributes() is called.
+This patchset enables Crypto Engine support for Qualcomm SoCs like
+SM6115, SM8150, SM8250, SM8350 and SM8450.
 
-Thank you very much for your help!
+Note that:
+- SM8250 crypto engine patch utilizes the work already done by myself and
+  Vladimir.
+- SM8350 crypto engine patch utilizes the work already done by Robert.
+- SM8450 crypto engine patch utilizes the work already done by Neil.
 
-BR,
-Ricardo
+Also this patchset is rebased on linux-next/master.
+
+Bhupesh Sharma (10):
+  dt-bindings: dma: Add support for SM6115 and QCM2290 SoCs
+  dt-bindings: dma: Increase iommu maxItems for BAM DMA
+  arm64: dts: qcom: sdm8550: Fix the BAM DMA engine compatible string
+  arm64: dts: qcom: sdm845: Fix the slimbam DMA engine compatible string
+  dt-bindings: qcom-qce: Fix compatible combinations for SM8150 and
+    IPQ4019 SoCs
+  dt-bindings: qcom-qce: Add compatibles for SM6115 and QCM2290
+  arm64: dts: qcom: sm6115: Add Crypto Engine support
+  arm64: dts: qcom: sm8150: Add Crypto Engine support
+  arm64: dts: qcom: sm8250: Add Crypto Engine support
+  arm64: dts: qcom: sm8350: Add Crypto Engine support
+
+Neil Armstrong (1):
+  arm64: dts: qcom: sm8450: add crypto nodes
+
+ .../devicetree/bindings/crypto/qcom-qce.yaml  | 50 +++++++++++++++----
+ .../devicetree/bindings/dma/qcom,bam-dma.yaml | 22 +++++---
+ arch/arm64/boot/dts/qcom/sdm845.dtsi          |  2 +-
+ arch/arm64/boot/dts/qcom/sm6115.dtsi          | 25 ++++++++++
+ arch/arm64/boot/dts/qcom/sm8150.dtsi          | 30 +++++++++++
+ arch/arm64/boot/dts/qcom/sm8250.dtsi          | 32 ++++++++++++
+ arch/arm64/boot/dts/qcom/sm8350.dtsi          | 22 ++++++++
+ arch/arm64/boot/dts/qcom/sm8450.dtsi          | 28 +++++++++++
+ arch/arm64/boot/dts/qcom/sm8550.dtsi          |  2 +-
+ 9 files changed, 194 insertions(+), 19 deletions(-)
+
+-- 
+2.38.1
+
