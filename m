@@ -2,172 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FFA77095A3
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 13:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43C257095AA
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 13:01:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbjESLBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 07:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43288 "EHLO
+        id S231847AbjESLBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 07:01:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231340AbjESLB0 (ORCPT
+        with ESMTP id S230244AbjESLBp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 07:01:26 -0400
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 383841BC1;
-        Fri, 19 May 2023 04:00:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1684494032; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=P7f4Q9hQu7cnvWu1lAf8NZUpIXs9TYXjTG4aZDpiIQK7Eq2A5o4Qe8OiAjiab8pFeD
-    4R4GgT0mYWNQEocFqKeO35HYdbAG8VWaeC4e4PleHTeKO1yzGwpROuCHNjNrSlVLFhJI
-    w4zr6Q9h9Y/vQCg8VtrpzqYyBRnInSBUaRRmcWaLGCHC8mlzmdQjA80QSDZUle/cgQ1m
-    iw6eo5b3EEKxXTGeRMZTJo3ms/Mgqxz/AqJGAlndVg6t++YYbRkhnMeG9jRq+vxKQzcm
-    RCYavuR/arfCmK9FdEhrZnC5uFSWoP0iCEArZGk9O9A3pHRBEtqbSElByjZCTvMtpvgY
-    /svQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1684494032;
-    s=strato-dkim-0002; d=strato.com;
-    h=Cc:To:Message-Id:Subject:Date:From:Cc:Date:From:Subject:Sender;
-    bh=yQb8geel8/PmlIERmu/C0g7x/X4cNdXUDvdM8Uvw/9U=;
-    b=WzM3laCuIUGw2ijYcg0X2MH5hIAfjIuke8yso8SLc9mXgslLyIZgZFweu5UcSorLag
-    S+eahYtVQQot9DbmRW2QBRLF+gMEQDF1C3+7ayl97kheXC2o5VCJqvwpMWdo8OshYUyN
-    WY1g1zSP203XuOv3r07gTpcfum93c8qe5jRMk1EmQgZ9Aisp2+RsyNeQM8RM+X3mNrLz
-    tKqyQ719l9l65ah085x84+PNikqF+K4OaJU7s8ncA2by3AQdE8GfRaiQ+El2AG9AuzDl
-    icYpD+LKltNC1jS0e/uGHLdD1ThA3HlbylEWEw8qJQVvG+aSrLXfn2S8iKwPHtkDKomQ
-    +/jg==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1684494032;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=Cc:To:Message-Id:Subject:Date:From:Cc:Date:From:Subject:Sender;
-    bh=yQb8geel8/PmlIERmu/C0g7x/X4cNdXUDvdM8Uvw/9U=;
-    b=nwH1W17jDTYw2bFCTJjtYH+bUYL0T/gy8+YqriQXvTzWjjm7vCqQm2c1ZS3j+0+aUE
-    U5bs7wpK3X1wJeDPUthpjly2Hpg8cpjFzMMTHOFnijG9TS0dMZIfkH1qz3PWpjFYRFp4
-    z4iA0Lb5tcTVmHneYG38tLkA+SUMfSGN9RETlrOkZ29yjlr80UKpXYq9U5oeBoMargew
-    wxI66xTjvUvTZ9FG+e3NwyZ/5JHErivfUrBk6kXhRo39zt4uZJ0ugIP8QT4rR7XNR1U0
-    WuMjRCu/mZBWdYWsxdkNJRnN+LMdRDm21wEp0dSe9oKJp8ELccIZZFAuayrj2qxiCRxL
-    q9gg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1684494032;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=Cc:To:Message-Id:Subject:Date:From:Cc:Date:From:Subject:Sender;
-    bh=yQb8geel8/PmlIERmu/C0g7x/X4cNdXUDvdM8Uvw/9U=;
-    b=r+2dnb6GwAVOFrnmIwUyHxClper+2dBKBOwjX4uZ4b3CBZ8FOs0WyozLf7lBHU2Wca
-    atRpLj02n/PYq0iSY8AQ==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQjVd4CteZ/7jYgS+mLFY+H0JAn9VOT/9w=="
-Received: from [192.168.244.3]
-    by smtp.strato.de (RZmta 49.4.0 DYNA|AUTH)
-    with ESMTPSA id j6420az4JB0WEZZ
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Fri, 19 May 2023 13:00:32 +0200 (CEST)
-From:   Stephan Gerhold <stephan@gerhold.net>
-Date:   Fri, 19 May 2023 13:00:13 +0200
-Subject: [PATCH v2] dmaengine: qcom: bam_dma: allow omitting
- num-{channels,ees}
+        Fri, 19 May 2023 07:01:45 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3616D1BE2;
+        Fri, 19 May 2023 04:01:12 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id 38308e7fff4ca-2ad9f2926adso34391261fa.1;
+        Fri, 19 May 2023 04:01:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684494060; x=1687086060;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=oY1HYSQizqf++ddJ9pIAfIcp1VHkJcel6jxA5ixO9Ds=;
+        b=IDpkDXNP+kZGUOjDbquAIu8yEdEqWAlhJ7BycF2yRZK0PX+d1qr9Z/GhnVwsxqGoVb
+         nT4fuXwMGtQLMGkczH4zGgyQHbw4t0ABMJR9gLLF9DaHv9j9huaLkHkE3Ha2oIMY/KIv
+         4RqFwJ1cDMjVv6uppJLKmCOn8XaCzufgu64VGOlW5j8UM1niBuZ6oHk9JCuCOXOS/vrE
+         BtA0u7mgRzltM8XiVpvFbg+dOZCAjVDrtQ/XEgVKII8GYwW01/PfkmjCNWBZxAUHQCyi
+         u9vKF5eIUHdVu5K5nvKmNpoNpHT7C8ub4tWDFbSD/xWQDdoLP7swIolp4H6h9tPYFb92
+         PDsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684494060; x=1687086060;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oY1HYSQizqf++ddJ9pIAfIcp1VHkJcel6jxA5ixO9Ds=;
+        b=CedA2cBco53eUQNfVhQlLA0lhJT2eszU5wQZsF9M2TZIDBN/18WTgmykbiUvdPqzaE
+         CXf9ts5z3W9sCYIqVr1kZMBMzQTy7Dj4hurQT70PebRN20q6ZOx/KFF9OOPUB3Na3MDD
+         O6wTDvgE1r/EZCldcS8QC5IkR8RgZCiRUsuEaDUeZHW6b8R8qZRspILNRh7mkN7lHbUi
+         Ut1vOdlcuSylRYj3MQhxWfpL5oaBQxogXhiiYCaPyfayeTXP8N8i9lFDJNR4UYggKd7Y
+         6pxLQialGCGpwR241aBOHMLnUsunxzfK+7Iy3egj1CLAFgMz8oy06iyT+EzSxfAWHhRU
+         uGXQ==
+X-Gm-Message-State: AC+VfDyryOtf1tWLooEG/+VrTQtQHbiqjc5uSE8ngn36/v1eKyFZ7qIQ
+        b6FMq5t30mkI0vwPd3OLaWY/nIN0iVo=
+X-Google-Smtp-Source: ACHHUZ4Yb8yh3iwvBtOkG3lkvyDjcH3Ey0hvO6TIGUNMT5QvdUafoy8WA1B2PrgGV5c4duioNIo9nQ==
+X-Received: by 2002:ac2:547c:0:b0:4f0:1e7d:f897 with SMTP id e28-20020ac2547c000000b004f01e7df897mr768560lfn.17.1684494060124;
+        Fri, 19 May 2023 04:01:00 -0700 (PDT)
+Received: from fedora (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id o6-20020ac24346000000b004f251cf3d31sm558454lfl.153.2023.05.19.04.00.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 May 2023 04:00:59 -0700 (PDT)
+Date:   Fri, 19 May 2023 14:00:54 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Andreas Klinger <ak@it-klinger.de>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, netdev@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: [PATCH v5 1/8] drivers: fwnode: fix fwnode_irq_get[_byname]()
+Message-ID: <339cc23ccae4580d5551cc2b6b9b4afdde48f25e.1684493615.git.mazziesaccount@gmail.com>
+References: <cover.1684493615.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230518-bamclk-dt-v2-1-a1a857b966ca@gerhold.net>
-X-B4-Tracking: v=1; b=H4sIALxWZ2QC/22Nyw7CIBBFf8XM2jEFaqCu/A/TBY9pISI1UBtN0
- 38Xu3Z5Tu5jhUI5UIHLYYVMSyhhShX48QDW6zQSBlcZeMNFc2YKjX7YeEc3o2tbo6mVRggJNW9
- 0ITRZJ+trI71irPKZaQjv/eDWV/ahzFP+7H8L+9l/0wtDhooPUiirOum660jZT9GdEs3Qb9v2B
- dpnIge5AAAA
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="tU6wD8GYZKI8Boni"
+Content-Disposition: inline
+In-Reply-To: <cover.1684493615.git.mazziesaccount@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The bam_dma driver needs to know the number of channels and execution
-environments (EEs) at probe time. If we are in full control of the BAM
-controller this information can be obtained from the BAM identification
-registers (BAM_REVISION/BAM_NUM_PIPES).
 
-When the BAM is "controlled remotely" it is more complicated. The BAM
-might not be on at probe time, so reading the registers could fail.
-This is why the information must be added to the device tree in this
-case, using "num-channels" and "qcom,num-ees".
+--tU6wD8GYZKI8Boni
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-However, there are also some BAM instances that are initialized by
-something else but we still have a clock that allows to turn it on when
-needed. This can be set up in the DT with "qcom,controlled-remotely"
-and "clocks" and is already supported by the bam_dma driver. Examples
-for this are the typical BLSP BAM instances on older SoCs, QPIC BAM
-(for NAND) and the crypto BAM on some SoCs.
+The fwnode_irq_get() and the fwnode_irq_get_byname() return 0 upon
+device-tree IRQ mapping failure. This is contradicting the
+fwnode_irq_get_byname() function documentation and can potentially be a
+source of errors like:
 
-In this case, there is no need to read "num-channels" and
-"qcom,num-ees" from the DT. The BAN can be turned on using the clock
-so we can just read it from the BAM registers like in the normal case.
+int probe(...) {
+	...
 
-Check for the BAM clock earlier and skip reading "num-channels" and
-"qcom,num-ees" if it is present to allow simplifying the DT description
-a bit.
+	irq =3D fwnode_irq_get_byname();
+	if (irq <=3D 0)
+		return irq;
 
-Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
+	...
+}
+
+Here we do correctly check the return value from fwnode_irq_get_byname()
+but the driver probe will now return success. (There was already one
+such user in-tree).
+
+Change the fwnode_irq_get_byname() to work as documented and make also the
+fwnode_irq_get() follow same common convention returning a negative errno
+upon failure.
+
+Fixes: ca0acb511c21 ("device property: Add fwnode_irq_get_byname")
+Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+Suggested-by: Jonathan Cameron <jic23@kernel.org>
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+
 ---
-Changes in v2:
-- Rewrite commit message for more clarity (discussion with Bhupesh)
-- Link to v1: https://lore.kernel.org/r/20230518-bamclk-dt-v1-1-82f738c897d9@gerhold.net
----
- drivers/dma/qcom/bam_dma.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+I dropped the existing reviewed-by tags because change to
+fwnode_irq_get() was added.
 
-diff --git a/drivers/dma/qcom/bam_dma.c b/drivers/dma/qcom/bam_dma.c
-index 1e47d27e1f81..4c3eb972039d 100644
---- a/drivers/dma/qcom/bam_dma.c
-+++ b/drivers/dma/qcom/bam_dma.c
-@@ -1272,7 +1272,15 @@ static int bam_dma_probe(struct platform_device *pdev)
- 	bdev->powered_remotely = of_property_read_bool(pdev->dev.of_node,
- 						"qcom,powered-remotely");
- 
--	if (bdev->controlled_remotely || bdev->powered_remotely) {
-+	if (bdev->controlled_remotely || bdev->powered_remotely)
-+		bdev->bamclk = devm_clk_get_optional(bdev->dev, "bam_clk");
-+	else
-+		bdev->bamclk = devm_clk_get(bdev->dev, "bam_clk");
+Revision history:
+v3 =3D> v4:
+ - Change also the fwnode_irq_get()
+---
+ drivers/base/property.c | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/base/property.c b/drivers/base/property.c
+index f6117ec9805c..8c40abed7852 100644
+--- a/drivers/base/property.c
++++ b/drivers/base/property.c
+@@ -987,12 +987,18 @@ EXPORT_SYMBOL(fwnode_iomap);
+  * @fwnode:	Pointer to the firmware node
+  * @index:	Zero-based index of the IRQ
+  *
+- * Return: Linux IRQ number on success. Other values are determined
+- * according to acpi_irq_get() or of_irq_get() operation.
++ * Return: Linux IRQ number on success. Negative errno on failure.
+  */
+ int fwnode_irq_get(const struct fwnode_handle *fwnode, unsigned int index)
+ {
+-	return fwnode_call_int_op(fwnode, irq_get, index);
++	int ret;
 +
-+	if (IS_ERR(bdev->bamclk))
-+		return PTR_ERR(bdev->bamclk);
++	ret =3D fwnode_call_int_op(fwnode, irq_get, index);
++	/* We treat mapping errors as invalid case */
++	if (ret =3D=3D 0)
++		return -EINVAL;
 +
-+	if (!bdev->bamclk) {
- 		ret = of_property_read_u32(pdev->dev.of_node, "num-channels",
- 					   &bdev->num_channels);
- 		if (ret)
-@@ -1284,14 +1292,6 @@ static int bam_dma_probe(struct platform_device *pdev)
- 			dev_err(bdev->dev, "num-ees unspecified in dt\n");
- 	}
- 
--	if (bdev->controlled_remotely || bdev->powered_remotely)
--		bdev->bamclk = devm_clk_get_optional(bdev->dev, "bam_clk");
--	else
--		bdev->bamclk = devm_clk_get(bdev->dev, "bam_clk");
--
--	if (IS_ERR(bdev->bamclk))
--		return PTR_ERR(bdev->bamclk);
--
- 	ret = clk_prepare_enable(bdev->bamclk);
- 	if (ret) {
- 		dev_err(bdev->dev, "failed to prepare/enable clock\n");
++	return ret;
+ }
+ EXPORT_SYMBOL(fwnode_irq_get);
+=20
+--=20
+2.40.1
 
----
-base-commit: 2437d5ea2191f3059246a1a7ac6fc4c8cc004dec
-change-id: 20230518-bamclk-dt-d44bae47b337
 
-Best regards,
--- 
-Stephan Gerhold <stephan@gerhold.net>
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
 
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--tU6wD8GYZKI8Boni
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRnVuUACgkQeFA3/03a
+ocV6bQgAkFMOjbtyS4zrLbCiAlRh+q00AnzwI0kFgMmRl9l6W/Ms88Tcyl11kXZ+
+ZyBzt9f2l2InccBaq76yul41ha3XIpAxz3vArpvRqEI5MxFDYoVz/2wwvs7eSltk
+xNTVEsxhm+1+tY7MtITToS/rGCieMvwWRTSp/reRDtgI0m7/zYrpd5cWGtN7saDb
+ELRlcfoeZQmxQSW9i7xpVcgDgeQEyD24DLKMSMhpZuYI32hrOrTsfxqZEg6cYJxm
+Pw+5Pq+lQrGGbvqABzvmGA8GPwR8cciSiHT1gOmpzWCr1HDDa0Nv0Vb7lEt1s9DY
+mmGcznUSTBxJXb/2UHzgLie14q3Qzw==
+=mfwf
+-----END PGP SIGNATURE-----
+
+--tU6wD8GYZKI8Boni--
