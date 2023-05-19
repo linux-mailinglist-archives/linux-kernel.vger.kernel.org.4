@@ -2,80 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A6CD7099B8
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 16:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E2C17099C1
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 16:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232025AbjESOaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 10:30:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51508 "EHLO
+        id S232034AbjESOba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 10:31:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231485AbjESOaK (ORCPT
+        with ESMTP id S229617AbjESOb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 10:30:10 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C113EE1;
-        Fri, 19 May 2023 07:30:09 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-96f7bf3cf9eso75228566b.0;
-        Fri, 19 May 2023 07:30:09 -0700 (PDT)
+        Fri, 19 May 2023 10:31:28 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB34137
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 07:31:27 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id 98e67ed59e1d1-253570deb8dso1881945a91.1
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 07:31:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684506608; x=1687098608;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CHMFMX7wtsHi+JJrcQ8ch2zghp9ED1gM5742JvmFaww=;
-        b=B2g8iZifUNFvKgNeimRo3zeDViTd78RIcgwcNpZ4RGq0xmmFBEdXsDMnThk7a4zwKY
-         Is+IRqo1VwcUV3pFm8TIqIeg9mE4Nf+cVRMJTfVwm/hC7KJ4zrzavmM+MOL0jvlzNUQS
-         xmfIA1AMG3XXgCMWqPRhQwTxQiJQpxil+zs9cQ4RXJbqRdnNHd1RX2zvIbX345Kr1NIk
-         5d5DiG/hJmCZsi0h/hNSFqo23il8oG1IsHA8XWoakB4SqUsZPy+PjEwAotqHq0g9Exxg
-         AYVutobttq3ReW+fWl7P6sg2YbRuCEraQsVsqBOyFIvMFn+Qu+QeRLZzApJ5RQTQiStH
-         4avw==
+        d=linaro.org; s=google; t=1684506687; x=1687098687;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2i+4jZMYyJOuLHa5p2LrqOp9rYboDhqgn1MB/sFP3Yk=;
+        b=NGH3s5VWcjCYJ467VCymIG56S/3e59VN9TouKrORlz1kUH9pDmPg+OhKrB7IREV6Rp
+         kyfAqSlCnfHExdp468iMVrISs6R+GMlbQ1CNIlcI1H05fV8MvYoZ8rVO2Mb4OV5wKw3v
+         I2bZ7wlj/bmDqIN8+0fwdCIE2/PYo+5mu5RzVhFiJ2YiTMpKd4F2lH6Vtg6aFyRA4ILl
+         rv7jDg/JBqRVP9kP83q9iGSkkC1pc5qJ8m3npI278unfvFayw6rzteHKvQ45jeEz1yel
+         WiqQADrAXSBPKyRx3xMRGcyYlXSv51Ab5b6XCaKL0GFBrwacjOCTB2sJDic4lu1vexJt
+         qkWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684506608; x=1687098608;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CHMFMX7wtsHi+JJrcQ8ch2zghp9ED1gM5742JvmFaww=;
-        b=C4mooBB50gXuBHA7BvATk9cq/AtTWDNudEHEmd7VBA0vtr4mHMWr6ifWGyCt0CHVG6
-         cTsEwL9g9eoNlCVC/J/2ywAB5YA4SWpUq/D/I1kZ5qepVVwHmErMIc+A7wCBxfQKUoI/
-         jHMryCaQjfje1oZ0RiuAe+SO7ZbEEbs3QZ+NbBuPGk+3fD7oycggr8JTS5NCf2rMNVkx
-         9SteqDEVUzspW3NbhI6nUFUOPNprBilQd7qiA2jAuBOC3uENlYSoIv+o2WWxabalbfdT
-         3p/dOcluvav5EE1+8yi4hBAcuwB9SnkzkaJ75UNKjXQTc1VOrQB/KJMPkc8uagqffP8J
-         cXWA==
-X-Gm-Message-State: AC+VfDzch/HuR2eHJT36XJ2IIGuXpObzPITW4IS3pg5+BovE0kLqOhVa
-        6SjEGFJ77aKuXnhu82HGSqM=
-X-Google-Smtp-Source: ACHHUZ7XHe4FPALPkE+NJVS4vycDimRwcV+1rNKWOtb+cTJtBBGtJSf1vQahAwzgqzE5DWsgQWGHfw==
-X-Received: by 2002:a17:907:5cd:b0:94e:46ef:1361 with SMTP id wg13-20020a17090705cd00b0094e46ef1361mr1648791ejb.34.1684506607763;
-        Fri, 19 May 2023 07:30:07 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id gf3-20020a170906e20300b0096a16e49b0fsm2370805ejb.51.2023.05.19.07.30.06
+        d=1e100.net; s=20221208; t=1684506687; x=1687098687;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2i+4jZMYyJOuLHa5p2LrqOp9rYboDhqgn1MB/sFP3Yk=;
+        b=CaORO92FG6j4OLEwqcm377+68tBzZo2yYDCE8xC++VNqgwlbJsfc/p60MG2Y1ssHK1
+         A9rJhX1/V+x6FBuSu/kiHgy/c3aTXUgfr2Y+Y1ju6eFUBsuYcw6HrAM+Kp+2B4e5Qq1o
+         SeM8v/2on5d8GlUdBC/Vy0rO/OBrIpNjNWg74As1yXsQnbP5Z6DU4mWwVwF8mIuC0qgE
+         0KcNMzL3yrSdilphlgr3O21fJG0Dc6hd3BQa6EK9aDGPvLYA1zGDKbxz6283RY63RFA7
+         TTCYxiX2yChsxMGUD5FMcA4j2LjoI+5hDT66Zf/j2YpTlpPpYdrQZvgUXNiiTMuNyTLc
+         4Cew==
+X-Gm-Message-State: AC+VfDx2YMj0Rrskfx2Snydv4/gtsHUJ4xqKMsiU+E154kKKWTHpooGs
+        F4m6OtTycb3EsXlyXNndsL+7h0DVUyCvvEIBtQ==
+X-Google-Smtp-Source: ACHHUZ4YSPrAcDxn1zJ2i51SAYCP+PWm804ct+HEEvUvMD4g7cLt1qC2faNpG6gOsV6P1sjOQukimg==
+X-Received: by 2002:a17:90a:c712:b0:250:2192:1bff with SMTP id o18-20020a17090ac71200b0025021921bffmr2556538pjt.23.1684506686731;
+        Fri, 19 May 2023 07:31:26 -0700 (PDT)
+Received: from localhost.localdomain ([117.202.184.13])
+        by smtp.gmail.com with ESMTPSA id 30-20020a17090a09a100b00250d908a771sm1634845pjo.50.2023.05.19.07.31.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 07:30:07 -0700 (PDT)
-Date:   Fri, 19 May 2023 17:30:04 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        Arun Ramadoss <arun.ramadoss@microchip.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Simon Horman <simon.horman@corigine.com>,
-        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net-next v4 1/2] net: dsa: microchip: ksz8: Make flow
- control, speed, and duplex on CPU port configurable
-Message-ID: <20230519143004.luvz73jiyvnqxk4y@skbuf>
-References: <20230519124700.635041-1-o.rempel@pengutronix.de>
- <20230519124700.635041-2-o.rempel@pengutronix.de>
+        Fri, 19 May 2023 07:31:26 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     lpieralisi@kernel.org, kw@linux.com, bhelgaas@google.com
+Cc:     robh@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, steev@kali.org,
+        quic_srichara@quicinc.com, dmitry.baryshkov@linaro.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v2 0/8] PCI: qcom: Do not advertise hotplug capability
+Date:   Fri, 19 May 2023 20:01:09 +0530
+Message-Id: <20230519143117.23875-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230519124700.635041-2-o.rempel@pengutronix.de>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,21 +72,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 02:46:59PM +0200, Oleksij Rempel wrote:
-> +void ksz8_phylink_mac_link_up(struct ksz_device *dev, int port,
-> +			      unsigned int mode, phy_interface_t interface,
-> +			      struct phy_device *phydev, int speed, int duplex,
-> +			      bool tx_pause, bool rx_pause)
-> +{
-> +	/* If the port is the CPU port, apply special handling. Only the CPU
-> +	 * port is configured via global registers.
-> +	 */
-> +	if (dev->cpu_port == port)
-> +		ksz8_cpu_port_link_up(dev, speed, duplex, tx_pause, rx_pause);
-> +}
+Hi,
 
-I'm sorry, but this is also baking in assumptions related to the
-topology of the tree (that the xMII port is used as a CPU port).
-The ksz8 driver may make this assumption in other places too,
-but I don't want to make it even worse to fix. Is the
-!dev->info->internal_phy[port] condition not enough here?
+The SoCs making use of Qualcomm PCIe controllers do not support the PCIe hotplug
+functionality. But the hotplug capability bit is set by default in the hardware.
+This causes the kernel PCI core to register hotplug service for the controller
+and send hotplug commands to it. But those commands will timeout generating
+messages as below during boot and suspend/resume.
+    
+[    5.782159] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x03c0 (issued 2020 msec ago)
+[    5.810161] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x03c0 (issued 2048 msec ago)
+[    7.838162] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x07c0 (issued 2020 msec ago)
+[    7.870159] pcieport 0001:00:00.0: pciehp: Timeout on hotplug command 0x07c0 (issued 2052 msec ago)
+    
+This not only spams the console output but also induces a delay of a couple of
+seconds. To fix this issue, this series clears the HPC bit in PCI_EXP_SLTCAP
+register as a part of the post init sequence for all IP versions to not
+advertise the hotplug capability for the controller.
+
+Testing
+=======
+
+This series has been tested on DB845c (SDM845 SoC) and Lenovo Thinkpad X13s
+(SC8280XP SoC).
+
+Thanks,
+Mani
+
+Changes in v2:
+
+* Collected tags
+* Moved the HPC clearing to a separate function and reused across different
+  configs
+
+Manivannan Sadhasivam (8):
+  PCI: qcom: Use DWC helpers for modifying the read-only DBI registers
+  PCI: qcom: Disable write access to read only registers for IP v2.9.0
+  PCI: qcom: Do not advertise hotplug capability for IPs v2.7.0 and
+    v1.9.0
+  PCI: qcom: Do not advertise hotplug capability for IPs v2.3.3 and
+    v2.9.0
+  PCI: qcom: Do not advertise hotplug capability for IP v2.3.2
+  PCI: qcom: Use post init sequence of IP v2.3.2 for v2.4.0
+  PCI: qcom: Do not advertise hotplug capability for IP v1.0.0
+  PCI: qcom: Do not advertise hotplug capability for IP v2.1.0
+
+ drivers/pci/controller/dwc/pcie-qcom.c | 73 ++++++++++++++------------
+ 1 file changed, 38 insertions(+), 35 deletions(-)
+
+-- 
+2.25.1
+
