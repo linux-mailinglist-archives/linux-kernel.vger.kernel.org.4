@@ -2,135 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D18B70923D
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 10:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D9F7709246
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 10:55:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbjESIy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 04:54:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44066 "EHLO
+        id S231164AbjESIz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 04:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231299AbjESIy5 (ORCPT
+        with ESMTP id S229684AbjESIzw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 04:54:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C643410E6;
-        Fri, 19 May 2023 01:54:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 788A06552C;
-        Fri, 19 May 2023 08:54:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD99AC4339C;
-        Fri, 19 May 2023 08:54:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684486464;
-        bh=l6xWlNTW11M1IArH9XbVsO0LuYjgvFrPFdvjgT2fKsY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=TLL7EZD00J0qHP0WIImFoaeP9iS7POWP+jnrXXMOVsvPZf7p0pLPOZmZditjFFg31
-         hQ44JGMc+sINjBZQV4JnhcqiHZ/mQYoX/q3UD8LQ3fL7avD2osNo6ikbeO+dTVqI8U
-         SLLneongeou+VquX03U5xk32P8IGa+mc28lW+KBpgGF+YcNep+zjvA092liO93u4Po
-         Mr+Hg/2V7r/LSvvS51mmeCcObriQgn7bfCwvJml8+elLZMzpPHkT4iYPgk0FkGLQ/W
-         H2027cYo7hdUiOwfaUuO0jp4YfS9qDFtQWfaHB6t7GSPEli7Z/CzCLg1UuRwwtw8K9
-         mD5z70YGlVj8g==
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-4f2676d62a2so3346163e87.0;
-        Fri, 19 May 2023 01:54:24 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwz/1er401cIoV6TLsg0UmhbYPE5TCnAfnokzh6bDmWjvQM2ck7
-        teEQdq8n/96UESDwnjrg6kSqQteCAOlkqzB54JM=
-X-Google-Smtp-Source: ACHHUZ7SvdXKZpS/i9iOaPcFYPkRcxW6aWBrXA6Y7mN4OZu24KBaz9xljJ2ps4rcZZOJmt7v9Wu5xjt2j2ikxrgIIvk=
-X-Received: by 2002:ac2:43a4:0:b0:4f2:7b65:baeb with SMTP id
- t4-20020ac243a4000000b004f27b65baebmr455104lfl.53.1684486462868; Fri, 19 May
- 2023 01:54:22 -0700 (PDT)
-MIME-Version: 1.0
-References: <ZGcyuyjJwZhdYS/G@gondor.apana.org.au> <E1pzvTZ-00AnMQ-5M@formenos.hmeau.com>
-In-Reply-To: <E1pzvTZ-00AnMQ-5M@formenos.hmeau.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Fri, 19 May 2023 10:54:11 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXGwS03zUBTGb7jmk1-6r+=a-HH+A-S9ZFTYRyJSzN0Xcg@mail.gmail.com>
-Message-ID: <CAMj1kXGwS03zUBTGb7jmk1-6r+=a-HH+A-S9ZFTYRyJSzN0Xcg@mail.gmail.com>
-Subject: Re: [PATCH 3/3] crypto: cmac - Add support for cloning
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Dmitry Safonov <dima@arista.com>,
-        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Bob Gilligan <gilligan@arista.com>,
-        Dan Carpenter <error27@gmail.com>,
-        David Laight <David.Laight@aculab.com>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Francesco Ruggeri <fruggeri05@gmail.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Ivan Delalande <colona@arista.com>,
-        Leonard Crestez <cdleonard@gmail.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 19 May 2023 04:55:52 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9914AA;
+        Fri, 19 May 2023 01:55:51 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 4FDC85C0069;
+        Fri, 19 May 2023 04:55:51 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 19 May 2023 04:55:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1684486551; x=1684572951; bh=UM
+        /Iy78jcidbViTHhtG0ZTxjLYDzr3qTMzVVSL0XtdA=; b=X5hx2jdpsdjrEC4d/o
+        pSBO9nUZSth/4yCIhUoNLGlQYSNvrksWdO5qkeOG8Ya72Q0612xDaZZdVXBWaUMB
+        1ipGrUoWPZo/BG6qF+xEM2DQG3pG4azrTq7zsuCHvKZUN+EwmdgL2tsAZxzm2Gk2
+        M9hlnk4IWnHqaxPG84sVs5o/UGjZsn75SEHOcN/tefngK21lSufEkJwXljoRxw3k
+        einpmAI/l+SlAAAR0HXWHkdhev00r8wJlOIGYozaOYEgm7Rxwj242W1DdANji5UG
+        iiY41VaWGp1tA5GswS3GBN465vXgfmX6mB1laZSOkAJXln5+LZGQ3H7CCpn5ZOeC
+        +wRA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684486551; x=1684572951; bh=UM/Iy78jcidbV
+        iTHhtG0ZTxjLYDzr3qTMzVVSL0XtdA=; b=vLRr8tOHknaO0lrCXrx+BYGsVmWWR
+        Ob07y/paEoQ17DHIPdkDe6xRe3H8G0oRIUSETcJ89mbKDVeKQ8i/23SGUTnMmE0A
+        phrtSm/U/m5UgEr+ny/2aS8Yqx35B6O9E5Qdj1J9D8WlHQ3Q5JMHbouQzXNqeePC
+        cx2OdQfZypEkcqm7ZTSTl1CeFnyRx7POK4UABjZdQkE/WaaLifCFwLy8i2g6zIon
+        O0gNm7t9m0tZw2tcLFNnrq0/NDnN1isNiND01ZElgs1QmvJ80/Eh1ag/E7aBWGx2
+        +ZiC4V7q4Ya8ywj/FngIA6GKYSvysFLqs2GoOElAZf8PerKdCTkUKV2TA==
+X-ME-Sender: <xms:ljlnZO4gNlipYcpOJklxZU5OQZVzXUidLRbPUJ7V01Mi-oGeLiU_Eg>
+    <xme:ljlnZH71_zcXldxXz5UgrdjRbzLt_6P39FBRKoev1R0dGuQ9DgCQvGfQp9H4175wb
+    pW6Q7CCChrBuG-6HHI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeihedguddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:ljlnZNcSE1qaXcHOxE2Mljx0INm6bT6bH9M7svDhqDmJjbUmxxmSYw>
+    <xmx:ljlnZLKbI5Ks5AwDeLNx4Cf-sGkNXqr_8TF0-BZGo8ZAVZsRzpeaGw>
+    <xmx:ljlnZCL7ZlfGiXQRw_OUynqsfiwgpBUMpxKf6SCCXu5TJVoHU5-1Lg>
+    <xmx:lzlnZOqOiyOaWEjH92Ym6MHdryujzavgDElKTq96AqfyXVbSCZHp1A>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 718B3B60086; Fri, 19 May 2023 04:55:50 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-431-g1d6a3ebb56-fm-20230511.001-g1d6a3ebb
+Mime-Version: 1.0
+Message-Id: <13666898-6f5f-434d-8294-95182a7563de@app.fastmail.com>
+In-Reply-To: <454dede3-5f20-74fc-975a-e11e4d8b5648@sifive.com>
+References: <mhng-24855381-7da8-4c77-bcaf-a3a53c8cb38b@palmer-ri-x1c9>
+ <556bebad-3150-4fd5-8725-e4973fd6edd1@app.fastmail.com>
+ <454dede3-5f20-74fc-975a-e11e4d8b5648@sifive.com>
+Date:   Fri, 19 May 2023 10:55:30 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Paul Walmsley" <paul.walmsley@sifive.com>
+Cc:     "Palmer Dabbelt" <palmer@rivosinc.com>, guoren <guoren@kernel.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Andy Lutomirski" <luto@kernel.org>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        "Jisheng Zhang" <jszhang@kernel.org>,
+        "Huacai Chen" <chenhuacai@kernel.org>,
+        "Anup Patel" <apatel@ventanamicro.com>,
+        "Atish Patra" <atishp@atishpatra.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        =?UTF-8?Q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>, "Mike Rapoport" <rppt@kernel.org>,
+        "Anup Patel" <anup@brainfault.org>, shihua@iscas.ac.cn,
+        jiawei@iscas.ac.cn, liweiwei@iscas.ac.cn, luxufan@iscas.ac.cn,
+        chunyu@iscas.ac.cn, tsu.yubo@gmail.com, wefu@redhat.com,
+        wangjunqiang@iscas.ac.cn, kito.cheng@sifive.com,
+        "Andy Chiu" <andy.chiu@sifive.com>,
+        "Vincent Chen" <vincent.chen@sifive.com>,
+        "Greentime Hu" <greentime.hu@sifive.com>,
+        "Jonathan Corbet" <corbet@lwn.net>, wuwei2016@iscas.ac.cn,
+        "Jessica Clarke" <jrtc27@jrtc27.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        "Guo Ren" <guoren@linux.alibaba.com>
+Subject: Re: [RFC PATCH 00/22] riscv: s64ilp32: Running 32-bit Linux kernel on 64-bit
+ supervisor mode
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Herbert,
+On Fri, May 19, 2023, at 02:38, Paul Walmsley wrote:
+> On Thu, 18 May 2023, Arnd Bergmann wrote:
+>
+>> We have had long discussions about supporting ilp32 userspace on
+>> arm64, and I think almost everyone is glad we never merged it into
+>> the mainline kernel, so we don't have to worry about supporting it
+>> in the future. The cost of supporting an extra user space ABI
+>> is huge, and I'm sure you don't want to go there. The other two
+>> cited examples (mips-n32 and x86-x32) are pretty much unused now
+>> as well, but still have a maintenance burden until they can finally
+>> get removed.
+>
+> There probably hasn't been much pressure to support Aarch64 ILP32 since 
+> ARM still has hardware support for Aarch32.  Will be interesting to see if 
+> that's still the case after ARM drops Aarch32 support for future designs.
 
-On Fri, 19 May 2023 at 10:29, Herbert Xu <herbert@gondor.apana.org.au> wrote:
->
-> Allow hmac to be cloned.  The underlying cipher needs to support
-> cloning by not having a cra_init function (all implementations of
-> aes that do not require a fallback can be cloned).
->
-> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+I think there was a some pressure for 64ilp32 from Arm when aarch64 support
+was originally added, as they always planned to drop aarch32 support
+eventually, but I don't see that coming back now. I think the situation
+is quite different as well:
 
-Does this imply that the cmac-aes-ce and cmac-aes-neon implementations
-for arm64 need a similar treatment?
+On aarch64, there is a significant cost in supporting aarch32 userspace
+because of the complexity of that particular instruction set, but at
+the same time there is also a huge amount of software that is compiled
+for or written to support aarch32 software, and nobody wants to
+replace that.  There are also a lot of existing arm32 chips with
+guaranteed availability well into the 2030s, new 32-bit-only chips
+based on Cortex-A7 (originally released in 2011) coming out constantly,
+and even the latest low-end core (Cortex-A510 r1). It's probably
+going to be several years before that core even shows up in low-memory
+systems, and then decades before this stops being available in SoCs,
+even in the unlikely case that no future low-end cores support
+aarch32-el0 mode (it's already been announced that there are no
+plans for future high-end cores with aarch32 mode, but those won't
+be used in low-memory configurations anyway).
 
-> ---
->
->  crypto/cmac.c |   18 +++++++++++++++++-
->  1 file changed, 17 insertions(+), 1 deletion(-)
->
-> diff --git a/crypto/cmac.c b/crypto/cmac.c
-> index bcc6f19a4f64..fce6b0f58e88 100644
-> --- a/crypto/cmac.c
-> +++ b/crypto/cmac.c
-> @@ -213,7 +213,22 @@ static int cmac_init_tfm(struct crypto_shash *tfm)
->         ctx->child = cipher;
->
->         return 0;
-> -};
-> +}
-> +
-> +static int cmac_clone_tfm(struct crypto_shash *tfm, struct crypto_shash *otfm)
-> +{
-> +       struct cmac_tfm_ctx *octx = crypto_shash_ctx(otfm);
-> +       struct cmac_tfm_ctx *ctx = crypto_shash_ctx(tfm);
-> +       struct crypto_cipher *cipher;
-> +
-> +       cipher = crypto_clone_cipher(octx->child);
-> +       if (IS_ERR(cipher))
-> +               return PTR_ERR(cipher);
-> +
-> +       ctx->child = cipher;
-> +
-> +       return 0;
-> +}
->
->  static void cmac_exit_tfm(struct crypto_shash *tfm)
->  {
-> @@ -280,6 +295,7 @@ static int cmac_create(struct crypto_template *tmpl, struct rtattr **tb)
->         inst->alg.final = crypto_cmac_digest_final;
->         inst->alg.setkey = crypto_cmac_digest_setkey;
->         inst->alg.init_tfm = cmac_init_tfm;
-> +       inst->alg.clone_tfm = cmac_clone_tfm;
->         inst->alg.exit_tfm = cmac_exit_tfm;
->
->         inst->free = shash_free_singlespawn_instance;
+For RISC-V, I have not seen much interest in Linux userspace for
+the existing rv32 mode, so you could argue that there is not much
+to lose in abandoning it. On the other hand, the cost of adding
+rv32 support to an rv64 core should be very small as all the
+instructions are already present in some other encoding, and
+developers have already spent a significant amount of work on
+bringing up rv32 userspace that would all have to be done again
+for a new ABI, and you'd end up splitting the already tiny
+developer base for 32-bit riscv in two for the existing rv32 side
+and a new rv64ilp32 side. 
+
+I suppose the answer in both cases is the same though: if a
+SoC maker wants to sell a product to users with low memory,
+they should pick a CPU core that implements standard 32-bit
+user space support rather than making a mess of it and
+expecting software to work around it.
+
+      Arnd
