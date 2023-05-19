@@ -2,164 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16AA0709B5E
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 17:31:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 960CC709B61
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 17:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231354AbjESPbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 11:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54448 "EHLO
+        id S232098AbjESPdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 11:33:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230414AbjESPbW (ORCPT
+        with ESMTP id S230461AbjESPdE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 11:31:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74165106;
-        Fri, 19 May 2023 08:31:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 113E0658BA;
-        Fri, 19 May 2023 15:31:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75E50C43446;
-        Fri, 19 May 2023 15:31:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684510280;
-        bh=LutjUTbti1HeouoWBzB8ND73lnDjx3NcWfIcsLJYYmE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=AMOrYWyg6OaQgH8gau7KnuU4B6CV3WiREPoOkTofba8Ayky0BGRYjhyYI5+LPgZCW
-         /DgDUYjjMBpUb6Cwvq7Zy/cxeTkGoqqSf4h1ZjSukKkeXgA/PeioMuH0QjQruIy0rx
-         7tgoV8VvhgDD7TtuIyYXpJc2nq31k5JaFjBitZE5JZkN1Ib284TjJOzHJ8SYPIYwzE
-         M6awRaz4TZ9wlqW+Pr0G/LYSHJ6QYVnsBqCSbspjFq7fesfynNVv8A03szXsDrwvLH
-         FulyfmvZMoetpAh9/pSJrcck6HxdTI39sqToiibJ7SizImJ4ojCQ72NtkZc2OqmiuJ
-         /cHfqjzhIxebg==
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-510e90d785fso2887136a12.2;
-        Fri, 19 May 2023 08:31:20 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzzcCcO5VCly1NwTmdmShEbjhpKEyDalP/Ig1LAIyZZsntQUd1h
-        aQw0GBIhxHWXkot8Oam6Q62B/tSiT/YYmUcdDes=
-X-Google-Smtp-Source: ACHHUZ6F1jwrc+hZPGVqYVC1J42+KZlyJm5HnfvuwPB72oAO64/VLWKkZr5Pm+u+bUmC5e6fQM9QCiYbzPCxU4SEr7c=
-X-Received: by 2002:a05:6402:1217:b0:50b:faa1:e1d5 with SMTP id
- c23-20020a056402121700b0050bfaa1e1d5mr1842334edw.39.1684510278533; Fri, 19
- May 2023 08:31:18 -0700 (PDT)
+        Fri, 19 May 2023 11:33:04 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BB11A4
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 08:33:02 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-3f529239e4aso34237591cf.0
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 08:33:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684510382; x=1687102382;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Kxy+rwK3enUPv3xL2BXOn58zbTbgfauUuJX0uZ3fQ6Q=;
+        b=mym6MEH6W1MyKl99fdoCqm1n9Yj6eOg4ue991079wWcQZiTubCmnUf2QwbNveAsQ7I
+         rtmG70t6mug7qYSTmuLGy6Ob+Ix0zrhQNr5gRNG3qd5FBBf0PKZeCoP70R2ptdvifnZi
+         HAPtUInBrHu4Ig4lzJTzQUu+0/nLbVaxRvP5E=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684510382; x=1687102382;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Kxy+rwK3enUPv3xL2BXOn58zbTbgfauUuJX0uZ3fQ6Q=;
+        b=MCSf0FGqNWqqGKlz8L4TTv3IxGnDfU3T0UdJSm3Hr2uFsCkemYl3nGrBRTWpOmGN04
+         My1qh+vKESmvSPgRCeSGPqDnY1eDQkIrXgxwGBjb19FsZffZI+qKH0rNBk1Z6rB1EtXQ
+         snGHhgDijo6x6ZtWt6BOhgk7kIzgqHYxsgtg3qaBcRDuqRi34GOtOyor0s2MhLnwCohO
+         Hdg5G5nTQRibBvFL/5xnRm9c4P3a2GkfapcF4fT/stYFHgrHWpwtzi8VDDJTHWeIhDZp
+         +Jx4notaW3ebP8vyYJ0NUOmwenw7v3K7kBN8ObUCavlVGd4iLsZUD9JUFo86VxL9gEhi
+         Zb0g==
+X-Gm-Message-State: AC+VfDwCFHlzLbg6fDi+PipD5FYRf0rSnpn7u+CY6hzojzEOZAEP+VWk
+        YX1rE9r1/n9UDpRQF1wpT1wL/FAKeXkVuvL2Pxz5buN2ixBZy5x+aeg=
+X-Google-Smtp-Source: ACHHUZ4euJqTxX9RYlpmPT+2WCkKOpGIAFPFTBdjpEhT2FoeJf3WzB2Yu+faYR8G6kOx+r1SQEFXaNYECKjMV0lYVZM=
+X-Received: by 2002:a05:622a:1183:b0:3f5:491e:946d with SMTP id
+ m3-20020a05622a118300b003f5491e946dmr4850090qtk.51.1684510381993; Fri, 19 May
+ 2023 08:33:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <mhng-24855381-7da8-4c77-bcaf-a3a53c8cb38b@palmer-ri-x1c9> <556bebad-3150-4fd5-8725-e4973fd6edd1@app.fastmail.com>
-In-Reply-To: <556bebad-3150-4fd5-8725-e4973fd6edd1@app.fastmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Fri, 19 May 2023 23:31:06 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRO8Qcz2EXz-ZAczpTj=Lm=GPO-UQMPqCRdqrfjg8sXbA@mail.gmail.com>
-Message-ID: <CAJF2gTRO8Qcz2EXz-ZAczpTj=Lm=GPO-UQMPqCRdqrfjg8sXbA@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/22] riscv: s64ilp32: Running 32-bit Linux kernel on
- 64-bit supervisor mode
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        "Conor.Dooley" <conor.dooley@microchip.com>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Anup Patel <anup@brainfault.org>, shihua@iscas.ac.cn,
-        jiawei@iscas.ac.cn, liweiwei@iscas.ac.cn, luxufan@iscas.ac.cn,
-        chunyu@iscas.ac.cn, tsu.yubo@gmail.com, wefu@redhat.com,
-        wangjunqiang@iscas.ac.cn, kito.cheng@sifive.com,
-        Andy Chiu <andy.chiu@sifive.com>,
-        Vincent Chen <vincent.chen@sifive.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Jonathan Corbet <corbet@lwn.net>, wuwei2016@iscas.ac.cn,
-        Jessica Clarke <jrtc27@jrtc27.com>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>
+References: <20230515142552.1.I17cae37888be3a8683911991602f18e482e7a621@changeid>
+ <ZGQ9Y+vqWhQLHAQh@google.com> <CAMaBtwHxaevxLY7zWNDU8zbyWx=puLkeeRAjFtovvrA5pjtJ4w@mail.gmail.com>
+ <ZGWBhEMmo2lStTg9@google.com> <CAMaBtwFtE=vjuhVy7rw9zCe9WV0dRyeBWj88JH2j3bkbh2BkXA@mail.gmail.com>
+ <ZGbXFtrBzbaD9rQs@google.com>
+In-Reply-To: <ZGbXFtrBzbaD9rQs@google.com>
+From:   Tim Van Patten <timvp@chromium.org>
+Date:   Fri, 19 May 2023 09:32:51 -0600
+Message-ID: <CAMaBtwHwfZCCQ4J_kNjNQtPJ1b5uHQTRHtHaxS+8odBUjivFUg@mail.gmail.com>
+Subject: Re: [PATCH] [v9] platform/chrome: cros_ec_lpc: Move host command to prepare/complete
+To:     Tzung-Bi Shih <tzungbi@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>, robbarnes@google.com,
+        lalithkraj@google.com, rrangel@chromium.org,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        chrome-platform@lists.linux.dev, Garrick Evans <garrick@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 2:29=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrote=
-:
+On Thu, May 18, 2023 at 7:55=E2=80=AFPM Tzung-Bi Shih <tzungbi@kernel.org> =
+wrote:
 >
-> On Thu, May 18, 2023, at 17:38, Palmer Dabbelt wrote:
-> > On Thu, 18 May 2023 06:09:51 PDT (-0700), guoren@kernel.org wrote:
-> >> From: Guo Ren <guoren@linux.alibaba.com>
-> >>
-> >> This patch series adds s64ilp32 support to riscv. The term s64ilp32
-> >> means smode-xlen=3D64 and -mabi=3Dilp32 (ints, longs, and pointers are=
- all
-> >> 32-bit), i.e., running 32-bit Linux kernel on pure 64-bit supervisor
-> >> mode. There have been many 64ilp32 abis existing, such as mips-n32 [1]=
-,
-> >> arm-aarch64ilp32 [2], and x86-x32 [3], but they are all about userspac=
-e.
-> >> Thus, this should be the first time running a 32-bit Linux kernel with
-> >> the 64ilp32 ABI at supervisor mode (If not, correct me).
+> On Thu, May 18, 2023 at 10:47:23AM -0600, Tim Van Patten wrote:
+> > On Wed, May 17, 2023 at 7:38=E2=80=AFPM Tzung-Bi Shih <tzungbi@kernel.o=
+rg> wrote:
+> > > On Wed, May 17, 2023 at 09:56:59AM -0600, Tim Van Patten wrote:
+> > > > The issue is that we need the EC aware of the AP being in the proce=
+ss
+> > > > of suspend/resume from start to finish, so we can accurately
+> > > > determine:
+> > > > - How long the process took to better gauge we're meeting ChromeOS =
+requirements.
+> > > > - When the AP failed to complete the process, so we can collect dat=
+a
+> > > > and perform error recovery.
+> [...]
+> > > How could the *error* recovery do?
 > >
-> > Does anyone actually want this?  At a bare minimum we'd need to add it
-> > to the psABI, which would presumably also be required on the compiler
-> > side of things.
+> > I don't understand what this is asking.
+>
+> Given that you said "we can collect data and perform error recovery" if t=
+he
+> suspend-resume takes more/less time than expected.  I'm trying to underst=
+and
+> what does "error recovery" mean.  What recovery it could take?
+
+Currently, for AMD, the EC will trigger data collection and either
+reset the AP or send a host event to attempt to trigger the AP into
+it's own recovery. Intel is looking into adding error recovery as
+well.
+
+> > > > > What about other interfaces (i2c, spi, uart)?  Do they also need =
+to change
+> > > > the callbacks?
+> > > >
+> > > > We aren't concerned about those devices, because they aren't being
+> > > > used on the devices we're seeing issues with. If devices using thos=
+e
+> > > > ECs want this change, they can pick it up as well, but we don't hav=
+e
+> > > > any way to test changes on those devices (whatever they may be).
+> > >
+> > > This doesn't sound good.  As I would suppose you are adding some new =
+EC FW
+> > > features regarding to EC_CMD_HOST_SLEEP_EVENT, you should consider th=
+e
+> > > existing systems too.
 > >
-> > It's not even clear anyone wants rv64/ilp32 in userspace, the kernel
-> > seems like it'd be even less widely used.
+> > Again, why are you assuming there is new EC FW for this? This is only
+> > changing when an already-existing host command is being sent. Nothing
+> > is being added or removed.
 >
-> We have had long discussions about supporting ilp32 userspace on
-> arm64, and I think almost everyone is glad we never merged it into
-> the mainline kernel, so we don't have to worry about supporting it
-> in the future. The cost of supporting an extra user space ABI
-> is huge, and I'm sure you don't want to go there. The other two
-> cited examples (mips-n32 and x86-x32) are pretty much unused now
-> as well, but still have a maintenance burden until they can finally
-> get removed.
+> I see.  There is no EC changes.
 >
-> If for some crazy reason you'd still want the 64ilp32 ABI in user
-> space, running the kernel this way is probably still a bad idea,
-> but that one is less clear. There is clearly a small memory
-> penalty of running a 64-bit kernel for larger data structures
-> (page, inode, task_struct, ...) and vmlinux, and there is no
-I don't think it's a small memory penalty, our measurement is about
-16% with defconfig, see "Why 32-bit Linux?" section.
-This patch series doesn't add 64ilp32 userspace abi, but it seems you
-also don't like to run 32-bit Linux kernel on 64-bit hardware, right?
+> Specifically, do you see any crashes, or premature events, or mal-functio=
+ns
+> regarding to the measurement is not that accurate?
 
-The motivation of s64ilp32 (running 32-bit Linux kernel on 64-bit s-mode):
- - The target hardware (Canaan Kendryte k230) only supports MXL=3D64,
-SXL=3D64, UXL=3D64/32.
- - The 64-bit Linux + compat 32-bit app can't satisfy the 64/128MB scenario=
-s.
+No, we don't see any issues with the current or new timings of sending
+these commands.
 
-> huge additional maintenance cost on top of the ABI itself
-> that you'd need either way, but using a 64-bit address space
-> in the kernel has some important advantages even when running
-> 32-bit userland: processes can use the entire 4GB virtual
-> space, while the kernel can address more than 768MB of lowmem,
-> and KASLR has more bits to work with for randomization. On
-> RISCV, some additional features (VMAP_STACK, KASAN, KFENCE,
-> ...) depend on 64-bit kernels even though they don't
-> strictly need that.
+> Also, we wouldn't want it to be LPC-specialized.  Please consider other
+> interfaces.
 
-I agree that the 64-bit linux kernel has more functionalities, but:
- - What do you think about linux on a 64/128MB SoC? Could it be
-affordable to VMAP_STACK, KASAN, KFENCE?
- - I think 32-bit Linux & RTOS have monopolized this market (64/128MB
-scenarios), right?
-
->
->      Arnd
-
-
-
---=20
-Best Regards
- Guo Ren
+I'm intentionally excluding those interfaces because we don't have any
+way to test/validate this change on those devices. Additionally, we
+don't have any devices that use this suspend/resume tracking logic
+using those interfaces, so there's no reason to introduce any risk by
+changing devices that don't need it.
