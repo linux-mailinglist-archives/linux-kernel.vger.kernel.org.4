@@ -2,163 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8330709F5A
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 20:48:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D69F709F5C
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 20:49:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230247AbjESSsa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 14:48:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43984 "EHLO
+        id S229896AbjESStL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 14:49:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbjESSsZ (ORCPT
+        with ESMTP id S229932AbjESStJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 14:48:25 -0400
-Received: from DM5PR00CU002.outbound.protection.outlook.com (mail-centralusazon11021017.outbound.protection.outlook.com [52.101.62.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6104CF3;
-        Fri, 19 May 2023 11:48:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UANkpDnVSZZNQMOleAkrOEmr1dfdfGHVAVp6itf0VsAEEMqxiLGj7sOpb5ocIh+vyN/esPq5SmZtWs+Qjoh/LZv5mYlpp5a4jcgGZXd+NS4N0DwP7r7oNZN0ta5qGpMFj5OHHyf7H53PIco35dDERWZ0xsOcZv6Cw46sUVNhpbvwmVu1HmUQth37t2QWgFv3RHoL8Bp+Hz0myX4uzo6Q8NDY6CbhS9LtsagFvuG4E3mrAU0WIP/IdHMDXROktL/r2H6arac2K8y6uYmjvXpm9X/zSqDzOjTZPf+a/RR+p0NoLwnGiCEakai2i0SecasVrOswUaFXbWLemvFW077JKw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PuA9oV2aPaHyo1atkeJyk8mbwVgSIglUdFC691brwc4=;
- b=VOBjYn+twyiOcN0OjlQz1ayBW9ZAXTS3Jtne0MTSx/EiQNhY21B+vP8E+EgKuPSKI3S221BLQCjZQ1D3nSTMABiWMuLbKdGvYF+EHG2AJ1ND9CYbx//mDeeINnUZEsTL0/KClbPj2ZgmIa0MZorZT9nAcs3XqpPAr+Eqxa9owSQKMhAugLYFbXnTJMOmn95kPmWJxU1a0mTRWbB3q6R9gYhiIRF0+JqbGEjw+u4iIl8+0smTIsljfq/tO4QNMa3Xxd1PJi95jg2KjkFZAQXdJgZ/MfOH+cdShymTb8oSN5jMtC3Ixr2CH6iHMJZ+p1yiFL0e22iOnawrRIj3EbjvbQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PuA9oV2aPaHyo1atkeJyk8mbwVgSIglUdFC691brwc4=;
- b=cC+1hHVZWHqSWsDEpKStSylDnqCLYJCN2g0XkY0THhTPGKnO4G51eBl8GiKABGlWOOiMryy/OlODy/Ccy6HG6Vct7s78H4KROwu/bGb2XRfJ3pDRh1QTS/Fig4LJu/yNn5kioOnmXPikUiZ4qs0a+B9fE7HAU6fkIOXVxx3kMQY=
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
- by CO1PPF59DDB86B4.namprd21.prod.outlook.com (2603:10b6:30f:fff1:0:4:0:c)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.5; Fri, 19 May
- 2023 18:48:21 +0000
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::a4f7:2466:97b5:bd31]) by BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::a4f7:2466:97b5:bd31%5]) with mapi id 15.20.6433.007; Fri, 19 May 2023
- 18:48:21 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        "bigeasy@linutronix.de" <bigeasy@linutronix.de>
-CC:     Mark Rutland <Mark.Rutland@arm.com>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
-        "kernel@xen0n.name" <kernel@xen0n.name>,
-        "hca@linux.ibm.com" <hca@linux.ibm.com>,
-        "gor@linux.ibm.com" <gor@linux.ibm.com>,
-        "agordeev@linux.ibm.com" <agordeev@linux.ibm.com>,
-        "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>,
-        "svens@linux.ibm.com" <svens@linux.ibm.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "wanpengli@tencent.com" <wanpengli@tencent.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "jgross@suse.com" <jgross@suse.com>,
-        "boris.ostrovsky@oracle.com" <boris.ostrovsky@oracle.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "longman@redhat.com" <longman@redhat.com>,
-        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
-        "pmladek@suse.com" <pmladek@suse.com>,
-        "senozhatsky@chromium.org" <senozhatsky@chromium.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "john.ogness@linutronix.de" <john.ogness@linutronix.de>,
-        "juri.lelli@redhat.com" <juri.lelli@redhat.com>,
-        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-        "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
-        "bsegall@google.com" <bsegall@google.com>,
-        "mgorman@suse.de" <mgorman@suse.de>,
-        "bristot@redhat.com" <bristot@redhat.com>,
-        "vschneid@redhat.com" <vschneid@redhat.com>,
-        "jstultz@google.com" <jstultz@google.com>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: RE: [PATCH v2 00/13] local_clock() vs noinstr
-Thread-Topic: [PATCH v2 00/13] local_clock() vs noinstr
-Thread-Index: AQHZij3IV/oI1X52lEiQ97JQ1G8kIa9h7iJw
-Date:   Fri, 19 May 2023 18:48:20 +0000
-Message-ID: <BYAPR21MB16887E8B94335E4331FF439AD77CA@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <20230519102058.581557770@infradead.org>
-In-Reply-To: <20230519102058.581557770@infradead.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=86956934-20fc-4e64-960d-927f86cb8830;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-05-19T18:39:56Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|CO1PPF59DDB86B4:EE_
-x-ms-office365-filtering-correlation-id: e52c8618-69c5-4183-a096-08db58999e12
-x-ld-processed: 72f988bf-86f1-41af-91ab-2d7cd011db47,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: lB2PNdJjxe3vAABKSSGPPlkVHpiWmKd/vsNFRTmyci9cVjoKA1b7QycEyJQvVCGqjgHo3nRqxPywdMZG2fFplULr1mZ/AAPBo6cxFllWFc+QGL+7G8QC1awKmdAorTNWf/hgOoe0Fk1lZuNYydW8TxEVaxNdOXBwlCTfieFOd4bT38V5Tkt1dpPPPi/IfaOQRPtOrgIesYK08+SJ7dqr9f+6nYcpsaBnIb0FTmh5i3qX4uRA/sjVk3BvuXgH0IsPFuHTzLYqSMn8KmhLM/y9HaEw+bd9cMCXvMgAAsZzbEA1iug1Or0GWCQPxM1Wrp/EYmF+o0hBPLFCaJsBF34vX37DRsIFSp356bnOU37sJQ2PZBNgOaZGpy3emwqdD1PFQJEE1d32eZksu+heylbfBbq+wyLH8xqx9F0yhOPfGb5ZRlbay6a9kKNSOm8KAY5ZxxGOX+E2drpCYBQ9327+K8+h2wFr++5hbFJPnPl1r1UyW5hugwy1fOJa5l9hTSA9gadHXb+5qtjOt6pTHpJKGnalb4/IjmwdaAhYeGGUk3/DB5W2ZBzs/UMRArh4sFH3aNVsXSqSWu3jCGgnHEZrYcOHWUdmj5ArQGNZFmwMzGHLoTXcGv007yWGS6E58ctrxeFO0osrMgn3eNTEKJjhbO/9+t02PhGFln088esy3lM=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(366004)(346002)(376002)(136003)(451199021)(71200400001)(76116006)(66556008)(10290500003)(478600001)(86362001)(54906003)(786003)(316002)(66446008)(4326008)(66946007)(7696005)(66476007)(64756008)(110136005)(52536014)(8936002)(82950400001)(7416002)(7406005)(55016003)(38100700002)(38070700005)(5660300002)(41300700001)(2906002)(122000001)(8990500004)(33656002)(8676002)(82960400001)(6506007)(9686003)(83380400001)(186003)(26005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?7T2jFawu8LnV4egSakgssV2YFkBwDFrd8eihD5/kFgXEDneoeY47tUZETr9W?=
- =?us-ascii?Q?FjEhpf8EZKTD0Of5rHTKZKmFGbQJS6wB3IKH8PsEoQkuhcfuKp7AnMlRMrty?=
- =?us-ascii?Q?SjdVl4iHlUFef+TVNgUWKPDenLXzTpCxE8iNPHxSltwRtV+JJK26p0U5ZXEQ?=
- =?us-ascii?Q?shTVZjc1Q/HAC4iuxrRSoiSrD9Ws0Ytiy2jh+kdqJsMrX866XqTyQ0D7DS2c?=
- =?us-ascii?Q?PD7byjZiIY0PdSc8WPOEo3l8Xfw5LC4alvoy1mgv1cw/yj82fFJH3T/rVmAj?=
- =?us-ascii?Q?yCRjGimtiiVhLAJVYLpHxgd3fpZmEB2nUTN9qfoc529LZDN4prsXpTUZfLPm?=
- =?us-ascii?Q?F+0xGGdZLTqRUWhSXIgufzANVfp/nL5EfFsauo2IYtlUtNykeZySUETbpOrP?=
- =?us-ascii?Q?q1Whp1dZXpHPrq/QwmqnYHDT2vCXs5oqfZC/TKu/A6Mrxufah6DhyvvMWbAu?=
- =?us-ascii?Q?kIEptTMytZs1gB/Dkiz1A2HQZnSoZkPNXGO7WvA6Yc48EAjLEJunDvDPrfen?=
- =?us-ascii?Q?Idpf5a//f5NWnNrn0ZE37nsctAp2OuwN6WOfwphn2tmvv7qUtaoM8/8kQv1O?=
- =?us-ascii?Q?QPjQeS3RtSlr09s7UIEDAQT11zIVwitr14q3sEE84+mR3rhKEgVm31l357sR?=
- =?us-ascii?Q?hw6HU/yGWb6AHIEghwwAawAumnzZwTWmfehYxfkX91E8Z7LLZnv1WNV3zutX?=
- =?us-ascii?Q?v7wagmrZs7nm40MihiJPDcVbwPpi8HI+HqY+YONBQ9zR4vcNBOOmnQ9GTZmL?=
- =?us-ascii?Q?LyRCnaPoqKHJkEgrJnNAUvg0aPA+7yPddoCePqJrC0hpRbbHS5KkCyBn8cc7?=
- =?us-ascii?Q?/hdK+0s8lpT6IdvAaOzBwGSddcWvqJepz1ubiwALx4Lt0S1hATvBLxY+oFRk?=
- =?us-ascii?Q?e3cLs85fU47jWs/MV1xdPVx9mwH5jvopfTaPPO73cwyIA5anz/MNEktK96Q4?=
- =?us-ascii?Q?jlPvYXwTi12hlMJMMYN/XwwwQAGIACOwpxymrn1TF55ukeyLds1Y8BayCmSY?=
- =?us-ascii?Q?+lsJr/3Yn5jbjaa7FM00qyC+qaTxD/+OxlvfAmEh4eEOEbikASE3GfhXoGTS?=
- =?us-ascii?Q?YRxuwlNdKK6OTNCNkKSqECPArYpc4IXOVP+HzST9HAj70WUvjERa/xuKBI9D?=
- =?us-ascii?Q?c2tSacbQmNhmehOeA53AfIB1ITY0foKIzLgKnwzVd7NUD2oWM+AwPUQAtu3m?=
- =?us-ascii?Q?jqzV38yzeetKnEeo9/9kkus8Kv/IXBAg/m2n2LM4PbueqxYbWf4TV3WNrfys?=
- =?us-ascii?Q?rJ93hHgiBMBYouhpum+eWoxDkKbwGyVxaKZOezEj7olS2dNKQe4u59xCUoOO?=
- =?us-ascii?Q?KeAF9Xc4xqtln+zmxcLwSiutxHKMkYAViv1MtO1V2DUtDDFKzIDQs3v1nPkJ?=
- =?us-ascii?Q?0xfoGphcLB39Kx+WfO7E8urXlPafL5MAGvcfSulb+0ykbRxJUa9m2WdR/6z7?=
- =?us-ascii?Q?tlmlZ/iKxfrLFiGOoBD/0DeqgUyB4dT5hMYXQNlyakIm0zU7Zd9g+o6KxHK6?=
- =?us-ascii?Q?RVcCdUMtwbU1kcJo0cd5bMbT3TP8hlKekdhRvrLIKUWmhmeFge8CVFBMGmUg?=
- =?us-ascii?Q?/IqFQyWEnF9O8CpbzaSy0m/A1QzOoG+593GaIzVUmn1mxqsdipItbOIXTrlB?=
- =?us-ascii?Q?4w=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 19 May 2023 14:49:09 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1361700;
+        Fri, 19 May 2023 11:48:51 -0700 (PDT)
+Date:   Fri, 19 May 2023 20:48:48 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1684522129;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=yMtivqkUAqqnsZXk4VtbvoP9i8FMY2mtgw5ZmhJ+e1U=;
+        b=q2TDypQB+zD+jySiOP4cMCby8ICAQsGn4ARtsV/Ulfbu1p7smP2x1elBGyBZC6+cu0rHy+
+        ShkKz+YE9CRIKsFR95s47fJPi1KeMDGOjRSMdQavoITVYlUD0GIAhBpONdqvuk2ZRU2dwc
+        CfdyBnjoQjWGTLjZjgcaGwuNEzlA0faKn+cRxf8ILKBkXWwBoYb6mbAiLZn21JVALFsFdy
+        gLhJubdfgMZ5t/0lqK6QMUqPnzd5Flf5UQHMzly6Kvdzpku75sPE/ZcZtPi6lr5qqTQ7KG
+        Hpl0K18nwRxIWYHwKk2YSr9QYHYsI5mbJqN7m4xJkQE3acrl2NknyQtqkbko1A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1684522129;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type;
+        bh=yMtivqkUAqqnsZXk4VtbvoP9i8FMY2mtgw5ZmhJ+e1U=;
+        b=vTXKaDfpO2upBex8PctZRhtK8JaLtMW9ezc0pHJ+VI8AEouP+uq47X7ov7dwxWP3K5v1lN
+        kvRgQMVgLrofZIBQ==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: [ANNOUNCE] v6.3.3-rt15
+Message-ID: <20230519184848.JLp18ErY@linutronix.de>
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e52c8618-69c5-4183-a096-08db58999e12
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 May 2023 18:48:20.7722
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: kB1+KDQN6kL950BelAL49/u33BuEIWKLrz/OpEDOdpfMVcOlQfhkdmCcQi0Y6DgAz3VsuA8y2hGOCEAXIl5gHkn8wKyX00CYdcz5OvO8ato=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PPF59DDB86B4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -166,53 +53,354 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org> Sent: Friday, May 19, 2023 3:21=
- AM
->=20
-> Hi All,
->=20
-> latest version of the local_clock_noinstr() patches.
->=20
-> Most of the changes are in Hyper-V and x86/vdso/gettimeofday; Michael has=
- been
-> very helpful navigating the Hyper-V spec and fixing their sched_clock
-> implementation.
->=20
-> ---
->  arch/arm64/include/asm/arch_timer.h      |  8 +----
->  arch/arm64/include/asm/io.h              | 12 +++----
->  arch/loongarch/include/asm/loongarch.h   |  2 +-
->  arch/loongarch/kernel/time.c             |  6 ++--
->  arch/s390/include/asm/timex.h            | 13 ++++---
->  arch/s390/kernel/time.c                  |  5 +++
->  arch/x86/include/asm/mshyperv.h          |  5 +++
->  arch/x86/include/asm/vdso/gettimeofday.h | 41 ++++++++++++++++------
->  arch/x86/kernel/kvmclock.c               |  4 +--
->  arch/x86/kernel/tsc.c                    | 38 +++++++++++++++-----
->  arch/x86/kvm/x86.c                       |  7 ++--
->  arch/x86/xen/time.c                      |  3 +-
->  drivers/clocksource/arm_arch_timer.c     | 60 ++++++++++++++++++++++++--=
-------
->  drivers/clocksource/hyperv_timer.c       | 44 ++++++++++++++---------
->  drivers/cpuidle/cpuidle.c                |  8 ++---
->  drivers/cpuidle/poll_state.c             |  4 +--
->  include/clocksource/hyperv_timer.h       | 24 +++++--------
->  include/linux/math64.h                   |  2 +-
->  include/linux/rbtree_latch.h             |  2 +-
->  include/linux/sched/clock.h              | 17 ++++++++-
->  include/linux/seqlock.h                  | 15 ++++----
->  kernel/printk/printk.c                   |  2 +-
->  kernel/sched/clock.c                     | 19 ++++++----
->  kernel/time/sched_clock.c                | 24 +++++++++----
->  kernel/time/timekeeping.c                |  4 +--
->  25 files changed, 242 insertions(+), 127 deletions(-)
+Dear RT folks!
 
-Based on linux-next20230519, tested the full series in a Hyper-V
-VM on x86/x64.   Did mainly a basic smoke test.  Sched clock
-appears to work correctly.  Verified correct operation of the TSC page
-clocksource and the MSR-based clocksource.  Verified that vDSO
-gettimeofday() works with the Hyper-V TSC page clocksource and
-is correctly disabled with the Hyper-V MSR-based clocksource.
-Tested in a normal VM and in an "SEV-SNP with vTOM" VM.
+I'm pleased to announce the v6.3.3-rt15 patch set. 
 
-Tested-by: Michael Kelley <mikelley@microsoft.com>  # Hyper-V
+Changes since v6.3.3-rt14:
+
+  - Pavel Pisa reported a problem on Xilinx Zynq (ARM). While looking at
+    the backtrace, bad VFP handling was identified which was introduced
+    in v6.3 cycle. A few patches were backported and extended to
+    address the the VFP problem.
+
+Known issues
+     None
+
+The delta patch against v6.3.3-rt14 is appended below and can be found here:
+ 
+     https://cdn.kernel.org/pub/linux/kernel/projects/rt/6.3/incr/patch-6.3.3-rt14-rt15.patch.xz
+
+You can get this release via the git tree at:
+
+    git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git v6.3.3-rt15
+
+The RT patch against v6.3.3 can be found here:
+
+    https://cdn.kernel.org/pub/linux/kernel/projects/rt/6.3/older/patch-6.3.3-rt15.patch.xz
+
+The split quilt queue is available at:
+
+    https://cdn.kernel.org/pub/linux/kernel/projects/rt/6.3/older/patches-6.3.3-rt15.tar.xz
+
+Sebastian
+
+diff --git a/arch/arm/include/asm/assembler.h b/arch/arm/include/asm/assembler.h
+index 06b48ce23e1ca..505a306e0271a 100644
+--- a/arch/arm/include/asm/assembler.h
++++ b/arch/arm/include/asm/assembler.h
+@@ -244,19 +244,6 @@ THUMB(	fpreg	.req	r7	)
+ 	.endm
+ #endif
+ 
+-	.macro	local_bh_disable, ti, tmp
+-	ldr	\tmp, [\ti, #TI_PREEMPT]
+-	add	\tmp, \tmp, #SOFTIRQ_DISABLE_OFFSET
+-	str	\tmp, [\ti, #TI_PREEMPT]
+-	.endm
+-
+-	.macro	local_bh_enable_ti, ti, tmp
+-	get_thread_info \ti
+-	ldr	\tmp, [\ti, #TI_PREEMPT]
+-	sub	\tmp, \tmp, #SOFTIRQ_DISABLE_OFFSET
+-	str	\tmp, [\ti, #TI_PREEMPT]
+-	.endm
+-
+ #define USERL(l, x...)				\
+ 9999:	x;					\
+ 	.pushsection __ex_table,"a";		\
+diff --git a/arch/arm/vfp/entry.S b/arch/arm/vfp/entry.S
+index 6dabb47617781..62206ef250371 100644
+--- a/arch/arm/vfp/entry.S
++++ b/arch/arm/vfp/entry.S
+@@ -23,15 +23,9 @@
+ @
+ ENTRY(do_vfp)
+ 	mov	r1, r10
+-	mov	r3, r9
+- 	ldr	r4, .LCvfp
+-	ldr	pc, [r4]		@ call VFP entry point
++	str	lr, [sp, #-8]!
++	add	r3, sp, #4
++	str	r9, [r3]
++	bl	vfp_entry
++	ldr	pc, [sp], #8
+ ENDPROC(do_vfp)
+-
+-ENTRY(vfp_null_entry)
+-	ret	lr
+-ENDPROC(vfp_null_entry)
+-
+-	.align	2
+-.LCvfp:
+-	.word	vfp_vector
+diff --git a/arch/arm/vfp/vfphw.S b/arch/arm/vfp/vfphw.S
+index 60acd42e05786..860512042bc21 100644
+--- a/arch/arm/vfp/vfphw.S
++++ b/arch/arm/vfp/vfphw.S
+@@ -75,8 +75,6 @@
+ @  lr  = unrecognised instruction return address
+ @  IRQs enabled.
+ ENTRY(vfp_support_entry)
+-	local_bh_disable r1, r4
+-
+ 	ldr	r11, [r1, #TI_CPU]	@ CPU number
+ 	add	r10, r1, #TI_VFPSTATE	@ r10 = workspace
+ 
+@@ -174,14 +172,15 @@ ENTRY(vfp_support_entry)
+ 					@ out before setting an FPEXC that
+ 					@ stops us reading stuff
+ 	VFPFMXR	FPEXC, r1		@ Restore FPEXC last
++	mov	sp, r3			@ we think we have handled things
++	pop	{lr}
+ 	sub	r2, r2, #4		@ Retry current instruction - if Thumb
+ 	str	r2, [sp, #S_PC]		@ mode it's two 16-bit instructions,
+ 					@ else it's one 32-bit instruction, so
+ 					@ always subtract 4 from the following
+ 					@ instruction address.
+-	local_bh_enable_ti r10, r4
+-	ret	r3			@ we think we have handled things
+ 
++	b	vfp_exit	@ tail call
+ 
+ look_for_VFP_exceptions:
+ 	@ Check for synchronous or asynchronous exception
+@@ -204,13 +203,13 @@ ENTRY(vfp_support_entry)
+ 	@ not recognised by VFP
+ 
+ 	DBGSTR	"not VFP"
+-	local_bh_enable_ti r10, r4
+-	ret	lr
++	b	vfp_exit	@ tail call
+ 
+ process_exception:
+ 	DBGSTR	"bounce"
++	mov	sp, r3			@ setup for a return to the user code.
++	pop	{lr}
+ 	mov	r2, sp			@ nothing stacked - regdump is at TOS
+-	mov	lr, r3			@ setup for a return to the user code.
+ 
+ 	@ Now call the C code to package up the bounce to the support code
+ 	@   r0 holds the trigger instruction
+diff --git a/arch/arm/vfp/vfpmodule.c b/arch/arm/vfp/vfpmodule.c
+index 01bc48d738478..a2745d17e9c71 100644
+--- a/arch/arm/vfp/vfpmodule.c
++++ b/arch/arm/vfp/vfpmodule.c
+@@ -32,10 +32,9 @@
+ /*
+  * Our undef handlers (in entry.S)
+  */
+-asmlinkage void vfp_support_entry(void);
+-asmlinkage void vfp_null_entry(void);
++asmlinkage void vfp_support_entry(u32, void *, u32, u32);
+ 
+-asmlinkage void (*vfp_vector)(void) = vfp_null_entry;
++static bool have_vfp __ro_after_init;
+ 
+ /*
+  * Dual-use variable.
+@@ -55,6 +54,34 @@ static unsigned int __initdata VFP_arch;
+  */
+ union vfp_state *vfp_current_hw_state[NR_CPUS];
+ 
++/*
++ * Claim ownership of the VFP unit.
++ *
++ * The caller may change VFP registers until vfp_unlock() is called.
++ *
++ * local_bh_disable() is used to disable preemption and to disable VFP
++ * processing in softirq context. On PREEMPT_RT kernels local_bh_disable() is
++ * not sufficient because it only serializes soft interrupt related sections
++ * via a local lock, but stays preemptible. Disabling preemption is the right
++ * choice here as bottom half processing is always in thread context on RT
++ * kernels so it implicitly prevents bottom half processing as well.
++ */
++static void vfp_lock(void)
++{
++	if (!IS_ENABLED(CONFIG_PREEMPT_RT))
++		local_bh_disable();
++	else
++		preempt_disable();
++}
++
++static void vfp_unlock(void)
++{
++	if (!IS_ENABLED(CONFIG_PREEMPT_RT))
++		local_bh_enable();
++	else
++		preempt_enable();
++}
++
+ /*
+  * Is 'thread's most up to date state stored in this CPUs hardware?
+  * Must be called from non-preemptible context.
+@@ -240,7 +267,7 @@ static void vfp_panic(char *reason, u32 inst)
+ /*
+  * Process bitmask of exception conditions.
+  */
+-static void vfp_raise_exceptions(u32 exceptions, u32 inst, u32 fpscr, struct pt_regs *regs)
++static int vfp_raise_exceptions(u32 exceptions, u32 inst, u32 fpscr)
+ {
+ 	int si_code = 0;
+ 
+@@ -248,8 +275,7 @@ static void vfp_raise_exceptions(u32 exceptions, u32 inst, u32 fpscr, struct pt_
+ 
+ 	if (exceptions == VFP_EXCEPTION_ERROR) {
+ 		vfp_panic("unhandled bounce", inst);
+-		vfp_raise_sigfpe(FPE_FLTINV, regs);
+-		return;
++		return FPE_FLTINV;
+ 	}
+ 
+ 	/*
+@@ -277,8 +303,7 @@ static void vfp_raise_exceptions(u32 exceptions, u32 inst, u32 fpscr, struct pt_
+ 	RAISE(FPSCR_OFC, FPSCR_OFE, FPE_FLTOVF);
+ 	RAISE(FPSCR_IOC, FPSCR_IOE, FPE_FLTINV);
+ 
+-	if (si_code)
+-		vfp_raise_sigfpe(si_code, regs);
++	return si_code;
+ }
+ 
+ /*
+@@ -323,6 +348,8 @@ static u32 vfp_emulate_instruction(u32 inst, u32 fpscr, struct pt_regs *regs)
+ void VFP_bounce(u32 trigger, u32 fpexc, struct pt_regs *regs)
+ {
+ 	u32 fpscr, orig_fpscr, fpsid, exceptions;
++	int si_code2 = 0;
++	int si_code = 0;
+ 
+ 	pr_debug("VFP: bounce: trigger %08x fpexc %08x\n", trigger, fpexc);
+ 
+@@ -370,7 +397,7 @@ void VFP_bounce(u32 trigger, u32 fpexc, struct pt_regs *regs)
+ 		 * unallocated VFP instruction but with FPSCR.IXE set and not
+ 		 * on VFP subarch 1.
+ 		 */
+-		 vfp_raise_exceptions(VFP_EXCEPTION_ERROR, trigger, fpscr, regs);
++		si_code = vfp_raise_exceptions(VFP_EXCEPTION_ERROR, trigger, fpscr);
+ 		goto exit;
+ 	}
+ 
+@@ -395,7 +422,7 @@ void VFP_bounce(u32 trigger, u32 fpexc, struct pt_regs *regs)
+ 	 */
+ 	exceptions = vfp_emulate_instruction(trigger, fpscr, regs);
+ 	if (exceptions)
+-		vfp_raise_exceptions(exceptions, trigger, orig_fpscr, regs);
++		si_code2 = vfp_raise_exceptions(exceptions, trigger, orig_fpscr);
+ 
+ 	/*
+ 	 * If there isn't a second FP instruction, exit now. Note that
+@@ -414,9 +441,14 @@ void VFP_bounce(u32 trigger, u32 fpexc, struct pt_regs *regs)
+  emulate:
+ 	exceptions = vfp_emulate_instruction(trigger, orig_fpscr, regs);
+ 	if (exceptions)
+-		vfp_raise_exceptions(exceptions, trigger, orig_fpscr, regs);
++		si_code = vfp_raise_exceptions(exceptions, trigger, orig_fpscr);
++
+  exit:
+-	local_bh_enable();
++	vfp_unlock();
++	if (si_code2)
++		vfp_raise_sigfpe(si_code2, regs);
++	if (si_code)
++		vfp_raise_sigfpe(si_code, regs);
+ }
+ 
+ static void vfp_enable(void *unused)
+@@ -515,11 +547,9 @@ static inline void vfp_pm_init(void) { }
+  */
+ void vfp_sync_hwstate(struct thread_info *thread)
+ {
+-	unsigned int cpu = get_cpu();
++	vfp_lock();
+ 
+-	local_bh_disable();
+-
+-	if (vfp_state_in_hw(cpu, thread)) {
++	if (vfp_state_in_hw(raw_smp_processor_id(), thread)) {
+ 		u32 fpexc = fmrx(FPEXC);
+ 
+ 		/*
+@@ -530,8 +560,7 @@ void vfp_sync_hwstate(struct thread_info *thread)
+ 		fmxr(FPEXC, fpexc);
+ 	}
+ 
+-	local_bh_enable();
+-	put_cpu();
++	vfp_unlock();
+ }
+ 
+ /* Ensure that the thread reloads the hardware VFP state on the next use. */
+@@ -645,6 +674,30 @@ static int vfp_starting_cpu(unsigned int unused)
+ 	return 0;
+ }
+ 
++/*
++ * Entered with:
++ *
++ *  r0  = instruction opcode (32-bit ARM or two 16-bit Thumb)
++ *  r1  = thread_info pointer
++ *  r2  = PC value to resume execution after successful emulation
++ *  r3  = normal "successful" return address
++ *  lr  = unrecognised instruction return address
++ */
++asmlinkage void vfp_entry(u32 trigger, struct thread_info *ti, u32 resume_pc,
++			  u32 resume_return_address)
++{
++	if (unlikely(!have_vfp))
++		return;
++
++	vfp_lock();
++	vfp_support_entry(trigger, ti, resume_pc, resume_return_address);
++}
++
++asmlinkage void vfp_exit(void)
++{
++	vfp_unlock();
++}
++
+ #ifdef CONFIG_KERNEL_MODE_NEON
+ 
+ static int vfp_kmode_exception(struct pt_regs *regs, unsigned int instr)
+@@ -720,7 +773,7 @@ void kernel_neon_begin(void)
+ 	unsigned int cpu;
+ 	u32 fpexc;
+ 
+-	local_bh_disable();
++	vfp_lock();
+ 
+ 	/*
+ 	 * Kernel mode NEON is only allowed outside of hardirq context with
+@@ -751,7 +804,7 @@ void kernel_neon_end(void)
+ {
+ 	/* Disable the NEON/VFP unit. */
+ 	fmxr(FPEXC, fmrx(FPEXC) & ~FPEXC_EN);
+-	local_bh_enable();
++	vfp_unlock();
+ }
+ EXPORT_SYMBOL(kernel_neon_end);
+ 
+@@ -798,7 +851,6 @@ static int __init vfp_init(void)
+ 	vfpsid = fmrx(FPSID);
+ 	barrier();
+ 	unregister_undef_hook(&vfp_detect_hook);
+-	vfp_vector = vfp_null_entry;
+ 
+ 	pr_info("VFP support v0.3: ");
+ 	if (VFP_arch) {
+@@ -883,7 +935,7 @@ static int __init vfp_init(void)
+ 				  "arm/vfp:starting", vfp_starting_cpu,
+ 				  vfp_dying_cpu);
+ 
+-	vfp_vector = vfp_support_entry;
++	have_vfp = true;
+ 
+ 	thread_register_notifier(&vfp_notifier_block);
+ 	vfp_pm_init();
+diff --git a/localversion-rt b/localversion-rt
+index 08b3e75841adc..18777ec0c27d4 100644
+--- a/localversion-rt
++++ b/localversion-rt
+@@ -1 +1 @@
+--rt14
++-rt15
