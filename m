@@ -2,231 +2,358 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4DDC709DBC
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 19:19:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53C02709DD6
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 19:21:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbjESRTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 13:19:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58046 "EHLO
+        id S231381AbjESRVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 13:21:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231173AbjESRTK (ORCPT
+        with ESMTP id S230203AbjESRVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 13:19:10 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D09139;
-        Fri, 19 May 2023 10:19:06 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id af79cd13be357-75939de402dso189086585a.1;
-        Fri, 19 May 2023 10:19:06 -0700 (PDT)
+        Fri, 19 May 2023 13:21:23 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E437E5F
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 10:21:02 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id 98e67ed59e1d1-253724f6765so1419865a91.3
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 10:21:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684516745; x=1687108745;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+        d=chromium.org; s=google; t=1684516862; x=1687108862;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xNvkHM3C8oMIiEYBQOR2QcPZngwWS8RB4fg2zL79fnY=;
-        b=AOm/dibf3V4J+EHKVHoe0O+9mITE7gFpTuRVTZvDH2PaOvftXn+CVoE5h0unk51WFK
-         tj5/qniAnoovIUeuyJMG62bsuZifc/NGumLY2dXedtLf9fE57jsdGubfXSsPBANl4s9W
-         AnOHSZqHwo4gRcfhsDZ20I/dTeKl99Y8vd6w/NqydamlD5NTao0MUTducK8L+fQjLGAe
-         IU3ZjCqSdUNCCYylZlguMA4Dw33NXsLyeGi6VvJD9PARnv/hp2BDHSomNKNhlfjtC8v1
-         JHKURKKyWzWDah/Ire0vT0dVgr2fq9DbaHvNnnT8YdFzj/2itS9NKbJkAy7bF9fG3VJz
-         Hlyg==
+        bh=c2pZ/r5SeHFXOp7Ja/58zWTa7i5IGy6MZWBDd9oaxl8=;
+        b=ilDuCWthPOZFKtCt3zIf5m+QHYxhL0PTxdcW95Z7gg00USsiUeQGowTgIWPEH/Y33c
+         Ik/fn/jfykHY8iDzsHbZ6NpVZo6Xk3e2y5yTqmdCNxluLu9AGXjZkhh5f44uskA/GzHn
+         u1LDd0tSIk5PEeZ5ZBUo0udHktvUN+nNujoAY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684516745; x=1687108745;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1684516862; x=1687108862;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xNvkHM3C8oMIiEYBQOR2QcPZngwWS8RB4fg2zL79fnY=;
-        b=B4dWOc0N+0ui8Ryd/ecBgwCR9h2GOj19h7FyPtc9kcJ1zAsNqrCko+WR0HhAdb73A3
-         0DShVN7wylcqpHRnPAnW0OlMD6pEvwXpIA5RDoFme8JGH9IBvzCu89Jtn4TifK5r1xzk
-         aBx65gPZzXyzQO+1fKkMoWkTSt2EVUj2NLwNucsM3uTnfM6qvk76hCI2L2XrlN+GPvG4
-         xK1OIeh7LBZZkxVmUU4VmblJzs/0NVaT9z43lAJlxO5qpG8T8ohwgxzZ2Q3tIftbrIsy
-         F7AfHrcKniaND3/6EW++3WHsJcNv9ub3KYQlQ986JXTFVu80nPf1E7RYceFJhoBqaPEe
-         Ot8w==
-X-Gm-Message-State: AC+VfDxdTes20YtG6ZisSBoSD6BMmF3YlDAdxuNLuaWJ/lJ6YBZquSF4
-        Ib0WWrryscwWVuUae5smNpI=
-X-Google-Smtp-Source: ACHHUZ71a5EXWIh4bpeS0CYUvFf5ufUdp7lwzzXIKP64RMTY1jT8R4s4nN7vgxgi+JeHX0csRt0TlQ==
-X-Received: by 2002:a05:6214:d8d:b0:621:363c:ea93 with SMTP id e13-20020a0562140d8d00b00621363cea93mr4473305qve.15.1684516745089;
-        Fri, 19 May 2023 10:19:05 -0700 (PDT)
-Received: from auth1-smtp.messagingengine.com (auth1-smtp.messagingengine.com. [66.111.4.227])
-        by smtp.gmail.com with ESMTPSA id a8-20020a0ca988000000b00623839cba8csm1476328qvb.44.2023.05.19.10.19.03
+        bh=c2pZ/r5SeHFXOp7Ja/58zWTa7i5IGy6MZWBDd9oaxl8=;
+        b=lFWFHL6z1k4WBfMK3mDJKPXGA4BEghhg/wX90GLK92sBEqmfT+R1QhqKIZ51itT6db
+         m/CpgDF4GnnVJxs4AXU9DoFSTVNxpUNXch3FyK5aKSbKziE5hawjGPaZnA5/Hu066tVO
+         d8hy41ty5P0VJzaDVw2nEpDG9+C8Jahi2755qjj2d3EgdDP7OXqm6JCLT/h9/e+DiHgG
+         9Pt3AdMtLCS3voWXyGTuRnF8YL3jzC9wciXoxee3GJAGAf1k9/7FZWdxwnqKyqGDP96K
+         eFAXZLuFepAmrIy3tTqn2jtFk346jkAWnwhbsLVAtbmnQfZPw4YrK4QePzXhw6ekYlMG
+         QQ0w==
+X-Gm-Message-State: AC+VfDy/ScyTf4nk2MSTiaO2JeTfHV9c/PVj/9C/tUTZky9Z9es7m/aY
+        6KsEH6tP0r+F95ZbKaibd7Z6Rw==
+X-Google-Smtp-Source: ACHHUZ4lM/dJKhnKU2Q+wZoGGBEPwvMjh0/mPYxex4mimbWoRZLpedLg4Xy78zBGg+bnhybRG/+l1Q==
+X-Received: by 2002:a17:90a:898f:b0:247:eae:1787 with SMTP id v15-20020a17090a898f00b002470eae1787mr2835153pjn.36.1684516861870;
+        Fri, 19 May 2023 10:21:01 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:9b89:2dd0:d160:429d])
+        by smtp.gmail.com with ESMTPSA id gj19-20020a17090b109300b0024e4f169931sm1763835pjb.2.2023.05.19.10.20.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 10:19:04 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 9B2DC27C0054;
-        Fri, 19 May 2023 13:19:03 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Fri, 19 May 2023 13:19:03 -0400
-X-ME-Sender: <xms:hq9nZDFjKx-D5N9bhOST6GS9Q6i32Ru78Q8023CvHAKlB8tmjXEyAg>
-    <xme:hq9nZAVeuXcjXBlKXi87up-_ipE_xZyz4quL8AipVax3KSPMaRcsrkBl_luuWc7-o
-    E5KNSHxdFdSWvM_3A>
-X-ME-Received: <xmr:hq9nZFLeYX4ZV7nJKe3QbgVyMBrsoZ2zgboSUM_dlH25DXN5sH6HQ01EyXU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeihedgudduudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnheptddtudegueevgefhgfeuffetffeuheekgedtffefhefhjeffhffgfeeg
-    geetgefhnecuffhomhgrihhnpegvfhhfihgtihhoshdrtghomhenucevlhhushhtvghruf
-    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsohhquhhnodhmvghsmhhtphgr
-    uhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdeigedqudejjeekheehhedvqdgsoh
-    hquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfihigmhgvrdhnrghmvg
-X-ME-Proxy: <xmx:hq9nZBHB5BGVLkp2BrzU93m5-LXng1l43P-VoOJr3C7Y0XOGfH12hQ>
-    <xmx:hq9nZJU-yxlc5s-dQ27-MzulGb9aMm9eiCarMrcP3tE6p-rtU6yomA>
-    <xmx:hq9nZMMfBv6uRnDIoNI0hqNzGdXmXp0QiJIeeW0uCta1ojHOzXjr2w>
-    <xmx:h69nZPHp7iKi3wWnJ0XDEWKvw6qNnkZ3qs2d9ErLd33RQxH0pYjdiw>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 19 May 2023 13:19:01 -0400 (EDT)
-Date:   Fri, 19 May 2023 10:18:31 -0700
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api@vger.kernel.org, Christian Brauner <brauner@kernel.org>,
-        Florian Weimer <fw@deneb.enyo.de>, David.Laight@aculab.com,
-        carlos@redhat.com, Peter Oskolkov <posk@posk.io>,
-        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
-        Chris Kennelly <ckennelly@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-        libc-alpha@sourceware.org, Steven Rostedt <rostedt@goodmis.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Florian Weimer <fweimer@redhat.com>
-Subject: Re: [RFC PATCH 1/4] rseq: Add sched_state field to struct rseq
-Message-ID: <ZGevZxOjJLMO9zlM@boqun-archlinux>
-References: <20230517152654.7193-1-mathieu.desnoyers@efficios.com>
- <20230517152654.7193-2-mathieu.desnoyers@efficios.com>
- <ZGaddGcHw7nJE+Gh@boqun-archlinux>
- <06ee47e0-99e0-4b6a-ab67-239fccf2777d@efficios.com>
+        Fri, 19 May 2023 10:21:01 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Petr Mladek <pmladek@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Matthias Kaehlcke <mka@chromium.org>,
+        kgdb-bugreport@lists.sourceforge.net,
+        Stephane Eranian <eranian@google.com>, mpe@ellerman.id.au,
+        Tzung-Bi Shih <tzungbi@chromium.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linuxppc-dev@lists.ozlabs.org, Sumit Garg <sumit.garg@linaro.org>,
+        npiggin@gmail.com, davem@davemloft.net,
+        Marc Zyngier <maz@kernel.org>,
+        Stephen Boyd <swboyd@chromium.org>, sparclinux@vger.kernel.org,
+        christophe.leroy@csgroup.eu,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        ravi.v.shankar@intel.com, Randy Dunlap <rdunlap@infradead.org>,
+        Pingfan Liu <kernelfans@gmail.com>,
+        Guenter Roeck <groeck@chromium.org>,
+        Lecopzer Chen <lecopzer.chen@mediatek.com>,
+        Ian Rogers <irogers@google.com>, ito-yuichi@fujitsu.com,
+        ricardo.neri@intel.com, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org, Will Deacon <will@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>, linux-kernel@vger.kernel.org,
+        Masayoshi Mizuma <msys.mizuma@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Douglas Anderson <dianders@chromium.org>
+Subject: [PATCH v5 08/18] watchdog/hardlockup: Move perf hardlockup checking/panic to common watchdog.c
+Date:   Fri, 19 May 2023 10:18:32 -0700
+Message-ID: <20230519101840.v5.8.Id4133d3183e798122dc3b6205e7852601f289071@changeid>
+X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
+In-Reply-To: <20230519101840.v5.18.Ia44852044cdcb074f387e80df6b45e892965d4a1@changeid>
+References: <20230519101840.v5.18.Ia44852044cdcb074f387e80df6b45e892965d4a1@changeid>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <06ee47e0-99e0-4b6a-ab67-239fccf2777d@efficios.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 10:15:11AM -0400, Mathieu Desnoyers wrote:
-> On 2023-05-18 17:49, Boqun Feng wrote:
-> > On Wed, May 17, 2023 at 11:26:51AM -0400, Mathieu Desnoyers wrote:
-> [...]
-> > > diff --git a/include/uapi/linux/rseq.h b/include/uapi/linux/rseq.h
-> > > index c233aae5eac9..c6d8537e23ca 100644
-> > > --- a/include/uapi/linux/rseq.h
-> > > +++ b/include/uapi/linux/rseq.h
-> > > @@ -37,6 +37,13 @@ enum rseq_cs_flags {
-> > >   		(1U << RSEQ_CS_FLAG_NO_RESTART_ON_MIGRATE_BIT),
-> > >   };
-> > > +enum rseq_sched_state {
-> > > +	/*
-> > > +	 * Task is currently running on a CPU if bit is set.
-> > > +	 */
-> > > +	RSEQ_SCHED_STATE_ON_CPU		= (1U << 0),
-> > > +};
-> [...]
-> > > +	/*
-> > > +	 * Restartable sequences sched_state field. Updated by the kernel. Read
-> > > +	 * by user-space with single-copy atomicity semantics. This fields can
-> > > +	 * be read by any userspace thread. Aligned on 32-bit. Contains a
-> > 
-> > Maybe this is a premature optimization, but since most of the time the
-> > bit would be read by another thread, does it make sense putting the
-> > "sched_state" into a different cache line to avoid false sharing?
-> 
-> I'm puzzled by your optimization proposal, so I'll say it outright: I'm
-> probably missing something.
-> 
+The perf hardlockup detector works by looking at interrupt counts and
+seeing if they change from run to run. The interrupt counts are
+managed by the common watchdog code via its watchdog_timer_fn().
 
-Maybe it's me who is missing something ;-)
+Currently the API between the perf detector and the common code is a
+function: is_hardlockup(). When the hard lockup detector sees that
+function return true then it handles printing out debug info and
+inducing a panic if necessary.
 
-> I agree that false-sharing would be an issue if various threads would
-> contend for updating any field within this cache line.
-> 
-> But the only thread responsible for updating this cache line's fields is the
-> current thread, either from userspace (stores to rseq_abi->rseq_cs) or from
-> the kernel (usually on return to userspace, except for this new ON_CPU bit
-> clear on context switch).
-> 
-> The other threads busy-waiting on the content of this sched_state field will
-> only load from it, never store. And they will only busy-wait on it as long
+Let's change the API a little bit in preparation for the buddy
+hardlockup detector. The buddy hardlockup detector wants to print
+nearly the same debug info and have nearly the same panic
+behavior. That means we want to move all that code to the common
+file. For now, the code in the common file will only be there if the
+perf hardlockup detector is enabled, but eventually it will be
+selected by a common config.
 
-But their loads can change the cache line state from "Exclusive" to
-"Shared" (using MESI terms), right? And that could delay the stores of
-the current thread.
+Right now, this _just_ moves the code from the perf detector file to
+the common file and changes the names. It doesn't make the changes
+that the buddy hardlockup detector will need and doesn't do any style
+cleanups. A future patch will do cleanup to make it more obvious what
+changed.
 
-> as the current task runs. When that task gets preempted, other threads will
-> notice the flag change and use sys_futex instead.
-> 
-> So the very worse I can think of in terms of pattern causing cache coherency
-> traffic due to false-sharing is if the lock owner happens to have lots of
-> rseq critical sections as well, causing it to repeatedly store to the
-> rseq_abi->rseq_cs field, which is in the same cache line.
-> 
-> But even then I'm wondering if this really matters, because each of those
-> stores to rseq_cs would only slow down loads from other threads which will
-> need to retry busy-wait anyway if the on-cpu flag is still set.
-> 
-> So, what am I missing ? Is this heavy use of rseq critical sections while
-> the lock is held the scenario you are concerned about ?
-> 
+With the above, we no longer have any callers of is_hardlockup()
+outside of the "watchdog.c" file, so we can remove it from the header,
+make it static, and move it to the same "#ifdef" block as our new
+watchdog_hardlockup_check(). While doing this, it can be noted that
+even if no hardlockup detectors were configured the existing code used
+to still have the code for counting/checking "hrtimer_interrupts" even
+if the perf hardlockup detector wasn't configured. We didn't need to
+do that, so move all the "hrtimer_interrupts" counting to only be
+there if the perf hardlockup detector is configured as well.
 
-The case in my mind is the opposite direction: the loads from other
-threads delay the stores to rseq_cs on the current thread, which I
-assume are usually a fast path. For example:
+This change is expected to be a no-op.
 
-	CPU 1				CPU 2
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
 
-	lock(foo); // holding a lock
-	rseq_start():
-	  <CPU 1 own the cache line exclusively>
-	  				lock(foo):
-					  <fail to get foo>
-					  <check whether the lock owner is on CPU>
-					  <cache line becames shared>
-	  ->rseq_cs = .. // Need to invalidate the cache line on other CPU
+Changes in v5:
+- watchdog_hardlockup_interrupt_count() => watchdog_hardlockup_kick()
+- watchdog_hardlockup_is_lockedup() => is_hardlockup()
 
-But as you mentioned, there is only one updater here (the current
-thread), so maybe it doesn't matter... but since it's a userspace ABI,
-so I cannot help thinking "what if there is another bit that has a
-different usage pattern introduced in the future", so..
+Changes in v4:
+- ("Move perf hardlockup checking/panic ...") new for v4.
 
-> Note that the heavy cache-line bouncing in my test-case happens on the lock
-> structure (cmpxchg expecting NULL, setting the current thread rseq_get_abi()
-> pointer on success). There are probably better ways to implement that part,
-> it is currently just a simple prototype showcasing the approach.
-> 
+ include/linux/nmi.h    |  5 ++-
+ kernel/watchdog.c      | 93 +++++++++++++++++++++++++++++++++---------
+ kernel/watchdog_perf.c | 42 +------------------
+ 3 files changed, 78 insertions(+), 62 deletions(-)
 
-Yeah.. that's a little strange, I guess you can just read the lock
-owner's rseq_abi, for example:
+diff --git a/include/linux/nmi.h b/include/linux/nmi.h
+index fafab128f37e..0c62c1bf0a71 100644
+--- a/include/linux/nmi.h
++++ b/include/linux/nmi.h
+@@ -15,7 +15,6 @@
+ void lockup_detector_init(void);
+ void lockup_detector_soft_poweroff(void);
+ void lockup_detector_cleanup(void);
+-bool is_hardlockup(void);
+ 
+ extern int watchdog_user_enabled;
+ extern int nmi_watchdog_user_enabled;
+@@ -88,6 +87,10 @@ extern unsigned int hardlockup_panic;
+ static inline void hardlockup_detector_disable(void) {}
+ #endif
+ 
++#if defined(CONFIG_HARDLOCKUP_DETECTOR_PERF)
++void watchdog_hardlockup_check(struct pt_regs *regs);
++#endif
++
+ #if defined(CONFIG_HAVE_NMI_WATCHDOG) || defined(CONFIG_HARDLOCKUP_DETECTOR)
+ # define NMI_WATCHDOG_SYSCTL_PERM	0644
+ #else
+diff --git a/kernel/watchdog.c b/kernel/watchdog.c
+index c705a18b26bf..12ce37d76e7d 100644
+--- a/kernel/watchdog.c
++++ b/kernel/watchdog.c
+@@ -85,6 +85,78 @@ __setup("nmi_watchdog=", hardlockup_panic_setup);
+ 
+ #endif /* CONFIG_HARDLOCKUP_DETECTOR */
+ 
++#if defined(CONFIG_HARDLOCKUP_DETECTOR_PERF)
++
++static DEFINE_PER_CPU(unsigned long, hrtimer_interrupts);
++static DEFINE_PER_CPU(unsigned long, hrtimer_interrupts_saved);
++static DEFINE_PER_CPU(bool, hard_watchdog_warn);
++static unsigned long hardlockup_allcpu_dumped;
++
++static bool is_hardlockup(void)
++{
++	unsigned long hrint = __this_cpu_read(hrtimer_interrupts);
++
++	if (__this_cpu_read(hrtimer_interrupts_saved) == hrint)
++		return true;
++
++	__this_cpu_write(hrtimer_interrupts_saved, hrint);
++	return false;
++}
++
++static void watchdog_hardlockup_kick(void)
++{
++	__this_cpu_inc(hrtimer_interrupts);
++}
++
++void watchdog_hardlockup_check(struct pt_regs *regs)
++{
++	/* check for a hardlockup
++	 * This is done by making sure our timer interrupt
++	 * is incrementing.  The timer interrupt should have
++	 * fired multiple times before we overflow'd.  If it hasn't
++	 * then this is a good indication the cpu is stuck
++	 */
++	if (is_hardlockup()) {
++		int this_cpu = smp_processor_id();
++
++		/* only print hardlockups once */
++		if (__this_cpu_read(hard_watchdog_warn) == true)
++			return;
++
++		pr_emerg("Watchdog detected hard LOCKUP on cpu %d\n",
++			 this_cpu);
++		print_modules();
++		print_irqtrace_events(current);
++		if (regs)
++			show_regs(regs);
++		else
++			dump_stack();
++
++		/*
++		 * Perform all-CPU dump only once to avoid multiple hardlockups
++		 * generating interleaving traces
++		 */
++		if (sysctl_hardlockup_all_cpu_backtrace &&
++				!test_and_set_bit(0, &hardlockup_allcpu_dumped))
++			trigger_allbutself_cpu_backtrace();
++
++		if (hardlockup_panic)
++			nmi_panic(regs, "Hard LOCKUP");
++
++		__this_cpu_write(hard_watchdog_warn, true);
++		return;
++	}
++
++	__this_cpu_write(hard_watchdog_warn, false);
++	return;
++}
++
++#else /* CONFIG_HARDLOCKUP_DETECTOR_PERF */
++
++static inline void watchdog_hardlockup_kick(void) { }
++
++#endif /* !CONFIG_HARDLOCKUP_DETECTOR_PERF */
++
+ /*
+  * These functions can be overridden if an architecture implements its
+  * own hardlockup detector.
+@@ -176,8 +248,6 @@ static DEFINE_PER_CPU(unsigned long, watchdog_touch_ts);
+ static DEFINE_PER_CPU(unsigned long, watchdog_report_ts);
+ static DEFINE_PER_CPU(struct hrtimer, watchdog_hrtimer);
+ static DEFINE_PER_CPU(bool, softlockup_touch_sync);
+-static DEFINE_PER_CPU(unsigned long, hrtimer_interrupts);
+-static DEFINE_PER_CPU(unsigned long, hrtimer_interrupts_saved);
+ static unsigned long soft_lockup_nmi_warn;
+ 
+ static int __init nowatchdog_setup(char *str)
+@@ -312,22 +382,6 @@ static int is_softlockup(unsigned long touch_ts,
+ }
+ 
+ /* watchdog detector functions */
+-bool is_hardlockup(void)
+-{
+-	unsigned long hrint = __this_cpu_read(hrtimer_interrupts);
+-
+-	if (__this_cpu_read(hrtimer_interrupts_saved) == hrint)
+-		return true;
+-
+-	__this_cpu_write(hrtimer_interrupts_saved, hrint);
+-	return false;
+-}
+-
+-static void watchdog_interrupt_count(void)
+-{
+-	__this_cpu_inc(hrtimer_interrupts);
+-}
+-
+ static DEFINE_PER_CPU(struct completion, softlockup_completion);
+ static DEFINE_PER_CPU(struct cpu_stop_work, softlockup_stop_work);
+ 
+@@ -358,8 +412,7 @@ static enum hrtimer_restart watchdog_timer_fn(struct hrtimer *hrtimer)
+ 	if (!watchdog_enabled)
+ 		return HRTIMER_NORESTART;
+ 
+-	/* kick the hardlockup detector */
+-	watchdog_interrupt_count();
++	watchdog_hardlockup_kick();
+ 
+ 	/* kick the softlockup detector */
+ 	if (completion_done(this_cpu_ptr(&softlockup_completion))) {
+diff --git a/kernel/watchdog_perf.c b/kernel/watchdog_perf.c
+index 8b8015758ea5..04415812d079 100644
+--- a/kernel/watchdog_perf.c
++++ b/kernel/watchdog_perf.c
+@@ -20,13 +20,11 @@
+ #include <asm/irq_regs.h>
+ #include <linux/perf_event.h>
+ 
+-static DEFINE_PER_CPU(bool, hard_watchdog_warn);
+ static DEFINE_PER_CPU(bool, watchdog_nmi_touch);
+ static DEFINE_PER_CPU(struct perf_event *, watchdog_ev);
+ static DEFINE_PER_CPU(struct perf_event *, dead_event);
+ static struct cpumask dead_events_mask;
+ 
+-static unsigned long hardlockup_allcpu_dumped;
+ static atomic_t watchdog_cpus = ATOMIC_INIT(0);
+ 
+ notrace void arch_touch_nmi_watchdog(void)
+@@ -122,45 +120,7 @@ static void watchdog_overflow_callback(struct perf_event *event,
+ 		return;
+ 	}
+ 
+-	/* check for a hardlockup
+-	 * This is done by making sure our timer interrupt
+-	 * is incrementing.  The timer interrupt should have
+-	 * fired multiple times before we overflow'd.  If it hasn't
+-	 * then this is a good indication the cpu is stuck
+-	 */
+-	if (is_hardlockup()) {
+-		int this_cpu = smp_processor_id();
+-
+-		/* only print hardlockups once */
+-		if (__this_cpu_read(hard_watchdog_warn) == true)
+-			return;
+-
+-		pr_emerg("Watchdog detected hard LOCKUP on cpu %d\n",
+-			 this_cpu);
+-		print_modules();
+-		print_irqtrace_events(current);
+-		if (regs)
+-			show_regs(regs);
+-		else
+-			dump_stack();
+-
+-		/*
+-		 * Perform all-CPU dump only once to avoid multiple hardlockups
+-		 * generating interleaving traces
+-		 */
+-		if (sysctl_hardlockup_all_cpu_backtrace &&
+-				!test_and_set_bit(0, &hardlockup_allcpu_dumped))
+-			trigger_allbutself_cpu_backtrace();
+-
+-		if (hardlockup_panic)
+-			nmi_panic(regs, "Hard LOCKUP");
+-
+-		__this_cpu_write(hard_watchdog_warn, true);
+-		return;
+-	}
+-
+-	__this_cpu_write(hard_watchdog_warn, false);
+-	return;
++	watchdog_hardlockup_check(regs);
+ }
+ 
+ static int hardlockup_detector_event_create(void)
+-- 
+2.40.1.698.g37aff9b760-goog
 
-	rseq_lock_slowpath() {
-		struct rseq_abi *other_rseq = lock->owner;
-
-		if (RSEQ_ACCESS_ONCE(other_rseq->sched_state)) {
-			...
-		}
-	}
-
-?
-
-Regards,
-Boqun
-
-> Thanks,
-> 
-> Mathieu
-> 
-> -- 
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> https://www.efficios.com
-> 
