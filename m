@@ -2,106 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9E5C7098C8
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 15:55:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E3B87098CB
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 15:55:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231985AbjESNzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 09:55:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35520 "EHLO
+        id S231995AbjESNzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 09:55:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232030AbjESNzB (ORCPT
+        with ESMTP id S231986AbjESNzI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 09:55:01 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F077712C
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 06:54:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1684504500; x=1716040500;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SFnwP/vyGrDIlPPr2daJemFKu+u/gI6MTNacrNW4jKs=;
-  b=qjBn+JjTG7s7c0LCkvjM0ZuMJN880ck63NrelokQWg78yORayFrWfLfq
-   zUxX1LUQvetJpOVt+RFWlqqOY+Yvmx6NMR+qivNnQSW7q3aLbtHarVRf9
-   pOXkaBFxo3o7/CBhU8xPj/+pQ7MBc1eB4ymX0ixfPrduG140hdJkro9XY
-   VprACmflGTZyrCtnoeZeyhHTYqKgdym2jdf7aeE31b9WVn2j32hx9sX4z
-   WhNMj0m8FsgtPZv2YygqIkdRcShiFgae9a3lTndarDBxzJnT9JVCkqS6u
-   lEF5p9IQMho/qT2dMFmuoPel51byM8HTtzNXJxOO+/Q1ayUyi8pR4sqIx
-   w==;
-X-IronPort-AV: E=Sophos;i="6.00,176,1681196400"; 
-   d="asc'?scan'208";a="152970577"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 19 May 2023 06:54:56 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 19 May 2023 06:54:54 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Fri, 19 May 2023 06:54:53 -0700
-Date:   Fri, 19 May 2023 14:54:32 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH -fixes] riscv: Fix unused variable warning when
- BUILTIN_DTB is set
-Message-ID: <20230519-backhand-overbid-1df4d90f7da8@wendy>
-References: <20230519131311.391960-1-alexghiti@rivosinc.com>
+        Fri, 19 May 2023 09:55:08 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7F413A
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 06:55:07 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id 98e67ed59e1d1-253340db64fso3220981a91.2
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 06:55:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684504507; x=1687096507;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8+CEZRZEOJVmAfb07UohKPHalX/8xKQCW3mCwVUhKXY=;
+        b=rM1oy/VcEqN+QQClQz6OKaQVVrrPbLKXvKUz1I3WrSEltiGXHWGDjkcHwSrVOG7OZ/
+         lVQGGbAKQdCMqVW/Ikx3OXHIT1mYGGc8gTl6HoGgUTXTQ8W0TLAsg9EyLuCyUdLqLSBu
+         h+X+ws3Ipz68QXu9rQE/2Dx9MG2xoNP3L0jqbqULTJjXhoqjBQYJWkaglln5Zn8pESz3
+         +VKJuBvQf+/dWMrBr8Kn9JhY4g/jpkSVR5ftb3iv7OA8Ashyjw3sjV26g8UeYZmkPNVG
+         ztFWfPCNzQNpNy18OexXS72AvhbEEeziQHibdlvJh78aK4N56ToEYoYP2T6O8ZxICyx1
+         dcwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684504507; x=1687096507;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8+CEZRZEOJVmAfb07UohKPHalX/8xKQCW3mCwVUhKXY=;
+        b=fL6uoSuKh2lGpkds2HPXx+P3eK/65X2rhA8Z7lKBSb/dJr16C50fYw0v7UP7c/4pfk
+         4bFhtJ8id+fphRycj41anNxLcX5RRc3Fj0rdQPVFTYc1YXW01ArJ4KMcQIqWhuz1mGXp
+         q4k0Hjc5nV+UZQg/KZB5toPRNE+WN6E4yXs8U5a232F8ECSbv1tRIhlTKleQQ7dggMuQ
+         nFO8OV3gEVmWu5IPihDQfb7QA4IcCMU/A+BVXQDV6fpmOMeq+tYuZD0KOgyKnTNrXi5P
+         LEb5tCeUxy0mC03cniDU7zXth32Rk0hKF39x/ag5ub/3XWyaFxoOHW3lCbIg3G3HvSh5
+         mj9Q==
+X-Gm-Message-State: AC+VfDxo/h59BU4IH7Lb/+qkx8GS1uDLQ6/iqBNtEDAutJON69qzHkwo
+        kGzCmZ8sivqUyLrC5vxfHy8rbxP6rL6KhHYOESs=
+X-Google-Smtp-Source: ACHHUZ7PEIVu0OBB3/bhMJ39RaFUcrr4Py6/PuwxYqjOar1OCLXNo3sf6tJwT9NRW1YhGrHAlPvpR3WyvsPdkrj+iEY=
+X-Received: by 2002:a17:90b:30d6:b0:24b:be0c:6134 with SMTP id
+ hi22-20020a17090b30d600b0024bbe0c6134mr2006965pjb.33.1684504506945; Fri, 19
+ May 2023 06:55:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="aPJ+XWcPL1J5bSvX"
-Content-Disposition: inline
-In-Reply-To: <20230519131311.391960-1-alexghiti@rivosinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7300:2387:b0:b5:d9d5:921c with HTTP; Fri, 19 May 2023
+ 06:55:06 -0700 (PDT)
+Reply-To: godwinrichar800@gmail.com
+From:   Richard Godwin <johnricher844@gmail.com>
+Date:   Fri, 19 May 2023 06:55:06 -0700
+Message-ID: <CAAAsin0vqhKp8FZOYUeDSdi7iWMkvkLnLu5kVRbi4Vw-5ttNNg@mail.gmail.com>
+Subject: URGENT
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.8 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---aPJ+XWcPL1J5bSvX
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+-- 
+Hello Dear Good Day,
 
-On Fri, May 19, 2023 at 03:13:11PM +0200, Alexandre Ghiti wrote:
-> commit ef69d2559fe9 ("riscv: Move early dtb mapping into the fixmap
-> region") wrongly moved the #ifndef CONFIG_BUILTIN_DTB surrounding the pa
-> variable definition in create_fdt_early_page_table(), so move it back to
-> its right place to quiet the following warning:
->=20
-> ../arch/riscv/mm/init.c: In function =E2=80=98create_fdt_early_page_table=
-=E2=80=99:
-> ../arch/riscv/mm/init.c:925:12: warning: unused variable =E2=80=98pa=E2=
-=80=99 [-Wunused-variable]
->   925 |  uintptr_t pa =3D dtb_pa & ~(PMD_SIZE - 1);
->=20
-> Fixes: ef69d2559fe9 ("riscv: Move early dtb mapping into the fixmap regio=
-n")
-> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+I hope you are doing great,
 
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+I have something important to discuss with you
 
-Thanks Alex.
+if you give me a listening ear.so that I can
 
---aPJ+XWcPL1J5bSvX
-Content-Type: application/pgp-signature; name="signature.asc"
+write you in details thank you as i wait for
 
------BEGIN PGP SIGNATURE-----
+your reply.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGd/mAAKCRB4tDGHoIJi
-0h2IAPwLAxCJ/+0IRNhP4m6vQWaDwze4VcB5EC2wibqTlCYvYwEAyzyVVdDhAhwW
-JYlxPuibr/SjwKVsvC8sLseZIFPboAA=
-=WuyF
------END PGP SIGNATURE-----
-
---aPJ+XWcPL1J5bSvX--
+Mr Richard Godwin
