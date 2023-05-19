@@ -2,48 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3665D70A2D8
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 00:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A0EC70A2DB
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 00:38:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231563AbjESWg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 18:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53340 "EHLO
+        id S231625AbjESWiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 18:38:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbjESWgZ (ORCPT
+        with ESMTP id S229557AbjESWiR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 18:36:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4171BD
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 15:36:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 37E7765AF3
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 22:36:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85AFEC433EF;
-        Fri, 19 May 2023 22:36:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1684535783;
-        bh=13ItZfCP8MHViSXswO3xyLCnVZA5On30GzWwaZ2N7Y4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=rHEm03DXcJdL7PktvKkr2JfOCBjU3KdqptRFDz3saO3dKHMW53SKZdJUFnJEhzy0Y
-         4Icf2Js5DKZNX+Nr/1l3WnUK/7Dq7A6yOoh/Rfek6C9R6ZkBE1Tu8Y6d7W7N1dTlEC
-         /+HKe3eQZZOyveL95eU7ddqBmpyJMtB/REwQ/CCg=
-Date:   Fri, 19 May 2023 15:36:22 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fix mult_frac() multiple argument evaluation bug
-Message-Id: <20230519153622.f95f74819ecf467c5291de7d@linux-foundation.org>
-In-Reply-To: <f522ad25-f899-4526-abc4-da35868b6a8b@p183>
-References: <f522ad25-f899-4526-abc4-da35868b6a8b@p183>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        Fri, 19 May 2023 18:38:17 -0400
+Received: from mail-ua1-x931.google.com (mail-ua1-x931.google.com [IPv6:2607:f8b0:4864:20::931])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FEBA1BD;
+        Fri, 19 May 2023 15:38:16 -0700 (PDT)
+Received: by mail-ua1-x931.google.com with SMTP id a1e0cc1a2514c-783f7e82f28so1173122241.1;
+        Fri, 19 May 2023 15:38:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684535895; x=1687127895;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qbwYVql1QIgBgS5uP0bWV9Ip2GirXHgk1wEAxdpCsvU=;
+        b=Aw9UK0Qnz6yA00ZAdBL8N2w7D8NUmQnlAbudWjTvA8cqrV5uY1aymOE6d2r5JVZJUV
+         VJLzH14Io7IiLsaswK2rA91pyqhIZq5u4tqUPteFTXkr4LSmH3YmnZS0ZDu9ef0m49V/
+         b/YMmJ0t+cZYyvXLiYSW5buVGero7QXURBN+w+a8hOzgAhmgzK7tezn7IlbtQ9xBB9C3
+         uv0zbgS/zzUbaXAz2a0xKxnTmmNecYU4LdbJLWSTs7SAr1G2De1qF5yvhvO3g++f4LUP
+         q5XIUgpd+dW8HGz7VQDoOnnKsfnW1+Fl2Kqm8WJ87pgZjLbuf3nrF126aVuwLlGhL6yu
+         2uXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684535895; x=1687127895;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qbwYVql1QIgBgS5uP0bWV9Ip2GirXHgk1wEAxdpCsvU=;
+        b=bC3q+8cya+loixQKbsJ/Ny/QHfsKb+IO9jtI9NVYQrALruadROOJXmqXB55pGQiGSq
+         Kib9ckOLpO4710cbYFmOV4aw3i24+B9LqmLAhyJWWKNiS0wKAduPFeB8sL7qY5mepTGN
+         3MXBogii5lxIYN3s69cnEATnGdorS+ae23B0+stv6G5WLfdD5s/zmUw2DaMIDGcDY5K8
+         UoMOecasU4XkZWX6IyWVZwQ3g4Zegn+dA9cjhBTPor+he7q6+oiDJlmFiRd4jgGDOkF9
+         /umZ+l7f+ZCVtBAFuXwrwAbE6VpZYj0t6LZ+2DgsPqr/UuWVqgFn+c4bgc/b6RMpb1+8
+         tr+Q==
+X-Gm-Message-State: AC+VfDwev+rJ1QJEQ2i5b3IA4/TuIbKGtCNcdWGClf3aiEAcco6gUYsH
+        3gnNj5pJJtRWQzmxHDybI5nrjpuojk6j7Krg31c=
+X-Google-Smtp-Source: ACHHUZ6MFBbl9p1Djo4vzwxuhjzjRUngVXdTCiAq0o7zitR/p5fEpQp0YA12uaLMpxcckxmbMn2ESj74kZtVl2Z2dDY=
+X-Received: by 2002:a67:cd13:0:b0:439:31ec:8602 with SMTP id
+ u19-20020a67cd13000000b0043931ec8602mr311596vsl.27.1684535895418; Fri, 19 May
+ 2023 15:38:15 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230518130713.1515729-1-dhowells@redhat.com> <20230518130713.1515729-17-dhowells@redhat.com>
+ <CAF=yD-J8KGX5gjGBK6OO2SuoVa8s07Cm-oKxwmvBmRXY7XscBQ@mail.gmail.com> <2154600.1684535361@warthog.procyon.org.uk>
+In-Reply-To: <2154600.1684535361@warthog.procyon.org.uk>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Fri, 19 May 2023 18:37:38 -0400
+Message-ID: <CAF=yD-L1E_jHqvErrVWYofrc+R-P=+2Y1ipoxMdxuiPx5PO0JA@mail.gmail.com>
+Subject: Re: [PATCH net-next v9 16/16] unix: Convert udp_sendpage() to use MSG_SPLICE_PAGES
+To:     David Howells <dhowells@redhat.com>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Chuck Lever III <chuck.lever@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Kuniyuki Iwashima <kuniyu@amazon.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,65 +82,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 May 2023 23:24:54 +0300 Alexey Dobriyan <adobriyan@gmail.com> wrote:
+On Fri, May 19, 2023 at 6:29=E2=80=AFPM David Howells <dhowells@redhat.com>=
+ wrote:
+>
+> Willem de Bruijn <willemdebruijn.kernel@gmail.com> wrote:
+>
+> > tiny nit: subject s/udp_sendpage/unix_stream_sendpage/
+>
+> Can that be fixed up on application/merging, or do I need to repost the
+> series?
 
-> mult_frac() evaluates _all_ arguments multiple times in the body.
-> 
-> --- a/include/linux/math.h
-> +++ b/include/linux/math.h
-> @@ -118,17 +118,17 @@ __STRUCT_FRACT(s32)
->  __STRUCT_FRACT(u32)
->  #undef __STRUCT_FRACT
->  
-> -/*
-> - * Multiplies an integer by a fraction, while avoiding unnecessary
-> - * overflow or loss of precision.
-> - */
-> -#define mult_frac(x, numer, denom)(			\
-> -{							\
-> -	typeof(x) quot = (x) / (denom);			\
-> -	typeof(x) rem  = (x) % (denom);			\
-> -	(quot * (numer)) + ((rem * (numer)) / (denom));	\
-> -}							\
-> -)
-> +/* Calculate "x * n / d" without unnecessary overflow or loss of precision. */
-> +#define mult_frac(x, n, d)	\
-> +({				\
-> +	typeof(x) x_ = (x);	\
-> +	typeof(n) n_ = (n);	\
-> +	typeof(d) d_ = (d);	\
-> +				\
-> +	typeof(x) q = x_ / d_;	\
-> +	typeof(x) r = x_ % d_;	\
-> +	q * n_ + r * n_ / d_;	\
-> +})
->  
+I definitely do not mean for this to trigger a whole resubmission if
+there are no other technical concerns.
 
-I like, but the compiler doesn't.  x86_64 allmodconfig, gcc-12.2.0.
+Even if we don't fix it up, it's not the end of the world.
 
-In file included from ./include/linux/math64.h:6,
-                 from ./include/linux/time.h:6,
-                 from ./include/linux/ktime.h:24,
-                 from ./include/linux/timer.h:6,
-                 from drivers/target/target_core_iblock.c:16:
-drivers/target/target_core_iblock.c: In function 'iblock_configure_device':
-drivers/target/target_core_iblock.c:127:73: error: passing argument 1 of 'queue_max_hw_sectors' makes pointer from integer without a cast [-Werror=int-conversion]
-  127 |         dev->dev_attrib.hw_max_sectors = mult_frac(queue_max_hw_sectors(q),
-      |                                                                         ^
-      |                                                                         |
-      |                                                                         unsigned int
-./include/linux/math.h:129:16: note: in definition of macro 'mult_frac'
-  129 |         typeof(x) r = x_ % d_;  \
-      |                ^
-In file included from drivers/target/target_core_iblock.c:18:
-./include/linux/blkdev.h:1112:77: note: expected 'const struct request_queue *' but argument is of type 'unsigned int'
- 1112 | static inline unsigned int queue_max_hw_sectors(const struct request_queue *q)
-      |                                                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
-cc1: all warnings being treated as errors
-make[3]: *** [scripts/Makefile.build:252: drivers/target/target_core_iblock.o] Error 1
-make[3]: *** Waiting for unfinished jobs....
-make[2]: *** [scripts/Makefile.build:494: drivers/target] Error 2
-make[2]: *** Waiting for unfinished jobs....
-make[1]: *** [scripts/Makefile.build:494: drivers] Error 2
-make: *** [Makefile:2026: .] Error 2
-
+Only a hint in case there is a respin.
