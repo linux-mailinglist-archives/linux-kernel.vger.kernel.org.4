@@ -2,134 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24C267092E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 11:22:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66CBD7092EB
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 11:23:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231397AbjESJWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 05:22:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60964 "EHLO
+        id S231452AbjESJXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 05:23:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbjESJWX (ORCPT
+        with ESMTP id S231411AbjESJXI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 05:22:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC07B10C3
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 02:21:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684488100;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TWFb7su+l+wO5tmP1uJaxoMrwLD0GIgYT9evuWTAj54=;
-        b=W1CH98enTEKi0X4/rQPxKTROeFhJJYHmjKScmE2p1eV+I5neulShL2oQ8TVbM2oPkLtlbO
-        IW7/SL1sCq6MDsXlnh+ANWjj9iI0VC83HYChyLkJGFpdcDxKCyr4B5mO5YV341Zig4jNvF
-        2T/xjXhlGIHq8R2LH2F9iwV1v0KE4UI=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-196-K_MxiW9uOPKNzzOapCuAOA-1; Fri, 19 May 2023 05:21:38 -0400
-X-MC-Unique: K_MxiW9uOPKNzzOapCuAOA-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f421cfb4beso11503875e9.0
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 02:21:38 -0700 (PDT)
+        Fri, 19 May 2023 05:23:08 -0400
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBEB2E47;
+        Fri, 19 May 2023 02:23:06 -0700 (PDT)
+Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-392116ae103so1828141b6e.0;
+        Fri, 19 May 2023 02:23:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684488097; x=1687080097;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TWFb7su+l+wO5tmP1uJaxoMrwLD0GIgYT9evuWTAj54=;
-        b=KDJ4Ohr/zKRSNymrY/rD4hgTdwjVEL703P8eQmi7zTyxi2i/mAVq4cvDKXWQmsS7N1
-         QncAp7asFCqF1j+uILRqjdQ+OPYEtOrala4fPsjCKx8futQnM4yqyXHB5hRvv/F3mHdQ
-         XBE4gg5iNx4ISDbyAb79CD4aLLtfSK4tusGXc/3MsDwM/pFmUaQjzdNvDEyTJte1jwhD
-         RPolo7BenURR5jGF5OB1MRni6vR8QljXcp6mXp6yFw5+D+GhsVIkirQvc/VOG03mLw6v
-         Oy1Jl4Xk/j2Dq17a+zCfuVu8B9fwH8KKsU3/A2MFlOt3/axRq5d8yEP47+CwR13unksW
-         71Ow==
-X-Gm-Message-State: AC+VfDx7Cr0HQ4joy2jZgfCVW6UK9X1W13r+UJn5OC8zUgTT2n4kHP+y
-        1F8RzmuMyGvGD+3X8tAPAU8igf4LI9uaIDYtGi/5h449FfOKkjVriNeuMlL9me2tLjNUOhyWGfq
-        PF4prdf3UwZEANgga87AtUdcD
-X-Received: by 2002:a1c:f20b:0:b0:3f4:16bc:bd1b with SMTP id s11-20020a1cf20b000000b003f416bcbd1bmr778348wmc.39.1684488097707;
-        Fri, 19 May 2023 02:21:37 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6dz0PcxB7344vGoAWPy4CcML6krGk716U287/gC5ZmUcy5HC+h9blZEghWa25ztRBkBdRg8Q==
-X-Received: by 2002:a1c:f20b:0:b0:3f4:16bc:bd1b with SMTP id s11-20020a1cf20b000000b003f416bcbd1bmr778313wmc.39.1684488097347;
-        Fri, 19 May 2023 02:21:37 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c722:9d00:7421:54d8:9227:a3e8? (p200300cbc7229d00742154d89227a3e8.dip0.t-ipconnect.de. [2003:cb:c722:9d00:7421:54d8:9227:a3e8])
-        by smtp.gmail.com with ESMTPSA id m16-20020a7bce10000000b003f435652aaesm1753343wmc.11.2023.05.19.02.21.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 May 2023 02:21:36 -0700 (PDT)
-Message-ID: <80f45fec-3e91-c7b3-7fb4-1aa9355c627a@redhat.com>
-Date:   Fri, 19 May 2023 11:21:35 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US
-To:     Peter Collingbourne <pcc@google.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        =?UTF-8?B?UXVuLXdlaSBMaW4gKOael+e+pOW0tCk=?= 
-        <Qun-wei.Lin@mediatek.com>, linux-arm-kernel@lists.infradead.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        "surenb@google.com" <surenb@google.com>,
-        =?UTF-8?B?Q2hpbndlbiBDaGFuZyAo5by16Yym5paHKQ==?= 
-        <chinwen.chang@mediatek.com>,
-        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
-        =?UTF-8?B?S3Vhbi1ZaW5nIExlZSAo5p2O5Yag56mOKQ==?= 
-        <Kuan-Ying.Lee@mediatek.com>,
-        =?UTF-8?B?Q2FzcGVyIExpICjmnY7kuK3mpq4p?= <casper.li@mediatek.com>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        vincenzo.frascino@arm.com,
-        Alexandru Elisei <alexandru.elisei@arm.com>, will@kernel.org,
-        eugenis@google.com, Steven Price <steven.price@arm.com>,
-        stable@vger.kernel.org
-References: <20230512235755.1589034-1-pcc@google.com>
- <20230512235755.1589034-2-pcc@google.com>
- <7471013e-4afb-e445-5985-2441155fc82c@redhat.com> <ZGJtJobLrBg3PtHm@arm.com>
- <ZGLC0T32sgVkG5kX@google.com>
- <851940cd-64f1-9e59-3de9-b50701a99281@redhat.com>
- <CAMn1gO79e+v3ceNY0YfwrYTvU1monKWmTedXsYjtucmM7s=MVA@mail.gmail.com>
- <c9f1fc7c-62a2-4768-7992-52e34ec36d0f@redhat.com>
- <CAMn1gO7t0S7CmeU=59Lq10N0WvrKebM=W91W7sa+SQoG13Uppw@mail.gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH 1/3] mm: Move arch_do_swap_page() call to before
- swap_free()
-In-Reply-To: <CAMn1gO7t0S7CmeU=59Lq10N0WvrKebM=W91W7sa+SQoG13Uppw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+        d=1e100.net; s=20221208; t=1684488186; x=1687080186;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=RrRs7m1C9m+EmWKO0WMeaCgh3OJPLA5+BvKvd2/4zcI=;
+        b=bWQDfChZLh/+qRczbv4WkYth3d/59Ug2xHfV0MSPr5DIOMf7pVqr9eC96bB2rXiuNO
+         lV5cpjkMCDn9zGdo8FAf+c7q63sGWdpF+z9r5GXOmIVdiehp8Alk/ZVwfeBDYS4980OI
+         FhPDFTMSUhJbwOXAc5epLEZtL8gC730pSjj9JGYPKAS7TdJWpaPt7vEM4I7ad2iGHCyk
+         cmEefAjPU3JDrVrLlVZRQsqX76UUzkz8i/0xpPoaQ33cnWAle0SL8PMhkUdNfLNQdsIL
+         64r3Gz3CKsYmmUZgOlRMO8bxMgOQRVY/wl2d49TY6F2BHdm7CNSArhmTrb0vxQpfJZC3
+         Rf6Q==
+X-Gm-Message-State: AC+VfDzVfUaEwsl5L32mOkuHE1JmE+8vfNhLASdunbZ7ZApNyQYFd5AB
+        MH7OV9QKpZvWtraTUr0bqw==
+X-Google-Smtp-Source: ACHHUZ57u3i+SSbVtqMNZMI6jUmfxGleHemSqI5RU40IgUoQx0IFUvSu7hfhjcMeFaohQaq83RSbgg==
+X-Received: by 2002:a05:6808:4c4:b0:394:2868:d51f with SMTP id a4-20020a05680804c400b003942868d51fmr787182oie.4.1684488186007;
+        Fri, 19 May 2023 02:23:06 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id c24-20020aca1c18000000b00397c03854edsm837946oic.17.2023.05.19.02.23.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 May 2023 02:23:05 -0700 (PDT)
+Received: (nullmailer pid 3014366 invoked by uid 1000);
+        Fri, 19 May 2023 09:23:02 -0000
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+MIME-Version: 1.0
+From:   Rob Herring <robh@kernel.org>
+To:     Devi Priya <quic_devipriy@quicinc.com>
+Cc:     andersson@kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, vkoul@kernel.org,
+        quic_srichara@quicinc.com, krzysztof.kozlowski+dt@linaro.org,
+        quic_sjaganat@quicinc.com, quic_anusha@quicinc.com,
+        linux-arm-msm@vger.kernel.org, quic_ipkumar@quicinc.com,
+        kishon@kernel.org, quic_arajkuma@quicinc.com, conor+dt@kernel.org,
+        quic_kathirav@quicinc.com, konrad.dybcio@linaro.org,
+        linux-phy@lists.infradead.org, robh+dt@kernel.org,
+        agross@kernel.org
+In-Reply-To: <20230519085723.15601-2-quic_devipriy@quicinc.com>
+References: <20230519085723.15601-1-quic_devipriy@quicinc.com>
+ <20230519085723.15601-2-quic_devipriy@quicinc.com>
+Message-Id: <168448818232.3014347.12687378726384996026.robh@kernel.org>
+Subject: Re: [PATCH V2 1/2] dt-bindings: phy: qcom,qmp-pcie: Add ipq9574
+ bindings
+Date:   Fri, 19 May 2023 04:23:02 -0500
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->> Sorry, I meant actual anonymous memory pages, not shmem. Like, anonymous
->> pages that are COW-shared due to fork() or KSM.
->>
->> How does MTE, in general, interact with that? Assume one process ends up
->> modifying the tags ... and the page is COW-shared with a different
->> process that should not observe these tag modifications.
+
+On Fri, 19 May 2023 14:27:22 +0530, Devi Priya wrote:
+> Add bindings for the PCIe QMP PHYs found on IPQ9574.
 > 
-> Tag modifications cause write faults if the page is read-only, so for
-> COW shared pages we would end up copying the page in the usual way,
-> which on arm64 would copy the tags as well via the copy_highpage hook
-> (see arch/arm64/mm/copypage.c).
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+> ---
+>  Changes in V2:
+> 	- Picked up the R-b tag
+> 	- Did not convert the clock IDs to numerical values as the clock
+> 	  header (dependent patch) is merged in latest rc1.
+> 
+>  .../phy/qcom,ipq9574-qmp-pcie-phy.yaml        | 90 +++++++++++++++++++
+>  1 file changed, 90 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/qcom,ipq9574-qmp-pcie-phy.yaml
+> 
 
-Oh, that makes sense, thanks for pointing that out!
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-... and I can spot that KSM also checks the tag when de-duplicating: 
-pages_identical() ends up calling memcmp_pages(), which knows how to 
-deal with tags.
+yamllint warnings/errors:
 
-Interestingly, calc_checksum() does not seem to care about tags. But 
-that simply implies that pages with the same content have same checksum, 
-independent of the tag. And pages_identical() is the single source of truth.
+dtschema/dtc warnings/errors:
+Error: Documentation/devicetree/bindings/phy/qcom,ipq9574-qmp-pcie-phy.example.dts:29.26-27 syntax error
+FATAL ERROR: Unable to parse input tree
+make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/phy/qcom,ipq9574-qmp-pcie-phy.example.dtb] Error 1
+make[1]: *** Waiting for unfinished jobs....
+make: *** [Makefile:1512: dt_binding_check] Error 2
 
--- 
-Thanks,
+doc reference errors (make refcheckdocs):
 
-David / dhildenb
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230519085723.15601-2-quic_devipriy@quicinc.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
