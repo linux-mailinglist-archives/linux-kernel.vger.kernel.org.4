@@ -2,99 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8338670A21A
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 23:50:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E9A70A224
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 23:52:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231702AbjESVuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 17:50:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33172 "EHLO
+        id S231400AbjESVwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 17:52:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230114AbjESVts (ORCPT
+        with ESMTP id S229508AbjESVwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 17:49:48 -0400
-Received: from mail-out.m-online.net (mail-out.m-online.net [IPv6:2001:a60:0:28:0:1:25:1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A5FB19BB
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 14:49:29 -0700 (PDT)
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 4QNL8F1tK7z1sG8n;
-        Fri, 19 May 2023 23:49:01 +0200 (CEST)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 4QNL8D5nw0z1qqlY;
-        Fri, 19 May 2023 23:49:00 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id XyLPMARxDKv3; Fri, 19 May 2023 23:48:59 +0200 (CEST)
-X-Auth-Info: UdoOlGJyC/tj1C8t/F+qwKRDlPRVzwm7sF3nVhFHfZv+Z8M1psgK2wdJJpzQJ6gi
-Received: from igel.home (aftr-62-216-205-130.dynamic.mnet-online.de [62.216.205.130])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Fri, 19 May 2023 23:48:59 +0200 (CEST)
-Received: by igel.home (Postfix, from userid 1000)
-        id 79E822C1CCF; Fri, 19 May 2023 23:48:59 +0200 (CEST)
-From:   Andreas Schwab <schwab@linux-m68k.org>
-To:     Alexandre Ghiti <alex@ghiti.fr>
-Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v8 1/3] riscv: Introduce CONFIG_RELOCATABLE
-In-Reply-To: <6fc7f0e1-0dde-9b41-0d60-6b0bd65bb630@ghiti.fr> (Alexandre
-        Ghiti's message of "Fri, 19 May 2023 13:08:12 +0200")
-References: <20230215143626.453491-1-alexghiti@rivosinc.com>
-        <20230215143626.453491-2-alexghiti@rivosinc.com>
-        <87wn1h5nne.fsf@igel.home>
-        <4adb27d2-325d-3ce0-23b1-ec69a973b4bf@ghiti.fr>
-        <87ttwi91g0.fsf@igel.home>
-        <6fc7f0e1-0dde-9b41-0d60-6b0bd65bb630@ghiti.fr>
-X-Yow:  YOW!!  Up ahead!  It's a DONUT HUT!!
-Date:   Fri, 19 May 2023 23:48:59 +0200
-Message-ID: <87sfbsvvp0.fsf@igel.home>
-User-Agent: Gnus/5.13 (Gnus v5.13)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 19 May 2023 17:52:08 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB371730;
+        Fri, 19 May 2023 14:51:44 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 1FA023200998;
+        Fri, 19 May 2023 17:51:17 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Fri, 19 May 2023 17:51:17 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1684533076; x=1684619476; bh=Swpo4gUk6xVGAujZkHWBnImzkqnYkyRI2qy
+        um8DHZXw=; b=ppK7/DGLIequAjDx/8H8T0JGT5Jpmz6WPC6jYQM5dQsLsrEic7K
+        eK98aWQONrLPIPoAghZSIP7W3v4HTpPXB6E53h34qtx1hKqmrN3sb074cpWM3OcD
+        6+oSm8YCGQcjfKhIFcv9OudS4NqMPkCoCj+ycwh3Pqd2WbUCM5RRmxSgzHtrsfcU
+        vbUD7OgOqe7mdJoTSjMg+ghoCw1vBYqR8AjT0879yEGzk9RqrrCjkfUAM7pvy/WI
+        WbHoOLPAMSZ93RvNLgziQLCbbE0S4OXwUstqVr4lqMGjWpU/fJBpKgsb6vaaec+H
+        0/FLBoKo/xGies1TvEUi2ct8onXjiARz5/Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1684533076; x=1684619476; bh=Swpo4gUk6xVGAujZkHWBnImzkqnYkyRI2qy
+        um8DHZXw=; b=t1g71FeOZc4MvfkUamJxEqiMBO3X/3I8Gu2WuShThD+opjiy4vb
+        Bn9re+3mbTKm3mtB4PdJAB+vJKc3Buq3J0dvjdmA4z5hjepasoBp9yaONtH/3nSU
+        5yS6epXvKblGMt60cxvH+gr3Pq0Oi8Vups6MyoFCSeg7vGcC4Rybgc7vWKZKY3ph
+        L0iEM0e3gKWsRSDIsdr0BuYLQ/WXIVqRkGG8tYHtgchYhjELHM8sc+W2KbTbt2j6
+        E8IOz69FEvDhM5VMFg8ukfIHVQhu9fH0ZSXE5cvp+Mrx6wDY9ku9wW+Z79WwCZ25
+        E23TcdI2S+5n8fn4UMlER6xPMrBAtO8kDBw==
+X-ME-Sender: <xms:VO9nZP2qDnQlSrXHYjZtszO0KIR7p2KoW2VAbgDCPZn7ilqeEW_Q3w>
+    <xme:VO9nZOE3EOekc6uH8YQEcBbjD05ZUaeA5mbjY0wZdlqsutZAaEofNTLJ76TVEHPjG
+    ZDGbBReDMluWizbyFc>
+X-ME-Received: <xmr:VO9nZP5I6IxXTDUbmS6G73seWF8b9FlH6UdsC7dWncXRYV8AUIsRaHxHd3YrmSaMOgKO>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeiiedgtdefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
+    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:VO9nZE20hoN3q4E124vsNYlbizWgS0wXSHJtOblhZuoEJt2WS6Owbw>
+    <xmx:VO9nZCG3lz_tVwiHCteGCu2Xje54QSBoh-MielZ-1Pl_NfLEwmNVJw>
+    <xmx:VO9nZF87c1NHDYyxQ1aGE62bsXDKeW0CHr5mlX58x3FZKdxGaGfCOg>
+    <xmx:VO9nZHQn3CAWH03xgc7WjMiRJFrvGe20ni5Qnly-neZnFmJPLK3Ghg>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 19 May 2023 17:51:15 -0400 (EDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
+Subject: Re: [PATCH 1/3] MIPS: Introduce WAR_4KC_LLSC config option
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <alpine.DEB.2.21.2305192117230.50034@angie.orcam.me.uk>
+Date:   Fri, 19 May 2023 22:51:04 +0100
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <53043C18-7C75-4D5F-A15E-86D981D19CA8@flygoat.com>
+References: <20230519164753.72065-1-jiaxun.yang@flygoat.com>
+ <20230519164753.72065-2-jiaxun.yang@flygoat.com>
+ <alpine.DEB.2.21.2305192117230.50034@angie.orcam.me.uk>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+X-Mailer: Apple Mail (2.3731.500.231)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mai 19 2023, Alexandre Ghiti wrote:
 
-> I have tested the following patch successfully, can you give it a try
-> while I make sure this is the only place I forgot to add the -fno-pie
-> flag?
->
-> diff --git a/arch/riscv/kernel/Makefile b/arch/riscv/kernel/Makefile
-> index fbdccc21418a..153864e4f399 100644
-> --- a/arch/riscv/kernel/Makefile
-> +++ b/arch/riscv/kernel/Makefile
-> @@ -23,6 +23,10 @@ ifdef CONFIG_FTRACE
->  CFLAGS_REMOVE_alternative.o = $(CC_FLAGS_FTRACE)
->  CFLAGS_REMOVE_cpufeature.o = $(CC_FLAGS_FTRACE)
->  endif
-> +ifdef CONFIG_RELOCATABLE
-> +CFLAGS_alternative.o += -fno-pie
-> +CFLAGS_cpufeature.o += -fno-pie
-> +endif
->  ifdef CONFIG_KASAN
->  KASAN_SANITIZE_alternative.o := n
->  KASAN_SANITIZE_cpufeature.o := n
 
-I can confirm that this fixes the crash.
+> 2023=E5=B9=B45=E6=9C=8819=E6=97=A5 21:23=EF=BC=8CMaciej W. Rozycki =
+<macro@orcam.me.uk> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> On Fri, 19 May 2023, Jiaxun Yang wrote:
+>=20
+>> diff --git a/arch/mips/kernel/cpu-probe.c =
+b/arch/mips/kernel/cpu-probe.c
+>> index 6d15a398d389..fd452e68cd90 100644
+>> --- a/arch/mips/kernel/cpu-probe.c
+>> +++ b/arch/mips/kernel/cpu-probe.c
+>> @@ -152,6 +152,13 @@ static inline void check_errata(void)
+>> struct cpuinfo_mips *c =3D &current_cpu_data;
+>>=20
+>> switch (current_cpu_type()) {
+>> + case CPU_4KC:
+>> + if ((c->processor_id & PRID_REV_MASK) < PRID_REV_4KC_V1_0) {
+>> + c->options &=3D ~MIPS_CPU_LLSC;
+>> + if (!IS_ENABLED(CONFIG_WAR_4K_LLSC))
+>> + pr_err("CPU have LLSC errata, please enable CONFIG_WAR_4K_LLSC");
+>=20
+> Given the circumstances I think this should be `panic'.  You don't =
+want=20
+> to continue with a system that can randomly lock up.
 
--- 
-Andreas Schwab, schwab@linux-m68k.org
-GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
-"And now for something completely different."
+I just checked how other architectures handle such situation, it seems =
+like
+TAINT_CPU_OUT_OF_SPEC is a better option.
+
+Panic in cpu_probe can be frustrating for users as it is earlier than =
+initialisation
+of consoles so the panic message can never be read by users.
+
+>=20
+> Also "CPU has LLSC erratum, [...]" as both are singular.
+
+Thanks for the tip :-)
+- Jiaxun
+
+>=20
+>  Maciej
+
