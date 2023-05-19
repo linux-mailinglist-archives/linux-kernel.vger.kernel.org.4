@@ -2,209 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0287094D3
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 12:32:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E55417094D4
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 12:32:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbjESKcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 06:32:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52202 "EHLO
+        id S231910AbjESKc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 06:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231912AbjESKcE (ORCPT
+        with ESMTP id S229970AbjESKcy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 06:32:04 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4552110DC;
-        Fri, 19 May 2023 03:32:03 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34J3VMDe016895;
-        Fri, 19 May 2023 10:31:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=sbPqLa45I3ZxZtAMxOJzpoQYgLrmAG8839OsopoEIl8=;
- b=g0JCe5fmqUAyxohmPHkV5bOgTYhPBs8+6GM262tLT3DmvTcKfn4gNegYPgNDZr8nSbiU
- 1URklR/k8v+heMD7IwgZN3cZTLr+XLD73Pc/VzYkuZfpSN0n3gvf0k7OB9SXo1CGsWeb
- 6HO6V6sAyK0ObfdoUI59zE0PaOXjEh/mau60asq9+O1dNPUVOOJlKopQxLYj8QzfDz8S
- t1LazEFrxKZPil2KVxcAL7B0PQYuCI+stIOIXHir+TISF96NpZvis9HbA5PVfeYDBuUO
- vHkIMN5hBE77cXOITeREbhLmCFJQ5kRIozkINDxJA0e74+usMmBFOhJf47gwpHJfmf2Q Ng== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qp0keru4a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 May 2023 10:31:59 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34JAVvP3014651
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 May 2023 10:31:58 GMT
-Received: from poovendh-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 19 May 2023 03:31:52 -0700
-From:   Poovendhan Selvaraj <quic_poovendh@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Fri, 19 May 2023 06:32:54 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2041.outbound.protection.outlook.com [40.107.243.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D5D7E66;
+        Fri, 19 May 2023 03:32:53 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=E4CgYiEtWt+RAaT+DEpruhiNPPPIn9lOxpBIZYyh8RqHihNFdPItnuHJd9LFJIHiG1+rwzvZLgU3PUlogB9kCNXVYxmWBm2+8VYs3c3RPGUyvXuySIqjkFYWWaMeqzCvwB5lRZgyBNS88kvFZtsya+u0CV4X3K39RN5tWfPGdZkVnp4oFhBee/c4Dj+NoPjO3Q3/1JjCYQN+Xwuo0xzLbpjXRUTTh0ZUUkPc/BbI08WNoBqOp/TXDco7blhMEDSBRujvEbYk7d8YnUzOfCHyjgUbCiKsH23l3Y06TsPlbHi0wtphgza42FkqfKE13X01bkg38eRPcgWQ7+rKfFmbUQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FWQJu2T43YyHtjgCZdIDWouC5oLWu6GppEerJQ4kabU=;
+ b=H1pbISKpYU/nd7kt1q6LNM/HESpacUEmMBVnSdpAzu9zczCPR3k0Wv3XfKTPfASx7F2tSLhK2Kasy78zBH62Ylj3LSSZ3I0dQYSobsEvKLzMvz+y3C8w7bfQX7+jzwz9nR9eC/OIGPszo1djbGtC/ae8nWmA0npJcI50PJb9kmcABPnuCjg9EkS4Bq3k14nIaX4i52TCbNDXBT/eb4XyljbsDwTSA+DSbpCrBZfoWngjKay/IXEF2+KBEtpAUARt8McHjLWwwgTGaBAv5zMdQrgt9GWs+1tJJxP2dkmvUa7ZJEvFM5yiVH1Hj7GVwAUrId436l0BQHWcMMBCRL3+WQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FWQJu2T43YyHtjgCZdIDWouC5oLWu6GppEerJQ4kabU=;
+ b=11eBNdrpV/AolUW542s2swMuQ4cnL946k5+E6apm3nU4DwB21dppgmDSSQ1ObbB7jF9JcCwWT7hZQ4vB2YPm4QTSXOehh2TZlFZNobLeY2/s0dJncjIHgbjHRd54h3rcix6mh/NIx7pj0IIjLrm0mIGh0zqtmJKcJRekmguV5Vk=
+Received: from MW4PR04CA0292.namprd04.prod.outlook.com (2603:10b6:303:89::27)
+ by SA3PR12MB9177.namprd12.prod.outlook.com (2603:10b6:806:39d::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.21; Fri, 19 May
+ 2023 10:32:50 +0000
+Received: from CO1NAM11FT010.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:89:cafe::81) by MW4PR04CA0292.outlook.office365.com
+ (2603:10b6:303:89::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19 via Frontend
+ Transport; Fri, 19 May 2023 10:32:49 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT010.mail.protection.outlook.com (10.13.175.88) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6411.21 via Frontend Transport; Fri, 19 May 2023 10:32:49 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Fri, 19 May
+ 2023 05:32:46 -0500
+From:   Nava kishore Manne <nava.kishore.manne@amd.com>
+To:     <mdf@kernel.org>, <hao.wu@intel.com>, <yilun.xu@intel.com>,
+        <trix@redhat.com>, <michal.simek@amd.com>,
+        <linux-fpga@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_devipriy@quicinc.com>
-Subject: [PATCH 2/2] arm64: dts: qcom: ipq9574: add support for RDP454 variant
-Date:   Fri, 19 May 2023 16:01:28 +0530
-Message-ID: <20230519103128.30783-3-quic_poovendh@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230519103128.30783-1-quic_poovendh@quicinc.com>
-References: <20230519103128.30783-1-quic_poovendh@quicinc.com>
+CC:     Alfonso Rodriguez <alfonso.rodriguezm@upm.es>
+Subject: [PATCH] fpga: zynq-fpga: Ensure proper xCAP interface switch
+Date:   Fri, 19 May 2023 16:02:32 +0530
+Message-ID: <20230519103232.3009096-1-nava.kishore.manne@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: LCHDdO8iiVM1Ca9Y9uisHTOL11xvWuOd
-X-Proofpoint-ORIG-GUID: LCHDdO8iiVM1Ca9Y9uisHTOL11xvWuOd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-19_06,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=999 malwarescore=0 bulkscore=0 adultscore=0 priorityscore=1501
- lowpriorityscore=0 clxscore=1015 impostorscore=0 phishscore=0 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305190089
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT010:EE_|SA3PR12MB9177:EE_
+X-MS-Office365-Filtering-Correlation-Id: e7499261-05d0-427c-9275-08db585464ad
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: n08S1QJUpgSJQRBZ7yFuAGBytdjoCqdZ5ap0vt0hySTUf/9LZ2kSR9afzLy4tZMkdBqytx6oaik7yXtqJesJWO3zOPV0JIy/pKuyBb8kRixL83XfD86PGMpZQKx4oViBz1ArGmPgcJgcD5FSOF7ouXGMNf6IAcYpRxBGJXKLJXupY3EN24wdgcizhzhDfZySEQo+zjjwHeHsS2lcqC+TwbFVr8yHykvV4PMqSrVKqI++Bseu7yfT/uPMj/9o4THMeJlJjSMOLwsqrgAuA9tjOLP3w5ATq1SETcnTUbYWj1+9RTOzA/ahx61M0bTSgudp9cfQ1VNNDsVoFBWmw6c1ag6tL/XPR+uu1JthDS86E3IcSfCVBox6wW8PygRsH9oP3pCiCyBc8e1JVecm87op0YK4JfBGI4kBnvk7QNt1BRhY70FyBUK3bI5Dy2y50qgJRHrX8huA8KFlbFjABbixsITUyIRHUXGnh+vWRWxgnGPARCNta/A6UTRq2MU1gyVohVn55Khnkc8cNJ+spD643QJ8DdRUFH4+r5Tfk9NgFO5ns2KTiuqPh2jSbXFyNrHlS6DB8RuQ0l+tVh6yLI984qpuiQmVkdx78BuYDI9Ts6CGGf/BnMUT3YVzZwj49nGfz3m9vONs70aKgkVSLi9mVGcVHk/eDMKlMIM73xdgmLFXkAEs6OCsUv0om45G6fFTKnlFXd6BjqeILlgTCJ2MpWVvdP6bpmTo1RyphQGySmSxb+oKzXnrZxgLe0CqGcyGZrtQ9vF4k7UvdljoPSm+gjwGCYexE2zJnt5uSKdz6ow=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(396003)(39860400002)(346002)(451199021)(46966006)(40470700004)(36840700001)(478600001)(316002)(5660300002)(8936002)(8676002)(41300700001)(4326008)(110136005)(2906002)(40460700003)(70206006)(70586007)(36860700001)(36756003)(103116003)(40480700001)(6666004)(16526019)(1076003)(186003)(26005)(82740400003)(86362001)(47076005)(2616005)(356005)(81166007)(336012)(82310400005)(426003)(83380400001)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2023 10:32:49.1088
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e7499261-05d0-427c-9275-08db585464ad
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT010.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB9177
+X-Spam-Status: No, score=1.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: POOVENDHAN SELVARAJ <quic_poovendh@quicinc.com>
+From: Alfonso Rodriguez <alfonso.rodriguezm@upm.es>
 
-Add the initial device tree support for the Reference Design Platform (RDP)
-454 based on IPQ9574 family of SoCs. This patch adds support for Console
-UART, SPI NOR and SMPA1 regulator node.
+Ensure that the low-level fpga-manager driver for Zynq-7000 devices
+switches between reconfiguration interfaces as specified in the TRM
+(section 6.5.1: "Ensure that all outstanding transactions are completed
+before changing interfaces"); device (re)configuration may fail otherwise
 
-Signed-off-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
+Signed-off-by: Alfonso Rodriguez <alfonso.rodriguezm@upm.es>
+Tested-by: Nava kishore Manne <nava.kishore.manne@amd.com>
 ---
- arch/arm64/boot/dts/qcom/Makefile           |  1 +
- arch/arm64/boot/dts/qcom/ipq9574-rdp454.dts | 92 +++++++++++++++++++++
- 2 files changed, 93 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/ipq9574-rdp454.dts
+ drivers/fpga/zynq-fpga.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index 7b5466395f46..834e790bec90 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -12,6 +12,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= ipq8074-hk10-c2.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= ipq9574-rdp418.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= ipq9574-rdp433.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= ipq9574-rdp449.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= ipq9574-rdp454.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-acer-a1-724.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-alcatel-idol347.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-asus-z00l.dtb
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574-rdp454.dts b/arch/arm64/boot/dts/qcom/ipq9574-rdp454.dts
-new file mode 100644
-index 000000000000..b3e853a9cc94
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/ipq9574-rdp454.dts
-@@ -0,0 +1,92 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause)
-+/*
-+ * IPQ9574 RDP454 board device tree source
-+ *
-+ * Copyright (c) 2020-2021 The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2022-2023 Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
+diff --git a/drivers/fpga/zynq-fpga.c b/drivers/fpga/zynq-fpga.c
+index ae0da361e6c6..88db9ac36887 100644
+--- a/drivers/fpga/zynq-fpga.c
++++ b/drivers/fpga/zynq-fpga.c
+@@ -493,15 +493,16 @@ static int zynq_fpga_ops_write_complete(struct fpga_manager *mgr,
+ 	if (err)
+ 		return err;
+ 
+-	/* Release 'PR' control back to the ICAP */
+-	zynq_fpga_write(priv, CTRL_OFFSET,
+-		zynq_fpga_read(priv, CTRL_OFFSET) & ~CTRL_PCAP_PR_MASK);
+-
+ 	err = zynq_fpga_poll_timeout(priv, INT_STS_OFFSET, intr_status,
+ 				     intr_status & IXR_PCFG_DONE_MASK,
+ 				     INIT_POLL_DELAY,
+ 				     INIT_POLL_TIMEOUT);
+ 
++	/* Release 'PR' control back to the ICAP */
++	zynq_fpga_write(priv, CTRL_OFFSET,
++			zynq_fpga_read(priv, CTRL_OFFSET)
++			& ~CTRL_PCAP_PR_MASK);
 +
-+/dts-v1/;
-+
-+#include "ipq9574.dtsi"
-+
-+/ {
-+	model = "Qualcomm Technologies, Inc. IPQ9574/AP-AL02-C9";
-+	compatible = "qcom,ipq9574-ap-al02-c9", "qcom,ipq9574";
-+
-+	aliases {
-+		serial0 = &blsp1_uart2;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+};
-+
-+/* In AL02-C9, the max supported CPU Freq is 1.5 GHz. Disabling frequencies beyond 1.5GHz*/
-+&cpu_opp_table {
-+	opp-1800000000 {
-+		opp-supported-hw = <0>;
-+	};
-+
-+	opp-2208000000 {
-+		opp-supported-hw = <0>;
-+	};
-+};
-+
-+/* Disable IPQ9574 integrated radio's reserved memory */
-+&blsp1_spi0 {
-+	pinctrl-0 = <&spi_0_pins>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+
-+	flash@0 {
-+		compatible = "micron,n25q128a11", "jedec,spi-nor";
-+		reg = <0>;
-+		#address-cells = <1>;
-+		#size-cells = <1>;
-+		spi-max-frequency = <50000000>;
-+	};
-+};
-+
-+&blsp1_uart2 {
-+	pinctrl-0 = <&uart2_pins>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+};
-+
-+&rpm_requests {
-+	regulators {
-+		compatible = "qcom,rpm-mp5496-regulators";
-+
-+		ipq9574_s1: s1 {
-+		/*
-+		 * During kernel bootup, the SoC runs at 800MHz with 875mV set by the bootloaders.
-+		 * During regulator registration, kernel not knowing the initial voltage,
-+		 * considers it as zero and brings up the regulators with minimum supported voltage.
-+		 * Update the regulator-min-microvolt with SVS voltage of 725mV so that
-+		 * the regulators are brought up with 725mV which is sufficient for all the
-+		 * corner parts to operate at 800MHz
-+		 */
-+			regulator-min-microvolt = <725000>;
-+			regulator-max-microvolt = <1075000>;
-+		};
-+	};
-+};
-+
-+&sleep_clk {
-+	clock-frequency = <32000>;
-+};
-+
-+&tlmm {
-+	spi_0_pins: spi-0-state {
-+		pins = "gpio11", "gpio12", "gpio13", "gpio14";
-+		function = "blsp0_spi";
-+		drive-strength = <8>;
-+		bias-disable;
-+	};
-+};
-+
-+&xo_board_clk {
-+	clock-frequency = <24000000>;
-+};
+ 	clk_disable(priv->clk);
+ 
+ 	if (err)
 -- 
-2.17.1
+2.25.1
 
