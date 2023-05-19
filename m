@@ -2,85 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 308FC70A311
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 01:02:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85A8170A31C
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 01:02:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbjESXCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 19:02:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34452 "EHLO
+        id S231150AbjESXCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 19:02:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjESXCQ (ORCPT
+        with ESMTP id S229449AbjESXCq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 19:02:16 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A60C99
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 16:02:15 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2af2d092d7aso799601fa.2
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 16:02:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684537333; x=1687129333;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7ICfQVhv0p58QRGm6Ofs09fgKjfcNCD6otbrYwwYRjw=;
-        b=k9H9/XI3c4gYLXp82YhPCxKp/bDxz6SLs54kVqVsH58rAVBFtDinul2AXJ4edC47fj
-         nKbery7wfrU4P9uk2IJgPBl3Fjdr7phb96CXmFwjNSPMLGxh1IVMXyRmqV31yuFyfZoM
-         7jc+hyKKcb3efWrPCnY+pwHfbjLrL8lYZAha27UWnTXjswT7u3SXRwa+yDiwxCJyXG5y
-         FsnGNwxdnMS6EH1orrvTh6JDIUfouHrBU0mUd54t4lZcvgGwCcyNJ2VFo4E+SpxkHuSv
-         KLF+Lp2TPkzxtmpmWsLk8N3ZCmFsRVTr3CJUN17MXA07WLu1RKvXM/Tol4dUd9C6ntbh
-         A4jA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684537333; x=1687129333;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7ICfQVhv0p58QRGm6Ofs09fgKjfcNCD6otbrYwwYRjw=;
-        b=Zcy2OexLnQWY0tvlp8I5rLCYQwF1wJD9sGkyAbF4qDcqPz6jUGdyrisaTBWP5S/f2l
-         x53ivrj7ujrXk2/mYPKe5xV7tgNq+Rc0FX78gMH3ALRFXcDEi2bwX+YTIAQjfSFmIo8Z
-         BKI5UIJqMqQz1/ngMWJyZknOdzlsXC6y8LSm3BNChu3uaJ7Dfcy5ebrMpLnVPcwW0Wac
-         3B4kJ8c49N07T1de1nWWssLzNstCDO+BlJmxgN4lsB+8t6P0m0TNpBfCY9YBIqNrSVHo
-         6Pdq0OmD81t0LP4rphgOjApGXe1OJLE7iJaQDS+SKn8CAKZmwK77GHhX7HapXRI5HiHl
-         nUuQ==
-X-Gm-Message-State: AC+VfDx5wlFbK4wBPESOlS5qDCk/u8PkTWcVfJ87Y7nirBRvIfXrFsJX
-        QJuZOzZMzMIGtqqJnB/jqDpawIeTJefLEWaOcc0=
-X-Google-Smtp-Source: ACHHUZ7UMqHk5rENqq9JMQbX9ZqRDgPSQuGZy96/uT1vIZP+8fQjGpkcjjF1D/yArdvq6XYMW8UwDw==
-X-Received: by 2002:a2e:9117:0:b0:2ad:af50:6ecb with SMTP id m23-20020a2e9117000000b002adaf506ecbmr1397207ljg.14.1684537333678;
-        Fri, 19 May 2023 16:02:13 -0700 (PDT)
-Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
-        by smtp.gmail.com with ESMTPSA id k1-20020a2e2401000000b002a8c2a4fe99sm34178ljk.28.2023.05.19.16.01.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 May 2023 16:02:00 -0700 (PDT)
-Message-ID: <d97a5b51-f71e-28d6-47ee-a49d11a6aa2d@linaro.org>
-Date:   Sat, 20 May 2023 01:01:58 +0200
+        Fri, 19 May 2023 19:02:46 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B75E107;
+        Fri, 19 May 2023 16:02:45 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34JMnTRi020637;
+        Fri, 19 May 2023 23:02:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=su/PahFjFXkN4pxSKJfmLjbSepDjEQz95cj3Gm6P61U=;
+ b=GYd3Ri9HErz/KDD2jWMgAH3sW9AnM3MbkbfmSzAcj8+Pq4CccwF+4x/CiktUDNgeeqIv
+ CDG7KCH08O/OORlwyaB78o8xlzC033WZ5QL3HXb5aQcXrg9ju+a58fO7PjIz1hZh5/2r
+ bE0GkBIKLr9N4IMZs+cFwq81VvmnadSoz/WQfl3BiCsHkbKFTj38nnBm+938pwile6wN
+ qNMpF0moBTcnrgg4BSmtL9KCCkFWdOnlWCp70yKpRoxYiGHLVW6NRAHOk7wKjuqEApLF
+ xDSWJZ65xw4+J4u8264wNZH0umhEgcuUcVmzUx0HDSqXf0VxBTJQ/ERV+HxFF8CI8fKE 7g== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qnwk4jtmp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 May 2023 23:02:37 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34JN2aRQ031930
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 May 2023 23:02:36 GMT
+Received: from [10.71.110.193] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 19 May
+ 2023 16:02:36 -0700
+Message-ID: <f62f3676-b931-6c88-9a49-80c17d16f463@quicinc.com>
+Date:   Fri, 19 May 2023 16:02:35 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v2] drm/msm/dpu: Set DPU_DATA_HCTL_EN for in
- INTF_SC7180_MASK
+Subject: Re: [PATCH v3 5/5] drm/msm/dsi: Remove incorrect references to
+ slice_count
 Content-Language: en-US
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>,
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+CC:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
         Daniel Vetter <daniel@ffwll.ch>,
-        Kalyan Thota <quic_kalyant@quicinc.com>,
-        Shubhashree Dhar <dhar@codeaurora.org>,
-        Raviteja Tamatam <travitej@codeaurora.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>
-Cc:     Rob Clark <robdclark@chromium.org>, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        freedreno@lists.freedesktop.org
-References: <20230508-topic-hctl_en-v2-1-e7bea9f1f5dd@linaro.org>
- <56ac76e8-e5ac-3712-1e07-ad6c5b96c77c@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <56ac76e8-e5ac-3712-1e07-ad6c5b96c77c@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+References: <20230405-add-dsc-support-v3-0-6e1d35a206b3@quicinc.com>
+ <20230405-add-dsc-support-v3-5-6e1d35a206b3@quicinc.com>
+ <qwi3zrnhuqeaiwr2vj7cp2d4czsjqawes7gjbjxcnj7avdzjtd@b7obpanefrt2>
+From:   Jessica Zhang <quic_jesszhan@quicinc.com>
+In-Reply-To: <qwi3zrnhuqeaiwr2vj7cp2d4czsjqawes7gjbjxcnj7avdzjtd@b7obpanefrt2>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: TJ14A3qoqzhizwKhFZuROTnFcksGFUEL
+X-Proofpoint-ORIG-GUID: TJ14A3qoqzhizwKhFZuROTnFcksGFUEL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-19_16,2023-05-17_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 suspectscore=0
+ clxscore=1015 impostorscore=0 mlxscore=0 phishscore=0 priorityscore=1501
+ malwarescore=0 lowpriorityscore=0 adultscore=0 mlxlogscore=999 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305190197
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -89,28 +90,100 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 20.05.2023 00:00, Abhinav Kumar wrote:
-> 
-> 
-> On 5/19/2023 11:49 AM, Konrad Dybcio wrote:
->> DPU5 and newer targets enable this unconditionally. Move it from the
->> SC7280 mask to the SC7180 one.
+On 5/19/2023 2:24 PM, Marijn Suijten wrote:
+> On 2023-05-19 14:17:30, Jessica Zhang wrote:
+>> Currently, slice_count is being used to calculate word count and
+>> pkt_per_line. In downstream, these values are calculated using slice per
+>> packet, which is not the same as slice_count.
 >>
-> 
-> You mean DPU 5.0.0 right?
-Yep!
-
-> 
->> Fixes: 7e6ee55320f0 ("drm/msm/disp/dpu1: enable DATA_HCTL_EN for sc7280 target")
->> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+>> Slice count represents the number of soft slices per interface, and its
+>> value will not always match that of slice per packet. For example, it is
+>> possible to have cases where there are multiple soft slices per interface
+>> but the panel specifies only one slice per packet.
+>>
+>> Thus, use the default value of one slice per packet and remove slice_count
+>> from the aforementioned calculations.
+>>
+>> Fixes: 08802f515c3c ("drm/msm/dsi: Add support for DSC configuration")
+>> Fixes: bc6b6ff8135c ("drm/msm/dsi: Use DSC slice(s) packet size to compute word count")
+>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
 >> ---
+>>   drivers/gpu/drm/msm/dsi/dsi_host.c | 24 ++++++++++++++----------
+>>   1 file changed, 14 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+>> index d04f8bbd707d..8c8858ee59ec 100644
+>> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
+>> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+>> @@ -866,18 +866,15 @@ static void dsi_update_dsc_timing(struct msm_dsi_host *msm_host, bool is_cmd_mod
+>>   	 */
+>>   	slice_per_intf = msm_dsc_get_slices_per_intf(dsc, hdisplay);
+>>   
+>> -	/*
+>> -	 * If slice_count is greater than slice_per_intf
+>> -	 * then default to 1. This can happen during partial
+>> -	 * update.
+>> -	 */
+>> -	if (dsc->slice_count > slice_per_intf)
+>> -		dsc->slice_count = 1;
+>> -
+>>   	total_bytes_per_intf = dsc->slice_chunk_size * slice_per_intf;
+>>   
+>>   	eol_byte_num = total_bytes_per_intf % 3;
+>> -	pkt_per_line = slice_per_intf / dsc->slice_count;
+>> +
+>> +	/*
+>> +	 * Default to 1 slice_per_pkt, so pkt_per_line will be equal to
+>> +	 * slice per intf.
+>> +	 */
+>> +	pkt_per_line = slice_per_intf;
 > 
-> I have cross-checked all the chipsets affected by this and confirmed DATA_HCTL is present and those 3 registers programmed with that feature bit are valid, hence
-> 
-> Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-Thanks!
+> Same as the comment below, perhaps it is a good idea to clarify in the
+> comment here that the original value wa *multiplied by* slice_per_pkt?
+> Otherwise this default of 1 is "invisible".
 
-Konrad
+Hi Marijn,
+
+Acked.
+
 > 
+> Alternatively we could have a `const slice_per_pkt = 1;` at the top, and
+> have the comment (the elaborate one from below) there?
+
+Since the default slice_per_pkt = 1 and there's only 2 places where I 
+have to add a clarifying comment, I think having a separate 
+slice_per_pkt variable is a bit redundant.
+
+Plus, if support for multiple slice_per_pkt values is added in the 
+future, we'd also have to drop this variable anyways.
+
+Thanks,
+
+Jessica Zhang
+
+> 
+> - Marijn
+> 
+>>   
+>>   	if (is_cmd_mode) /* packet data type */
+>>   		reg = DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM0_DATATYPE(MIPI_DSI_DCS_LONG_WRITE);
+>> @@ -1001,7 +998,14 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+>>   		if (!msm_host->dsc)
+>>   			wc = hdisplay * dsi_get_bpp(msm_host->format) / 8 + 1;
+>>   		else
+>> -			wc = msm_host->dsc->slice_chunk_size * msm_host->dsc->slice_count + 1;
+>> +			/*
+>> +			 * When DSC is enabled, WC = slice_chunk_size * slice_per_packet + 1.
+>> +			 * Currently, the driver only supports default value of slice_per_packet = 1
+>> +			 *
+>> +			 * TODO: Expand mipi_dsi_device struct to hold slice_per_packet info
+>> +			 *       and adjust DSC math to account for slice_per_packet.
+>> +			 */
+>> +			wc = msm_host->dsc->slice_chunk_size + 1;
+>>   
+>>   		dsi_write(msm_host, REG_DSI_CMD_MDP_STREAM0_CTRL,
+>>   			DSI_CMD_MDP_STREAM0_CTRL_WORD_COUNT(wc) |
+>>
+>> -- 
+>> 2.40.1
+>>
