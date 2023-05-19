@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1095E70A10C
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 22:54:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C82B770A10D
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 22:54:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbjESUyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 16:54:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36542 "EHLO
+        id S230235AbjESUyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 16:54:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbjESUyc (ORCPT
+        with ESMTP id S230161AbjESUye (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 16:54:32 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2E6132
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 13:54:30 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-561c46e07d7so51324107b3.2
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 13:54:30 -0700 (PDT)
+        Fri, 19 May 2023 16:54:34 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA0A4132
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 13:54:33 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-561c1436c75so56797797b3.1
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 13:54:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684529670; x=1687121670;
+        d=google.com; s=20221208; t=1684529673; x=1687121673;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=B95I2ErHfSKpIP3GGiqUWw60UUrTwERJDKlWWGCQqAQ=;
-        b=D18JUVsLkLZpjvIl5h5Dwd1u8deHaloBFH+VD56K9Pdzc3bUoQb6zAaly1nHAbG4tg
-         hSUhiBTQAzZMvTnFds5VA/Luy9aSR7sOTjKihgkwllwh6hj1+yqzRRBL/Qa5sVJ+5AGV
-         FOtgOdXbjAdTsFhW7DwRRvDoaAAiSlghKBrbyrwW66or+00+Yiiy3mau838YOBmQyFv3
-         4KWfcXdDmWw4JDDXlThdopr/dMvXQgfNx2JviUt4N3LQXdsQ2q5sFkACnAL4eNS122+G
-         VX8qB8CxUjETI+qFntxQ1VOItlyzKQvXkXphMqDNGBAK9CEW9l98Qeo+/DgbgAgDe0Rq
-         cR4g==
+        bh=MHyyjBXGdkt4cSmFwqyUBwVMuSNH2CUYNfBzVRGjfmY=;
+        b=r4xcUW9P7mdoHn/A+CRJgXb7Dqt1J5nqN2qQstM8zJ4vzpyBMLRQdqE6O+2Yt6wZ6J
+         XLqtV3cGRqQGUqAA9uK56ZkgjSbV0DPsadwZmjjpqLmDlgNahNwvWzbH4rcJNkYyHC9W
+         o8ziEEEcSETn5YCI2g6cJ9lMg1lSJV8QIQFxS785UqdAwFS7ZIpIWhsjFz+Hii7g7Ixo
+         /sp1fZvkYpFdnucZ7Rn/CpYqyFIIsK2y1a1IQIsEx+/attmCuI/8AqP29nXX5PeL+FtD
+         qv8JalAbNLD7Thc4JRda4MAJSCga202V19OZZGmXjWKaVrvf/iGocJ8Sna1zG/TmP/2P
+         Nupw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684529670; x=1687121670;
+        d=1e100.net; s=20221208; t=1684529673; x=1687121673;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=B95I2ErHfSKpIP3GGiqUWw60UUrTwERJDKlWWGCQqAQ=;
-        b=cz4MUU1pawJZTdK1GmJVDqhWXAxbpfgX7XKdlll23R8+WfzeRdEY6dwJL/2MezuvDQ
-         i+g0p17oBvv+75z2ER3/35tRoYUuTLmJ/SEHoQHW4tOQZpwQyMzj9mDS7XYw6mlJtlgA
-         MUPWRBW1/Ik1y2i/0BA3OhP+fVuyFq52WwlfO3K8EaTd6FSF0PA0g8YEjcDxWa3egLZ7
-         KP3qz2yc395FZXLnAGoL97ijL5RcUPaQHAFKYiEZBu9I2bM3fI5scHc3+Xo46VyHyyU5
-         Lcmf2qYWRCqZQtPUqocfNiDFwmFy0IcrXH6ypMctq2vnNx7cQL595Qxs2+f0daDOS+cD
-         cqtw==
-X-Gm-Message-State: AC+VfDyY2Zn7Hl55srUNz/DzRB39uFetvMR85t6BexM06OYkSh/0hpqr
-        dFJtprGtbHexVg5d9pcVQfI6Kh3q+IYa3NoxF8JdqA==
-X-Google-Smtp-Source: ACHHUZ7PilSNBvSKDgQ0Ty7EsCa7E2fB2HBgS0jvDO3j1+0fsunx8Hx6LGEPhE48lpQ8s/MJQFmCDRbkT8ISYeuVkFs=
-X-Received: by 2002:a81:a554:0:b0:562:1060:f2c9 with SMTP id
- v20-20020a81a554000000b005621060f2c9mr3296846ywg.13.1684529669598; Fri, 19
- May 2023 13:54:29 -0700 (PDT)
+        bh=MHyyjBXGdkt4cSmFwqyUBwVMuSNH2CUYNfBzVRGjfmY=;
+        b=bVbijgw6d1kAU/vaIK+Ml6LTkGjqTEHzmrQ95CwCuFPBIXPrbfv+NO32Mq5c1stgli
+         82c2IJ6n4f26PyHxt7av8CGmSDsUFd331BPpG7oVnfex0nTawpKUYn3DXf8BUzS/xC4D
+         3Ryg6o8BOGsA/hAo/wKLyGUOq41KeBUL4Kz+SgvUgkts/DGQ9AYAl6k8TrWIvbm7zbPd
+         6VsVJHlHYu3eq6vfRHdY+L6fDxqRiMsbuAvoynOtfF1xmDKwkKZ7mKBBCHYM3IcVIbqp
+         X2Nlx+q0xcxXhgUzhv1HX4JBolAOy9azKLzIjcExkJ+Alm/igrTme0XhIlAhG3V1xRMc
+         9JhA==
+X-Gm-Message-State: AC+VfDwJbpw8nKb3OIcBO5+OPSi6xDGbnp+9Lgdcx0rtUPXTwD2RltgT
+        229zfzk2UzRSMuPcq/54aWDVCyKjA3ZCEmtNVm7/Jw==
+X-Google-Smtp-Source: ACHHUZ7Uhhh6XgxXqlIUX4pwzEPbZOoNALxhDzGkdqBmt0G1CfN66PxvYVOA6Lxetgil3GBAaSSTlcRNPu7moiIMNx8=
+X-Received: by 2002:a0d:ca11:0:b0:561:4bc2:1587 with SMTP id
+ m17-20020a0dca11000000b005614bc21587mr3564951ywd.39.1684529672768; Fri, 19
+ May 2023 13:54:32 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230517160948.811355-1-jiaqiyan@google.com> <20230517160948.811355-2-jiaqiyan@google.com>
- <20230517235314.GB10757@monkey>
-In-Reply-To: <20230517235314.GB10757@monkey>
+References: <20230517160948.811355-1-jiaqiyan@google.com> <20230517160948.811355-3-jiaqiyan@google.com>
+ <20230518221808.GC4029@monkey>
+In-Reply-To: <20230518221808.GC4029@monkey>
 From:   Jiaqi Yan <jiaqiyan@google.com>
-Date:   Fri, 19 May 2023 13:54:18 -0700
-Message-ID: <CACw3F52zNguJ-MvXOAJuMK+JfreLxorvHDPwO8w_gQdOzWj7eA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/3] mm/hwpoison: find subpage in hugetlb HWPOISON list
+Date:   Fri, 19 May 2023 13:54:21 -0700
+Message-ID: <CACw3F53+Hg4CgFoPj3LLSiURzWfa2egWLO-=12GzfhsNC3XTvQ@mail.gmail.com>
+Subject: Re: [PATCH v1 2/3] hugetlbfs: improve read HWPOISON hugepage
 To:     Mike Kravetz <mike.kravetz@oracle.com>
 Cc:     songmuchun@bytedance.com, naoya.horiguchi@nec.com,
         shy828301@gmail.com, linmiaohe@huawei.com,
@@ -74,140 +74,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 4:53=E2=80=AFPM Mike Kravetz <mike.kravetz@oracle.c=
+On Thu, May 18, 2023 at 3:18=E2=80=AFPM Mike Kravetz <mike.kravetz@oracle.c=
 om> wrote:
 >
 > On 05/17/23 16:09, Jiaqi Yan wrote:
-> > Adds the functionality to search a subpage's corresponding raw_hwp_page
-> > in hugetlb page's HWPOISON list. This functionality can also tell if a
-> > subpage is a raw HWPOISON page.
+> > When a hugepage contains HWPOISON pages, read() fails to read any byte
+> > of the hugepage and returns -EIO, although many bytes in the HWPOISON
+> > hugepage are readable.
 > >
-> > Exports this functionality to be immediately used in the read operation
-> > for hugetlbfs.
+> > Improve this by allowing hugetlbfs_read_iter returns as many bytes as
+> > possible. For a requested range [offset, offset + len) that contains
+> > HWPOISON page, return [offset, first HWPOISON page addr); the next read
+> > attempt will fail and return -EIO.
 > >
 > > Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
 > > ---
-> >  include/linux/mm.h  | 23 +++++++++++++++++++++++
-> >  mm/memory-failure.c | 26 ++++++++++++++++----------
-> >  2 files changed, 39 insertions(+), 10 deletions(-)
+> >  fs/hugetlbfs/inode.c | 62 +++++++++++++++++++++++++++++++++++++++-----
+> >  1 file changed, 56 insertions(+), 6 deletions(-)
 > >
-> > diff --git a/include/linux/mm.h b/include/linux/mm.h
-> > index 27ce77080c79..f191a4119719 100644
-> > --- a/include/linux/mm.h
-> > +++ b/include/linux/mm.h
->
-> Any reason why you decided to add the following to linux/mm.h instead of
-> linux/hugetlb.h?  Since it is hugetlb specific I would have thought
-> hugetlb.h was more appropriate.
->
-> > @@ -3683,6 +3683,29 @@ enum mf_action_page_type {
-> >   */
-> >  extern const struct attribute_group memory_failure_attr_group;
+> > diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+> > index ecfdfb2529a3..1baa08ec679f 100644
+> > --- a/fs/hugetlbfs/inode.c
+> > +++ b/fs/hugetlbfs/inode.c
+> > @@ -282,6 +282,46 @@ hugetlb_get_unmapped_area(struct file *file, unsig=
+ned long addr,
+> >  }
+> >  #endif
 > >
-> > +#ifdef CONFIG_HUGETLB_PAGE
 > > +/*
-> > + * Struct raw_hwp_page represents information about "raw error page",
-> > + * constructing singly linked list from ->_hugetlb_hwpoison field of f=
-olio.
+> > + * Someone wants to read @bytes from a HWPOISON hugetlb @page from @of=
+fset.
+> > + * Returns the maximum number of bytes one can read without touching t=
+he 1st raw
+> > + * HWPOISON subpage.
+> > + *
+> > + * The implementation borrows the iteration logic from copy_page_to_it=
+er*.
 > > + */
-> > +struct raw_hwp_page {
-> > +     struct llist_node node;
-> > +     struct page *page;
-> > +};
-> > +
-> > +static inline struct llist_head *raw_hwp_list_head(struct folio *folio=
-)
+> > +static size_t adjust_range_hwpoison(struct page *page, size_t offset, =
+size_t bytes)
 > > +{
-> > +     return (struct llist_head *)&folio->_hugetlb_hwpoison;
-> > +}
+> > +     size_t n =3D 0;
+> > +     size_t res =3D 0;
+> > +     struct folio *folio =3D page_folio(page);
 > > +
-> > +/*
-> > + * Given @subpage, a raw page in a hugepage, find its location in @fol=
-io's
-> > + * _hugetlb_hwpoison list. Return NULL if @subpage is not in the list.
-> > + */
-> > +struct raw_hwp_page *find_raw_hwp_page(struct folio *folio,
-> > +                                    struct page *subpage);
-> > +#endif
+> > +     folio_lock(folio);
+>
+> What is the reason for taking folio_lock?
+
+I intended to make this routine (mostly find_raw_hwp_page) to be
+serialized with folio_clear_hugetlb_hwpoison() and
+hwpoison_user_mappings() in try_memory_failure_hugetlb(). They don't
+directly affect the raw_hwp_list. I can remove the lock in v2.
+
+>
 > > +
-> >  #if defined(CONFIG_TRANSPARENT_HUGEPAGE) || defined(CONFIG_HUGETLBFS)
-> >  extern void clear_huge_page(struct page *page,
-> >                           unsigned long addr_hint,
-> > diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-> > index 5b663eca1f29..c49e6c2d1f07 100644
-> > --- a/mm/memory-failure.c
-> > +++ b/mm/memory-failure.c
-> > @@ -1818,18 +1818,24 @@ EXPORT_SYMBOL_GPL(mf_dax_kill_procs);
-> >  #endif /* CONFIG_FS_DAX */
-> >
-> >  #ifdef CONFIG_HUGETLB_PAGE
-> > -/*
-> > - * Struct raw_hwp_page represents information about "raw error page",
-> > - * constructing singly linked list from ->_hugetlb_hwpoison field of f=
-olio.
-> > - */
-> > -struct raw_hwp_page {
-> > -     struct llist_node node;
-> > -     struct page *page;
-> > -};
-> >
-> > -static inline struct llist_head *raw_hwp_list_head(struct folio *folio=
-)
-> > +struct raw_hwp_page *find_raw_hwp_page(struct folio *folio,
-> > +                                    struct page *subpage)
-> >  {
-> > -     return (struct llist_head *)&folio->_hugetlb_hwpoison;
-> > +     struct llist_node *t, *tnode;
-> > +     struct llist_head *raw_hwp_head =3D raw_hwp_list_head(folio);
-> > +     struct raw_hwp_page *hwp_page =3D NULL;
-> > +     struct raw_hwp_page *p;
-> > +
-> > +     llist_for_each_safe(tnode, t, raw_hwp_head->first) {
->
-> IIUC, in rare error cases a hugetlb page can be poisoned WITHOUT a
-> raw_hwp_list.  This is indicated by the hugetlb page specific flag
-> RawHwpUnreliable or folio_test_hugetlb_raw_hwp_unreliable().
->
-> Looks like this routine does not consider that case.  Seems like it shoul=
-d
-> always return the passed subpage if folio_test_hugetlb_raw_hwp_unreliable=
-()
-> is true?
-
-Thanks for catching this. I wonder should this routine consider
-RawHwpUnreliable or should the caller do.
-
-find_raw_hwp_page now returns raw_hwp_page* in the llist entry to
-caller (valid one at the moment), but once RawHwpUnreliable is set,
-all the raw_hwp_page in the llist will be kfree(), and the returned
-value becomes dangling pointer to caller (if the caller holds that
-caller long enough). Maybe returning a bool would be safer to the
-caller? If the routine returns bool, then checking RawHwpUnreliable
-can definitely be within the routine.
-
-Another option is, this routine simply doesn one thing: find a
-raw_hwp_page in raw_hwp_list for a subpage. But the caller needs to 1)
-test RawHwpUnreliable before calls into the routine, and 2) test
-RawHwpUnreliable before access returned raw_hwp_page*. I think 2nd
-option will be error-prone and the 1st option is a better one.
-
-Maybe I am over-thinking. What do you think?
-
-> --
-> Mike Kravetz
->
-> > +             p =3D container_of(tnode, struct raw_hwp_page, node);
-> > +             if (subpage =3D=3D p->page) {
-> > +                     hwp_page =3D p;
+> > +     /* First subpage to start the loop. */
+> > +     page +=3D offset / PAGE_SIZE;
+> > +     offset %=3D PAGE_SIZE;
+> > +     while (1) {
+> > +             if (find_raw_hwp_page(folio, page) !=3D NULL)
 > > +                     break;
+> > +
+> > +             /* Safe to read n bytes without touching HWPOISON subpage=
+. */
+> > +             n =3D min(bytes, (size_t)PAGE_SIZE - offset);
+> > +             res +=3D n;
+> > +             bytes -=3D n;
+> > +             if (!bytes || !n)
+> > +                     break;
+> > +             offset +=3D n;
+> > +             if (offset =3D=3D PAGE_SIZE) {
+> > +                     page++;
+> > +                     offset =3D 0;
 > > +             }
 > > +     }
 > > +
-> > +     return hwp_page;
-> >  }
+> > +     folio_unlock(folio);
+> > +
+> > +     return res;
+> > +}
+> > +
+> >  /*
+> >   * Support for read() - Find the page attached to f_mapping and copy o=
+ut the
+> >   * data. This provides functionality similar to filemap_read().
+> > @@ -300,7 +340,7 @@ static ssize_t hugetlbfs_read_iter(struct kiocb *io=
+cb, struct iov_iter *to)
 > >
-> >  static unsigned long __folio_free_raw_hwp(struct folio *folio, bool mo=
-ve_flag)
+> >       while (iov_iter_count(to)) {
+> >               struct page *page;
+> > -             size_t nr, copied;
+> > +             size_t nr, copied, want;
+> >
+> >               /* nr is the maximum number of bytes to copy from this pa=
+ge */
+> >               nr =3D huge_page_size(h);
+> > @@ -328,16 +368,26 @@ static ssize_t hugetlbfs_read_iter(struct kiocb *=
+iocb, struct iov_iter *to)
+> >               } else {
+> >                       unlock_page(page);
+> >
+> > -                     if (PageHWPoison(page)) {
+> > -                             put_page(page);
+> > -                             retval =3D -EIO;
+> > -                             break;
+> > +                     if (!PageHWPoison(page))
+> > +                             want =3D nr;
+> > +                     else {
+> > +                             /*
+> > +                              * Adjust how many bytes safe to read wit=
+hout
+> > +                              * touching the 1st raw HWPOISON subpage =
+after
+> > +                              * offset.
+> > +                              */
+> > +                             want =3D adjust_range_hwpoison(page, offs=
+et, nr);
+> > +                             if (want =3D=3D 0) {
+> > +                                     put_page(page);
+> > +                                     retval =3D -EIO;
+> > +                                     break;
+> > +                             }
+> >                       }
+> >
+> >                       /*
+> >                        * We have the page, copy it to user space buffer=
+.
+> >                        */
+> > -                     copied =3D copy_page_to_iter(page, offset, nr, to=
+);
+> > +                     copied =3D copy_page_to_iter(page, offset, want, =
+to);
+> >                       put_page(page);
+> >               }
+> >               offset +=3D copied;
 > > --
 > > 2.40.1.606.ga4b1b128d6-goog
 > >
+>
+> Code looks fine, just wondering about that folio_lock.
+> --
+> Mike Kravetz
