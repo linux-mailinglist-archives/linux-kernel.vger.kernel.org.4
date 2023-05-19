@@ -2,167 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D35AC70A161
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 23:16:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11E7D70A17E
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 23:18:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbjESVQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 17:16:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47132 "EHLO
+        id S231396AbjESVSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 17:18:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbjESVQm (ORCPT
+        with ESMTP id S230340AbjESVRr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 17:16:42 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689C690
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 14:16:41 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-64d293746e0so2208619b3a.2
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 14:16:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684531001; x=1687123001;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z5hMrPsXETXdUYGIPUMht35rFX/2A/wIEa9AD1NCqZE=;
-        b=feoHRJajVXoGRyT1DlpVtAHKgDO2bRAUJNWq8xCnz05QMOevmCFEB9bWXjmtLfLX1G
-         bwCv06j9XAzYtKywaraY1du3bcg/CNfYPPc5D0mqAxbnIpYnSK9mFmxuujnz1gh7pmbh
-         GSpHd+P/cz4Vu0UY9cul2DtSIK8hFE3zevLiyHmi/e8dA01R2hgRM8+nS7xMoxTSRQca
-         Ce3JnNyIapbbI1AKu7USnqJervS79llMPA3QenKCZVdfKCGv7prVeilEVZaFBTAKY1Ur
-         TtA4A2Vjxb3cbMdjoZye7UGL0+5yuBxmqZOXAmrU3VMJdMdOFy94Ce1Y9/ZUjnxmXdWs
-         19sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684531001; x=1687123001;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Z5hMrPsXETXdUYGIPUMht35rFX/2A/wIEa9AD1NCqZE=;
-        b=bLhTrEUuLrXFuaY3M1VNuIL1hkXnQG0uXdqtbPBmfoeR362YbApc4Vyh61dc5PrTNZ
-         o2RPdjgr2ZOnCja4MZ4k92mN6APf+XgElIJOCxveV/B0445Lpdh/sPZohFmaGY2RWww3
-         mEH/bwOAkyOoET8YP41EuyaTywQYH+3N/eMuQjIpVD7ZZDqGziE8C+cT+SPkmhvoppso
-         kkAtE92ZY7k8oSDyvzqVpgGzqutIgSaKMDaW4jTWHdtsJSYUJxmS+4rZnnHct4QLLwBN
-         r3Q07JAXuoef/YiPy5+XBqiqYNz2ymj66sW41Oy7VBJBr5t6O5TIe8jEmZtHJ9XJCxi0
-         n84Q==
-X-Gm-Message-State: AC+VfDyyCZK095vnHmICmbLHluW4JQr7twdhPOFOEk1gb52miefbcFVC
-        FqXc00T1zaRBtp2LcCSGyFwk/upukebQIw==
-X-Google-Smtp-Source: ACHHUZ445VWHeMjyyHhoM02szw1B7s5OGkgW9z17+MhAY5V98leMuZwdsDxZF09fT2aYyVu6pehJ4A==
-X-Received: by 2002:a05:6a21:100a:b0:100:a636:6f22 with SMTP id nk10-20020a056a21100a00b00100a6366f22mr2546019pzb.19.1684531000853;
-        Fri, 19 May 2023 14:16:40 -0700 (PDT)
-Received: from ubuntu777.domain.name (36-228-97-28.dynamic-ip.hinet.net. [36.228.97.28])
-        by smtp.gmail.com with ESMTPSA id z6-20020aa785c6000000b00643aa9436c9sm110457pfn.172.2023.05.19.14.16.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 14:16:40 -0700 (PDT)
-From:   Min-Hua Chen <minhuadotchen@gmail.com>
-To:     Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     Min-Hua Chen <minhuadotchen@gmail.com>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] SoC: ti: davinci-mcasp: Use pcm_for_each_format() macro
-Date:   Sat, 20 May 2023 05:16:36 +0800
-Message-Id: <20230519211636.3699-1-minhuadotchen@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 19 May 2023 17:17:47 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACDD01B5;
+        Fri, 19 May 2023 14:17:45 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34JLHQC3007958;
+        Fri, 19 May 2023 21:17:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : subject :
+ date : message-id : mime-version : content-type :
+ content-transfer-encoding : to : cc; s=qcppdkim1;
+ bh=5FhssIiC+DX2Hv0hIoUJIUq0oRvrnilKVv4R00obZSA=;
+ b=NubJBAmjmyUMxcSXLa8NgjwCTfPLuvAjCTDU76hH8rnUwSn3EHnfc/T8oJaLKrNI4JxN
+ PGDIKlqlmsNFdAGUy4P/N7MoYbnCUSPOsb4VkrKKOnMwrh7I2PGmWcKc8H+TRJc8y9iu
+ HiMONUiGxvlSOOUZHHwMRTqFfD6M/0dK5uit1nLc+XN85B7ygpZIH4b9DU3JqGf1C/ti
+ /gPgmiyBwSIxFkrkODOP83PryYO2RSsRPrNVOnHTaEVTLbqaFvDApsuLiSu9m+NnUd6c
+ TKssqk2D4YAWE1Ob4+X+YHmDaWk8+mfEqyV4apUTXbi8QEBVjdekT2uyTMuGpRoHjn/4 xg== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qp6mqsnea-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 May 2023 21:17:37 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34JLHawt010993
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 May 2023 21:17:36 GMT
+Received: from jesszhan-linux.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Fri, 19 May 2023 14:17:35 -0700
+From:   Jessica Zhang <quic_jesszhan@quicinc.com>
+Subject: [PATCH v3 0/5] Add DSC v1.2 Support for DSI
+Date:   Fri, 19 May 2023 14:17:25 -0700
+Message-ID: <20230405-add-dsc-support-v3-0-6e1d35a206b3@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGXnZ2QC/4WNyw6CMBBFf4V07Zg+eOnK/zAuSjvILCjYQoMh/
+ LuFnQvj8szknrOygJ4wsGu2Mo+RAg0ugTplzHTaPRHIJmaSS8VzXoC2FmwwEOZxHPwELQrFG51
+ f6lywtGp0QGi8dqbbd33oweEy7a/RY0vLEbs/EncUpsG/j3YU+/V3JgrgUDambLnSWKni9prJk
+ DNnM/Rst0X5xyCTQfBKmorjparLb8O2bR8crIhZDQEAAA==
+To:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+CC:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>
+X-Mailer: b4 0.13-dev-bfdf5
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1684531055; l=3083;
+ i=quic_jesszhan@quicinc.com; s=20230329; h=from:subject:message-id;
+ bh=oYp+35cQvnRs1rtEejLP8yEuQKT8HF+BJYrGN2cRads=;
+ b=nHZZ0xle6+aENVCMPlEwxr6JaekPa7BowLeRk56S4jKy6auVIyoalWQX82ltZjzPIVRaT51k/
+ +aE1uAq/oo8AnKI9V8Um+ywJtKttAgWcvZVY2yXWh8PTfadBwnCjNbX
+X-Developer-Key: i=quic_jesszhan@quicinc.com; a=ed25519;
+ pk=gAUCgHZ6wTJOzQa3U0GfeCDH7iZLlqIEPo4rrjfDpWE=
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: GmeALdUxAyobx0Ed4gLfDmJmsvedGcgz
+X-Proofpoint-GUID: GmeALdUxAyobx0Ed4gLfDmJmsvedGcgz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-19_16,2023-05-17_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
+ malwarescore=0 spamscore=0 priorityscore=1501 suspectscore=0 phishscore=0
+ impostorscore=0 bulkscore=0 mlxscore=0 lowpriorityscore=0 adultscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305190184
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use pcm_for_each_format for the PCM format iteration and fix the
-following sparse warnings.
+This is a series of changes for DSI to enable command mode support
+for DSC v1.2.
 
-sound/soc/ti/davinci-mcasp.c:1336:26: sparse: warning: restricted snd_pcm_format_t degrades to integer
-sound/soc/ti/davinci-mcasp.c:1358:26: sparse: warning: restricted snd_pcm_format_t degrades to integer
-sound/soc/ti/davinci-mcasp.c:1438:26: sparse: warning: restricted snd_pcm_format_t degrades to integer
+This includes:
 
-No functional changes.
+1) Rounding up `hdisplay / 3` in dsc_timing_setup()
+2) Adjusting pclk_rate to account for compression
+3) Fixing incorrect uses of slice_count in DSI DSC calculations
+4) Setting the DATA_COMPRESS bit when DSC is enabled
 
-Signed-off-by: Min-Hua Chen <minhuadotchen@gmail.com>
+With these changes (and the dependency below), DSC v1.2 should work over
+DSI in command mode.
+
+Note: Changes that add DSC v1.2 support for video mode will be posted
+with the DP support changes.
+
+Depends-on: "add DSC 1.2 dpu supports" [1] and "Introduce MSM-specific
+DSC helpers" [2]
+
+[1] https://patchwork.freedesktop.org/series/116789/
+[2] https://patchwork.freedesktop.org/series/115833/
+
+Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
 ---
+Changes in v3:
+- Added fix to round up hdisplay DSC adjustment
+- Fixed inconsistent whitespace in dpu_hw_intf_ops comment doc
+- Moved placement of dpu_hw_intf_enable_compression
+- Picked up "drm/msm/dsi: Fix calculation for pkt_per_line" patch and
+  squashed all slice_count fixes into a single patch
+- Use drm_mode_vrefresh() to calculate adjusted pclk rate
+- Moved compressed pclk adjustment to dsi_adjust_compressed_pclk() helper
+- Rebased changes on top of updated dependencies
+- Reworded commit message for "drm/msm/dpu: Set DATA_COMPRESS for
+  command mode" for clarity
+- Removed revision changelog in commit messages
+- Link to v2: https://lore.kernel.org/r/20230405-add-dsc-support-v2-0-1072c70e9786@quicinc.com
 
-Change since v1:
-use clear subject format
+Changes in v2:
+- Changed has_data_compress dpu_cap to a DATA_COMPRESS INTF feature flag
+- Changed pclk math to only divide hdisplay by compression ratio
+- Reworded word count TODO comment
+- Make DATA_COMPRESS an INTF flag
+- Read INTF_CONFIG2 before writing to DATA_COMPRESS bit
+- Fixed whitespace issue in macro definition
+- Removed `inline` from dpu_hw_intf_enable_compression declaration
+- Only set dpu_hw_intf_ops.data_compress if DATA_COMPRESS feature is set
+- Reworded commit messages and cover letter for clarity
+- Link to v1: https://lore.kernel.org/r/20230405-add-dsc-support-v1-0-6bc6f03ae735@quicinc.com
 
 ---
- sound/soc/ti/davinci-mcasp.c | 27 +++++++++++++++------------
- 1 file changed, 15 insertions(+), 12 deletions(-)
+Jessica Zhang (5):
+      msm/drm/dsi: Round up DSC hdisplay calculation
+      drm/msm/dsi: Adjust pclk rate for compression
+      drm/msm/dpu: Add DPU_INTF_DATA_COMPRESS feature flag
+      drm/msm/dpu: Set DATA_COMPRESS for command mode
+      drm/msm/dsi: Remove incorrect references to slice_count
 
-diff --git a/sound/soc/ti/davinci-mcasp.c b/sound/soc/ti/davinci-mcasp.c
-index c0892be2992b..172fea764a31 100644
---- a/sound/soc/ti/davinci-mcasp.c
-+++ b/sound/soc/ti/davinci-mcasp.c
-@@ -1328,15 +1328,16 @@ static int davinci_mcasp_hw_rule_slot_width(struct snd_pcm_hw_params *params,
- 	struct davinci_mcasp_ruledata *rd = rule->private;
- 	struct snd_mask *fmt = hw_param_mask(params, SNDRV_PCM_HW_PARAM_FORMAT);
- 	struct snd_mask nfmt;
--	int i, slot_width;
-+	int slot_width;
-+	snd_pcm_format_t i;
- 
- 	snd_mask_none(&nfmt);
- 	slot_width = rd->mcasp->slot_width;
- 
--	for (i = 0; i <= SNDRV_PCM_FORMAT_LAST; i++) {
--		if (snd_mask_test(fmt, i)) {
-+	pcm_for_each_format(i) {
-+		if (snd_mask_test_format(fmt, i)) {
- 			if (snd_pcm_format_width(i) <= slot_width) {
--				snd_mask_set(&nfmt, i);
-+				snd_mask_set_format(&nfmt, i);
- 			}
- 		}
- 	}
-@@ -1350,15 +1351,16 @@ static int davinci_mcasp_hw_rule_format_width(struct snd_pcm_hw_params *params,
- 	struct davinci_mcasp_ruledata *rd = rule->private;
- 	struct snd_mask *fmt = hw_param_mask(params, SNDRV_PCM_HW_PARAM_FORMAT);
- 	struct snd_mask nfmt;
--	int i, format_width;
-+	int format_width;
-+	snd_pcm_format_t i;
- 
- 	snd_mask_none(&nfmt);
- 	format_width = rd->mcasp->max_format_width;
- 
--	for (i = 0; i <= SNDRV_PCM_FORMAT_LAST; i++) {
--		if (snd_mask_test(fmt, i)) {
-+	pcm_for_each_format(i) {
-+		if (snd_mask_test_format(fmt, i)) {
- 			if (snd_pcm_format_width(i) == format_width) {
--				snd_mask_set(&nfmt, i);
-+				snd_mask_set_format(&nfmt, i);
- 			}
- 		}
- 	}
-@@ -1431,12 +1433,13 @@ static int davinci_mcasp_hw_rule_format(struct snd_pcm_hw_params *params,
- 	struct snd_mask nfmt;
- 	int rate = params_rate(params);
- 	int slots = rd->mcasp->tdm_slots;
--	int i, count = 0;
-+	int count = 0;
-+	snd_pcm_format_t i;
- 
- 	snd_mask_none(&nfmt);
- 
--	for (i = 0; i <= SNDRV_PCM_FORMAT_LAST; i++) {
--		if (snd_mask_test(fmt, i)) {
-+	pcm_for_each_format(i) {
-+		if (snd_mask_test_format(fmt, i)) {
- 			uint sbits = snd_pcm_format_width(i);
- 			unsigned int sysclk_freq;
- 			int ppm;
-@@ -1454,7 +1457,7 @@ static int davinci_mcasp_hw_rule_format(struct snd_pcm_hw_params *params,
- 							 sbits * slots * rate,
- 							 false);
- 			if (abs(ppm) < DAVINCI_MAX_RATE_ERROR_PPM) {
--				snd_mask_set(&nfmt, i);
-+				snd_mask_set_format(&nfmt, i);
- 				count++;
- 			}
- 		}
+ .../gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c   |  3 ++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |  2 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |  2 +
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c        | 13 ++++++
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h        |  2 +
+ drivers/gpu/drm/msm/dsi/dsi_host.c                 | 49 +++++++++++++++-------
+ 6 files changed, 55 insertions(+), 16 deletions(-)
+---
+base-commit: 2f0218fa4805d7c7eed8dc072e1bdf9f100492c7
+change-id: 20230405-add-dsc-support-fe130ba49841
+
+Best regards,
 -- 
-2.34.1
+Jessica Zhang <quic_jesszhan@quicinc.com>
 
