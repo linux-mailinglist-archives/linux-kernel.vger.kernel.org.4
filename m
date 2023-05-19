@@ -2,309 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8801708F87
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 07:40:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABCE0708F88
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 07:40:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229816AbjESFkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 01:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35150 "EHLO
+        id S229971AbjESFkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 01:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbjESFkB (ORCPT
+        with ESMTP id S229676AbjESFkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 01:40:01 -0400
-Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5325F10E0
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 22:39:58 -0700 (PDT)
-Received: by mail-vk1-xa30.google.com with SMTP id 71dfb90a1353d-456ed68cd3cso384470e0c.0
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 22:39:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684474797; x=1687066797;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3B42Gi1lK0VMt7Rg2etX15frwNW0h2cgi6yUrv4a9E4=;
-        b=Ed3AudVTxqSKGtFbYSskCYpOnfo6Fd5kH7U4QBfFHB+9e2zMk1GgLqZQtXdJmVEx0m
-         /S39GtfNMeCWZOjnkOqwoWvhDpne2bfbV5jnqd6mDs3JZ8hvDjF1R2QXBt/iASL22fZS
-         QxyuNiSaB4cgY5fEMM1F07PE7VFPbd1oK5jMaxnZXO/8BY469t0u/KwpNQ3d9JjxK7/1
-         OVp1PX4Ds1i0cL8H2z9OwuLp3CIQniMLG0dQDT32VglzXdqQJ+yivM9Kr1q4mN/2U6TV
-         ZXAQzuViy/6XiE/KBz371SrbtyOj2UpoZ3OfW0fY+eNUIBFRxYE/+she14Y4//dmyQ2k
-         2X/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684474797; x=1687066797;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3B42Gi1lK0VMt7Rg2etX15frwNW0h2cgi6yUrv4a9E4=;
-        b=CUwJdugVi1lneO7RLgYZbwc0nQKD8pw2HHjwkZkAOfHt86CFyDVCN52yFUhpqQ7apb
-         3ZYxjsSAYZuZpg4XwbokXu70AAlZY983OAXQqYaDatQzCYhQjNsaQfK8RIk8YB5GdEdB
-         4fKs7JJRZ+DmXxpJvw0nsHnFAdr8JXPFkKnuVoB05EhN8EMtPMU8lWUDEnkM13KMxDE1
-         Q24m5CDB4THIXlxiwSFDUp5YAVkXpCEbDkK1tyQ+IJbWg/RQGrI1uCmhDnSVrm3eP1/W
-         /VfHOrAzVW8OBMS8MREa3kc/51Z6B5jytBLyr5OQ3O9leapwVw5TDgt5edoh6NEAIjNr
-         9u2g==
-X-Gm-Message-State: AC+VfDyEiY6YJ0LGyB+yOMkEQdytMeSrc7+NOkEkMnkpO1WTslNSoVrD
-        ykdYHh9Zx69ijIlVp9P8JPNAaE8b5CWdiS64GWSVAg==
-X-Google-Smtp-Source: ACHHUZ7xoIQRozNOou/K/L/ALEGzUZLUJumHHMd6mtrugzfaLJ3R/Wj848SKoSHi7xhRgqS6nI75aoWNt5UAqLtEcrI=
-X-Received: by 2002:a67:e955:0:b0:437:dc08:1a84 with SMTP id
- p21-20020a67e955000000b00437dc081a84mr267633vso.3.1684474797080; Thu, 18 May
- 2023 22:39:57 -0700 (PDT)
+        Fri, 19 May 2023 01:40:39 -0400
+Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-mr2fra01on2059.outbound.protection.outlook.com [40.107.9.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBDE710CE
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 22:40:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AUPSHMmUKRIgu5hq8LG46jGT0/LfqzGeFUJzcrgqr3E/ZSSFW77zDLQizhmvTLWnZEpwchE2wIeUpPLEvDoilftNFGwjx/RZ7o4di8V3CIgdoUPCwmQfrjVUOqcrrPBVrzz3LuexkgktGYNBQHoxMoGPf+jYkg3cS1/TCMvddJiS+jO00H4eSUNqziCt5gI/b6aldq5NsDejpx1Mjyc1K1hpgqn8ID4NI+CUmlI6KNRl4PDfP8bsc/4TjPsXWxzBrl/Qpwj8SU97bz9WSg5Sl79NYsI/Fp4n/qHuFyAmSAcSovoACPNVrFDNKsTtxL/GOKk/VZPgcLixU0KLFyQPOA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7Bfm7Kx9TPPXflocESOHFpte9GOjD4v2kMgpn/QQdFc=;
+ b=mTj/M8T8m18F13oGNifaEzBrsyxuFkIyQCUoYdCSNlQWfneLbm5FQJM4AXfwrrkzr3TmNWubYJee23Hk5/58+kjn/iLASeYknwubQ0g9TVz7qlOvIOzyAWUYMMZLtoleyHp+5Nieu16JeXfpE10p5C6P0r9/onFhbRh8pyFq7YAGDGrrrNP28PclkyRNUvbUSzbeI2UiOUQk/aBhLW91fCaOQUO+U5jOG+WjJVoRwBwE/kOWCQQsfEMgNNNrnbXLUtSLhT5ApDSyJHWDEqcGRDRe6i22oWPDxdK5S+06UcLnwpz+PgrePmyrLLylSWVRzpAKwWN+xL64TkByd2aqBg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7Bfm7Kx9TPPXflocESOHFpte9GOjD4v2kMgpn/QQdFc=;
+ b=UlENRCoWnex/yg9I9NkpupR8r6awD2NtlLIzAJj51n49sbzWYhKyjrunaQ1GCb5Imh4OwNTv2oPaTN7fZUQ1R6hdPzXOWIXQ5EAnovru4OzWq3E6BG63nimbV1iUzwt4sQW6iHmGznTiVtCPSWPXEU+T6sjI35HkWQzjTcaotULQSJWwRUn0x7ML9Owqgu1hZ8viwzetLpx7/r6sUXdhyuEMx+O5/ksJkipytB8SGSY/L+4QU3Cgene18xV5FHRXkGhJ4J7ABmasZBIGSAsDCcKt6GiQnCuwUMPNPFOchfuV0ale+5ju5YbTWzRKNob/92MY0I0R82OB5CAi2bFCjQ==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR0P264MB2259.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:169::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.21; Fri, 19 May
+ 2023 05:40:27 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::447b:6135:3337:d243]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::447b:6135:3337:d243%3]) with mapi id 15.20.6411.021; Fri, 19 May 2023
+ 05:40:27 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        David Laight <David.Laight@ACULAB.COM>
+CC:     'Michael Ellerman' <mpe@ellerman.id.au>,
+        "glider@google.com" <glider@google.com>,
+        "elver@google.com" <elver@google.com>,
+        "zhangpeng.00@bytedance.com" <zhangpeng.00@bytedance.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH] mm: kfence: Fix false positives on big endian
+Thread-Topic: [PATCH] mm: kfence: Fix false positives on big endian
+Thread-Index: AQHZfwTwBhXBE+Wdr0W8OihL3Jona69L1+OAgBNFpACAAg1BgA==
+Date:   Fri, 19 May 2023 05:40:26 +0000
+Message-ID: <90e5657a-d9f1-4d45-edfd-07e51d98731e@csgroup.eu>
+References: <20230505035127.195387-1-mpe@ellerman.id.au>
+ <826f836f41db41eeb0fc32061994ac39@AcuMS.aculab.com>
+ <20230517152028.86b6d2d5afa4541b4269131b@linux-foundation.org>
+In-Reply-To: <20230517152028.86b6d2d5afa4541b4269131b@linux-foundation.org>
+Accept-Language: fr-FR, en-US
+Content-Language: fr-FR
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR0P264MB2259:EE_
+x-ms-office365-filtering-correlation-id: 921c6112-7090-4339-6a6e-08db582b8ca5
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: nSZebBxVNADfcrBVH5MyhJXHV9QR0K43QmvDco49wLt047itIXiGxjEjasdMjyl2rnjCSGjM3qz3gJgUB0gkOHZYmt6uGLV5qozUwwQyrcZHJb/2n7KIW3TiMxknYJ2W3M+Y8kQPibPscM0XN+SFUWB7SFDBjxRcsEv3ImkpcuAFuHGZz4NFXHprS4G2VQ3UGW9VCWLqh6cAPZVdV+S3Le34SIY/e86nl4Mpq0++V8HsfaD+oKiUAWs+PFbpqkitYrfuHYZdVRrm1atMAcWE49qlJdXhRbKVnJVbPqHj0HtrIQ/IzxZA+y1pNjNso+Qqv8NoSlLBrR/0Nspl22wWuqi0EVuiduPkzkUVHt3POTki1KYRe1vsms1qRr0Yb/TCq9D3Ue5ceADZpmp0gkci/sVKKMT7odGdSJlSwY+Y9P6Sb/FTZJ/04wXtTUFhc11S5wwOsgg6nhD6gyU7crOAtxpSrUhgGlOjP1Wu9LsdIW98nAziNRntzG82/rX3UC/q3UIkk5e1MOTb6DUfWZId8PzGek+whxr6AOMoTVG+pXv3AFk75XAeeSbgYseJfVIid8iFywmFX14b5bzwo8H6QtXupOqnsHymWqR7OnEYGEZPgcZIXkbmeUOA4Rhul/Vj7LujA3yPnEcmgMDPPm8LU0t27QcdgwOHx4zSDjjm2tE=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(376002)(346002)(136003)(396003)(39850400004)(451199021)(41300700001)(31686004)(478600001)(110136005)(54906003)(66574015)(2616005)(4326008)(316002)(66446008)(64756008)(66476007)(66556008)(66946007)(76116006)(91956017)(71200400001)(44832011)(8936002)(8676002)(6512007)(6506007)(966005)(6486002)(186003)(5660300002)(86362001)(31696002)(122000001)(38100700002)(36756003)(2906002)(83380400001)(38070700005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MDBQS3o0VFBCdFI5NHlUZVlXWlhxcGVmbTlTR2Nldm53Z1NQVnoyYVk1Q0pv?=
+ =?utf-8?B?cVFKcXF3d1R0VVo2MWZjMTBoTk0zQVY1RkZSS0w0R3JtMk92VEwzUFg1Yk5N?=
+ =?utf-8?B?cEgrY0ZBRVREYm8wcWM0S2RRTDFzRWV6K1lIbkhSUHpRVnRrWkFqdnppZXkv?=
+ =?utf-8?B?ZUhzQmRYMVFocThSd3lLZ0pkRjVtVXVYNURTNUo2Q1RpUFlIT0dSNHFudkN6?=
+ =?utf-8?B?V2J1dTlld0I1L3JubHIzTmR1bnVrMnh0WS9iYjhrbXRzSk95ZE1QeGd5RE1z?=
+ =?utf-8?B?RjdEZWh5LzZYU0VJTUg1M0dDRWRGWkNXeDZoT1A5a3BySEZBdFQwSW9iRGZs?=
+ =?utf-8?B?RTd0dUxiZHBYSllKdTdZZXlNRHgzM3V0RTM1Qko5eDJ1Mi9DUDFlOWw0a2g0?=
+ =?utf-8?B?RGxjQXJENFRmclNqaDA0NFN6Wm15YnBqTnM1cVJFbWE0c3VsSU5wTHV2bUZs?=
+ =?utf-8?B?MU9ZQTUwTmlTYjI5YndXNEp6YTdpV0tUR01tWUp4TnNabWQ5S0cwTGJ6K1BC?=
+ =?utf-8?B?YXJVZ0w0alY0VUYxSjFEUmljRm9CM0xYM0Q4bk8yaUxFd2NPdklUYXNMRVVF?=
+ =?utf-8?B?K2c1U09pbGZvWmpJUk1GS3haOEJ1YmNxbzNWNkVFN0w0NTg3b25XTTVwTGd5?=
+ =?utf-8?B?V1ZWRWZ1S0NsYVE2RlljWmR2anJNbmpaSFZCdjVPd2ZUYW45SlVsaUZiT0Rz?=
+ =?utf-8?B?aHBJbmlxeHVjL2tERXBaL2ZkMW1lZGFKeloySTZUT21uSE9ORjJiL28yc3Aw?=
+ =?utf-8?B?eWdPTmI0dU1iTGY1WGZsRk00K3NiZkhPbWV5YXNDcXlrcVZLRGJtVDdLNkVo?=
+ =?utf-8?B?eEFQekl0a1liL2ZKaFRoQzZJWU9pcDY2V1R0b2dVcU51bUNFUmovMURjdW5J?=
+ =?utf-8?B?WDBXQzViTUkrV3h1SFRQVTJXc05Oam1wRVQ1anNxVUg5blJHRnJUOG9Zb016?=
+ =?utf-8?B?a3Rha284eWxuT1RHS2hOc2VoYjY1bFZmRUIrOWo3MkdmTEJqUGNMUHovaUw3?=
+ =?utf-8?B?VXJIUGcrbDY1cEVZYXQ1S1JIZFFQaWpQSE5Sc0tVczZuYS9ITzE4ZzVGZWhD?=
+ =?utf-8?B?YXZjczZJeDZaZ2hYcFo3S1lST0VMV2FSV21QNHEzZnRpMGtEYzFzK255R3Ri?=
+ =?utf-8?B?emU4Z2FZblhvTUo1ZDNJMDVKcENoSjZRcTd0dDcrNnAva3RGZk1zMjlPWTUr?=
+ =?utf-8?B?ZU9saU8xTlVybVMyYlpVMTRrUjR1UlNNZzZaczlESk1vcVBoRVd2bldBbytM?=
+ =?utf-8?B?OUFVQUx6Q1libmRDak1TOC8rZElaVDZQak15bHdXR2F2czlQdzIybHg0bWNE?=
+ =?utf-8?B?T1NsT21idnlxTXd2OTZJQTcxRjVLNEVYWWowMWFRZGozTmx5R3IyejlEZmJo?=
+ =?utf-8?B?aGdXeVRwRnpyWHpLR2hZVU1SbFd1L1doS0JOUHNxQjlVNTBOQ0VjWk1rVm02?=
+ =?utf-8?B?bzlaNU5sUWVScDZETXRydW5vM2hxaHNEQkt3OEU5MmVxUmtaOTdYalR5VEpI?=
+ =?utf-8?B?S1daZzEvSjJyWkdiZDhYKzNEQ3NDbXhBb0xrUk1nSE5FZmxKMlJHSU5Sa0VT?=
+ =?utf-8?B?dDYxcUtmZHgzbkswSU9BYUsvc0J0WWIwTnVmK1FkYWR5M3Q5UXJ3YzFVbDRv?=
+ =?utf-8?B?eVNTNUgzaDl1RkNUL1JNemxBaEh5SWxxUU5ibU5tOC9DcnlCUkJEQU51RmNr?=
+ =?utf-8?B?WHFaQUd2Y2lJUldNOVlwTGZ0aUFHays5U3pRNVFXaDRFUFZ2Nkx4ZXdrcll3?=
+ =?utf-8?B?VXIrNU9DTk9WdUptVlJQUVRESW9uWEhyTlRHRFA5TmpoV2lid01oendBNTVV?=
+ =?utf-8?B?aktTeUFVYUgzZVNmMUY2dzlrMm8weEN0UDRHWS9KODhGMnB2L09BeVJLNHFl?=
+ =?utf-8?B?ZkdneStGdmxMZkR4Q2tiNjFsdllBT1RVOEo0cnFqeFdsQ2IzdTNrMDZYeHEv?=
+ =?utf-8?B?eXpSUXBRQWlZcjRQcVRDb3VsNnpIL1dqQkdrM1RNMkd1cCtTNCthTUlpMGNZ?=
+ =?utf-8?B?cG9UVnBoVWY2ck9Cb2tQN2pmenBPRG02eTFBYi9FeGcxc2crWTlyL2ZDUmtC?=
+ =?utf-8?B?NWg2dHhpQTlHcUFzRXY4U2JVaEF3cVlJVHdROGRqQU45VEw2Wi9wamk0L3dt?=
+ =?utf-8?B?bWlxQ21XQll3NlBIdG1TZzhkaXByWUE2THh4T2xEVytmamdUVmI3dDNZaHlI?=
+ =?utf-8?Q?5vjd/qpmp79DNWlxhBeT2rqxRT/E5FjEMhM+o27WYPwS?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <F9ACA471A4106A4CA7B9D7DBE10510BF@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <CA+G9fYszs5wPp+TWJeVZsdRjnBTXTa8i3YY3qV9SHbB1+R2+4Q@mail.gmail.com>
- <20680bb5-71c0-4945-a058-05f43bbd03f4@kili.mountain>
-In-Reply-To: <20680bb5-71c0-4945-a058-05f43bbd03f4@kili.mountain>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Fri, 19 May 2023 11:09:45 +0530
-Message-ID: <CA+G9fYvY8HZ=F0hQueeX2x2RvP-fJgrDF_7y-Q_yhpVE_8Y9Xg@mail.gmail.com>
-Subject: Re: next: qemu-arm64: kernel BUG at fs/inode.c:1763!
-To:     Chuck Lever <chuck.lever@oracle.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>
-Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-mm <linux-mm@kvack.org>,
-        lkft-triage@lists.linaro.org, Al Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>, frederic@kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Jakub Kacinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Netdev <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 921c6112-7090-4339-6a6e-08db582b8ca5
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 May 2023 05:40:26.8980
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ErYs8B5sCr4QKD/knyH9fsN7gUTjr5c3G91Gy53wgGa3xDo3oIG09oB/p6c8/mHU1YJcJexIxzJ3v/1uPPfx4yjq73+bW7IRZLbyu6G/TdI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB2259
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FORGED_SPF_HELO,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 17 May 2023 at 20:38, Dan Carpenter <dan.carpenter@linaro.org> wrote:
->
-> The fs/inode.c:1763 bug is more stuff from net/handshake testing, so
-> lets add Chuck to the CC list.
-
-Anders bisected this problem and found the first bad commit,
-
----
-commit f921bd41001ccff2249f5f443f2917f7ef937daf
-Author: Chuck Lever <chuck.lever@oracle.com>
-Date:   Thu May 11 11:49:17 2023 -0400
-
-    net/handshake: Unpin sock->file if a handshake is cancelled
-
-    If user space never calls DONE, sock->file's reference count remains
-    elevated. Enable sock->file to be freed eventually in this case.
-
-    Reported-by: Jakub Kacinski <kuba@kernel.org>
-    Fixes: 3b3009ea8abb ("net/handshake: Create a NETLINK service for
-handling handshake requests")
-    Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
-    Signed-off-by: David S. Miller <davem@davemloft.net>
-
- net/handshake/handshake.h | 1 +
- net/handshake/request.c   | 4 ++++
- 2 files changed, 5 insertions(+)
-
-
-
->
-> regards,
-> dan carpenter
->
-> On Wed, May 17, 2023 at 06:39:57PM +0530, Naresh Kamboju wrote:
-> > Following kernel crash noticed while booting qemu-arm64 kunit builds on
-> > Linux next version 6.4.0-rc2-next-20230517.
-> >
-> > WARNING: CPU: 1 PID: 1436 at mm/page_alloc.c:4781 __alloc_pages
-> > kernel BUG at fs/inode.c:1763!
-> > WARNING: CPU: 0 PID: 0 at kernel/context_tracking.c:128
-> > ct_kernel_exit.constprop.0+0xe0/0xe8
-> >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >
-> > Detailed Crash log:
-> > =========
-> > <4>[  800.148388] ------------[ cut here ]------------
-> > <4>[  800.150072] WARNING: CPU: 1 PID: 1436 at mm/page_alloc.c:4781
-> > __alloc_pages+0x998/0x13e8
-> > <4>[  800.151978] Modules linked in:
-> > <4>[  800.153337] CPU: 1 PID: 1436 Comm: kunit_try_catch Tainted: G
-> > B            N 6.4.0-rc2-next-20230517 #1
-> > <4>[  800.154662] Hardware name: linux,dummy-virt (DT)
-> > <4>[  800.155921] pstate: 22400005 (nzCv daif +PAN -UAO +TCO -DIT
-> > -SSBS BTYPE=--)
-> > <4>[  800.157079] pc : __alloc_pages+0x998/0x13e8
-> > <4>[  800.158148] lr : __kmalloc_large_node+0xc0/0x1b8
-> > <4>[  800.159238] sp : ffff80000b5e7aa0
-> > <4>[  800.160154] x29: ffff80000b5e7aa0 x28: 0000000000000000 x27:
-> > 0000000000000000
-> > <4>[  800.161762] x26: ffff0000c4509f00 x25: ffff800008087a98 x24:
-> > ffffd0168ffa8460
-> > <4>[  800.163283] x23: 1ffff000016bcf74 x22: 0000000000040dc0 x21:
-> > 0000000000000000
-> > <4>[  800.164813] x20: 0000000000000015 x19: 0000000000000000 x18:
-> > 000000000000000b
-> > <4>[  800.166307] x17: 00000000bd2c963e x16: 00000000a2b18575 x15:
-> > 0000000033b8949b
-> > <4>[  800.167831] x14: 000000006d0ad0a4 x13: 00000000e32f85f5 x12:
-> > ffff7000016bcfa1
-> > <4>[  800.169363] x11: 1ffff000016bcfa0 x10: ffff7000016bcfa0 x9 :
-> > 000000000000f204
-> > <4>[  800.170928] x8 : 00000000f2000000 x7 : 00000000f2f2f2f2 x6 :
-> > 00000000f3f3f3f3
-> > <4>[  800.172467] x5 : 0000000000040dc0 x4 : ffff0000c614e900 x3 :
-> > 0000000000000000
-> > <4>[  800.173976] x2 : 0000000000000000 x1 : 0000000000000001 x0 :
-> > ffffd01696633000
-> > <4>[  800.175603] Call trace:
-> > <4>[  800.176314]  __alloc_pages+0x998/0x13e8
-> > <4>[  800.177355]  __kmalloc_large_node+0xc0/0x1b8
-> > <4>[  800.178401]  __kmalloc+0x158/0x1c0
-> > <4>[  800.179350]  handshake_req_alloc+0x70/0xb8
-> > <4>[  800.180510]  handshake_req_alloc_case+0xa4/0x188
-> > <4>[  800.181598]  kunit_try_run_case+0x88/0x120
-> > <4>[  800.182614]  kunit_generic_run_threadfn_adapter+0x38/0x60
-> > <4>[  800.183809]  kthread+0x194/0x1b0
-> > <4>[  800.184813]  ret_from_fork+0x10/0x20
-> > <4>[  800.185873] ---[ end trace 0000000000000000 ]---
-> > <6>[  800.202972]         ok 6 handshake_req_alloc excessive privsize
-> > <6>[  800.217425]         ok 7 handshake_req_alloc all good
-> > <6>[  800.219182]     # req_alloc API fuzzing: pass:7 fail:0 skip:0 total:7
-> > <6>[  800.222082]     ok 1 req_alloc API fuzzing
-> > <6>[  800.243148]     ok 2 req_submit NULL req arg
-> > <6>[  800.260195]     ok 3 req_submit NULL sock arg
-> > <6>[  800.274397]     ok 4 req_submit NULL sock->file
-> > <6>[  800.294631]     ok 5 req_lookup works
-> > <6>[  800.310289]     ok 6 req_submit max pending
-> > <6>[  800.326669]     ok 7 req_submit multiple
-> > <6>[  800.342645]     ok 8 req_cancel before accept
-> > <4>[  800.359161] ------------[ cut here ]------------
-> > <2>[  800.360659] kernel BUG at fs/inode.c:1763!
-> > <0>[  800.362464] Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
-> > <4>[  800.364079] Modules linked in:
-> > <4>[  800.364978] CPU: 0 PID: 9 Comm: kworker/0:1 Tainted: G    B   W
-> >       N 6.4.0-rc2-next-20230517 #1
-> > <4>[  800.366607] Hardware name: linux,dummy-virt (DT)
-> > <4>[  800.368282] Workqueue: events delayed_fput
-> > <4>[  800.369511] pstate: 62400005 (nZCv daif +PAN -UAO +TCO -DIT
-> > -SSBS BTYPE=--)
-> > <4>[  800.370861] pc : iput+0x2c4/0x328
-> > <4>[  800.371839] lr : iput+0x3c/0x328
-> > <4>[  800.372882] sp : ffff800008107b50
-> > <6>[  800.375744]     ok 9 req_cancel after accept
-> > <4>[  800.376704] x29: ffff800008107b50 x28: ffffd016924f7400 x27:
-> > ffff0000c08d4da0
-> > <4>[  800.379288] x26: ffff0000c042f918 x25: ffff0000cc273918 x24:
-> > ffff0000cc273900
-> > <4>[  800.381160] x23: 0000000000000000 x22: ffff0000c042f9b8 x21:
-> > ffffd016924f7b40
-> > <4>[  800.383408] x20: ffff0000c042f880 x19: ffff0000c042f880 x18:
-> > 000000000000000b
-> > <4>[  800.385535] x17: ffffd0168fb6f094 x16: ffffd0168fb6ee10 x15:
-> > ffffd0168fb6ebd4
-> > <4>[  800.387985] x14: ffffd0168f7d5de8 x13: ffffd0168f617f98 x12:
-> > ffff700001020f53
-> > <4>[  800.389672] x11: 1ffff00001020f52 x10: ffff700001020f52 x9 :
-> > ffffd0168fb67384
-> > <4>[  800.392442] x8 : ffff800008107a98 x7 : 0000000000000000 x6 :
-> > 0000000000000008
-> > <4>[  800.395053] x5 : ffff800008107a58 x4 : 0000000000000001 x3 :
-> > dfff800000000000
-> > <4>[  800.397652] x2 : 0000000000000007 x1 : ffff0000c042f918 x0 :
-> > 0000000000000060
-> > <4>[  800.400110] Call trace:
-> > <4>[  800.401352]  iput+0x2c4/0x328
-> > <4>[  800.402741]  dentry_unlink_inode+0x12c/0x240
-> > <4>[  800.404519]  __dentry_kill+0x16c/0x2b0
-> > <4>[  800.406047]  dput+0x24c/0x438
-> > <4>[  800.407331]  __fput+0x140/0x3b0
-> > <4>[  800.409152]  delayed_fput+0x64/0x80
-> > <4>[  800.410708]  process_one_work+0x3cc/0x7d0
-> > <4>[  800.413032]  worker_thread+0xa4/0x6a0
-> > <4>[  800.415041]  kthread+0x194/0x1b0
-> > <6>[  800.416283]     ok 10 req_cancel after done
-> > <4>[  800.416205]  ret_from_fork+0x10/0x20
-> > <0>[  800.419090] Code: 17ffffc4 97fffb54 17ffffd4 d65f03c0 (d4210000)
-> > <4>[  800.421577] ---[ end trace 0000000000000000 ]---
-> > <6>[  800.424335] note: kworker/0:1[9] exited with irqs disabled
-> > <6>[  800.428252] note: kworker/0:1[9] exited with preempt_count 1
-> > <4>[  800.435635] ------------[ cut here ]------------
-> > <4>[  800.436529] WARNING: CPU: 0 PID: 0 at
-> > kernel/context_tracking.c:128 ct_kernel_exit.constprop.0+0xe0/0xe8
-> > <4>[  800.439070] Modules linked in:
-> > <4>[  800.440326] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G    B D W
-> >     N 6.4.0-rc2-next-20230517 #1
-> > <4>[  800.442196] Hardware name: linux,dummy-virt (DT)
-> > <4>[  800.443408] pstate: 224003c5 (nzCv DAIF +PAN -UAO +TCO -DIT
-> > -SSBS BTYPE=--)
-> > <4>[  800.445031] pc : ct_kernel_exit.constprop.0+0xe0/0xe8
-> > <4>[  800.446629] lr : ct_kernel_exit.constprop.0+0x20/0xe8
-> > <4>[  800.448263] sp : ffffd01694ed7cd0
-> > <4>[  800.449375] x29: ffffd01694ed7cd0 x28: 00000000437e90ac x27:
-> > 0000000000000000
-> > <4>[  800.451354] x26: ffffd01694ef1e40 x25: 0000000000000000 x24:
-> > 0000000000000000
-> > <4>[  800.453397] x23: ffffd01694ee2ba0 x22: 1ffffa02d29dafb4 x21:
-> > 0000000000000000
-> > <4>[  800.455573] x20: ffffd01692f29c20 x19: ffff0000da667c20 x18:
-> > 000000000000000b
-> > <4>[  800.457649] x17: 000000000055a8d0 x16: 000000006cbc159c x15:
-> > ffffd0168fb6865c
-> > <4>[  800.459662] x14: ffffd0168fb680ec x13: ffffd0168fb3b03c x12:
-> > ffff7a02d29daf81
-> > <4>[  800.461787] x11: 1ffffa02d29daf80 x10: ffff7a02d29daf80 x9 :
-> > dfff800000000000
-> > <4>[  800.463827] x8 : ffffd01694ed7c08 x7 : 0000000000000000 x6 :
-> > 0000000000000008
-> > <4>[  800.465864] x5 : ffffd01694ed7bc8 x4 : 0000000000000001 x3 :
-> > dfff800000000000
-> > <4>[  800.467860] x2 : 4000000000000002 x1 : 4000000000000000 x0 :
-> > ffff2fea4773e000
-> > <4>[  800.469981] Call trace:
-> > <4>[  800.470946]  ct_kernel_exit.constprop.0+0xe0/0xe8
-> > <4>[  800.472535]  ct_idle_enter+0x10/0x20
-> > <4>[  800.473923]  default_idle_call+0x58/0x90
-> > <4>[  800.475213]  do_idle+0x304/0x388
-> > <4>[  800.476492]  cpu_startup_entry+0x2c/0x40
-> > <4>[  800.477885]  rest_init+0x120/0x128
-> > <4>[  800.478830]  arch_call_rest_init+0x1c/0x28
-> > <4>[  800.479961]  start_kernel+0x2f8/0x3c0
-> > <4>[  800.482015]  __primary_switched+0xc0/0xd0
-> > <4>[  800.483086] ---[ end trace 0000000000000000 ]---
-> > <6>[  800.487780]     ok 11 req_destroy works
-> > <6>[  800.488283] # Handshake API tests: pass:11 fail:0 skip:0 total:11
-> > <6>[  800.491161] # Totals: pass:17 fail:0 skip:0 total:17
-> > <6>[  800.495059] ok 75 Handshake API tests
-> > <6>[  800.514129] uart-pl011 9000000.pl011: no DMA platform data
-> >
-> > links,
-> >  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230517/testrun/17029810/suite/boot/test/gcc-12-lkftconfig-kunit/log
-> >  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230517/testrun/17029810/suite/boot/test/gcc-12-lkftconfig-kunit/history/
-> >  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230517/testrun/17029810/suite/boot/tests/
-> >
-> > Steps to reproduce:
-> > =================
-> > # To install tuxrun on your system globally:
-> > # sudo pip3 install -U tuxrun==0.42.0
-> > #
-> > # See https://tuxrun.org/ for complete documentation.
-> >
-> > tuxrun   \
-> >  --runtime podman   \
-> >  --device qemu-arm64   \
-> >  --kernel https://storage.tuxsuite.com/public/linaro/lkft/builds/2PtylM1zfMZo4vZUtwFtBJhJRvx/Image.gz
-> >   \
-> >  --modules https://storage.tuxsuite.com/public/linaro/lkft/builds/2PtylM1zfMZo4vZUtwFtBJhJRvx/modules.tar.xz
-> >   \
-> >  --rootfs https://storage.tuxsuite.com/public/linaro/lkft/oebuilds/2PeQhlPkvTmtoQVO1F0CQ7lAsm5/images/juno/lkft-tux-image-juno-20230511150149.rootfs.ext4.gz
-> >   \
-> >  --parameters SKIPFILE=skipfile-lkft.yaml   \
-> >  --image docker.io/lavasoftware/lava-dispatcher:2023.01.0020.gc1598238f   \
-> >  --tests kunit   \
-> >  --timeouts boot=30
-> >
-> > --
-> > Linaro LKFT
-> > https://lkft.linaro.org
-
-- Naresh
+DQoNCkxlIDE4LzA1LzIwMjMgw6AgMDA6MjAsIEFuZHJldyBNb3J0b24gYSDDqWNyaXTCoDoNCj4g
+T24gRnJpLCA1IE1heSAyMDIzIDE2OjAyOjE3ICswMDAwIERhdmlkIExhaWdodCA8RGF2aWQuTGFp
+Z2h0QEFDVUxBQi5DT00+IHdyb3RlOg0KPiANCj4+IEZyb206IE1pY2hhZWwgRWxsZXJtYW4NCj4+
+PiBTZW50OiAwNSBNYXkgMjAyMyAwNDo1MQ0KPj4+DQo+Pj4gU2luY2UgY29tbWl0IDFiYTNjYmYz
+ZWMzYiAoIm1tOiBrZmVuY2U6IGltcHJvdmUgdGhlIHBlcmZvcm1hbmNlIG9mDQo+Pj4gX19rZmVu
+Y2VfYWxsb2MoKSBhbmQgX19rZmVuY2VfZnJlZSgpIiksIGtmZW5jZSByZXBvcnRzIGZhaWx1cmVz
+IGluDQo+Pj4gcmFuZG9tIHBsYWNlcyBhdCBib290IG9uIGJpZyBlbmRpYW4gbWFjaGluZXMuDQo+
+Pj4NCj4+PiBUaGUgcHJvYmxlbSBpcyB0aGF0IHRoZSBuZXcgS0ZFTkNFX0NBTkFSWV9QQVRURVJO
+X1U2NCBlbmNvZGVzIHRoZQ0KPj4+IGFkZHJlc3Mgb2YgZWFjaCBieXRlIGluIGl0cyB2YWx1ZSwg
+c28gaXQgbmVlZHMgdG8gYmUgYnl0ZSBzd2FwcGVkIG9uIGJpZw0KPj4+IGVuZGlhbiBtYWNoaW5l
+cy4NCj4+Pg0KPj4+IFRoZSBjb21waWxlciBpcyBzbWFydCBlbm91Z2ggdG8gZG8gdGhlIGxlNjRf
+dG9fY3B1KCkgYXQgY29tcGlsZSB0aW1lLCBzbw0KPj4+IHRoZXJlIGlzIG5vIHJ1bnRpbWUgb3Zl
+cmhlYWQuDQo+Pj4NCj4+PiBGaXhlczogMWJhM2NiZjNlYzNiICgibW06IGtmZW5jZTogaW1wcm92
+ZSB0aGUgcGVyZm9ybWFuY2Ugb2YgX19rZmVuY2VfYWxsb2MoKSBhbmQgX19rZmVuY2VfZnJlZSgp
+IikNCj4+PiBTaWduZWQtb2ZmLWJ5OiBNaWNoYWVsIEVsbGVybWFuIDxtcGVAZWxsZXJtYW4uaWQu
+YXU+DQo+Pj4gLS0tDQo+Pj4gICBtbS9rZmVuY2Uva2ZlbmNlLmggfCAyICstDQo+Pj4gICAxIGZp
+bGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24oLSkNCj4+Pg0KPj4+IGRpZmYg
+LS1naXQgYS9tbS9rZmVuY2Uva2ZlbmNlLmggYi9tbS9rZmVuY2Uva2ZlbmNlLmgNCj4+PiBpbmRl
+eCAyYWFmYzQ2YTRhYWYuLjM5MmZiMjczZTdiZCAxMDA2NDQNCj4+PiAtLS0gYS9tbS9rZmVuY2Uv
+a2ZlbmNlLmgNCj4+PiArKysgYi9tbS9rZmVuY2Uva2ZlbmNlLmgNCj4+PiBAQCAtMjksNyArMjks
+NyBAQA0KPj4+ICAgICogY2FuYXJ5IG9mIGV2ZXJ5IDggYnl0ZXMgaXMgdGhlIHNhbWUuIDY0LWJp
+dCBtZW1vcnkgY2FuIGJlIGZpbGxlZCBhbmQgY2hlY2tlZA0KPj4+ICAgICogYXQgYSB0aW1lIGlu
+c3RlYWQgb2YgYnl0ZSBieSBieXRlIHRvIGltcHJvdmUgcGVyZm9ybWFuY2UuDQo+Pj4gICAgKi8N
+Cj4+PiAtI2RlZmluZSBLRkVOQ0VfQ0FOQVJZX1BBVFRFUk5fVTY0ICgodTY0KTB4YWFhYWFhYWFh
+YWFhYWFhYSBeICh1NjQpKDB4MDcwNjA1MDQwMzAyMDEwMCkpDQo+Pj4gKyNkZWZpbmUgS0ZFTkNF
+X0NBTkFSWV9QQVRURVJOX1U2NCAoKHU2NCkweGFhYWFhYWFhYWFhYWFhYWEgXiAodTY0KShsZTY0
+X3RvX2NwdSgweDA3MDYwNTA0MDMwMjAxMDApKSkNCj4+DQo+PiBXaGF0IGF0IHRoZSAodTY0KSBj
+YXN0cyBmb3I/DQo+PiBUaGUgY29uc3RhbnRzIHNob3VsZCBwcm9iYWJseSBoYXZlIGEgdWwgKG9y
+IHVsbCkgc3VmZml4Lg0KPj4NCj4gDQo+IEkgdHJpZWQgdGhhdCwgZGlkbid0IGZpeCB0aGUgc3Bh
+cnNlIHdhcm5pbmdzIGRlc2NyaWJlZCBhdA0KPiBodHRwczovL2xrbWwua2VybmVsLm9yZy9yLzIw
+MjMwNTEzMjI0NC5Ed3pCVWNVZC1sa3BAaW50ZWwuY29tLg0KPiANCj4gTWljaGFlbCwgaGF2ZSB5
+b3UgbG9va2VkIGludG8gdGhpcz8NCj4gDQo+IEknbGwgbWVyZ2UgaXQgdXBzdHJlYW0gLSBJIGd1
+ZXNzIHdlIGNhbiBsaXZlIHdpdGggdGhlIHdhcm5pbmdzIGZvciBhIHdoaWxlLg0KPiANCg0Kc3Bh
+cnNlIHdhcm5pbmcgZ29lcyBhd2F5IHdpdGg6DQoNCiNkZWZpbmUgS0ZFTkNFX0NBTkFSWV9QQVRU
+RVJOX1U2NCAoMHhhYWFhYWFhYWFhYWFhYWFhVUxMIF4gDQpsZTY0X3RvX2NwdSgoX19mb3JjZSBf
+X2xlNjQpMHgwNzA2MDUwNDAzMDIwMTAwKSkNCg0KQ2hyaXN0b3BoZQ0K
