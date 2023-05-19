@@ -2,181 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E841D709051
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 09:22:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 851C7709057
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 09:27:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229449AbjESHWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 03:22:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54824 "EHLO
+        id S229895AbjESH1C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 03:27:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229970AbjESHV6 (ORCPT
+        with ESMTP id S229436AbjESH1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 03:21:58 -0400
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C79114;
-        Fri, 19 May 2023 00:21:56 -0700 (PDT)
-Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-3945180bef1so1817261b6e.1;
-        Fri, 19 May 2023 00:21:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684480916; x=1687072916;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=2IOR7w7BSJsvirN+EhQ0URabvoF0Ui+FpLBmxQFZG4s=;
-        b=UOyCQLpcu3OPUmxAgv8HXSHDr0HAlUUUVwIpU+pNWNzE+SuqQL7Ip2D4DstOlS0WYU
-         fxQj0wXZEHvR9gd6RwK+EEkMlt31OxhGx3KkkAfLU6FGxpBxyQpCTjsB8c89jwv0+kIi
-         4DqjR4/YXyo7GWNETBn8qy7IRIb3p6fQn+tXUA8CGtWW0/Rt7VEqKfhF/RRAZKjlNpXY
-         JoKHApRtC1IKTSoXWlaq+RXpunJxjc+zvQz3wLmxxTvhpBcP67MDSSVRJnkG60XwEtlH
-         hpDqRcpBsM2PP5CjtrrPQgFSrCGzSzPw5/LCjsDlbQikXvGywwv2lc0B2EsMbiA0FIoj
-         JF+g==
-X-Gm-Message-State: AC+VfDygbdfIZHiYTYXvSlOz8/HX11YPV/IO9Pv1kY5LkMDmmKsIFlmP
-        zcJ/DurSpvrmoudxkx+PZrqHUuxctA==
-X-Google-Smtp-Source: ACHHUZ4Hx/ZbZtRBO65aGDwUX8MoiQLM3ifAOr1OlLqTwp8zpGcZ7hKvymgvutTpYkPcafPS7gkv8w==
-X-Received: by 2002:a05:6808:8c3:b0:392:5ce5:d20 with SMTP id k3-20020a05680808c300b003925ce50d20mr702787oij.48.1684480915978;
-        Fri, 19 May 2023 00:21:55 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id j24-20020a9d7698000000b006acfdbdf37csm1418756otl.31.2023.05.19.00.21.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 00:21:55 -0700 (PDT)
-Received: (nullmailer pid 2968846 invoked by uid 1000);
-        Fri, 19 May 2023 07:21:54 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Fri, 19 May 2023 03:27:00 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA80A122
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 00:26:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8043C6546B
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 07:26:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AFD6C433D2;
+        Fri, 19 May 2023 07:26:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1684481218;
+        bh=0Iw76+DN3emi3elLLNtbC3yKUGgaEG8sL8YyLz9vdrE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=0IAoQl22Lhkxe+2eHteSRW7Y7v4vizbyLCRFtPeVNRpZopNeLXV3irq6L+jgXTjcF
+         H4W47VXf+N/JI9HJjCzdjqf9nQeteoAjCUEi31XZdCkq/HOrdkxy+29z2BnGilqXKy
+         XVRXQ3Ru/HXS0YaTcGJ0n8kVh1OG3m0L2o6DAggA=
+Date:   Fri, 19 May 2023 08:26:54 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Deepanshu Kartikey <kartikey406@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: Re: [PATCH v2] Staging: rts5208: rtsx: fixed unbalanced braces
+ around else statement
+Message-ID: <2023051938-gondola-exfoliate-08e3@gregkh>
+References: <20230519031204.20058-1-kartikey406@gmail.com>
+ <20230519031204.20058-2-kartikey406@gmail.com>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Piyush Mehta <piyush.mehta@amd.com>
-Cc:     balbi@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org,
-        git@amd.com, krzysztof.kozlowski+dt@linaro.org,
-        gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        linux-usb@vger.kernel.org, michal.simek@amd.com,
-        linux-kernel@vger.kernel.org, michal.simek@xilinx.com,
-        siva.durga.prasad.paladugu@amd.com
-In-Reply-To: <20230519065940.2190786-1-piyush.mehta@amd.com>
-References: <20230519065940.2190786-1-piyush.mehta@amd.com>
-Message-Id: <168448091422.2968830.10066003697035225886.robh@kernel.org>
-Subject: Re: [PATCH V3] dt-bindings: usb: dwc3: Add interrupt-names
- property support for wakeup interrupt
-Date:   Fri, 19 May 2023 02:21:54 -0500
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230519031204.20058-2-kartikey406@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Fri, 19 May 2023 12:29:40 +0530, Piyush Mehta wrote:
-> The hibernation feature enabled for Xilinx Versal NET SoC in DWC3 IP.
-> As the DWC3 IP supports the hibernation feature, to handle the wakeup
-> or hibernation interrupt, add host mode "wakeup" interrupt-names
-> optional property in the binding schema to capture remote-wakeup and
-> connect/ disconnect event in the hibernation state.
+On Fri, May 19, 2023 at 08:42:04AM +0530, Deepanshu Kartikey wrote:
+> Fixed unbalanced braces around else statement
 > 
-> We have a dedicated IRQ line specifically for the hibernation feature.
-> When the "wakeup" IRQ line is triggered, it initiates a hibernation
-> interrupt, causing the system to wake up from the hibernation state.
-> 
-> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+> Signed-off-by: Deepanshu Kartikey <kartikey406@gmail.com>
 > ---
-> Change in V2:
-> -  Addressed ROB review comments
->  - Updated name of interrupt-names property with "wakeup"
->  - Move interrupt-names property from dwc3-xilinx core to dwc3 core.
+>  drivers/staging/rts5208/rtsx.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
 > 
-> Link: https://lore.kernel.org/all/CAL_JsqK6_7XD7+w+EQvPPmbmSOpfo3JDb0xDN4StuHUm1kgchw@mail.gmail.com/
+> diff --git a/drivers/staging/rts5208/rtsx.c b/drivers/staging/rts5208/rtsx.c
+> index 2284a96abcff..47dacef0aaf8 100644
+> --- a/drivers/staging/rts5208/rtsx.c
+> +++ b/drivers/staging/rts5208/rtsx.c
+> @@ -399,10 +399,8 @@ static int rtsx_control_thread(void *__dev)
+>  				chip->srb->device->id,
+>  				(u8)chip->srb->device->lun);
+>  			chip->srb->result = DID_BAD_TARGET << 16;
+> -		}
+> -
+> -		/* we've got a command, let's do it! */
+> -		else {
+> +		} else {
+> +			/* we've got a command, let's do it! */
+>  			scsi_show_command(chip);
+>  			rtsx_invoke_transport(chip->srb, chip);
+>  		}
+> -- 
+> 2.25.1
 > 
-> Change in V3:
-> -  Addressed Krzysztof Kozlowski comments
->  - Update binding schema enum.
->  - Upadet commit message.
-> 
-> Link: https://lore.kernel.org/all/76dfbf27-8ad2-6e09-5354-b006b9e81af1@linaro.org/
-> ---
->  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 2 ++
->  1 file changed, 2 insertions(+)
 > 
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+Hi,
 
-yamllint warnings/errors:
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/dwc3-xilinx.example.dtb: usb@0: usb@fe200000:interrupt-names: More than one condition true in oneOf schema:
-	{'maxItems': 3,
-	 'minItems': 1,
-	 'oneOf': [{'items': [{'const': 'dwc_usb3'}],
-	            'maxItems': 1,
-	            'minItems': 1,
-	            'type': 'array'},
-	           {'items': {'enum': ['host', 'peripheral', 'otg']},
-	            'type': 'array'},
-	           {'items': {'enum': ['host', 'peripheral', 'otg', 'wakeup']},
-	            'type': 'array'}]}
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/dwc3-xilinx.example.dtb: usb@0: usb@fe200000: Unevaluated properties are not allowed ('interrupt-names' was unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/dwc3-xilinx.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/dwc3-xilinx.example.dtb: usb@fe200000: interrupt-names: More than one condition true in oneOf schema:
-	{'maxItems': 3,
-	 'minItems': 1,
-	 'oneOf': [{'items': [{'const': 'dwc_usb3'}],
-	            'maxItems': 1,
-	            'minItems': 1,
-	            'type': 'array'},
-	           {'items': {'enum': ['host', 'peripheral', 'otg']},
-	            'type': 'array'},
-	           {'items': {'enum': ['host', 'peripheral', 'otg', 'wakeup']},
-	            'type': 'array'}]}
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/dwc3-xilinx.example.dtb: usb@fe200000: Unevaluated properties are not allowed ('interrupt-names' was unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ti,am62-usb.example.dtb: usb@f910000: usb@31100000:interrupt-names: More than one condition true in oneOf schema:
-	{'maxItems': 3,
-	 'minItems': 1,
-	 'oneOf': [{'items': [{'const': 'dwc_usb3'}],
-	            'maxItems': 1,
-	            'minItems': 1,
-	            'type': 'array'},
-	           {'items': {'enum': ['host', 'peripheral', 'otg']},
-	            'type': 'array'},
-	           {'items': {'enum': ['host', 'peripheral', 'otg', 'wakeup']},
-	            'type': 'array'}]}
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ti,am62-usb.example.dtb: usb@f910000: usb@31100000: Unevaluated properties are not allowed ('interrupt-names' was unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ti,am62-usb.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ti,am62-usb.example.dtb: usb@31100000: interrupt-names: More than one condition true in oneOf schema:
-	{'maxItems': 3,
-	 'minItems': 1,
-	 'oneOf': [{'items': [{'const': 'dwc_usb3'}],
-	            'maxItems': 1,
-	            'minItems': 1,
-	            'type': 'array'},
-	           {'items': {'enum': ['host', 'peripheral', 'otg']},
-	            'type': 'array'},
-	           {'items': {'enum': ['host', 'peripheral', 'otg', 'wakeup']},
-	            'type': 'array'}]}
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/ti,am62-usb.example.dtb: usb@31100000: Unevaluated properties are not allowed ('interrupt-names' was unexpected)
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-doc reference errors (make refcheckdocs):
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/process/submitting-patches.rst for what
+  needs to be done here to properly describe this.
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230519065940.2190786-1-piyush.mehta@amd.com
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+thanks,
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+greg k-h's patch email bot
