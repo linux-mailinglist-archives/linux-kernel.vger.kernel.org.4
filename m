@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0638708E53
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 05:28:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0181B708E54
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 05:28:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230235AbjESD16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 23:27:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60498 "EHLO
+        id S230139AbjESD2C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 23:28:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbjESD1n (ORCPT
+        with ESMTP id S229691AbjESD1o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 23:27:43 -0400
+        Thu, 18 May 2023 23:27:44 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5AA10D9;
-        Thu, 18 May 2023 20:27:41 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE7610DD;
+        Thu, 18 May 2023 20:27:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 51612653C7;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E967D653B7;
         Fri, 19 May 2023 03:27:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 579A2C433EF;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3605C433D2;
         Fri, 19 May 2023 03:27:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684466860;
-        bh=JeGq5bHAyBk0/sBP8+VGNu9E8xx/n54+KnUQPBhLFEw=;
+        s=k20201202; t=1684466861;
+        bh=YQ8esjaUlDPz/HxA3zI19y4t2Erk1u1PDHI45b/FAeQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=P+bo5OpEFRDeSS0JtAu63TcLpa6qhTAqyq7Nd8cSo7t1oJr4CPouWeyA7eTaZ2i6l
-         Pjc1+YrrtVIdriGBdn/tHMuMyREsgb+41bmSf/GjtsBd9Y8ajXkcdYG9pWltDY0xgx
-         GsmTGqaEfv9G62QWVzBf8lbmaXwk++BC+kLFAn8XbxE4XpcHt5f/XwMw/QQFbUOUhk
-         hy8xwk5dTZPhfZMKbPLNPhgUTB8fgN7u4a1KSLNIPJswS51gO9JKvlqIimA9q+pG1O
-         kX2YAc6JEZumTGRjcXWUdD704b5iDiHXNlDJLWi6VE2ito+4Azx0wgKE9Ge9XLDa6Y
-         33XZiy87H8KSA==
+        b=gTblL0ZRymq9Z9SHMp6VVNQpGAQ4UTw7GleisCltuJuFe1mZhQLo1+iwAW+PmIR11
+         VRoKelBaL1mQUnrSgoIQQAJJyeA8fHfXh4QgNyAjjYkWJSLMeU7EDdSRz9OyqGlq7q
+         tCpIX5qcRLBr8iLGaDx+BAcSxK9BPgj9prQTfBXDmfFYUtVkUUeYIFKkf1626/w3Zo
+         kB5Us0ZSP8cp7hUqlpul9s/klriqvkWMkOlLC1JO6/Ovd05vNAu4uSY6qyHu+2lRcm
+         356X3MCuQcoCN/bcBRB2HxgHj5DxmbAqZDrzCvUyBkmV+w+Ft4OB0x0ITZrmdvsbOF
+         eKC12yR2ymnvA==
 From:   Eduardo Valentin <evalenti@kernel.org>
 To:     eduval@amazon.com, linux-pm@vger.kernel.org
 Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -40,9 +40,9 @@ Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 2/7] thermal: stats: track number of change requests due to tz
-Date:   Thu, 18 May 2023 20:27:14 -0700
-Message-Id: <20230519032719.2581689-3-evalenti@kernel.org>
+Subject: [PATCH 3/7] thermal: stats: introduce thermal zone stats/ directory
+Date:   Thu, 18 May 2023 20:27:15 -0700
+Message-Id: <20230519032719.2581689-4-evalenti@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230519032719.2581689-1-evalenti@kernel.org>
 References: <20230519032719.2581689-1-evalenti@kernel.org>
@@ -60,25 +60,25 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Eduardo Valentin <eduval@amazon.com>
 
-This patch improves the current cooling device
-statistics by adding a new file under
-cdev/stats/requests_of_thermal_zone
+This patch adds a new sysfs interface to report
+statistics of each thermal zone. This interface
+follows the existing thermal statistics for cooling
+devices design, in which it is provided a reset
+mechanism. The patch adds a statistic to track
+the maximum gradient (dT/dt) to the thermal zone
+stats/ folder.
 
-to represent the number of times each thermal zone
-requested the cooling device to effectively change.
-If the request associated was not serviced because
-another thermal zone asked for a higher cooling level,
-this counter does not increase.
+Sample, how gradient changes using emulation:
 
-The file format is:
-thermal_zone: <type> <count>
-
-Samples:
-$ cat cdev0/stats/requests_of_thermal_zone
-thermal_zone: amb0	2
-
-In this example, it means the thermal zone 'amb0' has requested
-2 times for cdev0 to change state.
+$ cat stats/max_gradient
+0
+$ echo 2000 > emul_temp
+$ cat temp
+2000
+$ cat stats/max_gradient
+2849
+$ cat temp
+2000
 
 Cc: "Rafael J. Wysocki" <rafael@kernel.org> (supporter:THERMAL)
 Cc: Daniel Lezcano <daniel.lezcano@linaro.org> (supporter:THERMAL)
@@ -91,127 +91,257 @@ Cc: linux-kernel@vger.kernel.org (open list)
 
 Signed-off-by: Eduardo Valentin <eduval@amazon.com>
 ---
- .../driver-api/thermal/sysfs-api.rst          |  2 +
- drivers/thermal/thermal_core.h                |  1 +
- drivers/thermal/thermal_sysfs.c               | 52 +++++++++++++++++++
- 3 files changed, 55 insertions(+)
+ .../driver-api/thermal/sysfs-api.rst          |   3 +
+ drivers/thermal/thermal_core.c                |   1 +
+ drivers/thermal/thermal_core.h                |   3 +
+ drivers/thermal/thermal_sysfs.c               | 142 +++++++++++++++++-
+ include/linux/thermal.h                       |   2 +
+ 5 files changed, 147 insertions(+), 4 deletions(-)
 
 diff --git a/Documentation/driver-api/thermal/sysfs-api.rst b/Documentation/driver-api/thermal/sysfs-api.rst
-index caa50d61a5bc..75309a51d9b3 100644
+index 75309a51d9b3..18140dbb1ce1 100644
 --- a/Documentation/driver-api/thermal/sysfs-api.rst
 +++ b/Documentation/driver-api/thermal/sysfs-api.rst
-@@ -369,6 +369,8 @@ Thermal cooling device sys I/F, created once it's registered::
-     |---stats/trans_table:	Cooling state transition table
-     |---stats/time_in_thermal_zone_ms:	Time that this cooling device was driven
-                                 each associated thermal zone.
-+    |---stats/requests_of_thermal_zone:	Total number of times this cooling device
-+                                changed due to each associated thermal zone.
+@@ -355,6 +355,9 @@ Thermal zone device sys I/F, created once it's registered::
+     |---integral_cutoff:        Offset above which errors are accumulated
+     |---slope:                  Slope constant applied as linear extrapolation
+     |---offset:                 Offset constant applied as linear extrapolation
++    |---stats:			Directory containing thermal zone device's stats
++    |---stats/reset_tz_stats:	Writes to this file resets the statistics.
++    |---stats/max_gradient:	The maximum recorded dT/dt in uC/ms.
  
+ Thermal cooling device sys I/F, created once it's registered::
  
- Then next two dynamic attributes are created/removed in pairs. They represent
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 4bb77af6a6f4..3ba970c0744f 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -385,6 +385,7 @@ static void update_temperature(struct thermal_zone_device *tz)
+ 
+ 	tz->last_temperature = tz->temperature;
+ 	tz->temperature = temp;
++	thermal_zone_device_stats_update(tz);
+ 
+ 	trace_thermal_temperature(tz);
+ 
 diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
-index 3cce60c6e065..ed6511c3b794 100644
+index ed6511c3b794..ef37b92bbb7c 100644
 --- a/drivers/thermal/thermal_core.h
 +++ b/drivers/thermal/thermal_core.h
-@@ -103,6 +103,7 @@ struct thermal_instance {
- 	unsigned int weight; /* The weight of the cooling device */
- 	bool upper_no_limit;
- #if IS_ENABLED(CONFIG_THERMAL_STATISTICS)
-+	unsigned long total_requests;
- 	ktime_t time_in; /* time spent in this instance */
- #endif
- };
+@@ -140,10 +140,13 @@ ssize_t weight_store(struct device *, struct device_attribute *, const char *,
+ 		     size_t);
+ 
+ #ifdef CONFIG_THERMAL_STATISTICS
++void thermal_zone_device_stats_update(struct thermal_zone_device *tz);
+ void thermal_cooling_device_stats_update(struct thermal_cooling_device *cdev,
+ 					 struct thermal_instance *instance,
+ 					 unsigned long new_state);
+ #else
++static inline
++void thermal_zone_device_stats_update(struct thermal_zone_device *tz) {}
+ static inline void
+ thermal_cooling_device_stats_update(struct thermal_cooling_device *cdev,
+ 				    struct thermal_instance *instance,
 diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-index a3b71f03db75..0bce1415f7e8 100644
+index 0bce1415f7e8..aa28c1cae916 100644
 --- a/drivers/thermal/thermal_sysfs.c
 +++ b/drivers/thermal/thermal_sysfs.c
-@@ -723,6 +723,7 @@ void thermal_cooling_device_stats_update(struct thermal_cooling_device *cdev,
- 	stats->trans_table[stats->state * (cdev->max_state + 1) + new_state]++;
- 	stats->state = new_state;
- 	stats->total_trans++;
-+	stats->curr_instance->total_requests++;
- 
- unlock:
- 	spin_unlock(&stats->lock);
-@@ -867,6 +868,54 @@ time_in_thermal_zone_ms_show(struct device *dev, struct device_attribute *attr,
- 	return ret < 0 ? ret : len;
+@@ -537,20 +537,147 @@ static void destroy_trip_attrs(struct thermal_zone_device *tz)
+ 	kfree(tz->trips_attribute_group.attrs);
  }
  
-+static ssize_t
-+requests_of_thermal_zone_show(struct device *dev, struct device_attribute *attr,
-+			      char *buf)
++#ifdef CONFIG_THERMAL_STATISTICS
++/* thermal zone device statistics handling */
++struct thermal_zone_device_stats {
++	spinlock_t lock; /* protects this struct */
++	s64 max_gradient;
++	ktime_t last_time;
++};
++
++#define DELTA_MILLI_C_TO_MICRO_C(t0, t1)		(((t0) - (t1)) * 1000)
++static void temperature_stats_update(struct thermal_zone_device *tz)
 +{
-+	LIST_HEAD(cdev_thermal_zone_list);
-+	struct thermal_cooling_device *cdev = to_cooling_device(dev);
-+	struct cooling_dev_stats *stats = cdev->stats;
-+	struct cdev_thermal_zone_residency *res, *next;
-+	struct thermal_instance *instance;
-+	ssize_t len = 0, ret = 0;
++	struct thermal_zone_device_stats *stats = tz->stats;
++	ktime_t now = ktime_get(), delta;
++	s64 cur_gradient, delta_temp;
 +
-+	mutex_lock(&cdev->lock);
++	delta = ktime_sub(now, stats->last_time);
++	stats->last_time = now;
 +
-+	spin_lock(&stats->lock);
-+	update_time_in_state(stats, stats->curr_instance);
-+	spin_unlock(&stats->lock);
++	/* to see sub 1C/s, use uC/ms */
++	delta_temp = DELTA_MILLI_C_TO_MICRO_C(tz->temperature,
++					      tz->last_temperature);
++	cur_gradient = ktime_to_ms(delta);
++	if (cur_gradient)
++		cur_gradient = div64_s64(delta_temp, cur_gradient);
 +
-+	build_cdev_thermal_zone_residency(&cdev_thermal_zone_list, cdev);
++	/* Corner case of initialization, first temp read */
++	if (tz->last_temperature == 0)
++		cur_gradient = 0;
 +
-+	list_for_each_entry(instance, &cdev->thermal_instances, cdev_node)
-+		list_for_each_entry(res, &cdev_thermal_zone_list, node)
-+			if (strncmp(res->thermal_zone, instance->tz->type,
-+				    THERMAL_NAME_LENGTH) == 0)
-+				res->counter += instance->total_requests;
-+
-+	mutex_unlock(&cdev->lock);
-+
-+	list_for_each_entry_safe(res, next, &cdev_thermal_zone_list, node) {
-+		ret = sprintf(buf + len, "thermal_zone: %s\t%lu\n",
-+			      res->thermal_zone, res->counter);
-+
-+		if (ret == 0)
-+			ret = -EOVERFLOW;
-+
-+		if (ret < 0)
-+			break;
-+
-+		len += ret;
-+	}
-+
-+	list_for_each_entry_safe(res, next, &cdev_thermal_zone_list, node) {
-+		list_del(&res->node);
-+		kfree(res);
-+	}
-+
-+	return ret < 0 ? ret : len;
++	/* update fastest temperature rise from our perspective */
++	if (cur_gradient > stats->max_gradient)
++		stats->max_gradient = cur_gradient;
 +}
 +
- static ssize_t
- reset_store(struct device *dev, struct device_attribute *attr, const char *buf,
- 	    size_t count)
-@@ -897,6 +946,7 @@ reset_store(struct device *dev, struct device_attribute *attr, const char *buf,
++void thermal_zone_device_stats_update(struct thermal_zone_device *tz)
++{
++	struct thermal_zone_device_stats *stats = tz->stats;
++
++	spin_lock(&stats->lock);
++	temperature_stats_update(tz);
++	spin_unlock(&stats->lock);
++}
++
++static ssize_t max_gradient_show(struct device *dev,
++				 struct device_attribute *attr, char *buf)
++{
++	struct thermal_zone_device *tz = to_thermal_zone(dev);
++	struct thermal_zone_device_stats *stats = tz->stats;
++	int ret;
++
++	spin_lock(&stats->lock);
++	temperature_stats_update(tz);
++	ret = snprintf(buf, PAGE_SIZE, "%lld\n", stats->max_gradient);
++	spin_unlock(&stats->lock);
++
++	return ret;
++}
++
++static ssize_t
++reset_tz_stats_store(struct device *dev, struct device_attribute *attr,
++		     const char *buf, size_t count)
++{
++	struct thermal_zone_device *tz = to_thermal_zone(dev);
++	struct thermal_zone_device_stats *stats = tz->stats;
++
++	spin_lock(&stats->lock);
++
++	stats->max_gradient = 0;
++	stats->last_time = ktime_get();
++
++	spin_unlock(&stats->lock);
++
++	return count;
++}
++
++static DEVICE_ATTR_RO(max_gradient);
++static DEVICE_ATTR_WO(reset_tz_stats);
++
++static struct attribute *thermal_zone_device_stats_attrs[] = {
++	&dev_attr_max_gradient.attr,
++	&dev_attr_reset_tz_stats.attr,
++	NULL
++};
++
++static const struct attribute_group thermal_zone_device_stats_attr_group = {
++	.attrs = thermal_zone_device_stats_attrs,
++	.name = "stats"
++};
++
++static void
++thermal_zone_device_stats_setup(struct thermal_zone_device *tz,
++				const struct attribute_group **group)
++{
++	struct thermal_zone_device_stats *stats;
++	int var;
++
++	var = sizeof(*stats);
++
++	stats = kzalloc(var, GFP_KERNEL);
++	if (!stats)
++		return;
++
++	stats->last_time = ktime_get();
++	spin_lock_init(&stats->lock);
++	tz->stats = stats;
++
++	/* Fill the empty slot left in thermal_zone_device_attr_groups */
++	*group = &thermal_zone_device_stats_attr_group;
++}
++
++static void thermal_zone_device_stats_destroy(struct thermal_zone_device *tz)
++{
++	kfree(tz->stats);
++	tz->stats = NULL;
++}
++#else
++
++static inline void
++thermal_zone_device_stats_setup(struct thermal_zone_device *tz,
++				const struct attribute_group **group) {}
++static inline void
++thermal_zone_device_stats_destroy(struct thermal_zone_device *tz) {}
++
++#endif
++
+ int thermal_zone_create_device_groups(struct thermal_zone_device *tz,
+ 				      int mask)
+ {
+ 	const struct attribute_group **groups;
+-	int i, size, result;
++	int i, size, result, extras = 2;
  
- 	/* Make sure we reset all counters per instance */
- 	list_for_each_entry(instance, &cdev->thermal_instances, cdev_node) {
-+		instance->total_requests = 0;
- 		instance->time_in = ktime_set(0, 0);
++	if (IS_ENABLED(CONFIG_THERMAL_STATISTIC))
++		extras++;
+ 	/* we need one extra for trips and the NULL to terminate the array */
+-	size = ARRAY_SIZE(thermal_zone_attribute_groups) + 2;
++	size = ARRAY_SIZE(thermal_zone_attribute_groups) + extras;
+ 	/* This also takes care of API requirement to be NULL terminated */
+ 	groups = kcalloc(size, sizeof(*groups), GFP_KERNEL);
+ 	if (!groups)
+ 		return -ENOMEM;
+ 
+-	for (i = 0; i < size - 2; i++)
++	for (i = 0; i < size - extras; i++)
+ 		groups[i] = thermal_zone_attribute_groups[i];
+ 
+ 	if (tz->num_trips) {
+@@ -561,9 +688,15 @@ int thermal_zone_create_device_groups(struct thermal_zone_device *tz,
+ 			return result;
+ 		}
+ 
+-		groups[size - 2] = &tz->trips_attribute_group;
++		groups[size - extras] = &tz->trips_attribute_group;
  	}
  
-@@ -971,6 +1021,7 @@ static ssize_t trans_table_show(struct device *dev,
- static DEVICE_ATTR_RO(total_trans);
- static DEVICE_ATTR_RO(time_in_state_ms);
- static DEVICE_ATTR_RO(time_in_thermal_zone_ms);
-+static DEVICE_ATTR_RO(requests_of_thermal_zone);
- static DEVICE_ATTR_WO(reset);
- static DEVICE_ATTR_RO(trans_table);
++	/*
++	 * This will be nop if CONFIG_THERMAL_STATISTICS is not defined,
++	 * otherwise, it is always the last entry in the group prior to NULL
++	 */
++	thermal_zone_device_stats_setup(tz, &groups[size - 2]);
++
+ 	tz->device.groups = groups;
  
-@@ -978,6 +1029,7 @@ static struct attribute *cooling_device_stats_attrs[] = {
- 	&dev_attr_total_trans.attr,
- 	&dev_attr_time_in_state_ms.attr,
- 	&dev_attr_time_in_thermal_zone_ms.attr,
-+	&dev_attr_requests_of_thermal_zone.attr,
- 	&dev_attr_reset.attr,
- 	&dev_attr_trans_table.attr,
- 	NULL
+ 	return 0;
+@@ -578,6 +711,7 @@ void thermal_zone_destroy_device_groups(struct thermal_zone_device *tz)
+ 		destroy_trip_attrs(tz);
+ 
+ 	kfree(tz->device.groups);
++	thermal_zone_device_stats_destroy(tz);
+ }
+ 
+ /* sys I/F for cooling device */
+diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+index 87837094d549..9dc8292f0314 100644
+--- a/include/linux/thermal.h
++++ b/include/linux/thermal.h
+@@ -121,6 +121,7 @@ struct thermal_cooling_device {
+  * @trip_type_attrs:	attributes for trip points for sysfs: trip type
+  * @trip_hyst_attrs:	attributes for trip points for sysfs: trip hysteresis
+  * @mode:		current mode of this thermal zone
++ * @stats:		private pointer to stats collected on this thermal zone
+  * @devdata:	private pointer for device private data
+  * @trips:	an array of struct thermal_trip
+  * @num_trips:	number of trip points the thermal zone supports
+@@ -162,6 +163,7 @@ struct thermal_zone_device {
+ 	struct thermal_attr *trip_type_attrs;
+ 	struct thermal_attr *trip_hyst_attrs;
+ 	enum thermal_device_mode mode;
++	void *stats;
+ 	void *devdata;
+ 	struct thermal_trip *trips;
+ 	int num_trips;
 -- 
 2.34.1
 
