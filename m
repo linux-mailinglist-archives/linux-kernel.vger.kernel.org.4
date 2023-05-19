@@ -2,155 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79C0770966A
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 13:22:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AFF970967A
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 13:25:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231977AbjESLWz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 07:22:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56728 "EHLO
+        id S231569AbjESLZL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 07:25:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231594AbjESLWs (ORCPT
+        with ESMTP id S231440AbjESLYt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 07:22:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C02710E6;
-        Fri, 19 May 2023 04:22:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A981464811;
-        Fri, 19 May 2023 11:22:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3240C433A0;
-        Fri, 19 May 2023 11:22:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684495364;
-        bh=OcLM1N2ClGCrQpYWDpWQ6HQjg4/ELs+8TOzmNb/8/CI=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=LL1zcwb+2438spSK6nu0QO3uhzmYznCJ6FYaKF0rs9YJzYZuu8q7BN/huMRZ4XVqU
-         4UTECX1FDgXRdS6Hcp1cWQukl9y61Nqt8atvBSfQzPf0TQTJuYvBs18zMv+CB2Z+9F
-         BdHC51FzAjsQbRGzpE5DM3BQRphGFVqWstaNg4sVKaSKySAvAB5EsuMkelYtdruZDr
-         U+KcHge73B0ozjP5fEq7yDURVBW3gkporZYf+I4EjjYprwmtZybM8spv8qcLTjKeBt
-         zD0v+X553SpUwol+ns3i/J6jkmT/x9UPBf0hGy3IHNqQUkDr4lwEh9NqfpqcZaAV0F
-         S4TGrgB1oAKjA==
-Message-ID: <54b7d304016fd6e89a2899f7e417ba89bcb81c78.camel@kernel.org>
-Subject: Re: [PATCH v4 4/9] nfsd: ensure we use ctime_peek to grab the
- inode->i_ctime
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Chuck Lever III <chuck.lever@oracle.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Chinner <david@fromorbit.com>, Jan Kara <jack@suse.cz>,
-        Amir Goldstein <amir73il@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Neil Brown <neilb@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Theodore T'so <tytso@mit.edu>, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Steve French <sfrench@samba.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Tom Talpey <tom@talpey.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux-XFS <linux-xfs@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-        linux-mm <linux-mm@kvack.org>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        "linux-cifs@vger.kernel.org" <linux-cifs@vger.kernel.org>
-Date:   Fri, 19 May 2023 07:22:40 -0400
-In-Reply-To: <20230519-zierde-legieren-e769c19a29cb@brauner>
-References: <20230518114742.128950-1-jlayton@kernel.org>
-         <20230518114742.128950-5-jlayton@kernel.org>
-         <2B6A4DDD-0356-4765-9CED-B22A29767254@oracle.com>
-         <b046f7e3c86d1c9dd45e932d3f25785fce921f4a.camel@kernel.org>
-         <20230519-zierde-legieren-e769c19a29cb@brauner>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
+        Fri, 19 May 2023 07:24:49 -0400
+Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FBE10DC
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 04:24:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
+  t=1684495485; x=1716031485;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=DJEkgdbDwAplEONKdRUjU0FV8ZN9Nm0azo2uUq8WYdE=;
+  b=PD4e5jaYzygGbs4zCEkFLCb0Kcm4fRit4RhC26E9QmFovM2FvJjzSpoN
+   8Jheg0b/ohnqpDtWeivWUukT30+tME03W+usN3WhZcghtvyPqZcKxPoiL
+   K8YKhosBUYffxzwWfKnKEOYqRwaFdZG6Jh3xiI3zcZWdv23koOh3IWgQJ
+   E=;
+X-IronPort-AV: E=Sophos;i="6.00,176,1681171200"; 
+   d="scan'208";a="333499146"
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-e7094f15.us-west-2.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2023 11:24:40 +0000
+Received: from EX19D002EUA002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2c-m6i4x-e7094f15.us-west-2.amazon.com (Postfix) with ESMTPS id 8480B40D3C;
+        Fri, 19 May 2023 11:24:38 +0000 (UTC)
+Received: from EX19D048EUC002.ant.amazon.com (10.252.61.160) by
+ EX19D002EUA002.ant.amazon.com (10.252.50.7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Fri, 19 May 2023 11:24:37 +0000
+Received: from EX19MTAUWC001.ant.amazon.com (10.250.64.145) by
+ EX19D048EUC002.ant.amazon.com (10.252.61.160) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Fri, 19 May 2023 11:24:36 +0000
+Received: from dev-dsk-attofari-1c-9e00ebdc.eu-west-1.amazon.com
+ (10.13.242.123) by mail-relay.amazon.com (10.250.64.145) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26 via Frontend Transport; Fri, 19 May 2023 11:24:34 +0000
+From:   Adamos Ttofari <attofari@amazon.de>
+To:     <chang.seok.bae@intel.com>, <tglx@linutronix.de>
+CC:     <attofari@amazon.de>, <abusse@amazon.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Kyle Huey <me@kylehuey.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3] x86: fpu: Keep xfd_state always in sync with MSR_IA32_XFD
+Date:   Fri, 19 May 2023 11:23:12 +0000
+Message-ID: <20230519112315.30616-1-attofari@amazon.de>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <87y1ltbtkh.ffs@tglx>
+References: <87y1ltbtkh.ffs@tglx>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-05-19 at 12:36 +0200, Christian Brauner wrote:
-> On Thu, May 18, 2023 at 11:31:45AM -0400, Jeff Layton wrote:
-> > On Thu, 2023-05-18 at 13:43 +0000, Chuck Lever III wrote:
-> > >=20
-> > > > On May 18, 2023, at 7:47 AM, Jeff Layton <jlayton@kernel.org> wrote=
-:
-> > > >=20
-> > > > If getattr fails, then nfsd can end up scraping the time values dir=
-ectly
-> > > > out of the inode for pre and post-op attrs. This may or may not be =
-the
-> > > > right thing to do, but for now make it at least use ctime_peek in t=
-his
-> > > > situation to ensure that the QUERIED flag is masked.
-> > >=20
-> > > That code comes from:
-> > >=20
-> > > commit 39ca1bf624b6b82cc895b0217889eaaf572a7913
-> > > Author:     Amir Goldstein <amir73il@gmail.com>
-> > > AuthorDate: Wed Jan 3 17:14:35 2018 +0200
-> > > Commit:     J. Bruce Fields <bfields@redhat.com>
-> > > CommitDate: Thu Feb 8 13:40:17 2018 -0500
-> > >=20
-> > >     nfsd: store stat times in fill_pre_wcc() instead of inode times
-> > >=20
-> > >     The time values in stat and inode may differ for overlayfs and st=
-at time
-> > >     values are the correct ones to use. This is also consistent with =
-the fact
-> > >     that fill_post_wcc() also stores stat time values.
-> > >=20
-> > >     This means introducing a stat call that could fail, where previou=
-sly we
-> > >     were just copying values out of the inode.  To be conservative ab=
-out
-> > >     changing behavior, we fall back to copying values out of the inod=
-e in
-> > >     the error case.  It might be better just to clear fh_pre_saved (t=
-hough
-> > >     note the BUG_ON in set_change_info).
-> > >=20
-> > >     Signed-off-by: Amir Goldstein <amir73il@gmail.com>
-> > >     Signed-off-by: J. Bruce Fields <bfields@redhat.com>
-> > >=20
-> > > I was thinking it might have been added to handle odd corner
-> > > cases around re-exporting NFS mounts, but that does not seem
-> > > to be the case.
-> > >=20
-> > > The fh_getattr() can fail for legitimate reasons -- like the
-> > > file is in the middle of being deleted or renamed over -- I
-> > > would think. This code should really deal with that by not
-> > > adding pre-op attrs, since they are optional.
-> > >=20
-> >=20
-> > That sounds fine to me. I'll plan to drop this patch from the series an=
-d
-> > I'll send a separate patch to just remove those branches altogether
-> > (which should DTRT).
->=20
-> I'll wait with reviewing this until you send the next version then.
+Commit 672365477ae8 ("x86/fpu: Update XFD state where required") and
+commit 8bf26758ca96 ("x86/fpu: Add XFD state to fpstate") introduced a
+per CPU variable xfd_state to keep the MSR_IA32_XFD value cached. In
+order to avoid unnecessary writes to the MSR.
 
-I don't have any other big changes queued up. So far, this would just be
-the exact same set, without this patch.
+On CPU hotplug MSR_IA32_XFD is reset to the init_fpstate.xfd, which
+wipes out any stale state. But the per CPU cached xfd value is not
+reset, which brings them out of sync.
 
-FWIW, I'm mostly interested in your review of patches #1 and 2. Is
-altering prototype for generic_fillattr, and changing the logic in
-current_time the right approach here?
+As a consequence a subsequent xfd_update_state() might fail to update
+the MSR which in turn can result in XRSTOR raising a #NM in kernel
+space, which crashes the kernel.
 
---=20
-Jeff Layton <jlayton@kernel.org>
+To address the issue mentioned, initialize xfd_state together with
+MSR_IA32_XFD.
+
+Fixes: 672365477ae8 ("x86/fpu: Update XFD state where required")
+
+Signed-off-by: Adamos Ttofari <attofari@amazon.de>
+---
+ arch/x86/kernel/fpu/xstate.c |  5 +++--
+ arch/x86/kernel/fpu/xstate.h | 14 ++++++++++----
+ 2 files changed, 13 insertions(+), 6 deletions(-)
+
+diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+index 0bab497c9436..9bff4f07358d 100644
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@ -177,10 +177,11 @@ void fpu__init_cpu_xstate(void)
+ 	 * Must happen after CR4 setup and before xsetbv() to allow KVM
+ 	 * lazy passthrough.  Write independent of the dynamic state static
+ 	 * key as that does not work on the boot CPU. This also ensures
+-	 * that any stale state is wiped out from XFD.
++	 * that any stale state is wiped out from XFD. Reset the per CPU
++	 * xfd cache too.
+ 	 */
+ 	if (cpu_feature_enabled(X86_FEATURE_XFD))
+-		wrmsrl(MSR_IA32_XFD, init_fpstate.xfd);
++		xfd_set_state(init_fpstate.xfd);
+ 
+ 	/*
+ 	 * XCR_XFEATURE_ENABLED_MASK (aka. XCR0) sets user features
+diff --git a/arch/x86/kernel/fpu/xstate.h b/arch/x86/kernel/fpu/xstate.h
+index a4ecb04d8d64..d272fc214113 100644
+--- a/arch/x86/kernel/fpu/xstate.h
++++ b/arch/x86/kernel/fpu/xstate.h
+@@ -147,20 +147,26 @@ static inline void xfd_validate_state(struct fpstate *fpstate, u64 mask, bool rs
+ #endif
+ 
+ #ifdef CONFIG_X86_64
++static inline void xfd_set_state(u64 xfd)
++{
++	wrmsrl(MSR_IA32_XFD, xfd);
++	__this_cpu_write(xfd_state, xfd);
++}
++
+ static inline void xfd_update_state(struct fpstate *fpstate)
+ {
+ 	if (fpu_state_size_dynamic()) {
+ 		u64 xfd = fpstate->xfd;
+ 
+-		if (__this_cpu_read(xfd_state) != xfd) {
+-			wrmsrl(MSR_IA32_XFD, xfd);
+-			__this_cpu_write(xfd_state, xfd);
+-		}
++		if (__this_cpu_read(xfd_state) != xfd)
++			xfd_set_state(xfd);
+ 	}
+ }
+ 
+ extern int __xfd_enable_feature(u64 which, struct fpu_guest *guest_fpu);
+ #else
++static inline void xfd_set_state(u64 xfd) { }
++
+ static inline void xfd_update_state(struct fpstate *fpstate) { }
+ 
+ static inline int __xfd_enable_feature(u64 which, struct fpu_guest *guest_fpu) {
+-- 
+2.39.2
+
+
+
+
+Amazon Development Center Germany GmbH
+Krausenstr. 38
+10117 Berlin
+Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
+Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
+Sitz: Berlin
+Ust-ID: DE 289 237 879
+
+
+
