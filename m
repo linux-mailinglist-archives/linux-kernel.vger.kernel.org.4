@@ -2,149 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1480F709941
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 16:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60D81709944
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 16:15:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231697AbjESOPQ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 19 May 2023 10:15:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44076 "EHLO
+        id S231978AbjESOP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 10:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231653AbjESOPK (ORCPT
+        with ESMTP id S231653AbjESOPV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 10:15:10 -0400
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B719E73;
-        Fri, 19 May 2023 07:14:42 -0700 (PDT)
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-96f44435d92so41006066b.0;
-        Fri, 19 May 2023 07:14:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684505634; x=1687097634;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mtyjmo3U27wuRhuxdBoN4szAZEtqJIsshyVfilBgAD0=;
-        b=C4ucInKXKAyY39AY1irPEpCBVp43HjLOS7XZaLrlqvoU5igMwHa/lQmESfH/lbVzqL
-         hr4QX2dI5/a+KXZITwQj418BdH8tUWUH/F5JARAPxizo6a8P29Iig6d4ziEewjOFtyKx
-         D0YflxZafGjGbffr3X3XQqWUpg8Wflux3xKgYu60wDWx8qIYuoKgM/d8LL4cmFKA+O6s
-         k3NfqZMYdX8Zz8ivSfCCqxN5E7Fsm8X/Cs35SKGQyodk0xIlu3BdtULGdKPIrr/4QX48
-         quqTNDAhI2r8quPODmTsXCMFjxKrGB9oRfGglvGxUzBX0gq9g9AppPw+ZgICYBiSNXh3
-         iibQ==
-X-Gm-Message-State: AC+VfDyvjeRmnh6F+HU6ygfTpk5tvyL+mj4B8iGHatfMTwWbG8Ju4ikg
-        SDKe83tNbkAArusdWKn9dVCug5gW1BXZoaKDQBc=
-X-Google-Smtp-Source: ACHHUZ68+/i2ffEZTXg6tj3QMitnfwpUc6ZolPA0xIlso352d5CtlPMyVKVablcnpHf+LCxLGPtLwAjOXXkDYlCuYhQ=
-X-Received: by 2002:a17:906:729e:b0:96f:6590:cbdb with SMTP id
- b30-20020a170906729e00b0096f6590cbdbmr1995862ejl.6.1684505634451; Fri, 19 May
- 2023 07:13:54 -0700 (PDT)
+        Fri, 19 May 2023 10:15:21 -0400
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AEF21A5;
+        Fri, 19 May 2023 07:15:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1684505706;
+        bh=hrLDk4Ku/N+Gf0DGHxR5oOwcJE4ZzrE2JYuRc9BDUc8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=LU9/QsjsSej9UKNksRhmw8R7x+3+sG/kDctrb20XugRuqs4Yp1tAnZUJr8XBZe01J
+         9iOrpxuZxLSE2nERz3Zf4UfjMSo1NOOPWzOpZ3eBhzWX+sPkvaa62fRsu+zjf16Smu
+         rcl7010x+KL0IdFivUfiLbTA0HNQvVieMRQwkZvTlXJadxkHZkPr+uYmeSqomaQVnI
+         DHzJooY08xYC9Av03nPl8IR6geSxNobN0v4fAHrWhR4BbcbWhh9Zszim/DbZE5TPik
+         Oss5BmD17Y3Y7RvquNS5MJtTNBQGHndpQT6ph+GGTGPxvwI/GyqaDMpCHSi8fW/xAe
+         Cv/O9GxYUkVOw==
+Received: from [192.168.18.200] (unknown [198.16.236.227])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QN84V0J5Tz13HD;
+        Fri, 19 May 2023 10:15:06 -0400 (EDT)
+Message-ID: <06ee47e0-99e0-4b6a-ab67-239fccf2777d@efficios.com>
+Date:   Fri, 19 May 2023 10:15:11 -0400
 MIME-Version: 1.0
-References: <20230519102058.581557770@infradead.org> <20230519102716.045980863@infradead.org>
-In-Reply-To: <20230519102716.045980863@infradead.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 19 May 2023 16:13:41 +0200
-Message-ID: <CAJZ5v0hAyF8WK+jbWh6FZvmjfr0nxLg-phYTqFAyaUA5GJU4hQ@mail.gmail.com>
-Subject: Re: [PATCH v2 13/13] cpuidle: Use local_clock_noinstr()
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     bigeasy@linutronix.de, mark.rutland@arm.com, maz@kernel.org,
-        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
-        kernel@xen0n.name, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, pbonzini@redhat.com, wanpengli@tencent.com,
-        vkuznets@redhat.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, jgross@suse.com, boris.ostrovsky@oracle.com,
-        daniel.lezcano@linaro.org, kys@microsoft.com,
-        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        rafael@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
-        pmladek@suse.com, senozhatsky@chromium.org, rostedt@goodmis.org,
-        john.ogness@linutronix.de, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, jstultz@google.com, sboyd@kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RFC PATCH 1/4] rseq: Add sched_state field to struct rseq
+Content-Language: en-US
+To:     Boqun Feng <boqun.feng@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org, Christian Brauner <brauner@kernel.org>,
+        Florian Weimer <fw@deneb.enyo.de>, David.Laight@aculab.com,
+        carlos@redhat.com, Peter Oskolkov <posk@posk.io>,
+        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+        Chris Kennelly <ckennelly@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
+        libc-alpha@sourceware.org, Steven Rostedt <rostedt@goodmis.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Florian Weimer <fweimer@redhat.com>
+References: <20230517152654.7193-1-mathieu.desnoyers@efficios.com>
+ <20230517152654.7193-2-mathieu.desnoyers@efficios.com>
+ <ZGaddGcHw7nJE+Gh@boqun-archlinux>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <ZGaddGcHw7nJE+Gh@boqun-archlinux>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 12:33 PM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> With the introduction of local_clock_noinstr(), local_clock() itself
-> is no longer marked noinstr, use the correct function.
->
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+On 2023-05-18 17:49, Boqun Feng wrote:
+> On Wed, May 17, 2023 at 11:26:51AM -0400, Mathieu Desnoyers wrote:
+[...]
+>> diff --git a/include/uapi/linux/rseq.h b/include/uapi/linux/rseq.h
+>> index c233aae5eac9..c6d8537e23ca 100644
+>> --- a/include/uapi/linux/rseq.h
+>> +++ b/include/uapi/linux/rseq.h
+>> @@ -37,6 +37,13 @@ enum rseq_cs_flags {
+>>   		(1U << RSEQ_CS_FLAG_NO_RESTART_ON_MIGRATE_BIT),
+>>   };
+>>   
+>> +enum rseq_sched_state {
+>> +	/*
+>> +	 * Task is currently running on a CPU if bit is set.
+>> +	 */
+>> +	RSEQ_SCHED_STATE_ON_CPU		= (1U << 0),
+>> +};
+[...]
+>>   
+>> +	/*
+>> +	 * Restartable sequences sched_state field. Updated by the kernel. Read
+>> +	 * by user-space with single-copy atomicity semantics. This fields can
+>> +	 * be read by any userspace thread. Aligned on 32-bit. Contains a
+> 
+> Maybe this is a premature optimization, but since most of the time the
+> bit would be read by another thread, does it make sense putting the
+> "sched_state" into a different cache line to avoid false sharing?
 
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
+I'm puzzled by your optimization proposal, so I'll say it outright: I'm 
+probably missing something.
 
-> ---
->  drivers/cpuidle/cpuidle.c    |    8 ++++----
->  drivers/cpuidle/poll_state.c |    4 ++--
->  2 files changed, 6 insertions(+), 6 deletions(-)
->
-> --- a/drivers/cpuidle/cpuidle.c
-> +++ b/drivers/cpuidle/cpuidle.c
-> @@ -145,7 +145,7 @@ static noinstr void enter_s2idle_proper(
->
->         instrumentation_begin();
->
-> -       time_start = ns_to_ktime(local_clock());
-> +       time_start = ns_to_ktime(local_clock_noinstr());
->
->         tick_freeze();
->         /*
-> @@ -169,7 +169,7 @@ static noinstr void enter_s2idle_proper(
->         tick_unfreeze();
->         start_critical_timings();
->
-> -       time_end = ns_to_ktime(local_clock());
-> +       time_end = ns_to_ktime(local_clock_noinstr());
->
->         dev->states_usage[index].s2idle_time += ktime_us_delta(time_end, time_start);
->         dev->states_usage[index].s2idle_usage++;
-> @@ -243,7 +243,7 @@ noinstr int cpuidle_enter_state(struct c
->         sched_idle_set_state(target_state);
->
->         trace_cpu_idle(index, dev->cpu);
-> -       time_start = ns_to_ktime(local_clock());
-> +       time_start = ns_to_ktime(local_clock_noinstr());
->
->         stop_critical_timings();
->         if (!(target_state->flags & CPUIDLE_FLAG_RCU_IDLE)) {
-> @@ -276,7 +276,7 @@ noinstr int cpuidle_enter_state(struct c
->         start_critical_timings();
->
->         sched_clock_idle_wakeup_event();
-> -       time_end = ns_to_ktime(local_clock());
-> +       time_end = ns_to_ktime(local_clock_noinstr());
->         trace_cpu_idle(PWR_EVENT_EXIT, dev->cpu);
->
->         /* The cpu is no longer idle or about to enter idle. */
-> --- a/drivers/cpuidle/poll_state.c
-> +++ b/drivers/cpuidle/poll_state.c
-> @@ -15,7 +15,7 @@ static int __cpuidle poll_idle(struct cp
->  {
->         u64 time_start;
->
-> -       time_start = local_clock();
-> +       time_start = local_clock_noinstr();
->
->         dev->poll_time_limit = false;
->
-> @@ -32,7 +32,7 @@ static int __cpuidle poll_idle(struct cp
->                                 continue;
->
->                         loop_count = 0;
-> -                       if (local_clock() - time_start > limit) {
-> +                       if (local_clock_noinstr() - time_start > limit) {
->                                 dev->poll_time_limit = true;
->                                 break;
->                         }
->
->
+I agree that false-sharing would be an issue if various threads would 
+contend for updating any field within this cache line.
+
+But the only thread responsible for updating this cache line's fields is 
+the current thread, either from userspace (stores to rseq_abi->rseq_cs) 
+or from the kernel (usually on return to userspace, except for this new 
+ON_CPU bit clear on context switch).
+
+The other threads busy-waiting on the content of this sched_state field 
+will only load from it, never store. And they will only busy-wait on it 
+as long as the current task runs. When that task gets preempted, other 
+threads will notice the flag change and use sys_futex instead.
+
+So the very worse I can think of in terms of pattern causing cache 
+coherency traffic due to false-sharing is if the lock owner happens to 
+have lots of rseq critical sections as well, causing it to repeatedly 
+store to the rseq_abi->rseq_cs field, which is in the same cache line.
+
+But even then I'm wondering if this really matters, because each of 
+those stores to rseq_cs would only slow down loads from other threads 
+which will need to retry busy-wait anyway if the on-cpu flag is still set.
+
+So, what am I missing ? Is this heavy use of rseq critical sections 
+while the lock is held the scenario you are concerned about ?
+
+Note that the heavy cache-line bouncing in my test-case happens on the 
+lock structure (cmpxchg expecting NULL, setting the current thread 
+rseq_get_abi() pointer on success). There are probably better ways to 
+implement that part, it is currently just a simple prototype showcasing 
+the approach.
+
+Thanks,
+
+Mathieu
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
+
