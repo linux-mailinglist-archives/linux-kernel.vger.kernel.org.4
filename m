@@ -2,147 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C19B0708D52
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 03:27:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E85E708D53
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 03:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjESB1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 21:27:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58460 "EHLO
+        id S230060AbjESB1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 21:27:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbjESB1F (ORCPT
+        with ESMTP id S230063AbjESB1P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 21:27:05 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8770E3
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 18:27:03 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id 3f1490d57ef6-ba6d024a196so2403873276.2
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 18:27:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684459623; x=1687051623;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1lvP7Q1DPXjSG9iBptgkojp087iyFGiylW3zAHv1G0s=;
-        b=vOVrSlpzLvgAwRxr0Q+rmluXHst7drYbuTE/FlnkA0sI0Vq+REfrWisZRfc1SzSbgw
-         tVsm1pXic0P6GJDF2/7zkD8ER83IoVL7aMp/bHPVrAHQkbbixm3Kg0HMLS35H/xAyVl+
-         UTmOzWe+uQHcb5OYgXl4x58ilZsw3U0w8CB/8DRxqCAwNxEdqhyYWM9g8qj7xVjIwSzv
-         RagYDOY7DuNgn/2/x2NdIprh8X8N+/x5WsqWtdLmu0RBcEsmDgIcvf39Vl0lvfYzI66p
-         MeMDa4CFtzCaOZN4K8cznxO5u8tCBERtUczXNEkQCmNWKWb8p/nq25Dyc4YI11GlL9x7
-         1/nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684459623; x=1687051623;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1lvP7Q1DPXjSG9iBptgkojp087iyFGiylW3zAHv1G0s=;
-        b=FwwJn6Ip3WXSO2EQXsohH1SH7OJNv5OKT6nI5m0veTYJ6suRSSnAhjoq1xzXoyfeDC
-         ZPg6gzHw/dzhGevae+f1guxkzNU5PYRRXZ94QTsIpuwX3iPX9N3m8WuBkb7Txusvc6q0
-         RvMGjZIw46qCIaPkS47jZFUqf8xuDcGV50+xn266tOjXF/b5hY889GWyaLrsHFtqnCf4
-         BiF9W3Z76MkK10MiJxpuDwCMr8yQZbkkwEsO4hMLs+h9GU+lw7FCvfdjIgI5TeZOAXNr
-         9MJB+oA5pEX5ZgroUckLt5Cfxl5BYHedIp6aXvgxL51HvwYW+p4qCA3T8SZH1078R/G9
-         Gisg==
-X-Gm-Message-State: AC+VfDwitlD0S+Tm2YUpIV/gFHjjA8rx95O7NsA/zkR9TaS0TVWO8oe/
-        6nHtEqFWRUK3+N78EUWqVofRyg==
-X-Google-Smtp-Source: ACHHUZ60fWA8dMxrxSEEE9Cq6HNL+5hZBH8mz2lPQkgrGsomWHcS7zVmJG4fADlLH1bX8uxE4zKyvA==
-X-Received: by 2002:a25:c7cb:0:b0:b8f:6cd0:4ef1 with SMTP id w194-20020a25c7cb000000b00b8f6cd04ef1mr192327ybe.17.1684459622935;
-        Thu, 18 May 2023 18:27:02 -0700 (PDT)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id x6-20020a259c46000000b00b9ba6a3b675sm699871ybo.50.2023.05.18.18.27.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 18:27:02 -0700 (PDT)
-Date:   Thu, 18 May 2023 21:26:59 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-iio@vger.kernel.org
-Subject: Re: [PATCH v4 05/41] counter: add HAS_IOPORT dependencies
-Message-ID: <ZGbQYzXK8InMqkxu@fedora>
-References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
- <20230516110038.2413224-6-schnelle@linux.ibm.com>
+        Thu, 18 May 2023 21:27:15 -0400
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01on2047.outbound.protection.outlook.com [40.107.15.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA12810DD;
+        Thu, 18 May 2023 18:27:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BRWovs4ila+EGZmJ5kU8UfVBJspxkvwO3qkMvUz2UVLEdWWv6kPoeWN6J0+uM4Z4qNrWs8PUpRwKsa45s1UmTN26yQMEy3M8lWfT/pnqTrqI9s8+2NtRVlSj7go1MjebGkilMxk2WwAb9Xa9ah0AOrFj3uYDIqX8JTOrQzCr1f037RdjophkRyGoNATGPpV8zxapnXyNSVFtXjC0Xrj/ND+iXJJHesjVQ0yWaC+Me6Gg7HndF/lT+8rn3YyjKPoJrBAToixeQscXdtGYkAysB8eAAPzX3zHPJYpjCRA89jdBH0OULt2g9J9Iy5wKyEaxSkg8abRxrko4U+KNpXzl4Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=v6AU7I17ARnlmE6skWo+jayQbD/JP6rXXKaJ7GmUrgU=;
+ b=XQTGHQgzVzEe0AU+k9FaF9eDHTirpt6s66TT209x3vH7ax9cBdJBL46ofx5mOfFLFjGr35W7HXUqE5Z6q6QLxxczluVVoCqfv8Zug7Vw0QjQwHf67vYSZGXLp5tyI67ANIld6etIu5sj3o7GhDPy8gYGw2HcSjxnXPWnaTeRxyZNszPEqd2d23IhJ4FbnKfsc8hrvqp629uHK2prtnQlE85wsxLxrX27mU2ZTSTV3Nf9zrHMIHUKbJDli6kaVvzkZYiFm6W7mkTL6vyfPywrDf93WxnP0NeipoQJVW9+ycOpW+TSzMJQ3QlW8Zng0Lz6M69Wp8Gqa/hPFLveGgg2bw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=v6AU7I17ARnlmE6skWo+jayQbD/JP6rXXKaJ7GmUrgU=;
+ b=KHNjEWQZY98stHgFngcLuVGgFpQgKWXuqO9+ch0AD/NYssSNyrhXOjR05uzgolFFDuEZ8TKDxRU/nqJuA1ArCzsioYQ8x4OQIukheRLko8IdT4OoerJE6ylF3AWr5RVnNGHPgj7uzZO7gGchYzO9jBfbD2qhtMOklOcUb01GqcE=
+Received: from DB6PR04MB3141.eurprd04.prod.outlook.com (2603:10a6:6:c::21) by
+ DUZPR04MB10016.eurprd04.prod.outlook.com (2603:10a6:10:4dd::5) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6411.21; Fri, 19 May 2023 01:27:11 +0000
+Received: from DB6PR04MB3141.eurprd04.prod.outlook.com
+ ([fe80::4fc7:994a:43c9:7058]) by DB6PR04MB3141.eurprd04.prod.outlook.com
+ ([fe80::4fc7:994a:43c9:7058%7]) with mapi id 15.20.6411.017; Fri, 19 May 2023
+ 01:27:11 +0000
+From:   Wei Fang <wei.fang@nxp.com>
+To:     Lorenzo Bianconi <lorenzo.bianconi@redhat.com>,
+        Simon Horman <simon.horman@corigine.com>
+CC:     "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "hawk@kernel.org" <hawk@kernel.org>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        Shenwei Wang <shenwei.wang@nxp.com>,
+        Clark Wang <xiaoning.wang@nxp.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>
+Subject: RE: [PATCH net-next] net: fec: turn on XDP features
+Thread-Topic: [PATCH net-next] net: fec: turn on XDP features
+Thread-Index: AQHZiZa5MHJHr9fexEeXiNyvCoMG7a9gTlgAgAApkACAAFarYA==
+Date:   Fri, 19 May 2023 01:27:11 +0000
+Message-ID: <DB6PR04MB3141CE3CEC1A59134FE96272887C9@DB6PR04MB3141.eurprd04.prod.outlook.com>
+References: <20230518143236.1638914-1-wei.fang@nxp.com>
+ <ZGZkmvX0OLI+4fqY@corigine.com> <ZGaHeGUwFdWDthh4@lore-desk>
+In-Reply-To: <ZGaHeGUwFdWDthh4@lore-desk>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DB6PR04MB3141:EE_|DUZPR04MB10016:EE_
+x-ms-office365-filtering-correlation-id: f3c0e9be-6a3b-4cf2-5308-08db58082b5b
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ECrqDyJ/XHEwZ4AHujf/6tyvq+2ILB5GXrmolJxssyf9YZulfs4bPjvbcmuhNouJv4HZzIlFM4sDgC6XNhXuhvszu7hURRXCVGuz2NzYFMoyFaecFV34J1WeHGp+HgKRnqxKZ9LUBg3jQU+tXq40mtRBDhiNuvFQupVbIU8Q0D+yJnLzhafQHZGkZ2CGQlzv/VRVjkQo3BihF3kAhMby7XzxEZrkdJeqZzf1QBgI4Dn/cDy6SbEEg33QOb6IgdB0F+bzT5H2UKf8BBntc+EtvO4BH4ZtQwkdIuXOJXEal3KdcWnyraPlGG95cSW6A/5KWynXpi48zZ6S56JP32uGFYOIje0cBkVxL41xsGAkg92IL5ylKhpSuZq+IbYU8toQu2oorC30EufEcnbi/9LOSa59TCSu3eB/ZCAmIn/V/ESgFOB2tPS1qKKlImcxo1FLOQQQ4VGI5GDrrX8TcWur+vU2i/n7L4coOuxuA5dm+vOa0smIyFrpLEsLi0W4ofB/sMedElznmu6mTib6s2Ny3jq0tE/X7NpxXvqckbExF6oGanN8Y90jh9P7u7729PSxR7jvt4FqXrzVYJFZj1rvzZj0t2u5CRL/1nhu6Nhysx84WAZKwzjhgoF3BMo0xI0b
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB6PR04MB3141.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(376002)(346002)(366004)(39860400002)(451199021)(83380400001)(478600001)(7696005)(71200400001)(54906003)(6506007)(26005)(9686003)(53546011)(110136005)(186003)(2906002)(5660300002)(8936002)(44832011)(8676002)(52536014)(7416002)(33656002)(122000001)(38100700002)(4326008)(66446008)(66476007)(66556008)(66946007)(76116006)(64756008)(316002)(55016003)(86362001)(41300700001)(38070700005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?gb2312?B?SVdDM210TkZPcDcyMkxRU0RRU0VTRldEdzRVRGlIZmJsa0ZkTGl4bFZuUTFD?=
+ =?gb2312?B?d2FUUU1EYzR1WHVIbjViemdUM0pWa0dVTkhxd3ZFV2RvT2JVLytwQUIxRWRk?=
+ =?gb2312?B?eU9ia2VPb0hqYkJ4YlhpNkRLdkFaSWY3WHNmRDR4ZGl3Q1dOWG9kZyt1cG1J?=
+ =?gb2312?B?L0g3Q0tydDlqMDE2Nzc3OFBTWFMxSVI3RHRSWk5iTTZtOUQzeGRoNHRJQmhH?=
+ =?gb2312?B?NVluRDBhQTczUGp4U29rSXBoNXN4SDBBWEJwT1RjZkhmbzd5NGk1c1BrS3Jp?=
+ =?gb2312?B?Y2V6YjR3a3JZc0huejFvM1BMclJvSlBaTGlZMkpCSFp2YVFBNW5CWlNzZE1l?=
+ =?gb2312?B?QWo2M0ovU25UTnVkOUNSYitvdU96Z3orYmtvOU5ZM2h5V0JNSnRvWCtxcmlC?=
+ =?gb2312?B?MlZBUE0xZlhyM3QxQkJHRFRxdy85U1NadHA3bk1VWjh4L2Y2OWZQQ3ZtMEVy?=
+ =?gb2312?B?UXgxaU9VWm44V2dHVHJ2VytiZ0dDcFFwYlI5dFJWWEZYbkhSTkdOeXNQRkFS?=
+ =?gb2312?B?eGMrYUFuVURnejZWMnRJRE9hcFdZc1JLR3l3djhmV0FVejRaYXR3cUpySEJH?=
+ =?gb2312?B?OGZoazl6N0lVV0tVSXgyVGF6aSt0NENadmtjdnhJZG5rRmRNUThwSTl4QWdR?=
+ =?gb2312?B?eWpGWDJ1bExtbElsSWJOdjd2a0s3ZThydnZkd3NmaDVvaUtwWUJFa1o2TEFu?=
+ =?gb2312?B?Y0FnOHBURG5JNjZXblVnVkJpM3I3TmViQXFSeUpYZWRRUkd1NnJSTmE5U0JG?=
+ =?gb2312?B?Z0FQdzdJTGhmbjR2QjRiem1lVEtsR25tZllnWUV3TkdibkhPblhHK3BRN3Q4?=
+ =?gb2312?B?ZGpBUDhFb01rT2JKTFRXbklsWnp1Q2JmRngxT0lYSFMrMjZDeWdhblJqM1FV?=
+ =?gb2312?B?N1crZ0NIQ2d0R2IwZU04dGdhWmdTN2RnQnhvZXpSVHBaaXdmdzY2U1F3dUF5?=
+ =?gb2312?B?eWRFajRSMmZKcFIrRXpDZXd1QkVaOEUraXdSRkJ3VEIra1NMaGpOTGlHM2tH?=
+ =?gb2312?B?K0JyZEl3YjZGVWVWWlZTT3RvcmQ0TXp2aWdqQytYbDhjVDl6d2ZydkVob3Ra?=
+ =?gb2312?B?Rll2UnU3Y3RMZDJta0xZM1k0dnVrcm9rNm9LZXh4M0FWRGFOeFpzSUZLWHRa?=
+ =?gb2312?B?dlF4Mmt1cjRRZHA1eFZmcDM1bjFJR2N5dkQ4bkIyaUtnYmZSUW02VTltQVVI?=
+ =?gb2312?B?aTNuT3RaOEhxbWZ4cmszL1h6bnFZc2EvMWFWTzRidHpIOWNQNG9Ma3c5ckR0?=
+ =?gb2312?B?a2hYOE81UzMzWHhSMCtoTW1wY1A4YXBTSmN6aS9YZVRzV2o0SVNJQi9rZFVh?=
+ =?gb2312?B?UzkwZjg0SFdla2VIVmFVUGxuUVhGaXhEb2ZsdUtRVHp1YmxoRnJEejh0TUdv?=
+ =?gb2312?B?bUFvY0Z4RGNJc3BwLzBya0VJam5mMzFobmxKMENVaFF1UklxYSsvMi9xak1S?=
+ =?gb2312?B?aGNTQU9BVnVPL1RvMFNIVDVudU5iNEc0ZUFHSWNnNFNzMlVwYkRFQzB2cm5j?=
+ =?gb2312?B?TnliQlpFZU5KTFNveGZrWGlscXUrY05xeURYSFhULzVSVVhzak1FKy9JZzFz?=
+ =?gb2312?B?cnBSUms0dDFpa1hzOXZtdmZZMmF1TXUySWN1Z3h0bzJGZmdkTmwyL1ByVFFN?=
+ =?gb2312?B?QXkvODdHc1g1RGhIMFlOb0tFSkpNK01ZYnFldGUvM05sZUlPRE8yQUQwMWRy?=
+ =?gb2312?B?YWhaZmFRbXdYK0M2VFJiM09VZTQ2QllvaFI0Tlo2SDFUaC93MUs4cGZhQlha?=
+ =?gb2312?B?aFlxbnFnZVFTWHY1U0pZc2NNNGlxZmlVcGtNVGVVcjJUUmtyaEYxbTdDWVFr?=
+ =?gb2312?B?OFdRVU5YNlM5bDVMOVY3Si9QMGlRRUw4bkJNby9sMWtCM1BTUk9iL3dUbXNJ?=
+ =?gb2312?B?eXN1RXNwc3k2MVphZWFQVlViYkZZNHF2aVBsUCsvQXUxN3BZNVAzVmlpOWY2?=
+ =?gb2312?B?QVEwOTJoMXZRWVdxTkJTWTF3Q3ZpcHJBL084TnRyOFA4NnYreVA4NEkrd29z?=
+ =?gb2312?B?dEtOQUJENXBmUzhiV2wxb29DMEdOWU1tc1EvamZXSHI2em96a1NXaFdpaC9m?=
+ =?gb2312?B?bTNDT0ZpRGRTZHNTYkV2WTFySTY1MDFvSkFNRTl5c0FCR3B1QmZ4UEFjcG9O?=
+ =?gb2312?Q?sY+Y=3D?=
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5bxTSeSIiawlWPZU"
-Content-Disposition: inline
-In-Reply-To: <20230516110038.2413224-6-schnelle@linux.ibm.com>
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB6PR04MB3141.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f3c0e9be-6a3b-4cf2-5308-08db58082b5b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 19 May 2023 01:27:11.3392
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 9pKg4nhWTwZGJSD7vVW30h8iHZ062fpHcmH4pjIhhaf+gBgk8+iJZN+TNpZAfDUKgK9hCoCCdtze5QGXHTv9VQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DUZPR04MB10016
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---5bxTSeSIiawlWPZU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, May 16, 2023 at 01:00:01PM +0200, Niklas Schnelle wrote:
-> In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and friends
-> not being declared. We thus need to add HAS_IOPORT as dependency for
-> those drivers using them.
->=20
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-
-Hi Niklas,
-
-The change itself is fine, but please update the description to reflect
-that this is adding a depends on HAS_IOPORT_MAP rather than HAS_IOPORT,
-along with the reason why it's needed (i.e. devm_ioport_map() is used).
-
-Thanks,
-
-William Breathitt Gray
-
-> ---
-> Note: The HAS_IOPORT Kconfig option was added in v6.4-rc1 so
->       per-subsystem patches may be applied independently
->=20
->  drivers/counter/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/counter/Kconfig b/drivers/counter/Kconfig
-> index 4228be917038..e65a2bf178b8 100644
-> --- a/drivers/counter/Kconfig
-> +++ b/drivers/counter/Kconfig
-> @@ -15,6 +15,7 @@ if COUNTER
->  config 104_QUAD_8
->  	tristate "ACCES 104-QUAD-8 driver"
->  	depends on (PC104 && X86) || COMPILE_TEST
-> +	depends on HAS_IOPORT_MAP
->  	select ISA_BUS_API
->  	help
->  	  Say yes here to build support for the ACCES 104-QUAD-8 quadrature
-> --=20
-> 2.39.2
->=20
-
---5bxTSeSIiawlWPZU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZGbQYwAKCRC1SFbKvhIj
-Kwr/AP9BDmkAnBXC+MjVSJOmxTQF8Sx5RdpwwV0Oaq8V32L4cAEAjgIcBwlTHN/4
-SwcgWo1pJaiaLAG8+7C20VWkinQ4dwc=
-=WkDE
------END PGP SIGNATURE-----
-
---5bxTSeSIiawlWPZU--
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBMb3JlbnpvIEJpYW5jb25pIDxs
+b3JlbnpvLmJpYW5jb25pQHJlZGhhdC5jb20+DQo+IFNlbnQ6IDIwMjPE6jXUwjE5yNUgNDoxNg0K
+PiBUbzogU2ltb24gSG9ybWFuIDxzaW1vbi5ob3JtYW5AY29yaWdpbmUuY29tPg0KPiBDYzogV2Vp
+IEZhbmcgPHdlaS5mYW5nQG54cC5jb20+OyBkYXZlbUBkYXZlbWxvZnQubmV0Ow0KPiBlZHVtYXpl
+dEBnb29nbGUuY29tOyBrdWJhQGtlcm5lbC5vcmc7IHBhYmVuaUByZWRoYXQuY29tOw0KPiBhc3RA
+a2VybmVsLm9yZzsgZGFuaWVsQGlvZ2VhcmJveC5uZXQ7IGhhd2tAa2VybmVsLm9yZzsNCj4gam9o
+bi5mYXN0YWJlbmRAZ21haWwuY29tOyBTaGVud2VpIFdhbmcgPHNoZW53ZWkud2FuZ0BueHAuY29t
+PjsgQ2xhcmsNCj4gV2FuZyA8eGlhb25pbmcud2FuZ0BueHAuY29tPjsgbmV0ZGV2QHZnZXIua2Vy
+bmVsLm9yZzsNCj4gbGludXgta2VybmVsQHZnZXIua2VybmVsLm9yZzsgYnBmQHZnZXIua2VybmVs
+Lm9yZzsgZGwtbGludXgtaW14DQo+IDxsaW51eC1pbXhAbnhwLmNvbT47IExvcmVuem8gQmlhbmNv
+bmkgPGxvcmVuem9Aa2VybmVsLm9yZz4NCj4gU3ViamVjdDogUmU6IFtQQVRDSCBuZXQtbmV4dF0g
+bmV0OiBmZWM6IHR1cm4gb24gWERQIGZlYXR1cmVzDQo+IA0KPiA+ICtMb3JlbnpvDQo+ID4NCj4g
+PiBPbiBUaHUsIE1heSAxOCwgMjAyMyBhdCAxMDozMjozNlBNICswODAwLCB3ZWkuZmFuZ0BueHAu
+Y29tIHdyb3RlOg0KPiA+ID4gRnJvbTogV2VpIEZhbmcgPHdlaS5mYW5nQG54cC5jb20+DQo+ID4g
+Pg0KPiA+ID4gVGhlIFhEUCBmZWF0dXJlcyBhcmUgc3VwcG9ydGVkIHNpbmNlIHRoZSBjb21taXQg
+NjZjMGUxM2FkMjM2DQo+ID4gPiAoImRyaXZlcnM6IG5ldDogdHVybiBvbiBYRFAgZmVhdHVyZXMi
+KS4gQ3VycmVudGx5LCB0aGUgZmVjIGRyaXZlcg0KPiA+ID4gc3VwcG9ydHMgTkVUREVWX1hEUF9B
+Q1RfQkFTSUMsIE5FVERFVl9YRFBfQUNUX1JFRElSRUNUIGFuZA0KPiA+ID4gTkVUREVWX1hEUF9B
+Q1RfTkRPX1hNSVQuIFNvIHR1cm4gb24gdGhlc2UgWERQIGZlYXR1cmVzIGZvciBmZWMNCj4gPiA+
+IGRyaXZlci4NCj4gPiA+DQo+ID4gPiBTaWduZWQtb2ZmLWJ5OiBXZWkgRmFuZyA8d2VpLmZhbmdA
+bnhwLmNvbT4NCj4gPiA+IC0tLQ0KPiA+ID4gIGRyaXZlcnMvbmV0L2V0aGVybmV0L2ZyZWVzY2Fs
+ZS9mZWNfbWFpbi5jIHwgMiArKw0KPiA+ID4gIDEgZmlsZSBjaGFuZ2VkLCAyIGluc2VydGlvbnMo
+KykNCj4gPiA+DQo+ID4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQvZXRoZXJuZXQvZnJlZXNj
+YWxlL2ZlY19tYWluLmMNCj4gPiA+IGIvZHJpdmVycy9uZXQvZXRoZXJuZXQvZnJlZXNjYWxlL2Zl
+Y19tYWluLmMNCj4gPiA+IGluZGV4IGNkMjE1YWIyMGZmOS4uNTc3YWZmZGE2ZWZhIDEwMDY0NA0K
+PiA+ID4gLS0tIGEvZHJpdmVycy9uZXQvZXRoZXJuZXQvZnJlZXNjYWxlL2ZlY19tYWluLmMNCj4g
+PiA+ICsrKyBiL2RyaXZlcnMvbmV0L2V0aGVybmV0L2ZyZWVzY2FsZS9mZWNfbWFpbi5jDQo+ID4g
+PiBAQCAtNDAzMCw2ICs0MDMwLDggQEAgc3RhdGljIGludCBmZWNfZW5ldF9pbml0KHN0cnVjdCBu
+ZXRfZGV2aWNlICpuZGV2KQ0KPiA+ID4gIAl9DQo+ID4gPg0KPiA+ID4gIAluZGV2LT5od19mZWF0
+dXJlcyA9IG5kZXYtPmZlYXR1cmVzOw0KPiA+ID4gKwluZGV2LT54ZHBfZmVhdHVyZXMgPSBORVRE
+RVZfWERQX0FDVF9CQVNJQyB8DQo+IE5FVERFVl9YRFBfQUNUX1JFRElSRUNUIHwNCj4gPiA+ICsJ
+CQkgICAgIE5FVERFVl9YRFBfQUNUX05ET19YTUlUOw0KPiANCj4gc2hvdWxkIHdlIGNoZWNrIEZF
+Q19RVUlSS19TV0FQX0ZSQU1FIGhlcmU/IHNvbWV0aGluZyBsaWtlOg0KPiANCj4gCWlmICghKGZl
+cC0+cXVpcmtzICYgRkVDX1FVSVJLX1NXQVBfRlJBTUUpDQo+IAkJbmRldi0+eGRwX2ZlYXR1cmVz
+ID0gTkVUREVWX1hEUF9BQ1RfQkFTSUMgfA0KPiAJCQkJICAgICBORVRERVZfWERQX0FDVF9SRURJ
+UkVDVCB8DQo+IAkJCQkgICAgIE5FVERFVl9YRFBfQUNUX05ET19YTUlUOw0KPiANCj4gDQpJdCdz
+IHJlYWxseSBhIGdvb2Qgc3VnZ2VzdGlvbiwgdGhhbmsgeW91IHNvIG11Y2ghDQoNCj4gPiA+DQo+
+ID4gPiAgCWZlY19yZXN0YXJ0KG5kZXYpOw0KPiA+ID4NCj4gPiA+IC0tDQo+ID4gPiAyLjI1LjEN
+Cj4gPiA+DQo+ID4gPg0KPiA+DQo=
