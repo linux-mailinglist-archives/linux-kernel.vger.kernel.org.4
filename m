@@ -2,54 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0D4070A07B
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 22:20:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC14B70A07E
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 22:21:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbjESUUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 16:20:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55020 "EHLO
+        id S230387AbjESUVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 16:21:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229833AbjESUUW (ORCPT
+        with ESMTP id S229653AbjESUVA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 16:20:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85A2101;
-        Fri, 19 May 2023 13:20:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C0DF658C6;
-        Fri, 19 May 2023 20:20:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id AB3BEC4339B;
-        Fri, 19 May 2023 20:20:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684527620;
-        bh=W+1y5pThaFFE3SpILZFKpyqE2TZwN+fc8Bqgv3UwvCI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=qTn+7cT42uUN4tIaRMsQ1HvwgaQ2Ipf553F8fAhTB4aEvx9P6CVZMtiNHAKrm0EPA
-         BV25m+/XYSKzep9JIsTQS9n1o+GZVMK233sNUNwWbcEzcQlX0tF3hqtDXYGirVxGEn
-         uN4tWcRhNFtOZ3DkEfwm46L3qAqJM0H8sisZ3Uw4jmrpSoHdcJdAgMl0GNyjZFpGjP
-         CE2bO3rFRg4sTKkL8EZDATLUoQFIBOjyufckh2YImUgFc0y7yy81HS8t1pe1H2bhwP
-         RQ/b3h7PYDYIfIDbkdprUDrfM2im8c8eO71o53SByKAHCLhJ+5Y/E791O1Y365pr5n
-         Awze//Wo3wkXg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8F65FE21EFA;
-        Fri, 19 May 2023 20:20:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] Bluetooth: btqca: use le32_to_cpu for ver.soc_id
-From:   patchwork-bot+bluetooth@kernel.org
-Message-Id: <168452762057.10748.3201481225692918444.git-patchwork-notify@kernel.org>
-Date:   Fri, 19 May 2023 20:20:20 +0000
-References: <20230519104324.4623-1-minhuadotchen@gmail.com>
-In-Reply-To: <20230519104324.4623-1-minhuadotchen@gmail.com>
-To:     Min-Hua Chen <minhuadotchen@gmail.com>
-Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Fri, 19 May 2023 16:21:00 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094E6102;
+        Fri, 19 May 2023 13:20:47 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id E987432005BC;
+        Fri, 19 May 2023 16:20:43 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 19 May 2023 16:20:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1684527643; x=1684614043; bh=oI
+        JfFfhJfrFit/dFRNXoBCxBw8LbYIGZS18hb/Tgxjk=; b=f3ZkNvTprv0bWj9ozZ
+        MdUK0zGhSmAyXcHmPJ6qbVfWmrpn3ByC9jsOzGIt4lKARxpzUUcjWsRHAlg2GjCH
+        pS9GwC5PGcSdbYlgqvAp6YCdagg1X2xpGiarYWp4uzU5Uy2sQNPRVnl+ZM7a1gPh
+        TtnAzTuHoKqS+giSVNNvxMNoTFNcqyC/ZbvA1UPF+6ei4TAhjpJ0AI6D8XxJWE6B
+        VKOoI+DUB3L0IQCHLDk8LxfY5snJzRXoDPRzzJaralCKAfswbnzNqmoRuTcA/xdH
+        waV6docyZYaW1KGzTA493KL4uOZHU8q/ASjCHRmYvCSW11G/xcs7kSVFgTZ2KimP
+        rEuQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684527643; x=1684614043; bh=oIJfFfhJfrFit
+        /dFRNXoBCxBw8LbYIGZS18hb/Tgxjk=; b=aoLi/APTXljwnO2BmJWbRFXr53n9v
+        Y77nUM8qaiD720EcWMgd3IWkinmqH2o/XLRxlBPBHsABVkmfjWi1SibnzYbQTpCx
+        dIA7bBwAuMpuT5LkgDRk63zVBsY3E4lRzLM0TrDF1+xZRwRF9GxNMV3yW3/dwSMJ
+        Sv1g0p3SP7ossBoVOxBVU3Vr2fIrjdvUJGBJDGtJAcL5bbTmru0z2qBdnBSOcPrg
+        JYwm3E/mSSiVoOmTCHDH400EBVJrjXjvJYuZHi3Lx55guFf/m1KzACMlxnseGm4E
+        clVPVf7kgUYP7vXhr0vhuI1USkheTKxrBXUOlCPODBgiNt1LJAbAADyLw==
+X-ME-Sender: <xms:GtpnZPsxN_NS7FgRT4VuGEonfEAEgCmFwlEy4aXR26x03pLGsukSTA>
+    <xme:GtpnZAfmwSpNBHpf1uZE5AodjZSIK93uaJaV6fwUhFD-c_M2vArf0dRn0UqAQaQvc
+    JI5dYNc9JHHB6g-pss>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeihedgudegkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:GtpnZCyTDYF6Bch9LxKQea2EqL2sMI-H81L0z21W46lU3wj6DrHsKQ>
+    <xmx:GtpnZOOddD43qO_tabxl4BLNVwVtBjAJPoPJcOZ-k1n14_-tNr1DqQ>
+    <xmx:GtpnZP_vCAGbxyA16iJIz8aQsjWkRdmBh6hLxW-y6YOTJ6uuUT_q5A>
+    <xmx:G9pnZOfkGqiHQtYDuLtcDpE1vCg3IaArb5e9xelrwhm26lH9XNc_Vg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 07D16B6008D; Fri, 19 May 2023 16:20:42 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-431-g1d6a3ebb56-fm-20230511.001-g1d6a3ebb
+Mime-Version: 1.0
+Message-Id: <b3689d7f-1a78-46ea-8e1f-48bc080ce993@app.fastmail.com>
+In-Reply-To: <20230518131013.3366406-1-guoren@kernel.org>
+References: <20230518131013.3366406-1-guoren@kernel.org>
+Date:   Fri, 19 May 2023 22:20:21 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     guoren <guoren@kernel.org>, "Palmer Dabbelt" <palmer@rivosinc.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Andy Lutomirski" <luto@kernel.org>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+        "Jisheng Zhang" <jszhang@kernel.org>,
+        "Huacai Chen" <chenhuacai@kernel.org>,
+        "Anup Patel" <apatel@ventanamicro.com>,
+        "Atish Patra" <atishp@atishpatra.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        =?UTF-8?Q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>, "Mike Rapoport" <rppt@kernel.org>,
+        "Anup Patel" <anup@brainfault.org>, shihua@iscas.ac.cn,
+        jiawei@iscas.ac.cn, liweiwei@iscas.ac.cn, luxufan@iscas.ac.cn,
+        chunyu@iscas.ac.cn, tsu.yubo@gmail.com, wefu@redhat.com,
+        wangjunqiang@iscas.ac.cn, kito.cheng@sifive.com,
+        "Andy Chiu" <andy.chiu@sifive.com>,
+        "Vincent Chen" <vincent.chen@sifive.com>,
+        "Greentime Hu" <greentime.hu@sifive.com>,
+        "Jonathan Corbet" <corbet@lwn.net>, wuwei2016@iscas.ac.cn,
+        "Jessica Clarke" <jrtc27@jrtc27.com>
+Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        "Guo Ren" <guoren@linux.alibaba.com>
+Subject: Re: [RFC PATCH 00/22] riscv: s64ilp32: Running 32-bit Linux kernel on 64-bit
+ supervisor mode
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,29 +109,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Thu, May 18, 2023, at 15:09, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
+> Why 32-bit Linux?
+> =================
+> The motivation for using a 32-bit Linux kernel is to reduce memory
+> footprint and meet the small capacity of DDR & cache requirement
+> (e.g., 64/128MB SIP SoC).
+>
+> Here are the 32-bit v.s. 64-bit Linux kernel data type comparison
+> summary:
+> 			32-bit		64-bit
+> sizeof(page):		32bytes		64bytes
+> sizeof(list_head):	8bytes		16bytes
+> sizeof(hlist_head):	8bytes		16bytes
+> sizeof(vm_area):	68bytes		136bytes
+> ...
 
-This patch was applied to bluetooth/bluetooth-next.git (master)
-by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
+> Mem-usage:
+> (s32ilp32) # free
+>        total   used   free  shared  buff/cache   available
+> Mem:  100040   8380  88244      44        3416       88080
+>
+> (s64lp64)  # free
+>        total   used   free  shared  buff/cache   available
+> Mem:   91568  11848  75796      44        3924       75952
+>
+> (s64ilp32) # free
+>        total   used   free  shared  buff/cache   available
+> Mem:  101952   8528  90004      44        3420       89816
+>                      ^^^^^
+>
+> It's a rough measurement based on the current default config without any
+> modification, and 32-bit (s32ilp32, s64ilp32) saved more than 16% memory
+> to 64-bit (s64lp64). But s32ilp32 & s64ilp32 have a similar memory
+> footprint (about 0.33% difference), meaning s64ilp32 has a big chance to
+> replace s32ilp32 on the 64-bit machine.
 
-On Fri, 19 May 2023 18:43:23 +0800 you wrote:
-> Use le32_to_cpu for ver.soc_id to fix the following
-> sparse warning.
-> 
-> drivers/bluetooth/btqca.c:640:24: sparse: warning: restricted
-> __le32 degrades to integer
-> 
-> Signed-off-by: Min-Hua Chen <minhuadotchen@gmail.com>
-> 
-> [...]
+I've tried to run the same numbers for the debate about running
+32-bit vs 64-bit arm kernels in the past, but focused mostly on
+slightly larger systems, but I looked mainly at the 512MB case,
+as that is the most cost-efficient DDR3 memory configuration
+and fairly common.
 
-Here is the summary with links:
-  - [v2] Bluetooth: btqca: use le32_to_cpu for ver.soc_id
-    https://git.kernel.org/bluetooth/bluetooth-next/c/0f1e103dc579
+What I'd like to understand better in your example is where
+the 14MB of memory went. I assume this is for 128MB of total
+RAM, so we know that 1MB went into additional 'struct page'
+objects (32 bytes * 32768 pages). It would be good to know
+where the dynamic allocations went and if they are  reclaimable
+(e.g. inodes) or non-reclaimable (e.g. kmalloc-128).
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+For the vmlinux size, is this already a minimal config
+that one would run on a board with 128MB of RAM, or a
+defconfig that includes a lot of stuff that is only relevant
+for other platforms but also grows on 64-bit?
 
+What do you see in /proc/slabinfo, /proc/meminfo/, and
+'size vmlinux' for the s64ilp32 and s64lp64 kernels here?
 
+       Arnd
