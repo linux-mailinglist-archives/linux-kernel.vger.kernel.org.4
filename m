@@ -2,79 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D00B5709D8F
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 19:10:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C77E2709D8D
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 19:09:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbjESRJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 13:09:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51880 "EHLO
+        id S229988AbjESRI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 13:08:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231996AbjESRJX (ORCPT
+        with ESMTP id S231928AbjESRIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 13:09:23 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9306A170B;
-        Fri, 19 May 2023 10:09:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=ermZR
-        AVuUoVUkWCNUZOtH1iovxjOCeT0E8mJeG1r0+I=; b=c8bg5UGkN+QKNMc7GUCVj
-        nbRykxbHGXSq6kDTA0CCIynXgQiwtfU+WEMBP3GV44WqWelTu0N1XuTqmk7NZZLL
-        SB6hTSYVDUWIEJK5Bc1WqJhVi21tUxRQHmFoum6OR3mQWH+bIZgNMzrEfhL4UUoM
-        aniNd2AfBAOBN7fiGizrVk=
-Received: from lizhe.. (unknown [120.245.132.248])
-        by zwqz-smtp-mta-g5-3 (Coremail) with SMTP id _____wCnJg_FrGdktqNhAA--.38178S4;
-        Sat, 20 May 2023 01:07:59 +0800 (CST)
-From:   Lizhe <sensor1010@163.com>
-To:     lars.povlsen@microchip.com, Steen.Hegelund@microchip.com,
-        daniel.machon@microchip.com, UNGLinuxDriver@microchip.com,
-        linus.walleij@linaro.org
-Cc:     linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lizhe <sensor1010@163.com>
-Subject: [PATCH] drivers/pinctrl.c : Remove redundant clearing of IRQ_TYPE_SENSE_MASK
-Date:   Sat, 20 May 2023 01:07:16 +0800
-Message-Id: <20230519170716.3459-1-sensor1010@163.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 19 May 2023 13:08:55 -0400
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A859E73;
+        Fri, 19 May 2023 10:08:26 -0700 (PDT)
+Received: by mail-oo1-xc2e.google.com with SMTP id 006d021491bc7-54fba751417so1021448eaf.0;
+        Fri, 19 May 2023 10:08:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684516091; x=1687108091;
+        h=content-transfer-encoding:in-reply-to:from:cc:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1huWkAV6FuLMkFZoFUc2jV0JBX1yJxviSFDa630aSUI=;
+        b=NZTBKhwWfXCsnbVFJydIzWTvI8gqNXY7hZXh2onlWfRYFb8AvaI/LurW61SGa3kfF9
+         zNuwfu7AB6ovqrLjgJhAEnis4xVPZkuVBpl3RsxcqHVjmnY6c7zbHrI7T3ezjWt6rmLV
+         h2ntAJQuohlHtxeRF4Ty/Su4kq/86VqO06kIUSqf2Jrz95EOd+CqXhvFZBnTo5EBKi/K
+         92knZgsUYgWLRXwso0BXFrFBY4GmKh+VL4OZTzZYBmRSW94qLy3hRfInaUf8YGFEKcbl
+         BnCjNKGPKmlDqfcmqT91GDKiIKVANOMBB5qHjo2DUV3nvxsCkaHzY6hpunaYstndKHI6
+         JG2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684516091; x=1687108091;
+        h=content-transfer-encoding:in-reply-to:from:cc:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1huWkAV6FuLMkFZoFUc2jV0JBX1yJxviSFDa630aSUI=;
+        b=VqQFfsRDZn9NsRfpDf7XMGEg7Vko06c97gGHhwW0ymW0fS8bTf1cLXf37CZwSGgtJv
+         12d+BwHe+mH+oSC3QAlU4w0vBXHmGwQHQMdyOxdnnpbZnfdgL7DjeqOF9NUQvg5xM/OE
+         GkKXKSGADxZfcBh8FbOsl6wDxZKKwsYTE/34BVgo+zVle99ne/3lF6FpkabelYJEwKcT
+         sFf2FrwNeK1388lXLxVEMBWR2JcjTlnhpwiM+CDUYpSynXiglfX/cTbH1NnnVX85VBTH
+         az3I5cyh+2wsJCyFaxaO2l46W6dFWDJvFyDWz11qG7VshLKF6Wm1xJZdrXXZL2QMaPmI
+         ok5Q==
+X-Gm-Message-State: AC+VfDzCin88x9nPecEfR/4CToXZQYINNRSJ+lPUB5DGIbZwU4ujwZDu
+        NB/VAhBAA8LaBTN5knVGVm8=
+X-Google-Smtp-Source: ACHHUZ6NQo6oN6AeG//kTa2RBjdJtIq7/7jCuDeLPHgvzI34Dm5ZqWAn/xhimwla2Cdz0CTH4XraqA==
+X-Received: by 2002:aca:1907:0:b0:38c:2c70:ab05 with SMTP id l7-20020aca1907000000b0038c2c70ab05mr1251517oii.43.1684516090810;
+        Fri, 19 May 2023 10:08:10 -0700 (PDT)
+Received: from ?IPV6:2603:8081:140c:1a00:1b3d:4b6b:e581:f922? (2603-8081-140c-1a00-1b3d-4b6b-e581-f922.res6.spectrum.com. [2603:8081:140c:1a00:1b3d:4b6b:e581:f922])
+        by smtp.gmail.com with ESMTPSA id q14-20020a9d654e000000b006ac87b54ca4sm1820965otl.34.2023.05.19.10.08.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 May 2023 10:08:10 -0700 (PDT)
+Message-ID: <8b8ed0fa-1fdb-3cb5-4800-1d9defe9553f@gmail.com>
+Date:   Fri, 19 May 2023 12:08:09 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wCnJg_FrGdktqNhAA--.38178S4
-X-Coremail-Antispam: 1Uf129KBjvdXoW7GFy8uF1xGF4UZF1kWr1rJFb_yoWfGrX_uF
-        W5J39Fq3y8WF1ayrWxKr43ZFZ0yF4UXFnYgasYqan3CrW5Aw4jyrn7uF15Cws3uryUuFyj
-        yryrXr4Fyry7AjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRKpBTDUUUUU==
-X-Originating-IP: [120.245.132.248]
-X-CM-SenderInfo: 5vhq20jurqiii6rwjhhfrp/xtbBdBF0q1gi6LwzcwAAsU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH for-next v5 4/7] RDMA/rxe: Add page invalidation support
+Content-Language: en-US
+To:     Daisuke Matsuda <matsuda-daisuke@fujitsu.com>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        Leon Romanovsky <leonro@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Zhu Yanjun <zyjzyj2000@gmail.com>
+References: <cover.1684397037.git.matsuda-daisuke@fujitsu.com>
+ <6e9d5e2d1b2a63385d1e4fc2a74c3b11d4909842.1684397037.git.matsuda-daisuke@fujitsu.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, rpearsonhpe@gmail.com,
+        Xiao Yang <yangx.jy@fujitsu.com>,
+        "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
+        "y-goto@fujitsu.com" <y-goto@fujitsu.com>
+From:   Bob Pearson <rpearsonhpe@gmail.com>
+In-Reply-To: <6e9d5e2d1b2a63385d1e4fc2a74c3b11d4909842.1684397037.git.matsuda-daisuke@fujitsu.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Before executing microchip_sgpio_irq_set_type(),
-type has already been cleared IRQ_TYPE_SENSE_MASK, see __irq_set_trigger().
+On 5/18/23 23:07, Daisuke Matsuda wrote:
+> On page invalidation, an MMU notifier callback is invoked to unmap DMA
+> addresses and update the driver page table(umem_odp->dma_list). It also
+> set the corresponding entries in MR xarray to NULL to prevent any access.
+> The callback is registered when an ODP-enabled MR is created.
+> 
+> Signed-off-by: Daisuke Matsuda <matsuda-daisuke@fujitsu.com>
+> ---
+>  drivers/infiniband/sw/rxe/Makefile  |  2 ++
+>  drivers/infiniband/sw/rxe/rxe_odp.c | 56 +++++++++++++++++++++++++++++
+>  2 files changed, 58 insertions(+)
+>  create mode 100644 drivers/infiniband/sw/rxe/rxe_odp.c
+> 
+> diff --git a/drivers/infiniband/sw/rxe/Makefile b/drivers/infiniband/sw/rxe/Makefile
+> index 5395a581f4bb..93134f1d1d0c 100644
+> --- a/drivers/infiniband/sw/rxe/Makefile
+> +++ b/drivers/infiniband/sw/rxe/Makefile
+> @@ -23,3 +23,5 @@ rdma_rxe-y := \
+>  	rxe_task.o \
+>  	rxe_net.o \
+>  	rxe_hw_counters.o
+> +
+> +rdma_rxe-$(CONFIG_INFINIBAND_ON_DEMAND_PAGING) += rxe_odp.o
+> diff --git a/drivers/infiniband/sw/rxe/rxe_odp.c b/drivers/infiniband/sw/rxe/rxe_odp.c
+> new file mode 100644
+> index 000000000000..b69b25e0fef6
+> --- /dev/null
+> +++ b/drivers/infiniband/sw/rxe/rxe_odp.c
+> @@ -0,0 +1,56 @@
+> +// SPDX-License-Identifier: GPL-2.0 OR Linux-OpenIB
+> +/*
+> + * Copyright (c) 2022-2023 Fujitsu Ltd. All rights reserved.
+> + */
+> +
+> +#include <linux/hmm.h>
+> +
+> +#include <rdma/ib_umem_odp.h>
+> +
+> +#include "rxe.h"
+> +
+> +static void rxe_mr_unset_xarray(struct rxe_mr *mr, unsigned long start,
+> +				unsigned long end)
+> +{
+> +	unsigned long lower, upper, idx;
+> +
+> +	lower = rxe_mr_iova_to_index(mr, start);
+> +	upper = rxe_mr_iova_to_index(mr, end);
+> +
+> +	/* make elements in xarray NULL */
+> +	spin_lock(&mr->page_list.xa_lock);
+> +	for (idx = lower; idx <= upper; idx++)
+> +		__xa_erase(&mr->page_list, idx);
+> +	spin_unlock(&mr->page_list.xa_lock);
+> +}
+> +
+> +static bool rxe_ib_invalidate_range(struct mmu_interval_notifier *mni,
+> +				    const struct mmu_notifier_range *range,
+> +				    unsigned long cur_seq)
+> +{
+> +	struct ib_umem_odp *umem_odp =
+> +		container_of(mni, struct ib_umem_odp, notifier);
+> +	struct rxe_mr *mr = umem_odp->private;
+> +	unsigned long start, end;
+> +
+> +	if (!mmu_notifier_range_blockable(range))
+> +		return false;
+> +
+> +	mutex_lock(&umem_odp->umem_mutex);
+> +	mmu_interval_set_seq(mni, cur_seq);
+> +
+> +	start = max_t(u64, ib_umem_start(umem_odp), range->start);
+> +	end = min_t(u64, ib_umem_end(umem_odp), range->end);
+> +
+> +	rxe_mr_unset_xarray(mr, start, end);
+> +
+> +	/* update umem_odp->dma_list */
+> +	ib_umem_odp_unmap_dma_pages(umem_odp, start, end);
+> +
+> +	mutex_unlock(&umem_odp->umem_mutex);
+> +	return true;
+> +}
+> +
+> +const struct mmu_interval_notifier_ops rxe_mn_ops = {
+> +	.invalidate = rxe_ib_invalidate_range,
+> +};
 
-Signed-off-by: Lizhe <sensor1010@163.com>
----
- drivers/pinctrl/pinctrl-microchip-sgpio.c | 2 --
- 1 file changed, 2 deletions(-)
+Looks good.
 
-diff --git a/drivers/pinctrl/pinctrl-microchip-sgpio.c b/drivers/pinctrl/pinctrl-microchip-sgpio.c
-index 4794602316e7..59f232a68b5a 100644
---- a/drivers/pinctrl/pinctrl-microchip-sgpio.c
-+++ b/drivers/pinctrl/pinctrl-microchip-sgpio.c
-@@ -719,8 +719,6 @@ static void microchip_sgpio_irq_ack(struct irq_data *data)
- 
- static int microchip_sgpio_irq_set_type(struct irq_data *data, unsigned int type)
- {
--	type &= IRQ_TYPE_SENSE_MASK;
--
- 	switch (type) {
- 	case IRQ_TYPE_EDGE_BOTH:
- 		irq_set_handler_locked(data, handle_edge_irq);
--- 
-2.34.1
+Reviewed-by: Bob Pearson <rpearsonhpe@gmail.com>
 
