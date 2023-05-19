@@ -2,230 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D53A70949C
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 12:17:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A82770949B
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 12:17:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230032AbjESKRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 06:17:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44708 "EHLO
+        id S231802AbjESKQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 06:16:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231849AbjESKRJ (ORCPT
+        with ESMTP id S231642AbjESKQs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 06:17:09 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9E6E5F
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:17:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684491428; x=1716027428;
-  h=date:from:to:cc:subject:message-id;
-  bh=52BpUC/7yHF2M0hfS/ARaBdtZsdPNhk7oRxYKtt4rwM=;
-  b=oK9Ta+G7kCA5R2Q9IIlFwvXKVgKrR/KvX8TI/hGlVtmMdOZLIv1/wte5
-   FWiWsYccuou3nkRJcTVPUQGTebhaiKpOPbQz2GUmz4xIhvgFTwqjF/zIW
-   6+SHTxx4PD1/WuAN16wG/hn/hXQg/Ai07NjMpue9VxOvx/gZnfuZuJIx4
-   OLDT+pF3EpsEHMtg6C4gKfBzLbYKyNDlm27Dznm1XIpya4dgNlomoeOuH
-   qzYB4DeRlvHTpJKmqt5v+jpyq16X6f3UVElmKf5DQFokkiaUoBBcNR1e4
-   N8mCd+bTiFZ0CZsGOzzKUzfzgkqlpgoMFPm0V0R4b0wXyvTP10nD7pYCe
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="336929445"
-X-IronPort-AV: E=Sophos;i="6.00,176,1681196400"; 
-   d="scan'208";a="336929445"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2023 03:17:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="680005114"
-X-IronPort-AV: E=Sophos;i="6.00,176,1681196400"; 
-   d="scan'208";a="680005114"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 19 May 2023 03:17:06 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pzxAX-000AlB-3C;
-        Fri, 19 May 2023 10:17:05 +0000
-Date:   Fri, 19 May 2023 18:16:37 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/cleanups] BUILD SUCCESS
- 454a348714954f7b626c027a90c3967278e3f93b
-Message-ID: <20230519101637.0JXkd%lkp@intel.com>
-User-Agent: s-nail v14.9.24
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 19 May 2023 06:16:48 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7881AD;
+        Fri, 19 May 2023 03:16:46 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id EB00B5C018B;
+        Fri, 19 May 2023 06:16:45 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Fri, 19 May 2023 06:16:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1684491405; x=
+        1684577805; bh=eusJfDMu4BSNTI2WSPt51cso8c3WEiCMloVC5l7E91A=; b=b
+        lCqjsuOikslXbda5V6akg2UopLQgrMQlrMPxyvtjHo/yJUKUYsSrWvC17uuKr4vM
+        O3Dv3fChZ0sWQT9o+pbsyKJ3oF0P8ce1LmE7hNzWgNvVHUD7m+qKqpW9b0Imw1Mo
+        88O454JJockUe2btHxFt99nIq3+F+eEfjeZciytpwoQhJLAVLBKvGCGFJNPVFgMQ
+        HlxETu/Lumab7SYt93kWpZl2866CP9QND6VTMTK7Awv7LPawzIsV53d2kkASQlDX
+        oSMEWGKm2uXhWPj4LjqqQ5cZ7a3VdzP3vpxAnrZqJ0cFQWRcyL69/8YB8JAmenk1
+        IrTT22X/qH2pzPy4QFwYg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684491405; x=1684577805; bh=eusJfDMu4BSNT
+        I2WSPt51cso8c3WEiCMloVC5l7E91A=; b=dXyFgQH7P6eiAYgSleRv/Gjqb280F
+        ThmzxeXcsEdqsawOM/bakg1QLciiKGf86X0jkUAbdXki8U2advF5sTZKIilcju67
+        Oz0a4RkZ53yo8PRTDo9WfF8gEMuifyzzXRF3+qR1nhsdbtzwcDGuvhnof1nWAC9e
+        w9T3mDF5ynVfAQf3bFdZfb+wusOfpyS4xdqSm3SHpqCkbnWNIn05qSrdfe/+gW+U
+        h6pglTLWaR2rKFF9aEznZ0tseJSOR+otfGzLZTSdH535OpcEbLR4PogR0kMPWiX2
+        GiNV0jvqiazvZs01yOVjM03jQ4HHnsapOH+01jwn/uTa/ZFYiw4ySkGQg==
+X-ME-Sender: <xms:jUxnZKonMdhqVeRoGnusF0ygfdH53a7xUQR9toJGh1Dcgus8LewFIw>
+    <xme:jUxnZIq7PnuE_JoNKgCT_0iD_-qK8wLphLkh0Sbv-kWf6a9X_9WgscpqOa8wiVroO
+    qxiPRQGwq7uJud1y6Y>
+X-ME-Received: <xmr:jUxnZPMtzFy5V4YjzDWJnc_iQlJwKeWE0yecE-ajf3Kv2A1QC0kUa8LjLmPFGqtx1vtnPA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeihedgvdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
+    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:jUxnZJ5OH0_GBw2ta8PpGwzuhq2DpKv03WfZy8jNrZ1HgGx_DIU-Qw>
+    <xmx:jUxnZJ4x4ooMT9irvoHnf7oAQv9V5vB6jVGAuFBNJgF0IpWmbOEzAw>
+    <xmx:jUxnZJiwcZ3nG37hTXfgFl6VI2a07q-CTc3itCWRDP2dp1c3sFTQAQ>
+    <xmx:jUxnZLHArDRSAyu74WkwOIql1ojOGBgNqYSq6NBC0vaxyDfyimIFOg>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 19 May 2023 06:16:44 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 4DA4210DFD2; Fri, 19 May 2023 13:16:41 +0300 (+03)
+Date:   Fri, 19 May 2023 13:16:41 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Liam Merwick <liam.merwick@oracle.com>
+Subject: Re: [PATCHv12 4/9] x86/boot/compressed: Handle unaccepted memory
+Message-ID: <20230519101641.nka7ty3fttntymci@box.shutemov.name>
+References: <20230518231434.26080-1-kirill.shutemov@linux.intel.com>
+ <20230518231434.26080-5-kirill.shutemov@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230518231434.26080-5-kirill.shutemov@linux.intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: INFO setup_repo_specs: /db/releases/20230519164737/lkp-src/repo/*/tip
-https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cleanups
-branch HEAD: 454a348714954f7b626c027a90c3967278e3f93b  x86/platform: Avoid missing-prototype warnings for OLPC
+On Fri, May 19, 2023 at 02:14:29AM +0300, Kirill A. Shutemov wrote:
+> diff --git a/arch/x86/boot/compressed/mem.c b/arch/x86/boot/compressed/mem.c
+> index 67594fcb11d9..87372b96d613 100644
+> --- a/arch/x86/boot/compressed/mem.c
+> +++ b/arch/x86/boot/compressed/mem.c
+> @@ -1,9 +1,32 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  
+>  #include "error.h"
+> +#include "misc.h"
+>  
+>  void arch_accept_memory(phys_addr_t start, phys_addr_t end)
+>  {
+>  	/* Platform-specific memory-acceptance call goes here */
+>  	error("Cannot accept memory");
+>  }
+> +
+> +void init_unaccepted_memory(void)
+> +{
+> +	guid_t guid =  LINUX_EFI_UNACCEPTED_MEM_TABLE_GUID;
+> +	struct efi_unaccepted_memory *unaccepted_table;
+> +	unsigned long cfg_table_pa;
+> +	unsigned int cfg_table_len;
+> +	int ret;
+> +
+> +	ret = efi_get_conf_table(boot_params, &cfg_table_pa, &cfg_table_len);
+> +	if (ret)
+> +		error("EFI config table not found.");
+> +
+> +	unaccepted_table = (void *)efi_find_vendor_table(boot_params,
+> +							 cfg_table_pa,
+> +							 cfg_table_len,
+> +							 guid);
+> +	if (unaccepted_table->version != 1)
+> +		error("Unknown version of unaccepted memory table\n");
+> +
+> +	set_unaccepted_table(unaccepted_table);
+> +}
 
-elapsed time: 728m
+0-day reported boot failure outdise TDX guest with CONFIG_INTEL_TDX_GUEST=y.
 
-configs tested: 152
-configs skipped: 5
+The fixup:
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-alpha                randconfig-r005-20230517   gcc  
-alpha                randconfig-r006-20230517   gcc  
-alpha                randconfig-r013-20230517   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                         haps_hs_defconfig   gcc  
-arc                     haps_hs_smp_defconfig   gcc  
-arc                  randconfig-r033-20230517   gcc  
-arc                  randconfig-r043-20230517   gcc  
-arm                              allmodconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   gcc  
-arm                            mps2_defconfig   gcc  
-arm                  randconfig-r003-20230517   gcc  
-arm                  randconfig-r025-20230517   clang
-arm                  randconfig-r031-20230517   gcc  
-arm                  randconfig-r034-20230517   gcc  
-arm                  randconfig-r035-20230517   gcc  
-arm                  randconfig-r036-20230517   gcc  
-arm                  randconfig-r046-20230517   clang
-arm64                            allyesconfig   gcc  
-arm64                               defconfig   gcc  
-csky         buildonly-randconfig-r001-20230519   gcc  
-csky         buildonly-randconfig-r003-20230519   gcc  
-csky                                defconfig   gcc  
-csky                 randconfig-r001-20230517   gcc  
-csky                 randconfig-r006-20230517   gcc  
-hexagon              randconfig-r041-20230517   clang
-hexagon              randconfig-r045-20230517   clang
-i386                             allyesconfig   gcc  
-i386                              debian-10.3   gcc  
-i386                                defconfig   gcc  
-i386                          randconfig-a001   gcc  
-i386                          randconfig-a002   clang
-i386                          randconfig-a003   gcc  
-i386                          randconfig-a004   clang
-i386                          randconfig-a005   gcc  
-i386                          randconfig-a006   clang
-i386                          randconfig-a011   clang
-i386                          randconfig-a012   gcc  
-i386                          randconfig-a013   clang
-i386                          randconfig-a014   gcc  
-i386                          randconfig-a015   clang
-i386                          randconfig-a016   gcc  
-ia64                             allmodconfig   gcc  
-ia64         buildonly-randconfig-r006-20230519   gcc  
-ia64                                defconfig   gcc  
-ia64                 randconfig-r005-20230517   gcc  
-ia64                 randconfig-r011-20230517   gcc  
-ia64                 randconfig-r022-20230517   gcc  
-loongarch                        alldefconfig   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch    buildonly-randconfig-r002-20230519   gcc  
-loongarch    buildonly-randconfig-r005-20230517   gcc  
-loongarch                           defconfig   gcc  
-loongarch            randconfig-r003-20230517   gcc  
-loongarch            randconfig-r023-20230517   gcc  
-loongarch            randconfig-r033-20230517   gcc  
-loongarch            randconfig-r035-20230517   gcc  
-m68k                             allmodconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                          multi_defconfig   gcc  
-m68k                 randconfig-r022-20230517   gcc  
-m68k                 randconfig-r024-20230517   gcc  
-microblaze                          defconfig   gcc  
-microblaze           randconfig-r021-20230517   gcc  
-microblaze           randconfig-r031-20230517   gcc  
-mips                             allmodconfig   gcc  
-mips                             allyesconfig   gcc  
-mips                         cobalt_defconfig   gcc  
-mips                 randconfig-r015-20230517   clang
-nios2        buildonly-randconfig-r002-20230517   gcc  
-nios2                               defconfig   gcc  
-nios2                randconfig-r004-20230517   gcc  
-openrisc     buildonly-randconfig-r005-20230519   gcc  
-parisc                              defconfig   gcc  
-parisc               randconfig-r002-20230517   gcc  
-parisc               randconfig-r032-20230517   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc      buildonly-randconfig-r003-20230517   gcc  
-powerpc                       eiger_defconfig   gcc  
-powerpc                      pcm030_defconfig   gcc  
-powerpc                    sam440ep_defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                randconfig-r034-20230517   clang
-riscv                randconfig-r042-20230517   gcc  
-riscv                          rv32_defconfig   gcc  
-s390                             allmodconfig   gcc  
-s390                             allyesconfig   gcc  
-s390         buildonly-randconfig-r004-20230517   gcc  
-s390                                defconfig   gcc  
-s390                 randconfig-r003-20230517   clang
-s390                 randconfig-r004-20230517   clang
-s390                 randconfig-r005-20230517   clang
-s390                 randconfig-r026-20230517   gcc  
-s390                 randconfig-r044-20230517   gcc  
-sh                               allmodconfig   gcc  
-sh           buildonly-randconfig-r006-20230517   gcc  
-sh                         microdev_defconfig   gcc  
-sh                   randconfig-r023-20230517   gcc  
-sh                   randconfig-r036-20230517   gcc  
-sh                           se7722_defconfig   gcc  
-sh                   secureedge5410_defconfig   gcc  
-sparc                               defconfig   gcc  
-sparc                randconfig-r001-20230517   gcc  
-sparc                randconfig-r012-20230517   gcc  
-sparc                randconfig-r024-20230517   gcc  
-sparc64      buildonly-randconfig-r001-20230517   gcc  
-sparc64      buildonly-randconfig-r004-20230519   gcc  
-sparc64              randconfig-r004-20230517   gcc  
-sparc64              randconfig-r026-20230517   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   gcc  
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                        randconfig-a001   clang
-x86_64                        randconfig-a002   gcc  
-x86_64                        randconfig-a003   clang
-x86_64                        randconfig-a004   gcc  
-x86_64                        randconfig-a005   clang
-x86_64                        randconfig-a006   gcc  
-x86_64                        randconfig-a011   gcc  
-x86_64                        randconfig-a012   clang
-x86_64                        randconfig-a013   gcc  
-x86_64                        randconfig-a014   clang
-x86_64                        randconfig-a015   gcc  
-x86_64                        randconfig-a016   clang
-x86_64                        randconfig-k001   clang
-x86_64                        randconfig-x051   gcc  
-x86_64                        randconfig-x052   clang
-x86_64                        randconfig-x053   gcc  
-x86_64                        randconfig-x054   clang
-x86_64                        randconfig-x055   gcc  
-x86_64                        randconfig-x056   clang
-x86_64                        randconfig-x061   gcc  
-x86_64                        randconfig-x062   clang
-x86_64                        randconfig-x063   gcc  
-x86_64                        randconfig-x064   clang
-x86_64                        randconfig-x065   gcc  
-x86_64                        randconfig-x066   clang
-x86_64                               rhel-8.3   gcc  
-xtensa               randconfig-r002-20230517   gcc  
-xtensa               randconfig-r032-20230517   gcc  
-
+diff --git a/arch/x86/boot/compressed/mem.c b/arch/x86/boot/compressed/mem.c
+index 0108c97399a5..8df3d988ae69 100644
+--- a/arch/x86/boot/compressed/mem.c
++++ b/arch/x86/boot/compressed/mem.c
+@@ -56,6 +56,9 @@ void init_unaccepted_memory(void)
+ 							 cfg_table_pa,
+ 							 cfg_table_len,
+ 							 guid);
++	if (!unaccepted_table)
++		return;
++
+ 	if (unaccepted_table->version != 1)
+ 		error("Unknown version of unaccepted memory table\n");
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+  Kiryl Shutsemau / Kirill A. Shutemov
