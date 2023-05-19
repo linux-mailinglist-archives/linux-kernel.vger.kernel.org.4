@@ -2,104 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A6FD70945E
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 12:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 569F570945D
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 12:02:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231255AbjESKCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 06:02:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35210 "EHLO
+        id S231551AbjESKCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 06:02:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231519AbjESKCj (ORCPT
+        with ESMTP id S231527AbjESKCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 06:02:39 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D286132
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:02:38 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-64d1a0d640cso1271900b3a.1
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:02:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684490558; x=1687082558;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bzq3Pqk8pZIS4OBKRNMcHxRAHqoQcIGGMgWTxxeCr8o=;
-        b=b/fsbDPtKzkSjhJgYBibHq2FGgZEylRkGne9JM3bSu5YcnPkTHJwBC5AWTG1z7Zo/v
-         PnRJb3YgltwgODJqQdXmY7di2wO+CKBmkCtEV5H9qHVbDgLaqS9b9KfPPSFYW2+4PRPY
-         wLo0l4b1nR9LjZbB9QCsZaUyHFyniIfjFVftw//Hj+EhBdHntDeXTNNELfbpvQy1sXDt
-         ccOd0RAOtOEwelVloU36T4pkF0HPVBSqijaNH7ZD5KqWoI7Vz9149hCpjEsn18bsyFUA
-         oir4/aYRaplYGlf6ajbPLZQF8YIJWdMZ6Sgq5iFrtCVvoBxcJUSm85jVwa94/1Cr3Atj
-         zofg==
+        Fri, 19 May 2023 06:02:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2AA9C
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:01:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684490486;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VI5tgplCEt4jHAaMyiKalfapGPWMDCQqKZuSohEz4I8=;
+        b=Eo7ucxjJ4tfxCxIPEEz4t4tsX1UaymPPSo0X7E9BhzZG4guufEtZjTsxOhcggaW0LtdkYn
+        wbWuUkitvg6mhLtIhpU6sq4Tjwr2Rw4AuzQ0n+xxVaDZdM9z/2kkHI5fUXDb5YCeU364GH
+        wFyLyf/SQ0R/CUzmpA1ZsyWG7i/tGPQ=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-204-YuaYiAncNeiBrx4FNJ0rpQ-1; Fri, 19 May 2023 06:01:24 -0400
+X-MC-Unique: YuaYiAncNeiBrx4FNJ0rpQ-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3063287f1c9so1363809f8f.2
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:01:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684490558; x=1687082558;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1684490483; x=1687082483;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Bzq3Pqk8pZIS4OBKRNMcHxRAHqoQcIGGMgWTxxeCr8o=;
-        b=SzfT4A51QClIr7MXeH9pr2F6AKMkWp1o7Eqigaxeg+G0JHgGsJz98uDc5FV7dHwaY6
-         ZbvCbCmUghW14lgOa3IHc4b4XFcQBCKPOE9kTPdAyaPPKW+bkMbkQv5GWciD9N6/ntOB
-         nh+UrdWgppfjcbzTJktZEi1HYp+cZ2GZ0e3f36jK7XvOXqYqT/6NYqUbAtknLvThe59O
-         e+QSKfcV/O8qmNY2ntcV0TzJlBRD877Ra+w0KK5aWIYFcj51ZTN8TK4bb6XtqwZ6/YOB
-         Hd5ZimmoqIhupoIqjVptUmXvnR6voTR1xggi2hHKJf7O90T+q6uNTy3vyjxWK1gpLB9a
-         u/mw==
-X-Gm-Message-State: AC+VfDy5remz3bcDb1hXlMPcMaUakRAkEeXVjsF+MCLxK8KAu5u0aqk6
-        +LC+OiD6i4eNGWZ0xacTKseulliYGyk=
-X-Google-Smtp-Source: ACHHUZ6TuoypXaIzwGV7YKg30OUvIQCRjONVjfDFaTmc/vZITR66LGJJYCushdEgWVyNpsMp66BPFg==
-X-Received: by 2002:a05:6a20:9384:b0:105:b4e:ed71 with SMTP id x4-20020a056a20938400b001050b4eed71mr1939878pzh.32.1684490557737;
-        Fri, 19 May 2023 03:02:37 -0700 (PDT)
-Received: from localhost.localdomain ([2405:201:682f:3808:92bc:26c4:ce02:816b])
-        by smtp.gmail.com with ESMTPSA id i5-20020aa78b45000000b0064858e255d1sm2673663pfd.65.2023.05.19.03.02.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 03:02:37 -0700 (PDT)
-From:   Deepanshu Kartikey <kartikey406@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Deepanshu Kartikey <kartikey406@gmail.com>
-Subject: [PATCH] [PATCH v2] Staging: rts5208: rtsx: Moved else statement to same line with else if
-Date:   Fri, 19 May 2023 15:31:19 +0530
-Message-Id: <20230519100119.25482-1-kartikey406@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=VI5tgplCEt4jHAaMyiKalfapGPWMDCQqKZuSohEz4I8=;
+        b=VwSc/te+4y6fB1HjXQpmq7ebUaToHcJpME0zzlXTNy+qPIbSRfHvMT6YA+EVsP+9jP
+         zqMMd5djrKWP6qzRCveF6A9ADeUUN1eLSn3TV6HNStBIdyor3zDijDI/Vpb2Ty55IWFG
+         ZJyzKeC74e5qHzXULM7nQSFJOkL+9SaPi5Uc6rvBm47nlI5kEmPocYr00PTWtktrQC2e
+         XUPH1xfAiwrNR5cdhDJpmuxPXEuU349PI06bYJ8fjjYPcBN0xxsm0i9xgA/1PSdUII/n
+         5vcDVvibrJQqt0Guya80E8VM04RXmu9qfY/0Pb3WglrDUj8k8lsThl6MvVxCjGM04Ifu
+         DGqg==
+X-Gm-Message-State: AC+VfDxFZQmEw59yc/n6F2HaMhaGWwqptd8BXV9kHa9A4/62CjV4Hpu2
+        G2hD83Oi/rkQWYwWgYedKTPK1KMzkjZtLwIzcOKrVA1OlYKMXpy3zt87TbPVzZlYRBbxPSArowX
+        NhYTfw9E2BZMxVzOd0qZsXMYu
+X-Received: by 2002:a5d:4b43:0:b0:309:5068:9ebe with SMTP id w3-20020a5d4b43000000b0030950689ebemr1226775wrs.50.1684490483439;
+        Fri, 19 May 2023 03:01:23 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6bW0gym5bX5jcXG9w5DVs/9Wlup2M96haNB0vR03K3c+zLetIbvoA2UiOPc9NtNRwR6l97Vg==
+X-Received: by 2002:a5d:4b43:0:b0:309:5068:9ebe with SMTP id w3-20020a5d4b43000000b0030950689ebemr1226745wrs.50.1684490482941;
+        Fri, 19 May 2023 03:01:22 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c722:9d00:7421:54d8:9227:a3e8? (p200300cbc7229d00742154d89227a3e8.dip0.t-ipconnect.de. [2003:cb:c722:9d00:7421:54d8:9227:a3e8])
+        by smtp.gmail.com with ESMTPSA id k13-20020a5d518d000000b00306344eaebfsm4801755wrv.28.2023.05.19.03.01.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 May 2023 03:01:22 -0700 (PDT)
+Message-ID: <83a846a9-8f88-3f66-b840-e84d072bb0fb@redhat.com>
+Date:   Fri, 19 May 2023 12:01:21 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+To:     =?UTF-8?B?WGlhb21pbmcgRGluZyAo5LiB5pmT5piOKQ==?= 
+        <Xiaoming.Ding@mediatek.com>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "sumit.garg@linaro.org" <sumit.garg@linaro.org>
+Cc:     =?UTF-8?B?RmVpIFh1ICjlvpDpo54p?= <Fei.Xu@mediatek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "srv_heupstream@mediatek.com" <srv_heupstream@mediatek.com>,
+        "jens.wiklander@linaro.org" <jens.wiklander@linaro.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "op-tee@lists.trustedfirmware.org" <op-tee@lists.trustedfirmware.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>
+References: <20230517031856.19660-1-xiaoming.ding@mediatek.com>
+ <ZGSDoVKKVqCkbaCB@infradead.org>
+ <CAFA6WYO+AvnbuAdWyBAQ8HkLaOno7PXdsPb9SubxrGNvAm4UnQ@mail.gmail.com>
+ <ZGSLiiK/JzD5KMd7@infradead.org>
+ <CAFA6WYPOMwmrA3J84AHzoD2eAtNkpMxr754qHpc-j6XRkgFFvQ@mail.gmail.com>
+ <ZGSgCZrg+RjAbGO1@infradead.org>
+ <CAFA6WYO+EpiECFxdVgmd-Ey9jq1Ybt78WupK_bW5+oDcW-soVQ@mail.gmail.com>
+ <781d993204fbbdf30a6ca495b59b3b0aa7a2e496.camel@mediatek.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH] tee: add FOLL_LONGTERM for CMA case when alloc shm
+In-Reply-To: <781d993204fbbdf30a6ca495b59b3b0aa7a2e496.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Moved else statement to same line with else if,
-this warning was given by checkpatch.pl
+On 18.05.23 08:40, Xiaoming Ding (丁晓明) wrote:
+>  From 35fd062d5cbc4d182eee0183843cd6350d126788 Mon Sep 17 00:00:00 2001
+> From: Xiaoming Ding <xiaoming.ding@mediatek.com>
+> Date: Wed, 10 May 2023 10:15:23 +0800
+> Subject: [PATCH v2] tee: add FOLL_LONGTERM for CMA case when alloc shm
+> 
+> CMA is widely used on insufficient memory platform for
+> secure media playback case, and FOLL_LONGTERM will
+> avoid tee_shm alloc pages from CMA region.
+> without FOLL_LONGTERM, CMA region may alloc failed since
+> tee_shm has a chance to use it in advance.
+> 
+> modify is verified on OPTEE XTEST and kinds of secure + clear playback
+> 
+> 
+> Fixes: 033ddf12bcf5 ("tee: add register user memory")
+> Signed-off-by: Xiaoming Ding <xiaoming.ding@mediatek.com>
+> ---
+> v1 -> v2: take off the ifdef and apply FOLL_LONGTERM by default
+> 
+>   drivers/tee/tee_shm.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tee/tee_shm.c b/drivers/tee/tee_shm.c
+> index 673cf0359494..38878e549ca4 100644
+> --- a/drivers/tee/tee_shm.c
+> +++ b/drivers/tee/tee_shm.c
+> @@ -257,7 +257,7 @@ register_shm_helper(struct tee_context *ctx,
+> unsigned long addr,
+>   	}
+>   
+>   	if (flags & TEE_SHM_USER_MAPPED)
+> -		rc = pin_user_pages_fast(start, num_pages, FOLL_WRITE,
+> +		rc = pin_user_pages_fast(start, num_pages, FOLL_WRITE |
+> FOLL_LONGTERM,
+>   					 shm->pages);
+>   	else
+>   		rc = shm_get_kernel_pages(start, num_pages, shm-
+>> pages);
 
-Signed-off-by: Deepanshu Kartikey <kartikey406@gmail.com>
+I didn't dive deeply into that code, but I can spot that we can end up 
+long-term pinning multiple pages -- possibly unbound or is there any 
+sane limit on the number of pages?
 
-...
-Changes in V2:
-    - Moved else to the same line with else if
-    - Moved comment on else statement to inside of it
----
- drivers/staging/rts5208/rtsx.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+Take a look at io_uring/rsrc.c and how we account long-term pinned pages 
+against user->locked_vm/ctx->mm_account->pinned_vm in io_account_mem().
 
-diff --git a/drivers/staging/rts5208/rtsx.c b/drivers/staging/rts5208/rtsx.c
-index 2284a96abcff..47dacef0aaf8 100644
---- a/drivers/staging/rts5208/rtsx.c
-+++ b/drivers/staging/rts5208/rtsx.c
-@@ -399,10 +399,8 @@ static int rtsx_control_thread(void *__dev)
- 				chip->srb->device->id,
- 				(u8)chip->srb->device->lun);
- 			chip->srb->result = DID_BAD_TARGET << 16;
--		}
--
--		/* we've got a command, let's do it! */
--		else {
-+		} else {
-+			/* we've got a command, let's do it! */
- 			scsi_show_command(chip);
- 			rtsx_invoke_transport(chip->srb, chip);
- 		}
+If user space could only end up pinning one or two pages via that 
+interface, ok. But it looks like this interface could be abused to 
+create real real trouble by unprivileged users that should be able to 
+long-term pin that many pages.
+
+Am I missing something important (i.e., interface is only accessible by 
+privileged users) or should there be proper accounting and 
+RLIMIT_MEMLOCK checks?
+
 -- 
-2.25.1
+Thanks,
+
+David / dhildenb
 
