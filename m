@@ -2,125 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 619B4709416
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 11:51:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C35670941B
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 11:52:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230427AbjESJvx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 05:51:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54476 "EHLO
+        id S230113AbjESJwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 05:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229663AbjESJvw (ORCPT
+        with ESMTP id S230469AbjESJwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 05:51:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 883139C
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 02:51:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684489864;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TvDyxmxzm7Q9OzR/miu9z+fW0LmnPZ8pBxAPJO77LOE=;
-        b=NTEdYy0fj54rKNMToyY6ysZWhBGu4HzUqf6mxxezA7+hJY9ln6I3g/757np2TRh3NyH/Iz
-        kx4YCyR1OnCnVRQyLfE9naaSo/s7uKUFk8o1sLwp7RzVsDiu4EI0n+wXNnM/VleB2/dYgE
-        rlG1b+F5j6p9/rt2G6iSBAbzO5AqBic=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-142-CK_Vb4yzNJavxSMKDsrUZg-1; Fri, 19 May 2023 05:51:03 -0400
-X-MC-Unique: CK_Vb4yzNJavxSMKDsrUZg-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f422dc5ee5so17602835e9.0
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 02:51:02 -0700 (PDT)
+        Fri, 19 May 2023 05:52:09 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3282C19A;
+        Fri, 19 May 2023 02:52:03 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id af79cd13be357-7576deacbd6so157946785a.3;
+        Fri, 19 May 2023 02:52:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684489922; x=1687081922;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lYlFoKtA5IkPlUC08PPhE1HRAZ9SjNGPuMwfpP8csYw=;
+        b=nYxSjSYcaXL9wBLYYxr18nPzFhoS6t/XMYh9wWv4olQ5Ajdh0ltDPhpnV6tMT0kw2L
+         7PVzfD8g+760Xthp7t3msGPUjuZ59gQw4rwzaEmCtQ8hyGpsue8N+xUoLitFBMGgdB9W
+         jVGc5vSq1XyykVvXwliYjJhs52PRT3SjBYJ7iwE5d7/KP6vVYRumAVbxhCiJ5soKreN4
+         brAcrHDbctTGfUlLlmhxftAZM3pPIDGyFEnEQC4iY77FwsJnKWjlVhqa4CFYiyr2O4Qf
+         7YR2QIMjUYV5AhK5aiXR9mtSexGX2S4hbthpMwYW3yJ58fFaMoJ96fz6odyG79IA5mY6
+         tJ0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684489862; x=1687081862;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TvDyxmxzm7Q9OzR/miu9z+fW0LmnPZ8pBxAPJO77LOE=;
-        b=Vbf1Zgv3pOVfCNnj7V1t/+7FYO2YOpksanIbRjo29qw8kbzvfoc9CblKKWBrX8XDOI
-         /wCifhb2jiGBJOiGmIO4JnMButZAonQpUymmxvO3kbHD8djXuwj1qjvyYvmIULUGXlFi
-         J6X96UhpthS04srPnvZo23aingLJefJGl2B9ettjB4lDHyt325EN/PtNFSwQykH7NH1o
-         QRxU5fLszoF0FXmhERYkk8s6TR7RLGPC+KR8FytZTf+UW55rVMs+LY6vUi1kQoY7YnAN
-         cP6SzxFk7WCAzlmOpxf4GZGa8LK2K6zqmqQotZ7NerJ+KSLYhiI7MfCTrrTj7ulzLiEL
-         SC2A==
-X-Gm-Message-State: AC+VfDypYWo/fqKwmOB8lyhxg2Sid3nNJ6e8Y2xwc5r29Xqr3EKyixr7
-        I5WFJd6fVriQHAB4ZT5xH2ZIfv/kRjRvXUuZlUwtniqRMsFiYsAX8h4DAZSMu8ftRLf7azqtfrR
-        FVdO0G8qs6FjZAdt1Vv8Ufj8NMip7+t2q
-X-Received: by 2002:a1c:4b08:0:b0:3f5:bc8:e398 with SMTP id y8-20020a1c4b08000000b003f50bc8e398mr928365wma.13.1684489862094;
-        Fri, 19 May 2023 02:51:02 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6BckUfM2oCeZBj/Cs0gFTDkmhAZR9BmyMzz4SFPPpusbscCj6Hil+D1Tm7wqS2NYKyhfNKPg==
-X-Received: by 2002:a1c:4b08:0:b0:3f5:bc8:e398 with SMTP id y8-20020a1c4b08000000b003f50bc8e398mr928346wma.13.1684489861674;
-        Fri, 19 May 2023 02:51:01 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c722:9d00:7421:54d8:9227:a3e8? (p200300cbc7229d00742154d89227a3e8.dip0.t-ipconnect.de. [2003:cb:c722:9d00:7421:54d8:9227:a3e8])
-        by smtp.gmail.com with ESMTPSA id c18-20020a7bc852000000b003f4fb5532a1sm1790450wml.43.2023.05.19.02.51.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 May 2023 02:51:01 -0700 (PDT)
-Message-ID: <5f43a17c-94a0-4bff-b451-e5014de36ed9@redhat.com>
-Date:   Fri, 19 May 2023 11:51:00 +0200
+        d=1e100.net; s=20221208; t=1684489922; x=1687081922;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lYlFoKtA5IkPlUC08PPhE1HRAZ9SjNGPuMwfpP8csYw=;
+        b=jzs4CRdNuMvvpVjlEsvABhNf/hd/SQOozSPbu7zEhjHJsXaSTgEY1NVRbcn32kQVMd
+         r4NFT0N+Z83rCfQpL5qrTdFS0whkD9GLpXf7XiUoG58wLRwNNlJSH7jnMw1R7u5ORLB0
+         /kDjQQE31Dj1VHUQX3OLnVUtXlFH82OExycj41hUIgpM2JhBdkljk2p4FplgcdYNKGVd
+         x8AjpaJp1kXbkyBVRSXUBZNS2kfT/vZUEQwoUVOs5NXR/dF1qQdfdnDNSlXj9qy5imk5
+         T47F8d44zEI0STbX4bHKeWqxRCWmuK1sZhVLOurVn73nWCO1dXxqsXlHlpq1VeB83vLf
+         fARQ==
+X-Gm-Message-State: AC+VfDzvpE66CBK9U06xNWbHF+UNFIqy7k5DzX4f4eW6dacblK2nG5wQ
+        +JbBo/BM8JtE3UqJkjyDyPtvk0pewktLgM8BZqos4ia5u/wBBQ==
+X-Google-Smtp-Source: ACHHUZ5LXB2GGpTth50QwGaF1r9ATLp3VHmm5/m7EW57RPp9upvSN9LQS14BGDeYC2Kr+/Vi0wX8BeWxerm5Q629S9k=
+X-Received: by 2002:a05:6214:5183:b0:61a:fe65:4481 with SMTP id
+ kl3-20020a056214518300b0061afe654481mr2595650qvb.51.1684489921968; Fri, 19
+ May 2023 02:52:01 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3] mm, compaction: Skip all non-migratable pages during
- scan
-Content-Language: en-US
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     Khalid Aziz <khalid.aziz@oracle.com>, akpm@linux-foundation.org,
-        willy@infradead.org, steven.sistare@oracle.com,
-        mgorman@techsingularity.net, khalid@kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20230517161555.84776-1-khalid.aziz@oracle.com>
- <c34e3768-8a01-d155-1970-8eada8c80ba7@redhat.com>
- <87sfbubg3j.fsf@yhuang6-desk2.ccr.corp.intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <87sfbubg3j.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230516193549.544673-1-arnd@kernel.org> <a78d9dcd-0bc1-7e98-a8f1-e5d6cd0c09a3@intel.com>
+In-Reply-To: <a78d9dcd-0bc1-7e98-a8f1-e5d6cd0c09a3@intel.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Fri, 19 May 2023 12:51:25 +0300
+Message-ID: <CAHp75VeX9=1+apLMZsidudUziO_s4WUb=HOd0mraRHL17DN+cw@mail.gmail.com>
+Subject: Re: [PATCH 00/20] x86: address -Wmissing-prototype warnings
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>, x86@kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Juergen Gross <jgross@suse.com>,
+        "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Andy Shevchenko <andy@infradead.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-pci@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-pm@vger.kernel.org,
+        linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18.05.23 03:09, Huang, Ying wrote:
-> David Hildenbrand <david@redhat.com> writes:
-> 
->> On 17.05.23 18:15, Khalid Aziz wrote:
->>> Pages pinned in memory through extra refcounts can not be migrated.
->>> Currently as isolate_migratepages_block() scans pages for
->>> compaction, it skips any pinned anonymous pages. All non-migratable
->>> pages should be skipped and not just the anonymous pinned pages.
->>> This patch adds a check for extra refcounts on a page to determine
->>> if the page can be migrated.  This was seen as a real issue on a
->>> customer workload where a large number of pages were pinned by vfio
->>> on the host and any attempts to allocate hugepages resulted in
->>> significant amount of cpu time spent in either direct compaction or
->>> in kcompactd scanning vfio pinned pages over and over again that can
->>> not be migrated.
->>
->> How will this change affect alloc_contig_range(), such as used for CMA
->> allocations or virtio-mem? alloc_contig_range() ends up calling
->> isolate_migratepages_range() -> isolate_migratepages_block().
-> 
-> IIUC, cc->alloc_contig can be used to distinguish contiguous allocation
-> and compaction.  And, from the original commit which introduced
-> anonymous pages skipping (commit 119d6d59dcc0 ("mm, compaction: avoid
-> isolating pinned pages ")) and this patch, large number of migration
-> failure during compaction causes real issue too.  So, I suggest to use
-> cc->alloc_contig here.
+On Fri, May 19, 2023 at 12:56=E2=80=AFAM Dave Hansen <dave.hansen@intel.com=
+> wrote:
+> On 5/16/23 12:35, Arnd Bergmann wrote:
 
-Agreed. I further wonder if we want to special-case the !alloc_contig 
-case also for MIGRATE_CMA and ZONE_MOVABLE, where we cannot have 
-longterm page pinnings (e.g., vfio pinned pages).
+> I picked up the ones that were blatantly obvious, but left out 03, 04,
+> 10, 12 and 19 for the moment.
 
--- 
-Thanks,
+Btw, there is series that went unnoticed
 
-David / dhildenb
+https://lore.kernel.org/all/20211119110017.48510-1-andriy.shevchenko@linux.=
+intel.com/
 
+I dunno why.
+
+--=20
+With Best Regards,
+Andy Shevchenko
