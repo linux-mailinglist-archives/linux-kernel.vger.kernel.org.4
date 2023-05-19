@@ -2,144 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37E657097F5
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 15:07:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F0927097FC
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 15:09:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbjESNHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 09:07:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42014 "EHLO
+        id S230370AbjESNJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 09:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjESNHQ (ORCPT
+        with ESMTP id S229456AbjESNJK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 09:07:16 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2099.outbound.protection.outlook.com [40.107.223.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2F4B6;
-        Fri, 19 May 2023 06:07:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ietTplp9fUiQc+U6M91IgHrxwutiJririuOyOlwEA3onslBfEdddGFkSh5EgCasomwJ4JyNIF3p6pDfFUK16CvBI3B7NZtVVJf5DSaEdSYh3Kn84ONOVOhuV3e1fxdX3RFvRQ5Kzv6ygDPVtvwosnkOiao9mR30z+gVr7YeSk82p7upxPRV8cqhlWw5qcBbPd3ZJfyf93DzeXVp1Uh/ZSfc7mS5GxTmletlrL33wdkB4jQOF2lYhCa5evwgpXJor6ZnD4i+ephc81hOZwFY9KvH1UytNXalvEdz8BoYBQwcnhxtQDnQn4xzers08hGmP23EizjaO6AoNsM7KrsnOZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jdqvshBNK4APYtynyhlTTOarGvjR+E1t1Hh3aWUW+JQ=;
- b=oGKtD8eQNa1ITED6o7p/d90bCm/3ZHVsm8eR1vjL+3fQiFvwvTruIkBReGgkA+VV9/gWUH/XNfR2FngqX4gQAyzMrh+jGRjwstSU3HLB+UF4jaVKKXMdg6ZqWgJ1xwM0VjSCMmfzVbuqTKyhOVv/Z5jtC67/qEMivxLi+H7KJmNtGGjkZl2IeSdKyegVmTytreKbFCJxAFvdIKWuQTOCOMfSJ9P8FgMQZmj3C3c94kg3CTOrVaZdA9dN7uawIfIF+wrBk9YAvmXE3lxdeDA1KWUJS7zOa4nOVsCwf3SASM8rfrhGD4SjN6Lrg0uGP/T4SICXmVnzxx89aN1VnCrVow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Fri, 19 May 2023 09:09:10 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 158CE119
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 06:09:09 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4effb818c37so3709407e87.3
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 06:09:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jdqvshBNK4APYtynyhlTTOarGvjR+E1t1Hh3aWUW+JQ=;
- b=Z5Ci5eZBiB4X1Tr2VNnOfFxyT5JtAjmy60X+IkC0wQY/54USDTZ01e0nNWmLtyyJK230ZSl/UBAtsbJpKen86xwIHRQhD8HigtNK5YNJWzGrfrc+Jxfm1wptgxTO8+ZoY3elzPSQ7XlRLo7dsHhpCt7mLbBf9Oh8PpkFkSRBmeU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by SJ0PR13MB5675.namprd13.prod.outlook.com (2603:10b6:a03:402::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Fri, 19 May
- 2023 13:07:10 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6411.021; Fri, 19 May 2023
- 13:07:10 +0000
-Date:   Fri, 19 May 2023 15:06:40 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Martin Wetterwald <martin@wetterwald.eu>,
-        Arnd Bergmann <arnd@arndb.de>,
-        XueBing Chen <chenxuebing@jari.cn>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Saravana Kannan <saravanak@google.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [net-next] net: ipconfig: move ic_nameservers_fallback
- into #ifdef block
-Message-ID: <ZGd0YMg1y5wx4bRX@corigine.com>
-References: <20230519093250.4011881-1-arnd@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230519093250.4011881-1-arnd@kernel.org>
-X-ClientProxiedBy: AM0PR01CA0117.eurprd01.prod.exchangelabs.com
- (2603:10a6:208:168::22) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=linaro.org; s=google; t=1684501747; x=1687093747;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/Zv1mah4N/HaBlq32OJrOUOQJENrx2Ay1ik5IJM6AVI=;
+        b=E1COi7fX2rR/FXALr7SUoo8vmNVfuubFb6T0kKFyjEycRTKBAFRDmAdnqRsiv96QI+
+         YuksjYw1TCI8YD7OL1HQrzgBRoCAIAFokNHTHkDVC1hU3qngsBeDaYnHcwPs5B3kG3Es
+         u00S6fMxCjT7Mb78GlmwZedLK69dZlMIFKBL02M+7Q+i2qcCqg0QAnEjTlwu+jqP61+t
+         XdH1jZt1ZsHLr3eQuYX9Uk+sJk8rDuB0PHuNDxu1ssWyB4KCdzOdVXgajCPByvWxCIDq
+         eFyq3BBwUZrDO/qwGY7btyI+X5TzriO5HGMlo/fA56RtJOJp3ByAog9e5a2LPgxKgf2g
+         5u5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684501747; x=1687093747;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/Zv1mah4N/HaBlq32OJrOUOQJENrx2Ay1ik5IJM6AVI=;
+        b=RTlaiYr1pfhLXmzEMRzXNfbeoUnvVrp4/jxCZF8Y2zGa0ewk2Co8PgS4z2PXJKUlEj
+         C2f4hG493Zc56M3x2xCFB5M8zPeVH1rkaUo/dJZE/xlaXcIbX0LTvp2fBAJFasIcR3gt
+         ZC2CXJP33jAxN53XRAY+ScBSsWoVdRIci69kUGzIckeM1q/o0R0cBPiCLslKohw2Peai
+         lyjM0cgifYe0J1/ZLjgGebF/f4utyGX1A0P138xX4v1dVNZ7a0oyeDbc0/oNilsPPsLE
+         8+uGlMf51B/ayNil6Z5HAKgEJ8gbMe2d4lYqeE8E6OXUmVDkXuiA0LFjTgt0uYcLJiIw
+         Hx0Q==
+X-Gm-Message-State: AC+VfDyPZ6W7sHBfhlyKGkJL7NwUN6IwJ3IhRSSqg0UEu4P3gDPdHaaH
+        kpyQ80z/zkn4i7D0RNVd5ARZSQ==
+X-Google-Smtp-Source: ACHHUZ7c/wlNtcqnvOYUHVFfllflTtq4Bc0T77kg8q0qZWMwJo/oVsLcE8qIc4ULCRXWHIkvU13COQ==
+X-Received: by 2002:ac2:5a4d:0:b0:4ed:cb37:7d8c with SMTP id r13-20020ac25a4d000000b004edcb377d8cmr716553lfn.67.1684501747257;
+        Fri, 19 May 2023 06:09:07 -0700 (PDT)
+Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
+        by smtp.gmail.com with ESMTPSA id q30-20020ac25a1e000000b004edc7f6ee44sm278767lfn.234.2023.05.19.06.09.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 May 2023 06:09:06 -0700 (PDT)
+Message-ID: <4a9248c0-96ec-1986-d874-1cb7d8aac0ac@linaro.org>
+Date:   Fri, 19 May 2023 15:09:05 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SJ0PR13MB5675:EE_
-X-MS-Office365-Filtering-Correlation-Id: da9c0bfe-6f60-4a64-225d-08db5869f48f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ioDlZW4zKgAePwT0pRFMyNzeXG+UjMsJhCDyhZtG1/s5rQAspCfvmDVEdcmio1LgCqiG6m7GmSRmRlYhrzGd6o61VYoV+xFvqw1Ciki4kIsyqhTW/FDpNMIof70wz8cXqcIUEHbl9iZmEOhqPztSzFXULSk65Av75sZrRjWuFevH36datORK54ZNCbnQR+5IP0gUMhEIXo5rximzh37qMC+ryNwXLS60RePA+cI4v7Y60BoUWwdo1n7e1XZieIM4NxJC8mXBQ2KTHeAOioWZ6d/uJZeBZa47DcDyKKqcTm4AT9tf52SFLy9GSn8byt4FzhAGk8wmhiBAJ6XqRbSoproWATvbNqkz8p3T5x2da6b0U3Ty/6ag9YkdwQELs+Ct0O/V2IFP7TMDRGmOff3OghHl+RUxGdeDRfPYQq0vgAaQRdqO4kpWAUP/jnUwso9kuNK895zQebrsP3OaMpkkaETBui+++OcmKFjf64erxN6+OKbANHHafj8v0DSiWS56SpdE0JlZG+zRIsdq0cR0w8Wux7yVmm2vtVS/QxERoIb/Ansajp81g4wEFXZgRWC4
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39840400004)(376002)(366004)(396003)(136003)(346002)(451199021)(2616005)(186003)(41300700001)(38100700002)(6666004)(6486002)(83380400001)(6512007)(6506007)(478600001)(54906003)(44832011)(66476007)(6916009)(66556008)(4326008)(316002)(66946007)(7416002)(5660300002)(8936002)(86362001)(8676002)(2906002)(36756003)(4744005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xHeuXPF+noTJVUh6liuv70e+s+AeGDhEoKiLcMs+Joq2iFrLl+Q7Ef7Q/aPf?=
- =?us-ascii?Q?2HudV5Yl/2sl6nrkW9cRZ/Bwj3a0hVVFN5LkLio+JKKz5QV/jpK+4W5PF9w1?=
- =?us-ascii?Q?I8o8SxYdSpkXlaS4kSMFpwBeDLEsxj6a4Mwn+eqmJHeoufF1ueVMde1QsTIH?=
- =?us-ascii?Q?dCMaawbr/JLKvBPVdZ07mRv4SARUKOGUHBkDaG2aHYpgUQ28sSUUslmVEbI+?=
- =?us-ascii?Q?ZdeD3mj6VQZ+vjd9Di7cdFtySQPAtMoxhQ9U9D+DEwMOA92l2yyvoCEN2Uiu?=
- =?us-ascii?Q?I/jamoOPfI1pITlo3/fs8cRChuXmFIQ/VwLR1wwLLy+rJdSAhrd8nw5G9Rab?=
- =?us-ascii?Q?VsEUQVx9kFD5FMdn8pQUiS21LhXXBngVMhYr4vYzRELpGExcFHH3kDfB4u5w?=
- =?us-ascii?Q?QHJ3CMTFe7dEoC0hP20HTncPXcUyZiFM6R1W91WEVhUH3y0qYbZNBF4GE5Oa?=
- =?us-ascii?Q?quBEsFue1+ThI8+Bc9fhdHc74gAPm59st+xwMHs5Hv4pF5ZQth9r+O75ZG6R?=
- =?us-ascii?Q?yXnLoN3P/gGwU8QtNd6t2f6alUgmoBoP5XNNlhVK43H+tUvEe+k69I9WOnhn?=
- =?us-ascii?Q?u6LReB0ym57v55qilyDhR3l4xKitapE7bBmK4TmQVGyjIJSAQ0djJgrxGIh5?=
- =?us-ascii?Q?6728KeV7LkspkJHAGjzSfX/KSqS/iKPGob/rDb14YqU19CJWpnFMPzT6nYSP?=
- =?us-ascii?Q?cVAa1QCsQ5kvZrnYb6DM/COyQiQYI0lG5mZndglGHzso9RU4tzOppEmu7Yg/?=
- =?us-ascii?Q?DbzQlKAY9EIr4SdzkJLaSyovkEjASbzxZaQTs6hYrNpYoux8268bvzyaXjn1?=
- =?us-ascii?Q?9Bnyurk9iLCYP/5SHxPYkd4D0Zm/fcpIcbV9Os/TLRZzmbZVwXnji1Dt71BL?=
- =?us-ascii?Q?jfzp65cXTihpGRci1vCtC6p1riM+6cwxE9xI1OYO3Bp4gFUihb50Ts16hxJW?=
- =?us-ascii?Q?LQc0a9ZgZAdWfnOHIQArSxERx/4XRpJ+3591y2bj873lHrKeAueiiWVaFs81?=
- =?us-ascii?Q?SnRcFdoMxsxJQy8kTBB37YJNK1EOEDGM7JEE89ekhQktc1FyfLeAaNXulois?=
- =?us-ascii?Q?izUHgMt6zzs7u+Il1K1y6+9kSaXTNA2i5++JvnR+6TZ5zcEDhTu9EiXmtT6T?=
- =?us-ascii?Q?vf/737hnFBIhmGfiKMxx1QimgVIH9JXeOr1Gkas7RjJWAlulEKIs1y2fQUtl?=
- =?us-ascii?Q?lud4aO50s1LVlMsIdyL1uyvNay1DyIhXKOEjCi6GoOntExRTOTTaFNwUQ8v6?=
- =?us-ascii?Q?DEZ/saF0zlDxwBIA0l+f5zik9sQsY6jGb4ks5b/i5lTQSF/PMxD4cdlkC5qW?=
- =?us-ascii?Q?sXVo2qp83l3guYEeW1/0JFpCtxRmjE3b/G/zx0i7REGyoCerjD0MgV+KzwN3?=
- =?us-ascii?Q?eVwcj2aEcHlWHJZlFoCLBEvBqiV5VCzf0R80Y9aKySBBY1v+9mVISTBtAknB?=
- =?us-ascii?Q?Bm6r7MidUVp8+duz/JMfTDEEdanWWyYec2MoO8yvCOzXJ+apgOUScFEP1DGg?=
- =?us-ascii?Q?Hoe/wJwFzQcndR9SC79dglRs+OLzcw8ikG2lJ3U2rUo4XYOyGfFJdCz+NRBD?=
- =?us-ascii?Q?A5X4LZseED+wnW7+HRrA+gYwBLoKXRcAxQSkYk93Fb96MWiUyHvl6z9ec1NA?=
- =?us-ascii?Q?Sv5f77XSrsoeh13fq0g3cyiLmkF1Qn5czvQ6salKPU6LJz/Bl7vyBdvMG/8O?=
- =?us-ascii?Q?zoeSHQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: da9c0bfe-6f60-4a64-225d-08db5869f48f
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2023 13:07:10.2807
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1uIe5urcHxFLV+G9meQcK/C9WYm5EqU/xB734/iHLHb4mTqy7O5CGSVdvznLyumcBdneMOSTobEb57zPwjrteNBDxmTYLd9rbyrFaJ8vdbE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR13MB5675
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/4] clk: qcom: clk-alpha-pll: Add support for lucid ole
+ pll ops
+Content-Language: en-US
+To:     Jagadeesh Kona <quic_jkona@quicinc.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230509161218.11979-1-quic_jkona@quicinc.com>
+ <20230509161218.11979-2-quic_jkona@quicinc.com>
+ <019999fd-3c86-8c85-76c7-8d0206e60f4d@linaro.org>
+ <55fc32df-f01b-1ba3-3813-26a5f8c7f730@quicinc.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <55fc32df-f01b-1ba3-3813-26a5f8c7f730@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 11:32:38AM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The new variable is only used when IPCONFIG_BOOTP is defined and otherwise
-> causes a warning:
-> 
-> net/ipv4/ipconfig.c:177:12: error: 'ic_nameservers_fallback' defined but not used [-Werror=unused-variable]
-> 
-> Move it next to the user.
-> 
-> Fixes: 81ac2722fa19 ("net: ipconfig: Allow DNS to be overwritten by DHCPACK")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Thanks Arnd,
 
-I was able to observe this too.
+On 19.05.2023 14:49, Jagadeesh Kona wrote:
+> Hi,
+> 
+> Thanks Konrad for your review!
+> 
+> On 5/10/2023 1:36 AM, Konrad Dybcio wrote:
+>>
+>>
+>> On 9.05.2023 18:12, Jagadeesh Kona wrote:
+>>> From: Taniya Das <quic_tdas@quicinc.com>
+>>>
+>>> Add support for lucid ole pll ops to configure and control the
+>>> lucid ole pll. The lucid ole pll has an additional test control
+>>> register which is required to be programmed, add support to
+>>> program the same.
+>>>
+>>> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+>>> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
+>>> ---
+>> Isn't this commit "write to PLL_TEST_CTL_U2 on LUCID_EVO" instead?
+>>
+>> Meaninglessly duplicating ops does not seem useful.
+>>
+>> Konrad
+> 
+> Though we are reusing same ops for EVO and OLE, PLL_TEST_CTL_U2 register programming is applicable only to OLE PLL type.
+Well, your patch makes it unconditional (modulo programmer error) so
+I think that makes little sense.. A comment would be enough, imo.
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
-
+Konrad
+And PLL type is useful to properly refer respective hardware datasheets. Hence added separate ops for OLE PLL type.
+> 
+> 
+>>>   drivers/clk/qcom/clk-alpha-pll.c | 2 ++
+>>>   drivers/clk/qcom/clk-alpha-pll.h | 4 ++++
+>>>   2 files changed, 6 insertions(+)
+>>>
+>>> diff --git a/drivers/clk/qcom/clk-alpha-pll.c b/drivers/clk/qcom/clk-alpha-pll.c
+>>> index b9f6535a7ba7..f81c7c561352 100644
+>>> --- a/drivers/clk/qcom/clk-alpha-pll.c
+>>> +++ b/drivers/clk/qcom/clk-alpha-pll.c
+>>> @@ -55,6 +55,7 @@
+>>>   #define PLL_TEST_CTL(p)        ((p)->offset + (p)->regs[PLL_OFF_TEST_CTL])
+>>>   #define PLL_TEST_CTL_U(p)    ((p)->offset + (p)->regs[PLL_OFF_TEST_CTL_U])
+>>>   #define PLL_TEST_CTL_U1(p)     ((p)->offset + (p)->regs[PLL_OFF_TEST_CTL_U1])
+>>> +#define PLL_TEST_CTL_U2(p)     ((p)->offset + (p)->regs[PLL_OFF_TEST_CTL_U2])
+>>>   #define PLL_STATUS(p)        ((p)->offset + (p)->regs[PLL_OFF_STATUS])
+>>>   #define PLL_OPMODE(p)        ((p)->offset + (p)->regs[PLL_OFF_OPMODE])
+>>>   #define PLL_FRAC(p)        ((p)->offset + (p)->regs[PLL_OFF_FRAC])
+>>> @@ -2096,6 +2097,7 @@ void clk_lucid_evo_pll_configure(struct clk_alpha_pll *pll, struct regmap *regma
+>>>       clk_alpha_pll_write_config(regmap, PLL_TEST_CTL(pll), config->test_ctl_val);
+>>>       clk_alpha_pll_write_config(regmap, PLL_TEST_CTL_U(pll), config->test_ctl_hi_val);
+>>>       clk_alpha_pll_write_config(regmap, PLL_TEST_CTL_U1(pll), config->test_ctl_hi1_val);
+>>> +    clk_alpha_pll_write_config(regmap, PLL_TEST_CTL_U2(pll), config->test_ctl_hi2_val);
+>>>         /* Disable PLL output */
+>>>       regmap_update_bits(regmap, PLL_MODE(pll), PLL_OUTCTRL, 0);
+>>> diff --git a/drivers/clk/qcom/clk-alpha-pll.h b/drivers/clk/qcom/clk-alpha-pll.h
+>>> index d07b17186b90..4d9b6d5b7062 100644
+>>> --- a/drivers/clk/qcom/clk-alpha-pll.h
+>>> +++ b/drivers/clk/qcom/clk-alpha-pll.h
+>>> @@ -125,6 +125,7 @@ struct alpha_pll_config {
+>>>       u32 test_ctl_val;
+>>>       u32 test_ctl_hi_val;
+>>>       u32 test_ctl_hi1_val;
+>>> +    u32 test_ctl_hi2_val;
+>>>       u32 main_output_mask;
+>>>       u32 aux_output_mask;
+>>>       u32 aux2_output_mask;
+>>> @@ -171,6 +172,7 @@ extern const struct clk_ops clk_alpha_pll_zonda_ops;
+>>>   #define clk_alpha_pll_postdiv_zonda_ops clk_alpha_pll_postdiv_fabia_ops
+>>>     extern const struct clk_ops clk_alpha_pll_lucid_evo_ops;
+>>> +#define clk_alpha_pll_lucid_ole_ops clk_alpha_pll_lucid_evo_ops
+>>>   extern const struct clk_ops clk_alpha_pll_reset_lucid_evo_ops;
+>>>   #define clk_alpha_pll_reset_lucid_ole_ops clk_alpha_pll_reset_lucid_evo_ops
+>>>   extern const struct clk_ops clk_alpha_pll_fixed_lucid_evo_ops;
+>>> @@ -196,6 +198,8 @@ void clk_zonda_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
+>>>                    const struct alpha_pll_config *config);
+>>>   void clk_lucid_evo_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
+>>>                    const struct alpha_pll_config *config);
+>>> +#define clk_lucid_ole_pll_configure(pll, regmap, config) \
+>>> +            clk_lucid_evo_pll_configure(pll, regmap, config)
+>>>   void clk_rivian_evo_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
+>>>                     const struct alpha_pll_config *config);
+>>>   void clk_stromer_pll_configure(struct clk_alpha_pll *pll, struct regmap *regmap,
+> 
+> Thanks & Regards,
+> Jagadeesh
