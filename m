@@ -2,38 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE224709C1F
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 18:12:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53B22709C17
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 18:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbjESQMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 12:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43518 "EHLO
+        id S229798AbjESQLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 12:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjESQMN (ORCPT
+        with ESMTP id S229749AbjESQLd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 12:12:13 -0400
-Received: from viti.kaiser.cx (viti.kaiser.cx [IPv6:2a01:238:43fe:e600:cd0c:bd4a:7a3:8e9f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB6AAA;
-        Fri, 19 May 2023 09:12:13 -0700 (PDT)
-Received: from ipservice-092-217-072-086.092.217.pools.vodafone-ip.de ([92.217.72.86] helo=martin-debian-2.paytec.ch)
-        by viti.kaiser.cx with esmtpsa (TLS1.2:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        (Exim 4.89)
-        (envelope-from <martin@kaiser.cx>)
-        id 1q02iB-0001FM-CO; Fri, 19 May 2023 18:12:11 +0200
-From:   Martin Kaiser <martin@kaiser.cx>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Martin Kaiser <martin@kaiser.cx>
-Subject: [PATCH 2/2] hwrng: imx-rngc - don't init of_device_id's data
-Date:   Fri, 19 May 2023 18:11:19 +0200
-Message-Id: <20230519161119.287268-3-martin@kaiser.cx>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230519161119.287268-1-martin@kaiser.cx>
-References: <20230519161119.287268-1-martin@kaiser.cx>
+        Fri, 19 May 2023 12:11:33 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38DF61AB;
+        Fri, 19 May 2023 09:11:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=fEghx6mVjcgBf40Xq8ewYu2k1cwOduuzKJ9E2w6kTwM=; b=i1W21HiP4BIviwkn1gcVZAGlHI
+        frWQrTpRodMyiUCDpfrOXFUrdkqUDsqQN5UhcGyWxJW5IkZHtevoCdkub2+rufkSMsPx1jaUNH/3w
+        VAD1yJZwxtVK5eSgtdBCbr9E2DPYlqzGXaCn2sr1YoQa4SAULzUi26L9O6RmWgJ8GZPU=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1q02hN-00DLRZ-MI; Fri, 19 May 2023 18:11:21 +0200
+Date:   Fri, 19 May 2023 18:11:21 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     alexis.lothore@bootlin.com
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        thomas.petazzoni@bootlin.com, paul.arola@telus.com,
+        scott.roberts@telus.com,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
+Subject: Re: [PATCH net-next v2 4/7] net: dsa: mv88e6xxx: add field to
+ specify internal phys layout
+Message-ID: <31103ab4-c055-43bc-a124-84976ee47e32@lunn.ch>
+References: <20230519141303.245235-1-alexis.lothore@bootlin.com>
+ <20230519141303.245235-5-alexis.lothore@bootlin.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230519141303.245235-5-alexis.lothore@bootlin.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -41,27 +63,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have no device-specific data for fsl,imx25-rngb. There's no need to
-set .data = NULL, this is the default.
+> @@ -1198,13 +1198,17 @@ int mv88e6xxx_g2_irq_mdio_setup(struct mv88e6xxx_chip *chip,
+>  {
+>  	int phy, irq;
+>  
+> -	for (phy = 0; phy < chip->info->num_internal_phys; phy++) {
+> +	for (phy = chip->info->internal_phys_offset;
+> +	     phy <
+> +	     chip->info->num_internal_phys + chip->info->internal_phys_offset;
+> +	     phy++) {
 
-Signed-off-by: Martin Kaiser <martin@kaiser.cx>
+The code style is not so nice. How about moving this addition out of
+the for loop, it is static anyway. And then you can avoid splitting
+the expression over multiple lines.
+
+>  		irq = irq_find_mapping(chip->g2_irq.domain, phy);
+>  		if (irq < 0)
+>  			return irq;
+>  
+>  		bus->irq[chip->info->phy_base_addr + phy] = irq;
+>  	}
+> +
+
+No whitespace changed please.
+
+    Andrew
+
 ---
- drivers/char/hw_random/imx-rngc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/char/hw_random/imx-rngc.c b/drivers/char/hw_random/imx-rngc.c
-index c807fdbd22ba..1a6a5dd0a5a1 100644
---- a/drivers/char/hw_random/imx-rngc.c
-+++ b/drivers/char/hw_random/imx-rngc.c
-@@ -321,7 +321,7 @@ static int __maybe_unused imx_rngc_resume(struct device *dev)
- static SIMPLE_DEV_PM_OPS(imx_rngc_pm_ops, imx_rngc_suspend, imx_rngc_resume);
- 
- static const struct of_device_id imx_rngc_dt_ids[] = {
--	{ .compatible = "fsl,imx25-rngb", .data = NULL, },
-+	{ .compatible = "fsl,imx25-rngb" },
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, imx_rngc_dt_ids);
--- 
-2.30.2
-
+pw-bot: cr
