@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BD937091AC
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 10:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB5907091B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 10:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229951AbjESI3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 04:29:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57342 "EHLO
+        id S230326AbjESI3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 04:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjESI3H (ORCPT
+        with ESMTP id S230262AbjESI3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 04:29:07 -0400
+        Fri, 19 May 2023 04:29:14 -0400
 Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89943E56;
-        Fri, 19 May 2023 01:29:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3F7EE5F;
+        Fri, 19 May 2023 01:29:11 -0700 (PDT)
 Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
         by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1pzvTU-00AnM5-Tz; Fri, 19 May 2023 16:28:34 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 19 May 2023 16:28:32 +0800
+        id 1pzvTX-00AnME-24; Fri, 19 May 2023 16:28:36 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 19 May 2023 16:28:35 +0800
 From:   "Herbert Xu" <herbert@gondor.apana.org.au>
-Date:   Fri, 19 May 2023 16:28:32 +0800
-Subject: [PATCH 1/3] crypto: cmac - Use modern init_tfm/exit_tfm
+Date:   Fri, 19 May 2023 16:28:35 +0800
+Subject: [PATCH 2/3] crypto: cipher - Add crypto_clone_cipher
 References: <ZGcyuyjJwZhdYS/G@gondor.apana.org.au>
 To:     Dmitry Safonov <dima@arista.com>,
         Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
@@ -44,10 +44,10 @@ To:     Dmitry Safonov <dima@arista.com>,
         Leonard Crestez <cdleonard@gmail.com>,
         Salam Noureddine <noureddine@arista.com>,
         netdev@vger.kernel.org
-Message-Id: <E1pzvTU-00AnM5-Tz@formenos.hmeau.com>
+Message-Id: <E1pzvTX-00AnME-24@formenos.hmeau.com>
 X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,63 +55,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the modern init_tfm/exit_tfm interface instead of the obsolete
-cra_init/cra_exit interface.
-   
+Allow simple ciphers to be cloned, if they don't have a cra_init
+function.  This basically rules out those ciphers that require a
+fallback.
+
+In future simple ciphers will be eliminated, and replaced with a
+linear skcipher interface.  When that happens this restriction will
+disappear.
+
 Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 ---
 
- crypto/cmac.c |   18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ crypto/cipher.c                  |   23 +++++++++++++++++++++++
+ include/crypto/internal/cipher.h |    2 ++
+ 2 files changed, 25 insertions(+)
 
-diff --git a/crypto/cmac.c b/crypto/cmac.c
-index f4a5d3bfb376..bcc6f19a4f64 100644
---- a/crypto/cmac.c
-+++ b/crypto/cmac.c
-@@ -198,13 +198,14 @@ static int crypto_cmac_digest_final(struct shash_desc *pdesc, u8 *out)
- 	return 0;
+diff --git a/crypto/cipher.c b/crypto/cipher.c
+index b47141ed4a9f..d39ef5f72ab8 100644
+--- a/crypto/cipher.c
++++ b/crypto/cipher.c
+@@ -90,3 +90,26 @@ void crypto_cipher_decrypt_one(struct crypto_cipher *tfm,
+ 	cipher_crypt_one(tfm, dst, src, false);
  }
+ EXPORT_SYMBOL_NS_GPL(crypto_cipher_decrypt_one, CRYPTO_INTERNAL);
++
++struct crypto_cipher *crypto_clone_cipher(struct crypto_cipher *cipher)
++{
++	struct crypto_tfm *tfm = crypto_cipher_tfm(cipher);
++	struct crypto_alg *alg = tfm->__crt_alg;
++	struct crypto_cipher *ncipher;
++	struct crypto_tfm *ntfm;
++
++	if (alg->cra_init)
++		return ERR_PTR(-ENOSYS);
++
++	ntfm = __crypto_alloc_tfm(alg, CRYPTO_ALG_TYPE_CIPHER,
++				  CRYPTO_ALG_TYPE_MASK);
++	if (IS_ERR(ntfm))
++		return ERR_CAST(ntfm);
++
++	ntfm->crt_flags = tfm->crt_flags;
++
++	ncipher = __crypto_cipher_cast(ntfm);
++
++	return ncipher;
++}
++EXPORT_SYMBOL_GPL(crypto_clone_cipher);
+diff --git a/include/crypto/internal/cipher.h b/include/crypto/internal/cipher.h
+index a9174ba90250..5030f6d2df31 100644
+--- a/include/crypto/internal/cipher.h
++++ b/include/crypto/internal/cipher.h
+@@ -176,6 +176,8 @@ void crypto_cipher_encrypt_one(struct crypto_cipher *tfm,
+ void crypto_cipher_decrypt_one(struct crypto_cipher *tfm,
+ 			       u8 *dst, const u8 *src);
  
--static int cmac_init_tfm(struct crypto_tfm *tfm)
-+static int cmac_init_tfm(struct crypto_shash *tfm)
- {
-+	struct shash_instance *inst = shash_alg_instance(tfm);
-+	struct cmac_tfm_ctx *ctx = crypto_shash_ctx(tfm);
-+	struct crypto_cipher_spawn *spawn;
- 	struct crypto_cipher *cipher;
--	struct crypto_instance *inst = (void *)tfm->__crt_alg;
--	struct crypto_cipher_spawn *spawn = crypto_instance_ctx(inst);
--	struct cmac_tfm_ctx *ctx = crypto_tfm_ctx(tfm);
- 
-+	spawn = shash_instance_ctx(inst);
- 	cipher = crypto_spawn_cipher(spawn);
- 	if (IS_ERR(cipher))
- 		return PTR_ERR(cipher);
-@@ -214,9 +215,9 @@ static int cmac_init_tfm(struct crypto_tfm *tfm)
- 	return 0;
++struct crypto_cipher *crypto_clone_cipher(struct crypto_cipher *cipher);
++
+ struct crypto_cipher_spawn {
+ 	struct crypto_spawn base;
  };
- 
--static void cmac_exit_tfm(struct crypto_tfm *tfm)
-+static void cmac_exit_tfm(struct crypto_shash *tfm)
- {
--	struct cmac_tfm_ctx *ctx = crypto_tfm_ctx(tfm);
-+	struct cmac_tfm_ctx *ctx = crypto_shash_ctx(tfm);
- 	crypto_free_cipher(ctx->child);
- }
- 
-@@ -274,13 +275,12 @@ static int cmac_create(struct crypto_template *tmpl, struct rtattr **tb)
- 		   ~(crypto_tfm_ctx_alignment() - 1))
- 		+ alg->cra_blocksize * 2;
- 
--	inst->alg.base.cra_init = cmac_init_tfm;
--	inst->alg.base.cra_exit = cmac_exit_tfm;
--
- 	inst->alg.init = crypto_cmac_digest_init;
- 	inst->alg.update = crypto_cmac_digest_update;
- 	inst->alg.final = crypto_cmac_digest_final;
- 	inst->alg.setkey = crypto_cmac_digest_setkey;
-+	inst->alg.init_tfm = cmac_init_tfm;
-+	inst->alg.exit_tfm = cmac_exit_tfm;
- 
- 	inst->free = shash_free_singlespawn_instance;
- 
