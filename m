@@ -2,166 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5DE870A329
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 01:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 196A370A338
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 01:16:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbjESXHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 19:07:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37140 "EHLO
+        id S229586AbjESXQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 19:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjESXHx (ORCPT
+        with ESMTP id S229485AbjESXP7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 19:07:53 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48401B0
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 16:07:50 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-64d2da69fdfso1920603b3a.0
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 16:07:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1684537670; x=1687129670;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vej0HUXiqshmcvqs7VBZTGkCXU+JddJuVreKpbmYuhw=;
-        b=M7M+fUzZKYFhCed62ckEM75i49Kzi0Sy+mNCDiHsZpcNM/HQImrznTrkS4Wi9NL1Qt
-         OpBue7B/lTyS4Ky8m0UYNNuyU32olEvqU9kMDgIsurTQS74yymOzmc8h+RSkAmjSqxOP
-         woaJGiEwnE03YgfMS1q3jv3TV55P4eda89l5rEF9YibVhRMXrAoasmZaFgYrpCbUd+oE
-         XkNqBx9FFYqUpTZUSUyJJeWE0IiZORfli0QtnpbJ5rpT7PGgf7LZiQ+NCEMRM7WFfN1T
-         vkwBHodfbKEBqQNapAiloS/SU1gESn6ZDbM8KRw093WyP1wcSNUWGyK7A0I+ybuXSTVQ
-         2JuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684537670; x=1687129670;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vej0HUXiqshmcvqs7VBZTGkCXU+JddJuVreKpbmYuhw=;
-        b=Kr4KubnJagVpSQyAjDLrv89U4wL8s0wGT318UKjqe7NUPvcSB6speu+Zek6gPKiAzH
-         G84NT990mOIoTs5leOhzBQG6/ukthXNc/zsr8A/+R7X1D0jsxeHDWLeGdeSkD9agHL5X
-         89AJ3QEzpNviLhfIjHCqJ+/E8j7qPlWlj5hahU1s0IVq9M6V0W+Y/2nq1Gx09CMKqdWj
-         nDbDJrDCrJzVfsFPwk7gCvhiD6aFbOHKeg2Gu4S8YvlkeVNQ9lyL8WadDKIPzsW+Ej9V
-         nes7TQwLrM6ZL3gCcT0D7IQFWpe0eHJ+j0cPINC6R4KmQ8/yIB4U4dMbj+2Ll1NL095l
-         3NTg==
-X-Gm-Message-State: AC+VfDwcWgZ9B9VYHmjZVYPev2dxprCnMYdB9+0qeYJg0wWLX2w1zQ2+
-        JDGBPd7JvuBpNWMklouRk5a8sg==
-X-Google-Smtp-Source: ACHHUZ44Ml1ojpiPU8i/+mCvFac8UKDWss2kgW+R+G0QKFHgCdmutJq5p5DRKhkFYnyqqBTN1Dtx1w==
-X-Received: by 2002:a05:6a00:1896:b0:63b:854c:e0f6 with SMTP id x22-20020a056a00189600b0063b854ce0f6mr5344668pfh.21.1684537670148;
-        Fri, 19 May 2023 16:07:50 -0700 (PDT)
-Received: from dread.disaster.area (pa49-179-0-188.pa.nsw.optusnet.com.au. [49.179.0.188])
-        by smtp.gmail.com with ESMTPSA id i6-20020aa78d86000000b006414289ab69sm204704pfr.52.2023.05.19.16.07.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 16:07:49 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.96)
-        (envelope-from <david@fromorbit.com>)
-        id 1q09CM-001WVR-2G;
-        Sat, 20 May 2023 09:07:46 +1000
-Date:   Sat, 20 May 2023 09:07:46 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Mike Snitzer <snitzer@kernel.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Sarthak Kukreti <sarthakkukreti@chromium.org>,
-        dm-devel@redhat.com, linux-block@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Brian Foster <bfoster@redhat.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Bart Van Assche <bvanassche@google.com>,
-        "Darrick J. Wong" <djwong@kernel.org>
-Subject: Re: [PATCH v7 0/5] Introduce provisioning primitives
-Message-ID: <ZGgBQhsbU9b0RiT1@dread.disaster.area>
-References: <20230518223326.18744-1-sarthakkukreti@chromium.org>
- <ZGb2Xi6O3i2pLam8@infradead.org>
- <ZGeKm+jcBxzkMXQs@redhat.com>
+        Fri, 19 May 2023 19:15:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 634B812C;
+        Fri, 19 May 2023 16:15:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA72F6185C;
+        Fri, 19 May 2023 23:15:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CC28C4339C;
+        Fri, 19 May 2023 23:15:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684538157;
+        bh=ctggW45C4qZN8MuWcqhIdXG6lIrQzs/0cq7htlpYDEI=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=B4qFPiGv49KaRZpopjCHOOA9NpD0pCgROgb+Lxy5D38uVkKvMcniVC1nN+AlLT+EZ
+         FSBu9Y4PmABl0/hyE8DA2aO3GhgmyXsIk/usuDqi6KZJWeu8CncEfF7eTbfNdlPedD
+         W12avD3+cWws/bCIcVoB5rWyK44YowaXmgeybQaPXmWoPa4L1zS9Mlvx5rDC+rgsRO
+         1u6scsRQ+9vcILPLyCMd638oyRiwEu5GOet+r8OnLDJXzox6mB4qSF/AZZ9nqos8Yd
+         /JnzVJrALq73MlumazBRBRBSfuECFPDuBkTgxjfFMi9VfGF2jfnLuDL701QhXguwub
+         8Dx+4kabES1DQ==
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-4f37b860173so4228504e87.2;
+        Fri, 19 May 2023 16:15:57 -0700 (PDT)
+X-Gm-Message-State: AC+VfDxgkdsQzORnpgFbuGXGXgkRnR/R8+5D5GIPAwy/h+GIQjgIDWVF
+        uliabXgSDx3cSmD5ezTv8gI2Cp2W9JA0eOrd4Lk=
+X-Google-Smtp-Source: ACHHUZ4CaSj5wtRzcuyIbCsxD3oP6c+ReR1E4DO0JFM9No3bCyE4JZQg/16rPJwOgv4M0GUkxJvS5SoAB5Vg1FW68T4=
+X-Received: by 2002:ac2:5233:0:b0:4f2:4d6c:b30b with SMTP id
+ i19-20020ac25233000000b004f24d6cb30bmr1297795lfl.68.1684538155294; Fri, 19
+ May 2023 16:15:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZGeKm+jcBxzkMXQs@redhat.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230428071059.1988153-1-yukuai1@huaweicloud.com>
+In-Reply-To: <20230428071059.1988153-1-yukuai1@huaweicloud.com>
+From:   Song Liu <song@kernel.org>
+Date:   Fri, 19 May 2023 16:15:43 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW75ufS+t-Q=GaXP__VOt9Wf8cZKMBMXEXaVWWS=5bN8ew@mail.gmail.com>
+Message-ID: <CAPhsuW75ufS+t-Q=GaXP__VOt9Wf8cZKMBMXEXaVWWS=5bN8ew@mail.gmail.com>
+Subject: Re: [PATCH -next] md: fix duplicate filename for rdev
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     neilb@suse.de, akpm@linux-foundation.org,
+        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai3@huawei.com, yi.zhang@huawei.com, yangerkun@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 10:41:31AM -0400, Mike Snitzer wrote:
-> On Fri, May 19 2023 at 12:09P -0400,
-> Christoph Hellwig <hch@infradead.org> wrote:
-> 
-> > FYI, I really don't think this primitive is a good idea.  In the
-> > concept of non-overwritable storage (NAND, SMR drives) the entire
-> > concept of a one-shoot 'provisioning' that will guarantee later writes
-> > are always possible is simply bogus.
-> 
-> Valid point for sure, such storage shouldn't advertise support (and
-> will return -EOPNOTSUPP).
-> 
-> But the primitive still has utility for other classes of storage.
+On Fri, Apr 28, 2023 at 12:13=E2=80=AFAM Yu Kuai <yukuai1@huaweicloud.com> =
+wrote:
+>
+> From: Yu Kuai <yukuai3@huawei.com>
+>
+> commit 5792a2856a63 ("[PATCH] md: avoid a deadlock when removing a device
+> from an md array via sysfs") delay the deleting of rdev, however, this
+> introduce a window that rdev can be added again while the deleting is
+> not done yet, and sysfs will complain about duplicate filename.
+>
+> Follow up patches try to fix this problem by flush workqueue, however,
+> flush_rdev_wq() is just dead code, the progress in
+> md_kick_rdev_from_array():
+>
+> 1) list_del_rcu(&rdev->same_set);
+> 2) synchronize_rcu();
+> 3) queue_work(md_rdev_misc_wq, &rdev->del_work);
+>
+> So in flush_rdev_wq(), if rdev is found in the list, work_pending() can
+> never pass, in the meantime, if work is queued, then rdev can never be
+> found in the list.
+>
+> flush_rdev_wq() can be replaced by flush_workqueue() directly, however,
+> this approach is not good:
+> - the workqueue is global, this synchronization for all raid disks is
+>   not necessary.
+> - flush_workqueue can't be called under 'reconfig_mutex', there is still
+>   a small window between flush_workqueue() and mddev_lock() that other
+>   context can queue new work, hence the problem is not solved completely.
+>
+> sysfs already have apis to support delete itself through writer, and
+> these apis, specifically sysfs_break/unbreak_active_protection(), is used
+> so support deleting rdev synchronously. Therefore, the above commit can b=
+e
+> reverted, and sysfs duplicate filename can be avoided.
+>
+> A new mdadm regression test [1] is proposed as well.
+>
+> Link: https://lore.kernel.org/linux-raid/20230428062845.1975462-1-yukuai1=
+@huaweicloud.com/
+> Fixes: 5792a2856a63 ("[PATCH] md: avoid a deadlock when removing a device=
+ from an md array via sysfs")
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> ---
+>  drivers/md/md.c | 85 +++++++++++++++++++++++++------------------------
+>  drivers/md/md.h |  8 +++++
+>  2 files changed, 51 insertions(+), 42 deletions(-)
+>
+> diff --git a/drivers/md/md.c b/drivers/md/md.c
+> index 0a4a10d4c0e0..e1bc223d58b3 100644
+> --- a/drivers/md/md.c
+> +++ b/drivers/md/md.c
+> @@ -83,12 +83,12 @@ static struct module *md_cluster_mod;
+>  static DECLARE_WAIT_QUEUE_HEAD(resync_wait);
+>  static struct workqueue_struct *md_wq;
+>  static struct workqueue_struct *md_misc_wq;
+> -static struct workqueue_struct *md_rdev_misc_wq;
+>
+>  static int remove_and_add_spares(struct mddev *mddev,
+>                                  struct md_rdev *this);
+>  static void mddev_detach(struct mddev *mddev);
+>  static void md_wakeup_thread_directly(struct md_thread __rcu *thread);
+> +static void export_rdev(struct md_rdev *rdev);
 
-Yet the thing people are wanting to us filesystem developers to use
-this with is thinly provisioned storage that has snapshot
-capability. That, by definition, is non-overwritable storage. These
-are the use cases people are asking filesystes to gracefully handle
-and report errors when the sparse backing store runs out of space.
+There is some conflict with md_wakeup_thread_directly().
+I guess you run format-patch on top of the "protect md_thread" set
+which is not merged yet (and we are waiting for v8 of it?).
 
-e.g. journal writes after a snapshot is taken on a busy filesystem
-are always an overwrite and this requires more space in the storage
-device for the write to succeed. ENOSPC from the backing device for
-journal IO is a -fatal error-. Hence if REQ_PROVISION doesn't
-guarantee space for overwrites after snapshots, then it's not
-actually useful for solving the real world use cases we actually
-need device-level provisioning to solve.
+Please redo the patch on top of the latest md-next. I just updated it.
 
-It is not viable for filesystems to have to reprovision space for
-in-place metadata overwrites after every snapshot - the filesystem
-may not even know a snapshot has been taken! And it's not feasible
-for filesystems to provision on demand before they modify metadata
-because we don't know what metadata is going to need to be modified
-before we start modifying metadata in transactions. If we get ENOSPC
-from provisioning in the middle of a dirty transcation, it's all
-over just the same as if we get ENOSPC during metadata writeback...
-
-Hence what filesystems actually need is device provisioned space to
-be -always over-writable- without ENOSPC occurring.  Ideally, if we
-provision a range of the block device, the block device *must*
-guarantee all future writes to that LBA range succeeds. That
-guarantee needs to stand until we discard or unmap the LBA range,
-and for however many writes we do to that LBA range.
-
-e.g. If the device takes a snapshot, it needs to reprovision the
-potential COW ranges that overlap with the provisioned LBA range at
-snapshot time. e.g. by re-reserving the space from the backing pool
-for the provisioned space so if a COW occurs there is space
-guaranteed for it to succeed.  If there isn't space in the backing
-pool for the reprovisioning, then whatever operation that triggers
-the COW behaviour should fail with ENOSPC before doing anything
-else....
-
-Software devices like dm-thin/snapshot should really only need to
-keep a persistent map of the provisioned space and refresh space
-reservations for used space within that map whenever something that
-triggers COW behaviour occurs. i.e. a snapshot needs to reset the
-provisioned ranges back to "all ranges are freshly provisioned"
-before the snapshot is started. If that space is not available in
-the backing pool, then the snapshot attempt gets ENOSPC....
-
-That means filesystems only need to provision space for journals and
-fixed metadata at mkfs time, and they only need issue a
-REQ_PROVISION bio when they first allocate over-write in place
-metadata. We already have online discard and/or fstrim for releasing
-provisioned space via discards.
-
-This will require some mods to filesystems like ext4 and XFS to
-issue REQ_PROVISION and fail gracefully during metadata allocation.
-However, doing so means that we can actually harden filesystems
-against sparse block device ENOSPC errors by ensuring they will
-never occur in critical filesystem structures....
-
--Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+Thanks,
+Song
