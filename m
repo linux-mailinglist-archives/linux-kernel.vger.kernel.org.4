@@ -2,67 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C2E3709C6A
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 18:28:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A1C4709C79
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 18:31:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjESQ2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 12:28:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53924 "EHLO
+        id S230523AbjESQbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 12:31:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjESQ22 (ORCPT
+        with ESMTP id S229489AbjESQbl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 12:28:28 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D0E8F
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 09:28:27 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-307d58b3efbso2315736f8f.0
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 09:28:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684513705; x=1687105705;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2GJdeGWAzoXld9QLuODG0U2sKMNphJdDP2fBZjGvqmI=;
-        b=DplTAsJh4Gbxe0zkwj+3EHsAdFZh18sUNl88kJ/NEb/DXR1dsnjoftCCqi4z/9mevv
-         IWtqtGkjzz9Y1ReQBpZ0qPvPvoXejShcfCD5yqPcpXTsQdzyhoqUOJ3FoOg70LNskOAp
-         VeDhpEeG1QzDzLefMxy9CqzXAHOYRvKRgI3VzUO3Hi+lwG+vKpKX2+odV+QEPgWOcj1F
-         hSx7eiEyhOTsDio6UdFKqV7AnoQeB9W1jL7b62VrNdaKuwpxew64qxx94pnmjUhR/+37
-         788dcnsOKcVDwjdPqoY5KxB2xYTdXf9geOSsbG65pmh9rQ76vORaVbiq5rbiaLsAxO2O
-         P+lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684513705; x=1687105705;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2GJdeGWAzoXld9QLuODG0U2sKMNphJdDP2fBZjGvqmI=;
-        b=QfNGGQ5xPUAJPvNjmiy/2QVQ13F+QTnOFHY48Fg+NGFGKD85JD39qzwaNyBuMX5jbt
-         KXAq6ITtUovZT0PFd3zv1nRaqE6pUF3lH5ck16w7QLbrucI+lVnkOMpOHQUQcuk4gfqP
-         GyJAVu9Be6/ZvtdsrncCKams8vXDMwrtJyOc4PYdMddSXqs+G4Fdd7oculumQ/a+4A10
-         wqDlxzyP3WOEk9eagUB+WZmo76tivX/jCiePMAJYA/ns/HJMbY4NPrksHvq4cMNdZLCy
-         9dgDiTmRbCMoBctgTvjnm1EYvl/WAH3N4iM2bj5au9/OmhWr30ikfHCEXnh1Mf+DGung
-         qrzw==
-X-Gm-Message-State: AC+VfDw7+ePAXSnSL/U7Wy933LVd0laRKPplklC5AVF5spul+Tvw1jKN
-        Zp5jubd6tvVgDl8rhoOmepNZpA==
-X-Google-Smtp-Source: ACHHUZ4+noNRFYc/gXg2MiArTOT/3T/uxKicgvezGE4QIW4v1m8aywHdparsRxmCv8wrI2tZshVofA==
-X-Received: by 2002:a5d:4301:0:b0:306:147e:5553 with SMTP id h1-20020a5d4301000000b00306147e5553mr1867234wrq.23.1684513705606;
-        Fri, 19 May 2023 09:28:25 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id c2-20020a5d63c2000000b0030497b3224bsm5678580wrw.64.2023.05.19.09.28.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 09:28:24 -0700 (PDT)
-Date:   Fri, 19 May 2023 19:28:04 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     oe-kbuild@lists.linux.dev,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-Subject: drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c:1371 dpu_plane_reset()
- warn: variable dereferenced before check 'plane' (see line 1369)
-Message-ID: <f286d777-8866-4207-83f8-2f1c81efdb23@kili.mountain>
+        Fri, 19 May 2023 12:31:41 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45E84CA;
+        Fri, 19 May 2023 09:31:13 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34JBfjsB011872;
+        Fri, 19 May 2023 16:29:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=yZ+c8uZcJrlAlno5FxTnPElzATRQ31IF/+qQxmh4X7Y=;
+ b=JXYLKwcI2GbfAQOyp3pqNSg6DjU0Y7APV0UkqvAq+7mPhE6jU2niZ2R4O5GEnV8Jv3vY
+ GKGhPl9R8u8z9GTQRJNoPGaU+0mzwGn4MRHzlqrkBUJqPBmbmvIdtKopPW+l45x2R2N4
+ N53tfhOYno5CyDkZBijlZR00Ad7cvVpDEdEpXoDABtsI85/Pq3Lm9EQeADaOgh7BPKhU
+ vCAzv/tTJH7NrLUDiiqElo6FSx31LTwIxiOoWrGKsGUnDbsEy4Z69PrEn6OpGxkbbO+u
+ mhtvqcavuyOXh7qnKKh25rs7jG7FJgFRefJwgVrMfeYuSSMcB+UmlbDChCuJ2ha23dwu fw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qp4ccs7tp-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 May 2023 16:29:01 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34JGSxwm014994
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 May 2023 16:28:59 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 19 May
+ 2023 09:28:57 -0700
+Message-ID: <16562305-3bc0-c69f-0cb5-1b9da1014f19@quicinc.com>
+Date:   Fri, 19 May 2023 10:28:56 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [patch V4 36/37] x86/smpboot: Support parallel startup of
+ secondary CPUs
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>
+CC:     <x86@kernel.org>, Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        <xen-devel@lists.xenproject.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        <linux-csky@vger.kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        <linux-mips@vger.kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, <linux-parisc@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        <linux-riscv@lists.infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Ross Philipson <ross.philipson@oracle.com>,
+        David Woodhouse <dwmw@amazon.co.uk>
+References: <20230512203426.452963764@linutronix.de>
+ <20230512205257.411554373@linutronix.de>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <20230512205257.411554373@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: l2X6Bcn3k_Nws-GO_lVKOQ5EQSj3BbaM
+X-Proofpoint-ORIG-GUID: l2X6Bcn3k_Nws-GO_lVKOQ5EQSj3BbaM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-19_11,2023-05-17_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
+ lowpriorityscore=0 adultscore=0 impostorscore=0 spamscore=0 bulkscore=0
+ phishscore=0 mlxlogscore=999 suspectscore=0 malwarescore=0 clxscore=1011
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305190140
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,67 +114,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   2d1bcbc6cd703e64caf8df314e3669b4786e008a
-commit: 7f38ec140d9c1f257eb55d45d224a7203998d3cc drm/msm/dpu: move pipe_hw to dpu_plane_state
-config: ia64-randconfig-m041-20230514
-compiler: ia64-linux-gcc (GCC) 12.1.0
+On 5/12/2023 3:07 PM, Thomas Gleixner wrote:
+> From: David Woodhouse <dwmw@amazon.co.uk>
+> 
+> In parallel startup mode the APs are kicked alive by the control CPU
+> quickly after each other and run through the early startup code in
+> parallel. The real-mode startup code is already serialized with a
+> bit-spinlock to protect the real-mode stack.
+> 
+> In parallel startup mode the smpboot_control variable obviously cannot
+> contain the Linux CPU number so the APs have to determine their Linux CPU
+> number on their own. This is required to find the CPUs per CPU offset in
+> order to find the idle task stack and other per CPU data.
+> 
+> To achieve this, export the cpuid_to_apicid[] array so that each AP can
+> find its own CPU number by searching therein based on its APIC ID.
+> 
+> Introduce a flag in the top bits of smpboot_control which indicates that
+> the AP should find its CPU number by reading the APIC ID from the APIC.
+> 
+> This is required because CPUID based APIC ID retrieval can only provide the
+> initial APIC ID, which might have been overruled by the firmware. Some AMD
+> APUs come up with APIC ID = initial APIC ID + 0x10, so the APIC ID to CPU
+> number lookup would fail miserably if based on CPUID. Also virtualization
+> can make its own APIC ID assignements. The only requirement is that the
+> APIC IDs are consistent with the APCI/MADT table.
+> 
+> For the boot CPU or in case parallel bringup is disabled the control bits
+> are empty and the CPU number is directly available in bit 0-23 of
+> smpboot_control.
+> 
+> [ tglx: Initial proof of concept patch with bitlock and APIC ID lookup ]
+> [ dwmw2: Rework and testing, commit message, CPUID 0x1 and CPU0 support ]
+> [ seanc: Fix stray override of initial_gs in common_cpu_up() ]
+> [ Oleksandr Natalenko: reported suspend/resume issue fixed in
+>    x86_acpi_suspend_lowlevel ]
+> [ tglx: Make it read the APIC ID from the APIC instead of using CPUID,
+>    	split the bitlock part out ]
+> 
+> Co-developed-by: Thomas Gleixner <tglx@linutronix.de>
+> Co-developed-by: Brian Gerst <brgerst@gmail.com>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Signed-off-by: Brian Gerst <brgerst@gmail.com>
+> Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Tested-by: Michael Kelley <mikelley@microsoft.com>
+> ---
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
-| Closes: https://lore.kernel.org/r/202305192230.fkMk4qjF-lkp@intel.com/
+I pulled in this change via the next tree, tag next-20230519 and I get a 
+build failure using the x86_64_defconfig -
 
-New smatch warnings:
-drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c:1371 dpu_plane_reset() warn: variable dereferenced before check 'plane' (see line 1369)
+   DESCEND objtool
+   INSTALL libsubcmd_headers
+   CALL    scripts/checksyscalls.sh
+   AS      arch/x86/kernel/head_64.o
+arch/x86/kernel/head_64.S: Assembler messages:
+arch/x86/kernel/head_64.S:261: Error: missing ')'
+arch/x86/kernel/head_64.S:261: Error: junk `UL<<10)' after expression
+   CC      arch/x86/kernel/head64.o
+   CC      arch/x86/kernel/ebda.o
+   CC      arch/x86/kernel/platform-quirks.o
+scripts/Makefile.build:374: recipe for target 
+'arch/x86/kernel/head_64.o' failed
+make[3]: *** [arch/x86/kernel/head_64.o] Error 1
+make[3]: *** Waiting for unfinished jobs....
+scripts/Makefile.build:494: recipe for target 'arch/x86/kernel' failed
+make[2]: *** [arch/x86/kernel] Error 2
+scripts/Makefile.build:494: recipe for target 'arch/x86' failed
+make[1]: *** [arch/x86] Error 2
+make[1]: *** Waiting for unfinished jobs....
+Makefile:2026: recipe for target '.' failed
+make: *** [.] Error 2
 
-Old smatch warnings:
-drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c:618 _dpu_plane_get_csc() warn: variable dereferenced before check 'pdpu' (see line 615)
+This is with GCC 5.4.0, if it matters.
 
-vim +/plane +1371 drivers/gpu/drm/msm/disp/dpu1/dpu_plane.c
+Reverting this change allows the build to move forward, although I also 
+need to revert "x86/smpboot/64: Implement 
+arch_cpuhp_init_parallel_bringup() and enable it" for the build to fully 
+succeed.
 
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1365  static void dpu_plane_reset(struct drm_plane *plane)
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1366  {
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1367  	struct dpu_plane *pdpu;
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1368  	struct dpu_plane_state *pstate;
-7f38ec140d9c1f Dmitry Baryshkov  2023-03-16 @1369  	struct dpu_kms *dpu_kms = _dpu_plane_get_kms(plane);
-                                                                                                     ^^^^^
-Dereference inside the function.
+I'm not familiar with this code, and nothing obvious stands out to me. 
+What can I do to help root cause this?
 
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1370  
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27 @1371  	if (!plane) {
-                                                            ^^^^^^
-Checked too late.
-
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1372  		DPU_ERROR("invalid plane\n");
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1373  		return;
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1374  	}
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1375  
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1376  	pdpu = to_dpu_plane(plane);
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1377  	DPU_DEBUG_PLANE(pdpu, "\n");
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1378  
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1379  	/* remove previous state, if present */
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1380  	if (plane->state) {
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1381  		dpu_plane_destroy_state(plane, plane->state);
-c9ef97b694b9bf Bernard Zhao      2021-05-09  1382  		plane->state = NULL;
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1383  	}
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1384  
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1385  	pstate = kzalloc(sizeof(*pstate), GFP_KERNEL);
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1386  	if (!pstate) {
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1387  		DPU_ERROR_PLANE(pdpu, "failed to allocate state\n");
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1388  		return;
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1389  	}
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1390  
-7f38ec140d9c1f Dmitry Baryshkov  2023-03-16  1391  	/*
-7f38ec140d9c1f Dmitry Baryshkov  2023-03-16  1392  	 * Set the SSPP here until we have proper virtualized DPU planes.
-7f38ec140d9c1f Dmitry Baryshkov  2023-03-16  1393  	 * This is the place where the state is allocated, so fill it fully.
-7f38ec140d9c1f Dmitry Baryshkov  2023-03-16  1394  	 */
-7f38ec140d9c1f Dmitry Baryshkov  2023-03-16  1395  	pstate->hw_sspp = dpu_rm_get_sspp(&dpu_kms->rm, pdpu->pipe);
-7f38ec140d9c1f Dmitry Baryshkov  2023-03-16  1396  
-f964cfb7bcffc8 Dmitry Baryshkov  2021-06-28  1397  	__drm_atomic_helper_plane_reset(plane, &pstate->base);
-25fdd5933e4c0f Jeykumar Sankaran 2018-06-27  1398  }
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
-
+-Jeff
