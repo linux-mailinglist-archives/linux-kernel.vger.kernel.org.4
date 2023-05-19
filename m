@@ -2,80 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBAA670A11D
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 22:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F24070A121
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 22:57:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231696AbjESU4q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 16:56:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38510 "EHLO
+        id S229643AbjESU5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 16:57:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjESU4e (ORCPT
+        with ESMTP id S229545AbjESU5e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 16:56:34 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0221CE40
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 13:56:23 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-763997ab8cdso25598839f.2
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 13:56:23 -0700 (PDT)
+        Fri, 19 May 2023 16:57:34 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38350AA
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 13:57:33 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-55d9a9d19c9so67456417b3.1
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 13:57:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684529852; x=1687121852;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=taC7EmecSoPqYCCkWj+HzMbbAhne+m3XF3zqa1yQ0T0=;
+        b=4B7m9BOelUqdIVU9DQbPW2sWg+cpcfFxzeaMsHpViJbsnIFZdCmqby2ypo9+/L9cur
+         uU/0mkb3OEh9KfHiw/OXkz/dqjjDRFuh/UYbPTWgRDV5tassrDU+w7qktfU2GIq+WOgb
+         UWMDQnY1UtPg3Ohj33Ua8dE0GvysFG2aZABlzod6Hi9M0T5JE7ySunRW5ySiyzFKdbLK
+         VosgijfZUR4nX7yyBEMr1B3729NxFHGNJLdfEk12g8S+7CE4Yvm0wKNv8E9OE49S29L7
+         Cpbmy+iK55LTFoNtMNSrPHvZM9VKCOToPCWy0BoqfAaajNuG+bqQmsUdOfDKBUPTchYa
+         pexw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684529783; x=1687121783;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dAhsFZWzv4pW+FEJe+j1meXIun7sOpZm0ldqZGqi+6E=;
-        b=ealm4/jAIV+B5TkCZPNO9rT+brTsEg815QdspaG1QokWThp7qlxCpy1IDV20e1+Hc+
-         ypW/AIzoO+QvamOIGw4KWGdl6LBaiJ5RMBRkyikBZB46iXlFeWmQJpLnCvoIX7oKhlkx
-         TcBojEaU/14yMO/01SMNfXRUK5vU5RPImcwzsoCPbrO1bM99LAvCxofHtE41pcK2iq4U
-         ym21eFlfS9F7Oc1oacCD6P7r3yDvbLYeGzaGMGZO/tYfHYPegrT76ja1VP+PgyUbDusE
-         xlnJ9FXWZdtOq+l46yWlxJZpl44F/mHXEL54K9T/gZ7QRDOZ79RLzaDGc5Ujk6dbV794
-         jj/g==
-X-Gm-Message-State: AC+VfDxVq9XZ5HejAjSq0RUdERi2dGN1tAxhoYKdCMxeDSTFL7+HzTB5
-        nUwu0fJ7chAI3T1J0lpk/o0sBadnXBx/5mNd/coP91LUptnp
-X-Google-Smtp-Source: ACHHUZ5eBPeWyWaKDI49prhq7AsL0tX3Bj9eT6ivEGfM3LMeHkEYBzhvJHuqViDOaSy6/2UcdyP6aCq7gupAugrkOgoTWXQny1xM
-MIME-Version: 1.0
-X-Received: by 2002:a02:b0ca:0:b0:40f:ae69:a144 with SMTP id
- w10-20020a02b0ca000000b0040fae69a144mr1390179jah.5.1684529783286; Fri, 19 May
- 2023 13:56:23 -0700 (PDT)
-Date:   Fri, 19 May 2023 13:56:23 -0700
-In-Reply-To: <0000000000001b987605f47b72d3@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000058b12b05fc122703@google.com>
-Subject: Re: [syzbot] [reiserfs?] [overlayfs?] WARNING: locking bug in take_dentry_name_snapshot
-From:   syzbot <syzbot+5a195884ee3ad761db4e@syzkaller.appspotmail.com>
-To:     casey@schaufler-ca.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        miklos@szeredi.hu, paul@paul-moore.com,
-        reiserfs-devel@vger.kernel.org, roberto.sassu@huawei.com,
-        syzkaller-bugs@googlegroups.com, zohar@linux.ibm.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1684529852; x=1687121852;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=taC7EmecSoPqYCCkWj+HzMbbAhne+m3XF3zqa1yQ0T0=;
+        b=UPT/gY5HKRvHSsbLCA4qtlBXDQFdKxJBUo/zf0pzbypixQfBU4djj5UnpBqN6K24uf
+         eUx2I4fXqo4KEOs15Qi9ziRN4BRPxMUC+DCagba+LtJeJaB135WvqKQp/2CzyL65F6rK
+         gPu51FW8hFKFcByPoYhpnxWiwVJ8kYeYUoi8DXajs1MBhby765HMqnAuuEEI/RHBTcmu
+         mlhvo919pTyeCK62PNepIUstZvev+qXhiznPp6mj2rjt34XnWzWlH1CYFTH+ySz88JLL
+         aZD/8Ex8nnOI740nKSp6dXHEXZZHEHlw1hCSKQssxpEJeIifH09rrfLlvuAJkdK5kaV9
+         O/pQ==
+X-Gm-Message-State: AC+VfDwKb7xcC0IH46n0m7PvUaY8wU5sRLRRpo4NgqpfwG8GFG/u9Crw
+        VVuV+k5K9/ijvhMpHlUhkSfojiMyO5s=
+X-Google-Smtp-Source: ACHHUZ4734pJLWBn2szowanUZEDxVRHek8WgSKyLA+UtgLhhHZnXfDvUn/Wi+3M+ONKwnQYSYn2JFbGCo4A=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:ae4c:0:b0:561:b7fc:7445 with SMTP id
+ g12-20020a81ae4c000000b00561b7fc7445mr1980300ywk.1.1684529852517; Fri, 19 May
+ 2023 13:57:32 -0700 (PDT)
+Date:   Fri, 19 May 2023 13:57:30 -0700
+In-Reply-To: <10abe213-54bb-e637-7ea2-c088bca4726d@redhat.com>
+Mime-Version: 1.0
+References: <20230503160838.3412617-1-seanjc@google.com> <10abe213-54bb-e637-7ea2-c088bca4726d@redhat.com>
+Message-ID: <ZGfius5UkckpUyXl@google.com>
+Subject: Re: [PATCH v2 0/3] KVM: x86: SGX vs. XCR0 cleanups
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Kai Huang <kai.huang@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+On Fri, May 19, 2023, Paolo Bonzini wrote:
+> On 5/3/23 18:08, Sean Christopherson wrote:
+> > Stop adjusting the guest's CPUID info for the allowed XFRM (a.k.a. XCR0)
+> > for SGX enclaves.  Past me didn't understand the roles and responsibilities
+> > between userspace and KVM with respect to CPUID leafs, i.e. I thought I was
+> > being helpful by having KVM adjust the entries.
+> > 
+> > This is clearly an ABI change, but QEMU does the right thing and AFAIK no
+> > other VMMs support SGX (yet), so I'm hopeful/confident that we can excise
+> > the ugly before userspace starts depending on the bad behavior.
+> > v2:
+> >   - Collect reviews/testing. [Kai]
+> >   - Require FP+SSE to always be set in XFRM, and exempt them from the XFRM
+> >     vs. XCR0 check. [Kai]
+> > 
+> > v1: https://lore.kernel.org/all/20230405005911.423699-1-seanjc@google.com
+> > 
+> > Sean Christopherson (3):
+> >    KVM: VMX: Don't rely _only_ on CPUID to enforce XCR0 restrictions for
+> >      ECREATE
+> >    KVM: x86: Don't adjust guest's CPUID.0x12.1 (allowed SGX enclave XFRM)
+> >    KVM: x86: Open code supported XCR0 calculation in
+> >      kvm_vcpu_after_set_cpuid()
+> > 
+> >   arch/x86/kvm/cpuid.c   | 43 ++++++++++--------------------------------
+> >   arch/x86/kvm/vmx/sgx.c | 11 +++++++++--
+> >   2 files changed, 19 insertions(+), 35 deletions(-)
+> > 
+> > 
+> > base-commit: 5c291b93e5d665380dbecc6944973583f9565ee5
+> 
+> Queued, thanks.  But why patch 3?
 
-commit 52ca4b6435a493e47aaa98e7345e19e1e8710b13
-Author: Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Tue Mar 14 08:17:15 2023 +0000
+I want to guard against future misuse of calculating the support XCR0 before the
+CPUID update is complete.  I suppose I could have done this:
 
-    reiserfs: Switch to security_inode_init_security()
+  static u64 guest_cpuid_supported_xcr0(struct kvm_vcpu *vcpu)
+  {
+	struct kvm_cpuid_entry2 *best;
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=121dea5a280000
-start commit:   4bdec23f971b Merge tag 'hwmon-for-v6.3-rc4' of git://git.k..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ea09b0836073ee4
-dashboard link: https://syzkaller.appspot.com/bug?extid=5a195884ee3ad761db4e
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1277fb1ec80000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12543651c80000
+	best = kvm_find_cpuid_entry_index(vcpu, 0xd, 0);
+	if (!best)
+		return 0;
 
-If the result looks correct, please mark the issue as fixed by replying with:
+	return (best->eax | ((u64)best->edx << 32)) & kvm_caps.supported_xcr0;
+  }
 
-#syz fix: reiserfs: Switch to security_inode_init_security()
+but I don't really see the point since there should only ever be one caller,
+e.g. unlike cpuid_query_maxphyaddr() which needs a non-zero default.
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+> Small functions are nice and remove the need to remember what is in EDX:EAX
+> of CPUID[0xD,0].
+
+Hmm, yes and no.  Specifically, I dislike single-use helpers that bury unintuitive
+details in the helper, e.g. in this case, filtering the raw iguest CPUID with KVM's
+kvm_caps.supported_xcr0.  Communicating that in the name of the function so that
+they're are no surprises is often more difficult than just open coding things.
