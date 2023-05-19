@@ -2,86 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B701E709473
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 12:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58505709461
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 12:03:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231714AbjESKHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 06:07:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38448 "EHLO
+        id S231592AbjESKC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 06:02:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230469AbjESKHM (ORCPT
+        with ESMTP id S231519AbjESKCz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 06:07:12 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E12DF0;
-        Fri, 19 May 2023 03:07:11 -0700 (PDT)
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34J9axAw011595;
-        Fri, 19 May 2023 09:40:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=ltrFqY1cUQ4/MSse9aj4E2Qz7xojLKUAW7yUjGsTU5k=;
- b=M8sBlf06f5J6h245MK+vVY7lGh1FSQIykz0E3tPm0HLD7UooGXHglqC+bB+zgJCNm5UG
- Z6lhO+0sNj7YFeWbwo3y9IPoBiXzJxr4RkYliq9pEUvhHD9pGwfCFRvpvD7AZA4hW1uM
- 07ogguaZsXk8uFud8CYMPNIhvBj9OINuld9qgUNN7jN0w1DO4a9u4bVWx+1rayRLzpeV
- DHMrNMOph8a9h6Kxi0EWaBw0rKn1cVWv4P9WoJftSeCiN98wXufH5NjcnwcVpbEPywFJ
- Wbr2hACdRJTw4IvVJfqVpBRL4bHzDwVQj2wBYLQE6NSUuYImy8mR9PznHnAMejIzSBck yA== 
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qp5d3jbwd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 May 2023 09:40:25 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34J4bTve020197;
-        Fri, 19 May 2023 09:37:13 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3qj264tjhg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 May 2023 09:37:12 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34J9b99v33358120
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 19 May 2023 09:37:09 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 3F46D20043;
-        Fri, 19 May 2023 09:37:09 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E328720049;
-        Fri, 19 May 2023 09:37:08 +0000 (GMT)
-Received: from a46lp73.lnxne.boe (unknown [9.152.108.100])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 19 May 2023 09:37:08 +0000 (GMT)
-From:   Steffen Eiden <seiden@linux.ibm.com>
-To:     kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Viktor Mihajlovski <mihajlov@linux.ibm.com>
-Cc:     Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Nico Boehr <nrb@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Hendrik Brueckner <brueckner@linux.ibm.com>
-Subject: [PATCH v2 1/6] s390/uvdevice: Add info IOCTL
-Date:   Fri, 19 May 2023 11:37:03 +0200
-Message-Id: <20230519093708.810957-2-seiden@linux.ibm.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230519093708.810957-1-seiden@linux.ibm.com>
-References: <20230519093708.810957-1-seiden@linux.ibm.com>
+        Fri, 19 May 2023 06:02:55 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2128.outbound.protection.outlook.com [40.107.94.128])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B89CF0;
+        Fri, 19 May 2023 03:02:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ObgNxjI6ZWGuX1BZ47eRfUk5YCG4P4pTM6KkypJOiuvWV2rwnkm+Hroyo7uXkmYcnM5O6ojxWx9Eere+LE8c2PgNM58dG5eYvaLQnl5zDd9MCZnlh/SKqVuXwAK194c42jerAOMs8lShfVTh2lywE+UElbJJEct2KtBJFhlwjHDQFdArjRagXFztrpQ7vyfUCK9x8apNltLLLV0o+mHfLoNnebBZv+cnG69EAeon7JvY2c93Qt0lKN7n2clnu5vLO7nJwAwloiV0SImMGGYyrzjddZMpr8eZZZV4DDnX2A7li07oQiVlHT18ihFKK0mnqlDKfDlZldCfffD9cSqkVw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=q32WIGmfTQKLOoQN7DfiviaRYRpfXGBRJqqDABHBpWM=;
+ b=hN9KHbJMXS15/023jKL1pf9E/32i7bu+EwUoh09CSFIx0BoavWDAUBA+EykUfqiaUSGHh9dimPHhsq1DJYq6j2GpIX81EDSTxW8EAPv0NW35N6lrQu9BstanvgKN/CB5JhuybLVYDQyoodgWDfa6ST/kGEMsd0r6gwHC0vJDCDzSLh3hkPCgYr3EGo8srlWQZPyOpvnx1QqgPkJTSG+HlZdfB/KAvvxRmSVGrH6ScRTj3AbLWbgHW8tAu0FFrHIuCicveYkftyWksOFkT+gZEh3h8HHWH/ixGRxP/iPdUVqVg7DTciQd822OXekuQRrP8aP0PhIdAPnfhdXNh3KK2A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=q32WIGmfTQKLOoQN7DfiviaRYRpfXGBRJqqDABHBpWM=;
+ b=o5rqsBwLktmB4q8Yjqj237NXf9mo0mgf9Bb+wtNtpcJttkKZvPXWAeqvPfHBKCdYIUbUgZCpj6gvdHSOAnLGGMCFJ7kHyGXPvwx8W6xTb0FBJ4nRdFD9MEUWj0UOY8MFL4reEtPX1bA6NRZy2sb+9N7kYFxyD2TeldVySyKufyU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by SA1PR13MB5038.namprd13.prod.outlook.com (2603:10b6:806:1a9::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19; Fri, 19 May
+ 2023 10:02:51 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6411.021; Fri, 19 May 2023
+ 10:02:51 +0000
+Date:   Fri, 19 May 2023 12:02:44 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Ratheesh Kannoth <rkannoth@marvell.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sgoutham@marvell.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, linyunsheng@huawei.com,
+        sbhatta@marvell.com, gakula@marvell.com, schalla@marvell.com,
+        hkelam@marvell.com
+Subject: Re: [PATCH net-next v3] octeontx2-pf: Add support for page pool
+Message-ID: <ZGdJRMfuXHnvVQy9@corigine.com>
+References: <20230519071352.3967986-1-rkannoth@marvell.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230519071352.3967986-1-rkannoth@marvell.com>
+X-ClientProxiedBy: AM4PR05CA0020.eurprd05.prod.outlook.com (2603:10a6:205::33)
+ To PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: lhODXxIn914JOdoZsCdfqkW7LeChvKzI
-X-Proofpoint-GUID: lhODXxIn914JOdoZsCdfqkW7LeChvKzI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-19_06,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
- bulkscore=0 suspectscore=0 clxscore=1015 malwarescore=0 mlxlogscore=999
- spamscore=0 impostorscore=0 phishscore=0 lowpriorityscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305190080
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SA1PR13MB5038:EE_
+X-MS-Office365-Filtering-Correlation-Id: f0a1b910-24e0-4236-f7f8-08db5850350a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6Zz8eOm0RqJP9bZLh+zIvTl9yFa/6R68RBBuOQ9s2Zak1zoNsDR473TviTthhmcZOQQT3gPTqKdJbU8ugYa75AvN7N/GgrQYONHMgTubn7Vj6fEcJlbR0fAiHx5ozJ91GYzozu7Zjh8g8brwtmgPGUr7djH5a1SRtxVRw4yy2AVeyCjg79/F3tmFyYZb3A0X8qvWVEE4f9rU2VTxDLgatJrLzRdsqnXaJDhhAJ4Www8RWBW2+dQWtn3kWMZBlGGwSbRRwIdMgL0vRK4CMlXV5wEWTOC0kacZnbsgLt/1+VlcBLHG9ievhH/R2V+Bg2jccz8BykOAIqQNpv3g2nTaB+Y98MWAf0/7wDaA3q95z6DfAkuNY8CE6QbxslOsrUQ4a9PLWCZif0yzh+kWYJKWuC1IM7gP6B+1pxQZk7Lg3zP+ynOfKrnzjKaO6wZffKrwxqNFgBuEb8RKyYLH4Ayg1LAFolrShL8bFjNsmcQXh+rQql+SxZjvnDUD6IvhKaL2wSxDtKOqrI5u5WtJ7dU5O0aAgD5VEMcG2raDmCgQcuw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(396003)(136003)(39840400004)(376002)(451199021)(5660300002)(41300700001)(2906002)(36756003)(2616005)(83380400001)(38100700002)(86362001)(6506007)(6512007)(8936002)(44832011)(186003)(7416002)(8676002)(6486002)(966005)(66946007)(66556008)(66476007)(6666004)(478600001)(4326008)(6916009)(316002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?u9bworcSDLIIwLVr5qSXfMTwTclxsVbth8CymgozkXLIhMAaOtBO/W+S9Ofu?=
+ =?us-ascii?Q?3b2uhaz576QjUNaRcCSxxYJKD8HfILQC3y+9hNcZAlwheTxgNchLqyo+09s+?=
+ =?us-ascii?Q?vomXxg2nqwEELXbVigthQOaopNcN2JIa0YPim/zYYKJo8DyZEaZMzvqugJ0g?=
+ =?us-ascii?Q?MHMqjExW4xhlIyrrjtYpfQDwCuJjxATaFYWSHhWlpngE+uMMX5KkHnXoHAUq?=
+ =?us-ascii?Q?8U0CUmCUEbM6KZNFVQPomIkQLwhR8UYJCiYgGncjwdU/LIAoYJzoqQdv52cF?=
+ =?us-ascii?Q?AImaReVz6WDnIta0NrQu/ih1mi5kc71/Yd0EXr2Ryd3RlT70oHSfAleRvHTj?=
+ =?us-ascii?Q?OsPdhuyqEZyhHPhFyhW56lj/6kxUoDpUArnni+WrSdO8ZFnSeIfRTqI0j9I3?=
+ =?us-ascii?Q?UUDYQC5S1WmZQhthXQ1NmE4YrCwFYyYc43TA6X1WBn1jMEeTmkPsOg9OEG6b?=
+ =?us-ascii?Q?Aca8qzycIKpIW2qHq9KqLQLF1KZbjeDpQi8QdLIUaYVYXzh6wqkKhtiAkehf?=
+ =?us-ascii?Q?jcDYHH+m80mYhps3dXxn22zATucmXxrrGl7p5d9CK1Uwvg/CjKfRx0hgxLm+?=
+ =?us-ascii?Q?IFKM9kMoyTVXDpbcftEirZT0KjFII+d0ngWxrUmgx84IuRjlXp9x1pnYsv+e?=
+ =?us-ascii?Q?c6WMSJOVNAaWVe2gOQdrcdtNKTBEJHZ9vVfFP8jDh0JTljzH40A1uXJMd82f?=
+ =?us-ascii?Q?aDWVh0MY8Mj52BnCAnFyiUH7m3FmkLVEsyGsuUstwOZv4dG+m+nUS45jg9mk?=
+ =?us-ascii?Q?47brx95am1UbGzYIHV4p708F4VNNqn2loz6ltMk3Q0875PGjA2l1Ur1O+Cgs?=
+ =?us-ascii?Q?d2jBUe2NPES747hlmIp7bZoXZZ/Td3nV4gL8ITWCEJcP+tpQLs492fVU99pi?=
+ =?us-ascii?Q?EJWm6y0X7Vf436yWPDuY4r5VMHMXXcCCRFN1n7P1B7bsR3vlngREUfBdjgot?=
+ =?us-ascii?Q?3hlP8OAEvljM2xvNpSBlDQKAe8hyc6IaV+cXB4k0k0jBd6jACQSRmmwfekEM?=
+ =?us-ascii?Q?vPfcK0U8HlSXW6vX+uGaJtmsH06Dj4E6wjn4eXuNXSswnE9oAl3gEGKnXkq7?=
+ =?us-ascii?Q?yeEJ7A1xTN0MbDcryAzPaPADWC5KHVSSz6AeXHRAs+gabsRrKa8cPLr4jkhn?=
+ =?us-ascii?Q?q1zLDZ5/ciT1W0iTSvi1njWVhpsRRWKvXHcQsRBZuQHPVl9aqOj0cLYBigXL?=
+ =?us-ascii?Q?6kG0G8mB9S4/uUpjvAtlB2AifT1Q4Y5tpTeVx4NYQloEzkRCHwfWjc46xnaO?=
+ =?us-ascii?Q?U3ZCAZyU44gOucel6uYiGLf0JDaW/+Wi5ikd2BMVoBUpz248VE4XJHl3zZHR?=
+ =?us-ascii?Q?F76vQsw26/P9IvVNwpsjbzLtnnpGR8zA5JgOUosWMd/vORLR6hUqpmV9UVMA?=
+ =?us-ascii?Q?s+31+b5UIk1SE77cN6oXLtxfVd+ihd8B02COxoRm0yCiWUQFNACztJiqnI7V?=
+ =?us-ascii?Q?/Y8Ja/2kv6zwoxw9g3focnZawud5GeE/olViRagHK/Fz9Uu5pXMq66fJ5/MZ?=
+ =?us-ascii?Q?Z/MjLzJ+TEbhmSQisRvpOx5ahwRcdv1EMmtioi0KPEAm+0ipdhMXkXjPd719?=
+ =?us-ascii?Q?YUVrnhI/xET94pQSQdbzqa3jj1QYm85/jdLpI6MxZNCsG9hV5prG+F6WGbC7?=
+ =?us-ascii?Q?UmokbLBVH6V/pSrAFscYkh7XsgRq8/5aVf6E+aCQ5QxUc6ukIzR/U+vTkV69?=
+ =?us-ascii?Q?/5jtRw=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f0a1b910-24e0-4236-f7f8-08db5850350a
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2023 10:02:51.5368
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mIBWxv/3DI9q9JTU1AacDGnn6EJ6leYiqvZN5c+AFXkuEmnCEHF5+1WLyLoS8Jp+VCCra8184CBEwIt58Ju8rHdsukInBcNNaFWRe4OfSPg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR13MB5038
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,204 +116,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add an IOCTL that allows userspace to find out which IOCTLs the uvdevice
-supports without trial and error.
+On Fri, May 19, 2023 at 12:43:52PM +0530, Ratheesh Kannoth wrote:
+> Page pool for each rx queue enhance rx side performance
+> by reclaiming buffers back to each queue specific pool. DMA
+> mapping is done only for first allocation of buffers.
+> As subsequent buffers allocation avoid DMA mapping,
+> it results in performance improvement.
+> 
+> Image        |  Performance
+> ------------ | ------------
+> Vannila      |   3Mpps
+>              |
+> with this    |   42Mpps
+> change	     |
+> ---------------------------
+> 
+> Signed-off-by: Ratheesh Kannoth <rkannoth@marvell.com>
 
-Explicitly expose the IOCTL nr for the request types.
+...
 
-Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
----
- arch/s390/include/uapi/asm/uvdevice.h | 45 +++++++++++++++-
- drivers/s390/char/uvdevice.c          | 77 ++++++++++++++++++++++++---
- 2 files changed, 114 insertions(+), 8 deletions(-)
+> @@ -1205,10 +1226,28 @@ void otx2_sq_free_sqbs(struct otx2_nic *pfvf)
+>  	}
+>  }
+>  
+> +void otx2_free_bufs(struct otx2_nic *pfvf, struct otx2_pool *pool,
+> +		    u64 iova, int size)
+> +{
+> +	u64 pa = otx2_iova_to_phys(pfvf->iommu_domain, iova);
+> +	struct page *page = virt_to_head_page(phys_to_virt(pa));
 
-diff --git a/arch/s390/include/uapi/asm/uvdevice.h b/arch/s390/include/uapi/asm/uvdevice.h
-index 10a5ac918e02..ed58979b8438 100644
---- a/arch/s390/include/uapi/asm/uvdevice.h
-+++ b/arch/s390/include/uapi/asm/uvdevice.h
-@@ -32,6 +32,36 @@ struct uvio_attest {
- 	__u16 reserved136;				/* 0x0136 */
- };
- 
-+/**
-+ * uvio_uvdev_info - Information of supported functions
-+ *
-+ * @supp_uvio_cmds - supported IOCTLs by this device
-+ * @supp_uv_cmds - supported UVCs corresponding to the IOCTL
-+ *
-+ * UVIO request to get information about supported request types by this
-+ * uvdevice and the Ultravisor.
-+ * Everything is output. Bits are in LSB0 ordering.
-+ * If the bit is set in both, @supp_uvio_cmds and @supp_uv_cmds,
-+ * the uvdevice and the Ultravisor support that call.
-+ *
-+ * Note that bit 0 (UVIO_IOCTL_UVDEV_INFO_NR) is always zero for `supp_uv_cmds`
-+ * as there is no corresponding UV-call.
-+ */
-+struct uvio_uvdev_info {
-+	/*
-+	 * If bit `n` is set, this device supports the IOCTL with nr `n`.
-+	 */
-+	__u64 supp_uvio_cmds;
-+	/*
-+	 * If bit `n` is set, the Ultravisor(UV) supports the UV-call
-+	 * corresponding to the IOCTL with nr `n` in the calling contextx
-+	 * (host or guest).
-+	 * The value is only valid if the corresponding bit in @supp_uvio_cmds
-+	 * is set as well.
-+	 */
-+	__u64 supp_uv_cmds;
-+};
-+
- /*
-  * The following max values define an upper length for the IOCTL in/out buffers.
-  * However, they do not represent the maximum the Ultravisor allows which is
-@@ -46,6 +76,19 @@ struct uvio_attest {
- #define UVIO_DEVICE_NAME "uv"
- #define UVIO_TYPE_UVC 'u'
- 
--#define UVIO_IOCTL_ATT _IOWR(UVIO_TYPE_UVC, 0x01, struct uvio_ioctl_cb)
-+enum UVIO_IOCTL_NR {
-+	UVIO_IOCTL_UVDEV_INFO_NR = 0x00,
-+	UVIO_IOCTL_ATT_NR,
-+	/* must be the last entry */
-+	UVIO_IOCTL_NUM_IOCTLS
-+};
-+
-+#define UVIO_IOCTL(nr)		_IOWR(UVIO_TYPE_UVC, nr, struct uvio_ioctl_cb)
-+#define UVIO_IOCTL_UVDEV_INFO	UVIO_IOCTL(UVIO_IOCTL_UVDEV_INFO_NR)
-+#define UVIO_IOCTL_ATT		UVIO_IOCTL(UVIO_IOCTL_ATT_NR)
-+
-+#define UVIO_SUPP_CALL(nr)	(1ULL << (nr))
-+#define UVIO_SUPP_UDEV_INFO	UVIO_SUPP_CALL(UVIO_IOCTL_UDEV_INFO_NR)
-+#define UVIO_SUPP_ATT		UVIO_SUPP_CALL(UVIO_IOCTL_ATT_NR)
- 
- #endif /* __S390_ASM_UVDEVICE_H */
-diff --git a/drivers/s390/char/uvdevice.c b/drivers/s390/char/uvdevice.c
-index 1d40457c7b10..61c7f284c5c5 100644
---- a/drivers/s390/char/uvdevice.c
-+++ b/drivers/s390/char/uvdevice.c
-@@ -20,6 +20,7 @@
-  *  channel for userspace to the Ultravisor.
-  */
- 
-+#include "asm-generic/ioctl.h"
- #include <linux/module.h>
- #include <linux/kernel.h>
- #include <linux/miscdevice.h>
-@@ -32,6 +33,51 @@
- #include <asm/uvdevice.h>
- #include <asm/uv.h>
- 
-+/* Mapping from IOCTL-nr to UVC-bit */
-+static const u64 ioctl_nr_to_uvc_bit[] __initconst = {
-+	[UVIO_IOCTL_UVDEV_INFO_NR] = -1UL,
-+	[UVIO_IOCTL_ATT_NR] = BIT_UVC_CMD_RETR_ATTEST,
-+};
-+
-+static_assert(ARRAY_SIZE(ioctl_nr_to_uvc_bit) == UVIO_IOCTL_NUM_IOCTLS);
-+
-+static struct uvio_uvdev_info uvdev_info = {
-+	.supp_uvio_cmds = GENMASK_ULL(UVIO_IOCTL_NUM_IOCTLS - 1, 0),
-+};
-+
-+static void __init set_supp_uv_cmds(struct uvio_uvdev_info *info)
-+{
-+	int i;
-+
-+	for (i = 0; i < UVIO_IOCTL_NUM_IOCTLS; i++) {
-+		if (ioctl_nr_to_uvc_bit[i] == -1UL)
-+			continue;
-+		if (!test_bit_inv(ioctl_nr_to_uvc_bit[i], uv_info.inst_calls_list))
-+			continue;
-+		__set_bit(i, (unsigned long *)&info->supp_uv_cmds);
-+	}
-+}
-+
-+/**
-+ * uvio_uvdev_info() - get information about the uvdevice
-+ *
-+ * @uv_ioctl: ioctl control block
-+ *
-+ * Lists all supported IOCTLs by this uvdevice
-+ */
-+static int uvio_uvdev_info(struct uvio_ioctl_cb *uv_ioctl)
-+{
-+	void __user *user_buf_arg = (void __user *)uv_ioctl->argument_addr;
-+
-+	if (uv_ioctl->argument_len < sizeof(uvdev_info))
-+		return -EINVAL;
-+	if (copy_to_user(user_buf_arg, &uvdev_info, sizeof(uvdev_info)))
-+		return -EFAULT;
-+
-+	uv_ioctl->uv_rc = UVC_RC_EXECUTED;
-+	return  0;
-+}
-+
- static int uvio_build_uvcb_attest(struct uv_cb_attest *uvcb_attest, u8 *arcb,
- 				  u8 *meas, u8 *add_data, struct uvio_attest *uvio_attest)
- {
-@@ -185,8 +231,19 @@ static int uvio_attestation(struct uvio_ioctl_cb *uv_ioctl)
- 	return ret;
- }
- 
--static int uvio_copy_and_check_ioctl(struct uvio_ioctl_cb *ioctl, void __user *argp)
-+static int uvio_copy_and_check_ioctl(struct uvio_ioctl_cb *ioctl, void __user *argp,
-+				     unsigned long cmd)
- {
-+	u8 nr = _IOC_NR(cmd);
-+
-+	if (_IOC_DIR(cmd) != (_IOC_READ | _IOC_WRITE))
-+		return -ENOIOCTLCMD;
-+	if (_IOC_TYPE(cmd) != UVIO_TYPE_UVC)
-+		return -ENOIOCTLCMD;
-+	if (nr >= UVIO_IOCTL_NUM_IOCTLS)
-+		return -ENOIOCTLCMD;
-+	if (_IOC_SIZE(cmd) != sizeof(*ioctl))
-+		return -ENOIOCTLCMD;
- 	if (copy_from_user(ioctl, argp, sizeof(*ioctl)))
- 		return -EFAULT;
- 	if (ioctl->flags != 0)
-@@ -194,7 +251,7 @@ static int uvio_copy_and_check_ioctl(struct uvio_ioctl_cb *ioctl, void __user *a
- 	if (memchr_inv(ioctl->reserved14, 0, sizeof(ioctl->reserved14)))
- 		return -EINVAL;
- 
--	return 0;
-+	return nr;
- }
- 
- /*
-@@ -205,12 +262,17 @@ static long uvio_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
- 	void __user *argp = (void __user *)arg;
- 	struct uvio_ioctl_cb uv_ioctl = { };
- 	long ret;
-+	int nr;
-+
-+	nr = uvio_copy_and_check_ioctl(&uv_ioctl, argp, cmd);
-+	if (nr < 0)
-+		return nr;
- 
--	switch (cmd) {
--	case UVIO_IOCTL_ATT:
--		ret = uvio_copy_and_check_ioctl(&uv_ioctl, argp);
--		if (ret)
--			return ret;
-+	switch (nr) {
-+	case UVIO_IOCTL_UVDEV_INFO_NR:
-+		ret = uvio_uvdev_info(&uv_ioctl);
-+		break;
-+	case UVIO_IOCTL_ATT_NR:
- 		ret = uvio_attestation(&uv_ioctl);
- 		break;
- 	default:
-@@ -245,6 +307,7 @@ static void __exit uvio_dev_exit(void)
- 
- static int __init uvio_dev_init(void)
- {
-+	set_supp_uv_cmds(&uvdev_info);
- 	return misc_register(&uvio_dev_miscdev);
- }
- 
--- 
-2.40.1
+nit: please arrange local variables in networking code in reverse xmas tree
+     order - longest line to shortest.
 
+	u64 pa = otx2_iova_to_phys(pfvf->iommu_domain, iova);
+	struct page *page;
+
+	page = virt_to_head_page(phys_to_virt(pa));
+
+     The following tool can check this:
+
+        https://github.com/ecree-solarflare/xmastree
+
+...
+
+> @@ -1186,11 +1185,13 @@ bool otx2_sq_append_skb(struct net_device *netdev, struct otx2_snd_queue *sq,
+>  }
+>  EXPORT_SYMBOL(otx2_sq_append_skb);
+>  
+> -void otx2_cleanup_rx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq)
+> +void otx2_cleanup_rx_cqes(struct otx2_nic *pfvf, struct otx2_cq_queue *cq, int qidx)
+>  {
+>  	struct nix_cqe_rx_s *cqe;
+>  	int processed_cqe = 0;
+> -	u64 iova, pa;
+> +	struct otx2_pool *pool;
+> +	u16 pool_id;
+> +	u64 iova;
+
+Likewise here.
+
+>  
+>  	if (pfvf->xdp_prog)
+>  		xdp_rxq_info_unreg(&cq->xdp_rxq);
+
+...
