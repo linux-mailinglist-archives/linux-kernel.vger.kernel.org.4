@@ -2,63 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 247E57094C6
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 12:29:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A81A07094CA
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 12:29:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231881AbjESK2d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 06:28:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49868 "EHLO
+        id S231872AbjESK3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 06:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231815AbjESK2X (ORCPT
+        with ESMTP id S231635AbjESK3j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 06:28:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C3AE73
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:27:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684492059;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dpVUKoV13qmSlxZhl7UVQfhf3HY6y+j5TROYuDuVGKc=;
-        b=QYCK87SIAmXsg4mZB5Dm5hqwJufD/WcqCMUtNrU7lt/HqjgY9d+pqjogifTRryAw4/SwKT
-        YnOtP53lZbC4HmdaYJl1YWVfTqdlizytxT2vAST3xrKOPMEs3cH9+k1/eyryeqfd7aWikU
-        dzJE0Zb/ZuGl0Lk9tpoTIsbpoNYyikk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-282-noILZ21kOdC-g25uQy8reA-1; Fri, 19 May 2023 06:27:36 -0400
-X-MC-Unique: noILZ21kOdC-g25uQy8reA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CB8361C04B50;
-        Fri, 19 May 2023 10:27:35 +0000 (UTC)
-Received: from t480s.redhat.com (unknown [10.39.194.84])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id F08C62166B25;
-        Fri, 19 May 2023 10:27:32 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>, Peter Xu <peterx@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>
-Subject: [PATCH v1 3/3] selftests/mm: gup_longterm: add liburing tests
-Date:   Fri, 19 May 2023 12:27:23 +0200
-Message-Id: <20230519102723.185721-4-david@redhat.com>
-In-Reply-To: <20230519102723.185721-1-david@redhat.com>
-References: <20230519102723.185721-1-david@redhat.com>
+        Fri, 19 May 2023 06:29:39 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08962E6E
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:29:16 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1a516fb6523so29353425ad.3
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:29:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684492156; x=1687084156;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dyCts+3MIamz/ZP/Th1oUrcgbH11s2oWCUMvcOwKW/c=;
+        b=QwQQ1jJWLOQbljg6TCUXa5q9qgSjdve6OeoE561RDnhWjdKSN8Ga4m81FubQ9mtfC7
+         iPCKNMdZNbrLBp0aYOQ3WyKkrYI8Rksn8fKcwFdXF+46wQYH/mB1rxMeHXeo+PyXJ1/O
+         8l5l25MIW2Kg198SOnoYzl6NQcdfRqrHAUglrIUPPTB0GfWfh+zH3FzG1cE+133HABWJ
+         W5XMihnrXeQEkPbQtdELGmA5Sm0LHRMqN8osScTjCYITHfWrr45XfAsS7IuQ5vmPT/FQ
+         krpPDhSJ8yhIvvidzzMDrc4am9qi3WZygZMG1TC0uncBnRDIwwCps2co07joA0pXRcCS
+         vKzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684492156; x=1687084156;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dyCts+3MIamz/ZP/Th1oUrcgbH11s2oWCUMvcOwKW/c=;
+        b=U7QSbfskgdttNoPoaO3j86Hq21rOk7bCUMQcMGzBW4SrpMI/dLtXpr1mnEegdI7HEY
+         qtJxfbLtN7eVFWHwLypj8AmaAH6/rwJWXTqoM7FctCfplif7Q2b9mriMKujsorG1ipZK
+         PYAME486bkc7SoZo1tT2MnOWVrYAeIE5pcOVSRHgLZx9iDxmolvyX9AUYUa4lm5+vr90
+         3fqvZ/PqZ8XV0Co8dLFUPSf2yjcA0bkHnlcDx4RQRoJN0+wNUbHVNLTGVix59tyNFJSx
+         NTgaVomyWFhDrBTJ+q9HV81HWJH7z4A+QBkWB13tA7JIb98bEENndReqK6nS4BabQVm9
+         xnXA==
+X-Gm-Message-State: AC+VfDyxSsVuAMhOuwEuQoLMvupvGitXhXo4JSdg+3tSTHmha8RvcqPx
+        i4SQWCESkL81oBvkZ2OFKaI=
+X-Google-Smtp-Source: ACHHUZ7NMUT3TKAc7YbJrIYDWFZGmpcw+HSt+Acfdj11Pwa6UO0f3XrjjVk5DPL0j87P6igKTx2o+A==
+X-Received: by 2002:a17:903:1112:b0:1a6:8ed5:428a with SMTP id n18-20020a170903111200b001a68ed5428amr2918121plh.22.1684492156382;
+        Fri, 19 May 2023 03:29:16 -0700 (PDT)
+Received: from localhost.localdomain ([221.226.144.218])
+        by smtp.gmail.com with ESMTPSA id x4-20020a170902ea8400b001aaffe15f39sm3102770plb.30.2023.05.19.03.29.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 May 2023 03:29:16 -0700 (PDT)
+From:   Song Shuai <suagrfillet@gmail.com>
+To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, suagrfillet@gmail.com,
+        mason.huo@starfivetech.com, leyfoon.tan@starfivetech.com,
+        ajones@ventanamicro.com, jeeheng.sia@starfivetech.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Song Shuai <songshuaishuai@tinylab.org>
+Subject: [PATCH] riscv: hibernation: Remove duplicate call of suspend_restore_csrs
+Date:   Fri, 19 May 2023 18:29:08 +0800
+Message-Id: <20230519102908.253458-1-suagrfillet@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,126 +72,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Similar to the COW selftests, also use io_uring fixed buffers to test
-if long-term page pinning works as expected.
+The suspend_restore_csrs is called in both __hibernate_cpu_resume
+and the `else` of subsequent swsusp_arch_suspend.
 
-Signed-off-by: David Hildenbrand <david@redhat.com>
+Removing the first call makes both suspend_{save,restore}_csrs
+left in swsusp_arch_suspend for clean code.
+
+Signed-off-by: Song Shuai <suagrfillet@gmail.com>
+Signed-off-by: Song Shuai <songshuaishuai@tinylab.org>
 ---
- tools/testing/selftests/mm/gup_longterm.c | 73 +++++++++++++++++++++++
- 1 file changed, 73 insertions(+)
+ arch/riscv/kernel/hibernate-asm.S | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/tools/testing/selftests/mm/gup_longterm.c b/tools/testing/selftests/mm/gup_longterm.c
-index 44a3617fd423..d33d3e68ffab 100644
---- a/tools/testing/selftests/mm/gup_longterm.c
-+++ b/tools/testing/selftests/mm/gup_longterm.c
-@@ -22,6 +22,9 @@
- #include <linux/memfd.h>
+diff --git a/arch/riscv/kernel/hibernate-asm.S b/arch/riscv/kernel/hibernate-asm.S
+index 5c76671c7e15..d698dd7df637 100644
+--- a/arch/riscv/kernel/hibernate-asm.S
++++ b/arch/riscv/kernel/hibernate-asm.S
+@@ -28,7 +28,6 @@ ENTRY(__hibernate_cpu_resume)
  
- #include "local_config.h"
-+#ifdef LOCAL_CONFIG_HAVE_LIBURING
-+#include <liburing.h>
-+#endif /* LOCAL_CONFIG_HAVE_LIBURING */
+ 	REG_L	a0, hibernate_cpu_context
  
- #include "../../../../mm/gup_test.h"
- #include "../kselftest.h"
-@@ -80,6 +83,9 @@ enum test_type {
- 	TEST_TYPE_RO_FAST,
- 	TEST_TYPE_RW,
- 	TEST_TYPE_RW_FAST,
-+#ifdef LOCAL_CONFIG_HAVE_LIBURING
-+	TEST_TYPE_IOURING,
-+#endif /* LOCAL_CONFIG_HAVE_LIBURING */
- };
+-	suspend_restore_csrs
+ 	suspend_restore_regs
  
- static void do_test(int fd, size_t size, enum test_type type, bool shared)
-@@ -173,6 +179,51 @@ static void do_test(int fd, size_t size, enum test_type type, bool shared)
- 		ksft_test_result(should_work, "Should have worked\n");
- 		break;
- 	}
-+#ifdef LOCAL_CONFIG_HAVE_LIBURING
-+	case TEST_TYPE_IOURING: {
-+		struct io_uring ring;
-+		struct iovec iov;
-+
-+		/* io_uring always pins pages writable. */
-+		if (shared && fs_is_unknown(fs_type)) {
-+			ksft_test_result_skip("Unknown filesystem\n");
-+			return;
-+		}
-+		should_work = !shared ||
-+			      fs_supports_writable_longterm_pinning(fs_type);
-+
-+		/* Skip on errors, as we might just lack kernel support. */
-+		ret = io_uring_queue_init(1, &ring, 0);
-+		if (ret < 0) {
-+			ksft_test_result_skip("io_uring_queue_init() failed\n");
-+			break;
-+		}
-+		/*
-+		 * Register the range as a fixed buffer. This will FOLL_WRITE |
-+		 * FOLL_PIN | FOLL_LONGTERM the range.
-+		 */
-+		iov.iov_base = mem;
-+		iov.iov_len = size;
-+		ret = io_uring_register_buffers(&ring, &iov, 1);
-+		/* Only new kernels return EFAULT. */
-+		if (ret && (errno == ENOSPC || errno == EOPNOTSUPP ||
-+			    errno == EFAULT)) {
-+			ksft_test_result(!should_work, "Should have failed\n");
-+		} else if (ret) {
-+			/*
-+			 * We might just lack support or have insufficient
-+			 * MEMLOCK limits.
-+			 */
-+			ksft_test_result_skip("io_uring_register_buffers() failed\n");
-+		} else {
-+			ksft_test_result(should_work, "Should have worked\n");
-+			io_uring_unregister_buffers(&ring);
-+		}
-+
-+		io_uring_queue_exit(&ring);
-+		break;
-+	}
-+#endif /* LOCAL_CONFIG_HAVE_LIBURING */
- 	default:
- 		assert(false);
- 	}
-@@ -310,6 +361,18 @@ static void test_private_ro_fast_pin(int fd, size_t size)
- 	do_test(fd, size, TEST_TYPE_RO_FAST, false);
- }
- 
-+#ifdef LOCAL_CONFIG_HAVE_LIBURING
-+static void test_shared_iouring(int fd, size_t size)
-+{
-+	do_test(fd, size, TEST_TYPE_IOURING, true);
-+}
-+
-+static void test_private_iouring(int fd, size_t size)
-+{
-+	do_test(fd, size, TEST_TYPE_IOURING, false);
-+}
-+#endif /* LOCAL_CONFIG_HAVE_LIBURING */
-+
- static const struct test_case test_cases[] = {
- 	{
- 		"R/W longterm GUP pin in MAP_SHARED file mapping",
-@@ -343,6 +406,16 @@ static const struct test_case test_cases[] = {
- 		"R/O longterm GUP-fast pin in MAP_PRIVATE file mapping",
- 		test_private_ro_fast_pin,
- 	},
-+#ifdef LOCAL_CONFIG_HAVE_LIBURING
-+	{
-+		"io_uring fixed buffer with MAP_SHARED file mapping",
-+		test_shared_iouring,
-+	},
-+	{
-+		"io_uring fixed buffer with MAP_PRIVATE file mapping",
-+		test_private_iouring,
-+	},
-+#endif /* LOCAL_CONFIG_HAVE_LIBURING */
- };
- 
- static void run_test_case(struct test_case const *test_case)
+ 	/* Return zero value. */
 -- 
-2.40.1
+2.20.1
 
