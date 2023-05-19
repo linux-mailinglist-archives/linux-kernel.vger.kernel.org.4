@@ -2,128 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF8F708FD6
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 08:23:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 532D9708FE4
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 08:29:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229503AbjESGXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 02:23:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42334 "EHLO
+        id S229719AbjESG32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 02:29:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjESGXc (ORCPT
+        with ESMTP id S229436AbjESG30 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 02:23:32 -0400
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2056.outbound.protection.outlook.com [40.107.255.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E2D21A6
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 23:23:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OuMrLdqXPsBIY6xT/rkze8h8MX7OVRbl7IjsY/hDGK2fAZOJYobP2gRpBN0uGHggJ7PS1MhRbK5hwC+EyIG4m66q8WtVV0CuO8u9Rv23/mgO1RshqDDLuqVFg+7wZNukBVJf7xp2GyDQtnY/YJe5RNUK0EcqNDk18DoeydHv97PvoR+UyJ9/PBGE2T9Y5dilXphmhLC0bKGB3wsRYr1ODEkv2eiS+fmqoAsArL8YwzSA6Mzl1dKSufy4Bpz13Khok42bH/6Wma/QIJJrvCKFdcAWVVvCOpNkuNdvSfvs0ySbeuC+L1MhTAwMStEIKlIdUqh/Mphj64DsTMvx8g+VhA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IdNPuXnpUcCMVIOlw82piWY5gTBAX7L9eMsi404rws4=;
- b=a1DpfrQcA1ryBjozEic7+haLBnES91l9h3LI/xtEfP1MiOLA7dv6cc/WnIa6pvTM11hq38wABaC6BihLKJANJkH5O0gTCtt3n6Hu1W+FYM18btPet70hv5w/DpqdePXulQzuJkP4ykacJz634EM20GReMDD67dq49dx+CiWR2Rx1yt6mesLr5FBKeTQhlgOpMAgu8pPMynyiQBHVMF+L4+p9gCcna1vpXmC8RXxu48rNfQcJSQ3Wp39IkyvQd1vYcMKasMTGmhytfvk+XKp8+qTSaWbbsXGODebhK0drYM9y7kIs7bRz66ZjGSxJ+saTWYBuahxiea1/nzg4YQ+iYQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=jaguarmicro.com; dmarc=pass action=none
- header.from=jaguarmicro.com; dkim=pass header.d=jaguarmicro.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jaguarmicro.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IdNPuXnpUcCMVIOlw82piWY5gTBAX7L9eMsi404rws4=;
- b=n1RmfydpjepwYKtJIy+usAFSbYPCrF3S6F48iLpAjsknFmczBf692QSlp4A3Ytt4+u1Mb/+dBzHJ68u7/pfco1crdFRRpKhZuJn2fssS8VkglX9SHRgy9WdErGASIoIgqH5PgGU0zS0uxbQ/mCBD5vDkxFBVV0JmJEimQ0bWdKWd9q6cplPTkKszljID4AhQc4/emjDctIKvuo4mImgE2kq9ZMi/UtyJ+otksLuTaqfeBO0MP1FJvTKv6TUU8/j6+k9z1alyFXn2c6MkXmhxc178TaZm+91K8l9A4JgbuNLQquE3xKhyZb9axx40ZlJWpvxb2IXkohIC/2Yug8bJcA==
-Received: from TY2PR06MB3424.apcprd06.prod.outlook.com (2603:1096:404:104::19)
- by KL1PR06MB6018.apcprd06.prod.outlook.com (2603:1096:820:d4::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19; Fri, 19 May
- 2023 06:23:23 +0000
-Received: from TY2PR06MB3424.apcprd06.prod.outlook.com
- ([fe80::60d6:4281:7511:78f7]) by TY2PR06MB3424.apcprd06.prod.outlook.com
- ([fe80::60d6:4281:7511:78f7%7]) with mapi id 15.20.6411.021; Fri, 19 May 2023
- 06:23:23 +0000
-From:   Angus Chen <angus.chen@jaguarmicro.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-CC:     "masahiroy@kernel.org" <masahiroy@kernel.org>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "ndesaulniers@google.com" <ndesaulniers@google.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: RE: [PATCH] init: Add bdev fs printk if mount_block_root failed
-Thread-Topic: [PATCH] init: Add bdev fs printk if mount_block_root failed
-Thread-Index: AQHZiTxYACHcmK7CiEuq3+U+9CSzEa9gdNaAgACormA=
-Date:   Fri, 19 May 2023 06:23:22 +0000
-Message-ID: <TY2PR06MB342418A1256A1342EE27F474857C9@TY2PR06MB3424.apcprd06.prod.outlook.com>
-References: <20230518035321.1672-1-angus.chen@jaguarmicro.com>
- <20230518130221.81e8e1f474cfbfd6c93712c5@linux-foundation.org>
-In-Reply-To: <20230518130221.81e8e1f474cfbfd6c93712c5@linux-foundation.org>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=jaguarmicro.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TY2PR06MB3424:EE_|KL1PR06MB6018:EE_
-x-ms-office365-filtering-correlation-id: 4b062d79-f4ca-4dad-6231-08db58318c13
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: jHK56+SEE7Yz+VjsRyqZodYHafUVPJaR/zvUxxwb9UIv0klYgvCVeEGJ3qDtXPhyTyGrji0Beu9YQlqbrtqChW9ICshOsbQ9yo57zVrf3DBiMz97EQTQeUiQcgAT/IGKQ0fH5fsP2VkIRWUd3E8ipSgA3VJOZPGnbaTbJNuZ1roMuGXJ0OugYJp9oDALu64b02d+l2x/xHEEw17A+9vY+kaY6thKV0XoWAAAZwpW4zS0Wf4PG+7tiqLPSuM+Jrh0lPkfXRrgWufwO2+3usZ3M41U6B5Z1CMRqsYmYYhOpm6+Dz+PDJGEhHfglO8hhvreLRCFdRFMcAuk7kj4PUePAFf7d6wF7JWXLGSHoJiuJ5g2cVLv4uJyIKKj0QUxsPvj6vxKOFUbk7bb+6NPdc/tQ4ht8VPLDvjqDi0zKTvK7La2S1L++8/Sv2KMGsA59+0wjp+h71R4mE/LBa+0T5VxtBh4w855gUjhREdyNITW4oam32M7J4JPivHVS4Pibk1U/NXMFTq4csF6A9PiH2YENiICHhS1/OoXh7UZtkR/b4N2EFXST3CpNaFWcAm8wbdSYjs9jocBWYyqHzg1UhCGbSFNeCq2oCLQTXt771wPMlidVXd301kHMJ9O5fbU01kc
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY2PR06MB3424.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39840400004)(396003)(346002)(366004)(376002)(136003)(451199021)(7696005)(71200400001)(41300700001)(9686003)(53546011)(38100700002)(44832011)(26005)(6506007)(52536014)(5660300002)(83380400001)(186003)(38070700005)(2906002)(33656002)(86362001)(122000001)(8676002)(8936002)(55016003)(478600001)(76116006)(66446008)(6916009)(4326008)(64756008)(66946007)(66556008)(54906003)(66476007)(316002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?L1JmcVBXbnNGZzE1WlpvVWUwb1pOY2xlNW0rSzJwdVBTQ1NYcXRRRUYwSEtC?=
- =?utf-8?B?WnREQmVYWFhNb25QaWRXaFI2azVLaGxPRm1YSEpMNXNDV1lWaFNhK2I5VDlu?=
- =?utf-8?B?UjQ2dzFSUE85RlgwWkVXaEt4b0VaSDlWUDY1TlEwbTkzSUI0MzAzRXhTQk1i?=
- =?utf-8?B?UitzZWgxaUFkZzN3Z21PenNhYlZqc2lST2VUd0tCSi84WFVYNmNsNGlGZ1JS?=
- =?utf-8?B?bTV5MWR6b2liYitTcnVXczk2dU1JRUVqbDlGZVFLNDJqSUEyaTZLbGgzN3Vy?=
- =?utf-8?B?K3JqUGl0ZG5Wc2dzdGRXNmFZQlNWdHFLYU5VcjVpSmFHSGVjYnBuVGJnSDE0?=
- =?utf-8?B?NTBscHNYM3JlMm1rMXdKS3ZMZlJiUGpWZml1aTNsTGlUb2c3UThVSE8zeUhL?=
- =?utf-8?B?Qm9VdkZuM0tzMkRiTDlTcnJnVjBTSkJZaTdvVkVySmlaVUVZaGtHbkozYkVt?=
- =?utf-8?B?a0JyenpFNU9abUNCc2xtSkZDcDlLTGlNUUtFNkU4T2U4SCtVL2JyUVcyRVRK?=
- =?utf-8?B?ZWY0RXFxbmNIVzVkd295dFkweGp1M2VRMXltQ3BXZmllUDdkaDdZSk9uYlZ6?=
- =?utf-8?B?UnFWelVXWUpkUzdxVUVTT0QzS0ZRc0FwWU9mVjRrcUdDVU9rT3lXM0FUcVBL?=
- =?utf-8?B?VlJTTzJnaGcwZFRFdUZuWm9rVHBCRDFDbHB6WE16VHlSS1FuYkhTSzBFSnd4?=
- =?utf-8?B?Vm42dk05QzJyMGM4K2JpVnc2VTNVNXZTRWlQTU1QRG8rZkVJcnZpUWxYT2RZ?=
- =?utf-8?B?SXErYlRLZkhXcElVWW1sRllzTSsyQzNGbFhqMHdIc0dpMTc0NTg4YmxBRWRK?=
- =?utf-8?B?OHJaam4xNkRYZGpUN2tKbnBDZUMrL2l2U3JLZm1TUzZJNlgxblNCTXlVQmY3?=
- =?utf-8?B?MEwyclpoaTdDdXg3Mmw3ZnE3QmtqNVhIN29PcGdQemhnQmV5T2VScDlBRnpn?=
- =?utf-8?B?VHpXR216ZXoxMW9pT3dnK0hnN3UrS1VHbEhyVytiVGJUbFk0NEJsQ2E4Vm1H?=
- =?utf-8?B?MjNnY3VYZmxIampFNFN2d0tQM0JFY0dLdDJXWW1RaHgyTkQ2OG1qb2FuWmtz?=
- =?utf-8?B?QTFTVExTelY0dU5waTdqb2Erako4a1Y0cWF5Uld4b05EeWd4Yzd2bStYKzZX?=
- =?utf-8?B?Kzk2K2w3QmhxQmNSQTUvVmtoVDNGc2lwZ0pvSTdtM2pCQkZGN2V0eitlTEpp?=
- =?utf-8?B?a3dDSmxNd1BoRGl0T3hTQjJuWFd3c0JvcEIvekZDNi92ZFdYZEEwZDNuOThz?=
- =?utf-8?B?ZVdTU0duZGRnWTJKK3g3S2ViaGxVc3FXcWpwTk5hcHE0SWt6aXZaVUpsQzJD?=
- =?utf-8?B?d1NWOXJBUmFuKzlabEdqVjVBWHl0MUNjMUV5RjJaaXBvTW1YTVlzNnFsSGd6?=
- =?utf-8?B?ZGkvTE5kZTBtZmZ5M2VLK29haVFndzFlUmlvQzRYS05zMHVROVZBOGV1ZjFN?=
- =?utf-8?B?bHJZbHNJZkdRZVVnM0FzVDB1NDVrTDFLOGZLcWdHSGRLNi80SU8rb3hDTm1q?=
- =?utf-8?B?cURENlJiMmJPUDE3eG5MeDJrcHc0MVdOV2FQUHBiM00wb0Y2YVlWcE83bFA0?=
- =?utf-8?B?KzNMTVg4UVZZVHNtWFVqZll4RUxVMjBFalh2K09VQ0tCU0o3cllKd0ZFTDV4?=
- =?utf-8?B?U3BZVmRXNDUvYTRINHVYNURtSVhkbUE2Qnp1UTJvRDZ6OThLQWRxZGx6bXB3?=
- =?utf-8?B?Sy9wa0E3dWJPY3hpbkxFQjF6NWFsYUQ3RXJTK1pRM3ZwSTBzVzFnZVJpakYw?=
- =?utf-8?B?TWRNeFNNSmlsWnJNc1dVTEpxQ3NTYnhHTnlUSTVJc0VOMCtsMitsYXBqS1FR?=
- =?utf-8?B?b2NYTi8xaDJLTFpKMzFZa3ZIa1FDN0hWUnl1eFIxcVJ0ZGxuSGFocG1sRGxp?=
- =?utf-8?B?UG5jSEtLQks5UXRPMDlJeHVoTGN1SkRQMmJveksyMmtqS3RKTVRrdGhDSmZu?=
- =?utf-8?B?SmxxT1JSMDFqUDhleVMwME5oSGhUWVNDTXlJbW8vMFd2bW9wdE9GZ3JHblp3?=
- =?utf-8?B?UmFFQzlsYjVFN0tkZkUwYkN0bEdkMS9WSmZoN1FoUTRtNjhvSWJubHB6UDB0?=
- =?utf-8?B?NVNDNTdBcnZZWUNJcWNqY1NrNWxCUE55bndkaE9NNUlFZ0RQMWJlLzN5QjVh?=
- =?utf-8?Q?jXwiPtmOTDw//IjVmAweKkMd8?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-OriginatorOrg: jaguarmicro.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY2PR06MB3424.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4b062d79-f4ca-4dad-6231-08db58318c13
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 May 2023 06:23:22.9606
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 1e45a5c2-d3e1-46b3-a0e6-c5ebf6d8ba7b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Sk0iVcjKFiT98eZZd8GHeH2JnvFdKjQhVHqzHXxqfPT426vt39ecsQtTKexp+zK96mVcvi0Zw2qQ7u45MH8p5eVf0ocKLiWHbSuAjdT2kAQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR06MB6018
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        Fri, 19 May 2023 02:29:26 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69221AD;
+        Thu, 18 May 2023 23:29:24 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id B6C955C017D;
+        Fri, 19 May 2023 02:29:21 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 19 May 2023 02:29:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1684477761; x=1684564161; bh=i/
+        I47qKuqB4bMU6D9p4VPqhlV7pgkdTqCfilS1kyhrk=; b=cvQhoQ+6+7tyHLQX+f
+        OGY0l2YqyKen3c5oGftHNW1t9NnH6CVH/e9N7MJQMFCzRokvVu1B8GIR149GY9Bz
+        hKh7ayxfkFNP6je0N/MPetnp189QzqRt461h66qbXYuh8S5myoJfV60E3rNtV3Qa
+        XvCS4XzmrwB839XmiS5K4S8z2i4ViwqSAQI6gLtc/S6Ed05JqJ1kVHhFnqNYoctJ
+        4vsUikfelL/0Tb/Cdu/JEnMG0P08tnB2dGrA6k/BDoaNktfJitOExP5nAEG3FQVt
+        4dpDBGu0qdIUlHm19H0Disid5MlsPLDYxfG6qR84X9s5Ybf77oO+xD7IvLYElNud
+        ghVA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684477761; x=1684564161; bh=i/I47qKuqB4bM
+        U6D9p4VPqhlV7pgkdTqCfilS1kyhrk=; b=EQBnp+xYFByLFoZ23C2+Yit24Oawm
+        21NupXM0wkTiv5lPNJ/jvcsdY6n1YzhhOBCQbfIOeMDW+rQ0Ma+zcQ34BMTzca0m
+        YlmfDHwydRbiqDT3MVjhZklIVKGh8LuXDQVkXj6TBog7Va9uS6tFsGE+FPDZb918
+        2rY/o5olqLLKmTvAR9XJnwjhBCne+G2TQUOP7S4uGHKrIRCIPPbmrhd2bQEjc//f
+        P5tR7Ecn5wgGqmW+/PkDe78Nyyt8ps6WhgXi7qp0u8kYe1Qj0FbwQlPIeai8JEaX
+        UsDouVvMsNUqDw6F6X38o00KNh6mhPZPbL4qe4UOHyZ1f96qwKmiongLQ==
+X-ME-Sender: <xms:QBdnZBvrlhL4t0XWh-nHfmnIYF3TNDlSS3fp_MP1aiPLlC_jakdNFg>
+    <xme:QBdnZKd4VvC8vOhh5fJhODHOCfNZ5Lfkk1XVk9dNIKEhMvx19xG2jRGyk9VLoA0d6
+    TB_TGxxJwzNv6bXVBA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeigedguddtlecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:QBdnZEzBiwjQzoBhJBWoRDRMvEXQ3_mVRyfArBaVnV3Gbwyeu_qq9g>
+    <xmx:QBdnZIMBH5KcspvFPzoElf4y8gwzs3Q8wNGfR1JN6OOvTA56E39CkQ>
+    <xmx:QBdnZB8bl03HM0VghrSpjYgJiTD2-okPXDqTZZMed8rJFlczgz3F1g>
+    <xmx:QRdnZIg9y_xyUFUXTuVs55XzKaeMOJWbaV4XmFE0R3Qrkk3bF70fgA>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id F0459B60086; Fri, 19 May 2023 02:29:19 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-431-g1d6a3ebb56-fm-20230511.001-g1d6a3ebb
+Mime-Version: 1.0
+Message-Id: <ed53d7d6-78e7-45af-a441-1c87fba4d420@app.fastmail.com>
+In-Reply-To: <20230519045825.28369-2-stanley_chang@realtek.com>
+References: <20230519045825.28369-1-stanley_chang@realtek.com>
+ <20230519045825.28369-2-stanley_chang@realtek.com>
+Date:   Fri, 19 May 2023 08:28:59 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Stanley Chang" <stanley_chang@realtek.com>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc:     "Vinod Koul" <vkoul@kernel.org>,
+        "Kishon Vijay Abraham I" <kishon@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Conor Dooley" <conor+dt@kernel.org>,
+        "Alan Stern" <stern@rowland.harvard.edu>,
+        "Ray Chi" <raychi@google.com>,
+        "Bagas Sanjaya" <bagasdotme@gmail.com>,
+        "Eugeniu Rosca" <erosca@de.adit-jv.com>,
+        "Michael Grzeschik" <m.grzeschik@pengutronix.de>,
+        "Matthias Kaehlcke" <mka@chromium.org>,
+        "Flavio Suligoi" <f.suligoi@asem.it>,
+        "Mathias Nyman" <mathias.nyman@linux.intel.com>,
+        "Bhuvanesh Surachari" <Bhuvanesh_Surachari@mentor.com>,
+        "Paul Cercueil" <paul@crapouillou.net>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v1 2/3] usb: phy: Add driver for the Realtek SoC USB 2.0/3.0 PHY
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -132,91 +102,210 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogQW5kcmV3IE1vcnRvbiA8
-YWtwbUBsaW51eC1mb3VuZGF0aW9uLm9yZz4NCj4gU2VudDogRnJpZGF5LCBNYXkgMTksIDIwMjMg
-NDowMiBBTQ0KPiBUbzogQW5ndXMgQ2hlbiA8YW5ndXMuY2hlbkBqYWd1YXJtaWNyby5jb20+DQo+
-IENjOiBtYXNhaGlyb3lAa2VybmVsLm9yZzsgdmJhYmthQHN1c2UuY3o7IHBldGVyekBpbmZyYWRl
-YWQub3JnOw0KPiBuZGVzYXVsbmllcnNAZ29vZ2xlLmNvbTsgcGF1bG1ja0BrZXJuZWwub3JnOyBy
-cHB0QGtlcm5lbC5vcmc7DQo+IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IEFsIFZpcm8g
-PHZpcm9AemVuaXYubGludXgub3JnLnVrPg0KPiBTdWJqZWN0OiBSZTogW1BBVENIXSBpbml0OiBB
-ZGQgYmRldiBmcyBwcmludGsgaWYgbW91bnRfYmxvY2tfcm9vdCBmYWlsZWQNCj4gDQo+IE9uIFRo
-dSwgMTggTWF5IDIwMjMgMTE6NTM6MjEgKzA4MDAgQW5ndXMgQ2hlbg0KPiA8YW5ndXMuY2hlbkBq
-YWd1YXJtaWNyby5jb20+IHdyb3RlOg0KPiANCj4gPiBBdHRlbXB0IHRvIHByaW50ayBhbGwgYmRl
-diBmc3R5cGUgYXMgcm9vdCBnaXZlcyB0aGUgZm9sbG93aW5nIGtlcm5lbCBwYW5pYzoNCj4gPg0K
-PiA+IFsgICAgMS43MjkwMDZdIFZGUzogQ2Fubm90IG9wZW4gcm9vdCBkZXZpY2UgInZkYSIgb3Ig
-dW5rbm93bi1ibG9jaygyNTMsMCk6DQo+IGVycm9yIC0xOQ0KPiA+IFsgICAgMS43MzA2MDNdIFBs
-ZWFzZSBhcHBlbmQgYSBjb3JyZWN0ICJyb290PSIgYm9vdCBvcHRpb247IGhlcmUgYXJlIHRoZQ0K
-PiBhdmFpbGFibGUgcGFydGl0aW9uczoNCj4gPiBbICAgIDEuNzMyMzIzXSBmZDAwICAgICAgICAg
-IDI1NjAwMCB2ZGENCj4gPiBbICAgIDEuNzMyMzI5XSAgZHJpdmVyOiB2aXJ0aW9fYmxrDQo+ID4g
-WyAgICAxLjczNDE5NF0gS2VybmVsIHBhbmljIC0gbm90IHN5bmNpbmc6IFZGUzogVW5hYmxlIHRv
-IG1vdW50IHJvb3QgZnMgb24NCj4gdW5rbm93bi1ibG9jaygyNTMsMCkNCj4gPiBbICAgIDEuNzM0
-NzcxXSBDUFU6IDAgUElEOiAxIENvbW06IHN3YXBwZXIvMCBOb3QgdGFpbnRlZCA2LjQuMC1yYzIr
-ICM1Mw0KPiA+IFsgICAgMS43MzUxOTRdIEhhcmR3YXJlIG5hbWU6IFFFTVUgU3RhbmRhcmQgUEMg
-KFEzNSArIElDSDksIDIwMDkpLA0KPiBCSU9TIDEuMTAuMi0xdWJ1bnR1MSAwNC8wMS8yMDE0DQo+
-ID4gWyAgICAxLjczNTc3Ml0gQ2FsbCBUcmFjZToNCj4gPiBbICAgIDEuNzM1OTUwXSAgPFRBU0s+
-DQo+ID4gWyAgICAxLjczNjExM10gIGR1bXBfc3RhY2tfbHZsKzB4MzIvMHg1MA0KPiA+IFsgICAg
-MS43MzYzNjddICBwYW5pYysweDEwOC8weDMxMA0KPiA+IFsgICAgMS43MzY1NzBdICBtb3VudF9i
-bG9ja19yb290KzB4MTYxLzB4MzEwDQo+ID4gWyAgICAxLjczNjg0OV0gID8gcmRpbml0X3NldHVw
-KzB4NDAvMHg0MA0KPiA+IFsgICAgMS43MzcwODhdICBwcmVwYXJlX25hbWVzcGFjZSsweDEwYy8w
-eDE4MA0KPiA+IFsgICAgMS43MzczOTNdICBrZXJuZWxfaW5pdF9mcmVlYWJsZSsweDM1NC8weDQ1
-MA0KPiA+IFsgICAgMS43Mzc3MDddICA/IHJlc3RfaW5pdCsweGQwLzB4ZDANCj4gPiBbICAgIDEu
-NzM3OTQ1XSAga2VybmVsX2luaXQrMHgxNi8weDEzMA0KPiA+IFsgICAgMS43MzgxOTZdICByZXRf
-ZnJvbV9mb3JrKzB4MWYvMHgzMA0KPiA+DQo+ID4gUUVNVSBjb21tYW5kIGxpbmU6DQo+ID4gInFl
-bXUtc3lzdGVtLXg4Nl82NCAtYXBwZW5kIHJvb3Q9L2Rldi92ZGEgcm9vdGZzdHlwZT1leHQ0IC4u
-LiINCj4gPg0KPiA+IFRoaXMgZXJyb3IgaXMgYmVjYXVzZSBleHQ0IGlzIG5vdCBidWlsZGluIGFu
-ZCByZXF1ZXN0IGV4dDQgbW9kdWxlIGZhaWwuDQo+ID4NCj4gPiBBcyBhIGhpbnQsIHByaW50ayBh
-bGwgdGhlIGJkZXYgZnN0eXBlIGF2YWlsYWJsZSBmb3IgcHJvbXB0cy4NCj4gPg0KPiANCj4gU2Vl
-bXMgcmVhc29uYWJsZS4gIEkgcmV3b3JkZWQgdGhlIGNoYW5nZWxvZyBhIGJpdDoNCj4gDQo+IDog
-Qm9vdGluZyB3aXRoIHRoZSBRRU1VIGNvbW1hbmQgbGluZToNCj4gOiAicWVtdS1zeXN0ZW0teDg2
-XzY0IC1hcHBlbmQgcm9vdD0vZGV2L3ZkYSByb290ZnN0eXBlPWV4dDQgLi4uIg0KPiA6IHdpbGwg
-cGFuaWMgaWYgZXh0NCBpcyBub3QgYnVpbHRpbiBhbmQgYSByZXF1ZXN0IHRvIGxvYWQgdGhlIGV4
-dDQgbW9kdWxlDQo+IDogZmFpbHMuDQo+IDoNCj4gOiBbICAgIDEuNzI5MDA2XSBWRlM6IENhbm5v
-dCBvcGVuIHJvb3QgZGV2aWNlICJ2ZGEiIG9yIHVua25vd24tYmxvY2soMjUzLDApOg0KPiBlcnJv
-ciAtMTkNCj4gOiBbICAgIDEuNzMwNjAzXSBQbGVhc2UgYXBwZW5kIGEgY29ycmVjdCAicm9vdD0i
-IGJvb3Qgb3B0aW9uOyBoZXJlIGFyZSB0aGUNCj4gYXZhaWxhYmxlIHBhcnRpdGlvbnM6DQo+IDog
-WyAgICAxLjczMjMyM10gZmQwMCAgICAgICAgICAyNTYwMDAgdmRhDQo+IDogWyAgICAxLjczMjMy
-OV0gIGRyaXZlcjogdmlydGlvX2Jsaw0KPiA6IFsgICAgMS43MzQxOTRdIEtlcm5lbCBwYW5pYyAt
-IG5vdCBzeW5jaW5nOiBWRlM6IFVuYWJsZSB0byBtb3VudCByb290IGZzIG9uDQo+IHVua25vd24t
-YmxvY2soMjUzLDApDQo+IDogWyAgICAxLjczNDc3MV0gQ1BVOiAwIFBJRDogMSBDb21tOiBzd2Fw
-cGVyLzAgTm90IHRhaW50ZWQgNi40LjAtcmMyKyAjNTMNCj4gOiBbICAgIDEuNzM1MTk0XSBIYXJk
-d2FyZSBuYW1lOiBRRU1VIFN0YW5kYXJkIFBDIChRMzUgKyBJQ0g5LCAyMDA5KSwgQklPUw0KPiAx
-LjEwLjItMXVidW50dTEgMDQvMDEvMjAxNA0KPiA6IFsgICAgMS43MzU3NzJdIENhbGwgVHJhY2U6
-DQo+IDogWyAgICAxLjczNTk1MF0gIDxUQVNLPg0KPiA6IFsgICAgMS43MzYxMTNdICBkdW1wX3N0
-YWNrX2x2bCsweDMyLzB4NTANCj4gOiBbICAgIDEuNzM2MzY3XSAgcGFuaWMrMHgxMDgvMHgzMTAN
-Cj4gOiBbICAgIDEuNzM2NTcwXSAgbW91bnRfYmxvY2tfcm9vdCsweDE2MS8weDMxMA0KPiA6IFsg
-ICAgMS43MzY4NDldICA/IHJkaW5pdF9zZXR1cCsweDQwLzB4NDANCj4gOiBbICAgIDEuNzM3MDg4
-XSAgcHJlcGFyZV9uYW1lc3BhY2UrMHgxMGMvMHgxODANCj4gOiBbICAgIDEuNzM3MzkzXSAga2Vy
-bmVsX2luaXRfZnJlZWFibGUrMHgzNTQvMHg0NTANCj4gOiBbICAgIDEuNzM3NzA3XSAgPyByZXN0
-X2luaXQrMHhkMC8weGQwDQo+IDogWyAgICAxLjczNzk0NV0gIGtlcm5lbF9pbml0KzB4MTYvMHgx
-MzANCj4gOiBbICAgIDEuNzM4MTk2XSAgcmV0X2Zyb21fZm9yaysweDFmLzB4MzANCj4gOg0KPiA6
-IEFzIGEgaGludCwgcHJpbnQgYWxsIHRoZSBiZGV2IGZzdHlwZXMgd2hpY2ggYXJlIGF2YWlsYWJs
-ZS4NClRoYW5rIHlvdSBmb3IgeW91ciByZXBseS4gbW9yZSByZWFkYWJsZSBub3cuDQo+IA0KPiA+
-IC0tLSBhL2luaXQvZG9fbW91bnRzLmMNCj4gPiArKysgYi9pbml0L2RvX21vdW50cy5jDQo+ID4g
-QEAgLTQyNyw4ICs0MjcsMTkgQEAgdm9pZCBfX2luaXQgbW91bnRfYmxvY2tfcm9vdChjaGFyICpu
-YW1lLCBpbnQgZmxhZ3MpDQo+ID4gIAkJcHJpbnRrKCJWRlM6IENhbm5vdCBvcGVuIHJvb3QgZGV2
-aWNlIFwiJXNcIiBvciAlczogZXJyb3IgJWRcbiIsDQo+ID4gIAkJCQlyb290X2RldmljZV9uYW1l
-LCBiLCBlcnIpOw0KPiA+ICAJCXByaW50aygiUGxlYXNlIGFwcGVuZCBhIGNvcnJlY3QgXCJyb290
-PVwiIGJvb3Qgb3B0aW9uOyBoZXJlIGFyZSB0aGUNCj4gYXZhaWxhYmxlIHBhcnRpdGlvbnM6XG4i
-KTsNCj4gPiAtDQo+ID4gIAkJcHJpbnRrX2FsbF9wYXJ0aXRpb25zKCk7DQo+ID4gKw0KPiA+ICsJ
-CWlmIChyb290X2ZzX25hbWVzKQ0KPiA+ICsJCQludW1fZnMgPSBsaXN0X2JkZXZfZnNfbmFtZXMo
-ZnNfbmFtZXMsIFBBR0VfU0laRSk7DQo+ID4gKwkJaWYgKCFudW1fZnMpDQo+ID4gKwkJCXByX2Vy
-cigiQ2FuJ3QgZmluZCBhbnkgYmRldiBmaWxlc3lzdGVtIHRvIGJlIHVzZWQgZm9yIG1vdW50IVxu
-Iik7DQo+ID4gKwkJZWxzZSB7DQo+ID4gKwkJCXByX2VycigiTGlzdCBvZiBhbGwgYmRldiBmaWxl
-c3lzdGVtOlxuIik7DQo+ID4gKwkJCWZvciAoaSA9IDAsIHAgPSBmc19uYW1lczsgaSA8IG51bV9m
-czsgaSsrLCBwICs9IHN0cmxlbihwKSsxKQ0KPiA+ICsJCQkJcHJfZXJyKCIgJXMiLCBwKTsNCj4g
-PiArCQkJcHJfZXJyKCJcbiIpOw0KPiA+ICsJCX0NCj4gPiArDQo+ID4gIAkJcGFuaWMoIlZGUzog
-VW5hYmxlIHRvIG1vdW50IHJvb3QgZnMgb24gJXMiLCBiKTsNCj4gPiAgCX0NCj4gPiAgCWlmICgh
-KGZsYWdzICYgU0JfUkRPTkxZKSkgew0KPiANCj4gQW5kIEkgYWRkZWQgYSBsaXR0bGUgZml4Lg0K
-PiANCj4gLS0tIGEvaW5pdC9kb19tb3VudHMuY35pbml0LWFkZC1iZGV2LWZzLXByaW50ay1pZi1t
-b3VudF9ibG9ja19yb290LWZhaWxlZC1maXgNCj4gKysrIGEvaW5pdC9kb19tb3VudHMuYw0KPiBA
-QCAtNDM0LDcgKzQzNCw3IEBAIHJldHJ5Og0KPiAgCQlpZiAoIW51bV9mcykNCj4gIAkJCXByX2Vy
-cigiQ2FuJ3QgZmluZCBhbnkgYmRldiBmaWxlc3lzdGVtIHRvIGJlIHVzZWQgZm9yIG1vdW50IVxu
-Iik7DQo+ICAJCWVsc2Ugew0KPiAtCQkJcHJfZXJyKCJMaXN0IG9mIGFsbCBiZGV2IGZpbGVzeXN0
-ZW06XG4iKTsNCj4gKwkJCXByX2VycigiTGlzdCBvZiBhbGwgYmRldiBmaWxlc3lzdGVtczpcbiIp
-Ow0KPiAgCQkJZm9yIChpID0gMCwgcCA9IGZzX25hbWVzOyBpIDwgbnVtX2ZzOyBpKyssIHAgKz0g
-c3RybGVuKHApKzEpDQo+ICAJCQkJcHJfZXJyKCIgJXMiLCBwKTsNCj4gIAkJCXByX2VycigiXG4i
-KTsNCj4gXw0KPiANCj4gDQo+IFRoaXMgZnVuY3Rpb24gbm93IHVzZXMgYSBqdW1ibGUgb2YgcHJp
-bnRrKCkgYW5kIHByX2VycigpLiAgUGVyaGFwcw0KPiBzb21lb25lIHdpbGwgZ28gdGhyb3VnaCBh
-bmQgcmF0aW9uYWxpemUgYWxsIG9mIHRoaXMgc29tZXRpbWUuDQpZZXMsIEkgdG9vayB0aGUgcHJp
-bnRrIGZpcnN0IGJ1dCBnb3QgYSB3YXJuaW5nIGZyb20gY2hlY2twYXRjaC5wbC4NClRoYW5rcy4N
-Cg==
+On Fri, May 19, 2023, at 06:58, Stanley Chang wrote:
+> +struct rtk_usb_phy {
+> +	struct usb_phy phy;
+> +	struct device *dev;
+> +	struct regmap *usb_regs;
+> +	struct regmap *mac_regs;
+> +	struct regmap *usb_ctrl_regs;
+> +
+> +	int port_index;
+> +	int phyN;
+> +	void *reg_addr;
+> +	void *phy_data;
+> +
+> +#ifdef CONFIG_DEBUG_FS
+> +	struct dentry *debug_dir;
+> +#endif
+> +};
+
+I'd avoid the #ifdefs here and just leave the debugfs
+code in unconditionally in favor of readability. When
+debugfs is disabled, everything except for the one pointer
+value should get optimized out.
+
+> +#define phy_read(addr) __raw_readl(addr)
+> +#define phy_write(addr, val) do { \
+> +	/* Do smp_wmb */ \
+> +	smp_wmb(); __raw_writel(val, addr); \
+> +} while (0)
+
+Using __raw_readl()/__raw_writel() in a driver is almost never
+the right interface, it does not guarantee atomicity of the
+access, has the wrong byte-order on big-endian kernels and misses
+the barriers to serialize against DMA accesses. smp_wmb()
+should have no effect here since this only serializes access to
+memory against another CPU if it's paired with an smp_rmb(), but
+not on MMIO registers.
+
+> +#define PHY_IO_TIMEOUT_MSEC		(50)
+> +
+> +static inline int utmi_wait_register(void __iomem *reg, u32 mask, u32 
+> result)
+> +{
+> +	unsigned long timeout = jiffies + 
+> msecs_to_jiffies(PHY_IO_TIMEOUT_MSEC);
+> +
+> +	while (time_before(jiffies, timeout)) {
+> +		/* Do smp_rmb */
+> +		smp_rmb();
+> +		if ((phy_read(reg) & mask) == result)
+> +			return 0;
+> +		udelay(100);
+> +	}
+> +	pr_err("\033[0;32;31m can't program USB phy \033[m\n");
+> +
+> +	return -ETIMEDOUT;
+> +}
+
+This should just use read_poll_timeout() or possibly
+read_poll_timeout_atomic(), but not an open-coded version.
+
+I don't think I've seen escape sequences in a printk
+in any other driver, so please don't start that now.
+
+> +#define DEFAULT_CHIP_REVISION 0xA00
+> +#define MAX_CHIP_REVISION 0xC00
+> +
+> +static inline int __get_chip_revision(void)
+> +{
+> +	int chip_revision = 0xFFF;
+> +	char revision[] = "FFF";
+> +	struct soc_device_attribute soc_att[] = {{.revision = revision}, {}};
+
+You should probably check that you are actually on the right
+SoC type here as well, not just the right revision of
+an arbitrary chip.
+
+Ideally I think the revision check should be based off a DT proporty
+if that's possible, so you can have this code in the boot loader.
+
+> +#define RTK_USB2PHY_NAME "rtk-usb2phy"
+
+Better avoid hiding the driver name like this, it makes it harder
+to grep the source tree for particular driver names.
+
+> +	/* rmb for reg read */
+> +	smp_rmb();
+> +	regVal = phy_read(reg_gusb2phyacc0);
+
+I would expect that you don't need barriers like this, especially
+if you change the phy_read() helper to use the proper readl().
+
+If you do need to serialize against other CPUs, still, there should
+be a longer explanation about that, since it's so unexpected.
+
+> +
+> +static void do_rtk_usb2_phy_toggle(struct rtk_usb_phy *rtk_phy,
+> +	    int index, bool isConnect);
+
+It's best to sort your function definitions in a way that avoids
+forward declarations. This makes it easier to read and shows that
+there are no obvious recursions in the source. If you do have
+an intentional recursion, make sure that there is a way to
+prevent unbounded stack usage, and explain that in a comment.
+
+> +static int do_rtk_usb_phy_init(struct rtk_usb_phy *rtk_phy, int index)
+> +{
+> +	struct reg_addr *regAddr;
+> +	struct phy_data *phy_data;
+> +	struct phy_parameter *phy_page_setting;
+> +	int i;
+> +
+> +	if (!rtk_phy) {
+> +		pr_err("%s, rtk_phy is NULL\n", __func__);
+> +		return -EINVAL;
+> +	}
+> +
+> +	dev_dbg(rtk_phy->dev, "%s: init phy#%d\n", __func__, index);
+...
+> +	if (!phy_data) {
+> +		pr_err("%s, phy_data is NULL\n", __func__);
+> +		return -EINVAL;
+> +	}
+
+You can probably remove most of the debugging prints.
+
+> +	regAddr = &((struct reg_addr *)rtk_phy->reg_addr)[index];
+> +	phy_data = &((struct phy_data *)rtk_phy->phy_data)[index];
+
+Why do you need the casts here? It looks like regAddr should
+be an __iomem pointer. Please build your driver with 'make C=1'
+to see if there are any incorrect address space annotations.
+
+> +static int __get_phy_parameter_by_efuse(struct rtk_usb_phy *rtk_phy,
+> +	    struct phy_data *phy_data, int index)
+> +{
+> +	u8 value = 0;
+> +	struct nvmem_cell *cell;
+> +	struct soc_device_attribute rtk_soc_groot[] = {
+> +			{ .family = "Realtek Groot",},
+> +			{ /* empty */ }
+> +		};
+> +	struct soc_device_attribute rtk_soc_hank[] = {
+> +			{ .family = "Realtek Hank",},
+> +			{ /* empty */ }
+> +		};
+> +	struct soc_device_attribute rtk_soc_efuse_v1[] = {
+> +			{ .family = "Realtek Phoenix",},
+> +			{ .family = "Realtek Kylin",},
+> +			{ .family = "Realtek Hercules",},
+> +			{ .family = "Realtek Thor",},
+> +			{ .family = "Realtek Hank",},
+> +			{ .family = "Realtek Groot",},
+> +			{ .family = "Realtek Stark",},
+> +			{ .family = "Realtek Parker",},
+> +			{ /* empty */ }
+> +		};
+> +	struct soc_device_attribute rtk_soc_dis_level_at_page0[] = {
+> +			{ .family = "Realtek Phoenix",},
+> +			{ .family = "Realtek Kylin",},
+> +			{ .family = "Realtek Hercules",},
+> +			{ .family = "Realtek Thor",},
+> +			{ .family = "Realtek Hank",},
+> +			{ .family = "Realtek Groot",},
+> +			{ /* empty */ }
+> +		};
+> +
+> +	if (soc_device_match(rtk_soc_efuse_v1)) {
+> +		dev_dbg(rtk_phy->dev, "Use efuse v1 to updated phy parameter\n");
+> +		phy_data->check_efuse_version = CHECK_EFUSE_V1;
+
+I'm not entirely sure what you are trying to do here, but
+it looks the purpose is to tell the difference between implementations
+of the phy device by looking at which SoC it's in. You should
+only need that very rarely when this information cannot be
+passed through the DT, but you literally already have the
+per-SoC compatible strings below, so just use those, or add other
+DT properties in the binding for specific quirks or capabilities.
+
+> +#ifdef CONFIG_OF
+> +static const struct of_device_id usbphy_rtk_dt_match[] = {
+> +	{ .compatible = "realtek,usb3phy", },
+> +	{ .compatible = "realtek,rtd-usb3phy", },
+> +	{ .compatible = "realtek,rtd1295-usb3phy", },
+> +	{ .compatible = "realtek,rtd1619-usb3phy", },
+> +	{ .compatible = "realtek,rtd1319-usb3phy", },
+> +	{ .compatible = "realtek,rtd1619b-usb3phy", },
+> +	{ .compatible = "realtek,rtd1319d-usb3phy", },
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, usbphy_rtk_dt_match);
+> +#endif
+> +
+> +static struct platform_driver rtk_usb3phy_driver = {
+> +	.probe		= rtk_usb3phy_probe,
+> +	.remove		= rtk_usb3phy_remove,
+> +	.driver		= {
+> +		.name	= RTK_USB3PHY_NAME,
+> +		.owner	= THIS_MODULE,
+> +		.of_match_table = of_match_ptr(usbphy_rtk_dt_match),
+> +	},
+> +};
+
+Remove that of_match_ptr() and ifdef CONFIG_OF check here, new drivers
+should no longer use static platform device definitions and just assume
+that CONFIG_OF is used.
+
+     Arnd
