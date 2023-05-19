@@ -2,233 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E18B5709316
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 11:31:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBFC870931C
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 11:31:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231379AbjESJbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 05:31:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37606 "EHLO
+        id S231483AbjESJbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 05:31:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbjESJa5 (ORCPT
+        with ESMTP id S230050AbjESJbc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 05:30:57 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51BEBE42;
-        Fri, 19 May 2023 02:30:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684488656; x=1716024656;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=3QfHmYRgUcLgG7yswANAS21WIRJnHhTTVTEGJa0Yw9M=;
-  b=aNPhWBtEmbfUJGCuZ6C/AS1LQLE60/QVbdL7GBDcF4QLgw8fDKmv35IX
-   GRxdptbCE+iSlpzfX2C+kniw7UWt8Pa+NvDFJsLv++Gr85rzsD7nPXu+Q
-   DPr4xMclzMPMflAUzxoyKws2UV0ZMLzkIY3Ahu15uBcw08ADcsI3d1qmN
-   3soASoX/Gc9vAxa3Z2qsu0Lo/Ut+h+EWiA6L9leF2skbCUjuSkZSJ7w5I
-   LLyJBOxL1Uz4RaONjT+mS9H5bQllEPwjfnmjLli0fXVyLROq71YLEtGBV
-   cj9oR4/sbXBCmHPnmKwALIjHZGl1T7dAq1bZi+Dgi1mmwveHRZ62DSAHq
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="336920982"
-X-IronPort-AV: E=Sophos;i="6.00,176,1681196400"; 
-   d="scan'208";a="336920982"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2023 02:30:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="792315594"
-X-IronPort-AV: E=Sophos;i="6.00,176,1681196400"; 
-   d="scan'208";a="792315594"
-Received: from iannetti-mobl.ger.corp.intel.com ([10.252.43.241])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2023 02:30:36 -0700
-Date:   Fri, 19 May 2023 12:30:34 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Shaohua Li <shaohua.li@intel.com>,
-        Greg Kroah-Hartman <gregkh@suse.de>, linux-pci@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Lukas Wunner <lukas@wunner.de>, stable@vger.kernel.org
-Subject: Re: [PATCH 1/1] PCI/ASPM: Handle link retraining race
-In-Reply-To: <ZGaquEqo/psIH14Y@bhelgaas>
-Message-ID: <777a753-42f0-6616-5cc0-fceb157acc2@linux.intel.com>
-References: <ZGaquEqo/psIH14Y@bhelgaas>
+        Fri, 19 May 2023 05:31:32 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AC0C19A;
+        Fri, 19 May 2023 02:31:31 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id DF21722245;
+        Fri, 19 May 2023 09:31:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1684488688; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=KZ/M1xl0Qi9Qr3MsXW4Bp0NVv7pwTZ+lB5C3/VZAk4k=;
+        b=tB6EqhCStrvD/jy1rRvzboPGwcWKiIu7icvSsCuIj34O7kIORHTic7gmIdCy6IBhgGQ8Cj
+        1/US6GWyJb3o9I9sNfREgS8Z0lSZjIvfPafCJ4unLlTWMydlKIxWCfLLfrkB6iMGKYs4Ci
+        rbvVSH7pEnIogEMKJnT0dueObGnr/Kc=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1684488688;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=KZ/M1xl0Qi9Qr3MsXW4Bp0NVv7pwTZ+lB5C3/VZAk4k=;
+        b=bR6dSBXO6E+kd2Wd3M/dKQuH7t5WuFmWQgXOrQ0F1cFQIMPXElwtHJHPKOXk+EULQqFcMD
+        sR1MFgBFuS/sGvDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id AA6D213A12;
+        Fri, 19 May 2023 09:31:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id r0yQKPBBZ2RXJAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 19 May 2023 09:31:28 +0000
+From:   Takashi Iwai <tiwai@suse.de>
+To:     alsa-devel@alsa-project.org
+Cc:     linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org
+Subject: [PATCH 00/36] ALSA: Add MIDI 2.0 support
+Date:   Fri, 19 May 2023 11:30:38 +0200
+Message-Id: <20230519093114.28813-1-tiwai@suse.de>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-1530899728-1684488455=:1681"
-Content-ID: <94817ff1-4e4b-68c8-52bb-a4221219ee2@linux.intel.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Hi,
 
---8323329-1530899728-1684488455=:1681
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-Content-ID: <1d89f724-36b9-5e14-7d6f-7ac47fa9bb14@linux.intel.com>
+this is a (largish) patch set for adding the support of MIDI 2.0
+functionality, mainly targeted for USB devices.  MIDI 2.0 is a
+complete overhaul of the 40-years old MIDI 1.0.  Unlike MIDI 1.0 byte
+stream, MIDI 2.0 uses packets in 32bit words for Universal MIDI Packet
+(UMP) protocol.  It supports both MIDI 1.0 commands for compatibility
+and the extended MIDI 2.0 commands for higher resolutions and more
+functions.
 
-On Thu, 18 May 2023, Bjorn Helgaas wrote:
+For supporting the UMP, the patch set extends the existing ALSA
+rawmidi and sequencer interfaces, and adds the USB MIDI 2.0 support to
+the standard USB-audio driver.
 
-> On Tue, May 02, 2023 at 11:39:23AM +0300, Ilpo Järvinen wrote:
-> > Implementation Note at the end of PCIe r6.0.1 sec 7.5.3.7 recommends
-> > handling LTSSM race to ensure link retraining acquires correct
-> > parameters from the LNKCTL register. According to the implementation
-> > note, LTSSM might transition into Recovery or Configuration state
-> > independently of the driver requesting it, and if retraining due to
-> > such an event is still ongoing, the value written into the LNKCTL
-> > register might not be considered by the link retraining.
-> > 
-> > Ensure link training bit is clear before toggling link retraining bit
-> > to meet the requirements of the Implementation Note.
-> > 
-> > Fixes: 7d715a6c1ae5 ("PCI: add PCI Express ASPM support")
-> > Suggested-by: Lukas Wunner <lukas@wunner.de>
-> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > Reviewed-by: Lukas Wunner <lukas@wunner.de>
-> > Cc: stable@vger.kernel.org
-> 
-> Thanks for this!
-> 
-> The existing pcie_retrain_link() and pcie_wait_for_retrain() both
-> return bool, but neither is named as a predicate, and it's always a
-> little hard for me to keep track of what the true/false return values
-> mean.
-> 
-> I propose tweaking them so they both return 0 for success or
-> -ETIMEDOUT for failure.  What do you think?  It does make the patch
-> bigger, which is kind of unfortunate.
+The rawmidi for UMP has a different device name (/dev/snd/umpC*D*) and
+it reads/writes UMP packet data in 32bit CPU-native endianness.  For
+the old MIDI 1.0 applications, the legacy rawmidi interface is
+provided, too.
 
-It's better, yes, unless stable folks think it's not a minimal change.
+As default, USB-audio driver will take the alternate setting for MIDI
+2.0 interface, and the compatibility with MIDI 1.0 is provided via the
+rawmidi common layer.  However, user may let the driver falling back
+to the old MIDI 1.0 interface by a module option, too.
 
-As a confirmation for your return tweak improving things, I recall that I 
-had to be careful with the bool in this case for the reasons you mention 
-(it requires more mental capacity and verification which way the return 
-is).
+A UMP-capable rawmidi device can create the corresponding ALSA
+sequencer client(s) to support the UMP Endpoint and UMP Group
+connections.  As a nature of ALSA sequencer, arbitrary connections
+between clients/ports are allowed, and the ALSA sequencer core
+performs the automatic conversions for the connections between a new
+UMP sequencer client and a legacy MIDI 1.0 sequencer client.  It
+allows the existing application to use MIDI 2.0 devices without
+changes.
 
-(Also, expect the error handling reindent to cause a conflict with the RMW 
-series.)
+The MIDI-CI, which is another major extension in MIDI 2.0, isn't
+covered by this patch set.  It would be implemented rather in
+user-space.
+
+Roughly speaking, the first half of this patch set is for extending
+the rawmidi and USB-audio, and the second half is for extending the
+ALSA sequencer interface.
+
+The patch set is based on 6.4-rc2 kernel, but all patches can be
+cleanly applicable on 6.2 and 6.3 kernels, too (while 6.1 and older
+kernels would need minor adjustment for uapi header changes).
+
+The updates for alsa-lib and alsa-utils will follow shortly later.
+
+The author thanks members of MIDI Association OS/API Working Group,
+especially Andrew Mee, for great helps for the initial design and
+debugging / testing the drivers.
+
+
+Takashi
+
+---
+
+Takashi Iwai (36):
+  ALSA: rawmidi: Pass rawmidi directly to snd_rawmidi_kernel_open()
+  ALSA: rawmidi: Add ioctl callback to snd_rawmidi_global_ops
+  ALSA: rawmidi: UMP support
+  ALSA: rawmidi: Skip UMP devices at SNDRV_CTL_IOCTL_RAWMIDI_NEXT_DEVICE
+  ALSA: ump: Additional proc output
+  ALSA: usb-audio: Manage number of rawmidis globally
+  ALSA: usb-audio: Define USB MIDI 2.0 specs
+  ALSA: usb-audio: USB MIDI 2.0 UMP support
+  ALSA: usb-audio: Get UMP EP name string from USB interface
+  ALSA: usb-audio: Trim superfluous "MIDI" suffix from UMP EP name
+  ALSA: usb-audio: Create UMP blocks from USB MIDI GTBs
+  ALSA: ump: Redirect rawmidi substream access via own helpers
+  ALSA: ump: Add legacy raw MIDI support
+  ALSA: usb-audio: Enable the legacy raw MIDI support
+  ALSA: usb-audio: Inform inconsistent protocols in GTBs
+  ALSA: seq: Clear padded bytes at expanding events
+  ALSA: seq: Add snd_seq_expand_var_event_at() helper
+  ALSA: seq: Treat snd_seq_client object directly in client drivers
+  ALSA: seq: Drop dead code for the old broadcast support
+  ALSA: seq: Check the conflicting port at port creation
+  ALSA: seq: Check validity before creating a port object
+  ALSA: seq: Prohibit creating ports with special numbers
+  ALSA: seq: Introduce SNDRV_SEQ_IOCTL_USER_PVERSION ioctl
+  ALSA: seq: Add UMP support
+  ALSA: seq: Add port inactive flag
+  ALSA: seq: Support MIDI 2.0 UMP Endpoint port
+  ALSA: seq: Add port direction to snd_seq_port_info
+  ALSA: seq: Add UMP group number to snd_seq_port_info
+  ALSA: seq: Automatic conversion of UMP events
+  ALSA: seq: Allow suppressing UMP conversions
+  ALSA: seq: Bind UMP device
+  ALSA: seq: ump: Create UMP Endpoint port for broadcast
+  ALSA: seq: Add ioctls for client UMP info query and setup
+  ALSA: seq: Print UMP Endpoint and Block information in proc outputs
+  ALSA: seq: Add UMP group filter
+  ALSA: docs: Add MIDI 2.0 documentation
+
+ Documentation/sound/designs/index.rst    |    1 +
+ Documentation/sound/designs/midi-2.0.rst |  342 ++++++
+ include/linux/usb/midi-v2.h              |   94 ++
+ include/sound/asequencer.h               |    4 +
+ include/sound/rawmidi.h                  |   16 +-
+ include/sound/seq_device.h               |    1 +
+ include/sound/seq_kernel.h               |   10 +
+ include/sound/ump.h                      |  175 ++++
+ include/sound/ump_msg.h                  |  540 ++++++++++
+ include/uapi/sound/asequencer.h          |   83 +-
+ include/uapi/sound/asound.h              |   58 +-
+ sound/core/Kconfig                       |   13 +
+ sound/core/Makefile                      |    3 +
+ sound/core/rawmidi.c                     |  233 +++--
+ sound/core/rawmidi_compat.c              |    4 +
+ sound/core/seq/Kconfig                   |   14 +
+ sound/core/seq/Makefile                  |    3 +
+ sound/core/seq/seq_clientmgr.c           |  577 +++++++----
+ sound/core/seq/seq_clientmgr.h           |   27 +-
+ sound/core/seq/seq_compat.c              |    3 +
+ sound/core/seq/seq_dummy.c               |    9 +
+ sound/core/seq/seq_memory.c              |   98 +-
+ sound/core/seq/seq_memory.h              |   19 +-
+ sound/core/seq/seq_midi.c                |   12 +-
+ sound/core/seq/seq_ports.c               |   46 +-
+ sound/core/seq/seq_ports.h               |   23 +-
+ sound/core/seq/seq_ump_client.c          |  464 +++++++++
+ sound/core/seq/seq_ump_convert.c         | 1203 ++++++++++++++++++++++
+ sound/core/seq/seq_ump_convert.h         |   22 +
+ sound/core/seq/seq_virmidi.c             |    1 +
+ sound/core/ump.c                         |  677 ++++++++++++
+ sound/core/ump_convert.c                 |  520 ++++++++++
+ sound/core/ump_convert.h                 |   43 +
+ sound/usb/Kconfig                        |   11 +
+ sound/usb/Makefile                       |    1 +
+ sound/usb/card.c                         |   12 +-
+ sound/usb/midi.c                         |    7 +-
+ sound/usb/midi.h                         |    5 +-
+ sound/usb/midi2.c                        | 1189 +++++++++++++++++++++
+ sound/usb/midi2.h                        |   33 +
+ sound/usb/quirks.c                       |    8 +-
+ sound/usb/usbaudio.h                     |    2 +
+ 42 files changed, 6274 insertions(+), 332 deletions(-)
+ create mode 100644 Documentation/sound/designs/midi-2.0.rst
+ create mode 100644 include/linux/usb/midi-v2.h
+ create mode 100644 include/sound/ump.h
+ create mode 100644 include/sound/ump_msg.h
+ create mode 100644 sound/core/seq/seq_ump_client.c
+ create mode 100644 sound/core/seq/seq_ump_convert.c
+ create mode 100644 sound/core/seq/seq_ump_convert.h
+ create mode 100644 sound/core/ump.c
+ create mode 100644 sound/core/ump_convert.c
+ create mode 100644 sound/core/ump_convert.h
+ create mode 100644 sound/usb/midi2.c
+ create mode 100644 sound/usb/midi2.h
 
 -- 
- i.
+2.35.3
 
-
-> commit f55ef626b57f ("PCI/ASPM: Avoid link retraining race")
-> parent e8d05f522fae
-> Author: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> Date:   Tue May 2 11:39:23 2023 +0300
-> 
->     PCI/ASPM: Avoid link retraining race
->     
->     PCIe r6.0.1, sec 7.5.3.7, recommends setting the link control parameters,
->     then waiting for the Link Training bit to be clear before setting the
->     Retrain Link bit.
->     
->     This avoids a race where the LTSSM may not use the updated parameters if it
->     is already in the midst of link training because of other normal link
->     activity.
->     
->     Wait for the Link Training bit to be clear before toggling the Retrain Link
->     bit to ensure that the LTSSM uses the updated link control parameters.
->     
->     [bhelgaas: commit log, return 0 (success)/-ETIMEDOUT instead of bool for
->     both pcie_wait_for_retrain() and the existing pcie_retrain_link()]
->     Suggested-by: Lukas Wunner <lukas@wunner.de>
->     Fixes: 7d715a6c1ae5 ("PCI: add PCI Express ASPM support")
->     Link: https://lore.kernel.org/r/20230502083923.34562-1-ilpo.jarvinen@linux.intel.com
->     Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
->     Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
->     Reviewed-by: Lukas Wunner <lukas@wunner.de>
->     Cc: stable@vger.kernel.org
-> 
-> diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
-> index 72cdb30a924a..3aa73ecdf86f 100644
-> --- a/drivers/pci/pcie/aspm.c
-> +++ b/drivers/pci/pcie/aspm.c
-> @@ -193,12 +193,39 @@ static void pcie_clkpm_cap_init(struct pcie_link_state *link, int blacklist)
->  	link->clkpm_disable = blacklist ? 1 : 0;
->  }
->  
-> -static bool pcie_retrain_link(struct pcie_link_state *link)
-> +static int pcie_wait_for_retrain(struct pci_dev *pdev)
->  {
-> -	struct pci_dev *parent = link->pdev;
->  	unsigned long end_jiffies;
->  	u16 reg16;
->  
-> +	/* Wait for Link Training to be cleared by hardware */
-> +	end_jiffies = jiffies + LINK_RETRAIN_TIMEOUT;
-> +	do {
-> +		pcie_capability_read_word(pdev, PCI_EXP_LNKSTA, &reg16);
-> +		if (!(reg16 & PCI_EXP_LNKSTA_LT))
-> +			return 0;
-> +		msleep(1);
-> +	} while (time_before(jiffies, end_jiffies));
-> +
-> +	return -ETIMEDOUT;
-> +}
-> +
-> +static int pcie_retrain_link(struct pcie_link_state *link)
-> +{
-> +	struct pci_dev *parent = link->pdev;
-> +	int rc;
-> +	u16 reg16;
-> +
-> +	/*
-> +	 * Ensure the updated LNKCTL parameters are used during link
-> +	 * training by checking that there is no ongoing link training to
-> +	 * avoid LTSSM race as recommended in Implementation Note at the
-> +	 * end of PCIe r6.0.1 sec 7.5.3.7.
-> +	 */
-> +	rc = pcie_wait_for_retrain(parent);
-> +	if (rc)
-> +		return rc;
-> +
->  	pcie_capability_read_word(parent, PCI_EXP_LNKCTL, &reg16);
->  	reg16 |= PCI_EXP_LNKCTL_RL;
->  	pcie_capability_write_word(parent, PCI_EXP_LNKCTL, reg16);
-> @@ -212,15 +239,7 @@ static bool pcie_retrain_link(struct pcie_link_state *link)
->  		pcie_capability_write_word(parent, PCI_EXP_LNKCTL, reg16);
->  	}
->  
-> -	/* Wait for link training end. Break out after waiting for timeout */
-> -	end_jiffies = jiffies + LINK_RETRAIN_TIMEOUT;
-> -	do {
-> -		pcie_capability_read_word(parent, PCI_EXP_LNKSTA, &reg16);
-> -		if (!(reg16 & PCI_EXP_LNKSTA_LT))
-> -			break;
-> -		msleep(1);
-> -	} while (time_before(jiffies, end_jiffies));
-> -	return !(reg16 & PCI_EXP_LNKSTA_LT);
-> +	return pcie_wait_for_retrain(parent);
->  }
->  
->  /*
-> @@ -289,15 +308,15 @@ static void pcie_aspm_configure_common_clock(struct pcie_link_state *link)
->  		reg16 &= ~PCI_EXP_LNKCTL_CCC;
->  	pcie_capability_write_word(parent, PCI_EXP_LNKCTL, reg16);
->  
-> -	if (pcie_retrain_link(link))
-> -		return;
-> +	if (pcie_retrain_link(link)) {
->  
-> -	/* Training failed. Restore common clock configurations */
-> -	pci_err(parent, "ASPM: Could not configure common clock\n");
-> -	list_for_each_entry(child, &linkbus->devices, bus_list)
-> -		pcie_capability_write_word(child, PCI_EXP_LNKCTL,
-> +		/* Training failed. Restore common clock configurations */
-> +		pci_err(parent, "ASPM: Could not configure common clock\n");
-> +		list_for_each_entry(child, &linkbus->devices, bus_list)
-> +			pcie_capability_write_word(child, PCI_EXP_LNKCTL,
->  					   child_reg[PCI_FUNC(child->devfn)]);
-> -	pcie_capability_write_word(parent, PCI_EXP_LNKCTL, parent_reg);
-> +		pcie_capability_write_word(parent, PCI_EXP_LNKCTL, parent_reg);
-> +	}
->  }
->  
->  /* Convert L0s latency encoding to ns */
---8323329-1530899728-1684488455=:1681--
