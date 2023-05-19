@@ -2,194 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FDD6709567
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 12:51:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9DB70956D
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 12:53:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231644AbjESKvr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 06:51:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37972 "EHLO
+        id S229687AbjESKxU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 06:53:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbjESKvo (ORCPT
+        with ESMTP id S229648AbjESKxS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 06:51:44 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A854E66
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:51:43 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2ab3e8f4efeso8407441fa.0
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:51:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684493501; x=1687085501;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ScXDhSxUJlLB8bM84R+68wogc+rqJq5r2RRK+MTJ+NU=;
-        b=Z8ePaJEEAJ1d44ZWVMtQaPnFFAAFJjtgE1a4DYu9XXZwR/vsW6KMijy2rX9+CINVC/
-         ceIA7VXMB/WVy6vD884addB3TzMt4cxituZuJCkc/KqE5fiOnDs0FM4IGC+K+Nu2q6FR
-         u65no+7ysyDVzWxMUy+Jf3ldBI5UpD7AbzgtfKb6aqJGLwr228gaV7fqymN9Dyze6Vmt
-         8FXQnnTfiAdQrM+RHzqdJiSImgqgy8pTTwBHmQxwrVkggZy7DDMtPuw9aHpOKpX/Vgtj
-         XdTbfPPt4rM23XoQmPVT4m50LDhcEBJ0ekUL7KhZorE6qDxtIzm7nzME6gg14mqpR4hx
-         FNxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684493501; x=1687085501;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ScXDhSxUJlLB8bM84R+68wogc+rqJq5r2RRK+MTJ+NU=;
-        b=NpTeOd6/rGrvyhfL4yrPS6+eNFSNHoLmM72XbPEZKj8/nZEyHpcAsPGOM5yVqribmY
-         FZZLvpEHQbABCg2frx+UkWGUbFodtrb7dy88/z0K9NvKQnvPZmjPebvuZg4RCg7N20XW
-         NDyZ+8BrtcJNzsSM1UKSrOLvwef3HkaLApDsjAWoOK/e3mEFVa6ppBFT+OG/FppCeJRl
-         7kCsGPwKl+puVlYVFApFPAcWfvfzI9rMJmbu5ebrAMBdBq5C2JaHNF+oUIat5yRnhysK
-         9fIdmC04FTTWdMS1WJxDSaos6NJqoiic9PE8nKLPhRlgUIsPtuO+2Jh49esUADWN1Lrb
-         neRw==
-X-Gm-Message-State: AC+VfDyFOu/LKYsIY3SPBg1EusjFPOOqK7EFT/OblqlL2tnUQJSbFdQm
-        WcR4rdtI9f5+wuc2LUxIBamjCQ==
-X-Google-Smtp-Source: ACHHUZ7fNE8pZaCdlzbVuTf+/ffBSjRXKTAUPOZ+CEDWu2vtGLTvWrFE8NaZsL+Pk6K2CYcvA2il9g==
-X-Received: by 2002:a05:6512:68f:b0:4eb:4157:5704 with SMTP id t15-20020a056512068f00b004eb41575704mr884889lfe.29.1684493501227;
-        Fri, 19 May 2023 03:51:41 -0700 (PDT)
-Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
-        by smtp.gmail.com with ESMTPSA id e5-20020a056512090500b004f38411f148sm560865lft.84.2023.05.19.03.51.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 May 2023 03:51:40 -0700 (PDT)
-Message-ID: <875dec34-35da-e427-ae32-598958762dd2@linaro.org>
-Date:   Fri, 19 May 2023 12:51:39 +0200
+        Fri, 19 May 2023 06:53:18 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A47E45;
+        Fri, 19 May 2023 03:53:17 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34J9r7e8000745;
+        Fri, 19 May 2023 10:53:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=rxXCTIRRuoxKLQjYaSasSbfZHzS/pXtEXTYcTYZSFVo=;
+ b=LZzsPtSzDeFtlBiyt6ZvStwlCJdFs5qRncf4awtimNwynMon7NEDoYOWNGgS63UYUN6Q
+ La8N2oi6Py4PGkT7zDpe6FAK5GyD0wW6+P8sYoCTo1I/8uonhLecwXCF6WG2MDIZ99NN
+ bDvU+r+xr5N1f1WV6RbJPhZcakrz/12fALVLXsD1SqITA2daU0sAXKY6BLmHMx92LPOu
+ c/ODg53VoOedXE8KDP5sifTojtxlX+qByJXuYdITF1JJ8oTyhTpmbyDyv0XR3NLMmQkQ
+ X2mjeooSkHh3uIEvE2lzh3OS/1+1R8fDR1JiyE8XVN+YmrI9V44Qw8c53MmSbGOBZ6Nx 6Q== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qp0gk8v92-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 May 2023 10:53:12 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34JArBpQ002947
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 May 2023 10:53:11 GMT
+Received: from [10.216.31.56] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 19 May
+ 2023 03:53:06 -0700
+Message-ID: <2b013e9d-e4d9-075f-519b-0ce5c4f62894@quicinc.com>
+Date:   Fri, 19 May 2023 16:23:03 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v6 07/11] arm64: dts: qcom: sm6115: Add Crypto Engine
- support
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH V4 2/3] clk: qcom: videocc-sm8450: Add video clock
+ controller driver for SM8450
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_skakitap@quicinc.com>, <quic_jkona@quicinc.com>
+References: <20230509172148.7627-1-quic_tdas@quicinc.com>
+ <20230509172148.7627-3-quic_tdas@quicinc.com>
+ <CAA8EJprHgOaiH2CFKmz_E+NvJpA+DRNE-r1wQXbSfYi+5qoBmA@mail.gmail.com>
 Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     Stephan Gerhold <stephan@gerhold.net>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, andersson@kernel.org,
-        bhupesh.linux@gmail.com, krzysztof.kozlowski@linaro.org,
-        robh+dt@kernel.org, vladimir.zapolskiy@linaro.org,
-        rfoss@kernel.org, neil.armstrong@linaro.org, djakov@kernel.org
-References: <20230405072836.1690248-1-bhupesh.sharma@linaro.org>
- <20230405072836.1690248-8-bhupesh.sharma@linaro.org>
- <ZGdLCdSof027mk5u@gerhold.net>
- <CAH=2Ntx4H+hOzYLWqiogdBGE+rQ2XayrweE_P8T8gVE0zbwzeg@mail.gmail.com>
- <8c754bc2-abb3-faaa-0ab5-2c1991dfc2a6@linaro.org>
- <CAH=2NtyUNJFMbrhvP9BjmzdsLj9kvSYUH_ueAPUan9GRKaq2Xw@mail.gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <CAH=2NtyUNJFMbrhvP9BjmzdsLj9kvSYUH_ueAPUan9GRKaq2Xw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+From:   Taniya Das <quic_tdas@quicinc.com>
+In-Reply-To: <CAA8EJprHgOaiH2CFKmz_E+NvJpA+DRNE-r1wQXbSfYi+5qoBmA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Gr1aETRR1NR6ksAXQAS2weXToa89lZp0
+X-Proofpoint-ORIG-GUID: Gr1aETRR1NR6ksAXQAS2weXToa89lZp0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-19_06,2023-05-17_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ lowpriorityscore=0 spamscore=0 clxscore=1015 malwarescore=0
+ mlxlogscore=999 priorityscore=1501 mlxscore=0 phishscore=0 bulkscore=0
+ adultscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2304280000 definitions=main-2305190091
 X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Dmitry,
 
+Thank you for your review.
 
-On 19.05.2023 12:49, Bhupesh Sharma wrote:
-> On Fri, 19 May 2023 at 16:12, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+On 5/10/2023 2:03 AM, Dmitry Baryshkov wrote:
+> On Tue, 9 May 2023 at 20:22, Taniya Das <quic_tdas@quicinc.com> wrote:
 >>
->> On 19.05.2023 12:22, Bhupesh Sharma wrote:
->>> Hi Stephan,
->>>
->>> On Fri, 19 May 2023 at 15:40, Stephan Gerhold <stephan@gerhold.net> wrote:
->>>>
->>>> Hi Bhupesh,
->>>>
->>>> Not sure if this is the latest version of this series since it's pretty
->>>> old but I didn't find a new one. Just came here because you mentioned
->>>> RB1/RB2 [1] in my bam_dma patch and they don't have any BAM defined
->>>> upstream yet.
->>>>
->>>> [1]: https://lore.kernel.org/linux-arm-msm/CAH=2Ntw0BZH=RGp14mYLhX7D6jV5O5eDKRQbby=uCy85xMDU_g@mail.gmail.com/
->>>>
->>>> On Wed, Apr 05, 2023 at 12:58:32PM +0530, Bhupesh Sharma wrote:
->>>>> Add crypto engine (CE) and CE BAM related nodes and definitions to
->>>>> 'sm6115.dtsi'.
->>>>>
->>>>> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->>>>> ---
->>>>>  arch/arm64/boot/dts/qcom/sm6115.dtsi | 22 ++++++++++++++++++++++
->>>>>  1 file changed, 22 insertions(+)
->>>>>
->>>>> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
->>>>> index 2a51c938bbcb..ebac026b4cc7 100644
->>>>> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
->>>>> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
->>>>> @@ -650,6 +650,28 @@ usb_hsphy: phy@1613000 {
->>>>>                       status = "disabled";
->>>>>               };
->>>>>
->>>>> +             cryptobam: dma-controller@1b04000 {
->>>>> +                     compatible = "qcom,bam-v1.7.4", "qcom,bam-v1.7.0";
->>>>> +                     reg = <0x0 0x01b04000 0x0 0x24000>;
->>>>> +                     interrupts = <GIC_SPI 247 IRQ_TYPE_LEVEL_HIGH>;
->>>>> +                     #dma-cells = <1>;
->>>>> +                     qcom,ee = <0>;
->>>>> +                     qcom,controlled-remotely;
->>>>> +                     num-channels = <8>;
->>>>> +                     qcom,num-ees = <2>;
->>>>> +                     iommus = <&apps_smmu 0x94 0x11>,
->>>>> +                              <&apps_smmu 0x96 0x11>;
->>>>> +             };
->>>>> +
->>>>> +             crypto: crypto@1b3a000 {
->>>>> +                     compatible = "qcom,sm6115-qce", "qcom,sm8150-qce", "qcom,qce";
->>>>> +                     reg = <0x0 0x01b3a000 0x0 0x6000>;
->>>>> +                     dmas = <&cryptobam 6>, <&cryptobam 7>;
->>>>> +                     dma-names = "rx", "tx";
->>>>> +                     iommus = <&apps_smmu 0x94 0x11>,
->>>>> +                              <&apps_smmu 0x96 0x11>;
->>>>
->>>> Shouldn't you have clocks = <&rpmcc RPM_SMD_CE1_CLK> here to make sure
->>>> the clock for the crypto engine is on? Your binding patch (PATCH 06/11)
->>>> says "Crypto Engine block on Qualcomm SoCs SM6115 and QCM2290 do not
->>>> require clocks strictly" but doesn't say why.
->>>>
->>>> Make sure you don't rely on having rpmcc keep unused clocks on
->>>> permanently. This is the case at the moment, but we would like to change
->>>> this [2]. Adding new users that rely on this broken behavior would just
->>>> make this effort even more complicated.
->>>>
->>>> If you also add the clock to the cryptobam then you should be able to
->>>> see the advantage of my bam_dma patch [3]. It allows you to drop
->>>> "num-channels" and "qcom,num-ees" from the cryptobam in your changes
->>>> above because it can then be read directly from the BAM registers.
->>>
->>> Thanks for pointing this out. Actually that's why I was using your
->>> patch while testing with RB1/RB2 :)
->>>
->>> Yes, so the background is that I am preparing a new version of this
->>> crypto enablement patchset.
->>> Also your assumption about the clocks being turned on by the firmware
->>> is true for RB1/RB2 devices, so enabling them via Linux is optional as
->>> per Qualcomm enggs.
->> This is not necessarily true. Currently it's kept always-on on
->> by clk_smd_rpm_handoff, but that's a hack from 10 years ago when smd
->> was still new.
+>> Add support for the video clock controller driver for peripheral clock
+>> clients to be able to request for video cc clocks.
 >>
->>>
->>> So, I am testing the new patchset right now with 'clock' entries
->>> provided in the .dtsi and see if that causes any issue / improvement
->>> (etc.)
->> It won't change since it's on anyway, but that won't be a given for long.
+>> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+>> ---
+>> Changes since V3:
+>>   - Use lower case hex.
+>>   - Check the return value here and bail out early on failure in probe.
+>>
+>> Changes since V2:
+>>   - Update the header file name to match the latest upstream header
+>>     files.
+>>
+>> Changes since V1:
+>>   - Use DT indices instead of fw_name.
+>>   - Replace pm_runtime_enable with devm_pm_runtime_enable.
+>>   - Change license to GPL from GPL V2.
+>>
+>>   drivers/clk/qcom/Kconfig          |   9 +
+>>   drivers/clk/qcom/Makefile         |   1 +
+>>   drivers/clk/qcom/videocc-sm8450.c | 461 ++++++++++++++++++++++++++++++
+>>   3 files changed, 471 insertions(+)
+>>   create mode 100644 drivers/clk/qcom/videocc-sm8450.c
 > 
-> Right, so that's what I observe: RPM_SMD_CE1_CLK is always on by the
-> time crypto _probe gets called.
-> So, IMO let's not mix this patchset with the other fix which probably
-> will fix the 10-year old clk_smd_rpm handoff keeping
-> these clocks on.
+> [skipped]
 > 
-> Probably that should be a separate changeset - requiring very thorough
-> checks to make sure that we don't break
-> working platforms.
-It's not about mixing patchsets, the nodes should reflect all the clock/
-power-domain/regulator/pinctrl/etc. dependencies from their introduction.
-Remember, dt describes the hardware, not the software or firmware.
+> 
+>> +static const struct qcom_reset_map video_cc_sm8450_resets[] = {
+>> +       [CVP_VIDEO_CC_INTERFACE_BCR] = { 0x80e0 },
+>> +       [CVP_VIDEO_CC_MVS0_BCR] = { 0x8098 },
+>> +       [CVP_VIDEO_CC_MVS0C_BCR] = { 0x8048 },
+>> +       [CVP_VIDEO_CC_MVS1_BCR] = { 0x80bc },
+>> +       [CVP_VIDEO_CC_MVS1C_BCR] = { 0x8070 },
+> 
+> Can we have a common VIDEO_CC prefix here please?
 
-That - among other things - ensures backwards compatibility can be
-preserved.
+The BCR names are coming from hardware plan and software interface, thus 
+we would like to keep them intact.
+
+
 > 
-> Thanks.
+>> +       [VIDEO_CC_MVS0C_CLK_ARES] = { 0x8064, 2 },
+>> +       [VIDEO_CC_MVS1C_CLK_ARES] = { 0x808c, 2 },
+>> +};
+>> +
+
+The ARES resets are coming from VideoCC clocks(CBCR), hence the name 
+starts with VIDEO_CC.
+
+>> +static const struct regmap_config video_cc_sm8450_regmap_config = {
+>> +       .reg_bits = 32,
+>> +       .reg_stride = 4,
+>> +       .val_bits = 32,
+>> +       .max_register = 0x9f4c,
+>> +       .fast_io = true,
+>> +};
+>> +
+>> +static struct qcom_cc_desc video_cc_sm8450_desc = {
+>> +       .config = &video_cc_sm8450_regmap_config,
+>> +       .clks = video_cc_sm8450_clocks,
+>> +       .num_clks = ARRAY_SIZE(video_cc_sm8450_clocks),
+>> +       .resets = video_cc_sm8450_resets,
+>> +       .num_resets = ARRAY_SIZE(video_cc_sm8450_resets),
+>> +       .gdscs = video_cc_sm8450_gdscs,
+>> +       .num_gdscs = ARRAY_SIZE(video_cc_sm8450_gdscs),
+>> +};
+>> +
+>> +static const struct of_device_id video_cc_sm8450_match_table[] = {
+>> +       { .compatible = "qcom,sm8450-videocc" },
+>> +       { }
+>> +};
+>> +MODULE_DEVICE_TABLE(of, video_cc_sm8450_match_table);
+>> +
+>> +static int video_cc_sm8450_probe(struct platform_device *pdev)
+>> +{
+>> +       struct regmap *regmap;
+>> +       int ret;
+>> +
+>> +       ret = devm_pm_runtime_enable(&pdev->dev);
+>> +       if (ret)
+>> +               return ret;
+>> +
+>> +       ret = pm_runtime_resume_and_get(&pdev->dev);
+>> +       if (ret)
+>> +               return ret;
+>> +
+>> +       regmap = qcom_cc_map(pdev, &video_cc_sm8450_desc);
+>> +       if (IS_ERR(regmap)) {
+>> +               pm_runtime_put(&pdev->dev);
+>> +               return PTR_ERR(regmap);
+>> +       }
+>> +
+>> +       clk_lucid_evo_pll_configure(&video_cc_pll0, regmap, &video_cc_pll0_config);
+>> +       clk_lucid_evo_pll_configure(&video_cc_pll1, regmap, &video_cc_pll1_config);
+>> +
+>> +       /*
+>> +        * Keep clocks always enabled:
+>> +        *      video_cc_ahb_clk
+>> +        *      video_cc_sleep_clk
+>> +        *      video_cc_xo_clk
+>> +        */
+>> +       regmap_update_bits(regmap, 0x80e4, BIT(0), BIT(0));
+>> +       regmap_update_bits(regmap, 0x8130, BIT(0), BIT(0));
+>> +       regmap_update_bits(regmap, 0x8114, BIT(0), BIT(0));
+>> +
+>> +       ret = qcom_cc_really_probe(pdev, &video_cc_sm8450_desc, regmap);
+>> +
+>> +       pm_runtime_put(&pdev->dev);
+>> +
+>> +       return ret;
+>> +}
+>> +
+>> +static struct platform_driver video_cc_sm8450_driver = {
+>> +       .probe = video_cc_sm8450_probe,
+>> +       .driver = {
+>> +               .name = "video_cc-sm8450",
+>> +               .of_match_table = video_cc_sm8450_match_table,
+>> +       },
+>> +};
+>> +
+>> +static int __init video_cc_sm8450_init(void)
+>> +{
+>> +       return platform_driver_register(&video_cc_sm8450_driver);
+>> +}
+>> +subsys_initcall(video_cc_sm8450_init);
+>> +
+>> +static void __exit video_cc_sm8450_exit(void)
+>> +{
+>> +       platform_driver_unregister(&video_cc_sm8450_driver);
+>> +}
+>> +module_exit(video_cc_sm8450_exit);
+> 
+> module_platform_driver() ?
+> 
+
+We would like to keep the clock drivers all probed at subsys_initcall. 
+We could revisit and update as cleanup if we want to move them to module 
+init.
+
+>> +
+>> +MODULE_DESCRIPTION("QTI VIDEO_CC SM8450 Driver");
+>> +MODULE_LICENSE("GPL");
+>> --
+>> 2.17.1
+>>
+> 
+> 
+
+-- 
+Thanks & Regards,
+Taniya Das.
