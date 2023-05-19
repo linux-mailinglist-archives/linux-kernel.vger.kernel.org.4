@@ -2,126 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 392D170A354
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 01:27:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A28F70A356
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 01:28:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbjESX1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 19:27:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43998 "EHLO
+        id S230010AbjESX2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 19:28:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbjESX1K (ORCPT
+        with ESMTP id S229731AbjESX2I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 19:27:10 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3C2DE45
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 16:27:08 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f00d41df22so1722961e87.1
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 16:27:08 -0700 (PDT)
+        Fri, 19 May 2023 19:28:08 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A80D4E2;
+        Fri, 19 May 2023 16:28:06 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-96f5685f902so254744366b.2;
+        Fri, 19 May 2023 16:28:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684538827; x=1687130827;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5QsFRFDPv+w7LZXZOw0WA98ik9DN1mQO3qx3JO5B1H0=;
-        b=uI81i88i4vLJSz57S9e4aavEnPgPe8LEhscoxsdJHS8rI14Kpk3cINhNwm5LNan95E
-         KGil51GWfiZl8vHVIajj5QPGFH/D632STPHGU12u39WIdFD+P0HI+Ql/QCaMX52IfHpW
-         +u1wLZu+cjmmp8OZoJj3ZVCpxRxIMCC7vxzmjUVqxVnBS2RChsmk1/ySmEtZ+ykRdcsi
-         nJCuIxDB3HsHRY2YqWAX2sUI5VagVp7LfywKJSJWmdwf49zpadHNk0vhRgalgYg7O2ne
-         oqc6Zz0A+ZoX9sPzccRWBKKdDw8pjqICsL0hFeYmE8PM3EfpTCrE6p1vt9uZmeJYKnmr
-         bcsg==
+        d=gmail.com; s=20221208; t=1684538885; x=1687130885;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FmALGiwKdo85IV/l0yKB8MZ/9Xqr37x53vqm7mgmBgM=;
+        b=FSeQaWvLvlTWLX+Wh59wvsH+HF+fbvpAth0Hn6eOVSj6wIInENUntetyCxaX0m/EFR
+         dtQnrSWzlFHK8vrcFJm0yoHCiL9xfaMeWPoI9ysxyY0BnAHtis7x8E8ZjGKR9Cz9g8s4
+         NPjO5rNRjpkMZnt/AzasKYg5OFWYO28V+r6vIgPB38YAs8VtB42ad9Gm3c7cMO7QE+Mh
+         dL7NZErttetyFbcjvWCDXfCFt+Gu9kwgCytOLfAuHY5bnZGcX8qrxCflaOk1ermJXVCS
+         c/5nVRBh/ZP7YBog8jrszOiH45emtNnrSqV9hsxPvdv0lwCytuSk812LFiI+z76nE3S8
+         A4PQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684538827; x=1687130827;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5QsFRFDPv+w7LZXZOw0WA98ik9DN1mQO3qx3JO5B1H0=;
-        b=hiR3Pw0/U6r0BOi22iFUZqrdYSegcx5onrLuuk8RNzrmF/hxva1KN7TYzprOwiaDAZ
-         25G3VsBXhIqLBjWfWltCgfuj4Afdzmv3xv9EUUD91/JpOSKSgC8Mck7marsjTyJHeZEa
-         IM5COlXpqlBAB9/tqggxaCjwepL7959zxmruEbkWr5tZv45FUSKkp2BIXDhpeKqKewBO
-         I4MRRZFKekTpT2NBhvKYHYSWCcOHnbdJXZLTSC0dz6jB4GeNRrGSDXovL5JxjopqIWzO
-         72pwXLscNlKiaX2g1b5LatiR216njLAlZ9SFX6cOHyoogA20afiQBhOB/PA+47AEanHZ
-         kN7w==
-X-Gm-Message-State: AC+VfDywCZZe2GL+B92iF9NAipDVj9QHeMv6M2Kh1BlFFc+HYsjUI5AC
-        LJKjejYHaAXXTuM5EEH0lwcz4Q==
-X-Google-Smtp-Source: ACHHUZ7VnkPD1ndqaR5abX1TbBBXiGwzOUrBy9MaQnF4clOVweenoPwAMoB73Q3jwaB6Er+KN7+O0g==
-X-Received: by 2002:a05:6512:90d:b0:4f1:4898:d183 with SMTP id e13-20020a056512090d00b004f14898d183mr1203512lft.25.1684538826864;
-        Fri, 19 May 2023 16:27:06 -0700 (PDT)
-Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
-        by smtp.gmail.com with ESMTPSA id g6-20020ac25386000000b004eb2ac90f36sm55315lfh.207.2023.05.19.16.27.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 May 2023 16:27:06 -0700 (PDT)
-Message-ID: <3cfacc54-6cc5-1a11-d7db-96409097f290@linaro.org>
-Date:   Sat, 20 May 2023 01:27:04 +0200
+        d=1e100.net; s=20221208; t=1684538885; x=1687130885;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FmALGiwKdo85IV/l0yKB8MZ/9Xqr37x53vqm7mgmBgM=;
+        b=iCFfsFccSgLwaFfxJdFCii1XuWRhIyImRihHFFrIkTUkGoUraNSrKcl8Z1gcp8bqV4
+         N2kKrrPW7rjaSrtyktjZU63Ux+BsL9r5ll63+jMts3wXdJ4qnTkNMQGTFC0FeF4t56QD
+         1rvu+ij/RF6ptvHV/i8sS6XrS6dTAMG8reqWSSVcB8FZRHOLlpbZv30FqJ9lp0m4Qo0D
+         pvVTjM6g51abb+4APb5gyVjHaDGf11GlOzG0vXEgPZ3+ZE+P0AfEhNcyBJTYyf2V77VO
+         jLrUmcChYoVXW9uDbaB1DpE3ODcFty1PXchECEHcJURVcvSws6lajThx3h5Kjo1/ZHbx
+         kJ3g==
+X-Gm-Message-State: AC+VfDwum2xs+xOhiqh7jNTJpulSk9GUUvjxqTe9R7qLd5DSNhy7gIkK
+        3MdT/FFUZU3KsKeVhHcZOL4=
+X-Google-Smtp-Source: ACHHUZ5lbAwc8qalxxymZAlUqnfwWjFjOOkvfigqS+2G3CMGnmkLoGZZcQ/oOmPRlw5Dvu5Ym3ljkA==
+X-Received: by 2002:a17:907:72c7:b0:96f:6a91:40e3 with SMTP id du7-20020a17090772c700b0096f6a9140e3mr3663113ejc.49.1684538884652;
+        Fri, 19 May 2023 16:28:04 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id w26-20020a170907271a00b0096599bf7029sm157963ejk.145.2023.05.19.16.28.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 May 2023 16:28:04 -0700 (PDT)
+Date:   Sat, 20 May 2023 02:28:02 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Arun Ramadoss <arun.ramadoss@microchip.com>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Simon Horman <simon.horman@corigine.com>,
+        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH net-next v4 1/2] net: dsa: microchip: ksz8: Make flow
+ control, speed, and duplex on CPU port configurable
+Message-ID: <20230519232802.ae34asc4zgfmv3u4@skbuf>
+References: <20230519124700.635041-1-o.rempel@pengutronix.de>
+ <20230519124700.635041-1-o.rempel@pengutronix.de>
+ <20230519124700.635041-2-o.rempel@pengutronix.de>
+ <20230519124700.635041-2-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 5/5] ARM: dts: qcom: apq8026-samsung-matisse-wifi: Add
- reboot-mode node
-Content-Language: en-US
-To:     =?UTF-8?Q?Matti_Lehtim=c3=a4ki?= <matti.lehtimaki@gmail.com>,
-        linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230519210903.117030-1-matti.lehtimaki@gmail.com>
- <20230519210903.117030-6-matti.lehtimaki@gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230519210903.117030-6-matti.lehtimaki@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230519124700.635041-2-o.rempel@pengutronix.de>
+ <20230519124700.635041-2-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, May 19, 2023 at 02:46:59PM +0200, Oleksij Rempel wrote:
+> diff --git a/drivers/net/dsa/microchip/ksz8795.c b/drivers/net/dsa/microchip/ksz8795.c
+> index f56fca1b1a22..9eedccbf5b7c 100644
+> --- a/drivers/net/dsa/microchip/ksz8795.c
+> +++ b/drivers/net/dsa/microchip/ksz8795.c
+> @@ -1371,6 +1371,57 @@ void ksz8_config_cpu_port(struct dsa_switch *ds)
+> +/**
+> + * ksz8_cpu_port_link_up - Configures the CPU port of the switch.
+> + * @dev: The KSZ device instance.
+> + * @speed: The desired link speed.
+> + * @duplex: The desired duplex mode.
+> + * @tx_pause: If true, enables transmit pause.
+> + * @rx_pause: If true, enables receive pause.
+> + *
+> + * Description:
+> + * The function configures flow control and speed settings for the CPU
+> + * port of the switch based on the desired settings, current duplex mode, and
+> + * speed.
+> + */
+> +static void ksz8_cpu_port_link_up(struct ksz_device *dev, int speed, int duplex,
+> +				  bool tx_pause, bool rx_pause)
+> +{
+> +	u8 ctrl = 0;
+> +
+> +	/* SW_FLOW_CTRL, SW_HALF_DUPLEX, and SW_10_MBIT bits are bootstrappable
+> +	 * at least on KSZ8873. They can have different values depending on your
+> +	 * board setup.
+> +	 */
+> +	if (duplex) {
+> +		if (tx_pause || rx_pause)
+> +			ctrl |= SW_FLOW_CTRL;
+> +	} else {
+> +		ctrl |= SW_HALF_DUPLEX;
+> +	}
+> +
+> +	/* This hardware only supports SPEED_10 and SPEED_100. For SPEED_10
+> +	 * we need to set the SW_10_MBIT bit. Otherwise, we can leave it 0.
+> +	 */
+> +	if (speed == SPEED_10)
+> +		ctrl |= SW_10_MBIT;
+> +
+> +	ksz_rmw8(dev, REG_SW_CTRL_4, SW_HALF_DUPLEX | SW_FLOW_CTRL |
+> +		 SW_10_MBIT, ctrl);
 
+REG_SW_CTRL_4 ... S_REPLACE_VID_CTRL ... dev->info->regs[P_XMII_CTRL_1] ...
+at some point we will need one more consolidation effort here, since we
+have at least 3 ways of reaching the same register.
 
-On 19.05.2023 23:09, Matti Lehtimäki wrote:
-> This enables userspace to signal the bootloader to go into the
-> bootloader or recovery mode.
-> 
-> The magic values can be found in both the downstream kernel and the LK
-> kernel (bootloader).
-> 
-> Signed-off-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
-> ---
->  .../arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts b/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
-> index 91b860e24681..a05c41191efd 100644
-> --- a/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
-> +++ b/arch/arm/boot/dts/qcom-apq8026-samsung-matisse-wifi.dts
-> @@ -279,6 +279,16 @@ touchscreen@4a {
->  	};
->  };
+> +}
+> +
+> +void ksz8_phylink_mac_link_up(struct ksz_device *dev, int port,
+> +			      unsigned int mode, phy_interface_t interface,
+> +			      struct phy_device *phydev, int speed, int duplex,
+> +			      bool tx_pause, bool rx_pause)
+> +{
+> +	/* If the port is the CPU port, apply special handling. Only the CPU
+> +	 * port is configured via global registers.
+> +	 */
+> +	if (dev->cpu_port == port)
+> +		ksz8_cpu_port_link_up(dev, speed, duplex, tx_pause, rx_pause);
+> +}
+> +
+>  static int ksz8_handle_global_errata(struct dsa_switch *ds)
+>  {
+>  	struct ksz_device *dev = ds->priv;
+> @@ -1419,8 +1470,6 @@ int ksz8_setup(struct dsa_switch *ds)
+>  	 */
+>  	ds->vlan_filtering_is_global = true;
 >  
-> +&imem {
-> +	status = "okay";
-Drop, undisable in dtsi
+> -	ksz_cfg(dev, S_REPLACE_VID_CTRL, SW_FLOW_CTRL, true);
+> -
+>  	/* Enable automatic fast aging when link changed detected. */
+>  	ksz_cfg(dev, S_LINK_AGING_CTRL, SW_LINK_AUTO_AGING, true);
+>  
+> diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
+> index a4428be5f483..6e19ad70c671 100644
+> --- a/drivers/net/dsa/microchip/ksz_common.c
+> +++ b/drivers/net/dsa/microchip/ksz_common.c
+> @@ -210,6 +210,7 @@ static const struct ksz_dev_ops ksz8_dev_ops = {
+>  	.mirror_add = ksz8_port_mirror_add,
+>  	.mirror_del = ksz8_port_mirror_del,
+>  	.get_caps = ksz8_get_caps,
+> +	.phylink_mac_link_up = ksz8_phylink_mac_link_up,
 
-> +
-> +	reboot-mode {
-You can add a label like imem_reboot_mode and refer to just this
-thing from the device dt. Though I'm fairly sure the modes should
-be common.
+Another future consolidation to consider: since all ksz_dev_ops now
+provide .phylink_mac_link_up(), the "if" condition here is no longer
+necessary:
 
-Konrad
-> +		mode-bootloader = <0x77665500>;
-> +		mode-normal     = <0x77665501>;
-> +		mode-recovery   = <0x77665502>;
-> +	};
-> +};
-> +
->  &rpm_requests {
->  	regulators {
->  		compatible = "qcom,rpm-pm8226-regulators";
+static void ksz_phylink_mac_link_up(struct dsa_switch *ds, int port,
+				    unsigned int mode,
+				    phy_interface_t interface,
+				    struct phy_device *phydev, int speed,
+				    int duplex, bool tx_pause, bool rx_pause)
+{
+	struct ksz_device *dev = ds->priv;
+
+	if (dev->dev_ops->phylink_mac_link_up)
+		dev->dev_ops->phylink_mac_link_up(dev, port, mode, interface,
+						  phydev, speed, duplex,
+						  tx_pause, rx_pause);
+}
+
+which reminds me of the fact that I also had a patch to remove
+dev->dev_ops->phylink_mac_config():
+https://patchwork.kernel.org/project/netdevbpf/patch/20230316161250.3286055-5-vladimir.oltean@nxp.com/
+
+I give up with that patch set now, since there's zero reviewer interest.
+If you want and you think it's useful, you might want to adapt it for
+KSZ8873.
+
+>  	.config_cpu_port = ksz8_config_cpu_port,
+>  	.enable_stp_addr = ksz8_enable_stp_addr,
+>  	.reset = ksz8_reset_switch,
+> -- 
+> 2.39.2
+> 
+
+Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
