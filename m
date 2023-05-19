@@ -2,60 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29C71709B50
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 17:28:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BC34709B57
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 17:30:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232343AbjESP2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 11:28:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52624 "EHLO
+        id S232067AbjESPaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 11:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230440AbjESP2f (ORCPT
+        with ESMTP id S230305AbjESPaJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 11:28:35 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA82106;
-        Fri, 19 May 2023 08:28:33 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 982157C0;
-        Fri, 19 May 2023 15:28:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 982157C0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1684510112; bh=ypzbLdEgSgVU1CkpDITC1d6zG9XwYC1dqvAA2QZn0LY=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=eDsN4W2vF0m4WFO6UzXjf9b7dm0et8JUuedojt1TFB66cvkW8NWnwXGiNeHIORINN
-         0ynYPZeCKF6juv4ZqvzR6Jlq66OSLOB9qIycCy800f5G4PYctWl6UrNTHnGTdpdEpB
-         2uGDzKhKQLHUcH7f0Yyrsksb6+pXCXePtK6OfoiMcO3Xzjl+WarNjKB9guR2byflDJ
-         oIU17QKrBIOg3Zz4VVrN/LMcMGc9pNSdoI7PU5G7YCMmypgAej4neCCwH/to1xQ+/U
-         evy7j6l1RREi31Wh2TvWA+I9RScqc7vyaiQPuNQ2df/laIc8TtjQpfpS8Ftxt8VkUo
-         0bzJAmHBazLgQ==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Rong Tao <rtoax@foxmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Zhangfei Gao <zhangfei.gao@foxmail.com>,
-        linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tyler Hicks <code@tyhicks.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Jiri Kosina <jikos@kernel.org>,
-        Matthieu Baerts <matthieu.baerts@tessares.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Xujun Leng <lengxujun2007@126.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] docs: submitting-patches: Discuss interleaved replies
-In-Reply-To: <20230511184131.gonna.399-kees@kernel.org>
-References: <20230511184131.gonna.399-kees@kernel.org>
-Date:   Fri, 19 May 2023 09:28:31 -0600
-Message-ID: <87ttw8mjc0.fsf@meer.lwn.net>
+        Fri, 19 May 2023 11:30:09 -0400
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8963ECF;
+        Fri, 19 May 2023 08:30:08 -0700 (PDT)
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-96a6c0cc0fbso85150566b.1;
+        Fri, 19 May 2023 08:30:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684510207; x=1687102207;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hcZ/Ub84YadBRwYZeJ0rs+CniJfE2wBfphDsgARviFw=;
+        b=Zkx7uoxrkoVBzCuzGy1rMFkNs3VIqOCK+vFWH21ZAQS+Y23vCMW3ZN4QoW72MNbyWC
+         KPk5FK9qT5aIgmFXCFIZ92VpTR0PIjqmYkpNKf6ZcBtRpGxUUFf4MVbWrNQzE8dFMB7m
+         0SZTpG2PabZ8PJjksp1OC/uUqvGhzAPDSH2+aQIKZXE6XwNgWMtUoM/pEH+6x6EGLWIT
+         Cd6qDRbBvEC3dUmknms+AuoX+uMVaAL9OPuF4I9IYkc8e31JtFvIbj77GFNKQ/yinTzr
+         0U4I6gtTjQWX2Ijz2NI1v7RQmp/xWiBG9marup80zSkxn/26zRq2bkKTTf8tWxtJGUD7
+         zW2A==
+X-Gm-Message-State: AC+VfDz4wB7M5WE7Ckj8Y/o7PEb96m0Sk5szQTp4GiWttn6F5qSZsN1g
+        GIlnpdwL7IYuDK6Ddl1la347/wzUBiD8deERmz4=
+X-Google-Smtp-Source: ACHHUZ42Pwf/DpsQ/roRNrt1pUd9unjJ13E4hrqjMO8VNbOSd+9qmhWWCiO3jCcwjGwEYRD+RWyKM3h66zY0IFCIiCg=
+X-Received: by 2002:a17:906:74dd:b0:929:b101:937d with SMTP id
+ z29-20020a17090674dd00b00929b101937dmr2628424ejl.1.1684510206855; Fri, 19 May
+ 2023 08:30:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 19 May 2023 17:29:55 +0200
+Message-ID: <CAJZ5v0ifvaf3FBLtKGkSJxEkxLWA8dSatp2hygtYnSbnNRo65w@mail.gmail.com>
+Subject: [GIT PULL] Power management fixes for v6.4-rc3
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux PM <linux-pm@vger.kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,34 +55,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kees Cook <keescook@chromium.org> writes:
+Hi Linus,
 
-> Top-posting has been strongly discouraged in Linux development, but this
-> was actually not written anywhere in the common documentation about
-> sending patches and replying to reviews. Add a section about trimming
-> and interleaved replies.
->
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Thorsten Leemhuis <linux@leemhuis.info>
-> Cc: Rong Tao <rtoax@foxmail.com>
-> Cc: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> Cc: Zhangfei Gao <zhangfei.gao@foxmail.com>
-> Cc: linux-doc@vger.kernel.org
-> Cc: linux-hardening@vger.kernel.org
-> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
-> v2:
->  - rewrite 2.Process.rst to be postive and link to new section.
->  - fix typos and phrasing (Thorsten)
->  - add missing "::" for block quotes
->  - add Greg's Ack
-> v1: https://lore.kernel.org/lkml/20230510183423.never.877-kees@kernel.org
-> ---
->  Documentation/process/2.Process.rst          |  7 +++---
->  Documentation/process/submitting-patches.rst | 25 ++++++++++++++++++++
->  2 files changed, 29 insertions(+), 3 deletions(-)
+Please pull from the tag
 
-Applied, thanks.
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-6.4-rc3
 
-jon
+with top-most commit 5783ecc90e24a870a563b1acbfd13cad3786e519
+
+ Merge branch 'pm-tools'
+
+on top of commit f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6
+
+ Linux 6.4-rc2
+
+to receive power management fixes for 6.4-rc3.
+
+These fix two issues in the cpupower utility and get rid of a spurious
+warning message printed to the kernel log by the ACPI cpufreq driver
+after recent changes.
+
+Specifics:
+
+ - Get rid of a warning message printed by the ACPI cpufreq driver
+   after recent changes in it when anohter CPU performance scaling
+   driver is registered already when it starts (Petr Pavlu).
+
+ - Make cpupower read TSC on each CPU right before reading MPERF so as
+   to reduce the potential time difference between the TSC and MPERF
+   accesses and improve the C0 percentage calculation (Wyes Karny).
+
+ - Fix a possible file handle leak and clean up the code in the
+   sysfs_get_enabled() function in cpupower (Hao Zeng).
+
+Thanks!
+
+
+---------------
+
+Hao Zeng (1):
+      cpupower:Fix resource leaks in sysfs_get_enabled()
+
+Petr Pavlu (1):
+      cpufreq: ACPI: Prevent a warning when another frequency driver is loaded
+
+Wyes Karny (1):
+      cpupower: Make TSC read per CPU for Mperf monitor
+
+---------------
+
+ drivers/cpufreq/acpi-cpufreq.c                     |  2 +-
+ drivers/cpufreq/pcc-cpufreq.c                      |  2 +-
+ tools/power/cpupower/lib/powercap.c                | 23 +++++++++++-----
+ .../cpupower/utils/idle_monitor/mperf_monitor.c    | 31 ++++++++++------------
+ 4 files changed, 32 insertions(+), 26 deletions(-)
