@@ -2,128 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C6B870926E
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 11:03:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7B4E70928A
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 11:03:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbjESJC5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 05:02:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48684 "EHLO
+        id S231292AbjESJD5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 05:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbjESJCy (ORCPT
+        with ESMTP id S229783AbjESJDx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 05:02:54 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48EFEFB
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 02:02:52 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 552991FB;
-        Fri, 19 May 2023 02:03:36 -0700 (PDT)
-Received: from [10.57.73.191] (unknown [10.57.73.191])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D578A3F73F;
-        Fri, 19 May 2023 02:02:49 -0700 (PDT)
-Message-ID: <88c125fd-2294-4650-65b1-6be56589120e@arm.com>
-Date:   Fri, 19 May 2023 10:02:48 +0100
+        Fri, 19 May 2023 05:03:53 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9451C1988;
+        Fri, 19 May 2023 02:03:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BW3+KX2guWyCvmem3Ep4CiQwNiw+JjvnRT0IcRIMs3toCNbucaf231wbiDIrwsCplgZlwKt46fwykIveoVheJAQw9vNIwKVQjPVNWW1anX1Eey9dO/XyGNw1lc83MSiAXrPD2+jSo8q7PdspO1K3iGP3hJWB3TLuI38M0NW0j39UtGtleLdH5WelEzqno6svWm9jAPdDyFD0IlEnqYOusnqCnYvZUfE8/Qg6zKrQeDQOhJsUQs4bmtYMw1BWIb5rSkpUEv0bE0aCj42ZTm4+26COqlhsXA9Ubj508w5kC85u2DPoaN0K4ZV839Yt4RVRsY6BWceWc8vYqg3/Xtz9pQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sRX/hUM7cCAzaLs+Ic2alsQ0rXC0oJcJ3f4NoNSmaUQ=;
+ b=iWPTpEyUqJzEtVxlvNEjyL1fk8XdsTBjUPnzvUk3Fc+K9M0xXa4JkUihhCiIHWkIqNsj61gLQaBal8kPmykkj3e5sKLHDXbSBXF+x4WC20xIpcKAtiiUuJj4MDPjWOiugkEiC3z7mR34Lr3ZYBYHsh2/Z/fRKv2pjI5AUsu+sXWJbYRUwqoLccIWl4U9m8PDTrCHoB9unTZsMqDtGeGnT6OmnMvspCKjoTtIGVrzgQHKlU41dYqdVyW/jMrpCojatdkqooFRiBYMOFPj6O3+Qdh2C1tkDBFwqO7bxeXNbcXKpizb9vJHGGS730GQRgzCHfUzGV4S0PH2SDvj2DtjYw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sRX/hUM7cCAzaLs+Ic2alsQ0rXC0oJcJ3f4NoNSmaUQ=;
+ b=SERMzXRgtZcgAVddnCpvcvhvXLx7isEwFGpmgnlx5rNwm/ueLlUk1DjPGVizbSMQm5szs1QuRfGlxgtaWlgTXYz839ILUIp9PzG8KNKKK5n0pWQSCofVPfHMr92cd5EBeB+/5eWC1J7nO+jBLFEFexqBynj47axcLju90CFNmIc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by SA1PR13MB6541.namprd13.prod.outlook.com (2603:10b6:806:3a7::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.6; Fri, 19 May
+ 2023 09:03:21 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6411.021; Fri, 19 May 2023
+ 09:03:21 +0000
+Date:   Fri, 19 May 2023 11:03:07 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        Arun Ramadoss <arun.ramadoss@microchip.com>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH net-next v3 2/2] net: dsa: microchip: ksz8: Add function
+ to configure downstream ports for KSZ8xxx
+Message-ID: <ZGc7S7hp5DMmNh2W@corigine.com>
+References: <20230518092913.977705-1-o.rempel@pengutronix.de>
+ <20230518092913.977705-3-o.rempel@pengutronix.de>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230518092913.977705-3-o.rempel@pengutronix.de>
+X-ClientProxiedBy: AS4P192CA0018.EURP192.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5e1::7) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.0
-Subject: Re: [PATCH v2 2/5] mm: damon must atomically clear young on ptes and
- pmds
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        SeongJae Park <sj@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Uladzislau Rezki <urezki@gmail.com>, Zi Yan <ziy@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        damon@lists.linux.dev
-References: <20230518110727.2106156-1-ryan.roberts@arm.com>
- <20230518110727.2106156-3-ryan.roberts@arm.com>
- <CAOUHufYXuH+mUNAtiRbAqqKTKO-nGR248Z2MVgGzMJqYu8yawQ@mail.gmail.com>
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <CAOUHufYXuH+mUNAtiRbAqqKTKO-nGR248Z2MVgGzMJqYu8yawQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SA1PR13MB6541:EE_
+X-MS-Office365-Filtering-Correlation-Id: a805750f-8ef4-4c1d-e729-08db5847e4db
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: oOqfWESX/KZuUTp2r1CJdGqyhB4s5FydNimet6dZcGVnXZ5qux1qCiRsha11bn2qZjSGy80OFWNx98xHB4vAuv0OP8LIDducK5GsKmBI0v2In0vdt7eHMN1v5Cwkd2dyrk+/4ifLBTcjwcM2wN+06VfNRgOMbR3511Ww72eCXY/7rubbnIbBWRfXYb42BjGnM0Kq59ciqsKpgQSD4kTCYFBX7kTnILdDMuZmYt7EevK0OuYosIWuwnFwxFmp6Dfa+eyLi57Fw9OoYGdevRn5E1wx5bUYnc2dUcqGWxeIR+oeqIdn4WK43SooAC6jkG7WMHPQL8fzjYKHGLUmvB1S4UKFMN++3LVxsOm/Pp/dAOUgL8eIUyxhYjPfnw0Y8iT3u6wqHnizEyYXHQlHDnY4P2TNldpyEGnLLuKaRjdttmLZUfSm2UN0ZsYb9c51q+o8YnvKQuQj1iba6PVbbRECiZj/DbHexXRYX5zFMnHZr8TyM1tEKNcgNBsbsMF7nOqdiEfkg5xptBD7tw0xRvSpLTjN9mM6gxLmuaI2oj9Qi1K2rGNe49bc+aS86kZQE0u23Qr6moVk9I4uxvCDbTwka9haIAEWBBGkgPxap+O78/HGHDTeRfOon0BuDCwJAT8qLFhJufd8CpF6N1GHEnONQg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(346002)(366004)(39840400004)(376002)(451199021)(8936002)(316002)(2906002)(478600001)(41300700001)(6916009)(8676002)(4326008)(6486002)(54906003)(44832011)(7416002)(6666004)(66476007)(66946007)(66556008)(5660300002)(6512007)(6506007)(186003)(38100700002)(83380400001)(2616005)(86362001)(36756003)(32563001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?L1HVEUUD3TVGlL6jXJYcLEHz3vJtAu138KcrwQVqD65eoULsaYjRHHfLQh4z?=
+ =?us-ascii?Q?U6NLnRBukuyq/4inwmyxIUV4RBGIBYZOwwDZFIW8woo//DPd9U0wUNZOJ9qI?=
+ =?us-ascii?Q?DG0P3SpeW8bcUSlJIGVZ4f9wa2Hp+XNvwgehedW9EYyvxgRKzEgz1d1A/qln?=
+ =?us-ascii?Q?VHGvsYLQpo/FyNRezPrb1D9cBbm1fkqvD+Am79CPgyvHj0vQxi41t8iNV3wm?=
+ =?us-ascii?Q?H/bTkpEWVMkXZe5LOIaGSJO5fojMF5FBuK0+RLV5l4VYDr9JGM1AHnYkBBdN?=
+ =?us-ascii?Q?J1ZJrqRby3uVIcolp7vdRAMBZa0yCoPSlTntriUiOEO0TfOaIHq1f1E9bMXb?=
+ =?us-ascii?Q?AponAwwhAY5mqD85Twq5EuFUpmBtGvdYH0Kcp169zpVRnoCD9N3bTfbvX+Kr?=
+ =?us-ascii?Q?0x70GegObI7xffR64vnpy7fJVG/qYHJUsxGpzvwYNCb3l166Anu/7Ndkhjj6?=
+ =?us-ascii?Q?L2kOkvAkHwsIBXg8LF7Hx+7lGEtcKNZxu4cHxg4Q8DKBsr66MZOmpmDjwdsV?=
+ =?us-ascii?Q?YWl9bPaF1WppTzFtmMCmjWTWInVSNWYIm6rbtERqR6LgibmwK1u64vysCtUV?=
+ =?us-ascii?Q?znS6KdJ813ynExuoZlLx4JEtJgBwzqhHT6vp+qkHstrf/XxH+Lk9jrPFzgOj?=
+ =?us-ascii?Q?OMG8ZWtGYbdtd57gWth5LkCx4rzlmVman6cpD+98Yjy+4mNGJ/VX8jVi/3a4?=
+ =?us-ascii?Q?fpzyZUq0+v6Qn3NfU9JhmzLJXOBzudhrZAReB5eSgjCf2IoOb+Ep3WFFqiOM?=
+ =?us-ascii?Q?l11Mn2BKZTIA2Q75PxgVv6ASojmS9AEW98/V4Zi9Bhteu4BoxzvphUh7wr6U?=
+ =?us-ascii?Q?T6LKJ4a4yoMB2v1T1fGmqdZKONtNOvWaznA4Mtt087XHXlEUXccXPkNLQqvF?=
+ =?us-ascii?Q?K/3qZ2sYveymVCt6Ceonf92iXcMr/b6ByyqUizEeZy7HRvoQZt7dSGYK756q?=
+ =?us-ascii?Q?fkMW45wzVWMOX4aHqKgTYBZy8vjKBPFD9ODY0JpBGhXk4FCc5Fo6JqtSUzRa?=
+ =?us-ascii?Q?Ll1RbxONkk0ihfMQSj0geXV01yzy7P3adaC2yHP4AFb3oET17w4anxnuTfmb?=
+ =?us-ascii?Q?iHwB6BVaI09lCgwTVAp3SUp3pIlEFQWHiomKx63w8L/0D/RZKMmKpYi35ukV?=
+ =?us-ascii?Q?/YjswttDUINzQcfaGedxa/gYw/VLDxQkg5Jz2YRdUqPhqYjmmRtKJGNicfVh?=
+ =?us-ascii?Q?8ta4yYglNnYqfuhJUBpshUrfiveZ+VWVKZ5zdJDBZ4X9kOn+GX6ay0kIBgFb?=
+ =?us-ascii?Q?LfkktChaPYiS6hugsbbb1gbKL+5oS68T+pnphn60rpkekAO3M0/DvF3rcXcV?=
+ =?us-ascii?Q?ByR7xgJlhA8QxMvpr+0GK1pC7TRYZybhR8kQy6KV98rOdoWK57rJau84fxSl?=
+ =?us-ascii?Q?+PMAkZzN5Bt2o6hudFtyAX7VPZ/HEbOG3Ale/3uJTbLh6X/gVggytGFmP69p?=
+ =?us-ascii?Q?MbyvCyg4AMWOslUdp+euI6QeGmlfRRidl0WFAzUX/MAKoYm0RMTmGYM+cTcV?=
+ =?us-ascii?Q?av5TBpy1KFO0vn/dGSB62QNOm9ezxFIA//132FzDGpDgLWus+h9ss3pUMe2j?=
+ =?us-ascii?Q?gzLfB4sxdhiK0WAHadRtHSOxMI71nJQ41Mf9nI28CLlscrY93nvx8yQqmuyv?=
+ =?us-ascii?Q?JWEsP3IrcQljt+8T+6Ragrne37BN2irkr/BOUqyxXkMhUkURK8YVa0EQHVT4?=
+ =?us-ascii?Q?MkyT8A=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a805750f-8ef4-4c1d-e729-08db5847e4db
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2023 09:03:20.9918
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tP5AwSSGhHRTgacTpbbjuWS31uK827yBgS0fes5wyGQcpMajtaYSn9ye2PHOBlu8O7cbNSfjtGElilJVQhHYRrP42QP04XUksleWGUz8f/Y=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR13MB6541
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/05/2023 00:19, Yu Zhao wrote:
-> On Thu, May 18, 2023 at 5:07 AM Ryan Roberts <ryan.roberts@arm.com> wrote:
->>
->> It is racy to non-atomically read a pte, then clear the young bit, then
->> write it back as this could discard dirty information. Further, it is
->> bad practice to directly set a pte entry within a table. Instead
->> clearing young must go through the arch-provided helper,
->> ptep_test_and_clear_young() to ensure it is modified atomically and to
->> give the arch code visibility and allow it to check (and potentially
->> modify) the operation.
->>
->> Fixes: 46c3a0accdc4 ("mm/damon/vaddr: separate commonly usable functions")
+On Thu, May 18, 2023 at 11:29:13AM +0200, Oleksij Rempel wrote:
+> This patch introduces the function 'ksz8_downstream_link_up' to the
+> Microchip KSZ8xxx driver. This function configures the flow control settings
+> for the downstream ports of the switch based on desired settings and the
+> current duplex mode.
 > 
-> This should be a separate patch, since it's independent from what the
-> series tries to do.
+> The KSZ8795 switch, unlike the KSZ8873, supports asynchronous pause control.
+> However, a single bit controls both RX and TX pause, so we can't enforce
+> asynchronous pause control. The flow control can be set based on the
+> auto-negotiation process, depending on the capabilities of both link partners.
 > 
-> And that patch should cc stable, since it fixes user data corruption.
-
-Fair point. The first 3 patches are fixes for issues I found during the
-conversion. So if you're ok with it, I'll split into 2 series; the first 3
-patches in the first, and the conversion to ptep_deref() (or ptep_get(), as per
-your comments in the other thread) in the second. I guess the whole first series
-should go to stable.
-
-Let me know if you disagree.
-
+> For the KSZ8873, the PORT_FORCE_FLOW_CTRL bit can be set by the hardware
+> bootstrap, ignoring the auto-negotiation result. Therefore, even in
+> auto-negotiation mode, we need to ensure that the PORT_FORCE_FLOW_CTRL bit is
+> correctly set.
 > 
->> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
->> Reviewed-by: Zi Yan <ziy@nvidia.com>
->> ---
->>  mm/damon/ops-common.c | 16 ++++++----------
->>  mm/damon/ops-common.h |  4 ++--
->>  mm/damon/paddr.c      |  4 ++--
->>  mm/damon/vaddr.c      |  4 ++--
->>  4 files changed, 12 insertions(+), 16 deletions(-)
->>
->> diff --git a/mm/damon/ops-common.c b/mm/damon/ops-common.c
->> index cc63cf953636..acc264b97903 100644
->> --- a/mm/damon/ops-common.c
->> +++ b/mm/damon/ops-common.c
->> @@ -37,7 +37,7 @@ struct folio *damon_get_folio(unsigned long pfn)
->>         return folio;
->>  }
->>
->> -void damon_ptep_mkold(pte_t *pte, struct mm_struct *mm, unsigned long addr)
->> +void damon_ptep_mkold(pte_t *pte, struct vm_area_struct *vma, unsigned long addr)
->>  {
->>         bool referenced = false;
->>         struct folio *folio = damon_get_folio(pte_pfn(*pte));
->> @@ -45,13 +45,11 @@ void damon_ptep_mkold(pte_t *pte, struct mm_struct *mm, unsigned long addr)
->>         if (!folio)
->>                 return;
->>
->> -       if (pte_young(*pte)) {
->> +       if (ptep_test_and_clear_young(vma, addr, pte))
->>                 referenced = true;
->> -               *pte = pte_mkold(*pte);
->> -       }
->>
->>  #ifdef CONFIG_MMU_NOTIFIER
->> -       if (mmu_notifier_clear_young(mm, addr, addr + PAGE_SIZE))
->> +       if (mmu_notifier_clear_young(vma->vm_mm, addr, addr + PAGE_SIZE))
->>                 referenced = true;
->>  #endif /* CONFIG_MMU_NOTIFIER */
+> In the absence of auto-negotiation, we will enforce synchronous pause control
+> for the KSZ8795 switch.
 > 
-> Use ptep_clear_young_notify(). Similar below.
+> Note: It is currently not possible to force disable flow control on a port if
+> we still advertise pause support. This configuration is not currently supported
+> by Linux, and it may not make practical sense. However, it's essential to
+> understand this limitation when working with the KSZ8873 and similar devices.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 
-This looks sensible but I'd like clarification from SeongJae: Are you happy for
-me to do this refactoring as part of the patch?
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
-Thanks,
-Ryan
+> +static void ksz8_downstream_link_up(struct ksz_device *dev, int port,
+> +				   int duplex, bool tx_pause, bool rx_pause)
+> +{
+> +	const u16 *regs = dev->info->regs;
+> +	u8 ctrl = 0;
+> +	int ret;
+> +
+> +	/*
+> +	 * The KSZ8795 switch differs from the KSZ8873 by supporting
+> +	 * asynchronous pause control. However, since a single bit is used to
+> +	 * control both RX and TX pause, we can't enforce asynchronous pause
+> +	 * control - both TX and RX pause will be either enabled or disabled
+> +	 * together.
+> +	 *
+> +	 * If auto-negotiation is enabled, we usually allow the flow control to
+> +	 * be determined by the auto-negotiation process based on the
+> +	 * capabilities of both link partners. However, for KSZ8873, the
+> +	 * PORT_FORCE_FLOW_CTRL bit may be set by the hardware bootstrap,
+> +	 * ignoring the auto-negotiation result. Thus, even in auto-negotiatio
+> +	 * mode, we need to ensure that the PORT_FORCE_FLOW_CTRL bit is
+> +	 * properly cleared.
+> +	 *
+> +	 * In the absence of auto-negotiation, we will enforce synchronous
+> +	 * pause control for both variants of switches - KSZ8873 and KSZ8795.
+> +	 */
 
+nit: multi-line comments in networking code are like this:
+
+	/* This is
+	 * a wrap.
+	 */
+
+...
