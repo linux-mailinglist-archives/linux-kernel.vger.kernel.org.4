@@ -2,204 +2,1742 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A9C2709660
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 13:22:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2B32709661
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 13:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231341AbjESLWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 07:22:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56536 "EHLO
+        id S231508AbjESLWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 07:22:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjESLWe (ORCPT
+        with ESMTP id S230273AbjESLWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 07:22:34 -0400
-Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CF0113
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 04:22:33 -0700 (PDT)
-Received: by mail-vk1-xa36.google.com with SMTP id 71dfb90a1353d-45702d3d92cso464885e0c.1
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 04:22:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684495353; x=1687087353;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z/RMKPgMDb/kezo+OD6W99hnCs52+On33aMPIh/ueFE=;
-        b=ACXUEdWz5c7l2NrF5+/CK2ZFLzXNxuvrYg7WIWTFSUJEwhpdUkdkZD91WMvzdDyyza
-         H5zVTKtWleimNWlPMzMHEQ4KTnvA9rpvYM9s7/igDmHigEkfBcoaGesM18yL/UKre65H
-         ZKjeKQPyOojnU5NuUd6DVOZBh4cY42y//uxV2fLQgy7cWVTmbFbGGxz+SaNdBwN2sZGR
-         z6bZU5rEaeYN8eF7s/CffV03jbnnmTQkuh/Lrrpvqoj2E6vxU7Qnfq7MEomHvXKVoEdB
-         Pp2XyeVDHIn8/BALLzJuYx3+L+sVJfbFrbKHFbrb2Y2fKu5maxtgrQpQWmzfQS5bhbHA
-         iFlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684495353; x=1687087353;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Z/RMKPgMDb/kezo+OD6W99hnCs52+On33aMPIh/ueFE=;
-        b=HzBUaQ+WuKlRb2nlxwrJm4FcSrY2BQCm1AIsXamzO3JcCnLZxlgLg5GG315tiJMdph
-         L0qe72DrlClup3HNfwDyxF3fGbstbeTbGMnK1M0dZEKOfjo8aDjoUvS9JXexfw84mGkt
-         nlqAPKYVm/KbT+NesnC4P1J/ctQk2eu8X95ZBL69aiz9+L/Gtq/n5y8eke+zbHYIPoo1
-         f5gu+GaMwZ82c6SF0MxQxtoswlgEOf2T0eGopaETpUBl6YjHpNNyxKzoIqUjJVEjh5+r
-         3J6icEVgbZLtaJYe7lD+AafMacsZsvdohmx1yDGT3UF1UhCjZ8lmQ3lY2VIy+5ybIpYP
-         nZCA==
-X-Gm-Message-State: AC+VfDzlxJG6QWZ3cC1oaBuEY3xODRB0D/APqhCFIdKAWyIZpm9d31w/
-        aEEPY6v2SZOCdW+5xQRXH8nuD3QlI/lHBIo43UsE3w==
-X-Google-Smtp-Source: ACHHUZ7m3qaP/XE7vb1368EreQjFE2cU1V3DCULqQOCIm46K9tyTtrCNoT9GRM8U6EPOAVWlCCXig+GTn2cUepThfS0=
-X-Received: by 2002:a67:ba03:0:b0:42c:543a:ab2a with SMTP id
- l3-20020a67ba03000000b0042c543aab2amr584690vsn.35.1684495352840; Fri, 19 May
- 2023 04:22:32 -0700 (PDT)
+        Fri, 19 May 2023 07:22:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB062F0;
+        Fri, 19 May 2023 04:22:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D1F26173F;
+        Fri, 19 May 2023 11:22:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3239C433EF;
+        Fri, 19 May 2023 11:22:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684495349;
+        bh=l5jggaBaF9rYhDzesT2a1R8AWgdMAigfRZLPmyeS4Og=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=taf0lcz/gkLKPJMBS96p3wcB4usm5wAT2KrIP0L45H42J328N6jrnGHiB5dpMCnxm
+         BAo8cTa5pCpKDt9cR93ERVs+xWvpKVBwCFIPXSuTsJzrEeY2fOQXjXHh4b0pABVlJi
+         A++CfgCIBp06v6AuzHzH8K5qIvRgrTKJplAsMUU13vwZfTbAAqs8K5sPRHWZjV800A
+         GDL5L9isoxISFyTX5UYELcvn9OzI3LrduKzmUHG6oQXaThGOvzcsn6Z0kAa/KM118O
+         7WKbLPz5MZn3Jfd7YreLh4gPYvEaWMmDX4gVyvz2syLDocDzMFNQ1SZjvJWB1tb6uG
+         fiJZ71mBLCVnw==
+Date:   Fri, 19 May 2023 16:52:25 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Kelvin Cao <kelvin.cao@microchip.com>
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        logang@deltatee.com, george.ge@microchip.com,
+        christophe.jaillet@wanadoo.fr, hch@infradead.org
+Subject: Re: [PATCH v5 1/1] dmaengine: switchtec-dma: Introduce Switchtec DMA
+ engine PCI driver
+Message-ID: <ZGdb8c2JfPTRexJT@matsya>
+References: <20230518165920.897620-1-kelvin.cao@microchip.com>
+ <20230518165920.897620-2-kelvin.cao@microchip.com>
 MIME-Version: 1.0
-References: <20230515130553.2311248-1-jeffxu@chromium.org> <20230515130553.2311248-3-jeffxu@chromium.org>
- <6dbbc3da-78c9-8101-d52a-0be47da9d67e@intel.com> <CALmYWFtu-WzOTEs2aWU3zMW=KZUjaaL7OTE7hQtHjfwQfQNyEA@mail.gmail.com>
- <c53c03e8-529f-5b72-42ab-f32f50aaab35@intel.com>
-In-Reply-To: <c53c03e8-529f-5b72-42ab-f32f50aaab35@intel.com>
-From:   =?UTF-8?Q?Stephen_R=C3=B6ttger?= <sroettger@google.com>
-Date:   Fri, 19 May 2023 13:22:21 +0200
-Message-ID: <CAEAAPHb5wzn6=9sL92-wq7mwT0-iu7NVmzpWM7tSiN85kZYO9w@mail.gmail.com>
-Subject: Re: [PATCH 2/6] PKEY: Add arch_check_pkey_enforce_api()
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Jeff Xu <jeffxu@google.com>, jeffxu@chromium.org, luto@kernel.org,
-        jorgelo@chromium.org, keescook@chromium.org, groeck@chromium.org,
-        jannh@google.com, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, linux-hardening@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000026e13e05fc0a23ed"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230518165920.897620-2-kelvin.cao@microchip.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000026e13e05fc0a23ed
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+On 18-05-23, 09:59, Kelvin Cao wrote:
+> Some Switchtec Switches can expose DMA engines via extra PCI functions
+> on the upstream ports. At most one such function can be supported on
+> each upstream port. Each function can have one or more DMA channels.
+> 
+> Implement core PCI driver skeleton and DMA engine callbacks.
+> 
+> Signed-off-by: Kelvin Cao <kelvin.cao@microchip.com>
+> Co-developed-by: George Ge <george.ge@microchip.com>
+> Signed-off-by: George Ge <george.ge@microchip.com>
+> ---
+>  MAINTAINERS                 |    6 +
+>  drivers/dma/Kconfig         |    9 +
+>  drivers/dma/Makefile        |    1 +
+>  drivers/dma/switchtec_dma.c | 1570 +++++++++++++++++++++++++++++++++++
+>  4 files changed, 1586 insertions(+)
+>  create mode 100644 drivers/dma/switchtec_dma.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index e0ad886d3163..24e8d4463592 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -20346,6 +20346,12 @@ S:	Supported
+>  F:	include/net/switchdev.h
+>  F:	net/switchdev/
+>  
+> +SWITCHTEC DMA DRIVER
+> +M:	Kelvin Cao <kelvin.cao@microchip.com>
+> +L:	dmaengine@vger.kernel.org
+> +S:	Maintained
+> +F:	drivers/dma/switchtec_dma.c
+> +
+>  SY8106A REGULATOR DRIVER
+>  M:	Icenowy Zheng <icenowy@aosc.io>
+>  S:	Maintained
+> diff --git a/drivers/dma/Kconfig b/drivers/dma/Kconfig
+> index f5f422f9b850..cfc8b1988a3b 100644
+> --- a/drivers/dma/Kconfig
+> +++ b/drivers/dma/Kconfig
+> @@ -610,6 +610,15 @@ config SPRD_DMA
+>  	help
+>  	  Enable support for the on-chip DMA controller on Spreadtrum platform.
+>  
+> +config SWITCHTEC_DMA
+> +	tristate "Switchtec PSX/PFX Switch DMA Engine Support"
+> +	depends on PCI
+> +	select DMA_ENGINE
+> +	help
+> +	  Some Switchtec PSX/PFX PCIe Switches support additional DMA engines.
+> +	  These are exposed via an extra function on the switch's upstream
+> +	  port.
+> +
+>  config TXX9_DMAC
+>  	tristate "Toshiba TXx9 SoC DMA support"
+>  	depends on MACH_TX49XX
+> diff --git a/drivers/dma/Makefile b/drivers/dma/Makefile
+> index a4fd1ce29510..977c97cda53d 100644
+> --- a/drivers/dma/Makefile
+> +++ b/drivers/dma/Makefile
+> @@ -70,6 +70,7 @@ obj-$(CONFIG_STM32_DMA) += stm32-dma.o
+>  obj-$(CONFIG_STM32_DMAMUX) += stm32-dmamux.o
+>  obj-$(CONFIG_STM32_MDMA) += stm32-mdma.o
+>  obj-$(CONFIG_SPRD_DMA) += sprd-dma.o
+> +obj-$(CONFIG_SWITCHTEC_DMA) += switchtec_dma.o
+>  obj-$(CONFIG_TXX9_DMAC) += txx9dmac.o
+>  obj-$(CONFIG_TEGRA186_GPC_DMA) += tegra186-gpc-dma.o
+>  obj-$(CONFIG_TEGRA20_APB_DMA) += tegra20-apb-dma.o
+> diff --git a/drivers/dma/switchtec_dma.c b/drivers/dma/switchtec_dma.c
+> new file mode 100644
+> index 000000000000..2df6ad5c3ce6
+> --- /dev/null
+> +++ b/drivers/dma/switchtec_dma.c
+> @@ -0,0 +1,1570 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Microchip Switchtec(tm) DMA Controller Driver
+> + * Copyright (c) 2023, Kelvin Cao <kelvin.cao@microchip.com>
+> + * Copyright (c) 2023, Microchip Corporation
+> + */
+> +
+> +#include <linux/circ_buf.h>
+> +#include <linux/dmaengine.h>
+> +#include <linux/module.h>
+> +#include <linux/pci.h>
+> +#include <linux/delay.h>
+> +
+> +#include "dmaengine.h"
+> +
+> +MODULE_DESCRIPTION("Switchtec PCIe Switch DMA Engine");
+> +MODULE_VERSION("0.1");
+> +MODULE_LICENSE("GPL");
+> +MODULE_AUTHOR("Kelvin Cao");
+> +
+> +#define	SWITCHTEC_DMAC_CHAN_CTRL_OFFSET		0x1000
+> +#define	SWITCHTEC_DMAC_CHAN_CFG_STS_OFFSET	0x160000
+> +
+> +#define SWITCHTEC_DMA_CHAN_HW_REGS_SIZE		0x1000
+> +#define SWITCHTEC_DMA_CHAN_FW_REGS_SIZE		0x80
+> +
+> +#define SWITCHTEC_REG_CAP		0x80
+> +#define SWITCHTEC_REG_CHAN_CNT		0x84
+> +#define SWITCHTEC_REG_TAG_LIMIT		0x90
+> +#define SWITCHTEC_REG_CHAN_STS_VEC	0x94
+> +#define SWITCHTEC_REG_SE_BUF_CNT	0x98
+> +#define SWITCHTEC_REG_SE_BUF_BASE	0x9a
+> +
+> +#define SWITCHTEC_DESC_MAX_SIZE		0x100000
+> +
+> +#define SWITCHTEC_CHAN_CTRL_PAUSE	BIT(0)
+> +#define SWITCHTEC_CHAN_CTRL_HALT	BIT(1)
+> +#define SWITCHTEC_CHAN_CTRL_RESET	BIT(2)
+> +#define SWITCHTEC_CHAN_CTRL_ERR_PAUSE	BIT(3)
+> +
+> +#define SWITCHTEC_CHAN_STS_PAUSED	BIT(9)
+> +#define SWITCHTEC_CHAN_STS_HALTED	BIT(10)
+> +#define SWITCHTEC_CHAN_STS_PAUSED_MASK	GENMASK(29, 13)
+> +
+> +static const char * const channel_status_str[] = {
+> +	[13] = "received a VDM with length error status",
+> +	[14] = "received a VDM or Cpl with Unsupported Request error status",
+> +	[15] = "received a VDM or Cpl with Completion Abort error status",
+> +	[16] = "received a VDM with ECRC error status",
+> +	[17] = "received a VDM with EP error status",
+> +	[18] = "received a VDM with Reserved Cpl error status",
+> +	[19] = "received only part of split SE CplD",
+> +	[20] = "the ISP_DMAC detected a Completion Time Out",
+> +	[21] = "received a Cpl with Unsupported Request status",
+> +	[22] = "received a Cpl with Completion Abort status",
+> +	[23] = "received a Cpl with a reserved status",
+> +	[24] = "received a TLP with ECRC error status in its metadata",
+> +	[25] = "received a TLP with the EP bit set in the header",
+> +	[26] = "the ISP_DMAC tried to process a SE with an invalid Connection ID",
+> +	[27] = "the ISP_DMAC tried to process a SE with an invalid Remote Host interrupt",
+> +	[28] = "a reserved opcode was detected in an SE",
+> +	[29] = "received a SE Cpl with error status",
+> +};
+> +
+> +struct chan_hw_regs {
+> +	u16 cq_head;
+> +	u16 rsvd1;
+> +	u16 sq_tail;
+> +	u16 rsvd2;
+> +	u8 ctrl;
+> +	u8 rsvd3[3];
+> +	u16 status;
+> +	u16 rsvd4;
+> +};
+> +
+> +enum {
+> +	PERF_BURST_SCALE = 0x1,
+> +	PERF_BURST_SIZE = 0x6,
+> +	PERF_INTERVAL = 0x0,
+> +	PERF_MRRS = 0x3,
+> +	PERF_ARB_WEIGHT = 0x1,
+> +};
+> +
+> +enum {
+> +	PERF_BURST_SCALE_SHIFT = 0x2,
+> +	PERF_BURST_SCALE_MASK = 0x3,
+> +	PERF_MRRS_SHIFT = 0x4,
+> +	PERF_MRRS_MASK = 0x7,
+> +	PERF_INTERVAL_SHIFT = 0x8,
+> +	PERF_INTERVAL_MASK = 0x7,
+> +	PERF_BURST_SIZE_SHIFT = 0xc,
+> +	PERF_BURST_SIZE_MASK = 0x7,
+> +	PERF_ARB_WEIGHT_SHIFT = 0x18,
+> +	PERF_ARB_WEIGHT_MASK = 0xff,
+> +};
+> +
+> +enum {
+> +	PERF_MIN_INTERVAL = 0,
+> +	PERF_MAX_INTERVAL = 0x7,
+> +	PERF_MIN_BURST_SIZE = 0,
+> +	PERF_MAX_BURST_SIZE = 0x7,
+> +	PERF_MIN_BURST_SCALE = 0,
+> +	PERF_MAX_BURST_SCALE = 0x2,
+> +	PERF_MIN_MRRS = 0,
+> +	PERF_MAX_MRRS = 0x7,
+> +};
+> +
+> +enum {
+> +	SE_BUF_BASE_SHIFT = 0x2,
+> +	SE_BUF_BASE_MASK = 0x1ff,
+> +	SE_BUF_LEN_SHIFT = 0xc,
+> +	SE_BUF_LEN_MASK = 0x1ff,
+> +	SE_THRESH_SHIFT = 0x17,
+> +	SE_THRESH_MASK = 0x1ff,
+> +};
+> +
+> +#define SWITCHTEC_CHAN_ENABLE	BIT(1)
+> +
+> +struct chan_fw_regs {
+> +	u32 valid_en_se;
+> +	u32 cq_base_lo;
+> +	u32 cq_base_hi;
+> +	u16 cq_size;
+> +	u16 rsvd1;
+> +	u32 sq_base_lo;
+> +	u32 sq_base_hi;
+> +	u16 sq_size;
+> +	u16 rsvd2;
+> +	u32 int_vec;
+> +	u32 perf_cfg;
+> +	u32 rsvd3;
+> +	u32 perf_latency_selector;
+> +	u32 perf_fetched_se_cnt_lo;
+> +	u32 perf_fetched_se_cnt_hi;
+> +	u32 perf_byte_cnt_lo;
+> +	u32 perf_byte_cnt_hi;
+> +	u32 rsvd4;
+> +	u16 perf_se_pending;
+> +	u16 perf_se_buf_empty;
+> +	u32 perf_chan_idle;
+> +	u32 perf_lat_max;
+> +	u32 perf_lat_min;
+> +	u32 perf_lat_last;
+> +	u16 sq_current;
+> +	u16 sq_phase;
+> +	u16 cq_current;
+> +	u16 cq_phase;
+> +};
+> +
+> +enum cmd {
+> +	CMD_GET_HOST_LIST = 1,
+> +	CMD_REGISTER_BUF = 2,
+> +	CMD_UNREGISTER_BUF = 3,
+> +	CMD_GET_BUF_LIST = 4,
+> +	CMD_GET_OWN_BUF_LIST = 5,
+> +};
+> +
+> +enum cmd_status {
+> +	CMD_STATUS_IDLE = 0,
+> +	CMD_STATUS_INPROGRESS = 0x1,
+> +	CMD_STATUS_DONE = 0x2,
+> +	CMD_STATUS_ERROR = 0xFF,
+> +};
+> +
+> +struct switchtec_dma_chan {
+> +	struct switchtec_dma_dev *swdma_dev;
+> +	struct dma_chan dma_chan;
+> +	struct chan_hw_regs __iomem *mmio_chan_hw;
+> +	struct chan_fw_regs __iomem *mmio_chan_fw;
+> +	spinlock_t hw_ctrl_lock;
+> +
+> +	struct tasklet_struct desc_task;
+> +	spinlock_t submit_lock;
+> +	bool ring_active;
+> +	int cid;
+> +	spinlock_t complete_lock;
+> +	bool comp_ring_active;
+> +
+> +	/* channel index and irq */
+> +	int index;
+> +	int irq;
+> +
+> +	/*
+> +	 * In driver context, head is advanced by producer while
+> +	 * tail is advanced by consumer.
+> +	 */
+> +
+> +	/* the head and tail for both desc_ring and hw_sq */
+> +	int head;
+> +	int tail;
+> +	int phase_tag;
+> +	struct switchtec_dma_desc **desc_ring;
+> +	struct switchtec_dma_hw_se_desc *hw_sq;
+> +	dma_addr_t dma_addr_sq;
+> +
+> +	/* the tail for hw_cq */
+> +	int cq_tail;
+> +	struct switchtec_dma_hw_ce *hw_cq;
+> +	dma_addr_t dma_addr_cq;
+> +
+> +	struct list_head list;
+> +};
+> +
+> +struct switchtec_dma_dev {
+> +	struct dma_device dma_dev;
+> +	struct pci_dev __rcu *pdev;
+> +	struct switchtec_dma_chan **swdma_chans;
+> +	int chan_cnt;
+> +	int chan_status_irq;
+> +	void __iomem *bar;
+> +	struct tasklet_struct chan_status_task;
+> +};
+> +
+> +static struct switchtec_dma_chan *to_switchtec_dma_chan(struct dma_chan *c)
+> +{
+> +	return container_of(c, struct switchtec_dma_chan, dma_chan);
+> +}
+> +
+> +static struct device *to_chan_dev(struct switchtec_dma_chan *swdma_chan)
+> +{
+> +	return &swdma_chan->dma_chan.dev->device;
+> +}
+> +
+> +enum switchtec_dma_opcode {
+> +	SWITCHTEC_DMA_OPC_MEMCPY = 0,
+> +	SWITCHTEC_DMA_OPC_RDIMM = 0x1,
+> +	SWITCHTEC_DMA_OPC_WRIMM = 0x2,
+> +	SWITCHTEC_DMA_OPC_RHI = 0x6,
+> +	SWITCHTEC_DMA_OPC_NOP = 0x7,
+> +};
+> +
+> +struct switchtec_dma_hw_se_desc {
+> +	u8 opc;
+> +	u8 ctrl;
+> +	__le16 tlp_setting;
+> +	__le16 rsvd1;
+> +	__le16 cid;
+> +	__le32 byte_cnt;
+> +	__le32 addr_lo; /* SADDR_LO/WIADDR_LO */
+> +	__le32 addr_hi; /* SADDR_HI/WIADDR_HI */
+> +	__le32 daddr_lo;
+> +	__le32 daddr_hi;
+> +	__le16 dfid;
+> +	__le16 sfid;
+> +};
+> +
+> +#define SWITCHTEC_SE_DFM		BIT(5)
+> +#define SWITCHTEC_SE_LIOF		BIT(6)
+> +#define SWITCHTEC_SE_BRR		BIT(7)
+> +#define SWITCHTEC_SE_CID_MASK		GENMASK(15, 0)
+> +
+> +#define SWITCHTEC_CE_SC_LEN_ERR		BIT(0)
+> +#define SWITCHTEC_CE_SC_UR		BIT(1)
+> +#define SWITCHTEC_CE_SC_CA		BIT(2)
+> +#define SWITCHTEC_CE_SC_RSVD_CPL	BIT(3)
+> +#define SWITCHTEC_CE_SC_ECRC_ERR	BIT(4)
+> +#define SWITCHTEC_CE_SC_EP_SET		BIT(5)
+> +#define SWITCHTEC_CE_SC_D_RD_CTO	BIT(8)
+> +#define SWITCHTEC_CE_SC_D_RIMM_UR	BIT(9)
+> +#define SWITCHTEC_CE_SC_D_RIMM_CA	BIT(10)
+> +#define SWITCHTEC_CE_SC_D_RIMM_RSVD_CPL	BIT(11)
+> +#define SWITCHTEC_CE_SC_D_ECRC		BIT(12)
+> +#define SWITCHTEC_CE_SC_D_EP_SET	BIT(13)
+> +#define SWITCHTEC_CE_SC_D_BAD_CONNID	BIT(14)
+> +#define SWITCHTEC_CE_SC_D_BAD_RHI_ADDR	BIT(15)
+> +#define SWITCHTEC_CE_SC_D_INVD_CMD	BIT(16)
+> +#define SWITCHTEC_CE_SC_MASK		GENMASK(16, 0)
+> +
+> +struct switchtec_dma_hw_ce {
+> +	__le32 rdimm_cpl_dw0;
+> +	__le32 rdimm_cpl_dw1;
+> +	__le32 rsvd1;
+> +	__le32 cpl_byte_cnt;
+> +	__le16 sq_head;
+> +	__le16 rsvd2;
+> +	__le32 rsvd3;
+> +	__le32 sts_code;
+> +	__le16 cid;
+> +	__le16 phase_tag;
+> +};
+> +
+> +struct switchtec_dma_desc {
+> +	struct dma_async_tx_descriptor txd;
+> +	struct switchtec_dma_hw_se_desc *hw;
+> +	u32 orig_size;
+> +	bool completed;
+> +};
+> +
+> +#define SWITCHTEC_INVALID_HFID 0xffff
+> +
+> +enum desc_type {
+> +	MEMCPY,
+> +	WIMM,
+> +	UNKNOWN_TRANSACTION,
+> +};
+> +
+> +#define SWITCHTEC_DMA_SQ_SIZE	SZ_32K
+> +#define SWITCHTEC_DMA_CQ_SIZE	SZ_32K
+> +
+> +#define SWITCHTEC_DMA_RING_SIZE	SWITCHTEC_DMA_SQ_SIZE
+> +
+> +static int wait_for_chan_status(struct chan_hw_regs __iomem *chan_hw, u32 mask,
+> +		bool set)
 
-On Fri, May 19, 2023 at 2:00=E2=80=AFAM Dave Hansen <dave.hansen@intel.com>=
- wrote:
->
-> On 5/18/23 15:51, Jeff Xu wrote:
-> >> Do you have a solid handle on all call paths that will reach
-> >> __arch_check_vma_pkey_for_write() and can you ensure they are all
-> >> non-remote?
-> > Is this about the attack scenario where the attacker uses ptrace()
-> > into the chrome process ? if so it is not in our threat model, and
-> > that is more related to sandboxing on the host.
->
-> The attacker would use *some* remote interface.  ptrace() is just one of
-> those remote interfaces.
->
-> > Or is this about io_uring? Yes, io_uring kernel thread breaks our
-> > expectations of PKRU & user space threads, however I thought the break
-> > is not just for this - any syscall involved in memory operation will
-> > break after into io_uring ?
->
-> I'm not quite following.
->
-> Please just do me a favor: have the io_uring maintainers look at your
-> proposal.  Make sure that the defenses you are building can work in a
-> process where io_uring is in use by the benign threads.
->
-> Those same folks are pretty familiar with the other, more traditional
-> I/O syscalls that have in-memory descriptors that control syscall
-> behavior like readv/writev.  Those also need a close look.
->
-> > Other than those, yes, I try to ensure the check is only used at the
-> > beginning of syscall entry in all cases, which should be non-remote I
-> > hope.
->
-> You're right that synchronous, shallow syscall paths are usually
-> non-remote.  But those aren't the problem.  The problem is that there
-> *ARE* remote accesses and those are a potential hole for this whole
-> mechanism.
->
-> Can they be closed?  I don't know.  I honestly don't have a great grasp
-> on how widespread these things are.  You'll need a much more complete
-> grasp on them than I have before this thing can go forward.
+single line would read much better! (here and few other places)
 
-I don't think the remote writes are a problem for us if they're initiated f=
-rom
-the same process. It's a case of syscalls where we need to add special
-validation in userspace.
+Also run checkpatch with --strict option, that will help catch style
+inconsistencies (i am seeing some below)
 
---00000000000026e13e05fc0a23ed
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+> +{
+> +	u32 status;
+> +	int retry = 100;
+> +	int ret = -EIO;
+> +
+> +	do {
+> +		status = readl(&chan_hw->status);
+> +		if ((set && (status & mask)) ||
+> +		    (!set && !(status & mask))) {
+> +			ret = 0;
+> +			break;
+> +		}
 
-MIIPoQYJKoZIhvcNAQcCoIIPkjCCD44CAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ggz7MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-LmNybDBMBgNVHSAERTBDMEEGCSsGAQQBoDIBKDA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5n
-bG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzANBgkqhkiG9w0BAQsFAAOCAQEANyYcO+9JZYyqQt41
-TMwvFWAw3vLoLOQIfIn48/yea/ekOcParTb0mbhsvVSZ6sGn+txYAZb33wIb1f4wK4xQ7+RUYBfI
-TuTPL7olF9hDpojC2F6Eu8nuEf1XD9qNI8zFd4kfjg4rb+AME0L81WaCL/WhP2kDCnRU4jm6TryB
-CHhZqtxkIvXGPGHjwJJazJBnX5NayIce4fGuUEJ7HkuCthVZ3Rws0UyHSAXesT/0tXATND4mNr1X
-El6adiSQy619ybVERnRi5aDe1PTwE+qNiotEEaeujz1a/+yYaaTY+k+qJcVxi7tbyQ0hi0UB3myM
-A/z2HmGEwO8hx7hDjKmKbDCCA18wggJHoAMCAQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUA
-MEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9vdCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWdu
-MRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEg
-MB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENBIC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzAR
-BgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4
-Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0EXyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuu
-l9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+JJ5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJ
-pij2aTv2y8gokeWdimFXN6x0FNx04Druci8unPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh
-6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTvriBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti
-+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8E
-BTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5NUPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEA
-S0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigHM8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9u
-bG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmUY/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaM
-ld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88
-q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcya5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/f
-hO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/XzCCBNowggPCoAMCAQICEAGkX4MOebzHzp8Y/d5N
-uOkwDQYJKoZIhvcNAQELBQAwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYt
-c2ExKjAoBgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjMgU01JTUUgQ0EgMjAyMDAeFw0yMzAzMjQx
-MDU0MjJaFw0yMzA5MjAxMDU0MjJaMCUxIzAhBgkqhkiG9w0BCQEWFHNyb2V0dGdlckBnb29nbGUu
-Y29tMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzLPyMENiepo0e0KKXnecXERM1v8X
-LP8OaCG/arg3dD1qpML+nhDtU7YL7M+uU/zvIxrine9sVeBPMAsLyIBm/r4f6mk0Zo/1Nd/I2VL7
-JpL/XH8AloTMPn8ftcCAGtMjR6GHaQJt6AFuV5SV/LMkzQ1w0TyNPSn5akNB5fuqDDSqSSiWdEcz
-QNoEndEWuInBDSbUxc2cqYzY3PpGpJjrKOy1KbJzQ8KcZvrtFZpLnWN6Ry51yog7bRBCFmCaCV2w
-6aqHjyzIZlqXlIFBPZsMUke9QkLosM0XP1eL6NpSfJclTy3ZIULo+kiW3IxdbA/JidNnmYzCfZJo
-48ZLbpQbsQIDAQABo4IB1TCCAdEwHwYDVR0RBBgwFoEUc3JvZXR0Z2VyQGdvb2dsZS5jb20wDgYD
-VR0PAQH/BAQDAgWgMB0GA1UdJQQWMBQGCCsGAQUFBwMEBggrBgEFBQcDAjAdBgNVHQ4EFgQUZ+MO
-2DeNJUdew/schvbvw4wolIIwTAYDVR0gBEUwQzBBBgkrBgEEAaAyASgwNDAyBggrBgEFBQcCARYm
-aHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wDAYDVR0TAQH/BAIwADCBmgYI
-KwYBBQUHAQEEgY0wgYowPgYIKwYBBQUHMAGGMmh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2Nh
-L2dzYXRsYXNyM3NtaW1lY2EyMDIwMEgGCCsGAQUFBzAChjxodHRwOi8vc2VjdXJlLmdsb2JhbHNp
-Z24uY29tL2NhY2VydC9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcnQwHwYDVR0jBBgwFoAUfMwKaNei
-6x4schvRzV2Vb4378mMwRgYDVR0fBD8wPTA7oDmgN4Y1aHR0cDovL2NybC5nbG9iYWxzaWduLmNv
-bS9jYS9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcmwwDQYJKoZIhvcNAQELBQADggEBAEWztMCBdTNW
-CGPLcNM/ovJHsl+VF/BsKdiiwJoodyWO9fmhOgEVex1vfc+njM0bkWC0b4U08iUPP91eksCFGhhi
-cCchsXpkAzfcKPJ7OsFd7J4xQUQPpi02r1P7Y9UKLa8nsNChf9ck1GAz1Skb77r1JWgSlHOcyuVZ
-UQ/JuUVMf/XW7flFfNybswGgFmfnBvDW1qrqBPHpEFmWeNYXISpFQj0UWyGmykQGKi8q44IPy5Qg
-uId+alGaBDlL5OAZQtmhRyh1MVd2wtgvGEfNGDGq603urx17nwEvM1gjSmOgnhEigOhhHH7DOeyt
-5zPYLaKguxLWPGXlZ0UUjA7lH3gxggJqMIICZgIBATBoMFQxCzAJBgNVBAYTAkJFMRkwFwYDVQQK
-ExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFzIFIzIFNNSU1FIENB
-IDIwMjACEAGkX4MOebzHzp8Y/d5NuOkwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIE
-IE0nAq+EvotYtTh7dWzvuIiOrnYIYYo0wWDwWWRq+Z+QMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0B
-BwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDUxOTExMjIzM1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgB
-ZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQow
-CwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCcv6CjSuln+N+w7eq5
-XdOvXNuVF5J/89mVYERuinaf71Cf7CZJaemRjWsIr08MT/piZsGiaD0HF9k1KTkTH8H7pKiI5mMR
-cu5PFlFAjOoHNJq243lZuZTWBqhVn/cKiPhrhcKhwblvOgGRZYF8BHQLO2D9GsKpp4m7PY2DgdYN
-tjhBimMLr09QKDanxV1LUXzwFWr7bEkefhU8F+zYBpsZF3f3uE7gg0dQ9X2DxdCksOkP22D2w1Pd
-mquscqxelRuU2C8fIjyfP1kzSsK5F65Pr9gY9w0o205YuV9NZWDBi5qrgysIt5vod+60vQBDaKDA
-5MnKZXDoAREL0OWXHoXT
---00000000000026e13e05fc0a23ed--
+why not use readl_poll_timeout()
+
+> +
+> +		udelay(1000);
+> +	} while (retry--);
+> +
+> +	return ret;
+> +}
+> +
+> +static int halt_channel(struct switchtec_dma_chan *swdma_chan)
+> +{
+> +	struct chan_hw_regs __iomem *chan_hw = swdma_chan->mmio_chan_hw;
+> +	struct pci_dev *pdev;
+> +	int ret;
+> +
+> +	rcu_read_lock();
+> +	pdev = rcu_dereference(swdma_chan->swdma_dev->pdev);
+> +	if (!pdev) {
+> +		ret = -ENODEV;
+> +		goto unlock_and_exit;
+> +	}
+> +
+> +	spin_lock(&swdma_chan->hw_ctrl_lock);
+> +	writeb(SWITCHTEC_CHAN_CTRL_HALT, &chan_hw->ctrl);
+> +	ret = wait_for_chan_status(chan_hw, SWITCHTEC_CHAN_STS_HALTED, true);
+> +	spin_unlock(&swdma_chan->hw_ctrl_lock);
+> +
+> +unlock_and_exit:
+> +	rcu_read_unlock();
+> +	return ret;
+> +}
+> +
+> +static int unhalt_channel(struct switchtec_dma_chan *swdma_chan)
+> +{
+> +	u8 ctrl;
+> +	struct chan_hw_regs __iomem *chan_hw = swdma_chan->mmio_chan_hw;
+> +	struct pci_dev *pdev;
+> +	int ret;
+> +
+> +	rcu_read_lock();
+> +	pdev = rcu_dereference(swdma_chan->swdma_dev->pdev);
+> +	if (!pdev) {
+> +		ret = -ENODEV;
+> +		goto unlock_and_exit;
+> +	}
+> +
+> +	spin_lock(&swdma_chan->hw_ctrl_lock);
+> +	ctrl = readb(&chan_hw->ctrl);
+> +	ctrl &= ~SWITCHTEC_CHAN_CTRL_HALT;
+> +	writeb(ctrl, &chan_hw->ctrl);
+> +	ret = wait_for_chan_status(chan_hw, SWITCHTEC_CHAN_STS_HALTED, false);
+> +	spin_unlock(&swdma_chan->hw_ctrl_lock);
+> +
+> +unlock_and_exit:
+> +	rcu_read_unlock();
+> +	return ret;
+> +}
+> +
+> +static void flush_pci_write(struct chan_hw_regs __iomem *chan_hw)
+> +{
+> +	readl(&chan_hw->cq_head);
+> +}
+> +
+> +static int reset_channel(struct switchtec_dma_chan *swdma_chan)
+> +{
+> +	struct chan_hw_regs __iomem *chan_hw = swdma_chan->mmio_chan_hw;
+> +	struct pci_dev *pdev;
+> +
+> +	rcu_read_lock();
+> +	pdev = rcu_dereference(swdma_chan->swdma_dev->pdev);
+> +	if (!pdev) {
+> +		rcu_read_unlock();
+> +		return -ENODEV;
+> +	}
+> +
+> +	spin_lock(&swdma_chan->hw_ctrl_lock);
+> +	writel(SWITCHTEC_CHAN_CTRL_RESET | SWITCHTEC_CHAN_CTRL_ERR_PAUSE,
+> +	       &chan_hw->ctrl);
+> +	flush_pci_write(chan_hw);
+> +
+> +	udelay(1000);
+> +
+> +	writel(SWITCHTEC_CHAN_CTRL_ERR_PAUSE, &chan_hw->ctrl);
+> +	spin_unlock(&swdma_chan->hw_ctrl_lock);
+> +	flush_pci_write(chan_hw);
+> +
+> +	rcu_read_unlock();
+> +	return 0;
+> +}
+> +
+> +static int pause_reset_channel(struct switchtec_dma_chan *swdma_chan)
+> +{
+> +	struct chan_hw_regs __iomem *chan_hw = swdma_chan->mmio_chan_hw;
+> +	struct pci_dev *pdev;
+> +
+> +	rcu_read_lock();
+> +	pdev = rcu_dereference(swdma_chan->swdma_dev->pdev);
+> +	if (!pdev) {
+> +		rcu_read_unlock();
+> +		return -ENODEV;
+> +	}
+> +
+> +	spin_lock(&swdma_chan->hw_ctrl_lock);
+> +	writeb(SWITCHTEC_CHAN_CTRL_PAUSE, &chan_hw->ctrl);
+> +	spin_unlock(&swdma_chan->hw_ctrl_lock);
+> +
+> +	flush_pci_write(chan_hw);
+> +
+> +	rcu_read_unlock();
+> +
+> +	/* wait 60ms to ensure no pending CEs */
+> +	mdelay(60);
+> +
+> +	return reset_channel(swdma_chan);
+> +
+
+drop the empty line here
+
+> +}
+> +
+> +static int switchtec_dma_pause(struct dma_chan *chan)
+> +{
+> +	struct switchtec_dma_chan *swdma_chan = to_switchtec_dma_chan(chan);
+> +	struct chan_hw_regs __iomem *chan_hw = swdma_chan->mmio_chan_hw;
+> +	struct pci_dev *pdev;
+> +	int ret;
+> +
+> +	rcu_read_lock();
+> +	pdev = rcu_dereference(swdma_chan->swdma_dev->pdev);
+> +	if (!pdev) {
+> +		ret = -ENODEV;
+> +		goto unlock_and_exit;
+> +	}
+> +
+> +	spin_lock(&swdma_chan->hw_ctrl_lock);
+> +	writeb(SWITCHTEC_CHAN_CTRL_PAUSE, &chan_hw->ctrl);
+> +	ret = wait_for_chan_status(chan_hw, SWITCHTEC_CHAN_STS_PAUSED, true);
+> +	spin_unlock(&swdma_chan->hw_ctrl_lock);
+> +
+> +unlock_and_exit:
+> +	rcu_read_unlock();
+> +	return ret;
+> +}
+> +
+> +static int switchtec_dma_resume(struct dma_chan *chan)
+> +{
+> +	struct switchtec_dma_chan *swdma_chan = to_switchtec_dma_chan(chan);
+> +	struct chan_hw_regs __iomem *chan_hw = swdma_chan->mmio_chan_hw;
+> +	struct pci_dev *pdev;
+> +	int ret;
+> +
+> +	rcu_read_lock();
+> +	pdev = rcu_dereference(swdma_chan->swdma_dev->pdev);
+> +	if (!pdev) {
+> +		ret = -ENODEV;
+> +		goto unlock_and_exit;
+> +	}
+> +
+> +	spin_lock(&swdma_chan->hw_ctrl_lock);
+> +	writeb(0, &chan_hw->ctrl);
+> +	ret = wait_for_chan_status(chan_hw, SWITCHTEC_CHAN_STS_PAUSED, false);
+> +	spin_unlock(&swdma_chan->hw_ctrl_lock);
+> +
+> +unlock_and_exit:
+> +	rcu_read_unlock();
+> +	return ret;
+> +}
+> +
+> +static int enable_channel(struct switchtec_dma_chan *swdma_chan)
+> +{
+> +	u32 valid_en_se;
+> +	struct chan_fw_regs __iomem *chan_fw = swdma_chan->mmio_chan_fw;
+> +	struct pci_dev *pdev;
+
+reverse christmas tree pls
+
+> +
+> +	rcu_read_lock();
+> +	pdev = rcu_dereference(swdma_chan->swdma_dev->pdev);
+> +	if (!pdev) {
+> +		rcu_read_unlock();
+> +		return -ENODEV;
+> +	}
+> +
+> +	valid_en_se = readl(&chan_fw->valid_en_se);
+> +	valid_en_se |= SWITCHTEC_CHAN_ENABLE;
+> +
+> +	writel(valid_en_se, &chan_fw->valid_en_se);
+> +
+> +	rcu_read_unlock();
+> +	return 0;
+> +}
+> +
+> +static int disable_channel(struct switchtec_dma_chan *swdma_chan)
+> +{
+> +	u32 valid_en_se;
+> +	struct chan_fw_regs __iomem *chan_fw = swdma_chan->mmio_chan_fw;
+> +	struct pci_dev *pdev;
+> +
+> +	rcu_read_lock();
+> +	pdev = rcu_dereference(swdma_chan->swdma_dev->pdev);
+> +	if (!pdev) {
+> +		rcu_read_unlock();
+> +		return -ENODEV;
+> +	}
+> +
+> +	valid_en_se = readl(&chan_fw->valid_en_se);
+> +	valid_en_se &= ~SWITCHTEC_CHAN_ENABLE;
+> +
+> +	writel(valid_en_se, &chan_fw->valid_en_se);
+> +
+> +	rcu_read_unlock();
+> +	return 0;
+
+only diff b/w enable/disable is bit ops, I guess we can have a common fn
+with argument for enable/disable
+
+> +}
+> +
+> +static struct switchtec_dma_desc *switchtec_dma_get_desc(
+> +		struct switchtec_dma_chan *swdma_chan, int i)
+> +{
+> +	return swdma_chan->desc_ring[i];
+> +}
+> +
+> +static struct switchtec_dma_hw_ce *switchtec_dma_get_ce(
+> +		struct switchtec_dma_chan *swdma_chan, int i)
+> +{
+> +	return &swdma_chan->hw_cq[i];
+> +}
+> +
+> +static void switchtec_dma_process_desc(struct switchtec_dma_chan *swdma_chan)
+> +{
+> +	struct device *chan_dev = to_chan_dev(swdma_chan);
+> +	struct dmaengine_result res;
+> +	struct switchtec_dma_desc *desc;
+> +	struct switchtec_dma_hw_ce *ce;
+> +	__le16 phase_tag;
+> +	int tail;
+> +	int cid;
+> +	int se_idx;
+> +	u32 sts_code;
+> +	int i;
+> +	__le32 *p;
+> +
+> +	do {
+> +		spin_lock_bh(&swdma_chan->complete_lock);
+> +		if (!swdma_chan->comp_ring_active) {
+> +			spin_unlock_bh(&swdma_chan->complete_lock);
+> +			break;
+> +		}
+> +
+> +		ce = switchtec_dma_get_ce(swdma_chan, swdma_chan->cq_tail);
+> +
+> +		/*
+> +		 * phase_tag is updated by hardware, ensure the value is
+> +		 * not from the cache
+> +		 */
+> +		phase_tag = smp_load_acquire(&ce->phase_tag);
+> +		if (le16_to_cpu(phase_tag) == swdma_chan->phase_tag) {
+> +			spin_unlock_bh(&swdma_chan->complete_lock);
+> +			break;
+> +		}
+> +
+> +		cid = le16_to_cpu(ce->cid);
+> +		se_idx = cid & (SWITCHTEC_DMA_SQ_SIZE - 1);
+> +		desc = switchtec_dma_get_desc(swdma_chan, se_idx);
+> +
+> +		tail = swdma_chan->tail;
+> +
+> +		res.residue = desc->orig_size - le32_to_cpu(ce->cpl_byte_cnt);
+> +
+> +		sts_code = le32_to_cpu(ce->sts_code);
+> +
+> +		if (!(sts_code & SWITCHTEC_CE_SC_MASK)) {
+> +			res.result = DMA_TRANS_NOERROR;
+> +		} else {
+> +			if (sts_code & SWITCHTEC_CE_SC_D_RD_CTO)
+> +				res.result = DMA_TRANS_READ_FAILED;
+> +			else
+> +				res.result = DMA_TRANS_WRITE_FAILED;
+> +
+> +			dev_err(chan_dev, "CID 0x%04x failed, SC 0x%08x\n", cid,
+> +				(u32)(sts_code & SWITCHTEC_CE_SC_MASK));
+> +
+> +			p = (__le32 *)ce;
+> +			for (i = 0; i < sizeof(*ce)/4; i++) {
+> +				dev_err(chan_dev, "CE DW%d: 0x%08x\n", i,
+> +					le32_to_cpu(*p));
+> +				p++;
+> +			}
+> +		}
+> +
+> +		desc->completed = true;
+> +
+> +		swdma_chan->cq_tail++;
+> +		swdma_chan->cq_tail &= SWITCHTEC_DMA_CQ_SIZE - 1;
+> +
+> +		rcu_read_lock();
+> +		if (!rcu_dereference(swdma_chan->swdma_dev->pdev)) {
+> +			rcu_read_unlock();
+> +			spin_unlock_bh(&swdma_chan->complete_lock);
+> +			return;
+> +		}
+> +		writew(swdma_chan->cq_tail, &swdma_chan->mmio_chan_hw->cq_head);
+> +		rcu_read_unlock();
+> +
+> +		if (swdma_chan->cq_tail == 0)
+> +			swdma_chan->phase_tag = !swdma_chan->phase_tag;
+> +
+> +		/*  Out of order CE */
+> +		if (se_idx != tail) {
+> +			spin_unlock_bh(&swdma_chan->complete_lock);
+> +			continue;
+> +		}
+> +
+> +		do {
+> +			dma_cookie_complete(&desc->txd);
+> +			dma_descriptor_unmap(&desc->txd);
+> +			dmaengine_desc_get_callback_invoke(&desc->txd, &res);
+> +			desc->txd.callback = NULL;
+> +			desc->txd.callback_result = NULL;
+> +			desc->completed = false;
+> +
+> +			tail++;
+> +			tail &= SWITCHTEC_DMA_SQ_SIZE - 1;
+> +
+> +			/*
+> +			 * Ensure the desc updates are visible before updating
+> +			 * the tail index
+> +			 */
+> +			smp_store_release(&swdma_chan->tail, tail);
+> +			desc = switchtec_dma_get_desc(swdma_chan,
+> +						      swdma_chan->tail);
+> +			if (!desc->completed)
+> +				break;
+> +		} while (CIRC_CNT(READ_ONCE(swdma_chan->head), swdma_chan->tail,
+> +				  SWITCHTEC_DMA_SQ_SIZE));
+> +
+> +		spin_unlock_bh(&swdma_chan->complete_lock);
+> +	} while (1);
+> +}
+> +
+> +static void switchtec_dma_abort_desc(struct switchtec_dma_chan *swdma_chan,
+> +		int force)
+> +{
+> +	struct dmaengine_result res;
+> +	struct switchtec_dma_desc *desc;
+> +
+> +	if (!force)
+> +		switchtec_dma_process_desc(swdma_chan);
+> +
+> +	spin_lock_bh(&swdma_chan->complete_lock);
+> +
+> +	while (CIRC_CNT(swdma_chan->head, swdma_chan->tail,
+> +			SWITCHTEC_DMA_SQ_SIZE) >= 1) {
+> +		desc = switchtec_dma_get_desc(swdma_chan, swdma_chan->tail);
+> +
+> +		res.residue = desc->orig_size;
+> +		res.result = DMA_TRANS_ABORTED;
+> +
+> +		dma_cookie_complete(&desc->txd);
+> +		dma_descriptor_unmap(&desc->txd);
+> +		if (!force)
+> +			dmaengine_desc_get_callback_invoke(&desc->txd, &res);
+> +		desc->txd.callback = NULL;
+> +		desc->txd.callback_result = NULL;
+> +
+> +		swdma_chan->tail++;
+> +		swdma_chan->tail &= SWITCHTEC_DMA_SQ_SIZE - 1;
+> +	}
+> +
+> +	spin_unlock_bh(&swdma_chan->complete_lock);
+> +}
+> +
+> +static void switchtec_dma_chan_stop(struct switchtec_dma_chan *swdma_chan)
+> +{
+> +	int rc;
+> +
+> +	rc = halt_channel(swdma_chan);
+> +	if (rc)
+> +		return;
+> +
+> +	rcu_read_lock();
+> +	if (!rcu_dereference(swdma_chan->swdma_dev->pdev)) {
+> +		rcu_read_unlock();
+> +		return;
+> +	}
+> +
+> +	writel(0, &swdma_chan->mmio_chan_fw->sq_base_lo);
+> +	writel(0, &swdma_chan->mmio_chan_fw->sq_base_hi);
+> +	writel(0, &swdma_chan->mmio_chan_fw->cq_base_lo);
+> +	writel(0, &swdma_chan->mmio_chan_fw->cq_base_hi);
+> +
+> +	rcu_read_unlock();
+> +}
+> +
+> +static int switchtec_dma_terminate_all(struct dma_chan *chan)
+> +{
+> +	struct switchtec_dma_chan *swdma_chan = to_switchtec_dma_chan(chan);
+> +
+> +	spin_lock_bh(&swdma_chan->complete_lock);
+> +	swdma_chan->comp_ring_active = false;
+> +	spin_unlock_bh(&swdma_chan->complete_lock);
+> +
+> +	return pause_reset_channel(swdma_chan);
+> +}
+> +
+> +static void switchtec_dma_synchronize(struct dma_chan *chan)
+> +{
+> +	struct switchtec_dma_chan *swdma_chan = to_switchtec_dma_chan(chan);
+> +	int rc;
+> +
+> +	switchtec_dma_abort_desc(swdma_chan, 1);
+> +
+> +	rc = enable_channel(swdma_chan);
+> +	if (rc)
+> +		return;
+> +
+> +	rc = reset_channel(swdma_chan);
+> +	if (rc)
+> +		return;
+> +
+> +	rc = unhalt_channel(swdma_chan);
+> +	if (rc)
+> +		return;
+> +
+> +	spin_lock_bh(&swdma_chan->submit_lock);
+> +	swdma_chan->head = 0;
+> +	spin_unlock_bh(&swdma_chan->submit_lock);
+> +
+> +	spin_lock_bh(&swdma_chan->complete_lock);
+> +	swdma_chan->comp_ring_active = true;
+> +	swdma_chan->phase_tag = 0;
+> +	swdma_chan->tail = 0;
+> +	swdma_chan->cq_tail = 0;
+> +	swdma_chan->cid = 0;
+> +	dma_cookie_init(chan);
+> +	spin_unlock_bh(&swdma_chan->complete_lock);
+> +}
+> +
+> +static void switchtec_dma_desc_task(unsigned long data)
+> +{
+> +	struct switchtec_dma_chan *swdma_chan = (void *)data;
+> +
+> +	switchtec_dma_process_desc(swdma_chan);
+> +}
+> +
+> +static void switchtec_dma_chan_status_task(unsigned long data)
+> +{
+> +	struct switchtec_dma_dev *swdma_dev = (void *)data;
+> +	struct dma_device *dma_dev = &swdma_dev->dma_dev;
+> +	struct dma_chan *chan;
+> +	struct switchtec_dma_chan *swdma_chan;
+> +	struct chan_hw_regs __iomem *chan_hw;
+> +	struct device *chan_dev;
+> +	u32 chan_status;
+> +	int bit;
+> +
+> +	list_for_each_entry(chan, &dma_dev->channels, device_node) {
+> +		swdma_chan = to_switchtec_dma_chan(chan);
+> +		chan_dev = to_chan_dev(swdma_chan);
+> +		chan_hw = swdma_chan->mmio_chan_hw;
+> +
+> +		rcu_read_lock();
+> +		if (!rcu_dereference(swdma_dev->pdev)) {
+> +			rcu_read_unlock();
+> +			return;
+> +		}
+> +
+> +		chan_status = readl(&chan_hw->status);
+> +		chan_status &= SWITCHTEC_CHAN_STS_PAUSED_MASK;
+> +		rcu_read_unlock();
+> +
+> +		bit = ffs(chan_status);
+> +		if (!bit)
+> +			dev_dbg(chan_dev, "No pause bit set.");
+> +		else
+> +			dev_err(chan_dev, "Paused, %s\n",
+> +				channel_status_str[bit - 1]);
+> +	}
+> +}
+> +
+> +static struct dma_async_tx_descriptor *switchtec_dma_prep_desc(
+> +		struct dma_chan *c, enum desc_type type, u16 dst_fid,
+> +		dma_addr_t dma_dst, u16 src_fid, dma_addr_t dma_src, u64 data,
+> +		size_t len, unsigned long flags)
+> +	__acquires(swdma_chan->submit_lock)
+> +{
+> +	struct switchtec_dma_chan *swdma_chan = to_switchtec_dma_chan(c);
+> +	struct switchtec_dma_desc *desc;
+> +	int head;
+> +	int tail;
+> +
+> +
+> +	if (type != MEMCPY && type != WIMM) {
+> +		/*
+> +		 * Keep sparse happy by restoring an even lock count on
+> +		 * this lock.
+> +		 */
+> +		__acquire(swdma_chan->submit_lock);
+> +		return NULL;
+> +	}
+> +
+> +	spin_lock_bh(&swdma_chan->submit_lock);
+> +
+> +	if (!swdma_chan->ring_active)
+> +		goto err_unlock;
+> +
+> +	tail = READ_ONCE(swdma_chan->tail);
+> +	head = swdma_chan->head;
+> +
+> +	if (!CIRC_SPACE(head, tail, SWITCHTEC_DMA_RING_SIZE))
+> +		goto err_unlock;
+> +
+> +	desc = switchtec_dma_get_desc(swdma_chan, head);
+> +
+> +	if (src_fid != SWITCHTEC_INVALID_HFID &&
+> +	    dst_fid != SWITCHTEC_INVALID_HFID)
+> +		desc->hw->ctrl |= SWITCHTEC_SE_DFM;
+> +
+> +	if (flags & DMA_PREP_INTERRUPT)
+> +		desc->hw->ctrl |= SWITCHTEC_SE_LIOF;
+> +
+> +	if (flags & DMA_PREP_FENCE)
+> +		desc->hw->ctrl |= SWITCHTEC_SE_BRR;
+> +
+> +	desc->txd.flags = flags;
+> +
+> +	desc->completed = false;
+> +	if (type == MEMCPY) {
+> +		desc->hw->opc = SWITCHTEC_DMA_OPC_MEMCPY;
+> +		desc->hw->addr_lo = cpu_to_le32(lower_32_bits(dma_src));
+> +		desc->hw->addr_hi = cpu_to_le32(upper_32_bits(dma_src));
+> +	} else {
+> +		desc->hw->opc = SWITCHTEC_DMA_OPC_WRIMM;
+> +		desc->hw->addr_lo = cpu_to_le32(lower_32_bits(data));
+> +		desc->hw->addr_hi = cpu_to_le32(upper_32_bits(data));
+> +	}
+> +	desc->hw->daddr_lo = cpu_to_le32(lower_32_bits(dma_dst));
+> +	desc->hw->daddr_hi = cpu_to_le32(upper_32_bits(dma_dst));
+> +	desc->hw->byte_cnt = cpu_to_le32(len);
+> +	desc->hw->tlp_setting = 0;
+> +	desc->hw->dfid = cpu_to_le16(dst_fid);
+> +	desc->hw->sfid = cpu_to_le16(src_fid);
+> +	swdma_chan->cid &= SWITCHTEC_SE_CID_MASK;
+> +	desc->hw->cid = cpu_to_le16(swdma_chan->cid++);
+> +	desc->orig_size = len;
+> +
+> +	head++;
+> +	head &= SWITCHTEC_DMA_RING_SIZE - 1;
+> +
+> +	/*
+> +	 * Ensure the desc updates are visible before updating the head index
+> +	 */
+> +	smp_store_release(&swdma_chan->head, head);
+> +
+> +	/* return with the lock held, it will be released in tx_submit */
+> +
+> +	return &desc->txd;
+> +
+> +err_unlock:
+> +	/*
+> +	 * Keep sparse happy by restoring an even lock count on
+> +	 * this lock.
+> +	 */
+> +	__acquire(swdma_chan->submit_lock);
+> +
+> +	spin_unlock_bh(&swdma_chan->submit_lock);
+> +	return NULL;
+> +}
+> +
+> +static struct dma_async_tx_descriptor *switchtec_dma_prep_memcpy(
+> +		struct dma_chan *c, dma_addr_t dma_dst, dma_addr_t dma_src,
+> +		size_t len, unsigned long flags)
+> +	__acquires(swdma_chan->submit_lock)
+> +{
+> +	if (len > SWITCHTEC_DESC_MAX_SIZE) {
+> +		/*
+> +		 * Keep sparse happy by restoring an even lock count on
+> +		 * this lock.
+> +		 */
+> +		__acquire(swdma_chan->submit_lock);
+> +		return NULL;
+> +	}
+> +
+> +	return switchtec_dma_prep_desc(c, MEMCPY, SWITCHTEC_INVALID_HFID,
+> +				       dma_dst, SWITCHTEC_INVALID_HFID, dma_src,
+> +				       0, len, flags);
+> +}
+> +
+> +static struct dma_async_tx_descriptor *switchtec_dma_prep_wimm_data(
+> +		struct dma_chan *c, dma_addr_t dma_dst, u64 data,
+> +		unsigned long flags)
+> +	__acquires(swdma_chan->submit_lock)
+> +{
+
+can you please explain what is meant by wimm data and how it us used?
+
+> +	size_t len = sizeof(data);
+> +	struct switchtec_dma_chan *swdma_chan = to_switchtec_dma_chan(c);
+> +	struct device *chan_dev = to_chan_dev(swdma_chan);
+> +
+> +	if ((len == 8) && (dma_dst & ((1 << DMAENGINE_ALIGN_8_BYTES) - 1))) {
+> +		dev_err(chan_dev,
+> +			"QW WIMM dst addr 0x%08x_%08x not QW aligned!\n",
+> +			upper_32_bits(dma_dst), lower_32_bits(dma_dst));
+> +		/*
+> +		 * Keep sparse happy by restoring an even lock count on
+> +		 * this lock.
+> +		 */
+> +		__acquire(swdma_chan->submit_lock);
+> +		return NULL;
+> +	}
+> +
+> +	return switchtec_dma_prep_desc(c, WIMM, SWITCHTEC_INVALID_HFID, dma_dst,
+> +				       SWITCHTEC_INVALID_HFID, 0, data, len,
+> +				       flags);
+> +}
+> +
+> +static dma_cookie_t switchtec_dma_tx_submit(
+> +		struct dma_async_tx_descriptor *desc)
+> +	__releases(swdma_chan->submit_lock)
+> +{
+> +	struct switchtec_dma_chan *swdma_chan =
+> +		to_switchtec_dma_chan(desc->chan);
+> +	dma_cookie_t cookie;
+> +
+> +	cookie = dma_cookie_assign(desc);
+> +
+> +	spin_unlock_bh(&swdma_chan->submit_lock);
+
+I dont this is correct, why would you prevent users from preparing
+multiple descriptors..?
+
+> +
+> +	return cookie;
+> +}
+> +
+> +static enum dma_status switchtec_dma_tx_status(struct dma_chan *chan,
+> +		dma_cookie_t cookie, struct dma_tx_state *txstate)
+> +{
+> +	struct switchtec_dma_chan *swdma_chan = to_switchtec_dma_chan(chan);
+> +	enum dma_status ret;
+> +
+> +	ret = dma_cookie_status(chan, cookie, txstate);
+> +	if (ret == DMA_COMPLETE)
+> +		return ret;
+> +
+> +	switchtec_dma_process_desc(swdma_chan);
+> +
+> +	return dma_cookie_status(chan, cookie, txstate);
+> +}
+> +
+> +static void switchtec_dma_issue_pending(struct dma_chan *chan)
+> +{
+> +	struct switchtec_dma_chan *swdma_chan = to_switchtec_dma_chan(chan);
+> +	struct switchtec_dma_dev *swdma_dev = swdma_chan->swdma_dev;
+> +
+> +	/*
+> +	 * Ensure the desc updates are visible before starting the
+> +	 * DMA engine.
+> +	 */
+> +	wmb();
+> +
+> +	/*
+> +	 * The sq_tail register is actually for the head of the
+> +	 * submisssion queue. Chip has the opposite define of head/tail
+> +	 * to the Linux kernel.
+> +	 */
+> +
+> +	rcu_read_lock();
+> +	if (!rcu_dereference(swdma_dev->pdev)) {
+> +		rcu_read_unlock();
+> +		return;
+> +	}
+> +
+> +	spin_lock_bh(&swdma_chan->submit_lock);
+> +	writew(swdma_chan->head, &swdma_chan->mmio_chan_hw->sq_tail);
+> +	spin_unlock_bh(&swdma_chan->submit_lock);
+> +
+> +	rcu_read_unlock();
+> +}
+> +
+> +static irqreturn_t switchtec_dma_isr(int irq, void *chan)
+> +{
+> +	struct switchtec_dma_chan *swdma_chan = chan;
+> +
+> +	if (swdma_chan->comp_ring_active)
+> +		tasklet_schedule(&swdma_chan->desc_task);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static irqreturn_t switchtec_dma_chan_status_isr(int irq, void *dma)
+> +{
+> +	struct switchtec_dma_dev *swdma_dev = dma;
+> +
+> +	tasklet_schedule(&swdma_dev->chan_status_task);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static void switchtec_dma_free_desc(struct switchtec_dma_chan *swdma_chan)
+> +{
+> +	struct switchtec_dma_dev *swdma_dev = swdma_chan->swdma_dev;
+> +	size_t size;
+> +	int i;
+> +
+> +	size = SWITCHTEC_DMA_SQ_SIZE * sizeof(*swdma_chan->hw_sq);
+> +	if (swdma_chan->hw_sq)
+> +		dma_free_coherent(swdma_dev->dma_dev.dev, size,
+> +				  swdma_chan->hw_sq, swdma_chan->dma_addr_sq);
+> +
+> +	size = SWITCHTEC_DMA_CQ_SIZE * sizeof(*swdma_chan->hw_cq);
+> +	if (swdma_chan->hw_cq)
+> +		dma_free_coherent(swdma_dev->dma_dev.dev, size,
+> +				  swdma_chan->hw_cq, swdma_chan->dma_addr_cq);
+> +
+> +	if (swdma_chan->desc_ring) {
+> +		for (i = 0; i < SWITCHTEC_DMA_RING_SIZE; i++)
+> +			kfree(swdma_chan->desc_ring[i]);
+> +
+> +		kfree(swdma_chan->desc_ring);
+> +	}
+> +}
+> +
+> +static int switchtec_dma_alloc_desc(struct switchtec_dma_chan *swdma_chan)
+> +{
+> +	struct switchtec_dma_dev *swdma_dev = swdma_chan->swdma_dev;
+> +	struct pci_dev *pdev;
+> +	struct chan_fw_regs __iomem *chan_fw = swdma_chan->mmio_chan_fw;
+> +	size_t size;
+> +	struct switchtec_dma_desc *desc;
+> +	int rc;
+> +	int i;
+> +
+> +	swdma_chan->head = swdma_chan->tail = 0;
+> +	swdma_chan->cq_tail = 0;
+> +
+> +	size = SWITCHTEC_DMA_SQ_SIZE * sizeof(*swdma_chan->hw_sq);
+> +	swdma_chan->hw_sq = dma_alloc_coherent(swdma_dev->dma_dev.dev, size,
+> +					       &swdma_chan->dma_addr_sq,
+> +					       GFP_KERNEL);
+
+this can be called from atomic context, GFP_NOWAIT pls
+
+> +	if (!swdma_chan->hw_sq) {
+> +		rc = -ENOMEM;
+> +		goto free_and_exit;
+> +	}
+> +
+> +	size = SWITCHTEC_DMA_CQ_SIZE * sizeof(*swdma_chan->hw_cq);
+> +	swdma_chan->hw_cq = dma_alloc_coherent(swdma_dev->dma_dev.dev, size,
+> +					       &swdma_chan->dma_addr_cq,
+> +					       GFP_KERNEL);
+> +	if (!swdma_chan->hw_cq) {
+> +		rc = -ENOMEM;
+> +		goto free_and_exit;
+> +	}
+> +
+> +	/* reset host phase tag */
+> +	swdma_chan->phase_tag = 0;
+> +
+> +	size = sizeof(*swdma_chan->desc_ring);
+> +	swdma_chan->desc_ring = kcalloc(SWITCHTEC_DMA_RING_SIZE, size,
+> +					GFP_KERNEL);
+> +	if (!swdma_chan->desc_ring) {
+> +		rc = -ENOMEM;
+> +		goto free_and_exit;
+> +	}
+> +
+> +	for (i = 0; i < SWITCHTEC_DMA_RING_SIZE; i++) {
+> +		desc = kzalloc(sizeof(*desc), GFP_KERNEL);
+> +		if (!desc) {
+> +			rc = -ENOMEM;
+> +			goto free_and_exit;
+> +		}
+> +
+> +		dma_async_tx_descriptor_init(&desc->txd, &swdma_chan->dma_chan);
+> +		desc->txd.tx_submit = switchtec_dma_tx_submit;
+> +		desc->hw = &swdma_chan->hw_sq[i];
+> +		desc->completed = true;
+> +
+> +		swdma_chan->desc_ring[i] = desc;
+> +	}
+> +
+> +	rcu_read_lock();
+> +	pdev = rcu_dereference(swdma_dev->pdev);
+> +	if (!pdev) {
+> +		rcu_read_unlock();
+> +		rc = -ENODEV;
+> +		goto free_and_exit;
+> +	}
+> +
+> +	/* set sq/cq */
+> +	writel(lower_32_bits(swdma_chan->dma_addr_sq), &chan_fw->sq_base_lo);
+> +	writel(upper_32_bits(swdma_chan->dma_addr_sq), &chan_fw->sq_base_hi);
+> +	writel(lower_32_bits(swdma_chan->dma_addr_cq), &chan_fw->cq_base_lo);
+> +	writel(upper_32_bits(swdma_chan->dma_addr_cq), &chan_fw->cq_base_hi);
+> +
+> +	writew(SWITCHTEC_DMA_SQ_SIZE, &swdma_chan->mmio_chan_fw->sq_size);
+> +	writew(SWITCHTEC_DMA_CQ_SIZE, &swdma_chan->mmio_chan_fw->cq_size);
+
+why is hardware being written in alloc call, the job is to prepare
+descritor, hw write should happen when we submit the descriptors..
+
+> +
+> +	rcu_read_unlock();
+> +	return 0;
+> +
+> +free_and_exit:
+> +	switchtec_dma_free_desc(swdma_chan);
+> +	return rc;
+> +}
+> +
+> +static int switchtec_dma_alloc_chan_resources(struct dma_chan *chan)
+> +{
+> +	struct switchtec_dma_chan *swdma_chan = to_switchtec_dma_chan(chan);
+> +	struct switchtec_dma_dev *swdma_dev = swdma_chan->swdma_dev;
+> +	u32 perf_cfg;
+> +	int rc;
+> +
+> +	rc = switchtec_dma_alloc_desc(swdma_chan);
+> +	if (rc)
+> +		return rc;
+> +
+> +	rc = enable_channel(swdma_chan);
+> +	if (rc)
+> +		return rc;
+> +
+> +	rc = reset_channel(swdma_chan);
+> +	if (rc)
+> +		return rc;
+> +
+> +	rc = unhalt_channel(swdma_chan);
+> +	if (rc)
+> +		return rc;
+> +
+> +	swdma_chan->ring_active = true;
+> +	swdma_chan->comp_ring_active = true;
+> +	swdma_chan->cid = 0;
+> +
+> +	dma_cookie_init(chan);
+> +
+> +	rcu_read_lock();
+> +	if (!rcu_dereference(swdma_dev->pdev)) {
+> +		rcu_read_unlock();
+> +		return -ENODEV;
+> +	}
+> +
+> +	perf_cfg = readl(&swdma_chan->mmio_chan_fw->perf_cfg);
+> +	rcu_read_unlock();
+> +
+> +	dev_dbg(&chan->dev->device, "Burst Size:  0x%x",
+> +		(perf_cfg >> PERF_BURST_SIZE_SHIFT) & PERF_BURST_SIZE_MASK);
+> +
+> +	dev_dbg(&chan->dev->device, "Burst Scale: 0x%x",
+> +		(perf_cfg >> PERF_BURST_SCALE_SHIFT) & PERF_BURST_SCALE_MASK);
+> +
+> +	dev_dbg(&chan->dev->device, "Interval:    0x%x",
+> +		(perf_cfg >> PERF_INTERVAL_SHIFT) & PERF_INTERVAL_MASK);
+> +
+> +	dev_dbg(&chan->dev->device, "Arb Weight:  0x%x",
+> +		(perf_cfg >> PERF_ARB_WEIGHT_SHIFT) & PERF_ARB_WEIGHT_MASK);
+> +
+> +	dev_dbg(&chan->dev->device, "MRRS:        0x%x",
+> +		(perf_cfg >> PERF_MRRS_SHIFT) & PERF_MRRS_MASK);
+> +
+> +	return SWITCHTEC_DMA_SQ_SIZE;
+> +}
+> +
+> +static void switchtec_dma_free_chan_resources(struct dma_chan *chan)
+> +{
+> +	struct switchtec_dma_chan *swdma_chan = to_switchtec_dma_chan(chan);
+> +
+> +	spin_lock_bh(&swdma_chan->submit_lock);
+> +	swdma_chan->ring_active = false;
+> +	spin_unlock_bh(&swdma_chan->submit_lock);
+> +
+> +	spin_lock_bh(&swdma_chan->complete_lock);
+> +	swdma_chan->comp_ring_active = false;
+> +	spin_unlock_bh(&swdma_chan->complete_lock);
+> +
+> +	switchtec_dma_chan_stop(swdma_chan);
+> +
+> +	tasklet_kill(&swdma_chan->desc_task);
+> +
+> +	switchtec_dma_abort_desc(swdma_chan, 0);
+> +
+> +	switchtec_dma_free_desc(swdma_chan);
+> +
+> +	disable_channel(swdma_chan);
+> +}
+> +
+> +static int switchtec_dma_chan_init(struct switchtec_dma_dev *swdma_dev, int i)
+> +{
+> +	struct dma_device *dma = &swdma_dev->dma_dev;
+> +	struct pci_dev *pdev = rcu_dereference(swdma_dev->pdev);
+> +	struct dma_chan *chan;
+> +	struct switchtec_dma_chan *swdma_chan;
+> +	u32 perf_cfg;
+> +	u32 valid_en_se;
+> +	u32 thresh;
+> +	int se_buf_len;
+> +	int irq;
+> +	int rc;
+> +
+> +	swdma_chan = kzalloc(sizeof(*swdma_chan), GFP_KERNEL);
+> +	if (!swdma_chan)
+> +		return -ENOMEM;
+> +
+> +	swdma_chan->phase_tag = 0;
+> +	swdma_chan->index = i;
+> +	swdma_chan->swdma_dev = swdma_dev;
+> +
+> +	swdma_chan->mmio_chan_fw =
+> +		swdma_dev->bar + SWITCHTEC_DMAC_CHAN_CFG_STS_OFFSET +
+> +		i * SWITCHTEC_DMA_CHAN_FW_REGS_SIZE;
+> +	swdma_chan->mmio_chan_hw =
+> +		swdma_dev->bar + SWITCHTEC_DMAC_CHAN_CTRL_OFFSET +
+> +		i * SWITCHTEC_DMA_CHAN_HW_REGS_SIZE;
+> +
+> +	swdma_dev->swdma_chans[i] = swdma_chan;
+> +
+> +	rc = pause_reset_channel(swdma_chan);
+> +	if (rc)
+> +		goto free_and_exit;
+> +
+> +	perf_cfg = readl(&swdma_chan->mmio_chan_fw->perf_cfg);
+> +
+> +	/* init perf tuner */
+> +	perf_cfg = PERF_BURST_SCALE << PERF_BURST_SCALE_SHIFT;
+> +	perf_cfg |= PERF_MRRS << PERF_MRRS_SHIFT;
+> +	perf_cfg |= PERF_INTERVAL << PERF_INTERVAL_SHIFT;
+> +	perf_cfg |= PERF_BURST_SIZE << PERF_BURST_SIZE_SHIFT;
+> +	perf_cfg |= PERF_ARB_WEIGHT << PERF_ARB_WEIGHT_SHIFT;
+> +
+> +	writel(perf_cfg, &swdma_chan->mmio_chan_fw->perf_cfg);
+> +
+> +	valid_en_se = readl(&swdma_chan->mmio_chan_fw->valid_en_se);
+> +
+> +	dev_dbg(&pdev->dev, "Channel %d: SE buffer base %d\n",
+> +		i, (valid_en_se >> SE_BUF_BASE_SHIFT) & SE_BUF_BASE_MASK);
+> +
+> +	se_buf_len = (valid_en_se >> SE_BUF_LEN_SHIFT) & SE_BUF_LEN_MASK;
+> +	dev_dbg(&pdev->dev, "Channel %d: SE buffer count %d\n", i, se_buf_len);
+> +
+> +	thresh = se_buf_len / 2;
+> +	valid_en_se |= (thresh & SE_THRESH_MASK) << SE_THRESH_SHIFT;
+> +	writel(valid_en_se, &swdma_chan->mmio_chan_fw->valid_en_se);
+> +
+> +	/* request irqs */
+> +	irq = readl(&swdma_chan->mmio_chan_fw->int_vec);
+> +	dev_dbg(&pdev->dev, "Channel %d: CE irq vector %d\n", i, irq);
+> +
+> +	rc = pci_request_irq(pdev, irq, switchtec_dma_isr, NULL, swdma_chan,
+> +			     KBUILD_MODNAME);
+> +	if (rc)
+> +		goto free_and_exit;
+> +
+> +	swdma_chan->irq = irq;
+> +
+> +	spin_lock_init(&swdma_chan->hw_ctrl_lock);
+> +	spin_lock_init(&swdma_chan->submit_lock);
+> +	spin_lock_init(&swdma_chan->complete_lock);
+> +	tasklet_init(&swdma_chan->desc_task, switchtec_dma_desc_task,
+> +		     (unsigned long)swdma_chan);
+> +
+> +	chan = &swdma_chan->dma_chan;
+> +	chan->device = dma;
+> +	dma_cookie_init(chan);
+> +
+> +	list_add_tail(&chan->device_node, &dma->channels);
+> +
+> +	return 0;
+> +
+> +free_and_exit:
+> +	kfree(swdma_chan);
+> +	return rc;
+> +}
+> +
+> +static int switchtec_dma_chan_free(struct switchtec_dma_chan *swdma_chan)
+> +{
+> +	struct pci_dev *pdev = rcu_dereference(swdma_chan->swdma_dev->pdev);
+> +
+> +	spin_lock_bh(&swdma_chan->submit_lock);
+> +	swdma_chan->ring_active = false;
+> +	spin_unlock_bh(&swdma_chan->submit_lock);
+> +
+> +	spin_lock_bh(&swdma_chan->complete_lock);
+> +	swdma_chan->comp_ring_active = false;
+> +	spin_unlock_bh(&swdma_chan->complete_lock);
+> +
+> +	pci_free_irq(pdev, swdma_chan->irq, swdma_chan);
+> +
+> +	switchtec_dma_chan_stop(swdma_chan);
+> +
+> +	return 0;
+> +}
+> +
+> +static int switchtec_dma_chans_release(struct switchtec_dma_dev *swdma_dev)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < swdma_dev->chan_cnt; i++)
+> +		switchtec_dma_chan_free(swdma_dev->swdma_chans[i]);
+> +
+> +	return 0;
+> +}
+> +
+> +static int switchtec_dma_chans_enumerate(struct switchtec_dma_dev *swdma_dev,
+> +					 int chan_cnt)
+> +{
+> +	struct dma_device *dma = &swdma_dev->dma_dev;
+> +	struct pci_dev *pdev = rcu_dereference(swdma_dev->pdev);
+> +	int base;
+> +	int cnt;
+> +	int rc;
+> +	int i;
+> +
+> +	swdma_dev->swdma_chans = kcalloc(chan_cnt,
+> +					 sizeof(*swdma_dev->swdma_chans),
+> +					 GFP_KERNEL);
+> +
+> +	if (!swdma_dev->swdma_chans)
+> +		return -ENOMEM;
+> +
+> +	base = readw(swdma_dev->bar + SWITCHTEC_REG_SE_BUF_BASE);
+> +	cnt = readw(swdma_dev->bar + SWITCHTEC_REG_SE_BUF_CNT);
+> +
+> +	dev_dbg(&pdev->dev, "EP SE buffer base %d\n", base);
+> +	dev_dbg(&pdev->dev, "EP SE buffer count %d\n", cnt);
+> +
+> +	INIT_LIST_HEAD(&dma->channels);
+> +
+> +	for (i = 0; i < chan_cnt; i++) {
+> +		rc = switchtec_dma_chan_init(swdma_dev, i);
+> +		if (rc) {
+> +			dev_err(&pdev->dev, "Channel %d: init channel failed\n",
+> +				i);
+> +			chan_cnt = i;
+> +			goto err_exit;
+> +		}
+> +	}
+> +
+> +	return chan_cnt;
+> +
+> +err_exit:
+> +	for (i = 0; i < chan_cnt; i++)
+> +		switchtec_dma_chan_free(swdma_dev->swdma_chans[i]);
+> +
+> +	kfree(swdma_dev->swdma_chans);
+> +
+> +	return rc;
+> +}
+> +
+> +static void switchtec_dma_release(struct dma_device *dma_dev)
+> +{
+> +	int i;
+> +	struct switchtec_dma_dev *swdma_dev =
+> +		container_of(dma_dev, struct switchtec_dma_dev, dma_dev);
+> +
+> +	for (i = 0; i < swdma_dev->chan_cnt; i++)
+> +		kfree(swdma_dev->swdma_chans[i]);
+> +
+> +	kfree(swdma_dev->swdma_chans);
+> +
+> +	put_device(dma_dev->dev);
+> +	kfree(swdma_dev);
+> +}
+> +
+> +static int switchtec_dma_create(struct pci_dev *pdev)
+> +{
+> +	struct switchtec_dma_dev *swdma_dev;
+> +	struct dma_device *dma;
+> +	struct dma_chan *chan;
+> +	int chan_cnt;
+> +	int nr_vecs;
+> +	int irq;
+> +	int rc;
+> +
+> +	/*
+> +	 * Create the switchtec dma device
+> +	 */
+> +	swdma_dev = kzalloc(sizeof(*swdma_dev), GFP_KERNEL);
+> +	if (!swdma_dev)
+> +		return -ENOMEM;
+> +
+> +	swdma_dev->bar = ioremap(pci_resource_start(pdev, 0),
+> +				 pci_resource_len(pdev, 0));
+> +
+> +	pci_info(pdev, "Switchtec PSX/PFX DMA EP\n");
+> +
+> +	RCU_INIT_POINTER(swdma_dev->pdev, pdev);
+> +
+> +	nr_vecs = pci_msix_vec_count(pdev);
+> +	rc = pci_alloc_irq_vectors(pdev, nr_vecs, nr_vecs, PCI_IRQ_MSIX);
+> +	if (rc < 0)
+> +		goto err_exit;
+> +
+> +	tasklet_init(&swdma_dev->chan_status_task,
+> +		     switchtec_dma_chan_status_task,
+> +		     (unsigned long)swdma_dev);
+> +
+> +	irq = readw(swdma_dev->bar + SWITCHTEC_REG_CHAN_STS_VEC);
+> +	pci_dbg(pdev, "Channel pause irq vector %d\n", irq);
+> +
+> +	rc = pci_request_irq(pdev, irq, switchtec_dma_chan_status_isr, NULL,
+> +			     swdma_dev, KBUILD_MODNAME);
+> +	if (rc)
+> +		goto err_exit;
+> +
+> +	swdma_dev->chan_status_irq = irq;
+> +
+> +	chan_cnt = readl(swdma_dev->bar + SWITCHTEC_REG_CHAN_CNT);
+> +	if (!chan_cnt) {
+> +		pci_err(pdev, "No channel configured.\n");
+> +		rc = -ENXIO;
+> +		goto err_exit;
+> +	}
+> +
+> +	chan_cnt = switchtec_dma_chans_enumerate(swdma_dev, chan_cnt);
+> +	if (chan_cnt < 0) {
+> +		pci_err(pdev, "Failed to enumerate dma channels: %d\n",
+> +			chan_cnt);
+> +		rc = -ENXIO;
+> +		goto err_exit;
+> +	}
+> +
+> +	swdma_dev->chan_cnt = chan_cnt;
+> +
+> +	dma = &swdma_dev->dma_dev;
+> +	dma->copy_align = DMAENGINE_ALIGN_1_BYTE;
+> +	dma_cap_set(DMA_MEMCPY, dma->cap_mask);
+> +	dma_cap_set(DMA_PRIVATE, dma->cap_mask);
+> +	dma->dev = get_device(&pdev->dev);
+> +
+> +	dma->device_alloc_chan_resources = switchtec_dma_alloc_chan_resources;
+> +	dma->device_free_chan_resources = switchtec_dma_free_chan_resources;
+> +	dma->device_prep_dma_memcpy = switchtec_dma_prep_memcpy;
+> +	dma->device_prep_dma_imm_data = switchtec_dma_prep_wimm_data;
+> +	dma->device_issue_pending = switchtec_dma_issue_pending;
+> +	dma->device_tx_status = switchtec_dma_tx_status;
+> +	dma->device_pause = switchtec_dma_pause;
+> +	dma->device_resume = switchtec_dma_resume;
+> +	dma->device_terminate_all = switchtec_dma_terminate_all;
+> +	dma->device_synchronize = switchtec_dma_synchronize;
+> +	dma->device_release = switchtec_dma_release;
+> +
+> +	rc = dma_async_device_register(dma);
+> +	if (rc) {
+> +		pci_err(pdev, "Failed to register dma device: %d\n", rc);
+> +		goto err_chans_release_exit;
+> +	}
+> +
+> +	pci_info(pdev, "Channel count: %d\n", chan_cnt);
+
+dev_info()?
+
+> +
+> +	list_for_each_entry(chan, &dma->channels, device_node)
+> +		pci_info(pdev, "%s\n", dma_chan_name(chan));
+> +
+> +	pci_set_drvdata(pdev, swdma_dev);
+> +
+> +	return 0;
+> +
+> +err_chans_release_exit:
+> +	switchtec_dma_chans_release(swdma_dev);
+> +
+> +err_exit:
+> +	if (swdma_dev->chan_status_irq)
+> +		free_irq(swdma_dev->chan_status_irq, swdma_dev);
+> +
+> +	iounmap(swdma_dev->bar);
+> +	kfree(swdma_dev);
+> +	return rc;
+> +}
+> +
+> +static int switchtec_dma_probe(struct pci_dev *pdev,
+> +			       const struct pci_device_id *id)
+> +{
+> +	int rc;
+> +
+> +	rc = pci_enable_device(pdev);
+> +	if (rc)
+> +		return rc;
+> +
+> +	rc = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(64));
+> +	if (rc)
+> +		goto err_disable;
+> +
+> +	rc = pci_request_mem_regions(pdev, KBUILD_MODNAME);
+> +	if (rc)
+> +		goto err_disable;
+> +
+> +	pci_set_master(pdev);
+> +
+> +	rc = switchtec_dma_create(pdev);
+> +	if (rc)
+> +		goto err_free;
+> +
+> +	pci_info(pdev, "Switchtec DMA Channels Registered\n");
+> +
+> +	return 0;
+> +
+> +err_free:
+> +	pci_free_irq_vectors(pdev);
+> +	pci_release_mem_regions(pdev);
+> +
+> +err_disable:
+> +	pci_disable_device(pdev);
+> +
+> +	return rc;
+> +}
+> +
+> +static void switchtec_dma_remove(struct pci_dev *pdev)
+> +{
+> +	struct switchtec_dma_dev *swdma_dev = pci_get_drvdata(pdev);
+> +
+> +	switchtec_dma_chans_release(swdma_dev);
+> +
+> +	tasklet_kill(&swdma_dev->chan_status_task);
+> +
+> +	rcu_assign_pointer(swdma_dev->pdev, NULL);
+> +	synchronize_rcu();
+> +
+> +	pci_free_irq(pdev, swdma_dev->chan_status_irq, swdma_dev);
+> +
+> +	pci_free_irq_vectors(pdev);
+> +
+> +	dma_async_device_unregister(&swdma_dev->dma_dev);
+> +
+> +	iounmap(swdma_dev->bar);
+> +	pci_release_mem_regions(pdev);
+> +	pci_disable_device(pdev);
+> +
+> +	pci_info(pdev, "Switchtec DMA Channels Unregistered\n");
+> +}
+> +
+> +/*
+> + * Use vender/device and class to identify the DMA function.
+> + */
+> +#define SWITCHTEC_DMA_DEVICE(device_id) \
+> +	{ \
+> +		.vendor     = PCI_VENDOR_ID_MICROSEMI, \
+> +		.device     = device_id, \
+> +		.subvendor  = PCI_ANY_ID, \
+> +		.subdevice  = PCI_ANY_ID, \
+> +		.class      = PCI_CLASS_SYSTEM_OTHER << 8, \
+> +		.class_mask = 0xFFFFFFFF, \
+> +	}
+> +
+> +static const struct pci_device_id switchtec_dma_pci_tbl[] = {
+> +	SWITCHTEC_DMA_DEVICE(0x4000), /* PFX 100XG4 */
+> +	SWITCHTEC_DMA_DEVICE(0x4084), /* PFX 84XG4 */
+> +	SWITCHTEC_DMA_DEVICE(0x4068), /* PFX 68XG4 */
+> +	SWITCHTEC_DMA_DEVICE(0x4052), /* PFX 52XG4 */
+> +	SWITCHTEC_DMA_DEVICE(0x4036), /* PFX 36XG4 */
+> +	SWITCHTEC_DMA_DEVICE(0x4028), /* PFX 28XG4 */
+> +	SWITCHTEC_DMA_DEVICE(0x4100), /* PSX 100XG4 */
+> +	SWITCHTEC_DMA_DEVICE(0x4184), /* PSX 84XG4 */
+> +	SWITCHTEC_DMA_DEVICE(0x4168), /* PSX 68XG4 */
+> +	SWITCHTEC_DMA_DEVICE(0x4152), /* PSX 52XG4 */
+> +	SWITCHTEC_DMA_DEVICE(0x4136), /* PSX 36XG4 */
+> +	SWITCHTEC_DMA_DEVICE(0x4128), /* PSX 28XG4 */
+> +	SWITCHTEC_DMA_DEVICE(0x4352), /* PFXA 52XG4 */
+> +	SWITCHTEC_DMA_DEVICE(0x4336), /* PFXA 36XG4 */
+> +	SWITCHTEC_DMA_DEVICE(0x4328), /* PFXA 28XG4 */
+> +	SWITCHTEC_DMA_DEVICE(0x4452), /* PSXA 52XG4 */
+> +	SWITCHTEC_DMA_DEVICE(0x4436), /* PSXA 36XG4 */
+> +	SWITCHTEC_DMA_DEVICE(0x4428), /* PSXA 28XG4 */
+> +	{0}
+> +};
+> +MODULE_DEVICE_TABLE(pci, switchtec_dma_pci_tbl);
+> +
+> +static struct pci_driver switchtec_dma_pci_driver = {
+> +	.name           = KBUILD_MODNAME,
+> +	.id_table       = switchtec_dma_pci_tbl,
+> +	.probe          = switchtec_dma_probe,
+> +	.remove		= switchtec_dma_remove,
+> +};
+> +module_pci_driver(switchtec_dma_pci_driver);
+> -- 
+> 2.25.1
+
+-- 
+~Vinod
