@@ -2,134 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B315C709B64
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 17:33:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A470709B71
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 17:38:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232178AbjESPds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 11:33:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55406 "EHLO
+        id S232145AbjESPiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 11:38:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232160AbjESPdr (ORCPT
+        with ESMTP id S229708AbjESPiE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 11:33:47 -0400
-Received: from exchange.fintech.ru (exchange.fintech.ru [195.54.195.159])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA4A1AC
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 08:33:44 -0700 (PDT)
-Received: from Ex16-01.fintech.ru (10.0.10.18) by exchange.fintech.ru
- (195.54.195.169) with Microsoft SMTP Server (TLS) id 14.3.498.0; Fri, 19 May
- 2023 18:33:34 +0300
-Received: from localhost (10.0.253.138) by Ex16-01.fintech.ru (10.0.10.18)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Fri, 19 May
- 2023 18:33:34 +0300
-From:   Nikita Zhandarovich <n.zhandarovich@fintech.ru>
-To:     Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-CC:     Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>, <lvc-project@linuxtesting.org>
-Subject: [PATCH] drm/radeon: fix possible division-by-zero errors
-Date:   Fri, 19 May 2023 08:33:27 -0700
-Message-ID: <20230519153327.231806-1-n.zhandarovich@fintech.ru>
-X-Mailer: git-send-email 2.25.1
+        Fri, 19 May 2023 11:38:04 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22A741A6;
+        Fri, 19 May 2023 08:38:03 -0700 (PDT)
+Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QN9tq6T5Hz67qNN;
+        Fri, 19 May 2023 23:36:51 +0800 (CST)
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 19 May
+ 2023 16:37:59 +0100
+Date:   Fri, 19 May 2023 16:37:58 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Ira Weiny <ira.weiny@intel.com>
+CC:     Davidlohr Bueso <dave@stgolabs.net>, LiuLele <liu.lele@qq.com>,
+        <dave.jiang@intel.com>, <alison.schofield@intel.com>,
+        <bhelgaas@google.com>, <bwidawsk@kernel.org>,
+        <dan.j.williams@intel.com>, <helgaas@kernel.org>,
+        <linux-acpi@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <rostedt@goodmis.org>, <vishal.l.verma@intel.com>
+Subject: Re: CXL memory device not created correctly
+Message-ID: <20230519163758.000044dc@Huawei.com>
+In-Reply-To: <646793cc665bf_1231462943c@iweiny-mobl.notmuch>
+References: <cec6a8f5-a284-4f46-1ada-4edd625a9a2e@intel.com>
+        <tencent_D9D9D358330CA573E23D490C6EE13E0DC105@qq.com>
+        <gbsxrcjtnf67jxpqmbn57nqoslpmjtuk2ycatmau3vfsmpvbrd@c2umpofn2hti>
+        <646793cc665bf_1231462943c@iweiny-mobl.notmuch>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.0.253.138]
-X-ClientProxiedBy: Ex16-02.fintech.ru (10.0.10.19) To Ex16-01.fintech.ru
- (10.0.10.18)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Function rv740_get_decoded_reference_divider() may return 0 due to
-unpredictable reference divider value calculated in
-radeon_atom_get_clock_dividers(). This will lead to
-division-by-zero error once that value is used as a divider
-in calculating 'clk_s'.
-While unlikely, this issue should nonetheless be prevented so add a
-sanity check for such cases by testing 'decoded_ref' value against 0.
+On Fri, 19 May 2023 08:20:44 -0700
+Ira Weiny <ira.weiny@intel.com> wrote:
 
-Found by Linux Verification Center (linuxtesting.org) with static
-analysis tool SVACE.
+> Davidlohr Bueso wrote:
+> > On Fri, 19 May 2023, LiuLele wrote:
+> >   
+> > >In my testing CXL device /sys/bus/cxl/devices/mem0  not created, and the get error messages :
+> > >
+> > >```
+> > >cxl_pci 0000:0d:00.0: Failed to get interrupt for event Info log
+> > >```
+> > >
+> > >My test environment is a qemu CXL emulator with qemu v8.0.0, Linux kernel v6.3.0.
+> > >While with kernel 5.9.13,  /sys/bus/cxl/devices/mem0  can be created.  
+> > 
+> > Yes, this can be annoying and would argue the probe should not error out.  
+> 
+> I had to double check.  Events are mandatory on devices.  On checking
+> again interrupt support is mandatory as well.  So that is why I errored
+> out here.  With real HW this should not be an issue.
+> 
+> > Regardless, the actual qemu support is in Jonathan's tree:
+> > 
+> > https://gitlab.com/jic23/qemu/-/commit/a04e6476df363d1f6bc160577b30dda6564d3f67  
+> 
+> That is the commit you need but it is probably best to use one of
+> Jonathans 'official' branches.  Looks like he just pushed a new one today.
+> 
+> https://gitlab.com/jic23/qemu/-/tree/cxl-2023-05-19
 
-Fixes: 66229b200598 ("drm/radeon/kms: add dpm support for rv7xx (v4)")
-Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+Leave that one for now.  It was to get the CI tests to run. I need to tidy up
+a bit and will announce when I have a clean one...
 
----
- drivers/gpu/drm/radeon/cypress_dpm.c | 7 +++++--
- drivers/gpu/drm/radeon/ni_dpm.c      | 7 +++++--
- drivers/gpu/drm/radeon/rv740_dpm.c   | 7 +++++--
- 3 files changed, 15 insertions(+), 6 deletions(-)
+> 
+> I've not run that one yet.  So if you have issues try his previous one it
+> is working well for me.
+> 
+> https://gitlab.com/jic23/qemu/-/tree/cxl-2023-04-19
 
-diff --git a/drivers/gpu/drm/radeon/cypress_dpm.c b/drivers/gpu/drm/radeon/cypress_dpm.c
-index fdddbbaecbb7..3678b7e384e1 100644
---- a/drivers/gpu/drm/radeon/cypress_dpm.c
-+++ b/drivers/gpu/drm/radeon/cypress_dpm.c
-@@ -555,10 +555,13 @@ static int cypress_populate_mclk_value(struct radeon_device *rdev,
- 
- 		if (radeon_atombios_get_asic_ss_info(rdev, &ss,
- 						     ASIC_INTERNAL_MEMORY_SS, vco_freq)) {
-+			u32 clk_s, clk_v;
- 			u32 reference_clock = rdev->clock.mpll.reference_freq;
- 			u32 decoded_ref = rv740_get_decoded_reference_divider(dividers.ref_div);
--			u32 clk_s = reference_clock * 5 / (decoded_ref * ss.rate);
--			u32 clk_v = ss.percentage *
-+			if (!decoded_ref)
-+				return -EINVAL;
-+			clk_s = reference_clock * 5 / (decoded_ref * ss.rate);
-+			clk_v = ss.percentage *
- 				(0x4000 * dividers.whole_fb_div + 0x800 * dividers.frac_fb_div) / (clk_s * 625);
- 
- 			mpll_ss1 &= ~CLKV_MASK;
-diff --git a/drivers/gpu/drm/radeon/ni_dpm.c b/drivers/gpu/drm/radeon/ni_dpm.c
-index 672d2239293e..9ce3e5635efc 100644
---- a/drivers/gpu/drm/radeon/ni_dpm.c
-+++ b/drivers/gpu/drm/radeon/ni_dpm.c
-@@ -2239,10 +2239,13 @@ static int ni_populate_mclk_value(struct radeon_device *rdev,
- 
- 		if (radeon_atombios_get_asic_ss_info(rdev, &ss,
- 						     ASIC_INTERNAL_MEMORY_SS, vco_freq)) {
-+			u32 clk_s, clk_v;
- 			u32 reference_clock = rdev->clock.mpll.reference_freq;
- 			u32 decoded_ref = rv740_get_decoded_reference_divider(dividers.ref_div);
--			u32 clk_s = reference_clock * 5 / (decoded_ref * ss.rate);
--			u32 clk_v = ss.percentage *
-+			if (!decoded_ref)
-+				return -EINVAL;
-+			clk_s = reference_clock * 5 / (decoded_ref * ss.rate);
-+			clk_v = ss.percentage *
- 				(0x4000 * dividers.whole_fb_div + 0x800 * dividers.frac_fb_div) / (clk_s * 625);
- 
- 			mpll_ss1 &= ~CLKV_MASK;
-diff --git a/drivers/gpu/drm/radeon/rv740_dpm.c b/drivers/gpu/drm/radeon/rv740_dpm.c
-index d57a3e1df8d6..ca76efa0f59d 100644
---- a/drivers/gpu/drm/radeon/rv740_dpm.c
-+++ b/drivers/gpu/drm/radeon/rv740_dpm.c
-@@ -247,10 +247,13 @@ int rv740_populate_mclk_value(struct radeon_device *rdev,
- 
- 		if (radeon_atombios_get_asic_ss_info(rdev, &ss,
- 						     ASIC_INTERNAL_MEMORY_SS, vco_freq)) {
-+			u32 clk_s, clk_v;
- 			u32 reference_clock = rdev->clock.mpll.reference_freq;
- 			u32 decoded_ref = rv740_get_decoded_reference_divider(dividers.ref_div);
--			u32 clk_s = reference_clock * 5 / (decoded_ref * ss.rate);
--			u32 clk_v = 0x40000 * ss.percentage *
-+			if (!decoded_ref)
-+				return -EINVAL;
-+			clk_s = reference_clock * 5 / (decoded_ref * ss.rate);
-+			clk_v = 0x40000 * ss.percentage *
- 				(dividers.whole_fb_div + (dividers.frac_fb_div / 8)) / (clk_s * 10000);
- 
- 			mpll_ss1 &= ~CLKV_MASK;
--- 
-2.25.1
+That one should be good to go still I think
+
+Jonathan
+
+> 
+> Ira
+> 
+> > 
+> > Thanks,
+> > Davidlohr  
+> 
+> 
 
