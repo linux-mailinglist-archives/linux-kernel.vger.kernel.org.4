@@ -2,105 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFE88709755
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 14:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 854B570975A
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 14:40:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbjESMiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 08:38:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53950 "EHLO
+        id S231288AbjESMkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 08:40:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbjESMix (ORCPT
+        with ESMTP id S230516AbjESMkL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 08:38:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B5BF4;
-        Fri, 19 May 2023 05:38:52 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E0519656F6;
-        Fri, 19 May 2023 12:38:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48AE3C433EF;
-        Fri, 19 May 2023 12:38:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684499931;
-        bh=tuw/mKj0P6fjqCWthB3GTMhCdp5EZdmQ+EdF4Yb0yf0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PVU9nfoaNQpms40ciIXHs6s2YzKHm/o+vE9Qux9gyKAvKGN0rOxq3Aa6YkEkEMJbs
-         h3k6ALD71V8hYPkmNZH2h+KvRz2WmY1ft0bsBud/P3rudL7eYSSnxiAA8Nnlo1vvAH
-         vzaFChbcEez+EaFkSkdy4oYxrRr6Gi5rM+pzcyO4H54sMp3srERmnYj6bSHA1+I5/J
-         PBt9FNEILY1jnARUzqB2qBsXTkiS9NoXwzXY9Bw1TwkWeCZAR+1E4BT7efq7Fkshvn
-         njoksnTG+nuxS1zlEvjYZ5+/ARSk5gPDWIbYookCDhttaZu30KfZPjtfKo7GMsd4JR
-         2aPRbLx4E+xaA==
-Date:   Fri, 19 May 2023 14:38:36 +0200
-From:   Marek =?UTF-8?B?QmVow7pu?= <kabel@kernel.org>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Alexis =?UTF-8?B?TG90aG9yw6k=?= <alexis.lothore@bootlin.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        paul.arola@telus.com, scott.roberts@telus.com
-Subject: Re: [PATCH net-next 2/2] net: dsa: mv88e6xxx: enable support for
- 88E6361 switch
-Message-ID: <20230519143713.1ac9c7a1@thinkpad>
-In-Reply-To: <6643e099-7b72-4da2-aba1-521e1a4c961b@lunn.ch>
-References: <20230517203430.448705-1-alexis.lothore@bootlin.com>
-        <20230517203430.448705-3-alexis.lothore@bootlin.com>
-        <9a836863-c279-490f-a49a-de4db5de9fd4@lunn.ch>
-        <ee281c0f-5e8b-8453-08bf-858c5503dc22@bootlin.com>
-        <6643e099-7b72-4da2-aba1-521e1a4c961b@lunn.ch>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Fri, 19 May 2023 08:40:11 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F290F4
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 05:40:08 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-510d6e1f1abso5430856a12.2
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 05:40:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20221208.gappssmtp.com; s=20221208; t=1684500007; x=1687092007;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1VSn6O9dGnsUidQ3Wuo34DwvHlJIF3gPCLvKg2mvcJk=;
+        b=LLmls+aHWju+njqqOMHyx3fU5SFdNmFhb4tgDdLoo4mChRkLnFBR78wajLQl3VXJLm
+         Yj5ewiYCkPX7iXTm8MDOhRExxEc2A+ZDmUBlZUFBEI2aIOywM4ZUejzMaOmsymL3Wsve
+         RkFTrYudP27KFIWhu8ZNY4BNrwY2s4DBJIBc2KO1nNztY5UHozKqo1NuwR6r5gF7P5P5
+         keDxW6WwhpRCBz9RlLpXH2+wSyumRV2pqoE2FBxheE1BK1w9TgDgFJ5ubFlbfpRlnNeB
+         fHGPYnA6facRU9th7QCsF4gxGURb3idDz2l0CE1AUFVOTsmvl2OoMDjksUf7AWg/1xHM
+         bZSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684500007; x=1687092007;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1VSn6O9dGnsUidQ3Wuo34DwvHlJIF3gPCLvKg2mvcJk=;
+        b=C3bypQOJybeWISexpynP9q2wIOFiXrmReazKYNNPK3+7mA6ufTawuklf78oMTP4XZQ
+         WjOqha03z2q2yg3O1LzViczY0GReO79gfBLBIE6LOaP12T0/pDVBMRBsLVjs3/UGdsqu
+         znQN/9BAoduZNc78oMlifF+EO+h2OQgN90Zznv0nMY2WYdrEbADiKMOpe/O/v9MbQ/ZI
+         bTRJ8YlmCtUpglrbRxb5T7K1FxFq3nQ5BN999r2OK7zqNyzMgcttzCGhoJl8/5UI3t0i
+         ruZlami4WtTt8CvLjAyv1oDrW8pdjcrPUOkGgYdBTipZ+B3LqsZG3ZcNxIqpB+iqCssW
+         8eeA==
+X-Gm-Message-State: AC+VfDytg5cexVELZqwEGzZ7eZGwtW05MbiHg/k6XVxRJ8XiwwSIafoL
+        FPViMZ+5DbXlkgRKzoQEKgGfAg==
+X-Google-Smtp-Source: ACHHUZ6ioONCjugzdv338fbw98Vbwa9MN8B7f8tAyWbzJy9rkNZajByuKWx5auxegVru3hs9T99w6Q==
+X-Received: by 2002:a17:907:7f0e:b0:966:484a:3350 with SMTP id qf14-20020a1709077f0e00b00966484a3350mr1821664ejc.35.1684500007074;
+        Fri, 19 May 2023 05:40:07 -0700 (PDT)
+Received: from localhost ([2a02:8070:6389:7d40:e266:3092:9afb:a7b1])
+        by smtp.gmail.com with ESMTPSA id ju11-20020a17090798ab00b009661cf921b4sm2202417ejc.202.2023.05.19.05.40.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 May 2023 05:40:06 -0700 (PDT)
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Mel Gorman <mgorman@techsingularity.net>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Subject: [PATCH 0/5] mm: compaction: cleanups & simplifications
+Date:   Fri, 19 May 2023 14:39:54 +0200
+Message-Id: <20230519123959.77335-1-hannes@cmpxchg.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 18 May 2023 14:58:00 +0200
-Andrew Lunn <andrew@lunn.ch> wrote:
+These compaction cleanups are split out from the huge page allocator
+series[1], as requested by reviewer feedback.
 
-> > >> +	[MV88E6361] = {
-> > >> +		.prod_num = MV88E6XXX_PORT_SWITCH_ID_PROD_6361,
-> > >> +		.family = MV88E6XXX_FAMILY_6393,
-> > >> +		.name = "Marvell 88E6361",
-> > >> +		.num_databases = 4096,
-> > >> +		.num_macs = 16384,
-> > >> +		.num_ports = 11,
-> > >> +		/* Ports 1, 2 and 8 are not routed */
-> > >> +		.invalid_port_mask = BIT(1) | BIT(2) | BIT(8),
-> > >> +		.num_internal_phys = 5,  
-> > > 
-> > > Which ports have internal PHYs? 2, 3, 4, 5, 6, 7 ?  What does
-> > > mv88e6xxx_phy_is_internal() return for these ports, and
-> > > mv88e6xxx_get_capsmv88e6xxx_get_caps()? I'm wondering if you actually
-> > > need to list 8 here?  
-> > 
-> > Indeed there is something wrong here too. I need to tune
-> > mv88e6393x_phylink_get_caps to reflect 88E6361 differences.
-> > 
-> > As stated above, port 3 to 7 are the ones with internal PHY.
-> > For mv88e6xxx_phy_is_internal, I see that it is merely comparing the port index
-> > to the number of internal phys, so in this case it would advertise (wrongly)
-> > that ports 0 to 4 have internal phys.  
-> 
-> Ports 1 and 2 should hopefully be protected by the
-> invalid_port_mask. It should not even be possible to create those
-> ports. port 0 is interesting, and possibly currently broken on
-> 6393. Please take a look at that.
+Against current mm-stable.
 
-Why would port 0 be broken on 6393x ?
+[1] https://lore.kernel.org/linux-mm/20230418191313.268131-1-hannes@cmpxchg.org/
 
-Marek
+ include/linux/compaction.h     | 96 ++----------------------------------------------------------------------------------------------
+ include/trace/events/mmflags.h |  4 ++--
+ mm/compaction.c                | 62 ++++++++++++++++++++++++++++++++++----------------------------
+ mm/page_alloc.c                | 57 ++++++++++++++++++++-------------------------------------
+ mm/vmscan.c                    | 27 ++++++++++++++-------------
+ 5 files changed, 72 insertions(+), 174 deletions(-)
+
+
