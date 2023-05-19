@@ -2,57 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A97A709F1A
+	by mail.lfdr.de (Postfix) with ESMTP id 50968709F1B
 	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 20:32:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231475AbjESScu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 14:32:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37640 "EHLO
+        id S231585AbjESScx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 14:32:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231193AbjESSco (ORCPT
+        with ESMTP id S229691AbjESScs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 14:32:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9841A5;
-        Fri, 19 May 2023 11:32:43 -0700 (PDT)
+        Fri, 19 May 2023 14:32:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 490981A6
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 11:32:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 825BA65A5E;
-        Fri, 19 May 2023 18:32:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E35D5C433EF;
-        Fri, 19 May 2023 18:32:42 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DAA5465A6E
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 18:32:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4839BC433D2;
+        Fri, 19 May 2023 18:32:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684521162;
-        bh=6z6VnKDMJ9Z6QjVLBMuj7xV3WTFENjZl77zsA1rZ8Fo=;
+        s=k20201202; t=1684521167;
+        bh=K14RvfL5bNtJjP01WcOq4iiUrs8BdClIvTB9DLiZclg=;
         h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=gFC2Wvqh29BbEjIzwmxntQe3xXeHJ8MSTwdmjW4K47SHwk6SmoOWtRgKtCRpBb20T
-         i3T+dDBlZlvh4BbOnyAzvpRzlWzo9mNh1Q2yRV/GN4K5z0p9H83kjCx62xCXsDFS0q
-         qwd1+l68ZFB+4XVGpR9amsECOIQHglc9BUeWwz48+M5xFaCNo55U/OP8tTV7kJK7Vp
-         iXRyKG+QmggoizfvESiT8WR1YvNvEeEWRFjdTL+2wzX8rfz6nqj9OoQfUjM0r4/zMS
-         b8Tb6M4ibREPLfzUInAzq4MABBRWVc/syPOaQzzyzRYvBwBfJA/r6FxCkZ8WMN8+qB
-         RNlyy+CLfNCUg==
+        b=oAYuSKUe9Ie24I1iLoSOypBITGudkjhVPeoCtWIM1VEd0e/8XlktKlLs1HuoH4Wwp
+         Luvotd1IcjW5AmPxRuGeg7QumrBUAJLFuSGrt8zhKdnEWzLucoFurpLJnK8pMFgsNW
+         WryQ6xenvy/M1nFkqSUrrEsFj9sUkO4wBeEdfQuKMvhylP72RHfTQ549J1wEF8QXpy
+         5FLzXzERV/569ufUTKuy10Wzrf3IgHaMl5Dyf5ktZ2t2dOoz9n1LU49HjGYiacoRUN
+         lG706/vs1mQXNJGKc87a6PUzZ3HoW+y1+NLnUpvP9R00udxrizp3F9WJMWh5OeVSPx
+         kCsyQIJHbVudg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D0DC1C3959E;
-        Fri, 19 May 2023 18:32:42 +0000 (UTC)
-Subject: Re: [GIT PULL] hotfixes for 6.4-rc2
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 36360C73FE0;
+        Fri, 19 May 2023 18:32:47 +0000 (UTC)
+Subject: Re: [GIT PULL] sound fixes for 6.4-rc3
 From:   pr-tracker-bot@kernel.org
-In-Reply-To: <20230518155606.326cc8a860382d3a08cf5e21@linux-foundation.org>
-References: <20230518155606.326cc8a860382d3a08cf5e21@linux-foundation.org>
-X-PR-Tracked-List-Id: <mm-commits.vger.kernel.org>
-X-PR-Tracked-Message-Id: <20230518155606.326cc8a860382d3a08cf5e21@linux-foundation.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm tags/mm-hotfixes-stable-2023-05-18-15-52
-X-PR-Tracked-Commit-Id: c7394fa9aa4ccd4e477626c4f7aef0b360c92efb
+In-Reply-To: <87jzx420m1.wl-tiwai@suse.de>
+References: <87jzx420m1.wl-tiwai@suse.de>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <87jzx420m1.wl-tiwai@suse.de>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.4-rc3
+X-PR-Tracked-Commit-Id: dc4f2ccaedddb489a83e7b12ebbdc347272aacc9
 X-PR-Merge-Tree: torvalds/linux.git
 X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: f4a8871f9f347b185c44525c9bb1755951f94841
-Message-Id: <168452116285.23824.2103312105983458925.pr-tracker-bot@kernel.org>
-Date:   Fri, 19 May 2023 18:32:42 +0000
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>, linux-mm@kvack.org,
-        mm-commits@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-PR-Merge-Commit-Id: 46be92e58fa8868fc10854de94f270e1d58ec434
+Message-Id: <168452116721.23824.3223277432558454839.pr-tracker-bot@kernel.org>
+Date:   Fri, 19 May 2023 18:32:47 +0000
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,12 +63,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Thu, 18 May 2023 15:56:06 -0700:
+The pull request you sent on Fri, 19 May 2023 10:20:54 +0200:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm tags/mm-hotfixes-stable-2023-05-18-15-52
+> git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.4-rc3
 
 has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/f4a8871f9f347b185c44525c9bb1755951f94841
+https://git.kernel.org/torvalds/c/46be92e58fa8868fc10854de94f270e1d58ec434
 
 Thank you!
 
