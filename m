@@ -2,73 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAF8A709F0A
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 20:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70534709F0D
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 20:29:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbjESSZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 14:25:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35118 "EHLO
+        id S229826AbjESS3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 14:29:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjESSZ5 (ORCPT
+        with ESMTP id S229675AbjESS27 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 14:25:57 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6D3E1
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 11:25:56 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba8696637a7so6861071276.3
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 11:25:56 -0700 (PDT)
+        Fri, 19 May 2023 14:28:59 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75EF21A1;
+        Fri, 19 May 2023 11:28:58 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-96aae59bbd6so678884066b.3;
+        Fri, 19 May 2023 11:28:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684520755; x=1687112755;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UkvqDfyMOLrjy8YMY1wwRgMIQfqQZGbB8xX3NIFQuJ8=;
-        b=EHWVv93HNkwFD6Rzv38Ipc2B9rPBD1UDSNb25aEyGm9tgrL4HAfKR3FhP4mF0gDZ8o
-         5akGYCEZHakPY7q+34PKZr+wjUxJKbOWkHSdmCIF9EthXaS0GE1aeTDaAYg74+n8LxZv
-         NrNY0cT19gsI9F6xDoZFfVqJL3/PXEZm7iHMz8EEbdrZb3BVlRolZpZs2icBr5OUNum5
-         NS6M57Pod3yr/sG/iNpxrle6ypJpM2UH+leYpSYYesmxJnETM/FgFp+u2mEeUpZlkVpR
-         gVvuRxOcV30/Oziq9eKB/d6UWnrG6nSzoKyR8Y2BOsFA/g06gQPoCPP9LQW1NpKMIWBr
-         bE6g==
+        d=gmail.com; s=20221208; t=1684520937; x=1687112937;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WlvvDrxI+8RIoRlqGPQtu1ddIFRRsxtK/LYB4K1t6K8=;
+        b=N/cEBGaYZ08QnrzSQmmg9MF9G6mNibaGTIF7Xyf/hkjz3yE2Jp11UAx2+rYdMN4gDM
+         jkUycYMykO5k8VLewS95pKAjkBEAWqww4BnjEU/vH6puyWuva4MM7LyvbnEpJ8eaa9DI
+         7b8rK+zVTZuz5jBnVmRwO+CMGdZR891zOaQL9kOwypl6IVIUoRpHqlCCDQ/3KBqo0aXo
+         7QLRuNHpPAer+F2uh/9hOcbeMj9RhQ4vnPsuE+cYMWOMxhNLM5Acor/2tCQS8ofXjFq7
+         rlvX+uOiOaAGj5hhApAKpNOmvVDmAi/amGY7RIS8L7IawZjiZ1SFdU9oaou36teJVhOI
+         2wkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684520755; x=1687112755;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UkvqDfyMOLrjy8YMY1wwRgMIQfqQZGbB8xX3NIFQuJ8=;
-        b=MAikf9SOX62Yv3JNURu3oUUEG31NBadlQfQUZ9fcZRpIrI6fl9gv/9kT571ogzz92N
-         wxo/O7rnKRQ6E9G0uLa5y0aUtUm3Ij2LyWtDXfaN3ewX4GGa5L36C9aaW430be0XF/GQ
-         gyeqUzDs5NK00YVGOaTyiIJpW19LcSUe6B1FyXWNp/RZNX7N4QdIjqaJBJJdS3Vy5Y+i
-         vZsWlALmnAokMQvQ1bklQTQ7XrXC0gF4BRG270VzV2YNoAB4Uzu/hDoxPnnra9S22b3C
-         bW/ABDpQu9SG3A4nFHs2cDfsp7dj+joQjerdRILN4btVJjnKB2dDPFiJBo/vHvMXFJ2z
-         W9wg==
-X-Gm-Message-State: AC+VfDyZQ1FVm5Tfjf9BKSD5nIR2xTkZ79CfC1gmcd2/ZzEjql95Jaa3
-        AXGTXN7LPBesC/kG5MHeRPeMIhCiWjs=
-X-Google-Smtp-Source: ACHHUZ78HIA/K1sflsbUYSUjC6gecUrhcvhYYTntQ6SB2UFg6TeL234xl9KHrlPWo8SNMaksMPK95sULPeI=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:8402:0:b0:ba8:797c:9bc7 with SMTP id
- u2-20020a258402000000b00ba8797c9bc7mr1655166ybk.11.1684520755427; Fri, 19 May
- 2023 11:25:55 -0700 (PDT)
-Date:   Fri, 19 May 2023 11:25:53 -0700
-In-Reply-To: <20230519162432.GG4967@kernel.org>
-Mime-Version: 1.0
-References: <20230308094106.227365-1-rppt@kernel.org> <e48a7fb1f8ab8d670b0884fd2a5d1e8c1c20e712.camel@intel.com>
- <ZAn34D3hXR7dp8KC@kernel.org> <ZGeYgKCFOkzP2fub@google.com> <20230519162432.GG4967@kernel.org>
-Message-ID: <ZGe/Md3FXb1ihXwe@google.com>
-Subject: Re: [RFC PATCH 0/5] Prototype for direct map awareness in page allocator
-From:   Sean Christopherson <seanjc@google.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Rick P Edgecombe <rick.p.edgecombe@intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "song@kernel.org" <song@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        d=1e100.net; s=20221208; t=1684520937; x=1687112937;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WlvvDrxI+8RIoRlqGPQtu1ddIFRRsxtK/LYB4K1t6K8=;
+        b=OVUXXj26+P1JPxCHLRiY0eaUlyffA2hNo73DozavFpU/nHIMKccmQ+oo10VREDs8Lq
+         4K5mSZioTBsL6vZGnfbtBNovE1AL8CgOXEbp2KGXm27+OenLUrzUbwwh2dwk/1D9h2H4
+         /xZxaSWN3Msaq9Yullt376WBpqEwpwLU1yHm2Y/sXrWnI00osmdZ8MGR4QzBg0Q6J5Im
+         dt99ojBeGMTMmatPJAooLHQuKiGPbKM5TipIfqLz7MSEtmfBHp58QhtpXfuJc9FQajEb
+         K6o+3oWkNsDcs22h9K7FcMwWNq+ttvVWHyO1k59m8ETKrdcuZsuBU63R+67PI8iJtjFR
+         fQ5Q==
+X-Gm-Message-State: AC+VfDzRAs8CXcN9+l4ifR/B88TUD3QEUfob2b9a07Ou2uvt2h0f6lSK
+        kQP2/QbD2qkr3Sh9AU/C2mk=
+X-Google-Smtp-Source: ACHHUZ4R5YD3cMgV+tRC5UioVf2DwYIMuBKxYzGkAv6uLyu7ptlFV1obSOW7EKeU7d++ICsSSTMLXg==
+X-Received: by 2002:a17:907:72c5:b0:96f:5f44:ea02 with SMTP id du5-20020a17090772c500b0096f5f44ea02mr2615072ejc.8.1684520936856;
+        Fri, 19 May 2023 11:28:56 -0700 (PDT)
+Received: from localhost.my.domain (83.11.222.198.ipv4.supernova.orange.pl. [83.11.222.198])
+        by smtp.gmail.com with ESMTPSA id u27-20020a170906069b00b0094f7744d135sm2597897ejb.78.2023.05.19.11.28.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 May 2023 11:28:56 -0700 (PDT)
+From:   Artur Weber <aweber.kernel@gmail.com>
+To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Artur Weber <aweber.kernel@gmail.com>
+Subject: [PATCH] media: Revert "media: exynos4-is: Remove dependency on obsolete SoC support"
+Date:   Fri, 19 May 2023 20:28:53 +0200
+Message-Id: <20230519182853.3836-1-aweber.kernel@gmail.com>
+X-Mailer: git-send-email 2.40.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,58 +74,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023, Mike Rapoport wrote:
-> On Fri, May 19, 2023 at 08:40:48AM -0700, Sean Christopherson wrote:
-> > On Thu, Mar 09, 2023, Mike Rapoport wrote:
-> > > On Thu, Mar 09, 2023 at 01:59:00AM +0000, Edgecombe, Rick P wrote:
-> > > > On Wed, 2023-03-08 at 11:41 +0200, Mike Rapoport wrote:
-> > > > > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
-> > > > > 
-> > > > > Hi,
-> > > > > 
-> > > > > This is a third attempt to make page allocator aware of the direct
-> > > > > map
-> > > > > layout and allow grouping of the pages that must be unmapped from
-> > > > > the direct map.
-> > > > > 
-> > > > > This a new implementation of __GFP_UNMAPPED, kinda a follow up for
-> > > > > this set:
-> > > > > 
-> > > > > https://lore.kernel.org/all/20220127085608.306306-1-rppt@kernel.org
-> > > > > 
-> > > > > but instead of using a migrate type to cache the unmapped pages, the
-> > > > > current implementation adds a dedicated cache to serve __GFP_UNMAPPED
-> > > > > allocations.
-> > > > 
-> > > > It seems a downside to having a page allocator outside of _the_ page
-> > > > allocator is you don't get all of the features that are baked in there.
-> > > > For example does secretmem care about numa? I guess in this
-> > > > implementation there is just one big cache for all nodes.
-> > > > 
-> > > > Probably most users would want __GFP_ZERO. Would secretmem care about
-> > > > __GFP_ACCOUNT?
-> > > 
-> > > The intention was that the pages in cache are always zeroed, so __GFP_ZERO
-> > > is always implicitly there, at least should have been.
-> > 
-> > Would it be possible to drop that assumption/requirement, i.e. allow allocation of
-> > __GFP_UNMAPPED without __GFP_ZERO?  At a glance, __GFP_UNMAPPED looks like it would
-> > be a great fit for backing guest memory, in particular for confidential VMs.  And
-> > for some flavors of CoCo, i.e. TDX, the trusted intermediary is responsible for
-> > zeroing/initializing guest memory as the untrusted host (kernel/KVM) doesn't have
-> > access to the guest's encryption key.  In other words, zeroing in the kernel would
-> > be unnecessary work.
-> 
-> Making and unmapped allocation without __GFP_ZERO shouldn't be a problem. 
-> 
-> However, using a gfp flag and hooking up into the free path in page
-> allocator have issues and preferably should be avoided.
-> 
-> Will something like unmapped_alloc() and unmapped_free() work for your
-> usecase?
+Support for the Exynos4212 SoC was originally dropped as there were
+no boards using it. We will be adding a device that uses it, so add
+it back.
 
-Yep, I'm leaning more and more towards having KVM implement its own ioctl() for
-managing this type of memory.  Wiring that up to use dedicated APIs should be no
-problem.
+This reverts commit 2d41a0c9ae51ac363d107f2510022106e7234b33.
 
-Thanks!
+Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
+---
+This patch has been split off from the following series:
+"[PATCH v3 00/13] Re-introduce Exynos4212 support and add Samsung
+Galaxy Tab 3 8.0 boards"
+https://lore.kernel.org/all/20230501195525.6268-1-aweber.kernel@gmail.com/
+---
+ drivers/media/platform/samsung/exynos4-is/Kconfig     | 2 +-
+ drivers/media/platform/samsung/exynos4-is/fimc-core.c | 2 +-
+ drivers/media/platform/samsung/exynos4-is/fimc-lite.c | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/media/platform/samsung/exynos4-is/Kconfig b/drivers/media/platform/samsung/exynos4-is/Kconfig
+index da33faa7132e..7f9ba053dd8e 100644
+--- a/drivers/media/platform/samsung/exynos4-is/Kconfig
++++ b/drivers/media/platform/samsung/exynos4-is/Kconfig
+@@ -47,7 +47,7 @@ config VIDEO_S5P_MIPI_CSIS
+ config VIDEO_EXYNOS_FIMC_LITE
+ 	tristate "EXYNOS FIMC-LITE camera interface driver"
+ 	depends on I2C
+-	depends on SOC_EXYNOS4412 || SOC_EXYNOS5250 || COMPILE_TEST
++	depends on SOC_EXYNOS4212 || SOC_EXYNOS4412 || SOC_EXYNOS5250 || COMPILE_TEST
+ 	depends on HAS_DMA
+ 	select VIDEOBUF2_DMA_CONTIG
+ 	select VIDEO_EXYNOS4_IS_COMMON
+diff --git a/drivers/media/platform/samsung/exynos4-is/fimc-core.c b/drivers/media/platform/samsung/exynos4-is/fimc-core.c
+index a2034ade8b9e..976b4f747ad4 100644
+--- a/drivers/media/platform/samsung/exynos4-is/fimc-core.c
++++ b/drivers/media/platform/samsung/exynos4-is/fimc-core.c
+@@ -1128,7 +1128,7 @@ static const struct fimc_drvdata fimc_drvdata_exynos4210 = {
+ 	.out_buf_count	= 32,
+ };
+ 
+-/* EXYNOS4412 */
++/* EXYNOS4212, EXYNOS4412 */
+ static const struct fimc_drvdata fimc_drvdata_exynos4x12 = {
+ 	.num_entities	= 4,
+ 	.lclk_frequency	= 166000000UL,
+diff --git a/drivers/media/platform/samsung/exynos4-is/fimc-lite.c b/drivers/media/platform/samsung/exynos4-is/fimc-lite.c
+index 24b3dda26714..c3146ae08447 100644
+--- a/drivers/media/platform/samsung/exynos4-is/fimc-lite.c
++++ b/drivers/media/platform/samsung/exynos4-is/fimc-lite.c
+@@ -1621,7 +1621,7 @@ static const struct dev_pm_ops fimc_lite_pm_ops = {
+ 			   NULL)
+ };
+ 
+-/* EXYNOS4412 */
++/* EXYNOS4212, EXYNOS4412 */
+ static struct flite_drvdata fimc_lite_drvdata_exynos4 = {
+ 	.max_width		= 8192,
+ 	.max_height		= 8192,
+
+base-commit: a23a3041c733e068bed5ece88acb45fe0edf0413
+-- 
+2.40.1
+
