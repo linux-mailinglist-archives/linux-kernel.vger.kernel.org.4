@@ -2,91 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE5DD70979B
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 14:53:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CCE97097A4
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 14:55:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbjESMxQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 08:53:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34118 "EHLO
+        id S231706AbjESMzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 08:55:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231697AbjESMxO (ORCPT
+        with ESMTP id S229675AbjESMy6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 08:53:14 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A557A18D;
-        Fri, 19 May 2023 05:53:12 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-64d247a023aso1209218b3a.2;
-        Fri, 19 May 2023 05:53:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684500792; x=1687092792;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SlSC5gAlSXnToYmUu/sgOcjEykIkE6DHvgXD5U+xj54=;
-        b=UKWj7gNY5FT++SNCrJYnd72T2NQPNrNjWaOs177/qY+jyyfHtrmrZd72vqIK6TiG9U
-         Jqf/1SnX9JtFEijWoaAGnExRyaSKJAn28O5z0G7LSx5aX3tqrzeAwTFB4EzKd1PIcLRP
-         7DP5ioH8rS0OHVXMh4N8wCO7yRY01o+w2zmf4cvl+x4Y/DE93aFl/ySg2IYx4b56AeKR
-         Q7/u9kT42KoiEWXdTUZ/2TPfvKDKb4nwx8KOO21qIcYZCSEev23pKPykelI61zzu7fZW
-         G6Va7s/4Ag0udzUVWJqIYb8fTryqTZxPTqw54iB4SMs49l3Ng4Ifg9YCKHU4mm87Q4o4
-         d4zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684500792; x=1687092792;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SlSC5gAlSXnToYmUu/sgOcjEykIkE6DHvgXD5U+xj54=;
-        b=JbhoTvXF3ubMDMCqb7pK+iHorbEk6ZMeJeGIC5aXyc5jfl/S7X3JLCb9Zv3d4j6PZn
-         mzLvPCAhcBD8aJw2w7qqHmKXppPf8Bhkcj90S+9Yk3Vve2XOpI0rlCYhOADKxn43/GS+
-         KMNEOODv9D9vqD1w/yCLtc7FMA3af6P7csUP3fCC7sIVA6FuPu74ikN8DsbxZ4bTE23i
-         vaAT9K4mao2CiRSanXxUizNtjcDT3UvfoT40isIPpWQZTsDBFoaS9TiGQhf0E323W8n7
-         nXIHrCEMHupKunxXXLqHPG7q2y8v1/9ZwYHfqooeCloTCMq3YhYi3vIu6DaIehvFh+1p
-         XL1g==
-X-Gm-Message-State: AC+VfDzxjixcVbFwVl8S3rQu8KW+bPOlbbHzJnXwqoL4HRhgfc28PL52
-        0CxwbHjCUssWAC6u9dwXQRfjADRVoH4=
-X-Google-Smtp-Source: ACHHUZ66Dg61w6FuRrM+Q0rw453FF2MyRAWuWHW54C6TTdb3852VDU1T0wgnbihGbF6BaYDoOaS7Pg==
-X-Received: by 2002:a05:6a20:2d23:b0:106:bb67:d684 with SMTP id g35-20020a056a202d2300b00106bb67d684mr2075822pzl.42.1684500791984;
-        Fri, 19 May 2023 05:53:11 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f2-20020a655502000000b0051baf3f1b3esm2763663pgr.76.2023.05.19.05.53.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 05:53:11 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 19 May 2023 05:53:10 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Gopal Prasad <llyyr.public@gmail.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (nct6683) Add another customer ID for NCT6687D
- sensor chip on some MSI boards.
-Message-ID: <f7b24380-cbb1-410b-9507-006c142c41b0@roeck-us.net>
-References: <20230517042025.16942-1-llyyr.public@gmail.com>
+        Fri, 19 May 2023 08:54:58 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A432BD2;
+        Fri, 19 May 2023 05:54:57 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34JCaAl5032129;
+        Fri, 19 May 2023 12:54:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : subject
+ : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=yFJblaR40t/9aaEAQPrCMDd4C9c19HeT/Ol5piOv1v4=;
+ b=HdEfNoTNwVsB1F0Gl2mMj+7iLJI01tSk+qF+Gkf1u2KF7MCMfdcAwl7jM/7mmBvfYDbK
+ FSbRlQ67K8SoApO3oddKv2YesKY0dD8N9qt5vwKCglW0bHUfmViQ3N8Cd+mrdvsidiCj
+ Rzlx60ytYXz6TgawXL+wLWG9hxgXoRJh6dS9e1cK2Q3OPFnorsyBKull1WzepuIN3HOr
+ dDd02tbS1Wogr0klrfDu9gWTtDK79Mjw/bUdxeJPuMJM64jtQs3iRhHlzZiYb8exESsU
+ 2Au9ws6CfyHu5fFWD8OfudNUYBXsxshrlI2Q8jPD7GRSRlSFxSEx+HvpWSESxf1rnhVP wg== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qp0kes2m3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 May 2023 12:54:42 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34JCseRc005455
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 May 2023 12:54:40 GMT
+Received: from win-platform-upstream01.qualcomm.com (10.80.80.8) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Fri, 19 May 2023 05:54:24 -0700
+From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <ulf.hansson@linaro.org>,
+        <linus.walleij@linaro.org>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <p.zabel@pengutronix.de>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <robimarko@gmail.com>,
+        <andy.shevchenko@gmail.com>, <quic_srichara@quicinc.com>
+Subject: [PATCH V7 0/8] Add minimal boot support for IPQ5018
+Date:   Fri, 19 May 2023 18:24:01 +0530
+Message-ID: <20230519125409.497439-1-quic_srichara@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230517042025.16942-1-llyyr.public@gmail.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: pAiRPYZaZMBz8P4XMxJ3IVkmFAGtK5l-
+X-Proofpoint-ORIG-GUID: pAiRPYZaZMBz8P4XMxJ3IVkmFAGtK5l-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-19_08,2023-05-17_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ mlxlogscore=883 malwarescore=0 bulkscore=0 adultscore=0 priorityscore=1501
+ lowpriorityscore=0 clxscore=1015 impostorscore=0 phishscore=0 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305190108
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 09:50:25AM +0530, Gopal Prasad wrote:
-> From: llyyr <llyyr.public@gmail.com>
-> 
+The IPQ5018 is Qualcomm's 802.11ax SoC for Routers,
+Gateways and Access Points.
 
-The above is still wrong. Never mind, I fixed that.
+This series adds minimal board boot support for ipq5018-mp03.1-c2 board.
 
-> This value was found on a MSI Z690-A PRO DDR5 with NCT6687D.
-> 
-> Signed-off-by: Gopal Prasad <llyyr.public@gmail.com>
+[v7]   Fixed tz reserved region size in patch 7/8
 
-Applied. In the future, please version your patches and provide
-change logs.
+[v6]   Fixed patch [4/8] pinctrl driver for rebase issue.
 
-Thanks,
-Guenter
+[v5]
+       Added Reviewed-by tags from Krzysztof Kozlowski.
+       Changed patch [6/8] with [1] since its already Acked
+       Rebased patch [4/8] on top of [2] and fixed other comments
+       Fixed commit log for patch [7/8]
+       Fixed comments for patch [2/8]
+
+[1] https://patchwork.kernel.org/project/linux-arm-msm/patch/1678164097-13247-4-git-send-email-quic_mmanikan@quicinc.com/
+[2] https://lore.kernel.org/r/1683718725-14869-1-git-send-email-quic_rohiagar@quicinc.com
+       
+[v4]
+       Fixed all comments for clocks, schema, dts
+       Added Reviewed-by tags.
+
+[v3]
+	Fixed all comments for clocks, schema fixes
+        Picked up Reviewed-by from Bjorn for pinctrl driver
+
+[v2]
+	Fixed all comments and rebased for TOT.
+
+Manikanta Mylavarapu (1):
+  dt-bindings: scm: Add compatible for IPQ5018
+
+Sricharan Ramabadhran (7):
+  dt-bindings: arm64: Add IPQ5018 clock and reset
+  clk: qcom: Add Global Clock controller (GCC) driver for IPQ5018
+  dt-bindings: pinctrl: qcom: Add support for ipq5018
+  pinctrl: qcom: Add IPQ5018 pinctrl driver
+  dt-bindings: qcom: Add ipq5018 bindings
+  arm64: dts: Add ipq5018 SoC and rdp432-c2 board support
+  arm64: defconfig: Enable IPQ5018 SoC base configs
+
+ .../devicetree/bindings/arm/qcom.yaml         |    7 +
+ .../bindings/clock/qcom,ipq5018-gcc.yaml      |   63 +
+ .../bindings/firmware/qcom,scm.yaml           |    1 +
+ .../bindings/pinctrl/qcom,ipq5018-tlmm.yaml   |  127 +
+ arch/arm64/boot/dts/qcom/Makefile             |    1 +
+ .../arm64/boot/dts/qcom/ipq5018-rdp432-c2.dts |   72 +
+ arch/arm64/boot/dts/qcom/ipq5018.dtsi         |  250 ++
+ arch/arm64/configs/defconfig                  |    3 +
+ drivers/clk/qcom/Kconfig                      |   10 +-
+ drivers/clk/qcom/Makefile                     |    1 +
+ drivers/clk/qcom/gcc-ipq5018.c                | 3731 +++++++++++++++++
+ drivers/pinctrl/qcom/Kconfig                  |   10 +
+ drivers/pinctrl/qcom/Makefile                 |    1 +
+ drivers/pinctrl/qcom/pinctrl-ipq5018.c        |  783 ++++
+ include/dt-bindings/clock/qcom,gcc-ipq5018.h  |  183 +
+ include/dt-bindings/reset/qcom,gcc-ipq5018.h  |  122 +
+ 16 files changed, 5363 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/qcom,ipq5018-gcc.yaml
+ create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,ipq5018-tlmm.yaml
+ create mode 100644 arch/arm64/boot/dts/qcom/ipq5018-rdp432-c2.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/ipq5018.dtsi
+ create mode 100644 drivers/clk/qcom/gcc-ipq5018.c
+ create mode 100644 drivers/pinctrl/qcom/pinctrl-ipq5018.c
+ create mode 100644 include/dt-bindings/clock/qcom,gcc-ipq5018.h
+ create mode 100644 include/dt-bindings/reset/qcom,gcc-ipq5018.h
+
+-- 
+2.34.1
+
