@@ -2,189 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D7170989C
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 15:44:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E53B7098A2
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 15:47:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231771AbjESNoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 09:44:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
+        id S231293AbjESNrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 09:47:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjESNoS (ORCPT
+        with ESMTP id S229525AbjESNq6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 09:44:18 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50644AA;
-        Fri, 19 May 2023 06:44:17 -0700 (PDT)
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34JDiG1J026493;
-        Fri, 19 May 2023 13:44:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : content-type : mime-version; s=pp1;
- bh=EjAZT4UN24dbbozDuIDqkO2EKI6bcA9TP22AbafGM5o=;
- b=olH8shnzLUD5FRXEI2XDkT+NkWopCL57/Kh3hN9+svYc6samcioVb0bsdVcSRiaMFzj7
- 1PbdD/UZxOOk3c/I4KQf6juu5ebYSF6bHNa9pic7VuFP9A50FO7bL6KRVNr8Cvex0Urm
- kwl6p4ZyXbn9MAu4CRfyFU+b+yE53baVE+K07pdRa/XnOG4ASl+SPpL/hdbUJInePPHY
- gLFULNdAXizPyr/IecyoZL1GBYcRcmNlnmo8Md3oRn6NnJWrNGZ4VRPHTom7xKEAKOzI
- Xcfi0H97ClXUv6tmP7eEVhm3ivm40SBotFR6IQXt9LFc9Nszh1TJlZczwvdVemLFCahq ow== 
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qpa8r800s-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 May 2023 13:44:15 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34J3pfDr027478;
-        Fri, 19 May 2023 13:44:13 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3qj264u6ne-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 May 2023 13:44:13 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34JDiAbJ39518472
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 19 May 2023 13:44:10 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1588C20040;
-        Fri, 19 May 2023 13:44:10 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E32A120043;
-        Fri, 19 May 2023 13:44:09 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Fri, 19 May 2023 13:44:09 +0000 (GMT)
-Date:   Fri, 19 May 2023 15:44:08 +0200
-From:   Alexander Gordeev <agordeev@linux.ibm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: [GIT PULL] s390 updates for 6.4-rc3
-Message-ID: <ZGd9KHlUSFgg+NHq@tuxmaker.boeblingen.de.ibm.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: pZhXANFyfGicmatNSYirib6lgiBsCpyv
-X-Proofpoint-ORIG-GUID: pZhXANFyfGicmatNSYirib6lgiBsCpyv
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Fri, 19 May 2023 09:46:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA778AA
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 06:46:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684503972;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ooaoDXWiYqNHwpwAlZ5TH2xlrXBySJTTzRpl4impsO0=;
+        b=dJ0qj6SJWQ7Ne59BfByRoO9NJcWTPpKmUms4f9D+toBDuMP+M8UgEptgEiyloObn3jAQ5Q
+        xy4iL5wub1v65W7FyNPUF+mvcbWQ8mfPWYR6fMMzmWmQhUNaJr9A+DD4ECUdxQHSv1j1MP
+        4SPzDaQEVWah5Q8v/O081cyKvL27aU4=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-19-ghpMEZwcOGq8Uxo8G9L_mA-1; Fri, 19 May 2023 09:46:10 -0400
+X-MC-Unique: ghpMEZwcOGq8Uxo8G9L_mA-1
+Received: by mail-ed1-f69.google.com with SMTP id 4fb4d7f45d1cf-5118fc8abd0so508567a12.1
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 06:46:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684503969; x=1687095969;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ooaoDXWiYqNHwpwAlZ5TH2xlrXBySJTTzRpl4impsO0=;
+        b=Uyd3ZLhmsSSt/ACKkAeB71BzeMrd9lEO9zzj8UllgO5LhlPoBvl9YJVQopUsefoZax
+         vUDsCT9a1Y3kH82Lkxp0bt8VpBHR2l8T2kUjSDGjptM+Yqg2RqwNjH8mCmBAzn3lqChp
+         RZ9Hr4GVwbF8MUAmnz3Tr+w4Lvy4KUN/zSrQRF2K7XlpjWEk5rXpxlQ/cXkOXw29ZsIO
+         ao0hNSG5D4I17dS0tL8/StIMSnUHwY3AUGcaggtGP0zmNDGlUcT6rEeBmye8NdElTVMb
+         6AAxTcMOUPzkyocccuUXhJ3ivDnsa6o9qiMNXjTt2Gm5ZkuRnYNObUtcWyNH7SlnIaf2
+         1CuQ==
+X-Gm-Message-State: AC+VfDz+6QtNT9vwv9bRpz9uk632mWOMmvyv7Gghfxqtt5A1N9VHY/yA
+        4Au9Ti62d9FG4TRjaYzQ8+x2Wugts3z9DkUnXFZePXaljhnM1YTt5t+jPrcYPfO4y/Wf45soLXU
+        toos2XKDplcLjN7eZw1zGN7eK
+X-Received: by 2002:a05:6402:1b0c:b0:50d:ff73:64ef with SMTP id by12-20020a0564021b0c00b0050dff7364efmr1749671edb.20.1684503969777;
+        Fri, 19 May 2023 06:46:09 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7kbSpzzRMNk2yhk0jXBgwaJ85kMVYUNGda42rdnEP81KbEsJQBybc1tTyjvhwsxgEOc2a2OA==
+X-Received: by 2002:a05:6402:1b0c:b0:50d:ff73:64ef with SMTP id by12-20020a0564021b0c00b0050dff7364efmr1749646edb.20.1684503969445;
+        Fri, 19 May 2023 06:46:09 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
+        by smtp.gmail.com with ESMTPSA id m11-20020a50ef0b000000b005067d6b06efsm1681645eds.17.2023.05.19.06.46.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 May 2023 06:46:08 -0700 (PDT)
+Message-ID: <2d7ee116-5985-021f-0dfb-b0485a465c86@redhat.com>
+Date:   Fri, 19 May 2023 15:46:08 +0200
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-19_09,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
- spamscore=0 mlxlogscore=999 impostorscore=0 suspectscore=0 adultscore=0
- clxscore=1011 priorityscore=1501 bulkscore=0 mlxscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305190114
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: Fwd: ThinkPad L540: suspend not working (deep / S3 / standby,
+ regression Linux 4.19 -> 6.1)
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Input <linux-input@vger.kernel.org>,
+        Linux i2c Devices <linux-i2c@vger.kernel.org>,
+        Benjamin Tissoires <btissoir@redhat.com>
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        kolAflash@kolahilft.de
+References: <73883c7d-42db-7ac6-fa43-b9be45cdc795@gmail.com>
+Content-Language: en-US, nl
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <73883c7d-42db-7ac6-fa43-b9be45cdc795@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Linus,
+Hi All,
 
-please pull s390 changes for 6.4-rc3. It contain a fix to statfs code,
-which was acked by Andrew Morton:
-https://lore.kernel.org/all/20230511204513.3d0d60f0315350177a800284@linux-foundation.org/
+This looks like something for Benjamin Tissoires (who will
+be available to look at this in 2 weeks or so) to look at.
 
-Thank you,
-Alexander
+Adding Benjamin to the Cc.
 
-The following changes since commit f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6:
+In the mean time passing psmouse.synaptics_intertouch=0 on the
+kernel commandline should restore the old 4.19 kernel behavior
+of simply using the touchpad in ps/2 mode.
 
-  Linux 6.4-rc2 (2023-05-14 12:51:40 -0700)
+Regards,
 
-are available in the Git repository at:
+Hans
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux.git tags/s390-6.4-2
 
-for you to fetch changes up to 0f1cbf941d5949110adf70725a9614e622de8d99:
 
-  s390/iommu: get rid of S390_CCW_IOMMU and S390_AP_IOMMU (2023-05-01 14:11:28 -0300)
+On 5/19/23 15:19, Bagas Sanjaya wrote:
+> Hi,
+> 
+> I notice a regression report on Bugzilla [1]. Quoting from it:
+> 
+>> ThinkPad L540 failed suspend deep dmesg output - Linux-6.1.27 from Debian-12
+>>
+>> Since updating from Linux-4.19 to Linux-6.1.27 suspend deep is not working anymore.
+>> (a.k.a. S3, standby or suspend to ram)
+>>
+>> Notebook: ThinkPad L540 20AU-S00N00
+>> OS: Debian-12 "Bookworm" (was Debian-10 "Buster" before)
+>> Kernel: Linux-6.1.27 from Debian-12 (was Linux-4.19 from Debian-10 before)
+>>
+>> Can I provide any other helpful information?
+>> Do you need a test with a vanilla Linux-6.1 kernel?
+>> Should I perform any other tests or maybe try out boot parameters?
+>>
+>> Full dmesg output attached.
+>> Excerpt:
+>> rmi4_f01 rmi4-00.fn01: Failed to write sleep mode: -6.
+>> rmi4_f01 rmi4-00.fn01: Suspend failed with code -6.
+>> rmi4_physical rmi4-00: Failed to suspend functions: -6
+>> rmi4_smbus 0-002c: Failed to suspend device: -6
+>> rmi4_smbus 0-002c: PM: dpm_run_callback(): rmi_smb_suspend+0x0/0x40 [rmi_smbus] returns -6
+>> rmi4_smbus 0-002c: PM: failed to suspend async: error -6
+>> sd 4:0:0:0: [sda] Synchronizing SCSI cache
+>> sd 4:0:0:0: [sda] Stopping disk
+>> PM: Some devices failed to suspend, or early wake event detected
+>> sd 4:0:0:0: [sda] Starting disk
+>> OOM killer enabled.
+>> Restarting tasks ... 
+>> rmi4_physical rmi4-00: rmi_driver_set_irq_bits: Failed to change enabled interrupts!
+>> psmouse: probe of serio2 failed with error -1
+>>
+>>
+>>
+>> Maybe related:
+>>
+>> 5.17-rc regression: X1 Carbon touchpad not resumed
+>> https://lore.kernel.org/lkml/YgF%2F0QGFN4SppLKg@shikoro/T/
+> 
+> FYI, I guess the regression is also introduced by 172d931910e1db
+> ("i2c: enable async suspend/resume on i2c client devices") and
+> should have been fixed by 7b1f781f2d2460 ("Input: psmouse - set up
+> dependency between PS/2 and SMBus companions"), but it doesn't
+> fix the reporter's issue.
+> 
+> Anyway, I'm adding this to regzbot:
+> 
+> #regzbot introduced: v4.19..v6.1 https://bugzilla.kernel.org/show_bug.cgi?id=217462
+> #regzbot title: psmouse suspend failed on ThinkPad L540
+> 
+> Thanks.
+> 
+> [1]: https://bugzilla.kernel.org/show_bug.cgi?id=217462
+> 
 
-----------------------------------------------------------------
-s390 updates for 6.4-rc3
-
-- Add check whether the required facilities are installed
-  before using the s390-specific ChaCha20 implementation.
-
-- Key blobs for s390 protected key interface IOCTLs commands
-  PKEY_VERIFYKEY2 and PKEY_VERIFYKEY3 may contain clear key
-  material. Zeroize copies of these keys in kernel memory
-  after creating protected keys.
-
-- Set CONFIG_INIT_STACK_NONE=y in defconfigs to avoid extra
-  overhead of initializing all stack variables by default.
-
-- Make sure that when a new channel-path is enabled all
-  subchannels are evaluated: with and without any devices
-  connected on it.
-
-- When SMT thread CPUs are added to CPU topology masks the
-  nr_cpu_ids limit is not checked and could be exceeded.
-  Respect the nr_cpu_ids limit and avoid a warning when
-  CONFIG_DEBUG_PER_CPU_MAPS is set.
-
-- The pointer to IPL Parameter Information Block is stored
-  in the absolute lowcore as a virtual address. Save it as
-  the physical address for later use by dump tools.
-
-- Fix a Queued Direct I/O (QDIO) problem on z/VM guests using
-  QIOASSIST with dedicated (pass through) QDIO-based devices
-  such as FCP, real OSA or HiperSockets.
-
-- s390's struct statfs and struct statfs64 contain padding,
-  which field-by-field copying does not set. Initialize the
-  respective structures with zeros before filling them and
-  copying to userspace.
-
-- Grow s390 compat_statfs64, statfs and statfs64 structures
-  f_spare array member to cover padding and simplify things.
-
-- Remove obsolete SCHED_BOOK and SCHED_DRAWER configs.
-
-- Remove unneeded S390_CCW_IOMMU and S390_AP_IOM configs.
-
-----------------------------------------------------------------
-Alexander Gordeev (2):
-  s390/topology: honour nr_cpu_ids when adding CPUs
-  s390/ipl: fix IPIB virtual vs physical address confusion
-
-Heiko Carstens (3):
-  s390/crypto: use vector instructions only if available for ChaCha20
-  s390/defconfigs: set CONFIG_INIT_STACK_NONE=y
-  s390/qdio: fix do_sqbs() inline assembly constraint
-
-Holger Dengler (1):
-  s390/pkey: zeroize key blobs
-
-Ilya Leoshkevich (2):
-  statfs: enforce statfs[64] structure initialization
-  s390/uapi: cover statfs padding by growing f_spare
-
-Jason Gunthorpe (1):
-  s390/iommu: get rid of S390_CCW_IOMMU and S390_AP_IOMMU
-
-Lukas Bulwahn (1):
-  s390/Kconfig: remove obsolete configs SCHED_{BOOK,DRAWER}
-
-Vineeth Vijayan (1):
-  s390/cio: include subchannels without devices also for evaluation
-
- Documentation/s390/vfio-ap.rst       |  1 -
- arch/s390/Kconfig                    | 11 +---------
- arch/s390/configs/debug_defconfig    |  3 +--
- arch/s390/configs/defconfig          |  3 +--
- arch/s390/configs/zfcpdump_defconfig |  1 +
- arch/s390/crypto/chacha-glue.c       |  2 +-
- arch/s390/include/asm/compat.h       |  2 +-
- arch/s390/include/uapi/asm/statfs.h  |  4 ++--
- arch/s390/kernel/ipl.c               |  3 +--
- arch/s390/kernel/topology.c          | 32 +++++++++++++++-------------
- drivers/iommu/Kconfig                | 16 --------------
- drivers/s390/cio/device.c            |  2 ++
- drivers/s390/cio/qdio.h              |  2 +-
- drivers/s390/crypto/pkey_api.c       |  3 +++
- fs/statfs.c                          |  4 ++--
- 15 files changed, 34 insertions(+), 55 deletions(-)
