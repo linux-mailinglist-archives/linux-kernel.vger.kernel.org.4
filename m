@@ -2,79 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6F4770970E
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 14:08:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06795709715
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 14:09:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231281AbjESMIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 08:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46562 "EHLO
+        id S231460AbjESMJq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 08:09:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbjESMIL (ORCPT
+        with ESMTP id S229571AbjESMJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 08:08:11 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A40128;
-        Fri, 19 May 2023 05:08:10 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1ae452c2777so5821395ad.0;
-        Fri, 19 May 2023 05:08:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684498090; x=1687090090;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=C6BBqUoJ4/4c3Znf57SydvHkRL6P0DusBuHBrxg8e2U=;
-        b=KMMCbehNSm4rWRP1n7ZuJVMQa3GotzEHXSoG70C+PpyV6UhZ6EpV0iOm2U68OlHL60
-         HO2d/N0vweaTM1a+OpmmmrO6XRzYUOJPEXlJPPr0mMm+HVWj+VrPTCdliTDKqB9DAWl8
-         ytJVFixN9gjk9QDWi0BKJq809XZQ8j98Lnv681L0En2CpXMeXkVPuYZonJ1B6233qYPi
-         3lovK5GCqJ9kBi3Ft8uecD7WcJve3mM1+EOz0DTGkdNu94m/Am7nM/jyoJrhwQwK6dHk
-         K+7YqjMfy1jGcAWjzpFTCX2BkHaA6l6CQI9UZiRjbFXpc5e8uMYY57JKbVLqVAwcDc/K
-         /GbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684498090; x=1687090090;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=C6BBqUoJ4/4c3Znf57SydvHkRL6P0DusBuHBrxg8e2U=;
-        b=ijrIyHswnb4QdbmewS93y7O6Fe80IRGE4n7WtjIO3eDzHwmmO7i2CGwXsPPEgYLoaF
-         t+He02bQ8xT1YccGHeCsxbi6pY/hFL3gPiRwjP7ivPPcw6qPP5Cr9zakRr5ctq771GjA
-         hToZcvngND8PEK8kd/0Us9Exgd8ujyRVyEpba9Vd8jw/OzFkYZMW7HtmAD58IZ8On47o
-         qFKY3LbfetqkMf035UFOG+SUkqhcfPtNwyJ/v16klLkhbw44H4o/etMdlFkMAlRnUKPT
-         9aW6dFzBVtLX/IhuquiCmuR0fKYtMW/gf6Aq/W9wq8/kxQXUgg2ZTkB7umJjGDT5URLu
-         56iQ==
-X-Gm-Message-State: AC+VfDzMRFAjKMHgv52I8ldAGimwWNq0bwh2Q02udCEPEzx9QHzbvmU9
-        Rrgk870sc84bLe4dAjdb8ejc6XXweCEj+UiTehyAbkl9H8k=
-X-Google-Smtp-Source: ACHHUZ7GYTC+oWEngnW9J6+8ApgdZ1+WdQmZoz840G1bbSvnat/kRo0fmJc49r+dm0L3m3Y79c55X4AbMPalrP5sw6o=
-X-Received: by 2002:a17:903:2343:b0:1ae:35b8:d5ae with SMTP id
- c3-20020a170903234300b001ae35b8d5aemr2842877plh.19.1684498089812; Fri, 19 May
- 2023 05:08:09 -0700 (PDT)
-MIME-Version: 1.0
-From:   Zhouyi Zhou <zhouzhouyi@gmail.com>
-Date:   Fri, 19 May 2023 20:07:58 +0800
-Message-ID: <CAABZP2wiPdij+q_Nms08e8KbT9+CgXuoU+MO3dyoujG_1PPHAQ@mail.gmail.com>
-Subject: a small question about bpftool struct_ops
-To:     bpf@vger.kernel.org, linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 19 May 2023 08:09:43 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1BD128;
+        Fri, 19 May 2023 05:09:37 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id AC3AD5C0208;
+        Fri, 19 May 2023 08:09:33 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Fri, 19 May 2023 08:09:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1684498173; x=1684584573; bh=Mx
+        aybIo+rxpirmU88Zvah8XfxfWvwDtpl+cNoSkys6I=; b=Q0MlMmxTzyw4pVVcJT
+        vRqaslXkNToR2VaA4IHp2uzwMBULCK8c/Sxfynl9jnpFU5Oeb/24g73/8G2VcEMe
+        GHJz37cuzeUD0J8zSy96C0q06yH5b0NYLYhaWn1Gw0LDYgl3zuB8ruBcheCitHnb
+        oEz9J2qJ4iS/mhfdVw1BhrWZyZbuaN92Wd4Ns1DOvhwXE0dZEf387chWc1qNPvA7
+        H6LeV3AEaLZ3wIAIievFk9VXl4/o5oNpipBDcCmKN05sLL2BwTEPCmjK2IV/OmoV
+        ehq/Hcy4ULr/4ilyo7AGGTveSq5qN9w/6o90ZYcpQhCvG1Fc5t2twZRNORTKjrk+
+        i6Vg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684498173; x=1684584573; bh=MxaybIo+rxpir
+        mU88Zvah8XfxfWvwDtpl+cNoSkys6I=; b=rt1BNYexiUNroHAALgEkYqfePno/6
+        XwxxgFiiA/Wbfk6hTu/XlsXLpj2AHFEuRDmj8gEVhc6SQdZ+PpfN5LOu72VUeQ9+
+        y6HkzIq9c2aK8wyOuJTxVTj9nErufpZ5PcVxle9HXA9TfrFSnW+uaPpPlyO2Ceid
+        Nq2uMrvdwvogH385uqOMUcv+nw9gADpplGLQQvcHLwSkeghzTZwikd2RghzmIra5
+        kT91kkOSEcJ3Cm2ptafQldBC85kh7Ch2Nsk9MatlA38qTzcYrL6g4GF9GsbeeEAL
+        pjztTxP5cRHtNfbhFK7i7HyixdZzM2u3vpo0Ij/FyoEjhsgGDuAN+0LPw==
+X-ME-Sender: <xms:_GZnZJnWZB2IyypOr_yRnE0D3CvKXbEq05w1xtt0PEPHojUtrJ9MMQ>
+    <xme:_GZnZE3xvucdo-tfM8QW2EAJZB2cLg5FK-b55YHFAak6yQxPgdokQkFRcuORdo1-b
+    j0iVbQuppIa6aIaKBA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeihedggeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:_GZnZPpDdGmXZCCb7m59J49-q5TnDSqQBwV6B31eJLU3NxqW9Mifmg>
+    <xmx:_GZnZJn57hY2WDzP4ha-F1l54B-WWf1X7xyQqCE9g3bQ7QrrPpXeig>
+    <xmx:_GZnZH2AT3tC_hFcIMFDqo84dtlpJ0mh489IMmq_BtxdyO71BrapSA>
+    <xmx:_WZnZLLmQYCUSB-Wfx2NvnHGRoXma16YUbBHKSLs0RdQMpJEHg4p2w>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 147E1B6008D; Fri, 19 May 2023 08:09:31 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-431-g1d6a3ebb56-fm-20230511.001-g1d6a3ebb
+Mime-Version: 1.0
+Message-Id: <9aaed1c3-9a7d-4348-b15f-2bb9be654bef@app.fastmail.com>
+In-Reply-To: <a78d9dcd-0bc1-7e98-a8f1-e5d6cd0c09a3@intel.com>
+References: <20230516193549.544673-1-arnd@kernel.org>
+ <a78d9dcd-0bc1-7e98-a8f1-e5d6cd0c09a3@intel.com>
+Date:   Fri, 19 May 2023 14:09:11 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Dave Hansen" <dave.hansen@intel.com>,
+        "Arnd Bergmann" <arnd@kernel.org>, x86@kernel.org
+Cc:     "Thomas Gleixner" <tglx@linutronix.de>,
+        "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Andy Lutomirski" <luto@kernel.org>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        "Masami Hiramatsu" <mhiramat@kernel.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        "Juergen Gross" <jgross@suse.com>,
+        "Srivatsa S. Bhat (VMware)" <srivatsa@csail.mit.edu>,
+        "Alexey Makhalov" <amakhalov@vmware.com>,
+        "VMware PV-Drivers Reviewers" <pv-drivers@vmware.com>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "Darren Hart" <dvhart@infradead.org>,
+        "Andy Shevchenko" <andy@infradead.org>,
+        "Boris Ostrovsky" <boris.ostrovsky@oracle.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-pci@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-pm@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH 00/20] x86: address -Wmissing-prototype warnings
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_TEMPERROR,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear developers:
-I compiled bpftool and bpf tests in mainline (2d1bcbc6cd70),
-but when I invoke:
-bpftool struct_ops register bpf_cubic.bpf.o
+On Thu, May 18, 2023, at 23:56, Dave Hansen wrote:
+> On 5/16/23 12:35, Arnd Bergmann wrote:
+>> 
+>> All of the warnings have to be addressed in some form before the warning
+>> can be enabled by default.
+>
+> I picked up the ones that were blatantly obvious, but left out 03, 04,
+> 10, 12 and 19 for the moment.
 
-the command line fail with:
-libbpf: struct_ops init_kern: struct tcp_congestion_ops data is not
-found in struct bpf_struct_ops_tcp_congestion_ops
-libbpf: failed to load object 'bpf_cubic.bpf.o'
+Ok, thanks!
 
-The host OS I used to compile the kernel and bpf is Ubuntu 23.04, the
-guest OS that I run bpftool is Ubuntu 22.04.
-I have stumbled on this for several days, could you help me by guidance my way?
+I've already sent a fixed version of patch 10, let me know if you
+need anything else for the other ones.
 
-Thanks in advance
-Zhouyi
+> BTW, I think the i386 allyesconfig is getting pretty lightly tested
+> these days.  I think you and I hit the same mlx4 __bad_copy_from()
+> compile issue.
+
+I did all my testing on randconfig builds, so I probably caught a lot
+of the more obscure corner cases, but it doesn't always hit everything
+that is in allyesconfig/allmodconfig.
+
+       Arnd
