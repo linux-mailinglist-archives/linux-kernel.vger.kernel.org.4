@@ -2,85 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37BD0708D94
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 04:00:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C502708DAE
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 04:12:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230222AbjESCAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 22:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39842 "EHLO
+        id S230339AbjESCME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 22:12:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230192AbjESCAW (ORCPT
+        with ESMTP id S230308AbjESCMB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 22:00:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28B72B1
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 19:00:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 18 May 2023 22:12:01 -0400
+Received: from bird.elm.relay.mailchannels.net (bird.elm.relay.mailchannels.net [23.83.212.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1419FE4A;
+        Thu, 18 May 2023 19:11:59 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 5170B540B3A;
+        Fri, 19 May 2023 02:11:59 +0000 (UTC)
+Received: from pdx1-sub0-mail-a208.dreamhost.com (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id B909554189B;
+        Fri, 19 May 2023 02:11:58 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1684462318; a=rsa-sha256;
+        cv=none;
+        b=lFVuP0UoAneulIb7AnLiKzB/VWkoxfjRvq9wDf/gk5bJ0/rcRTYyHpH/RCpPhJl1iALLig
+        jIq5PhCKmV8jrX5yowgbfX8NvUPZqRuxH0cNB6YdORheHKeCOn5J547NAy4R0ogBvUAMYJ
+        u5GuLicKDmbbqa6WitM6R+0KA7BG9wwNdZ8E29aDbyL6NPNYU/GljD6b7v/zbkAWCqW6Hl
+        hqsSRd1pLvsFcOms537k03oRCdCjSkEyBkl9xH0bcXJFiZCkgSCYpaCPCadPbnCx7gfiOP
+        k4LSsgJE8zgAVzEseCnCWupQTZKhwh5O9p7tqtu8EOPXOUXqU7gQ9kd/AcwGYA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1684462318;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=UGS5YSwf/rGU2XZSGVPlNsADHYegr/4g6swrqUfHy7s=;
+        b=7mShLIeClaqzPUCKIdjphAH2oWfX+GzrU/n0YYf5GZwnx6vBJGOz6Ud4sISM2FFCG8sl8Q
+        6fA0t67d5XFZfEXlDgYKMRLtCiJTpLTzN7kWn7491KZ3Pl2u+AEaNvK34mXB711KlBME9t
+        xeEGsFs5xgo2bLOw8lYwP11WKZq4TxmmwcrG2pccP/TTsJspxpaOopzyO52TBYIma1edIh
+        uZ3rlsz3A3ndwiMOx/xgkMjJwidIzYl45rMtn6/mFjUOmuU4y7m/osfsrNZIrj3EibazMi
+        TnR9uo4NkkvwQJAYBDmtnqSSOHK29gc80eTbecqV+m2fbBWL3ePRuYpWfgkA4A==
+ARC-Authentication-Results: i=1;
+        rspamd-5cdf8fd7d9-fw8rh;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Stupid-Trouble: 64a12e39217dfb73_1684462319114_247395351
+X-MC-Loop-Signature: 1684462319113:2194989952
+X-MC-Ingress-Time: 1684462319113
+Received: from pdx1-sub0-mail-a208.dreamhost.com (pop.dreamhost.com
+ [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.127.59.19 (trex/6.8.1);
+        Fri, 19 May 2023 02:11:59 +0000
+Received: from offworld (unknown [104.36.25.8])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 88FC96539D
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 02:00:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E292EC4339E;
-        Fri, 19 May 2023 02:00:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684461619;
-        bh=5sOQHQ9Kucc4cxOLrcur6qfX+1wsgfuVZWtUJ50lEPE=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=EqCpmX7beQRULXUiNGQKrXJiL71Mh8t41y8i6OecWSR1X0rSBtzvHW3SjlNme0v1E
-         JWybiszk1ABLgjcSERud7FlYvTSnXRrSqIiwkB0DdBaiby5J0P4xhDQ6bFRfU7UmC4
-         3EXHU9BJK9OWlKuEIaKHNyZKdFlVaGEoV37J9E98WdmBv0KJ1eR8dyFd5s4CMlDTNb
-         Pv9ZtdinN0bWEGH0lXj5qry/uHfcpHlIZbaNnggWhgD0uVkL/sjKskvYA2OprwDDKd
-         0kvoqA3RQzVcyyk/UErJBxjKx4IHjfXTATWQwU0+nuYJpT4ftj80C6QQ3n3hRUQE/D
-         GFywBV1e5/nAw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id C7A67E21EE0;
-        Fri, 19 May 2023 02:00:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a208.dreamhost.com (Postfix) with ESMTPSA id 4QMr255946z9r;
+        Thu, 18 May 2023 19:11:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1684462318;
+        bh=UGS5YSwf/rGU2XZSGVPlNsADHYegr/4g6swrqUfHy7s=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=edgYCx8RTxJ0QaKA/sRny6kjo4yI+ie8V3T3tW3Jox9IGLLgUlCkCUW7GsXlG+fQt
+         Dy7yqwu9j4WqawEvohkJsvU0mOTsv9Qd7SadnukmYuHAiZSmWE1qX5A6PuM/zoRbpm
+         TBTJE4UzsqXG2EvTEN7GtbvfDe72pql0hx847aZO0IeAYYn6+ybr8QvRB4b8yJ4UiH
+         vlCaeg3n9I70PEXabo2MdA9a7+MdQYUl8MiZukvF+LO9FKWqmHJY5CZ3vlLgqLzcFj
+         w8FI+Ir/NVi31hL9ajSsQdWVlirdm4NCVOUg+SAuLbduizTKIzR134trbKguCnkJ5n
+         kfq78sUTFUMdw==
+Date:   Thu, 18 May 2023 18:38:46 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     LiuLele <liu.lele@qq.com>
+Cc:     dave.jiang@intel.com, Jonathan.Cameron@huawei.com,
+        alison.schofield@intel.com, bhelgaas@google.com,
+        bwidawsk@kernel.org, dan.j.williams@intel.com, helgaas@kernel.org,
+        ira.weiny@intel.com, linux-acpi@vger.kernel.org,
+        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, rostedt@goodmis.org,
+        vishal.l.verma@intel.com
+Subject: Re: CXL memory device not created correctly
+Message-ID: <gbsxrcjtnf67jxpqmbn57nqoslpmjtuk2ycatmau3vfsmpvbrd@c2umpofn2hti>
+References: <cec6a8f5-a284-4f46-1ada-4edd625a9a2e@intel.com>
+ <tencent_D9D9D358330CA573E23D490C6EE13E0DC105@qq.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] platform/chrome: cros_typec_switch: Add Pin D support
-From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <168446161981.25987.15931742013465277857.git-patchwork-notify@kernel.org>
-Date:   Fri, 19 May 2023 02:00:19 +0000
-References: <20230508183428.1893357-1-pmalani@chromium.org>
-In-Reply-To: <20230508183428.1893357-1-pmalani@chromium.org>
-To:     Prashant Malani <pmalani@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
-        bleung@chromium.org, heikki.krogerus@linux.intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <tencent_D9D9D358330CA573E23D490C6EE13E0DC105@qq.com>
+User-Agent: NeoMutt/20230407
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Fri, 19 May 2023, LiuLele wrote:
 
-This patch was applied to chrome-platform/linux.git (for-next)
-by Prashant Malani <pmalani@chromium.org>:
+>In my testing CXL device /sys/bus/cxl/devices/mem0  not created, and the get error messages :
+>
+>```
+>cxl_pci 0000:0d:00.0: Failed to get interrupt for event Info log
+>```
+>
+>My test environment is a qemu CXL emulator with qemu v8.0.0, Linux kernel v6.3.0.
+>While with kernel 5.9.13,  /sys/bus/cxl/devices/mem0  can be created.
 
-On Mon,  8 May 2023 18:34:27 +0000 you wrote:
-> The ChromeOS EC's mux interface allows us to specify whether the port
-> should be configured for Pin Assignment D in DisplayPort alternate mode
-> (i.e 2 lanes USB + 2 lanes DP). Update the function that determines mux
-> state to account for Pin Assignment D and return the appropriate mux
-> setting.
-> 
-> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Signed-off-by: Prashant Malani <pmalani@chromium.org>
-> 
-> [...]
+Yes, this can be annoying and would argue the probe should not error out.
+Regardless, the actual qemu support is in Jonathan's tree:
 
-Here is the summary with links:
-  - platform/chrome: cros_typec_switch: Add Pin D support
-    https://git.kernel.org/chrome-platform/c/c9f9c6c875d1
+https://gitlab.com/jic23/qemu/-/commit/a04e6476df363d1f6bc160577b30dda6564d3f67
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Thanks,
+Davidlohr
