@@ -2,180 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D66D709F08
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 20:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BAF8A709F0A
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 20:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbjESSXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 14:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34430 "EHLO
+        id S229744AbjESSZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 14:25:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjESSX1 (ORCPT
+        with ESMTP id S229493AbjESSZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 14:23:27 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E50BD132
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 11:23:24 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id d2e1a72fcca58-64d285fc7ecso1923043b3a.2
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 11:23:24 -0700 (PDT)
+        Fri, 19 May 2023 14:25:57 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6D3E1
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 11:25:56 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba8696637a7so6861071276.3
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 11:25:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684520604; x=1687112604;
+        d=google.com; s=20221208; t=1684520755; x=1687112755;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DLB02Z/Vwsol/Ye6PM6jgDdfosuGHdGXe49pn4jVFGs=;
-        b=ITz9fDEYRz6uJ1+nRWO7vsSi14em+HdSJidcWgxJ4Wt6DeOJu7xDarNLoGHPPmOBJm
-         513df8JS3NzUdZBK5GSwxSAE1obesd28XWXoOz2iBbvdy2ADgD8Q7q4etCMKIPinEZf9
-         82KenOrwjvv/KK8vs+qKxwowe4qePsP8+TuW1ty9rOYtzfzi/ynfD476K7Sa4jcxQ34p
-         HkwfUr8RcwOMfxti367AckaqXDd3aDIN65dnmKhBIIZmfTcWPib/CZQFAhBLIgn2eTM2
-         VcgA71nqkKuEZwM79FEKmyy8iW+KFC3fLH2DABkTHNX+7IlmO+RnTTQJhuLLoZh1rgpR
-         H95A==
+        bh=UkvqDfyMOLrjy8YMY1wwRgMIQfqQZGbB8xX3NIFQuJ8=;
+        b=EHWVv93HNkwFD6Rzv38Ipc2B9rPBD1UDSNb25aEyGm9tgrL4HAfKR3FhP4mF0gDZ8o
+         5akGYCEZHakPY7q+34PKZr+wjUxJKbOWkHSdmCIF9EthXaS0GE1aeTDaAYg74+n8LxZv
+         NrNY0cT19gsI9F6xDoZFfVqJL3/PXEZm7iHMz8EEbdrZb3BVlRolZpZs2icBr5OUNum5
+         NS6M57Pod3yr/sG/iNpxrle6ypJpM2UH+leYpSYYesmxJnETM/FgFp+u2mEeUpZlkVpR
+         gVvuRxOcV30/Oziq9eKB/d6UWnrG6nSzoKyR8Y2BOsFA/g06gQPoCPP9LQW1NpKMIWBr
+         bE6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684520604; x=1687112604;
+        d=1e100.net; s=20221208; t=1684520755; x=1687112755;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DLB02Z/Vwsol/Ye6PM6jgDdfosuGHdGXe49pn4jVFGs=;
-        b=eC6eIcMKDAQGbTTyfRsYnUfAT0Fd0Yro5EXszQcxINMnP8Sry0tVHZteAImWNhKIIj
-         +dr9Y+K92MegZK9YZxGnhK817NT+Avfi7qbVFGG/Q3Cszm+f3s4TEAzjQa4B56spXvjq
-         h3Z04XUlwlp0QIghpdbnWjjJqgHzFwCn/bgCU0A4QIoF2UfVJ58NvCZyLxYjL0RtgUVg
-         EFz5cDsf9rHQH7f/XsIPOfa2NeTVRZb5yyy8qwBYgp3cw3U/gCEqVPb350MEeNXnbiJ9
-         eBIX673qFgUzGn0kFNa827Vw2sKGyFCNivZqbsAEgfYPPdr27TnwvKQTePEMx9LY/rTX
-         Geew==
-X-Gm-Message-State: AC+VfDzG4/fsdpG2b7ZzWHQ5Fr/+kq1jhsy4Uj1i4KwlZr0BIKZKEwtw
-        KyLt5MasFO29Vdz6+ywfYyy1I04o3sM=
-X-Google-Smtp-Source: ACHHUZ419BZyva9XfjdHZezzlVRJTJng9P1rwHIVB2iZ3Kvn5yX6WZYPLwlGGRjyBM2xKvPRPQpWmzT2ch0=
+        bh=UkvqDfyMOLrjy8YMY1wwRgMIQfqQZGbB8xX3NIFQuJ8=;
+        b=MAikf9SOX62Yv3JNURu3oUUEG31NBadlQfQUZ9fcZRpIrI6fl9gv/9kT571ogzz92N
+         wxo/O7rnKRQ6E9G0uLa5y0aUtUm3Ij2LyWtDXfaN3ewX4GGa5L36C9aaW430be0XF/GQ
+         gyeqUzDs5NK00YVGOaTyiIJpW19LcSUe6B1FyXWNp/RZNX7N4QdIjqaJBJJdS3Vy5Y+i
+         vZsWlALmnAokMQvQ1bklQTQ7XrXC0gF4BRG270VzV2YNoAB4Uzu/hDoxPnnra9S22b3C
+         bW/ABDpQu9SG3A4nFHs2cDfsp7dj+joQjerdRILN4btVJjnKB2dDPFiJBo/vHvMXFJ2z
+         W9wg==
+X-Gm-Message-State: AC+VfDyZQ1FVm5Tfjf9BKSD5nIR2xTkZ79CfC1gmcd2/ZzEjql95Jaa3
+        AXGTXN7LPBesC/kG5MHeRPeMIhCiWjs=
+X-Google-Smtp-Source: ACHHUZ78HIA/K1sflsbUYSUjC6gecUrhcvhYYTntQ6SB2UFg6TeL234xl9KHrlPWo8SNMaksMPK95sULPeI=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:aa7:88c4:0:b0:643:4595:64c7 with SMTP id
- k4-20020aa788c4000000b00643459564c7mr1352262pff.4.1684520604384; Fri, 19 May
- 2023 11:23:24 -0700 (PDT)
-Date:   Fri, 19 May 2023 11:23:23 -0700
-In-Reply-To: <CSQFE7I30W27.2TPDIHOTZNRIZ@dev-dsk-nsaenz-1b-189b39ae.eu-west-1.amazon.com>
+ (user=seanjc job=sendgmr) by 2002:a25:8402:0:b0:ba8:797c:9bc7 with SMTP id
+ u2-20020a258402000000b00ba8797c9bc7mr1655166ybk.11.1684520755427; Fri, 19 May
+ 2023 11:25:55 -0700 (PDT)
+Date:   Fri, 19 May 2023 11:25:53 -0700
+In-Reply-To: <20230519162432.GG4967@kernel.org>
 Mime-Version: 1.0
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-3-chao.p.peng@linux.intel.com> <CSQFE7I30W27.2TPDIHOTZNRIZ@dev-dsk-nsaenz-1b-189b39ae.eu-west-1.amazon.com>
-Message-ID: <ZGe+m+uFzpiW7wlr@google.com>
-Subject: Re: [PATCH v10 2/9] KVM: Introduce per-page memory attributes
+References: <20230308094106.227365-1-rppt@kernel.org> <e48a7fb1f8ab8d670b0884fd2a5d1e8c1c20e712.camel@intel.com>
+ <ZAn34D3hXR7dp8KC@kernel.org> <ZGeYgKCFOkzP2fub@google.com> <20230519162432.GG4967@kernel.org>
+Message-ID: <ZGe/Md3FXb1ihXwe@google.com>
+Subject: Re: [RFC PATCH 0/5] Prototype for direct map awareness in page allocator
 From:   Sean Christopherson <seanjc@google.com>
-To:     Nicolas Saenz Julienne <nsaenz@amazon.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, graf@amazon.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com, anelkz@amazon.de
+To:     Mike Rapoport <rppt@kernel.org>
+Cc:     Rick P Edgecombe <rick.p.edgecombe@intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "song@kernel.org" <song@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
 Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023, Nicolas Saenz Julienne wrote:
-> Hi,
+On Fri, May 19, 2023, Mike Rapoport wrote:
+> On Fri, May 19, 2023 at 08:40:48AM -0700, Sean Christopherson wrote:
+> > On Thu, Mar 09, 2023, Mike Rapoport wrote:
+> > > On Thu, Mar 09, 2023 at 01:59:00AM +0000, Edgecombe, Rick P wrote:
+> > > > On Wed, 2023-03-08 at 11:41 +0200, Mike Rapoport wrote:
+> > > > > From: "Mike Rapoport (IBM)" <rppt@kernel.org>
+> > > > > 
+> > > > > Hi,
+> > > > > 
+> > > > > This is a third attempt to make page allocator aware of the direct
+> > > > > map
+> > > > > layout and allow grouping of the pages that must be unmapped from
+> > > > > the direct map.
+> > > > > 
+> > > > > This a new implementation of __GFP_UNMAPPED, kinda a follow up for
+> > > > > this set:
+> > > > > 
+> > > > > https://lore.kernel.org/all/20220127085608.306306-1-rppt@kernel.org
+> > > > > 
+> > > > > but instead of using a migrate type to cache the unmapped pages, the
+> > > > > current implementation adds a dedicated cache to serve __GFP_UNMAPPED
+> > > > > allocations.
+> > > > 
+> > > > It seems a downside to having a page allocator outside of _the_ page
+> > > > allocator is you don't get all of the features that are baked in there.
+> > > > For example does secretmem care about numa? I guess in this
+> > > > implementation there is just one big cache for all nodes.
+> > > > 
+> > > > Probably most users would want __GFP_ZERO. Would secretmem care about
+> > > > __GFP_ACCOUNT?
+> > > 
+> > > The intention was that the pages in cache are always zeroed, so __GFP_ZERO
+> > > is always implicitly there, at least should have been.
+> > 
+> > Would it be possible to drop that assumption/requirement, i.e. allow allocation of
+> > __GFP_UNMAPPED without __GFP_ZERO?  At a glance, __GFP_UNMAPPED looks like it would
+> > be a great fit for backing guest memory, in particular for confidential VMs.  And
+> > for some flavors of CoCo, i.e. TDX, the trusted intermediary is responsible for
+> > zeroing/initializing guest memory as the untrusted host (kernel/KVM) doesn't have
+> > access to the guest's encryption key.  In other words, zeroing in the kernel would
+> > be unnecessary work.
 > 
-> On Fri Dec 2, 2022 at 6:13 AM UTC, Chao Peng wrote:
+> Making and unmapped allocation without __GFP_ZERO shouldn't be a problem. 
 > 
-> [...]
-> > +The user sets the per-page memory attributes to a guest memory range indicated
-> > +by address/size, and in return KVM adjusts address and size to reflect the
-> > +actual pages of the memory range have been successfully set to the attributes.
-> > +If the call returns 0, "address" is updated to the last successful address + 1
-> > +and "size" is updated to the remaining address size that has not been set
-> > +successfully. The user should check the return value as well as the size to
-> > +decide if the operation succeeded for the whole range or not. The user may want
-> > +to retry the operation with the returned address/size if the previous range was
-> > +partially successful.
-> > +
-> > +Both address and size should be page aligned and the supported attributes can be
-> > +retrieved with KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES.
-> > +
-> > +The "flags" field may be used for future extensions and should be set to 0s.
+> However, using a gfp flag and hooking up into the free path in page
+> allocator have issues and preferably should be avoided.
 > 
-> We have been looking into adding support for the Hyper-V VSM extensions
-> which Windows uses to implement Credential Guard. This interface seems
-> like a good fit for one of its underlying features. I just wanted to
-> share a bit about it, and see if we can expand it to fit this use-case.
-> Note that this was already briefly discussed between Sean and Alex some
-> time ago[1].
-> 
-> VSM introduces isolated guest execution contexts called Virtual Trust
-> Levels (VTL) [2]. Each VTL has its own memory access protections,
-> virtual processors states, interrupt controllers and overlay pages. VTLs
-> are hierarchical and might enforce memory protections on less privileged
-> VTLs. Memory protections are enforced on a per-GPA granularity.
-> 
-> The list of possible protections is:
-> - No access -- This needs a new memory attribute, I think.
+> Will something like unmapped_alloc() and unmapped_free() work for your
+> usecase?
 
-No, if KVM provides three bits for READ, WRITE, and EXECUTE, then userspace can
-get all the possible combinations.  E.g. this is RWX=000b
+Yep, I'm leaning more and more towards having KVM implement its own ioctl() for
+managing this type of memory.  Wiring that up to use dedicated APIs should be no
+problem.
 
-> - Read-only, no execute
-
-RWX=100b (using my completely arbitrary ordering of RWX bits :-) )
-
-> - Read-only, execute
-
-RWX=101b
-
-> - Read/write, no execute
-
-RWX=110b
-
-> - Read/write, execute
-
-RWX=111b
-
-> We implemented this in the past by using a separate address space per
-> VTL and updating memory regions on protection changes. But having to
-> update the memory slot layout for every permission change scales poorly,
-> especially as we have to perform 100.000s of these operations at boot
-> (see [1] for a little more context).
-> 
-> I believe the biggest barrier for us to use memory attributes is not
-> having the ability to target specific address spaces, or to the very
-> least having some mechanism to maintain multiple independent layers of
-> attributes.
-
-Can you elaborate on "specific address spaces"?  In KVM, that usually means SMM,
-but the VTL comment above makes me think you're talking about something entirely
-different.  E.g. can you provide a brief summary of the requirements/expectations?
-
-> Also sorry for not posting our VSM patches. They are not ready for
-> upstream review yet, but we're working on it.
-> 
-> Nicolas
-> 
-> [1] https://patchwork.kernel.org/comment/25054908/
-> [2] See Chapter 15 of Microsoft's 'Hypervisor Top Level Functional Specification':
->     https://raw.githubusercontent.com/MicrosoftDocs/Virtualization-Documentation/main/tlfs/Hypervisor%20Top%20Level%20Functional%20Specification%20v6.0b.pdf
+Thanks!
