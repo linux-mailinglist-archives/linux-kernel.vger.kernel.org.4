@@ -2,129 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A61B070A331
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 01:08:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5DE870A329
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 01:07:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231799AbjESXIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 19:08:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37534 "EHLO
+        id S229597AbjESXHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 19:07:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231672AbjESXI0 (ORCPT
+        with ESMTP id S229449AbjESXHx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 19:08:26 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 871A11B7;
-        Fri, 19 May 2023 16:08:25 -0700 (PDT)
-Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
-        by linux.microsoft.com (Postfix) with ESMTPSA id E5CF920FB618;
-        Fri, 19 May 2023 16:08:24 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E5CF920FB618
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1684537705;
-        bh=VuJim+olM4mdhP+9flU3IJ60VgfVV5tOztn8lZStPJ4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=EA90QIJKk7Kzx8LR8kLyEGzeafYINfLECxf+o873foSJutgK6yUMqSqpFLQzJNcrg
-         Tz2xfOFTTScDouLpbyQDcjhjegnMdskIsEl00QcJHkv+qfIyHLUKsk8hL3A9VaS2nE
-         blpwdRhDpEZI+77H1b2c9W9gqGV/3MS8ziQfOuCw=
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     rostedt@goodmis.org, mhiramat@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, ast@kernel.org
-Subject: [PATCH v3 4/4] tracing/user_events: Document user_event_mm one-shot list usage
-Date:   Fri, 19 May 2023 16:07:41 -0700
-Message-Id: <20230519230741.669-5-beaub@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230519230741.669-1-beaub@linux.microsoft.com>
-References: <20230519230741.669-1-beaub@linux.microsoft.com>
+        Fri, 19 May 2023 19:07:53 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48401B0
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 16:07:50 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-64d2da69fdfso1920603b3a.0
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 16:07:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1684537670; x=1687129670;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vej0HUXiqshmcvqs7VBZTGkCXU+JddJuVreKpbmYuhw=;
+        b=M7M+fUzZKYFhCed62ckEM75i49Kzi0Sy+mNCDiHsZpcNM/HQImrznTrkS4Wi9NL1Qt
+         OpBue7B/lTyS4Ky8m0UYNNuyU32olEvqU9kMDgIsurTQS74yymOzmc8h+RSkAmjSqxOP
+         woaJGiEwnE03YgfMS1q3jv3TV55P4eda89l5rEF9YibVhRMXrAoasmZaFgYrpCbUd+oE
+         XkNqBx9FFYqUpTZUSUyJJeWE0IiZORfli0QtnpbJ5rpT7PGgf7LZiQ+NCEMRM7WFfN1T
+         vkwBHodfbKEBqQNapAiloS/SU1gESn6ZDbM8KRw093WyP1wcSNUWGyK7A0I+ybuXSTVQ
+         2JuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684537670; x=1687129670;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vej0HUXiqshmcvqs7VBZTGkCXU+JddJuVreKpbmYuhw=;
+        b=Kr4KubnJagVpSQyAjDLrv89U4wL8s0wGT318UKjqe7NUPvcSB6speu+Zek6gPKiAzH
+         G84NT990mOIoTs5leOhzBQG6/ukthXNc/zsr8A/+R7X1D0jsxeHDWLeGdeSkD9agHL5X
+         89AJ3QEzpNviLhfIjHCqJ+/E8j7qPlWlj5hahU1s0IVq9M6V0W+Y/2nq1Gx09CMKqdWj
+         nDbDJrDCrJzVfsFPwk7gCvhiD6aFbOHKeg2Gu4S8YvlkeVNQ9lyL8WadDKIPzsW+Ej9V
+         nes7TQwLrM6ZL3gCcT0D7IQFWpe0eHJ+j0cPINC6R4KmQ8/yIB4U4dMbj+2Ll1NL095l
+         3NTg==
+X-Gm-Message-State: AC+VfDwcWgZ9B9VYHmjZVYPev2dxprCnMYdB9+0qeYJg0wWLX2w1zQ2+
+        JDGBPd7JvuBpNWMklouRk5a8sg==
+X-Google-Smtp-Source: ACHHUZ44Ml1ojpiPU8i/+mCvFac8UKDWss2kgW+R+G0QKFHgCdmutJq5p5DRKhkFYnyqqBTN1Dtx1w==
+X-Received: by 2002:a05:6a00:1896:b0:63b:854c:e0f6 with SMTP id x22-20020a056a00189600b0063b854ce0f6mr5344668pfh.21.1684537670148;
+        Fri, 19 May 2023 16:07:50 -0700 (PDT)
+Received: from dread.disaster.area (pa49-179-0-188.pa.nsw.optusnet.com.au. [49.179.0.188])
+        by smtp.gmail.com with ESMTPSA id i6-20020aa78d86000000b006414289ab69sm204704pfr.52.2023.05.19.16.07.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 May 2023 16:07:49 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.96)
+        (envelope-from <david@fromorbit.com>)
+        id 1q09CM-001WVR-2G;
+        Sat, 20 May 2023 09:07:46 +1000
+Date:   Sat, 20 May 2023 09:07:46 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Mike Snitzer <snitzer@kernel.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Sarthak Kukreti <sarthakkukreti@chromium.org>,
+        dm-devel@redhat.com, linux-block@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Brian Foster <bfoster@redhat.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Bart Van Assche <bvanassche@google.com>,
+        "Darrick J. Wong" <djwong@kernel.org>
+Subject: Re: [PATCH v7 0/5] Introduce provisioning primitives
+Message-ID: <ZGgBQhsbU9b0RiT1@dread.disaster.area>
+References: <20230518223326.18744-1-sarthakkukreti@chromium.org>
+ <ZGb2Xi6O3i2pLam8@infradead.org>
+ <ZGeKm+jcBxzkMXQs@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZGeKm+jcBxzkMXQs@redhat.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During 6.4 development it became clear that the one-shot list used by
-the user_event_mm's next field was confusing to others. It is not clear
-how this list is protected or what the next field usage is for unless
-you are familiar with the code.
+On Fri, May 19, 2023 at 10:41:31AM -0400, Mike Snitzer wrote:
+> On Fri, May 19 2023 at 12:09P -0400,
+> Christoph Hellwig <hch@infradead.org> wrote:
+> 
+> > FYI, I really don't think this primitive is a good idea.  In the
+> > concept of non-overwritable storage (NAND, SMR drives) the entire
+> > concept of a one-shoot 'provisioning' that will guarantee later writes
+> > are always possible is simply bogus.
+> 
+> Valid point for sure, such storage shouldn't advertise support (and
+> will return -EOPNOTSUPP).
+> 
+> But the primitive still has utility for other classes of storage.
 
-Add comments into the user_event_mm struct indicating lock requirement
-and usage. Also document how and why this approach was used via comments
-in both user_event_enabler_update() and user_event_mm_get_all() and the
-rules to properly use it.
+Yet the thing people are wanting to us filesystem developers to use
+this with is thinly provisioned storage that has snapshot
+capability. That, by definition, is non-overwritable storage. These
+are the use cases people are asking filesystes to gracefully handle
+and report errors when the sparse backing store runs out of space.
 
-Link: https://lore.kernel.org/linux-trace-kernel/CAHk-=wicngggxVpbnrYHjRTwGE0WYscPRM+L2HO2BF8ia1EXgQ@mail.gmail.com/
+e.g. journal writes after a snapshot is taken on a busy filesystem
+are always an overwrite and this requires more space in the storage
+device for the write to succeed. ENOSPC from the backing device for
+journal IO is a -fatal error-. Hence if REQ_PROVISION doesn't
+guarantee space for overwrites after snapshots, then it's not
+actually useful for solving the real world use cases we actually
+need device-level provisioning to solve.
 
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
----
- include/linux/user_events.h      |  1 +
- kernel/trace/trace_events_user.c | 23 ++++++++++++++++++++++-
- 2 files changed, 23 insertions(+), 1 deletion(-)
+It is not viable for filesystems to have to reprovision space for
+in-place metadata overwrites after every snapshot - the filesystem
+may not even know a snapshot has been taken! And it's not feasible
+for filesystems to provision on demand before they modify metadata
+because we don't know what metadata is going to need to be modified
+before we start modifying metadata in transactions. If we get ENOSPC
+from provisioning in the middle of a dirty transcation, it's all
+over just the same as if we get ENOSPC during metadata writeback...
 
-diff --git a/include/linux/user_events.h b/include/linux/user_events.h
-index 17d452b389de..8afa8c3a0973 100644
---- a/include/linux/user_events.h
-+++ b/include/linux/user_events.h
-@@ -20,6 +20,7 @@ struct user_event_mm {
- 	struct list_head	mms_link;
- 	struct list_head	enablers;
- 	struct mm_struct	*mm;
-+	/* Used for one-shot lists, protected by event_mutex */
- 	struct user_event_mm	*next;
- 	refcount_t		refcnt;
- 	refcount_t		tasks;
-diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-index 360d0f965cb8..6058ca2de3be 100644
---- a/kernel/trace/trace_events_user.c
-+++ b/kernel/trace/trace_events_user.c
-@@ -450,12 +450,25 @@ static bool user_event_enabler_exists(struct user_event_mm *mm,
- static void user_event_enabler_update(struct user_event *user)
- {
- 	struct user_event_enabler *enabler;
--	struct user_event_mm *mm = user_event_mm_get_all(user);
- 	struct user_event_mm *next;
-+	struct user_event_mm *mm;
- 	int attempt;
- 
- 	lockdep_assert_held(&event_mutex);
- 
-+	/*
-+	 * We need to build a one-shot list of all the mms that have an
-+	 * enabler for the user_event passed in. This list is only valid
-+	 * while holding the event_mutex. The only reason for this is due
-+	 * to the global mm list being RCU protected and we use methods
-+	 * which can wait (mmap_read_lock and pin_user_pages_remote).
-+	 *
-+	 * NOTE: user_event_mm_get_all() increments the ref count of each
-+	 * mm that is added to the list to prevent removal timing windows.
-+	 * We must always put each mm after they are used, which may wait.
-+	 */
-+	mm = user_event_mm_get_all(user);
-+
- 	while (mm) {
- 		next = mm->next;
- 		mmap_read_lock(mm->mm);
-@@ -514,6 +527,14 @@ static struct user_event_mm *user_event_mm_get_all(struct user_event *user)
- 	struct user_event_enabler *enabler;
- 	struct user_event_mm *mm;
- 
-+	/*
-+	 * We use the mm->next field to build a one-shot list from the global
-+	 * RCU protected list. To build this list the event_mutex must be held.
-+	 * This lets us build a list without requiring allocs that could fail
-+	 * when user based events are most wanted for diagnostics.
-+	 */
-+	lockdep_assert_held(&event_mutex);
-+
- 	/*
- 	 * We do not want to block fork/exec while enablements are being
- 	 * updated, so we use RCU to walk the current tasks that have used
+Hence what filesystems actually need is device provisioned space to
+be -always over-writable- without ENOSPC occurring.  Ideally, if we
+provision a range of the block device, the block device *must*
+guarantee all future writes to that LBA range succeeds. That
+guarantee needs to stand until we discard or unmap the LBA range,
+and for however many writes we do to that LBA range.
+
+e.g. If the device takes a snapshot, it needs to reprovision the
+potential COW ranges that overlap with the provisioned LBA range at
+snapshot time. e.g. by re-reserving the space from the backing pool
+for the provisioned space so if a COW occurs there is space
+guaranteed for it to succeed.  If there isn't space in the backing
+pool for the reprovisioning, then whatever operation that triggers
+the COW behaviour should fail with ENOSPC before doing anything
+else....
+
+Software devices like dm-thin/snapshot should really only need to
+keep a persistent map of the provisioned space and refresh space
+reservations for used space within that map whenever something that
+triggers COW behaviour occurs. i.e. a snapshot needs to reset the
+provisioned ranges back to "all ranges are freshly provisioned"
+before the snapshot is started. If that space is not available in
+the backing pool, then the snapshot attempt gets ENOSPC....
+
+That means filesystems only need to provision space for journals and
+fixed metadata at mkfs time, and they only need issue a
+REQ_PROVISION bio when they first allocate over-write in place
+metadata. We already have online discard and/or fstrim for releasing
+provisioned space via discards.
+
+This will require some mods to filesystems like ext4 and XFS to
+issue REQ_PROVISION and fail gracefully during metadata allocation.
+However, doing so means that we can actually harden filesystems
+against sparse block device ENOSPC errors by ensuring they will
+never occur in critical filesystem structures....
+
+-Dave.
 -- 
-2.25.1
-
+Dave Chinner
+david@fromorbit.com
