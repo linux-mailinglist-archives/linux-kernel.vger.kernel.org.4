@@ -2,187 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7236F709E7C
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 19:45:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A21B0709E83
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 19:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbjESRps (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 13:45:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49872 "EHLO
+        id S231200AbjESRql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 13:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbjESRpq (ORCPT
+        with ESMTP id S230426AbjESRqi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 13:45:46 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2072.outbound.protection.outlook.com [40.107.243.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A75FA;
-        Fri, 19 May 2023 10:45:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ppg+71jCFiaabfeufd7FApCDIZEXmIpE+XPg8HxQnIzVOBlLksSNmE6ijmV9SWU1Ymt3Ao3k1WVoXogKAZkix1oWmIXejfLCB4dS9iKtHqQ+pJz/Pvd8UhYewPyiWQbrgLeUA5iQaR9FZhL8f7G25HCO76pyiVkfp3ylBPUcOxpob3I5TtTlOtZcBBzeS072s3jG+h+2UvEJPAHurdAn/7Pq4sP3lLA+O1S5GL8yGPxkqkmXtmvBg2ZVXifmdcrU/IALOlp1hNm45uPZdUCKG5Jmon7FQ4cxkmVKEPvhczgh3glsaZYjTLzvo2LjLp4pa9BeeSVeHmz8kp1f+iphQg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=j6WC/cVxaj9ybZ5XMFXyqrPquAi+C7ftmXM2cHM77ZQ=;
- b=RJ//H3fi/KFCq5+1yFQ/4sk89tqSjoYYM6JXVwJmqO+zeb3bV8gJTmSJbCkfJV+Tc2AD7/win6DWiZBN/yMOUf4rJbMY9MpQvIiCa/gijbZJ4qBl+3IKZvSrTwYlN1RFWy+jobbb2hdqg/PQ/Z7EplKnoCIIKw0tjCChUn1TNq68r4l/jdP1p10vQPJ17qITE6wx9mV7Lj1adiSDEkC3p78joH1TvD8DdR9MQPBq1aLCUifKXLZfeXh1avEM9UzqkQREwq0+gMRH9dHk9PXfZ35VN1lYIm8e6kowrF4sKFpdzJybt45zGJI17rSMfgRaz/UOCnWnyO287uMKnxcEYQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=j6WC/cVxaj9ybZ5XMFXyqrPquAi+C7ftmXM2cHM77ZQ=;
- b=GsnfOmpX4FGqnIewkm1YrSR3JbBxsCsMjqtMGFc2VtWoXYDRy2OkIDGvyVHHhV2UulGVhUadlS7c6KmMlcwNSXer3I7aP8xSpIt0gkalo3vZ55tw1ZCL2R9KD0cWfk+eavmV1u68cMLU7evk+oXxWn7pp28IBehGWELlc5V7Hyc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by CH0PR12MB5329.namprd12.prod.outlook.com (2603:10b6:610:d4::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.21; Fri, 19 May
- 2023 17:45:40 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::3f45:358e:abba:24f5]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::3f45:358e:abba:24f5%3]) with mapi id 15.20.6411.019; Fri, 19 May 2023
- 17:45:40 +0000
-Message-ID: <a7493000-c72f-34af-d41c-9735eae5fd34@amd.com>
-Date:   Fri, 19 May 2023 12:44:48 -0500
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 3/3] crypto: ccp - Add support for PCI device 0x156E
-From:   "Limonciello, Mario" <mario.limonciello@amd.com>
-To:     Tom Lendacky <thomas.lendacky@amd.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>
-Cc:     John Allen <john.allen@amd.com>, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230519032414.94247-1-mario.limonciello@amd.com>
- <20230519032414.94247-4-mario.limonciello@amd.com>
-Content-Language: en-US
-In-Reply-To: <20230519032414.94247-4-mario.limonciello@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SN1PR12CA0061.namprd12.prod.outlook.com
- (2603:10b6:802:20::32) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+        Fri, 19 May 2023 13:46:38 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B38113D;
+        Fri, 19 May 2023 10:46:35 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34JFMfDd012512;
+        Fri, 19 May 2023 17:45:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=eudHzY6WP7JinnfOr70AykPZvSkkpEMxuNg8hMfppYo=;
+ b=DMV0U+nIXEVCY+aepXRfFYvdfBeVO+N4QF0je1NreoKWWMhdhmNCmkCFY69GHp3G1MUl
+ W4uLhQQIfJlWzCmL2UlwpB67SLBLlnvd3eaMcPBXY3xpzTd4DPesNiwRSj6AMqZBspVo
+ 08MDwx36HiK4jQA4XpyJQxV1CWo2sx0aEh71PEANzSjVcRsNE8URDp/9OH/+p2Kh4/Bd
+ u8dY8/MWw20kSLCJ06My3a975QQQC9ySq7nhEqEvzzuIHXWUfJmJ+Gzj0a0CNBUiRPUE
+ dcRr1k8AfSKrqIM3q0pDGScz3hGnOYsEF+bviVQ6TCuLFhAIK7GTUA+1LUQeisPdvBFr pg== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qp95v0w04-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 May 2023 17:45:03 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34JHj1wR008027
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 May 2023 17:45:01 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 19 May
+ 2023 10:44:59 -0700
+Message-ID: <ebe36911-024a-839c-3b7e-05c99bfb0d66@quicinc.com>
+Date:   Fri, 19 May 2023 11:44:58 -0600
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|CH0PR12MB5329:EE_
-X-MS-Office365-Filtering-Correlation-Id: b44b35ed-da75-49a6-2efe-08db5890dc71
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: c6WY1GGIBQCltVGHpHILRjBx+K+YD2g+ehiZ2pkcO5X/Ctwz3ZV+Pv+eiQXfrIKK4bBP2zLm3r74dp8gvo+/NLIZkhlTUiBq+OYs26BBlvVza5+b6hoFc/Mx/Kl8dJvZqHGR2L9X2f/ayRdEsrq1C5UiVj8wuz/vNNvY9Mu3Wprft9z0/OstHDFIdcboC5ULuhpXo/JHQwipeidTxCETfKF3RMxXlA799X8FyIcMm+w/dH+hEFA40EkS1qHGKi+VwQY2cLVnrLBm7qcTAJ6NZ9wuefqstNd4/Il/NDMTW/qtL56FSOqIvnKW3JvHGIlHOqHAGAwzYvE6BE9jvKalL8hESKtZrCVg49XjSs6rwrOEOFVgkm3GM+0KwaeSYHCAN57HgB2o5BsxRzZF2K+BYN+F9CgmH9uIN1SxTdTBsY/qzy2MaJ0I30Wwr0Petrr3ry4xnVQ3rNRziOzxe9ITjYJ4JwCdWbJFjL4DrEaYqP546hmrnRHDlwjcx5iTa02/0UpEo+NAceOvpPpidfe2OG30d9ihlv/v7J3rWVKF8fiIdJW6r+LYDmEKyUMR7J+HIkkB9eBTQSC9rAWu8sGu2xVz0qcvT4fwH/QUJDe1B8+upRaBZa7w6smtf6M7vVmRpHBTTxvDoAVGZFmPpv8a9g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(136003)(376002)(346002)(366004)(451199021)(66946007)(66476007)(66556008)(4326008)(8676002)(8936002)(316002)(110136005)(31686004)(478600001)(41300700001)(86362001)(2906002)(31696002)(53546011)(6506007)(26005)(6512007)(36756003)(6486002)(38100700002)(186003)(5660300002)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZUR3dUxCanByOHFoNWpJMWNaZU5TTDZuSEdPbGlsMURkR2x3Sm9ya2NHVGkv?=
- =?utf-8?B?N2dVS0tGcnpWcGh6dTF1NFBENCtVT1dtcGMvQTQ3bE9Wbmp4OWtWRDBXUldR?=
- =?utf-8?B?MW5KcVI5Z2RBQlMybFZDem9Sam5abmZnMUZNejV2R1g4MmJVRFFnOFl0R1RX?=
- =?utf-8?B?UlA0VDdBMGQwVlo2Vzd0aXlydVlSWnZZMXVDdmFZZDg3eUx4UlJJVlBSUXUy?=
- =?utf-8?B?cmxnOTlFRXdIc0lpTUF1ZGZsd1dlbEJPSmNseEp0akxUYW5BVEZjaXpzQi8x?=
- =?utf-8?B?UDA3aERwUm05Mzd2OUFPdmVjSmpXTTZxTnExSjNSQWU4eUxVM2dBN0tUNXY5?=
- =?utf-8?B?MjVWR2lFUVpYaStReUdEQTZLV0svNzcrU3BBcFJrN0JpL05aeDl2RTNSVjN2?=
- =?utf-8?B?QTdIR3FoN3ZHYnc5bzNFRmswOUlBckpzSlYzYWdUL25uOG9VdXlRQnF1NlVp?=
- =?utf-8?B?dEhvQ1NETFFjeU9wNGV0QmQ0eC9vVmNzd0VBdDlJWTcranZzelhJNk5mS3ha?=
- =?utf-8?B?TVBVcGdUNWxNMWpFNGYxTDlPV2RRNnRYTnE0NXBJR3JxWC8wZ3hKUjhFc1N1?=
- =?utf-8?B?TGRxU3ZvZkdWcmVXWDVsZ3Vpbkpwa1Z6eGFsT0NrS0ZVN2FoL2hwMWJ1S3lw?=
- =?utf-8?B?YzI0a0ZNZFdLL1liTWdzLzRXb3VsckQvRXhmUm44TmVLZ1BST0dyOEVZQU1w?=
- =?utf-8?B?eXZ5WXhMY1lPNW53OGdldTAzWDBIdVpWc2ExT2V6d0tCMURCVm5GS3RaQnJD?=
- =?utf-8?B?d1VhamFaSWdyRWxqVUljR2p3UVZoQTJRSGJINTR3d2Ryd1lvaHRTQUJBWjNG?=
- =?utf-8?B?Vnl0QkpJamd6M3BGOCs1aW1xYVVVaG5UNFdnRG1EUXhKT1BsMHdGZGY0dEZE?=
- =?utf-8?B?Z21adzVURDE1MVpPRzE5ZlVUWnA1Mm5ZdURyNjdBejRTSWlNbEVTbEg4b1FN?=
- =?utf-8?B?aGovcGRCeVVWREdhMGNOZy92OUtYaDhaZENjbkJsZ3VrOVBWV2FSU0lNclFh?=
- =?utf-8?B?YUxnaTI5SEkxWlZSNVNTWGx4bEdFNS83Q2NqcTlCOUVkSkIzb3RhWVg2bkFv?=
- =?utf-8?B?U2E0L2ZhSDhjRitKTUdCQWVITkp1akFGT005bjFKTXVYc2VjWEg1Ty9kS2FV?=
- =?utf-8?B?OGtYN2NITEg5S3JaRWtxbytvWVVjNWF1bEVtRXVJcDRTNjZGU1JPRXY5Qzkv?=
- =?utf-8?B?V3BvUDRBYmo3aDV1eUd1eVZQVUxGQW9rbVlPZkhLUC83bU1OUWhIUVdrTXhn?=
- =?utf-8?B?UG5ReE44SExOTlhBVUIydGlWcmVBUmNVUWtGaUZoN1ArM1NMV1NwRktzYmhO?=
- =?utf-8?B?aGVwNVVyUzNiQVl5Sjd4c055dnFuZldGenE2WkZiTzI3eDZjVGl4WFNadG4x?=
- =?utf-8?B?enhPT2xsUDZhUlpzbEZZSTkxUmY2T2IwM3FoUG8vcElrWGNvY3FaekRBRHNW?=
- =?utf-8?B?cExnN2hwUUlPSHdjSVFIbFh2eUVzRHByM1BidVBGcGtyQ2Y0MGNHUU9PbVdX?=
- =?utf-8?B?YkNPNDFKcGVSakcydjBkaDB4NDJGcnlKaDlKbzFzbkViVTVjVE9VWEVIYzlI?=
- =?utf-8?B?MGpZQ3U0UHY4bkFPeTRRVDdzbmx5aVcrSW9JcFJyWmtBL2JlWExtSG8yeXNJ?=
- =?utf-8?B?R0FETkZ2Q2R2QUhxWlRkZkdFcVphUC9lVnRwSHRiMDF2Y3NISUtHcFFtOXVI?=
- =?utf-8?B?TzdYbXVic2JJeUoxVXVmOTJRQmRSRG5EUFFEZEFxanZBcTNlbXYyZ2RIeXV1?=
- =?utf-8?B?RTJsdjJMa0ZnUWYzT1FZbTNER3JVeUZMYU1iRjBWZFdWenFuaTVBZ1FFdUIz?=
- =?utf-8?B?ejZLSmp1V1htVjFjVUtsSTQ3R0lEeDNMWmROQkhpa0JrUkJrVDRaNjZSdmYx?=
- =?utf-8?B?c1owcUJJQmhUNEtkdnA3YUVrSUdqdXE2QXhlNThMZVlYQlJzbWNHTjJGa1Jl?=
- =?utf-8?B?NjRPOTN3NWIvcjQ5R2h0NVQ3aU9XVHdBbnllTVBCdWV1dFdqZjFHTlZHd1Ev?=
- =?utf-8?B?K2JWSi96MzM3enlicTQ2aDU4MUVCQ2tZSFM5aFhINWt2RVoxWVVjZnByQ1BS?=
- =?utf-8?B?YW1OMG9MTTUwZ0xxZ3dwR09iZjN1QW94dnVTa3g0dVdCR3RRcWh6bUY5MTZR?=
- =?utf-8?Q?tgpuhPLlrtq2UYfuWO2Fi1cLU?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b44b35ed-da75-49a6-2efe-08db5890dc71
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2023 17:45:40.1707
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Vg8EOCw/c28huL48mbV/ihQFq63pEE4oyDTXWpdFLQYIUYkhHMyuIHvHCYBWTN/SeooWEsSmV7diB94pn4evkg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5329
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [patch V4 36/37] x86/smpboot: Support parallel startup of
+ secondary CPUs
+Content-Language: en-US
+To:     Andrew Cooper <andrew.cooper3@citrix.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>
+CC:     <x86@kernel.org>, Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        <xen-devel@lists.xenproject.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        <linux-csky@vger.kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        <linux-mips@vger.kernel.org>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>, <linux-parisc@vger.kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        <linux-riscv@lists.infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Ross Philipson <ross.philipson@oracle.com>,
+        David Woodhouse <dwmw@amazon.co.uk>
+References: <20230512203426.452963764@linutronix.de>
+ <20230512205257.411554373@linutronix.de>
+ <16562305-3bc0-c69f-0cb5-1b9da1014f19@quicinc.com>
+ <0cafbfcb-2430-6d90-ee77-4e5de08ee1da@citrix.com>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <0cafbfcb-2430-6d90-ee77-4e5de08ee1da@citrix.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: wzgfaxTFUND7jtAhGx51l9t9Ic-_fDjs
+X-Proofpoint-GUID: wzgfaxTFUND7jtAhGx51l9t9Ic-_fDjs
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-19_12,2023-05-17_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ lowpriorityscore=0 impostorscore=0 phishscore=0 bulkscore=0 adultscore=0
+ mlxscore=0 mlxlogscore=999 malwarescore=0 clxscore=1015 spamscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305190152
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/18/2023 10:24 PM, Mario Limonciello wrote:
-> From: John Allen <john.allen@amd.com>
->
-> Add a new CCP/PSP PCI device ID and new PSP register offsets.
->
-> Signed-off-by: John Allen <john.allen@amd.com>
+On 5/19/2023 10:57 AM, Andrew Cooper wrote:
+> On 19/05/2023 5:28 pm, Jeffrey Hugo wrote:
+>>    DESCEND objtool
+>>    INSTALL libsubcmd_headers
+>>    CALL    scripts/checksyscalls.sh
+>>    AS      arch/x86/kernel/head_64.o
+>> arch/x86/kernel/head_64.S: Assembler messages:
+>> arch/x86/kernel/head_64.S:261: Error: missing ')'
+>> arch/x86/kernel/head_64.S:261: Error: junk `UL<<10)' after expression
+>>    CC      arch/x86/kernel/head64.o
+>>    CC      arch/x86/kernel/ebda.o
+>>    CC      arch/x86/kernel/platform-quirks.o
+>> scripts/Makefile.build:374: recipe for target
+>> 'arch/x86/kernel/head_64.o' failed
+>> make[3]: *** [arch/x86/kernel/head_64.o] Error 1
+>> make[3]: *** Waiting for unfinished jobs....
+>> scripts/Makefile.build:494: recipe for target 'arch/x86/kernel' failed
+>> make[2]: *** [arch/x86/kernel] Error 2
+>> scripts/Makefile.build:494: recipe for target 'arch/x86' failed
+>> make[1]: *** [arch/x86] Error 2
+>> make[1]: *** Waiting for unfinished jobs....
+>> Makefile:2026: recipe for target '.' failed
+>> make: *** [.] Error 2
+>>
+>> This is with GCC 5.4.0, if it matters.
+>>
+>> Reverting this change allows the build to move forward, although I
+>> also need to revert "x86/smpboot/64: Implement
+>> arch_cpuhp_init_parallel_bringup() and enable it" for the build to
+>> fully succeed.
+>>
+>> I'm not familiar with this code, and nothing obvious stands out to me.
+>> What can I do to help root cause this?
+> 
+> Can you try:
+> 
+> -#define XAPIC_ENABLE    (1UL << 11)
+> -#define X2APIC_ENABLE    (1UL << 10)
+> +#define XAPIC_ENABLE    BIT(11)
+> +#define X2APIC_ENABLE    BIT(10)
+> 
+> The UL suffix isn't understood by older binutils, and this patch adds
+> the first use of these constants in assembly.
 
-As this patch was from John, I forgot to include my S-o-b:
+Ah, makes sense.
 
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+Your suggested change works for me.  No more compile error.
 
-Herbert if you would like me to resend with this directly
-in the patch, let me know and I will.
+I assume you will be following up with a patch to address this.  Feel 
+free to add the following tags as you see fit:
 
-> ---
->   drivers/crypto/ccp/sp-pci.c | 15 +++++++++++++++
->   1 file changed, 15 insertions(+)
->
-> diff --git a/drivers/crypto/ccp/sp-pci.c b/drivers/crypto/ccp/sp-pci.c
-> index d0d70af0c4c0..b603ad9b8341 100644
-> --- a/drivers/crypto/ccp/sp-pci.c
-> +++ b/drivers/crypto/ccp/sp-pci.c
-> @@ -420,6 +420,14 @@ static const struct psp_vdata pspv5 = {
->   	.intsts_reg		= 0x10514,	/* P2CMSG_INTSTS */
->   };
->   
-> +static const struct psp_vdata pspv6 = {
-> +	.sev                    = &sevv2,
-> +	.tee                    = &teev2,
-> +	.feature_reg            = 0x109fc,	/* C2PMSG_63 */
-> +	.inten_reg              = 0x10510,	/* P2CMSG_INTEN */
-> +	.intsts_reg             = 0x10514,	/* P2CMSG_INTSTS */
-> +};
-> +
->   #endif
->   
->   static const struct sp_dev_vdata dev_vdata[] = {
-> @@ -478,6 +486,12 @@ static const struct sp_dev_vdata dev_vdata[] = {
->   		.bar = 2,
->   #ifdef CONFIG_CRYPTO_DEV_SP_PSP
->   		.psp_vdata = &pspv5,
-> +#endif
-> +	},
-> +	{	/* 8 */
-> +		.bar = 2,
-> +#ifdef CONFIG_CRYPTO_DEV_SP_PSP
-> +		.psp_vdata = &pspv6,
->   #endif
->   	},
->   };
-> @@ -491,6 +505,7 @@ static const struct pci_device_id sp_pci_table[] = {
->   	{ PCI_VDEVICE(AMD, 0x15C7), (kernel_ulong_t)&dev_vdata[6] },
->   	{ PCI_VDEVICE(AMD, 0x1649), (kernel_ulong_t)&dev_vdata[6] },
->   	{ PCI_VDEVICE(AMD, 0x17E0), (kernel_ulong_t)&dev_vdata[7] },
-> +	{ PCI_VDEVICE(AMD, 0x156E), (kernel_ulong_t)&dev_vdata[8] },
->   	/* Last entry must be zero */
->   	{ 0, }
->   };
+Reported-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+Tested-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+
+-Jeff
