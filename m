@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5021709FB3
+	by mail.lfdr.de (Postfix) with ESMTP id 26DC5709FB1
 	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 21:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbjESTJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 15:09:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56570 "EHLO
+        id S230513AbjESTJz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 15:09:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbjESTJn (ORCPT
+        with ESMTP id S230433AbjESTJm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 15:09:43 -0400
+        Fri, 19 May 2023 15:09:42 -0400
 Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3BFC10C6
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 12:09:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F8C0A2
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 12:09:17 -0700 (PDT)
 Received: from pps.filterd (m0134425.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34JI24mN001398;
+        by mx0b-002e3701.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34JHWEkj024725;
         Fri, 19 May 2023 19:07:56 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : subject :
  date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pps0720;
- bh=UMdJ6dPRWg9qYBO+924mw4Sp9YYoC2nRG2nYkjyua60=;
- b=o/6BPIdmcGnULaL2UMNQ7Xhrg4JxtznEP69bTDZJyrKz7uCisppIBq8rWpgdDCfXWlLl
- rryVoDJYjGk5ImEeyP0EGkKEHgBvkeAlG8mTF9ukN7DeEv7PJfJT2XOdoSFVjZGoHF/C
- 9tgFcDYqdIlT985llyU0TnDnCcV/kPkfRlfPlvO6mTP46hespnPAtuUWg8HOuWOvy5xg
- LScFvcwKjwfmDc+xDUyH9pVS72rtTGFrk/H/LVWHb/egd789WBVAuIhe5Q5A8lDNFPp+
- 2yt8+aXPHPIdWlzNtZ4t3SwhGZvznOteDR7I4va7bZ/voyEUYCLbaUKJrZ/07Lx4k/Hz 4Q== 
+ bh=MwEcF3wqivG6f5Xew+DgcPMveJbhktL16VB8vHcGDMQ=;
+ b=SpfKiC1cVwZ7FqOeQASbyLJTv8IK/NkUN82JUHpbhkO7QmBYukFZ8Ph47MqPtPupo/Qv
+ atiX2cfTF16BVThyYeWODh/z/lV3fU5roHA0mnoKPxnfWdytxehaiqWrINa7dm+X0FBy
+ JPT/ID+7vygXMXoKc5bicOx0SbK2Fb4vhmLXH8yeXgY8pTAxYxTOyICo4NYMAe5chOVp
+ cYPGq2b58VCtlj5lAZJ15XP37KTSCWk/umS05h/W6u8I+eFcFYgE2c9rnHfh79G1kes2
+ uCzPrNThrtlhF4pbZl/Dgxp/M34SXbJ7fg79pe0HiJ9Fq9egCrbQZh5OpwFneBlF9wWz GQ== 
 Received: from p1lg14881.it.hpe.com (p1lg14881.it.hpe.com [16.230.97.202])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3qp3xs5yag-1
+        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3qp3xs5yaf-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Fri, 19 May 2023 19:07:56 +0000
 Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by p1lg14881.it.hpe.com (Postfix) with ESMTPS id CC2F1804DC5;
+        by p1lg14881.it.hpe.com (Postfix) with ESMTPS id CC3D7804DCC;
         Fri, 19 May 2023 19:07:55 +0000 (UTC)
 Received: from dog.eag.rdlabs.hpecorp.net (unknown [16.231.227.36])
-        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id 29F90808736;
-        Fri, 19 May 2023 19:07:55 +0000 (UTC)
+        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTP id E68B7809A8E;
+        Fri, 19 May 2023 19:07:54 +0000 (UTC)
 Received: by dog.eag.rdlabs.hpecorp.net (Postfix, from userid 200934)
-        id 567F53031304C; Fri, 19 May 2023 14:07:52 -0500 (CDT)
+        id 595723031304D; Fri, 19 May 2023 14:07:52 -0500 (CDT)
 From:   Steve Wahl <steve.wahl@hpe.com>
 To:     Steve Wahl <steve.wahl@hpe.com>,
         Dimitri Sivanich <dimitri.sivanich@hpe.com>,
@@ -50,16 +50,16 @@ To:     Steve Wahl <steve.wahl@hpe.com>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
         "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND v5 7/8] x86/platform/uv: Remove remaining BUG_ON() and BUG() calls
-Date:   Fri, 19 May 2023 14:07:51 -0500
-Message-Id: <20230519190752.3297140-8-steve.wahl@hpe.com>
+Subject: [PATCH RESEND v5 8/8] x86/platform/uv: Update UV[23] platform code for SNC
+Date:   Fri, 19 May 2023 14:07:52 -0500
+Message-Id: <20230519190752.3297140-9-steve.wahl@hpe.com>
 X-Mailer: git-send-email 2.26.2
 In-Reply-To: <20230519190752.3297140-1-steve.wahl@hpe.com>
 References: <20230519190752.3297140-1-steve.wahl@hpe.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: KlCvAKV32Pnum7iWRGr-vMdqa9utnj9q
-X-Proofpoint-GUID: KlCvAKV32Pnum7iWRGr-vMdqa9utnj9q
+X-Proofpoint-ORIG-GUID: _yNh-yBQDraidRg8Sid9hKNWD6yveEvP
+X-Proofpoint-GUID: _yNh-yBQDraidRg8Sid9hKNWD6yveEvP
 X-HPE-SCL: -1
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
@@ -79,38 +79,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace BUG and BUG_ON with WARN_ON_ONCE and carry on as best as we
-can.
+Previous Sub-NUMA Clustering changes need not just a count of blades
+present, but a count that includes any missing ids for blades not
+present; in other words, the range from lowest to highest blade id.
 
 Signed-off-by: Steve Wahl <steve.wahl@hpe.com>
 ---
- arch/x86/kernel/apic/x2apic_uv_x.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ arch/x86/kernel/apic/x2apic_uv_x.c | 42 +++++++++++++++++++++++++++---
+ 1 file changed, 38 insertions(+), 4 deletions(-)
 
 diff --git a/arch/x86/kernel/apic/x2apic_uv_x.c b/arch/x86/kernel/apic/x2apic_uv_x.c
-index 10d3bdf874a0..1836330ff7b3 100644
+index 1836330ff7b3..d9384d5b4b8e 100644
 --- a/arch/x86/kernel/apic/x2apic_uv_x.c
 +++ b/arch/x86/kernel/apic/x2apic_uv_x.c
-@@ -617,7 +617,8 @@ static __init void build_uv_gr_table(void)
+@@ -1462,11 +1462,37 @@ static int __init decode_uv_systab(void)
+ 	return 0;
+ }
  
- 	bytes = _gr_table_len * sizeof(struct uv_gam_range_s);
- 	grt = kzalloc(bytes, GFP_KERNEL);
--	BUG_ON(!grt);
-+	if (WARN_ON_ONCE(!grt))
++/*
++ * Given a bitmask 'bits' representing presnt blades, numbered
++ * starting at 'base', masking off unused high bits of blade number
++ * with 'mask', update the minimum and maximum blade numbers that we
++ * have found.  (Masking with 'mask' necessary because of BIOS
++ * treatment of system partitioning when creating this table we are
++ * interpreting.)
++ */
++static inline void blade_update_min_max(unsigned long bits, int base, int mask, int *min, int *max)
++{
++	int first, last;
++
++	if (!bits)
 +		return;
- 	_gr_table = grt;
++	first = (base + __ffs(bits)) & mask;
++	last =  (base + __fls(bits)) & mask;
++
++	if (*min > first)
++		*min = first;
++	if (*max < last)
++		*max = last;
++}
++
+ /* Set up physical blade translations from UVH_NODE_PRESENT_TABLE */
+ static __init void boot_init_possible_blades(struct uv_hub_info_s *hub_info)
+ {
+ 	unsigned long np;
+ 	int i, uv_pb = 0;
++	int sock_min = INT_MAX, sock_max = -1, s_mask;
++
++	s_mask = (1 << uv_cpuid.n_skt) - 1;
  
- 	for (; gre->type != UV_GAM_RANGE_TYPE_UNUSED; gre++) {
-@@ -1548,7 +1549,8 @@ static void __init build_socket_tables(void)
- 			return;
+ 	if (UVH_NODE_PRESENT_TABLE) {
+ 		pr_info("UV: NODE_PRESENT_DEPTH = %d\n",
+@@ -1474,23 +1500,31 @@ static __init void boot_init_possible_blades(struct uv_hub_info_s *hub_info)
+ 		for (i = 0; i < UVH_NODE_PRESENT_TABLE_DEPTH; i++) {
+ 			np = uv_read_local_mmr(UVH_NODE_PRESENT_TABLE + i * 8);
+ 			pr_info("UV: NODE_PRESENT(%d) = 0x%016lx\n", i, np);
+-			uv_pb += hweight64(np);
++			blade_update_min_max(np, i * 64, s_mask, &sock_min, &sock_max);
  		}
- 		pr_err("UV: Error: UVsystab address translations not available!\n");
--		BUG();
-+		WARN_ON_ONCE(!gre);
-+		return;
  	}
+ 	if (UVH_NODE_PRESENT_0) {
+ 		np = uv_read_local_mmr(UVH_NODE_PRESENT_0);
+ 		pr_info("UV: NODE_PRESENT_0 = 0x%016lx\n", np);
+-		uv_pb += hweight64(np);
++		blade_update_min_max(np, 0, s_mask, &sock_min, &sock_max);
+ 	}
+ 	if (UVH_NODE_PRESENT_1) {
+ 		np = uv_read_local_mmr(UVH_NODE_PRESENT_1);
+ 		pr_info("UV: NODE_PRESENT_1 = 0x%016lx\n", np);
+-		uv_pb += hweight64(np);
++		blade_update_min_max(np, 64, s_mask, &sock_min, &sock_max);
++	}
++
++	/* Only update if we actually found some bits indicating blades present */
++	if (sock_max >= sock_min) {
++		_min_socket = sock_min;
++		_max_socket = sock_max;
++		uv_pb = sock_max - sock_min + 1;
+ 	}
+ 	if (uv_possible_blades != uv_pb)
+ 		uv_possible_blades = uv_pb;
  
- 	numn = num_possible_nodes();
+-	pr_info("UV: number nodes/possible blades %d\n", uv_pb);
++	pr_info("UV: number nodes/possible blades %d (%d - %d)\n",
++		uv_pb, sock_min, sock_max);
+ }
+ 
+ static int __init alloc_conv_table(int num_elem, unsigned short **table)
 -- 
 2.26.2
 
