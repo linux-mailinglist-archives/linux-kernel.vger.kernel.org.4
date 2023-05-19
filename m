@@ -2,148 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2652170A06E
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 22:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 61F9270A07C
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 22:20:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231689AbjESUO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 16:14:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50982 "EHLO
+        id S230311AbjESUU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 16:20:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231790AbjESUOq (ORCPT
+        with ESMTP id S229653AbjESUUW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 16:14:46 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1B8410E9
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 13:14:09 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f42769a0c1so37048375e9.2
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 13:14:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684527248; x=1687119248;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=AnzQY1sqcvkjTs0N5+FyW+tD9eHn3O+t59IFw425bEc=;
-        b=lBMivHKfRgtwtCk+QICLAiIJZApK/Ya8eAcwg2PaSoWf/aHVGAuuAVxqiR8GzW4L3P
-         QnOaTovcfEvbcdxxdX6Cy++w8DSCIVL2TTCMG2Y8IEo2ON0UjTTifJy/TgoHmB66wmjQ
-         EPDzFOGysJEybVyEC4CKrHDZcXsDjbTVna5hli/+MjItKxiu9PmBgRGdqEpRQ3qeWgVN
-         ucWiYZKuviqLbfq1YqHdoAwCQy031OYleemP0tyFxWzrezJNvORm3g38mqtn+geEDs5A
-         udl1L6GjoTGK7lCDDUDydf2cmkDpGuAWi97/7sA+nMfN304GTW2xmNZrrFwZ2VPuvXdd
-         etTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684527248; x=1687119248;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AnzQY1sqcvkjTs0N5+FyW+tD9eHn3O+t59IFw425bEc=;
-        b=LHOZECmVRrIfH7+ribfW/Y1DEsBgpil32XRrz+qgctOVwOQ44pHm9hJA7Pq1jmqSdR
-         /xp/sJCWCAuu7cS3DQlCwhLY4Z+EyXGZkpQqZFAMqX373TvOXg8KPfLxhpeO2ZNFmHNb
-         Q2l1JmPWenammMOjGj3kD6deEwxANmO46TjSCz2NT3kjWYDNEedY2F9I70p5M1aZa+Ky
-         IPGC+X5q9sFawib4/s5cAUAMoUqWzRZOG/jbWph8AgYVjzJbL6MLqWNiHJ+gOru2Cif6
-         /86jB3z1z+CbnVVZ7Y/dNOmraD2Yd+J4+sbj4WBW2nJ0vMKfgMgDGbpTI2HOMvA7nqr5
-         88bw==
-X-Gm-Message-State: AC+VfDxgd5jRRRVKMRlp7CZW+513XcdtfF79QDSBjG0/fl74OHavL2G3
-        OmhwU6UlQgT6MrAoxZNwPV4+lF/h7dqgUQhENL8DlQ==
-X-Google-Smtp-Source: ACHHUZ42sasNBJ5U+qQUANkYHe8wr6QZwvgJdArljj1mz3V27qwnBdyMWtJUiDirfiineHeOKCNND53yzPz00TsHIAA=
-X-Received: by 2002:a1c:f705:0:b0:3f4:c28b:ec88 with SMTP id
- v5-20020a1cf705000000b003f4c28bec88mr1837762wmh.41.1684527248304; Fri, 19 May
- 2023 13:14:08 -0700 (PDT)
+        Fri, 19 May 2023 16:20:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA367FE;
+        Fri, 19 May 2023 13:20:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 41B8E6578B;
+        Fri, 19 May 2023 20:20:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9E1F3C433D2;
+        Fri, 19 May 2023 20:20:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684527620;
+        bh=N3VANGUb4aHSfCOqfO6QrYJYArpb3F+YiYYG3POd9tk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=QyHDdOas0TjGGseC8ggyxvcA3+jg5eeE24+V/cNGrFWVcBOzLF32wE7ywf5IHWPg4
+         AWuyCNcpNA68+gabexMd8cn4oVNVf8T68AWUet95zoFYVz7i+FGGRsCYRWXViwQUfc
+         rXiQV7YVXrS3sGOWZImXM/w3HTxrJGLJiHTdem1EXp1jQxh/C/dyxMQjUo6J//j514
+         M2rNEGE+4A8YLcuIxmv/OeUCFOAwQzjYJM3e1ha7ZpgdJ772gMvWz24eB4f6X1ryJg
+         Q2xEBgQB0I+m/n29sn6GQ4HBLd4lVSK73OCqd2LLqh6j/eGCzMRmgnda9P/9ujRBpq
+         PvrbqJ1spChtA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 8277EC3959E;
+        Fri, 19 May 2023 20:20:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230518-bamclk-dt-v2-1-a1a857b966ca@gerhold.net>
-In-Reply-To: <20230518-bamclk-dt-v2-1-a1a857b966ca@gerhold.net>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Sat, 20 May 2023 01:43:56 +0530
-Message-ID: <CAH=2Ntx3WxEM_ita+caGXvqCJjCy=TkX8gjyT9nSV3j-89Y_cQ@mail.gmail.com>
-Subject: Re: [PATCH v2] dmaengine: qcom: bam_dma: allow omitting num-{channels,ees}
-To:     Stephan Gerhold <stephan@gerhold.net>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] Bluetooth: btqca: make sure to handle byte order for
+ soc_id
+From:   patchwork-bot+bluetooth@kernel.org
+Message-Id: <168452762053.10748.12822242658004808633.git-patchwork-notify@kernel.org>
+Date:   Fri, 19 May 2023 20:20:20 +0000
+References: <20230510-btqca-byte-order-v1-1-82e6a371c5aa@fairphone.com>
+In-Reply-To: <20230510-btqca-byte-order-v1-1-82e6a371c5aa@fairphone.com>
+To:     Luca Weiss <luca.weiss@fairphone.com>
+Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        gubbaven@codeaurora.org, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org, johan.hedberg@intel.com,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        simon.horman@corigine.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 May 2023 at 16:30, Stephan Gerhold <stephan@gerhold.net> wrote:
->
-> The bam_dma driver needs to know the number of channels and execution
-> environments (EEs) at probe time. If we are in full control of the BAM
-> controller this information can be obtained from the BAM identification
-> registers (BAM_REVISION/BAM_NUM_PIPES).
->
-> When the BAM is "controlled remotely" it is more complicated. The BAM
-> might not be on at probe time, so reading the registers could fail.
-> This is why the information must be added to the device tree in this
-> case, using "num-channels" and "qcom,num-ees".
->
-> However, there are also some BAM instances that are initialized by
-> something else but we still have a clock that allows to turn it on when
-> needed. This can be set up in the DT with "qcom,controlled-remotely"
-> and "clocks" and is already supported by the bam_dma driver. Examples
-> for this are the typical BLSP BAM instances on older SoCs, QPIC BAM
-> (for NAND) and the crypto BAM on some SoCs.
->
-> In this case, there is no need to read "num-channels" and
-> "qcom,num-ees" from the DT. The BAN can be turned on using the clock
-> so we can just read it from the BAM registers like in the normal case.
->
-> Check for the BAM clock earlier and skip reading "num-channels" and
-> "qcom,num-ees" if it is present to allow simplifying the DT description
-> a bit.
->
-> Signed-off-by: Stephan Gerhold <stephan@gerhold.net>
-> ---
-> Changes in v2:
-> - Rewrite commit message for more clarity (discussion with Bhupesh)
-> - Link to v1: https://lore.kernel.org/r/20230518-bamclk-dt-v1-1-82f738c897d9@gerhold.net
-> ---
->  drivers/dma/qcom/bam_dma.c | 18 +++++++++---------
->  1 file changed, 9 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/dma/qcom/bam_dma.c b/drivers/dma/qcom/bam_dma.c
-> index 1e47d27e1f81..4c3eb972039d 100644
-> --- a/drivers/dma/qcom/bam_dma.c
-> +++ b/drivers/dma/qcom/bam_dma.c
-> @@ -1272,7 +1272,15 @@ static int bam_dma_probe(struct platform_device *pdev)
->         bdev->powered_remotely = of_property_read_bool(pdev->dev.of_node,
->                                                 "qcom,powered-remotely");
->
-> -       if (bdev->controlled_remotely || bdev->powered_remotely) {
-> +       if (bdev->controlled_remotely || bdev->powered_remotely)
-> +               bdev->bamclk = devm_clk_get_optional(bdev->dev, "bam_clk");
-> +       else
-> +               bdev->bamclk = devm_clk_get(bdev->dev, "bam_clk");
-> +
-> +       if (IS_ERR(bdev->bamclk))
-> +               return PTR_ERR(bdev->bamclk);
-> +
-> +       if (!bdev->bamclk) {
->                 ret = of_property_read_u32(pdev->dev.of_node, "num-channels",
->                                            &bdev->num_channels);
->                 if (ret)
-> @@ -1284,14 +1292,6 @@ static int bam_dma_probe(struct platform_device *pdev)
->                         dev_err(bdev->dev, "num-ees unspecified in dt\n");
->         }
->
-> -       if (bdev->controlled_remotely || bdev->powered_remotely)
-> -               bdev->bamclk = devm_clk_get_optional(bdev->dev, "bam_clk");
-> -       else
-> -               bdev->bamclk = devm_clk_get(bdev->dev, "bam_clk");
-> -
-> -       if (IS_ERR(bdev->bamclk))
-> -               return PTR_ERR(bdev->bamclk);
-> -
->         ret = clk_prepare_enable(bdev->bamclk);
->         if (ret) {
->                 dev_err(bdev->dev, "failed to prepare/enable clock\n");
+Hello:
 
-Reviewed-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+This patch was applied to bluetooth/bluetooth-next.git (master)
+by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
 
-Thanks.
+On Wed, 10 May 2023 11:27:21 +0200 you wrote:
+> The field soc_id in struct qca_btsoc_version is __le32 so we need to
+> convert it to host byteorder before using.
+> 
+> Reported-by: Simon Horman <simon.horman@corigine.com>
+> Fixes: 059924fdf6c1 ("Bluetooth: btqca: Use NVM files based on SoC ID for WCN3991")
+> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+> 
+> [...]
+
+Here is the summary with links:
+  - Bluetooth: btqca: make sure to handle byte order for soc_id
+    https://git.kernel.org/bluetooth/bluetooth-next/c/0f1e103dc579
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
