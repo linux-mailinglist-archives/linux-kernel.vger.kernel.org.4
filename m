@@ -2,80 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46BBB708C88
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 01:54:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0AD4708C92
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 02:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229865AbjERXyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 19:54:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47066 "EHLO
+        id S229924AbjESAAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 20:00:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjERXyJ (ORCPT
+        with ESMTP id S229487AbjESAAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 19:54:09 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D7B7E6E
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 16:54:09 -0700 (PDT)
+        Thu, 18 May 2023 20:00:04 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41EFAEA;
+        Thu, 18 May 2023 17:00:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684454049; x=1715990049;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+D5psDNyUmd7dAZ4+pd1QsJ/Pk3EYpwue9iEXA+aI5I=;
-  b=eLLQ6ExMuHcIWB9RhkszCO9G8T2fWNTFiFrmKvBQDVgKGPJxm9J333A/
-   kV3RPgeJb9Bh7gwai2FIv472bv6W+uVT5IeX3VoRoKj4eEDF0Z+GfJ9Xw
-   yFurf/Bl1of9dCDIeKOl4BO/CIi6o2yBR+1v2rQ1C3CH1qoN6VSd2LNDa
-   /47bsjr/EUtMTivjPbiizs3UvT2730DutDr998iLN2jfRhWcm7wbdKT8k
-   DhvWbVl7Cxl3NPFstkQou4WylohxkWt5xU0BLARzLwoiuDUUsPsa5DBWt
-   I1cCUmODn58GI9EQDTL5Ya6J83JHwxnVxVDw/QXI68U5nAXff9jkUBcsN
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="336813414"
+  t=1684454403; x=1715990403;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=5t/LbPMDhw3OuvazmSL5YCXrk6Z1rz2sQn9LegvfpFw=;
+  b=OqZQrbWcEh7sjE/ph87CEn3UDaDnG9jWwgtLprotujV3EaKyHxTwQI2y
+   ZQ04cv6qXXRGmuoARpBynnNLo/9fy0gOOEr35gy/7noN27UlfVy20lOP1
+   1Lc9eRXJdxfaxaImgFZ9owa/3KEh9TsdMdTZTks5SIBut4BO6h8Y9lEeS
+   cvDFMstPX8Rc3ZTeb8Avd2pgnBFFMIitqD/45ID5nEDxLTAz2I9q1JYaY
+   u1myV+OXd64fCFWSdC0nQdY9n9d84mj/Vpckzdk+67kdjAr55d628qb+P
+   L+X3DLr4N4V9EkqUnn049NGRxhnPun9i0InuIs0Bh+oKXgKD2Xlyp6DCI
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="352246432"
 X-IronPort-AV: E=Sophos;i="6.00,175,1681196400"; 
-   d="scan'208";a="336813414"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 16:54:08 -0700
+   d="scan'208";a="352246432"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 17:00:02 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="846677814"
+X-IronPort-AV: E=McAfee;i="6600,9927,10714"; a="792144716"
 X-IronPort-AV: E=Sophos;i="6.00,175,1681196400"; 
-   d="scan'208";a="846677814"
-Received: from refaase-mobl.ger.corp.intel.com (HELO intel.com) ([10.251.221.245])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 16:54:04 -0700
-Date:   Fri, 19 May 2023 01:54:00 +0200
-From:   Andi Shyti <andi.shyti@linux.intel.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Jani Nikula <jani.nikula@intel.com>
-Subject: Re: [Intel-gfx] [RESEND PATCH] drm/i915: constify pointers to
- hwmon_channel_info
-Message-ID: <ZGa6mAe726ER7N4t@ashyti-mobl2.lan>
-References: <20230511175446.282041-1-krzysztof.kozlowski@linaro.org>
+   d="scan'208";a="792144716"
+Received: from mkim1-mobl.amr.corp.intel.com (HELO [10.209.118.171]) ([10.209.118.171])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 May 2023 17:00:02 -0700
+Message-ID: <c53c03e8-529f-5b72-42ab-f32f50aaab35@intel.com>
+Date:   Thu, 18 May 2023 17:00:01 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230511175446.282041-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/6] PKEY: Add arch_check_pkey_enforce_api()
+Content-Language: en-US
+To:     Jeff Xu <jeffxu@google.com>
+Cc:     jeffxu@chromium.org, luto@kernel.org, jorgelo@chromium.org,
+        keescook@chromium.org, groeck@chromium.org, jannh@google.com,
+        sroettger@google.com, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, linux-hardening@vger.kernel.org
+References: <20230515130553.2311248-1-jeffxu@chromium.org>
+ <20230515130553.2311248-3-jeffxu@chromium.org>
+ <6dbbc3da-78c9-8101-d52a-0be47da9d67e@intel.com>
+ <CALmYWFtu-WzOTEs2aWU3zMW=KZUjaaL7OTE7hQtHjfwQfQNyEA@mail.gmail.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <CALmYWFtu-WzOTEs2aWU3zMW=KZUjaaL7OTE7hQtHjfwQfQNyEA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
+On 5/18/23 15:51, Jeff Xu wrote:
+>> Do you have a solid handle on all call paths that will reach
+>> __arch_check_vma_pkey_for_write() and can you ensure they are all
+>> non-remote?
+> Is this about the attack scenario where the attacker uses ptrace()
+> into the chrome process ? if so it is not in our threat model, and
+> that is more related to sandboxing on the host.
 
-On Thu, May 11, 2023 at 07:54:46PM +0200, Krzysztof Kozlowski wrote:
-> Statically allocated array of pointers to hwmon_channel_info can be made
-> const for safety.
-> 
-> Acked-by: Jani Nikula <jani.nikula@intel.com>
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+The attacker would use *some* remote interface.  ptrace() is just one of
+those remote interfaces.
 
-Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com> 
+> Or is this about io_uring? Yes, io_uring kernel thread breaks our
+> expectations of PKRU & user space threads, however I thought the break
+> is not just for this - any syscall involved in memory operation will
+> break after into io_uring ?
 
-Andi
+I'm not quite following.
+
+Please just do me a favor: have the io_uring maintainers look at your
+proposal.  Make sure that the defenses you are building can work in a
+process where io_uring is in use by the benign threads.
+
+Those same folks are pretty familiar with the other, more traditional
+I/O syscalls that have in-memory descriptors that control syscall
+behavior like readv/writev.  Those also need a close look.
+
+> Other than those, yes, I try to ensure the check is only used at the
+> beginning of syscall entry in all cases, which should be non-remote I
+> hope.
+
+You're right that synchronous, shallow syscall paths are usually
+non-remote.  But those aren't the problem.  The problem is that there
+*ARE* remote accesses and those are a potential hole for this whole
+mechanism.
+
+Can they be closed?  I don't know.  I honestly don't have a great grasp
+on how widespread these things are.  You'll need a much more complete
+grasp on them than I have before this thing can go forward.
