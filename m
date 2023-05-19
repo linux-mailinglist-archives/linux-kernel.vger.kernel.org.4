@@ -2,232 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF98C70992F
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 16:13:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1480F709941
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 16:15:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232139AbjESONb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 10:13:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42134 "EHLO
+        id S231697AbjESOPQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 19 May 2023 10:15:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232088AbjESONP (ORCPT
+        with ESMTP id S231653AbjESOPK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 10:13:15 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6039312C;
-        Fri, 19 May 2023 07:13:13 -0700 (PDT)
-Received: (Authenticated sender: alexis.lothore@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7C022E0004;
-        Fri, 19 May 2023 14:13:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1684505592;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+pTZBh4+ZRBlZb4kygGnhcmsOQohHM/7lyy4o5VBhtc=;
-        b=VMGIdgCi44uU+239PmKYr3hORa6blm2Sw0Jfh58S3ybM2XtaCYH2LcWaKdiocMO9iv0PrG
-        c47UrQC4zi1D7b22yRPaveCOwSGl7d8GI6OP39pzKa+PHE5t4K+O81oQsDXD7Tj4rIYOko
-        Q8R7mYKMjPFISfWn77kUDVO2CkV/zmTCmcaJN9ZU8AdblWuScJ4UhQv31rgI34J64nfIrd
-        gm7/IPYQCNXHjRteibT71pJIYxtFHuY21pTWTxS8wnyL2phD67vJRH8vI4xPoIDVejWINk
-        tO4ovUl6uVkeDAHJ014SetNThJWq1MJT+YMUakikoGJoc/8rZfxB/dgYweZGRg==
-From:   alexis.lothore@bootlin.com
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Russell King <linux@armlinux.org.uk>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        paul.arola@telus.com, scott.roberts@telus.com,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        =?UTF-8?q?Alexis=20Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Subject: [PATCH net-next v2 7/7] net: dsa: mv88e6xxx: enable support for 88E6361 switch
-Date:   Fri, 19 May 2023 16:13:03 +0200
-Message-Id: <20230519141303.245235-8-alexis.lothore@bootlin.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230519141303.245235-1-alexis.lothore@bootlin.com>
-References: <20230519141303.245235-1-alexis.lothore@bootlin.com>
+        Fri, 19 May 2023 10:15:10 -0400
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B719E73;
+        Fri, 19 May 2023 07:14:42 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-96f44435d92so41006066b.0;
+        Fri, 19 May 2023 07:14:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684505634; x=1687097634;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mtyjmo3U27wuRhuxdBoN4szAZEtqJIsshyVfilBgAD0=;
+        b=C4ucInKXKAyY39AY1irPEpCBVp43HjLOS7XZaLrlqvoU5igMwHa/lQmESfH/lbVzqL
+         hr4QX2dI5/a+KXZITwQj418BdH8tUWUH/F5JARAPxizo6a8P29Iig6d4ziEewjOFtyKx
+         D0YflxZafGjGbffr3X3XQqWUpg8Wflux3xKgYu60wDWx8qIYuoKgM/d8LL4cmFKA+O6s
+         k3NfqZMYdX8Zz8ivSfCCqxN5E7Fsm8X/Cs35SKGQyodk0xIlu3BdtULGdKPIrr/4QX48
+         quqTNDAhI2r8quPODmTsXCMFjxKrGB9oRfGglvGxUzBX0gq9g9AppPw+ZgICYBiSNXh3
+         iibQ==
+X-Gm-Message-State: AC+VfDyvjeRmnh6F+HU6ygfTpk5tvyL+mj4B8iGHatfMTwWbG8Ju4ikg
+        SDKe83tNbkAArusdWKn9dVCug5gW1BXZoaKDQBc=
+X-Google-Smtp-Source: ACHHUZ68+/i2ffEZTXg6tj3QMitnfwpUc6ZolPA0xIlso352d5CtlPMyVKVablcnpHf+LCxLGPtLwAjOXXkDYlCuYhQ=
+X-Received: by 2002:a17:906:729e:b0:96f:6590:cbdb with SMTP id
+ b30-20020a170906729e00b0096f6590cbdbmr1995862ejl.6.1684505634451; Fri, 19 May
+ 2023 07:13:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230519102058.581557770@infradead.org> <20230519102716.045980863@infradead.org>
+In-Reply-To: <20230519102716.045980863@infradead.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 19 May 2023 16:13:41 +0200
+Message-ID: <CAJZ5v0hAyF8WK+jbWh6FZvmjfr0nxLg-phYTqFAyaUA5GJU4hQ@mail.gmail.com>
+Subject: Re: [PATCH v2 13/13] cpuidle: Use local_clock_noinstr()
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     bigeasy@linutronix.de, mark.rutland@arm.com, maz@kernel.org,
+        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
+        kernel@xen0n.name, hca@linux.ibm.com, gor@linux.ibm.com,
+        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
+        svens@linux.ibm.com, pbonzini@redhat.com, wanpengli@tencent.com,
+        vkuznets@redhat.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, jgross@suse.com, boris.ostrovsky@oracle.com,
+        daniel.lezcano@linaro.org, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        rafael@kernel.org, longman@redhat.com, boqun.feng@gmail.com,
+        pmladek@suse.com, senozhatsky@chromium.org, rostedt@goodmis.org,
+        john.ogness@linutronix.de, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
+        vschneid@redhat.com, jstultz@google.com, sboyd@kernel.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexis Lothoré <alexis.lothore@bootlin.com>
+On Fri, May 19, 2023 at 12:33 PM Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> With the introduction of local_clock_noinstr(), local_clock() itself
+> is no longer marked noinstr, use the correct function.
+>
+> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-Marvell 88E6361 is an 8-port switch derived from the
-88E6393X/88E9193X/88E6191X switches family. It can benefit from the
-existing mv88e6xxx driver by simply adding the proper switch description in
-the driver. Main differences with other switches from this
-family are:
-- 8 ports exposed (instead of 11): ports 1, 2 and 8 not available
-- No 5GBase-x nor SFI/USXGMII support
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 
----
-Changes since v1:
-- define internal phys offset
-- enforce 88e6361 features in mv88e6393x_phylink_get_caps
-- enforce 88e6361 features in mv88e6393x_port_set_speed_duplex
-- enforce 88e6361 features in mv88e6393x_port_max_speed_mode
-
-Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
----
- drivers/net/dsa/mv88e6xxx/chip.c | 42 ++++++++++++++++++++++++++++----
- drivers/net/dsa/mv88e6xxx/chip.h |  3 ++-
- drivers/net/dsa/mv88e6xxx/port.c | 11 ++++++++-
- drivers/net/dsa/mv88e6xxx/port.h |  1 +
- 4 files changed, 50 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index 0e6267193ac1..7c77b4b634f9 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -790,6 +790,8 @@ static void mv88e6393x_phylink_get_caps(struct mv88e6xxx_chip *chip, int port,
- 	unsigned long *supported = config->supported_interfaces;
- 	bool is_6191x =
- 		chip->info->prod_num == MV88E6XXX_PORT_SWITCH_ID_PROD_6191X;
-+	bool is_6361 =
-+		chip->info->prod_num == MV88E6XXX_PORT_SWITCH_ID_PROD_6361;
- 
- 	mv88e6xxx_translate_cmode(chip->ports[port].cmode, supported);
- 
-@@ -804,13 +806,17 @@ static void mv88e6393x_phylink_get_caps(struct mv88e6xxx_chip *chip, int port,
- 		/* 6191X supports >1G modes only on port 10 */
- 		if (!is_6191x || port == 10) {
- 			__set_bit(PHY_INTERFACE_MODE_2500BASEX, supported);
--			__set_bit(PHY_INTERFACE_MODE_5GBASER, supported);
--			__set_bit(PHY_INTERFACE_MODE_10GBASER, supported);
-+			config->mac_capabilities |= MAC_2500FD;
-+
-+			/* 6361 only supports up to 2500BaseX */
-+			if (!is_6361) {
-+				__set_bit(PHY_INTERFACE_MODE_5GBASER, supported);
-+				__set_bit(PHY_INTERFACE_MODE_10GBASER, supported);
-+				config->mac_capabilities |= MAC_5000FD |
-+					MAC_10000FD;
-+			}
- 			/* FIXME: USXGMII is not supported yet */
- 			/* __set_bit(PHY_INTERFACE_MODE_USXGMII, supported); */
--
--			config->mac_capabilities |= MAC_2500FD | MAC_5000FD |
--				MAC_10000FD;
- 		}
- 	}
- 
-@@ -6311,6 +6317,32 @@ static const struct mv88e6xxx_info mv88e6xxx_table[] = {
- 		.ptp_support = true,
- 		.ops = &mv88e6352_ops,
- 	},
-+	[MV88E6361] = {
-+		.prod_num = MV88E6XXX_PORT_SWITCH_ID_PROD_6361,
-+		.family = MV88E6XXX_FAMILY_6393,
-+		.name = "Marvell 88E6361",
-+		.num_databases = 4096,
-+		.num_macs = 16384,
-+		.num_ports = 11,
-+		/* Ports 1, 2 and 8 are not routed */
-+		.invalid_port_mask = BIT(1) | BIT(2) | BIT(8),
-+		.num_internal_phys = 5,
-+		.internal_phys_offset = 3,
-+		.max_vid = 4095,
-+		.max_sid = 63,
-+		.port_base_addr = 0x0,
-+		.phy_base_addr = 0x0,
-+		.global1_addr = 0x1b,
-+		.global2_addr = 0x1c,
-+		.age_time_coeff = 3750,
-+		.g1_irqs = 10,
-+		.g2_irqs = 14,
-+		.atu_move_port_mask = 0x1f,
-+		.pvt = true,
-+		.multi_chip = true,
-+		.ptp_support = true,
-+		.ops = &mv88e6393x_ops,
-+	},
- 	[MV88E6390] = {
- 		.prod_num = MV88E6XXX_PORT_SWITCH_ID_PROD_6390,
- 		.family = MV88E6XXX_FAMILY_6390,
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.h b/drivers/net/dsa/mv88e6xxx/chip.h
-index dd7c8880e987..79c06ba42c54 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.h
-+++ b/drivers/net/dsa/mv88e6xxx/chip.h
-@@ -82,6 +82,7 @@ enum mv88e6xxx_model {
- 	MV88E6350,
- 	MV88E6351,
- 	MV88E6352,
-+	MV88E6361,
- 	MV88E6390,
- 	MV88E6390X,
- 	MV88E6393X,
-@@ -100,7 +101,7 @@ enum mv88e6xxx_family {
- 	MV88E6XXX_FAMILY_6351,	/* 6171 6175 6350 6351 */
- 	MV88E6XXX_FAMILY_6352,	/* 6172 6176 6240 6352 */
- 	MV88E6XXX_FAMILY_6390,  /* 6190 6190X 6191 6290 6390 6390X */
--	MV88E6XXX_FAMILY_6393,	/* 6191X 6193X 6393X */
-+	MV88E6XXX_FAMILY_6393,	/* 6191X 6193X 6361 6393X */
- };
- 
- /**
-diff --git a/drivers/net/dsa/mv88e6xxx/port.c b/drivers/net/dsa/mv88e6xxx/port.c
-index 66f1b40b4e96..e72ea3c8092f 100644
---- a/drivers/net/dsa/mv88e6xxx/port.c
-+++ b/drivers/net/dsa/mv88e6xxx/port.c
-@@ -421,9 +421,14 @@ phy_interface_t mv88e6390x_port_max_speed_mode(struct mv88e6xxx_chip *chip,
- int mv88e6393x_port_set_speed_duplex(struct mv88e6xxx_chip *chip, int port,
- 				     int speed, int duplex)
- {
-+	bool is_6361 =
-+		chip->info->prod_num == MV88E6XXX_PORT_SWITCH_ID_PROD_6361;
- 	u16 reg, ctrl;
- 	int err;
- 
-+	if (is_6361 && speed > 2500)
-+		return -EOPNOTSUPP;
-+
- 	if (speed == 200 && port != 0)
- 		return -EOPNOTSUPP;
- 
-@@ -506,8 +511,12 @@ int mv88e6393x_port_set_speed_duplex(struct mv88e6xxx_chip *chip, int port,
- phy_interface_t mv88e6393x_port_max_speed_mode(struct mv88e6xxx_chip *chip,
- 					       int port)
- {
-+	bool is_6361 =
-+		chip->info->prod_num == MV88E6XXX_PORT_SWITCH_ID_PROD_6361;
-+
- 	if (port == 0 || port == 9 || port == 10)
--		return PHY_INTERFACE_MODE_10GBASER;
-+		return is_6361 ? PHY_INTERFACE_MODE_2500BASEX :
-+			PHY_INTERFACE_MODE_10GBASER;
- 
- 	return PHY_INTERFACE_MODE_NA;
- }
-diff --git a/drivers/net/dsa/mv88e6xxx/port.h b/drivers/net/dsa/mv88e6xxx/port.h
-index 3c9fc17abdd2..56dfa9d3d4e0 100644
---- a/drivers/net/dsa/mv88e6xxx/port.h
-+++ b/drivers/net/dsa/mv88e6xxx/port.h
-@@ -138,6 +138,7 @@
- #define MV88E6XXX_PORT_SWITCH_ID_PROD_6141	0x3400
- #define MV88E6XXX_PORT_SWITCH_ID_PROD_6341	0x3410
- #define MV88E6XXX_PORT_SWITCH_ID_PROD_6352	0x3520
-+#define MV88E6XXX_PORT_SWITCH_ID_PROD_6361	0x2610
- #define MV88E6XXX_PORT_SWITCH_ID_PROD_6350	0x3710
- #define MV88E6XXX_PORT_SWITCH_ID_PROD_6351	0x3750
- #define MV88E6XXX_PORT_SWITCH_ID_PROD_6390	0x3900
--- 
-2.40.1
-
+> ---
+>  drivers/cpuidle/cpuidle.c    |    8 ++++----
+>  drivers/cpuidle/poll_state.c |    4 ++--
+>  2 files changed, 6 insertions(+), 6 deletions(-)
+>
+> --- a/drivers/cpuidle/cpuidle.c
+> +++ b/drivers/cpuidle/cpuidle.c
+> @@ -145,7 +145,7 @@ static noinstr void enter_s2idle_proper(
+>
+>         instrumentation_begin();
+>
+> -       time_start = ns_to_ktime(local_clock());
+> +       time_start = ns_to_ktime(local_clock_noinstr());
+>
+>         tick_freeze();
+>         /*
+> @@ -169,7 +169,7 @@ static noinstr void enter_s2idle_proper(
+>         tick_unfreeze();
+>         start_critical_timings();
+>
+> -       time_end = ns_to_ktime(local_clock());
+> +       time_end = ns_to_ktime(local_clock_noinstr());
+>
+>         dev->states_usage[index].s2idle_time += ktime_us_delta(time_end, time_start);
+>         dev->states_usage[index].s2idle_usage++;
+> @@ -243,7 +243,7 @@ noinstr int cpuidle_enter_state(struct c
+>         sched_idle_set_state(target_state);
+>
+>         trace_cpu_idle(index, dev->cpu);
+> -       time_start = ns_to_ktime(local_clock());
+> +       time_start = ns_to_ktime(local_clock_noinstr());
+>
+>         stop_critical_timings();
+>         if (!(target_state->flags & CPUIDLE_FLAG_RCU_IDLE)) {
+> @@ -276,7 +276,7 @@ noinstr int cpuidle_enter_state(struct c
+>         start_critical_timings();
+>
+>         sched_clock_idle_wakeup_event();
+> -       time_end = ns_to_ktime(local_clock());
+> +       time_end = ns_to_ktime(local_clock_noinstr());
+>         trace_cpu_idle(PWR_EVENT_EXIT, dev->cpu);
+>
+>         /* The cpu is no longer idle or about to enter idle. */
+> --- a/drivers/cpuidle/poll_state.c
+> +++ b/drivers/cpuidle/poll_state.c
+> @@ -15,7 +15,7 @@ static int __cpuidle poll_idle(struct cp
+>  {
+>         u64 time_start;
+>
+> -       time_start = local_clock();
+> +       time_start = local_clock_noinstr();
+>
+>         dev->poll_time_limit = false;
+>
+> @@ -32,7 +32,7 @@ static int __cpuidle poll_idle(struct cp
+>                                 continue;
+>
+>                         loop_count = 0;
+> -                       if (local_clock() - time_start > limit) {
+> +                       if (local_clock_noinstr() - time_start > limit) {
+>                                 dev->poll_time_limit = true;
+>                                 break;
+>                         }
+>
+>
