@@ -2,48 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B6D9709238
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 10:54:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D18B70923D
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 10:55:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231251AbjESIyE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 04:54:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43098 "EHLO
+        id S230451AbjESIy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 04:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230418AbjESIyB (ORCPT
+        with ESMTP id S231299AbjESIy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 04:54:01 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 874DC10C3
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 01:53:46 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0451D1FB;
-        Fri, 19 May 2023 01:54:31 -0700 (PDT)
-Received: from [10.57.73.191] (unknown [10.57.73.191])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EBC533F73F;
-        Fri, 19 May 2023 01:53:43 -0700 (PDT)
-Message-ID: <2ee0f754-6959-4fa8-0020-06f2d7fc76e4@arm.com>
-Date:   Fri, 19 May 2023 09:53:42 +0100
+        Fri, 19 May 2023 04:54:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C643410E6;
+        Fri, 19 May 2023 01:54:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 788A06552C;
+        Fri, 19 May 2023 08:54:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD99AC4339C;
+        Fri, 19 May 2023 08:54:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684486464;
+        bh=l6xWlNTW11M1IArH9XbVsO0LuYjgvFrPFdvjgT2fKsY=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=TLL7EZD00J0qHP0WIImFoaeP9iS7POWP+jnrXXMOVsvPZf7p0pLPOZmZditjFFg31
+         hQ44JGMc+sINjBZQV4JnhcqiHZ/mQYoX/q3UD8LQ3fL7avD2osNo6ikbeO+dTVqI8U
+         SLLneongeou+VquX03U5xk32P8IGa+mc28lW+KBpgGF+YcNep+zjvA092liO93u4Po
+         Mr+Hg/2V7r/LSvvS51mmeCcObriQgn7bfCwvJml8+elLZMzpPHkT4iYPgk0FkGLQ/W
+         H2027cYo7hdUiOwfaUuO0jp4YfS9qDFtQWfaHB6t7GSPEli7Z/CzCLg1UuRwwtw8K9
+         mD5z70YGlVj8g==
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-4f2676d62a2so3346163e87.0;
+        Fri, 19 May 2023 01:54:24 -0700 (PDT)
+X-Gm-Message-State: AC+VfDwz/1er401cIoV6TLsg0UmhbYPE5TCnAfnokzh6bDmWjvQM2ck7
+        teEQdq8n/96UESDwnjrg6kSqQteCAOlkqzB54JM=
+X-Google-Smtp-Source: ACHHUZ7SvdXKZpS/i9iOaPcFYPkRcxW6aWBrXA6Y7mN4OZu24KBaz9xljJ2ps4rcZZOJmt7v9Wu5xjt2j2ikxrgIIvk=
+X-Received: by 2002:ac2:43a4:0:b0:4f2:7b65:baeb with SMTP id
+ t4-20020ac243a4000000b004f27b65baebmr455104lfl.53.1684486462868; Fri, 19 May
+ 2023 01:54:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.0
-Subject: Re: [PATCH v2 2/5] mm: damon must atomically clear young on ptes and
- pmds
-To:     SeongJae Park <sj@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Uladzislau Rezki <urezki@gmail.com>, Zi Yan <ziy@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        damon@lists.linux.dev
-References: <20230518171323.83828-1-sj@kernel.org>
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <20230518171323.83828-1-sj@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <ZGcyuyjJwZhdYS/G@gondor.apana.org.au> <E1pzvTZ-00AnMQ-5M@formenos.hmeau.com>
+In-Reply-To: <E1pzvTZ-00AnMQ-5M@formenos.hmeau.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 19 May 2023 10:54:11 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGwS03zUBTGb7jmk1-6r+=a-HH+A-S9ZFTYRyJSzN0Xcg@mail.gmail.com>
+Message-ID: <CAMj1kXGwS03zUBTGb7jmk1-6r+=a-HH+A-S9ZFTYRyJSzN0Xcg@mail.gmail.com>
+Subject: Re: [PATCH 3/3] crypto: cmac - Add support for cloning
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Dmitry Safonov <dima@arista.com>,
+        Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Bob Gilligan <gilligan@arista.com>,
+        Dan Carpenter <error27@gmail.com>,
+        David Laight <David.Laight@aculab.com>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Francesco Ruggeri <fruggeri05@gmail.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Ivan Delalande <colona@arista.com>,
+        Leonard Crestez <cdleonard@gmail.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,40 +80,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/05/2023 18:13, SeongJae Park wrote:
-> Hi Ryan,
-> 
-> 
-> Nit.  For consistency of DAMON commits subjects, I'd prefer something like
-> "mm/damon/ops-common: atomically test and clear young on ptes and pmds".
-> 
-> On Thu, 18 May 2023 12:07:24 +0100 Ryan Roberts <ryan.roberts@arm.com> wrote:
-> 
->> It is racy to non-atomically read a pte, then clear the young bit, then
->> write it back as this could discard dirty information. Further, it is
->> bad practice to directly set a pte entry within a table. Instead
->> clearing young must go through the arch-provided helper,
->> ptep_test_and_clear_young() to ensure it is modified atomically and to
->> give the arch code visibility and allow it to check (and potentially
->> modify) the operation.
->>
->> Fixes: 46c3a0accdc4 ("mm/damon/vaddr: separate commonly usable functions")
-> 
-> Nit.  The commit is only for refactoring.  The original code camde from commit
-> 3f49584b262c ("mm/damon: implement primitives for the virtual memory address
-> spaces").
-> 
->> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
->> Reviewed-by: Zi Yan <ziy@nvidia.com>
-> 
-> Other than above nits,
-> 
-> Reviewed-by: SeongJae Park <sj@kernel.org>
+Hi Herbert,
 
-Thanks for the reviews! I'll fix the nits you raised for v3.
+On Fri, 19 May 2023 at 10:29, Herbert Xu <herbert@gondor.apana.org.au> wrote:
+>
+> Allow hmac to be cloned.  The underlying cipher needs to support
+> cloning by not having a cra_init function (all implementations of
+> aes that do not require a fallback can be cloned).
+>
+> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 
-> 
-> 
-> Thanks,
-> SJ
-> 
+Does this imply that the cmac-aes-ce and cmac-aes-neon implementations
+for arm64 need a similar treatment?
+
+> ---
+>
+>  crypto/cmac.c |   18 +++++++++++++++++-
+>  1 file changed, 17 insertions(+), 1 deletion(-)
+>
+> diff --git a/crypto/cmac.c b/crypto/cmac.c
+> index bcc6f19a4f64..fce6b0f58e88 100644
+> --- a/crypto/cmac.c
+> +++ b/crypto/cmac.c
+> @@ -213,7 +213,22 @@ static int cmac_init_tfm(struct crypto_shash *tfm)
+>         ctx->child = cipher;
+>
+>         return 0;
+> -};
+> +}
+> +
+> +static int cmac_clone_tfm(struct crypto_shash *tfm, struct crypto_shash *otfm)
+> +{
+> +       struct cmac_tfm_ctx *octx = crypto_shash_ctx(otfm);
+> +       struct cmac_tfm_ctx *ctx = crypto_shash_ctx(tfm);
+> +       struct crypto_cipher *cipher;
+> +
+> +       cipher = crypto_clone_cipher(octx->child);
+> +       if (IS_ERR(cipher))
+> +               return PTR_ERR(cipher);
+> +
+> +       ctx->child = cipher;
+> +
+> +       return 0;
+> +}
+>
+>  static void cmac_exit_tfm(struct crypto_shash *tfm)
+>  {
+> @@ -280,6 +295,7 @@ static int cmac_create(struct crypto_template *tmpl, struct rtattr **tb)
+>         inst->alg.final = crypto_cmac_digest_final;
+>         inst->alg.setkey = crypto_cmac_digest_setkey;
+>         inst->alg.init_tfm = cmac_init_tfm;
+> +       inst->alg.clone_tfm = cmac_clone_tfm;
+>         inst->alg.exit_tfm = cmac_exit_tfm;
+>
+>         inst->free = shash_free_singlespawn_instance;
