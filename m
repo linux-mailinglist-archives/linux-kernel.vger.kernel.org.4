@@ -2,151 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BDEB709EFE
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 20:19:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D66D709F08
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 20:23:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbjESSTv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 14:19:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33644 "EHLO
+        id S229681AbjESSXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 14:23:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjESSTt (ORCPT
+        with ESMTP id S229501AbjESSX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 14:19:49 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2087.outbound.protection.outlook.com [40.107.21.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D0B139;
-        Fri, 19 May 2023 11:19:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cO2BE533BXPqkECD6IhYkbe/evTo+V/45ADYzGaJno7S9Jw1Yo3v9OEkNkkPsJoc0YvLAOyPhvqh2vCsj5F4H641P6xqFz5BcMvThwifzg+97HMl5gNRLMfOTxI6uDF62TTCueRoYAh0Kb2oiRHyMHMsvhnR3dhb5WlUy6kSwL5IoZcgbOolqvBNinjz4kAOiTcGV6C19BobkGeDgdFVOwdfX1J5hWr+mAIS0VpecY60Yzdu5C8pNbe86Wj8r/R+jI9x+N7dvbDTRdx19HT3aWitGVw1q6iI1l8QYnjomTkDpAhWTFgvUmAqYBkmL0oYqOwj6O2f5VSN4Q5Kq0k1qQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wC4kEaFlAoAM/G2jGMBadVCU4PahcHFpgcxEjF89u0o=;
- b=Q8N87mHCBDLU0UsT6Q0B0P02HzCVK9sbN56zjbMqn95/kjnnCFQYeAXxMJ1PxQPyJ2FjTIIleYfnKQWcQMmu0JvdfCMsmESs+w8gRoMmMperO958HAnWDLDOcTzk3BG6FqXy5m6xc+fabX13T7KMd3bxmWxIqxx8Qaz4wHUMzzch2zE/INMcllUmwXDH5WYzJmgz5rzTeWJwxzSibpnKaaFYrsmQ21On8c5xua2fe68jJjRd4iUu66/VcT3i1ol83qSDKhZFhh4/1TCUmDaY8s6KvCx1Ve6pEgV8bECnUEgEd5uXqoSA8pjLMzDJl2ag4q52y7ul4UHFZOe/w7D8pA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wC4kEaFlAoAM/G2jGMBadVCU4PahcHFpgcxEjF89u0o=;
- b=Z1SMRN8lzl3TLHOXXsOWfB5A3FBRClaxjjOXw/b3DnsqqgA/Ad4EkDvKf9h8p7IuMbu96YXPIdGfuYV2RCoVYarYIQ8iRm6XWZixZkfS711WOhI164/yiY4gHCvtL112fZ6tIG5pFWusC3upUMmUgFgXKay/gNtDqBeJbrE4c+w=
-Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
- by PAXPR04MB8654.eurprd04.prod.outlook.com (2603:10a6:102:21d::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19; Fri, 19 May
- 2023 18:19:44 +0000
-Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
- ([fe80::25d3:de2:ef1:3884]) by AM6PR04MB4838.eurprd04.prod.outlook.com
- ([fe80::25d3:de2:ef1:3884%4]) with mapi id 15.20.6411.021; Fri, 19 May 2023
- 18:19:44 +0000
-From:   Frank Li <frank.li@nxp.com>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
-        "kw@linux.com" <kw@linux.com>
-CC:     "kishon@kernel.org" <kishon@kernel.org>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>
-Subject: RE: [EXT] [PATCH v4 4/7] PCI: endpoint: Add BME notifier support
-Thread-Topic: [EXT] [PATCH v4 4/7] PCI: endpoint: Add BME notifier support
-Thread-Index: AQHZimA1/HTZGCCvNkeTHIvD7zgRf69h5tGg
-Date:   Fri, 19 May 2023 18:19:44 +0000
-Message-ID: <AM6PR04MB483845CDCBDF5962C3F9D8F2887C9@AM6PR04MB4838.eurprd04.prod.outlook.com>
-References: <20230519144215.25167-1-manivannan.sadhasivam@linaro.org>
- <20230519144215.25167-5-manivannan.sadhasivam@linaro.org>
-In-Reply-To: <20230519144215.25167-5-manivannan.sadhasivam@linaro.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM6PR04MB4838:EE_|PAXPR04MB8654:EE_
-x-ms-office365-filtering-correlation-id: 767757ce-1460-4a67-5b43-08db58959edf
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Ml0QYoIh6DVkDmIYTPzc16dsveFg+8Y79B+9zEUu07kYfouTPkeQ4N8oJ0nm8JgxCF6eysclDiCXzku6vP16Bzspyy+yuV+0Qe8wtnsspyEy3iZShN77ipVv4zRvxSfZfoOo3Py0/QkTcrJnGVhTsf/9da0N/gt6GoCe2X/zrfd5Vc/R1mFCSwBzs5++nPn9Ma8Y5M+asut705buqmNYVTx06c4s4ye7oq+vp0he/wjtjRhVEDpI225ON4wnA8Pna0rfUS9O2kYBatxIv8P1+gg0sSyEho3yGGw96/WJzNm2m9xHC0iUpRi7DL2LD/HWw+X5OjE1v5ICSN4QDHJ5RbQsD4tpFBsLr7XNT1jo5XnlXPygnWpgwbbShXLFhtG75rmO6MJg9qpGVAXjgJ81MJWcJ84Z3+eyM2LvHqsDlLumWUdraewalznFpxj27IKjkt1zTQEzkVTGH2866bi9XU2Qg5rRwL3zREZy/o1XXqFfvfJyjC7tuR0ke4OJi01c0Icv9KcfbHozjFJD9sCevhHZ0aF188nVgPaFyVyDe81kZ4SADkhw9G2bDN7lWQ4UPB95+N+ntBr0Tq6A69VpGVZK9KKGY2CnHxgUVN9gqSk=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(39860400002)(376002)(366004)(346002)(451199021)(4744005)(6506007)(55016003)(9686003)(966005)(26005)(66946007)(55236004)(186003)(66476007)(5660300002)(83380400001)(64756008)(316002)(41300700001)(44832011)(4326008)(76116006)(66446008)(52536014)(8936002)(2906002)(8676002)(66556008)(110136005)(478600001)(7696005)(54906003)(71200400001)(86362001)(33656002)(38070700005)(38100700002)(122000001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?X4BZIO3wIQCEBs2WarKhbAQwQFUMSwgf1UyFFqVSOU8tSL6uXujPTjjdJvIg?=
- =?us-ascii?Q?LW5peuT7fl+ThW4azxwzYwsbXsSfmweqDGF5oywxtpeJ1HYL+hTp4Lx/QQ0T?=
- =?us-ascii?Q?TbNLhsKdcLlTml8m6eQIr0C/Wpiy5tlmm9WDUf2E7P89aPYhq3GC0ESxEgfn?=
- =?us-ascii?Q?gHD4BuECGGpEzff5PhvzcJrxdoeBSyW7xCuLLB0H6BzK5YLdJMttYp3OquSy?=
- =?us-ascii?Q?hTXVBfsmDwSxaBnU6SRHovt8dl+4yENxrS4OSK94eunfrD6zqzTFYxHotVUP?=
- =?us-ascii?Q?b6GzJgdYWG+hV4WPxilQVFf6TdbNfQPkrVHqFWprnvJkD27aGnr9cVIYOmok?=
- =?us-ascii?Q?D0dX5/u3ZEh+eC7bZRsZ/as4kesJoW4r1yZOnCeoMF7MA/WuASDw6cODHH9g?=
- =?us-ascii?Q?Cjhm70l/6b2n1lwGreFvy74z630yflKtl8n1LVeUOp6ezmXlDKZMYxRQm+j9?=
- =?us-ascii?Q?JXBb6ePwJFrzWpYXyu5zFEgMnv7XheBC6w7DKKLuVKz3C6sk8f/FlirtPed3?=
- =?us-ascii?Q?dPOLfVVhXuZ2D+aklMCcSvCXGSsy27PEIyugu7gkWKwh6okS0Q2ydcQcO4Zs?=
- =?us-ascii?Q?1n4Mc+4zS3LFPlHos2BxbzuaN8fO8DcL55nenLSfLLT4Pb34OW6WMe1GdYKb?=
- =?us-ascii?Q?+F4E5cojJAcxdegPfoti5F0g9Ii19Yy6Zg/uAVH8Bs+GufVBKpaxUTuOhNtq?=
- =?us-ascii?Q?s4YkMU5N05bttzRJCY5cwVSfq3ySPHmbE8EmAZoZRPOW7iRkvyyj0WpCT2fE?=
- =?us-ascii?Q?wb5CS8wfSGVHsJV5Ze8sQXw/PmxXqqG4XUqZgLvVhVNAZLFfkFVfyyTmMS+5?=
- =?us-ascii?Q?j9qpgszTWWC9EYKRPRa8zvb9pNU7200+ISEUXSKEuLm+nt98NvMMnzTAkXV5?=
- =?us-ascii?Q?kpVdjPJ/+GD8ong38x7/rQnubE0TbW/BERV3djTPpibMO+NbyIXVDAx2dncV?=
- =?us-ascii?Q?rgk2Ek0MtPas9pKeCFUCoW9DQJuClc9GjSItZwcSvPw/PURBMd86t9fce8ec?=
- =?us-ascii?Q?bcE1Sz9IBK3Iv6V10WkmjxOAA3Z/SBPq3rI7Hl0iM2GoYRTr602cDIHfEK++?=
- =?us-ascii?Q?B/gRCE8nWYKGA+9a6cWBElmSRpZ4JgnD8A22IP5BYUctiQpmBH2UW7cODBo9?=
- =?us-ascii?Q?mLj1pS7RM2xKYbNRSEtTulrAym40Rbromz9Q616nCkh2OOAJ7J41z927xYJB?=
- =?us-ascii?Q?tzlhr9cwM2A7i0Lq4QVRW0KKynvPVJxH6Mj5q0b1Dfq+XvfbPvgJX6N199yh?=
- =?us-ascii?Q?pKJpxVEW5iOEJhKqqWGbFv/t0uGbgqi6XSbYOVhyoVEbDzLS/QwQeEMF1nJC?=
- =?us-ascii?Q?8Gn4YPydO8xT6uAtH3i/an5YV7sTMf4FvwoJ6prpwLW45I6+wgpTRe7W+ufg?=
- =?us-ascii?Q?nTaaMGSLQL+dwOOvRYifrAoymo8/m41s0xULRPy5Lk/VRHvwEosS8UCIhx7x?=
- =?us-ascii?Q?vcO7n1dmV59TAI8jPLxO2W3Z8dyuvKhiQn1ll2Me5KD1I6w/vPTRlaVSKMo1?=
- =?us-ascii?Q?dXvuCN0r82V87/GZWiRiaMzE06vjEPF/RXWcV8lqgDOhlxyLyGH3BUPA1nC/?=
- =?us-ascii?Q?iQ2J00IJ9YluEf2UJrI=3D?=
+        Fri, 19 May 2023 14:23:27 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E50BD132
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 11:23:24 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id d2e1a72fcca58-64d285fc7ecso1923043b3a.2
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 11:23:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684520604; x=1687112604;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DLB02Z/Vwsol/Ye6PM6jgDdfosuGHdGXe49pn4jVFGs=;
+        b=ITz9fDEYRz6uJ1+nRWO7vsSi14em+HdSJidcWgxJ4Wt6DeOJu7xDarNLoGHPPmOBJm
+         513df8JS3NzUdZBK5GSwxSAE1obesd28XWXoOz2iBbvdy2ADgD8Q7q4etCMKIPinEZf9
+         82KenOrwjvv/KK8vs+qKxwowe4qePsP8+TuW1ty9rOYtzfzi/ynfD476K7Sa4jcxQ34p
+         HkwfUr8RcwOMfxti367AckaqXDd3aDIN65dnmKhBIIZmfTcWPib/CZQFAhBLIgn2eTM2
+         VcgA71nqkKuEZwM79FEKmyy8iW+KFC3fLH2DABkTHNX+7IlmO+RnTTQJhuLLoZh1rgpR
+         H95A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684520604; x=1687112604;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DLB02Z/Vwsol/Ye6PM6jgDdfosuGHdGXe49pn4jVFGs=;
+        b=eC6eIcMKDAQGbTTyfRsYnUfAT0Fd0Yro5EXszQcxINMnP8Sry0tVHZteAImWNhKIIj
+         +dr9Y+K92MegZK9YZxGnhK817NT+Avfi7qbVFGG/Q3Cszm+f3s4TEAzjQa4B56spXvjq
+         h3Z04XUlwlp0QIghpdbnWjjJqgHzFwCn/bgCU0A4QIoF2UfVJ58NvCZyLxYjL0RtgUVg
+         EFz5cDsf9rHQH7f/XsIPOfa2NeTVRZb5yyy8qwBYgp3cw3U/gCEqVPb350MEeNXnbiJ9
+         eBIX673qFgUzGn0kFNa827Vw2sKGyFCNivZqbsAEgfYPPdr27TnwvKQTePEMx9LY/rTX
+         Geew==
+X-Gm-Message-State: AC+VfDzG4/fsdpG2b7ZzWHQ5Fr/+kq1jhsy4Uj1i4KwlZr0BIKZKEwtw
+        KyLt5MasFO29Vdz6+ywfYyy1I04o3sM=
+X-Google-Smtp-Source: ACHHUZ419BZyva9XfjdHZezzlVRJTJng9P1rwHIVB2iZ3Kvn5yX6WZYPLwlGGRjyBM2xKvPRPQpWmzT2ch0=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:aa7:88c4:0:b0:643:4595:64c7 with SMTP id
+ k4-20020aa788c4000000b00643459564c7mr1352262pff.4.1684520604384; Fri, 19 May
+ 2023 11:23:24 -0700 (PDT)
+Date:   Fri, 19 May 2023 11:23:23 -0700
+In-Reply-To: <CSQFE7I30W27.2TPDIHOTZNRIZ@dev-dsk-nsaenz-1b-189b39ae.eu-west-1.amazon.com>
+Mime-Version: 1.0
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <20221202061347.1070246-3-chao.p.peng@linux.intel.com> <CSQFE7I30W27.2TPDIHOTZNRIZ@dev-dsk-nsaenz-1b-189b39ae.eu-west-1.amazon.com>
+Message-ID: <ZGe+m+uFzpiW7wlr@google.com>
+Subject: Re: [PATCH v10 2/9] KVM: Introduce per-page memory attributes
+From:   Sean Christopherson <seanjc@google.com>
+To:     Nicolas Saenz Julienne <nsaenz@amazon.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, graf@amazon.com,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        wei.w.wang@intel.com, anelkz@amazon.de
 Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 767757ce-1460-4a67-5b43-08db58959edf
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 May 2023 18:19:44.1297
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Jif3pn9u8TsLjSpBjIgornef2aqHK8EvTLCdzeaRjO2pkAk9uv1bFJG4E6rpXYS43EGESskoaEF/lhKcFQaGvQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8654
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, May 19, 2023, Nicolas Saenz Julienne wrote:
+> Hi,
+> 
+> On Fri Dec 2, 2022 at 6:13 AM UTC, Chao Peng wrote:
+> 
+> [...]
+> > +The user sets the per-page memory attributes to a guest memory range indicated
+> > +by address/size, and in return KVM adjusts address and size to reflect the
+> > +actual pages of the memory range have been successfully set to the attributes.
+> > +If the call returns 0, "address" is updated to the last successful address + 1
+> > +and "size" is updated to the remaining address size that has not been set
+> > +successfully. The user should check the return value as well as the size to
+> > +decide if the operation succeeded for the whole range or not. The user may want
+> > +to retry the operation with the returned address/size if the previous range was
+> > +partially successful.
+> > +
+> > +Both address and size should be page aligned and the supported attributes can be
+> > +retrieved with KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES.
+> > +
+> > +The "flags" field may be used for future extensions and should be set to 0s.
+> 
+> We have been looking into adding support for the Hyper-V VSM extensions
+> which Windows uses to implement Credential Guard. This interface seems
+> like a good fit for one of its underlying features. I just wanted to
+> share a bit about it, and see if we can expand it to fit this use-case.
+> Note that this was already briefly discussed between Sean and Alex some
+> time ago[1].
+> 
+> VSM introduces isolated guest execution contexts called Virtual Trust
+> Levels (VTL) [2]. Each VTL has its own memory access protections,
+> virtual processors states, interrupt controllers and overlay pages. VTLs
+> are hierarchical and might enforce memory protections on less privileged
+> VTLs. Memory protections are enforced on a per-GPA granularity.
+> 
+> The list of possible protections is:
+> - No access -- This needs a new memory attribute, I think.
 
-> @@ -72,11 +72,13 @@ struct pci_epf_ops {
->   * @core_init: Callback for the EPC initialization complete event
->   * @link_up: Callback for the EPC link up event
->   * @link_down: Callback for the EPC link down event
-> + * @bme: Callback for the EPC BME (Bus Master Enable) event
->   */
->  struct pci_epc_event_ops {
->         int (*core_init)(struct pci_epf *epf);
->         int (*link_up)(struct pci_epf *epf);
->         int (*link_down)(struct pci_epf *epf);
-> +       int (*bme)(struct pci_epf *epf);
+No, if KVM provides three bits for READ, WRITE, and EXECUTE, then userspace can
+get all the possible combinations.  E.g. this is RWX=000b
 
-I posted a doorbell from host to EP at
-https://lore.kernel.org/imx/20230426203436.1277307-2-Frank.Li@nxp.com/T/#u
+> - Read-only, no execute
 
-Can we consider consolidate these notification to one function and distingu=
-ished by
-EVENT_ID in future?
+RWX=100b (using my completely arbitrary ordering of RWX bits :-) )
 
-Best regards
-Frank Li
+> - Read-only, execute
 
->  };
->=20
->  /**
-> --
-> 2.25.1
+RWX=101b
 
+> - Read/write, no execute
+
+RWX=110b
+
+> - Read/write, execute
+
+RWX=111b
+
+> We implemented this in the past by using a separate address space per
+> VTL and updating memory regions on protection changes. But having to
+> update the memory slot layout for every permission change scales poorly,
+> especially as we have to perform 100.000s of these operations at boot
+> (see [1] for a little more context).
+> 
+> I believe the biggest barrier for us to use memory attributes is not
+> having the ability to target specific address spaces, or to the very
+> least having some mechanism to maintain multiple independent layers of
+> attributes.
+
+Can you elaborate on "specific address spaces"?  In KVM, that usually means SMM,
+but the VTL comment above makes me think you're talking about something entirely
+different.  E.g. can you provide a brief summary of the requirements/expectations?
+
+> Also sorry for not posting our VSM patches. They are not ready for
+> upstream review yet, but we're working on it.
+> 
+> Nicolas
+> 
+> [1] https://patchwork.kernel.org/comment/25054908/
+> [2] See Chapter 15 of Microsoft's 'Hypervisor Top Level Functional Specification':
+>     https://raw.githubusercontent.com/MicrosoftDocs/Virtualization-Documentation/main/tlfs/Hypervisor%20Top%20Level%20Functional%20Specification%20v6.0b.pdf
