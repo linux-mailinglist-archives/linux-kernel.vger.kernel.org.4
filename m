@@ -2,133 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32054709BCE
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 17:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5103709BD1
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 17:57:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232336AbjESP5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 11:57:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34440 "EHLO
+        id S232159AbjESP55 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 11:57:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232355AbjESP5g (ORCPT
+        with ESMTP id S232225AbjESP5x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 11:57:36 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D67E10FA;
-        Fri, 19 May 2023 08:57:24 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34JEmff0023732;
-        Fri, 19 May 2023 15:57:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=T1k8rEsc1p0ygsuyJorb2hKKhH5mQ8/ePQuTPCRGSjE=;
- b=WeTPyyWVI4VNgd1gt/7q0JPaHeCeT1tCLd4Z317FNJz9FXCPpmmkaQzWkVjG4HPE0Npy
- HGAsdzF5k2bU1nqV5OqiKpdjGD+eZc40sQOSOc1TIePsNDQjQ78XZPgKWUAwBiRt6oik
- pNVfwd2CfxdmibBXC8FjUCN6Gy43uDLXPVprMloFDza78y7dhH2fTPW4t9qFX3DNdXnP
- AQus54wmfjHSPzw8KgwVoRcjQK5CupnCcj/ogPFpgAjMc6jywhgTTKQ8lI+DhoxT4yZg
- HGRH/qbWO7sqkOlZ/34HkEGK84tWM/IZmkJrQe9GI42520CJS1nk3AA2imxKul5s15D5 Eg== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qp8fm0mt7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 May 2023 15:57:20 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34JFvJw9020438
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 May 2023 15:57:19 GMT
-Received: from hu-jkona-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 19 May 2023 08:57:15 -0700
-From:   Jagadeesh Kona <quic_jkona@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-CC:     Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        "Jagadeesh Kona" <quic_jkona@quicinc.com>,
-        Satya Priya Kakitapalli <quic_skakitap@quicinc.com>
-Subject: [PATCH 4/4] arm64: dts: qcom: sm8550: Add camera clock controller
-Date:   Fri, 19 May 2023 21:26:02 +0530
-Message-ID: <20230519155602.6642-5-quic_jkona@quicinc.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230519155602.6642-1-quic_jkona@quicinc.com>
-References: <20230519155602.6642-1-quic_jkona@quicinc.com>
+        Fri, 19 May 2023 11:57:53 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76C2AE54
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 08:57:36 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id 6a1803df08f44-61b63897579so4919946d6.0
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 08:57:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684511855; x=1687103855;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZlIVAJkfUZuaa/mIdEmkmyvFCFGMfQ33OBwJnbKZILY=;
+        b=lGGNkc8nfCv/+xd2tZWAVIdZN9LnuxzOUwfAxn6XE17QzOycTPTNHliz2ZFhtUh+YF
+         JfMZXk0Yo/TMVeGFSlU3/F7eUMtnFJBCXPCt26x0DGb+Aw7txIF2aO5F9oHYF/FDUcxh
+         GExjFkSKHEtoweTKlQE9o4+WW11YS3OY+aZ7a09D+dQPabHwOa1Epx/EnbWh1XUYda7+
+         wI2uhfXAkB4w3HxyEfqCNZpJflCbxhnWPV8BVHOI9XqeBIuKc62zGR/nGqmcLpxtjnMu
+         G1upkcZHOuuu1ofZSEnNwVWpvUkbkyTS+oBc8BsvaswqSUBCY2+6kDIgIaX8H9VOpJ92
+         viYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684511855; x=1687103855;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZlIVAJkfUZuaa/mIdEmkmyvFCFGMfQ33OBwJnbKZILY=;
+        b=OAfo6A6kIxklZrVtWeDaqPt8KMk9LOLGj5O/aYrYD+OCvyA3VqJJYZp+pzFE76Kvol
+         kd+9mpj6pnHg/S85BV11Wpgmjx7S7fqjqhH4DQyraGzsrGk/225bOC2voEUIcVbt6wMG
+         v6xU/zIeX/SzVa5/H/2/b3tcAPPYrTPvWQYqCILdiUKcJQ6i2QyDMGfTiDnAcZqLwez6
+         S0y91nAz2vy3nnXtNqdgG/VAa/VVqoswLv4tTTn+NYnkko06dvMHV+dK+/NxJoZ96cyf
+         1KWUsYnhKik+i0CUAX/ztptPv0yFTvF4cnL5fAYOLBpXG8V5VinHaQjj+yVOaeuJzssG
+         G7Og==
+X-Gm-Message-State: AC+VfDxpvIePdsv5UB4L5kg+9D7uoxZRJ7nRla0eyuYworYIvVaN6iH+
+        3u7AsjjX7F76VwsKY+ECkkbdQbqi0qx80O1nzfyfQ+zftAReXvWl+2i+pQ==
+X-Google-Smtp-Source: ACHHUZ7am3g5K1M8XXYl0TVpF1TkbnbjfGOU5itzTMNk/WigjyM4lXkOk9kRkA/Mj26X0uyicFXOI+bHipdr7bUnf/U=
+X-Received: by 2002:a05:6214:401d:b0:616:859a:471a with SMTP id
+ kd29-20020a056214401d00b00616859a471amr5347827qvb.17.1684511855305; Fri, 19
+ May 2023 08:57:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: nTh1A7YU-qA1rMkwFmEst8YMYhHPXPsA
-X-Proofpoint-GUID: nTh1A7YU-qA1rMkwFmEst8YMYhHPXPsA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-19_11,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- impostorscore=0 adultscore=0 mlxlogscore=995 bulkscore=0 spamscore=0
- priorityscore=1501 malwarescore=0 phishscore=0 clxscore=1015
- suspectscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305190135
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <CAK7LNAT_cMLGLBz7ugaLpJD3QmZmY8FK56x9nihvWeYhJpi2ag@mail.gmail.com>
+ <20220919170828.3718437-1-ndesaulniers@google.com> <597ef55f-e7c1-ab60-b4aa-0071ff4b5e0e@collabora.com>
+ <CAKwvOdmSrAxx-YY1Na3BSdYuxXCPKK+F0K5V6i+adTn_bVJEsw@mail.gmail.com>
+ <89961dfc-d40f-78e4-5d34-b86b7d152182@collabora.com> <CAKwvOd=4hBcU4fAkddU0b-GOZc9FzTZoj3PFW6ZZrX0jS8x+bg@mail.gmail.com>
+ <17c91d37-7d9c-0df4-2438-2b30ca0b5777@collabora.com> <CAKwvOdk4QO8x_bs64fFRCsMu__AjhXd4Ew2KfgzQOb9Q3FMqSA@mail.gmail.com>
+ <b5d0cf82-0e42-f6a1-c9f5-c145fdc4c622@collabora.com> <CAKwvOdkFxu9hYSL_RCXadpR0dQd1+dZmAUVXdfFiLUfxg4D_Xw@mail.gmail.com>
+ <878rdlk9bi.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
+ <CAKwvOd=8LVU+iANkFx18Wm1jg7gYiAXovAmo9t5ZZaVdMULn-Q@mail.gmail.com> <875y8ok9b5.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
+In-Reply-To: <875y8ok9b5.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Fri, 19 May 2023 08:57:24 -0700
+Message-ID: <CAKwvOdmJJibt6sHSp91v2s7BxUWBC6xG7F7+3C6gUxNMzZ2xRA@mail.gmail.com>
+Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
+ compiler-specific macros
+To:     =?UTF-8?Q?Ricardo_Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>
+Cc:     Shreeya Patel <shreeya.patel@collabora.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Bill Wendling <morbo@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        regressions@lists.linux.dev,
+        "gustavo.padovan@collabora.com" <gustavo.padovan@collabora.com>,
+        Guillaume Charles Tucker <guillaume.tucker@collabora.com>,
+        denys.f@collabora.com, kernelci@lists.linux.dev,
+        Greg KH <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add device node for camera clock controller on Qualcomm
-SM8550 platform.
+On Fri, May 19, 2023 at 1:35=E2=80=AFAM Ricardo Ca=C3=B1uelo
+<ricardo.canuelo@collabora.com> wrote:
+>
+> On jue, may 18 2023 at 14:12:30, Nick Desaulniers <ndesaulniers@google.co=
+m> wrote:
+> > That's a higher risk change (and has my name on the tested-by tag, yike=
+s).
+> >
+> > So is that the culprit of the boot failure you're observing?
+>
+> Right now it is.
+>
+> Here's a test run using that commit
+> (5750121ae7382ebac8d47ce6d68012d6cd1d7926):
+> https://lava.collabora.dev/scheduler/job/10373216
+>
+> Here's one with the commit right after that one
+> (26ef40de5cbb24728a34a319e8d42cdec99f186c):
+> https://lava.collabora.dev/scheduler/job/10371513
+>
+> Then one with 26ef40de5cbb24728a34a319e8d42cdec99f186c with a revert
+> commit for 5750121ae7382ebac8d47ce6d68012d6cd1d7926 on top:
+> https://lava.collabora.dev/scheduler/job/10371882
+>
+> But I'm not confident enough to jump ahead and call this a kernel
+> regression, specially after the bisector confidently said that about
+> your commit and then it turned out none of us could reproduce it.
 
-Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
-Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sm8550.dtsi | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+It could be; if the link order was changed, it's possible that this
+target may be hitting something along the lines of:
+https://isocpp.org/wiki/faq/ctors#static-init-order i.e. the "static
+initialization order fiasco"
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-index e67e7c69dae6..ac82d3774ed8 100644
---- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-@@ -4,6 +4,7 @@
-  */
- 
- #include <dt-bindings/clock/qcom,rpmh.h>
-+#include <dt-bindings/clock/qcom,sm8550-camcc.h>
- #include <dt-bindings/clock/qcom,sm8550-gcc.h>
- #include <dt-bindings/clock/qcom,sm8550-tcsr.h>
- #include <dt-bindings/clock/qcom,sm8550-dispcc.h>
-@@ -2397,6 +2398,20 @@ opp-202000000 {
- 			};
- 		};
- 
-+		camcc: clock-controller@ade0000 {
-+			compatible = "qcom,sm8550-camcc";
-+			reg = <0 0xade0000 0 0x20000>;
-+			clocks = <&bi_tcxo_div2>,
-+				 <&bi_tcxo_ao_div2>,
-+				 <&sleep_clk>,
-+				 <&gcc GCC_CAMERA_AHB_CLK>;
-+			power-domains = <&rpmhpd SM8550_MMCX>;
-+			required-opps = <&rpmhpd_opp_low_svs>;
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+			#power-domain-cells = <1>;
-+		};
-+
- 		mdss: display-subsystem@ae00000 {
- 			compatible = "qcom,sm8550-mdss";
- 			reg = <0 0x0ae00000 0 0x1000>;
--- 
-2.40.1
+I'm struggling to think of how this appears in C codebases, but I
+swear years ago I had a discussion with GKH (maybe?) about this. I
+think I was playing with converting Kbuild to use Ninja rather than
+Make; the resulting kernel image wouldn't boot because I had modified
+the order the object files were linked in.  If you were to randomly
+shuffle the object files in the kernel, I recall some hazard that may
+prevent boot.
 
+>
+> There have been some cases where a commit made a test fail (kernel
+> failing to load, for instance) and the real problem was that the kernel
+> got bigger than the target was capable of handling. So not a problem
+> with the commit at all, it was just that the memory mappings needed to
+> be redefined for that target. What I'm saying is that sometimes a
+> regression report is really uncovering a problem in the test setup
+> rather than introducing a bug. Maybe this is one of those cases.
+>
+> Cheers,
+> Ricardo
+
+
+
+--=20
+Thanks,
+~Nick Desaulniers
