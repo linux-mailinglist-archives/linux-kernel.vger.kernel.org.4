@@ -2,53 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53E88709D82
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 19:06:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D00B5709D8F
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 19:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231175AbjESRGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 13:06:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48296 "EHLO
+        id S230123AbjESRJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 13:09:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231345AbjESRFq (ORCPT
+        with ESMTP id S231996AbjESRJX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 13:05:46 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE3C1E5C;
-        Fri, 19 May 2023 10:05:32 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 3FF7B7C0;
-        Fri, 19 May 2023 17:05:21 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 3FF7B7C0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1684515921; bh=32yUJ/Ep+SRRswkhu8CSGkcBJ2kdTHXVgiH1bkIO4qs=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Sz93O2MrDkbaobmjkJ4YaHN0AUsD9dSLwiu3oH8qY4OEUKIHsY0wZxUduPTtQiDGm
-         F6EjFmjz4TlLD5IYnTPhc007iYrszZr4V5JyctI/kGhBb1Pqxf37RXfMsiP2DzS6re
-         Sy0+VaKsJIfemyC0l+d2yBBLQks8akk4UaK6GRUZuIQ47YAGOajWtf66psmV+IdXtc
-         7az6kUp5rKGdc9B0V326bC75avIMUS4DPGYYd8QZwOL9SHfYewwv2ZVP5glXpAm/fp
-         xgu5x8yS+QifekV7BKMjJt9KX5ewJhXJ/7AgXYsVCnXAUlupWqmEHvFntzHAciAEtR
-         tzl6G8QjkX3dg==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH 7/7] dt-bindings: Update Documentation/arm references
-In-Reply-To: <20230519-tug-garbage-4fee2efc3f0a@spud>
-References: <20230519164607.38845-1-corbet@lwn.net>
- <20230519164607.38845-8-corbet@lwn.net>
- <20230519-tug-garbage-4fee2efc3f0a@spud>
-Date:   Fri, 19 May 2023 11:05:20 -0600
-Message-ID: <877ct4meun.fsf@meer.lwn.net>
+        Fri, 19 May 2023 13:09:23 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9306A170B;
+        Fri, 19 May 2023 10:09:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=ermZR
+        AVuUoVUkWCNUZOtH1iovxjOCeT0E8mJeG1r0+I=; b=c8bg5UGkN+QKNMc7GUCVj
+        nbRykxbHGXSq6kDTA0CCIynXgQiwtfU+WEMBP3GV44WqWelTu0N1XuTqmk7NZZLL
+        SB6hTSYVDUWIEJK5Bc1WqJhVi21tUxRQHmFoum6OR3mQWH+bIZgNMzrEfhL4UUoM
+        aniNd2AfBAOBN7fiGizrVk=
+Received: from lizhe.. (unknown [120.245.132.248])
+        by zwqz-smtp-mta-g5-3 (Coremail) with SMTP id _____wCnJg_FrGdktqNhAA--.38178S4;
+        Sat, 20 May 2023 01:07:59 +0800 (CST)
+From:   Lizhe <sensor1010@163.com>
+To:     lars.povlsen@microchip.com, Steen.Hegelund@microchip.com,
+        daniel.machon@microchip.com, UNGLinuxDriver@microchip.com,
+        linus.walleij@linaro.org
+Cc:     linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Lizhe <sensor1010@163.com>
+Subject: [PATCH] drivers/pinctrl.c : Remove redundant clearing of IRQ_TYPE_SENSE_MASK
+Date:   Sat, 20 May 2023 01:07:16 +0800
+Message-Id: <20230519170716.3459-1-sensor1010@163.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wCnJg_FrGdktqNhAA--.38178S4
+X-Coremail-Antispam: 1Uf129KBjvdXoW7GFy8uF1xGF4UZF1kWr1rJFb_yoWfGrX_uF
+        W5J39Fq3y8WF1ayrWxKr43ZFZ0yF4UXFnYgasYqan3CrW5Aw4jyrn7uF15Cws3uryUuFyj
+        yryrXr4Fyry7AjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRKpBTDUUUUU==
+X-Originating-IP: [120.245.132.248]
+X-CM-SenderInfo: 5vhq20jurqiii6rwjhhfrp/xtbBdBF0q1gi6LwzcwAAsU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,24 +54,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Conor Dooley <conor@kernel.org> writes:
+Before executing microchip_sgpio_irq_set_type(),
+type has already been cleared IRQ_TYPE_SENSE_MASK, see __irq_set_trigger().
 
-> On Fri, May 19, 2023 at 10:46:07AM -0600, Jonathan Corbet wrote:
->> The Arm documentation has moved to Documentation/arch/arm; update
->> references under arch/arm64 to match.
->
-> This commit message seems a wee bit inaccurate ;)
+Signed-off-by: Lizhe <sensor1010@163.com>
+---
+ drivers/pinctrl/pinctrl-microchip-sgpio.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-Argh.  I pulled this change out into a separate patch because checkpatch
-whined at me, and did it a bit too quickly, I guess...
+diff --git a/drivers/pinctrl/pinctrl-microchip-sgpio.c b/drivers/pinctrl/pinctrl-microchip-sgpio.c
+index 4794602316e7..59f232a68b5a 100644
+--- a/drivers/pinctrl/pinctrl-microchip-sgpio.c
++++ b/drivers/pinctrl/pinctrl-microchip-sgpio.c
+@@ -719,8 +719,6 @@ static void microchip_sgpio_irq_ack(struct irq_data *data)
+ 
+ static int microchip_sgpio_irq_set_type(struct irq_data *data, unsigned int type)
+ {
+-	type &= IRQ_TYPE_SENSE_MASK;
+-
+ 	switch (type) {
+ 	case IRQ_TYPE_EDGE_BOTH:
+ 		irq_set_handler_locked(data, handle_edge_irq);
+-- 
+2.34.1
 
->> Cc: Rob Herring <robh+dt@kernel.org>
->> Cc: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
->> Cc: Conor Dooley <conor+dt@kernel.org>
->
-> Otherwise,
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-
-Thanks,
-
-jon
