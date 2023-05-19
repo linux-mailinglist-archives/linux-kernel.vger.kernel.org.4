@@ -2,143 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 350F570A007
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 21:43:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7579970A010
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 21:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbjESTm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 15:42:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40404 "EHLO
+        id S229875AbjESTs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 15:48:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbjESTmz (ORCPT
+        with ESMTP id S229523AbjESTs4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 15:42:55 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40EC186;
-        Fri, 19 May 2023 12:42:53 -0700 (PDT)
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34JJb0aX023123;
-        Fri, 19 May 2023 19:42:43 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=XsOHwqSus0ATATt2cux6Mgrp0/sHwsa6ufvz+q0MK8g=;
- b=c9ELQp+Re9BiKXDXTxlE0rFLbKbhdTmPV7aKJsnIAVCyEYJ5wdS1pyzDF/1q127Se3eJ
- acLqWr8DruMmg7pbMDK9/9HWMxGmr753ygh0j6NIopweYQ80CKmihTT18tTdjH2GxLDC
- d0LT7c4Gys94/z7+Q7le/6wwf5Jv/opLotpAnOMtY/BfuXBJcPgChzk1nEWpudQyOVwC
- iFPgh+IXGMuqNkfEs+hLIRGprjbrc1idmvR+Wy7J9mY6hb9oUw/r/syVUka5IQtRyE+K
- kUoaXa204wkk+VKa6RnXHnic/5Hp0x++2ctSqUJD6ptgJZTNGT3QX3OXV+5DGuR51U54 FA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qpem8198y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 May 2023 19:42:43 +0000
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34JJb6ED023940;
-        Fri, 19 May 2023 19:42:42 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qpem8198h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 May 2023 19:42:42 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34JJBZ5F005254;
-        Fri, 19 May 2023 19:42:41 GMT
-Received: from smtprelay05.wdc07v.mail.ibm.com ([9.208.129.117])
-        by ppma02wdc.us.ibm.com (PPS) with ESMTPS id 3qj266rjv1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 May 2023 19:42:41 +0000
-Received: from smtpav04.dal12v.mail.ibm.com (smtpav04.dal12v.mail.ibm.com [10.241.53.103])
-        by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34JJgeAi57082344
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 19 May 2023 19:42:40 GMT
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E25495805E;
-        Fri, 19 May 2023 19:42:39 +0000 (GMT)
-Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 247025805A;
-        Fri, 19 May 2023 19:42:39 +0000 (GMT)
-Received: from wecm-9-67-22-188.wecm.ibm.com (unknown [9.67.22.188])
-        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 19 May 2023 19:42:39 +0000 (GMT)
-Message-ID: <078d8c1fd6b6de59cde8aa85f8e59a056cb78614.camel@linux.ibm.com>
-Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM
- after writes
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Christian Brauner <brauner@kernel.org>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>
-Cc:     Stefan Berger <stefanb@linux.ibm.com>,
-        Paul Moore <paul@paul-moore.com>,
-        linux-integrity@vger.kernel.org, miklos@szeredi.hu,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        Ignaz Forster <iforster@suse.de>, Petr Vorel <pvorel@suse.cz>
-Date:   Fri, 19 May 2023 15:42:38 -0400
-In-Reply-To: <20230407-trasse-umgearbeitet-d580452b7a9b@brauner>
-References: <20230407-trasse-umgearbeitet-d580452b7a9b@brauner>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: zr_Pq2V2khX2xqvpCsnZD1Mjxeh_EExZ
-X-Proofpoint-ORIG-GUID: ks43xaZjg_1cB0zk9Sgi9XaOBDVpYPRs
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-19_14,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- lowpriorityscore=0 bulkscore=0 spamscore=0 mlxlogscore=999 clxscore=1011
- phishscore=0 malwarescore=0 adultscore=0 impostorscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305190168
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 19 May 2023 15:48:56 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEDDE19F;
+        Fri, 19 May 2023 12:48:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IK08sKhD3nomrv8OZT1PVztWfyoQKBHoIZIfKTb9yJSh/4lUbyFacTNzdlO8QFyfTFRgMz+t6iSttvUkdcMXFMiouoUgRrCQPYjMYoDGYdHvqWpl86XkAS+PIHjFDiPsh/lc9dfdOZteRNf1ODupwiM8cT4Odi0h7QssUldHTffqTViP6L8qfBWHXEjaMLXotQOIlJilhv1CZxY6Ijwkq9XpCXLRqQbCNRzNXpChNo7nBbCCF5eSNRzILfKGFpLxSlja7JOm3k5NKveE14JXnuJbad3ETwMP+OvW3wvEC1uOjMqja+VTV0YUkg8lSvhMMffM/sl2nQDOimJP9gl1Hg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9jxEsXgJI98k/z3IqOECTL/vn2LsOyK0Yvtu0DxcwS0=;
+ b=khj+LcpKqC70AjT4ZXxix7V6vHCGoLuF7UUG3/v+0fR/H65h+ZGRiXPo4HHLIgDUvs9BMlfFumJZq1bXUBniXW9csZ2/Degnirygbp+QO1FueHb31twrfQFHHZl9uYLSGS848Uk+vyVVW3srB1iI7laodRKww5z8fSPMNz6J4Ln0dv1AZAFOKRIRqcYUCTD5HzoE4c3iqLMXJ3Y1B8MuOZ770iEtN0iH7FqMJpXAE2/9S4TMuPllpQnGhUEzLgC6fsjjOzAdRVFGprAS7WHikaB/4CSOZZAb7MVpwypyxYRqiY4aetfk0BbCPjbQ7GBP+WNFLBXYSJ11PmA5zfWO3g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9jxEsXgJI98k/z3IqOECTL/vn2LsOyK0Yvtu0DxcwS0=;
+ b=fI6Y/d5U2Jy+922AcZRhL4q1k/9vPhrgrR+G8Fd3JL3g+Snizc5d6hRnB3FyJj1l5g3f+XTg8+wAstEzufwbyLj3pT0FmdfnpVGvMG5I3iu5F9BjnLperRi8kN/X0GsiO/wt3igZL3n5b/U3gQR2XPol1CxQ3Fnq+mK9NMgtwkEMVfSmlrSsPbGnuhSv17z4n8s6/U+uPVluwAsyt6qW5FIrxJXwmYmVveJi0fTM95azzPnbhd82aHRWeIK4vHCKFfHcba7V11yZnfIOX1AjUBJOcEM9TBQxy4cQAZxKwBqqw3Z/jYcgjLfZ55J9sCJscuvc7ZPPzFNg7WqU+W0BKA==
+Received: from BL0PR05CA0025.namprd05.prod.outlook.com (2603:10b6:208:91::35)
+ by SJ1PR12MB6337.namprd12.prod.outlook.com (2603:10b6:a03:456::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19; Fri, 19 May
+ 2023 19:48:49 +0000
+Received: from BL02EPF000145BA.namprd05.prod.outlook.com
+ (2603:10b6:208:91:cafe::92) by BL0PR05CA0025.outlook.office365.com
+ (2603:10b6:208:91::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.15 via Frontend
+ Transport; Fri, 19 May 2023 19:48:48 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BL02EPF000145BA.mail.protection.outlook.com (10.167.241.210) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6433.7 via Frontend Transport; Fri, 19 May 2023 19:48:48 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 19 May 2023
+ 12:48:32 -0700
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 19 May
+ 2023 12:48:31 -0700
+Received: from Asurada-Nvidia (10.127.8.14) by mail.nvidia.com (10.129.68.9)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37 via Frontend
+ Transport; Fri, 19 May 2023 12:48:30 -0700
+Date:   Fri, 19 May 2023 12:48:29 -0700
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+CC:     "Liu, Yi L" <yi.l.liu@intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
+Subject: Re: [PATCH v2 06/11] iommufd: IOMMU_HWPT_ALLOC allocation with user
+ data
+Message-ID: <ZGfSjYMA06PmaI+Y@Asurada-Nvidia>
+References: <20230511143844.22693-1-yi.l.liu@intel.com>
+ <20230511143844.22693-7-yi.l.liu@intel.com>
+ <BN9PR11MB52767257B1AC401121F3B24F8C7C9@BN9PR11MB5276.namprd11.prod.outlook.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB52767257B1AC401121F3B24F8C7C9@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF000145BA:EE_|SJ1PR12MB6337:EE_
+X-MS-Office365-Filtering-Correlation-Id: 65411883-5093-45cd-75bb-08db58a2103a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZucyivpXTxXVoKGnd4mXmcLFKYMxsxMRqdVM4ywVP1HbXjOHccSE9HZcb5AXrw253ECBRYBtUnDV3v7RiQ5AkXNMo8mCZ0WF8YLGqDsyDCFZ5tCWOnipnLmO9izElz4yCQR2w1p1/msAL6D+CzLqJ+TfKLSQGI8t2qG5o6pg02dRGBtKjorK2jjhyp94Tes2sl4ep5htGVuIjkN2ok447GvbEeJQXkhGh4zLQiIqZE1J5EIiKOlDDRJvMNyb45ZTCHPnXbd9sS6IboOBFkKwu71RSk0/qY2RSdwqL9Vt/7pyj4Dg14s+MnKIJDXAB08dZPgUL8gyewescSOXyw5kKRVQOw87gJahAltvE3kHs+szrl0toHgHDFJvoksdRJnEKrkP8wfJI9QLXy3AmoekzSyfJ4rNNmXc7EfGihBgbjxHMAhmmpG7fVnGZcKW2lXr7JicwxPSQTPTRquLfTFHZ+hYZFCY3YIhRP6AAwJzVCDef99xTNOgn5aShmQHcweWhhYRCQfYYdCot5pY9Wagi99xoD3UDdpupblccKyS5QxabNI/+ezTyKvnGxVsEi6Ywt6WF4YJVa7/9nntP3wuPhJWqci/T8lYKmJbI+hEKMJBrWpDMS6spQjBTkvXvlPpMJCiH6QBFer00EkXTHqtqf5dlGIfLbxePnveTq5rY9v2bECvJC4kgIemlRyC6edfyG/SwAQcM4j87kehYtRijR1ikzZ2Y3WGPrWNGWKYmIi7Ot5StXAnLxJNaPfYXiiTPM01f8x3PDo0e9DBV6TyGw==
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(136003)(346002)(39860400002)(451199021)(36840700001)(40470700004)(46966006)(33716001)(356005)(82310400005)(7636003)(82740400003)(40460700003)(40480700001)(2906002)(55016003)(54906003)(478600001)(86362001)(36860700001)(186003)(26005)(9686003)(70586007)(70206006)(316002)(4326008)(8676002)(5660300002)(8936002)(6916009)(41300700001)(7416002)(47076005)(426003)(336012)(67856001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2023 19:48:48.1395
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 65411883-5093-45cd-75bb-08db58a2103a
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL02EPF000145BA.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6337
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-04-07 at 10:31 +0200, Christian Brauner wrote:
-> So, I think we want both; we want the ovl_copyattr() and the
-> vfs_getattr_nosec() change:
+On Fri, May 19, 2023 at 09:41:00AM +0000, Tian, Kevin wrote:
+> External email: Use caution opening links or attachments
 > 
-> (1) overlayfs should copy up the inode version in ovl_copyattr(). That
->     is in line what we do with all other inode attributes. IOW, the
->     overlayfs inode's i_version counter should aim to mirror the
->     relevant layer's i_version counter. I wouldn't know why that
->     shouldn't be the case. Asking the other way around there doesn't
->     seem to be any use for overlayfs inodes to have an i_version that
->     isn't just mirroring the relevant layer's i_version.
-> (2) Jeff's changes for ima to make it rely on vfs_getattr_nosec().
->     Currently, ima assumes that it will get the correct i_version from
->     an inode but that just doesn't hold for stacking filesystem.
 > 
-> While (1) would likely just fix the immediate bug (2) is correct and
-> _robust_. If we change how attributes are handled vfs_*() helpers will
-> get updated and ima with it. Poking at raw inodes without using
-> appropriate helpers is much more likely to get ima into trouble.
+> > From: Yi Liu <yi.l.liu@intel.com>
+> > Sent: Thursday, May 11, 2023 10:39 PM
+> > +     if (cmd->hwpt_type != IOMMU_HWPT_TYPE_DEFAULT) {
+> > +             if (!ops->domain_alloc_user_data_len) {
+> > +                     rc = -EOPNOTSUPP;
+> > +                     goto out_put_idev;
+> > +             }
+> > +             klen = ops->domain_alloc_user_data_len(cmd->hwpt_type);
+> > +             if (WARN_ON(klen < 0)) {
+> > +                     rc = -EINVAL;
+> > +                     goto out_put_pt;
+> > +             }
+> > +     }
+> 
+> What about passing the user pointer to the iommu driver which
+> then does the copy so we don't need an extra @data_len()
+> callback for every driver?
 
-In addition to properly setting the i_version for IMA, EVM has a
-similar issue with i_generation and s_uuid. Adding them to
-ovl_copyattr() seems to resolve it.   Does that make sense?
+It's doable by letting the driver do copy_from_user(), yet I
+recall that Jason suggested to keep it in the iommufd. Also,
+we are reusing the ucmd_buffer for the user_data. And the klen
+isn't really being used for its value here. So, it is likely
+enough to have an ops->hwpt_type_is_supported.
 
-diff --git a/fs/overlayfs/util.c b/fs/overlayfs/util.c
-index 923d66d131c1..cd0aeb828868 100644
---- a/fs/overlayfs/util.c
-+++ b/fs/overlayfs/util.c
-@@ -1118,5 +1118,8 @@ void ovl_copyattr(struct inode *inode)
- 	inode->i_atime = realinode->i_atime;
- 	inode->i_mtime = realinode->i_mtime;
- 	inode->i_ctime = realinode->i_ctime;
-+	inode->i_generation = realinode->i_generation;
-+	if (inode->i_sb)
-+		uuid_copy(&inode->i_sb->s_uuid, &realinode->i_sb-
->s_uuid);
- 	i_size_write(inode, i_size_read(realinode));
- }
--- 
-thanks,
+> >
+> > +     switch (pt_obj->type) {
+> > +     case IOMMUFD_OBJ_IOAS:
+> > +             ioas = container_of(pt_obj, struct iommufd_ioas, obj);
+> > +             break;
+> 
+> this should fail if parent is specified.
 
-Mimib
+I don't think that's necessaray: the parent is NULL by default
+and only specified (if IOMMUFD_OBJ_HW_PAGETABLE) by the exact
+pt_id/pt_obj here.
 
+> > +     case IOMMUFD_OBJ_HW_PAGETABLE:
+> > +             /* pt_id points HWPT only when hwpt_type
+> > is !IOMMU_HWPT_TYPE_DEFAULT */
+> > +             if (cmd->hwpt_type == IOMMU_HWPT_TYPE_DEFAULT) {
+> > +                     rc = -EINVAL;
+> > +                     goto out_put_pt;
+> > +             }
+> > +
+> > +             parent = container_of(pt_obj, struct iommufd_hw_pagetable,
+> > obj);
+> > +             /*
+> > +              * Cannot allocate user-managed hwpt linking to
+> > auto_created
+> > +              * hwpt. If the parent hwpt is already a user-managed hwpt,
+> > +              * don't allocate another user-managed hwpt linking to it.
+> > +              */
+> > +             if (parent->auto_domain || parent->parent) {
+> > +                     rc = -EINVAL;
+> > +                     goto out_put_pt;
+> > +             }
+> > +             ioas = parent->ioas;
+> 
+> for nesting why is ioas required? In concept we can just pass NULL ioas
+> to iommufd_hw_pagetable_alloc() for this hwpt. If within that function
+> there is a need to toggle ioas for the parent it can always retrieve it
+> from the parent hwpt.
+
+Jason suggested this for simplicity. As I replied in another
+email, a user hwpt still needs ioas's refcount and mutex, so
+it would otherwise have a duplicated code in the beginning of
+most of hwpt_ functions:
+	if (hwpt->parent)
+		ioas = hwpt->parent->ioas;
+	else (hwpt->ioas)
+		ioas = hwpt->ioas;
+	else
+		WARN_ON(1);
+
+Thanks
+Nic
