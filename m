@@ -2,61 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D1C77094A7
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 12:20:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DE457094A8
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 12:20:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231811AbjESKUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 06:20:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46430 "EHLO
+        id S231829AbjESKUW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 06:20:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231806AbjESKUM (ORCPT
+        with ESMTP id S231812AbjESKUS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 06:20:12 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6AB5E6E
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:20:11 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-5343c3daff0so2064527a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:20:11 -0700 (PDT)
+        Fri, 19 May 2023 06:20:18 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8CB1AD
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:20:16 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-5208be24dcbso2139545a12.1
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:20:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684491611; x=1687083611;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        d=gmail.com; s=20221208; t=1684491616; x=1687083616;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
         bh=wba1YArvykmSZksSn+PRwHxHWmhMmfjRVISgjVjCTk4=;
-        b=r+7NWjZWVcWmma20ropjBAVlRiDX88ySFCqwHU/iGNGMjO4nwzeYgtuz2/2mYn7sbd
-         2duhvUxTPNcRZfDYB8iNwLX9J3x0Cj/NiP7qlNjf1+kvk3EUbhLdayVpvye8f6LE/l0m
-         tB2poaw72qFJmc3Dv/aMLEeN1QWbUlm08z+cq9hqyr9VG3Ujqavzh3+p6hqTbGlhbAa+
-         9/CGpc/6uBRzuNwGghhybADvueP5g/TpMG4c0i50zQzhkavYr01AAwhDeyclrpnyfgCT
-         afQEgmm5aCJjjW+ijynifNz9VJZ3ORZDq+3gRN8yEQId4l1CB1BAW0HV4tCIAj7mRrtW
-         +E3g==
+        b=de0+lVs7fkMKCXKZN1Uo3v1hZWz7Q0rLROV5fVLqv8ZK4RiAwZ4ihjvw9OXZc0TjWZ
+         /zXm+CgtQcIJ9lctzjY613itfA6hAd10/oaQX+Uim+w8FDQey/YmF6rmFEEb0mYbeO8S
+         PDKb2qdfHgSlBS+LD2+OcTziblsjhcIZP44+9ZPqUvPDcxqPnCYsWA5pIA8uFbmn2YGX
+         jXnkaJA/Nk0gPNdc80IbR5sKerOv512segljfyJCBc5XqQKOx/Luksx+uEp/cNwcIh+y
+         tSTXMOuqaTHfSPxKIBjS98V1MKWJXtinmIwKWXU9LoW3lnE2PLBoYJXCVL0r6G402lzb
+         ZolQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684491611; x=1687083611;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
+        d=1e100.net; s=20221208; t=1684491616; x=1687083616;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
         bh=wba1YArvykmSZksSn+PRwHxHWmhMmfjRVISgjVjCTk4=;
-        b=ZcgZ90wOlRsLk7wzqMmW6x9HplxT1yeksUkHlZUfQCfczAINCv6TD6fxFxlM4Up4AA
-         x4s0fhvQYoNTrY+T7qsA20QzJz+HCaY9FJH73lFl4tT81nqeRI1y9l66p/69KbEw/FuK
-         jToksZEy/DrHBSUj7DBv1RtNzOonCYXkqgKC2hMmj7yRGaj7n3uBufPwdIjXh+SV7HJP
-         2W0n9UP2F6wNlzrq3L4SjzKUdRu8nVKywJv5gtyF7RzTLyjd7Qrl3kRu2vr1GILJ2zG9
-         TnMFkUoNJQUiy0Un6/UqUzUcCYC4YtIuAwMuOcUYqCelxounoskfe6iHjwZCPs0SPJAP
-         LhAg==
-X-Gm-Message-State: AC+VfDxgYmuog164hk++XQpBRGisU10sKmhEtCpykzXLDfe/MfHMLnac
-        xjAMT2Kc+vUxD4rqW0RgmIDzOhzKIZo=
-X-Google-Smtp-Source: ACHHUZ6SUGdXo0L79y50osdj51y3rTdr1BqzA3o2k+ZO/cPnnVD/3MDRCNTkiyZLCFaPTV/cEAt2Xg==
-X-Received: by 2002:a17:90a:2e12:b0:253:3ce4:b421 with SMTP id q18-20020a17090a2e1200b002533ce4b421mr1721376pjd.1.1684491611042;
-        Fri, 19 May 2023 03:20:11 -0700 (PDT)
+        b=VRatWi/cRcnEcp1/98WFZpwIZRfTz98HWhhvIY/qh5JsuRFlZ7iJmDaV6CM65MGhEo
+         2CEtpM8kFZtroutzlvrIXBxx2QrD5I66ZjVowrovU7l5Oz+3uUOa44ZqpE4+UeVslmNl
+         9k1o46WtNl8JBSRe/rIzgKou7m6vjXTaxVNPqQo5kDpYxA5KlXyjU16/BMf7vpMG6oHP
+         HQ1cxLYI4SlIMM2b526+KJBSg+ibwSQf2dT2ReQgvOA1N+IJsN7d6lmhA+QecL57pZuG
+         M/fgeJ+DHgMzPyuHkxPv1UsNzsLo07K0DJVJDkaNnbzcqb/6w0NRl1qoF9L0eHBvZDWv
+         nqeg==
+X-Gm-Message-State: AC+VfDxYL0KegJ/tj/HxyecIwmyb3got6oozLAR2vmYAo3KLqFQjoKFl
+        qYFY+OxsxEBtzSppVJUfDlA=
+X-Google-Smtp-Source: ACHHUZ4iDDAHgVYfvn93q6kUTIsh196jK6e4uGk1QBRgVFTeo4UoDjg08LB76NZrjlzPoz0t7WrbyQ==
+X-Received: by 2002:a17:90a:8c10:b0:250:1905:ae78 with SMTP id a16-20020a17090a8c1000b002501905ae78mr1651705pjo.15.1684491615776;
+        Fri, 19 May 2023 03:20:15 -0700 (PDT)
 Received: from localhost.localdomain ([2405:201:682f:3808:92bc:26c4:ce02:816b])
-        by smtp.gmail.com with ESMTPSA id t7-20020a17090a3b4700b0025374fedab4sm1239643pjf.22.2023.05.19.03.20.08
+        by smtp.gmail.com with ESMTPSA id t7-20020a17090a3b4700b0025374fedab4sm1239643pjf.22.2023.05.19.03.20.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 03:20:10 -0700 (PDT)
+        Fri, 19 May 2023 03:20:15 -0700 (PDT)
 From:   Deepanshu Kartikey <kartikey406@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
         Deepanshu Kartikey <kartikey406@gmail.com>
-Subject: [PATCH] Staging: rts5208: rtsx: Moved else statement to same line with else if
-Date:   Fri, 19 May 2023 15:49:19 +0530
-Message-Id: <20230519101920.27342-1-kartikey406@gmail.com>
+Subject: [PATCH v2] Staging: rts5208: rtsx: Moved else statement to same line with else if
+Date:   Fri, 19 May 2023 15:49:20 +0530
+Message-Id: <20230519101920.27342-2-kartikey406@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230519101920.27342-1-kartikey406@gmail.com>
+References: <20230519101920.27342-1-kartikey406@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
