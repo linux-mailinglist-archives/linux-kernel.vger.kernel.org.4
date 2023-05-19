@@ -2,68 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE78770A2FD
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 00:57:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 637EC70A2FF
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 00:57:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230480AbjESW5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 18:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59408 "EHLO
+        id S231252AbjESW5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 18:57:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230127AbjESW46 (ORCPT
+        with ESMTP id S229522AbjESW5a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 18:56:58 -0400
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B1D5101;
-        Fri, 19 May 2023 15:56:56 -0700 (PDT)
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2533a03388dso2688045a91.2;
-        Fri, 19 May 2023 15:56:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684537016; x=1687129016;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1XhktrS4pjZiSF5CEkm3e0GzTVsAdSXWeFoG2dQLx48=;
-        b=CC2W9orn6ZvkLghjBRJdudFMsMIP3IWBex/mnJqNA4H546+BeSYM2lI5UB78CCqxo1
-         47X4K08QRWqbjnBlwJ/nDmPK+5Dp3i93eVgcU7AqT+/7yiSpv00D2JQMKS7xIgaA3H2I
-         jGASFgr2NgoJyknrq1rugtbFVVPjh150be+gDYFFfibFxYQxDzxUaLaroFao/0wvNmrG
-         2vpc3cOfKgSY+JbHV0QQDB225ldMJ3BRAxPuct26sIvU+ENY1IY/AMGtStJmCSikxSew
-         8i+2iYEw2rhdQvY/+JzbeNBlUkiZ4/LkXSNRtSyX044G1HGDHgmvv1n9qHK9P/XDVf3i
-         09aw==
-X-Gm-Message-State: AC+VfDyXtrgr6tRGpiNuyvLK0/QH5AhTpgLOQp+b97uWXhrBgE+443TK
-        1TGY5C/KX2RN+VBzhuHhf7GbTgmzlwc=
-X-Google-Smtp-Source: ACHHUZ5RNlOvKy/+siOiFnOai/5TiFKjqwC0RcKJx8TBxt/xuO0VfDShkEj+HZKyRGNVfJ0jZX5n2A==
-X-Received: by 2002:a17:90a:5792:b0:24d:f2f5:f571 with SMTP id g18-20020a17090a579200b0024df2f5f571mr3586528pji.36.1684537015922;
-        Fri, 19 May 2023 15:56:55 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:102a:f960:4ec2:663d? ([2620:15c:211:201:102a:f960:4ec2:663d])
-        by smtp.gmail.com with ESMTPSA id e4-20020a17090a4a0400b00250cf4e7d25sm1915151pjh.41.2023.05.19.15.56.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 May 2023 15:56:55 -0700 (PDT)
-Message-ID: <7c1dd111-e1cf-e806-7d74-f65138e8fca3@acm.org>
-Date:   Fri, 19 May 2023 15:56:53 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v5 3/7] ufs: mcq: Add supporting functions for mcq abort
-Content-Language: en-US
-To:     "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
-        quic_asutoshd@quicinc.com, quic_cang@quicinc.com, mani@kernel.org,
-        stanley.chu@mediatek.com, adrian.hunter@intel.com,
-        beanhuo@micron.com, avri.altman@wdc.com, martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        Alice Chao <alice.chao@mediatek.com>,
-        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
-        Eric Biggers <ebiggers@google.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <cover.1683872601.git.quic_nguyenb@quicinc.com>
- <e95d40f2d9e473b809d6aa54cfa85b9d1a2e8b15.1683872601.git.quic_nguyenb@quicinc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <e95d40f2d9e473b809d6aa54cfa85b9d1a2e8b15.1683872601.git.quic_nguyenb@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        Fri, 19 May 2023 18:57:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929DCB2;
+        Fri, 19 May 2023 15:57:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 277AA65B4D;
+        Fri, 19 May 2023 22:57:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8845EC433EF;
+        Fri, 19 May 2023 22:57:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684537048;
+        bh=h8socTlt1GEsOUSmVGIVVptBI3/m5KKwApvE3v5t0Yc=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=TEpK3ZJk4vW0HizoaM2YD835Qi7CodgP8r0J1mMiEuciEGPnsmdzR88lmoL/Y8BM+
+         /2inBFJLmhuqeWV0uxX2WQpe/hgF1BOMVOPJ/qtJsTw3vRVUmUz3HiiXEX1XVn3bG6
+         1teSKTwLhLWEFf6KqoKGqUXZ4gWkLSf/wgWKWa1zQZa5x26PXsHti3NoVOdTKXeHkr
+         +sHDXCgkBCzbV0PJBc9JEamteVT8R8pSvQ1vjSGKxMQP5kLsiD2XfXTIPbq3wzHrid
+         9XqJNF1hkk1/Wldb054pthBhRW+39DQDOOlXNdV8b96b/X5KVVBS/ZnSygwZ63Re2s
+         G2AZK1qbgujQA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 75ACFC3959E;
+        Fri, 19 May 2023 22:57:28 +0000 (UTC)
+Subject: Re: [GIT PULL] Ceph fixes for 6.4-rc3
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20230519161655.667685-1-idryomov@gmail.com>
+References: <20230519161655.667685-1-idryomov@gmail.com>
+X-PR-Tracked-List-Id: <ceph-devel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20230519161655.667685-1-idryomov@gmail.com>
+X-PR-Tracked-Remote: https://github.com/ceph/ceph-client.git tags/ceph-for-6.4-rc3
+X-PR-Tracked-Commit-Id: 4cafd0400bcb6187c0d4ab4d4b0229a89ac4f8c2
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: a59487458824184abf568721fe7d1beb1e0d099e
+Message-Id: <168453704847.17720.5667186822006919784.pr-tracker-bot@kernel.org>
+Date:   Fri, 19 May 2023 22:57:28 +0000
+To:     Ilya Dryomov <idryomov@gmail.com>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,9 +61,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/11/23 23:28, Bao D. Nguyen wrote:
-> Add supporting functions to handle ufs abort in mcq mode.
+The pull request you sent on Fri, 19 May 2023 18:16:55 +0200:
 
-Reviewed-by: Bart Van Assche <bvanassche@acm.org>
+> https://github.com/ceph/ceph-client.git tags/ceph-for-6.4-rc3
 
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/a59487458824184abf568721fe7d1beb1e0d099e
 
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
