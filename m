@@ -2,73 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 721D4708F06
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 06:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88924708F11
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 07:00:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbjESExw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 00:53:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52712 "EHLO
+        id S229945AbjESFAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 01:00:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjESExu (ORCPT
+        with ESMTP id S229497AbjESFAO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 00:53:50 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00CF710DC;
-        Thu, 18 May 2023 21:53:47 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 704385C0148;
-        Fri, 19 May 2023 00:53:47 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Fri, 19 May 2023 00:53:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1684472027; x=1684558427; bh=DvA6KR+zTo8Tl
-        45tDoGl60OGn7Mp+gVqUU5IsuJpDS4=; b=S6oEgnqWG0ih2m1BwJ0eqeB0LUzVD
-        xHTXh//gxAs/c/scnaj9KHEK+FAQpzDKNycaqraX5r/dc5dzpiptvzdyB3tiQH7x
-        /5mN7RRCcaGAGWnJKSb9tnZO5REuaN52m8/jQQgDhsUbKjZYMsKlT5N/lZ6ruYLn
-        WJ6GA4vaw/Qv0uU8HzpwMbErIgvLoxMoABzUfe4ccXA7C0Q5xgYlYXnsXN3y6XvQ
-        Tb9z3Zw02oFQAV+G3YQHr4X/UIgfVkooQzyQ3LY/eXjbjHeaVJpWBWyJ3dNMCZ/H
-        rah9uaGW/0nQTXzd4OBRt1yjRVgN0cKnYkeOLyURoXueBI31srv0BoMKQ==
-X-ME-Sender: <xms:2gBnZEHJNpxdgBoqPuj_hFS3JjjvYLjM3rBuT19dvoFupgW1uZT03Q>
-    <xme:2gBnZNUyBuqOe9WPDEP1rHLK_xSHVjx_2LEB0eLzMV3dkpVvu9yg3HB8Yr-2PepzU
-    aNVsAs3zVpaN4pr1gY>
-X-ME-Received: <xmr:2gBnZOJaC8CCp_c4uivU0V1KI11wcNUzI4lMJdIenHtsVLcNbqDSg6fZztBPLbrmo-rbZWXWsD2UdnKEGm3eCGi12F0YI7b_yiA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeigedgkeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevufgjkfhfgggtsehttdertddttddvnecuhfhrohhmpefhihhnnhcu
-    vfhhrghinhcuoehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgqeenucggtffrrg
-    htthgvrhhnpedvtedtgeduhefhkeeuueegteetheeuleeuieevkeeluddvvdffffdtvdet
-    ieeuudenucffohhmrghinhepthhlughprdhorhhgpdgrrhgthhhivhgvrdhorhhgpdhtoh
-    hrqhhuvgdrnhgvthenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhl
-    fhhrohhmpehfthhhrghinheslhhinhhugidqmheikehkrdhorhhg
-X-ME-Proxy: <xmx:2gBnZGEquAG8b4FWurj3i1wbsqUjOftOxpIjQt6VI2kLKr0zjMGSIg>
-    <xmx:2gBnZKX1LJ3cfOaKUsEq4NFkaqNbcf2ZDPpxna0pHbhuUrqIHt_mcg>
-    <xmx:2gBnZJNx2VvDy8WH9VKQJJ8Ccx7Kg5VXpsazI_GUC6wxJXDafevZjQ>
-    <xmx:2wBnZIx0diWrG9R0VfsLLF835b2gG923T4XAW1HYPeATzgLlzAoRVg>
-Feedback-ID: i58a146ae:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 19 May 2023 00:53:43 -0400 (EDT)
-Date:   Fri, 19 May 2023 14:53:40 +1000 (AEST)
-From:   Finn Thain <fthain@linux-m68k.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-cc:     linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH 02/11] Docs/scsi: introduction: multiple cleanups
-In-Reply-To: <20230518212749.18266-3-rdunlap@infradead.org>
-Message-ID: <525c424f-a748-80f5-5a16-ca979bc77864@linux-m68k.org>
-References: <20230518212749.18266-1-rdunlap@infradead.org> <20230518212749.18266-3-rdunlap@infradead.org>
+        Fri, 19 May 2023 01:00:14 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2467A10CE;
+        Thu, 18 May 2023 22:00:09 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 34J4wHaZ5009950, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 34J4wHaZ5009950
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Fri, 19 May 2023 12:58:17 +0800
+Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Fri, 19 May 2023 12:58:26 +0800
+Received: from RTEXH36506.realtek.com.tw (172.21.6.27) by
+ RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Fri, 19 May 2023 12:58:26 +0800
+Received: from localhost.localdomain (172.21.252.101) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server id
+ 15.1.2507.17 via Frontend Transport; Fri, 19 May 2023 12:58:26 +0800
+From:   Stanley Chang <stanley_chang@realtek.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Stanley Chang <stanley_chang@realtek.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Douglas Anderson" <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Flavio Suligoi <f.suligoi@asem.it>,
+        Ray Chi <raychi@google.com>,
+        "Michael Grzeschik" <m.grzeschik@pengutronix.de>,
+        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>
+Subject: [PATCH v1 1/3] usb: phy: add usb phy notify port status API
+Date:   Fri, 19 May 2023 12:58:01 +0800
+Message-ID: <20230519045825.28369-1-stanley_chang@realtek.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-KSE-ServerInfo: RTEXMBS05.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,48 +73,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In Realtek SoC, the parameter of usb phy is designed to can dynamic
+tuning base on port status. Therefore, add a notify callback of phy
+driver when usb port status change.
 
-On Thu, 18 May 2023, Randy Dunlap wrote:
+Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
+---
+ drivers/usb/core/hub.c  | 13 +++++++++++++
+ include/linux/usb/phy.h | 14 ++++++++++++++
+ 2 files changed, 27 insertions(+)
 
-> Modify URLs to use https instead of http.
-> Remove ancient URLs that don't work.
-> Change "scsi" in text to "SCSI".
-> Change "cdrom" in text to "CD-ROM".
-> Drop the reference to "autoclean" for modules since I can't
->   find it in any current documentation.
-> 
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-> Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-> Cc: linux-scsi@vger.kernel.org
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: linux-doc@vger.kernel.org
-> ---
->  Documentation/scsi/scsi.rst |   23 ++++++++++-------------
->  1 file changed, 10 insertions(+), 13 deletions(-)
-> 
-> diff -- a/Documentation/scsi/scsi.rst b/Documentation/scsi/scsi.rst
-> --- a/Documentation/scsi/scsi.rst
-> +++ b/Documentation/scsi/scsi.rst
-> @@ -6,30 +6,28 @@ SCSI subsystem documentation
->  
->  The Linux Documentation Project (LDP) maintains a document describing
->  the SCSI subsystem in the Linux kernel (lk) 2.4 series. See:
-> -http://www.tldp.org/HOWTO/SCSI-2.4-HOWTO . The LDP has single
-> +https://www.tldp.org/HOWTO/SCSI-2.4-HOWTO . The LDP has single
->  and multiple page HTML renderings as well as postscript and pdf.
-> -It can also be found at:
-> -http://web.archive.org/web/%2E/http://www.torque.net/scsi/SCSI-2.4-HOWTO
->  
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 97a0f8faea6e..b4fbbeae1927 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -614,6 +614,19 @@ static int hub_ext_port_status(struct usb_hub *hub, int port1, int type,
+ 		ret = 0;
+ 	}
+ 	mutex_unlock(&hub->status_mutex);
++
++	if (!ret) {
++		struct usb_device *hdev = hub->hdev;
++
++		if (hdev && !hdev->parent) {
++			struct usb_hcd *hcd = bus_to_hcd(hdev->bus);
++
++			if (hcd->usb_phy)
++				usb_phy_notify_port_status(hcd->usb_phy,
++					    port1 - 1, *status, *change);
++		}
++	}
++
+ 	return ret;
+ }
+ 
+diff --git a/include/linux/usb/phy.h b/include/linux/usb/phy.h
+index e4de6bc1f69b..53bf3540098f 100644
+--- a/include/linux/usb/phy.h
++++ b/include/linux/usb/phy.h
+@@ -144,6 +144,10 @@ struct usb_phy {
+ 	 */
+ 	int	(*set_wakeup)(struct usb_phy *x, bool enabled);
+ 
++	/* notify phy port status change */
++	int	(*notify_port_status)(struct usb_phy *x,
++		int port, u16 portstatus, u16 portchange);
++
+ 	/* notify phy connect status change */
+ 	int	(*notify_connect)(struct usb_phy *x,
+ 			enum usb_device_speed speed);
+@@ -316,6 +320,16 @@ usb_phy_set_wakeup(struct usb_phy *x, bool enabled)
+ 		return 0;
+ }
+ 
++static inline int
++usb_phy_notify_port_status(struct usb_phy *x, int port, u16 portstatus,
++	    u16 portchange)
++{
++	if (x && x->notify_port_status)
++		return x->notify_port_status(x, port, portstatus, portchange);
++	else
++		return 0;
++}
++
+ static inline int
+ usb_phy_notify_connect(struct usb_phy *x, enum usb_device_speed speed)
+ {
+-- 
+2.34.1
 
-That link got corrupted by commit b7223d9bdec. It used to be
-http://web.archive.org/web/*/http://www.torque.net/scsi/SCSI-2.4-HOWTO
-which does actually work.
-
-FWIW, I'm not in favour of replacing any links with archive.org links 
-unless no better source can be found. I am in favour of citations in the 
-form of a link with retrieval date. In this context the date can often be 
-inferred from commit or release dates.
-
-Therefore, a second commit, 0ea6e611221, could also be reverted with 
-regards to this link (if you're planning to edit it). Just my $0.02.
