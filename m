@@ -2,104 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF3B70A2B3
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 00:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 063B970A2B7
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 00:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231707AbjESWKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 18:10:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44962 "EHLO
+        id S231193AbjESWQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 18:16:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjESWKK (ORCPT
+        with ESMTP id S229503AbjESWQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 18:10:10 -0400
-Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3C6189;
-        Fri, 19 May 2023 15:10:09 -0700 (PDT)
-Received: by mail-vk1-xa2b.google.com with SMTP id 71dfb90a1353d-4572a528cefso316845e0c.0;
-        Fri, 19 May 2023 15:10:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684534209; x=1687126209;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gyfmWjt1VTCSjEVbZNcL2tFnvyTBlxMVg1mjX07QoOk=;
-        b=HuqVrHcIazlUiRSIb8fAEfdnHq/RzLyc/Altx4qWmXass7Tml/ynZuTYQt00iiZUhM
-         BRGbiXN4KogjSr01b1jWtSks2+m/EJRNsWdhy3SP/PNG8D03BzTBIg/8A7AZ5mzf8MD+
-         U5XuFtLvT8iuEexfhBYsri6fcGAulgnpVNMHUYoVfhBJkZxK9PdNwEVuHlLuvnBGs6OT
-         hpz4njpSffhfS+tEBpCx+poGKyuG6uk+yyLvuZWYFa2jLCFSnTTbHymrUEIleI/lXNYp
-         sqXslBL3PcxCesRRNsIsrdvsqd4VIVgJTneJNGHAjfimt3WT1kQhcnEiudtfwbrLAO4J
-         dBAA==
+        Fri, 19 May 2023 18:16:12 -0400
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00A2018F;
+        Fri, 19 May 2023 15:16:10 -0700 (PDT)
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1ae615d5018so22475885ad.1;
+        Fri, 19 May 2023 15:16:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684534209; x=1687126209;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gyfmWjt1VTCSjEVbZNcL2tFnvyTBlxMVg1mjX07QoOk=;
-        b=dTyaspIhvwp1fGGBGkzx93kaEaJ11UQocLKpF5G7KM7wWJ90s8WcSAO5A0a+/Aq96t
-         KgXAa5jwHeI2Gjg2qmjomV5WZZkK2LQsL+9sb9mjn07E5qa3YzSh98Uk+AkVJY77hWvX
-         51uj2PPyVlw3AcccrhirGbGjQCcPIbfZ2hdPYXoeN79JwEot5h+iT0w1ug+j7oyLFlnb
-         91EmfsbXfQkEJMXRCPx/890H0dRtojbuSHq0SW1hz35hAocYFRgjTOJqT3w2TkWQ4n0/
-         hCbjlDaqwosJbqnmMqU68TYhMvjWnijFQaI8ipST4lJMaS95nbGO+4NUvdgw8uMsBH1u
-         Xt4w==
-X-Gm-Message-State: AC+VfDwQsafApZds5Pm9bum/7jDQZhwwhYVzEGkMXy0mAWmYe8R4PHaa
-        ZSvHUD/9aDRX19v4m8ykJfNiSUsD5R/lotccczk=
-X-Google-Smtp-Source: ACHHUZ6udFa8fDirOYyi4r78zSwj7dD2Pe6HxOKp+hdVt7UaRlTAzbr80JAQ7Aig0vByD6RfXheFKqIBKauvLEZux/k=
-X-Received: by 2002:a05:6102:cd:b0:42c:543a:ab2a with SMTP id
- u13-20020a05610200cd00b0042c543aab2amr272687vsp.35.1684534208774; Fri, 19 May
- 2023 15:10:08 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684534570; x=1687126570;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XtM0QQIU8DI6fo0EMR+USpkpdkW5a7e0M4zESvox7Pk=;
+        b=VlfYDjeYSXtsAVV1ctXqWpvBTdQ+hKbVB477AHvtu1BX1+MXxrlXn5coABgXSipqty
+         EEtDzS7M4G4ZED2jSLlFaowg0rdop0J8ndufnArOuFJg40Xs8dd1ne6WntFO+exVXrSI
+         fO3MAuF07IEWpMuqFuC0s8V0M2r4KewNDOgBvOjEl8L5hoz0jqd3++yfvQLnBCOsd9MR
+         tC+moHzsiMeSbqzu/KdgnjCempSZRfEeHgfslrGnf5+W6UFWDAsavhysPlHd9Zg8RwPc
+         7BpWScgWuVkGykUt+dswDX+N8o7m4glqIFaiurlvqgkuwErJa91rxsxI4IBXUre3faOJ
+         uztg==
+X-Gm-Message-State: AC+VfDzgRLpeTEYsbrg752dBBbiOyi4VwdPfW3MZC5UGoleK9CVs/Huu
+        vKGrMlh6hTRqlLmo+CkO9jU=
+X-Google-Smtp-Source: ACHHUZ6aAxD485/wVKDZ0bBQlfeObDUeCRkHxLNbStjrAHM+Rv/2TWXWJKQ4OabwG5a3QwDd3nuChg==
+X-Received: by 2002:a17:902:7d8d:b0:1ab:19db:f2b with SMTP id a13-20020a1709027d8d00b001ab19db0f2bmr4087054plm.36.1684534570327;
+        Fri, 19 May 2023 15:16:10 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:102a:f960:4ec2:663d? ([2620:15c:211:201:102a:f960:4ec2:663d])
+        by smtp.gmail.com with ESMTPSA id g2-20020a170902740200b001ac84f87b1dsm111904pll.155.2023.05.19.15.16.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 May 2023 15:16:09 -0700 (PDT)
+Message-ID: <a7296997-89a1-2fb6-3bb4-1fc60d50a132@acm.org>
+Date:   Fri, 19 May 2023 15:16:07 -0700
 MIME-Version: 1.0
-References: <20230518130713.1515729-1-dhowells@redhat.com> <20230518130713.1515729-17-dhowells@redhat.com>
-In-Reply-To: <20230518130713.1515729-17-dhowells@redhat.com>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Fri, 19 May 2023 18:09:31 -0400
-Message-ID: <CAF=yD-J8KGX5gjGBK6OO2SuoVa8s07Cm-oKxwmvBmRXY7XscBQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v9 16/16] unix: Convert udp_sendpage() to use MSG_SPLICE_PAGES
-To:     David Howells <dhowells@redhat.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        David Ahern <dsahern@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>, Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Chuck Lever III <chuck.lever@oracle.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Kuniyuki Iwashima <kuniyu@amazon.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2] ufs: poll HCS.UCRDY before issuing a UIC command
+Content-Language: en-US
+To:     Kiwoong Kim <kwmad.kim@samsung.com>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, beanhuo@micron.com,
+        adrian.hunter@intel.com, sc.suh@samsung.com, hy50.seo@samsung.com,
+        sh425.lee@samsung.com, kwangwon.min@samsung.com
+References: <CGME20230516034218epcas2p297e9c5a33d370c8c45a40ab58f500ae0@epcas2p2.samsung.com>
+ <1684208012-114324-1-git-send-email-kwmad.kim@samsung.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <1684208012-114324-1-git-send-email-kwmad.kim@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 9:08=E2=80=AFAM David Howells <dhowells@redhat.com>=
- wrote:
->
-> Convert unix_stream_sendpage() to use sendmsg() with MSG_SPLICE_PAGES
-> rather than directly splicing in the pages itself.
->
-> This allows ->sendpage() to be replaced by something that can handle
-> multiple multipage folios in a single transaction.
->
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: "David S. Miller" <davem@davemloft.net>
-> cc: Eric Dumazet <edumazet@google.com>
-> cc: Jakub Kicinski <kuba@kernel.org>
-> cc: Paolo Abeni <pabeni@redhat.com>
-> cc: Kuniyuki Iwashima <kuniyu@amazon.com>
-> cc: Jens Axboe <axboe@kernel.dk>
-> cc: Matthew Wilcox <willy@infradead.org>
-> cc: netdev@vger.kernel.org
+On 5/15/23 20:33, Kiwoong Kim wrote:
+> v1 -> v2: replace usleep_range with udelay
+> because it's a sleepable period.
+> 
+> With auto hibern8 enabled, UIC could be working
+> for a while to process a hibern8 operation and HCI
+> reports UIC not ready for a short term through HCS.UCRDY.
+> And UFS driver can't recognize the operation.
+> UFSHCI spec specifies UCRDY like this:
+> whether the host controller is ready to process UIC COMMAND
+> 
+> The 'ready' could be seen as many different meanings. If the meaning
+> includes not processing any request from HCI, processing a hibern8
+> operation can be 'not ready'. In this situation, the driver needs to
+> wait until the operations is completed.
+> 
+> Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
+> ---
+>   drivers/ufs/core/ufshcd.c | 13 ++++++++++++-
+>   1 file changed, 12 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+> index 9434328..5f6819a 100644
+> --- a/drivers/ufs/core/ufshcd.c
+> +++ b/drivers/ufs/core/ufshcd.c
+> @@ -2365,7 +2365,18 @@ static inline int ufshcd_hba_capabilities(struct ufs_hba *hba)
+>    */
+>   static inline bool ufshcd_ready_for_uic_cmd(struct ufs_hba *hba)
+>   {
+> -	return ufshcd_readl(hba, REG_CONTROLLER_STATUS) & UIC_COMMAND_READY;
+> +	ktime_t timeout = ktime_add_ms(ktime_get(), UIC_CMD_TIMEOUT);
+> +	u32 val = 0;
+> +
+> +	do {
+> +		val = ufshcd_readl(hba, REG_CONTROLLER_STATUS) &
+> +			UIC_COMMAND_READY;
+> +		if (val)
+> +			break;
+> +		udelay(500);
+> +	} while (ktime_before(ktime_get(), timeout));
+> +
+> +	return val ? true : false;
+>   }
 
-tiny nit: subject s/udp_sendpage/unix_stream_sendpage/
+Sleeping during up to 500 ms while holding a spin lock is not acceptable.
+Has it been considered to modify the UFS core such that the host_lock is
+not held around calls of the above function, e.g. via the (untested) patch
+below?
 
-no other comments on this patch series from me
+Thanks,
+
+Bart.
+
+
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 9736b2b4120e..394283b04d7c 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -2416,7 +2416,6 @@ __ufshcd_send_uic_cmd(struct ufs_hba *hba, struct uic_command *uic_cmd,
+  		      bool completion)
+  {
+  	lockdep_assert_held(&hba->uic_cmd_mutex);
+-	lockdep_assert_held(hba->host->host_lock);
+
+  	if (!ufshcd_ready_for_uic_cmd(hba)) {
+  		dev_err(hba->dev,
+@@ -2452,9 +2451,7 @@ int ufshcd_send_uic_cmd(struct ufs_hba *hba, struct uic_command *uic_cmd)
+  	mutex_lock(&hba->uic_cmd_mutex);
+  	ufshcd_add_delay_before_dme_cmd(hba);
+
+-	spin_lock_irqsave(hba->host->host_lock, flags);
+  	ret = __ufshcd_send_uic_cmd(hba, uic_cmd, true);
+-	spin_unlock_irqrestore(hba->host->host_lock, flags);
+  	if (!ret)
+  		ret = ufshcd_wait_for_uic_cmd(hba, uic_cmd);
+
+@@ -4122,8 +4119,8 @@ static int ufshcd_uic_pwr_ctrl(struct ufs_hba *hba, struct uic_command *cmd)
+  		wmb();
+  		reenable_intr = true;
+  	}
+-	ret = __ufshcd_send_uic_cmd(hba, cmd, false);
+  	spin_unlock_irqrestore(hba->host->host_lock, flags);
++	ret = __ufshcd_send_uic_cmd(hba, cmd, false);
+  	if (ret) {
+  		dev_err(hba->dev,
+  			"pwr ctrl cmd 0x%x with mode 0x%x uic error %d\n",
+
