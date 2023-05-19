@@ -2,137 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF6AB708D7B
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 03:46:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4863708D8A
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 03:53:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbjESBq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 21:46:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35444 "EHLO
+        id S230212AbjESBxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 21:53:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229678AbjESBqZ (ORCPT
+        with ESMTP id S230044AbjESBxK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 21:46:25 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5476E72
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 18:46:24 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-b9a6eec8611so502823276.0
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 18:46:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684460784; x=1687052784;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mRnoeSreGadiB9OVFL5oCBNcNTPO+fzcoPwxWhqIGcg=;
-        b=m/EKtTwTMCvRUghPbTZ0aLtHJy5wYPNjmfShebx8gh0Ah746OQAyDiF/KhBP9nBO5q
-         /TOeepsJT2xGTdCeohn7tT6Am1m2UH65mH27EiAkOnWDaaPXvAFAwbc2BSZoYPXwVDwN
-         60ps19MyNd0Snmvlzz7WaOtShYk5Yvvtfe0PI6cY5GGVSaoFE+wlmWfO7wWmpa4a/1Rv
-         rLpJDopWLH8dDlg+DWF2BV8LP/we5EcBvYQ7u4BRd3LR9B5uYk3LTJvYb2XA+y1FF5Xg
-         SrOcDqxyEZ2Jh/yExanCmbqP7ksD96dvYEVTtN+1AajtZp7mf8t79xaadD6A7S66YEvF
-         upSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684460784; x=1687052784;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mRnoeSreGadiB9OVFL5oCBNcNTPO+fzcoPwxWhqIGcg=;
-        b=ZM0NHr/WAO9RX274luNV//bV1YQ4psesUt0vflUF1/JgWs/d0fH5P6wya9bGpU11Zl
-         7BIyFQ4VkDQAuuHh1y8FOkmBUUb5jzTQGo4/47fZDfD211A4xEgPz6q1TQ1hjCcDXV0+
-         Czv3llUTc/ygdyGjRPbpWuwUvt5WCFrPdmc14bmNmRV5DPY8uvxUkn21whBzhPCEK8In
-         1/oMNBeoZ6LE7+d8op2qXFU1hbZXdOAj7CyYKrCUiHbOM5kG5+hWrPQo3lmHq6cO34bk
-         R1TG0l5Cvrz+GQ+8+FO/DwSvSPP8AQAz5n7aMJS3go3KQl71oGGADQDK4kS5qQs9JPg+
-         F2Hg==
-X-Gm-Message-State: AC+VfDxbjZUnebXEfX1nxHKt68/dqEt8+laj4Z/m/2lRP5MO9qyQA8Qp
-        1INzWUhdWugqyu/DbPW1cBia3w==
-X-Google-Smtp-Source: ACHHUZ5esT/785s6QhSuTQVf2a5lnrzyIuiXiyyvpytcpb/6xWEtPZjGg8NzuB3lqxsqrT87kZ4kdw==
-X-Received: by 2002:a25:b123:0:b0:ba7:46b3:5c91 with SMTP id g35-20020a25b123000000b00ba746b35c91mr270954ybj.2.1684460783920;
-        Thu, 18 May 2023 18:46:23 -0700 (PDT)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id w33-20020a25ac21000000b00b9b1d09ed18sm728200ybi.33.2023.05.18.18.46.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 18:46:23 -0700 (PDT)
-Date:   Thu, 18 May 2023 21:46:21 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Vladislav Efanov <VEfanov@ispras.ru>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rene Herman <rene.herman@keyaccess.nl>,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-Subject: Re: [PATCH] isa: Remove unnecessary checks
-Message-ID: <ZGbU7YQgzGelwiGy@fedora>
-References: <20230517125025.434005-1-VEfanov@ispras.ru>
+        Thu, 18 May 2023 21:53:10 -0400
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2062.outbound.protection.outlook.com [40.107.105.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03EE010F4;
+        Thu, 18 May 2023 18:53:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Avhzmh3zGyeIzmdwacRh8CC8mHnbtmuMi+hRBa/r3FGMzTnOKC0qpWMf8gb7zqKwVBbu+94gDjXUGmvNNA+LuJrYYbgu3/8eeGjiaH2mvlIApH0iHSpJcYHcgRDRkuXyJAG2L8TmbyqJg94YobPTvX1RlyXmMTFhhvLA6w7sE1JvC8gqK9Em14tXalnovEp+DEZ8zu2LeK22/o8e+RxADNGoKuag+OEmkKWU7jSFXcrLLv1rlr/BoPEmDSrMubKAfF9T0GBitPEep7D/UOhe7rNwLcfXbuuun/S/TXoPL8vYDmQT+WLeVb+krZkNm1VgjSf2czj6IEpS1Or+xPcyKQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lfLyk3ljl1W2mwxZANOkwsxQFfXAcWFZduwf354sSfM=;
+ b=Omtxxx0NPK+NxCIJLFH2jVjm7d3luSprhsOVRc/nrcJMfjnc8OeqWdcmpjEPfERnKRou/wX6FSNpLf+UnUeQhk/7mZfnMcCjMWph+6AWnNR1JCsTEBpY1Z3oxUAAdunKP5OAvs11mEfrZGw8aM7ingC7dShkfCenSiNowPHv4AUIcahqKmkUAQh58jzqMQj819NGT3cWu27+T4cJbzalxi9YU/5UjMGuzakqghLK+ky3vIrwLm2oQNW4FEUlQFiFCXj9yDoKncHsQd7S2lju+B89uWnPH0w2mA8VH6Eno0E8jr2I0TYlfKCRwDwlGlGPKtLtD2RCeTATh+Qm7mIteg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lfLyk3ljl1W2mwxZANOkwsxQFfXAcWFZduwf354sSfM=;
+ b=U96iONrEDda2h54KRE2IXJgCjaOLDceALP8bFu8U8eie3WAP8dp4nPpckNcPWTKHEDo1wAsma/qK4tDeZQmwUe2iQ8S96dLi11IcnB7XUKzwSGiE8EFQ6eaKPSD3EV7YeCmHgnwoM5E8Q2aYLFt1d7q/tF+bbUohClLVj0h7x58=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM5PR04MB3139.eurprd04.prod.outlook.com (2603:10a6:206:8::20)
+ by PAXPR04MB9350.eurprd04.prod.outlook.com (2603:10a6:102:2b7::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19; Fri, 19 May
+ 2023 01:52:58 +0000
+Received: from AM5PR04MB3139.eurprd04.prod.outlook.com
+ ([fe80::682b:185:581f:7ea2]) by AM5PR04MB3139.eurprd04.prod.outlook.com
+ ([fe80::682b:185:581f:7ea2%4]) with mapi id 15.20.6411.021; Fri, 19 May 2023
+ 01:52:58 +0000
+From:   wei.fang@nxp.com
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
+        hawk@kernel.org, john.fastabend@gmail.com, shenwei.wang@nxp.com,
+        xiaoning.wang@nxp.com, simon.horman@corigine.com,
+        lorenzo.bianconi@redhat.com, netdev@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-imx@nxp.com
+Subject: [PATCH V2 net-next] net: fec: turn on XDP features
+Date:   Fri, 19 May 2023 09:48:25 +0800
+Message-Id: <20230519014825.1659331-1-wei.fang@nxp.com>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI1PR02CA0033.apcprd02.prod.outlook.com
+ (2603:1096:4:1f6::14) To AM5PR04MB3139.eurprd04.prod.outlook.com
+ (2603:10a6:206:8::20)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4EKlEO7L5rYoZBuz"
-Content-Disposition: inline
-In-Reply-To: <20230517125025.434005-1-VEfanov@ispras.ru>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM5PR04MB3139:EE_|PAXPR04MB9350:EE_
+X-MS-Office365-Filtering-Correlation-Id: 68c0a23e-8b20-458b-a90a-08db580bc530
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 05gtidu9rO1+ywxlB41ltrWuaWeBQQ4SrkmEtx0NT8VSfufTy2U2OYBikVBFDrXo3zh0wIxfR+rDrU1STtFbjKXxd2UsvrRz6s5OZopKAWEfdHIGB+utkhO2PhXaObaPfn9fWQFbnrYOzENR/TmLLUmuFeKAbUw6ZmMG/uAwcd7sibKOYBly590mf/a0nEK1kgZFApiD4wzIU2sl5FILBjfjLeI1iDksKNPucb3WrpMCXkuaYQjOBvBnNNQLslSLHcnGaGBsRq9XzBXyTqWHRf9kmVUc62yPW80+FDq6KuU2EpJm9RAJc5zNTOVaGDekE4uWOaE95yzSOZRF9O1PoX5LNJzECbpaM26bp0QYzJ7JgK6tKrKCq9ySifGaTgeqibboJbupyjDhL6fnVu4QjXCazzAvl3ul3vUcV41uHF7+kXb8VMIE2UgHtxg/X1EamaolIin7uUGNq2DJq9OxigNXMzWvWU6NNvapPLYXNaz22f7OJVrRkyLX6BV18MDwr9Gx157ttcv5dA5o+O/odrvje+l5Ud77xAuBgyES2zReONIwJqBsPTjhIdUCowJd7jhFdKQQvrGVlwUB5EpeJ4g0LzFxkYQSOV8ou8GgtYCgB57W5MHEyinOpYvwTGBsjJlcDBQuep2si9nsZzUNwA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM5PR04MB3139.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(39860400002)(376002)(366004)(396003)(346002)(451199021)(6506007)(6512007)(6666004)(26005)(1076003)(52116002)(6486002)(8676002)(921005)(36756003)(316002)(478600001)(38350700002)(4326008)(186003)(2616005)(5660300002)(66476007)(86362001)(7416002)(66946007)(66556008)(38100700002)(9686003)(41300700001)(2906002)(8936002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mOg/WDQ8tw0rm6anBSQw0wHOUOfvYAsmNPrTQMn5bNGuz5pJ9OREzxevLD4v?=
+ =?us-ascii?Q?V1A9BcqKYdgHd7/aIQOC4+E3ZLUbE62hCRKx3QsIXLzOzoZXiRtKSaypxGMd?=
+ =?us-ascii?Q?jl6+wedBo04XWoYqwpwrWiPVDL7zeaOGKYc8/ICc9JyE12DkSaY9gk2Y+PZw?=
+ =?us-ascii?Q?rbG4Jupt15dPfDfl3c0TvBPBgqf0+ch8RNUgFKdTjhlRE/NQMBrMoFiXroUN?=
+ =?us-ascii?Q?+bNmk+zJIzf8NfchjJCAfEDEUVW46wIkADaajhdUR6SMr5fTDjEC9L/yaGBT?=
+ =?us-ascii?Q?x5tj5LRyhk1/7WrBQM4drFPml15AVKWM92wfi+PX/itkXAnJwjvgOUgaiz3H?=
+ =?us-ascii?Q?Hdti8RCoiTfYnBjYHsnviN4Zyovq4OI0asR2ecNJ7xR8Hf9yDz1i5x69/+i1?=
+ =?us-ascii?Q?9cAFY9tbDHIliaLs9xO7pkb4JCvVPj4fCH2FnKpYHNBYZW9S4e5gxrkPYGom?=
+ =?us-ascii?Q?yCy4BBADwzyN5lV6+oOh8k3grvM90z8E/+p3DdtgYF8OAuSY/FEwhS94ji3S?=
+ =?us-ascii?Q?NZQm+4EGwUsGINr+ociPcTTDZ2RMltV97g56FqlpXyWNhUVNahEVcunUweRL?=
+ =?us-ascii?Q?xr7khrY6wDDQ/XaqGiE34R2iI8n/WefTqKvAlNla3i6NnvUEnv66MorxmAhs?=
+ =?us-ascii?Q?oi2S4qhW2yvZxb1fA1Cv+n7Iq2gq5Caqi2bCUkSzLw1KoCLZP4f/OGKlSDM5?=
+ =?us-ascii?Q?FaKwi+lKCB0nBakhKriHFvvi2R3D/FGJNqt6IQKK7BFeo4wzFbmYJWdg5qZ2?=
+ =?us-ascii?Q?S+W0izON6UmOtXYfSCb6U9CUJSXt+t3jkvnZ1nDB8WvduSQKdk9kodUwNzkz?=
+ =?us-ascii?Q?AhgtECRE/q/PNTFDlEFDYR8WrrboFxGEc++cHLmv2GlwfklZDRsbsfRuUyDN?=
+ =?us-ascii?Q?DnsU/6wWmkvdF4Oz6sETSK1MFFiABzIpSuB9cx8xFHrHbS9fcIgyOObgybo9?=
+ =?us-ascii?Q?ioTMsEAPy4CsITt62hxpcoi6sT1bGRz9lc7d/ZbA51XZFrKx+v/muSH8Rwdn?=
+ =?us-ascii?Q?bp1INrbKgaXEYFw9Bt8SAiKvnu+6HLRu54kKhrRq84uInA4Ybl0EiZBGef1t?=
+ =?us-ascii?Q?Zjw11m7WczPuvf1eGsEPqu5DUJxAjJnE376X2NrH6yUkxtnGuzyiMS7G82Bk?=
+ =?us-ascii?Q?a2dwYeXAYyfLqBqjaoNJFqzaz8+fQf9G5ptkIMpao1KFUiVxGcNGl99e0HkH?=
+ =?us-ascii?Q?HxxaNygGh/h7YzzITvOwMRjU2ThThrR0Iv4pbNux3Q6ozDTEYVj8R0dOd4nY?=
+ =?us-ascii?Q?PVyohaDqlHrdHqncmV1N4zWPvVvGrp+tRcIM+qrLHNEm5s50aNyl2L5ONn02?=
+ =?us-ascii?Q?gIh/4Rh2qXUvGVQ5OQ4qjxm47r73JQx9RwuNB7dJgdMjHSlFfC3WkwOXyZFJ?=
+ =?us-ascii?Q?OTg2FP1QU+r9HMx98IN/1qq6lpfm8Tpyt+MKa9FkUUrfsIuCIOolv+UiUdwW?=
+ =?us-ascii?Q?35q09jAgOFq3T0tbv5mPoTU5ZlWTnwloiEnmY6MSbT3PFp1cY7Sv7UtcN91d?=
+ =?us-ascii?Q?7kD19HZ8LkhsjkVJ22gYl67GkLrtWzqM2DVAxDIBeBBVZt898ASJeFbB14Aj?=
+ =?us-ascii?Q?/YnYzo6gowsa9Md0FQrgXxxqprmkzdQ0Tgu01O9W?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 68c0a23e-8b20-458b-a90a-08db580bc530
+X-MS-Exchange-CrossTenant-AuthSource: AM5PR04MB3139.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2023 01:52:58.2501
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: t6p9+0FTNtR2S59medoB9ct9LtIwCH/feu1A4GBrjGR+ctwSjv0L7zRTkzW+uB3tnTNv5u8JqtecZQEYojZ4qQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9350
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Wei Fang <wei.fang@nxp.com>
 
---4EKlEO7L5rYoZBuz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The XDP features are supported since the commit 66c0e13ad236
+("drivers: net: turn on XDP features"). Currently, the fec
+driver supports NETDEV_XDP_ACT_BASIC, NETDEV_XDP_ACT_REDIRECT
+and NETDEV_XDP_ACT_NDO_XMIT. So turn on these XDP features
+for fec driver.
 
-On Wed, May 17, 2023 at 03:50:25PM +0300, Vladislav Efanov wrote:
-> The isa_dev->dev.platform_data is initialized with incoming
-> parameter isa_driver. After it isa_dev->dev.platform_data is
-> checked for NULL, but incoming parameter isa_driver is not
-> NULL since it is dereferenced many times before this check.
->=20
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
->=20
-> Fixes: a5117ba7da37 ("[PATCH] Driver model: add ISA bus")
-> Signed-off-by: Vladislav Efanov <VEfanov@ispras.ru>
+Signed-off-by: Wei Fang <wei.fang@nxp.com>
+---
+V2 change:
+fec with FEC_QUIRK_SWAP_FRAME quirk does not support XDP, so
+check this condition before turn on XDP features.
+---
+ drivers/net/ethernet/freescale/fec_main.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-I don't think the Fixes line is needed because this is removing a
-superfluous check rather than fixing a bug. Regardless, here's my Ack
-for Greg as the patch itself makes sense.
+diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
+index cd215ab20ff9..10cb5ad2d758 100644
+--- a/drivers/net/ethernet/freescale/fec_main.c
++++ b/drivers/net/ethernet/freescale/fec_main.c
+@@ -4031,6 +4031,11 @@ static int fec_enet_init(struct net_device *ndev)
+ 
+ 	ndev->hw_features = ndev->features;
+ 
++	if (!(fep->quirks & FEC_QUIRK_SWAP_FRAME))
++		ndev->xdp_features = NETDEV_XDP_ACT_BASIC |
++				     NETDEV_XDP_ACT_REDIRECT |
++				     NETDEV_XDP_ACT_NDO_XMIT;
++
+ 	fec_restart(ndev);
+ 
+ 	if (fep->quirks & FEC_QUIRK_MIB_CLEAR)
+-- 
+2.25.1
 
-Acked-by: William Breathitt Gray <william.gray@linaro.org>
-
-> ---
->  drivers/base/isa.c | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
->=20
-> diff --git a/drivers/base/isa.c b/drivers/base/isa.c
-> index 55e3ee2da98f..675ad3139224 100644
-> --- a/drivers/base/isa.c
-> +++ b/drivers/base/isa.c
-> @@ -149,11 +149,8 @@ int isa_register_driver(struct isa_driver *isa_drive=
-r, unsigned int ndev)
->  			break;
->  		}
-> =20
-> -		if (isa_dev->dev.platform_data) {
-> -			isa_dev->next =3D isa_driver->devices;
-> -			isa_driver->devices =3D &isa_dev->dev;
-> -		} else
-> -			device_unregister(&isa_dev->dev);
-> +		isa_dev->next =3D isa_driver->devices;
-> +		isa_driver->devices =3D &isa_dev->dev;
->  	}
-> =20
->  	if (!error && !isa_driver->devices)
-> --=20
-> 2.34.1
->=20
-
---4EKlEO7L5rYoZBuz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZGbU7QAKCRC1SFbKvhIj
-Ky5IAQCiRVaj1Srg0+u3ajag42dujk+UQQsqAb8BYYJven/kHgEA7+pycPHYjXw5
-xwWzhVadqLfbQJpdO29ogoYxQUtbnQ4=
-=kz4u
------END PGP SIGNATURE-----
-
---4EKlEO7L5rYoZBuz--
