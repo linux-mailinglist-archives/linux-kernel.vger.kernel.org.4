@@ -2,116 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51297709EBA
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 20:04:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4E3C709ECA
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 20:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229935AbjESSEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 14:04:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56890 "EHLO
+        id S231145AbjESSJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 14:09:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjESSET (ORCPT
+        with ESMTP id S229456AbjESSJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 14:04:19 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2261E107;
-        Fri, 19 May 2023 11:04:18 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34JI41K9123753;
-        Fri, 19 May 2023 13:04:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1684519441;
-        bh=pxyRvlFpeqDhcPQM1uiU4LwtUvwW6oBAb1Z/Y2aKWnI=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=M6NcYj20vRMklofcChadDLNy3CKli7JRlwfgsDVme8iM73W8qMs++Plkceatuslot
-         8GV5WlFq6k9A1w5cx5zFa3jVZhhS/kAZDqQ7J0aXTLK44P6Px7na1yds78c1mTRSlb
-         7BVzs000qmLnYeuUcZUXAZRxOkotXeCyEZilnsHo=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34JI41sA019183
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Fri, 19 May 2023 13:04:01 -0500
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 19
- May 2023 13:04:01 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 19 May 2023 13:04:01 -0500
-Received: from [10.250.33.177] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34JI40ni127628;
-        Fri, 19 May 2023 13:04:00 -0500
-Message-ID: <8133a637-2295-6b1d-569a-381de692e330@ti.com>
-Date:   Fri, 19 May 2023 13:04:00 -0500
+        Fri, 19 May 2023 14:09:17 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D405C107;
+        Fri, 19 May 2023 11:09:15 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-510dabb3989so5415495a12.0;
+        Fri, 19 May 2023 11:09:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684519754; x=1687111754;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8o05QKrR9i4VTufIFRtl+AkR5mq9b5z62LFHT8IgVfw=;
+        b=aNrpVUMvMUZrfYK8lfSebmNQYE99vsyydV1N10nkuzsz9DUJKm80hRtutMT81CQ/v1
+         erlLrLCFEXvUHu/3uUhhbpbghSv5bwZ+8TMFNzun5FCWpaWmZjOnmptTd3qkUrwhmt5O
+         FfhqPY8IcOd1FM9R/q00TxXX9eAQbHmNXSwp32D8gjp+kN/FOrHK8Cxr3Uvm5ux5dGsY
+         ExChZOjnPNs28nvEl7HsDVYGM4eXf5T6jZxxneuqtn5Q7p1mkSenltRNq0ufI8Pj9YWv
+         zxkaJ6UR+/j+X5Z0VlaIjleiwsjCvChv0Uv/YqSkgyWNsjYs0Qq4Z2N7Ryxx9mzHG/0P
+         bqfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684519754; x=1687111754;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8o05QKrR9i4VTufIFRtl+AkR5mq9b5z62LFHT8IgVfw=;
+        b=TvWQilo/16Zu8bETHM15cGMpuYq2dI1YAefj0bPxfZWR0crygEaIp9buG709u51u9/
+         ZtOtVpy2t18kewJdJSiMi+S9woG4O8QtwkwaMlAH5S0MZfP/xivENxa3oaRs5EApP08j
+         kCrCVv0ROrkGCaOeVHKaXxkTl8dZA3KXtB3V+oyJIytLhpm1QnLMzT3av0HIfKJmpjP9
+         318H7FQR11u4vEfXbdCQYe3yvlcxqvH2lugwgG/p7BYQpzRguMwCPhseue2+8v166gFC
+         Zy0b7gbDQRzEuKV+sZntkp9htlkd3+ipF9BYJoe0fJb2+yO4EK1BXk/hPIbOB5LjEB5S
+         WXqg==
+X-Gm-Message-State: AC+VfDwGIC7vhKU43+Cluc3yw1AH70HqPdR0WLjJZ5IFdvlYOmWZLhRA
+        MuZ9zKPpK3McylEVan3g4Ag=
+X-Google-Smtp-Source: ACHHUZ4QuWMsmHNjfxTEGVqbmvSkwEgThKA2QEo9J/htJiK0EVr0kMRbpREmzY4yQ1LotTfnAwMbxQ==
+X-Received: by 2002:aa7:d9c3:0:b0:50b:cae1:d7a3 with SMTP id v3-20020aa7d9c3000000b0050bcae1d7a3mr2639608eds.14.1684519754252;
+        Fri, 19 May 2023 11:09:14 -0700 (PDT)
+Received: from localhost.my.domain (83.11.222.198.ipv4.supernova.orange.pl. [83.11.222.198])
+        by smtp.gmail.com with ESMTPSA id g26-20020aa7c85a000000b0050690bc07a3sm19824edt.18.2023.05.19.11.09.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 May 2023 11:09:13 -0700 (PDT)
+From:   Artur Weber <aweber.kernel@gmail.com>
+To:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>, Pavel Machek <pavel@ucw.cz>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Helge Deller <deller@gmx.de>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Luca Weiss <luca@z3ntu.xyz>,
+        Artur Weber <aweber.kernel@gmail.com>,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-pwm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht
+Subject: [PATCH v2 0/4] video: backlight: lp855x: modernize bindings
+Date:   Fri, 19 May 2023 20:07:24 +0200
+Message-Id: <20230519180728.2281-1-aweber.kernel@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 2/2] arm64: dts: ti: k3-am62-main: add sa3_secproxy in
- cbass_main
-Content-Language: en-US
-To:     Nitin Yadav <n-yadav@ti.com>, <nm@ti.com>, <vigneshr@ti.com>,
-        <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230519113434.1024206-1-n-yadav@ti.com>
- <20230519113434.1024206-3-n-yadav@ti.com>
-From:   Andrew Davis <afd@ti.com>
-In-Reply-To: <20230519113434.1024206-3-n-yadav@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/19/23 6:34 AM, Nitin Yadav wrote:
-> Add sa3_secproxy node in k3-am62-main.dtsi to keep device tree
-> nodes in sync with u-boot nodes.
+Convert TI LP855X backlight controller bindings from TXT to YAML and,
+while we're at it, rework some of the code related to PWM handling.
+Also correct existing DTS files to avoid introducing new dtb_check
+errors.
 
-That is not a good reason, nodes should be added because the device
-exists and should be described. Simply say that here.
+Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
 
-> 
-> Signed-off-by: Nitin Yadav <n-yadav@ti.com>
-> ---
->   arch/arm64/boot/dts/ti/k3-am62-main.dtsi | 9 +++++++++
->   1 file changed, 9 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-> index b3e4857bbbe4..7c2af5b0e022 100644
-> --- a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-> @@ -42,6 +42,15 @@ gic_its: msi-controller@1820000 {
->   		};
->   	};
->   
-> +	sa3_secproxy: secproxy@44880000 {
-> +		compatible = "ti,am654-secure-proxy";
+Changed in v2:
+ - Added additionalProperties to ROM patternProperties in DT binding
 
-The "ti,am654-secure-proxy" binding has interrupts as a required
-property, so this will cause new binding check warnings.
+Artur Weber (4):
+  dt-bindings: backlight: lp855x: convert to YAML and modernize
+  video: backlight: lp855x: get PWM for PWM mode during probe
+  ARM: dts: adapt to LP855X bindings changes
+  arm64: dts: adapt to LP855X bindings changes
 
-We also already have a Secure Proxy instance in this DT, why
-do we need this other one? Is this the instance that was added
-for for the R5 use? I guess that would explain why there are no
-interrupts to the big ARM core.. Can we actually use this
-node in Linux then? If not mark it disabled/reserved.
+ .../leds/backlight/lp855x-backlight.yaml      | 149 ++++++++++++++++++
+ .../bindings/leds/backlight/lp855x.txt        |  72 ---------
+ .../dts/qcom-apq8026-samsung-matisse-wifi.dts |   1 -
+ ...-msm8974pro-sony-xperia-shinano-castor.dts |  23 +--
+ .../boot/dts/nvidia/tegra210-p2371-2180.dts   |   6 +-
+ drivers/video/backlight/lp855x_bl.c           |  48 +++---
+ 6 files changed, 189 insertions(+), 110 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/leds/backlight/lp855x-backlight.yaml
+ delete mode 100644 Documentation/devicetree/bindings/leds/backlight/lp855x.txt
 
-Andrew
 
-> +		#mbox-cells = <1>;
-> +		reg-names = "rt", "scfg", "target_data";
-> +		reg = <0x00 0x44880000 0x00 0x20000>,
-> +		      <0x0 0x44860000 0x0 0x20000>,
-> +		      <0x0 0x43600000 0x0 0x10000>;
-> +	};
-> +
->   	main_conf: syscon@100000 {
->   		compatible = "syscon", "simple-mfd";
->   		reg = <0x00 0x00100000 0x00 0x20000>;
+base-commit: fb200218b40b7864f64f1a47de61e035d8934e92
+-- 
+2.40.1
+
