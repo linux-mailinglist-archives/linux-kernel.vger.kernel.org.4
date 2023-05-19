@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B8270933D
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 11:33:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B8E370933E
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 11:33:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231742AbjESJdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 05:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39204 "EHLO
+        id S231349AbjESJdR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 05:33:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231649AbjESJce (ORCPT
+        with ESMTP id S231663AbjESJck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 05:32:34 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7CD1995
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 02:31:47 -0700 (PDT)
+        Fri, 19 May 2023 05:32:40 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A101199A
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 02:31:48 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 154A11FE49;
+        by smtp-out2.suse.de (Postfix) with ESMTPS id A0F6E1FE4B;
         Fri, 19 May 2023 09:31:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
         t=1684488706; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Rq5WlanO/xh2oW9do+M5eMsEpGumjDX5yZ06jjyViW0=;
-        b=xmdCtVYrMgwQIeQg0Ri8h19UQBkqc32+m50ERp7tzbSnLmUipAumuzu1SJ/phdaGpGr1e5
-        1ZgL/fk8c6FVnpguGTKnhuqyOQrpti/LK/H+C+rorBRPFOZiiJKM5Z9WuE4hOpAXUwr0s9
-        29s7vHtwPm0hy1t2+xcRRUUUZY+vO4I=
+        bh=l1TEiSv0o3bNfukbYFt8AXhybPoVqwjpcYPyqBGQTlU=;
+        b=t7lu+feEt5qu08v1HxYzhYtAgR26S8XfPKpBY9i2AbGehY1sFLM7RRq20VG586tX+M7K6U
+        0dw6GDIbF3s1QmD1tt8+3FsAB4BVK8ykc9ETxp99WiA2/7qXhxZxXm9/oSydnzibrd+ria
+        3nC8iJwCLZm+CwXBzK6KEaJZDlxo15Y=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
         s=susede2_ed25519; t=1684488706;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Rq5WlanO/xh2oW9do+M5eMsEpGumjDX5yZ06jjyViW0=;
-        b=r+BrIYhpRWPNhyt1t2aruu0CAFCh5kY4Dd+eoUor1IqBUVTilS+3Pmn4fR+mslChitAuvI
-        dgV2YxBk2vRF0cDA==
+        bh=l1TEiSv0o3bNfukbYFt8AXhybPoVqwjpcYPyqBGQTlU=;
+        b=SiGNHPyoOJ4hegNpZQlBYziB2Db4EVTTfePySayMLHwHBrrnYtWgot+/fUzKsQ/R6Np+Jg
+        UweSkC+GMZiO1ZAg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EC14813A12;
-        Fri, 19 May 2023 09:31:45 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7FC6E13A12;
+        Fri, 19 May 2023 09:31:46 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id eMzSOAFCZ2RXJAAAMHmgww
-        (envelope-from <tiwai@suse.de>); Fri, 19 May 2023 09:31:45 +0000
+        id 6CDZHQJCZ2RXJAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 19 May 2023 09:31:46 +0000
 From:   Takashi Iwai <tiwai@suse.de>
 To:     alsa-devel@alsa-project.org
 Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH 27/36] ALSA: seq: Add port direction to snd_seq_port_info
-Date:   Fri, 19 May 2023 11:31:05 +0200
-Message-Id: <20230519093114.28813-28-tiwai@suse.de>
+Subject: [PATCH 28/36] ALSA: seq: Add UMP group number to snd_seq_port_info
+Date:   Fri, 19 May 2023 11:31:06 +0200
+Message-Id: <20230519093114.28813-29-tiwai@suse.de>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <20230519093114.28813-1-tiwai@suse.de>
 References: <20230519093114.28813-1-tiwai@suse.de>
@@ -70,176 +70,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a new field "direction" to snd_seq_port_info for allowing a client
-to tell the expected direction of the port access.  A port might still
-allow subscriptions for read/write (e.g. for MIDI-CI) even if the
-primary usage of the port is a single direction (either input or
-output only).  This new "direction" field can help to indicate such
-cases.
-
-When the direction is unspecified at creating a port and the port has
-either read or write capability, the corresponding direction bits are
-set automatically as default.
+Add yet more new filed "ump_group" to snd_seq_port_info for specifying
+the associated UMP Group number for each sequencer port.  This will be
+referred in the upcoming automatic UMP conversion in sequencer core.
 
 Signed-off-by: Takashi Iwai <tiwai@suse.de>
 ---
- include/uapi/sound/asequencer.h |  9 ++++++++-
- sound/core/seq/seq_clientmgr.c  | 16 ++++++++++++++--
- sound/core/seq/seq_dummy.c      |  1 +
- sound/core/seq/seq_midi.c       |  4 ++++
- sound/core/seq/seq_ports.c      | 13 +++++++++++++
- sound/core/seq/seq_ports.h      |  2 ++
- sound/core/seq/seq_virmidi.c    |  1 +
- 7 files changed, 43 insertions(+), 3 deletions(-)
+ include/uapi/sound/asequencer.h | 3 ++-
+ sound/core/seq/seq_ports.c      | 9 +++++++--
+ sound/core/seq/seq_ports.h      | 3 ++-
+ 3 files changed, 11 insertions(+), 4 deletions(-)
 
 diff --git a/include/uapi/sound/asequencer.h b/include/uapi/sound/asequencer.h
-index 67532c46b115..eae1e0b0bf37 100644
+index eae1e0b0bf37..2470eaa5edc5 100644
 --- a/include/uapi/sound/asequencer.h
 +++ b/include/uapi/sound/asequencer.h
-@@ -455,6 +455,12 @@ struct snd_seq_remove_events {
- #define SNDRV_SEQ_PORT_FLG_TIMESTAMP	(1<<1)
- #define SNDRV_SEQ_PORT_FLG_TIME_REAL	(1<<2)
- 
-+/* port direction */
-+#define SNDRV_SEQ_PORT_DIR_UNKNOWN	0
-+#define SNDRV_SEQ_PORT_DIR_INPUT	1
-+#define SNDRV_SEQ_PORT_DIR_OUTPUT	2
-+#define SNDRV_SEQ_PORT_DIR_BIDIRECTION	3
-+
- struct snd_seq_port_info {
- 	struct snd_seq_addr addr;	/* client/port numbers */
- 	char name[64];			/* port name */
-@@ -471,7 +477,8 @@ struct snd_seq_port_info {
- 	void *kernel;			/* reserved for kernel use (must be NULL) */
+@@ -478,7 +478,8 @@ struct snd_seq_port_info {
  	unsigned int flags;		/* misc. conditioning */
  	unsigned char time_queue;	/* queue # for timestamping */
--	char reserved[59];		/* for future use */
-+	unsigned char direction;	/* port usage direction (r/w/bidir) */
-+	char reserved[58];		/* for future use */
+ 	unsigned char direction;	/* port usage direction (r/w/bidir) */
+-	char reserved[58];		/* for future use */
++	unsigned char ump_group;	/* 0 = UMP EP (no conversion), 1-16 = UMP group number */
++	char reserved[57];		/* for future use */
  };
  
  
-diff --git a/sound/core/seq/seq_clientmgr.c b/sound/core/seq/seq_clientmgr.c
-index 061b3e2bece1..33aa6c5c5c9e 100644
---- a/sound/core/seq/seq_clientmgr.c
-+++ b/sound/core/seq/seq_clientmgr.c
-@@ -2440,6 +2440,17 @@ static void snd_seq_info_dump_subscribers(struct snd_info_buffer *buffer,
- 
- #define FLAG_PERM_DUPLEX(perm) ((perm) & SNDRV_SEQ_PORT_CAP_DUPLEX ? 'X' : '-')
- 
-+static const char *port_direction_name(unsigned char dir)
-+{
-+	static const char *names[4] = {
-+		"-", "In", "Out", "In/Out"
-+	};
-+
-+	if (dir > SNDRV_SEQ_PORT_DIR_BIDIRECTION)
-+		return "Invalid";
-+	return names[dir];
-+}
-+
- static void snd_seq_info_dump_ports(struct snd_info_buffer *buffer,
- 				    struct snd_seq_client *client)
- {
-@@ -2449,12 +2460,13 @@ static void snd_seq_info_dump_ports(struct snd_info_buffer *buffer,
- 	list_for_each_entry(p, &client->ports_list_head, list) {
- 		if (p->capability & SNDRV_SEQ_PORT_CAP_INACTIVE)
- 			continue;
--		snd_iprintf(buffer, "  Port %3d : \"%s\" (%c%c%c%c)\n",
-+		snd_iprintf(buffer, "  Port %3d : \"%s\" (%c%c%c%c) [%s]\n",
- 			    p->addr.port, p->name,
- 			    FLAG_PERM_RD(p->capability),
- 			    FLAG_PERM_WR(p->capability),
- 			    FLAG_PERM_EX(p->capability),
--			    FLAG_PERM_DUPLEX(p->capability));
-+			    FLAG_PERM_DUPLEX(p->capability),
-+			    port_direction_name(p->direction));
- 		snd_seq_info_dump_subscribers(buffer, &p->c_src, 1, "    Connecting To: ");
- 		snd_seq_info_dump_subscribers(buffer, &p->c_dest, 0, "    Connected From: ");
- 	}
-diff --git a/sound/core/seq/seq_dummy.c b/sound/core/seq/seq_dummy.c
-index 8c18d8c4177e..2e8844ee32ed 100644
---- a/sound/core/seq/seq_dummy.c
-+++ b/sound/core/seq/seq_dummy.c
-@@ -127,6 +127,7 @@ create_port(int idx, int type)
- 	pinfo.capability |= SNDRV_SEQ_PORT_CAP_WRITE | SNDRV_SEQ_PORT_CAP_SUBS_WRITE;
- 	if (duplex)
- 		pinfo.capability |= SNDRV_SEQ_PORT_CAP_DUPLEX;
-+	pinfo.direction = SNDRV_SEQ_PORT_DIR_BIDIRECTION;
- 	pinfo.type = SNDRV_SEQ_PORT_TYPE_MIDI_GENERIC
- 		| SNDRV_SEQ_PORT_TYPE_SOFTWARE
- 		| SNDRV_SEQ_PORT_TYPE_PORT;
-diff --git a/sound/core/seq/seq_midi.c b/sound/core/seq/seq_midi.c
-index 2b5fff80de58..44302d98950e 100644
---- a/sound/core/seq/seq_midi.c
-+++ b/sound/core/seq/seq_midi.c
-@@ -367,6 +367,10 @@ snd_seq_midisynth_probe(struct device *_dev)
- 		if ((port->capability & (SNDRV_SEQ_PORT_CAP_WRITE|SNDRV_SEQ_PORT_CAP_READ)) == (SNDRV_SEQ_PORT_CAP_WRITE|SNDRV_SEQ_PORT_CAP_READ) &&
- 		    info->flags & SNDRV_RAWMIDI_INFO_DUPLEX)
- 			port->capability |= SNDRV_SEQ_PORT_CAP_DUPLEX;
-+		if (port->capability & SNDRV_SEQ_PORT_CAP_READ)
-+			port->direction |= SNDRV_SEQ_PORT_DIR_INPUT;
-+		if (port->capability & SNDRV_SEQ_PORT_CAP_WRITE)
-+			port->direction |= SNDRV_SEQ_PORT_DIR_OUTPUT;
- 		port->type = SNDRV_SEQ_PORT_TYPE_MIDI_GENERIC
- 			| SNDRV_SEQ_PORT_TYPE_HARDWARE
- 			| SNDRV_SEQ_PORT_TYPE_PORT;
 diff --git a/sound/core/seq/seq_ports.c b/sound/core/seq/seq_ports.c
-index 842ea3fb2800..3734e6352f5e 100644
+index 3734e6352f5e..6926e14055f3 100644
 --- a/sound/core/seq/seq_ports.c
 +++ b/sound/core/seq/seq_ports.c
-@@ -357,6 +357,16 @@ int snd_seq_set_port_info(struct snd_seq_client_port * port,
+@@ -357,8 +357,12 @@ int snd_seq_set_port_info(struct snd_seq_client_port * port,
  	port->time_real = (info->flags & SNDRV_SEQ_PORT_FLG_TIME_REAL) ? 1 : 0;
  	port->time_queue = info->time_queue;
  
-+	/* direction */
-+	port->direction = info->direction;
-+	/* fill default port direction */
-+	if (!port->direction) {
-+		if (info->capability & SNDRV_SEQ_PORT_CAP_READ)
-+			port->direction |= SNDRV_SEQ_PORT_DIR_INPUT;
-+		if (info->capability & SNDRV_SEQ_PORT_CAP_WRITE)
-+			port->direction |= SNDRV_SEQ_PORT_DIR_OUTPUT;
-+	}
+-	/* direction */
++	/* UMP direction and group */
+ 	port->direction = info->direction;
++	port->ump_group = info->ump_group;
++	if (port->ump_group > SNDRV_UMP_MAX_GROUPS)
++		port->ump_group = 0;
 +
- 	return 0;
- }
- 
-@@ -394,6 +404,9 @@ int snd_seq_get_port_info(struct snd_seq_client_port * port,
+ 	/* fill default port direction */
+ 	if (!port->direction) {
+ 		if (info->capability & SNDRV_SEQ_PORT_CAP_READ)
+@@ -404,8 +408,9 @@ int snd_seq_get_port_info(struct snd_seq_client_port * port,
  		info->time_queue = port->time_queue;
  	}
  
-+	/* direction */
-+	info->direction = port->direction;
-+
+-	/* direction */
++	/* UMP direction and group */
+ 	info->direction = port->direction;
++	info->ump_group = port->ump_group;
+ 
  	return 0;
  }
- 
 diff --git a/sound/core/seq/seq_ports.h b/sound/core/seq/seq_ports.h
-index 44f0e9e96bbf..dce733ab2398 100644
+index dce733ab2398..c6c138edceab 100644
 --- a/sound/core/seq/seq_ports.h
 +++ b/sound/core/seq/seq_ports.h
-@@ -72,6 +72,8 @@ struct snd_seq_client_port {
+@@ -72,8 +72,9 @@ struct snd_seq_client_port {
  	int midi_voices;
  	int synth_voices;
  		
-+	/* direction */
-+	unsigned char direction;
+-	/* direction */
++	/* UMP direction and group */
+ 	unsigned char direction;
++	unsigned char ump_group;
  };
  
  struct snd_seq_client;
-diff --git a/sound/core/seq/seq_virmidi.c b/sound/core/seq/seq_virmidi.c
-index f5cae49500c8..1b9260108e48 100644
---- a/sound/core/seq/seq_virmidi.c
-+++ b/sound/core/seq/seq_virmidi.c
-@@ -385,6 +385,7 @@ static int snd_virmidi_dev_attach_seq(struct snd_virmidi_dev *rdev)
- 	pinfo->capability |= SNDRV_SEQ_PORT_CAP_WRITE | SNDRV_SEQ_PORT_CAP_SYNC_WRITE | SNDRV_SEQ_PORT_CAP_SUBS_WRITE;
- 	pinfo->capability |= SNDRV_SEQ_PORT_CAP_READ | SNDRV_SEQ_PORT_CAP_SYNC_READ | SNDRV_SEQ_PORT_CAP_SUBS_READ;
- 	pinfo->capability |= SNDRV_SEQ_PORT_CAP_DUPLEX;
-+	pinfo->direction = SNDRV_SEQ_PORT_DIR_BIDIRECTION;
- 	pinfo->type = SNDRV_SEQ_PORT_TYPE_MIDI_GENERIC
- 		| SNDRV_SEQ_PORT_TYPE_SOFTWARE
- 		| SNDRV_SEQ_PORT_TYPE_PORT;
 -- 
 2.35.3
 
