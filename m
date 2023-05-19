@@ -2,86 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD2F7096F6
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 13:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 341A77096FB
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 14:00:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230325AbjESL6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 07:58:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43504 "EHLO
+        id S231228AbjESMAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 08:00:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjESL6f (ORCPT
+        with ESMTP id S229571AbjESL77 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 07:58:35 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1B0DE1;
-        Fri, 19 May 2023 04:58:33 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34JBiPsq026698;
-        Fri, 19 May 2023 11:58:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=+fX3WrloTcPg+Nga+D8INYObLCjqPG9wOmoTWaCuhTQ=;
- b=lEJCzEk5lj/mdzdKqJYobOfCVK5fmyhq6+hpiYArWuL844iSNh1ngjsxOgakRe5DnOAd
- Q+AT4rw5Dr1oGPCpIhA+yM8fHAzjUCElqVGB7gI14gAy9R9vJJF5BLy2N224AvhWireT
- gpbor8d6TtmgG2fiowFVY0Bc+3ASlQm8ErH59bBN9AYkdfKuRkiO5qtf4eNUDLFmWhbx
- nq6YAjrkaXi2V6B3u1F1xkpoVNZ6hpXX5qQwwU37Zz3TvJUUWgIginnkz5ngSKkoLQJq
- XbVHinXnXF1RsCWv7T0dfFUsyUhIaBHfhLxMZgE4UEYwTsxmLGDWw+vy13lWEuGfHGvS Xw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qp4nt8fb7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 May 2023 11:58:29 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34JBwSpR006684
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 May 2023 11:58:28 GMT
-Received: from [10.217.216.177] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 19 May
- 2023 04:58:24 -0700
-Message-ID: <da68d3eb-300c-a1e8-6085-1bce1641b664@quicinc.com>
-Date:   Fri, 19 May 2023 17:28:21 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 2/4] dt-bindings: clock: qcom: Add SM8550 video clock
- controller
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
+        Fri, 19 May 2023 07:59:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05EADF5;
+        Fri, 19 May 2023 04:59:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 955C765710;
+        Fri, 19 May 2023 11:59:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6ECCC433EF;
+        Fri, 19 May 2023 11:59:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684497597;
+        bh=jGfCp1g8O5R8vITSnEGD8PGxEQbGPlY0ilYpANNCCaA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rl3XaIMlUbNbyDZRfTH8BGhpI6z9Y9DxA6Svt94cOsXYGzba520RDaU0XgL24vKdM
+         La3NQRENMGf2yXJziYPJq+MzgzRZIzqWpoNcjDWRa6I8vGsvsbnl2o5eYY05go683w
+         lHFsXp+mjrnKW1jVMXk4PIxcvEJoaaCPZAroSn/INjFJhJ+tl/k+cCS8asEYp5S2JM
+         HsunLtnp4zHAklMhHbSSYxvWgnU3fKmC1A1JDYi+2tGAWV/fZ+Ev+2a+Chc9lFWh9c
+         lq0yhdjf/BDk8+6xRkZq2gQwNkcLT4l2u4XlbmMjapUH+MZRGHNUVbDAb3AYkgn173
+         wsYZ/eTE+RuBQ==
+Date:   Fri, 19 May 2023 12:59:49 +0100
+From:   Will Deacon <will@kernel.org>
+To:     Elliot Berman <quic_eberman@quicinc.com>
+Cc:     Alex Elder <elder@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Conor Dooley <conor+dt@kernel.org>
-CC:     Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230509161218.11979-1-quic_jkona@quicinc.com>
- <20230509161218.11979-3-quic_jkona@quicinc.com>
- <d48ded3e-7a14-e859-f330-dfffe103eb56@linaro.org>
-From:   Jagadeesh Kona <quic_jkona@quicinc.com>
-In-Reply-To: <d48ded3e-7a14-e859-f330-dfffe103eb56@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: lhf2JImYOXEknb_QtN7JOR_DGi5tRCk9
-X-Proofpoint-GUID: lhf2JImYOXEknb_QtN7JOR_DGi5tRCk9
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-19_08,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 lowpriorityscore=0 adultscore=0 clxscore=1011 phishscore=0
- spamscore=0 impostorscore=0 bulkscore=0 malwarescore=0 mlxscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305190101
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        Jonathan Corbet <corbet@lwn.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v13 10/24] gunyah: vm_mgr: Add/remove user memory regions
+Message-ID: <20230519115948.GB2637@willie-the-truck>
+References: <20230509204801.2824351-1-quic_eberman@quicinc.com>
+ <20230509204801.2824351-11-quic_eberman@quicinc.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230509204801.2824351-11-quic_eberman@quicinc.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,61 +76,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Elliot,
 
-Thanks Krzysztof for your review!
+On Tue, May 09, 2023 at 01:47:47PM -0700, Elliot Berman wrote:
+> When launching a virtual machine, Gunyah userspace allocates memory for
+> the guest and informs Gunyah about these memory regions through
+> SET_USER_MEMORY_REGION ioctl.
+> 
+> Co-developed-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+> Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> ---
+>  drivers/virt/gunyah/Makefile    |   2 +-
+>  drivers/virt/gunyah/vm_mgr.c    |  59 +++++++-
+>  drivers/virt/gunyah/vm_mgr.h    |  26 ++++
+>  drivers/virt/gunyah/vm_mgr_mm.c | 236 ++++++++++++++++++++++++++++++++
+>  include/uapi/linux/gunyah.h     |  37 +++++
+>  5 files changed, 356 insertions(+), 4 deletions(-)
+>  create mode 100644 drivers/virt/gunyah/vm_mgr_mm.c
 
-On 5/10/2023 12:43 PM, Krzysztof Kozlowski wrote:
-> On 09/05/2023 18:12, Jagadeesh Kona wrote:
->> Add device tree bindings for the video clock controller on Qualcomm
->> SM8550 platform.
->>
->> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
->> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
->> ---
->>   .../bindings/clock/qcom,sm8550-videocc.yaml   | 77 +++++++++++++++++++
->>   .../dt-bindings/clock/qcom,sm8550-videocc.h   | 38 +++++++++
->>   2 files changed, 115 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/clock/qcom,sm8550-videocc.yaml
->>   create mode 100644 include/dt-bindings/clock/qcom,sm8550-videocc.h
->>
->> diff --git a/Documentation/devicetree/bindings/clock/qcom,sm8550-videocc.yaml b/Documentation/devicetree/bindings/clock/qcom,sm8550-videocc.yaml
->> new file mode 100644
->> index 000000000000..107af5e9af89
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/clock/qcom,sm8550-videocc.yaml
->> @@ -0,0 +1,77 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/clock/qcom,sm8550-videocc.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Qualcomm Video Clock & Reset Controller on SM8550
->> +
->> +maintainers:
->> +  - Jagadeesh Kona <quic_jkona@quicinc.com>
->> +  - Taniya Das <quic_tdas@quicinc.com>
->> +
->> +description: |
->> +  Qualcomm video clock control module provides the clocks, resets and power
->> +  domains on SM8550.
->> +
->> +  See also:: include/dt-bindings/clock/qcom,videocc-sm8550.h
->> +
->> +properties:
->> +  compatible:
->> +    const: qcom,sm8550-videocc
-> 
-> Nope, looks 100% the same as sm8450, put it there.
-> 
-> https://lore.kernel.org/all/20230509172148.7627-2-quic_tdas@quicinc.com/
-> 
-Yes, will take care of this in next series.
+[...]
 
-> Best regards,
-> Krzysztof
-> 
+> +int gh_vm_mem_alloc(struct gh_vm *ghvm, struct gh_userspace_memory_region *region)
+> +{
+> +	struct gh_vm_mem *mapping, *tmp_mapping;
+> +	struct page *curr_page, *prev_page;
+> +	struct gh_rm_mem_parcel *parcel;
+> +	int i, j, pinned, ret = 0;
+> +	unsigned int gup_flags;
+> +	size_t entry_size;
+> +	u16 vmid;
+> +
+> +	if (!region->memory_size || !PAGE_ALIGNED(region->memory_size) ||
+> +		!PAGE_ALIGNED(region->userspace_addr) ||
+> +		!PAGE_ALIGNED(region->guest_phys_addr))
+> +		return -EINVAL;
+> +
+> +	if (overflows_type(region->guest_phys_addr + region->memory_size, u64))
+> +		return -EOVERFLOW;
+> +
+> +	ret = mutex_lock_interruptible(&ghvm->mm_lock);
+> +	if (ret)
+> +		return ret;
+> +
+> +	mapping = __gh_vm_mem_find_by_label(ghvm, region->label);
+> +	if (mapping) {
+> +		ret = -EEXIST;
+> +		goto unlock;
+> +	}
+> +
+> +	list_for_each_entry(tmp_mapping, &ghvm->memory_mappings, list) {
+> +		if (gh_vm_mem_overlap(tmp_mapping, region->guest_phys_addr,
+> +					region->memory_size)) {
+> +			ret = -EEXIST;
+> +			goto unlock;
+> +		}
+> +	}
+> +
+> +	mapping = kzalloc(sizeof(*mapping), GFP_KERNEL_ACCOUNT);
+> +	if (!mapping) {
+> +		ret = -ENOMEM;
+> +		goto unlock;
+> +	}
+> +
+> +	mapping->guest_phys_addr = region->guest_phys_addr;
+> +	mapping->npages = region->memory_size >> PAGE_SHIFT;
+> +	parcel = &mapping->parcel;
+> +	parcel->label = region->label;
+> +	parcel->mem_handle = GH_MEM_HANDLE_INVAL; /* to be filled later by mem_share/mem_lend */
+> +	parcel->mem_type = GH_RM_MEM_TYPE_NORMAL;
+> +
+> +	ret = account_locked_vm(ghvm->mm, mapping->npages, true);
+> +	if (ret)
+> +		goto free_mapping;
+> +
+> +	mapping->pages = kcalloc(mapping->npages, sizeof(*mapping->pages), GFP_KERNEL_ACCOUNT);
+> +	if (!mapping->pages) {
+> +		ret = -ENOMEM;
+> +		mapping->npages = 0; /* update npages for reclaim */
+> +		goto unlock_pages;
+> +	}
+> +
+> +	gup_flags = FOLL_LONGTERM;
+> +	if (region->flags & GH_MEM_ALLOW_WRITE)
+> +		gup_flags |= FOLL_WRITE;
+> +
+> +	pinned = pin_user_pages_fast(region->userspace_addr, mapping->npages,
+> +					gup_flags, mapping->pages);
+> +	if (pinned < 0) {
+> +		ret = pinned;
+> +		goto free_pages;
+> +	} else if (pinned != mapping->npages) {
+> +		ret = -EFAULT;
+> +		mapping->npages = pinned; /* update npages for reclaim */
+> +		goto unpin_pages;
+> +	}
 
-Thanks & Regards,
-Jagadeesh
+Sorry if I missed it, but I still don't see where you reject file mappings
+here.
+
+This is also the wrong interface for upstream. Please get involved with
+the fd-based guest memory discussions [1] and port your series to that. 
+
+This patch cannot be merged in its current form.
+
+Will
+
+[1] https://lore.kernel.org/kvm/20221202061347.1070246-1-chao.p.peng@linux.intel.com/
