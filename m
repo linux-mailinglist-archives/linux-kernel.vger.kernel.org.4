@@ -2,136 +2,404 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C4D709074
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 09:36:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54D39709092
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 09:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229557AbjESHf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 03:35:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58014 "EHLO
+        id S229602AbjESHmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 03:42:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjESHf4 (ORCPT
+        with ESMTP id S230290AbjESHl6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 03:35:56 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2095.outbound.protection.outlook.com [40.107.237.95])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5AE8122;
-        Fri, 19 May 2023 00:35:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P/mTgLKt4OykDgjggjBvDiL69Ymmk0eswrDsNb3ioEkeqaQbq/6BIg+7B/Eip2cmnWlKxpcIHLFzQIoiMvwTpQjpCb7dFMwWl2yb7lPNQjvVZ3oytB9DUaQf212KWtal1482f3MVAj9CvucxbU6+CwDqCI2moOoEI+e+csm1FMat5sqv2mBzpnsgB9Tg1Ek75Gkw6mv6Rplcg1UKK67sK/t7H6MsZ5WgPJJq4YKrfz/w4FJghZLfCuSfcey2y6Qr/2c+9Ed+jrygdKc9XjUwIxeC4GBhGIO49lbJKe7Nh//+YSSMYZwsJOpb16pK4SzaR7gGsKcZtVnQO78bzp1IWA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Z8+I9neSIHXxpIwT4XV/8CiUJ9ideXDflsF0eFVC33g=;
- b=OTt1a71c0N6V+PTN+mGBNoLjib1JR9kFT9UhTWEJyAMFy1GjDcHDyguH3Afa57TK/PV55Ezu/gSgGCI9mWVNsLp3urwkiGC1RtGkNRpDaDrsL2fECITmF7i+vm6iBvstZoIlImXQqjXjQEVrl9jA1ZxpVYI5jUAFxp8j0U9OB7ExyzHm613DTctvrNU+cVMi8dWVki+EkoyFIq5bPPWQhCziefrS1trIYTma20FAgt5csxRHccweVEQDzDpS2kqJrXHv2+oqK4Z6nU1qYmUDwKfjjP+9ZAgOrrqT//V15vaAnQgNyPeXhSDIdGcSPhh+uTUFADcreLcF/WoQKsDISg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Z8+I9neSIHXxpIwT4XV/8CiUJ9ideXDflsF0eFVC33g=;
- b=PUWNKL4Pqe2lZULSjl3j/7gMdSulG0JgNp51EmrR6JoHKkjN1Pwb0Rkchu64qHhy/mLcsN3hGV3770l6DVu3mWzrBQO9ZcXJPJYEYMSjxcHic8mgV3tHXKN+g7utA+Nbkf79r7tljgWWimi5Aj9PcXUn7Lye0Yja/7taPqhOksg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from BY3PR13MB4834.namprd13.prod.outlook.com (2603:10b6:a03:36b::10)
- by BY5PR13MB3779.namprd13.prod.outlook.com (2603:10b6:a03:229::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.21; Fri, 19 May
- 2023 07:35:51 +0000
-Received: from BY3PR13MB4834.namprd13.prod.outlook.com
- ([fe80::d98b:da1b:b1f0:d4d7]) by BY3PR13MB4834.namprd13.prod.outlook.com
- ([fe80::d98b:da1b:b1f0:d4d7%7]) with mapi id 15.20.6411.021; Fri, 19 May 2023
- 07:35:49 +0000
-Date:   Fri, 19 May 2023 09:35:27 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     wei.fang@nxp.com
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, Frank.Li@freescale.com, shenwei.wang@nxp.com,
-        xiaoning.wang@nxp.com, netdev@vger.kernel.org, linux-imx@nxp.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 net-next] net: fec: remove useless fec_enet_reset_skb()
-Message-ID: <ZGcmv8LKS9ayAHRI@corigine.com>
-References: <20230519020113.1670786-1-wei.fang@nxp.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230519020113.1670786-1-wei.fang@nxp.com>
-X-ClientProxiedBy: AM0PR06CA0111.eurprd06.prod.outlook.com
- (2603:10a6:208:ab::16) To BY3PR13MB4834.namprd13.prod.outlook.com
- (2603:10b6:a03:36b::10)
+        Fri, 19 May 2023 03:41:58 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C59A3195
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 00:41:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684482068;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=0KfcB1OydV4rwmbYT4w5olAopDG1nKc4VGqZ0OSjoS0=;
+        b=IRG8kubvbf8DSgkiK6Gvyh9hLw+E+rnKERBelNz8Uhwp037cwDuzk+sKmnStOuSjq9yKOz
+        bKegXUxO9nhcDLRioWlrEiwLOtg284nRf0VbCEgi2/NII2AsGGaeBG+2BKVVObK2xme+DG
+        h+aeZ4OgtrsmIHSklpEK4YMUJDaz2wg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-556-dD1o4JJQP7qz_5TIdUc_iw-1; Fri, 19 May 2023 03:41:04 -0400
+X-MC-Unique: dD1o4JJQP7qz_5TIdUc_iw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 262C429AB3F0;
+        Fri, 19 May 2023 07:41:04 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.221])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A08342166B25;
+        Fri, 19 May 2023 07:41:00 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     David Howells <dhowells@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v20 00/32] splice, block: Use page pinning and kill ITER_PIPE
+Date:   Fri, 19 May 2023 08:40:15 +0100
+Message-Id: <20230519074047.1739879-1-dhowells@redhat.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY3PR13MB4834:EE_|BY5PR13MB3779:EE_
-X-MS-Office365-Filtering-Correlation-Id: 98a59b5f-b0ab-4bb5-5470-08db583ba235
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: psMDBnSwhWtjLNg26NXzBNzv9End7DTvMSxwQfTDCVLuDSwr6hualkAi9g02HQFhiUo09oDed3bAVbBlAYrAfwnbl6FflnQTtPt1sY8mtXk9vtWMOSt4m1XbsxjwKzjRPhD74KBCKYuXUajrZhkdeJ+XmatD90I0RA4UevBb1ChPi4T/D5CRJ1kBjOpEASP8LVvG6sM2PunyLdcx6RMGzYmlZC2UpmJzJIPBAAsdJR0XU7tbVkxA4g2sl6/lMc5kvRFvmyhwDPMyzh3SJ/NZ9+J265YPgYxd46eL0UDNElzBLYeN/V6x8GubEtgzSJ8D73IZgAfBWPcaqSVH2meC8fKmAh1CPFBO3Vpl0VBZEqjQ/Ory4iOSmxAwnacGF61/UE5P1vfSyODzDWz+ohz3PSmN5S4XKi84z7Hcuj4bosVV29yyfwkaoqHjpImNI2B6B/x0VN3TiDglVUuK3CTPZsEqgeNrn82joukQC1ZJOg5hcYr66amAcIBt6x7N0n1n3X4b9PbF0DuTAvbaJMriGSCjJBiyEJ1HX1xndMzDtAmJydH6OUQ3QKN6Im6RmP+A
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR13MB4834.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39830400003)(396003)(136003)(366004)(346002)(376002)(451199021)(38100700002)(36756003)(86362001)(7416002)(5660300002)(44832011)(8676002)(8936002)(2616005)(6506007)(6512007)(4744005)(2906002)(186003)(478600001)(316002)(6666004)(66946007)(66556008)(66476007)(6916009)(4326008)(6486002)(41300700001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pmRHwI6jhi9rxiKNXcMW0NU7SHyMAw9OE8CAeOhNV4ZGBKt7B3at6gw1WXkF?=
- =?us-ascii?Q?XWX7/mNXVF34AkYxp0uqQliQ/9w/Or5KXsZ7LFGD9+hz4syA9bmrsW07QWRV?=
- =?us-ascii?Q?aRKFcjRgvckcO3jEuCmd4OuerHW9jfFizIfK/IZE4agcHu3QdABM3KMeEu1d?=
- =?us-ascii?Q?mZ3wJmBGtfW9w1h2WRZCMBavJD7FCBzLJik2f6dZIfmwScY+BRHM9LSJTymN?=
- =?us-ascii?Q?WmrrsMoR6xKDHfyetZ4uKEzm2m3GuJfMqQpmuViS/Q4XTcODp1yWFAGOZWCF?=
- =?us-ascii?Q?8RUI5n3s+GAsxYXsD/I/c4N8Omf2HB/HTp83dKFAwhWxsd40o5RbAvlXh0Jb?=
- =?us-ascii?Q?6COjucOF66G5m17p0cQTFW8eA5V8Oa+ruue/nokvyIY9ejUurX6Xp90K45Tk?=
- =?us-ascii?Q?nLTpy+CD+fH6vgazCramGisyN6QjtiVHPUJlBIb6VDzu1YlDPJjtpwurjePC?=
- =?us-ascii?Q?jKfShBCsolcxSJLFNHUJmbhaGcBqC6ezJLVZ18rCfXWoION8B0Uy6McD0MBU?=
- =?us-ascii?Q?euGocbxDq2GAnQT9p1EQQUE5jCMjGcjfVKlFziptH+WibwYq1lf0W0LY1/P2?=
- =?us-ascii?Q?DI4qJUtakTbJVGgrcz7AmeSCqapVZfydq23BXxSn+ZcPTuHEufAEdpRQKhoz?=
- =?us-ascii?Q?vpxHpVEZXVDCq4yqz5FZjR/py/DTOvsCw67n7EnYz9eFNcOOvfRKe97Ul8tH?=
- =?us-ascii?Q?SDYVskUtufmJ8PvvhyHOvr14k+7i+9OknYroLOLvzPgZ+yX97uNTDpbDAJls?=
- =?us-ascii?Q?2IqcnfjQdJkBpqq6kICt5Qo2kofGolsX4n64iVIed5wm0vFQiY/Frurthlyq?=
- =?us-ascii?Q?La/67rg5Sow3WqsZzwvRSQ2hqfqCSc0jwNT6nUZXsuUJyhM6Cw5XAc6tKCJm?=
- =?us-ascii?Q?lpqUq8z3arMhUQeYGv26TYO/ZysRO4d1OrSxMJY7EnDujSDsj4dazCRxL2qj?=
- =?us-ascii?Q?v6hTEM+r+1fdYN1Gjm9v3WqWxf8adX+FuBMU09D1qKbbC5IigK5ddCT33dxW?=
- =?us-ascii?Q?IX4slZQ0wJ1Lb3yWaDjpMypifzQDw2RB7kG9nbmEDIfhoVYyUWgm2ScjxZG7?=
- =?us-ascii?Q?N58NGK4+pic0w10f+EixoYwXeKbFErAbbExp40dIP6VFbrxtZ2m+hZy3D/+g?=
- =?us-ascii?Q?Hw7yCDdEJzM62V2iARQq/QihwU/w8O8LTZqhxV2CNMBRu+O5/1q3V8crKoP5?=
- =?us-ascii?Q?jY4I97IDrA36nY5PZtITWfwA7RvrnpSyLvUbwmotrQZPLVJrXnux8M+scdR7?=
- =?us-ascii?Q?rHfQnC0E39Y+p35uZqpMhLIOyh7fnTMSPAI2l6yXmGvlCE+zgKOndglimF4A?=
- =?us-ascii?Q?TanA74oY1jC0f+JBMRq/VNh+wL5v0NDm2dek6AZ+RR1k6DbjfDMRx9FJK0WG?=
- =?us-ascii?Q?Ubk+5ozDFwLXYFalXxDpwlIvlMLh13ha+u4nKtwmyAlG+ADqQc1LFFPoxzmF?=
- =?us-ascii?Q?t9yd/LHk+mTgU/c/iHKaiQRIAwMo6Yu2FhfIsnUupczy2SrTOBoBeFaIY3DM?=
- =?us-ascii?Q?vvr1BGNkTKIlIluPuTTKysK2znRWHrFt4gX58nitysyLez+BYV2Ov3TkM7Ze?=
- =?us-ascii?Q?d7AHZcGkr3D8AqRp4fRmKq8d6NL6o+KDYVne9I5MYIs8jxLH/WDWc6q8cLSb?=
- =?us-ascii?Q?KHaqIqqeTn/US6dWJPwrNf+5D8VtIcFhcZ63KMjY8PGnQrllHQPELyOEWMR2?=
- =?us-ascii?Q?EJop9Q=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 98a59b5f-b0ab-4bb5-5470-08db583ba235
-X-MS-Exchange-CrossTenant-AuthSource: BY3PR13MB4834.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2023 07:35:49.6694
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hjA5Wuvj6lyTilf8p0Jfy7303MKdxldiMd4r1ynjjuPXPU+V7jtxMxCH1sTtoKh8pVpeKslP3qRzIrZsbhoH2x80+jKGdbnsZmUhAeF/yos=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR13MB3779
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 10:01:13AM +0800, wei.fang@nxp.com wrote:
-> From: Wei Fang <wei.fang@nxp.com>
-> 
-> This patch is a cleanup for fec driver. The fec_enet_reset_skb()
-> is used to free skb buffers for tx queues and is only invoked in
-> fec_restart(). However, fec_enet_bd_init() also resets skb buffers
-> and is invoked in fec_restart() too. So fec_enet_reset_skb() is
-> redundant and useless.
-> 
-> Signed-off-by: Wei Fang <wei.fang@nxp.com>
-> ---
-> V2 change:
-> According to Simon Horman's suggestion, it's just a cleanup and without
-> user-visible problem, so change the target tree from net to net-next.
+Hi Jens, Al, Christoph,
 
-Thanks Wei Fang, looks good.
+The first half of this patchset kills off ITER_PIPE to avoid a race between
+truncate, iov_iter_revert() on the pipe and an as-yet incomplete DMA to a
+bio with unpinned/unref'ed pages from an O_DIRECT splice read.  This causes
+memory corruption[2].  Instead, we use filemap_splice_read(), which invokes
+the buffered file reading code and splices from the pagecache into the
+pipe; direct_splice_read(), which bulk-allocates a buffer, reads into it
+and then pushes the filled pages into the pipe; or handle it in
+filesystem-specific code.
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+ (1) Simplify the calculations for the number of pages to be reclaimed in
+     direct_splice_read().
+
+ (2) Turn do_splice_to() into a helper so that it can be used by overlayfs
+     and coda to perform the checks on the lower fs.
+
+ (3) Provide shmem with its own splice_read to handle non-existent pages
+     in the pagecache.  We don't want a ->read_folio() as we don't want to
+     populate holes, but filemap_get_pages() requires it.
+
+ (4) Provide overlayfs with its own splice_read to call down to a lower
+     layer as overlayfs doesn't provide ->read_folio().
+
+ (5) Provide coda with its own splice_read to call down to a lower layer as
+     coda doesn't provide ->read_folio().
+
+ (6) Direct ->splice_read to direct_splice_read() in tty, procfs, kernfs
+     and random files as they just copy to the output buffer and don't
+     splice pages.
+
+ (7) Provide stubs for afs, ceph, ecryptfs, ext4, f2fs, nfs, ntfs3, ocfs2,
+     orangefs, xfs and zonefs to do locking and/or revalidation.
+
+ (8) Change generic_file_splice_read() to just switch between
+     filemap_splice_read() and direct_splice_read() rather than using
+     ITER_PIPE.
+
+ (9) Make cifs use generic_file_splice_read().
+
+(10) Remove ITER_PIPE and its paraphernalia as generic_file_splice_read()
+     was the only user.
+
+The second half of the patchset rolls page-pinning out to the bio struct
+and the block layer, using iov_iter_extract_pages() to get pages and noting
+with BIO_PAGE_PINNED if the data pages attached to a bio are pinned.  If
+the data pages come from a non-user-backed iterator, then the pages are
+left unpinned and unref'd, relying on whoever set up the I/O to do the
+retaining
+
+(10) Don't hold a ref on ZERO_PAGE in iomap_dio_zero().
+
+(11) Fix bio_flagged() so that it doesn't prevent a gcc optimisation.
+
+(12) Make the bio struct carry a pair of flags to indicate the cleanup
+     mode.  BIO_NO_PAGE_REF is replaced with BIO_PAGE_REFFED (indicating
+     FOLL_GET was used) and BIO_PAGE_PINNED (indicating FOLL_PIN was used)
+     is added.
+
+     BIO_PAGE_REFFED will go away, but at the moment fs/direct-io.c sets it
+     and this series does not fully address that file.
+
+(13) Add a function, bio_release_page(), to release a page appropriately to
+     the cleanup mode indicated by the BIO_PAGE_* flags.
+
+(14) Make bio_iov_iter_get_pages() use iov_iter_extract_pages() to retain
+     the pages appropriately and clean them up later.
+
+(15) Make bio_map_user_iov() also use iov_iter_extract_pages().
+
+I've pushed the patches here also:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=iov-extract
+
+David
+
+Changes:
+========
+ver #20)
+ - Make direct_splice_read() limit the read to eof for regular files and
+   blockdevs.
+ - Check against s_maxbytes on the backing store, not a devnode inode.
+ - Provide stubs for afs, ceph, ecryptfs, ext4, f2fs, nfs, ntfs3, ocfs2,
+   orangefs, xfs and zonefs.
+ - Always use direct_splice_read() for 9p, trace and sockets.
+
+ver #19)
+ - Remove a missed get_page() on the zeropage in shmem_splice_read().
+
+ver #18)
+ - Split out the cifs bits from the patch the switches
+   generic_file_splice_read() over to using the non-ITER_PIPE splicing.
+ - Don't get/put refs on the zeropage in shmem_splice_read().
+
+ver #17)
+ - Rename do_splice_to() to vfs_splice_read() and export it so that it can
+   be a helper and make overlayfs and coda use it, allowing duplicate
+   checks to be removed.
+
+ver #16)
+ - The filemap_get_pages() changes are now upstream.
+ - filemap_splice_read() and direct_splice_read() are now upstream.
+ - iov_iter_extract_pages() is now upstream.
+
+ver #15)
+ - Fixed up some errors in overlayfs_splice_read().
+
+ver #14)
+ - Some changes to generic_file_buffered_splice_read():
+   - Rename to filemap_splice_read() and move to mm/filemap.c.
+   - Create a helper, pipe_head_buf().
+   - Use init_sync_kiocb().
+ - Some changes to generic_file_direct_splice_read():
+   - Use alloc_pages_bulk_array() rather than alloc_pages_bulk_list().
+   - Use release_pages() instead of __free_page() in a loop.
+   - Rename to direct_splice_read().
+ - Rearrange the patches to implement filemap_splice_read() and
+   direct_splice_read() separately to changing generic_file_splice_read().
+ - Don't call generic_file_splice_read() when there isn't a ->read_folio().
+ - Insert patches to fix read_folio-less cases:
+   - Make tty, procfs, kernfs and (u)random use direct_splice_read().
+   - Make overlayfs and coda call down to a lower layer.
+   - Give shmem its own splice-read that doesn't insert missing pages.
+ - Fixed a min() with mixed type args on some arches.
+
+ver #13)
+ - Only use allocation in advance and ITER_BVEC for DIO read-splice.
+ - Make buffered read-splice get pages directly from the pagecache.
+ - Alter filemap_get_pages() & co. so that it doesn't need an iterator.
+
+ver #12)
+ - Added the missing __bitwise on the iov_iter_extraction_t typedef.
+ - Rebased on -rc7.
+ - Don't specify FOLL_PIN to pin_user_pages_fast().
+ - Inserted patch at front to fix race between DIO read and truncation that
+   caused memory corruption when iov_iter_revert() got called on an
+   ITER_PIPE iterator[2].
+ - Inserted a patch after that to remove the now-unused ITER_PIPE and its
+   helper functions.
+ - Removed the ITER_PIPE bits from iov_iter_extract_pages().
+
+ver #11)
+ - Fix iov_iter_extract_kvec_pages() to include the offset into the page in
+   the returned starting offset.
+ - Use __bitwise for the extraction flags
+
+ver #10)
+ - Fix use of i->kvec in iov_iter_extract_bvec_pages() to be i->bvec.
+ - Drop bio_set_cleanup_mode(), open coding it instead.
+
+ver #9)
+ - It's now not permitted to use FOLL_PIN outside of mm/, so:
+ - Change iov_iter_extract_mode() into iov_iter_extract_will_pin() and
+   return true/false instead of FOLL_PIN/0.
+ - Drop of folio_put_unpin() and page_put_unpin() and instead call
+   unpin_user_page() (and put_page()) directly as necessary.
+ - Make __bio_release_pages() call bio_release_page() instead of
+   unpin_user_page() as there's no BIO_* -> FOLL_* translation to do.
+ - Drop the FOLL_* renumbering patch.
+ - Change extract_flags to extraction_flags.
+
+ver #8)
+ - Import Christoph Hellwig's changes.
+   - Split the conversion-to-extraction patch.
+   - Drop the extract_flags arg from iov_iter_extract_mode().
+   - Don't default bios to BIO_PAGE_REFFED, but set explicitly.
+ - Switch FOLL_PIN and FOLL_GET when renumbering so PIN is at bit 0.
+ - Switch BIO_PAGE_PINNED and BIO_PAGE_REFFED so PINNED is at bit 0.
+ - We should always be using FOLL_PIN (not FOLL_GET) for DIO, so adjust the
+   patches for that.
+
+ver #7)
+ - For now, drop the parts to pass the I/O direction to iov_iter_*pages*()
+   as it turned out to be a lot more complicated, with places not setting
+   IOCB_WRITE when they should, for example.
+ - Drop all the patches that changed things other then the block layer's
+   bio handling.  The netfslib and cifs changes can go into a separate
+   patchset.
+ - Add support for extracting pages from KVEC-type iterators.
+ - When extracting from BVEC/KVEC, skip over empty vecs at the front.
+
+ver #6)
+ - Fix write() syscall and co. not setting IOCB_WRITE.
+ - Added iocb_is_read() and iocb_is_write() to check IOCB_WRITE.
+ - Use op_is_write() in bio_copy_user_iov().
+ - Drop the iterator direction checks from smbd_recv().
+ - Define FOLL_SOURCE_BUF and FOLL_DEST_BUF and pass them in as part of
+   gup_flags to iov_iter_get/extract_pages*().
+ - Replace iov_iter_get_pages*2() with iov_iter_get_pages*() and remove.
+ - Add back the function to indicate the cleanup mode.
+ - Drop the cleanup_mode return arg to iov_iter_extract_pages().
+ - Provide a helper to clean up a page.
+ - Renumbered FOLL_GET and FOLL_PIN and made BIO_PAGE_REFFED/PINNED have
+   the same numerical values, enforced with an assertion.
+ - Converted AF_ALG, SCSI vhost, generic DIO, FUSE, splice to pipe, 9P and
+   NFS.
+ - Added in the patches to make CIFS do top-to-bottom iterators and use
+   various of the added extraction functions.
+ - Added a pair of work-in-progess patches to make sk_buff fragments store
+   FOLL_GET and FOLL_PIN.
+
+ver #5)
+ - Replace BIO_NO_PAGE_REF with BIO_PAGE_REFFED and split into own patch.
+ - Transcribe FOLL_GET/PIN into BIO_PAGE_REFFED/PINNED flags.
+ - Add patch to allow bio_flagged() to be combined by gcc.
+
+ver #4)
+ - Drop the patch to move the FOLL_* flags to linux/mm_types.h as they're
+   no longer referenced by linux/uio.h.
+ - Add ITER_SOURCE/DEST cleanup patches.
+ - Make iov_iter/netfslib iter extraction patches use ITER_SOURCE/DEST.
+ - Allow additional gup_flags to be passed into iov_iter_extract_pages().
+ - Add struct bio patch.
+
+ver #3)
+ - Switch to using EXPORT_SYMBOL_GPL to prevent indirect 3rd-party access
+   to get/pin_user_pages_fast()[1].
+
+ver #2)
+ - Rolled the extraction cleanup mode query function into the extraction
+   function, returning the indication through the argument list.
+ - Fixed patch 4 (extract to scatterlist) to actually use the new
+   extraction API.
+
+Link: https://lore.kernel.org/r/Y3zFzdWnWlEJ8X8/@infradead.org/ [1]
+Link: https://lore.kernel.org/r/000000000000b0b3c005f3a09383@google.com/ [2]
+Link: https://lore.kernel.org/r/166697254399.61150.1256557652599252121.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166722777223.2555743.162508599131141451.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166732024173.3186319.18204305072070871546.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166869687556.3723671.10061142538708346995.stgit@warthog.procyon.org.uk/ # rfc
+Link: https://lore.kernel.org/r/166920902005.1461876.2786264600108839814.stgit@warthog.procyon.org.uk/ # v2
+Link: https://lore.kernel.org/r/166997419665.9475.15014699817597102032.stgit@warthog.procyon.org.uk/ # v3
+Link: https://lore.kernel.org/r/167305160937.1521586.133299343565358971.stgit@warthog.procyon.org.uk/ # v4
+Link: https://lore.kernel.org/r/167344725490.2425628.13771289553670112965.stgit@warthog.procyon.org.uk/ # v5
+Link: https://lore.kernel.org/r/167391047703.2311931.8115712773222260073.stgit@warthog.procyon.org.uk/ # v6
+Link: https://lore.kernel.org/r/20230120175556.3556978-1-dhowells@redhat.com/ # v7
+Link: https://lore.kernel.org/r/20230123173007.325544-1-dhowells@redhat.com/ # v8
+Link: https://lore.kernel.org/r/20230124170108.1070389-1-dhowells@redhat.com/ # v9
+Link: https://lore.kernel.org/r/20230125210657.2335748-1-dhowells@redhat.com/ # v10
+Link: https://lore.kernel.org/r/20230126141626.2809643-1-dhowells@redhat.com/ # v11
+Link: https://lore.kernel.org/r/20230207171305.3716974-1-dhowells@redhat.com/ # v12
+Link: https://lore.kernel.org/r/20230209102954.528942-1-dhowells@redhat.com/ # v13
+Link: https://lore.kernel.org/r/20230214171330.2722188-1-dhowells@redhat.com/ # v14
+Link: https://lore.kernel.org/r/20230308143754.1976726-1-dhowells@redhat.com/ # v16
+Link: https://lore.kernel.org/r/20230308165251.2078898-1-dhowells@redhat.com/ # v17
+Link: https://lore.kernel.org/r/20230314220757.3827941-1-dhowells@redhat.com/ # v18
+Link: https://lore.kernel.org/r/20230315163549.295454-1-dhowells@redhat.com/ # v19
+
+Additional patches that got folded in:
+
+Link: https://lore.kernel.org/r/20230213134619.2198965-1-dhowells@redhat.com/ # v1
+Link: https://lore.kernel.org/r/20230213153301.2338806-1-dhowells@redhat.com/ # v2
+Link: https://lore.kernel.org/r/20230214083710.2547248-1-dhowells@redhat.com/ # v3
+
+Christoph Hellwig (1):
+  block: Replace BIO_NO_PAGE_REF with BIO_PAGE_REFFED with inverted
+    logic
+
+David Howells (31):
+  splice: Fix filemap of a blockdev
+  splice: Clean up direct_splice_read() a bit
+  splice: Make direct_read_splice() limit to eof where appropriate
+  splice: Make do_splice_to() generic and export it
+  splice: Make splice from a DAX file use direct_splice_read()
+  shmem: Implement splice-read
+  overlayfs: Implement splice-read
+  coda: Implement splice-read
+  tty, proc, kernfs, random: Use direct_splice_read()
+  net: Make sock_splice_read() use direct_splice_read() by default
+  9p:  Add splice_read stub
+  afs: Provide a splice-read stub
+  ceph: Provide a splice-read stub
+  ecryptfs: Provide a splice-read stub
+  ext4: Provide a splice-read stub
+  f2fs: Provide a splice-read stub
+  nfs: Provide a splice-read stub
+  ntfs3: Provide a splice-read stub
+  ocfs2: Provide a splice-read stub
+  orangefs: Provide a splice-read stub
+  xfs: Provide a splice-read stub
+  zonefs: Provide a splice-read stub
+  splice: Convert trace/seq to use direct_splice_read()
+  splice: Do splice read from a file without using ITER_PIPE
+  cifs: Use generic_file_splice_read()
+  iov_iter: Kill ITER_PIPE
+  iomap: Don't get an reference on ZERO_PAGE for direct I/O block
+    zeroing
+  block: Fix bio_flagged() so that gcc can better optimise it
+  block: Add BIO_PAGE_PINNED and associated infrastructure
+  block: Convert bio_iov_iter_get_pages to use iov_iter_extract_pages
+  block: convert bio_map_user_iov to use iov_iter_extract_pages
+
+ block/bio.c               |  29 +--
+ block/blk-map.c           |  22 +-
+ block/blk.h               |  12 ++
+ drivers/char/random.c     |   4 +-
+ drivers/tty/tty_io.c      |   4 +-
+ fs/9p/vfs_file.c          |  26 ++-
+ fs/afs/file.c             |  20 +-
+ fs/ceph/file.c            |  66 +++++-
+ fs/cifs/cifsfs.c          |   8 +-
+ fs/cifs/cifsfs.h          |   3 -
+ fs/cifs/file.c            |  16 --
+ fs/coda/file.c            |  29 ++-
+ fs/direct-io.c            |   2 +
+ fs/ecryptfs/file.c        |  27 ++-
+ fs/ext4/file.c            |  13 +-
+ fs/f2fs/file.c            |  68 +++++-
+ fs/iomap/direct-io.c      |   1 -
+ fs/kernfs/file.c          |   2 +-
+ fs/nfs/file.c             |  26 ++-
+ fs/nfs/internal.h         |   2 +
+ fs/nfs/nfs4file.c         |   2 +-
+ fs/ntfs3/file.c           |  36 +++-
+ fs/ocfs2/file.c           |  42 +++-
+ fs/ocfs2/ocfs2_trace.h    |   3 +
+ fs/orangefs/file.c        |  25 ++-
+ fs/overlayfs/file.c       |  23 +-
+ fs/proc/inode.c           |   4 +-
+ fs/proc/proc_sysctl.c     |   2 +-
+ fs/proc_namespace.c       |   6 +-
+ fs/splice.c               |  93 ++++----
+ fs/xfs/xfs_file.c         |  33 ++-
+ fs/xfs/xfs_trace.h        |   2 +-
+ fs/zonefs/file.c          |  43 +++-
+ include/linux/bio.h       |   5 +-
+ include/linux/blk_types.h |   3 +-
+ include/linux/splice.h    |   3 +
+ include/linux/uio.h       |  14 --
+ kernel/trace/trace.c      |   2 +-
+ lib/iov_iter.c            | 431 +-------------------------------------
+ mm/filemap.c              |   7 +-
+ mm/shmem.c                | 134 +++++++++++-
+ net/socket.c              |   2 +-
+ 42 files changed, 717 insertions(+), 578 deletions(-)
 
