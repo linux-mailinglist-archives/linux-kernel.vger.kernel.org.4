@@ -2,85 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D507709A22
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 16:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49606709A1F
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 16:42:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231650AbjESOmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 10:42:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58876 "EHLO
+        id S232080AbjESOmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 10:42:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232088AbjESOmR (ORCPT
+        with ESMTP id S231650AbjESOl5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 10:42:17 -0400
-Received: from mail-qk1-f171.google.com (mail-qk1-f171.google.com [209.85.222.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE19119
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 07:41:34 -0700 (PDT)
-Received: by mail-qk1-f171.google.com with SMTP id af79cd13be357-7576e0b14ceso174302485a.1
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 07:41:34 -0700 (PDT)
+        Fri, 19 May 2023 10:41:57 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B43C1A8
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 07:41:56 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f42769a0c1so33566665e9.2
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 07:41:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=google; t=1684507314; x=1687099314;
+        h=content-transfer-encoding:in-reply-to:from:cc:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=ZPCIL09AOSqWQqhHIiNOjpVpg9ys42pH9qllL6EB20s=;
+        b=KC0A8M82FSRL/w3Z+0G8RLwuRw/Qk03zulwBFRg3/hdqlst759Rz4XGxUIbHwWBC7E
+         fMPl8XZyRJQsIKyw/Wa9pZh//XpMcpfcca39syIFkTwWy3zcy+z1hjLmIcnixYqg7jqB
+         ly/61l24DfCGYwaUOmhDUGyMiE8YagWB24R+0fsepwW2SERyDUdFIer47xEM6hjEeKyL
+         J99UuswxuJx7VDawy/YNH7aVF3Wp0dnruIPsleqsHFqbG3jNBk1D0JDa88HKiG7mcvW7
+         JUrkvOcvMih8bgZznYc2dzP0syFcITerosfUuX3HSWiKW5q2rnPJxVdbadXUTcWCBRBd
+         8jzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684507293; x=1687099293;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ruzCCcFqzef6NacZHTXOwoNZcEE4fN80jkfDGRuHqfY=;
-        b=c4aO4C5AWIoNmNgPJq9Z2b1TmDBvq+cZx4XsyGZJdcfwn4Kv4KHtOs0W4z4uCEeNho
-         KGWOaubXkQ6ulRshJFfrMojciFe9sDdlM1VEwLSzmsJIpVbFhD2S2f+fvGR4LBTGKVya
-         PnDc/Sfj8LsufEDr0PYQAkrjsU68PXlvqDPhJFbWsoNizmcN0Pxmmi8L0ESD6+cOMMEA
-         YG64V2nZwgx+rAbgSTcqAivlKLdcE82eB0B1gxGGBwpbKkJDdCupMmFveJuuebwIXAfy
-         ozq5BLV4sUKHp1hDyK20tJ9KbpbXceb8fPSTshlg+SSuAQxqqZjj5v+Mt4H+2E1eYQhD
-         SivQ==
-X-Gm-Message-State: AC+VfDweFGwU6XG7dvl3yUYxg/rTFNKvb+rzFLoPtaqBabm+NoPRAdtJ
-        k5r39B8UbOd3tHyjVlTU4p5s
-X-Google-Smtp-Source: ACHHUZ7qTfS72Mnvokou1gCiu8aMJLDGwXNKH9h+hze9P3ooxLjSWNKQoFEuFuJJeWOz7sBi4VE6LQ==
-X-Received: by 2002:ad4:5d4e:0:b0:5ef:1e0a:1b07 with SMTP id jk14-20020ad45d4e000000b005ef1e0a1b07mr5299722qvb.40.1684507293525;
-        Fri, 19 May 2023 07:41:33 -0700 (PDT)
-Received: from localhost (pool-68-160-166-30.bstnma.fios.verizon.net. [68.160.166.30])
-        by smtp.gmail.com with ESMTPSA id qd17-20020ad44811000000b005ddd27e2c0asm1358298qvb.36.2023.05.19.07.41.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 07:41:33 -0700 (PDT)
-Date:   Fri, 19 May 2023 10:41:31 -0400
-From:   Mike Snitzer <snitzer@kernel.org>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Sarthak Kukreti <sarthakkukreti@chromium.org>, dm-devel@redhat.com,
-        linux-block@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Jens Axboe <axboe@kernel.dk>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>,
-        Brian Foster <bfoster@redhat.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Bart Van Assche <bvanassche@google.com>,
-        "Darrick J. Wong" <djwong@kernel.org>
-Subject: Re: [PATCH v7 0/5] Introduce provisioning primitives
-Message-ID: <ZGeKm+jcBxzkMXQs@redhat.com>
-References: <20230518223326.18744-1-sarthakkukreti@chromium.org>
- <ZGb2Xi6O3i2pLam8@infradead.org>
+        d=1e100.net; s=20221208; t=1684507314; x=1687099314;
+        h=content-transfer-encoding:in-reply-to:from:cc:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZPCIL09AOSqWQqhHIiNOjpVpg9ys42pH9qllL6EB20s=;
+        b=A6ok3KnHmb8NKkW/OeCpO2w3izyeB7wdtTkXDU6bkkrPeCqwWKuiJgtKveqRjCPqDv
+         306mKoBdObbtsVpYUR8Cg/7NrirZXT7OKDnAAI/cMYR7mbfesDJxom8pyUCU9+l3ScRq
+         mwVcGb/+1/q9uruj8tMOL0nzaNPM0DYCo2SYX0QU07z4z0GIz2uhxyPVWz2Yu68TV7ac
+         x99QwQ0MdAJoi/pwpFvf9CVuPavcDphKlh6TYLbpYqkhm7eKDjPA73s6NTlm+T2aiLmi
+         CCl/kWcaDyD2XgnDfe0TRFUxCKQk0/IyUrPH6E2+rEhfB7uBmP5tOnMOXZf7q8Q077yF
+         8v2w==
+X-Gm-Message-State: AC+VfDxEcFiW6cbisdGq5pn5LIfyvaJJvVw92rDaPX0kaI8yyfwIq8rw
+        j+UxYBGVSo1hZ4YixqjQJoDtmg==
+X-Google-Smtp-Source: ACHHUZ6Fv1Pzw1Fi3QT/Y7/GISidkfYh+x+0jaaTg7mLE9TBRave9jZ25l6kp6Y5J2PrgmwFWrd8QQ==
+X-Received: by 2002:a7b:cbc4:0:b0:3f4:21ff:b91f with SMTP id n4-20020a7bcbc4000000b003f421ffb91fmr1523271wmi.28.1684507314420;
+        Fri, 19 May 2023 07:41:54 -0700 (PDT)
+Received: from [10.83.37.24] ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id m25-20020a7bcb99000000b003f195d540d9sm2638102wmi.14.2023.05.19.07.41.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 May 2023 07:41:53 -0700 (PDT)
+Message-ID: <4f72f65f-80de-6e15-b314-a4a5e4410d88@arista.com>
+Date:   Fri, 19 May 2023 15:41:51 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZGb2Xi6O3i2pLam8@infradead.org>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 3/3] crypto: cmac - Add support for cloning
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+References: <ZGcyuyjJwZhdYS/G@gondor.apana.org.au>
+ <E1pzvTZ-00AnMQ-5M@formenos.hmeau.com>
+Content-Language: en-US
+Cc:     Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Bob Gilligan <gilligan@arista.com>,
+        Dan Carpenter <error27@gmail.com>,
+        David Laight <David.Laight@aculab.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Francesco Ruggeri <fruggeri05@gmail.com>,
+        Ivan Delalande <colona@arista.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Leonard Crestez <cdleonard@gmail.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        netdev@vger.kernel.org
+From:   Dmitry Safonov <dima@arista.com>
+In-Reply-To: <E1pzvTZ-00AnMQ-5M@formenos.hmeau.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19 2023 at 12:09P -0400,
-Christoph Hellwig <hch@infradead.org> wrote:
+Hi Herbert,
 
-> FYI, I really don't think this primitive is a good idea.  In the
-> concept of non-overwritable storage (NAND, SMR drives) the entire
-> concept of a one-shoot 'provisioning' that will guarantee later writes
-> are always possible is simply bogus.
+Thanks for the patches!
 
-Valid point for sure, such storage shouldn't advertise support (and
-will return -EOPNOTSUPP).
+On 5/19/23 09:28, Herbert Xu wrote:
+> Allow hmac to be cloned.  The underlying cipher needs to support
 
-But the primitive still has utility for other classes of storage.
+Small nit ^cmac
+
+> cloning by not having a cra_init function (all implementations of
+> aes that do not require a fallback can be cloned).
+> 
+> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+
+I'll remove per-CPU request allocations and base version7 on this.
+
+Thanks,
+         Dmitry
+
