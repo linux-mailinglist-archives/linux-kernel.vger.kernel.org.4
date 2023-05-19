@@ -2,87 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08D47709B06
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 17:15:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 142F6709B0B
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 17:17:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232242AbjESPPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 11:15:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47914 "EHLO
+        id S232281AbjESPRE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 11:17:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbjESPPc (ORCPT
+        with ESMTP id S229532AbjESPRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 11:15:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAAEBCF;
-        Fri, 19 May 2023 08:15:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Fri, 19 May 2023 11:17:02 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9300DCF;
+        Fri, 19 May 2023 08:17:01 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FF6E65897;
-        Fri, 19 May 2023 15:15:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0896BC4339B;
-        Fri, 19 May 2023 15:15:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684509330;
-        bh=16KHEhda17R0uNXkQJHXQVrobh41ZoiUCwXJdgtxDD4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=p6EYn1BZXuMfM8CtTTKN7KtAAWXREvTpcAmBw49BmFLfAExk/ZJu+zT1Bcveqew3f
-         4yBzHEpEFeQNIKciEdvSB+HHhL8+fUDuf+suVvtk3wnbHDHxTT29TbEI9hC9QszG7R
-         9l10yRvtue+XsivRFuDgsSsm9JZDlWNuYj5sCe0eZPfoN2/TtOoT9xM1lIaFy/DDQX
-         Z0QT5Z5sbqkgYAQI8objP2GG49dMUIEuUfQd8frsG5M5Kl5c7k+9iBX6y6yl4Tkdi/
-         jEfC2XE07PCOrhU0wbYYoqP0JUqnaiLECjzKvze65VIfpUSSVLwjNnJGlpq/rUbngG
-         gPWtmKCfyAcuA==
-Date:   Fri, 19 May 2023 08:15:26 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Breno Leitao <leitao@debian.org>
-Cc:     axboe@kernel.dk, davem@davemloft.net, edumazet@google.com,
-        pabeni@redhat.com, willemdebruijn.kernel@gmail.com,
-        courmisch@gmail.com, nhorman@tuxdriver.com, asml.silence@gmail.com,
-        alex.aring@gmail.com, dccp@vger.kernel.org, mptcp@lists.linux.dev,
-        linux-kernel@vger.kernel.org, matthieu.baerts@tessares.net,
-        marcelo.leitner@gmail.com, linux-wpan@vger.kernel.org,
-        linux-sctp@vger.kernel.org, leit@fb.com, David.Laight@ACULAB.COM,
-        dsahern@kernel.org
-Subject: Re: [PATCH 0/1] net: ioctl: Use kernel buffer on proto ioctl
- callbacks
-Message-ID: <20230519081526.59411533@kernel.org>
-In-Reply-To: <20230519135821.922326-1-leitao@debian.org>
-References: <20230519135821.922326-1-leitao@debian.org>
+        by ms.lwn.net (Postfix) with ESMTPSA id 3DABE536;
+        Fri, 19 May 2023 15:17:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 3DABE536
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1684509421; bh=CK6rRcjDmy59SAWk5ogUPHgX/+aOB52LGzE5tSHwm6g=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=bLWvdKK+WFSXvmaz58gi3ugXKzO6raXMduOFBnX5WxH+sXHsYkkuVqBftrLqH/1Zi
+         eOBvoE4iLqIUYodItyE7dy43AIxlOObiCNjxaMcMaybS3r8N2BGWPXcWQ7Z3xHBi2O
+         SUjwLlvVfuvWzakgDuDHGe+QsmhZq0rz9q2YDSAivHExqq1xjJ2xyYrjPGCuRKshGw
+         2JeeuczENBfFoDHk3B4pTusxr+oxch9VlwzS+oiYC6xzFNs57JmNb49+DZ5KJjOVwc
+         N/J21spsvRqR5duNeBIeJxWUfWrU7k0Hl6hHaLb23gVtN0KJo7162XBsmz8t8tz8jL
+         WABbANxwWcDqQ==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     torvalds@linux-foundation.org, linux-doc@vger.kernel.org,
+        workflows@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jakub Kicinski <kuba@kernel.org>
+Subject: Re: [RFC] MAINTAINERS: direct process doc changes to a dedicated ML
+In-Reply-To: <20230511020204.910178-1-kuba@kernel.org>
+References: <20230511020204.910178-1-kuba@kernel.org>
+Date:   Fri, 19 May 2023 09:17:00 -0600
+Message-ID: <87353snyfn.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 May 2023 06:58:20 -0700 Breno Leitao wrote:
-> With the implementation of network ioctl on io_uring[1], Willem
-> suggested[2] that the "struct proto" ioctls functions should be reused,
-> instead of duplicating the code.
-> For that, the ioctl callbacks need to be more flexible, and avoid
-> operating on userspace buffers (doing get/put_user()) directly on the
-> callbacks. This patch adds this flexibility, so, the io_uring plumbing
-> becomes more clean, avoiding duplicating code. This may also benefit
-> BPF.
-> 
-> For that, a wrapper is created, which will copy from/to userspace, and
-> the ioctl callback will rely on the wrapper to do userspace memory
-> copies.
-> 
-> I've tested this patch in three different ways:
-> 1) Created a simple testcase for TCP/UDP [3]
-> 2) Run relevant LTP tests, such as: sockioctl, setsockopt, bind, sendto,
-> 				    fanout, ns-udpsender, etc
-> 3) Run basics network selftests
-> 
-> PS: There are some `strcmp()` in the `sock_skprot_ioctl()`, that I was
-> not able to find a better way to deal with it. Any feedback is
-> appreciated.
+Jakub Kicinski <kuba@kernel.org> writes:
 
-Why not CC netdev@ on this?
+> It's hard to keep track of changes to the process docs.
+> Subsystem maintainers should probably know what's going on,
+> to ensure reasonably uniform developer experience across
+> trees.
+>
+> We also need a place where process discussions can be held
+> (i.e. designated mailing list which can be CCed on naturally
+> arising discussions). I'm using workflows@ in this RFC,
+> but a new list may be better.
+>
+> No change to the patch flow intended.
+>
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+> I've been pondering the lack of cross-maintainer communication
+> as the kernel grows, and I hope this could help bring us together
+> a little. Plus twice over the last 2 weeks someone popped up on
+> netdev with what I personally considered incorrect interpretation
+> of the process docs, so it'd be nice to CC a list on my replies
+> so I can be corrected, in case I'm wrong.
+>
+> Opinions more than welcome!
+> ---
+>  MAINTAINERS | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 1c78e61a3387..58239fbc7007 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -6223,6 +6223,12 @@ X:	Documentation/power/
+>  X:	Documentation/spi/
+>  X:	Documentation/userspace-api/media/
+>  
+> +DOCUMENTATION PROCESS
+> +M:	Jonathan Corbet <corbet@lwn.net>
+> +S:	Maintained
+> +F:	Documentation/process/
+> +L:	workflows@vger.kernel.org
+> +
+
+Applied, thanks.
+
+jon
