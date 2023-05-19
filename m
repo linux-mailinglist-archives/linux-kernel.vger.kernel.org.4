@@ -2,110 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D82470986B
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 15:37:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F91F70986D
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 15:37:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbjESNhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 09:37:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53974 "EHLO
+        id S229621AbjESNhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 09:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbjESNhE (ORCPT
+        with ESMTP id S231182AbjESNhO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 09:37:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F251A1;
-        Fri, 19 May 2023 06:37:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A98C7657A6;
-        Fri, 19 May 2023 13:37:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D633CC433D2;
-        Fri, 19 May 2023 13:37:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684503423;
-        bh=hiK8VYTchK7S3+lPacQ5ekj52Lz+h90mgpXJRPZ1faU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PWRi8d/MlwSR1R6bPzftqiCGljJm1zyhe4GlcGPD1gnNAG4UhV4pYTRdgBY+zCd4o
-         t4J95dEwBDbP0EV8tSCi+Weokx9PSctINNw3afgGtv4h7oJqc4TbX/WmCE82sg5uqz
-         VB/DxbqmPtsLuyJ6oGO/Mzj2e3tMMyd6lRTWz+dGWTAWfnUMsHfDR6ptFwoeNXXLUs
-         u1ZP24Q7fzj9uUv91mrsUtf573iNZD6lcTo/nIbRF2jSvbmHCb4RKG9z8dVSW7F+i1
-         dBgya8n35kbt8hp8klPgSWDkHvTOvq3uJmz02vM5prdHcSXsoKrAhLFHTUKHSPS4WF
-         tSp171a3A5/sw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 94052403B5; Fri, 19 May 2023 10:37:00 -0300 (-03)
-Date:   Fri, 19 May 2023 10:37:00 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     James Clark <james.clark@arm.com>, Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] perf test attr: Update no event/metric
- expectations
-Message-ID: <ZGd7fDmBDEmoiSE7@kernel.org>
-References: <20230517225707.2682235-1-irogers@google.com>
- <64f329a9-09a3-aa84-a354-23a919062d09@arm.com>
- <ZGYYJ/biKyeFNJjL@kernel.org>
- <f753beda-2d5e-c391-520a-450b186fd4d4@linux.intel.com>
- <9178149c-45e8-3de4-58db-b8b8d27b3a08@linux.intel.com>
+        Fri, 19 May 2023 09:37:14 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2056.outbound.protection.outlook.com [40.107.244.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E32DA1
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 06:37:13 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OI4BH2qIFAZP89CJXJY7p1e1kgZuH3z2WCkQkjQih3uSIzcELK7qnMdCJAtGMoH/QRnjDzq5maeLc16TJsu9qtlK6rQ0SBBBDNe/ZiQmMFH5wJ5+6SqwzYEGGTtRr02Q2DpCMGt1spy5rzXGd18cjtZHCsISVf5Sn1Zke13DHDQ1pBuEeXgzcxcamnIMAzXMP4SP8pLMGQNNwDYhMxVVy8F93iwcA6gHSGIteM0qgHhy0XmWdZrX1hHcmWfQtMv2RxznKqggBeHAIuJ48qZzq7yZbIOv332NE/6+xNBstAd/ZEQg27s1DWlvGOv6A+VvlXwtbSwsbkJWCYCM6qYpMQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=EuGC7Fke+W0eFI3eNU4WgqJ79fFNvanzYmZ3IzVS7fI=;
+ b=O0c8uuk0SezLU5doARuJLyFeY/roikSJCi0MFtPBSyexWSZ+Gqj5bFAXybq8iZqI7066VN0fSPWP0kW1L105Z598GSqdn5qpyo17rH0jd0BPNkw+gVDQ6/wym34DMDNJNcN4qrnh/NxI0fS8zeyJlJhGLUUwX+wQBHSmav/LU0nFbjHy6VzO58rhXPolyt+O+lgdCv2Nkq0o/cNWI7iOEfaJuxze88pXexLx47BcMC0JcZEZ9f1L0mM43+l68yphO/OZY0k0RW0FTRbqRDdm53EJV1S0Sfa11MQjlp7G1cA703GwGRCrPsxrG6NjnmQ7gwSh8ECNwUuAylSdL/z6OQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=EuGC7Fke+W0eFI3eNU4WgqJ79fFNvanzYmZ3IzVS7fI=;
+ b=LvBgUlWJ9dbMitxb849jQQhHzCxuCQu7F7euI6htOH34WDE3wI21Lp7x7PNgH1REdL6wKLD22Hwb266NZsg5oMrJO8JHWjQVd5tfpH8CdVB5ACQ9/J8qATpAHTAcV+yy4NvZmV5PBsxx/GI67e7kR+Fnb+/0uAftHcdydLosfi0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM6PR12MB3370.namprd12.prod.outlook.com (2603:10b6:5:38::25) by
+ MN2PR12MB4453.namprd12.prod.outlook.com (2603:10b6:208:260::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6411.21; Fri, 19 May 2023 13:37:10 +0000
+Received: from DM6PR12MB3370.namprd12.prod.outlook.com
+ ([fe80::b59e:105c:f546:4310]) by DM6PR12MB3370.namprd12.prod.outlook.com
+ ([fe80::b59e:105c:f546:4310%7]) with mapi id 15.20.6411.021; Fri, 19 May 2023
+ 13:37:10 +0000
+Message-ID: <570f1771-cecc-edf0-185e-f6f76b681684@amd.com>
+Date:   Fri, 19 May 2023 09:37:08 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] drm/sched: Remove redundant check
+To:     Vladislav Efanov <VEfanov@ispras.ru>
+Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        lvc-project@linuxtesting.org
+References: <20230517125247.434103-1-VEfanov@ispras.ru>
+Content-Language: en-CA, en-US
+From:   Luben Tuikov <luben.tuikov@amd.com>
+In-Reply-To: <20230517125247.434103-1-VEfanov@ispras.ru>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BL0PR02CA0103.namprd02.prod.outlook.com
+ (2603:10b6:208:51::44) To DM6PR12MB3370.namprd12.prod.outlook.com
+ (2603:10b6:5:38::25)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9178149c-45e8-3de4-58db-b8b8d27b3a08@linux.intel.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3370:EE_|MN2PR12MB4453:EE_
+X-MS-Office365-Filtering-Correlation-Id: d8a082b7-2e09-4b81-ca21-08db586e257a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ibdN0vJtss1ZvgLN/Z/uUHKY0lo4COD4k+4HpoD9g3cn2S5DOxaHC0UVPa057jdgnxXFgCRp8gwLOpdV1bMl3NzLMdV+gEqyAEp9PTrTjHXZRTzEfddbq70kSzWCPEWI76uT9xISR+WLH8/8J/IW+Y7xNjj9f7eeOPEmUiXrq0JRAJBawvYYuksiGgnswQ8Rp35TpnAahvQADPzzyi96PGf60QCSDLBlzNFOITO5Sub9ZQd1CVyJxMdQeVy7LtowHO8KQFfzkwJo0H6dBVt9RPMIwXtMYTnLXwG3O7H4A9bcVOgfOTzL87t1XXipNKdMtoxecMg+AmKN8mCR9ZC4U3YYZn+UfUAKzGm7lSiyiMP6Dq7eUnz0caBtEzCpZ5JGU0jBKQClzV5Ohs1hbt9SM5fajWN0Aro+Lk6fwcx1ikJ2xmMFIdr2o5Im72p0DAaj4K5Ic5dlj0MLJBcDGYSC+GSdIrUGwrSanXGYsiLTaal5MstzGAwN/xzln8BfO8XnC2bWnit5b2h6pE0cisb65yXcghmBVY6oYgVYppH5Htr0WXf9F0ib/p+GhKeI3fR0SAggBtBCWRHTCZPPe1o3ja6WdSF0kU7QH3YoyUhNFRWI6vuVEGTg5oIimt4XCa2ElAxpBx2iALJlZxJPDGTgcg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR12MB3370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(366004)(376002)(136003)(346002)(451199021)(36756003)(86362001)(31696002)(54906003)(316002)(6916009)(66946007)(66556008)(66476007)(4326008)(478600001)(6486002)(8676002)(5660300002)(2906002)(8936002)(44832011)(38100700002)(41300700001)(2616005)(186003)(53546011)(6512007)(6506007)(83380400001)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NFBqTkVnTEV0aXhsV3cxSFNQN1l6eloxcUV3Zm9GOWpzU3o3VXFYZ1Z4Rm5X?=
+ =?utf-8?B?U1M5ako0M2h2SG0rZUljRXREYzFMd25jWDdSVnlXWVNYak5LWi9xUmFYVGlI?=
+ =?utf-8?B?QU9vSS9uVk1FWTJRVzVadUhLckllYVN1NnRFaDNOVE5Vd2JqeUs5VDZZelZu?=
+ =?utf-8?B?TkpuMU1hZ1gzVHpFeUs3aVRvNG1WZFEyaWhLdmt4RkExK3pHN2lYeFVjR1JW?=
+ =?utf-8?B?SS9WUlhEbkJpVEhFRkFUMUU5WHM3bm50Z0lSd1dIdFE0MXZUREVuU0RZL0Vr?=
+ =?utf-8?B?cVJ5NzRrUWFFa1MvRzFBSklsN2xmdXFwb0IwNVhzNXZ5dWo2L3Q4a3V2UzJJ?=
+ =?utf-8?B?RHMySzlVRldlM1d3OUUwbzhIbXBFbnlORjdCTWRabnU3Y0dxM0l6YWFVeFda?=
+ =?utf-8?B?ZWlVejhNMFkyR0g5WDRjdVVrZmdOeXU3SHdrVFIwQWRwdnN0clllNDRtakZC?=
+ =?utf-8?B?eWFSeThnVzdnQzdlMytVTUM4MHdXeEQxelAxa0V1RFoyRTF0ZlM4V0xUUFg1?=
+ =?utf-8?B?RkFJOEViTlFiOFRHdExIeXpvRDIvZXhaTGNNa3p2bVIxVEtpbnlYWW9sSk5F?=
+ =?utf-8?B?OVRTaXFkeHNSQnVVM2pwYUlSZDAxZGNjRjBaR0hoK2huVlhGOTUxaXNzZ2d6?=
+ =?utf-8?B?TThjUlpOZHZ0M1Urbk1HeVZsRG9wOUJYb0dWSFhuejZzR1NWSnlFZlMrbXl4?=
+ =?utf-8?B?U0ZFa0t6UUlOc2NDUER5WTBhWUQrUUc1djZta2hQTGJSdGZQTENPazBtVUs3?=
+ =?utf-8?B?azBhNjBtZU55NlFKQ1RPYVl5MEFINjlyeHNqTFFxWjlSUGZ2aWw5dEVFeGxZ?=
+ =?utf-8?B?LzZYU0dsZ3BUNmVqaVBmMkFxVTR2VG9EdEpTM1NaVHBleTE1NzRWMXRPYmRR?=
+ =?utf-8?B?OG5vQ09VTXVCVXJFQVVvY28wM05xc0ZCV1lWTXNvRWp2RDlGUHdWb1JMWllP?=
+ =?utf-8?B?TG5PNHdyaFFCbTZrb2VwWWFMT0lvYkNTSWxUYVlyK2poTzlyZzhTTEYyKzJ0?=
+ =?utf-8?B?WG1NcFN0Z1Y3SGRTc1dzWlV6aHpsakpSWG55ZlZFaGRsNmJ4UDdQa25hTU1x?=
+ =?utf-8?B?WHQzcE0waUhadnY2cnhYSk44L201TG1UdzhKWWJ2ODJqekNRUXFSRjFjMHRO?=
+ =?utf-8?B?Umt0TVY5RjBuNXR4d0o2V01ia2NzSXI2OGVQdUlTSEdrOU52YTZ5RE9lM0hZ?=
+ =?utf-8?B?S096SURMTElzb1paMkdxZXpoUVVsU05wdE4yT1M2ZGlCa3NEQ0IzSDZnVGF3?=
+ =?utf-8?B?aWlKOEpMYStrLzBNUHBQUEkyVkJaUHo3c0JLc2dZbG5QZmRBTVZiUzlQMU1Q?=
+ =?utf-8?B?QUZSU2w3cE9sVzZKNDhOZ1pWbEJsbHk0WHY5dEVPMTFXZHgvWE1hSys3Rkhi?=
+ =?utf-8?B?dDRoa0J0SDFQdGdXVmMvdDgveFNOdytWYloydXkrZ2FKam5xVEQ4VDNPbm9Z?=
+ =?utf-8?B?ZUtmRThNa0cwY0R3OW1ueUZudmVqdmtDcE0xd2d5ZWJWaVppSmFGN3FteUhB?=
+ =?utf-8?B?SlFzdEV0amZhVzdCT2dHUTRRNjhTZldUMGFLR3NLdHJHMDY3Y01tWFBOV2ti?=
+ =?utf-8?B?bGwyUHJEMW5ZU3NlejAvcmxOTUs5NXBETmd4R3Zvd2Z5bzcxeFByR1ZHc0wr?=
+ =?utf-8?B?M1crTDFLcm1zSkRUMWNET2xHV3dsTHc1UjR4K3VpeUppcFlHQmxSMzR0SGgw?=
+ =?utf-8?B?eGVSMUJYcVB0WmtiNlZpeEJlVXRESDlHaXIwc3FlWWdheEthK3BkeklnYXpH?=
+ =?utf-8?B?dUg5KzBVdE95YVFQdktOUnphc0hpeTBwWUd1eGNYcDVGMzJRc01jcDZNTjVS?=
+ =?utf-8?B?aWJ2ZzloZEY4UUVqaXRQUEtSbUxrKy92blJ5ZW96dTJKWTIzS3Bub1I5R1Fp?=
+ =?utf-8?B?dDVqZy8zZVhuQVlzWXo2c09FMUdHOFdJcVJPNUpHZWJVeW1IRUVlRUtZNWVn?=
+ =?utf-8?B?aDZwVkNEbzBCaEovM3RBVThyMlFpUUY3VDJvZkpTMVNHQWNTWlQvSG1XMU1z?=
+ =?utf-8?B?UndBK1pMLytzYkEzUVpXMDZVL1FDZG5Fd3R0QjFlY0ZHWTFWOVA4aDR0eDMx?=
+ =?utf-8?B?QlBINzNJdlpidlgxSVQwVnV1UGhxenR6OXBoeDVKc2lEWVh1VU9pRUJCTzJQ?=
+ =?utf-8?B?eTZWU0VTdFZjS1NISW45ZFMveUFabFd6MjZKM1IrQVN5c2ZTM2p3c1hURy9H?=
+ =?utf-8?Q?ab+E0d85lusR2kC18PYR+BhBmD6h3gMZ4Tu+Qdj5Gz9o?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d8a082b7-2e09-4b81-ca21-08db586e257a
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR12MB3370.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2023 13:37:10.3505
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yC3f6joJuHA4vWy07GdDDCsbUyd8B3yt6EkuzSy8/38QoWgbpIle2evR/nZMj7LA
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4453
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, May 18, 2023 at 01:45:06PM -0400, Liang, Kan escreveu:
-> Hi Arnaldo,
-> 
-> On 2023-05-18 8:55 a.m., Liang, Kan wrote:
-> > On 2023-05-18 8:20 a.m., Arnaldo Carvalho de Melo wrote:
-> >> Em Thu, May 18, 2023 at 08:50:14AM +0100, James Clark escreveu:
-> >>>
-> >>> On 17/05/2023 23:57, Ian Rogers wrote:
-> >>>> Previously hard coded events/metrics were used, update for the use of
-> >>>> the TopdownL1 json metric group.
-> >>>>
-> >>>> Fixes: 94b1a603fca7 ("perf stat: Add TopdownL1 metric as a default if present")
-> >>>> Signed-off-by: Ian Rogers <irogers@google.com>
-> >>>> ---
-> >>>>  tools/perf/tests/attr/base-stat            |   2 +-
-> >>>>  tools/perf/tests/attr/test-stat-default    |  80 ++++++++-----
-> >>>>  tools/perf/tests/attr/test-stat-detailed-1 |  95 +++++++++------
-> >>>>  tools/perf/tests/attr/test-stat-detailed-2 | 119 +++++++++++--------
-> >>>>  tools/perf/tests/attr/test-stat-detailed-3 | 127 ++++++++++++---------
-> >>>>  5 files changed, 249 insertions(+), 174 deletions(-)
-> >>>>
-> >>> Reviewed-by: James Clark <james.clark@arm.com>
-> >> Thanks, applied both patches to perf-tools.
-> >>
-> > Could you please hold patch 1 for a while?
-> 
-> Sorry for the noise.
-> 
-> Ian has addressed my concerns. The patch looks good to me now.
-> It also fixes a "Failed" on my Cascade Lake machine.
-> 
-> Tested-by: Kan Liang <kan.liang@linux.intel.com>
+Thanks!
 
-Thanks, added it,
+Reviewed-by: Luben Tuikov <luben.tuikov@amd.com>
 
-- Arnaldo
- 
-> But for long term, we probably need a better solution to avoid keeping
-> adding such non-architectural events in the test case.
+Applied to drm-misc-fixes.
+
+Regards,
+Luben
+
+On 2023-05-17 08:52, Vladislav Efanov wrote:
+> The rq pointer points inside the drm_gpu_scheduler structure. Thus
+> it can't be NULL.
+> 
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> 
+> Fixes: c61cdbdbffc1 ("drm/scheduler: Fix hang when sched_entity released")
+> Signed-off-by: Vladislav Efanov <VEfanov@ispras.ru>
+> ---
+>  drivers/gpu/drm/scheduler/sched_main.c | 3 ---
+>  1 file changed, 3 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/scheduler/sched_main.c b/drivers/gpu/drm/scheduler/sched_main.c
+> index 8c183639603e..aea5a90ff98b 100644
+> --- a/drivers/gpu/drm/scheduler/sched_main.c
+> +++ b/drivers/gpu/drm/scheduler/sched_main.c
+> @@ -1141,9 +1141,6 @@ void drm_sched_fini(struct drm_gpu_scheduler *sched)
+>  	for (i = DRM_SCHED_PRIORITY_COUNT - 1; i >= DRM_SCHED_PRIORITY_MIN; i--) {
+>  		struct drm_sched_rq *rq = &sched->sched_rq[i];
+>  
+> -		if (!rq)
+> -			continue;
+> -
+>  		spin_lock(&rq->lock);
+>  		list_for_each_entry(s_entity, &rq->entities, list)
+>  			/*
+
