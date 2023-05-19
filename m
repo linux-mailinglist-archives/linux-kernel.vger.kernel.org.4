@@ -2,38 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41E6070999E
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 16:27:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C5B7099A8
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 16:28:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231756AbjESO1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 10:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50054 "EHLO
+        id S231899AbjESO2p convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 19 May 2023 10:28:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjESO1L (ORCPT
+        with ESMTP id S229642AbjESO2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 10:27:11 -0400
-Received: from mail11.truemail.it (mail11.truemail.it [IPv6:2001:4b7e:0:8::81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A21116;
-        Fri, 19 May 2023 07:27:08 -0700 (PDT)
-Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-        by mail11.truemail.it (Postfix) with ESMTPA id E7DED2133C;
-        Fri, 19 May 2023 16:27:02 +0200 (CEST)
-Date:   Fri, 19 May 2023 16:26:58 +0200
-From:   Francesco Dolcini <francesco@dolcini.it>
-To:     Jerome Neanne <jneanne@baylibre.com>, nm@ti.com, lee@kernel.org,
-        tony@atomide.com, vigneshr@ti.com
-Cc:     afd@ti.com, khilman@baylibre.com, narmstrong@baylibre.com,
-        msp@baylibre.com, j-keerthy@ti.com, jneanne@baylibre.com,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-omap@vger.kernel.org, Wolfram Sang <wsa@kernel.org>,
-        linux-i2c@vger.kernel.org
-Subject: RCU WARNING on 6.4-rc2, TI AM62 and TPS65219
-Message-ID: <ZGeHMjlnob2GFyHF@francesco-nb.int.toradex.com>
+        Fri, 19 May 2023 10:28:44 -0400
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09BAC116;
+        Fri, 19 May 2023 07:28:43 -0700 (PDT)
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-94f9cd65b1aso83515866b.0;
+        Fri, 19 May 2023 07:28:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684506521; x=1687098521;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TLDNSUFZ15J3Btc6EBpClFXuRobltQofOM7qiJmAWtw=;
+        b=KRBc+0cu2G/0e8Jlz/2TAvCPf6yW/GIuqnapzYtnswjjty015uxUDsBSv9dFC/Kfvh
+         5890fkJrg5abJxwwIo5k8Clvki1rAt6o/n8LELiiwkayCZpEijUWvoh0JWVifRxQd6e2
+         39djli+NWpr9EaHIr3n/bPdhAQb2HMFJ/FE1JSonBwzilvS7NY91/S9iXjV6GY1tpqF+
+         AcB6H9ZDqEWMzI85poMe+vkoIItfcqBjr6WXA525sr+w1h+mFUDw6inyfIMe9ubq7yer
+         /fZD8TgugK9bS/B2Cz0mJXqhQ6luSTX8UHjW3XRQW/tmAfdBbQ9fGh5o9ILvZVy5gCM+
+         OJzg==
+X-Gm-Message-State: AC+VfDyg2J0hgh48O9vhBDCfXH4GQ3ABSujgXTKysEBbzfo4S3N4m7Jr
+        qVSKLXgBpLoj2YtGjyJtbpHy3Av0fpcHq3jEdls=
+X-Google-Smtp-Source: ACHHUZ5RV9na8upB9VpmAYJiOF1HuwfHNjLjLE3y5Guu3Tc0j9QfWlBan4m+d1kfmfK4B7nmMhbK5yhqV2F3nabl1aA=
+X-Received: by 2002:a17:906:5350:b0:92e:f520:7762 with SMTP id
+ j16-20020a170906535000b0092ef5207762mr2447774ejo.6.1684506521290; Fri, 19 May
+ 2023 07:28:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+References: <8abea32a-4895-7826-8a9c-9ddc5a7ad2bd@linuxfoundation.org>
+In-Reply-To: <8abea32a-4895-7826-8a9c-9ddc5a7ad2bd@linuxfoundation.org>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Fri, 19 May 2023 16:28:28 +0200
+Message-ID: <CAJZ5v0gqwHmuV+MC8RVfZ51KjC-3mJ-fxTswQmvh3GCjSPPADA@mail.gmail.com>
+Subject: Re: [GIT PULL] cpupower update for Linux 6.4-rc3
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, shuah <shuah@kernel.org>,
+        Thomas Renninger <trenn@suse.de>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -41,92 +59,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello all,
-while testing 6.4-rc2 (2d1bcbc6cd70) on a TI K3 AM625 SoC with TPS65219
-PMIC I noticed this warning.
+On Wed, May 17, 2023 at 8:26 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>
+> Hi Rafael,
+>
+> Please pull the following cpupower update for Linux 6.4-rc3 or for
+> a later rc.
+>
+> This cpupower fixes update for Linux 6.4-rc3 consists of:
+>
+> - a resource leak fix
+> - fix drift in C0 percentage calculation due to System-wide TSC read.
+>    To lower this drift read TSC per CPU and also just after mperf read.
+>    This technique improves C0 percentage calculation in Mperf monitor
+>
+> diff is attached.
+>
+> thanks,
+> -- Shuah
+>
+> ----------------------------------------------------------------
+> The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+>
+>    Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+>
+> are available in the Git repository at:
+>
+>    git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux tags/linux-cpupower-6.4-rc3
+>
+> for you to fetch changes up to c2adb1877b76fc81ae041e1db1a6ed2078c6746b:
+>
+>    cpupower: Make TSC read per CPU for Mperf monitor (2023-05-08 10:46:49 -0600)
+>
+> ----------------------------------------------------------------
+> linux-cpupower-6.4-rc3
+>
+> This cpupower fixes update for Linux 6.4-rc3 consists of:
+>
+> - a resource leak fix
+> - fix drift in C0 percentage calculation due to System-wide TSC read.
+>    To lower this drift read TSC per CPU and also just after mperf read.
+>    This technique improves C0 percentage calculation in Mperf monitor
+>
+> ----------------------------------------------------------------
+> Hao Zeng (1):
+>        cpupower:Fix resource leaks in sysfs_get_enabled()
+>
+> Wyes Karny (1):
+>        cpupower: Make TSC read per CPU for Mperf monitor
+>
+>   tools/power/cpupower/lib/powercap.c                | 23 +++++++++++-----
+>   .../cpupower/utils/idle_monitor/mperf_monitor.c    | 31 ++++++++++------------
+>   2 files changed, 30 insertions(+), 24 deletions(-)
+>
+> ----------------------------------------------------------------
 
-[   80.117502] systemd-shutdown[1]: All loop devices detached.
-[   80.123176] systemd-shutdown[1]: Stopping MD devices.
-[   80.128700] systemd-shutdown[1]: All MD devices stopped.
-[   80.134123] systemd-shutdown[1]: Detaching DM devices.
-[   80.139553] systemd-shutdown[1]: All DM devices detached.
-[   80.144970] systemd-shutdown[1]: All filesystems, swaps, loop devices, MD devices and DM devices detached.
-[   80.162682] systemd-shutdown[1]: Syncing filesystems and block devices.
-[   80.169602] systemd-shutdown[1]: Rebooting.
-[   80.173817] kvm: exiting hardware virtualization
-[   80.213016] reboot: Restarting system
-[   80.216767] ------------[ cut here ]------------
-[   80.221380] Voluntary context switch within RCU read-side critical section!
-[   80.221404] WARNING: CPU: 0 PID: 1 at kernel/rcu/tree_plugin.h:318 rcu_note_context_switch+0x31c/0x390
-[   80.237669] Modules linked in: 8021q garp mrp stp llc cfg80211 usb_f_ncm u_ether bluetooth ecdh_generic ecc rfkill sp
-idev crct10dif_ce snd_soc_simple_card snd_soc_simple_card_utils rtc_ti_k3 sa2ul sha256_generic libsha256 authenc snd_soc
-_davinci_mcasp snd_soc_ti_udma snd_soc_ti_edma snd_soc_ti_sdma ti_ads1015 ina2xx industrialio_triggered_buffer pwm_tiehr
-pwm snd_soc_nau8822 tps65219_pwrbutton lm75 kfifo_buf spi_omap2_mcspi rtc_ds1307 libcomposite fuse drm ipv6
-[   80.278507] CPU: 0 PID: 1 Comm: systemd-shutdow Not tainted 6.4.0-rc2-00166-gf932e7bb873b #3
-[   80.286938] Hardware name: Toradex Verdin AM62 on Verdin Development Board (DT)
-[   80.294238] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-[   80.301193] pc : rcu_note_context_switch+0x31c/0x390
-[   80.306154] lr : rcu_note_context_switch+0x31c/0x390
-[   80.311114] sp : ffff80000a71b4c0
-[   80.314422] x29: ffff80000a71b4c0 x28: 0000000000000000 x27: ffff000000118000
-[   80.321556] x26: 0000000000000000 x25: ffff000000118000 x24: ffff800008fafbd8
-[   80.328689] x23: ffff000000118000 x22: 0000000000000000 x21: ffff000000118000
-[   80.335822] x20: 0000000000000000 x19: ffff00003fd68cc0 x18: 0000000000000010
-[   80.342955] x17: 0000000000000000 x16: 0000000000000000 x15: ffff000000118000
-[   80.350087] x14: 00000000000001c5 x13: ffff000000118478 x12: 00000000ffffffea
-[   80.357220] x11: 00000000ffffefff x10: 00000000ffffefff x9 : ffff80000a2a9a98
-[   80.364352] x8 : 0000000000017fe8 x7 : c0000000ffffefff x6 : 000000000000bff4
-[   80.371485] x5 : 0000000000057fa8 x4 : 0000000000000000 x3 : 0000000000000000
-[   80.378617] x2 : ffff80000a251990 x1 : 0000000000000000 x0 : 0000000000000000
-[   80.385751] Call trace:
-[   80.388193]  rcu_note_context_switch+0x31c/0x390
-[   80.392807]  __schedule+0x98/0xa7c
-[   80.396214]  schedule+0x5c/0xc4
-[   80.399354]  schedule_timeout+0x180/0x25c
-[   80.403362]  wait_for_completion_timeout+0x80/0x15c
-[   80.408238]  ti_sci_set_device_state+0xb4/0x1e4
-[   80.412771]  ti_sci_cmd_get_device_exclusive+0x18/0x24
-[   80.417907]  ti_sci_pd_power_on+0x28/0x48
-[   80.421914]  _genpd_power_on+0x94/0x154
-[   80.425749]  genpd_power_on.part.0+0xa4/0x174
-[   80.430104]  genpd_runtime_resume+0x118/0x294
-[   80.434457]  __rpm_callback+0x48/0x140
-[   80.438206]  rpm_callback+0x6c/0x78
-[   80.441692]  rpm_resume+0x3bc/0x59c
-[   80.445179]  __pm_runtime_resume+0x4c/0x90
-[   80.449272]  omap_i2c_xfer_common+0x38/0x598
-[   80.453540]  omap_i2c_xfer_polling+0x14/0x20
-[   80.457804]  __i2c_transfer+0x138/0x35c
-[   80.461642]  i2c_transfer+0x94/0xf4
-[   80.465130]  regmap_i2c_read+0x60/0xa8
-[   80.468879]  _regmap_raw_read+0xf0/0x170
-[   80.472799]  _regmap_bus_read+0x44/0x7c
-[   80.476632]  _regmap_read+0x64/0xf4
-[   80.480118]  _regmap_update_bits+0xf4/0x130
-[   80.484298]  regmap_update_bits_base+0x64/0x98
-[   80.488738]  tps65219_restart+0x38/0x48
-[   80.492576]  atomic_notifier_call_chain+0x60/0x90
-[   80.497280]  do_kernel_restart+0x24/0x30
-[   80.501202]  machine_restart+0x38/0x5c
-[   80.504950]  kernel_restart+0x88/0x98
-[   80.508612]  __do_sys_reboot+0x1e0/0x264
-[   80.512533]  __arm64_sys_reboot+0x24/0x30
-[   80.516538]  invoke_syscall+0x44/0x104
-[   80.520287]  el0_svc_common.constprop.0+0x44/0xec
-[   80.524988]  do_el0_svc+0x38/0x98
-[   80.528302]  el0_svc+0x2c/0x84
-[   80.531354]  el0t_64_sync_handler+0xb8/0xbc
-[   80.535534]  el0t_64_sync+0x190/0x194
-[   80.539192] ---[ end trace 0000000000000000 ]---
-
-
-This looks similar to what is described here [1], same issue or
-something else? Any suggestion?
-
-The issue is systematic and happens at every boot. With a TI downstream
-5.10 kernel this issue was never experienced.
-
-Francesco
-
-[1] https://lore.kernel.org/all/20230327-tegra-pmic-reboot-v6-0-af44a4cd82e9@skidata.com/
-
+Pulled, thanks!
