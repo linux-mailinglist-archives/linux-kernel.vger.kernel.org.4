@@ -2,150 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F015709E4C
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 19:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8053709E56
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 19:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232072AbjESRgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 13:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44980 "EHLO
+        id S232071AbjESRiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 13:38:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231448AbjESRgI (ORCPT
+        with ESMTP id S229726AbjESRiU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 13:36:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615F6BC;
-        Fri, 19 May 2023 10:36:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C873765A03;
-        Fri, 19 May 2023 17:36:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53E23C433D2;
-        Fri, 19 May 2023 17:36:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684517765;
-        bh=fTmCX95uDO4JmgzC6JzK4SCPqiqeBArOtaaIcRc+kAI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jz0boiMefZuw5q2eYukuYNt69NAWp8uDGYhmif6qa4V/1GEozEpWO2z17Vnfh1VOh
-         2weE1zscBWBvZBeagyFDE1UgwxROY7qXrR11gD95jgzmEL08d9NFpgdGhYGHF5he42
-         OqZb+GmmMG7mTUZYIPR8scbjCkQ6D4fAWwd55JZp/jqlx4cROusJU5+dXZF7a6dyL0
-         bjVKxJt07hdrzE4Zdko9AekpgXQhHjhR7XgDEjNaxYQFDKapbxYTehLmxpe2vqieg8
-         8ERfNmu3j9zT6PNmF5VcPgcb/ROgPb/1N97xkqWZvSoW+6JQdI4xPvPA7lvCKk4PGc
-         472UbKYuL/rvA==
-Date:   Fri, 19 May 2023 23:06:00 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Cai Huoqing <cai.huoqing@linux.dev>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v10 0/4] dmaengine: dw-edma: Add support for native HDMA
-Message-ID: <ZGezgLc63PsqfWBs@matsya>
-References: <20230517030115.21093-1-cai.huoqing@linux.dev>
- <ZGddCpjX8n1ML21j@matsya>
- <ZGd7/FGJVi6lDk8F@chq-MS-7D45>
+        Fri, 19 May 2023 13:38:20 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 059D5C7
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 10:38:19 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-510d6e1f1b2so5997971a12.3
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 10:38:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1684517897; x=1687109897;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2ucWVdofg5ar9Sy7957FpoXFp27vLdLXG53ARFC9CGo=;
+        b=ednmVM8rJlHSxfzo9l6pu1Mem8mdgWjnKJHswoZ2OZGw7qtqP0Xq/0tpuGdr1uXHnn
+         skHkC+vIxObBmeOB6fR0duwzSXz/tUoyVweBu6kZdWiDIcBm1knjqCc0lVqp3o/RzUrH
+         7NrCPhwg1Zj9LHaLbbhs+f87dfOy5TBGItUDM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684517897; x=1687109897;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2ucWVdofg5ar9Sy7957FpoXFp27vLdLXG53ARFC9CGo=;
+        b=hb3yJsFKCMiBPL0moyyZ8XsVgG8eke/9CYPEoCbCB3u7sW1OYSNv/qkZ5KEAaxk2nk
+         Ux+SngcGj1O6pxgAG2IzMPlzZiZzycmTN8uWqNycC3BcSdjROoKtzS1lxHnq3Hgn4mRN
+         YlUstKEWCpQRFU0jf9lgBz9qh5RxRijHhO2WH/0UMyFm27NP3yQ2bjRq6spkdEleZun2
+         k2J4FM18CZjW6SYg+OmAVpfmgMgWu02gzni39eX+a6pq7Bg/kxUBPzoH1D7Nj2LAaAvk
+         klDenzaWiUmHYiTObkkMQ75ht4mMp5tUYimd64ImJyt0aaF22IBxpA3YnK0eLaU1nXiM
+         Ys8Q==
+X-Gm-Message-State: AC+VfDxSATQsH7R9dI6dOZ/4wbEorDyUru7dE7+d2+OWTGeEvp9UIWz3
+        sk1Risrw/XddxC8Abi6hAnsxDB0zucClm1yVrrP2gAhy
+X-Google-Smtp-Source: ACHHUZ5kXWkr33h7+bUv51AyYR/LFH0/rkaFmyv6+fJU1NaoDVGSgGkm6RnVYwlddh2klc0KL8Xxdg==
+X-Received: by 2002:aa7:da0a:0:b0:510:deb5:ff4f with SMTP id r10-20020aa7da0a000000b00510deb5ff4fmr2254739eds.35.1684517897446;
+        Fri, 19 May 2023 10:38:17 -0700 (PDT)
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com. [209.85.218.50])
+        by smtp.gmail.com with ESMTPSA id b20-20020a056402139400b00508804f3b1dsm1870793edv.57.2023.05.19.10.38.16
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 May 2023 10:38:17 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-965ab8ed1fcso648227666b.2
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 10:38:16 -0700 (PDT)
+X-Received: by 2002:a17:906:db0d:b0:94f:1a23:2f1b with SMTP id
+ xj13-20020a170906db0d00b0094f1a232f1bmr2341051ejb.24.1684517896563; Fri, 19
+ May 2023 10:38:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZGd7/FGJVi6lDk8F@chq-MS-7D45>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230519074047.1739879-1-dhowells@redhat.com> <20230519074047.1739879-4-dhowells@redhat.com>
+ <CAHk-=whX+mAESz01NJZssoLMsgEpFjx7LDLO1_uW1qaDY2Jidw@mail.gmail.com> <1845768.1684514823@warthog.procyon.org.uk>
+In-Reply-To: <1845768.1684514823@warthog.procyon.org.uk>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 19 May 2023 10:37:59 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjDq5_wLWrapzFiJ3ZNn6aGFWeMJpAj5q+4z-Ok8DD9dA@mail.gmail.com>
+Message-ID: <CAHk-=wjDq5_wLWrapzFiJ3ZNn6aGFWeMJpAj5q+4z-Ok8DD9dA@mail.gmail.com>
+Subject: Re: [PATCH v20 03/32] splice: Make direct_read_splice() limit to eof
+ where appropriate
+To:     David Howells <dhowells@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Christoph Hellwig <hch@lst.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19-05-23, 21:39, Cai Huoqing wrote:
-> On 19 5月 23 16:57:06, Vinod Koul wrote:
-> > On 17-05-23, 11:01, Cai Huoqing wrote:
-> > > Add support for HDMA NATIVE, as long the IP design has set
-> > > the compatible register map parameter-HDMA_NATIVE,
-> > > which allows compatibility for native HDMA register configuration.
-> > > 
-> > > The HDMA Hyper-DMA IP is an enhancement of the eDMA embedded-DMA IP.
-> > > And the native HDMA registers are different from eDMA,
-> > > so this patch add support for HDMA NATIVE mode.
-> > > 
-> > > HDMA write and read channels operate independently to maximize
-> > > the performance of the HDMA read and write data transfer over
-> > > the link When you configure the HDMA with multiple read channels,
-> > > then it uses a round robin (RR) arbitration scheme to select
-> > > the next read channel to be serviced.The same applies when
-> > > youhave multiple write channels.
-> > > 
-> > > The native HDMA driver also supports a maximum of 16 independent
-> > > channels (8 write + 8 read), which can run simultaneously.
-> > > Both SAR (Source Address Register) and DAR (Destination Address Register)
-> > > are aligned to byte.
-> > > 
-> > > Cai Huoqing (1):
-> > >   dmaengine: dw-edma: Add support for native HDMA
-> > > 
-> > > Cai huoqing (3):
-> > >   dmaengine: dw-edma: Rename dw_edma_core_ops structure to
-> > >     dw_edma_plat_ops
-> > >   dmaengine: dw-edma: Create a new dw_edma_core_ops structure to
-> > >     abstract controller operation
-> > >   dmaengine: dw-edma: Add HDMA DebugFS support
-> > 
-> > You should have a single name for all these patches :-(
-> 
-> Hi Vinod,
-> 
-> Thanks for your reply.
-> 
-> Do you mean patch[0/4] and patch[3/4] shouldn't have the same name?
+On Fri, May 19, 2023 at 9:48=E2=80=AFAM David Howells <dhowells@redhat.com>=
+ wrote:
+>
+> This is just an optimisation to cut down the amount of bufferage allocate=
+d
 
-It should be Cai Huoqing or Cai huoqing not both :-)
+So the thing is, it's actually very very wrong for some files.
 
-> 
-> Thanks,
-> Cai-
-> > 
-> > > 
-> > > Tested-by: Serge Semin <fancer.lancer@gmail.com>
-> > > 
-> > > v9->v10:
-> > >   1.Update commit log.
-> > >   2.rebase for dma-next
-> > > 
-> > > v9 link:
-> > >   https://lore.kernel.org/lkml/20230413033156.93751-1-cai.huoqing@linux.dev/
-> > > 
-> > >  drivers/dma/dw-edma/Makefile                 |   8 +-
-> > >  drivers/dma/dw-edma/dw-edma-core.c           |  86 ++----
-> > >  drivers/dma/dw-edma/dw-edma-core.h           |  58 ++++
-> > >  drivers/dma/dw-edma/dw-edma-pcie.c           |   4 +-
-> > >  drivers/dma/dw-edma/dw-edma-v0-core.c        |  85 +++++-
-> > >  drivers/dma/dw-edma/dw-edma-v0-core.h        |  14 +-
-> > >  drivers/dma/dw-edma/dw-hdma-v0-core.c        | 296 +++++++++++++++++++
-> > >  drivers/dma/dw-edma/dw-hdma-v0-core.h        |  17 ++
-> > >  drivers/dma/dw-edma/dw-hdma-v0-debugfs.c     | 170 +++++++++++
-> > >  drivers/dma/dw-edma/dw-hdma-v0-debugfs.h     |  22 ++
-> > >  drivers/dma/dw-edma/dw-hdma-v0-regs.h        | 129 ++++++++
-> > >  drivers/pci/controller/dwc/pcie-designware.c |   2 +-
-> > >  include/linux/dma/edma.h                     |   7 +-
-> > >  13 files changed, 807 insertions(+), 91 deletions(-)
-> > >  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.c
-> > >  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.h
-> > >  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.c
-> > >  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-debugfs.h
-> > >  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-regs.h
-> > > 
-> > > -- 
-> > > 2.34.1
-> > 
-> > -- 
-> > ~Vinod
+Now, admittedly, those files have other issues too, and it's a design
+mistake to begin with, but look at a number of files in /proc.
 
--- 
-~Vinod
+In particular, look at the regular files that have a size of '0'. It's
+quite common indeed. Things like
+
+    /proc/cpuinfo
+    /proc/stat
+    ...
+
+you can find a ton of them with
+
+    find /proc -type f -size 0
+
+Is it horribly wrong and bad? Yes. I hate it. It means that some
+really basic user space tools refuse to work on them, and the tools
+are 100% right - this is a kernel misfeature. Trying to do things like
+
+    less -S /proc/cpuinfo
+
+may or may not work depending on your version of 'less', for example,
+because it's entirely reasonable to do something like
+
+    fd =3D open(..);
+    if (!fstat(fd, &st))
+         len =3D st.st_size;
+
+and limit your reads to the size of the file - exactly like your patch does=
+.
+
+Except it fails horribly on those broken /proc files.
+
+I hate it, and I blame myself for the above horror, but it's pretty
+much unfixable. We could make them look like named pipes or something,
+but that's really ugly and probably would break other things anyway.
+And we simply don't know the size ahead of time.
+
+Now, *most* things work, because they just do the whole "read until
+EOF". In fact, my current version of 'less' has no problem at all
+doing the above thing, and gives the "expected" output.
+
+Also, honestly, I really don't think that it's necessarily a good idea
+to splice /proc files, but we actually do have splice wired up to
+these because people asked for it:
+
+    fe33850ff798 ("proc: wire up generic_file_splice_read for iter ops")
+    4bd6a7353ee1 ("sysctl: Convert to iter interfaces")
+
+so I suspect those things do exist.
+
+> I could just drop it and leave it to userspace for now as the filesystem/=
+block
+> layer will stop anyway if it hits the EOF.  Christoph would prefer that I=
+ call
+> direct_splice_read() from generic_file_splice_read() in all O_DIRECT case=
+s, if
+> that's fine with you.
+
+I guess that's fine, and for O_DIRECT itself it might even make sense
+to do the size test. That said, I doubt it matters: if you use
+O_DIRECT on a small file, you only have yourself to blame for doing
+something stupid.
+
+And if it isn't a small file, then who cares about some small EOF-time
+optimization? Nobody.
+
+So I would suggest not doing that optimization at all, because as-is,
+it's either pointless or actively broken.
+
+That said, I would *not* hate some kind of special FMODE_SIZELIMIT
+flag that allows filesystems to opt in to "limit reads to size".
+
+We already have flags like that: FMODE_UNSIGNED_OFFSET and
+'sb->s_maxbytes' are both basically variations on that same theme, and
+having another flag to say "limit reads to i_size" wouldn't be wrong.
+
+It's only wrong when it is done mindlessly with S_ISREG().
+
+             Linus
