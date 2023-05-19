@@ -2,78 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20A32708D29
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 03:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55751708D2C
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 03:07:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230226AbjESBFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 21:05:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51090 "EHLO
+        id S229545AbjESBHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 21:07:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjESBFy (ORCPT
+        with ESMTP id S229691AbjESBHv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 21:05:54 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC81E72;
-        Thu, 18 May 2023 18:05:53 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d2e1a72fcca58-643bb9cdd6eso2898735b3a.1;
-        Thu, 18 May 2023 18:05:53 -0700 (PDT)
+        Thu, 18 May 2023 21:07:51 -0400
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6B8E67
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 18:07:48 -0700 (PDT)
+Received: by mail-qv1-xf2c.google.com with SMTP id 6a1803df08f44-6235aac00edso24391956d6.1
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 18:07:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684458353; x=1687050353;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pSYVMPQ3qj8a/oGdCfP3ChzUdlIw5oHn6OsEYCKEbhE=;
-        b=Rth35TClksUPImcNts0Hu3FlSVSE3DyrAny65QP0/qp22dd+jsjhO90EsgDrwiesgD
-         FmCMizTGgTRLzipMPmH5vaVxREr9rbehnvQqrO1vFJPzozJcTSC/AosoPU2SaBIypSVP
-         iFYTOSeE1LzAYZUVvg2MviUDaCX6mypvAWOzN6+WTJvW2UjBn1wX1JesMrEuv1V+6G/K
-         snzG7RnVvCC5xvJqDy+gKX1j/2fKele+VuOlxyFfaMAK5OtDnc0QMFIzQfnEswQspucn
-         h1lNDEZuXBLgsEdIIXLx3GVDjw7N1vlgOfKsM0KsefmXyXwYZaeVSUrAIiaR17twwjX0
-         TOVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684458353; x=1687050353;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1684458467; x=1687050467;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pSYVMPQ3qj8a/oGdCfP3ChzUdlIw5oHn6OsEYCKEbhE=;
-        b=UnEr7RFLwHellrarzPHnojtDSPQRei/NEx4nUICO81FpwGAwN0S2ktME5hnSip8unB
-         ubjo6eQea0v2Oabb6E3AdDmCinlsHfL3d8HllI45PDnSDV1OmY6HT13U4ydK0B7QisNJ
-         NvI6oNfYfTrU8APuTI2bppoD5096/gGUScI6BujI4NxeLysX5kVByN4oaUwGKIzDpjY4
-         JrCrMwd1uqKK7pq787c/50/QeurRlZcN4zDgqOyWlQpj03LoiFnHyRktg5NAbevq55Fb
-         5PQaFToI3qRCNS7mUxEdjMUTA789dfWefpA9o9gYKND2W4emc4RDToVARExP5l70Uziv
-         QvJw==
-X-Gm-Message-State: AC+VfDy6lmZchcTbsu0tN+Z2vBjCOKNZ6+OrVa0+PJxi0/zd4+Qv41zT
-        r4WMNKcPjzyJM2RpncAwuNU=
-X-Google-Smtp-Source: ACHHUZ6Fl3iXdAwbPHQEfCikSntdgoIoCgedUlJPp7xmBcIxxFF6oDDMbiB3KmzcevopG44y7tL8XA==
-X-Received: by 2002:a05:6a20:1586:b0:101:73a9:1683 with SMTP id h6-20020a056a20158600b0010173a91683mr339836pzj.33.1684458352611;
-        Thu, 18 May 2023 18:05:52 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:36bb:8bd6:552:c349])
-        by smtp.gmail.com with ESMTPSA id c23-20020aa78817000000b0064d2d0ff8d5sm445306pfo.163.2023.05.18.18.05.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 18:05:51 -0700 (PDT)
-Date:   Thu, 18 May 2023 18:05:48 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Sakari Ailus <sakari.ailus@iki.fi>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Hugues Fruchet <hugues.fruchet@st.com>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] media: c8sectpfe: convert to gpio descriptors
-Message-ID: <ZGbLbOHYxq+bPzb7@google.com>
-References: <20230130131003.668888-1-arnd@kernel.org>
- <ZGUbDFssUwXKTiDt@valkosipuli.retiisi.eu>
- <ZGUnBfqBLWkD7ZgD@google.com>
- <ZGUqWZoxXRGGJ9Kv@valkosipuli.retiisi.eu>
+        bh=ShpVRoLx2yuZQEh5Oa8VlRwMbFO5/1uX0O7lleIq/ac=;
+        b=cocTURKwNfIosKU3hcLYkK4xIp3+2QXu88CJ3E8cWB9Uh/PVZwmzB08Q/OkRfalPDq
+         LGmHCntuptqdgbdp6pbiZRzBndUrNjd0fBkzqRWItWlSYmB0dWjvUcQW/KhARoegtqH3
+         pqEta1v9ZHiAAR1ID41v+FuR/Rra77fCQi0PBHpLp1ohFwMKv53HVtGyhCUaZQB4KQ2X
+         o/3Q5das7C2xufnwqZJzQGFh3Yeez2h8NXxLz/v1F0AewGSov0erw9uF/Db/5LBZnOqt
+         zK+Ebp6/ymfuEr3JwYxd3RIKvViMJKrAAHRn+wfS1A1Mcn3/4ZYuJ/Yh6JEBaE28ibL4
+         Jtew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684458467; x=1687050467;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ShpVRoLx2yuZQEh5Oa8VlRwMbFO5/1uX0O7lleIq/ac=;
+        b=WlbUX1ydcGCOzvN40BaP4iMP7cyD/QfIEfos2RtwvotnDr7qaRbe/2/daLd/Qq+oJD
+         TkqGq8rpZlTzsRcUaHsN3shPeja5TL8afacjR5pUePPW6oHxYz+Gc6sQvPiY4GlDmduh
+         +AawgkclSxxGfCj5tFmQhHU4OgE4tRDJind5VifsS91s4Huyqu4krnzt47pau0s5ihLe
+         iXn2SMymFRZ1QaAxhZL5l0nFwApGb7JdNGZPvQuV75hL6SUcnt5Y+v3aoY+8YcTnkFXe
+         5mAh1/dOcMfh+icvRkBSyVqr2wEWkDU6h2PACeTcdgfyGymy9JfcXyCYmBp+YZ7p73V8
+         Rx0Q==
+X-Gm-Message-State: AC+VfDxjBT7BCLX8b9smCZhZW+2LmzJbWrodVAr2teUzt6PGi+fmmGmN
+        LIf2lSHQUFq40+xYDExQRZlvKX6K51JXPzwDaulsxA==
+X-Google-Smtp-Source: ACHHUZ6hbJVg8k+ym3Y6f8JpHjSIABCLMheeU/pZuiiIfxNOllV4Xy5gjeJ5oiMqS1HX2M5YJI+Iy2L/NxfbfD2cMlE=
+X-Received: by 2002:ad4:5ecc:0:b0:623:7707:5650 with SMTP id
+ jm12-20020ad45ecc000000b0062377075650mr1894478qvb.15.1684458467209; Thu, 18
+ May 2023 18:07:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZGUqWZoxXRGGJ9Kv@valkosipuli.retiisi.eu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <ZD12htq6dWg0tg2e@google.com> <1ed06a62-05a1-ebe6-7ac4-5b35ba272d13@redhat.com>
+ <ZD2bBB00eKP6F8kz@google.com> <9efef45f-e9f4-18d1-0120-f0fc0961761c@redhat.com>
+ <ZD86E23gyzF6Q7AF@google.com> <5869f50f-0858-ab0c-9049-4345abcf5641@redhat.com>
+ <ZEM5Zq8oo+xnApW9@google.com> <CAGtprH_+bF4VZg2ps6CM8vjJVvShsvSGAvaLfTedts4cKqhSUw@mail.gmail.com>
+ <ZFwPBqGeW+d9xMEs@google.com> <CAGtprH8jUAM015h4eEhbdAv6Oq2UNbX3P5Z-VCVbcrHtnATJwQ@mail.gmail.com>
+ <ZF1Oh5qrgcNNZ7Jc@google.com>
+In-Reply-To: <ZF1Oh5qrgcNNZ7Jc@google.com>
+From:   Vishal Annapurve <vannapurve@google.com>
+Date:   Thu, 18 May 2023 18:07:36 -0700
+Message-ID: <CAGtprH_H1afUJ2cUnznWqYLTZVuEcOogRwXF6uBAeHbLMQsrsQ@mail.gmail.com>
+Subject: Re: Rename restrictedmem => guardedmem? (was: Re: [PATCH v10 0/9]
+ KVM: mm: fd-based approach for supporting KVM)
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        tabba@google.com, Michael Roth <michael.roth@amd.com>,
+        wei.w.wang@intel.com, Mike Rapoport <rppt@kernel.org>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Ackerley Tng <ackerleytng@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>,
+        Christian Brauner <brauner@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,42 +93,213 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 10:26:17PM +0300, Sakari Ailus wrote:
-> Hi Dmitry,
-> 
-> On Wed, May 17, 2023 at 12:12:05PM -0700, Dmitry Torokhov wrote:
-> > On Wed, May 17, 2023 at 09:21:00PM +0300, Sakari Ailus wrote:
-> > > Hi Arnd,
-> > > 
-> > > On Mon, Jan 30, 2023 at 02:09:47PM +0100, Arnd Bergmann wrote:
-> > > > From: Arnd Bergmann <arnd@arndb.de>
-> > > > 
-> > > > The gpio usage in the function is fairly straightforward,
-> > > > but the normal gpiod_get() interface cannot be used here
-> > > > since the gpio is referenced by a child node of the device.
-> > > > 
-> > > > Using devm_fwnode_gpiod_get_index() is the best alternative
-> > > > here.
-> > > > 
-> > > > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> > > 
-> > > I've picked
-> > > <URL:https://patchwork.linuxtv.org/project/linux-media/patch/20230130131003.668888-1-arnd@kernel.org/>
-> > > instead. I hope that's fine. Also cc Dmitry.
-> > 
-> > What do you mean "instead"? This is the exact patch that started this
-> > thread, and it is broken (uses wrong name of the GPIO and wrong polarity).
-> > 
-> > I'd much rather you picked up
-> > https://lore.kernel.org/all/Y92VLGLQJZ%2FUDRx1@google.com/
-> > 
-> > Thanks.
-> 
-> Ah, the URL in my e-mail was wrong. I have
-> <URL:https://patchwork.linuxtv.org/project/linux-media/patch/Y92VLGLQJZ/UDRx1@google.com/>,
-> i.e. the same patch.
+On Thu, May 11, 2023 at 1:22=E2=80=AFPM Sean Christopherson <seanjc@google.=
+com> wrote:
+> ...
+> Ah, you're effectively suggesting a hybrid model where the file is the si=
+ngle
+> source of truth for what's private versus shared, ad KVM gets pfns throug=
+h
+> direct communication with the backing store via the file descriptor, but =
+userspace
+> can still control things via mmap() and friends.
+>
+> If you're not suggesting a backdoor, i.e. KVM still gets private pfns via=
+ hvas,
+> then we're back at Kirill's series, because otherwise there's no easy way=
+ for KVM
+> to retrieve the pfn.
+>
 
-Ah, I see, thank you.
+Yeah, I was hinting towards using the backdoor, where KVM still gets
+private pfns via HVAs.
 
--- 
-Dmitry
+> A form of this was also discussed, though I don't know how much of the di=
+scussion
+> happened on-list.
+>
+> KVM actually does something like this for s390's Ultravisor (UV), which i=
+s quite
+> a bit like TDX (UV is a trusted intermediary) except that it handles faul=
+ts much,
+> much more gracefully.  Specifically, when the untrusted host attempts to =
+access a
+> secure page, a fault occurs and the kernel responds by telling UV to expo=
+rt the
+> page.  The fault is gracefully handled even even for kernel accesses
+> (see do_secure_storage_access()).  The kernel does BUG() if the export fa=
+ils when
+> handling fault from kernel context, but my understanding is that export c=
+an fail
+> if and only if there's a fatal error elsewhere, i.e. the UV essentialy _e=
+nsures_
+> success, and goes straight to BUG()/panic() if something goes wrong.
+>
+> On the guest side, accesses to exported (swapped) secure pages generate i=
+ntercepts
+> and KVM faults in the page.  To do so, KVM freezes the page/folio refcoun=
+t, tells
+> the UV to import the page, and then unfreezes the page/folio.  But very c=
+rucially,
+> when _anything_ in the untrusted host attempts to access the secure page,=
+ the
+> above fault handling for untrusted host accesses kicks in.  In other word=
+s, the
+> guest can cause thrash, but can't bring down the host.
+>
+
+Yeah, this is very similar to what I was trying to propose. Except in
+this case, the backing store i.e. guest_mem will have to let the fault
+be unhandled for untrusted host accesses to private ranges of
+guest_mem file.
+
+> TDX on the other hand silently poisons memory, i.e. doesn't even generate=
+ a
+> synchronous fault.  Thus the kernel needs to be 100% perfect on preventin=
+g _any_
+> accesses to private memory from the host, and doing that is non-trivial a=
+nd
+> invasive.
+>
+> SNP does synchronously fault, but the automatically converting in the #PF=
+ handler
+> got NAK'd[*] for good reasons, e.g. SNP doesn't guarantee conversion succ=
+ess as the
+> guest can trigger concurrent RMP modifications.  So the end result ends u=
+p being
+> the same as TDX, host accesses need to be completely prevented.
+>
+> Again, this is all doable, but costly.  And IMO, provides very little val=
+ue.
+
+With this hybrid approach with the backdoor access to pfns from KVM,
+do we see a scenario where host can bypass the guest_mem restrictions
+and still be able to access the private ranges using HVA ranges? One
+possibility is that these pages are mapped in the IOMMU (when they are
+shared) and then get converted to private without getting unmapped
+from IOMMU. Maybe KVM can disallow converting the ranges which are
+pinned for DMA (not sure if there is a way to do that).
+
+Few additional benefits here:
+1) Possibly handle the pkvm usecase in this series without the need
+for additional modifications.
+2) Handling UPM for normal VMs possibly could get simpler as this
+hybrid approach can allow preserving the contents across conversions.
+
+>
+> Allowing things like mbind() is nice-to-have at best, as implementing fbi=
+nd()
+> isn't straightforward and arguably valuable to have irrespective of this
+> discussion, e.g. to allow userspace to say "use this policy regardless of=
+ what
+> process maps the file".
+>
+
+Agreed, having mbind supported is not a significant gain given the cost her=
+e.
+
+> Using a common memory pool (same physical page is used for both shared an=
+d private)
+> is a similar story.  There are plenty of existing controls to limit users=
+pace/guest
+> memory usage and to deal with OOM scenarios, so barring egregious host ac=
+counting
+> and/or limiting bugs, which would affect _all_ VM types, the worst case s=
+cenario
+> is that a VM is terminated because host userspace is buggy.  On the slip =
+side, using
+> a common pool brings complexity into the kernel, as backing stores would =
+need to
+> be taught to deny access to a subset of pages in their mappings, and in m=
+ultiple
+> paths, e.g. faults, read()/write() and similar, page migration, swap, etc=
+.
+
+In this case the backing store that needs to be modified would just be
+guest_mem though.
+
+>
+> [*] https://lore.kernel.org/linux-mm/8a244d34-2b10-4cf8-894a-1bf12b59cf92=
+@www.fastmail.com
+>
+> > > Issues that led to us abandoning the "map with special !Present PTEs"=
+ approach:
+> > >
+> > >  - Using page tables, i.e. hardware defined structures, to track gfn=
+=3D>pfn mappings
+> > >    is inefficient and inflexible compared to software defined structu=
+res, especially
+> > >    for the expected use cases for CoCo guests.
+> > >
+> > >  - The kernel wouldn't _easily_ be able to enforce a 1:1 page:guest a=
+ssociation,
+> > >    let alone a 1:1 pfn:gfn mapping.
+> >
+> > Maybe KVM can ensure that each page of the guest_mem file is
+> > associated with a single memslot.
+>
+> This is a hard NAK.  Guest physical address space is guaranteed to have h=
+oles
+> and/or be discontiguous, for the PCI hole at the top of lower memory.  Al=
+lowing
+> only a single binding would prevent userspace from backing all (or large =
+chunks)
+> of guest memory with a single file.
+>
+
+Poor choice of words from my side. I meant to suggest that KVM can
+ensure that ANY page of the guest_mem file is associated with at max
+one memslot.
+
+> ...
+> That'd work for the hybrid model (fd backdoor with pseudo mmap() support)=
+, but
+> not for a generic VMA-based implementation.  If the file isn't the single=
+ source
+> of truth, then forcing all mappings to go away simply can't work.
+>
+> > > #3 is also a limiter.  E.g. if a guest is primarly backed by 1GiB pag=
+es, keeping
+> > > the 1GiB mapping is desirable if the guest converts a few KiB of memo=
+ry to shared,
+> > > and possibly even if the guest converts a few MiB of memory.
+> >
+> > This caveat maybe can be lived with as shared ranges most likely will
+> > not be backed by 1G pages anyways, possibly causing IO performance to
+> > get hit. This possibly needs more discussion about conversion
+> > granularity used by guests.
+>
+> Yes, it's not the end of the world.  My point is that separating shared a=
+nd private
+> memory provides more flexibility.  Maybe that flexibility never ends up b=
+eing
+> super important, but at the same time we shouldn't willingly paint oursel=
+ves into
+> a corner.
+
+There are some performance implications here with the split approach.
+
+This flexibility is actually coming with the cost of managing double
+allocation effectively. As the granularity of mappings increases for
+the shared memory, it gets difficult to cap the amount of double
+allocation. So effectively it comes down to always using smaller
+granularity for shared memory and also the private memory for
+converted ranges. In general the performance requirements would always
+try to push for higher mapping granularities depending on the scale of
+usage.
+
+In general private memory (and also the shared memory on respective
+conversions) will always need to be hole punched to ensure that the
+double allocation won't happen. And so, even if this is something for
+the future, using hugetlbfs pages for backing private memory with the
+split model effectively makes it impossible to cap the double
+allocation. I am not sure if the 1G pages can be handled better with
+the hybrid model but maybe it's worth checking.
+
+Split shared/private mem approach also increases the uncertainties
+around memory management in general where the same amount of memory
+which was available earlier is first freed to the system and then
+allocated back from the system. .e.g. Even if hugepages were around
+when private memory was initially allocated, further allocations keep
+increasing the possibilities of not being able to use a huge page to
+back the memory even if the whole huge page is private/shared.
