@@ -2,110 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC9D5709F89
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 21:04:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7235D709F84
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 21:04:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229990AbjESTEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 15:04:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49862 "EHLO
+        id S229504AbjESTD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 15:03:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229661AbjESTEG (ORCPT
+        with ESMTP id S229661AbjESTD5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 15:04:06 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2188E43;
-        Fri, 19 May 2023 12:04:05 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id 98e67ed59e1d1-25332422531so921837a91.0;
-        Fri, 19 May 2023 12:04:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684523045; x=1687115045;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YfXrnsFbDXzdjb7qVOuxa9oqHZXkdudlA04RuxH6kHU=;
-        b=Obzgb1d1YO8Ma5ayrIqbqB+itqTi4kP0eZaBh1HA1gMENpv9Lt6Ud3XKkHHNEpdfuK
-         5gjzq4aFIcrNj0dRIxiAZFE0Em8BbhFgOxsQsndjCNv5a3aSklxq9KWVFKLw88hmGSFL
-         4J+kWhvONNHVrEjlaDdxGA2xbaCmVD/T7myymgBqjmRnAnFrTjby8QQOPyb0bfLkZvWJ
-         IyTUgOzV7VIGo3A4F34PhycAl2Dq1YLrTt5YhmkrBKfq8fSbtGu+U5WuonRBIap5ZqNA
-         b2Nrcp9fkTn3SCZEcEjpyyFBCAQ/+Ff4OJq4g5azZu5TgzFJ0QNkNt1BGEA7JPrggQNG
-         1zyQ==
+        Fri, 19 May 2023 15:03:57 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567DD115
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 12:03:56 -0700 (PDT)
+Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com [209.85.128.198])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 4D1153F2EC
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 19:03:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1684523033;
+        bh=XcHofI6kNEF4j/Kf2RXJBAVOXSkxkL55tOyPYK5vuTY=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=k8dvhuEZWtWXo93agEdgu9NtR41h5sYfqBdrHs61WuVPjiYnJ2zAFKTsaRAHLrPR1
+         tkiM8sAZ/JejfBD+BJ0Jp9yERhSuUo6BaJmkzBjDfkobBCJWmsTvEQ3NTfIJksQzfM
+         DUX9fsWKjtisgUjaFaMoV8rNYzZv5uySq2tyLj2sgQ4+hxZIBVguUod1vnhIN/Qimw
+         EevSYrGcTisnmkFZqpZVWkv/iF+2QUt2YEVlOJn+pNETAAnqH/DAhgRkkrSkimHwuX
+         hPugQwJ3tMkD9QHFCAzxwLMtKGy8lgxzMVBXPONCQ55NTYh7BykfAX8jqi4uO945dn
+         T9MnsQ1Wr1QqQ==
+Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-560ee0df572so58582877b3.0
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 12:03:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684523045; x=1687115045;
+        d=1e100.net; s=20221208; t=1684523032; x=1687115032;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=YfXrnsFbDXzdjb7qVOuxa9oqHZXkdudlA04RuxH6kHU=;
-        b=h8QufKdw4gLic3dtjjMB30hwLq8F/7CFVv4061JNDNaQy1wZCFNFht09hXsT8xTnr8
-         wdqGyhRYZkWAgQ9GspyZquKbEMyiGJH8PEgVTO7rSu8/3GiZKI1g6sPH3kHJ16EykUQg
-         caIhYUlxhrHgEgyTJLe2OdX6xKvrLkhSiByZxDcpom4hrj1tvF8cGZorG+bwyABZrg0a
-         quOxUc7l7X3CCR83AllZpqPdhMn9bR9m89+C43H99A95v3iKDcHA8T31Rn9ARZvdbtwe
-         2KsvcnR6sQHrA8kUls0CKe+NiJGCg+w8YQYQ8IGBxnYNkSlMKFc97b+UeUFjXLn4l46d
-         Q7/A==
-X-Gm-Message-State: AC+VfDzeciNBYTjZSx12lpGjh8zrBxiFwwx6yGxgpDwS4sgsKzW8VvEb
-        GZlcvsOTlL8AcaoozJ25n9sEqBDDxiJdciI4YMc=
-X-Google-Smtp-Source: ACHHUZ7/g9smq23s1GWkIcfuQWHgi04Ume0EYORX2B+tWQFnpHrqjHZUkp5I4/ogpznh/+RN3lo4ylL5K/KA/cpvAnI=
-X-Received: by 2002:a17:90a:c692:b0:24d:f113:2e2c with SMTP id
- n18-20020a17090ac69200b0024df1132e2cmr3661479pjt.16.1684523045036; Fri, 19
- May 2023 12:04:05 -0700 (PDT)
+        bh=XcHofI6kNEF4j/Kf2RXJBAVOXSkxkL55tOyPYK5vuTY=;
+        b=aIKKjMvf2OFSLy4HurKYRog0lmkuvOtD4JYf00vLYDs0wZZtWBR5OpaDG7xkMM0PQq
+         4CopDY0XuHqsPfuxe6198BZOTVJzMYEMIWLqyQ4P0OMiJR9VkRdk+ef0BqjPVIWc9Z6G
+         n/YEJeNtMNwMIInlcrn4pFgIPNn5AHKLdOsGYubAdnGDFWtacJHimVFVw77pGcnLcXA0
+         KO06jd4SlwtKbQfQ9MASie92Ar4YLMWu/swL5mfX+UYdFawvRruHrCGoUcTTNCCPc6WR
+         M+B9DMsarMD8Zwvqk4AUY+CBk6uLFEF1M5KVoNa00SfO85N4NbdhvRlvBnWhgLnaOi8v
+         Fiuw==
+X-Gm-Message-State: AC+VfDzIOF/K3YhXIAwhCTbHMZbbL9FkHzFj6yL8h4c2/axxIUk2nvfs
+        NJELHtDygd6TaUQTlZ+xpoBfmh2WtwUvtulkkSdjf1X6TH9vnW3bxzOQEwwWK2vUOgv2IUnL2ib
+        RUBnd3r3zfW5Amv49KISwEc6EvIC/ypICZgFVtGC1uaaDnKiPUIvA2QEklJmP5Ubo0A==
+X-Received: by 2002:a81:a50b:0:b0:562:7f3:beec with SMTP id u11-20020a81a50b000000b0056207f3beecmr3218655ywg.41.1684523032189;
+        Fri, 19 May 2023 12:03:52 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ75LggaPKvfmQxpqMoi8YVwv8zfguEte4G59jkEryMI221oD1iZsnPYCPelkPJYXY/CAjTOweLS3CGjCW/7JoE=
+X-Received: by 2002:a81:a50b:0:b0:562:7f3:beec with SMTP id
+ u11-20020a81a50b000000b0056207f3beecmr3218633ywg.41.1684523031870; Fri, 19
+ May 2023 12:03:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230513074339.266879-1-mmyangfl@gmail.com> <20230513074339.266879-3-mmyangfl@gmail.com>
- <ZGc2m5dJh79y3pxO@gondor.apana.org.au>
-In-Reply-To: <ZGc2m5dJh79y3pxO@gondor.apana.org.au>
-From:   Yangfl <mmyangfl@gmail.com>
-Date:   Sat, 20 May 2023 03:03:27 +0800
-Message-ID: <CAAXyoMM7WisnMKTHrfx0WdMY9Xa492caaeCNrjKOdMsS0QBXhA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] crypto: hisilicon/advca - Add SHA support
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     linux-crypto@vger.kernel.org, Weili Qian <qianweili@huawei.com>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        linux-kernel@vger.kernel.org
+References: <20230404122652.275005-1-aleksandr.mikhalitsyn@canonical.com>
+ <20230404122652.275005-3-aleksandr.mikhalitsyn@canonical.com> <ZGe9I+S78pQ/RPs7@google.com>
+In-Reply-To: <ZGe9I+S78pQ/RPs7@google.com>
+From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Date:   Fri, 19 May 2023 21:03:40 +0200
+Message-ID: <CAEivzxcx3yCXO_Hk1_xgWZgkHrTmZNNXVBU2ox2Y=vVY_vnG-g@mail.gmail.com>
+Subject: Re: [PATCH 2/2] KVM: SVM: add some info prints to SEV init
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     pbonzini@redhat.com,
+        =?UTF-8?Q?St=C3=A9phane_Graber?= <stgraber@ubuntu.com>,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Herbert Xu <herbert@gondor.apana.org.au> =E4=BA=8E2023=E5=B9=B45=E6=9C=8819=
-=E6=97=A5=E5=91=A8=E4=BA=94 16:43=E5=86=99=E9=81=93=EF=BC=9A
+On Fri, May 19, 2023 at 8:17=E2=80=AFPM Sean Christopherson <seanjc@google.=
+com> wrote:
 >
-> On Sat, May 13, 2023 at 03:43:22PM +0800, David Yang wrote:
-> >
-> > +static int hica_sha_export(const struct hica_sha_priv *priv, void *out=
-,
-> > +                        unsigned int digestsize)
-> > +{
-> > +     if (hica_sha_wait(priv, SHA_RECORD_READY))
-> > +             return -ETIMEDOUT;
-> > +
-> > +     for (unsigned int i =3D 0; i < digestsize; i +=3D sizeof(u32))
-> > +             *(u32 *) (out + i) =3D
-> > +                     be32_to_cpu(readl_relaxed(priv->base + SHA_OUT0 +=
- i));
-> > +
-> > +     return 0;
-> > +}
+> On Tue, Apr 04, 2023, Alexander Miqqqqkhalitsyn wrote:
+> > Let's add a few pr_info's to sev_hardware_setup to make SEV/SEV-ES
+> > enabling a little bit handier for users. Right now it's too hard
+> > to guess why SEV/SEV-ES are failing to enable.
 >
-> Can you please explain what this is doing? Is this exporting
-> the finalized hash, or the intermediate state?
+> Hmm, I'm somewhat torn, but I'm against taking this patch, at least not i=
+n its
+> current form.  I appreciated that determining why KVM isn't enabling SEV/=
+SEV-ES
+> is annoying, but there's very little actionable information provided here=
+ that
+> isn't also super obvious.  I also don't want to start us down a slippery =
+slope
+> of printing out messages every time KVM doesn't enable a feature.
 >
-> If it's exporting the intermediate state, why aren't you implementing
-> an import function?
+> If someone tries to enable SEV and doesn't check that their CPU supports =
+SEV,
+> then IMO that's on them.  Ditto for SEV-ES.
 >
-> Thanks,
-> --
-> Email: Herbert Xu <herbert@gondor.apana.org.au>
-> Home Page: http://gondor.apana.org.au/~herbert/
-> PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+> The NPT thing is mildly interesting, but practically speaking I don't exp=
+ect that
+> to ever be a hindrace for generic enabling.  Ditto for MMIO caching.
+>
+> The decode assists check is (a) completely unactionable for the vast, vas=
+t majority
+> of users and (b) is a WARN_ON_ONCE() condition.
+>
+> The ASID stuff is by far the most interesting, but that's also quite inte=
+resting
+> for when SEV and SEV-ES _are_ fully supported.
+>
+> So if we want to provide the user more info, I'd prefer to do something l=
+ike the
+> below, which I think would be more helpful and would avoid my slippery sl=
+ope
+> concerns.
 
-The intermediate state. Importing is done by hica_sha_init, since if I
-got it right, crypto hash api are required to handle multiple requests
-simultaneously, thus there will be no sense to set ctrl and state
-separately.
+Dear Sean,
+
+Thanks for looking into this!
+
+I agree with your points, let's go that way and print only ASID stuff
+as it can be not obvious to the end-user.
+
+I'm ready to prepare -v2 if you don't mind.
+
+Kind regards,
+Alex
+
+>
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index c25aeb550cd9..eb4c6e3812d9 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -2216,7 +2216,6 @@ void __init sev_hardware_setup(void)
+>         if (misc_cg_set_capacity(MISC_CG_RES_SEV, sev_asid_count))
+>                 goto out;
+>
+> -       pr_info("SEV supported: %u ASIDs\n", sev_asid_count);
+>         sev_supported =3D true;
+>
+>         /* SEV-ES support requested? */
+> @@ -2243,11 +2242,16 @@ void __init sev_hardware_setup(void)
+>         sev_es_asid_count =3D min_sev_asid - 1;
+>         if (misc_cg_set_capacity(MISC_CG_RES_SEV_ES, sev_es_asid_count))
+>                 goto out;
+> -
+> -       pr_info("SEV-ES supported: %u ASIDs\n", sev_es_asid_count);
+>         sev_es_supported =3D true;
+>
+>  out:
+> +       if (boot_cpu_has(X86_FEATURE_SEV))
+> +               pr_info("SEV %s (ASIDs %u - %u)\n",
+> +                       sev_supported ? "enabled" : "disabled", ...);
+> +       if (boot_cpu_has(X86_FEATURE_SEV_ES))
+> +               pr_info("SEV-ES %s (ASIDs %u - %u)\n",
+> +                       sev_es_supported ? "enabled" : "disabled", ...);
+> +
+>         sev_enabled =3D sev_supported;
+>         sev_es_enabled =3D sev_es_supported;
+>  #endif
