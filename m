@@ -2,144 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7A06709817
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 15:18:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 438B0709813
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 15:17:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231297AbjESNSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 09:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45624 "EHLO
+        id S231416AbjESNRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 09:17:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231536AbjESNRx (ORCPT
+        with ESMTP id S229749AbjESNRp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 09:17:53 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE3B318F;
-        Fri, 19 May 2023 06:17:50 -0700 (PDT)
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34JDEUAY006321;
-        Fri, 19 May 2023 13:17:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=ijXvu111ai67ohCScJNa9NqtoJ30FOCHXdeN2lPmtM0=;
- b=GJ/2Q8ZQHCLzjnHwuNkxkxawD1abD4JUEx683+5UHiWKe99kZeohMWrToOxv01g+zlE/
- +MmQ/v+tAGQ5ZWm0Sa6i9FSpSB7GV9MERmXzOyxkTnWDuE2G3hZIypMIDNxrOB0Dpd5U
- kFgqfOHWD61Gg7HViJ+wwYWshdq66uMsAUVvNS8rsnoiwdFMzyEIl+ikvmax/6P1t5+y
- nIH1uLm/oTPsqIcqcL77XA+mMxQfWzz8rT0EplCzAh5Dipg2Y6C+mYMFUHExPVypzsJv
- iHmRoSbSY1g47yv2m7uy5X7zEFPtUeZ9GSxWaiAKiDcIcZl8cPjyqbzSAkNnkujoKSw8 HA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qp9tm83ve-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 May 2023 13:17:35 +0000
-Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34JDEWH6006350;
-        Fri, 19 May 2023 13:17:34 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qp9tm83u6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 May 2023 13:17:34 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34J9cqFS025053;
-        Fri, 19 May 2023 13:17:32 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3qj264tmtb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 May 2023 13:17:32 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34JDHUde53870888
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 19 May 2023 13:17:30 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 25CA72004E;
-        Fri, 19 May 2023 13:17:30 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 40EFA20040;
-        Fri, 19 May 2023 13:17:29 +0000 (GMT)
-Received: from [9.171.0.172] (unknown [9.171.0.172])
-        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 19 May 2023 13:17:29 +0000 (GMT)
-Message-ID: <6f4d672ba7136f2b01ea9ee69687b16168eddb8d.camel@linux.ibm.com>
-Subject: Re: [PATCH v4 05/41] counter: add HAS_IOPORT dependencies
-From:   Niklas Schnelle <schnelle@linux.ibm.com>
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-iio@vger.kernel.org
-Date:   Fri, 19 May 2023 15:17:28 +0200
-In-Reply-To: <ZGbQYzXK8InMqkxu@fedora>
-References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
-         <20230516110038.2413224-6-schnelle@linux.ibm.com> <ZGbQYzXK8InMqkxu@fedora>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.1 (3.48.1-1.fc38) 
+        Fri, 19 May 2023 09:17:45 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2118.outbound.protection.outlook.com [40.107.96.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E09C7134;
+        Fri, 19 May 2023 06:17:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eWY4CoUiKInQiJEW1m3jP8FdfMO4v86pzRxB9KOdL2Hv7fdpH1JMLTuAcIDF6JGsPy3Jxc2rQkQe71/RQbxQOi1inDU6TyHgI8Ml9UJJHfICvAR4pmEMFFmqpDraEA1nnXdiaXWgnQt0Evo+xN+xVraDiyjYa0vpCjjjFUzvFX//4qPGjBvwt8ImvLMyKg4e6MC/JbyEAtSvZvpW1XiGMWsXmTsRx90RydrQsdSPaverRtclmvswsKp8v6RkcCA7PP85X0m9IHkZ7KZJdJogmmvThLNTPmTBO30Cm6/KC4+J3tz8uMHpRV29cEwTwWR+3/xjBmOtqXJmpJ6YdM/gNw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uflacbdZQ6gMgM1UqyxZNBLI8r7F5AL2cLmJtFwxV/w=;
+ b=k2al0W6kDL3vR91LycGWWBQQBFxOfy/DA0XEeUm7mWMYl1GFUD+lLfON7Md1H4VVqOGDJg2+DZwZxFI3Gh2elG6PHBSMB2chPmGo6dMNbUlTvLWStB1jRZe8U8KYqx/kHtEKzPb6nz/LVudInog9E7luUEnRhoztLnnr5Edy9FpOL9+gaB8A5rGrg1pGz0we6qBLiSZHaDy6IBWPxOzcAU2PKHIBh2M8qbhIXSfBNzYuUhoWhOdy27NCl8gmkk20gS0/C2Z/y8dBT6oeKtHtwDQ49kSlVX9xfr/qyElOxpryMHYtEXolvY74DHP+/l5kSkJ0TZ/JFAfZc44jEaVFMg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uflacbdZQ6gMgM1UqyxZNBLI8r7F5AL2cLmJtFwxV/w=;
+ b=PkkFWBBVP72He8DRU6UpzFBIPHplFNNvIMiBkCSZvHSIJiiDc5Ie1tPeN98GSahuJAmH+8rLwqidHKgxWA3jmBinOIE7C3pZ8qU2nFYSiot7fuDqtTtFxZC3RNetCwAyVrjnk9AGDLjNH9x/Ahev5MJXNPFqf2IqkC+hNLpw2Jk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by SA1PR13MB5537.namprd13.prod.outlook.com (2603:10b6:806:230::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.17; Fri, 19 May
+ 2023 13:17:41 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6411.021; Fri, 19 May 2023
+ 13:17:41 +0000
+Date:   Fri, 19 May 2023 15:17:34 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Min-Hua Chen <minhuadotchen@gmail.com>
+Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] net: stmmac: compare p->des0 and p->des1 with __le32
+ type values
+Message-ID: <ZGd27iXZnqm/f96r@corigine.com>
+References: <20230519115030.74493-1-minhuadotchen@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230519115030.74493-1-minhuadotchen@gmail.com>
+X-ClientProxiedBy: AS4P189CA0029.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5db::20) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: Zof9Fp_j2zXxj6sECntRpw2dnvs6ntSY
-X-Proofpoint-GUID: DKFPxVQmw6qbh6pizGvz84p3u-eyrFmc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-19_08,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 priorityscore=1501 impostorscore=0 phishscore=0
- adultscore=0 malwarescore=0 spamscore=0 clxscore=1015 bulkscore=0
- mlxscore=0 mlxlogscore=720 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305190110
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SA1PR13MB5537:EE_
+X-MS-Office365-Filtering-Correlation-Id: 788da2f2-4388-4669-8c74-08db586b6cbf
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5h2AdjGM+ORJFZL4RXFe+T84I5eUqWtJ3dVkBmhbBl2/kB9TpGE9TXw10VGoQA8Q+sM9Rbzy1qEsxSpijcDoPLffoYV7A9byC2lqYNeSDERqSIBZT2MIwRmA28Q1Sg1Yh738ufUzDDlImGT+ZCL3X1U9KgIgiFWAvm3uo2ouIhxrx5AqW6Ew/GaNM4PCbqfaVAYt8kpXgw7SvcfBEKxjhgRjkMs4SmSEyI6rX/ABRbKmjiRdw9s9GJjTcr5orE6szu0aoR9e+2KalNJMIhNnKh8omDEWA7sNvmLVMBMCv27ajUSMGQzqcgrZ8kfQNZ4vVOzYxQbv6P1qlHv6OZKgx5+nAatr0KcZXISWlkOIStxilHSS8btqm/wNx5CfKVrf6Yw0RbD+tysEC9GEXe1sM2vXy12tVZHFLfkP/I81M5XBReUtz4/TE0IcwqpBgr1eVXs8hbY+aLsTuQTkuWp0ncNvXx/TQ3HWdXs8ZczSyDJOmh6wsaHQOPA/ecK00gak8f1zUfWogyJBDDT2+iO2DDASV5e32KXqeIJ1J1AE2oE99qOqP4t3DXJulG/6UHpN
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39840400004)(376002)(396003)(366004)(136003)(346002)(451199021)(38100700002)(7416002)(41300700001)(5660300002)(36756003)(8676002)(2906002)(6916009)(8936002)(4744005)(4326008)(316002)(86362001)(66556008)(66476007)(66946007)(966005)(186003)(44832011)(2616005)(6506007)(83380400001)(6512007)(478600001)(6666004)(6486002)(54906003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zKzxmENcOQoCFnwPIIdBFdy5R6ewRTKjT6115sBr2cGhHVGSmfRkMxobkvPV?=
+ =?us-ascii?Q?NncE6lx4bac118K4bBTZGSbT18W+1YZXZj2L/3JMlnmEGe/z5KvH3KZfN/+6?=
+ =?us-ascii?Q?1dsHxUCTZloQseIbE4R5qXebpc0iWF8fttsxsqb9YVvi6SDuoXLSwQP3is63?=
+ =?us-ascii?Q?QTehmdjGYQax2y5f3u40ng4t4cxCfi7NfPGyiUYg5Y1O8CRH/RcrQ5CoTkOV?=
+ =?us-ascii?Q?vhV9Je+0NCep7sT9tiKPx29E7RrI4+lz8T1JyotDJGK+fi4nFzSyhSMWAXgy?=
+ =?us-ascii?Q?SYEguEY8yyeXNHpHcoZkhHIze9znYYvNzDbQMg9FVaYhotEbSDbu1cYny4wQ?=
+ =?us-ascii?Q?3MnZlyxevmzEfRnVglqklHurC7EwjVtHzi0DE6FNxgOagoc4h73lEkT5B4gc?=
+ =?us-ascii?Q?7PZ5YRAagsdgpmYP4jyBSVB5OCDRYRSXrWNz1oTfd4K/nPbWcbEbVWINULku?=
+ =?us-ascii?Q?XTffPJSAgRSd/ruQYGdJ7d7EV4ctvwLdDhO3CrR6QzHn+WgGX52/GDpLZli7?=
+ =?us-ascii?Q?QhkCJtR78+qNHRI5VvIznleTuwswdaON5eAhL1HYF4UREnVaVThOLhoMuhc5?=
+ =?us-ascii?Q?b29MZVVyHOMdQaymdQgqFORPOdDY0cy1C8dOOCsBEkUa+/GSaJcL9iX8aoKm?=
+ =?us-ascii?Q?oy5ykYUAEjT1iqlUowKanXgB5ysDz4OIa2HYgeyAkjH2mOpDmJz6UZTOVr3k?=
+ =?us-ascii?Q?mEHk+85GudFB2DHBS/XgToM8KdpcLcMMaRkPWZlb0u+6pKz9jNt0b4LNR/CX?=
+ =?us-ascii?Q?vErGCNtS7+DkpF0k+7jOpW3oZewflUEPKZ4GQhN5DJC1n0UiwYmlheRBdhJW?=
+ =?us-ascii?Q?MMEKPMfremonmzU9XazzU9oRmW33rWu/G+NDbXlGUpRMK0FumQvCAInve9hm?=
+ =?us-ascii?Q?Mexhat/enuLOawNirEEjb7xm/1wWKphn72CChtyHN1kZ1Q52PTK6LYqTV+r7?=
+ =?us-ascii?Q?1ZgjXQAPXsw9RK3sXrs3G6oxEMpAyxvfn8O4/ZNE89g44gFtcTJy3vJGoXqc?=
+ =?us-ascii?Q?O6QSxdTDh5M4XtPeSvp3NB2XEM5rAnWy/47nzO6WRbfaSgHusN5+Rec0Xm8K?=
+ =?us-ascii?Q?MGRwHjcyhHldvoRvpTx2OXDgVy2z/HpyTtW6djFvM3kN96K1P9XFdymi8QRw?=
+ =?us-ascii?Q?uvoEC/H1zzzJulKnty2XcojhY0d3ZcaO1qzNcTG84+KZyNgc3TUcfTWXULeQ?=
+ =?us-ascii?Q?ckqf+iWRlUxx9oldlZ4Lk5Rlop+SLuNtraUefTZoIRRDzmqKhmBZYXhEpWTY?=
+ =?us-ascii?Q?G81vgqwchLUW9zBJ7DIk5KhVxMo38AiF0omutBgnYagzS1WrpxnqHV9mSnGh?=
+ =?us-ascii?Q?lTOv8vxzUoNXyNvr9Q+EKqT72FNcqtK1jZgaMLP5rSoB9zdi2FQlgGBOxgEN?=
+ =?us-ascii?Q?YzQHNvShNTrWxUGCnSNZQKJKB6+1rgwWqSjzuNeq8sRtybBOulLyaAEJVKdy?=
+ =?us-ascii?Q?GTzCVzrlgevI+NwARSE/ED9BK2yjTYHbdSZ/k9CmAfg2dO/SZHqiJr2AtGWP?=
+ =?us-ascii?Q?WrGaGMARqHcd72qQh8qTiCkEeyGWxoc9DHg6Es5wjQZN5FGz33dij7lzyxch?=
+ =?us-ascii?Q?sS+X5j7FznA6ODGTutaBeD/LQ+0kXgJxhEdiwO19ybmdc2lo/ER/o94OpzgZ?=
+ =?us-ascii?Q?ZcMzIYrr78JMLVi2FA134UFx414H5fFgUZEcIels399d4pwt5AKY7ygFI2Io?=
+ =?us-ascii?Q?F7JeXQ=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 788da2f2-4388-4669-8c74-08db586b6cbf
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2023 13:17:41.3198
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: oPvC3LY9O1YkGxw3ZuM/LehVKdCzpEjxqCgFnrOZmmjArP8pPqXbB5hCg10jPrCA+Q2yCeBGx7MiXjWBZ9GAJEeas6qnsJ5cPMq/Hcz4kHM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR13MB5537
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-05-18 at 21:26 -0400, William Breathitt Gray wrote:
-> On Tue, May 16, 2023 at 01:00:01PM +0200, Niklas Schnelle wrote:
-> > In a future patch HAS_IOPORT=3Dn will result in inb()/outb() and friend=
-s
-> > not being declared. We thus need to add HAS_IOPORT as dependency for
-> > those drivers using them.
-> >=20
-> > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> > Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
->=20
-> Hi Niklas,
->=20
-> The change itself is fine, but please update the description to reflect
-> that this is adding a depends on HAS_IOPORT_MAP rather than HAS_IOPORT,
-> along with the reason why it's needed (i.e. devm_ioport_map() is used).
->=20
-> Thanks,
->=20
-> William Breathitt Gray
->=20
->=20
+On Fri, May 19, 2023 at 07:50:28PM +0800, Min-Hua Chen wrote:
+> [You don't often get email from minhuadotchen@gmail.com. Learn why this is important at https://aka.ms/LearnAboutSenderIdentification ]
+> 
+> Use cpu_to_le32 to convert the constants to __le32 type
+> before comparing them with p->des0 and p->des1 (they are __le32 type)
+> and to fix following sparse warnings:
+> 
+> drivers/net/ethernet/stmicro/stmmac/dwxgmac2_descs.c:110:23: sparse: warning: restricted __le32 degrades to integer
+> drivers/net/ethernet/stmicro/stmmac/dwxgmac2_descs.c:110:50: sparse: warning: restricted __le32 degrades to integer
+> 
+> Reviewed-by: Simon Horman <simon.horman@corigine.com>
+> Signed-off-by: Min-Hua Chen <minhuadotchen@gmail.com>
 
-Right, this clearly needs adjustment. I went with the following commit
-message for v5:
-
-"counter: add HAS_IOPORT_MAP dependency
-
-The 104_QUAD_8 counter driver uses devm_ioport_map() without depending
-on HAS_IOPORT_MAP. This causes compilation to fail on platforms such as
-s390 which do not support I/O port mapping. Add the missing
-HAS_IOPORT_MAP dependency to fix this."
-
-Thanks,
-Niklas
-
-
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
