@@ -2,129 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E56B0709ACA
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 17:01:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8A7F709AD0
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 17:03:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232138AbjESPBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 11:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41866 "EHLO
+        id S232119AbjESPD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 11:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230449AbjESPB3 (ORCPT
+        with ESMTP id S229714AbjESPD1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 11:01:29 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22AEC7;
-        Fri, 19 May 2023 08:01:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=2jTWFuDurAqpzGQEpvpUbzRLzj71zTuSnsPEw86T0dg=; b=Txzbih6tIIhzpwJ7L7uIU45yY5
-        OWYVCIoZHG3+TqKOMTcv/YhOErojdq9GxUi60L9sDnj6lZ2P61vKlifRT54INB5lzKNYlZYvaM6Wi
-        vbwg9FXEBVsxZCtJ/j86nxm5CWgkoYdBkUjZDCsPGC9uvd/ADo+pnlZ7tJWZdbhpg90P1UiH4Xf0V
-        xqYhuk+oU/unDeRRCpDVI/OQwgji22fmplqBaRqOulmQMLdSO1/y6XoNc8iqQXRJyPNHsAGA/PyXx
-        ijaSG60jfT0UcCoLJyfmmeyXQq+XyhfKxBfpk78CkvzLfQKjMPrZzuwH+T+vp4qdbqa++Y2TZzc3q
-        tE9DW1VA==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q01bi-00GY2d-2U;
-        Fri, 19 May 2023 15:01:26 +0000
-Message-ID: <69c787f6-7496-f6dd-2324-6a6079e15754@infradead.org>
-Date:   Fri, 19 May 2023 08:01:25 -0700
+        Fri, 19 May 2023 11:03:27 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494F6121
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 08:03:26 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1684508604;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=33LUfnvcBk5FJKdYxdHSvEMGUXklwU9JErgqA7bqDJ8=;
+        b=BULDGCz+pHDYEffJS7qJztU2tfavRGbe3pvfFYMm3MrdqhTqpfs2TOFO38tn6qcymA+p5C
+        1Ja36SbVAISU5Q+HjRN3EIGwpIwvMroO37uLoUUcEPnWcuKvpVBXravxxVc5hDoFSfc5MK
+        FxVLTA7eSOuXBIQuWqS5KmgFuJfmKSiFritnDKcOab5kmWThqpHCeOsnOPylviJchMZdXm
+        18u1Vwe/HoCV9Jgd7kUMh1voW9YPZpMe1dUXnwO/3FaSDVmJgT5D857yqj9/517FHBV+E9
+        GO2m9z9xJmsYkK8x5Tqx61M3VWNqYlHnIT9XU/O/Kb0X22k4c1zvd7GdgBsKBQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1684508604;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=33LUfnvcBk5FJKdYxdHSvEMGUXklwU9JErgqA7bqDJ8=;
+        b=bEJ0YDdfhjKEuNxmuJSTb7dtJlosFCgokxKWlbJE08kxOa98ydSQ6tJ0YqOmxhj1v/U8xB
+        +S9Q5rry41cK+WCg==
+To:     Adamos Ttofari <attofari@amazon.de>, chang.seok.bae@intel.com
+Cc:     attofari@amazon.de, abusse@amazon.de,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Kyle Huey <me@kylehuey.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] x86: fpu: Keep xfd_state always in sync with
+ MSR_IA32_XFD
+In-Reply-To: <20230519112315.30616-1-attofari@amazon.de>
+References: <87y1ltbtkh.ffs@tglx> <20230519112315.30616-1-attofari@amazon.de>
+Date:   Fri, 19 May 2023 17:03:23 +0200
+Message-ID: <87ilco4b44.ffs@tglx>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] media: frontend.h.rst.exceptions: add more dvb define
- exceptions
-Content-Language: en-US
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Athanasios Oikonomou <athoik@gmail.com>,
-        linux-media@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org
-References: <20230518234735.20289-1-rdunlap@infradead.org>
- <20230519090308.0e53eccd@sal.lan>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230519090308.0e53eccd@sal.lan>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, May 19 2023 at 11:23, Adamos Ttofari wrote:
+> Commit 672365477ae8 ("x86/fpu: Update XFD state where required") and
+> commit 8bf26758ca96 ("x86/fpu: Add XFD state to fpstate") introduced a
+> per CPU variable xfd_state to keep the MSR_IA32_XFD value cached. In
+> order to avoid unnecessary writes to the MSR.
+>
+> On CPU hotplug MSR_IA32_XFD is reset to the init_fpstate.xfd, which
+> wipes out any stale state. But the per CPU cached xfd value is not
+> reset, which brings them out of sync.
+>
+> As a consequence a subsequent xfd_update_state() might fail to update
+> the MSR which in turn can result in XRSTOR raising a #NM in kernel
+> space, which crashes the kernel.
+>
+> To address the issue mentioned, initialize xfd_state together with
+> MSR_IA32_XFD.
+>
+> Fixes: 672365477ae8 ("x86/fpu: Update XFD state where required")
+>
+> Signed-off-by: Adamos Ttofari <attofari@amazon.de>
 
-
-On 5/19/23 01:03, Mauro Carvalho Chehab wrote:
-> Hi Randy,
-> 
-> Em Thu, 18 May 2023 16:47:35 -0700
-> Randy Dunlap <rdunlap@infradead.org> escreveu:
-> 
->> Building documentation reports multiple warnings for undefined DVB
->> frontend labels:
->>
->> Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-11-45'
->> Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-4-15'
->> Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-14-45'
->> Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-7-15'
->> Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-11-45'
->> Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-4-15'
->> Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-14-45'
->> Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-7-15'
-> 
-> Thanks for the patch. FYI, I already merged yesterday a fix identical
-> to your patch:
-> 
-> 	https://git.linuxtv.org/media_stage.git/commit/?id=8bc27fa5d7763d376a992a1638475987ed4807e7
-> 
-> Regards,
-> Mauro
-
-
-Hi Mauro,
-
-Did you post that patch to the linux-media mailing list?
-I searched that list for such a patch before I made the patch.
-
-Thanks.
-
-> 
->>
->> so add those symbols to the ignore list to prevent the build warnings.
->>
->> Fixes: 1825788e2a96 ("media: dvb: add missing DVB-S2X FEC parameter values")
->> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
->> Reported-by: kernel test robot <lkp@intel.com>
->> Link: https://lore.kernel.org/linux-media/202305162245.wtaLIXf3-lkp@intel.com/
->> Cc: Athanasios Oikonomou <athoik@gmail.com>
->> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
->> Cc: linux-media@vger.kernel.org
->> Cc: Jonathan Corbet <corbet@lwn.net>
->> Cc: linux-doc@vger.kernel.org
->> ---
->>  Documentation/userspace-api/media/frontend.h.rst.exceptions |    4 ++++
->>  1 file changed, 4 insertions(+)
->>
->> diff -- a/Documentation/userspace-api/media/frontend.h.rst.exceptions b/Documentation/userspace-api/media/frontend.h.rst.exceptions
->> --- a/Documentation/userspace-api/media/frontend.h.rst.exceptions
->> +++ b/Documentation/userspace-api/media/frontend.h.rst.exceptions
->> @@ -142,6 +142,10 @@ ignore symbol FEC_26_45
->>  ignore symbol FEC_28_45
->>  ignore symbol FEC_32_45
->>  ignore symbol FEC_77_90
->> +ignore symbol FEC_11_45
->> +ignore symbol FEC_4_15
->> +ignore symbol FEC_14_45
->> +ignore symbol FEC_7_15
->>  
->>  ignore symbol TRANSMISSION_MODE_AUTO
->>  ignore symbol TRANSMISSION_MODE_1K
-
--- 
-~Randy
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
