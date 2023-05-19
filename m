@@ -2,97 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B45AB708CFA
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 02:37:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 190D2708CFC
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 02:39:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229747AbjESAhD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 20:37:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39632 "EHLO
+        id S230329AbjESAi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 20:38:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjESAhB (ORCPT
+        with ESMTP id S229493AbjESAiy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 20:37:01 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3673EE5A;
-        Thu, 18 May 2023 17:36:58 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1ae4be0b1f3so20041025ad.0;
-        Thu, 18 May 2023 17:36:58 -0700 (PDT)
+        Thu, 18 May 2023 20:38:54 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C027115
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 17:38:53 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id e9e14a558f8ab-3352b8b9b70so972635ab.0
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 17:38:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684456617; x=1687048617;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sJgSzGtgikyMjdsd1BSJ/7i+WEAYOWc3x+UR966c4LU=;
-        b=Y+UAGCe7cLK92GhY6jl+kEGjDFxbxZ/KfX3qZTCxudL6DxuVvRm4s5XSZ1vXJuR7B2
-         Yqt3GULH3mZ2NY7RNidCre5jRZnpnxFj/+pqGKeBMdZZiTaLSHtZFnCzTC2T7ndZialz
-         FAL0AbL18+a2/1x7DKzmm2fWDfjaDaQBmWVCqAL7cLwIyayVcS9Nu5q4bMJAeE2F6oib
-         bLVpZCHmRxxJW/25zA3k3uvDRfJ0Z2WBzGvLY4Mo4XsvqQJP1AEtvYVvzaW7E4b/OR6d
-         RvNVq9cZDbQ09G+Hx6jeMbou0HzpE1i93tKWvQSp/2Lyl4clrJnDwv2zOKtQgUrbnOtD
-         sANg==
+        d=sifive.com; s=google; t=1684456732; x=1687048732;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7/jPM0KnH+FwZjtmXcaKFjOjxDtUtKIRA4syAmgc008=;
+        b=fmjVDjbt+kVlfJJwbXQK46gG++Iuw6KXHsivhDuvDS1k3OJpQOQpec2T2c0ma/iqQN
+         9WeSajyeQsFTZLYH+IeZpzrbcJzTbvXie0lgLosHMSjhrMgYpvYY00G4EHMPgrvi/Iu7
+         tenMCSZl7X6Sx3vKHFEsDse1sK6aOo9BlIjqXMsUfRbjFkGXnAzDm9lEdyUKq9mlWbah
+         zASFPie7alKP0oNfedYyG7FvDteT1lmEtAWg4J3HHFpfWvz6xut2TzwAIjl2xAf9qhFd
+         ud+gIUTwV59X4gLBAG8ikBAGXop4+zMT79TM2ItusYqCkJffT4YMR2Qhr2yOj532k4Uo
+         p0WQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684456617; x=1687048617;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sJgSzGtgikyMjdsd1BSJ/7i+WEAYOWc3x+UR966c4LU=;
-        b=iwNRtLoLPYTJjiWQT5mq6IwD4o15z4xWvmhbfmO6QMTMnuBY6svVtzd21D30K+lbdY
-         VfDtH1Q5FN+DW45kkfhsamz9EdsbK2ED26hc0dr14cuQGWkc+1LwUvlsbwxo4W7Sditd
-         BWn2ZuB+330/o4nbd8f6A+pSYSkh9zhulb23xXYkKJvZTVX8KBWOJZGkS9FnUiYYKPIs
-         G/ZebW1cm7Txb2goFDzeFZznvrSQS40R45iatqdpgmMmoL2p0tLv60VjkXkzL7oAj+Fm
-         Hv4IKZjRAlAa0qsCnyS7qQZHu2024VyjDd2C0+Vm+WC94Jo4mOkWDK6JxQBMZR2oVGA4
-         fz4A==
-X-Gm-Message-State: AC+VfDxZlXTHuFNCYtg/Vjs81XsnJ7yHS+aY9L8ror2KijiWt2VS+Wkg
-        FmMCo+deSW17XFSAHCHf0UIfgSdIa8M=
-X-Google-Smtp-Source: ACHHUZ4+/TArAWN3BndzVZerlnFGVtVemG6aevDvPcQBvkAKGW8/QfS9QeeM+QywIFyBmBcjpcL5EA==
-X-Received: by 2002:a17:902:7448:b0:1a6:dd9a:62c5 with SMTP id e8-20020a170902744800b001a6dd9a62c5mr964259plt.10.1684456617383;
-        Thu, 18 May 2023 17:36:57 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id u2-20020a170902b28200b001ac7c6fd12asm2066109plr.104.2023.05.18.17.36.56
+        d=1e100.net; s=20221208; t=1684456732; x=1687048732;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7/jPM0KnH+FwZjtmXcaKFjOjxDtUtKIRA4syAmgc008=;
+        b=XryiMQcSzFsDGrOBhRoDkZwjB4EK8j6Aiscs1gkRYkkqNnoA4lJ4F04xjuyLYPcf3U
+         Jycc1x3fcP3rf34H5BOrvaffghGvPJoW1OqMHDaOUuWgmy8atfLpyiB5sHZ7fL7ZiIGA
+         Ull5G/nIbY86CYtEO2VglICz8F8ZKjNCaFcVddTO+ODeHXcc4vFJN8VU+ukgkRggcIu0
+         hVX7o4WgiZA+XZBGH+/aueGH0RzWyTEtPBcynR4KnX4m4YPxqXN83QCcrGQrR8g8g+vN
+         BtHCML3ouNPCwuRdFC4unPeMfIN5r2RyiL/zNMcl0POYFgZ72NPJnRmKcNe6/UTra6l/
+         IeGQ==
+X-Gm-Message-State: AC+VfDzaKl+L52yTWSH2sxkRGFSotIUGJOyuYn1dClQ5KOTnyNhyIG6g
+        8oBgZvZELZR3476cJjt6LmliPA==
+X-Google-Smtp-Source: ACHHUZ5LcaA26lj0MuLputKQFfYR1Y7nG2KPFDIiKERvOLPuxhn7bS0bUuvXzticQqEP+j2ZkW7d9w==
+X-Received: by 2002:a92:c707:0:b0:335:8542:440c with SMTP id a7-20020a92c707000000b003358542440cmr530202ilp.12.1684456732398;
+        Thu, 18 May 2023 17:38:52 -0700 (PDT)
+Received: from localhost (c-98-32-39-159.hsd1.nm.comcast.net. [98.32.39.159])
+        by smtp.gmail.com with ESMTPSA id m20-20020a92c534000000b00337b078ce44sm669216ili.0.2023.05.18.17.38.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 18 May 2023 17:36:56 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Thu, 18 May 2023 14:36:55 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     jiangshanlai@gmail.com
-Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        Amitkumar Karwar <amitkarwar@gmail.com>,
-        Ganapathi Bhat <ganapathi017@gmail.com>,
-        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
-        Xinming Hu <huxinming820@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 02/13] wifi: mwifiex: Use default @max_active for
- workqueues
-Message-ID: <ZGbEp3CTOgg8HxlV@slm.duckdns.org>
-References: <20230509015032.3768622-1-tj@kernel.org>
- <20230509015032.3768622-3-tj@kernel.org>
+        Thu, 18 May 2023 17:38:51 -0700 (PDT)
+Date:   Thu, 18 May 2023 17:38:50 -0700 (PDT)
+From:   Paul Walmsley <paul.walmsley@sifive.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+cc:     Palmer Dabbelt <palmer@rivosinc.com>, guoren <guoren@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        "Conor.Dooley" <conor.dooley@microchip.com>,
+        =?ISO-8859-15?Q?Heiko_St=FCbner?= <heiko@sntech.de>,
+        Jisheng Zhang <jszhang@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Anup Patel <apatel@ventanamicro.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        =?ISO-8859-15?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Anup Patel <anup@brainfault.org>, shihua@iscas.ac.cn,
+        jiawei@iscas.ac.cn, liweiwei@iscas.ac.cn, luxufan@iscas.ac.cn,
+        chunyu@iscas.ac.cn, tsu.yubo@gmail.com, wefu@redhat.com,
+        wangjunqiang@iscas.ac.cn, kito.cheng@sifive.com,
+        Andy Chiu <andy.chiu@sifive.com>,
+        Vincent Chen <vincent.chen@sifive.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Jonathan Corbet <corbet@lwn.net>, wuwei2016@iscas.ac.cn,
+        Jessica Clarke <jrtc27@jrtc27.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [RFC PATCH 00/22] riscv: s64ilp32: Running 32-bit Linux kernel
+ on 64-bit supervisor mode
+In-Reply-To: <556bebad-3150-4fd5-8725-e4973fd6edd1@app.fastmail.com>
+Message-ID: <454dede3-5f20-74fc-975a-e11e4d8b5648@sifive.com>
+References: <mhng-24855381-7da8-4c77-bcaf-a3a53c8cb38b@palmer-ri-x1c9> <556bebad-3150-4fd5-8725-e4973fd6edd1@app.fastmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230509015032.3768622-3-tj@kernel.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 03:50:21PM -1000, Tejun Heo wrote:
-> These workqueues only host a single work item and thus doen't need explicit
-> concurrency limit. Let's use the default @max_active. This doesn't cost
-> anything and clearly expresses that @max_active doesn't matter.
+On Thu, 18 May 2023, Arnd Bergmann wrote:
 
-Applied to wq/for-6.5-cleanup-ordered.
+> We have had long discussions about supporting ilp32 userspace on
+> arm64, and I think almost everyone is glad we never merged it into
+> the mainline kernel, so we don't have to worry about supporting it
+> in the future. The cost of supporting an extra user space ABI
+> is huge, and I'm sure you don't want to go there. The other two
+> cited examples (mips-n32 and x86-x32) are pretty much unused now
+> as well, but still have a maintenance burden until they can finally
+> get removed.
 
-Thanks.
+There probably hasn't been much pressure to support Aarch64 ILP32 since 
+ARM still has hardware support for Aarch32.  Will be interesting to see if 
+that's still the case after ARM drops Aarch32 support for future designs.
 
--- 
-tejun
+
+- Paul
