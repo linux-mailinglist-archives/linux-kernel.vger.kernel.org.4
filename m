@@ -2,64 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66CBD7092EB
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 11:23:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8DDF7092EA
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 11:23:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231452AbjESJXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 05:23:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33262 "EHLO
+        id S230376AbjESJXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 05:23:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231411AbjESJXI (ORCPT
+        with ESMTP id S229451AbjESJXF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 05:23:08 -0400
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBEB2E47;
-        Fri, 19 May 2023 02:23:06 -0700 (PDT)
-Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-392116ae103so1828141b6e.0;
-        Fri, 19 May 2023 02:23:06 -0700 (PDT)
+        Fri, 19 May 2023 05:23:05 -0400
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC38192;
+        Fri, 19 May 2023 02:23:05 -0700 (PDT)
+Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-3944816b579so1674572b6e.1;
+        Fri, 19 May 2023 02:23:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684488186; x=1687080186;
+        d=1e100.net; s=20221208; t=1684488184; x=1687080184;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=RrRs7m1C9m+EmWKO0WMeaCgh3OJPLA5+BvKvd2/4zcI=;
-        b=bWQDfChZLh/+qRczbv4WkYth3d/59Ug2xHfV0MSPr5DIOMf7pVqr9eC96bB2rXiuNO
-         lV5cpjkMCDn9zGdo8FAf+c7q63sGWdpF+z9r5GXOmIVdiehp8Alk/ZVwfeBDYS4980OI
-         FhPDFTMSUhJbwOXAc5epLEZtL8gC730pSjj9JGYPKAS7TdJWpaPt7vEM4I7ad2iGHCyk
-         cmEefAjPU3JDrVrLlVZRQsqX76UUzkz8i/0xpPoaQ33cnWAle0SL8PMhkUdNfLNQdsIL
-         64r3Gz3CKsYmmUZgOlRMO8bxMgOQRVY/wl2d49TY6F2BHdm7CNSArhmTrb0vxQpfJZC3
-         Rf6Q==
-X-Gm-Message-State: AC+VfDzVfUaEwsl5L32mOkuHE1JmE+8vfNhLASdunbZ7ZApNyQYFd5AB
-        MH7OV9QKpZvWtraTUr0bqw==
-X-Google-Smtp-Source: ACHHUZ57u3i+SSbVtqMNZMI6jUmfxGleHemSqI5RU40IgUoQx0IFUvSu7hfhjcMeFaohQaq83RSbgg==
-X-Received: by 2002:a05:6808:4c4:b0:394:2868:d51f with SMTP id a4-20020a05680804c400b003942868d51fmr787182oie.4.1684488186007;
-        Fri, 19 May 2023 02:23:06 -0700 (PDT)
+        bh=3UraE6X1bGQBbaM/niZUO5TV7tVH+NhZ8DOXB03Zfqk=;
+        b=TvweDTsrVCLbEdiehhd0t/5+03yyUL3NCPKkhype+YywgpHavEBR0hg8qX1mK61kLI
+         Ga2OijuXQefKNjVmFaya/08IoNcJUDZNFmW1HELlWW253ixubJ/1K+Ra8ygryE0rp53V
+         5fCGYDotLX3t0UFzrSGSBXdewmu2MBtPrgFV7G3+5L4vW5VmcWWBwcGUXrYZFahk8ndC
+         odQOuJtHSKaVV2MWYb3YvP+EXbYhqUjW/dPnNYEweghqgHBSNXxbJQRll0W+VwK7MWyk
+         kFgZ91lSje173PmblZa2ApVjIvSLLWFnbUcP+knO2nZR/RTD3AnnCTbnWqOjvHYoUYI2
+         U7fA==
+X-Gm-Message-State: AC+VfDzi3O9FUq4sPamsdBC0/YDjQ6Qq0moCk0+PDxEF+WVczydocArA
+        uRQNh9iak/tR+HpljNBX1w==
+X-Google-Smtp-Source: ACHHUZ7mE/rmaqPh2pkd3JAot4Zv0jCYiATZb5CADq/aILvohgmA9artxd1r9SoE5HpO3+ucAQ8JAw==
+X-Received: by 2002:a54:408a:0:b0:38e:8d7f:c07e with SMTP id i10-20020a54408a000000b0038e8d7fc07emr676449oii.52.1684488184181;
+        Fri, 19 May 2023 02:23:04 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id c24-20020aca1c18000000b00397c03854edsm837946oic.17.2023.05.19.02.23.04
+        by smtp.gmail.com with ESMTPSA id c24-20020aca1c18000000b00397c03854edsm837927oic.17.2023.05.19.02.23.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 02:23:05 -0700 (PDT)
-Received: (nullmailer pid 3014366 invoked by uid 1000);
+        Fri, 19 May 2023 02:23:03 -0700 (PDT)
+Received: (nullmailer pid 3014363 invoked by uid 1000);
         Fri, 19 May 2023 09:23:02 -0000
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
-To:     Devi Priya <quic_devipriy@quicinc.com>
-Cc:     andersson@kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, vkoul@kernel.org,
-        quic_srichara@quicinc.com, krzysztof.kozlowski+dt@linaro.org,
-        quic_sjaganat@quicinc.com, quic_anusha@quicinc.com,
-        linux-arm-msm@vger.kernel.org, quic_ipkumar@quicinc.com,
-        kishon@kernel.org, quic_arajkuma@quicinc.com, conor+dt@kernel.org,
-        quic_kathirav@quicinc.com, konrad.dybcio@linaro.org,
-        linux-phy@lists.infradead.org, robh+dt@kernel.org,
-        agross@kernel.org
-In-Reply-To: <20230519085723.15601-2-quic_devipriy@quicinc.com>
-References: <20230519085723.15601-1-quic_devipriy@quicinc.com>
- <20230519085723.15601-2-quic_devipriy@quicinc.com>
-Message-Id: <168448818232.3014347.12687378726384996026.robh@kernel.org>
-Subject: Re: [PATCH V2 1/2] dt-bindings: phy: qcom,qmp-pcie: Add ipq9574
- bindings
+To:     Shenghao Ding <13916275206@139.com>
+Cc:     x1077012@ti.com, Ryan_Chu@wistron.com, broonie@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, peeyush@ti.com,
+        devicetree@vger.kernel.org, pierre-louis.bossart@linux.intel.com,
+        Sam_Wu@wistron.com, linux-kernel@vger.kernel.org,
+        shenghao-ding@ti.com, robh+dt@kernel.org, navada@ti.com,
+        kevin-lu@ti.com, gentuser@gmail.com, alsa-devel@alsa-project.org,
+        lgirdwood@gmail.com, perex@perex.cz
+In-Reply-To: <20230519080245.20243-1-13916275206@139.com>
+References: <20230519080245.20243-1-13916275206@139.com>
+Message-Id: <168448818168.3014319.8544192762874121053.robh@kernel.org>
+Subject: Re: [PATCH v3 5/5] ASoC: dt-bindings: Add tas2781 amplifier
 Date:   Fri, 19 May 2023 04:23:02 -0500
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
@@ -73,37 +69,42 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Fri, 19 May 2023 14:27:22 +0530, Devi Priya wrote:
-> Add bindings for the PCIe QMP PHYs found on IPQ9574.
+On Fri, 19 May 2023 16:02:45 +0800, Shenghao Ding wrote:
+> Create tas2781.yaml for tas2781 driver.
 > 
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+> Signed-off-by: Shenghao Ding <13916275206@139.com>
+> 
 > ---
->  Changes in V2:
-> 	- Picked up the R-b tag
-> 	- Did not convert the clock IDs to numerical values as the clock
-> 	  header (dependent patch) is merged in latest rc1.
-> 
->  .../phy/qcom,ipq9574-qmp-pcie-phy.yaml        | 90 +++++++++++++++++++
->  1 file changed, 90 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/phy/qcom,ipq9574-qmp-pcie-phy.yaml
+> Changes in v3:
+>  - Add allOf with ref to saound-dai-common
+>  - remove audio-slots, put all the i2c address into <reg>
+>  - Add more description on broadcast-addr item
+>  Changes to be committed:
+> 	new file:   Documentation/devicetree/bindings/sound/ti,tas2781.yaml
+> ---
+>  .../devicetree/bindings/sound/ti,tas2781.yaml | 83 +++++++++++++++++++
+>  1 file changed, 83 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/sound/ti,tas2781.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
+./Documentation/devicetree/bindings/sound/ti,tas2781.yaml:71:1: [error] syntax error: found character '\t' that cannot start any token (syntax)
 
 dtschema/dtc warnings/errors:
-Error: Documentation/devicetree/bindings/phy/qcom,ipq9574-qmp-pcie-phy.example.dts:29.26-27 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/phy/qcom,ipq9574-qmp-pcie-phy.example.dtb] Error 1
+make[1]: *** Deleting file 'Documentation/devicetree/bindings/sound/ti,tas2781.example.dts'
+Documentation/devicetree/bindings/sound/ti,tas2781.yaml:71:1: found character '\t' that cannot start any token
+make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/sound/ti,tas2781.example.dts] Error 1
 make[1]: *** Waiting for unfinished jobs....
+./Documentation/devicetree/bindings/sound/ti,tas2781.yaml:71:1: found character '\t' that cannot start any token
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/sound/ti,tas2781.yaml: ignoring, error parsing file
 make: *** [Makefile:1512: dt_binding_check] Error 2
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230519085723.15601-2-quic_devipriy@quicinc.com
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230519080245.20243-1-13916275206@139.com
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
