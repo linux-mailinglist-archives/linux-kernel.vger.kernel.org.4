@@ -2,90 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 908D67098EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 16:02:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ECDA7098EE
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 16:03:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232047AbjESOCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 10:02:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39142 "EHLO
+        id S231845AbjESODr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 10:03:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232002AbjESOCc (ORCPT
+        with ESMTP id S231190AbjESODo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 10:02:32 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C1319F;
-        Fri, 19 May 2023 07:02:30 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-510d8d7f8eeso5351604a12.0;
-        Fri, 19 May 2023 07:02:30 -0700 (PDT)
+        Fri, 19 May 2023 10:03:44 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63C518D;
+        Fri, 19 May 2023 07:03:43 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-64d15660784so1481562b3a.0;
+        Fri, 19 May 2023 07:03:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684504949; x=1687096949;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:cc:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20221208; t=1684505023; x=1687097023;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=gU4fcWRkdVVZk4e/xekN0dbe8Liasg2vpN9d6LWDIj8=;
-        b=kJm180i1UBge3gCR83fkSzsqYvJz6RKG1c3LFKtZrdUPhIJ1/Wq441ACbP/jR900yG
-         ny+2UGVO5J8HvdoGenH0Q+3/Y/teP4bg/rn09UgRa8cK5BdGjBFSQfto8RffY5uKzAoy
-         crpwxTnLz2Lbp+SNBI6Ssl1EapvepZIDdFrZ7aXAjRRQJ3w8Vg0WfjbRRSoQ+WwB6WaV
-         nv5ERlypqOCiDHS/I6D+ky/2zYmBNhS75bXVSLtme0lWgZ7pv5bpMqnQpR1RKPu6J3Vw
-         qIHWTddAL4rrBseYrhl80a02T4erlhoMUNj3gcNUml+nUCfbjcNSO/BzjbrDzwGDzgC1
-         LooQ==
+        bh=veSeRUByjygam3prdbXNh3NDFxBsJbAjdHCjGVdp/Ps=;
+        b=hBs8/D9aMGTO/3J7gWPAq/xzOgKcQFA+p8/zL8Ndlys0Sa9IzdE0cp7uSsSdx2FYXf
+         8s3e84pYlkknqD3Nmp9/r7KUYzfamcKSlHbXVx/Px/OT+choLxK0JLSyS7Z9csn/cWO7
+         nAKBVNMiWktgZOsNM34BuRkvED1N1mrgkSxMjXoGI9yrkGh8lUl77lu3JZ9fA9p/QOcx
+         Pw9H2jzKhvLyhbs1O9wHGEUZEXiQjiUJCpp82tDzuWqSUjhmObwY0P2StNegvHhEOfOc
+         oMMRhzGlWH/Qo/EDJtD5VpK1Jg5m+YTc2AAR9PzjnlRvHYTCPGYtAytdAUgc1BI2PXMQ
+         r04A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684504949; x=1687096949;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:cc:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1684505023; x=1687097023;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gU4fcWRkdVVZk4e/xekN0dbe8Liasg2vpN9d6LWDIj8=;
-        b=hAYDqOJwbphTe0MyNORs6hn4eL6AzXkAbnbA79+k8Pl/tvkr+ZwDwzL9DW0JR4C7Nh
-         Zn3B/tbQC9sGJ15i/RRg6HDzdMDxtZxNF1VibbYXIG/xFsPBteF9eevZcRgP8MsbSE6K
-         TIMhpI9MtZ9Ugz9k15rJF58t130xORn85XPSv/cJAk2Eud+FElENX66Xt3+yZbzr9KIx
-         ONOrHgpj9QahI29wBu4j68zGyktFizm3Hqf3nmALMNRDCOFSABFZjLAOlG3GJYUjClzd
-         mHtZImqxCxvdinhcdZxok9ruIl1QUUWJOjMJaHrK/QHas0YDvAATI54YAJnZNBLN8+r4
-         pzMw==
-X-Gm-Message-State: AC+VfDzjqFRvI2Ggs65xlmGfizTPRQEycO+cR7Pk+kCMR7RT9PFEdo9r
-        lF33Gtmp4DeI3iL+gSr9yjc=
-X-Google-Smtp-Source: ACHHUZ5+6O6UimiC9BuTzXStBnJe+Pv1drzr+y3ZimksVFDewJX9nt59+m8oKxUJFw2oCmxRAA/UDg==
-X-Received: by 2002:a17:906:fe04:b0:94f:6627:22b5 with SMTP id wy4-20020a170906fe0400b0094f662722b5mr1547950ejb.47.1684504948627;
-        Fri, 19 May 2023 07:02:28 -0700 (PDT)
-Received: from [192.168.0.28] ([87.116.164.240])
-        by smtp.gmail.com with ESMTPSA id b19-20020aa7d493000000b0050dab547fc6sm1681516edr.74.2023.05.19.07.02.27
+        bh=veSeRUByjygam3prdbXNh3NDFxBsJbAjdHCjGVdp/Ps=;
+        b=WIG/QlXnRfGpuC+Ocu2AUzd756pXiL1oGLJATkbfI2llhskCDmOVfQuFxEJk5BhqGK
+         +czBy2JmuuhGzbKTPp9AeI0L0qYUN4eeJX03rxJTSyOng+YMlG1Nw2NvG0yQkTQgcp8V
+         Rw/O6XuD6FmH/8Svgyza/tlgYI8+JjFpNjSciZr0ik8Do7GAMJH2htvD+gur2Gni0rS6
+         yDe2F1jnyAVYlYyIsnjLWO0g6HymHsV/hKG0VZTVR1s64U+X2P4G/O23KkThTPR5vYrG
+         wzKUuAGhiVhC/d+oysBmvaT2yip4PjSgjdmrIXqk4a1MIXjSHLHBAhZb/v/X31yYng8y
+         j+9Q==
+X-Gm-Message-State: AC+VfDx+QBc0a3DbYB89AxpOskJOdBL7x3/UJZRz3j8dE2BuS5T/Oj6j
+        Ng7fTEFQyzE9vx0gMaJM6LGPo16AXIQ=
+X-Google-Smtp-Source: ACHHUZ6UpPmjSvf/6vLp8ZFMXnnfY7ykZt+MPPT5GGF0zjYwlh3htii3HC9PEcInzfO/6wXr6AISqg==
+X-Received: by 2002:a05:6a21:3986:b0:106:76e8:9414 with SMTP id ad6-20020a056a21398600b0010676e89414mr2274616pzc.40.1684505023163;
+        Fri, 19 May 2023 07:03:43 -0700 (PDT)
+Received: from [192.168.1.107] ([103.194.71.110])
+        by smtp.gmail.com with ESMTPSA id w5-20020a636205000000b00530704f3a53sm3101727pgb.30.2023.05.19.07.03.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 May 2023 07:02:28 -0700 (PDT)
-Message-ID: <587c9c16-db0f-3b92-915e-23ceccf1d8b8@gmail.com>
-Date:   Fri, 19 May 2023 16:02:26 +0200
+        Fri, 19 May 2023 07:03:42 -0700 (PDT)
+Message-ID: <891d7a86-cab3-bbf3-89d3-6e521e5aef04@gmail.com>
+Date:   Fri, 19 May 2023 19:33:39 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Cc:     savicaleksa83@gmail.com, linux-hwmon@vger.kernel.org,
-        main@ehvag.de, Jack Doan <me@jackdoan.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] hwmon: (aquacomputer_d5next) Add support for Aquacomputer
- Leakshield
-To:     Guenter Roeck <linux@roeck-us.net>
-References: <20230516164213.7938-1-savicaleksa83@gmail.com>
- <50a17124-7bb8-4868-987a-08d4988747fb@roeck-us.net>
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] hwmon: (nct6683) Add another customer ID for NCT6687D
+ sensor chip on some MSI boards.
 Content-Language: en-US
-From:   Aleksa Savic <savicaleksa83@gmail.com>
-In-Reply-To: <50a17124-7bb8-4868-987a-08d4988747fb@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230517042025.16942-1-llyyr.public@gmail.com>
+ <f7b24380-cbb1-410b-9507-006c142c41b0@roeck-us.net>
+ <bac9f57b-7a4e-40a2-5006-9074109a50d0@gmail.com>
+ <ca6da82a-c535-4d31-9657-01c6327c870a@roeck-us.net>
+From:   llyyr <llyyr.public@gmail.com>
+In-Reply-To: <ca6da82a-c535-4d31-9657-01c6327c870a@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-19 14:56:24 GMT+02:00, Guenter Roeck wrote:
+On 5/19/23 19:21, Guenter Roeck wrote:
+> On Fri, May 19, 2023 at 07:16:53PM +0530, llyyr wrote:
+>> On 5/19/23 18:23, Guenter Roeck wrote:
+>>> On Wed, May 17, 2023 at 09:50:25AM +0530, Gopal Prasad wrote:
+>>>> From: llyyr <llyyr.public@gmail.com>
+>>>>
+>>>
+>>> The above is still wrong. Never mind, I fixed that.
+>>
+>> I wasn't sure about it, but I checked and I'm pretty sure pseudonyms are
+>> allowed [1]. Is the problem here that my online handle not have a first name
+>> and a last name part?
+>>
+>> * https://www.kernel.org/doc/html/v6.3/process/submitting-patches.html#developer-s-certificate-of-origin-1-1
+>>
 > 
-> This would have to be a separate change.
+> "... using a known identity (sorry, no anonymous contributions.)"
+>                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 
+> Are you making that up ?
 > 
 > Guenter
 
-Will move into separate patch, thanks.
+Please see commit d4563201f33a022fc0353033d9dfeb1606a88330 [1] and DCO 
+Guidelines [2]
 
-Aleksa
+ > And despite the language, we've always accepted nicknames and
+that language was never meant to be any kind of exclusionary wording.
+
+
+ > A real name does not require a legal name, nor a birth name, nor any 
+name that appears on an official ID (e.g. a passport). Your real name is 
+the name you convey to people in the community for them to use to 
+identify you as you. The key concern is that your identification is 
+sufficient enough to contact you if an issue were to arise in the future 
+about your contribution.
+
+* 
+https://github.com/torvalds/linux/commit/d4563201f33a022fc0353033d9dfeb1606a88330
+* https://github.com/cncf/foundation/blob/main/dco-guidelines.md
