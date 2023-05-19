@@ -2,124 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2AC1709D76
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 19:06:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AEC0709D83
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 19:06:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231986AbjESRGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 13:06:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47790 "EHLO
+        id S231812AbjESRGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 13:06:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231837AbjESRFT (ORCPT
+        with ESMTP id S231806AbjESRFs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 13:05:19 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F06C10F0
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 10:04:55 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2af2b74d258so251521fa.3
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 10:04:54 -0700 (PDT)
+        Fri, 19 May 2023 13:05:48 -0400
+Received: from mail-vk1-xa2d.google.com (mail-vk1-xa2d.google.com [IPv6:2607:f8b0:4864:20::a2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F35F0E75;
+        Fri, 19 May 2023 10:05:33 -0700 (PDT)
+Received: by mail-vk1-xa2d.google.com with SMTP id 71dfb90a1353d-4570b867188so268560e0c.2;
+        Fri, 19 May 2023 10:05:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684515893; x=1687107893;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=KKTw5Zfw+dKxxnY8fd/tof/aQPft5PObVsbIBwm4nOE=;
-        b=z3yvfQ4KllCaIiBPBzGr9FG7c5sdwTiPqU6aglyOS4rJihClrvueBLtwUcEXnJTQhE
-         KlBTPqEwHR5um1+ryteThNBiq3Kv3LgHLa8HPLErzzMrUm+2kKOBMLyqJNnVrN+8dKEY
-         3m3pTPxnqWLSpGlNWegJTsWft6XfG0P1wCxfXxjqXzgqd0catmm3Ku0GmWczouxrKs/y
-         2LH8VuuUaOSrNDmFbiHZ6rp3jxyNtSRD97xY2lflSuVPUdm166+HMvBXLEgxL1ia4/Bw
-         UFDEIicCYwh0FLE1ePZv5oMLb9U5k/hMD6Es+M4rCtTnjsJh9iRUzJ/mLPMtf4nZBmJk
-         rtWQ==
+        d=gmail.com; s=20221208; t=1684515927; x=1687107927;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i1n4O+vlOu4SbLTPevxm0onbYElb9o3Bb/csYwfWCaI=;
+        b=Z9YMzHq8VhtpM2O9otsqrd0tZdg2BAl3LqABN5m5syzJVM1lg1GV0kQ7t49DciamlA
+         Paldm4xslsFsO3Zz96SA/Yiqo1iWl6LCX4EHgAyNXBVnAZNfDAlwBwi9ebTwEDz8M2yS
+         Ya1ssFsQrhnlFIhxoX1ZUDdPuX7/cda8chyiqxsTt9LFOXfv9CImgSTC3FilQvyO49Kj
+         l8asp5wZmZ0j6GArjCOnkAPlfrEDhpybs4QPbUIQIXlvjWTOxe6HFdDYh0W8Iq8yiFut
+         KRQ6gCQj8Cl9xwULPOQ+y9EgU/SxrG/FVEwDp4hyZiWSfyui/7mmkwJMJje+mrlQucUy
+         E6Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684515893; x=1687107893;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1684515927; x=1687107927;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KKTw5Zfw+dKxxnY8fd/tof/aQPft5PObVsbIBwm4nOE=;
-        b=Klrh4stnXLp4m1fAnMLgjUZ4EKNAqaNlWZQuXtfC/6f9HYW+HoP1ogvLQbdgB3HrwL
-         5DPx066oq1BERM3rZ1V/P6SvySFqJYEprqd3hHZNPn6KbbDhuBGD+coHUqEzwOK8MfiD
-         piyBsrcCOwSOgSJCNO78HS+DeQYnZuZFkoJyvndP4fNtekMyJyRkH/sHzuUNJA5Lk+0W
-         7brNnNSZ28kAanjzmzxqX9BRZSxYXIfFWmGwTuganjWq5IFFq/tQQGAJnWwWDbMuXLxu
-         LxBXBLpFgdh68GY0mtcN9pTO/8nBplipGnc9DFIq4fIi+I0mqUQ5FvlUZpLCKVsx83Z1
-         jpow==
-X-Gm-Message-State: AC+VfDzyrikFRWpfemdUlWq3T9A94EWtbjQFgP6chQENornqvBFCQeDW
-        c53CxY7d70XSPPBQY5kZGP1VLQ==
-X-Google-Smtp-Source: ACHHUZ6hb+9tW9dZymi1gZLakhlpllRE71/FgqhEmtf6uNPbPo+mBDJ1VJEFHKSoSos09di8OsIesQ==
-X-Received: by 2002:a2e:3213:0:b0:2af:1eee:84af with SMTP id y19-20020a2e3213000000b002af1eee84afmr1168912ljy.26.1684515893318;
-        Fri, 19 May 2023 10:04:53 -0700 (PDT)
-Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
-        by smtp.gmail.com with ESMTPSA id a6-20020a19f806000000b004f38260f196sm654478lff.218.2023.05.19.10.04.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 10:04:52 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Fri, 19 May 2023 19:04:33 +0200
-Subject: [PATCH v4 12/12] iommu/arm-smmu-qcom: Add SM6350 DPU compatible
+        bh=i1n4O+vlOu4SbLTPevxm0onbYElb9o3Bb/csYwfWCaI=;
+        b=RMZH4XlGd5IrxdIssj8DptCVn44kYgRI/exFpKi+WD/SRo9FX46G4LroHnzm9KXJGL
+         BA/UvOj2fYyO21rS13rnHMfOV9M3sI+4h3MJJSSOZwvq339n0lVurl92+1dMriRkfx5Q
+         vtfPZ0iPnlAzLowOHlQaYwRVYK0jP+4dCTA4aas1q0WVBmSZV5HM4MWxpOA7FzQqEpPd
+         Q2Od77t1rDesbxd6gSkT4zjh2KRU6NpgULvyYbkJupXoQRhnAorl06cD/BipR6G4dX8H
+         JZSgJlsRiJj6VJLbmrI0OlQU//uhStSghuoZYSgLlBpALlLQIOjLTtCUjDXiQusgVjDx
+         GeKw==
+X-Gm-Message-State: AC+VfDzMEvwVzAutYR+3MRzHiwf+VuI7m57m+H4di0Lm+ySQEb3Zr/dM
+        pyT14SxS2+zwapVTGtocZurHtoBL0YRRNxa2YAdu6Ifn
+X-Google-Smtp-Source: ACHHUZ7he1ysiV2/BJa/IxnYP0TMe2H/1MAu1dfEC0JqOVlqIWcniS7jsLoWxFw3ZocAuNoRMWTl5P2siqcOF/nFXbw=
+X-Received: by 2002:a1f:e7c1:0:b0:440:65a5:332a with SMTP id
+ e184-20020a1fe7c1000000b0044065a5332amr1268332vkh.5.1684515926745; Fri, 19
+ May 2023 10:05:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230411-topic-straitlagoon_mdss-v4-12-68e7e25d70e1@linaro.org>
-References: <20230411-topic-straitlagoon_mdss-v4-0-68e7e25d70e1@linaro.org>
-In-Reply-To: <20230411-topic-straitlagoon_mdss-v4-0-68e7e25d70e1@linaro.org>
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux.dev, Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1684515870; l=1014;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=d3S3xhOuliIdaa9KoHmUn1yxgnvenr1zId8Sw3Pr4Gg=;
- b=ihwHwr0j8S4l2zwqo/DbkiQez0VWcdnrFgJZGS+0sED5bEZluFPe94qSoPP/csG4/zAKv0PiV
- fDngCeGT1ZID8bR3q1gXI/bL59YYGxIww0TnxuHMyLWg2Di1qBia5nL
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+References: <20230519135821.922326-1-leitao@debian.org> <20230519135821.922326-2-leitao@debian.org>
+ <CAF=yD-Jj6dvyOskL+F52_aaaCovVTcpoYSCeMY7xH=FK7r3Jiw@mail.gmail.com> <ZGeYF+pp8Ukbo4p5@gmail.com>
+In-Reply-To: <ZGeYF+pp8Ukbo4p5@gmail.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Fri, 19 May 2023 13:04:50 -0400
+Message-ID: <CAF=yD-L0MnbofufMB_SKu+8PZ+f_QdAGYoDe-jOavdkAjFrXXg@mail.gmail.com>
+Subject: Re: [PATCH 1/1] net: ioctl: Use kernel memory on protocol ioctl callbacks
+To:     Breno Leitao <leitao@debian.org>
+Cc:     axboe@kernel.dk, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, courmisch@gmail.com,
+        nhorman@tuxdriver.com, asml.silence@gmail.com,
+        alex.aring@gmail.com, dccp@vger.kernel.org, mptcp@lists.linux.dev,
+        linux-kernel@vger.kernel.org, matthieu.baerts@tessares.net,
+        marcelo.leitner@gmail.com, linux-wpan@vger.kernel.org,
+        linux-sctp@vger.kernel.org, leit@fb.com, David.Laight@aculab.com,
+        dsahern@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Konrad Dybcio <konrad.dybcio@somainline.org>
+On Fri, May 19, 2023 at 11:39=E2=80=AFAM Breno Leitao <leitao@debian.org> w=
+rote:
+>
+> On Fri, May 19, 2023 at 11:09:29AM -0400, Willem de Bruijn wrote:
+> > On Fri, May 19, 2023 at 9:59=E2=80=AFAM Breno Leitao <leitao@debian.org=
+> wrote:
+> > >
+> > > Most of the ioctls to net protocols operates directly on userspace
+> > > argument (arg). Usually doing get_user()/put_user() directly in the
+> > > ioctl callback.  This is not flexible, because it is hard to reuse th=
+ese
+> > > functions without passing userspace buffers.
+> > >
+> > > Change the "struct proto" ioctls to avoid touching userspace memory a=
+nd
+> > > operate on kernel buffers, i.e., all protocol's ioctl callbacks is
+> > > adapted to operate on a kernel memory other than on userspace (so, no
+> > > more {put,get}_user() and friends being called in the ioctl callback)=
+.
+> > >
+> > > This changes the "struct proto" ioctl format in the following way:
+> > >
+> > >     int                     (*ioctl)(struct sock *sk, int cmd,
+> > > -                                        unsigned long arg);
+> > > +                                        int *karg);
+> > >
+> > > So, the "karg" argument, which is passed to the ioctl callback, is a
+> > > pointer allocated to kernel space memory (inside a function wrapper -
+> > > sock_skprot_ioctl()). This buffer (karg) may contain input argument
+> > > (copied from userspace in a prep function) and it might return a
+> > > value/buffer, which is copied back to userspace if necessary. There i=
+s
+> > > not one-size-fits-all format (that is I am using 'may' above), but
+> > > basically, there are three type of ioctls:
+> > >
+> > > 1) Do not read from userspace, returns a result to userspace
+> > > 2) Read an input parameter from userspace, and does not return anythi=
+ng
+> > >   to userspace
+> > > 3) Read an input from userspace, and return a buffer to userspace.
+> > >
+> > > The default case (1) (where no input parameter is given, and an "int"=
+ is
+> > > returned to userspace) encompasses more than 90% of the cases, but th=
+ere
+> > > are two other exceptions. Here is a list of exceptions:
+> > >
+> > > * Protocol RAW:
+> > >    * cmd =3D SIOCGETVIFCNT:
+> > >      * input and output =3D struct sioc_vif_req
+> > >    * cmd =3D SIOCGETSGCNT
+> > >      * input and output =3D struct sioc_sg_req
+> > >    * Explanation: for the SIOCGETVIFCNT case, userspace passes the in=
+put
+> > >      argument, which is struct sioc_vif_req. Then the callback popula=
+tes
+> > >      the struct, which is copied back to userspace.
+> > >
+> > > * Protocol RAW6:
+> > >    * cmd =3D SIOCGETMIFCNT_IN6
+> > >      * input and output =3D struct sioc_mif_req6
+> > >    * cmd =3D SIOCGETSGCNT_IN6
+> > >      * input and output =3D struct sioc_sg_req6
+> > >
+> > > * Protocol PHONET:
+> > >   * cmd =3D=3D SIOCPNADDRESOURCE | SIOCPNDELRESOURCE
+> > >      * input int (4 bytes)
+> > >   * Nothing is copied back to userspace.
+> > >
+> > > For the exception cases, functions sock_skproto_ioctl_in{out}() will
+> > > copy the userspace input, and copy it back to kernel space.
+> > >
+> > > The wrapper that prepares the buffer and puts the buffer back to user=
+ is
+> > > sock_skprot_ioctl(), so, instead of calling sk->sk_prot->ioctl(), the
+> > > callee now calls sock_skprot_ioctl().
+> > >
+> > > Signed-off-by: Breno Leitao <leitao@debian.org>
+> >
+> > Overall this looks great to me.
+>
+> Thanks for the guidance and quick review!
+>
+> >
+> > Thanks for the detailed commit message that lists all exceptions, Bruno=
+.
+> >
+> > Since that is a limited well understood list, I'm not in favor of the
+> > suggestion to add an explicit length argument that then needs to be
+> > checked in each callee.
+> >
+> > > +/* Copy 'size' bytes from userspace and return `size` back to usersp=
+ace */
+> > > +int sock_skproto_ioctl_inout(struct sock *sk, unsigned int cmd,
+> > > +                            void __user *arg, size_t size)
+> > > +{
+> > > +       void *ptr;
+> > > +       int ret;
+> > > +
+> > > +       ptr =3D kmalloc(size, GFP_KERNEL);
+> > > +       if (!ptr)
+> > > +               return -ENOMEM;
+> >
+> > > +/* A wrapper around sock ioctls, which copies the data from userspac=
+e
+> > > + * (depending on the protocol/ioctl), and copies back the result to =
+userspace.
+> > > + * The main motivation for this function is to pass kernel memory to=
+ the
+> > > + * protocol ioctl callsback, instead of userspace memory.
+> > > + */
+> > > +int sock_skprot_ioctl(struct sock *sk, unsigned int cmd,
+> > > +                     void __user *arg)
+> > > +{
+> > > +#ifdef CONFIG_IP_MROUTE
+> > > +       if (!strcmp(sk->sk_prot->name, "RAW")) {
+> >
+> > This must check both sk_family and sk_protocol. That is preferable
+> > over string match.
+> >
+> > For these exception cases, instead of having sock_skproto_ioctl_inout
+> > dynamically allocate the struct, how about stack allocating them here
+> > and passing to the function?
+>
+> Should I stack allocate all the 4 structures sock_skprot_ioctl and pass
+> them to sock_skproto_ioctl_inout() together with the size? (using the
+> original name to avoid confusion - will rename in V2)
+>
+> I mean, writing something as:
+>
+> int sock_skprot_ioctl(struct sock *sk, unsigned int cmd
+>                      void __user *arg`
+> {
+>         struct sioc_vif_req sioc_vif_req_arg;
+>         struct sioc_sg_req sioc_sg_req_arg;
+>         struct sioc_mif_req6 sioc_mif_req6_arg;
+>         struct sioc_sg_req6 sioc_sg_req6_arg;
+>
+>         ..
+>
+>         if (!strcmp(sk->sk_prot->name, "RAW6")) {
+>         switch (cmd) {
+>                case SIOCGETMIFCNT_IN6:
+>                        return sock_skproto_ioctl_inout(sk, cmd,
+>                                arg, &sioc_mif_req6_arg, sizeof(sioc_mif_r=
+eq6_arg);
+>                case SIOCGETSGCNT_IN6:
+>                        return sock_skproto_ioctl_inout(sk, cmd,
+>                                arg, &sioc_sg_req6_arg, sizeof(sioc_sg_req=
+6_arg));
+>                }
+>        }
+>        ...
+> }
 
-Add the SM6350 DPU compatible to clients compatible list, as it also
-needs the workarounds.
+Slight preference for using braces in the individual case statements
+and defining the variables in that block scope. See for instance
+do_tcp_setsockopt.
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-Acked-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-index d7d5d1dbee17..e64c737724c4 100644
---- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-+++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-@@ -253,6 +253,7 @@ static const struct of_device_id qcom_smmu_client_of_match[] __maybe_unused = {
- 	{ .compatible = "qcom,sc8280xp-mdss" },
- 	{ .compatible = "qcom,sdm845-mdss" },
- 	{ .compatible = "qcom,sdm845-mss-pil" },
-+	{ .compatible = "qcom,sm6350-mdss" },
- 	{ .compatible = "qcom,sm6375-mdss" },
- 	{ .compatible = "qcom,sm8150-mdss" },
- 	{ .compatible = "qcom,sm8250-mdss" },
-
--- 
-2.40.1
-
+Btw, no need for a cover letter for a single patch.
