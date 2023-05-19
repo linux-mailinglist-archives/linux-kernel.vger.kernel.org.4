@@ -2,295 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0BFB708F7A
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 07:34:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8801708F87
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 07:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230217AbjESFel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 01:34:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34192 "EHLO
+        id S229816AbjESFkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 01:40:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjESFej (ORCPT
+        with ESMTP id S229652AbjESFkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 01:34:39 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19F410C3;
-        Thu, 18 May 2023 22:34:37 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34J3ksaF021889;
-        Fri, 19 May 2023 05:34:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Ve89u6dCj1VnELc5YfDEQGyWeZzzFw0y02fInwa/dq8=;
- b=cZDn4qRSQbHtXXLnnVbSw+FDwcBWPklOexiqTiH9MefD8LlZcl5N7X8mkyjKtJI09FTs
- jk6ZOmKVVUP8mVbdVMHn8WRscu22RYiSe0NpLznjG8CugorpLdkrvPbBbmz87syTVsrA
- 2oUcStakAzrc+73CgywOXrjx2RjBz5nbiLBCjARj0RdCESpzUXr6+fr1XwJEzqx2PL2Q
- ZeSmbixsXO6VRCRX9HcJCPWfqGgRrID67T9QrHStc9Gq5ElUcYk7mYW0/RY8kJqNY5eK
- jFibFSOJ+Qlqmi/zwqib5XKtjjt+Cu5y3I7ybL+PvPLcmpsQ8zcG8TVP1YW0IpcHIMPQ Ag== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qncbhtvpm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 May 2023 05:34:32 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34J5YVbU011961
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 May 2023 05:34:31 GMT
-Received: from [10.216.41.71] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 18 May
- 2023 22:34:23 -0700
-Message-ID: <4ca12678-bc20-419e-ebcd-17da17214a7c@quicinc.com>
-Date:   Fri, 19 May 2023 11:04:18 +0530
+        Fri, 19 May 2023 01:40:01 -0400
+Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5325F10E0
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 22:39:58 -0700 (PDT)
+Received: by mail-vk1-xa30.google.com with SMTP id 71dfb90a1353d-456ed68cd3cso384470e0c.0
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 22:39:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684474797; x=1687066797;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3B42Gi1lK0VMt7Rg2etX15frwNW0h2cgi6yUrv4a9E4=;
+        b=Ed3AudVTxqSKGtFbYSskCYpOnfo6Fd5kH7U4QBfFHB+9e2zMk1GgLqZQtXdJmVEx0m
+         /S39GtfNMeCWZOjnkOqwoWvhDpne2bfbV5jnqd6mDs3JZ8hvDjF1R2QXBt/iASL22fZS
+         QxyuNiSaB4cgY5fEMM1F07PE7VFPbd1oK5jMaxnZXO/8BY469t0u/KwpNQ3d9JjxK7/1
+         OVp1PX4Ds1i0cL8H2z9OwuLp3CIQniMLG0dQDT32VglzXdqQJ+yivM9Kr1q4mN/2U6TV
+         ZXAQzuViy/6XiE/KBz371SrbtyOj2UpoZ3OfW0fY+eNUIBFRxYE/+she14Y4//dmyQ2k
+         2X/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684474797; x=1687066797;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3B42Gi1lK0VMt7Rg2etX15frwNW0h2cgi6yUrv4a9E4=;
+        b=CUwJdugVi1lneO7RLgYZbwc0nQKD8pw2HHjwkZkAOfHt86CFyDVCN52yFUhpqQ7apb
+         3ZYxjsSAYZuZpg4XwbokXu70AAlZY983OAXQqYaDatQzCYhQjNsaQfK8RIk8YB5GdEdB
+         4fKs7JJRZ+DmXxpJvw0nsHnFAdr8JXPFkKnuVoB05EhN8EMtPMU8lWUDEnkM13KMxDE1
+         Q24m5CDB4THIXlxiwSFDUp5YAVkXpCEbDkK1tyQ+IJbWg/RQGrI1uCmhDnSVrm3eP1/W
+         /VfHOrAzVW8OBMS8MREa3kc/51Z6B5jytBLyr5OQ3O9leapwVw5TDgt5edoh6NEAIjNr
+         9u2g==
+X-Gm-Message-State: AC+VfDyEiY6YJ0LGyB+yOMkEQdytMeSrc7+NOkEkMnkpO1WTslNSoVrD
+        ykdYHh9Zx69ijIlVp9P8JPNAaE8b5CWdiS64GWSVAg==
+X-Google-Smtp-Source: ACHHUZ7xoIQRozNOou/K/L/ALEGzUZLUJumHHMd6mtrugzfaLJ3R/Wj848SKoSHi7xhRgqS6nI75aoWNt5UAqLtEcrI=
+X-Received: by 2002:a67:e955:0:b0:437:dc08:1a84 with SMTP id
+ p21-20020a67e955000000b00437dc081a84mr267633vso.3.1684474797080; Thu, 18 May
+ 2023 22:39:57 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH 09/11] arm64: dtsi: qcom: ipq5018: enable nodes required
- for multipd
-Content-Language: en-US
-To:     Kathiravan T <quic_kathirav@quicinc.com>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@linaro.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <jassisinghbrar@gmail.com>, <mathieu.poirier@linaro.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <quic_gurus@quicinc.com>, <loic.poulain@linaro.org>,
-        <quic_eberman@quicinc.com>, <robimarko@gmail.com>,
-        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_arajkuma@quicinc.com>,
-        <quic_anusha@quicinc.com>, <quic_poovendh@quicinc.com>
-References: <1678164097-13247-1-git-send-email-quic_mmanikan@quicinc.com>
- <1678164097-13247-10-git-send-email-quic_mmanikan@quicinc.com>
- <aec18281-f3c4-8631-acd8-337a0aa04316@quicinc.com>
-From:   Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
-In-Reply-To: <aec18281-f3c4-8631-acd8-337a0aa04316@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: jX6tZanQW-EzjBE4Q-GwatyecggMBbXO
-X-Proofpoint-ORIG-GUID: jX6tZanQW-EzjBE4Q-GwatyecggMBbXO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-19_02,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- lowpriorityscore=0 bulkscore=0 phishscore=0 adultscore=0
- priorityscore=1501 suspectscore=0 clxscore=1015 impostorscore=0 mlxscore=0
- malwarescore=0 mlxlogscore=958 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2305190047
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <CA+G9fYszs5wPp+TWJeVZsdRjnBTXTa8i3YY3qV9SHbB1+R2+4Q@mail.gmail.com>
+ <20680bb5-71c0-4945-a058-05f43bbd03f4@kili.mountain>
+In-Reply-To: <20680bb5-71c0-4945-a058-05f43bbd03f4@kili.mountain>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 19 May 2023 11:09:45 +0530
+Message-ID: <CA+G9fYvY8HZ=F0hQueeX2x2RvP-fJgrDF_7y-Q_yhpVE_8Y9Xg@mail.gmail.com>
+Subject: Re: next: qemu-arm64: kernel BUG at fs/inode.c:1763!
+To:     Chuck Lever <chuck.lever@oracle.com>,
+        Dan Carpenter <dan.carpenter@linaro.org>
+Cc:     Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-mm <linux-mm@kvack.org>,
+        lkft-triage@lists.linaro.org, Al Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>, frederic@kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Jakub Kacinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Netdev <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 17 May 2023 at 20:38, Dan Carpenter <dan.carpenter@linaro.org> wrote:
+>
+> The fs/inode.c:1763 bug is more stuff from net/handshake testing, so
+> lets add Chuck to the CC list.
+
+Anders bisected this problem and found the first bad commit,
+
+---
+commit f921bd41001ccff2249f5f443f2917f7ef937daf
+Author: Chuck Lever <chuck.lever@oracle.com>
+Date:   Thu May 11 11:49:17 2023 -0400
+
+    net/handshake: Unpin sock->file if a handshake is cancelled
+
+    If user space never calls DONE, sock->file's reference count remains
+    elevated. Enable sock->file to be freed eventually in this case.
+
+    Reported-by: Jakub Kacinski <kuba@kernel.org>
+    Fixes: 3b3009ea8abb ("net/handshake: Create a NETLINK service for
+handling handshake requests")
+    Signed-off-by: Chuck Lever <chuck.lever@oracle.com>
+    Signed-off-by: David S. Miller <davem@davemloft.net>
+
+ net/handshake/handshake.h | 1 +
+ net/handshake/request.c   | 4 ++++
+ 2 files changed, 5 insertions(+)
 
 
-On 3/7/2023 7:52 PM, Kathiravan T wrote:
-> 
-> On 3/7/2023 10:11 AM, Manikanta Mylavarapu wrote:
->> Enable nodes required for multipd remoteproc bring up
->>
->> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
->> ---
->>   arch/arm64/boot/dts/qcom/ipq5018.dtsi | 130 ++++++++++++++++++++++++++
->>   1 file changed, 130 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/ipq5018.dtsi 
->> b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
->> index 084fb7b30dfd..4fa0990ab543 100644
->> --- a/arch/arm64/boot/dts/qcom/ipq5018.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/ipq5018.dtsi
->> @@ -95,6 +95,24 @@ tz: tz@4ac00000 {
->>               reg = <0x0 0x4ac00000 0x0 0x00400000>;
->>               no-map;
->>           };
->> +
->> +        q6_region: wcnss@4b000000 {
->> +            no-map;
->> +            reg = <0x0 0x4b000000 0x0 0x01700000>;
-> 
-> 
-> move the no-map after reg property to keep it consistent with other 
-> nodes. Also no need to pad the size in reg property
-> 
-> 
-Sure. I will do it.
->> +        };
->> +
->> +        smem@4ab00000 {
->> +            compatible = "qcom,smem";
->> +            reg = <0x0 0x4ab00000 0x0 0x00100000>;
->> +            hwlocks = <&tcsr_mutex 0>;
->> +            no-map;
->> +        };
->> +    };
->> +
->> +    firmware {
-> 
-> 
-> nodes should be in sorted order, please take care of this throughout the 
-> changes.
-> 
-> 
-Sure. I will do it.
->> +        scm {
->> +            compatible = "qcom,scm-ipq5018", "qcom,scm";
->> +        };
->>       };
->>       timer {
->> @@ -105,6 +123,30 @@ timer {
->>                    <GIC_PPI 1 (GIC_CPU_MASK_SIMPLE(4) | 
->> IRQ_TYPE_LEVEL_LOW)>;
->>       };
->> +    wcss: wcss-smp2p {
->> +        compatible = "qcom,smp2p";
->> +        qcom,smem = <435>, <428>;
->> +
->> +        interrupt-parent = <&intc>;
->> +        interrupts = <GIC_SPI 177 IRQ_TYPE_EDGE_RISING>;
->> +
->> +        mboxes = <&apcs_glb 9>;
->> +
->> +        qcom,local-pid = <0>;
->> +        qcom,remote-pid = <1>;
->> +
->> +        wcss_smp2p_out: master-kernel {
->> +            qcom,entry-name = "master-kernel";
->> +            #qcom,smem-state-cells = <1>;
->> +        };
->> +
->> +        wcss_smp2p_in: slave-kernel {
->> +            qcom,entry-name = "slave-kernel";
->> +            interrupt-controller;
->> +            #interrupt-cells = <2>;
->> +        };
->> +    };
->> +
->>       soc: soc@0 {
->>           #address-cells = <1>;
->>           #size-cells = <1>;
->> @@ -217,5 +259,93 @@ frame@b128000 {
->>                   status = "disabled";
->>               };
->>           };
->> +
->> +        tcsr_mutex: hwlock@1905000 {
->> +            compatible = "qcom,tcsr-mutex";
->> +            reg = <0x01905000 0x8000>;
-> 
-> 
-> Please cover the entire region of size 128KB
-> 
-> 
-Sure. I will do it.
->> +            #hwlock-cells = <1>;
->> +        };
->> +
->> +        apcs_glb: mailbox@b111000 {
->> +            compatible = "qcom,ipq5018-apcs-apps-global";
->> +            reg = <0x0b111000 0x1000>;
->> +            #clock-cells = <1>;
->> +            #mbox-cells = <1>;
->> +        };
->> +
->> +        q6v5_wcss: remoteproc@cd00000 {
->> +            compatible = "qcom,ipq5018-q6-mpd";
->> +            #address-cells = <1>;
->> +            #size-cells = <1>;
->> +            ranges;
->> +            reg = <0x0cd00000 0x4040>;
-> 
-> 
-> reg can be moved after compatible
-> 
-> 
-Sure. I will do it.
->> +            interrupts-extended = <&intc GIC_SPI 291 
->> IRQ_TYPE_EDGE_RISING>,
->> +                          <&wcss_smp2p_in 0 0>,
->> +                          <&wcss_smp2p_in 1 0>,
->> +                          <&wcss_smp2p_in 2 0>,
->> +                          <&wcss_smp2p_in 3 0>;
->> +            interrupt-names = "wdog",
->> +                      "fatal",
->> +                      "ready",
->> +                      "handover",
->> +                      "stop-ack";
->> +
->> +            qcom,smem-states = <&wcss_smp2p_out 0>,
->> +                       <&wcss_smp2p_out 1>;
->> +            qcom,smem-state-names = "shutdown",
->> +                        "stop";
->> +            memory-region = <&q6_region>;
->> +
->> +            glink-edge {
->> +                interrupts = <GIC_SPI 179 IRQ_TYPE_EDGE_RISING>;
->> +                label = "rtr";
->> +                qcom,remote-pid = <1>;
->> +                mboxes = <&apcs_glb 8>;
->> +            };
->> +
->> +            q6_wcss_pd1: remoteproc_pd1 {
->> +                compatible = "qcom,ipq5018-wcss-ahb-mpd";
->> +            };
->> +
->> +            q6_wcss_pd2: remoteproc_pd2 {
->> +                compatible = "qcom,ipq5018-wcss-pcie-mpd";
->> +                interrupts-extended = <&wcss_smp2p_in 16 0>,
->> +                    <&wcss_smp2p_in 17 0>,
-> 
-> 
-> Please take care of the alignment
-> 
-> 
-Sure. I will do it.
 
-Thanks & Regards,
-Manikanta.
->> +                    <&wcss_smp2p_in 20 0>,
->> +                    <&wcss_smp2p_in 19 0>;
->> +                interrupt-names = "fatal",
->> +                    "ready",
->> +                    "spawn-ack",
->> +                    "stop-ack";
->> +
->> +                qcom,smem-states = <&wcss_smp2p_out 16>,
->> +                        <&wcss_smp2p_out 17>,
->> +                        <&wcss_smp2p_out 18>;
->> +                qcom,smem-state-names = "shutdown",
->> +                            "stop",
->> +                            "spawn";
->> +                status = "disabled";
->> +            };
->> +
->> +            q6_wcss_pd3: remoteproc_pd3 {
->> +                compatible = "qcom,ipq5018-wcss-pcie-mpd";
->> +                interrupts-extended = <&wcss_smp2p_in 24 0>,
->> +                            <&wcss_smp2p_in 25 0>,
->> +                            <&wcss_smp2p_in 28 0>,
->> +                            <&wcss_smp2p_in 27 0>;
->> +                interrupt-names = "fatal",
->> +                        "ready",
->> +                        "spawn-ack",
->> +                        "stop-ack";
->> +
->> +                qcom,smem-states = <&wcss_smp2p_out 24>,
->> +                        <&wcss_smp2p_out 25>,
->> +                        <&wcss_smp2p_out 26>;
->> +                qcom,smem-state-names = "shutdown",
->> +                            "stop",
->> +                            "spawn";
->> +                status = "disabled";
->> +            };
->> +        };
->>       };
->>   };
+>
+> regards,
+> dan carpenter
+>
+> On Wed, May 17, 2023 at 06:39:57PM +0530, Naresh Kamboju wrote:
+> > Following kernel crash noticed while booting qemu-arm64 kunit builds on
+> > Linux next version 6.4.0-rc2-next-20230517.
+> >
+> > WARNING: CPU: 1 PID: 1436 at mm/page_alloc.c:4781 __alloc_pages
+> > kernel BUG at fs/inode.c:1763!
+> > WARNING: CPU: 0 PID: 0 at kernel/context_tracking.c:128
+> > ct_kernel_exit.constprop.0+0xe0/0xe8
+> >
+> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> >
+> > Detailed Crash log:
+> > =========
+> > <4>[  800.148388] ------------[ cut here ]------------
+> > <4>[  800.150072] WARNING: CPU: 1 PID: 1436 at mm/page_alloc.c:4781
+> > __alloc_pages+0x998/0x13e8
+> > <4>[  800.151978] Modules linked in:
+> > <4>[  800.153337] CPU: 1 PID: 1436 Comm: kunit_try_catch Tainted: G
+> > B            N 6.4.0-rc2-next-20230517 #1
+> > <4>[  800.154662] Hardware name: linux,dummy-virt (DT)
+> > <4>[  800.155921] pstate: 22400005 (nzCv daif +PAN -UAO +TCO -DIT
+> > -SSBS BTYPE=--)
+> > <4>[  800.157079] pc : __alloc_pages+0x998/0x13e8
+> > <4>[  800.158148] lr : __kmalloc_large_node+0xc0/0x1b8
+> > <4>[  800.159238] sp : ffff80000b5e7aa0
+> > <4>[  800.160154] x29: ffff80000b5e7aa0 x28: 0000000000000000 x27:
+> > 0000000000000000
+> > <4>[  800.161762] x26: ffff0000c4509f00 x25: ffff800008087a98 x24:
+> > ffffd0168ffa8460
+> > <4>[  800.163283] x23: 1ffff000016bcf74 x22: 0000000000040dc0 x21:
+> > 0000000000000000
+> > <4>[  800.164813] x20: 0000000000000015 x19: 0000000000000000 x18:
+> > 000000000000000b
+> > <4>[  800.166307] x17: 00000000bd2c963e x16: 00000000a2b18575 x15:
+> > 0000000033b8949b
+> > <4>[  800.167831] x14: 000000006d0ad0a4 x13: 00000000e32f85f5 x12:
+> > ffff7000016bcfa1
+> > <4>[  800.169363] x11: 1ffff000016bcfa0 x10: ffff7000016bcfa0 x9 :
+> > 000000000000f204
+> > <4>[  800.170928] x8 : 00000000f2000000 x7 : 00000000f2f2f2f2 x6 :
+> > 00000000f3f3f3f3
+> > <4>[  800.172467] x5 : 0000000000040dc0 x4 : ffff0000c614e900 x3 :
+> > 0000000000000000
+> > <4>[  800.173976] x2 : 0000000000000000 x1 : 0000000000000001 x0 :
+> > ffffd01696633000
+> > <4>[  800.175603] Call trace:
+> > <4>[  800.176314]  __alloc_pages+0x998/0x13e8
+> > <4>[  800.177355]  __kmalloc_large_node+0xc0/0x1b8
+> > <4>[  800.178401]  __kmalloc+0x158/0x1c0
+> > <4>[  800.179350]  handshake_req_alloc+0x70/0xb8
+> > <4>[  800.180510]  handshake_req_alloc_case+0xa4/0x188
+> > <4>[  800.181598]  kunit_try_run_case+0x88/0x120
+> > <4>[  800.182614]  kunit_generic_run_threadfn_adapter+0x38/0x60
+> > <4>[  800.183809]  kthread+0x194/0x1b0
+> > <4>[  800.184813]  ret_from_fork+0x10/0x20
+> > <4>[  800.185873] ---[ end trace 0000000000000000 ]---
+> > <6>[  800.202972]         ok 6 handshake_req_alloc excessive privsize
+> > <6>[  800.217425]         ok 7 handshake_req_alloc all good
+> > <6>[  800.219182]     # req_alloc API fuzzing: pass:7 fail:0 skip:0 total:7
+> > <6>[  800.222082]     ok 1 req_alloc API fuzzing
+> > <6>[  800.243148]     ok 2 req_submit NULL req arg
+> > <6>[  800.260195]     ok 3 req_submit NULL sock arg
+> > <6>[  800.274397]     ok 4 req_submit NULL sock->file
+> > <6>[  800.294631]     ok 5 req_lookup works
+> > <6>[  800.310289]     ok 6 req_submit max pending
+> > <6>[  800.326669]     ok 7 req_submit multiple
+> > <6>[  800.342645]     ok 8 req_cancel before accept
+> > <4>[  800.359161] ------------[ cut here ]------------
+> > <2>[  800.360659] kernel BUG at fs/inode.c:1763!
+> > <0>[  800.362464] Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
+> > <4>[  800.364079] Modules linked in:
+> > <4>[  800.364978] CPU: 0 PID: 9 Comm: kworker/0:1 Tainted: G    B   W
+> >       N 6.4.0-rc2-next-20230517 #1
+> > <4>[  800.366607] Hardware name: linux,dummy-virt (DT)
+> > <4>[  800.368282] Workqueue: events delayed_fput
+> > <4>[  800.369511] pstate: 62400005 (nZCv daif +PAN -UAO +TCO -DIT
+> > -SSBS BTYPE=--)
+> > <4>[  800.370861] pc : iput+0x2c4/0x328
+> > <4>[  800.371839] lr : iput+0x3c/0x328
+> > <4>[  800.372882] sp : ffff800008107b50
+> > <6>[  800.375744]     ok 9 req_cancel after accept
+> > <4>[  800.376704] x29: ffff800008107b50 x28: ffffd016924f7400 x27:
+> > ffff0000c08d4da0
+> > <4>[  800.379288] x26: ffff0000c042f918 x25: ffff0000cc273918 x24:
+> > ffff0000cc273900
+> > <4>[  800.381160] x23: 0000000000000000 x22: ffff0000c042f9b8 x21:
+> > ffffd016924f7b40
+> > <4>[  800.383408] x20: ffff0000c042f880 x19: ffff0000c042f880 x18:
+> > 000000000000000b
+> > <4>[  800.385535] x17: ffffd0168fb6f094 x16: ffffd0168fb6ee10 x15:
+> > ffffd0168fb6ebd4
+> > <4>[  800.387985] x14: ffffd0168f7d5de8 x13: ffffd0168f617f98 x12:
+> > ffff700001020f53
+> > <4>[  800.389672] x11: 1ffff00001020f52 x10: ffff700001020f52 x9 :
+> > ffffd0168fb67384
+> > <4>[  800.392442] x8 : ffff800008107a98 x7 : 0000000000000000 x6 :
+> > 0000000000000008
+> > <4>[  800.395053] x5 : ffff800008107a58 x4 : 0000000000000001 x3 :
+> > dfff800000000000
+> > <4>[  800.397652] x2 : 0000000000000007 x1 : ffff0000c042f918 x0 :
+> > 0000000000000060
+> > <4>[  800.400110] Call trace:
+> > <4>[  800.401352]  iput+0x2c4/0x328
+> > <4>[  800.402741]  dentry_unlink_inode+0x12c/0x240
+> > <4>[  800.404519]  __dentry_kill+0x16c/0x2b0
+> > <4>[  800.406047]  dput+0x24c/0x438
+> > <4>[  800.407331]  __fput+0x140/0x3b0
+> > <4>[  800.409152]  delayed_fput+0x64/0x80
+> > <4>[  800.410708]  process_one_work+0x3cc/0x7d0
+> > <4>[  800.413032]  worker_thread+0xa4/0x6a0
+> > <4>[  800.415041]  kthread+0x194/0x1b0
+> > <6>[  800.416283]     ok 10 req_cancel after done
+> > <4>[  800.416205]  ret_from_fork+0x10/0x20
+> > <0>[  800.419090] Code: 17ffffc4 97fffb54 17ffffd4 d65f03c0 (d4210000)
+> > <4>[  800.421577] ---[ end trace 0000000000000000 ]---
+> > <6>[  800.424335] note: kworker/0:1[9] exited with irqs disabled
+> > <6>[  800.428252] note: kworker/0:1[9] exited with preempt_count 1
+> > <4>[  800.435635] ------------[ cut here ]------------
+> > <4>[  800.436529] WARNING: CPU: 0 PID: 0 at
+> > kernel/context_tracking.c:128 ct_kernel_exit.constprop.0+0xe0/0xe8
+> > <4>[  800.439070] Modules linked in:
+> > <4>[  800.440326] CPU: 0 PID: 0 Comm: swapper/0 Tainted: G    B D W
+> >     N 6.4.0-rc2-next-20230517 #1
+> > <4>[  800.442196] Hardware name: linux,dummy-virt (DT)
+> > <4>[  800.443408] pstate: 224003c5 (nzCv DAIF +PAN -UAO +TCO -DIT
+> > -SSBS BTYPE=--)
+> > <4>[  800.445031] pc : ct_kernel_exit.constprop.0+0xe0/0xe8
+> > <4>[  800.446629] lr : ct_kernel_exit.constprop.0+0x20/0xe8
+> > <4>[  800.448263] sp : ffffd01694ed7cd0
+> > <4>[  800.449375] x29: ffffd01694ed7cd0 x28: 00000000437e90ac x27:
+> > 0000000000000000
+> > <4>[  800.451354] x26: ffffd01694ef1e40 x25: 0000000000000000 x24:
+> > 0000000000000000
+> > <4>[  800.453397] x23: ffffd01694ee2ba0 x22: 1ffffa02d29dafb4 x21:
+> > 0000000000000000
+> > <4>[  800.455573] x20: ffffd01692f29c20 x19: ffff0000da667c20 x18:
+> > 000000000000000b
+> > <4>[  800.457649] x17: 000000000055a8d0 x16: 000000006cbc159c x15:
+> > ffffd0168fb6865c
+> > <4>[  800.459662] x14: ffffd0168fb680ec x13: ffffd0168fb3b03c x12:
+> > ffff7a02d29daf81
+> > <4>[  800.461787] x11: 1ffffa02d29daf80 x10: ffff7a02d29daf80 x9 :
+> > dfff800000000000
+> > <4>[  800.463827] x8 : ffffd01694ed7c08 x7 : 0000000000000000 x6 :
+> > 0000000000000008
+> > <4>[  800.465864] x5 : ffffd01694ed7bc8 x4 : 0000000000000001 x3 :
+> > dfff800000000000
+> > <4>[  800.467860] x2 : 4000000000000002 x1 : 4000000000000000 x0 :
+> > ffff2fea4773e000
+> > <4>[  800.469981] Call trace:
+> > <4>[  800.470946]  ct_kernel_exit.constprop.0+0xe0/0xe8
+> > <4>[  800.472535]  ct_idle_enter+0x10/0x20
+> > <4>[  800.473923]  default_idle_call+0x58/0x90
+> > <4>[  800.475213]  do_idle+0x304/0x388
+> > <4>[  800.476492]  cpu_startup_entry+0x2c/0x40
+> > <4>[  800.477885]  rest_init+0x120/0x128
+> > <4>[  800.478830]  arch_call_rest_init+0x1c/0x28
+> > <4>[  800.479961]  start_kernel+0x2f8/0x3c0
+> > <4>[  800.482015]  __primary_switched+0xc0/0xd0
+> > <4>[  800.483086] ---[ end trace 0000000000000000 ]---
+> > <6>[  800.487780]     ok 11 req_destroy works
+> > <6>[  800.488283] # Handshake API tests: pass:11 fail:0 skip:0 total:11
+> > <6>[  800.491161] # Totals: pass:17 fail:0 skip:0 total:17
+> > <6>[  800.495059] ok 75 Handshake API tests
+> > <6>[  800.514129] uart-pl011 9000000.pl011: no DMA platform data
+> >
+> > links,
+> >  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230517/testrun/17029810/suite/boot/test/gcc-12-lkftconfig-kunit/log
+> >  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230517/testrun/17029810/suite/boot/test/gcc-12-lkftconfig-kunit/history/
+> >  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230517/testrun/17029810/suite/boot/tests/
+> >
+> > Steps to reproduce:
+> > =================
+> > # To install tuxrun on your system globally:
+> > # sudo pip3 install -U tuxrun==0.42.0
+> > #
+> > # See https://tuxrun.org/ for complete documentation.
+> >
+> > tuxrun   \
+> >  --runtime podman   \
+> >  --device qemu-arm64   \
+> >  --kernel https://storage.tuxsuite.com/public/linaro/lkft/builds/2PtylM1zfMZo4vZUtwFtBJhJRvx/Image.gz
+> >   \
+> >  --modules https://storage.tuxsuite.com/public/linaro/lkft/builds/2PtylM1zfMZo4vZUtwFtBJhJRvx/modules.tar.xz
+> >   \
+> >  --rootfs https://storage.tuxsuite.com/public/linaro/lkft/oebuilds/2PeQhlPkvTmtoQVO1F0CQ7lAsm5/images/juno/lkft-tux-image-juno-20230511150149.rootfs.ext4.gz
+> >   \
+> >  --parameters SKIPFILE=skipfile-lkft.yaml   \
+> >  --image docker.io/lavasoftware/lava-dispatcher:2023.01.0020.gc1598238f   \
+> >  --tests kunit   \
+> >  --timeouts boot=30
+> >
+> > --
+> > Linaro LKFT
+> > https://lkft.linaro.org
+
+- Naresh
