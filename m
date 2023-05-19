@@ -2,137 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70534709F0D
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 20:29:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5340709F10
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 20:29:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbjESS3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 14:29:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35784 "EHLO
+        id S229949AbjESS3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 14:29:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbjESS27 (ORCPT
+        with ESMTP id S229675AbjESS3W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 14:28:59 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75EF21A1;
-        Fri, 19 May 2023 11:28:58 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-96aae59bbd6so678884066b.3;
-        Fri, 19 May 2023 11:28:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684520937; x=1687112937;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=WlvvDrxI+8RIoRlqGPQtu1ddIFRRsxtK/LYB4K1t6K8=;
-        b=N/cEBGaYZ08QnrzSQmmg9MF9G6mNibaGTIF7Xyf/hkjz3yE2Jp11UAx2+rYdMN4gDM
-         jkUycYMykO5k8VLewS95pKAjkBEAWqww4BnjEU/vH6puyWuva4MM7LyvbnEpJ8eaa9DI
-         7b8rK+zVTZuz5jBnVmRwO+CMGdZR891zOaQL9kOwypl6IVIUoRpHqlCCDQ/3KBqo0aXo
-         7QLRuNHpPAer+F2uh/9hOcbeMj9RhQ4vnPsuE+cYMWOMxhNLM5Acor/2tCQS8ofXjFq7
-         rlvX+uOiOaAGj5hhApAKpNOmvVDmAi/amGY7RIS8L7IawZjiZ1SFdU9oaou36teJVhOI
-         2wkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684520937; x=1687112937;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WlvvDrxI+8RIoRlqGPQtu1ddIFRRsxtK/LYB4K1t6K8=;
-        b=OVUXXj26+P1JPxCHLRiY0eaUlyffA2hNo73DozavFpU/nHIMKccmQ+oo10VREDs8Lq
-         4K5mSZioTBsL6vZGnfbtBNovE1AL8CgOXEbp2KGXm27+OenLUrzUbwwh2dwk/1D9h2H4
-         /xZxaSWN3Msaq9Yullt376WBpqEwpwLU1yHm2Y/sXrWnI00osmdZ8MGR4QzBg0Q6J5Im
-         dt99ojBeGMTMmatPJAooLHQuKiGPbKM5TipIfqLz7MSEtmfBHp58QhtpXfuJc9FQajEb
-         K6o+3oWkNsDcs22h9K7FcMwWNq+ttvVWHyO1k59m8ETKrdcuZsuBU63R+67PI8iJtjFR
-         fQ5Q==
-X-Gm-Message-State: AC+VfDzRAs8CXcN9+l4ifR/B88TUD3QEUfob2b9a07Ou2uvt2h0f6lSK
-        kQP2/QbD2qkr3Sh9AU/C2mk=
-X-Google-Smtp-Source: ACHHUZ4R5YD3cMgV+tRC5UioVf2DwYIMuBKxYzGkAv6uLyu7ptlFV1obSOW7EKeU7d++ICsSSTMLXg==
-X-Received: by 2002:a17:907:72c5:b0:96f:5f44:ea02 with SMTP id du5-20020a17090772c500b0096f5f44ea02mr2615072ejc.8.1684520936856;
-        Fri, 19 May 2023 11:28:56 -0700 (PDT)
-Received: from localhost.my.domain (83.11.222.198.ipv4.supernova.orange.pl. [83.11.222.198])
-        by smtp.gmail.com with ESMTPSA id u27-20020a170906069b00b0094f7744d135sm2597897ejb.78.2023.05.19.11.28.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 11:28:56 -0700 (PDT)
-From:   Artur Weber <aweber.kernel@gmail.com>
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Artur Weber <aweber.kernel@gmail.com>
-Subject: [PATCH] media: Revert "media: exynos4-is: Remove dependency on obsolete SoC support"
-Date:   Fri, 19 May 2023 20:28:53 +0200
-Message-Id: <20230519182853.3836-1-aweber.kernel@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        Fri, 19 May 2023 14:29:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3336A139;
+        Fri, 19 May 2023 11:29:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B0E9665A57;
+        Fri, 19 May 2023 18:29:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 236E5C433D2;
+        Fri, 19 May 2023 18:29:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684520960;
+        bh=VbswIOQ3rtIAguwfMIDLkhK3SAdNBiRLTGE9PLqBpxs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SBl7lTyiVZ/MrUMp2wnKof1LP0ZBJFnIPTfmQinAMwWFL+Qba3q7Xlm5483Paz6W/
+         qPba9Aj8SndGmDK5pwnBZ8nmTjsHMvJAALu4GKlr1QJHoo3/Fp3y89OLwAn5fws+q3
+         5Vv25dDt+P0195GkSOvdyWajhueQSNrjSQ2TjepIrLg6wc5JAZdnRTMvqUMEjQCU33
+         PdeTtPWjOE6XeF8FrjxH8w7UpdU6PO2t4OWMjyBwzORAvZMO+r+7buu6fP/t45hS0M
+         ZPqNGebT+w3geR4+8jk9EoyA+I1PHRuqP0K06u1emlyJKRQcrAQJHNTW9RZiUl3uXQ
+         VizuQeQW1rJrA==
+Date:   Fri, 19 May 2023 19:29:15 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     marius.cristea@microchip.com
+Cc:     jic23@kernel.org, lars@metafoo.de, robh+dt@kernel.org,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: iio: adc: adding MCP3564 ADC
+Message-ID: <20230519-variably-direction-cfa9a034e844@spud>
+References: <20230519160145.44208-1-marius.cristea@microchip.com>
+ <20230519160145.44208-2-marius.cristea@microchip.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="DejDAUkNXgqO8feK"
+Content-Disposition: inline
+In-Reply-To: <20230519160145.44208-2-marius.cristea@microchip.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Support for the Exynos4212 SoC was originally dropped as there were
-no boards using it. We will be adding a device that uses it, so add
-it back.
 
-This reverts commit 2d41a0c9ae51ac363d107f2510022106e7234b33.
+--DejDAUkNXgqO8feK
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Artur Weber <aweber.kernel@gmail.com>
----
-This patch has been split off from the following series:
-"[PATCH v3 00/13] Re-introduce Exynos4212 support and add Samsung
-Galaxy Tab 3 8.0 boards"
-https://lore.kernel.org/all/20230501195525.6268-1-aweber.kernel@gmail.com/
----
- drivers/media/platform/samsung/exynos4-is/Kconfig     | 2 +-
- drivers/media/platform/samsung/exynos4-is/fimc-core.c | 2 +-
- drivers/media/platform/samsung/exynos4-is/fimc-lite.c | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+Hey Marius,
 
-diff --git a/drivers/media/platform/samsung/exynos4-is/Kconfig b/drivers/media/platform/samsung/exynos4-is/Kconfig
-index da33faa7132e..7f9ba053dd8e 100644
---- a/drivers/media/platform/samsung/exynos4-is/Kconfig
-+++ b/drivers/media/platform/samsung/exynos4-is/Kconfig
-@@ -47,7 +47,7 @@ config VIDEO_S5P_MIPI_CSIS
- config VIDEO_EXYNOS_FIMC_LITE
- 	tristate "EXYNOS FIMC-LITE camera interface driver"
- 	depends on I2C
--	depends on SOC_EXYNOS4412 || SOC_EXYNOS5250 || COMPILE_TEST
-+	depends on SOC_EXYNOS4212 || SOC_EXYNOS4412 || SOC_EXYNOS5250 || COMPILE_TEST
- 	depends on HAS_DMA
- 	select VIDEOBUF2_DMA_CONTIG
- 	select VIDEO_EXYNOS4_IS_COMMON
-diff --git a/drivers/media/platform/samsung/exynos4-is/fimc-core.c b/drivers/media/platform/samsung/exynos4-is/fimc-core.c
-index a2034ade8b9e..976b4f747ad4 100644
---- a/drivers/media/platform/samsung/exynos4-is/fimc-core.c
-+++ b/drivers/media/platform/samsung/exynos4-is/fimc-core.c
-@@ -1128,7 +1128,7 @@ static const struct fimc_drvdata fimc_drvdata_exynos4210 = {
- 	.out_buf_count	= 32,
- };
- 
--/* EXYNOS4412 */
-+/* EXYNOS4212, EXYNOS4412 */
- static const struct fimc_drvdata fimc_drvdata_exynos4x12 = {
- 	.num_entities	= 4,
- 	.lclk_frequency	= 166000000UL,
-diff --git a/drivers/media/platform/samsung/exynos4-is/fimc-lite.c b/drivers/media/platform/samsung/exynos4-is/fimc-lite.c
-index 24b3dda26714..c3146ae08447 100644
---- a/drivers/media/platform/samsung/exynos4-is/fimc-lite.c
-+++ b/drivers/media/platform/samsung/exynos4-is/fimc-lite.c
-@@ -1621,7 +1621,7 @@ static const struct dev_pm_ops fimc_lite_pm_ops = {
- 			   NULL)
- };
- 
--/* EXYNOS4412 */
-+/* EXYNOS4212, EXYNOS4412 */
- static struct flite_drvdata fimc_lite_drvdata_exynos4 = {
- 	.max_width		= 8192,
- 	.max_height		= 8192,
+On Fri, May 19, 2023 at 07:01:44PM +0300, marius.cristea@microchip.com wrot=
+e:
+> From: Marius Cristea <marius.cristea@microchip.com>
+>=20
+> This is the device tree schema for iio driver for
+> Microchip family of 153.6 ksps, Low-Noise 16/24-Bit
+> Delta-Sigma ADCs with an SPI interface.
 
-base-commit: a23a3041c733e068bed5ece88acb45fe0edf0413
--- 
-2.40.1
+Just one quick process bit, please try to CC all of the maintainers
+listed by get_maintainer.pl - you unfortunately managed to miss 2 of the
+3 dt-binding maintainers :/ Perhaps you ran get_maintainer.pl using our
+vendor tree?
 
+> Signed-off-by: Marius Cristea <marius.cristea@microchip.com>
+> ---
+
+> +  vref-supply:
+> +    description:
+> +      Some devices have a specific reference voltage supplied on a diffe=
+rent
+> +      pin to the other supplies. Needed to be able to establish channel =
+scaling
+> +      unless there is also an internal reference available (e.g. mcp3564=
+r)
+
+Should this be marked as a required property for the non-r devices that
+do not have an internal reference?
+
+> +  microchip,hw-device-address:
+
+Hopefully Rob or Jonathan etc can chime in as to whether a common
+property exists for this type of thing...
+
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 0
+> +    maximum: 3
+> +    description:
+> +      The address is set on a per-device basis by fuses in the factory,
+> +      configured on request. If not requested, the fuses are set for 0x1.
+> +      The device address is part of the device markings to avoid
+> +      potential confusion. This address is coded on two bits, so four po=
+ssible
+> +      addresses are available when multiple devices are present on the s=
+ame
+> +      SPI bus with only one Chip Select line for all devices.
+
+=2E.although if it doesn't, it'd be good, I think, to add here where the
+property crops up in spi transfers. And if not in the description, in
+the commit message instead?
+
+Thanks,
+Conor.
+
+
+--DejDAUkNXgqO8feK
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGe/+wAKCRB4tDGHoIJi
+0iBxAQD8eWexJAxdcKmL9CavbD0A6xzVonbGarfwkIDy7JlDjAD+MWkzon01DZkl
+zn0K0jxeA7gcoP8ruCzeoIBgvADWUwQ=
+=h34s
+-----END PGP SIGNATURE-----
+
+--DejDAUkNXgqO8feK--
