@@ -2,104 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC12709268
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 11:02:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C193270926D
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 11:02:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbjESJCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 05:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48462 "EHLO
+        id S230448AbjESJCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 05:02:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbjESJCn (ORCPT
+        with ESMTP id S230417AbjESJCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 05:02:43 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA6BFB
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 02:02:41 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-64d11974b45so1344539b3a.2
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 02:02:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=huaqin-corp-partner-google-com.20221208.gappssmtp.com; s=20221208; t=1684486960; x=1687078960;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=dgyhdD0Z5uIMOVTz0Ju4X2/oVNPW1i/oYYXsh7N4X4M=;
-        b=OWYBiz6WlIh1V/l9X/Gdf+xPSgBsF7e7sXV6UyuHEndXrapxhmrB3TkC8R3zfq/hCB
-         3z1Q1aBMLMESjZAzDRx7Fh+BF0rEqnRHgzz5uOvdWZ4uvQAK7lp95KBQdSKKsfs+YH/m
-         paaxoRemHtRz+QfjeLSxWOHRgbF+QdNq7CjbMhxHIn8lIjjDCXynHoJDi58uoqzKNgFW
-         tkTVDKAoA/kBReaBp0KaewU/1eYhT+5kRq0V9jQjW0VxL2hI8oqlMQFyfGHbCuB5DE3G
-         q9UO7sUdKNhlxskD0bSC80KJPycUjuPk7oU92vWmsykPaF+RaTr0FMys670hQoP9Aizb
-         sx4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684486960; x=1687078960;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dgyhdD0Z5uIMOVTz0Ju4X2/oVNPW1i/oYYXsh7N4X4M=;
-        b=ljtT7bYr9QMu/v5P0jRfsRB49iIYojjUtP+/LYZpn3MEIwa1EPKQIgGY4CEJnf8eW1
-         j4wdEb15a350EKMt7qQmmXNbx62LZNLZ9QderUzIkRT4R1LPjT3DEqP37meDb5QJJ08d
-         c169Bot/FZxNvOsHWMw+JGZm8fc23IFmt8BC/DdI5OhNaRDoBLFZ+27vE3Xbb7l6uME5
-         WJugyprRQSq5PlH9ddDQ4OZbntu4zDHQ1IFYAKbaojgj9DQJnf6VnQn9e3Bf72DvDQev
-         Nr/6tNMDWF5iP+FUkRXXv4EDOdHfSSc+jK7+LjJWYBSORAaONSlcjvKTBfEOf1+rGehe
-         xKbQ==
-X-Gm-Message-State: AC+VfDzoEKdcXPh2N7dzfRq5luqqxCDsJjvB8/i8V0YofnEvvRANHgiQ
-        O7U1bYB0u3tBIKO6HEVJ8CPYWg==
-X-Google-Smtp-Source: ACHHUZ7wFFt/rKk0Cxr4ucwSXRW4PIJaDmBYFThv9U1k7G56FqIDDwZ4dNN/aLv5j+zmomsAxW5B7A==
-X-Received: by 2002:a05:6a00:8c7:b0:64d:1215:a0f5 with SMTP id s7-20020a056a0008c700b0064d1215a0f5mr2448868pfu.34.1684486960613;
-        Fri, 19 May 2023 02:02:40 -0700 (PDT)
-Received: from yc.huaqin.com ([101.78.151.214])
-        by smtp.gmail.com with ESMTPSA id c24-20020aa78e18000000b00622e01989cbsm2649274pfr.176.2023.05.19.02.02.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 02:02:40 -0700 (PDT)
-From:   Cong Yang <yangcong5@huaqin.corp-partner.google.com>
-To:     jikos@kernel.org, benjamin.tissoires@redhat.com,
-        dianders@chromium.org, mka@chromium.org, dmitry.torokhov@gmail.com,
-        hsinyi@google.com
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Cong Yang <yangcong5@huaqin.corp-partner.google.com>
-Subject: [PATCH] HID: i2c-hid: goodix: Add ili9882t timing
-Date:   Fri, 19 May 2023 17:01:49 +0800
-Message-Id: <20230519090149.4407-1-yangcong5@huaqin.corp-partner.google.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 19 May 2023 05:02:49 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D866C10D0;
+        Fri, 19 May 2023 02:02:47 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34J8GIgq016895;
+        Fri, 19 May 2023 09:02:42 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=12Id2iNCy+FYiHhY11gLnPTDc+lnbY+nDzvf/MNbTSg=;
+ b=l8TmSq3hcvMZQJ3cTGeCppx0zhpm7OO5A32ouMM4LHqBZu62NKGQhRlt/fg1Vl8vFJ6i
+ YgFq6QG2LmrGM/NP0Yei936i2mX+1BqCmVRHEjc67o/AWBvKPIPjKvn9yp64yUHpETUm
+ QaCRtcjFMKkeFzweaoqOdK9cnrFgqrYONQEQPY1uQ+Zm3wPrKQ2FItaONxdfrsCCmU28
+ vFLN6BuRghA25CPOM4NH3uTJd3ec8kV/bV8DYwRvDtHl/vgr2EharDR7JdLlL8GhwX+6
+ y1uB9mE/YVFSJoXWHqWDdkGnGQeJrW3xfZ1/PQbU00eb/+l/QpvQoi4sx2gaTTqWtlTJ mg== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qp4ccr83t-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 May 2023 09:02:42 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34J92esG025427
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 May 2023 09:02:40 GMT
+Received: from devipriy-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Fri, 19 May 2023 02:02:33 -0700
+From:   Devi Priya <quic_devipriy@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <lpieralisi@kernel.org>,
+        <kw@linux.com>, <robh@kernel.org>, <bhelgaas@google.com>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>, <mani@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-clk@vger.kernel.org>
+CC:     <quic_srichara@quicinc.com>, <quic_sjaganat@quicinc.com>,
+        <quic_kathirav@quicinc.com>, <quic_arajkuma@quicinc.com>,
+        <quic_anusha@quicinc.com>, <quic_ipkumar@quicinc.com>
+Subject: [PATCH V4 0/6] Add PCIe support for IPQ9574
+Date:   Fri, 19 May 2023 14:32:13 +0530
+Message-ID: <20230519090219.15925-1-quic_devipriy@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: azFRzdq4DwccWZXm1qzlSmonLllWMMCv
+X-Proofpoint-ORIG-GUID: azFRzdq4DwccWZXm1qzlSmonLllWMMCv
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-19_05,2023-05-17_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
+ lowpriorityscore=0 adultscore=0 impostorscore=0 spamscore=0 bulkscore=0
+ phishscore=0 mlxlogscore=744 suspectscore=0 malwarescore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305190076
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ili9882t is a TDDI IC ((Touch with Display Driver)). It requires the
-panel reset gpio to be high before i2c commands. Use a longer delay in
-post_power_delay_ms to ensure the poweron sequence.
+This series adds support for enabling the PCIe host devices (PCIe0, PCIe1,
+PCIe2, PCIe3) found on IPQ9574 platform.
+The PCIe0 & PCIe1 are 1-lane Gen3 host and PCIe2 & PCIe3 
+are 2-lane Gen3 host.
 
-Signed-off-by: Cong Yang <yangcong5@huaqin.corp-partner.google.com>
----
- drivers/hid/i2c-hid/i2c-hid-of-goodix.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+DTS patch is based on the below series
+https://lore.kernel.org/linux-arm-msm/20230517172527.1968-1-quic_devipriy@quicinc.com/
 
-diff --git a/drivers/hid/i2c-hid/i2c-hid-of-goodix.c b/drivers/hid/i2c-hid/i2c-hid-of-goodix.c
-index 0060e3dcd775..c5870b683a26 100644
---- a/drivers/hid/i2c-hid/i2c-hid-of-goodix.c
-+++ b/drivers/hid/i2c-hid/i2c-hid-of-goodix.c
-@@ -101,8 +101,14 @@ static const struct goodix_i2c_hid_timing_data goodix_gt7375p_timing_data = {
- 	.post_gpio_reset_delay_ms = 180,
- };
- 
-+static const struct goodix_i2c_hid_timing_data ilitek_ili9882t_timing_data = {
-+	.post_power_delay_ms = 200,
-+	.post_gpio_reset_delay_ms = 180,
-+};
-+
- static const struct of_device_id goodix_i2c_hid_of_match[] = {
- 	{ .compatible = "goodix,gt7375p", .data = &goodix_gt7375p_timing_data },
-+	{ .compatible = "ilitek,ili9882t", .data = &ilitek_ili9882t_timing_data },
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, goodix_i2c_hid_of_match);
+Changes in V4:
+	- Rebased on the below series
+https://lore.kernel.org/linux-arm-msm/20230517172527.1968-1-quic_devipriy@quicinc.com/
+	- Change logs are added to the respective patches.
+
+[V3]
+https://lore.kernel.org/linux-arm-msm/20230421124938.21974-1-quic_devipriy@quicinc.com/
+	- Dropped the phy driver and binding patches as they have been 
+	  posted as a separate series.
+	- Dropped the pinctrl binding fix patch as it is unrelated to the series
+	  dt-bindings: pinctrl: qcom: Add few missing functions.
+	- Rebased on linux-next/master.
+	- Detailed change logs are added to the respective patches.
+	
+[V2]
+https://lore.kernel.org/linux-arm-msm/20230404164828.8031-1-quic_devipriy@quicinc.com/
+	- Reordered the patches and splitted the board DT changes
+	  into a separate patch as suggested
+	- Detailed change logs are added to the respective patches
+
+[V1]
+https://lore.kernel.org/linux-arm-msm/20230214164135.17039-1-quic_devipriy@quicinc.com/
+
+Devi Priya (6):
+  dt-bindings: clock: Add PCIe pipe clock definitions
+  clk: qcom: gcc-ipq9574: Add PCIe pipe clocks
+  dt-bindings: PCI: qcom: Add IPQ9574
+  arm64: dts: qcom: ipq9574: Add PCIe PHYs and controller nodes
+  arm64: dts: qcom: ipq9574: Enable PCIe PHYs and controllers
+  PCI: qcom: Add support for IPQ9574
+
+ .../devicetree/bindings/pci/qcom,pcie.yaml    |  48 +++
+ arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts   | 113 ++++++
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi         | 365 ++++++++++++++++++
+ drivers/clk/qcom/gcc-ipq9574.c                |  76 ++++
+ drivers/pci/controller/dwc/pcie-qcom.c        |  57 ++-
+ include/dt-bindings/clock/qcom,ipq9574-gcc.h  |   4 +
+ 6 files changed, 645 insertions(+), 18 deletions(-)
+
 -- 
-2.25.1
+2.17.1
 
