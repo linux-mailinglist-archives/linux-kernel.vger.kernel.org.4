@@ -2,87 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3131D70A2A0
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 00:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB61870A2A3
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 00:03:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbjESWCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 18:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40390 "EHLO
+        id S229795AbjESWDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 18:03:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbjESWCn (ORCPT
+        with ESMTP id S229627AbjESWDc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 18:02:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60EFC125
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 15:02:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684533726;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9Fz8oD8SeEi0X0FetXkpDXCUncDXsExXWOBUZVu30QA=;
-        b=IfU8RJtogPJ5w8X2qHYTQ/i93afKb5azZpjY69XEsC2u3cOH5YOO4mXj4sn+P8n6JDFLWi
-        KZsEGmABUEZtk3H1kx3cSMeGAyy2P4ozh/AhAcYOwTCxLlSzOADREvLDLreDlrTohA5lTI
-        QHdS8pxngyYVE7sWGtAYxxdrmthgqMc=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-257-vP_iopFnNPSM4QzMo_0Lyw-1; Fri, 19 May 2023 18:02:05 -0400
-X-MC-Unique: vP_iopFnNPSM4QzMo_0Lyw-1
-Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-6239a184651so13324886d6.2
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 15:02:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684533724; x=1687125724;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9Fz8oD8SeEi0X0FetXkpDXCUncDXsExXWOBUZVu30QA=;
-        b=YohZNesuoKeiCu+m3tbtsbCrp4u6/TZh8Hhh8Vcg6p+UzTMQlir+nq0y7nV5zyTEE6
-         Fyng00qCUj3WOxq+89kLnNZhCpTjtaqMZgLdhJkiVQoa2bLVr2xtVKWfCx8OkGycS8r/
-         eOq5rlGGuVZJZLgl1/EQxYYbox5wQahXgmuB5X7gJ7Mfh3kZznuNefwIwmQ8ggGJ5XYg
-         8FEaDNh7SkWEdusztbN1FSOAHS6YLHKvxoFh/gd3ShhNmHwkA8b1Wb71DLBhr8H7J9H+
-         Dkl5IPWr0zML3J6Vra462+woABoINunVVnDLOQYnAGUzQR7s6t6t8G0h4mTXcxzvzuBc
-         oGsA==
-X-Gm-Message-State: AC+VfDyocf2Xr64stJck6Rtb2eT8it4zQ1nZd3GjqkbqSLAkROJPQUZR
-        G+K/zVxNBh8a4dZDU5ci+cxM9zpVJpXssflaMhNTn1bHCCP/WQBEXq5mcPA14JsCyBiEQdn0wLv
-        nrbIoAJ6EYTC+2n9YaUt+p9SH4vysAiHa
-X-Received: by 2002:a05:622a:354:b0:3f5:4292:4ce8 with SMTP id r20-20020a05622a035400b003f542924ce8mr5295819qtw.8.1684533724175;
-        Fri, 19 May 2023 15:02:04 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4Mt53H4iQwzI1D2lNsu2LLMAIoLcw8qn589H2uxtmd69AEaI+GNRnNJfxUNZFRD08CfKnRPg==
-X-Received: by 2002:a05:622a:354:b0:3f5:4292:4ce8 with SMTP id r20-20020a05622a035400b003f542924ce8mr5295791qtw.8.1684533723908;
-        Fri, 19 May 2023 15:02:03 -0700 (PDT)
-Received: from thinkpad-p1.localdomain (cpe00fc8d79db03-cm00fc8d79db00.cpe.net.fido.ca. [72.137.118.218])
-        by smtp.gmail.com with ESMTPSA id w19-20020ac843d3000000b003f4fa14decbsm159980qtn.52.2023.05.19.15.02.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 15:02:03 -0700 (PDT)
-Message-ID: <d3a8ecce64a35c13dd60d942f2c4762e99775aef.camel@redhat.com>
-Subject: Re: [PATCH v4 1/3] cacheinfo: Add arch specific early level
- initializer
-From:   Radu Rendec <rrendec@redhat.com>
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Pierre Gondois <Pierre.Gondois@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Date:   Fri, 19 May 2023 18:02:02 -0400
-In-Reply-To: <20230519214430.GA3116@ranerica-svr.sc.intel.com>
-References: <20230412185759.755408-1-rrendec@redhat.com>
-         <20230412185759.755408-2-rrendec@redhat.com>
-         <20230510191207.GA18514@ranerica-svr.sc.intel.com>
-         <b49e241d3ea8c679b81134e22c908ca64aeca18c.camel@redhat.com>
-         <20230511000058.GD18514@ranerica-svr.sc.intel.com>
-         <9020807789b70db0d84d142cbfed2bd8868f366a.camel@redhat.com>
-         <20230519214430.GA3116@ranerica-svr.sc.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+        Fri, 19 May 2023 18:03:32 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F80F10EC;
+        Fri, 19 May 2023 15:03:00 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 49A16320091A;
+        Fri, 19 May 2023 18:03:00 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Fri, 19 May 2023 18:03:00 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1684533779; x=1684620179; bh=jIqJL/NnQpehuADJQuVaM4SynqOfVffT2Cc
+        4DfmU6kM=; b=uAlCQIBMuYeeFwcf/oKb2FwHhhVPqFvEewLKMTG4U9VHboY9y4V
+        Q56qik0vKZdaAOv/snedAoYYqaVP0gbM6FIMcMFGIRWyomQNG18+30wVGXelg3Nc
+        YPX54DJnovQPXbP8blFSUQ70YfQRmGXUSwozUseusDeOuHjlDbCunqhUy2ZSRBL3
+        ZF7U7QrDFqsEbmooIbLmOgEh/hcym4nv6H/MZnU8t1MJh/FD48UGRwJvfmPPK2Ge
+        g90Clsp+SoFSVp/LMC3zYU6k1Rw7R7uyDptlcoVNK2FVWjW5/AQh/aFezG9eG+Y8
+        Vc07MqFLg27b5BgO5UWd1Yryd9NhP/8hRaQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1684533779; x=1684620179; bh=jIqJL/NnQpehuADJQuVaM4SynqOfVffT2Cc
+        4DfmU6kM=; b=Ajp0awkzr9rPoBGX5nlwRBH66sZo7ZLbKy/0JGwZVp2w4kV/ITo
+        mrStE/NCCXXtTM1FmvnTzkf190kh3fcGDQCUUfMz1G9intGx1KwmJ/8MuOqstIv/
+        G24BrIerw69QIqG2c13DtI4Y64USGZJ8+lQhXfsXmzxcRHNC756+2F2EWKCCXmYw
+        LGWvKQfUN1iagsNZCnBnAKUaSp9C5yOYVrPdNtfCxQiTOoUh1HnvlcEuoHNBaoot
+        GF5YLdeBmULL7QqE7a+oxAYziLP9H7/ecCSkb31P5r7zqmP4FalsPtoVq+P5UitI
+        Jpv2JS/pGFMZo3PQSK6qmdyomhUUaErzQ2Q==
+X-ME-Sender: <xms:E_JnZCvaBD0kAEPKoYVGQPpc6mFiRj2zhf3Jj5Y8HbpHSDPTrMve4g>
+    <xme:E_JnZHeirQhfcks7ZfzRIImr86kkgP780XxIjsYPktI7jzYQJrVrrX1nA534L2JC_
+    Z49gsgi7KaPLkgDMwg>
+X-ME-Received: <xmr:E_JnZNxu-aAIQCuye-VzJngY6j0qhq2zJcAV8Y7F8NquEVTSSTIjfCfT25q6NTXlJ12H>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeiiedgtdehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
+    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:E_JnZNNHgePKL4I82PoFcylcHYNvX2CjpuGwNEw3xOXoDgVCOoag-Q>
+    <xmx:E_JnZC_rWnF9bvYlivHNIYIkboVc70Wn5lvCaCixRvwwft07FuzSoQ>
+    <xmx:E_JnZFX5PAXk9MxV50Fhlq_P8MUEdby8xfICSjRq3W5Ft0v6ImvD3Q>
+    <xmx:E_JnZEKPYADbuIP7pcjk0Kz_uvXKH1m7gbUJseg_jZ6B1kcCafobEA>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 19 May 2023 18:02:58 -0400 (EDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
+Subject: Re: [PATCH] MIPS: Fix MIPS_O32_FP64_SUPPORT for 64bit CPUs before R2
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <alpine.DEB.2.21.2305192033550.50034@angie.orcam.me.uk>
+Date:   Fri, 19 May 2023 23:02:47 +0100
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Message-Id: <C1676532-0051-43D7-82D8-1E5697407C70@flygoat.com>
+References: <20230519163023.70542-1-jiaxun.yang@flygoat.com>
+ <alpine.DEB.2.21.2305192033550.50034@angie.orcam.me.uk>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+X-Mailer: Apple Mail (2.3731.500.231)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,152 +89,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ricardo,
 
-On Fri, 2023-05-19 at 14:44 -0700, Ricardo Neri wrote:
-> On Thu, May 11, 2023 at 03:55:18PM -0400, Radu Rendec wrote:
-> > On Wed, 2023-05-10 at 17:00 -0700, Ricardo Neri wrote:
-> > > On Wed, May 10, 2023 at 04:44:49PM -0400, Radu Rendec wrote:
-> > > > On Wed, 2023-05-10 at 12:12 -0700, Ricardo Neri wrote:
-> > > > > On Wed, Apr 12, 2023 at 02:57:57PM -0400, Radu Rendec wrote:
-> > > > > > This patch gives architecture specific code the ability to init=
-ialize
-> > > > > > the cache level and allocate cacheinfo memory early, when cache=
- level
-> > > > > > initialization runs on the primary CPU for all possible CPUs.
-> > > > [cut]
-> > > > > > -int detect_cache_attributes(unsigned int cpu)
-> > > > > > +static inline int init_level_allocate_ci(unsigned int cpu)
-> > > > > > =C2=A0{
-> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int ret;
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0unsigned int early_l=
-eaves =3D cache_leaves(cpu);
-> > > > > > =C2=A0
-> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Since early =
-initialization/allocation of the cacheinfo is allowed
-> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * via fetch_ca=
-che_info() and this also gets called as CPU hotplug
-> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * callbacks vi=
-a cacheinfo_cpu_online, the init/alloc can be skipped
-> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * as it will h=
-appen only once (the cacheinfo memory is never freed).
-> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Just populate the=
- cacheinfo.
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Just populate the=
- cacheinfo. However, if the cacheinfo has been
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * allocated early t=
-hrough the arch-specific early_cache_level() call,
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * there is a chance=
- the info is wrong (this can happen on arm64). In
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * that case, call i=
-nit_cache_level() anyway to give the arch-specific
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * code a chance to =
-make things right.
-> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
-> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (per_cpu_cacheinf=
-o(cpu))
-> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0goto populate_leaves;
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (per_cpu_cacheinf=
-o(cpu) && !ci_cacheinfo(cpu)->early_ci_levels)
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
-> > > > > > =C2=A0
-> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (init_cache_=
-level(cpu) || !cache_leaves(cpu))
-> > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return -ENOENT;
-> > > > > > =C2=A0
-> > > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret =3D allocate_cac=
-he_info(cpu);
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Now that we have =
-properly initialized the cache level info, make
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * sure we don't try=
- to do that again the next time we are called
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * (e.g. as CPU hotp=
-lug callbacks).
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ci_cacheinfo(cpu)->e=
-arly_ci_levels =3D false;
-> > > > > > +
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (cache_leaves(cpu=
-) <=3D early_leaves)
-> > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return 0;
-> > > > > > +
-> > > > >=20
-> > > > > I had posted a patchset[1] for x86 that initializes
-> > > > > ci_cacheinfo(cpu)->num_leaves during SMP boot.
-> > > > >=20
-> > > > > This means that early_leaves and a late cache_leaves() are equal =
-but
-> > > > > per_cpu_cacheinfo(cpu) is never allocated. Currently, x86 does no=
-t use
-> > > > > fetch_cache_info().
-> > > > >=20
-> > > > > I think that we should check here that per_cpu_cacheinfo() has be=
-en allocated to
-> > > > > take care of the case in which early and late cache leaves remain=
- the same:
-> > > > >=20
-> > > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (cache_leaves(cpu) <=3D =
-early_leaves)
-> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (cache_leaves(cpu) <=3D =
-early_leaves && per_cpu_cacheinfo(cpu))
-> > > > >=20
-> > > > > Otherwise, in v6.4-rc1 + [1] I observe a NULL pointer dereference=
- from
-> > > > > last_level_cache_is_valid().
-> > > > >=20
-> > > > > I can post a patch with this fix if it makes sense.
-> > > > >=20
-> > > > > [1]. https://lore.kernel.org/all/20230424001956.21434-3-ricardo.n=
-eri-calderon@linux.intel.com/
-> > > >=20
-> > > > Thanks for bringing this to my attention. I need to run some tests =
-on
-> > > > x86 (I did all that work/testing on arm64) and wrap my head around =
-it.
-> > > >=20
-> > > > While I don't see any problem with the fix you're proposing, I'm af=
-raid
-> > > > it may circle back to the other problem I tried to fix initially. H=
-ave
-> > > > you tested this on an RT kernel by any chance?
-> > >=20
-> > > That is a good point. I did not test on an RT kernel. I'll try that.
-> >=20
-> > It looks like the flow is much simpler on x86: detect_cache_attributes(=
-)
-> > is called only once for each CPU, and it's called in kthread context.
-> >=20
-> > I haven't tested on an RT kernel but I think it should be fine. I put a
-> > msleep() there and saw no issues, which means kmalloc() on RT should be
-> > fine as well.
+
+> 2023=E5=B9=B45=E6=9C=8819=E6=97=A5 21:10=EF=BC=8CMaciej W. Rozycki =
+<macro@orcam.me.uk> =E5=86=99=E9=81=93=EF=BC=9A
 >=20
-> I booted the realtime kernel [3] with CONFIG_PREEMPT_RT and did not obser=
-ve
-> the BUG splat. I tried before your patchset. Were you able to reproduce o=
-n
-> x86? Also, I was not able to reproduce the BUG splat after your changes +
-> [1] + my earlier suggested patch in this thread.
+> On Fri, 19 May 2023, Jiaxun Yang wrote:
+>=20
+>> MIPS_O32_FP64_SUPPORT enables possibility of using all 32 FPRs on =
+32bit
+>> kernel in case CPU implemented FR1. As FR1 is present on all 64bit =
+CPUs
+>> following R4000's priviliged spec, there is no reason to limit such =
+support
+>> to R2+ CPUs.
+>=20
+> I guess one can do it and still run FPXX software, but I fail to see =
+what=20
+> gain it provides.  For FP32 it breaks things as accesses to =
+odd-numbered=20
+> FPRs will no longer get at the high part of a double value and for =
+FP64=20
+> there are no MTHC1/MFHC1 instructions required to access the high =
+part.
 
-Thanks for trying this out. I think the BUG splat cannot be reproduced
-on x86, either with or without my fix because detect_cache_attributes()
-is always called in kthread context, and that makes kmalloc() happy on
-RT kernels.
+Actually software may access the high part by SDC1/LDC1.
+FP32 binaries are still going to run at FR0 mode.
 
-At the time when I first asked you about the RT kernel, I hadn't looked
-closely at the x86 code yet, and I was unaware of the (much simpler)
-flow and the kthread context. Sorry for the confusion!
+>=20
+> What problem are you trying to solve?  And how did you verify this =
+patch?
 
-In any case, your test on the RT kernel validates the conclusion that
-we already came to, and eliminates any trace of doubt. FWIW, I was
-testing on arm64 when I found the bug and created the fix. Things are
-much more complicated there, and detect_cache_attributes() is called
-twice for each CPU (the second time with preemption disabled).
+Was trying to deal a proprietary JIT software who want to enable FR1 via =
+prctl
+on Loongson-2F with 32 bit kernel.
 
-Best regards,
-Radu
+>=20
+>> --- a/arch/mips/kernel/fpu-probe.c
+>> +++ b/arch/mips/kernel/fpu-probe.c
+>> @@ -289,6 +289,23 @@ void cpu_set_fpu_opts(struct cpuinfo_mips *c)
+>> c->options |=3D MIPS_CPU_FRE;
+>> }
+>>=20
+>> + /* Fix up FIR for FPU earlier than R2 */
+>> + if (!cpu_has_mips_r2_r6) {
+>> + c->fpu_id |=3D MIPS_FPIR_S;
+>> +#ifdef CONFIG_CPU_R4K_FPU
+>> + /* All known R4000 class FPU implemented double */
+>> + c->fpu_id |=3D MIPS_FPIR_D;
+>> +#endif
+>=20
+> Currently all FPUs we support implement double and we require that, so =
+no=20
+> need to make this piece conditional (I would use IS_ENABLED otherwise, =
+so=20
+> as not to clutter the source with #ifdef), but `c->fpu_id' is also =
+exposed=20
+> to the user via ptrace(2), so this has to reflect hardware and not =
+give a=20
+> synthesized value.
+
+Alas, I thought R2030 class FPU does not have double? Since MIPS-IV spec
+says SDC1 is introduced in MIPS II.
+
+Thanks
+Jiaxun
+
+>=20
+>  Maciej
 
