@@ -2,86 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 477D270948B
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 12:13:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 128C5709492
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 12:15:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231687AbjESKN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 06:13:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42718 "EHLO
+        id S231424AbjESKPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 06:15:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231309AbjESKNU (ORCPT
+        with ESMTP id S230179AbjESKPT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 06:13:20 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C297134
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:13:19 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-510d8d7f8eeso4908599a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:13:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684491197; x=1687083197;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sVdHyVEBkD1LhOEev7a/Do4pDVl++X0ERDIZ2zx9RbU=;
-        b=p6kqZICOEEaQoD/heIGGVBqfIBu4+MRpLi+U5R6hLH3o7j4HYwZHdfMFqe4xm5VVOZ
-         m+HyeVP7MFtTZcaXCjpSA5b4IDUnKhBeAq8tIO46Vp/lgo/4jOnbEFFxGj2yc5ynI6+F
-         TTm6QG1oPFf04M2Gir8Nvjd7ejwPj4VkfJILwE+smALFlcBYALklVIeHvJ/4SnBWlHQ+
-         Kz0kZJH0RB6o9jcHgLMTuzwGIITeMpPIVIxomW8qyR09EhBJXP2hBVErPp1AD+hQ4rv7
-         Yso12Y3AkBHm0+p3x7nP+w9RPYwjNB+Q71PqcTre1mOMJiYCGg4N7y+hkCadeThB3EyI
-         y/5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684491197; x=1687083197;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sVdHyVEBkD1LhOEev7a/Do4pDVl++X0ERDIZ2zx9RbU=;
-        b=VngptQ+g4fm2hNTdX3UoyyjTil958JOqyml/1nSoXZseBUj+XKSt7K3/in8teTrthx
-         CeE69QhSuNXM52KdNG4tFBaI4pl3IjJQ3yBld2DlXB7b97r0PyKmmayy50WGI2RhHJBb
-         Lyx2U/GwxbsbGTrFS1p/sGTbv1dal3hVfQaB5rnVWx5vOn9QThcdUL6/Lh5WVZeKKPH3
-         7qgtZTlixB8ozTGMve5lKfIru+pZnoCFSGcPk+etg/hV7gUU+QRBg+1YT+3O+v+PkR6k
-         yjvfNCeohyGmh+TcbNVKDqGla4h1PfoO+NSbjsj9O9TvFv8Dt2mkS5UQxVz1RdM958B2
-         KrVg==
-X-Gm-Message-State: AC+VfDygw8xh26yKJNhJC2eDKuizxx+7qutAxMmwA3rfREIXXmz1AFJs
-        u6Wv4Q2msobc4PWaqxWI7mBKeluEa0Vce5R1C/8=
-X-Google-Smtp-Source: ACHHUZ67k7p2+Hbu5dbMuK1yegRrf60hzjh7w0A4QE1rrsaoPb+IFbSjWwraoX0YSblJwbDBGkagZ1OeZ3mFkPnJvc8=
-X-Received: by 2002:a17:907:26ca:b0:969:bac4:8e22 with SMTP id
- bp10-20020a17090726ca00b00969bac48e22mr1085758ejc.26.1684491197102; Fri, 19
- May 2023 03:13:17 -0700 (PDT)
+        Fri, 19 May 2023 06:15:19 -0400
+X-Greylist: delayed 89342 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 19 May 2023 03:15:16 PDT
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F02018D;
+        Fri, 19 May 2023 03:15:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1684491314; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=iANyA4lM6//5dQkWecMxgml5rXURe/0ELdSy8UYp6WJrO8FonNjnXxWfnyd4LTzAs+
+    Ux03ynJwpzKjMJ408uB37wjU0zAC4zXaOhj4fuN/795f2ezl+cQ+FMo+811GLK3Vd/UO
+    YlPg/GwYFqIunknSdBuwJR8ODITVYm23oysVXro0nqO+t8lT21u03wEVUofoTY6soTX7
+    bylf31XYNafH9fmG9znjNwQ15fV8BirNpvK5Nie7IAUs9gNeITHrKt/RfktXojIU2XFv
+    y7OYFdytJ82Fe+LlFSAjaLRMd71NT10Nj6cqXPZG5vdHve8gc+96n9+WQxbHmPn9BszJ
+    74yQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1684491314;
+    s=strato-dkim-0002; d=strato.com;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=bMaBcHyP5lxITjgi+pD+NP0DTQNJJ5pW1j0FLrg0quI=;
+    b=G73tI7MN8s1wJBfCE+HS6Nva7yCzpwT8CeQrf3PildSZoXHKWMPaezcfC9kq8aqDvm
+    rfCmQVY2/4PSRRAfKDtkwtzN0igXzPchRJN2uMEPOe56RJz5L8EhHW51ryhMSXlMbMPh
+    xjIFJP0q7qaPjG3zIuEDN7BSkx5giN73ezVo6ctsExZxOUefyEe4Gf7uHN+KDYwqAk7o
+    xEQxvwJnZ+94e9S9Dt3aDpfO4Y68H/M39iSxlgRhyaoiCu8dTMAqLMDGV8Qvie/VFy8v
+    78HYUnHXqnxFi4larOri8lC0YqzA48Ooj4ge8WqevO7rC9anbwc99qcywbRcOKMZ7x/F
+    l0fg==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1684491314;
+    s=strato-dkim-0002; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=bMaBcHyP5lxITjgi+pD+NP0DTQNJJ5pW1j0FLrg0quI=;
+    b=nOOuq5T3Q7+IDv8tzciey3NwrRAPEuvQwwoMt6GekNA4alhtNTpj/xsx3fHFSrrS+U
+    ukYnizrIAfjBXUhiRC2A+XtU2+E8+zFQI9yxt9NNDzFjGJ5XC2kNJAQwK7LlcQ2YqpAK
+    ei8zoQz/4bPKo059UbGJ3oqcGmbkvnvzlzy1b1lNBYm6msR4InYF7NDHum6TgAvOuX4L
+    KIrtgm6wWNFIvdDPyoXs7zuHBjQk2QUEExMVf33sfavhZahxT2OFDWnPjsoiivt8LlaM
+    eK2omIX09XA2bmTQB6myGm+6xuhPKZxmhQ3VKzpoTKFEZCMVQ7QEI0oE1sn8jw16LIG4
+    Kdqw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1684491314;
+    s=strato-dkim-0003; d=gerhold.net;
+    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
+    From:Subject:Sender;
+    bh=bMaBcHyP5lxITjgi+pD+NP0DTQNJJ5pW1j0FLrg0quI=;
+    b=EvXGdjEoEvq2toiY8ete6slwJhuC6Fazz1BmAzUal1DnQ5Pm+7n+Kp69OKXye06eLk
+    yQVn5Mk1pcWsfpWxsVCQ==
+X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA95nh"
+Received: from gerhold.net
+    by smtp.strato.de (RZmta 49.4.0 DYNA|AUTH)
+    with ESMTPSA id j6420az4JAFEERA
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Fri, 19 May 2023 12:15:14 +0200 (CEST)
+Date:   Fri, 19 May 2023 12:15:13 +0200
+From:   Stephan Gerhold <stephan@gerhold.net>
+To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dmaengine: qcom: bam_dma: make channels/EEs optional in
+ DT with clock
+Message-ID: <ZGdMMd3pS7LRjBOU@gerhold.net>
+References: <20230518-bamclk-dt-v1-1-82f738c897d9@gerhold.net>
+ <CAH=2Ntya7bqHVri_F8BOUJ6kJxtG2_usV08do+=OgkaoVJvxBQ@mail.gmail.com>
+ <ZGYKQkgRrBqO2rsx@gerhold.net>
+ <CAH=2Ntw0BZH=RGp14mYLhX7D6jV5O5eDKRQbby=uCy85xMDU_g@mail.gmail.com>
 MIME-Version: 1.0
-Sender: hhkjrjf701@gmail.com
-Received: by 2002:a98:8ad9:0:b0:1ca:9374:fdb6 with HTTP; Fri, 19 May 2023
- 03:13:16 -0700 (PDT)
-From:   Sophia Erick <sdltdkggl3455@gmail.com>
-Date:   Fri, 19 May 2023 12:13:16 +0200
-X-Google-Sender-Auth: fI9Tks2i0CLHTNHI8CnJ3Ooe0so
-Message-ID: <CAJn1gpPZR5M-XNfgdwgRP2tOadupXK1Q-SOcoNPJWgpEoRXKZg@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: ****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAH=2Ntw0BZH=RGp14mYLhX7D6jV5O5eDKRQbby=uCy85xMDU_g@mail.gmail.com>
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dearly Beloved In Christ,
+On Fri, May 19, 2023 at 02:40:21PM +0530, Bhupesh Sharma wrote:
+> On Thu, 18 May 2023 at 16:51, Stephan Gerhold <stephan@gerhold.net> wrote:
+> >
+> > On Thu, May 18, 2023 at 04:43:57PM +0530, Bhupesh Sharma wrote:
+> > > On Thu, 18 May 2023 at 14:56, Stephan Gerhold <stephan@gerhold.net> wrote:
+> > > >
+> > > > If we have a BAM clock in the DT we are able to turn on the BAM
+> > > > controller while probing, so there is no need to read "num-channels"
+> > > > and "qcom,num-ees" from the DT. It can be read more accurately directly
+> > > > from the identification registers of the BAM.
+> > > >
+> > > > This simplifies setting up typical controlled-remotely BAM DMAs in the
+> > > > DT that can be turned on via a clock (e.g. the BLSP DMA).
+> > >
+> > > Can you please list which qcom board(s) you tested this patch on?
+> > >
+> >
+> > It works fine at least on MSM8916/DB410c (for blsp_dma) and MDM9607
+> > (blsp_dma and qpic_dma (for NAND)). More testing would be much
+> > appreciated of course!
+> 
+> I tested this yesterday on RB1/RB2, RB5 and saw no improvement, so was wondering
+> why exactly is this needed and which platforms are impacted.
+> 
 
-Please forgive me for stressing you with my predicaments as I directly
-believe that you will be honest to fulfill my final wish before i die.
+RB1/RB2 should be able to benefit from this for the cryptobam if you add
+the rpmcc clock to it, see my reply in [1].
 
-I am Mrs.Sophia Erick, and i was Diagnosed with Cancer about 2 years
-ago, before i go for a surgery i have to do this by helping the
-Orphanages home, Motherless babies home, less privileged and disable
-citizens and widows around the world,
+[1]: https://lore.kernel.org/linux-arm-msm/ZGdLCdSof027mk5u@gerhold.net/
 
-So If you are interested to fulfill my final wish by using the sum of
-$ 11,000,000.00,  to help them as I mentioned, kindly get back to me
-for more information on how the fund will be transferred to your
-account.
+> > Personally I don't see much of a risk: If enabling the clock doesn't
+> > actually enable the BAM controller, then the clock probably does not
+> > belong to the BAM in the first place... :)
+> 
+> Right, but I think the commit message needs a bit more clarity to
+> reflect that it is now proposed to check for the bam_clk presence
+> earlier in the _probe flow (as compared to earlier).
+> 
 
-Sincerely Mrs. Sophia Erick.
+Sure, I will try to clarify the commit message a bit in v2.
+
+Thanks,
+Stephan
