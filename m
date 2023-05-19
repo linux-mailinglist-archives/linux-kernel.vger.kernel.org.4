@@ -2,127 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D4E4709EF4
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 20:17:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C02E709EF8
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 20:18:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbjESSRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 14:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60868 "EHLO
+        id S230187AbjESSSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 14:18:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbjESSRL (ORCPT
+        with ESMTP id S229653AbjESSSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 14:17:11 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B614D134
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 11:17:09 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id 98e67ed59e1d1-24e116d1a05so3765545a91.2
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 11:17:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684520229; x=1687112229;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=p7OoJfw3RHMFn7mGuM4fGvncHAWlDYR0N8g6j4d0nVE=;
-        b=DbwE3NxE6r7NeADpJ6ABRv/bnfbI/0LJHJMB4K9aetjV+ctmPbRt8KZUZnB01lVh5f
-         Pg+4MezKvCs8pFl8SfCID+aeV7vPPOze2DihxQ255PZc9nbStbalRpZJxN/8KtbLFUqz
-         mPvEu2FuiKLgDWEjbLSBchLAPyq7FcJtsXX/+0NVzcRG6xJp0tL8ef+iRpeXJiY5MOrJ
-         LlsX9CDFab32oYpXoHnXeD2nF0SzwspoWHRrSlISx7x5U8+1O4idqew6Bm8pZvyzys41
-         WhqXGk9Nz5xYy7crWzMUSDrORyjLJm8D3jkz6U2qM0DnOf+nYH9bfJYsNfR0I3NoWlSd
-         yUsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684520229; x=1687112229;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=p7OoJfw3RHMFn7mGuM4fGvncHAWlDYR0N8g6j4d0nVE=;
-        b=QrlXU+m8Fqp4OLaDk1bnzeu6/EBRdezbqiBvdMN+oN0EQD6iZIaiNvjJWZh2eVeqpj
-         iGqj3KdCxoPc+YpAdKlOrCCHYSRoQBygc8O7EMC/WLdh+DbwYvmiXCR0qxhTcOBEINIi
-         Fa33uczlYchLP0DHEGNYoiPhJ3ltevd6ezenWq/YNsFluKAQQzSOk/zviHRibtGoXSBK
-         IFwhkjhJwfwlSy2bcYcA7kEmKA6pQ92f6jHmfJzU+xfD409BLt61cx4MTioSkhBtW/t4
-         1wkpnks4aqsxQnqrRtlpECtx5k1HeZV6bDilFqjzz1VI8SBLQIc8990gth0qzPh3LLNI
-         hIoA==
-X-Gm-Message-State: AC+VfDy4NFGp6TppvwmJjZzNK3t8I1ux9+BrMysl24fTozSqA7n6GE2k
-        ZnIXi9Ruk0ZB/0yip4YkLkcNMWu/V7w=
-X-Google-Smtp-Source: ACHHUZ5hiuYY7xIICZlrf2NJEEijsjU6hS74QOOvmQfsNtxcSIqUyXsJfot6x9ETVDyakelaxsAowBF8Hlg=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90b:b03:b0:253:8392:8c2f with SMTP id
- bf3-20020a17090b0b0300b0025383928c2fmr678602pjb.6.1684520229207; Fri, 19 May
- 2023 11:17:09 -0700 (PDT)
-Date:   Fri, 19 May 2023 11:17:07 -0700
-In-Reply-To: <20230404122652.275005-3-aleksandr.mikhalitsyn@canonical.com>
-Mime-Version: 1.0
-References: <20230404122652.275005-1-aleksandr.mikhalitsyn@canonical.com> <20230404122652.275005-3-aleksandr.mikhalitsyn@canonical.com>
-Message-ID: <ZGe9I+S78pQ/RPs7@google.com>
-Subject: Re: [PATCH 2/2] KVM: SVM: add some info prints to SEV init
-From:   Sean Christopherson <seanjc@google.com>
-To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Cc:     pbonzini@redhat.com,
-        "=?iso-8859-1?Q?St=E9phane?= Graber" <stgraber@ubuntu.com>,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 19 May 2023 14:18:09 -0400
+Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [IPv6:2001:4b7a:2000:18::164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF6718C;
+        Fri, 19 May 2023 11:18:07 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 6F87D1F58D;
+        Fri, 19 May 2023 20:18:03 +0200 (CEST)
+Date:   Fri, 19 May 2023 20:18:01 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        iommu@lists.linux.dev, Rob Herring <robh@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+Subject: Re: [PATCH v4 00/12] SM63(50|75) DPU support
+Message-ID: <dktpk4msw3v7y4tgyovcqels34urqzm3fcocygn6ocufws3kev@bd5zcy572cle>
+References: <20230411-topic-straitlagoon_mdss-v4-0-68e7e25d70e1@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230411-topic-straitlagoon_mdss-v4-0-68e7e25d70e1@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 04, 2023, Alexander Miqqqqkhalitsyn wrote:
-> Let's add a few pr_info's to sev_hardware_setup to make SEV/SEV-ES
-> enabling a little bit handier for users. Right now it's too hard
-> to guess why SEV/SEV-ES are failing to enable.
+On 2023-05-19 19:04:21, Konrad Dybcio wrote:
+> v3 -> v4:
+> - Drop adding new QoS LUT entries
+> - Add safe_lut_tbl for both SoCs
 
-Hmm, I'm somewhat torn, but I'm against taking this patch, at least not in its
-current form.  I appreciated that determining why KVM isn't enabling SEV/SEV-ES
-is annoying, but there's very little actionable information provided here that
-isn't also super obvious.  I also don't want to start us down a slippery slope
-of printing out messages every time KVM doesn't enable a feature.
+I may not have pinged you correctly with this message [1], but can you
+add the DSC configuration for both SoCs?
 
-If someone tries to enable SEV and doesn't check that their CPU supports SEV,
-then IMO that's on them.  Ditto for SEV-ES.
+[1]: https://lore.kernel.org/linux-arm-msm/u47xthqfjxpbbzjbvnrz4qa2f2m3aip4iose7cwuhzg4raf7db@qxbos7u55wko/
 
-The NPT thing is mildly interesting, but practically speaking I don't expect that
-to ever be a hindrace for generic enabling.  Ditto for MMIO caching.
+- Marijn
 
-The decode assists check is (a) completely unactionable for the vast, vast majority
-of users and (b) is a WARN_ON_ONCE() condition.
-
-The ASID stuff is by far the most interesting, but that's also quite interesting
-for when SEV and SEV-ES _are_ fully supported.
-
-So if we want to provide the user more info, I'd prefer to do something like the
-below, which I think would be more helpful and would avoid my slippery slope
-concerns.
-
-diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-index c25aeb550cd9..eb4c6e3812d9 100644
---- a/arch/x86/kvm/svm/sev.c
-+++ b/arch/x86/kvm/svm/sev.c
-@@ -2216,7 +2216,6 @@ void __init sev_hardware_setup(void)
-        if (misc_cg_set_capacity(MISC_CG_RES_SEV, sev_asid_count))
-                goto out;
- 
--       pr_info("SEV supported: %u ASIDs\n", sev_asid_count);
-        sev_supported = true;
- 
-        /* SEV-ES support requested? */
-@@ -2243,11 +2242,16 @@ void __init sev_hardware_setup(void)
-        sev_es_asid_count = min_sev_asid - 1;
-        if (misc_cg_set_capacity(MISC_CG_RES_SEV_ES, sev_es_asid_count))
-                goto out;
--
--       pr_info("SEV-ES supported: %u ASIDs\n", sev_es_asid_count);
-        sev_es_supported = true;
- 
- out:
-+       if (boot_cpu_has(X86_FEATURE_SEV))
-+               pr_info("SEV %s (ASIDs %u - %u)\n",
-+                       sev_supported ? "enabled" : "disabled", ...);
-+       if (boot_cpu_has(X86_FEATURE_SEV_ES))
-+               pr_info("SEV-ES %s (ASIDs %u - %u)\n",
-+                       sev_es_supported ? "enabled" : "disabled", ...);
-+
-        sev_enabled = sev_supported;
-        sev_es_enabled = sev_es_supported;
- #endif
+> 
+> Depends on:
+> - https://lore.kernel.org/linux-arm-msm/20230411-dpu-intf-te-v4-0-27ce1a5ab5c6@somainline.org/
+> 
+> v3: https://lore.kernel.org/r/20230411-topic-straitlagoon_mdss-v3-0-9837d6b3516d@linaro.org
+> 
+> v2 -> v3:
+> - Don't duplicate qcm2290_lm_sblk
+> - Use DEFAULT_DPU_LINE_WIDTH defines
+> - Fix up sspp clk assignments for sm6350
+> - Add 6350-6375-common QoS data straight to the common file
+>   instead of moving it around after adding it
+> - Fix up iommu compatible order before adding new entries
+> - Reuse sm6350 msm_mdss_data for sm6375
+> - INTF_SC7180_MASK -> INTF_SC7280_MASK (enable HCTL) on 6375
+> - use double tabs in catalog headers
+> - remove one unused entry in 6350 dpu_qos_lut_entry
+> - add missing tear IRQs, drop INTF0 irq on 6375
+> - don't overduplicate DPU bindings, reuse 7180
+> - Pick up tags
+> - Rebase on INTF_TE v4 and next-20230504
+> 
+> Depends on:
+> - https://lore.kernel.org/linux-arm-msm/20230411-dpu-intf-te-v4-0-27ce1a5ab5c6@somainline.org/
+> 
+> v2: https://lore.kernel.org/r/20230411-topic-straitlagoon_mdss-v2-0-5def73f50980@linaro.org
+> 
+> v1 -> v2:
+> - Rebase on the DPU catalog rework and INTF_TE
+> - Fix QSEED(3L/4) discrepancies
+> - Fixed DMA/cursor discrepancies for 6350
+> - No deduplication, that's gonna be handled in catalogrework 2:
+>   "the return of the catalogrework"
+> - Split MDSS & DPU binding additions
+> - Drop "Allow variable SSPP/INTF_BLK size", that got in w/ the rework
+> - Split MDSS and DPU additions
+> - Pick up Rob's acks
+> 
+> Depends on (and based on): https://lore.kernel.org/linux-arm-msm/20230411-dpu-intf-te-v2-0-ef76c877eb97@somainline.org/T/#t
+> 
+> v1: https://lore.kernel.org/linux-arm-msm/20230211122656.1479141-1-konrad.dybcio@linaro.org/
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+> Konrad Dybcio (12):
+>       dt-bindings: display/msm: dsi-controller-main: Add SM6350
+>       dt-bindings: display/msm: dsi-controller-main: Add SM6375
+>       dt-bindings: display/msm: sc7180-dpu: Describe SM6350 and SM6375
+>       dt-bindings: display/msm: Add SM6350 MDSS
+>       dt-bindings: display/msm: Add SM6375 MDSS
+>       drm/msm/dpu: Add SM6350 support
+>       drm/msm: mdss: Add SM6350 support
+>       drm/msm/dpu: Add SM6375 support
+>       drm/msm: mdss: Add SM6375 support
+>       iommu/arm-smmu-qcom: Sort the compatible list alphabetically
+>       iommu/arm-smmu-qcom: Add SM6375 DPU compatible
+>       iommu/arm-smmu-qcom: Add SM6350 DPU compatible
+> 
+>  .../bindings/display/msm/dsi-controller-main.yaml  |   4 +
+>  .../bindings/display/msm/qcom,sc7180-dpu.yaml      |  23 ++-
+>  .../bindings/display/msm/qcom,sm6350-mdss.yaml     | 214 ++++++++++++++++++++
+>  .../bindings/display/msm/qcom,sm6375-mdss.yaml     | 216 +++++++++++++++++++++
+>  .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_4_sm6350.h | 188 ++++++++++++++++++
+>  .../gpu/drm/msm/disp/dpu1/catalog/dpu_6_9_sm6375.h | 153 +++++++++++++++
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c     |   6 +
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h     |   2 +
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c            |   2 +
+>  drivers/gpu/drm/msm/msm_mdss.c                     |  10 +
+>  drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c         |   6 +-
+>  11 files changed, 821 insertions(+), 3 deletions(-)
+> ---
+> base-commit: c437aff71b13c5ca77821ec1bab98ca7e18716d0
+> change-id: 20230411-topic-straitlagoon_mdss-8f34cacd5e26
+> 
+> Best regards,
+> -- 
+> Konrad Dybcio <konrad.dybcio@linaro.org>
+> 
