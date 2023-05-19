@@ -2,101 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C30D5709AC0
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 16:58:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E56B0709ACA
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 17:01:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232197AbjESO6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 10:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41134 "EHLO
+        id S232138AbjESPBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 11:01:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232138AbjESO6o (ORCPT
+        with ESMTP id S230449AbjESPB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 10:58:44 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A92101
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 07:58:42 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-561bcd35117so42753967b3.3
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 07:58:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1684508322; x=1687100322;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AajyqWszb0uY6qD9cS3VXYrfDU988bXtZCs1rPMruhw=;
-        b=CVjYLnK8pZSm+0s+2JgmOpL6fd7Fh3xe0DrvRV47kW58O8GUdqascT+ihAWb+4/PB5
-         57l1fSbdpzDrjebhCKxmt8dH+h8nzNnzfGUC6O47kcvj+/tq7D0PSJjuIJJayEMDuPTp
-         RZmYcbvGlGStIcUkuVCBO7399/guNv++G9I5Asoz5DROlHagoZjpYdqO7T9i1NOAzJ1w
-         Du4lToaIIcFchOrn0Nn//43a6dCasI0vQfLXRVHExkpStSbCh+g9ayLmw5x0ghVHqblw
-         Dsm6QLKodk9RMwxd+A5A9Ln0JG71pTOJEq/9kFiLF97zE4pLcdM5N8FRzbB5GfM0mP18
-         P5iQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684508322; x=1687100322;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AajyqWszb0uY6qD9cS3VXYrfDU988bXtZCs1rPMruhw=;
-        b=mIRNsieDvYF8AKLrLUQUH47KIM6yhhpfx8WOd3pGUhVhrm9nOlig8P4Iiw8uUopmfJ
-         KjWIKYCztHhdmeubqVIu5Ehrqg8X3Sw13Yjegf2ALlKU3tRoKbGl8Onc66KU65j0RJBs
-         Kt2jUXdRxcbP5AfsG1Nd+Z123wscbZ0kSUilez732Fu8IvqmJ46jwTiq7I79eJWeP8j2
-         mrs6GTcGpOoLrWXJG6w6RTBwAhe1MfSPUGGZkHIKeGILLVAZ75RuLKCrL9O8S7FsQD/E
-         /IlaxML8MzWe10OPTN6Ab8JP15WigJnfWLnJzi8wlj3oYx364eihLr9tCVIRwkHez4Bq
-         Gaeg==
-X-Gm-Message-State: AC+VfDwMebcBRSjLK+4lujkL+Z/MdRIzx8ynfM5O3HPeu9vg+bCgSYkK
-        ii9q/POtX/du3ES4V9MLttDiFD13EXzGAp4xFwk5
-X-Google-Smtp-Source: ACHHUZ4wVQ8Htbed+cTytEWUQf0lb6NRULZiiMX8VBBzsWBICc5rj9+tiqRxdZAlDEbFGOiNVwJSMMDulwZ/apnybkg=
-X-Received: by 2002:a81:4e92:0:b0:561:d6dd:bc84 with SMTP id
- c140-20020a814e92000000b00561d6ddbc84mr2216527ywb.48.1684508321812; Fri, 19
- May 2023 07:58:41 -0700 (PDT)
+        Fri, 19 May 2023 11:01:29 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E22AEC7;
+        Fri, 19 May 2023 08:01:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=2jTWFuDurAqpzGQEpvpUbzRLzj71zTuSnsPEw86T0dg=; b=Txzbih6tIIhzpwJ7L7uIU45yY5
+        OWYVCIoZHG3+TqKOMTcv/YhOErojdq9GxUi60L9sDnj6lZ2P61vKlifRT54INB5lzKNYlZYvaM6Wi
+        vbwg9FXEBVsxZCtJ/j86nxm5CWgkoYdBkUjZDCsPGC9uvd/ADo+pnlZ7tJWZdbhpg90P1UiH4Xf0V
+        xqYhuk+oU/unDeRRCpDVI/OQwgji22fmplqBaRqOulmQMLdSO1/y6XoNc8iqQXRJyPNHsAGA/PyXx
+        ijaSG60jfT0UcCoLJyfmmeyXQq+XyhfKxBfpk78CkvzLfQKjMPrZzuwH+T+vp4qdbqa++Y2TZzc3q
+        tE9DW1VA==;
+Received: from [2601:1c2:980:9ec0::2764]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q01bi-00GY2d-2U;
+        Fri, 19 May 2023 15:01:26 +0000
+Message-ID: <69c787f6-7496-f6dd-2324-6a6079e15754@infradead.org>
+Date:   Fri, 19 May 2023 08:01:25 -0700
 MIME-Version: 1.0
-References: <20230407-trasse-umgearbeitet-d580452b7a9b@brauner>
- <90a25725b4b3c96e84faefdb827b261901022606.camel@kernel.org>
- <cbffa3dee65ecc0884dd16eb3af95c09a28f4297.camel@linux.ibm.com>
- <CAHC9VhSeBn-4UN48NcQWhJqLvQuydt4OvdyUsk9AXcviJ9Cqyw@mail.gmail.com> <49a31515666cb0ecf78909f09d40d29eb5528e0f.camel@linux.ibm.com>
-In-Reply-To: <49a31515666cb0ecf78909f09d40d29eb5528e0f.camel@linux.ibm.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Fri, 19 May 2023 10:58:30 -0400
-Message-ID: <CAHC9VhS7uMMgvwRRDzpZPUQDAeibdkLi0OCdp=j_Q-EcMHm0cw@mail.gmail.com>
-Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM after writes
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Stefan Berger <stefanb@linux.ibm.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Amir Goldstein <amir73il@gmail.com>,
-        linux-integrity@vger.kernel.org, miklos@szeredi.hu,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] media: frontend.h.rst.exceptions: add more dvb define
+ exceptions
+Content-Language: en-US
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Athanasios Oikonomou <athoik@gmail.com>,
+        linux-media@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-doc@vger.kernel.org
+References: <20230518234735.20289-1-rdunlap@infradead.org>
+ <20230519090308.0e53eccd@sal.lan>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20230519090308.0e53eccd@sal.lan>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 4:56=E2=80=AFPM Mimi Zohar <zohar@linux.ibm.com> wr=
-ote:
-> On Thu, 2023-05-18 at 16:46 -0400, Paul Moore wrote:
-> > On Fri, Apr 21, 2023 at 10:44=E2=80=AFAM Mimi Zohar <zohar@linux.ibm.co=
-m> wrote:
-> > > On Fri, 2023-04-07 at 09:29 -0400, Jeff Layton wrote:
 
-...
 
-> > I'm going through my review queue to make sure I haven't missed
-> > anything and this thread popped up ... Stefan, Mimi, did you get a fix
-> > into an upstream tree somewhere?  If not, is it because you are
-> > waiting on a review/merge from me into the LSM tree?
->
-> Sorry for the delay.  Between vacation and LSS, I just started testing
-> Jeff Layton's patch.
+On 5/19/23 01:03, Mauro Carvalho Chehab wrote:
+> Hi Randy,
+> 
+> Em Thu, 18 May 2023 16:47:35 -0700
+> Randy Dunlap <rdunlap@infradead.org> escreveu:
+> 
+>> Building documentation reports multiple warnings for undefined DVB
+>> frontend labels:
+>>
+>> Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-11-45'
+>> Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-4-15'
+>> Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-14-45'
+>> Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-7-15'
+>> Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-11-45'
+>> Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-4-15'
+>> Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-14-45'
+>> Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-7-15'
+> 
+> Thanks for the patch. FYI, I already merged yesterday a fix identical
+> to your patch:
+> 
+> 	https://git.linuxtv.org/media_stage.git/commit/?id=8bc27fa5d7763d376a992a1638475987ed4807e7
+> 
+> Regards,
+> Mauro
 
-No worries, I'm a bit behind too, I just wanted to make sure I wasn't
-blocking this thread :)
 
---=20
-paul-moore.com
+Hi Mauro,
+
+Did you post that patch to the linux-media mailing list?
+I searched that list for such a patch before I made the patch.
+
+Thanks.
+
+> 
+>>
+>> so add those symbols to the ignore list to prevent the build warnings.
+>>
+>> Fixes: 1825788e2a96 ("media: dvb: add missing DVB-S2X FEC parameter values")
+>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Link: https://lore.kernel.org/linux-media/202305162245.wtaLIXf3-lkp@intel.com/
+>> Cc: Athanasios Oikonomou <athoik@gmail.com>
+>> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+>> Cc: linux-media@vger.kernel.org
+>> Cc: Jonathan Corbet <corbet@lwn.net>
+>> Cc: linux-doc@vger.kernel.org
+>> ---
+>>  Documentation/userspace-api/media/frontend.h.rst.exceptions |    4 ++++
+>>  1 file changed, 4 insertions(+)
+>>
+>> diff -- a/Documentation/userspace-api/media/frontend.h.rst.exceptions b/Documentation/userspace-api/media/frontend.h.rst.exceptions
+>> --- a/Documentation/userspace-api/media/frontend.h.rst.exceptions
+>> +++ b/Documentation/userspace-api/media/frontend.h.rst.exceptions
+>> @@ -142,6 +142,10 @@ ignore symbol FEC_26_45
+>>  ignore symbol FEC_28_45
+>>  ignore symbol FEC_32_45
+>>  ignore symbol FEC_77_90
+>> +ignore symbol FEC_11_45
+>> +ignore symbol FEC_4_15
+>> +ignore symbol FEC_14_45
+>> +ignore symbol FEC_7_15
+>>  
+>>  ignore symbol TRANSMISSION_MODE_AUTO
+>>  ignore symbol TRANSMISSION_MODE_1K
+
+-- 
+~Randy
