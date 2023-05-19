@@ -2,304 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55751708D2C
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 03:07:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C346708D38
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 03:19:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbjESBHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 21:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51496 "EHLO
+        id S230342AbjESBTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 21:19:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbjESBHv (ORCPT
+        with ESMTP id S229969AbjESBTa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 21:07:51 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6B8E67
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 18:07:48 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id 6a1803df08f44-6235aac00edso24391956d6.1
-        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 18:07:48 -0700 (PDT)
+        Thu, 18 May 2023 21:19:30 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DCEE75
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 18:19:27 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-517ab9a4a13so2384206a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 18 May 2023 18:19:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684458467; x=1687050467;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ShpVRoLx2yuZQEh5Oa8VlRwMbFO5/1uX0O7lleIq/ac=;
-        b=cocTURKwNfIosKU3hcLYkK4xIp3+2QXu88CJ3E8cWB9Uh/PVZwmzB08Q/OkRfalPDq
-         LGmHCntuptqdgbdp6pbiZRzBndUrNjd0fBkzqRWItWlSYmB0dWjvUcQW/KhARoegtqH3
-         pqEta1v9ZHiAAR1ID41v+FuR/Rra77fCQi0PBHpLp1ohFwMKv53HVtGyhCUaZQB4KQ2X
-         o/3Q5das7C2xufnwqZJzQGFh3Yeez2h8NXxLz/v1F0AewGSov0erw9uF/Db/5LBZnOqt
-         zK+Ebp6/ymfuEr3JwYxd3RIKvViMJKrAAHRn+wfS1A1Mcn3/4ZYuJ/Yh6JEBaE28ibL4
-         Jtew==
+        d=chromium.org; s=google; t=1684459166; x=1687051166;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GjQ7lK8x1oL2I5FLMeKnNLIrlKblkTMw13nT3cZTNwk=;
+        b=ZMW1ujm0IGNY4HJVwAoezA3+fLyirNIeI5kZF43KvmeV0tNoxyX+O2S2JdzkpN852K
+         qwo/z8/aQZ78rKRpB4A25ywXP0hUVPkkkPIL/MA9enCQ/vdpwKmPx0Am8kl+ts9BBL/F
+         kWJ5nb+orKVuCwDB7UZg+kL2eN4Sx2jtWLjyc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684458467; x=1687050467;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ShpVRoLx2yuZQEh5Oa8VlRwMbFO5/1uX0O7lleIq/ac=;
-        b=WlbUX1ydcGCOzvN40BaP4iMP7cyD/QfIEfos2RtwvotnDr7qaRbe/2/daLd/Qq+oJD
-         TkqGq8rpZlTzsRcUaHsN3shPeja5TL8afacjR5pUePPW6oHxYz+Gc6sQvPiY4GlDmduh
-         +AawgkclSxxGfCj5tFmQhHU4OgE4tRDJind5VifsS91s4Huyqu4krnzt47pau0s5ihLe
-         iXn2SMymFRZ1QaAxhZL5l0nFwApGb7JdNGZPvQuV75hL6SUcnt5Y+v3aoY+8YcTnkFXe
-         5mAh1/dOcMfh+icvRkBSyVqr2wEWkDU6h2PACeTcdgfyGymy9JfcXyCYmBp+YZ7p73V8
-         Rx0Q==
-X-Gm-Message-State: AC+VfDxjBT7BCLX8b9smCZhZW+2LmzJbWrodVAr2teUzt6PGi+fmmGmN
-        LIf2lSHQUFq40+xYDExQRZlvKX6K51JXPzwDaulsxA==
-X-Google-Smtp-Source: ACHHUZ6hbJVg8k+ym3Y6f8JpHjSIABCLMheeU/pZuiiIfxNOllV4Xy5gjeJ5oiMqS1HX2M5YJI+Iy2L/NxfbfD2cMlE=
-X-Received: by 2002:ad4:5ecc:0:b0:623:7707:5650 with SMTP id
- jm12-20020ad45ecc000000b0062377075650mr1894478qvb.15.1684458467209; Thu, 18
- May 2023 18:07:47 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684459166; x=1687051166;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GjQ7lK8x1oL2I5FLMeKnNLIrlKblkTMw13nT3cZTNwk=;
+        b=QeG48qwyYuii+FKQ2NtWFf0monSe0YQUqodH6umZfKKHwHQI2IFXAaPAWbo1PjYhL/
+         soBfUwf/K+0UxCb61JwNKp78hli98BNdi0350kdhOXYHwewWAD58KW6PIf9MYikmMtKE
+         XGugcHnwxXseKFby8aZEqsxSQhxYa2hzP5WaVFdh2wMfV+2y0iWj+X3fCfOmu3OKoa8x
+         pUZi/rApnkwMamKUjCNQftMvpOZ+V7CLytSq4QH+f10dEyMTmMKpxZ/obwQpc2QMFpaM
+         9M6eUjdzYEEO5FMKIQbS04jhfsN2wcTVADI64omPInzctYVUKm4vH94jGtunKJx7Rms1
+         mTeg==
+X-Gm-Message-State: AC+VfDy2PoKLpYxdhCNUCvxRcJ6jCbF0NJ9Cr6n2+r2kO425QnlPKghq
+        74uZmFQcK3qTW1EESlpT4c/NYg==
+X-Google-Smtp-Source: ACHHUZ52jvk/GEcjXoEOI/KyFOvc57rvcKEvB+GgBuys5A2AaRwCx5rVtsr4rXoWnPmxj1vyw0YjsQ==
+X-Received: by 2002:a17:903:32c7:b0:1ac:43ea:7882 with SMTP id i7-20020a17090332c700b001ac43ea7882mr1271097plr.29.1684459166520;
+        Thu, 18 May 2023 18:19:26 -0700 (PDT)
+Received: from localhost (183.43.230.35.bc.googleusercontent.com. [35.230.43.183])
+        by smtp.gmail.com with UTF8SMTPSA id j6-20020a170902c08600b001ac2be26340sm2075201pld.222.2023.05.18.18.19.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 18 May 2023 18:19:26 -0700 (PDT)
+From:   jeffxu@chromium.org
+To:     dave.hansen@intel.com, luto@kernel.org, jorgelo@chromium.org,
+        keescook@chromium.org, groeck@chromium.org, jannh@google.com,
+        sroettger@google.com
+Cc:     akpm@linux-foundation.org, jeffxu@google.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, linux-hardening@vger.kernel.org
+Subject: [PATCH v1 0/6] Memory Mapping (VMA) protection using PKU - set 1
+Date:   Fri, 19 May 2023 01:19:08 +0000
+Message-ID: <20230519011915.846407-1-jeffxu@chromium.org>
+X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
 MIME-Version: 1.0
-References: <ZD12htq6dWg0tg2e@google.com> <1ed06a62-05a1-ebe6-7ac4-5b35ba272d13@redhat.com>
- <ZD2bBB00eKP6F8kz@google.com> <9efef45f-e9f4-18d1-0120-f0fc0961761c@redhat.com>
- <ZD86E23gyzF6Q7AF@google.com> <5869f50f-0858-ab0c-9049-4345abcf5641@redhat.com>
- <ZEM5Zq8oo+xnApW9@google.com> <CAGtprH_+bF4VZg2ps6CM8vjJVvShsvSGAvaLfTedts4cKqhSUw@mail.gmail.com>
- <ZFwPBqGeW+d9xMEs@google.com> <CAGtprH8jUAM015h4eEhbdAv6Oq2UNbX3P5Z-VCVbcrHtnATJwQ@mail.gmail.com>
- <ZF1Oh5qrgcNNZ7Jc@google.com>
-In-Reply-To: <ZF1Oh5qrgcNNZ7Jc@google.com>
-From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Thu, 18 May 2023 18:07:36 -0700
-Message-ID: <CAGtprH_H1afUJ2cUnznWqYLTZVuEcOogRwXF6uBAeHbLMQsrsQ@mail.gmail.com>
-Subject: Re: Rename restrictedmem => guardedmem? (was: Re: [PATCH v10 0/9]
- KVM: mm: fd-based approach for supporting KVM)
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        tabba@google.com, Michael Roth <michael.roth@amd.com>,
-        wei.w.wang@intel.com, Mike Rapoport <rppt@kernel.org>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Ackerley Tng <ackerleytng@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>,
-        Christian Brauner <brauner@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 1:22=E2=80=AFPM Sean Christopherson <seanjc@google.=
-com> wrote:
-> ...
-> Ah, you're effectively suggesting a hybrid model where the file is the si=
-ngle
-> source of truth for what's private versus shared, ad KVM gets pfns throug=
-h
-> direct communication with the backing store via the file descriptor, but =
-userspace
-> can still control things via mmap() and friends.
->
-> If you're not suggesting a backdoor, i.e. KVM still gets private pfns via=
- hvas,
-> then we're back at Kirill's series, because otherwise there's no easy way=
- for KVM
-> to retrieve the pfn.
->
+From: Jeff Xu <jeffxu@google.com>
 
-Yeah, I was hinting towards using the backdoor, where KVM still gets
-private pfns via HVAs.
+This is the first set of Memory mapping (VMA) protection patches using PKU.
 
-> A form of this was also discussed, though I don't know how much of the di=
-scussion
-> happened on-list.
->
-> KVM actually does something like this for s390's Ultravisor (UV), which i=
-s quite
-> a bit like TDX (UV is a trusted intermediary) except that it handles faul=
-ts much,
-> much more gracefully.  Specifically, when the untrusted host attempts to =
-access a
-> secure page, a fault occurs and the kernel responds by telling UV to expo=
-rt the
-> page.  The fault is gracefully handled even even for kernel accesses
-> (see do_secure_storage_access()).  The kernel does BUG() if the export fa=
-ils when
-> handling fault from kernel context, but my understanding is that export c=
-an fail
-> if and only if there's a fatal error elsewhere, i.e. the UV essentialy _e=
-nsures_
-> success, and goes straight to BUG()/panic() if something goes wrong.
->
-> On the guest side, accesses to exported (swapped) secure pages generate i=
-ntercepts
-> and KVM faults in the page.  To do so, KVM freezes the page/folio refcoun=
-t, tells
-> the UV to import the page, and then unfreezes the page/folio.  But very c=
-rucially,
-> when _anything_ in the untrusted host attempts to access the secure page,=
- the
-> above fault handling for untrusted host accesses kicks in.  In other word=
-s, the
-> guest can cause thrash, but can't bring down the host.
->
+* * * 
 
-Yeah, this is very similar to what I was trying to propose. Except in
-this case, the backing store i.e. guest_mem will have to let the fault
-be unhandled for untrusted host accesses to private ranges of
-guest_mem file.
+Background:
 
-> TDX on the other hand silently poisons memory, i.e. doesn't even generate=
- a
-> synchronous fault.  Thus the kernel needs to be 100% perfect on preventin=
-g _any_
-> accesses to private memory from the host, and doing that is non-trivial a=
-nd
-> invasive.
->
-> SNP does synchronously fault, but the automatically converting in the #PF=
- handler
-> got NAK'd[*] for good reasons, e.g. SNP doesn't guarantee conversion succ=
-ess as the
-> guest can trigger concurrent RMP modifications.  So the end result ends u=
-p being
-> the same as TDX, host accesses need to be completely prevented.
->
-> Again, this is all doable, but costly.  And IMO, provides very little val=
-ue.
+As discussed previously in the kernel mailing list [1], V8 CFI [2] uses 
+PKU to protect memory, and Stephen Röttger proposes to extend the PKU to 
+memory mapping [3].
 
-With this hybrid approach with the backdoor access to pfns from KVM,
-do we see a scenario where host can bypass the guest_mem restrictions
-and still be able to access the private ranges using HVA ranges? One
-possibility is that these pages are mapped in the IOMMU (when they are
-shared) and then get converted to private without getting unmapped
-from IOMMU. Maybe KVM can disallow converting the ranges which are
-pinned for DMA (not sure if there is a way to do that).
+We're using PKU for in-process isolation to enforce control-flow integrity
+for a JIT compiler. In our threat model, an attacker exploits a 
+vulnerability and has arbitrary read/write access to the whole process
+space concurrently to other threads being executed. This attacker can
+manipulate some arguments to syscalls from some threads.
 
-Few additional benefits here:
-1) Possibly handle the pkvm usecase in this series without the need
-for additional modifications.
-2) Handling UPM for normal VMs possibly could get simpler as this
-hybrid approach can allow preserving the contents across conversions.
+Under such a powerful attack, we want to create a “safe/isolated”
+thread environment. We assign dedicated PKUs to this thread, 
+and use those PKUs to protect the threads’ runtime environment.
+The thread has exclusive access to its run-time memory. This
+includes modifying the protection of the memory mapping, or
+munmap the memory mapping after use. And the other threads
+won’t be able to access the memory or modify the memory mapping
+(VMA) belonging to the thread.
 
->
-> Allowing things like mbind() is nice-to-have at best, as implementing fbi=
-nd()
-> isn't straightforward and arguably valuable to have irrespective of this
-> discussion, e.g. to allow userspace to say "use this policy regardless of=
- what
-> process maps the file".
->
+* * * 
 
-Agreed, having mbind supported is not a significant gain given the cost her=
-e.
+Proposed changes:
 
-> Using a common memory pool (same physical page is used for both shared an=
-d private)
-> is a similar story.  There are plenty of existing controls to limit users=
-pace/guest
-> memory usage and to deal with OOM scenarios, so barring egregious host ac=
-counting
-> and/or limiting bugs, which would affect _all_ VM types, the worst case s=
-cenario
-> is that a VM is terminated because host userspace is buggy.  On the slip =
-side, using
-> a common pool brings complexity into the kernel, as backing stores would =
-need to
-> be taught to deny access to a subset of pages in their mappings, and in m=
-ultiple
-> paths, e.g. faults, read()/write() and similar, page migration, swap, etc=
-.
+This patch introduces a new flag, PKEY_ENFORCE_API, to the pkey_alloc()
+function. When a PKEY is created with this flag, it is enforced that any
+thread that wants to make changes to the memory mapping (such as mprotect)
+of the memory must have write access to the PKEY. PKEYs created without
+this flag will continue to work as they do now, for backwards 
+compatibility.
 
-In this case the backing store that needs to be modified would just be
-guest_mem though.
+Only PKEY created from user space can have the new flag set, the PKEY
+allocated by the kernel internally will not have it. In other words,
+ARCH_DEFAULT_PKEY(0) and execute_only_pkey won’t have this flag set,
+and continue work as today.
 
->
-> [*] https://lore.kernel.org/linux-mm/8a244d34-2b10-4cf8-894a-1bf12b59cf92=
-@www.fastmail.com
->
-> > > Issues that led to us abandoning the "map with special !Present PTEs"=
- approach:
-> > >
-> > >  - Using page tables, i.e. hardware defined structures, to track gfn=
-=3D>pfn mappings
-> > >    is inefficient and inflexible compared to software defined structu=
-res, especially
-> > >    for the expected use cases for CoCo guests.
-> > >
-> > >  - The kernel wouldn't _easily_ be able to enforce a 1:1 page:guest a=
-ssociation,
-> > >    let alone a 1:1 pfn:gfn mapping.
-> >
-> > Maybe KVM can ensure that each page of the guest_mem file is
-> > associated with a single memslot.
->
-> This is a hard NAK.  Guest physical address space is guaranteed to have h=
-oles
-> and/or be discontiguous, for the PCI hole at the top of lower memory.  Al=
-lowing
-> only a single binding would prevent userspace from backing all (or large =
-chunks)
-> of guest memory with a single file.
->
+This flag is checked only at syscall entry, such as mprotect/munmap in
+this set of patches. It will not apply to other call paths. In other
+words, if the kernel want to change attributes of VMA for some reasons,
+the kernel is free to do that and not affected by this new flag.
 
-Poor choice of words from my side. I meant to suggest that KVM can
-ensure that ANY page of the guest_mem file is associated with at max
-one memslot.
+This set of patch covers mprotect/munmap, I plan to work on other 
+syscalls after this. 
 
-> ...
-> That'd work for the hybrid model (fd backdoor with pseudo mmap() support)=
-, but
-> not for a generic VMA-based implementation.  If the file isn't the single=
- source
-> of truth, then forcing all mappings to go away simply can't work.
->
-> > > #3 is also a limiter.  E.g. if a guest is primarly backed by 1GiB pag=
-es, keeping
-> > > the 1GiB mapping is desirable if the guest converts a few KiB of memo=
-ry to shared,
-> > > and possibly even if the guest converts a few MiB of memory.
-> >
-> > This caveat maybe can be lived with as shared ranges most likely will
-> > not be backed by 1G pages anyways, possibly causing IO performance to
-> > get hit. This possibly needs more discussion about conversion
-> > granularity used by guests.
->
-> Yes, it's not the end of the world.  My point is that separating shared a=
-nd private
-> memory provides more flexibility.  Maybe that flexibility never ends up b=
-eing
-> super important, but at the same time we shouldn't willingly paint oursel=
-ves into
-> a corner.
+* * * 
 
-There are some performance implications here with the split approach.
+Testing:
 
-This flexibility is actually coming with the cost of managing double
-allocation effectively. As the granularity of mappings increases for
-the shared memory, it gets difficult to cap the amount of double
-allocation. So effectively it comes down to always using smaller
-granularity for shared memory and also the private memory for
-converted ranges. In general the performance requirements would always
-try to push for higher mapping granularities depending on the scale of
-usage.
+I have tested this patch on a Linux kernel 5.15, 6,1, and 6.4-rc1,
+new selftest is added in: pkey_enforce_api.c 
 
-In general private memory (and also the shared memory on respective
-conversions) will always need to be hole punched to ensure that the
-double allocation won't happen. And so, even if this is something for
-the future, using hugetlbfs pages for backing private memory with the
-split model effectively makes it impossible to cap the double
-allocation. I am not sure if the 1G pages can be handled better with
-the hybrid model but maybe it's worth checking.
+* * * 
 
-Split shared/private mem approach also increases the uncertainties
-around memory management in general where the same amount of memory
-which was available earlier is first freed to the system and then
-allocated back from the system. .e.g. Even if hugepages were around
-when private memory was initially allocated, further allocations keep
-increasing the possibilities of not being able to use a huge page to
-back the memory even if the whole huge page is private/shared.
+Discussion:
+
+We believe that this patch provides a valuable security feature. 
+It allows us to create “safe/isolated” thread environments that are 
+protected from attackers with arbitrary read/write access to 
+the process space.
+
+We believe that the interface change and the patch don't 
+introduce backwards compatibility risk.
+
+We would like to disucss this patch in Linux kernel community
+for feedback and support. 
+
+* * * 
+
+Reference:
+
+[1]https://lore.kernel.org/all/202208221331.71C50A6F@keescook/
+[2]https://docs.google.com/document/d/1O2jwK4dxI3nRcOJuPYkonhTkNQfbmwdvxQMyXgeaRHo/edit?usp=sharing
+[3]https://docs.google.com/document/d/1qqVoVfRiF2nRylL3yjZyCQvzQaej1HRPh3f5wj1AS9I/edit
+
+* * * 
+Current status:
+
+There are on-going discussion related to threat model, io_uring, we will continue discuss using v0 thread.
+
+* * * 
+PATCH history:
+
+v1: update code related review comments:
+mprotect.c: 
+	remove syscall from do_mprotect_pkey()
+	remove pr_warn_ratelimited
+
+munmap.c:
+	change syscall to enum caller_origin
+	remove pr_warn_ratelimited
+
+v0:
+https://lore.kernel.org/linux-mm/20230515130553.2311248-1-jeffxu@chromium.org/
+
+Best Regards,
+-Jeff Xu
+
+
+Jeff Xu (6):
+  PKEY: Introduce PKEY_ENFORCE_API flag
+  PKEY: Add arch_check_pkey_enforce_api()
+  PKEY: Apply PKEY_ENFORCE_API to mprotect
+  PKEY:selftest pkey_enforce_api for mprotect
+  PKEY: Apply PKEY_ENFORCE_API to munmap
+  PKEY:selftest pkey_enforce_api for munmap
+
+ arch/powerpc/include/asm/pkeys.h              |   19 +-
+ arch/x86/include/asm/mmu.h                    |    7 +
+ arch/x86/include/asm/pkeys.h                  |   92 +-
+ arch/x86/mm/pkeys.c                           |    2 +-
+ include/linux/mm.h                            |    8 +-
+ include/linux/pkeys.h                         |   18 +-
+ include/uapi/linux/mman.h                     |    5 +
+ mm/mmap.c                                     |   31 +-
+ mm/mprotect.c                                 |   17 +-
+ mm/mremap.c                                   |    6 +-
+ tools/testing/selftests/mm/Makefile           |    1 +
+ tools/testing/selftests/mm/pkey_enforce_api.c | 1312 +++++++++++++++++
+ 12 files changed, 1499 insertions(+), 19 deletions(-)
+ create mode 100644 tools/testing/selftests/mm/pkey_enforce_api.c
+
+
+base-commit: ba0ad6ed89fd5dada3b7b65ef2b08e95d449d4ab
+-- 
+2.40.1.606.ga4b1b128d6-goog
+
