@@ -2,157 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F7B709E39
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 19:33:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70BE2709E44
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 19:34:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231283AbjESRdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 13:33:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41798 "EHLO
+        id S232063AbjESReG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 13:34:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbjESRdP (ORCPT
+        with ESMTP id S232142AbjESRd5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 13:33:15 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567D710DC
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 10:32:50 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id 6a1803df08f44-623f24b7ec9so119536d6.3
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 10:32:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684517569; x=1687109569;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=28CIrmSeW20zxT1lrEW3DjvASU36Pu1EBFA82UM2iKs=;
-        b=1Iyutpx1ohuULHbEgEiXeeQ1FIPdxRvYDFE5PYOWHG5EX1xjrOwlqkkaUlN+7l8TzD
-         szXzmjvzth53x9OKnK+vbmrjVx2S/TQI1MVGqVpSZJ6b50XxZ57wRuiglgYZ5X3eElYM
-         U14n6OeUEtrMvHAiSeRKLqNhiYLDX4PpmHF0WSYKVa/jqWU52r+Q6mf2TnlXpKAu/tEt
-         Cd3PRltGv5+jf/a0H2dXDXUz2W4VV/N4y5oyaMzn8RMP5DPh7hhH1kRhUsQ+MO6KgFPN
-         aEYdn0/kvp6XECDLQmzu/PZqZYwMJLAqGKgQOeoR4Xk0MlAFFTRUeMpzldu9/WztkDu1
-         iU1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684517569; x=1687109569;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=28CIrmSeW20zxT1lrEW3DjvASU36Pu1EBFA82UM2iKs=;
-        b=dumt2BYfv2r+7XI0n+yvZvUMWBPXD10mURGrAVGKJoRjVzEtt/sZ7bmgYlWusfc+YQ
-         U7Dksqq4Yd/B8zRDqbFrAV01uVlj2lndNP0haryS4+kO0YF5Bk5DVEWt42v++hew+KvZ
-         2p3mrSYB/Azxm8aI0OdJ1XmcGwUWIF2PIppMmY3v2R5tNtlszFrThRQr36CPW+j9aPSA
-         eb3IXiw6LIizHsO2tOPAxB3/iwAcSyJIRPHsNtxJG5U77BDnjQ+vXbi58IYmy8pJZHvK
-         vWB27R6/AOfs5lEOIwC4Cv6WXjFo2eqXRv/WmlyCFd4GSlECIhXpk68GJa5bD/4uu1MM
-         Er5w==
-X-Gm-Message-State: AC+VfDx5xJKStOoAdMBRboYNlKCZ9cUNN9XdXzGKLQevsAvF/AxHHY1a
-        TCPQLNb4Q6jVJisNH1d0uSJXXhnFZzDj6GiUEjVwIA==
-X-Google-Smtp-Source: ACHHUZ5W2Po65BFI15eOheYTJXgbEStDZirigUQta6i+5d+3xwpd1LAe8DNgWb3cpBxGrqqPIWfWd9RLNhg+JZrFyKw=
-X-Received: by 2002:a05:6214:416:b0:621:7d4:e059 with SMTP id
- z22-20020a056214041600b0062107d4e059mr6079776qvx.10.1684517569077; Fri, 19
- May 2023 10:32:49 -0700 (PDT)
+        Fri, 19 May 2023 13:33:57 -0400
+Received: from smtp.smtpout.orange.fr (smtp-20.smtpout.orange.fr [80.12.242.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F2F5171F
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 10:33:34 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id 03yTqTToaqmw803yUqQMYM; Fri, 19 May 2023 19:33:08 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1684517588;
+        bh=axl0zhsvpOM6Fxxob2rDzGKPa3FDR+vU6oCHaOjC7nk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=LhUmCPjqjFRrzSgpetc6BLMo5HV9JGPDZKReX7utFpQcGXqk9CrF05Xmi4ocCv7Rm
+         A03Pj1M9tXhjMr3lYU0EUSLBffJtkkkEHZ+lk2jKYI+pINbTdgMRtatuopHZwOux0B
+         asNIJX1rZuitNY1XTKyZODeFlf2qfc9R4wgB7dkQV8G5SRDbJEuBHK3GaM0ckGw0Lf
+         tbQce+LrhfA1iiIDbEUivumHleLZS1iejFP73gBWiQOv6M4371SjgDKJtk93JKAmFe
+         BmBMszFt7s3gDU8ymOMLm7GSv/OrfJG47u0XC9sWW+NQobJ6b6UVKBt6Yg6lKYCloo
+         Iuq3oFKRwOyBQ==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 19 May 2023 19:33:08 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <193a5d30-dd0c-fadb-3358-2fd46fa47e60@wanadoo.fr>
+Date:   Fri, 19 May 2023 19:33:05 +0200
 MIME-Version: 1.0
-References: <20230511182426.1898675-1-axelrasmussen@google.com>
- <CADrL8HXFiTL-RDnETS2BUg_qH8CvcCMZiX-kutsrS1-8Uy25=w@mail.gmail.com>
- <ZGVRUeCWr8209m8d@x1n> <ZGVTMnVKNcQDM0x4@x1n> <CAJHvVcgXynHcuoS6eCfOAB2SgzqYy_zMGrRMR2kFuxOtSdUwvQ@mail.gmail.com>
- <CACw3F52MNOVv6KA5n7wRYDT2ujwYkco=aYngbo-zGA3zW1yq+w@mail.gmail.com>
- <ZGZMtK6PzoTuLZ1b@x1n> <CAJHvVcgcYPu-G3RDVrkrM_J48NUiUY0SH0G1sd+=X9BDgnQEuQ@mail.gmail.com>
- <32fdc2c8-b86b-92f3-1d5e-64db6be29126@redhat.com> <CACw3F50qvf13-fUx4XrL1jkhbo2mQ5sPV=E_i7_Gt2NaWXJfnQ@mail.gmail.com>
- <ZGehyTCtAtTneiE8@x1n>
-In-Reply-To: <ZGehyTCtAtTneiE8@x1n>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Fri, 19 May 2023 10:32:13 -0700
-Message-ID: <CAJHvVcgVcGigruVdCyOZ2gyrOMboHjuMBwyx9+9LFiv_xH2Q5A@mail.gmail.com>
-Subject: Re: [PATCH 1/3] mm: userfaultfd: add new UFFDIO_SIGBUS ioctl
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Jiaqi Yan <jiaqiyan@google.com>,
-        David Hildenbrand <david@redhat.com>,
-        James Houghton <jthoughton@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Hongchen Zhang <zhanghongchen@loongson.cn>,
-        Huang Ying <ying.huang@intel.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Shuah Khan <shuah@kernel.org>,
-        ZhangPeng <zhangpeng362@huawei.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Anish Moorthy <amoorthy@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/2] x86/PCI: Fix a sanity check in
+ pirq_convert_irt_table()
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-pci@vger.kernel.org
+References: <bc8422a8bf3ff99809413eb62dd12aacc85a9950.1683356951.git.christophe.jaillet@wanadoo.fr>
+ <alpine.DEB.2.21.2305190345331.50034@angie.orcam.me.uk>
+Content-Language: fr, en-US
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <alpine.DEB.2.21.2305190345331.50034@angie.orcam.me.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 9:20=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote:
->
-> Hi, Jiaqi,
->
-> On Fri, May 19, 2023 at 08:04:09AM -0700, Jiaqi Yan wrote:
-> > I don't think CAP_ADMIN is something we can work around: a VMM must be
-> > a good citizen to avoid introducing any vulnerability to the host or
-> > guest.
-> >
-> > On the other hand, "Userfaults allow the implementation of on-demand
-> > paging from userland and more generally they allow userland to take
-> > control of various memory page faults, something otherwise only the
-> > kernel code could do." [3]. I am not familiar with the UFFD internals,
-> > but our use case seems to match what UFFD wants to provide: without
-> > affecting the whole world, give a specific userspace (without
-> > CAP_ADMIN) the ability to handle page faults (indirectly emulate a
-> > HWPOISON page (in my mind I treat it as SetHWPOISON(page) +
-> > TestHWPOISON(page) operation in kernel's PF code)). So is it fair to
-> > say what Axel provided here is "provide !ADMIN somehow"?
-> >
-> > [3]https://docs.kernel.org/admin-guide/mm/userfaultfd.html
->
-> Userfault keywords on "user", IMHO.  We don't strictly need userfault to
-> resolve anything regarding CAP_ADMIN problems.  MADV_DONTNEED also dosn't
-> need CAP_ADMIN, same to any new madvise() if we want to make it useful fo=
-r
-> injecting poisoned ptes with !ADMIN and limit it within current->mm.
->
-> But I think you're right that userfaultfd always tried to avoid having
-> ADMIN and keep everything within its own scope of permissions.
->
-> So again, totally no objection on make it uffd specific for now if you gu=
-ys
-> are all happy with it, but just to be clear that it's (to me) mostly for
-> avoiding another WAKE, and afaics that's not really for solving the ADMIN
-> issue here.
+Le 19/05/2023 à 13:21, Maciej W. Rozycki a écrit :
+> On Sat, 6 May 2023, Christophe JAILLET wrote:
+> 
+>> We compare the size in bytes of a struct (and its ending flexible array)
+>> with the number of elements in a flexible array.
+> 
+>   Incorrect, see the inline documentation for the struct.
 
-How about this plan:
+Ouch.
 
-Since the concrete use case we have (postcopy live migration) is
-UFFD-specific, let's leave it as a UFFDIO_* operation for now.
+As you explained in your reply for the 2nd patch:
+     irT_routing_table != irQ_routing_table
 
-If in the future we come up with a non-UFFD use case, we can add a new
-MADV_* which does this operation at that point. From my perspective
-they could even share most of the same implementation code.
+Sorry for the noise.
 
-I don't think it's a big problem keeping the UFFDIO_* version too at
-that point, because it still provides some (perhaps small) value:
+CJ
 
-- Combines the operation + waking into one syscall
-- It allows us to support additional UFFD flags which modify / extend
-the operation in UFFD-specific ways, if we want to add those in the
-future
+> 
+>> This is wrong and "ir->size < ir->used" is likely to be always false.
+> 
+>   Hopefully, but we've seen all kinds of rubbish in PC BIOS data, and this
+> data structure seems available for OEMs to program with a tool called BCP.
+> Better safe than sorry.  Therefore, NAK.
+> 
+>    Maciej
+> 
 
-Seem reasonable?
-
-If so, I'll send a v2 with documentation updates.
-
->
-> Thanks,
->
-> --
-> Peter Xu
->
