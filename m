@@ -2,211 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF26170A2A6
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 00:04:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBFE670A2AA
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 00:05:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229693AbjESWE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 18:04:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42334 "EHLO
+        id S231558AbjESWFL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 18:05:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231340AbjESWEU (ORCPT
+        with ESMTP id S231294AbjESWFI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 18:04:20 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FAEE4D;
-        Fri, 19 May 2023 15:04:15 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-24e25e2808fso3509859a91.0;
-        Fri, 19 May 2023 15:04:15 -0700 (PDT)
+        Fri, 19 May 2023 18:05:08 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDF4E124
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 15:05:04 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-96f53c06babso320730066b.3
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 15:05:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684533854; x=1687125854;
+        d=google.com; s=20221208; t=1684533903; x=1687125903;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zdZ68oUc3H7SB6Qm6IW5KKphTlw7I2zDsq2qS2mOj/8=;
-        b=rYfgINwR3urYVNTEe+KfUUjGgM/8J8nTfMFyL08QMLuyg5zs1EbbsbAPaj1OFXdkbO
-         B0r0s+IHkSozRPT246lSrZEX4mTJPLXXE3TpjM8Q24Xe293vRqXkzBXzHpDIdBJmCYDR
-         tDrTarTEUclvu51G5Shm7r205D86m7XiCf8rqA1o+2AMpAasR92xJo57Z4MSxWVb8HTz
-         P4iCkDVWUMMBhYtowdFNM0askwsFdnoY29Jm21D1KWQlvPZbd0nJyhSdbYVrkgf+QubP
-         FEXpsqptoeuj8HIjwAe9Ljbl/PEgZmWMh9NNJrQ5k2M/gwBYf8qffKz1BIEqvyvdqa1S
-         vSgg==
+        bh=7JS9bsmb2ExhOm+g4Lt75nCSXcOXphRaQoc6aXCE0Cw=;
+        b=RnHJnnkj1VIHqje8IVNGPXgjD9OytYKxqYmMWS+0edD6d8Vlh452IK5UUoVYNHA0m/
+         JrZSLCWIuJkr/qFmn1GwZ0Z9okNmo3X9wIG4aOXiJQ71dR9N+z/hpGwqL9OucT/xYJs8
+         sXEdyf8eOAvooUYTi70XJlwMMww38PhJnoEwn+5ccVFnCUU0iBMWPYHYxxF+nFh6BS11
+         hlwa6Rx019RR4e90c7/yYg70FhEHrfU21w6a39b0FXQyYvZVkLYv79wYuo3K268S+3qN
+         t9JlkLqNgoKr9rx/LuewcGO1LO3srqyemDzUIMJlk4pSxE08v9Vre2LHZVt2SYIitl+8
+         7ARQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684533854; x=1687125854;
+        d=1e100.net; s=20221208; t=1684533903; x=1687125903;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zdZ68oUc3H7SB6Qm6IW5KKphTlw7I2zDsq2qS2mOj/8=;
-        b=MdKG0uxD7Fp4Zi3719374pam7X3cI7MzLteNwn5wResTzKCLBIISa98c1n3mDrDaST
-         6rFFVRYNSnOJjWSD9VbE/djyeJxSJgbSUPCIf/xQgx7wCRPWLz6c3XLL50hU54Kcr0Am
-         KMOxBJcAgTdsRae7szOcDgNrgut8ux3NhyDI9/UIiy9oNI+ZNgOgroqO2ktzJgc08Cdn
-         pix743uw8SLPJsZgqozUD8c76O9NIQ9d/caGsLiVwHWYCB102J38dqM722Kq6KGwqRBs
-         yJOPdrvHaNBBbk5kGgQBNO4iYYe0AFs1w3gPhpRFLVSzk0OiIfDILVmLfbj3boCqRVHE
-         U+TA==
-X-Gm-Message-State: AC+VfDzq//51GARL9QVK87TGn4VOY/xJbUlzn01994ndj4Cv8B3wrxIw
-        BhhrTZEjjUQRRoubMLPdlE0Ksf34LKOVLRTU6MsCXOhN
-X-Google-Smtp-Source: ACHHUZ7Huu5zh0PplEq4pYaCX5efGavs4vWgv29aBI63xl0HIs0/bUcafgDG52nAQM3MspUvXzLAAoEw0xbxmVWO9yE=
-X-Received: by 2002:a17:90a:4ce5:b0:24e:3bb3:ea0c with SMTP id
- k92-20020a17090a4ce500b0024e3bb3ea0cmr3364626pjh.10.1684533853854; Fri, 19
- May 2023 15:04:13 -0700 (PDT)
+        bh=7JS9bsmb2ExhOm+g4Lt75nCSXcOXphRaQoc6aXCE0Cw=;
+        b=NywiR7OLsr3bzj+7igrjOoXovg4qOWj4P/AifMdmcWYtq405wl3eLBTQ8xVbMARQ9a
+         hoBJaX3IITrsunAu7QRWZlTpdKZS9zfOEq1qadc0dqSinh6uEX3Xh9uj2LvIflD/KwEC
+         Z5mka1LFIJ0AhPFKW1kDLIf54Jk0RtSl2B+qM5BXBtoqswwOJb6//ElPmkhAwJ7tJ0je
+         ztvD+9hNT/xDwkcJVUuhwX6fx6tDZHYLz54I2Bdj7pwI2TXG6Z41UQNjfjmzXLggbp/L
+         BfZjx+SFzNsjaijvwDz5kMUzHVTNw+IyM80qBi65NpRjIimBtITFuJqeiNwaZC1vpRjc
+         V5mA==
+X-Gm-Message-State: AC+VfDyFLlXEgcVnd/j/UqEaErNDV459ddZNl/KehMwHnDaOKmut2bUk
+        UokHmUyGlUoJ2ixg8QVOHl9z2d0tG9HO2VhO85dKGQ==
+X-Google-Smtp-Source: ACHHUZ7PmKcUuxcRDtXRlzFfxhF3Z2gXJBCsnJtL/zsYC6bfcRtFijkSyPQ0sZzD2Lm33IiCzO9EnEZJEPBnURKzzfQ=
+X-Received: by 2002:a17:907:a428:b0:94f:59aa:8a7c with SMTP id
+ sg40-20020a170907a42800b0094f59aa8a7cmr3260984ejc.20.1684533903287; Fri, 19
+ May 2023 15:05:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230506195325.876871-1-aford173@gmail.com> <CAHCN7xLfh6Ttoi29d6Vn1Hw75GEA8hd-XGec08ofeC176thkPg@mail.gmail.com>
-In-Reply-To: <CAHCN7xLfh6Ttoi29d6Vn1Hw75GEA8hd-XGec08ofeC176thkPg@mail.gmail.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Fri, 19 May 2023 17:04:01 -0500
-Message-ID: <CAHCN7xKHHKQgjtzS+KSHE9w++_udRJ1PRVcse=rD6-tZGVGcdQ@mail.gmail.com>
-Subject: Re: [PATCH] clk: imx: composite-8m: Add imx8m_divider_determine_rate
-To:     linux-clk@vger.kernel.org
-Cc:     aford@beaconembedded.com, Abel Vesa <abelvesa@kernel.org>,
-        Peng Fan <peng.fan@nxp.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>
+References: <CAJD7tkaOMeeGNqm6nFyHgPhd9VpnCVqCAYCY725NoTohTMAnmw@mail.gmail.com>
+ <B66FDA24-50C6-444D-BD84-124E68A2AEEE@didiglobal.com>
+In-Reply-To: <B66FDA24-50C6-444D-BD84-124E68A2AEEE@didiglobal.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Fri, 19 May 2023 15:04:26 -0700
+Message-ID: <CAJD7tkb7zSFT5VnZ-00CA0mBE8dFmVqwPwvMpCYG9c-J3ovjyA@mail.gmail.com>
+Subject: Re: [PATCH v4 0/2] memcontrol: support cgroup level OOM protection
+To:     =?UTF-8?B?56iL5Z6y5rabIENoZW5na2FpdGFvIENoZW5n?= 
+        <chengkaitao@didiglobal.com>
+Cc:     "tj@kernel.org" <tj@kernel.org>,
+        "lizefan.x@bytedance.com" <lizefan.x@bytedance.com>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "mhocko@kernel.org" <mhocko@kernel.org>,
+        "roman.gushchin@linux.dev" <roman.gushchin@linux.dev>,
+        "shakeelb@google.com" <shakeelb@google.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "muchun.song@linux.dev" <muchun.song@linux.dev>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
+        "chengzhihao1@huawei.com" <chengzhihao1@huawei.com>,
+        "pilgrimtao@gmail.com" <pilgrimtao@gmail.com>,
+        "haolee.swjtu@gmail.com" <haolee.swjtu@gmail.com>,
+        "yuzhao@google.com" <yuzhao@google.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "vasily.averin@linux.dev" <vasily.averin@linux.dev>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "surenb@google.com" <surenb@google.com>,
+        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "feng.tang@intel.com" <feng.tang@intel.com>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        David Rientjes <rientjes@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 10:03=E2=80=AFPM Adam Ford <aford173@gmail.com> wro=
-te:
+On Wed, May 17, 2023 at 10:12=E2=80=AFPM =E7=A8=8B=E5=9E=B2=E6=B6=9B Chengk=
+aitao Cheng
+<chengkaitao@didiglobal.com> wrote:
 >
-> On Sat, May 6, 2023 at 2:53=E2=80=AFPM Adam Ford <aford173@gmail.com> wro=
-te:
+> At 2023-05-18 04:42:12, "Yosry Ahmed" <yosryahmed@google.com> wrote:
+> >On Wed, May 17, 2023 at 3:01=E2=80=AFAM =E7=A8=8B=E5=9E=B2=E6=B6=9B Chen=
+gkaitao Cheng
+> ><chengkaitao@didiglobal.com> wrote:
+> >>
+> >> At 2023-05-17 16:09:50, "Yosry Ahmed" <yosryahmed@google.com> wrote:
+> >> >On Wed, May 17, 2023 at 1:01=E2=80=AFAM =E7=A8=8B=E5=9E=B2=E6=B6=9B C=
+hengkaitao Cheng
+> >> ><chengkaitao@didiglobal.com> wrote:
+> >> >>
+> >> >> At 2023-05-17 14:59:06, "Yosry Ahmed" <yosryahmed@google.com> wrote=
+:
+> >> >> >+David Rientjes
+> >> >> >
+> >> >> >On Tue, May 16, 2023 at 8:20=E2=80=AFPM chengkaitao <chengkaitao@d=
+idiglobal.com> wrote:
+> >> >> >>
+> >> >> Thank you for providing a new application scenario. You have descri=
+bed a
+> >> >> new per-memcg approach, but a simple introduction cannot explain th=
+e
+> >> >> details of your approach clearly. If you could compare and analyze =
+my
+> >> >> patches for possible defects, or if your new approach has advantage=
+s
+> >> >> that my patches do not have, I would greatly appreciate it.
+> >> >
+> >> >Sorry if I was not clear, I am not implying in any way that the
+> >> >approach I am describing is better than your patches. I am guilty of
+> >> >not conducting the proper analysis you are requesting.
+> >>
+> >> There is no perfect approach in the world, and I also seek your advice=
+ with
+> >> a learning attitude. You don't need to say sorry, I should say thank y=
+ou.
+> >>
+> >> >I just saw the thread and thought it might be interesting to you or
+> >> >others to know the approach that we have been using for years in our
+> >> >production. I guess the target is the same, be able to tell the OOM
+> >> >killer which memcgs/processes are more important to protect. The
+> >> >fundamental difference is that instead of tuning this based on the
+> >> >memory usage of the memcg (your approach), we essentially give the OO=
+M
+> >> >killer the ordering in which we want memcgs/processes to be OOM
+> >> >killed. This maps to jobs priorities essentially.
+> >>
+> >> Killing processes in order of memory usage cannot effectively protect
+> >> important processes. Killing processes in a user-defined priority orde=
+r
+> >> will result in a large number of OOM events and still not being able t=
+o
+> >> release enough memory. I have been searching for a balance between
+> >> the two methods, so that their shortcomings are not too obvious.
+> >> The biggest advantage of memcg is its tree topology, and I also hope
+> >> to make good use of it.
 > >
-> > Currently, certain clocks are derrived as a divider from their
-> > parent clock.  For some clocks, even when CLK_SET_RATE_PARENT
-> > is set, the parent clock is not properly set which can lead
-> > to some relatively inaccurate clock values.
+> >For us, killing processes in a user-defined priority order works well.
 > >
-> > Unlike imx/clk-composite-93 and imx/clk-divider-gate, it
-> > cannot rely on calling a standard determine_rate function,
-> > because the 8m composite clocks have a pre-divider and
-> > post-divider. Because of this, a custom determine_rate
-> > function is necessary to determine the maximum clock
-> > division which is equivalent to pre-divider * the
-> > post-divider.
+> >It seems like to tune memory.oom.protect you use oom_kill_inherit to
+> >observe how many times this memcg has been killed due to a limit in an
+> >ancestor. Wouldn't it be more straightforward to specify the priority
+> >of protections among memcgs?
 > >
-> > With this added, the system can attempt to adjust the parent rate
-> > when the proper flags are set which can lead to a more precise clock
-> > value.
-> >
-> > On the imx8mplus, no clock changes are present.
-> > On the Mini and Nano, this can help achieve more accurate
-> > lcdif clocks. When trying to get a pixel clock of 31.500MHz
-> > on an imx8m Nano, the clocks divided the 594MHz down, but
-> > left the parent rate untouched which caused a calulation error.
-> >
-> > Before:
-> > video_pll              594000000
-> >   video_pll_bypass     594000000
-> >     video_pll_out      594000000
-> >       disp_pixel       31263158
-> >         disp_pixel_clk 31263158
-> >
-> > Variance =3D -236842 Hz
-> >
-> > After this patch:
-> > video_pll               31500000
-> >   video_pll_bypass      31500000
-> >     video_pll_out       31500000
-> >       disp_pixel        31500000
-> >         disp_pixel_clk  31500000
-> >
-> > Variance =3D 0 Hz
-> >
-> > All other clocks rates and parent were the same.
-> > Similar results on imx8mm were found.
-> >
+> >For example, if you observe multiple memcgs being OOM killed due to
+> >hitting an ancestor limit, you will need to decide which of them to
+> >increase memory.oom.protect for more, based on their importance.
+> >Otherwise, if you increase all of them, then there is no point if all
+> >the memory is protected, right?
 >
-> Peng / Abel,
->
-> I was curious if either of you might have time to review this attempt
-> at enabling determine_rate on the 8m's.  I tested this on the 8mm,
-> 8mn, and 8mp, and found no regressions.
+> If all memory in memcg is protected, its meaning is similar to that of th=
+e
+> highest priority memcg in your approach, which is ultimately killed or
+> never killed.
 
-Gentle nudge.
-
-It's been several weeks since the initial post and the DSI driver is
-now available for Mini and Nano, so having this in Mini and Nano will
-really help it sync various video sources.
-
-thanks,
-
-adam
+Makes sense. I believe it gets a bit trickier when you want to
+describe relative ordering between memcgs using memory.oom.protect.
 
 >
-> adam
-> > Fixes: 690dccc4a0bf ("Revert "clk: imx: composite-8m: Add support to de=
-termine_rate"")
-> > Signed-off-by: Adam Ford <aford173@gmail.com>
-> > ---
-> > V2:  Fix build warning found by build bot and fix prediv_value
-> >      and div_value because the values stored are the divisor - 1,
-> >      so we need to add 1 to the values to be correct.
+> >In this case, wouldn't it be easier to just tell the OOM killer the
+> >relative priority among the memcgs?
 > >
-> > diff --git a/drivers/clk/imx/clk-composite-8m.c b/drivers/clk/imx/clk-c=
-omposite-8m.c
-> > index cbf0d7955a00..7a6e3ce97133 100644
-> > --- a/drivers/clk/imx/clk-composite-8m.c
-> > +++ b/drivers/clk/imx/clk-composite-8m.c
-> > @@ -119,10 +119,41 @@ static int imx8m_clk_composite_divider_set_rate(s=
-truct clk_hw *hw,
-> >         return ret;
-> >  }
+> >>
+> >> >If this approach works for you (or any other audience), that's great,
+> >> >I can share more details and perhaps we can reach something that we
+> >> >can both use :)
+> >>
+> >> If you have a good idea, please share more details or show some code.
+> >> I would greatly appreciate it
 > >
-> > +static int imx8m_divider_determine_rate(struct clk_hw *hw,
-> > +                                     struct clk_rate_request *req)
-> > +{
-> > +       struct clk_divider *divider =3D to_clk_divider(hw);
-> > +       int prediv_value;
-> > +       int div_value;
-> > +
-> > +       /* if read only, just return current value */
-> > +       if (divider->flags & CLK_DIVIDER_READ_ONLY) {
-> > +               u32 val;
-> > +
-> > +               val =3D readl(divider->reg);
-> > +               prediv_value =3D val >> divider->shift;
-> > +               prediv_value &=3D clk_div_mask(divider->width);
-> > +               prediv_value++;
-> > +
-> > +               div_value =3D val >> PCG_DIV_SHIFT;
-> > +               div_value &=3D clk_div_mask(PCG_DIV_WIDTH);
-> > +               div_value++;
-> > +
-> > +               return divider_ro_determine_rate(hw, req, divider->tabl=
-e,
-> > +                                                PCG_PREDIV_WIDTH + PCG=
-_DIV_WIDTH,
-> > +                                                divider->flags, prediv=
-_value * div_value);
-> > +       }
-> > +
-> > +       return divider_determine_rate(hw, req, divider->table,
-> > +                                     PCG_PREDIV_WIDTH + PCG_DIV_WIDTH,
-> > +                                     divider->flags);
-> > +}
-> > +
-> >  static const struct clk_ops imx8m_clk_composite_divider_ops =3D {
-> >         .recalc_rate =3D imx8m_clk_composite_divider_recalc_rate,
-> >         .round_rate =3D imx8m_clk_composite_divider_round_rate,
-> >         .set_rate =3D imx8m_clk_composite_divider_set_rate,
-> > +       .determine_rate =3D imx8m_divider_determine_rate,
-> >  };
+> >The code we have needs to be rebased onto a different version and
+> >cleaned up before it can be shared, but essentially it is as
+> >described.
 > >
-> >  static u8 imx8m_clk_composite_mux_get_parent(struct clk_hw *hw)
-> > --
-> > 2.39.2
-> >
+> >(a) All processes and memcgs start with a default score.
+> >(b) Userspace can specify scores for memcgs and processes. A higher
+> >score means higher priority (aka less score gets killed first).
+> >(c) The OOM killer essentially looks for the memcg with the lowest
+> >scores to kill, then among this memcg, it looks for the process with
+> >the lowest score. Ties are broken based on usage, so essentially if
+> >all processes/memcgs have the default score, we fallback to the
+> >current OOM behavior.
+>
+> If memory oversold is severe, all processes of the lowest priority
+> memcg may be killed before selecting other memcg processes.
+> If there are 1000 processes with almost zero memory usage in
+> the lowest priority memcg, 1000 invalid kill events may occur.
+> To avoid this situation, even for the lowest priority memcg,
+> I will leave him a very small oom.protect quota.
+
+I checked internally, and this is indeed something that we see from
+time to time. We try to avoid that with userspace OOM killing, but
+it's not 100% effective.
+
+>
+> If faced with two memcgs with the same total memory usage and
+> priority, memcg A has more processes but less memory usage per
+> single process, and memcg B has fewer processes but more
+> memory usage per single process, then when OOM occurs, the
+> processes in memcg B may continue to be killed until all processes
+> in memcg B are killed, which is unfair to memcg B because memcg A
+> also occupies a large amount of memory.
+
+I believe in this case we will kill one process in memcg B, then the
+usage of memcg A will become higher, so we will pick a process from
+memcg A next.
+
+>
+> Dose your approach have these issues? Killing processes in a
+> user-defined priority is indeed easier and can work well in most cases,
+> but I have been trying to solve the cases that it cannot cover.
+
+The first issue is relatable with our approach. Let me dig more info
+from our internal teams and get back to you with more details.
+
+>
+> --
+> Thanks for your comment!
+> chengkaitao
+>
+>
