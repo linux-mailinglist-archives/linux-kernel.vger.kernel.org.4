@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 128D970A047
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 22:05:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 335A770A048
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 22:05:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbjESUFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 16:05:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48042 "EHLO
+        id S229938AbjESUFp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 16:05:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbjESUFi (ORCPT
+        with ESMTP id S229676AbjESUFi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 19 May 2023 16:05:38 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2AB8102
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 13:05:35 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f4ad71b00eso23352795e9.2
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 13:05:35 -0700 (PDT)
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F2A1A8
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 13:05:36 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f4ec041fc3so23054955e9.1
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 13:05:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=shruggie-ro.20221208.gappssmtp.com; s=20221208; t=1684526734; x=1687118734;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=unGGcWMXSxlIkISO/XPChAGC5INeHx+xymr7hphOHTk=;
-        b=k5Guw/07AnhDpxjKB8UcXAAmZWcQ5O3JowQVJ8laPyua71EN/rsYssN/IFPaFpkVpI
-         TNQ3Unj6O43cAdOO+OlJb/KWDnruigOlVvcsww9kNmV0PUazy0v2IbPDWbOOOPXT46IK
-         gb2tn8Hf/7Bg0Lu5ehkHUxiwM3yKMAO1UQ2MwV2DKEkEB946eY0I3G1Gxks2hY+Ydn7W
-         ecXUt3qg+NzSrGI0M2vHUQcH7ryHNXhU1MzhxtbmTvYxXhHlz6txRv/tGxamizDCnjzp
-         i2DRuPB/RPO5+nSINoDpkwQxIm/dOb0kmar0qY5Mm/EYGnDK2PDeXlgtmjuPcYIxJN/+
-         M8uA==
+        d=shruggie-ro.20221208.gappssmtp.com; s=20221208; t=1684526735; x=1687118735;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Dhk36Zm9kcZS6s/7QkUBwDpZCpJODd1UkmAk+ko7ofs=;
+        b=lFddv1Xx7+aPZjnuJK/BNYdmR8nlXfjsnu2AfYrhh7BYshp1lzes5QgQmT8Nhc/gBL
+         KCc6xtnn/dDsF6gi7C6YIJROVs7pvOVZnvCZejZ7ey69pbvMzBs0EhpaXbM5AmCGUnb5
+         gGH8L5TA3JLdPqgiLlxcIegGfCFQaMOyh3YSCRjWpGi8bmeJ9J7C5rYazwbHsPAQMTtr
+         w7Qde26UkLiaeMT93GpPAhIOQ20R39oN+YLgF0h5UYtM/AOcigpxfR8LCo1xVORSNXKI
+         2GgcpH9pjx4n4PdWkfJoO8bs8I5D/YPUTpaXrVJRRGHV6ZZRLa1EL8ph1Yhfc9FLOvq0
+         w6rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684526734; x=1687118734;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=unGGcWMXSxlIkISO/XPChAGC5INeHx+xymr7hphOHTk=;
-        b=kxDAAPqjFFJbA1aj4psyu5SR1i5zSA1rHoEgSohZ7KbiXfvXHUMdR/8X4Uq9Dg8f36
-         s5TIv6VYov8LN/MwaJORVioPhs4RBDi4cJipJVwFUmPk+OJKfWN9UssskTAU8NpCAr7q
-         NDQhQHjGIw0ML4PkNi1kXPsddrvUR4b9gCSBdsNhHvKLeklAnN00X/PTrvHSllYxyJSp
-         6ZqAHVJPUs5IoKrP5N9hjTPNhcDPfpD9jxpGNgihZKC14jIhM15pA8fcDG9DenMqS+wR
-         L4zz3aHxcfZygpYq4+CbWulmCGu7vkJPLuJrIff3WA4nTh01ZMr4oF9z39h+YIBs2sVH
-         P/eg==
-X-Gm-Message-State: AC+VfDwwBO4gvZYCsAt3TXoDuTIjWKpqmMtv7epQv0V5JMr6wxI9/QFQ
-        i2r3vJaSH4al5BZPqHYwX/BdTw==
-X-Google-Smtp-Source: ACHHUZ7ga4CZxLiQQKfdmi4Xqh4DykUfMWEgzKKffEXW7eHm0kD86vFODcQqOLeT733JRNm32EOAfA==
-X-Received: by 2002:a1c:7303:0:b0:3f1:9acf:8682 with SMTP id d3-20020a1c7303000000b003f19acf8682mr2044341wmb.17.1684526733947;
-        Fri, 19 May 2023 13:05:33 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684526735; x=1687118735;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Dhk36Zm9kcZS6s/7QkUBwDpZCpJODd1UkmAk+ko7ofs=;
+        b=Izpb249acUYzQvjQImJf21Ryn+V6gXcYzSSiSo0AN+Z6XJRkLlc6kBUDdZG8qy9Hqg
+         tOpPLy60yyUbjHu6SN3XLXm967WkIA1zTLMLDsKPnd6THQAWElOjazH4R70dE66k2yGG
+         2yJRyLCocDEy3CysQJuzwY5v73gLJMYaZfKtCqk6F84QF+vDlatI6jS7Wpvkwy+bUkkc
+         E36gFk46+1kk+/9E2LY+G5quy6GAeAAWCbdnPdYKmgEJc6PkZ0SW8elr1t24iv/gBruz
+         Yw8PcJfgcTvYXqGYH3Ahrshlyp7vnqH6PbsUpoRzTiIFwQLera1j+KTC8rGLOBRobK1/
+         BTQw==
+X-Gm-Message-State: AC+VfDx7E5gABQfcob/DK08RTXmuO7Supjb74QBKFc3FDDj+JgS3hK88
+        Ajp2ILAupakxaiWF+r3hOgLuYQ==
+X-Google-Smtp-Source: ACHHUZ7/5/41nm0I7TwCks1heDFNmOyLJILcAtVDJl+PWPTeQg8QiNNU9BXxnomI8I+UZzBMfl7Fcg==
+X-Received: by 2002:a05:6000:c3:b0:304:6762:2490 with SMTP id q3-20020a05600000c300b0030467622490mr2871230wrx.3.1684526735223;
+        Fri, 19 May 2023 13:05:35 -0700 (PDT)
 Received: from localhost.localdomain ([188.27.132.2])
-        by smtp.gmail.com with ESMTPSA id q3-20020adfea03000000b002fe96f0b3acsm6220329wrm.63.2023.05.19.13.05.32
+        by smtp.gmail.com with ESMTPSA id q3-20020adfea03000000b002fe96f0b3acsm6220329wrm.63.2023.05.19.13.05.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 13:05:33 -0700 (PDT)
+        Fri, 19 May 2023 13:05:34 -0700 (PDT)
 From:   Alexandru Ardelean <alex@shruggie.ro>
 To:     dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -59,16 +60,17 @@ Cc:     lee@kernel.org, daniel.thompson@linaro.org, jingoohan1@gmail.com,
         deller@gmx.de, Yannick Fertre <yannick.fertre@foss.st.com>,
         Philippe CORNU <philippe.cornu@foss.st.com>,
         Alexandru Ardelean <alex@shruggie.ro>
-Subject: [PATCH 1/2] backlight: gpio_backlight: add new property default-brightness-level
-Date:   Fri, 19 May 2023 23:05:19 +0300
-Message-Id: <20230519200520.10657-1-alex@shruggie.ro>
+Subject: [PATCH 2/2] dt-bindings: backlight: document new property default-brightness-level
+Date:   Fri, 19 May 2023 23:05:20 +0300
+Message-Id: <20230519200520.10657-2-alex@shruggie.ro>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230519200520.10657-1-alex@shruggie.ro>
+References: <20230519200520.10657-1-alex@shruggie.ro>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -77,7 +79,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Yannick Fertre <yannick.fertre@foss.st.com>
 
-Add new property to set a brightness by default at probe.
+Add documentation for new default-brightness-level property.
 
 Reviewed-by: Philippe CORNU <philippe.cornu@foss.st.com>
 Signed-off-by: Yannick Fertre <yannick.fertre@foss.st.com>
@@ -87,34 +89,29 @@ Signed-off-by: Alexandru Ardelean <alex@shruggie.ro>
 Link to original patch:
   https://github.com/STMicroelectronics/linux/commit/c4067d7bd883c6fa14ffd49892c4ce663cdafe98
 
- drivers/video/backlight/gpio_backlight.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ .../bindings/leds/backlight/gpio-backlight.yaml          | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-diff --git a/drivers/video/backlight/gpio_backlight.c b/drivers/video/backlight/gpio_backlight.c
-index 6f78d928f054..d3fa3a8bef4d 100644
---- a/drivers/video/backlight/gpio_backlight.c
-+++ b/drivers/video/backlight/gpio_backlight.c
-@@ -53,6 +53,7 @@ static int gpio_backlight_probe(struct platform_device *pdev)
- 	struct backlight_device *bl;
- 	struct gpio_backlight *gbl;
- 	int ret, init_brightness, def_value;
-+	u32 value;
+diff --git a/Documentation/devicetree/bindings/leds/backlight/gpio-backlight.yaml b/Documentation/devicetree/bindings/leds/backlight/gpio-backlight.yaml
+index 584030b6b0b9..b96c08cff0f0 100644
+--- a/Documentation/devicetree/bindings/leds/backlight/gpio-backlight.yaml
++++ b/Documentation/devicetree/bindings/leds/backlight/gpio-backlight.yaml
+@@ -23,6 +23,15 @@ properties:
+     description: enable the backlight at boot.
+     type: boolean
  
- 	gbl = devm_kzalloc(dev, sizeof(*gbl), GFP_KERNEL);
- 	if (gbl == NULL)
-@@ -93,7 +94,11 @@ static int gpio_backlight_probe(struct platform_device *pdev)
- 	else
- 		bl->props.power = FB_BLANK_UNBLANK;
- 
--	bl->props.brightness = 1;
-+	ret = device_property_read_u32(dev, "default-brightness-level", &value);
-+	if (!ret && value <= props.max_brightness)
-+		bl->props.brightness = value;
-+	else
-+		bl->props.brightness = 1;
- 
- 	init_brightness = backlight_get_brightness(bl);
- 	ret = gpiod_direction_output(gbl->gpiod, init_brightness);
++  default-brightness-level:
++    description:
++      The default brightness level (index into the array defined by the
++      "brightness-levels" property).
++    $ref: /schemas/types.yaml#/definitions/uint32
++
++dependencies:
++  default-brightness-level: [ "brightness-levels" ]
++
+ required:
+   - compatible
+   - gpios
 -- 
 2.40.1
 
