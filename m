@@ -2,202 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1869270906E
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 09:34:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C4D709074
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 09:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbjESHeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 03:34:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57632 "EHLO
+        id S229557AbjESHf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 03:35:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjESHeK (ORCPT
+        with ESMTP id S229436AbjESHf4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 03:34:10 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ABA67122
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 00:34:08 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 125491FB;
-        Fri, 19 May 2023 00:34:53 -0700 (PDT)
-Received: from [192.168.0.11] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0DE623F73F;
-        Fri, 19 May 2023 00:34:05 -0700 (PDT)
-Message-ID: <4995207f-cf18-634d-c3b2-43affa7482f9@arm.com>
-Date:   Fri, 19 May 2023 13:04:02 +0530
+        Fri, 19 May 2023 03:35:56 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2095.outbound.protection.outlook.com [40.107.237.95])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5AE8122;
+        Fri, 19 May 2023 00:35:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=P/mTgLKt4OykDgjggjBvDiL69Ymmk0eswrDsNb3ioEkeqaQbq/6BIg+7B/Eip2cmnWlKxpcIHLFzQIoiMvwTpQjpCb7dFMwWl2yb7lPNQjvVZ3oytB9DUaQf212KWtal1482f3MVAj9CvucxbU6+CwDqCI2moOoEI+e+csm1FMat5sqv2mBzpnsgB9Tg1Ek75Gkw6mv6Rplcg1UKK67sK/t7H6MsZ5WgPJJq4YKrfz/w4FJghZLfCuSfcey2y6Qr/2c+9Ed+jrygdKc9XjUwIxeC4GBhGIO49lbJKe7Nh//+YSSMYZwsJOpb16pK4SzaR7gGsKcZtVnQO78bzp1IWA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Z8+I9neSIHXxpIwT4XV/8CiUJ9ideXDflsF0eFVC33g=;
+ b=OTt1a71c0N6V+PTN+mGBNoLjib1JR9kFT9UhTWEJyAMFy1GjDcHDyguH3Afa57TK/PV55Ezu/gSgGCI9mWVNsLp3urwkiGC1RtGkNRpDaDrsL2fECITmF7i+vm6iBvstZoIlImXQqjXjQEVrl9jA1ZxpVYI5jUAFxp8j0U9OB7ExyzHm613DTctvrNU+cVMi8dWVki+EkoyFIq5bPPWQhCziefrS1trIYTma20FAgt5csxRHccweVEQDzDpS2kqJrXHv2+oqK4Z6nU1qYmUDwKfjjP+9ZAgOrrqT//V15vaAnQgNyPeXhSDIdGcSPhh+uTUFADcreLcF/WoQKsDISg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Z8+I9neSIHXxpIwT4XV/8CiUJ9ideXDflsF0eFVC33g=;
+ b=PUWNKL4Pqe2lZULSjl3j/7gMdSulG0JgNp51EmrR6JoHKkjN1Pwb0Rkchu64qHhy/mLcsN3hGV3770l6DVu3mWzrBQO9ZcXJPJYEYMSjxcHic8mgV3tHXKN+g7utA+Nbkf79r7tljgWWimi5Aj9PcXUn7Lye0Yja/7taPqhOksg=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from BY3PR13MB4834.namprd13.prod.outlook.com (2603:10b6:a03:36b::10)
+ by BY5PR13MB3779.namprd13.prod.outlook.com (2603:10b6:a03:229::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.21; Fri, 19 May
+ 2023 07:35:51 +0000
+Received: from BY3PR13MB4834.namprd13.prod.outlook.com
+ ([fe80::d98b:da1b:b1f0:d4d7]) by BY3PR13MB4834.namprd13.prod.outlook.com
+ ([fe80::d98b:da1b:b1f0:d4d7%7]) with mapi id 15.20.6411.021; Fri, 19 May 2023
+ 07:35:49 +0000
+Date:   Fri, 19 May 2023 09:35:27 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     wei.fang@nxp.com
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, Frank.Li@freescale.com, shenwei.wang@nxp.com,
+        xiaoning.wang@nxp.com, netdev@vger.kernel.org, linux-imx@nxp.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 net-next] net: fec: remove useless fec_enet_reset_skb()
+Message-ID: <ZGcmv8LKS9ayAHRI@corigine.com>
+References: <20230519020113.1670786-1-wei.fang@nxp.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230519020113.1670786-1-wei.fang@nxp.com>
+X-ClientProxiedBy: AM0PR06CA0111.eurprd06.prod.outlook.com
+ (2603:10a6:208:ab::16) To BY3PR13MB4834.namprd13.prod.outlook.com
+ (2603:10b6:a03:36b::10)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3] memblock: Add flags and nid info in memblock debugfs
-Content-Language: en-US
-To:     Yuwei Guan <ssawgyw@gmail.com>
-Cc:     rppt@kernel.org, akpm@linux-foundation.org, tsahu@linux.ibm.com,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20230518091431.299-1-ssawgyw@gmail.com>
- <ab37a497-3caa-1313-90a8-328cfe99c8d3@arm.com>
- <CALJQGLkLBrgtiz1f=_NHZG5jtwn2TfzqB4yCgfxxmQWXbfN7dQ@mail.gmail.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <CALJQGLkLBrgtiz1f=_NHZG5jtwn2TfzqB4yCgfxxmQWXbfN7dQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY3PR13MB4834:EE_|BY5PR13MB3779:EE_
+X-MS-Office365-Filtering-Correlation-Id: 98a59b5f-b0ab-4bb5-5470-08db583ba235
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: psMDBnSwhWtjLNg26NXzBNzv9End7DTvMSxwQfTDCVLuDSwr6hualkAi9g02HQFhiUo09oDed3bAVbBlAYrAfwnbl6FflnQTtPt1sY8mtXk9vtWMOSt4m1XbsxjwKzjRPhD74KBCKYuXUajrZhkdeJ+XmatD90I0RA4UevBb1ChPi4T/D5CRJ1kBjOpEASP8LVvG6sM2PunyLdcx6RMGzYmlZC2UpmJzJIPBAAsdJR0XU7tbVkxA4g2sl6/lMc5kvRFvmyhwDPMyzh3SJ/NZ9+J265YPgYxd46eL0UDNElzBLYeN/V6x8GubEtgzSJ8D73IZgAfBWPcaqSVH2meC8fKmAh1CPFBO3Vpl0VBZEqjQ/Ory4iOSmxAwnacGF61/UE5P1vfSyODzDWz+ohz3PSmN5S4XKi84z7Hcuj4bosVV29yyfwkaoqHjpImNI2B6B/x0VN3TiDglVUuK3CTPZsEqgeNrn82joukQC1ZJOg5hcYr66amAcIBt6x7N0n1n3X4b9PbF0DuTAvbaJMriGSCjJBiyEJ1HX1xndMzDtAmJydH6OUQ3QKN6Im6RmP+A
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY3PR13MB4834.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39830400003)(396003)(136003)(366004)(346002)(376002)(451199021)(38100700002)(36756003)(86362001)(7416002)(5660300002)(44832011)(8676002)(8936002)(2616005)(6506007)(6512007)(4744005)(2906002)(186003)(478600001)(316002)(6666004)(66946007)(66556008)(66476007)(6916009)(4326008)(6486002)(41300700001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pmRHwI6jhi9rxiKNXcMW0NU7SHyMAw9OE8CAeOhNV4ZGBKt7B3at6gw1WXkF?=
+ =?us-ascii?Q?XWX7/mNXVF34AkYxp0uqQliQ/9w/Or5KXsZ7LFGD9+hz4syA9bmrsW07QWRV?=
+ =?us-ascii?Q?aRKFcjRgvckcO3jEuCmd4OuerHW9jfFizIfK/IZE4agcHu3QdABM3KMeEu1d?=
+ =?us-ascii?Q?mZ3wJmBGtfW9w1h2WRZCMBavJD7FCBzLJik2f6dZIfmwScY+BRHM9LSJTymN?=
+ =?us-ascii?Q?WmrrsMoR6xKDHfyetZ4uKEzm2m3GuJfMqQpmuViS/Q4XTcODp1yWFAGOZWCF?=
+ =?us-ascii?Q?8RUI5n3s+GAsxYXsD/I/c4N8Omf2HB/HTp83dKFAwhWxsd40o5RbAvlXh0Jb?=
+ =?us-ascii?Q?6COjucOF66G5m17p0cQTFW8eA5V8Oa+ruue/nokvyIY9ejUurX6Xp90K45Tk?=
+ =?us-ascii?Q?nLTpy+CD+fH6vgazCramGisyN6QjtiVHPUJlBIb6VDzu1YlDPJjtpwurjePC?=
+ =?us-ascii?Q?jKfShBCsolcxSJLFNHUJmbhaGcBqC6ezJLVZ18rCfXWoION8B0Uy6McD0MBU?=
+ =?us-ascii?Q?euGocbxDq2GAnQT9p1EQQUE5jCMjGcjfVKlFziptH+WibwYq1lf0W0LY1/P2?=
+ =?us-ascii?Q?DI4qJUtakTbJVGgrcz7AmeSCqapVZfydq23BXxSn+ZcPTuHEufAEdpRQKhoz?=
+ =?us-ascii?Q?vpxHpVEZXVDCq4yqz5FZjR/py/DTOvsCw67n7EnYz9eFNcOOvfRKe97Ul8tH?=
+ =?us-ascii?Q?SDYVskUtufmJ8PvvhyHOvr14k+7i+9OknYroLOLvzPgZ+yX97uNTDpbDAJls?=
+ =?us-ascii?Q?2IqcnfjQdJkBpqq6kICt5Qo2kofGolsX4n64iVIed5wm0vFQiY/Frurthlyq?=
+ =?us-ascii?Q?La/67rg5Sow3WqsZzwvRSQ2hqfqCSc0jwNT6nUZXsuUJyhM6Cw5XAc6tKCJm?=
+ =?us-ascii?Q?lpqUq8z3arMhUQeYGv26TYO/ZysRO4d1OrSxMJY7EnDujSDsj4dazCRxL2qj?=
+ =?us-ascii?Q?v6hTEM+r+1fdYN1Gjm9v3WqWxf8adX+FuBMU09D1qKbbC5IigK5ddCT33dxW?=
+ =?us-ascii?Q?IX4slZQ0wJ1Lb3yWaDjpMypifzQDw2RB7kG9nbmEDIfhoVYyUWgm2ScjxZG7?=
+ =?us-ascii?Q?N58NGK4+pic0w10f+EixoYwXeKbFErAbbExp40dIP6VFbrxtZ2m+hZy3D/+g?=
+ =?us-ascii?Q?Hw7yCDdEJzM62V2iARQq/QihwU/w8O8LTZqhxV2CNMBRu+O5/1q3V8crKoP5?=
+ =?us-ascii?Q?jY4I97IDrA36nY5PZtITWfwA7RvrnpSyLvUbwmotrQZPLVJrXnux8M+scdR7?=
+ =?us-ascii?Q?rHfQnC0E39Y+p35uZqpMhLIOyh7fnTMSPAI2l6yXmGvlCE+zgKOndglimF4A?=
+ =?us-ascii?Q?TanA74oY1jC0f+JBMRq/VNh+wL5v0NDm2dek6AZ+RR1k6DbjfDMRx9FJK0WG?=
+ =?us-ascii?Q?Ubk+5ozDFwLXYFalXxDpwlIvlMLh13ha+u4nKtwmyAlG+ADqQc1LFFPoxzmF?=
+ =?us-ascii?Q?t9yd/LHk+mTgU/c/iHKaiQRIAwMo6Yu2FhfIsnUupczy2SrTOBoBeFaIY3DM?=
+ =?us-ascii?Q?vvr1BGNkTKIlIluPuTTKysK2znRWHrFt4gX58nitysyLez+BYV2Ov3TkM7Ze?=
+ =?us-ascii?Q?d7AHZcGkr3D8AqRp4fRmKq8d6NL6o+KDYVne9I5MYIs8jxLH/WDWc6q8cLSb?=
+ =?us-ascii?Q?KHaqIqqeTn/US6dWJPwrNf+5D8VtIcFhcZ63KMjY8PGnQrllHQPELyOEWMR2?=
+ =?us-ascii?Q?EJop9Q=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 98a59b5f-b0ab-4bb5-5470-08db583ba235
+X-MS-Exchange-CrossTenant-AuthSource: BY3PR13MB4834.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2023 07:35:49.6694
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hjA5Wuvj6lyTilf8p0Jfy7303MKdxldiMd4r1ynjjuPXPU+V7jtxMxCH1sTtoKh8pVpeKslP3qRzIrZsbhoH2x80+jKGdbnsZmUhAeF/yos=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR13MB3779
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/18/23 19:35, Yuwei Guan wrote:
-> Anshuman Khandual <anshuman.khandual@arm.com> 于2023年5月18日周四 18:12写道：
->>
->>
->>
->> On 5/18/23 14:44, Yuwei Guan wrote:
->>> Currently, the memblock debugfs can display the count of memblock_type and
->>> the base and end of the reg. However, when memblock_mark_*() or
->>> memblock_set_node() is executed on some range, the information in the
->>> existing debugfs cannot make it clear why the address is not consecutive.
->>>
->>> For example,
->>> cat /sys/kernel/debug/memblock/memory
->>>    0: 0x0000000080000000..0x00000000901fffff
->>>    1: 0x0000000090200000..0x00000000905fffff
->>>    2: 0x0000000090600000..0x0000000092ffffff
->>>    3: 0x0000000093000000..0x00000000973fffff
->>>    4: 0x0000000097400000..0x00000000b71fffff
->>>    5: 0x00000000c0000000..0x00000000dfffffff
->>>    6: 0x00000000e2500000..0x00000000f87fffff
->>>    7: 0x00000000f8800000..0x00000000fa7fffff
->>>    8: 0x00000000fa800000..0x00000000fd3effff
->>>    9: 0x00000000fd3f0000..0x00000000fd3fefff
->>>   10: 0x00000000fd3ff000..0x00000000fd7fffff
->>>   11: 0x00000000fd800000..0x00000000fd901fff
->>>   12: 0x00000000fd902000..0x00000000fd909fff
->>>   13: 0x00000000fd90a000..0x00000000fd90bfff
->>>   14: 0x00000000fd90c000..0x00000000ffffffff
->>>   15: 0x0000000880000000..0x0000000affffffff
->>>
->>> So we can add flags and nid to this debugfs.
->>>
->>> For example,
->>> cat /sys/kernel/debug/memblock/memory
->>>    0: 0x0000000080000000..0x00000000901fffff     NONE    0
->>>    1: 0x0000000090200000..0x00000000905fffff    NOMAP    0
->>>    2: 0x0000000090600000..0x0000000092ffffff     NONE    0
->>>    3: 0x0000000093000000..0x00000000973fffff    NOMAP    0
->>>    4: 0x0000000097400000..0x00000000b71fffff     NONE    0
->>>    5: 0x00000000c0000000..0x00000000dfffffff     NONE    0
->>>    6: 0x00000000e2500000..0x00000000f87fffff     NONE    0
->>>    7: 0x00000000f8800000..0x00000000fa7fffff    NOMAP    0
->>>    8: 0x00000000fa800000..0x00000000fd3effff     NONE    0
->>>    9: 0x00000000fd3f0000..0x00000000fd3fefff    NOMAP    0
->>>   10: 0x00000000fd3ff000..0x00000000fd7fffff     NONE    0
->>>   11: 0x00000000fd800000..0x00000000fd901fff    NOMAP    0
->>>   12: 0x00000000fd902000..0x00000000fd909fff     NONE    0
->>>   13: 0x00000000fd90a000..0x00000000fd90bfff    NOMAP    0
->>>   14: 0x00000000fd90c000..0x00000000ffffffff     NONE    0
->>>   15: 0x0000000880000000..0x0000000affffffff     NONE    0
->>
->> Although, Mike had suggested to keep these flags print last, above
->> format looks good as well.
->>
->>>
->>> Signed-off-by: Yuwei Guan <ssawgyw@gmail.com>
->>> ---
->>> v3:
->>> - show string value for each memblock flag
->>> ---
->>>  mm/memblock.c | 12 +++++++++++-
->>>  1 file changed, 11 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/mm/memblock.c b/mm/memblock.c
->>> index 511d4783dcf1..5fba53f98b2d 100644
->>> --- a/mm/memblock.c
->>> +++ b/mm/memblock.c
->>> @@ -2143,13 +2143,23 @@ static int memblock_debug_show(struct seq_file *m, void *private)
->>>       struct memblock_region *reg;
->>>       int i;
->>>       phys_addr_t end;
->>> +     static const char flagname[BITS_PER_LONG][8] = {
->>> +             [0 ... (BITS_PER_LONG-1)] = "?",
->>
->> Minor nit -
->>
->> Although checkpatch does not complain, should there be spaces between
->> the operator and operands e.g (BITS_PER_LONG - 1).
->>
->>> +
->>> +             [ilog2(MEMBLOCK_HOTPLUG)] = "HOTPLUG",
->>> +             [ilog2(MEMBLOCK_MIRROR)] = "MIRROR",
->>> +             [ilog2(MEMBLOCK_NOMAP)] = "NOMAP",
->>> +             [ilog2(MEMBLOCK_DRIVER_MANAGED)] = "DRV_MNG",
->>> +     };
->>
->> Also, BITS_PER_LONG sized array is really required here ? as there are
->> just four available memblock flags.
->>
-> Hi Anshuman,
-> The main reason to use BITS_PER_LONG is to reserve.
-> If the flagname buffer is (ilog2(MEMBLOCK_DRIVER_MANAGED) + 1),
-> memblock_flags adds a new attribute and does not add its name in debugfs,
-> it will cause an overflow.
-
-Agreed.
-
-> But BITS_PER_LONG is too wasteful, so I implement a new solution.
-> Please help to check it.
+On Fri, May 19, 2023 at 10:01:13AM +0800, wei.fang@nxp.com wrote:
+> From: Wei Fang <wei.fang@nxp.com>
 > 
->         struct memblock_type *type = m->private;
->         struct memblock_region *reg;
-> -       int i;
-> +       int i, j;
->         phys_addr_t end;
-> +       static const char *flagname[] = {
-> +               [ilog2(MEMBLOCK_HOTPLUG)] = "HOTPLUG",
-> +               [ilog2(MEMBLOCK_MIRROR)] = "MIRROR",
-> +               [ilog2(MEMBLOCK_NOMAP)] = "NOMAP",
-> +               [ilog2(MEMBLOCK_DRIVER_MANAGED)] = "DRV_MNG",
-> +       };
+> This patch is a cleanup for fec driver. The fec_enet_reset_skb()
+> is used to free skb buffers for tx queues and is only invoked in
+> fec_restart(). However, fec_enet_bd_init() also resets skb buffers
+> and is invoked in fec_restart() too. So fec_enet_reset_skb() is
+> redundant and useless.
 > 
->         for (i = 0; i < type->cnt; i++) {
->                 reg = &type->regions[i];
->                 end = reg->base + reg->size - 1;
-> 
->                 seq_printf(m, "%4d: ", i);
-> -               seq_printf(m, "%pa..%pa\n", &reg->base, &end);
-> +               seq_printf(m, "%pa..%pa ", &reg->base, &end);
-> +               seq_printf(m, "%4d ", memblock_get_region_node(reg));
-> +               if (reg->flags) {
-> +                       for (j = 0; j < ARRAY_SIZE(flagname); j++) {
-> +                               if (reg->flags & (1U << j)) {
-> +                                       seq_printf(m, "%s\n", flagname[j]);
-> +                                       break;
-> +                               }
-> +                       }
-> +                       if (j == ARRAY_SIZE(flagname))
-> +                               seq_printf(m, "%s\n", "UNKNOWN");
-> +               } else {
-> +                       seq_printf(m, "%s\n", "NONE");
-> +               }
->         }
+> Signed-off-by: Wei Fang <wei.fang@nxp.com>
+> ---
+> V2 change:
+> According to Simon Horman's suggestion, it's just a cleanup and without
+> user-visible problem, so change the target tree from net to net-next.
 
-Please move the static array outside, just before this function and
-capture ARRAY_SIZE(flagname) in a local variable to make it compact.
+Thanks Wei Fang, looks good.
 
-Rest looks good.
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
->>>
->>>       for (i = 0; i < type->cnt; i++) {
->>>               reg = &type->regions[i];
->>>               end = reg->base + reg->size - 1;
->>>
->>>               seq_printf(m, "%4d: ", i);
->>> -             seq_printf(m, "%pa..%pa\n", &reg->base, &end);
->>> +             seq_printf(m, "%pa..%pa ", &reg->base, &end);
->>> +             seq_printf(m, "%8s ", reg->flags ? flagname[ilog2(reg->flags)] : "NONE");
->>> +             seq_printf(m, "%4d\n", memblock_get_region_node(reg));
->>>       }
->>>       return 0;
->>>  }
