@@ -2,162 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E108870948F
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 12:13:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15483709483
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 12:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231769AbjESKNk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 06:13:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42944 "EHLO
+        id S231271AbjESKKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 06:10:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231771AbjESKNf (ORCPT
+        with ESMTP id S230473AbjESKKg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 06:13:35 -0400
-X-Greylist: delayed 171 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 19 May 2023 03:13:30 PDT
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D48711AD;
-        Fri, 19 May 2023 03:13:29 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1684491025; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=HgouqRz/ghNoHWuKMf6PX8KPdqH+12xJPj2Lqz2I6OklvXY5A6AzUkYxf8zz3tpz4E
-    kU9qYVWZhOwXXGVhWCg7lNfdtKSq26thyZka15mD2wf62dFFcRhEsPzUas2pnN11wN9k
-    BwWcEGfRJDCaInWA0V9mZ37p0aSKYNZEpV4Cu0F8VDzdZqODKS8waABXFlrJ341Mk/Yb
-    EXLSaNBw5ovplPhOLn577R7HOBAad5pdrVAuRhucFY27gr/gYZUIKIrwV99VnvigE8Ol
-    lQVX0B7uYcfJMBjxgJcLSaUus4/d6x3mKUfwUirpGejPgiVtRrNOFjtiiKPEp5VP50z/
-    PTdA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1684491025;
-    s=strato-dkim-0002; d=strato.com;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=eRuHGpVTvQWAER09Wkg6bg13Zj7DEpwOzvgnktYZ170=;
-    b=KaHbAy/ym2yhPolIhX/FXj4iZ5An++rlbx3wXBrlsQs3JTZGn7lih8FoIV9cmk4JdM
-    gIOlpGDKR4TSWbI9X6QQY27Ql9O7m48Iw8kOnt7oxHg0I4hpipfjNbNas2Jns9Ev9p17
-    kIdGJdyJ472cQcn2r3Gm1R83hZRUIzIOmr39EIZ/KzldadxVtZg/sVCvlOFSJHZgB32a
-    eLkIWpdm6XB2GNmdCSA3x7W0qQpu5Bq3QMO3+8zn/SiEmp+kfBbdYg3OWXwQsBlTEj5L
-    SduQJqJ7/V+ov+Q2ThMOWiV0Gbgn9eFLu6kpW/htgNnH0Hesz3LoYFn8JOZe7ShrTp1k
-    o2XQ==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1684491025;
-    s=strato-dkim-0002; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=eRuHGpVTvQWAER09Wkg6bg13Zj7DEpwOzvgnktYZ170=;
-    b=ScETnCUGxDV6vnxqkKAsWVbvj8b4pswuzLOHteNnjqjHR+jGTn/iwsBxUSX2MSIc4K
-    lPD0m+eNtYIcSkgwQjd4G89IR8P5mxu3FZZ+MMr+RoHG3nPs1RVT93HDJQQrHNBSGZtX
-    W3n+SMFetbcAESBRWofNmzihF2JDwfUMmFTzPRbQUR3d6xCboWoRa1s4nlkdJPNAAjM/
-    kchO9vpttxVR9iNeDDJ5GzQy02j8sUsgUpVQ4cP0NGdevqPY6msa94iW0uG+iQTP/Uii
-    lHYHLHeaWwX3QnZgbyrEWRlfvDAnauXqITuLGKROSeFga6HPbF0imqawnV82p3cqWbJJ
-    sZ8A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1684491025;
-    s=strato-dkim-0003; d=gerhold.net;
-    h=In-Reply-To:References:Message-ID:Subject:Cc:To:From:Date:Cc:Date:
-    From:Subject:Sender;
-    bh=eRuHGpVTvQWAER09Wkg6bg13Zj7DEpwOzvgnktYZ170=;
-    b=8YTy2aZbMdRCJrQUpO9sgBSJBxaGuCpPael52wn3PFdbxrMprW76DpLYUCJsIVNL06
-    MMFBAvW3QJxL2AWoLWAA==
-X-RZG-AUTH: ":P3gBZUipdd93FF5ZZvYFPugejmSTVR2nRPhVOQ/OcYgojyw4j34+u261EJF5OxJD4paA95nh"
-Received: from gerhold.net
-    by smtp.strato.de (RZmta 49.4.0 DYNA|AUTH)
-    with ESMTPSA id j6420az4JAAPEQ7
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-        (Client did not present a certificate);
-    Fri, 19 May 2023 12:10:25 +0200 (CEST)
-Date:   Fri, 19 May 2023 12:10:17 +0200
-From:   Stephan Gerhold <stephan@gerhold.net>
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        agross@kernel.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, andersson@kernel.org,
-        bhupesh.linux@gmail.com, krzysztof.kozlowski@linaro.org,
-        robh+dt@kernel.org, konrad.dybcio@linaro.org,
-        vladimir.zapolskiy@linaro.org, rfoss@kernel.org,
-        neil.armstrong@linaro.org, djakov@kernel.org
-Subject: Re: [PATCH v6 07/11] arm64: dts: qcom: sm6115: Add Crypto Engine
- support
-Message-ID: <ZGdLCdSof027mk5u@gerhold.net>
-References: <20230405072836.1690248-1-bhupesh.sharma@linaro.org>
- <20230405072836.1690248-8-bhupesh.sharma@linaro.org>
+        Fri, 19 May 2023 06:10:36 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF8F9C
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:10:35 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 590545C014B;
+        Fri, 19 May 2023 06:10:32 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Fri, 19 May 2023 06:10:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1684491032; x=1684577432; bh=WmoTlhd7e1kwJpAAsaCCOOQJxMdCzpL/nDP
+        L1E42Cfo=; b=P5i+sNrzGgkybQ2llHpdSW2AKLSaYvzjLV/X1tKoCOnMEuquyum
+        Xz7L7fUs5n+bcz3EquSOz/LyYzo4+bnInf6pePRv8KXFTe1Ri70wn0/aQTymk6Nj
+        3cOgoNnjULfVW8UqeTZdOxRVQ+EBZ+LWRXrUhP2M9QLZF0gH6sQkNPc9qKZCOrO9
+        9MfZ9MN3Y9m8U5zroM3O8KCYAEdroMxEt0djE4C7v+kuG5NSqqLCvp420255lmj3
+        Zfhv2QVb/G0g/MmOCnqA0OBNGNTtKmfHSBfBvNe+eSi5vldVRS0rB6sPFGLPp1+q
+        imYfiENJ01Bse+gNazzWEmT6kALsLF8G68A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684491032; x=1684577432; bh=WmoTlhd7e1kwJ
+        pAAsaCCOOQJxMdCzpL/nDPL1E42Cfo=; b=xGmbjPzlgjhHajV61PT0fxHOkTPA9
+        P/BKddYJeZL8r3HwmUtZQoGkTKDM3sMX2G2E47LEKMHpnsftch7DUZCK3BGFhY94
+        qp7VHIhqnZbVw9bKSeYk7xj1S+ywBdu1R3Z+/eMTB4h0v5/lNdk7d0UjJ6+USLn/
+        P/hvq8ohUkOE9QafrdILUftyhnmjgg631lGCldrTurUHMVTM73uZKI3dDsT/NJWJ
+        X/UjqL6iaIaAhkO2lv6CnDY+vYB14qlO0xDRW15Eu4p2VpQ+NsZcRo5gdaBSL5/u
+        UwkL3yHLMhGBwUUudXDfwgnrAIf6s8EPADQJkSMIokbsiTEV/s8yHvbEw==
+X-ME-Sender: <xms:F0tnZHkDT-Yelrchp8VYR0XaK9crha449BTfficNd73wBREUMflA5A>
+    <xme:F0tnZK1MRXbgM7v-C9t2xZc8E_Or2jhOZiSv4A9o_b74SKo8qEk7L9IO1Y9kSOg3U
+    ai88nLPPn61bA>
+X-ME-Received: <xmr:F0tnZNprQUsXTFl7lvK1CHl92nb7NWLH5Vh17LdECZL8ASWuJUyNkriWpp4gXXVb2KbHmK8hrICDHD5zZXDlUakiFA6EOjfasJI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeihedgvdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepofgrrhgv
+    khcuofgrrhgtiiihkhhofihskhhiqdfikphrvggtkhhiuceomhgrrhhmrghrvghksehinh
+    hvihhsihgslhgvthhhihhnghhslhgrsgdrtghomheqnecuggftrfgrthhtvghrnhepgfdu
+    leetfeevhfefheeiteeliefhjefhleduveetteekveettddvgeeuteefjedunecuvehluh
+    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrrhhmrghrvghk
+    sehinhhvihhsihgslhgvthhhihhnghhslhgrsgdrtghomh
+X-ME-Proxy: <xmx:F0tnZPkznI8Dzysbg3Je1q1Haflx3_kES29BO_hzPvRFEZZya4yEfA>
+    <xmx:F0tnZF2bA5DdY11UUPtFQPCIHoGt_tmnpY_iR1S6AbEzh2Q89gSLLg>
+    <xmx:F0tnZOtQwe94V3TNIOi1__ZV8Bk1B_Z4LPUSCGxb79tkGw_tF69vFw>
+    <xmx:GEtnZE3OXQaasri_Ttvfhpz8-Ksd1lV6mvoGRbShRHswItGlXDiKsw>
+Feedback-ID: i1568416f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 19 May 2023 06:10:29 -0400 (EDT)
+Date:   Fri, 19 May 2023 12:10:26 +0200
+From:   Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= 
+        <marmarek@invisiblethingslab.com>
+To:     Christoph Hellwig <hch@lst.de>
+Cc:     Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, xen-devel@lists.xenproject.org,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org,
+        nouveau@lists.freedesktop.org
+Subject: Re: [PATCH 2/4] x86: always initialize xen-swiotlb when xen-pcifront
+ is enabling
+Message-ID: <ZGdLErBzi9MANL3i@mail-itl>
+References: <20230518134253.909623-1-hch@lst.de>
+ <20230518134253.909623-3-hch@lst.de>
+ <ZGZr/xgbUmVqpOpN@mail-itl>
+ <20230519040405.GA10818@lst.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="A3eIvvbx7EttM1KL"
 Content-Disposition: inline
-In-Reply-To: <20230405072836.1690248-8-bhupesh.sharma@linaro.org>
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230519040405.GA10818@lst.de>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bhupesh,
 
-Not sure if this is the latest version of this series since it's pretty 
-old but I didn't find a new one. Just came here because you mentioned 
-RB1/RB2 [1] in my bam_dma patch and they don't have any BAM defined
-upstream yet.
+--A3eIvvbx7EttM1KL
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Date: Fri, 19 May 2023 12:10:26 +0200
+From: Marek =?utf-8?Q?Marczykowski-G=C3=B3recki?= <marmarek@invisiblethingslab.com>
+To: Christoph Hellwig <hch@lst.de>
+Cc: Juergen Gross <jgross@suse.com>,
+	Stefano Stabellini <sstabellini@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Ben Skeggs <bskeggs@redhat.com>,
+	Karol Herbst <kherbst@redhat.com>, Lyude Paul <lyude@redhat.com>,
+	xen-devel@lists.xenproject.org, iommu@lists.linux.dev,
+	linux-kernel@vger.kernel.org, nouveau@lists.freedesktop.org
+Subject: Re: [PATCH 2/4] x86: always initialize xen-swiotlb when xen-pcifront
+ is enabling
 
-[1]: https://lore.kernel.org/linux-arm-msm/CAH=2Ntw0BZH=RGp14mYLhX7D6jV5O5eDKRQbby=uCy85xMDU_g@mail.gmail.com/
+On Fri, May 19, 2023 at 06:04:05AM +0200, Christoph Hellwig wrote:
+> On Thu, May 18, 2023 at 08:18:39PM +0200, Marek Marczykowski-G=C3=B3recki=
+ wrote:
+> > On Thu, May 18, 2023 at 03:42:51PM +0200, Christoph Hellwig wrote:
+> > > Remove the dangerous late initialization of xen-swiotlb in
+> > > pci_xen_swiotlb_init_late and instead just always initialize
+> > > xen-swiotlb in the boot code if CONFIG_XEN_PCIDEV_FRONTEND is enabled.
+> > >=20
+> > > Signed-off-by: Christoph Hellwig <hch@lst.de>
+> >=20
+> > Doesn't it mean all the PV guests will basically waste 64MB of RAM
+> > by default each if they don't really have PCI devices?
+>=20
+> If CONFIG_XEN_PCIDEV_FRONTEND is enabled, and the kernel's isn't booted
+> with swiotlb=3Dnoforce, yes.
 
-On Wed, Apr 05, 2023 at 12:58:32PM +0530, Bhupesh Sharma wrote:
-> Add crypto engine (CE) and CE BAM related nodes and definitions to
-> 'sm6115.dtsi'.
-> 
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/sm6115.dtsi | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> index 2a51c938bbcb..ebac026b4cc7 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> @@ -650,6 +650,28 @@ usb_hsphy: phy@1613000 {
->  			status = "disabled";
->  		};
->  
-> +		cryptobam: dma-controller@1b04000 {
-> +			compatible = "qcom,bam-v1.7.4", "qcom,bam-v1.7.0";
-> +			reg = <0x0 0x01b04000 0x0 0x24000>;
-> +			interrupts = <GIC_SPI 247 IRQ_TYPE_LEVEL_HIGH>;
-> +			#dma-cells = <1>;
-> +			qcom,ee = <0>;
-> +			qcom,controlled-remotely;
-> +			num-channels = <8>;
-> +			qcom,num-ees = <2>;
-> +			iommus = <&apps_smmu 0x94 0x11>,
-> +				 <&apps_smmu 0x96 0x11>;
-> +		};
-> +
-> +		crypto: crypto@1b3a000 {
-> +			compatible = "qcom,sm6115-qce", "qcom,sm8150-qce", "qcom,qce";
-> +			reg = <0x0 0x01b3a000 0x0 0x6000>;
-> +			dmas = <&cryptobam 6>, <&cryptobam 7>;
-> +			dma-names = "rx", "tx";
-> +			iommus = <&apps_smmu 0x94 0x11>,
-> +				 <&apps_smmu 0x96 0x11>;
+That's "a bit" unfortunate, since that might be significant part of the
+VM memory, or if you have a lot of VMs, a significant part of the host
+memory - it quickly adds up.
+While I would say PCI passthrough is not very common for PV guests, can
+the decision about xen-swiotlb be delayed until you can enumerate
+xenstore to check if there are any PCI devices connected (and not
+allocate xen-swiotlb by default if there are none)? This would
+still not cover the hotplug case (in which case, you'd need to force it
+with a cmdline), but at least you wouldn't loose much memory just
+because one of your VMs may use PCI passthrough (so, you have it enabled
+in your kernel).
+Please remember that guest kernel is not always under full control of
+the host admin, so making guests loose 64MB of RAM always, in default
+setup isn't good for customers of such VMs...
 
-Shouldn't you have clocks = <&rpmcc RPM_SMD_CE1_CLK> here to make sure
-the clock for the crypto engine is on? Your binding patch (PATCH 06/11)
-says "Crypto Engine block on Qualcomm SoCs SM6115 and QCM2290 do not
-require clocks strictly" but doesn't say why.
+--=20
+Best Regards,
+Marek Marczykowski-G=C3=B3recki
+Invisible Things Lab
 
-Make sure you don't rely on having rpmcc keep unused clocks on
-permanently. This is the case at the moment, but we would like to change
-this [2]. Adding new users that rely on this broken behavior would just
-make this effort even more complicated.
+--A3eIvvbx7EttM1KL
+Content-Type: application/pgp-signature; name="signature.asc"
 
-If you also add the clock to the cryptobam then you should be able to
-see the advantage of my bam_dma patch [3]. It allows you to drop
-"num-channels" and "qcom,num-ees" from the cryptobam in your changes
-above because it can then be read directly from the BAM registers.
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
-Stephan
+iQEzBAEBCAAdFiEEhrpukzGPukRmQqkK24/THMrX1ywFAmRnSxEACgkQ24/THMrX
+1yxoZQgAigYwLANKEDjGQFkztgAogWxy1LFDTtNJ3E+BQRNBEzsMU2jP0ND6oIWA
+fuzuDMHRtd7zAop8RQSHwJ+x9OTpPlBR1a7tSxaszuF9tm+l1lWN/6M+fFKNNG+C
+C8hCEe5NjlcrGsCOzfsPrU2/141dN/1DayOWQ6DPpBawF7PBOZrhqdEKVV+SfVEL
+D7HM1k8hZj8Nxn39zU0AztoC4HpnhA/ovojpuL7HhyKrs/PbUFgQeJJhYAWDxsNI
+1CGjRlyzNFMFBtmC1r7foXOX8AKpcOGeGLcnw5aoMCBnAlZi7rUE/WY+fHGud1tk
+iPlvgAJ6SgmEF/kRu7VrzljzR8eZZA==
+=fKf1
+-----END PGP SIGNATURE-----
 
-[2]: https://lore.kernel.org/linux-arm-msm/20230303-topic-rpmcc_sleep-v2-0-ae80a325fe94@linaro.org/
-[3]: https://lore.kernel.org/linux-arm-msm/20230518-bamclk-dt-v1-1-82f738c897d9@gerhold.net/
+--A3eIvvbx7EttM1KL--
