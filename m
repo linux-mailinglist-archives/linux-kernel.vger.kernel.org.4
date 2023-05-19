@@ -2,100 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BC46709429
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 11:55:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F0117093E5
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 11:43:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231300AbjESJzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 05:55:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57056 "EHLO
+        id S231757AbjESJni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 05:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230285AbjESJzc (ORCPT
+        with ESMTP id S231375AbjESJnO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 05:55:32 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BEC9EF0
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 02:55:30 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 34J9eU7k025050;
-        Fri, 19 May 2023 11:40:30 +0200
-Date:   Fri, 19 May 2023 11:40:30 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] tools/nolibc: riscv: Fix up compile error for rv32
-Message-ID: <20230519094030.GA24947@1wt.eu>
-References: <cover.1684425792.git.falcon@tinylab.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1684425792.git.falcon@tinylab.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 19 May 2023 05:43:14 -0400
+Received: from mail-ej1-x64a.google.com (mail-ej1-x64a.google.com [IPv6:2a00:1450:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60A63C06
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 02:41:21 -0700 (PDT)
+Received: by mail-ej1-x64a.google.com with SMTP id a640c23a62f3a-96ad0625249so337552666b.1
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 02:41:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684489244; x=1687081244;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qWpQ3Z9uo5d0lko+yuj7LVhbX1lJ1BOQYyhbdzAiJWo=;
+        b=dyt7NwVO2a1gKgywYFDD8VjInLnFEg9pkbesUJ5JP62K+efVqGabn2ejkuN+LA0w+3
+         7skaMDSCg4NECg+cB+RSOxApwoffaQAtr+X/Aadf95/LadOlW2OybzUpZM2hLDUDP/Rj
+         j23AANItbXkHlUHz5AemgqeZt/ql4Uws1OqRWWb50SWAR3QIBqOYgpm4ZZYPVRzLg+Dm
+         p4BMj2purjRFRRLB1LFM8so/mUBz31z3Fimh19+TyWPUPdzALTMS5bsDjUIRFj7AVmBT
+         sjluU/ZYj/ZOLN7F6l2bDDVzSOj5BVThpWdNmyUAKBVHGZn2ygORwCveYpBHY39Y/io9
+         Xfcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684489244; x=1687081244;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qWpQ3Z9uo5d0lko+yuj7LVhbX1lJ1BOQYyhbdzAiJWo=;
+        b=hI4X/XGoqYqSTKYb1qgQ3+FCoMA2x6rN5tju5jSUNxCaY4vbYy9g372tjErNQ16Qk+
+         ljtNFEIet9Hq+EjeqdcowARpCmpN/ybp1ES86ptnPLtvnGgZN7Za2xe2BSPSeu4/0P+0
+         On1x65NtIvTHYelFHKTPhQH2SmuV+oxSYOpxE2BaRsU7HIZ+R9iPb+UVypfBrWRTfeJH
+         68hvvHm5M6ZBMdsvHYv88V1AKoV1upfSYPTOC4c1Z1BRvT3gXQSsiKNNnSHeIjqod2vy
+         3e3f0f0szVY9QF369uxJSy3ryzr6FmpPXrr1DfyfS1AV3b93ZOedABi8Bqmu3/Ocgl34
+         N2tg==
+X-Gm-Message-State: AC+VfDy5o5KbrxKd4ddjbTpqfPCzhiXI+debSPSx2reouyqtDGHhrTx4
+        TVx+VcR603i0wuCV5FdQOf6pBJ7I9xqsXbQ=
+X-Google-Smtp-Source: ACHHUZ5n/GWQx8DIeNB1oencH1Ize+8S1lQNiMrR+ccKmOwSjb/TZ7lXLIx1yetd0ozoxs/LbXo6AOMtrxnl+is=
+X-Received: from aliceryhl.c.googlers.com ([fda3:e722:ac3:cc00:31:98fb:c0a8:6c8])
+ (user=aliceryhl job=sendgmr) by 2002:a17:907:a067:b0:94a:8224:dbbc with SMTP
+ id ia7-20020a170907a06700b0094a8224dbbcmr440656ejc.5.1684489244727; Fri, 19
+ May 2023 02:40:44 -0700 (PDT)
+Date:   Fri, 19 May 2023 09:40:42 +0000
+In-Reply-To: <8e42aad3-d94e-3cb4-ee59-90ded31cea9e@gmail.com>
+Mime-Version: 1.0
+References: <8e42aad3-d94e-3cb4-ee59-90ded31cea9e@gmail.com>
+X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
+Message-ID: <20230519094042.3432952-1-aliceryhl@google.com>
+Subject: Re: [PATCH v1 1/7] rust: workqueue: add low-level workqueue bindings
+From:   Alice Ryhl <aliceryhl@google.com>
+To:     yakoyoku@gmail.com
+Cc:     alex.gaynor@gmail.com, aliceryhl@google.com,
+        benno.lossin@proton.me, bjorn3_gh@protonmail.com,
+        boqun.feng@gmail.com, gary@garyguo.net, jiangshanlai@gmail.com,
+        linux-kernel@vger.kernel.org, ojeda@kernel.org,
+        patches@lists.linux.dev, rust-for-linux@vger.kernel.org,
+        tj@kernel.org, wedsonaf@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhangjin,
+On 5/18/23 16:51, Martin Rodriguez Reboredo wrote:
+> On 5/17/23 17:31, Alice Ryhl wrote:
+>> +    /// Enqueues a work item.
+>> +    ///
+>> +    /// This may fail if the work item is already enqueued in a workqueue.
+>
+> Wouldn't be worth to mention that, if not implied, the item it's going
+> to be worked on an unbound CPU?
 
-On Fri, May 19, 2023 at 01:00:18AM +0800, Zhangjin Wu wrote:
-> Hi, Willy
-> 
-> nolibc for riscv is only tested for rv64 currently (see
-> tools/testing/selftests/nolibc/Makefile), this patchset tries to let it
-> compile for rv32, but still not pass the nolibc selftest:
-> 
-> * The first patch uses lw/sw instead of ld/sd for rv32 and verse-vice for rv64
->     * This patch may conflict with the stackprotector patch [1], because
->       both of them changed the _start assembly in arch-riscv.h
+I'm not really sure what you mean. Can you elaborate?
 
-That's quite embarrassing, I'm having to trace of that series here. Now
-I can find it in my LKML archives, but I don't have the direct message and
-didn't spot the other ones. I'll have to investigate, thanks for notifying
-me! I'm CCing Thomas, I will check with him how to best merge the two.
-
-> * The second patch adds __NR_llseek based sys_lseek implementation for rv32
->     * There is no __NR_lseek for rv32, see include/uapi/asm-generic/unistd.h
->     * This code is based on the version from glibc, sysdeps/unix/sysv/linux/lseek.c
->     * It passed the two lseek tests in nolibc selftest (write a test case manually)
-
-OK.
-
-> * To let it compile for rv32, we still need to apply one of such actions:
->     * Revert the kernel commit d4c08b9776b3 ("riscv: Use latest system call ABI"),
->       but it is not the right direction, that commit has removed all of the time32 syscalls,
->       and let C lib (e.g. glibc) provide the same C APIs based on the other time64 syscalls
-> 
->     * If not really use any of the time32 syscalls, defining __ARCH_WANT_TIME32_SYSCALLS
->       macro will let it compile, but this is buggy for the current implmentations are based
->       on time32 syscalls!
-> 
->     * Really implement the C APIs for rv32, based on the time64 syscalls, just like glibc.
->       This commit c8ce48f06503 ("asm-generic: Make time32 syscall numbers optional") shows
->       us which functions should be re-implemented.
-> 
-> So, the work todo for rv32 is:
-> 
-> * Rebasing all of the old time32 syscalls based C APIs on the new time64 syscalls,
->   but they are not simply mapped one by one, glibc is a good reference.
-> 
-> * Add standalone rv32 test support in tools/testing/selftests/nolibc/
-
-I'm not the right one to judge how to best support rv32 but at least I just
-don't want to go backwards. I'm just having a probably stupid question, but
-how relevant is rv32 ? I mean, all the boards I've seen to date were based
-on rv64 even the smallest embedded ones, so I'm sincerely wondering if there
-exists at all any rv32 devices capable of running Linux. Because if that's
-not the case, maybe we should instead declare that we only support rv64 ?
-If such devices exist however, I'm all for us supporting them well.
-
-Thanks,
-Willy
+Alice
