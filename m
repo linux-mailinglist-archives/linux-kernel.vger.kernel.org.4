@@ -2,215 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4894F7093DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 11:41:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E6397093E4
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 11:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231287AbjESJkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 05:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43194 "EHLO
+        id S231321AbjESJn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 05:43:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232133AbjESJka (ORCPT
+        with ESMTP id S231720AbjESJnK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 05:40:30 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E83222D65;
-        Fri, 19 May 2023 02:39:07 -0700 (PDT)
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34J9axPd011590;
-        Fri, 19 May 2023 09:38:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=Z3DHTJ+7ccCZ8u6VBoGzT/0UhbeLb4ZdKwglhpyHwnU=;
- b=LqJ+XP2Ey/phhALF0/WIG88GhMD4ynUbgCvVFiEKfKZ1+2ePoGRHJZq5f1gPbPortdXb
- jn2eW2pyPgqTjN/92cDhRphq4nqbSmfk8nyVQnGdbPl/751tiQeO3bfcn+c/lk5s+/Su
- 5KL0DaNKSPdfwkscHG89b/+bv8uB54UhFBFj7vHSLqamyT9bmiRk7SI+aTBTuHrWIYdr
- pt6UgbBq8N/t1h7Vo96cxssRUHn1JvtYrpFh8Zc5QNjFILG6NfjCatIu0b+Hp1nztSO/
- jjpu5Jh8cAo5TuBlGoHwruiteZVk1nuj9/cgkB0Zhqm/CDDGy+tCGJ0uMP8QE1e76kX5 UA== 
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qp5d3jc6x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 May 2023 09:38:11 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34J7aEd4001088;
-        Fri, 19 May 2023 09:37:14 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3qj264tjhh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 19 May 2023 09:37:14 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34J9bBvs5505598
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 19 May 2023 09:37:11 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1932320040;
-        Fri, 19 May 2023 09:37:11 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id BE93920049;
-        Fri, 19 May 2023 09:37:10 +0000 (GMT)
-Received: from a46lp73.lnxne.boe (unknown [9.152.108.100])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Fri, 19 May 2023 09:37:10 +0000 (GMT)
-From:   Steffen Eiden <seiden@linux.ibm.com>
-To:     kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Viktor Mihajlovski <mihajlov@linux.ibm.com>
-Cc:     Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Nico Boehr <nrb@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Hendrik Brueckner <brueckner@linux.ibm.com>
-Subject: [PATCH v2 6/6] s390/uv: Update query for secret-UVCs
-Date:   Fri, 19 May 2023 11:37:08 +0200
-Message-Id: <20230519093708.810957-7-seiden@linux.ibm.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230519093708.810957-1-seiden@linux.ibm.com>
-References: <20230519093708.810957-1-seiden@linux.ibm.com>
+        Fri, 19 May 2023 05:43:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D00D2D79;
+        Fri, 19 May 2023 02:41:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A3AF61167;
+        Fri, 19 May 2023 09:40:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00C86C433EF;
+        Fri, 19 May 2023 09:40:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684489204;
+        bh=62m/R5D6FGhqWG6KoI9PHPEn7TdMdQqLFV3wk0LBtDc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=r5ynEHQ4VnYlo+YQjrf4A6aNXFbJk6j3c64Y7p0QM+DrWvOKJbZh68x46Tqydb38O
+         MzJEmqOAOCv/UjBxt/7hYmy5B5C8xXNk+Pk4slcPAxTzm5btMMHC8Tq4NLUcW99nsw
+         EHkGmjo/iZ9JE/YY1bu16vysaEMjywfEh8dG2cv4T4U7F1sYQWJ137x0R7n1LKD+ug
+         5o7PlE0O4QN5ybvdtJkliLy1JQG4V3dwzKwfGg4D+x90k9W+F1nhotMLMP+WPAY/so
+         mQGAkaUOWqty6IqB1mzWmq2/FnYe5i3AgFTYmLaxD46SMuJQ7Cr0Ckz7+VFoXphUWy
+         fEs8pclnp2+HQ==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org
+Subject: [PATCH] [suggestion] mm/gup: avoid IS_ERR_OR_NULL
+Date:   Fri, 19 May 2023 11:39:13 +0200
+Message-Id: <20230519093953.10972-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: z8WGEaTxaGfB7exZzSJCPbJUaL17POkO
-X-Proofpoint-GUID: z8WGEaTxaGfB7exZzSJCPbJUaL17POkO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-19_06,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
- bulkscore=0 suspectscore=0 clxscore=1015 malwarescore=0 mlxlogscore=999
- spamscore=0 impostorscore=0 phishscore=0 lowpriorityscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305190080
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Update the query struct such that secret-UVC related
-information can be parsed.
-Add sysfs files for these new values.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
+While looking at an unused-variable warning, I noticed a new interface coming
+in that requires the use of IS_ERR_OR_NULL(), which tends to indicate bad
+interface design and is usually surprising to users.
+
+Change get_user_page_vma_remote() to return -EIO when no pages were
+found and adapt the callers to match.
+
+Fixes: eca1a00155df ("mm/gup: remove vmas parameter from get_user_pages_remote()")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 ---
- arch/s390/boot/uv.c        |  4 ++++
- arch/s390/include/asm/uv.h | 13 +++++++++++--
- arch/s390/kernel/uv.c      | 40 ++++++++++++++++++++++++++++++++++++++
- 3 files changed, 55 insertions(+), 2 deletions(-)
+I see the real bug is already fixed, but this seemed worth pointing out still.
+Not sure if this is the best way to handle the return types here, but the version
+in linux-next doesn't look great either.
+---
+ arch/arm64/kernel/mte.c | 4 ++--
+ include/linux/mm.h      | 2 +-
+ kernel/events/uprobes.c | 5 ++++-
+ mm/memory.c             | 2 +-
+ 4 files changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/arch/s390/boot/uv.c b/arch/s390/boot/uv.c
-index 0a077c0a2056..323b5cae3cf1 100644
---- a/arch/s390/boot/uv.c
-+++ b/arch/s390/boot/uv.c
-@@ -47,6 +47,10 @@ void uv_query_info(void)
- 		uv_info.conf_dump_finalize_len = uvcb.conf_dump_finalize_len;
- 		uv_info.supp_att_req_hdr_ver = uvcb.supp_att_req_hdr_ver;
- 		uv_info.supp_att_pflags = uvcb.supp_att_pflags;
-+		uv_info.supp_add_secret_req_ver = uvcb.supp_add_secret_req_ver;
-+		uv_info.supp_add_secret_pcf = uvcb.supp_add_secret_pcf;
-+		uv_info.supp_secret_types = uvcb.supp_secret_types;
-+		uv_info.max_secrets = uvcb.max_num_secrets;
- 	}
+diff --git a/arch/arm64/kernel/mte.c b/arch/arm64/kernel/mte.c
+index 4c5ef9b20065..6983ba35ce16 100644
+--- a/arch/arm64/kernel/mte.c
++++ b/arch/arm64/kernel/mte.c
+@@ -434,8 +434,8 @@ static int __access_remote_tags(struct mm_struct *mm, unsigned long addr,
+ 		struct page *page = get_user_page_vma_remote(mm, addr,
+ 							     gup_flags, &vma);
  
- #ifdef CONFIG_PROTECTED_VIRTUALIZATION_GUEST
-diff --git a/arch/s390/include/asm/uv.h b/arch/s390/include/asm/uv.h
-index 6180ac8909d5..0f3dee3fce71 100644
---- a/arch/s390/include/asm/uv.h
-+++ b/arch/s390/include/asm/uv.h
-@@ -123,7 +123,7 @@ struct uv_cb_qui {
- 	u32 reserved70[3];			/* 0x0070 */
- 	u32 max_num_sec_conf;			/* 0x007c */
- 	u64 max_guest_stor_addr;		/* 0x0080 */
--	u8  reserved88[158 - 136];		/* 0x0088 */
-+	u8  reserved88[0x9e - 0x88];		/* 0x0088 */
- 	u16 max_guest_cpu_id;			/* 0x009e */
- 	u64 uv_feature_indications;		/* 0x00a0 */
- 	u64 reserveda8;				/* 0x00a8 */
-@@ -135,7 +135,12 @@ struct uv_cb_qui {
- 	u64 reservedd8;				/* 0x00d8 */
- 	u64 supp_att_req_hdr_ver;		/* 0x00e0 */
- 	u64 supp_att_pflags;			/* 0x00e8 */
--	u8 reservedf0[256 - 240];		/* 0x00f0 */
-+	u64 reservedf0;				/* 0x00f0 */
-+	u64 supp_add_secret_req_ver;		/* 0x00f8 */
-+	u64 supp_add_secret_pcf;		/* 0x0100 */
-+	u64 supp_secret_types;			/* 0x0180 */
-+	u16 max_num_secrets;			/* 0x0110 */
-+	u8 reserved112[0x120 - 0x112];		/* 0x0112 */
- } __packed __aligned(8);
+-		if (IS_ERR_OR_NULL(page)) {
+-			err = page == NULL ? -EIO : PTR_ERR(page);
++		if (IS_ERR(page)) {
++			err = PTR_ERR(page);
+ 			break;
+ 		}
  
- /* Initialize Ultravisor */
-@@ -384,6 +389,10 @@ struct uv_info {
- 	unsigned long conf_dump_finalize_len;
- 	unsigned long supp_att_req_hdr_ver;
- 	unsigned long supp_att_pflags;
-+	unsigned long supp_add_secret_req_ver;
-+	unsigned long supp_add_secret_pcf;
-+	unsigned long supp_secret_types;
-+	unsigned short max_secrets;
- };
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 42ff3e04c006..4bb172e4818c 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -2397,7 +2397,7 @@ static inline struct page *get_user_page_vma_remote(struct mm_struct *mm,
+ 	if (got < 0)
+ 		return ERR_PTR(got);
+ 	if (got == 0)
+-		return NULL;
++		return ERR_PTR(-EIO);
  
- extern struct uv_info uv_info;
-diff --git a/arch/s390/kernel/uv.c b/arch/s390/kernel/uv.c
-index d5b5d7e83c17..c0a1bfb01135 100644
---- a/arch/s390/kernel/uv.c
-+++ b/arch/s390/kernel/uv.c
-@@ -571,6 +571,42 @@ static ssize_t uv_query_supp_att_pflags(struct kobject *kobj,
- static struct kobj_attribute uv_query_supp_att_pflags_attr =
- 	__ATTR(supp_att_pflags, 0444, uv_query_supp_att_pflags, NULL);
+ 	vma = vma_lookup(mm, addr);
+ 	if (WARN_ON_ONCE(!vma)) {
+diff --git a/kernel/events/uprobes.c b/kernel/events/uprobes.c
+index cac3aef7c6f7..9cf2d4ba760e 100644
+--- a/kernel/events/uprobes.c
++++ b/kernel/events/uprobes.c
+@@ -474,7 +474,10 @@ int uprobe_write_opcode(struct arch_uprobe *auprobe, struct mm_struct *mm,
+ 		gup_flags |= FOLL_SPLIT_PMD;
+ 	/* Read the page with vaddr into memory */
+ 	old_page = get_user_page_vma_remote(mm, vaddr, gup_flags, &vma);
+-	if (IS_ERR_OR_NULL(old_page))
++	if (old_page == ERR_PTR(-EIO))
++		return 0;
++
++	if (IS_ERR(old_page))
+ 		return PTR_ERR(old_page);
  
-+static ssize_t uv_query_supp_add_secret_req_ver(struct kobject *kobj,
-+						struct kobj_attribute *attr, char *page)
-+{
-+	return sysfs_emit(page, "%lx\n", uv_info.supp_add_secret_req_ver);
-+}
-+
-+static struct kobj_attribute uv_query_supp_add_secret_req_ver_attr =
-+	__ATTR(supp_add_secret_req_ver, 0444, uv_query_supp_add_secret_req_ver, NULL);
-+
-+static ssize_t uv_query_supp_add_secret_pcf(struct kobject *kobj,
-+					    struct kobj_attribute *attr, char *page)
-+{
-+	return sysfs_emit(page, "%lx\n", uv_info.supp_add_secret_pcf);
-+}
-+
-+static struct kobj_attribute uv_query_supp_add_secret_pcf_attr =
-+	__ATTR(supp_add_secret_pcf, 0444, uv_query_supp_add_secret_pcf, NULL);
-+
-+static ssize_t uv_query_supp_secret_types(struct kobject *kobj,
-+					  struct kobj_attribute *attr, char *page)
-+{
-+	return sysfs_emit(page, "%lx\n", uv_info.supp_secret_types);
-+}
-+
-+static struct kobj_attribute uv_query_supp_secret_types_attr =
-+	__ATTR(supp_secret_types, 0444, uv_query_supp_secret_types, NULL);
-+
-+static ssize_t uv_query_max_secrets(struct kobject *kobj,
-+				    struct kobj_attribute *attr, char *page)
-+{
-+	return sysfs_emit(page, "%d\n", uv_info.max_secrets);
-+}
-+
-+static struct kobj_attribute uv_query_max_num_secrets_attr =
-+	__ATTR(max_secrets, 0444, uv_query_max_secrets, NULL);
-+
- static struct attribute *uv_query_attrs[] = {
- 	&uv_query_facilities_attr.attr,
- 	&uv_query_feature_indications_attr.attr,
-@@ -584,6 +620,10 @@ static struct attribute *uv_query_attrs[] = {
- 	&uv_query_dump_cpu_len_attr.attr,
- 	&uv_query_supp_att_req_hdr_ver_attr.attr,
- 	&uv_query_supp_att_pflags_attr.attr,
-+	&uv_query_supp_add_secret_req_ver_attr.attr,
-+	&uv_query_supp_add_secret_pcf_attr.attr,
-+	&uv_query_supp_secret_types_attr.attr,
-+	&uv_query_max_num_secrets_attr.attr,
- 	NULL,
- };
+ 	ret = verify_opcode(old_page, vaddr, &opcode);
+diff --git a/mm/memory.c b/mm/memory.c
+index 8358f3b853f2..f9a81278e76d 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -5604,7 +5604,7 @@ int __access_remote_vm(struct mm_struct *mm, unsigned long addr, void *buf,
+ 		struct page *page = get_user_page_vma_remote(mm, addr,
+ 							     gup_flags, &vma);
  
+-		if (IS_ERR_OR_NULL(page)) {
++		if (IS_ERR(page)) {
+ #ifndef CONFIG_HAVE_IOREMAP_PROT
+ 			break;
+ #else
 -- 
-2.40.1
+2.39.2
 
