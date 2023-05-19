@@ -2,77 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F32709484
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 12:11:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B05E70948A
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 12:13:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231760AbjESKLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 06:11:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41752 "EHLO
+        id S230437AbjESKNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 06:13:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230331AbjESKLH (ORCPT
+        with ESMTP id S229851AbjESKNO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 06:11:07 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9800B114
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:11:04 -0700 (PDT)
-Date:   Fri, 19 May 2023 12:11:00 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1684491062; bh=BnKI1wFlnT7b9jk8O+5vwIz927UI6o6heQwO+A058hM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Hm2Q61hygij7TXQsb0WOKAyTvP/4g8aTkuHcvdRlVmlanj28CwhY2264Zi1sZtA5f
-         2oVsfGRhuWLt7xdgA6TU0hAecM5iwndcUQEUgGEJZg+T/pkMWfgJi9VHIYIwGULR3k
-         7KIJk5DbjaIsz7UGp8jHFcFL3BUWGOM3WsJFutJo=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Zhangjin Wu <falcon@tinylab.org>,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] tools/nolibc: riscv: Fix up compile error for rv32
-Message-ID: <c5140f54-99f2-4d7f-8b53-bd3cd1093727@t-8ch.de>
-References: <cover.1684425792.git.falcon@tinylab.org>
- <20230519094030.GA24947@1wt.eu>
+        Fri, 19 May 2023 06:13:14 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94494E47
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:13:12 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-64d3e5e5980so99399b3a.2
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:13:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684491192; x=1687083192;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BSr7GdXWAJku5Kok/w8KozBJgW/7oVgHlXu4LnQYU4U=;
+        b=AMYwSYKjD74G4Sw9tPc/nRaoL17u7EvGnGODVSfNhloK/SPeeqRD/GT1KCyKJg2Omz
+         eGIQemeDf5Tp/uGNuMICegZqzEvI2IThIZt23UyHiXLNXV69Epl/EyfBbJ5fGMEgJxpe
+         fykU5WMP1StVgRHUrIxCeuIn5oCBg9YwwY7o4Du9FeZ39gRWPwa5HOVux9DCdi5GNv4F
+         WXQ29NIgBQ9H/ufW3/IzAYS/FLw8jbcxsgS+HYQJK6wt+CNNQQUjGu6kYBrwq1UVCig0
+         knv/dg9Ia25SXp88Ykh7NRtrRs3uKAwAyQM6R6ILcu8prQ3Q7mO3Il08Xh7dAF2g+GcN
+         B1Mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684491192; x=1687083192;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BSr7GdXWAJku5Kok/w8KozBJgW/7oVgHlXu4LnQYU4U=;
+        b=IIzt/cXAak5727RrPEMzymlpofm6YhXE56yvUTxc3zwyCv/awYa/MtHC12oiADnPzU
+         PtQpwnUteCziZi2XyM6wt+DxoJhUdqyBBTxqMj810hjW1AiO+JibpyFsLPlRunWbuTDM
+         2rJGzu/Zc6n349R4QM/SngAsjqS4fY/8MK/QckJQ348rF4osRvmSU+WqvStYmsxFQNBp
+         oKugFOyWNXPn0aUiguM6+cjwJlzbpnx1Z0iuoRELaY77VQWMQqRsk03MdiUwv5WwClgw
+         qQTwBQshWwgCEzWf86m9yWXJE4GLwM3aBVATmg0rEsDO/nlQMO/QCnbEgAgHKBTJpZIl
+         SX/w==
+X-Gm-Message-State: AC+VfDxJ9gVSsChQzC+YCJYxEKzOhYdXEFk79OPGzw7tstA5KmjqqnW5
+        sLF32Y/GTqaU+Vm6dWsEIIIo+A==
+X-Google-Smtp-Source: ACHHUZ5kIqy1tdfgOlJbIVGQKOPxbA7vVEAaQIQrUfkKpzzN8ZCX1hfQmxBOMBUcHovpjekE6/JZTg==
+X-Received: by 2002:a05:6a20:3d09:b0:104:a096:6ac7 with SMTP id y9-20020a056a203d0900b00104a0966ac7mr1962172pzi.34.1684491192074;
+        Fri, 19 May 2023 03:13:12 -0700 (PDT)
+Received: from ?IPV6:2401:4900:1c60:d309:883d:817e:8e91:be39? ([2401:4900:1c60:d309:883d:817e:8e91:be39])
+        by smtp.gmail.com with ESMTPSA id p15-20020aa7860f000000b0064d35776709sm732016pfn.78.2023.05.19.03.13.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 May 2023 03:13:11 -0700 (PDT)
+Message-ID: <8e3c745a-2e37-2927-7dbf-e23a777702f3@linaro.org>
+Date:   Fri, 19 May 2023 15:43:06 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230519094030.GA24947@1wt.eu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 4/4] arm64: dts: qcom: qdu1000-idp: add SDHCI for emmc
+Content-Language: en-US
+To:     Komal Bajaj <quic_kbajaj@quicinc.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20230519085122.15758-1-quic_kbajaj@quicinc.com>
+ <20230519085122.15758-5-quic_kbajaj@quicinc.com>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+In-Reply-To: <20230519085122.15758-5-quic_kbajaj@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Willy,
 
-On 2023-05-19 11:40:30+0200, Willy Tarreau wrote:
-> Hi Zhangjin,
+On 5/19/23 2:21 PM, Komal Bajaj wrote:
+> Add sdhci node for emmc in qdu1000-idp.
 > 
-> On Fri, May 19, 2023 at 01:00:18AM +0800, Zhangjin Wu wrote:
-> > Hi, Willy
-> > 
-> > nolibc for riscv is only tested for rv64 currently (see
-> > tools/testing/selftests/nolibc/Makefile), this patchset tries to let it
-> > compile for rv32, but still not pass the nolibc selftest:
-> > 
-> > * The first patch uses lw/sw instead of ld/sd for rv32 and verse-vice for rv64
-> >     * This patch may conflict with the stackprotector patch [1], because
-> >       both of them changed the _start assembly in arch-riscv.h
+> Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
+> ---
+>   arch/arm64/boot/dts/qcom/qdu1000-idp.dts | 11 +++++++++++
+>   1 file changed, 11 insertions(+)
 > 
-> That's quite embarrassing, I'm having to trace of that series here. Now
-> I can find it in my LKML archives, but I don't have the direct message and
-> didn't spot the other ones. I'll have to investigate, thanks for notifying
-> me! I'm CCing Thomas, I will check with him how to best merge the two.
+> diff --git a/arch/arm64/boot/dts/qcom/qdu1000-idp.dts b/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
+> index 9e9fd4b8023e..b2526e991548 100644
+> --- a/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
+> +++ b/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
+> @@ -451,3 +451,14 @@
+>   &uart7 {
+>   	status = "okay";
+>   };
+> +
+> +&sdhc_1 {
+> +	status = "okay";
+> +
+> +	pinctrl-0 = <&sdc1_on_state>;
+> +	pinctrl-1 = <&sdc1_off_state>;
+> +	pinctrl-names = "default", "sleep";
+> +
+> +	vmmc-supply = <&vreg_l10a_2p95>;
+> +	vqmmc-supply = <&vreg_l7a_1p8>;
+> +};
 
-I think the conflict should be trivial to fix.
+Again, please follow alphabetical order for adding new node entries.
 
-I can also resend my series or just the single riscv patch.
+Also, we have been placing 'status = .. ' entry at the end for new .dts 
+(or .dts entry), but if that is the format used across this board dts
+I am ok with the same.
 
-<snip>
-
-Thomas
+Thanks,
+Bhupesh
