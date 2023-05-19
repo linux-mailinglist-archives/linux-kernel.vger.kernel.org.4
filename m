@@ -2,249 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83FCF709D14
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 18:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE9F8709D1E
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 19:03:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231584AbjESQ7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 12:59:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45190 "EHLO
+        id S229480AbjESRDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 13:03:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjESQ7E (ORCPT
+        with ESMTP id S229458AbjESRDO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 12:59:04 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8D4132
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 09:59:02 -0700 (PDT)
-Received: from pps.filterd (m0109334.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34JChS8k020839
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 09:59:02 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : mime-version; s=s2048-2021-q4;
- bh=A6bD4pqAy7cB66atyCNREi+vmWF8SO6MiaWbWqZiKkg=;
- b=PvtPNikYmPXXf5tdQK9e4F6KDGyRvScX+5TjyE05uyZ1edbAaciKfHqJWe4PSbN7czE4
- CTwqomrj/V3uqtBIL1SjeKPHcIenxnkNLxuUwnQnklQRGz4SfBdrq2v2VoVtf07nSMAS
- LVCT0Jj5BzR2divNDzJBoBxQAbPJemrREB2t57Trhhkc+kUFN0tKx4Dys0NNSIIPvlll
- 8ZBublfr7vNPHOTCZTQ0ZeKEU7iy2cog16lSm5FA6fTlRLsEtVO9j+3rXMwLFgHEhkxi
- 7v8Hs0iqxzX1dkLsgDn6sZdmsLWgSjEwG0Wc+48EwA4slkPvbR/owICxepBYF7uhCH8C ow== 
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2103.outbound.protection.outlook.com [104.47.55.103])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qp9by1r92-2
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 09:59:02 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nDvU8uuAVRoU4tA3IVaw44QMJcIRuyK6/YuEyOImy81Nt+QKl/Rw1paObFXn1WZgWzNsrbUpLNiYeQJ/YXzwKbuNUr7DJ4jA//yxuJu63gpJDgmyxKE+aXjDXw0tlqk/Ehq+knCOXqEVit6zYSr5jFKtKTPrfUEhqgGDIHI/gLt0Q5yr/1hyomYDGowGe3XLkim2dJOKt4mw4qstGsspnHU8MrmioYFWZUlvUV0yu+yMxtfjQ3x71jPM75CpQK7jqSo00RverkBJzMC/m2Zfv46KUGp3dfWF7/8guiKqBW1UwJT6MH7xjm2sYfcuxjP7YiY9qze8RTg+tfgYja4a7w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=A6bD4pqAy7cB66atyCNREi+vmWF8SO6MiaWbWqZiKkg=;
- b=eZzVU3OvemKY7QwKoNmh6/ufIocMTCM2Sc8Wtdu7k3GnAfLwzDYiGZIfqBGinlEFmlcxZwf/02l9wPdugu8yuhlQv5SYo0zjVOYF9cdJbPUXsqpgCLRUIe64t1HQKIjw2Sf3oeXqYou2r0e4DGh2S/HB2OFrL8Fvk0jzpkNw2ZGWNjiVob47L6r4W6IpQq1Njucwc5iWa1wJp/TvyP0mRsPgvFIpOcJDfly/mEr4MDXUGY0aj/sQLDj3rwSybVuxxklTRFQ6rxxHx2Hdj+zZy0KKxndsiUU9U0XJ2xmJYqJ5OPv+vfd80TcNYT6W5Wpho8Gd0xR3zEGnRNpFyVHZJw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com (2603:10b6:806:1dc::10)
- by SA3PR15MB5656.namprd15.prod.outlook.com (2603:10b6:806:311::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.21; Fri, 19 May
- 2023 16:59:00 +0000
-Received: from SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::e868:d4eb:382:e522]) by SA1PR15MB5109.namprd15.prod.outlook.com
- ([fe80::e868:d4eb:382:e522%5]) with mapi id 15.20.6411.021; Fri, 19 May 2023
- 16:59:00 +0000
-From:   Song Liu <songliubraving@meta.com>
-To:     Song Liu <song@kernel.org>
-CC:     LKML <linux-kernel@vger.kernel.org>,
-        Kernel Team <kernel-team@meta.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v4] watchdog: Allow nmi watchdog to use "ref-cycles" event
-Thread-Topic: [PATCH v4] watchdog: Allow nmi watchdog to use "ref-cycles"
- event
-Thread-Index: AQHZiR9WEaR3xoFFfEGCLaxGjWAWL69h1CkA
-Date:   Fri, 19 May 2023 16:59:00 +0000
-Message-ID: <3BDFDE24-C5B6-47A0-A541-2BF833BBA832@fb.com>
-References: <20230518002555.1114189-1-song@kernel.org>
-In-Reply-To: <20230518002555.1114189-1-song@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3731.500.231)
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SA1PR15MB5109:EE_|SA3PR15MB5656:EE_
-x-ms-office365-filtering-correlation-id: 3c608802-6fbf-493f-2ffe-08db588a579a
-x-fb-source: Internal
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: v8hp3HWegMe0i5WBnyC9DmULz+NEpnMr3jOCFZ4JkmS6Kg8//uLtCNe7hA7PYV+lzNn9IOsNpSsJjgLv0ii7JEkiP5K6DsNQZ6Hug7anNC8uQxK7CDg8o4MmiIIk3cRjF37f7dnsSPRt8MG9m8oRddRsSRVitw0D0gke6gt9vierUmKASVTdHYvYuqapZZdA7GU/8lj34WPoHVlcBtdvA/Y9BstWI9tPR06f3zUtxlk9ZlxElr7S70E5ngDM3Vi6ATeAuFvDqQR95iNtG/MribDZqrMls9KDLBUYrnp0rHdsQKx8fH550E3ATL56/o9Y3UkKdFZveL8IYPZU+oNuuxSgfNXWOCPqIZAAboeiPQ+6BsphJfhD1nYz9AVdXyXgUOm0mlMLdxNWwQZoeyCQPF/kRDWPL/1fOy9pbcCv/rGd+JgQn7jMZf28QzQRclZpGj2QQ9IX8/uTIzPrMWFqYdQSNONAPrfI589ZOAFiPhWhJzSGrcBKg5LiBT/40lpGhHUUUJ7ol16d1mWqn1A7ITUZKZ+TguA0B98B/zdJRqN7JMQ5MOptevWnv0EDODivaofuqxglajb5pJLBzyenR1ChpCbG3HR53UZw84N2cER/j6pr5buxfDJ2/pizFSYlLNAR0gVSYOw0bAqx3sTOrA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR15MB5109.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(346002)(376002)(396003)(366004)(451199021)(71200400001)(6486002)(41300700001)(38100700002)(53546011)(6506007)(6512007)(9686003)(36756003)(5660300002)(186003)(83380400001)(38070700005)(2906002)(86362001)(33656002)(8936002)(8676002)(478600001)(6916009)(64756008)(66556008)(66946007)(66446008)(76116006)(66476007)(4326008)(91956017)(122000001)(54906003)(316002)(461764006);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?a6mF07UoSnRlLtNX05xwCb+RZyx+K1dSw3JM3y+Y8oJeTAjXGIYBIN7cSrrL?=
- =?us-ascii?Q?W1yhqFOw7A9XjcsdlPdFWG33+M2oQZSb5Cs0NdlcTHWWUX+tZIee3WTb6Wjo?=
- =?us-ascii?Q?AAVhhAg7T5c4TjK7CFr7St8vEWZgr9RinxNerfRPlYi2tCnEVga/Ea/FCH+K?=
- =?us-ascii?Q?d7CvZMYKvQUFPwYo3OvpKwsUhEaJIHS91+z2bPhpWk0kfYbjpmnSypFOe69U?=
- =?us-ascii?Q?XOboDFzfNfPzlHyFDp0cs862lWhynosdoVVH62ZbP7lNeKAShnevi4Zw+Hui?=
- =?us-ascii?Q?yEEUlj12gbuqcJkmPp05+LpzYXYCB19M4klvHsiyT3MSzq7aQteTue5ruxk0?=
- =?us-ascii?Q?zhfQy54driy7U/mbdWuk2q7JRogMHb8NtweI5vh2X2ghm+rNKuJbfh87pUMR?=
- =?us-ascii?Q?s5cBUcMk3lGJsv5f2DWb2FnwP9fyyhprH9LJ/5Sgf5EytGI9WjnXgnwL+NAf?=
- =?us-ascii?Q?ZHOO+wEXhJcuCEi77i3j91tL3lHxR2Kk7hO73bzzv5gWUISfggQmi1YvaRuq?=
- =?us-ascii?Q?DpMsy+3YkrPTdrtWem5kqc1U3nWHeL9kfXapMsPNcGUH2MSYMR0L3AqyM+dB?=
- =?us-ascii?Q?Es2rh/VP1yJyMlSk2xwIZ32+PKv9XVBtUIhFOxJh5nM2DoJZtj/kWz/UxKRG?=
- =?us-ascii?Q?xVOH229KUE17bh9b+h7JjXDYLGcVc1/LgyIKkLcP0vj0yfFcUsWrhDemCb3w?=
- =?us-ascii?Q?t/qiEV0DOHvNF2/h0lZqROLjA6/S9ncslqp61ZctI3gmh1i/AJVmzI8wu3Yh?=
- =?us-ascii?Q?fpACL7S92YIycaaWrOhVFhTNUx4kX1xyD2UcDMYK9O+lmxmZ4N22CPWBU8ip?=
- =?us-ascii?Q?oxqmSLZSLsTdjTU6kGPz6HrAciQacsRWV0LAiA/xaG2qGqCqphmC5S8YxWCK?=
- =?us-ascii?Q?WtTZYP2o4aPnebLktEojkzzoo31+ffWvIUlF4lmYywL5XXs4U/V/kdKEZ/1Y?=
- =?us-ascii?Q?phPu+WcQfkpDf12wv2zqzqyolg9Nc1cyWS19R3B00D4N/l/Er0Yt6tr2FQJb?=
- =?us-ascii?Q?xesTpb77dOhuLY3j6CYjXmfDXzUmsl6szGGb9vvYWFaPG8XKJQDZXDNK3Gpg?=
- =?us-ascii?Q?iWNVY3XMmQtjPAYPKaVROlK+W8j3rXXPWiDa5GI4Nz26bVpGMiDaDbrzZZUS?=
- =?us-ascii?Q?+/I5hHnmBBUcg8FF0ZfXYHSrF65pqeHtQEryCCVEdGsyJ+tIzairVK/hg7X+?=
- =?us-ascii?Q?2NeW+ft77G1fc5ynY0ZLdkngPkh6GrJ99yy8dqKb4RQ1VIEpLqM6pFwFkUqe?=
- =?us-ascii?Q?6ZvjCAHRMF/NjqTWs5cc7Y4EV3u1QA0FO9dd8BCnoKI2syK6jbHcvGHSSKvh?=
- =?us-ascii?Q?NMtsKf29tGlIn6iry8H2j+yrMyfCeFh28giOz0esWPoxCbN80egp35MNQG+J?=
- =?us-ascii?Q?4AlR3vB2bEggZ7BYR2JZCBrUqO270yPtDFwg1dVzqVygFfsnMXeKUvZy5zmV?=
- =?us-ascii?Q?5Nak18B/CKUNwToLLrDL8we+kmEe+ffL/rllLhzRNOOPrrMn1KLJCbj/AhFm?=
- =?us-ascii?Q?m68ZAumY0GEYsZaADmMtOmDVydGEDI5fUdZVKpJ9jdzopFtJGoINYrDC5syC?=
- =?us-ascii?Q?t6urnCcQ6JcsSp8YByTTsNzMLaYNdoHobHjxlqHyOI1QE0Ic5uIbSga5xjKM?=
- =?us-ascii?Q?tFzkK8BPrGuMAszVu1bWXK4=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <0F02F8509FC6F94FBC647694DF73C206@namprd15.prod.outlook.com>
+        Fri, 19 May 2023 13:03:14 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB11132;
+        Fri, 19 May 2023 10:03:12 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34JDFdwD022366;
+        Fri, 19 May 2023 17:02:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=15mqatN0JtAeqDTDURc3+E1nmxFNbcd2tiKr9rIMIXA=;
+ b=goVIuVlSw3toAzeF82WTFdm3Zf9PACYUlywnPgnHsUMBJLEhFtPBSvR9IVuGAFCM7nxr
+ 9GNYMiwzPZUyXxnNLcD0N8ww8H2PApz4SGEbNphqXZ/fuvioCOqfkbHbh0ujIvz1TMAV
+ VF9+v8S0S+Lqv+UnSHaAN6sasP38I+7NK7d2ZTOPWGCDdXVs6k0HsGrUGtu90ylX/tGs
+ hrH4VNBcP9fxaIQrGZy+tOXAeZisM2nB5eHkzACzT5+wJ9TcfW5y5ASJQf+p2UXRXXF5
+ E6H2Hp+aV88tm/LFLbaEdi7Q7TEr6/wjPlUnxVUQK6Hv4Szp2z+v3kCcOANqPrn4PXSk eQ== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qp4nt9aju-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 May 2023 17:02:32 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34JH2VMo021638
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 19 May 2023 17:02:31 GMT
+Received: from [10.110.48.165] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 19 May
+ 2023 10:02:30 -0700
+Message-ID: <e22c31bd-10ed-f242-3e72-debf40e01e3c@quicinc.com>
+Date:   Fri, 19 May 2023 10:02:29 -0700
 MIME-Version: 1.0
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SA1PR15MB5109.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3c608802-6fbf-493f-2ffe-08db588a579a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 May 2023 16:59:00.0900
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vHtbWqX6yZ6pGTC5atbhdUIh+VqYo9yvJ6RR2/4g6XVE2oR/UsqoR+ZMvvQNBIFunbUjef0e6nlR+FcXswnaxQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR15MB5656
-X-Proofpoint-GUID: Balj3dD6pqUx882n5vz5RmW1II3Yi-Q5
-X-Proofpoint-ORIG-GUID: Balj3dD6pqUx882n5vz5RmW1II3Yi-Q5
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v13 10/24] gunyah: vm_mgr: Add/remove user memory regions
+To:     Will Deacon <will@kernel.org>
+CC:     Alex Elder <elder@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        "Arnd Bergmann" <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Bagas Sanjaya" <bagasdotme@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+References: <20230509204801.2824351-1-quic_eberman@quicinc.com>
+ <20230509204801.2824351-11-quic_eberman@quicinc.com>
+ <20230519115948.GB2637@willie-the-truck>
+Content-Language: en-US
+From:   Elliot Berman <quic_eberman@quicinc.com>
+In-Reply-To: <20230519115948.GB2637@willie-the-truck>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: qssvahDTuyjVZhfr-3TN9xikhuY7sI_z
+X-Proofpoint-GUID: qssvahDTuyjVZhfr-3TN9xikhuY7sI_z
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-19_12,2023-05-17_02,2023-02-09_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 lowpriorityscore=0 adultscore=0 clxscore=1015 phishscore=0
+ spamscore=0 impostorscore=0 bulkscore=0 malwarescore=0 mlxscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305190145
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew and Peter, 
 
-Does this version look good do you?
 
-Thanks,
-Song
-
-> On May 17, 2023, at 5:25 PM, Song Liu <song@kernel.org> wrote:
+On 5/19/2023 4:59 AM, Will Deacon wrote:
+> Hi Elliot,
 > 
-> NMI watchdog permanently consumes one hardware counters per CPU on the
-> system. For systems that use many hardware counters, this causes more
-> aggressive time multiplexing of perf events.
+> On Tue, May 09, 2023 at 01:47:47PM -0700, Elliot Berman wrote:
+>> When launching a virtual machine, Gunyah userspace allocates memory for
+>> the guest and informs Gunyah about these memory regions through
+>> SET_USER_MEMORY_REGION ioctl.
+>>
+>> Co-developed-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+>> Signed-off-by: Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>
+>> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+>> ---
+>>   drivers/virt/gunyah/Makefile    |   2 +-
+>>   drivers/virt/gunyah/vm_mgr.c    |  59 +++++++-
+>>   drivers/virt/gunyah/vm_mgr.h    |  26 ++++
+>>   drivers/virt/gunyah/vm_mgr_mm.c | 236 ++++++++++++++++++++++++++++++++
+>>   include/uapi/linux/gunyah.h     |  37 +++++
+>>   5 files changed, 356 insertions(+), 4 deletions(-)
+>>   create mode 100644 drivers/virt/gunyah/vm_mgr_mm.c
 > 
-> OTOH, some CPUs (mostly Intel) support "ref-cycles" event, which is rarely
-> used. Add kernel cmdline arg nmi_watchdog=ref-cycles to configure the
-> watchdog to use "ref-cycles" event instead of "cycles".
+> [...]
 > 
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Signed-off-by: Song Liu <song@kernel.org>
+>> +int gh_vm_mem_alloc(struct gh_vm *ghvm, struct gh_userspace_memory_region *region)
+>> +{
+>> +	struct gh_vm_mem *mapping, *tmp_mapping;
+>> +	struct page *curr_page, *prev_page;
+>> +	struct gh_rm_mem_parcel *parcel;
+>> +	int i, j, pinned, ret = 0;
+>> +	unsigned int gup_flags;
+>> +	size_t entry_size;
+>> +	u16 vmid;
+>> +
+>> +	if (!region->memory_size || !PAGE_ALIGNED(region->memory_size) ||
+>> +		!PAGE_ALIGNED(region->userspace_addr) ||
+>> +		!PAGE_ALIGNED(region->guest_phys_addr))
+>> +		return -EINVAL;
+>> +
+>> +	if (overflows_type(region->guest_phys_addr + region->memory_size, u64))
+>> +		return -EOVERFLOW;
+>> +
+>> +	ret = mutex_lock_interruptible(&ghvm->mm_lock);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>> +	mapping = __gh_vm_mem_find_by_label(ghvm, region->label);
+>> +	if (mapping) {
+>> +		ret = -EEXIST;
+>> +		goto unlock;
+>> +	}
+>> +
+>> +	list_for_each_entry(tmp_mapping, &ghvm->memory_mappings, list) {
+>> +		if (gh_vm_mem_overlap(tmp_mapping, region->guest_phys_addr,
+>> +					region->memory_size)) {
+>> +			ret = -EEXIST;
+>> +			goto unlock;
+>> +		}
+>> +	}
+>> +
+>> +	mapping = kzalloc(sizeof(*mapping), GFP_KERNEL_ACCOUNT);
+>> +	if (!mapping) {
+>> +		ret = -ENOMEM;
+>> +		goto unlock;
+>> +	}
+>> +
+>> +	mapping->guest_phys_addr = region->guest_phys_addr;
+>> +	mapping->npages = region->memory_size >> PAGE_SHIFT;
+>> +	parcel = &mapping->parcel;
+>> +	parcel->label = region->label;
+>> +	parcel->mem_handle = GH_MEM_HANDLE_INVAL; /* to be filled later by mem_share/mem_lend */
+>> +	parcel->mem_type = GH_RM_MEM_TYPE_NORMAL;
+>> +
+>> +	ret = account_locked_vm(ghvm->mm, mapping->npages, true);
+>> +	if (ret)
+>> +		goto free_mapping;
+>> +
+>> +	mapping->pages = kcalloc(mapping->npages, sizeof(*mapping->pages), GFP_KERNEL_ACCOUNT);
+>> +	if (!mapping->pages) {
+>> +		ret = -ENOMEM;
+>> +		mapping->npages = 0; /* update npages for reclaim */
+>> +		goto unlock_pages;
+>> +	}
+>> +
+>> +	gup_flags = FOLL_LONGTERM;
+>> +	if (region->flags & GH_MEM_ALLOW_WRITE)
+>> +		gup_flags |= FOLL_WRITE;
+>> +
+>> +	pinned = pin_user_pages_fast(region->userspace_addr, mapping->npages,
+>> +					gup_flags, mapping->pages);
+>> +	if (pinned < 0) {
+>> +		ret = pinned;
+>> +		goto free_pages;
+>> +	} else if (pinned != mapping->npages) {
+>> +		ret = -EFAULT;
+>> +		mapping->npages = pinned; /* update npages for reclaim */
+>> +		goto unpin_pages;
+>> +	}
 > 
-> ---
-> Changes in v4:
-> Fix compile error for !CONFIG_HARDLOCKUP_DETECTOR_PERF. (kernel test bot)
-> 
-> Changes in v3:
-> 
-> Pivot the design to use kernel arg nmi_watchdog=ref-cycles (Peter)
-> ---
-> Documentation/admin-guide/kernel-parameters.txt | 5 +++--
-> include/linux/nmi.h                             | 2 ++
-> kernel/watchdog.c                               | 2 ++
-> kernel/watchdog_hld.c                           | 9 +++++++++
-> 4 files changed, 16 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 9e5bab29685f..d378e23dad7c 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -3593,10 +3593,12 @@
-> Format: [state][,regs][,debounce][,die]
-> 
-> nmi_watchdog= [KNL,BUGS=X86] Debugging features for SMP kernels
-> - Format: [panic,][nopanic,][num]
-> + Format: [panic,][nopanic,][ref-cycles][num]
-> Valid num: 0 or 1
-> 0 - turn hardlockup detector in nmi_watchdog off
-> 1 - turn hardlockup detector in nmi_watchdog on
-> + ref-cycles - configure the watchdog with perf event
-> +             "ref-cycles" instead of "cycles"
-> When panic is specified, panic when an NMI watchdog
-> timeout occurs (or 'nopanic' to not panic on an NMI
-> watchdog, if CONFIG_BOOTPARAM_HARDLOCKUP_PANIC is set)
-> @@ -7097,4 +7099,3 @@
-> memory, and other data can't be written using
-> xmon commands.
-> off xmon is disabled.
-> -
-> diff --git a/include/linux/nmi.h b/include/linux/nmi.h
-> index 048c0b9aa623..edfd1bcce0f6 100644
-> --- a/include/linux/nmi.h
-> +++ b/include/linux/nmi.h
-> @@ -102,12 +102,14 @@ extern void hardlockup_detector_perf_disable(void);
-> extern void hardlockup_detector_perf_enable(void);
-> extern void hardlockup_detector_perf_cleanup(void);
-> extern int hardlockup_detector_perf_init(void);
-> +extern void hardlockup_config_perf_event(const char *str);
-> #else
-> static inline void hardlockup_detector_perf_stop(void) { }
-> static inline void hardlockup_detector_perf_restart(void) { }
-> static inline void hardlockup_detector_perf_disable(void) { }
-> static inline void hardlockup_detector_perf_enable(void) { }
-> static inline void hardlockup_detector_perf_cleanup(void) { }
-> +static inline void hardlockup_config_perf_event(const char *str) { }
-> # if !defined(CONFIG_HAVE_NMI_WATCHDOG)
-> static inline int hardlockup_detector_perf_init(void) { return -ENODEV; }
-> static inline void arch_touch_nmi_watchdog(void) {}
-> diff --git a/kernel/watchdog.c b/kernel/watchdog.c
-> index 8e61f21e7e33..fed4f0be8e1a 100644
-> --- a/kernel/watchdog.c
-> +++ b/kernel/watchdog.c
-> @@ -81,6 +81,8 @@ static int __init hardlockup_panic_setup(char *str)
-> nmi_watchdog_user_enabled = 0;
-> else if (!strncmp(str, "1", 1))
-> nmi_watchdog_user_enabled = 1;
-> + else if (!strncmp(str, "ref-cycles", 10))
-> + hardlockup_config_perf_event(str);
-> return 1;
-> }
-> __setup("nmi_watchdog=", hardlockup_panic_setup);
-> diff --git a/kernel/watchdog_hld.c b/kernel/watchdog_hld.c
-> index 247bf0b1582c..4deca58ba6ed 100644
-> --- a/kernel/watchdog_hld.c
-> +++ b/kernel/watchdog_hld.c
-> @@ -294,3 +294,12 @@ int __init hardlockup_detector_perf_init(void)
-> }
-> return ret;
-> }
-> +
-> +/**
-> + * hardlockup_config_perf_event - Overwrite config of wd_hw_attr
-> + */
-> +void __init hardlockup_config_perf_event(const char *str)
-> +{
-> + if (!strncmp(str, "ref-cycles", 10))
-> + wd_hw_attr.config = PERF_COUNT_HW_REF_CPU_CYCLES;
-> +}
-> -- 
-> 2.34.1
+> Sorry if I missed it, but I still don't see where you reject file mappings
+> here.
 > 
 
+Sure, I can reject file mappings. I didn't catch that was the ask 
+previously and thought it was only a comment about behavior of file 
+mappings.
+
+> This is also the wrong interface for upstream. Please get involved with
+> the fd-based guest memory discussions [1] and port your series to that.
+> 
+
+The user interface design for *shared* memory aligns with 
+KVM_SET_USER_MEMORY_REGION.
+
+I understood we want to use restricted memfd for giving guest-private 
+memory (Gunyah calls this "lending memory"). When I went through the 
+changes, I gathered KVM is using restricted memfd only for guest-private 
+memory and not for shared memory. Thus, I dropped support for lending 
+memory to the guest VM and only retained the shared memory support in 
+this series. I'd like to merge what we can today and introduce the 
+guest-private memory support in tandem with the restricted memfd; I 
+don't see much reason to delay the series.
+
+I briefly evaluated and picked the arm64/pKVM support that Fuad shared 
+[2] and found it should be fine for Gunyah. I did build-only at the 
+time. I don't have any comments on the base restricted_memfd support and 
+Fuad has not posted [2] on mailing lists yet as far as I can tell.
+
+> This patch cannot be merged in its current form.
+> 
+
+I am a little confused why the implementation to share memory with the 
+VM is being rejected. Besides rejecting file mappings, any other changes 
+needed to be accepted?
+
+- Elliot
+
+> Will
+> 
+> [1] https://lore.kernel.org/kvm/20221202061347.1070246-1-chao.p.peng@linux.intel.com/
+[2]: 
+https://android-kvm.googlesource.com/linux/+/refs/heads/tabba/fdmem-v10-core
