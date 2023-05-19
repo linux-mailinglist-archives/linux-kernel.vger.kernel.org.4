@@ -2,255 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B25ED708E58
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 05:28:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81349708E5D
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 05:31:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230378AbjESD2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 18 May 2023 23:28:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60530 "EHLO
+        id S229591AbjESDbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 18 May 2023 23:31:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbjESD1q (ORCPT
+        with ESMTP id S229504AbjESDbm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 18 May 2023 23:27:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B278E10E9;
-        Thu, 18 May 2023 20:27:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4112E653C3;
-        Fri, 19 May 2023 03:27:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F121C4339E;
-        Fri, 19 May 2023 03:27:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684466863;
-        bh=ujYvyZ0mZ6AlXxLS56qjiYCxAcNxvL+EYzl8ihJpbwg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B4wgFIUdZPMp2aSIvY0Dtwi1ytQPZlrke9rEsq2Nv3a7vcSzwbzO/UYxJ0HkiP0fK
-         9C82l58vw22sST2p8bZdYTlf3nbfce9LvPZe0GBGyEqTjrkdYrqEaPyoH/AtRDK3Bz
-         xpzvuW5KCW6RdYhaPMrmYlSyNfz0wSwnObqZqdw3dw+eajk1R6NESCAMwv5yWVNq/j
-         irs+aDFBWTPEgEKzEFE2C802KDE6jE3WDtja8I9IFFPa15nPzA+OPvFdpQrA7l3U99
-         RCCqmcYwLA0o93mZ6Br/zJ7Tgz48iqkgNP3o5uQJXX7V/4g2g8AphLiSFfVGyOp/nZ
-         1wthwW0b7FpNg==
-From:   Eduardo Valentin <evalenti@kernel.org>
-To:     eduval@amazon.com, linux-pm@vger.kernel.org
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 7/7] thermal: stats: add error accounting to thermal zone
-Date:   Thu, 18 May 2023 20:27:19 -0700
-Message-Id: <20230519032719.2581689-8-evalenti@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230519032719.2581689-1-evalenti@kernel.org>
-References: <20230519032719.2581689-1-evalenti@kernel.org>
+        Thu, 18 May 2023 23:31:42 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC0012F;
+        Thu, 18 May 2023 20:31:41 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.west.internal (Postfix) with ESMTP id 9FAA332007D7;
+        Thu, 18 May 2023 23:31:37 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Thu, 18 May 2023 23:31:38 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1684467097; x=1684553497; bh=Po/ogvPWUOXjRWtD3eSRZTMYszH7hxYjNm1
+        SSZFz8Ag=; b=A0R0m+TSMqktHrkPrL9VqAT3f4aINfWvUXypjlxWTDx6o1QY+vM
+        WLi8SlvdHxvtXzqUtaIVznbwomt3JX2/k5tde3bKkZDM1WpxLJMtyVvYHPuRlQRy
+        ghISHthfBF+22z4nihxbKYAJ3A22uWF1GmZc5Y1xGCeIWCmirqlIHbZNXWBGKK68
+        67ZuvbAQOC+GSzo1a3dHo3KJhYO9AW0pJz2RKZbkLyMxmj6bN+YdxvjEFCh+e8Ma
+        vxeW39/Hgk7RPC2un7r40jimbb828m4Osdx/Wr4w5fRQOycCHcqt/K+oDgsVI6Cs
+        ABuxm6LL9RAoOXZR9+bqbxlj8FybWFD8Vvw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1684467097; x=1684553497; bh=Po/ogvPWUOXjRWtD3eSRZTMYszH7hxYjNm1
+        SSZFz8Ag=; b=n+V2uXd6XU9+8SwnC3Wd8UEeF0CsUodCgjU2IRdzaqnaKeCJP2F
+        DrhigMLjcoBlyoLJRKk9cl15JuNzBG5gVqAliuHavCyFiTI6Koh621of5+HHbp8q
+        hPpQEalIl5faa6SokhJcnCDgXOjXgsKdwtE+crYLDhsgLPXH1i8IauDB4nChk0b/
+        mk3QaapXq0bCW63rFVvRlHpsnpgy3/lOxaXOXqCxSVwyDWVp7ggBZpeQ4h6LzXdq
+        poRhGcq3bSUIvmnjXwnNDpreikmpVZ1qRwVW8xiT/gf4i10HWjPidUcJymKdkAhw
+        Y7uBsKLKhHPlK4HfmNhGsOZXdil6WpxsoAQ==
+X-ME-Sender: <xms:mO1mZChzbyEqY4cpb-3pXhlVytmnirLNR3dLFkfAOx1u0m_R8DaztA>
+    <xme:mO1mZDAUwH7bdLlq71zXjVJwhnDPMxz5Edm-U4A9GN-vErXrYsMnw8XU9IakhoeT6
+    JhgOh5FZpoeioQ4CQ>
+X-ME-Received: <xmr:mO1mZKEQjL04REfqRlUFUuleD62wuE_58SbByw2adh39xjhPV2FDEiCHeK09260W_0lDrCKxMEpMpzVe-SzNf4rXA651dKbcVWkcoxPRyX1ue9DpLPstxtUhgg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeigedgjeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfvfevfhfhufgjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
+    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpeekheegueeiteeghfehvefgkeefgefhtefhgfdukeekueffkeei
+    fefhffeliedtfeenucffohhmrghinhepuggvvhhitggvthhrvggvrdhorhhgpdhgihhthh
+    husgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhr
+    ohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:mO1mZLQm48IUIUyPWewYXpHB--oCenY9m4ybvF714-mFENhCmbh_YQ>
+    <xmx:mO1mZPz2sBFSr-pI-JrY2rxhMJhzHaG4nIJpIT4zPCUM22v3m1SYIA>
+    <xmx:mO1mZJ4tdj-Ah7gwWe8PoLLMLFkONa1XyAvHIY5j9IxnSclaG_J0XA>
+    <xmx:me1mZPB365adlT_MO0zbMomtAp81BcTpg90ul8MylYJB2iW2fQfwVg>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 18 May 2023 23:31:35 -0400 (EDT)
+Message-ID: <c6e44e14-35b2-da09-5e8c-4d47e7a7a055@sholland.org>
+Date:   Thu, 18 May 2023 22:31:35 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux ppc64le; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Content-Language: en-US
+To:     Jisheng Zhang <jszhang@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+References: <20230518152244.2178-1-jszhang@kernel.org>
+ <20230518152244.2178-7-jszhang@kernel.org>
+From:   Samuel Holland <samuel@sholland.org>
+Subject: Re: [PATCH v4 06/10] dt-bindings: riscv: Add bouffalolab bl808 board
+ compatibles
+In-Reply-To: <20230518152244.2178-7-jszhang@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eduardo Valentin <eduval@amazon.com>
+Hi Jisheng, DT maintainers,
 
-This patch adds an extra stat to report how many
-temperature update failures were detected.
-Error count is increase whenever the thermal
-driver returns an actual error or when the temperature
-is non positive.
+On 5/18/23 10:22, Jisheng Zhang wrote:
+> Several SoMs and boards are available that feature the Bouffalolab
+> bl808 SoC. Document the compatible strings.
+> 
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  .../bindings/riscv/bouffalolab.yaml           | 29 +++++++++++++++++++
+>  1 file changed, 29 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/riscv/bouffalolab.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/riscv/bouffalolab.yaml b/Documentation/devicetree/bindings/riscv/bouffalolab.yaml
+> new file mode 100644
+> index 000000000000..3b25d1a5d04a
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/riscv/bouffalolab.yaml
+> @@ -0,0 +1,29 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/riscv/bouffalolab.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Bouffalo Lab Technology SoC-based boards
+> +
+> +maintainers:
+> +  - Jisheng Zhang <jszhang@kernel.org>
+> +
+> +description:
+> +  Bouffalo Lab Technology SoC-based boards
+> +
+> +properties:
+> +  $nodename:
+> +    const: '/'
+> +  compatible:
+> +    oneOf:
+> +      - description: Carrier boards for the Sipeed M1s SoM
+> +        items:
+> +          - enum:
+> +              - sipeed,m1s-dock
+> +          - const: sipeed,m1s
+> +          - const: bouffalolab,bl808
 
-Sample:
+As mentioned in the message for patch 5, "The Bouffalolab bl808 SoC
+contains three riscv CPUs, namely M0, D0 and LP. The D0 is 64bit RISC-V
+GC compatible, so can run linux."
 
-$ cat /sys/class/thermal/thermal_zone0/stats/error_count
-0
-$ echo -1 > /sys/class/thermal/thermal_zone0/emul_temp
-$ cat /sys/class/thermal/thermal_zone0/stats/error_count
-3
+I have also been running U-Boot and NOMMU Linux on the less powerful,
+but still quite fast, "M0" core. However, this core needs a different
+DTB because:
+ 1) The CPU is different (T-HEAD E907 instead of C906).
+ 2) The interrupt routing is completely different.
+    a. The M0 core contains a CLIC instead of a PLIC.
+    b. The peripherals in the SoC are split between two buses. Those
+       on one bus have their IRQs directly connected to M0, and share
+       a multiplexed IRQ connection to D0; and vice versa for the
+       other bus. So each bus's interrupt-parent needs to be swapped.
 
-Cc: "Rafael J. Wysocki" <rafael@kernel.org> (supporter:THERMAL)
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org> (supporter:THERMAL)
-Cc: Amit Kucheria <amitk@kernel.org> (reviewer:THERMAL)
-Cc: Zhang Rui <rui.zhang@intel.com> (reviewer:THERMAL)
-Cc: Jonathan Corbet <corbet@lwn.net> (maintainer:DOCUMENTATION)
-Cc: linux-pm@vger.kernel.org (open list:THERMAL)
-Cc: linux-doc@vger.kernel.org (open list:DOCUMENTATION)
-Cc: linux-kernel@vger.kernel.org (open list)
+Using some preprocessor magic like we did for Allwinner and Renesas, I
+was able to share most of the SoC and board DTs between the cores[1].
+However, this still ends up with two DTs for each board. So here are my
+questions:
+ - Is this acceptable?
+ - Is there precedent for how we should name the two board DTs?
+ - How does this affect the board and SoC compatible strings?
+   - Should there be a separate "bouffalolab,bl808-d0" in addition to
+     "bouffalolab,bl808"?
+   - Is it acceptable to use the same board compatible string for both,
+     since the _board_ part of the DT does not change, only things
+     inside the SoC?
 
-Signed-off-by: Eduardo Valentin <eduval@amazon.com>
----
- drivers/thermal/thermal_core.c  |  3 ++
- drivers/thermal/thermal_core.h  |  7 ++++
- drivers/thermal/thermal_sysfs.c | 64 +++++++++++++++++++++++++++++++++
- 3 files changed, 74 insertions(+)
+It would be possible to avoid having two DTs per board by guarding all
+of the differences behind "#ifdef CONFIG_64BIT", but that seems wrong
+because you would end up with two totally incompatible DTBs named the
+same thing, depending on how the DTB was built.
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 2ff7d9c7c973..359e7b2ff0e3 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -389,6 +389,9 @@ static void update_temperature(struct thermal_zone_device *tz)
- 		/* tell the governor its source is hosed */
- 		handle_error_temperature(tz, ret);
- 
-+		/* book keeping */
-+		thermal_zone_device_error_stats_update(tz, ret);
-+
- 		return;
- 	}
- 
-diff --git a/drivers/thermal/thermal_core.h b/drivers/thermal/thermal_core.h
-index ef37b92bbb7c..612f93e6c257 100644
---- a/drivers/thermal/thermal_core.h
-+++ b/drivers/thermal/thermal_core.h
-@@ -141,12 +141,19 @@ ssize_t weight_store(struct device *, struct device_attribute *, const char *,
- 
- #ifdef CONFIG_THERMAL_STATISTICS
- void thermal_zone_device_stats_update(struct thermal_zone_device *tz);
-+void thermal_zone_device_error_stats_update(struct thermal_zone_device *tz,
-+					    int error);
- void thermal_cooling_device_stats_update(struct thermal_cooling_device *cdev,
- 					 struct thermal_instance *instance,
- 					 unsigned long new_state);
- #else
- static inline
- void thermal_zone_device_stats_update(struct thermal_zone_device *tz) {}
-+static inline
-+void thermal_zone_device_error_stats_update(struct thermal_zone_device *tz,
-+					    int error)
-+{
-+}
- static inline void
- thermal_cooling_device_stats_update(struct thermal_cooling_device *cdev,
- 				    struct thermal_instance *instance,
-diff --git a/drivers/thermal/thermal_sysfs.c b/drivers/thermal/thermal_sysfs.c
-index 25851fe073c3..e511042e9dab 100644
---- a/drivers/thermal/thermal_sysfs.c
-+++ b/drivers/thermal/thermal_sysfs.c
-@@ -541,12 +541,21 @@ static void destroy_trip_attrs(struct thermal_zone_device *tz)
- /* thermal zone device statistics handling */
- struct thermal_zone_device_stats {
- 	spinlock_t lock; /* protects this struct */
-+	unsigned int error_count; /* just account them */
-+	int max_temperature;
- 	s64 max_gradient;
- 	s64 min_gradient;
- 	ktime_t last_time;
- 	ktime_t *time_in_trip;
- };
- 
-+static void error_stats_update(struct thermal_zone_device *tz, int error)
-+{
-+	struct thermal_zone_device_stats *stats = tz->stats;
-+
-+	stats->error_count++;
-+}
-+
- #define DELTA_MILLI_C_TO_MICRO_C(t0, t1)		(((t0) - (t1)) * 1000)
- static void temperature_stats_update(struct thermal_zone_device *tz)
- {
-@@ -555,6 +564,15 @@ static void temperature_stats_update(struct thermal_zone_device *tz)
- 	s64 cur_gradient, delta_temp;
- 	int i, trip_id = -1;
- 
-+	if (tz->temperature <= 0) {
-+		/* probably a wrong reading */
-+		error_stats_update(tz, tz->temperature);
-+		return;
-+	}
-+
-+	if (tz->temperature > stats->max_temperature)
-+		stats->max_temperature = tz->temperature;
-+
- 	delta = ktime_sub(now, stats->last_time);
- 	stats->last_time = now;
- 
-@@ -610,6 +628,31 @@ void thermal_zone_device_stats_update(struct thermal_zone_device *tz)
- 	spin_unlock(&stats->lock);
- }
- 
-+void thermal_zone_device_error_stats_update(struct thermal_zone_device *tz,
-+					    int error)
-+{
-+	struct thermal_zone_device_stats *stats = tz->stats;
-+
-+	spin_lock(&stats->lock);
-+	error_stats_update(tz, error);
-+	spin_unlock(&stats->lock);
-+}
-+
-+static ssize_t max_temperature_show(struct device *dev,
-+				    struct device_attribute *attr, char *buf)
-+{
-+	struct thermal_zone_device *tz = to_thermal_zone(dev);
-+	struct thermal_zone_device_stats *stats = tz->stats;
-+	int ret;
-+
-+	spin_lock(&stats->lock);
-+	temperature_stats_update(tz);
-+	ret = snprintf(buf, PAGE_SIZE, "%d\n", stats->max_temperature);
-+	spin_unlock(&stats->lock);
-+
-+	return ret;
-+}
-+
- static ssize_t max_gradient_show(struct device *dev,
- 				 struct device_attribute *attr, char *buf)
- {
-@@ -640,6 +683,21 @@ static ssize_t min_gradient_show(struct device *dev,
- 	return ret;
- }
- 
-+static ssize_t error_count_show(struct device *dev,
-+				struct device_attribute *attr, char *buf)
-+{
-+	struct thermal_zone_device *tz = to_thermal_zone(dev);
-+	struct thermal_zone_device_stats *stats = tz->stats;
-+	int ret;
-+
-+	spin_lock(&stats->lock);
-+	temperature_stats_update(tz);
-+	ret = snprintf(buf, PAGE_SIZE, "%u\n", stats->error_count);
-+	spin_unlock(&stats->lock);
-+
-+	return ret;
-+}
-+
- static ssize_t
- time_in_trip_ms_show(struct device *dev, struct device_attribute *attr,
- 		     char *buf)
-@@ -705,6 +763,8 @@ reset_tz_stats_store(struct device *dev, struct device_attribute *attr,
- 
- 	stats->min_gradient = 0;
- 	stats->max_gradient = 0;
-+	stats->max_temperature = 0;
-+	stats->error_count = 0;
- 	stats->last_time = ktime_get();
- 
- 	for (i = 0; i <= tz->num_trips; i++)
-@@ -717,13 +777,17 @@ reset_tz_stats_store(struct device *dev, struct device_attribute *attr,
- 
- static DEVICE_ATTR_RO(min_gradient);
- static DEVICE_ATTR_RO(max_gradient);
-+static DEVICE_ATTR_RO(max_temperature);
- static DEVICE_ATTR_RO(time_in_trip_ms);
-+static DEVICE_ATTR_RO(error_count);
- static DEVICE_ATTR_WO(reset_tz_stats);
- 
- static struct attribute *thermal_zone_device_stats_attrs[] = {
- 	&dev_attr_min_gradient.attr,
- 	&dev_attr_max_gradient.attr,
-+	&dev_attr_max_temperature.attr,
- 	&dev_attr_time_in_trip_ms.attr,
-+	&dev_attr_error_count.attr,
- 	&dev_attr_reset_tz_stats.attr,
- 	NULL
- };
--- 
-2.34.1
+Thoughts?
+
+Regards,
+Samuel
+
+[1]: https://github.com/openbouffalo/u-boot/commit/3ca800850f30
 
