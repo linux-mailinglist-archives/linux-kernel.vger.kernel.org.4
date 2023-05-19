@@ -2,55 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B0D7709194
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 10:20:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E947C709196
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 10:21:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230419AbjESIUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 04:20:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54588 "EHLO
+        id S229978AbjESIVA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 04:21:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230325AbjESIU2 (ORCPT
+        with ESMTP id S229502AbjESIU6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 04:20:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB834E4D
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 01:20:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Fri, 19 May 2023 04:20:58 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9521210D
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 01:20:57 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EEA9654E8
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 08:20:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id D8B32C433D2;
-        Fri, 19 May 2023 08:20:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684484421;
-        bh=cYNsUqwT6Czd7CihswXIkDGRkFsuSYQWgVboqu1K6jA=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=iLAe1xuM9zRLHRQs2u9Yh2Ep0+uBSKH7J+3J1B2F1aOH/s14yG/hy7DV7QZd10HBG
-         pdNZabSLeGwefTNzy84a+Yv+uGJKhYPiMHT4KbmczYxRkfYQNBu01pqguQ4nS/Rhwu
-         vZrWgxo8N+KwQzJxopYrT+qGKvQvJnGmbi6DvQi7Tbp0aVk42j9RNBjNEz+lXaIYBF
-         VchEXOtwfs09I/vrAzoqCz4hIFDvpkprVcQvsFu8I/nK8cKaS5x1sDUok+wOBgTcrV
-         ggNY6JQLQgImY2741lSEyub80t6ZJj7yd1T+GFLGCQ0Sx0lKwJM1nCnloJ/5yB+1qJ
-         5zzLjIOAXBKJw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id BBDE9C73FE2;
-        Fri, 19 May 2023 08:20:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
+        by smtp-out2.suse.de (Postfix) with ESMTPS id A083B1FE3F;
+        Fri, 19 May 2023 08:20:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1684484455; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=eHKhe64mDB9SMYnFBqDUvd9AtzD9pORioULOHydYWQQ=;
+        b=HaPAElJzLxwc7INOznSJt1/Dd30Ve01Si2iGuKqdVFQSWsFlGDRfJTL3xq8S4uUPeQBozB
+        d3Q8qBipNmwwCZjyhq7hiLIyBIMSrf+fAwPrxHLGnNN/ra7Kurqg+BRqQ4n5WVAcyVU2Qv
+        ggJF0zVLhNM9+x1J6EQVoWLKcMMrbSo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1684484455;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=eHKhe64mDB9SMYnFBqDUvd9AtzD9pORioULOHydYWQQ=;
+        b=K3upFZXcSqP41Ho8/fHJrPH7tmlPrYrMVrQWG16ENxJndmMHn/Qz3WOnHRsI7vfOTu9NZb
+        1HWTPfAe4hIYwlAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 634A813A15;
+        Fri, 19 May 2023 08:20:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 1sRDF2cxZ2SFBAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Fri, 19 May 2023 08:20:55 +0000
+Date:   Fri, 19 May 2023 10:20:54 +0200
+Message-ID: <87jzx420m1.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] sound fixes for 6.4-rc3
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=ISO-8859-2
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] MAINTAINERS: add myself as maintainer for enetc
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <168448442176.11174.1817196669995161023.git-patchwork-notify@kernel.org>
-Date:   Fri, 19 May 2023 08:20:21 +0000
-References: <20230518154146.856687-1-vladimir.oltean@nxp.com>
-In-Reply-To: <20230518154146.856687-1-vladimir.oltean@nxp.com>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, claudiu.manoil@nxp.com,
-        linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,28 +69,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Linus,
 
-This patch was applied to netdev/net.git (main)
-by David S. Miller <davem@davemloft.net>:
+please pull sound fixes for v6.4-rc3 from:
 
-On Thu, 18 May 2023 18:41:46 +0300 you wrote:
-> I would like to be copied on new patches submitted on this driver.
-> I am relatively familiar with the code, having practically maintained
-> it for a while.
-> 
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-> ---
->  MAINTAINERS | 1 +
->  1 file changed, 1 insertion(+)
+  git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.4-rc3
 
-Here is the summary with links:
-  - [net] MAINTAINERS: add myself as maintainer for enetc
-    https://git.kernel.org/netdev/net/c/3be5f6cd4a52
+The topmost commit is dc4f2ccaedddb489a83e7b12ebbdc347272aacc9
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+----------------------------------------------------------------
 
+sound fixes for 6.4-rc3
+
+A collection of small fixes that have been gathered since rc1:
+
+- Lots of small ASoC SOF Intel fixes
+- A couple of UAF and NULL-dereference fixes
+- Quirks and updates for HD-audio, USB-audio and ASoC AMD
+- A few minor build / sparse warning fixes
+- MAINTAINERS and DT updates
+
+----------------------------------------------------------------
+
+Ai Chao (1):
+      ALSA: hda/realtek: Add a quirk for HP EliteDesk 805
+
+Aidan MacDonald (1):
+      ASoC: jz4740-i2s: Make I2S divider calculations more robust
+
+Alexandru Sorodoc (1):
+      ALSA: hda/realtek: Add quirks for ASUS GU604V and GU603V
+
+Arnd Bergmann (2):
+      ALSA: cs46xx: mark snd_cs46xx_download_image as static
+      ALSA: oss: avoid missing-prototype warnings
+
+Dan Carpenter (1):
+      ALSA: firewire-digi00x: prevent potential use after free
+
+Douglas Anderson (1):
+      ASoC: mediatek: mt8186: Fix use-after-free in driver remove path
+
+Jeremy Soller (2):
+      ASoC: amd: yc: Add DMI entry to support System76 Pangolin 12
+      ALSA: hda/realtek: Add quirk for Clevo L140AU
+
+Kai Vehmanen (1):
+      ASoC: SOF: pm: save io region state in case of errors in resume
+
+Kai-Heng Feng (1):
+      ALSA: hda/realtek: Fix mute and micmute LEDs for yet another HP laptop
+
+Krzysztof Kozlowski (1):
+      ASoC: MAINTAINERS: drop Krzysztof Kozlowski from Samsung audio
+
+Lucas Tanure (1):
+      MAINTAINERS: Remove self from Cirrus Codec drivers
+
+Luke D. Jones (1):
+      ALSA: hda/realtek: Add quirk for 2nd ASUS GU603
+
+Martin Povi¹er (1):
+      ASoC: dt-bindings: Adjust #sound-dai-cells on TI's single-DAI codecs
+
+Maxim Kochetkov (1):
+      ASoC: dwc: limit the number of overrun messages
+
+Nikhil Mahale (1):
+      ALSA: hda: Add NVIDIA codec IDs a3 through a7 to patch table
+
+Pawe³ Anikiel (1):
+      ASoC: ssm2602: Add workaround for playback distortions
+
+Peter Ujfalusi (1):
+      ASoC: SOF: ipc3-topology: Make sure that only one cmd is sent in dai_config
+
+Pierre-Louis Bossart (9):
+      ASoC: SOF: Intel: hda-mlink: fix sublink refcounting
+      ASoC: SOF: Intel: hda-mlink: add helper to get SoundWire hlink
+      ASoC: SOF: Intel: hda-mlink: fix base_ptr computation
+      ASoC: SOF: Intel: hda-mlink: use 'ml_addr' parameter consistently
+      ASoC: SOF: Intel: hda-mlink: initialize instance_offset member
+      ASoC: SOF: Intel: hda-mlink: add helper to program SoundWire PCMSyCM registers
+      ASoC: SOF: debug: conditionally bump runtime_pm counter on exceptions
+      ASoC: SOF: pcm: fix pm_runtime imbalance in error handling
+      ASoC: SOF: sof-client-probes: fix pm_runtime imbalance in error handling
+
+Ranjani Sridharan (3):
+      ASoC: SOF: topology: Fix logic for copying tuples
+      ASoC: SOF: Separate the tokens for input and output pin index
+      ASoC: SOF: topology: Fix tuples array allocation
+
+Ryan C. Underwood (1):
+      ALSA: hda/realtek: Apply HP B&O top speaker profile to Pavilion 15
+
+Shengjiu Wang (1):
+      ASoC: fsl_micfil: Fix error handler with pm_runtime_enable
+
+Simon Trimmer (1):
+      ASoC: cs35l56: Prevent unbalanced pm_runtime in dsp_work() on SoundWire
+
+Takashi Iwai (2):
+      ALSA: usb-audio: Add a sample rate workaround for Line6 Pod Go
+      ALSA: hda: Fix Oops by 9.1 surround channel names
+
+V sujith kumar Reddy (1):
+      ASoC: SOF: amd: Fix NULL pointer crash in acp_sof_ipc_msg_data function
+
+Vitaly Rodionov (1):
+      ALSA: hda/realtek: Add quirk for HP EliteBook G10 laptops
+
+---
+ .../devicetree/bindings/sound/tas2562.yaml         |  6 +-
+ .../devicetree/bindings/sound/tas2770.yaml         |  6 +-
+ .../devicetree/bindings/sound/tas27xx.yaml         |  6 +-
+ MAINTAINERS                                        |  4 +-
+ include/sound/hda-mlink.h                          | 14 ++++
+ include/uapi/sound/sof/tokens.h                    |  3 +-
+ sound/core/oss/pcm_plugin.h                        | 16 ++--
+ sound/firewire/digi00x/digi00x-stream.c            |  4 +-
+ sound/pci/cs46xx/cs46xx_lib.c                      |  2 +-
+ sound/pci/hda/hda_generic.c                        |  7 +-
+ sound/pci/hda/patch_hdmi.c                         |  5 ++
+ sound/pci/hda/patch_realtek.c                      | 34 +++++++-
+ sound/soc/amd/yc/acp6x-mach.c                      |  7 ++
+ sound/soc/codecs/cs35l56.c                         |  3 +-
+ sound/soc/codecs/ssm2602.c                         | 15 ++++
+ sound/soc/dwc/dwc-i2s.c                            |  4 +-
+ sound/soc/fsl/fsl_micfil.c                         | 14 +++-
+ sound/soc/jz4740/jz4740-i2s.c                      | 54 +++++++++++-
+ sound/soc/mediatek/mt8186/mt8186-afe-clk.c         |  6 --
+ sound/soc/mediatek/mt8186/mt8186-afe-clk.h         |  1 -
+ sound/soc/mediatek/mt8186/mt8186-afe-pcm.c         |  4 -
+ sound/soc/mediatek/mt8186/mt8186-audsys-clk.c      | 46 ++++++-----
+ sound/soc/mediatek/mt8186/mt8186-audsys-clk.h      |  1 -
+ sound/soc/sof/amd/acp-ipc.c                        |  7 +-
+ sound/soc/sof/debug.c                              |  4 +-
+ sound/soc/sof/intel/hda-mlink.c                    | 96 ++++++++++++++++++++--
+ sound/soc/sof/ipc3-topology.c                      |  7 +-
+ sound/soc/sof/ipc4-topology.c                      |  4 +-
+ sound/soc/sof/pcm.c                                | 17 ++--
+ sound/soc/sof/pm.c                                 | 14 +++-
+ sound/soc/sof/sof-client-probes.c                  | 14 ++--
+ sound/soc/sof/topology.c                           |  6 +-
+ sound/usb/format.c                                 |  1 +
+ 33 files changed, 333 insertions(+), 99 deletions(-)
 
