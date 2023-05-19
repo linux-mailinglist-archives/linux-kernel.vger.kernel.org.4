@@ -2,649 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7C7D7091CA
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 10:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3803E7091D0
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 10:41:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbjESIkL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 19 May 2023 04:40:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33458 "EHLO
+        id S230364AbjESIla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 04:41:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjESIkI (ORCPT
+        with ESMTP id S230316AbjESIl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 04:40:08 -0400
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E80B8107;
-        Fri, 19 May 2023 01:40:05 -0700 (PDT)
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-643990c5373so3016499b3a.1;
-        Fri, 19 May 2023 01:40:05 -0700 (PDT)
+        Fri, 19 May 2023 04:41:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C6AE5A
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 01:40:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684485639;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=egBPRHVpdHSfd20nm0e9mbT5sU7zP2+9zHGLlUwPTiM=;
+        b=Y77Oh3f7BbqcfJAya9qhO8BC23iyJEZx3HziCeSQzEQQ599j2qfpmgfm7k+H1sGowKMamg
+        RhjRf+yEOfGQLldxYGJqMxWAiDakcFBZkknCfFWlqTqdSidTIxHuS6So5ljtjYRQTJp4rL
+        005bhweGkCVLmz1VxYS0ZpsndKRkmpc=
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
+ [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-615-Xy109IeYPI21oHsHQJUJ_A-1; Fri, 19 May 2023 04:40:38 -0400
+X-MC-Unique: Xy109IeYPI21oHsHQJUJ_A-1
+Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-64d1cdf9fa0so1127023b3a.0
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 01:40:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684485605; x=1687077605;
-        h=content-transfer-encoding:fcc:content-language:user-agent
-         :mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z/UOchxxUnmXIMoyxuk1iTxwCG4937jStQaVujCO6JY=;
-        b=FdZ1bGYpNoKEPA8eHdKFn1SgKG6CUHUFy34FznmRETNluaEWz1Lvcxd1aghDLehnnv
-         ncNGEwmR44Zn97W/UVaivjiL9l7dd5osGgAfl4+FEuyovTKf+30c+y3px4qnjFCtOynP
-         UXLAzFmXw3qMUzBVAnnIuE121qaH58yZK4JfmTQOceEKkf0cGYge50lkuo6RlicUr5OU
-         TnHIOS/t9sUTswzyYBnzHPcCq26c1CIYGhsPFLgMM7aES48HJahOxtb4Maj05nEV1o44
-         8lU6AXiT+qe1wrO10W8XbFN2GyzBka5oTkIqop13NC2PH5iPBDtHRCC+4+JQfJcKg7y4
-         PPWQ==
-X-Gm-Message-State: AC+VfDwA4sGdiGf43SKJjwtjfjdtY/9uJ8k5FOlQ5QUfi/Adez/fbPl9
-        oey1XF1Yri/lXb0fUBrcjB9nHfSYex9ZNvFO
-X-Google-Smtp-Source: ACHHUZ6GYQZlYvHe/szDTDmTqCUzzwH881NyUk/HVYvJVZBdmWPNDwiE2VQ6Rodfx9b3roRFYXTCyw==
-X-Received: by 2002:a05:6a21:6d95:b0:ff:d437:13fb with SMTP id wl21-20020a056a216d9500b000ffd43713fbmr1434517pzb.49.1684485605116;
-        Fri, 19 May 2023 01:40:05 -0700 (PDT)
-Received: from localhost ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id v12-20020a17090a4ecc00b00252b3328ad8sm970042pjl.0.2023.05.19.01.40.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 01:40:04 -0700 (PDT)
-From:   Hongyu Xie <xiehongyu1@kylinos.cn>
-To:     rdunlap@infradead.org, linux@armlinux.org.uk,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org
-Cc:     linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xy521521@gmail.com, Hongyu Xie <xiehongyu1@kylinos.cn>
-Subject: Re: [RFC PATCH v2 -next] tty: serial: add panic serial helper
-Date:   Fri, 19 May 2023 16:40:01 +0800
-Message-Id: <0507937d-33ed-9396-2efd-c749acdcefc7@kylinos.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <a8c0f2b3-fcc3-ee94-16b5-ef37b4ec37a9@infradead.org>
-References: <20230518102903.1179581-1-xiehongyu1@kylinos.cn> <a8c0f2b3-fcc3-ee94-16b5-ef37b4ec37a9@infradead.org>
+        d=1e100.net; s=20221208; t=1684485636; x=1687077636;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=egBPRHVpdHSfd20nm0e9mbT5sU7zP2+9zHGLlUwPTiM=;
+        b=COz+uQObb89FMXX/3BsG7haBBuKqkv71InZ3zWT6TUqK0EDPNoJ8NeAvfU8husVx8y
+         0NbR5ZJMs0fsH0sEIzDnCQkz2bPbF+RxIXZdXrZSA+sfmb5y1eMzmTGKy7W2ZpES2SJs
+         wmLyVtRQaz72LkYt+hGOAleYHW9pP9Es3GkBJD9k7yhyDtcNAeo/41KR2AWIGSrJAfRn
+         80GI2tRAng+ugiHuyyOz0ctSvwz9H8Z7gu8FZ1XcZi/6Ks1LB7BhDJ8NjoBCjazh5I5b
+         s5UyIGMgRlzs2li5hUVP03zR5tILCnIHj3ZkhlTHK/m4Z0om38vUq4fHmoNziKqCbH7L
+         I3wg==
+X-Gm-Message-State: AC+VfDxB6ExfdO+yTX4ZbXyCORAj3dfhQAdbovyXBG/swvuncStjEdNV
+        lfHVG2DjIfLEKoceIU+qSf+Qv9KoJpFi6/PRpIwOrYlfhA42dHm82FeZm7X35fL4ltNe6ADCJ96
+        RYrwwIL0LR/HPlU4dvCJ1zfCEowBgf1eP9VE=
+X-Received: by 2002:a05:6a20:12ce:b0:103:4188:5dc6 with SMTP id v14-20020a056a2012ce00b0010341885dc6mr1404873pzg.61.1684485636692;
+        Fri, 19 May 2023 01:40:36 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5qifzK49CJEVh43BJzHJgxewYSM92TBkBZCMgJvFD6rw1sXkY73qala5W0RRLrYfUw1jrMRQ==
+X-Received: by 2002:a05:6a20:12ce:b0:103:4188:5dc6 with SMTP id v14-20020a056a2012ce00b0010341885dc6mr1404860pzg.61.1684485636344;
+        Fri, 19 May 2023 01:40:36 -0700 (PDT)
+Received: from [10.72.12.98] ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id c24-20020aa78e18000000b00622e01989cbsm2609668pfr.176.2023.05.19.01.40.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 May 2023 01:40:36 -0700 (PDT)
+Message-ID: <c1fd63b9-42ea-fa83-ecb1-9af715e37ffa@redhat.com>
+Date:   Fri, 19 May 2023 16:40:26 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101 Thunderbird/102.11.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v20 13/32] ceph: Provide a splice-read stub
+To:     David Howells <dhowells@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Christoph Hellwig <hch@lst.de>,
+        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org
+References: <20230519074047.1739879-1-dhowells@redhat.com>
+ <20230519074047.1739879-14-dhowells@redhat.com>
 Content-Language: en-US
-X-Mozilla-Draft-Info: internal/draft; vcard=0; receipt=0; DSN=0; uuencode=0; attachmentreminder=0; deliveryformat=1
-X-Identity-Key: id1
-Fcc:    imap://xiehongyu1%40kylinos.cn@imap.kylinos.cn/Sent
+From:   Xiubo Li <xiubli@redhat.com>
+In-Reply-To: <20230519074047.1739879-14-dhowells@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+
+On 5/19/23 15:40, David Howells wrote:
+> Provide a splice_read stub for Ceph.  This does the inode shutdown check
+> before proceeding and jumps to direct_splice_read() if O_DIRECT is set, the
+> file has inline data or is a synchronous file.
+>
+> We try and get FILE_RD and either FILE_CACHE and/or FILE_LAZYIO caps and
+> hold them across filemap_splice_read().  If we fail to get FILE_CACHE or
+> FILE_LAZYIO capabilities, we use direct_splice_read() instead.
+>
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Christoph Hellwig <hch@lst.de>
+> cc: Al Viro <viro@zeniv.linux.org.uk>
+> cc: Jens Axboe <axboe@kernel.dk>
+> cc: Xiubo Li <xiubli@redhat.com>
+> cc: Ilya Dryomov <idryomov@gmail.com>
+> cc: Jeff Layton <jlayton@kernel.org>
+> cc: ceph-devel@vger.kernel.org
+> cc: linux-fsdevel@vger.kernel.org
+> cc: linux-block@vger.kernel.org
+> cc: linux-mm@kvack.org
+> ---
+>   fs/ceph/file.c | 66 +++++++++++++++++++++++++++++++++++++++++++++++++-
+>   1 file changed, 65 insertions(+), 1 deletion(-)
+>
+> diff --git a/fs/ceph/file.c b/fs/ceph/file.c
+> index f4d8bf7dec88..382dd5901748 100644
+> --- a/fs/ceph/file.c
+> +++ b/fs/ceph/file.c
+> @@ -1745,6 +1745,70 @@ static ssize_t ceph_read_iter(struct kiocb *iocb, struct iov_iter *to)
+>   	return ret;
+>   }
+>   
+> +/*
+> + * Wrap filemap_splice_read with checks for cap bits on the inode.
+> + * Atomically grab references, so that those bits are not released
+> + * back to the MDS mid-read.
+> + */
+> +static ssize_t ceph_splice_read(struct file *in, loff_t *ppos,
+> +				struct pipe_inode_info *pipe,
+> +				size_t len, unsigned int flags)
+> +{
+> +	struct ceph_file_info *fi = in->private_data;
+> +	struct inode *inode = file_inode(in);
+> +	struct ceph_inode_info *ci = ceph_inode(inode);
+> +	ssize_t ret;
+> +	int want = 0, got = 0;
+> +	CEPH_DEFINE_RW_CONTEXT(rw_ctx, 0);
+> +
+> +	dout("splice_read %p %llx.%llx %llu~%zu trying to get caps on %p\n",
+> +	     inode, ceph_vinop(inode), *ppos, len, inode);
+> +
+> +	if (ceph_inode_is_shutdown(inode))
+> +		return -ESTALE;
+> +
+> +	if ((in->f_flags & O_DIRECT) ||
+> +	    ceph_has_inline_data(ci) ||
+> +	    (fi->flags & CEPH_F_SYNC))
+> +		return direct_splice_read(in, ppos, pipe, len, flags);
+> +
+> +	ceph_start_io_read(inode);
+> +
+> +	want = CEPH_CAP_FILE_CACHE;
+> +	if (fi->fmode & CEPH_FILE_MODE_LAZY)
+> +		want |= CEPH_CAP_FILE_LAZYIO;
+> +
+> +	ret = ceph_get_caps(in, CEPH_CAP_FILE_RD, want, -1, &got);
+> +	if (ret < 0) {
+> +		ceph_end_io_read(inode);
+> +		return ret;
+> +	}
+> +
+> +	if ((got & (CEPH_CAP_FILE_CACHE | CEPH_CAP_FILE_LAZYIO)) == 0) {
+> +		dout("splice_read/sync %p %llx.%llx %llu~%zu got cap refs on %s\n",
+> +		     inode, ceph_vinop(inode), *ppos, len,
+> +		     ceph_cap_string(got));
+> +
+> +		ceph_end_io_read(inode);
+> +		return direct_splice_read(in, ppos, pipe, len, flags);
+
+Shouldn't we release cap ref before returning here ?
+
+Thanks
+
+- Xiubo
 
 
-在 2023/5/19 13:33, Randy Dunlap 写道:
-> Hi--
-> 
-> On 5/18/23 03:29, Hongyu Xie wrote:
->> It was inspired by kgdboc.
->>
->> This is a debug module that allows you to get all kernel logs
->> after panic.
->>
->> Normally you need to attach a USB-to-UART tool or enable kdump
->> before panic happens to get log from kernel after panic. If you
->> didn't do that and kdump is not working, you can't get any log to
->> know what happened before panic. If you have a USB-to-UART tool
->> and the uart port on your computer is working. This module helps
->> you to get all kernel log after panic() is called.
->>
->> To use this, see Documentation/dev-tools/panic_serial_helper.rst.
->>
->> Tested on arm64, x86 device.
->>
->> Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
->> ---
->>
->> v2:
->>   1. add a doc file
->>   2. remove the password thing
->>
->>   .../dev-tools/panic_serial_helper.rst         | 143 +++++
-> 
-> This file name (panic_serial_helper) also needs to be added to
-> Documentation/dev-tools/index.rst.
-> 
->>   MAINTAINERS                                   |   5 +
->>   drivers/tty/serial/Kconfig                    |  46 ++
->>   drivers/tty/serial/Makefile                   |   1 +
->>   drivers/tty/serial/panic_serial_helper.c      | 571 ++++++++++++++++++
->>   include/linux/panic.h                         |   1 +
->>   kernel/panic.c                                |  12 +
->>   7 files changed, 779 insertions(+)
->>   create mode 100644 Documentation/dev-tools/panic_serial_helper.rst
->>   create mode 100644 drivers/tty/serial/panic_serial_helper.c
->>
->> diff --git a/Documentation/dev-tools/panic_serial_helper.rst b/Documentation/dev-tools/panic_serial_helper.rst
->> new file mode 100644
->> index 000000000000..adbc4026fbe4
->> --- /dev/null
->> +++ b/Documentation/dev-tools/panic_serial_helper.rst
->> @@ -0,0 +1,143 @@
->> +.. SPDX-License-Identifier: GPL-2.0
->> +
-> 
-> The "===...===" lines here must be at least as long as the heading.
-> 
->> +=================================================
->> +Using panic serial helper to get kernel logs after panic
->> +=================================================
-> 
->> +========================================================
->> +Using panic serial helper to get kernel logs after panic
->> +========================================================
-> 
->> +
->> +:Author: Hongyu Xie <xiehongyu1@kylinos.cn>
->> +
->> +What is this?
->> +============
-> 
->     =============
-> 
->> +
->> +A debug module inspired by kgdboc that allows you to get all kernel logs
->> +after panic.
->> +
->> +When do you need it and why?
->> +============
-> 
->     =============================
-> 
->> +
->> +When
->> +--------------
->> +
->> +Didn't enable debugging tool like Kdump and didn't connect a USB-to-UART
->> +tool to the debug uart port on your PC before panic.
->> +
->> +Why
->> +--------------
->> +
->> +There are many debugging methods to know what was going on before panic.
->> +
->> +Kdump, for example. If Kdump is enabled, you can get a core image after
->> +panic. Then use GDB or Crash to debug that core image to know what happened
->> +before panic(see ``Documentation/admin-guide/kdump/kdump.rst`` for more
-> 
->     before panice (see
-> 
->> +information about Kdump).
->> +
->> +Another way is to connect the UART side of a USB-to-UART tool to the
-> 
-> Please use "UART" consistently (not "uart").
-> 
->> +debugging uart port(normally a 3 pin slot on the motherborad or a RS232
-> 
->     debugging UART port (normally a 3-pin            motherboard or an RS232
-> 
->> +port on the back panel of your PC) before panic happens. Then connect the
-> 
-> I wish I had a PC with a serial port so that I could test/use this.
-> 
->> +USB side of a USB-to-UART tool to another PC. You can read all the kernel
->> +logs coming from that uart port through apps like minicom on another PC.
->> +So when panic happens you'll know what was going on.
->> +
->> +What if Kdump hasn't been enabled? And in production environment you don't
->> +always connect a USB-to-UART tool before panic happens.
->> +
->> +So if Kdump is not enabled, you can use this module to get all the kernel
->> +logs after panic.
-> 
-> if this module is loaded prior to the panic.
-> 
->> +
->> +How to use it?
->> +============
-> 
->     ===============
->> +
->> +Prerequisites
->> +--------------
->> +
->> +1. Same as kgdboc, the UART driver must implement two callbacks in the
->> +struct uart_ops. See ``Documentation/dev-tools/kgdb.rst`` section
->> +``kgdboc and uarts``
->> +
->> +2. Your PC has an uart port and it's working.
->> +
->> +How
->> +--------------
->> +
->> +First you need to enable ``CONFIG_PANIC_SERIAL_HELPER`` in your
->> +config. To enable ``CONFIG_PANIC_SERIAL_HELPER`` you should look under
->> +:menuselection:
->> +`Device Drivers
->> +  --> Character devices
->> +    --> Enable TTY (TTY [=y])
->> +      --> Serial drivers`
->> +and select
->> +:menuselection:`debug through uart after panic`.
->> +
->> +Second, build and update the kernel image. Then wait for panic.
->> +
->> +After panic, you need to do the following,
-> 
->                                     following:
-> 
->> +1. connect the uart side of an USB-to-UART tool to any uart
->> +  port on your device(PC, server, Laptop, etc...) after panic.
-> 
->                    device (PC,                etc.).
-> 
-> You have already said "after panic".
-> 
->> +  Connect the USB side of that tool to another PC. Open
->> +  minicom(or other app) on that PC, and set "/dev/ttyUSB0"(or
-> 
->       minicom (or                                     ttyUSB0" (or
-> 
->> +  "/dev/ttyUSB1 if there is already another USB-to-UART tool
->> +  connected to your device) with "115200 8N1".
->> +
->> +  It automatically selects the port where you first pressing the
-> 
->                                                   first press the
-> 
->> +  "Enter"(some keyboard labeled with "Return")
-> 
->       "Enter" key (some keyboards label this with "Return").
-> 
->> +
->> +2. press "Enter"(some keyboard labeled with "Return") in that
-> 
->              "Enter" (or "Return") in that
-> 
->> +  minicom window, you'll get a help menu,
-> 
->       minicom window; you'll get a help meu:
-> 
->> +  "
->> +  help:
->> +      -a      show all kernel msg
->> +      -3      show S3 msg
->> +      -4      show S4 msg
->> +      -filter-[string]        show msg contains [string]
-> 
->                                            containing
-> 
->> +      -q-     quit
->> +  "
->> +
->> +see ``Help menu options`` for details.
->> +
->> +3. finally, type 'a', '3', '4', 'q' or "filter-xxx" then press
->> + "Enter" to get what you want.
->> +
->> +Help menu options
->> +--------------
->> +Available options:
->> +
->> + - a
->> +
->> +   Show all the messages starting from ``Booting Linux on ...``
->> +
->> + - 3
->> +
->> +   If STR happened before panic, this will show messages starting from
-> 
-> What "STR" is this?
-Suspend to ram, also known as S3.
-> 
->> +   ``PM: suspend entry...``
->> +
->> + - 4
->> +
->> +   If STD happened before panic, this will show messages starting from
-> 
-> Is this "STD" or "STR"?
-STD, suspend to disk, also known as S4.
-> 
->> +   ``PM: hibernation entry...``
->> +
->> + - filter-[string]
->> +
->> +   Only show messages that contain ``string``. For example, if you're only
->> +   interesting in message lines that contain ``CPU``, you just input
->> +   ``filter-CPU``.
->> +   Here is an output example for fitering ``CPU``::
-> 
->                                      filtering
-> 
-> It might be nice to provide case-ignored filter matching, e.g.,
-> find "CPU" or "cpu".
-Ok, it'll be in v3.
-> 
->> +
->> +   <6>[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x701f6633
->> +   <6>[    0.000000] Detected PIPT I-cache on CPU0
->> +   <6>[    0.000000] CPU features: detected: Kernel page table isolation (K
->> +   ...
->> +   <6>[    0.000000] GICv3: CPU0: using allocated LPI pending table @0x0000
->> +   <6>[    0.002411] smp: Bringing up secondary CPUs ...
->> +   <6>[    0.039105] Detected PIPT I-cache on CPU1
->> +   ...
->> +   <4>[    6.432129] CPU: 3 PID: 392 Comm: (crub_all) Tainted: G        W
->> +   <4>[    6.560279] CPU: 2 PID: 478 Comm: (ostnamed) Tainted: G        W
->> +   ...
->> +   <4>[  225.297828] CPU: 4 PID: 0 Comm: swapper/4 Tainted: G        W
->> +   <2>[  225.297909] SMP: stopping secondary CPUs
->> +   <0>[  225.297919] CPU features: 0x000000,02000800,0400421b
->> +
->> + - q-
->> +
->> +   return to help menu.
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 5bd0f510f744..951c6804b3cb 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -11552,6 +11552,11 @@ F:	include/linux/kgdb.h
->>   F:	kernel/debug/
->>   F:	kernel/module/kdb.c
->>   
->> +PANIC SERIAL CONSOLE
->> +M:	Hongyu Xie <xiehongyu1@kylinos.cn>
->> +F:	drivers/tty/serial/panic_serial_helper.c
->> +F:	drivers/tty/serial/panic_serial_helper.h
->> +
-> 
-> This is the wrong place for "PANIC SERIAL CONSOLE".
-> The MAINTAINERS file should remain in alphabetical order.
-> Please move this to after
-> PANASONIC LAPTOP ACPI EXTRAS DRIVER
-> Thanks.
-> 
->>   KHADAS MCU MFD DRIVER
->>   M:	Neil Armstrong <neil.armstrong@linaro.org>
->>   L:	linux-amlogic@lists.infradead.org
->> diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
->> index 398e5aac2e77..66cc7bddf561 100644
->> --- a/drivers/tty/serial/Kconfig
->> +++ b/drivers/tty/serial/Kconfig
->> @@ -198,6 +198,52 @@ config SERIAL_KGDB_NMI
->>   
->>   	  If unsure, say N.
->>   
-> 
-> I have comments here and similar ones in the documentation file.
-> It would be quite OK to make the Kconfig help text shorter and refer
-> to the Documentation file for more detailed help.
-> 
->> +config PANIC_SERIAL_HELPER
->> +	tristate "debug through uart after panic"
->> +	depends on PANIC_TIMEOUT=0
->> +	select CONSOLE_POLL
->> +	help
->> +	  This is a debug module that allows you to get all kernel logs
->> +	  after panic.
->> +
->> +	  Normally you need to attach a USB-to-UART tool or enable kdump
->> +	  before panic happens to get log from kernel after panic. If you
->> +	  didn't do that and kdump is not working, you can't get any log to
->> +	  know what happened before panic. If you have a USB-to-UART tool
->> +	  and the uart port on your computer is working. This module helps
-> 
-> 	                                     is working, this module helps
-> 
->> +	  you to get all kernel log after panic() is called.
->> +
->> +	  This module use serial port in poll mode, so it's more stable
-> 
-> 	              uses
-> 
->> +	  than other debugging methods.
->> +
->> +	  To use this, you need to do the following after panic,
->> +	    1. connect the uart side of an USB-to-UART tool to any uart
->> +	    port on your device(PC, server, Laptop, etc...) after panic.
-> 
-> 	                 device (PC,                etc.).
-> 
->> +	    Connect the USB side of that tool to another PC. Open
->> +	    minicom(or other app) on that PC, and set "/dev/ttyUSB0"(or
-> 
-> 	    minicom (or                                     ttyUSB0" (or
-> 
->> +	    "/dev/ttyUSB1 if there is already another USB-to-UART tool
->> +	    connected to your device) with "115200 8N1".
->> +
->> +	    It automatically selects the port where you first pressing the
-> 
-> 	                                                first press the
-> 
->> +	    "Enter"(some keyboard labeled with "Return")
-> 
-> 	    "Enter" key (some keyboards label this as "Return").
-> 
->> +
->> +	    2.press "Enter"(some keyboard labeled with "Return") in that
-> 
-> 	    2. press "Enter" (or "Return") in that
-> 
->> +	    minicom window, you'll get a help menu,
-> 
-> 	            window; you'll get a help menu:
-> 
->> +	    "
->> +	    help:
->> +	        -a      show all kernel msg
->> +	        -3      show S3 msg
->> +	        -4      show S4 msg
->> +	        -filter-[string]        show msg contains [string]
-> 
-> 	                                         containing
-> 
->> +	        -q-     quit
->> +	    "
->> +
->> +	   3.Finally, type 'a', '3', '4', 'q' or "filter-xxx" then press
-> 
-> 	   3. Finally,
-> 
->> +	   "Enter" to get what you want.
->> +
->> +	  Say Y if you have an UART port that is working.  If unsure, say N
-> 
-> 	                                                              say N.
-> 
->> +	  Say M if you want add this as a module driver.
-> 
-> 	  The moudul will be called panic_serial_helper.
-> 
->> +
->>   config SERIAL_MESON
->>   	tristate "Meson serial port support"
->>   	depends on ARCH_MESON || COMPILE_TEST
->> diff --git a/drivers/tty/serial/panic_serial_helper.c b/drivers/tty/serial/panic_serial_helper.c
->> new file mode 100644
->> index 000000000000..59863f777331
->> --- /dev/null
->> +++ b/drivers/tty/serial/panic_serial_helper.c
->> @@ -0,0 +1,571 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * panic_serial_helper.c Debug through uart when panic.
->> + *
->> + * Copyright (C) 2023 Xie Hongyu <xiehongyu1@kylinos.cn>
->> + *
->> + * Inspired by kgdboc.
->> + *
->> + */
->> +
->> +#define MODULE_NAME "panic_seial_helper"
-> 
->                                serial
-> 
->> +#define pr_fmt(fmt) MODULE_NAME ": " fmt
->> +
->> +#include <linux/kmsg_dump.h>
->> +#include <linux/bsearch.h>
->> +#include <linux/slab.h>
->> +#include <linux/delay.h>
->> +#include <linux/module.h>
->> +#include <linux/tty_driver.h>
->> +#include <linux/serial_core.h>
->> +
->> +#define S3_ENTRY "PM: suspend entry"
->> +#define S3_EXIT "PM: suspend exit"
->> +#define S4_ENTRY "PM: hibernation entry"
->> +#define S4_EXIT "PM: hibernation exit"
->> +
->> +/* list to store msg lines */
->> +static LIST_HEAD(psh_list);
->> +
->> +/* msg line prototype */
->> +struct dmesg_lines {
->> +	struct list_head entry;
->> +	char *buf;
->> +	int size;
->> +};
->> +
->> +/* panic serial helper status*/
->> +enum PSHS {
->> +	PSHS_INIT,
->> +	PSHS_WAIT_HELP_INPUT,
->> +};
->> +
->> +/* panic serial helper msg type */
->> +enum PSHM_TYPE {
->> +	PSHM_TYPE_ALL,
->> +	PSHM_TYPE_S3,
->> +	PSHM_TYPE_S4,
->> +	PSHM_TYPE_STRINGS,
->> +	PSHM_TYPE_QUIT,
->> +};
->> +
->> +/* whether uart is dumping msg */
->> +static bool dumping_msg;
->> +
->> +/* to filter msg */
->> +static char filter[256] = {0};
->> +
->> +struct psh_buf {
->> +#define PSH_BUF_SIZE 256
->> +	char buf[PSH_BUF_SIZE];
->> +	int cur;
->> +};
->> +
->> +static const char psh_tty_types[][32] = {
->> +	{"ttyAMA"},
->> +	{"ttyS"},
->> +	{"ttyPS"},
->> +	{"ttyLP"},
->> +	{"ttyARC"},
->> +	{"ttyAL"},
->> +	{"ttyUL"},
->> +};
->> +
->> +#define TTY_OPS "115200n8n"
-> 
-> Other places here say "115200 8N1". Is there a typo above?
-Not a typo, the order that uart_parse_options parse is parity, bits, 
-flow. "115200 8N1" shows in minicom setting window.
-> 
->> +
->> +struct psh_serial_dev {
->> +	struct list_head entry;
->> +	struct tty_driver *drv;
->> +	struct psh_buf buf;
->> +	enum PSHS psh_status;
->> +	enum PSHM_TYPE psh_msg_type;
->> +	int line;
->> +};
->> +
->> +struct psh_serial_dev *psh_dev;
->> +
->> +/* char handle prototype */
-> 
-> s/handle/handler/ IMO
-> and in other places also.
-> 
->> +struct c_handle {
->> +	char c;
->> +	int (*handler)(struct psh_serial_dev *dev, void *d);
->> +};
->> +
-> 
-> [snip]
-What does "[snip]" mean? Can't find it on Bing or Google.
-> 
->> +
->> +static void psh_help(struct psh_serial_dev *dev)
->> +{
->> +	static const char help[] = "\nhelp:\n";
->> +	static const char show_all[] = "\t-a\tshow all kernel msg\n";
->> +	static const char show_s3[] = "\t-3\tshow S3 msg\n";
->> +	static const char show_s4[] = "\t-4\tshow S4 msg\n";
->> +	static const char _filter[] =
->> +		"\t-filter-[string]\tshow msg contains [string]\n";
-> 
-> 		                              containing
-> 
->> +	static const char _quit[] = "\t-q-\tquit\n";
->> +
->> +	psh_put_strings(dev, help, strlen(help));
->> +	psh_put_strings(dev, show_all, strlen(show_all));
->> +	psh_put_strings(dev, show_s3, strlen(show_s3));
->> +	psh_put_strings(dev, show_s4, strlen(show_s4));
->> +	psh_put_strings(dev, _filter, strlen(_filter));
->> +	psh_put_strings(dev, _quit, strlen(_quit));
->> +}
->> +
-> 
-> [snip]
-> 
->> +
->> +/* try all uart port under the same driver */
->> +static int psh_try_all_uart_port(struct uart_driver *drv)
->> +{
->> +	struct psh_serial_dev *dev = NULL;
->> +	struct uart_driver *driver = NULL;
->> +	char drv_name[64] = {0};
->> +	int count = 10000;
->> +	int i = 0, nr = drv->nr;
->> +
->> +	for (i = 0; i < nr; i++) {
->> +		memset(drv_name, 0, sizeof(drv_name));
->> +		snprintf(drv_name, sizeof(drv_name), "%s%d,%s",
->> +			drv->driver_name,
->> +			i, TTY_OPS);
->> +
->> +		driver = psh_find_uart_driver(drv_name);
->> +		if (!driver)
->> +			continue;
->> +
->> +		dev = create_psh_serial_dev(driver, i);
->> +		if (!dev) {
->> +			tty_driver_kref_put(driver->tty_driver);
->> +			driver = NULL;
->> +			continue;
->> +		}
->> +
->> +		count = 10000;
-> 
-> Already init-ed to 10000 above...
-Need it here. Out side of while loop is a for loop.
-> 
->> +		while (count-- > 0) {
->> +			psh_wait_for_input(dev);
->> +
->> +			if (psh_dev)
->> +				return 0;
->> +		}
->> +
->> +		tty_driver_kref_put(driver->tty_driver);
->> +		driver = NULL;
->> +		kfree(dev);
->> +		dev = NULL;
->> +	}
->> +
->> +	return -1;
->> +}
-> 
-> 
-> Thanks.
-Thanks for your kind reply. I'll send v3 asap.
+> +	}
+> +
+> +	dout("splice_read %p %llx.%llx %llu~%zu got cap refs on %s\n",
+> +	     inode, ceph_vinop(inode), *ppos, len, ceph_cap_string(got));
+> +
+> +	rw_ctx.caps = got;
+> +	ceph_add_rw_context(fi, &rw_ctx);
+> +	ret = filemap_splice_read(in, ppos, pipe, len, flags);
+> +	ceph_del_rw_context(fi, &rw_ctx);
+> +
+> +	dout("splice_read %p %llx.%llx dropping cap refs on %s = %zd\n",
+> +	     inode, ceph_vinop(inode), ceph_cap_string(got), ret);
+> +	ceph_put_cap_refs(ci, got);
+> +
+> +	ceph_end_io_read(inode);
+> +	return ret;
+> +}
+> +
+>   /*
+>    * Take cap references to avoid releasing caps to MDS mid-write.
+>    *
+> @@ -2593,7 +2657,7 @@ const struct file_operations ceph_file_fops = {
+>   	.lock = ceph_lock,
+>   	.setlease = simple_nosetlease,
+>   	.flock = ceph_flock,
+> -	.splice_read = generic_file_splice_read,
+> +	.splice_read = ceph_splice_read,
+>   	.splice_write = iter_file_splice_write,
+>   	.unlocked_ioctl = ceph_ioctl,
+>   	.compat_ioctl = compat_ptr_ioctl,
+>
 
-Hongyu Xie
