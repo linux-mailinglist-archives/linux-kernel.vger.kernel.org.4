@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C0570A332
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 01:08:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A61B070A331
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 01:08:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231837AbjESXIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 19:08:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37536 "EHLO
+        id S231799AbjESXIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 19:08:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231716AbjESXI1 (ORCPT
+        with ESMTP id S231672AbjESXI0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 19:08:27 -0400
+        Fri, 19 May 2023 19:08:26 -0400
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 499541B3;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 871A11B7;
         Fri, 19 May 2023 16:08:25 -0700 (PDT)
 Received: from W11-BEAU-MD.localdomain (unknown [76.135.27.212])
-        by linux.microsoft.com (Postfix) with ESMTPSA id AC48720FB614;
+        by linux.microsoft.com (Postfix) with ESMTPSA id E5CF920FB618;
         Fri, 19 May 2023 16:08:24 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com AC48720FB614
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E5CF920FB618
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1684537704;
-        bh=R9WpmxQFldXYYmhS/GVfkKBD8D/fasffqThY+EQObvc=;
+        s=default; t=1684537705;
+        bh=VuJim+olM4mdhP+9flU3IJ60VgfVV5tOztn8lZStPJ4=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YHrrSZG4sLrjrhf1tGCCfZggsuLDngkFW6hb54mD9g9x+G1paMrvjGSquAm019F+K
-         B9vK+RU4y/bqFjkZr9e5plPWkG0LPYXlkXJaHjt3AMGanGsu2QJq+oJo9nZLDzAGLE
-         DoakVU00mWA9A5mZKYyFrEg/+JLWNjHNSkk3xRtM=
+        b=EA90QIJKk7Kzx8LR8kLyEGzeafYINfLECxf+o873foSJutgK6yUMqSqpFLQzJNcrg
+         Tz2xfOFTTScDouLpbyQDcjhjegnMdskIsEl00QcJHkv+qfIyHLUKsk8hL3A9VaS2nE
+         blpwdRhDpEZI+77H1b2c9W9gqGV/3MS8ziQfOuCw=
 From:   Beau Belgrave <beaub@linux.microsoft.com>
 To:     rostedt@goodmis.org, mhiramat@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
         torvalds@linux-foundation.org, ast@kernel.org
-Subject: [PATCH v3 3/4] tracing/user_events: Rename link fields for clarity
-Date:   Fri, 19 May 2023 16:07:40 -0700
-Message-Id: <20230519230741.669-4-beaub@linux.microsoft.com>
+Subject: [PATCH v3 4/4] tracing/user_events: Document user_event_mm one-shot list usage
+Date:   Fri, 19 May 2023 16:07:41 -0700
+Message-Id: <20230519230741.669-5-beaub@linux.microsoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230519230741.669-1-beaub@linux.microsoft.com>
 References: <20230519230741.669-1-beaub@linux.microsoft.com>
@@ -48,211 +48,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently most list_head fields of various structs within user_events
-are simply named link. This causes folks to keep additional context in
-their head when working with the code, which can be confusing.
+During 6.4 development it became clear that the one-shot list used by
+the user_event_mm's next field was confusing to others. It is not clear
+how this list is protected or what the next field usage is for unless
+you are familiar with the code.
 
-Instead of using link, describe what the actual link is, for example:
-list_del_rcu(&mm->link);
-
-Changes into:
-list_del_rcu(&mm->mms_link);
-
-The reader now is given a hint the link is to the mms global list
-instead of having to remember or spot check within the code.
+Add comments into the user_event_mm struct indicating lock requirement
+and usage. Also document how and why this approach was used via comments
+in both user_event_enabler_update() and user_event_mm_get_all() and the
+rules to properly use it.
 
 Link: https://lore.kernel.org/linux-trace-kernel/CAHk-=wicngggxVpbnrYHjRTwGE0WYscPRM+L2HO2BF8ia1EXgQ@mail.gmail.com/
 
 Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
 Signed-off-by: Beau Belgrave <beaub@linux.microsoft.com>
 ---
- include/linux/user_events.h      |  2 +-
- kernel/trace/trace_events_user.c | 40 ++++++++++++++++++--------------
- 2 files changed, 23 insertions(+), 19 deletions(-)
+ include/linux/user_events.h      |  1 +
+ kernel/trace/trace_events_user.c | 23 ++++++++++++++++++++++-
+ 2 files changed, 23 insertions(+), 1 deletion(-)
 
 diff --git a/include/linux/user_events.h b/include/linux/user_events.h
-index 2847f5a18a86..17d452b389de 100644
+index 17d452b389de..8afa8c3a0973 100644
 --- a/include/linux/user_events.h
 +++ b/include/linux/user_events.h
-@@ -17,7 +17,7 @@
- 
- #ifdef CONFIG_USER_EVENTS
- struct user_event_mm {
--	struct list_head	link;
-+	struct list_head	mms_link;
+@@ -20,6 +20,7 @@ struct user_event_mm {
+ 	struct list_head	mms_link;
  	struct list_head	enablers;
  	struct mm_struct	*mm;
++	/* Used for one-shot lists, protected by event_mutex */
  	struct user_event_mm	*next;
+ 	refcount_t		refcnt;
+ 	refcount_t		tasks;
 diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-index 2f70dabb0f71..360d0f965cb8 100644
+index 360d0f965cb8..6058ca2de3be 100644
 --- a/kernel/trace/trace_events_user.c
 +++ b/kernel/trace/trace_events_user.c
-@@ -96,7 +96,7 @@ struct user_event {
-  * these to track enablement sites that are tied to an event.
-  */
- struct user_event_enabler {
--	struct list_head	link;
-+	struct list_head	mm_enablers_link;
- 	struct user_event	*event;
- 	unsigned long		addr;
- 
-@@ -153,7 +153,7 @@ struct user_event_file_info {
- #define VALIDATOR_REL (1 << 1)
- 
- struct user_event_validator {
--	struct list_head	link;
-+	struct list_head	user_event_link;
- 	int			offset;
- 	int			flags;
- };
-@@ -259,7 +259,7 @@ static struct user_event_group
- 
- static void user_event_enabler_destroy(struct user_event_enabler *enabler)
- {
--	list_del_rcu(&enabler->link);
-+	list_del_rcu(&enabler->mm_enablers_link);
- 
- 	/* No longer tracking the event via the enabler */
- 	refcount_dec(&enabler->event->refcnt);
-@@ -438,7 +438,7 @@ static bool user_event_enabler_exists(struct user_event_mm *mm,
+@@ -450,12 +450,25 @@ static bool user_event_enabler_exists(struct user_event_mm *mm,
+ static void user_event_enabler_update(struct user_event *user)
  {
  	struct user_event_enabler *enabler;
+-	struct user_event_mm *mm = user_event_mm_get_all(user);
+ 	struct user_event_mm *next;
++	struct user_event_mm *mm;
+ 	int attempt;
  
--	list_for_each_entry(enabler, &mm->enablers, link) {
-+	list_for_each_entry(enabler, &mm->enablers, mm_enablers_link) {
- 		if (enabler->addr == uaddr &&
- 		    (enabler->values & ENABLE_VAL_BIT_MASK) == bit)
- 			return true;
-@@ -460,7 +460,7 @@ static void user_event_enabler_update(struct user_event *user)
+ 	lockdep_assert_held(&event_mutex);
+ 
++	/*
++	 * We need to build a one-shot list of all the mms that have an
++	 * enabler for the user_event passed in. This list is only valid
++	 * while holding the event_mutex. The only reason for this is due
++	 * to the global mm list being RCU protected and we use methods
++	 * which can wait (mmap_read_lock and pin_user_pages_remote).
++	 *
++	 * NOTE: user_event_mm_get_all() increments the ref count of each
++	 * mm that is added to the list to prevent removal timing windows.
++	 * We must always put each mm after they are used, which may wait.
++	 */
++	mm = user_event_mm_get_all(user);
++
+ 	while (mm) {
  		next = mm->next;
  		mmap_read_lock(mm->mm);
+@@ -514,6 +527,14 @@ static struct user_event_mm *user_event_mm_get_all(struct user_event *user)
+ 	struct user_event_enabler *enabler;
+ 	struct user_event_mm *mm;
  
--		list_for_each_entry(enabler, &mm->enablers, link) {
-+		list_for_each_entry(enabler, &mm->enablers, mm_enablers_link) {
- 			if (enabler->event == user) {
- 				attempt = 0;
- 				user_event_enabler_write(mm, enabler, true, &attempt);
-@@ -496,7 +496,7 @@ static bool user_event_enabler_dup(struct user_event_enabler *orig,
- 	refcount_inc(&enabler->event->refcnt);
- 
- 	/* Enablers not exposed yet, RCU not required */
--	list_add(&enabler->link, &mm->enablers);
-+	list_add(&enabler->mm_enablers_link, &mm->enablers);
- 
- 	return true;
- }
-@@ -526,13 +526,15 @@ static struct user_event_mm *user_event_mm_get_all(struct user_event *user)
- 	 */
- 	rcu_read_lock();
- 
--	list_for_each_entry_rcu(mm, &user_event_mms, link)
--		list_for_each_entry_rcu(enabler, &mm->enablers, link)
-+	list_for_each_entry_rcu(mm, &user_event_mms, mms_link) {
-+		list_for_each_entry_rcu(enabler, &mm->enablers, mm_enablers_link) {
- 			if (enabler->event == user) {
- 				mm->next = found;
- 				found = user_event_mm_get(mm);
- 				break;
- 			}
-+		}
-+	}
- 
- 	rcu_read_unlock();
- 
-@@ -571,7 +573,7 @@ static void user_event_mm_attach(struct user_event_mm *user_mm, struct task_stru
- 	unsigned long flags;
- 
- 	spin_lock_irqsave(&user_event_mms_lock, flags);
--	list_add_rcu(&user_mm->link, &user_event_mms);
-+	list_add_rcu(&user_mm->mms_link, &user_event_mms);
- 	spin_unlock_irqrestore(&user_event_mms_lock, flags);
- 
- 	t->user_event_mm = user_mm;
-@@ -600,7 +602,7 @@ static void user_event_mm_destroy(struct user_event_mm *mm)
- {
- 	struct user_event_enabler *enabler, *next;
- 
--	list_for_each_entry_safe(enabler, next, &mm->enablers, link)
-+	list_for_each_entry_safe(enabler, next, &mm->enablers, mm_enablers_link)
- 		user_event_enabler_destroy(enabler);
- 
- 	mmdrop(mm->mm);
-@@ -637,7 +639,7 @@ void user_event_mm_remove(struct task_struct *t)
- 
- 	/* Remove the mm from the list, so it can no longer be enabled */
- 	spin_lock_irqsave(&user_event_mms_lock, flags);
--	list_del_rcu(&mm->link);
-+	list_del_rcu(&mm->mms_link);
- 	spin_unlock_irqrestore(&user_event_mms_lock, flags);
- 
++	/*
++	 * We use the mm->next field to build a one-shot list from the global
++	 * RCU protected list. To build this list the event_mutex must be held.
++	 * This lets us build a list without requiring allocs that could fail
++	 * when user based events are most wanted for diagnostics.
++	 */
++	lockdep_assert_held(&event_mutex);
++
  	/*
-@@ -685,9 +687,10 @@ void user_event_mm_dup(struct task_struct *t, struct user_event_mm *old_mm)
- 
- 	rcu_read_lock();
- 
--	list_for_each_entry_rcu(enabler, &old_mm->enablers, link)
-+	list_for_each_entry_rcu(enabler, &old_mm->enablers, mm_enablers_link) {
- 		if (!user_event_enabler_dup(enabler, mm))
- 			goto error;
-+	}
- 
- 	rcu_read_unlock();
- 
-@@ -756,7 +759,7 @@ static struct user_event_enabler
- 	 */
- 	if (!*write_result) {
- 		refcount_inc(&enabler->event->refcnt);
--		list_add_rcu(&enabler->link, &user_mm->enablers);
-+		list_add_rcu(&enabler->mm_enablers_link, &user_mm->enablers);
- 	}
- 
- 	mutex_unlock(&event_mutex);
-@@ -912,8 +915,8 @@ static void user_event_destroy_validators(struct user_event *user)
- 	struct user_event_validator *validator, *next;
- 	struct list_head *head = &user->validators;
- 
--	list_for_each_entry_safe(validator, next, head, link) {
--		list_del(&validator->link);
-+	list_for_each_entry_safe(validator, next, head, user_event_link) {
-+		list_del(&validator->user_event_link);
- 		kfree(validator);
- 	}
- }
-@@ -967,7 +970,7 @@ static int user_event_add_field(struct user_event *user, const char *type,
- 	validator->offset = offset;
- 
- 	/* Want sequential access when validating */
--	list_add_tail(&validator->link, &user->validators);
-+	list_add_tail(&validator->user_event_link, &user->validators);
- 
- add_field:
- 	field->type = type;
-@@ -1357,7 +1360,7 @@ static int user_event_validate(struct user_event *user, void *data, int len)
- 	void *pos, *end = data + len;
- 	u32 loc, offset, size;
- 
--	list_for_each_entry(validator, head, link) {
-+	list_for_each_entry(validator, head, user_event_link) {
- 		pos = data + validator->offset;
- 
- 		/* Already done min_size check, no bounds check here */
-@@ -2278,7 +2281,7 @@ static long user_events_ioctl_unreg(unsigned long uarg)
- 	 */
- 	mutex_lock(&event_mutex);
- 
--	list_for_each_entry_safe(enabler, next, &mm->enablers, link)
-+	list_for_each_entry_safe(enabler, next, &mm->enablers, mm_enablers_link) {
- 		if (enabler->addr == reg.disable_addr &&
- 		    (enabler->values & ENABLE_VAL_BIT_MASK) == reg.disable_bit) {
- 			set_bit(ENABLE_VAL_FREEING_BIT, ENABLE_BITOPS(enabler));
-@@ -2289,6 +2292,7 @@ static long user_events_ioctl_unreg(unsigned long uarg)
- 			/* Removed at least one */
- 			ret = 0;
- 		}
-+	}
- 
- 	mutex_unlock(&event_mutex);
- 
+ 	 * We do not want to block fork/exec while enablements are being
+ 	 * updated, so we use RCU to walk the current tasks that have used
 -- 
 2.25.1
 
