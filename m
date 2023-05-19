@@ -2,167 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6331B7090F5
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 09:48:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42E34709080
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 09:41:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231542AbjESHrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 03:47:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59520 "EHLO
+        id S230236AbjESHlF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 03:41:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231538AbjESHqr (ORCPT
+        with ESMTP id S229436AbjESHlD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 03:46:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC17E198A
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 00:43:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684482171;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=0UdxcT7QYPFwRvPO4h85pE794/0OGizygn6UovNdu60=;
-        b=jUVUx3KTwhweTrBjGAPexHrmA0/P6O4LZnJj11WXcf/V6hzdOfJ+Zwh4jwsgczxBs1Xgdu
-        p1I0SkvqlYqClWwlOOG05s8t/8n9z5rtCQkvIsnh1Z90IbRAbGFNIoCFdwoqRoWkD8i6dw
-        siMFv21+6e0BM/UD3NRBWhmQYq4UShQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-437-iVklZYPOP7qgZhTLOyp__w-1; Fri, 19 May 2023 03:42:47 -0400
-X-MC-Unique: iVklZYPOP7qgZhTLOyp__w-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C287E38035AD;
-        Fri, 19 May 2023 07:42:46 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.221])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A83937C2A;
-        Fri, 19 May 2023 07:42:44 +0000 (UTC)
-From:   David Howells <dhowells@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: [PATCH v20 32/32] block: convert bio_map_user_iov to use iov_iter_extract_pages
-Date:   Fri, 19 May 2023 08:40:47 +0100
-Message-Id: <20230519074047.1739879-33-dhowells@redhat.com>
-In-Reply-To: <20230519074047.1739879-1-dhowells@redhat.com>
-References: <20230519074047.1739879-1-dhowells@redhat.com>
+        Fri, 19 May 2023 03:41:03 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E18186;
+        Fri, 19 May 2023 00:41:02 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-64d1a0d640cso1188589b3a.1;
+        Fri, 19 May 2023 00:41:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684482062; x=1687074062;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JRJ3fn1HtdgZlOZej3gETBmVJ+xLrS5nzxVcVkHU8nI=;
+        b=U66IIAM5LTp9hYcjFHNgLO+QkZaVEkt1hK9eiOSoXoAKBVk50/PU4bwua5ibSP8O5l
+         BJCI2l47VkV1ygBvCVOU5iy2wpuUoALxiTf/VTDxwI/ZltdrqEhZc3WS+N2Mgm4ipIrO
+         IJ2JDVk1pWEPrThg72x2ljXCQk71smSQZS4cU8pwBsbTK3Zn7Kuyh8QkspP7SfxFmwTr
+         66bdDIgKKsMgqU2H+dzYhN3hymo1ln5sa64Hpn7+fYn64R9gpVS/oYEMwpamwvGRMr8d
+         HqBOS2XXS9bOH8fxicF9NV1Kl6Ii3bSctgbku2JHKzN/TE4T9qDMV7thXnRUNVu0agcB
+         Jfdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684482062; x=1687074062;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JRJ3fn1HtdgZlOZej3gETBmVJ+xLrS5nzxVcVkHU8nI=;
+        b=bPG1i9lpoHJqfrcSFYQ0+m+iy/UFGJfUOCMcoWIo4tTcQHvc7ScVeBRiwfd3CSRRRj
+         tBndVRV5Vr7udLzitmk1DixJCaihS2GH6Pw9E/pEvOzJ/DnrQShnHUU+UEhLZkIjps86
+         aGfAxE/vFqHvsNi8fyYVeZniWyDjKw5jdE6ZuLks2KmVpqv6MXpV+0XDJKhxNDj0ZBda
+         C6H9T9+krYE0XqB1TxK8G2JCQRsp/1/LFcsiwEWR0I+fkJj08vrTIjiqBkVOWtK4B+Dl
+         Ta9Y2vvauzEPBvvpQp2YEon2xLnlasKefulL1K4o+wc9+94+Pr8b/nJkrdvnCLn3xR9f
+         5dEg==
+X-Gm-Message-State: AC+VfDxby6Br8zZqdpAmiNCX+uOj80aaIc04WYrSFRhiUDJFfUEBpV5l
+        lmrHiS6dcDF8odO7PBzBW9Zaiqct7O3Cn/n5Fp4=
+X-Google-Smtp-Source: ACHHUZ6Pdkuo63Ae65R/z90mCGtob/7eXWm7iQA9+766zyYgJ8NZIcslRv8GAMgUfjL4aYNFKmWEUA==
+X-Received: by 2002:a05:6a20:6a1e:b0:103:b448:ddd8 with SMTP id p30-20020a056a206a1e00b00103b448ddd8mr1458982pzk.58.1684482061893;
+        Fri, 19 May 2023 00:41:01 -0700 (PDT)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id q2-20020a632a02000000b0050bc4ca9024sm2422098pgq.65.2023.05.19.00.41.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 May 2023 00:41:01 -0700 (PDT)
+Message-ID: <70c86b5e-a8c8-fb6a-d4cf-0580a527ee5a@gmail.com>
+Date:   Fri, 19 May 2023 15:40:53 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.0
+Subject: Re: [PATCH] perf/x86/intel: Save/restore cpuc->active_pebs_data_cfg
+ when using guest PEBS
+Content-Language: en-US
+To:     "Liang, Kan" <kan.liang@linux.intel.com>
+Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20230517133808.67885-1-likexu@tencent.com>
+ <3dca8ccf-081a-0765-b5e3-9584f9128137@linux.intel.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <3dca8ccf-081a-0765-b5e3-9584f9128137@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This will pin pages or leave them unaltered rather than getting a ref on
-them as appropriate to the iterator.
+On 19/5/2023 12:31 am, Liang, Kan wrote:
+> 
+> 
+> On 2023-05-17 9:38 a.m., Like Xu wrote:
+>> From: Like Xu <likexu@tencent.com>
+>>
+>> After commit b752ea0c28e3 ("perf/x86/intel/ds: Flush PEBS DS when changing
+>> PEBS_DATA_CFG"), the cpuc->pebs_data_cfg may save some bits that are not
+>> supported by real hardware, such as PEBS_UPDATE_DS_SW. This would cause
+>> the VMX hardware MSR switching mechanism to save/restore invalid values
+>> for PEBS_DATA_CFG MSR, thus crashing the host when PEBS is used for guest.
+> 
+> I believe we clear the SW bit when it takes effect.
+> 
+> +	if (cpuc->pebs_data_cfg & PEBS_UPDATE_DS_SW) {
+> +		cpuc->pebs_data_cfg = pebs_data_cfg;
+> +		pebs_update_threshold(cpuc);
+> +	}
+> 
+> I think the SW bit can only be seen in a shot period between add() and
+> enable(). Is it caused by a VM enter which just happens on the period?
 
-The pages need to be pinned for DIO rather than having refs taken on them
-to prevent VM copy-on-write from malfunctioning during a concurrent fork()
-(the result of the I/O could otherwise end up being visible to/affected by
-the child process).
+What happens here is that when *intel_pmu_pebs_del()* is called,
+the pebs_update_state() also triggers:
+	cpuc->pebs_data_cfg |= PEBS_UPDATE_DS_SW;
+and the new value will then be used for the next kvm_entry.
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Reviewed-by: John Hubbard <jhubbard@nvidia.com>
-cc: Al Viro <viro@zeniv.linux.org.uk>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Jan Kara <jack@suse.cz>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: Logan Gunthorpe <logang@deltatee.com>
-cc: linux-block@vger.kernel.org
----
+The KVM created pebs perf_event is not added/enabled at this point
+and the cpuc->pebs_data_cfg strangely holds a non-zero value.
 
-Notes:
-    ver #10)
-     - Drop bio_set_cleanup_mode(), open coding it instead.
-    
-    ver #8)
-     - Split the patch up a bit [hch].
-     - We should only be using pinned/non-pinned pages and not ref'd pages,
-       so adjust the comments appropriately.
-    
-    ver #7)
-     - Don't treat BIO_PAGE_REFFED/PINNED as being the same as FOLL_GET/PIN.
-    
-    ver #5)
-     - Transcribe the FOLL_* flags returned by iov_iter_extract_pages() to
-       BIO_* flags and got rid of bi_cleanup_mode.
-     - Replaced BIO_NO_PAGE_REF to BIO_PAGE_REFFED in the preceding patch.
+Perhaps there is more room for perf fixes here, but for guest pebs usages,
+using active_pebs_data_cfg in intel_guest_get_msrs() is part of what is needed.
 
- block/blk-map.c | 23 +++++++++++------------
- 1 file changed, 11 insertions(+), 12 deletions(-)
-
-diff --git a/block/blk-map.c b/block/blk-map.c
-index 33d9f6e89ba6..3551c3ff17cf 100644
---- a/block/blk-map.c
-+++ b/block/blk-map.c
-@@ -281,22 +281,21 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
- 
- 	if (blk_queue_pci_p2pdma(rq->q))
- 		extraction_flags |= ITER_ALLOW_P2PDMA;
-+	if (iov_iter_extract_will_pin(iter))
-+		bio_set_flag(bio, BIO_PAGE_PINNED);
- 
--	bio_set_flag(bio, BIO_PAGE_REFFED);
- 	while (iov_iter_count(iter)) {
--		struct page **pages, *stack_pages[UIO_FASTIOV];
-+		struct page *stack_pages[UIO_FASTIOV];
-+		struct page **pages = stack_pages;
- 		ssize_t bytes;
- 		size_t offs;
- 		int npages;
- 
--		if (nr_vecs <= ARRAY_SIZE(stack_pages)) {
--			pages = stack_pages;
--			bytes = iov_iter_get_pages(iter, pages, LONG_MAX,
--						   nr_vecs, &offs, extraction_flags);
--		} else {
--			bytes = iov_iter_get_pages_alloc(iter, &pages,
--						LONG_MAX, &offs, extraction_flags);
--		}
-+		if (nr_vecs > ARRAY_SIZE(stack_pages))
-+			pages = NULL;
-+
-+		bytes = iov_iter_extract_pages(iter, &pages, LONG_MAX,
-+					       nr_vecs, extraction_flags, &offs);
- 		if (unlikely(bytes <= 0)) {
- 			ret = bytes ? bytes : -EFAULT;
- 			goto out_unmap;
-@@ -318,7 +317,7 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
- 				if (!bio_add_hw_page(rq->q, bio, page, n, offs,
- 						     max_sectors, &same_page)) {
- 					if (same_page)
--						put_page(page);
-+						bio_release_page(bio, page);
- 					break;
- 				}
- 
-@@ -330,7 +329,7 @@ static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
- 		 * release the pages we didn't map into the bio, if any
- 		 */
- 		while (j < npages)
--			put_page(pages[j++]);
-+			bio_release_page(bio, pages[j++]);
- 		if (pages != stack_pages)
- 			kvfree(pages);
- 		/* couldn't stuff something into bio? */
-
+> 
+>> Fix it by using the active host value from cpuc->active_pebs_data_cfg.
+> 
+> I don't see a problem of using active_pebs_data_cfg, since it reflects
+> the current MSR setting. Just curious about how it's triggered.
+> 
+>>
+>> Cc: Kan Liang <kan.liang@linux.intel.com>
+>> Cc: Peter Zijlstra <peterz@infradead.org>
+>> Signed-off-by: Like Xu <likexu@tencent.com>
+>> ---
+> 
+> Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+> 
+> Thanks,
+> Kan
+> 
+>>   arch/x86/events/intel/core.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+>> index 070cc4ef2672..89b9c1cebb61 100644
+>> --- a/arch/x86/events/intel/core.c
+>> +++ b/arch/x86/events/intel/core.c
+>> @@ -4074,7 +4074,7 @@ static struct perf_guest_switch_msr *intel_guest_get_msrs(int *nr, void *data)
+>>   	if (x86_pmu.intel_cap.pebs_baseline) {
+>>   		arr[(*nr)++] = (struct perf_guest_switch_msr){
+>>   			.msr = MSR_PEBS_DATA_CFG,
+>> -			.host = cpuc->pebs_data_cfg,
+>> +			.host = cpuc->active_pebs_data_cfg,
+>>   			.guest = kvm_pmu->pebs_data_cfg,
+>>   		};
+>>   	}
