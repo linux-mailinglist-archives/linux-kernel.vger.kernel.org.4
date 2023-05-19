@@ -2,175 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7545570A390
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 02:02:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 662CE70A3FC
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 02:18:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbjETAC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 20:02:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51394 "EHLO
+        id S229882AbjETARz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 20:17:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjETAC1 (ORCPT
+        with ESMTP id S229436AbjETARx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 20:02:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DFAAE60
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 17:01:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684540866;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=f+CzZRPIOEI63Yig5Ocd0qzQo9k6vKIgNZsTOkrOnGQ=;
-        b=WtvG+3pf44siRJcG4gqfF+5jvpTWZAzq4t7bV6QUGmB8J1qukzEnSNhOxBAvJrv6ME1rTZ
-        FWJkM2pq56oHbxaOCxRC7jRkSijtBvIwVwD1lR/mqHxQYYKNAHMHgbBQt+PoijeOc9vlP6
-        dFbVZXY1wQeGsJ4fEaDNnBayI2HTzu8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-56-YEHt9biKO1iJWTOezthP0Q-1; Fri, 19 May 2023 20:01:03 -0400
-X-MC-Unique: YEHt9biKO1iJWTOezthP0Q-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9CA87811E86;
-        Sat, 20 May 2023 00:01:02 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.221])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 614E94F2DE6;
-        Sat, 20 May 2023 00:01:00 +0000 (UTC)
-From:   David Howells <dhowells@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Christoph Hellwig <hch@lst.de>,
-        Steve French <sfrench@samba.org>, linux-cifs@vger.kernel.org
-Subject: [PATCH v21 03/30] splice: Rename direct_splice_read() to copy_splice_read()
-Date:   Sat, 20 May 2023 01:00:22 +0100
-Message-Id: <20230520000049.2226926-4-dhowells@redhat.com>
-In-Reply-To: <20230520000049.2226926-1-dhowells@redhat.com>
-References: <20230520000049.2226926-1-dhowells@redhat.com>
+        Fri, 19 May 2023 20:17:53 -0400
+X-Greylist: delayed 1559 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 19 May 2023 17:17:51 PDT
+Received: from sp11.canonet.ne.jp (sp11.canonet.ne.jp [210.134.168.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AA8B7BA;
+        Fri, 19 May 2023 17:17:51 -0700 (PDT)
+Received: from csp11.canonet.ne.jp (unknown [172.21.160.131])
+        by sp11.canonet.ne.jp (Postfix) with ESMTP id 3F9871E0673;
+        Sat, 20 May 2023 08:27:55 +0900 (JST)
+Received: from echeck11.canonet.ne.jp ([172.21.160.121])
+        by csp1 with ESMTP
+        id 09Vrq3Vki4rRY09Vrqq05F; Sat, 20 May 2023 08:27:55 +0900
+X-CNT-CMCheck-Reason: "undefined", "v=2.4 cv=ecuDw5IH c=1 sm=1 tr=0
+ ts=646805fb cx=g_jp:t_eml p=8qjN7mntoMwA:10 p=qF8rPwcGiB-_sHJHalcA:9
+ p=SoNdl_qjRqA86Y2-AIoZ:22 a=cYGYO7ts52rupuxT5MoNxg==:117
+ a=yr9NA9NbXb0B05yJHQEWeQ==:17 a=PlGk70OYzacA:10 a=kj9zAlcOel0A:10
+ a=P0xRbXHiH_UA:10 a=x7bEGLp0ZPQA:10 a=CjuIK1q_8ugA:10"
+X-CNT-CMCheck-Score: 100.00
+Received: from echeck11.canonet.ne.jp (localhost [127.0.0.1])
+        by esets.canonet.ne.jp (Postfix) with ESMTP id 11DBA1C01F5;
+        Sat, 20 May 2023 08:27:55 +0900 (JST)
+X-Virus-Scanner: This message was checked by ESET Mail Security
+        for Linux/BSD. For more information on ESET Mail Security,
+        please, visit our website: http://www.eset.com/.
+Received: from smtp11.canonet.ne.jp (unknown [172.21.160.101])
+        by echeck11.canonet.ne.jp (Postfix) with ESMTP id DB01F1C0269;
+        Sat, 20 May 2023 08:27:54 +0900 (JST)
+Received: from gifu21.com (webmail.canonet.ne.jp [210.134.169.250])
+        by smtp11.canonet.ne.jp (Postfix) with ESMTPA id CB6D415F965;
+        Sat, 20 May 2023 08:27:53 +0900 (JST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <20230519232753.0000530B.0121@gifu21.com>
+Date:   Sat, 20 May 2023 08:27:53 +0900
+From:   "Cheng Yong Tan" <kuzira7@gifu21.com>
+To:     <reginagaria@hotmail.com>
+Reply-To: <consultantoffice001@gmail.com>
+Subject: Supply
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Priority: 3
+ORGANIZATION: Cheng Yong Tan
+X-MAILER: Active! mail
+X-EsetResult: clean, %VIRUSNAME%
+X-ESET-AS: R=SPAM;S=100;OP=CALC;TIME=1684538875;VERSION=7954;MC=2889291719;ID=3158366498;TRN=15;CRV=254;IPC=210.134.169.250;SP=4;SIPS=1;PI=5;F=0
+X-I-ESET-AS: RN=442,624:0;RNP=consultantoffice001@gmail.com
+X-ESET-Antispam: SPAM
+X-Spam-Status: Yes, score=5.4 required=5.0 tests=BAYES_50,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNRESOLVED_TEMPLATE,
+        XPRIO_SHORT_SUBJ autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        * -0.0 RCVD_IN_MSPIKE_H2 RBL: Average reputation (+2)
+        *      [210.134.168.88 listed in wl.mailspike.net]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [consultantoffice001[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  1.3 UNRESOLVED_TEMPLATE Headers contain an unresolved template
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
+        *  1.0 XPRIO_SHORT_SUBJ Has X Priority header + short subject
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename direct_splice_read() to copy_splice_read() to better reflect as to
-what it does.
 
-Suggested-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Christoph Hellwig <hch@lst.de>
-cc: Steve French <sfrench@samba.org>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Al Viro <viro@zeniv.linux.org.uk>
-cc: linux-cifs@vger.kernel.org
-cc: linux-mm@kvack.org
-cc: linux-block@vger.kernel.org
-cc: linux-fsdevel@vger.kernel.org
----
- fs/cifs/cifsfs.c   |  4 ++--
- fs/cifs/file.c     |  2 +-
- fs/splice.c        | 11 +++++------
- include/linux/fs.h |  6 +++---
- 4 files changed, 11 insertions(+), 12 deletions(-)
+Hello
 
-diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
-index 43a4d8603db3..fa2477bbcc86 100644
---- a/fs/cifs/cifsfs.c
-+++ b/fs/cifs/cifsfs.c
-@@ -1416,7 +1416,7 @@ const struct file_operations cifs_file_direct_ops = {
- 	.fsync = cifs_fsync,
- 	.flush = cifs_flush,
- 	.mmap = cifs_file_mmap,
--	.splice_read = direct_splice_read,
-+	.splice_read = copy_splice_read,
- 	.splice_write = iter_file_splice_write,
- 	.unlocked_ioctl  = cifs_ioctl,
- 	.copy_file_range = cifs_copy_file_range,
-@@ -1470,7 +1470,7 @@ const struct file_operations cifs_file_direct_nobrl_ops = {
- 	.fsync = cifs_fsync,
- 	.flush = cifs_flush,
- 	.mmap = cifs_file_mmap,
--	.splice_read = direct_splice_read,
-+	.splice_read = copy_splice_read,
- 	.splice_write = iter_file_splice_write,
- 	.unlocked_ioctl  = cifs_ioctl,
- 	.copy_file_range = cifs_copy_file_range,
-diff --git a/fs/cifs/file.c b/fs/cifs/file.c
-index c5fcefdfd797..023496207c18 100644
---- a/fs/cifs/file.c
-+++ b/fs/cifs/file.c
-@@ -5091,6 +5091,6 @@ ssize_t cifs_splice_read(struct file *in, loff_t *ppos,
- 	if (unlikely(!len))
- 		return 0;
- 	if (in->f_flags & O_DIRECT)
--		return direct_splice_read(in, ppos, pipe, len, flags);
-+		return copy_splice_read(in, ppos, pipe, len, flags);
- 	return filemap_splice_read(in, ppos, pipe, len, flags);
- }
-diff --git a/fs/splice.c b/fs/splice.c
-index 3e06611d19ae..2478e065bc53 100644
---- a/fs/splice.c
-+++ b/fs/splice.c
-@@ -300,12 +300,11 @@ void splice_shrink_spd(struct splice_pipe_desc *spd)
- }
- 
- /*
-- * Splice data from an O_DIRECT file into pages and then add them to the output
-- * pipe.
-+ * Copy data from a file into pages and then splice those into the output pipe.
-  */
--ssize_t direct_splice_read(struct file *in, loff_t *ppos,
--			   struct pipe_inode_info *pipe,
--			   size_t len, unsigned int flags)
-+ssize_t copy_splice_read(struct file *in, loff_t *ppos,
-+			 struct pipe_inode_info *pipe,
-+			 size_t len, unsigned int flags)
- {
- 	struct iov_iter to;
- 	struct bio_vec *bv;
-@@ -390,7 +389,7 @@ ssize_t direct_splice_read(struct file *in, loff_t *ppos,
- 	kfree(bv);
- 	return ret;
- }
--EXPORT_SYMBOL(direct_splice_read);
-+EXPORT_SYMBOL(copy_splice_read);
- 
- /**
-  * generic_file_splice_read - splice data from file to a pipe
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 21a981680856..e3c22efa413e 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2752,9 +2752,9 @@ ssize_t vfs_iocb_iter_write(struct file *file, struct kiocb *iocb,
- ssize_t filemap_splice_read(struct file *in, loff_t *ppos,
- 			    struct pipe_inode_info *pipe,
- 			    size_t len, unsigned int flags);
--ssize_t direct_splice_read(struct file *in, loff_t *ppos,
--			   struct pipe_inode_info *pipe,
--			   size_t len, unsigned int flags);
-+ssize_t copy_splice_read(struct file *in, loff_t *ppos,
-+			 struct pipe_inode_info *pipe,
-+			 size_t len, unsigned int flags);
- extern ssize_t generic_file_splice_read(struct file *, loff_t *,
- 		struct pipe_inode_info *, size_t, unsigned int);
- extern ssize_t iter_file_splice_write(struct pipe_inode_info *,
+My name is Dr.Cheng Yong Tan, I'm a Singaporean. I was just doing a little research on an article on google the other day and came across your details. I thought I would reach out to you today to seek your interest about a business opportunity open in the company where I work as a Research Assistant and consultant.
+
+I was wondering if you would respond just for a quick discussion about a business proposal so I can share more details for you to just review first and see if it will interest you before you consider collaborating with me and work on the project together.
+
+I just pray you are an open minded person that likes to learn more and review/explore business opportunities available in diverse fields, as I'm really excited about the potential profit prospect in the business opportunity if we can collaborate.
+
+I look forward to hearing from you so I can share more details and insight.
+
+Best regards
+
+Dr.Cheng Yong Tan
+
+Research Assistant
+CV Industrial Ltd
+
 
