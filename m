@@ -2,142 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8DD3709A60
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 16:48:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D8DC709A6C
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 16:50:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231331AbjESOsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 10:48:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35626 "EHLO
+        id S232096AbjESOuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 10:50:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232098AbjESOsc (ORCPT
+        with ESMTP id S232095AbjESOuH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 10:48:32 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6572C1B5
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 07:48:31 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-96649b412easo532763666b.0
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 07:48:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684507711; x=1687099711;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=osK35APNMHUOM/vspbNmY4dm4o7cSGGXI42PTW0uu8s=;
-        b=ZYjh30K7khuwsHmxdTGgS+WoY9zJgx6/9/pcc1JbuvgcIEsldCdXXJbEp4NACjCKaD
-         LMW1h53HHwQnKpmODQx7uXNQn0+JuBNgZS2Zh/7IejB20vSK2D1Unr6kMSuPVMXAFhiZ
-         9ZeWiBl87aFZW9wBv1Nh3DLuN2movq9+fC554=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684507711; x=1687099711;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=osK35APNMHUOM/vspbNmY4dm4o7cSGGXI42PTW0uu8s=;
-        b=UokvlmPWXs1gY0jEEhuTpAya1J18aYOAr2fyxevhbeOJByHS2sfsKQlrEyId4TTeRZ
-         GVZ+i/rZo2vxv2pNhq/tpXcaXC/ajhlFmYEXxv+LaSqX/krAonV23GxgNOUB1Ae0SDEo
-         W0G4L/L7eNp9NmFS/x3+AJpsXHShA/F1y4Cj9OX6Btv8pc6v3cTeJtNhrfinFYUFbG+o
-         COYx10yuY+29xwgDipX2zN+3P4CoRfELDTaD/q3gx2XZrP3WY4xymTjRtB9TTPKHfEZ+
-         MkUBRbKXdUGqjN8qFiuGceTomsOu4yvsWGmsjV5sujgrNCVKo/5snBIT8qIDnlI9geeI
-         OVpA==
-X-Gm-Message-State: AC+VfDyTiDo8dF+JvVX360tJxMl5Ox75uZNgETI5/wxCu2kGraaEevTo
-        0jTb6NE/adZ+UiSXu4uP9EQGow==
-X-Google-Smtp-Source: ACHHUZ4sIn6w3qgGaOnZt7gYsC2ndgI+MwJv4U/AftjTcUf/UQqUnAD4mNaTZk8Vvatu2vHjziPdfA==
-X-Received: by 2002:a17:906:d54a:b0:94e:f738:514f with SMTP id cr10-20020a170906d54a00b0094ef738514fmr2090904ejc.13.1684507710607;
-        Fri, 19 May 2023 07:48:30 -0700 (PDT)
-Received: from alco.roam.corp.google.com ([2620:0:1059:10:62fd:274b:c2ab:69bb])
-        by smtp.gmail.com with ESMTPSA id a2-20020a17090680c200b0096a68648329sm2349437ejx.214.2023.05.19.07.48.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 07:48:30 -0700 (PDT)
-From:   Ricardo Ribalda <ribalda@chromium.org>
-Date:   Fri, 19 May 2023 16:47:39 +0200
-Subject: [PATCH v7 4/4] riscv/purgatory: Remove PGO flags
+        Fri, 19 May 2023 10:50:07 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2EF41A6;
+        Fri, 19 May 2023 07:50:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1684507765; i=deller@gmx.de;
+        bh=Pj1LG5Utwzy7oSUbGmPubC+BUUsniVXrDIxDTOEkeOI=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=tSCZRXCEu4HR2Kz+W3QijBKl9VTLiHC2N49HMFK+w1Hpq7F3BeCUmSxaeverRIduK
+         YvbL2Ymxs0+Kp5aDW7gqVB49juie7ExHaJUlFUs2v60jM15gQ9mF3aH93i9x42RO9w
+         9TXAzSs37I291wPx/bn8A73o/OlsLsYSYYE85DjzxMVaEA6yxB3HCFa+shHTzK9pxS
+         cPh+lmhPc3rkF4R1AOlxE6B/2vE5tYm+MxGhTMIvL78Q81QkBfWiGyuLYO4zWOaHMG
+         7hMnRilqDEXHeNRHjRPli5KXdm75BbFjdPjnsy5XqmnG2eFTxlZUPrDjQdX+ZaePe4
+         vJWTj7xRB3auQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([94.134.152.232]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MBDj4-1prnPX0fpm-00ChEA; Fri, 19
+ May 2023 16:49:25 +0200
+Message-ID: <ade998d7-abd7-3514-a8d4-25c3ec71b171@gmx.de>
+Date:   Fri, 19 May 2023 16:49:22 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230321-kexec_clang16-v7-4-b05c520b7296@chromium.org>
-References: <20230321-kexec_clang16-v7-0-b05c520b7296@chromium.org>
-In-Reply-To: <20230321-kexec_clang16-v7-0-b05c520b7296@chromium.org>
-To:     Eric Biederman <ebiederm@xmission.com>,
-        Philipp Rudo <prudo@linux.vnet.ibm.com>,
-        Dave Young <dyoung@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4 37/41] fbdev: atyfb: Remove unused clock determination
+Content-Language: en-US
+To:     =?UTF-8?B?VmlsbGUgU3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     Baoquan He <bhe@redhat.com>, Philipp Rudo <prudo@redhat.com>,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Ross Zwisler <zwisler@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Simon Horman <horms@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        llvm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org,
-        Ricardo Ribalda <ribalda@chromium.org>, stable@vger.kernel.org,
-        Palmer Dabbelt <palmer@rivosinc.com>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1298; i=ribalda@chromium.org;
- h=from:subject:message-id; bh=wdnk6GxBa5T/HIlvuq8XoXYQQFQFk4mx9eVuJiQf83M=;
- b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBkZ4wzePFk89/IBhUZr9SWcIl2QkwFBFu2gEcYe
- /5y+YTRvGqJAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCZGeMMwAKCRDRN9E+zzrE
- iEJ9EACWgKvSdCRvRA4/lyxhvVHQgJQ0PCNnOhH3hpa3YJPoHyQLHQ8AWvcvBMla51KPtthYLTN
- RttNdzciI8SyWtWAc62LCy0wqaKDS+qbrbvVnUEYDgzqyCjq/gSxRky4clrjmFzUvY2wNCRfWMt
- yFLtWzm5iYd4N7d07L87XEKmPRitblqcy/VsPL9EMUutCQ5OQlaaSRto36SmkRf9nkrMPPzCH+2
- qNNS8PY2lNeGzUvTDAi7F00EDf/PLWQ7pXaKeJeU56IsYS8v1VUoNdkx04R/AIO8TBdqwsDZhhD
- UqPLLPRwecZmAks5n575AFj+ZFRtUPueG6J2aQ1ndVzS+8/OTyW1xxwogq6fkwr44uXalhe3YxJ
- aUOnvtCxh06L48mQLfdlx1JhUTlhZ1AtVysiezFN9EedPP27rIgxpSSgnEwsjDWJny3YJfbGJQN
- Zk7DDEwAQLAN3GaT+i/K2X8PEHG6+A5SkFE+wZe5WKERCdPLVGgWjIYwaqXDAvGK/5DfORHun85
- 2qC2ReqZtGwpWhUfg6jJ4cFTsiNbkYy31b1T5/9BqXT5dBqfAuVU/QKYqg5qb4ciKtKesTLLV1H
- ZydnfO9MMJNG6tjvelUtgGQRPqf1ea9Lob19/0XoQrWh8oifHm8eWWisKYfQY/1ExftAFpZCeA5
- BmR9KbCqwO2lwOg==
-X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
- fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+References: <20230516110038.2413224-1-schnelle@linux.ibm.com>
+ <20230516110038.2413224-38-schnelle@linux.ibm.com>
+ <ZGN2FKSBkMREujgR@intel.com>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <ZGN2FKSBkMREujgR@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:imFSKe5fuE/OhtLKAsIULRQNuTzYdH/PCC+1ZlOSr9/KeiGoYxz
+ fYJzRc92qIRdL1vlEzKoSpyTFB2X9aetsOZCaYtRapiztiYKf/98SjySwc5QkoBZWZzWEkF
+ q0qexuWtAyK2XftNY9AlO8p9mW8zcBnBT2sDv400OmcOY2R9U7KuLU2NI085SY0Z71BsqbC
+ exRh04UzyoRal5s7TuQrw==
+UI-OutboundReport: notjunk:1;M01:P0:F6hcsYgijK4=;LujMkLAJlcpsClyXQ5ix44Lyzv1
+ pG/GAlVohiISVUdZUHbMVfGS1jS7GysZKXL0FMzoapBoGi2pXdgoFLOAyd1o2oQcbR8ek8qgb
+ 0Aade+CEV7000j7xt17IPxA89E7yJANid1SDclfwD0Vu+2pQCW1COH1OQr5JgHajjwY9u+cvn
+ hDxcqJHuJsDUBLG35UF8FcXwajiEv8alXQqRPU7J3TN2S2fGfGy56X6RpP1lXdwV29ftk/9LK
+ m4MS5skf4XWXnY272t1Ug6nLndfivDAiPNlqrZ02hnbhLaLJFSi2uRbkIaaP6fjmS6FCj9WIO
+ K+CCejY/g1os2LGVCrkGywZexGtloihZ/znNBovLll+IyFbbQX5PV4AoNvC9AXp2ELcEqZ3N3
+ 7Sl8mBkm6J4PEuJcggvbbcnCcL2Nt4658krAYzEFf7L6BS63+ygY4UZn1ZWXL4APN9s7lwpeD
+ O8k02ZtSvS2SNSrZDT6zd/mXV4m5Fo1e1ndvOmOlwqWn47in6/a3s2buDlBWcYwmaP2Zx+0yj
+ xjkh5d9MwfTWwIhn2KD3sX8I9MOb3raC012xJMMQxY6ecSIVKwr8cYorbQsNKtmiQp6HkIBp0
+ RfCETpwmwnwtikLsnsIjbK91deGnT/9OqKnB+dkWtRVBtlvobqnev0x3fQWLgSFwaKWiMmhaM
+ YPpuXwTig6zfYRgU6iZx1z2N566sx0hIFVkE8BRtMgIdlFSusxojz68tCpXe+UjkR6xCH9b1B
+ 5VXVVewjb4uniWy5nWm6Zrf9lJfRXCLlvPujACn6vB2XHRHQpQoIS2ZctTw1p/UIU7NoirNOS
+ 6/iapCj0rZfeR3ZxR1Hg8CshejQS9EqHSR0i98kWpM2K400vfe1TFKmZH9ozJfIEfJhxHZexg
+ GzzL6a7L8Sa8kM/QlauRe3mfbOrCtB+o1HB4Yot8sOOROs0s4+YGExAiW5NPj/SbFk91nQLq0
+ PBdmFaze2TUblHbilaOlhHirXv4=
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If profile-guided optimization is enabled, the purgatory ends up with
-multiple .text sections.
-This is not supported by kexec and crashes the system.
+On 5/16/23 14:24, Ville Syrj=C3=A4l=C3=A4 wrote:
+> On Tue, May 16, 2023 at 01:00:33PM +0200, Niklas Schnelle wrote:
+>> Just below the removed lines par->clk_wr_offset is hard coded to 3 so
+>> there is no use in determining a different clock just to then ignore it
+>> anyway. This also removes the only I/O port use remaining in the driver
+>> allowing it to be built without CONFIG_HAS_IOPORT.
+>>
+>> Link: https://lore.kernel.org/all/ZBx5aLo5h546BzBt@intel.com/
+>> Suggested-by: Ville Syrj=C3=A4l=C3=A4 <ville.syrjala@linux.intel.com>
+>> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+>
+> Reviewed-by: Ville Syrj=C3=A4l=C3=A4 <ville.syrjala@linux.intel.com>
+>
+>> ---
+>> Note: The HAS_IOPORT Kconfig option was added in v6.4-rc1 so
+>>        per-subsystem patches may be applied independently
 
-Cc: stable@vger.kernel.org
-Fixes: 930457057abe ("kernel/kexec_file.c: split up __kexec_load_puragory")
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
----
- arch/riscv/purgatory/Makefile | 5 +++++
- 1 file changed, 5 insertions(+)
+applied this patch to fbdev git tree.
 
-diff --git a/arch/riscv/purgatory/Makefile b/arch/riscv/purgatory/Makefile
-index 5730797a6b40..bd2e27f82532 100644
---- a/arch/riscv/purgatory/Makefile
-+++ b/arch/riscv/purgatory/Makefile
-@@ -35,6 +35,11 @@ CFLAGS_sha256.o := -D__DISABLE_EXPORTS
- CFLAGS_string.o := -D__DISABLE_EXPORTS
- CFLAGS_ctype.o := -D__DISABLE_EXPORTS
- 
-+# When profile-guided optimization is enabled, llvm emits two different
-+# overlapping text sections, which is not supported by kexec. Remove profile
-+# optimization flags.
-+KBUILD_CFLAGS := $(filter-out -fprofile-sample-use=% -fprofile-use=%,$(KBUILD_CFLAGS))
-+
- # When linking purgatory.ro with -r unresolved symbols are not checked,
- # also link a purgatory.chk binary without -r to check for unresolved symbols.
- PURGATORY_LDFLAGS := -e purgatory_start -z nodefaultlib
+Thanks!
 
--- 
-2.40.1.698.g37aff9b760-goog
+Helge
+
+>>
+>>   drivers/video/fbdev/aty/atyfb_base.c | 5 -----
+>>   1 file changed, 5 deletions(-)
+>>
+>> diff --git a/drivers/video/fbdev/aty/atyfb_base.c b/drivers/video/fbdev=
+/aty/atyfb_base.c
+>> index b02e4e645035..cba2b113b28b 100644
+>> --- a/drivers/video/fbdev/aty/atyfb_base.c
+>> +++ b/drivers/video/fbdev/aty/atyfb_base.c
+>> @@ -3498,11 +3498,6 @@ static int atyfb_setup_generic(struct pci_dev *p=
+dev, struct fb_info *info,
+>>   	if (ret)
+>>   		goto atyfb_setup_generic_fail;
+>>   #endif
+>> -	if (!(aty_ld_le32(CRTC_GEN_CNTL, par) & CRTC_EXT_DISP_EN))
+>> -		par->clk_wr_offset =3D (inb(R_GENMO) & 0x0CU) >> 2;
+>> -	else
+>> -		par->clk_wr_offset =3D aty_ld_8(CLOCK_CNTL, par) & 0x03U;
+>> -
+>>   	/* according to ATI, we should use clock 3 for acelerated mode */
+>>   	par->clk_wr_offset =3D 3;
+>>
+>> --
+>> 2.39.2
+>
 
