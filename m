@@ -2,275 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EA8270A09C
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 22:28:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 108F970A0A1
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 22:35:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231473AbjESU2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 16:28:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58816 "EHLO
+        id S230217AbjESUfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 16:35:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbjESU2A (ORCPT
+        with ESMTP id S231290AbjESUez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 16:28:00 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD24119A;
-        Fri, 19 May 2023 13:27:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684528078; x=1716064078;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=XALtxzpKtpRxLIztaMGye6Hq0U/QQOFMvurHPzjt4es=;
-  b=CWagWlNK0dWmv1F3OOCs6d+V9zki+rQTQc2qvI3HobqHnETQZysru7O6
-   ZfMLT7SJxrPSkEv+JV982BswJyliQQgybK05smMP6HtVULbOnwGLWJpE4
-   oE3Avd7VdVgkZ8ltqBuoKNO+k0eFV0S7PdOhle4XFtpxxSCFeA80AfLci
-   8GrLWTN/pFc+B+e1PTW8znHnhz9WokAa5/IY4a9MOLYbXxrgo7I3YHl4H
-   Db0eoNPp9/buh1tdaE+XzDn97rYlmnw8AqKrt2c3dpKNOY21huurk3+yu
-   aBwFL/KykYaCrPEc6fvcYF4YrzFrYNk6ZPLycLyrJpqFYexLx5fTsBi4l
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10715"; a="418175381"
-X-IronPort-AV: E=Sophos;i="6.00,177,1681196400"; 
-   d="scan'208";a="418175381"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2023 13:27:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10715"; a="876967803"
-X-IronPort-AV: E=Sophos;i="6.00,177,1681196400"; 
-   d="scan'208";a="876967803"
-Received: from srinivas-otcpl-7600.jf.intel.com (HELO jacob-builder.jf.intel.com) ([10.54.97.184])
-  by orsmga005.jf.intel.com with ESMTP; 19 May 2023 13:27:56 -0700
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        "Lu Baolu" <baolu.lu@linux.intel.com>,
-        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
-        vkoul@kernel.org
-Cc:     "Robin Murphy" <robin.murphy@arm.com>,
-        "Will Deacon" <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        narayan.ranganathan@intel.com,
-        Jacob Pan <jacob.jun.pan@linux.intel.com>
-Subject: [PATCH v6 4/4] dmaengine/idxd: Re-enable kernel workqueue under DMA API
-Date:   Fri, 19 May 2023 13:32:23 -0700
-Message-Id: <20230519203223.2777255-5-jacob.jun.pan@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230519203223.2777255-1-jacob.jun.pan@linux.intel.com>
-References: <20230519203223.2777255-1-jacob.jun.pan@linux.intel.com>
+        Fri, 19 May 2023 16:34:55 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AEFC107;
+        Fri, 19 May 2023 13:34:54 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-966400ee79aso701925266b.0;
+        Fri, 19 May 2023 13:34:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684528493; x=1687120493;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3DYhz4q6r+8hJyhMZr5fo0ENEYzNVGjwRINrf0k6BeU=;
+        b=JczEPQDDUgRxxpDO1Nz8Fqsptg0WMWssCyuRQ+JFFnVmiSt3CZYudNw5WRw85QIN9T
+         r9KbRxt4jT9b9lGagerzf6vDJf+C10HYyIKN83F9o+9rpRi/UBYCcZ4jOqwXdHICFJnc
+         XTrDDxJWxexpVhv52sqzX8yX/WbcBkTFryieiXAwt7M/MvwIpUCZqsm5jGT8/2b91qeS
+         IGMJLIMAJULoBMN/rQbEwqE1KtZ67IbilgUmfNM5R+YcPH016fT0MtpcYTAsW6un3BIK
+         3xiCdx5yTwMwSQRx0SHEf7okS7vGrZr+ZZUfuglVJcUaqbvHLWegH5E6Jj8erRbDN5i6
+         6n3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684528493; x=1687120493;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3DYhz4q6r+8hJyhMZr5fo0ENEYzNVGjwRINrf0k6BeU=;
+        b=ItXGrKcLkf6zEOj94mdORWjTDBugID9QovMg8ao5ZI736K8SdjIaY8eqKDyBdNQl0r
+         +wBkj44LrQ3hBBb7X4QKjI4qGYcC4vKh0lQGYPWL/Aez7M7VmkjXNvCjUMgaJAWBcNQk
+         1WA4wrLFYR7o6mBI+mge30Puuet9UgfZib+Tfj48rwIxPYUDGPBr7L/vsHO0pDPYqTIO
+         /KWMqAS0FtVMTyAvMJXKR9NH4bmjcWzY3mQsYI7OxBM97uIjWyJEq1onjE5bjpdWKA5U
+         y/9mrOJXRYByfqCQFx1CHgQ+XBewMLcMr6qV2Aq2z/xxLx+Xezjgsv6ajXG8eLbcnQPV
+         yQvA==
+X-Gm-Message-State: AC+VfDx6rzTN7sQBPVjSFWaQnqLAfMsVvRXJmVXXy6hwWb6+Nlgzpbtr
+        oaEKwnYCfhX0uzHUC8VhVEg=
+X-Google-Smtp-Source: ACHHUZ6VIdrbAorwWnn6B35+W1E85vZRDOL6WuFFOWALu7jFm51+UEiQQkQfHTagO8Qz/9Z0HF6TIA==
+X-Received: by 2002:a17:907:3da0:b0:95e:d448:477 with SMTP id he32-20020a1709073da000b0095ed4480477mr3733261ejc.33.1684528492332;
+        Fri, 19 May 2023 13:34:52 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id y2-20020a170906914200b0094e597f0e4dsm22928ejw.121.2023.05.19.13.34.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 May 2023 13:34:52 -0700 (PDT)
+Date:   Fri, 19 May 2023 23:34:49 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Woojung Huh <woojung.huh@microchip.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Arun Ramadoss <arun.ramadoss@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
+        Eric Dumazet <edumazet@google.com>, kernel@pengutronix.de,
+        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH net-next v4 1/2] net: dsa: microchip: ksz8: Make flow
+ control, speed, and duplex on CPU port configurable
+Message-ID: <20230519203449.pc5vbfgbfc6rdo6i@skbuf>
+References: <20230519124700.635041-1-o.rempel@pengutronix.de>
+ <20230519124700.635041-2-o.rempel@pengutronix.de>
+ <20230519143004.luvz73jiyvnqxk4y@skbuf>
+ <20230519185015.GA18246@pengutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230519185015.GA18246@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kernel workqueues were disabled due to flawed use of kernel VA and SVA
-API. Now that we have the support for attaching PASID to the device's
-default domain and the ability to reserve global PASIDs from SVA APIs,
-we can re-enable the kernel work queues and use them under DMA API.
+On Fri, May 19, 2023 at 08:50:15PM +0200, Oleksij Rempel wrote:
+> Thank you for your feedback. I see your point. 
+> 
+> We need to remember that the KSZ switch series has different types of
+> ports. Specifically, for the KSZ8 series, there's a unique port. This
+> port is unique because it's the only one that can be configured with
+> global registers, and it is only one supports tail tagging. This special
+> port is already referenced in the driver by "dev->cpu_port", so I continued
+> using it in my patch.
 
-We also use non-privileged access for in-kernel DMA to be consistent
-with the IOMMU settings. Consequently, interrupt for user privilege is
-enabled for work completion IRQs.
+Ok, I understand, so for the KSZ8 family, the assumption about which
+port will use tail tagging is baked into the hardware.
 
-Link:https://lore.kernel.org/linux-iommu/20210511194726.GP1002214@nvidia.com/
-Reviewed-by: Dave Jiang <dave.jiang@intel.com>
-Reviewed-by: Fenghua Yu <fenghua.yu@intel.com>
-Signed-off-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
----
- drivers/dma/idxd/device.c | 30 ++++----------------
- drivers/dma/idxd/dma.c    |  5 ++--
- drivers/dma/idxd/init.c   | 60 ++++++++++++++++++++++++++++++++++++---
- drivers/dma/idxd/sysfs.c  |  7 -----
- 4 files changed, 64 insertions(+), 38 deletions(-)
+> It is important to note that while this port has an xMII interface, it
+> is not the only port that could have an xMII interface. Therefore, using
+> "dev->info->internal_phy" may not be the best way to identify this port,
+> because there can be ports that are not global/cpu, have an xMII
+> interface, but don't have an internal PHY.
 
-diff --git a/drivers/dma/idxd/device.c b/drivers/dma/idxd/device.c
-index 5abbcc61c528..66b6665a45cb 100644
---- a/drivers/dma/idxd/device.c
-+++ b/drivers/dma/idxd/device.c
-@@ -299,21 +299,6 @@ void idxd_wqs_unmap_portal(struct idxd_device *idxd)
- 	}
- }
- 
--static void __idxd_wq_set_priv_locked(struct idxd_wq *wq, int priv)
--{
--	struct idxd_device *idxd = wq->idxd;
--	union wqcfg wqcfg;
--	unsigned int offset;
--
--	offset = WQCFG_OFFSET(idxd, wq->id, WQCFG_PRIVL_IDX);
--	spin_lock(&idxd->dev_lock);
--	wqcfg.bits[WQCFG_PRIVL_IDX] = ioread32(idxd->reg_base + offset);
--	wqcfg.priv = priv;
--	wq->wqcfg->bits[WQCFG_PRIVL_IDX] = wqcfg.bits[WQCFG_PRIVL_IDX];
--	iowrite32(wqcfg.bits[WQCFG_PRIVL_IDX], idxd->reg_base + offset);
--	spin_unlock(&idxd->dev_lock);
--}
--
- static void __idxd_wq_set_pasid_locked(struct idxd_wq *wq, int pasid)
- {
- 	struct idxd_device *idxd = wq->idxd;
-@@ -1423,15 +1408,14 @@ int drv_enable_wq(struct idxd_wq *wq)
- 	}
- 
- 	/*
--	 * In the event that the WQ is configurable for pasid and priv bits.
--	 * For kernel wq, the driver should setup the pasid, pasid_en, and priv bit.
--	 * However, for non-kernel wq, the driver should only set the pasid_en bit for
--	 * shared wq. A dedicated wq that is not 'kernel' type will configure pasid and
-+	 * In the event that the WQ is configurable for pasid, the driver
-+	 * should setup the pasid, pasid_en bit. This is true for both kernel
-+	 * and user shared workqueues. There is no need to setup priv bit in
-+	 * that in-kernel DMA will also do user privileged requests.
-+	 * A dedicated wq that is not 'kernel' type will configure pasid and
- 	 * pasid_en later on so there is no need to setup.
- 	 */
- 	if (test_bit(IDXD_FLAG_CONFIGURABLE, &idxd->flags)) {
--		int priv = 0;
--
- 		if (wq_pasid_enabled(wq)) {
- 			if (is_idxd_wq_kernel(wq) || wq_shared(wq)) {
- 				u32 pasid = wq_dedicated(wq) ? idxd->pasid : 0;
-@@ -1439,10 +1423,6 @@ int drv_enable_wq(struct idxd_wq *wq)
- 				__idxd_wq_set_pasid_locked(wq, pasid);
- 			}
- 		}
--
--		if (is_idxd_wq_kernel(wq))
--			priv = 1;
--		__idxd_wq_set_priv_locked(wq, priv);
- 	}
- 
- 	rc = 0;
-diff --git a/drivers/dma/idxd/dma.c b/drivers/dma/idxd/dma.c
-index eb35ca313684..07623fb0f52f 100644
---- a/drivers/dma/idxd/dma.c
-+++ b/drivers/dma/idxd/dma.c
-@@ -75,9 +75,10 @@ static inline void idxd_prep_desc_common(struct idxd_wq *wq,
- 	hw->xfer_size = len;
- 	/*
- 	 * For dedicated WQ, this field is ignored and HW will use the WQCFG.priv
--	 * field instead. This field should be set to 1 for kernel descriptors.
-+	 * field instead. This field should be set to 0 for kernel descriptors
-+	 * since kernel DMA on VT-d supports "user" privilege only.
- 	 */
--	hw->priv = 1;
-+	hw->priv = 0;
- 	hw->completion_addr = compl;
- }
- 
-diff --git a/drivers/dma/idxd/init.c b/drivers/dma/idxd/init.c
-index 1aa823974cda..bd7b9bd40f0a 100644
---- a/drivers/dma/idxd/init.c
-+++ b/drivers/dma/idxd/init.c
-@@ -550,14 +550,65 @@ static struct idxd_device *idxd_alloc(struct pci_dev *pdev, struct idxd_driver_d
- 
- static int idxd_enable_system_pasid(struct idxd_device *idxd)
- {
--	return -EOPNOTSUPP;
-+	struct pci_dev *pdev = idxd->pdev;
-+	struct device *dev = &pdev->dev;
-+	struct iommu_domain *domain;
-+	union gencfg_reg gencfg;
-+	ioasid_t pasid;
-+	int ret;
-+
-+	/*
-+	 * Attach a global PASID to the DMA domain so that we can use ENQCMDS
-+	 * to submit work on buffers mapped by DMA API.
-+	 */
-+	domain = iommu_get_domain_for_dev(dev);
-+	if (!domain)
-+		return -EPERM;
-+
-+	pasid = iommu_alloc_global_pasid_dev(dev);
-+	if (pasid == IOMMU_PASID_INVALID)
-+		return -ENOSPC;
-+
-+	/*
-+	 * DMA domain is owned by the driver, it should support all valid
-+	 * types such as DMA-FQ, identity, etc.
-+	 */
-+	ret = iommu_attach_device_pasid(domain, dev, pasid);
-+	if (ret) {
-+		dev_err(dev, "failed to attach device pasid %d, domain type %d",
-+			pasid, domain->type);
-+		iommu_free_global_pasid(pasid);
-+		return ret;
-+	}
-+
-+	/* Since we set user privilege for kernel DMA, enable completion IRQ */
-+	gencfg.bits = ioread32(idxd->reg_base + IDXD_GENCFG_OFFSET);
-+	gencfg.user_int_en = 1;
-+	iowrite32(gencfg.bits, idxd->reg_base + IDXD_GENCFG_OFFSET);
-+	idxd->pasid = pasid;
-+
-+	return ret;
- }
- 
- static void idxd_disable_system_pasid(struct idxd_device *idxd)
- {
-+	struct pci_dev *pdev = idxd->pdev;
-+	struct device *dev = &pdev->dev;
-+	struct iommu_domain *domain;
-+	union gencfg_reg gencfg;
-+
-+	domain = iommu_get_domain_for_dev(dev);
-+	if (!domain)
-+		return;
-+
-+	iommu_detach_device_pasid(domain, dev, idxd->pasid);
-+	iommu_free_global_pasid(idxd->pasid);
- 
--	iommu_sva_unbind_device(idxd->sva);
-+	gencfg.bits = ioread32(idxd->reg_base + IDXD_GENCFG_OFFSET);
-+	gencfg.user_int_en = 0;
-+	iowrite32(gencfg.bits, idxd->reg_base + IDXD_GENCFG_OFFSET);
- 	idxd->sva = NULL;
-+	idxd->pasid = IOMMU_PASID_INVALID;
- }
- 
- static int idxd_enable_sva(struct pci_dev *pdev)
-@@ -600,8 +651,9 @@ static int idxd_probe(struct idxd_device *idxd)
- 		} else {
- 			set_bit(IDXD_FLAG_USER_PASID_ENABLED, &idxd->flags);
- 
--			if (idxd_enable_system_pasid(idxd))
--				dev_warn(dev, "No in-kernel DMA with PASID.\n");
-+			rc = idxd_enable_system_pasid(idxd);
-+			if (rc)
-+				dev_warn(dev, "No in-kernel DMA with PASID. %d\n", rc);
- 			else
- 				set_bit(IDXD_FLAG_PASID_ENABLED, &idxd->flags);
- 		}
-diff --git a/drivers/dma/idxd/sysfs.c b/drivers/dma/idxd/sysfs.c
-index 293739ac5596..63f6966c51aa 100644
---- a/drivers/dma/idxd/sysfs.c
-+++ b/drivers/dma/idxd/sysfs.c
-@@ -948,13 +948,6 @@ static ssize_t wq_name_store(struct device *dev,
- 	if (strlen(buf) > WQ_NAME_SIZE || strlen(buf) == 0)
- 		return -EINVAL;
- 
--	/*
--	 * This is temporarily placed here until we have SVM support for
--	 * dmaengine.
--	 */
--	if (wq->type == IDXD_WQT_KERNEL && device_pasid_enabled(wq->idxd))
--		return -EOPNOTSUPP;
--
- 	input = kstrndup(buf, count, GFP_KERNEL);
- 	if (!input)
- 		return -ENOMEM;
--- 
-2.25.1
-
+Right, but since we're talking about phylink, the goal is to identify
+the xMII ports, not the CPU ports... This is a particularly denatured
+case because the xMII port is global and is also the CPU port.
