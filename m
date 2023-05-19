@@ -2,176 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C240E70A03A
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 21:58:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE23E70A03E
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 22:00:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbjEST60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 15:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45808 "EHLO
+        id S230108AbjESUAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 16:00:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbjEST6X (ORCPT
+        with ESMTP id S229762AbjESUAC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 15:58:23 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43921712
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 12:57:45 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-561fc920e70so41677207b3.0
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 12:57:45 -0700 (PDT)
+        Fri, 19 May 2023 16:00:02 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 828D090
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 12:59:57 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id 98e67ed59e1d1-24e147c206eso2217982a91.0
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 12:59:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684526250; x=1687118250;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pKqky4qtLhLMqwc+jYDJn6p8bYat7L/lp+nKxMPkRyY=;
-        b=Y4/nCNzrFtAXrTxhpgxnIohVGQ15GL4scvI0E/2mwJYj0GQbPVuXot7Jeu/0WvRvj2
-         9Uxos5w5dD8ChOUGochlppnIBC5WV72wtD3Z57q1qVzEB6BAU0zrp0Rj839OpxiYl1kv
-         G7aILpvUERbXB4ndb2rR/5sC8oXuhx9NqV1vUAEDqYGF4xFHckOEfCC8e/Xg4DdMuR9l
-         zQm9PUkP+OBFNpwTjL8yMr9HKgLvxTY4wkwyU4C1eKD22zw0o+8bYInRVaF8kFuyTWom
-         12s22nrLwFtLZKHZJekTC38ZFlIu/iG4U6Mf6VoeQ952/z/sfp8161qhLkUY71jT5lqI
-         iHcQ==
+        d=google.com; s=20221208; t=1684526397; x=1687118397;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=sM2EB7NCw7NfgMqqrzYyWFdwz4M2eE9WrGZWFFwFv3Q=;
+        b=Uy5gh7plFqIDxIaXvzbz2FWW891KSI0x5cnbCcT/IZcbVc8WG45G06UoARW5CGRcI0
+         y6iRd0JZ3hiCts4BW656JSFRQKrR2FVXqJ1bESFVH/3r7xlAZINmrzF8iSJM7VAg7Tfi
+         ySi16326cL5FZhktxjPU8z4DP6Wg1SAbsZ8oOCO95rPBzo85rT6A0NtpCmMPJ2VQ0JjB
+         a5Dn/yZemKY7xJnPBPPV1Tt6X9H37slBF1/b+0XU9g8if5i3BJc3fGB35LBrxGDnYh5z
+         yYG0Y8KS2YgCBq+IMFza1bfT+wvKZ162qCmPMXLt/xKNlmXBZeYVhG+aS9ownhy5uQVP
+         Oupg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684526250; x=1687118250;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pKqky4qtLhLMqwc+jYDJn6p8bYat7L/lp+nKxMPkRyY=;
-        b=d346nIMd4FT/Wqn1gYJ28qop5VaDByBfnv+3Q11TZLgrlUllYIhBU7hCsPwGBfZhBY
-         hRk4HgVXuSM0J+4QD04Q65P8kqE9j+qv2FCez/cPQvthqr8gPsA5ZuVcvCF/iHW7BBKb
-         +ZEEUld3M/CXcbfueNaNULf9v3Tr7+uRqAT46ZNukyjJuEgp9uyDWTPMiVW5Vq0eSJqp
-         kiegU3kBfjV2lAzXwmQ3XR3PiX5i1MqKGcss0z+8dGAGVq9O1YcTU5eUFzQBzM0QuVHQ
-         0CEgEjdA4mdOkR3kayTwZlYKZl9jjVhPwYbGBW/IC/SLUks/CoYZ/WaorpCjtwWkShny
-         A/UQ==
-X-Gm-Message-State: AC+VfDwOAvYtFEOGPC6AWL+w0djxfXL9OF+fDWTXO0+CPQ3lWD3TJq/y
-        303Orr+Lw4AZPSuqnxdhUugsSHtC+PQ=
-X-Google-Smtp-Source: ACHHUZ6FEiPmU5v43LWifQRBpo81052L49sw5QgxYInZToAzWsR8mGtYDH7+PppQKkPgp34+c6aLJuvLWhk=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:9f0a:0:b0:561:949f:227 with SMTP id
- s10-20020a819f0a000000b00561949f0227mr1854093ywn.1.1684526250423; Fri, 19 May
- 2023 12:57:30 -0700 (PDT)
-Date:   Fri, 19 May 2023 12:57:28 -0700
-In-Reply-To: <CSQI5IB968XC.GO0OPMYT1C8N@dev-dsk-nsaenz-1b-189b39ae.eu-west-1.amazon.com>
+        d=1e100.net; s=20221208; t=1684526397; x=1687118397;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sM2EB7NCw7NfgMqqrzYyWFdwz4M2eE9WrGZWFFwFv3Q=;
+        b=DOL8qT85qAFNomzuQ79tNxgXIbvWmFuAZQ2yAeEoMktJHXWANXNyujkE5KPCxsTuys
+         6TDDY1O7GDiEpMQpRpViaRXYkXCNarTDZahSGaF2UFKh5zao8lVFR9qSX2cA8hxpdHG+
+         XZoV+K8GfcIUxn4qEf8QzZfseOLZN+CFDHpDK7Aj7QRiNLIT0CZHAZqrKqNkU5T4HrMd
+         2KAWTes1Y62IHxqEorWjQHRkcvR1wQUEsQ5IGOl95L7jLI0xsM+wYSOxoxZFvWE/5kWf
+         q8BfpZLVn7vCFWklnGz4tChEmw0LFkVqet96ATKOGgcExtOW1CcrDSJ8+KOx61u2l6yU
+         2CMQ==
+X-Gm-Message-State: AC+VfDwDP17g+x+1mDOi3Oi6HKxyZnpJN3+eyp5A8U5dWJ1ndsUN5YuQ
+        cxAoyyRIJiHn6jSqWTEF8MldyKCsthSHbQ==
+X-Google-Smtp-Source: ACHHUZ7uw4oIzy93fUnVuA0JSxHld2rgcS476PgaXURhqaQWJFCE0i/oqjMOOOLuIkDZmoI4FcNNtNMVyO1D4w==
+X-Received: from xllamas.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5070])
+ (user=cmllamas job=sendgmr) by 2002:a17:90b:905:b0:253:3b5f:7a16 with SMTP id
+ bo5-20020a17090b090500b002533b5f7a16mr844623pjb.1.1684526397005; Fri, 19 May
+ 2023 12:59:57 -0700 (PDT)
+Date:   Fri, 19 May 2023 19:59:49 +0000
 Mime-Version: 1.0
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <20221202061347.1070246-3-chao.p.peng@linux.intel.com> <CSQFE7I30W27.2TPDIHOTZNRIZ@dev-dsk-nsaenz-1b-189b39ae.eu-west-1.amazon.com>
- <ZGe+m+uFzpiW7wlr@google.com> <CSQI5IB968XC.GO0OPMYT1C8N@dev-dsk-nsaenz-1b-189b39ae.eu-west-1.amazon.com>
-Message-ID: <ZGfUqBLaO+cI9ypv@google.com>
-Subject: Re: [PATCH v10 2/9] KVM: Introduce per-page memory attributes
-From:   Sean Christopherson <seanjc@google.com>
-To:     Nicolas Saenz Julienne <nsaenz@amazon.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, graf@amazon.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Miaohe Lin <linmiaohe@huawei.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
+Message-ID: <20230519195950.1775656-1-cmllamas@google.com>
+Subject: [PATCH] binder: fix UAF of alloc->vma in race with munmap()
+From:   Carlos Llamas <cmllamas@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "=?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?=" <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Carlos Llamas <cmllamas@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
         Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        wei.w.wang@intel.com, anelkz@amazon.de
-Content-Type: text/plain; charset="us-ascii"
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-team@android.com,
+        Jann Horn <jannh@google.com>, stable@vger.kernel.org,
+        Minchan Kim <minchan@kernel.org>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        Todd Kjos <tkjos@google.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023, Nicolas Saenz Julienne wrote:
-> Hi Sean,
-> 
-> On Fri May 19, 2023 at 6:23 PM UTC, Sean Christopherson wrote:
-> > On Fri, May 19, 2023, Nicolas Saenz Julienne wrote:
-> > > Hi,
-> > >
-> > > On Fri Dec 2, 2022 at 6:13 AM UTC, Chao Peng wrote:
-> > >
-> > > [...]
-> > > > +The user sets the per-page memory attributes to a guest memory range indicated
-> > > > +by address/size, and in return KVM adjusts address and size to reflect the
-> > > > +actual pages of the memory range have been successfully set to the attributes.
-> > > > +If the call returns 0, "address" is updated to the last successful address + 1
-> > > > +and "size" is updated to the remaining address size that has not been set
-> > > > +successfully. The user should check the return value as well as the size to
-> > > > +decide if the operation succeeded for the whole range or not. The user may want
-> > > > +to retry the operation with the returned address/size if the previous range was
-> > > > +partially successful.
-> > > > +
-> > > > +Both address and size should be page aligned and the supported attributes can be
-> > > > +retrieved with KVM_GET_SUPPORTED_MEMORY_ATTRIBUTES.
-> > > > +
-> > > > +The "flags" field may be used for future extensions and should be set to 0s.
-> > >
-> > > We have been looking into adding support for the Hyper-V VSM extensions
-> > > which Windows uses to implement Credential Guard. This interface seems
-> > > like a good fit for one of its underlying features. I just wanted to
-> > > share a bit about it, and see if we can expand it to fit this use-case.
-> > > Note that this was already briefly discussed between Sean and Alex some
-> > > time ago[1].
-> > >
-> > > VSM introduces isolated guest execution contexts called Virtual Trust
-> > > Levels (VTL) [2]. Each VTL has its own memory access protections,
-> > > virtual processors states, interrupt controllers and overlay pages. VTLs
-> > > are hierarchical and might enforce memory protections on less privileged
-> > > VTLs. Memory protections are enforced on a per-GPA granularity.
-> > >
-> > > The list of possible protections is:
-> > > - No access -- This needs a new memory attribute, I think.
-> >
-> > No, if KVM provides three bits for READ, WRITE, and EXECUTE, then userspace can
-> > get all the possible combinations.  E.g. this is RWX=000b
-> 
-> That's not what the current implementation does, when attributes is
-> equal 0 it clears the entries from the xarray:
-> 
-> static int kvm_vm_ioctl_set_mem_attributes(struct kvm *kvm,
-> 					   struct kvm_memory_attributes *attrs)
-> {
-> 
->     entry = attrs->attributes ? xa_mk_value(attrs->attributes) : NULL;
-> [...]
->     for (i = start; i < end; i++)
->     	if (xa_err(xa_store(&kvm->mem_attr_array, i, entry,
->     			    GFP_KERNEL_ACCOUNT)))
->         		break;
-> }
-> 
-> >From Documentation/core-api/xarray.rst:
-> 
-> "There is no difference between an entry that has never
-> been stored to, one that has been erased and one that has most recently
-> had ``NULL`` stored to it."
-> 
-> The way I understood the series, there needs to be a differentiation
-> between no attributes (regular page fault) and no-access.
+[ cmllamas: clean forward port from commit 015ac18be7de ("binder: fix
+  UAF of alloc->vma in race with munmap()") in 5.10 stable. It is needed
+  in mainline after the revert of commit a43cfc87caaf ("android: binder:
+  stop saving a pointer to the VMA") as pointed out by Liam. The commit
+  log and tags have been tweaked to reflect this. ]
 
-Ah, I see what you're saying.  There are multiple ways to solve things without a
-"no access" flag while still maintaining an empty xarray for the default case.
-E.g. invert the flags to be DENY flags[*], have an internal-only "entry valid" flag,
-etc.
+In commit 720c24192404 ("ANDROID: binder: change down_write to
+down_read") binder assumed the mmap read lock is sufficient to protect
+alloc->vma inside binder_update_page_range(). This used to be accurate
+until commit dd2283f2605e ("mm: mmap: zap pages with read mmap_sem in
+munmap"), which now downgrades the mmap_lock after detaching the vma
+from the rbtree in munmap(). Then it proceeds to teardown and free the
+vma with only the read lock held.
 
-[*] I vaguely recall suggesting a "deny" approach somewhere, but I may just be
-    making things up to make it look like I thought deeply about this ;-)
+This means that accesses to alloc->vma in binder_update_page_range() now
+will race with vm_area_free() in munmap() and can cause a UAF as shown
+in the following KASAN trace:
+
+  ==================================================================
+  BUG: KASAN: use-after-free in vm_insert_page+0x7c/0x1f0
+  Read of size 8 at addr ffff16204ad00600 by task server/558
+
+  CPU: 3 PID: 558 Comm: server Not tainted 5.10.150-00001-gdc8dcf942daa #1
+  Hardware name: linux,dummy-virt (DT)
+  Call trace:
+   dump_backtrace+0x0/0x2a0
+   show_stack+0x18/0x2c
+   dump_stack+0xf8/0x164
+   print_address_description.constprop.0+0x9c/0x538
+   kasan_report+0x120/0x200
+   __asan_load8+0xa0/0xc4
+   vm_insert_page+0x7c/0x1f0
+   binder_update_page_range+0x278/0x50c
+   binder_alloc_new_buf+0x3f0/0xba0
+   binder_transaction+0x64c/0x3040
+   binder_thread_write+0x924/0x2020
+   binder_ioctl+0x1610/0x2e5c
+   __arm64_sys_ioctl+0xd4/0x120
+   el0_svc_common.constprop.0+0xac/0x270
+   do_el0_svc+0x38/0xa0
+   el0_svc+0x1c/0x2c
+   el0_sync_handler+0xe8/0x114
+   el0_sync+0x180/0x1c0
+
+  Allocated by task 559:
+   kasan_save_stack+0x38/0x6c
+   __kasan_kmalloc.constprop.0+0xe4/0xf0
+   kasan_slab_alloc+0x18/0x2c
+   kmem_cache_alloc+0x1b0/0x2d0
+   vm_area_alloc+0x28/0x94
+   mmap_region+0x378/0x920
+   do_mmap+0x3f0/0x600
+   vm_mmap_pgoff+0x150/0x17c
+   ksys_mmap_pgoff+0x284/0x2dc
+   __arm64_sys_mmap+0x84/0xa4
+   el0_svc_common.constprop.0+0xac/0x270
+   do_el0_svc+0x38/0xa0
+   el0_svc+0x1c/0x2c
+   el0_sync_handler+0xe8/0x114
+   el0_sync+0x180/0x1c0
+
+  Freed by task 560:
+   kasan_save_stack+0x38/0x6c
+   kasan_set_track+0x28/0x40
+   kasan_set_free_info+0x24/0x4c
+   __kasan_slab_free+0x100/0x164
+   kasan_slab_free+0x14/0x20
+   kmem_cache_free+0xc4/0x34c
+   vm_area_free+0x1c/0x2c
+   remove_vma+0x7c/0x94
+   __do_munmap+0x358/0x710
+   __vm_munmap+0xbc/0x130
+   __arm64_sys_munmap+0x4c/0x64
+   el0_svc_common.constprop.0+0xac/0x270
+   do_el0_svc+0x38/0xa0
+   el0_svc+0x1c/0x2c
+   el0_sync_handler+0xe8/0x114
+   el0_sync+0x180/0x1c0
+
+  [...]
+  ==================================================================
+
+To prevent the race above, revert back to taking the mmap write lock
+inside binder_update_page_range(). One might expect an increase of mmap
+lock contention. However, binder already serializes these calls via top
+level alloc->mutex. Also, there was no performance impact shown when
+running the binder benchmark tests.
+
+Fixes: c0fd2101781e ("Revert "android: binder: stop saving a pointer to the VMA"")
+Fixes: dd2283f2605e ("mm: mmap: zap pages with read mmap_sem in munmap")
+Reported-by: Jann Horn <jannh@google.com>
+Closes: https://lore.kernel.org/all/20230518144052.xkj6vmddccq4v66b@revolver
+Cc: <stable@vger.kernel.org>
+Cc: Minchan Kim <minchan@kernel.org>
+Cc: Yang Shi <yang.shi@linux.alibaba.com>
+Cc: Liam Howlett <liam.howlett@oracle.com>
+Signed-off-by: Carlos Llamas <cmllamas@google.com>
+Acked-by: Todd Kjos <tkjos@google.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+ drivers/android/binder_alloc.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
+index e7c9d466f8e8..662a2a2e2e84 100644
+--- a/drivers/android/binder_alloc.c
++++ b/drivers/android/binder_alloc.c
+@@ -212,7 +212,7 @@ static int binder_update_page_range(struct binder_alloc *alloc, int allocate,
+ 		mm = alloc->mm;
+ 
+ 	if (mm) {
+-		mmap_read_lock(mm);
++		mmap_write_lock(mm);
+ 		vma = alloc->vma;
+ 	}
+ 
+@@ -270,7 +270,7 @@ static int binder_update_page_range(struct binder_alloc *alloc, int allocate,
+ 		trace_binder_alloc_page_end(alloc, index);
+ 	}
+ 	if (mm) {
+-		mmap_read_unlock(mm);
++		mmap_write_unlock(mm);
+ 		mmput(mm);
+ 	}
+ 	return 0;
+@@ -303,7 +303,7 @@ static int binder_update_page_range(struct binder_alloc *alloc, int allocate,
+ 	}
+ err_no_vma:
+ 	if (mm) {
+-		mmap_read_unlock(mm);
++		mmap_write_unlock(mm);
+ 		mmput(mm);
+ 	}
+ 	return vma ? -ENOMEM : -ESRCH;
+-- 
+2.40.1.698.g37aff9b760-goog
+
