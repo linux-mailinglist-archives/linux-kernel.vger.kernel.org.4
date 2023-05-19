@@ -2,242 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7685709468
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 12:05:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB64F70946C
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 12:06:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231556AbjESKFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 06:05:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36558 "EHLO
+        id S231654AbjESKGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 06:06:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231875AbjESKFC (ORCPT
+        with ESMTP id S231134AbjESKF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 06:05:02 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC4612B
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:04:59 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-64d11974b45so1379833b3a.2
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:04:59 -0700 (PDT)
+        Fri, 19 May 2023 06:05:59 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620EF102
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:05:58 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1ae408f4d1aso24469755ad.0
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 03:05:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684490699; x=1687082699;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9xTS/+ikRkp6T2vKwWJPFVIVMKM4hxn92K6n0PRCytk=;
-        b=kknctPkpZrVOtKToPJl+ulrI88aXtNavFYH10YxLF2I4G2cDXB2nOfkmYVnypLwYOr
-         97CSCYF/uB4e6h6q791T5909bZmXXMvpBslfC1NgSzpFMpUcERN+W6b7wZnnsDCim1LE
-         CU2uKf5iyeHjv4M2QrZ1p3QERw1tEVISL+9CM=
+        d=linaro.org; s=google; t=1684490758; x=1687082758;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=t6PY6uvUf462T5HGV7ZU1zDBsJ0eattmDdV+/C5PCe8=;
+        b=IVUEnwMqL5OREMR07mtKr8g8QRCpY4hGCDmnHnUVeqzZat7auN15wGndpqI2hOG8Ku
+         UKZjPP6eJT1wyv3Uo1nbytT+te6IV7AFyo9YW6mYXzNNcZE3jSZUVkuf3vH+50X+bu+T
+         iA5JSSUemXiJCUXn3x941Ud6NdyRngRfcSmSlH4vtI7Jw2zcZx+vB6sB4X2gfaz9yJq1
+         01hqTR6/t5ME5bm456kENgG70IQUp/17RKiGyBmFnNCzpksENb4BpUtvNHnqrQduTmSp
+         6VIrzSx8aCQTsxebHR7j8aZdoSNfokPc0nYPnjDfmghNRkgJccQTy3zo6PIMvQqm9rx6
+         LYrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684490699; x=1687082699;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9xTS/+ikRkp6T2vKwWJPFVIVMKM4hxn92K6n0PRCytk=;
-        b=GUCd7ZOvZEhXc0/mfk0429x3tNwNkrsKWStUUIbeTSAEJSmBgk0a4Ra2jlAIk/x882
-         j9kmovdH0phBdDq7UIvP5UzpYXTpNsi4dDeKJh5I/V2q0qu/yqMJy8s1Db8/cw52yALq
-         6QMSqv+6QMS67EaUYxfmOrM2H+xR+adqC7eH5G+cnmhlp+71eUVYvZid3tYKTPNz5jrp
-         MdgcZjk20Qhs3HB6fJVOphTsM94kuEZ4+lcrgv35Krxio8miJx/hHEVdnbNOZmd4e3En
-         Vi1LZ+f7oHGJo4dDF3quTf/eJAcJ4ZvE38aLF/Qmdw0e0v8/7l7a7ysTfLXRI5nUss0o
-         s7cQ==
-X-Gm-Message-State: AC+VfDzU2A1wrslXfaSMgoPF/mbqzXOAHRQJqWOKB4eJPUueyeWcTSeD
-        qQm0VnlMABfA4meCG7ellGRqng==
-X-Google-Smtp-Source: ACHHUZ5tvd92H6EeKlIkOXPkMDBslOJK20p/RKYh/cqtFgsiyWV7f/sG/EKWlt6mVLUiEs9OHaRAHg==
-X-Received: by 2002:a05:6a21:9706:b0:104:387a:bbaf with SMTP id ub6-20020a056a21970600b00104387abbafmr1046602pzb.53.1684490699233;
-        Fri, 19 May 2023 03:04:59 -0700 (PDT)
-Received: from chromium.org (0.223.81.34.bc.googleusercontent.com. [34.81.223.0])
-        by smtp.gmail.com with ESMTPSA id 11-20020aa7910b000000b006372791d708sm2678533pfh.104.2023.05.19.03.04.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 03:04:58 -0700 (PDT)
-Date:   Fri, 19 May 2023 10:04:53 +0000
-From:   Tomasz Figa <tfiga@chromium.org>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        m.szyprowski@samsung.com, mchehab@kernel.org, ming.qian@nxp.com,
-        shijie.qin@nxp.com, eagle.zhou@nxp.com, bin.liu@mediatek.com,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        tiffany.lin@mediatek.com, andrew-ct.chen@mediatek.com,
-        yunfei.dong@mediatek.com, stanimir.k.varbanov@gmail.com,
-        quic_vgarodia@quicinc.com, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, daniel.almeida@collabora.com,
-        hverkuil-cisco@xs4all.nl, jernel@kernel.org,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, kernel@collabora.com
-Subject: Re: [PATCH v2 2/8] media: videobuf2: Make bufs array dynamic
- allocated
-Message-ID: <20230519100453.6o4eriisloiji32g@chromium.org>
-References: <20230321102855.346732-1-benjamin.gaignard@collabora.com>
- <20230321102855.346732-3-benjamin.gaignard@collabora.com>
- <20230321181610.GE20234@pendragon.ideasonboard.com>
+        d=1e100.net; s=20221208; t=1684490758; x=1687082758;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=t6PY6uvUf462T5HGV7ZU1zDBsJ0eattmDdV+/C5PCe8=;
+        b=U4AmCEs7vbY8sKZgRze4NUz3cBtABFGBvkp4SP4NyZFCji5930Fx9ZtjYoX38tMrCn
+         QYIFAt71KCqHQDtxJxxvOP8yYaDuw3jMAbJ+NkfmOGwl+RXif+DmH+qZ5hMthezKGG37
+         XwxdOJpaLjWZjTLI8X71XxxjUN0yB4RxNXtdnH5/wZjEsHct3mqB6wuMGyE9U42LAqrG
+         d9rTB/MKaWl32u7JONToH/Dpy/8GTT7P46cfWsSrbyV7CFS5g+GJrOjUMxGg50htV0U2
+         OqIQt6UakR0wmGEn5Z0O/l3lRfyuFuEKVzXFOhnN7n8I16sfdRy02nhM+LNoUDdII+o0
+         a16A==
+X-Gm-Message-State: AC+VfDz88qfTgeJGrvw9qFkNqidD82jBpjVn6ppKXryQt8vTd7gt7ZJ9
+        z7SNhs0QSZ9lllqYRZbNQMry3A==
+X-Google-Smtp-Source: ACHHUZ7lgCfZfb0FUOSKZivRwVF3xk9a4aNF0MSxuLrcXj9+fivBKJ+Knm9ROa3VzxvyXITlnYpSAg==
+X-Received: by 2002:a17:902:e547:b0:1ac:712d:2032 with SMTP id n7-20020a170902e54700b001ac712d2032mr2401279plf.50.1684490757775;
+        Fri, 19 May 2023 03:05:57 -0700 (PDT)
+Received: from ?IPV6:2401:4900:1c60:d309:883d:817e:8e91:be39? ([2401:4900:1c60:d309:883d:817e:8e91:be39])
+        by smtp.gmail.com with ESMTPSA id y7-20020a17090322c700b001a800e03cf9sm3006682plg.256.2023.05.19.03.05.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 May 2023 03:05:57 -0700 (PDT)
+Message-ID: <7cf74a2b-21e3-4a0d-5791-d7d97e21cf30@linaro.org>
+Date:   Fri, 19 May 2023 15:35:51 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230321181610.GE20234@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH 2/4] arm: dts: qcom: qdu1000: Add SDHCI node
+To:     Komal Bajaj <quic_kbajaj@quicinc.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20230519085122.15758-1-quic_kbajaj@quicinc.com>
+ <20230519085122.15758-3-quic_kbajaj@quicinc.com>
+Content-Language: en-US
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+In-Reply-To: <20230519085122.15758-3-quic_kbajaj@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 21, 2023 at 08:16:10PM +0200, Laurent Pinchart wrote:
-> Hi Benjamin,
-> 
-> Thank you for the patch.
-> 
-> On Tue, Mar 21, 2023 at 11:28:49AM +0100, Benjamin Gaignard wrote:
-> > Instead of a static array change bufs to a dynamically allocated array.
-> > This will allow to store more video buffer if needed.
-> > Protect the array with a spinlock.
-> 
-> I think I asked in the review of v1 why we couldn't use the kernel
-> IDA/IDR APIs to allocate buffer IDs and register buffers, but I don't
-> think I've received a reply. Wouldn't it be better than rolling out our
-> own mechanism ?
-> 
+Hi Komal,
 
-+1, with a note that [1] suggests that IDR is deprecated and XArray[2]
-should be used instead.
-
-[1] https://docs.kernel.org/core-api/idr.html
-[2] https://docs.kernel.org/core-api/xarray.html
-
-Also from my quick look, XArray may be solving the locking concerns for us
-automatically.
-
-Best regards,
-Tomasz
-
-> > Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
-> > ---
-> >  .../media/common/videobuf2/videobuf2-core.c   |  8 +++
-> >  include/media/videobuf2-core.h                | 49 ++++++++++++++++---
-> >  2 files changed, 49 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
-> > index 79e90e338846..ae9d72f4d181 100644
-> > --- a/drivers/media/common/videobuf2/videobuf2-core.c
-> > +++ b/drivers/media/common/videobuf2/videobuf2-core.c
-> > @@ -2452,6 +2452,13 @@ int vb2_core_queue_init(struct vb2_queue *q)
-> >  	mutex_init(&q->mmap_lock);
-> >  	init_waitqueue_head(&q->done_wq);
-> >  
-> > +	q->max_num_bufs = 32;
-> > +	q->bufs = kmalloc_array(q->max_num_bufs, sizeof(*q->bufs), GFP_KERNEL | __GFP_ZERO);
-> > +	if (!q->bufs)
-> > +		return -ENOMEM;
-> > +
-> > +	spin_lock_init(&q->bufs_lock);
-> > +
-> >  	q->memory = VB2_MEMORY_UNKNOWN;
-> >  
-> >  	if (q->buf_struct_size == 0)
-> > @@ -2479,6 +2486,7 @@ void vb2_core_queue_release(struct vb2_queue *q)
-> >  	mutex_lock(&q->mmap_lock);
-> >  	__vb2_queue_free(q, q->num_buffers);
-> >  	mutex_unlock(&q->mmap_lock);
-> > +	kfree(q->bufs);
-> >  }
-> >  EXPORT_SYMBOL_GPL(vb2_core_queue_release);
-> >  
-> > diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
-> > index 5b1e3d801546..397dbf6e61e1 100644
-> > --- a/include/media/videobuf2-core.h
-> > +++ b/include/media/videobuf2-core.h
-> > @@ -558,6 +558,8 @@ struct vb2_buf_ops {
-> >   * @dma_dir:	DMA mapping direction.
-> >   * @bufs:	videobuf2 buffer structures
-> >   * @num_buffers: number of allocated/used buffers
-> > + * @bufs_lock: lock to protect bufs access
-> > + * @max_num_bufs: max number of buffers storable in bufs
-> >   * @queued_list: list of buffers currently queued from userspace
-> >   * @queued_count: number of buffers queued and ready for streaming.
-> >   * @owned_by_drv_count: number of buffers owned by the driver
-> > @@ -619,8 +621,10 @@ struct vb2_queue {
-> >  	struct mutex			mmap_lock;
-> >  	unsigned int			memory;
-> >  	enum dma_data_direction		dma_dir;
-> > -	struct vb2_buffer		*bufs[VB2_MAX_FRAME];
-> > +	struct vb2_buffer		**bufs;
-> >  	unsigned int			num_buffers;
-> > +	spinlock_t			bufs_lock;
-> > +	size_t				max_num_bufs;
-> >  
-> >  	struct list_head		queued_list;
-> >  	unsigned int			queued_count;
-> > @@ -1239,9 +1243,16 @@ static inline void vb2_clear_last_buffer_dequeued(struct vb2_queue *q)
-> >  static inline struct vb2_buffer *vb2_get_buffer(struct vb2_queue *q,
-> >  						unsigned int index)
-> >  {
-> > -	if (index < q->num_buffers)
-> > -		return q->bufs[index];
-> > -	return NULL;
-> > +	struct vb2_buffer *vb = NULL;
-> > +
-> > +	spin_lock(&q->bufs_lock);
-> > +
-> > +	if (index < q->max_num_bufs)
-> > +		vb = q->bufs[index];
-> > +
-> > +	spin_unlock(&q->bufs_lock);
-> > +
-> > +	return vb;
-> >  }
-> >  
-> >  /**
-> > @@ -1251,12 +1262,30 @@ static inline struct vb2_buffer *vb2_get_buffer(struct vb2_queue *q,
-> >   */
-> >  static inline bool vb2_queue_add_buffer(struct vb2_queue *q, struct vb2_buffer *vb)
-> >  {
-> > -	if (vb->index < VB2_MAX_FRAME) {
-> > +	bool ret = false;
-> > +
-> > +	spin_lock(&q->bufs_lock);
-> > +
-> > +	if (vb->index >= q->max_num_bufs) {
-> > +		struct vb2_buffer **tmp;
-> > +
-> > +		tmp = krealloc_array(q->bufs, q->max_num_bufs * 2, sizeof(*q->bufs), GFP_KERNEL);
-> > +		if (!tmp)
-> > +			goto realloc_failed;
-> > +
-> > +		q->max_num_bufs *= 2;
-> > +		q->bufs = tmp;
-> > +	}
-> > +
-> > +	if (vb->index < q->max_num_bufs) {
-> >  		q->bufs[vb->index] = vb;
-> > -		return true;
-> > +		ret = true;
-> >  	}
-> >  
-> > -	return false;
-> > +realloc_failed:
-> > +	spin_unlock(&q->bufs_lock);
-> > +
-> > +	return ret;
-> >  }
-> >  
-> >  /**
-> > @@ -1266,8 +1295,12 @@ static inline bool vb2_queue_add_buffer(struct vb2_queue *q, struct vb2_buffer *
-> >   */
-> >  static inline void vb2_queue_remove_buffer(struct vb2_queue *q, struct vb2_buffer *vb)
-> >  {
-> > -	if (vb->index < VB2_MAX_FRAME)
-> > +	spin_lock(&q->bufs_lock);
-> > +
-> > +	if (vb->index < q->max_num_bufs)
-> >  		q->bufs[vb->index] = NULL;
-> > +
-> > +	spin_unlock(&q->bufs_lock);
-> >  }
-> >  
-> >  /*
+On 5/19/23 2:21 PM, Komal Bajaj wrote:
+> Add sdhc node for eMMC on QDU1000 and QRU1000 SoCs.
 > 
-> -- 
-> Regards,
+> Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
+> ---
+>   arch/arm64/boot/dts/qcom/qdu1000.dtsi | 60 +++++++++++++++++++++++++++
+>   1 file changed, 60 insertions(+)
 > 
-> Laurent Pinchart
+> diff --git a/arch/arm64/boot/dts/qcom/qdu1000.dtsi b/arch/arm64/boot/dts/qcom/qdu1000.dtsi
+> index 734438113bba..6113def66a08 100644
+> --- a/arch/arm64/boot/dts/qcom/qdu1000.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/qdu1000.dtsi
+> @@ -19,6 +19,10 @@
+> 
+>   	chosen: chosen { };
+> 
+> +	aliases {
+> +		mmc0 = &sdhc_1; /*SDC1 eMMC slot*/
+
+Please use the right comment formats /* text */
+Also, just /* eMMC */ would be fine here.
+
+> +	};
+> +
+>   	cpus {
+>   		#address-cells = <2>;
+>   		#size-cells = <0>;
+> @@ -842,6 +846,62 @@
+>   			#hwlock-cells = <1>;
+>   		};
+> 
+> +		sdhc_1: mmc@8804000 {
+> +			compatible = "qcom,qdu1000-sdhci", "qcom,sdhci-msm-v5";
+> +			reg = <0x0 0x08804000 0x0 0x1000>,
+> +			      <0x0 0x08805000 0x0 0x1000>;
+> +
+> +			reg-names = "hc", "cqhci";
+> +
+> +			interrupts = <GIC_SPI 207 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 223 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-names = "hc_irq", "pwr_irq";
+> +
+> +			clocks = <&gcc GCC_SDCC5_AHB_CLK>,
+> +				 <&gcc GCC_SDCC5_APPS_CLK>,
+> +				 <&rpmhcc RPMH_CXO_CLK>;
+> +			clock-names = "iface", "core", "xo";
+> +
+> +			/* Add dt entry for gcc hw reset */
+
+Please drop the comment above - it's not needed.
+
+> +			resets = <&gcc GCC_SDCC5_BCR>;
+> +
+> +			interconnects = <&system_noc MASTER_SDCC_1 0 &mc_virt SLAVE_EBI1 0>,
+> +					<&gem_noc MASTER_APPSS_PROC 0 &system_noc SLAVE_SDCC_2 0>;
+> +			interconnect-names = "sdhc-ddr", "cpu-sdhc";
+> +			power-domains = <&rpmhpd QDU1000_CX>;
+> +			operating-points-v2 = <&sdhc1_opp_table>;
+> +
+> +			iommus = <&apps_smmu 0x0080 0x0>;
+> +			dma-coherent;
+> +
+> +			bus-width = <8>;
+> +			non-removable;
+> +			supports-cqe;
+> +
+> +			no-sd;
+> +			no-sd;
+
+Can we club the following 3 together:
+non-removable;
+no-sd;
+no-sd;
+
+And normally these is a part of board file (.dts), right?
+
+Thanks,
+Bhupesh
+
+> +			mmc-ddr-1_8v;
+> +			mmc-hs200-1_8v;
+> +			mmc-hs400-1_8v;
+> +			mmc-hs400-enhanced-strobe;
+> +			cap-mmc-hw-reset;
+> +
+> +			qcom,dll-config = <0x0007642c>;
+> +			qcom,ddr-config = <0x80040868>;
+> +
+> +			status = "disabled";
+> +
+> +			sdhc1_opp_table: opp-table {
+> +				compatible = "operating-points-v2";
+> +
+> +				opp-384000000 {
+> +					opp-hz = /bits/ 64 <384000000>;
+> +					required-opps = <&rpmhpd_opp_min_svs>;
+> +				};
+> +			};
+> +		};
+> +
+>   		pdc: interrupt-controller@b220000 {
+>   			compatible = "qcom,qdu1000-pdc", "qcom,pdc";
+>   			reg = <0x0 0xb220000 0x0 0x30000>, <0x0 0x174000f0 0x0 0x64>;
+> --
+> 2.17.1
+> 
