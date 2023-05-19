@@ -2,75 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43D8170A0A8
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 22:36:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FA9970A102
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 22:46:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231407AbjESUgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 16:36:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33846 "EHLO
+        id S230106AbjESUpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 16:45:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbjESUgS (ORCPT
+        with ESMTP id S229797AbjESUpt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 16:36:18 -0400
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67DB71B4
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 13:36:17 -0700 (PDT)
-Received: by mail-qk1-x744.google.com with SMTP id af79cd13be357-75791a035b8so194009585a.3
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 13:36:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684528576; x=1687120576;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dQlu0Oc2Q0nPMBCNq5iTPUZpwrRZlsMdPt2zjra8+VI=;
-        b=iKPz9Oh4/TvVutVjYTfPi0mjubOCm5vM4CVbTGjh1CEUB63GubzRmFCVaqX3GyvjSH
-         UvJlkmD4v1juCbNVwQ3OIs6PDGP7Jf8uqyXqRinbquXuvulf9PbLIoMKagLcY3edyWRo
-         XDQlSVsRSXCOSnkrEt9igXA5SXejdTxCR1fUZ1gP8KSIS/7tsrxUUVtQ7VJy6pmjEzRL
-         uRO4ZT4zlnvL9MpYySpXjW3JwOPLE6/og/rMjLYZCkQGv/7YL5nIqFUOMFxkbvL6u9pN
-         gueIhAcEq8omC2de4/PPfLI+selElP2mz6un1jXu2QmxZiEPiQ++7JKkD9AJMR3vsOMf
-         vkYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684528576; x=1687120576;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dQlu0Oc2Q0nPMBCNq5iTPUZpwrRZlsMdPt2zjra8+VI=;
-        b=iNbTDj9A79d4qDxi/KX3NFW80swvJgrvWM9CMZ+67JbdPtsOBaoszktrM1R9Snw3RN
-         4vIB/AdLhaTyv7GicBrC5GTo2jNADLfa5+SE+Jpd2C3IDHXFza1p5xhhdN/10v5J8F9X
-         3hkbHZGakZHAhNYHssJKD28eRkRVul+XQK0w4MlxhCK34Y/9BKqFMAMurGkTcdbX35xv
-         vfIhAb0/5bGJwdh0p2mBHPbr/SIofcnP0XmM1u91xf3TkpHzFraDd0Y4mHLAGmwQRzy7
-         9pSOy/gckY6hdZf1x6aqzASq8oAlLkKjcJ07msX2kP9zkehtAoNET1YIkqxIKyNaUJGg
-         z7eA==
-X-Gm-Message-State: AC+VfDwzaxdwnU8TNJ45CGVaFAqQkJaTfDDm8o0MzfsyeTjnSOy/7pMv
-        vP/8yCGbuJLnKWpl8p+uPHoV9A0Yn18YFT4eLeM=
-X-Google-Smtp-Source: ACHHUZ4oVWzrM2Cl1CQkqiQLJ1xIhyBwUZcbcH94LKkZdYasH6Ds0Jf0Yom27k6E9aoxU7l5KEU+PRUAWlhkwCoUc1U=
-X-Received: by 2002:a05:6214:c8d:b0:5ca:83ed:12be with SMTP id
- r13-20020a0562140c8d00b005ca83ed12bemr6007898qvr.21.1684528576436; Fri, 19
- May 2023 13:36:16 -0700 (PDT)
+        Fri, 19 May 2023 16:45:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238DC116
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 13:45:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9EA3660C5D
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 20:45:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 801C1C433EF;
+        Fri, 19 May 2023 20:45:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684529147;
+        bh=WJO1c4PJ+6qGvmWHyWcDtGHu6W/qtzeSk7We3HLS+0Y=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HbWF9ckmO8I/D9tphXQDuU04e1KhWw9QjwvCjln1ZDQ5kccZq5HgTDsM+qmZ3gIss
+         iGUCUNfPILwV18RVcSig8Uh1m1X+kMUkElsXBXDEeEOxxFx/xQ682X54Z23vSlCKfm
+         PXRV8QOS99m3hhrGzaHVpe0THU/hAPaUypF/VbVGAMhPToURJJ3DNOk0nyTBhOO3+8
+         E/rZ+kVzTgat/r8MO7beGku9RaQ0VK5mwbpF8mOqX6Y5SoEtUvPJggbPFHyxA+WBlA
+         /bEws/nR4a6KWCLU19P//aZSegN7dIqyIj5f8S+S1SRcgO5KHfRMhdznHnCangdM9G
+         h3QxXRiOtJGoQ==
+Date:   Fri, 19 May 2023 13:45:45 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>
+Cc:     Jesper Dangaard Brouer <hawk@kernel.org>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        <netdev@vger.kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        <linux-kernel@vger.kernel.org>, "Christoph Hellwig" <hch@lst.de>,
+        Eric Dumazet <edumazet@google.com>,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        <intel-wired-lan@lists.osuosl.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Magnus Karlsson <magnus.karlsson@intel.com>
+Subject: Re: [Intel-wired-lan] [PATCH net-next 07/11] net: page_pool: add
+ DMA-sync-for-CPU inline helpers
+Message-ID: <20230519134545.5807e1d8@kernel.org>
+In-Reply-To: <77d929b2-c124-d3db-1cd9-8301d1d269d3@intel.com>
+References: <20230516161841.37138-1-aleksander.lobakin@intel.com>
+        <20230516161841.37138-8-aleksander.lobakin@intel.com>
+        <20230517211211.1d1bbd0b@kernel.org>
+        <9feef136-7ff3-91a4-4198-237b07a91c0c@intel.com>
+        <20230518075643.3a242837@kernel.org>
+        <0dfa36f1-a847-739e-4557-fc43e2e8c6a7@intel.com>
+        <20230518133627.72747418@kernel.org>
+        <77d929b2-c124-d3db-1cd9-8301d1d269d3@intel.com>
 MIME-Version: 1.0
-Received: by 2002:a0c:f205:0:b0:623:7c92:8385 with HTTP; Fri, 19 May 2023
- 13:36:16 -0700 (PDT)
-Reply-To: regionalmanager.mariam@hotmail.com
-From:   Mariam Kouame <mariamkouame1993@gmail.com>
-Date:   Fri, 19 May 2023 13:36:16 -0700
-Message-ID: <CAJF_a36r4b6Dr8-hkX=x2WOwmphyEtxVNkc+uRSvO4CLqcW6AA@mail.gmail.com>
-Subject: from mariam kouame
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear,
+On Fri, 19 May 2023 15:56:40 +0200 Alexander Lobakin wrote:
+> From: Jakub Kicinski <kuba@kernel.org>
+> Date: Thu, 18 May 2023 13:36:27 -0700
+> >> I'll definitely take a look, I also like the idea of minimalistic and
+> >> lightweight headers.
+> >> page_pool.h and page_pool_drv.h? :D  
+> > 
+> > What I've been doing lately is split like this:
+> > 
+> > include/net/something.h           (simply includes all other headers)
+> > include/net/something/types.h     (structs, defines, enums)
+> > include/net/something/functions.h (inlines and function declarations)
+> > 
+> > If that's reasonable -- we should put the helpers under
+> > 
+> > include/net/page_pool/functions.h ?  
+> 
+> Hmm, all files that need something from page_pool.h usually need both
+> types and functions. Not sure we'll benefit anything here.
 
-Please grant me permission to share a very crucial discussion with
-you. I am looking forward to hearing from you at your earliest
-convenience.
+Ack, in the scheme above most places (source files) would include
+something.h, the something/types.h is just for other headers.
+something/functions.h is basically never included directly.
 
-Mrs. Mariam Kouame
+> OTOH leaving
+> those sync-for-cpu inlines alone allows to avoid including dma-mapping.h
+> and currently only IAVF needs them. So my idea is:
+> 
+> - you need smth from PP, but not sync-for-cpu -- more lightweight
+>   page_pool.h is for you;
+> - you need sync-for-cpu (or maybe something else with heavy deps in the
+>   future) -- just include page_pool_drv.h.
+
+The idea makes sense in isolation, but I'm trying to figure out
+a convention which would not require case-by-case discussions.
+
+> I tried moving something else, but couldn't find anything that would
+> give any win. <linux/mm.h> and <linux/ptr_ring.h> are needed to define
+> `struct page_pool`, i.e. even being structured like in your example they
+> would've gone into pp/types.h =\
+> `struct ptr_ring` itself doesn't require any MM-related definitions, so
+> would we split it into ptr_ring/{types,functions}.h, we could probably
+> avoid a couple includes :D
+
+Ack, not saying that we need to split now, it's just about the naming
+(everyone's favorite topic).
+
+I think that it's a touch weird to name the header _drv.h and then
+include it in the core in multiple places (*cough* xdp_sock_drv.h). 
+Also If someone needs to add another "heavy" static line for use by 
+the core they will try to put it in page_pool.h rather than _drv.h...
+
+I'd rather split the includes by the basic language-level contents,
+first, then by the intended consumer, only if necessary. Language 
+level sorting require less thinking :)
+
+But none of this is important, if you don't wanna to do it, just keep 
+the new helpers in page_pool.h (let's not do another _drv.h).
