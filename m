@@ -2,159 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB61870A2A3
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 00:03:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF26170A2A6
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 00:04:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbjESWDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 18:03:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41496 "EHLO
+        id S229693AbjESWE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 18:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjESWDc (ORCPT
+        with ESMTP id S231340AbjESWEU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 18:03:32 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F80F10EC;
-        Fri, 19 May 2023 15:03:00 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 49A16320091A;
-        Fri, 19 May 2023 18:03:00 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Fri, 19 May 2023 18:03:00 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1684533779; x=1684620179; bh=jIqJL/NnQpehuADJQuVaM4SynqOfVffT2Cc
-        4DfmU6kM=; b=uAlCQIBMuYeeFwcf/oKb2FwHhhVPqFvEewLKMTG4U9VHboY9y4V
-        Q56qik0vKZdaAOv/snedAoYYqaVP0gbM6FIMcMFGIRWyomQNG18+30wVGXelg3Nc
-        YPX54DJnovQPXbP8blFSUQ70YfQRmGXUSwozUseusDeOuHjlDbCunqhUy2ZSRBL3
-        ZF7U7QrDFqsEbmooIbLmOgEh/hcym4nv6H/MZnU8t1MJh/FD48UGRwJvfmPPK2Ge
-        g90Clsp+SoFSVp/LMC3zYU6k1Rw7R7uyDptlcoVNK2FVWjW5/AQh/aFezG9eG+Y8
-        Vc07MqFLg27b5BgO5UWd1Yryd9NhP/8hRaQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1684533779; x=1684620179; bh=jIqJL/NnQpehuADJQuVaM4SynqOfVffT2Cc
-        4DfmU6kM=; b=Ajp0awkzr9rPoBGX5nlwRBH66sZo7ZLbKy/0JGwZVp2w4kV/ITo
-        mrStE/NCCXXtTM1FmvnTzkf190kh3fcGDQCUUfMz1G9intGx1KwmJ/8MuOqstIv/
-        G24BrIerw69QIqG2c13DtI4Y64USGZJ8+lQhXfsXmzxcRHNC756+2F2EWKCCXmYw
-        LGWvKQfUN1iagsNZCnBnAKUaSp9C5yOYVrPdNtfCxQiTOoUh1HnvlcEuoHNBaoot
-        GF5YLdeBmULL7QqE7a+oxAYziLP9H7/ecCSkb31P5r7zqmP4FalsPtoVq+P5UitI
-        Jpv2JS/pGFMZo3PQSK6qmdyomhUUaErzQ2Q==
-X-ME-Sender: <xms:E_JnZCvaBD0kAEPKoYVGQPpc6mFiRj2zhf3Jj5Y8HbpHSDPTrMve4g>
-    <xme:E_JnZHeirQhfcks7ZfzRIImr86kkgP780XxIjsYPktI7jzYQJrVrrX1nA534L2JC_
-    Z49gsgi7KaPLkgDMwg>
-X-ME-Received: <xmr:E_JnZNxu-aAIQCuye-VzJngY6j0qhq2zJcAV8Y7F8NquEVTSSTIjfCfT25q6NTXlJ12H>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeiiedgtdehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
-    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
-    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:E_JnZNNHgePKL4I82PoFcylcHYNvX2CjpuGwNEw3xOXoDgVCOoag-Q>
-    <xmx:E_JnZC_rWnF9bvYlivHNIYIkboVc70Wn5lvCaCixRvwwft07FuzSoQ>
-    <xmx:E_JnZFX5PAXk9MxV50Fhlq_P8MUEdby8xfICSjRq3W5Ft0v6ImvD3Q>
-    <xmx:E_JnZEKPYADbuIP7pcjk0Kz_uvXKH1m7gbUJseg_jZ6B1kcCafobEA>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 19 May 2023 18:02:58 -0400 (EDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: [PATCH] MIPS: Fix MIPS_O32_FP64_SUPPORT for 64bit CPUs before R2
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <alpine.DEB.2.21.2305192033550.50034@angie.orcam.me.uk>
-Date:   Fri, 19 May 2023 23:02:47 +0100
-Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+        Fri, 19 May 2023 18:04:20 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14FAEE4D;
+        Fri, 19 May 2023 15:04:15 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-24e25e2808fso3509859a91.0;
+        Fri, 19 May 2023 15:04:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684533854; x=1687125854;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zdZ68oUc3H7SB6Qm6IW5KKphTlw7I2zDsq2qS2mOj/8=;
+        b=rYfgINwR3urYVNTEe+KfUUjGgM/8J8nTfMFyL08QMLuyg5zs1EbbsbAPaj1OFXdkbO
+         B0r0s+IHkSozRPT246lSrZEX4mTJPLXXE3TpjM8Q24Xe293vRqXkzBXzHpDIdBJmCYDR
+         tDrTarTEUclvu51G5Shm7r205D86m7XiCf8rqA1o+2AMpAasR92xJo57Z4MSxWVb8HTz
+         P4iCkDVWUMMBhYtowdFNM0askwsFdnoY29Jm21D1KWQlvPZbd0nJyhSdbYVrkgf+QubP
+         FEXpsqptoeuj8HIjwAe9Ljbl/PEgZmWMh9NNJrQ5k2M/gwBYf8qffKz1BIEqvyvdqa1S
+         vSgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684533854; x=1687125854;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zdZ68oUc3H7SB6Qm6IW5KKphTlw7I2zDsq2qS2mOj/8=;
+        b=MdKG0uxD7Fp4Zi3719374pam7X3cI7MzLteNwn5wResTzKCLBIISa98c1n3mDrDaST
+         6rFFVRYNSnOJjWSD9VbE/djyeJxSJgbSUPCIf/xQgx7wCRPWLz6c3XLL50hU54Kcr0Am
+         KMOxBJcAgTdsRae7szOcDgNrgut8ux3NhyDI9/UIiy9oNI+ZNgOgroqO2ktzJgc08Cdn
+         pix743uw8SLPJsZgqozUD8c76O9NIQ9d/caGsLiVwHWYCB102J38dqM722Kq6KGwqRBs
+         yJOPdrvHaNBBbk5kGgQBNO4iYYe0AFs1w3gPhpRFLVSzk0OiIfDILVmLfbj3boCqRVHE
+         U+TA==
+X-Gm-Message-State: AC+VfDzq//51GARL9QVK87TGn4VOY/xJbUlzn01994ndj4Cv8B3wrxIw
+        BhhrTZEjjUQRRoubMLPdlE0Ksf34LKOVLRTU6MsCXOhN
+X-Google-Smtp-Source: ACHHUZ7Huu5zh0PplEq4pYaCX5efGavs4vWgv29aBI63xl0HIs0/bUcafgDG52nAQM3MspUvXzLAAoEw0xbxmVWO9yE=
+X-Received: by 2002:a17:90a:4ce5:b0:24e:3bb3:ea0c with SMTP id
+ k92-20020a17090a4ce500b0024e3bb3ea0cmr3364626pjh.10.1684533853854; Fri, 19
+ May 2023 15:04:13 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230506195325.876871-1-aford173@gmail.com> <CAHCN7xLfh6Ttoi29d6Vn1Hw75GEA8hd-XGec08ofeC176thkPg@mail.gmail.com>
+In-Reply-To: <CAHCN7xLfh6Ttoi29d6Vn1Hw75GEA8hd-XGec08ofeC176thkPg@mail.gmail.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Fri, 19 May 2023 17:04:01 -0500
+Message-ID: <CAHCN7xKHHKQgjtzS+KSHE9w++_udRJ1PRVcse=rD6-tZGVGcdQ@mail.gmail.com>
+Subject: Re: [PATCH] clk: imx: composite-8m: Add imx8m_divider_determine_rate
+To:     linux-clk@vger.kernel.org
+Cc:     aford@beaconembedded.com, Abel Vesa <abelvesa@kernel.org>,
+        Peng Fan <peng.fan@nxp.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <C1676532-0051-43D7-82D8-1E5697407C70@flygoat.com>
-References: <20230519163023.70542-1-jiaxun.yang@flygoat.com>
- <alpine.DEB.2.21.2305192033550.50034@angie.orcam.me.uk>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-X-Mailer: Apple Mail (2.3731.500.231)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, May 11, 2023 at 10:03=E2=80=AFPM Adam Ford <aford173@gmail.com> wro=
+te:
+>
+> On Sat, May 6, 2023 at 2:53=E2=80=AFPM Adam Ford <aford173@gmail.com> wro=
+te:
+> >
+> > Currently, certain clocks are derrived as a divider from their
+> > parent clock.  For some clocks, even when CLK_SET_RATE_PARENT
+> > is set, the parent clock is not properly set which can lead
+> > to some relatively inaccurate clock values.
+> >
+> > Unlike imx/clk-composite-93 and imx/clk-divider-gate, it
+> > cannot rely on calling a standard determine_rate function,
+> > because the 8m composite clocks have a pre-divider and
+> > post-divider. Because of this, a custom determine_rate
+> > function is necessary to determine the maximum clock
+> > division which is equivalent to pre-divider * the
+> > post-divider.
+> >
+> > With this added, the system can attempt to adjust the parent rate
+> > when the proper flags are set which can lead to a more precise clock
+> > value.
+> >
+> > On the imx8mplus, no clock changes are present.
+> > On the Mini and Nano, this can help achieve more accurate
+> > lcdif clocks. When trying to get a pixel clock of 31.500MHz
+> > on an imx8m Nano, the clocks divided the 594MHz down, but
+> > left the parent rate untouched which caused a calulation error.
+> >
+> > Before:
+> > video_pll              594000000
+> >   video_pll_bypass     594000000
+> >     video_pll_out      594000000
+> >       disp_pixel       31263158
+> >         disp_pixel_clk 31263158
+> >
+> > Variance =3D -236842 Hz
+> >
+> > After this patch:
+> > video_pll               31500000
+> >   video_pll_bypass      31500000
+> >     video_pll_out       31500000
+> >       disp_pixel        31500000
+> >         disp_pixel_clk  31500000
+> >
+> > Variance =3D 0 Hz
+> >
+> > All other clocks rates and parent were the same.
+> > Similar results on imx8mm were found.
+> >
+>
+> Peng / Abel,
+>
+> I was curious if either of you might have time to review this attempt
+> at enabling determine_rate on the 8m's.  I tested this on the 8mm,
+> 8mn, and 8mp, and found no regressions.
 
+Gentle nudge.
 
-> 2023=E5=B9=B45=E6=9C=8819=E6=97=A5 21:10=EF=BC=8CMaciej W. Rozycki =
-<macro@orcam.me.uk> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> On Fri, 19 May 2023, Jiaxun Yang wrote:
->=20
->> MIPS_O32_FP64_SUPPORT enables possibility of using all 32 FPRs on =
-32bit
->> kernel in case CPU implemented FR1. As FR1 is present on all 64bit =
-CPUs
->> following R4000's priviliged spec, there is no reason to limit such =
-support
->> to R2+ CPUs.
->=20
-> I guess one can do it and still run FPXX software, but I fail to see =
-what=20
-> gain it provides.  For FP32 it breaks things as accesses to =
-odd-numbered=20
-> FPRs will no longer get at the high part of a double value and for =
-FP64=20
-> there are no MTHC1/MFHC1 instructions required to access the high =
-part.
+It's been several weeks since the initial post and the DSI driver is
+now available for Mini and Nano, so having this in Mini and Nano will
+really help it sync various video sources.
 
-Actually software may access the high part by SDC1/LDC1.
-FP32 binaries are still going to run at FR0 mode.
+thanks,
 
->=20
-> What problem are you trying to solve?  And how did you verify this =
-patch?
+adam
 
-Was trying to deal a proprietary JIT software who want to enable FR1 via =
-prctl
-on Loongson-2F with 32 bit kernel.
-
->=20
->> --- a/arch/mips/kernel/fpu-probe.c
->> +++ b/arch/mips/kernel/fpu-probe.c
->> @@ -289,6 +289,23 @@ void cpu_set_fpu_opts(struct cpuinfo_mips *c)
->> c->options |=3D MIPS_CPU_FRE;
->> }
->>=20
->> + /* Fix up FIR for FPU earlier than R2 */
->> + if (!cpu_has_mips_r2_r6) {
->> + c->fpu_id |=3D MIPS_FPIR_S;
->> +#ifdef CONFIG_CPU_R4K_FPU
->> + /* All known R4000 class FPU implemented double */
->> + c->fpu_id |=3D MIPS_FPIR_D;
->> +#endif
->=20
-> Currently all FPUs we support implement double and we require that, so =
-no=20
-> need to make this piece conditional (I would use IS_ENABLED otherwise, =
-so=20
-> as not to clutter the source with #ifdef), but `c->fpu_id' is also =
-exposed=20
-> to the user via ptrace(2), so this has to reflect hardware and not =
-give a=20
-> synthesized value.
-
-Alas, I thought R2030 class FPU does not have double? Since MIPS-IV spec
-says SDC1 is introduced in MIPS II.
-
-Thanks
-Jiaxun
-
->=20
->  Maciej
-
+>
+> adam
+> > Fixes: 690dccc4a0bf ("Revert "clk: imx: composite-8m: Add support to de=
+termine_rate"")
+> > Signed-off-by: Adam Ford <aford173@gmail.com>
+> > ---
+> > V2:  Fix build warning found by build bot and fix prediv_value
+> >      and div_value because the values stored are the divisor - 1,
+> >      so we need to add 1 to the values to be correct.
+> >
+> > diff --git a/drivers/clk/imx/clk-composite-8m.c b/drivers/clk/imx/clk-c=
+omposite-8m.c
+> > index cbf0d7955a00..7a6e3ce97133 100644
+> > --- a/drivers/clk/imx/clk-composite-8m.c
+> > +++ b/drivers/clk/imx/clk-composite-8m.c
+> > @@ -119,10 +119,41 @@ static int imx8m_clk_composite_divider_set_rate(s=
+truct clk_hw *hw,
+> >         return ret;
+> >  }
+> >
+> > +static int imx8m_divider_determine_rate(struct clk_hw *hw,
+> > +                                     struct clk_rate_request *req)
+> > +{
+> > +       struct clk_divider *divider =3D to_clk_divider(hw);
+> > +       int prediv_value;
+> > +       int div_value;
+> > +
+> > +       /* if read only, just return current value */
+> > +       if (divider->flags & CLK_DIVIDER_READ_ONLY) {
+> > +               u32 val;
+> > +
+> > +               val =3D readl(divider->reg);
+> > +               prediv_value =3D val >> divider->shift;
+> > +               prediv_value &=3D clk_div_mask(divider->width);
+> > +               prediv_value++;
+> > +
+> > +               div_value =3D val >> PCG_DIV_SHIFT;
+> > +               div_value &=3D clk_div_mask(PCG_DIV_WIDTH);
+> > +               div_value++;
+> > +
+> > +               return divider_ro_determine_rate(hw, req, divider->tabl=
+e,
+> > +                                                PCG_PREDIV_WIDTH + PCG=
+_DIV_WIDTH,
+> > +                                                divider->flags, prediv=
+_value * div_value);
+> > +       }
+> > +
+> > +       return divider_determine_rate(hw, req, divider->table,
+> > +                                     PCG_PREDIV_WIDTH + PCG_DIV_WIDTH,
+> > +                                     divider->flags);
+> > +}
+> > +
+> >  static const struct clk_ops imx8m_clk_composite_divider_ops =3D {
+> >         .recalc_rate =3D imx8m_clk_composite_divider_recalc_rate,
+> >         .round_rate =3D imx8m_clk_composite_divider_round_rate,
+> >         .set_rate =3D imx8m_clk_composite_divider_set_rate,
+> > +       .determine_rate =3D imx8m_divider_determine_rate,
+> >  };
+> >
+> >  static u8 imx8m_clk_composite_mux_get_parent(struct clk_hw *hw)
+> > --
+> > 2.39.2
+> >
