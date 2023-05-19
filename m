@@ -2,271 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C35C2709CE8
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 18:52:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 053E0709CF0
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 18:53:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230522AbjESQwT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 12:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40372 "EHLO
+        id S231346AbjESQxm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 12:53:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbjESQwS (ORCPT
+        with ESMTP id S230391AbjESQxj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 12:52:18 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1159D2
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 09:52:16 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f13d8f74abso3995559e87.0
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 09:52:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684515135; x=1687107135;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2DjgA1oSFnHQ4T6jrg+cwQvWM2kbJwi4Mht8bmer9w4=;
-        b=bD5SZuxbEmenh+bIZ9h7qXdIyWVefZ/663ljisl0IiiYIlre6Eo5AcRKIL5SfF8UFt
-         Y5cp/rZkyH0wtkvf+Ec/mop9IBVz8dNg9tATgCuNQZCG0k+bWamEtt3zd50+7pCZU3xL
-         wDBsIy0q/eUcbMMBK5oj9cODU16IoYnOFgYEpKqjrcac6TgQEZUO9ZaRUXmGY01o/eTh
-         VJZvvhGiT2sq6JW4vxM2nlZKCOnoR4hfLrcx74dzK/OZF1hrHO2FKUtuF5vxEOmvSgVZ
-         6LqioT2CnphXAe9kg+6bqSVnQnATy5kx/1ZcRS0r6uOWRcZtNoWnrMfnKM3jyxJuiujb
-         J9aA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684515135; x=1687107135;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2DjgA1oSFnHQ4T6jrg+cwQvWM2kbJwi4Mht8bmer9w4=;
-        b=EyLdhtcKb/rrAc9Bmz6KmG4WGS/t9Pd942TDMn7obJ1Qasb+xEZqEjLUY/m7c030tX
-         uojxW4NS4Sb8+4MwytcARbOWyeLmvMtw1KcpH5WjE+v/RcLU1hp7BxR97nMSjjYUG73o
-         YTDK/YkIdIEgcEhC9/Ax7xqhaDEah7uShoFNfDNkySqr1WZ+VKiZRW5iSajqFwokhv8d
-         OMAhROZmAQJ7v20t6sZf9TtPc4GTpfmLQm7A5lNQYCKDB/kqbrw8ddEykDnHeT/nM32R
-         Q2flJK2koanxcl9MFadLmHw2D+zCKPUGsvXG0BDz4GK2ivFK9cJX0/23SjRbqrfBiQQP
-         ZN1w==
-X-Gm-Message-State: AC+VfDy4Ze2iMamoNE1plbureC8TZkpWPnz+wm37NyvWcjiTp9gFeNHw
-        3oUSUc4i0a65Q1LxWtepZ+rMIg==
-X-Google-Smtp-Source: ACHHUZ6YOnVvDEC7VEmTfNh32G3NHcYUKKtzhFaBOKXNc9qp7TPU42iCrIiTIu5+W5aG+vTZHFl5/A==
-X-Received: by 2002:a19:f00b:0:b0:4ed:bf01:3ff3 with SMTP id p11-20020a19f00b000000b004edbf013ff3mr801227lfc.43.1684515134862;
-        Fri, 19 May 2023 09:52:14 -0700 (PDT)
-Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
-        by smtp.gmail.com with ESMTPSA id s18-20020ac25fb2000000b004edb8fac1cesm648518lfe.215.2023.05.19.09.52.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 May 2023 09:52:14 -0700 (PDT)
-Message-ID: <f78d73b3-5cec-ca0e-fceb-b70f52fee29b@linaro.org>
-Date:   Fri, 19 May 2023 18:52:12 +0200
-MIME-Version: 1.0
+        Fri, 19 May 2023 12:53:39 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2499DB9;
+        Fri, 19 May 2023 09:53:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684515218; x=1716051218;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=B9ZSoLldXVUidDjWhScKU0flJ5XjWUwxzw5SkJeW1kU=;
+  b=R4vXHvmzJ7V2OUDadreUp7paPJO+5rcM02YZPEZRleN9DYEMr4IrUyXz
+   vKN0WTlUtny5ozrmo4jRjW5+Nfc7RBXRW9Un6miXj/OP4qnPbn1+oesOJ
+   Q6wbx/qNgscoOnKvgv8x/trvaqCuWcTy5P4lENi/LFMkOXjKron5AH3Ti
+   yhXhPQvoXla85UlnD8jiQRZNr0BM4q3WcAN6dFB3Oc7EVCv2AhLKNW0+K
+   39B5spWgLjcRmN0fkSWguTXh6P/s3KRS1WZoaZX9Qr9tvATnnottOHgKh
+   FxKrJ5m99hCV8dLU3f6wPSpF7evMr31Q6N3epPhtFpPPwUSKzZ4tRf+k0
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10715"; a="349937324"
+X-IronPort-AV: E=Sophos;i="6.00,177,1681196400"; 
+   d="scan'208";a="349937324"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 May 2023 09:53:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10715"; a="767676867"
+X-IronPort-AV: E=Sophos;i="6.00,177,1681196400"; 
+   d="scan'208";a="767676867"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga008.fm.intel.com with ESMTP; 19 May 2023 09:53:37 -0700
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 19 May 2023 09:53:37 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Fri, 19 May 2023 09:53:37 -0700
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.45) by
+ edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Fri, 19 May 2023 09:53:36 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VUdRZpM1zz+WpOWeOgJ+86ILj9RXoRewCbQjbMrZW0ND52X/AQ6IwzqqgBYAZSwLQmWqKsVW8Eef4tNX2Uduk/st3Pgo6YUJTY5bbHe87VjsJGlmzxIHQvgN7is/YOQqKM4LsE/+xT17rrKWMWeqaFKqa8L4Nt1SRJTQTnnBtuncvYAtjMxQyPo0RJPk/aYgjZWa1RxWT0ts11H7ZfoUWmEqZDdzRhtLK7yryd22c5+wE6qybI+ke1B0AplMRa2X4CS4nmlaOyVrwjewvGRO5CZW1Nc0haXm7o215e6pF1v4HobtgAUCmMxHn40++Wju+0AYHnA+QRuZprcW9c1F9g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Di19W1XF1oJP0mXEAoXmw1CKbArGdd4rqF4Ec0GodKw=;
+ b=lB+gp9lkLv5kxtwtZaiCcfYSTtzPZL88dQgBd63vUS3Yp7zhLSnMmNj1XXw+D4mIS23AXByJZgF/aGQa/bzyjG2IznqDmV62I8cAsip9MKW9+56Ui2esbTqquyxBOk3/XCVFt7Rwo1eFKgBztfKo+xCEjBUNMaEErJVqOvFRsXz3UpgKdm7v3qd8170Xc0+BsQh+JvJpqDAt97wkFIt/CooZze76AuWYHIbMGYImGvXnKevVSakbj1TblHZdvWpEaxuDLxBbB/8cHmX5hzg8J8gVSFXkiU7V1Hnl1JkM5+hW/9hOQbZUZVO6PemABSTdNYvItcU6gsHp6WgFFgFGcA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
+ by PH0PR11MB7710.namprd11.prod.outlook.com (2603:10b6:510:298::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19; Fri, 19 May
+ 2023 16:53:23 +0000
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::64d9:76b5:5b43:1590]) by DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::64d9:76b5:5b43:1590%2]) with mapi id 15.20.6411.019; Fri, 19 May 2023
+ 16:53:23 +0000
+Message-ID: <ac1895cc-a7b0-e40c-7dfc-8ab301f39893@intel.com>
+Date:   Fri, 19 May 2023 18:52:13 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH 3/4] clk: qcom: camcc-sm8550: Add camera clock controller
- driver for SM8550
+Subject: Re: [PATCH RESEND bpf-next 02/15] ice: make RX HW timestamp reading
+ code more reusable
 Content-Language: en-US
-To:     Jagadeesh Kona <quic_jkona@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Satya Priya Kakitapalli <quic_skakitap@quicinc.com>
-References: <20230519155602.6642-1-quic_jkona@quicinc.com>
- <20230519155602.6642-4-quic_jkona@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230519155602.6642-4-quic_jkona@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Larysa Zaremba <larysa.zaremba@intel.com>
+CC:     <bpf@vger.kernel.org>, Stanislav Fomichev <sdf@google.com>,
+        "Alexei Starovoitov" <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "Andrii Nakryiko" <andrii@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "Martin KaFai Lau" <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Anatoly Burakov <anatoly.burakov@intel.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        "Magnus Karlsson" <magnus.karlsson@gmail.com>,
+        Maryam Tahhan <mtahhan@redhat.com>,
+        <xdp-hints@xdp-project.net>, <netdev@vger.kernel.org>,
+        <intel-wired-lan@lists.osuosl.org>, <linux-kernel@vger.kernel.org>
+References: <20230512152607.992209-1-larysa.zaremba@intel.com>
+ <20230512152607.992209-3-larysa.zaremba@intel.com>
+From:   Alexander Lobakin <aleksander.lobakin@intel.com>
+In-Reply-To: <20230512152607.992209-3-larysa.zaremba@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: LO2P265CA0057.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:60::21) To DM6PR11MB3625.namprd11.prod.outlook.com
+ (2603:10b6:5:13a::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|PH0PR11MB7710:EE_
+X-MS-Office365-Filtering-Correlation-Id: c3307129-48a2-49f7-0de9-08db58898ec2
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: k5MWNKe7mNO1Ok9Qyrzgy5HWUxMz7hmoj6XvcmsDeQMFGAD/kKIViOtS706IeimTTVA0fRpkEneSUI+SDtZKazHaoobWAfMokPLTpJOrwKxVMFst/6x2WdzQZXfoFL9jBiFky5A7BG2OkDnatbkK0UmsIPZigj0oKzGG0I4ZwCrSdz6vMQ/eOVNfgk+H6Br8tgvXzjE2NgKctSE8ExLK42PpeXquKgkmRbRmbU44Kb5N7xeOHlOP1iApsn4p9rwdawnqzr/V/I2oiy2OCnjHU2T9COw9WUwnBZUb/64s+3+xU7WY9XOqeO5l70B9YcP83wCWjYPBcWp6XsEoDZyuxIZgm6D2FTYkr7vzMFIQd+OfYPnNHZYRTXXUrYKptuQ8LO0/8ROCcfV/2kjxpwRDf+LaufcP4taegoXy6ufT/Wlk8zidn/mIqHtAhabwTLDT7RBCS47RGQ6FzQrLgYSotbHRTm8zUrWlc/4Nw8hgwR3TjKuM10JcqjyMBGw6bTgqiDcPOJyURhIRNPsHTYBi1rI6dbZw/trF/luYd950Cap/fBxnhqteIU0ZY3u93FW3Fs8zv0DBHwHv8vdxj0hlvuncwblUm1j+ThzRwsrFLWAF8D4JpCvXKUykBXOiTXZ8mdJ8leM7fSqStkwNWqkpCQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(366004)(396003)(376002)(346002)(39860400002)(451199021)(8676002)(2906002)(8936002)(478600001)(4326008)(31686004)(41300700001)(6862004)(6636002)(316002)(54906003)(37006003)(7416002)(6486002)(66476007)(66946007)(66556008)(5660300002)(6666004)(36756003)(6506007)(6512007)(26005)(82960400001)(186003)(83380400001)(86362001)(31696002)(38100700002)(2616005)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?N2lyc05oa1FuQjVWOXc1QnZtSjFyTE9pdEJ4Q09qMTFYU25vd2R6Yy82b1FG?=
+ =?utf-8?B?TjBUYjFTVkh0UXhCVmtGRWUxcjIzcHBOL1dXN0RTUkVSdVJoSWptVDJqWWhG?=
+ =?utf-8?B?R082bWRHaTR0YXkzQTRycXVMeHFOOEhqaHRLMGlaVklKSGd1eVJ3Wjd3ZWF4?=
+ =?utf-8?B?TkFVRnh2U3FRbFJ1MisyWUZxVElpWmYyQSs3T2pzczZCdVE4b1dPWklXNlBa?=
+ =?utf-8?B?L2ZIVEFtd1B5THZSc2l1Zm93dHVQdnJLWHU3NVFNK3RTdnV2K2pON2k5VDBL?=
+ =?utf-8?B?SCt1TnNObGVJTzk5ZzNaRGpMN2pTa29yNU1lejdwL3JjMEY3RnVSRTRhZHY3?=
+ =?utf-8?B?dlBjMFVmZ2cvSWVpaVkyb1BzbENLWWpFVEwxNXhxa3F5eTEvcVNoTVpDcnlF?=
+ =?utf-8?B?cEduTGdBOWswdFdBRjN4NURGK29tbHl2M09ET3Y4VUVZVGRYTHlMeDJqakFR?=
+ =?utf-8?B?aHJUUDFvWnRzblJ5elZyQlhoVDdUTi9EVlZVY0RodGVwdExHSzVhbTJSM0Rx?=
+ =?utf-8?B?OEJxNkVPSGFTUEdnUlpuMWhtbEE0NTJiS1JHQ3JqcUxTVXg0N1JLeXp4VzFD?=
+ =?utf-8?B?STBWUDhZTkNONWloOGxSV3hwMWlOaFFSTWh6a3lyUFE5VjZFMklkM0xwV1BL?=
+ =?utf-8?B?Zy81UjJ0VDBDTlpZSjQxNUlvam4yV0RnYzNiK2hLUWdxVy9MSnV3dmZBUXFT?=
+ =?utf-8?B?M0tjMEJwNlR4NzdTWTdMbE4rOWhNVVl0NWZmK3pYMVhKZzV5Wk5HR3lzMWg2?=
+ =?utf-8?B?SmV5bXlwOWVjZVRETC84dmlFTTB6bnRtK21BeHppWjJJcGxhTzduTWRWTXA1?=
+ =?utf-8?B?SE40US9xNXI3RWtUZVEzRUFQSmJjeVFlZGNwVkRKUW53YTdFZEdkN0VMMVcy?=
+ =?utf-8?B?NVY0UlpOQnZlYlV0dW5Va3JIWHBNb1l0bHBUUmJBUTkyT0ZxZjNZbkdqU3Zl?=
+ =?utf-8?B?MlhiNnNMQWh2U3ZRbTIxSFBjOFRlVE91eWFneERyckwzWnQ2WGIrcHkzUXJi?=
+ =?utf-8?B?a0M4eUlNZzU1S3I1TGQvMzdJa0lrU1VBVTN5VkMyZU9ydjFTZDBJTU5TMTJt?=
+ =?utf-8?B?bTVrcmFrdkgxcjE2Y2sxQk9sSVdJcUlxRUt3R2IxVXB3cTN1d3VwUDJwVFJX?=
+ =?utf-8?B?SkJVU2FKellSMDZ2dldKeU9vZFluMzNkZTNEV3ZONnJsRjltVGZZZDlURlFj?=
+ =?utf-8?B?ZWR4cktlQXpiKy9nbG5vL3JWeTRKV1RLZVh6V0twS2lrOW81MURjTkIwNk1C?=
+ =?utf-8?B?ZjZzTEFMQm9lakJ3d2lvQUY2NklvWm50cGN3dG1VbmhTWmxmSmpObC9BTkRC?=
+ =?utf-8?B?UDZ6bk5uM1RZTE5obWJaaVNlK3NnQXkwVi9LTVBHVnZpR0JDeVNWU3VnOVRo?=
+ =?utf-8?B?dU52TXRyMDBJcG5INGFGR3UxQnhUZDBrR3dQbjZlNTB6Q1MyM3ZwU2o2OHhv?=
+ =?utf-8?B?ZmhZaWpRTE44Z0Z0T251RTVKT1Fud0JtZkZMMjZEZzA3R2kxMFk5Tk9UT3RI?=
+ =?utf-8?B?azl2eHE0OWNLcThDWlc3dUdTU1NKeVE3YmUycVVCZGN0dEdYeVE1L3JvcDB1?=
+ =?utf-8?B?OXgxZUp0U25RcVBqQnBBQ1hQeHovZ2dEaGdnVFpZbldrSVFwK2Z4SUNYZXcv?=
+ =?utf-8?B?dkwxRzIwc2ZRQVA2UjJQZ0lOeExrWmhRbVU0c3pDUmZqa1E1SEViUVB6djFP?=
+ =?utf-8?B?M21MR21tTkdaSHJ0ZUhDTHM0Y2o4bHpwUERJQmFra1VNV1BwbzlGaEpqWGEv?=
+ =?utf-8?B?aDE5ZEFQM3JGRVBLN1VMS28wRWl1akI1TFFiUmpHVWwvZGVNamJmZHdyT054?=
+ =?utf-8?B?WWpwcFdGMjhQTFpBUWZrWWJaUUJmRnM0T1VBNktkV0JHMmF3c216N0IxZDZS?=
+ =?utf-8?B?M0ZHazVCTlBjZ2RkYkJqYjJ3MUl0RCtUSU81c09LWEp0cVFjWVhLbitVOTBn?=
+ =?utf-8?B?RURBWkJTTDYyWHRlVkFOK0NpckIzRUU5OWlBd3FLS3VkN3BYT283VFJTcFJH?=
+ =?utf-8?B?MzlEOVV2ZnQ0WkJYVEJ4LzZpMWZSNm1TQmJsY0Vjc1ZFamlDK2JRRjB1VkJ0?=
+ =?utf-8?B?QzZLRE9VV1Z2YUFIM3pZM2pTeThBMng2Q29mUUpnZDlnb09YS0Z4dUUzNXFn?=
+ =?utf-8?B?VEV3SUVsZ2MvN3phWmFSQ29RSWhwTnZOc0VVVnh4U1d5ZWhyeFJTaDJmeUFP?=
+ =?utf-8?B?ZHc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: c3307129-48a2-49f7-0de9-08db58898ec2
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 May 2023 16:53:23.5607
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: bNfyA1XnvurKoetgCdVyLnS1/SuFIq3CLNIR4iTuc0qzyfL0MDJ4BLJkvBTxkz0BvqgwVLLN0jvp1sP9SYa8MMHqH/mdLJR0IImsif93GZc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB7710
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Larysa Zaremba <larysa.zaremba@intel.com>
+Date: Fri, 12 May 2023 17:25:54 +0200
 
+> Previously, we only needed RX HW timestamp in skb path,
+> hence all related code was written with skb in mind.
+> But with the addition of XDP hints via kfuncs to the ice driver,
+> the same logic will be needed in .xmo_() callbacks.
 
-On 19.05.2023 17:56, Jagadeesh Kona wrote:
-> Add support for the camera clock controller for camera clients to be
-> able to request for camcc clocks on SM8550 platform.
-> 
-> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
-> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
-> ---
->  drivers/clk/qcom/Kconfig        |    7 +
->  drivers/clk/qcom/Makefile       |    1 +
->  drivers/clk/qcom/camcc-sm8550.c | 3572 +++++++++++++++++++++++++++++++
->  3 files changed, 3580 insertions(+)
->  create mode 100644 drivers/clk/qcom/camcc-sm8550.c
-> 
-> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-> index 6bb9b4aff047..c8eccd428736 100644
-> --- a/drivers/clk/qcom/Kconfig
-> +++ b/drivers/clk/qcom/Kconfig
-> @@ -700,6 +700,13 @@ config SM_CAMCC_8450
->  	  Support for the camera clock controller on SM8450 devices.
->  	  Say Y if you want to support camera devices and camera functionality.
->  
-> +config SM_CAMCC_8550
-> +	tristate "SM8550 Camera Clock Controller"
-> +	select SM_GCC_8550
-> +	help
-> +	  Support for the camera clock controller on SM8550 devices.
-> +	  Say Y if you want to support camera devices and camera functionality.
-> +
->  config SM_DISPCC_6115
->  	tristate "SM6115 Display Clock Controller"
->  	depends on SM_GCC_6115
-> diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
-> index f0b95fc217aa..2b1fcd5c920a 100644
-> --- a/drivers/clk/qcom/Makefile
-> +++ b/drivers/clk/qcom/Makefile
-> @@ -100,6 +100,7 @@ obj-$(CONFIG_SDX_GCC_65) += gcc-sdx65.o
->  obj-$(CONFIG_SM_CAMCC_6350) += camcc-sm6350.o
->  obj-$(CONFIG_SM_CAMCC_8250) += camcc-sm8250.o
->  obj-$(CONFIG_SM_CAMCC_8450) += camcc-sm8450.o
-> +obj-$(CONFIG_SM_CAMCC_8550) += camcc-sm8550.o
->  obj-$(CONFIG_SM_DISPCC_6115) += dispcc-sm6115.o
->  obj-$(CONFIG_SM_DISPCC_6125) += dispcc-sm6125.o
->  obj-$(CONFIG_SM_DISPCC_6350) += dispcc-sm6350.o
-> diff --git a/drivers/clk/qcom/camcc-sm8550.c b/drivers/clk/qcom/camcc-sm8550.c
-> new file mode 100644
-> index 000000000000..2c3d2436da0f
-> --- /dev/null
-> +++ b/drivers/clk/qcom/camcc-sm8550.c
-> @@ -0,0 +1,3572 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2023, Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +
-> +#include <linux/clk-provider.h>
-> +#include <linux/module.h>
-> +#include <linux/of_device.h>
-> +#include <linux/pm_runtime.h>
-> +#include <linux/regmap.h>
-> +
-> +#include <dt-bindings/clock/qcom,sm8550-camcc.h>
-> +
-> +#include "clk-alpha-pll.h"
-> +#include "clk-branch.h"
-> +#include "clk-rcg.h"
-> +#include "clk-regmap.h"
-> +#include "common.h"
-> +#include "gdsc.h"
-> +#include "reset.h"
-> +
-> +enum {
-> +	DT_BI_TCXO,
-> +	DT_BI_TCXO_AO,
-> +	DT_SLEEP_CLK,
-> +};
-> +
-> +enum {
-> +	P_BI_TCXO,
-> +	P_CAM_CC_PLL0_OUT_EVEN,
-> +	P_CAM_CC_PLL0_OUT_MAIN,
-> +	P_CAM_CC_PLL0_OUT_ODD,
-> +	P_CAM_CC_PLL10_OUT_EVEN,
-> +	P_CAM_CC_PLL11_OUT_EVEN,
-> +	P_CAM_CC_PLL12_OUT_EVEN,
-While it makes sense for a computer, I think it would make more
-sense to keep the >=10 entries after 9
-
-> +	P_CAM_CC_PLL1_OUT_EVEN,
-> +	P_CAM_CC_PLL2_OUT_EVEN,
-> +	P_CAM_CC_PLL2_OUT_MAIN,
-> +	P_CAM_CC_PLL3_OUT_EVEN,
-> +	P_CAM_CC_PLL4_OUT_EVEN,
-> +	P_CAM_CC_PLL5_OUT_EVEN,
-> +	P_CAM_CC_PLL6_OUT_EVEN,
-> +	P_CAM_CC_PLL7_OUT_EVEN,
-> +	P_CAM_CC_PLL8_OUT_EVEN,
-> +	P_CAM_CC_PLL9_OUT_EVEN,
-> +	P_CAM_CC_PLL9_OUT_ODD,
-> +	P_SLEEP_CLK,
-> +};
-> +
-> +static const struct pll_vco lucid_ole_vco[] = {
-> +	{ 249600000, 2300000000, 0 },
-> +};
-> +
-> +static const struct pll_vco rivian_ole_vco[] = {
-> +	{ 777000000, 1285000000, 0 },
-> +};
-> +
-> +static const struct alpha_pll_config cam_cc_pll0_config = {
-> +	.l = 0x4400003E,
-Lowercase hex, everywhere, please.
-
-> +	.alpha = 0x8000,
-> +	.config_ctl_val = 0x20485699,
-> +	.config_ctl_hi_val = 0x00182261,
-> +	.config_ctl_hi1_val = 0x82AA299C,
-> +	.test_ctl_val = 0x00000000,
-> +	.test_ctl_hi_val = 0x00000003,
-> +	.test_ctl_hi1_val = 0x00009000,
-> +	.test_ctl_hi2_val = 0x00000034,
-> +	.user_ctl_val = 0x00008400,
-> +	.user_ctl_hi_val = 0x00000005,
-> +};
-> +
 [...]
 
-> +
-> +	clk_lucid_ole_pll_configure(&cam_cc_pll0, regmap, &cam_cc_pll0_config);
-> +	clk_lucid_ole_pll_configure(&cam_cc_pll1, regmap, &cam_cc_pll1_config);
-> +	clk_lucid_ole_pll_configure(&cam_cc_pll10, regmap, &cam_cc_pll10_config);
-Same as the first comment
+> @@ -2176,9 +2174,8 @@ ice_ptp_rx_hwtstamp(struct ice_rx_ring *rx_ring,
+>  	ts_high = le32_to_cpu(rx_desc->wb.flex_ts.ts_high);
+>  	ts_ns = ice_ptp_extend_32b_ts(cached_time, ts_high);
+>  
+> -	hwtstamps = skb_hwtstamps(skb);
+> -	memset(hwtstamps, 0, sizeof(*hwtstamps));
+> -	hwtstamps->hwtstamp = ns_to_ktime(ts_ns);
+> +	*dst = ts_ns;
+> +	return true;
 
-Konrad
-> +	clk_lucid_ole_pll_configure(&cam_cc_pll11, regmap, &cam_cc_pll11_config);
-> +	clk_lucid_ole_pll_configure(&cam_cc_pll12, regmap, &cam_cc_pll12_config);
-> +	clk_rivian_ole_pll_configure(&cam_cc_pll2, regmap, &cam_cc_pll2_config);
-> +	clk_lucid_ole_pll_configure(&cam_cc_pll3, regmap, &cam_cc_pll3_config);
-> +	clk_lucid_ole_pll_configure(&cam_cc_pll4, regmap, &cam_cc_pll4_config);
-> +	clk_lucid_ole_pll_configure(&cam_cc_pll5, regmap, &cam_cc_pll5_config);
-> +	clk_lucid_ole_pll_configure(&cam_cc_pll6, regmap, &cam_cc_pll6_config);
-> +	clk_lucid_ole_pll_configure(&cam_cc_pll7, regmap, &cam_cc_pll7_config);
-> +	clk_lucid_ole_pll_configure(&cam_cc_pll8, regmap, &cam_cc_pll8_config);
-> +	clk_lucid_ole_pll_configure(&cam_cc_pll9, regmap, &cam_cc_pll9_config);
-> +
-> +	/*
-> +	 * Keep clocks always enabled:
-> +	 *	cam_cc_gdsc_clk
-> +	 *	cam_cc_sleep_clk
-> +	 */
-> +	regmap_update_bits(regmap, 0x1419c, BIT(0), BIT(0));
-> +	regmap_update_bits(regmap, 0x142cc, BIT(0), BIT(0));
-> +
-> +	ret = qcom_cc_really_probe(pdev, &cam_cc_sm8550_desc, regmap);
-> +
-> +	pm_runtime_put(&pdev->dev);
-> +
-> +	return ret;
-> +}
-> +
-> +static struct platform_driver cam_cc_sm8550_driver = {
-> +	.probe = cam_cc_sm8550_probe,
-> +	.driver = {
-> +		.name = "cam_cc-sm8550",
-> +		.of_match_table = cam_cc_sm8550_match_table,
-> +	},
-> +};
-> +
-> +static int __init cam_cc_sm8550_init(void)
+Can't we use the same I wrote in the prev. comment, i.e. return 0 or
+timestamp? I don't think ts == 0 is valid.
+
+>  }
+>  
+>  /**
+
+[...]
+
+> + * The driver receives a notification in the receive descriptor with timestamp.
+> + * The timestamp is in ns, so we must convert the result first.
+> + */
+> +static void
+> +ice_ptp_rx_hwts_to_skb(struct ice_rx_ring *rx_ring,
+> +		       union ice_32b_rx_flex_desc *rx_desc,
+> +		       struct sk_buff *skb)
 > +{
-> +	return platform_driver_register(&cam_cc_sm8550_driver);
-> +}
-> +subsys_initcall(cam_cc_sm8550_init);
+> +	struct skb_shared_hwtstamps *hwtstamps;
+> +	u64 ts_ns;
 > +
-> +static void __exit cam_cc_sm8550_exit(void)
-> +{
-> +	platform_driver_unregister(&cam_cc_sm8550_driver);
-> +}
-> +module_exit(cam_cc_sm8550_exit);
+> +	if (!ice_ptp_copy_rx_hwts_from_desc(rx_ring, rx_desc, &ts_ns))
+> +		return;
 > +
-> +MODULE_DESCRIPTION("QTI CAM_CC SM8550 Driver");
-> +MODULE_LICENSE("GPL");
+> +	hwtstamps = skb_hwtstamps(skb);
+> +	memset(hwtstamps, 0, sizeof(*hwtstamps));
+> +	hwtstamps->hwtstamp = ns_to_ktime(ts_ns);
+
+Ok, my optimizations aren't in this series :D
+If you look at the hwtimestamps in skb, you'll see all that can be
+minimized to just:
+
+	*skb_hwtstamps(skb) = (struct skb_shared_hwtstamps){
+		.hwtstamp	= ns_to_ktime(ts_ns),
+	};
+
+Compiler will probably do its job, but I wouldn't always rely on it.
+Sometimes it's even able to not expand memset(8 bytes) to *(u64 *) = 0.
+
+> +}
+> +
+>  /**
+>   * ice_process_skb_fields - Populate skb header fields from Rx descriptor
+>   * @rx_ring: Rx descriptor ring packet is being transacted on
+> @@ -210,7 +235,7 @@ ice_process_skb_fields(struct ice_rx_ring *rx_ring,
+>  	ice_rx_csum(rx_ring, skb, rx_desc, ptype);
+>  
+>  	if (rx_ring->ptp_rx)
+> -		ice_ptp_rx_hwtstamp(rx_ring, rx_desc, skb);
+> +		ice_ptp_rx_hwts_to_skb(rx_ring, rx_desc, skb);
+>  }
+>  
+>  /**
+
+Thanks,
+Olek
