@@ -2,115 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DF38709148
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 10:04:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 395B8709154
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 10:06:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbjESIEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 04:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46686 "EHLO
+        id S229609AbjESIGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 04:06:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbjESID6 (ORCPT
+        with ESMTP id S229492AbjESIGj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 04:03:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0916519A9;
-        Fri, 19 May 2023 01:03:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52343618D3;
-        Fri, 19 May 2023 08:03:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05839C4339B;
-        Fri, 19 May 2023 08:03:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684483393;
-        bh=3jJWIcZgZvkk6Y5TXMWAviv665TtXazo1GYVATenEgk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=oOC9D1zeDvY/rgTWO34r/1nK5ramY/l3sd7exY4dWp58CH5VMEAR0FGDjpHZZieHR
-         IDNuWiSZ2L4e8OZbrkxxTuiWXURErRCaJJl0eq9o5FJ3Q3IIjXHiEmvU8W84wgKPfG
-         DKMsz2BTGy8qzBuNGtZ9snqIRPX4+Qtg2XT5LxND9wj/UdTDsb6pyIUwWfhJjUqmGa
-         g0puIgjBjq3j9iFdRG5n+44yxUl/3NhlHHQbv4hYNFE3u/phBToyHzg+bStn20lBXH
-         hggvLBWpkKhA10hk8vc7SJXOEQisD6wxjfKt47JbrtFjxGTgHpmS8htn3oOY7RIg8z
-         3ELes+8fH63GA==
-Date:   Fri, 19 May 2023 09:03:08 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        Athanasios Oikonomou <athoik@gmail.com>,
-        linux-media@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH] media: frontend.h.rst.exceptions: add more dvb define
- exceptions
-Message-ID: <20230519090308.0e53eccd@sal.lan>
-In-Reply-To: <20230518234735.20289-1-rdunlap@infradead.org>
-References: <20230518234735.20289-1-rdunlap@infradead.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        Fri, 19 May 2023 04:06:39 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DA3CDC;
+        Fri, 19 May 2023 01:06:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Kd5z80OJj0dUJeDURr2Zi4Eua7ZzLvvTOjXs2zK93gI=; b=LAMUe46zdzmbVFG55DnnX4RtSF
+        4UrKdMQ97G7nP+GvDW6AS9tuP3lrT87WlHTyqfIesu/MMCSA7BKfNZhRWwQX2GMEn4QaCYW2N0+b5
+        Df76lHAk8f8BQxbYYaFB1tdNxJX4SG1adc66FG9zMz1gVPp+N0iygK9LW3rLnudfcWkijwBGHGb7s
+        5LiU0MGiY2lVXBEGJcrY83ehpzF8y/Zd2Yrrz5K8/vIxUiaWnNm463hkoriYQhLgeaEZf7iPJKZju
+        k6VA8+bdI45OyAbPbYSF6kjLYn9FX09OKNrAQbWy4lj/Z14ED+XDFPbIipYavw2yGE+TYeC0RHeBT
+        x7TtPPPQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pzv7y-00FSh2-2h;
+        Fri, 19 May 2023 08:06:18 +0000
+Date:   Fri, 19 May 2023 01:06:18 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v20 00/32] splice, block: Use page pinning and kill
+ ITER_PIPE
+Message-ID: <ZGct+qt/cHRcgJ+Y@infradead.org>
+References: <20230519074047.1739879-1-dhowells@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230519074047.1739879-1-dhowells@redhat.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Randy,
-
-Em Thu, 18 May 2023 16:47:35 -0700
-Randy Dunlap <rdunlap@infradead.org> escreveu:
-
-> Building documentation reports multiple warnings for undefined DVB
-> frontend labels:
+On Fri, May 19, 2023 at 08:40:15AM +0100, David Howells wrote:
+> Hi Jens, Al, Christoph,
 > 
-> Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-11-45'
-> Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-4-15'
-> Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-14-45'
-> Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-7-15'
-> Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-11-45'
-> Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-4-15'
-> Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-14-45'
-> Documentation/output/frontend.h.rst:6: WARNING: undefined label: 'fec-7-15'
+> The first half of this patchset kills off ITER_PIPE to avoid a race between
+> truncate, iov_iter_revert() on the pipe and an as-yet incomplete DMA to a
+> bio with unpinned/unref'ed pages from an O_DIRECT splice read.  This causes
+> memory corruption[2].  Instead, we use filemap_splice_read(), which invokes
+> the buffered file reading code and splices from the pagecache into the
+> pipe; direct_splice_read(), which bulk-allocates a buffer, reads into it
+> and then pushes the filled pages into the pipe; or handle it in
+> filesystem-specific code.
 
-Thanks for the patch. FYI, I already merged yesterday a fix identical
-to your patch:
-
-	https://git.linuxtv.org/media_stage.git/commit/?id=8bc27fa5d7763d376a992a1638475987ed4807e7
-
-Regards,
-Mauro
-
-
-> 
-> so add those symbols to the ignore list to prevent the build warnings.
-> 
-> Fixes: 1825788e2a96 ("media: dvb: add missing DVB-S2X FEC parameter values")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/linux-media/202305162245.wtaLIXf3-lkp@intel.com/
-> Cc: Athanasios Oikonomou <athoik@gmail.com>
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: linux-media@vger.kernel.org
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: linux-doc@vger.kernel.org
-> ---
->  Documentation/userspace-api/media/frontend.h.rst.exceptions |    4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff -- a/Documentation/userspace-api/media/frontend.h.rst.exceptions b/Documentation/userspace-api/media/frontend.h.rst.exceptions
-> --- a/Documentation/userspace-api/media/frontend.h.rst.exceptions
-> +++ b/Documentation/userspace-api/media/frontend.h.rst.exceptions
-> @@ -142,6 +142,10 @@ ignore symbol FEC_26_45
->  ignore symbol FEC_28_45
->  ignore symbol FEC_32_45
->  ignore symbol FEC_77_90
-> +ignore symbol FEC_11_45
-> +ignore symbol FEC_4_15
-> +ignore symbol FEC_14_45
-> +ignore symbol FEC_7_15
->  
->  ignore symbol TRANSMISSION_MODE_AUTO
->  ignore symbol TRANSMISSION_MODE_1K
+If there's a clearly separate first and second half of a 32 patch
+series, it might really make sense to just split it instead of exceeding
+every normal attention window..
