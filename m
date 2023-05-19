@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB4F07099DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 16:32:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE8567099DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 19 May 2023 16:32:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231605AbjESOcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 10:32:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52936 "EHLO
+        id S231410AbjESOco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 10:32:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232127AbjESOc1 (ORCPT
+        with ESMTP id S231906AbjESOck (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 10:32:27 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 579811727
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 07:32:00 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-2536b4b3398so1522389a91.3
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 07:32:00 -0700 (PDT)
+        Fri, 19 May 2023 10:32:40 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39C64E60
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 07:32:11 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-2537909d28cso777896a91.0
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 07:32:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684506719; x=1687098719;
+        d=linaro.org; s=google; t=1684506723; x=1687098723;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bkQkFXSrqR5MDMbqBcH7Nxin9P2rGGa9soJkqC/yxfY=;
-        b=bwm/X4pMr8MwYBpFxgbtrdPEnQVZlktmQcTkB5+TrS8zlCJkEN8VDgewXp8Ju/XmsW
-         mobigOKrqd9SV8PvXBlhoPTyVhviDEV/X5tvPoZcG7SQSDEtVrB5SKFi50u+ATW1k61k
-         oLdabeZhinepamdwCimBMJjcOVb0DTPdK3R0eVrNpt4M8hQ8DZVhwz3gAq3Jwxle6E6/
-         KUTsDj3ReTi0IVug0CTJxF3n+zApxOsazseIcWr30rl4JA4KzXosl6O57j7B1JKTL0Zf
-         A0U9p9GQ3P5mosV8zHs6YZO8DrMqALXEybry6CV0Ad1eLs5h2UjgqZf7twHncsie+rTn
-         RCnw==
+        bh=BAHgbKUGLDFGyzp+XWYZ2sseIunYBsYQIO/Xldf05CU=;
+        b=GvXGvNsaT7/5inshDPfJkzj0LWRNaGcBA3Ja8kveCoTlHDPcoyIo62P2bRx/jlufmp
+         5ND1hfWqZ7qMQbxbjvT19uSrYM0qycwqu++VsvfHja0ofRz2g7WzSIH++lohamsrwWPb
+         Br1/35TWmItJVR+41jgSKnCl3ru/XHdzFuDiK5bDf6mnriLKSA1rb9+65F539O96rYE7
+         P1ke++e4vMO58Phpz29rS6is6e3cq/pWnWpDOy0OcoBJF/VIZ18TEawpwD99DUmfJ0qn
+         F05QWqEXVVDUhjJjK2pS8vHBlekfiChQhY6Tnoh1M09SlNCw6pWJqsoChpm5ggulP3wY
+         82Ag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684506719; x=1687098719;
+        d=1e100.net; s=20221208; t=1684506723; x=1687098723;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bkQkFXSrqR5MDMbqBcH7Nxin9P2rGGa9soJkqC/yxfY=;
-        b=jefzzTjuL/pUqN2Wo8K2YporCCkVhqZK7mIuYU7hNp49cpCSMlE19pzyjN1Dg6sboE
-         0yb3KVZK6joADXSZAdY1ZzBQOsLtH29IfwrMfvY4rgXhXupOx/ZAGMUNWRen2fTdgL6a
-         G3PR6i6AdbEz65jzGCJHRFZSJnBuyJOpNSXT+60VNJEIzPB5NRLA/N5ldQM0ev89uZGo
-         CNe+WlEE8H6NgwqhvJs9uIkHPVHaRjMcN5/fZyh4HkknZFvRHFCVRLd47q4TKVyudixn
-         R+uMw2l06TVJUWgHsu4+0oMwwTz2UWqVwMmC8zK4nCgHFUK0Up6f0a/0BfnktOTkKJxO
-         6gNQ==
-X-Gm-Message-State: AC+VfDzf7rJ7Se8mADHQurBbnVExwtSJjfwPSxnMXEmr9uATBVgTl7x0
-        hJ39e1hnz+kA3H2ZMfAHGOc0
-X-Google-Smtp-Source: ACHHUZ7L4BNRnO2AO8+x/0VeQ3qqRfXjKD6RjZHEvBFJ27gt0YQqcifFfTec2K/wR2chakMau/BgCw==
-X-Received: by 2002:a17:90b:46c1:b0:250:4847:426a with SMTP id jx1-20020a17090b46c100b002504847426amr2284620pjb.11.1684506719250;
-        Fri, 19 May 2023 07:31:59 -0700 (PDT)
+        bh=BAHgbKUGLDFGyzp+XWYZ2sseIunYBsYQIO/Xldf05CU=;
+        b=OFMirUBNDFYXt8gsp5jtyGQQJygao3pjjjFZApI1Itq/Rt87USGGra5sJ7kGlo9yKq
+         dN72hPhCh1V1GgPLSe+uQjjvIFD8/ei+ML6gwCrxpHs0L/YWKS4DjL7Ia1mh0HdrpIxK
+         FoE0EXQQzc0hExiKPg3A1TMRJ0wsE5G8/PtR2W9vJ1nCfJnQgVVoYItUMbebQQ4xR2wz
+         cPzgCETPpDz8GG+q01+MRH/jLEIqwvfALQk/9IIqUKi9qNy3e46munn5HfJsxH28PY6R
+         2FKAinf2LGgF9SfnHLp0z2mfDf7y6xt9xdbzzOWk4pl5pSO/LGrgDrC9tF1hKxdz2Elj
+         W2wg==
+X-Gm-Message-State: AC+VfDxAPWhY0/1CcSUJxC88h8OWfbmYFti6T2PUNvQt/T8D7aeLqdiK
+        dqm6276R9MMp3Uk/2AjDdtcy
+X-Google-Smtp-Source: ACHHUZ7/XjprjaCK6xRs1WdONtFFs1DjhFLoZ10cR5Cz0B+lSKNv3kPgBw75xSodoC0Keq0vr1mFUQ==
+X-Received: by 2002:a17:90a:aa92:b0:253:3662:9825 with SMTP id l18-20020a17090aaa9200b0025336629825mr2387535pjq.8.1684506723555;
+        Fri, 19 May 2023 07:32:03 -0700 (PDT)
 Received: from localhost.localdomain ([117.202.184.13])
-        by smtp.gmail.com with ESMTPSA id 30-20020a17090a09a100b00250d908a771sm1634845pjo.50.2023.05.19.07.31.55
+        by smtp.gmail.com with ESMTPSA id 30-20020a17090a09a100b00250d908a771sm1634845pjo.50.2023.05.19.07.31.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 07:31:58 -0700 (PDT)
+        Fri, 19 May 2023 07:32:03 -0700 (PDT)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     lpieralisi@kernel.org, kw@linux.com, bhelgaas@google.com
 Cc:     robh@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
@@ -57,9 +57,9 @@ Cc:     robh@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
         linux-kernel@vger.kernel.org, steev@kali.org,
         quic_srichara@quicinc.com, dmitry.baryshkov@linaro.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v2 7/8] PCI: qcom: Do not advertise hotplug capability for IP v1.0.0
-Date:   Fri, 19 May 2023 20:01:16 +0530
-Message-Id: <20230519143117.23875-8-manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v2 8/8] PCI: qcom: Do not advertise hotplug capability for IP v2.1.0
+Date:   Fri, 19 May 2023 20:01:17 +0530
+Message-Id: <20230519143117.23875-9-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230519143117.23875-1-manivannan.sadhasivam@linaro.org>
 References: <20230519143117.23875-1-manivannan.sadhasivam@linaro.org>
@@ -75,7 +75,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SoCs making use of Qcom PCIe controller IP v1.0.0 do not support hotplug
+SoCs making use of Qcom PCIe controller IP v2.1.0 do not support hotplug
 functionality. But the hotplug capability bit is set by default in the
 hardware. This causes the kernel PCI core to register hotplug service for
 the controller and send hotplug commands to it. But those commands will
@@ -97,12 +97,12 @@ Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
  1 file changed, 2 insertions(+)
 
 diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-index e6db9e551752..612266fb849a 100644
+index 612266fb849a..7a87a47eb7ed 100644
 --- a/drivers/pci/controller/dwc/pcie-qcom.c
 +++ b/drivers/pci/controller/dwc/pcie-qcom.c
-@@ -521,6 +521,8 @@ static int qcom_pcie_post_init_1_0_0(struct qcom_pcie *pcie)
- 		writel(val, pcie->parf + PARF_AXI_MSTR_WR_ADDR_HALT);
- 	}
+@@ -438,6 +438,8 @@ static int qcom_pcie_post_init_2_1_0(struct qcom_pcie *pcie)
+ 	writel(CFG_BRIDGE_SB_INIT,
+ 	       pci->dbi_base + AXI_MSTR_RESP_COMP_CTRL1);
  
 +	qcom_pcie_clear_hpc(pcie->pci);
 +
