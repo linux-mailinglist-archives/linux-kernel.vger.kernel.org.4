@@ -2,89 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D6A70A819
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 14:21:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BEDC70A825
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 14:33:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232056AbjETMVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 08:21:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51904 "EHLO
+        id S230314AbjETMdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 08:33:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231801AbjETMU7 (ORCPT
+        with ESMTP id S229563AbjETMdq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 08:20:59 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6B221730
-        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 05:20:20 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f3b4ed6fdeso749584e87.3
-        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 05:20:20 -0700 (PDT)
+        Sat, 20 May 2023 08:33:46 -0400
+Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D3BEE;
+        Sat, 20 May 2023 05:33:44 -0700 (PDT)
+Received: by mail-vs1-xe31.google.com with SMTP id ada2fe7eead31-437e2e0a5c7so826798137.0;
+        Sat, 20 May 2023 05:33:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684585216; x=1687177216;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6euEkRodrQgx7ZE9t7r7K+NeHv1LqldRFjOFTB8bWyY=;
-        b=BmrH/ZJTnlOU8B8MsGcUTxSs3ldt6wbdkha5Pku8nW8wiesMbU9mNfyY7MrN4V2Gqr
-         RLM9scxRukJ/ONiVl2FsY6eDoLKRgfHlIFHVnW3yGkZxHqsyzkcOxFzg8TIpGA3BT8c9
-         nXHtqqFpJohjbQNeLqbPPGwTBeK/TU/btYx1zkZFbakqExv6o0z5JGy6ZhPC3MkoQRIr
-         CZsWcSPBsbGhnU8JpbytXaPNh2weDBplzjO1VgucrO8AcidNHtppBnIsBiW2L/gbckAN
-         dcFefXS2aEZ6Kq53K1na7IRRmYLvYbZohlo99vP8mSpdLLltZHx6ugzO+AwL6Mk6CKg+
-         AN4w==
+        d=gmail.com; s=20221208; t=1684586024; x=1687178024;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Yf84jDrozMrVV1oSYdPXMslyu1qqK1BqRWzZfbaK148=;
+        b=mhC8RSqOMipd/H+QQ7X/H5lG97+eN3kQcqDo4ll/2O1NjwbY+Ym8IidvgesuRLmMHC
+         VS3tnrq51JnysqdyfLAZofABlVIfNnQF4QMJgxTWIIyj7hFEhCBPKPamKJOpVgPnUNaC
+         pKWS5JToSm6UrCbASXJEvaLIT3EPBKtf8wBesHoAaefzeNAuqXnmFO5YQ5YOGVRoT7G6
+         fP+SJ3DIYqEXTZkvvZfVdQdWBWWul978WFjFVjYQ5XqJkI5GDlSKdHYqGBtYrTaLqDpN
+         FmIZZsry4xe7joi54JZ1c5wixbz8NGYl3Bbid6qGvOHc6RN91lULv9QHfS6uJ9cCiN7e
+         L86Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684585216; x=1687177216;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1684586024; x=1687178024;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6euEkRodrQgx7ZE9t7r7K+NeHv1LqldRFjOFTB8bWyY=;
-        b=bro9HX5ZNt0UfE7bXsHh7hhKWqnVo64zK7vul55gcOxq1F1B6Ipkdwd22hL3wEpuao
-         is8V4qwVmio8yyXlrvOsyOR3q9gSJSOsmcQCdEZBL9Tf2mLca0gNm2XsnNIOvmSgP+3U
-         LU1JCy7cn+Vnq8e4hKpilSnUMnrvVPxKYQkYJuHhSQJOTlonl7x9DeBX7jJSkcbZrdJw
-         k4ICj/SzNc1KaPwHyQpHVRpDzgHhvVg1rQ2M0dw0KswZrsDMSH0BNDKxpHlttrtbdmeM
-         Z4uViQms6IX3N1cMuxYegowT2e0BSqaGCm3MYq1CF5W9KYpxVbA02TZCan9QpJD4eXbH
-         EYRw==
-X-Gm-Message-State: AC+VfDy80M5u4FW7R1KZKi0xAQ0goyfh8IkqqTfRm/d2raIlH4qERxLa
-        8yvZemNL+8NDX0McsXsRPa4eSw==
-X-Google-Smtp-Source: ACHHUZ58TljU+iUDLDIpGnb1GNrV3kCrtVuNbUTxPr6r/DQkrOHnuSQRaoImSSkim8bcpU5KKyUiNg==
-X-Received: by 2002:ac2:539a:0:b0:4cc:96f8:f9c6 with SMTP id g26-20020ac2539a000000b004cc96f8f9c6mr1835216lfh.5.1684585216004;
-        Sat, 20 May 2023 05:20:16 -0700 (PDT)
-Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
-        by smtp.gmail.com with ESMTPSA id y6-20020ac24466000000b004f37bd02a89sm244766lfl.287.2023.05.20.05.20.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 May 2023 05:20:15 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Sat, 20 May 2023 14:19:58 +0200
-Subject: [PATCH v7 18/18] drm/msm/a6xx: Add A610 speedbin support
+        bh=Yf84jDrozMrVV1oSYdPXMslyu1qqK1BqRWzZfbaK148=;
+        b=bgcurzoFKFSGajBXEzXnuR8OMb+TVd6w3L3R3WG8NtVqVVCan/Bhhpv3RFTOThSEKW
+         qFhd4jCHo0/4qJkPS5//jpIhrtVJiuRRN93vbNXXlYEPwzRgHIUPzU4rV2n90c0/QBed
+         pDEl/pmFASkQDFCdu4Gaab8roJuYX8jki/QxFQ0xwRgFk3Ha7J9PUxajzWjeBn9p2r7H
+         YowuniyE8dkPlRi8v2RZaMsrn+85S45fsoa2r0nlcQA8U1kiIjjurXXcMfxCUDQ6FMCg
+         pPRoUTBvRB1ddpKiY3SMaXS3USS+MkeJxxjFjsKpCt9Dl258C1x59yUg/u/SQTycxZ9X
+         ywjQ==
+X-Gm-Message-State: AC+VfDxYUFW11Q+mE0eE69mtO3S62bFtpqS4pDUVYcTQZCbCK95xFBpB
+        CC51Drb2fhOJ4aBkHMq7/1kUssMAC+HM+0ODxdM=
+X-Google-Smtp-Source: ACHHUZ6O99wAxftOjtNLOfQmUxEfN/7H5XRgGxtF695mB/3s6/+Mjm9D+Wo/pNvXyyIo9zmtfUK2284RT9Lm+0Q/UPU=
+X-Received: by 2002:a05:6102:e46:b0:434:5359:61b1 with SMTP id
+ p6-20020a0561020e4600b00434535961b1mr820666vst.19.1684586023789; Sat, 20 May
+ 2023 05:33:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230223-topic-gmuwrapper-v7-18-ecc7aab83556@linaro.org>
-References: <20230223-topic-gmuwrapper-v7-0-ecc7aab83556@linaro.org>
-In-Reply-To: <20230223-topic-gmuwrapper-v7-0-ecc7aab83556@linaro.org>
-To:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1684585186; l=1852;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=aYEnG9+HCzURuVCpcLpZTVlrArU+CPMAgc+RtQYPTAw=;
- b=cBGb71GEz6m+55DZbw5+CIlpa9bA2JR7ff/H/b1bxB27zpReX2GOg7AWcYOzBnWEkZtbP6mJc
- HaVYS9xm5/JBf1ihgp+IOvYeg1spOGFEwJmV78VNSn9B2Aj+MtEE37L
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+References: <20230520120528.339680-1-andrea.righi@canonical.com>
+In-Reply-To: <20230520120528.339680-1-andrea.righi@canonical.com>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Sat, 20 May 2023 15:33:32 +0300
+Message-ID: <CAOQ4uxjOgWDqufLcabkkPcxvFcrehzoDuO0d6kdJZuoiRBKStw@mail.gmail.com>
+Subject: Re: [PATCH] ovl: make consistent use of OVL_FS()
+To:     Andrea Righi <andrea.righi@canonical.com>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>, linux-unionfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,64 +69,187 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A610 is implemented on at least three SoCs: SM6115 (bengal), SM6125
-(trinket) and SM6225 (khaje). Trinket does not support speed binning
-(only a single SKU exists) and we don't yet support khaje upstream.
-Hence, add a fuse mapping table for bengal to allow for per-chip
-frequency limiting.
+On Sat, May 20, 2023 at 3:20=E2=80=AFPM Andrea Righi <andrea.righi@canonica=
+l.com> wrote:
+>
+> Always use OVL_FS() to retrieve the corresponding struct ovl_fs from a
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 27 +++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+I don't mind this cleanup, but...
 
-diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-index c07b25fc2bd9..d004458ca783 100644
---- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-+++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-@@ -2102,6 +2102,30 @@ static bool a6xx_progress(struct msm_gpu *gpu, struct msm_ringbuffer *ring)
- 	return progress;
- }
- 
-+static u32 a610_get_speed_bin(u32 fuse)
-+{
-+	/*
-+	 * There are (at least) three SoCs implementing A610: SM6125 (trinket),
-+	 * SM6115 (bengal) and SM6225 (khaje). Trinket does not have speedbinning,
-+	 * as only a single SKU exists and we don't support khaje upstream yet.
-+	 * Hence, this matching table is only valid for bengal and can be easily
-+	 * expanded if need be.
-+	 */
-+
-+	if (fuse == 0)
-+		return 0;
-+	else if (fuse == 206)
-+		return 1;
-+	else if (fuse == 200)
-+		return 2;
-+	else if (fuse == 157)
-+		return 3;
-+	else if (fuse == 127)
-+		return 4;
-+
-+	return UINT_MAX;
-+}
-+
- static u32 a618_get_speed_bin(u32 fuse)
- {
- 	if (fuse == 0)
-@@ -2199,6 +2223,9 @@ static u32 fuse_to_supp_hw(struct device *dev, struct adreno_gpu *adreno_gpu, u3
- {
- 	u32 val = UINT_MAX;
- 
-+	if (adreno_is_a610(adreno_gpu))
-+		val = a610_get_speed_bin(fuse);
-+
- 	if (adreno_is_a618(adreno_gpu))
- 		val = a618_get_speed_bin(fuse);
- 
+> struct super_block and make sure that it is exclusively used with an
+> overlayfs superblock (otherwise, trigger a BUG).
+>
+> Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
+> ---
+>  fs/overlayfs/copy_up.c   |  2 +-
+>  fs/overlayfs/export.c    | 10 +++++-----
+>  fs/overlayfs/inode.c     |  8 ++++----
+>  fs/overlayfs/namei.c     |  2 +-
+>  fs/overlayfs/ovl_entry.h |  4 ++++
+>  fs/overlayfs/super.c     | 10 +++++-----
+>  fs/overlayfs/util.c      | 18 +++++++++---------
+>  7 files changed, 29 insertions(+), 25 deletions(-)
+>
+> diff --git a/fs/overlayfs/copy_up.c b/fs/overlayfs/copy_up.c
+> index f658cc8ea492..60aa615820e7 100644
+> --- a/fs/overlayfs/copy_up.c
+> +++ b/fs/overlayfs/copy_up.c
+> @@ -905,7 +905,7 @@ static int ovl_do_copy_up(struct ovl_copy_up_ctx *c)
+>  static bool ovl_need_meta_copy_up(struct dentry *dentry, umode_t mode,
+>                                   int flags)
+>  {
+> -       struct ovl_fs *ofs =3D dentry->d_sb->s_fs_info;
+> +       struct ovl_fs *ofs =3D OVL_FS(dentry->d_sb);
+>
+>         if (!ofs->config.metacopy)
+>                 return false;
+> diff --git a/fs/overlayfs/export.c b/fs/overlayfs/export.c
+> index defd4e231ad2..f5f0ef8e3ce8 100644
+> --- a/fs/overlayfs/export.c
+> +++ b/fs/overlayfs/export.c
+> @@ -182,7 +182,7 @@ static int ovl_connect_layer(struct dentry *dentry)
+>   */
+>  static int ovl_check_encode_origin(struct dentry *dentry)
+>  {
+> -       struct ovl_fs *ofs =3D dentry->d_sb->s_fs_info;
+> +       struct ovl_fs *ofs =3D OVL_FS(dentry->d_sb);
+>
+>         /* Upper file handle for pure upper */
+>         if (!ovl_dentry_lower(dentry))
+> @@ -434,7 +434,7 @@ static struct dentry *ovl_lookup_real_inode(struct su=
+per_block *sb,
+>                                             struct dentry *real,
+>                                             const struct ovl_layer *layer=
+)
+>  {
+> -       struct ovl_fs *ofs =3D sb->s_fs_info;
+> +       struct ovl_fs *ofs =3D OVL_FS(sb);
+>         struct dentry *index =3D NULL;
+>         struct dentry *this =3D NULL;
+>         struct inode *inode;
+> @@ -655,7 +655,7 @@ static struct dentry *ovl_get_dentry(struct super_blo=
+ck *sb,
+>                                      struct ovl_path *lowerpath,
+>                                      struct dentry *index)
+>  {
+> -       struct ovl_fs *ofs =3D sb->s_fs_info;
+> +       struct ovl_fs *ofs =3D OVL_FS(sb);
+>         const struct ovl_layer *layer =3D upper ? &ofs->layers[0] : lower=
+path->layer;
+>         struct dentry *real =3D upper ?: (index ?: lowerpath->dentry);
+>
+> @@ -680,7 +680,7 @@ static struct dentry *ovl_get_dentry(struct super_blo=
+ck *sb,
+>  static struct dentry *ovl_upper_fh_to_d(struct super_block *sb,
+>                                         struct ovl_fh *fh)
+>  {
+> -       struct ovl_fs *ofs =3D sb->s_fs_info;
+> +       struct ovl_fs *ofs =3D OVL_FS(sb);
+>         struct dentry *dentry;
+>         struct dentry *upper;
+>
+> @@ -700,7 +700,7 @@ static struct dentry *ovl_upper_fh_to_d(struct super_=
+block *sb,
+>  static struct dentry *ovl_lower_fh_to_d(struct super_block *sb,
+>                                         struct ovl_fh *fh)
+>  {
+> -       struct ovl_fs *ofs =3D sb->s_fs_info;
+> +       struct ovl_fs *ofs =3D OVL_FS(sb);
+>         struct ovl_path origin =3D { };
+>         struct ovl_path *stack =3D &origin;
+>         struct dentry *dentry =3D NULL;
+> diff --git a/fs/overlayfs/inode.c b/fs/overlayfs/inode.c
+> index 541cf3717fc2..c27823f6e7aa 100644
+> --- a/fs/overlayfs/inode.c
+> +++ b/fs/overlayfs/inode.c
+> @@ -334,7 +334,7 @@ static const char *ovl_get_link(struct dentry *dentry=
+,
+>
+>  bool ovl_is_private_xattr(struct super_block *sb, const char *name)
+>  {
+> -       struct ovl_fs *ofs =3D sb->s_fs_info;
+> +       struct ovl_fs *ofs =3D OVL_FS(sb);
+>
+>         if (ofs->config.userxattr)
+>                 return strncmp(name, OVL_XATTR_USER_PREFIX,
+> @@ -689,7 +689,7 @@ int ovl_set_acl(struct mnt_idmap *idmap, struct dentr=
+y *dentry,
+>  int ovl_update_time(struct inode *inode, struct timespec64 *ts, int flag=
+s)
+>  {
+>         if (flags & S_ATIME) {
+> -               struct ovl_fs *ofs =3D inode->i_sb->s_fs_info;
+> +               struct ovl_fs *ofs =3D OVL_FS(inode->i_sb);
+>                 struct path upperpath =3D {
+>                         .mnt =3D ovl_upper_mnt(ofs),
+>                         .dentry =3D ovl_upperdentry_dereference(OVL_I(ino=
+de)),
+> @@ -952,7 +952,7 @@ static inline void ovl_lockdep_annotate_inode_mutex_k=
+ey(struct inode *inode)
+>
+>  static void ovl_next_ino(struct inode *inode)
+>  {
+> -       struct ovl_fs *ofs =3D inode->i_sb->s_fs_info;
+> +       struct ovl_fs *ofs =3D OVL_FS(inode->i_sb);
+>
+>         inode->i_ino =3D atomic_long_inc_return(&ofs->last_ino);
+>         if (unlikely(!inode->i_ino))
+> @@ -1284,7 +1284,7 @@ struct inode *ovl_get_trap_inode(struct super_block=
+ *sb, struct dentry *dir)
+>  static bool ovl_hash_bylower(struct super_block *sb, struct dentry *uppe=
+r,
+>                              struct dentry *lower, bool index)
+>  {
+> -       struct ovl_fs *ofs =3D sb->s_fs_info;
+> +       struct ovl_fs *ofs =3D OVL_FS(sb);
+>
+>         /* No, if pure upper */
+>         if (!lower)
+> diff --git a/fs/overlayfs/namei.c b/fs/overlayfs/namei.c
+> index cfb3420b7df0..d0f196b85541 100644
+> --- a/fs/overlayfs/namei.c
+> +++ b/fs/overlayfs/namei.c
+> @@ -832,7 +832,7 @@ struct dentry *ovl_lookup(struct inode *dir, struct d=
+entry *dentry,
+>  {
+>         struct ovl_entry *oe;
+>         const struct cred *old_cred;
+> -       struct ovl_fs *ofs =3D dentry->d_sb->s_fs_info;
+> +       struct ovl_fs *ofs =3D OVL_FS(dentry->d_sb);
+>         struct ovl_entry *poe =3D dentry->d_parent->d_fsdata;
+>         struct ovl_entry *roe =3D dentry->d_sb->s_root->d_fsdata;
+>         struct ovl_path *stack =3D NULL, *origin_path =3D NULL;
+> diff --git a/fs/overlayfs/ovl_entry.h b/fs/overlayfs/ovl_entry.h
+> index fd11fe6d6d45..b91b3694ae26 100644
+> --- a/fs/overlayfs/ovl_entry.h
+> +++ b/fs/overlayfs/ovl_entry.h
+> @@ -5,6 +5,8 @@
+>   * Copyright (C) 2016 Red Hat, Inc.
+>   */
+>
+> +#include <uapi/linux/magic.h>
+> +
+>  struct ovl_config {
+>         char *lowerdir;
+>         char *upperdir;
+> @@ -97,6 +99,8 @@ static inline struct mnt_idmap *ovl_upper_mnt_idmap(str=
+uct ovl_fs *ofs)
+>
+>  static inline struct ovl_fs *OVL_FS(struct super_block *sb)
+>  {
+> +       /* Make sure OVL_FS() is always used with an overlayfs superblock=
+ */
+> +       BUG_ON(sb->s_magic !=3D OVERLAYFS_SUPER_MAGIC);
 
--- 
-2.40.1
+1. Adding new BUG_ON to kernel code is not acceptable - if anything
+    you can add WARN_ON_ONCE()
+2. If anything, you should check s_type =3D=3D s_ovl_fs_type, not s_magic
+3. It is very unclear to me that this check has that much value and OVL_FS(=
+)
+    macro is very commonly used inside internal helpers, so please add a
+    "why" to your patch - why do you think that it is desired and/or valuab=
+le
+    to fortify OVL_FS() like this?
 
+Thanks,
+Amir.
