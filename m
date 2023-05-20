@@ -2,74 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E50BC70A62B
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 09:34:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FE5370A62F
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 09:38:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbjETHeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 03:34:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51642 "EHLO
+        id S229522AbjETHib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 03:38:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbjETHee (ORCPT
+        with ESMTP id S229495AbjETHi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 03:34:34 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FD6119F;
-        Sat, 20 May 2023 00:34:33 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-64d3578c25bso1609887b3a.3;
-        Sat, 20 May 2023 00:34:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684568073; x=1687160073;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wBXlPJ2WOFDTyTHyLQ9M5/vOMvc7Mykf2q4oVdOVeEg=;
-        b=QN6XoqWxTSy3GlTXwrZ/aRy5SVogCyExaBhpUYS1aG7Mq5WOb3qX89yDQW8ui6jALU
-         bbgFOuA1cNZJjGOuz1NMI+TgiAvv8r+7u4GoJbQ/p40sdOef28WYQn5FJQsFXbtVkGDm
-         SX52G9VZgX+PVbKjFyJ7NzW8uysNXhnSRHv/pWPAGBJcV90ve/ITlbXMgbPfhEEehLdS
-         yOXFaDq9UrMxxK9Ddi4FhGa3KlEDmLTFJGylHHfigZTp9Vtx6Cdn3h8lgnVfIEHEjfIu
-         O/TCrxI/eZzHhH4oqB0CX6HqHyqAINBdChpbtn26Owd3g88VwyG5oE4+njobqdVbxS0v
-         3PsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684568073; x=1687160073;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wBXlPJ2WOFDTyTHyLQ9M5/vOMvc7Mykf2q4oVdOVeEg=;
-        b=HD45ePTKeXE+cSJlRRn1aN1sOsCM7O4cw5X2IVcWgcgtnYe5dQKbFJ5jQFt2uiS2zV
-         ryZ7Kieo5VmgFL0F2U3WlACuoUFt2M+tp7/iRrrPcq8k9Brx9PL93rGlvATASUFlln0h
-         lKlbnjswGOFMRuRTzlSf/jO58JHjRl8y3yzix26z5V3uEjAa/vvodNRlYlvsyik26hz4
-         9vz1iURgU+uBxYpdjjmf4s++d5kRFTW0MThBxnk3cnk17k6HoP1LPfnIb+Qf6BhSbToP
-         n1sgLYN20oYABNaiT9E4Z8izOblilCjATGGl5paE7gsRdKyptIGbfpxi2aH5l7dTImWS
-         WWDw==
-X-Gm-Message-State: AC+VfDzvQiB1adB5Bq4/UmTF0cqq18K/E+JH/80ZXpEvoM0Ql2CBMYbx
-        g1YI4IJd6AHsP5T1wCxOZIc=
-X-Google-Smtp-Source: ACHHUZ5QxeqwpmX+8bEEsL5MfjtiJ1O/rhGic4E6owcjthl0YEtN976ophiU97AJmOE0F6GQ6X+Lyw==
-X-Received: by 2002:a05:6a00:2e87:b0:636:f899:46a0 with SMTP id fd7-20020a056a002e8700b00636f89946a0mr7194401pfb.15.1684568072820;
-        Sat, 20 May 2023 00:34:32 -0700 (PDT)
-Received: from ubuntu777.domain.name (36-228-97-28.dynamic-ip.hinet.net. [36.228.97.28])
-        by smtp.gmail.com with ESMTPSA id fe21-20020a056a002f1500b0064d47cd117esm499146pfb.39.2023.05.20.00.34.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 May 2023 00:34:32 -0700 (PDT)
-From:   Min-Hua Chen <minhuadotchen@gmail.com>
-To:     kuba@kernel.org
-Cc:     alexandre.torgue@foss.st.com, davem@davemloft.net,
-        edumazet@google.com, joabreu@synopsys.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        mcoquelin.stm32@gmail.com, minhuadotchen@gmail.com,
-        netdev@vger.kernel.org, pabeni@redhat.com, peppe.cavallaro@st.com,
-        simon.horman@corigine.com
-Subject: Re: [PATCH v3] net: stmmac: compare p->des0 and p->des1 with __le32 type values
-Date:   Sat, 20 May 2023 15:34:28 +0800
-Message-Id: <20230520073428.3781-1-minhuadotchen@gmail.com>
+        Sat, 20 May 2023 03:38:27 -0400
+Received: from smtp.smtpout.orange.fr (smtp-27.smtpout.orange.fr [80.12.242.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F224B1A1
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 00:38:26 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id 0HAVqW6X7JVCN0HAVqfvyc; Sat, 20 May 2023 09:38:25 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1684568305;
+        bh=NMjTFjxZxa7W+uVqFF89Z29R05LLDCicjWL4MP87TLA=;
+        h=From:To:Cc:Subject:Date;
+        b=rjfSfBGl4jypnBJRKK4oqNz4knkIQvQt35+3zw44PGHb8ZXZAdN6zVsLZP690+JIr
+         /ZR2d8XIqBwP1JuiHyaRMKIGdurVz4gklakLC+Y8qHtfu3BibGOACEVxhewlRNGSdi
+         HsH3opyCszrZ0qEyI+CFyW8MT0aZXr+QX6dqzpsEKuKnMtzFMFGUL0vWzY4dg4uSd9
+         mim6BrdJVCZETBuzOaWLXt+TnsHPzzK5Vuy2r3KDwmDLYaC0LIZaHoYFkBwIIlYcfl
+         ohxbqvZiRFyzMswmwBir5Zrpq0r2EaAcyqbQZvxNivgc83CgAfJuCky1YU92P6KKl5
+         4SRn2Bi2Y97QQ==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 20 May 2023 09:38:25 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Kalle Valo <kvalo@kernel.org>,
+        Dominik Brodowski <linux@dominikbrodowski.net>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-wireless@vger.kernel.org
+Subject: [PATCH] orinoco: Fix an error handling path in orinoco_cs_probe()
+Date:   Sat, 20 May 2023 09:38:22 +0200
+Message-Id: <e24735ce4d82901d5f7ea08419eea53bfdde3d65.1684568286.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230519210439.4a3bb326@kernel.org>
-References: <20230519210439.4a3bb326@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,23 +54,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jakub,
+Should orinoco_cs_config() fail, some resources need to be released as
+already done in the remove function.
 
->We can make working with sparse easier by making sure it doesn't
->generate false positive warnings :\
+While at it, remove a useless and erroneous comment. The probe is
+orinoco_cs_probe(), not orinoco_cs_attach().
 
-It will be good if sparse can handle this case correctly.
+Fixes: 15b99ac17295 ("[PATCH] pcmcia: add return value to _config() functions")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/net/wireless/intersil/orinoco/orinoco_cs.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
->
->> (There are around 7000 sparse warning in ARCH=arm64 defconfig build and
->> sometimes it is hard to remember all the false alarm cases)
->>
->> Could you consider taking this patch, please?
->
->No. We don't take patches to address false positive static
->checker warnings.
+diff --git a/drivers/net/wireless/intersil/orinoco/orinoco_cs.c b/drivers/net/wireless/intersil/orinoco/orinoco_cs.c
+index a956f965a1e5..03bfd2482656 100644
+--- a/drivers/net/wireless/intersil/orinoco/orinoco_cs.c
++++ b/drivers/net/wireless/intersil/orinoco/orinoco_cs.c
+@@ -96,6 +96,7 @@ orinoco_cs_probe(struct pcmcia_device *link)
+ {
+ 	struct orinoco_private *priv;
+ 	struct orinoco_pccard *card;
++	int ret;
+ 
+ 	priv = alloc_orinocodev(sizeof(*card), &link->dev,
+ 				orinoco_cs_hard_reset, NULL);
+@@ -107,8 +108,16 @@ orinoco_cs_probe(struct pcmcia_device *link)
+ 	card->p_dev = link;
+ 	link->priv = priv;
+ 
+-	return orinoco_cs_config(link);
+-}				/* orinoco_cs_attach */
++	ret = orinoco_cs_config(link);
++	if (ret)
++		goto err_free_orinocodev;
++
++	return 0;
++
++err_free_orinocodev:
++	free_orinocodev(priv);
++	return ret;
++}
+ 
+ static void orinoco_cs_detach(struct pcmcia_device *link)
+ {
+-- 
+2.34.1
 
-No problem.
-
-thanks,
-Min-Hua
