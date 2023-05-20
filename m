@@ -2,111 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E296770A96D
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 19:07:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B91A70A972
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 19:22:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231406AbjETRHb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 13:07:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54200 "EHLO
+        id S230307AbjETRWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 13:22:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231292AbjETRH3 (ORCPT
+        with ESMTP id S229617AbjETRW3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 13:07:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAEF713D;
-        Sat, 20 May 2023 10:07:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sat, 20 May 2023 13:22:29 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A27DF
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 10:22:28 -0700 (PDT)
+Received: from mercury (unknown [185.254.75.45])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 683226009E;
-        Sat, 20 May 2023 17:07:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81614C433EF;
-        Sat, 20 May 2023 17:07:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1684602445;
-        bh=wphMWIeArtEsSvlb8OAF/hjXa+qd9hNZT35tlKvo6ro=;
-        h=Date:From:To:Cc:Subject:From;
-        b=r5aDMt6DknXGaviLKge92fgS3pD/Hmb27zUeMozitoVV5yBBJegshSy+sWls8FsBY
-         eNRNXCE4pT8AsBbD/tIi+YWIp6YRJaZYc0sl7JK3GS3znV8ma+bZoSnxfWST3o2hXV
-         2XAZ+0SrdC3wzWREuZ3X4D3m6G0EZigGxolaRZo0=
-Date:   Sat, 20 May 2023 18:07:23 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Jiri Slaby <jslaby@suse.cz>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [GIT PULL] TTY/Serial driver fixes for 6.4-rc3
-Message-ID: <ZGj-S_GkMqxVBlDe@kroah.com>
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id CC7046603276;
+        Sat, 20 May 2023 18:22:26 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684603346;
+        bh=EfPREliC14ufTBd9m+Ctkx8qzjEo4WHQhzv5J2dsXWs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nzGPb24oK/xKPTnHbtMNNpv3L2HXPIkCixoSX8WdIVxaScmbyK6UVaeeX7urXTY6w
+         3Si3NH/HyLwiGdj4mC48Dc+gzd2ACALmoevnyzrMmn0W1gR+0ZOEzGShiBiZzyhJXc
+         knSUts77EsWFmkeqRcWbLRsJSywASQc2HfwsQ0DyWbg5EEKy52gKm+1IDVHEmt6tab
+         NfeWuHe0dguSBVGRikGNex26VuAlWtayXO2CFwvVsgdGB66HVnsE3hSutKBjO35h5r
+         tPPbeYqhluvSKcRpWcpvgRc2oasrjVzW1mwL+s4XuCJGf7pPCgry5aLRloKcOS/Dmz
+         asEse4vgovVCw==
+Received: by mercury (Postfix, from userid 1000)
+        id 5A40610628E0; Sat, 20 May 2023 19:22:24 +0200 (CEST)
+Date:   Sat, 20 May 2023 19:22:24 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Carlos Chinea <carlos.chinea@nokia.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jianglei Nie <niejianglei2021@163.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Wang Qing <wangqing@vivo.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        Yuan Can <yuancan@huawei.com>,
+        Miaoqian Lin <linmq006@gmail.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] hsi: fix ssi_waketest() declaration
+Message-ID: <20230520172224.ngyvbjk6bl75qmx2@mercury.elektranox.org>
+References: <20230516202226.559733-1-arnd@kernel.org>
+ <202305161330.FE7311B@keescook>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="jndqyqf4dc4zinfa"
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <202305161330.FE7311B@keescook>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+--jndqyqf4dc4zinfa
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-are available in the Git repository at:
+Hi,
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-6.4-rc3
+On Tue, May 16, 2023 at 01:30:35PM -0700, Kees Cook wrote:
+> On Tue, May 16, 2023 at 10:22:07PM +0200, Arnd Bergmann wrote:
+> > From: Arnd Bergmann <arnd@arndb.de>
+> >=20
+> > The ssi_waketest() function definition causes a 'make W=3D1' warning
+> > because the declaration is hidden away in ssi_protocol.c:
+> >=20
+> > drivers/hsi/controllers/omap_ssi_core.c:147:6: error: no previous proto=
+type for 'ssi_waketest'
+> >=20
+> > Move it into a header file instead.
+> >=20
+> > Fixes: dc7bf5d71868 ("HSI: Introduce driver for SSI Protocol")
+> > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>=20
+> Reviewed-by: Kees Cook <keescook@chromium.org>
 
-for you to fetch changes up to 8fb9ea65c9d1338b0d2bb0a9122dc942cdd32357:
+Thanks, queued.
 
-  vc_screen: reload load of struct vc_data pointer in vcs_write() to avoid UAF (2023-05-13 20:01:13 +0900)
+-- Sebastian
 
-----------------------------------------------------------------
-TTY/Serial fixes for 6.4-rc3
+--jndqyqf4dc4zinfa
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Here are some small tty and serial driver fixes for 6.4-rc3 to resolve
-some reported problems, and add some new device ids.  These include:
-  - termios documentation updates
-  - vc_screen use-after-free fix
-  - memory leak fix in arc_uart driver
-  - new 8250 driver ids
-  - other small serial driver fixes
+-----BEGIN PGP SIGNATURE-----
 
-All of these have been in linux-next for a while with no reported
-problems.
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRpAcwACgkQ2O7X88g7
++ppGiBAAl4UBkglC9LCH67Xl6HE868T1Y0Rs91pxTIE6xfEKzYd5ONE4i8T1uG+H
+XqNtKqT7pNccAmvhTfQtLqc4+zu3vRd1A0ZBCL5HEhKiBkTzdR7jYdQzKr9rfmLy
+xIaypnXVjpaCsomFiNjuBLQy6xp5BiV1xdbVLBeI8dxEhaDVknsETr9I5uhDRdcJ
+8BLuj9Yyh8EUPXNo3d8zBPy9XFevOIFI1gq3maigG1vCLDrWvtCOtsNfQx5yjdU5
+TT6bmfBS2yOL6H5yBsu7803BOsiBbwdac/1l9JPuE3HI9zZv0fBnGF3SlXmjHkky
+yfguW5Ff9u760mE50PtFn9Y3JwocVb8tatIWIwGWTRx7QoM4lD7HeFPu5B/pdc+9
+JEBXdIKs2OpvcYNk1CKh1KRAfK+lciiIgXI4htGaq9CmeCMlMoyv/mT1jOjItXPo
+7QqxBdQaqPqdIEGvSIYOI+8PTOiq4Nv2J9WvpxHg2vGJUicaPXZDpQgRU5MiEIM4
+NdXWBs5H+v5uMJ8WkoutZHGqSkKWpniEvn09wrpUptE4F3NgFc01xXSuhpg8Y74A
+5PLJHjCHREXcmZgMP0KdUve+K7hjWeIVXu6kJPQ3dDb4n46wjqmHqTTXsEJOPGNE
+xtVy1/jQ2moOsBwv+4bBWjBnHxpXdlvZ39hnDJyYAhW3zPpQ3yM=
+=9aei
+-----END PGP SIGNATURE-----
 
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Andrew Davis (1):
-      serial: 8250_exar: Add support for USR298x PCI Modems
-
-Doug Berger (2):
-      serial: 8250_bcm7271: balance clk_enable calls
-      serial: 8250_bcm7271: fix leak in `brcmuart_probe`
-
-Geert Uytterhoeven (1):
-      serial: 8250: Document termios parameter of serial8250_em485_config()
-
-George Kennedy (1):
-      vc_screen: reload load of struct vc_data pointer in vcs_write() to avoid UAF
-
-Ke Zhang (1):
-      serial: arc_uart: fix of_iomap leak in `arc_serial_probe`
-
-Krzysztof Kozlowski (1):
-      serial: qcom-geni: fix enabling deactivated interrupt
-
-Vitaliy Tomin (1):
-      serial: Add support for Advantech PCI-1611U card
-
- drivers/tty/serial/8250/8250_bcm7271.c |  7 +++++--
- drivers/tty/serial/8250/8250_exar.c    | 17 +++++++++++++++++
- drivers/tty/serial/8250/8250_pci.c     |  5 +++++
- drivers/tty/serial/8250/8250_port.c    |  1 +
- drivers/tty/serial/arc_uart.c          |  7 ++++---
- drivers/tty/serial/qcom_geni_serial.c  |  9 ++++-----
- drivers/tty/vt/vc_screen.c             | 11 +++++++++--
- 7 files changed, 45 insertions(+), 12 deletions(-)
+--jndqyqf4dc4zinfa--
