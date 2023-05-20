@@ -2,20 +2,20 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FFE970A747
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 12:49:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 219E570A74A
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 12:49:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231651AbjETKtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 06:49:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60892 "EHLO
+        id S231630AbjETKtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 06:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231409AbjETKtI (ORCPT
+        with ESMTP id S231586AbjETKtJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 06:49:08 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9FBE5D;
+        Sat, 20 May 2023 06:49:09 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCFC4E49;
         Sat, 20 May 2023 03:49:07 -0700 (PDT)
-Date:   Sat, 20 May 2023 10:49:04 -0000
+Date:   Sat, 20 May 2023 10:49:05 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020; t=1684579745;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -23,12 +23,12 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=aH2Ohb05YwZe/otHvSs0r1c79czQSc9dK7wj6jHNME8=;
-        b=nTbaTzh6aXgROOF+Hq16W3DA/QPy1SBux6oo0LAszaNFP5YuSVIFKEsljTfTy9f5OkGjEJ
-        zDMWN8Uq7g8zioYdU+6O1whdUIlnRQQymmgQ3dgGHTCKD6KdJf3vP1TGkhDXW8dmicIQGr
-        EfVdOmc1Mk95X2n3Bsal4/5PdMsXnyeAQuIQD0reX48E5grc/myy/m6e4PJnRwFnie6LAs
-        YVsUgFIcZ2nwriPp+bgAiWalVturI+S6BAN4NgxYPydOgbG+kfa6ZR0ZKeGphp4Pa7+wlV
-        1TFUamOvkETkfWmKf8OL8N8NkmNUvwmaENjymo4gYpxT+zs5ePtopZke1/3asA==
+        bh=d9heDPoj8Z+mlwzB7nznnw7IVG9CDvfDKPj3o7QB/QI=;
+        b=lbCnvci1LFsz8fckqAtPkqvVx0bT8X0mGeRIPDnayPs5yOAYfYRpZBqtPEIRn1V2xbHxYx
+        eSug79/hchrmu420WeDzvno0Y61e/jihNov1Fgth2nfp30M44vpps2/GUo90QGZcQWj4XA
+        uveSDuXP5wLUKFcMzo/uJ639QI4IbOL8SrAmHqDo9CqPnxvdvf6nroe862dmc89yJgX3S9
+        8wTjRYqL4n4Urm0NVcRUm0b0im2uEnBtmtQh3M4Y7jLGGbYozySyG4bdyg4GGK2I5TRlR9
+        k1RXjULxNMYHq1DEFvMLY2ym95rALVZ3AoqycZXq+DJW8alpSNrsYI4tF0AvIA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1684579745;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
@@ -36,22 +36,22 @@ DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=aH2Ohb05YwZe/otHvSs0r1c79czQSc9dK7wj6jHNME8=;
-        b=l//Iih+LaVgiukaUpZ0p6OjTkxEpnGBfKwQm1Kdrb0oS4SGiZnS3L4oSj6kobddtEE/glh
-        EJwpkewjIaymQnCw==
+        bh=d9heDPoj8Z+mlwzB7nznnw7IVG9CDvfDKPj3o7QB/QI=;
+        b=pXQKucuo86m0ZT05l/H5JkWBT4PjmxfQmsPdvX1oj7q1UxINKHAIp3HuXJYTfoSxLa+t6y
+        71QBAVYjS9bq6RAw==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] types: Introduce [us]128
+Subject: [tip: locking/core] cyrpto/b128ops: Remove struct u128
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Arnd Bergmann <arnd@arndb.de>,
         Herbert Xu <herbert@gondor.apana.org.au>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230515080554.047618712@infradead.org>
-References: <20230515080554.047618712@infradead.org>
+In-Reply-To: <20230515080553.979680310@infradead.org>
+References: <20230515080553.979680310@infradead.org>
 MIME-Version: 1.0
-Message-ID: <168457974454.404.3651021680456124884.tip-bot2@tip-bot2>
+Message-ID: <168457974513.404.3421776135547286788.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,86 +68,62 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the locking/core branch of tip:
 
-Commit-ID:     1fbd899da7d7a5eb7dd81404d37342b4de95f48f
-Gitweb:        https://git.kernel.org/tip/1fbd899da7d7a5eb7dd81404d37342b4de95f48f
+Commit-ID:     f49a2237d34009e1623fd04a5f3c34ea39dd5792
+Gitweb:        https://git.kernel.org/tip/f49a2237d34009e1623fd04a5f3c34ea39dd5792
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Mon, 15 May 2023 09:57:01 +02:00
+AuthorDate:    Mon, 15 May 2023 09:57:00 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Fri, 19 May 2023 12:35:11 +02:00
+CommitterDate: Fri, 19 May 2023 12:35:10 +02:00
 
-types: Introduce [us]128
+cyrpto/b128ops: Remove struct u128
 
-Introduce [us]128 (when available). Unlike [us]64, ensure they are
-always naturally aligned.
-
-This also enables 128bit wide atomics (which require natural
-alignment) such as cmpxchg128().
+Per git-grep u128_xor() and its related struct u128 are unused except
+to implement {be,le}128_xor(). Remove them to free up the namespace.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Reviewed-by: Arnd Bergmann <arnd@arndb.de>
 Acked-by: Herbert Xu <herbert@gondor.apana.org.au>
-Link: https://lore.kernel.org/r/20230515080554.047618712@infradead.org
+Link: https://lore.kernel.org/r/20230515080553.979680310@infradead.org
 ---
- include/linux/types.h          | 5 +++++
- include/uapi/linux/types.h     | 4 ++++
- lib/crypto/curve25519-hacl64.c | 2 --
- lib/crypto/poly1305-donna64.c  | 2 --
- 4 files changed, 9 insertions(+), 4 deletions(-)
+ include/crypto/b128ops.h | 14 +++-----------
+ 1 file changed, 3 insertions(+), 11 deletions(-)
 
-diff --git a/include/linux/types.h b/include/linux/types.h
-index 688fb94..becb8cd 100644
---- a/include/linux/types.h
-+++ b/include/linux/types.h
-@@ -10,6 +10,11 @@
- #define DECLARE_BITMAP(name,bits) \
- 	unsigned long name[BITS_TO_LONGS(bits)]
+diff --git a/include/crypto/b128ops.h b/include/crypto/b128ops.h
+index 0b8e6bc..f3b37cb 100644
+--- a/include/crypto/b128ops.h
++++ b/include/crypto/b128ops.h
+@@ -50,10 +50,6 @@
+ #include <linux/types.h>
  
-+#ifdef __SIZEOF_INT128__
-+typedef __s128 s128;
-+typedef __u128 u128;
-+#endif
-+
- typedef u32 __kernel_dev_t;
- 
- typedef __kernel_fd_set		fd_set;
-diff --git a/include/uapi/linux/types.h b/include/uapi/linux/types.h
-index 308433b..6375a06 100644
---- a/include/uapi/linux/types.h
-+++ b/include/uapi/linux/types.h
-@@ -13,6 +13,10 @@
- 
- #include <linux/posix_types.h>
- 
-+#ifdef __SIZEOF_INT128__
-+typedef __signed__ __int128 __s128 __attribute__((aligned(16)));
-+typedef unsigned __int128 __u128 __attribute__((aligned(16)));
-+#endif
- 
- /*
-  * Below are truly Linux-specific types that should never collide with
-diff --git a/lib/crypto/curve25519-hacl64.c b/lib/crypto/curve25519-hacl64.c
-index 771d82d..c40e5d9 100644
---- a/lib/crypto/curve25519-hacl64.c
-+++ b/lib/crypto/curve25519-hacl64.c
-@@ -14,8 +14,6 @@
- #include <crypto/curve25519.h>
- #include <linux/string.h>
- 
--typedef __uint128_t u128;
+ typedef struct {
+-	u64 a, b;
+-} u128;
 -
- static __always_inline u64 u64_eq_mask(u64 a, u64 b)
- {
- 	u64 x = a ^ b;
-diff --git a/lib/crypto/poly1305-donna64.c b/lib/crypto/poly1305-donna64.c
-index d34cf40..988702c 100644
---- a/lib/crypto/poly1305-donna64.c
-+++ b/lib/crypto/poly1305-donna64.c
-@@ -10,8 +10,6 @@
- #include <asm/unaligned.h>
- #include <crypto/internal/poly1305.h>
+-typedef struct {
+ 	__be64 a, b;
+ } be128;
  
--typedef __uint128_t u128;
--
- void poly1305_core_setkey(struct poly1305_core_key *key,
- 			  const u8 raw_key[POLY1305_BLOCK_SIZE])
+@@ -61,20 +57,16 @@ typedef struct {
+ 	__le64 b, a;
+ } le128;
+ 
+-static inline void u128_xor(u128 *r, const u128 *p, const u128 *q)
++static inline void be128_xor(be128 *r, const be128 *p, const be128 *q)
  {
+ 	r->a = p->a ^ q->a;
+ 	r->b = p->b ^ q->b;
+ }
+ 
+-static inline void be128_xor(be128 *r, const be128 *p, const be128 *q)
+-{
+-	u128_xor((u128 *)r, (u128 *)p, (u128 *)q);
+-}
+-
+ static inline void le128_xor(le128 *r, const le128 *p, const le128 *q)
+ {
+-	u128_xor((u128 *)r, (u128 *)p, (u128 *)q);
++	r->a = p->a ^ q->a;
++	r->b = p->b ^ q->b;
+ }
+ 
+ #endif /* _CRYPTO_B128OPS_H */
