@@ -2,94 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DC6B70A8A3
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 17:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30C1270A8AE
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 17:06:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231657AbjETPA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 11:00:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56180 "EHLO
+        id S231720AbjETPG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 11:06:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230014AbjETPA4 (ORCPT
+        with ESMTP id S229737AbjETPGZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 11:00:56 -0400
-Received: from smtp.smtpout.orange.fr (smtp-15.smtpout.orange.fr [80.12.242.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 396D1118
-        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 08:00:55 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id 0O4hqFQmweM6M0O4iqgCiP; Sat, 20 May 2023 17:00:53 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1684594853;
-        bh=5VvxviU32EnF0yUc09qoA4jqdLeStDT9+mAuA1G4mT8=;
-        h=From:To:Cc:Subject:Date;
-        b=QyT70HvV0e5RPfiuGIrnDb/2Rni0o2JNkfLH9Xnif4lQWNXymjTE4Pp8pXFvUuufv
-         jAodpg9v2ARZslta04J0XOkseNB0plN7Gta57uvW+RwcGBsd7ANChzHaTYEYD67/A+
-         t7RPE59bhX6x1mwoaaOB9xIzomKA+h3J9Mw4f5dlJAjBzp6AiAP6HfM/kYYjfUe2ag
-         KFSdS66CHdYGz8ctvva/4/sAhcqImOmUZ59GMfyExKNsrSFaXWfWd6daxlaVOaP392
-         1TdFD5Xk+Tz2/xAKb3gbZoPbaFloiA5dtXhg6vRLml1TapBPcqtUSMNUmu+as7ZIf6
-         MOMw8Bb4h58YQ==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 20 May 2023 17:00:53 +0200
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Olivier Moysan <olivier.moysan@foss.st.com>,
-        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        alsa-devel@alsa-project.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] ASoC: stm32: sai: Use the devm_clk_get_optional() helper
-Date:   Sat, 20 May 2023 17:00:50 +0200
-Message-Id: <f7987f18dadf77bfa09969fd4c82d5a0f4e4e3b7.1684594838.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sat, 20 May 2023 11:06:25 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2D0FDC3
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 08:06:24 -0700 (PDT)
+Received: (qmail 73707 invoked by uid 1000); 20 May 2023 11:06:23 -0400
+Date:   Sat, 20 May 2023 11:06:23 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     syzbot <syzbot+e761775e8f4a28711f19@syzkaller.appspotmail.com>
+Cc:     andreyknvl@google.com, charu@tickmarks.net,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] [usb?] INFO: task hung in usb_register_dev
+Message-ID: <32b49d74-16df-4f8e-9956-c7705a900ee9@rowland.harvard.edu>
+References: <0000000000003a41f705a9c74dfa@google.com>
+ <00000000000041730905fc1940ff@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00000000000041730905fc1940ff@google.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use devm_clk_get_optional() instead of hand writing it.
-This saves some LoC and improves the semantic.
+On Fri, May 19, 2023 at 10:24:25PM -0700, syzbot wrote:
+> syzbot suspects this issue was fixed by commit:
+> 
+> commit df05a9b05e466a46725564528b277d0c570d0104
+> Author: Alan Stern <stern@rowland.harvard.edu>
+> Date:   Mon Apr 10 19:38:22 2023 +0000
+> 
+>     USB: sisusbvga: Add endpoint checks
+> 
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1286f641280000
+> start commit:   7d2a07b76933 Linux 5.14
+> git tree:       upstream
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=b04081cf516e2565
+> dashboard link: https://syzkaller.appspot.com/bug?extid=e761775e8f4a28711f19
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=133519b1300000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=116ec82e300000
+> 
+> If the result looks correct, please mark the issue as fixed by replying with:
+> 
+> #syz fix: USB: sisusbvga: Add endpoint checks
+> 
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- sound/soc/stm/stm32_sai_sub.c | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+If that commit does fix this problem, it's entirely by accident.  I 
+suspect that instead the commit merely prevents the reproducer from 
+entering the buggy pathway, but that pathway still exists.
 
-diff --git a/sound/soc/stm/stm32_sai_sub.c b/sound/soc/stm/stm32_sai_sub.c
-index f6695dee353b..271ec5b3378d 100644
---- a/sound/soc/stm/stm32_sai_sub.c
-+++ b/sound/soc/stm/stm32_sai_sub.c
-@@ -1485,12 +1485,9 @@ static int stm32_sai_sub_parse_of(struct platform_device *pdev,
- 		if (ret < 0)
- 			return ret;
- 	} else {
--		sai->sai_mclk = devm_clk_get(&pdev->dev, "MCLK");
--		if (IS_ERR(sai->sai_mclk)) {
--			if (PTR_ERR(sai->sai_mclk) != -ENOENT)
--				return PTR_ERR(sai->sai_mclk);
--			sai->sai_mclk = NULL;
--		}
-+		sai->sai_mclk = devm_clk_get_optional(&pdev->dev, "MCLK");
-+		if (IS_ERR(sai->sai_mclk))
-+			return PTR_ERR(sai->sai_mclk);
- 	}
- 
- 	return 0;
--- 
-2.34.1
+In fact, I'd guess from reading through the driver that the problem is 
+that it does dozens of I/O operations, with 5-second timeouts and 
+multiple retries, without checking for errors until the end.  All while 
+holding a contested mutex.
 
+However the driver is not maintained much AFAICT, so it's not likely to 
+get fixed.  It's probably also not used by more than a few people, if 
+any.
+
+Alan Stern
