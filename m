@@ -2,142 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4BF370A5A5
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 07:21:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7492E70A5A8
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 07:24:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbjETFVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 01:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35802 "EHLO
+        id S229901AbjETFYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 01:24:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjETFVx (ORCPT
+        with ESMTP id S229503AbjETFY1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 01:21:53 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF101B7;
-        Fri, 19 May 2023 22:21:50 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f42769a0c1so40338225e9.2;
-        Fri, 19 May 2023 22:21:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684560109; x=1687152109;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+YCeLgnfdNNLRbQJ3YR4Z/VQhSO2Fn36PmEIuzpNl+A=;
-        b=qJMAA70oc2XzjFfK6LPciZZQX2UKttbs+TQxY35L4pb79WT5OF3+MZZGqHT4YHfuAM
-         yQ9VXsEnIgwnlo2mLlA+UcY8p7lXlWs3dDK1rjLegS/JB9UMW4dKKr44A+h2KTvBFh2P
-         i3lJ24kUMGsp0l97Sq/Q7+hPMOx/TH+8c1plxCa03LEupDJd9GB7Ff8Mgk9a930xkeWR
-         yhmy9LwdvUrNh9FAyBb+2qNOo2FTi8zAZJZY4MZSjxDkFlJfnhrY6dT2ctcRQPcEvFbC
-         uFlZ8p8+TmykOoeWdT9qmQ/HDEdELlbSRVLyxIb12w9GN0LFjpEaqHCie1vuGi3OhpSl
-         ontg==
+        Sat, 20 May 2023 01:24:27 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9B61B5
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 22:24:26 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-76c48b53e16so34187739f.1
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 22:24:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684560109; x=1687152109;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+YCeLgnfdNNLRbQJ3YR4Z/VQhSO2Fn36PmEIuzpNl+A=;
-        b=ELtLzmR/PhKTcfYIsVLpj72/NyYAvTh+jg0Wznc19s+YevRZfM5+jhvfbyBgeDiNpw
-         N0Rpaa9McFsURfF3llaIMpx9qOYqY7ovtmVHs0KdJVpFQqHhlm/P0Wru2jFCm5BQFzzH
-         hfR99o/0zg8ekRMoCqsjJuGDdL6yfoJdH+UvECPUdc1wDl8uxc1lk95AHgwtV3+0Eg+V
-         FjbSUzt1vtfW9a9vM3xR5xnFIDKPSdzDopNxAYP/hBtlvga0oAf2lUGajod53JD6dya5
-         R1mEM0DALKSnRW0//7lGQfuNQe8Lqmx+6dsT3zsmFYkel5ZNSyazC6P9FYqGsFMVZM+z
-         k2OA==
-X-Gm-Message-State: AC+VfDxuYiontxVIIL64FzRm89nFpG9xGFvNdC6Ylg1aL6cnn4P0r0ak
-        GSKynHTmXZmNE+M8tFbhmdc=
-X-Google-Smtp-Source: ACHHUZ4Eoa9xWVslykQCIhtD+WNpYCFuNO5kU1HN6r6LAMURYRyh8pv+wrNmJ053DffGSdTv1WNVTA==
-X-Received: by 2002:a1c:7314:0:b0:3f4:2bce:eef8 with SMTP id d20-20020a1c7314000000b003f42bceeef8mr2763578wmb.16.1684560108575;
-        Fri, 19 May 2023 22:21:48 -0700 (PDT)
-Received: from localhost (host81-154-179-160.range81-154.btcentralplus.com. [81.154.179.160])
-        by smtp.gmail.com with ESMTPSA id l13-20020a7bc44d000000b003f42328b5d9sm1062855wmi.39.2023.05.19.22.21.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 22:21:47 -0700 (PDT)
-Date:   Sat, 20 May 2023 06:19:37 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH] [suggestion] mm/gup: avoid IS_ERR_OR_NULL
-Message-ID: <1ca47b8a-292c-47ab-aa6f-ca24fdfc0d3c@lucifer.local>
-References: <20230519093953.10972-1-arnd@kernel.org>
- <5b071f65-7f87-4a7b-a76a-f4a1c1568ae7@lucifer.local>
- <ZGf1hV7iEQyqAim5@ziepe.ca>
+        d=1e100.net; s=20221208; t=1684560266; x=1687152266;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SrdV0ygMdYPqAmG7LwAZV4OGjE5KtVQqdUSmJPUHjZU=;
+        b=NSRoR8aLjLHdwtEZyBfYhVmGZMG6GUIlaMjkloZxY0FYwhJ4dggtr+7SPEveHSwT+T
+         pwloLU/9e0WPZTt3XEgKaeARilel4JM7CciMlgxoAPsdr5ED9qWhCtx8O5PPQIx352K1
+         VLXcq3XlbpWqSvVRN07n6wMDQYwmpWqa8AZwpj9u2T20+SbMDrU9RshrbfXnHqfxgzx8
+         Y2z/FuoqpwRsvjPsry0/mhUd6E0e++hVKBf0+mztVXhZizqdcLduq1s5AE4T3+fb09+P
+         b8R6N5mjGHENE5PeuQ0IjVFAvGZxmBnUZNr3jGlYKsunD5JJlkN/ZyjxryzI4hLxBEnF
+         BTLA==
+X-Gm-Message-State: AC+VfDwI5be49XvMkIEJMbW2Fb0Iifh2qFeTbEpX53HhdD8EyoBoFNeO
+        T7exuFwreY9nohOvQRPGHgy62Bm01x2H14t9xLfDHDPO087U
+X-Google-Smtp-Source: ACHHUZ6hTFX7a0pVUYivQtv8iU28xZiCDjaD/cgUE6pqb8VNbogQ2Lh7JMQe9On01smA0p41OO2OMcJ1fCrx97WO3Na4JQboaq1h
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZGf1hV7iEQyqAim5@ziepe.ca>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:a10b:0:b0:416:5d0f:f494 with SMTP id
+ f11-20020a02a10b000000b004165d0ff494mr1852614jag.5.1684560265963; Fri, 19 May
+ 2023 22:24:25 -0700 (PDT)
+Date:   Fri, 19 May 2023 22:24:25 -0700
+In-Reply-To: <0000000000003a41f705a9c74dfa@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000041730905fc1940ff@google.com>
+Subject: Re: [syzbot] [usb?] INFO: task hung in usb_register_dev
+From:   syzbot <syzbot+e761775e8f4a28711f19@syzkaller.appspotmail.com>
+To:     andreyknvl@google.com, charu@tickmarks.net,
+        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 07:17:41PM -0300, Jason Gunthorpe wrote:
-> On Fri, May 19, 2023 at 03:51:51PM +0100, Lorenzo Stoakes wrote:
-> > Given you are sharply criticising the code I authored here, is it too much
-> > to ask for you to cc- me, the author on commentaries like this? Thanks.
-> >
-> > On Fri, May 19, 2023 at 11:39:13AM +0200, Arnd Bergmann wrote:
-> > > From: Arnd Bergmann <arnd@arndb.de>
-> > >
-> > > While looking at an unused-variable warning, I noticed a new interface coming
-> > > in that requires the use of IS_ERR_OR_NULL(), which tends to indicate bad
-> > > interface design and is usually surprising to users.
-> >
-> > I am not sure I understand your reasoning, why does it 'tend to indicate
-> > bad interface design'? You say that as if it is an obvious truth. Not
-> > obvious to me at all.
-> >
-> > There are 3 possible outcomes from the function - an error, the function
-> > failing to pin a page, or it succeeding in doing so. For some of the
-> > callers that results in an error, for others it is not an error.
->
-> No, there really isn't.
->
-> Either it pins the page or it doesn't. Returning "NULL" to mean a
-> specific kind of failure was encountered is crazy.. Especially if we
-> don't document what that specific failure even was.
->
+syzbot suspects this issue was fixed by commit:
 
-It's not a specific kind of failure, it's literally "I didn't pin any
-pages" which a caller may or may not choose to interpret as a failure.
+commit df05a9b05e466a46725564528b277d0c570d0104
+Author: Alan Stern <stern@rowland.harvard.edu>
+Date:   Mon Apr 10 19:38:22 2023 +0000
 
-> IIRC if you look really closely the only time get_user_pages()
-> actually returns 0 is if the input argument validation fails, which I
-> think is a bug that should be fixed.
+    USB: sisusbvga: Add endpoint checks
 
-That can be a reason for gup returning 0 but also if it you look at the
-main loop in __get_user_pages_locked(), if it can't find the VMA it will
-bail early, OR if the VMA flags are not as expected it'll bail early.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1286f641280000
+start commit:   7d2a07b76933 Linux 5.14
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=b04081cf516e2565
+dashboard link: https://syzkaller.appspot.com/bug?extid=e761775e8f4a28711f19
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=133519b1300000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=116ec82e300000
 
->
-> get_user_pages() never returns 0, so get_user_page_vma_remote() never
-> returns NULL. Until we get there collapsing the 0 to EIO is perfectly
-> fine.
+If the result looks correct, please mark the issue as fixed by replying with:
 
-Well no, as shown above actually there is a distinct third state,
-i.e. couldn't pin, which if you see there is at least one case where the
-caller differentiates between an error and not being able to pin -
-uprobe_write_opcode() - which treats failure to pin as a non-error state.
+#syz fix: USB: sisusbvga: Add endpoint checks
 
-Also if we decided at some point to return -EIO as an error suddenly we
-would be treating an error state as not an error state in the proposed code
-which sounds like a foot gun.
-
->
-> Jason
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
