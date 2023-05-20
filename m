@@ -2,77 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8DE970AA81
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 20:33:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A858F70AA8D
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 20:41:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232034AbjETSdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 14:33:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53796 "EHLO
+        id S231946AbjETSlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 14:41:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232348AbjETSdc (ORCPT
+        with ESMTP id S231296AbjETSlV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 14:33:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF2DA171E;
-        Sat, 20 May 2023 11:33:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sat, 20 May 2023 14:41:21 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2D929D
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 11:41:19 -0700 (PDT)
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CC0ED616DA;
-        Sat, 20 May 2023 18:31:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 392A3C433D2;
-        Sat, 20 May 2023 18:31:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684607498;
-        bh=X2VGAPCVLCsc6/NzhzGn215Og+8S4PHUAyLBQgeh6rg=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=SQxFnCMTRIFMl2jHFKChsQkxaHB5whuykjYiAyX1yqWBU3zjSEsRzDxy7sASFDwlw
-         0elCmQmPAbch11hosz8TvrzlGvl3c3GnPaFY24anwU/ZirJsnyMRPEJXTXUGmxu1iZ
-         kak1eC9qtXGjd2TX/oC7R3Xy+4zAbdV3LOXsk44VX9ARAXLzgEgp0HMiMcouN30v4e
-         4wh7uB5TXR+S44sZt6gxhDpu9FyJ3fHumnHzxcaxue/ow2g7Rh6S0mAVVT58G6HioW
-         +SoD/vtYbqEkuh6cJzl4nfRiWyAjuebOo3I2d0hdviT99PKGS/SdxVInESd0a3ikY7
-         bDN1INMJX6ECg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 270DBC73FE0;
-        Sat, 20 May 2023 18:31:38 +0000 (UTC)
-Subject: Re: [GIT PULL] TTY/Serial driver fixes for 6.4-rc3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <ZGj-S_GkMqxVBlDe@kroah.com>
-References: <ZGj-S_GkMqxVBlDe@kroah.com>
-X-PR-Tracked-List-Id: <linux-serial.vger.kernel.org>
-X-PR-Tracked-Message-Id: <ZGj-S_GkMqxVBlDe@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-6.4-rc3
-X-PR-Tracked-Commit-Id: 8fb9ea65c9d1338b0d2bb0a9122dc942cdd32357
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 0dd2a6fb1e34d6dcb96806bc6b111388ad324722
-Message-Id: <168460749815.29791.4858353528788159525.pr-tracker-bot@kernel.org>
-Date:   Sat, 20 May 2023 18:31:38 +0000
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Jiri Slaby <jslaby@suse.cz>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 570AE3F22E
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 18:41:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1684608078;
+        bh=C/qPwdzE2G8bmRC9cyFwLOXABhp9l9ZfW4+oqS1kXSE=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=XKXu1tvIPc358yamsTwgxwV0M0AR6Dz5xWkdMCR4vjO3W4DFtykUPcH3eg6KtVJa0
+         uAiHiKV2id5UnMOrpdCb75d0MEO+kjOPPimPVTxSFYd5NysHGeVVSVIFuZa0LlgQxT
+         qt/gKoFaTU6W2GjWT1ULF9Sb7iHS+nZFql9JDo40mwBsdcWpIBOe0+ImLXRKw8n7sX
+         NAp60+T0c59JbyoXpi1nKFBzpi2AhAkadnRSb2rOLDVcVmWAlbgM4KT3YMsQIYJrto
+         wOAQsCw7usKj4L9nWmEYptxpUEoc/oB/pOrYRuy960sgsFKLjJDYmQL5i28pJUfP8B
+         fDjPOlHqjiGAA==
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-9663552473fso573785066b.1
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 11:41:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684608078; x=1687200078;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=C/qPwdzE2G8bmRC9cyFwLOXABhp9l9ZfW4+oqS1kXSE=;
+        b=koJ6xiwblK6nREO+rnX9SbXXbM80R7CuGCLu7fFVAkCXP2/jrfA5IaxqDMT50OjEY6
+         FdxG0eZMAK/poG9kwLfYZbv6ISgs420eQKianvECyZX6TbU/4mzfyxaDgUJM4hQuMVdv
+         QdxT2sWbfnzk6mBYCNhqlu7Tn2S5gZT2eU5T2MT7UcqapLv+eI3wrU/EhKRkfVbeNWm1
+         ZoL0u4ge351T1vIRMMzOvZsedUq9lUaYB52nqD/z7Llmnr3lRPqFi0JmTo6YcHcwZa6e
+         EiRvvu5zsUvcx69ab0eVYhSh5tmP3VDXvgVN8Kj9EpF/uoNIdmztOKKyKT30X78wohAq
+         4Nkw==
+X-Gm-Message-State: AC+VfDw1aaDSfUllIRgugxL4qfnpDJaww+fkcPUB3iQovW9mPly6Zgli
+        VctFGIJVTLAgt6m/G0A5aWQf8eVJDHJj5tBS0eTqG89RE3a5VkyL1BVM1fHJhKxnEr09ce/cVPF
+        YR+HEpayMPi7XF5wmzJWCWOIZlPgrTC/K8MqZM79ykQ==
+X-Received: by 2002:a17:906:4fd0:b0:94f:36a0:da45 with SMTP id i16-20020a1709064fd000b0094f36a0da45mr6744526ejw.29.1684608077966;
+        Sat, 20 May 2023 11:41:17 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6Xoe3IyQTapTDN6XUEY4kDd0qIfZg0/ZY+peJltZTxeQjT+uu29NTmJQOVkcaER0JvBQaGfQ==
+X-Received: by 2002:a17:906:4fd0:b0:94f:36a0:da45 with SMTP id i16-20020a1709064fd000b0094f36a0da45mr6744513ejw.29.1684608077668;
+        Sat, 20 May 2023 11:41:17 -0700 (PDT)
+Received: from righiandr-XPS-13-7390.homenet.telecomitalia.it (host-87-10-127-160.retail.telecomitalia.it. [87.10.127.160])
+        by smtp.gmail.com with ESMTPSA id x6-20020a1709065ac600b009663115c8f8sm1046294ejs.152.2023.05.20.11.41.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 20 May 2023 11:41:17 -0700 (PDT)
+From:   Andrea Righi <andrea.righi@canonical.com>
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Amir Goldstein <amir73il@gmail.com>, linux-unionfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] overlayfs: debugging check for valid superblock
+Date:   Sat, 20 May 2023 20:41:12 +0200
+Message-Id: <20230520184114.77725-1-andrea.righi@canonical.com>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sat, 20 May 2023 18:07:23 +0100:
+OVL_FS() is used to get a struct ovl_fs from a sturct super_block, but
+we don't have any check to determine if the superblock is valid or not.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-6.4-rc3
+This can lead to unexpected behaviors or bugs that are pretty hard to
+track down.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/0dd2a6fb1e34d6dcb96806bc6b111388ad324722
+Add an explicit WARN_ON_ONCE() check to OVL_FS() to make sure it's
+always used with a valid overlayfs superblock.
 
-Thank you!
+To avoid enabling this additional pendatic check everywhere, introduce
+the new config option CONFIG_OVERLAY_FS_DEBUG, that can be used in the
+future also for other additional debugging checks.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Maybe a nicer solution could be to return an error from OVL_FS() when
+it's used with an invalid superblock and propagate the error in the rest
+of overlayfs code, but for now having at least the possibility to
+trigger a warning can help to catch potential bugs in advance.
+
+Changelog (v1 -> v2):
+ - replace BUG_ON() with WARN_ON_ONCE()
+ - introduce CONFIG_OVERLAY_FS_DEBUG
+
+Andrea Righi (2):
+      ovl: Kconfig: introduce CONFIG_OVERLAY_FS_DEBUG
+      ovl: make consistent use of OVL_FS()
+
+ fs/overlayfs/Kconfig     |  9 +++++++++
+ fs/overlayfs/copy_up.c   |  2 +-
+ fs/overlayfs/export.c    | 10 +++++-----
+ fs/overlayfs/inode.c     |  8 ++++----
+ fs/overlayfs/namei.c     |  2 +-
+ fs/overlayfs/ovl_entry.h | 16 ++++++++++++++++
+ fs/overlayfs/super.c     | 12 ++++++------
+ fs/overlayfs/util.c      | 18 +++++++++---------
+ 8 files changed, 51 insertions(+), 26 deletions(-)
+
