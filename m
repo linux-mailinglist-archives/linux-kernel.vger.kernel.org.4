@@ -2,109 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E662F70A54E
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 06:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D673770A557
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 06:42:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230446AbjETEWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 00:22:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54170 "EHLO
+        id S229673AbjETEmy convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 20 May 2023 00:42:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbjETEWv (ORCPT
+        with ESMTP id S229379AbjETEmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 00:22:51 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84BF61BD
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 21:22:50 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-561f10b6139so24355077b3.2
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 21:22:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1684556569; x=1687148569;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FtTOSvtfQG93Oel0meKxRB+k4uCHs3I7uk0ZTZm75x8=;
-        b=Q1EECUwMrhw+/VXBEDI08aoB2G39WG+y6CST9973Czb0jNct9GJ8fvqXwZQ02FdRM3
-         cKLG5mt5dpzf002oCDfbU9jbnIZTqsxzdoQXfTG73/oJYi0BZ/JZMm9ASd56fOw4H4Nz
-         LLq9BTdtd8cU7BNRVp9zQyK8+mPz4vJYBcLFw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684556569; x=1687148569;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FtTOSvtfQG93Oel0meKxRB+k4uCHs3I7uk0ZTZm75x8=;
-        b=S8QbpDAmlpvQJd87NbO5yob4mQmbC2q/GJ0uAYyT7f/ixc9zfnr7R+rPmUcpyyekCA
-         x6UIVOcueOVK8RcEk72gID7ntcSVU6OrTHXviXw7+sEeZIlY35vrbh+lbAewOoZMxxKO
-         MXcokgiksDqbBiEXZ9SsttyuLoc/T+p8jb0nOCZnCKVb8fjp8a+dWgOx/ke2ZU+rbFF4
-         nGb9fI1ZwygJbtI52kHnj9RfuFRg7rpBa4iiXyqkHvJA3/j58XgQXJSeBLDNc6bX3dXa
-         exDWwohgWg3MOXout5WXwh9uNBQf/4bLF1bOZjbefZqR0/TZp2zxob3cP5xh52UKBga2
-         Z/8g==
-X-Gm-Message-State: AC+VfDzktn6zbhlAK2zHRBH+L1jsSUM3Jevo3FRP/ApLepCWpGgre4S+
-        9tVZ3Yifm5zSMvdw4xplwCsPF061Y5ofFMsFMMfFow==
-X-Google-Smtp-Source: ACHHUZ4NMcs0KKTciTfhFcPKbClou7h2OuXMWrw7zvwLfXuyRiIvLoBZUabWp3vqHHxnFyfuxaywKWAJmJPzE4ag+II=
-X-Received: by 2002:a0d:e288:0:b0:545:637c:3ed7 with SMTP id
- l130-20020a0de288000000b00545637c3ed7mr4458531ywe.1.1684556569453; Fri, 19
- May 2023 21:22:49 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230519190934.339332-1-joel@joelfernandes.org>
- <20230519190934.339332-2-joel@joelfernandes.org> <CAHk-=whoajP4bZMbZC_VYmBhmhCpXsBesszwWUH0i6SpK_dAtw@mail.gmail.com>
- <CAEXW_YQ4wdGVa5M6jZfi5d-pdJOp1Nu7qTBvWYS=255AnYWZCw@mail.gmail.com>
- <CAHk-=wj9j+puqhe+E-AcG5j-5nP_tQ7DmAcb=Cb6v7n4mpxXjQ@mail.gmail.com>
- <CAEXW_YT1qr9F1QaABthUx6qxWPYYom-oW7XMVExzrHLWdhUGKg@mail.gmail.com>
- <CAEXW_YTqjGG4Y06brQthe4UMqprTJm=xk=P7i5gTpm2rZRZkXQ@mail.gmail.com>
- <CAHk-=wh3tjw+MNxe6zuixtD=D8bXYHWs9h3Y++r5ObTcSvz6+A@mail.gmail.com> <CAEXW_YS-ScBYeTtj7PTZSSYXeApsZ1vhTpBFtq5jNA_R9055=Q@mail.gmail.com>
-In-Reply-To: <CAEXW_YS-ScBYeTtj7PTZSSYXeApsZ1vhTpBFtq5jNA_R9055=Q@mail.gmail.com>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Sat, 20 May 2023 00:22:38 -0400
-Message-ID: <CAEXW_YRbekxrn4iUvWGzJBfwMButjT=srHZS2H9P910K8YmH=g@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] mm/mremap: Optimize the start addresses in move_page_tables()
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
-        Kirill A Shutemov <kirill@shutemov.name>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Sat, 20 May 2023 00:42:52 -0400
+Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044FFE40;
+        Fri, 19 May 2023 21:42:49 -0700 (PDT)
+Received: from smtpclient.apple (unknown [124.16.139.61])
+        by APP-05 (Coremail) with SMTP id zQCowAC3v4u5T2hkS4LeAQ--.40596S2;
+        Sat, 20 May 2023 12:42:34 +0800 (CST)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
+Subject: Re: memory leak in do_epoll_create
+From:   =?utf-8?B?6IyD5L+K5p2w?= <junjie2020@iscas.ac.cn>
+In-Reply-To: <20230519185703.GA3288616@google.com>
+Date:   Sat, 20 May 2023 12:42:23 +0800
+Cc:     martin.petersen@oracle.com, jejb@linux.ibm.com,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Transfer-Encoding: 8BIT
+Message-Id: <BF300751-7758-4FDE-AB54-9D25974DC873@iscas.ac.cn>
+References: <eb5a09c.67fa.1883321b285.Coremail.junjie2020@iscas.ac.cn>
+ <20230519185703.GA3288616@google.com>
+To:     Eric Biggers <ebiggers@kernel.org>
+X-Mailer: Apple Mail (2.3731.500.231)
+X-CM-TRANSID: zQCowAC3v4u5T2hkS4LeAQ--.40596S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7urW8AFy7tF15GrW5uFW3KFg_yoW8JFy7pF
+        45ta9a9r4ktFn3J340va18Za4ft3yfWFy3Jrs8Xw4rGr9xJryfArykKFWY9asFqr18CrWF
+        vrWqqF1qyw1UGaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvIb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I
+        8E87Iv6xkF7I0E14v26r4UJVWxJr1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8I
+        j28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr
+        4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxG
+        rwCY02Avz4vE14v_Gryl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
+        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
+        6r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2
+        IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv
+        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf
+        9x07j7KsbUUUUU=
+X-Originating-IP: [124.16.139.61]
+X-CM-SenderInfo: xmxqyxbhsqji46lvutnvoduhdfq/
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 20, 2023 at 12:14=E2=80=AFAM Joel Fernandes <joel@joelfernandes=
-.org> wrote:
->
-> On Sat, May 20, 2023 at 12:01=E2=80=AFAM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
-> >
-> > On Fri, May 19, 2023 at 8:57=E2=80=AFPM Joel Fernandes <joel@joelfernan=
-des.org> wrote:
-> > >
-> > > I also realize that I don't really need to check whether the masked
-> > > source address falls under a VMA neighboring to that of the source's.
-> >
-> > I don't think that's true.
-> >
-> > You can't start randomly moving other source vma's that may have other =
-contents.
->
-> If the beginning part of the PMD is not mapped at the destination, I
-> thought maybe a whole PMD could be moved to it. But I guess not
-> because we don't want those contents to be accessible. So then in that
-> case we have to forbid the optimization for all intra-VMA moves except
-> those involving the stack. I will think more about it.
+Thank you for your response. This is my first time submitting crashes to kernel developers, so forgive me if there are any shortcomings. In my opinion, some of the code crashes in the old version may also be present in the new version. That’s why I want to report these crash to you. I will take note of the issues you mentioned and make a meaningful contribution by submitting valid kernel errors next time.!
+Sincerely!
+> 2023年5月20日 02:57，Eric Biggers <ebiggers@kernel.org> 写道：
+> 
+> On Fri, May 19, 2023 at 04:30:26PM +0800, 范俊杰 wrote:
+>> Hi Kernel maintainers,
+>> 
+>> Our tool found a new bug memory leak in do_epoll_create in Kernel commit
+>> v5.14.
+>> 
+> 
+> v5.14 is almost 2 years old.  Why are you testing such an old kernel version?
+> This bug could have already been fixed almost 2 years ago.
+> 
+> Also, if you think this is a bug in eventpoll, this report should be sent to
+> linux-fsdevel, as per './scripts/get_maintainer.pl fs/eventpoll.c'.  It's
+> unclear why you are sending this report to linux-scsi.
+> 
+>> The report is as below and this bug don't have a repro C program until
+>> now. Please inform me if you confirm this is a reproducible bug.
+> 
+> I think you answered your own question.  It doesn't have a reproducer;
+> therefore, it's not reproducible.
+> 
+> - Eric
 
-Duh, we can't move crap from the source like that also because it has
-real data. I think I got confused between "moving" and "copying". I
-feel silly, maybe it is time to go to sleep and live to fight another
-day.
-
- - Joel
