@@ -2,181 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D90D70A861
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 15:46:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC58570A862
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 15:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231164AbjETNqa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 09:46:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43450 "EHLO
+        id S231342AbjETNvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 09:51:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjETNq1 (ORCPT
+        with ESMTP id S229464AbjETNvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 09:46:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A0F1DE;
-        Sat, 20 May 2023 06:46:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2693D608D5;
-        Sat, 20 May 2023 13:46:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CC64C4339C;
-        Sat, 20 May 2023 13:46:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684590385;
-        bh=yIrQnawHJxJyexbo6ICsyoYjJo4r/4iP3AULd75+fu0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=maabUWJj3wwNV5MX26qtdjvxOdShqjT4k28TQ4J7tGe0zn/XmZK9Sa5gD2dnlVePf
-         fxPbQTBWAsz5go9X4oZcBgw79cIbEaoN0DPCi5+Gjyni9vvQV09rqFj8vWaB9LeKrw
-         +TxQ4hTylrqoP2bcv0bTGW3MylFtgHn19CrtR3wNQzuuO5vqJDQbirl+dpx6eBR05I
-         oZk0HTIsAdDQLN3ggPXZcY1xU3s+fQb2nFluTCWhJhHamKfJNAjBkJgdHh2qumSGcp
-         FmLDpIBJT2RD2U/7yH9nVgFIex4/ckZRJxa420t5BVX82WlEnj0WsjzMW7S+ccYIAl
-         YP5Kp8LNbU48Q==
-Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-38eda4ef362so2596563b6e.2;
-        Sat, 20 May 2023 06:46:25 -0700 (PDT)
-X-Gm-Message-State: AC+VfDw7wvyo3Rfh9CKU2qvesypoBtfB1dcbbMwp/A4x3tA2n+B9e9b4
-        IQ0bQojJdaqmJLs5u3cdrDtZqKobRibLZRnOXxA=
-X-Google-Smtp-Source: ACHHUZ4V7+GZIVtg8yKowpo9yasKR3QeANExbuoh5914rgZ5G0yPyKitI9qNJSr1olNJryUWH4OtmppGfjplb0vxqp0=
-X-Received: by 2002:a05:6808:8e7:b0:396:2678:f15d with SMTP id
- d7-20020a05680808e700b003962678f15dmr2968716oic.5.1684590384790; Sat, 20 May
- 2023 06:46:24 -0700 (PDT)
+        Sat, 20 May 2023 09:51:06 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 024ECC4
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 06:51:05 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id 98e67ed59e1d1-25367154308so2024341a91.1
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 06:51:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684590664; x=1687182664;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=v1DjKkNqJxAe4f+qRtBPeAc8nITQor5FKijXM6qfCso=;
+        b=NzJBUaOZA5G1WnPV+WkVooIG9lLQAVrTDQ16cKheCsE9jy1VAvjCpC0Ba3XyIfi5nJ
+         9LWlk3IfKgjqEO4ErgqOTA7eUeTruF13mNro9mGxjz6BpwJuTy4KingJNL3PAERWhjPJ
+         Lp69ICG7lxaJHwR5gShqUY3CusIgX8JXm7z94Y7R/qzg71wOZS8xOxMRBgB5+xY6hsSu
+         S0+uAvAlOgIj8mdKIg2mijFPg8rNL8YGSPFia0FMvZgaKYyS2tFtaFbghIPu5iPjCoo0
+         SqCtsiNMKPJ136R/5CZ72mmPxUDpG8zgYSevDFpqxFBSbHNuHF5lm1KvNEmmygCOfQyN
+         guJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684590664; x=1687182664;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=v1DjKkNqJxAe4f+qRtBPeAc8nITQor5FKijXM6qfCso=;
+        b=JJly9B9HenrBY214QWEb/JkHfs80y7gSFS5vqDV2dQXmHVxRZg0gfdj4YV0G6OAFtG
+         n2I0GhqnYLMnlHO+bG55LgKkXPpuFLIf+UesYxRDLaWdvy9QZhYRjYuzu+Kr3o8bJP23
+         edCL1qv01mMLMClWhJjP62l1FhPhTrvZippC+9HHlpzbc4pldWtuvL1KpdiDyLW6UaF5
+         9XcatbenMZPA5YPa7OQPzKPcwOy/J5+7XOTgqiZLHpacuoKRRA7D/UARAop/lZkfHhaS
+         8rJfH8V18AiKTO+yIoKuIBq94rS87VpXmWVnoPFXb0JPIyoV1Khk/Dvr7RvxcGYJFWyv
+         4jTg==
+X-Gm-Message-State: AC+VfDz+enc6KeyowYcPCT/gyKJ0IQzBxZhff/Xz5ALsC+frSxSE8+mR
+        X9Z3FarNwCo9g3uozVJotLc=
+X-Google-Smtp-Source: ACHHUZ6GaD8+abD+X/MQmS2hqD4IMHqYPqXScSS516EF/bZdrcHeYGnN0LSVRqnmFGvDnJ/0sqS3Uw==
+X-Received: by 2002:a17:90b:400a:b0:253:8e47:40b8 with SMTP id ie10-20020a17090b400a00b002538e4740b8mr4286223pjb.1.1684590664240;
+        Sat, 20 May 2023 06:51:04 -0700 (PDT)
+Received: from debian.me (subs09a-223-255-225-69.three.co.id. [223.255.225.69])
+        by smtp.gmail.com with ESMTPSA id i7-20020a17090aee8700b0023a84911df2sm1283255pjz.7.2023.05.20.06.51.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 20 May 2023 06:51:03 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 21CFB105634; Sat, 20 May 2023 20:50:52 +0700 (WIB)
+Date:   Sat, 20 May 2023 20:50:52 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hawking Zhang <Hawking.Zhang@amd.com>, Le Ma <le.ma@amd.com>,
+        Tao Zhou <tao.zhou1@amd.com>,
+        YiPeng Chai <YiPeng.Chai@amd.com>,
+        "Jiadong.Zhu" <Jiadong.Zhu@amd.com>,
+        Yang Wang <KevinYang.Wang@amd.com>,
+        Candice Li <candice.li@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Likun Gao <Likun.Gao@amd.com>,
+        Linux AMDGPU <amd-gfx@lists.freedesktop.org>,
+        Linux DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>
+Cc:     "Azamat S. Kalimoulline" <turtle@bazon.ru>,
+        max <kernel-ODwfxu5zp4@maxxor.org>
+Subject: Re: Fwd: Kernel 5.11 crashes when it boots, it produces black screen.
+Message-ID: <ZGjQPFvnAvN6MJnc@debian.me>
+References: <c2168e4f-4d47-0d5d-a1b7-d237f0760df8@gmail.com>
 MIME-Version: 1.0
-References: <20230514152739.962109-1-masahiroy@kernel.org> <20230514152739.962109-15-masahiroy@kernel.org>
- <CAKwvOdkZgu7wmaxFMKKjY1WscWto=vU=KAEO-pVmJ8+zegWG4g@mail.gmail.com>
-In-Reply-To: <CAKwvOdkZgu7wmaxFMKKjY1WscWto=vU=KAEO-pVmJ8+zegWG4g@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sat, 20 May 2023 22:45:48 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARcSSA429nZENksFwVWu--gLhzymi06XLY7VpRimiHZaQ@mail.gmail.com>
-Message-ID: <CAK7LNARcSSA429nZENksFwVWu--gLhzymi06XLY7VpRimiHZaQ@mail.gmail.com>
-Subject: Re: [PATCH v5 14/21] modpost: remove is_shndx_special() check from section_rel(a)
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nicolas Pitre <npitre@baylibre.com>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="BrcuXWEws5Ub7YHG"
+Content-Disposition: inline
+In-Reply-To: <c2168e4f-4d47-0d5d-a1b7-d237f0760df8@gmail.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 6:23=E2=80=AFAM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Sun, May 14, 2023 at 8:28=E2=80=AFAM Masahiro Yamada <masahiroy@kernel=
-.org> wrote:
-> >
-> > This check is unneeded. Without it, sec_name() will returns the null
-> > string "", then section_mismatch() will return immediately.
-> >
-> > Anyway, special section indices do not appear quite often in these
-> > loops.
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
->
-> Could almost eliminate is_shndx_special after this. I think there's
-> only one callsite after this?
 
-There will be no callsite of is_shndx_special().
-I will remove the definition as well.
+--BrcuXWEws5Ub7YHG
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, May 10, 2023 at 03:26:56PM +0700, Bagas Sanjaya wrote:
+> Anyway, let me add this regression to regzbot:
+>=20
+> #regzbot introduced: v5.10..v5.11 https://bugzilla.kernel.org/show_bug.cg=
+i?id=3D212579
+> #regzbot title: Booting kernel on AMD Ryzen 5 PRO stucks in loading initrd
 
+Resolving...
 
- (I should check with the series applied;
-> this patch fails to apply on mainline if that's relevant for potential
-> merge conflicts).
->
-> Does doing that additional work speed things up though?
+#regzbot resolve: reporter found a workaround to the presumably firmware bug
 
+See [1] for the precise workaround.
 
-I do not know.
-
-As I wrote in the comment, special indices rarely appear in
-the relocation.
-I do not believe "let's bail out earlier" does not buy us.
-
-
-
->
-> > ---
-> >
-> >  scripts/mod/modpost.c | 16 ++++------------
-> >  1 file changed, 4 insertions(+), 12 deletions(-)
-> >
-> > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> > index 0ef9d6964b6a..28db215ecc71 100644
-> > --- a/scripts/mod/modpost.c
-> > +++ b/scripts/mod/modpost.c
-> > @@ -1370,7 +1370,6 @@ static int addend_mips_rel(struct elf_info *elf, =
-Elf_Shdr *sechdr, Elf_Rela *r)
-> >  static void section_rela(const char *modname, struct elf_info *elf,
-> >                          Elf_Shdr *sechdr)
-> >  {
-> > -       Elf_Sym  *sym;
-> >         Elf_Rela *rela;
-> >         Elf_Rela r;
-> >         unsigned int r_sym;
-> > @@ -1413,11 +1412,8 @@ static void section_rela(const char *modname, st=
-ruct elf_info *elf,
-> >                                 continue;
-> >                         break;
-> >                 }
-> > -               sym =3D elf->symtab_start + r_sym;
-> > -               /* Skip special sections */
-> > -               if (is_shndx_special(sym->st_shndx))
-> > -                       continue;
-> > -               check_section_mismatch(modname, elf, sym,
-> > +
-> > +               check_section_mismatch(modname, elf, elf->symtab_start =
-+ r_sym,
-> >                                        fsecndx, fromsec, r.r_offset, r.=
-r_addend);
-> >         }
-> >  }
-> > @@ -1425,7 +1421,6 @@ static void section_rela(const char *modname, str=
-uct elf_info *elf,
-> >  static void section_rel(const char *modname, struct elf_info *elf,
-> >                         Elf_Shdr *sechdr)
-> >  {
-> > -       Elf_Sym *sym;
-> >         Elf_Rel *rel;
-> >         Elf_Rela r;
-> >         unsigned int r_sym;
-> > @@ -1472,11 +1467,8 @@ static void section_rel(const char *modname, str=
-uct elf_info *elf,
-> >                 default:
-> >                         fatal("Please add code to calculate addend for =
-this architecture\n");
-> >                 }
-> > -               sym =3D elf->symtab_start + r_sym;
-> > -               /* Skip special sections */
-> > -               if (is_shndx_special(sym->st_shndx))
-> > -                       continue;
-> > -               check_section_mismatch(modname, elf, sym,
-> > +
-> > +               check_section_mismatch(modname, elf, elf->symtab_start =
-+ r_sym,
-> >                                        fsecndx, fromsec, r.r_offset, r.=
-r_addend);
-> >         }
-> >  }
-> > --
-> > 2.39.2
-> >
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
-
-
+[1]: https://bugzilla.kernel.org/show_bug.cgi?id=3D216340#c53
 
 --=20
-Best Regards
-Masahiro Yamada
+An old man doll... just what I always wanted! - Clara
+
+--BrcuXWEws5Ub7YHG
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZGjQNQAKCRD2uYlJVVFO
+ow8xAP95LId80yotLjJuCqAvScT3zVqlzU3jw0za7laxNjvTOAD+IoX87VSLE1u5
+TGII8nt/cEhCPC6HB1p6JcsDu48a3Ag=
+=cXnc
+-----END PGP SIGNATURE-----
+
+--BrcuXWEws5Ub7YHG--
