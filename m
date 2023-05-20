@@ -2,79 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7492E70A5A8
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 07:24:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7EB70A5B0
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 07:31:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbjETFYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 01:24:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36510 "EHLO
+        id S229518AbjETFbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 01:31:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229503AbjETFY1 (ORCPT
+        with ESMTP id S229602AbjETFbE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 01:24:27 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9B61B5
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 22:24:26 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-76c48b53e16so34187739f.1
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 22:24:26 -0700 (PDT)
+        Sat, 20 May 2023 01:31:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A3AE1B7
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 22:30:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684560615;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=XzCEspLGlKA254CwGe35oONfGtSOvg7zfEOdpWW9psA=;
+        b=gxlrjznh8a5Ksia6vy/ycC1tZgqKGIdLecDRkZgDtFiaihlSorcGoo2re5UWIAF8bu5lBl
+        DgfN4wxQX/hC15it5tatUHbCUmxdCgirKUQjZBH7ltMEFwL7qIaAtdkTl0ndu8KLIWIAL5
+        rqz88/7FrirH1dtwhXujCQdJZ3zhNB4=
+Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
+ [209.85.161.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-497-T9J5ppVKM_Sy9LPGeFnuyw-1; Sat, 20 May 2023 01:30:14 -0400
+X-MC-Unique: T9J5ppVKM_Sy9LPGeFnuyw-1
+Received: by mail-oo1-f71.google.com with SMTP id 006d021491bc7-5551fb18a74so62709eaf.2
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 22:30:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684560266; x=1687152266;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SrdV0ygMdYPqAmG7LwAZV4OGjE5KtVQqdUSmJPUHjZU=;
-        b=NSRoR8aLjLHdwtEZyBfYhVmGZMG6GUIlaMjkloZxY0FYwhJ4dggtr+7SPEveHSwT+T
-         pwloLU/9e0WPZTt3XEgKaeARilel4JM7CciMlgxoAPsdr5ED9qWhCtx8O5PPQIx352K1
-         VLXcq3XlbpWqSvVRN07n6wMDQYwmpWqa8AZwpj9u2T20+SbMDrU9RshrbfXnHqfxgzx8
-         Y2z/FuoqpwRsvjPsry0/mhUd6E0e++hVKBf0+mztVXhZizqdcLduq1s5AE4T3+fb09+P
-         b8R6N5mjGHENE5PeuQ0IjVFAvGZxmBnUZNr3jGlYKsunD5JJlkN/ZyjxryzI4hLxBEnF
-         BTLA==
-X-Gm-Message-State: AC+VfDwI5be49XvMkIEJMbW2Fb0Iifh2qFeTbEpX53HhdD8EyoBoFNeO
-        T7exuFwreY9nohOvQRPGHgy62Bm01x2H14t9xLfDHDPO087U
-X-Google-Smtp-Source: ACHHUZ6hTFX7a0pVUYivQtv8iU28xZiCDjaD/cgUE6pqb8VNbogQ2Lh7JMQe9On01smA0p41OO2OMcJ1fCrx97WO3Na4JQboaq1h
+        d=1e100.net; s=20221208; t=1684560613; x=1687152613;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XzCEspLGlKA254CwGe35oONfGtSOvg7zfEOdpWW9psA=;
+        b=AT+DzecBh1kwZDTyJECzDWKmz5VVQgbh8+l+k6Z36RdEOVwkuk30VWHzgPNx6v85PX
+         Broot8tQUg8Qz9U4m5RfZPISUt9uARXcKKfymvG37EdbDbyo/1Rj20432ZHxiBj2PjCY
+         bl0sWb0h9NsUJ7A4eyMdqMOJoePjUYNmj9N27HdSzKdcdbRHSxicpSQvIfryy+UwYXHa
+         dlrS2TCjiWFRhikuV5gNqSECohPn99x/qpbhxJzeSdYEmWNk+qUVz9n341g9pfo0VXjZ
+         nl/euDUWMh8UrGxZJknAU+MJYDg6roeN8O2x2S3yzfnKdrS3qElY+EzHmgy6HKw0S5JB
+         OO5A==
+X-Gm-Message-State: AC+VfDyx4TJQ3z0oDnNpP3HfApUHC1ht/judHmZVpMEMADd2w6uudR9h
+        504X/EqBTfmpXGkK1DIP/gbFcmbGL9TNdU0cGm/JGtaH4lsXtxU0DQn2FFICfYwF7NzSeoghlCS
+        yHEgA3SUcCOaaqFzyI2XUnw7sXQjor1FAs7Q=
+X-Received: by 2002:a4a:2a56:0:b0:550:ab9f:ae6c with SMTP id x22-20020a4a2a56000000b00550ab9fae6cmr1939164oox.7.1684560613395;
+        Fri, 19 May 2023 22:30:13 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4ZWo8MuQDw+aQtJyA+TVBUa/z/h7TANbcVuEGzhRhIWm7wgNVaPiBGm+XdzbHOJcW9FAjxTQ==
+X-Received: by 2002:a4a:2a56:0:b0:550:ab9f:ae6c with SMTP id x22-20020a4a2a56000000b00550ab9fae6cmr1939150oox.7.1684560613112;
+        Fri, 19 May 2023 22:30:13 -0700 (PDT)
+Received: from localhost.localdomain ([2804:1b3:a803:7f0c:32e1:e970:713a:f05b])
+        by smtp.gmail.com with ESMTPSA id j14-20020a4ad6ce000000b005524555de56sm365494oot.36.2023.05.19.22.30.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 May 2023 22:30:12 -0700 (PDT)
+From:   Leonardo Bras <leobras@redhat.com>
+To:     Jens Axboe <axboe@kernel.dk>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Leonardo Bras <leobras@redhat.com>,
+        Guo Ren <guoren@kernel.org>,
+        Valentin Schneider <vschneid@redhat.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH v2 0/3] Move usages of struct __call_single_data to call_single_data_t
+Date:   Sat, 20 May 2023 02:29:55 -0300
+Message-Id: <20230520052957.798486-1-leobras@redhat.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-Received: by 2002:a02:a10b:0:b0:416:5d0f:f494 with SMTP id
- f11-20020a02a10b000000b004165d0ff494mr1852614jag.5.1684560265963; Fri, 19 May
- 2023 22:24:25 -0700 (PDT)
-Date:   Fri, 19 May 2023 22:24:25 -0700
-In-Reply-To: <0000000000003a41f705a9c74dfa@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000041730905fc1940ff@google.com>
-Subject: Re: [syzbot] [usb?] INFO: task hung in usb_register_dev
-From:   syzbot <syzbot+e761775e8f4a28711f19@syzkaller.appspotmail.com>
-To:     andreyknvl@google.com, charu@tickmarks.net,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, stern@rowland.harvard.edu,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
+Changes since RFCv1:
+- request->csd moved to the middle of the struct, without size impact
+- type change happens in a different patch (thanks Jens Axboe!)
+- Improved the third patch to also update the .h file.
 
-commit df05a9b05e466a46725564528b277d0c570d0104
-Author: Alan Stern <stern@rowland.harvard.edu>
-Date:   Mon Apr 10 19:38:22 2023 +0000
+Leonardo Bras (3):
+  blk-mq: Move csd inside struct request so it's 32-byte aligned
+  blk-mq: Change request->csd type to call_single_data_t
+  smp: Change signatures to use call_single_data_t
 
-    USB: sisusbvga: Add endpoint checks
+ include/linux/blk-mq.h | 10 +++++-----
+ include/linux/smp.h    |  2 +-
+ kernel/smp.c           |  4 ++--
+ kernel/up.c            |  2 +-
+ 4 files changed, 9 insertions(+), 9 deletions(-)
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1286f641280000
-start commit:   7d2a07b76933 Linux 5.14
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=b04081cf516e2565
-dashboard link: https://syzkaller.appspot.com/bug?extid=e761775e8f4a28711f19
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=133519b1300000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=116ec82e300000
+-- 
+2.40.1
 
-If the result looks correct, please mark the issue as fixed by replying with:
-
-#syz fix: USB: sisusbvga: Add endpoint checks
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
