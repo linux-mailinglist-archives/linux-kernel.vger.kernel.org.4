@@ -2,88 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 305F570A6E8
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 11:54:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A7EA70A6EA
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 11:54:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231458AbjETJyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 05:54:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49358 "EHLO
+        id S231462AbjETJyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 05:54:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbjETJx5 (ORCPT
+        with ESMTP id S231397AbjETJyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 05:53:57 -0400
-Received: from fgw22-7.mail.saunalahti.fi (fgw22-7.mail.saunalahti.fi [62.142.5.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4761E56
-        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 02:53:54 -0700 (PDT)
-Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
-        by fgw22.mail.saunalahti.fi (Halon) with ESMTP
-        id 397b899a-f6f4-11ed-a9de-005056bdf889;
-        Sat, 20 May 2023 12:53:51 +0300 (EEST)
-From:   andy.shevchenko@gmail.com
-Date:   Sat, 20 May 2023 12:53:51 +0300
-To:     William Breathitt Gray <william.gray@linaro.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-Subject: Re: [PATCH 0/3] Add Intel 8254 Counter support
-Message-ID: <ZGiYr6XLguZ8R3_8@surfacebook>
-References: <cover.1681665189.git.william.gray@linaro.org>
+        Sat, 20 May 2023 05:54:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4BFE4D;
+        Sat, 20 May 2023 02:54:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D9D4F60A4A;
+        Sat, 20 May 2023 09:54:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D854C433D2;
+        Sat, 20 May 2023 09:54:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1684576459;
+        bh=srxttNx0ob8d7XPvQiozrPbGXHOOjc+3+6ZLqelbWZ4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=po5DJeGEXC01gw+dVqJSepdFqD35vsu9JmgFBZwNQ7klC+RJ/FmdJf4yyzEW/87Oh
+         Fj2Ppy23niTqhFNsDpJxsaIHCui37wnsHbaPVXQbEpK0zSE8XhJAz4k3eldvGvxS8A
+         7GQMPSNqxAGH/bye5xn2Oa7XVNeqFbuq45zMHaaw=
+Date:   Sat, 20 May 2023 10:54:15 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Carlos Llamas <cmllamas@google.com>
+Cc:     Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, kernel-team@android.com,
+        Jann Horn <jannh@google.com>, stable@vger.kernel.org,
+        Minchan Kim <minchan@kernel.org>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        Todd Kjos <tkjos@google.com>
+Subject: Re: [PATCH] binder: fix UAF of alloc->vma in race with munmap()
+Message-ID: <2023052048-sloping-credible-8871@gregkh>
+References: <20230519195950.1775656-1-cmllamas@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1681665189.git.william.gray@linaro.org>
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230519195950.1775656-1-cmllamas@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sun, Apr 16, 2023 at 01:36:52PM -0400, William Breathitt Gray kirjoitti:
-> The Intel 8254 PIT first appeared in the early 1980s and was used
-> initially in IBM PC compatibles. The popularity of the original Intel
-> 825x family of chips led to many subsequent variants and clones of the
-> interface in various chips and integrated circuits. Although still
-> popular, interfaces compatible with the Intel 8254 PIT are nowdays
-> typically found embedded in larger VLSI processing chips and FPGA
-> components rather than as discrete ICs.
-> 
-> This patch series introduces a library to provide support for interfaces
-> compatible with the venerable Intel 8254 Programmable Interval Timer
-> (PIT). Modules wanting access to the i8254 library should select the
-> newly introduced CONFIG_I8254 Kconfig option, and import the I8254
-> symbol namespace.
-> 
-> Support for the i8254 is added in respective follow-up patches for the
-> 104-dio-48e driver and stx104 driver whose devices feature i8254
-> compatible interfaces. Several additional dependencies are necessary for
-> the 104-dio-48e [0][1][2] and stx104 [3][4].
-> 
-> Due to the dependency requirements, I can take the i8254 introduction
-> patch through the Counter tree and provide an immutable branch that can
-> be merged to the GPIO and IIO trees; the 104-dio-48e patch and stx104
-> patch could then be picked up separately by the respective subsystem
-> maintainers.
+On Fri, May 19, 2023 at 07:59:49PM +0000, Carlos Llamas wrote:
+> [ cmllamas: clean forward port from commit 015ac18be7de ("binder: fix
+>   UAF of alloc->vma in race with munmap()") in 5.10 stable. It is needed
+>   in mainline after the revert of commit a43cfc87caaf ("android: binder:
+>   stop saving a pointer to the VMA") as pointed out by Liam. The commit
+>   log and tags have been tweaked to reflect this. ]
 
-Good job!
+I'm confused, is this for a stable release (and if so, which one), or is
+this for Linus's tree?
 
-What I'm wondering is that. Can x86 core and others which are using that chip
-utilize (some of) the functions from the library?
+thanks,
 
-> [0] https://lore.kernel.org/all/05a878d340251b781387db4b6490f288e41a651c.1680543810.git.william.gray@linaro.org/
-> [1] https://lore.kernel.org/all/20230208105542.9459-1-william.gray@linaro.org/
-> [2] https://lore.kernel.org/all/cover.1679323449.git.william.gray@linaro.org/
-> [3] https://lore.kernel.org/all/20230318185503.341914-1-william.gray@linaro.org/
-> [4] https://lore.kernel.org/all/cover.1680790580.git.william.gray@linaro.org/
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+greg k-h
