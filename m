@@ -2,133 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3419170A4F4
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 05:33:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9000170A4FC
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 05:50:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230185AbjETDdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 23:33:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44072 "EHLO
+        id S229709AbjETDum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 23:50:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjETDdj (ORCPT
+        with ESMTP id S229449AbjETDuj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 23:33:39 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0D756FA;
-        Fri, 19 May 2023 20:33:35 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8DxI_COP2hk+1cKAA--.18012S3;
-        Sat, 20 May 2023 11:33:34 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxkrCKP2hkChtrAA--.50756S3;
-        Sat, 20 May 2023 11:33:30 +0800 (CST)
-Subject: Re: [PATCH v1] usb: dwc2: add pci_device_id driver_data parse support
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     kernel test robot <lkp@intel.com>,
-        Minas Harutyunyan <hminas@synopsys.com>,
-        Bjorn Helgaas <helgaas@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        oe-kbuild-all@lists.linux.dev, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
-References: <20230518092240.8023-1-zhuyinbo@loongson.cn>
- <202305190105.O6ycxCti-lkp@intel.com>
- <933c829f-0d27-f3b9-3db6-f2211495b086@loongson.cn>
- <2023051951-snuff-fit-4cf6@gregkh>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <55bcc7fc-274b-b364-9a0d-431d7f4d215e@loongson.cn>
-Date:   Sat, 20 May 2023 11:33:30 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Fri, 19 May 2023 23:50:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A95F21AC;
+        Fri, 19 May 2023 20:50:37 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 45AEF60D36;
+        Sat, 20 May 2023 03:50:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5EA4C433EF;
+        Sat, 20 May 2023 03:50:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684554636;
+        bh=7gbdOBvoubtVGsMnX7VrvFV+k1lz+2s/iUuXnAd/aCk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=gFQGZQzrT4E+c674LllbDACRPlLS/xQYPbM2g2mFLk3FS+i6jXI0qJhDrrJN7qu7R
+         FJMBI7Y/6gSagf/Nx4UaLOIN1NTpqxG5Yuy81b1pWDCpirJ/cHbkUqgGVWHEpVuNg3
+         dvZ533mkeoDDJlcxxTZKuGQafjZoialQDnZxCIdr7pdheg7fYBxzk95gCNXKwmOnrF
+         93mu+mgxXONmSzifVbGKu6EbBl8qmPxM61/9nVrbZchRTENnkS77SdnxnxI3kxAUrN
+         qHjCjfBJbBTTE6harqHqvLGPjce/8GukbYexrIcZHmXaXPAStRaedjhfyQUdTVNMDu
+         /9tL32eEd6I7Q==
+Message-ID: <e5a3b404-b958-c833-1032-70c78e159940@kernel.org>
+Date:   Fri, 19 May 2023 21:50:34 -0600
 MIME-Version: 1.0
-In-Reply-To: <2023051951-snuff-fit-4cf6@gregkh>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.0
+Subject: Re: [PATCH 1/1] net: ioctl: Use kernel memory on protocol ioctl
+ callbacks
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxkrCKP2hkChtrAA--.50756S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxWr4rGFyDXr1UJF18tFy3XFb_yoW5CryUpa
-        yUZF4qkryvqr1rCay8K3WDZ3W5trs5Ja47Wrn8Kw45ZFsFva43trs2kFyYkrnFgwn7GFy7
-        AryfX39a93W8JaDanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bDAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
-        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY
-        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14
-        v26r126r1DMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE
-        7xkEbVWUJVW8JwCFI7km07C267AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI8I3I
-        0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAI
-        cVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcV
-        CF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07jO-B_UUUUU=
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_SBL_CSS,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+To:     Breno Leitao <leitao@debian.org>, axboe@kernel.dk,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, willemdebruijn.kernel@gmail.com,
+        courmisch@gmail.com, nhorman@tuxdriver.com
+Cc:     asml.silence@gmail.com, alex.aring@gmail.com, dccp@vger.kernel.org,
+        mptcp@lists.linux.dev, linux-kernel@vger.kernel.org,
+        matthieu.baerts@tessares.net, marcelo.leitner@gmail.com,
+        linux-wpan@vger.kernel.org, linux-sctp@vger.kernel.org,
+        leit@fb.com, David.Laight@ACULAB.COM
+References: <20230519135821.922326-1-leitao@debian.org>
+ <20230519135821.922326-2-leitao@debian.org>
+From:   David Ahern <dsahern@kernel.org>
+In-Reply-To: <20230519135821.922326-2-leitao@debian.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 5/19/23 7:58 AM, Breno Leitao wrote:
+> diff --git a/net/core/sock.c b/net/core/sock.c
+> index 5440e67bcfe3..47567909baf2 100644
+> --- a/net/core/sock.c
+> +++ b/net/core/sock.c
+> @@ -4106,3 +4109,107 @@ int sock_bind_add(struct sock *sk, struct sockaddr *addr, int addr_len)
+>  	return sk->sk_prot->bind_add(sk, addr, addr_len);
+>  }
+>  EXPORT_SYMBOL(sock_bind_add);
+> +
+> +/* Copy 'size' bytes from userspace and do not copy anything back */
+> +int sock_skproto_ioctl_in(struct sock *sk, unsigned int cmd,
+> +			  void __user *arg)
+
+Unless I missed a reference, this one, the _inout, and the _out below
+can be marked static - they are not need outside of sock.c.
 
 
-在 2023/5/19 下午5:49, Greg Kroah-Hartman 写道:
-> On Fri, May 19, 2023 at 03:13:20PM +0800, zhuyinbo wrote:
->>
->>
->> 在 2023/5/19 上午1:52, kernel test robot 写道:
->>> Hi Yinbo,
->>>
->>> kernel test robot noticed the following build errors:
->>>
->>> [auto build test ERROR on pci/next]
->>> [also build test ERROR on pci/for-linus westeri-thunderbolt/next linus/master v6.4-rc2 next-20230518]
->>> [cannot apply to usb/usb-testing usb/usb-next usb/usb-linus]
->>> [If your patch is applied to the wrong git tree, kindly drop us a note.
->>> And when submitting patch, we suggest to use '--base' as documented in
->>> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->>>
->>> url:    https://github.com/intel-lab-lkp/linux/commits/Yinbo-Zhu/usb-dwc2-add-pci_device_id-driver_data-parse-support/20230518-173721
->>> base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
->>> patch link:    https://lore.kernel.org/r/20230518092240.8023-1-zhuyinbo%40loongson.cn
->>> patch subject: [PATCH v1] usb: dwc2: add pci_device_id driver_data parse support
->>> config: powerpc-allmodconfig
->>> compiler: powerpc-linux-gcc (GCC) 12.1.0
->>> reproduce (this is a W=1 build):
->>>           wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->>>           chmod +x ~/bin/make.cross
->>>           # https://github.com/intel-lab-lkp/linux/commit/3ff56448e1442fe8b1e72651a8d4d6e1086ece32
->>>           git remote add linux-review https://github.com/intel-lab-lkp/linux
->>>           git fetch --no-tags linux-review Yinbo-Zhu/usb-dwc2-add-pci_device_id-driver_data-parse-support/20230518-173721
->>>           git checkout 3ff56448e1442fe8b1e72651a8d4d6e1086ece32
->>>           # save the config file
->>>           mkdir build_dir && cp config build_dir/.config
->>>           COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
->>>           COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
->>>
->>> If you fix the issue, kindly add following tag where applicable
->>> | Reported-by: kernel test robot <lkp@intel.com>
->>> | Closes: https://lore.kernel.org/oe-kbuild-all/202305190105.O6ycxCti-lkp@intel.com/
->>>
->>> All errors (new ones prefixed by >>, old ones prefixed by <<):
->>>
->>>>> ERROR: modpost: "dwc2_pci_ids" [drivers/usb/dwc2/dwc2_pci.ko] undefined!
->>
->>
->> I test it was set dwc2 pci driver as built-in, so no error, this compile
->> error was that dwc2_pci_ids not export when driver as module and I will
->> add EXPORT_SYMBOL_GPL(dwc2_pci_ids) to fix that compile issue.
-> 
-> Again, no, please do this properly, no one should ever be walking a pci
-> id list by hand like this...
+> +{
+> +	int karg;
+> +
+> +	if (get_user(karg, (u32 __user *)arg))
+> +		return -EFAULT;
+> +
+> +	return sk->sk_prot->ioctl(sk, cmd, &karg);
+> +}
+> +
+> +/* Copy 'size' bytes from userspace and return `size` back to userspace */
+> +int sock_skproto_ioctl_inout(struct sock *sk, unsigned int cmd,
+> +			     void __user *arg, size_t size)
+> +{
+> +	void *ptr;
+> +	int ret;
+> +
+> +	ptr = kmalloc(size, GFP_KERNEL);
+> +	if (!ptr)
+> +		return -ENOMEM;
+> +
+> +	if (copy_from_user(ptr, arg, size)) {
+> +		ret = -EFAULT;
+> +		goto out;
+> +	}
+> +
+> +	ret = sk->sk_prot->ioctl(sk, cmd, ptr);
+> +	if (ret)
+> +		goto out;
+> +
+> +	if (copy_to_user(arg, ptr, size))
+> +		ret = -EFAULT;
+> +
+> +out:
+> +	kfree(ptr);
+> +	return ret;
+> +}
+> +
+> +/* This is the most common ioctl prep function, where the result (4 bytes) is
+> + * copied back to userspace if the ioctl() returns successfully. No input is
+> + * copied from userspace as input argument.
+> + */
+> +int sock_skproto_ioctl_out(struct sock *sk, unsigned int cmd,
+> +			   void __user *arg)
+> +{
+> +	int ret, karg = 0;
+> +
+> +	ret = sk->sk_prot->ioctl(sk, cmd, &karg);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return put_user(karg, (int __user *)arg);
+> +}
+> +
+> +/* A wrapper around sock ioctls, which copies the data from userspace
+> + * (depending on the protocol/ioctl), and copies back the result to userspace.
+> + * The main motivation for this function is to pass kernel memory to the
+> + * protocol ioctl callsback, instead of userspace memory.
+> + */
+> +int sock_skprot_ioctl(struct sock *sk, unsigned int cmd,
+> +		      void __user *arg)
+> +{
+> +#ifdef CONFIG_IP_MROUTE
+> +	if (!strcmp(sk->sk_prot->name, "RAW")) {
+> +		switch (cmd) {
+> +		/* These userspace buffers will be consumed by ipmr_ioctl() */
+> +		case SIOCGETVIFCNT:
+> +			return sock_skproto_ioctl_inout(sk, cmd,
+> +				arg, sizeof(struct sioc_vif_req));
+> +		case SIOCGETSGCNT:
+> +			return sock_skproto_ioctl_inout(sk, cmd,
+> +				arg, sizeof(struct sioc_sg_req));
+> +		}
+> +	}
+> +#endif
+> +#ifdef CONFIG_IPV6_MROUTE
+> +	if (!strcmp(sk->sk_prot->name, "RAW6")) {
+> +		switch (cmd) {
+> +		/* These userspace buffers will be consumed by ip6mr_ioctl() */
+> +		case SIOCGETMIFCNT_IN6:
+> +			return sock_skproto_ioctl_inout(sk, cmd,
+> +				arg, sizeof(struct sioc_mif_req6));
+> +		case SIOCGETSGCNT_IN6:
+> +			return sock_skproto_ioctl_inout(sk, cmd,
+> +				arg, sizeof(struct sioc_sg_req6));
+> +		}
+> +	}
+> +#endif
+> +#ifdef CONFIG_PHONET
+> +	if (!strcmp(sk->sk_prot->name, "PHONET")) {
+> +		/* This userspace buffers will be consumed by pn_ioctl() */
+> +		switch (cmd) {
+> +		case SIOCPNADDRESOURCE:
+> +		case SIOCPNDELRESOURCE:
+> +			return sock_skproto_ioctl_in(sk, cmd, arg);
+> +		}
+> +	}
+> +#endif
+> +
+> +	return sock_skproto_ioctl_out(sk, cmd, arg);
+> +}
 
-
-okay, I got it. But I don't seem to have found a good way to set
-dwc2 elements yet for pci device, in addition, I have some alalysis in
-another mail loop. please you check in your free time.
-
-Thanks!
-Yinbo.
 
