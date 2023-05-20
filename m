@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10F8E70A9EF
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 20:22:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA41A70A9F3
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 20:22:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231823AbjETSWT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 14:22:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43666 "EHLO
+        id S231985AbjETSWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 14:22:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231938AbjETSV5 (ORCPT
+        with ESMTP id S231714AbjETSWB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 14:21:57 -0400
+        Sat, 20 May 2023 14:22:01 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5D910EC;
-        Sat, 20 May 2023 11:21:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85ED10F9;
+        Sat, 20 May 2023 11:21:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BED2960EFA;
-        Sat, 20 May 2023 18:21:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 688D3C433D2;
-        Sat, 20 May 2023 18:21:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9452A60C03;
+        Sat, 20 May 2023 18:21:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4107AC4339B;
+        Sat, 20 May 2023 18:21:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684606878;
-        bh=CuKgPgV6aZ3NzUMUfu26ivUi3ak9kLb/FiLkOUerykQ=;
+        s=k20201202; t=1684606881;
+        bh=cUruHpp5csKVaRsO8925IjftPTB8zY3Vv0Hmu8lUWVE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ZSEJHIMD65qHE7urlgBofOUOYkh6TmO/7ShT+Hf9BeXWdyhf/Xu016kH04f31CzYQ
-         WgsdBufzCdqgPl1h3NjmALpBDGtzNdGOqL9d5Qi4o+jBFKFH3vb/y2MsLDeRlqDAtw
-         6+MC7efR19BYwACdt2PYs155AxQvRc1Y/+HdBs+Svskyid7U0+/cZIE5H8DQmJSn0m
-         A7mlEV0lOBRiS1JU9tC7J0l4t6HO6Sye8WoLIUKyCXFA0dCiwB/SHZP/tQvVKo4fZh
-         lui+aa/zSnxbyrjBvszd+uC+FYPNvJXB682Uj990Ys6XSTurwtVZhOBnpvPkUHODsF
-         ZQvqrrBl0j05Q==
+        b=uVbFs3gBoHbd9JB56mKNctb7H6qLe45kfmwzqtcDeqZApUsmhITuFKkkKLiU/KQzV
+         MGtDDfIJw6AYivb0ahAstjAGaPv9y6eavS9hoKwMzOOaACtyUAnB/ud6LBybXUJFXM
+         ZAjLEvDhcQtn5fgsWC26yslDHRUtVBgr5WlvpCZwJBs88Oa2isb2QK1NjVnhA0RoR7
+         rqgOGd36Yjpze7OWp617DZswlqLluccIzcjImAqLo+7i0/FyWZqfE3sz0KbdtsxNl7
+         tHsGt/77fAFd8Xlsh5AD8XU5nwgz05VJtEt7MpK0uuJ8t2UnVlH2ygr8/ifV6TGMNb
+         WsgNmxJgBIz3A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Liming Sun <limings@nvidia.com>,
-        Vadim Pasternak <vadimp@nvidia.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, markgross@kernel.org,
-        platform-driver-x86@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 07/14] platform/mellanox: fix potential race in mlxbf-tmfifo driver
-Date:   Sat, 20 May 2023 14:20:35 -0400
-Message-Id: <20230520182044.836702-7-sashal@kernel.org>
+Cc:     Bob Peterson <rpeterso@redhat.com>,
+        Yang Lan <lanyang0908@gmail.com>,
+        Andreas Gruenbacher <agruenba@redhat.com>,
+        Sasha Levin <sashal@kernel.org>, cluster-devel@redhat.com
+Subject: [PATCH AUTOSEL 6.1 08/14] gfs2: Don't deref jdesc in evict
+Date:   Sat, 20 May 2023 14:20:36 -0400
+Message-Id: <20230520182044.836702-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230520182044.836702-1-sashal@kernel.org>
 References: <20230520182044.836702-1-sashal@kernel.org>
@@ -59,63 +58,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Liming Sun <limings@nvidia.com>
+From: Bob Peterson <rpeterso@redhat.com>
 
-[ Upstream commit 3d43f9f639542fadfb28f40b509bf147a6624d48 ]
+[ Upstream commit 504a10d9e46bc37b23d0a1ae2f28973c8516e636 ]
 
-This commit adds memory barrier for the 'vq' update in function
-mlxbf_tmfifo_virtio_find_vqs() to avoid potential race due to
-out-of-order memory write. It also adds barrier for the 'is_ready'
-flag to make sure the initializations are visible before this flag
-is checked.
+On corrupt gfs2 file systems the evict code can try to reference the
+journal descriptor structure, jdesc, after it has been freed and set to
+NULL. The sequence of events is:
 
-Signed-off-by: Liming Sun <limings@nvidia.com>
-Reviewed-by: Vadim Pasternak <vadimp@nvidia.com>
-Link: https://lore.kernel.org/r/b98c0ab61d644ba38fa9b3fd1607b138b0dd820b.1682518748.git.limings@nvidia.com
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+init_journal()
+...
+fail_jindex:
+   gfs2_jindex_free(sdp); <------frees journals, sets jdesc = NULL
+      if (gfs2_holder_initialized(&ji_gh))
+         gfs2_glock_dq_uninit(&ji_gh);
+fail:
+   iput(sdp->sd_jindex); <--references jdesc in evict_linked_inode
+      evict()
+         gfs2_evict_inode()
+            evict_linked_inode()
+               ret = gfs2_trans_begin(sdp, 0, sdp->sd_jdesc->jd_blocks);
+<------references the now freed/zeroed sd_jdesc pointer.
+
+The call to gfs2_trans_begin is done because the truncate_inode_pages
+call can cause gfs2 events that require a transaction, such as removing
+journaled data (jdata) blocks from the journal.
+
+This patch fixes the problem by adding a check for sdp->sd_jdesc to
+function gfs2_evict_inode. In theory, this should only happen to corrupt
+gfs2 file systems, when gfs2 detects the problem, reports it, then tries
+to evict all the system inodes it has read in up to that point.
+
+Reported-by: Yang Lan <lanyang0908@gmail.com>
+Signed-off-by: Bob Peterson <rpeterso@redhat.com>
+Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/platform/mellanox/mlxbf-tmfifo.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+ fs/gfs2/super.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/drivers/platform/mellanox/mlxbf-tmfifo.c b/drivers/platform/mellanox/mlxbf-tmfifo.c
-index 1ae3c56b66b09..b2e19f30a928b 100644
---- a/drivers/platform/mellanox/mlxbf-tmfifo.c
-+++ b/drivers/platform/mellanox/mlxbf-tmfifo.c
-@@ -765,7 +765,7 @@ static void mlxbf_tmfifo_rxtx(struct mlxbf_tmfifo_vring *vring, bool is_rx)
- 	fifo = vring->fifo;
+diff --git a/fs/gfs2/super.c b/fs/gfs2/super.c
+index 2015bd05cba10..9d27aa8bd2bc6 100644
+--- a/fs/gfs2/super.c
++++ b/fs/gfs2/super.c
+@@ -1380,6 +1380,14 @@ static void gfs2_evict_inode(struct inode *inode)
+ 	if (inode->i_nlink || sb_rdonly(sb))
+ 		goto out;
  
- 	/* Return if vdev is not ready. */
--	if (!fifo->vdev[devid])
-+	if (!fifo || !fifo->vdev[devid])
- 		return;
- 
- 	/* Return if another vring is running. */
-@@ -961,9 +961,13 @@ static int mlxbf_tmfifo_virtio_find_vqs(struct virtio_device *vdev,
- 
- 		vq->num_max = vring->num;
- 
-+		vq->priv = vring;
++	/*
++	 * In case of an incomplete mount, gfs2_evict_inode() may be called for
++	 * system files without having an active journal to write to.  In that
++	 * case, skip the filesystem evict.
++	 */
++	if (!sdp->sd_jdesc)
++		goto out;
 +
-+		/* Make vq update visible before using it. */
-+		virtio_mb(false);
-+
- 		vqs[i] = vq;
- 		vring->vq = vq;
--		vq->priv = vring;
- 	}
- 
- 	return 0;
-@@ -1260,6 +1264,9 @@ static int mlxbf_tmfifo_probe(struct platform_device *pdev)
- 
- 	mod_timer(&fifo->timer, jiffies + MLXBF_TMFIFO_TIMER_INTERVAL);
- 
-+	/* Make all updates visible before setting the 'is_ready' flag. */
-+	virtio_mb(false);
-+
- 	fifo->is_ready = true;
- 	return 0;
- 
+ 	gfs2_holder_mark_uninitialized(&gh);
+ 	ret = evict_should_delete(inode, &gh);
+ 	if (ret == SHOULD_DEFER_EVICTION)
 -- 
 2.39.2
 
