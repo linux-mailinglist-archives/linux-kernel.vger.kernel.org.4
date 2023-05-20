@@ -2,128 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3330B70A948
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 18:50:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 787AB70A95F
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 18:55:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbjETQuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 12:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50854 "EHLO
+        id S230427AbjETQzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 12:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjETQuS (ORCPT
+        with ESMTP id S229523AbjETQzJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 12:50:18 -0400
-Received: from DM5PR00CU002.outbound.protection.outlook.com (mail-centralusazon11021025.outbound.protection.outlook.com [52.101.62.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAFDDE9;
-        Sat, 20 May 2023 09:50:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GDHDFd7ef5PF2wyXnoipFijmtsnRMOtpgKYJND272HNw3vq1ctZHaVzc3FRltPk7IXJpygr8jgMU0B2iw93B/78XM93xUHtSEo0p328FjX1BdBAG+8auiiXKbDI6y9AP+UncuUg2Hm0Nn7X8qKuXRk0ZW3vGTxaWl53QEQ+84M4kk7ztkq3YbePJtai6AoDfnARsT4aZTdJTtcSa3yhjexOcuMJZZHaYGt1JJOVpHJefKbOGjy/i3O8lzs+NuuYBiXxEI8IpXgY7d71lW9WuGIDrdDidW9Rgznbj8qcFOapnPPd5rL2J4eyRJDhJcUcfQW0jkzFySyXxthoX3++dwQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Nk0UmCgHLKyKXa++q0JQFeNiFBT+4gy/Zuvgh/xKXpc=;
- b=CrZ5nagMDs50o619/14SGqFf9tUmifgUUKm5pAdgtoOQz/KXcArKk1bWRg6uZlOoQJ9SF49KRfkFmFNAjy4832vOcNIfzFz8fWnDh8UZ1a1xC9QU2FE9yaMGzTniLPuQRwTcDgy5sAJ9Dh6hh1SrIyRDwwKnKZ8Zp2Gg6r/nl8zKN/dFlRwR/O82jJQbO7Mhhl71n9a1YNisU1+q31ileSyYxNxmBWmF811QYkyWxg2perR/xBhGFZT3S4EUc4XRE8J373V9cMu5HKjFpzHSfHvFgJ7BSUNHlzx8zPwdnYN4D0D5Y4lRLHbpeykNUQ3Vo0DinmaOIYyEVl64+W/F3Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Nk0UmCgHLKyKXa++q0JQFeNiFBT+4gy/Zuvgh/xKXpc=;
- b=Ba+1fp78OtzW0YtY/kB15D9acvlEt8wlvjtxogMmqGcgh6QqKg+sGlmXBGR1b9sFcOryifTevvoJrzKyl1aKxrqD5mMGO/yAdXVrCzZx+624H3QpgaeuTbtiSlnF69c2Sa7rzXG1SxBq8/d9Ww36g8Nc//JdNIXNxaV+6PEywPU=
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
- by SN7PR21MB3955.namprd21.prod.outlook.com (2603:10b6:806:2dd::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.12; Sat, 20 May
- 2023 16:50:14 +0000
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::a4f7:2466:97b5:bd31]) by BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::a4f7:2466:97b5:bd31%5]) with mapi id 15.20.6433.010; Sat, 20 May 2023
- 16:50:13 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Saurabh Sengar <ssengar@linux.microsoft.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
-CC:     Saurabh Singh Sengar <ssengar@microsoft.com>
-Subject: RE: [PATCH 2/2] Drivers: hv: Kconfig: Add HYPERV_VTL_MODE
- dependencies
-Thread-Topic: [PATCH 2/2] Drivers: hv: Kconfig: Add HYPERV_VTL_MODE
- dependencies
-Thread-Index: AQHZhBiSXHyss6LMXEKxhJqATsYYqa9jayRA
-Date:   Sat, 20 May 2023 16:50:13 +0000
-Message-ID: <BYAPR21MB16884CCC195B1D90BFB30D0CD77DA@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <1683816877-10747-1-git-send-email-ssengar@linux.microsoft.com>
- <1683816877-10747-2-git-send-email-ssengar@linux.microsoft.com>
-In-Reply-To: <1683816877-10747-2-git-send-email-ssengar@linux.microsoft.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=c4755354-b2f0-4b02-974e-488479445ce0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-05-20T16:39:37Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|SN7PR21MB3955:EE_
-x-ms-office365-filtering-correlation-id: 4b04b05a-e7e3-4558-6d51-08db59524855
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: VuL8tJUZYcVKKvzSnq6BqaFQUtZlC3qlfySJ2XVKaxWzS8fvQcEIQaTKddqEi7BdoEZldqCt3S1IP+YJxobB29U5G4Lh8xIhTS59ccG/q0WQNB+BXT/DPbUTVWZC8MaozWzsUkxwb+dSGA2RD+G2VnvIAbC3PGdlCBOCX41SzAY1L29mTZ/kpwu/jC/CqsNfUffoGWBiFlq/v2bxAc3q+vX9fQp6GXQH+pK1IDiLBirL4IHKF4MChObBRcrBIA85YDW9iHIv2NnnU73OhDljfasXEvTW3wUikZ+qhEfp5Al4obYXuVLm3TFH9Qss7cuFIWjP1XbsPI/REXBIUvBXn3cx3i4wUdiVaQK1PRJKLSxk+YQHsP+EWop9CQzR7loRWrHJoCQDSaSwvdjvh3VFKyAi0FArHOmhqJcJCbRC0Ap3VGlX0+yBrfoDJhob9SupeGOtHMCLVwtJjS7EYLMa/LVHFFHMUT0tRnvbpeL/XcqHJW70N8NwGjiI8mrUgF2MMXhGJmo7u7dlxbsnhkk4c/w97IgjlWIrvulOOMwfv0r2enFjrM8y8Q0uTWCCxBvj6c6kVGX8wiarSeu0sltx0ZCvmyiVWf8WQiWid2bW7+z8QrDNs2Es5PpTySBhjfHvd+VQUfRKbpLh1nS2LCnwQ94Bg0iYyxSldujdfaXRhWOsnTiy4wBPBhNxZatoCxaD
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(376002)(366004)(396003)(136003)(451199021)(55016003)(8990500004)(83380400001)(186003)(2906002)(478600001)(4326008)(66476007)(76116006)(66946007)(66556008)(41300700001)(7696005)(786003)(316002)(64756008)(110136005)(66446008)(71200400001)(10290500003)(52536014)(26005)(5660300002)(9686003)(6506007)(107886003)(8676002)(8936002)(38070700005)(38100700002)(82950400001)(82960400001)(122000001)(921005)(86362001)(33656002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?6HTFJydf7jiR8RqBIXy8F043YrVn/86XZwknxQFYZ0MK+sfXOgiDqGH2i7ff?=
- =?us-ascii?Q?NjcPknVV5IprjL2AP2WOScn/1E04OkxbSO1YTAV5QI1ZiHqRUOXEm2vaEI0a?=
- =?us-ascii?Q?WTBCNhkIdBzujt6tFuYBnqD5BxDvbm/TwhfH9mEi499OZA1lt5xl1F25GbO6?=
- =?us-ascii?Q?Y0im6Lu8FlIIgN18nEA5zhthRpX5Az7+L5L4sgRhiMsGPjZL5SXR0s959T0U?=
- =?us-ascii?Q?DmZlt801CGOIfYJVV/oLJjMu7Daa+O3BKQpFFj/TlHf+RfcKxyHLtaMIf7gA?=
- =?us-ascii?Q?0JB0w+J0au6BKzFD7nd4JwgjmsJWc0up4rDdxS09tTlRGdW0/xey2HledpCJ?=
- =?us-ascii?Q?11X/bMHZt2Z2M6Aegl/2O6xWw35KaSEAkV9WX0+Ze6L4mdRKLhSrtUY3a0JY?=
- =?us-ascii?Q?U9AswuIosAk14onhTdqIWZUIScYPSCm0ereALC3Auiz68GVfCqMPB3Y3YMOX?=
- =?us-ascii?Q?q6zBdsaz85YOJae4W2sDvSpqfhewC9NiF/gK8yCPC2r/vM5IRPjL0xK1kGzN?=
- =?us-ascii?Q?TVUNKJY+WT5VV3KSiigiPm4llp/tCtQbd2CLii7iwh1z3IHU713Kbo165Mwi?=
- =?us-ascii?Q?W5whAg2m2/khagAXl30KU6YCIiAOta3gYfABvxGmgI0jA4n+qTuJBN7tucOB?=
- =?us-ascii?Q?lQcpyOqwVVDgPQkV31ppS5h2q/Q+gSQ3tH/r5v99lPCX/BqKNUFI4Bc+bQgr?=
- =?us-ascii?Q?rhfIo2P+F52I1MyPBv6Cy2vOusZti8bXTQmO+6WQnc8XefAP5Mwm5gzkXnPz?=
- =?us-ascii?Q?XkXI2oYLoAJjRqrzp6c+Dazdz5kY2BHg4bbV1F4kzCVJPqbce3a7iC2l7axx?=
- =?us-ascii?Q?F3iehhUsvDjkxpIdI29eVe0ecMEud8WW5TW61Xb6ZXw4wsUXvzL34QaovvYs?=
- =?us-ascii?Q?+fZbGr8AV98pGA5sEbJUpk0iKMdnQHMJ2Mw1Cl0W5sab/XxprhhJO/6GjqeD?=
- =?us-ascii?Q?Ci96+m+Awsw2mE2vLfOg01751dVDlvASFS4gBbOYk9L0KKK+4uMZo6Ya90XR?=
- =?us-ascii?Q?fUCliYOPLSAm4kMH25bYbRwCatpVY1HwfFOeOF1qNLsQ6FAc9Hwyq2LlGtS5?=
- =?us-ascii?Q?qtWhcB6jdQQ+UewciBJ0Y8/A+PGzJ3MsBW2qnH9qgGAQm2dzupmy0AGzVSr2?=
- =?us-ascii?Q?Be4wb4D2br3x07oeWOagF+raKGG4Yq9ZdnXvbJK9HH0U7b9rFEJCI8Ne/d93?=
- =?us-ascii?Q?CT0t+v0vFoVXr/ubBaExzegxO9N0dUUY0ZjnpIq7vcF+6aRXju3aAX4zLFwV?=
- =?us-ascii?Q?sZF5DHlIWPeXSL1Y8lCfEuWUY7pcELFj7xpUMbNnScaoHY5u/5ncxZ7hSULy?=
- =?us-ascii?Q?oVZbkjt22BD8ajE+8cOsvECIDqscq+a2PFGxmxQsADcuNrC4GQS7zRWJwX1+?=
- =?us-ascii?Q?s3e52ftSJoLbsKNTI7tchE7Rk2CU9/OfNypVuZWgYgXgnNdhzg7X4l+ajVAW?=
- =?us-ascii?Q?Ipja+hMpfeXsMXl12qs3nQQ2aRlScrny9G9XsC6u/KzzzWbW6Y8FxvqOEtr+?=
- =?us-ascii?Q?71XO44rROJ4DdJGVoQvxWLVp+3H2kV6KQprOqSgBe8jHAD61dW5CtLLBkOMS?=
- =?us-ascii?Q?WrFtAMfPDRLVwf5QogJzFsxLUXxri2OzlYeQjiy4uLary3ghRWexqbCBwaE3?=
- =?us-ascii?Q?IQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Sat, 20 May 2023 12:55:09 -0400
+Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C431D102
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 09:55:07 -0700 (PDT)
+Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-33827ea8273so30800025ab.0
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 09:55:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684601707; x=1687193707;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iR+Mev6mqwJYOKc7k8OaTu9UD8vOFEdqohU0fITChcA=;
+        b=EtsalOs2uDcMXBfQMc2cqWdOQl+b2Mav3V7RxsybBKtDI0qj72cDIjJQ7qyxKmlIlk
+         KR8ilgrANCyTrSMyUrIGgqT1owihPG9V8L3iYnUTnO2U1Y/yLFCpJlfpJZi9C8PWLWUF
+         1FKZBG8dIXtpnRoxTAQc3CCPrXWMNoHRAO3qj3k9uWo7YCVR4bOE97vVnfZNu+f4UokN
+         ulEFVrvUs6Psp0QmbAPUaVk70dzwiCOdY5oXTlQvYnYx43iucxgfXC3Ysk53LCakRatB
+         ENLpKbvnaLrgINrqhvZBGBJTdD9TiLvl2deRrmC2omSwG1le1/ELuZ84iwwOx+QBa20O
+         LneA==
+X-Gm-Message-State: AC+VfDx4HvSe+TQK2Xzf/ALDQvE4T2+moEYZaQOr4v57fxgAXvbli3nt
+        JdJYL7R3Dr8NvaUZr8rPlHbWJkhvOKp34dP12rROYlU/ZASH
+X-Google-Smtp-Source: ACHHUZ7P72GS3ZpOe/xeExsK6LC3T14A1FN8ycKeUosRtvx1LZAsN0ujMYs/CXP496pUTNac0u+x3ZPI1lr5GRoFLTNuhkJih36l
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4b04b05a-e7e3-4558-6d51-08db59524855
-X-MS-Exchange-CrossTenant-originalarrivaltime: 20 May 2023 16:50:13.8327
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: l5QJI8h9rqUprod9IQTPQ5tGhdPiZeBJrsaUF4MNgPzitVBaisM/UFsaTSZIs82JP2N48OB+Rb/5GsHUh4kV0J+7frxIZllQ+nGS+mK+vz0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR21MB3955
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a92:ce49:0:b0:331:4e48:32be with SMTP id
+ a9-20020a92ce49000000b003314e4832bemr2825228ilr.4.1684601707056; Sat, 20 May
+ 2023 09:55:07 -0700 (PDT)
+Date:   Sat, 20 May 2023 09:55:07 -0700
+In-Reply-To: <0000000000007c47b505f909f71d@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000056580b05fc22e607@google.com>
+Subject: Re: [syzbot] [f2fs?] general protection fault in __drop_extent_tree
+From:   syzbot <syzbot+d015b6c2fbb5c383bf08@syzkaller.appspotmail.com>
+To:     chao@kernel.org, jaegeuk@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -131,55 +57,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Saurabh Sengar <ssengar@linux.microsoft.com>
->=20
-> MTRRs are not per-VTL and are controlled by VTL0, make sure it
-> is disabled for all other VTLs.
+syzbot has found a reproducer for the following issue on:
 
-Clarifying the wording a bit:
+HEAD commit:    d635f6cc934b Merge tag 'drm-fixes-2023-05-20' of git://ano..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=177b7d29280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=bda401fa9c6b4502
+dashboard link: https://syzkaller.appspot.com/bug?extid=d015b6c2fbb5c383bf08
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=157567a6280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13d301f9280000
 
-MTRRs are not per-VTL, but are always controlled by VTL0.   Allow
-building for VTLs other than VTL0 only when MTRR functionality
-is disabled.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/8dcff8d58d55/disk-d635f6cc.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/b0fda3221672/vmlinux-d635f6cc.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/9541aa11c888/bzImage-d635f6cc.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/7626bc33593c/mount_0.gz
 
->=20
-> X86_MPPARSE scans low memory for MP tables, which is not required
-> for Hyper-V VTL platforms.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d015b6c2fbb5c383bf08@syzkaller.appspotmail.com
 
-Is the above statement saying that MP tables aren't required, so remove
-the code to save space?  Or is there a problem/failure if MP table code
-runs and scans low memory?   *Requiring* that it be disabled, and the
-reference to scanning low memory makes me think it might be the latter,
-in which case I'd suggest this more forceful wording:
+general protection fault, probably for non-canonical address 0xdffffc0000000009: 0000 [#1] PREEMPT SMP KASAN
+KASAN: null-ptr-deref in range [0x0000000000000048-0x000000000000004f]
+CPU: 1 PID: 5010 Comm: syz-executor252 Not tainted 6.4.0-rc2-syzkaller-00290-gd635f6cc934b #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/28/2023
+RIP: 0010:__lock_acquire+0x69/0x2000 kernel/locking/lockdep.c:4942
+Code: df 0f b6 04 30 84 c0 0f 85 5a 16 00 00 83 3d d1 e1 ea 0c 00 0f 84 02 11 00 00 83 3d 70 33 74 0b 00 74 2b 4c 89 f0 48 c1 e8 03 <80> 3c 30 00 74 12 4c 89 f7 e8 59 38 78 00 48 be 00 00 00 00 00 fc
+RSP: 0018:ffffc90003a6faf8 EFLAGS: 00010006
+RAX: 0000000000000009 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: dffffc0000000000 RDI: 0000000000000048
+RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: dffffc0000000001 R12: 0000000000000001
+R13: 0000000000000000 R14: 0000000000000048 R15: ffff88807d47d940
+FS:  00007fcf413a3700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055664a01b058 CR3: 000000007ddb9000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5691
+ __raw_write_lock include/linux/rwlock_api_smp.h:209 [inline]
+ _raw_write_lock+0x2e/0x40 kernel/locking/spinlock.c:300
+ __drop_extent_tree+0x3ac/0x660 fs/f2fs/extent_cache.c:1100
+ f2fs_drop_extent_tree+0x17/0x30 fs/f2fs/extent_cache.c:1116
+ f2fs_insert_range+0x2d5/0x3c0 fs/f2fs/file.c:1664
+ f2fs_fallocate+0x4e4/0x6d0 fs/f2fs/file.c:1838
+ vfs_fallocate+0x54b/0x6b0 fs/open.c:324
+ ksys_fallocate fs/open.c:347 [inline]
+ __do_sys_fallocate fs/open.c:355 [inline]
+ __se_sys_fallocate fs/open.c:353 [inline]
+ __x64_sys_fallocate+0xbd/0x100 fs/open.c:353
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fcf413f7459
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 41 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fcf413a32f8 EFLAGS: 00000246 ORIG_RAX: 000000000000011d
+RAX: ffffffffffffffda RBX: 00007fcf414817a0 RCX: 00007fcf413f7459
+RDX: 0000000000000000 RSI: 0000000000000020 RDI: 0000000000000005
+RBP: 00007fcf4144e7f8 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000010000 R11: 0000000000000246 R12: 00007fcf4144e6c0
+R13: 0030656c69662f2e R14: 4b55cd3db08b6c4e R15: 00007fcf414817a8
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__lock_acquire+0x69/0x2000 kernel/locking/lockdep.c:4942
+Code: df 0f b6 04 30 84 c0 0f 85 5a 16 00 00 83 3d d1 e1 ea 0c 00 0f 84 02 11 00 00 83 3d 70 33 74 0b 00 74 2b 4c 89 f0 48 c1 e8 03 <80> 3c 30 00 74 12 4c 89 f7 e8 59 38 78 00 48 be 00 00 00 00 00 fc
+RSP: 0018:ffffc90003a6faf8 EFLAGS: 00010006
+RAX: 0000000000000009 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: dffffc0000000000 RDI: 0000000000000048
+RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: dffffc0000000001 R12: 0000000000000001
+R13: 0000000000000000 R14: 0000000000000048 R15: ffff88807d47d940
+FS:  00007fcf413a3700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055664a01b058 CR3: 000000007ddb9000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	df 0f                	fisttps (%rdi)
+   2:	b6 04                	mov    $0x4,%dh
+   4:	30 84 c0 0f 85 5a 16 	xor    %al,0x165a850f(%rax,%rax,8)
+   b:	00 00                	add    %al,(%rax)
+   d:	83 3d d1 e1 ea 0c 00 	cmpl   $0x0,0xceae1d1(%rip)        # 0xceae1e5
+  14:	0f 84 02 11 00 00    	je     0x111c
+  1a:	83 3d 70 33 74 0b 00 	cmpl   $0x0,0xb743370(%rip)        # 0xb743391
+  21:	74 2b                	je     0x4e
+  23:	4c 89 f0             	mov    %r14,%rax
+  26:	48 c1 e8 03          	shr    $0x3,%rax
+* 2a:	80 3c 30 00          	cmpb   $0x0,(%rax,%rsi,1) <-- trapping instruction
+  2e:	74 12                	je     0x42
+  30:	4c 89 f7             	mov    %r14,%rdi
+  33:	e8 59 38 78 00       	callq  0x783891
+  38:	48                   	rex.W
+  39:	be 00 00 00 00       	mov    $0x0,%esi
+  3e:	00 fc                	add    %bh,%ah
 
-The MP table code scans low memory, which causes failures in VTLs
-other than VTL0.   Allow building for VTLs other than VTL0 only when
-MP table functionality is disabled.
 
-If you can give slightly more detail about "causes failures" (a panic?
-some other problem?) that would be good too.
-
-Michael
-
->=20
-> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> ---
->  drivers/hv/Kconfig | 2 ++
->  1 file changed, 2 insertions(+)
->=20
-> diff --git a/drivers/hv/Kconfig b/drivers/hv/Kconfig
-> index 00242107d62e..c8d443886b9d 100644
-> --- a/drivers/hv/Kconfig
-> +++ b/drivers/hv/Kconfig
-> @@ -16,6 +16,8 @@ config HYPERV
->  config HYPERV_VTL_MODE
->  	bool "Enable Linux to boot in VTL context"
->  	depends on X86_64 && HYPERV
-> +	depends on !MTRR
-> +	depends on !X86_MPPARSE
->  	default n
->  	help
->  	  Virtual Secure Mode (VSM) is a set of hypervisor capabilities and
-> --
-> 2.34.1
-
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
