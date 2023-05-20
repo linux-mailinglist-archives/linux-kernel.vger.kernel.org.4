@@ -2,145 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D87F70A8FD
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 18:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 680B470A91F
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 18:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231779AbjETQI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 12:08:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42246 "EHLO
+        id S229933AbjETQ3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 12:29:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231626AbjETQI0 (ORCPT
+        with ESMTP id S229523AbjETQ32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 12:08:26 -0400
+        Sat, 20 May 2023 12:29:28 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26BF189;
-        Sat, 20 May 2023 09:08:01 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C929124;
+        Sat, 20 May 2023 09:29:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BFCDD6132C;
-        Sat, 20 May 2023 16:07:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8D1EC433EF;
-        Sat, 20 May 2023 16:07:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684598876;
-        bh=V4usJZqRAFqQRrB2t/cEprnBUvtDDffV3Y2qt9ee9NM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=D2e1vkPiu+Au/fOv8dpSaECuWvpg5sz/3KlYc6+XVZEMKqmifqR1LZoIBQcBcNwnS
-         N19K5hWcRI3O9L+48G7hglwvVKVUeY5oKNk50B40tIATkeLNebsVaW4FuRl5/KtNAM
-         XiY169Oq8wFU7ofjcxfGQS9ORDdX4I3Gir+/Zf98nbcWhY4IPEjenmgSNP79tdp8b3
-         gma7bdaPPEaBp5Xu0Ka6RB77KkgArzBAwlrRC2kfyNpo2IN2uQSRMBTuLqsZUB41yC
-         QXzdikdZyvoN4yMaJ6YRvJeuf3rjB0ta8xuSoQrbzN3m48sDkv3GP6+tO7P3C2/Pfd
-         nVufObl4xmFSw==
-Date:   Sat, 20 May 2023 17:24:05 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Andreas Klinger <ak@it-klinger.de>
-Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 0/3] Support Honeywell mprls0025pa pressure sensor
-Message-ID: <20230520172405.0e1a3ff8@jic23-huawei>
-In-Reply-To: <ZGNpZM137jF5yzie@arbad>
-References: <ZGNpZM137jF5yzie@arbad>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 302F360F78;
+        Sat, 20 May 2023 16:29:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1FB6C433AA;
+        Sat, 20 May 2023 16:29:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1684600166;
+        bh=fTnQ3UUQGfx5X0prFzXPtTRMKF/u+s4ExF23SjpumIk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=h1/lwdsQrUsOzmAxQPXk6OZR3fcv4Y6H1DgMU6+bALEJ5Ksl6aoJOox9GpBrAjN9Q
+         xESjjU6gHJdRsTJogcOk8ud56izKpWovyso07qMC5bFSrdOcS0d6eQCQeMdaVFo3bw
+         AtQt/L0HU5EHi3yc9fZXYtTUdKqnilRWUKVLqfbQ=
+Date:   Sat, 20 May 2023 17:29:23 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Carlos Llamas <cmllamas@google.com>
+Cc:     Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, kernel-team@android.com,
+        Jann Horn <jannh@google.com>, stable@vger.kernel.org,
+        Minchan Kim <minchan@kernel.org>,
+        Yang Shi <yang.shi@linux.alibaba.com>,
+        Liam Howlett <liam.howlett@oracle.com>,
+        Todd Kjos <tkjos@google.com>
+Subject: Re: [PATCH] binder: fix UAF of alloc->vma in race with munmap()
+Message-ID: <2023052002-nervy-juggling-c7a1@gregkh>
+References: <20230519195950.1775656-1-cmllamas@google.com>
+ <2023052032-lemon-backed-ccf2@gregkh>
+ <ZGjCWI6kpaNuNiya@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZGjCWI6kpaNuNiya@google.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 16 May 2023 13:30:44 +0200
-Andreas Klinger <ak@it-klinger.de> wrote:
+On Sat, May 20, 2023 at 12:51:36PM +0000, Carlos Llamas wrote:
+> On Sat, May 20, 2023 at 10:55:02AM +0100, Greg Kroah-Hartman wrote:
+> > On Fri, May 19, 2023 at 07:59:49PM +0000, Carlos Llamas wrote:
+> > > [ cmllamas: clean forward port from commit 015ac18be7de ("binder: fix
+> > >   UAF of alloc->vma in race with munmap()") in 5.10 stable. It is needed
+> > >   in mainline after the revert of commit a43cfc87caaf ("android: binder:
+> > >   stop saving a pointer to the VMA") as pointed out by Liam. The commit
+> > >   log and tags have been tweaked to reflect this. ]
+> > > 
+> > > In commit 720c24192404 ("ANDROID: binder: change down_write to
+> > > down_read") binder assumed the mmap read lock is sufficient to protect
+> > > alloc->vma inside binder_update_page_range(). This used to be accurate
+> > > until commit dd2283f2605e ("mm: mmap: zap pages with read mmap_sem in
+> > > munmap"), which now downgrades the mmap_lock after detaching the vma
+> > > from the rbtree in munmap(). Then it proceeds to teardown and free the
+> > > vma with only the read lock held.
+> > > 
+> > > This means that accesses to alloc->vma in binder_update_page_range() now
+> > > will race with vm_area_free() in munmap() and can cause a UAF as shown
+> > > in the following KASAN trace:
+> > > 
+> > >   ==================================================================
+> > >   BUG: KASAN: use-after-free in vm_insert_page+0x7c/0x1f0
+> > >   Read of size 8 at addr ffff16204ad00600 by task server/558
+> > > 
+> > >   CPU: 3 PID: 558 Comm: server Not tainted 5.10.150-00001-gdc8dcf942daa #1
+> > >   Hardware name: linux,dummy-virt (DT)
+> > >   Call trace:
+> > >    dump_backtrace+0x0/0x2a0
+> > >    show_stack+0x18/0x2c
+> > >    dump_stack+0xf8/0x164
+> > >    print_address_description.constprop.0+0x9c/0x538
+> > >    kasan_report+0x120/0x200
+> > >    __asan_load8+0xa0/0xc4
+> > >    vm_insert_page+0x7c/0x1f0
+> > >    binder_update_page_range+0x278/0x50c
+> > >    binder_alloc_new_buf+0x3f0/0xba0
+> > >    binder_transaction+0x64c/0x3040
+> > >    binder_thread_write+0x924/0x2020
+> > >    binder_ioctl+0x1610/0x2e5c
+> > >    __arm64_sys_ioctl+0xd4/0x120
+> > >    el0_svc_common.constprop.0+0xac/0x270
+> > >    do_el0_svc+0x38/0xa0
+> > >    el0_svc+0x1c/0x2c
+> > >    el0_sync_handler+0xe8/0x114
+> > >    el0_sync+0x180/0x1c0
+> > > 
+> > >   Allocated by task 559:
+> > >    kasan_save_stack+0x38/0x6c
+> > >    __kasan_kmalloc.constprop.0+0xe4/0xf0
+> > >    kasan_slab_alloc+0x18/0x2c
+> > >    kmem_cache_alloc+0x1b0/0x2d0
+> > >    vm_area_alloc+0x28/0x94
+> > >    mmap_region+0x378/0x920
+> > >    do_mmap+0x3f0/0x600
+> > >    vm_mmap_pgoff+0x150/0x17c
+> > >    ksys_mmap_pgoff+0x284/0x2dc
+> > >    __arm64_sys_mmap+0x84/0xa4
+> > >    el0_svc_common.constprop.0+0xac/0x270
+> > >    do_el0_svc+0x38/0xa0
+> > >    el0_svc+0x1c/0x2c
+> > >    el0_sync_handler+0xe8/0x114
+> > >    el0_sync+0x180/0x1c0
+> > > 
+> > >   Freed by task 560:
+> > >    kasan_save_stack+0x38/0x6c
+> > >    kasan_set_track+0x28/0x40
+> > >    kasan_set_free_info+0x24/0x4c
+> > >    __kasan_slab_free+0x100/0x164
+> > >    kasan_slab_free+0x14/0x20
+> > >    kmem_cache_free+0xc4/0x34c
+> > >    vm_area_free+0x1c/0x2c
+> > >    remove_vma+0x7c/0x94
+> > >    __do_munmap+0x358/0x710
+> > >    __vm_munmap+0xbc/0x130
+> > >    __arm64_sys_munmap+0x4c/0x64
+> > >    el0_svc_common.constprop.0+0xac/0x270
+> > >    do_el0_svc+0x38/0xa0
+> > >    el0_svc+0x1c/0x2c
+> > >    el0_sync_handler+0xe8/0x114
+> > >    el0_sync+0x180/0x1c0
+> > > 
+> > >   [...]
+> > >   ==================================================================
+> > > 
+> > > To prevent the race above, revert back to taking the mmap write lock
+> > > inside binder_update_page_range(). One might expect an increase of mmap
+> > > lock contention. However, binder already serializes these calls via top
+> > > level alloc->mutex. Also, there was no performance impact shown when
+> > > running the binder benchmark tests.
+> > > 
+> > > Fixes: c0fd2101781e ("Revert "android: binder: stop saving a pointer to the VMA"")
+> > 
+> > I can't find this commit in any tree, are you sure it's correct?
+> 
+> The commit comes from your char-misc-linus branch, it hasn't really
+> landed in mainline yet. I added this tag to make sure this fix is
+> bounded to the revert otherwise it exposes the UAF. I know I'm relying
+> on a merge, so let me know if I should drop the tag instead.
 
-> Support Honeywell mprls0025pa pressure sensor.
-Series applied to the togreg branch of iio.git and initially pushed out
-as testing for 0-day to see if it can find anything we missed.
+Ah, no, that works, thanks, I'll queue it up.
 
-Thanks,
-
-Jonathan
-
-> 
-> This patch series adds support for Honeywell mprls0025pa pressure sensor series.
-> There are a variety of sensors with different pressure ranges supported.
-> 
-> Changes in v5:
-> - Patch 1: "dt-bindings: iio: pressure: Support Honeywell mprls0025pa sensor"
->   - add Reviewd-by tag
->   - preserve formating in description
-> - Patch 2: "iio: pressure: Honeywell mprls0025pa pressure sensor"
->   - make use of div_s64_rem()
->   - document calculation
->   - reorder includes
->   - use NANO from units.h
-> - Patch 3: "MAINTAINERS: Add Honeywell mprls0025pa sensor"
->   - no changes
-> 
-> Changes in v4:
-> - Patch 1: "dt-bindings: iio: pressure: Support Honeywell mprls0025pa sensor"
->   - change line length to 80 characters
->   - make vdd-supply mandatory
-> - Patch 2: "iio: pressure: Honeywell mprls0025pa pressure sensor"
->   - change line length to 80 characters
->   - change regulator vcc to devm_regulator_get_enable()
->   - switch to probe_new
->   - many changes from the review
-> - Patch 3: "MAINTAINERS: Add Honeywell mprls0025pa sensor"
->   - no changes
-> 
-> Changes in v3:
-> - Patch 1: "dt-bindings: iio: pressure: Support Honeywell mprls0025pa sensor"
->   - fix errors while doing dt_binding_check
->   - add vdd-supply
-> - Patch 2: "iio: pressure: Honeywell mpr pressure sensor"
->   - change to _RAW interface
->   - add transfer function
->   - add regulator
->   - move to device_property_xxx functions
->   - many more changes from the feedbacks
-> - Patch 3: "MAINTAINERS: Add Honeywell mpr sensor"
->   - change file names
-> 
-> Changes in v2:
-> - Patch 1: "dt-bindings: iio: pressure: Support Honeywell mprls0025pa sensor"
->   - change the global sensor decription of mpr to the specific sensor
->     mprls0025pa
->   - change compatible string
->   - rename the file to honeywell,mprls0025pa.yaml
->   - honeywell,pmin-pascal and honeywell,pmax-pascal: add unit pascal to property
->     names 
->   - add new property honeywell,transfer-function
-> - Patch 2: "iio: pressure: Honeywell mpr pressure sensor"
->   - no change so far
->   - will be changed and send out as new version when the dt definition is
->     settled down
-> - Patch 3: "MAINTAINERS: Add Honeywell mpr sensor"
->   - no change so far
-> 
-> Andreas Klinger (3):
->   dt-bindings: iio: pressure: Support Honeywell mprls0025pa sensor
->   iio: pressure: Honeywell mprls0025pa pressure sensor
->   MAINTAINERS: Add Honeywell mprls0025pa sensor
-> 
->  .../iio/pressure/honeywell,mprls0025pa.yaml   | 104 ++++
->  MAINTAINERS                                   |   7 +
->  drivers/iio/pressure/Kconfig                  |  13 +
->  drivers/iio/pressure/Makefile                 |   1 +
->  drivers/iio/pressure/mprls0025pa.c            | 450 ++++++++++++++++++
->  5 files changed, 575 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/iio/pressure/honeywell,mprls0025pa.yaml
->  create mode 100644 drivers/iio/pressure/mprls0025pa.c
-> 
-> 
-> base-commit: 457391b0380335d5e9a5babdec90ac53928b23b4
-
+greg k-h
