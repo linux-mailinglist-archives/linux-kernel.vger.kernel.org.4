@@ -2,57 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C579770A943
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 18:40:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F27F70A914
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 18:28:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbjETQki (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 12:40:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49292 "EHLO
+        id S229718AbjETQ2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 12:28:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjETQke (ORCPT
+        with ESMTP id S229523AbjETQ2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 12:40:34 -0400
+        Sat, 20 May 2023 12:28:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58C098E
-        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 09:40:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E115918C;
+        Sat, 20 May 2023 09:28:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E289E60B86
-        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 16:40:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C40B2C433EF;
-        Sat, 20 May 2023 16:40:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B69D0619E0;
+        Sat, 20 May 2023 16:28:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D388DC433D2;
+        Sat, 20 May 2023 16:28:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684600832;
-        bh=T64zNX1m7m4YFe69QC+IHxV7cY9TLku1+q52iomz1gE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uUxVbv260mef6o/DDZdOZdJva3acBvLV3lU3n3gEy+x82IexadqsipQvkmAAr+xVd
-         Gqx4VJsuIO9pzUIgpJZHi5rUNh2xfS/29DI9Zsf6FzXEzdIAhDBtFnPZivXD5sC7aT
-         oZ63UoMWlV0lHwoZ5vCe23B1+eOT4vM62EZaALDy9mYPLJeqd/VjlcKyG/fCCkfRyw
-         hhumgI5XA61W57ZiKCSmz78UgS0yAm0GGiqxN3quqv+utMyrPzVnN5TK/AImLo6WZk
-         BvZpIOPrEnOWut1izCrHbOBV62i1NgSZGf46HgtgpjRILSXAJg5/SOqK3RxswaDob3
-         Q6qRhPzYxefXw==
-Date:   Sat, 20 May 2023 09:40:30 -0700
-From:   Chris Li <chrisl@kernel.org>
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>
-Subject: Re: [PATCH] swap: cleanup get/put_swap_device usage
-Message-ID: <ZGj3/p/IFGRTBbHf@google.com>
-References: <20230516052957.175432-1-ying.huang@intel.com>
- <d1b054d0-d083-d35c-e547-7e8756fd802a@redhat.com>
- <87fs7v7qmh.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        s=k20201202; t=1684600094;
+        bh=cJZpEEFzsfD8lCjNgKENQ3mel7UzhmXW1jVWuTGoWEI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JInoDV3y8FmEf+3ELZHCa+0XsraKuYQ0ikcJpyWAYs+eWaCzTKE2KoUiszBef8pqs
+         nG7kxJ/Y/KdAgd24j9PJRimfEqpjbTCFfCtkwf4GI9E4Pq1ePWqaJu7Olrrnq8j6Di
+         qzVVokxQv6HSRNXgxbDailOgyI8y8jasz+BjI+C+biM0QBRxHw9kgRhVUxuxm10+sZ
+         OpC3nYs8s+HhUzgxyT768j6pdKaAEWQ3MGWRNJFV5CdVuKFo71RJ8Bn92pZFdbSFku
+         FjRm8ZcaSMMSB/IcDo+3ylHUNeLIZaD2eFrlkf/aemsyo4FYusceMo3I/8SHCcF/3N
+         en1tt1Z4RHakg==
+Date:   Sat, 20 May 2023 17:44:22 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 4/5] iio: light: ROHM BU27008 color sensor
+Message-ID: <20230520174422.4313cd83@jic23-huawei>
+In-Reply-To: <2594162f0e44148cffb1fb05f1d6edfde6bd11bc.1683541225.git.mazziesaccount@gmail.com>
+References: <cover.1683541225.git.mazziesaccount@gmail.com>
+        <2594162f0e44148cffb1fb05f1d6edfde6bd11bc.1683541225.git.mazziesaccount@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87fs7v7qmh.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -63,81 +65,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 08:23:18AM +0800, Huang, Ying wrote:
-> David Hildenbrand <david@redhat.com> writes:
+On Mon, 8 May 2023 13:39:29 +0300
+Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+
+> The ROHM BU27008 is a sensor with 5 photodiodes (red, green, blue, clear
+> and IR) with four configurable channels. Red and green being always
+> available and two out of the rest three (blue, clear, IR) can be
+> selected to be simultaneously measured. Typical application is adjusting
+> LCD backlight of TVs, mobile phones and tablet PCs.
 > 
-> > On 16.05.23 07:29, Huang Ying wrote:
-> >> The general rule to use a swap entry is as follows.
-> >> When we get a swap entry, if there isn't some other way to prevent
-> >> swapoff, such as page lock for swap cache, page table lock, etc., the
-> >> swap entry may become invalid because of swapoff.  Then, we need to
-> >> enclose all swap related functions with get_swap_device() and
-> >> put_swap_device(), unless the swap functions call
-> >> get/put_swap_device() by themselves.
-> >> Add the rule as comments of get_swap_device(), and cleanup some
-> >> functions which call get/put_swap_device().
-> >> 1. Enlarge the get/put_swap_device() protection range in
-> >> __read_swap_cache_async().  This makes the function a little easier to
-> >> be understood because we don't need to consider swapoff.  And this
-> >> makes it possible to remove get/put_swap_device() calling in some
-> >> function called by __read_swap_cache_async().
-> >> 2. Remove get/put_swap_device() in __swap_count().  Which is call in
-> >> do_swap_page() only, which encloses the call with get/put_swap_device()
-> >> already.
-> >> 3. Remove get/put_swap_device() in __swp_swapcount().  Which is call
-> >> in __read_swap_cache_async() only, which encloses the call with
-> >> get/put_swap_device() already.
-> >> 4. Remove get/put_swap_device() in __swap_duplicate(). Which is
-> >> called
-> >> by
-> >> - swap_shmem_alloc(): the swap cache is locked.
-> >> - copy_nonpresent_pte() -> swap_duplicate() and try_to_unmap_one()
-> >> ->
-> >> swap_duplicate(): the page table lock is held.
-> >> - __read_swap_cache_async() -> swapcache_prepare(): enclosed with
-> >> get/put_swap_device() already.
-> >> Other get/put_swap_device() usages are checked too.
-> >
-> > I suggest splitting this patch up into logical pieces as outlined here
-> > by you already.
-
-Agree with David here.
-
+> Add initial support for the ROHM BU27008 color sensor.
+>  - raw_read() of RGB and clear channels
+>  - triggered buffer w/ DRDY interrtupt
 > 
-> OK.  Will do that in the next version.
+> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> 
+> ---
+> 
+> Please, check the way trigger handling is now implemented. I've verified
+> it works for one user-space user, but I am no longer confident on how
+> the triggers are intended to be used.
+> 
+> When testing the trigger passing iio_trigger_generic_data_rdy_poll() as
+> a handler in devm_request_irq() I saw an IRQ storm. The threaded handler
+> given in devm_iio_triggered_buffer_setup() [bu27008_trigger_handler()] got
+> never called and system hung just looping in
+> iio_trigger_generic_data_rdy_poll(). Hence, this version disables the
+> IRQ in the handler registered at devm_request_irq(), before cascading
+> into iio_trigger_poll(). IRQ is now re-enabled in trigger's .reenable
+> callback. Feedback is appreciated!
 
-Your patch make sense to me.
+What you have makes sense to me.
 
-Looking forward to your next version.
+A few trivial things inline I'll tidy up whilst applying.
 
-BTW, no relat to your patch, but just when I look
-at your patch I notice is that we have too many swap
-count functions.
-The naming scheme is very confusing.
 
-1) swap_count(), just mask out SWAP_HAS_CACHE
+> +static int bu27008_trigger_set_state(struct iio_trigger *trig,
+> +				     bool state)
+> +{
+> +	struct bu27008_data *data = iio_trigger_get_drvdata(trig);
+> +	int ret = 0;
 
-2) __swap_count() the name with underscore suggest it
-is more internal.  But __swap_count() calls swap_count().
-It is basically swap_count() with device lookup.
+No need to initialize ret.
 
-3) swap_swapcount()
-similar to __swap_count() but with cluster level
-locking if possible. otherwise fall back to device level locking.
+> +
+> +	if (state)
+> +		ret = bu27008_set_drdy_irq(data, BU27008_INT_EN);
+> +	else
+> +		ret = bu27008_set_drdy_irq(data, BU27008_INT_DIS);
+> +	if (ret)
+> +		dev_err(data->dev, "Failed to set trigger state\n");
+> +
+> +	return ret;
+> +}
+> +
+> +static void bu27008_trigger_reenable(struct iio_trigger *trig)
+> +{
+> +	struct bu27008_data *data = iio_trigger_get_drvdata(trig);
+> +
+> +	enable_irq(data->irq);
+> +}
 
-4) __swp_swapcount()
-swap_swapcount () with device lookup.  not consider continuing.
-Again this function is more external while swap_swapcount()
-is more internal.
 
-5) swp_swapcount() similar to __swp_swapcount()
-exact count consider continue
+> +static irqreturn_t bu27008_data_rdy_poll(int irq, void *private)
+> +{
+> +	/*
+> +	 * The BU27008 keeps IRQ asserted until we read the VALID bit from
+> +	 * a register. We need to keep the IRQ disabled until this
 
-We should have a more consistent naming regarding swap count.
-Device level, then cluster level, then entry level.
+Half sentence.   If this is all that comes up I'll change it to.
 
-Also I consider the continuing is internal to the current
-swap index implementation. If we have alternative swap file
-implementation, we might not have count continuing at all.
+We need to keep the IRQ disable until then.
 
-Chris
+> +	 */
+> +	disable_irq_nosync(irq);
+> +	iio_trigger_poll(private);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int bu27008_setup_trigger(struct bu27008_data *data, struct iio_dev *idev)
+> +{
+> +	struct iio_trigger *itrig;
+> +	char *name;
+> +	int ret;
+> +
+> +	ret = devm_iio_triggered_buffer_setup(data->dev, idev,
+> +					      &iio_pollfunc_store_time,
+> +					      bu27008_trigger_handler,
+> +					      &bu27008_buffer_ops);
+> +	if (ret)
+> +		return dev_err_probe(data->dev, ret,
+> +			     "iio_triggered_buffer_setup_ext FAIL\n");
+> +
+> +	itrig = devm_iio_trigger_alloc(data->dev, "%sdata-rdy-dev%d",
+> +				       idev->name, iio_device_id(idev));
+> +	if (!itrig)
+> +		return -ENOMEM;
+> +
+> +	data->trig = itrig;
+> +
+> +	itrig->ops = &bu27008_trigger_ops;
+> +	iio_trigger_set_drvdata(itrig, data);
+> +
+> +	name = devm_kasprintf(data->dev, GFP_KERNEL, "%s-bu27008",
+> +			      dev_name(data->dev));
+> +
+> +	ret = devm_request_irq(data->dev, data->irq,
+> +			       &bu27008_data_rdy_poll,
+> +			       0, name, itrig);
+> +	if (ret)
+> +		return dev_err_probe(data->dev, ret, "Could not request IRQ\n");
+> +
+> +	ret = devm_iio_trigger_register(data->dev, itrig);
+> +	if (ret)
+> +		return dev_err_probe(data->dev, ret,
+> +				     "Trigger registration failed\n");
+> +
+> +	/* set default trigger */
+> +	idev->trig = iio_trigger_get(itrig);
+> +
+> +	return 0;
+> +}
+
