@@ -2,60 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8F9070A87C
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 16:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1097270A87E
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 16:13:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231576AbjETOMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 10:12:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48286 "EHLO
+        id S231586AbjETONt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 10:13:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229662AbjETOMu (ORCPT
+        with ESMTP id S229464AbjETONr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 10:12:50 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4605E103;
-        Sat, 20 May 2023 07:12:49 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id A2FED6E3;
-        Sat, 20 May 2023 14:12:48 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net A2FED6E3
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1684591968; bh=ssW6Hz/R5GSYGIKYc6bggawEYxKcwfdt7FMg15yh+SQ=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Wqc7837+yYQXWUWpNZUbvPfAYsEU94Nsz63U2qrzVyv7mG9M0sVdGPh8u7zVEB38U
-         sl6657pnw40uwSVT1M0djeLOW9uewXdf3OyWstEEpXxJ6I7nPy4oXj/iuB3RZkpCwi
-         vxB63WPEpBIlq2H6TNUGxZM7mF0vUJPIxCT6JbKWtX8U2p21dBr0uaI34QOdMUUaXo
-         TDDws2G9+yEWz1JZec2SLrtHGWn4d9CUQXGzyaHta5aj7U/RKlYlUlV8tiJysSna0J
-         TqXVQXXa8kjv8LocVTL3rWVHJWzTQWPb3p4jd497m0LjvWI1wI9MWzhvObS9pq5K09
-         nmCd0mP7uhhsw==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     kernel test robot <lkp@intel.com>, linux-doc@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6ni?= =?utf-8?Q?g?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-input@vger.kernel.org, linux-sunxi@lists.linux.dev,
-        linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH 6/7] docs: update some straggling Documentation/arm
- references
-In-Reply-To: <202305201023.2DYXmdv3-lkp@intel.com>
-References: <20230519164607.38845-7-corbet@lwn.net>
- <202305201023.2DYXmdv3-lkp@intel.com>
-Date:   Sat, 20 May 2023 08:12:47 -0600
-Message-ID: <87r0rbjdls.fsf@meer.lwn.net>
+        Sat, 20 May 2023 10:13:47 -0400
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D2CEFD;
+        Sat, 20 May 2023 07:13:46 -0700 (PDT)
+Received: (from willy@localhost)
+        by pcw.home.local (8.15.2/8.15.2/Submit) id 34KEDW6v027662;
+        Sat, 20 May 2023 16:13:32 +0200
+Date:   Sat, 20 May 2023 16:13:32 +0200
+From:   Willy Tarreau <w@1wt.eu>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>
+Cc:     Zhangjin Wu <falcon@tinylab.org>, aou@eecs.berkeley.edu,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, shuah@kernel.org
+Subject: Re: [PATCH] selftests/nolibc: Fix up compile error for rv32
+Message-ID: <20230520141332.GB27611@1wt.eu>
+References: <20230520-nolibc-stackprotector-riscv-v1-1-d8912012a034@weissschuh.net>
+ <20230520120254.66315-1-falcon@tinylab.org>
+ <20230520133237.GA27501@1wt.eu>
+ <d98dfd41-8938-4388-90f0-38199d2f0574@t-8ch.de>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <d98dfd41-8938-4388-90f0-38199d2f0574@t-8ch.de>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,51 +46,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kernel test robot <lkp@intel.com> writes:
+On Sat, May 20, 2023 at 04:07:34PM +0200, Thomas Weißschuh wrote:
+> Hi Willy!
+> 
+> On 2023-05-20 15:32:37+0200, Willy Tarreau wrote:
+> > Thomas, Zhangjin,
+> > 
+> > I've merged your latest patches in my branch 20230520-nolibc-rv32+stkp2,
+> > which was rebased to integrate the updated commit messages and a few
+> > missing s-o-b from mine. Please have a look:
+> > 
+> >    https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git
+> > 
+> > However, Thomas, I noticed something puzzling me. While I tested with
+> > gcc-9.5 (that I have here along my toolchains) I found that it would
+> > systematically fail:
+> > 
+> >   sysroot/x86/include/stackprotector.h:46:1: warning: 'no_stack_protector' attribute directive ignored [-Wattributes]
+> >      46 | {
+> >         | ^
+> >   !!Stack smashing detected!!
+> >   qemu: uncaught target signal 6 (Aborted) - core dumped
+> >   0 test(s) passed.
+> > 
+> > The reason is that it doesn't support the attribute "no_stack_protector".
+> > Upon closer investigation, I noticed that _start() on x86_64 doens't have
+> > it, yet it works on more recent compilers! So I don't understand why it
+> > works with more recent compilers.
+> 
+> _start() not having the attribute is indeed an oversight.
+> No idea how it worked before.
 
-> Hi Jonathan,
->
-> kernel test robot noticed the following build warnings:
->
-> [auto build test WARNING on linus/master]
-> [also build test WARNING on v6.4-rc2 next-20230519]
-> [cannot apply to sunxi/sunxi/for-next arm64/for-next/core thierry-reding-pwm/for-next]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Jonathan-Corbet/arm-docs-Move-Arm-documentation-to-Documentation-arch/20230520-005124
-> base:   linus/master
-> patch link:    https://lore.kernel.org/r/20230519164607.38845-7-corbet%40lwn.net
-> patch subject: [PATCH 6/7] docs: update some straggling Documentation/arm references
-> reproduce:
->         # https://github.com/intel-lab-lkp/linux/commit/3c9885f2702a3319156cfbacedfca658e726213b
->         git remote add linux-review https://github.com/intel-lab-lkp/linux
->         git fetch --no-tags linux-review Jonathan-Corbet/arm-docs-Move-Arm-documentation-to-Documentation-arch/20230520-005124
->         git checkout 3c9885f2702a3319156cfbacedfca658e726213b
->         make menuconfig
->         # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
->         make htmldocs
->
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202305201023.2DYXmdv3-lkp@intel.com/
->
-> All warnings (new ones prefixed by >>):
->
->>> Warning: MAINTAINERS references a file that doesn't exist: Documentation/arch/arm64/
+No problem, I preferred to mention it anyway.
 
-Sigh...obviously this hunk:
+> > I managed to avoid the crash by enclosing the __stack_chk_init() function
+> > in a #pragma GCC optimize("-fno-stack-protector") while removing the
+> > attribute (though Clang and more recent gcc use this attribute so we
+> > shouldn't completely drop it either).
+> 
+> I would like to first align x86 to __attribute__((no_stack_protector))
+> for uniformity and then figure out on how to make it nicer.
 
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git
--F:	Documentation/arm64/
-+F:	Documentation/arch/arm64/
- F:	arch/arm64/
- F:	tools/testing/selftests/arm64/
+I agree.
 
-...got a bit ahead of the game.  I'll take that one out, sorry for the
-noise.
+> > I consider this non-critical as we can expect that regtests are run with
+> > a reasonably recent compiler version, but if in the long term we can find
+> > a more reliable detection for this, it would be nice.
+> > 
+> > For example I found that gcc defines __SSP_ALL__ to 1 when
+> > -fstack-protector is used, and 2 when -fstack-protector-all is used.
+> > With clang, it's 1 and 3 respectively. Maybe we should use that and
+> > drop NOLIBC_STACKPROTECTOR, that would be one less variable to deal
+> > with: the code would automatically adapt to whatever cflags the user
+> > sets on the compiler, which is generally better.
+> 
+> That sounds great!
+> 
+> I explicitly looked for something like this before, dumping preprocessor
+> directives and comparing.
+> It seems the fact that my compilers enable this feature by default made
+> me miss it.
 
-jon
+Hmmm that's indeed possible. With -fno-stack-protector it should disappear:
+
+  $ gcc -fno-stack-protector -dM -E -xc - < /dev/null |grep SSP
+  $ gcc -fstack-protector -dM -E -xc - < /dev/null |grep SSP
+  #define __SSP__ 1
+  $ gcc -fstack-protector-all -dM -E -xc - < /dev/null |grep SSP
+  #define __SSP_ALL__ 2
+  $ clang -fstack-protector-all -dM -E -xc - < /dev/null |grep SSP
+  #define __SSP_ALL__ 3
+
+> I'll send patches.
+
+OK thanks. Just be aware that I'll be less responsive this week-end from
+now on.
+
+Willy
