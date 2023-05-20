@@ -2,170 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A201370A84E
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 15:20:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 119AC70A84D
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 15:20:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229563AbjETNUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 09:20:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38854 "EHLO
+        id S230331AbjETNT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 09:19:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231265AbjETNUH (ORCPT
+        with ESMTP id S230210AbjETNTw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 09:20:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D9CB0
-        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 06:19:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684588764;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lTn8gTlrwHnM2AKAy5qI/9dWkXoUP9wXNayQrQJHG40=;
-        b=GIK+EGQjJbe58mNB7cjqx22fzSiyOsgfRgL8zYNKWQB+tGr2t1B2A5MrfhFzrB1lMVv5wb
-        9dCYIruujHXNQR+6VRUT7BAo/Ha1FymACcHvRQk6oFz0FG0xgJMj9pskkkuGoYldJuhX7b
-        4DO4LRQ91FmoCdQ5pTpHlzMa3tj7lp4=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-443-R6-VQ7OUNkChkXTGHWJMQw-1; Sat, 20 May 2023 09:19:19 -0400
-X-MC-Unique: R6-VQ7OUNkChkXTGHWJMQw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Sat, 20 May 2023 09:19:52 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF13BE
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 06:19:50 -0700 (PDT)
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AD0013C02535;
-        Sat, 20 May 2023 13:19:18 +0000 (UTC)
-Received: from localhost (ovpn-12-79.pek2.redhat.com [10.72.12.79])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 935C74F2DE4;
-        Sat, 20 May 2023 13:19:17 +0000 (UTC)
-Date:   Sat, 20 May 2023 21:19:14 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     "chenjiahao (C)" <chenjiahao16@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        kexec@lists.infradead.org, linux-doc@vger.kernel.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        conor.dooley@microchip.com, guoren@kernel.org, heiko@sntech.de,
-        bjorn@rivosinc.com, alex@ghiti.fr, akpm@linux-foundation.org,
-        atishp@rivosinc.com, thunder.leizhen@huawei.com, horms@kernel.org
-Subject: Re: [PATCH -next v4 1/2] riscv: kdump: Implement
- crashkernel=X,[high,low]
-Message-ID: <ZGjI0kDmtnxKY3NP@MiWiFi-R3L-srv>
-References: <20230410130553.3226347-1-chenjiahao16@huawei.com>
- <20230410130553.3226347-2-chenjiahao16@huawei.com>
- <ZEnaPzx3O9NWixIR@MiWiFi-R3L-srv>
- <366da9fb-0a3c-ac62-3df3-7a7f328973a6@huawei.com>
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 3667B3F125
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 13:19:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1684588788;
+        bh=NzthO7BMG0Z86lKTG5pcPZLaqdSgk8GzDOcuVAlDI3A=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=wXdF+c8Wfz0aZ5OVDhy/iU5/99nBsm6BwOUXsQcP1y9sUr6EX3Q4TeZgZ7E68MX0q
+         SqXk7gt/X3w4OdZsA8exzwIiY3dlqb/F+dB9cif5Dkd1FfuKwKFqUZQvNqEZI+6jdv
+         U68XxTLZmDG8QWSBIfU8wg0AgeP3fbUh5O7mNo8yKJIUpbA3uLbOt4DhwclFCiKuu2
+         lO1F1zzsOc9yG4Hcc2ytSShVaykTukmfu7JS8EKNTtfEfgB1XZ1qfVuZjR+VxWZz4U
+         l5mng90Xez039mv6AM0lL94G9TimmwbkwqCsrlpVTlfb5TvFcZagJAWWJKKVnfMXhI
+         DwbEAlugFnXWw==
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-96fa4c724fdso38266066b.0
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 06:19:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684588787; x=1687180787;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NzthO7BMG0Z86lKTG5pcPZLaqdSgk8GzDOcuVAlDI3A=;
+        b=QpaftydVJL5uXMgHxYEjXovBaKzuJemi/XAM2Puf3vgmQoSaVE1SdEAcMbU2iFbYGJ
+         i3nHs/7M8Oj0tVRtRFQj8MVvZEFfR53tWL/4GufypVj4coIJxFebAva/VwOB45Av2iCz
+         asonWCDzV3adaimiKpXGXrgFVHQ0ff4ZJJ9pdMcFJvSYF3WaAvAtb/1zg1Kke1lECsvo
+         4tARCTjnQhd3Q9piTKDlzZcvh6RDF6QbYwI334BrOVMNOwHyKlFX0dUPL63Ztkug1K+I
+         /gs+VfCy8ZbnQVYXP+9G/aTWO+KlTbLDeI8PVL4m6V1lZwyfw/5JiM1zVk3fw/BHYV9k
+         Y/eA==
+X-Gm-Message-State: AC+VfDzaaLsHiaQhYDflavIjXuSGlb7LgnNV02pU83zwKqZeqjwpEIp5
+        hEnMcQcJjjR8TpMW5D3L1PolihWYC07udfmg8M3c/yC2+92N6TwGARsOCUG/fTCx8mkjUVxYOMn
+        EaA/acyHVjSmyLAGrNNyY0pudtszt396caD/SbC31VA==
+X-Received: by 2002:a17:907:360c:b0:969:9c0c:4c97 with SMTP id bk12-20020a170907360c00b009699c0c4c97mr4345923ejc.1.1684588787745;
+        Sat, 20 May 2023 06:19:47 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7du0+pcc/ypA6rXudHicfHbFFFlQPmbDMyIlAS1D42x2hBvPlKAhnw6o02K4eWbFkgkHqzhA==
+X-Received: by 2002:a17:907:360c:b0:969:9c0c:4c97 with SMTP id bk12-20020a170907360c00b009699c0c4c97mr4345910ejc.1.1684588787417;
+        Sat, 20 May 2023 06:19:47 -0700 (PDT)
+Received: from localhost (host-87-10-127-160.retail.telecomitalia.it. [87.10.127.160])
+        by smtp.gmail.com with ESMTPSA id s14-20020a170906c30e00b0094f410225c7sm770863ejz.169.2023.05.20.06.19.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 20 May 2023 06:19:47 -0700 (PDT)
+Date:   Sat, 20 May 2023 15:19:44 +0200
+From:   Andrea Righi <andrea.righi@canonical.com>
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     Miklos Szeredi <miklos@szeredi.hu>, linux-unionfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ovl: make consistent use of OVL_FS()
+Message-ID: <ZGjI8Hutt9JwuN/i@righiandr-XPS-13-7390>
+References: <20230520120528.339680-1-andrea.righi@canonical.com>
+ <CAOQ4uxjOgWDqufLcabkkPcxvFcrehzoDuO0d6kdJZuoiRBKStw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <366da9fb-0a3c-ac62-3df3-7a7f328973a6@huawei.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOQ4uxjOgWDqufLcabkkPcxvFcrehzoDuO0d6kdJZuoiRBKStw@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/11/23 at 04:47pm, chenjiahao (C) wrote:
-......
-> > > @@ -1163,8 +1185,12 @@ static void __init reserve_crashkernel(void)
-> > >   {
-> > >   	unsigned long long crash_base = 0;
-> > >   	unsigned long long crash_size = 0;
-> > > +	unsigned long long crash_low_size = 0;
-> > >   	unsigned long search_start = memblock_start_of_DRAM();
-> > >   	unsigned long search_end = memblock_end_of_DRAM();
-> > > +	unsigned long search_low_max = (unsigned long)dma32_phys_limit;
-> > > +	char *cmdline = boot_command_line;
-> > > +	bool fixed_base = false;
-> > >   	int ret = 0;
-> > > @@ -1180,14 +1206,34 @@ static void __init reserve_crashkernel(void)
-> > >   		return;
-> > >   	}
-> > > -	ret = parse_crashkernel(boot_command_line, memblock_phys_mem_size(),
-> > > +	ret = parse_crashkernel(cmdline, memblock_phys_mem_size(),
-> > >   				&crash_size, &crash_base);
-> > > -	if (ret || !crash_size)
-> > > +	if (ret == -ENOENT) {
-> > > +		/* Fallback to crashkernel=X,[high,low] */
-> > > +		ret = parse_crashkernel_high(cmdline, 0, &crash_size, &crash_base);
-> > > +		if (ret || !crash_size)
-> > > +			return;
-> > > +
-> > > +		/*
-> > > +		 * crashkernel=Y,low is valid only when crashkernel=X,high
-> > > +		 * is passed.
-> > > +		 */
-> > > +		ret = parse_crashkernel_low(cmdline, 0, &crash_low_size, &crash_base);
-> > > +		if (ret == -ENOENT)
-> > > +			crash_low_size = DEFAULT_CRASH_KERNEL_LOW_SIZE;
-> > > +		else if (ret)
-> > > +			return;
-> > > +
-> > > +		search_start = search_low_max;
-> > > +	} else if (ret || !crash_size) {
-> > > +		/* Invalid argument value specified */
-> > >   		return;
-> > > +	}
-> > >   	crash_size = PAGE_ALIGN(crash_size);
-> > >   	if (crash_base) {
-> > > +		fixed_base = true;
-> > >   		search_start = crash_base;
-> > >   		search_end = crash_base + crash_size;
-> > >   	}
-> > > @@ -1201,16 +1247,31 @@ static void __init reserve_crashkernel(void)
-> > >   	 */
-> > >   	crash_base = memblock_phys_alloc_range(crash_size, PMD_SIZE,
-> > >   					       search_start,
-> > > -					       min(search_end, (unsigned long) SZ_4G));
-> > > +					       min(search_end, search_low_max));
-> > Here, it seems not right in case crashkernel=,high is specified. In that
-> > case, search_start == search_low_max, then the min(search_end,
-> > search_low_max) will get search_low_max too. Then you make the fallback
-> > in below code block to try to get crashkernel reservation above 4G. This
-> > doesn't comply with the crashkernel=,high grammer which has been
-> > implemented in other architectures.
-> > 
-> > For crashkernel=,high, user explicitly require memory reservation above
-> > 4G. Why does crashkernel=,high is needed? E.g on big end server with
-> > huge memory, while the low memory under 4G is limited and precious.
-> > Hence, user want to put the main crashkernel reservation above 4G to
-> > contain kdump kernel/initrd and run user space program, while with few
-> > low memory for pci device driver. E.g crashkernel=2G,high, it won't
-> > impact much if there's huge memory above 4G and get crashkernel
-> > reservation there. However, it impacts a lot if it reserves memory
-> > below 4G.
-> > 
-> > I would strongly suggest that risc-v also reserve memory from above 4G
-> > for crashkernel=,high, then fallback to below 4G. That's consistent with
-> > crashkernel=,high grammer.
+On Sat, May 20, 2023 at 03:33:32PM +0300, Amir Goldstein wrote:
+> On Sat, May 20, 2023 at 3:20 PM Andrea Righi <andrea.righi@canonical.com> wrote:
+...
+> > @@ -97,6 +99,8 @@ static inline struct mnt_idmap *ovl_upper_mnt_idmap(struct ovl_fs *ofs)
+> >
+> >  static inline struct ovl_fs *OVL_FS(struct super_block *sb)
+> >  {
+> > +       /* Make sure OVL_FS() is always used with an overlayfs superblock */
+> > +       BUG_ON(sb->s_magic != OVERLAYFS_SUPER_MAGIC);
 > 
-> Sorry for late response.
-> 
-> I have got the point here. So with the original implication of "crashkernel=,high",
-> there is even no need to try reserving low memory under 4G. I have arranged another
-> version of patchset, in which I updated the allocation logic in that case.
-> 
-> For example, when "crashkernel=1G,high" is specified, the previous logic is like:
-> alloc range: crash_size: 0x40000000 (1G), crash_base: 4G_limit,
->              crash_max: 4G_limit
-> alloc range high: crash_size: 0x40000000 (1G), crash_base: 4G_limit,
->                   crash_max: memblock_range_end
-> alloc range low: low_size: 0x8000000 (128MB,default), crash_base: 0x0,
->                  crash_max: 4G_limit
-> 
-> After revision, the logic is like:
-> alloc range: crash_size: 0x40000000 (1G), crash_base: memblock_range_start,
->              crash_max: memblock_range_end
-> alloc range low: low_size: 0x8000000 (128MB,default), crash_base: 0x0,
->                  crash_max: 4G_limit
-> 
-> Please let me know if there is any problem exist.
+> 1. Adding new BUG_ON to kernel code is not acceptable - if anything
+>     you can add WARN_ON_ONCE()
 
-Sorry for late reply.
+OK, but accessing a pointer to a struct ovl_fs that is not really a
+struct ovl_fs can potentially have nasty effects, even data corruption
+maybe? I'd rather crash the system now rather than experiencing random
+behaviors later...
 
-Hmm, it doesn't seem completely correct. I will comment in your v5
-patch. Please see over there.
+> 2. If anything, you should check s_type == s_ovl_fs_type, not s_magic
 
+Hm.. is there a fast way to determine when sb->s_type == overlayfs?
+Using get_fs_type() here seems quite expensive and I'm not even sure if
+it's doable, is there a better way that I don't see?
+
+> 3. It is very unclear to me that this check has that much value and OVL_FS()
+>     macro is very commonly used inside internal helpers, so please add a
+>     "why" to your patch - why do you think that it is desired and/or valuable
+>     to fortify OVL_FS() like this?
+
+Sure, I can send a v2 explaining why I think this is needed. Basically I
+was debugging a custom overlayfs patch and after a while I realized that
+I was accessing the sb->s_fs_info of a real path (not an overlayfs sb),
+using OVL_FS() with a proper check would have saved a me a bunch of
+time.
+
+Thanks for looking at this!
+-Andrea
