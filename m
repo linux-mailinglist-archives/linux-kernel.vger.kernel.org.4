@@ -2,99 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C4770A501
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 05:55:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E4A70A504
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 05:57:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbjETDz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 23:55:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46016 "EHLO
+        id S230087AbjETD5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 23:57:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjETDzZ (ORCPT
+        with ESMTP id S229449AbjETD5D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 23:55:25 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3A7E3;
-        Fri, 19 May 2023 20:55:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=oL9McTatLzHAnvigXeTVcWUVg0VQVXOaPT42iNyRB/I=; b=uFVuErhl9FJ8po3AK62lX9hvDS
-        oqPSzYD12l6vrFqhWjp8Zp0Tds1+aNcCpz0R2/DYhXeYq5Nqf45/hVBGlYPu0Th5KCrpYeTYJHTu+
-        rEzVFFIB1bkLogNKU3egCB8886wQgii88jrgrYA21qNeaueL4UFNrq/oVXF6+iqM9890s0Sv2fcZ+
-        5YIPlDW6IQpR7Eq9SUhTPkG+CBpJD/SrLX1IgXHoX4VlU1cyNEVtVVEdheuZa21Ew6oLZPZVlmqGX
-        2X96l2gCZbv5fmOV13NyDPGxDUxRFSEoF+y+couTXvwfpDKDQ1M+rmzaO0Br5FKGiTHfu180VVimF
-        6AMfAFTw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q0DgF-000bJ1-28;
-        Sat, 20 May 2023 03:54:55 +0000
-Date:   Fri, 19 May 2023 20:54:55 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH v20 03/32] splice: Make direct_read_splice() limit to eof
- where appropriate
-Message-ID: <ZGhEj5RhZYwCnzKG@infradead.org>
-References: <ZGc3vUU/bUpt+3Tm@infradead.org>
- <ZGcusJQfz68H1s7S@infradead.org>
- <20230519074047.1739879-1-dhowells@redhat.com>
- <20230519074047.1739879-4-dhowells@redhat.com>
- <1742093.1684485814@warthog.procyon.org.uk>
- <2154518.1684535271@warthog.procyon.org.uk>
+        Fri, 19 May 2023 23:57:03 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7811D101
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 20:57:02 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-ba818eb96dcso3564125276.0
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 20:57:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1684555021; x=1687147021;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=k48QyU7lF8u1l7ywe+luULWJLH7q4GBm+Nfjv/qBk0s=;
+        b=Uvv7TmePr330Eu7MGfoPqtTuWruLmLIq1IBdIV4uYhFpKrim+1cUl2g4w+n8Ma6NxX
+         YpIBLKAMud1MQuhqfUg2cwekk4NdPJkpuTqDOD9IENpHtR1JK2kZ6Y5s5Wu/OiFKM/ps
+         4cfPf4dwFrs5IvWVznM8yRp5EdKHjiHXYN1D8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684555021; x=1687147021;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=k48QyU7lF8u1l7ywe+luULWJLH7q4GBm+Nfjv/qBk0s=;
+        b=cZv3M75HVtKYEwco4OH0d6WyMXfz3dHTOXQebpSWNbTLSoy9k0vz3ts7nsew7IQc7u
+         OywM0xcdTMvqmp0GdZ9FrmMw4G78jNA42pGiuvqXPT9eP8P/U/RjWtVLiSKmPBKrwvt2
+         3xDN/9P3LMIUGDDwy5WMYN4xq/dLcgi4/JXMh9x6JJyjUxzoTXc7PcepDwYtMrnrvlHC
+         QcufO5mILSXpajzcPby59W4GoVv3y2Duxw5FeElaRqIV3ozp52qqdN5sejWrzJazL0eW
+         K2NMt1PrLSczyAON0Kw0ic2Fy0ve2vSvHJmEblgj4uj/IsSWpzehghvXH5NbMYuymR0m
+         tT9Q==
+X-Gm-Message-State: AC+VfDzk9WAs9dDbkv4OQ4qNp4QndKtRh9TqsuhhQR5M/KaDQhQitEFd
+        zllugRny6Q3F1FgpFuAobYb6Z0f4XTeCuqH7fODfAA==
+X-Google-Smtp-Source: ACHHUZ5TESjAYLMyKkTXEwDGBwMPceDrtDjcUJRXQ3cm+D8ZoLt30E5SfCHCAJ5Qm2cec08U4VoOZF0NGTmZ61Dt6Cc=
+X-Received: by 2002:a25:b088:0:b0:ba6:dd3a:1c4b with SMTP id
+ f8-20020a25b088000000b00ba6dd3a1c4bmr3610614ybj.65.1684555021630; Fri, 19 May
+ 2023 20:57:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2154518.1684535271@warthog.procyon.org.uk>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230519190934.339332-1-joel@joelfernandes.org>
+ <20230519190934.339332-2-joel@joelfernandes.org> <CAHk-=whoajP4bZMbZC_VYmBhmhCpXsBesszwWUH0i6SpK_dAtw@mail.gmail.com>
+ <CAEXW_YQ4wdGVa5M6jZfi5d-pdJOp1Nu7qTBvWYS=255AnYWZCw@mail.gmail.com>
+ <CAHk-=wj9j+puqhe+E-AcG5j-5nP_tQ7DmAcb=Cb6v7n4mpxXjQ@mail.gmail.com> <CAEXW_YT1qr9F1QaABthUx6qxWPYYom-oW7XMVExzrHLWdhUGKg@mail.gmail.com>
+In-Reply-To: <CAEXW_YT1qr9F1QaABthUx6qxWPYYom-oW7XMVExzrHLWdhUGKg@mail.gmail.com>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Fri, 19 May 2023 23:56:50 -0400
+Message-ID: <CAEXW_YTqjGG4Y06brQthe4UMqprTJm=xk=P7i5gTpm2rZRZkXQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] mm/mremap: Optimize the start addresses in move_page_tables()
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Kirill A Shutemov <kirill@shutemov.name>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 11:27:51PM +0100, David Howells wrote:
-> 	ssize_t generic_file_splice_read(struct file *in, loff_t *ppos,
-> 					 struct pipe_inode_info *pipe, size_t len,
-> 					 unsigned int flags)
-> 	{
-> 		if (unlikely(*ppos >= in->f_mapping->host->i_sb->s_maxbytes))
-> 			return 0;
-> 		if (unlikely(!len))
-> 			return 0;
-> 		return filemap_splice_read(in, ppos, pipe, len, flags);
-> 	}
-> 
-> so I wonder if the tests in generic_file_splice_read() can be folded into
-> vfs_splice_read(), pointers to generic_file_splice_read() be replaced with
-> pointers to filemap_splice_read() and generic_file_splice_read() just be
-> removed.
-> 
-> I suspect we can't quite do this because of the *ppos check - but I wonder if
-> that's actually necessary since filemap_splice_read() checks against
-> i_size... or if the check can be moved there if we definitely want to do it.
-> 
-> Certainly, the zero-length check can be done in vfs_splice_read().
+On Fri, May 19, 2023 at 11:17=E2=80=AFPM Joel Fernandes <joel@joelfernandes=
+.org> wrote:
+>
+> Hi Linus,
+>
+> On Fri, May 19, 2023 at 10:34=E2=80=AFPM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > On Fri, May 19, 2023 at 3:52=E2=80=AFPM Joel Fernandes <joel@joelfernan=
+des.org> wrote:
+> > > >
+> > > > I *suspect* that the test is literally just for the stack movement
+> > > > case by execve, where it catches the case where we're doing the
+> > > > movement entirely within the one vma we set up.
+> > >
+> > > Yes that's right, the test is only for the stack movement case. For
+> > > the regular mremap case, I don't think there is a way for it to
+> > > trigger.
+> >
+> > So I feel the test is simply redundant.
+> >
+> > For the regular mremap case, it never triggers.
+>
+> Unfortunately, I just found that mremap-ing a range purely within a
+> VMA can actually cause the old and new VMA passed to
+> move_page_tables() to be the same.
+>
+> I added a printk to the beginning of move_page_tables that prints all the=
+ args:
+> printk("move_page_tables(vma=3D(%lx,%lx), old_addr=3D%lx,
+> new_vma=3D(%lx,%lx), new_addr=3D%lx, len=3D%lx)\n", vma->vm_start,
+> vma->vm_end, old_addr, new_vma->vm_start, new_vma->vm_end, new_addr,
+> len);
+>
+> Then I wrote a simple test to move 1MB purely within a 10MB range and
+> I found on running the test that the old and new vma passed to
+> move_page_tables() are exactly the same.
+>
+> [   19.697596] move_page_tables(vma=3D(7f1f985f7000,7f1f98ff7000),
+> old_addr=3D7f1f987f7000, new_vma=3D(7f1f985f7000,7f1f98ff7000),
+> new_addr=3D7f1f98af7000, len=3D100000)
+>
+> That is a bit counter intuitive as I really thought we'd be splitting
+> the VMAs with such a move. Any idea what am I missing?
+>
+> Also, such a usecase will break with my patch as we may accidentally
+> overwrite parts of a range that were not part of the mremap request.
+> Maybe I should just turn off the optimization if vma =3D=3D new_vma,
+> however that will also turn it off for the stack move so then maybe
+> another way is to special case stack moves in move_page_tables().
+>
+> So this means I have to go back to the drawing board a bit on this
+> patch, and also add more tests in mremap_test.c to test such
+> within-VMA moving. I believe there are no such existing tests... More
+> work to do for me. :-)
 
-The zero length check makes sense in vfs_splice_read.  The ppos check
-I think makes sense for filemap_splice_read - after all we're dealing
-with the page cache here, and the page cache needs a working maxbytes
-and i_size.  What callers of filemap_splice_read that don't have the
-checks do you have in your tree right now and how did you end up with
-them?
+I also realize that I don't really need to check whether the masked
+source address falls under a VMA neighboring to that of the source's.
+I only need to do so for the destination. And for the destination
+masked address, I need to forbid the optimization if after masking,
+the destination addr will fall within *any* mapping whether it is its
+own or a neighbor one. Since we cannot afford to corrupt those. I
+believe that will also take care of both the intra-VMA moves as well
+as the stack usecase. And also cut down one of the two find_vma_prev()
+calls.
+
+I will rewrite the patch to address these soon. Thanks for patience
+and all the comments,
+
+Thanks!
+
+ - Joel
