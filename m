@@ -2,101 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B94970A827
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 14:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B9A370A82E
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 14:48:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbjETMfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 08:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59402 "EHLO
+        id S230370AbjETMsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 08:48:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbjETMfk (ORCPT
+        with ESMTP id S229464AbjETMsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 08:35:40 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98225115
-        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 05:35:39 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-64d2f99c8c3so1270611b3a.0
-        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 05:35:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684586139; x=1687178139;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qi1BxeyXyBr0dFvjh80CQh5A+2m5jDZBC0Bu7zhHxEw=;
-        b=QL/LdjHbI4m+gVCU+VvtvjX0NJ8mVhPe62iN8KT39wNVWlaM60Jxr2acJQK0RZkR0d
-         nDT/0BYx2tyRGhkwA6WezQrmA76bxlTaLdmhPIpjZ2pDPg7FK44taZnStGq4tSdwrFIs
-         fNarjRaZNC7cW140Z5nwBlcy+/Gz42AV6nYRot7ChkpRrjbwIl5ulku0KwU48qDXg5Zk
-         7i5GDuSIkgV3Ve74itYUUonXj6phUzztKVazUERNLluyPmnVnqqb63iUXiLi6Y4q8yJn
-         YYsBTHbdSTkTXN8z0p2T9NAY1pYxBqhEb7HZqxbHJuVoEgKFZVOiFtqdBQpxR7KivWg5
-         mtzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684586139; x=1687178139;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qi1BxeyXyBr0dFvjh80CQh5A+2m5jDZBC0Bu7zhHxEw=;
-        b=Gboojaei6kgONc5p3pcnRBOQDMOSoqcyYAadMoIRUemFetB5yBLdAgW7JNpjyesozA
-         VbYR845aEOEwZ+hfOvKCTec70mSTMeMMN8XK/EqL1cF3yczloUa+71Y6l/fOr4MCeuCc
-         DVJt1yisbL1ZA33bZzYkncOudux6k0x522Mow+JkkF9xRnjpK5KenlsLLW+pmq36rirg
-         sWL4W5pCFucGRxNhBAe2XiW9zlMU22OLnZxqkHzIYE5JxVK+T7nleLSei/LyI6YWtpat
-         bU58jbiHzB0I/lpUxZ+Ul+J1O33tGsOv806aGI+YdqTJdXYQ684vbE7bz/QDlzcOINFS
-         wZWg==
-X-Gm-Message-State: AC+VfDzC8makQDwwhylNBDVOzCCWcclbDzgFuZa+xDs6OswUsk5rPUK6
-        NndyeowN5OqxbaF9ucyulVHY7g==
-X-Google-Smtp-Source: ACHHUZ7CzT1d8/QJg8ZlDIs8IMGzYxs0CAE5xM0ac4MEmXuxLlO65D0vgJA2pzrvzzXyJYhzORTc/Q==
-X-Received: by 2002:a05:6a00:891:b0:63b:8afe:a4dc with SMTP id q17-20020a056a00089100b0063b8afea4dcmr6625617pfj.30.1684586138790;
-        Sat, 20 May 2023 05:35:38 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id r25-20020a62e419000000b0062d859a33d1sm1194351pfh.84.2023.05.20.05.35.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 May 2023 05:35:38 -0700 (PDT)
-Date:   Sat, 20 May 2023 12:35:34 +0000
-From:   Carlos Llamas <cmllamas@google.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, kernel-team@android.com,
-        Jann Horn <jannh@google.com>, stable@vger.kernel.org,
-        Minchan Kim <minchan@kernel.org>,
-        Yang Shi <yang.shi@linux.alibaba.com>,
-        Liam Howlett <liam.howlett@oracle.com>,
-        Todd Kjos <tkjos@google.com>
-Subject: Re: [PATCH] binder: fix UAF of alloc->vma in race with munmap()
-Message-ID: <ZGi+ltbOgQcJEq58@google.com>
-References: <20230519195950.1775656-1-cmllamas@google.com>
- <2023052048-sloping-credible-8871@gregkh>
+        Sat, 20 May 2023 08:48:37 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 168A0119
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 05:48:35 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-23-ZFWb1jHDM3WePpzNReqI_Q-1; Sat, 20 May 2023 13:48:23 +0100
+X-MC-Unique: ZFWb1jHDM3WePpzNReqI_Q-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sat, 20 May
+ 2023 13:48:21 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Sat, 20 May 2023 13:48:21 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Willem de Bruijn' <willemdebruijn.kernel@gmail.com>,
+        Breno Leitao <leitao@debian.org>
+CC:     "axboe@kernel.dk" <axboe@kernel.dk>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "courmisch@gmail.com" <courmisch@gmail.com>,
+        "nhorman@tuxdriver.com" <nhorman@tuxdriver.com>,
+        "asml.silence@gmail.com" <asml.silence@gmail.com>,
+        "alex.aring@gmail.com" <alex.aring@gmail.com>,
+        "dccp@vger.kernel.org" <dccp@vger.kernel.org>,
+        "mptcp@lists.linux.dev" <mptcp@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "matthieu.baerts@tessares.net" <matthieu.baerts@tessares.net>,
+        "marcelo.leitner@gmail.com" <marcelo.leitner@gmail.com>,
+        "linux-wpan@vger.kernel.org" <linux-wpan@vger.kernel.org>,
+        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
+        "leit@fb.com" <leit@fb.com>,
+        "dsahern@kernel.org" <dsahern@kernel.org>
+Subject: RE: [PATCH 1/1] net: ioctl: Use kernel memory on protocol ioctl
+ callbacks
+Thread-Topic: [PATCH 1/1] net: ioctl: Use kernel memory on protocol ioctl
+ callbacks
+Thread-Index: AQHZinQFkjARdT8YlUi1kSrEdFLkt69jHBLw
+Date:   Sat, 20 May 2023 12:48:21 +0000
+Message-ID: <00e1ca50c7824750b24039c16a9d8bc9@AcuMS.aculab.com>
+References: <20230519135821.922326-1-leitao@debian.org>
+ <20230519135821.922326-2-leitao@debian.org>
+ <CAF=yD-Jj6dvyOskL+F52_aaaCovVTcpoYSCeMY7xH=FK7r3Jiw@mail.gmail.com>
+ <ZGeYF+pp8Ukbo4p5@gmail.com>
+ <CAF=yD-L0MnbofufMB_SKu+8PZ+f_QdAGYoDe-jOavdkAjFrXXg@mail.gmail.com>
+In-Reply-To: <CAF=yD-L0MnbofufMB_SKu+8PZ+f_QdAGYoDe-jOavdkAjFrXXg@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2023052048-sloping-credible-8871@gregkh>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 20, 2023 at 10:54:15AM +0100, Greg Kroah-Hartman wrote:
-> On Fri, May 19, 2023 at 07:59:49PM +0000, Carlos Llamas wrote:
-> > [ cmllamas: clean forward port from commit 015ac18be7de ("binder: fix
-> >   UAF of alloc->vma in race with munmap()") in 5.10 stable. It is needed
-> >   in mainline after the revert of commit a43cfc87caaf ("android: binder:
-> >   stop saving a pointer to the VMA") as pointed out by Liam. The commit
-> >   log and tags have been tweaked to reflect this. ]
-> 
-> I'm confused, is this for a stable release (and if so, which one), or is
-> this for Linus's tree?
+RnJvbTogV2lsbGVtIGRlIEJydWlqbg0KPiBTZW50OiAxOSBNYXkgMjAyMyAxODowNQ0KLi4uDQo+
+ID4gU2hvdWxkIEkgc3RhY2sgYWxsb2NhdGUgYWxsIHRoZSA0IHN0cnVjdHVyZXMgc29ja19za3By
+b3RfaW9jdGwgYW5kIHBhc3MNCj4gPiB0aGVtIHRvIHNvY2tfc2twcm90b19pb2N0bF9pbm91dCgp
+IHRvZ2V0aGVyIHdpdGggdGhlIHNpemU/ICh1c2luZyB0aGUNCj4gPiBvcmlnaW5hbCBuYW1lIHRv
+IGF2b2lkIGNvbmZ1c2lvbiAtIHdpbGwgcmVuYW1lIGluIFYyKQ0KPiA+DQo+ID4gSSBtZWFuLCB3
+cml0aW5nIHNvbWV0aGluZyBhczoNCj4gPg0KPiA+IGludCBzb2NrX3NrcHJvdF9pb2N0bChzdHJ1
+Y3Qgc29jayAqc2ssIHVuc2lnbmVkIGludCBjbWQNCj4gPiAgICAgICAgICAgICAgICAgICAgICB2
+b2lkIF9fdXNlciAqYXJnYA0KPiA+IHsNCj4gPiAgICAgICAgIHN0cnVjdCBzaW9jX3ZpZl9yZXEg
+c2lvY192aWZfcmVxX2FyZzsNCj4gPiAgICAgICAgIHN0cnVjdCBzaW9jX3NnX3JlcSBzaW9jX3Nn
+X3JlcV9hcmc7DQo+ID4gICAgICAgICBzdHJ1Y3Qgc2lvY19taWZfcmVxNiBzaW9jX21pZl9yZXE2
+X2FyZzsNCj4gPiAgICAgICAgIHN0cnVjdCBzaW9jX3NnX3JlcTYgc2lvY19zZ19yZXE2X2FyZzsN
+Cj4gPg0KPiA+ICAgICAgICAgLi4NCj4gPg0KPiA+ICAgICAgICAgaWYgKCFzdHJjbXAoc2stPnNr
+X3Byb3QtPm5hbWUsICJSQVc2IikpIHsNCj4gPiAgICAgICAgIHN3aXRjaCAoY21kKSB7DQo+ID4g
+ICAgICAgICAgICAgICAgY2FzZSBTSU9DR0VUTUlGQ05UX0lONjoNCj4gPiAgICAgICAgICAgICAg
+ICAgICAgICAgIHJldHVybiBzb2NrX3NrcHJvdG9faW9jdGxfaW5vdXQoc2ssIGNtZCwNCj4gPiAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgYXJnLCAmc2lvY19taWZfcmVxNl9hcmcsIHNp
+emVvZihzaW9jX21pZl9yZXE2X2FyZyk7DQo+ID4gICAgICAgICAgICAgICAgY2FzZSBTSU9DR0VU
+U0dDTlRfSU42Og0KPiA+ICAgICAgICAgICAgICAgICAgICAgICAgcmV0dXJuIHNvY2tfc2twcm90
+b19pb2N0bF9pbm91dChzaywgY21kLA0KPiA+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICBhcmcsICZzaW9jX3NnX3JlcTZfYXJnLCBzaXplb2Yoc2lvY19zZ19yZXE2X2FyZykpOw0KPiA+
+ICAgICAgICAgICAgICAgIH0NCj4gPiAgICAgICAgfQ0KPiA+ICAgICAgICAuLi4NCj4gPiB9DQo+
+IA0KPiBTbGlnaHQgcHJlZmVyZW5jZSBmb3IgdXNpbmcgYnJhY2VzIGluIHRoZSBpbmRpdmlkdWFs
+IGNhc2Ugc3RhdGVtZW50cw0KPiBhbmQgZGVmaW5pbmcgdGhlIHZhcmlhYmxlcyBpbiB0aGF0IGJs
+b2NrIHNjb3BlLiBTZWUgZm9yIGluc3RhbmNlDQo+IGRvX3RjcF9zZXRzb2Nrb3B0Lg0KDQpCZXdh
+cmUgb2Ygc3RhY2sgYmxvYXQgZXNwZWNpYWxseSB1bmRlciBLQVNBTiAoZXRjKS4NCkl0IG1pZ2h0
+IGJlIGJldHRlciB0byB1c2UgYSB1bmlvbi4NClRoZW4gdGhlIHN3aXRjaCBzdGF0ZW1lbnQgb25s
+eSBuZWVkIGRldGVybWluZSB0aGUgcmVxdWlyZWQgbGVuZ3RoLg0KDQoJRGF2aWQNCg0KLQ0KUmVn
+aXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRv
+biBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
-Sorry for the confusion. This is for Linus's tree.
