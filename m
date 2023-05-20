@@ -2,102 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56AA570A572
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 07:03:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FA6170A574
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 07:04:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbjETFD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 01:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58190 "EHLO
+        id S229958AbjETFEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 01:04:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjETFD0 (ORCPT
+        with ESMTP id S229512AbjETFEm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 01:03:26 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40764E4C
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 22:03:23 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1q0EkQ-0007Al-Jq; Sat, 20 May 2023 07:03:18 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1q0EkP-0005ZM-2c; Sat, 20 May 2023 07:03:17 +0200
-Date:   Sat, 20 May 2023 07:03:17 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Arun Ramadoss <arun.ramadoss@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
-        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        UNGLinuxDriver@microchip.com,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH net-next v4 1/2] net: dsa: microchip: ksz8: Make flow
- control, speed, and duplex on CPU port configurable
-Message-ID: <20230520050317.GC18246@pengutronix.de>
-References: <20230519124700.635041-1-o.rempel@pengutronix.de>
- <20230519124700.635041-2-o.rempel@pengutronix.de>
- <20230519143004.luvz73jiyvnqxk4y@skbuf>
- <20230519185015.GA18246@pengutronix.de>
- <20230519203449.pc5vbfgbfc6rdo6i@skbuf>
+        Sat, 20 May 2023 01:04:42 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3BC5F1;
+        Fri, 19 May 2023 22:04:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=kyno7uaGol+0Au+jeyK6ifVXccyu7nII+Bbwm/hovJU=; b=s7UP4Sx7JFz6PF8XhGe3p/f0aQ
+        2HHxn/9xS3MpXXSgWN2Aw8vUybKc87OsnzpwHYyHpCwiFaKdvrs1h8u8c0yJJ0hxloX9XVBrDfbZ9
+        L7y6hSznUFJK8I7ZAx4x3tmnrDwrx9ElsRHn5Cya5odTKRqHa6nRBvQnpbMkbN3VV01mh5LZN2P0W
+        pONzrYAHEDCUtLpUxD9d9fJMiRJOZtXAcLcPEzoPaxnX7iHb9uj25vOoxaX9I0tzjUPBeLEO8Nvh8
+        ORXsXdIsyjvCkOZkvKcpcS95zsw7CvW2pKYujFxNKsFZK0OssXoFItZouzDjTYMbnGVFPKnT01ynT
+        HqtudESw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q0Elh-000jwN-0t;
+        Sat, 20 May 2023 05:04:37 +0000
+Date:   Fri, 19 May 2023 22:04:37 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, arnd@arndb.de, christophe.leroy@csgroup.eu,
+        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
+        schnelle@linux.ibm.com, David.Laight@aculab.com, shorne@gmail.com,
+        willy@infradead.org, deller@gmx.de
+Subject: Re: [PATCH v5 RESEND 14/17] mm/ioremap: Consider IOREMAP space in
+ generic ioremap
+Message-ID: <ZGhU5bjVLaqAE1j1@infradead.org>
+References: <20230515090848.833045-1-bhe@redhat.com>
+ <20230515090848.833045-15-bhe@redhat.com>
+ <ZGR3Ft27kdgXKKfp@infradead.org>
+ <ZGR3yWIdjfJTupgY@infradead.org>
+ <ZGg++JKsQh/tOZHI@MiWiFi-R3L-srv>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230519203449.pc5vbfgbfc6rdo6i@skbuf>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZGg++JKsQh/tOZHI@MiWiFi-R3L-srv>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 11:34:49PM +0300, Vladimir Oltean wrote:
-> On Fri, May 19, 2023 at 08:50:15PM +0200, Oleksij Rempel wrote:
-> > Thank you for your feedback. I see your point. 
+On Sat, May 20, 2023 at 11:31:04AM +0800, Baoquan He wrote:
+> > > Together with a little comment that ioremap often, but not always
+> > > uses the generic vmalloc area.
 > > 
-> > We need to remember that the KSZ switch series has different types of
-> > ports. Specifically, for the KSZ8 series, there's a unique port. This
-> > port is unique because it's the only one that can be configured with
-> > global registers, and it is only one supports tail tagging. This special
-> > port is already referenced in the driver by "dev->cpu_port", so I continued
-> > using it in my patch.
+> > .. and with that we can also simply is_ioremap_addr by moving it
+> > to ioremap.c and making it always operate on the IOREMAP constants.
 > 
-> Ok, I understand, so for the KSZ8 family, the assumption about which
-> port will use tail tagging is baked into the hardware.
-> 
-> > It is important to note that while this port has an xMII interface, it
-> > is not the only port that could have an xMII interface. Therefore, using
-> > "dev->info->internal_phy" may not be the best way to identify this port,
-> > because there can be ports that are not global/cpu, have an xMII
-> > interface, but don't have an internal PHY.
-> 
-> Right, but since we're talking about phylink, the goal is to identify
-> the xMII ports, not the CPU ports... This is a particularly denatured
-> case because the xMII port is global and is also the CPU port.
+> Great idea too, will do. Put this into a separate patch?
 
-I see. Do you have any suggestions for a better or more suitable
-implementation? I'm open to ideas.
-
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Yes.
