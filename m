@@ -2,161 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 787AB70A95F
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 18:55:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4850770A96B
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 19:07:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230427AbjETQzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 12:55:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51932 "EHLO
+        id S231263AbjETRHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 13:07:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjETQzJ (ORCPT
+        with ESMTP id S229523AbjETRHL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 12:55:09 -0400
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C431D102
-        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 09:55:07 -0700 (PDT)
-Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-33827ea8273so30800025ab.0
-        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 09:55:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684601707; x=1687193707;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iR+Mev6mqwJYOKc7k8OaTu9UD8vOFEdqohU0fITChcA=;
-        b=EtsalOs2uDcMXBfQMc2cqWdOQl+b2Mav3V7RxsybBKtDI0qj72cDIjJQ7qyxKmlIlk
-         KR8ilgrANCyTrSMyUrIGgqT1owihPG9V8L3iYnUTnO2U1Y/yLFCpJlfpJZi9C8PWLWUF
-         1FKZBG8dIXtpnRoxTAQc3CCPrXWMNoHRAO3qj3k9uWo7YCVR4bOE97vVnfZNu+f4UokN
-         ulEFVrvUs6Psp0QmbAPUaVk70dzwiCOdY5oXTlQvYnYx43iucxgfXC3Ysk53LCakRatB
-         ENLpKbvnaLrgINrqhvZBGBJTdD9TiLvl2deRrmC2omSwG1le1/ELuZ84iwwOx+QBa20O
-         LneA==
-X-Gm-Message-State: AC+VfDx4HvSe+TQK2Xzf/ALDQvE4T2+moEYZaQOr4v57fxgAXvbli3nt
-        JdJYL7R3Dr8NvaUZr8rPlHbWJkhvOKp34dP12rROYlU/ZASH
-X-Google-Smtp-Source: ACHHUZ7P72GS3ZpOe/xeExsK6LC3T14A1FN8ycKeUosRtvx1LZAsN0ujMYs/CXP496pUTNac0u+x3ZPI1lr5GRoFLTNuhkJih36l
+        Sat, 20 May 2023 13:07:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94D3D102;
+        Sat, 20 May 2023 10:07:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C48B6009E;
+        Sat, 20 May 2023 17:07:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42BA1C433D2;
+        Sat, 20 May 2023 17:07:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1684602429;
+        bh=dYwxFiHj7VpZzw4iuAW8YC1n/ifus0o7CunucL8QZUc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=q//94LiIo/GU++SBwZPoY0NvF8FTjJNpVvTvIpPUxrUn0Y9/VfM/vZAvx/8lKlQH/
+         4BEenl12CbSqJFv8oPLhPoS6HMj65h1ycw447ENllrU/m/PSHKoTuW+Hj3zvddZ4yT
+         BIIxM3I43kJOOkA/yNiafYDnkQzeHgjsjq5KwVrI=
+Date:   Sat, 20 May 2023 18:07:07 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB / Thunderbolt driver fixes for 6.4-rc3
+Message-ID: <ZGj-OwflJxwZafmq@kroah.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:ce49:0:b0:331:4e48:32be with SMTP id
- a9-20020a92ce49000000b003314e4832bemr2825228ilr.4.1684601707056; Sat, 20 May
- 2023 09:55:07 -0700 (PDT)
-Date:   Sat, 20 May 2023 09:55:07 -0700
-In-Reply-To: <0000000000007c47b505f909f71d@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000056580b05fc22e607@google.com>
-Subject: Re: [syzbot] [f2fs?] general protection fault in __drop_extent_tree
-From:   syzbot <syzbot+d015b6c2fbb5c383bf08@syzkaller.appspotmail.com>
-To:     chao@kernel.org, jaegeuk@kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
-HEAD commit:    d635f6cc934b Merge tag 'drm-fixes-2023-05-20' of git://ano..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=177b7d29280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=bda401fa9c6b4502
-dashboard link: https://syzkaller.appspot.com/bug?extid=d015b6c2fbb5c383bf08
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=157567a6280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13d301f9280000
+  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/8dcff8d58d55/disk-d635f6cc.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/b0fda3221672/vmlinux-d635f6cc.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/9541aa11c888/bzImage-d635f6cc.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/7626bc33593c/mount_0.gz
+are available in the Git repository at:
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+d015b6c2fbb5c383bf08@syzkaller.appspotmail.com
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.4-rc3
 
-general protection fault, probably for non-canonical address 0xdffffc0000000009: 0000 [#1] PREEMPT SMP KASAN
-KASAN: null-ptr-deref in range [0x0000000000000048-0x000000000000004f]
-CPU: 1 PID: 5010 Comm: syz-executor252 Not tainted 6.4.0-rc2-syzkaller-00290-gd635f6cc934b #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/28/2023
-RIP: 0010:__lock_acquire+0x69/0x2000 kernel/locking/lockdep.c:4942
-Code: df 0f b6 04 30 84 c0 0f 85 5a 16 00 00 83 3d d1 e1 ea 0c 00 0f 84 02 11 00 00 83 3d 70 33 74 0b 00 74 2b 4c 89 f0 48 c1 e8 03 <80> 3c 30 00 74 12 4c 89 f7 e8 59 38 78 00 48 be 00 00 00 00 00 fc
-RSP: 0018:ffffc90003a6faf8 EFLAGS: 00010006
-RAX: 0000000000000009 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: dffffc0000000000 RDI: 0000000000000048
-RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: dffffc0000000001 R12: 0000000000000001
-R13: 0000000000000000 R14: 0000000000000048 R15: ffff88807d47d940
-FS:  00007fcf413a3700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055664a01b058 CR3: 000000007ddb9000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- lock_acquire+0x1e3/0x520 kernel/locking/lockdep.c:5691
- __raw_write_lock include/linux/rwlock_api_smp.h:209 [inline]
- _raw_write_lock+0x2e/0x40 kernel/locking/spinlock.c:300
- __drop_extent_tree+0x3ac/0x660 fs/f2fs/extent_cache.c:1100
- f2fs_drop_extent_tree+0x17/0x30 fs/f2fs/extent_cache.c:1116
- f2fs_insert_range+0x2d5/0x3c0 fs/f2fs/file.c:1664
- f2fs_fallocate+0x4e4/0x6d0 fs/f2fs/file.c:1838
- vfs_fallocate+0x54b/0x6b0 fs/open.c:324
- ksys_fallocate fs/open.c:347 [inline]
- __do_sys_fallocate fs/open.c:355 [inline]
- __se_sys_fallocate fs/open.c:353 [inline]
- __x64_sys_fallocate+0xbd/0x100 fs/open.c:353
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fcf413f7459
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 41 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fcf413a32f8 EFLAGS: 00000246 ORIG_RAX: 000000000000011d
-RAX: ffffffffffffffda RBX: 00007fcf414817a0 RCX: 00007fcf413f7459
-RDX: 0000000000000000 RSI: 0000000000000020 RDI: 0000000000000005
-RBP: 00007fcf4144e7f8 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000010000 R11: 0000000000000246 R12: 00007fcf4144e6c0
-R13: 0030656c69662f2e R14: 4b55cd3db08b6c4e R15: 00007fcf414817a8
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:__lock_acquire+0x69/0x2000 kernel/locking/lockdep.c:4942
-Code: df 0f b6 04 30 84 c0 0f 85 5a 16 00 00 83 3d d1 e1 ea 0c 00 0f 84 02 11 00 00 83 3d 70 33 74 0b 00 74 2b 4c 89 f0 48 c1 e8 03 <80> 3c 30 00 74 12 4c 89 f7 e8 59 38 78 00 48 be 00 00 00 00 00 fc
-RSP: 0018:ffffc90003a6faf8 EFLAGS: 00010006
-RAX: 0000000000000009 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: dffffc0000000000 RDI: 0000000000000048
-RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: dffffc0000000001 R12: 0000000000000001
-R13: 0000000000000000 R14: 0000000000000048 R15: ffff88807d47d940
-FS:  00007fcf413a3700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055664a01b058 CR3: 000000007ddb9000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	df 0f                	fisttps (%rdi)
-   2:	b6 04                	mov    $0x4,%dh
-   4:	30 84 c0 0f 85 5a 16 	xor    %al,0x165a850f(%rax,%rax,8)
-   b:	00 00                	add    %al,(%rax)
-   d:	83 3d d1 e1 ea 0c 00 	cmpl   $0x0,0xceae1d1(%rip)        # 0xceae1e5
-  14:	0f 84 02 11 00 00    	je     0x111c
-  1a:	83 3d 70 33 74 0b 00 	cmpl   $0x0,0xb743370(%rip)        # 0xb743391
-  21:	74 2b                	je     0x4e
-  23:	4c 89 f0             	mov    %r14,%rax
-  26:	48 c1 e8 03          	shr    $0x3,%rax
-* 2a:	80 3c 30 00          	cmpb   $0x0,(%rax,%rsi,1) <-- trapping instruction
-  2e:	74 12                	je     0x42
-  30:	4c 89 f7             	mov    %r14,%rdi
-  33:	e8 59 38 78 00       	callq  0x783891
-  38:	48                   	rex.W
-  39:	be 00 00 00 00       	mov    $0x0,%esi
-  3e:	00 fc                	add    %bh,%ah
+for you to fetch changes up to ddaf098ea779b3c1302c7843f6ff01e89b1fd380:
 
+  driver core: class: properly reference count class_dev_iter() (2023-05-19 11:03:36 +0100)
 
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+----------------------------------------------------------------
+USB/Thunderbolt fixes for 6.4-rc3
+
+Here are some USB fixes for 6.4-rc3, as well as a driver core fix that
+resolves a memory leak that shows up in USB devices easier than other
+subsystems.
+
+Included in here are:
+  - driver core memory leak as reported and tested by syzbot and
+    developers
+  - dwc3 driver fixes for reported problems
+  - xhci driver fixes for reported problems
+  - USB gadget driver reverts to resolve regressions
+  - usbtmc driver fix for syzbot reported problem
+  - thunderbolt driver fixes for reported issues
+  - other small USB fixes
+
+All of these, except for the driver core fix, have been in linux-next
+with no reported problems.  The driver core fix was tested and verified
+to solve the issue by syzbot and the original reporter.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Alan Stern (1):
+      USB: usbtmc: Fix direction for 0-length ioctl control messages
+
+Badhri Jagan Sridharan (1):
+      usb: typec: altmodes/displayport: fix pin_assignment_show
+
+Dan Carpenter (1):
+      usb: dwc3: fix a test for error in dwc3_core_init()
+
+Francesco Dolcini (2):
+      Revert "usb: gadget: udc: core: Prevent redundant calls to pullup"
+      Revert "usb: gadget: udc: core: Invoke usb_gadget_connect only when started"
+
+Greg Kroah-Hartman (2):
+      Merge tag 'thunderbolt-for-v6.4-rc3' of git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-linus
+      driver core: class: properly reference count class_dev_iter()
+
+Jó Ágila Bitsch (1):
+      usb: gadget: drop superfluous ':' in doc string
+
+Konrad Gräfe (1):
+      usb: gadget: u_ether: Fix host MAC address case
+
+Linyu Yuan (1):
+      usb: dwc3: fix gadget mode suspend interrupt handler issue
+
+Mario Limonciello (2):
+      thunderbolt: Clear registers properly when auto clear isn't in use
+      xhci-pci: Only run d3cold avoidance quirk for s2idle
+
+Mathias Nyman (1):
+      xhci: Fix incorrect tracking of free space on transfer rings
+
+Maxime Bizon (1):
+      usb-storage: fix deadlock when a scsi command timeouts more than once
+
+Roger Quadros (2):
+      usb: dwc3: gadget: Improve dwc3_gadget_suspend() and dwc3_gadget_resume()
+      usb: typec: tps6598x: Fix fault at module removal
+
+Udipto Goswami (1):
+      usb: dwc3: debugfs: Resume dwc3 before accessing registers
+
+Weitao Wang (1):
+      USB: UHCI: adjust zhaoxin UHCI controllers OverCurrent bit value
+
+ drivers/base/class.c                     |   2 +
+ drivers/thunderbolt/nhi.c                |  29 +++++-
+ drivers/thunderbolt/nhi_regs.h           |   2 +
+ drivers/usb/class/usbtmc.c               |   2 +
+ drivers/usb/dwc3/core.c                  |   2 +-
+ drivers/usb/dwc3/core.h                  |   2 +
+ drivers/usb/dwc3/debugfs.c               | 109 ++++++++++++++++++++++
+ drivers/usb/dwc3/gadget.c                |  79 +++++++++-------
+ drivers/usb/gadget/function/u_ether.c    |   3 +
+ drivers/usb/gadget/udc/core.c            | 151 +++++++++----------------------
+ drivers/usb/host/uhci-pci.c              |  10 +-
+ drivers/usb/host/xhci-pci.c              |  12 ++-
+ drivers/usb/host/xhci-ring.c             |  29 +++++-
+ drivers/usb/host/xhci.h                  |   2 +-
+ drivers/usb/storage/scsiglue.c           |  28 ++++--
+ drivers/usb/typec/altmodes/displayport.c |   4 +
+ drivers/usb/typec/tipd/core.c            |   3 +
+ include/linux/device/class.h             |   1 +
+ include/linux/usb/composite.h            |   2 +-
+ 19 files changed, 309 insertions(+), 163 deletions(-)
