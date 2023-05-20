@@ -2,73 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6312770A83E
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 15:03:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D334570A842
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 15:04:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231241AbjETNDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 09:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36114 "EHLO
+        id S231297AbjETND5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 09:03:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjETNDH (ORCPT
+        with ESMTP id S229511AbjETND4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 09:03:07 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC00121
-        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 06:03:06 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-133-LK-B9zgTPvWRVmrWC1tFjw-1; Sat, 20 May 2023 14:02:58 +0100
-X-MC-Unique: LK-B9zgTPvWRVmrWC1tFjw-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sat, 20 May
- 2023 14:02:57 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Sat, 20 May 2023 14:02:57 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Willem de Bruijn' <willemdebruijn.kernel@gmail.com>,
-        Breno Leitao <leitao@debian.org>
-CC:     "axboe@kernel.dk" <axboe@kernel.dk>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "courmisch@gmail.com" <courmisch@gmail.com>,
-        "nhorman@tuxdriver.com" <nhorman@tuxdriver.com>,
-        "asml.silence@gmail.com" <asml.silence@gmail.com>,
-        "alex.aring@gmail.com" <alex.aring@gmail.com>,
-        "dccp@vger.kernel.org" <dccp@vger.kernel.org>,
-        "mptcp@lists.linux.dev" <mptcp@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "matthieu.baerts@tessares.net" <matthieu.baerts@tessares.net>,
-        "marcelo.leitner@gmail.com" <marcelo.leitner@gmail.com>,
-        "linux-wpan@vger.kernel.org" <linux-wpan@vger.kernel.org>,
-        "linux-sctp@vger.kernel.org" <linux-sctp@vger.kernel.org>,
-        "leit@fb.com" <leit@fb.com>,
-        "dsahern@kernel.org" <dsahern@kernel.org>
-Subject: RE: [PATCH 1/1] net: ioctl: Use kernel memory on protocol ioctl
- callbacks
-Thread-Topic: [PATCH 1/1] net: ioctl: Use kernel memory on protocol ioctl
- callbacks
-Thread-Index: AQHZimPokjARdT8YlUi1kSrEdFLkt69jHkPA
-Date:   Sat, 20 May 2023 13:02:57 +0000
-Message-ID: <ab85b4420e93475dacd5e18017704b24@AcuMS.aculab.com>
-References: <20230519135821.922326-1-leitao@debian.org>
- <20230519135821.922326-2-leitao@debian.org>
- <CAF=yD-Jj6dvyOskL+F52_aaaCovVTcpoYSCeMY7xH=FK7r3Jiw@mail.gmail.com>
-In-Reply-To: <CAF=yD-Jj6dvyOskL+F52_aaaCovVTcpoYSCeMY7xH=FK7r3Jiw@mail.gmail.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Sat, 20 May 2023 09:03:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D846121;
+        Sat, 20 May 2023 06:03:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B46A460ADB;
+        Sat, 20 May 2023 13:03:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1C2FC433EF;
+        Sat, 20 May 2023 13:03:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684587834;
+        bh=CaFXi9q+WoKBuXyVVgMPIOn5XN/0+5juvLuIbWmVSoU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JKc/ct2EQTcT/ZO3UbqtuskstgvAcAToW8AISP+bpuL8miQVPYP0bxL/OBEAT1PbI
+         pvfTSIw+srkc8bXbFoQ2mSEv4X8b5bP1QULXTnptXFIe3sb1RWLOjbcl9Geb1eKrdH
+         kq0yA2aDgaOSaxbbRwq1/zCyN1PrK1/GagA40/knD39uFEBv0cqTyXE2J5YZQ/w8zo
+         K6qRlyfKGu1vwHa2MxOJH7T/62mbDYEqIlqQPLvyf8En/g84PI4IsQ7KJ86B5F3WU8
+         9ewL4G6p1NuuAm8eqxdPNXOWWuXx+6qy4rgMgC20rPuYxL9G1qcg1phigW5tlGxAlk
+         zxqVA0+L9MFxw==
+Date:   Sat, 20 May 2023 15:03:48 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     aloktiagi <aloktiagi@gmail.com>
+Cc:     viro@zeniv.linux.org.uk, willy@infradead.org,
+        David.Laight@ACULAB.COM, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        hch@infradead.org, tycho@tycho.pizza
+Subject: Re: [RFC v5 1/2] epoll: Implement eventpoll_replace_file()
+Message-ID: <20230520-pseudologie-beharren-5c5c440c204e@brauner>
+References: <20230429054955.1957024-1-aloktiagi@gmail.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230429054955.1957024-1-aloktiagi@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,28 +57,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogV2lsbGVtIGRlIEJydWlqbg0KPiBTZW50OiAxOSBNYXkgMjAyMyAxNjowOQ0KLi4uDQo+
-IFNpbmNlIHRoYXQgaXMgYSBsaW1pdGVkIHdlbGwgdW5kZXJzdG9vZCBsaXN0LCBJJ20gbm90IGlu
-IGZhdm9yIG9mIHRoZQ0KPiBzdWdnZXN0aW9uIHRvIGFkZCBhbiBleHBsaWNpdCBsZW5ndGggYXJn
-dW1lbnQgdGhhdCB0aGVuIG5lZWRzIHRvIGJlDQo+IGNoZWNrZWQgaW4gZWFjaCBjYWxsZWUuDQoN
-CldoaWxlIGNhbGxzIGZyb20gdXNlcnNwYWNlIGFuZCBkaXJlY3QgY2FsbHMgZnJvbSBkcml2ZXJz
-IGNhbiBiZQ0KcmVhc29uYWJseSBleHBlY3RlZCB0byBoYXZlIHRoZSByZXF1aXJlZCBsZW5ndGgg
-YnVmZmVyLCBJJ20NCm5vdCBzdXJlIHRoYXQgaXMgZ3VhcmFudGVlZCBmb3IgaW5kaXJlY3QgY2Fs
-bHMgdmlhIGlvX3VyaW5nDQphbmQgYnBmLg0KSW4gdGhvc2UgY2FzZXMgdGhlIGFzc29jaWF0ZWQg
-bGVuZ3RoIGlzIGxpa2VseSB0byBjb21lIGZyb20NCnVzZXJzcGFjZSBhbmQgYSBzdWl0YWJseSBz
-aXplZCBrZXJuZWwgYnVmZmVyIGFsbG9jYXRlZC4NClNvIHNvbWV0aGluZyBuZWVkcyB0byBlbnN1
-cmUgdGhlIGJ1ZmZlciBpcyBsb25nIGVub3VnaA0KKGFuZCwgaW5kZWVkLCBub3Qgc3R1cGlkbHkg
-bG9uZykuDQoNCk5vdyB5b3UgY291bGQgcmVxdWlyZSB0aGF0IHRoZSBjYWxsZXIgYWx3YXlzIHN1
-cHBseSBhIGJ1ZmZlcg0Kb2YgYXQgbGVhc3QgKHNheSkgNjQgYnl0ZXMgYXMgd2VsbCBhcyB0aGUg
-YWN0dWFsIGxlbmd0aC4NClRoZW4gb25seSBjYWxsZWUgZnVuY3Rpb25zIHRoYXQgaGF2ZSBhIGxv
-bmcgYnVmZmVyIG5lZWQgY2hlY2suDQoNCkFuIGFsdGVybmF0ZSBvcHRpb24gaXMgdG8gZGVmaW5l
-IGEgdW5pb24gb2YgYWxsIHRoZSB2YWxpZA0KYXJndW1lbnQgdHlwZXMgYW5kIHJlcXVpcmUgdGhh
-dCBhbnkgY29kZSBtYWtpbmcgJ3Vua25vd24nDQpyZXF1ZXN0cyBzdXBwbHkgYSBrZXJuZWwgYnVm
-ZmVyIG9mIHRoYXQgbGVuZ3RoLg0KKFdpdGggZHVlIGNhcmUgdGFrZW4gdG8gYXZvaWQgb3Zlcmxv
-bmcgY29waWVzIG9mIHVuaW5pdGlhbGlzZWQNCmtlcm5lbCBtZW1vcnkgYmFjayB0byB1c2Vyc3Bh
-Y2UuKQ0KDQpUaGUgc2FtZSB1bmlvbiB3b3VsZCBiZSB1c2VmdWwgYXMgYW4gdXBwZXIgYm91bmQg
-Zm9yIHRoZQ0Ka2VybmVsIGJ1ZmZlciBzaXplIC0gZXZlbiBpZiBpdCBpcyB0b28gbGFyZ2UgdG8g
-YWx3YXlzDQphbGxvY2F0ZSBvbiBzdGFjay4NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRk
-cmVzcyBMYWtlc2lkZSwgQnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBN
-SzEgMVBULCBVSw0KUmVnaXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
+On Sat, Apr 29, 2023 at 05:49:54AM +0000, aloktiagi wrote:
+> Introduce a mechanism to replace a file linked in the epoll interface with a new
+> file.
+> 
+> eventpoll_replace() finds all instances of the file to be replaced and replaces
+> them with the new file and the interested events.
+> 
+> Signed-off-by: aloktiagi <aloktiagi@gmail.com>
+> ---
+> Changes in v5:
+>   - address review comments and move the call to replace old file in each
+>     subsystem (epoll, io_uring, etc.) outside the fdtable helpers like
+>     replace_fd().
+> 
+> Changes in v4:
+>   - address review comment to remove the redundant eventpoll_replace() function.
+>   - removed an extra empty line introduced in include/linux/file.h
+> 
+> Changes in v3:
+>   - address review comment and iterate over the file table while holding the
+>     spin_lock(&files->file_lock).
+>   - address review comment and call filp_close() outside the
+>     spin_lock(&files->file_lock).
+> ---
+>  fs/eventpoll.c            | 65 +++++++++++++++++++++++++++++++++++++++
+>  include/linux/eventpoll.h |  8 +++++
+>  2 files changed, 73 insertions(+)
+> 
+> diff --git a/fs/eventpoll.c b/fs/eventpoll.c
+> index 64659b110973..be9d192b223d 100644
+> --- a/fs/eventpoll.c
+> +++ b/fs/eventpoll.c
+> @@ -935,6 +935,71 @@ void eventpoll_release_file(struct file *file)
+>  	mutex_unlock(&epmutex);
+>  }
+>  
+> +static int ep_insert(struct eventpoll *ep, const struct epoll_event *event,
+> +			struct file *tfile, int fd, int full_check);
+> +
+> +/*
+> + * This is called from eventpoll_replace() to replace a linked file in the epoll
+> + * interface with a new file received from another process. This is useful in
+> + * cases where a process is trying to install a new file for an existing one
+> + * that is linked in the epoll interface
+> + */
+> +int eventpoll_replace_file(struct file *toreplace, struct file *file, int tfd)
+> +{
+> +	int fd;
+> +	int error = 0;
+> +	struct eventpoll *ep;
+> +	struct epitem *epi;
+> +	struct hlist_node *next;
+> +	struct epoll_event event;
+> +	struct hlist_head *to_remove = toreplace->f_ep;
+> +
+> +	if (!file_can_poll(file))
+> +		return 0;
+> +
+> +	mutex_lock(&epmutex);
 
+Sorry, I missed that you send a new version somehow.
+
+So, I think I mentioned this last time: The locking has changed to
+reduce contention on the global mutex. Both epmutex and ep_remove() are
+gone. So this doesn't even compile anymore...
+
+  CC      fs/eventpoll.o
+../fs/eventpoll.c: In function ‘eventpoll_replace_file’:
+../fs/eventpoll.c:998:21: error: ‘epmutex’ undeclared (first use in this function); did you mean ‘mutex’?
+  998 |         mutex_lock(&epmutex);
+      |                     ^~~~~~~
+      |                     mutex
+../fs/eventpoll.c:998:21: note: each undeclared identifier is reported only once for each function it appears in
+../fs/eventpoll.c:1034:17: error: implicit declaration of function ‘ep_remove’; did you mean ‘idr_remove’? [-Werror=implicit-function-declaration]
+ 1034 |                 ep_remove(ep, epi);
+      |                 ^~~~~~~~~
+      |                 idr_remove
+
+on current mainline. So please send a new version for this.
