@@ -2,52 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FEE370A9E6
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 20:22:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEAEF70A9E5
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 20:22:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231962AbjETSWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 14:22:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43162 "EHLO
+        id S231873AbjETSWD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 14:22:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231774AbjETSVs (ORCPT
+        with ESMTP id S231646AbjETSVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 14:21:48 -0400
+        Sat, 20 May 2023 14:21:49 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30700E52;
-        Sat, 20 May 2023 11:21:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E89E7C;
+        Sat, 20 May 2023 11:21:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CB5DF60C07;
-        Sat, 20 May 2023 18:21:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58D60C433D2;
-        Sat, 20 May 2023 18:21:12 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 55B3660C16;
+        Sat, 20 May 2023 18:21:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF36EC433D2;
+        Sat, 20 May 2023 18:21:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684606873;
-        bh=kXan3NraEurdaWBq41zYwmJFzrEv8zVPeN6RH9hcA5k=;
+        s=k20201202; t=1684606875;
+        bh=cWB1dZy+1AbY9jcNQa0xPC8wJXDRMfc8M7uaWfwUlok=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cY93oyEZ86npAUHWmnGOuC7KobLL1wr5Jez2r6S8kBxFa4ceBX3fpJ6Lissb51YM/
-         2IwK4kuFS2lQPqzTWW4T7tFAiGC7g3ygI/0yvCSaeoc2QhWAqOAxUT5jjJUneDXMQ0
-         JrirXw4MWeAQInCalhfdElFJyPB48mOqPlhKZfpnSamRfEmkqb+U0gy1AMofuQB2sB
-         6kqcTJBHuyvQhk3gqJEhK3ZlAIF/WUe/1t5Qb0wF2u5+QsyO+nUav8U3etNKVQXgex
-         h4UM47FASxQ4jphOJGusDvpOj8ycb4HEDiyrdFp4jrWh5qa/yFaJ1w2JEWRHySXEmf
-         oKPJbKy/LX8XQ==
+        b=my5u3OxZ+1FcvF+20aLm48zM9SRPPWRkO8Ixu1wuElLQqDJMeuk6JAN5ceExNDv08
+         Ncda8Tl5dB+fa1v0GIX++HYMjvjcibk7U9mgsmWAvLleT3MDh2tF2Cv4L40Ze4SK9E
+         qIfSEuq1QjHQkWIe/WgoTA/d9/FduepW2jyF4lVV8tfuuVmi9nf9rRA7lh2MsUrO15
+         97dJmK9UxA1Ov2t1/Z0Gx1/VcKC2nf/AGi3jNL9XdkwGm1RssHvvW6ZjDCNHIERAlj
+         3bDIl9KQiUzprnaIO+SOQiwmbwl347/WYl4N+n0aFZ0Bimi0yoxT9Hl57ZrGp8Dslo
+         Nmq7tH7H3oscQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Sasha Levin <sashal@kernel.org>, niklas.soderlund@ragnatech.se,
-        mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 05/14] media: rcar-vin: Select correct interrupt mode for V4L2_FIELD_ALTERNATE
-Date:   Sat, 20 May 2023 14:20:33 -0400
-Message-Id: <20230520182044.836702-5-sashal@kernel.org>
+Cc:     Julian Winkler <julian.winkler1@web.de>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Sasha Levin <sashal@kernel.org>,
+        mika.westerberg@linux.intel.com, markgross@kernel.org,
+        platform-driver-x86@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 06/14] platform/x86: intel_scu_pcidrv: Add back PCI ID for Medfield
+Date:   Sat, 20 May 2023 14:20:34 -0400
+Message-Id: <20230520182044.836702-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230520182044.836702-1-sashal@kernel.org>
 References: <20230520182044.836702-1-sashal@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -61,43 +59,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+From: Julian Winkler <julian.winkler1@web.de>
 
-[ Upstream commit e10707d5865c90d3dfe4ef589ce02ff4287fef85 ]
+[ Upstream commit 4a9b6850c794e4394cad99e2b863d75f5bc8e92f ]
 
-When adding proper support for V4L2_FIELD_ALTERNATE it was missed that
-this field format should trigger an interrupt for each field, not just
-for the whole frame. Fix this by marking it as progressive in the
-capture setup, which will then select the correct interrupt mode.
+This id was removed in commit b47018a778c1 ("platform/x86: intel_scu_ipc:
+Remove Lincroft support"), saying it is only used on Moorestown,
+but apparently the same id is also used on Medfield.
 
-Tested on both Gen2 and Gen3 with the result of a doubling of the frame
-rate for V4L2_FIELD_ALTERNATE. From a PAL video source the frame rate is
-now 50, which is expected for alternate field capture.
+Tested on the Medfield based Motorola RAZR i smartphone.
 
-Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
-Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Signed-off-by: Julian Winkler <julian.winkler1@web.de>
+Link: https://lore.kernel.org/r/20230416154932.6579-1-julian.winkler1@web.de
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/media/platform/renesas/rcar-vin/rcar-dma.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/platform/x86/intel_scu_pcidrv.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/media/platform/renesas/rcar-vin/rcar-dma.c b/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
-index 3aea96d85165a..ef5adffae1972 100644
---- a/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
-+++ b/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
-@@ -651,11 +651,9 @@ static int rvin_setup(struct rvin_dev *vin)
- 	case V4L2_FIELD_SEQ_TB:
- 	case V4L2_FIELD_SEQ_BT:
- 	case V4L2_FIELD_NONE:
--		vnmc = VNMC_IM_ODD_EVEN;
--		progressive = true;
--		break;
- 	case V4L2_FIELD_ALTERNATE:
- 		vnmc = VNMC_IM_ODD_EVEN;
-+		progressive = true;
- 		break;
- 	default:
- 		vnmc = VNMC_IM_ODD;
+diff --git a/drivers/platform/x86/intel_scu_pcidrv.c b/drivers/platform/x86/intel_scu_pcidrv.c
+index 80abc708e4f2f..d904fad499aa5 100644
+--- a/drivers/platform/x86/intel_scu_pcidrv.c
++++ b/drivers/platform/x86/intel_scu_pcidrv.c
+@@ -34,6 +34,7 @@ static int intel_scu_pci_probe(struct pci_dev *pdev,
+ 
+ static const struct pci_device_id pci_ids[] = {
+ 	{ PCI_VDEVICE(INTEL, 0x080e) },
++	{ PCI_VDEVICE(INTEL, 0x082a) },
+ 	{ PCI_VDEVICE(INTEL, 0x08ea) },
+ 	{ PCI_VDEVICE(INTEL, 0x0a94) },
+ 	{ PCI_VDEVICE(INTEL, 0x11a0) },
 -- 
 2.39.2
 
