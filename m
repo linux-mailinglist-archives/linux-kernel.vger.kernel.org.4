@@ -2,53 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28E9870AA67
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 20:28:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3685070AA66
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 20:28:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232252AbjETS2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 14:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49246 "EHLO
+        id S232373AbjETS2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 14:28:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232058AbjETS1V (ORCPT
+        with ESMTP id S231908AbjETS1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 14:27:21 -0400
+        Sat, 20 May 2023 14:27:22 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 044EE124;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148D5198D;
         Sat, 20 May 2023 11:26:49 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C85B616CF;
-        Sat, 20 May 2023 18:24:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82660C4339B;
-        Sat, 20 May 2023 18:24:14 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 00E6960A24;
+        Sat, 20 May 2023 18:24:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8201C433EF;
+        Sat, 20 May 2023 18:24:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684607055;
-        bh=PsdLhYUW2/2yOHPd/tsa7m1zstJtfVAA7v3QvF6juMM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=YY+WaiNCbCo4oJ7hA7HVmHQOgxerSLjBy8WrJ4o90IQAnljZl31tR/LGB0B2u1rG3
-         MS9oBhAidLQuOEyhd9HVYNlfP1txj7ZoTqUeguwV3LcHZwO/ZOCs/n6XFh8i9zzFPi
-         HttYZMxDmvjiC3y+5mCuMxIjSDbik5YYrikmjtYMiU2eBtQfkcHv5WCu8IB2rWVHYs
-         W6yYAEChDs6DOebUEms2v8JTGTnekAm9xmseobZguwpo5JKDLFqqRSRC2bVeefv1vs
-         sq4byOYrUIDn2uN5n5hz/Dmi+IU1jAKn882+vu2q7tXNSiIz/iJzcd14oLAkGIVyA5
-         X7x4Qtfec7SyQ==
+        s=k20201202; t=1684607060;
+        bh=dW1NgTsNOzopuYcGNJ5kIrt/3hgndm+ge9v3hE0088I=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=aIENLaJywDOxCqSsHJrzGn4YMBe95WR+YvKcF8IexiqCIsYMWQEp7+WKCO5uPJNx6
+         cC9alxj+nVKSZ3p7DapAtFNYB47tWDW7DofUdomejPgL/zGFv6onH5aWDhz5b7Bn4+
+         YNB6gvaYMYx3XJNjZvYKOjQsG5HwAXPyyWIlfp0DNjk7MA6zfdefjPpWTk8vsV/btW
+         b3IhLwCJdzbGzDQDsX03XDlinalRi/MlitC9z+gjGxCrKB2MJrAVrkt00J0l8o6Fmg
+         YXkSCAy1DugM+ucF1SmGxY7c5IFwR+FYwyM6mUzeF8Iog44puPOKFP37Eyi/4XCpyu
+         OT8nTeZOAKE3g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Haibo Li <haibo.li@mediatek.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alexandre Mergnat <amergnat@baylibre.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        Sasha Levin <sashal@kernel.org>, linux@armlinux.org.uk,
-        matthias.bgg@gmail.com, alexander.sverdlin@nokia.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH AUTOSEL 4.19 1/5] ARM: 9295/1: unwind:fix unwind abort for uleb128 case
-Date:   Sat, 20 May 2023 14:24:05 -0400
-Message-Id: <20230520182412.860973-1-sashal@kernel.org>
+Cc:     =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sasha Levin <sashal@kernel.org>, mchehab@kernel.org,
+        linux-media@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 2/5] media: rcar-vin: Select correct interrupt mode for V4L2_FIELD_ALTERNATE
+Date:   Sat, 20 May 2023 14:24:06 -0400
+Message-Id: <20230520182412.860973-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230520182412.860973-1-sashal@kernel.org>
+References: <20230520182412.860973-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -62,91 +60,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Haibo Li <haibo.li@mediatek.com>
+From: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
-[ Upstream commit fa3eeb638de0c1a9d2d860e5b48259facdd65176 ]
+[ Upstream commit e10707d5865c90d3dfe4ef589ce02ff4287fef85 ]
 
-When unwind instruction is 0xb2,the subsequent instructions
-are uleb128 bytes.
-For now,it uses only the first uleb128 byte in code.
+When adding proper support for V4L2_FIELD_ALTERNATE it was missed that
+this field format should trigger an interrupt for each field, not just
+for the whole frame. Fix this by marking it as progressive in the
+capture setup, which will then select the correct interrupt mode.
 
-For vsp increments of 0x204~0x400,use one uleb128 byte like below:
-0xc06a00e4 <unwind_test_work>: 0x80b27fac
-  Compact model index: 0
-  0xb2 0x7f vsp = vsp + 1024
-  0xac      pop {r4, r5, r6, r7, r8, r14}
+Tested on both Gen2 and Gen3 with the result of a doubling of the frame
+rate for V4L2_FIELD_ALTERNATE. From a PAL video source the frame rate is
+now 50, which is expected for alternate field capture.
 
-For vsp increments larger than 0x400,use two uleb128 bytes like below:
-0xc06a00e4 <unwind_test_work>: @0xc0cc9e0c
-  Compact model index: 1
-  0xb2 0x81 0x01 vsp = vsp + 1032
-  0xac      pop {r4, r5, r6, r7, r8, r14}
-The unwind works well since the decoded uleb128 byte is also 0x81.
-
-For vsp increments larger than 0x600,use two uleb128 bytes like below:
-0xc06a00e4 <unwind_test_work>: @0xc0cc9e0c
-  Compact model index: 1
-  0xb2 0x81 0x02 vsp = vsp + 1544
-  0xac      pop {r4, r5, r6, r7, r8, r14}
-In this case,the decoded uleb128 result is 0x101(vsp=0x204+(0x101<<2)).
-While the uleb128 used in code is 0x81(vsp=0x204+(0x81<<2)).
-The unwind aborts at this frame since it gets incorrect vsp.
-
-To fix this,add uleb128 decode to cover all the above case.
-
-Signed-off-by: Haibo Li <haibo.li@mediatek.com>
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/arm/kernel/unwind.c | 25 ++++++++++++++++++++++++-
- 1 file changed, 24 insertions(+), 1 deletion(-)
+ drivers/media/platform/rcar-vin/rcar-dma.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm/kernel/unwind.c b/arch/arm/kernel/unwind.c
-index 314cfb232a635..f2bb090373c67 100644
---- a/arch/arm/kernel/unwind.c
-+++ b/arch/arm/kernel/unwind.c
-@@ -313,6 +313,29 @@ static int unwind_exec_pop_subset_r0_to_r3(struct unwind_ctrl_block *ctrl,
- 	return URC_OK;
- }
- 
-+static unsigned long unwind_decode_uleb128(struct unwind_ctrl_block *ctrl)
-+{
-+	unsigned long bytes = 0;
-+	unsigned long insn;
-+	unsigned long result = 0;
-+
-+	/*
-+	 * unwind_get_byte() will advance `ctrl` one instruction at a time, so
-+	 * loop until we get an instruction byte where bit 7 is not set.
-+	 *
-+	 * Note: This decodes a maximum of 4 bytes to output 28 bits data where
-+	 * max is 0xfffffff: that will cover a vsp increment of 1073742336, hence
-+	 * it is sufficient for unwinding the stack.
-+	 */
-+	do {
-+		insn = unwind_get_byte(ctrl);
-+		result |= (insn & 0x7f) << (bytes * 7);
-+		bytes++;
-+	} while (!!(insn & 0x80) && (bytes != sizeof(result)));
-+
-+	return result;
-+}
-+
- /*
-  * Execute the current unwind instruction.
-  */
-@@ -366,7 +389,7 @@ static int unwind_exec_insn(struct unwind_ctrl_block *ctrl)
- 		if (ret)
- 			goto error;
- 	} else if (insn == 0xb2) {
--		unsigned long uleb128 = unwind_get_byte(ctrl);
-+		unsigned long uleb128 = unwind_decode_uleb128(ctrl);
- 
- 		ctrl->vrs[SP] += 0x204 + (uleb128 << 2);
- 	} else {
+diff --git a/drivers/media/platform/rcar-vin/rcar-dma.c b/drivers/media/platform/rcar-vin/rcar-dma.c
+index 70a8cc433a03f..cc28e2cb23f11 100644
+--- a/drivers/media/platform/rcar-vin/rcar-dma.c
++++ b/drivers/media/platform/rcar-vin/rcar-dma.c
+@@ -633,6 +633,7 @@ static int rvin_setup(struct rvin_dev *vin)
+ 		vnmc = VNMC_IM_FULL | VNMC_FOC;
+ 		break;
+ 	case V4L2_FIELD_NONE:
++	case V4L2_FIELD_ALTERNATE:
+ 		vnmc = VNMC_IM_ODD_EVEN;
+ 		progressive = true;
+ 		break;
 -- 
 2.39.2
 
