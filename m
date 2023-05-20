@@ -2,53 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7457970A63E
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 09:57:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B947F70A640
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 09:59:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbjETH5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 03:57:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54706 "EHLO
+        id S230431AbjETH7F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 03:59:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230413AbjETH5p (ORCPT
+        with ESMTP id S229898AbjETH7D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 03:57:45 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9565E40;
-        Sat, 20 May 2023 00:57:43 -0700 (PDT)
-Received: from [IPv6:2a00:23c7:6883:e501:5580:8bf2:4bf2:e6a4] (unknown [IPv6:2a00:23c7:6883:e501:5580:8bf2:4bf2:e6a4])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: obbardc)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4DAB96605974;
-        Sat, 20 May 2023 08:57:42 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684569462;
-        bh=BI2J02PLbopbt5XA9JjbBhRrBn4bnsbA8yL+gwb0Vco=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=osrwvOkmzE9BarrlvSF6+uz+lBKMKO6j7cIhvvNLMusR2QEAh6KFXi03ZqEOHYzb+
-         ygDDpXf7NU30qCIPCSdzkJRu0ZyQ/maGsoI+JnymBDOP36lmjIsdvw4cj4XRCJVttE
-         t34260u+aT5lJpHn99Ei9UM5ICgigg5eLhLIXH7gaYmdUZrm1aI2AZltviBuIrb/YT
-         xKJk9+frvP1LOtJlPBxPXucMAzIqQuV3ZM2IroVl7JFH+3MW++qE1wqSYAciiiupn+
-         5m8plpqINvHkA9zPS9G1n30o0R12sfwRdP9cId7asbUfd/X6ZXNRp9zNy5LpTDPVwk
-         jIFKADJMuDUhA==
-Message-ID: <f4f5d85d24519367ec5e80a5d97f936a806dfcbb.camel@collabora.com>
-Subject: Re: [PATCH v1 2/2] clk: divider: Properly handle rates exceeding
- UINT_MAX
-From:   Christopher Obbard <chris.obbard@collabora.com>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     kernel@collabora.com
-Date:   Sat, 20 May 2023 08:57:38 +0100
-In-Reply-To: <20230519190522.194729-3-sebastian.reichel@collabora.com>
-References: <20230519190522.194729-1-sebastian.reichel@collabora.com>
-         <20230519190522.194729-3-sebastian.reichel@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+        Sat, 20 May 2023 03:59:03 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DC481AB;
+        Sat, 20 May 2023 00:59:01 -0700 (PDT)
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1684569539;
+        bh=klcCYv0POgTHflBTuyz58iRWIXS2P6htUHJnqMwO6Ww=;
+        h=From:Date:Subject:To:Cc:From;
+        b=SV+R3mRvu44/HLbpzx4GrhhDjOJcqQPP1ovckF8VAQc/1LcshmZfjstQU/YdJ3CRg
+         PDnkNpmOXArtEZ50UOf2NxxZlqj07Hbo8j6Pg2ouaIOS0Nm1UcA7IPXR4/KeCT8rFX
+         3T2t/W1As5kIaaw8g2u2DnLzKo9z9cS2SwJg2hDI=
+Date:   Sat, 20 May 2023 09:58:57 +0200
+Subject: [PATCH] tools/nolibc/unistd: add syscall()
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20230517-nolibc-syscall-v1-1-af232d84577a@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAMB9aGQC/x2N0QrCMAwAf2Xk2cK6uSr+ivjQptEFQiYNE2Xs3
+ w17vIPjNjBqTAa3boNGHzZe1CGeOsA564sCV2cY+mHsp3gJuggXDPYzzCKh1DjWnM7pigk8Ktk
+ olJYVZ890FXH5bvTk73G5P/b9D8c9+mF1AAAA
+To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1684569538; l=2832;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=klcCYv0POgTHflBTuyz58iRWIXS2P6htUHJnqMwO6Ww=;
+ b=ewHKJyEfkEmvKkPeIoXFZXAktJFnj+qL5jaDAfCNIrMtzbq4BtBzzloLaCNOoJZUTYB/toMkj
+ O+fvWWkZIS1CkBrmlih998nRefG8rXL130cD94jsb0k1eeK9Mg1QoQR
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -59,87 +53,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sebastian,
+syscall() is used by "normal" libcs to allow users to directly call
+syscalls.
+By having the same syntax inside nolibc users can more easily write code
+that works with different libcs.
 
-On Fri, 2023-05-19 at 21:05 +0200, Sebastian Reichel wrote:
-> Requesting rates exceeding UINT_MAX (so roughly 4.3 GHz) results
-> in very small rate being chosen instead of very high ones, since
-> DIV_ROUND_UP_ULL takes a 32 bit integer as second argument.
->=20
-> Correct this by using DIV64_U64_ROUND_UP instead, which takes proper
-> 64 bit values for dividend and divisor.
->=20
-> Note, that this is usually not an issue. ULONG_MAX sets the lower
-> 32 bits and thus effectively requests UINT_MAX. On most platforms
-> that is good enough. To trigger a real bug one of the following
-> conditions must be met:
->=20
-> =C2=A0* A parent clock with more than 8.5 GHz is available
-> =C2=A0* Instead of ULONG_MAX a specific frequency like 4.3 GHz is
-> =C2=A0=C2=A0 requested. That would end up becoming 5 MHz instead :)
->=20
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+The macro logic is adapted from systemtaps STAP_PROBEV() macro that is
+released in the public domain / CC0.
 
-This patch series fixes the error on Rockchip RK3588 on ROCK 5 Model B.
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ tools/include/nolibc/unistd.h                | 15 +++++++++++++++
+ tools/testing/selftests/nolibc/nolibc-test.c |  2 ++
+ 2 files changed, 17 insertions(+)
 
-Tested-by: Christopher Obbard <chris.obbard@collabora.com>
+diff --git a/tools/include/nolibc/unistd.h b/tools/include/nolibc/unistd.h
+index ac7d53d986cd..6773e83c16a0 100644
+--- a/tools/include/nolibc/unistd.h
++++ b/tools/include/nolibc/unistd.h
+@@ -56,6 +56,21 @@ int tcsetpgrp(int fd, pid_t pid)
+ 	return ioctl(fd, TIOCSPGRP, &pid);
+ }
+ 
++#define _syscall(N, ...)                                                      \
++({                                                                            \
++	int _ret = my_syscall##N(__VA_ARGS__);                                \
++	if (_ret < 0) {                                                       \
++		SET_ERRNO(-_ret);                                             \
++		_ret = -1;                                                    \
++	}                                                                     \
++	_ret;                                                                 \
++})
++
++#define _sycall_narg(...) __syscall_narg(__VA_ARGS__, 6, 5, 4, 3, 2, 1, 0)
++#define __syscall_narg(_0, _1, _2, _3, _4, _5, _6, N, ...) N
++#define _syscall_n(N, ...) _syscall(N, __VA_ARGS__)
++#define syscall(...) _syscall_n(_sycall_narg(__VA_ARGS__), ##__VA_ARGS__)
++
+ /* make sure to include all global symbols */
+ #include "nolibc.h"
+ 
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index f042a6436b6b..54bf91847af3 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -588,6 +588,8 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(waitpid_child);     EXPECT_SYSER(1, waitpid(getpid(), &tmp, WNOHANG), -1, ECHILD); break;
+ 		CASE_TEST(write_badf);        EXPECT_SYSER(1, write(-1, &tmp, 1), -1, EBADF); break;
+ 		CASE_TEST(write_zero);        EXPECT_SYSZR(1, write(1, &tmp, 0)); break;
++		CASE_TEST(syscall_noargs);    EXPECT_SYSEQ(1, syscall(__NR_getpid), getpid()); break;
++		CASE_TEST(syscall_args);      EXPECT_SYSER(1, syscall(__NR_fstat, 0, NULL), -1, EFAULT); break;
+ 		case __LINE__:
+ 			return ret; /* must be last */
+ 		/* note: do not set any defaults so as to permit holes above */
 
-> ---
-> =C2=A0drivers/clk/clk-divider.c | 6 +++---
-> =C2=A01 file changed, 3 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/clk/clk-divider.c b/drivers/clk/clk-divider.c
-> index a2c2b5203b0a..dddaaf0f9d25 100644
-> --- a/drivers/clk/clk-divider.c
-> +++ b/drivers/clk/clk-divider.c
-> @@ -220,7 +220,7 @@ static int _div_round_up(const struct clk_div_table *=
-table,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 un=
-signed long parent_rate, unsigned long rate,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 un=
-signed long flags)
-> =C2=A0{
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int div =3D DIV_ROUND_UP_ULL((=
-u64)parent_rate, rate);
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int div =3D DIV64_U64_ROUND_UP=
-(parent_rate, rate);
-> =C2=A0
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (flags & CLK_DIVIDER_P=
-OWER_OF_TWO)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0div =3D __roundup_pow_of_two(div);
-> @@ -237,7 +237,7 @@ static int _div_round_closest(const struct clk_div_ta=
-ble *table,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int up, down;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0unsigned long up_rate, do=
-wn_rate;
-> =C2=A0
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0up =3D DIV_ROUND_UP_ULL((u64)p=
-arent_rate, rate);
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0up =3D DIV64_U64_ROUND_UP(pare=
-nt_rate, rate);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0down =3D parent_rate / ra=
-te;
-> =C2=A0
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (flags & CLK_DIVIDER_P=
-OWER_OF_TWO) {
-> @@ -473,7 +473,7 @@ int divider_get_val(unsigned long rate, unsigned long=
- parent_rate,
-> =C2=A0{
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0unsigned int div, value;
-> =C2=A0
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0div =3D DIV_ROUND_UP_ULL((u64)=
-parent_rate, rate);
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0div =3D DIV64_U64_ROUND_UP(par=
-ent_rate, rate);
-> =C2=A0
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (!_is_valid_div(table,=
- div, flags))
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0return -EINVAL;
-> --=20
-> 2.39.2
->=20
->=20
+---
+base-commit: 063dcc53b416ae1e89f767330feab3d0842943ed
+change-id: 20230517-nolibc-syscall-bd13da6468c6
+
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
+
