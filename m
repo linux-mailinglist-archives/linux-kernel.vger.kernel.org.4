@@ -2,251 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D35F70A730
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 12:35:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EC8770A739
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 12:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231550AbjETKfM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 06:35:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59452 "EHLO
+        id S231321AbjETKtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 06:49:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjETKfJ (ORCPT
+        with ESMTP id S229933AbjETKtF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 06:35:09 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 137ABE49
-        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 03:35:06 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8BxKupZomhkLmgKAA--.17997S3;
-        Sat, 20 May 2023 18:35:05 +0800 (CST)
-Received: from [10.130.0.149] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxMuVXomhkPJxrAA--.49896S3;
-        Sat, 20 May 2023 18:35:04 +0800 (CST)
-Subject: Re: [PATCH] LoongArch: Add support to clone a time namespace
-To:     Huacai Chen <chenhuacai@kernel.org>
-References: <1684292580-2455-1-git-send-email-yangtiezhu@loongson.cn>
- <CAAhV-H6wtsFX+EUqzgseNmEW7FJk4b7b_PmcxKBiYu0qdHGwJQ@mail.gmail.com>
-Cc:     WANG Xuerui <kernel@xen0n.name>,
-        Christian Brauner <brauner@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        loongson-kernel@lists.loongnix.cn
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <23ed6b8b-be53-bde0-717a-9eded1ad3780@loongson.cn>
-Date:   Sat, 20 May 2023 18:35:03 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Sat, 20 May 2023 06:49:05 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 350D1E52;
+        Sat, 20 May 2023 03:49:04 -0700 (PDT)
+Date:   Sat, 20 May 2023 10:49:00 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1684579741;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cPLgs9688f7qR4gd53HIiO9RQxgYGUDHWdJpOUX2Fds=;
+        b=HP/2rZKgZZLax1TvoIrTLj3MKiAz/rEXkN/KWqAnqy0FAJfr4JKlf/qduS0CBUMsQ19PXc
+        F7kEJJx+go8TXH1zuRcSg/IItRBIAx/Rgk/f9MaJGPCBXWDxQB49uxzzOeWshkP6tdKYld
+        iLiAUtxDzUMhfW669VWE79TcTBf3eOVXeVkITlF0SjNUGRksxO5Z6G/HjSZ9xxyte4DAoM
+        pOeqG8I+MU4s6Gcr5kkHbEqHyG6Bne/T6pvaYDQYEvnkFMUAdcrI2hAk8hAQCy7Vwg3n9A
+        hOStRAWo4PFUtO4HdShxCgJlY3HutLBuysmHPypSWxqCOcGPMfxG5ugnFwBhNw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1684579741;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=cPLgs9688f7qR4gd53HIiO9RQxgYGUDHWdJpOUX2Fds=;
+        b=z43g199Ys9pJoGH7NcsSoBlaWjNbLHWe75NIZ2q33+OvPr4YTsVoDE7GD6NMjZOaiICrUw
+        yFnp2VBvsGF5rhDQ==
+From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: locking/core] s390/cpum_sf: Convert to cmpxchg128()
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Heiko Carstens <hca@linux.ibm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230515080554.657068280@infradead.org>
+References: <20230515080554.657068280@infradead.org>
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H6wtsFX+EUqzgseNmEW7FJk4b7b_PmcxKBiYu0qdHGwJQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+Message-ID: <168457974010.404.13588891713487239670.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8CxMuVXomhkPJxrAA--.49896S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxKrWkZFy3WrWUJryUJrW7CFg_yoW7Ar4fpF
-        WfAFn2vw42qrySgr18Jw1Duw1YywnrGw4FgF15KF4SyF4IvFy2vF10yrZ5JFWFy3y8Gr17
-        uayIqwsYvan0qw7anT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bfAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r1Y6r17M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E
-        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km
-        07C267AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r
-        1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWU
-        JVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r
-        1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUv
-        cSsGvfC2KfnxnUUI43ZEXa7IU8fsqJUUUUU==
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_SBL_CSS,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following commit has been merged into the locking/core branch of tip:
 
+Commit-ID:     71af29d0671b5bd38846176fb48f31152a026925
+Gitweb:        https://git.kernel.org/tip/71af29d0671b5bd38846176fb48f31152a026925
+Author:        Peter Zijlstra <peterz@infradead.org>
+AuthorDate:    Mon, 15 May 2023 09:57:10 +02:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Fri, 19 May 2023 12:35:15 +02:00
 
-On 05/18/2023 10:25 AM, Huacai Chen wrote:
-> Hi, Tiezhu,
->
-> The layout of vdso data (loongarch_vdso_data):
->
->        struct vdso_pcpu_data pdata[NR_CPUS];
->        struct vdso_data data[CS_BASES];
->
-> VDSO_DATA_SIZE is the page aligned size of loongarch_vdso_data, and in
-> memory, vdso code is above vdso data.
->
-> Then, get_vdso_base() returns the start of vdso code, and
-> get_vdso_data() returns the start of vdso data.
->
-> In your patch, __arch_get_timens_vdso_data() returns get_vdso_data() +
-> PAGE_SIZE, but you don't increase the size of loongarch_vdso_data. The
-> result is it returns an address in vdso code.
->
-> Now, do you know what the problem is? Or still insist that "I have tested"?
+s390/cpum_sf: Convert to cmpxchg128()
 
-Please review the following changes based on the current patch,
-modify the layout of vvar to expand a page size for timens_data,
-and also map it to zero pfn before creating time namespace, then
-the last thing is to add the callback function vvar_fault().
+Now that there is a cross arch u128 and cmpxchg128(), use those
+instead of the custom CDSG helper.
 
-$ git diff
-diff --git a/arch/loongarch/include/asm/page.h 
-b/arch/loongarch/include/asm/page.h
-index fb5338b..26e8dcc 100644
---- a/arch/loongarch/include/asm/page.h
-+++ b/arch/loongarch/include/asm/page.h
-@@ -81,6 +81,7 @@ typedef struct { unsigned long pgprot; } pgprot_t;
-  #define __va(x)                ((void *)((unsigned long)(x) + 
-PAGE_OFFSET - PHYS_OFFSET))
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+Acked-by: Heiko Carstens <hca@linux.ibm.com>
+Link: https://lore.kernel.org/r/20230515080554.657068280@infradead.org
+---
+ arch/s390/include/asm/cpu_mf.h  |  2 +-
+ arch/s390/kernel/perf_cpum_sf.c | 16 +++-------------
+ 2 files changed, 4 insertions(+), 14 deletions(-)
 
-  #define pfn_to_kaddr(pfn)      __va((pfn) << PAGE_SHIFT)
-+#define sym_to_pfn(x)          __phys_to_pfn(__pa_symbol(x))
-
-  #define virt_to_pfn(kaddr)     PFN_DOWN(PHYSADDR(kaddr))
-  #define virt_to_page(kaddr)    pfn_to_page(virt_to_pfn(kaddr))
-diff --git a/arch/loongarch/kernel/vdso.c b/arch/loongarch/kernel/vdso.c
-index cf62103..3e89aca 100644
---- a/arch/loongarch/kernel/vdso.c
-+++ b/arch/loongarch/kernel/vdso.c
-@@ -23,7 +23,27 @@
-  #include <vdso/vsyscall.h>
-  #include <generated/vdso-offsets.h>
-
-+/*
-+ * The layout of vvar:
-+ *
-+ *                 high
-+ * +----------------+----------------+
-+ * | timens_data    | PAGE_SIZE      |
-+ * +----------------+----------------+
-+ * | vdso_data      |                |
-+ * | vdso_pcpu_data | VDSO_DATA_SIZE |
-+ * +----------------+----------------+
-+ *                 low
-+ */
-+#define VVAR_SIZE (VDSO_DATA_SIZE + PAGE_SIZE)
-+
-+enum vvar_pages {
-+       VVAR_DATA_PAGE_OFFSET,
-+       VVAR_TIMENS_PAGE_OFFSET,
-+};
-+
-  extern char vdso_start[], vdso_end[];
-+extern unsigned long zero_pfn;
-
-  /* Kernel-provided data used by the VDSO. */
-  static union {
-@@ -42,6 +62,40 @@ static int vdso_mremap(const struct 
-vm_special_mapping *sm, struct vm_area_struc
-         return 0;
-  }
-
-+static vm_fault_t vvar_fault(const struct vm_special_mapping *sm,
-+                            struct vm_area_struct *vma, struct vm_fault 
-*vmf)
-+{
-+       struct page *timens_page = find_timens_vvar_page(vma);
-+       unsigned long pfn;
-+
-+       switch (vmf->pgoff) {
-+       case VVAR_DATA_PAGE_OFFSET:
-+               if (timens_page)
-+                       pfn = page_to_pfn(timens_page);
-+               else
-+                       pfn = sym_to_pfn(vdso_data);
-+               break;
-+#ifdef CONFIG_TIME_NS
-+       case VVAR_TIMENS_PAGE_OFFSET:
-+               /*
-+                * If a task belongs to a time namespace then a namespace
-+                * specific VVAR is mapped with the 
-VVAR_DATA_PAGE_OFFSET and
-+                * the real VVAR page is mapped with the 
-VVAR_TIMENS_PAGE_OFFSET
-+                * offset.
-+                * See also the comment near timens_setup_vdso_data().
-+                */
-+               if (!timens_page)
-+                       return VM_FAULT_SIGBUS;
-+               pfn = sym_to_pfn(vdso_data);
-+               break;
-+#endif /* CONFIG_TIME_NS */
-+       default:
-+               return VM_FAULT_SIGBUS;
-+       }
-+
-+       return vmf_insert_pfn(vma, vmf->address, pfn);
-+}
-+
-  struct loongarch_vdso_info vdso_info = {
-         .vdso = vdso_start,
-         .size = PAGE_SIZE,
-@@ -52,6 +106,7 @@ struct loongarch_vdso_info vdso_info = {
-         },
-         .data_mapping = {
-                 .name = "[vvar]",
-+               .fault = vvar_fault,
-         },
-         .offset_sigreturn = vdso_offset_sigreturn,
-  };
-@@ -120,7 +175,7 @@ static unsigned long vdso_base(void)
-  int arch_setup_additional_pages(struct linux_binprm *bprm, int 
-uses_interp)
-  {
-         int ret;
--       unsigned long vvar_size, size, data_addr, vdso_addr;
-+       unsigned long size, data_addr, vdso_addr;
-         struct mm_struct *mm = current->mm;
-         struct vm_area_struct *vma;
-         struct loongarch_vdso_info *info = current->thread.vdso;
-@@ -132,17 +187,16 @@ int arch_setup_additional_pages(struct 
-linux_binprm *bprm, int uses_interp)
-          * Determine total area size. This includes the VDSO data itself
-          * and the data pages.
-          */
--       vvar_size = VDSO_DATA_SIZE;
--       size = vvar_size + info->size;
-+       size = VVAR_SIZE + info->size;
-
-         data_addr = get_unmapped_area(NULL, vdso_base(), size, 0, 0);
-         if (IS_ERR_VALUE(data_addr)) {
-                 ret = data_addr;
-                 goto out;
-         }
--       vdso_addr = data_addr + VDSO_DATA_SIZE;
-+       vdso_addr = data_addr + VVAR_SIZE;
-
--       vma = _install_special_mapping(mm, data_addr, vvar_size,
-+       vma = _install_special_mapping(mm, data_addr, VVAR_SIZE,
-                                        VM_READ | VM_MAYREAD,
-                                        &info->data_mapping);
-         if (IS_ERR(vma)) {
-@@ -153,7 +207,12 @@ int arch_setup_additional_pages(struct linux_binprm 
-*bprm, int uses_interp)
-         /* Map VDSO data page. */
-         ret = remap_pfn_range(vma, data_addr,
-                               virt_to_phys(&loongarch_vdso_data) >> 
-PAGE_SHIFT,
--                             vvar_size, PAGE_READONLY);
-+                             VDSO_DATA_SIZE, PAGE_READONLY);
-+       if (ret)
-+               goto out;
-+
-+       ret = remap_pfn_range(vma, data_addr + VDSO_DATA_SIZE, zero_pfn,
-+                             PAGE_SIZE, PAGE_READONLY);
-         if (ret)
-                 goto out;
-
-If you have any more comments, please let me know, thank you.
-I will send v2 after waiting for some more feedbacks.
-
-Thanks,
-Tiezhu
-
+diff --git a/arch/s390/include/asm/cpu_mf.h b/arch/s390/include/asm/cpu_mf.h
+index 7e417d7..a0de5b9 100644
+--- a/arch/s390/include/asm/cpu_mf.h
++++ b/arch/s390/include/asm/cpu_mf.h
+@@ -140,7 +140,7 @@ union hws_trailer_header {
+ 		unsigned int dsdes:16;	/* 48-63: size of diagnostic SDE */
+ 		unsigned long long overflow; /* 64 - Overflow Count   */
+ 	};
+-	__uint128_t val;
++	u128 val;
+ };
+ 
+ struct hws_trailer_entry {
+diff --git a/arch/s390/kernel/perf_cpum_sf.c b/arch/s390/kernel/perf_cpum_sf.c
+index 7ef72f5..8ecfbce 100644
+--- a/arch/s390/kernel/perf_cpum_sf.c
++++ b/arch/s390/kernel/perf_cpum_sf.c
+@@ -1271,16 +1271,6 @@ static void hw_collect_samples(struct perf_event *event, unsigned long *sdbt,
+ 	}
+ }
+ 
+-static inline __uint128_t __cdsg(__uint128_t *ptr, __uint128_t old, __uint128_t new)
+-{
+-	asm volatile(
+-		"	cdsg	%[old],%[new],%[ptr]\n"
+-		: [old] "+d" (old), [ptr] "+QS" (*ptr)
+-		: [new] "d" (new)
+-		: "memory", "cc");
+-	return old;
+-}
+-
+ /* hw_perf_event_update() - Process sampling buffer
+  * @event:	The perf event
+  * @flush_all:	Flag to also flush partially filled sample-data-blocks
+@@ -1352,7 +1342,7 @@ static void hw_perf_event_update(struct perf_event *event, int flush_all)
+ 			new.f = 0;
+ 			new.a = 1;
+ 			new.overflow = 0;
+-			prev.val = __cdsg(&te->header.val, old.val, new.val);
++			prev.val = cmpxchg128(&te->header.val, old.val, new.val);
+ 		} while (prev.val != old.val);
+ 
+ 		/* Advance to next sample-data-block */
+@@ -1562,7 +1552,7 @@ static bool aux_set_alert(struct aux_buffer *aux, unsigned long alert_index,
+ 		}
+ 		new.a = 1;
+ 		new.overflow = 0;
+-		prev.val = __cdsg(&te->header.val, old.val, new.val);
++		prev.val = cmpxchg128(&te->header.val, old.val, new.val);
+ 	} while (prev.val != old.val);
+ 	return true;
+ }
+@@ -1636,7 +1626,7 @@ static bool aux_reset_buffer(struct aux_buffer *aux, unsigned long range,
+ 				new.a = 1;
+ 			else
+ 				new.a = 0;
+-			prev.val = __cdsg(&te->header.val, old.val, new.val);
++			prev.val = cmpxchg128(&te->header.val, old.val, new.val);
+ 		} while (prev.val != old.val);
+ 		*overflow += orig_overflow;
+ 	}
