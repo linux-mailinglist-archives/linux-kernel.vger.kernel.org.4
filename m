@@ -2,83 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19CE270A8C9
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 17:17:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C368970A8CC
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 17:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229558AbjETPRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 11:17:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60340 "EHLO
+        id S231416AbjETPRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 11:17:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231626AbjETPRP (ORCPT
+        with ESMTP id S231626AbjETPRs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 11:17:15 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3732DF2;
-        Sat, 20 May 2023 08:17:13 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-9661047f8b8so805870466b.0;
-        Sat, 20 May 2023 08:17:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684595831; x=1687187831;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=y469sUGtR54aB4T78LIqmlcF1QDANFMy5ogHNLimX/8=;
-        b=DFGJio+BvQf2QBCLxS3QiRfSEguV8mxHgnUjYIc9KGq//OWlZGVi/lpMTog2PemY6n
-         Zk6kqS8Yqilei/RcZvC9ZCWW80Mbu7V5xgLLG9QruVK1YqtEiJAqsAu5BtGKKgAtVnrZ
-         zRUulNIlgTUKmA9UzHUEk0I1b6kz/7CZL0L9IkwQqAR2lQL12qHidLf1i9psqrKqv5+K
-         U3u88h9F/YH1leyVgpK4RYc4jQIAGfPFLoOvYT82ByvesmsGgE61ooTAUrFO/ScAhfJ/
-         Mwtx8FLP/hBHQsmaYLtU+mJCf4BJsdQI5+9z5iOt0FgyFHgX/gzBwaVmNsq3WFswOLOp
-         viGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684595831; x=1687187831;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=y469sUGtR54aB4T78LIqmlcF1QDANFMy5ogHNLimX/8=;
-        b=AyMJYIFTSbo7zgqWokOWOaxsGBG1h/tGb4lxAuG2a6PrwVxOxNsalcwdjJI7YaTNjB
-         XReEAcZndMGbYfpqliL+08K+rn/VpwwJWHBJj1UF1mb5l5XPa8s2AgZtkBpILuGvFW+o
-         uxMaMI6kV3I0Qzn7lBADM3fmbgSirkuhf2cyijvFU07FDSZyFvCRkD90tfZq3QK29zz2
-         eOoWrs86LIeAWKpW2P5862IVwCEnj26qWrvU2HsbLbyOQ3AcTV3XfiCEj4g35FBdbRAW
-         S0jgQlky0WCRdQC/K4lwfjjdo0h3ErUne86jkagMtJ8GFi3jv3OhJzXtDRCQAE5n1rRH
-         EQcw==
-X-Gm-Message-State: AC+VfDw+wUzP2F504r1YMkwJYnoZTCx8k8MwHA/y8Z7exq2R2HIjU5tV
-        jfex3oaxCiiQtoFIUO6CBXM=
-X-Google-Smtp-Source: ACHHUZ6GXK0nu3XJofgB096aLk7moFqBp/ZMelrOb0gVAWgAFfUwRBEGrxnrHYOHWW61+GMWOH0siA==
-X-Received: by 2002:a17:907:7f1d:b0:88a:1ea9:a5ea with SMTP id qf29-20020a1709077f1d00b0088a1ea9a5eamr4771025ejc.65.1684595831311;
-        Sat, 20 May 2023 08:17:11 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id g18-20020a170906199200b00965cfc209d5sm889840ejd.8.2023.05.20.08.17.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 May 2023 08:17:10 -0700 (PDT)
-Date:   Sat, 20 May 2023 18:17:08 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Arun Ramadoss <arun.ramadoss@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
-        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        UNGLinuxDriver@microchip.com,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH net-next v4 1/2] net: dsa: microchip: ksz8: Make flow
- control, speed, and duplex on CPU port configurable
-Message-ID: <20230520151708.24duenxufth4xsh5@skbuf>
-References: <20230519124700.635041-1-o.rempel@pengutronix.de>
- <20230519124700.635041-2-o.rempel@pengutronix.de>
- <20230519143004.luvz73jiyvnqxk4y@skbuf>
- <20230519185015.GA18246@pengutronix.de>
- <20230519203449.pc5vbfgbfc6rdo6i@skbuf>
- <20230520050317.GC18246@pengutronix.de>
+        Sat, 20 May 2023 11:17:48 -0400
+Received: from smtp.smtpout.orange.fr (smtp-20.smtpout.orange.fr [80.12.242.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6DF2FE
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 08:17:47 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id 0OL2qxEf9KkqR0OL3qE16C; Sat, 20 May 2023 17:17:45 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1684595865;
+        bh=NYS0+POCoqp3fqggV8ajYmceozpIyaDAzScoVhfOmvk=;
+        h=From:To:Cc:Subject:Date;
+        b=c5vX2GpYoQNcaWitUgGn3tivkOqJmcaiO0iuBAdXG/MnjO3qH054AmA+C/wZ+dCHN
+         Ze7m2ICI3C+0CHlL9VUY1aifbWkBESuetxWtC6oj2c9jfhbHJemxIcg6ibupNyMXDr
+         wE336W9rOvgvhUZJn7lnE4yKOKdZXXKVrBJ+xe0ExGMWAxZot0Dm+9h3GqrCiCWqMe
+         uFRMYpYz2Ee0NgkQLPJAEB1yK3QvQHJjS322ZlWf6m30Taxy7g80uyx9vxPfmR+o2q
+         1NjtWgePMGXiN8O9Pq4cUwGQT5sBgxoerF6WFrQJ3MbKYMkGsatlFbn4yPKKYb/KNR
+         4/O+QYx2GOBhg==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 20 May 2023 17:17:45 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-bluetooth@vger.kernel.org
+Subject: [PATCH] Bluetooth: hci_ll: Use the devm_clk_get_optional() helper
+Date:   Sat, 20 May 2023 17:17:43 +0200
+Message-Id: <2035c65977818626011f512d17cd018b6d877925.1684595848.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230520050317.GC18246@pengutronix.de>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,49 +55,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 20, 2023 at 07:03:17AM +0200, Oleksij Rempel wrote:
-> On Fri, May 19, 2023 at 11:34:49PM +0300, Vladimir Oltean wrote:
-> > On Fri, May 19, 2023 at 08:50:15PM +0200, Oleksij Rempel wrote:
-> > > Thank you for your feedback. I see your point. 
-> > > 
-> > > We need to remember that the KSZ switch series has different types of
-> > > ports. Specifically, for the KSZ8 series, there's a unique port. This
-> > > port is unique because it's the only one that can be configured with
-> > > global registers, and it is only one supports tail tagging. This special
-> > > port is already referenced in the driver by "dev->cpu_port", so I continued
-> > > using it in my patch.
-> > 
-> > Ok, I understand, so for the KSZ8 family, the assumption about which
-> > port will use tail tagging is baked into the hardware.
-> > 
-> > > It is important to note that while this port has an xMII interface, it
-> > > is not the only port that could have an xMII interface. Therefore, using
-> > > "dev->info->internal_phy" may not be the best way to identify this port,
-> > > because there can be ports that are not global/cpu, have an xMII
-> > > interface, but don't have an internal PHY.
-> > 
-> > Right, but since we're talking about phylink, the goal is to identify
-> > the xMII ports, not the CPU ports... This is a particularly denatured
-> > case because the xMII port is global and is also the CPU port.
-> 
-> I see. Do you have any suggestions for a better or more suitable
-> implementation? I'm open to ideas.
+Use devm_clk_get_optional() instead of hand writing it.
+This is slightly less verbose and improves the semantic.
 
-Trying to answer here for both questions. In the RFC/RFT patch set I had
-posted, I introduced the concept of "wacky" registers, which are registers
-which should be per port (and are accessed as per-port by the driver),
-but because there is a single such port in the switch, the hardware
-design degenerated into moving them in the global area. Nonetheless,
-treating the xMII global registers as per-port makes it possible for the
-common driver to share more code between KSZ8 and others.
+This also simplifies ll_open() because clk_prepare_enable() already handles
+NULL clk.
 
-If you look at ksz9477_phylink_mac_link_up() - renamed to just
-ksz_phylink_mac_link_up() in my patch set - hard enough, you can see
-that it makes an attempt to generalize the "link up" procedure for all
-switch families, via these regs and fields. At the end of that regfield
-series, I theoretically converted KSZ8765/KSZ8794/KSZ8795 to reuse
-ksz9477_phylink_mac_link_up(). Theoretically because no one commented
-on whether the result still worked.
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+ drivers/bluetooth/hci_ll.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-I think that regfields and that KSZ_WACKY_REG_FIELD_8() are an avenue
-worth exploring here.
+diff --git a/drivers/bluetooth/hci_ll.c b/drivers/bluetooth/hci_ll.c
+index 4a0b5c3160c2..de463d8bf265 100644
+--- a/drivers/bluetooth/hci_ll.c
++++ b/drivers/bluetooth/hci_ll.c
+@@ -129,8 +129,7 @@ static int ll_open(struct hci_uart *hu)
+ 	if (hu->serdev) {
+ 		struct ll_device *lldev = serdev_device_get_drvdata(hu->serdev);
+ 
+-		if (!IS_ERR(lldev->ext_clk))
+-			clk_prepare_enable(lldev->ext_clk);
++		clk_prepare_enable(lldev->ext_clk);
+ 	}
+ 
+ 	return 0;
+@@ -703,8 +702,8 @@ static int hci_ti_probe(struct serdev_device *serdev)
+ 	if (IS_ERR(lldev->enable_gpio))
+ 		return PTR_ERR(lldev->enable_gpio);
+ 
+-	lldev->ext_clk = devm_clk_get(&serdev->dev, "ext_clock");
+-	if (IS_ERR(lldev->ext_clk) && PTR_ERR(lldev->ext_clk) != -ENOENT)
++	lldev->ext_clk = devm_clk_get_optional(&serdev->dev, "ext_clock");
++	if (IS_ERR(lldev->ext_clk))
+ 		return PTR_ERR(lldev->ext_clk);
+ 
+ 	of_property_read_u32(serdev->dev.of_node, "max-speed", &max_speed);
+-- 
+2.34.1
+
