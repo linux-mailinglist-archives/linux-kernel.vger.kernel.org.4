@@ -2,66 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DF9A70A67E
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 10:52:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40AC470A68C
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 11:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230515AbjETIvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 04:51:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36288 "EHLO
+        id S230318AbjETJCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 05:02:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229762AbjETIvG (ORCPT
+        with ESMTP id S229568AbjETJCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 04:51:06 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 49FFABD
-        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 01:51:05 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 34K8oqrM027225;
-        Sat, 20 May 2023 10:50:52 +0200
-Date:   Sat, 20 May 2023 10:50:52 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] tools/nolibc: riscv: Fix up load/store instructions
- for rv32
-Message-ID: <20230520085052.GC27206@1wt.eu>
-References: <cover.1684425792.git.falcon@tinylab.org>
- <1425d092ef4c1242646ede2bbcbc3ac945c2b274.1684425792.git.falcon@tinylab.org>
+        Sat, 20 May 2023 05:02:12 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8828510A;
+        Sat, 20 May 2023 02:02:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
+        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ROreG6kiJHA2gDeVQnQ0pl8EyThSYR4NrNrObaLNkZo=; b=Libx7jSdGZ1yT/+90Pr5nn5tPz
+        3p/rS2poLYavfOHw9sceEoZ4jk351v9PEiQKKkDexGqeC0iG7jPdlPISLRaA1weC4tqtAlkNNOjwV
+        cftsjyXliWrqKtqzUflc0PTqANZCbz2JDrBJnQz4LFIL7htsGtwIMJMiMVAQIv6mTFqiEEqWYf2R6
+        IOXzsmP2u2XQLRlo61Rd9aarKFAjHtb711mqbOGthUvI5NeXjLaj3NCX+vbF1ALHFqg+jIvBJwM6S
+        OAqzeMnsRKZOmS5KTJkXQ0MJt+c0WpZpbna26j/YewRlYIA9orFYD00/eGI2AvUcuOtK4UOLKMiQa
+        nyQyuprQ==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q0ITD-0014R0-1T;
+        Sat, 20 May 2023 09:01:47 +0000
+Date:   Sat, 20 May 2023 02:01:47 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Christoph Hellwig <hch@lst.de>, Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        linux-ext4@vger.kernel.org
+Subject: Re: [PATCH v21 18/30] ext4: Provide a splice-read stub
+Message-ID: <ZGiMewK8CW7DB4sl@infradead.org>
+References: <ZGhIpbrgQaPRPC3c@infradead.org>
+ <20230520000049.2226926-1-dhowells@redhat.com>
+ <20230520000049.2226926-19-dhowells@redhat.com>
+ <2233565.1684567304@warthog.procyon.org.uk>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1425d092ef4c1242646ede2bbcbc3ac945c2b274.1684425792.git.falcon@tinylab.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <2233565.1684567304@warthog.procyon.org.uk>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhangjin,
+On Sat, May 20, 2023 at 08:21:44AM +0100, David Howells wrote:
+> Christoph Hellwig <hch@infradead.org> wrote:
+> 
+> > Not sure I'd call this a stub, but then again I'm not a native speaker.
+> 
+> "Wrapper"?
 
-On Fri, May 19, 2023 at 01:02:12AM +0800, Zhangjin Wu wrote:
-> Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-> ---
->  tools/include/nolibc/arch-riscv.h | 14 +++++++++-----
->  1 file changed, 9 insertions(+), 5 deletions(-)
-
-I'm having a comment regarding this one (which for now I've queued so that
-Thomas can rebase his series), please provide a real commit message that
-explains the purpose of the change and the solutions chosen. Feel free
-to copy-paste from your cover letter if that fits, it's just that I do
-want to see some justification for a change in the commit message itself
-(i.e think about the poor person seeing a bisect stop on that one).
-
-You can send me a paragraph or two and I'll happily copy them into my
-local copy of the rebased commit.
-
-Thank you!
-Willy
+That's what I'd call it, yes.
