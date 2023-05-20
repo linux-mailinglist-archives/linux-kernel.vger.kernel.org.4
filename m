@@ -2,104 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9B3C70A436
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 03:16:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 367AA70A43B
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 03:18:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230382AbjETBQl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 21:16:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42084 "EHLO
+        id S230190AbjETBS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 21:18:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjETBQj (ORCPT
+        with ESMTP id S229577AbjETBSy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 21:16:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8374C1AC;
-        Fri, 19 May 2023 18:16:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 02700644DC;
-        Sat, 20 May 2023 01:16:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 608A5C433A7;
-        Sat, 20 May 2023 01:16:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684545397;
-        bh=cmPyGCDj3qYpYiJY3BxliTqaHfvx5UhxPrQyG6kxeS4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lXQGijUOEm+xkhPEy7uN3Yw9xNiuxFfHKXog5I2f2KPdVq6ruBtfNJP5I/KFJk+IR
-         gqcCw58L69rFicAeGpMZiDATP6ljYaZS6ozhxB81pknfM1O7umGsNk8BuqM1RPbdix
-         ZW4XU8iAicsoPwGpnGPqcjDUUIOfsWaTipNUj44htuOS9hqr0vPjn3di83e2kN8qbX
-         DaY7QZKYf0hrp0zPbDjkZxN3Xz6vN0oJ1q1IoPCWlVewjwQKW4cQkArfQErf5ZNtHJ
-         v+CzvoYHrPDdEfn42PnXi23bwP7QEC4zRtraE8/MMCFb6Of4Row0Z521cGGzDaG65Y
-         0ZlgRfy5WD0ug==
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-96aadfb19d7so738735966b.2;
-        Fri, 19 May 2023 18:16:37 -0700 (PDT)
-X-Gm-Message-State: AC+VfDyc0RzRvRK04RpqQECRiliB5mltyFPrSAqqiS2e4X5bDnxH+wsf
-        YxVsaPI12z9/zYPCqoPgtHh+sqx1Al8aBWWnndo=
-X-Google-Smtp-Source: ACHHUZ5BJxethRchVhvqgx4k+CmNvVMLwKMqXE8ThR/0TeGuD/7A9IKk1GVtu6KMRelWQhhuu+wSq2pSNp/02QFmE9M=
-X-Received: by 2002:a17:907:8a10:b0:96a:d916:cb2f with SMTP id
- sc16-20020a1709078a1000b0096ad916cb2fmr4107322ejc.36.1684545395510; Fri, 19
- May 2023 18:16:35 -0700 (PDT)
+        Fri, 19 May 2023 21:18:54 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD6B1B7
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 18:18:52 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2af225e5b4bso18063301fa.3
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 18:18:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684545531; x=1687137531;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YQeGWuW8RcPla1MeSBzNJGfr9g0lsAtcWxD6c9UFs98=;
+        b=hTtCjc7O5oTR1ftdHf2UZ4g2m3ZmcB+HMAAdY4R4wijTwQl//sNkm18HJt9V6HvP3+
+         qWB10B5bbVifvIm+cvM6CQxb9F1YjSFWQQLd6y6O+a0XrXAvTHzilOVwDj/iu7UWNfez
+         XCDWiJn4cdsJJzz/KCVSVinL+J+lzEFWHJ1DlGs3cG6IrvbwXYQPnNKo1ZeAJzxoZeSI
+         +I1YRiW6A1YArltMc0MVVTNR6/zl4ztl881mS/gn6lv7FNPEZCt+YECQzxcn8rcMAz8Z
+         B3lZBEv7f0Ie2OHyhwtPCOtHgJnpulRe7RxzbTzGX0qeEgpR0FUOWuUl231igBSdP80x
+         6iPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684545531; x=1687137531;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YQeGWuW8RcPla1MeSBzNJGfr9g0lsAtcWxD6c9UFs98=;
+        b=GrhMGg9Q+jKZ9PTPS3O4LaMuUJJ01DozAMIYCjfwdLOu0K6Ek1XYIQO/UkFPX2P6uT
+         fBAFFkenT32LGrA3kAZY7Somz1FjjdSkW79ya8Ef5dXd7tB0oDL2vKcb6nv7ekbC3Jxg
+         nKxpuUBPZNkFJLoi0Ii9YEeqgsmOsMDNEQ5/9OJnZB4EZwQv8KpGLwL04QC2SGXpuJMQ
+         5axuJeDVN4KCVvyrgFl7V/1yfYQU/oh44hAF8sK+i0MCdcnGiT3lu0+Y17Y1XTQbXHS5
+         +M6ZSU0PwKsMa0nWOlxft3k1/d7bDzol/4CQXBYUhW+FGmbLWuL45YbV6p55lBLvGj9U
+         Kq0Q==
+X-Gm-Message-State: AC+VfDwjKMezyDuPQt5zG6sqP6matMmwLU9kEzGti3sJO3GksTHu3NVJ
+        zl3xD0Xes0vd8zc+vE0aHshdGw==
+X-Google-Smtp-Source: ACHHUZ4nWlf1P1MoPeTL7kAFyzkQHlLj8djlYxph5xL2WpK5rj3dqdtDO2ujXNAkWiZVCdilAvLr5A==
+X-Received: by 2002:a2e:92cd:0:b0:2a7:a30e:d11b with SMTP id k13-20020a2e92cd000000b002a7a30ed11bmr1595802ljh.7.1684545530859;
+        Fri, 19 May 2023 18:18:50 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id n18-20020a2e9052000000b00295a3a64816sm76710ljg.2.2023.05.19.18.18.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 19 May 2023 18:18:50 -0700 (PDT)
+Message-ID: <bbdced3e-b7be-493c-e6a8-4aba3aa2d09d@linaro.org>
+Date:   Sat, 20 May 2023 04:18:49 +0300
 MIME-Version: 1.0
-References: <20230518184541.2627-10-jszhang@kernel.org> <mhng-e1d500da-688e-49bf-a2d8-bef0e2df48f8@palmer-ri-x1c9a>
-In-Reply-To: <mhng-e1d500da-688e-49bf-a2d8-bef0e2df48f8@palmer-ri-x1c9a>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 20 May 2023 09:16:24 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQrfGyitzi7yhcs1dedG9NH2wnieoLu78SUNSaRiyL9dg@mail.gmail.com>
-Message-ID: <CAJF2gTQrfGyitzi7yhcs1dedG9NH2wnieoLu78SUNSaRiyL9dg@mail.gmail.com>
-Subject: Re: [PATCH v2 9/9] riscv: defconfig: enable T-HEAD SoC
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     jszhang@kernel.org, tglx@linutronix.de,
-        Marc Zyngier <maz@kernel.org>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        frank.li@vivo.com, wefu@redhat.com, uwu@icenowy.me
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 1/3] drm/msm/dp: Drop now unused dp_hpd module
+Content-Language: en-GB
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Vinod Polimera <quic_vpolimer@quicinc.com>,
+        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org
+References: <20230515030256.300104-1-quic_bjorande@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230515030256.300104-1-quic_bjorande@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Acked-by: Guo Ren <guoren@kernel.org>
+On 15/05/2023 06:02, Bjorn Andersson wrote:
+> The dp_hpd module is a remnant from the downstream design and is now
+> completely unused. Drop it and all references to it.
+> 
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/dp/dp_debug.c   |  8 ++-
+>   drivers/gpu/drm/msm/dp/dp_debug.h   | 12 ++---
+>   drivers/gpu/drm/msm/dp/dp_display.c | 35 +------------
+>   drivers/gpu/drm/msm/dp/dp_hpd.c     | 67 -------------------------
+>   drivers/gpu/drm/msm/dp/dp_hpd.h     | 78 -----------------------------
+>   drivers/gpu/drm/msm/dp/dp_panel.h   |  1 -
+>   6 files changed, 11 insertions(+), 190 deletions(-)
+>   delete mode 100644 drivers/gpu/drm/msm/dp/dp_hpd.c
+>   delete mode 100644 drivers/gpu/drm/msm/dp/dp_hpd.h
 
-On Sat, May 20, 2023 at 4:56=E2=80=AFAM Palmer Dabbelt <palmer@dabbelt.com>=
- wrote:
->
-> On Thu, 18 May 2023 11:45:41 PDT (-0700), jszhang@kernel.org wrote:
-> > Enable T-HEAD SoC config in defconfig to allow the default
-> > upstream kernel to boot on Sipeed Lichee Pi 4A board.
-> >
-> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > ---
-> >  arch/riscv/configs/defconfig | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfi=
-g
-> > index d98d6e90b2b8..109e4b5b003c 100644
-> > --- a/arch/riscv/configs/defconfig
-> > +++ b/arch/riscv/configs/defconfig
-> > @@ -27,6 +27,7 @@ CONFIG_EXPERT=3Dy
-> >  CONFIG_PROFILING=3Dy
-> >  CONFIG_SOC_MICROCHIP_POLARFIRE=3Dy
-> >  CONFIG_ARCH_RENESAS=3Dy
-> > +CONFIG_ARCH_THEAD=3Dy
-> >  CONFIG_SOC_SIFIVE=3Dy
-> >  CONFIG_SOC_STARFIVE=3Dy
-> >  CONFIG_ARCH_SUNXI=3Dy
->
-> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+I think this is not complete. Could you please check if 
+https://patchwork.freedesktop.org/patch/433883/?series=90198&rev=1 works 
+for you?
 
+-- 
+With best wishes
+Dmitry
 
-
---=20
-Best Regards
- Guo Ren
