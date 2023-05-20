@@ -2,186 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 935B870A465
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 03:44:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 138EE70A473
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 03:55:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbjETBn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 21:43:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47450 "EHLO
+        id S231499AbjETBzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 21:55:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbjETBn4 (ORCPT
+        with ESMTP id S231494AbjETBzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 21:43:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ADDE116;
-        Fri, 19 May 2023 18:43:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9550161CAB;
-        Sat, 20 May 2023 01:43:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07925C4339B;
-        Sat, 20 May 2023 01:43:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684547034;
-        bh=/MFAlDt0wtJT6ilnMT0hH/mEXV8rXc92ftjgCpnLA3s=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=h2zoj4WIIqf1y3gDpPN1FD5eTvZAhQ2NxcOcF1MU4+K6WRIwYZbzgs+1AdWY9SMkt
-         wmEihANFP8MzHHECEX5XQbs+m0HfAOKNAJcTjzlf58vC1TLsrwiF8R9Whtv74tKgXo
-         CShtNmh9yiGjbQ50e8vbMGMSuHGvLub5YQj4tIiCJQqg3g7pJ9KAtSg0CBFoXMJnbk
-         2JY8odcEr+nWrPXZJx8o4WfGqdOWLJ08lxRtiBj6KH+uVOlkggPTR4CR97VX/NWxBX
-         7kZNkLOY0+ms0YM0a9r1II1vyBiBjN7OK/BxBSDo7ecYiRPp39UOsDf7XZFiCI52Fw
-         YtkjHSYN4Y9FA==
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-96f7bf3cf9eso187584466b.0;
-        Fri, 19 May 2023 18:43:53 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwgpcOkBHfqDO/SkoAQy6h0KInJZ4uq6plmJVyEEAxOhsnyuDmZ
-        nQldLNPX+4DdAOD7daCetu3MouH5h4A7pN2HKrQ=
-X-Google-Smtp-Source: ACHHUZ7NXAqlZZPtIfnAbts8fbQ84+TJlZoNY4/JP72g+NSV4DhtWHHrkOiBofCFGBDO+RuN07qx8nKyurA8K30+ZxE=
-X-Received: by 2002:a17:906:a143:b0:960:f1a6:6a12 with SMTP id
- bu3-20020a170906a14300b00960f1a66a12mr3138956ejb.55.1684547032269; Fri, 19
- May 2023 18:43:52 -0700 (PDT)
+        Fri, 19 May 2023 21:55:33 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44EF3128;
+        Fri, 19 May 2023 18:55:32 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-643990c5319so2897664b3a.2;
+        Fri, 19 May 2023 18:55:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684547731; x=1687139731;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RQLH3Pz0r24f41zJi+Y/rFTpLpmNVDUqO6m0VkTNqZQ=;
+        b=HZqfno5CxT3eIpLYVJk6Qs92HXMRmJcpQID4d5EqWTu1iPBXDj3lbDSaKtxe9UGK6m
+         kfk9DL+ze63ayibZZzbRk31D01m1wdzIil2GaAjwwAdZ18QC7guJjNxyE5tSzu/SO8in
+         cDDH0zZuxmTHarIOUI7yBNysayZ6OFgXM49cQYAbeKfLv9EcidMjfEe4cs5ffqhPRfF3
+         kvMwIfG/V7OAlU2n6LnRjN6beJaESUaVlB9Af+vzJrX/Y1UZxap4M6fgTJwpUYiR6Wju
+         nDK5S3aLnUD9X+b5mBm3tPPT3eB1Cqpdj632VE6DaOfe3vG1IN7aEWkAXsJHABk1lVwX
+         D7fA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684547731; x=1687139731;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RQLH3Pz0r24f41zJi+Y/rFTpLpmNVDUqO6m0VkTNqZQ=;
+        b=j5QVKJgjt3fx2NzpyySX0rzKWLuO+LwepwGBUHvDr2fExb5o82cX/wpQgBpPWgCtC/
+         JawGHPf06EMIEz4qNLplAO5Xh6YbeGBRZ4Cg73kh56LXfb6lxjh213LBdTeW7JKIyrZw
+         60djdKPwhamAim3R37KwPfocGjrQB7RMJVyBpkyd8PfiW7Xwy0DzRxQDoUv0Mzzo+SdH
+         yiR1ncekMFuSh75WIEJMXQ3+gseBRxnmlXUj61sb/dv6Z+f0vFbcWg2TCoWJGXAIoPWw
+         2xtzyKNIWRB/2jAJKOhxAkWnVbLuIG7Qbhf++CZbfa2Ey7rBydVJkstnwA44j4N+ErAv
+         UhbQ==
+X-Gm-Message-State: AC+VfDwJh7xSDem3nC0xzlKeyII45jgpLLlNvqIrygf9dzqkBmAMxvXc
+        CzYDoUoWHlxsmzQegtfHpRs=
+X-Google-Smtp-Source: ACHHUZ530gkeNgmhcoWvoQri+XxvWEXyMVxLz2RbkbfZlLY+IC2AiFL1CI4Q6p16HMrqEiBOK6orSA==
+X-Received: by 2002:a17:903:248:b0:1a9:3b64:3747 with SMTP id j8-20020a170903024800b001a93b643747mr5197035plh.17.1684547731671;
+        Fri, 19 May 2023 18:55:31 -0700 (PDT)
+Received: from ubuntu777.domain.name (36-228-97-28.dynamic-ip.hinet.net. [36.228.97.28])
+        by smtp.gmail.com with ESMTPSA id c9-20020a170903234900b001ac5896e96esm262638plh.207.2023.05.19.18.55.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 May 2023 18:55:31 -0700 (PDT)
+From:   Min-Hua Chen <minhuadotchen@gmail.com>
+To:     kuba@kernel.org
+Cc:     alexandre.torgue@foss.st.com, davem@davemloft.net,
+        edumazet@google.com, joabreu@synopsys.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        mcoquelin.stm32@gmail.com, minhuadotchen@gmail.com,
+        netdev@vger.kernel.org, pabeni@redhat.com, peppe.cavallaro@st.com,
+        simon.horman@corigine.com
+Subject: Re: [PATCH v3] net: stmmac: compare p->des0 and p->des1 with __le32 type values
+Date:   Sat, 20 May 2023 09:55:27 +0800
+Message-Id: <20230520015527.215952-1-minhuadotchen@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230519152715.7d1c3a49@kernel.org>
+References: <20230519152715.7d1c3a49@kernel.org>
 MIME-Version: 1.0
-References: <mhng-24855381-7da8-4c77-bcaf-a3a53c8cb38b@palmer-ri-x1c9>
- <556bebad-3150-4fd5-8725-e4973fd6edd1@app.fastmail.com> <CAJF2gTRO8Qcz2EXz-ZAczpTj=Lm=GPO-UQMPqCRdqrfjg8sXbA@mail.gmail.com>
- <a9fcf1ad-a387-42a7-957a-e5a6a36fb3d7@app.fastmail.com>
-In-Reply-To: <a9fcf1ad-a387-42a7-957a-e5a6a36fb3d7@app.fastmail.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sat, 20 May 2023 09:43:41 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTRCW7h+PXz4JnNJVQ4cEEnNkcMfy8BUgGXuPZXJV6Q+Tg@mail.gmail.com>
-Message-ID: <CAJF2gTRCW7h+PXz4JnNJVQ4cEEnNkcMfy8BUgGXuPZXJV6Q+Tg@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/22] riscv: s64ilp32: Running 32-bit Linux kernel on
- 64-bit supervisor mode
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        "Conor.Dooley" <conor.dooley@microchip.com>,
-        =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
-        Jisheng Zhang <jszhang@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Anup Patel <apatel@ventanamicro.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Anup Patel <anup@brainfault.org>, shihua@iscas.ac.cn,
-        jiawei@iscas.ac.cn, liweiwei@iscas.ac.cn, luxufan@iscas.ac.cn,
-        chunyu@iscas.ac.cn, tsu.yubo@gmail.com, wefu@redhat.com,
-        wangjunqiang@iscas.ac.cn, kito.cheng@sifive.com,
-        Andy Chiu <andy.chiu@sifive.com>,
-        Vincent Chen <vincent.chen@sifive.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Jonathan Corbet <corbet@lwn.net>, wuwei2016@iscas.ac.cn,
-        Jessica Clarke <jrtc27@jrtc27.com>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 20, 2023 at 12:54=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrot=
-e:
->
-> On Fri, May 19, 2023, at 17:31, Guo Ren wrote:
-> > On Fri, May 19, 2023 at 2:29=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> w=
-rote:
-> >> On Thu, May 18, 2023, at 17:38, Palmer Dabbelt wrote:
-> >> > On Thu, 18 May 2023 06:09:51 PDT (-0700), guoren@kernel.org wrote:
-> >>
-> >> If for some crazy reason you'd still want the 64ilp32 ABI in user
-> >> space, running the kernel this way is probably still a bad idea,
-> >> but that one is less clear. There is clearly a small memory
-> >> penalty of running a 64-bit kernel for larger data structures
-> >> (page, inode, task_struct, ...) and vmlinux, and there is no
-> > I don't think it's a small memory penalty, our measurement is about
-> > 16% with defconfig, see "Why 32-bit Linux?" section.
-> >
-> > This patch series doesn't add 64ilp32 userspace abi, but it seems you
-> > also don't like to run 32-bit Linux kernel on 64-bit hardware, right?
->
-> Ok, I'm sorry for missing the important bit here. So if this can
-> still use the normal 32-bit user space, the cost of this patch set
-> is not huge, and it's something that can be beneficial in a few
-> cases, though I suspect most users are still better off running
-> 64-bit kernels.
->
-> > The motivation of s64ilp32 (running 32-bit Linux kernel on 64-bit s-mod=
-e):
-> >  - The target hardware (Canaan Kendryte k230) only supports MXL=3D64,
-> > SXL=3D64, UXL=3D64/32.
-> >  - The 64-bit Linux + compat 32-bit app can't satisfy the 64/128MB scen=
-arios.
-> >
-> >> huge additional maintenance cost on top of the ABI itself
-> >> that you'd need either way, but using a 64-bit address space
-> >> in the kernel has some important advantages even when running
-> >> 32-bit userland: processes can use the entire 4GB virtual
-> >> space, while the kernel can address more than 768MB of lowmem,
-> >> and KASLR has more bits to work with for randomization. On
-> >> RISCV, some additional features (VMAP_STACK, KASAN, KFENCE,
-> >> ...) depend on 64-bit kernels even though they don't
-> >> strictly need that.
-> >
-> > I agree that the 64-bit linux kernel has more functionalities, but:
-> >  - What do you think about linux on a 64/128MB SoC? Could it be
-> > affordable to VMAP_STACK, KASAN, KFENCE?
->
-> I would definitely recommend VMAP_STACK, but that can be implemented
-> and is used on other 32-bit architectures (ppc32, arm32) without a
-> huge cost. The larger virtual user address space can help even on
-> machines with 128MB, though most applications probably don't care at
-> that point.
-Good point, I would support VMAP_STACK in ARCH_RV64ILP32.
+Hi Jakub,
 
+>On Fri, 19 May 2023 19:50:28 +0800 Min-Hua Chen wrote:
+>> -		if ((p->des0 == 0xffffffff) && (p->des1 == 0xffffffff))
+>> +		if (p->des0 == cpu_to_le32(0xffffffff) &&
+>> +		    p->des1 == cpu_to_le32(0xffffffff))
+>
+>Can you try to fix the sparse tool instead? I believe it already
+>ignores such errors for the constant of 0, maybe it can be taught 
+>to ignore all "isomorphic" values?
+>
+
+I downloaded the source code of sparse and I'm afraid that I cannot make
+0xFFFFFFFF ignored easily. I've tried ~0 instead of 0xFFFFFF,
+but it did not work with current sparse.
+
+0 is a special case mentioned in [1].
+
+"""
+One small note: the constant integer “0” is special. 
+You can use a constant zero as a bitwise integer type without
+sparse ever complaining. This is because “bitwise” (as the name
+implies) was designed for making sure that bitwise types don’t
+get mixed up (little-endian vs big-endian vs cpu-endian vs whatever),
+and there the constant “0” really _is_ special.
+"""
+
+For 0xFFFFFFFF, it may look like a false alarm, but we can silence the
+sparse warning by taking a fix like mine and people can keep working on
+other sparse warnings easier.
+(There are around 7000 sparse warning in ARCH=arm64 defconfig build and
+sometimes it is hard to remember all the false alarm cases)
+
+Could you consider taking this patch, please?
 
 >
-> >  - I think 32-bit Linux & RTOS have monopolized this market (64/128MB
-> > scenarios), right?
->
-> The minimum amount of RAM that makes a system usable for Linux is
-> constantly going up, so I think with 64MB, most new projects are
-> already better off running some RTOS kernel instead of Linux.
-> The ones that are still usable today probably won't last a lot
-> of distro upgrades before the bloat catches up with them, but I
-> can see how your patch set can give them a few extra years of
-> updates.
-Linux development costs much cheaper than RTOS, so the vendors would
-first develop a Linux version. If it succeeds in the market, the
-vendors will create a cost-down solution. So their first choice is to
-cut down the memory footprint of the first Linux version instead of
-moving to RTOS.
+>By "isomorphic" I mean that 0xffffffff == cpu_to_le32(0xffffffff)
+>so there's no point complaining.
 
-With the price of 128MB-DDR3 & 64MB-DDR2 being more and more similar,
-32bit-Linux has more opportunities to instead of RTOS.
+thanks,
+Min-Hua
 
->
-> For the 256MB+ systems, I would expect the sensitive kernel
-> allocations to be small enough that the series makes little
-> difference. The 128MB systems are the most interesting ones
-> here, and I'm curious to see where you spot most of the
-> memory usage differences, I'll also reply to your initial
-> mail for that.
-Thx, I aslo recommand you read about "Why s64ilp32 has better
-performance?" section :)
-How do you think running arm32-Linux on coretex-A35/A53/A55?
-
->
->        Arnd
-
-
-
---=20
-Best Regards
- Guo Ren
+[1] https://www.kernel.org/doc/html/v4.12/dev-tools/sparse.html
