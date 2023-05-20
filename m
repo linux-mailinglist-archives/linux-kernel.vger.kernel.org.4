@@ -2,78 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C1270A8AE
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 17:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E37AF70A8B6
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 17:14:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231720AbjETPG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 11:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57840 "EHLO
+        id S231733AbjETPOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 11:14:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbjETPGZ (ORCPT
+        with ESMTP id S229737AbjETPOI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 11:06:25 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2D0FDC3
-        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 08:06:24 -0700 (PDT)
-Received: (qmail 73707 invoked by uid 1000); 20 May 2023 11:06:23 -0400
-Date:   Sat, 20 May 2023 11:06:23 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     syzbot <syzbot+e761775e8f4a28711f19@syzkaller.appspotmail.com>
-Cc:     andreyknvl@google.com, charu@tickmarks.net,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] [usb?] INFO: task hung in usb_register_dev
-Message-ID: <32b49d74-16df-4f8e-9956-c7705a900ee9@rowland.harvard.edu>
-References: <0000000000003a41f705a9c74dfa@google.com>
- <00000000000041730905fc1940ff@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00000000000041730905fc1940ff@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+        Sat, 20 May 2023 11:14:08 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E48E115;
+        Sat, 20 May 2023 08:14:01 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 007223200943;
+        Sat, 20 May 2023 11:13:56 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Sat, 20 May 2023 11:13:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1684595636; x=1684682036; bh=aa
+        3hX/fA0kw3zAvbLHpth1nKSHzqiH1/xoeSyjYa+44=; b=DjVIQbEEzF8gzFujZJ
+        Ja8RZc6CYm7LRcuMbwXywCoX5IxQGZQDHzllM9s9KoZWL8NCgytF5HXZPayWcyH+
+        h6hymDfvSRrP75/PknwFAMEELiXgtHlspEubEPRo8vxqJUoQ78ckzWD3FQHdcHMx
+        HCNA1qpmTkWeJhWihk51TrrgSj+NUnC8w9AjsYrhRMKlGdflD1n7fzKeJifEEtPU
+        OxjeHO/lRhIzi9L5CwE5YQlfNvWOGAv/ISoaQWaGVzNzPdgAJ34xkBm1O+eYV9Zw
+        BL8N0CR/OP7eqpwHvJA8xLzurZmeE9h5W77AZ7fvslx7th7pQxFt9e4T/BHBHFNu
+        L+rQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684595636; x=1684682036; bh=aa3hX/fA0kw3z
+        AvbLHpth1nKSHzqiH1/xoeSyjYa+44=; b=wtHrGm2xnbhXmTeF6BUoqV5Cn2tCC
+        GkLrDXRIjQQ2J0vNbzWLjHmX7v0huaQy4Jw6IBySxuCpdyqxiZmSFmR73dA+y9Em
+        g3ZkAoXcL1JPGVXfC8cHIzCCo1Pqz+eO8UiuyBOBzBJHCNlGX3II3Uio5IcPpI9L
+        61aYN6OJj9rnTXWEGSDbtlMBSJrfUrNjs5baol3TkOJMoS3HUXd8G2MiPkcTEBal
+        zJ9t9BuvMzS061gF7ZwnaBmAMXCq0egpYUP2JnlAaIUshDx/xuEaAejpRkAD0K9A
+        hwkpPv3snDnn1OyAVnAs4DYSwRLUo3gvZsSrdHPG4pjoNcfiIlJ3Ri+kw==
+X-ME-Sender: <xms:s-NoZDUIsOa1tSao4Iyq6Qvmtyu5s06f3FFYaE2Dmi3e9i4m3S6F2A>
+    <xme:s-NoZLk4JS_vSdBtVkF-3LgHQMKFQt1Ypol3xfRZc8QWLA8_F32yNih4biX7pEC9n
+    7jYRtnhUTjYUuOiNME>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeijedgkeefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:s-NoZPa0uzMrugOx9Q6BU7YP9R_ncC9JfqCR7cZVMsn9dhswAS2VkA>
+    <xmx:s-NoZOV8LBfOu4PdAOb3SIjMYiKIjWw_PbIgDDUK17qMNm1y7-KyfQ>
+    <xmx:s-NoZNmvhsv9qHQvl6rtrSauiz7KYFsnh4sNQb8DHkOwedPt14aFpQ>
+    <xmx:tONoZAtprfgNSXNA7rR5NZBQ3r6C2Lz36GZu3Gs80Q_-W5CZi1ZABw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id B469DB60089; Sat, 20 May 2023 11:13:55 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-431-g1d6a3ebb56-fm-20230511.001-g1d6a3ebb
+Mime-Version: 1.0
+Message-Id: <a98521a5-474a-44de-a95b-9a334b8f7fa4@app.fastmail.com>
+In-Reply-To: <alpine.DEB.2.21.2305201531101.27887@angie.orcam.me.uk>
+References: <20230519195135.79600-1-jiaxun.yang@flygoat.com>
+ <dae342ed-8999-4fa5-b719-322182580025@app.fastmail.com>
+ <alpine.DEB.2.21.2305201531101.27887@angie.orcam.me.uk>
+Date:   Sat, 20 May 2023 17:13:35 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc:     "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        "Baoquan He" <bhe@redhat.com>,
+        "Huacai Chen" <chenhuacai@kernel.org>
+Subject: Re: [PATCH v4] mips: add <asm-generic/io.h> including
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 10:24:25PM -0700, syzbot wrote:
-> syzbot suspects this issue was fixed by commit:
-> 
-> commit df05a9b05e466a46725564528b277d0c570d0104
-> Author: Alan Stern <stern@rowland.harvard.edu>
-> Date:   Mon Apr 10 19:38:22 2023 +0000
-> 
->     USB: sisusbvga: Add endpoint checks
-> 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1286f641280000
-> start commit:   7d2a07b76933 Linux 5.14
-> git tree:       upstream
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=b04081cf516e2565
-> dashboard link: https://syzkaller.appspot.com/bug?extid=e761775e8f4a28711f19
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=133519b1300000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=116ec82e300000
-> 
-> If the result looks correct, please mark the issue as fixed by replying with:
-> 
-> #syz fix: USB: sisusbvga: Add endpoint checks
-> 
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+On Sat, May 20, 2023, at 16:45, Maciej W. Rozycki wrote:
+> 	if (sizeof(type) != sizeof(u64) || sizeof(u64) == sizeof(long)) \
+> 		*__mem = __val;						\
+> 	else if (cpu_has_64bits) {					\
+> 		unsigned long __flags;					\
+> 		type __tmp;						\
+> 									\
+> 		if (irq)						\
+> 			local_irq_save(__flags);			\
+> 		__asm__ __volatile__(					\
+> 			".set	push"		"\t\t# __writeq""\n\t"	\
+> 			".set	arch=r4000"			"\n\t"	\
+> 			"dsll32 %L0, %L0, 0"			"\n\t"	\
+> 			"dsrl32 %L0, %L0, 0"			"\n\t"	\
+> 			"dsll32 %M0, %M0, 0"			"\n\t"	\
+> 			"or	%L0, %L0, %M0"			"\n\t"	\
+> 			"sd	%L0, %2"			"\n\t"	\
+> 			".set	pop"				"\n"	\
+> 			: "=r" (__tmp)					\
+> 			: "0" (__val), "m" (*__mem));			\
+> 		if (irq)						\
+> 			local_irq_restore(__flags);			\
+> 	} else								\
+> 		BUG();							\
+>
+> etc. so we don't actually lose atomicity, because we always use 64-bit 
+> operations (SD above, store-doubleword) and we BUG if they are not there 
+> (i.e. with 32-bit hardware; not a build-time check as in principle the 
+> same 32-bit kernel image ought to run just fine both on 32-bit and 64-bit 
+> hardware).  A few MIPS platforms do use them, e.g. SB1250, which requires 
+> 64-bit unswapped accesses to SoC registers.
 
-If that commit does fix this problem, it's entirely by accident.  I 
-suspect that instead the commit merely prevents the reproducer from 
-entering the buggy pathway, but that pathway still exists.
+Ok, makes sense.
 
-In fact, I'd guess from reading through the driver that the problem is 
-that it does dozens of I/O operations, with 5-second timeouts and 
-multiple retries, without checking for errors until the end.  All while 
-holding a contested mutex.
-
-However the driver is not maintained much AFAICT, so it's not likely to 
-get fixed.  It's probably also not used by more than a few people, if 
-any.
-
-Alan Stern
+     Arnd
