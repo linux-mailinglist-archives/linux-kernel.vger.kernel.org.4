@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F53F70A412
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 02:44:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE0B670A416
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 02:46:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbjETAoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 20:44:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37332 "EHLO
+        id S230255AbjETAqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 20:46:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjETAn7 (ORCPT
+        with ESMTP id S229436AbjETAqg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 20:43:59 -0400
+        Fri, 19 May 2023 20:46:36 -0400
 Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EEC219A;
-        Fri, 19 May 2023 17:43:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85FE619F;
+        Fri, 19 May 2023 17:46:35 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QNQ214Tq8z4f3l8S;
-        Sat, 20 May 2023 08:43:53 +0800 (CST)
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QNQ5348DPz4f3l91;
+        Sat, 20 May 2023 08:46:31 +0800 (CST)
 Received: from [10.174.179.247] (unknown [10.174.179.247])
-        by APP4 (Coremail) with SMTP id gCh0CgAHcLPIF2hkL+g2Jw--.27055S3;
-        Sat, 20 May 2023 08:43:54 +0800 (CST)
-Message-ID: <df73b658-0e94-edd7-40ef-4f0d21feec28@huaweicloud.com>
-Date:   Sat, 20 May 2023 08:43:52 +0800
+        by APP4 (Coremail) with SMTP id gCh0CgCH77JoGGhkawM3Jw--.59245S3;
+        Sat, 20 May 2023 08:46:32 +0800 (CST)
+Message-ID: <537ffeb6-5b46-ebc7-cf48-19f9d628967c@huaweicloud.com>
+Date:   Sat, 20 May 2023 08:46:32 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.10.0
-Subject: Re: [PATCH OLK-5.10 v3 2/4] md/raid10: fix overflow in
- safe_delay_store
+Subject: Re: [PATCH OLK-5.10 v3 3/4] md/raid10: fix wrong setting of
+ max_corr_read_errors
 To:     Song Liu <song@kernel.org>, linan666@huaweicloud.com
 Cc:     neilb@suse.de, Rob.Becker@riverbed.com, linux-raid@vger.kernel.org,
         linux-kernel@vger.kernel.org, yukuai3@huawei.com,
         yi.zhang@huawei.com, houtao1@huawei.com, yangerkun@huawei.com
 References: <20230515134808.3936750-1-linan666@huaweicloud.com>
- <20230515134808.3936750-3-linan666@huaweicloud.com>
- <CAPhsuW53EAK406k+PoLWi2z6SPLJBWa8r4rgXqoYKFRXm-kPSg@mail.gmail.com>
+ <20230515134808.3936750-4-linan666@huaweicloud.com>
+ <CAPhsuW4SweXwqCN-_z926CSw4+i0-nHKj8wNooKBvV-1YJ1moQ@mail.gmail.com>
 From:   Li Nan <linan666@huaweicloud.com>
-In-Reply-To: <CAPhsuW53EAK406k+PoLWi2z6SPLJBWa8r4rgXqoYKFRXm-kPSg@mail.gmail.com>
+In-Reply-To: <CAPhsuW4SweXwqCN-_z926CSw4+i0-nHKj8wNooKBvV-1YJ1moQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAHcLPIF2hkL+g2Jw--.27055S3
-X-Coremail-Antispam: 1UD129KBjvdXoWrZF4xuF43KF48ur13tr4Utwb_yoWfArX_Ga
-        48tF93Jw18JF1xtF95Ar15ZrWkKF45WryUZFnrGrWrZ3W3JFy8uFykKrZ3Xw1DWFyqvFn8
-        ArnIvFW8Ar1YqjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbfAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
-        Gr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
-        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7
-        M4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64
-        vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8G
-        jcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2I
-        x0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK
-        8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7
-        CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbHa0DUUUUU==
+X-CM-TRANSID: gCh0CgCH77JoGGhkawM3Jw--.59245S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7WF1kJr45KF1ktr1xtr1UKFg_yoW8Gr48pF
+        4kGas0vr4UAF17AFsFvrykuasYyasakrWUGryUAa4fXF98Wry3Cr9rKa9agF1vgr1rKF13
+        XFsIg3s8C3W8trDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBF14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr
+        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIF
+        xwACI402YVCY1x02628vn2kIc2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7V
+        AKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCj
+        r7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6x
+        IIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAI
+        w20EY4v20xvaj40_Zr0_Wr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7
+        CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUAkucUUUUU=
 X-CM-SenderInfo: polqt0awwwqx5xdzvxpfor3voofrz/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
@@ -69,26 +69,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-在 2023/5/20 6:01, Song Liu 写道:
+在 2023/5/20 6:06, Song Liu 写道:
 > On Mon, May 15, 2023 at 6:49 AM <linan666@huaweicloud.com> wrote:
 >>
 >> From: Li Nan <linan122@huawei.com>
 >>
->> There is no input check when echo md/safe_mode_delay and overflow will
->> occur. There is risk of overflow in strict_strtoul_scaled(), too. Fix it
->> by using kstrtoul instead of parsing word one by one.
+>> max_corr_read_errors should not be negative number. Change it to
+>> unsigned int where use it.
 >>
->> Fixes: 72e02075a33f ("md: factor out parsing of fixed-point numbers")
+>> Fixes: 1e50915fe0bb ("raid: improve MD/raid10 handling of correctable read errors.")
 >> Signed-off-by: Li Nan <linan122@huawei.com>
 >> Reviewed-by: Yu Kuai <yukuai3@huawei.com>
 >> ---
->>   drivers/md/md.c | 76 +++++++++++++++++++++++++++++++------------------
->>   1 file changed, 48 insertions(+), 28 deletions(-)
+>>   drivers/md/md.c     | 2 +-
+>>   drivers/md/raid10.c | 5 +++--
+>>   2 files changed, 4 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/drivers/md/md.c b/drivers/md/md.c
+>> index 5bba071ea907..b69ddfb1662a 100644
+>> --- a/drivers/md/md.c
+>> +++ b/drivers/md/md.c
+>> @@ -4484,7 +4484,7 @@ __ATTR_PREALLOC(array_state, S_IRUGO|S_IWUSR, array_state_show, array_state_stor
+>>
+>>   static ssize_t
+>>   max_corrected_read_errors_show(struct mddev *mddev, char *page) {
+>> -       return sprintf(page, "%d\n",
+>> +       return sprintf(page, "%u\n",
+>>                         atomic_read(&mddev->max_corr_read_errors));
+>>   }
 > 
-> This patch adds more complexity, which I don't really think is necessary.
-> Can we just check for overflow in safe_delay_store()?
+> max_corr_read_errors is atomic_t, so a signed integer. So these
+> signed => unsigned changes are pretty error prone. Can we just
+> add check in max_corrected_read_errors_store() so we never store
+> a negative value?
+> 
+> Thanks,
+> Song
+> 
 
-Yes, checking overflow is more convenient, I will check it in v4.
+I will check input in v4
 
 -- 
 Thanks,
