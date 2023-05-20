@@ -2,51 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC4B770A7A2
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 14:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E04E570A7A5
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 14:05:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231288AbjETMDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 08:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47870 "EHLO
+        id S231492AbjETMFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 08:05:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjETMDH (ORCPT
+        with ESMTP id S229563AbjETMFg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 08:03:07 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237E7C6;
-        Sat, 20 May 2023 05:03:04 -0700 (PDT)
-X-QQ-mid: bizesmtp70t1684584176tjfoh9p1
-Received: from linux-lab-host.localdomain ( [116.30.125.36])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 20 May 2023 20:02:55 +0800 (CST)
-X-QQ-SSF: 00200000000000C0V000000A0000000
-X-QQ-FEAT: +ynUkgUhZJnYh1ftKzhir2TdHIFgiWxK45RvD2Ho5QFMDZZkyhJO8CvAx2MHP
-        YhLQ6ZN/Jk492lBH+9nt50cfKzTgRS9vo4o37eJwmTg97yBk96pAveZfLi1HZuFeWQh5fqZ
-        pL7V++RPd3VykDkp7FEXf/AU1qigHxxY2jh7K8G7euu9cGL/h0WEZtPyW/6X9mMvXHgSKiZ
-        Wk9ljR2Wpo4DU8UnqZ9r88XO/yazK+LoLhDGVEULeFEheGEMGtrjrbxLZZ5lvdRqa9/W949
-        CuKa3UWi8eq0dtXcMYIgZ73t/4rPGRPZAqJY4D1ZHghi60JwK7jVSBlEZ/xABywLC8lSj8B
-        h6aY3NZ2mHKaJWEaPAQeUn0OtVoGrTBVGw/MhYwngGISe4MvQ667iIh6zENDA==
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 12071841425974536677
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     linux@weissschuh.net
-Cc:     aou@eecs.berkeley.edu, falcon@tinylab.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, shuah@kernel.org, w@1wt.eu
-Subject: [PATCH] selftests/nolibc: Fix up compile error for rv32
-Date:   Sat, 20 May 2023 20:02:53 +0800
-Message-Id: <20230520120254.66315-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230520-nolibc-stackprotector-riscv-v1-1-d8912012a034@weissschuh.net>
-References: <20230520-nolibc-stackprotector-riscv-v1-1-d8912012a034@weissschuh.net>
+        Sat, 20 May 2023 08:05:36 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2540ED9
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 05:05:33 -0700 (PDT)
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id A05273F4A6
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 12:05:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1684584331;
+        bh=60TFqnza5VbHJKprZSin9i4HWkFAHRNaJt0eS4ZxD8s=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=PMDPDW82uuAJYA7b3JgyqIH8bJukZlBSO8Ov1qh7AY5HxGsNnXuk+AH/McWB2l+B0
+         Q0OajxeZeWok+Kjt+PEcK4mfIusmVZV6uLTngrSRJMfriVRoYap52QbaOTqBOGmYXH
+         n1JsxhyhAabjouLkCGNUMjKIgWS2h34EpPT8s2qPCxdg5PNfbcUowM8sNrr5Rj7OzM
+         Lmbhm4o7WIHNG+tPE63Jl4WzTaEFUpclP6Qu2OiIFfS6PmBDQy2SANc6gJ6jYxYFk6
+         /RSMZ+wKYNwLOBvNrbN8aLnNGfsy9jSmwcNFkkoqopQcD3x0zQTQ4XH1TIDLdu7G8T
+         oXZMwearJWN0g==
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-94a348facbbso564845966b.1
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 05:05:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684584330; x=1687176330;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=60TFqnza5VbHJKprZSin9i4HWkFAHRNaJt0eS4ZxD8s=;
+        b=O+zgYqRrTO/km9BHrAkvrXyTFkq0kuJn2l8YdephMr09VVf3u1i00GjMcCQroFeu9q
+         b0Aey4hqLNYvHHex1u/trcrqUPvPkK+eViWqk24rgsd2OxQLsdDOPKmXzr/E/s+gB495
+         RAE1SfxGZP22Ab0rulHSe2UqNH83qxBTIdN+oY2TY3zQbgDgLM+6neq9dlPla8SBitTc
+         BZeNYSjomwcc/i3XYb5l1uAPGmE9auJFvX3R+iPM3dULTdGbOQc9wTT0a/JExWcQqrYD
+         kbFQY2scBfyg5jpSVtZt3gUzYt5Vrh2esZEThZK/405vlkiE3KCuNN3Y+vGIyRLyAE8W
+         HD+A==
+X-Gm-Message-State: AC+VfDynjv5QAaRB2XRKGIxDg5WPjjHTikhMqLEGjPLslCgPtPjzXfaa
+        tsF8q6TtqMDzfOPjdvTeZb42sUbA9ng0/PbG227eAf+RVvL6ZRKt8XPyL2kSO9kJLqm8ms3E/QV
+        hpXQYH3ZzEGVCsZ0f2bv2WA3R/Ddl6I9vecLDQb2zMA==
+X-Received: by 2002:a17:906:58d4:b0:961:8fcd:53bc with SMTP id e20-20020a17090658d400b009618fcd53bcmr5391972ejs.21.1684584330194;
+        Sat, 20 May 2023 05:05:30 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7aS+yoHbfqTQY2i+A8LbnOXz8P5DPH3/0giVARe9tbP5FAEvmcZ37GmTTmH1k/9L2RLsJLRg==
+X-Received: by 2002:a17:906:58d4:b0:961:8fcd:53bc with SMTP id e20-20020a17090658d400b009618fcd53bcmr5391947ejs.21.1684584329789;
+        Sat, 20 May 2023 05:05:29 -0700 (PDT)
+Received: from righiandr-XPS-13-7390.homenet.telecomitalia.it (host-87-10-127-160.retail.telecomitalia.it. [87.10.127.160])
+        by smtp.gmail.com with ESMTPSA id gv18-20020a170906f11200b00965a4350411sm731443ejb.9.2023.05.20.05.05.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 20 May 2023 05:05:29 -0700 (PDT)
+From:   Andrea Righi <andrea.righi@canonical.com>
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ovl: make consistent use of OVL_FS()
+Date:   Sat, 20 May 2023 14:05:28 +0200
+Message-Id: <20230520120528.339680-1-andrea.righi@canonical.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,54 +76,286 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When compile nolibc-test.c for rv32, we got such error:
+Always use OVL_FS() to retrieve the corresponding struct ovl_fs from a
+struct super_block and make sure that it is exclusively used with an
+overlayfs superblock (otherwise, trigger a BUG).
 
-    tools/testing/selftests/nolibc/nolibc-test.c:599:57: error: ‘__NR_fstat’ undeclared (first use in this function)
-      599 |   CASE_TEST(syscall_args);      EXPECT_SYSER(1, syscall(__NR_fstat, 0, NULL), -1, EFAULT); break;
-
-The generic include/uapi/asm-generic/unistd.h used by rv32 doesn't
-support __NR_fstat, using the common __NR_read functions as expected.
-
-    Running test 'syscall'
-    69 syscall_noargs = 1                                            [OK]
-    70 syscall_args = -1 EBADF                                       [OK]
-
-Btw, the latest riscv libc6-dev package is required, otherwise, we would
-also get such error:
-
-    In file included from /usr/riscv64-linux-gnu/include/sys/cdefs.h:452,
-                     from /usr/riscv64-linux-gnu/include/features.h:461,
-                     from /usr/riscv64-linux-gnu/include/bits/libc-header-start.h:33,
-                     from /usr/riscv64-linux-gnu/include/limits.h:26,
-                     from /usr/lib/gcc-cross/riscv64-linux-gnu/9/include/limits.h:194,
-                     from /usr/lib/gcc-cross/riscv64-linux-gnu/9/include/syslimits.h:7,
-                     from /usr/lib/gcc-cross/riscv64-linux-gnu/9/include/limits.h:34,
-                     from /labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc/nolibc-test.c:6:
-    /usr/riscv64-linux-gnu/include/bits/wordsize.h:28:3: error: #error "rv32i-based targets are not supported"
-       28 | # error "rv32i-based targets are not supported"
-
-The glibc commit 5b6113d62efa ("RISC-V: Support the 32-bit ABI
-implementation") fixed up above error, so, glibc >= 2.33 (who includes
-this commit) is required.
-
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/overlayfs/copy_up.c   |  2 +-
+ fs/overlayfs/export.c    | 10 +++++-----
+ fs/overlayfs/inode.c     |  8 ++++----
+ fs/overlayfs/namei.c     |  2 +-
+ fs/overlayfs/ovl_entry.h |  4 ++++
+ fs/overlayfs/super.c     | 10 +++++-----
+ fs/overlayfs/util.c      | 18 +++++++++---------
+ 7 files changed, 29 insertions(+), 25 deletions(-)
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 063f9959ac44..d8b59c8f6c03 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -596,7 +596,7 @@ int run_syscall(int min, int max)
- 		CASE_TEST(write_badf);        EXPECT_SYSER(1, write(-1, &tmp, 1), -1, EBADF); break;
- 		CASE_TEST(write_zero);        EXPECT_SYSZR(1, write(1, &tmp, 0)); break;
- 		CASE_TEST(syscall_noargs);    EXPECT_SYSEQ(1, syscall(__NR_getpid), getpid()); break;
--		CASE_TEST(syscall_args);      EXPECT_SYSER(1, syscall(__NR_fstat, 0, NULL), -1, EFAULT); break;
-+		CASE_TEST(syscall_args);      EXPECT_SYSER(1, syscall(__NR_read, -1, &tmp, 1), -1, EBADF); break;
- 		case __LINE__:
- 			return ret; /* must be last */
- 		/* note: do not set any defaults so as to permit holes above */
+diff --git a/fs/overlayfs/copy_up.c b/fs/overlayfs/copy_up.c
+index f658cc8ea492..60aa615820e7 100644
+--- a/fs/overlayfs/copy_up.c
++++ b/fs/overlayfs/copy_up.c
+@@ -905,7 +905,7 @@ static int ovl_do_copy_up(struct ovl_copy_up_ctx *c)
+ static bool ovl_need_meta_copy_up(struct dentry *dentry, umode_t mode,
+ 				  int flags)
+ {
+-	struct ovl_fs *ofs = dentry->d_sb->s_fs_info;
++	struct ovl_fs *ofs = OVL_FS(dentry->d_sb);
+ 
+ 	if (!ofs->config.metacopy)
+ 		return false;
+diff --git a/fs/overlayfs/export.c b/fs/overlayfs/export.c
+index defd4e231ad2..f5f0ef8e3ce8 100644
+--- a/fs/overlayfs/export.c
++++ b/fs/overlayfs/export.c
+@@ -182,7 +182,7 @@ static int ovl_connect_layer(struct dentry *dentry)
+  */
+ static int ovl_check_encode_origin(struct dentry *dentry)
+ {
+-	struct ovl_fs *ofs = dentry->d_sb->s_fs_info;
++	struct ovl_fs *ofs = OVL_FS(dentry->d_sb);
+ 
+ 	/* Upper file handle for pure upper */
+ 	if (!ovl_dentry_lower(dentry))
+@@ -434,7 +434,7 @@ static struct dentry *ovl_lookup_real_inode(struct super_block *sb,
+ 					    struct dentry *real,
+ 					    const struct ovl_layer *layer)
+ {
+-	struct ovl_fs *ofs = sb->s_fs_info;
++	struct ovl_fs *ofs = OVL_FS(sb);
+ 	struct dentry *index = NULL;
+ 	struct dentry *this = NULL;
+ 	struct inode *inode;
+@@ -655,7 +655,7 @@ static struct dentry *ovl_get_dentry(struct super_block *sb,
+ 				     struct ovl_path *lowerpath,
+ 				     struct dentry *index)
+ {
+-	struct ovl_fs *ofs = sb->s_fs_info;
++	struct ovl_fs *ofs = OVL_FS(sb);
+ 	const struct ovl_layer *layer = upper ? &ofs->layers[0] : lowerpath->layer;
+ 	struct dentry *real = upper ?: (index ?: lowerpath->dentry);
+ 
+@@ -680,7 +680,7 @@ static struct dentry *ovl_get_dentry(struct super_block *sb,
+ static struct dentry *ovl_upper_fh_to_d(struct super_block *sb,
+ 					struct ovl_fh *fh)
+ {
+-	struct ovl_fs *ofs = sb->s_fs_info;
++	struct ovl_fs *ofs = OVL_FS(sb);
+ 	struct dentry *dentry;
+ 	struct dentry *upper;
+ 
+@@ -700,7 +700,7 @@ static struct dentry *ovl_upper_fh_to_d(struct super_block *sb,
+ static struct dentry *ovl_lower_fh_to_d(struct super_block *sb,
+ 					struct ovl_fh *fh)
+ {
+-	struct ovl_fs *ofs = sb->s_fs_info;
++	struct ovl_fs *ofs = OVL_FS(sb);
+ 	struct ovl_path origin = { };
+ 	struct ovl_path *stack = &origin;
+ 	struct dentry *dentry = NULL;
+diff --git a/fs/overlayfs/inode.c b/fs/overlayfs/inode.c
+index 541cf3717fc2..c27823f6e7aa 100644
+--- a/fs/overlayfs/inode.c
++++ b/fs/overlayfs/inode.c
+@@ -334,7 +334,7 @@ static const char *ovl_get_link(struct dentry *dentry,
+ 
+ bool ovl_is_private_xattr(struct super_block *sb, const char *name)
+ {
+-	struct ovl_fs *ofs = sb->s_fs_info;
++	struct ovl_fs *ofs = OVL_FS(sb);
+ 
+ 	if (ofs->config.userxattr)
+ 		return strncmp(name, OVL_XATTR_USER_PREFIX,
+@@ -689,7 +689,7 @@ int ovl_set_acl(struct mnt_idmap *idmap, struct dentry *dentry,
+ int ovl_update_time(struct inode *inode, struct timespec64 *ts, int flags)
+ {
+ 	if (flags & S_ATIME) {
+-		struct ovl_fs *ofs = inode->i_sb->s_fs_info;
++		struct ovl_fs *ofs = OVL_FS(inode->i_sb);
+ 		struct path upperpath = {
+ 			.mnt = ovl_upper_mnt(ofs),
+ 			.dentry = ovl_upperdentry_dereference(OVL_I(inode)),
+@@ -952,7 +952,7 @@ static inline void ovl_lockdep_annotate_inode_mutex_key(struct inode *inode)
+ 
+ static void ovl_next_ino(struct inode *inode)
+ {
+-	struct ovl_fs *ofs = inode->i_sb->s_fs_info;
++	struct ovl_fs *ofs = OVL_FS(inode->i_sb);
+ 
+ 	inode->i_ino = atomic_long_inc_return(&ofs->last_ino);
+ 	if (unlikely(!inode->i_ino))
+@@ -1284,7 +1284,7 @@ struct inode *ovl_get_trap_inode(struct super_block *sb, struct dentry *dir)
+ static bool ovl_hash_bylower(struct super_block *sb, struct dentry *upper,
+ 			     struct dentry *lower, bool index)
+ {
+-	struct ovl_fs *ofs = sb->s_fs_info;
++	struct ovl_fs *ofs = OVL_FS(sb);
+ 
+ 	/* No, if pure upper */
+ 	if (!lower)
+diff --git a/fs/overlayfs/namei.c b/fs/overlayfs/namei.c
+index cfb3420b7df0..d0f196b85541 100644
+--- a/fs/overlayfs/namei.c
++++ b/fs/overlayfs/namei.c
+@@ -832,7 +832,7 @@ struct dentry *ovl_lookup(struct inode *dir, struct dentry *dentry,
+ {
+ 	struct ovl_entry *oe;
+ 	const struct cred *old_cred;
+-	struct ovl_fs *ofs = dentry->d_sb->s_fs_info;
++	struct ovl_fs *ofs = OVL_FS(dentry->d_sb);
+ 	struct ovl_entry *poe = dentry->d_parent->d_fsdata;
+ 	struct ovl_entry *roe = dentry->d_sb->s_root->d_fsdata;
+ 	struct ovl_path *stack = NULL, *origin_path = NULL;
+diff --git a/fs/overlayfs/ovl_entry.h b/fs/overlayfs/ovl_entry.h
+index fd11fe6d6d45..b91b3694ae26 100644
+--- a/fs/overlayfs/ovl_entry.h
++++ b/fs/overlayfs/ovl_entry.h
+@@ -5,6 +5,8 @@
+  * Copyright (C) 2016 Red Hat, Inc.
+  */
+ 
++#include <uapi/linux/magic.h>
++
+ struct ovl_config {
+ 	char *lowerdir;
+ 	char *upperdir;
+@@ -97,6 +99,8 @@ static inline struct mnt_idmap *ovl_upper_mnt_idmap(struct ovl_fs *ofs)
+ 
+ static inline struct ovl_fs *OVL_FS(struct super_block *sb)
+ {
++	/* Make sure OVL_FS() is always used with an overlayfs superblock */
++	BUG_ON(sb->s_magic != OVERLAYFS_SUPER_MAGIC);
+ 	return (struct ovl_fs *)sb->s_fs_info;
+ }
+ 
+diff --git a/fs/overlayfs/super.c b/fs/overlayfs/super.c
+index f97ad8b40dbb..879d601ba61e 100644
+--- a/fs/overlayfs/super.c
++++ b/fs/overlayfs/super.c
+@@ -259,7 +259,7 @@ static void ovl_free_fs(struct ovl_fs *ofs)
+ 
+ static void ovl_put_super(struct super_block *sb)
+ {
+-	struct ovl_fs *ofs = sb->s_fs_info;
++	struct ovl_fs *ofs = OVL_FS(sb);
+ 
+ 	ovl_free_fs(ofs);
+ }
+@@ -267,7 +267,7 @@ static void ovl_put_super(struct super_block *sb)
+ /* Sync real dirty inodes in upper filesystem (if it exists) */
+ static int ovl_sync_fs(struct super_block *sb, int wait)
+ {
+-	struct ovl_fs *ofs = sb->s_fs_info;
++	struct ovl_fs *ofs = OVL_FS(sb);
+ 	struct super_block *upper_sb;
+ 	int ret;
+ 
+@@ -315,7 +315,7 @@ static int ovl_sync_fs(struct super_block *sb, int wait)
+  */
+ static int ovl_statfs(struct dentry *dentry, struct kstatfs *buf)
+ {
+-	struct ovl_fs *ofs = dentry->d_sb->s_fs_info;
++	struct ovl_fs *ofs = OVL_FS(dentry->d_sb);
+ 	struct dentry *root_dentry = dentry->d_sb->s_root;
+ 	struct path path;
+ 	int err;
+@@ -364,7 +364,7 @@ static inline int ovl_xino_def(void)
+ static int ovl_show_options(struct seq_file *m, struct dentry *dentry)
+ {
+ 	struct super_block *sb = dentry->d_sb;
+-	struct ovl_fs *ofs = sb->s_fs_info;
++	struct ovl_fs *ofs = OVL_FS(sb);
+ 
+ 	seq_show_option(m, "lowerdir", ofs->config.lowerdir);
+ 	if (ofs->config.upperdir) {
+@@ -396,7 +396,7 @@ static int ovl_show_options(struct seq_file *m, struct dentry *dentry)
+ 
+ static int ovl_remount(struct super_block *sb, int *flags, char *data)
+ {
+-	struct ovl_fs *ofs = sb->s_fs_info;
++	struct ovl_fs *ofs = OVL_FS(sb);
+ 	struct super_block *upper_sb;
+ 	int ret = 0;
+ 
+diff --git a/fs/overlayfs/util.c b/fs/overlayfs/util.c
+index 923d66d131c1..2425240ef139 100644
+--- a/fs/overlayfs/util.c
++++ b/fs/overlayfs/util.c
+@@ -18,25 +18,25 @@
+ 
+ int ovl_want_write(struct dentry *dentry)
+ {
+-	struct ovl_fs *ofs = dentry->d_sb->s_fs_info;
++	struct ovl_fs *ofs = OVL_FS(dentry->d_sb);
+ 	return mnt_want_write(ovl_upper_mnt(ofs));
+ }
+ 
+ void ovl_drop_write(struct dentry *dentry)
+ {
+-	struct ovl_fs *ofs = dentry->d_sb->s_fs_info;
++	struct ovl_fs *ofs = OVL_FS(dentry->d_sb);
+ 	mnt_drop_write(ovl_upper_mnt(ofs));
+ }
+ 
+ struct dentry *ovl_workdir(struct dentry *dentry)
+ {
+-	struct ovl_fs *ofs = dentry->d_sb->s_fs_info;
++	struct ovl_fs *ofs = OVL_FS(dentry->d_sb);
+ 	return ofs->workdir;
+ }
+ 
+ const struct cred *ovl_override_creds(struct super_block *sb)
+ {
+-	struct ovl_fs *ofs = sb->s_fs_info;
++	struct ovl_fs *ofs = OVL_FS(sb);
+ 
+ 	return override_creds(ofs->creator_cred);
+ }
+@@ -62,7 +62,7 @@ int ovl_can_decode_fh(struct super_block *sb)
+ 
+ struct dentry *ovl_indexdir(struct super_block *sb)
+ {
+-	struct ovl_fs *ofs = sb->s_fs_info;
++	struct ovl_fs *ofs = OVL_FS(sb);
+ 
+ 	return ofs->indexdir;
+ }
+@@ -70,7 +70,7 @@ struct dentry *ovl_indexdir(struct super_block *sb)
+ /* Index all files on copy up. For now only enabled for NFS export */
+ bool ovl_index_all(struct super_block *sb)
+ {
+-	struct ovl_fs *ofs = sb->s_fs_info;
++	struct ovl_fs *ofs = OVL_FS(sb);
+ 
+ 	return ofs->config.nfs_export && ofs->config.index;
+ }
+@@ -78,7 +78,7 @@ bool ovl_index_all(struct super_block *sb)
+ /* Verify lower origin on lookup. For now only enabled for NFS export */
+ bool ovl_verify_lower(struct super_block *sb)
+ {
+-	struct ovl_fs *ofs = sb->s_fs_info;
++	struct ovl_fs *ofs = OVL_FS(sb);
+ 
+ 	return ofs->config.nfs_export && ofs->config.index;
+ }
+@@ -152,7 +152,7 @@ enum ovl_path_type ovl_path_type(struct dentry *dentry)
+ 
+ void ovl_path_upper(struct dentry *dentry, struct path *path)
+ {
+-	struct ovl_fs *ofs = dentry->d_sb->s_fs_info;
++	struct ovl_fs *ofs = OVL_FS(dentry->d_sb);
+ 
+ 	path->mnt = ovl_upper_mnt(ofs);
+ 	path->dentry = ovl_dentry_upper(dentry);
+@@ -415,7 +415,7 @@ bool ovl_dentry_needs_data_copy_up(struct dentry *dentry, int flags)
+ 
+ bool ovl_redirect_dir(struct super_block *sb)
+ {
+-	struct ovl_fs *ofs = sb->s_fs_info;
++	struct ovl_fs *ofs = OVL_FS(sb);
+ 
+ 	return ofs->config.redirect_dir && !ofs->noxattr;
+ }
 -- 
-2.25.1
+2.39.2
 
