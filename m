@@ -2,124 +2,304 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1097270A87E
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 16:13:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B943070A884
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 16:31:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231586AbjETONt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 10:13:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48682 "EHLO
+        id S231453AbjETO2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 10:28:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjETONr (ORCPT
+        with ESMTP id S229464AbjETO2c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 10:13:47 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6D2CEFD;
-        Sat, 20 May 2023 07:13:46 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 34KEDW6v027662;
-        Sat, 20 May 2023 16:13:32 +0200
-Date:   Sat, 20 May 2023 16:13:32 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas@t-8ch.de>
-Cc:     Zhangjin Wu <falcon@tinylab.org>, aou@eecs.berkeley.edu,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, shuah@kernel.org
-Subject: Re: [PATCH] selftests/nolibc: Fix up compile error for rv32
-Message-ID: <20230520141332.GB27611@1wt.eu>
-References: <20230520-nolibc-stackprotector-riscv-v1-1-d8912012a034@weissschuh.net>
- <20230520120254.66315-1-falcon@tinylab.org>
- <20230520133237.GA27501@1wt.eu>
- <d98dfd41-8938-4388-90f0-38199d2f0574@t-8ch.de>
+        Sat, 20 May 2023 10:28:32 -0400
+Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB39C115
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 07:28:30 -0700 (PDT)
+Received: by mail-vs1-xe2a.google.com with SMTP id ada2fe7eead31-437de9222a9so1001885137.0
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 07:28:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684592910; x=1687184910;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FnahHUDaOzUYBYnHGcO8vg1OxYRFdXQA4RSYztwTqns=;
+        b=6jmRYHUSy+3V1Pm1Me1w0q39JXv8J9u99nlq4qhDFFVcHxQXiDnWEVj9/X1gRLSpaA
+         Ovc0SnNq52kDPkkFIHhTw7qT91jQj0bqPIzXdOeveKMAGouS2yZqTPO9cShDU+6FvYPt
+         2u7fc/aBq2QTfW4EdIw9i3D55P9hwdRUw0UXInYD7D2iJSTghJPiZ4p6uQB/RRtuj9Jq
+         F/Lnn7woUCzP+dzpvSd8+gDIMqoVJvmtOi2jHLuQrRfyS6PvdRgA5Uj+Xxpuoppkpa+o
+         7ZXqUkrAA2vEDqiN0MycK0pomf3OrA1I1Sr9bcTm2N6i2+8pjxmy+ZXY+CICMUuxlTBD
+         jb4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684592910; x=1687184910;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FnahHUDaOzUYBYnHGcO8vg1OxYRFdXQA4RSYztwTqns=;
+        b=JgedTd037RQxV59qOejaB4Mt0GG+rV9GKSP9frj5SDBvsCgZHYjFFZe9r86kWZEuKe
+         LchYDd+tshiop0Rpsnau+qJlqYRczi2D5881+4WlxryAmzh76RoMg68zTSAH1Ej/z7H0
+         5E04zpBCYt4l+RDxnfSeBbpcTJCqDuR3xXVBrnqpAVobDA3tOaPwdD4J2Fy75fE9evHx
+         GFmDa3X+HC6+PKl/0AbgNHMJMGF2CIJdN5nqWoaLbhOInFv4kYsPj3ZDtCh9qw2aiynQ
+         35NXY16zY6E3a9fbX26nQtzZ8XeQEqJ5JCWdoVwcfpbWemqSCxBEvpXKUT9hmRr6nI87
+         x0Rg==
+X-Gm-Message-State: AC+VfDz2laDOfIB+bpBIQvn1lrGKXmA+d1W6JD18u9J+IbUKQ3CJFa/F
+        ap3aPflY+WQcWWLcfANrzX+/uD+v/VOuSFtTfthkmA==
+X-Google-Smtp-Source: ACHHUZ7VsWAWuvH8EJv6/vbMtYMacrJCln2WeQNa1k9rtsXydkvUh9DBsranpuSJAwvjfY8Bz44npMDWqiZ0zG1amQo=
+X-Received: by 2002:a05:6102:7a8:b0:438:d4bd:f1f2 with SMTP id
+ x8-20020a05610207a800b00438d4bdf1f2mr931731vsg.22.1684592909593; Sat, 20 May
+ 2023 07:28:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d98dfd41-8938-4388-90f0-38199d2f0574@t-8ch.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230517124201.441634-1-imagedong@tencent.com>
+ <20230517124201.441634-4-imagedong@tencent.com> <CANn89iKLf=V664AsUYC52h_q-xjEq9xC3KqTq8q+t262T91qVQ@mail.gmail.com>
+ <CADxym3a0gmzmD3Vwu_shoJnAHm-xjD5tJRuKwTvAXnVk_H55AA@mail.gmail.com>
+ <CADVnQynZ67511+cKF=hyiaLx5-fqPGGmpyJ-5Lk6ge-ivmAf-w@mail.gmail.com>
+ <CADxym3ZiyYK7Vyz05qLv8jOPmNZXXepCsTbZxdkhSQxRx0cdSA@mail.gmail.com>
+ <CADVnQy=JQkVGRsbL0u=-oZSpdaFBpz907yX24p3uUu2pMhUjGg@mail.gmail.com> <CADxym3awe-c29C-e1Y+efepLdpFWrG520ezJO1EjJ5C3arq6Eg@mail.gmail.com>
+In-Reply-To: <CADxym3awe-c29C-e1Y+efepLdpFWrG520ezJO1EjJ5C3arq6Eg@mail.gmail.com>
+From:   Neal Cardwell <ncardwell@google.com>
+Date:   Sat, 20 May 2023 10:28:12 -0400
+Message-ID: <CADVnQyk2y68HKScad4W2jOy9uqe7TTCyY-StwdLWFPJhXU+CUA@mail.gmail.com>
+Subject: Re: [PATCH net-next 3/3] net: tcp: handle window shrink properly
+To:     Menglong Dong <menglong8.dong@gmail.com>
+Cc:     Eric Dumazet <edumazet@google.com>, kuba@kernel.org,
+        davem@davemloft.net, pabeni@redhat.com, dsahern@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Menglong Dong <imagedong@tencent.com>,
+        Yuchung Cheng <ycheng@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 20, 2023 at 04:07:34PM +0200, Thomas Weißschuh wrote:
-> Hi Willy!
-> 
-> On 2023-05-20 15:32:37+0200, Willy Tarreau wrote:
-> > Thomas, Zhangjin,
-> > 
-> > I've merged your latest patches in my branch 20230520-nolibc-rv32+stkp2,
-> > which was rebased to integrate the updated commit messages and a few
-> > missing s-o-b from mine. Please have a look:
-> > 
-> >    https://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git
-> > 
-> > However, Thomas, I noticed something puzzling me. While I tested with
-> > gcc-9.5 (that I have here along my toolchains) I found that it would
-> > systematically fail:
-> > 
-> >   sysroot/x86/include/stackprotector.h:46:1: warning: 'no_stack_protector' attribute directive ignored [-Wattributes]
-> >      46 | {
-> >         | ^
-> >   !!Stack smashing detected!!
-> >   qemu: uncaught target signal 6 (Aborted) - core dumped
-> >   0 test(s) passed.
-> > 
-> > The reason is that it doesn't support the attribute "no_stack_protector".
-> > Upon closer investigation, I noticed that _start() on x86_64 doens't have
-> > it, yet it works on more recent compilers! So I don't understand why it
-> > works with more recent compilers.
-> 
-> _start() not having the attribute is indeed an oversight.
-> No idea how it worked before.
+On Sat, May 20, 2023 at 5:08=E2=80=AFAM Menglong Dong <menglong8.dong@gmail=
+.com> wrote:
+>
+> On Fri, May 19, 2023 at 12:03=E2=80=AFAM Neal Cardwell <ncardwell@google.=
+com> wrote:
+> >
+> > On Thu, May 18, 2023 at 10:12=E2=80=AFAM Menglong Dong <menglong8.dong@=
+gmail.com> wrote:
+> > >
+> > > On Thu, May 18, 2023 at 9:40=E2=80=AFPM Neal Cardwell <ncardwell@goog=
+le.com> wrote:
+> > > >
+> > > > On Wed, May 17, 2023 at 10:35=E2=80=AFPM Menglong Dong <menglong8.d=
+ong@gmail.com> wrote:
+> > > > >
+> > > > > On Wed, May 17, 2023 at 10:47=E2=80=AFPM Eric Dumazet <edumazet@g=
+oogle.com> wrote:
+> > > > > >
+> > > > > > On Wed, May 17, 2023 at 2:42=E2=80=AFPM <menglong8.dong@gmail.c=
+om> wrote:
+> > > > > > >
+> > > > > > > From: Menglong Dong <imagedong@tencent.com>
+> > > > > > >
+> > > > > > > Window shrink is not allowed and also not handled for now, bu=
+t it's
+> > > > > > > needed in some case.
+> > > > > > >
+> > > > > > > In the origin logic, 0 probe is triggered only when there is =
+no any
+> > > > > > > data in the retrans queue and the receive window can't hold t=
+he data
+> > > > > > > of the 1th packet in the send queue.
+> > > > > > >
+> > > > > > > Now, let's change it and trigger the 0 probe in such cases:
+> > > > > > >
+> > > > > > > - if the retrans queue has data and the 1th packet in it is n=
+ot within
+> > > > > > > the receive window
+> > > > > > > - no data in the retrans queue and the 1th packet in the send=
+ queue is
+> > > > > > > out of the end of the receive window
+> > > > > >
+> > > > > > Sorry, I do not understand.
+> > > > > >
+> > > > > > Please provide packetdrill tests for new behavior like that.
+> > > > > >
+> > > > >
+> > > > > Yes. The problem can be reproduced easily.
+> > > > >
+> > > > > 1. choose a server machine, decrease it's tcp_mem with:
+> > > > >     echo '1024 1500 2048' > /proc/sys/net/ipv4/tcp_mem
+> > > > > 2. call listen() and accept() on a port, such as 8888. We call
+> > > > >     accept() looply and without call recv() to make the data stay
+> > > > >     in the receive queue.
+> > > > > 3. choose a client machine, and create 100 TCP connection
+> > > > >     to the 8888 port of the server. Then, every connection sends
+> > > > >     data about 1M.
+> > > > > 4. we can see that some of the connection enter the 0-probe
+> > > > >     state, but some of them keep retrans again and again. As
+> > > > >     the server is up to the tcp_mem[2] and skb is dropped before
+> > > > >     the recv_buf full and the connection enter 0-probe state.
+> > > > >     Finially, some of these connection will timeout and break.
+> > > > >
+> > > > > With this series, all the 100 connections will enter 0-probe
+> > > > > status and connection break won't happen. And the data
+> > > > > trans will recover if we increase tcp_mem or call 'recv()'
+> > > > > on the sockets in the server.
+> > > > >
+> > > > > > Also, such fundamental change would need IETF discussion first.
+> > > > > > We do not want linux to cause network collapses just because bi=
+llions
+> > > > > > of devices send more zero probes.
+> > > > >
+> > > > > I think it maybe a good idea to make the connection enter
+> > > > > 0-probe, rather than drop the skb silently. What 0-probe
+> > > > > meaning is to wait for space available when the buffer of the
+> > > > > receive queue is full. And maybe we can also use 0-probe
+> > > > > when the "buffer" of "TCP protocol" (which means tcp_mem)
+> > > > > is full?
+> > > > >
+> > > > > Am I right?
+> > > > >
+> > > > > Thanks!
+> > > > > Menglong Dong
+> > > >
+> > > > Thanks for describing the scenario in more detail. (Some kind of
+> > > > packetdrill script or other program to reproduce this issue would b=
+e
+> > > > nice, too, as Eric noted.)
+> > > >
+> > > > You mention in step (4.) above that some of the connections keep
+> > > > retransmitting again and again. Are those connections receiving any
+> > > > ACKs in response to their retransmissions? Perhaps they are receivi=
+ng
+> > > > dupacks?
+> > >
+> > > Actually, these packets are dropped without any reply, even dupacks.
+> > > skb will be dropped directly when tcp_try_rmem_schedule()
+> > > fails in tcp_data_queue(). That's reasonable, as it's
+> > > useless to reply a ack to the sender, which will cause the sender
+> > > fast retrans the packet, because we are out of memory now, and
+> > > retrans can't solve the problem.
+> >
+> > I'm not sure I see the problem. If retransmits can't solve the
+> > problem, then why are you proposing that data senders keep
+> > retransmitting forever (via 0-window-probes) in this kind of scenario?
+> >
+>
+> Because the connection will break if the count of
+> retransmits up to tcp_retires2, but probe-0 can keep
+> for a long time.
 
-No problem, I preferred to mention it anyway.
+I see. So it sounds like you agree that retransmits can solve the
+problem, as long as the retransmits are using the zero-window probe
+state machine (ICSK_TIME_PROBE0, tcp_probe_timer()), which continues
+as long as the receiver is sending ACKs. And it sounds like when you
+said "retrans can't solve the problem" you didn't literally mean that
+retransmits can't solve the problem, but rather you meant that the RTO
+state machine, specifically (ICSK_TIME_RETRANS,
+tcp_retransmit_timer(), etc) can't solve the problem. I agree with
+that assessment that in this scenario tcp_probe_timer() seems like a
+solution but tcp_retransmit_timer() does not.
 
-> > I managed to avoid the crash by enclosing the __stack_chk_init() function
-> > in a #pragma GCC optimize("-fno-stack-protector") while removing the
-> > attribute (though Clang and more recent gcc use this attribute so we
-> > shouldn't completely drop it either).
-> 
-> I would like to first align x86 to __attribute__((no_stack_protector))
-> for uniformity and then figure out on how to make it nicer.
+> > A single dupack without SACK blocks will not cause the sender to fast
+> > retransmit. (Only 3 dupacks would trigger fast retransmit.)
+> >
+> > Three or more dupacks without SACK blocks will cause the sender to
+> > fast retransmit the segment above SND.UNA once if the sender doesn't
+> > have SACK support. But in this case AFAICT fast-retransmitting once is
+> > a fine strategy, since the sender should keep retrying transmits (with
+> > backoff) until the receiver potentially has memory available to
+> > receive the packet.
+> >
+> > >
+> > > > If so, then perhaps we could solve this problem without
+> > > > depending on a violation of the TCP spec (which says the receive
+> > > > window should not be retracted) in the following way: when a data
+> > > > sender suffers a retransmission timeout, and retransmits the first
+> > > > unacknowledged segment, and receives a dupack for SND.UNA instead o=
+f
+> > > > an ACK covering the RTO-retransmitted segment, then the data sender
+> > > > should estimate that the receiver doesn't have enough memory to buf=
+fer
+> > > > the retransmitted packet. In that case, the data sender should ente=
+r
+> > > > the 0-probe state and repeatedly set the ICSK_TIME_PROBE0 timer to
+> > > > call tcp_probe_timer().
+> > > >
+> > > > Basically we could try to enhance the sender-side logic to try to
+> > > > distinguish between two kinds of problems:
+> > > >
+> > > > (a) Repeated data packet loss caused by congestion, routing problem=
+s,
+> > > > or connectivity problems. In this case, the data sender uses
+> > > > ICSK_TIME_RETRANS and tcp_retransmit_timer(), and backs off and onl=
+y
+> > > > retries sysctl_tcp_retries2 times before timing out the connection
+> > > >
+> > > > (b) A receiver that is repeatedly sending dupacks but not ACKing
+> > > > retransmitted data because it doesn't have any memory. In this case=
+,
+> > > > the data sender uses ICSK_TIME_PROBE0 and tcp_probe_timer(), and ba=
+cks
+> > > > off but keeps retrying as long as the data sender receives ACKs.
+> > > >
+> > >
+> > > I'm not sure if this is an ideal method, as it may be not rigorous
+> > > to conclude that the receiver is oom with dupacks. A packet can
+> > > loss can also cause multi dupacks.
+> >
+> > When a data sender suffers an RTO and retransmits a single data
+> > packet, it would be very rare for the data sender to receive multiple
+> > pure dupacks without SACKs. This would only happen in the rare case
+> > where (a) the connection did not have SACK enabled, and (b) there was
+> > a hole in the received sequence space and there were still packets in
+> > flight when the (spurioius) RTO fired.
+> >
+> > But if we want to be paranoid, then this new response could be written
+> > to only trigger if SACK is enabled (the vast, vast majority of cases).
+> > If SACK is enabled, and an RTO of a data packet starting at sequence
+> > S1 results in the receiver sending only a dupack for S1 without SACK
+> > blocks, then this clearly shows the issue is not packet loss but
+> > suggests a receiver unable to buffer the given data packet, AFAICT.
+> >
+>
+> Yeah, you are right on this point, multi pure dupacks can
+> mean out of memory of the receiver. But we still need to
+> know if the receiver recovers from OOM. Without window
+> shrink, the window in the ack of zero-window probe packet
+> is not zero on OOM.
 
-I agree.
+But do we need a protocol-violating zero-window in this case? Why not
+use my approach suggested above: conveying the OOM condition by
+sending an ACK but not ACKing the retransmitted packet?
 
-> > I consider this non-critical as we can expect that regtests are run with
-> > a reasonably recent compiler version, but if in the long term we can find
-> > a more reliable detection for this, it would be nice.
-> > 
-> > For example I found that gcc defines __SSP_ALL__ to 1 when
-> > -fstack-protector is used, and 2 when -fstack-protector-all is used.
-> > With clang, it's 1 and 3 respectively. Maybe we should use that and
-> > drop NOLIBC_STACKPROTECTOR, that would be one less variable to deal
-> > with: the code would automatically adapt to whatever cflags the user
-> > sets on the compiler, which is generally better.
-> 
-> That sounds great!
-> 
-> I explicitly looked for something like this before, dumping preprocessor
-> directives and comparing.
-> It seems the fact that my compilers enable this feature by default made
-> me miss it.
+Thanks,
+neal
 
-Hmmm that's indeed possible. With -fno-stack-protector it should disappear:
-
-  $ gcc -fno-stack-protector -dM -E -xc - < /dev/null |grep SSP
-  $ gcc -fstack-protector -dM -E -xc - < /dev/null |grep SSP
-  #define __SSP__ 1
-  $ gcc -fstack-protector-all -dM -E -xc - < /dev/null |grep SSP
-  #define __SSP_ALL__ 2
-  $ clang -fstack-protector-all -dM -E -xc - < /dev/null |grep SSP
-  #define __SSP_ALL__ 3
-
-> I'll send patches.
-
-OK thanks. Just be aware that I'll be less responsive this week-end from
-now on.
-
-Willy
+> Hi, Eric and kuba, do you have any comments on this
+> case?
+>
+> Thanks!
+> Menglong Dong
+>
+> > thanks,
+> > neal
+> >
+> > >
+> > > Thanks!
+> > > Menglong Dong
+> > >
+> > > > AFAICT that would be another way to reach the happy state you menti=
+on:
+> > > > "all the 100 connections will enter 0-probe status and connection
+> > > > break won't happen", and we could reach that state without violatin=
+g
+> > > > the TCP protocol spec and without requiring changes on the receiver
+> > > > side (so that this fix could help in scenarios where the
+> > > > memory-constrained receiver is an older stack without special new
+> > > > behavior).
+> > > >
+> > > > Eric, Yuchung, Menglong: do you think something like that would wor=
+k?
+> > > >
+> > > > neal
