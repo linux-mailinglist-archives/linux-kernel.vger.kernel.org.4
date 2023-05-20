@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A8870A748
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 12:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 138EB70A749
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 12:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbjETKtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 06:49:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60900 "EHLO
+        id S230419AbjETKta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 06:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231460AbjETKtJ (ORCPT
+        with ESMTP id S229933AbjETKtJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 20 May 2023 06:49:09 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15088E54;
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146FCE4B;
         Sat, 20 May 2023 03:49:07 -0700 (PDT)
-Date:   Sat, 20 May 2023 10:49:02 -0000
+Date:   Sat, 20 May 2023 10:49:03 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1684579743;
+        s=2020; t=1684579744;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=h/CYMaHe41OXFIYPcIF2+mDgE/e7EFfDTDmPw0LM0D4=;
-        b=QKeuJd/whZotB+vV1/oGGVhVkPZUrcZbc4yhU4w74ufcmgfIim7JbcDk3YYYPkCn40mRFV
-        AXQBMaYlGAJBCBbk0WaJHoe83qM8OjxiUmZy1DUXzxaMyD03PSFinRg36eN8hsxNFK1zJQ
-        +/4SdY+tcZvl4FkXGQX2vIjX6HytXDHWOeCm06WKxVGHZ3cMGQUqHpVtp6VKpQmFEYnJyW
-        d9H3eoxSzgXwEd5KasYtPSjezP9ICggNGkx1dUpYJITuysbbWL3IjFKDjyiN+70o81KBRM
-        hEPWHunO1iQjz0J1Ix2k3Qh9308l+2J6N+WNOJg91k2Y01ZPLccHNSSUWpyD+Q==
+        bh=sKTnX9U4la8LIGHj4YGgh8FrnRokKNk/8RFff/d1G/U=;
+        b=XkQr0mzf8ATiH0q1A2XCkFwAbcMJhYe+Cw4YjJSo+Xyd7FtL4UlkpJ6o+f0dmJoSzRb3XM
+        S40sGIA92XTdx88K8IMKPp06fQSJHoh5lNebGWzIYJbhmaE7jQapXfmLwFIWeUYmAtOByI
+        GR8khHsUkB6mjpjPbbcMIu5Yltphqd7zeNYjjg9qx9ZOiGQcszsNtvYeeBECX8L6bgxyD0
+        K1bKOJIlmIQ8waWOAdc7qJXTk576fUSX3sfd/9btfIu+V5Wt+VtIC8b5cuIlV54IyQUmWA
+        ZraniwLl1H7vi13eFoGHJDQAhXKUkFn/NpBYncg/QJ8teBWfMHA/vVeO4eXRMg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1684579743;
+        s=2020e; t=1684579744;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=h/CYMaHe41OXFIYPcIF2+mDgE/e7EFfDTDmPw0LM0D4=;
-        b=90Z7Ycl+Xpi2zuaAaqjru3h+9cjMGVV6BphQi5GhL9s/2Getltha4NaBtVQaPzmNemwfZK
-        KaLje+yu6E1WfaBw==
+        bh=sKTnX9U4la8LIGHj4YGgh8FrnRokKNk/8RFff/d1G/U=;
+        b=LrS+Xqt5QmAubMmd4AZT94EcdW84Qxs51ue3qoEOEzv2HeRrwIcGOTzER0KR+EYgjzfbvO
+        b8pPeJRye5tA90Bw==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] percpu: Wire up cmpxchg128
+Subject: [tip: locking/core] instrumentation: Wire up cmpxchg128()
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, x86@kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Mark Rutland <mark.rutland@arm.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230515080554.248739380@infradead.org>
-References: <20230515080554.248739380@infradead.org>
+In-Reply-To: <20230515080554.181725437@infradead.org>
+References: <20230515080554.181725437@infradead.org>
 MIME-Version: 1.0
-Message-ID: <168457974296.404.7434315965646266706.tip-bot2@tip-bot2>
+Message-ID: <168457974351.404.16335282040874543294.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,194 +68,306 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the locking/core branch of tip:
 
-Commit-ID:     58e59a577359bd13d2219f5db064af41af68011e
-Gitweb:        https://git.kernel.org/tip/58e59a577359bd13d2219f5db064af41af68011e
+Commit-ID:     2dfdbe12758bbc435af489e3ee167dbfab7d66be
+Gitweb:        https://git.kernel.org/tip/2dfdbe12758bbc435af489e3ee167dbfab7d66be
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Mon, 15 May 2023 09:57:04 +02:00
+AuthorDate:    Mon, 15 May 2023 09:57:03 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Fri, 19 May 2023 12:35:13 +02:00
+CommitterDate: Fri, 19 May 2023 12:35:12 +02:00
 
-percpu: Wire up cmpxchg128
+instrumentation: Wire up cmpxchg128()
 
-In order to replace cmpxchg_double() with the newly minted
-cmpxchg128() family of functions, wire it up in this_cpu_cmpxchg().
+Wire up the cmpxchg128 family in the atomic wrapper scripts.
+
+These provide the generic cmpxchg128 family of functions from the
+arch_ prefixed version, adding explicit instrumentation where needed.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Link: https://lore.kernel.org/r/20230515080554.248739380@infradead.org
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+Link: https://lore.kernel.org/r/20230515080554.181725437@infradead.org
 ---
- arch/arm64/include/asm/percpu.h | 20 +++++++++++-
- arch/s390/include/asm/percpu.h  | 16 +++++++++-
- arch/x86/include/asm/percpu.h   | 59 ++++++++++++++++++++++++++++++++-
- include/asm-generic/percpu.h    | 16 +++++++++-
- 4 files changed, 111 insertions(+)
+ include/linux/atomic/atomic-arch-fallback.h | 95 +++++++++++++++++++-
+ include/linux/atomic/atomic-instrumented.h  | 86 +++++++++++++++++-
+ scripts/atomic/gen-atomic-fallback.sh       |  4 +-
+ scripts/atomic/gen-atomic-instrumented.sh   |  4 +-
+ 4 files changed, 183 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm64/include/asm/percpu.h b/arch/arm64/include/asm/percpu.h
-index b9ba19d..2549829 100644
---- a/arch/arm64/include/asm/percpu.h
-+++ b/arch/arm64/include/asm/percpu.h
-@@ -140,6 +140,10 @@ PERCPU_RET_OP(add, add, ldadd)
-  * re-enabling preemption for preemptible kernels, but doing that in a way
-  * which builds inside a module would mean messing directly with the preempt
-  * count. If you do this, peterz and tglx will hunt you down.
-+ *
-+ * Not to mention it'll break the actual preemption model for missing a
-+ * preemption point when TIF_NEED_RESCHED gets set while preemption is
-+ * disabled.
-  */
- #define this_cpu_cmpxchg_double_8(ptr1, ptr2, o1, o2, n1, n2)		\
- ({									\
-@@ -240,6 +244,22 @@ PERCPU_RET_OP(add, add, ldadd)
- #define this_cpu_cmpxchg_8(pcp, o, n)	\
- 	_pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
+diff --git a/include/linux/atomic/atomic-arch-fallback.h b/include/linux/atomic/atomic-arch-fallback.h
+index a6e4437..1722ddb 100644
+--- a/include/linux/atomic/atomic-arch-fallback.h
++++ b/include/linux/atomic/atomic-arch-fallback.h
+@@ -77,6 +77,29 @@
  
-+#define this_cpu_cmpxchg64(pcp, o, n)	this_cpu_cmpxchg_8(pcp, o, n)
-+
-+#define this_cpu_cmpxchg128(pcp, o, n)					\
-+({									\
-+	typedef typeof(pcp) pcp_op_T__;					\
-+	u128 old__, new__, ret__;					\
-+	pcp_op_T__ *ptr__;						\
-+	old__ = o;							\
-+	new__ = n;							\
-+	preempt_disable_notrace();					\
-+	ptr__ = raw_cpu_ptr(&(pcp));					\
-+	ret__ = cmpxchg128_local((void *)ptr__, old__, new__);		\
-+	preempt_enable_notrace();					\
-+	ret__;								\
-+})
-+
- #ifdef __KVM_NVHE_HYPERVISOR__
- extern unsigned long __hyp_per_cpu_offset(unsigned int cpu);
- #define __per_cpu_offset
-diff --git a/arch/s390/include/asm/percpu.h b/arch/s390/include/asm/percpu.h
-index 081837b..5603402 100644
---- a/arch/s390/include/asm/percpu.h
-+++ b/arch/s390/include/asm/percpu.h
-@@ -148,6 +148,22 @@
- #define this_cpu_cmpxchg_4(pcp, oval, nval) arch_this_cpu_cmpxchg(pcp, oval, nval)
- #define this_cpu_cmpxchg_8(pcp, oval, nval) arch_this_cpu_cmpxchg(pcp, oval, nval)
+ #endif /* arch_cmpxchg64_relaxed */
  
-+#define this_cpu_cmpxchg64(pcp, o, n)	this_cpu_cmpxchg_8(pcp, o, n)
++#ifndef arch_cmpxchg128_relaxed
++#define arch_cmpxchg128_acquire arch_cmpxchg128
++#define arch_cmpxchg128_release arch_cmpxchg128
++#define arch_cmpxchg128_relaxed arch_cmpxchg128
++#else /* arch_cmpxchg128_relaxed */
 +
-+#define this_cpu_cmpxchg128(pcp, oval, nval)				\
-+({									\
-+	typedef typeof(pcp) pcp_op_T__;					\
-+	u128 old__, new__, ret__;					\
-+	pcp_op_T__ *ptr__;						\
-+	old__ = oval;							\
-+	new__ = nval;							\
-+	preempt_disable_notrace();					\
-+	ptr__ = raw_cpu_ptr(&(pcp));					\
-+	ret__ = cmpxchg128((void *)ptr__, old__, new__);		\
-+	preempt_enable_notrace();					\
-+	ret__;								\
++#ifndef arch_cmpxchg128_acquire
++#define arch_cmpxchg128_acquire(...) \
++	__atomic_op_acquire(arch_cmpxchg128, __VA_ARGS__)
++#endif
++
++#ifndef arch_cmpxchg128_release
++#define arch_cmpxchg128_release(...) \
++	__atomic_op_release(arch_cmpxchg128, __VA_ARGS__)
++#endif
++
++#ifndef arch_cmpxchg128
++#define arch_cmpxchg128(...) \
++	__atomic_op_fence(arch_cmpxchg128, __VA_ARGS__)
++#endif
++
++#endif /* arch_cmpxchg128_relaxed */
++
+ #ifndef arch_try_cmpxchg_relaxed
+ #ifdef arch_try_cmpxchg
+ #define arch_try_cmpxchg_acquire arch_try_cmpxchg
+@@ -217,6 +240,76 @@
+ 
+ #endif /* arch_try_cmpxchg64_relaxed */
+ 
++#ifndef arch_try_cmpxchg128_relaxed
++#ifdef arch_try_cmpxchg128
++#define arch_try_cmpxchg128_acquire arch_try_cmpxchg128
++#define arch_try_cmpxchg128_release arch_try_cmpxchg128
++#define arch_try_cmpxchg128_relaxed arch_try_cmpxchg128
++#endif /* arch_try_cmpxchg128 */
++
++#ifndef arch_try_cmpxchg128
++#define arch_try_cmpxchg128(_ptr, _oldp, _new) \
++({ \
++	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
++	___r = arch_cmpxchg128((_ptr), ___o, (_new)); \
++	if (unlikely(___r != ___o)) \
++		*___op = ___r; \
++	likely(___r == ___o); \
 +})
++#endif /* arch_try_cmpxchg128 */
 +
- #define arch_this_cpu_xchg(pcp, nval)					\
- ({									\
- 	typeof(pcp) *ptr__;						\
-diff --git a/arch/x86/include/asm/percpu.h b/arch/x86/include/asm/percpu.h
-index 13c0d63..4d58b97 100644
---- a/arch/x86/include/asm/percpu.h
-+++ b/arch/x86/include/asm/percpu.h
-@@ -210,6 +210,65 @@ do {									\
- 	(typeof(_var))(unsigned long) pco_old__;			\
++#ifndef arch_try_cmpxchg128_acquire
++#define arch_try_cmpxchg128_acquire(_ptr, _oldp, _new) \
++({ \
++	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
++	___r = arch_cmpxchg128_acquire((_ptr), ___o, (_new)); \
++	if (unlikely(___r != ___o)) \
++		*___op = ___r; \
++	likely(___r == ___o); \
++})
++#endif /* arch_try_cmpxchg128_acquire */
++
++#ifndef arch_try_cmpxchg128_release
++#define arch_try_cmpxchg128_release(_ptr, _oldp, _new) \
++({ \
++	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
++	___r = arch_cmpxchg128_release((_ptr), ___o, (_new)); \
++	if (unlikely(___r != ___o)) \
++		*___op = ___r; \
++	likely(___r == ___o); \
++})
++#endif /* arch_try_cmpxchg128_release */
++
++#ifndef arch_try_cmpxchg128_relaxed
++#define arch_try_cmpxchg128_relaxed(_ptr, _oldp, _new) \
++({ \
++	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
++	___r = arch_cmpxchg128_relaxed((_ptr), ___o, (_new)); \
++	if (unlikely(___r != ___o)) \
++		*___op = ___r; \
++	likely(___r == ___o); \
++})
++#endif /* arch_try_cmpxchg128_relaxed */
++
++#else /* arch_try_cmpxchg128_relaxed */
++
++#ifndef arch_try_cmpxchg128_acquire
++#define arch_try_cmpxchg128_acquire(...) \
++	__atomic_op_acquire(arch_try_cmpxchg128, __VA_ARGS__)
++#endif
++
++#ifndef arch_try_cmpxchg128_release
++#define arch_try_cmpxchg128_release(...) \
++	__atomic_op_release(arch_try_cmpxchg128, __VA_ARGS__)
++#endif
++
++#ifndef arch_try_cmpxchg128
++#define arch_try_cmpxchg128(...) \
++	__atomic_op_fence(arch_try_cmpxchg128, __VA_ARGS__)
++#endif
++
++#endif /* arch_try_cmpxchg128_relaxed */
++
+ #ifndef arch_try_cmpxchg_local
+ #define arch_try_cmpxchg_local(_ptr, _oldp, _new) \
+ ({ \
+@@ -2668,4 +2761,4 @@ arch_atomic64_dec_if_positive(atomic64_t *v)
+ #endif
+ 
+ #endif /* _LINUX_ATOMIC_FALLBACK_H */
+-// ad2e2b4d168dbc60a73922616047a9bfa446af36
++// 52dfc6fe4a2e7234bbd2aa3e16a377c1db793a53
+diff --git a/include/linux/atomic/atomic-instrumented.h b/include/linux/atomic/atomic-instrumented.h
+index 03a232a..8583720 100644
+--- a/include/linux/atomic/atomic-instrumented.h
++++ b/include/linux/atomic/atomic-instrumented.h
+@@ -2034,6 +2034,36 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+ 	arch_cmpxchg64_relaxed(__ai_ptr, __VA_ARGS__); \
  })
  
-+#if defined(CONFIG_X86_32) && defined(CONFIG_X86_CMPXCHG64)
-+#define percpu_cmpxchg64_op(size, qual, _var, _oval, _nval)		\
-+({									\
-+	union {								\
-+		u64 var;						\
-+		struct {						\
-+			u32 low, high;					\
-+		};							\
-+	} old__, new__;							\
-+									\
-+	old__.var = _oval;						\
-+	new__.var = _nval;						\
-+									\
-+	asm qual ("cmpxchg8b " __percpu_arg([var])			\
-+		  : [var] "+m" (_var),					\
-+		    "+a" (old__.low),					\
-+		    "+d" (old__.high)					\
-+		  : "b" (new__.low),					\
-+		    "c" (new__.high)					\
-+		  : "memory");						\
-+									\
-+	old__.var;							\
++#define cmpxchg128(ptr, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	kcsan_mb(); \
++	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	arch_cmpxchg128(__ai_ptr, __VA_ARGS__); \
 +})
 +
-+#define raw_cpu_cmpxchg64(pcp, oval, nval)	percpu_cmpxchg64_op(8,         , pcp, oval, nval)
-+#define this_cpu_cmpxchg64(pcp, oval, nval)	percpu_cmpxchg64_op(8, volatile, pcp, oval, nval)
-+#endif
-+
-+#ifdef CONFIG_X86_64
-+#define raw_cpu_cmpxchg64(pcp, oval, nval)	percpu_cmpxchg_op(8,         , pcp, oval, nval);
-+#define this_cpu_cmpxchg64(pcp, oval, nval)	percpu_cmpxchg_op(8, volatile, pcp, oval, nval);
-+
-+#define percpu_cmpxchg128_op(size, qual, _var, _oval, _nval)		\
-+({									\
-+	union {								\
-+		u128 var;						\
-+		struct {						\
-+			u64 low, high;					\
-+		};							\
-+	} old__, new__;							\
-+									\
-+	old__.var = _oval;						\
-+	new__.var = _nval;						\
-+									\
-+	asm qual ("cmpxchg16b " __percpu_arg([var])			\
-+		  : [var] "+m" (_var),					\
-+		    "+a" (old__.low),					\
-+		    "+d" (old__.high)					\
-+		  : "b" (new__.low),					\
-+		    "c" (new__.high)					\
-+		  : "memory");						\
-+									\
-+	old__.var;							\
++#define cmpxchg128_acquire(ptr, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	arch_cmpxchg128_acquire(__ai_ptr, __VA_ARGS__); \
 +})
 +
-+#define raw_cpu_cmpxchg128(pcp, oval, nval)	percpu_cmpxchg128_op(16,         , pcp, oval, nval)
-+#define this_cpu_cmpxchg128(pcp, oval, nval)	percpu_cmpxchg128_op(16, volatile, pcp, oval, nval)
-+#endif
++#define cmpxchg128_release(ptr, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	kcsan_release(); \
++	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	arch_cmpxchg128_release(__ai_ptr, __VA_ARGS__); \
++})
 +
- /*
-  * this_cpu_read() makes gcc load the percpu variable every time it is
-  * accessed while this_cpu_read_stable() allows the value to be cached.
-diff --git a/include/asm-generic/percpu.h b/include/asm-generic/percpu.h
-index 6432a7f..53d933e 100644
---- a/include/asm-generic/percpu.h
-+++ b/include/asm-generic/percpu.h
-@@ -298,6 +298,14 @@ do {									\
- #define raw_cpu_cmpxchg_8(pcp, oval, nval) \
- 	raw_cpu_generic_cmpxchg(pcp, oval, nval)
- #endif
-+#ifndef raw_cpu_cmpxchg64
-+#define raw_cpu_cmpxchg64(pcp, oval, nval) \
-+	raw_cpu_generic_cmpxchg(pcp, oval, nval)
-+#endif
-+#ifndef raw_cpu_cmpxchg128
-+#define raw_cpu_cmpxchg128(pcp, oval, nval) \
-+	raw_cpu_generic_cmpxchg(pcp, oval, nval)
-+#endif
++#define cmpxchg128_relaxed(ptr, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	arch_cmpxchg128_relaxed(__ai_ptr, __VA_ARGS__); \
++})
++
+ #define try_cmpxchg(ptr, oldp, ...) \
+ ({ \
+ 	typeof(ptr) __ai_ptr = (ptr); \
+@@ -2110,6 +2140,44 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+ 	arch_try_cmpxchg64_relaxed(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+ })
  
- #ifndef raw_cpu_cmpxchg_double_1
- #define raw_cpu_cmpxchg_double_1(pcp1, pcp2, oval1, oval2, nval1, nval2) \
-@@ -423,6 +431,14 @@ do {									\
- #define this_cpu_cmpxchg_8(pcp, oval, nval) \
- 	this_cpu_generic_cmpxchg(pcp, oval, nval)
- #endif
-+#ifndef this_cpu_cmpxchg64
-+#define this_cpu_cmpxchg64(pcp, oval, nval) \
-+	this_cpu_generic_cmpxchg(pcp, oval, nval)
-+#endif
-+#ifndef this_cpu_cmpxchg128
-+#define this_cpu_cmpxchg128(pcp, oval, nval) \
-+	this_cpu_generic_cmpxchg(pcp, oval, nval)
-+#endif
++#define try_cmpxchg128(ptr, oldp, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	typeof(oldp) __ai_oldp = (oldp); \
++	kcsan_mb(); \
++	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
++	arch_try_cmpxchg128(__ai_ptr, __ai_oldp, __VA_ARGS__); \
++})
++
++#define try_cmpxchg128_acquire(ptr, oldp, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	typeof(oldp) __ai_oldp = (oldp); \
++	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
++	arch_try_cmpxchg128_acquire(__ai_ptr, __ai_oldp, __VA_ARGS__); \
++})
++
++#define try_cmpxchg128_release(ptr, oldp, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	typeof(oldp) __ai_oldp = (oldp); \
++	kcsan_release(); \
++	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
++	arch_try_cmpxchg128_release(__ai_ptr, __ai_oldp, __VA_ARGS__); \
++})
++
++#define try_cmpxchg128_relaxed(ptr, oldp, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	typeof(oldp) __ai_oldp = (oldp); \
++	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
++	arch_try_cmpxchg128_relaxed(__ai_ptr, __ai_oldp, __VA_ARGS__); \
++})
++
+ #define cmpxchg_local(ptr, ...) \
+ ({ \
+ 	typeof(ptr) __ai_ptr = (ptr); \
+@@ -2124,6 +2192,13 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+ 	arch_cmpxchg64_local(__ai_ptr, __VA_ARGS__); \
+ })
  
- #ifndef this_cpu_cmpxchg_double_1
- #define this_cpu_cmpxchg_double_1(pcp1, pcp2, oval1, oval2, nval1, nval2) \
++#define cmpxchg128_local(ptr, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	arch_cmpxchg128_local(__ai_ptr, __VA_ARGS__); \
++})
++
+ #define sync_cmpxchg(ptr, ...) \
+ ({ \
+ 	typeof(ptr) __ai_ptr = (ptr); \
+@@ -2150,6 +2225,15 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+ 	arch_try_cmpxchg64_local(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+ })
+ 
++#define try_cmpxchg128_local(ptr, oldp, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	typeof(oldp) __ai_oldp = (oldp); \
++	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
++	arch_try_cmpxchg128_local(__ai_ptr, __ai_oldp, __VA_ARGS__); \
++})
++
+ #define cmpxchg_double(ptr, ...) \
+ ({ \
+ 	typeof(ptr) __ai_ptr = (ptr); \
+@@ -2167,4 +2251,4 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+ })
+ 
+ #endif /* _LINUX_ATOMIC_INSTRUMENTED_H */
+-// 6b513a42e1a1b5962532a019b7fc91eaa044ad5e
++// 82d1be694fab30414527d0877c29fa75ed5a0b74
+diff --git a/scripts/atomic/gen-atomic-fallback.sh b/scripts/atomic/gen-atomic-fallback.sh
+index 6e853f0..a70acd5 100755
+--- a/scripts/atomic/gen-atomic-fallback.sh
++++ b/scripts/atomic/gen-atomic-fallback.sh
+@@ -217,11 +217,11 @@ cat << EOF
+ 
+ EOF
+ 
+-for xchg in "arch_xchg" "arch_cmpxchg" "arch_cmpxchg64"; do
++for xchg in "arch_xchg" "arch_cmpxchg" "arch_cmpxchg64" "arch_cmpxchg128"; do
+ 	gen_xchg_fallbacks "${xchg}"
+ done
+ 
+-for cmpxchg in "cmpxchg" "cmpxchg64"; do
++for cmpxchg in "cmpxchg" "cmpxchg64" "cmpxchg128"; do
+ 	gen_try_cmpxchg_fallbacks "${cmpxchg}"
+ done
+ 
+diff --git a/scripts/atomic/gen-atomic-instrumented.sh b/scripts/atomic/gen-atomic-instrumented.sh
+index d9ffd74..4f80347 100755
+--- a/scripts/atomic/gen-atomic-instrumented.sh
++++ b/scripts/atomic/gen-atomic-instrumented.sh
+@@ -166,14 +166,14 @@ grep '^[a-z]' "$1" | while read name meta args; do
+ done
+ 
+ 
+-for xchg in "xchg" "cmpxchg" "cmpxchg64" "try_cmpxchg" "try_cmpxchg64"; do
++for xchg in "xchg" "cmpxchg" "cmpxchg64" "cmpxchg128" "try_cmpxchg" "try_cmpxchg64" "try_cmpxchg128"; do
+ 	for order in "" "_acquire" "_release" "_relaxed"; do
+ 		gen_xchg "${xchg}" "${order}" ""
+ 		printf "\n"
+ 	done
+ done
+ 
+-for xchg in "cmpxchg_local" "cmpxchg64_local" "sync_cmpxchg" "try_cmpxchg_local" "try_cmpxchg64_local" ; do
++for xchg in "cmpxchg_local" "cmpxchg64_local" "cmpxchg128_local" "sync_cmpxchg" "try_cmpxchg_local" "try_cmpxchg64_local" "try_cmpxchg128_local"; do
+ 	gen_xchg "${xchg}" "" ""
+ 	printf "\n"
+ done
