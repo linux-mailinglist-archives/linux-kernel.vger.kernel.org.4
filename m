@@ -2,121 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A830E70A6E6
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 11:53:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 305F570A6E8
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 11:54:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231340AbjETJxn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 05:53:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49168 "EHLO
+        id S231458AbjETJyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 05:54:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbjETJxl (ORCPT
+        with ESMTP id S230200AbjETJx5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 05:53:41 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A253FE46;
-        Sat, 20 May 2023 02:53:39 -0700 (PDT)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1684576417;
-        bh=4DgNOA9MxUdAC/1KBzMGa1BMYIwEibXuZWjLGIR+M4Y=;
-        h=From:Date:Subject:To:Cc:From;
-        b=YdfF2wHQeAHvxYdN3D90MRXKyn0mgq3yjtd06cnIPS30c+UHNOpY0Lj6zZCG2aRXE
-         R3QCC5C3DuZP8v/hq++VOyLpswTKYYc9s3tHXxLOevzairZCj9bJW3LQdXD9XaENgI
-         qhXdmBA7ft2J/LwOQV2IfASy1Mv/MaELdY/A94OY=
-Date:   Sat, 20 May 2023 11:53:35 +0200
-Subject: [PATCH] tools/nolibc: riscv: add stackprotector support
+        Sat, 20 May 2023 05:53:57 -0400
+Received: from fgw22-7.mail.saunalahti.fi (fgw22-7.mail.saunalahti.fi [62.142.5.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4761E56
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 02:53:54 -0700 (PDT)
+Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
+        by fgw22.mail.saunalahti.fi (Halon) with ESMTP
+        id 397b899a-f6f4-11ed-a9de-005056bdf889;
+        Sat, 20 May 2023 12:53:51 +0300 (EEST)
+From:   andy.shevchenko@gmail.com
+Date:   Sat, 20 May 2023 12:53:51 +0300
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+Subject: Re: [PATCH 0/3] Add Intel 8254 Counter support
+Message-ID: <ZGiYr6XLguZ8R3_8@surfacebook>
+References: <cover.1681665189.git.william.gray@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230520-nolibc-stackprotector-riscv-v1-1-d8912012a034@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIAJ6YaGQC/x2NQQrCMBAAv1L27EIaiaJfEQ/JdmsXQ1J2YxFK/
- 27wOHOY2cFYhQ3uww7Km5jU0mE8DUBLLC9GmTqDd/7sgndYapZEaC3Se9XamFpVVDHacLw4Srd
- wnWkK0AspGmPSWGjpjfLJuctVeZbvf/l4HscP8js5B4IAAAA=
-To:     Willy Tarreau <w@1wt.eu>, Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Zhangjin Wu <falcon@tinylab.org>, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1684576416; l=2523;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=4DgNOA9MxUdAC/1KBzMGa1BMYIwEibXuZWjLGIR+M4Y=;
- b=AQlACYthYxoszOZiNGyDJMnuc12eS8SCPgKc8+mKUU7vddLmVS/v0wGmHcxVJhTuTp1cUe+dP
- BrnOmwubpxDBV9w9hmNLbAtIpQb+KGH8KbEZLwivhPgdcHNYJRXZvp4
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1681665189.git.william.gray@linaro.org>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
+Sun, Apr 16, 2023 at 01:36:52PM -0400, William Breathitt Gray kirjoitti:
+> The Intel 8254 PIT first appeared in the early 1980s and was used
+> initially in IBM PC compatibles. The popularity of the original Intel
+> 825x family of chips led to many subsequent variants and clones of the
+> interface in various chips and integrated circuits. Although still
+> popular, interfaces compatible with the Intel 8254 PIT are nowdays
+> typically found embedded in larger VLSI processing chips and FPGA
+> components rather than as discrete ICs.
+> 
+> This patch series introduces a library to provide support for interfaces
+> compatible with the venerable Intel 8254 Programmable Interval Timer
+> (PIT). Modules wanting access to the i8254 library should select the
+> newly introduced CONFIG_I8254 Kconfig option, and import the I8254
+> symbol namespace.
+> 
+> Support for the i8254 is added in respective follow-up patches for the
+> 104-dio-48e driver and stx104 driver whose devices feature i8254
+> compatible interfaces. Several additional dependencies are necessary for
+> the 104-dio-48e [0][1][2] and stx104 [3][4].
+> 
+> Due to the dependency requirements, I can take the i8254 introduction
+> patch through the Counter tree and provide an immutable branch that can
+> be merged to the GPIO and IIO trees; the 104-dio-48e patch and stx104
+> patch could then be picked up separately by the respective subsystem
+> maintainers.
 
-This was split out from the general stackprotector series[0] to be
-rebased on the nolibc rv32 work from Zhangjin.
+Good job!
 
-This was only tested for rv64 as the nolibc rv32 port is not yet
-functional.
+What I'm wondering is that. Can x86 core and others which are using that chip
+utilize (some of) the functions from the library?
 
-Based on the nolibc/20230520-nolibc-rv32+stkp branch.
+> [0] https://lore.kernel.org/all/05a878d340251b781387db4b6490f288e41a651c.1680543810.git.william.gray@linaro.org/
+> [1] https://lore.kernel.org/all/20230208105542.9459-1-william.gray@linaro.org/
+> [2] https://lore.kernel.org/all/cover.1679323449.git.william.gray@linaro.org/
+> [3] https://lore.kernel.org/all/20230318185503.341914-1-william.gray@linaro.org/
+> [4] https://lore.kernel.org/all/cover.1680790580.git.william.gray@linaro.org/
 
-[0] https://lore.kernel.org/lkml/20230408-nolibc-stackprotector-archs-v1-0-271f5c859c71@weissschuh.net/
----
- tools/include/nolibc/arch-riscv.h       | 7 ++++++-
- tools/testing/selftests/nolibc/Makefile | 1 +
- 2 files changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/tools/include/nolibc/arch-riscv.h b/tools/include/nolibc/arch-riscv.h
-index 992a1739dd9c..d0439249c9c9 100644
---- a/tools/include/nolibc/arch-riscv.h
-+++ b/tools/include/nolibc/arch-riscv.h
-@@ -177,14 +177,19 @@ struct sys_stat_struct {
- char **environ __attribute__((weak));
- const unsigned long *_auxv __attribute__((weak));
- 
-+#define __ARCH_SUPPORTS_STACK_PROTECTOR
-+
- /* startup code */
--void __attribute__((weak,noreturn,optimize("omit-frame-pointer"))) _start(void)
-+void __attribute__((weak,noreturn,optimize("omit-frame-pointer"),no_stack_protector)) _start(void)
- {
- 	__asm__ volatile (
- 		".option push\n"
- 		".option norelax\n"
- 		"lla   gp, __global_pointer$\n"
- 		".option pop\n"
-+#ifdef NOLIBC_STACKPROTECTOR
-+		"call __stack_chk_init\n"    /* initialize stack protector                          */
-+#endif
- 		REG_L" a0, 0(sp)\n"          /* argc (a0) was in the stack                          */
- 		"add   a1, sp, "SZREG"\n"    /* argv (a1) = sp                                      */
- 		"slli  a2, a0, "PTRLOG"\n"   /* envp (a2) = SZREG*argc ...                          */
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 6d660d922240..bd41102ea299 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -85,6 +85,7 @@ CFLAGS_STKP_x86 = $(CFLAGS_STACKPROTECTOR)
- CFLAGS_STKP_arm64 = $(CFLAGS_STACKPROTECTOR)
- CFLAGS_STKP_arm = $(CFLAGS_STACKPROTECTOR)
- CFLAGS_STKP_mips = $(CFLAGS_STACKPROTECTOR)
-+CFLAGS_STKP_riscv = $(CFLAGS_STACKPROTECTOR)
- CFLAGS_STKP_loongarch = $(CFLAGS_STACKPROTECTOR)
- CFLAGS_s390 = -m64
- CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
-
----
-base-commit: 6a1f732e0d753a691e9e787615b9a0dd92e1f3f4
-change-id: 20230520-nolibc-stackprotector-riscv-160cb957fcd5
-
-Best regards,
 -- 
-Thomas Weißschuh <linux@weissschuh.net>
+With Best Regards,
+Andy Shevchenko
+
 
