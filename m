@@ -2,45 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4690170AA56
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 20:27:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49BF270AA40
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 20:27:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232021AbjETS1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 14:27:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49080 "EHLO
+        id S232270AbjETS1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 14:27:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232170AbjETS1O (ORCPT
+        with ESMTP id S232138AbjETS1O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 20 May 2023 14:27:14 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 684C510F1;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD5A10F5;
         Sat, 20 May 2023 11:26:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 37C11616C3;
-        Sat, 20 May 2023 18:23:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2E1EC433D2;
-        Sat, 20 May 2023 18:23:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D8974616DA;
+        Sat, 20 May 2023 18:23:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F626C433EF;
+        Sat, 20 May 2023 18:23:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684607014;
-        bh=aks827XbioErvve/dkNRJXRajnnTOO0WCKzcP5cIXm8=;
+        s=k20201202; t=1684607021;
+        bh=+c/hg+pn6YqJJKirv+KPqU8DGCISXulUy2B44R/iVk8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tapxMojmHUVo5gTl8xp+w/RXAq/zwfxq/ptGPb84oozJU+iFq8DcJ+c2XpOJCrVwb
-         FS04GaL9PXcEiKxy782Fijc82i4lxcy3VUEzdKTYvCyPEnGrWVf8SF6T9kCrJMtzJu
-         XzO6mw1lsQos74qHftHeRq3lZb0k58pSdnzWavz8nxlx9y3Ks0qa8b2IL1aNcZuGLJ
-         hs+a50qy859GiKO5zgfJPsWxFW3A/SJcS2IUK+jbxfN71SA0K5wylGtsqJQ28jTCrR
-         F+sFtX5SvOT41i/cXu47ogY6AhU7DeB/m/zF2gBGZITNu3uaqcM2w+Y/RfUd9s45aY
-         ESaVPBV7Z2fHQ==
+        b=U3HB/hSy/VT6zEmgkX2/jaE90i/RZBjzLenfvxmf7/Jf6SPIfKQvzJQMbNRytS/X0
+         XwIW5XosqRSH0wx3S2FLJlK3CwWRJWEY5QAVdm8SgwbQIWsCFHMYzkVRjUApaljcyH
+         EVIvDlXWGqC9ZE9GqMd40OsIzePHZ2fVpUYJNz1pCHyOk9gIAGvB7NHF26ajzWrKIj
+         +cFHgRndxqse2l7MpQDbnJpzayOr0dCttHyH3eknm/o4zykTSYHigfv6n2nnrP/W72
+         VBylc0R1sMEA/7K8Iit6La/pvpINHSglbB7LnRaV5nxQw7LWEu5KBFyxfMvBlss6C/
+         RD0DbO4qy8EXg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Bob Peterson <rpeterso@redhat.com>,
-        Yang Lan <lanyang0908@gmail.com>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, cluster-devel@redhat.com
-Subject: [PATCH AUTOSEL 5.10 4/8] gfs2: Don't deref jdesc in evict
-Date:   Sat, 20 May 2023 14:23:08 -0400
-Message-Id: <20230520182312.851751-4-sashal@kernel.org>
+Cc:     Helge Deller <deller@gmx.de>, Sasha Levin <sashal@kernel.org>,
+        daniel@ffwll.ch, tzimmermann@suse.de, javierm@redhat.com,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: [PATCH AUTOSEL 5.10 5/8] fbdev: modedb: Add 1920x1080 at 60 Hz video mode
+Date:   Sat, 20 May 2023 14:23:09 -0400
+Message-Id: <20230520182312.851751-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230520182312.851751-1-sashal@kernel.org>
 References: <20230520182312.851751-1-sashal@kernel.org>
@@ -58,64 +57,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bob Peterson <rpeterso@redhat.com>
+From: Helge Deller <deller@gmx.de>
 
-[ Upstream commit 504a10d9e46bc37b23d0a1ae2f28973c8516e636 ]
+[ Upstream commit c8902258b2b8ecaa1b8d88c312853c5b14c2553d ]
 
-On corrupt gfs2 file systems the evict code can try to reference the
-journal descriptor structure, jdesc, after it has been freed and set to
-NULL. The sequence of events is:
+Add typical resolution for Full-HD monitors.
 
-init_journal()
-...
-fail_jindex:
-   gfs2_jindex_free(sdp); <------frees journals, sets jdesc = NULL
-      if (gfs2_holder_initialized(&ji_gh))
-         gfs2_glock_dq_uninit(&ji_gh);
-fail:
-   iput(sdp->sd_jindex); <--references jdesc in evict_linked_inode
-      evict()
-         gfs2_evict_inode()
-            evict_linked_inode()
-               ret = gfs2_trans_begin(sdp, 0, sdp->sd_jdesc->jd_blocks);
-<------references the now freed/zeroed sd_jdesc pointer.
-
-The call to gfs2_trans_begin is done because the truncate_inode_pages
-call can cause gfs2 events that require a transaction, such as removing
-journaled data (jdata) blocks from the journal.
-
-This patch fixes the problem by adding a check for sdp->sd_jdesc to
-function gfs2_evict_inode. In theory, this should only happen to corrupt
-gfs2 file systems, when gfs2 detects the problem, reports it, then tries
-to evict all the system inodes it has read in up to that point.
-
-Reported-by: Yang Lan <lanyang0908@gmail.com>
-Signed-off-by: Bob Peterson <rpeterso@redhat.com>
-Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/gfs2/super.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/video/fbdev/core/modedb.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/fs/gfs2/super.c b/fs/gfs2/super.c
-index 5cb7e771b57ab..e01b6a2d12d30 100644
---- a/fs/gfs2/super.c
-+++ b/fs/gfs2/super.c
-@@ -1416,6 +1416,14 @@ static void gfs2_evict_inode(struct inode *inode)
- 	if (inode->i_nlink || sb_rdonly(sb))
- 		goto out;
+diff --git a/drivers/video/fbdev/core/modedb.c b/drivers/video/fbdev/core/modedb.c
+index 6473e0dfe1464..e78ec7f728463 100644
+--- a/drivers/video/fbdev/core/modedb.c
++++ b/drivers/video/fbdev/core/modedb.c
+@@ -257,6 +257,11 @@ static const struct fb_videomode modedb[] = {
+ 	{ NULL, 72, 480, 300, 33386, 40, 24, 11, 19, 80, 3, 0,
+ 		FB_VMODE_DOUBLE },
  
-+	/*
-+	 * In case of an incomplete mount, gfs2_evict_inode() may be called for
-+	 * system files without having an active journal to write to.  In that
-+	 * case, skip the filesystem evict.
-+	 */
-+	if (!sdp->sd_jdesc)
-+		goto out;
++	/* 1920x1080 @ 60 Hz, 67.3 kHz hsync */
++	{ NULL, 60, 1920, 1080, 6734, 148, 88, 36, 4, 44, 5, 0,
++		FB_SYNC_HOR_HIGH_ACT | FB_SYNC_VERT_HIGH_ACT,
++		FB_VMODE_NONINTERLACED },
 +
- 	gfs2_holder_mark_uninitialized(&gh);
- 	ret = evict_should_delete(inode, &gh);
- 	if (ret == SHOULD_DEFER_EVICTION)
+ 	/* 1920x1200 @ 60 Hz, 74.5 Khz hsync */
+ 	{ NULL, 60, 1920, 1200, 5177, 128, 336, 1, 38, 208, 3,
+ 		FB_SYNC_HOR_HIGH_ACT | FB_SYNC_VERT_HIGH_ACT,
 -- 
 2.39.2
 
