@@ -2,74 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E25B370A673
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 10:42:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D657E70A676
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 10:45:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231245AbjETIlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 04:41:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33134 "EHLO
+        id S231266AbjETIn4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 04:43:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbjETIlw (ORCPT
+        with ESMTP id S231240AbjETIny (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 04:41:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 584A0BD
-        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 01:41:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684572067;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZfsN9u3tZvTje8ugz3SqEzdJkX9NnPmdfbSTVEwM6F0=;
-        b=bdPXIxDPEL5m3cmpPtL2em96IjpApfrCdnXd9CX94wVE5GmCNJDqcP0pZ6c8SxTbEq3SGx
-        I5ZEg5ytSpt9wy++aXMSi6PMnAY6QItsbgI2LzzpD89RNigW5jetJBJnc1Hrxpm+fIe9bx
-        r6OVmQdrKCG3BuiieOr4V8ys3ktF5AM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-551-CYBqTh54MsOJt7lOdtj2Og-1; Sat, 20 May 2023 04:41:04 -0400
-X-MC-Unique: CYBqTh54MsOJt7lOdtj2Og-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Sat, 20 May 2023 04:43:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B36E4AB
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 01:43:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 180A7101A52C;
-        Sat, 20 May 2023 08:41:03 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.221])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 90E2DC53524;
-        Sat, 20 May 2023 08:41:00 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <ZGghr0/lFRKmaoAX@moria.home.lan>
-References: <ZGghr0/lFRKmaoAX@moria.home.lan> <20230519074047.1739879-1-dhowells@redhat.com> <20230519074047.1739879-30-dhowells@redhat.com>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     dhowells@redhat.com, Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: Re: [PATCH v20 29/32] block: Replace BIO_NO_PAGE_REF with BIO_PAGE_REFFED with inverted logic
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 43A3A610D5
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 08:43:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A31B9C4339C
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 08:43:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684572232;
+        bh=q8wzoly7YJd3wL9q5vpF3c1DGI0d06QhOhge2JVJV5U=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=ijwwa9nw0pjTSuZ7q/bshHkMKD5QlO5fINK6ccVvDAjoWCNALzzCD/XYxT8NR/f/l
+         D52pipde/es6WfhZqeA3/i0U6WK94+1Fzqdi+Jo1QQBxSnMW6oMqmc89g6UU9XQWE3
+         LRwf1zqujrnLyu9o+ni1TBNhclvAtyU/B4DBs9xrdhjYA7zx2xfu36We+a+chVKzGT
+         piWQoAmEM8RqOavzbz3GclquTdAU7fvI7BZ/jNUH5XgtJ5keJnv/A2Gxt+sHkJyjza
+         fqrknfT+Cmr4euWcx60uVv1Vjv0tPrUMFISo5ZmuefW/I2lrOhKWgm/qU9ZPqb9jkC
+         sSgZ4LkR79hfw==
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-510d8b0169fso5489206a12.1
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 01:43:52 -0700 (PDT)
+X-Gm-Message-State: AC+VfDyBNi2rm6cQEsEeYEkxnBnvEqxqcBwDU9q8tkuKLEdrZ1CtD+YM
+        m0kttXlUslaAOEpZfAs5dFoYmra0X3qbTKz6vCQ=
+X-Google-Smtp-Source: ACHHUZ7TLDwGUzb3p7e39xGVbwmazSAUUSI8aJJ1deVvVbH905mq/y8n8yEbYhWccb49zSY4Cd0hDP2vFe1tWYsTO2Q=
+X-Received: by 2002:a17:907:94ca:b0:94a:44ef:853d with SMTP id
+ dn10-20020a17090794ca00b0094a44ef853dmr4504939ejc.68.1684572230928; Sat, 20
+ May 2023 01:43:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2292307.1684572059.1@warthog.procyon.org.uk>
-Date:   Sat, 20 May 2023 09:40:59 +0100
-Message-ID: <2292308.1684572059@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20230520063818.27208-1-lvjianmin@loongson.cn> <20230520063818.27208-5-lvjianmin@loongson.cn>
+In-Reply-To: <20230520063818.27208-5-lvjianmin@loongson.cn>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Sat, 20 May 2023 16:43:39 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6BBCXpF2uOehwz1gsMdb6vcjHsCYsp+soL+Tzy-bfxQg@mail.gmail.com>
+Message-ID: <CAAhV-H6BBCXpF2uOehwz1gsMdb6vcjHsCYsp+soL+Tzy-bfxQg@mail.gmail.com>
+Subject: Re: [PATCH V1 4/4] irqchip/loongson-liointc: Add IRQCHIP_SKIP_SET_WAKE
+ flag
+To:     Jianmin Lv <lvjianmin@loongson.cn>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
+        loongarch@lists.linux.dev,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, Yinbo Zhu <zhuyinbo@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,29 +69,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kent Overstreet <kent.overstreet@linux.dev> wrote:
+Hi, Jianmin,
 
-> > Replace BIO_NO_PAGE_REF with a BIO_PAGE_REFFED flag that has the inverted
-> > meaning is only set when a page reference has been acquired that needs to
-> > be released by bio_release_pages().
-> 
-> What was the motivation for this patch?
+On Sat, May 20, 2023 at 2:38=E2=80=AFPM Jianmin Lv <lvjianmin@loongson.cn> =
+wrote:
+>
+> From: Yinbo Zhu <zhuyinbo@loongson.cn>
+>
+> Liointc doesn't require specific logic to work with wakeup IRQs,
+> and no irq_set_wake callback is needed. To allow registered IRQs
+> from liointc to be used as a wakeup-source, and ensure irq_set_irq_wake()
+> works well, the flag IRQCHIP_SKIP_SET_WAKE should be added.
+Maybe using LIOINTC instead of Liointc/liointc is better in commit
+message. Except this small issue, for the whole series,
+Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
 
-We need to move to using FOLL_PIN for buffers derived from direct I/O to avoid
-the fork vs async-DIO race.  Further, we shouldn't be taking a ref or a pin on
-pages derived from internal kernel iterators such as KVEC or BVEC as the page
-refcount might not be a valid way to control the lifetime of the data/buffers
-in those pages (slab, for instance).  Rather, for internal kernel I/O, we need
-to rely on the caller to hold onto the memory until we tell them we've
-finished.
-
-So we flip the polarity of the page-is-ref'd flag and then add a
-page-is-pinned flag.  The intention is to ultimately drop the page-is-ref'd
-flag - but we still need to keep the page-is-pinned flag.  This makes it
-easier to take a stepwise approach - and having both flags working the same
-way makes the logic easier to follow.
-
-See iov_iter_extract_pages() and iov_iter_extract_will_pin().
-
-David
-
+>
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+> ---
+>  drivers/irqchip/irq-loongson-liointc.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq=
+-loongson-liointc.c
+> index 9a9c2bf048a3..dbd1ccce0fb2 100644
+> --- a/drivers/irqchip/irq-loongson-liointc.c
+> +++ b/drivers/irqchip/irq-loongson-liointc.c
+> @@ -291,6 +291,7 @@ static int liointc_init(phys_addr_t addr, unsigned lo=
+ng size, int revision,
+>         ct->chip.irq_mask =3D irq_gc_mask_disable_reg;
+>         ct->chip.irq_mask_ack =3D irq_gc_mask_disable_reg;
+>         ct->chip.irq_set_type =3D liointc_set_type;
+> +       ct->chip.flags =3D IRQCHIP_SKIP_SET_WAKE;
+>
+>         gc->mask_cache =3D 0;
+>         priv->gc =3D gc;
+> --
+> 2.31.1
+>
+>
