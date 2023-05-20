@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 671DA70A4BE
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 04:56:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1787F70A4C0
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 04:56:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231268AbjETC4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 22:56:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36186 "EHLO
+        id S231351AbjETC4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 22:56:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231313AbjETC4T (ORCPT
+        with ESMTP id S231299AbjETC4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 22:56:19 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B777610C6
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 19:56:05 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-51b4ef5378bso3665540a12.1
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 19:56:05 -0700 (PDT)
+        Fri, 19 May 2023 22:56:23 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B022E72
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 19:56:12 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 41be03b00d2f7-517ab9a4a13so3529214a12.1
+        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 19:56:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684551365; x=1687143365;
+        d=linaro.org; s=google; t=1684551371; x=1687143371;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NdjFM4dLH/3Dvg/h6tIt5S0f0cR4Hqz/fqP9xWQOSCY=;
-        b=LLoQFboo3HEEqlewtWhwNdaOnxlOcR1QNDw1LOON+5GMzJyWQnzZ5U5PGo0x1NqCZZ
-         dcdeYmnvswHKHtZTg6gfDYvsqHsXjpdmsduh9uvhdqWSnYn79hyPxcJO0RfJzPTJKWfb
-         rU/QCzBtesM91Iq3xlIvYXmecjT41jCXqVqSAypQTNxheaBvwdI7lPv7XPZ7d+r6yfee
-         uoSUCKH7ZF1gWhwKw04zLbd9M9VTiCOAOrvDQ4Txu3OOYomnY6uYaUc9WH7hz5fLTZhx
-         ppBKxxv7H1YL/MrBAjT2sbYzgN3EkUe86IAmr5JAb8m/Ibu0yKdei3Xftn4kMgLAyLMZ
-         n8RA==
+        bh=recTry7bFKm4wzLhlG9hQCZazqye+5oXd/1+UMeTYjY=;
+        b=sD8iZAJjSSBUahh7dJQAISY6FjE9iqiYw5EYMplq4IMpAbKP1XRpx6/GpPEwJDdLFT
+         yv9R+L4aKYuUVMYffC6/Irn+s06hfoSfxFJN6v5YRWjF+xEWGXo5Scfqdoed8jbKVcTB
+         PAK4Yoh/X1XJ1Ihsy6gYYlH+bIsDR/SCv0OEyOMr5kSsl+M7OzRhYcDy002+NUhR6y+s
+         OWQR1V1BZgOtUpK8aDycvFFJkUfU09ulKCQqZ1CnMxtG2ZJ7r2EhWXN5uiG0hDjpB/XT
+         4tmqG8MgF/kV/PZI8lEX/ds7gSzQJgovc5UH+QlPcpRS5NUR+0p7gNqwsffCNSks3CKW
+         mPtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684551365; x=1687143365;
+        d=1e100.net; s=20221208; t=1684551371; x=1687143371;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NdjFM4dLH/3Dvg/h6tIt5S0f0cR4Hqz/fqP9xWQOSCY=;
-        b=awOj+wFK/3XIy/TIjpne1hHJnffRwtS8biA53heWcx5PkdkRAoecT62dJObIIZTPzL
-         Wy2pbdsa4Cin/xxZqDFO4g1jTohbD57YfX+qXuNk5A00MuxyRyQmAG3u/XCZNhfpEvjb
-         fDDWwjNTTqYeEvcr3R5i+/ymDu0n+06fYDlF7OiLP+iWaaED9AEw7bthawDHKM5CKdkG
-         5JkMpDDYn0njE56MyDWQmPCCD6VjwO4rm8nhT7baVht151D9CQXA0Rnb3s5II8KcgDZo
-         nsPPpi1U1g6asntjOkxAbFEY7s4tryq6f31YpUqa6XYnocGRO2m4PLX5bQQwGCXgoaxf
-         8+IQ==
-X-Gm-Message-State: AC+VfDyc4VKWet4q9kvm0rCpLkDUXqwZ1im33/9V846APe8cYDCjUzm6
-        BR85K0rGNAO+mobte9XIrVQaqw==
-X-Google-Smtp-Source: ACHHUZ4ZcwvCIjenJ+1wG5YTMVBIlnUcq1xZpfG2+i3fFZy55N6Mb0f1cM/i626B7qLb8kKPF2UxrA==
-X-Received: by 2002:a17:902:b718:b0:1ae:4d1c:129f with SMTP id d24-20020a170902b71800b001ae4d1c129fmr3877077pls.54.1684551364848;
-        Fri, 19 May 2023 19:56:04 -0700 (PDT)
+        bh=recTry7bFKm4wzLhlG9hQCZazqye+5oXd/1+UMeTYjY=;
+        b=jGiLs7ZxMBMyUSVNRM1wlESp+2HLqrcG5+U1sSlC+Gmw85CLCKOmmAVFFRta7AMkPS
+         4eh6HM4sj1uq2nGmKJqLUX/8NsDewUIeSkTd82C59gc9SojbUqBZoejO4qPS9O7MiWG2
+         8iZca3eKH7rg24svXtpLrE7ZC7djnW+Iik0tO9/gOHoPjtN+N4YcriR/Yy3agpSA36IJ
+         RXvnsWQimhCLGBcSc0d9MT//DDomGAJleaRDguT/OBbAGoaI5KUcK3OLX7XqVQaJhSZI
+         Ed2krRIFPdFmsLMXHv5k1+vsu6gec6gQrubzRIFJ4qOTry1FOVUdN7G3UJQhUOXY7MoA
+         U5sA==
+X-Gm-Message-State: AC+VfDzF++xq/BOcn6Ms7TBjVOpGFbeYSI297M7Sldtk5M1MDkI58djs
+        U8ZpyPu9R74T3utjQlR5PJRKnQ==
+X-Google-Smtp-Source: ACHHUZ7qxcjc3CZcoBE1hsRJjLPpLwYgASAN3M4aNC/9blApuhqFcYiFRj7ZoRAsQUe6kxz1kOZ+PA==
+X-Received: by 2002:a17:902:c412:b0:1ae:4:da97 with SMTP id k18-20020a170902c41200b001ae0004da97mr5440280plk.4.1684551371580;
+        Fri, 19 May 2023 19:56:11 -0700 (PDT)
 Received: from leoy-yangtze.lan ([156.59.236.113])
-        by smtp.gmail.com with ESMTPSA id b6-20020a170902d50600b001a95aef9728sm346100plg.19.2023.05.19.19.55.58
+        by smtp.gmail.com with ESMTPSA id b6-20020a170902d50600b001a95aef9728sm346100plg.19.2023.05.19.19.56.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 May 2023 19:56:04 -0700 (PDT)
+        Fri, 19 May 2023 19:56:11 -0700 (PDT)
 From:   Leo Yan <leo.yan@linaro.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         John Garry <john.g.garry@oracle.com>,
@@ -76,9 +76,9 @@ To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         linux-perf-users@vger.kernel.org, linux-csky@vger.kernel.org,
         linux-riscv@lists.infradead.org
 Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v1 2/5] perf parse-regs: Introduce functions arch__reg_{ip|sp}()
-Date:   Sat, 20 May 2023 10:55:34 +0800
-Message-Id: <20230520025537.1811986-3-leo.yan@linaro.org>
+Subject: [PATCH v1 3/5] perf parse-regs: Remove unused macros PERF_REG_{IP|SP}
+Date:   Sat, 20 May 2023 10:55:35 +0800
+Message-Id: <20230520025537.1811986-4-leo.yan@linaro.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230520025537.1811986-1-leo.yan@linaro.org>
 References: <20230520025537.1811986-1-leo.yan@linaro.org>
@@ -94,255 +94,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ideally, we want util/perf_regs.c to be general enough and doesn't bind
-with specific architecture.
-
-But since util/perf_regs.c uses the macros PERF_REG_IP and PERF_REG_SP
-which are defined by architecture, thus util/perf_regs.c is dependent on
-architecture header (see util/perf_regs.h includes "<perf_regs.h>", here
-perf_regs.h is architecture specific header).
-
-As a step to generalize util/perf_regs.c, this commit introduces weak
-functions arch__reg_ip() and arch__reg_sp() and every architecture can
-define their own functions; thus, util/perf_regs.c doesn't need to use
-PERF_REG_IP and PERF_REG_SP anymore.
-
-This is a preparation to get rid of architecture specific header from
-util/perf_regs.h.
+The macros PERF_REG_{IP|SP} have been replaced by arch__reg_{ip|sp}()
+respectively, remove them!
 
 Signed-off-by: Leo Yan <leo.yan@linaro.org>
 ---
- tools/perf/arch/arm/util/perf_regs.c     | 10 ++++++++++
- tools/perf/arch/arm64/util/perf_regs.c   | 10 ++++++++++
- tools/perf/arch/csky/util/perf_regs.c    | 10 ++++++++++
- tools/perf/arch/mips/util/perf_regs.c    | 10 ++++++++++
- tools/perf/arch/powerpc/util/perf_regs.c | 10 ++++++++++
- tools/perf/arch/riscv/util/perf_regs.c   | 10 ++++++++++
- tools/perf/arch/s390/util/perf_regs.c    | 10 ++++++++++
- tools/perf/arch/x86/util/perf_regs.c     | 10 ++++++++++
- tools/perf/util/perf_regs.c              | 10 ++++++++++
- tools/perf/util/perf_regs.h              |  4 +++-
- tools/perf/util/unwind-libdw.c           |  2 +-
- tools/perf/util/unwind.h                 |  4 ++--
- 12 files changed, 96 insertions(+), 4 deletions(-)
+ tools/perf/arch/arm/include/perf_regs.h     | 3 ---
+ tools/perf/arch/arm64/include/perf_regs.h   | 3 ---
+ tools/perf/arch/csky/include/perf_regs.h    | 3 ---
+ tools/perf/arch/mips/include/perf_regs.h    | 2 --
+ tools/perf/arch/powerpc/include/perf_regs.h | 3 ---
+ tools/perf/arch/riscv/include/perf_regs.h   | 3 ---
+ tools/perf/arch/s390/include/perf_regs.h    | 3 ---
+ tools/perf/arch/x86/include/perf_regs.h     | 2 --
+ 8 files changed, 22 deletions(-)
 
-diff --git a/tools/perf/arch/arm/util/perf_regs.c b/tools/perf/arch/arm/util/perf_regs.c
-index 2833e101a7c6..37aa3a2091bd 100644
---- a/tools/perf/arch/arm/util/perf_regs.c
-+++ b/tools/perf/arch/arm/util/perf_regs.c
-@@ -4,3 +4,13 @@
- const struct sample_reg sample_reg_masks[] = {
- 	SMPL_REG_END
- };
-+
-+uint64_t arch__reg_ip(void)
-+{
-+	return PERF_REG_ARM_PC;
-+}
-+
-+uint64_t arch__reg_sp(void)
-+{
-+	return PERF_REG_ARM_SP;
-+}
-diff --git a/tools/perf/arch/arm64/util/perf_regs.c b/tools/perf/arch/arm64/util/perf_regs.c
-index 006692c9b040..dbe7f00b222b 100644
---- a/tools/perf/arch/arm64/util/perf_regs.c
-+++ b/tools/perf/arch/arm64/util/perf_regs.c
-@@ -169,3 +169,13 @@ uint64_t arch__user_reg_mask(void)
- 	}
- 	return PERF_REGS_MASK;
- }
-+
-+uint64_t arch__reg_ip(void)
-+{
-+	return PERF_REG_ARM64_PC;
-+}
-+
-+uint64_t arch__reg_sp(void)
-+{
-+	return PERF_REG_ARM64_SP;
-+}
-diff --git a/tools/perf/arch/csky/util/perf_regs.c b/tools/perf/arch/csky/util/perf_regs.c
-index 2864e2e3776d..d230d7e640fd 100644
---- a/tools/perf/arch/csky/util/perf_regs.c
-+++ b/tools/perf/arch/csky/util/perf_regs.c
-@@ -4,3 +4,13 @@
- const struct sample_reg sample_reg_masks[] = {
- 	SMPL_REG_END
- };
-+
-+uint64_t arch__reg_ip(void)
-+{
-+	return PERF_REG_CSKY_PC;
-+}
-+
-+uint64_t arch__reg_sp(void)
-+{
-+	return PERF_REG_CSKY_SP;
-+}
-diff --git a/tools/perf/arch/mips/util/perf_regs.c b/tools/perf/arch/mips/util/perf_regs.c
-index 2864e2e3776d..64882ebc9287 100644
---- a/tools/perf/arch/mips/util/perf_regs.c
-+++ b/tools/perf/arch/mips/util/perf_regs.c
-@@ -4,3 +4,13 @@
- const struct sample_reg sample_reg_masks[] = {
- 	SMPL_REG_END
- };
-+
-+uint64_t arch__reg_ip(void)
-+{
-+	return PERF_REG_MIPS_PC;
-+}
-+
-+uint64_t arch__reg_sp(void)
-+{
-+	return PERF_REG_MIPS_R29;
-+}
-diff --git a/tools/perf/arch/powerpc/util/perf_regs.c b/tools/perf/arch/powerpc/util/perf_regs.c
-index 8d07a78e742a..c84cd79986a8 100644
---- a/tools/perf/arch/powerpc/util/perf_regs.c
-+++ b/tools/perf/arch/powerpc/util/perf_regs.c
-@@ -226,3 +226,13 @@ uint64_t arch__intr_reg_mask(void)
- 	}
- 	return mask;
- }
-+
-+uint64_t arch__reg_ip(void)
-+{
-+	return PERF_REG_POWERPC_NIP;
-+}
-+
-+uint64_t arch__reg_sp(void)
-+{
-+	return PERF_REG_POWERPC_R1;
-+}
-diff --git a/tools/perf/arch/riscv/util/perf_regs.c b/tools/perf/arch/riscv/util/perf_regs.c
-index 2864e2e3776d..13bbddd139d0 100644
---- a/tools/perf/arch/riscv/util/perf_regs.c
-+++ b/tools/perf/arch/riscv/util/perf_regs.c
-@@ -4,3 +4,13 @@
- const struct sample_reg sample_reg_masks[] = {
- 	SMPL_REG_END
- };
-+
-+uint64_t arch__reg_ip(void)
-+{
-+	return PERF_REG_RISCV_PC;
-+}
-+
-+uint64_t arch__reg_sp(void)
-+{
-+	return PERF_REG_RISCV_SP;
-+}
-diff --git a/tools/perf/arch/s390/util/perf_regs.c b/tools/perf/arch/s390/util/perf_regs.c
-index 2864e2e3776d..9b2297471090 100644
---- a/tools/perf/arch/s390/util/perf_regs.c
-+++ b/tools/perf/arch/s390/util/perf_regs.c
-@@ -4,3 +4,13 @@
- const struct sample_reg sample_reg_masks[] = {
- 	SMPL_REG_END
- };
-+
-+uint64_t arch__reg_ip(void)
-+{
-+	return PERF_REG_S390_PC;
-+}
-+
-+uint64_t arch__reg_sp(void)
-+{
-+	return PERF_REG_S390_R15;
-+}
-diff --git a/tools/perf/arch/x86/util/perf_regs.c b/tools/perf/arch/x86/util/perf_regs.c
-index 0ed177991ad0..c752a6e9cba6 100644
---- a/tools/perf/arch/x86/util/perf_regs.c
-+++ b/tools/perf/arch/x86/util/perf_regs.c
-@@ -312,3 +312,13 @@ uint64_t arch__intr_reg_mask(void)
+diff --git a/tools/perf/arch/arm/include/perf_regs.h b/tools/perf/arch/arm/include/perf_regs.h
+index 99a06550e25d..75ce1c370114 100644
+--- a/tools/perf/arch/arm/include/perf_regs.h
++++ b/tools/perf/arch/arm/include/perf_regs.h
+@@ -12,7 +12,4 @@ void perf_regs_load(u64 *regs);
+ #define PERF_REGS_MAX	PERF_REG_ARM_MAX
+ #define PERF_SAMPLE_REGS_ABI	PERF_SAMPLE_REGS_ABI_32
  
- 	return PERF_REGS_MASK;
- }
-+
-+uint64_t arch__reg_ip(void)
-+{
-+	return PERF_REG_X86_IP;
-+}
-+
-+uint64_t arch__reg_sp(void)
-+{
-+	return PERF_REG_X86_SP;
-+}
-diff --git a/tools/perf/util/perf_regs.c b/tools/perf/util/perf_regs.c
-index 8720ec6cf147..334c9a2b785d 100644
---- a/tools/perf/util/perf_regs.c
-+++ b/tools/perf/util/perf_regs.c
-@@ -20,6 +20,16 @@ uint64_t __weak arch__user_reg_mask(void)
- 	return PERF_REGS_MASK;
- }
+-#define PERF_REG_IP	PERF_REG_ARM_PC
+-#define PERF_REG_SP	PERF_REG_ARM_SP
+-
+ #endif /* ARCH_PERF_REGS_H */
+diff --git a/tools/perf/arch/arm64/include/perf_regs.h b/tools/perf/arch/arm64/include/perf_regs.h
+index 35a3cc775b39..58639ee9f7ea 100644
+--- a/tools/perf/arch/arm64/include/perf_regs.h
++++ b/tools/perf/arch/arm64/include/perf_regs.h
+@@ -14,7 +14,4 @@ void perf_regs_load(u64 *regs);
+ #define PERF_REGS_MAX	PERF_REG_ARM64_MAX
+ #define PERF_SAMPLE_REGS_ABI	PERF_SAMPLE_REGS_ABI_64
  
-+uint64_t __weak arch__reg_ip(void)
-+{
-+	return 0;
-+}
-+
-+uint64_t __weak arch__reg_sp(void)
-+{
-+	return 0;
-+}
-+
- #ifdef HAVE_PERF_REGS_SUPPORT
+-#define PERF_REG_IP	PERF_REG_ARM64_PC
+-#define PERF_REG_SP	PERF_REG_ARM64_SP
+-
+ #endif /* ARCH_PERF_REGS_H */
+diff --git a/tools/perf/arch/csky/include/perf_regs.h b/tools/perf/arch/csky/include/perf_regs.h
+index 1afcc0e916c2..076c7746c8a2 100644
+--- a/tools/perf/arch/csky/include/perf_regs.h
++++ b/tools/perf/arch/csky/include/perf_regs.h
+@@ -12,7 +12,4 @@
+ #define PERF_REGS_MAX	PERF_REG_CSKY_MAX
+ #define PERF_SAMPLE_REGS_ABI	PERF_SAMPLE_REGS_ABI_32
  
- const char *perf_reg_name(int id, const char *arch)
-diff --git a/tools/perf/util/perf_regs.h b/tools/perf/util/perf_regs.h
-index ab4ec3f2a170..0a1460aaad37 100644
---- a/tools/perf/util/perf_regs.h
-+++ b/tools/perf/util/perf_regs.h
-@@ -26,13 +26,15 @@ enum {
- int arch_sdt_arg_parse_op(char *old_op, char **new_op);
- uint64_t arch__intr_reg_mask(void);
- uint64_t arch__user_reg_mask(void);
-+uint64_t arch__reg_ip(void);
-+uint64_t arch__reg_sp(void);
+-#define PERF_REG_IP	PERF_REG_CSKY_PC
+-#define PERF_REG_SP	PERF_REG_CSKY_SP
+-
+ #endif /* ARCH_PERF_REGS_H */
+diff --git a/tools/perf/arch/mips/include/perf_regs.h b/tools/perf/arch/mips/include/perf_regs.h
+index b8cd8bbb37ba..7082e91e0ed1 100644
+--- a/tools/perf/arch/mips/include/perf_regs.h
++++ b/tools/perf/arch/mips/include/perf_regs.h
+@@ -7,8 +7,6 @@
+ #include <asm/perf_regs.h>
  
- #ifdef HAVE_PERF_REGS_SUPPORT
- extern const struct sample_reg sample_reg_masks[];
+ #define PERF_REGS_MAX PERF_REG_MIPS_MAX
+-#define PERF_REG_IP PERF_REG_MIPS_PC
+-#define PERF_REG_SP PERF_REG_MIPS_R29
  
- #include <perf_regs.h>
+ #define PERF_REGS_MASK ((1ULL << PERF_REG_MIPS_MAX) - 1)
  
--#define DWARF_MINIMAL_REGS ((1ULL << PERF_REG_IP) | (1ULL << PERF_REG_SP))
-+#define DWARF_MINIMAL_REGS ((1ULL << arch__reg_ip()) | (1ULL << arch__reg_sp()))
- 
- const char *perf_reg_name(int id, const char *arch);
- int perf_reg_value(u64 *valp, struct regs_dump *regs, int id);
-diff --git a/tools/perf/util/unwind-libdw.c b/tools/perf/util/unwind-libdw.c
-index bdccfc511b7e..f308f2ea512b 100644
---- a/tools/perf/util/unwind-libdw.c
-+++ b/tools/perf/util/unwind-libdw.c
-@@ -252,7 +252,7 @@ int unwind__get_entries(unwind_entry_cb_t cb, void *arg,
- 	if (!ui->dwfl)
- 		goto out;
- 
--	err = perf_reg_value(&ip, &data->user_regs, PERF_REG_IP);
-+	err = perf_reg_value(&ip, &data->user_regs, arch__reg_ip());
- 	if (err)
- 		goto out;
- 
-diff --git a/tools/perf/util/unwind.h b/tools/perf/util/unwind.h
-index b2a03fa5289b..0a98ea9d8c94 100644
---- a/tools/perf/util/unwind.h
-+++ b/tools/perf/util/unwind.h
-@@ -43,11 +43,11 @@ int unwind__get_entries(unwind_entry_cb_t cb, void *arg,
+diff --git a/tools/perf/arch/powerpc/include/perf_regs.h b/tools/perf/arch/powerpc/include/perf_regs.h
+index 9bb17c3f370b..1c66f6ba6773 100644
+--- a/tools/perf/arch/powerpc/include/perf_regs.h
++++ b/tools/perf/arch/powerpc/include/perf_regs.h
+@@ -16,7 +16,4 @@ void perf_regs_load(u64 *regs);
+ 	#define PERF_SAMPLE_REGS_ABI	PERF_SAMPLE_REGS_ABI_32
  #endif
  
- #ifndef LIBUNWIND__ARCH_REG_SP
--#define LIBUNWIND__ARCH_REG_SP PERF_REG_SP
-+#define LIBUNWIND__ARCH_REG_SP arch__reg_sp()
+-#define PERF_REG_IP     PERF_REG_POWERPC_NIP
+-#define PERF_REG_SP     PERF_REG_POWERPC_R1
+-
+ #endif /* ARCH_PERF_REGS_H */
+diff --git a/tools/perf/arch/riscv/include/perf_regs.h b/tools/perf/arch/riscv/include/perf_regs.h
+index 6944bf0de53e..d482edb413e5 100644
+--- a/tools/perf/arch/riscv/include/perf_regs.h
++++ b/tools/perf/arch/riscv/include/perf_regs.h
+@@ -16,7 +16,4 @@
+ #define PERF_SAMPLE_REGS_ABI	PERF_SAMPLE_REGS_ABI_32
  #endif
  
- #ifndef LIBUNWIND__ARCH_REG_IP
--#define LIBUNWIND__ARCH_REG_IP PERF_REG_IP
-+#define LIBUNWIND__ARCH_REG_IP arch__reg_ip()
- #endif
+-#define PERF_REG_IP	PERF_REG_RISCV_PC
+-#define PERF_REG_SP	PERF_REG_RISCV_SP
+-
+ #endif /* ARCH_PERF_REGS_H */
+diff --git a/tools/perf/arch/s390/include/perf_regs.h b/tools/perf/arch/s390/include/perf_regs.h
+index 52fcc0891da6..130dfad2b96a 100644
+--- a/tools/perf/arch/s390/include/perf_regs.h
++++ b/tools/perf/arch/s390/include/perf_regs.h
+@@ -11,7 +11,4 @@ void perf_regs_load(u64 *regs);
+ #define PERF_REGS_MAX PERF_REG_S390_MAX
+ #define PERF_SAMPLE_REGS_ABI PERF_SAMPLE_REGS_ABI_64
  
- int LIBUNWIND__ARCH_REG_ID(int regnum);
+-#define PERF_REG_IP PERF_REG_S390_PC
+-#define PERF_REG_SP PERF_REG_S390_R15
+-
+ #endif /* ARCH_PERF_REGS_H */
+diff --git a/tools/perf/arch/x86/include/perf_regs.h b/tools/perf/arch/x86/include/perf_regs.h
+index 16e23b722042..f209ce2c1dd9 100644
+--- a/tools/perf/arch/x86/include/perf_regs.h
++++ b/tools/perf/arch/x86/include/perf_regs.h
+@@ -20,7 +20,5 @@ void perf_regs_load(u64 *regs);
+ #define PERF_REGS_MASK (((1ULL << PERF_REG_X86_64_MAX) - 1) & ~REG_NOSUPPORT)
+ #define PERF_SAMPLE_REGS_ABI PERF_SAMPLE_REGS_ABI_64
+ #endif
+-#define PERF_REG_IP PERF_REG_X86_IP
+-#define PERF_REG_SP PERF_REG_X86_SP
+ 
+ #endif /* ARCH_PERF_REGS_H */
 -- 
 2.39.2
 
