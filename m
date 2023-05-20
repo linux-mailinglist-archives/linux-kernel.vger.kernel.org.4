@@ -2,50 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAA9C70A9A3
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 20:18:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BBFD70A9AA
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 20:19:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbjETSSV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 14:18:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39704 "EHLO
+        id S231708AbjETSTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 14:19:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231255AbjETSSM (ORCPT
+        with ESMTP id S231687AbjETSS7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 14:18:12 -0400
+        Sat, 20 May 2023 14:18:59 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB02618C;
-        Sat, 20 May 2023 11:18:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66C6910EC;
+        Sat, 20 May 2023 11:18:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 46B2B60AFD;
-        Sat, 20 May 2023 18:18:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6666C433D2;
-        Sat, 20 May 2023 18:18:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7CF3460F97;
+        Sat, 20 May 2023 18:18:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C959C433EF;
+        Sat, 20 May 2023 18:18:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684606688;
-        bh=LEXUqYnFYNBp/lSZwiBu4F7bB23102+sZXyYbD4ZC0Y=;
+        s=k20201202; t=1684606691;
+        bh=qygkCaueoV0Y08cF/1bEx58wZi9wpmzZxDqhrtlsgaQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r6xWldq+MJLNubjwleMlnd8SNKyt5UFAEKRpjlk6suo3oJsZXZulueQuZq6P6DJAK
-         WubZxowaAGjnTJAUbyDcVS0bJaW39pNNfRws4PXi3qIKspVFRuRrt1WRP0LeOJxqfm
-         3hRwphXcN6gEso5xsq28WrnfsZpbMJMpzAtd4czR/YKCrfN5pxjI6CFW26NFS2shDc
-         4mPTcr02QKBv6YvLHDJ8eH+5CIHG7EhtvB5fTNjPVfZeCXIhoF0w5Yz9UFRdm1p0mB
-         Yf8q6xL9f0MDndvugBfxglCBqIrnEl+imYQaxpGqiEDl+rnDqn016F0JF8OFeGqxV5
-         CjMlBQCYpTa7w==
+        b=Y44xKOQRwKM8KyjGgzaNnx9aBwqez2BvT9WEoslPP/ofPLN9vS0Ax2Gbr9X8n0+a/
+         2NHgKGZ7uJWJNrfUVmXk81eeO9Zdu9kDZZ+4Zjo/7NgQqOiIkcSkXDV70GE6FJgc2q
+         s0X6QJOZVFWIhHXSJrxpOPnvmfAKMgk0MP8uJjEpz12JmbTizlD0KQJ9HYRfLF8opv
+         OqgkODFLwTqA+9Hrt+BLzJt4K4OYHPCy6ebUYIsVvYDYy0iDLbne4uVsE6eU66UAY2
+         jobBk/Ywq3qZv2zZ6evRouqPjRPnYC3lCnqPHWs4eOdzqmV1/uWkapoEpMxMYaDiJX
+         akCK8TNHlhs0g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Mario Limonciello <mario.limonciello@amd.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sasha Levin <sashal@kernel.org>, clemens@ladisch.de,
-        jdelvare@suse.com, linux-hwmon@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 05/18] hwmon: (k10temp) Add PCI ID for family 19, model 78h
-Date:   Sat, 20 May 2023 14:17:37 -0400
-Message-Id: <20230520181750.823365-5-sashal@kernel.org>
+Cc:     =?UTF-8?q?Niklas=20S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Sasha Levin <sashal@kernel.org>, niklas.soderlund@ragnatech.se,
+        mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 06/18] media: rcar-vin: Gen3 can not scale NV12
+Date:   Sat, 20 May 2023 14:17:38 -0400
+Message-Id: <20230520181750.823365-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230520181750.823365-1-sashal@kernel.org>
 References: <20230520181750.823365-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
@@ -59,35 +61,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+From: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 
-[ Upstream commit 7d8accfaa0ab65e4282c8e58950f7d688342cd86 ]
+[ Upstream commit 879c5a458e532b95783ce27f704d1b21573066f7 ]
 
-Enable k10temp on this system.
+The VIN modules on Gen3 can not scale NV12, fail format validation if
+the user tries. Currently no frames are produced if this is attempted.
 
-  [ bp: Massage. ]
-
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-Acked-by: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/r/20230427053338.16653-3-mario.limonciello@amd.com
+Signed-off-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
+Signed-off-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/hwmon/k10temp.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/platform/renesas/rcar-vin/rcar-dma.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/drivers/hwmon/k10temp.c b/drivers/hwmon/k10temp.c
-index be8bbb1c3a02d..823d0ca1d6059 100644
---- a/drivers/hwmon/k10temp.c
-+++ b/drivers/hwmon/k10temp.c
-@@ -507,6 +507,7 @@ static const struct pci_device_id k10temp_id_table[] = {
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_M50H_DF_F3) },
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_M60H_DF_F3) },
- 	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_M70H_DF_F3) },
-+	{ PCI_VDEVICE(AMD, PCI_DEVICE_ID_AMD_19H_M78H_DF_F3) },
- 	{ PCI_VDEVICE(HYGON, PCI_DEVICE_ID_AMD_17H_DF_F3) },
- 	{}
- };
+diff --git a/drivers/media/platform/renesas/rcar-vin/rcar-dma.c b/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
+index 98bfd445a649b..cc6b59e5621ae 100644
+--- a/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
++++ b/drivers/media/platform/renesas/rcar-vin/rcar-dma.c
+@@ -1312,6 +1312,11 @@ static int rvin_mc_validate_format(struct rvin_dev *vin, struct v4l2_subdev *sd,
+ 	}
+ 
+ 	if (rvin_scaler_needed(vin)) {
++		/* Gen3 can't scale NV12 */
++		if (vin->info->model == RCAR_GEN3 &&
++		    vin->format.pixelformat == V4L2_PIX_FMT_NV12)
++			return -EPIPE;
++
+ 		if (!vin->scaler)
+ 			return -EPIPE;
+ 	} else {
 -- 
 2.39.2
 
