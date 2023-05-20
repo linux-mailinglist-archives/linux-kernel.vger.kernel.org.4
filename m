@@ -2,100 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2D5870AA76
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 20:28:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29BA270AA5D
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 20:28:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232290AbjETS2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 14:28:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48866 "EHLO
+        id S232343AbjETS2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 14:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232263AbjETS1f (ORCPT
+        with ESMTP id S231945AbjETS1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 14:27:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0C0FE56;
-        Sat, 20 May 2023 11:26:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C865B60F92;
-        Sat, 20 May 2023 18:24:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BF89C4331F;
-        Sat, 20 May 2023 18:24:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684607085;
-        bh=vJMFvbfb1riHt08Qatx5dIhEfYslvuhQrxIlacgSUL0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=un3sGc1U61ctJ29V/iAJwB+RzcsWnWJhi1hrbhsJq79NtTEzF41M4RzMBqWd6xd2k
-         SdEqTOGTL9hOqd04X+SbyYK4ocbVba9IIQhsBgvnBdBEUvnSNoqxzd0+3iicC3a0ot
-         iAjx+ofsC6z6ZNQ8uANwMWIrLQKKGaMc2uGBrgA53fC0GfCVG6ewtgwDaUdn9juMGl
-         mzv8hp5E/EE2Y9unLAkz3z45aTpI/W0CnZYwAqDMlyH6u3J+QTyJimuooqfJMBqXVp
-         xDC4UPT+n5tFgmXbpmjgRnV8My9rUISQKP5b2WC9nZ1drwrUaD37IVDLLZAUbVNQjx
-         /nTgBajrZTszw==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>,
-        josef@toxicpanda.com, linux-block@vger.kernel.org,
-        nbd@other.debian.org
-Subject: [PATCH AUTOSEL 4.14 4/4] nbd: Fix debugfs_create_dir error checking
-Date:   Sat, 20 May 2023 14:24:29 -0400
-Message-Id: <20230520182432.866012-4-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230520182432.866012-1-sashal@kernel.org>
-References: <20230520182432.866012-1-sashal@kernel.org>
+        Sat, 20 May 2023 14:27:17 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 807161BE1
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 11:26:39 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f42769a0c1so44811055e9.2
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 11:26:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684607121; x=1687199121;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GBfAShbL2IFJ1lSCZxPc0Karf4RuFXcjGgcsz2VTYqI=;
+        b=eoW6hNH8Hog/G7dZuz4VVN4Xzi9iExHiFG7RVEeDXHwQvdZtvj0r+chEb/6bgUbhaU
+         0jMgaX17rfZ7FhIZerDUY8UgVnKETfjoWAbw9+04QvFrtOP9ezYeRd93lBsfS0VXeosC
+         Rf+MNqwoSWbK6FjUffCZYevrsme3ACluQeY4OMske15vBECHVKOgnTxFVw9GlxZCv1yp
+         5PgmsZf5+kXFVLSIlWS5uZ2fE9iyIDh5NaRs8to/hmpBeXMPU3pV/eHTfeDj+Wo7iJ0I
+         NSTGDbd5liPQC1q6iMOZc5aAVArL9Yz6jVSaLefRytunh6w6a8rzx+PIufKvEM045m8W
+         iMyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684607121; x=1687199121;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GBfAShbL2IFJ1lSCZxPc0Karf4RuFXcjGgcsz2VTYqI=;
+        b=AZw0vsTqmiw+xAaOpoZIAjjrbcHKKxGaugFAaoG06eLub8mbh0C3bUZZC9SKwIYe+g
+         T1yT6FhaR+dEJjdgqz+bV7GT8nb57GBI9uA35ZS3+4uaS99c6H+YbL2w7bVf2G+uGFpf
+         AsOox5onymPMV1biWAO37jq7i4zYpBWm3JNunK04+wkhPPwbkKk5colhlQbAOGMHrcDT
+         TnWDzwI7N+DdosahHxBBez5oCVWcUAqn1GEiywENGeM5z2E2NRU+Ao5KH4GhHTNYj40C
+         mvHdrDTgJMyvoJWm3wdGTEw3pAneIqvSw7LzylyGu74FEZusfNtTbR0mR11U4r1SoJsn
+         KJKg==
+X-Gm-Message-State: AC+VfDwJzP2X+x7Qq2/Min9ykLVC5X7ZJu7ONtvfSScY2HLBqoSFSMLj
+        QZmNZEzTCq1dPyY7U98QdDTW9/7nkQ==
+X-Google-Smtp-Source: ACHHUZ4u3LT2iINGZEWbqgw88KTI3RuqWORHfxsR71f5E1vzz1uF2eo+O+SeeE1ps9F4ouef35c6mQ==
+X-Received: by 2002:adf:ee49:0:b0:306:3b78:fe33 with SMTP id w9-20020adfee49000000b003063b78fe33mr4620791wro.32.1684607121387;
+        Sat, 20 May 2023 11:25:21 -0700 (PDT)
+Received: from p183 ([46.53.251.140])
+        by smtp.gmail.com with ESMTPSA id n1-20020adfe781000000b002c54c9bd71fsm2575661wrm.93.2023.05.20.11.25.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 20 May 2023 11:25:21 -0700 (PDT)
+Date:   Sat, 20 May 2023 21:25:19 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH v2] fix mult_frac() multiple argument evaluation bug
+Message-ID: <f9f9fdbb-ec8e-4f5e-a998-2a58627a1a43@p183>
+References: <f522ad25-f899-4526-abc4-da35868b6a8b@p183>
+ <20230519153622.f95f74819ecf467c5291de7d@linux-foundation.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230519153622.f95f74819ecf467c5291de7d@linux-foundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ivan Orlov <ivan.orlov0322@gmail.com>
+mult_frac() evaluates _all_ arguments multiple times in the body.
 
-[ Upstream commit 4913cfcf014c95f0437db2df1734472fd3e15098 ]
+Clarify comment while I'm at it.
 
-The debugfs_create_dir function returns ERR_PTR in case of error, and the
-only correct way to check if an error occurred is 'IS_ERR' inline function.
-This patch will replace the null-comparison with IS_ERR.
-
-Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
-Link: https://lore.kernel.org/r/20230512130533.98709-1-ivan.orlov0322@gmail.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
 ---
- drivers/block/nbd.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/block/nbd.c b/drivers/block/nbd.c
-index f01b8860ba143..eb2ca7f6ab3ab 100644
---- a/drivers/block/nbd.c
-+++ b/drivers/block/nbd.c
-@@ -1531,7 +1531,7 @@ static int nbd_dev_dbg_init(struct nbd_device *nbd)
- 		return -EIO;
- 
- 	dir = debugfs_create_dir(nbd_name(nbd), nbd_dbg_dir);
--	if (!dir) {
-+	if (IS_ERR(dir)) {
- 		dev_err(nbd_to_dev(nbd), "Failed to create debugfs dir for '%s'\n",
- 			nbd_name(nbd));
- 		return -EIO;
-@@ -1557,7 +1557,7 @@ static int nbd_dbg_init(void)
- 	struct dentry *dbg_dir;
- 
- 	dbg_dir = debugfs_create_dir("nbd", NULL);
--	if (!dbg_dir)
-+	if (IS_ERR(dbg_dir))
- 		return -EIO;
- 
- 	nbd_dbg_dir = dbg_dir;
--- 
-2.39.2
+ include/linux/math.h |   22 +++++++++++-----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
 
+--- a/include/linux/math.h
++++ b/include/linux/math.h
+@@ -118,17 +118,17 @@ __STRUCT_FRACT(s32)
+ __STRUCT_FRACT(u32)
+ #undef __STRUCT_FRACT
+ 
+-/*
+- * Multiplies an integer by a fraction, while avoiding unnecessary
+- * overflow or loss of precision.
+- */
+-#define mult_frac(x, numer, denom)(			\
+-{							\
+-	typeof(x) quot = (x) / (denom);			\
+-	typeof(x) rem  = (x) % (denom);			\
+-	(quot * (numer)) + ((rem * (numer)) / (denom));	\
+-}							\
+-)
++/* Calculate "x * n / d" without unnecessary overflow or loss of precision. */
++#define mult_frac(x, n, d)	\
++({				\
++	typeof(x) x_ = (x);	\
++	typeof(n) n_ = (n);	\
++	typeof(d) d_ = (d);	\
++				\
++	typeof(x_) q = x_ / d_;	\
++	typeof(x_) r = x_ % d_;	\
++	q * n_ + r * n_ / d_;	\
++})
+ 
+ #define sector_div(a, b) do_div(a, b)
+ 
