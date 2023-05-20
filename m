@@ -2,57 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8605A70A8F3
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 18:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAFFB70A992
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 20:01:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231694AbjETQBq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 12:01:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40050 "EHLO
+        id S229617AbjETSAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 14:00:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbjETQBl (ORCPT
+        with ESMTP id S229464AbjETSAj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 12:01:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D29EF103;
-        Sat, 20 May 2023 09:01:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 68BF5611AD;
-        Sat, 20 May 2023 16:01:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76382C433D2;
-        Sat, 20 May 2023 16:01:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684598498;
-        bh=MdQooeElfsooN2WS+bp+2quLDk/tTcKEvG92kyMIT00=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HIXQEXQG+CtPaTE7rTy1zQtkAtA8lmHEXOY/FUggY5Bj6bi7VFIZYE8lNHc9uxWpp
-         Y5kzfz3wV223kQ/vmijFnSYGztC28r7RH6IDRKbjnNmUse05UWYbsPuMZGzqJyyn7f
-         21cXSWcohekgghbBpxQTskbp+W3Lk+YiumSBwsR02s2OoEeWtTqNBwEHfwhrJbwQRt
-         ZUIL0HQmnYZA38JKzuiWHqne8//O/SRI6Vu7qYd0JCUtgTA7uDCkLtoi749WoR9BWH
-         p6PIfdhH8X/i4G5JAuBwd0bC/317uVWAlBXh7GdOmaaMttPUPFset1MRtoHnpBugqj
-         A9ak9AJD3RTxg==
-Date:   Sat, 20 May 2023 17:17:48 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Astrid Rost <astrid.rost@axis.com>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>, <linux-iio@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kernel@axis.com>,
-        Uwe =?UTF-8?B?S2xlaW5l?= =?UTF-8?B?LUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mathieu Othacehe <m.othacehe@gmail.com>
-Subject: Re: [PATCH v3 5/7] iio: light: vcnl4000: Add period for
- vcnl4040/4200
-Message-ID: <20230520171748.5ff504de@jic23-huawei>
-In-Reply-To: <20230517151406.368219-6-astrid.rost@axis.com>
-References: <20230517151406.368219-1-astrid.rost@axis.com>
-        <20230517151406.368219-6-astrid.rost@axis.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Sat, 20 May 2023 14:00:39 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 678A9FE
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 11:00:38 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1ae58e4b295so27964695ad.2
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 11:00:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684605638; x=1687197638;
+        h=cc:to:subject:date:from:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n/w9xABIfUj6Dl4/qFa1pCSYIiL8B2Gh1Bv0+XJyaLg=;
+        b=N8L1hdpmePzAhgQ+Ob47tLL3IRB6FCvBr4dMK8UEnsLU68O9eBsSuE2TGy/L4NdMse
+         U65SMoxO73eAC1b4bEdEjjbP/2bc7Jh8rYkj8RVVA7o+FBboO4xeGFtSDCI/zgZv3YfH
+         Hy7w6tUr3Z3efFxaoWi/tubjqPhO4hv/6uObSjPuFtOlnirpLc6rtthxmpruvOHG/oiS
+         dEWDvUc28sEMf5eT/Wb3XniNldGaYAMEfZlt6qPsH/4kC6Gdgv4NG9bgbzrD0DVza+4K
+         d/cQylSZ41Kdeg+H5lfbp+0IOLZTYn8oCbIrSMlSf9BeHr21ZlghjzPH6PWKBKzcp3iM
+         Z6jQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684605638; x=1687197638;
+        h=cc:to:subject:date:from:message-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=n/w9xABIfUj6Dl4/qFa1pCSYIiL8B2Gh1Bv0+XJyaLg=;
+        b=Q/hwE/DQJ5p0YS+upKEIIIzFxD5b1TiBTA1KKHOCX+K+ZXWQRzjSBYY8JvSCMRMEG3
+         ikiNrY6a8K90ZLJPCpAmS3DhdXNHgTFfQRa7bkO1k1mLrfU3gEr84XTAAH95m5uE0LEL
+         7Dp4pAmKLRO/xIsBclKAkMQIyXFaHU/m3j6N0sVobiXhTTeHRh192OAltVcqjOJ5CpjA
+         em9cS9ZtU2ST2pBazIm2ENPlVQreMFgaLM8WfjHEp6qF7e8DF+QTZKt77v4p6TYXIy6j
+         /s2QBufJKRe++xbLLRp8jX0dWhJFmd6LIzGwOIi3K5R62qTRZ1K7/ztZVQKjdWhYueva
+         JW9w==
+X-Gm-Message-State: AC+VfDxbrkWEZzp2okw4hElZC2y4/ECNu5oz0uJxxhvMCUL3+++8hnL3
+        /QOUthywO+6nopYQIHxrkJY=
+X-Google-Smtp-Source: ACHHUZ7VX15xvIk9IjlTdopKTebyozL9mjDmdwEDVDwn8YHkJZYF/JOTz2sNj9RspZm/0KavfCxOAQ==
+X-Received: by 2002:a17:902:c407:b0:1ac:451d:34b with SMTP id k7-20020a170902c40700b001ac451d034bmr8470317plk.9.1684605637889;
+        Sat, 20 May 2023 11:00:37 -0700 (PDT)
+Received: from localhost ([123.56.124.140])
+        by smtp.gmail.com with ESMTPSA id bj6-20020a170902850600b001a183ade911sm1800688plb.56.2023.05.20.11.00.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 20 May 2023 11:00:37 -0700 (PDT)
+Message-ID: <64690ac5.170a0220.92bb3.2e7a@mx.google.com>
+From:   ghostfly233 <ghostfly23333@gmail.com>
+Date:   Sat, 20 May 2023 19:59:40 +0800
+Subject: [PATCH] drm/amdgpu: Rearrange WREG32 operations in gfxhub_v2_1.c
+To:     alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com
+Cc:     amd-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        airlied@gmail.com, daniel@ffwll.ch, ghostfly23333@gmail.com
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,171 +67,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 17 May 2023 17:14:04 +0200
-Astrid Rost <astrid.rost@axis.com> wrote:
+In gfxhub_v2_1_setup_vmid_config(), the GCVM_CONTEXT1_CNTL reg is
+written before related GCVM_CONTEXT1_PAGE_TABLE_START_ADDR and
+GCVM_CONTEXT1_PAGE_TABLE_END_ADDR regs are written, which may
+cause undefined behavior.
 
-> Add read/write attribute for proximity and illuminance period.
-> The period is set in the interrupt persistence flags
-> (PS_PERS and ALS_PERS). An interrupt will not be asserted if the raw
-> value is not over (or lower) than the threshold for the set
-> continued amount of measurements.
-> The time in seconds is calculated by the number of continued refreshes
-> multiplied with the integration time.
-> It will always pick the next lower possible value. The period changes,
-> if the integration time is changed.
-> 
-> Signed-off-by: Astrid Rost <astrid.rost@axis.com>
-Hi Astrid,
+This patch rearranges WREG32 operations in gfxhub_v2_1_setup_vmid_config(),
+so that it can ensure the addresses are initialized before CNTL is enabled
+and reduce the risk of encountering undefined behavior.
 
-A few minor things inline.  I might have ignored these but given the
-bot found an issue it seemed sensible to suggest tidying them up for v4.
+Signed-off-by: Zibin Liu <ghostfly23333@gmail.com>
+---
+ drivers/gpu/drm/amd/amdgpu/gfxhub_v2_1.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Jonathan
+diff --git a/drivers/gpu/drm/amd/amdgpu/gfxhub_v2_1.c b/drivers/gpu/drm/amd/amdgpu/gfxhub_v2_1.c
+index 4aacbbec31e2..6d094e7315eb 100644
+--- a/drivers/gpu/drm/amd/amdgpu/gfxhub_v2_1.c
++++ b/drivers/gpu/drm/amd/amdgpu/gfxhub_v2_1.c
+@@ -321,8 +321,6 @@ static void gfxhub_v2_1_setup_vmid_config(struct amdgpu_device *adev)
+ 		tmp = REG_SET_FIELD(tmp, GCVM_CONTEXT1_CNTL,
+ 				    RETRY_PERMISSION_OR_INVALID_PAGE_FAULT,
+ 				    !adev->gmc.noretry);
+-		WREG32_SOC15_OFFSET(GC, 0, mmGCVM_CONTEXT1_CNTL,
+-				    i * hub->ctx_distance, tmp);
+ 		WREG32_SOC15_OFFSET(GC, 0, mmGCVM_CONTEXT1_PAGE_TABLE_START_ADDR_LO32,
+ 				    i * hub->ctx_addr_distance, 0);
+ 		WREG32_SOC15_OFFSET(GC, 0, mmGCVM_CONTEXT1_PAGE_TABLE_START_ADDR_HI32,
+@@ -333,6 +331,8 @@ static void gfxhub_v2_1_setup_vmid_config(struct amdgpu_device *adev)
+ 		WREG32_SOC15_OFFSET(GC, 0, mmGCVM_CONTEXT1_PAGE_TABLE_END_ADDR_HI32,
+ 				    i * hub->ctx_addr_distance,
+ 				    upper_32_bits(adev->vm_manager.max_pfn - 1));
++		WREG32_SOC15_OFFSET(GC, 0, mmGCVM_CONTEXT1_CNTL,
++				    i * hub->ctx_distance, tmp);
+ 	}
+ 
+ 	hub->vm_cntx_cntl = tmp;
+-- 
+2.34.1
 
-> ---
->  drivers/iio/light/vcnl4000.c | 255 ++++++++++++++++++++++++++++++-----
->  1 file changed, 220 insertions(+), 35 deletions(-)
-> 
-> diff --git a/drivers/iio/light/vcnl4000.c b/drivers/iio/light/vcnl4000.c
-> index 73158bde5686..a0b99f82f8c4 100644
-> --- a/drivers/iio/light/vcnl4000.c
-> +++ b/drivers/iio/light/vcnl4000.c
-> @@ -84,8 +84,10 @@
->  #define VCNL4040_ALS_CONF_ALS_SHUTDOWN	BIT(0)
->  #define VCNL4040_ALS_CONF_IT		GENMASK(7, 6) /* Ambient integration time */
->  #define VCNL4040_ALS_CONF_INT_EN	BIT(1) /* Ambient light Interrupt enable */
-> +#define VCNL4040_ALS_CONF_PERS	GENMASK(3, 2) /* Ambient interrupt persistence setting */
->  #define VCNL4040_PS_CONF1_PS_SHUTDOWN	BIT(0)
->  #define VCNL4040_PS_CONF2_PS_IT	GENMASK(3, 1) /* Proximity integration time */
-> +#define VCNL4040_CONF1_PS_PERS	GENMASK(5, 4) /* Proximity interrupt persistence setting */
->  #define VCNL4040_PS_CONF2_PS_INT	GENMASK(9, 8) /* Proximity interrupt mode */
->  #define VCNL4040_PS_IF_AWAY		BIT(8) /* Proximity event cross low threshold */
->  #define VCNL4040_PS_IF_CLOSE		BIT(9) /* Proximity event cross high threshold */
-> @@ -152,6 +154,8 @@ static const int vcnl4200_als_it_times[][2] = {
->  	{0, 200000},
->  	{0, 400000},
->  };
-> +static const int vcnl4040_als_persistence[] = {1, 2, 4, 8};
-> +static const int vcnl4040_ps_persistence[] = {1, 2, 3, 4};
->  
->  #define VCNL4000_SLEEP_DELAY_MS	2000 /* before we enter pm_runtime_suspend */
->  
-> @@ -646,6 +650,135 @@ static ssize_t vcnl4040_write_ps_it(struct vcnl4000_data *data, int val)
->  	return ret;
->  }
->  
-> +static ssize_t vcnl4040_read_als_period(struct vcnl4000_data *data, int *val, int *val2)
-> +{
-> +	int ret, ret_pers, ret_it;
-> +	int64_t val_c;
-> +
-> +	ret = i2c_smbus_read_word_data(data->client, VCNL4200_AL_CONF);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret_pers = FIELD_GET(VCNL4040_ALS_CONF_PERS, ret);
-> +
-> +	if (ret_pers >= ARRAY_SIZE(vcnl4040_als_persistence))
-> +		return -EINVAL;
-> +
-> +	ret_it = FIELD_GET(VCNL4040_ALS_CONF_IT, ret);
-> +
-> +	if (ret_it >= data->chip_spec->num_als_it_times)
-> +		return -EINVAL;
-> +
-> +	val_c = mul_u32_u32((*data->chip_spec->als_it_times)[ret_it][1],
-> +	      vcnl4040_als_persistence[ret_pers]);
-> +	*val = div_u64_rem(val_c, 1000000, val2);
-> +
-> +	return IIO_VAL_INT_PLUS_MICRO;
-> +}
-> +
-> +static ssize_t vcnl4040_write_als_period(struct vcnl4000_data *data, int val, int val2)
-> +{
-> +	unsigned int index;
-> +	int ret, ret_it;
-> +	u16 regval;
-> +	int64_t val_n = mul_u32_u32(val, 1000000) + val2;
-
-Could use MICRO define from units.h to make this more obvious.
-Same in other new cases of multiplying by 10^6
-
-> +
-> +	ret = i2c_smbus_read_word_data(data->client, VCNL4200_AL_CONF);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret_it = FIELD_GET(VCNL4040_ALS_CONF_IT, ret);
-> +
-> +	if (ret_it >= data->chip_spec->num_als_it_times)
-> +		return -EINVAL;
-> +
-> +	for (index = 0; index < ARRAY_SIZE(vcnl4040_als_persistence) - 1; index++)
-> +		if (val_n < mul_u32_u32(vcnl4040_als_persistence[index],
-> +				(*data->chip_spec->als_it_times)[ret_it][1]))
-> +			break;
-> +
-> +	mutex_lock(&data->vcnl4000_lock);
-> +
-> +	ret = i2c_smbus_read_word_data(data->client, VCNL4200_AL_CONF);
-> +	if (ret < 0)
-> +		goto out;
-> +
-> +	regval = (ret & ~VCNL4040_ALS_CONF_PERS) |
-> +	    FIELD_PREP(VCNL4040_ALS_CONF_PERS, index);
-> +	ret = i2c_smbus_write_word_data(data->client, VCNL4200_AL_CONF,
-> +					regval);
-> +
-> +out:
-> +	mutex_unlock(&data->vcnl4000_lock);
-> +	return ret;
-> +}
-
-...
-
-> +static ssize_t vcnl4040_write_ps_period(struct vcnl4000_data *data, int val, int val2)
-> +{
-> +	int ret, ret_it, index;
-> +	u16 regval;
-> +
-> +	ret = i2c_smbus_read_word_data(data->client, VCNL4200_PS_CONF1);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret_it = FIELD_GET(VCNL4040_PS_CONF2_PS_IT, ret);
-> +
-> +	if (ret_it >= data->chip_spec->num_ps_it_times)
-> +		return -EINVAL;
-> +
-> +	if (val > 9)
-> +		index = ARRAY_SIZE(vcnl4040_ps_persistence) - 1;
-> +	else {
-> +		for (index = 0; index < ARRAY_SIZE(vcnl4040_ps_persistence) - 1; index++) {
-> +			if (val2 <= vcnl4040_ps_persistence[index]
-> +					* (*data->chip_spec->ps_it_times)[ret_it][1])
-> +				break;
-> +		}
-> +	}
-> +
-> +	mutex_lock(&data->vcnl4000_lock);
-> +
-> +	ret = i2c_smbus_read_word_data(data->client, VCNL4200_PS_CONF1);
-> +	if (ret < 0)
-> +		goto out;
-> +
-> +	regval = (ret & ~VCNL4040_CONF1_PS_PERS) |
-> +	    FIELD_PREP(VCNL4040_CONF1_PS_PERS, index);
-> +	ret = i2c_smbus_write_word_data(data->client, VCNL4200_PS_CONF1,
-> +					regval);
-> +
-> +out:
-> +	mutex_unlock(&data->vcnl4000_lock);
-> +	return ret;
-> +}
-> +
-
-Trivial but as you are going around again: One blank line is enough.
-
-> +
->  static int vcnl4000_read_raw(struct iio_dev *indio_dev,
->  				struct iio_chan_spec const *chan,
