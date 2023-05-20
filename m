@@ -2,120 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 119AC70A84D
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 15:20:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62DE470A852
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 15:20:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbjETNT4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 09:19:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38886 "EHLO
+        id S231424AbjETNUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 09:20:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbjETNTw (ORCPT
+        with ESMTP id S230372AbjETNUf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 09:19:52 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF13BE
-        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 06:19:50 -0700 (PDT)
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Sat, 20 May 2023 09:20:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E9EE185;
+        Sat, 20 May 2023 06:20:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 3667B3F125
-        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 13:19:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1684588788;
-        bh=NzthO7BMG0Z86lKTG5pcPZLaqdSgk8GzDOcuVAlDI3A=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=wXdF+c8Wfz0aZ5OVDhy/iU5/99nBsm6BwOUXsQcP1y9sUr6EX3Q4TeZgZ7E68MX0q
-         SqXk7gt/X3w4OdZsA8exzwIiY3dlqb/F+dB9cif5Dkd1FfuKwKFqUZQvNqEZI+6jdv
-         U68XxTLZmDG8QWSBIfU8wg0AgeP3fbUh5O7mNo8yKJIUpbA3uLbOt4DhwclFCiKuu2
-         lO1F1zzsOc9yG4Hcc2ytSShVaykTukmfu7JS8EKNTtfEfgB1XZ1qfVuZjR+VxWZz4U
-         l5mng90Xez039mv6AM0lL94G9TimmwbkwqCsrlpVTlfb5TvFcZagJAWWJKKVnfMXhI
-         DwbEAlugFnXWw==
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-96fa4c724fdso38266066b.0
-        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 06:19:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684588787; x=1687180787;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NzthO7BMG0Z86lKTG5pcPZLaqdSgk8GzDOcuVAlDI3A=;
-        b=QpaftydVJL5uXMgHxYEjXovBaKzuJemi/XAM2Puf3vgmQoSaVE1SdEAcMbU2iFbYGJ
-         i3nHs/7M8Oj0tVRtRFQj8MVvZEFfR53tWL/4GufypVj4coIJxFebAva/VwOB45Av2iCz
-         asonWCDzV3adaimiKpXGXrgFVHQ0ff4ZJJ9pdMcFJvSYF3WaAvAtb/1zg1Kke1lECsvo
-         4tARCTjnQhd3Q9piTKDlzZcvh6RDF6QbYwI334BrOVMNOwHyKlFX0dUPL63Ztkug1K+I
-         /gs+VfCy8ZbnQVYXP+9G/aTWO+KlTbLDeI8PVL4m6V1lZwyfw/5JiM1zVk3fw/BHYV9k
-         Y/eA==
-X-Gm-Message-State: AC+VfDzaaLsHiaQhYDflavIjXuSGlb7LgnNV02pU83zwKqZeqjwpEIp5
-        hEnMcQcJjjR8TpMW5D3L1PolihWYC07udfmg8M3c/yC2+92N6TwGARsOCUG/fTCx8mkjUVxYOMn
-        EaA/acyHVjSmyLAGrNNyY0pudtszt396caD/SbC31VA==
-X-Received: by 2002:a17:907:360c:b0:969:9c0c:4c97 with SMTP id bk12-20020a170907360c00b009699c0c4c97mr4345923ejc.1.1684588787745;
-        Sat, 20 May 2023 06:19:47 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7du0+pcc/ypA6rXudHicfHbFFFlQPmbDMyIlAS1D42x2hBvPlKAhnw6o02K4eWbFkgkHqzhA==
-X-Received: by 2002:a17:907:360c:b0:969:9c0c:4c97 with SMTP id bk12-20020a170907360c00b009699c0c4c97mr4345910ejc.1.1684588787417;
-        Sat, 20 May 2023 06:19:47 -0700 (PDT)
-Received: from localhost (host-87-10-127-160.retail.telecomitalia.it. [87.10.127.160])
-        by smtp.gmail.com with ESMTPSA id s14-20020a170906c30e00b0094f410225c7sm770863ejz.169.2023.05.20.06.19.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 May 2023 06:19:47 -0700 (PDT)
-Date:   Sat, 20 May 2023 15:19:44 +0200
-From:   Andrea Righi <andrea.righi@canonical.com>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     Miklos Szeredi <miklos@szeredi.hu>, linux-unionfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ovl: make consistent use of OVL_FS()
-Message-ID: <ZGjI8Hutt9JwuN/i@righiandr-XPS-13-7390>
-References: <20230520120528.339680-1-andrea.righi@canonical.com>
- <CAOQ4uxjOgWDqufLcabkkPcxvFcrehzoDuO0d6kdJZuoiRBKStw@mail.gmail.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 34A1461202;
+        Sat, 20 May 2023 13:20:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96CC3C433EF;
+        Sat, 20 May 2023 13:20:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684588826;
+        bh=dRRmQ6Y4HWULY62shVdUhCkQLcBFMPcWXifxi8UXuKA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=gPWRiqmeFBMpBvHF5Oi/S0ORsVPNAgNnaS6YDMaS6HMnzhAJcMUBjEFkylhM3959+
+         RQ75jj7azcw0f0gMgDTA8JWld9o743zISUnqUGN859wsklORSE/zV9xK6cy29NL1hV
+         zw9LZ44z8Y7Ohdz5EDroQOIqpbtM9FFX4d78F2jIvuk12cQbi5OfO9q6K22KwD4Cym
+         C72rc/dLoNnMtYB2smfEI2CJCtb8GAbhsxeuYFCTUPK1juZoaandc1uH86IKFZ/xsf
+         +W13ZeqoJ/gphz7iYpd28QfHSyN/bUOs2lbJgANTNNxfWFB03n1ejMR8vqV6zwpLEh
+         rNQ1pkqtYop1A==
+Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-3942cd86697so2415876b6e.0;
+        Sat, 20 May 2023 06:20:26 -0700 (PDT)
+X-Gm-Message-State: AC+VfDyeaT6qDq41tV66U7Q6Wir+KWNRjr25ABS3AGiI5lKa1yoW5SRs
+        oRHnCB668UEPQyq565QpyT3dRP6p2ZR1GzXRFVo=
+X-Google-Smtp-Source: ACHHUZ4OIynnymrUbFwL6tNR3IEfg0Y5SqGGWfkdSe2tNrwhBkwARi2+vEnIddmQPHt/Z3Gig4XqFZHTLGfJY0zZXUk=
+X-Received: by 2002:aca:1215:0:b0:38d:f794:26c with SMTP id
+ 21-20020aca1215000000b0038df794026cmr2992239ois.56.1684588825816; Sat, 20 May
+ 2023 06:20:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOQ4uxjOgWDqufLcabkkPcxvFcrehzoDuO0d6kdJZuoiRBKStw@mail.gmail.com>
+References: <20230514152739.962109-1-masahiroy@kernel.org> <20230514152739.962109-7-masahiroy@kernel.org>
+ <CAKwvOdkQex2H4iDLE-D=4_vFebhB86aya6zPEB8rhaQy-HwspQ@mail.gmail.com>
+In-Reply-To: <CAKwvOdkQex2H4iDLE-D=4_vFebhB86aya6zPEB8rhaQy-HwspQ@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sat, 20 May 2023 22:19:49 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAToX+G_9wkmSziU-YZeg9wc2mOGwD-1R-Txrinba4c8RQ@mail.gmail.com>
+Message-ID: <CAK7LNAToX+G_9wkmSziU-YZeg9wc2mOGwD-1R-Txrinba4c8RQ@mail.gmail.com>
+Subject: Re: [PATCH v5 06/21] modpost: clean up is_executable_section()
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Pitre <npitre@baylibre.com>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 20, 2023 at 03:33:32PM +0300, Amir Goldstein wrote:
-> On Sat, May 20, 2023 at 3:20 PM Andrea Righi <andrea.righi@canonical.com> wrote:
-...
-> > @@ -97,6 +99,8 @@ static inline struct mnt_idmap *ovl_upper_mnt_idmap(struct ovl_fs *ofs)
+On Thu, May 18, 2023 at 6:10=E2=80=AFAM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Sun, May 14, 2023 at 8:28=E2=80=AFAM Masahiro Yamada <masahiroy@kernel=
+.org> wrote:
 > >
-> >  static inline struct ovl_fs *OVL_FS(struct super_block *sb)
-> >  {
-> > +       /* Make sure OVL_FS() is always used with an overlayfs superblock */
-> > +       BUG_ON(sb->s_magic != OVERLAYFS_SUPER_MAGIC);
-> 
-> 1. Adding new BUG_ON to kernel code is not acceptable - if anything
->     you can add WARN_ON_ONCE()
+> > SHF_EXECINSTR is a bit flag (#define SHF_EXECINSTR 0x4).
+> > Compare the masked flag to '!=3D 0'.
+> >
+> > There is no good reason to stop modpost immediately even if a special
+> > section index is given. You will get a section mismatch error anyway.
+> >
+> > Also, change the return type to bool.
+> >
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+>
+> Moving the definition and renaming the parameter seems very
+> unnecessary, but whatever. Thanks for the patch!
 
-OK, but accessing a pointer to a struct ovl_fs that is not really a
-struct ovl_fs can potentially have nasty effects, even data corruption
-maybe? I'd rather crash the system now rather than experiencing random
-behaviors later...
 
-> 2. If anything, you should check s_type == s_ovl_fs_type, not s_magic
+Moving the definition _is_ necessary.
 
-Hm.. is there a fast way to determine when sb->s_type == overlayfs?
-Using get_fs_type() here seems quite expensive and I'm not even sure if
-it's doable, is there a better way that I don't see?
+See the next patch, which moves the call-site of
+is_executable_section().
 
-> 3. It is very unclear to me that this check has that much value and OVL_FS()
->     macro is very commonly used inside internal helpers, so please add a
->     "why" to your patch - why do you think that it is desired and/or valuable
->     to fortify OVL_FS() like this?
+The definition must come before the caller.
 
-Sure, I can send a v2 explaining why I think this is needed. Basically I
-was debugging a custom overlayfs patch and after a while I realized that
-I was accessing the sb->s_fs_info of a real path (not an overlayfs sb),
-using OVL_FS() with a proper check would have saved a me a bunch of
-time.
 
-Thanks for looking at this!
--Andrea
+
+The current code exceeds 80-cols per line.
+
+I renamed the parameters so that the lines
+fit within 80-cols without wrapping.
+
+
+
+
+
+> Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+>
+> > ---
+> >
+> >  scripts/mod/modpost.c | 16 ++++++++--------
+> >  1 file changed, 8 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> > index bb7d1d87bae7..0bda2f22c985 100644
+> > --- a/scripts/mod/modpost.c
+> > +++ b/scripts/mod/modpost.c
+> > @@ -1207,6 +1207,14 @@ static Elf_Sym *find_elf_symbol2(struct elf_info=
+ *elf, Elf_Addr addr,
+> >         return near;
+> >  }
+> >
+> > +static bool is_executable_section(struct elf_info *elf, unsigned int s=
+ecndx)
+> > +{
+> > +       if (secndx > elf->num_sections)
+> > +               return false;
+> > +
+> > +       return (elf->sechdrs[secndx].sh_flags & SHF_EXECINSTR) !=3D 0;
+> > +}
+> > +
+> >  static void default_mismatch_handler(const char *modname, struct elf_i=
+nfo *elf,
+> >                                      const struct sectioncheck* const m=
+ismatch,
+> >                                      Elf_Rela *r, Elf_Sym *sym, const c=
+har *fromsec)
+> > @@ -1252,14 +1260,6 @@ static void default_mismatch_handler(const char =
+*modname, struct elf_info *elf,
+> >         }
+> >  }
+> >
+> > -static int is_executable_section(struct elf_info* elf, unsigned int se=
+ction_index)
+> > -{
+> > -       if (section_index > elf->num_sections)
+> > -               fatal("section_index is outside elf->num_sections!\n");
+> > -
+> > -       return ((elf->sechdrs[section_index].sh_flags & SHF_EXECINSTR) =
+=3D=3D SHF_EXECINSTR);
+> > -}
+> > -
+> >  static void extable_mismatch_handler(const char* modname, struct elf_i=
+nfo *elf,
+> >                                      const struct sectioncheck* const m=
+ismatch,
+> >                                      Elf_Rela* r, Elf_Sym* sym,
+> > --
+> > 2.39.2
+> >
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
