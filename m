@@ -2,61 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2352F70A92A
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 18:30:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3330B70A948
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 18:50:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbjETQai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 12:30:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47188 "EHLO
+        id S230338AbjETQuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 12:50:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjETQaf (ORCPT
+        with ESMTP id S229523AbjETQuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 12:30:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE31121;
-        Sat, 20 May 2023 09:30:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C69D60F78;
-        Sat, 20 May 2023 16:30:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97BF5C433D2;
-        Sat, 20 May 2023 16:30:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684600232;
-        bh=99kybXVVak92KXWTW8T86FBan8p8JbXRhODDLorI754=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PiMSHrkNfmVzqhJFiTqexamm1jVb0xJ81UqPn0BT343IQPdPlrXWgBfTjDkLw0RMz
-         o3oQhd8I6X+RITRt8jS7FAwp2+ufn90mQ9s7waHa2ITw70IMA3FIUsGBULkBnIIn/0
-         EUHO2inStIJoocmScKlTX4jBkBY7DjDxicy/+TCPDBRIdTBVRvmwLkCIROWNwL9XQ4
-         V8vTiRL8NCsrjWqf3sjOBki46OKqboHvda9t70Kyrs34nw+JTCzSz28tIZLU6UIv9i
-         ExHGa4WPHhuxEbtXRfL+JHpQCl5f9ff81+IVLg551Jcy5CnjfLBAKcp81W03Xtlnyc
-         HPCl7L7UOTNyw==
-Date:   Sat, 20 May 2023 17:46:41 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 0/5] Support ROHM BU27008 RGB sensor
-Message-ID: <20230520174641.162d9027@jic23-huawei>
-In-Reply-To: <cover.1683541225.git.mazziesaccount@gmail.com>
-References: <cover.1683541225.git.mazziesaccount@gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Sat, 20 May 2023 12:50:18 -0400
+Received: from DM5PR00CU002.outbound.protection.outlook.com (mail-centralusazon11021025.outbound.protection.outlook.com [52.101.62.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAFDDE9;
+        Sat, 20 May 2023 09:50:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GDHDFd7ef5PF2wyXnoipFijmtsnRMOtpgKYJND272HNw3vq1ctZHaVzc3FRltPk7IXJpygr8jgMU0B2iw93B/78XM93xUHtSEo0p328FjX1BdBAG+8auiiXKbDI6y9AP+UncuUg2Hm0Nn7X8qKuXRk0ZW3vGTxaWl53QEQ+84M4kk7ztkq3YbePJtai6AoDfnARsT4aZTdJTtcSa3yhjexOcuMJZZHaYGt1JJOVpHJefKbOGjy/i3O8lzs+NuuYBiXxEI8IpXgY7d71lW9WuGIDrdDidW9Rgznbj8qcFOapnPPd5rL2J4eyRJDhJcUcfQW0jkzFySyXxthoX3++dwQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Nk0UmCgHLKyKXa++q0JQFeNiFBT+4gy/Zuvgh/xKXpc=;
+ b=CrZ5nagMDs50o619/14SGqFf9tUmifgUUKm5pAdgtoOQz/KXcArKk1bWRg6uZlOoQJ9SF49KRfkFmFNAjy4832vOcNIfzFz8fWnDh8UZ1a1xC9QU2FE9yaMGzTniLPuQRwTcDgy5sAJ9Dh6hh1SrIyRDwwKnKZ8Zp2Gg6r/nl8zKN/dFlRwR/O82jJQbO7Mhhl71n9a1YNisU1+q31ileSyYxNxmBWmF811QYkyWxg2perR/xBhGFZT3S4EUc4XRE8J373V9cMu5HKjFpzHSfHvFgJ7BSUNHlzx8zPwdnYN4D0D5Y4lRLHbpeykNUQ3Vo0DinmaOIYyEVl64+W/F3Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Nk0UmCgHLKyKXa++q0JQFeNiFBT+4gy/Zuvgh/xKXpc=;
+ b=Ba+1fp78OtzW0YtY/kB15D9acvlEt8wlvjtxogMmqGcgh6QqKg+sGlmXBGR1b9sFcOryifTevvoJrzKyl1aKxrqD5mMGO/yAdXVrCzZx+624H3QpgaeuTbtiSlnF69c2Sa7rzXG1SxBq8/d9Ww36g8Nc//JdNIXNxaV+6PEywPU=
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
+ by SN7PR21MB3955.namprd21.prod.outlook.com (2603:10b6:806:2dd::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6433.12; Sat, 20 May
+ 2023 16:50:14 +0000
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::a4f7:2466:97b5:bd31]) by BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::a4f7:2466:97b5:bd31%5]) with mapi id 15.20.6433.010; Sat, 20 May 2023
+ 16:50:13 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     Saurabh Sengar <ssengar@linux.microsoft.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>
+CC:     Saurabh Singh Sengar <ssengar@microsoft.com>
+Subject: RE: [PATCH 2/2] Drivers: hv: Kconfig: Add HYPERV_VTL_MODE
+ dependencies
+Thread-Topic: [PATCH 2/2] Drivers: hv: Kconfig: Add HYPERV_VTL_MODE
+ dependencies
+Thread-Index: AQHZhBiSXHyss6LMXEKxhJqATsYYqa9jayRA
+Date:   Sat, 20 May 2023 16:50:13 +0000
+Message-ID: <BYAPR21MB16884CCC195B1D90BFB30D0CD77DA@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <1683816877-10747-1-git-send-email-ssengar@linux.microsoft.com>
+ <1683816877-10747-2-git-send-email-ssengar@linux.microsoft.com>
+In-Reply-To: <1683816877-10747-2-git-send-email-ssengar@linux.microsoft.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=c4755354-b2f0-4b02-974e-488479445ce0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-05-20T16:39:37Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|SN7PR21MB3955:EE_
+x-ms-office365-filtering-correlation-id: 4b04b05a-e7e3-4558-6d51-08db59524855
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: VuL8tJUZYcVKKvzSnq6BqaFQUtZlC3qlfySJ2XVKaxWzS8fvQcEIQaTKddqEi7BdoEZldqCt3S1IP+YJxobB29U5G4Lh8xIhTS59ccG/q0WQNB+BXT/DPbUTVWZC8MaozWzsUkxwb+dSGA2RD+G2VnvIAbC3PGdlCBOCX41SzAY1L29mTZ/kpwu/jC/CqsNfUffoGWBiFlq/v2bxAc3q+vX9fQp6GXQH+pK1IDiLBirL4IHKF4MChObBRcrBIA85YDW9iHIv2NnnU73OhDljfasXEvTW3wUikZ+qhEfp5Al4obYXuVLm3TFH9Qss7cuFIWjP1XbsPI/REXBIUvBXn3cx3i4wUdiVaQK1PRJKLSxk+YQHsP+EWop9CQzR7loRWrHJoCQDSaSwvdjvh3VFKyAi0FArHOmhqJcJCbRC0Ap3VGlX0+yBrfoDJhob9SupeGOtHMCLVwtJjS7EYLMa/LVHFFHMUT0tRnvbpeL/XcqHJW70N8NwGjiI8mrUgF2MMXhGJmo7u7dlxbsnhkk4c/w97IgjlWIrvulOOMwfv0r2enFjrM8y8Q0uTWCCxBvj6c6kVGX8wiarSeu0sltx0ZCvmyiVWf8WQiWid2bW7+z8QrDNs2Es5PpTySBhjfHvd+VQUfRKbpLh1nS2LCnwQ94Bg0iYyxSldujdfaXRhWOsnTiy4wBPBhNxZatoCxaD
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(376002)(366004)(396003)(136003)(451199021)(55016003)(8990500004)(83380400001)(186003)(2906002)(478600001)(4326008)(66476007)(76116006)(66946007)(66556008)(41300700001)(7696005)(786003)(316002)(64756008)(110136005)(66446008)(71200400001)(10290500003)(52536014)(26005)(5660300002)(9686003)(6506007)(107886003)(8676002)(8936002)(38070700005)(38100700002)(82950400001)(82960400001)(122000001)(921005)(86362001)(33656002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?6HTFJydf7jiR8RqBIXy8F043YrVn/86XZwknxQFYZ0MK+sfXOgiDqGH2i7ff?=
+ =?us-ascii?Q?NjcPknVV5IprjL2AP2WOScn/1E04OkxbSO1YTAV5QI1ZiHqRUOXEm2vaEI0a?=
+ =?us-ascii?Q?WTBCNhkIdBzujt6tFuYBnqD5BxDvbm/TwhfH9mEi499OZA1lt5xl1F25GbO6?=
+ =?us-ascii?Q?Y0im6Lu8FlIIgN18nEA5zhthRpX5Az7+L5L4sgRhiMsGPjZL5SXR0s959T0U?=
+ =?us-ascii?Q?DmZlt801CGOIfYJVV/oLJjMu7Daa+O3BKQpFFj/TlHf+RfcKxyHLtaMIf7gA?=
+ =?us-ascii?Q?0JB0w+J0au6BKzFD7nd4JwgjmsJWc0up4rDdxS09tTlRGdW0/xey2HledpCJ?=
+ =?us-ascii?Q?11X/bMHZt2Z2M6Aegl/2O6xWw35KaSEAkV9WX0+Ze6L4mdRKLhSrtUY3a0JY?=
+ =?us-ascii?Q?U9AswuIosAk14onhTdqIWZUIScYPSCm0ereALC3Auiz68GVfCqMPB3Y3YMOX?=
+ =?us-ascii?Q?q6zBdsaz85YOJae4W2sDvSpqfhewC9NiF/gK8yCPC2r/vM5IRPjL0xK1kGzN?=
+ =?us-ascii?Q?TVUNKJY+WT5VV3KSiigiPm4llp/tCtQbd2CLii7iwh1z3IHU713Kbo165Mwi?=
+ =?us-ascii?Q?W5whAg2m2/khagAXl30KU6YCIiAOta3gYfABvxGmgI0jA4n+qTuJBN7tucOB?=
+ =?us-ascii?Q?lQcpyOqwVVDgPQkV31ppS5h2q/Q+gSQ3tH/r5v99lPCX/BqKNUFI4Bc+bQgr?=
+ =?us-ascii?Q?rhfIo2P+F52I1MyPBv6Cy2vOusZti8bXTQmO+6WQnc8XefAP5Mwm5gzkXnPz?=
+ =?us-ascii?Q?XkXI2oYLoAJjRqrzp6c+Dazdz5kY2BHg4bbV1F4kzCVJPqbce3a7iC2l7axx?=
+ =?us-ascii?Q?F3iehhUsvDjkxpIdI29eVe0ecMEud8WW5TW61Xb6ZXw4wsUXvzL34QaovvYs?=
+ =?us-ascii?Q?+fZbGr8AV98pGA5sEbJUpk0iKMdnQHMJ2Mw1Cl0W5sab/XxprhhJO/6GjqeD?=
+ =?us-ascii?Q?Ci96+m+Awsw2mE2vLfOg01751dVDlvASFS4gBbOYk9L0KKK+4uMZo6Ya90XR?=
+ =?us-ascii?Q?fUCliYOPLSAm4kMH25bYbRwCatpVY1HwfFOeOF1qNLsQ6FAc9Hwyq2LlGtS5?=
+ =?us-ascii?Q?qtWhcB6jdQQ+UewciBJ0Y8/A+PGzJ3MsBW2qnH9qgGAQm2dzupmy0AGzVSr2?=
+ =?us-ascii?Q?Be4wb4D2br3x07oeWOagF+raKGG4Yq9ZdnXvbJK9HH0U7b9rFEJCI8Ne/d93?=
+ =?us-ascii?Q?CT0t+v0vFoVXr/ubBaExzegxO9N0dUUY0ZjnpIq7vcF+6aRXju3aAX4zLFwV?=
+ =?us-ascii?Q?sZF5DHlIWPeXSL1Y8lCfEuWUY7pcELFj7xpUMbNnScaoHY5u/5ncxZ7hSULy?=
+ =?us-ascii?Q?oVZbkjt22BD8ajE+8cOsvECIDqscq+a2PFGxmxQsADcuNrC4GQS7zRWJwX1+?=
+ =?us-ascii?Q?s3e52ftSJoLbsKNTI7tchE7Rk2CU9/OfNypVuZWgYgXgnNdhzg7X4l+ajVAW?=
+ =?us-ascii?Q?Ipja+hMpfeXsMXl12qs3nQQ2aRlScrny9G9XsC6u/KzzzWbW6Y8FxvqOEtr+?=
+ =?us-ascii?Q?71XO44rROJ4DdJGVoQvxWLVp+3H2kV6KQprOqSgBe8jHAD61dW5CtLLBkOMS?=
+ =?us-ascii?Q?WrFtAMfPDRLVwf5QogJzFsxLUXxri2OzlYeQjiy4uLary3ghRWexqbCBwaE3?=
+ =?us-ascii?Q?IQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4b04b05a-e7e3-4558-6d51-08db59524855
+X-MS-Exchange-CrossTenant-originalarrivaltime: 20 May 2023 16:50:13.8327
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: l5QJI8h9rqUprod9IQTPQ5tGhdPiZeBJrsaUF4MNgPzitVBaisM/UFsaTSZIs82JP2N48OB+Rb/5GsHUh4kV0J+7frxIZllQ+nGS+mK+vz0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR21MB3955
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,154 +131,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 8 May 2023 13:30:28 +0300
-Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+From: Saurabh Sengar <ssengar@linux.microsoft.com>
+>=20
+> MTRRs are not per-VTL and are controlled by VTL0, make sure it
+> is disabled for all other VTLs.
 
-> Add support for ROHM BU27008 RGB sensor.
+Clarifying the wording a bit:
 
-Series applied to the togreg branch of iio.git and pushed out initially
-as testing for all the normal reasons.
+MTRRs are not per-VTL, but are always controlled by VTL0.   Allow
+building for VTLs other than VTL0 only when MTRR functionality
+is disabled.
 
-Thanks,
+>=20
+> X86_MPPARSE scans low memory for MP tables, which is not required
+> for Hyper-V VTL platforms.
 
-Jonathan
-> 
-> The ROHM BU27008 is a sensor with 5 photodiodes (red, green, blue, clear
-> and IR) with four configurable channels. Red and green being always
-> available and two out of the rest three (blue, clear, IR) can be
-> selected to be simultaneously measured. Typical application is adjusting
-> LCD backlight of TVs, mobile phones and tablet PCs.
-> 
-> This series supports reading the RGBC and IR channels using IIO
-> framework. However, only two of the BC+IR can be enabled at the same
-> time. Series adds also support for scale and integration time
-> configuration, where scale consists of impact of both the integration
-> time and hardware gain. The gain and time support is backed by the newly
-> introduced IIO GTS helper. This series depends on GTS helper patches
-> added in BU27034 support series which is already merged in iio/togreg
-> which this series is based on.
-> 
-> The hardware allows configuring gain setting by writing a 5-bit gain
-> selector value to a register. Part of the gain setting is common for all
-> channels (RGBC + IR) but part of the selector value can be set
-> separately for RGBC and IR:
-> 
-> MODE_CONTROL2 REG:
-> bit 7	    6	    5	    4	    3	    2	    1	    0
-> -----------------------------------------------------------------
-> |	RGB	selector		|
-> +---------------------------------------+
-> -----------------------------------------------------------------
-> | high bits IR	|			| low bits IR selector	|
-> +---------------+			+-----------------------+
-> 
-> In theory it would be possible to set certain separate gain values for
-> RGBC and IR channels, but this gets pretty confusing because there are a
-> few 'unsupported' selector values. If only RGBC or IR was set, some
-> extra handling should be done to prevent the other channel from getting
-> unsupported value due to change in high-bits. Furthermore, allowing the
-> channels to be set different gain values (in some cases when gains are
-> such the HW supports it) would make the cases where also integration
-> time is changed to achieve correct scale ... interesting. It might also
-> be confusing for user to try predicting when setting different scales
-> succeeds and when it does not. Furthermore, if for example the scale
-> setting for RGBC caused IR selector to be invalid - it could also cause
-> the IR scale to "jump" very far from previous value.
-> 
-> To make the code simpler and more predictable for users, the current
-> logic is as follows:
-> 
-> 1. Prevent setting IR scale. (My assumption is IR is less used than
-> RGBC)
-> 2. When RGBC scale is set, set also the IR-selector to the same value.
-> This prevents unsupported selector values and makes the IR scale changes
-> predictable.
-> 
-> The 2) could mean we effectively have the same scale for all channels.
-> Unfortunately, the HW design is slightly peculiar and selector 0 means
-> gain 1X on RGBC but gain 2X on IR. Rest of the selectors equal same gain
-> values on RGBC and IR. The result is that while changin selector from 0
-> => 1 causes RGBC gain to go from 1X => 4X, it causes IR gain to go from  
-> 2X => 4X.
-> 
-> So, the driver provides separate scale entries for all channels (also
-> RGB and C will have separate gain entries because these channels are of
-> same type as IR channel). This makes it possible for user applications
-> to go read the scales for all channels after setting scale for one (in
-> order to detect the IR scale difference).
-> 
-> Having the separate IR scale entry which applications can read to detect
-> "arbitrary scale changes" makes it possible for applications to be
-> written so they can cope if we need to implement the 'allow setting some
-> different gains for IR and RGBC' - later.
-> 
-> Finally, the scales_available is also provided for all other channels
-> except the IR channel, which does not allow the scale to be changed.
-> 
-> The sensor provides a data-ready IRQ and the driver implements a
-> triggered buffer mode using this IRQ as a trigger.
-> 
-> Finally, the series introduces generic iio_validate_own_trigger() helper
-> which can be used as a validate_trigger callback for drivers which
-> require the trigger and iio-device to be parented by same device. The
-> KX022A driver is converted to use this new callback instead of rolling
-> it's own function. The new helper and KX022A can be merged in as
-> independent changes if need be.
-> 
-> 
-> Revision history
-> v3 => v4:
->   iio_validate_own_trigger:
->     - kernel-doc fix
->   bu27008 driver fixes:
->     - re-enable IRQ in trigger renable-callback
->     - do trigger setup on own function
->     - drop regmap lock
->     - configure channels in appropriate callback
-> v3 => v4:
->   bu27008 driver fixes:
->     - Drop thread from device IRQ handler
->     - Styling and some minor improvements
->     - Use kernel-doc for enums
->     - Correctly order entries in Makefile
-> v2 => v3:
->   dt-bindings:
->     - No changes
->   iio_validate_own_trigger:
->     - subject fix
->   bu27008:
->     - Mostly styling based on comments from Andy and Andi
-> 
->   More accurate changelog in individual patches
-> 
-> v1 => v2:
->   dt-bindings:
->     - Fix issues pointed by Krzysztof.
->   bu27008 driver:
->     - Fix issues pointed by Jonathan
->   Add new helper for validating own trigger
-> 
->   More accurate changelog in individual patches
-> 
+Is the above statement saying that MP tables aren't required, so remove
+the code to save space?  Or is there a problem/failure if MP table code
+runs and scans low memory?   *Requiring* that it be disabled, and the
+reference to scanning low memory makes me think it might be the latter,
+in which case I'd suggest this more forceful wording:
+
+The MP table code scans low memory, which causes failures in VTLs
+other than VTL0.   Allow building for VTLs other than VTL0 only when
+MP table functionality is disabled.
+
+If you can give slightly more detail about "causes failures" (a panic?
+some other problem?) that would be good too.
+
+Michael
+
+>=20
+> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
 > ---
-> 
-> Matti Vaittinen (5):
->   dt-bindings: iio: light: ROHM BU27008
->   iio: trigger: Add simple trigger_validation helper
->   iio: kx022a: Use new iio_validate_own_trigger()
->   iio: light: ROHM BU27008 color sensor
->   MAINTAINERS: Add ROHM BU27008
-> 
->  .../bindings/iio/light/rohm,bu27008.yaml      |   49 +
->  MAINTAINERS                                   |    3 +-
->  drivers/iio/accel/kionix-kx022a.c             |   13 +-
->  drivers/iio/industrialio-trigger.c            |   22 +-
->  drivers/iio/light/Kconfig                     |   14 +
->  drivers/iio/light/Makefile                    |    1 +
->  drivers/iio/light/rohm-bu27008.c              | 1026 +++++++++++++++++
->  include/linux/iio/trigger.h                   |    1 +
->  8 files changed, 1115 insertions(+), 14 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/iio/light/rohm,bu27008.yaml
->  create mode 100644 drivers/iio/light/rohm-bu27008.c
-> 
+>  drivers/hv/Kconfig | 2 ++
+>  1 file changed, 2 insertions(+)
+>=20
+> diff --git a/drivers/hv/Kconfig b/drivers/hv/Kconfig
+> index 00242107d62e..c8d443886b9d 100644
+> --- a/drivers/hv/Kconfig
+> +++ b/drivers/hv/Kconfig
+> @@ -16,6 +16,8 @@ config HYPERV
+>  config HYPERV_VTL_MODE
+>  	bool "Enable Linux to boot in VTL context"
+>  	depends on X86_64 && HYPERV
+> +	depends on !MTRR
+> +	depends on !X86_MPPARSE
+>  	default n
+>  	help
+>  	  Virtual Secure Mode (VSM) is a set of hypervisor capabilities and
+> --
+> 2.34.1
 
