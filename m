@@ -2,105 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9402E70A5A3
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 07:19:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4BF370A5A5
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 07:21:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbjETFTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 01:19:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35238 "EHLO
+        id S230300AbjETFVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 01:21:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjETFTe (ORCPT
+        with ESMTP id S229512AbjETFVx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 01:19:34 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9CB1B0;
-        Fri, 19 May 2023 22:19:32 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 34K5ILO00007046, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 34K5ILO00007046
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Sat, 20 May 2023 13:18:21 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Sat, 20 May 2023 13:18:31 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Sat, 20 May 2023 13:18:30 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Sat, 20 May 2023 13:18:30 +0800
-From:   =?utf-8?B?U3RhbmxleSBDaGFuZ1vmmIzogrLlvrdd?= 
-        <stanley_chang@realtek.com>
-To:     Vinod Koul <vkoul@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-CC:     Paul Cercueil <paul@crapouillou.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Ray Chi <raychi@google.com>,
-        "Bagas Sanjaya" <bagasdotme@gmail.com>,
-        Eugeniu Rosca <erosca@de.adit-jv.com>,
-        Michael Grzeschik <m.grzeschik@pengutronix.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Flavio Suligoi <f.suligoi@asem.it>,
-        Mathias Nyman <mathias.nyman@linux.intel.com>,
-        Bhuvanesh Surachari <Bhuvanesh_Surachari@mentor.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: RE: [PATCH v1 2/3] usb: phy: Add driver for the Realtek SoC USB 2.0/3.0 PHY
-Thread-Topic: [PATCH v1 2/3] usb: phy: Add driver for the Realtek SoC USB
- 2.0/3.0 PHY
-Thread-Index: AQHZig6UEIendKXQakm8Ocfv4iAbD69gulMAgACuYvD//3+eAIAAb2SAgAFHdSA=
-Date:   Sat, 20 May 2023 05:18:30 +0000
-Message-ID: <1b32419b8024407298e9bb5f33d3d47b@realtek.com>
-References: <20230519045825.28369-1-stanley_chang@realtek.com>
- <20230519045825.28369-2-stanley_chang@realtek.com>
- <0d165c7efbb71a65803abddc364e1c5252b8b939.camel@crapouillou.net>
- <0ee8a26205a041cab9a787ec29201a9f@realtek.com>
- <f7edea0c-dbfe-4c16-8134-0656411a837d@app.fastmail.com>
- <ZGe0f4OfaXzweSp3@matsya>
-In-Reply-To: <ZGe0f4OfaXzweSp3@matsya>
-Accept-Language: zh-TW, en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.190.159]
-x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Sat, 20 May 2023 01:21:53 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF101B7;
+        Fri, 19 May 2023 22:21:50 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f42769a0c1so40338225e9.2;
+        Fri, 19 May 2023 22:21:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684560109; x=1687152109;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+YCeLgnfdNNLRbQJ3YR4Z/VQhSO2Fn36PmEIuzpNl+A=;
+        b=qJMAA70oc2XzjFfK6LPciZZQX2UKttbs+TQxY35L4pb79WT5OF3+MZZGqHT4YHfuAM
+         yQ9VXsEnIgwnlo2mLlA+UcY8p7lXlWs3dDK1rjLegS/JB9UMW4dKKr44A+h2KTvBFh2P
+         i3lJ24kUMGsp0l97Sq/Q7+hPMOx/TH+8c1plxCa03LEupDJd9GB7Ff8Mgk9a930xkeWR
+         yhmy9LwdvUrNh9FAyBb+2qNOo2FTi8zAZJZY4MZSjxDkFlJfnhrY6dT2ctcRQPcEvFbC
+         uFlZ8p8+TmykOoeWdT9qmQ/HDEdELlbSRVLyxIb12w9GN0LFjpEaqHCie1vuGi3OhpSl
+         ontg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684560109; x=1687152109;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+YCeLgnfdNNLRbQJ3YR4Z/VQhSO2Fn36PmEIuzpNl+A=;
+        b=ELtLzmR/PhKTcfYIsVLpj72/NyYAvTh+jg0Wznc19s+YevRZfM5+jhvfbyBgeDiNpw
+         N0Rpaa9McFsURfF3llaIMpx9qOYqY7ovtmVHs0KdJVpFQqHhlm/P0Wru2jFCm5BQFzzH
+         hfR99o/0zg8ekRMoCqsjJuGDdL6yfoJdH+UvECPUdc1wDl8uxc1lk95AHgwtV3+0Eg+V
+         FjbSUzt1vtfW9a9vM3xR5xnFIDKPSdzDopNxAYP/hBtlvga0oAf2lUGajod53JD6dya5
+         R1mEM0DALKSnRW0//7lGQfuNQe8Lqmx+6dsT3zsmFYkel5ZNSyazC6P9FYqGsFMVZM+z
+         k2OA==
+X-Gm-Message-State: AC+VfDxuYiontxVIIL64FzRm89nFpG9xGFvNdC6Ylg1aL6cnn4P0r0ak
+        GSKynHTmXZmNE+M8tFbhmdc=
+X-Google-Smtp-Source: ACHHUZ4Eoa9xWVslykQCIhtD+WNpYCFuNO5kU1HN6r6LAMURYRyh8pv+wrNmJ053DffGSdTv1WNVTA==
+X-Received: by 2002:a1c:7314:0:b0:3f4:2bce:eef8 with SMTP id d20-20020a1c7314000000b003f42bceeef8mr2763578wmb.16.1684560108575;
+        Fri, 19 May 2023 22:21:48 -0700 (PDT)
+Received: from localhost (host81-154-179-160.range81-154.btcentralplus.com. [81.154.179.160])
+        by smtp.gmail.com with ESMTPSA id l13-20020a7bc44d000000b003f42328b5d9sm1062855wmi.39.2023.05.19.22.21.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 May 2023 22:21:47 -0700 (PDT)
+Date:   Sat, 20 May 2023 06:19:37 +0100
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Arnd Bergmann <arnd@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH] [suggestion] mm/gup: avoid IS_ERR_OR_NULL
+Message-ID: <1ca47b8a-292c-47ab-aa6f-ca24fdfc0d3c@lucifer.local>
+References: <20230519093953.10972-1-arnd@kernel.org>
+ <5b071f65-7f87-4a7b-a76a-f4a1c1568ae7@lucifer.local>
+ <ZGf1hV7iEQyqAim5@ziepe.ca>
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZGf1hV7iEQyqAim5@ziepe.ca>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgVmlub2QsDQoNCj4gVGhlIGlzIGNvcnJlY3QsIHBoeSBpbnRlcmZhY2VzIGNhbiBiZSBpbXBy
-b3ZlZCB1cG9uIGFuZCBoYXZlIGJlZW4gYWRkZWQNCj4gdXBvbiBhcyBhbmQgd2hlbiB3ZSBoYXZl
-IHVzZXJzLg0KPiANCj4gRldJVyB0aGVyZSBhcmUgYWxyZWFkeSB1c2IgcGh5IGRyaXZlcnMgaW4g
-R2VuZXJpYyBwaHkgc3VzYnlzdGVtLCBzbyB5b3UgbmVlZA0KPiB0byByZWFsbHkganVzdGlmeSB3
-aHkgeW91IG5lZWQgYSBuZXcgaW50ZXJmYWNlPw0KPiANCg0KSSB3aWxsIHJlZmVyZW5jZSB0aGUg
-dXMgcGh5IGRyaXZlcnMgaW4gZHJpdmVycy9waHkuDQpJcyB1c2luZyB1c2IgcGh5IGluIGRyaXZl
-cnMvcGh5IHRoZSByaWdodCBjaG9pY2U/DQpBcyB0aGUgZm9sbG93aW5nIGFzOg0KZHJpdmVycy9w
-aHkvdGkvcGh5LXR3bDQwMzAtdXNiLmMNCmRyaXZlcnMvcGh5L3RpL3BoeS1vbWFwLXVzYjIuYw0K
-ZHJpdmVycy9waHkvdGkvcGh5LWRtODE2eC11c2IuYw0KZHJpdmVycy9waHkvcGh5LWxnbS11c2Iu
-Yw0KZHJpdmVycy9waHkvdGVncmEveHVzYi5jDQpkcml2ZXJzL3BoeS9tb3Rvcm9sYS9waHktY3Bj
-YXAtdXNiLmMNCg0KVGhhbmtzLA0KU3RhbmxleQ0KDQo=
+On Fri, May 19, 2023 at 07:17:41PM -0300, Jason Gunthorpe wrote:
+> On Fri, May 19, 2023 at 03:51:51PM +0100, Lorenzo Stoakes wrote:
+> > Given you are sharply criticising the code I authored here, is it too much
+> > to ask for you to cc- me, the author on commentaries like this? Thanks.
+> >
+> > On Fri, May 19, 2023 at 11:39:13AM +0200, Arnd Bergmann wrote:
+> > > From: Arnd Bergmann <arnd@arndb.de>
+> > >
+> > > While looking at an unused-variable warning, I noticed a new interface coming
+> > > in that requires the use of IS_ERR_OR_NULL(), which tends to indicate bad
+> > > interface design and is usually surprising to users.
+> >
+> > I am not sure I understand your reasoning, why does it 'tend to indicate
+> > bad interface design'? You say that as if it is an obvious truth. Not
+> > obvious to me at all.
+> >
+> > There are 3 possible outcomes from the function - an error, the function
+> > failing to pin a page, or it succeeding in doing so. For some of the
+> > callers that results in an error, for others it is not an error.
+>
+> No, there really isn't.
+>
+> Either it pins the page or it doesn't. Returning "NULL" to mean a
+> specific kind of failure was encountered is crazy.. Especially if we
+> don't document what that specific failure even was.
+>
+
+It's not a specific kind of failure, it's literally "I didn't pin any
+pages" which a caller may or may not choose to interpret as a failure.
+
+> IIRC if you look really closely the only time get_user_pages()
+> actually returns 0 is if the input argument validation fails, which I
+> think is a bug that should be fixed.
+
+That can be a reason for gup returning 0 but also if it you look at the
+main loop in __get_user_pages_locked(), if it can't find the VMA it will
+bail early, OR if the VMA flags are not as expected it'll bail early.
+
+>
+> get_user_pages() never returns 0, so get_user_page_vma_remote() never
+> returns NULL. Until we get there collapsing the 0 to EIO is perfectly
+> fine.
+
+Well no, as shown above actually there is a distinct third state,
+i.e. couldn't pin, which if you see there is at least one case where the
+caller differentiates between an error and not being able to pin -
+uprobe_write_opcode() - which treats failure to pin as a non-error state.
+
+Also if we decided at some point to return -EIO as an error suddenly we
+would be treating an error state as not an error state in the proposed code
+which sounds like a foot gun.
+
+>
+> Jason
