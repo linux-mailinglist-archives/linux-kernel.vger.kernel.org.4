@@ -2,76 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C14C70A9EA
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 20:22:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CB7470AA02
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 20:23:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231686AbjETSWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 14:22:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43432 "EHLO
+        id S231531AbjETSXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 14:23:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231557AbjETSVv (ORCPT
+        with ESMTP id S232087AbjETSWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 14:21:51 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F2BE10CC;
-        Sat, 20 May 2023 11:21:29 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1ae87bdc452so10580345ad.2;
-        Sat, 20 May 2023 11:21:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684606887; x=1687198887;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qFFbB0eljV8B1MeTCIcq4HztEtmKMqwP+0gvj6VcmR4=;
-        b=Nnk6Ai/nkBf2hhxnRhVom43y5wyOdJP9gUzN7dZmbhN9Xlh/jd+IJMDrqrQ/mIW6zi
-         LNJWi3s0pmf0bHnCIHEE7G6/Y4SgsCdkyiuv14aavxpMVL8QaJ77n6FF6w7/MLicxl+G
-         keikEFDOL66YAj9F4r4jow8pidhVd1RUrM7mvAJpriKKcBXYpFllm5urCVAyixUbldL7
-         0atWVqYzHBRCkc3un7tnKM2CprEARuTOB7TINNTfNq0ZCl1lMEYQLpJFqKu3qGuDnWdx
-         EiwBdeEgWY10w7YgOnbYTtxL+qOcImMpAa4Cb0QlgJ2zvF/KozyhDoT3EDZOGPKYe/vy
-         XlTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684606887; x=1687198887;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qFFbB0eljV8B1MeTCIcq4HztEtmKMqwP+0gvj6VcmR4=;
-        b=hqVwJcfw8/k1rdmzK6gKtYM56Iv9NUZC+/DsFY+ACLsZ3hhGv4HKFtDnMYESLDVLTQ
-         q7bi1jG3WpxZtC6Ffc+4YqFQX7k+AUjJ4OaxG8q7DD0L9sJI7gzPDxEvRvTnhJAD+zIc
-         fvt07y6uJjHd9judjNAIj/CKGmAJRemA/TXoCBLkLnucKTTCAGNYhWq9LoRJL7bFjWgD
-         k/gVYQjLkbcJ1nXkyxZmX/yK3++RONMHBBXB/oRs2Pdy//oU7jvwFeiVCcMasHLFv2rK
-         JM4H5iZRtvrC8Fs11pLcmAimu+b2R3BRUF+O8pDJhycWbmXyinjpccFAPvzm5SF6VD+0
-         Fvzw==
-X-Gm-Message-State: AC+VfDxWgUNYjf5yOYTdQ4NoV/o6bWcQncgjqA+vIRgyOPjlG5aNz5Ty
-        m/MHHl+9b3CyUWU/okw5dQjBs1z/1whpDGqipTY=
-X-Google-Smtp-Source: ACHHUZ6Dd97OJfNjLHrXt5eSzL/oUGa+2LLRlD67s5KC5vc1UxPwiMnl+25XJI/CR7wqyE8JSfjOQnTdHTmh69CEGes=
-X-Received: by 2002:a17:902:e848:b0:1ad:d500:19d3 with SMTP id
- t8-20020a170902e84800b001add50019d3mr8459565plg.23.1684606886701; Sat, 20 May
- 2023 11:21:26 -0700 (PDT)
+        Sat, 20 May 2023 14:22:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC81110FC;
+        Sat, 20 May 2023 11:22:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CC04F60F88;
+        Sat, 20 May 2023 18:22:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E9F2C433D2;
+        Sat, 20 May 2023 18:22:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684606939;
+        bh=QXOmpFfrX6WqPjEMMraE5Lk9ZwBNgRHBGUmGtOqvR3Y=;
+        h=From:To:Cc:Subject:Date:From;
+        b=iSwCLec8SCqScGb16+HI4oHFqR/Hs0qviBIURyuZox3ihfrJ4syl5P++GqHyHvxjn
+         4cVsfPSKmaEddgl+kkj0mLWxC/fdsIu6Cnpi6AXxly6wTD/DqIct+xK90YlD466bhT
+         AX8CDRggXVSqb1RIAdIRtTk75L2NfelpOM+qUG/pwy62Cq5YzUcSO/8ASVWI6/4HO5
+         P2Hin2rMIqKPtYvjhkhMjjPVBE+9H+u4THqKVHnxaPW2x5CRgfJCa+ylpaG8scLcfC
+         XP21clreOlOU7iKaw8SXEa7rw+fFbtzfnFWXPiZwyQocuJ8i+eKu5GVjGL+NeWC7Ju
+         i2BHXgmhKwgxg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Jammy Huang <jammy_huang@aspeedtech.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Sasha Levin <sashal@kernel.org>, airlied@redhat.com,
+        airlied@gmail.com, daniel@ffwll.ch, dri-devel@lists.freedesktop.org
+Subject: [PATCH AUTOSEL 5.15 01/11] drm/ast: Fix ARM compatibility
+Date:   Sat, 20 May 2023 14:22:04 -0400
+Message-Id: <20230520182215.845131-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230517223007.178432-1-boerge.struempfel@gmail.com>
- <CAOMZO5CqMMCCOsAB3YgJUUampE=iZru57d=qoX13-GkSaaC5gg@mail.gmail.com>
- <CAEktqcuMrqiwDfGM=SAoHiKPY-hupS+jipt=6Tasr1q8VUvRQQ@mail.gmail.com>
- <CAOMZO5CJwwKmDYRxnny2JOrwucGn=q7+9xKqk_NSvZ_wyNSHEQ@mail.gmail.com>
- <CAEktqcue7gFk9fXMsNPxwUsUVRxpa6GE5wCHZqU2p2dDz8WYqg@mail.gmail.com> <CAHp75VcP78MhmjzOCiGwfEwWwVxCHhy3qmZet0HqjPeLTc9h-A@mail.gmail.com>
-In-Reply-To: <CAHp75VcP78MhmjzOCiGwfEwWwVxCHhy3qmZet0HqjPeLTc9h-A@mail.gmail.com>
-From:   =?UTF-8?B?QsO2cmdlIFN0csO8bXBmZWw=?= <boerge.struempfel@gmail.com>
-Date:   Sat, 20 May 2023 20:21:15 +0200
-Message-ID: <CAEktqctboF3=ykVNtPsifcmHzF6dWwoEcVh+O4H1u-R=TT6gHg@mail.gmail.com>
-Subject: Re: [PATCH v4 1/3] spi: add SPI_MOSI_IDLE_LOW mode bit
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Fabio Estevam <festevam@gmail.com>, bstruempfel@ultratronik.de,
-        amit.kumar-mahapatra@amd.com, broonie@kernel.org,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,58 +56,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank you for you response
+From: Jammy Huang <jammy_huang@aspeedtech.com>
 
-Am Do., 18. Mai 2023 um 12:58 Uhr schrieb Andy Shevchenko
-<andy.shevchenko@gmail.com>:
->
-> On Thu, May 18, 2023 at 3:27=E2=80=AFAM B=C3=B6rge Str=C3=BCmpfel
-> <boerge.struempfel@gmail.com> wrote:
-> > Am Do., 18. Mai 2023 um 01:53 Uhr schrieb Fabio Estevam <festevam@gmail=
-.com>:
->
-> ...
->
->
-> > Okay. I have begun to implement this. During this, I noticed, that if
-> > I called the new option
-> > "--mosi-idle-low", the alignment of the help-lines (and in the c code
-> > itself) would break.
-> > Should I therefore shorten the option name by using an abbreviation
-> > like "--mil", which is
-> > probably not very helpful as a "full option name", or should I touch
-> > all the other lines and
-> > insert necessary spaces, such that they are aligned once more? (And if
-> > so, should I do
-> > this in a seperate patch, preparing the addition of the new options?)
->
-> It's a user space tool where not so strict rules of commit splitting
-> apply (as far as I know), I would go with indention fixes in the same
-> patch that adds the option.
->
+[ Upstream commit 4327a6137ed43a091d900b1ac833345d60f32228 ]
 
-That's good to know. I will do that.
+ARM architecture only has 'memory', so all devices are accessed by
+MMIO if possible.
 
-> ...
->
-> > > > While looking through the code, I noticed, that the latest two
-> > > > additions to the spi->mode
-> > > > (SPI_3WIRE_HIZ and SPI_RX_CPHA_FLIP) are also missing from this too=
-l. Is this
-> > > > by design, or should they then be included as well?
-> > >
-> > > Looks like these two are missing and would be good to get them includ=
-ed as well.
-> >
-> > Okay. Should this be a separate patch, or should I add the support for
-> > all 3 mode bits in
-> > one commit?
->
-> Split them logically. Are they from the same group of bits? No? then spli=
-t.
->
-Yes they are actually from the same group of bits. Therefore I'll add
-them all in the same patch.
-> --
-> With Best Regards,
-> Andy Shevchenko
+Signed-off-by: Jammy Huang <jammy_huang@aspeedtech.com>
+Reviewed-by: Thomas Zimmermann <tzimmermann@suse.de>
+Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+Link: https://patchwork.freedesktop.org/patch/msgid/20230421003354.27767-1-jammy_huang@aspeedtech.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/gpu/drm/ast/ast_main.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/gpu/drm/ast/ast_main.c b/drivers/gpu/drm/ast/ast_main.c
+index 79a3618679554..754a08c92d3d1 100644
+--- a/drivers/gpu/drm/ast/ast_main.c
++++ b/drivers/gpu/drm/ast/ast_main.c
+@@ -423,11 +423,12 @@ struct ast_private *ast_device_create(const struct drm_driver *drv,
+ 		return ERR_PTR(-EIO);
+ 
+ 	/*
+-	 * If we don't have IO space at all, use MMIO now and
+-	 * assume the chip has MMIO enabled by default (rev 0x20
+-	 * and higher).
++	 * After AST2500, MMIO is enabled by default, and it should be adopted
++	 * to be compatible with Arm.
+ 	 */
+-	if (!(pci_resource_flags(pdev, 2) & IORESOURCE_IO)) {
++	if (pdev->revision >= 0x40) {
++		ast->ioregs = ast->regs + AST_IO_MM_OFFSET;
++	} else if (!(pci_resource_flags(pdev, 2) & IORESOURCE_IO)) {
+ 		drm_info(dev, "platform has no IO space, trying MMIO\n");
+ 		ast->ioregs = ast->regs + AST_IO_MM_OFFSET;
+ 	}
+-- 
+2.39.2
+
