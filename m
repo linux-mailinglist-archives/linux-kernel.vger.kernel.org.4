@@ -2,108 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16A2B70A646
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 10:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAF5E70A648
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 10:07:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230467AbjETIFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 04:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55936 "EHLO
+        id S229977AbjETIHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 04:07:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbjETIFN (ORCPT
+        with ESMTP id S229602AbjETIHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 04:05:13 -0400
-Received: from smtp.smtpout.orange.fr (smtp-24.smtpout.orange.fr [80.12.242.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080C51AC
-        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 01:05:11 -0700 (PDT)
-Received: from pop-os.home ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id 0HaPqGwrCcjUo0HaPqpKsf; Sat, 20 May 2023 10:05:10 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1684569910;
-        bh=FbFOTo7bbOqLCpse5mxCwFCHaJIvxu1hx1VMbc9WcyM=;
-        h=From:To:Cc:Subject:Date;
-        b=qdMsTmyonGN4tbdfAOPFZbo+BSHaTAIcTWJzN2NC6vs4YHHkOyEkNkY4XoDQg3JDs
-         3Jrwx6PbOR+8JAyxXuxaNTZ1CjT29AYgT4obgLcaCy6vpUXF7gaNRgJfKl31kOQ15z
-         HE/fFAysTZ8iN5Bl1m79+DZO3hujEUMEIMyDLzEn75CZOJ9IgIlZTBS+boHFKzbR1T
-         VYVeRs/bOElY2UI0AiCoth7u2WAmrxeAwMbDon39eAcHDngCKycr9bot5/JmsOEywx
-         7bStQcNkoXiMv6h5vkHwClIsk5rEJznzt37cALRrE1HgXWoOHKHItV9GU5zeQLtC07
-         +VcWt7T5QjsLA==
-X-ME-Helo: pop-os.home
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 20 May 2023 10:05:10 +0200
-X-ME-IP: 86.243.2.178
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Kalle Valo <kvalo@kernel.org>,
-        Dominik Brodowski <linux@dominikbrodowski.net>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-wireless@vger.kernel.org
-Subject: [PATCH wireless] wl3501_cs: Fix an error handling path in wl3501_probe()
-Date:   Sat, 20 May 2023 10:05:08 +0200
-Message-Id: <7cc9c9316489b7d69b36aeb0edd3123538500b41.1684569865.git.christophe.jaillet@wanadoo.fr>
-X-Mailer: git-send-email 2.34.1
+        Sat, 20 May 2023 04:07:35 -0400
+Received: from relay01.th.seeweb.it (relay01.th.seeweb.it [5.144.164.162])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1FCCE40
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 01:07:33 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 80FAB201EA;
+        Sat, 20 May 2023 10:07:30 +0200 (CEST)
+Date:   Sat, 20 May 2023 10:07:28 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Jessica Zhang <quic_jesszhan@quicinc.com>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/5] msm/drm/dsi: Round up DSC hdisplay calculation
+Message-ID: <uh5cshbplstpnp7npqvnxwefyh7h4zur3vrkt626pdeczgdnya@s3mhsrlc4smy>
+References: <20230405-add-dsc-support-v3-0-6e1d35a206b3@quicinc.com>
+ <20230405-add-dsc-support-v3-1-6e1d35a206b3@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230405-add-dsc-support-v3-1-6e1d35a206b3@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Should wl3501_config() fail, some resources need to be released as already
-done in the remove function.
+On 2023-05-19 14:17:26, Jessica Zhang wrote:
+> Currently, when compression is enabled, hdisplay is reduced via integer
+> division. This causes issues for modes where the original hdisplay is
+> not a multiple of 3.
+> 
+> To fix this, use DIV_ROUND_UP to divide hdisplay.
+> 
+> Reported-by: Marijn Suijten <marijn.suijten@somainline.org>
 
-Fixes: 15b99ac17295 ("[PATCH] pcmcia: add return value to _config() functions")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
----
- drivers/net/wireless/legacy/wl3501_cs.c | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
+This should have been:
 
-diff --git a/drivers/net/wireless/legacy/wl3501_cs.c b/drivers/net/wireless/legacy/wl3501_cs.c
-index 7fb2f9513476..c45c4b7cbbaf 100644
---- a/drivers/net/wireless/legacy/wl3501_cs.c
-+++ b/drivers/net/wireless/legacy/wl3501_cs.c
-@@ -1862,6 +1862,7 @@ static int wl3501_probe(struct pcmcia_device *p_dev)
- {
- 	struct net_device *dev;
- 	struct wl3501_card *this;
-+	int ret;
- 
- 	/* The io structure describes IO port mapping */
- 	p_dev->resource[0]->end	= 16;
-@@ -1873,8 +1874,7 @@ static int wl3501_probe(struct pcmcia_device *p_dev)
- 
- 	dev = alloc_etherdev(sizeof(struct wl3501_card));
- 	if (!dev)
--		goto out_link;
--
-+		return -ENOMEM;
- 
- 	dev->netdev_ops		= &wl3501_netdev_ops;
- 	dev->watchdog_timeo	= 5 * HZ;
-@@ -1887,9 +1887,15 @@ static int wl3501_probe(struct pcmcia_device *p_dev)
- 	netif_stop_queue(dev);
- 	p_dev->priv = dev;
- 
--	return wl3501_config(p_dev);
--out_link:
--	return -ENOMEM;
-+	ret = wl3501_config(p_dev);
-+	if (ret)
-+		goto out_free_etherdev;
-+
-+	return 0;
-+
-+out_free_etherdev:
-+	free_netdev(dev);
-+	return ret;
- }
- 
- static int wl3501_config(struct pcmcia_device *link)
--- 
-2.34.1
+Suggested-by: Marijn Suijten <marijn.suijten@somainline.org>
 
+> Fixes: f3a99460406b ("drm/msm/dsi: update hdisplay calculation for dsi_timing_setup")
+
+This hash is not valid (and checkpatch points it out...), as it is your
+local commit from the MSM DSC helper methods series.  The original issue
+was introduced in:
+
+Fixes: 08802f515c3cf ("drm/msm/dsi: Add support for DSC configuration")
+
+- Marijn
+
+> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+> ---
+>  drivers/gpu/drm/msm/dsi/dsi_host.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> index 9223d7ec5a73..18d38b90eb28 100644
+> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
+> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> @@ -952,7 +952,7 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+>  		 * pulse width same
+>  		 */
+>  		h_total -= hdisplay;
+> -		hdisplay = msm_dsc_get_bytes_per_line(msm_host->dsc) / 3;
+> +		hdisplay = DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc), 3);
+>  		h_total += hdisplay;
+>  		ha_end = ha_start + hdisplay;
+>  	}
+> 
+> -- 
+> 2.40.1
+> 
