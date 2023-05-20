@@ -2,145 +2,285 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC1F070A756
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 12:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32B7470A759
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 12:54:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231358AbjETKxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 06:53:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36620 "EHLO
+        id S231463AbjETKyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 06:54:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231348AbjETKxR (ORCPT
+        with ESMTP id S229762AbjETKyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 06:53:17 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F7BABA;
-        Sat, 20 May 2023 03:53:16 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-255401f977dso92773a91.2;
-        Sat, 20 May 2023 03:53:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684579996; x=1687171996;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=P2Flc+umkv9dYlbkZdtlsTRHK8tgRPIuGdGuQOdfjXU=;
-        b=sUUQJQLqDmz00Y+NpimGaI39GTznVVNmQDSiJlmQ05z/VXRK+XEZc7MxvTFClGAN4Y
-         W1dUgcJtIuQata/23+gTWYlMqECMPcFvF2TuCsnxoEjNBZFnCz6Z2Mel4OX0tCnL86qo
-         n/lbCYg9RzFKaiAX3HztHaQv1zI/lHHEQIk9ilJZkROXmZLTPV04z9U557Avuq9KB4jE
-         3KQEs5Pj2TTBGw0BYKOBpnHdEoyulHo/oH4F2raEwO3vfqNZjYzbuoWJ3j/ELV7lwqt4
-         5Bipamk5h/pSJHJ9QwvFIIR2MaW+PpizYxFDZmyZWApkXX29roTCuxaUTJU5kFdJMu/q
-         n8lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684579996; x=1687171996;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P2Flc+umkv9dYlbkZdtlsTRHK8tgRPIuGdGuQOdfjXU=;
-        b=D2Ip/2gFIrbKE88xCaNPD3tv6gCF9tJwnkoqsvVmBFWGMUrruXcqSRuu0EUIxXzdPT
-         8k/PelLrxQDcyaFetKU2Lgoggg/AjvhzhJdo626r26DwRjMU+SJNqF5iK7AfKYkhG05T
-         es04yR6BjIVFClYM1C/b9/jGalwaLlrhna7uyRlYlG57iKbXN+5LXNwT32ocZvHuzLGv
-         k53+Zz/OnFCYaapdPxawvSqem7+fIJatKsiZLz+0EzKEH96E3pJFDGD2QnlODsENUqeL
-         0/1pYq63ennZ/Jarj1upVpvqhLnS5Co50TCq/5BXjsgeFcGHMAXkKPClnj7Wmwi1/Q2o
-         gMWg==
-X-Gm-Message-State: AC+VfDwE0CbK3E6vbAYLsQzjDQkKF+RalUR13KIFkzwW/mMWDnkZ3KAr
-        m83C+wT4kHHd6WEpHDFXVZ/0EYmB9otrSHSE
-X-Google-Smtp-Source: ACHHUZ6eD45MgvcMJzfKIezETpCJsw9UiLAKMt3UDX18u0vEk9m/Eh12lKnBMtX1sZN/C+IRbZbSlw==
-X-Received: by 2002:a17:90b:3847:b0:250:ca46:dfe1 with SMTP id nl7-20020a17090b384700b00250ca46dfe1mr4343224pjb.48.1684579995680;
-        Sat, 20 May 2023 03:53:15 -0700 (PDT)
-Received: from yoga ([2400:1f00:13:245c:9b1a:1a9d:79c2:5b3b])
-        by smtp.gmail.com with ESMTPSA id d23-20020a17090ac25700b0024e07ae2cfesm988687pjx.38.2023.05.20.03.53.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 May 2023 03:53:15 -0700 (PDT)
-Date:   Sat, 20 May 2023 16:23:07 +0530
-From:   Anup Sharma <anupnewsmail@gmail.com>
-To:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Anup Sharma <anupnewsmail@gmail.com>,
-        Peter Meerwald <pmeerw@pmeerw.net>,
-        u.kleine-koenig@pengutronix.de, andriy.shevchenko@linux.intel.com,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/2] dt-bindings: iio: temperature: Add support for tmp006
-Message-ID: <3bbda3b1402a26cdafc95c7685679f2311365cad.1684579603.git.anupnewsmail@gmail.com>
-References: <cover.1684579603.git.anupnewsmail@gmail.com>
+        Sat, 20 May 2023 06:54:37 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C17781B4;
+        Sat, 20 May 2023 03:54:34 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.43])
+        by gateway (Coremail) with SMTP id _____8AxW+rppmhk_2gKAA--.18127S3;
+        Sat, 20 May 2023 18:54:33 +0800 (CST)
+Received: from openarena.loongson.cn (unknown [10.20.42.43])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxkrDmpmhkOaFrAA--.51434S2;
+        Sat, 20 May 2023 18:54:30 +0800 (CST)
+From:   Sui Jingfeng <suijingfeng@loongson.cn>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sui Jingfeng <suijingfeng@loongson.cn>,
+        Li Yi <liyi@loongson.cn>, suijingfeng <15330273260@189.cn>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        loongson-kernel@lists.loongnix.cn
+Subject: [PATCH v14 0/2] drm: add kms driver for loongson display controller
+Date:   Sat, 20 May 2023 18:54:28 +0800
+Message-Id: <20230520105430.325685-1-suijingfeng@loongson.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1684579603.git.anupnewsmail@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxkrDmpmhkOaFrAA--.51434S2
+X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoWfGryDKrWxGw43uryxJw1kXwb_yoWDWF47pF
+        43Ca4FkrWDJF12yr9xA3W8GFyfAa4fXFWSgF43X3sIg3yDAFyUZrn8ZFW5JrW7ZFy7Xry2
+        qr97Kr4UG3ZFkaUanT9S1TB71UUUUbDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bSxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVWUCVW8JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r1q6r43M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E
+        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxV
+        Aaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY
+        O2xFxVAFwI0_Jw0_GFylx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
+        WUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
+        JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rV
+        WUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4U
+        JbIYCTnIWIevJa73UjIFyTuYvjxUstxhDUUUU
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,RCVD_IN_SBL_CSS,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add devicetree binding document for TMP006, IR thermopile sensor.
+Loongson display controller IP has been integrated in both Loongson north
+bridge chipset(ls7a1000/ls7a2000) and Loongson SoCs(ls2k1000/ls2k2000), it
+has been even included in Loongson self-made BMC products.
 
-Signed-off-by: Anup Sharma <anupnewsmail@gmail.com>
----
-Changes:
-V1 -> V2: Removed redundant dt-binding from subject.
-          Added supply information.
-          Adhere to the generic node name.
-	  Adding missing semicolon to fix syntax error detected
-	  using dt_binding_check
----
- .../bindings/iio/temperature/ti,tmp006.yaml   | 42 +++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/iio/temperature/ti,tmp006.yaml
+This display controller is a PCI device. It has two display pipes and each
+display pipe support a primary plane and a cursor plane. For the DC in the
+ls7a1000 and ls2k1000, each display pipe has a DVO output interface which
+provide RGB888 signals, vertical & horizontal synchronisations and pixel
+clock. Each CRTC is able to support 1920x1080@60Hz, the maximum resolution
+of each display pipe is 2048x2048 according to the hardware spec.
 
-diff --git a/Documentation/devicetree/bindings/iio/temperature/ti,tmp006.yaml b/Documentation/devicetree/bindings/iio/temperature/ti,tmp006.yaml
-new file mode 100644
-index 000000000000..d43002b9bfdc
---- /dev/null
-+++ b/Documentation/devicetree/bindings/iio/temperature/ti,tmp006.yaml
-@@ -0,0 +1,42 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/iio/temperature/ti,tmp006.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: TI TMP006 IR thermopile sensor
-+
-+maintainers:
-+  - Peter Meerwald <pmeerw@pmeerw.net>
-+
-+description: |
-+  TI TMP006 - Infrared Thermopile Sensor in Chip-Scale Package.
-+  https://cdn.sparkfun.com/datasheets/Sensors/Temp/tmp006.pdf
-+
-+properties:
-+  compatible:
-+    const: ti,tmp006
-+
-+  reg:
-+    maxItems: 1
-+
-+  vdd-supply:
-+    description: provide VDD power to the sensor.
-+
-+required:
-+  - compatible
-+  - reg
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        temperature-sensor@40 {
-+            compatible = "ti,tmp006";
-+            reg = <0x40>;
-+            vdd-supply = <&ldo4_reg>;
-+        };
-+    };
+For the DC in LS7A2000, each display pipe is equipped with a built-in HDMI
+encoder which is compliant with the HDMI 1.4 specification, thus it support
+3840x2160@30Hz. The first display pipe is also equipped with a transparent
+vga encoder which is parallel with the HDMI encoder. The DC in LS7A2000 is
+more complete compare with the one in old chips, besides above feature, it
+has two hardware cursors, two hardware vblank counter and two scanout
+position recorders unit. It also support tiled framebuffer format which
+can be scanout the tiled framebuffer rendered by the LoongGPU directly.
+
+v1 -> v2:
+ 1) Use hpd status reg when polling for ls7a2000
+ 2) Fix all warnings emerged when compile with W=1
+
+v2 -> v3:
+ 1) Add COMPILE_TEST in Kconfig and make the driver off by default
+ 2) Alphabetical sorting headers (Thomas)
+ 3) Untangle register access functions as much as possible (Thomas)
+ 4) Switch to TTM based memory manager and prefer cached mapping
+    for Loongson SoC (Thomas)
+ 5) Add chip id detection method, now all models are distinguishable.
+ 6) Revise builtin HDMI phy driver, nearly all main stream mode
+    below 4K@30Hz is tested, this driver supported these mode very
+    well including clone display mode and extend display mode.
+
+v3 -> v4:
+ 1) Quickly fix a small mistake.
+
+v4 -> v5:
+ 1) Drop potential support for Loongson 2K series SoC temporary,
+    this part should be resend with the DT binding patch in the future.
+ 2) Add per display pipe debugfs support to the builtin HDMI encoder.
+ 3) Rewrite atomic_update() for hardware cursors plane(Thomas)
+ 4) Rewrite encoder and connector initialization part, untangle it
+    according to the chip(Thomas).
+
+v5 -> v6:
+ 1) Remove stray code which didn't get used, say lsdc_of_get_reserved_ram
+ 2) Fix all typos I could found, make sentences and code more readable
+ 3) Untangle lsdc_hdmi*_connector_detect() function according to the pipe
+ 4) After a serious consideration, we rename this driver as loongson.
+    Because we also have drivers toward the LoongGPU IP in LS7A2000 and
+    LS2K2000. Besides, there are also drivers about the external encoder,
+    HDMI audio driver and vbios support etc. This patch only provide DC
+    driver part, my teammate Li Yi believe that loongson will be more
+    suitable for loongson graphics than lsdc in the long run.
+
+    loongson.ko = LSDC + LoongGPU + encoders driver + vbios/DT ...
+
+v6 -> v7:
+ 1) Add prime support, self-sharing is works. sharing buffer with etnaviv
+    is also tested, and its works with limitation.
+ 2) Implement buffer objects tracking with list_head.
+ 3) S3(sleep to RAM) is tested on ls3a5000+ls7a2000 evb and it works.
+ 4) Rewrite lsdc_bo_move, since ttm core stop allocating resources
+    during BO creation. Patch V1 ~ V6 of this series no longer works
+    on latest kernel. Thus, we send V7 to revival them.
+
+v7 -> v8:
+ 1) Zero a compile warnnings on 32-bit platform, compile with W=1
+ 2) Revise lsdc_bo_gpu_offset() and minor cleanup
+ 3) Pageflip tested on the virtual terminal with following commands
+
+    modetest -M loongson -s 32:1920x1080 -v
+    modetest -M loongson -s 34:1920x1080 -v -F tiles
+
+   It works like a charm, when running pageflip test with dual screnn
+   configuration, another two additional bo created by the modetest
+   emerged, VRAM usage up to 40+MB, well we have at least 64MB, still
+   enough.
+
+   # cat bos
+
+       bo[0000]: size:     8112kB VRAM
+       bo[0001]: size:       16kB VRAM
+       bo[0002]: size:       16kB VRAM
+       bo[0003]: size:    16208kB VRAM
+       bo[0004]: size:     8112kB VRAM
+       bo[0005]: size:     8112kB VRAM
+
+v8 -> v9:
+ 1) Select I2C and I2C_ALGOBIT in Kconfig and should depend on MMU.
+ 2) Using pci_get_domain_bus_and_slot to get the GPU device.
+ 3) Other minor improvements.
+
+ Those patches are tested on ls3a5000 + ls7a1000 CRB, ls3a5000 + ls7a2000
+ evb, and lemote a1901 board(ls3a4000 + ls7a1000). On loongson mips CPU,
+ the write combine support should be enabled, to get a decent performance
+ for writing framebuffer data to the VRAM.
+
+v9 -> v10:
+ 1) Revise lsdc_drm_freeze() to implement S3 completely and correctly.
+    I suddenly realized that pinned buffer can not move and VRAM lost
+    power when sleep to RAM. Thus, the data in the buffer who is pinned
+    in VRAM will get lost when resume. Yet it's not big problem because
+    we are software rendering solution which relay on the CPU update the
+    front framebuffer. We can see the garbage data when resume from S3,
+    but the screen will show correct image as I move the cursor. This is
+    due to the cpu repaint. v10 of this patch make S3 perfect by unpin
+    all of BOs in VRAM, evict them all to system RAM.
+
+v10 -> v11:
+ 1) On double screen case, the single giant framebuffer is referenced by
+    two GEM object, hence, it will be pinned by prepare_fb() at lease two
+    times. This cause its pin count > 1. V10 of this patch only unpin VRAM
+    BOs once when suspend, which is not correct on double screen case. V11
+    of this patch unpin BOs until its pin count reach to zero when suspend.
+    Then, we make the S3 support complete finally. With v11, I can't see
+    any garbage data after resume. Tested on both ls7a1000 and ls7a2000
+    platform, with single screen and double screen configuration.
+ 2) Fix vblank wait timeout when disable CRTC.
+ 3) Test against IGT, at least fbdev test and kms_flip test passed.
+ 4) Rewrite pixel PLL update function, magic numbers eliminated (Emil)
+ 5) Drop a few common hardware features description in lsdc_desc (Emil)
+ 6) Drop lsdc_mode_config_mode_valid(), instead add restrictions in dumb
+    create function. (Emil)
+ 7) Untangle the ls7a1000 case and ls7a2000 case completely (Thomas)
+
+v11 -> v12:
+ none
+
+v12 -> v13:
+ 1) Add benchmark to figure out the bandwidth of the hardware platform.
+    Usage:
+    # cd /sys/kernel/debug/dri/0/
+    # cat benchmark
+
+ 2) VRAM is filled with garbage data if uninitialized, add a buffer
+    clearing procedure, clear it on the BO creation time.
+ 3) Update copyrights and adjust coding style (Huacai)
+
+v13 -> v14:
+ 1) Trying to add async update support for cursor plane.
+
+Sui Jingfeng (2):
+  drm: add kms driver for loongson display controller
+  MAINTAINERS: add maintainers for DRM LOONGSON driver
+
+ MAINTAINERS                                   |    8 +
+ drivers/gpu/drm/Kconfig                       |    2 +
+ drivers/gpu/drm/Makefile                      |    1 +
+ drivers/gpu/drm/loongson/Kconfig              |   17 +
+ drivers/gpu/drm/loongson/Makefile             |   20 +
+ drivers/gpu/drm/loongson/lsdc_benchmark.c     |  133 ++
+ drivers/gpu/drm/loongson/lsdc_benchmark.h     |   13 +
+ drivers/gpu/drm/loongson/lsdc_crtc.c          | 1066 +++++++++++++++++
+ drivers/gpu/drm/loongson/lsdc_debugfs.c       |   91 ++
+ drivers/gpu/drm/loongson/lsdc_device.c        |  104 ++
+ drivers/gpu/drm/loongson/lsdc_drv.c           |  495 ++++++++
+ drivers/gpu/drm/loongson/lsdc_drv.h           |  451 +++++++
+ drivers/gpu/drm/loongson/lsdc_gem.c           |  324 +++++
+ drivers/gpu/drm/loongson/lsdc_gem.h           |   37 +
+ drivers/gpu/drm/loongson/lsdc_gfxpll.c        |  199 +++
+ drivers/gpu/drm/loongson/lsdc_gfxpll.h        |   52 +
+ drivers/gpu/drm/loongson/lsdc_i2c.c           |  179 +++
+ drivers/gpu/drm/loongson/lsdc_i2c.h           |   29 +
+ drivers/gpu/drm/loongson/lsdc_irq.c           |   71 ++
+ drivers/gpu/drm/loongson/lsdc_irq.h           |   16 +
+ drivers/gpu/drm/loongson/lsdc_output.h        |   21 +
+ drivers/gpu/drm/loongson/lsdc_output_7a1000.c |  161 +++
+ drivers/gpu/drm/loongson/lsdc_output_7a2000.c |  531 ++++++++
+ drivers/gpu/drm/loongson/lsdc_pixpll.c        |  481 ++++++++
+ drivers/gpu/drm/loongson/lsdc_pixpll.h        |   86 ++
+ drivers/gpu/drm/loongson/lsdc_plane.c         |  781 ++++++++++++
+ drivers/gpu/drm/loongson/lsdc_probe.c         |   56 +
+ drivers/gpu/drm/loongson/lsdc_probe.h         |   12 +
+ drivers/gpu/drm/loongson/lsdc_regs.h          |  402 +++++++
+ drivers/gpu/drm/loongson/lsdc_ttm.c           |  610 ++++++++++
+ drivers/gpu/drm/loongson/lsdc_ttm.h           |   99 ++
+ 31 files changed, 6548 insertions(+)
+ create mode 100644 drivers/gpu/drm/loongson/Kconfig
+ create mode 100644 drivers/gpu/drm/loongson/Makefile
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_benchmark.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_benchmark.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_crtc.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_debugfs.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_device.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_drv.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_drv.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_gem.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_gem.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_gfxpll.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_gfxpll.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_i2c.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_i2c.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_irq.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_irq.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_output.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_output_7a1000.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_output_7a2000.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_pixpll.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_pixpll.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_plane.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_probe.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_probe.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_regs.h
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_ttm.c
+ create mode 100644 drivers/gpu/drm/loongson/lsdc_ttm.h
+
 -- 
-2.34.1
+2.25.1
 
