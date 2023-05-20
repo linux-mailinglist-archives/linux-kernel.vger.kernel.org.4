@@ -2,90 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DBE670A496
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 04:16:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C84A70A499
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 04:16:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231251AbjETCQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 19 May 2023 22:16:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58110 "EHLO
+        id S231663AbjETCQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 19 May 2023 22:16:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbjETCQF (ORCPT
+        with ESMTP id S230415AbjETCQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 19 May 2023 22:16:05 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94FF0E4C
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 19:16:00 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-510d1972d5aso5673724a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 19:16:00 -0700 (PDT)
+        Fri, 19 May 2023 22:16:27 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AC35E5F;
+        Fri, 19 May 2023 19:16:22 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-5346d150972so2478178a12.3;
+        Fri, 19 May 2023 19:16:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1684548959; x=1687140959;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=F0gJN167bDqfq0Xjot6aQ2NfScujfQQVtYPukcrFzaM=;
-        b=H742rLalEWqjuZIxMMi23m+V5n4cq5iDoDrJFYkx/Gpy3orxRKxFDxwwJ76mf8iZZV
-         MhAUK5FDBF/HyrNIFTIVHywiQmaKuE0V6T+muc6Fh1G1a9lIe5YpzQ2b/aTWLt4QHbK6
-         Do+RPa+tbatYtEDY6k466XChdw82jehydUj2g=
+        d=gmail.com; s=20221208; t=1684548981; x=1687140981;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lFgyeYw4uPK6HO8hs9FRdVOfgCGNivxnwmXr9VMJrDo=;
+        b=DoD8GwmF2nlWu+yHJ3xHDVInM293//B2zW3ZK73ZkXnOZeVJNv1G91PULPGAOZJLRX
+         wzxIwTxaouX37dwag+QW0ieFMFiiVmx0RWrD6jUjOH6fv1xHGzn7k/E2Oj8YPeHXBBkX
+         u0fShKanlW6S+FA9ENGR/kpgjexVAXoWjJJ7PJxN81rYNljeE3NmnivGaBtoJlvcfIPv
+         Om/06THeksmrbjY7sW4hdtbTvc2xG/zBLKrZ6LFq7WFPYcjv99sTUYaIGkLYnEHHlu9m
+         4dW3aYROEM8yzwHPuBdCekQ16zm2Hv1DEDHYbdUlh6CLFVMKklt0c3odVWBDtzgNFOQE
+         KwZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684548959; x=1687140959;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=F0gJN167bDqfq0Xjot6aQ2NfScujfQQVtYPukcrFzaM=;
-        b=bHVlIvjDiEdgISxeZqfywB7vgcPwJbvpsXxoi7l+GFHfRfvBM5i7ezI9/5wnm1zook
-         v6r8qGiZteiUYFW/ohHUsn0Coj1yKD6n8o5SU83EWntyQsvG+08iezpv+ZqXXsLnV2b6
-         3iKjVDv4Tj1D2JxXVZJ4hKp+j6tJZolCtkObxfbehdToyVTc6ECCm54O61QGrnNTbRBU
-         1CCbTGrDWzc1Y9MBmk5xLLkbhB7ioj4zoljiAcKx4UGsiB/PxgHWBcLAxTsHXJjgzYGb
-         grPRzuxbqN4ljSecIyVLzxiE14lQP9MoDlwawcwaGvhvEPjBviObIyrhDwAwryffWkpt
-         JPUw==
-X-Gm-Message-State: AC+VfDyuEbZPbeEr2hLXSW/3PCQXleeOFfAqODQn2mXpckR3qbtMoDah
-        WNZuJRhghipqaQ0wDYw1P2Y9WkuPPuXgkifiNRl10MyG
-X-Google-Smtp-Source: ACHHUZ71+MzSj+JgoMo5DbXc1bfIpJvaHvNsKfod/Ic7fNP70WQ6HW8IlzNp19OD2Cu6UwmUSXxIFA==
-X-Received: by 2002:a17:907:9955:b0:947:ebd5:c798 with SMTP id kl21-20020a170907995500b00947ebd5c798mr2878796ejc.54.1684548958983;
-        Fri, 19 May 2023 19:15:58 -0700 (PDT)
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com. [209.85.218.45])
-        by smtp.gmail.com with ESMTPSA id i7-20020a170906444700b00965aee5be9asm268534ejp.170.2023.05.19.19.15.57
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 19 May 2023 19:15:57 -0700 (PDT)
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-96f7bf29550so153615466b.3
-        for <linux-kernel@vger.kernel.org>; Fri, 19 May 2023 19:15:57 -0700 (PDT)
-X-Received: by 2002:a17:906:c155:b0:94f:432f:243e with SMTP id
- dp21-20020a170906c15500b0094f432f243emr3325059ejc.14.1684548957398; Fri, 19
- May 2023 19:15:57 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684548981; x=1687140981;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lFgyeYw4uPK6HO8hs9FRdVOfgCGNivxnwmXr9VMJrDo=;
+        b=Re1K68ZWgLt4Rcb376P5dRIwmJO+S0VQYtoYHu6ze99sl/O1JwCrewp8xldSw89g3z
+         9A2dapAkGu2YkpITYzgzKa2x83GE2l+EUGv60e/DVcC/73OHU36IWB832lV+L0948lGt
+         9Wu/m0tiuFxnkKzvCslJnF0JIqLry0nIAkKQYRSuPTQe1V4L+Ua9bEbGtuzE4UBMwbOX
+         XNtiApg8EVLXnNE0d0kNg66asA/yE4udl9+XNzL0mDgsJMsCAlFymWvHEDriork2+gLt
+         YUOj6ezgWpkR+RHkIu9log9XlpdJDEMIGojhYaZJYqTPqSSHJ9ZkFC5TiQBbbiwNQTFz
+         sFxA==
+X-Gm-Message-State: AC+VfDzntF1N2euuicR0NyiFfuBRREKpY274UXjQMd9Gubse6ejhPavO
+        8NiiG9mWlgnVP0e46DRJ7MA=
+X-Google-Smtp-Source: ACHHUZ5uDX9A05fqyl3r2z7ZsQfBkXnB/zDTEtuHhK4CITCJcUviCGg40/57dB4lFG3yVKDfjiQfow==
+X-Received: by 2002:a17:902:d382:b0:1ae:3991:e4f9 with SMTP id e2-20020a170902d38200b001ae3991e4f9mr3897402pld.61.1684548981433;
+        Fri, 19 May 2023 19:16:21 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-25.three.co.id. [180.214.233.25])
+        by smtp.gmail.com with ESMTPSA id jh12-20020a170903328c00b001a19f3a661esm295628plb.138.2023.05.19.19.16.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 19 May 2023 19:16:20 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 988531069E8; Sat, 20 May 2023 09:16:17 +0700 (WIB)
+Date:   Sat, 20 May 2023 09:16:17 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Input <linux-input@vger.kernel.org>,
+        Linux i2c Devices <linux-i2c@vger.kernel.org>
+Cc:     Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        kolAflash@kolahilft.de
+Subject: Re: Fwd: ThinkPad L540: suspend not working (deep / S3 / standby,
+ regression Linux 4.19 -> 6.1)
+Message-ID: <ZGgtcaGIECpaXKvp@debian.me>
+References: <73883c7d-42db-7ac6-fa43-b9be45cdc795@gmail.com>
 MIME-Version: 1.0
-References: <20230519230741.669-1-beaub@linux.microsoft.com>
-In-Reply-To: <20230519230741.669-1-beaub@linux.microsoft.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 19 May 2023 19:15:40 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgi1Cbe0RV0M2Fm1j1LFgC+tFMPEQhUBC1Mtk+3w944uw@mail.gmail.com>
-Message-ID: <CAHk-=wgi1Cbe0RV0M2Fm1j1LFgC+tFMPEQhUBC1Mtk+3w944uw@mail.gmail.com>
-Subject: Re: [PATCH v3 0/4] tracing/user_events: Use non-RCU context for
- enabler writes
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     rostedt@goodmis.org, mhiramat@kernel.org,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        ast@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="wREUupUIgHJ2Wbjf"
+Content-Disposition: inline
+In-Reply-To: <73883c7d-42db-7ac6-fa43-b9be45cdc795@gmail.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 4:08=E2=80=AFPM Beau Belgrave <beaub@linux.microsof=
-t.com> wrote:
->
-> There was also feedback given that some of the code was confusing and
-> needed further comments and field renames, especially for links. I think
-> having this feedback will help others contribute to this code easier, so
-> I am grouping this into a single series to address this together.
 
-Thanks, added comments and renaming look sane to me,
+--wREUupUIgHJ2Wbjf
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-                 Linus
+On Fri, May 19, 2023 at 08:19:39PM +0700, Bagas Sanjaya wrote:
+> #regzbot introduced: v4.19..v6.1 https://bugzilla.kernel.org/show_bug.cgi=
+?id=3D217462
+> #regzbot title: psmouse suspend failed on ThinkPad L540
+>=20
+
+The reporter had narrowed down possible culprit commit range [1],
+thus telling regzbot:
+
+#regzbot introduced: v5.16.18..v5.17-rc3
+
+Thanks.
+
+[1]: https://bugzilla.kernel.org/show_bug.cgi?id=3D217462#c3
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--wREUupUIgHJ2Wbjf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZGgtZQAKCRD2uYlJVVFO
+o9aLAQC6hU7NN4GSTfBKgKeqs8JmCvfJgpTt6DbB6FgDW1030AD/cTZsWR+xE1xU
+pw87w0X/mt7M0TWhJbvezzYs/i/cIg8=
+=s0ct
+-----END PGP SIGNATURE-----
+
+--wREUupUIgHJ2Wbjf--
