@@ -2,64 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FD6E70A847
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 15:12:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A201370A84E
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 15:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbjETNMI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 09:12:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37946 "EHLO
+        id S229563AbjETNUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 09:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbjETNMF (ORCPT
+        with ESMTP id S231265AbjETNUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 09:12:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C255CE;
-        Sat, 20 May 2023 06:12:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sat, 20 May 2023 09:20:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D9CB0
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 06:19:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684588764;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lTn8gTlrwHnM2AKAy5qI/9dWkXoUP9wXNayQrQJHG40=;
+        b=GIK+EGQjJbe58mNB7cjqx22fzSiyOsgfRgL8zYNKWQB+tGr2t1B2A5MrfhFzrB1lMVv5wb
+        9dCYIruujHXNQR+6VRUT7BAo/Ha1FymACcHvRQk6oFz0FG0xgJMj9pskkkuGoYldJuhX7b
+        4DO4LRQ91FmoCdQ5pTpHlzMa3tj7lp4=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-443-R6-VQ7OUNkChkXTGHWJMQw-1; Sat, 20 May 2023 09:19:19 -0400
+X-MC-Unique: R6-VQ7OUNkChkXTGHWJMQw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A5C560AFF;
-        Sat, 20 May 2023 13:12:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB10BC433D2;
-        Sat, 20 May 2023 13:12:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684588323;
-        bh=wjix5IqQaLwdfF1gkqB4SlaPuA5XKajeDY2XdF8xEis=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=VaTaFLQWahiMaN3qIIEpPfrR5WPwhLbS1GtBOWXye+zGtcdUWti1sMD4vM0GDdEEK
-         rKS/VefWb0vLCXUXBPM8SkY19nbFBO/95EHwnFtczqzDZVpD/rFoDv8CfoswmKPH4+
-         56cuqtZREWRH4wK0HOMvI7QruHgqm11ZgTb6Q6Ox9xVSmVP1mygszyj0jFTU+0zL/G
-         +YrBcuJv+TjQat9Mfp0DH06qGrqXU8Aofo5671s8VMvWo2VysYKaE9kJOzAYyeAivR
-         axOMhyhhCjcsuEGH8Qe4Mg1/R1RlW/kLMeb+/O62LwqKkCR+7KYjQAP00oMLR00PCo
-         0syARdjlHespQ==
-Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-5552a0a9557so79089eaf.0;
-        Sat, 20 May 2023 06:12:02 -0700 (PDT)
-X-Gm-Message-State: AC+VfDw8MOSZHkH4XtpF7XC/lSUH1fAlH8CaiunfZtAnVUCblu/jLfWp
-        tSZA3K4wTNShRkUpVHQw+r846tnLgvKJlUp1gqQ=
-X-Google-Smtp-Source: ACHHUZ4Lu7MTY72NW2ayPlKI7Kw9Tl3IQLt7fiY4AzyC6eo+BhtFymTkMaqpjADT55RPbNSuR0ellXcwVVStaPkF3rk=
-X-Received: by 2002:a4a:9c50:0:b0:54f:49ed:a88b with SMTP id
- c16-20020a4a9c50000000b0054f49eda88bmr3023968ook.2.1684588322191; Sat, 20 May
- 2023 06:12:02 -0700 (PDT)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AD0013C02535;
+        Sat, 20 May 2023 13:19:18 +0000 (UTC)
+Received: from localhost (ovpn-12-79.pek2.redhat.com [10.72.12.79])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 935C74F2DE4;
+        Sat, 20 May 2023 13:19:17 +0000 (UTC)
+Date:   Sat, 20 May 2023 21:19:14 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     "chenjiahao (C)" <chenjiahao16@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        kexec@lists.infradead.org, linux-doc@vger.kernel.org,
+        paul.walmsley@sifive.com, palmer@dabbelt.com,
+        conor.dooley@microchip.com, guoren@kernel.org, heiko@sntech.de,
+        bjorn@rivosinc.com, alex@ghiti.fr, akpm@linux-foundation.org,
+        atishp@rivosinc.com, thunder.leizhen@huawei.com, horms@kernel.org
+Subject: Re: [PATCH -next v4 1/2] riscv: kdump: Implement
+ crashkernel=X,[high,low]
+Message-ID: <ZGjI0kDmtnxKY3NP@MiWiFi-R3L-srv>
+References: <20230410130553.3226347-1-chenjiahao16@huawei.com>
+ <20230410130553.3226347-2-chenjiahao16@huawei.com>
+ <ZEnaPzx3O9NWixIR@MiWiFi-R3L-srv>
+ <366da9fb-0a3c-ac62-3df3-7a7f328973a6@huawei.com>
 MIME-Version: 1.0
-References: <20230514152739.962109-1-masahiroy@kernel.org> <20230514152739.962109-3-masahiroy@kernel.org>
- <CAKwvOd=2SJHNEQR1QHhLkA8V97o0BV90E346RT6-43SGnza9EQ@mail.gmail.com>
-In-Reply-To: <CAKwvOd=2SJHNEQR1QHhLkA8V97o0BV90E346RT6-43SGnza9EQ@mail.gmail.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sat, 20 May 2023 22:11:26 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAREQ1Zs94YiV0vAnaQh43OBVUbMTpzFNxfenEPAG3z_=w@mail.gmail.com>
-Message-ID: <CAK7LNAREQ1Zs94YiV0vAnaQh43OBVUbMTpzFNxfenEPAG3z_=w@mail.gmail.com>
-Subject: Re: [PATCH v5 02/21] modpost: remove fromsym info in __ex_table
- section mismatch warning
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nicolas Pitre <npitre@baylibre.com>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <366da9fb-0a3c-ac62-3df3-7a7f328973a6@huawei.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,87 +68,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 3:53=E2=80=AFAM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Sun, May 14, 2023 at 8:27=E2=80=AFAM Masahiro Yamada <masahiroy@kernel=
-.org> wrote:
-> >
-> > report_extable_warnings() prints "from" in a pretty form, but we know
-> > it is always located in the __ex_table section, i.e. a collection of
-> > struct exception_table_entry.
->
-> Would it still be helpful to have "from __ex_table" somewhere in the
-> error string that may be shown to developers?
+On 05/11/23 at 04:47pm, chenjiahao (C) wrote:
+......
+> > > @@ -1163,8 +1185,12 @@ static void __init reserve_crashkernel(void)
+> > >   {
+> > >   	unsigned long long crash_base = 0;
+> > >   	unsigned long long crash_size = 0;
+> > > +	unsigned long long crash_low_size = 0;
+> > >   	unsigned long search_start = memblock_start_of_DRAM();
+> > >   	unsigned long search_end = memblock_end_of_DRAM();
+> > > +	unsigned long search_low_max = (unsigned long)dma32_phys_limit;
+> > > +	char *cmdline = boot_command_line;
+> > > +	bool fixed_base = false;
+> > >   	int ret = 0;
+> > > @@ -1180,14 +1206,34 @@ static void __init reserve_crashkernel(void)
+> > >   		return;
+> > >   	}
+> > > -	ret = parse_crashkernel(boot_command_line, memblock_phys_mem_size(),
+> > > +	ret = parse_crashkernel(cmdline, memblock_phys_mem_size(),
+> > >   				&crash_size, &crash_base);
+> > > -	if (ret || !crash_size)
+> > > +	if (ret == -ENOENT) {
+> > > +		/* Fallback to crashkernel=X,[high,low] */
+> > > +		ret = parse_crashkernel_high(cmdline, 0, &crash_size, &crash_base);
+> > > +		if (ret || !crash_size)
+> > > +			return;
+> > > +
+> > > +		/*
+> > > +		 * crashkernel=Y,low is valid only when crashkernel=X,high
+> > > +		 * is passed.
+> > > +		 */
+> > > +		ret = parse_crashkernel_low(cmdline, 0, &crash_low_size, &crash_base);
+> > > +		if (ret == -ENOENT)
+> > > +			crash_low_size = DEFAULT_CRASH_KERNEL_LOW_SIZE;
+> > > +		else if (ret)
+> > > +			return;
+> > > +
+> > > +		search_start = search_low_max;
+> > > +	} else if (ret || !crash_size) {
+> > > +		/* Invalid argument value specified */
+> > >   		return;
+> > > +	}
+> > >   	crash_size = PAGE_ALIGN(crash_size);
+> > >   	if (crash_base) {
+> > > +		fixed_base = true;
+> > >   		search_start = crash_base;
+> > >   		search_end = crash_base + crash_size;
+> > >   	}
+> > > @@ -1201,16 +1247,31 @@ static void __init reserve_crashkernel(void)
+> > >   	 */
+> > >   	crash_base = memblock_phys_alloc_range(crash_size, PMD_SIZE,
+> > >   					       search_start,
+> > > -					       min(search_end, (unsigned long) SZ_4G));
+> > > +					       min(search_end, search_low_max));
+> > Here, it seems not right in case crashkernel=,high is specified. In that
+> > case, search_start == search_low_max, then the min(search_end,
+> > search_low_max) will get search_low_max too. Then you make the fallback
+> > in below code block to try to get crashkernel reservation above 4G. This
+> > doesn't comply with the crashkernel=,high grammer which has been
+> > implemented in other architectures.
+> > 
+> > For crashkernel=,high, user explicitly require memory reservation above
+> > 4G. Why does crashkernel=,high is needed? E.g on big end server with
+> > huge memory, while the low memory under 4G is limited and precious.
+> > Hence, user want to put the main crashkernel reservation above 4G to
+> > contain kdump kernel/initrd and run user space program, while with few
+> > low memory for pci device driver. E.g crashkernel=2G,high, it won't
+> > impact much if there's huge memory above 4G and get crashkernel
+> > reservation there. However, it impacts a lot if it reserves memory
+> > below 4G.
+> > 
+> > I would strongly suggest that risc-v also reserve memory from above 4G
+> > for crashkernel=,high, then fallback to below 4G. That's consistent with
+> > crashkernel=,high grammer.
+> 
+> Sorry for late response.
+> 
+> I have got the point here. So with the original implication of "crashkernel=,high",
+> there is even no need to try reserving low memory under 4G. I have arranged another
+> version of patchset, in which I updated the allocation logic in that case.
+> 
+> For example, when "crashkernel=1G,high" is specified, the previous logic is like:
+> alloc range: crash_size: 0x40000000 (1G), crash_base: 4G_limit,
+>              crash_max: 4G_limit
+> alloc range high: crash_size: 0x40000000 (1G), crash_base: 4G_limit,
+>                   crash_max: memblock_range_end
+> alloc range low: low_size: 0x8000000 (128MB,default), crash_base: 0x0,
+>                  crash_max: 4G_limit
+> 
+> After revision, the logic is like:
+> alloc range: crash_size: 0x40000000 (1G), crash_base: memblock_range_start,
+>              crash_max: memblock_range_end
+> alloc range low: low_size: 0x8000000 (128MB,default), crash_base: 0x0,
+>                  crash_max: 4G_limit
+> 
+> Please let me know if there is any problem exist.
 
+Sorry for late reply.
 
-See the code.
+Hmm, it doesn't seem completely correct. I will comment in your v5
+patch. Please see over there.
 
-The variable, 'fromsec' (i.e. "__ex_table") is remaining.
-
-It prints a warning message as you wish.
-
-
-
-
-> >
-> > It is very likely to fail to get the symbol name and ends up with
-> > meaningless message:
-> >
-> >   ... in reference from the (unknown reference) (unknown) to ...
-> >
-> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> > ---
-> >
-> >  scripts/mod/modpost.c | 11 ++---------
-> >  1 file changed, 2 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> > index ba4577aa4f1d..bbe066f7adbc 100644
-> > --- a/scripts/mod/modpost.c
-> > +++ b/scripts/mod/modpost.c
-> > @@ -1297,23 +1297,16 @@ static void report_extable_warnings(const char*=
- modname, struct elf_info* elf,
-> >                                     Elf_Rela* r, Elf_Sym* sym,
-> >                                     const char* fromsec, const char* to=
-sec)
-> >  {
-> > -       Elf_Sym* fromsym =3D find_elf_symbol2(elf, r->r_offset, fromsec=
-);
-> > -       const char* fromsym_name =3D sym_name(elf, fromsym);
-> >         Elf_Sym* tosym =3D find_elf_symbol(elf, r->r_addend, sym);
-> >         const char* tosym_name =3D sym_name(elf, tosym);
-> > -       const char* from_pretty_name;
-> > -       const char* from_pretty_name_p;
-> >         const char* to_pretty_name;
-> >         const char* to_pretty_name_p;
-> >
-> > -       get_pretty_name(is_function(fromsym),
-> > -                       &from_pretty_name, &from_pretty_name_p);
-> >         get_pretty_name(is_function(tosym),
-> >                         &to_pretty_name, &to_pretty_name_p);
-> >
-> > -       warn("%s(%s+0x%lx): Section mismatch in reference from the %s %=
-s%s to the %s %s:%s%s\n",
-> > -            modname, fromsec, (long)r->r_offset, from_pretty_name,
-> > -            fromsym_name, from_pretty_name_p,
-> > +       warn("%s(%s+0x%lx): Section mismatch in reference to the %s %s:=
-%s%s\n",
-> > +            modname, fromsec, (long)r->r_offset,
-> >              to_pretty_name, tosec, tosym_name, to_pretty_name_p);
-> >
-> >         if (!match(tosec, mismatch->bad_tosec) &&
-> > --
-> > 2.39.2
-> >
->
->
-> --
-> Thanks,
-> ~Nick Desaulniers
-
-
-
---=20
-Best Regards
-Masahiro Yamada
