@@ -2,75 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B943070A884
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 16:31:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FD3C70A885
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 16:35:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231453AbjETO2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 10:28:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
+        id S231593AbjETOcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 10:32:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjETO2c (ORCPT
+        with ESMTP id S229464AbjETOcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 10:28:32 -0400
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB39C115
-        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 07:28:30 -0700 (PDT)
-Received: by mail-vs1-xe2a.google.com with SMTP id ada2fe7eead31-437de9222a9so1001885137.0
-        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 07:28:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684592910; x=1687184910;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FnahHUDaOzUYBYnHGcO8vg1OxYRFdXQA4RSYztwTqns=;
-        b=6jmRYHUSy+3V1Pm1Me1w0q39JXv8J9u99nlq4qhDFFVcHxQXiDnWEVj9/X1gRLSpaA
-         Ovc0SnNq52kDPkkFIHhTw7qT91jQj0bqPIzXdOeveKMAGouS2yZqTPO9cShDU+6FvYPt
-         2u7fc/aBq2QTfW4EdIw9i3D55P9hwdRUw0UXInYD7D2iJSTghJPiZ4p6uQB/RRtuj9Jq
-         F/Lnn7woUCzP+dzpvSd8+gDIMqoVJvmtOi2jHLuQrRfyS6PvdRgA5Uj+Xxpuoppkpa+o
-         7ZXqUkrAA2vEDqiN0MycK0pomf3OrA1I1Sr9bcTm2N6i2+8pjxmy+ZXY+CICMUuxlTBD
-         jb4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684592910; x=1687184910;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FnahHUDaOzUYBYnHGcO8vg1OxYRFdXQA4RSYztwTqns=;
-        b=JgedTd037RQxV59qOejaB4Mt0GG+rV9GKSP9frj5SDBvsCgZHYjFFZe9r86kWZEuKe
-         LchYDd+tshiop0Rpsnau+qJlqYRczi2D5881+4WlxryAmzh76RoMg68zTSAH1Ej/z7H0
-         5E04zpBCYt4l+RDxnfSeBbpcTJCqDuR3xXVBrnqpAVobDA3tOaPwdD4J2Fy75fE9evHx
-         GFmDa3X+HC6+PKl/0AbgNHMJMGF2CIJdN5nqWoaLbhOInFv4kYsPj3ZDtCh9qw2aiynQ
-         35NXY16zY6E3a9fbX26nQtzZ8XeQEqJ5JCWdoVwcfpbWemqSCxBEvpXKUT9hmRr6nI87
-         x0Rg==
-X-Gm-Message-State: AC+VfDz2laDOfIB+bpBIQvn1lrGKXmA+d1W6JD18u9J+IbUKQ3CJFa/F
-        ap3aPflY+WQcWWLcfANrzX+/uD+v/VOuSFtTfthkmA==
-X-Google-Smtp-Source: ACHHUZ7VsWAWuvH8EJv6/vbMtYMacrJCln2WeQNa1k9rtsXydkvUh9DBsranpuSJAwvjfY8Bz44npMDWqiZ0zG1amQo=
-X-Received: by 2002:a05:6102:7a8:b0:438:d4bd:f1f2 with SMTP id
- x8-20020a05610207a800b00438d4bdf1f2mr931731vsg.22.1684592909593; Sat, 20 May
- 2023 07:28:29 -0700 (PDT)
+        Sat, 20 May 2023 10:32:07 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D6B109
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 07:32:03 -0700 (PDT)
+X-QQ-mid: bizesmtp66t1684593116t2c0umov
+Received: from linux-lab-host.localdomain ( [116.30.125.36])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 20 May 2023 22:31:54 +0800 (CST)
+X-QQ-SSF: 01200000000000D0V000000A0000000
+X-QQ-FEAT: RmDZc/K2LPEPOHsJ1JSKHHcUPDqD0No37nsGY5eqpO6LGzdOd94mh4Wd/weQ4
+        cRb1gzcYjFdZnWMwKzupL3vpcbPcf7Z4rUwiCAjk3gZTbFQpkGr+jyC6yLIc97CzZUjax6s
+        5kwcGgCFfenBkl6Oc2fxkuBxF+xxfX8QhT8l6XdccQO9wGQLPBMMmeqR1olBaqac7Jzjbhh
+        4EzJEtwIzh1blSAYvkTuR1xReUHj5yFNsvcW/KzHnONxV0HeIZkzqMQ8R0YtzANctNba4/v
+        /DEtjWi1bITZ7IfaNGFWT/mjEZMWT9oumz6JhzLTemftEGwTBbupnZWwaXdQU+L5Szq4wWn
+        Jree7y5SH5J0CUj5Jkv1izDnQnZQvaaoTyTQb744yuZD4yXzR+yUtnkqFxk8Q==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 16622545413430521310
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     aou@eecs.berkeley.edu, falcon@tinylab.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux@weissschuh.net, palmer@rivosinc.com,
+        paul.walmsley@sifive.com, paulmck@kernel.org
+Subject: Re: [PATCH 0/2] tools/nolibc: riscv: Fix up compile error for rv32
+Date:   Sat, 20 May 2023 22:31:54 +0800
+Message-Id: <20230520143154.68663-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230519094030.GA24947@1wt.eu>
+References: <20230519094030.GA24947@1wt.eu>
 MIME-Version: 1.0
-References: <20230517124201.441634-1-imagedong@tencent.com>
- <20230517124201.441634-4-imagedong@tencent.com> <CANn89iKLf=V664AsUYC52h_q-xjEq9xC3KqTq8q+t262T91qVQ@mail.gmail.com>
- <CADxym3a0gmzmD3Vwu_shoJnAHm-xjD5tJRuKwTvAXnVk_H55AA@mail.gmail.com>
- <CADVnQynZ67511+cKF=hyiaLx5-fqPGGmpyJ-5Lk6ge-ivmAf-w@mail.gmail.com>
- <CADxym3ZiyYK7Vyz05qLv8jOPmNZXXepCsTbZxdkhSQxRx0cdSA@mail.gmail.com>
- <CADVnQy=JQkVGRsbL0u=-oZSpdaFBpz907yX24p3uUu2pMhUjGg@mail.gmail.com> <CADxym3awe-c29C-e1Y+efepLdpFWrG520ezJO1EjJ5C3arq6Eg@mail.gmail.com>
-In-Reply-To: <CADxym3awe-c29C-e1Y+efepLdpFWrG520ezJO1EjJ5C3arq6Eg@mail.gmail.com>
-From:   Neal Cardwell <ncardwell@google.com>
-Date:   Sat, 20 May 2023 10:28:12 -0400
-Message-ID: <CADVnQyk2y68HKScad4W2jOy9uqe7TTCyY-StwdLWFPJhXU+CUA@mail.gmail.com>
-Subject: Re: [PATCH net-next 3/3] net: tcp: handle window shrink properly
-To:     Menglong Dong <menglong8.dong@gmail.com>
-Cc:     Eric Dumazet <edumazet@google.com>, kuba@kernel.org,
-        davem@davemloft.net, pabeni@redhat.com, dsahern@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Menglong Dong <imagedong@tencent.com>,
-        Yuchung Cheng <ycheng@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,228 +53,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 20, 2023 at 5:08=E2=80=AFAM Menglong Dong <menglong8.dong@gmail=
-.com> wrote:
->
-> On Fri, May 19, 2023 at 12:03=E2=80=AFAM Neal Cardwell <ncardwell@google.=
-com> wrote:
-> >
-> > On Thu, May 18, 2023 at 10:12=E2=80=AFAM Menglong Dong <menglong8.dong@=
-gmail.com> wrote:
-> > >
-> > > On Thu, May 18, 2023 at 9:40=E2=80=AFPM Neal Cardwell <ncardwell@goog=
-le.com> wrote:
-> > > >
-> > > > On Wed, May 17, 2023 at 10:35=E2=80=AFPM Menglong Dong <menglong8.d=
-ong@gmail.com> wrote:
-> > > > >
-> > > > > On Wed, May 17, 2023 at 10:47=E2=80=AFPM Eric Dumazet <edumazet@g=
-oogle.com> wrote:
-> > > > > >
-> > > > > > On Wed, May 17, 2023 at 2:42=E2=80=AFPM <menglong8.dong@gmail.c=
-om> wrote:
-> > > > > > >
-> > > > > > > From: Menglong Dong <imagedong@tencent.com>
-> > > > > > >
-> > > > > > > Window shrink is not allowed and also not handled for now, bu=
-t it's
-> > > > > > > needed in some case.
-> > > > > > >
-> > > > > > > In the origin logic, 0 probe is triggered only when there is =
-no any
-> > > > > > > data in the retrans queue and the receive window can't hold t=
-he data
-> > > > > > > of the 1th packet in the send queue.
-> > > > > > >
-> > > > > > > Now, let's change it and trigger the 0 probe in such cases:
-> > > > > > >
-> > > > > > > - if the retrans queue has data and the 1th packet in it is n=
-ot within
-> > > > > > > the receive window
-> > > > > > > - no data in the retrans queue and the 1th packet in the send=
- queue is
-> > > > > > > out of the end of the receive window
-> > > > > >
-> > > > > > Sorry, I do not understand.
-> > > > > >
-> > > > > > Please provide packetdrill tests for new behavior like that.
-> > > > > >
-> > > > >
-> > > > > Yes. The problem can be reproduced easily.
-> > > > >
-> > > > > 1. choose a server machine, decrease it's tcp_mem with:
-> > > > >     echo '1024 1500 2048' > /proc/sys/net/ipv4/tcp_mem
-> > > > > 2. call listen() and accept() on a port, such as 8888. We call
-> > > > >     accept() looply and without call recv() to make the data stay
-> > > > >     in the receive queue.
-> > > > > 3. choose a client machine, and create 100 TCP connection
-> > > > >     to the 8888 port of the server. Then, every connection sends
-> > > > >     data about 1M.
-> > > > > 4. we can see that some of the connection enter the 0-probe
-> > > > >     state, but some of them keep retrans again and again. As
-> > > > >     the server is up to the tcp_mem[2] and skb is dropped before
-> > > > >     the recv_buf full and the connection enter 0-probe state.
-> > > > >     Finially, some of these connection will timeout and break.
-> > > > >
-> > > > > With this series, all the 100 connections will enter 0-probe
-> > > > > status and connection break won't happen. And the data
-> > > > > trans will recover if we increase tcp_mem or call 'recv()'
-> > > > > on the sockets in the server.
-> > > > >
-> > > > > > Also, such fundamental change would need IETF discussion first.
-> > > > > > We do not want linux to cause network collapses just because bi=
-llions
-> > > > > > of devices send more zero probes.
-> > > > >
-> > > > > I think it maybe a good idea to make the connection enter
-> > > > > 0-probe, rather than drop the skb silently. What 0-probe
-> > > > > meaning is to wait for space available when the buffer of the
-> > > > > receive queue is full. And maybe we can also use 0-probe
-> > > > > when the "buffer" of "TCP protocol" (which means tcp_mem)
-> > > > > is full?
-> > > > >
-> > > > > Am I right?
-> > > > >
-> > > > > Thanks!
-> > > > > Menglong Dong
-> > > >
-> > > > Thanks for describing the scenario in more detail. (Some kind of
-> > > > packetdrill script or other program to reproduce this issue would b=
-e
-> > > > nice, too, as Eric noted.)
-> > > >
-> > > > You mention in step (4.) above that some of the connections keep
-> > > > retransmitting again and again. Are those connections receiving any
-> > > > ACKs in response to their retransmissions? Perhaps they are receivi=
-ng
-> > > > dupacks?
-> > >
-> > > Actually, these packets are dropped without any reply, even dupacks.
-> > > skb will be dropped directly when tcp_try_rmem_schedule()
-> > > fails in tcp_data_queue(). That's reasonable, as it's
-> > > useless to reply a ack to the sender, which will cause the sender
-> > > fast retrans the packet, because we are out of memory now, and
-> > > retrans can't solve the problem.
-> >
-> > I'm not sure I see the problem. If retransmits can't solve the
-> > problem, then why are you proposing that data senders keep
-> > retransmitting forever (via 0-window-probes) in this kind of scenario?
-> >
->
-> Because the connection will break if the count of
-> retransmits up to tcp_retires2, but probe-0 can keep
-> for a long time.
+Hi Willy,
 
-I see. So it sounds like you agree that retransmits can solve the
-problem, as long as the retransmits are using the zero-window probe
-state machine (ICSK_TIME_PROBE0, tcp_probe_timer()), which continues
-as long as the receiver is sending ACKs. And it sounds like when you
-said "retrans can't solve the problem" you didn't literally mean that
-retransmits can't solve the problem, but rather you meant that the RTO
-state machine, specifically (ICSK_TIME_RETRANS,
-tcp_retransmit_timer(), etc) can't solve the problem. I agree with
-that assessment that in this scenario tcp_probe_timer() seems like a
-solution but tcp_retransmit_timer() does not.
-
-> > A single dupack without SACK blocks will not cause the sender to fast
-> > retransmit. (Only 3 dupacks would trigger fast retransmit.)
-> >
-> > Three or more dupacks without SACK blocks will cause the sender to
-> > fast retransmit the segment above SND.UNA once if the sender doesn't
-> > have SACK support. But in this case AFAICT fast-retransmitting once is
-> > a fine strategy, since the sender should keep retrying transmits (with
-> > backoff) until the receiver potentially has memory available to
-> > receive the packet.
-> >
-> > >
-> > > > If so, then perhaps we could solve this problem without
-> > > > depending on a violation of the TCP spec (which says the receive
-> > > > window should not be retracted) in the following way: when a data
-> > > > sender suffers a retransmission timeout, and retransmits the first
-> > > > unacknowledged segment, and receives a dupack for SND.UNA instead o=
-f
-> > > > an ACK covering the RTO-retransmitted segment, then the data sender
-> > > > should estimate that the receiver doesn't have enough memory to buf=
-fer
-> > > > the retransmitted packet. In that case, the data sender should ente=
-r
-> > > > the 0-probe state and repeatedly set the ICSK_TIME_PROBE0 timer to
-> > > > call tcp_probe_timer().
-> > > >
-> > > > Basically we could try to enhance the sender-side logic to try to
-> > > > distinguish between two kinds of problems:
-> > > >
-> > > > (a) Repeated data packet loss caused by congestion, routing problem=
-s,
-> > > > or connectivity problems. In this case, the data sender uses
-> > > > ICSK_TIME_RETRANS and tcp_retransmit_timer(), and backs off and onl=
-y
-> > > > retries sysctl_tcp_retries2 times before timing out the connection
-> > > >
-> > > > (b) A receiver that is repeatedly sending dupacks but not ACKing
-> > > > retransmitted data because it doesn't have any memory. In this case=
-,
-> > > > the data sender uses ICSK_TIME_PROBE0 and tcp_probe_timer(), and ba=
-cks
-> > > > off but keeps retrying as long as the data sender receives ACKs.
-> > > >
-> > >
-> > > I'm not sure if this is an ideal method, as it may be not rigorous
-> > > to conclude that the receiver is oom with dupacks. A packet can
-> > > loss can also cause multi dupacks.
-> >
-> > When a data sender suffers an RTO and retransmits a single data
-> > packet, it would be very rare for the data sender to receive multiple
-> > pure dupacks without SACKs. This would only happen in the rare case
-> > where (a) the connection did not have SACK enabled, and (b) there was
-> > a hole in the received sequence space and there were still packets in
-> > flight when the (spurioius) RTO fired.
-> >
-> > But if we want to be paranoid, then this new response could be written
-> > to only trigger if SACK is enabled (the vast, vast majority of cases).
-> > If SACK is enabled, and an RTO of a data packet starting at sequence
-> > S1 results in the receiver sending only a dupack for S1 without SACK
-> > blocks, then this clearly shows the issue is not packet loss but
-> > suggests a receiver unable to buffer the given data packet, AFAICT.
-> >
+> Hi Zhangjin,
+> 
+> On Fri, May 19, 2023 at 01:00:18AM +0800, Zhangjin Wu wrote:
+> ...
 >
-> Yeah, you are right on this point, multi pure dupacks can
-> mean out of memory of the receiver. But we still need to
-> know if the receiver recovers from OOM. Without window
-> shrink, the window in the ack of zero-window probe packet
-> is not zero on OOM.
-
-But do we need a protocol-violating zero-window in this case? Why not
-use my approach suggested above: conveying the OOM condition by
-sending an ACK but not ACKing the retransmitted packet?
-
-Thanks,
-neal
-
-> Hi, Eric and kuba, do you have any comments on this
-> case?
+> > * To let it compile for rv32, we still need to apply one of such actions:
+> >     * Revert the kernel commit d4c08b9776b3 ("riscv: Use latest system call ABI"),
+> >       but it is not the right direction, that commit has removed all of the time32 syscalls,
+> >       and let C lib (e.g. glibc) provide the same C APIs based on the other time64 syscalls
+> > 
+> >     * If not really use any of the time32 syscalls, defining __ARCH_WANT_TIME32_SYSCALLS
+> >       macro will let it compile, but this is buggy for the current implmentations are based
+> >       on time32 syscalls!
+> > 
+> >     * Really implement the C APIs for rv32, based on the time64 syscalls, just like glibc.
+> >       This commit c8ce48f06503 ("asm-generic: Make time32 syscall numbers optional") shows
+> >       us which functions should be re-implemented.
+> > 
+> > So, the work todo for rv32 is:
+> > 
+> > * Rebasing all of the old time32 syscalls based C APIs on the new time64 syscalls,
+> >   but they are not simply mapped one by one, glibc is a good reference.
+> > 
+> > * Add standalone rv32 test support in tools/testing/selftests/nolibc/
+> 
+> I'm not the right one to judge how to best support rv32 but at least I just
+> don't want to go backwards. I'm just having a probably stupid question, but
+> how relevant is rv32 ? I mean, all the boards I've seen to date were based
+> on rv64 even the smallest embedded ones, so I'm sincerely wondering if there
+> exists at all any rv32 devices capable of running Linux. Because if that's
+> not the case, maybe we should instead declare that we only support rv64 ?
+> If such devices exist however, I'm all for us supporting them well.
 >
-> Thanks!
-> Menglong Dong
->
-> > thanks,
-> > neal
-> >
-> > >
-> > > Thanks!
-> > > Menglong Dong
-> > >
-> > > > AFAICT that would be another way to reach the happy state you menti=
-on:
-> > > > "all the 100 connections will enter 0-probe status and connection
-> > > > break won't happen", and we could reach that state without violatin=
-g
-> > > > the TCP protocol spec and without requiring changes on the receiver
-> > > > side (so that this fix could help in scenarios where the
-> > > > memory-constrained receiver is an older stack without special new
-> > > > behavior).
-> > > >
-> > > > Eric, Yuchung, Menglong: do you think something like that would wor=
-k?
-> > > >
-> > > > neal
+
+Firstly, as the commit c8ce48f06503 ("asm-generic: Make time32 syscall
+numbers optional") shows:
+
+    We don't want new architectures to even provide the old 32-bit time_t
+    based system calls any more, or define the syscall number macros.
+
+So, this is not rv32 specific, more and more architectures are trying to
+use the generic unistd.h (include/uapi/asm-generic/unistd.h), but rv32
+may be the first new architecture variant who have no time32 syscalls.
+
+Second, I did search some rv32 socs/boards from two companies, they are
+bl602/bl616/bl702, esp32-c2/c3/c6, some of them even have 532KB sRAM which is
+enough for nolibc-based app + linux kernel, I have gotten 334K rv64 vmlinuz
+(+nolibc hello.c) in the tinylinux work for riscv, the future work may be
+running linux on such a real rv32 board ;-)
+
+Best regards,
+Zhangjin Wu
+
+> Thanks,
+> Willy
