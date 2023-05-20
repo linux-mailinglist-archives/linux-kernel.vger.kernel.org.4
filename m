@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF1A370A614
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 09:11:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8992F70A616
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 09:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbjETHLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 03:11:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48224 "EHLO
+        id S229512AbjETHLM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 03:11:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjETHLD (ORCPT
+        with ESMTP id S229508AbjETHLK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 03:11:03 -0400
-Received: from smtp.smtpout.orange.fr (smtp-20.smtpout.orange.fr [80.12.242.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1DD3E40
-        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 00:11:00 -0700 (PDT)
+        Sat, 20 May 2023 03:11:10 -0400
+Received: from smtp.smtpout.orange.fr (smtp-13.smtpout.orange.fr [80.12.242.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ACFE1BD
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 00:11:09 -0700 (PDT)
 Received: from pop-os.home ([86.243.2.178])
         by smtp.orange.fr with ESMTPA
-        id 0GjwqX2OKqmw80GjwqRTUl; Sat, 20 May 2023 09:10:57 +0200
+        id 0Gk7qZUTZEQ0Y0Gk7qts3h; Sat, 20 May 2023 09:11:07 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1684566657;
-        bh=ZdHX2ENYCr6jKauhqqWQ2NeyEOo+ci9pQnDa5o7LLQ4=;
-        h=From:To:Cc:Subject:Date;
-        b=Lk3CsbJVD1weK7t2DnluWEMeMdnfgTokN57Q4M8Rs72nRj7L4EOzrkvxTXgWYSvln
-         Zm66Mc+/RVfnJboMdS4gBpCsp/5JMLEx2hFbsKG+jATGGKz5tyTCfCHI7QI4anoBhe
-         xukQZEsVLRTX7+d/WtHelmOP8KAIsWPuPHOd+qvJ9ltpYmM5pBDBwl0fhqstShZnkt
-         3sNTOWJpZ+6HQLpvlAXzguCz/CO4aNmCAWRdaCprMTunXlgQRm7w3aKSfqmyGpWQtn
-         8+MUFequeh3R28ei4LNT9E4qBZSWhd7OFDThXv13JmbzzTyD60gZPwOK+a4f8Lp+ME
-         6qwfTmIjIGn0Q==
+        s=t20230301; t=1684566667;
+        bh=VFjzBLHfhQsZzoJFtk+tIh2Z2Xhz+SOk2hnwtR5F5/8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=gZIYGipVV9Y4wpoaG1QQOBvBgDEiE428BuqGFIX1gqxPpi0KdfnBBQu9bSB3wnmCg
+         7EzstYJn3mlm9bOMx3hDyRCkD9zEj+LeWGir81pLUs98sWBo0K1RmyAPPiP7DFd5oW
+         90O7twltgmBEhN1gqd33gvckuN3/XqvqGOWJkICYdcyOoZx5GYbOwnp+sGa6VlQVcQ
+         Y6g6+dFIfmK6cgM7hvCP4p27LtBLMBoZdvPe1tWFa5hCYlLFGMLNSG7feLQR3Wz4zL
+         QaScYGdILL8ywj4COQhM0xp9KgGHwHdJi/W9/Nn/fPGi3kEZeuuX/QRZOmorEy6Lmf
+         Eb2p/acrFLUxw==
 X-ME-Helo: pop-os.home
 X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sat, 20 May 2023 09:10:57 +0200
+X-ME-Date: Sat, 20 May 2023 09:11:07 +0200
 X-ME-IP: 86.243.2.178
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Lee Jones <lee@kernel.org>,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <maira.canal@usp.br>
+To:     Lee Jones <lee@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Lee Jones <lee.jones@linaro.org>
-Subject: [PATCH 1/2] mfd: wcd934x: Fix an error handling path in wcd934x_slim_probe()
-Date:   Sat, 20 May 2023 09:10:54 +0200
-Message-Id: <02d8447f6d1df52cc8357aae698152e9a9be67c6.1684565021.git.christophe.jaillet@wanadoo.fr>
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH 2/2] mfd: wcd934x: Simplify with dev_err_probe()
+Date:   Sat, 20 May 2023 09:11:05 +0200
+Message-Id: <73fdc6ecf619f80fad126abca11fb579d3d87f64.1684565021.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <02d8447f6d1df52cc8357aae698152e9a9be67c6.1684565021.git.christophe.jaillet@wanadoo.fr>
+References: <02d8447f6d1df52cc8357aae698152e9a9be67c6.1684565021.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -54,45 +54,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If devm_gpiod_get_optional() fails, some resources need to be released, as
-already done in the .remove() function.
+Use dev_err_probe() to simplify code, save a few LoC and be consistent
+with error codes handling in messages.
+It also filters -EPROBE_DEFER that can be returned by devm_clk_get().
 
-While at it, remove the unneeded error code from a dev_err_probe() call.
-It is already added in a human readable way by dev_err_probe() itself.
-
-Fixes: 6a0ee2a61a31 ("mfd: wcd934x: Replace legacy gpio interface for gpiod")
 Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- drivers/mfd/wcd934x.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ drivers/mfd/wcd934x.c | 19 +++++++------------
+ 1 file changed, 7 insertions(+), 12 deletions(-)
 
 diff --git a/drivers/mfd/wcd934x.c b/drivers/mfd/wcd934x.c
-index 07e884087f2c..281470d6b0b9 100644
+index 281470d6b0b9..6b942d5270c1 100644
 --- a/drivers/mfd/wcd934x.c
 +++ b/drivers/mfd/wcd934x.c
-@@ -258,8 +258,9 @@ static int wcd934x_slim_probe(struct slim_device *sdev)
- 	usleep_range(600, 650);
- 	reset_gpio = devm_gpiod_get_optional(dev, "reset", GPIOD_OUT_LOW);
- 	if (IS_ERR(reset_gpio)) {
--		return dev_err_probe(dev, PTR_ERR(reset_gpio),
--				"Failed to get reset gpio: err = %ld\n", PTR_ERR(reset_gpio));
-+		ret = dev_err_probe(dev, PTR_ERR(reset_gpio),
-+				    "Failed to get reset gpio\n");
-+		goto err_disable_regulators;
- 	}
- 	msleep(20);
- 	gpiod_set_value(reset_gpio, 1);
-@@ -269,6 +270,10 @@ static int wcd934x_slim_probe(struct slim_device *sdev)
- 	dev_set_drvdata(dev, ddata);
+@@ -227,10 +227,9 @@ static int wcd934x_slim_probe(struct slim_device *sdev)
+ 				     "Failed to get IRQ\n");
  
- 	return 0;
-+
-+err_disable_regulators:
-+	regulator_bulk_disable(WCD934X_MAX_SUPPLY, ddata->supplies);
-+	return ret;
- }
+ 	ddata->extclk = devm_clk_get(dev, "extclk");
+-	if (IS_ERR(ddata->extclk)) {
+-		dev_err(dev, "Failed to get extclk");
+-		return PTR_ERR(ddata->extclk);
+-	}
++	if (IS_ERR(ddata->extclk))
++		return dev_err_probe(dev, PTR_ERR(ddata->extclk),
++				     "Failed to get extclk");
  
- static void wcd934x_slim_remove(struct slim_device *sdev)
+ 	ddata->supplies[0].supply = "vdd-buck";
+ 	ddata->supplies[1].supply = "vdd-buck-sido";
+@@ -239,16 +238,12 @@ static int wcd934x_slim_probe(struct slim_device *sdev)
+ 	ddata->supplies[4].supply = "vdd-io";
+ 
+ 	ret = regulator_bulk_get(dev, WCD934X_MAX_SUPPLY, ddata->supplies);
+-	if (ret) {
+-		dev_err(dev, "Failed to get supplies: err = %d\n", ret);
+-		return ret;
+-	}
++	if (ret)
++		return dev_err_probe(dev, ret, "Failed to get supplies\n");
+ 
+ 	ret = regulator_bulk_enable(WCD934X_MAX_SUPPLY, ddata->supplies);
+-	if (ret) {
+-		dev_err(dev, "Failed to enable supplies: err = %d\n", ret);
+-		return ret;
+-	}
++	if (ret)
++		return dev_err_probe(dev, ret, "Failed to enable supplies\n");
+ 
+ 	/*
+ 	 * For WCD934X, it takes about 600us for the Vout_A and
 -- 
 2.34.1
 
