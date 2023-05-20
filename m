@@ -2,45 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 140FC70A9F5
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 20:22:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8619570A9DB
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 20:21:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232008AbjETSW1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 14:22:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43824 "EHLO
+        id S231772AbjETSVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 14:21:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231981AbjETSWD (ORCPT
+        with ESMTP id S231594AbjETSVn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 14:22:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734951A1;
-        Sat, 20 May 2023 11:21:44 -0700 (PDT)
+        Sat, 20 May 2023 14:21:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E2C8E77;
+        Sat, 20 May 2023 11:21:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D9A560AFD;
-        Sat, 20 May 2023 18:20:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B93EFC433EF;
-        Sat, 20 May 2023 18:20:50 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0D2C660BAD;
+        Sat, 20 May 2023 18:21:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 183B9C433D2;
+        Sat, 20 May 2023 18:21:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684606851;
-        bh=WOWpvSGVcqwyTfThoCVxq6bLDLLJMriEoKmSw2N5Opk=;
+        s=k20201202; t=1684606868;
+        bh=+wj/oMrcHpzqd2DfJKmgymGErx0RFUsGqUTYuA7aRK8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=r1KhSl5REnJcsNuMUxOuVYF5jLu002U9u05YTQ8dKyeURW4kC0BgRlw6IQtkBT806
-         lP9ofnBV4c0vjMzhEypGOzDNnRmrCmwQ5QSCX64k7mD+nTx8nn7kgPI9FWIc9ehQYa
-         Pytk2TjhsgKP57RgKv0breEsg3bo7W5RyGpzaXF+rYLxgy/o/qpKy3sPAYRyBc8D5z
-         rHCphkQH+IUiRYECufNk/bqAiCGLW/hOeZKBK3YWXVbWgvzXRddrGFkXZ0+G3bVxJ3
-         Xz37cTrgjNjLmBUCxmo0lx4YalWKKFxZcF1EloBcmgnZUMgH/SAo5ZfRxJJ32gvcv9
-         la/CX6e2biH7A==
+        b=E9tRUdzte4aXZFV8GZcNYXFhAf4XlZl4QQOi7aE284eSQwaBQxw3pR3Sa3QJbLJeK
+         WMvr3xK6Z/DSsKCQGLd1BoELl0kPAocJkk931x7ZQfOjG83mK4ngar4zKJLHNWrFTJ
+         IY3wo9lP8zFAkWwQG08wpWNcOe6kX+yjsiwyEah1buboGUECpZcFYWS8CxCBSKES8U
+         gRyde0Q4EnopvpHS2TRAK2Nb2xAoRocUOtSKCSYFE77Ucfccipaf9lhTsd3xgNOkPP
+         BxAWsrarYVWMOGjQhlIQ3K4U5MHhZfqUrniPlIr3CoCX/wAoRrORJ7wS9am+6BqLIH
+         Tr+tAKv9t6Bbg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Filipe Manana <fdmanana@suse.com>, Qu Wenruo <wqu@suse.com>,
-        David Sterba <dsterba@suse.com>,
-        Sasha Levin <sashal@kernel.org>, clm@fb.com,
-        josef@toxicpanda.com, linux-btrfs@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 02/14] btrfs: abort transaction when sibling keys check fails for leaves
-Date:   Sat, 20 May 2023 14:20:30 -0400
-Message-Id: <20230520182044.836702-2-sashal@kernel.org>
+Cc:     Haibo Li <haibo.li@mediatek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alexandre Mergnat <amergnat@baylibre.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Sasha Levin <sashal@kernel.org>, linux@armlinux.org.uk,
+        matthias.bgg@gmail.com, alexander.sverdlin@nokia.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.1 03/14] ARM: 9295/1: unwind:fix unwind abort for uleb128 case
+Date:   Sat, 20 May 2023 14:20:31 -0400
+Message-Id: <20230520182044.836702-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230520182044.836702-1-sashal@kernel.org>
 References: <20230520182044.836702-1-sashal@kernel.org>
@@ -48,8 +54,8 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,54 +64,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Filipe Manana <fdmanana@suse.com>
+From: Haibo Li <haibo.li@mediatek.com>
 
-[ Upstream commit 9ae5afd02a03d4e22a17a9609b19400b77c36273 ]
+[ Upstream commit fa3eeb638de0c1a9d2d860e5b48259facdd65176 ]
 
-If the sibling keys check fails before we move keys from one sibling
-leaf to another, we are not aborting the transaction - we leave that to
-some higher level caller of btrfs_search_slot() (or anything else that
-uses it to insert items into a b+tree).
+When unwind instruction is 0xb2,the subsequent instructions
+are uleb128 bytes.
+For now,it uses only the first uleb128 byte in code.
 
-This means that the transaction abort will provide a stack trace that
-omits the b+tree modification call chain. So change this to immediately
-abort the transaction and therefore get a more useful stack trace that
-shows us the call chain in the bt+tree modification code.
+For vsp increments of 0x204~0x400,use one uleb128 byte like below:
+0xc06a00e4 <unwind_test_work>: 0x80b27fac
+  Compact model index: 0
+  0xb2 0x7f vsp = vsp + 1024
+  0xac      pop {r4, r5, r6, r7, r8, r14}
 
-It's also important to immediately abort the transaction just in case
-some higher level caller is not doing it, as this indicates a very
-serious corruption and we should stop the possibility of doing further
-damage.
+For vsp increments larger than 0x400,use two uleb128 bytes like below:
+0xc06a00e4 <unwind_test_work>: @0xc0cc9e0c
+  Compact model index: 1
+  0xb2 0x81 0x01 vsp = vsp + 1032
+  0xac      pop {r4, r5, r6, r7, r8, r14}
+The unwind works well since the decoded uleb128 byte is also 0x81.
 
-Reviewed-by: Qu Wenruo <wqu@suse.com>
-Signed-off-by: Filipe Manana <fdmanana@suse.com>
-Reviewed-by: David Sterba <dsterba@suse.com>
-Signed-off-by: David Sterba <dsterba@suse.com>
+For vsp increments larger than 0x600,use two uleb128 bytes like below:
+0xc06a00e4 <unwind_test_work>: @0xc0cc9e0c
+  Compact model index: 1
+  0xb2 0x81 0x02 vsp = vsp + 1544
+  0xac      pop {r4, r5, r6, r7, r8, r14}
+In this case,the decoded uleb128 result is 0x101(vsp=0x204+(0x101<<2)).
+While the uleb128 used in code is 0x81(vsp=0x204+(0x81<<2)).
+The unwind aborts at this frame since it gets incorrect vsp.
+
+To fix this,add uleb128 decode to cover all the above case.
+
+Signed-off-by: Haibo Li <haibo.li@mediatek.com>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/btrfs/ctree.c | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/arm/kernel/unwind.c | 25 ++++++++++++++++++++++++-
+ 1 file changed, 24 insertions(+), 1 deletion(-)
 
-diff --git a/fs/btrfs/ctree.c b/fs/btrfs/ctree.c
-index dbbae92ac23d8..ab9f8d6c4f1b9 100644
---- a/fs/btrfs/ctree.c
-+++ b/fs/btrfs/ctree.c
-@@ -3118,6 +3118,7 @@ static int push_leaf_right(struct btrfs_trans_handle *trans, struct btrfs_root
+diff --git a/arch/arm/kernel/unwind.c b/arch/arm/kernel/unwind.c
+index a37ea6c772cd5..2e6aa5dc15bf3 100644
+--- a/arch/arm/kernel/unwind.c
++++ b/arch/arm/kernel/unwind.c
+@@ -307,6 +307,29 @@ static int unwind_exec_pop_subset_r0_to_r3(struct unwind_ctrl_block *ctrl,
+ 	return URC_OK;
+ }
  
- 	if (check_sibling_keys(left, right)) {
- 		ret = -EUCLEAN;
-+		btrfs_abort_transaction(trans, ret);
- 		btrfs_tree_unlock(right);
- 		free_extent_buffer(right);
- 		return ret;
-@@ -3348,6 +3349,7 @@ static int push_leaf_left(struct btrfs_trans_handle *trans, struct btrfs_root
++static unsigned long unwind_decode_uleb128(struct unwind_ctrl_block *ctrl)
++{
++	unsigned long bytes = 0;
++	unsigned long insn;
++	unsigned long result = 0;
++
++	/*
++	 * unwind_get_byte() will advance `ctrl` one instruction at a time, so
++	 * loop until we get an instruction byte where bit 7 is not set.
++	 *
++	 * Note: This decodes a maximum of 4 bytes to output 28 bits data where
++	 * max is 0xfffffff: that will cover a vsp increment of 1073742336, hence
++	 * it is sufficient for unwinding the stack.
++	 */
++	do {
++		insn = unwind_get_byte(ctrl);
++		result |= (insn & 0x7f) << (bytes * 7);
++		bytes++;
++	} while (!!(insn & 0x80) && (bytes != sizeof(result)));
++
++	return result;
++}
++
+ /*
+  * Execute the current unwind instruction.
+  */
+@@ -360,7 +383,7 @@ static int unwind_exec_insn(struct unwind_ctrl_block *ctrl)
+ 		if (ret)
+ 			goto error;
+ 	} else if (insn == 0xb2) {
+-		unsigned long uleb128 = unwind_get_byte(ctrl);
++		unsigned long uleb128 = unwind_decode_uleb128(ctrl);
  
- 	if (check_sibling_keys(left, right)) {
- 		ret = -EUCLEAN;
-+		btrfs_abort_transaction(trans, ret);
- 		goto out;
- 	}
- 	return __push_leaf_left(path, min_data_size,
+ 		ctrl->vrs[SP] += 0x204 + (uleb128 << 2);
+ 	} else {
 -- 
 2.39.2
 
