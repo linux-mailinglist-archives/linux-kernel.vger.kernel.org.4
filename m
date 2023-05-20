@@ -2,64 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D961B70A8D8
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 17:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 558C470A8DD
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 17:33:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231732AbjETPaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 11:30:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34716 "EHLO
+        id S231788AbjETPda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 11:33:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbjETPaM (ORCPT
+        with ESMTP id S231180AbjETPd3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 11:30:12 -0400
+        Sat, 20 May 2023 11:33:29 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A17103;
-        Sat, 20 May 2023 08:30:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C3CD103;
+        Sat, 20 May 2023 08:33:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A253360DEF;
-        Sat, 20 May 2023 15:30:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C482FC433D2;
-        Sat, 20 May 2023 15:30:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C51D860B04;
+        Sat, 20 May 2023 15:33:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90740C433D2;
+        Sat, 20 May 2023 15:33:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684596610;
-        bh=I0/PYCkSOLHKSNHXu0txjdVY6Bmb7+j9J1Y+CWmldhw=;
+        s=k20201202; t=1684596807;
+        bh=v2J4QcmeQzjUO1CUDFFKdSrX6QMMRgCiCMtenkolPlU=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=aDoEEmHZpAqFLAowx9ND3W5CE9XrVubLboXGte0hddEMGEcF3hCFdNREo5UzQ289k
-         5Rg1ZQ/HdJZe2YK5XD5+3tk6SoOzbkGWwhOSbgIHrbnHPSQ979IVy9Qe3O7Qjmv13S
-         m3Kdc/kBOu87bYqO3WUNkexGhMgxGPyMEbq3BlyeuIcgNO30lV2Wynrlc78quhQwz2
-         ruAnC0ZAvwc4+qHeCTWWK0touTiXNcxDMJUqrTQ5BDs/1Jl3OhE8xPTjSwuEmAcCE9
-         XCwIuokDpzPFCwMCuQCPtMl9+pkthh0ehCi5kDKnA5LB+ubH3uS8lSEqeLzxcMGWMk
-         8ivitMZ9wdr6Q==
-Date:   Sat, 20 May 2023 16:46:18 +0100
+        b=saGd+R5YIQWo5HvkhlsM7ywmRukcLhf2Kgb3vtXaUdjya86Ia9ulrRP1ID2G0lpwp
+         jehUTPp1qXNEbMKx7JiO6CykDrQ9H9M5VZ71ADjTAG+F4eUXuw/ap6KYpDWkfjBOMw
+         KSPFG2/zqDGKLlBYCi0Hi6qCFSg3mTaJ6UeHvR8/KytNG7jC3eU8DZwW+9tu5+gRLN
+         fmOsfadxDhg2lWgAfVNJwG2dvOMWjQXnLdVKqXueEq7KN73EzCTygK0zjvcTS+4O5i
+         1gqlyTL3zMgLkEV+tJGSAkWlCnzivD2vSi5GnZs6qqFSqOcTNBsSGhr1GS0Iq65zlN
+         iZV2/2HrJVO9A==
+Date:   Sat, 20 May 2023 16:49:35 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     =?UTF-8?B?0KHRgtCw0YDQuiDQk9C10L7RgNCz0LjQuSDQndC40LrQvtC70LDQtdCy0Lg=?=
-         =?UTF-8?B?0Yc=?= <GNStark@sberdevices.ru>
-Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "neil.armstrong@linaro.org" <neil.armstrong@linaro.org>,
-        "khilman@baylibre.com" <khilman@baylibre.com>,
-        "jbrunet@baylibre.com" <jbrunet@baylibre.com>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "nuno.sa@analog.com" <nuno.sa@analog.com>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-amlogic@lists.infradead.org" 
-        <linux-amlogic@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: Re: [PATCH v1] meson saradc: fix clock divider mask length
-Message-ID: <20230520164618.08f26fd9@jic23-huawei>
-In-Reply-To: <f0966e95-43c7-e6f6-8aeb-05f27691cec3@sberdevices.ru>
-References: <20230515210545.2100161-1-gnstark@sberdevices.ru>
-        <CAFBinCCc+t7Ks6fqz38cVrufPRFdxFgC9Qp+JhcM1KfD6pupTg@mail.gmail.com>
-        <f0966e95-43c7-e6f6-8aeb-05f27691cec3@sberdevices.ru>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     Shreeya Patel <shreeya.patel@collabora.com>, lars@metafoo.de,
+        heiko@sntech.de, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, sebastian.reichel@collabora.com,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@collabora.com, gustavo.padovan@collabora.com,
+        serge.broslavsky@collabora.com
+Subject: Re: [PATCH 5/7] iio: adc: rockchip_saradc: Use dev_err_probe
+Message-ID: <20230520164935.70094206@jic23-huawei>
+In-Reply-To: <d1955b9e-c719-9c7c-b1fd-f11fa97e44af@collabora.com>
+References: <20230516230051.14846-1-shreeya.patel@collabora.com>
+        <20230516230051.14846-6-shreeya.patel@collabora.com>
+        <d1955b9e-c719-9c7c-b1fd-f11fa97e44af@collabora.com>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -70,51 +64,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 17 May 2023 16:47:59 +0000
-=D0=A1=D1=82=D0=B0=D1=80=D0=BA =D0=93=D0=B5=D0=BE=D1=80=D0=B3=D0=B8=D0=B9 =
-=D0=9D=D0=B8=D0=BA=D0=BE=D0=BB=D0=B0=D0=B5=D0=B2=D0=B8=D1=87 <GNStark@sberd=
-evices.ru> wrote:
+On Wed, 17 May 2023 12:40:37 +0200
+AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> wrote:
 
-> On 5/16/23 22:08, Martin Blumenstingl wrote:
-> > Hi George,
-> >
-> > thank you for this patch!
-> >
-> > On Mon, May 15, 2023 at 11:06=E2=80=AFPM George Stark <gnstark@sberdevi=
-ces.ru> wrote: =20
-> >> From: George Stark <GNStark@sberdevices.ru>
-> >>
-> >> According to datasheets of supported meson SOCs
-> >> length of ADC_CLK_DIV field is 6 bits long =20
-> > I have a question about this sentence which doesn't affect this patch
-> > - it's only about managing expectations:
-> > Which SoC are you referring to?
-> > This divider is only relevant on older SoCs that predate GXBB (S905).
-> > To my knowledge all SoCs from GXBB onwards place the divider in the
-> > main or AO clock controller, so this bitmask is irrelevant there. =20
->=20
-> Hello Martin
->=20
-> I've checked datasheets of all chips listed in meson_sar_adc_of_match arr=
-ay in meson_saradc.c and everywhere this field is 6 bits long. According to=
- driver code and existing dts files this patch affects all supported chips =
-except meson8.
+> Il 17/05/23 01:00, Shreeya Patel ha scritto:
+> > Use dev_err_probe instead of dev_err in probe function,
+> > which simplifies code a little bit and prints the error
+> > code.
+> > 
+> > Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+> > ---
+> >   drivers/iio/adc/rockchip_saradc.c | 45 ++++++++++++++-----------------
+> >   1 file changed, 20 insertions(+), 25 deletions(-)
+> > 
+> > diff --git a/drivers/iio/adc/rockchip_saradc.c b/drivers/iio/adc/rockchip_saradc.c
+> > index 5e1e8575bc76..a52021fd477d 100644
+> > --- a/drivers/iio/adc/rockchip_saradc.c
+> > +++ b/drivers/iio/adc/rockchip_saradc.c  
+> 
+> ..snip..
+> 
+> > @@ -494,23 +492,20 @@ static int rockchip_saradc_probe(struct platform_device *pdev)
+> >   	 * This may become user-configurable in the future.
+> >   	 */
+> >   	ret = clk_set_rate(info->clk, info->data->clk_rate);
+> > -	if (ret < 0) {
+> > -		dev_err(&pdev->dev, "failed to set adc clk rate, %d\n", ret);
+> > -		return ret;
+> > -	}
+> > +	if (ret < 0)
+> > +		return dev_err_probe(&pdev->dev, ret,
+> > +				     "failed to set adc clk rate\n");
+> >   
+> >   	ret = regulator_enable(info->vref);
+> > -	if (ret < 0) {
+> > -		dev_err(&pdev->dev, "failed to enable vref regulator\n");
+> > -		return ret;
+> > -	}
+> > +	if (ret < 0)
+> > +		return dev_err_probe(&pdev->dev, ret,
+> > +				     "failed to enable vref regulator\n");
+> > +
+> >   	ret = devm_add_action_or_reset(&pdev->dev,
+> >   				       rockchip_saradc_regulator_disable, info);
+> > -	if (ret) {
+> > -		dev_err(&pdev->dev, "failed to register devm action, %d\n",
+> > -			ret);
+> > -		return ret;
+> > -	}
+> > +	if (ret)
+> > +		return dev_err_probe(&pdev->dev, ret,
+> > +				     "failed to register devm action\n");  
+> 
+> It's not your fault - and it's about a pre-existing issue, but there's that:
+> you're returning an error if devm_add_action_or_reset() fails (which is highly
+> unlikely), but you're leaving the regulator enabled!
+Which regulator?  The _or_reset() part means that the callback is called if
+the devm_add_action_or_reset is going to return an error.  So in the
+path you talk about
+rockchip_saradc_regulator_disable() is called and disables vref
 
-On that note, do we want to add any clarifying text on the scope to the
-commit message?
-
-Jonathan
-
->=20
-> Best regards
-> George
->=20
->=20
-> >> Fixes: 3adbf3427330 ("iio: adc: add a driver for the SAR ADC found in =
-Amlogic Meson SoCs")
-> >> Signed-off-by: George Stark <GNStark@sberdevices.ru> =20
-> > Since my question above doesn't affect this patch:
-> > Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> > =20
->=20
+> 
+> As for how to proceed here, I would suggest to fix this issue in a separated
+> commit (before the dev_err_probe() conversion); it'd look like...
+> 
+> 	if (ret) {
+> 		regulator_disable(info->vref);
+> 		dev_err( .... blurb );
+> 		return ret;
+> 	}
+> 
+> and after the conversion it'd look like...
+> 
+> 	if (ret) {
+> 		regulator_disable(info->vref);
+> 		return dev_err_probe( ... blurb );
+> 	}
+> 
+> Cheers,
+> Angelo
+> 
+> >   
+> >   	ret = regulator_get_voltage(info->vref);
+> >   	if (ret < 0)  
+> 
 
