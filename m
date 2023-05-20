@@ -2,45 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA41A70A9F3
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 20:22:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FAA870A9F6
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 20:22:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231985AbjETSWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 14:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43774 "EHLO
+        id S232004AbjETSWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 14:22:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231714AbjETSWB (ORCPT
+        with ESMTP id S231974AbjETSWD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 14:22:01 -0400
+        Sat, 20 May 2023 14:22:03 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85ED10F9;
-        Sat, 20 May 2023 11:21:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAAC81702;
+        Sat, 20 May 2023 11:21:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9452A60C03;
-        Sat, 20 May 2023 18:21:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4107AC4339B;
-        Sat, 20 May 2023 18:21:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BA4660B8D;
+        Sat, 20 May 2023 18:21:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11BACC4339B;
+        Sat, 20 May 2023 18:21:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684606881;
-        bh=cUruHpp5csKVaRsO8925IjftPTB8zY3Vv0Hmu8lUWVE=;
+        s=k20201202; t=1684606901;
+        bh=Caj9Chv14WJIy5OSbKzEcAb/SOrNpcH0u4TKTyOodn8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=uVbFs3gBoHbd9JB56mKNctb7H6qLe45kfmwzqtcDeqZApUsmhITuFKkkKLiU/KQzV
-         MGtDDfIJw6AYivb0ahAstjAGaPv9y6eavS9hoKwMzOOaACtyUAnB/ud6LBybXUJFXM
-         ZAjLEvDhcQtn5fgsWC26yslDHRUtVBgr5WlvpCZwJBs88Oa2isb2QK1NjVnhA0RoR7
-         rqgOGd36Yjpze7OWp617DZswlqLluccIzcjImAqLo+7i0/FyWZqfE3sz0KbdtsxNl7
-         tHsGt/77fAFd8Xlsh5AD8XU5nwgz05VJtEt7MpK0uuJ8t2UnVlH2ygr8/ifV6TGMNb
-         WsgNmxJgBIz3A==
+        b=nHuQFJPzr0vbY4R/e1kvCF/7TUpp2fu6TI6jhAE7dQakIWpdCNe7i3qzaIrCF4q1H
+         dygU9rfaffRfDfhDQHmOrF49DBVI0DRfbI5ZUflI4Nf8Lf05nYXUtc5s41xDEzifFB
+         EgDunWHps/X48dDrSwuk0KKc7yHH/mZDToOYOYxMD4YSvV3R3bmKqEtrQUT8qbtUZ1
+         jDoFS8yj6fjJo/t/hn+SoDsRO3nxygu8m5r4N0tc3hrE5bqms8+2TA6sihXaNZaaK7
+         LOui5VwpENzFv0oDgbGi+v7hu0U9S4zMLlbB1rzj5J9etjfnSlFvuDk2vokq7n7m3I
+         eSJTrMMmzsHLQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Bob Peterson <rpeterso@redhat.com>,
-        Yang Lan <lanyang0908@gmail.com>,
-        Andreas Gruenbacher <agruenba@redhat.com>,
-        Sasha Levin <sashal@kernel.org>, cluster-devel@redhat.com
-Subject: [PATCH AUTOSEL 6.1 08/14] gfs2: Don't deref jdesc in evict
-Date:   Sat, 20 May 2023 14:20:36 -0400
-Message-Id: <20230520182044.836702-8-sashal@kernel.org>
+Cc:     Yifan Zhang <yifan1.zhang@amd.com>, Lang Yu <lang.yu@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
+        Hawking.Zhang@amd.com, mario.limonciello@amd.com,
+        lijo.lazar@amd.com, YiPeng.Chai@amd.com, andrey.grodzovsky@amd.com,
+        Amaranath.Somalapuram@amd.com, Bokun.Zhang@amd.com,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: [PATCH AUTOSEL 6.1 09/14] drm/amdgpu: set gfx9 onwards APU atomics support to be true
+Date:   Sat, 20 May 2023 14:20:37 -0400
+Message-Id: <20230520182044.836702-9-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230520182044.836702-1-sashal@kernel.org>
 References: <20230520182044.836702-1-sashal@kernel.org>
@@ -58,64 +63,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bob Peterson <rpeterso@redhat.com>
+From: Yifan Zhang <yifan1.zhang@amd.com>
 
-[ Upstream commit 504a10d9e46bc37b23d0a1ae2f28973c8516e636 ]
+[ Upstream commit af7828fbceed4f9e503034111066a0adef3db383 ]
 
-On corrupt gfs2 file systems the evict code can try to reference the
-journal descriptor structure, jdesc, after it has been freed and set to
-NULL. The sequence of events is:
+APUs w/ gfx9 onwards doesn't reply on PCIe atomics, rather
+it is internal path w/ native atomic support. Set have_atomics_support
+to true.
 
-init_journal()
-...
-fail_jindex:
-   gfs2_jindex_free(sdp); <------frees journals, sets jdesc = NULL
-      if (gfs2_holder_initialized(&ji_gh))
-         gfs2_glock_dq_uninit(&ji_gh);
-fail:
-   iput(sdp->sd_jindex); <--references jdesc in evict_linked_inode
-      evict()
-         gfs2_evict_inode()
-            evict_linked_inode()
-               ret = gfs2_trans_begin(sdp, 0, sdp->sd_jdesc->jd_blocks);
-<------references the now freed/zeroed sd_jdesc pointer.
-
-The call to gfs2_trans_begin is done because the truncate_inode_pages
-call can cause gfs2 events that require a transaction, such as removing
-journaled data (jdata) blocks from the journal.
-
-This patch fixes the problem by adding a check for sdp->sd_jdesc to
-function gfs2_evict_inode. In theory, this should only happen to corrupt
-gfs2 file systems, when gfs2 detects the problem, reports it, then tries
-to evict all the system inodes it has read in up to that point.
-
-Reported-by: Yang Lan <lanyang0908@gmail.com>
-Signed-off-by: Bob Peterson <rpeterso@redhat.com>
-Signed-off-by: Andreas Gruenbacher <agruenba@redhat.com>
+Signed-off-by: Yifan Zhang <yifan1.zhang@amd.com>
+Reviewed-by: Lang Yu <lang.yu@amd.com>
+Acked-by: Felix Kuehling <Felix.Kuehling@amd.com>
+Acked-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/gfs2/super.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/fs/gfs2/super.c b/fs/gfs2/super.c
-index 2015bd05cba10..9d27aa8bd2bc6 100644
---- a/fs/gfs2/super.c
-+++ b/fs/gfs2/super.c
-@@ -1380,6 +1380,14 @@ static void gfs2_evict_inode(struct inode *inode)
- 	if (inode->i_nlink || sb_rdonly(sb))
- 		goto out;
- 
-+	/*
-+	 * In case of an incomplete mount, gfs2_evict_inode() may be called for
-+	 * system files without having an active journal to write to.  In that
-+	 * case, skip the filesystem evict.
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+index 011e4fbe27f10..646a211e1a964 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+@@ -3735,6 +3735,12 @@ int amdgpu_device_init(struct amdgpu_device *adev,
+ 		adev->have_atomics_support = ((struct amd_sriov_msg_pf2vf_info *)
+ 			adev->virt.fw_reserve.p_pf2vf)->pcie_atomic_ops_support_flags ==
+ 			(PCI_EXP_DEVCAP2_ATOMIC_COMP32 | PCI_EXP_DEVCAP2_ATOMIC_COMP64);
++	/* APUs w/ gfx9 onwards doesn't reply on PCIe atomics, rather it is a
++	 * internal path natively support atomics, set have_atomics_support to true.
 +	 */
-+	if (!sdp->sd_jdesc)
-+		goto out;
-+
- 	gfs2_holder_mark_uninitialized(&gh);
- 	ret = evict_should_delete(inode, &gh);
- 	if (ret == SHOULD_DEFER_EVICTION)
++	else if ((adev->flags & AMD_IS_APU) &&
++		(adev->ip_versions[GC_HWIP][0] > IP_VERSION(9, 0, 0)))
++		adev->have_atomics_support = true;
+ 	else
+ 		adev->have_atomics_support =
+ 			!pci_enable_atomic_ops_to_root(adev->pdev,
 -- 
 2.39.2
 
