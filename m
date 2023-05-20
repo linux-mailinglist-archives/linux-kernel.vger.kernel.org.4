@@ -2,65 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BB7C70AB9A
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 00:41:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F12170ABA2
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 01:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbjETWlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 18:41:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
+        id S229708AbjETXQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 19:16:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjETWlv (ORCPT
+        with ESMTP id S229511AbjETXQM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 18:41:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B02ACDE;
-        Sat, 20 May 2023 15:41:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4B73560C3C;
-        Sat, 20 May 2023 22:41:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5CE2C433EF;
-        Sat, 20 May 2023 22:41:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684622509;
-        bh=uoMxow7xFBBRRvshKvrIaPvVPMHtBi6h9O2RJF+yIQA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=UNLYWE6OrxkNb/F3fYYUELjZEWqr71e65cwbS36XIMBrM/El6pHDcXTRCYttbaeTN
-         Wz/+b3JevKDHS424vwjctXtpOgxNdLj/a3cPVdySMrBr9cgl7LJoTkWIFQdCZ/Yf/f
-         Vu9sYuemDxosbs7c45T70Kfrl0IWdIFqN3RnQP+BwhneTpPu+wX6ckowcPzdWGwCa3
-         lliab0u+W1dU0quQAmAKlu880cqaJwptvEopyqgiP51Dk6ojwyQH6a4pPyyaSoVzoq
-         /5r/8sWCQB8jfUcmRgEmYQiNwOk6HITbw0vse1zLWrjI2+va1vY3HYq7UL3IqJ7fHs
-         vqfkoWUC7z/dg==
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-19a08412723so3785445fac.0;
-        Sat, 20 May 2023 15:41:49 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzztbbH/9vMQIHoWe+7wo8MlNo2bXHPwDAZU0I6jjJZeRtZLr/R
-        pk2ER89dNuO7IRKDa7Is3sXi5vUBU/QlPiG2fl8=
-X-Google-Smtp-Source: ACHHUZ7UPfw2OIS0jUpr+b1VZVpyh0jql89BYNScfEw2Su3I8HM3zYJ3+zXIiIUkPBuEdQ+6zIUAlJSuxDuOSL6ZyZc=
-X-Received: by 2002:a05:6870:90c2:b0:18e:b6d5:7451 with SMTP id
- s2-20020a05687090c200b0018eb6d57451mr3979310oab.13.1684622508953; Sat, 20 May
- 2023 15:41:48 -0700 (PDT)
+        Sat, 20 May 2023 19:16:12 -0400
+Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93042115;
+        Sat, 20 May 2023 16:16:09 -0700 (PDT)
+Received: by mail-ot1-x32c.google.com with SMTP id 46e09a7af769-6aaef8ca776so1737206a34.2;
+        Sat, 20 May 2023 16:16:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684624569; x=1687216569;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qtN503DAMVLG+ZzNXh8XqsPCLRzxoeSh0JfLzHKejJY=;
+        b=CyIMrN2MhpEosseCZAw9ARngSHbN3e1fKGeGdChJABNEVzGX5zLDpwSkLg6Gtyf9mV
+         269PUmpAyCGZDzk6Zie8vBgnafQ7CuTukl2G+p/toBY4P0YGTxiXltwfvNHGeB/PuzIS
+         X11Ug+1jQs9jUbMG1f3EEW7mz/6Z2/SE9JzGM+0lXc04t8LrOJsVTgoj4DnRuH4Iy0jQ
+         3FPo52z1AZt3Ez38be23zFbQyVqlX6zbUduKq4PjDYUp7qFsq9cbNndV7qEBDuO07tfx
+         ayy6FyIOIstNFOWpJLlD6s/yx88js5mmUKdY8W+XcRanLodcAGJzDfcQDSMD/NERscwi
+         Wp5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684624569; x=1687216569;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qtN503DAMVLG+ZzNXh8XqsPCLRzxoeSh0JfLzHKejJY=;
+        b=el9b4Uuqw4WGWoInjoLeUSN3uVFPIymnxyYdQ17BAOV+LPIGPnTRSQlZMgvXgMPNf7
+         2YZFWVM+RYLa2VOZQFfaSjcKcron4a0GuBHEtgaopDD7sD02a3e2ukiSCw7l9uiyXgwT
+         UPx1zgSyA2R9rt+hZBYhPotIBf774DyR/KLlnyZzZBFcO1I3Z2sw6KFVGF6zIFEG2A0g
+         /PaxQAAUtqTV5KlNS2lKzPGUzY6mnDSLf/9zjP81auQN9ordHI9JTSCCv4I19ukAmNBm
+         /neL/sk439fy9XRFj5ij3neTLFMtWxXIyPF65Y8WuzO5lMAfD1OsbxbpTpSphkMFJDRJ
+         L0/w==
+X-Gm-Message-State: AC+VfDzTQTd604YgjXNIojEmOuHvjGAtq8dMSIIOqlpm95NSmGhrpCdF
+        h5Lq6i9tdZIQwMb8RpEmcxvfr+ED3j8=
+X-Google-Smtp-Source: ACHHUZ5ijRccqrMNCyT9C9rF+440+EpLu9j68TL2kbqDne8/GuC7Bfc/VBYBipCqvRLoCJtcB0CjyA==
+X-Received: by 2002:a05:6830:1181:b0:6ab:43b:a93c with SMTP id u1-20020a056830118100b006ab043ba93cmr3351049otq.13.1684624568854;
+        Sat, 20 May 2023 16:16:08 -0700 (PDT)
+Received: from [192.168.0.92] (cpe-70-94-157-206.satx.res.rr.com. [70.94.157.206])
+        by smtp.gmail.com with ESMTPSA id i17-20020a9d6251000000b006ad3ed04973sm971205otk.8.2023.05.20.16.16.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 20 May 2023 16:16:08 -0700 (PDT)
+Message-ID: <ced4d4e1-8358-d718-58ee-9effe39cff6e@gmail.com>
+Date:   Sat, 20 May 2023 18:16:07 -0500
 MIME-Version: 1.0
-References: <20230509012616.81579-1-darwi@linutronix.de> <20230515173217.64864-1-darwi@linutronix.de>
-In-Reply-To: <20230515173217.64864-1-darwi@linutronix.de>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 21 May 2023 07:41:12 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASPnxnoUmzg43YDcCGP4uor=VO96bmZu3gh3av2BO9wOg@mail.gmail.com>
-Message-ID: <CAK7LNASPnxnoUmzg43YDcCGP4uor=VO96bmZu3gh3av2BO9wOg@mail.gmail.com>
-Subject: Re: [PATCH v3 0/2] scripts: Resolve gtags empty index generation
-To:     "Ahmed S. Darwish" <darwi@linutronix.de>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kbuild@vger.kernel.org, linux-doc@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [ANNOUNCE] util-linux v2.39
+Content-Language: en-US
+From:   Bruce Dubbs <bruce.dubbs@gmail.com>
+To:     Masatake YAMATO <yamato@redhat.com>
+Cc:     kzak@redhat.com, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, util-linux@vger.kernel.org,
+        renodr2002@gmail.com
+References: <20230517112242.3rubpxvxhzsc4kt2@ws.net.home>
+ <652d32c5-4b33-ce3a-3de7-9ebc064bbdcb@gmail.com>
+ <20230520.074311.642413213582621319.yamato@redhat.com>
+ <2fc8421e-634a-aa7d-b023-c8d5e5fa1741@gmail.com>
+In-Reply-To: <2fc8421e-634a-aa7d-b023-c8d5e5fa1741@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,116 +79,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 2:33=E2=80=AFAM Ahmed S. Darwish <darwi@linutronix.=
-de> wrote:
->
-> Hi,
->
-> v3-changelog
-> ------------
->
-> Handle review remarks from Masahiro Yamada:
->
->   - Apply shellcheck on new "scripts/tags.sh" code.
->
->   - Shorten code through shell's "default value" parameter expansion.
->
-> NEW:
->
->   - Cc docs maintainer (Documentation/process/changes.rst change).
->
-> Thanks!
->
-> v2-changelog
-> ------------
->
-> https://lkml.kernel.org/r/20230509012616.81579-1-darwi@linutronix.de
->
-> Handle review remarks from Masahiro Yamada:
->
->   - scripts/tags.sh: remove the O=3D language, and focus on the general
->     case of the build directory being different from the kernel source
->     tree, as specified in kernel Makefile L159.
->
->   - Fix failure when build directory is a subdirectory of the kernel
->     source tree.
->
-> NEW:
->
->   - Update Documentation/process/changes.rst with new gtags (GNU GLOBAL)
->     requirements.
->
-> Thanks!
->
-> Cover letter / v1
-> -----------------
->
-> https://lkml.kernel.org/r/20230504201833.202494-1-darwi@linutronix.de
->
-> make gtags for O=3D kernel builds is currently broken. For example, when =
-doing:
->
->    make O=3D../build/ x86_64_defconfig
->    make O=3D../build/ gtags
->
-> gtags generates a warning for each kernel source file to be indexed:
->
->    make[1]: Entering directory '/home/darwi/build'
->      GEN     gtags
->    Warning: '/home/darwi/linux/arch/x86/include/asm/qspinlock.h' is out o=
-f source tree. ignored.
->    Warning: '/home/darwi/linux/arch/x86/include/asm/hpet.h' is out of sou=
-rce tree. ignored.
->    ...
->    Warning: '/home/darwi/linux/virt/lib/irqbypass.c' is out of source tre=
-e. ignored.
->    make[1]: Leaving directory '/home/darwi/build/'
->
-> and then generates an empty index:
->
->    $ du -hs ~/build/G*
->    16K  /home/darwi/build/GPATH
->    16K  /home/darwi/build/GRTAGS
->    16K  /home/darwi/build/GTAGS
->
-> This series includes a proposed fix. After applying it:
->
->    $ make O=3D../build/ gtags
->    make[1]: Entering directory '/home/darwi/build'
->      GEN     gtags
->    make[1]: Leaving directory '/home/darwi/build'
->
->    $ du -hs ~/build/G*
->    9.1M /home/darwi/build/GPATH
->    506M /home/darwi/build/GRTAGS
->    696M /home/darwi/build/GTAGS
->
-> The generated files can then be integrated with editors or IDEs as
-> usual.
->
-> =3D>
->
-> Ahmed S. Darwish (2):
->   scripts/tags.sh: Resolve gtags empty index generation
->   docs: Set minimal gtags / GNU GLOBAL version to 6.6.5
+On 5/19/23 17:56, Bruce Dubbs wrote:
+> On 5/19/23 17:43, Masatake YAMATO wrote:
+>> Bruce,
+>>
+>>> On 5/17/23 06:22, Karel Zak wrote:
+>>>> The util-linux release v2.39 is available at
+>>>>                                        
+>>>> http://www.kernel.org/pub/linux/utils/util-linux/v2.39
+>>>>                                     Feedback and bug reports, as always, are 
+>>>> welcomed.
+>>>
+>>> Karel, I have installed util-linux v2.39 in LFS and have run into a
+>>> problem with one test, test_mkfds.  Actually the test passes, but does
+>>> not clean up after itself. What is left over is:
+>>>
+>>> tester 32245 1 0 15:43 ?  00:00:00 /sources/util-linux-2.39/test_mkfds
+>>> -q udp 3 4 server-port=34567 client-port=23456 server-do-bind=1
+>>> client-do-bind=1 client-do-connect=1
+>>> tester 32247 1 0 15:43 ?  00:00:00 /sources/util-linux-2.39/test_mkfds
+>>> -q udp6 3 4 lite=1 server-port=34567 client-port=23456
+>>> server-do-bind=1 client-do-bind=1 client-do-connect=1
+>>>
+>>> It's possible it may be due to something we are doing inside our
+>>> chroot environment, but we've not had this type of problem with
+>>> earlier versions of util-linux.
+>>>
+>>> In all I do have:
+>>>
+>>>    All 261 tests PASSED
+>>>
+>>> but the left over processes interfere later when we try to remove the
+>>> non-root user, tester, that runs the tests.  I can work around the
+>>> problem by disabling test_mkfds, but thought you would like to know.
+>>
+>> Thank you for reporting.
+>> Reproduced on my PC. I found two processes were not killed properly.
+>>
+>> Could you try the following change?
+>>
+>> diff --git a/tests/ts/lsfd/option-inet b/tests/ts/lsfd/option-inet
+>> index 21e66f700..70cc3798d 100755
+>> --- a/tests/ts/lsfd/option-inet
+>> +++ b/tests/ts/lsfd/option-inet
+>> @@ -84,14 +84,10 @@ ts_cd "$TS_OUTDIR"
+>>                     -o ASSOC,TYPE,NAME \
+>>                     -Q "(PID == $PID0) or (PID == $PID1) or (PID == $PID2) or (PID 
+>> == $PID3) or (PID == $PID4)"
+>> -    kill -CONT "${PID0}"
+>> -    wait "${PID0}"
+>> -
+>> -    kill -CONT "${PID1}"
+>> -    wait "${PID1}"
+>> -
+>> -    kill -CONT "${PID2}"
+>> -    wait "${PID2}"
+>> +    for pid in "${PID0}" "${PID1}" "${PID2}" "${PID3}" "${PID4}"; do
+>> +       kill -CONT "${pid}"
+>> +       wait "${pid}"
+>> +    done
+>>   } > "$TS_OUTPUT" 2>&1
+>>   ts_finalize
+> 
+> I will do that, but will not be able to get to it until late tomorrow, but will 
+> report back asap.
+
+I used the above patch and it fixed the problem.  Thank you.
+
+   -- Bruce
 
 
-Both applied. Thanks.
-
-
-
-
->
->  Documentation/process/changes.rst | 7 +++++++
->  scripts/tags.sh                   | 9 ++++++++-
->  2 files changed, 15 insertions(+), 1 deletion(-)
->
-> base-commit: f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6
-> --
-> 2.30.2
-
-
-
---=20
-Best Regards
-Masahiro Yamada
