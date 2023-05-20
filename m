@@ -2,293 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C96470A79E
-	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 13:59:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC4B770A7A2
+	for <lists+linux-kernel@lfdr.de>; Sat, 20 May 2023 14:03:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231465AbjETL6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 07:58:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46994 "EHLO
+        id S231288AbjETMDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 08:03:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbjETL6B (ORCPT
+        with ESMTP id S229563AbjETMDH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 07:58:01 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3C79693;
-        Sat, 20 May 2023 04:57:59 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.43:45102.1143588744
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id 86ACD1002A6;
-        Sat, 20 May 2023 19:57:51 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-75648544bd-7vx9t with ESMTP id 92972edf7ff648be911319ad121a0a90 for liupeibao@loongson.cn;
-        Sat, 20 May 2023 19:57:53 CST
-X-Transaction-ID: 92972edf7ff648be911319ad121a0a90
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <cf3199a1-758d-f0a4-c69a-ea2428c12f4b@189.cn>
-Date:   Sat, 20 May 2023 19:57:50 +0800
+        Sat, 20 May 2023 08:03:07 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237E7C6;
+        Sat, 20 May 2023 05:03:04 -0700 (PDT)
+X-QQ-mid: bizesmtp70t1684584176tjfoh9p1
+Received: from linux-lab-host.localdomain ( [116.30.125.36])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sat, 20 May 2023 20:02:55 +0800 (CST)
+X-QQ-SSF: 00200000000000C0V000000A0000000
+X-QQ-FEAT: +ynUkgUhZJnYh1ftKzhir2TdHIFgiWxK45RvD2Ho5QFMDZZkyhJO8CvAx2MHP
+        YhLQ6ZN/Jk492lBH+9nt50cfKzTgRS9vo4o37eJwmTg97yBk96pAveZfLi1HZuFeWQh5fqZ
+        pL7V++RPd3VykDkp7FEXf/AU1qigHxxY2jh7K8G7euu9cGL/h0WEZtPyW/6X9mMvXHgSKiZ
+        Wk9ljR2Wpo4DU8UnqZ9r88XO/yazK+LoLhDGVEULeFEheGEMGtrjrbxLZZ5lvdRqa9/W949
+        CuKa3UWi8eq0dtXcMYIgZ73t/4rPGRPZAqJY4D1ZHghi60JwK7jVSBlEZ/xABywLC8lSj8B
+        h6aY3NZ2mHKaJWEaPAQeUn0OtVoGrTBVGw/MhYwngGISe4MvQ667iIh6zENDA==
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 12071841425974536677
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     linux@weissschuh.net
+Cc:     aou@eecs.berkeley.edu, falcon@tinylab.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, shuah@kernel.org, w@1wt.eu
+Subject: [PATCH] selftests/nolibc: Fix up compile error for rv32
+Date:   Sat, 20 May 2023 20:02:53 +0800
+Message-Id: <20230520120254.66315-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230520-nolibc-stackprotector-riscv-v1-1-d8912012a034@weissschuh.net>
+References: <20230520-nolibc-stackprotector-riscv-v1-1-d8912012a034@weissschuh.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [v13,1/2] drm: add kms driver for loongson display controller
-Content-Language: en-US
-To:     Liu Peibao <liupeibao@loongson.cn>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        suijingfeng <15330273260@189.cn>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>
-Cc:     linaro-mm-sig@lists.linaro.org, loongson-kernel@lists.loongnix.cn,
-        Li Yi <liyi@loongson.cn>, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        linux-media@vger.kernel.org
-References: <20230515155734.2954149-2-suijingfeng@loongson.cn>
- <d06cb599-5040-628e-a45b-270dfe0c2db4@loongson.cn>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <d06cb599-5040-628e-a45b-270dfe0c2db4@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+When compile nolibc-test.c for rv32, we got such error:
 
+    tools/testing/selftests/nolibc/nolibc-test.c:599:57: error: ‘__NR_fstat’ undeclared (first use in this function)
+      599 |   CASE_TEST(syscall_args);      EXPECT_SYSER(1, syscall(__NR_fstat, 0, NULL), -1, EFAULT); break;
 
-On 2023/5/19 18:04, Liu Peibao wrote:
-> I test this on my 3A5000 + 7A1000 and 3A5000 + 7A2000 desktop,
-> and this works well, so:
->
-> Tested-by: Liu Peibao <liupeibao@loongson.cn>
+The generic include/uapi/asm-generic/unistd.h used by rv32 doesn't
+support __NR_fstat, using the common __NR_read functions as expected.
 
-Thanks a lot.
+    Running test 'syscall'
+    69 syscall_noargs = 1                                            [OK]
+    70 syscall_args = -1 EBADF                                       [OK]
 
-> Br,
-> Peibao
->
-> On 5/15/23 11:57 PM, Sui Jingfeng wrote:
->> Loongson display controller IP has been integrated in both Loongson north
->> bridge chipset(ls7a1000/ls7a2000) and Loongson SoCs(ls2k1000/ls2k2000), it
->> has been even included in Loongson self-made BMC products.
->>
->> This display controller is a PCI device. It has two display pipes and each
->> display pipe support a primary plane and a cursor plane. For the DC in the
->> ls7a1000 and ls2k1000, each display pipe has a DVO output interface which
->> provide RGB888 signals, vertical & horizontal synchronisations and pixel
->> clock. Each CRTC is able to support 1920x1080@60Hz, the maximum resolution
->> of each display pipe is 2048x2048 according to the hardware spec.
->>
->> For the DC in LS7A2000, each display pipe is equipped with a built-in HDMI
->> encoder which is compliant with the HDMI 1.4 specification, thus it support
->> 3840x2160@30Hz. The first display pipe is also equipped with a transparent
->> vga encoder which is parallel with the HDMI encoder. The DC in LS7A2000 is
->> more complete compare with the one in old chips, besides above feature, it
->> has two hardware cursors, two hardware vblank counter and two scanout
->> position recorders unit. It also support tiled framebuffer format which
->> can be scanout the tiled framebuffer rendered by the LoongGPU directly.
->>
->> v1 -> v2:
->>   1) Use hpd status reg when polling for ls7a2000
->>   2) Fix all warnings emerged when compile with W=1
->>
->> v2 -> v3:
->>   1) Add COMPILE_TEST in Kconfig and make the driver off by default
->>   2) Alphabetical sorting headers (Thomas)
->>   3) Untangle register access functions as much as possible (Thomas)
->>   4) Switch to TTM based memory manager and prefer cached mapping
->>      for Loongson SoC (Thomas)
->>   5) Add chip id detection method, now all models are distinguishable.
->>   6) Revise builtin HDMI phy driver, nearly all main stream mode
->>      below 4K@30Hz is tested, this driver supported these mode very
->>      well including clone display mode and extend display mode.
->>
->> v3 -> v4:
->>   1) Quickly fix a small mistake.
->>
->> v4 -> v5:
->>   1) Drop potential support for Loongson 2K series SoC temporary,
->>      this part should be resend with the DT binding patch in the future.
->>   2) Add per display pipe debugfs support to the builtin HDMI encoder.
->>   3) Rewrite atomic_update() for hardware cursors plane(Thomas)
->>   4) Rewrite encoder and connector initialization part, untangle it
->>      according to the chip(Thomas).
->>
->> v5 -> v6:
->>   1) Remove stray code which didn't get used, say lsdc_of_get_reserved_ram
->>   2) Fix all typos I could found, make sentences and code more readable
->>   3) Untangle lsdc_hdmi*_connector_detect() function according to the pipe
->>   4) After a serious consideration, we rename this driver as loongson.
->>      Because we also have drivers toward the LoongGPU IP in LS7A2000 and
->>      LS2K2000. Besides, there are also drivers about the external encoder,
->>      HDMI audio driver and vbios support etc. This patch only provide DC
->>      driver part, my teammate Li Yi believe that loongson will be more
->>      suitable for loongson graphics than lsdc in the long run.
->>
->>      loongson.ko = LSDC + LoongGPU + encoders driver + vbios/DT ...
->>
->> v6 -> v7:
->>   1) Add prime support, self-sharing is works. sharing buffer with etnaviv
->>      is also tested, and its works with limitation.
->>   2) Implement buffer objects tracking with list_head.
->>   3) S3(sleep to RAM) is tested on ls3a5000+ls7a2000 evb and it works.
->>   4) Rewrite lsdc_bo_move, since ttm core stop allocating resources
->>      during BO creation. Patch V1 ~ V6 of this series no longer works
->>      on latest kernel. Thus, we send V7 to revival them.
->>
->> v7 -> v8:
->>   1) Zero a compile warnnings on 32-bit platform, compile with W=1
->>   2) Revise lsdc_bo_gpu_offset() and minor cleanup
->>   3) Pageflip tested on the virtual terminal with following commands
->>
->>      modetest -M loongson -s 32:1920x1080 -v
->>      modetest -M loongson -s 34:1920x1080 -v -F tiles
->>
->>     It works like a charm, when running pageflip test with dual screnn
->>     configuration, another two additional bo created by the modetest
->>     emerged, VRAM usage up to 40+MB, well we have at least 64MB, still
->>     enough.
->>
->>     # cat bos
->>
->>         bo[0000]: size:     8112kB VRAM
->>         bo[0001]: size:       16kB VRAM
->>         bo[0002]: size:       16kB VRAM
->>         bo[0003]: size:    16208kB VRAM
->>         bo[0004]: size:     8112kB VRAM
->>         bo[0005]: size:     8112kB VRAM
->>
->> v8 -> v9:
->>   1) Select I2C and I2C_ALGOBIT in Kconfig and should depend on MMU.
->>   2) Using pci_get_domain_bus_and_slot to get the GPU device.
->>   3) Other minor improvements.
->>
->>   Those patches are tested on ls3a5000 + ls7a1000 CRB, ls3a5000 + ls7a2000
->>   evb, and lemote a1901 board(ls3a4000 + ls7a1000). On loongson mips CPU,
->>   the write combine support should be enabled, to get a decent performance
->>   for writing framebuffer data to the VRAM.
->>
->> v9 -> v10:
->>   1) Revise lsdc_drm_freeze() to implement S3 completely and correctly.
->>      I suddenly realized that pinned buffer can not move and VRAM lost
->>      power when sleep to RAM. Thus, the data in the buffer who is pinned
->>      in VRAM will get lost when resume. Yet it's not big problem because
->>      we are software rendering solution which relay on the CPU update the
->>      front framebuffer. We can see the garbage data when resume from S3,
->>      but the screen will show correct image as I move the cursor. This is
->>      due to the cpu repaint. v10 of this patch make S3 perfect by unpin
->>      all of BOs in VRAM, evict them all to system RAM.
->>
->> v10 -> v11:
->>   1) On double screen case, the single giant framebuffer is referenced by
->>      two GEM object, hence, it will be pinned by prepare_fb() at lease two
->>      times. This cause its pin count > 1. V10 of this patch only unpin VRAM
->>      BOs once when suspend, which is not correct on double screen case. V11
->>      of this patch unpin BOs until its pin count reach to zero when suspend.
->>      Then, we make the S3 support complete finally. With v11, I can't see
->>      any garbage data after resume. Tested on both ls7a1000 and ls7a2000
->>      platform, with single screen and double screen configuration.
->>   2) Fix vblank wait timeout when disable CRTC.
->>   3) Test against IGT, at least fbdev test and kms_flip test passed.
->>   4) Rewrite pixel PLL update function, magic numbers eliminated (Emil)
->>   5) Drop a few common hardware features description in lsdc_desc (Emil)
->>   6) Drop lsdc_mode_config_mode_valid(), instead add restrictions in dumb
->>      create function. (Emil)
->>   7) Untangle the ls7a1000 case and ls7a2000 case completely (Thomas)
->>
->> v11 -> v12:
->>   none
->>
->> v12 -> v13:
->>   1) Add benchmark to figure out the bandwidth of the hardware platform.
->>      Usage:
->>      # cd /sys/kernel/debug/dri/0/
->>      # cat benchmark
->>
->>   2) VRAM is filled with garbage data if uninitialized, add a buffer
->>      clearing procedure, clear it on the BO creation time.
->>   3) Update copyrights and adjust coding style (Huacai)
->>
->> Signed-off-by: Li Yi <liyi@loongson.cn>
->> Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
->> Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
->> Cc: Maxime Ripard <mripard@kernel.org>
->> Cc: Thomas Zimmermann <tzimmermann@suse.de>
->> Cc: David Airlie <airlied@gmail.com>
->> Cc: Daniel Vetter <daniel@ffwll.ch>
->> Cc: Sumit Semwal <sumit.semwal@linaro.org>
->> Cc: "Christian König" <christian.koenig@amd.com>
->> ---
->>   drivers/gpu/drm/Kconfig                     |    2 +
->>   drivers/gpu/drm/Makefile                    |    1 +
->>   drivers/gpu/drm/loongson/Kconfig            |   17 +
->>   drivers/gpu/drm/loongson/Makefile           |   21 +
->>   drivers/gpu/drm/loongson/ls7a1000_outputs.c |  161 +++
->>   drivers/gpu/drm/loongson/ls7a2000_outputs.c |  531 +++++++++
->>   drivers/gpu/drm/loongson/lsdc_benchmark.c   |  132 +++
->>   drivers/gpu/drm/loongson/lsdc_benchmark.h   |   13 +
->>   drivers/gpu/drm/loongson/lsdc_crtc.c        | 1068 +++++++++++++++++++
->>   drivers/gpu/drm/loongson/lsdc_debugfs.c     |   91 ++
->>   drivers/gpu/drm/loongson/lsdc_device.c      |  104 ++
->>   drivers/gpu/drm/loongson/lsdc_drv.c         |  484 +++++++++
->>   drivers/gpu/drm/loongson/lsdc_drv.h         |  452 ++++++++
->>   drivers/gpu/drm/loongson/lsdc_gem.c         |  324 ++++++
->>   drivers/gpu/drm/loongson/lsdc_gem.h         |   37 +
->>   drivers/gpu/drm/loongson/lsdc_gfxpll.c      |  199 ++++
->>   drivers/gpu/drm/loongson/lsdc_gfxpll.h      |   52 +
->>   drivers/gpu/drm/loongson/lsdc_i2c.c         |  179 ++++
->>   drivers/gpu/drm/loongson/lsdc_i2c.h         |   29 +
->>   drivers/gpu/drm/loongson/lsdc_irq.c         |   81 ++
->>   drivers/gpu/drm/loongson/lsdc_irq.h         |   16 +
->>   drivers/gpu/drm/loongson/lsdc_output.h      |   21 +
->>   drivers/gpu/drm/loongson/lsdc_pixpll.c      |  481 +++++++++
->>   drivers/gpu/drm/loongson/lsdc_pixpll.h      |   86 ++
->>   drivers/gpu/drm/loongson/lsdc_plane.c       |  639 +++++++++++
->>   drivers/gpu/drm/loongson/lsdc_probe.c       |   56 +
->>   drivers/gpu/drm/loongson/lsdc_probe.h       |   12 +
->>   drivers/gpu/drm/loongson/lsdc_regs.h        |  400 +++++++
->>   drivers/gpu/drm/loongson/lsdc_ttm.c         |  610 +++++++++++
->>   drivers/gpu/drm/loongson/lsdc_ttm.h         |   99 ++
->>   30 files changed, 6398 insertions(+)
->>   create mode 100644 drivers/gpu/drm/loongson/Kconfig
->>   create mode 100644 drivers/gpu/drm/loongson/Makefile
->>   create mode 100644 drivers/gpu/drm/loongson/ls7a1000_outputs.c
->>   create mode 100644 drivers/gpu/drm/loongson/ls7a2000_outputs.c
->>   create mode 100644 drivers/gpu/drm/loongson/lsdc_benchmark.c
->>   create mode 100644 drivers/gpu/drm/loongson/lsdc_benchmark.h
->>   create mode 100644 drivers/gpu/drm/loongson/lsdc_crtc.c
->>   create mode 100644 drivers/gpu/drm/loongson/lsdc_debugfs.c
->>   create mode 100644 drivers/gpu/drm/loongson/lsdc_device.c
->>   create mode 100644 drivers/gpu/drm/loongson/lsdc_drv.c
->>   create mode 100644 drivers/gpu/drm/loongson/lsdc_drv.h
->>   create mode 100644 drivers/gpu/drm/loongson/lsdc_gem.c
->>   create mode 100644 drivers/gpu/drm/loongson/lsdc_gem.h
->>   create mode 100644 drivers/gpu/drm/loongson/lsdc_gfxpll.c
->>   create mode 100644 drivers/gpu/drm/loongson/lsdc_gfxpll.h
->>   create mode 100644 drivers/gpu/drm/loongson/lsdc_i2c.c
->>   create mode 100644 drivers/gpu/drm/loongson/lsdc_i2c.h
->>   create mode 100644 drivers/gpu/drm/loongson/lsdc_irq.c
->>   create mode 100644 drivers/gpu/drm/loongson/lsdc_irq.h
->>   create mode 100644 drivers/gpu/drm/loongson/lsdc_output.h
->>   create mode 100644 drivers/gpu/drm/loongson/lsdc_pixpll.c
->>   create mode 100644 drivers/gpu/drm/loongson/lsdc_pixpll.h
->>   create mode 100644 drivers/gpu/drm/loongson/lsdc_plane.c
->>   create mode 100644 drivers/gpu/drm/loongson/lsdc_probe.c
->>   create mode 100644 drivers/gpu/drm/loongson/lsdc_probe.h
->>   create mode 100644 drivers/gpu/drm/loongson/lsdc_regs.h
->>   create mode 100644 drivers/gpu/drm/loongson/lsdc_ttm.c
->>   create mode 100644 drivers/gpu/drm/loongson/lsdc_ttm.h
+Btw, the latest riscv libc6-dev package is required, otherwise, we would
+also get such error:
+
+    In file included from /usr/riscv64-linux-gnu/include/sys/cdefs.h:452,
+                     from /usr/riscv64-linux-gnu/include/features.h:461,
+                     from /usr/riscv64-linux-gnu/include/bits/libc-header-start.h:33,
+                     from /usr/riscv64-linux-gnu/include/limits.h:26,
+                     from /usr/lib/gcc-cross/riscv64-linux-gnu/9/include/limits.h:194,
+                     from /usr/lib/gcc-cross/riscv64-linux-gnu/9/include/syslimits.h:7,
+                     from /usr/lib/gcc-cross/riscv64-linux-gnu/9/include/limits.h:34,
+                     from /labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc/nolibc-test.c:6:
+    /usr/riscv64-linux-gnu/include/bits/wordsize.h:28:3: error: #error "rv32i-based targets are not supported"
+       28 | # error "rv32i-based targets are not supported"
+
+The glibc commit 5b6113d62efa ("RISC-V: Support the 32-bit ABI
+implementation") fixed up above error, so, glibc >= 2.33 (who includes
+this commit) is required.
+
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+---
+ tools/testing/selftests/nolibc/nolibc-test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 063f9959ac44..d8b59c8f6c03 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -596,7 +596,7 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(write_badf);        EXPECT_SYSER(1, write(-1, &tmp, 1), -1, EBADF); break;
+ 		CASE_TEST(write_zero);        EXPECT_SYSZR(1, write(1, &tmp, 0)); break;
+ 		CASE_TEST(syscall_noargs);    EXPECT_SYSEQ(1, syscall(__NR_getpid), getpid()); break;
+-		CASE_TEST(syscall_args);      EXPECT_SYSER(1, syscall(__NR_fstat, 0, NULL), -1, EFAULT); break;
++		CASE_TEST(syscall_args);      EXPECT_SYSER(1, syscall(__NR_read, -1, &tmp, 1), -1, EBADF); break;
+ 		case __LINE__:
+ 			return ret; /* must be last */
+ 		/* note: do not set any defaults so as to permit holes above */
+-- 
+2.25.1
+
