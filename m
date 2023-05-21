@@ -2,105 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EA6D70ACAC
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 08:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B659D70ACB2
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 08:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjEUGhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 02:37:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40732 "EHLO
+        id S229797AbjEUGmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 02:42:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbjEUGhE (ORCPT
+        with ESMTP id S229464AbjEUGmQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 02:37:04 -0400
-Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37BBEEC;
-        Sat, 20 May 2023 23:37:03 -0700 (PDT)
-Received: by mail-vs1-xe33.google.com with SMTP id ada2fe7eead31-434834245c3so1500082137.0;
-        Sat, 20 May 2023 23:37:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684651022; x=1687243022;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kNXWOz7UolGhGcbBAcgLcS0Q8bM1q+X2iGCobO7rdLA=;
-        b=sQCY5/pidxzHE09Yg766989a2ysU7/HaceAkXm/1lI5TnG5+Vc27nEIWQBQhmQ6Nqk
-         sOONm33e1bLrnjC8IU6+xjqOa4p6Ptt8x9YJLMyxlSlnrg+BkMuB9zl3y7ZGenBOG/nf
-         T6/+zJVcCQghTnNysRPu9qxx+eAY111oXojzn8FM8f9U7n0UrVL7pViTG1XUrSoOdtBZ
-         R3svAP0pvvf1jdhfc46xsTPVdV8e1X2UKJzvIMmdDOE15c00VWYRd9oYUWvqM2LIgdNW
-         00VD9mIBjJ5u621/hb8Dkkg5f0cu1IBm8gKRAPphdKLokTflW3rzJ4FeHJi5fxFLX3l8
-         H5IQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684651022; x=1687243022;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kNXWOz7UolGhGcbBAcgLcS0Q8bM1q+X2iGCobO7rdLA=;
-        b=Z3m/nrDCqAVw7Higm+asBm40TZW6c1M7rgApY7N4CDmnW72LUvRIuByaSwz4/roSnE
-         qOve7JmIYemAPz3yuXF+ZbGjsOu5GIX6B9lw900kc/v+Dq0zzA9LHCdzpWMgWqp1ZQA0
-         DlqMf6uOCRjbPw4ns3OLtvvbHvlDGUeW2WrMsX0ik2KQr6P6/4Sn1P+6fvpsfNub1pCC
-         77y+ItbYkqDeaIaeDis3L8M4PQGX4Q1KUXuMyexWRvSpP18pD8LA3tZx2wdtEgA6A/cy
-         OR7f8P3aF1r20kfly2JX9NKuXO3vz2weAodIvO/Ddzest7btXsE1QB4e+cw2Y0qCiT+z
-         pLFA==
-X-Gm-Message-State: AC+VfDygJ08oiOevO9o7/PPIWbkY7yFR0YHzkanU4nv8aWiCU2ltWDV9
-        N+i/9a25IsFnPr5YFl/GWa6BRrLHqFa/69q2JTS7mhwxOFw=
-X-Google-Smtp-Source: ACHHUZ4Lg015Wd0pnzmRcl5ETKQG+12h8NkPBN5pZMfaIUo1dVN1MBAhQItqj69Hfnahaqs4ac74jfQY/xRuu4SNlhc=
-X-Received: by 2002:a67:f1d2:0:b0:437:e767:5fa7 with SMTP id
- v18-20020a67f1d2000000b00437e7675fa7mr1596656vsm.3.1684651022142; Sat, 20 May
- 2023 23:37:02 -0700 (PDT)
+        Sun, 21 May 2023 02:42:16 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79C8FE;
+        Sat, 20 May 2023 23:42:14 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 43B9A5C00A9;
+        Sun, 21 May 2023 02:42:14 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Sun, 21 May 2023 02:42:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684651334; x=1684737734; bh=gPrys0vkcHlGP
+        tYBYK6F1sl19b9RAU8HqVL8+AFxLlo=; b=VWqKkBivBtd2iP7BGLrKU5gLDxY98
+        MGwWLvrkkjzbsf6HJPJa5e9DEShpcoDjUoAn0NW+k5shcZranVkXkKqxUUSqM2v3
+        E/MPWeAiaqIxPmjSj0vFXLSXYzeEnJmseRZN9jzsbtfMsZjfdfJl9Xv+P4MP8uFZ
+        vanWQzdRAeUMF/KB/2frT1EtQbf/sd0NGgmtH1FRDtGNfMlvbWaEvaDVaxUfa1qz
+        1tM6ZiMSwkF39V6gAcqgXPHQpbSrxgGWBbAsvTKSe40Ky3g7WHd90zk2BU8EixFE
+        0D/oMtiUE28Ga01+vzwx6XuD/iyUAvYSYFZPXPdn16SMdnelFoldMzTPA==
+X-ME-Sender: <xms:Rb1pZKYGGdclzMledTRE2ZKjKDGKf1XutToTaNuRe7T5VXC0B1g4Ag>
+    <xme:Rb1pZNYUn27RuTu_SePi0Jala468edcHmUjjLYlfYA2Vcy3nWr_8b_4HatImHBQz5
+    JJDczjCDUDAJ0rRnLU>
+X-ME-Received: <xmr:Rb1pZE97HMf1j233MP3c4Slg2u0AHmOghp9n2IWvBUNJ5ghReHxmImoYayDJru2aTFy_U9nchgwB3AckU1N4o0xVYdhmSBqjHbg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeikedguddtlecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefujgfkfhggtgesthdtredttddtvdenucfhrhhomhephfhinhhn
+    ucfvhhgrihhnuceofhhthhgrihhnsehlihhnuhigqdhmieekkhdrohhrgheqnecuggftrf
+    grthhtvghrnhepfeeiheejvdetgfeitddutefhkeeilefhveehgfdvtdekkedvkeehffdt
+    keevvdeunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehfthhhrghinheslhhinhhugidqmhei
+    kehkrdhorhhg
+X-ME-Proxy: <xmx:Rb1pZMrmoNGy90TgBUIo9SDoB_p8E63nSCo0_9FyUkkSKvig-rMQsA>
+    <xmx:Rb1pZFqEV_tCCp-MFItfATDr8SF3PwYRkjoIxknX1cc2YHv0C9oxyQ>
+    <xmx:Rb1pZKTSCjXEFcmsc0xfWTimY90N5a5QuBLfHenglp7an5CQitHHDg>
+    <xmx:Rr1pZOC9F4Hc-eJ6NrHLHl4eedJqkAO29d9ZAbSkfKoVhKhQBALNbg>
+Feedback-ID: i58a146ae:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 21 May 2023 02:42:10 -0400 (EDT)
+Date:   Sun, 21 May 2023 16:42:15 +1000 (AEST)
+From:   Finn Thain <fthain@linux-m68k.org>
+To:     Tejun Heo <tj@kernel.org>
+cc:     jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, Michael Schmitz <schmitzmic@gmail.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+Subject: Re: [PATCH RESEND 01/13] scsi: ncr53c8xx: Use default @max_active
+ for hostdata->work_q
+In-Reply-To: <ZGmGZxYmN0En7wAB@slm.duckdns.org>
+Message-ID: <ea7df70c-01ab-2ad3-a775-542afc6f21d6@linux-m68k.org>
+References: <20230509015032.3768622-1-tj@kernel.org> <20230509015032.3768622-2-tj@kernel.org> <ZGmGZxYmN0En7wAB@slm.duckdns.org>
 MIME-Version: 1.0
-References: <20230520184114.77725-1-andrea.righi@canonical.com> <20230520184114.77725-2-andrea.righi@canonical.com>
-In-Reply-To: <20230520184114.77725-2-andrea.righi@canonical.com>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Sun, 21 May 2023 09:36:51 +0300
-Message-ID: <CAOQ4uxgccn0CkaPqHB4ybD5f+yM+jTzm4BbpNHPFawTDC73KfQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] ovl: Kconfig: introduce CONFIG_OVERLAY_FS_DEBUG
-To:     Andrea Righi <andrea.righi@canonical.com>
-Cc:     Miklos Szeredi <miklos@szeredi.hu>, linux-unionfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 20, 2023 at 9:41=E2=80=AFPM Andrea Righi <andrea.righi@canonica=
-l.com> wrote:
->
-> Provide a Kconfig option to enable extra debugging checks for overlayfs.
->
-> Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
+On Sat, 20 May 2023, Tejun Heo wrote:
 
-I think that could be useful someday...
+> From: Tejun Heo <tj@kernel.org>
+> Subject: scsi: ncr53c8xx: Use default @max_active for hostdata->work_q
+> 
 
-Reviewed-by: Amir Goldstein <amir73il@gmail.com>
+This driver is normally referred to as ncr5380 or NCR5380. (It doesn't 
+support any other member of the 538x family.)
 
+> hostdata->work_q only hosts a single work item, hostdata->main_task, and
+> thus doesn't need explicit concurrency limit. Let's use the default
+> @max_active. This doesn't cost anything and clearly expresses that
+> @max_active doesn't matter.
+> 
+> Signed-off-by: Tejun Heo <tj@kernel.org>
+
+Acked-by: Finn Thain <fthain@linux-m68k.org>
+
+> Cc: Finn Thain <fthain@linux-m68k.org>
+> Cc: Michael Schmitz <schmitzmic@gmail.com>
+> Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
+> Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+> Cc: linux-scsi@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
 > ---
->  fs/overlayfs/Kconfig | 9 +++++++++
->  1 file changed, 9 insertions(+)
->
-> diff --git a/fs/overlayfs/Kconfig b/fs/overlayfs/Kconfig
-> index 6708e54b0e30..fec5020c3495 100644
-> --- a/fs/overlayfs/Kconfig
-> +++ b/fs/overlayfs/Kconfig
-> @@ -124,3 +124,12 @@ config OVERLAY_FS_METACOPY
->           that doesn't support this feature will have unexpected results.
->
->           If unsure, say N.
-> +
-> +config OVERLAY_FS_DEBUG
-> +       bool "Overlayfs: turn on extra debugging checks"
-> +       default n
-> +       depends on OVERLAY_FS
-> +       help
-> +         Say Y here to enable extra debugging checks in overlayfs.
-> +
-> +         If unsure, say N.
-> --
-> 2.39.2
->
+> Hello,
+> 
+> Resending because I screwed up the cc list in the original posting. The
+> whole series can be viewed at:
+> 
+>   http://lkml.kernel.org/r/20230509015032.3768622-1-tj@kernel.org
+> 
+> It's not a must but it'd be great if I can route this through the 
+> workqueue tree so that it can go together with other related and 
+> followup cleanups.
+> 
+> Thanks.
+> 
+
+No objection from me. I guess it's Martin's call?
