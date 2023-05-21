@@ -2,64 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4641A70AD3B
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 11:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2277B70AD25
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 11:15:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230095AbjEUJYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 05:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57002 "EHLO
+        id S229947AbjEUJPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 05:15:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjEUJYw (ORCPT
+        with ESMTP id S229481AbjEUJPe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 05:24:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 157BDBA;
-        Sun, 21 May 2023 02:24:51 -0700 (PDT)
+        Sun, 21 May 2023 05:15:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C32CF
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 02:15:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F1E26163B;
-        Sun, 21 May 2023 09:24:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BD1CC433D2;
-        Sun, 21 May 2023 09:24:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 025FE60DE8
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 09:15:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ED62C433EF;
+        Sun, 21 May 2023 09:15:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684661090;
-        bh=VFUii29FV4EQioWM+zCcaPyRQxlTB11/ZC6sCA8N8UY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k9I4iu8tkFEXqV0QmJ6D5PsZZLo5qVH6r6Frzo9prgUXEGs6GzcA2Z9m/FqJLKxx/
-         TgKeGBUxjf23Tpabbe939cTayUaPqJxOk4x3eNuuKcs2uGeOn+6/Q8DVfkpb3p1XAm
-         SvPrndOr0/zwxjtK93EdXBwlt0JsWD8IbOwvWxYMq7cwkS2h8Z2epjSQNP++0iOKdl
-         dNsdkOuMt5SBdjafmY3xTkR5+PhARKrXk/pqHvmlN1u1eDlHUwY4g4AKS6saKm2/XG
-         eIF2oNbqVmWgJmHs7YE38kQSZm5oqMbFz67l87+rdiouLGln0Xwhk/q2KUyzrpmNH0
-         Mw9Z4EnPj6Yhw==
-Date:   Sun, 21 May 2023 17:13:38 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
+        s=k20201202; t=1684660532;
+        bh=J6QGR+R9nb0MwoXrY/wVlgZDi2AoSc1og9Jf61EJyDc=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=YVPYT6UHU0h3BbC7xXT3xJzABOj9G5nhlyVQ96KFJ6bCDcF+a0srZJb7Egs0sxAQf
+         o9IrjNXTV6kNdB9CcZddF4aNPVGZP3gkBSs1zmS1yWBVzDCqAnv2Y+1KlGn0R+Ps88
+         RorQaM2o2TMrWa93tO3Ahwoh7ol3IvMAW1taijxPc2tps0W0Eyz8m/xWiqe4MsY2uC
+         jN7aQSIRMz1ENygz/CLpJzSK9llKsaiLK48NAwY7v9fmhTpl+BELcfYKD6U+EFgIGx
+         ogJgLpod1Mhgb8GxEEYcM0D7M0yLakjf5TDyzfuk2Hd7GUo+Xt472eQLaLeCPNvvjb
+         /7AkIvUWlWlQA==
+From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To:     David Hildenbrand <david@redhat.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH v4 03/10] dt-bindings: serial: add documentation for
- Bouffalolab UART Driver
-Message-ID: <ZGngwijxAKRpzmh7@xhacker>
-References: <20230518152244.2178-1-jszhang@kernel.org>
- <20230518152244.2178-4-jszhang@kernel.org>
- <b5869cb0-1eab-4ab7-6dd7-16b06f91d93f@sholland.org>
+        linux-riscv@lists.infradead.org,
+        Anshuman Khandual <anshuman.khandual@arm.com>
+Cc:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Oscar Salvador <osalvador@suse.de>,
+        virtualization@lists.linux-foundation.org, linux@rivosinc.com,
+        Alexandre Ghiti <alexghiti@rivosinc.com>
+Subject: Re: [PATCH 0/7] riscv: Memory Hot(Un)Plug support
+In-Reply-To: <87zg62eqm4.fsf@all.your.base.are.belong.to.us>
+References: <20230512145737.985671-1-bjorn@kernel.org>
+ <9aa7d030-19b5-01df-70c0-86d8d6ab86a6@redhat.com>
+ <87zg62eqm4.fsf@all.your.base.are.belong.to.us>
+Date:   Sun, 21 May 2023 11:15:29 +0200
+Message-ID: <87lehikpu6.fsf@all.your.base.are.belong.to.us>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <b5869cb0-1eab-4ab7-6dd7-16b06f91d93f@sholland.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,91 +64,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 10:00:50PM -0500, Samuel Holland wrote:
-> Hi Jisheng,
+Hi David and Anshuman!
 
-Hi Samuel,
+Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> writes:
 
-> 
-> On 5/18/23 10:22, Jisheng Zhang wrote:
-> > Add bindings doc for Bouffalolab UART Driver
-> > 
-> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-> > ---
-> >  .../serial/bouffalolab,bl808-uart.yaml        | 47 +++++++++++++++++++
-> >  1 file changed, 47 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/serial/bouffalolab,bl808-uart.yaml
-> > 
-> > diff --git a/Documentation/devicetree/bindings/serial/bouffalolab,bl808-uart.yaml b/Documentation/devicetree/bindings/serial/bouffalolab,bl808-uart.yaml
-> > new file mode 100644
-> > index 000000000000..0ef858e50efb
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/serial/bouffalolab,bl808-uart.yaml
-> > @@ -0,0 +1,47 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +# Copyright (C) 2022 Jisheng Zhang <jszhang@kernel.org>
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/serial/bouffalolab,bl808-uart.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Bouffalolab UART Controller
-> > +
-> > +maintainers:
-> > +  - Jisheng Zhang <jszhang@kernel.org>
-> > +
-> > +allOf:
-> > +  - $ref: serial.yaml#
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: bouffalolab,bl808-uart
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  clocks:
-> > +    maxItems: 1
-> 
-> This is not complete. There are separate APB and module (baud) clocks,
-> as well as a peripheral reset line. If we are going to keep the binding
-> stable, these need to be described up front.
+> David Hildenbrand <david@redhat.com> writes:
+>
+>> On 12.05.23 16:57, Bj=C3=B6rn T=C3=B6pel wrote:
+>>> From: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+>>>=20
+>>> Memory Hot(Un)Plug support for the RISC-V port
+>>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> [...]
+>
+>>
+>> Cool stuff! I'm fairly busy right now, so some high-level questions upfr=
+ont:
+>
+> No worries, and no rush! I'd say the v1 series was mainly for the RISC-V
+> folks, and I've got tons of (offline) comments from Alex -- and with
+> your comments below some more details to figure out.
 
-IIUC, the only requirement is to keep the driver compatible with both
-new dts and old dts. clk tree and reset can be added latter. I have seen
-sevral such examples from other SoCs' mainline progress.
+One of the major issues with my v1 patch is around init_mm page table
+synchronization, and that'll be part of the v2.
 
-> 
-> (I still don't fully understand the clock tree, and so far that has been
-> the main blocker for me sending a follow-up series with additional
-> bindings for hardware that's otherwise already supported, like the
-> Ethernet MAC.)
-> 
-> Regards,
-> Samuel
-> 
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - interrupts
-> > +  - clocks
-> > +
-> > +unevaluatedProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/interrupt-controller/irq.h>
-> > +
-> > +    uart0: serial@30002000 {
-> > +        compatible = "bouffalolab,bl808-uart";
-> > +        reg = <0x30002000 0x1000>;
-> > +        interrupts = <53 IRQ_TYPE_LEVEL_HIGH>;
-> > +        clocks = <&xtal>;
-> > +    };
-> > +...
-> 
+I've noticed there's a quite a difference between x86-64 and arm64 in
+terms of locking, when updating (add/remove) the init_mm table. x86-64
+uses the usual page table locking mechanisms (used by the generic
+kernel functions), whereas arm64 does not.
+
+How does arm64 manage to mix the "lock-less" updates (READ/WRITE_ONCE,
+and fences in set_p?d+friends), with the generic kernel ones that uses
+the regular page locking mechanism?
+
+I'm obviously missing something about the locking rules for memory hot
+add/remove... I've been reading the arm64 memory hot add/remove
+series, but none the wiser! ;-)
+
+
+Bj=C3=B6rn
