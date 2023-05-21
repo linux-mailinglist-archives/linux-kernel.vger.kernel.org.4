@@ -2,106 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2277B70AD25
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 11:15:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A56170AD29
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 11:16:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229947AbjEUJPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 05:15:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54722 "EHLO
+        id S229970AbjEUJQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 05:16:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjEUJPe (ORCPT
+        with ESMTP id S229481AbjEUJQ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 05:15:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C32CF
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 02:15:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 025FE60DE8
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 09:15:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0ED62C433EF;
-        Sun, 21 May 2023 09:15:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684660532;
-        bh=J6QGR+R9nb0MwoXrY/wVlgZDi2AoSc1og9Jf61EJyDc=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=YVPYT6UHU0h3BbC7xXT3xJzABOj9G5nhlyVQ96KFJ6bCDcF+a0srZJb7Egs0sxAQf
-         o9IrjNXTV6kNdB9CcZddF4aNPVGZP3gkBSs1zmS1yWBVzDCqAnv2Y+1KlGn0R+Ps88
-         RorQaM2o2TMrWa93tO3Ahwoh7ol3IvMAW1taijxPc2tps0W0Eyz8m/xWiqe4MsY2uC
-         jN7aQSIRMz1ENygz/CLpJzSK9llKsaiLK48NAwY7v9fmhTpl+BELcfYKD6U+EFgIGx
-         ogJgLpod1Mhgb8GxEEYcM0D7M0yLakjf5TDyzfuk2Hd7GUo+Xt472eQLaLeCPNvvjb
-         /7AkIvUWlWlQA==
-From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To:     David Hildenbrand <david@redhat.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org,
-        Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Oscar Salvador <osalvador@suse.de>,
-        virtualization@lists.linux-foundation.org, linux@rivosinc.com,
-        Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: Re: [PATCH 0/7] riscv: Memory Hot(Un)Plug support
-In-Reply-To: <87zg62eqm4.fsf@all.your.base.are.belong.to.us>
-References: <20230512145737.985671-1-bjorn@kernel.org>
- <9aa7d030-19b5-01df-70c0-86d8d6ab86a6@redhat.com>
- <87zg62eqm4.fsf@all.your.base.are.belong.to.us>
-Date:   Sun, 21 May 2023 11:15:29 +0200
-Message-ID: <87lehikpu6.fsf@all.your.base.are.belong.to.us>
+        Sun, 21 May 2023 05:16:26 -0400
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E11CF;
+        Sun, 21 May 2023 02:16:25 -0700 (PDT)
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-52867360efcso3377189a12.2;
+        Sun, 21 May 2023 02:16:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684660585; x=1687252585;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Es75wE1TSD9/bxpBEraTqQGgh/2Yg3IpDVhaSa9N/Z8=;
+        b=XkIYN9rgpERLMyhUOV+cMWlBUHjQYm7Rdx/JmysPFfsdpTNlN5ukWx0I61lv0b3V+o
+         w/HqWt/6p86P9dd4oqboAbbX1HY9ZKPhlINmtYM04lh4UIaaP4ESQuwn/Y9wdXVGDfqA
+         UKULTNS9Sm9r82MzzLJlep0ImpntZSYXRgmgbU+2sNk7BIgWQKh786CJBsWEWh3AgI1/
+         vCLyQ1ASJIkJnFxY6gzhF7QFAUCuuHdUsHNo3NOTTNiOmXtif1cvGzpmDSnYSHWSLXeM
+         L9rxXchfZYdr22kfWlfSB7zx2Og5+chK+bejy5WFi9Od3nbMI3vWkvDLEMlkQ8/vmw50
+         fVDA==
+X-Gm-Message-State: AC+VfDz/TyYeyQUlVEpq1huA07GhhvrAeKPLbk71foecoc+N5flJ7MMC
+        rmsCIHltnBMUXSqZuHwj2dndTeTyfQh4U/QNd8g=
+X-Google-Smtp-Source: ACHHUZ6xvmdUQ7UA8O/mJrSNvBDBD+JdVbnKgQYo2ZkCX5YaJgRtWvqNbFTWz7AM32S8Xrul2lID3OzeJEPgNIy1rPI=
+X-Received: by 2002:a17:90a:9cf:b0:250:bb6:47ed with SMTP id
+ 73-20020a17090a09cf00b002500bb647edmr6796360pjo.33.1684660584928; Sun, 21 May
+ 2023 02:16:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230519195600.420644-1-frank.jungclaus@esd.eu> <20230519195600.420644-2-frank.jungclaus@esd.eu>
+In-Reply-To: <20230519195600.420644-2-frank.jungclaus@esd.eu>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Sun, 21 May 2023 18:16:13 +0900
+Message-ID: <CAMZ6Rq+V4HRLa2bzADnsvaKHuCwi6O5jKo39mhon_+OnMDEJbQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/6] can: esd_usb: Make use of existing kernel macros
+To:     Frank Jungclaus <frank.jungclaus@esd.eu>
+Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
+        Wolfgang Grandegger <wg@grandegger.com>,
+        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David and Anshuman!
+Thanks for the patch.
 
-Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org> writes:
-
-> David Hildenbrand <david@redhat.com> writes:
+On Sat. 20 May 2023 at 04:57, Frank Jungclaus <frank.jungclaus@esd.eu> wrote:
+> Make use of existing kernel macros:
+> - Use the unit suffixes from linux/units.h for the controller clock
+> frequencies
+> - Use the BIT() and the GENMASK() macro to set specific bits in some
+>   constants
+> - Use CAN_MAX_DLEN (instead of directly using the value 8) for the
+> maximum CAN payload length
 >
->> On 12.05.23 16:57, Bj=C3=B6rn T=C3=B6pel wrote:
->>> From: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
->>>=20
->>> Memory Hot(Un)Plug support for the RISC-V port
->>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> Additionally:
+> - Spend some commenting for the previously changed constants
+> - Add the current year to the copyright notice
+> - While adding the header linux/units.h to the list of include files
+> also sort that list alphabetically
 >
-> [...]
+> Suggested-by: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+> Link: https://lore.kernel.org/all/CAMZ6RqLaDNy-fZ2G0+QMhUEckkXLL+ZyELVSDFmqpd++aBzZQg@mail.gmail.com/
+> Link: https://lore.kernel.org/all/CAMZ6RqKdg5YBufa0C+ttzJvoG=9yuti-8AmthCi4jBbd08JEtw@mail.gmail.com/
+> Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> Link: https://lore.kernel.org/all/20230518-grower-film-ea8b5f853f3e-mkl@pengutronix.de/
+> Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
+> ---
+>  drivers/net/can/usb/esd_usb.c | 40 ++++++++++++++++++-----------------
+>  1 file changed, 21 insertions(+), 19 deletions(-)
 >
->>
->> Cool stuff! I'm fairly busy right now, so some high-level questions upfr=
-ont:
+> diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
+> index d33bac3a6c10..32354cfdf151 100644
+> --- a/drivers/net/can/usb/esd_usb.c
+> +++ b/drivers/net/can/usb/esd_usb.c
+> @@ -3,19 +3,20 @@
+>   * CAN driver for esd electronics gmbh CAN-USB/2 and CAN-USB/Micro
+>   *
+>   * Copyright (C) 2010-2012 esd electronic system design gmbh, Matthias Fuchs <socketcan@esd.eu>
+> - * Copyright (C) 2022 esd electronics gmbh, Frank Jungclaus <frank.jungclaus@esd.eu>
+> + * Copyright (C) 2022-2023 esd electronics gmbh, Frank Jungclaus <frank.jungclaus@esd.eu>
+>   */
+> +#include <linux/can.h>
+> +#include <linux/can/dev.h>
+> +#include <linux/can/error.h>
+> +
+>  #include <linux/ethtool.h>
+> -#include <linux/signal.h>
+> -#include <linux/slab.h>
+>  #include <linux/module.h>
+>  #include <linux/netdevice.h>
+> +#include <linux/signal.h>
+> +#include <linux/slab.h>
+> +#include <linux/units.h>
+>  #include <linux/usb.h>
 >
-> No worries, and no rush! I'd say the v1 series was mainly for the RISC-V
-> folks, and I've got tons of (offline) comments from Alex -- and with
-> your comments below some more details to figure out.
+> -#include <linux/can.h>
+> -#include <linux/can/dev.h>
+> -#include <linux/can/error.h>
+> -
+>  MODULE_AUTHOR("Matthias Fuchs <socketcan@esd.eu>");
+>  MODULE_AUTHOR("Frank Jungclaus <frank.jungclaus@esd.eu>");
+>  MODULE_DESCRIPTION("CAN driver for esd electronics gmbh CAN-USB/2 and CAN-USB/Micro interfaces");
+> @@ -27,8 +28,8 @@ MODULE_LICENSE("GPL v2");
+>  #define USB_CANUSBM_PRODUCT_ID 0x0011
+>
+>  /* CAN controller clock frequencies */
+> -#define ESD_USB2_CAN_CLOCK     60000000
+> -#define ESD_USBM_CAN_CLOCK     36000000
+> +#define ESD_USB2_CAN_CLOCK     (60 * MEGA) /* Hz */
+> +#define ESD_USBM_CAN_CLOCK     (36 * MEGA) /* Hz */
+>
+>  /* Maximum number of CAN nets */
+>  #define ESD_USB_MAX_NETS       2
+> @@ -42,20 +43,21 @@ MODULE_LICENSE("GPL v2");
+>  #define CMD_IDADD              6 /* also used for IDADD_REPLY */
+>
+>  /* esd CAN message flags - dlc field */
+> -#define ESD_RTR                        0x10
+> +#define ESD_RTR        BIT(4)
+> +
+>
+>  /* esd CAN message flags - id field */
+> -#define ESD_EXTID              0x20000000
+> -#define ESD_EVENT              0x40000000
+> -#define ESD_IDMASK             0x1fffffff
+> +#define ESD_EXTID      BIT(29)
+> +#define ESD_EVENT      BIT(30)
+> +#define ESD_IDMASK     GENMASK(28, 0)
+>
+>  /* esd CAN event ids */
+>  #define ESD_EV_CAN_ERROR_EXT   2 /* CAN controller specific diagnostic data */
+>
+>  /* baudrate message flags */
+> -#define ESD_USB_UBR            0x80000000
+> -#define ESD_USB_LOM            0x40000000
+> -#define ESD_USB_NO_BAUDRATE    0x7fffffff
+> +#define ESD_USB_LOM    BIT(30) /* 0x40000000, Listen Only Mode */
+> +#define ESD_USB_UBR    BIT(31) /* 0x80000000, User Bit Rate (controller BTR) in bits 0..27 */
+                                     ^^^^^^^^^^
 
-One of the major issues with my v1 patch is around init_mm page table
-synchronization, and that'll be part of the v2.
+As pointented by Marc, no need for redundant comment with the hexadecimal value.
 
-I've noticed there's a quite a difference between x86-64 and arm64 in
-terms of locking, when updating (add/remove) the init_mm table. x86-64
-uses the usual page table locking mechanisms (used by the generic
-kernel functions), whereas arm64 does not.
-
-How does arm64 manage to mix the "lock-less" updates (READ/WRITE_ONCE,
-and fences in set_p?d+friends), with the generic kernel ones that uses
-the regular page locking mechanism?
-
-I'm obviously missing something about the locking rules for memory hot
-add/remove... I've been reading the arm64 memory hot add/remove
-series, but none the wiser! ;-)
-
-
-Bj=C3=B6rn
+> +#define ESD_USB_NO_BAUDRATE    GENMASK(30, 0) /* bit rate unconfigured */
+>
+>  /* bit timing CAN-USB/2 */
+>  #define ESD_USB2_TSEG1_MIN     1
+> @@ -70,7 +72,7 @@ MODULE_LICENSE("GPL v2");
+>  #define ESD_USB2_BRP_MIN       1
+>  #define ESD_USB2_BRP_MAX       1024
+>  #define ESD_USB2_BRP_INC       1
+> -#define ESD_USB2_3_SAMPLES     0x00800000
+> +#define ESD_USB2_3_SAMPLES     BIT(23)
+>
+>  /* esd IDADD message */
+>  #define ESD_ID_ENABLE          0x80
+> @@ -128,7 +130,7 @@ struct rx_msg {
+>         __le32 ts;
+>         __le32 id; /* upper 3 bits contain flags */
+>         union {
+> -               u8 data[8];
+> +               u8 data[CAN_MAX_DLEN];
+>                 struct {
+>                         u8 status; /* CAN Controller Status */
+>                         u8 ecc;    /* Error Capture Register */
+> @@ -145,7 +147,7 @@ struct tx_msg {
+>         u8 dlc;
+>         u32 hnd;        /* opaque handle, not used by device */
+>         __le32 id; /* upper 3 bits contain flags */
+> -       u8 data[8];
+> +       u8 data[CAN_MAX_DLEN];
+>  };
+>
+>  struct tx_done_msg {
+> --
+> 2.25.1
+>
