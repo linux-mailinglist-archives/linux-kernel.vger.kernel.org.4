@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BBAE70B1E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 00:57:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DD8D70B1E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 00:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230284AbjEUW5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 18:57:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49378 "EHLO
+        id S231232AbjEUW6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 18:58:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjEUW5G (ORCPT
+        with ESMTP id S229481AbjEUW6W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 18:57:06 -0400
+        Sun, 21 May 2023 18:58:22 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A53B9BE
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 15:57:05 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14658BE
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 15:58:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
         Content-ID:Content-Description:In-Reply-To:References;
-        bh=vgnEmcsn/vdxwW+Wgs9nj2+PsYmZXDs2hNecCx7a6R8=; b=WOwGfCog1wQ+I6YMalK9qZfuYC
-        1R7vptRIeip+Ffkd7pVoZsLhGEaDC8KEdBj9jrBgIMMQ4Mfvhx3xY3BQAZAQ9TEQ3qTL78oGO99T3
-        AJMfW+nXBiTwd+vgiBouEoqflMeoLA2kujnSp8pWRAZs1NyAua//Ve9Rq4BFcPGEyx42N++S5VDZV
-        WNfozb2VveEu8fQ1wqoRIJXnKfY+sMGEHNHifo7UXwJNjvw03AfArieJ59mLrbtIENr9TfT9yd6kA
-        JyBT1QzKBwr5PmnpvijQ1mpV9LBpv/koIv0Dy7Er0qRwyCbzszbE3dms8ZUUdawUARcGtqTI79LtE
-        gJZgl43g==;
+        bh=BXUO1wgjEjTKJJJ0W0k6Aejv/+QwkUlBVT276pYvRHE=; b=Fj9xeJAJlkOs0Jj6NIZ1QfEjXc
+        0kRSuhsYHT09Hjin7VlS3XoS9HKE87Xtm3oX+tkGIWNq9OgaaHsKk1iWSweA6QsdjRPE4SQZJMAUJ
+        +oKtsiVOMpm/Jt7+/CxmosIOlMza3x8izRu3SRFwvrhUG8NrqJFodv3CxnE9ajnqMIOB0KaaNS4i0
+        Rv2oUF1Py0wpAvmaYfbl+fbgTaQWBWoBlPEqbLmhPk37v9XVe/zRS+9EIvjY/jX1zMBQS+AZusuae
+        oMEeHzNBB1OLmHQC7wC5ICywp+jf+ruw99lpim4Er9TA4FVMGPpFQYBDDvP8fEU3VvnxnOsN0yMNf
+        3W9XlfcA==;
 Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
         by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q0rz5-004o6u-0t;
-        Sun, 21 May 2023 22:57:03 +0000
+        id 1q0s0K-004oEt-0C;
+        Sun, 21 May 2023 22:58:20 +0000
 From:   Randy Dunlap <rdunlap@infradead.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Grant Likely <grant.likely@secretlab.ca>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>, alsa-devel@alsa-project.org,
-        linuxppc-dev@lists.ozlabs.org, Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>
-Subject: [PATCH v2 RESEND] ASoC: fsl MPC52xx drivers require PPC_BESTCOMM
-Date:   Sun, 21 May 2023 15:57:02 -0700
-Message-Id: <20230521225702.1608-1-rdunlap@infradead.org>
+        kernel test robot <lkp@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Subject: [PATCH RESEND] x86: msr: clean up kernel-doc notation
+Date:   Sun, 21 May 2023 15:58:19 -0700
+Message-Id: <20230521225819.4737-1-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -55,57 +52,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both SND_MPC52xx_SOC_PCM030 and SND_MPC52xx_SOC_EFIKA select
-SND_SOC_MPC5200_AC97. The latter symbol depends on PPC_BESTCOMM,
-so the 2 former symbols should also depend on PPC_BESTCOMM since
-"select" does not follow any dependency chains.
+Convert x86/lib/msr.c comments to kernel-doc notation to
+eliminate kernel-doc warnings:
 
-This prevents a kconfig warning and build errors:
+msr.c:30: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+ * Read an MSR with error handling
+msr.c:52: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+ * Write an MSR with error handling
+msr.c:91: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+ * Set @bit in a MSR @msr.
+msr.c:104: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+ * Clear @bit in a MSR @msr.
 
-WARNING: unmet direct dependencies detected for SND_SOC_MPC5200_AC97
-  Depends on [n]: SOUND [=y] && !UML && SND [=m] && SND_SOC [=m] && SND_POWERPC_SOC [=m] && PPC_MPC52xx [=y] && PPC_BESTCOMM [=n]
-  Selected by [m]:
-  - SND_MPC52xx_SOC_PCM030 [=m] && SOUND [=y] && !UML && SND [=m] && SND_SOC [=m] && SND_POWERPC_SOC [=m] && PPC_MPC5200_SIMPLE [=y]
-  - SND_MPC52xx_SOC_EFIKA [=m] && SOUND [=y] && !UML && SND [=m] && SND_SOC [=m] && SND_POWERPC_SOC [=m] && PPC_EFIKA [=y]
-
-ERROR: modpost: "mpc5200_audio_dma_destroy" [sound/soc/fsl/mpc5200_psc_ac97.ko] undefined!
-ERROR: modpost: "mpc5200_audio_dma_create" [sound/soc/fsl/mpc5200_psc_ac97.ko] undefined!
-
-Fixes: 40d9ec14e7e1 ("ASoC: remove BROKEN from Efika and pcm030 fabric drivers")
+Fixes: 22085a66c2fa ("x86: Add another set of MSR accessor functions")
 Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Cc: Grant Likely <grant.likely@secretlab.ca>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Liam Girdwood <lgirdwood@gmail.com>
-Cc: Shengjiu Wang <shengjiu.wang@gmail.com>
-Cc: Xiubo Li <Xiubo.Lee@gmail.com>
-Cc: alsa-devel@alsa-project.org
-Cc: linuxppc-dev@lists.ozlabs.org
-Cc: Jaroslav Kysela <perex@perex.cz>
-Cc: Takashi Iwai <tiwai@suse.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/oe-kbuild-all/202304120048.v4uqUq9Q-lkp@intel.com/
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: x86@kernel.org
 ---
-v2: use correct email address for Mark Brown.
+ arch/x86/lib/msr.c |   32 +++++++++++++++++++-------------
+ 1 file changed, 19 insertions(+), 13 deletions(-)
 
- sound/soc/fsl/Kconfig |    4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff -- a/sound/soc/fsl/Kconfig b/sound/soc/fsl/Kconfig
---- a/sound/soc/fsl/Kconfig
-+++ b/sound/soc/fsl/Kconfig
-@@ -243,7 +243,7 @@ config SND_SOC_MPC5200_AC97
+diff -- a/arch/x86/lib/msr.c b/arch/x86/lib/msr.c
+--- a/arch/x86/lib/msr.c
++++ b/arch/x86/lib/msr.c
+@@ -27,14 +27,14 @@ void msrs_free(struct msr *msrs)
+ EXPORT_SYMBOL(msrs_free);
  
- config SND_MPC52xx_SOC_PCM030
- 	tristate "SoC AC97 Audio support for Phytec pcm030 and WM9712"
--	depends on PPC_MPC5200_SIMPLE
-+	depends on PPC_MPC5200_SIMPLE && PPC_BESTCOMM
- 	select SND_SOC_MPC5200_AC97
- 	select SND_SOC_WM9712
- 	help
-@@ -252,7 +252,7 @@ config SND_MPC52xx_SOC_PCM030
+ /**
+- * Read an MSR with error handling
+- *
++ * msr_read - Read an MSR with error handling
+  * @msr: MSR to read
+  * @m: value to read into
+  *
+  * It returns read data only on success, otherwise it doesn't change the output
+  * argument @m.
+  *
++ * Return: %0 for success, otherwise an error code
+  */
+ static int msr_read(u32 msr, struct msr *m)
+ {
+@@ -49,10 +49,12 @@ static int msr_read(u32 msr, struct msr
+ }
  
- config SND_MPC52xx_SOC_EFIKA
- 	tristate "SoC AC97 Audio support for bbplan Efika and STAC9766"
--	depends on PPC_EFIKA
-+	depends on PPC_EFIKA && PPC_BESTCOMM
- 	select SND_SOC_MPC5200_AC97
- 	select SND_SOC_STAC9766
- 	help
+ /**
+- * Write an MSR with error handling
++ * msr_write - Write an MSR with error handling
+  *
+  * @msr: MSR to write
+  * @m: value to write
++ *
++ * Return: %0 for success, otherwise an error code
+  */
+ static int msr_write(u32 msr, struct msr *m)
+ {
+@@ -88,12 +90,14 @@ static inline int __flip_bit(u32 msr, u8
+ }
+ 
+ /**
+- * Set @bit in a MSR @msr.
++ * msr_set_bit - Set @bit in a MSR @msr.
++ * @msr: MSR to write
++ * @bit: bit number to set
+  *
+- * Retval:
+- * < 0: An error was encountered.
+- * = 0: Bit was already set.
+- * > 0: Hardware accepted the MSR write.
++ * Return:
++ * * < 0: An error was encountered.
++ * * = 0: Bit was already set.
++ * * > 0: Hardware accepted the MSR write.
+  */
+ int msr_set_bit(u32 msr, u8 bit)
+ {
+@@ -101,12 +105,14 @@ int msr_set_bit(u32 msr, u8 bit)
+ }
+ 
+ /**
+- * Clear @bit in a MSR @msr.
++ * msr_clear_bit - Clear @bit in a MSR @msr.
++ * @msr: MSR to write
++ * @bit: bit number to clear
+  *
+- * Retval:
+- * < 0: An error was encountered.
+- * = 0: Bit was already cleared.
+- * > 0: Hardware accepted the MSR write.
++ * Return:
++ * * < 0: An error was encountered.
++ * * = 0: Bit was already cleared.
++ * * > 0: Hardware accepted the MSR write.
+  */
+ int msr_clear_bit(u32 msr, u8 bit)
+ {
