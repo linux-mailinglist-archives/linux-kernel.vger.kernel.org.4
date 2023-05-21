@@ -2,69 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09C2870AD68
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 12:12:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A4B170AD73
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 12:27:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbjEUKIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 06:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34030 "EHLO
+        id S231211AbjEUKZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 06:25:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230440AbjEUKGc (ORCPT
+        with ESMTP id S230459AbjEUKHG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 06:06:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ECABE76;
-        Sun, 21 May 2023 02:56:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DFD3860C73;
-        Sun, 21 May 2023 09:56:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB7DFC433D2;
-        Sun, 21 May 2023 09:56:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684662984;
-        bh=ZI8ncAeJoNssp3pUmQAmF0Tdngr2Bh5l0sRrrnkwfZw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MFFhtQcS8pDT1l0qTeOdj+l2KQ32o6XnuHlkB0I8vTxzFuBT/eYhlqqtdhcnqXu7L
-         FzxL5JHIE7OgVS8NZYu9mP40kZum2MTcDZJdx/nkyXRAvRbQHr3FW24BFRu7CGuJ65
-         bRa3/Opk7i5PviasnG7qfwczdeeGiEXYRp5X49HaGI8e6AGDyudYiK6ivRhHvZzkb4
-         PNM3CFewhgF+SC+Sqqgvddw+vtVEZVvX55RRmq5EoIPH1G7K66Ax1doMYY7R+P/+Tz
-         +xuR3ETw1tnw9Sy673XJBedsHDVkw45PfV9bCktcfats3f4mD0EFu85wRQUYKSjFdg
-         lsOEMbCgemmMg==
-Date:   Sun, 21 May 2023 17:45:11 +0800
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
-        Palmer Dabbelt <palmer@rivosinc.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v4 06/10] dt-bindings: riscv: Add bouffalolab bl808 board
- compatibles
-Message-ID: <ZGnoJ6OrC1XvjglJ@xhacker>
-References: <20230518152244.2178-1-jszhang@kernel.org>
- <20230518152244.2178-7-jszhang@kernel.org>
- <c6e44e14-35b2-da09-5e8c-4d47e7a7a055@sholland.org>
- <20230519-squad-undermine-6124aafebafa@wendy>
- <ZGnkhSlk8NaPELxh@xhacker>
+        Sun, 21 May 2023 06:07:06 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1465E6E
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 02:55:41 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-25566708233so78538a91.0
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 02:55:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1684662941; x=1687254941;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J2wvUeHhuusQaep940v40WYCSBa0GTC/pU4VHFBZK60=;
+        b=XnIQqtxdxPmD/KnZq8uj/btOSp0PPr8cQxoppCk6LlcV9cq2J7lenURpztkriMgNAh
+         sK3FUJUMe/6fFhvg1YPxrBjRCff0j4Vm+3jxxp6lsGM3tZOXYW4RNrDvKAWQmB65hwZ5
+         SLGfeEZarhej8B+HRf8MQPQDEIkQLh//EquRSaY0Q87miZs8ojMxNZ3gn/oH0QiO+IIx
+         Hd3MshNLmegApz9HX6IksnLt7K7INyLwibs0UIGS81aWqIrSedRMK2TpXarOumqSMP/2
+         jy1hRpLb53TGSsHE3T6ICh6n/sZ8SnWdDjit0y/DrNnPj8DMpwaUUkEcm9lt39OyByPk
+         HqZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684662941; x=1687254941;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=J2wvUeHhuusQaep940v40WYCSBa0GTC/pU4VHFBZK60=;
+        b=D59SoVCRCkzLfO3WQJbpbrXFg5LkF02wRisPiUC/C0X2VgUQ261sySCvlOl/M+F7OM
+         +Ei+oEy1csUJqRUr2MnEIM5sNd6CUoZoN0DRKy5DEHOtsIUWcWBg7xap1z4hVqs3NcMF
+         P5iZqIWrOsi8alQ8ZWtfkPpaqfeaDgCfYycL6f3s8kPJjMwc9aKarzC/XKcTG4x7p56n
+         bQDLrXi9oVDyIzXALlrvVv4YBtbGkJZVPxmntCh7Jz8m2hH6PEJ9942sdVOGfmLsDaPf
+         qxRQ+r6ibllqHqr11CavqNh++x6HULCv0+xSxfn5WLhHXuQCOwavmYhE1b0MfODdsySC
+         9UEQ==
+X-Gm-Message-State: AC+VfDyE8TtwOyUBxeTnximqq0zIXGRST1PFqXWtF+/CdfwIqp3IrEqn
+        7gHeSGwuPNbI4yJdt6t/aaaxUwPRtsrv3859eKc=
+X-Google-Smtp-Source: ACHHUZ4pNkFMSNTwnq79r37gYRmD1cb5gl4v11Ef3rVSHBUEsV1w9A31bRWAJMxfSePavMnzWl8xYg==
+X-Received: by 2002:a17:90b:4f4e:b0:250:4f32:54b2 with SMTP id pj14-20020a17090b4f4e00b002504f3254b2mr7164761pjb.19.1684662941280;
+        Sun, 21 May 2023 02:55:41 -0700 (PDT)
+Received: from localhost.localdomain ([139.177.225.249])
+        by smtp.gmail.com with ESMTPSA id b15-20020a631b4f000000b00534684201b0sm2530629pgm.27.2023.05.21.02.55.38
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sun, 21 May 2023 02:55:40 -0700 (PDT)
+From:   Peng Zhang <zhangpeng.00@bytedance.com>
+To:     arnd@kernel.org, willy@infradead.org
+Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Liam.Howlett@oracle.com,
+        Peng Zhang <zhangpeng.00@bytedance.com>
+Subject: [PATCH] radix tree test suite: Fix building radix tree test suite.
+Date:   Sun, 21 May 2023 17:54:50 +0800
+Message-Id: <20230521095450.21332-1-zhangpeng.00@bytedance.com>
+X-Mailer: git-send-email 2.37.0 (Apple Git-136)
+In-Reply-To: <20230516194212.548910-1-arnd@kernel.org>
+References: <20230516194212.548910-1-arnd@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZGnkhSlk8NaPELxh@xhacker>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,159 +73,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 21, 2023 at 05:29:47PM +0800, Jisheng Zhang wrote:
-> On Fri, May 19, 2023 at 12:55:02PM +0100, Conor Dooley wrote:
-> > On Thu, May 18, 2023 at 10:31:35PM -0500, Samuel Holland wrote:
-> > > Hi Jisheng, DT maintainers,
-> > 
-> > Sick, thanks for piping up Samuel!
-> > Both Rob and Krzysztof are not around at the moment, so that probably
-> > leaves it up to me.. I'm adding Arnd in case he has a take here too.
-> > 
-> > > On 5/18/23 10:22, Jisheng Zhang wrote:
-> > > > Several SoMs and boards are available that feature the Bouffalolab
-> > > > bl808 SoC. Document the compatible strings.
-> > > > 
-> > > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> > > > Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-> > > > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> > > > ---
-> > > >  .../bindings/riscv/bouffalolab.yaml           | 29 +++++++++++++++++++
-> > > >  1 file changed, 29 insertions(+)
-> > > >  create mode 100644 Documentation/devicetree/bindings/riscv/bouffalolab.yaml
-> > > > 
-> > > > diff --git a/Documentation/devicetree/bindings/riscv/bouffalolab.yaml b/Documentation/devicetree/bindings/riscv/bouffalolab.yaml
-> > > > new file mode 100644
-> > > > index 000000000000..3b25d1a5d04a
-> > > > --- /dev/null
-> > > > +++ b/Documentation/devicetree/bindings/riscv/bouffalolab.yaml
-> > > > @@ -0,0 +1,29 @@
-> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > > +%YAML 1.2
-> > > > +---
-> > > > +$id: http://devicetree.org/schemas/riscv/bouffalolab.yaml#
-> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > +
-> > > > +title: Bouffalo Lab Technology SoC-based boards
-> > > > +
-> > > > +maintainers:
-> > > > +  - Jisheng Zhang <jszhang@kernel.org>
-> > > > +
-> > > > +description:
-> > > > +  Bouffalo Lab Technology SoC-based boards
-> > > > +
-> > > > +properties:
-> > > > +  $nodename:
-> > > > +    const: '/'
-> > > > +  compatible:
-> > > > +    oneOf:
-> > > > +      - description: Carrier boards for the Sipeed M1s SoM
-> > > > +        items:
-> > > > +          - enum:
-> > > > +              - sipeed,m1s-dock
-> > > > +          - const: sipeed,m1s
-> > > > +          - const: bouffalolab,bl808
-> > > 
-> > > As mentioned in the message for patch 5, "The Bouffalolab bl808 SoC
-> > > contains three riscv CPUs, namely M0, D0 and LP. The D0 is 64bit RISC-V
-> > > GC compatible, so can run linux."
-> > > 
-> > > I have also been running U-Boot and NOMMU Linux on the less powerful,
-> > > but still quite fast, "M0" core. However, this core needs a different
-> 
-> Just FYI, I successfully ran nommu rv32 linux kernel on the "M0" core
-> with some patches to the riscv head and irqchip driver.
-> 
-> > > DTB because:
-> > >  1) The CPU is different (T-HEAD E907 instead of C906).
-> > >  2) The interrupt routing is completely different.
-> > >     a. The M0 core contains a CLIC instead of a PLIC.
-> > >     b. The peripherals in the SoC are split between two buses. Those
-> > >        on one bus have their IRQs directly connected to M0, and share
-> > >        a multiplexed IRQ connection to D0; and vice versa for the
-> > >        other bus. So each bus's interrupt-parent needs to be swapped.
-> > > 
-> > > Using some preprocessor magic like we did for Allwinner and Renesas, I
-> > > was able to share most of the SoC and board DTs between the cores[1].
-> > > However, this still ends up with two DTs for each board. So here are my
-> > > questions:
-> > >  - Is this acceptable?
-> > 
-> > I expected it to look worse than it actually turned out to be.
-> > I don't think Krzysztof in particular is a fan of having conditional
-> > bits in dts files, but for the shared arm/riscv stuff there was not
-> > really another sensible option.
-> > 
-> > >  - Is there precedent for how we should name the two board DTs?
-> > 
-> > Arnd might have some idea about precedent here, but I like your naming
-> > well enough.
-> > 
-> > >  - How does this affect the board and SoC compatible strings?
-> > >    - Should there be a separate "bouffalolab,bl808-d0" in addition to
-> > >      "bouffalolab,bl808"?
-> > 
-> > What ordering were you intending here?
-> > "pine64,0x64" "bouffalolab,bl808" "bouffalolab,bl808-d0"?
-> > 
-> > That doesn't really seem correct though, as it does not get less specific
-> > as you move right.
-> > 
-> > "pine64,0x64" "bouffalolab,bl808-d0" "bouffalolab,bl808" doesn't seem
-> > right either though, for the same sort of reason.
-> > 
-> > >    - Is it acceptable to use the same board compatible string for both,
-> > >      since the _board_ part of the DT does not change, only things
-> > >      inside the SoC?
-> 
-> what about describing the DT as the SoC is, e.g
-> lp: cpu@0 {
-> 	...
-> 	status = disabled;
-> };
-> 
-> m0: cpu@1 {
-> 	...
-> 	status = disabled;
-> };
-> 
-> d0: cpu@2 {
-> 	...
-> 	status = disabled;
-> };
-> 
-> Then in m0 dts:
-> &m0 {
-> 	status = okay;
-> };
-> 
-> in d0 dts:
-> &m0 {
+The build of radix tree test suite failed due to a new internal header
+file added to radix-tree.c. Adding the header directory in the Makefile
+fixes it.
 
-typo: 
+Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
+---
+ tools/testing/radix-tree/Makefile | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-&d0 {
+diff --git a/tools/testing/radix-tree/Makefile b/tools/testing/radix-tree/Makefile
+index caf32a9b9608..7527f738b4a1 100644
+--- a/tools/testing/radix-tree/Makefile
++++ b/tools/testing/radix-tree/Makefile
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-CFLAGS += -I. -I../../include -g -Og -Wall -D_LGPL_SOURCE -fsanitize=address \
+-	  -fsanitize=undefined
++CFLAGS += -I. -I../../include -I../../../lib -g -Og -Wall \
++	  -D_LGPL_SOURCE -fsanitize=address -fsanitize=undefined
+ LDFLAGS += -fsanitize=address -fsanitize=undefined
+ LDLIBS+= -lpthread -lurcu
+ TARGETS = main idr-test multiorder xarray maple
+@@ -49,6 +49,7 @@ $(OFILES): Makefile *.h */*.h generated/map-shift.h generated/bit-length.h \
+ 	../../../include/linux/xarray.h \
+ 	../../../include/linux/maple_tree.h \
+ 	../../../include/linux/radix-tree.h \
++	../../../lib/radix-tree.h \
+ 	../../../include/linux/idr.h
+ 
+ radix-tree.c: ../../../lib/radix-tree.c
+-- 
+2.20.1
 
-> 	status = okay;
-> };
-> 
-> 
-> > 
-> > I think you may need to have 2 compatibles per board, depending on which
-> > cpu. Perhaps even as verbose as:
-> > "pine61,0x64-d0" "pine64,0x64" "bouffalolab,bl808-d0" "bouffalolab,bl808"
-> > 
-> > Not exactly straightforward though, is it!
-> > 
-> > > It would be possible to avoid having two DTs per board by guarding all
-> > > of the differences behind "#ifdef CONFIG_64BIT", but that seems wrong
-> > > because you would end up with two totally incompatible DTBs named the
-> > > same thing, depending on how the DTB was built.
-> > 
-> > I think having 2 dtbs is fine, and as I mentioned, I've seen Krzysztof
-> > complain previously about conditional bits like that.
-> > 
-> > Cheers,
-> > Conor.
-> 
-> 
