@@ -2,70 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A4B170AD73
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 12:27:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0431B70AD7A
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 12:39:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231211AbjEUKZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 06:25:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34026 "EHLO
+        id S231588AbjEUKig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 06:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230459AbjEUKHG (ORCPT
+        with ESMTP id S231171AbjEUKZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 06:07:06 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1465E6E
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 02:55:41 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-25566708233so78538a91.0
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 02:55:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1684662941; x=1687254941;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=J2wvUeHhuusQaep940v40WYCSBa0GTC/pU4VHFBZK60=;
-        b=XnIQqtxdxPmD/KnZq8uj/btOSp0PPr8cQxoppCk6LlcV9cq2J7lenURpztkriMgNAh
-         sK3FUJUMe/6fFhvg1YPxrBjRCff0j4Vm+3jxxp6lsGM3tZOXYW4RNrDvKAWQmB65hwZ5
-         SLGfeEZarhej8B+HRf8MQPQDEIkQLh//EquRSaY0Q87miZs8ojMxNZ3gn/oH0QiO+IIx
-         Hd3MshNLmegApz9HX6IksnLt7K7INyLwibs0UIGS81aWqIrSedRMK2TpXarOumqSMP/2
-         jy1hRpLb53TGSsHE3T6ICh6n/sZ8SnWdDjit0y/DrNnPj8DMpwaUUkEcm9lt39OyByPk
-         HqZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684662941; x=1687254941;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=J2wvUeHhuusQaep940v40WYCSBa0GTC/pU4VHFBZK60=;
-        b=D59SoVCRCkzLfO3WQJbpbrXFg5LkF02wRisPiUC/C0X2VgUQ261sySCvlOl/M+F7OM
-         +Ei+oEy1csUJqRUr2MnEIM5sNd6CUoZoN0DRKy5DEHOtsIUWcWBg7xap1z4hVqs3NcMF
-         P5iZqIWrOsi8alQ8ZWtfkPpaqfeaDgCfYycL6f3s8kPJjMwc9aKarzC/XKcTG4x7p56n
-         bQDLrXi9oVDyIzXALlrvVv4YBtbGkJZVPxmntCh7Jz8m2hH6PEJ9942sdVOGfmLsDaPf
-         qxRQ+r6ibllqHqr11CavqNh++x6HULCv0+xSxfn5WLhHXuQCOwavmYhE1b0MfODdsySC
-         9UEQ==
-X-Gm-Message-State: AC+VfDyE8TtwOyUBxeTnximqq0zIXGRST1PFqXWtF+/CdfwIqp3IrEqn
-        7gHeSGwuPNbI4yJdt6t/aaaxUwPRtsrv3859eKc=
-X-Google-Smtp-Source: ACHHUZ4pNkFMSNTwnq79r37gYRmD1cb5gl4v11Ef3rVSHBUEsV1w9A31bRWAJMxfSePavMnzWl8xYg==
-X-Received: by 2002:a17:90b:4f4e:b0:250:4f32:54b2 with SMTP id pj14-20020a17090b4f4e00b002504f3254b2mr7164761pjb.19.1684662941280;
-        Sun, 21 May 2023 02:55:41 -0700 (PDT)
-Received: from localhost.localdomain ([139.177.225.249])
-        by smtp.gmail.com with ESMTPSA id b15-20020a631b4f000000b00534684201b0sm2530629pgm.27.2023.05.21.02.55.38
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 21 May 2023 02:55:40 -0700 (PDT)
-From:   Peng Zhang <zhangpeng.00@bytedance.com>
-To:     arnd@kernel.org, willy@infradead.org
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, Liam.Howlett@oracle.com,
-        Peng Zhang <zhangpeng.00@bytedance.com>
-Subject: [PATCH] radix tree test suite: Fix building radix tree test suite.
-Date:   Sun, 21 May 2023 17:54:50 +0800
-Message-Id: <20230521095450.21332-1-zhangpeng.00@bytedance.com>
-X-Mailer: git-send-email 2.37.0 (Apple Git-136)
-In-Reply-To: <20230516194212.548910-1-arnd@kernel.org>
-References: <20230516194212.548910-1-arnd@kernel.org>
+        Sun, 21 May 2023 06:25:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E052210C3;
+        Sun, 21 May 2023 03:14:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7222161542;
+        Sun, 21 May 2023 10:14:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6455C433D2;
+        Sun, 21 May 2023 10:14:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684664043;
+        bh=Vu1TAPPciiNN/+NNVmvm2e6pyVPkwqUzX+KPyIlmhCM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ZajnV1LcRAkwfLq/SJRiJS+qsd4lpR2KLL8lVNF7DVVheUsJOlHe7P2ShRWtM0Tkd
+         69DII5MQ03k9o/X8SjWJD7kfLHjYKxcfuYPcVl56KiPn64ch/vX5Cs2xud/M3ExphV
+         sSyuyMf7SQxEidkxPniJVpNz8d3w7Mi0gBzORbN9WIkfW+F6LznOr/6WaoBMXCmPyX
+         RqlLJHqzojkHWOnad98ZUuIwQzcOwIH8C7fPRHurcfWl83vJ1sORj07t1O94LRJl7b
+         H/goTc0FbDbgnMGh5zgjrk0qNgbIgB6iB03SXh+WkBPUoC3kuZyymqZHNA8SMP3tCp
+         7dvGSDzJFa1Xg==
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Lars-Peter Clausen <lars@metafoo.de>,
+        Vinod Koul <vkoul@kernel.org>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Sinan Kaya <okaya@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
+Subject: [PATCH v3 0/5] dma: don't set chancnt
+Date:   Sun, 21 May 2023 18:02:47 +0800
+Message-Id: <20230521100252.3197-1-jszhang@kernel.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,37 +61,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The build of radix tree test suite failed due to a new internal header
-file added to radix-tree.c. Adding the header directory in the Makefile
-fixes it.
+I'm patching dw-axi-dmac to add more features, but I found a small
+clean up point and some drivers in drivers/dma/ have the same issue,
+so this series comes.
 
-Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
----
- tools/testing/radix-tree/Makefile | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+The dma framework will calculate the dma channels chancnt, setting it
+is wrong.
 
-diff --git a/tools/testing/radix-tree/Makefile b/tools/testing/radix-tree/Makefile
-index caf32a9b9608..7527f738b4a1 100644
---- a/tools/testing/radix-tree/Makefile
-+++ b/tools/testing/radix-tree/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- 
--CFLAGS += -I. -I../../include -g -Og -Wall -D_LGPL_SOURCE -fsanitize=address \
--	  -fsanitize=undefined
-+CFLAGS += -I. -I../../include -I../../../lib -g -Og -Wall \
-+	  -D_LGPL_SOURCE -fsanitize=address -fsanitize=undefined
- LDFLAGS += -fsanitize=address -fsanitize=undefined
- LDLIBS+= -lpthread -lurcu
- TARGETS = main idr-test multiorder xarray maple
-@@ -49,6 +49,7 @@ $(OFILES): Makefile *.h */*.h generated/map-shift.h generated/bit-length.h \
- 	../../../include/linux/xarray.h \
- 	../../../include/linux/maple_tree.h \
- 	../../../include/linux/radix-tree.h \
-+	../../../lib/radix-tree.h \
- 	../../../include/linux/idr.h
- 
- radix-tree.c: ../../../lib/radix-tree.c
+NOTE: I leave drivers/dma/ioat/ as is, because its logic have a
+heavy dependency on chancnt usage, however it's still doable.
+
+Since v2:
+  - rebase on latest rc1
+  - collet Acked-by tag
+
+Since v1:
+  - collet Acked-by tag
+  - fix typo
+
+Jisheng Zhang (5):
+  dmaengine: dw-axi-dmac: Don't set chancnt
+  dmaengine: axi-dmac: Don't set chancnt
+  dmaengine: plx_dma: Don't set chancnt
+  dmaengine: hidma: Don't set chancnt
+  dmaengine: sprd: Don't set chancnt
+
+ drivers/dma/dma-axi-dmac.c                     | 1 -
+ drivers/dma/dw-axi-dmac/dw-axi-dmac-platform.c | 1 -
+ drivers/dma/plx_dma.c                          | 1 -
+ drivers/dma/qcom/hidma.c                       | 1 -
+ drivers/dma/sprd-dma.c                         | 1 -
+ 5 files changed, 5 deletions(-)
+
 -- 
-2.20.1
+2.40.0
 
