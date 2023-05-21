@@ -2,97 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2661D70ACA1
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 08:22:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31DE970ACA3
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 08:23:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbjEUGWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 02:22:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39208 "EHLO
+        id S229501AbjEUGXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 02:23:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjEUGWi (ORCPT
+        with ESMTP id S230180AbjEUGXJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 02:22:38 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75DEFE43;
-        Sat, 20 May 2023 23:22:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684650155; x=1716186155;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ekzYqo7EzgZT0OkwVWM3WQ4Ormn8rtrKMWfR7boXeYc=;
-  b=ZuWDNHQb0MoaIRsXJ4OkGdk1l1hnLSlbR1lmV0iIrBOewNo3VYzJHGi8
-   YuTOxtO0vQFpp0zJ0TAP1dMc8i2Czm4Sp+fpSiqFs1hfAWsZqS4XrN591
-   3LKoO7Jb4NKeVJuUzaRIMemNi44IUzJrmPcC3sTd2jgaPUeIBp25/EXxf
-   0YBm90rSlXu3ropXNPo+cJfQ728HH4BBP7ssKB4UsP5OqSztgoJi9sBPX
-   bgWTwrfnL0J56ksSs5UiTFs55/LyrSG6gWnzJrqeMqqRpZLTY97GIEY9s
-   P46Nqv4q0XxiBefDxN5zlchzdr9Ng47NYiFiBtsRbFLOGEXxowY52rRGn
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10716"; a="332282579"
-X-IronPort-AV: E=Sophos;i="6.00,181,1681196400"; 
-   d="scan'208";a="332282579"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2023 23:22:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10716"; a="1033113548"
-X-IronPort-AV: E=Sophos;i="6.00,181,1681196400"; 
-   d="scan'208";a="1033113548"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
-  by fmsmga005.fm.intel.com with ESMTP; 20 May 2023 23:22:30 -0700
-Message-ID: <ab7d4bfc-d599-0875-cbdd-0be8cc5d9d7f@linux.intel.com>
-Date:   Sun, 21 May 2023 14:21:48 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Cc:     baolu.lu@linux.intel.com, Robin Murphy <robin.murphy@arm.com>,
-        Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "Zanussi, Tom" <tom.zanussi@intel.com>,
-        narayan.ranganathan@intel.com
-Subject: Re: [PATCH v6 1/4] iommu: Generalize default PCIe requester ID PASID
-Content-Language: en-US
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
-        vkoul@kernel.org
-References: <20230519203223.2777255-1-jacob.jun.pan@linux.intel.com>
- <20230519203223.2777255-2-jacob.jun.pan@linux.intel.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20230519203223.2777255-2-jacob.jun.pan@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 21 May 2023 02:23:09 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C745E46
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 23:22:57 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id DA8B61FD7B;
+        Sun, 21 May 2023 06:22:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1684650175; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=K6WgYX3+4JPXyBRLNRcc7FPcPkiactSsV+yrns5CXJE=;
+        b=TGUdGGahIbBCogql31lXFRA6YrTnwQSlHD54hPFsY4TYsDIPkXbluOdUCM9XMjGBytaeUb
+        R8s2s/B2dUs1qrBgNBf/Jy2qQQmJlR7SEybcMSdf+eFhD3cntspoaYt6gxIAakfQMsIj7D
+        BjO4SwGAgqv7y/vj8euF/BBkGlDHnbk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1684650175;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=K6WgYX3+4JPXyBRLNRcc7FPcPkiactSsV+yrns5CXJE=;
+        b=54YhbEIjghbLU3NQPpZQWy2nLYySJHNyPAHSGXxIo4NgDpphFJ1lY0P8CYayHo18vlviu9
+        50Fn23+SeCMqTDCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B521713425;
+        Sun, 21 May 2023 06:22:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id k4hWK7+4aWRlCwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Sun, 21 May 2023 06:22:55 +0000
+Date:   Sun, 21 May 2023 08:22:56 +0200
+Message-ID: <877ct2yzi7.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Adam Stylinski <kungfujesus06@gmail.com>
+Cc:     Takashi Iwai <tiwai@suse.de>, perex@perex.cz,
+        linux-kernel@vger.kernel.org
+Subject: Re: ca0132 patches
+In-Reply-To: <CAJwHY9VXeGEvvR8qL+DEB6anfR6ePW864UKftVStH0Wj_Das1g@mail.gmail.com>
+References: <CAJwHY9WVvV1aN-Wa5OnUrr_yvcD+RK+ykDgqpffKaOPvzXLiTg@mail.gmail.com>
+        <a2feaf97-b9e4-4318-86e7-e7a654794f78@xianwang.io>
+        <87a5xzz3lf.wl-tiwai@suse.de>
+        <CAJwHY9WGRCdbb=vrbY1UwdiJ3mb28tk2S69i89CiPMJyHQa0=Q@mail.gmail.com>
+        <CAJwHY9WgpL8KajHAS3Xb1=A=J5_Accm76p4W89j+K+wRjN7zQQ@mail.gmail.com>
+        <CAJwHY9VXeGEvvR8qL+DEB6anfR6ePW864UKftVStH0Wj_Das1g@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/20/23 4:32 AM, Jacob Pan wrote:
-> PCIe Process address space ID (PASID) is used to tag DMA traffic, it
-> provides finer grained isolation than requester ID (RID).
+On Sun, 21 May 2023 04:29:45 +0200,
+Adam Stylinski wrote:
 > 
-> For each RID, 0 is as a special PASID for the legacy DMA (without
-> PASID), thus RID_PASID. This is universal across all architectures,
-> therefore warranted to be declared in the common header.
-> Noting that VT-d could support none-zero RID_PASID, but currently not
-> used.
+> Sorry, mutt's being insane uncooperative.  Here's the format-patch attached.
 > 
-> By having a common RID_PASID, we can avoid conflicts between different
-> use cases in the generic code. e.g. SVA and DMA API with PASIDs.
+> On Sat, May 20, 2023 at 11:21 AM Adam Stylinski <kungfujesus06@gmail.com> wrote:
+> >
+> > Mutt + SMTP + Gmail are acting up and I had to head out. I'll get this sent out tonight, though. Did you want me to cc the mailing list too?
+> >
+> > On Sat, May 20, 2023, 10:27 AM Adam Stylinski <kungfujesus06@gmail.com> wrote:
+> >>
+> >> Correct.  A format-patch output is coming soon, I'm just waiting for a
+> >> proper clone to finish.
+> >>
+> >> On Sat, May 20, 2023 at 6:42 AM Takashi Iwai <tiwai@suse.de> wrote:
+> >> >
+> >> > On Fri, 19 May 2023 05:53:09 +0200,
+> >> > Xian Wang wrote:
+> >> > >
+> >> > > On 18/05/2023 20:02, Adam Stylinski wrote:
+> >> > > > Hello,
+> >> > > >
+> >> > > > I noticed you patched in a quirk in basically the same place I am for
+> >> > > > a different EVGA board.  This quirk is needed for me as well but it
+> >> > > > would seem the bugzilla and mailing lists are ignored.  I was hoping
+> >> > > > maybe I could draw your attention to this?
+> >> > > >
+> >> > > > https://bugzilla.kernel.org/show_bug.cgi?id=67071
+> >> > > >
+> >> > > > I suffer a similar issue (namely surround is disabled without enabling
+> >> > > > this quirk).  I still have some temperamental behavior with the quirk
+> >> > > > in place (the port mapping doesn't always seem consistent boot to
+> >> > > > boot, often needing several reboots before all channels are working).
+> >> > > > I'm not certain if this is a quirk of loading the firmware or what.
+> >> > > > At the very least, not having to patch this locally every kernel
+> >> > > > update would be nice.  I'm CC'ing the maintainer who signed off on the
+> >> > > > patch as well, really hoping to get some attention on this.
+> >> > >
+> >> > > Hi Adam,
+> >> > >
+> >> > > Unfortunately I haven't experienced the flakiness of surround sound
+> >> > > mentioned in the bug. The channel mapping seems correct and is
+> >> > > consistent from boot to boot.
+> >> > >
+> >> > > For not patching locally every time there is a new kernel, are you
+> >> > > open to submit that one-line patch up?
+> >> >
+> >> > So you need only the addition of
+> >> >   SND_PCI_QUIRK(0x3842, 0x104b, "EVGA X299 Dark", QUIRK_R3DI)
+> >> > ?
+> >> >
+> >> > If so, I can submit a oneliner from my side, too.  But it's still
+> >> > better to be submitted from the person who actually tested the patch,
+> >> > of course.
+> >> >
+> >> >
+> >> > Takashi
+> From fd1ff1aff3a70716b4d6d99a89934aea5d718cad Mon Sep 17 00:00:00 2001
+> From: Adam Stylinski <kungfujesus06@gmail.com>
+> Date: Sat, 20 May 2023 10:31:54 -0400
+> Subject: [PATCH] ALSA: hda/ca0132: add quirk for EVGA X299 DARK
 > 
-> Signed-off-by: Jacob Pan<jacob.jun.pan@linux.intel.com>
+> This quirk is necessary for surround and other DSP effects to work
+> with the onboard ca0132 based audio chipset for the EVGA X299 dark
+> mainboard.
+> 
+> Signed-off-by: Adam Stylinski <kungfujesus06@gmail.com>
 
-Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
+Could you rather submit to alsa-devel ML (plus Cc to LKML)?
 
-Best regards,
-baolu
+
+thanks,
+
+Takashi
+
+> 
+> ---
+>  sound/pci/hda/patch_ca0132.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/sound/pci/hda/patch_ca0132.c b/sound/pci/hda/patch_ca0132.c
+> index 099722ebaed8..748a3c40966e 100644
+> --- a/sound/pci/hda/patch_ca0132.c
+> +++ b/sound/pci/hda/patch_ca0132.c
+> @@ -1306,6 +1306,7 @@ static const struct snd_pci_quirk ca0132_quirks[] = {
+>  	SND_PCI_QUIRK(0x1458, 0xA026, "Gigabyte G1.Sniper Z97", QUIRK_R3DI),
+>  	SND_PCI_QUIRK(0x1458, 0xA036, "Gigabyte GA-Z170X-Gaming 7", QUIRK_R3DI),
+>  	SND_PCI_QUIRK(0x3842, 0x1038, "EVGA X99 Classified", QUIRK_R3DI),
+> +	SND_PCI_QUIRK(0x3842, 0x104b, "EVGA X299 Dark", QUIRK_R3DI),
+>  	SND_PCI_QUIRK(0x3842, 0x1055, "EVGA Z390 DARK", QUIRK_R3DI),
+>  	SND_PCI_QUIRK(0x1102, 0x0013, "Recon3D", QUIRK_R3D),
+>  	SND_PCI_QUIRK(0x1102, 0x0018, "Recon3D", QUIRK_R3D),
+> -- 
+> 2.40.1
+> 
