@@ -2,119 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF9E070AD00
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 10:31:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB90470AD0D
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 10:57:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbjEUIba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 04:31:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49192 "EHLO
+        id S229641AbjEUI5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 04:57:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbjEUI2W (ORCPT
+        with ESMTP id S231180AbjEUI4d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 04:28:22 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7EA8ED
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 01:28:21 -0700 (PDT)
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 888BF3F4F7
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 08:28:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1684657698;
-        bh=JDxwondAh/OUHugni3ivKWRUI1pwMRnCsBuB/co2xpE=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=TgERYlQJWvrZw7gHn3ucr5v6Nsd0NPB6uVbqs6k+qlDRmOiBwA+YCgNvgKKN2htlj
-         Lglx3xdXLUG+JjpvwJOL2XDX88f4LQc6C12su5kUVlO8wIOkprSj39FAH1dCBu1HJS
-         BFD+gl1ECGerPKif+P5j6wuIlTgkCsR0R8j4T+8kDxuVs3KUuF4FpMPLnehtEcRWk4
-         yWHy+ZV02QDXg1le5Gulw5oES5qrEbkHF8kNaxHyRKbpb65rSsQCOH4FjYe7G2fvZC
-         LDotCl7ELbaD99OHxLBepkHJmAq1952gy9yymZNgPUMNJtofHVujJCu/Dy6u2NAbLU
-         KQ3EZBc0ExEZQ==
-Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-510b714821fso3139021a12.1
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 01:28:18 -0700 (PDT)
+        Sun, 21 May 2023 04:56:33 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29901CA;
+        Sun, 21 May 2023 01:53:56 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-3f690149f13so29224271cf.1;
+        Sun, 21 May 2023 01:53:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684659235; x=1687251235;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vEIrP2ynpjpmZmVLItYY+rNU7ObAmm9vuXWERHD5GRU=;
+        b=ST1pQhAY8zUonWh1liTdSJ9j7v/hDgthAFgILkfcxi45vkQc3G8QRUcfP+y9nu2KwA
+         l4wE1CQt9UdkqXi79C/5vUnjAtVaGYe0rPXsUrFv1/cz0CgPXogrHjSd3PBuwzq1caQX
+         fV7ni8gC8vZWgDMxFpRtvSe5vMSPDdsx/OL/81/uIrS4UgtoxCnvSKsAaZ3d3z26B5Ea
+         DW3Ilxw5K3VQc4K4zhg9l8sx+ckiAEFZPgrPiqjGBz3BaJ9hGElT/LkZeZKYc5SRJ8JF
+         3YoxtdkrhdnisGE02CKYjm9+Y9KlucNVulLe9/If4BeAZjjYf/qOq+/ympibu5iGR750
+         lFRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684657698; x=1687249698;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1684659235; x=1687251235;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JDxwondAh/OUHugni3ivKWRUI1pwMRnCsBuB/co2xpE=;
-        b=JadZMG4DvCfDwoJQFoTGOVrR/35faz6whgBul6CeP2erxJhd1Wsn0VPzKPNbrU3LY1
-         MJCDdU/wu5xcQ/DKajqdagMezILqPaHYrYAmc1KLbocBj2SfBS38vlvNyrMc7dyu1aE7
-         g8v5Zk85oyQuPamgxte/Fneg3xuCh8Q3/9yRoXQNg6HgXtUYPm2VkjYt5pS4FoOlZd/q
-         ouDjoR3XcSWq+sN6Liha8pRINGXLZ8y3BW8ZZSMWRifoHxk0alcHNddo1TbmuPHU1QOM
-         k93ywdY83CdIrhOZX/Si+vUPJLaHA7N6KpTSrnqYIdcLmof/MTcHeosykQpQ19s6Oum6
-         0aUg==
-X-Gm-Message-State: AC+VfDyeWbfAOo/Rsr5BgJBrjakxTptXb2hveb/qDX72lQNuYrCn0jaY
-        L+rp8hiN2kOwcCJEI+vNYzHFP/g5epmZWJpNhgoCZPxSZyeX3hkGwi8XQbwamW5YJnkrpJe7PMm
-        fgrj3xS/zACFFxQgCWnZsRznP9PR6TAVkIjglD4QAZQ==
-X-Received: by 2002:a50:ed09:0:b0:50c:161b:9154 with SMTP id j9-20020a50ed09000000b0050c161b9154mr6988440eds.11.1684657698395;
-        Sun, 21 May 2023 01:28:18 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6ZOrhcJoW7hdR/JwsluZvVPpD3I9c6Xd7IgooNQQzahawcWHebG+MovffeT+18V5hGxmKYpQ==
-X-Received: by 2002:a50:ed09:0:b0:50c:161b:9154 with SMTP id j9-20020a50ed09000000b0050c161b9154mr6988428eds.11.1684657698143;
-        Sun, 21 May 2023 01:28:18 -0700 (PDT)
-Received: from righiandr-XPS-13-7390.homenet.telecomitalia.it (host-87-10-127-160.retail.telecomitalia.it. [87.10.127.160])
-        by smtp.gmail.com with ESMTPSA id z17-20020aa7cf91000000b004c2158e87e6sm1656646edx.97.2023.05.21.01.28.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 May 2023 01:28:17 -0700 (PDT)
-From:   Andrea Righi <andrea.righi@canonical.com>
-To:     Miklos Szeredi <miklos@szeredi.hu>
-Cc:     Amir Goldstein <amir73il@gmail.com>, linux-unionfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/3] ovl: validate superblock in OVL_FS()
-Date:   Sun, 21 May 2023 10:28:13 +0200
-Message-Id: <20230521082813.17025-4-andrea.righi@canonical.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230521082813.17025-1-andrea.righi@canonical.com>
-References: <20230521082813.17025-1-andrea.righi@canonical.com>
+        bh=vEIrP2ynpjpmZmVLItYY+rNU7ObAmm9vuXWERHD5GRU=;
+        b=c5yor4UmvO/Pzks4GF6UGzXcmHvJSGDI17zVy8eWxt8AUgnWSQTmFb9A7r3Cru7xQs
+         0rhp+BCg934UU/xhZF7RqHVXa/l7WZTjq2DVkNRJuII3DD6R7rdYuptew81fuIzSK/Ko
+         dwe4OXvbouNZI9pS1nlWGg9Ihpl5z91sVQkn04/P1hqnlUYX1Lu32qpZg36CZw3XOYjZ
+         rwKhaIHST6pDly0a5/ea5+0Wy+MHxQLkLe2LEsenh2yn0hJOBVvbINIjsBvt336bufAZ
+         xdbcr5zpgG7F1ePqX+AopSSWW+B9nZPH0LVz0JOJ4DxDHDCCoFIryafpq7KmFXeWC2mD
+         TdZg==
+X-Gm-Message-State: AC+VfDzinW5bTkWMIejvcL62BeA32Gc/sPA6sTZlodYmg0VVRkn6ZZJE
+        rBCsKWpRaK8SbxGp4aDfF75qMFZHyaSr3LDoy8c4GA+/JsI=
+X-Google-Smtp-Source: ACHHUZ6Z2pP9QjNcRZjEfdfq0bpt+soUrXi6Q3GIPCsRITb5cwsQAg6J8GvUL5nww5ZFgbGQm+YwX9aaD1UulpmaEHU=
+X-Received: by 2002:ac8:5d8d:0:b0:3f5:543:4c3f with SMTP id
+ d13-20020ac85d8d000000b003f505434c3fmr12959562qtx.66.1684659235216; Sun, 21
+ May 2023 01:53:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230515210545.2100161-1-gnstark@sberdevices.ru>
+ <CAFBinCCc+t7Ks6fqz38cVrufPRFdxFgC9Qp+JhcM1KfD6pupTg@mail.gmail.com>
+ <f0966e95-43c7-e6f6-8aeb-05f27691cec3@sberdevices.ru> <20230520164618.08f26fd9@jic23-huawei>
+In-Reply-To: <20230520164618.08f26fd9@jic23-huawei>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Sun, 21 May 2023 11:53:19 +0300
+Message-ID: <CAHp75VenNPOK7X=vOoZE2rGyC46q4qdNOgSDbDMqV+Gdigm81Q@mail.gmail.com>
+Subject: Re: [PATCH v1] meson saradc: fix clock divider mask length
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     =?UTF-8?B?0KHRgtCw0YDQuiDQk9C10L7RgNCz0LjQuSDQndC40LrQvtC70LDQtdCy0LjRhw==?= 
+        <GNStark@sberdevices.ru>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "neil.armstrong@linaro.org" <neil.armstrong@linaro.org>,
+        "khilman@baylibre.com" <khilman@baylibre.com>,
+        "jbrunet@baylibre.com" <jbrunet@baylibre.com>,
+        "nuno.sa@analog.com" <nuno.sa@analog.com>,
+        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-amlogic@lists.infradead.org" 
+        <linux-amlogic@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        kernel <kernel@sberdevices.ru>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When CONFIG_OVERLAY_FS_DEBUG is enabled add an explicit check to make
-sure that OVL_FS() is always used with a valid overlayfs superblock.
-Otherwise trigger a WARN_ON_ONCE().
+On Sat, May 20, 2023 at 6:30=E2=80=AFPM Jonathan Cameron <jic23@kernel.org>=
+ wrote:
+> On Wed, 17 May 2023 16:47:59 +0000
+> =D0=A1=D1=82=D0=B0=D1=80=D0=BA =D0=93=D0=B5=D0=BE=D1=80=D0=B3=D0=B8=D0=B9=
+ =D0=9D=D0=B8=D0=BA=D0=BE=D0=BB=D0=B0=D0=B5=D0=B2=D0=B8=D1=87 <GNStark@sber=
+devices.ru> wrote:
+> > On 5/16/23 22:08, Martin Blumenstingl wrote:
 
-Reviewed-by: Amir Goldstein <amir73il@gmail.com>
-Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
----
- fs/overlayfs/ovl_entry.h | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+...
 
-diff --git a/fs/overlayfs/ovl_entry.h b/fs/overlayfs/ovl_entry.h
-index b32c38fdf3c7..e156649d9c71 100644
---- a/fs/overlayfs/ovl_entry.h
-+++ b/fs/overlayfs/ovl_entry.h
-@@ -97,8 +97,20 @@ static inline struct mnt_idmap *ovl_upper_mnt_idmap(struct ovl_fs *ofs)
- 
- extern struct file_system_type ovl_fs_type;
- 
-+static inline bool is_ovl_fs_sb(struct super_block *sb)
-+{
-+	return sb->s_type == &ovl_fs_type;
-+}
-+
-+#ifdef CONFIG_OVERLAY_FS_DEBUG
-+#define OVL_VALIDATE_SB(__sb)	WARN_ON_ONCE(!is_ovl_fs_sb(__sb))
-+#else
-+#define OVL_VALIDATE_SB(__sb)
-+#endif
-+
- static inline struct ovl_fs *OVL_FS(struct super_block *sb)
- {
-+	OVL_VALIDATE_SB(sb);
- 	return (struct ovl_fs *)sb->s_fs_info;
- }
- 
--- 
-2.39.2
+> > I've checked datasheets of all chips listed in meson_sar_adc_of_match a=
+rray in meson_saradc.c and everywhere this field is 6 bits long. According =
+to driver code and existing dts files this patch affects all supported chip=
+s except meson8.
+>
+> On that note, do we want to add any clarifying text on the scope to the
+> commit message?
 
+We should, I think, but according to Martin's message, as I may
+interpret it, the datasheet may also be wrong and some experiments on
+a real hardware should prepend any change in the code.
+
+
+--=20
+With Best Regards,
+Andy Shevchenko
