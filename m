@@ -2,101 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB30170ADC7
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 13:48:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 312BD70ADAF
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 13:47:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229559AbjEULrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 07:47:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
+        id S229635AbjEULqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 07:46:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231668AbjEUKkV (ORCPT
+        with ESMTP id S231867AbjEUKqi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 06:40:21 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0751A8;
-        Sun, 21 May 2023 03:36:04 -0700 (PDT)
-Date:   Sun, 21 May 2023 12:36:01 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
-        t=1684665362; bh=DHkS6vR075WOjYryzPWplYp9E9UCb+89BMbbIW7FyiA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B4j6MrFveCJ/eL/P6OzEPwPxvEcIStVL2HPwsp65qDZTBbuEp8VMEP+fnMdzfZbf2
-         p9HOisqOhrsIQUphD72u//kAtFUBo21iub42AsIJuSvOwgng4FF31iLnDhIsqVsKjR
-         keVBHoPhVpG12mpW7Qa4Dht4CO5uXEHOGs6gjsak=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH 7/7] tools/nolibc: simplify stackprotector compiler flags
-Message-ID: <ccd8a189-0ca1-4462-8478-87b6c6ccb066@t-8ch.de>
-References: <20230521-nolibc-automatic-stack-protector-v1-0-dad6c80c51c1@weissschuh.net>
- <20230521-nolibc-automatic-stack-protector-v1-7-dad6c80c51c1@weissschuh.net>
+        Sun, 21 May 2023 06:46:38 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D17319F;
+        Sun, 21 May 2023 03:45:09 -0700 (PDT)
+Received: from [91.65.34.120] (helo=phil.lan)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1q0gYe-0008By-Qn; Sun, 21 May 2023 12:45:00 +0200
+From:   Heiko Stuebner <heiko@sntech.de>
+To:     Jacob Chen <jacob-chen@iotwrt.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Rob Herring <robh+dt@kernel.org>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH RESEND 0/2] media: rockchip: rga: Add rk3568 support
+Date:   Sun, 21 May 2023 12:44:58 +0200
+Message-Id: <168466589373.900480.8086350880534437090.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.39.0
+In-Reply-To: <20230119-rk3568-rga-v1-0-43d4d14365e6@pengutronix.de>
+References: <20230119-rk3568-rga-v1-0-43d4d14365e6@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230521-nolibc-automatic-stack-protector-v1-7-dad6c80c51c1@weissschuh.net>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-21 11:36:35+0200, Thomas Weißschuh wrote:
-> Now that nolibc enable stackprotector support automatically when the
-> compiler enables it we only have to get the -fstack-protector flags
-> correct.
+On Fri, 20 Jan 2023 10:14:21 +0100, Michael Tretter wrote:
+> The RGA2 on the Rockchip rk3568 is the same core as the RGA2 on the Rockchip
+> rk3288.
 > 
-> The cc-options are structured so that -fstack-protector-all is only
-> enabled if -mstack-protector=guard works, as that is the only mode
-> supported by nolibc.
+> This series adds the necessary device tree binding and node in the device tree
+> to enable the RGA2 on the Rockchip rk3568.
 > 
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> ---
->  tools/testing/selftests/nolibc/Makefile | 13 ++-----------
->  1 file changed, 2 insertions(+), 11 deletions(-)
+> I tested the driver with the GStreamer v4l2convert element on a Rock3 Model A
+> board.
 > 
-> diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-> index bd41102ea299..445c352b1b33 100644
-> --- a/tools/testing/selftests/nolibc/Makefile
-> +++ b/tools/testing/selftests/nolibc/Makefile
-> @@ -76,20 +76,11 @@ else
->  Q=@
->  endif
->  
-> -CFLAGS_STACKPROTECTOR = -DNOLIBC_STACKPROTECTOR \
-> -			$(call cc-option,-mstack-protector-guard=global) \
-> -			$(call cc-option,-fstack-protector-all)
-> -CFLAGS_STKP_i386 = $(CFLAGS_STACKPROTECTOR)
-> -CFLAGS_STKP_x86_64 = $(CFLAGS_STACKPROTECTOR)
-> -CFLAGS_STKP_x86 = $(CFLAGS_STACKPROTECTOR)
-> -CFLAGS_STKP_arm64 = $(CFLAGS_STACKPROTECTOR)
-> -CFLAGS_STKP_arm = $(CFLAGS_STACKPROTECTOR)
-> -CFLAGS_STKP_mips = $(CFLAGS_STACKPROTECTOR)
-> -CFLAGS_STKP_riscv = $(CFLAGS_STACKPROTECTOR)
-> -CFLAGS_STKP_loongarch = $(CFLAGS_STACKPROTECTOR)
-> +CFLAGS_STACKPROTECTOR = $(call cc-option,-mstack-protector-guard=global -fstack-protector-all)
->  CFLAGS_s390 = -m64
->  CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
->  		$(call cc-option,-fno-stack-protector) \
-> +		$(call cc-option,-mstack-protector-guard=global $(call cc-option,-fstack-protector-all)) \
->  		$(CFLAGS_STKP_$(ARCH)) $(CFLAGS_$(ARCH))
->  LDFLAGS := -s
+> [...]
 
-I noticed, of course after having sent the series, that the cleanup here
-was not done properly.
+Applied, thanks!
 
-CFLAGS_STACKPROTECTOR and CFLAGS_STKP should be deleted completely.
+[1/2] media: dt-bindings: media: rockchip-rga: add rockchip,rk3568-rga
+      commit: 9b12ceb5a80d1fb45d293265de100e33b5843943
+[2/2] arm64: dts: rockchip: Add RGA2 support to rk356x
+      commit: 0c3391f8bb06b744df521651534cd99e3d77e0a8
 
-This will be fixed in v2, or feel free to fix it up when applying the
-series.
+Best regards,
+-- 
+Heiko Stuebner <heiko@sntech.de>
