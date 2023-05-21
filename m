@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F348970AEB8
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 18:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED49D70AEBB
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 18:05:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbjEUQFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 12:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55100 "EHLO
+        id S230157AbjEUQFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 12:05:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjEUQFQ (ORCPT
+        with ESMTP id S229794AbjEUQFR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 12:05:16 -0400
+        Sun, 21 May 2023 12:05:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60B1AC7;
-        Sun, 21 May 2023 09:05:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E11CD;
+        Sun, 21 May 2023 09:05:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E863760DE9;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6DA8660DE9;
+        Sun, 21 May 2023 16:05:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2CA1C433EF;
         Sun, 21 May 2023 16:05:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC57DC433D2;
-        Sun, 21 May 2023 16:05:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684685114;
-        bh=G3drc7In4D1VhMoTc5Lfa7NiaqWtPZnS/8G0QWUohGM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=p1ijQ+zARm7LoKfY65ZFtMu7Q8ga38E80NWgFuV7jj7qRULguwqCPqtEuW0HXHq1N
-         AmkwuOgCJlx9eN8P4/yhxpZ0OphqpxZuTLdUQgXG46v6fOj76m5qb7pdRcfAQ041EX
-         Ege574MPrvQZ7VTyUL4wRF9KrU9dOZjegaoUrBxiH3j3bl6FZV9iluSD6dU95zo0nz
-         xQQbbRDaV+kaqPnKc1gdtZDH1Yme/6NcJMizqs7000mXeDgnu9K122BcjLywI8/KGL
-         YT/wJ9xpAOu6WEi8PbnSldOZYPHDJSkbEUr7DMIDMqZE+LhElp1HR/nAvmyzLvhMSN
-         wV2/B9AgIvp8A==
+        s=k20201202; t=1684685115;
+        bh=kwJKTr748jqWjN1i3IcmeB/TjKVKVtw80rljWW81Xwc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=NEEQFwkIadEOXado3HB0SNTEaLqMIwaCppXoh+DRHhAGrRcWp8YS0ieITv9SInVxF
+         4tcnvGw/Q1GNj53MG1kvTnDeMbdi8YYBWt6/3R5Oq7p2gWyMkbbtcb+rIxxR+r80E4
+         pgbKJMap1F9PJY5eNNtdUXBU4upOAaC3vRumR2PWhTlSsXZlyCgrIo8tGAIxQOsod/
+         ovEaV8/07TpLL5WOVAx/gbfaWpZaI/NJI30tBs0PZBeYql7DNEOVT1MAHCdLzd1PlU
+         mcG8McYtC3DY3BhAWL5x7+7Qvmyy1pIYeJYcpkntSwblGybyokRozk5WrEvTgoH9oq
+         jomqSx445Gyhw==
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -39,10 +39,12 @@ Cc:     linux-kernel@vger.kernel.org,
         Nick Desaulniers <ndesaulniers@google.com>,
         Nicolas Schier <nicolas@fjasle.eu>,
         Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH v6 00/20] Unify <linux/export.h> and <asm/export.h>, remove EXPORT_DATA_SYMBOL(), faster TRIM_UNUSED_KSYMS
-Date:   Mon, 22 May 2023 01:04:05 +0900
-Message-Id: <20230521160426.1881124-1-masahiroy@kernel.org>
+Subject: [PATCH v6 01/20] Revert "modpost: skip ELF local symbols during section mismatch check"
+Date:   Mon, 22 May 2023 01:04:06 +0900
+Message-Id: <20230521160426.1881124-2-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230521160426.1881124-1-masahiroy@kernel.org>
+References: <20230521160426.1881124-1-masahiroy@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -55,84 +57,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This reverts commit a4d26f1a0958bb1c2b60c6f1e67c6f5d43e2647b.
 
-This patch set refactors modpost first to make it easier to
-add new code.
+The variable 'fromsym' never starts with ".L" since commit 87e5b1e8f257
+("module: Sync code of is_arm_mapping_symbol()").
 
-My goals:
+In other words, Pattern 6 is now dead code.
 
- - Refactors EXPORT_SYMBOL, <linux/export.h> and <asm/export.h>.
-   You can still put EXPORT_SYMBOL() in *.S file, very close to the definition,
-   but you do not need to care about whether it is a function or a data.
-   This removes EXPORT_DATA_SYMBOL().
+Previously, the .LANCHOR1 hid the symbols listed in Pattern 2, but
+a4d26f1a0958 was a cheesy workaround.
 
- - Re-implement TRIM_UNUSED_KSYMS in one-pass.
-   This makes the building faster.
+87e5b1e8f257 addressed the issue in a much better way.
 
- - Move the static EXPORT_SYMBOL check to modpost.
-   This also makes the building faster.
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
-This patch set is applicable to
-git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git kbuild
+ scripts/mod/modpost.c | 12 ------------
+ 1 file changed, 12 deletions(-)
 
-Previous version
-v5: https://lore.kernel.org/linux-kbuild/CAK7LNARBiOywrMLbR=9N35sk19U0QM3xcPy7d1WqV-eyb4W23w@mail.gmail.com/T/#t
-v4: https://lore.kernel.org/linux-kbuild/CAK7LNASDzy9RERN6+q6WgR4ROYZQue=SBqgbcoYuVePByHtk6Q@mail.gmail.com/T/#t
-v3: https://lore.kernel.org/all/20220928063947.299333-1-masahiroy@kernel.org/
-
-
-Masahiro Yamada (20):
-  Revert "modpost: skip ELF local symbols during section mismatch check"
-  modpost: fix section mismatch message for R_ARM_ABS32
-  modpost: detect section mismatch for R_ARM_MOVW_ABS_NC and
-    R_ARM_MOVT_ABS
-  modpost: remove unused argument from secref_whitelist()
-  modpost: refactor find_fromsym() and find_tosym()
-  modpost: unify 'sym' and 'to' in default_mismatch_handler()
-  modpost: replace r->r_offset, r->r_addend with faddr, taddr
-  modpost: remove is_shndx_special() check from section_rel(a)
-  modpost: pass struct module pointer to check_section_mismatch()
-  kbuild: generate KSYMTAB entries by modpost
-  ia64,export.h: replace EXPORT_DATA_SYMBOL* with EXPORT_SYMBOL*
-  modpost: check static EXPORT_SYMBOL* by modpost again
-  modpost: squash sym_update_namespace() into sym_add_exported()
-  modpost: use null string instead of NULL pointer for default namespace
-  kbuild: implement CONFIG_TRIM_UNUSED_KSYMS without recursion
-  modpost: merge fromsec=DATA_SECTIONS entries in sectioncheck table
-  modpost: merge bad_tosec=ALL_EXIT_SECTIONS entries in sectioncheck
-    table
-  modpost: remove *_sections[] arrays
-  modpost: merge two similar section mismatch warnings
-  modpost: show offset from symbol for section mismatch warnings
-
- .gitignore                        |   1 -
- Makefile                          |  19 +-
- arch/ia64/include/asm/Kbuild      |   1 +
- arch/ia64/include/asm/export.h    |   3 -
- arch/ia64/kernel/head.S           |   2 +-
- arch/ia64/kernel/ivt.S            |   2 +-
- arch/um/os-Linux/user_syms.c      |   9 +-
- include/asm-generic/export.h      |  83 +-----
- include/asm-generic/vmlinux.lds.h |   1 +
- include/linux/export-internal.h   |  49 ++++
- include/linux/export.h            | 119 ++------
- include/linux/pm.h                |   8 +-
- kernel/module/internal.h          |  12 +
- scripts/Makefile.build            |  19 +-
- scripts/Makefile.modpost          |   7 +
- scripts/adjust_autoksyms.sh       |  73 -----
- scripts/basic/fixdep.c            |   3 +-
- scripts/check-local-export        |  70 -----
- scripts/gen_ksymdeps.sh           |  30 --
- scripts/mod/modpost.c             | 454 +++++++++++++++---------------
- scripts/mod/modpost.h             |   6 +-
- scripts/remove-stale-files        |   2 +
- 22 files changed, 345 insertions(+), 628 deletions(-)
- delete mode 100644 arch/ia64/include/asm/export.h
- delete mode 100755 scripts/adjust_autoksyms.sh
- delete mode 100755 scripts/check-local-export
- delete mode 100755 scripts/gen_ksymdeps.sh
-
+diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+index 0d2c2aff2c03..71de14544432 100644
+--- a/scripts/mod/modpost.c
++++ b/scripts/mod/modpost.c
+@@ -1034,14 +1034,6 @@ static const struct sectioncheck *section_mismatch(
+  *   fromsec = text section
+  *   refsymname = *.constprop.*
+  *
+- * Pattern 6:
+- *   Hide section mismatch warnings for ELF local symbols.  The goal
+- *   is to eliminate false positive modpost warnings caused by
+- *   compiler-generated ELF local symbol names such as ".LANCHOR1".
+- *   Autogenerated symbol names bypass modpost's "Pattern 2"
+- *   whitelisting, which relies on pattern-matching against symbol
+- *   names to work.  (One situation where gcc can autogenerate ELF
+- *   local symbols is when "-fsection-anchors" is used.)
+  **/
+ static int secref_whitelist(const struct sectioncheck *mismatch,
+ 			    const char *fromsec, const char *fromsym,
+@@ -1092,10 +1084,6 @@ static int secref_whitelist(const struct sectioncheck *mismatch,
+ 	    match(fromsym, optim_symbols))
+ 		return 0;
+ 
+-	/* Check for pattern 6 */
+-	if (strstarts(fromsym, ".L"))
+-		return 0;
+-
+ 	return 1;
+ }
+ 
 -- 
 2.39.2
 
