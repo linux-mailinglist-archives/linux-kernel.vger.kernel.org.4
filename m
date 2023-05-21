@@ -2,161 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0108B70ABF6
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 04:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3015370ABF7
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 04:11:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230264AbjEUCHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 22:07:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47626 "EHLO
+        id S230200AbjEUCH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 22:07:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbjEUCCD (ORCPT
+        with ESMTP id S230285AbjEUCHD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 22:02:03 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE68D93
-        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 19:01:56 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1ae8de081ccso11111185ad.1
-        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 19:01:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684634516; x=1687226516;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=51eARV0mcKeV1eIZtds0tWRUIXNBvFSqTgfBgrE5Jwg=;
-        b=xelRWVs3hikFpb6Z+GQFtokNQWEDsFQ16L9wp06fub8GBYnTA4OUitMDyex+TszXFn
-         muJjlJWM011b09xLbXnpBId7LBmeLKJ/2x9KLxY8cbN7O44YMZ/zPT227036WmXvn4E4
-         6tWGCQyzIqZmOqlNx1h4Mf7UNBXnxm8xg1wJs0xfENsxwlJNd6u4aqSDTP2XOUopPfmK
-         V6O4giJfRAUCB8FTpncGp3G7MNz4APz6MsVEAOLwbZ1XrWICx7joDvSD0WGoDb4VGTcm
-         j1kb4Q2H3wMg0pADO+lHH54XIuyPfPRq5ZslfMslq8bRHL824dHu7jsrYsDY387nMtTd
-         pjvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684634516; x=1687226516;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=51eARV0mcKeV1eIZtds0tWRUIXNBvFSqTgfBgrE5Jwg=;
-        b=ARzFVR28l99O7TjbDtIwCq1aQe7ln+W+dlmgGCbHDUl3YCtR460yRFuH/1v0oKG98w
-         nktKTORWgdpcG2sfwf9D74f3O6yvV+FVZg4lh0TFiuN1tdwZqPvsV/uTjCmM5l+MXs16
-         xdsOO5i3A7XDTiBE5Z+EBXSemuTRUuc6r/PuHzbbKlwGVvuVSUHlqOTMd7E2LEKMvCrD
-         BACzPGMLmXL2fRxztQIG9Hp4MLrQlrfKbzrUoTcrAE4N3Uuvg1fqCFIgkItf8++q5riG
-         Jpe3i8U9boUWHv8dX7uGchykvrim4VJ45fG7DkYc3KjI/a2GStZ2/HO/zpzs0IbljIR9
-         Kalw==
-X-Gm-Message-State: AC+VfDzRDBN0oeJESKGO60QY8XNzSotI6nqv9jug4R/tBKnBXohKfkot
-        9EosiNs4iZbSq3tsfJwQlfB5kA==
-X-Google-Smtp-Source: ACHHUZ5ZFTB2b1TzGRnzu56JDQXNuSCkhQzwTKamxHc9v+Tcbetk0vwpHRvSFd3twRCqlRjYN2kXqA==
-X-Received: by 2002:a17:902:e848:b0:1ac:820e:c34a with SMTP id t8-20020a170902e84800b001ac820ec34amr12119763plg.0.1684634516058;
-        Sat, 20 May 2023 19:01:56 -0700 (PDT)
-Received: from x1 ([2601:1c2:1800:f680:95b7:fae6:7e9f:45cb])
-        by smtp.gmail.com with ESMTPSA id v7-20020a170902b7c700b001ae0152d280sm2107584plz.193.2023.05.20.19.01.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 20 May 2023 19:01:55 -0700 (PDT)
-Date:   Sat, 20 May 2023 19:05:54 -0700
-From:   Drew Fustini <dfustini@baylibre.com>
-To:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <anup@brainfault.org>
-Subject: riscv: boot failure for 3335068f8721 ("riscv: Use PUD/P4D/PGD pages
- for the linear mapping")
-Message-ID: <ZGl8gn/rD8WZ0nak@x1>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 20 May 2023 22:07:03 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A51A1;
+        Sat, 20 May 2023 19:06:52 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 9B0B23200312;
+        Sat, 20 May 2023 22:06:49 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Sat, 20 May 2023 22:06:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1684634809; x=1684721209; bh=+zMtkZSHtPQagLGrrkdkLMVhLxx0zNy3rsJ
+        4w9hvcuM=; b=Ayy6qnw39wnrhL/4oNup9u3xy+B2OlHXYj7c5za7xz/ZbDYIlYY
+        1O9B1Qas/7hrvddfSEAflONPU8ebEgJ4J+1UwP2h8xnma7nDygJU31i3E76FRNTu
+        eDv+ngqJRw8Lgf0hbp3e9sCnPI9NRrq8O57DLzDKaTClDuLMnJ8YW4VDLqxpvQC6
+        QnDciBWrWvf08gxqDgMcJ81SS9v4crT9I7eRUxljeEEXYw4sfHiZphFNV3IlZVTD
+        h6Ur39KuA0Fbei1Kt3O1b6U3WKQw8DiBQhVVv22GS+T9o5XLVwcS0F5uGVW64Wqi
+        0LHKIhgG3G7ji6hrDJ6LArwIyGypQdOk+3Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1684634809; x=1684721209; bh=+zMtkZSHtPQagLGrrkdkLMVhLxx0zNy3rsJ
+        4w9hvcuM=; b=JAE+673+Crs/LCIvAt4YZOMvV9wHJkUXzcB46Aa9wVPKEuKcbsE
+        G/b17oJUBvOrbm/AKvVuf4/BS87JmoSRaGdP6cHqG/eV4HXtfqgzCKc7/zQc1Ec0
+        Ot7v5VTKtoqlIGFaLgVRTN8KZL95lQeIRn/Qto48qgC88+vMo6AnwdXfOKVklfu9
+        szKoSUNvAlEI2YWL1ki5+3Q6Qped1PYG9xK1C+CcSOkMZXHT3LuZ5HiqxVKW+tAO
+        4BoUcK5jD7OFmmM/PFxWttz/wj5M6sAJCw9dJj3stwZswlqJlhlbcj7+w05iw4eG
+        I1ksWGdEX4OpK/SmsUH+OyYFhX+4RYqrPlw==
+X-ME-Sender: <xms:uHxpZN4P0AjbAuNuiZgYLud4uV40MBGsdSEMBKWixEd6QmMzcYkdhQ>
+    <xme:uHxpZK5Rdht5mkzi2hdEKlTv_G7nirR3L-RGsFk-I3h4l64BQJKxgtFFV5Q6o5DKt
+    EZTnmms0Fsq4jQyC80>
+X-ME-Received: <xmr:uHxpZEdziyYE0l_Gtejr1DRypfjfRd3it9ESI-rSnwwYoAiEqbB8qATN7ct6BPKX9OmJ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeikedgheegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepvefhkeelveetheeifeekveegueffjeetudelteelieehffdu
+    vddtleevtdduledtnecuffhomhgrihhnpehsthgrthhushdrfhhrnecuvehluhhsthgvrh
+    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghes
+    fhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:uHxpZGJLSc_5OBgBgXtcDaBPi7wjHZIP77ahtpeZayJW6gj1cWioog>
+    <xmx:uHxpZBLpitJTF8IqTPmn70fmZD4of637PHXch6GNiChUlgTf2g2s7A>
+    <xmx:uHxpZPwECmxKrXnasOFxIU_X294GiR9uvJ2ji6fMFycsqduYti6s4Q>
+    <xmx:uXxpZIVGDwWAX9R9cKTo_nxo-rq67_LS7j6vyCzvHRlMzMnm55zBlA>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 20 May 2023 22:06:47 -0400 (EDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
+Subject: Re: [PATCH] MIPS: Fix MIPS_O32_FP64_SUPPORT for 64bit CPUs before R2
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <alpine.DEB.2.21.2305192352100.27887@angie.orcam.me.uk>
+Date:   Sun, 21 May 2023 03:06:36 +0100
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <6B6F47AF-BA16-49FA-A959-7D3F064993DA@flygoat.com>
+References: <20230519163023.70542-1-jiaxun.yang@flygoat.com>
+ <alpine.DEB.2.21.2305192033550.50034@angie.orcam.me.uk>
+ <C1676532-0051-43D7-82D8-1E5697407C70@flygoat.com>
+ <alpine.DEB.2.21.2305192352100.27887@angie.orcam.me.uk>
+To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
+X-Mailer: Apple Mail (2.3731.500.231)
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, I tested 6.4-rc1 on an internal RISC-V SoC and observed a boot
-failure on a Store/AMO access fault (exception code 7) in __memset().
-stval (e.g. badaddr) was set to 0xffffaf8000000000. This SoC is RV64GC
-with Sv48 so it seems that address is the start of the "direct mapping
-of all physical memory" [1].
 
-The 6.3 release boots okay and the system is able to operate correctly
-with an Ubuntu 23.04 rootfs on eMMC. Therefore, I decided to bisect and
-I found the failure begins with 3335068f8721 ("riscv: Use PUD/P4D/PGD
-pages for the linear mapping"). The system boots okay with the prior
-commit 8589e346bbb6 ("riscv: Move the linear mapping creation in its
-own function").
 
-The boot log [2] shows that the fault happens right after buildroot's
-init script [3] uses switch_root to execute init from the Ubuntu rootfs
-on the eMMC.
+> 2023=E5=B9=B45=E6=9C=8820=E6=97=A5 21:32=EF=BC=8CMaciej W. Rozycki =
+<macro@orcam.me.uk> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> On Fri, 19 May 2023, Jiaxun Yang wrote:
+>=20
+>>> I guess one can do it and still run FPXX software, but I fail to see =
+what=20
+>>> gain it provides.  For FP32 it breaks things as accesses to =
+odd-numbered=20
+>>> FPRs will no longer get at the high part of a double value and for =
+FP64=20
+>>> there are no MTHC1/MFHC1 instructions required to access the high =
+part.
+>>=20
+>> Actually software may access the high part by SDC1/LDC1.
+>=20
+> I'm aware of that, but you'd need a new psABI variation really to =
+handle=20
+> such an arrangement.  None of the existing FP32, FP64, FPXX handles =
+it.
+>=20
+>>> What problem are you trying to solve?  And how did you verify this =
+patch?
+>>=20
+>> Was trying to deal a proprietary JIT software who want to enable FR1 =
+via prctl
+>> on Loongson-2F with 32 bit kernel.
+>=20
+> There may be a better way: rather than avoiding MTHC1/MFHC1, handle =
+them=20
+> in the FPU emulator where unavailable in FR=3D1 mode while leaving the =
+rest=20
+> to hardware.  That would make regular FR64 software work.
+>=20
+> I'd expect such a JIT to have other issues with pre-R2 hardware =
+though,=20
+> with missing machine instructions.  I had a similar situation a few =
+years=20
+> ago with FireFox's JIT making assumptions above the MIPS ISA level the=20=
 
-DWARF4 is enabled in .config [4] and the decoded stack trace [5] shows:
+> piece of software was itself compiled for and opted for just disabling =
+the=20
+> JIT, as fixing FireFox and rebuilding it would be more effort than it =
+was=20
+> worth in my view.
+>=20
+> This might be the best way for you to move forward too, and I'm all =
+but=20
+> enthusiastic about adding a workaround in the kernel for a broken =
+piece of=20
+> proprietary user software.  Sorry.
 
-  epc : __memset (/eng/dfustini/gitlab/linux/arch/riscv/lib/memset.S:67)
+Thanks for all those information. I was just entertaining by poking =
+around some
+old software blobs from Loongson so I=E2=80=99d give up upstreaming =
+those changes.
 
-From memset.S:
+My limited test works fine with this patch though.
 
- Line 67:         REG_S a1,        0(t0)
+- Jiaxun
 
-From the oops:
+>=20
+> Also I seem to remember there was a pitfall with running 32-bit =
+software=20
+> on pre-R2 hardware in the FR=3D1 mode, but maybe I'm making up things =
+here. =20
+> It's been so long since I last looked into this.
+>=20
+> In any case you do need to verify this somehow, like by running the =
+math=20
+> part of the glibc testsuite with o32 in the FR=3D1 mode on pre-R2 =
+hardware. =20
+> Running the GDB test suite to make sure ptrace(2) works fine with the =
+new=20
+> FPU configuration would make sense too.
+>=20
+>>> Currently all FPUs we support implement double and we require that, =
+so no=20
+>>> need to make this piece conditional (I would use IS_ENABLED =
+otherwise, so=20
+>>> as not to clutter the source with #ifdef), but `c->fpu_id' is also =
+exposed=20
+>>> to the user via ptrace(2), so this has to reflect hardware and not =
+give a=20
+>>> synthesized value.
+>>=20
+>> Alas, I thought R2030 class FPU does not have double? Since MIPS-IV =
+spec
+>> says SDC1 is introduced in MIPS II.
+>=20
+> There's no SDC1/LDC1, but the usual MIPS I FP machine instructions (of=20=
 
- epc : ffffffff81122d6c ra : ffffffff80218504 sp : ffffaf8002e47500
-  gp : ffffffff82695010 tp : ffffaf8002e2ec00 t0 : ffffaf8000000000
-  t1 : 0000000000000080 t2 : 0000000000000001 s0 : ffffaf8002e47550
-  s1 : ffff8d8200000040 a0 : ffffaf8000000000 a1 : 0000000000000000
+> which there are fewer than in MIPS II, e.g. there's no SQRT.fmt or =
+direct=20
+> conversions) do support the double format/encoding.  It's just that =
+double=20
+> FP data has to be transferred piecemeal; other supported operations =
+will=20
+> execute just fine.  Otherwise the existence of the odd-numbered FPRs =
+would=20
+> make no sense in the first place.
+>=20
+> Plain single floating-point units are extremely rare, e.g. the R4650 =
+has=20
+> one (it does support CP0.Status.FR though, for 32 singles), and we do =
+not=20
+> support them (e.g. the R4650 has a simple base-bounds MMU only, no =
+TLB). =20
+> Another one is the R5900, but its FPU is not an IEEE 754 device even.
+>=20
+>  Maciej
 
-Thus I think it is trying to store 0x0 to 0xffffaf8000000000 which is
-the start of the direct map. From the boot log [2], OpenSBI shows:
-
- Domain0 Region00 : 0x0000000002080000-0x00000000020bffff M: (I,R,W) S/U: ()
- Domain0 Region01 : 0x0000008000000000-0x000000800003ffff M: (R,W,X) S/U: ()
- Domain0 Region02 : 0x0000000002000000-0x000000000207ffff M: (I,R,W) S/U: ()
- Domain0 Region03 : 0x0000000000000000-0xffffffffffffffff M: (R,W,X) S/U: (R,W,X)
-
-The DDR memory on this SoC starts at 0x8000000000 with size 2GB. The
-memory node from the device tree [6]:
-
-        memory@8000000000 {
-                device_type = "memory";
-                reg = <0x80 0 0x00000000 0x80000000>;
-        };
-
-I think the direct map address 0xffffaf8000000000 would map to physical
-address 0x8000000000. Thus I think the attempted store in S-mode to that
-address would violate the PMP settings for Region01.
-
-I do not yet understand why this happens with 3335068f8721 ("riscv: Use
-PUD/P4D/PGD pages for the linear mapping") but not for the prior commit
-8589e346bbb6 ("riscv: Move the linear mapping creation in its own
-function").
-
-One important cavaet: I do have a small diff from mainline to add
-support for the eMMC controller in this SoC to sdhci-of-dwcmshc.c. The
-output of 'git diff' when 3335068f8721 is checked out [7] shows that
-this just adds a new compatible and corresponding sdhci_ops struct.
-Everything works ok with this change in both the 6.3 release and the
-commit prior to 3335068f8721.
-
-I know it is a bit awkward for me to report a boot failure for an
-internal SoC but I am hoping to find a better solution than just
-reverting this change in the downstream kernel.
-
-The reason that so few changes are needed to run Linux on this SoC is
-that there is a service processor that handles all the low-level tasks
-like setting up clocks and configuring various peripheral controllers.
-Everything is already setup and ready to go by the time the hart meant
-to run OpenSBI+Linux (fw_payload.bin) comes out of reset.
-
-Note: normally Linux runs on all four harts but I reduced to running on
-a single hart to simplify diagnosing this boot failure.
-
-Thanks,
-Drew
-
-[1] https://docs.kernel.org/riscv/vm-layout.html#risc-v-linux-kernel-sv48
-[2] boot log: https://gist.github.com/pdp7/afe78604f477c9e3a3cf0241bcdffcdb
-[3] init script: https://gist.github.com/pdp7/8d61bafbca55e987b790433c0353831d
-[4] linux .config: https://gist.github.com/pdp7/a4df66f1359a34194bddd32f74ab38a3
-[5] stacktrace: https://gist.github.com/pdp7/0524892ea319775ea70e43a54cc842a9
-[6] mysoc.dts: https://gist.github.com/pdp7/cd1b2e8e8d3f6047efd53e4ef65664da
-[7] git diff: https://gist.github.com/pdp7/581c9e8415da94a29d34ae6d7cc14669
