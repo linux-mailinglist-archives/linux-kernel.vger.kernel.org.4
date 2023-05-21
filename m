@@ -2,113 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58A0870ADCD
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 13:48:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB30170ADC7
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 13:48:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231436AbjEULsD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 07:48:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37072 "EHLO
+        id S229559AbjEULrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 07:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231548AbjEUKiV (ORCPT
+        with ESMTP id S231668AbjEUKkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 06:38:21 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6D7199E;
-        Sun, 21 May 2023 03:31:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1684665065; bh=OyPM9NsCxMx6I9tXXMiKqYnKHKcV0KAitdqe+nojJM8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=pXEYe5cTzBo5VbxQSbXyGzPY6WEbMcmPPd5OuFuDayxaVmH/S9WuwexVEHC4z66In
-         mFmrBb6Fh5U4VI1O9Xw5zx1By6kYpELq3XG9nSQGt+72Tjx0ql3L1cRFFAT4gGkrFT
-         4XSOnEPi4iZkw7fQM/o79gNg/zbLmWHy3xdR/dlQ=
-Received: from [100.100.57.122] (unknown [58.34.185.106])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 311D060132;
-        Sun, 21 May 2023 18:31:05 +0800 (CST)
-Message-ID: <a31415d5-ca4e-49fa-60d7-9cd53ba5a680@xen0n.name>
-Date:   Sun, 21 May 2023 18:31:04 +0800
+        Sun, 21 May 2023 06:40:21 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0751A8;
+        Sun, 21 May 2023 03:36:04 -0700 (PDT)
+Date:   Sun, 21 May 2023 12:36:01 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=t-8ch.de; s=mail;
+        t=1684665362; bh=DHkS6vR075WOjYryzPWplYp9E9UCb+89BMbbIW7FyiA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B4j6MrFveCJ/eL/P6OzEPwPxvEcIStVL2HPwsp65qDZTBbuEp8VMEP+fnMdzfZbf2
+         p9HOisqOhrsIQUphD72u//kAtFUBo21iub42AsIJuSvOwgng4FF31iLnDhIsqVsKjR
+         keVBHoPhVpG12mpW7Qa4Dht4CO5uXEHOGs6gjsak=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        llvm@lists.linux.dev
+Subject: Re: [PATCH 7/7] tools/nolibc: simplify stackprotector compiler flags
+Message-ID: <ccd8a189-0ca1-4462-8478-87b6c6ccb066@t-8ch.de>
+References: <20230521-nolibc-automatic-stack-protector-v1-0-dad6c80c51c1@weissschuh.net>
+ <20230521-nolibc-automatic-stack-protector-v1-7-dad6c80c51c1@weissschuh.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.1
-Subject: Re: [PATCH V1 2/4] irqchip/loongson-pch-pic: Fix potential incorrect
- hwirq assignment
-Content-Language: en-US
-To:     Jianmin Lv <lvjianmin@loongson.cn>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn,
-        Liu Peibao <liupeibao@loongson.cn>, stable@vger.kernel.org
-References: <20230520063818.27208-1-lvjianmin@loongson.cn>
- <20230520063818.27208-3-lvjianmin@loongson.cn>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <20230520063818.27208-3-lvjianmin@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230521-nolibc-automatic-stack-protector-v1-7-dad6c80c51c1@weissschuh.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/20 14:38, Jianmin Lv wrote:
-> From: Liu Peibao <liupeibao@loongson.cn>
+On 2023-05-21 11:36:35+0200, Thomas Weißschuh wrote:
+> Now that nolibc enable stackprotector support automatically when the
+> compiler enables it we only have to get the -fstack-protector flags
+> correct.
 > 
-> In DeviceTree path, when ht_vec_base is not zero, the hwirq of PCH PIC will
-> be assigned incorrectly. Because when pch_pic_domain_translate() adds the
-> ht_vec_base to hwirq, the hwirq dose not subtract the ht_vec_base when
-
-"does not have the ht_vec_base subtracted"?
-
-> calling irq_domain_set_info().
+> The cc-options are structured so that -fstack-protector-all is only
+> enabled if -mstack-protector=guard works, as that is the only mode
+> supported by nolibc.
 > 
-> The ht_vec_base is designed for the parent irq chip/domain of the PCH PIC.
-> It seems not proper to deal this in callbacks of the PCH PIC domain and
-> let's put this back like the initial commit ef8c01eb64ca ("irqchip: Add
-> Loongson PCH PIC controller").
-> 
-> Fixes: bcdd75c596c8 ("irqchip/loongson-pch-pic: Add ACPI init support")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
-> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
+> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 > ---
->   drivers/irqchip/irq-loongson-pch-pic.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+>  tools/testing/selftests/nolibc/Makefile | 13 ++-----------
+>  1 file changed, 2 insertions(+), 11 deletions(-)
 > 
-> diff --git a/drivers/irqchip/irq-loongson-pch-pic.c b/drivers/irqchip/irq-loongson-pch-pic.c
-> index 921c5c0190d1..93a71f66efeb 100644
-> --- a/drivers/irqchip/irq-loongson-pch-pic.c
-> +++ b/drivers/irqchip/irq-loongson-pch-pic.c
-> @@ -164,7 +164,7 @@ static int pch_pic_domain_translate(struct irq_domain *d,
->   		if (fwspec->param_count < 2)
->   			return -EINVAL;
->   
-> -		*hwirq = fwspec->param[0] + priv->ht_vec_base;
-> +		*hwirq = fwspec->param[0];
->   		*type = fwspec->param[1] & IRQ_TYPE_SENSE_MASK;
->   	} else {
->   		if (fwspec->param_count < 1)
-> @@ -196,7 +196,7 @@ static int pch_pic_alloc(struct irq_domain *domain, unsigned int virq,
->   
->   	parent_fwspec.fwnode = domain->parent->fwnode;
->   	parent_fwspec.param_count = 1;
-> -	parent_fwspec.param[0] = hwirq;
-> +	parent_fwspec.param[0] = hwirq + priv->ht_vec_base;
->   
->   	err = irq_domain_alloc_irqs_parent(domain, virq, 1, &parent_fwspec);
->   	if (err)
+> diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+> index bd41102ea299..445c352b1b33 100644
+> --- a/tools/testing/selftests/nolibc/Makefile
+> +++ b/tools/testing/selftests/nolibc/Makefile
+> @@ -76,20 +76,11 @@ else
+>  Q=@
+>  endif
+>  
+> -CFLAGS_STACKPROTECTOR = -DNOLIBC_STACKPROTECTOR \
+> -			$(call cc-option,-mstack-protector-guard=global) \
+> -			$(call cc-option,-fstack-protector-all)
+> -CFLAGS_STKP_i386 = $(CFLAGS_STACKPROTECTOR)
+> -CFLAGS_STKP_x86_64 = $(CFLAGS_STACKPROTECTOR)
+> -CFLAGS_STKP_x86 = $(CFLAGS_STACKPROTECTOR)
+> -CFLAGS_STKP_arm64 = $(CFLAGS_STACKPROTECTOR)
+> -CFLAGS_STKP_arm = $(CFLAGS_STACKPROTECTOR)
+> -CFLAGS_STKP_mips = $(CFLAGS_STACKPROTECTOR)
+> -CFLAGS_STKP_riscv = $(CFLAGS_STACKPROTECTOR)
+> -CFLAGS_STKP_loongarch = $(CFLAGS_STACKPROTECTOR)
+> +CFLAGS_STACKPROTECTOR = $(call cc-option,-mstack-protector-guard=global -fstack-protector-all)
+>  CFLAGS_s390 = -m64
+>  CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 \
+>  		$(call cc-option,-fno-stack-protector) \
+> +		$(call cc-option,-mstack-protector-guard=global $(call cc-option,-fstack-protector-all)) \
+>  		$(CFLAGS_STKP_$(ARCH)) $(CFLAGS_$(ARCH))
+>  LDFLAGS := -s
 
--- 
-WANG "xen0n" Xuerui
+I noticed, of course after having sent the series, that the cleanup here
+was not done properly.
 
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+CFLAGS_STACKPROTECTOR and CFLAGS_STKP should be deleted completely.
 
+This will be fixed in v2, or feel free to fix it up when applying the
+series.
