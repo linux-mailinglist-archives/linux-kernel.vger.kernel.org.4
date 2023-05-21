@@ -2,55 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E14270AC50
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 06:05:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B587570AC66
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 06:52:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbjEUEFI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 00:05:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57258 "EHLO
+        id S229707AbjEUEi6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 00:38:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbjEUEDf (ORCPT
+        with ESMTP id S229481AbjEUEi4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 00:03:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A59E4B;
-        Sat, 20 May 2023 21:03:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EBF7160C54;
-        Sun, 21 May 2023 04:03:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FDBAC433EF;
-        Sun, 21 May 2023 04:03:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684641782;
-        bh=tAL1e1CrhZKFhxrzTAaRdTpX97DGjoMXvtlZ/Guyg3E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qOmd4822YlstRkGzmOQeiQ6MujYbRy6GTSeaJm0vJuGIjwwfsAFPN7fcm7nB3w9Tr
-         2PZ7MZrpm0KiaGQ/pYdYNZxjJU1vbHLSbTowJJxyvKTNyQfWKYU3iOTHYM4072mZDv
-         bj4Wg/1wBXbGZgrvbGYfPyjxGDHUkrXFvBXOZWj8JvPMef380QKRcUFNCsEXi+OSb7
-         FfpHeVvguvXVPCrKhae2AHSWQiUMTMTlJH9SkKBB0EG5+2CsfoRZa50Y+OyaDRnW43
-         50+Yh/+vNOpx0ok9b5x75ez4NkvANWZTApj7P7Ic4z08YIXshyHtbtAB1bK+QDYjSM
-         ugwGA4TcJ05gg==
-Date:   Sat, 20 May 2023 23:02:59 -0500
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>
-Cc:     agross@kernel.org, konrad.dybcio@linaro.org,
-        linus.walleij@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        richardcochran@gmail.com, manivannan.sadhasivam@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH v3 0/3] Add pinctrl support for SDX75
-Message-ID: <7khdd4o2h2nwhopsziqdsjmbdfiehiax5mywbkrjr2fkzhcymz@4tastcouroqv>
-References: <1684425432-10072-1-git-send-email-quic_rohiagar@quicinc.com>
+        Sun, 21 May 2023 00:38:56 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F9F10A
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 21:38:55 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1q0aqD-0005hY-W3; Sun, 21 May 2023 06:38:46 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1q0aq9-0000RO-Na; Sun, 21 May 2023 06:38:41 +0200
+Date:   Sun, 21 May 2023 06:38:41 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Woojung Huh <woojung.huh@microchip.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Arun Ramadoss <arun.ramadoss@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
+        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
+        UNGLinuxDriver@microchip.com,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH net-next v4 1/2] net: dsa: microchip: ksz8: Make flow
+ control, speed, and duplex on CPU port configurable
+Message-ID: <20230521043841.GA22442@pengutronix.de>
+References: <20230519124700.635041-1-o.rempel@pengutronix.de>
+ <20230519124700.635041-2-o.rempel@pengutronix.de>
+ <20230519143004.luvz73jiyvnqxk4y@skbuf>
+ <20230519185015.GA18246@pengutronix.de>
+ <20230519203449.pc5vbfgbfc6rdo6i@skbuf>
+ <20230520050317.GC18246@pengutronix.de>
+ <20230520151708.24duenxufth4xsh5@skbuf>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1684425432-10072-1-git-send-email-quic_rohiagar@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230520151708.24duenxufth4xsh5@skbuf>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,46 +69,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 09:27:09PM +0530, Rohit Agarwal wrote:
-> Hi,
+On Sat, May 20, 2023 at 06:17:08PM +0300, Vladimir Oltean wrote:
+> On Sat, May 20, 2023 at 07:03:17AM +0200, Oleksij Rempel wrote:
+> > On Fri, May 19, 2023 at 11:34:49PM +0300, Vladimir Oltean wrote:
+> > > On Fri, May 19, 2023 at 08:50:15PM +0200, Oleksij Rempel wrote:
+> > > > Thank you for your feedback. I see your point. 
+> > > > 
+> > > > We need to remember that the KSZ switch series has different types of
+> > > > ports. Specifically, for the KSZ8 series, there's a unique port. This
+> > > > port is unique because it's the only one that can be configured with
+> > > > global registers, and it is only one supports tail tagging. This special
+> > > > port is already referenced in the driver by "dev->cpu_port", so I continued
+> > > > using it in my patch.
+> > > 
+> > > Ok, I understand, so for the KSZ8 family, the assumption about which
+> > > port will use tail tagging is baked into the hardware.
+> > > 
+> > > > It is important to note that while this port has an xMII interface, it
+> > > > is not the only port that could have an xMII interface. Therefore, using
+> > > > "dev->info->internal_phy" may not be the best way to identify this port,
+> > > > because there can be ports that are not global/cpu, have an xMII
+> > > > interface, but don't have an internal PHY.
+> > > 
+> > > Right, but since we're talking about phylink, the goal is to identify
+> > > the xMII ports, not the CPU ports... This is a particularly denatured
+> > > case because the xMII port is global and is also the CPU port.
+> > 
+> > I see. Do you have any suggestions for a better or more suitable
+> > implementation? I'm open to ideas.
 > 
-> Changes in v3:
->  - Addressing minor comments from Bhupesh related to reusing variable.
+> Trying to answer here for both questions. In the RFC/RFT patch set I had
+> posted, I introduced the concept of "wacky" registers, which are registers
+> which should be per port (and are accessed as per-port by the driver),
+> but because there is a single such port in the switch, the hardware
+> design degenerated into moving them in the global area. Nonetheless,
+> treating the xMII global registers as per-port makes it possible for the
+> common driver to share more code between KSZ8 and others.
 > 
-> Changes in v2:
->  - Added a patch for updating the maintainers entry for pinctrl bindings.
->  - Some formatting issue at the end of the driver change.
+> If you look at ksz9477_phylink_mac_link_up() - renamed to just
+> ksz_phylink_mac_link_up() in my patch set - hard enough, you can see
+> that it makes an attempt to generalize the "link up" procedure for all
+> switch families, via these regs and fields. At the end of that regfield
+> series, I theoretically converted KSZ8765/KSZ8794/KSZ8795 to reuse
+> ksz9477_phylink_mac_link_up(). Theoretically because no one commented
+> on whether the result still worked.
 > 
-> This patch series adds pinctrl bindings and tlmm support for SDX75.
-> 
-> The series is rebased on linux-next and based on all the review and
-> comments from different versions of [1].
-> 
-> [1] https://lore.kernel.org/linux-arm-msm/1681966915-15720-1-git-send-email-quic_rohiagar@quicinc.com/
+> I think that regfields and that KSZ_WACKY_REG_FIELD_8() are an avenue
+> worth exploring here.
 > 
 
-Reviewed-by: Bjorn Andersson <andersson@kernel.org>
+Looks good, I like the idea with "wacky" registers!
+
+Would you prefer that I start working on adapting your patch set to the
+KSZ8873? Or should I make a review to move forward the existing patch set?
+
+Just a heads up, I don't have access to the KSZ87xx series switches, so
+I won't be able to test the changes on these models.
+
+Let me know what you think and how we should proceed.
 
 Regards,
-Bjorn
-
-> Thanks,
-> Rohit.
-> 
-> Rohit Agarwal (3):
->   dt-bindings: pinctrl: qcom: Add SDX75 pinctrl devicetree compatible
->   MAINTAINERS: Update the entry for pinctrl maintainers
->   pinctrl: qcom: Add SDX75 pincontrol driver
-> 
->  .../bindings/pinctrl/qcom,sdx75-tlmm.yaml          |  137 +++
->  MAINTAINERS                                        |    2 +-
->  drivers/pinctrl/qcom/Kconfig                       |   30 +-
->  drivers/pinctrl/qcom/Makefile                      |    3 +-
->  drivers/pinctrl/qcom/pinctrl-sdx75.c               | 1144 ++++++++++++++++++++
->  5 files changed, 1304 insertions(+), 12 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/qcom,sdx75-tlmm.yaml
->  create mode 100644 drivers/pinctrl/qcom/pinctrl-sdx75.c
-> 
-> -- 
-> 2.7.4
-> 
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
