@@ -2,161 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D17370AC4E
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 06:04:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF82E70AC4F
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 06:05:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbjEUED7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 00:03:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57246 "EHLO
+        id S229992AbjEUEEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 00:04:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbjEUD7c (ORCPT
+        with ESMTP id S229488AbjEUECX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 23:59:32 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED6451A7;
-        Sat, 20 May 2023 20:58:41 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 34L3wDfn016942;
-        Sun, 21 May 2023 05:58:13 +0200
-Date:   Sun, 21 May 2023 05:58:13 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Zhangjin Wu <falcon@tinylab.org>
-Cc:     thomas@t-8ch.de, aou@eecs.berkeley.edu,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, shuah@kernel.org,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH] selftests/nolibc: Fix up compile error for rv32
-Message-ID: <ZGmW1YEUWASzEJ13@1wt.eu>
-References: <20230520140949.GA27611@1wt.eu>
- <20230520183022.35929-1-falcon@tinylab.org>
+        Sun, 21 May 2023 00:02:23 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C7ED103;
+        Sat, 20 May 2023 20:59:19 -0700 (PDT)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34L3lwbV020136;
+        Sat, 20 May 2023 20:58:37 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=s2048-2021-q4;
+ bh=krOn2oJrQESUkVNcIzn/LOJAf78dVPtsRL13NvHjc9Y=;
+ b=DK8/9YtvGIUOPdMU5koP3+c0jqJ0DkXomgkDjd3LYDVBAWeiKzb/sAJyV/V8HbzHgn/Q
+ DpFuhrrcxhnILToINWL2LCDhcUYKwjnxT5uUS3R3tRPH8ll23dlJVFLqqTq0hMK7KHJl
+ U86MKlndd1MeCiSBhver8GQZhcIl/qMyWg8SBUPIxIPkvExpM7o7SSDquw+HJhf5uYZm
+ Z3td346vcND+L5CYh0JRKOC39kIg6xj0/TcoMRTwqmhGgDFMvoKSDPCzriKIetmD+rTQ
+ nDmOdmGkFQ8HWbICpMTCk/nSaeiMhw/qKFYnWG1rGQwfTJKu5N1eZ/FCV2gquDffyBdW xg== 
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2169.outbound.protection.outlook.com [104.47.57.169])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qpuwqbpgv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 20 May 2023 20:58:36 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cjx2kAAXq/bKv9C60wk6j2MFhb3LLENAYPkHopfqeQl37HmkYapUCHQu6dju7DwCD/UuGH7+e5UXXCkBWzA5KOgMmG6igYjQkR7ro6l4ErxBp5BtsSnR28AqWonJtNIuvkeyHkXRIbh47fRRsm8uuhh1jvlifsEooDzziRrsC//auv/rA+qMsk3wgXVMT5m+Zh0Q8E6VhEi5tFNBu6Ix8hxwL5YEzKbJbcvmg1Tk0ar7VXd8yFrD7LK8NTxBHKD/YOTMFS33VY5Vq78NIAmgVGys69ZemIqpoCEpQTPBnZfcHwUbAzRSePqpsOLyaeARNE2U5d3nOO1XC1BLfzQ6Ag==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=krOn2oJrQESUkVNcIzn/LOJAf78dVPtsRL13NvHjc9Y=;
+ b=K8k8oVJBwjThfegtk/MkmBzqDBXVcOF7riOlW2bpSvbb1NnEFBMe+Bb+ohnslBSlqHKdMRq2f4VGdmuTg3X+FRgrka7Lh5HyYVKWMqoYtqOauYc+cuSNmUCVYhU85uWR1JcTWqzV0gx2djYJoaLjDxBqLbKqLPTHNzq9HAQfuheCUhmq7UfbRkbooAwYSp+q5yH5xprb+D7ZmfvrcStmwVVUJ2Z3b99rEAaDur7oLaaSF5Km56G2HECq46LWkg9hS/qIPH4ObRVejm0/k5KEJL13MIiDhLaANxvQmXRGkKUQNxHDXpBGclq+dVxdbfRIK3gUYejHPSda2T+4aoQPeQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by DM6PR15MB3912.namprd15.prod.outlook.com (2603:10b6:5:2ba::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.27; Sun, 21 May
+ 2023 03:58:31 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::589f:9230:518:7f53]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::589f:9230:518:7f53%7]) with mapi id 15.20.6411.027; Sun, 21 May 2023
+ 03:58:31 +0000
+Message-ID: <b4f66729-90ab-080a-51ec-bf435ad6199d@meta.com>
+Date:   Sat, 20 May 2023 20:58:25 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.1
+Subject: Re:
+Content-Language: en-US
+To:     Ze Gao <zegao2021@gmail.com>, jolsa@kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hao Luo <haoluo@google.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Song Liu <song@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        kafai@fb.com, kpsingh@chromium.org, netdev@vger.kernel.org,
+        paulmck@kernel.org, songliubraving@fb.com,
+        Ze Gao <zegao@tencent.com>
+References: <20220515203653.4039075-1-jolsa@kernel.org>
+ <20230520094722.5393-1-zegao@tencent.com>
+From:   Yonghong Song <yhs@meta.com>
+In-Reply-To: <20230520094722.5393-1-zegao@tencent.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR13CA0233.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c1::28) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230520183022.35929-1-falcon@tinylab.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|DM6PR15MB3912:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1a0e4438-c3a5-4b86-aa3d-08db59afa416
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: GXq90qkSZsjyUZkkibT5QmBP59O4aIJUKXjNxmHqBxyvzTO3cFqCRPSteG7Boryf4JuMgMxD0doe0+MRg+e9NuZVVDMtc/4qPa9BVfuUv3a+jTF92XmqnFn3n7frMBpuDbXDRpRP3+sSbNrlVM/8T5QT7Uy8JRd1WQ35WdwXJVuS+2uLYdp3YyNLS6jJWgdtW2Cp8buUtnZAATQA7VHZcrbVDMU4Sjsi24Yo+OLFJ2Pn5VcIwiPmIfpH4WiXqpisbV1nMsDOtc/P7FVjm4SBO6jhylGifeJOPDajDwNcU8m62obT8AS8fe/5cHXJzSPdgL7W3q7PSOMuP0cLdR71X1y9N3dhuigRgNxozIgJ4QHU4WcHYqzxVmHH3ZskH1FBHTOrjqiMZACXBjEJtcPPKlhpjEArMOf+a5D5ysESwQODISwnYsPuoTlz7/l3v3NKu5tkvy5Xhp6VVTxyyyR0uXZhJtf4rqxKPTJ+lwOOiHUCyLJzxPy4cJOt3av9ohPqp8Nk8jvTH8ly3J36tqBr+aVciOMMujm1ChUiohNTPWT3nhY+3G5YsAbu3tEYJujXSMxTOICG0huyF5zSmn6QMuIxo4S6fBYUTOEoFKuCfETtUQUYWu1RJjCwMJIo7iTWHLtE5YUy1dE/nJ/+1zFfyQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(396003)(346002)(366004)(39860400002)(451199021)(8936002)(8676002)(5660300002)(7116003)(7416002)(83380400001)(3480700007)(53546011)(186003)(6512007)(6506007)(2616005)(31696002)(86362001)(38100700002)(41300700001)(6666004)(6486002)(478600001)(66476007)(66556008)(66946007)(4326008)(316002)(36756003)(54906003)(2906002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OTdpdk10SENHSTFoS2NHbTRtb2ZwQys5QnVCVUZMS3RHS2ZPaVZoV21uUDV1?=
+ =?utf-8?B?cGljUFF1eWUweGIzN0xodlBDdmVianFBWWlmODRaUVYzV2pTNWRVVnBUakFs?=
+ =?utf-8?B?TW9qenB6OFQ3alIwVTlQS0xWYmZIWUUwK0VoQkFHMGNxbmpjYTVwbEhmZWRw?=
+ =?utf-8?B?UGdvb1oyTmN1aFdOc3J2OVB4UHU4a0x3d1o2dnZRYmVLWm9IbWJNam9XNm1w?=
+ =?utf-8?B?RVhJVUpmbXA3QytucGk3dzFObnFVZWVDRmIyNFYzWlV1TzZqMUVoZm5GR0pI?=
+ =?utf-8?B?NlFjNGgvUjF4NUFuWS9CWkY1VTNTVytpakh5QjhmL2EvcEYzMjJUNEc5V2tI?=
+ =?utf-8?B?ZmNBMnE2Sk1TMG5zM3d1bDBra3plY2FiV0k5a2hyZmZtOHVKWVd6Z3hBN1lC?=
+ =?utf-8?B?NC9oR29UNkgrTFZ1Y05GU1pXblZ5aXdTMzIyYzk2UGlnd1RRUEphY04wTDAr?=
+ =?utf-8?B?SkNjVTRuSVlINHIzVHAzUWR3QzFORW1RcStJamlXTWJiYS9TWTJFTktjZENN?=
+ =?utf-8?B?NThOVEwvWVNPR3dNaHdldXltditrRENKUGU2Si90RTEyWnlESUtrczFXQysx?=
+ =?utf-8?B?Ty8yeC9Dd2dadFBuRE9WdU4ycFJtNVJieUNTMTlRcGRBaU9TVWVpUk1LNUZi?=
+ =?utf-8?B?ekFUR0ozOWw4ZzdBMTI1bEhiT2xSWGp1WVkzQWVxbUlna1h4c0Fzdi9KTXUw?=
+ =?utf-8?B?SU9XR2dKcUthQmpaaUdaS1habURKelMrRVEySEkzQzVqS0tFdXozcnlmYVhL?=
+ =?utf-8?B?SUhjWlI2RklGd1NnWHdsYXBkdVdESy9kVDhvWm8wbVdpQmR0UHl3ZDFneks1?=
+ =?utf-8?B?bXlUcGNwNmdTTkt0N2pLNnRKM0wyNnJMdjVOUGxocWtMQXpWeDVqb0o3YytM?=
+ =?utf-8?B?ZThHWjJKNjBFLzd3dXNYM2hzMGRWRDN3ZDFpNlJ5RFZLNEZnbWZFQklrZ0Y0?=
+ =?utf-8?B?SlRNK2pad1gvM3FRSFd6MTN3cnFKVVZBak9leE51TDBzZFd4eVVoU1ArZnA4?=
+ =?utf-8?B?NUp0TmtjeGNsMmlNbGRSVGZFVjRmbnRNajJrWXlnT2M1MjNrb2xHazNFbWVk?=
+ =?utf-8?B?N21LUGYreE53bks0OG9VR0xWUllENUVBSFhSTjZmYjJJaWRkMFdiSjVsSVV4?=
+ =?utf-8?B?SUFkVytYTHJ2NWlheDRRZHZoUm84VHFTeHJvMFZOZWlXMVBFNlBUcGNPcEtn?=
+ =?utf-8?B?eW4xQVdMOXRzVi9vUTN4c1VGV2tMczZNay95ZFgvOUJxUGJsYXdncVdEMm9y?=
+ =?utf-8?B?Z1lyalpTRFU5TDZuVXF5OFZpZ0x1YXFJQVdNZGJ5V2IvS0g3YlRNa2tHUTF5?=
+ =?utf-8?B?VXZvWUNwaTVPSHlxSUZkUVJCMFlLdmZhc0RvT0k0YVJzTjEzLzRzNWdjSERW?=
+ =?utf-8?B?Q3BSZk1JZWVqekttYkNRaXU4WGwwSWhsOE1PNlpoSWZtVWc5bXF6OVVSQXVs?=
+ =?utf-8?B?Nmk2K0psbEE3OFdjYUFzR3E4ZVg4b1RZMmdHcXozU2YyQnFZeERjVzdZQk9U?=
+ =?utf-8?B?RVdhVmd5eFpMNGdCMHZnS3lKK3h0YkVTTzN2NFdOa3M1SDhFU29UM2lvU3lC?=
+ =?utf-8?B?bnRuZlNDOWdZWmowRzZLczYrVGhyTUIxVmJWalJjUStCREZldndYNngxRHZF?=
+ =?utf-8?B?TnVDYi9oVzJyQ2V0bW9RWGY1MSthWlFEbFJvMm9lZlpDWHBIRjF6VzB0VFpY?=
+ =?utf-8?B?WjUzZ3Vhbm9WWDAyNVhKTE1KbzNpUWdpQWcxb3Zlbjh3U3F4akcwdndMS0RY?=
+ =?utf-8?B?QWtaWDZzL1JRM3NqRTNScFFqWXlkbmtuQ1Zkaml1Z1ZibE1hSXo0bTIzUXY0?=
+ =?utf-8?B?SUdZTmp2U2dVc1NwWTdPbDcrMm95cmtkdUZrcHBhOE05WEJHNkZrMmtKeWhw?=
+ =?utf-8?B?OU4vUEFaT1FhYWs4R3dTQjNEdEhSZDlHbUd5OHgzY0hRK0IvV292TU94ZEl2?=
+ =?utf-8?B?clV4cmVENE1WWjcvdVJxNGh5dXZtSk5sVE4yZDNyb0lMcTdQanlFZGlFcGNY?=
+ =?utf-8?B?dHdMR0hRSElhMmdlZ3BqekZWekVYU0JvL0RVVnF1NVZjOWtaVjBvbEhuOTlv?=
+ =?utf-8?B?eFAvZkFkUmlXTmYzd2pSMDRVWUQvLzJaVHdYM1RiYUR4NmtRbk1sSm9oOCth?=
+ =?utf-8?B?YVZ3YUpxU2tlVEFPWm5RMXgzVDJxbGdDdGdnemVCZVJHZVBxTG1Qdk5XNmh4?=
+ =?utf-8?B?SlE9PQ==?=
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1a0e4438-c3a5-4b86-aa3d-08db59afa416
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 May 2023 03:58:31.1530
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YGw3PU7CgxNYG151VBjH0UfkHHq3hkAjhOFUnzjSfJZMdrEFREQm/xFBUnEYHZ9O
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR15MB3912
+X-Proofpoint-ORIG-GUID: SYnOvrOtduPz7Lulv5jIEqEXjk1szRyy
+X-Proofpoint-GUID: SYnOvrOtduPz7Lulv5jIEqEXjk1szRyy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-21_01,2023-05-17_02,2023-02-09_01
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 21, 2023 at 02:30:22AM +0800, Zhangjin Wu wrote:
-> > > The goal of this second test was to make sure that arguments are passed
-> > > in the correct order. For this I tried to have a syscall were the
-> > > checked error is generated from a non-first argument.
-> > > (The NULL generating the EFAULT).
-> > > So the new check does not fullfil this goal anymore.
-> > 
-> > Ah OK good to know.
-> >
+
+
+On 5/20/23 2:47 AM, Ze Gao wrote:
 > 
-> does this meet the requirement? the 3rd argument shouldn't < 0, otherwise, there is an EFAULT. 
+> Hi Jiri,
 > 
->     CASE_TEST(syscall_args);      EXPECT_SYSER(1, syscall(__NR_read, 1, &tmp, -1), -1, EFAULT); break;
+> Would you like to consider to add rcu_is_watching check in
+> to solve this from the viewpoint of kprobe_multi_link_prog_run
+> itself? And accounting of missed runs can be added as well
+> to imporve observability.
 > 
-> It get such test result:
+> Regards,
+> Ze
 > 
->     70 syscall_args = -1 EFAULT                                      [OK]
-
-I think what Thomas meant is that he wants to be sure the call doesn't
-end up as read(-1, &tmp, 1). Here you could have -EBADF or -EFAULT, it
-depends. Anyway other solutions can be found if necessary. Another
-approach could be to switch back to __NR_fstat and condition it to its
-definition.
-
-> > > Maybe we can find a new syscall to test with?
-> > 
-> > Maybe it would be worth considering pselect() or equivalent which
-> > involve many arguments. I don't know if rv32 has fstatat() or
-> > lstat() for example, that could be used as alternatives ?
-> >
 > 
-> Unfortuantely, none of them is available in rv32, we have the same tricks you used in another reply:
+> -----------------
+>  From 29fd3cd713e65461325c2703cf5246a6fae5d4fe Mon Sep 17 00:00:00 2001
+> From: Ze Gao <zegao@tencent.com>
+> Date: Sat, 20 May 2023 17:32:05 +0800
+> Subject: [PATCH] bpf: kprobe_multi runs bpf progs only when rcu_is_watching
 > 
->     $ echo "#include <asm/unistd.h>" | \
->         riscv64-linux-gnu-gcc -march=rv32im -mabi=ilp32 -Wl,-melf32lriscv_ilp32 -xc - -E -dM | \
->         grep -E "pselect|fstat|lstat"
->     #define __NR_pselect6_time64 413
->     #define __NR3264_fstatfs 44
->     #define __NR_fstatfs64 __NR3264_fstatfs
+>  From the perspective of kprobe_multi_link_prog_run, any traceable
+> functions can be attached while bpf progs need specical care and
+> ought to be under rcu protection. To solve the likely rcu lockdep
+> warns once for good, when (future) functions in idle path were
+> attached accidentally, we better paying some cost to check at least
+> in kernel-side, and return when rcu is not watching, which helps
+> to avoid any unpredictable results.
 
-Then probably fstatfs should work equally for this test.
+kprobe_multi/fprobe share the same set of attachments with fentry.
+Currently, fentry does not filter with !rcu_is_watching, maybe
+because this is an extreme corner case. Not sure whether it is
+worthwhile or not.
 
-> Or, use the rv32 test result as a crude reference:
-(... trimmed to keep only the failed ones ...)
+Maybe if you can give a concrete example (e.g., attachment point)
+with current code base to show what the issue you encountered and
+it will make it easier to judge whether adding !rcu_is_watching()
+is necessary or not.
+
 > 
->     15 chmod_net = -1 ENOENT                                        [FAIL]
->     16 chmod_self = -1 ENOENT  != (-1 EPERM)                        [FAIL]
->     17 chown_self = -1 ENOENT  != (-1 EPERM)                        [FAIL]
->     20 chroot_exe = -1 ENOENT  != (-1 ENOTDIR)                      [FAIL]
->     30 fork = 1 ENOSYS                                              [FAIL]
->     33 gettimeofday_null = -1 ENOSYS                                [FAIL]
->     35 gettimeofday_bad1 = -1 ENOSYS  != (-1 EFAULT)                [FAIL]
->     36 gettimeofday_bad2 = -1 ENOSYS  != (-1 EFAULT)                [FAIL]
->     37 gettimeofday_bad2 = -1 ENOSYS  != (-1 EFAULT)                [FAIL]
->     45 link_cross = -1 ENOENT  != (-1 EXDEV)                        [FAIL]
->     51 poll_null = -1 ENOSYS                                        [FAIL]
->     52 poll_stdout = -1 ENOSYS                                      [FAIL]
->     53 poll_fault = -1 ENOSYS  != (-1 EFAULT)                       [FAIL]
->     56 select_null = -1 ENOSYS                                      [FAIL]
->     57 select_stdout = -1 ENOSYS                                    [FAIL]
->     58 select_fault = -1 ENOSYS  != (-1 EFAULT)                     [FAIL]
->     64 wait_child = -1 ENOSYS  != (-1 ECHILD)                       [FAIL]
->     65 waitpid_min = -1 ENOSYS  != (-1 ESRCH)                       [FAIL]
->     66 waitpid_child = -1 ENOSYS  != (-1 ECHILD)                    [FAIL]
->     Errors during this test: 19
-
-So that's a lot of failures and we should start to blindly degrade other
-tests just for the sake of fixing these ones here, it should be done more
-carefully.
-
-> As my latest reply here [1] explains, this error is not really rv32 specific,
-> all of the time32 based syscalls and even the other 32bit syscalls have been
-> disabled by default for new architectures (add the author of commit
-> "c8ce48f06503" in the cc list), rv32 here is a very good test case for such
-> trend.
-
-I'm fine with going in that direction if that's the future, and using
-rv32 as a guide towards this. *BUT* it doesn't mean we have to break
-the rest that currently works on existing platforms and is currently
-used by various programs. Maybe it means that some of these tests
-should be grouped together into a time32_syscall category that's only
-tested when __ARCH_WANT_TIME32_SYSCALLS is defined. It would also help
-figure what is wrong for some of them. For example chmod/chown/link above
-seem to indicate that /proc is not mounted in your test config, not that
-the syscalls are not supported. This it seems to me that on this platform
-we should still see these syscalls fail and the other ones not executed.
-
-Another approach would be to just group them for easier detection of
-the __ARCH_WANT_TIME32_SYSCALLS vs other ones, but not disable them, so
-that we can watch the progress made on supporting the mapping of these
-ones on new syscalls instead.
-
-And for the one that you changed from __NR_stat to __NR_read, I'm
-proposing that either we find another one that works everywhere, or
-that we just revert the change and guard it under an ifdef, because
-having a direct reference to a syscall number requires that it exists
-and I agree that we must not break the build in such a case.
-
-My preference for the short term would be the following:
-  1) make sure we fix build issues for all platforms, including rv32
-  2) make sure Thomas' work on syscall() and STKP works fine where it
-     should, as it used to till now on other platforms
-
-  => this should be added to the 6.5 queue, and for this I don't want
-     to make this series regress as it should be queued quickly so that
-     test code used by other developers working on 6.5 is reasonably
-     stabilized.
-
-  3) evaluate what needs to be done regarding time32, this implies
-     working in the lower abstraction layers to depend on
-     __ARCH_WANT_TIME32_SYSCALLS and use the new syscalls instead.
-
-  => I don't know how much work it requires; if it's trivial this
-     could possibly be for 6.5, otherwise it will have to be postponed.
-
-Thanks,
-Willy
+> Signed-off-by: Ze Gao <zegao@tencent.com>
+> ---
+>   kernel/trace/bpf_trace.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> index 9a050e36dc6c..3e6ea7274765 100644
+> --- a/kernel/trace/bpf_trace.c
+> +++ b/kernel/trace/bpf_trace.c
+> @@ -2622,7 +2622,7 @@ kprobe_multi_link_prog_run(struct bpf_kprobe_multi_link *link,
+>   	struct bpf_run_ctx *old_run_ctx;
+>   	int err;
+>   
+> -	if (unlikely(__this_cpu_inc_return(bpf_prog_active) != 1)) {
+> +	if (unlikely(__this_cpu_inc_return(bpf_prog_active) != 1 || !rcu_is_watching())) {
+>   		err = 0;
+>   		goto out;
+>   	}
