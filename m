@@ -2,140 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2496C70AEAF
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 17:51:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DFE870AEB1
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 17:51:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229490AbjEUPvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 11:51:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53258 "EHLO
+        id S230131AbjEUPvt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 11:51:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbjEUPvo (ORCPT
+        with ESMTP id S229664AbjEUPvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 11:51:44 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31CC1E4;
-        Sun, 21 May 2023 08:51:42 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34LFmJBj020316;
-        Sun, 21 May 2023 15:51:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=ljMuxPaCpT5wa5tNE10UNsmBcvn2Lm9qekfcG5KgMlI=;
- b=g8lFVyci3fIdPnqlnfQ4QWWDaQC1F5RnFcjH4sJFBfEZVxd4jJ2zVV87ECXm1Ja34/Hc
- 7yOt67S9oq/1Lvk1tpI7vwf6uwABVe8MbWlgg0j/thCPDMaWNS1X3/ySD/6qBUW5WxlB
- eQhmKavGeAo5TJBPJ5V4+yBHZWRB/PLl/scyqSVCTJdib/4M3IumQS6QYnMX1n6ZGsE5
- uAvPA93xyF2w+UUVJwHf2XMvwu+mb/hUrut21T8UMe+UUxL7LYa/KIz338rO2IzSsRDf
- aJw09WS3aztB5cTCZqdj+uQWJj3FcOmfaw5bBnl/6P2BU/C2WhtNBLp6rm29Cv6Uel8W lQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qpkjuj5c7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 21 May 2023 15:51:38 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34LFpalh010803
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 21 May 2023 15:51:36 GMT
-Received: from [10.216.45.27] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Sun, 21 May
- 2023 08:51:28 -0700
-Message-ID: <4dc3dbe4-e560-0dae-bb25-69782df78cf1@quicinc.com>
-Date:   Sun, 21 May 2023 21:21:25 +0530
+        Sun, 21 May 2023 11:51:46 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72B18E4;
+        Sun, 21 May 2023 08:51:45 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2af225e5b4bso32008951fa.3;
+        Sun, 21 May 2023 08:51:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684684303; x=1687276303;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=pH3nQjsrCHG2TEDAKhl31UrwoK3q+tYKSVtPhhbX+gk=;
+        b=RXcAlAd3jAO5nHXwihNAto5sNJVGe93FSGzBYot9c7g3Nsc2X6A2hYvNglAcr9QCT3
+         jR78ugq+rpFSvliJeCrRoDZ1ug03MxR8GvrtIi/FnAt2RMOuNl/lJw6pEzM00kcB7Yfl
+         JoMcGJD+HaMpy1dU1EiBWUcUHSPJrd0YDjR8zsV1i1YJfE83+oK/HeucBBVVJjparFjw
+         glOgt+YbB58QqfniTVbz9Ew5ebTXePpfdzKLO/MipZ0Lza700LNuR198A4sJYT2SOM8U
+         sbDIr/1ZBPZ4bBDFvJTBJN8e364y3goRBoz3Gh+hsaps7jE9pSd5rLOE2xU5jJ8x1e9j
+         o1uA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684684303; x=1687276303;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pH3nQjsrCHG2TEDAKhl31UrwoK3q+tYKSVtPhhbX+gk=;
+        b=LR09i923IFS9xUH5RIVRufDej9bh0esIBk1CHJm4H4aCHLhOWqtaKW1MxmnHnwF/ER
+         NoYf7t28sYciM3vZ43YOvs2Y7ZJXc9OIP1i/5f4MYcg0PZiL96+Rch4k1I6QV4II+hnu
+         owP8qxiWvx81Lof896XE7RdxJlsDbVe7CFOz55hFWatVutsBABE8uahdbBxr3+sHr+/9
+         9owbxWMWt8TLVXlSYrIcjtVBmXyS3RtIlubwO+sx042W1gi10adzu8nMy/vvBJMNX1Ud
+         pXDvwl95qfJ/6vI7S0Lx/0qx3KwzyiR5Z91Wg4mf0lTsnWiIrWpi5TSg4iMvw+D3dIcx
+         K2rw==
+X-Gm-Message-State: AC+VfDwgP663h8kNa3igcBcNq1euIzl0epJHGgsJ6Wbom+ohcTMWJgMX
+        t+7F/7j1l79HxY6e3hPMqcYas41lhex4eDxfG9chPD/DoeU=
+X-Google-Smtp-Source: ACHHUZ471hzqlzDIkTUzLeRUfQR6YpdE4zP6axlFe76wx/QP44e+hX/JvrdM2r8xSGg0tFKuQauYbamMLKaPNoqAoj0=
+X-Received: by 2002:a2e:8713:0:b0:2a8:a6a5:e26e with SMTP id
+ m19-20020a2e8713000000b002a8a6a5e26emr3101926lji.20.1684684303375; Sun, 21
+ May 2023 08:51:43 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH 05/11] dt-bindings: clock: qcom: gcc-ipq9574: Add Q6 gcc
- clock control
-Content-Language: en-US
-From:   Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <jassisinghbrar@gmail.com>,
-        <mathieu.poirier@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <quic_gurus@quicinc.com>,
-        <loic.poulain@linaro.org>, <quic_eberman@quicinc.com>,
-        <robimarko@gmail.com>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>, <linux-clk@vger.kernel.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_poovendh@quicinc.com>
-References: <1678164097-13247-1-git-send-email-quic_mmanikan@quicinc.com>
- <1678164097-13247-6-git-send-email-quic_mmanikan@quicinc.com>
- <95c57098-aa37-a203-2ed3-f36449abefea@linaro.org>
- <3d876a44-0145-09b8-0722-80f57d6c96ac@quicinc.com>
-In-Reply-To: <3d876a44-0145-09b8-0722-80f57d6c96ac@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: xaZDKvE2tSgsYPIiehCiu6PhZgjTd1jT
-X-Proofpoint-ORIG-GUID: xaZDKvE2tSgsYPIiehCiu6PhZgjTd1jT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-21_11,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
- lowpriorityscore=0 malwarescore=0 mlxscore=0 suspectscore=0
- mlxlogscore=889 priorityscore=1501 adultscore=0 impostorscore=0
- phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305210140
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230309194402.119562-1-tmaimon77@gmail.com> <20230309194402.119562-2-tmaimon77@gmail.com>
+ <495fcc93ab28ff8949569ededee954c1.sboyd@kernel.org> <CAP6Zq1hOHJWQSmGoVDz5bSjwdhNyQmaZVOEE8_dX6S4HCFQ2Jg@mail.gmail.com>
+ <099514a84f97c694d2382812b03aad1e.sboyd@kernel.org>
+In-Reply-To: <099514a84f97c694d2382812b03aad1e.sboyd@kernel.org>
+From:   Tomer Maimon <tmaimon77@gmail.com>
+Date:   Sun, 21 May 2023 18:51:32 +0300
+Message-ID: <CAP6Zq1gSuaHruFaBgdBevsWDrQ4U6eTV+YN3ebFH6r2YbEbh+g@mail.gmail.com>
+Subject: Re: [PATCH v15 1/1] clk: npcm8xx: add clock controller
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     avifishman70@gmail.com, benjaminfair@google.com, joel@jms.id.au,
+        mturquette@baylibre.com, tali.perry1@gmail.com, venture@google.com,
+        yuenn@google.com, openbmc@lists.ozlabs.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Stephen,
 
+Sorry for the late reply and thanks a lot for your clarifications.
 
-On 5/8/2023 7:59 PM, Manikanta Mylavarapu wrote:
-> 
-> 
-> On 3/7/2023 8:49 PM, Krzysztof Kozlowski wrote:
->> On 07/03/2023 05:41, Manikanta Mylavarapu wrote:
->>> Add support for the QDSP6 gcc clock control used on IPQ9574
->>> based devices. This would allow mpd remoteproc driver to control
->>> the required gcc clocks to bring the subsystem out of reset.
->>>
->>> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
->>> ---
->>>   include/dt-bindings/clock/qcom,ipq9574-gcc.h | 159 ++++++++++---------
->>>   1 file changed, 83 insertions(+), 76 deletions(-)
->>>
->>> diff --git a/include/dt-bindings/clock/qcom,ipq9574-gcc.h 
->>> b/include/dt-bindings/clock/qcom,ipq9574-gcc.h
->>> index c89e96d568c6..8bd6350ecd56 100644
->>> --- a/include/dt-bindings/clock/qcom,ipq9574-gcc.h
->>> +++ b/include/dt-bindings/clock/qcom,ipq9574-gcc.h
->>> @@ -138,80 +138,87 @@
->>>   #define WCSS_AHB_CLK_SRC                129
->>>   #define GCC_Q6_AHB_CLK                    130
->>>   #define GCC_Q6_AHB_S_CLK                131
->>> -#define GCC_WCSS_ECAHB_CLK                132
->>> -#define GCC_WCSS_ACMT_CLK                133
->>
->> That's an ABI break, if file was accepted. Or a very weird change
->> anyway, if it wasn't (why adding entry and immediately changing it?).
->>
->> Best regards,
->> Krzysztof
->>
-> 
-> I will add new macros at the end instead in middle.
-> 
-> Thanks & Regards,
-> Manikanta.
+I have sent today V16 with some changes according to your comments.
 
-Clocks in multipd architecture will be handled by QDSP6 firmware.
-So i am going to remove clock macros and drop this patch.
+On Wed, 5 Apr 2023 at 22:09, Stephen Boyd <sboyd@kernel.org> wrote:
+>
+> Quoting Tomer Maimon (2023-03-31 11:07:19)
+> > On Mon, 20 Mar 2023 at 21:50, Stephen Boyd <sboyd@kernel.org> wrote:
+> > >
+> > > Quoting Tomer Maimon (2023-03-09 11:44:02)
+> > > > diff --git a/drivers/clk/clk-npcm8xx.c b/drivers/clk/clk-npcm8xx.c
+> > > > new file mode 100644
+> > > > index 000000000000..67058f121251
+> > > > --- /dev/null
+> > > > +++ b/drivers/clk/clk-npcm8xx.c
+> > > > +       { NPCM8XX_CLK_S_PLL0, { .name = NPCM8XX_CLK_S_REFCLK }, NPCM8XX_PLLCON0, 0 },
+> > > > +       { NPCM8XX_CLK_S_PLL1, { .name = NPCM8XX_CLK_S_REFCLK }, NPCM8XX_PLLCON1, 0 },
+> > > > +       { NPCM8XX_CLK_S_PLL2, { .name = NPCM8XX_CLK_S_REFCLK }, NPCM8XX_PLLCON2, 0 },
+> > > > +       { NPCM8XX_CLK_S_PLL_GFX, { .name = NPCM8XX_CLK_S_REFCLK }, NPCM8XX_PLLCONG, 0 },
+> > > > +};
+> > > > +
+> > > > +static const u32 cpuck_mux_table[] = { 0, 1, 2, 7 };
+> > > > +static const struct clk_parent_data cpuck_mux_parents[] = {
+> > > > +       { .fw_name = NPCM8XX_CLK_S_PLL0, .name = NPCM8XX_CLK_S_PLL0 },
+> > >
+> > > You should only have .fw_name or .index when introducing new drivers.
+> > > The .name field is for existing drivers that want to migrate to
+> > > clk_parent_data.
+> > I thought using .name was done when the clock defines in the DT, like
+> > the ref clock.
+> > If the other clocks are not defined both .fw_name and .name the clocks
+> > are not registered properly.
+>
+> Are you saying that having .name fixes it?
+>
+> > >
+> > > > +       { .fw_name = NPCM8XX_CLK_S_PLL1, .name = NPCM8XX_CLK_S_PLL1 },
+> > > > +       { .name = NPCM8XX_CLK_S_REFCLK },
+> > >
+> > > Note, this line says to use '.index = 0', and .name will be ignored.
+> > > Maybe just use the index for everything? That makes it simpler and
+> > > potentially faster because we don't have to do string comparisons
+> > > anywhere.
+> > Should the clk_parent_data mux use only .index? if yes how should the
+> > clock tree have a connection between the parent's clock and the mux
+> > for example:
+> > for example, how should the driver connect between
+> > NPCM8XX_CLK_S_PLL1_DIV2 and the index number in the clk_parent_data?
+>
+> It's not required, but it makes things simpler to only use .index or
+> direct clk_hw pointers (.hw). I'm working on a clk documentation
+> overhaul series right now, about 4 years later than I should have done
+> it. It will cover this.
+>
+> The .index field corresponds to the cell index in your devicetree
+> 'clocks' property of the clk provider (the node with #clock-cells
+> property). If the clk is internal, just use a .hw member and point to it
+> directly. Don't consume your own clks in DT. If NPCM8XX_CLK_S_PLL1_DIV2
+> is a clk provided/registered by this device then it should be pointed to
+> directly with the clk_hw pointer. If NPCM8XX_CLK_S_PLL1_DIV2 is an
+> external clk that is consumed via the 'clocks' property in DT, then it
+> should be specified as a parent via the .index member.
+>
+> > > > +
+> > > > +static int npcm8xx_clk_probe(struct platform_device *pdev)
+> > > > +{
+> > > > +       struct clk_hw_onecell_data *npcm8xx_clk_data;
+> > > > +       struct device *dev = &pdev->dev;
+> > > > +       void __iomem *clk_base;
+> > > > +       struct resource *res;
+> > > > +       struct clk_hw *hw;
+> > > > +       unsigned int i;
+> > > > +       int err;
+> > > > +
+> > > > +       npcm8xx_clk_data = devm_kzalloc(dev, struct_size(npcm8xx_clk_data, hws,
+> > > > +                                                        NPCM8XX_NUM_CLOCKS),
+> > > > +                                       GFP_KERNEL);
+> > > > +       if (!npcm8xx_clk_data)
+> > > > +               return -ENOMEM;
+> > > > +
+> > > > +       res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> > > > +       clk_base = devm_ioremap(dev, res->start, resource_size(res));
+> > >
+> > > Can you use devm_platform_ioremap_resource() instead?
+> > We should use devm_ioremap since the clock register is used for the
+> > reset driver as well.
+>
+We using the same ioremap sequence in npcm7xx clock driver since the
+clock and reset share the same register region.
+res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+clk_base = devm_ioremap(dev, res->start, resource_size(res));
+https://elixir.bootlin.com/linux/v6.4-rc1/source/drivers/clk/clk-npcm7xx.c#L413
+Why we cannot use it in the NPCM8XX clock driver?
 
-Thanks & Regards,
-Manikanta.
+> Are the clk and reset drivers sharing the register range? If so, please
+> use auxiliary bus to register the reset driver, and map the register
+> region once in the driver that registers the auxiliary device. Pass the
+> iomem pointer to the auxiliary device.
+
+Sorry, but I didn't understand what you mean by using the auxiliary
+bus to register the reset driver do you have an example of how it
+should be done?
+
+Thanks,
+
+Tomer
