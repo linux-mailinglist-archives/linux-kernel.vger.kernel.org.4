@@ -2,113 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4397670AE2C
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 15:12:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 157C470AE2D
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 15:15:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbjEUNMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 09:12:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35016 "EHLO
+        id S229888AbjEUNNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 09:13:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjEUNM1 (ORCPT
+        with ESMTP id S229571AbjEUNMk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 09:12:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF43CD2;
-        Sun, 21 May 2023 06:12:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F99061213;
-        Sun, 21 May 2023 13:12:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9F21C433EF;
-        Sun, 21 May 2023 13:12:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684674745;
-        bh=5osWxdwPx60PnNZ3bXxJWoLfr3s7lo3UzwnKiZV/e98=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=sd53AVXzPB7VRwxDZr5f/H8KpE4s9copE2WxhdfezXQl+y3MrH1VxEessQIt3wqOA
-         S+eQGpBMFeiBQ7jSHxFDtf2FxXWFm0cM1kvDFjswwBNajLeOxgy/gX3GKHwPJor93B
-         7joYkPl6ELb7HA3on0wwhVXBsbVIvEhkS7QNVPBOYpPu+upD+ASPJtvL48cc3CPjeh
-         DA0Khf2Lm4+oyg8TTeud0bDpBpJ9re4+Xjt2ANCgMzL7F8ai7CrVn1lGIVtMwD83AP
-         ISdhLIC/qrEbUbgvavEzSV7pRmrnkpycjpm5HbqRohL34LMjUekmnLNnJxibI2mVuK
-         qOcmwja1KcZPA==
-Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-54fd177fbd4so2464034eaf.3;
-        Sun, 21 May 2023 06:12:25 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxVY3M+pWRCcGKgw19q1CNfvs9dmjXi2UmGC3jzD7d6mvJ5lP1g
-        JT/nwim6w4l2lmWkhDi4XQ3enbgy3oItFBPcSqY=
-X-Google-Smtp-Source: ACHHUZ5dNnhg7fL/+DFlc6lUze5i8Y14NPnnmvFWkfYxGox9e9+TCvJL88+y2ASvH89eQUEP73xDQbhF5q6WHHQyvAw=
-X-Received: by 2002:a4a:9c50:0:b0:54f:b59c:256a with SMTP id
- c16-20020a4a9c50000000b0054fb59c256amr3772159ook.4.1684674744986; Sun, 21 May
- 2023 06:12:24 -0700 (PDT)
+        Sun, 21 May 2023 09:12:40 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53D5DD2;
+        Sun, 21 May 2023 06:12:31 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-510d8d7f8eeso8800922a12.0;
+        Sun, 21 May 2023 06:12:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684674749; x=1687266749;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8iBg6fZcsLrOWyeykX+56jGb75hNNV7FJu88HNfeKOU=;
+        b=eLCXHvu+AUn1UenGQt31AhojUxR6fg3IytThxncsBLzz+958Qx0MEr/oCAi6XSRVTU
+         bBaXK/rwS5gdy2End1Qyqg8DThD7ZMp1KRtfJw3c+lUOocGXyVyK3w27sPfxTHN2/HJS
+         +Uo+s/8ZAQjk+AaNxx4I7MIvOQhqri/C0hV4qNCbkg2UuMYqEZAfsYb0xpdBC4IITexT
+         31OIDEsgi1xp9iKTG7rXOxqf0IagaK8X2v0bNjdwUMLxI82QaHVlPsAL8kcO0vu7gnlI
+         qaBjQY8WKtTb8wLuMP7fF0Ln56MHHCAFTRxPUIVMH4yfshCFethJEVJGqlASfyTg3vZ0
+         6VAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684674749; x=1687266749;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8iBg6fZcsLrOWyeykX+56jGb75hNNV7FJu88HNfeKOU=;
+        b=Hgig1A8X73kBkTomp05+zOgynCtIgpJR2RY1/3jllxtjRnw+2ogKdJInGKSpPKibVQ
+         HvHLtp3vC1lfGZ6KPanoVv2WJqAWx9ni5n+eTrT/0DrVuylo1ipMaaVOJP959SbHxZwU
+         sOJgTTNbwTi8HV6p0E3gLZE2XO+7nvsyv8WOpS7hSS0z3eHkyBafc6uU8lecHYw5JI06
+         0To6k0phwj5nx2FDMubojZijIyoZYiyW5skX7U4lXHTTK6hMzr7CeXyCGoXiV3IgZEf5
+         7rp89Wm9rhFLMI3z1fV8kOrGxz+WAyA+ZAISoF16ggBI3OtqDLaGr6lcM3KfrzW1/KnO
+         pIDg==
+X-Gm-Message-State: AC+VfDxpaepITJ/uDe/aIFYHGdBI6N5Jsr8tLsCulMslj9FLQxyeOjPM
+        XpJYMFjJ21L9GYKpI2pxtmU=
+X-Google-Smtp-Source: ACHHUZ6Ae2KA7P/eF3KFKnhVugAaxwTE4acjoeTtAVQ6prvxMnu6ZPmaA2P0rUr4iYlh35bp1KUmCQ==
+X-Received: by 2002:aa7:c74c:0:b0:506:bda9:e063 with SMTP id c12-20020aa7c74c000000b00506bda9e063mr5643911eds.16.1684674749177;
+        Sun, 21 May 2023 06:12:29 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id o26-20020a056402039a00b00509d1c6dcefsm1842830edv.13.2023.05.21.06.12.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 May 2023 06:12:28 -0700 (PDT)
+Date:   Sun, 21 May 2023 16:12:26 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     David Epping <david.epping@missinglinkelectronics.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH net 3/3] net: phy: mscc: enable VSC8501/2 RGMII RX clock
+Message-ID: <20230521131226.bxk4g5gstprrvngp@skbuf>
+References: <20230520160603.32458-1-david.epping@missinglinkelectronics.com>
+ <20230520160603.32458-4-david.epping@missinglinkelectronics.com>
+ <20230521123512.3kpy66sjnzj2chie@skbuf>
 MIME-Version: 1.0
-References: <20230511162423.1922133-1-masahiroy@kernel.org>
-In-Reply-To: <20230511162423.1922133-1-masahiroy@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 21 May 2023 22:11:48 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARNVu_HMH7MRm5t2d+uMfpsYki7FWhZeF7+nDVtPEo_Yw@mail.gmail.com>
-Message-ID: <CAK7LNARNVu_HMH7MRm5t2d+uMfpsYki7FWhZeF7+nDVtPEo_Yw@mail.gmail.com>
-Subject: Re: [PATCH] modpost: error out if addend_*_rel() is not implemented
- for REL arch
-To:     linux-kbuild@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230521123512.3kpy66sjnzj2chie@skbuf>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 1:25=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.o=
-rg> wrote:
->
-> The section mismatch check relies on the relocation entries.
->
-> For REL, the addend value is implicit, so we need some code to compute
-> it. Currently, EM_386, EM_ARM, and EM_MIPS are supported. This commit
-> makes sure we covered all the cases.
->
-> I believe the other architectures use RELA, where the explicit r_addend
-> field exists.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
-
-Applied to linux-kbuild.
-
-
-
->
->  scripts/mod/modpost.c | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index 95da374cc534..44309d463a49 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -1442,6 +1442,8 @@ static void section_rel(const char *modname, struct=
- elf_info *elf,
->                         if (addend_mips_rel(elf, sechdr, &r))
->                                 continue;
->                         break;
-> +               default:
-> +                       fatal("Please add code to calculate addend for th=
-is architecture\n");
->                 }
->                 sym =3D elf->symtab_start + r_sym;
->                 /* Skip special sections */
+On Sun, May 21, 2023 at 03:35:12PM +0300, Vladimir Oltean wrote:
+> Let's resolve that difference before the patches are merged, and write
+> some correct comments.
+> 
+> I agree that the datasheet is not clear, but I think that the RX_CLK
+> output is enabled or not based on the strapping of the RCVRDCLK1 and
+> RCVRDCLK2 pins. Coincidentally, these are also muxed with PHYADD1 and
+> PHYADD2, so the default value of RX_CLK_DISABLE might depend on the
+> PHY address (?!).
+> 
+> What is your PHY address? Mine are 0x10 and 0x11 for the VSC8502 on my
+> board.
+> 
+> Not saying that the patch is wrong or that the resolution should be any
+> different than it is. Just that it's clear we can't both be right, and
+> my PHYs clearly work (re-tested just now).
+> 
 > --
-> 2.39.2
->
+> pw-bot: changes-requested
 
+Ah, no, I think the explanation is much simpler. I see the datasheet
+mentions that "RX_CLK output disable" is a sticky bit, which means it
+preserves its value across a reset.
 
---=20
-Best Regards
-Masahiro Yamada
+In my case, it is the U-Boot driver which clears that setting, as part
+of configuring RGMII delays.
+https://source.denx.de/u-boot/u-boot/-/blob/master/drivers/net/phy/mscc.c#L1553
