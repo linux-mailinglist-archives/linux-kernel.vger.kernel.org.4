@@ -2,104 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA9E670AE40
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 15:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F8B670AE44
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 16:00:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229634AbjEUNoK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 09:44:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39300 "EHLO
+        id S230044AbjEUN7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 09:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjEUNoC (ORCPT
+        with ESMTP id S229719AbjEUNzR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 09:44:02 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7B7AA;
-        Sun, 21 May 2023 06:44:01 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-510e90d785fso5509312a12.2;
-        Sun, 21 May 2023 06:44:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684676639; x=1687268639;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=sZpvyR57mXeFP0Qm641psPJxyuo/h1ZNJwmOyidkJfY=;
-        b=dtajUC7PCeAXr0i98qEMgbSbvz9+wLFlJmCSyIjzkoKKqbQWGVCSdDqQ02Tf9ZMo9X
-         SjvQyT+rcpG2A0JMQCBCHCjQrkwGnVhXjWBu4/0bQK0C+WUrdd/Jcnk25qZVNzbcVJaY
-         uOT2SvrnMM377XU39AC+GtJk4t8Gslcxxmp+vB+Sekg0MbWUf+0eVlI8jE0Mjt16opss
-         up8AYRk8G9CIFr7qk23BbG6uydqnNS7uEMJoLX2juXKPSxCuhIaLlZuMBdDUpLAIe/8P
-         sS2wThyIssKp1s8Jnm8xzSqe7z5GIK67MCMYL/R95nmYiMDzIb0JadJq6tGEznk2swF5
-         jlyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684676639; x=1687268639;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sZpvyR57mXeFP0Qm641psPJxyuo/h1ZNJwmOyidkJfY=;
-        b=Qo67RR5/Nm6UlH9Mnb95EaYpAx7bTZmc7MfEiJutk+kPW79+Tabkb2MyOwTvUWOOOy
-         xjf2/uX61gPSOY3Ts3gUB2keaje+gtTzMvSuE4lGUNGO7smBnmn+hTTBF3Ms/jXH4+Ej
-         oVA1ssmso/E65xBdWSrIOBjU/StSowPl15KxN16Dn2O0CoOPoGEpSwyGO4h198A8uUqS
-         +r+zAvFwecFgfdSXNDezwU1qvI0qckNxakT/I2iHpHgsauA1E+m/SukVPHbvmQePczOs
-         yUIPf+tq5f6JywD3enY1UfD5J1Lq+IqqnhuEcTt0/H9KltWXRzJ6kG8UJMZlCNn2iAAF
-         nAaA==
-X-Gm-Message-State: AC+VfDy/w5VcE6DCWEL1fABZROxon+LDCSGugVbaU/1FgOV2+k+hPJL/
-        1UBJ8aes0ivA0PzpmU3bOrzdm+QDMbc=
-X-Google-Smtp-Source: ACHHUZ6s8i/nz0kHAigbvf8YrctI31S/v/qbPm9d7o6kBKJDLRrNaZVogWmEF2pFxyMFalKjd/4G2Q==
-X-Received: by 2002:a17:907:7b98:b0:965:ff38:2fb3 with SMTP id ne24-20020a1709077b9800b00965ff382fb3mr7715778ejc.74.1684676639346;
-        Sun, 21 May 2023 06:43:59 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id sb8-20020a170906edc800b0096f6e2f4d9esm1875140ejb.83.2023.05.21.06.43.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 May 2023 06:43:58 -0700 (PDT)
-Date:   Sun, 21 May 2023 16:43:56 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     David Epping <david.epping@missinglinkelectronics.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net 3/3] net: phy: mscc: enable VSC8501/2 RGMII RX clock
-Message-ID: <20230521134356.ar3itavhdypnvasc@skbuf>
-References: <20230520160603.32458-1-david.epping@missinglinkelectronics.com>
- <20230520160603.32458-4-david.epping@missinglinkelectronics.com>
+        Sun, 21 May 2023 09:55:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D82CCBB;
+        Sun, 21 May 2023 06:55:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BAC260B59;
+        Sun, 21 May 2023 13:55:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4273AC433EF;
+        Sun, 21 May 2023 13:55:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684677315;
+        bh=pBCLLi539NwV8+/W4KsfZGUmhSMDLjN83ORiIGsKyD8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cK/ec9CWGi3yDybEdGIX95PeMdA5wkUw3wyv9C1tGRMVsm4jLQTJGRk8vN45t6DMk
+         gDy/AHrj628jCljwwcfoFfp2Tik+BvnFDfub90nmcKrLdIOdDhqbxLl6GEQq2119tt
+         te+xml+FGGJceSPUkNja7qe+J4F3waEdhq1STW5I6QCri9KjAMZJZSK1sDXdkH7av+
+         Ky0wWMiToEkdtTEW1YKuHfQxsEIXfPNDGaBJSgbMOoOpA5qsw3QKRxwYMhJ2zLXj1u
+         6ML7cx178L1/n3gb78O9xsmX5vMzQ0a37czOvSk4L7xL6q9uN5NT/OZv96P/h+0Jkg
+         TT3SPPqHKP00w==
+Date:   Sun, 21 May 2023 14:55:09 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Jisheng Zhang <jszhang@kernel.org>
+Cc:     Samuel Holland <samuel@sholland.org>, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-serial@vger.kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH v4 01/10] dt-bindings: vendor-prefixes: add bouffalolab
+Message-ID: <20230521-dribble-brook-7dd1ad2096bb@spud>
+References: <20230518152244.2178-1-jszhang@kernel.org>
+ <20230518152244.2178-2-jszhang@kernel.org>
+ <a45c9193-aa63-650f-dbb3-14b6c3f74eeb@sholland.org>
+ <ZGneH+ApaQVvv3SW@xhacker>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="FMaHoBVJWJuve3oJ"
 Content-Disposition: inline
-In-Reply-To: <20230520160603.32458-4-david.epping@missinglinkelectronics.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZGneH+ApaQVvv3SW@xhacker>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 20, 2023 at 06:06:03PM +0200, David Epping wrote:
-> +/* For VSC8501 and VSC8502 the RGMII RX clock output is disabled by default. */
-> +static int vsc85xx_rgmii_enable_rx_clk(struct phy_device *phydev,
-> +				       u32 rgmii_cntl)
-> +{
-> +	int rc, phy_id;
-> +
-> +	phy_id = phydev->drv->phy_id & phydev->drv->phy_id_mask;
-> +	if (PHY_ID_VSC8501 != phy_id && PHY_ID_VSC8502 != phy_id)
-> +		return 0;
 
-Not only bit 11 is reserved for VSC8530, but it's also read-only, so it
-should not matter what is written there.
+--FMaHoBVJWJuve3oJ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Since vsc85xx_rgmii_enable_rx_clk() and vsc85xx_rgmii_set_skews() write
-to the same register, would it not make sense to combine the two into a
-single phy_modify_paged() call, and to zeroize bit 11 as part of that?
+On Sun, May 21, 2023 at 05:02:23PM +0800, Jisheng Zhang wrote:
+> On Thu, May 18, 2023 at 09:53:12PM -0500, Samuel Holland wrote:
+> > Hi Jisheng,
+> >=20
+> > Thanks for updating this series!
+> >=20
+> > On 5/18/23 10:22, Jisheng Zhang wrote:
+> > > In the following commits, we will support bl808 SoC which is from
+> > > Bouffalo Lab Technology (Nanjing) Co., Ltd.
+> > >=20
+> > > Add bouffalolab vendor prefix binding.
+> > >=20
+> > > Link: https://en.bouffalolab.com/
+> > > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> > > Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+> > > ---
+> > >  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+> > >  1 file changed, 2 insertions(+)
+> > >=20
+> > > diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b=
+/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> > > index 82d39ab0231b..3566346f2f9e 100644
+> > > --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> > > +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+> > > @@ -200,6 +200,8 @@ patternProperties:
+> > >      description: BOE Technology Group Co., Ltd.
+> > >    "^bosch,.*":
+> > >      description: Bosch Sensortec GmbH
+> > > +  "^bouffalolab,.*":
+> > > +    description: Bouffalo Lab Technology (Nanjing) Co., Ltd.
+> >=20
+> > Have you thought about using the "bflb" abbreviation as the vendor
+>=20
+> I did think about bflb vs bouffalolab. Here is what I thought: I came
+> across "marvell" vs "mrvl" sevral years ago, I got an impression
+> "marvell" vendor prefix is preferred if I read the discussions
+> correctly.
+>=20
+> As for Bouffalolab vendor prefix, I have no preference, maybe DT
+> maintainers can provide inputs here.
+> Rob, Conor, Krzysztof, what's your opinion?
 
-The other caller of vsc85xx_rgmii_set_skews(), VSC8572, unfortunately
-does not document bit 11 at all - it doesn't say if it's read-only or not.
-We could conditionally include the VSC8502_RGMII_RX_CLK_DISABLE bit in the
-"mask" argument of phy_modify_paged() based on rgmii_cntl == VSC8502_RGMII_CNTL,
-such as to exclude VSC8572.
+I had a look through the blame for vendor-prefixes.yaml since I had no
+clue how easy it would be to find the marvell discussion - the commit
+for gateworks' deprecated entry (done by Krzysztof says "Favor the
+longer one (more descriptive)" & I think the same point is valid here.
+I would have no idea what "bflb" was if I came across it in isolation!
 
-What do you think?
+Cheers,
+Conor.
+
+--FMaHoBVJWJuve3oJ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGoivQAKCRB4tDGHoIJi
+0nKuAP4hnuFH5NcKfffzyLkN8Barhu7GOpkz3/pxDVaBdSmPawEA7NUtHlY90ReQ
+o+9cvTiUjzAl5IcXBx3fNh+I9wjCzw4=
+=1Q15
+-----END PGP SIGNATURE-----
+
+--FMaHoBVJWJuve3oJ--
