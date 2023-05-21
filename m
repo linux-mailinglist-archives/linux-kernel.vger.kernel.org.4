@@ -2,49 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F7A470AFF2
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 21:33:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C89570AFEF
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 21:33:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbjEUTdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 15:33:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38762 "EHLO
+        id S229512AbjEUTdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 15:33:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230414AbjEUTdJ (ORCPT
+        with ESMTP id S229563AbjEUTdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 15:33:09 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BEB2E0;
-        Sun, 21 May 2023 12:33:07 -0700 (PDT)
-Received: (Authenticated sender: didi.debian@cknow.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 6D3CA240002;
-        Sun, 21 May 2023 19:33:00 +0000 (UTC)
-From:   Diederik de Haas <didi.debian@cknow.org>
-To:     Jacob Chen <jacob-chen@iotwrt.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Rob Herring <robh+dt@kernel.org>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-rockchip@lists.infradead.org,
-        Heiko Stuebner <heiko@sntech.de>
-Cc:     Heiko Stuebner <heiko@sntech.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH RESEND 0/2] media: rockchip: rga: Add rk3568 support
-Date:   Sun, 21 May 2023 21:32:51 +0200
-Message-ID: <2386524.2IynHR6iFi@prancing-pony>
-Organization: Connecting Knowledge
-In-Reply-To: <168466589373.900480.8086350880534437090.b4-ty@sntech.de>
-References: <20230119-rk3568-rga-v1-0-43d4d14365e6@pengutronix.de>
- <168466589373.900480.8086350880534437090.b4-ty@sntech.de>
+        Sun, 21 May 2023 15:33:03 -0400
+Received: from out-34.mta1.migadu.com (out-34.mta1.migadu.com [IPv6:2001:41d0:203:375::22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F9DDD
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 12:33:01 -0700 (PDT)
+Date:   Sun, 21 May 2023 19:32:55 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1684697580;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Akzv5NktCvKGPt0vU42haRZ9ILj4vsVHEjDPh0FBt5c=;
+        b=hL8GqOAV5h82tlgHzhue02i1byAYrjXvnwi5Ela8TBVeuXBMB0Za94zqr7INqehcHRIL/A
+        jITLf8LDah5KC3AJdzTCa0LHbRSoVjL1Acgd+4ZWUV7HbZTwr/Ij/+bsdb8iOUWjHRoDmb
+        HyTrLoAajcfC5oH0wKrD5HhkmkoUGSQ=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Raghavendra Rao Ananta <rananta@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v4 6/6] KVM: arm64: Use TLBI range-based intructions for
+ unmap
+Message-ID: <ZGpx58R6Lp1qpTkA@linux.dev>
+References: <20230519005231.3027912-1-rananta@google.com>
+ <20230519005231.3027912-7-rananta@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart2141483.da5uFje5fu";
- micalg="pgp-sha256"; protocol="application/pgp-signature"
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230519005231.3027912-7-rananta@google.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,60 +55,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---nextPart2141483.da5uFje5fu
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"; protected-headers="v1"
-From: Diederik de Haas <didi.debian@cknow.org>
-Date: Sun, 21 May 2023 21:32:51 +0200
-Message-ID: <2386524.2IynHR6iFi@prancing-pony>
-Organization: Connecting Knowledge
-In-Reply-To: <168466589373.900480.8086350880534437090.b4-ty@sntech.de>
-MIME-Version: 1.0
-
-On Sunday, 21 May 2023 12:44:58 CEST Heiko Stuebner wrote:
-> On Fri, 20 Jan 2023 10:14:21 +0100, Michael Tretter wrote:
-> > The RGA2 on the Rockchip rk3568 is the same core as the RGA2 on the
-> > Rockchip rk3288.
-> > 
-> > This series adds the necessary device tree binding and node in the device
-> > tree to enable the RGA2 on the Rockchip rk3568.
-> > 
-> > I tested the driver with the GStreamer v4l2convert element on a Rock3
-> > Model A board.
-> > 
-> > [...]
+On Fri, May 19, 2023 at 12:52:31AM +0000, Raghavendra Rao Ananta wrote:
+> The current implementation of the stage-2 unmap walker traverses
+> the given range and, as a part of break-before-make, performs
+> TLB invalidations with a DSB for every PTE. A multitude of this
+> combination could cause a performance bottleneck.
 > 
-> Applied, thanks!
+> Hence, if the system supports FEAT_TLBIRANGE, defer the TLB
+> invalidations until the entire walk is finished, and then
+> use range-based instructions to invalidate the TLBs in one go.
+> Condition this upon S2FWB in order to avoid walking the page-table
+> again to perform the CMOs after issuing the TLBI.
+
+nit: Rather than discussing a theoretical CMO walker, I think this is
+more readable if you mention the existing behavior of the walker.
+
+  Condition deferred TLB invalidation on the system supporting FWB, as
+  the optimization is entirely pointless when the unmap walker needs to
+  perform CMOs.
+
+> Rename stage2_put_pte() to stage2_unmap_put_pte() as the function
+> now serves the stage-2 unmap walker specifically, rather than
+> acting generic.
 > 
-> [1/2] media: dt-bindings: media: rockchip-rga: add rockchip,rk3568-rga
->       commit: 9b12ceb5a80d1fb45d293265de100e33b5843943
-> [2/2] arm64: dts: rockchip: Add RGA2 support to rk356x
->       commit: 0c3391f8bb06b744df521651534cd99e3d77e0a8
+> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> ---
+>  arch/arm64/kvm/hyp/pgtable.c | 35 ++++++++++++++++++++++++++++++-----
+>  1 file changed, 30 insertions(+), 5 deletions(-)
+> 
+> diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+> index b8f0dbd12f773..5832ee3418fb0 100644
+> --- a/arch/arm64/kvm/hyp/pgtable.c
+> +++ b/arch/arm64/kvm/hyp/pgtable.c
+> @@ -771,16 +771,34 @@ static void stage2_make_pte(const struct kvm_pgtable_visit_ctx *ctx, kvm_pte_t n
+>  	smp_store_release(ctx->ptep, new);
+>  }
+>  
+> -static void stage2_put_pte(const struct kvm_pgtable_visit_ctx *ctx, struct kvm_s2_mmu *mmu,
+> -			   struct kvm_pgtable_mm_ops *mm_ops)
+> +static bool stage2_unmap_defer_tlb_flush(struct kvm_pgtable *pgt)
+>  {
+> +	/*
+> +	 * If FEAT_TLBIRANGE is implemented, defer the individial PTE
 
-https://lore.kernel.org/all/TY3P286MB26115F60D273E840D36A610598CA9@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM/
+typo: individual
 
-indicated that there was a problem with device >= 4GB (RAM?):
-> Since we have the over-4GB problem now, should we mark this problem as a
-> TODO or something?
+Also, 'PTE' isn't significant here.
 
-I thought that was the reason that these patches weren't picked up before?
+> +	 * TLB invalidations until the entire walk is finished, and
+> +	 * then use the range-based TLBI instructions to do the
+> +	 * invalidations. Condition this upon S2FWB in order to avoid
+> +	 * a page-table walk again to perform the CMOs after TLBI.
+> +	 */
 
-I have no insight into this problem, so I can't comment on the technical
-aspects, but I had made a note for myself 'locally' about it.
---nextPart2141483.da5uFje5fu
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
+Apply the wording suggestion from the changelog here as well.
 
------BEGIN PGP SIGNATURE-----
+> +	return system_supports_tlb_range() && stage2_has_fwb(pgt);
+> +}
+> +
+> +static void stage2_unmap_put_pte(const struct kvm_pgtable_visit_ctx *ctx,
+> +				struct kvm_s2_mmu *mmu,
+> +				struct kvm_pgtable_mm_ops *mm_ops)
+> +{
+> +	struct kvm_pgtable *pgt = ctx->arg;
+> +
+>  	/*
+>  	 * Clear the existing PTE, and perform break-before-make with
+>  	 * TLB maintenance if it was valid.
+>  	 */
+>  	if (kvm_pte_valid(ctx->old)) {
+>  		kvm_clear_pte(ctx->ptep);
+> -		kvm_call_hyp(__kvm_tlb_flush_vmid_ipa, mmu, ctx->addr, ctx->level);
+> +
+> +		if (!stage2_unmap_defer_tlb_flush(pgt))
+> +			kvm_call_hyp(__kvm_tlb_flush_vmid_ipa, mmu,
+> +					ctx->addr, ctx->level);
+>  	}
+>  
+>  	mm_ops->put_page(ctx->ptep);
+> @@ -1015,7 +1033,7 @@ static int stage2_unmap_walker(const struct kvm_pgtable_visit_ctx *ctx,
+>  	 * block entry and rely on the remaining portions being faulted
+>  	 * back lazily.
+>  	 */
+> -	stage2_put_pte(ctx, mmu, mm_ops);
+> +	stage2_unmap_put_pte(ctx, mmu, mm_ops);
+>  
+>  	if (need_flush && mm_ops->dcache_clean_inval_poc)
+>  		mm_ops->dcache_clean_inval_poc(kvm_pte_follow(ctx->old, mm_ops),
+> @@ -1029,13 +1047,20 @@ static int stage2_unmap_walker(const struct kvm_pgtable_visit_ctx *ctx,
+>  
+>  int kvm_pgtable_stage2_unmap(struct kvm_pgtable *pgt, u64 addr, u64 size)
+>  {
+> +	int ret;
+>  	struct kvm_pgtable_walker walker = {
+>  		.cb	= stage2_unmap_walker,
+>  		.arg	= pgt,
+>  		.flags	= KVM_PGTABLE_WALK_LEAF | KVM_PGTABLE_WALK_TABLE_POST,
+>  	};
+>  
+> -	return kvm_pgtable_walk(pgt, addr, size, &walker);
+> +	ret = kvm_pgtable_walk(pgt, addr, size, &walker);
+> +	if (stage2_unmap_defer_tlb_flush(pgt))
+> +		/* Perform the deferred TLB invalidations */
+> +		kvm_call_hyp(__kvm_tlb_flush_vmid_range, pgt->mmu,
+> +				addr, addr + size);
+> +
+> +	return ret;
+>  }
+>  
+>  struct stage2_attr_data {
+> -- 
+> 2.40.1.698.g37aff9b760-goog
+> 
 
-iHUEABYIAB0WIQT1sUPBYsyGmi4usy/XblvOeH7bbgUCZGpx4wAKCRDXblvOeH7b
-brDNAQCQRk0uL8qr7RMJLjC56GL9KRq/TtmKBlnQUaSGchIxVQEAxlugcLBQ9jQf
-I7iu5nMhGOwfgEn3VBfHPtIgbDurnQk=
-=qohm
------END PGP SIGNATURE-----
-
---nextPart2141483.da5uFje5fu--
-
-
-
+-- 
+Thanks,
+Oliver
