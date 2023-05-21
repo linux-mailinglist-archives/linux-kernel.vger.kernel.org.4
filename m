@@ -2,94 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73F9F70AE45
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 16:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9E6970AE51
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 16:21:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbjEUOCJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 10:02:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40576 "EHLO
+        id S229678AbjEUOUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 10:20:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229497AbjEUN5i (ORCPT
+        with ESMTP id S229940AbjEUOUj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 09:57:38 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B7C9C
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 06:57:37 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f475366514so33415815e9.2
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 06:57:37 -0700 (PDT)
+        Sun, 21 May 2023 10:20:39 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F49BE;
+        Sun, 21 May 2023 07:19:48 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-510d8ead2f1so7163501a12.3;
+        Sun, 21 May 2023 07:19:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684677456; x=1687269456;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1684678786; x=1687270786;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8IZ0+A20S9i4vsmJVu3SMU9ONVfr0Mn1VLo9H2/PkYg=;
-        b=mfjpjTnSjrraX6wSw1VqZPoSlQUYds0j5RVTeUZvgl4eazAtKtZMDclec5O7b9AACJ
-         OR3vnQV8B7H5BU1RpPDX0IPHDnD2M3LPs2818ZU8rkl4mB9+GIu1qfbjZPNvKvS9aWpv
-         VgS6l8DFX5QKsDkrpnokeNsttz9fquyppptD9K7Z51oLTkoUyL3Ci+iupRBYoilNJ8QK
-         b5AvnAgiEksQgGeDioU+yZ+c7vjbOqWUfENblcnkAq6Svu7w85fRlJpfXKtJ7ATdV4Sv
-         wj5p30Z73A3DjwYkYgucVIlcd9VRkHMoj/jO3lKbPTUj+40aQI6OSH2v0AYgtP+2XXtr
-         MaAQ==
+        bh=g7nc8IQP1+x6u9N7+EYfITX13eAIkcVj3K/FpgMBq4Y=;
+        b=hMI+YQvgIwZ0nFTrph18YPJAPJ/xqRvgbwDk0QNL7DpOR3z2xwQQZ09Y5ZB6aKwQ1N
+         vAgB18wD4Uz/K3EB1WkMeoAAQj9DLgB56nJjPbLccvgfFoiQI74WddeHk+E7C8SRYSYL
+         HrpQLEY5WuXmBoxwAPjftuOppi/LU8kC/KLqRKQJB6t4mwXSTDzGCa2Z9HHBVeihFInM
+         +j+n2WojQy5OP7ATXwgbIfOAdr8sCKWQNah5J28W/WJwcBBQ+MvXxi6K+vUpN5+DCuKe
+         CWg64ghMVjzIgCBe5FnaHQziqCCEr23LlqmF/i8RfrDYQrd5B/cL7jrk1CAmHsXdoFvc
+         681A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684677456; x=1687269456;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1684678786; x=1687270786;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8IZ0+A20S9i4vsmJVu3SMU9ONVfr0Mn1VLo9H2/PkYg=;
-        b=Jhq6EHUU8AJBiu8ivEdkoDfEdBDkPBp68Rd95ilsU/I4/YtVVX5c71td24zhP+yFrB
-         hSTmHwU/0J2au7GOdGqCBQZ4XMdR7HFZxdk+bYqRw/OK6RreEf9uFfgkIlZbYt6cQDFM
-         mZKp9qEUh1tzhYR/POC+puFcbqbWwlA7T4eK7nLEItPJIapPlL++kIpNrQTxYn0I686T
-         QlCRLE6bEdD1IcUxYqBkhEPKJuUyHXjem3V3Tc9JzQ2qd2hDd16XYN7XNAf2XKx8k7u4
-         dybP8IEaUZwIH2bjQgnyBZXkQEAA8RPpAfxEYpHXWzBt3SmUACT04PojNeqJLRjKNdkP
-         mppQ==
-X-Gm-Message-State: AC+VfDw3XGhMX2cnqoZKnmYhWrRIrfyR/E6aJNZ3OMQjSvFIZ1LS4VEA
-        fqsxRhd305NXbeACJtm+CX4=
-X-Google-Smtp-Source: ACHHUZ7afx+Sddu7qd91bjzXnmT7lURCcBuyJE+991XKC/gxiCqM3ABLBv18C/RPLbqa6wm3W6W+Dg==
-X-Received: by 2002:a7b:cb97:0:b0:3f4:253b:92b3 with SMTP id m23-20020a7bcb97000000b003f4253b92b3mr5133092wmi.18.1684677455507;
-        Sun, 21 May 2023 06:57:35 -0700 (PDT)
-Received: from solpc.. (67.pool90-171-92.dynamic.orange.es. [90.171.92.67])
-        by smtp.gmail.com with ESMTPSA id j15-20020a5d464f000000b003012030a0c6sm4756925wrs.18.2023.05.21.06.57.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 May 2023 06:57:35 -0700 (PDT)
-From:   =?UTF-8?q?Joan=20Bruguera=20Mic=C3=B3?= <joanbrugueram@gmail.com>
-To:     zhengqi.arch@bytedance.com
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: shrinkers: fix race condition on debugfs cleanup
-Date:   Sun, 21 May 2023 13:57:33 +0000
-Message-Id: <20230521135733.1076395-1-joanbrugueram@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <2d44a1bd-eb80-7724-ff4e-a0fc3bfd8b72@bytedance.com>
-References: <2d44a1bd-eb80-7724-ff4e-a0fc3bfd8b72@bytedance.com>
+        bh=g7nc8IQP1+x6u9N7+EYfITX13eAIkcVj3K/FpgMBq4Y=;
+        b=SFn5N4Zxm4F1FlfFFlNPK7n2xD4j56CUwEgjU5Yedq16qYyXoOyMqrpOdCQ6usMGcX
+         q3SaCqkRbADGozd/zb34GjJnx0lU8mkr9v4GnFOOmEDh2gmFXlrcL4v1l35ZdCrlRViv
+         rjRfXtrFtGD/kxnUgzXV0HXNl2+1o2S76TA1VwYwzcF09Q+br0mxmTk6t2R2vHfgBlS4
+         5FTuW+8rXYyLJ93+r3vThzycC9sQ4xOvoiffxg5icHWUuSvgKk2WSdB4UmkxeMJ31OaZ
+         PKs696XuY4fwCtKeJVZ6nxS9lb6rE2wIAYBGOCZ/B4i4vM2s6WW4rexSc/qYwRijVnLe
+         EsXg==
+X-Gm-Message-State: AC+VfDy+NxOJGF7mQ9HyZWIJOYKFT1fEaw0gOgfdEGvTed7FmLS67RxW
+        rBQm2GQhCD1Y9GTDDWVHhxB18Pwy3w71aW37v1k=
+X-Google-Smtp-Source: ACHHUZ4BVlr3vRVhKVcq01bQhG1RUX5SPWxkcsAY6aiBTMuFu3CQVjxEKjSI3NraOjSXw4ScmEjdwc7YjUWWZs4ifb0=
+X-Received: by 2002:a05:6402:1217:b0:50b:faa1:e1d5 with SMTP id
+ c23-20020a056402121700b0050bfaa1e1d5mr5627068edw.39.1684678786185; Sun, 21
+ May 2023 07:19:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220515203653.4039075-1-jolsa@kernel.org> <20230520094722.5393-1-zegao@tencent.com>
+ <ZGnRjkjxWrK8HzNm@krava> <20230521190907.e4104a653583dfac785e379a@kernel.org>
+In-Reply-To: <20230521190907.e4104a653583dfac785e379a@kernel.org>
+From:   Ze Gao <zegao2021@gmail.com>
+Date:   Sun, 21 May 2023 22:19:34 +0800
+Message-ID: <CAD8CoPCNNh4_vtTQVGeoN7t7TcN9w60Fw6=r7yKwvxBSr_ZJ3Q@mail.gmail.com>
+Subject: Re:
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Jiri Olsa <olsajiri@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hao Luo <haoluo@google.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        kafai@fb.com, kpsingh@chromium.org, netdev@vger.kernel.org,
+        paulmck@kernel.org, songliubraving@fb.com,
+        Ze Gao <zegao@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/3 13:37, Qi Zheng wrote:
-> > +void shrinker_debugfs_remove(struct dentry *debugfs_entry, int debugfs_id)
-> > +{
-> 
-> It would be better to add a check:
-> 
-> 	if (!debugfs_entry)
-> 		return;
-> 
-> > +	debugfs_remove_recursive(debugfs_entry);
-> > +	ida_free(&shrinker_debugfs_ida, debugfs_id);
-> > +}
+On Sun, May 21, 2023 at 6:09=E2=80=AFPM Masami Hiramatsu <mhiramat@kernel.o=
+rg> wrote:
+>
+> On Sun, 21 May 2023 10:08:46 +0200
+> Jiri Olsa <olsajiri@gmail.com> wrote:
+>
+> > On Sat, May 20, 2023 at 05:47:24PM +0800, Ze Gao wrote:
+> > >
+> > > Hi Jiri,
+> > >
+> > > Would you like to consider to add rcu_is_watching check in
+> > > to solve this from the viewpoint of kprobe_multi_link_prog_run
+> >
+> > I think this was discussed in here:
+> >   https://lore.kernel.org/bpf/20230321020103.13494-1-laoar.shao@gmail.c=
+om/
+> >
+> > and was considered a bug, there's fix mentioned later in the thread
+> >
+> > there's also this recent patchset:
+> >   https://lore.kernel.org/bpf/20230517034510.15639-3-zegao@tencent.com/
+> >
+> > that solves related problems
+>
+> I think this rcu_is_watching() is a bit different issue. This rcu_is_watc=
+hing()
+> check is required if the kprobe_multi_link_prog_run() uses any RCU API.
+> E.g. rethook_try_get() is also checks rcu_is_watching() because it uses
+> call_rcu().
 
-As a practical matter, both `debugfs_remove_recursive(NULL)` and
-`ida_free(_, -1);` are documented as no-ops, see:
+Yes, that's my point!
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/fs/debugfs/inode.c?id=0dd2a6fb1e34d6dcb96806bc6b111388ad324722#n748
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=fc82bbf4dede758007763867d0282353c06d1121
+Regards,
+Ze
 
-Sorry for the late reply (the patch already reached the mainline tree).
+>
+> >
+> > > itself? And accounting of missed runs can be added as well
+> > > to imporve observability.
+> >
+> > right, we count fprobe->nmissed but it's not exposed, we should allow
+> > to get 'missed' stats from both fprobe and kprobe_multi later, which
+> > is missing now, will check
+> >
+> > thanks,
+> > jirka
+> >
+> > >
+> > > Regards,
+> > > Ze
+> > >
+> > >
+> > > -----------------
+> > > From 29fd3cd713e65461325c2703cf5246a6fae5d4fe Mon Sep 17 00:00:00 200=
+1
+> > > From: Ze Gao <zegao@tencent.com>
+> > > Date: Sat, 20 May 2023 17:32:05 +0800
+> > > Subject: [PATCH] bpf: kprobe_multi runs bpf progs only when rcu_is_wa=
+tching
+> > >
+> > > From the perspective of kprobe_multi_link_prog_run, any traceable
+> > > functions can be attached while bpf progs need specical care and
+> > > ought to be under rcu protection. To solve the likely rcu lockdep
+> > > warns once for good, when (future) functions in idle path were
+> > > attached accidentally, we better paying some cost to check at least
+> > > in kernel-side, and return when rcu is not watching, which helps
+> > > to avoid any unpredictable results.
+> > >
+> > > Signed-off-by: Ze Gao <zegao@tencent.com>
+> > > ---
+> > >  kernel/trace/bpf_trace.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> > > index 9a050e36dc6c..3e6ea7274765 100644
+> > > --- a/kernel/trace/bpf_trace.c
+> > > +++ b/kernel/trace/bpf_trace.c
+> > > @@ -2622,7 +2622,7 @@ kprobe_multi_link_prog_run(struct bpf_kprobe_mu=
+lti_link *link,
+> > >     struct bpf_run_ctx *old_run_ctx;
+> > >     int err;
+> > >
+> > > -   if (unlikely(__this_cpu_inc_return(bpf_prog_active) !=3D 1)) {
+> > > +   if (unlikely(__this_cpu_inc_return(bpf_prog_active) !=3D 1 || !rc=
+u_is_watching())) {
+> > >             err =3D 0;
+> > >             goto out;
+> > >     }
+> > > --
+> > > 2.40.1
+> > >
+>
+>
+> --
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
