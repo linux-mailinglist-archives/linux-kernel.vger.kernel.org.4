@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A7FE70B1B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 00:31:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6917F70B1BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 00:31:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231466AbjEUWbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 18:31:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41522 "EHLO
+        id S231493AbjEUWbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 18:31:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231487AbjEUWb1 (ORCPT
+        with ESMTP id S231489AbjEUWbg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 18:31:27 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D0E719D;
-        Sun, 21 May 2023 15:31:04 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34LMKMAd008663;
-        Sun, 21 May 2023 22:30:45 GMT
+        Sun, 21 May 2023 18:31:36 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085351B4;
+        Sun, 21 May 2023 15:31:17 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34LMTsta026563;
+        Sun, 21 May 2023 22:30:53 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=qcppdkim1;
- bh=0Ohj/c0pwNjTWAj1F0YqcMHYb9dDbpYymK6fWTSiUH8=;
- b=pGr8mX6gv9kkfcLMBN37iJEayS4NGw5ATMuYn8Bkn7/M/d98SNL+8+vlpcPETUBEs5lt
- 0RMr63pnKQSbeHMSl302sjfug1EYbeIVqzjGksUC8SZQNCrRalA1UByDS0R60+76tnXQ
- /J9Lm3Uiq5N0veXtw6eOGgEfPCd0pxjri/lMQ+LFHLcpWahbX+KhQuly3yuvcCDZ+ChI
- tvpM/vUgAqWlcOJKnNA5oA/d8JryhKWxw2I9+3wYdxl5Q9lGFVUXsFRPnSwxi93pZGQL
- KTaMMDJFQh8VRP73PNSCFAxqxxWGY4W+KcBBvo/Y4/G+xtVWgweybYaPU2ZxE+eIbMB+ gw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qppypa6cd-1
+ bh=su4pLfaYpFjRQckjSvgDjsewZEZbx868uHmkpyjso4s=;
+ b=SDVRfjCrACNcg6LJi4tTo65n2Yg4GkY/dVr3flASoMXqmfaGaMAsamyQj8NFyS6GWPB7
+ sN2PeRdKbUiM453rWFu2k1URqOydZyHyjvc8DzMdimuAuj2mJtzlcfQ5ZGxsPpQI+J0O
+ R6Y6naD7Bc/rMrz1Zae+3sYMlO8E5BOt7ynSDm14fghE+bNKr1eKlb/5ZsB3qvpL6Tcu
+ 26DYdT3ZKvA+IDG3W/Jc7gxrBxYr/VOxmApYCLCjI6S8ZrphZMMMkdyiJFQ1sQVKwEW5
+ N0tFj1lhcYYi2kkxKOUO+I/03Q68UWhlTYVZQZyAAwBQfEYrMxcv6qkJhslPvxol263h 1w== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qppa1a9uy-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 21 May 2023 22:30:45 +0000
+        Sun, 21 May 2023 22:30:53 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34LMUiuH026839
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34LMUp36011891
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 21 May 2023 22:30:44 GMT
+        Sun, 21 May 2023 22:30:52 GMT
 Received: from mmanikan-linux.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Sun, 21 May 2023 15:30:37 -0700
+ 15.2.986.42; Sun, 21 May 2023 15:30:44 -0700
 From:   Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
 To:     <agross@kernel.org>, <andersson@kernel.org>,
         <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
@@ -54,9 +54,9 @@ CC:     <quic_srichara@quicinc.com>, <quic_sjaganat@quicinc.com>,
         <quic_kathirav@quicinc.com>, <quic_anusha@quicinc.com>,
         <quic_poovendh@quicinc.com>, <quic_varada@quicinc.com>,
         <quic_devipriy@quicinc.com>
-Subject: [PATCH V2 12/13] arm64: dts: qcom: ipq5018: Add RDP432-c1 board support
-Date:   Mon, 22 May 2023 03:58:51 +0530
-Message-ID: <20230521222852.5740-13-quic_mmanikan@quicinc.com>
+Subject: [PATCH V2 13/13] arm64: dtsi: qcom: ipq9574: Add nodes to bring up multipd
+Date:   Mon, 22 May 2023 03:58:52 +0530
+Message-ID: <20230521222852.5740-14-quic_mmanikan@quicinc.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230521222852.5740-1-quic_mmanikan@quicinc.com>
 References: <20230521222852.5740-1-quic_mmanikan@quicinc.com>
@@ -67,107 +67,178 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: SbYtfswi2Bra9PUdrD-uffKZG38reukA
-X-Proofpoint-GUID: SbYtfswi2Bra9PUdrD-uffKZG38reukA
+X-Proofpoint-GUID: uYe28ZOXgSwTAqI5FOeRAdDepM7YcXwg
+X-Proofpoint-ORIG-GUID: uYe28ZOXgSwTAqI5FOeRAdDepM7YcXwg
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-21_17,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- clxscore=1015 mlxlogscore=999 phishscore=0 impostorscore=0
- lowpriorityscore=0 bulkscore=0 suspectscore=0 malwarescore=0 spamscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305210203
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 bulkscore=0 adultscore=0 suspectscore=0
+ priorityscore=1501 spamscore=0 mlxlogscore=760 phishscore=0
+ impostorscore=0 mlxscore=0 malwarescore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305210202
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add initial device tree support for the RDP432-C1 board.
+Enable nodes required for multipd remoteproc bring up.
 
 Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
 ---
 Changes in V2:
-	- Renamed mp03.5-c1 to RDP432-c1
-	- Removed boot-args
-	- Resolved dt-binding error's
+	- Corrected syntax like alignmnet and kept nodes in sorted order.
+	- Added 'firmware-name' property.
 
- arch/arm64/boot/dts/qcom/Makefile             |  1 +
- .../arm64/boot/dts/qcom/ipq5018-rdp432-c1.dts | 49 +++++++++++++++++++
- 2 files changed, 50 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/ipq5018-rdp432-c1.dts
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi | 118 ++++++++++++++++++++++++++
+ 1 file changed, 118 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index 259bd57c6064..bb9164de75b0 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -3,6 +3,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= apq8016-sbc.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= apq8094-sony-xperia-kitakami-karin_windy.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= apq8096-db820c.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= apq8096-ifc6640.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= ipq5018-rdp432-c1.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= ipq5018-rdp432-c2.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= ipq5332-mi01.2.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= ipq5332-rdp468.dtb
-diff --git a/arch/arm64/boot/dts/qcom/ipq5018-rdp432-c1.dts b/arch/arm64/boot/dts/qcom/ipq5018-rdp432-c1.dts
-new file mode 100644
-index 000000000000..7fe28d9859b0
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/ipq5018-rdp432-c1.dts
-@@ -0,0 +1,49 @@
-+// SPDX-License-Identifier: GPL-2.0+ OR BSD-3-Clause
-+/*
-+ * IPQ5018 RDP432-C1 board device tree source
-+ *
-+ * Copyright (c) 2023, The Linux Foundation. All rights reserved.
-+ */
+diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+index 0e04549c69a5..ff0da53ba05f 100644
+--- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
++++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+@@ -160,6 +160,11 @@
+ 			no-map;
+ 		};
+
++		q6_region: wcnss@4ab00000 {
++			reg = <0x0 0x4ab00000 0x0 0x2b00000>;
++			no-map;
++		};
 +
-+/dts-v1/;
+ 		smem@4aa00000 {
+ 			compatible = "qcom,smem";
+ 			reg = <0x0 0x4aa00000 0x0 0x00100000>;
+@@ -697,6 +702,95 @@
+ 			};
+ 		};
+
++		q6v5_wcss: remoteproc@cd00000 {
++			compatible = "qcom,ipq9574-q6-mpd";
++			reg = <0x0cd00000 0x4040>;
++			firmware-name = "IPQ9574/q6_fw.mdt",
++					"IPQ9574/m3_fw.mdt";
++			interrupts-extended = <&intc GIC_SPI 325 IRQ_TYPE_EDGE_RISING>,
++					      <&wcss_smp2p_in 0 0>,
++					      <&wcss_smp2p_in 1 0>,
++					      <&wcss_smp2p_in 2 0>,
++					      <&wcss_smp2p_in 3 0>;
++			interrupt-names = "wdog",
++					  "fatal",
++					  "ready",
++					  "handover",
++					  "stop-ack";
 +
-+#include "ipq5018.dtsi"
++			qcom,smem-states = <&wcss_smp2p_out 0>,
++					   <&wcss_smp2p_out 1>;
++			qcom,smem-state-names = "shutdown",
++						"stop";
++			memory-region = <&q6_region>;
 +
-+/ {
-+	model = "Qualcomm Technologies, Inc. IPQ5018/AP-RDP432.1-C1";
-+	compatible = "qcom,ipq5018-rdp432-c1", "qcom,ipq5018";
++			glink-edge {
++				interrupts = <GIC_SPI 321 IRQ_TYPE_EDGE_RISING>;
++				label = "rtr";
++				qcom,remote-pid = <1>;
++				mboxes = <&apcs_glb 8>;
++			};
 +
-+	aliases {
-+		serial0 = &blsp1_uart1;
++			pd-1 {
++				compatible = "qcom,ipq9574-wcss-ahb-mpd";
++				firmware-name = "IPQ9574/q6_fw.mdt";
++				interrupts-extended = <&wcss_smp2p_in 8 0>,
++						      <&wcss_smp2p_in 9 0>,
++						      <&wcss_smp2p_in 12 0>,
++						      <&wcss_smp2p_in 11 0>;
++				interrupt-names = "fatal",
++						  "ready",
++						  "spawn-ack",
++						  "stop-ack";
++				qcom,smem-states = <&wcss_smp2p_out 8>,
++						   <&wcss_smp2p_out 9>,
++						   <&wcss_smp2p_out 10>;
++				qcom,smem-state-names = "shutdown",
++							"stop",
++							"spawn";
++			};
++
++			pd-2 {
++				compatible = "qcom,ipq5018-wcss-pcie-mpd";
++				interrupts-extended = <&wcss_smp2p_in 16 0>,
++						      <&wcss_smp2p_in 17 0>,
++						      <&wcss_smp2p_in 20 0>,
++						      <&wcss_smp2p_in 19 0>;
++				interrupt-names = "fatal",
++						  "ready",
++						  "spawn-ack",
++						  "stop-ack";
++
++				qcom,smem-states = <&wcss_smp2p_out 16>,
++						   <&wcss_smp2p_out 17>,
++						   <&wcss_smp2p_out 18>;
++				qcom,smem-state-names = "shutdown",
++							"stop",
++							"spawn";
++				status = "disabled";
++			};
++
++			pd-3 {
++				compatible = "qcom,ipq5018-wcss-pcie-mpd";
++				interrupts-extended = <&wcss_smp2p_in 24 0>,
++						      <&wcss_smp2p_in 25 0>,
++						      <&wcss_smp2p_in 28 0>,
++						      <&wcss_smp2p_in 27 0>;
++				interrupt-names = "fatal",
++						  "ready",
++						  "spawn-ack",
++						  "stop-ack";
++
++				qcom,smem-states = <&wcss_smp2p_out 24>,
++						   <&wcss_smp2p_out 25>,
++						   <&wcss_smp2p_out 26>;
++				qcom,smem-state-names = "shutdown",
++							"stop",
++							"spawn";
++				status = "disabled";
++			};
++		};
++
+ 		pcie1: pci@10000000 {
+ 			compatible = "qcom,pcie-ipq9574";
+ 			reg =  <0x10000000 0xf1d>,
+@@ -966,4 +1060,28 @@
+ 			     <GIC_PPI 4 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
+ 			     <GIC_PPI 1 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
+ 	};
++
++	wcss: wcss-smp2p {
++		compatible = "qcom,smp2p";
++		qcom,smem = <435>, <428>;
++
++		interrupt-parent = <&intc>;
++		interrupts = <GIC_SPI 322 IRQ_TYPE_EDGE_RISING>;
++
++		mboxes = <&apcs_glb 9>;
++
++		qcom,local-pid = <0>;
++		qcom,remote-pid = <1>;
++
++		wcss_smp2p_out: master-kernel {
++			qcom,entry-name = "master-kernel";
++			#qcom,smem-state-cells = <1>;
++		};
++
++		wcss_smp2p_in: slave-kernel {
++			qcom,entry-name = "slave-kernel";
++			interrupt-controller;
++			#interrupt-cells = <2>;
++		};
 +	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+};
-+
-+&blsp1_uart1 {
-+	pinctrl-0 = <&uart1_pins>;
-+	pinctrl-names = "default";
-+	status = "okay";
-+};
-+
-+&q6v5_wcss {
-+	pd-2 {
-+		firmware-name = "IPQ5018/q6_fw.mdt";
-+		status = "okay";
-+	};
-+
-+	pd-3 {
-+		firmware-name = "IPQ5018/q6_fw.mdt";
-+		status = "okay";
-+	};
-+};
-+
-+&sleep_clk {
-+	clock-frequency = <32000>;
-+};
-+
-+&xo_board_clk {
-+	clock-frequency = <24000000>;
-+};
+ };
 --
 2.17.1
 
