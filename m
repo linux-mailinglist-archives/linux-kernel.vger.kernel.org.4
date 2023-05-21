@@ -2,80 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF1E770ACF0
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 10:09:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E556D70ACFD
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 10:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbjEUIJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 04:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47562 "EHLO
+        id S229714AbjEUIbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 04:31:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbjEUIJC (ORCPT
+        with ESMTP id S229812AbjEUIYD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 04:09:02 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DAB4121
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 01:09:00 -0700 (PDT)
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com [209.85.208.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 63A473F229
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 08:08:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1684656537;
-        bh=D4a7NFbYZdr4NKPTHaSPRKtANJCLNSohcV2A2Pqbz7w=;
-        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=EW0gtOvDxyXQ44qIiflAeLXomEx3P2YJwFFZ+K/r134v1duNtM72wTq81Hx8XeFSZ
-         2NBDAP2QCX3b/cRVBskvPu2SUYhnZJafD2KZWdmjJID/WO8cgID8yhtW0ohuySp4eb
-         PQlCmvTg0Ejsy31f57S4e508OmLZ7R6+p8SKPg58a4vfFLxIL9+rBb7vHlxxj4o8Uf
-         tXqPq2M2W+7EUuK2EDYKFL8hZFsJBairXS+DU/T9+cahSgiIzm4UX9B36aZx1yL/nv
-         4TKUIyhZIh8vjf54l47+re84I4ZER4QLAugnDvjdhSIUXH97c4XdPyt+U2nAWrdI5Q
-         1qe8D8EyshU3w==
-Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-513ddd8e39cso274074a12.2
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 01:08:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684656536; x=1687248536;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=D4a7NFbYZdr4NKPTHaSPRKtANJCLNSohcV2A2Pqbz7w=;
-        b=SL4jjM4EV22gn/tFwON0SVMocTeEWjxGHL0aMpid2+ODgnw5MKzCXhz1NgnsULTr9a
-         ztuxJigZXegsYOME1nsvpyMvjPosAyibZIFiQw565isD4oOUFL9Zv+uRnCxNvSYGnq+/
-         2c9caxrfMkQsKuuNXvaw98AWGZZnH90zz4z5irCYqg2hvue8pG1qXfPVqZOsD9vFaZPb
-         iNdbeTNI5uYhGzPbuii/Pa4JWDmXkugVOW/7jxQuBeu/ZuirJ2QKMVJJXyLM1O339n6v
-         r4jrv4J01kj78BFhI62A3KO8cfu1Nd3/W42AVJmL9UMGRxKTYWrgg2hiAgq6pz0juAOb
-         SS3w==
-X-Gm-Message-State: AC+VfDwSWuOcwMOEMiBdfg8ssiGPWg/DmR8Wt2KhYsTX3l9dfrPu9q/7
-        syRYnDaCEwg++MVrgSA4s0j2iCOdMuGIMB8wrQNr58X68RTgJpb2AqymzGAJwODEXKai9QqAH0F
-        k7hTsyVlcha3VqYWzESk4OsyateSK2gM1rgSR9AWIyA==
-X-Received: by 2002:aa7:d84d:0:b0:506:741e:5c14 with SMTP id f13-20020aa7d84d000000b00506741e5c14mr5521996eds.30.1684656536376;
-        Sun, 21 May 2023 01:08:56 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5mq7iVe/zedFU6nogB7eeLqebSUmtsgjf2jeLI2+cE1nsmndfX047ChOhrZo9/snVITMzH/g==
-X-Received: by 2002:aa7:d84d:0:b0:506:741e:5c14 with SMTP id f13-20020aa7d84d000000b00506741e5c14mr5521988eds.30.1684656536045;
-        Sun, 21 May 2023 01:08:56 -0700 (PDT)
-Received: from localhost (host-87-10-127-160.retail.telecomitalia.it. [87.10.127.160])
-        by smtp.gmail.com with ESMTPSA id l17-20020aa7d951000000b0050bc4600d38sm1607791eds.79.2023.05.21.01.08.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 May 2023 01:08:55 -0700 (PDT)
-Date:   Sun, 21 May 2023 10:08:55 +0200
-From:   Andrea Righi <andrea.righi@canonical.com>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     Miklos Szeredi <miklos@szeredi.hu>, linux-unionfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] ovl: make consistent use of OVL_FS()
-Message-ID: <ZGnRl7gvto2KvpWr@righiandr-XPS-13-7390>
-References: <20230520184114.77725-1-andrea.righi@canonical.com>
- <20230520184114.77725-3-andrea.righi@canonical.com>
- <CAOQ4uxh-ApuxzCG57BeSDveg34LQWD48xKHKO9vCX=5NTn647A@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOQ4uxh-ApuxzCG57BeSDveg34LQWD48xKHKO9vCX=5NTn647A@mail.gmail.com>
+        Sun, 21 May 2023 04:24:03 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB5A1A6
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 01:22:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684657335; x=1716193335;
+  h=date:from:to:cc:subject:message-id;
+  bh=xkAFYghe+sJHVHpTcXYCu1qjQ2ifG+WbceFU9vlNe6o=;
+  b=DF/0uBdeq2F5w8VPoA/32sXjBHeydaI/meMUD4KRBMcyxF6OumoC28+b
+   5FF0s9Rq/rOtyXewF4/8uT4Nl4rrB/+JOP+hgSgI7WjfqkU9sDY41fbwf
+   wRg3DLzZZNBwrW9rFyAFOhKtFdLu8Q+KoImiin0u4FUqSPBxxjta1iMqA
+   dbCMOrsB2pBTxeagBnJpKw0okIa7H5EL6rVuIZI+wKz9wsd9euwCNLIL/
+   95F+0huW7AMdb4ZN9N0EzG4IOT8w3RY8lBnpALX5BzvdZ+e6wCcS3F+Dn
+   VLUFeiWc7OM3aGGrdCLnGmA0oaLoIEP33cSDuZTucQuLLiSxwjx2GgNe8
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10716"; a="350189484"
+X-IronPort-AV: E=Sophos;i="6.00,181,1681196400"; 
+   d="scan'208";a="350189484"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2023 01:22:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10716"; a="706145255"
+X-IronPort-AV: E=Sophos;i="6.00,181,1681196400"; 
+   d="scan'208";a="706145255"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 21 May 2023 01:22:14 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q0eKT-000C3Q-2s;
+        Sun, 21 May 2023 08:22:13 +0000
+Date:   Sun, 21 May 2023 16:22:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
+ 812195e4f70ef0e9fc68127355c553c537749546
+Message-ID: <20230521082203.gkHt6%lkp@intel.com>
+User-Agent: s-nail v14.9.24
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,191 +60,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 21, 2023 at 09:51:46AM +0300, Amir Goldstein wrote:
-> On Sat, May 20, 2023 at 9:41 PM Andrea Righi <andrea.righi@canonical.com> wrote:
-> >
-> > Always use OVL_FS() to retrieve the corresponding struct ovl_fs from a
-> > struct super_block.
-> >
-> > Moreover, make sure that it is exclusively used with an overlayfs
-> > superblock when CONFIG_OVERLAY_FS_DEBUG is enabled (otherwise trigger a
-> > WARN_ON_ONCE).
-> 
-> Seems that you do not mind learning how we usually do things...
-> so "Moreover", "Also" is usually an indication that this change needs to be
-> in a separate patch.
-> I think this is one of those cases.
+tree/branch: INFO setup_repo_specs: /db/releases/20230519164737/lkp-src/repo/*/paulmck-rcu
+https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
+branch HEAD: 812195e4f70ef0e9fc68127355c553c537749546  rcuscale: Measure grace-period kthread CPU time
 
-OK, I'll split the "moreover" part in a separate patch. :)
+elapsed time: 721m
 
-> 
-> >
-> > Signed-off-by: Andrea Righi <andrea.righi@canonical.com>
-> > ---
-> >  fs/overlayfs/copy_up.c   |  2 +-
-> >  fs/overlayfs/export.c    | 10 +++++-----
-> >  fs/overlayfs/inode.c     |  8 ++++----
-> >  fs/overlayfs/namei.c     |  2 +-
-> >  fs/overlayfs/ovl_entry.h | 16 ++++++++++++++++
-> >  fs/overlayfs/super.c     | 12 ++++++------
-> >  fs/overlayfs/util.c      | 18 +++++++++---------
-> >  7 files changed, 42 insertions(+), 26 deletions(-)
-> >
-> > diff --git a/fs/overlayfs/copy_up.c b/fs/overlayfs/copy_up.c
-> > index f658cc8ea492..60aa615820e7 100644
-> > --- a/fs/overlayfs/copy_up.c
-> > +++ b/fs/overlayfs/copy_up.c
-> > @@ -905,7 +905,7 @@ static int ovl_do_copy_up(struct ovl_copy_up_ctx *c)
-> >  static bool ovl_need_meta_copy_up(struct dentry *dentry, umode_t mode,
-> >                                   int flags)
-> >  {
-> > -       struct ovl_fs *ofs = dentry->d_sb->s_fs_info;
-> > +       struct ovl_fs *ofs = OVL_FS(dentry->d_sb);
-> >
-> >         if (!ofs->config.metacopy)
-> >                 return false;
-> > diff --git a/fs/overlayfs/export.c b/fs/overlayfs/export.c
-> > index defd4e231ad2..f5f0ef8e3ce8 100644
-> > --- a/fs/overlayfs/export.c
-> > +++ b/fs/overlayfs/export.c
-> > @@ -182,7 +182,7 @@ static int ovl_connect_layer(struct dentry *dentry)
-> >   */
-> >  static int ovl_check_encode_origin(struct dentry *dentry)
-> >  {
-> > -       struct ovl_fs *ofs = dentry->d_sb->s_fs_info;
-> > +       struct ovl_fs *ofs = OVL_FS(dentry->d_sb);
-> >
-> >         /* Upper file handle for pure upper */
-> >         if (!ovl_dentry_lower(dentry))
-> > @@ -434,7 +434,7 @@ static struct dentry *ovl_lookup_real_inode(struct super_block *sb,
-> >                                             struct dentry *real,
-> >                                             const struct ovl_layer *layer)
-> >  {
-> > -       struct ovl_fs *ofs = sb->s_fs_info;
-> > +       struct ovl_fs *ofs = OVL_FS(sb);
-> >         struct dentry *index = NULL;
-> >         struct dentry *this = NULL;
-> >         struct inode *inode;
-> > @@ -655,7 +655,7 @@ static struct dentry *ovl_get_dentry(struct super_block *sb,
-> >                                      struct ovl_path *lowerpath,
-> >                                      struct dentry *index)
-> >  {
-> > -       struct ovl_fs *ofs = sb->s_fs_info;
-> > +       struct ovl_fs *ofs = OVL_FS(sb);
-> >         const struct ovl_layer *layer = upper ? &ofs->layers[0] : lowerpath->layer;
-> >         struct dentry *real = upper ?: (index ?: lowerpath->dentry);
-> >
-> > @@ -680,7 +680,7 @@ static struct dentry *ovl_get_dentry(struct super_block *sb,
-> >  static struct dentry *ovl_upper_fh_to_d(struct super_block *sb,
-> >                                         struct ovl_fh *fh)
-> >  {
-> > -       struct ovl_fs *ofs = sb->s_fs_info;
-> > +       struct ovl_fs *ofs = OVL_FS(sb);
-> >         struct dentry *dentry;
-> >         struct dentry *upper;
-> >
-> > @@ -700,7 +700,7 @@ static struct dentry *ovl_upper_fh_to_d(struct super_block *sb,
-> >  static struct dentry *ovl_lower_fh_to_d(struct super_block *sb,
-> >                                         struct ovl_fh *fh)
-> >  {
-> > -       struct ovl_fs *ofs = sb->s_fs_info;
-> > +       struct ovl_fs *ofs = OVL_FS(sb);
-> >         struct ovl_path origin = { };
-> >         struct ovl_path *stack = &origin;
-> >         struct dentry *dentry = NULL;
-> > diff --git a/fs/overlayfs/inode.c b/fs/overlayfs/inode.c
-> > index 541cf3717fc2..c27823f6e7aa 100644
-> > --- a/fs/overlayfs/inode.c
-> > +++ b/fs/overlayfs/inode.c
-> > @@ -334,7 +334,7 @@ static const char *ovl_get_link(struct dentry *dentry,
-> >
-> >  bool ovl_is_private_xattr(struct super_block *sb, const char *name)
-> >  {
-> > -       struct ovl_fs *ofs = sb->s_fs_info;
-> > +       struct ovl_fs *ofs = OVL_FS(sb);
-> >
-> >         if (ofs->config.userxattr)
-> >                 return strncmp(name, OVL_XATTR_USER_PREFIX,
-> > @@ -689,7 +689,7 @@ int ovl_set_acl(struct mnt_idmap *idmap, struct dentry *dentry,
-> >  int ovl_update_time(struct inode *inode, struct timespec64 *ts, int flags)
-> >  {
-> >         if (flags & S_ATIME) {
-> > -               struct ovl_fs *ofs = inode->i_sb->s_fs_info;
-> > +               struct ovl_fs *ofs = OVL_FS(inode->i_sb);
-> >                 struct path upperpath = {
-> >                         .mnt = ovl_upper_mnt(ofs),
-> >                         .dentry = ovl_upperdentry_dereference(OVL_I(inode)),
-> > @@ -952,7 +952,7 @@ static inline void ovl_lockdep_annotate_inode_mutex_key(struct inode *inode)
-> >
-> >  static void ovl_next_ino(struct inode *inode)
-> >  {
-> > -       struct ovl_fs *ofs = inode->i_sb->s_fs_info;
-> > +       struct ovl_fs *ofs = OVL_FS(inode->i_sb);
-> >
-> >         inode->i_ino = atomic_long_inc_return(&ofs->last_ino);
-> >         if (unlikely(!inode->i_ino))
-> > @@ -1284,7 +1284,7 @@ struct inode *ovl_get_trap_inode(struct super_block *sb, struct dentry *dir)
-> >  static bool ovl_hash_bylower(struct super_block *sb, struct dentry *upper,
-> >                              struct dentry *lower, bool index)
-> >  {
-> > -       struct ovl_fs *ofs = sb->s_fs_info;
-> > +       struct ovl_fs *ofs = OVL_FS(sb);
-> >
-> >         /* No, if pure upper */
-> >         if (!lower)
-> > diff --git a/fs/overlayfs/namei.c b/fs/overlayfs/namei.c
-> > index cfb3420b7df0..d0f196b85541 100644
-> > --- a/fs/overlayfs/namei.c
-> > +++ b/fs/overlayfs/namei.c
-> > @@ -832,7 +832,7 @@ struct dentry *ovl_lookup(struct inode *dir, struct dentry *dentry,
-> >  {
-> >         struct ovl_entry *oe;
-> >         const struct cred *old_cred;
-> > -       struct ovl_fs *ofs = dentry->d_sb->s_fs_info;
-> > +       struct ovl_fs *ofs = OVL_FS(dentry->d_sb);
-> >         struct ovl_entry *poe = dentry->d_parent->d_fsdata;
-> >         struct ovl_entry *roe = dentry->d_sb->s_root->d_fsdata;
-> >         struct ovl_path *stack = NULL, *origin_path = NULL;
-> > diff --git a/fs/overlayfs/ovl_entry.h b/fs/overlayfs/ovl_entry.h
-> > index fd11fe6d6d45..0b93b1d9ad79 100644
-> > --- a/fs/overlayfs/ovl_entry.h
-> > +++ b/fs/overlayfs/ovl_entry.h
-> > @@ -95,8 +95,24 @@ static inline struct mnt_idmap *ovl_upper_mnt_idmap(struct ovl_fs *ofs)
-> >         return mnt_idmap(ovl_upper_mnt(ofs));
-> >  }
-> >
-> > +extern struct file_system_type ovl_fs_type;
-> > +
-> > +#ifdef CONFIG_OVERLAY_FS_DEBUG
-> > +static inline bool is_ovl_fs_sb(struct super_block *sb)
-> > +{
-> > +       return sb->s_type == &ovl_fs_type;
-> > +}
-> > +#else
-> > +static inline bool is_ovl_fs_sb(struct super_block *sb)
-> > +{
-> > +       return true;
-> > +}
-> > +#endif
-> > +
-> >  static inline struct ovl_fs *OVL_FS(struct super_block *sb)
-> >  {
-> > +       WARN_ON_ONCE(!is_ovl_fs_sb(sb));
-> > +
-> >         return (struct ovl_fs *)sb->s_fs_info;
-> >  }
-> >
-> 
-> IMO, is_ovl_fs_sb() is useful and no reason to hide it under
-> CONFIG_OVERLAY_FS_DEBUG.
-> IMO, only the fortification of OVL_FS() needs to be hidden inside
-> CONFIG_OVERLAY_FS_DEBUG.
-> 
-> With those minor comments fixed you may add:
-> 
-> Reviewed-by: Amir Goldstein <amir73il@gmail.com>
+configs tested: 132
+configs skipped: 8
 
-Makes sense. Will send a v3 with your changes.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Thanks for the review!
--Andrea
+tested configs:
+alpha                            alldefconfig   gcc  
+alpha                            allyesconfig   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r034-20230521   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                 nsimosci_hs_smp_defconfig   gcc  
+arc                  randconfig-r043-20230521   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                         assabet_defconfig   gcc  
+arm          buildonly-randconfig-r005-20230521   clang
+arm                                 defconfig   gcc  
+arm                           omap1_defconfig   clang
+arm                  randconfig-r046-20230521   clang
+arm                        vexpress_defconfig   clang
+arm                         vf610m4_defconfig   gcc  
+arm64                            allyesconfig   gcc  
+arm64        buildonly-randconfig-r006-20230521   clang
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r014-20230521   gcc  
+csky                 randconfig-r026-20230521   gcc  
+hexagon      buildonly-randconfig-r001-20230521   clang
+hexagon              randconfig-r031-20230521   clang
+hexagon              randconfig-r032-20230521   clang
+hexagon              randconfig-r041-20230521   clang
+hexagon              randconfig-r045-20230521   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                          randconfig-a001   gcc  
+i386                          randconfig-a002   clang
+i386                          randconfig-a003   gcc  
+i386                          randconfig-a004   clang
+i386                          randconfig-a005   gcc  
+i386                          randconfig-a006   clang
+i386                          randconfig-a011   clang
+i386                          randconfig-a012   gcc  
+i386                          randconfig-a013   clang
+i386                          randconfig-a014   gcc  
+i386                          randconfig-a015   clang
+i386                          randconfig-a016   gcc  
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r023-20230521   gcc  
+loongarch                        alldefconfig   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch            randconfig-r022-20230521   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                            mac_defconfig   gcc  
+microblaze           randconfig-r006-20230521   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                      malta_kvm_defconfig   clang
+mips                 randconfig-r004-20230521   gcc  
+mips                         rt305x_defconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r025-20230521   gcc  
+nios2                randconfig-r033-20230521   gcc  
+nios2                randconfig-r036-20230521   gcc  
+openrisc                    or1ksim_defconfig   gcc  
+parisc                              defconfig   gcc  
+parisc64                         alldefconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc                      cm5200_defconfig   gcc  
+powerpc                       holly_defconfig   gcc  
+powerpc                 mpc834x_itx_defconfig   gcc  
+powerpc                    mvme5100_defconfig   clang
+powerpc                     ppa8548_defconfig   clang
+powerpc                      tqm8xx_defconfig   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r042-20230521   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r001-20230521   clang
+s390                 randconfig-r002-20230521   clang
+s390                 randconfig-r044-20230521   gcc  
+sh                               allmodconfig   gcc  
+sh           buildonly-randconfig-r004-20230521   gcc  
+sh                 kfr2r09-romimage_defconfig   gcc  
+sh                     magicpanelr2_defconfig   gcc  
+sh                          r7785rp_defconfig   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r011-20230521   gcc  
+sparc                randconfig-r013-20230521   gcc  
+sparc                randconfig-r015-20230521   gcc  
+sparc64              randconfig-r003-20230521   gcc  
+sparc64              randconfig-r035-20230521   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                        randconfig-a001   clang
+x86_64                        randconfig-a002   gcc  
+x86_64                        randconfig-a003   clang
+x86_64                        randconfig-a004   gcc  
+x86_64                        randconfig-a005   clang
+x86_64                        randconfig-a006   gcc  
+x86_64                        randconfig-a011   gcc  
+x86_64                        randconfig-a012   clang
+x86_64                        randconfig-a013   gcc  
+x86_64                        randconfig-a014   clang
+x86_64                        randconfig-a015   gcc  
+x86_64                        randconfig-a016   clang
+x86_64                        randconfig-k001   clang
+x86_64                        randconfig-x051   gcc  
+x86_64                        randconfig-x052   clang
+x86_64                        randconfig-x053   gcc  
+x86_64                        randconfig-x054   clang
+x86_64                        randconfig-x055   gcc  
+x86_64                        randconfig-x056   clang
+x86_64                        randconfig-x061   gcc  
+x86_64                        randconfig-x062   clang
+x86_64                        randconfig-x063   gcc  
+x86_64                        randconfig-x064   clang
+x86_64                        randconfig-x065   gcc  
+x86_64                        randconfig-x066   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                           alldefconfig   gcc  
+xtensa               randconfig-r016-20230521   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
