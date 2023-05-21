@@ -2,130 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC2D570B03C
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 22:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA31A70B072
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 23:00:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231160AbjEUU0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 16:26:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46508 "EHLO
+        id S230515AbjEUVAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 17:00:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbjEUU0n (ORCPT
+        with ESMTP id S229528AbjEUVAH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 16:26:43 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A0ADDE;
-        Sun, 21 May 2023 13:26:41 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-96fb45a5258so202725966b.2;
-        Sun, 21 May 2023 13:26:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684700799; x=1687292799;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=X69f/eGnne5uw8yiXIr7+EFlS/jdrHMk5L4Y1wX1DGQ=;
-        b=jnsY8z2hfPE31V+hrL/HzhhcAGpVZ6Mm21zRAWHOlkIBTGzfCaBM+h3RJct1KT13Qf
-         M3qx5sdy6Dkr53cnZ9gVVAgU5awrQHDS6IA5Q1EdyGPZCL9EuyiLF/CPyru/DmBYGt+n
-         ++9YboruM2OFupJ407QPbsSuQo2TYmJJOxiDkdfd12n+dS/RsjtT9/WJ/N4/62mvM1Gt
-         HqGCf/m4XCIpHPv4qTpXZnwKP5j8zqzJP6gXB7RzcCMkKi9dH3+aAt7Ja3wHpIMznLPO
-         xNqwQ8fGowGu3A3Krn3cuextzAYW3XidKaOh2papT5EgbNOZrjjsNnnt/YWlfzzzvQE4
-         LhSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684700799; x=1687292799;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=X69f/eGnne5uw8yiXIr7+EFlS/jdrHMk5L4Y1wX1DGQ=;
-        b=Ou/Rx+OxKXT5YzcS/rLOJ/JHh8YMBnd+pQalJS+uW5FFJ6FLg+tyFHThIdaCujG+94
-         tcNeuzNIZJbLdW9j+HqF3vUVhqDdfs0RxKoHfDo14Vys9EBPf4M9Xe8LdDkv6o+nburg
-         bnsZrbpNelWS8AsmXoK2bO9tOsuU2VgSo1msANjl8eOWgrGRcmlEtIPuo7rFvDk3ufGX
-         R5uQfBIPEbq5eQapxP3MNUBfyr74unwjxG6nTODRbL1IYUcSrC90q1O2eUOwcbR3qQnE
-         NScVnvHGxR3Fn87+Gh3P6xhgaRpyTEAzoPfumB5XmKSRRqVLk3nlIbEYCweMtuEf8HFD
-         G3jQ==
-X-Gm-Message-State: AC+VfDw1UMpOf6QnG88ISa3CwmMM8V1vUAoJ8OS9ZJT9+dugkAo/IQTW
-        mHiP2tgBAoph6DOSxnkaYdI=
-X-Google-Smtp-Source: ACHHUZ74hjAZJLte5l7Qajhb8oZ9w/ViPSQhmPHkbC3tzZjyEiPOw2sJ6WzFVmLMROXwW5AUuRvdTA==
-X-Received: by 2002:a17:907:6d26:b0:957:2e48:5657 with SMTP id sa38-20020a1709076d2600b009572e485657mr7459511ejc.68.1684700799383;
-        Sun, 21 May 2023 13:26:39 -0700 (PDT)
-Received: from krava ([83.240.61.63])
-        by smtp.gmail.com with ESMTPSA id t11-20020a17090616cb00b0094f1b8901e1sm2256648ejd.68.2023.05.21.13.26.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 May 2023 13:26:38 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Sun, 21 May 2023 22:26:37 +0200
-To:     Ze Gao <zegao2021@gmail.com>
-Cc:     Yonghong Song <yhs@meta.com>, Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Hao Luo <haoluo@google.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Song Liu <song@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        kafai@fb.com, kpsingh@chromium.org, netdev@vger.kernel.org,
-        paulmck@kernel.org, songliubraving@fb.com,
-        Ze Gao <zegao@tencent.com>
-Subject: Re:
-Message-ID: <ZGp+fW855gmWuh9W@krava>
-References: <20220515203653.4039075-1-jolsa@kernel.org>
- <20230520094722.5393-1-zegao@tencent.com>
- <b4f66729-90ab-080a-51ec-bf435ad6199d@meta.com>
- <CAD8CoPAXse1GKAb15O5tZJwBqMt1N_btH+qRe7c_a-ryUMjx7A@mail.gmail.com>
+        Sun, 21 May 2023 17:00:07 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90F9DD;
+        Sun, 21 May 2023 14:00:04 -0700 (PDT)
+Received: from workpc.. (109-252-147-95.dynamic.spd-mgts.ru [109.252.147.95])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E64DE6603276;
+        Sun, 21 May 2023 21:59:59 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684702802;
+        bh=GIXilKY2uDiAyFEFs3WQryEDhmdiI2VTNt842YIAWGc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=VBUZ1X3ffZxM2ZjEtSY8f9UTW7/+UeldmI6gPxAyUm3iqxpBLX5+cKl6yFrueTocM
+         DGPqwN9fCgJ6jda9pnnZs9CyzQFr9PFNphM527hLE6n2gcA+gqrUYFGTTiCFjlThKv
+         qgp3urTeRK3yqpczeyBA604cBoXgYkrY9kspwuEEPbK7LJ0UCHLTtLE32ypscD/oqZ
+         x361DMtNHSm3G89w2rdaB36SYr2r2jEWEF+DTLGU+hSVaIFMeON86xwtRufeS8VV1X
+         aZmvSH9U95RR+CXvtTmtKa5MDtXw94TWtXqTW78BnWj5+1GiaamjptQ8hfgfTkpTvF
+         LJB/moJbYutDQ==
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Liam Mark <lmark@codeaurora.org>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <jstultz@google.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Emil Velikov <emil.l.velikov@gmail.com>
+Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        linux-tegra@vger.kernel.org, kernel@collabora.com
+Subject: [PATCH v3 0/6] Move dma-buf mmap() reservation locking down to exporters
+Date:   Sun, 21 May 2023 23:51:06 +0300
+Message-Id: <20230521205112.150206-1-dmitry.osipenko@collabora.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAD8CoPAXse1GKAb15O5tZJwBqMt1N_btH+qRe7c_a-ryUMjx7A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 21, 2023 at 11:10:16PM +0800, Ze Gao wrote:
-> > kprobe_multi/fprobe share the same set of attachments with fentry.
-> > Currently, fentry does not filter with !rcu_is_watching, maybe
-> > because this is an extreme corner case. Not sure whether it is
-> > worthwhile or not.
-> 
-> Agreed, it's rare, especially after Peter's patches which push narrow
-> down rcu eqs regions
-> in the idle path and reduce the chance of any traceable functions
-> happening in between.
-> 
-> However, from RCU's perspective, we ought to check if rcu_is_watching
-> theoretically
-> when there's a chance our code will run in the idle path and also we
-> need rcu to be alive,
-> And also we cannot simply make assumptions for any future changes in
-> the idle path.
-> You know, just like what was hit in the thread.
-> 
-> > Maybe if you can give a concrete example (e.g., attachment point)
-> > with current code base to show what the issue you encountered and
-> > it will make it easier to judge whether adding !rcu_is_watching()
-> > is necessary or not.
-> 
-> I can reproduce likely warnings on v6.1.18 where arch_cpu_idle is
-> traceable but not on the latest version
-> so far. But as I state above, in theory we need it. So here is a
-> gentle ping :) .
+This patchset makes dma-buf exporters responisble for taking care of
+the reservation lock. I also included patch that moves drm-shmem to use
+reservation lock, to let CI test the whole set. I'm going to take all
+the patches via the drm-misc tree, please give an ack.
 
-hum, this change [1] added rcu_is_watching check to ftrace_test_recursion_trylock,
-which we use in fprobe_handler and is coming to fprobe_exit_handler in [2]
+Previous policy stated that dma-buf core takes the lock around mmap()
+callback. Which meant that both importers and exporters shouldn't touch
+the reservation lock in the mmap() code path. This worked well until
+Intel-CI found a deadlock problem in a case of self-imported dma-buf [1].
 
-I might be missing something, but it seems like we don't need another
-rcu_is_watching call on kprobe_multi level
+The problem happens when userpace mmaps a self-imported dma-buf, i.e.
+mmaps the dma-buf FD. DRM core treats self-imported dma-bufs as own GEMs
+[2]. There is no way to differentiate a prime GEM from a normal GEM for
+drm-shmem in drm_gem_shmem_mmap(), which resulted in a deadlock problem
+for drm-shmem mmap() code path once it's switched to use reservation lock.
 
-jirka
+It was difficult to fix the drm-shmem problem without adjusting dma-buf
+locking policy. In parctice not much changed from importers perspective
+because previosly dma-buf was taking the lock in between of importers
+and exporters. Now this lock is shifted down to exporters.
 
+[1] https://intel-gfx-ci.01.org/tree/drm-tip/Patchwork_114671v2/shard-snb5/igt@prime_vgem@sync@rcs0.html
+[2] https://elixir.bootlin.com/linux/v6.3-rc4/source/drivers/gpu/drm/drm_prime.c#L924
 
-[1] d099dbfd3306 cpuidle: tracing: Warn about !rcu_is_watching()
-[2] https://lore.kernel.org/bpf/20230517034510.15639-4-zegao@tencent.com/
+Changelog:
+
+v3: - Added r-b from Hans Verkuil to the videobuf2 patch.
+
+    - The v2 fastrpc patch was already applied, not including it anymore.
+      Though, the cover-letter says that I'd want to apply all the patches
+      via the drm-misc tree to keep the proper ordering of the changes.
+
+    - Previously Intel's CI gave a flake failure to v2, want to re-test
+      it again.
+
+v2: - Added ack from Christian König to the DRM patch.
+
+    - Dropped "fixes" tag from the patches, like was requested by
+      Christian König. The patches don't actually need a backport
+      and merely improve the locking policy.
+
+    - Dropped "reverts" from the patch titles to prevent them from
+      auto-backporting by the stable bot based on the title.
+
+    - Added r-b from Emil Velikov and placed the drm_WARN in the
+      drm-shmem patch like he suggested in a comment to v1.
+
+    - Corrected drm-shmem patch dma_resv_lock(obj->resv) inconsistently
+      used with dma_resv_unlock(shmem->base.resv). Now shmem->base.resv
+      variant is used for all locks/unlocks.
+
+Dmitry Osipenko (6):
+  media: videobuf2: Don't assert held reservation lock for dma-buf
+    mmapping
+  dma-buf/heaps: Don't assert held reservation lock for dma-buf mmapping
+  udmabuf: Don't assert held reservation lock for dma-buf mmapping
+  drm: Don't assert held reservation lock for dma-buf mmapping
+  dma-buf: Change locking policy for mmap()
+  drm/shmem-helper: Switch to reservation lock
+
+ drivers/dma-buf/dma-buf.c                     |  17 +-
+ drivers/dma-buf/heaps/cma_heap.c              |   3 -
+ drivers/dma-buf/heaps/system_heap.c           |   3 -
+ drivers/dma-buf/udmabuf.c                     |   2 -
+ drivers/gpu/drm/drm_gem_shmem_helper.c        | 208 ++++++++----------
+ drivers/gpu/drm/drm_prime.c                   |   2 -
+ drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c    |   2 -
+ drivers/gpu/drm/lima/lima_gem.c               |   8 +-
+ drivers/gpu/drm/omapdrm/omap_gem_dmabuf.c     |   2 -
+ drivers/gpu/drm/panfrost/panfrost_drv.c       |   7 +-
+ .../gpu/drm/panfrost/panfrost_gem_shrinker.c  |   6 +-
+ drivers/gpu/drm/panfrost/panfrost_mmu.c       |  19 +-
+ drivers/gpu/drm/tegra/gem.c                   |   2 -
+ .../common/videobuf2/videobuf2-dma-contig.c   |   3 -
+ .../media/common/videobuf2/videobuf2-dma-sg.c |   3 -
+ .../common/videobuf2/videobuf2-vmalloc.c      |   3 -
+ include/drm/drm_gem_shmem_helper.h            |  14 +-
+ 17 files changed, 117 insertions(+), 187 deletions(-)
+
+-- 
+2.40.1
+
