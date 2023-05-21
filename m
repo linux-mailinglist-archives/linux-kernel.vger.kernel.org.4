@@ -2,134 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B92A070AD8A
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 13:05:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0C7C70ADC6
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 13:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232172AbjEULFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 07:05:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40244 "EHLO
+        id S231674AbjEULrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 07:47:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232135AbjEULBe (ORCPT
+        with ESMTP id S231898AbjEULqF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 07:01:34 -0400
-Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB24E1
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 04:01:33 -0700 (PDT)
-Received: by mail-oi1-x236.google.com with SMTP id 5614622812f47-3945180bef1so2996541b6e.1
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 04:01:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684666892; x=1687258892;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BEVVgF6fRqcDcGbTpPr+QMQIBhdEVGHu/g9nl9l3kAo=;
-        b=ZatrjIX6XBKp87w3IlH1+vp1iRu8f0EGtZKtOU0m8C7sa50wWNJzmmT8i4P/a3COAD
-         bxtqNHuByVuYqjNwcye+bHBiIPcxe95vedpJOHao4lA0HL3aZklSaoDBup3/X0Z3ZBSG
-         m54ivKDu0Ct6u9v+PbWLggTpgyiFl2xT7alWJhRHUVFbIGJa4tgYan6YQ9ayD0qCns5+
-         b0JMMYErbK03/oZ9X9WPGyjGyLivD78U8hLPHXQ2GMrl7QYoEkufgW+coU7J4045KUdb
-         EyJ3SvgwY7Y6DEQi+tmhDDF7a3fUL/ueEWTnr9zhmXuUBv5u/Jm1Dur/t7fnSR5aNyic
-         stNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684666892; x=1687258892;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BEVVgF6fRqcDcGbTpPr+QMQIBhdEVGHu/g9nl9l3kAo=;
-        b=aGtC4deTBnsFBx+ik//O7wX4JQBz0p+zgRvT4pMBShuJI5bxq6wu9ATE/KVb9PAY7J
-         bztPpl20WhkF+92wtcZeEJ0j8IbTEycrEsuQFpEUwGCemt2tajluIfeT0+OqrW6Uc48F
-         t5nX3RoV+lSsHcZFUde86WE5il72uRoNxh1cUt/cMxiUem5oaIgwGrYPXEFuvXkAXak4
-         1IhSq9vF1bFhuuRAk3ll9eC+C7Qf0oLMl50KL3YO3j/Tm5I6GaARZRsR6hx1SG9fHmOG
-         yOk4wE/AKhoH1FzeEW39/NS7K/MVvLbEFpyp3K9l0OC9UDAiDgSZ+7mzvL5vQ+kWLgT3
-         c9BA==
-X-Gm-Message-State: AC+VfDxoMONfOr8qaTvhCT9RQRHoWuDdJM7q/Z3nuddiNdhjFS7pEeop
-        DelpkPg4VJI/8GgtJ2TwJ8XiBbtnG0VVu+2K3fA=
-X-Google-Smtp-Source: ACHHUZ7E0zJVT/sc8m3kRGBn1JE212p2WeIluch0hWHDQ0fIANfng29eEF3EW4kAY7vqmecDgcCAS/jauAlUydP9uMM=
-X-Received: by 2002:a05:6808:614e:b0:397:ee99:a616 with SMTP id
- dl14-20020a056808614e00b00397ee99a616mr1383087oib.15.1684666892424; Sun, 21
- May 2023 04:01:32 -0700 (PDT)
+        Sun, 21 May 2023 07:46:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68BAE18F;
+        Sun, 21 May 2023 04:17:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2C716147A;
+        Sun, 21 May 2023 11:17:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47639C4339B;
+        Sun, 21 May 2023 11:17:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684667820;
+        bh=oXwvhxYmXD40/yjCvSkTkZwbE0tn28YyZYrBXJtZc+0=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bP5iPUJUmzbQpyH29R8A2+C7USZY/pXLu2hEf8jck6hUGECaTptPUwg+4JvzY/UXk
+         EiNJ6BrPzJV/S6PNiFG2YDei3T+5U6zT0RLK1RIrN59quiZxFCmrz9YW87Hckp/7ta
+         MF6vckvtDFcHCA4clSIRbihkNvL0vKvmFUtkW+GduHEioiNxObaPWB7Ax/WdHPBebD
+         GI8MaD7RQBBFFl4pmyNucYyNmRAVpFtJkVAsLVzQwbuwc2X0VWWKek4Yfnmbr23CE5
+         Y138AQY47kAtAteK0D72LuX1/nK5tupoECGK6M0KlzxsZoLG6g8dw2sYVg8sWYHHid
+         oIBToRCU8lvlw==
+Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-5527456ede6so2390586eaf.3;
+        Sun, 21 May 2023 04:17:00 -0700 (PDT)
+X-Gm-Message-State: AC+VfDxKYz02kzbcdAzcNIen8+KxpTPrfep9DMX5O0WRPuGw9zQDZn1p
+        WZivM0jhxlDzNX3dbBJfZuI8bJ2zX2fR/jbcei8=
+X-Google-Smtp-Source: ACHHUZ6PGzg0eqaif3me5Nt1Fh731/EEV7EqAVTctdgV4bm+DhKI3Bsu0xT6KKyWaruU6wFpwMPs8uXL7sTmIIpzrMA=
+X-Received: by 2002:aca:1e17:0:b0:38d:f298:6cfc with SMTP id
+ m23-20020aca1e17000000b0038df2986cfcmr4495096oic.0.1684667819560; Sun, 21 May
+ 2023 04:16:59 -0700 (PDT)
 MIME-Version: 1.0
-Sender: tombobolo3@gmail.com
-Received: by 2002:a8a:54a:0:b0:4dc:b40a:643e with HTTP; Sun, 21 May 2023
- 04:01:31 -0700 (PDT)
-From:   Tom Bobo <btom7210@gmail.com>
-Date:   Sun, 21 May 2023 04:01:31 -0700
-X-Google-Sender-Auth: Jhm8oRYqo6FwtcfeZPzH1aBosig
-Message-ID: <CAEgAAzLO-oW6FuZp4x-zujby1C0qWxSo2aEiqXad5ecHkyJGmw@mail.gmail.com>
-Subject: I NEED A TRUSTED PERSON
-To:     undisclosed-recipients:;
+References: <20230515005419.1293357-1-masahiroy@kernel.org> <CAKwvOdkMYKhm1gaDGxqa=J136J1=+vSv=fEVYNJR430Px5Qy6A@mail.gmail.com>
+In-Reply-To: <CAKwvOdkMYKhm1gaDGxqa=J136J1=+vSv=fEVYNJR430Px5Qy6A@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 21 May 2023 20:16:23 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARvKhuWWTcvDj-TWw3yFG-kk_qLyfY44nTeP9bYVHNj-Q@mail.gmail.com>
+Message-ID: <CAK7LNARvKhuWWTcvDj-TWw3yFG-kk_qLyfY44nTeP9bYVHNj-Q@mail.gmail.com>
+Subject: Re: [PATCH] modpost: fix section mismatch message for R_ARM_ABS32
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Russell King <linux@armlinux.org.uk>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Sam Ravnborg <sam@ravnborg.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.3 required=5.0 tests=ADVANCE_FEE_5_NEW_FRM_MNY,
-        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FILL_THIS_FORM,FILL_THIS_FORM_LONG,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,LOTS_OF_MONEY,MILLION_USD,MONEY_FORM,MONEY_FRAUD_8,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
-        T_FILL_THIS_FORM_FRAUD_PHISH,T_FILL_THIS_FORM_LOAN,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:236 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5650]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [tombobolo3[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [tombobolo3[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  1.2 MILLION_USD BODY: Talks about millions of dollars
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  0.0 FILL_THIS_FORM Fill in a form with personal information
-        *  2.0 FILL_THIS_FORM_LONG Fill in a form with personal information
-        *  0.0 T_FILL_THIS_FORM_LOAN Answer loan question(s)
-        *  0.0 MONEY_FORM Lots of money if you fill out a form
-        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
-        *  0.0 T_FILL_THIS_FORM_FRAUD_PHISH Answer suspicious question(s)
-        *  0.0 ADVANCE_FEE_5_NEW_FRM_MNY Advance Fee fraud form and lots of
-        *      money
-        *  2.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I'm Mr Tom Bobolo from West Africa,i am very sorry to intrude into
-your privacy,i got your email address through internet computerized
-search and after my prayers over it,i have to consult you for this
-wonderful opportunity. I have a business deal to share with you in the
-sum of 10. 2 Million USD Dollars that has been held here in (B.O.A)
-bank of Africa. The fund mentioned above rightfully belongs to one of
-our late clients who deposited the money in our bank here in Burkina
-Faso, ever since he died nobody has been able to apply to claim the
-fund. So I hope that you will come and assume as his foreign business
-partner.
-Also note this business is risk free, you do not have to be scared or
-doubtful of its reality. Please my dearest one also note this, once we
-succeed in transferring this fund to your provided account in your
-country it will be shared among us in-agreement of 60% to 40. I
-believe that after this deal joy and happiness will be on our faces
-and families. Please reply to me with your details so we can move on
-with this great plan okay.
-REPLY TO-- ( btom7210@gmail.com )
-Your Full Name.......
-Your Age&Sex........
-Your Marital Status......
-Your Country Name.......
-Your Phone Number......
-Your Occupation.....
-Your Bank Name......
-Your Account Number.....
-Thanks Yours Brotherly
-Mr. Tom Bobolo
+On Thu, May 18, 2023 at 6:41=E2=80=AFAM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Sun, May 14, 2023 at 5:54=E2=80=AFPM Masahiro Yamada <masahiroy@kernel=
+.org> wrote:
+> >
+> > The section mismatch check does not show proper warning messages for AR=
+M.
+> >
+> > Here, very simple test code.
+> >
+> >     #include <linux/init.h>
+> >
+> >     static int __initdata foo;
+> >
+> >     void set_foo(int x)
+> >     {
+> >             foo =3D x;
+> >     }
+> >
+> >     int get_foo(int x)
+> >     {
+> >             return foo;
+> >     }
+> >
+> > If I compile it for ARM, modpost does not show the symbol name.
+> >
+> >   WARNING: modpost: vmlinux.o: section mismatch in reference: set_foo (=
+section: .text) -> (unknown) (section: .init.data)
+> >   WARNING: modpost: vmlinux.o: section mismatch in reference: get_foo (=
+section: .text) -> (unknown) (section: .init.data)
+> >
+> > If I compile it for other architectures, modpost shows the correct symb=
+ol name.
+> >
+> >   WARNING: modpost: vmlinux.o: section mismatch in reference: set_foo (=
+section: .text) -> foo (section: .init.data)
+> >   WARNING: modpost: vmlinux.o: section mismatch in reference: get_foo (=
+section: .text) -> foo (section: .init.data)
+> >
+> > For R_ARM_ABS32, addend_arm_rel() sets r->r_addend to a wrong value.
+> >
+> > arch/arm/kernel/module.c handles R_ARM_ABS32 as follows:
+> >
+> >         case R_ARM_ABS32:
+> >         case R_ARM_TARGET1:
+> >                 *(u32 *)loc +=3D sym->st_value;
+> >
+> > I just mimicked it in modpost.
+> >
+> > Fixes: 56a974fa2d59 ("kbuild: make better section mismatch reports on a=
+rm")
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > ---
+> >
+> >  scripts/mod/modpost.c | 7 ++++---
+> >  1 file changed, 4 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> > index d4531d09984d..c93780d93caf 100644
+> > --- a/scripts/mod/modpost.c
+> > +++ b/scripts/mod/modpost.c
+> > @@ -1460,12 +1460,13 @@ static int addend_386_rel(struct elf_info *elf,=
+ Elf_Shdr *sechdr, Elf_Rela *r)
+> >  static int addend_arm_rel(struct elf_info *elf, Elf_Shdr *sechdr, Elf_=
+Rela *r)
+> >  {
+> >         unsigned int r_typ =3D ELF_R_TYPE(r->r_info);
+> > +       unsigned int *location =3D reloc_location(elf, sechdr, r);
+>
+> If `location` is only used in one case of the switch, consider
+> computing `location` only in that case.
+
+
+I really suspect the other case labels are also wrong.
+
+For example, see R_ARM_PC24 in arch/arm/kernel/module.c
+
+The offset is encoded in the instruction.
+If you can compute the addend without reading the instruction,
+I do not know how.
+
+Anyway, I will fix another breakage.
+It will need 'location' as well.
+
+
+
+
+
+
+
+
+
+>
+> > +       Elf_Sym *sym;
+> >
+> >         switch (r_typ) {
+> >         case R_ARM_ABS32:
+> > -               /* From ARM ABI: (S + A) | T */
+> > -               r->r_addend =3D (int)(long)
+> > -                             (elf->symtab_start + ELF_R_SYM(r->r_info)=
+);
+> > +               sym =3D elf->symtab_start + ELF_R_SYM(r->r_info);
+> > +               r->r_addend =3D TO_NATIVE(*location) + sym->st_value;
+> >                 break;
+> >         case R_ARM_PC24:
+> >         case R_ARM_CALL:
+> > --
+> > 2.39.2
+> >
+>
+>
+> --
+> Thanks,
+> ~Nick Desaulniers
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
