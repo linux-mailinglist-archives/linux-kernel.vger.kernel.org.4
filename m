@@ -2,75 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 802C070AD30
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 11:20:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3E270AD38
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 11:23:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbjEUJUS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 21 May 2023 05:20:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55942 "EHLO
+        id S230056AbjEUJXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 05:23:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbjEUJUO (ORCPT
+        with ESMTP id S229511AbjEUJXn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 05:20:14 -0400
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B352493;
-        Sun, 21 May 2023 02:20:13 -0700 (PDT)
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-528dd896165so3372953a12.2;
-        Sun, 21 May 2023 02:20:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684660813; x=1687252813;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        Sun, 21 May 2023 05:23:43 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E85BE;
+        Sun, 21 May 2023 02:23:42 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-953343581a4so722371066b.3;
+        Sun, 21 May 2023 02:23:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684661020; x=1687253020;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8HwM6KmZId1WNbACaRjkfOnAGeuoeekyl1zBNcHd9TA=;
-        b=XryRZG9kjgR04Bo7y5DJ1NWf9L1YacHwnzTTjdMy6+HRQxSLhryJA2mwGII3zz4uHf
-         ZXFo68HzIhcQfxvylfF9alveHChOjBEwKQCFSm5fugwpEwaDvScEd6S6CPs2iwj6uZdG
-         2FglrwCM1ZXbqReWy0LC9/5fiet6G2k2OEcpPL3emVJ+OQq5KgeD18i0yP3VNGbB1oW+
-         8i7Ilei2iPMa4mAaSB4YRKswINobG23Be6ot5vYOkzlWRqbloU+H6O94Aqr7b11LkFoE
-         /pzCE2TMoq+92poT6Yp6pJKyEs7rvrsrb7zBntWzm6Ls2FmkiZS67RqSeCJKC4vrP1ZU
-         bNgw==
-X-Gm-Message-State: AC+VfDw9cdKdoBQOuy+PYdJ/FObCY6UhgDGhvE8Xc/oW9qVVOajWK5hS
-        Ffm1gGwIWtsCLVC8cVQLTALl+zGqxJbiohJt+mI=
-X-Google-Smtp-Source: ACHHUZ5EcacBz0A46K/VKH3jwBK9qhZjbtZFgrRtmxBbmqtC0ruud8NkHVNYVHupcXDOIoSnjQ9K+XwaOO3YjxUV2t8=
-X-Received: by 2002:a17:90a:e2d3:b0:246:5f9e:e4cf with SMTP id
- fr19-20020a17090ae2d300b002465f9ee4cfmr7011890pjb.43.1684660813127; Sun, 21
- May 2023 02:20:13 -0700 (PDT)
+        bh=FKZukhm5GSKmU51vFPYjTGL4UgfSHtcD+TagC/Ptxm0=;
+        b=skLr/EdpMfEGH9Rbaj/MDqy/ZaCgApTqRce7kKKb/XpIOmxL5ymm0tNmZTn+iosc5T
+         pCI3QttHtALspn/OgQ4CrnDoE/S0wLEUD2mjP/0KT3yfLlcBGDtXdwl4nzjh4LEsAW55
+         fRPctXrHaSyg3rch1vDJ2o5yzUXb1A18zRpFXRXV5HIH6jzLRu1pa2L7yKawF227dQmq
+         uLWwgNJLYrWX6dIFhrKvw5i2ktBJSkKvZXIiTp1Di66t+lSgvkbD3urv7w5hyFFjEAaJ
+         JbuRkwrpvzf+w0wh1H5w5O6z4wrX6RXTPbkaSodDnd54zUW3q+FZ0mDG5FeFeE1Shweh
+         RkGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684661020; x=1687253020;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FKZukhm5GSKmU51vFPYjTGL4UgfSHtcD+TagC/Ptxm0=;
+        b=JvbRCJrACtNhwZxJFR4Oh2uXB5RK4lEfb48SYUWn4J/0vyejhPomNyPPQk0Zea5Q6a
+         lgPY2kKvzbbaCrawrN7Sq4pCKnrR4KuO6r5MK/dBMEBt1ImLBcWfJBgJC3g/r1IVtb87
+         RLMXFolD7AahHHxcDyIZXg39tpk71InRHAQxxfeN4fG2cCvN9QJKSnjs2WxeP1i40Qvc
+         wCE2tqZQsF3cSL7ZVTRrgWQISGQzOh9asFwLjt3CuLpiH1uygc0OTkU5c3lRFQzvReEO
+         7VQ2GgXVJRAnanIiq6aHELewENCNhbNscIG5vbMLBgRaUhT9Re9+1abj7DzqT8gNKwi8
+         YB9Q==
+X-Gm-Message-State: AC+VfDxaxN/grMGwhLQbypxJ7LtiZAN60zT4/ePuZgkD/jiNkzGlpHqD
+        AE/O3CTvdLL7duACs0Wlx+U=
+X-Google-Smtp-Source: ACHHUZ6F95+Byml2u7GCsJXRFro0lfF2gly6Xq17xAqm93aO+AjPp3AXFSISVTQTNvriGN6myyKvsA==
+X-Received: by 2002:a17:906:da89:b0:94e:70bb:5f8a with SMTP id xh9-20020a170906da8900b0094e70bb5f8amr6049235ejb.66.1684661019559;
+        Sun, 21 May 2023 02:23:39 -0700 (PDT)
+Received: from ?IPV6:2a02:168:575a:b00b:a38f:4e43:c984:c3e8? ([2a02:168:575a:b00b:a38f:4e43:c984:c3e8])
+        by smtp.googlemail.com with ESMTPSA id gv3-20020a1709072bc300b0094f3b18044bsm1711947ejc.218.2023.05.21.02.23.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 21 May 2023 02:23:38 -0700 (PDT)
+Message-ID: <6f1e866b-a96a-3134-c735-c941681b0638@gmail.com>
+Date:   Sun, 21 May 2023 11:23:37 +0200
 MIME-Version: 1.0
-References: <20230519195600.420644-1-frank.jungclaus@esd.eu>
-In-Reply-To: <20230519195600.420644-1-frank.jungclaus@esd.eu>
-From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Sun, 21 May 2023 18:20:02 +0900
-Message-ID: <CAMZ6Rq+hYcDks2MWz5fuhHogKYhAhSHg0J7bpKQ8DZaxpXRriw@mail.gmail.com>
-Subject: Re: [PATCH v2 0/6] can: esd_usb: More preparation before supporting
- esd CAN-USB/3
-To:     Frank Jungclaus <frank.jungclaus@esd.eu>
-Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        =?UTF-8?Q?Stefan_M=C3=A4tje?= <stefan.maetje@esd.eu>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Content-Language: en-US
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     linux-i2c@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Evan.Quan@amd.com, Lijo.Lazar@amd.com, Sanket.Goswami@amd.com,
+        heikki.krogerus@linux.intel.com, ajayg@nvidia.com,
+        andriy.shevchenko@linux.intel.com
+References: <20230518161150.92959-1-mario.limonciello@amd.com>
+From:   Gregor Riepl <onitake@gmail.com>
+Subject: Re: [PATCH v2] usb: typec: ucsi: Mark dGPUs as DEVICE scope
+In-Reply-To: <20230518161150.92959-1-mario.limonciello@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Frank,
+> As the power supply for a dGPU is only for powering devices connected
+> to dGPU, create a device property to indicate that the UCSI endpoint
+> is only for the scope of `POWER_SUPPLY_SCOPE_DEVICE`.
 
-On Sat. 20 mai 2023 à 04:57, Frank Jungclaus <frank.jungclaus@esd.eu> wrote:
-> Apply another small batch of patches as preparation for adding support
-> of the newly available esd CAN-USB/3 to esd_usb.c.
-> ---
+Is this a given fact?
 
-I sent two nitpicks but aside from that the series looks good. Thank
-you for taking time to clean-up the existing code before introducing
-the new changes.
+I could imagine that a dGPU device would be capable of feeding power 
+back into the system, for example when an external docking station or 
+display device has a power supply connected to it.
 
-I do not think I will need to review the v3, so in advance:
-
-Reviewed-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Although I don't think it's possible (or safe) with a desktop system, 
+maybe a portable computer with a discrete GPU would be able to do this?
