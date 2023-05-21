@@ -2,85 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6476F70ADD3
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 13:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11B8A70ADC8
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 13:48:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbjEULsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 07:48:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37018 "EHLO
+        id S231292AbjEULrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 07:47:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231487AbjEUKiU (ORCPT
+        with ESMTP id S231650AbjEUKkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 06:38:20 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F5BEE7A;
-        Sun, 21 May 2023 03:28:14 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f41d087b3bso49835875e9.0;
-        Sun, 21 May 2023 03:28:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684664893; x=1687256893;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EDi/bV4t8FuHg0kLhL6xrOY9UnW1rRP8TKkwFlbWsok=;
-        b=WGEiRTS0hwmpHaG4o6Qd+CjuRerdMAMZCmtvy+JKDEX51m7rMBkqEybPP1OkUyRpry
-         rrpQwhrW1DmXyj+bNT6LP2ZtMfj+kgERp1HRbnOB83XR9mrrPJ8WYVsMUm65BOyqZSmA
-         gAMXDDbceLKcAMkIvkphCUjUi4n9xkQPgTKbj/XnjXwsvxTvghHT0m/ZqA1PRqAkM17b
-         ix/giuz9empZ5F+c3TZ1xM7+fMhJC8KuotY5Ujg+Qpty3Q5wKRk2DW2+O6KKjTfYkHhU
-         nvsm264cRKutBCXMR0KbMcfAziHwR+r4n1GSo1RLjOSoeKRNSLsNeuJ0U2OjY+TSORFT
-         mogA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684664893; x=1687256893;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EDi/bV4t8FuHg0kLhL6xrOY9UnW1rRP8TKkwFlbWsok=;
-        b=QAGLnvKl+LXCWWlx2hoygasuWhm1wcz2FUTX3OOYcF3fJxbYXFFw5UIuswYWU3lQ1U
-         FuSwM8spUJQi6ZUswXesQrc0R1iERAGoeWLvv0azaf4PXZqOz7qpdpzJNIaOsrgoGEnu
-         iNBkssfhpWeDMWUe/J8v9tNJC2VqTzwzNhOopwaDuy8zDO11UOI/mfcfgYQt0Ic+NdDV
-         gIuCPJygf8WHbaWiakW6Gof3xgDJWv8S0/ERXKdtSlKUPr9zGpPy0GqME6o2r2r2H3Fn
-         07v7+5ShXO879HLj6BhAmvi4am9KvMWfVpAa4h19eevde4YLUxTe2Himd2tN3j0b9rt/
-         EQsA==
-X-Gm-Message-State: AC+VfDyYKsuTiu809ia5dZa5cHPeT55M56xLwmGwSkyhMvltH0FK4aqa
-        vqNBMp4i8oyQs2ijS5VhInA=
-X-Google-Smtp-Source: ACHHUZ5+rx9X9ugCqBQMsdH8+Y+g0erFQZ4tqSfXn10BM4X5Xjd6W89H6Vc4p7ud3qN1lcPDY+YAPQ==
-X-Received: by 2002:a7b:cb91:0:b0:3f6:1a9:b9db with SMTP id m17-20020a7bcb91000000b003f601a9b9dbmr1289831wmi.21.1684664892392;
-        Sun, 21 May 2023 03:28:12 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id y21-20020a7bcd95000000b003f4e8530696sm4740414wmj.46.2023.05.21.03.28.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 May 2023 03:28:11 -0700 (PDT)
-Date:   Sun, 21 May 2023 13:28:09 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Arun Ramadoss <arun.ramadoss@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
-        netdev@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-        UNGLinuxDriver@microchip.com,
-        "David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH net-next v4 1/2] net: dsa: microchip: ksz8: Make flow
- control, speed, and duplex on CPU port configurable
-Message-ID: <20230521102809.i3o55e4nuuy7dtdu@skbuf>
-References: <20230519124700.635041-1-o.rempel@pengutronix.de>
- <20230519124700.635041-2-o.rempel@pengutronix.de>
- <20230519143004.luvz73jiyvnqxk4y@skbuf>
- <20230519185015.GA18246@pengutronix.de>
- <20230519203449.pc5vbfgbfc6rdo6i@skbuf>
- <20230520050317.GC18246@pengutronix.de>
- <20230520151708.24duenxufth4xsh5@skbuf>
- <20230521043841.GA22442@pengutronix.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230521043841.GA22442@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Sun, 21 May 2023 06:40:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85F219B;
+        Sun, 21 May 2023 03:31:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 384E7616F5;
+        Sun, 21 May 2023 10:28:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 243EBC433EF;
+        Sun, 21 May 2023 10:28:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684664913;
+        bh=fuwAavm/XaNEAXoWfH+8YMFck1QbFLwrPXjkugnEjGc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ZklILM9/gXHkmMK8esniIM/BsLqN2K4sb1ZQSwMJLVSn4FIJLDuSf6SqgodPF887D
+         52utCGg8uIy3Mp8jHuXlxJwsrRcc/O+t8xls6IAPFPQgH05ORKDyi0aOJ1gtr7x++x
+         W0ebfTTsJ7Yp//nU0gL0Qr+7jKFJ7vLuHvpol1/rEdpqamal1a7Wf5e5dPbIy8QLsD
+         TzuNvtoDSvI15/io6hy7ldIoZcnXa/xOn6R2rc8sKxhS1XJvmaG0/2O6jTgizm27bg
+         +sk1gfglqE5tcQsoP45sgfn2m0fyM6242S6JCtRsBYs4mjav+vqqm6wamTHlNtZQkS
+         g/nJd4Gt4kRZA==
+Date:   Sun, 21 May 2023 19:28:26 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     David Howells <dhowells@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Christoph Hellwig <hch@lst.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH v21 26/30] splice: Convert trace/seq to use
+ copy_splice_read()
+Message-Id: <20230521192826.825bfafa17645aacba9b1076@kernel.org>
+In-Reply-To: <20230520000049.2226926-27-dhowells@redhat.com>
+References: <20230520000049.2226926-1-dhowells@redhat.com>
+        <20230520000049.2226926-27-dhowells@redhat.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,49 +71,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 21, 2023 at 06:38:41AM +0200, Oleksij Rempel wrote:
-> Looks good, I like the idea with "wacky" registers!
-> 
-> Would you prefer that I start working on adapting your patch set to the
-> KSZ8873? Or should I make a review to move forward the existing patch set?
-> 
-> Just a heads up, I don't have access to the KSZ87xx series switches, so
-> I won't be able to test the changes on these models.
-> 
-> Let me know what you think and how we should proceed.
+Hi David,
 
-If we convert to regfields, the entire driver will need to be converted
-(all switch families). I'd say make a best effort full conversion, and
-if something breaks on the families which you could not test, surely
-someone will jump to correct it. Since your KSZ8873 also has wacky registers
-(btw, feel free to rename the concept to something more serious), I think
-that not a lot can go wrong with a blind conversion as long as it's tested
-on other hardware.
+On Sat, 20 May 2023 01:00:45 +0100
+David Howells <dhowells@redhat.com> wrote:
 
-BTW, revisiting, I already found a bug in the conversion (patch 2/4):
+> For the splice from the trace seq buffer, just use copy_splice_read().
 
-+	} else if (mii_sel == bitval[P_RMII_SEL]) {
- 		interface = PHY_INTERFACE_MODE_RGMII;
- 	} else {
-+		ret = ksz_regfields_read(dev, port, RF_RGMII_ID_IG_ENABLE, &ig);
-+		if (WARN_ON(ret))
-+			return PHY_INTERFACE_MODE_NA;
-+
-+		ret = ksz_regfields_read(dev, port, RF_RGMII_ID_IG_ENABLE, &eg);
-						    ~~~~~~~~~~~~~~~~~~~~~
-						    should have been RF_RGMII_ID_EG_ENABLE
-+		if (WARN_ON(ret))
-+			return PHY_INTERFACE_MODE_NA;
-+
- 		interface = PHY_INTERFACE_MODE_RGMII;
--		if (data8 & P_RGMII_ID_EG_ENABLE)
-+		if (eg)
- 			interface = PHY_INTERFACE_MODE_RGMII_TXID;
--		if (data8 & P_RGMII_ID_IG_ENABLE) {
-+		if (ig) {
- 			interface = PHY_INTERFACE_MODE_RGMII_RXID;
--			if (data8 & P_RGMII_ID_EG_ENABLE)
-+			if (eg)
- 				interface = PHY_INTERFACE_MODE_RGMII_ID;
- 		}
- 	}
+So this is because you will remove generic_file_splice_read() (since
+it's buggy), right?
+
+> 
+> In the future, something better can probably be done by gifting pages from
+> seq->buf into the pipe, but that would require changing seq->buf into a
+> vmap over an array of pages.
+
+So what we need is to introduce a vmap? We introduced splice support for
+avoiding copy ringbuffer pages, but this drops it. Thus this will drop
+performance of splice on ring buffer (trace file). If it is correct,
+can you also add a note about that?
+
+Thank you,
+
+> 
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Christoph Hellwig <hch@lst.de>
+> cc: Al Viro <viro@zeniv.linux.org.uk>
+> cc: Jens Axboe <axboe@kernel.dk>
+> cc: Steven Rostedt <rostedt@goodmis.org>
+> cc: Masami Hiramatsu <mhiramat@kernel.org>
+> cc: linux-kernel@vger.kernel.org
+> cc: linux-trace-kernel@vger.kernel.org
+> cc: linux-fsdevel@vger.kernel.org
+> cc: linux-block@vger.kernel.org
+> cc: linux-mm@kvack.org
+> ---
+>  kernel/trace/trace.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
+> index ebc59781456a..c210d02fac97 100644
+> --- a/kernel/trace/trace.c
+> +++ b/kernel/trace/trace.c
+> @@ -5171,7 +5171,7 @@ static const struct file_operations tracing_fops = {
+>  	.open		= tracing_open,
+>  	.read		= seq_read,
+>  	.read_iter	= seq_read_iter,
+> -	.splice_read	= generic_file_splice_read,
+> +	.splice_read	= copy_splice_read,
+>  	.write		= tracing_write_stub,
+>  	.llseek		= tracing_lseek,
+>  	.release	= tracing_release,
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
