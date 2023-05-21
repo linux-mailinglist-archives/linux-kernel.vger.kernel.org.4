@@ -2,277 +2,392 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A4070ACE8
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 10:01:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCEB470ACEC
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 10:05:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229783AbjEUIAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 04:00:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45868 "EHLO
+        id S229761AbjEUIFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 04:05:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjEUHw7 (ORCPT
+        with ESMTP id S229519AbjEUIDI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 03:52:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347CC13E;
-        Sun, 21 May 2023 00:51:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 21 May 2023 04:03:08 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DC8E53;
+        Sun, 21 May 2023 01:02:46 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B05E260BC6;
-        Sun, 21 May 2023 07:51:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22DF1C433EF;
-        Sun, 21 May 2023 07:51:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684655513;
-        bh=qCdfiHgWNF+4ugK9D5xFFKCz70goNquE6NddNPUlNAQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=L6Ec5Oy3RWuQt9BK33lg7MUHL7hOiD5bEFd81TQaVyMbFzZJskojVXXW0Ez2KPrJL
-         E5H5lL2kmFaZ45wlE5C9DlCfH5AosHemXtitosku34CF20/LOaI4DEbvt0AvAHlIKz
-         x5b8hsbn2g3Zmh8aIK5qJJLMHO5l82uvLbYE+/N4tzaJWHwFAk9YHoN9HWhrMLfjNX
-         mWdBsnG+NzkhCijyUcj4NFu7qjhdVEqQDX2h7EFfaMJ8J6eBjwkhWs+iikZ1I1DQvq
-         P71UUuv87A6eGO6His1QFN1rtw/KFbHJhAdSVKH0JgRWNB0ObLN6sH/BqP7/Rkz24+
-         Qjsjx/ttS9XYw==
-Date:   Sun, 21 May 2023 16:51:48 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Florent Revest <revest@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org
-Subject: Re: [PATCH v12 11/11] Documentation: tracing/probes: Add fprobe
- event tracing document
-Message-Id: <20230521165148.80e689b343f556f047042e6e@kernel.org>
-In-Reply-To: <b31f1995-4d73-4a5a-108a-606691c8de18@gmail.com>
-References: <168438749373.1517340.14083401972478496211.stgit@mhiramat.roam.corp.google.com>
-        <168438759098.1517340.8357153598969739502.stgit@mhiramat.roam.corp.google.com>
-        <b31f1995-4d73-4a5a-108a-606691c8de18@gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 779031FD7B;
+        Sun, 21 May 2023 08:02:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1684656165; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pCK3meqcPobnyOfFHNVNquedHciiEj56/ANbHw3V9G0=;
+        b=g7+YFBuKM8l4Dzz/5km5k9RkyklczO+aJCZDx7HB6Wg0fueUKjgrTy+ACYvF9vfMDaXRPd
+        Z3+sk1771dLOfc5jDPJOLMkxiZVMdCv7H2+gPk1jPW8x/F3ZefExcGHXyWks10NxwDyrYW
+        D7bzKBp5Hzi5XD1jYlGkZdaxGzfMPS4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1684656165;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pCK3meqcPobnyOfFHNVNquedHciiEj56/ANbHw3V9G0=;
+        b=8OBNf4PibLW2junhTZok8nZ8XLPBMpy+chGHjUvmsfyxlvSYkrS45BQbKXL3SdZttcOPBZ
+        l5igGOtL/05LfMBQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 142501346B;
+        Sun, 21 May 2023 08:02:45 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id cODvAyXQaWT0LgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Sun, 21 May 2023 08:02:45 +0000
+Date:   Sun, 21 May 2023 10:02:44 +0200
+Message-ID: <871qjayuvv.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Shenghao Ding <13916275206@139.com>
+Cc:     broonie@kernel.org, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        lgirdwood@gmail.com, perex@perex.cz,
+        pierre-louis.bossart@linux.intel.com, kevin-lu@ti.com,
+        shenghao-ding@ti.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, x1077012@ti.com, peeyush@ti.com,
+        navada@ti.com, gentuser@gmail.com, Ryan_Chu@wistron.com,
+        Sam_Wu@wistron.com
+Subject: Re: [PATCH v3 4/5] ALSA: hda/tas2781: Add tas2781 HDA driver
+In-Reply-To: <20230519080227.20224-1-13916275206@139.com>
+References: <20230519080227.20224-1-13916275206@139.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 May 2023 16:00:49 +0700
-Bagas Sanjaya <bagasdotme@gmail.com> wrote:
-
-> On 5/18/23 12:26, Masami Hiramatsu (Google) wrote:
-> > diff --git a/Documentation/trace/fprobetrace.rst b/Documentation/trace/fprobetrace.rst
-> > new file mode 100644
-> > index 000000000000..e949bc0cff05
-> > --- /dev/null
-> > +++ b/Documentation/trace/fprobetrace.rst
-> > @@ -0,0 +1,188 @@
-> > +.. SPDX-License-Identifier: GPL-2.0
-> > +
-> > +==========================
-> > +Fprobe-based Event Tracing
-> > +==========================
-> > +
-> > +.. Author: Masami Hiramatsu <mhiramat@kernel.org>
-> > +
-> > +Overview
-> > +--------
-> > +
-> > +Fprobe event is similar to the kprobe event, but limited to probe on
-> > +the function entry and exit only. It is good enough for many use cases
-> > +which only traces some specific functions.
-> > +
-> > +This document also covers tracepoint probe events (tprobe) since this
-> > +is also works only on the tracepoint entry. User can trace a part of
-> > +tracepoint argument, or the tracepoint without trace-event, which is
-> > +not exposed on tracefs.
-> > +
-> > +As same as other dynamic events, fprobe events and tracepoint probe
-> > +events are defined via `dynamic_events` interface file on tracefs.
-> > +
-> > +Synopsis of fprobe-events
-> > +-------------------------
-> > +::
-> > +
-> > +  f[:[GRP1/][EVENT1]] SYM [FETCHARGS]                       : Probe on function entry
-> > +  f[MAXACTIVE][:[GRP1/][EVENT1]] SYM%return [FETCHARGS]     : Probe on function exit
-> > +  t[:[GRP2/][EVENT2]] TRACEPOINT [FETCHARGS]                : Probe on tracepoint
-> > +
-> > + GRP1           : Group name for fprobe. If omitted, use "fprobes" for it.
-> > + GRP2           : Group name for tprobe. If omitted, use "tracepoints" for it.
-> > + EVENT1         : Event name for fprobe. If omitted, the event name is
-> > +                  "SYM__entry" or "SYM__exit".
-> > + EVENT2         : Event name for tprobe. If omitted, the event name is
-> > +                  the same as "TRACEPOINT", but if the "TRACEPOINT" starts
-> > +                  with a digit character, "_TRACEPOINT" is used.
-> > + MAXACTIVE      : Maximum number of instances of the specified function that
-> > +                  can be probed simultaneously, or 0 for the default value
-> > +                  as defined in Documentation/trace/fprobes.rst
-> > +
-> > + FETCHARGS      : Arguments. Each probe can have up to 128 args.
-> > +  ARG           : Fetch "ARG" function argument using BTF (only for function
-> > +                  entry or tracepoint.) (\*1)
-> > +  @ADDR         : Fetch memory at ADDR (ADDR should be in kernel)
-> > +  @SYM[+|-offs] : Fetch memory at SYM +|- offs (SYM should be a data symbol)
-> > +  $stackN       : Fetch Nth entry of stack (N >= 0)
-> > +  $stack        : Fetch stack address.
-> > +  $argN         : Fetch the Nth function argument. (N >= 1) (\*2)
-> > +  $retval       : Fetch return value.(\*3)
-> > +  $comm         : Fetch current task comm.
-> > +  +|-[u]OFFS(FETCHARG) : Fetch memory at FETCHARG +|- OFFS address.(\*4)(\*5)
-> > +  \IMM          : Store an immediate value to the argument.
-> > +  NAME=FETCHARG : Set NAME as the argument name of FETCHARG.
-> > +  FETCHARG:TYPE : Set TYPE as the type of FETCHARG. Currently, basic types
-> > +                  (u8/u16/u32/u64/s8/s16/s32/s64), hexadecimal types
-> > +                  (x8/x16/x32/x64), "char", "string", "ustring", "symbol", "symstr"
-> > +                  and bitfield are supported.
-> > +
-> > +  (\*1) This is available only when BTF is enabled.
-> > +  (\*2) only for the probe on function entry (offs == 0).
-> > +  (\*3) only for return probe.
-> > +  (\*4) this is useful for fetching a field of data structures.
-> > +  (\*5) "u" means user-space dereference.
-> > +
-> > +For the details of TYPE, see :ref:`kprobetrace documentation <kprobetrace_types>`.
-> > +
-> > +BTF arguments
-> > +-------------
-> > +BTF (BPF Type Format) argument allows user to trace function and tracepoint
-> > +parameters by its name instead of ``$argN``. This feature is available if the
-> > +kernel is configured with CONFIG_BPF_SYSCALL and CONFIG_DEBUG_INFO_BTF.
-> > +If user only specify the BTF argument, the event's argument name is also
-> > +automatically set by the given name. ::
-> > +
-> > + # echo 'f:myprobe vfs_read count pos' >> dynamic_events
-> > + # cat dynamic_events
-> > + f:fprobes/myprobe vfs_read count=count pos=pos
-> > +
-> > +It also chooses the fetch type from BTF information. For example, in the above
-> > +example, the ``count`` is unsigned long, and the ``pos`` is a pointer. Thus, both
-> > +are converted to 64bit unsigned long, but only ``pos`` has "%Lx" print-format as
-> > +below ::
-> > +
-> > + # cat events/fprobes/myprobe/format
-> > + name: myprobe
-> > + ID: 1313
-> > + format:
-> > +	field:unsigned short common_type;	offset:0;	size:2;	signed:0;
-> > +	field:unsigned char common_flags;	offset:2;	size:1;	signed:0;
-> > +	field:unsigned char common_preempt_count;	offset:3;	size:1;	signed:0;
-> > +	field:int common_pid;	offset:4;	size:4;	signed:1;
-> > +
-> > +	field:unsigned long __probe_ip;	offset:8;	size:8;	signed:0;
-> > +	field:u64 count;	offset:16;	size:8;	signed:0;
-> > +	field:u64 pos;	offset:24;	size:8;	signed:0;
-> > +
-> > + print fmt: "(%lx) count=%Lu pos=0x%Lx", REC->__probe_ip, REC->count, REC->pos
-> > +
-> > +If user unsures the name of arguments, ``$arg*`` will be helpful. The ``$arg*``
-> > +is expanded to all function arguments of the function or the tracepoint. ::
-> > +
-> > + # echo 'f:myprobe vfs_read $arg*' >> dynamic_events
-> > + # cat dynamic_events
-> > + f:fprobes/myprobe vfs_read file=file buf=buf count=count pos=pos
-> > +
-> > +BTF also affects the ``$retval``. If user doesn't set any type, the retval type is
-> > +automatically picked from the BTF. If the function returns ``void``, ``$retval``
-> > +is rejected.
-> > +
-> > +Usage examples
-> > +--------------
-> > +Here is an example to add fprobe events on ``vfs_read()`` function entry
-> > +and exit, with BTF arguments.
-> > +::
-> > +
-> > +  # echo 'f vfs_read $arg*' >> dynamic_events
-> > +  # echo 'f vfs_read%return $retval' >> dynamic_events
-> > +  # cat dynamic_events
-> > + f:fprobes/vfs_read__entry vfs_read file=file buf=buf count=count pos=pos
-> > + f:fprobes/vfs_read__exit vfs_read%return arg1=$retval
-> > +  # echo 1 > events/fprobes/enable
-> > +  # head -n 20 trace | tail
-> > + #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-> > + #              | |         |   |||||     |         |
-> > +               sh-70      [000] ...1.   335.883195: vfs_read__entry: (vfs_read+0x4/0x340) file=0xffff888005cf9a80 buf=0x7ffef36c6879 count=1 pos=0xffffc900005aff08
-> > +               sh-70      [000] .....   335.883208: vfs_read__exit: (ksys_read+0x75/0x100 <- vfs_read) arg1=1
-> > +               sh-70      [000] ...1.   335.883220: vfs_read__entry: (vfs_read+0x4/0x340) file=0xffff888005cf9a80 buf=0x7ffef36c6879 count=1 pos=0xffffc900005aff08
-> > +               sh-70      [000] .....   335.883224: vfs_read__exit: (ksys_read+0x75/0x100 <- vfs_read) arg1=1
-> > +               sh-70      [000] ...1.   335.883232: vfs_read__entry: (vfs_read+0x4/0x340) file=0xffff888005cf9a80 buf=0x7ffef36c687a count=1 pos=0xffffc900005aff08
-> > +               sh-70      [000] .....   335.883237: vfs_read__exit: (ksys_read+0x75/0x100 <- vfs_read) arg1=1
-> > +               sh-70      [000] ...1.   336.050329: vfs_read__entry: (vfs_read+0x4/0x340) file=0xffff888005cf9a80 buf=0x7ffef36c6879 count=1 pos=0xffffc900005aff08
-> > +               sh-70      [000] .....   336.050343: vfs_read__exit: (ksys_read+0x75/0x100 <- vfs_read) arg1=1
-> > +
-> > +You can see all function arguments and return values are recorded as signed int.
-> > +
-> > +Also, here is an example of tracepoint events on ``sched_switch`` tracepoint.
-> > +To compare the result, this also enables the ``sched_switch`` traceevent too.
-> > +::
-> > +
-> > +  # echo 't sched_switch $arg*' >> dynamic_events
-> > +  # echo 1 > events/sched/sched_switch/enable
-> > +  # echo 1 > events/tracepoints/sched_switch/enable
-> > +  # echo > trace
-> > +  # head -n 20 trace | tail
-> > + #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-> > + #              | |         |   |||||     |         |
-> > +               sh-70      [000] d..2.  3912.083993: sched_switch: prev_comm=sh prev_pid=70 prev_prio=120 prev_state=S ==> next_comm=swapper/0 next_pid=0 next_prio=120
-> > +               sh-70      [000] d..3.  3912.083995: sched_switch: (__probestub_sched_switch+0x4/0x10) preempt=0 prev=0xffff88800664e100 next=0xffffffff828229c0 prev_state=1
-> > +           <idle>-0       [000] d..2.  3912.084183: sched_switch: prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcu_preempt next_pid=16 next_prio=120
-> > +           <idle>-0       [000] d..3.  3912.084184: sched_switch: (__probestub_sched_switch+0x4/0x10) preempt=0 prev=0xffffffff828229c0 next=0xffff888004208000 prev_state=0
-> > +      rcu_preempt-16      [000] d..2.  3912.084196: sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=120 prev_state=I ==> next_comm=swapper/0 next_pid=0 next_prio=120
-> > +      rcu_preempt-16      [000] d..3.  3912.084196: sched_switch: (__probestub_sched_switch+0x4/0x10) preempt=0 prev=0xffff888004208000 next=0xffffffff828229c0 prev_state=1026
-> > +           <idle>-0       [000] d..2.  3912.085191: sched_switch: prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcu_preempt next_pid=16 next_prio=120
-> > +           <idle>-0       [000] d..3.  3912.085191: sched_switch: (__probestub_sched_switch+0x4/0x10) preempt=0 prev=0xffffffff828229c0 next=0xffff888004208000 prev_state=0
-> > +
-> > +As you can see, the ``sched_switch`` trace-event shows *cooked* parameters, on
-> > +the other hand, the ``sched_switch`` tracepoint probe event shows *raw*
-> > +parameters. This means you can access any field values in the task
-> > +structure pointed by the ``prev`` and ``next`` arguments.
-> > +
-> > +For example, usually ``task_struct::start_time`` is not traced, but with this
-> > +traceprobe event, you can trace it as below.
-> > +::
-> > +
-> > +  # echo 't sched_switch comm=+1896(next):string start_time=+1728(next):u64' > dynamic_events
-> > +  # head -n 20 trace | tail
-> > + #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-> > + #              | |         |   |||||     |         |
-> > +               sh-70      [000] d..3.  5606.686577: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="rcu_preempt" usage=1 start_time=245000000
-> > +      rcu_preempt-16      [000] d..3.  5606.686602: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="sh" usage=1 start_time=1596095526
-> > +               sh-70      [000] d..3.  5606.686637: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="swapper/0" usage=2 start_time=0
-> > +           <idle>-0       [000] d..3.  5606.687190: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="rcu_preempt" usage=1 start_time=245000000
-> > +      rcu_preempt-16      [000] d..3.  5606.687202: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="swapper/0" usage=2 start_time=0
-> > +           <idle>-0       [000] d..3.  5606.690317: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="kworker/0:1" usage=1 start_time=137000000
-> > +      kworker/0:1-14      [000] d..3.  5606.690339: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="swapper/0" usage=2 start_time=0
-> > +           <idle>-0       [000] d..3.  5606.692368: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="kworker/0:1" usage=1 start_time=137000000
-> > +
-> > +Currently, to find the offset of a specific field in the data structure,
-> > +you need to build kernel with debuginfo and run `perf probe` command with
-> > +`-D` option. e.g.
-> > +::
-> > +
-> > + # perf probe -D "__probestub_sched_switch next->comm:string next->start_time"
-> > + p:probe/__probestub_sched_switch __probestub_sched_switch+0 comm=+1896(%cx):string start_time=+1728(%cx):u64
-> > +
-> > +And replace the ``%cx`` with the ``next``.
+On Fri, 19 May 2023 10:02:27 +0200,
+Shenghao Ding wrote:
 > 
-> The doc LGTM, thanks!
+> Create tas2781 HDA driver.
 > 
-> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> 
+> Signed-off-by: Shenghao Ding <13916275206@139.com>
 
-Thanks Bagas!
+First of all, please give more description.  It's far more changes
+than written in four words.
 
-> -- 
-> An old man doll... just what I always wanted! - Clara
-> 
+Also, don't forget to put me on Cc.  I almost overlooked this one.
+
+> diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+> index 172ffc2c332b..f5b912f90018 100644
+> --- a/sound/pci/hda/patch_realtek.c
+> +++ b/sound/pci/hda/patch_realtek.c
+> +static int comp_match_tas2781_dev_name(struct device *dev, void *data)
+> +{
+> +	struct scodec_dev_name *p = data;
+> +	const char *d = dev_name(dev);
+> +	int n = strlen(p->bus);
+> +	char tmp[32];
+> +
+> +	/* check the bus name */
+> +	if (strncmp(d, p->bus, n))
+> +		return 0;
+> +	/* skip the bus number */
+> +	if (isdigit(d[n]))
+> +		n++;
+> +	/* the rest must be exact matching */
+> +	snprintf(tmp, sizeof(tmp), "-%s:00", p->hid);
+> +
+> +	return !strcmp(d + n, tmp);
+> +}
+
+You don't use the index here...
+
+> +static void tas2781_generic_fixup(struct hda_codec *cdc, int action,
+> +	const char *bus, const char *hid, int count)
+> +{
+> +	struct device *dev = hda_codec_dev(cdc);
+> +	struct alc_spec *spec = cdc->spec;
+> +	struct scodec_dev_name *rec;
+> +	int ret, i;
+> +
+> +	switch (action) {
+> +	case HDA_FIXUP_ACT_PRE_PROBE:
+> +		for (i = 0; i < count; i++) {
+> +			rec = devm_kmalloc(dev, sizeof(*rec), GFP_KERNEL);
+> +			if (!rec)
+> +				return;
+> +			rec->bus = bus;
+> +			rec->hid = hid;
+> +			rec->index = i;
+
+... and assigning here.  It means that the multiple instances would
+silently break.  It's better to catch here instead.
+
+> +static void tas2781_fixup_i2c(struct hda_codec *cdc,
+> +	const struct hda_fixup *fix, int action)
+> +{
+> +	 tas2781_generic_fixup(cdc, action, "i2c", "TIAS2781", 1);
+> +}
+> +
+>  /* for alc295_fixup_hp_top_speakers */
+>  #include "hp_x360_helper.c"
+>  
+> @@ -7201,6 +7260,8 @@ enum {
+>  	ALC287_FIXUP_YOGA9_14IAP7_BASS_SPK_PIN,
+>  	ALC295_FIXUP_DELL_INSPIRON_TOP_SPEAKERS,
+>  	ALC236_FIXUP_DELL_DUAL_CODECS,
+> +	ALC287_FIXUP_TAS2781_I2C_2,
+> +	ALC287_FIXUP_TAS2781_I2C_4
+>  };
+>  
+>  /* A special fixup for Lenovo C940 and Yoga Duet 7;
+> @@ -9189,6 +9250,18 @@ static const struct hda_fixup alc269_fixups[] = {
+>  		.chained = true,
+>  		.chain_id = ALC255_FIXUP_DELL1_MIC_NO_PRESENCE,
+>  	},
+> +	[ALC287_FIXUP_TAS2781_I2C_2] = {
+> +		.type = HDA_FIXUP_FUNC,
+> +		.v.func = tas2781_fixup_i2c,
+> +		.chained = true,
+> +		.chain_id = ALC269_FIXUP_THINKPAD_ACPI,
+> +	},
+> +	[ALC287_FIXUP_TAS2781_I2C_4] = {
+> +		.type = HDA_FIXUP_FUNC,
+> +		.v.func = tas2781_fixup_i2c,
+> +		.chained = true,
+> +		.chain_id = ALC269_FIXUP_THINKPAD_ACPI,
+> +	},
+
+What's a difference between *_2 and *_4?
+
+> --- /dev/null
+> +++ b/sound/pci/hda/tas2781_hda_i2c.c
+> +static int tas2781_acpi_get_i2c_resource(struct acpi_resource
+> +	*ares, void *data)
+> +{
+> +	struct tasdevice_priv *tas_priv = (struct tasdevice_priv *)data;
+> +	struct acpi_resource_i2c_serialbus *sb;
+> +
+> +	if (i2c_acpi_get_i2c_resource(ares, &sb)) {
+> +		if (sb->slave_address != TAS2781_GLOBAL_ADDR) {
+> +			tas_priv->tasdevice[tas_priv->ndev].dev_addr =
+> +				(unsigned int) sb->slave_address;
+> +			tas_priv->ndev++;
+> +		} else
+> +			tas_priv->glb_addr.dev_addr = TAS2781_GLOBAL_ADDR;
+> +
+
+Did you run checkpatch.pl?  I thought it would complain.
+
+> +static void tas2781_hda_playback_hook(struct device *dev, int action)
+> +{
+> +	struct tasdevice_priv *tas_priv = dev_get_drvdata(dev);
+> +	int ret = 0;
+> +
+> +	dev_info(tas_priv->dev, "%s: action = %d\n", __func__, action);
+
+Don't use dev_info().  It'd be dev_dbg() at most.
+
+> +	switch (action) {
+> +	case HDA_GEN_PCM_ACT_OPEN:
+> +		pm_runtime_get_sync(dev);
+> +		mutex_lock(&tas_priv->codec_lock);
+> +		tas_priv->cur_conf = 0;
+> +		tas_priv->rcabin.profile_cfg_id = 1;
+> +		tasdevice_tuning_switch(tas_priv, 0);
+> +		mutex_unlock(&tas_priv->codec_lock);
+> +		break;
+> +	case HDA_GEN_PCM_ACT_CLOSE:
+> +		mutex_lock(&tas_priv->codec_lock);
+> +		tasdevice_tuning_switch(tas_priv, 1);
+> +		mutex_unlock(&tas_priv->codec_lock);
+> +
+> +		pm_runtime_mark_last_busy(dev);
+> +		pm_runtime_put_autosuspend(dev);
+> +		break;
+> +	default:
+> +		dev_warn(tas_priv->dev, "Playback action not supported: %d\n",
+> +			action);
+> +		break;
+> +	}
+> +
+> +	if (ret)
+> +		dev_err(tas_priv->dev, "Regmap access fail: %d\n", ret);
+
+The ret is never used.
+
+> +static int tasdevice_set_profile_id(struct snd_kcontrol *kcontrol,
+> +		struct snd_ctl_elem_value *ucontrol)
+> +{
+> +	struct tasdevice_priv *tas_priv = snd_kcontrol_chip(kcontrol);
+> +
+> +	tas_priv->rcabin.profile_cfg_id = ucontrol->value.integer.value[0];
+> +
+> +	return 1;
+
+It should return 0 if the value is unchanged.
+(Ditto for other *_put functions)
+
+> +static int tasdevice_create_control(struct tasdevice_priv *tas_priv)
+> +{
+> +	char prof_ctrl_name[SNDRV_CTL_ELEM_ID_NAME_MAXLEN];
+> +	struct hda_codec *codec = tas_priv->codec;
+> +	struct snd_kcontrol_new prof_ctrl = {
+> +		.name = prof_ctrl_name,
+> +		.iface = SNDRV_CTL_ELEM_IFACE_CARD,
+> +		.info = tasdevice_info_profile,
+> +		.get = tasdevice_get_profile_id,
+> +		.put = tasdevice_set_profile_id,
+> +	};
+> +	int ret;
+> +
+> +	/* Create a mixer item for selecting the active profile */
+> +	scnprintf(prof_ctrl_name, SNDRV_CTL_ELEM_ID_NAME_MAXLEN,
+> +		"tasdev-profile-id");
+
+A too bad name as a control element.  Use a more readable one.
+
+> +static int tasdevice_info_programs(struct snd_kcontrol *kcontrol,
+> +			struct snd_ctl_elem_info *uinfo)
+> +{
+> +	struct tasdevice_priv *tas_priv = snd_kcontrol_chip(kcontrol);
+> +	struct tasdevice_fw *tas_fw = tas_priv->fmw;
+> +
+> +	uinfo->type = SNDRV_CTL_ELEM_TYPE_INTEGER;
+> +	uinfo->count = 1;
+> +	uinfo->value.integer.min = 0;
+> +	uinfo->value.integer.max = (int)tas_fw->nr_programs;
+
+The cast is superfluous.
+
+> +static int tasdevice_info_configurations(
+> +	struct snd_kcontrol *kcontrol, struct snd_ctl_elem_info *uinfo)
+> +{
+> +	struct tasdevice_priv *tas_priv = snd_kcontrol_chip(kcontrol);
+> +	struct tasdevice_fw *tas_fw = tas_priv->fmw;
+> +
+> +	uinfo->type = SNDRV_CTL_ELEM_TYPE_INTEGER;
+> +	uinfo->count = 1;
+> +	uinfo->value.integer.min = 0;
+> +	uinfo->value.integer.max = (int)tas_fw->nr_configurations - 1;
+
+Ditto.
+
+> +/**
+> + * tas2781_digital_getvol - get the volum control
+> + * @kcontrol: control pointer
+> + * @ucontrol: User data
+> + * Customer Kcontrol for tas2781 is primarily for regmap booking, paging
+> + * depends on internal regmap mechanism.
+> + * tas2781 contains book and page two-level register map, especially
+> + * book switching will set the register BXXP00R7F, after switching to the
+> + * correct book, then leverage the mechanism for paging to access the
+> + * register.
+> + */
+
+You shouldn't use the kerneldoc marker "/**" for local static
+functions.  It's not a part of API.
+
+> +static int tasdevice_dsp_create_ctrls(struct tasdevice_priv
+> +	*tas_priv)
+> +{
+> +	char prog_name[SNDRV_CTL_ELEM_ID_NAME_MAXLEN];
+> +	char conf_name[SNDRV_CTL_ELEM_ID_NAME_MAXLEN];
+> +	struct hda_codec *codec = tas_priv->codec;
+> +	struct snd_kcontrol_new prog_ctl = {
+> +		.name = prog_name,
+> +		.iface = SNDRV_CTL_ELEM_IFACE_CARD,
+> +		.info = tasdevice_info_programs,
+> +		.get = tasdevice_program_get,
+> +		.put = tasdevice_program_put,
+> +	};
+> +	struct snd_kcontrol_new conf_ctl = {
+> +		.name = conf_name,
+> +		.iface = SNDRV_CTL_ELEM_IFACE_CARD,
+> +		.info = tasdevice_info_configurations,
+> +		.get = tasdevice_config_get,
+> +		.put = tasdevice_config_put,
+> +	};
+> +	int ret;
+> +
+> +	scnprintf(prog_name, SNDRV_CTL_ELEM_ID_NAME_MAXLEN, "tasdev-prog-id");
+> +	scnprintf(conf_name, SNDRV_CTL_ELEM_ID_NAME_MAXLEN, "tasdev-conf-id");
+
+Please use better names.
+
+> +static void tas2781_apply_calib(struct tasdevice_priv *tas_priv)
+> +{
+> +	unsigned char page_array[CALIB_MAX] = {0x17, 0x18, 0x18, 0x0d, 0x18};
+> +	unsigned char rgno_array[CALIB_MAX] = {0x74, 0x0c, 0x14, 0x3c, 0x7c};
+
+Should be static const arrays.
+
+> +static int tas2781_save_calibration(struct tasdevice_priv *tas_priv)
+> +{
+> +	efi_guid_t efi_guid = EFI_GUID(0x02f9af02, 0x7734, 0x4233, 0xb4, 0x3d,
+> +		0x93, 0xfe, 0x5a, 0xa3, 0x5d, 0xb3);
+> +	static efi_char16_t efi_name[] = L"CALI_DATA";
+> +	struct hda_codec *codec = tas_priv->codec;
+> +	unsigned int subid = codec->core.subsystem_id & 0xFFFF;
+> +	struct tm *tm = &tas_priv->tm;
+> +	unsigned int attr, crc;
+> +	unsigned int *tmp_val;
+> +	efi_status_t status;
+> +	int ret = 0;
+> +
+> +	//Lenovo devices
+> +	if ((subid == 0x387d) || (subid == 0x387e) || (subid == 0x3881)
+> +		|| (subid == 0x3884) || (subid == 0x3886) || (subid == 0x38a7)
+> +		|| (subid == 0x38a8) || (subid == 0x38ba) || (subid == 0x38bb)
+> +		|| (subid == 0x38be) || (subid == 0x38bf) || (subid == 0x38c3)
+> +		|| (subid == 0x38cb) || (subid == 0x38cd))
+> +		efi_guid = EFI_GUID(0x1f52d2a1, 0xbb3a, 0x457d, 0xbc, 0x09,
+> +			0x43, 0xa3, 0xf4, 0x31, 0x0a, 0x92);
+
+Here can be a problem: the device ID is embedded here, and it's hard
+to find out.  You'd better to make it some quirk flag that is set in a
+common place and check the flag here instead of checking ID at each
+place.
+
+> +	crc = crc32(~0, tas_priv->cali_data.data, 84) ^ ~0;
+> +	dev_info(tas_priv->dev, "cali crc 0x%08x PK tmp_val 0x%08x\n",
+> +		crc, tmp_val[21]);
+
+If it's a dev_info() output, make it more understandable.
+
+> +	if (crc == tmp_val[21]) {
+> +		time64_to_tm(tmp_val[20], 0, tm);
+> +		dev_info(tas_priv->dev, "%4ld-%2d-%2d, %2d:%2d:%2d\n",
+> +			tm->tm_year, tm->tm_mon, tm->tm_mday,
+> +			tm->tm_hour, tm->tm_min, tm->tm_sec);
+
+Ditto.  Or, make them a debug print instead.
+
+> +static int tas2781_runtime_suspend(struct device *dev)
+> +{
+> +	struct tasdevice_priv *tas_priv = dev_get_drvdata(dev);
+> +	int i, ret = 0;
+> +
+> +	dev_info(tas_priv->dev, "Runtime Suspend\n");
+
+It must be a debug print.  Otherwise it'll be too annoying.
+
+Also, as a minor nitpicking, there are many functions that set ret = 0
+at the beginning but never used.  The unconditional 0 initialization
+is often a bad sign indicating that the author doesn't think fully of
+the code flow.  Please revisit those.
 
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+thanks,
+
+Takashi
