@@ -2,82 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77EB070B16D
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 00:23:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03FFC70B170
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 00:23:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231172AbjEUWXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 18:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38534 "EHLO
+        id S231186AbjEUWX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 18:23:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjEUWXw (ORCPT
+        with ESMTP id S231173AbjEUWXy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 18:23:52 -0400
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B26DD;
-        Sun, 21 May 2023 15:23:51 -0700 (PDT)
-Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-39415d3526bso1805614b6e.2;
-        Sun, 21 May 2023 15:23:51 -0700 (PDT)
+        Sun, 21 May 2023 18:23:54 -0400
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC68DD;
+        Sun, 21 May 2023 15:23:53 -0700 (PDT)
+Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-6af6df840ffso757334a34.1;
+        Sun, 21 May 2023 15:23:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684707830; x=1687299830;
+        d=1e100.net; s=20221208; t=1684707833; x=1687299833;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=UTDXznobr9OPk+Kds1D2lbqkYdCbNQhB7fj/Qh9tqKo=;
-        b=DkZtRC3wKGVk7KlENQIVplS3L2HonPW1ookSIhbnhtwkfffLIzSJRhhhNrTHVhj/9E
-         22acdedscyboX5khJJBhvyYsi7IhpQIf/Lpc5pJ7VPPgrnXBLzfaoXyOoZpWKTFu6KnL
-         7eMPUgZzzLpDfDhyj4YKrfLSFGJSRzHAZqjlI+yI3tcnHhokSvZVfMJnU6UWlRtf9Zg9
-         N4/DIteH4lX21Kk4511u1RjKHuUDUwtg1ebJvYLJ4S1Vjrv6oMVhn7i604aNUhNmI7d/
-         0+aFTujyLBxWo8KHHGZEN2QKhyNYELsPDHNtP5Ox3EMWUPtnp3/V/tR09cndytbXeHF/
-         49rA==
-X-Gm-Message-State: AC+VfDzHoPYiViVj+WL2jvkfhvY2TdBwCHsxq2zjmsF3FmQeAMgtApxG
-        QMrRmoUoRCj2i2XAUL2ZCQ==
-X-Google-Smtp-Source: ACHHUZ4mXZIQJRPImk5ZQVXVSf87ZYMaE7QQotlJ+SeOXmbjEFs6/lL9AYO1x/bwqPZ9UK6CS+zBbA==
-X-Received: by 2002:a05:6808:601:b0:396:38a9:cd80 with SMTP id y1-20020a056808060100b0039638a9cd80mr4357194oih.12.1684707830411;
-        Sun, 21 May 2023 15:23:50 -0700 (PDT)
+        bh=KAY67UCuApho3EFGBTe+ZwXaOBBvqQRkfmzBqO+gFKk=;
+        b=S2ZGPZidlN3cOFNKQPt9zHHYKuqzB0EAt0r80dbz2gn582/XBuXMlgJHroO82boDs8
+         ssn3v9BNZo2p0shmWqelD+WtsNqALpPPXLBPOyweIQktuQtoBuTUfmBOn8sUp8ZSB7d1
+         9tW6FW5bvazieEMiZlIvClWw8T/utNdEJGlAVPxYzNiOXnPXH2AKwaWStNTmKUgm6UsI
+         IkuZ7ITlPJ/i4B7WQib8W2IG66be1YdezHx6OV7UB5FlSgzAOt/RXbA7mV5WS1cglpzI
+         nY8rQpLwI8e3stuWCUVTUVF4P7soz7LCkRgIyivE0PwF17gFNJVON9DlzsnDby0m00Bu
+         cSWQ==
+X-Gm-Message-State: AC+VfDxsuVXr9d90q0cpfUSUIlOMaAJFxv0AzTa+lkg7FmsJAaAtPxZU
+        yhyHujVoeP/I9IO6dpCz6w==
+X-Google-Smtp-Source: ACHHUZ7L6bXXfCzbawGSRq/3weqfOYxW8zXa/PPv5VJnhrT+5whuhA5JYT6Gqt+riwr27cWsTCTAzA==
+X-Received: by 2002:a9d:5e8f:0:b0:6af:793b:a87 with SMTP id f15-20020a9d5e8f000000b006af793b0a87mr901124otl.28.1684707832800;
+        Sun, 21 May 2023 15:23:52 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p25-20020a4adc19000000b005476712364bsm1760475oov.19.2023.05.21.15.23.48
+        by smtp.gmail.com with ESMTPSA id q25-20020a9d7c99000000b006aaf82bd5a2sm1825160otn.43.2023.05.21.15.23.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 May 2023 15:23:49 -0700 (PDT)
-Received: (nullmailer pid 1541543 invoked by uid 1000);
+        Sun, 21 May 2023 15:23:52 -0700 (PDT)
+Received: (nullmailer pid 1541546 invoked by uid 1000);
         Sun, 21 May 2023 22:23:48 -0000
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
 To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     Martin Botka <martin.botka@somainline.org>,
-        Andy Gross <agross@kernel.org>,
-        dri-devel@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        ~postmarketos/upstreaming@lists.sr.ht, devicetree@vger.kernel.org,
-        David Airlie <airlied@gmail.com>,
+Cc:     Bjorn Andersson <andersson@kernel.org>,
         Jami Kettunen <jami.kettunen@somainline.org>,
-        linux-kernel@vger.kernel.org, Caleb Connolly <caleb@connolly.tech>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@somainline.org>,
-        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        David Airlie <airlied@gmail.com>,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
         Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Rob Herring <robh+dt@kernel.org>
-In-Reply-To: <20230521-drm-panels-sony-v1-5-541c341d6bee@somainline.org>
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Caleb Connolly <caleb@connolly.tech>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-arm-msm@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        devicetree@vger.kernel.org
+In-Reply-To: <20230521-drm-panels-sony-v1-9-541c341d6bee@somainline.org>
 References: <20230521-drm-panels-sony-v1-0-541c341d6bee@somainline.org>
- <20230521-drm-panels-sony-v1-5-541c341d6bee@somainline.org>
-Message-Id: <168470782726.1541479.18410268198759128308.robh@kernel.org>
-Subject: Re: [PATCH RFC 05/10] dt-bindings: display: panel: Describe
- Samsung SOFEF01-M Display-IC
+ <20230521-drm-panels-sony-v1-9-541c341d6bee@somainline.org>
+Message-Id: <168470782808.1541521.2400870342628606112.robh@kernel.org>
+Subject: Re: [PATCH RFC 09/10] dt-bindings: display: panel: Describe Sony
+ Xperia 1 display
 Date:   Sun, 21 May 2023 17:23:48 -0500
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -85,14 +86,14 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Sun, 21 May 2023 23:23:07 +0200, Marijn Suijten wrote:
-> Document the SOFEF01-M Display-IC and 1080x2520 panels found in the Sony
-> Xperia 5 (6.1") and Sony Xperia 10 II (6.0").
+On Sun, 21 May 2023 23:23:11 +0200, Marijn Suijten wrote:
+> Document an unnamed Samsung Display-IC and 1644x3840@60 6.5" panel found
+> in the Sony Xperia 1.
 > 
 > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 > ---
->  .../bindings/display/panel/samsung,sofef01-m.yaml  | 109 +++++++++++++++++++++
->  1 file changed, 109 insertions(+)
+>  .../display/panel/sony,griffin-samsung.yaml        | 73 ++++++++++++++++++++++
+>  1 file changed, 73 insertions(+)
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -101,12 +102,12 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/panel/samsung,sofef01-m.example.dtb: panel@0: 'vci-supply' does not match any of the regexes: 'pinctrl-[0-9]+'
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/display/panel/samsung,sofef01-m.yaml
+./Documentation/devicetree/bindings/display/panel/sony,griffin-samsung.yaml: $id: relative path/filename doesn't match actual path or filename
+	expected: http://devicetree.org/schemas/display/panel/sony,griffin-samsung.yaml#
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230521-drm-panels-sony-v1-5-541c341d6bee@somainline.org
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230521-drm-panels-sony-v1-9-541c341d6bee@somainline.org
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
