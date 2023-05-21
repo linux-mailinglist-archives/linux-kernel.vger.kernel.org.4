@@ -2,103 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C90A70ABBF
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 02:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F74F70ABC4
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 02:27:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbjEUAFR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 20:05:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38274 "EHLO
+        id S229840AbjEUA1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 20:27:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229865AbjEUAFP (ORCPT
+        with ESMTP id S229669AbjEUA1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 20:05:15 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82B3F185
-        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 17:05:14 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2af177f12a5so37473521fa.2
-        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 17:05:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684627512; x=1687219512;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MT2O6oEN4amZYZbrPzoTSJIieP6gKCVAv+FAOIlFDXo=;
-        b=XFBqKEra1c/S26nfesjWt8E3n4da7Md83Qiisn1UfjHJJkHSilc1MK4xgcu1Mmtn1z
-         Ol+T86Oh+5cGxlezT7q7sp3KXGfDtqljAUaZVTCTc1IV0oicq6iZBDy7Pk77gMp2Y5tY
-         0Ua/vlANdFKNbAUESeGGgwSOuWy7z42omTf7hJYcbo2RhcdhfBEz99rsB8Kt43JydXYc
-         nrVrrbaTKpOhGyCe1+Fvfkliy7fQxUbi4ZNMXv0CqHeqFDAKHV6J6+vlMe/sJ9mkNXE0
-         GdtHgQ/52xgOehvnXkBRw1O+qd1kj5gmOREAtIVI419LBTIfpmQN6F71y5CGXwPsVsgM
-         p3jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684627512; x=1687219512;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MT2O6oEN4amZYZbrPzoTSJIieP6gKCVAv+FAOIlFDXo=;
-        b=SRcXufhazfEfYUKrCfUk3ESNhoL5ebl3Vb8zaInplMGNMcriPERjvjKhPX4EWl96oG
-         BeHpOq5qKp2iz7t0b7RyBy7NnN6U2bdhlHAqsmBxjlIbny46DXb6oGPdV0KBWLnq9XG7
-         6LGOfc8rhS0fd192S77kBtPfocGh/UpzwUaUk3oGfjq0wdlJoL2DkoX/5N6ZfCekQTi0
-         rSkqDJc7Pfyc8ctYJBQfIcf+TsvOgpcn/v4bpJpb1+KaLCkqmE4MCtB2GU3cshgag+CN
-         0VpEKkKTsS4T8twnZbtO6Zgq0OrIHD9DtjkOzyNsjllJLzeHzpUbOcl5hl8ogGTUXYEi
-         pw4g==
-X-Gm-Message-State: AC+VfDw063KcHsVkU4gFiMBxJGIqDTGNfyf8PGt0eKC1tidLEFDpeu40
-        2OK7vMGh3qdRsfbB1qY+YI6zcg==
-X-Google-Smtp-Source: ACHHUZ4jgVMNNvFJMhZdrVgAOcV35Yjx3chgNSXtiIxkETrAzXdaeq+4jbf5BxLmtDKv30mLNW2NFw==
-X-Received: by 2002:a2e:3c0d:0:b0:2ac:826e:c5a with SMTP id j13-20020a2e3c0d000000b002ac826e0c5amr2828206lja.1.1684627512687;
-        Sat, 20 May 2023 17:05:12 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id p1-20020a2e9a81000000b002ad90280503sm488438lji.138.2023.05.20.17.05.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 20 May 2023 17:05:12 -0700 (PDT)
-Message-ID: <828b2591-c160-b88c-bc8f-5105fffe23d3@linaro.org>
-Date:   Sun, 21 May 2023 03:05:11 +0300
+        Sat, 20 May 2023 20:27:33 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CF26121
+        for <linux-kernel@vger.kernel.org>; Sat, 20 May 2023 17:27:32 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 34L0QXY5025308
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 20 May 2023 20:26:35 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1684628801; bh=9eqcIzS90vnBQyM2ULk0Xad6DIwhxJd9pXvwxDT5agA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=A7s9yjjs1TBgqn+gjf9Hj7xacMo4w4aYV4pZ4boAwBJMKMvQWe+RMxIaZ5voydTo9
+         fzuTP9lDyOjxHdCtB5SC3OFBwx9XCJ9hGZrF99bBo8YVUDZWxn0sBQ2JpVM+dJFMnX
+         cnu27yYekG/5ZGpiTVtRgYH40kySbm4j1uBx5FoupvHx0eqEWSK3UnVlERqM4DJJq3
+         QcJWADWsI+eON5HwrDf7uUa3hXhp/maoPNGhjV17IvT3oCrs8BdIcsj06okrcGNFMq
+         8ePkbEFz+t3D2MhcKaiZGmk9Ff9skg/gyyQxbAqpXlQkwLTgcdgcMGniG7jyULMiNM
+         ZQmCn3Cjb/Btg==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 9EFD915C02EE; Sat, 20 May 2023 20:26:33 -0400 (EDT)
+Date:   Sat, 20 May 2023 20:26:33 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Christoph Hellwig <hch@infradead.org>
+Cc:     David Howells <dhowells@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Christoph Hellwig <hch@lst.de>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        linux-ext4@vger.kernel.org
+Subject: Re: [PATCH v21 18/30] ext4: Provide a splice-read stub
+Message-ID: <20230521002633.GA207046@mit.edu>
+References: <ZGhIpbrgQaPRPC3c@infradead.org>
+ <20230520000049.2226926-1-dhowells@redhat.com>
+ <20230520000049.2226926-19-dhowells@redhat.com>
+ <2233565.1684567304@warthog.procyon.org.uk>
+ <ZGiMewK8CW7DB4sl@infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v11 6/9] drm/msm/dpu: always clear every individual
- pending flush mask
-Content-Language: en-GB
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
-        agross@kernel.org, andersson@kernel.org
-Cc:     quic_abhinavk@quicinc.com, quic_jesszhan@quicinc.com,
-        quic_sbillaka@quicinc.com, marijn.suijten@somainline.org,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1684452816-27848-1-git-send-email-quic_khsieh@quicinc.com>
- <1684452816-27848-7-git-send-email-quic_khsieh@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <1684452816-27848-7-git-send-email-quic_khsieh@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZGiMewK8CW7DB4sl@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/05/2023 02:33, Kuogee Hsieh wrote:
-> There are two tiers of pending flush control, main controller and
-> individual hardware block. Currently only the main controller of
-> flush mask is reset to 0 but leave out some individual pending flush
-> mask of particular hardware block keep previous value at
-> clear_pending_flush(). Reset all individual hardware blocks flush
-> mask to 0 to avoid individual hardware block be triggered accidentally.
+On Sat, May 20, 2023 at 02:01:47AM -0700, Christoph Hellwig wrote:
+> On Sat, May 20, 2023 at 08:21:44AM +0100, David Howells wrote:
+> > Christoph Hellwig <hch@infradead.org> wrote:
+> > 
+> > > Not sure I'd call this a stub, but then again I'm not a native speaker.
+> > 
+> > "Wrapper"?
 > 
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> ---
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
+> That's what I'd call it, yes.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Agreed, "wrapper" is a better term.
 
--- 
-With best wishes
-Dmitry
+Other than that,
+
+Acked-by: Theodore Ts'o <tytso@mit.edu>
+
 
