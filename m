@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BACA870B1A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 00:30:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4153E70B1A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 00:31:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231405AbjEUWax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 18:30:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40896 "EHLO
+        id S231410AbjEUWbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 18:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231374AbjEUWat (ORCPT
+        with ESMTP id S231190AbjEUWa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 18:30:49 -0400
+        Sun, 21 May 2023 18:30:59 -0400
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED71B106;
-        Sun, 21 May 2023 15:30:33 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34LMMJ4m023140;
-        Sun, 21 May 2023 22:30:15 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E802E118;
+        Sun, 21 May 2023 15:30:39 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34LMTWRZ012427;
+        Sun, 21 May 2023 22:30:23 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=qcppdkim1;
- bh=wnTfdqfN1wkN74stgMXwZ2w/Xvja+10t8dNRWHknvn0=;
- b=CVSZusGKaLFonT6LLR2tno/ytWxeJKAEgsZWtEP5GbttIQ5R0w1tKdzCwwk0G/dyXhOG
- eJFnGh+U7AlQ9LZRZwtB83lgecx88VU7Jusu6IQupmeDflFkjuYLFYzm/qerUMmktF4S
- xJxTddcEgaag4JxL71oRZf0L0U3zRaoKz+LKZ83FxGYIVfLBliTTTKKvzcLSYRrpcgT2
- Mm9ct/z6X43RB+JsoJ2OUN0wsUcjg1qxCc8FutXvhZgrEC0CmVp3mgIghhaZPKbpZ7JE
- ejv4xYPI+P1ATlrM48p9X0QZzac9x/nVtHtWs9aKZXtAlVizyxPkblv0x7VqsFca4IeA ng== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qpqgf26f4-1
+ bh=KpxT2tQuw92BghxnJ2ffYtjPALWHenAYhG0/Wy9Up/w=;
+ b=OKLnX259l285YQndZCoxSlANLV4Ftwuzg2EdyNHq6+U/N34RtPkj7gbBSHN8TapZCOkl
+ 7h7vsIqDxIG2PF802664CZVFSUVQiBCqnJH9jTCUg52qZIevYiQmyC4GcSu43il1liws
+ GtUYLqqhEcC1iQ1pKiuKIF7LGadwWY/kURsmLg4gQYoOeFQloqhh2paO89iclt2+yMP7
+ Pr1s2d8SpEjm2UzFK2yp/vESBwGLWUeDgs0w75yJLlsBZbAqXTtKkEbb6iTdlN1TNW7Q
+ 5PPcJtdtsk991Q9+Ud9ksEVKmFBi0YSim8py3yH7LnU8wWBnScPY6qPiG1nuds6ApgyZ Ww== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qpkwmtee5-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 21 May 2023 22:30:15 +0000
+        Sun, 21 May 2023 22:30:23 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34LMUFOA000953
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34LMUMlS000915
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 21 May 2023 22:30:15 GMT
+        Sun, 21 May 2023 22:30:22 GMT
 Received: from mmanikan-linux.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Sun, 21 May 2023 15:30:07 -0700
+ 15.2.986.42; Sun, 21 May 2023 15:30:15 -0700
 From:   Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
 To:     <agross@kernel.org>, <andersson@kernel.org>,
         <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
@@ -54,9 +54,9 @@ CC:     <quic_srichara@quicinc.com>, <quic_sjaganat@quicinc.com>,
         <quic_kathirav@quicinc.com>, <quic_anusha@quicinc.com>,
         <quic_poovendh@quicinc.com>, <quic_varada@quicinc.com>,
         <quic_devipriy@quicinc.com>
-Subject: [PATCH V2 08/13] firmware: qcom_scm: ipq5018: Add WCSS AHB pd support
-Date:   Mon, 22 May 2023 03:58:47 +0530
-Message-ID: <20230521222852.5740-9-quic_mmanikan@quicinc.com>
+Subject: [PATCH V2 09/13] remoteproc: qcom: q6v5: Add multipd interrupts support
+Date:   Mon, 22 May 2023 03:58:48 +0530
+Message-ID: <20230521222852.5740-10-quic_mmanikan@quicinc.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230521222852.5740-1-quic_mmanikan@quicinc.com>
 References: <20230521222852.5740-1-quic_mmanikan@quicinc.com>
@@ -67,15 +67,15 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: _Y6t_qYZjboKxdPhmdHXt2gNOWXIidGy
-X-Proofpoint-GUID: _Y6t_qYZjboKxdPhmdHXt2gNOWXIidGy
+X-Proofpoint-GUID: Wsyddai1_M2kw62Enx6NNIh9vxwDvtZI
+X-Proofpoint-ORIG-GUID: Wsyddai1_M2kw62Enx6NNIh9vxwDvtZI
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-21_17,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
- suspectscore=0 malwarescore=0 priorityscore=1501 impostorscore=0
- phishscore=0 mlxscore=0 bulkscore=0 mlxlogscore=999 lowpriorityscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
+ spamscore=0 impostorscore=0 mlxscore=0 adultscore=0 suspectscore=0
+ priorityscore=1501 phishscore=0 mlxlogscore=830 lowpriorityscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2304280000 definitions=main-2305210203
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
@@ -87,175 +87,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support to power up, down & load userpd firmware.
+In multipd model, root & user pd remoteproc's interrupts are
+different. User pd needs additional interrupts like spawn.
+Instead of going with qcom_q6v5_init(), we defined a new
+function to register userpd rproc interrupts in mpd driver.
+Since userpd rproc uses some of common interrupts like fatal,
+ready, static is removed from ISR handler and used in userpd
+interrupt registration.
 
 Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
 ---
 Changes in V2:
-	- This patch is generated by Strip off SCM code changes from here
+	- This patch is generated by Strip off qcom_q6v5 changes from here
 	  https://lore.kernel.org/linux-arm-msm/1678164097-13247-9-git-send-email-quic_mmanikan@quicinc.com/
 
- drivers/firmware/qcom_scm.c            | 114 +++++++++++++++++++++++++
- drivers/firmware/qcom_scm.h            |   6 ++
- include/linux/firmware/qcom/qcom_scm.h |   3 +
- 3 files changed, 123 insertions(+)
+ drivers/remoteproc/qcom_q6v5.c | 37 +++++++++++++++++++++++++++++++---
+ drivers/remoteproc/qcom_q6v5.h | 11 ++++++++++
+ 2 files changed, 45 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-index fde33acd46b7..c617e9e671ec 100644
---- a/drivers/firmware/qcom_scm.c
-+++ b/drivers/firmware/qcom_scm.c
-@@ -643,6 +643,120 @@ int qcom_scm_pas_shutdown(u32 peripheral)
+diff --git a/drivers/remoteproc/qcom_q6v5.c b/drivers/remoteproc/qcom_q6v5.c
+index 192c7aa0e39e..d535f3365865 100644
+--- a/drivers/remoteproc/qcom_q6v5.c
++++ b/drivers/remoteproc/qcom_q6v5.c
+@@ -118,7 +118,7 @@ static irqreturn_t q6v5_wdog_interrupt(int irq, void *data)
+ 	return IRQ_HANDLED;
  }
- EXPORT_SYMBOL(qcom_scm_pas_shutdown);
+
+-static irqreturn_t q6v5_fatal_interrupt(int irq, void *data)
++irqreturn_t q6v5_fatal_interrupt(int irq, void *data)
+ {
+ 	struct qcom_q6v5 *q6v5 = data;
+ 	size_t len;
+@@ -139,7 +139,7 @@ static irqreturn_t q6v5_fatal_interrupt(int irq, void *data)
+ 	return IRQ_HANDLED;
+ }
+
+-static irqreturn_t q6v5_ready_interrupt(int irq, void *data)
++irqreturn_t q6v5_ready_interrupt(int irq, void *data)
+ {
+ 	struct qcom_q6v5 *q6v5 = data;
+
+@@ -183,7 +183,16 @@ static irqreturn_t q6v5_handover_interrupt(int irq, void *data)
+ 	return IRQ_HANDLED;
+ }
+
+-static irqreturn_t q6v5_stop_interrupt(int irq, void *data)
++irqreturn_t q6v5_spawn_interrupt(int irq, void *data)
++{
++	struct qcom_q6v5 *q6v5 = data;
++
++	complete(&q6v5->spawn_done);
++
++	return IRQ_HANDLED;
++}
++
++irqreturn_t q6v5_stop_interrupt(int irq, void *data)
+ {
+ 	struct qcom_q6v5 *q6v5 = data;
+
+@@ -220,6 +229,28 @@ int qcom_q6v5_request_stop(struct qcom_q6v5 *q6v5, struct qcom_sysmon *sysmon)
+ }
+ EXPORT_SYMBOL_GPL(qcom_q6v5_request_stop);
 
 +/**
-+ * qti_scm_int_radio_powerup - Bring up WCSS AHB userpd
++ * qcom_q6v5_request_spawn() - request the remote processor to spawn
++ * @q6v5:      reference to qcom_q6v5 context
 + *
-+ * @peripheral:	peripheral id
-+ *
-+ * Return 0 on success.
++ * Return: 0 on success, negative errno on failure
 + */
-+int qti_scm_int_radio_powerup(u32 peripheral)
++int qcom_q6v5_request_spawn(struct qcom_q6v5 *q6v5)
 +{
 +	int ret;
-+	struct qcom_scm_desc desc = {
-+		.svc = QCOM_SCM_PD_LOAD_SVC_ID,
-+		.cmd = QCOM_SCM_INT_RAD_PWR_UP_CMD_ID,
-+		.arginfo = QCOM_SCM_ARGS(1),
-+		.args[0] = peripheral,
-+		.owner = ARM_SMCCC_OWNER_SIP,
-+	};
-+	struct qcom_scm_res res;
 +
-+	ret = qcom_scm_clk_enable();
-+	if (ret)
-+		return ret;
++	ret = qcom_smem_state_update_bits(q6v5->spawn_state,
++					  BIT(q6v5->spawn_bit), BIT(q6v5->spawn_bit));
 +
-+	ret = qcom_scm_bw_enable();
-+	if (ret)
-+		return ret;
++	ret = wait_for_completion_timeout(&q6v5->spawn_done, 5 * HZ);
 +
-+	ret = qcom_scm_call(__scm->dev, &desc, &res);
-+	qcom_scm_bw_disable();
-+	qcom_scm_clk_disable();
++	qcom_smem_state_update_bits(q6v5->spawn_state,
++				    BIT(q6v5->spawn_bit), 0);
 +
-+	return ret ? : res.result[0];
++	return ret == 0 ? -ETIMEDOUT : 0;
 +}
-+EXPORT_SYMBOL(qti_scm_int_radio_powerup);
-+
-+/**
-+ * qti_scm_int_radio_powerdown() - Shut down WCSS AHB userpd
-+ *
-+ * @peripheral: peripheral id
-+ *
-+ * Returns 0 on success.
-+ */
-+int qti_scm_int_radio_powerdown(u32 peripheral)
-+{
-+	int ret;
-+	struct qcom_scm_desc desc = {
-+		.svc = QCOM_SCM_PD_LOAD_SVC_ID,
-+		.cmd = QCOM_SCM_INT_RAD_PWR_DN_CMD_ID,
-+		.arginfo = QCOM_SCM_ARGS(1),
-+		.args[0] = peripheral,
-+		.owner = ARM_SMCCC_OWNER_SIP,
-+	};
-+	struct qcom_scm_res res;
-+
-+	ret = qcom_scm_clk_enable();
-+	if (ret)
-+		return ret;
-+
-+	ret = qcom_scm_bw_enable();
-+	if (ret)
-+		return ret;
-+
-+	ret = qcom_scm_call(__scm->dev, &desc, &res);
-+	qcom_scm_bw_disable();
-+	qcom_scm_clk_disable();
-+
-+	return ret ? : res.result[0];
-+}
-+EXPORT_SYMBOL(qti_scm_int_radio_powerdown);
-+
-+/**
-+ * qti_scm_pdseg_memcpy_v2() - copy userpd PIL segments data to dma blocks
-+ *
-+ * @peripheral:		peripheral id
-+ * @phno:		program header no
-+ * @dma:		handle of dma region
-+ * @seg_cnt:		no of dma blocks
-+ *
-+ * Returns 0 if trustzone successfully loads userpd PIL segments from dma
-+ * blocks to DDR
-+ */
-+int qti_scm_pdseg_memcpy_v2(u32 peripheral, int phno, dma_addr_t dma,
-+			    int seg_cnt)
-+{
-+	int ret;
-+	struct qcom_scm_desc desc = {
-+		.svc = QCOM_SCM_PD_LOAD_SVC_ID,
-+		.cmd = QCOM_SCM_PD_LOAD_V2_CMD_ID,
-+		.arginfo = QCOM_SCM_ARGS(4, QCOM_SCM_VAL, QCOM_SCM_VAL,
-+						QCOM_SCM_RW, QCOM_SCM_VAL),
-+		.args[0] = peripheral,
-+		.args[1] = phno,
-+		.args[2] = dma,
-+		.args[3] = seg_cnt,
-+		.owner = ARM_SMCCC_OWNER_SIP,
-+	};
-+	struct qcom_scm_res res;
-+
-+	ret = qcom_scm_clk_enable();
-+	if (ret)
-+		return ret;
-+
-+	ret = qcom_scm_bw_enable();
-+	if (ret)
-+		return ret;
-+
-+	ret = qcom_scm_call(__scm->dev, &desc, &res);
-+	qcom_scm_bw_disable();
-+	qcom_scm_clk_disable();
-+
-+	return ret ? : res.result[0];
-+}
-+EXPORT_SYMBOL(qti_scm_pdseg_memcpy_v2);
++EXPORT_SYMBOL_GPL(qcom_q6v5_request_spawn);
 +
  /**
-  * qcom_scm_pas_supported() - Check if the peripheral authentication service is
-  *			      available for the given peripherial
-diff --git a/drivers/firmware/qcom_scm.h b/drivers/firmware/qcom_scm.h
-index e6e512bd57d1..99e3ab2f1986 100644
---- a/drivers/firmware/qcom_scm.h
-+++ b/drivers/firmware/qcom_scm.h
-@@ -132,6 +132,12 @@ extern int scm_legacy_call(struct device *dev, const struct qcom_scm_desc *desc,
- #define QCOM_SCM_SMMU_CONFIG_ERRATA1		0x03
- #define QCOM_SCM_SMMU_CONFIG_ERRATA1_CLIENT_ALL	0x02
+  * qcom_q6v5_panic() - panic handler to invoke a stop on the remote
+  * @q6v5:	reference to qcom_q6v5 context
+diff --git a/drivers/remoteproc/qcom_q6v5.h b/drivers/remoteproc/qcom_q6v5.h
+index 5a859c41896e..4e1bb1a68284 100644
+--- a/drivers/remoteproc/qcom_q6v5.h
++++ b/drivers/remoteproc/qcom_q6v5.h
+@@ -18,21 +18,27 @@ struct qcom_q6v5 {
 
-+#define QCOM_SCM_PD_LOAD_SVC_ID			0x2
-+#define QCOM_SCM_PD_LOAD_CMD_ID			0x16
-+#define QCOM_SCM_PD_LOAD_V2_CMD_ID		0x19
-+#define QCOM_SCM_INT_RAD_PWR_UP_CMD_ID		0x17
-+#define QCOM_SCM_INT_RAD_PWR_DN_CMD_ID		0x18
-+
- #define QCOM_SCM_SVC_WAITQ			0x24
- #define QCOM_SCM_WAITQ_RESUME			0x02
- #define QCOM_SCM_WAITQ_GET_WQ_CTX		0x03
-diff --git a/include/linux/firmware/qcom/qcom_scm.h b/include/linux/firmware/qcom/qcom_scm.h
-index 250ea4efb7cb..488d6eccb5a4 100644
---- a/include/linux/firmware/qcom/qcom_scm.h
-+++ b/include/linux/firmware/qcom/qcom_scm.h
-@@ -81,6 +81,9 @@ extern int qcom_scm_pas_mem_setup(u32 peripheral, phys_addr_t addr,
- extern int qcom_scm_pas_auth_and_reset(u32 peripheral);
- extern int qcom_scm_pas_shutdown(u32 peripheral);
- extern bool qcom_scm_pas_supported(u32 peripheral);
-+int qti_scm_int_radio_powerup(u32 peripheral);
-+int qti_scm_int_radio_powerdown(u32 peripheral);
-+int qti_scm_pdseg_memcpy_v2(u32 peripheral, int phno, dma_addr_t dma, int seg_cnt);
+ 	struct qcom_smem_state *state;
+ 	struct qmp *qmp;
++	struct qcom_smem_state *shutdown_state;
++	struct qcom_smem_state *spawn_state;
 
- extern int qcom_scm_io_readl(phys_addr_t addr, unsigned int *val);
- extern int qcom_scm_io_writel(phys_addr_t addr, unsigned int val);
+ 	struct icc_path *path;
+
+ 	unsigned stop_bit;
++	unsigned shutdown_bit;
++	unsigned spawn_bit;
+
+ 	int wdog_irq;
+ 	int fatal_irq;
+ 	int ready_irq;
+ 	int handover_irq;
+ 	int stop_irq;
++	int spawn_irq;
+
+ 	bool handover_issued;
+
+ 	struct completion start_done;
+ 	struct completion stop_done;
++	struct completion spawn_done;
+
+ 	int crash_reason;
+
+@@ -50,7 +56,12 @@ void qcom_q6v5_deinit(struct qcom_q6v5 *q6v5);
+ int qcom_q6v5_prepare(struct qcom_q6v5 *q6v5);
+ int qcom_q6v5_unprepare(struct qcom_q6v5 *q6v5);
+ int qcom_q6v5_request_stop(struct qcom_q6v5 *q6v5, struct qcom_sysmon *sysmon);
++int qcom_q6v5_request_spawn(struct qcom_q6v5 *q6v5);
+ int qcom_q6v5_wait_for_start(struct qcom_q6v5 *q6v5, int timeout);
+ unsigned long qcom_q6v5_panic(struct qcom_q6v5 *q6v5);
++irqreturn_t q6v5_fatal_interrupt(int irq, void *data);
++irqreturn_t q6v5_ready_interrupt(int irq, void *data);
++irqreturn_t q6v5_spawn_interrupt(int irq, void *data);
++irqreturn_t q6v5_stop_interrupt(int irq, void *data);
+
+ #endif
 --
 2.17.1
 
