@@ -2,77 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1ACA70ADFF
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 14:08:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB55B70AE05
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 14:19:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231495AbjEUMGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 08:06:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54266 "EHLO
+        id S229485AbjEUMSK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 08:18:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231267AbjEUMFz (ORCPT
+        with ESMTP id S229545AbjEUMSI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 08:05:55 -0400
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6081BD3
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 04:56:12 -0700 (PDT)
-Received: by mail-qv1-xf34.google.com with SMTP id 6a1803df08f44-6239144bd59so16467886d6.3
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 04:56:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684670171; x=1687262171;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vR/aSgrJHdEUHH393ovuG+gdb9mEVG9SSuRJGcP6Heo=;
-        b=Wdirt828U4kFg5VqZH4MpQgZt+SNwy/3kKyKDRrL//VLcyBNiWsoHNCYzaaNfzOoYL
-         wpS50YMo9JlD4sd/L5oj2aDgxuBbXT5Xn6J4xzx/pqjlmymeLFSBkhAM5sPYDWMT8Ie/
-         Nt42kCoDxFl1oM+681qc9DK2D4hUIcsgsKUZIg4Bo/oqo9+iNWQcF46J5QELHmPULtti
-         nrD42K9yBZ0FrSRanlk0nla5IG1thQflsHP9fhQNrAl+IdeiIjkSrjtoNOtWUgd83MsJ
-         rqZhZOtgK0WMZaNXAnCOvuQhmyhJ/rGPsa8UJDZH5AX4RY4Z8O6upuxZTKo5cgdJfA0C
-         EsMA==
+        Sun, 21 May 2023 08:18:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 440C9AA
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 05:17:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684671440;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=PVI1SUuvnV8gNQBr8/dAeXC/qHkJbwltv/7php7lDhI=;
+        b=ZZcrDerdH4Mj4kX0lUQhr2rdWlmRhodO8/uWQvd/ofQuM+CwuR96MmZVnRn3QbGT3DvsXK
+        n4q49s3gwgl2DU8eIRGXrRJ27+Xs95BQZeg8gk5au93LtqPx2Ctng6uO1Q2mN630L5dtre
+        AoiZ4kqoMfKF9gXzTODJ3239SfAQGHY=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-553-ke_sJEiCPz6g_JtwY8hGPw-1; Sun, 21 May 2023 08:17:19 -0400
+X-MC-Unique: ke_sJEiCPz6g_JtwY8hGPw-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3079c6648e3so2897347f8f.2
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 05:17:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684670171; x=1687262171;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vR/aSgrJHdEUHH393ovuG+gdb9mEVG9SSuRJGcP6Heo=;
-        b=HeataryUqJrlEXK8mV4dKsU5qHcAsQb2+4Od2rD+rTEQ4SWxZJs7798gm1V3uno4tp
-         rpg5UpObcjYja+SpFviWyDCArZbaVXa1Eb92W66+qFGrLLk9hRm2IbIScHwSooH8OBip
-         mUWnDORAy32lcGCti+RytgHo4bUwHY02+mEyNef67AcPmAIJRaa2S4RQNQpdKOw0EOJI
-         ZpHDR3pcdZM6sYTZNfL7LgLl3RTZNY03qowcsz3BXmv2qcDTYvSVG+BY2pN4fGdfAzds
-         XKaOIIULJ8NX9SQ8Q8YM2Nizp49upbAzZ8Q/KMM574d+JX4x6VhfWPDYPI04jgfRpLKD
-         9jxA==
-X-Gm-Message-State: AC+VfDwLAbcM+0sAIAssRHMomUP+cqMNhguU17Nnih6yuPZ0Dt4FDdRu
-        iKRB/Gd8MStQqg1Gxx0pKGDQvWxx3EViVa59OxE=
-X-Google-Smtp-Source: ACHHUZ4+7FiqpbotmcA964UQQHpj+IlwakcRbi2lNer9f8Zkw9u+yy/2yWdoMzBzRsG1MP/HynS+gaeUrhZoJHuweQg=
-X-Received: by 2002:ad4:5d4e:0:b0:5ef:8ae8:9adb with SMTP id
- jk14-20020ad45d4e000000b005ef8ae89adbmr15043853qvb.37.1684670171274; Sun, 21
- May 2023 04:56:11 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684671438; x=1687263438;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PVI1SUuvnV8gNQBr8/dAeXC/qHkJbwltv/7php7lDhI=;
+        b=PEXGRH18z1etD87AZgnLCBDf4AJ2HX3e/vfjiMMuYngbI7MPmnTRfz2ATOCcTWXPz2
+         jUZDvSdT1+LNviZSHR0IK2Lntw492/8abpaINcEXlUb+MYrDtHnqsXBktXCRr/g/06fk
+         8B3gUH2QTujZRXzIv/M7yVv6Z44QvS3ZxUDt03anbtiateiUXmXq7okit+V2MP9DRHPX
+         BfFUT/68LyW7yFJeVnAEqWuKxsSMKwiKe6OHUT0b84GhogHz+SB/j+TtIPRnClw8qkeh
+         CFgRKaW35ovbDtU06ZxFOsLYLIy7TxtbNH42j4+PMhFZXUsiwL0mct5fvyHr0Bp7i95k
+         nUOg==
+X-Gm-Message-State: AC+VfDyNiIOsM8HvUFnm7udQi4TxrelkNApP8DjuL4zaiXUHvk7jWLaC
+        GB0rYuGqlQ//Q43WbntNTEKZqJl8E/rDrwpndMKgszYZa3TSyuSzAEcvqXuHucLtFlJ/mEP76dc
+        HlOC70M84ivlWNRtNyQ62KiIo
+X-Received: by 2002:adf:ef02:0:b0:304:6a26:1f6 with SMTP id e2-20020adfef02000000b003046a2601f6mr5438316wro.59.1684671437923;
+        Sun, 21 May 2023 05:17:17 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7MabypKyS43fFTGDOIMddCh8GmeAQuT0OWOFj+HgMqjnBfB1qqcakVGaLM+RJUoDZY8N6ccg==
+X-Received: by 2002:adf:ef02:0:b0:304:6a26:1f6 with SMTP id e2-20020adfef02000000b003046a2601f6mr5438307wro.59.1684671437551;
+        Sun, 21 May 2023 05:17:17 -0700 (PDT)
+Received: from [192.168.10.118] ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
+        by smtp.gmail.com with ESMTPSA id o16-20020a5d62d0000000b002fb60c7995esm4602199wrv.8.2023.05.21.05.17.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 May 2023 05:17:16 -0700 (PDT)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: [GIT PULL] KVM fixes for Linux 6.4-rc3
+Date:   Sun, 21 May 2023 14:17:15 +0200
+Message-Id: <20230521121715.45809-1-pbonzini@redhat.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Received: by 2002:a0c:8bd9:0:b0:5e9:5ac4:6997 with HTTP; Sun, 21 May 2023
- 04:56:10 -0700 (PDT)
-Reply-To: wijh555@gmail.com
-From:   "Dr. Rooney Harry" <osane706@gmail.com>
-Date:   Sun, 21 May 2023 04:56:10 -0700
-Message-ID: <CAC7OyroBg-Xrba=kO2wgVeK2t0Ko+z1EZXrR_WH1r7SVvUr3pw@mail.gmail.com>
-Subject: Very Urgent,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=4.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ****
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello,
-I tried e-mailing you more than twice but my email bounced back
-failure, Note this, soonest you receive this email revert to me before
-I deliver the message it's importunate, pressing, crucial. Await your
-response.
+Linus,
 
-Best regards
-Dr. Rooney Harry
+The following changes since commit f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6:
+
+  Linux 6.4-rc2 (2023-05-14 12:51:40 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
+
+for you to fetch changes up to b9846a698c9aff4eb2214a06ac83638ad098f33f:
+
+  KVM: VMX: add MSR_IA32_TSX_CTRL into msrs_to_save (2023-05-21 04:05:51 -0400)
+
+----------------------------------------------------------------
+ARM:
+* Plug a race in the stage-2 mapping code where the IPA and the PA
+  would end up being out of sync
+
+* Make better use of the bitmap API (bitmap_zero, bitmap_zalloc...)
+
+* FP/SVE/SME documentation update, in the hope that this field
+  becomes clearer...
+
+* Add workaround for Apple SEIS brokenness to a new SoC
+
+* Random comment fixes
+
+x86:
+
+* add MSR_IA32_TSX_CTRL into msrs_to_save
+
+* fixes for XCR0 handling in SGX enclaves
+
+Generic:
+
+* Fix vcpu_array[0] races
+
+* Fix race between starting a VM and "reboot -f"
+
+----------------------------------------------------------------
+Christophe JAILLET (2):
+      KVM: arm64: Slightly optimize flush_context()
+      KVM: arm64: Use the bitmap API to allocate bitmaps
+
+Jacob Xu (1):
+      KVM: VMX: Fix header file dependency of asm/vmx.h
+
+Jingyu Wang (1):
+      KVM: arm64: Fix repeated words in comments
+
+Marc Zyngier (4):
+      KVM: arm64: Constify start/end/phys fields of the pgtable walker data
+      KVM: arm64: vgic: Add Apple M2 PRO/MAX cpus to the list of broken SEIS implementations
+      Merge branch kvm-arm64/misc-6.4 into kvmarm-master/fixes
+      Merge branch kvm-arm64/pgtable-fixes-6.4 into kvmarm-master/fixes
+
+Mark Brown (3):
+      KVM: arm64: Document check for TIF_FOREIGN_FPSTATE
+      KVM: arm64: Restructure check for SVE support in FP trap handler
+      KVM: arm64: Clarify host SME state management
+
+Michal Luczaj (1):
+      KVM: Fix vcpu_array[0] races
+
+Mingwei Zhang (1):
+      KVM: VMX: add MSR_IA32_TSX_CTRL into msrs_to_save
+
+Oliver Upton (2):
+      KVM: arm64: Infer the PA offset from IPA in stage-2 map walker
+      KVM: arm64: Infer PA offset from VA in hyp map walker
+
+Paolo Bonzini (1):
+      Merge tag 'kvmarm-fixes-6.4-1' of git://git.kernel.org/pub/scm/linux/kernel/git/kvmarm/kvmarm into HEAD
+
+Sean Christopherson (4):
+      KVM: Use syscore_ops instead of reboot_notifier to hook restart/shutdown
+      KVM: Don't enable hardware after a restart/shutdown is initiated
+      KVM: VMX: Don't rely _only_ on CPUID to enforce XCR0 restrictions for ECREATE
+      KVM: x86: Don't adjust guest's CPUID.0x12.1 (allowed SGX enclave XFRM)
+
+ arch/arm64/include/asm/cputype.h        |  8 +++++
+ arch/arm64/include/asm/kvm_pgtable.h    |  1 +
+ arch/arm64/kvm/fpsimd.c                 | 26 ++++++++++-----
+ arch/arm64/kvm/hyp/include/hyp/switch.h | 12 +++++--
+ arch/arm64/kvm/hyp/pgtable.c            | 41 ++++++++++++++++++-----
+ arch/arm64/kvm/inject_fault.c           |  2 +-
+ arch/arm64/kvm/vgic/vgic-v3.c           |  4 +++
+ arch/arm64/kvm/vmid.c                   |  7 ++--
+ arch/x86/include/asm/vmx.h              |  2 ++
+ arch/x86/kvm/cpuid.c                    | 16 ---------
+ arch/x86/kvm/vmx/sgx.c                  | 11 ++++--
+ arch/x86/kvm/x86.c                      |  6 +++-
+ virt/kvm/kvm_main.c                     | 59 +++++++++++++++++++++------------
+ 13 files changed, 129 insertions(+), 66 deletions(-)
+
