@@ -2,72 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DC7570AE1A
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 14:38:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B78E70AE1C
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 14:38:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbjEUMiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 08:38:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59724 "EHLO
+        id S230415AbjEUMiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 08:38:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbjEUMiJ (ORCPT
+        with ESMTP id S230333AbjEUMiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 08:38:09 -0400
+        Sun, 21 May 2023 08:38:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D359DC2;
-        Sun, 21 May 2023 05:38:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 137BCCA;
+        Sun, 21 May 2023 05:38:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7267D60F4F;
-        Sun, 21 May 2023 12:38:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0BA3C433AC;
-        Sun, 21 May 2023 12:38:07 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C49E60DDB;
+        Sun, 21 May 2023 12:38:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBD0FC433EF;
+        Sun, 21 May 2023 12:38:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684672687;
-        bh=F/yfHoeQVFg/Iszqcubt0GmafBS2VeuM5J2EsdRkorE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=GsRudyw5Le/vW1MxI7Egj44IrRtSsL2qcnDSjrbRH9Jjk5Ftslq5CeBx+YTYNOVnp
-         zPI4QxGvX6UmdJ2hQXABKjZ/TnJI6Gu1nAdoE/ygYblhEol7yjGpfurUT+q/FbrHCX
-         c6Qpz14ATiApAPJEd846Ff6EFttbhO2GRnsJB3FjQSvchIdGYoOQJSyLiShVsUkTky
-         TT8cxlNuYWxw551hKixFJcTsmMKRBal2jwmyxan9z5XLR2zSSVRCUz3wnPUqfzbRVu
-         66vc1GoxLlK1smyqnhQh5h2wqoKUz8HUL8RSlY5DmMg/uUSnpNutUHzxCbHl9PEYdH
-         2I9XSGQzykHVQ==
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-510db954476so6656329a12.0;
-        Sun, 21 May 2023 05:38:07 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxNp/q4HH0i2I8pIPMDVnjUZBPNTHaj4Wp8pb3vIdD3i20k7V2u
-        p+nMeeFJDd6cVXMV+9aJHVU3jl68qS97yL7XjEc=
-X-Google-Smtp-Source: ACHHUZ7xwFr0B8U2E4m75ywW4UFqxLS+S/YsLcMBNyTGaV28JA5fJc72cb9PwN0LTziFkSud8N29VLDJmUmJXac2joo=
-X-Received: by 2002:a05:6402:1210:b0:510:5d6d:552e with SMTP id
- c16-20020a056402121000b005105d6d552emr5870163edw.40.1684672685946; Sun, 21
- May 2023 05:38:05 -0700 (PDT)
-MIME-Version: 1.0
-References: <mhng-24855381-7da8-4c77-bcaf-a3a53c8cb38b@palmer-ri-x1c9> <668be661-728d-b87f-b827-4345ad07cc61@sifive.com>
-In-Reply-To: <668be661-728d-b87f-b827-4345ad07cc61@sifive.com>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Sun, 21 May 2023 20:37:54 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTTnbeuFMEQewN=AG5BPiP_V6dfwwFqd18HVtOrnS23bqQ@mail.gmail.com>
-Message-ID: <CAJF2gTTnbeuFMEQewN=AG5BPiP_V6dfwwFqd18HVtOrnS23bqQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/22] riscv: s64ilp32: Running 32-bit Linux kernel on
- 64-bit supervisor mode
-To:     Paul Walmsley <paul.walmsley@sifive.com>
-Cc:     Palmer Dabbelt <palmer@rivosinc.com>,
-        Arnd Bergmann <arnd@arndb.de>, tglx@linutronix.de,
-        peterz@infradead.org, luto@kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>, heiko@sntech.de,
-        jszhang@kernel.org, chenhuacai@kernel.org, apatel@ventanamicro.com,
-        atishp@atishpatra.org, Mark Rutland <mark.rutland@arm.com>,
-        bjorn@kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, rppt@kernel.org,
-        anup@brainfault.org, shihua@iscas.ac.cn, jiawei@iscas.ac.cn,
-        liweiwei@iscas.ac.cn, luxufan@iscas.ac.cn, chunyu@iscas.ac.cn,
-        tsu.yubo@gmail.com, wefu@redhat.com, wangjunqiang@iscas.ac.cn,
-        kito.cheng@sifive.com, andy.chiu@sifive.com,
-        vincent.chen@sifive.com, greentime.hu@sifive.com, corbet@lwn.net,
-        wuwei2016@iscas.ac.cn, jrtc27@jrtc27.com,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, guoren@linux.alibaba.com
-Content-Type: text/plain; charset="UTF-8"
+        s=k20201202; t=1684672695;
+        bh=Jll+2wLKZKNWexh6GXg4tih2KocZ6TFm2zI/zSaHAYo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OP6JmtvsjPPHb3vSIHejSVrNNCIDyo/cAMKbjodHWyGK+t7OBZjKHXRQ9VsPzg6W/
+         VQQu7wY6npTY56xqKhmP9SQFbIHCn467PFxMVMgFxEygyD6Be7yyrVp/2RtCtK8UUF
+         dl2HsikqQ1uSuU4NN0FP5wWM1ut+HJqsjrbDyJq81qRjPXHVV6qc1j+rPHNk3x4grz
+         tt0QmJXxFORZo11pxp32QvmblMX7usT3KPLV4R76DqCdoVfv/nvBYEBxvWzLmAqii/
+         mfm5BibjM/0/Zz8b9EXf7CETZVcl6P2JJIZwLeEjIfJGwYonbaWe7SKFGwCrHxASBH
+         6aQQ24f4bR45A==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1q0iKC-00GqhP-9k;
+        Sun, 21 May 2023 13:38:12 +0100
+Date:   Sun, 21 May 2023 13:38:11 +0100
+Message-ID: <87wn11oo5o.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <conor@kernel.org>, <daire.mcnamara@microchip.com>
+Subject: Re: Potential issue with (or misunderstanding of) of_irq_get()
+In-Reply-To: <20230519-unkempt-cartel-48efb4d8f0b4@wendy>
+References: <20230519-unkempt-cartel-48efb4d8f0b4@wendy>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: conor.dooley@microchip.com, tglx@linutronix.de, robh+dt@kernel.org, frowand.list@gmail.com, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, conor@kernel.org, daire.mcnamara@microchip.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -78,76 +70,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 8:14=E2=80=AFAM Paul Walmsley <paul.walmsley@sifive=
-.com> wrote:
->
-> On Thu, 18 May 2023, Palmer Dabbelt wrote:
->
-> > On Thu, 18 May 2023 06:09:51 PDT (-0700), guoren@kernel.org wrote:
-> >
-> > > This patch series adds s64ilp32 support to riscv. The term s64ilp32
-> > > means smode-xlen=3D64 and -mabi=3Dilp32 (ints, longs, and pointers ar=
-e all
-> > > 32-bit), i.e., running 32-bit Linux kernel on pure 64-bit supervisor
-> > > mode. There have been many 64ilp32 abis existing, such as mips-n32 [1=
-],
-> > > arm-aarch64ilp32 [2], and x86-x32 [3], but they are all about userspa=
-ce.
-> > > Thus, this should be the first time running a 32-bit Linux kernel wit=
-h
-> > > the 64ilp32 ABI at supervisor mode (If not, correct me).
-> >
-> > Does anyone actually want this?  At a bare minimum we'd need to add it =
-to the
-> > psABI, which would presumably also be required on the compiler side of =
-things.
-> >
-> > It's not even clear anyone wants rv64/ilp32 in userspace, the kernel se=
-ems
-> > like it'd be even less widely used.
->
-> We've certainly talked to folks who are interested in RV64 ILP32 userspac=
-e
-> with an LP64 kernel.  The motivation is the usual one: to reduce data siz=
-e
-> and therefore (ideally) BOM cost.  I think this work, if it goes forward,
-> would need to go hand in hand with the RVIA psABI group.
->
-> The RV64 ILP32 kernel and ILP32 userspace approach implemented by this
-> patch is intriguing, but I guess for me, the question is whether it's
-> worth the extra hassle vs. a pure RV32 kernel & userspace.
-Running pure RV32 kernel on 64-bit hardware is not an intelligent
-choice (such as cortex-a35/a53/a55), because they wasted 64-bit hw
-capabilities, and the hardware designer would waste additional
-resources & time on 32-bit machine & supervisor modes (In arm it is
-called EL3/EL2/EL1 modes). Think about too many PMP CSRs, PMU CSRs,
-and mode switch ... it's definitely wrong to follow the
-cortex-a35/a53/a55 way to deal with riscv32 on a 64-bit hardware. The
-chapter "Why s64ilp32 has better performance?" give out the
-improvement v.s. pure 32-bit, I repeat it here:
+On Fri, 19 May 2023 12:02:47 +0100,
+Conor Dooley <conor.dooley@microchip.com> wrote:
+>=20
+> [1  <text/plain; us-ascii (quoted-printable)>]
+> Hey!
+>=20
+> I've run into an issue with of_irq_get() while writing an irqchip driver
+> and I was hoping that by posting about it I might get some guidance as
+> to whether I just doing something fundamentally wrong in my code, or
+> if the specific case was just an oversight.
+>=20
+> I've been trying to solve the issue that I pointed out here:
+> https://lore.kernel.org/linux-gpio/23a69be6-96d3-1c28-f1aa-555e38ff991e@m=
+icrochip.com/
+>=20
+> To spare reading that, the TL;DR is that the SoC has 3 GPIO controllers,
+> with 14, 24 and 32 GPIOs each. All 68 can be used for interrupts.
+> The PLIC only has 41 interrupts for GPIOs, so there's a bit of extra RTL
+> sitting between the GPIO controllers and the PLIC, that is runtime
+> configurable, deciding whether an GPIO gets a PLIC interrupt of its
+> own or shares an interrupt with other GPIOs from the same GPIO controller.
+>=20
+> Since the interrupt router/mux is not part of the GPIO controller blocks,
+> I have written a driver for the it & changed the representation in the DT
+> to the below. For each of the 41 interrupts "consumed" by the driver
+> bound to the irqmux node, I have created a domain.
 
- - memcpy/memset/strcmp (s64ilp32 has half of the number of
-instructions and double the bandwidth per load/store instruction than
-s32ilp32.)
+In general, this feels a wee bit wrong.
 
-- ebpf JIT is a 64-bit virtual ISA, which couldn't be sufficient
-mapping by s32ilp32, but s64ilp32 could (just like s64lp64).
+=46rom what I understand of the HW, it is expected that most of the GPIO
+interrupt will be directly associated with a PLIC interrupt in an 1:1
+fashion (only 68 - 41 + 1 =3D 28 interrupts will be muxed). So 40 GPIOs
+could have a chance of being directly assigned to a PLIC input without
+any muxing.
 
- - Atomic64 (s64ilp32 has the exact native instructions mapping as
-s64lp64, but s32ilp32 only uses generic_atomic64, a tradeoff & limited
-software solution.)
+If you start allocating a domain per interrupt, you end-up actively
+preventing the use of hierarchical domains, and you don't really
+benefit from what the mux HW can do for you.
 
- - 64-bit native arithmetic instructions for "long long" type
+[...]
 
- - riscv s64ilp32 could support cmxchg_double for slub (The 2nd 32-bit
-Linux supports the feature, the 1st is i386.)
+> This approach in DT allows the GPIO controller driver to not care about
+> the router/mux configuration, which makes sense to me as it is not part
+> of those IP blocks.
+>=20
+> My irqchip driver was adding domains like so:
+>=20
+> 	for (; i < MPFS_MUX_NUM_IRQS; i++) {
+> 		priv->irqchip_data[i].output_hwirq =3D i;
+>=20
+> 		priv->irqchip_data[i].irq =3D irq_of_parse_and_map(node, i);
+>=20
+> 		domain =3D irq_domain_add_linear(node, MPFS_MAX_IRQS_PER_GPIO,
+> 					       &mpfs_irq_mux_nondirect_domain_ops,
+> 					       &priv->irqchip_data[i]);
+>=20
+> 		irq_set_chained_handler_and_data(priv->irqchip_data[i].irq,
+> 						 mpfs_irq_mux_nondirect_handler,
+> 						 &priv->irqchip_data[i]);
+> 	}
+>=20
+> In my irqchip's select callback I check the struct irq_fwspec's param[0]
+> to determine which domain is actually responsible for it.
 
->
->
-> - Paul
+Huh. In general, if you want to resort to 'select', you're doing
+something that is a bit iffy.
 
+>=20
+> That's all working nicely & I was doing some cleanup before submitting,
+> when I noticed that debugfs complained about the fact that I had several
+> domains hanging off the same of device_node:
+> debugfs: File ':soc:interrupt-controller@20002054' in directory 'domains'=
+ already present!
+> debugfs: File ':soc:interrupt-controller@20002054' in directory 'domains'=
+ already present!
 
+Of course. You get 41 domains with all the same node...
+
+You really should only have one hierarchical domain that represents
+all inputs. How you deal with the difference in handling probably
+shouldn't be directly reflected at that level of the hierarchy, but
+below the mux.
+
+> To get around that, I tried to switch to creating fwnodes instead,
+> one for each domain:
+>=20
+> 	for (; i < MPFS_MUX_NUM_IRQS; i++) {
+> 		priv->irqchip_data[i].output_hwirq =3D i;
+>=20
+> 		priv->irqchip_data[i].irq =3D irq_of_parse_and_map(node, i);
+>=20
+> 		fwnode =3D irq_domain_alloc_named_id_fwnode("mpfs-irq-mux", i);
+>=20
+> 		domain =3D irq_domain_create_linear(fwnode, MPFS_MAX_IRQS_PER_GPIO,
+> 						  &mpfs_irq_mux_nondirect_domain_ops,
+> 						  &priv->irqchip_data[i]);
+>=20
+> 		irq_set_chained_handler_and_data(priv->irqchip_data[i].irq,
+> 						 mpfs_irq_mux_nondirect_handler,
+> 						 &priv->irqchip_data[i]);
+> 	}
+>=20
+> That's grand for debugfs, but I then ran into a problem that made me feel
+> I had designed myself into an incorrect corner.
+
+Yup. Now that you have disassociated yourself from the firmware-based
+naming, you cannot use it to drive the mapping and sh*t happens. The
+thing is, named fwnode are only there as a band-aid to be able to
+designate objects that have no fwnode representation.
+
+And it goes downhill from there. My gut felling for this is that you
+should try and build something that looks like this:
+
+- the mux exposes a single hierarchical domain that is directly
+  connected to the PLIC.
+
+- the first 40 interrupt allocations are serviced by simply allocating
+  a corresponding PLIC interrupt and configuring the mux to do its
+  job.
+
+- all the 28 other interrupts must be muxed onto a single PLIC. For
+  these interrupts, you must make sure that the domain hierarchy gets
+  truncated at the MUX level (see irq_domain_disconnect_hierarchy()
+  for the gory details). They all get to be placed behind a chained
+  interrupt handler, with their own irqchip ops.
+
+That way, no repainting of fwnodes, no select/match complexity, and
+must of the interrupts get to benefit from the hierarchical setup
+(such as being able to set their affinity).
+
+Of course, all of this is assuming that the HW is able to deal with a
+large number of interrupts muxed to a single one. If not, you may have
+to use more that one of these, but the idea is the same.
+
+Thoughts?
+
+	M.
 
 --=20
-Best Regards
- Guo Ren
+Without deviation from the norm, progress is not possible.
