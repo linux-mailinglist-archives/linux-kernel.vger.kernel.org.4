@@ -2,121 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 377C170AFCE
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 21:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2760B70AFDD
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 21:23:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230302AbjEUTVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 15:21:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35748 "EHLO
+        id S230319AbjEUTX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 15:23:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230174AbjEUTVl (ORCPT
+        with ESMTP id S229999AbjEUTXX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 15:21:41 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 424FAD1
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 12:21:40 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-510f3db1cd8so5621605a12.1
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 12:21:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1684696898; x=1687288898;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4HXhFRUhp8ATNRE1IY8Xb1FY1Xv4mWGcfTkE+W6AJow=;
-        b=PAm1kCzX2Y7OPOmT60te/tIf6F6s8zGjojbIvuwMyxeQ8rxZdAkxC5rU7iSH/xiFbx
-         u/O2VypCPAnFqLVAu81U3SvZICDXoX3/d+n6t0v10NtIrOzdnvSYbFQjfJchUwsUwkvq
-         XyEs57loEM7JOyL0tBZrygh5oEicB0SzRbtBw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684696898; x=1687288898;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4HXhFRUhp8ATNRE1IY8Xb1FY1Xv4mWGcfTkE+W6AJow=;
-        b=ASgvPh4YoxOB+GxVO125hBNCovaIftjN7b+PgQY4c02tZW2ouA6rKP3vg2Yn8NxgQh
-         C6rwFmOFbEwtspYqPSAlVBdgIM+KlVeFzXnUJlFYU6JQbHrFP8hNgMJgQhcdPzt6EJzl
-         Yj6apTK7jtUIbxka04gbAXD/OiIQ0VNhSHG6cBQbS2scz8rbd7YtydztLZ97fKIYzkKY
-         tPuv763XFCyEjTfVBbHTGVL+SkftPWFf7aJBYAPdCpjgGXhwmHww0E12AryCkSrWQzSi
-         Wrbm0ZCgUTcO+QKjCT7geZ/lxTPHNuhppt/KXoEZuTZnM1f7cCb3KtTBfyUKICWd7jk8
-         sYXA==
-X-Gm-Message-State: AC+VfDwVp/WpsR9vp7W+3cAuqw5Xln+nd4w5eT2BU3etqvLG47wUZq+b
-        I7LlJ96Ni5VmIRvaYV0gI+Xhpf53/4U22BENl8maHw==
-X-Google-Smtp-Source: ACHHUZ5nVPsTpSEXe6TT+VgX7lRaLLWpNI4os1chm1l7JaYrWEtihKQNPVAMsQNzVMvxl012CeyNtw==
-X-Received: by 2002:a50:ee90:0:b0:506:82b7:10c3 with SMTP id f16-20020a50ee90000000b0050682b710c3mr6356934edr.41.1684696898601;
-        Sun, 21 May 2023 12:21:38 -0700 (PDT)
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com. [209.85.208.49])
-        by smtp.gmail.com with ESMTPSA id b23-20020aa7cd17000000b0050d8aac0a1esm2176421edw.19.2023.05.21.12.21.37
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 21 May 2023 12:21:37 -0700 (PDT)
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-510f525e06cso5476608a12.2
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 12:21:37 -0700 (PDT)
-X-Received: by 2002:a05:6402:6d8:b0:50b:fb60:f431 with SMTP id
- n24-20020a05640206d800b0050bfb60f431mr6096635edy.7.1684696897335; Sun, 21 May
- 2023 12:21:37 -0700 (PDT)
+        Sun, 21 May 2023 15:23:23 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07E6CF;
+        Sun, 21 May 2023 12:23:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684697002; x=1716233002;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=94cvnOcUrdgVab2RIcN+CCNS/6lW7eS0PodjcFGd9oQ=;
+  b=L8u2ehuk1QE5vqe9W7xsKDptNt1ArAkTtij9NLjk7Zbc4fQ4dx53ep45
+   TjIAtKwCXAXBU1LZGo7bJyEs9zk22c9L3UijV30AqBFzuuKDDlfmuz5vY
+   e5lTFPAIFP0EJIRZeysdfe6NcF/AOAkNNzcXXwYeDluOY4IPRPvuRV8JI
+   SFjPLBUkrFYRtT02VL6xyhdDnBiarAoOBxH0Q+wqggL6PAavO34E4ih7m
+   RNom2pEQ8B1vs4pm3iLynwCPbf9B52021a1ESF9dhlu0uR7EsT0iFTsQM
+   nh/d/OGHC+b/toPH+TUXKnKHTTiXczpyzPiUFAGHQDmglK/jAI1nEReqS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="337341549"
+X-IronPort-AV: E=Sophos;i="6.00,182,1681196400"; 
+   d="scan'208";a="337341549"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2023 12:23:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="847565687"
+X-IronPort-AV: E=Sophos;i="6.00,182,1681196400"; 
+   d="scan'208";a="847565687"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga001.fm.intel.com with ESMTP; 21 May 2023 12:23:21 -0700
+Received: from [10.212.161.251] (kliang2-mobl1.ccr.corp.intel.com [10.212.161.251])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 852F5580BA0;
+        Sun, 21 May 2023 12:23:17 -0700 (PDT)
+Message-ID: <1ea342ab-d68f-26e5-0043-f05b1886009e@linux.intel.com>
+Date:   Sun, 21 May 2023 15:23:16 -0400
 MIME-Version: 1.0
-References: <CAH2r5msxkE5cPJ-nQCAibJ+x+hO7uSLpasGm81i6DknQ8M5zWg@mail.gmail.com>
- <CAHk-=wiStOAKntvgzZ79aA=Xc0Zz7byoBxBW_As5cmn5cgkuoQ@mail.gmail.com> <CAH2r5muxwEMA9JpE6ijSbZEByxRmtNSiwcXMbOz+Ojo8_APJUQ@mail.gmail.com>
-In-Reply-To: <CAH2r5muxwEMA9JpE6ijSbZEByxRmtNSiwcXMbOz+Ojo8_APJUQ@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 21 May 2023 12:21:20 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjeuUNo6o6k4y3nQD2mmT5T04ack7i_UOAetmga-4_SbQ@mail.gmail.com>
-Message-ID: <CAHk-=wjeuUNo6o6k4y3nQD2mmT5T04ack7i_UOAetmga-4_SbQ@mail.gmail.com>
-Subject: Re: [GIT PULL] ksmbd server fixes
-To:     Steve French <smfrench@gmail.com>
-Cc:     Namjae Jeon <linkinjeon@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>,
-        samba-technical <samba-technical@lists.samba.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v1 05/23] perf pmu: Remove perf_pmu__hybrid_mounted
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Ming Wang <wangming01@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Dmitrii Dolgov <9erthalion6@gmail.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Ali Saidi <alisaidi@amazon.com>, Rob Herring <robh@kernel.org>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Kang Minchul <tegongkang@gmail.com>,
+        linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org
+References: <20230517145803.559429-1-irogers@google.com>
+ <20230517145803.559429-6-irogers@google.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20230517145803.559429-6-irogers@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 21, 2023 at 12:03=E2=80=AFPM Steve French <smfrench@gmail.com> =
-wrote:
->
-> I would be happy to do the move (to fs/smb) of the directories and
-> update the config soon (seems reasonably low risk) - let me know if you
-> want me to send it this week or wait till 6.5-rc
 
-So I think the "do it now or wait until the 6.5 merge window" is
-entirely up to you.
 
-We've often intentionally done big renames during the "quiet time"
-after the merge window is oven, just because doing them during the
-merge window can be somewhat painful with unnecessary conflicts.
+On 2023-05-17 10:57 a.m., Ian Rogers wrote:
+> perf_pmu__hybrid_mounted is used to detect whether cpu_core or
+> cpu_atom
 
-I would *not* want to do it during the last week of the release, just
-in case there are small details that need to be fixed up, but doing it
-now during the rc3/rc4 kind of timeframe is not only fairly quiet, but
-also gives us time to find any surprises.
+Currently, there are only two CPU types for a hybrid machine, core and
+atom. But there may be more CPU types added later. Please see the CPUID
+1AH EAX enumeration in SDM VOL2. It has several reserved encodings for
+CPU types. It's better not using the hardcode cpu_core/cpu_atom to
+replace the perf_pmu__hybrid_mounted().
 
-So in that sense, doing it now is likely one of the better times, and
-a pure rename should not be risky from a code standpoint.
+Thanks,
+Kan
 
-At the same time, doing it during the merge window isn't *wrong*
-either.  Despite the somewhat painful merge with folio changes, I
-don't think fs/cifs/ or fs/ksmbd/ normally have a lot of conflicts,
-and git does handle rename conflicts fairly well unless there's just
-lots of complexity.
-
-So it's really fine either way. The normal kind of "big changes"
-should obviously always be merge window things, but pure renames
-really are different and are often done outside of the merge window
-(the same way I intentionally did the MAINTAINERS re-ordering just
-*after* the merge window)
-
-But we don't do renames often enough to have any kind of strict rules
-about things like this.
-
-So I think "whenever is most convenient for you" is the thing to aim
-for here. This is *not* a "only during merge window" kind of thing.
-
-                 Linus
+> is mounted with a non-empty cpus file by
+> pmu_lookup. pmu_lookup will attempt to read the cpus file too and so
+> the check can be folded into this.
+> 
+> Checking hybrid_mounted in pmu_is_uncore is redundant as the next
+> cpumask read will fail returning false.
+> 
+> Reduce the scope of perf_pmu__find_hybrid_pmu by making it static.
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/util/pmu-hybrid.c | 15 +--------------
+>  tools/perf/util/pmu-hybrid.h |  3 ---
+>  tools/perf/util/pmu.c        | 26 ++++++++++++++------------
+>  3 files changed, 15 insertions(+), 29 deletions(-)
+> 
+> diff --git a/tools/perf/util/pmu-hybrid.c b/tools/perf/util/pmu-hybrid.c
+> index bc4cb0738c35..7fe943dd3217 100644
+> --- a/tools/perf/util/pmu-hybrid.c
+> +++ b/tools/perf/util/pmu-hybrid.c
+> @@ -18,20 +18,7 @@
+>  
+>  LIST_HEAD(perf_pmu__hybrid_pmus);
+>  
+> -bool perf_pmu__hybrid_mounted(const char *name)
+> -{
+> -	int cpu;
+> -	char pmu_name[PATH_MAX];
+> -	struct perf_pmu pmu = {.name = pmu_name};
+> -
+> -	if (strncmp(name, "cpu_", 4))
+> -		return false;
+> -
+> -	strlcpy(pmu_name, name, sizeof(pmu_name));
+> -	return perf_pmu__scan_file(&pmu, "cpus", "%u", &cpu) > 0;
+> -}
+> -
+> -struct perf_pmu *perf_pmu__find_hybrid_pmu(const char *name)
+> +static struct perf_pmu *perf_pmu__find_hybrid_pmu(const char *name)
+>  {
+>  	struct perf_pmu *pmu;
+>  
+> diff --git a/tools/perf/util/pmu-hybrid.h b/tools/perf/util/pmu-hybrid.h
+> index 206b94931531..8dbcae935020 100644
+> --- a/tools/perf/util/pmu-hybrid.h
+> +++ b/tools/perf/util/pmu-hybrid.h
+> @@ -13,9 +13,6 @@ extern struct list_head perf_pmu__hybrid_pmus;
+>  #define perf_pmu__for_each_hybrid_pmu(pmu)	\
+>  	list_for_each_entry(pmu, &perf_pmu__hybrid_pmus, hybrid_list)
+>  
+> -bool perf_pmu__hybrid_mounted(const char *name);
+> -
+> -struct perf_pmu *perf_pmu__find_hybrid_pmu(const char *name);
+>  bool perf_pmu__is_hybrid(const char *name);
+>  
+>  static inline int perf_pmu__hybrid_pmu_num(void)
+> diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+> index 1e0be23d4dd7..729b1f166f80 100644
+> --- a/tools/perf/util/pmu.c
+> +++ b/tools/perf/util/pmu.c
+> @@ -617,9 +617,6 @@ static bool pmu_is_uncore(int dirfd, const char *name)
+>  {
+>  	int fd;
+>  
+> -	if (perf_pmu__hybrid_mounted(name))
+> -		return false;
+> -
+>  	fd = perf_pmu__pathname_fd(dirfd, name, "cpumask", O_PATH);
+>  	if (fd < 0)
+>  		return false;
+> @@ -898,6 +895,16 @@ static int pmu_max_precise(int dirfd, struct perf_pmu *pmu)
+>  	return max_precise;
+>  }
+>  
+> +/**
+> + * perf_pmu__skip_empty_cpus() - should pmu_lookup skip the named PMU if the
+> + *      cpus or cpumask file isn't present?
+> + * @name: Name of PMU.
+> + */
+> +static bool perf_pmu__skip_empty_cpus(const char *name)
+> +{
+> +	return !strcmp(name, "cpu_core") || !strcmp(name, "cpu_atom");
+> +}
+> +
+>  static struct perf_pmu *pmu_lookup(int dirfd, const char *lookup_name)
+>  {
+>  	struct perf_pmu *pmu;
+> @@ -905,15 +912,8 @@ static struct perf_pmu *pmu_lookup(int dirfd, const char *lookup_name)
+>  	LIST_HEAD(aliases);
+>  	__u32 type;
+>  	char *name = pmu_find_real_name(lookup_name);
+> -	bool is_hybrid = perf_pmu__hybrid_mounted(name);
+>  	char *alias_name;
+>  
+> -	/*
+> -	 * Check pmu name for hybrid and the pmu may be invalid in sysfs
+> -	 */
+> -	if (!strncmp(name, "cpu_", 4) && !is_hybrid)
+> -		return NULL;
+> -
+>  	/*
+>  	 * The pmu data we store & need consists of the pmu
+>  	 * type value and format definitions. Load both right
+> @@ -933,8 +933,10 @@ static struct perf_pmu *pmu_lookup(int dirfd, const char *lookup_name)
+>  		return NULL;
+>  
+>  	pmu->cpus = pmu_cpumask(dirfd, name);
+> -	pmu->name = strdup(name);
+> +	if (!pmu->cpus && perf_pmu__skip_empty_cpus(name))
+> +		goto err;
+>  
+> +	pmu->name = strdup(name);
+>  	if (!pmu->name)
+>  		goto err;
+>  
+> @@ -964,7 +966,7 @@ static struct perf_pmu *pmu_lookup(int dirfd, const char *lookup_name)
+>  	list_splice(&aliases, &pmu->aliases);
+>  	list_add_tail(&pmu->list, &pmus);
+>  
+> -	if (is_hybrid)
+> +	if (!strcmp(name, "cpu_core") || !strcmp(name, "cpu_atom"))
+>  		list_add_tail(&pmu->hybrid_list, &perf_pmu__hybrid_pmus);
+>  	else
+>  		INIT_LIST_HEAD(&pmu->hybrid_list);
