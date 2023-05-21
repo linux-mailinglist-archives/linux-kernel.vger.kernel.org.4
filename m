@@ -2,107 +2,301 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8DAC70AC34
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 05:44:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 975C370AC37
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 05:47:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbjEUDoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 20 May 2023 23:44:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55502 "EHLO
+        id S229922AbjEUDrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 20 May 2023 23:47:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjEUDom (ORCPT
+        with ESMTP id S229973AbjEUDr1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 20 May 2023 23:44:42 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0678111F;
-        Sat, 20 May 2023 20:44:42 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-53404873a19so3271704a12.3;
-        Sat, 20 May 2023 20:44:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684640681; x=1687232681;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SL4uL+0ooOhf/aDssPqwcUbkWmE/VBQrEPhJXPQmD9Q=;
-        b=LgmNhRQIwE3dic7rdCSZ8MDMFZwK6qjah/wGqQVO4p9EQTMjkOkwDx2uIM3IjSVyK1
-         lr0YTszVU0t7RtThakEMJe5C7J4DT4C962wSIwDCrPM2J7Aeah6VT7FVipdqFZ7reGaO
-         7WojsEUjNXsuY+AKgXV19p9Wlyy+U5cpAHMQ1YCz/pAjd7v9AV/ln0M2QAEpIPhUI5Dn
-         gn/aYoDXzTGgrnJycEVjREvbtx3Hs1b/0jpl8l/WbkBOz9gRHMSBHJ2Z1zJYlTXCCT3x
-         VQzHBuO04NySJ+lzlY1i81OA2goO8k0SGsiUtsQFh8f4yTLC2X38AA8p0llwAvDwBmQr
-         wNdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684640681; x=1687232681;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SL4uL+0ooOhf/aDssPqwcUbkWmE/VBQrEPhJXPQmD9Q=;
-        b=Fvdt2kMxHxNCg5bed8uzVYdwM3qCMtXFToYLWKqQA8s05ITZp1wAu8RlvsAakrOKQl
-         HqrF9TB1QgSIZhLdbomxB8VbUklXmxueJhQUlUEvGHbu5+opYxdjelGux8oUUoEeEWnh
-         7S80AhJCf+PMYzfYHD3z5OonVWII/d35asp9R1gH2TSP5aMIBZC/4+O2XU5OHr4Go4xC
-         vOmvsJEot4Ba8IALDOP5fXkB9MHQ0KHwZaohusmsLZvwTm68WNctDO/hyVQ3keD3E1qs
-         y5xf8+dDfxKtAnu217g5sIa8CFkbHy0ntSsFIZrBnWgtJySZI7KZHSt/MXJznaLx99gn
-         mrRQ==
-X-Gm-Message-State: AC+VfDyfSgljQGBDo2ijlRcCW3LSQIc+9bJJrTpSUY3Nvep6U4BWqgI/
-        9LzqBRYxn6Jne5JD3W0c7ys=
-X-Google-Smtp-Source: ACHHUZ6wrnaCoBJWBg685ejuyEA0YzgDIIWVmsY0LmElLhB9TuADWoGJGorSCrOlj5JDMF6oqAFGJQ==
-X-Received: by 2002:a17:902:da91:b0:1ac:7543:bcdf with SMTP id j17-20020a170902da9100b001ac7543bcdfmr8204176plx.31.1684640681094;
-        Sat, 20 May 2023 20:44:41 -0700 (PDT)
-Received: from [172.27.232.67] (ec2-16-163-40-128.ap-east-1.compute.amazonaws.com. [16.163.40.128])
-        by smtp.gmail.com with ESMTPSA id i3-20020a170902c94300b001ae59169f05sm2220305pla.182.2023.05.20.20.44.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 20 May 2023 20:44:40 -0700 (PDT)
-Message-ID: <3f09e751-33fd-7d60-78cd-6857d113e8bd@gmail.com>
-Date:   Sun, 21 May 2023 11:44:36 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 5/6] KVM: x86: Keep a per-VM MTRR state
+        Sat, 20 May 2023 23:47:27 -0400
+Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2DDE66;
+        Sat, 20 May 2023 20:45:43 -0700 (PDT)
+Received: from pps.filterd (m0044012.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34KLVD5L019075;
+        Sat, 20 May 2023 20:45:22 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=s2048-2021-q4;
+ bh=+bqz1OdnSQOlIp5S+fErTIAyODuBtNJ1zkHp2y8mKgo=;
+ b=MqyHTLxYwgOmPNarMOOlb0UpzrfP9yX08EUorFNf5Dhmu0Hsr0VZIM4lzOT0/cEfOf81
+ NUSlCYRqqJiXeOObEW99yPHF2P92YgrtDxPqPWNy6w5jTZG5yv6T7gAivdHT4BDfzu0p
+ Ow18LXzXABb8E/Gx9dtO9wMEreKAb7woSnkro6OIgxbzDHuX9cZb0WxZippPvvaxW4yu
+ kVLhePpHYyCvcDDtz0cWqjqutJu/MlUP9gasN1cILd0ycjRM2fbj3ldwxm/gbKAgVHJm
+ HDiEc3fWXPk2f2xZfkzlKyFPfFDDf1yKk4vvinJpdi4+IhqszrEklKGz7fzZc/vvq3CI 7g== 
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2168.outbound.protection.outlook.com [104.47.56.168])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qpuwqbn7r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 20 May 2023 20:45:22 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NdSRW1iECy2f3JtdpBrpFPweCWxQS7Pczjqqprrx+GXMce1aOii/YoCfuqnGHXAAxZNtC4la/3z+UE3A15fBPRbBBKO3lIpjgXVNG7D0n92dEQ43H3wpwqrWA4y6fH5OfSf4ksBSAEKoIVOgYLtHeWPpWfJEl49oRLT2xsxAIxO7ZN1xylKPJ0ESULXYy+zEKWw8ofrqmn8CpyluaZxpFnvLcbSZfhVJXAdseayZ75/DvFJoXViIHMxYZ1r3HapJx04LMFJUA8kdKwoSS9+lPl59nGASedvnh62Z8LVPTPyqOo48kfUYK++xrRoZqlkgztFaHFKLxVvsqGpPlcxdTQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=+bqz1OdnSQOlIp5S+fErTIAyODuBtNJ1zkHp2y8mKgo=;
+ b=TyKPO5mSEutUhomcQB8xgZzbwsIa4ISY+9+/6xeY1laC7Yh9yLtwH9Fww5ZNpbuQ5/8z6Jsv2ybCmMn5ksXetZYgZmolnLxgzbXwy9eJ3KJVJCtc9AYTRblrX+H2TtF+EW2rIT0brc38H0UkwvWjKCHy0bV88TvFcqhyrsSgdjLMGk1TFibxMYAPCfeR20QPphTyL2AzzDy2I8YJkAeQn7805HIjuZUPc6pIWSwg8Bo0HVTv29Eyutyog6Fr92KhoMohK5dzfzV88NKRVOJGYfkmZxGwn4roLrcvkCLPg4Oooktk0fzZa4UhaTOHJJXcG5ZCmm9opwIszJ+YNDZ0Pg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
+ dkim=pass header.d=meta.com; arc=none
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
+ by DS0PR15MB6037.namprd15.prod.outlook.com (2603:10b6:8:15f::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.19; Sun, 21 May
+ 2023 03:44:48 +0000
+Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::589f:9230:518:7f53]) by SN6PR1501MB2064.namprd15.prod.outlook.com
+ ([fe80::589f:9230:518:7f53%7]) with mapi id 15.20.6411.027; Sun, 21 May 2023
+ 03:44:48 +0000
+Message-ID: <57dc6a0e-6ba9-e77c-80ac-6bb0a6e2650a@meta.com>
+Date:   Sat, 20 May 2023 20:44:44 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.1
+Subject: Re: [bug] kernel: bpf: syscall: a possible sleep-in-atomic bug in
+ __bpf_prog_put()
+To:     Teng Qi <starmiku1207184332@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
+        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, davem@davemloft.net, kuba@kernel.org,
+        hawk@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+References: <20230516111823.2103536-1-starmiku1207184332@gmail.com>
+ <e37c0a65-a3f6-e2e6-c2ad-367db20253a0@meta.com>
+ <CALyQVax8X63qekZVhvRTmZFFs+ucPKRkBB7UnRZk6Hu3ggi7Og@mail.gmail.com>
 Content-Language: en-US
-To:     Yan Zhao <yan.y.zhao@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     pbonzini@redhat.com, seanjc@google.com
-References: <20230509134825.1523-1-yan.y.zhao@intel.com>
- <20230509135300.1855-1-yan.y.zhao@intel.com>
-From:   Robert Hoo <robert.hoo.linux@gmail.com>
-In-Reply-To: <20230509135300.1855-1-yan.y.zhao@intel.com>
+From:   Yonghong Song <yhs@meta.com>
+In-Reply-To: <CALyQVax8X63qekZVhvRTmZFFs+ucPKRkBB7UnRZk6Hu3ggi7Og@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: BYAPR07CA0082.namprd07.prod.outlook.com
+ (2603:10b6:a03:12b::23) To SN6PR1501MB2064.namprd15.prod.outlook.com
+ (2603:10b6:805:d::27)
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|DS0PR15MB6037:EE_
+X-MS-Office365-Filtering-Correlation-Id: eecaa809-0baf-456c-0ddb-08db59adb99a
+X-FB-Source: Internal
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: N/KqOzAkAoxekScxuMy7vqt2MBlKrAH9BYFehxlboS2MpO2vcjplCnjBs4qPJoNr4gEldVMXLQsP4j7MFXacXP2dNCqaQM6Etbk/7uYOXQsrGCVopwYS6VsCvRrmdVyWVrF8jZGkmFfX0U95+Qw3N5cIkM1i8Z2CPLkfOvfJhZmb/tKzhwYi62thlnI9uyK6lsn7J79w1COXtZS1EXW58Sh3SsSJkjZz0ecscaAlJYbVR6AMP0mEzJDszRJSoOowfiBtqOo+ZJ31Xzj2IDRw9HwF7jeTG5ZE9MD/Vqb1pmeHbBxBkhg7YpTZUwbNWX2fOIUuXh+8XSM8tJjvvHzln2U3VLs8TNOWgAb3+jL5PE5aQXSuY9mM/C7G+EFMTF0xNPxTZf2VAKt3wq8tBZ+4yieTD6B8ATZPyVVg5LOJTnCNJC/Q5wuFpXjvWni2/ivhf9mehSqC0df0dXVGJKgMFZztrGPKYNV5z7yU1nTsKGx9qMdpdW76HTIkrx2fUXTOHMbmCyuMA4U3rZOVGsa9ttNdsd1zoszkwyyZwZkxnYPUF1tWMb/GhO9uTEECBmwff+EJ2D1+TBKeM0fvqzvRRVKypWuk8OiPA+2MBxwJ4XdqS+kZKz38BsbTlTYwXSB3DnlG/z0ixlWSeEGwJX+Lew==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(346002)(39860400002)(376002)(366004)(451199021)(6486002)(41300700001)(36756003)(38100700002)(6512007)(6506007)(53546011)(7416002)(5660300002)(31696002)(186003)(2616005)(83380400001)(86362001)(6666004)(2906002)(8676002)(8936002)(66476007)(66946007)(4326008)(6916009)(66556008)(31686004)(478600001)(316002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WkNtQVlBb3A4NmJHNi8ybjlaWHJDaG5JelB0YjQwWE9naVJWdE1nL3BxaURS?=
+ =?utf-8?B?di84aGtPNWw5OHBQY0g1K2NvdktIM1RZa2t2MkRHbnFtY1FQaTlyVFdxbG9v?=
+ =?utf-8?B?cjhjSFU2ZnpZeXlVYktYcVl2ZTV5a0Z2TGt4a3I1bmF6OHFBWmNCU2s1Wm5p?=
+ =?utf-8?B?aFh1NzV2TkFwemZOcWdRZkJCQ0NCMlRvcFEyTE02VDF3bVdMQTZmZGhJRkNa?=
+ =?utf-8?B?K0IvRnlPWkJ6NHU1VU5xd2RNV3kvOVhmWEZxRjN5YUwrWkQ1R0FtN3FzRFJ5?=
+ =?utf-8?B?eVpJM1RHbEFHdmd4NVVubmhVd3NobXVHK25KR3dGR2ZqNjZYRjg1M3NEc24v?=
+ =?utf-8?B?b3g5dGsrTURVMVBkOFV0ZUVQdWo3U0NoVjVNbzlNakJQTHNwTWJvY1l2V2dG?=
+ =?utf-8?B?dUxmSXcxd0owN0JReTVucmtCNEg4T2xGY0x0RnhmVnc3dTZBcmxkVk8zZUV1?=
+ =?utf-8?B?TDlLMmY0QTAxekx1a1ROYUFaTVJaNXdteUtZZEExcENpQ2w3SGpJM1dIWHZF?=
+ =?utf-8?B?V0JCWlFRSU45aXIyd0tpVGR1R01uME1tV2J2aUhjRGJ4YmhGWVZHdlhaYk52?=
+ =?utf-8?B?NUZUbDdvdjVHdk9OT2ZROVJSSkJLemdmT1VTYzdEekxSN2twOEpkdWt5bjRI?=
+ =?utf-8?B?UE1wR1VrcHBnc0lORmZtc1NGamxZYlNWb0RIR2F5KzFLODNsUzNMRSs1QmNS?=
+ =?utf-8?B?ZHcvSGNhV1ExZ3RMYnJnenZ2MUxrdGhUVkRSOS9lR2xBRyt6M0lOWlVEenoz?=
+ =?utf-8?B?TVhNdkdrcmFqd2JkZmJmaFIwWHlFVEE2cWY2ZWk1Rjh6RWovNmhjKzlUR3pz?=
+ =?utf-8?B?bG9RZGFpZG16Vm9tMW5UcGFyR1l0b2RmMVd1NEdiRzM3M3FLNnhLQnhSZytW?=
+ =?utf-8?B?SklGRUlON2kzVHVQVk5oRW1jbzNYbFdBTjMzR0ZKdUZaZ1ZTVWVicHJsanEv?=
+ =?utf-8?B?VFp0bXBQZFMvWkd2ck1JR0JuNlkxcytXaDJ6NzNOQkROZk5UOVZiRk5HQ0g4?=
+ =?utf-8?B?bFplNnNJME1veUFYTWt2Zy94UVNIMmNvUnhyZFV1K3hzY3F3NU85d0NzczFF?=
+ =?utf-8?B?a0Q2RVpXYW9Pd2ZNdUtZSW16b0YrMDhmM0hqWGNEczFrK0JRZlpGTHVGZkF4?=
+ =?utf-8?B?OHRiTzBJZlF6bGhkK1VaWlJUQ0lqYTNidUF3ZnRKWmNzN1hkdyt1YTczOGVl?=
+ =?utf-8?B?b0p1WnlVUDNsZUprRTZxb2NSNkkrajEvd0hQa3hUMVRTMjllNmx6RnF2R0x3?=
+ =?utf-8?B?d2QzQ2d0OTB3RGJuanFJMjR4RTVrcUJVWVlPSGk4Vmh6cnNIbU1hMjkvTTBz?=
+ =?utf-8?B?c0w2UTV2dzZWMzhaRHRmQkxPR1R1RFRNSm1Xem9MVGNKUFUxWnE4c1BGZDhX?=
+ =?utf-8?B?UjBUTVFMWGlXdTRacmpFNjZSOWRYSzcrbVJ2TlNva2hyQzdoOTl3NmM0dmhs?=
+ =?utf-8?B?dkRXK0RtcmxZRU1IOXRkNjNhc25RRExOckE1VnBkeUpETy9MeEhUNnVMTzla?=
+ =?utf-8?B?TVlWdU1VSmdiMUFzaWxhd2VOa1hFb2VEVGZNZ2NDU1JWTTFJdmwzWHA3b3hj?=
+ =?utf-8?B?V2MxY0pobFZyTVV0elVrcFRNRE4yZG92VzYrb3I5bk5HTE1CL3FSRW1QeE43?=
+ =?utf-8?B?TFFITDkvVVZIUEFTSXR0VTYwZS9yUnBnZTBlOTgyNEhuck5VZzVJMU12SmIr?=
+ =?utf-8?B?UDN1NmFhZ0M5ejRSa0pZOWVVWDdSZTNHQUY5Q05HRkJzUnhDNFhRcDJBNm91?=
+ =?utf-8?B?UDhHQ3FuYXJqeXVKaTc2S2pnTXplVXJ5RE1ZRzNTT2tvK0tBMlgvQkZrQmps?=
+ =?utf-8?B?S2F0YXl5UXowVGFMQXprUkovMmdKT0tIdjIzZjFsbVErKzg2UnNhY2FTTHRY?=
+ =?utf-8?B?cE82QmtOendreHVHanczVWM0SzNNNDhlcysySEp1bGd3YzhLTHFMUFhWbVg2?=
+ =?utf-8?B?TjE5M20wK1NZMVFxRnhidmFwTGNKL21ZUWFmaTN6aGRsS0pqMkNvMXhvb3dW?=
+ =?utf-8?B?VzlNTXJNSkpxckVONnlrRW9DdUFBTldJQ01sUDR4ajhjVHU2d2NXYUo3TDYv?=
+ =?utf-8?B?L0Y2TVdqbnRWei82Mzhid0R2YU1uUWxzdGkwMGNYazJCMzVQTzhuYXFNZHdX?=
+ =?utf-8?B?a0VDbjlQQ2ZYdllYR2d2TXMzZFVYY0MxYkJrb0tSY1FvcUsyRnBweW52UVMr?=
+ =?utf-8?B?V2c9PQ==?=
+X-OriginatorOrg: meta.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eecaa809-0baf-456c-0ddb-08db59adb99a
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 May 2023 03:44:48.2789
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: z/jubhW2fuqdA2y/9GjRy+6NF1GTj2nFJLWhLrfJC7QDwNymrFr2uh2VLsmpwEN7
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR15MB6037
+X-Proofpoint-ORIG-GUID: A6ABq2Bc0HUiZGE7SpvNmIpYAvmQVbHk
+X-Proofpoint-GUID: A6ABq2Bc0HUiZGE7SpvNmIpYAvmQVbHk
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-21_01,2023-05-17_02,2023-02-09_01
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/9/2023 9:53 PM, Yan Zhao wrote:
-> Keep a per-VM MTRR state and point it to the MTRR state of vCPU 0.
-> 
-> This is a preparation patch for KVM to reference a per-VM guest MTRR
-> to decide memory type of EPT leaf entries when noncoherent DMA is present.
-> 
-> Though each vCPU has its own MTRR state, MTRR states should be
-> consistent across each VM, which is demanded as in Intel's SDM
-> "In a multiprocessor system using a processor in the P6 family or a more
-> recent family, each processor MUST use the identical MTRR memory map so
-> that software will have a consistent view of memory."
-> 
-> Therefore, when memory type of EPT leaf entry needs to honor guest MTRR,
-> a per-VM version of guest MTRR can be referenced.
-> 
-> Each vCPU still has its own MTRR state field to keep guest rdmsr()
-> returning the right value when there's lag of MTRR update for each vCPU.
-> 
-Can we get rid of per-vCPU MTRR state copies and just have this per-VM 
-state only? therefore can simplify implementation and avoid hazard of 
-inconsistency among per-VPU MTRR states.
 
-I see in SDM, it notes:
-"In multiple processor systems, the operating system must maintain MTRR 
-consistency between all the processors in the system (that is, all 
-processors must use the same MTRR values). The P6 and more recent processor 
-families provide no hardware support for maintaining this consistency."
 
-leaving each vCPU's MTRR is just to fully mimic HW?
+On 5/19/23 7:18 AM, Teng Qi wrote:
+> Thank you for your response.
+>  > Looks like you only have suspicion here. Could you find a real violation
+>  > here where __bpf_prog_put() is called with !in_irq() &&
+>  > !irqs_disabled(), but inside spin_lock or rcu read lock? I have not seen
+>  > things like that.
+> 
+> For the complex conditions to call bpf_prog_put() with 1 refcnt, we have 
+> been
+> unable to really trigger this atomic violation after trying to construct
+> test cases manually. But we found that it is possible to show cases with
+> !in_irq() && !irqs_disabled(), but inside spin_lock or rcu read lock.
+> For example, even a failed case, one of selftest cases of bpf, netns_cookie,
+> calls bpf_sock_map_update() and may indirectly call bpf_prog_put()
+> only inside rcu read lock: The possible call stack is:
+> net/core/sock_map.c: 615 bpf_sock_map_update()
+> net/core/sock_map.c: 468 sock_map_update_common()
+> net/core/sock_map.c:  217 sock_map_link()
+> kernel/bpf/syscall.c: 2111 bpf_prog_put()
+> 
+> The files about netns_cookie include
+> tools/testing/selftests/bpf/progs/netns_cookie_prog.c and
+> tools/testing/selftests/bpf/prog_tests/netns_cookie.c. We inserted the
+> following code in
+> ‘net/core/sock_map.c: 468 sock_map_update_common()’:
+> static int sock_map_update_common(..)
+> {
+>          int inIrq = in_irq();
+>          int irqsDisabled = irqs_disabled();
+>          int preemptBits = preempt_count();
+>          int inAtomic = in_atomic();
+>          int rcuHeld = rcu_read_lock_held();
+>          printk("in_irq() %d, irqs_disabled() %d, preempt_count() %d,
+>            in_atomic() %d, rcu_read_lock_held() %d", inIrq, irqsDisabled,
+>            preemptBits, inAtomic, rcuHeld);
+> }
+> 
+> The output message is as follows:
+> root@(none):/root/bpf# ./test_progs -t netns_cookie
+> [  137.639188] in_irq() 0, irqs_disabled() 0, preempt_count() 0, 
+> in_atomic() 0,
+>          rcu_read_lock_held() 1
+> #113     netns_cookie:OK
+> Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+> 
+> We notice that there are numerous callers in kernel/, net/ and drivers/, 
+> so we
+> highly suggest modifying __bpf_prog_put() to address this gap. The gap 
+> exists
+> because __bpf_prog_put() is only safe under in_irq() || irqs_disabled()
+> but not in_atomic() || rcu_read_lock_held(). The following code snippet may
+> mislead developers into thinking that bpf_prog_put() is safe in all 
+> contexts.
+> if (in_irq() || irqs_disabled()) {
+>          INIT_WORK(&aux->work, bpf_prog_put_deferred);
+>          schedule_work(&aux->work);
+> } else {
+>          bpf_prog_put_deferred(&aux->work);
+> }
+> 
+> Implicit dependency may lead to issues.
+> 
+>  > Any problem here?
+> We mentioned it to demonstrate the possibility of kvfree() being
+> called by __bpf_prog_put_noref().
+> 
+> Thanks.
+> -- Teng Qi
+> 
+> On Wed, May 17, 2023 at 1:08 AM Yonghong Song <yhs@meta.com 
+> <mailto:yhs@meta.com>> wrote:
+> 
+> 
+> 
+>     On 5/16/23 4:18 AM, starmiku1207184332@gmail.com
+>     <mailto:starmiku1207184332@gmail.com> wrote:
+>      > From: Teng Qi <starmiku1207184332@gmail.com
+>     <mailto:starmiku1207184332@gmail.com>>
+>      >
+>      > Hi, bpf developers,
+>      >
+>      > We are developing a static tool to check the matching between
+>     helpers and the
+>      > context of hooks. During our analysis, we have discovered some
+>     important
+>      > findings that we would like to report.
+>      >
+>      > ‘kernel/bpf/syscall.c: 2097 __bpf_prog_put()’ shows that function
+>      > bpf_prog_put_deferred() won`t be called in the condition of
+>      > ‘in_irq() || irqs_disabled()’.
+>      > if (in_irq() || irqs_disabled()) {
+>      >      INIT_WORK(&aux->work, bpf_prog_put_deferred);
+>      >      schedule_work(&aux->work);
+>      > } else {
+>      >
+>      >      bpf_prog_put_deferred(&aux->work);
+>      > }
+>      >
+>      > We suspect this condition exists because there might be sleepable
+>     operations
+>      > in the callees of the bpf_prog_put_deferred() function:
+>      > kernel/bpf/syscall.c: 2097 __bpf_prog_put()
+>      > kernel/bpf/syscall.c: 2084 bpf_prog_put_deferred()
+>      > kernel/bpf/syscall.c: 2063 __bpf_prog_put_noref()
+>      > kvfree(prog->aux->jited_linfo);
+>      > kvfree(prog->aux->linfo);
+> 
+>     Looks like you only have suspicion here. Could you find a real
+>     violation
+>     here where __bpf_prog_put() is called with !in_irq() &&
+>     !irqs_disabled(), but inside spin_lock or rcu read lock? I have not seen
+>     things like that.
+> 
+>      >
+>      > Additionally, we found that array prog->aux->jited_linfo is
+>     initialized in
+>      > ‘kernel/bpf/core.c: 157 bpf_prog_alloc_jited_linfo()’:
+>      > prog->aux->jited_linfo = kvcalloc(prog->aux->nr_linfo,
+>      >    sizeof(*prog->aux->jited_linfo), bpf_memcg_flags(GFP_KERNEL |
+>     __GFP_NOWARN));
+> 
+>     Any problem here?
+> 
+>      >
+>      > Our question is whether the condition 'in_irq() ||
+>     irqs_disabled() == false' is
+>      > sufficient for calling 'kvfree'. We are aware that calling
+>     'kvfree' within the
+>      > context of a spin lock or an RCU lock is unsafe.
 
+Your above analysis makes sense if indeed that kvfree cannot appear
+inside a spin lock region or RCU read lock region. But is it true?
+I checked a few code paths in kvfree/kfree. It is either guarded
+with local_irq_save/restore or by 
+spin_lock_irqsave/spin_unlock_irqrestore, etc. Did I miss
+anything? Are you talking about RT kernel here?
+
+
+>      >
+>      > Therefore, we propose modifying the condition to include
+>     in_atomic(). Could we
+>      > update the condition as follows: "in_irq() || irqs_disabled() ||
+>     in_atomic()"?
+>      >
+>      > Thank you! We look forward to your feedback.
+>      >
+>      > Signed-off-by: Teng Qi <starmiku1207184332@gmail.com
+>     <mailto:starmiku1207184332@gmail.com>>
+> 
