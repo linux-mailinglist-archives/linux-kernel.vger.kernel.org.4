@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A56170AD29
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 11:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4298870AD2B
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 11:16:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbjEUJQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 05:16:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55024 "EHLO
+        id S230015AbjEUJQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 05:16:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjEUJQ0 (ORCPT
+        with ESMTP id S229511AbjEUJQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 05:16:26 -0400
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E11CF;
-        Sun, 21 May 2023 02:16:25 -0700 (PDT)
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-52867360efcso3377189a12.2;
-        Sun, 21 May 2023 02:16:25 -0700 (PDT)
+        Sun, 21 May 2023 05:16:30 -0400
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D21CF;
+        Sun, 21 May 2023 02:16:29 -0700 (PDT)
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-64d2c865e4eso2035527b3a.0;
+        Sun, 21 May 2023 02:16:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684660585; x=1687252585;
+        d=1e100.net; s=20221208; t=1684660589; x=1687252589;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Es75wE1TSD9/bxpBEraTqQGgh/2Yg3IpDVhaSa9N/Z8=;
-        b=XkIYN9rgpERLMyhUOV+cMWlBUHjQYm7Rdx/JmysPFfsdpTNlN5ukWx0I61lv0b3V+o
-         w/HqWt/6p86P9dd4oqboAbbX1HY9ZKPhlINmtYM04lh4UIaaP4ESQuwn/Y9wdXVGDfqA
-         UKULTNS9Sm9r82MzzLJlep0ImpntZSYXRgmgbU+2sNk7BIgWQKh786CJBsWEWh3AgI1/
-         vCLyQ1ASJIkJnFxY6gzhF7QFAUCuuHdUsHNo3NOTTNiOmXtif1cvGzpmDSnYSHWSLXeM
-         L9rxXchfZYdr22kfWlfSB7zx2Og5+chK+bejy5WFi9Od3nbMI3vWkvDLEMlkQ8/vmw50
-         fVDA==
-X-Gm-Message-State: AC+VfDz/TyYeyQUlVEpq1huA07GhhvrAeKPLbk71foecoc+N5flJ7MMC
-        rmsCIHltnBMUXSqZuHwj2dndTeTyfQh4U/QNd8g=
-X-Google-Smtp-Source: ACHHUZ6xvmdUQ7UA8O/mJrSNvBDBD+JdVbnKgQYo2ZkCX5YaJgRtWvqNbFTWz7AM32S8Xrul2lID3OzeJEPgNIy1rPI=
-X-Received: by 2002:a17:90a:9cf:b0:250:bb6:47ed with SMTP id
- 73-20020a17090a09cf00b002500bb647edmr6796360pjo.33.1684660584928; Sun, 21 May
- 2023 02:16:24 -0700 (PDT)
+        bh=KHIw7JGPsQWr9sfK8pf8whE7OIvCqL302ZlVYFFtHzk=;
+        b=EiW9f9bmO+FQZAhkkEdXsP0FA6mIbNTWvEGhFr2kB4sD99zUkNN7lyQbOpuwbScjG3
+         zSFXUJA4TFGMW/7huhnZLpxeCCdG96a2qSWtL1qlcjduDJ09MfEOzvHben+qNgh6ir+u
+         duIGog8SMBniaHmTTWMJWzMogQ4RMmHDWnC9fDpBPwvfDD47fSjN6O4Kse2uqkgTnibr
+         0Z6agHRJ++fXEVv3JYeo8CPg9DBkhQceqZUlrqcQIWcXJz/oXMxaJi1DYNEZRVqMh5sG
+         OC6US2nZh9l3vsXkxClOSG71lhpebjVgXxZGEK7RiWhhIYLt0ZTsemxxtetZt3o22j0j
+         OO3w==
+X-Gm-Message-State: AC+VfDzfCM9XHZcQvnL3e6RhIRcHkaWQ0NLwJK/Xybo3tkjDnDmfH8xv
+        pnMFRbotdyGKPsJAPNxhPgI7nAeTZLN34QXXIrI=
+X-Google-Smtp-Source: ACHHUZ7fMKxiJ2y7Pl6IaCFH5VD2rbG7Utn6oWaSJg1ig0JcRvWSsDnrtoHdJRGRAB8R2iYVskFm0yRWjjJQ5utYPoY=
+X-Received: by 2002:a05:6a20:e615:b0:102:2de7:ee1d with SMTP id
+ my21-20020a056a20e61500b001022de7ee1dmr7751637pzb.6.1684660588725; Sun, 21
+ May 2023 02:16:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230519195600.420644-1-frank.jungclaus@esd.eu> <20230519195600.420644-2-frank.jungclaus@esd.eu>
-In-Reply-To: <20230519195600.420644-2-frank.jungclaus@esd.eu>
+References: <20230519195600.420644-1-frank.jungclaus@esd.eu> <20230519195600.420644-3-frank.jungclaus@esd.eu>
+In-Reply-To: <20230519195600.420644-3-frank.jungclaus@esd.eu>
 From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Date:   Sun, 21 May 2023 18:16:13 +0900
-Message-ID: <CAMZ6Rq+V4HRLa2bzADnsvaKHuCwi6O5jKo39mhon_+OnMDEJbQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/6] can: esd_usb: Make use of existing kernel macros
+Date:   Sun, 21 May 2023 18:16:17 +0900
+Message-ID: <CAMZ6RqL-2qB=kLPd84rWHd3=xPcspSNXvNYpR9Fyx+4-Ft16gQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/6] can: esd_usb: Replace initializer macros used for
+ struct can_bittiming_const
 To:     Frank Jungclaus <frank.jungclaus@esd.eu>
 Cc:     linux-can@vger.kernel.org, Marc Kleine-Budde <mkl@pengutronix.de>,
         Wolfgang Grandegger <wg@grandegger.com>,
@@ -62,133 +63,110 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 Thanks for the patch.
 
 On Sat. 20 May 2023 at 04:57, Frank Jungclaus <frank.jungclaus@esd.eu> wrote:
-> Make use of existing kernel macros:
-> - Use the unit suffixes from linux/units.h for the controller clock
-> frequencies
-> - Use the BIT() and the GENMASK() macro to set specific bits in some
->   constants
-> - Use CAN_MAX_DLEN (instead of directly using the value 8) for the
-> maximum CAN payload length
+> Replace the macros used to initialize the members of struct
+> can_bittiming_const with direct values. Then also use those struct
+> members to do the calculations in esd_usb2_set_bittiming().
 >
-> Additionally:
-> - Spend some commenting for the previously changed constants
-> - Add the current year to the copyright notice
-> - While adding the header linux/units.h to the list of include files
-> also sort that list alphabetically
->
-> Suggested-by: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
 > Link: https://lore.kernel.org/all/CAMZ6RqLaDNy-fZ2G0+QMhUEckkXLL+ZyELVSDFmqpd++aBzZQg@mail.gmail.com/
-> Link: https://lore.kernel.org/all/CAMZ6RqKdg5YBufa0C+ttzJvoG=9yuti-8AmthCi4jBbd08JEtw@mail.gmail.com/
-> Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> Link: https://lore.kernel.org/all/20230518-grower-film-ea8b5f853f3e-mkl@pengutronix.de/
+> Suggested-by: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
 > Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
 > ---
->  drivers/net/can/usb/esd_usb.c | 40 ++++++++++++++++++-----------------
->  1 file changed, 21 insertions(+), 19 deletions(-)
+>  drivers/net/can/usb/esd_usb.c | 33 +++++++++++++--------------------
+>  1 file changed, 13 insertions(+), 20 deletions(-)
 >
 > diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_usb.c
-> index d33bac3a6c10..32354cfdf151 100644
+> index 32354cfdf151..2eecf352ec47 100644
 > --- a/drivers/net/can/usb/esd_usb.c
 > +++ b/drivers/net/can/usb/esd_usb.c
-> @@ -3,19 +3,20 @@
->   * CAN driver for esd electronics gmbh CAN-USB/2 and CAN-USB/Micro
->   *
->   * Copyright (C) 2010-2012 esd electronic system design gmbh, Matthias Fuchs <socketcan@esd.eu>
-> - * Copyright (C) 2022 esd electronics gmbh, Frank Jungclaus <frank.jungclaus@esd.eu>
-> + * Copyright (C) 2022-2023 esd electronics gmbh, Frank Jungclaus <frank.jungclaus@esd.eu>
->   */
-> +#include <linux/can.h>
-> +#include <linux/can/dev.h>
-> +#include <linux/can/error.h>
-> +
->  #include <linux/ethtool.h>
-> -#include <linux/signal.h>
-> -#include <linux/slab.h>
->  #include <linux/module.h>
->  #include <linux/netdevice.h>
-> +#include <linux/signal.h>
-> +#include <linux/slab.h>
-> +#include <linux/units.h>
->  #include <linux/usb.h>
->
-> -#include <linux/can.h>
-> -#include <linux/can/dev.h>
-> -#include <linux/can/error.h>
-> -
->  MODULE_AUTHOR("Matthias Fuchs <socketcan@esd.eu>");
->  MODULE_AUTHOR("Frank Jungclaus <frank.jungclaus@esd.eu>");
->  MODULE_DESCRIPTION("CAN driver for esd electronics gmbh CAN-USB/2 and CAN-USB/Micro interfaces");
-> @@ -27,8 +28,8 @@ MODULE_LICENSE("GPL v2");
->  #define USB_CANUSBM_PRODUCT_ID 0x0011
->
->  /* CAN controller clock frequencies */
-> -#define ESD_USB2_CAN_CLOCK     60000000
-> -#define ESD_USBM_CAN_CLOCK     36000000
-> +#define ESD_USB2_CAN_CLOCK     (60 * MEGA) /* Hz */
-> +#define ESD_USBM_CAN_CLOCK     (36 * MEGA) /* Hz */
->
->  /* Maximum number of CAN nets */
->  #define ESD_USB_MAX_NETS       2
-> @@ -42,20 +43,21 @@ MODULE_LICENSE("GPL v2");
->  #define CMD_IDADD              6 /* also used for IDADD_REPLY */
->
->  /* esd CAN message flags - dlc field */
-> -#define ESD_RTR                        0x10
-> +#define ESD_RTR        BIT(4)
-> +
->
->  /* esd CAN message flags - id field */
-> -#define ESD_EXTID              0x20000000
-> -#define ESD_EVENT              0x40000000
-> -#define ESD_IDMASK             0x1fffffff
-> +#define ESD_EXTID      BIT(29)
-> +#define ESD_EVENT      BIT(30)
-> +#define ESD_IDMASK     GENMASK(28, 0)
->
->  /* esd CAN event ids */
->  #define ESD_EV_CAN_ERROR_EXT   2 /* CAN controller specific diagnostic data */
->
->  /* baudrate message flags */
-> -#define ESD_USB_UBR            0x80000000
-> -#define ESD_USB_LOM            0x40000000
-> -#define ESD_USB_NO_BAUDRATE    0x7fffffff
-> +#define ESD_USB_LOM    BIT(30) /* 0x40000000, Listen Only Mode */
-> +#define ESD_USB_UBR    BIT(31) /* 0x80000000, User Bit Rate (controller BTR) in bits 0..27 */
-                                     ^^^^^^^^^^
-
-As pointented by Marc, no need for redundant comment with the hexadecimal value.
-
-> +#define ESD_USB_NO_BAUDRATE    GENMASK(30, 0) /* bit rate unconfigured */
+> @@ -60,18 +60,10 @@ MODULE_LICENSE("GPL v2");
+>  #define ESD_USB_NO_BAUDRATE    GENMASK(30, 0) /* bit rate unconfigured */
 >
 >  /* bit timing CAN-USB/2 */
->  #define ESD_USB2_TSEG1_MIN     1
-> @@ -70,7 +72,7 @@ MODULE_LICENSE("GPL v2");
->  #define ESD_USB2_BRP_MIN       1
->  #define ESD_USB2_BRP_MAX       1024
->  #define ESD_USB2_BRP_INC       1
-> -#define ESD_USB2_3_SAMPLES     0x00800000
-> +#define ESD_USB2_3_SAMPLES     BIT(23)
+> -#define ESD_USB2_TSEG1_MIN     1
+> -#define ESD_USB2_TSEG1_MAX     16
+>  #define ESD_USB2_TSEG1_SHIFT   16
+> -#define ESD_USB2_TSEG2_MIN     1
+> -#define ESD_USB2_TSEG2_MAX     8
+>  #define ESD_USB2_TSEG2_SHIFT   20
+> -#define ESD_USB2_SJW_MAX       4
+>  #define ESD_USB2_SJW_SHIFT     14
+>  #define ESD_USBM_SJW_SHIFT     24
+> -#define ESD_USB2_BRP_MIN       1
+> -#define ESD_USB2_BRP_MAX       1024
+> -#define ESD_USB2_BRP_INC       1
+>  #define ESD_USB2_3_SAMPLES     BIT(23)
 >
 >  /* esd IDADD message */
->  #define ESD_ID_ENABLE          0x80
-> @@ -128,7 +130,7 @@ struct rx_msg {
->         __le32 ts;
->         __le32 id; /* upper 3 bits contain flags */
->         union {
-> -               u8 data[8];
-> +               u8 data[CAN_MAX_DLEN];
->                 struct {
->                         u8 status; /* CAN Controller Status */
->                         u8 ecc;    /* Error Capture Register */
-> @@ -145,7 +147,7 @@ struct tx_msg {
->         u8 dlc;
->         u32 hnd;        /* opaque handle, not used by device */
->         __le32 id; /* upper 3 bits contain flags */
-> -       u8 data[8];
-> +       u8 data[CAN_MAX_DLEN];
+> @@ -909,19 +901,20 @@ static const struct ethtool_ops esd_usb_ethtool_ops = {
+>
+>  static const struct can_bittiming_const esd_usb2_bittiming_const = {
+>         .name = "esd_usb2",
+> -       .tseg1_min = ESD_USB2_TSEG1_MIN,
+> -       .tseg1_max = ESD_USB2_TSEG1_MAX,
+> -       .tseg2_min = ESD_USB2_TSEG2_MIN,
+> -       .tseg2_max = ESD_USB2_TSEG2_MAX,
+> -       .sjw_max = ESD_USB2_SJW_MAX,
+> -       .brp_min = ESD_USB2_BRP_MIN,
+> -       .brp_max = ESD_USB2_BRP_MAX,
+> -       .brp_inc = ESD_USB2_BRP_INC,
+> +       .tseg1_min = 1,
+> +       .tseg1_max = 16,
+> +       .tseg2_min = 1,
+> +       .tseg2_max = 8,
+> +       .sjw_max = 4,
+> +       .brp_min = 1,
+> +       .brp_max = 1024,
+> +       .brp_inc = 1,
 >  };
 >
->  struct tx_done_msg {
+>  static int esd_usb2_set_bittiming(struct net_device *netdev)
+>  {
+>         struct esd_usb_net_priv *priv = netdev_priv(netdev);
+> +       const struct can_bittiming_const *btc = priv->can.bittiming_const;
+
+I initially suggested doing:
+
+          const struct can_bittiming_const *btc = priv->can.bittiming_const;
+
+But now that I think again about it, doing:
+
+          const struct can_bittiming_const *btc = &esd_usb2_bittiming_const;
+
+is slightly better as it will allow the compiler to fold the integer
+constant expressions such as btc->brp_max - 1. The compiler is not
+smart enough to figure out what values are held in
+priv->can.bittiming_const at compile time.
+
+Sorry for not figuring this the first time.
+
+>         struct can_bittiming *bt = &priv->can.bittiming;
+>         union esd_usb_msg *msg;
+>         int err;
+> @@ -932,7 +925,7 @@ static int esd_usb2_set_bittiming(struct net_device *netdev)
+>         if (priv->can.ctrlmode & CAN_CTRLMODE_LISTENONLY)
+>                 canbtr |= ESD_USB_LOM;
+>
+> -       canbtr |= (bt->brp - 1) & (ESD_USB2_BRP_MAX - 1);
+> +       canbtr |= (bt->brp - 1) & (btc->brp_max - 1);
+>
+>         if (le16_to_cpu(priv->usb->udev->descriptor.idProduct) ==
+>             USB_CANUSBM_PRODUCT_ID)
+> @@ -940,12 +933,12 @@ static int esd_usb2_set_bittiming(struct net_device *netdev)
+>         else
+>                 sjw_shift = ESD_USB2_SJW_SHIFT;
+>
+> -       canbtr |= ((bt->sjw - 1) & (ESD_USB2_SJW_MAX - 1))
+> +       canbtr |= ((bt->sjw - 1) & (btc->sjw_max - 1))
+>                 << sjw_shift;
+>         canbtr |= ((bt->prop_seg + bt->phase_seg1 - 1)
+> -                  & (ESD_USB2_TSEG1_MAX - 1))
+> +                  & (btc->tseg1_max - 1))
+>                 << ESD_USB2_TSEG1_SHIFT;
+> -       canbtr |= ((bt->phase_seg2 - 1) & (ESD_USB2_TSEG2_MAX - 1))
+> +       canbtr |= ((bt->phase_seg2 - 1) & (btc->tseg2_max - 1))
+>                 << ESD_USB2_TSEG2_SHIFT;
+>         if (priv->can.ctrlmode & CAN_CTRLMODE_3_SAMPLES)
+>                 canbtr |= ESD_USB2_3_SAMPLES;
 > --
 > 2.25.1
 >
