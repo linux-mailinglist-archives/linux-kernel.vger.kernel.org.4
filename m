@@ -2,208 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF8F70B201
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 01:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D912870B203
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 01:11:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230282AbjEUXKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 19:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52774 "EHLO
+        id S230424AbjEUXLH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 19:11:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjEUXKv (ORCPT
+        with ESMTP id S230171AbjEUXLF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 19:10:51 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC8EC3;
-        Sun, 21 May 2023 16:10:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=K4WPA18aOPTDws24S0fhivh+wdB5uMs20IVqeoLDFVg=; b=hJTNXKpY1GbFcDud/StMM0mEm2
-        xOmsZsaInQKpMD9FooAVISqofGLGHm9a5H/rHHpttDavg1t7RPFnHv8iu4yaUr4I+Skm4f77Ts7dJ
-        N2rIhAHDLkfqC7vOSwQBkIZ+8V7ubQvABAmenRS2bJGr7w2aWA++bPIRU/l7QEgnL9z+xQKpIf0O8
-        gXwWSbOoxhiW+4lat9w6/+2JVZ+DJixh+RMPg1k6trv0YRuSKave9LzH9XIY2TvdiFKQwJ5R7v2gl
-        pGJdi2o9fdGbWKWa+/Afah6LjIxCRvgysMR2L09BoIET2yphe3qVs/N+Gt0oXMonLk1kEizCDctvw
-        p0QorifA==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1q0sCL-004pPC-1G;
-        Sun, 21 May 2023 23:10:47 +0000
-Message-ID: <7ee02152-d498-87dc-d372-017212888db9@infradead.org>
-Date:   Sun, 21 May 2023 16:10:44 -0700
+        Sun, 21 May 2023 19:11:05 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09522CD;
+        Sun, 21 May 2023 16:11:04 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id e9e14a558f8ab-3382b8b3c33so41139955ab.2;
+        Sun, 21 May 2023 16:11:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684710663; x=1687302663;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fR1fnzVsiO6TQrco2vdiwn9ZSO3wfii/ZP217z+d6sY=;
+        b=Gc7wLockmD4v+aSXwZMKBZ7I/u5xtpXXlmagZbUmnWmO/y6jjGKa7RUxtMC/T8SG5N
+         yIP1uHr2ExY80WdW1jvKu5LqF62+iZCzjT962Xh4qQVsyR3XIgnaJUtWN0GbWR6/aUB+
+         uRmPNKPW3AgIvu3wVqC0euT0CLrcuiUYpfZcqc4+dJ7k9m5d40lsCet5Ngt4uvplnnhG
+         sy4AQxFRr3WFySKImr4CK6Ruk9wHONZXpp6877P9hZGtU8fmYzY4SE8X2JbKHqHRLUY/
+         8UuO0OU+OFzIfO/QaZvNgBJEUswa7vPltRF3zoyPTaMW7uf9Usu3jWEOb3S+N4x65Zz4
+         JK6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684710663; x=1687302663;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fR1fnzVsiO6TQrco2vdiwn9ZSO3wfii/ZP217z+d6sY=;
+        b=SHLI7CVNvqZRoWOd66k/02C1GfDpIEB10Ugh9o6rIUjmJNoNnBl13czkn2D7zFt4E/
+         5ytClub2KEMHEu4bYwtIpBcZYY7mUI4m6qzF3FKJSex/OLJfvO0i7Hcmb7kQ08MdIZdX
+         ba5/52vXj5jiLFrP0J1uaUxZ+TPtVSziCZ49J2UkQAGaNHMRDcpi/A/dV3qQ6vR2ynou
+         Q907vWZ5XOQsCowb/3hpt26btgN40Z8l83n5vkxxsGIUUs9e11cgWNUDl1g0Fpc4ynDP
+         nhjTyT7g4ZDMCI3gZuYhlxol64MZMhYsqTOuClmLXiERHhprV7WaDXs6C9MF5K7jaM7l
+         o2TA==
+X-Gm-Message-State: AC+VfDwRl2sKOX1o1qaQlXA8zUd3/WqsQlxDp8Ojamch7dJTLpIlyVD+
+        JRcjZLAUuB+X50OUneOS7kA=
+X-Google-Smtp-Source: ACHHUZ5qTtzjMeqjz4J5xQqWpVvxTmUX/LLonCNiWhPS9JJleopzkoK5l+pwhL1tYrWCis2JDEbaqA==
+X-Received: by 2002:a92:d708:0:b0:338:6ace:dd74 with SMTP id m8-20020a92d708000000b003386acedd74mr5918827iln.18.1684710663219;
+        Sun, 21 May 2023 16:11:03 -0700 (PDT)
+Received: from aford-B741.lan ([2601:447:d001:897f:84e4:c2f6:44bb:b929])
+        by smtp.gmail.com with ESMTPSA id a93-20020a029466000000b00416789bfd70sm1367468jai.1.2023.05.21.16.11.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 May 2023 16:11:02 -0700 (PDT)
+From:   Adam Ford <aford173@gmail.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     aford@beaconembedded.com, Adam Ford <aford173@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] arm64: dts: imx8mn-beacon: Migrate sound card to simple-audio-card
+Date:   Sun, 21 May 2023 18:10:54 -0500
+Message-Id: <20230521231055.167351-1-aford173@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 3/3] Documentation: kernel-parameters: Add some MIPS
- parameters
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
-        linux-doc@vger.kernel.org, corbet@lwn.net
-References: <20230521223124.21911-1-jiaxun.yang@flygoat.com>
- <20230521223124.21911-4-jiaxun.yang@flygoat.com>
-Content-Language: en-US
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230521223124.21911-4-jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi--
+Instead of using a custom glue layer connecting the wm8962 CODEC
+to the SAI3 sound-dai, migrate the sound card to simple-audio-card.
 
-A few of these new entries are out of place, i.e., not in
-sorted order. See below.
+Signed-off-by: Adam Ford <aford173@gmail.com>
 
-
-On 5/21/23 15:31, Jiaxun Yang wrote:
-> Those parameters lives in MIPS kernel since very start.
-> Document them for convenience.
-> 
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
->  .../admin-guide/kernel-parameters.txt         | 29 +++++++++++++++++++
->  1 file changed, 29 insertions(+)
-> 
-> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-> index 9c502d3aa0cd..67a0c3f7eca3 100644
-> --- a/Documentation/admin-guide/kernel-parameters.txt
-> +++ b/Documentation/admin-guide/kernel-parameters.txt
-> @@ -713,6 +713,8 @@
->  			Sets the size of memory pool for coherent, atomic dma
->  			allocations, by default set to 256K.
->  
-> +	coherentio	[KNL,MIPS] Force enable hardware DMA cache coherency.
-> +
-
-This one should be just above "coherent_pool".
-
->  	com20020=	[HW,NET] ARCnet - COM20020 chipset
->  			Format:
->  			<io>[,<irq>[,<nodeID>[,<backplane>[,<ckp>[,<timeout>]]]]]
-> @@ -3626,6 +3628,8 @@
->  
->  	nocache		[ARM]
->  
-> +	nocoherentio	[KNL,MIPS] Force enable software DMA cache coherency.
-> +
-
-OK.
-
->  	no_console_suspend
->  			[HW] Never suspend the console
->  			Disable suspending of consoles during suspend and
-> @@ -3645,6 +3649,7 @@
->  			[KNL] Disable object debugging
->  
->  	nodsp		[SH] Disable hardware DSP at boot time.
-> +			[MIPS] Disable DSP ASE at boot time.
->  
->  	noefi		Disable EFI runtime services support.
->  
-> @@ -3667,6 +3672,8 @@
->  
->  	nofsgsbase	[X86] Disables FSGSBASE instructions.
->  
-> +	noftlb		[MIPS] Disable Fixed TLB at boot time.
-
-OK.
-
-> +
->  	nofxsr		[BUGS=X86-32] Disables x86 floating point extended
->  			register save and restore. The kernel will only save
->  			legacy floating-point registers on task switch.
-> @@ -3678,6 +3685,8 @@
->  			in certain environments such as networked servers or
->  			real-time systems.
->  
-> +	nohtw		[MIPS] Disable hardware page table walker at boot time.
-> +
-
-nohtw should be immediately after "nohlt".
-
->  	no_hash_pointers
->  			Force pointers printed to the console or buffers to be
->  			unhashed.  By default, when a pointer is printed via %p
-> @@ -3758,6 +3767,8 @@
->  
->  	nolapic_timer	[X86-32,APIC] Do not use the local APIC timer.
->  
-> +	noulri          [MIPS] Disable RDHWR ULR access for user space.
-> +
-This should be just after "no_uaccess_flush".
-
->  	nomca		[IA-64] Disable machine check abort handling
->  
->  	nomce		[X86-32] Disable Machine Check Exception
-> @@ -3882,6 +3893,8 @@
->  			[X86,PV_OPS] Disable paravirtualized VMware scheduler
->  			clock and use the default one.
->  
-> +	nowait		[MIPS] Disable the wait instruction for idle.
-> +
-
-OK.
-
->  	nowatchdog	[KNL] Disable both lockup detectors, i.e.
->  			soft-lockup and NMI watchdog (hard-lockup).
->  
-> @@ -3893,6 +3906,8 @@
->  			LEGACY_XAPIC_DISABLED bit set in the
->  			IA32_XAPIC_DISABLE_STATUS MSR.
->  
-> +	noxpa		[MIPS] Disable XPA (eXtended Physical Addressing) ASE.
-> +
-
-OK.
-
->  	noxsave		[BUGS=X86] Disables x86 extended register state save
->  			and restore using xsave. The kernel will fallback to
->  			enabling legacy floating-point and sse state.
-> @@ -3936,6 +3951,8 @@
->  
->  	nr_uarts=	[SERIAL] maximum number of UARTs to be registered.
->  
-> +	ntlb=		[MIPS] Override max number of TLB entries.
-> +
-
-OK.
-
->  	numa=off 	[KNL, ARM64, PPC, RISCV, SPARC, X86] Disable NUMA, Only
->  			set up a single NUMA node spanning all memory.
->  
-> @@ -5273,6 +5290,18 @@
->  	rcupdate.rcu_self_test= [KNL]
->  			Run the RCU early boot self tests
->  
-> +	rd_size=	[KNL,MIPS]
-> +			Specify size of initrd in memory.
-> +			Need to be used with rd_start.
-> +
-> +	rd_start=	[KNL,MIPS]
-> +			Specify a virtual address from which to load the initrd.
-> +			Must in KSEG0 or XKPHYS space.
-> +			Need to be used with rd_size.
-> +
-
-rd_size and rd_start should be just after "rdrand".
-
-> +	rdhwr_noopt	[MIPS] Disable optimization of trap and emulation for
-> +			"RDHWR v1, $29" instruction.
-> +
-
-OK.
-
->  	rdinit=		[KNL]
->  			Format: <full_path>
->  			Run specified binary instead of /init from the ramdisk,
-
-thanks.
+diff --git a/arch/arm64/boot/dts/freescale/imx8mn.dtsi b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
+index bd84db550053..8be8f090e8b8 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mn.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mn.dtsi
+@@ -1069,13 +1069,6 @@ lcdif: lcdif@32e00000 {
+ 					 <&clk IMX8MN_CLK_DISP_APB_ROOT>,
+ 					 <&clk IMX8MN_CLK_DISP_AXI_ROOT>;
+ 				clock-names = "pix", "axi", "disp_axi";
+-				assigned-clocks = <&clk IMX8MN_CLK_DISP_PIXEL_ROOT>,
+-						  <&clk IMX8MN_CLK_DISP_AXI>,
+-						  <&clk IMX8MN_CLK_DISP_APB>;
+-				assigned-clock-parents = <&clk IMX8MN_CLK_DISP_PIXEL>,
+-							 <&clk IMX8MN_SYS_PLL2_1000M>,
+-							 <&clk IMX8MN_SYS_PLL1_800M>;
+-				assigned-clock-rates = <594000000>, <500000000>, <200000000>;
+ 				interrupts = <GIC_SPI 5 IRQ_TYPE_LEVEL_HIGH>;
+ 				power-domains = <&disp_blk_ctrl IMX8MN_DISPBLK_PD_LCDIF>;
+ 				status = "disabled";
+@@ -1093,12 +1086,6 @@ mipi_dsi: dsi@32e10000 {
+ 				clocks = <&clk IMX8MN_CLK_DSI_CORE>,
+ 					 <&clk IMX8MN_CLK_DSI_PHY_REF>;
+ 				clock-names = "bus_clk", "sclk_mipi";
+-				assigned-clocks = <&clk IMX8MN_CLK_DSI_CORE>,
+-						  <&clk IMX8MN_CLK_DSI_PHY_REF>;
+-				assigned-clock-parents = <&clk IMX8MN_SYS_PLL1_266M>,
+-							 <&clk IMX8MN_CLK_24M>;
+-				assigned-clock-rates = <266000000>, <24000000>;
+-				samsung,pll-clock-frequency = <24000000>;
+ 				interrupts = <GIC_SPI 18 IRQ_TYPE_LEVEL_HIGH>;
+ 				power-domains = <&disp_blk_ctrl IMX8MN_DISPBLK_PD_MIPI_DSI>;
+ 				status = "disabled";
+@@ -1142,6 +1129,21 @@ disp_blk_ctrl: blk-ctrl@32e28000 {
+ 					      "lcdif-axi", "lcdif-apb", "lcdif-pix",
+ 					      "dsi-pclk", "dsi-ref",
+ 					      "csi-aclk", "csi-pclk";
++				assigned-clocks = <&clk IMX8MN_CLK_DSI_CORE>,
++						  <&clk IMX8MN_CLK_DSI_PHY_REF>,
++						  <&clk IMX8MN_CLK_DISP_PIXEL>,
++						  <&clk IMX8MN_CLK_DISP_AXI>,
++						  <&clk IMX8MN_CLK_DISP_APB>;
++				assigned-clock-parents = <&clk IMX8MN_SYS_PLL1_266M>,
++							 <&clk IMX8MN_CLK_24M>,
++							 <&clk IMX8MN_VIDEO_PLL1_OUT>,
++							 <&clk IMX8MN_SYS_PLL2_1000M>,
++							 <&clk IMX8MN_SYS_PLL1_800M>;
++				assigned-clock-rates = <266000000>,
++						       <24000000>,
++						       <594000000>,
++						       <500000000>,
++						       <200000000>;
+ 				#power-domain-cells = <1>;
+ 			};
+ 
 -- 
-~Randy
+2.39.2
+
