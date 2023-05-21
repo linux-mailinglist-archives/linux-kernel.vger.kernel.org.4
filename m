@@ -2,354 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5409470AF61
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 19:58:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9552770AF8F
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 20:32:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbjEURrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 13:47:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44228 "EHLO
+        id S229760AbjEUScb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 14:32:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231425AbjEURmy (ORCPT
+        with ESMTP id S231319AbjEURnD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 13:42:54 -0400
-Received: from smtp.smtpout.orange.fr (smtp-14.smtpout.orange.fr [80.12.242.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E855DD
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 10:21:54 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id 0mkfqJIn4ZV0d0mkgqyDCA; Sun, 21 May 2023 19:21:52 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1684689712;
-        bh=GnoOf0xWLQliOYfqdOBB5QyrQ9P0hooDp7U/JgfRxhQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=QDON1IcHnHw69grnW6tznLI6KTYLejaGitd81P2nJq5WPI2l87j3T1kHItWJ/50gh
-         sR+pnniHAug6z7owl99WwN2PEOZYI1vHBZFiloIAUCz2QSUzIf717W/RKRMxtebMZH
-         L7vVSPQGoa3/qDx+Qf3PGPbyDbiR/o8YGlraeSg6jc0dKjjUxXTeZDgfFC9JTkfeS1
-         LLvgqBrEuYF6/EST+4gGjz2Ah1yiZ6vxHFMBa0IM44UUaZAxMPduxCiFhoQmD7Swo/
-         qwoVPe5uavA0bp+bQI54jb7pK8RY5Rdkm2uK92me5x78uQjvN0/s5IDn7bAsnvYS5P
-         4accYLgEahIKw==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 21 May 2023 19:21:52 +0200
-X-ME-IP: 86.243.2.178
-Message-ID: <0e72c35f-5d9d-45a7-5f85-3971b8029106@wanadoo.fr>
-Date:   Sun, 21 May 2023 19:21:49 +0200
+        Sun, 21 May 2023 13:43:03 -0400
+Received: from fgw21-7.mail.saunalahti.fi (fgw21-7.mail.saunalahti.fi [62.142.5.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 019CFE45
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 10:14:26 -0700 (PDT)
+Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
+        by fgw21.mail.saunalahti.fi (Halon) with ESMTP
+        id ee8f2be1-f7fa-11ed-abf4-005056bdd08f;
+        Sun, 21 May 2023 20:14:24 +0300 (EEST)
+From:   andy.shevchenko@gmail.com
+Date:   Sun, 21 May 2023 20:14:23 +0300
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Andreas Klinger <ak@it-klinger.de>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, netdev@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH v5 2/8] iio: mb1232: relax return value check for IRQ get
+Message-ID: <ZGpRb65GcaMRagiq@surfacebook>
+References: <cover.1684493615.git.mazziesaccount@gmail.com>
+ <05636b651b9a3b13aa3a3b7d3faa00f2a8de6bca.1684493615.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v16 1/1] clk: npcm8xx: add clock controller
-Content-Language: fr
-To:     Tomer Maimon <tmaimon77@gmail.com>, mturquette@baylibre.com,
-        sboyd@kernel.org, avifishman70@gmail.com, tali.perry1@gmail.com,
-        joel@jms.id.au, venture@google.com, yuenn@google.com,
-        benjaminfair@google.com
-Cc:     openbmc@lists.ozlabs.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230521143202.155399-1-tmaimon77@gmail.com>
- <20230521143202.155399-2-tmaimon77@gmail.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20230521143202.155399-2-tmaimon77@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <05636b651b9a3b13aa3a3b7d3faa00f2a8de6bca.1684493615.git.mazziesaccount@gmail.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 21/05/2023 à 16:32, Tomer Maimon a écrit :
-> Nuvoton Arbel BMC NPCM8XX contains an integrated clock controller which
-> generates and supplies clocks to all modules within the BMC.
+Fri, May 19, 2023 at 02:01:23PM +0300, Matti Vaittinen kirjoitti:
+> fwnode_irq_get() was changed to not return 0 anymore.
 > 
-> Signed-off-by: Tomer Maimon <tmaimon77@gmail.com>
+> Drop check for return value 0.
+> 
+> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
-Hi,
-
-should there be a v17, below a few nits and questions.
-
-Jusrt my 2c,
+With or without below being addressed,
+Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 
 > ---
->   drivers/clk/Kconfig       |   8 +
->   drivers/clk/Makefile      |   1 +
->   drivers/clk/clk-npcm8xx.c | 566 ++++++++++++++++++++++++++++++++++++++
->   3 files changed, 575 insertions(+)
->   create mode 100644 drivers/clk/clk-npcm8xx.c
+> Revsion history:
+> v4 => v5:
+>  - drop unnecessary data->irqnr = -1 assignment
 > 
-> diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-> index 016814e15536..2249de28a46a 100644
-> --- a/drivers/clk/Kconfig
-> +++ b/drivers/clk/Kconfig
-> @@ -325,6 +325,14 @@ config COMMON_CLK_LOCHNAGAR
->   	  This driver supports the clocking features of the Cirrus Logic
->   	  Lochnagar audio development board.
->   
-> +config COMMON_CLK_NPCM8XX
-> +	tristate "Clock driver for the NPCM8XX SoC Family"
-> +	depends on ARCH_NPCM || COMPILE_TEST
-> +	help
-> +	  This driver supports the clocks on the Nuvoton BMC NPCM8XX SoC Family,
-> +	  all the clocks are initialized by the bootloader, so this driver
-> +	  allows only reading of current settings directly from the hardware.
-> +
->   config COMMON_CLK_LOONGSON2
->   	bool "Clock driver for Loongson-2 SoC"
->   	depends on LOONGARCH || COMPILE_TEST
-> diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
-> index 0aebef17edc6..88713cbfbab5 100644
-> --- a/drivers/clk/Makefile
-> +++ b/drivers/clk/Makefile
-> @@ -51,6 +51,7 @@ obj-$(CONFIG_ARCH_MILBEAUT_M10V)	+= clk-milbeaut.o
->   obj-$(CONFIG_ARCH_MOXART)		+= clk-moxart.o
->   obj-$(CONFIG_ARCH_NOMADIK)		+= clk-nomadik.o
->   obj-$(CONFIG_ARCH_NPCM7XX)	    	+= clk-npcm7xx.o
-> +obj-$(CONFIG_COMMON_CLK_NPCM8XX)	+= clk-npcm8xx.o
->   obj-$(CONFIG_ARCH_NSPIRE)		+= clk-nspire.o
->   obj-$(CONFIG_COMMON_CLK_OXNAS)		+= clk-oxnas.o
->   obj-$(CONFIG_COMMON_CLK_PALMAS)		+= clk-palmas.o
-> diff --git a/drivers/clk/clk-npcm8xx.c b/drivers/clk/clk-npcm8xx.c
-> new file mode 100644
-> index 000000000000..9e6ed073d124
-> --- /dev/null
-> +++ b/drivers/clk/clk-npcm8xx.c
-> @@ -0,0 +1,566 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Nuvoton NPCM8xx Clock Generator
-> + * All the clocks are initialized by the bootloader, so this driver allow only
+> The first patch of the series changes the fwnode_irq_get() so this depends
+> on the first patch of the series and should not be applied alone.
+> ---
+>  drivers/iio/proximity/mb1232.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/iio/proximity/mb1232.c b/drivers/iio/proximity/mb1232.c
+> index e70cac8240af..3ae226297a00 100644
+> --- a/drivers/iio/proximity/mb1232.c
+> +++ b/drivers/iio/proximity/mb1232.c
+> @@ -76,7 +76,7 @@ static s16 mb1232_read_distance(struct mb1232_data *data)
+>  		goto error_unlock;
+>  	}
+>  
+> -	if (data->irqnr >= 0) {
+> +	if (data->irqnr > 0) {
+>  		/* it cannot take more than 100 ms */
+>  		ret = wait_for_completion_killable_timeout(&data->ranging,
+>  									HZ/10);
+> @@ -212,10 +212,7 @@ static int mb1232_probe(struct i2c_client *client)
+>  	init_completion(&data->ranging);
+>  
+>  	data->irqnr = fwnode_irq_get(dev_fwnode(&client->dev), 0);
+> -	if (data->irqnr <= 0) {
+> -		/* usage of interrupt is optional */
 
-nit: allows (as in Kconfig)
+Maybe this comment can be kept.
 
-[...]
+> -		data->irqnr = -1;
+> -	} else {
+> +	if (data->irqnr > 0) {
+>  		ret = devm_request_irq(dev, data->irqnr, mb1232_handle_irq,
+>  				IRQF_TRIGGER_FALLING, id->name, indio_dev);
+>  		if (ret < 0) {
 
-> +/* npcm8xx clock registers*/
-> +#define NPCM8XX_CLKSEL          (0x04)
-> +#define NPCM8XX_CLKDIV1         (0x08)
-> +#define NPCM8XX_CLKDIV2         (0x2C)
-> +#define NPCM8XX_CLKDIV3         (0x58)
-> +#define NPCM8XX_CLKDIV4         (0x7C)
-> +#define NPCM8XX_PLLCON0         (0x0C)
-> +#define NPCM8XX_PLLCON1         (0x10)
-> +#define NPCM8XX_PLLCON2         (0x54)
-> +#define NPCM8XX_PLLCONG         (0x60)
-> +#define NPCM8XX_THRTL_CNT       (0xC0)
+-- 
+With Best Regards,
+Andy Shevchenko
 
-nit: () around this values looks superfluous.
 
-> +
-> +#define PLLCON_LOKI	BIT(31)
-> +#define PLLCON_LOKS	BIT(30)
-
-[...]
-
-> +static struct clk_hw *
-> +npcm8xx_clk_register_pll(struct device *dev, void __iomem *pllcon,
-> +			 const char *name, const struct clk_parent_data *parent,
-> +			 unsigned long flags)
-> +{
-> +	struct npcm8xx_clk_pll *pll;
-> +	struct clk_init_data init = {};
-> +	int ret;
-> +
-> +	pll = kzalloc(sizeof(*pll), GFP_KERNEL);
-
-Everything looks devm_()'ed in this driver, except this kzalloc.
-Except the one below, there is no kfree to free this memory, and no 
-.remove() function.
-
-Is it on purpose?
-
-> +	if (!pll)
-> +		return ERR_PTR(-ENOMEM);
-> +
-> +	init.name = name;
-> +	init.ops = &npcm8xx_clk_pll_ops;
-> +	init.parent_data = parent;
-> +	init.num_parents = 1;
-> +	init.flags = flags;
-> +
-> +	pll->pllcon = pllcon;
-> +	pll->hw.init = &init;
-> +
-> +	ret = devm_clk_hw_register(dev, &pll->hw);
-> +	if (ret) {
-> +		kfree(pll);
-> +		return ERR_PTR(ret);
-> +	}
-> +
-> +	return &pll->hw;
-> +}
-> +
-> +static DEFINE_SPINLOCK(npcm8xx_clk_lock);
-> +
-> +static int npcm8xx_clk_probe(struct platform_device *pdev)
-> +{
-> +	struct clk_hw_onecell_data *npcm8xx_clk_data;
-> +	struct device *dev = &pdev->dev;
-> +	void __iomem *clk_base;
-> +	struct resource *res;
-> +	struct clk_hw *hw;
-> +	unsigned int i;
-> +	int err;
-> +
-> +	npcm8xx_clk_data = devm_kzalloc(dev, struct_size(npcm8xx_clk_data, hws,
-> +							 NPCM8XX_NUM_CLOCKS),
-> +					GFP_KERNEL);
-> +	if (!npcm8xx_clk_data)
-> +		return -ENOMEM;
-> +
-> +	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> +	clk_base = devm_ioremap(dev, res->start, resource_size(res));
-> +	if (!clk_base) {
-> +		dev_err(&pdev->dev, "Failed to remap I/O memory\n");
-
-Here and below: mostly a matter of taste, but usually return 
-dev_err_probe() saves a few LoC and keep the error code in the error 
-message.
-
-> +		return -ENOMEM;
-> +	}
-> +
-> +	npcm8xx_clk_data->num = NPCM8XX_NUM_CLOCKS;
-> +
-> +	for (i = 0; i < NPCM8XX_NUM_CLOCKS; i++)
-> +		npcm8xx_clk_data->hws[i] = ERR_PTR(-EPROBE_DEFER);
-> +
-> +	/* Register plls */
-> +	for (i = 0; i < ARRAY_SIZE(npcm8xx_pll_clks); i++) {
-> +		struct npcm8xx_pll_data *pll_clk = &npcm8xx_pll_clks[i];
-> +
-> +		hw = npcm8xx_clk_register_pll(dev, clk_base + pll_clk->reg,
-> +					      pll_clk->name, &pll_clk->parent,
-> +					      pll_clk->flags);
-> +		if (IS_ERR(hw)) {
-> +			dev_err(dev, "npcm8xx_clk: Can't register pll\n");
-> +			return PTR_ERR(hw);
-> +		}
-> +		pll_clk->hw = *hw;
-> +	}
-> +
-> +	/* Register fixed dividers */
-> +	hw = devm_clk_hw_register_fixed_factor(dev, NPCM8XX_CLK_S_PLL1_DIV2,
-> +					       NPCM8XX_CLK_S_PLL1, 0, 1, 2);
-> +	if (IS_ERR(hw)) {
-> +		dev_err(dev, "npcm8xx_clk: Can't register fixed div\n");
-> +		return PTR_ERR(hw);
-> +	}
-> +	hw_pll1_div2 = *hw;
-> +
-> +	hw = devm_clk_hw_register_fixed_factor(dev, NPCM8XX_CLK_S_PLL2_DIV2,
-> +					       NPCM8XX_CLK_S_PLL2, 0, 1, 2);
-> +	if (IS_ERR(hw)) {
-> +		dev_err(dev, "npcm8xx_clk: Can't register pll2 div2\n");
-> +		return PTR_ERR(hw);
-> +	}
-> +	hw_pll2_div2 = *hw;
-> +
-> +	hw = devm_clk_hw_register_fixed_factor(dev, NPCM8XX_CLK_S_PLL_GFX_DIV2,
-> +					       NPCM8XX_CLK_S_PLL_GFX, 0, 1, 2);
-> +	if (IS_ERR(hw)) {
-> +		dev_err(dev, "npcm8xx_clk: Can't register gfx div2\n");
-> +		return PTR_ERR(hw);
-> +	}
-> +	hw_gfx_div2 = *hw;
-> +
-> +	/* Register muxes */
-> +	for (i = 0; i < ARRAY_SIZE(npcm8xx_muxes); i++) {
-> +		struct npcm8xx_clk_mux_data *mux_data = &npcm8xx_muxes[i];
-> +
-> +		hw = devm_clk_hw_register_mux_parent_data_table(dev,
-> +								mux_data->name,
-> +								mux_data->parent_data,
-> +								mux_data->num_parents,
-> +								mux_data->flags,
-> +								clk_base + NPCM8XX_CLKSEL,
-> +								mux_data->shift,
-> +								mux_data->mask,
-> +								0,
-> +								mux_data->table,
-> +								&npcm8xx_clk_lock);
-> +		if (IS_ERR(hw)) {
-> +			dev_err(dev, "npcm8xx_clk: Can't register mux\n");
-> +			return PTR_ERR(hw);
-> +		}
-> +		mux_data->hw = *hw;
-> +	}
-> +
-> +	hw = devm_clk_hw_register_fixed_factor(dev, NPCM8XX_CLK_S_PRE_CLK,
-> +					       NPCM8XX_CLK_S_CPU_MUX, 0, 1, 2);
-> +	if (IS_ERR(hw)) {
-> +		dev_err(dev, "npcm8xx_clk: Can't register ckclk div2\n");
-
-ckclk or just clk?
-
-Based on naming only, this div2 (here and below) looks strange.
-Is it on purpose, on just a cut'n'paste  from the previous message?
-
-> +		return PTR_ERR(hw);
-> +	}
-> +	hw_pre_clk = *hw;
-> +
-> +	hw = devm_clk_hw_register_fixed_factor(dev, NPCM8XX_CLK_S_AXI,
-> +					       NPCM8XX_CLK_S_TH, 0, 1, 2);
-> +	if (IS_ERR(hw)) {
-> +		dev_err(dev, "npcm8xx_clk: Can't register axi div2\n");
-> +		return PTR_ERR(hw);
-> +	}
-> +	npcm8xx_clk_data->hws[NPCM8XX_CLK_AXI] = hw;
-> +
-> +	hw = devm_clk_hw_register_fixed_factor(dev, NPCM8XX_CLK_S_ATB,
-> +					       NPCM8XX_CLK_S_AXI, 0, 1, 2);
-> +	if (IS_ERR(hw)) {
-> +		dev_err(dev, "npcm8xx_clk: Can't register atb div2\n");
-> +		return PTR_ERR(hw);
-> +	}
-> +	npcm8xx_clk_data->hws[NPCM8XX_CLK_ATB] = hw;
-> +
-> +	/* Register clock dividers specified in npcm8xx_divs */
-> +	for (i = 0; i < ARRAY_SIZE(npcm8xx_divs); i++) {
-> +		const struct npcm8xx_clk_div_data *div_data = &npcm8xx_divs[i];
-> +
-> +		hw = clk_hw_register_divider_parent_data(dev, div_data->name,
-> +							 &div_data->parent_data,
-> +							 div_data->flags,
-> +							 clk_base + div_data->reg,
-> +							 div_data->shift,
-> +							 div_data->width,
-> +							 div_data->clk_divider_flags,
-> +							 &npcm8xx_clk_lock);
-> +		if (IS_ERR(hw)) {
-> +			dev_err(dev, "npcm8xx_clk: Can't register div table\n");
-> +			goto err_div_clk;
-> +		}
-> +
-> +		if (div_data->onecell_idx >= 0)
-> +			npcm8xx_clk_data->hws[div_data->onecell_idx] = hw;
-> +	}
-> +
-> +	err = devm_of_clk_add_hw_provider(dev, of_clk_hw_onecell_get,
-> +					  npcm8xx_clk_data);
-> +	if (err) {
-> +		dev_err(dev, "unable to add clk provider\n");
-> +		hw = ERR_PTR(err);
-> +		goto err_div_clk;
-> +	}
-> +
-> +	return err;
-> +
-> +err_div_clk:
-> +	while (i--) {
-> +		if (npcm8xx_divs[i].onecell_idx >= 0)
-> +			clk_hw_unregister_divider(npcm8xx_clk_data->hws[npcm8xx_divs[i].onecell_idx]);
-> +	}
-
-There is an error handling path in the probe, but no .remove() function.
-Should there be one?
-
-CJ
-
-[...]
