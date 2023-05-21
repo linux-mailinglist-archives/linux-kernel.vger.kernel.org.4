@@ -2,133 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66C7D70ADEF
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 13:49:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEFC070ADE7
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 13:49:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbjEULtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 07:49:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35612 "EHLO
+        id S230480AbjEULsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 07:48:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230452AbjEUK1S (ORCPT
+        with ESMTP id S229684AbjEUK1p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 06:27:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF598E9
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 03:18:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 21 May 2023 06:27:45 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580D31B4;
+        Sun, 21 May 2023 03:22:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1684664572; bh=6bQqYSey8mS2bTEsYB7j3/EUnIUGLpRwZkXxTWoD9rQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=e/1lu6zFvq9gZwsA5LHrtocFnFCvkiEPoJNeF6vuul9CazKzepVyurhpWa92JOZ2L
+         /2pqbG54GdOaxAV/eeAfPycxn8rTx451i7Won0bqOqw44l6TiqanJwbfRd2G00oPYj
+         wZHlfJ3hZ2/pEQr/NeiEXCXpfKfNzifluSSH6P28=
+Received: from [100.100.57.122] (unknown [58.34.185.106])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 808BD60E74
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 10:18:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA5A7C433D2;
-        Sun, 21 May 2023 10:18:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684664297;
-        bh=/6G0R4XqwX0+utiCHqMrQZrwWDY/DWn/StvBRO6Mufs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=O9kYaJibsH+dk7Jxjy+Jz3gSW3iD9B3NOhQZEH04dm3gUtNgerpqG/TknIVMSJ1tr
-         BYYVZSqhe8W7nRsN3J00PqfVbnDgKZSIvxDJRkozqfNmJbNUMyjsTmBjN4ECnfpdMd
-         94AN3NWbApZlxP/zDAfJRE7EJ8lAfzdSC1CYW1a1rLg46WMKs4u8OTcr3EVePOkFM7
-         WGd1lZZe57LIo3vZPqiRFT356XymjeZDAPdenY5mSdBs3+b3VmUnzVJEjZQCpgu0ag
-         5DSIopPBeUwWO6fKI45VlWVZGW57iboQmseDT21SvD6NtSzVTTIxVZQywJk82lOWU+
-         4cwQxF0BVXDVQ==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1q0g8l-00Gpq5-KX;
-        Sun, 21 May 2023 11:18:15 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Dan Carpenter <dan.carpenter@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Julius Werner <jwerner@chromium.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] irqchip updates for 6.4, take #1
-Date:   Sun, 21 May 2023 11:18:12 +0100
-Message-Id: <20230521101812.2520740-1-maz@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 571376006F;
+        Sun, 21 May 2023 18:22:52 +0800 (CST)
+Message-ID: <4529ee5b-364a-7819-c727-71cf94057b8b@xen0n.name>
+Date:   Sun, 21 May 2023 18:22:51 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: tglx@linutronix.de, dan.carpenter@linaro.org, dianders@chromium.org, jiaxun.yang@flygoat.com, jwerner@chromium.org, wangkefeng.wang@huawei.com, krzysztof.kozlowski@linaro.org, martin.blumenstingl@googlemail.com, fancer.lancer@gmail.com, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.1
+Subject: Re: [PATCH v10 00/30] Add KVM LoongArch support
+Content-Language: en-US
+To:     maobibo <maobibo@loongson.cn>, Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Xi Ruoyao <xry111@xry111.site>,
+        Tianrui Zhao <zhaotianrui@loongson.cn>
+References: <20230515021522.2445551-1-zhaotianrui@loongson.cn>
+ <02f07d8e-e1c2-2ec0-59c3-f5b4ef0463dc@loongson.cn>
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <02f07d8e-e1c2-2ec0-59c3-f5b4ef0463dc@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thomas,
+On 2023/5/18 10:56, maobibo wrote:
+> Hi Paolo & Huacai,
+> 
+> Sorry to bother you, I do not know flow of kernel code reviewing and merging.
+> 
+> I want to know who should give a reviewed-by comments for these piece of code
+> about loongarch kvm patch. It should be kvm maintainer or LoongArch maintianer?
+> And any suggestion is welcome.
 
-Here's a handful of irqchip fixes for 6.4. Nothing major, the most
-interesting thing being the workaround for a "creative" firmware issue
-on some Mediatek-based Chromebooks, resulting in fireworks of the
-pseudo-NMI feature is enabled.
+IMO the series should get its R-b from kvm maintainers (because it's kvm 
+after all), and ideally also Acked-by from arch/loongarch maintainers 
+(because it contains arch-specific code), according to common sense.
 
-Please pull,
+But in order for the various maintainers/reviewers to effectively 
+review, maybe the LoongArch ISA manual Volume 3 (containing details 
+about the virtualization extension) should be put out soon. AFAIK Huacai 
+has access to it, by being a Loongson employee, but I don't know if he 
+can review this series in the public without violating NDAs; Loongson 
+outsiders like me and the kvm reviewers can only trust the commit 
+messages and comments for the time being.
 
-	M.
+(BTW, how do people usually deal with pre-release hardware wit 
+documentation not out yet? I suppose similar situations like this should 
+turn up fairly often.)
 
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+Aside from this, there's another point: use of undocumented instructions 
+in raw form with ".word". This currently doesn't work in LLVM/Clang, 
+thus will slightly set back the ongoing ClangBuiltLinux enablement 
+effort (currently all such usages in arch/loongarch are related to 
+"invtlb" which has perfect support, and can be removed). AFAIK, such 
+practice dates back to the LoongISA times, when the Loongson extended 
+opcodes weren't supported by the upstream MIPS toolchains for some 
+reason; but LoongArch is independent and not bounded by anyone else now, 
+so it's better in terms of maintainability to just add the instructions 
+to the toolchains. People will not be inconvenienced by having to use 
+bleeding-edge LoongArch toolchains because upstream LoongArch devs have 
+always been doing this.
 
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+-- 
+WANG "xen0n" Xuerui
 
-are available in the Git repository at:
+Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms.git tags/irqchip-fixes-6.4-1
-
-for you to fetch changes up to cddb536a73ef2c82ce04059dc61c65e85a355561:
-
-  irqchip/mbigen: Unify the error handling in mbigen_of_create_domain() (2023-05-16 11:19:29 +0100)
-
-----------------------------------------------------------------
-irqchip fixes for 6.4, take #1
-
-- MIPS GIC fixes for issues that could result in either
-  loss of state in the interrupt controller, or a deadlock
-
-- Workaround for Mediatek Chromebooks that only save/restore
-  partial state when turning the GIC redistributors off,
-  resulting if fireworks if Linux uses interrupt priorities
-  for pseudo-NMIs
-
-- Fix the MBIGEN error handling on init
-
-- Mark meson-gpio OF data structures as __maybe_unused,
-  avoiding compilation warnings on non-OF setups
-
-----------------------------------------------------------------
-Douglas Anderson (2):
-      dt-bindings: interrupt-controller: arm,gic-v3: Add quirk for Mediatek SoCs w/ broken FW
-      irqchip/gic-v3: Disable pseudo NMIs on Mediatek devices w/ firmware issues
-
-Jiaxun Yang (2):
-      irqchip/mips-gic: Don't touch vl_map if a local interrupt is not routable
-      irqchip/mips-gic: Use raw spinlock for gic_lock
-
-Kefeng Wang (1):
-      irqchip/mbigen: Unify the error handling in mbigen_of_create_domain()
-
-Krzysztof Kozlowski (1):
-      irqchip/meson-gpio: Mark OF related data as maybe unused
-
- .../bindings/interrupt-controller/arm,gic-v3.yaml  |  6 ++++
- drivers/irqchip/irq-gic-common.c                   |  8 ++++--
- drivers/irqchip/irq-gic-common.h                   |  1 +
- drivers/irqchip/irq-gic-v3.c                       | 20 ++++++++++++++
- drivers/irqchip/irq-mbigen.c                       | 31 ++++++++++++---------
- drivers/irqchip/irq-meson-gpio.c                   |  2 +-
- drivers/irqchip/irq-mips-gic.c                     | 32 ++++++++++++----------
- 7 files changed, 69 insertions(+), 31 deletions(-)
