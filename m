@@ -2,76 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D1DE70AF81
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 20:29:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 425C870AF85
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 20:31:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231765AbjEUS3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 14:29:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48710 "EHLO
+        id S230499AbjEUSb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 14:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231792AbjEUSQ0 (ORCPT
+        with ESMTP id S231774AbjEUSaD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 14:16:26 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE55137
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 11:10:37 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-ba82956d3e0so4127324276.0
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 11:10:37 -0700 (PDT)
+        Sun, 21 May 2023 14:30:03 -0400
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73A1DBF
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 11:29:50 -0700 (PDT)
+Received: by mail-ot1-x331.google.com with SMTP id 46e09a7af769-6af7062f064so699563a34.2
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 11:29:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684692636; x=1687284636;
+        d=linaro.org; s=google; t=1684693790; x=1687285790;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Lkjzc+aDypSMI7e9l+x5HsKGmCuqjdvtk76l+YseVrM=;
-        b=n+WUlbPG7U+2MxbjLkfmws8nrRXJXShW2Xrti83ugFG3vzfFfmcSOXShpI7MG5o1Si
-         PViSN5gazzVaDCtWYkvQnuGiDCj5UZxxrf3m9Zs72O/5yQFIRW9jjXiMKXxbQ53HXDmz
-         P+dbNP+X6WcBXBD8P7un7KR6KtvnbILpdRF3PUyt6l+6hWssJWIndDt45xgbB+3qCmVi
-         XTtVtELIUcEw6mjXj0/J7pvdDbxnXcEVuBhrlzzW+HaUNgJKdSkje5LpqbYR93lT8zgE
-         hvUWBMX1fvEv4Ap8KszP/JyGxMABZuOzOPx2+E2me/69YhoX9d6oZFdSMaMqewkFZZON
-         EuyQ==
+        bh=8YdKvk1s42m4/YyjaeLQo6Rg9ti5aRTm6YguiBgoAog=;
+        b=Erbz7tA5D0m+MvvR7Ywy2y0rf0TYdz1OZaBimm9pJAQCLdc3a+p/8YHsDgUN5KpOt4
+         2kqNEfEOzCtJF04UxYmE57duLHedYwl8EG21VKJ7/yU1zH8hUQazEdwR18/uKsn7+vcN
+         FRFW45DaMYsY51lucjDnrzh2yowTtp/0fQeeIxO9IB1Uhe6dL+8I5LFt0MyNuwgLgseH
+         TixXH/78EprKDCJgcbiYUkHDcAw/Qk2sY2hUGsmeeCB70UYTX4o772xLoqkGf/RByvfN
+         WHN4TmajUR6i6KymqAddi3H1Dc4xyWhVdlk+NlUMrsagJbcB0NgoMh/rvKyQyU8euwvQ
+         tUyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684692636; x=1687284636;
+        d=1e100.net; s=20221208; t=1684693790; x=1687285790;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Lkjzc+aDypSMI7e9l+x5HsKGmCuqjdvtk76l+YseVrM=;
-        b=fVtrOdFTfgZ0cnVbVwI3PdWnKwAy7sucnQE8WTcVqiRsuGGXMyyRAidlnva6hwgGxr
-         MpykhsD4d/xr+2wX6K35BQO3wwxgzqvAAjqS+e+FTpbnbj2IMhjIAV6K/Y/CyUuai5wf
-         vs3il878L6vkp+JVPjvGj/sL4tYkBDbMS4rXPh6ODVPWqcSvp3e4vDONJeki6WtL4EH9
-         HjucddWDEmzsklZ7VeK+dK+brTxkeJvAm9J/bx4w3c0d4fem7R99qPFaY2e+FHfA7Qh3
-         ZX4mlaTZ/pcc3NP1ilZf61S/ZgYy2durgN7Fo8EEFRvTKSR7d7HfOMm88ma/bbIUDRfw
-         M7+w==
-X-Gm-Message-State: AC+VfDyP596LfG1sg9F1ShZsmo+072Fcqs747RrGvn1xiUsk4owozDLs
-        qEuFLBALDImXECVVKfUjMEFR0hRolLxaJpLommFCqg==
-X-Google-Smtp-Source: ACHHUZ55W84sCFiOxOJpLNBhRJQ8wI4F5e70a7F/5r8/nyLXHtEwHzpYQsd9caGfXD1Y3CXq9xw91dvDYW+yC7cT0WY=
-X-Received: by 2002:a25:250e:0:b0:b9a:affd:64d3 with SMTP id
- l14-20020a25250e000000b00b9aaffd64d3mr8761953ybl.15.1684692636458; Sun, 21
- May 2023 11:10:36 -0700 (PDT)
+        bh=8YdKvk1s42m4/YyjaeLQo6Rg9ti5aRTm6YguiBgoAog=;
+        b=c0M+KpnOYjXpmg9Sl/Ukr0P/jDARadjyZIz+wgy3wgibHUxsoskq+n8ZbGVIGOW9dI
+         GSpbXboearh+X307GBYQnzBMiwPjNSORentbYwBrpOFkt78rT+B+0MvukQOq68Vm8t0A
+         aO38SmOXg56BPnpXaLU4ZjF4Sx69s8RbPa6KsJisxViheB9xr+4QYKFN2+y8Jf5B6e0/
+         LantoXuh7RpXq4tzkkuSGNAPXM5fpYWa2G/0isen5/dCaoinGJi/JpoFHeQWXrsSLQC+
+         mB3/YFmA2zTqJiWU8JmwJgDilcYhE0QSI58ZCL094uspKNzpilggMxo03TWkJA3jglgU
+         q9PQ==
+X-Gm-Message-State: AC+VfDz1vvVyg9LqqB/T5eXCWRgE8XpbgBYzRntRFY2LWNhgBrf6t7Yy
+        7Mt5OIhG0WyXtstTc7HvFGr9yi6QYTRLXBGosbkl5Q==
+X-Google-Smtp-Source: ACHHUZ6tUPGnoQNqWfClyhqKpcD4Og/NRsCoCFuUaqfRk4LTXdDwhB41w0GIzYb4N2zjTwdmXRsKwnqf9JYItUOvo1Y=
+X-Received: by 2002:a05:6870:b145:b0:19d:6f68:c3f with SMTP id
+ a5-20020a056870b14500b0019d6f680c3fmr1170765oal.33.1684693789681; Sun, 21 May
+ 2023 11:29:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <1678164097-13247-1-git-send-email-quic_mmanikan@quicinc.com>
- <1678164097-13247-9-git-send-email-quic_mmanikan@quicinc.com>
- <366ed962-dedb-0e88-036d-a1a806d0b589@quicinc.com> <f63c86fd-4c39-7523-1971-6d8df91afcf4@quicinc.com>
-In-Reply-To: <f63c86fd-4c39-7523-1971-6d8df91afcf4@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sun, 21 May 2023 21:10:25 +0300
-Message-ID: <CAA8EJpoH51ajGvSdb1VBmtkKdLUnVGNhoBay93whz+hJh4ApXA@mail.gmail.com>
-Subject: Re: [PATCH 08/11] remoteproc: qcom: Add Hexagon based multipd rproc driver
-To:     Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
-Cc:     Sricharan Ramabadhran <quic_srichara@quicinc.com>,
-        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        jassisinghbrar@gmail.com, mathieu.poirier@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, quic_gurus@quicinc.com,
-        loic.poulain@linaro.org, quic_eberman@quicinc.com,
-        robimarko@gmail.com, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-remoteproc@vger.kernel.org, linux-clk@vger.kernel.org,
-        quic_gokulsri@quicinc.com, quic_sjaganat@quicinc.com,
-        quic_kathirav@quicinc.com, quic_arajkuma@quicinc.com,
-        quic_anusha@quicinc.com, quic_poovendh@quicinc.com
+References: <20230519135803.13850-1-manivannan.sadhasivam@linaro.org>
+In-Reply-To: <20230519135803.13850-1-manivannan.sadhasivam@linaro.org>
+From:   Loic Poulain <loic.poulain@linaro.org>
+Date:   Sun, 21 May 2023 20:27:45 +0200
+Message-ID: <CAMZdPi_QRi_n7=Do_P6E3Xwk=zQ3nS3jpiFBNApCvWd4v=LSCw@mail.gmail.com>
+Subject: Re: [PATCH] bus: mhi: host: pci_generic: Add support for IP_SW0 channels
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_krichai@quicinc.com
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,143 +67,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 21 May 2023 at 18:48, Manikanta Mylavarapu
-<quic_mmanikan@quicinc.com> wrote:
+On Fri, 19 May 2023 at 15:58, Manivannan Sadhasivam
+<manivannan.sadhasivam@linaro.org> wrote:
 >
+> IP_SW0 channels are used to transfer data over the networking interface
+> between MHI endpoint and the host. Define the channels in the MHI v1
+> channel config along with dedicated event rings.
 >
->
-> On 3/7/2023 6:47 PM, Sricharan Ramabadhran wrote:
-> >
-> >
-> > On 3/7/2023 10:11 AM, Manikanta Mylavarapu wrote:
-> >> APSS brings Q6 out of reset and then Q6 brings
-> >> WCSS block (wifi radio's) out of reset.
-> >>
-> >>                    ---------------
-> >>                   -->  |WiFi 2G radio|
-> >>                   |       --------------
-> >>                   |
-> >> --------    -------          |
-> >> | APSS | --->   |QDSP6|  -----|
-> >> ---------    -------       |
-> >>                                |
-> >>                          |
-> >>                   |   --------------
-> >>                   --> |WiFi 5G radio|
-> >>                   --------------
-> >>
-> >> Problem here is if any radio crashes, subsequently other
-> >> radio also should crash because Q6 crashed. Let's say
-> >> 2G radio crashed, Q6 should pass this info to APSS. Only
-> >> Q6 processor interrupts registered with APSS. Obviously
-> >> Q6 should crash and raise fatal interrupt to APSS. Due
-> >> to this 5G radio also crashed. But no issue in 5G radio,
-> >> because of 2G radio crash 5G radio also impacted.
-> >>
-> >> In multi pd model, this problem is resolved. Here WCSS
-> >> functionality (WiFi radio's) moved out from Q6 root pd
-> >> to a separate user pd. Due to this, radio's independently
-> >> pass their status info to APPS with out crashing Q6. So
-> >> other radio's won't be impacted.
-> >>
-> >>                         ---------
-> >>                             |WiFi    |
-> >>                         --> |2G radio|
-> >>                         |     ---------
-> >> ------    Start Q6             -------     |
-> >> |    |    ------------------>     |     |     |
-> >> |    |  Start WCSS PD1 (2G)       |     |        |
-> >> |APSS|    ----------------------->|QDSP6|-----|
-> >> |    |    Start WCSS PD1 (5G)    |     |
-> >> |    |    ----------------------->|     |-----|
-> >> ------                     -------     |
-> >>                         |
-> >>                         |    -----------
-> >>                         |-->|WiFi      |
-> >>                         |5G radio |
-> >>                         -----------
-> >> According to linux terminology, here consider Q6 as root
-> >> i.e it provide all services, WCSS (wifi radio's) as user
-> >> i.e it uses services provided by root.
-> >>
-> >> Since Q6 root & WCSS user pd's able to communicate with
-> >> APSS individually, multipd remoteproc driver registers
-> >> each PD with rproc framework. Here clients (Wifi host drivers)
-> >> intrested on WCSS PD rproc, so multipd driver start's root
-> >> pd in the context of WCSS user pd rproc start. Similarly
-> >> on down path, root pd will be stopped after wcss user pd
-> >> stopped.
-> >>
-> >> Here WCSS(user) PD is dependent on Q6(root) PD, so first
-> >> q6 pd should be up before wcss pd. After wcss pd goes down,
-> >> q6 pd should be turned off.
-> >>
-> >> rproc->ops->start(userpd_rproc) {
-> >>     /* Boot root pd rproc */
-> >>     rproc_boot(upd_dev->parent);
-> >>     ---
-> >>     /* user pd rproc start sequence */
-> >>     ---
-> >>     ---
-> >> }
-> >> With this way we ensure that root pd brought up before userpd.
-> >>
-> >> rproc->ops->stop(userpd_rproc) {
-> >>     ---
-> >>     ---
-> >>     /* user pd rproc stop sequence */
-> >>     ---
-> >>     ---
-> >>     /* Shutdown root pd rproc */
-> >>     rproc_shutdown(upd_dev->parent);
-> >> }
-> >> After userpd rproc stops, root pd rproc will be stopped.
-> >> IPQ5018, IPQ9574 supports multipd remoteproc driver.
-> >>
-> >> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
-> >> ---
-> >>   drivers/firmware/qcom_scm.c            | 114 +++++
-> >>   drivers/firmware/qcom_scm.h            |   6 +
-> >>   drivers/remoteproc/Kconfig             |  20 +
-> >>   drivers/remoteproc/Makefile            |   1 +
-> >>   drivers/remoteproc/qcom_common.c       |  23 +
-> >>   drivers/remoteproc/qcom_common.h       |   1 +
-> >>   drivers/remoteproc/qcom_q6v5.c         |  41 +-
-> >>   drivers/remoteproc/qcom_q6v5.h         |  15 +-
-> >>   drivers/remoteproc/qcom_q6v5_adsp.c    |   5 +-
-> >>   drivers/remoteproc/qcom_q6v5_mpd.c     | 668 +++++++++++++++++++++++++
-> >>   drivers/remoteproc/qcom_q6v5_mss.c     |   4 +-
-> >>   drivers/remoteproc/qcom_q6v5_pas.c     |   3 +-
-> >>   drivers/soc/qcom/mdt_loader.c          | 314 ++++++++++++
-> >>   include/linux/firmware/qcom/qcom_scm.h |   3 +
-> >>   include/linux/soc/qcom/mdt_loader.h    |  19 +
-> >>   15 files changed, 1228 insertions(+), 9 deletions(-)
-> >>   create mode 100644 drivers/remoteproc/qcom_q6v5_mpd.c
-> >>
-> >> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-> >> index d88c5f14bd54..d69560963353 100644
-> >> --- a/drivers/firmware/qcom_scm.c
-> >> +++ b/drivers/firmware/qcom_scm.c
-> >> @@ -654,6 +654,120 @@ int qcom_scm_pas_shutdown(u32 peripheral)
-> >>   }
-> >>   EXPORT_SYMBOL(qcom_scm_pas_shutdown);
-> >> +/**
-> >> + * qti_scm_int_radio_powerup - Bring up internal radio userpd
-> >> + *
-> >> + * @peripheral:    peripheral id
-> >> + *
-> >> + * Return 0 on success.
-> >> + */
-> >> +int qti_scm_int_radio_powerup(u32 peripheral)
-> >> +{
-> >
-> > qcom instead and in other places too.
-> >
-> Internal open source team suggested to use qti.
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-All existing drivers use qcom_ prefix. Other functions in qcom_scm.c
-use qcom_ prefix. Please stick to it.
+Assuming we can extend the number of event rings (and dedicated irqs)
+without hitting any hardware limitation on the device side?
 
--- 
-With best wishes
-Dmitry
+Reviewed-by: Loic Poulain <loic.poulain@linaro.org>
+
+
+
+> ---
+>  drivers/bus/mhi/host/pci_generic.c | 26 ++++++++++++++++++++++----
+>  1 file changed, 22 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
+> index db0a0b062d8e..70e37c490150 100644
+> --- a/drivers/bus/mhi/host/pci_generic.c
+> +++ b/drivers/bus/mhi/host/pci_generic.c
+> @@ -212,6 +212,19 @@ struct mhi_pci_dev_info {
+>                 .offload_channel = false,       \
+>         }
+>
+> +#define MHI_EVENT_CONFIG_SW_DATA(ev_ring, el_count) \
+> +       {                                       \
+> +               .num_elements = el_count,       \
+> +               .irq_moderation_ms = 0,         \
+> +               .irq = (ev_ring) + 1,           \
+> +               .priority = 1,                  \
+> +               .mode = MHI_DB_BRST_DISABLE,    \
+> +               .data_type = MHI_ER_DATA,       \
+> +               .hardware_event = false,        \
+> +               .client_managed = false,        \
+> +               .offload_channel = false,       \
+> +       }
+> +
+>  #define MHI_EVENT_CONFIG_HW_DATA(ev_ring, el_count, ch_num) \
+>         {                                       \
+>                 .num_elements = el_count,       \
+> @@ -237,8 +250,10 @@ static const struct mhi_channel_config modem_qcom_v1_mhi_channels[] = {
+>         MHI_CHANNEL_CONFIG_DL_AUTOQUEUE(21, "IPCR", 8, 0),
+>         MHI_CHANNEL_CONFIG_UL_FP(34, "FIREHOSE", 32, 0),
+>         MHI_CHANNEL_CONFIG_DL_FP(35, "FIREHOSE", 32, 0),
+> -       MHI_CHANNEL_CONFIG_HW_UL(100, "IP_HW0", 128, 2),
+> -       MHI_CHANNEL_CONFIG_HW_DL(101, "IP_HW0", 128, 3),
+> +       MHI_CHANNEL_CONFIG_UL(46, "IP_SW0", 64, 2),
+> +       MHI_CHANNEL_CONFIG_DL(47, "IP_SW0", 64, 3),
+> +       MHI_CHANNEL_CONFIG_HW_UL(100, "IP_HW0", 128, 4),
+> +       MHI_CHANNEL_CONFIG_HW_DL(101, "IP_HW0", 128, 5),
+>  };
+>
+>  static struct mhi_event_config modem_qcom_v1_mhi_events[] = {
+> @@ -246,9 +261,12 @@ static struct mhi_event_config modem_qcom_v1_mhi_events[] = {
+>         MHI_EVENT_CONFIG_CTRL(0, 64),
+>         /* DIAG dedicated event ring */
+>         MHI_EVENT_CONFIG_DATA(1, 128),
+> +       /* Software channels dedicated event ring */
+> +       MHI_EVENT_CONFIG_SW_DATA(2, 64),
+> +       MHI_EVENT_CONFIG_SW_DATA(3, 64),
+>         /* Hardware channels request dedicated hardware event rings */
+> -       MHI_EVENT_CONFIG_HW_DATA(2, 1024, 100),
+> -       MHI_EVENT_CONFIG_HW_DATA(3, 2048, 101)
+> +       MHI_EVENT_CONFIG_HW_DATA(4, 1024, 100),
+> +       MHI_EVENT_CONFIG_HW_DATA(5, 2048, 101)
+>  };
+>
+>  static const struct mhi_controller_config modem_qcom_v1_mhiv_config = {
+> --
+> 2.25.1
+>
