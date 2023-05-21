@@ -2,143 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8622070ADB0
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 13:47:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B92A070AD8A
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 13:05:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231806AbjEULqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 07:46:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37756 "EHLO
+        id S232172AbjEULFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 07:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231865AbjEUKqi (ORCPT
+        with ESMTP id S232135AbjEULBe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 06:46:38 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8655A1A4;
-        Sun, 21 May 2023 03:46:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1684665977; bh=ROm0pJOZNyVDKEAis1Y6Eci8XLW7KJHTxO8fnKHcE5k=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=mH+YJ27HMqhNsQjU+h8lFEiVcwuIQDEP7IoCIvHgdTVn5XPDbyx19NbUrmnYvOaFY
-         LOz2TDlA91owpQ0zButjzTnK2/BYfFDlFq7NDtdtvjCcCYE8oKF4fEKKN+1qRGpem8
-         GUqAhxAxB55f5Pt/rh+uzS/s8WEO7YeePbFRbjAU=
-Received: from [100.100.57.122] (unknown [58.34.185.106])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 4A09A60115;
-        Sun, 21 May 2023 18:46:17 +0800 (CST)
-Message-ID: <4a08b133-4ead-083e-4ddb-519e12a0dad6@xen0n.name>
-Date:   Sun, 21 May 2023 18:46:16 +0800
+        Sun, 21 May 2023 07:01:34 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB24E1
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 04:01:33 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id 5614622812f47-3945180bef1so2996541b6e.1
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 04:01:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684666892; x=1687258892;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BEVVgF6fRqcDcGbTpPr+QMQIBhdEVGHu/g9nl9l3kAo=;
+        b=ZatrjIX6XBKp87w3IlH1+vp1iRu8f0EGtZKtOU0m8C7sa50wWNJzmmT8i4P/a3COAD
+         bxtqNHuByVuYqjNwcye+bHBiIPcxe95vedpJOHao4lA0HL3aZklSaoDBup3/X0Z3ZBSG
+         m54ivKDu0Ct6u9v+PbWLggTpgyiFl2xT7alWJhRHUVFbIGJa4tgYan6YQ9ayD0qCns5+
+         b0JMMYErbK03/oZ9X9WPGyjGyLivD78U8hLPHXQ2GMrl7QYoEkufgW+coU7J4045KUdb
+         EyJ3SvgwY7Y6DEQi+tmhDDF7a3fUL/ueEWTnr9zhmXuUBv5u/Jm1Dur/t7fnSR5aNyic
+         stNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684666892; x=1687258892;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BEVVgF6fRqcDcGbTpPr+QMQIBhdEVGHu/g9nl9l3kAo=;
+        b=aGtC4deTBnsFBx+ik//O7wX4JQBz0p+zgRvT4pMBShuJI5bxq6wu9ATE/KVb9PAY7J
+         bztPpl20WhkF+92wtcZeEJ0j8IbTEycrEsuQFpEUwGCemt2tajluIfeT0+OqrW6Uc48F
+         t5nX3RoV+lSsHcZFUde86WE5il72uRoNxh1cUt/cMxiUem5oaIgwGrYPXEFuvXkAXak4
+         1IhSq9vF1bFhuuRAk3ll9eC+C7Qf0oLMl50KL3YO3j/Tm5I6GaARZRsR6hx1SG9fHmOG
+         yOk4wE/AKhoH1FzeEW39/NS7K/MVvLbEFpyp3K9l0OC9UDAiDgSZ+7mzvL5vQ+kWLgT3
+         c9BA==
+X-Gm-Message-State: AC+VfDxoMONfOr8qaTvhCT9RQRHoWuDdJM7q/Z3nuddiNdhjFS7pEeop
+        DelpkPg4VJI/8GgtJ2TwJ8XiBbtnG0VVu+2K3fA=
+X-Google-Smtp-Source: ACHHUZ7E0zJVT/sc8m3kRGBn1JE212p2WeIluch0hWHDQ0fIANfng29eEF3EW4kAY7vqmecDgcCAS/jauAlUydP9uMM=
+X-Received: by 2002:a05:6808:614e:b0:397:ee99:a616 with SMTP id
+ dl14-20020a056808614e00b00397ee99a616mr1383087oib.15.1684666892424; Sun, 21
+ May 2023 04:01:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.1
-Subject: Re: [PATCH V1 3/4] irqchip/loongson-liointc: Fix IRQ trigger polarity
-Content-Language: en-US
-To:     Jianmin Lv <lvjianmin@loongson.cn>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, stable@vger.kernel.org
-References: <20230520063818.27208-1-lvjianmin@loongson.cn>
- <20230520063818.27208-4-lvjianmin@loongson.cn>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <20230520063818.27208-4-lvjianmin@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Sender: tombobolo3@gmail.com
+Received: by 2002:a8a:54a:0:b0:4dc:b40a:643e with HTTP; Sun, 21 May 2023
+ 04:01:31 -0700 (PDT)
+From:   Tom Bobo <btom7210@gmail.com>
+Date:   Sun, 21 May 2023 04:01:31 -0700
+X-Google-Sender-Auth: Jhm8oRYqo6FwtcfeZPzH1aBosig
+Message-ID: <CAEgAAzLO-oW6FuZp4x-zujby1C0qWxSo2aEiqXad5ecHkyJGmw@mail.gmail.com>
+Subject: I NEED A TRUSTED PERSON
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.3 required=5.0 tests=ADVANCE_FEE_5_NEW_FRM_MNY,
+        BAYES_50,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FILL_THIS_FORM,FILL_THIS_FORM_LONG,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,LOTS_OF_MONEY,MILLION_USD,MONEY_FORM,MONEY_FRAUD_8,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,
+        T_FILL_THIS_FORM_FRAUD_PHISH,T_FILL_THIS_FORM_LOAN,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:236 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5650]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [tombobolo3[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [tombobolo3[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  1.2 MILLION_USD BODY: Talks about millions of dollars
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 FILL_THIS_FORM Fill in a form with personal information
+        *  2.0 FILL_THIS_FORM_LONG Fill in a form with personal information
+        *  0.0 T_FILL_THIS_FORM_LOAN Answer loan question(s)
+        *  0.0 MONEY_FORM Lots of money if you fill out a form
+        *  0.0 MONEY_FRAUD_8 Lots of money and very many fraud phrases
+        *  0.0 T_FILL_THIS_FORM_FRAUD_PHISH Answer suspicious question(s)
+        *  0.0 ADVANCE_FEE_5_NEW_FRM_MNY Advance Fee fraud form and lots of
+        *      money
+        *  2.7 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/20 14:38, Jianmin Lv wrote:
-> For IRQ controller INT_POLARITY regitser of Loongson-2K CPU
-
-"For the INT_POLARITY register of Loongson-2K series IRQ controller"?
-
-> series, '0' indicates high level or rising edge triggered IRQ,
-> '1' indicates low level or falling edge triggered IRQ.
-
-Remove the two "IRQ"s; the topic is "polarity", not "IRQs".
-
-Also please mention the source of this information; I've checked the 
-Loongson 2K1000LA User Manual v1.0 and it seems a similar description is 
-found in Table 9-2, Section 9.3 (中断寄存器描述 / Description of the Interrupt 
-Registers). It mentioned "Intpol_0" and "Intpol_1" but the description 
-is consistent with the wording here.
-
-> 
-> For Loongson-3A CPU series, setting INT_POLARITY register is not
-> supported and writting it has no effect.
-
-Only 3A and not the whole Loongson-3 series?
-
-Also typo: "writing".
-
-> 
-> So trigger polarity setting shouled be fixed for Loongson-2K CPU
-> series.
-
-The changes seem to be just inversion of the polarity flags. It should 
-be correct given your description, and not affect Loongson-3 series 
-because it's supposed to behave as noops; it may be better to move the 
-explanation regarding Loongson-3 behavior to code comment (e.g. 
-somewhere near the definition of LIOINTC_REG_INTC_POL) so it's 
-immediately visible to drive-by readers not familiar with LoongArch 
-internals, without them having to dig through commit history to see this.
-
-> 
-> Fixes: 17343d0b4039 ("irqchip/loongson-liointc: Support to set IRQ type for ACPI path")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Chong Qiao <qiaochong@loongson.cn>
-> Signed-off-by: Jianmin Lv <lvjianmin@loongson.cn>
-
-Again, who's the proper author for this patch? Given the tags it seems 
-the author should be Chong Qiao, but I didn't see an Author: line at the 
-beginning.
-
-> ---
->   drivers/irqchip/irq-loongson-liointc.c | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
-> index 8d00a9ad5b00..9a9c2bf048a3 100644
-> --- a/drivers/irqchip/irq-loongson-liointc.c
-> +++ b/drivers/irqchip/irq-loongson-liointc.c
-> @@ -116,19 +116,19 @@ static int liointc_set_type(struct irq_data *data, unsigned int type)
->   	switch (type) {
->   	case IRQ_TYPE_LEVEL_HIGH:
->   		liointc_set_bit(gc, LIOINTC_REG_INTC_EDGE, mask, false);
-> -		liointc_set_bit(gc, LIOINTC_REG_INTC_POL, mask, true);
-> +		liointc_set_bit(gc, LIOINTC_REG_INTC_POL, mask, false);
->   		break;
->   	case IRQ_TYPE_LEVEL_LOW:
->   		liointc_set_bit(gc, LIOINTC_REG_INTC_EDGE, mask, false);
-> -		liointc_set_bit(gc, LIOINTC_REG_INTC_POL, mask, false);
-> +		liointc_set_bit(gc, LIOINTC_REG_INTC_POL, mask, true);
->   		break;
->   	case IRQ_TYPE_EDGE_RISING:
->   		liointc_set_bit(gc, LIOINTC_REG_INTC_EDGE, mask, true);
-> -		liointc_set_bit(gc, LIOINTC_REG_INTC_POL, mask, true);
-> +		liointc_set_bit(gc, LIOINTC_REG_INTC_POL, mask, false);
->   		break;
->   	case IRQ_TYPE_EDGE_FALLING:
->   		liointc_set_bit(gc, LIOINTC_REG_INTC_EDGE, mask, true);
-> -		liointc_set_bit(gc, LIOINTC_REG_INTC_POL, mask, false);
-> +		liointc_set_bit(gc, LIOINTC_REG_INTC_POL, mask, true);
->   		break;
->   	default:
->   		irq_gc_unlock_irqrestore(gc, flags);
-
--- 
-WANG "xen0n" Xuerui
-
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
-
+I'm Mr Tom Bobolo from West Africa,i am very sorry to intrude into
+your privacy,i got your email address through internet computerized
+search and after my prayers over it,i have to consult you for this
+wonderful opportunity. I have a business deal to share with you in the
+sum of 10. 2 Million USD Dollars that has been held here in (B.O.A)
+bank of Africa. The fund mentioned above rightfully belongs to one of
+our late clients who deposited the money in our bank here in Burkina
+Faso, ever since he died nobody has been able to apply to claim the
+fund. So I hope that you will come and assume as his foreign business
+partner.
+Also note this business is risk free, you do not have to be scared or
+doubtful of its reality. Please my dearest one also note this, once we
+succeed in transferring this fund to your provided account in your
+country it will be shared among us in-agreement of 60% to 40. I
+believe that after this deal joy and happiness will be on our faces
+and families. Please reply to me with your details so we can move on
+with this great plan okay.
+REPLY TO-- ( btom7210@gmail.com )
+Your Full Name.......
+Your Age&Sex........
+Your Marital Status......
+Your Country Name.......
+Your Phone Number......
+Your Occupation.....
+Your Bank Name......
+Your Account Number.....
+Thanks Yours Brotherly
+Mr. Tom Bobolo
