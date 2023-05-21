@@ -2,115 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9F4770AF71
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 20:24:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12A6370AF72
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 20:28:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230482AbjEUSJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 14:09:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47574 "EHLO
+        id S229639AbjEUS2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 14:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231784AbjEUSGi (ORCPT
+        with ESMTP id S231821AbjEUSIp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 14:06:38 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B00CF1
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 11:06:37 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-96f5d651170so559994566b.1
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 11:06:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1684692396; x=1687284396;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GMadGmvjqp8xzF2NAhfvAfuBYa9KMMmlXCO3kEDZwAM=;
-        b=gn/sLYZphidGrvrDMOxCRbNY8HB6uvZE1TDJyvj5zI1D4eu0GDCGAL1Ax7ihd1UxZV
-         BfFKctjP5JYxO2a80fJoAhXhijFT+xt92v1Nna7mMBwlRGO0CwZh+tFyiUQOL6RfIxPS
-         uRXgQ94R/JckRuiW0G27YJj1L48k+tXNmv4AI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684692396; x=1687284396;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GMadGmvjqp8xzF2NAhfvAfuBYa9KMMmlXCO3kEDZwAM=;
-        b=bVFxML8xVXoXc7qZqUa2MItkUpvQKn9FuRX0YGmpLV/suMfRW5DUEZcP4aMsU6+3hM
-         3yGxmceNsixDGJKA+ccVDg4D5dkrZxzXZyeskTqng3BfHLkF6SOawKoFwobYdwsUfI5W
-         PAnsAq1C4Rtd6vL7LzXlQ4CtbB6gpmMRquhf8M138imw8aR/DSCEYXCRpKs7rwDqcQHs
-         YNl/6AWjJQqycs+ndrDem3Vsny8iz6cje+FZIpLzuRbD8ejXHQUtCo2cenIxRJz+s0UK
-         c1KILfi6hg239h63sS/9WROR4ggKe1sZfDLax/kO0lwI/uVvmGIvL7vuwavmjthETkRN
-         SB6Q==
-X-Gm-Message-State: AC+VfDyUAfLm1CIYV+OdnP1nG0+2vKdX328IADxEjQGqcYIjcs9K2f9Q
-        0sGPaoGUheEkRhKfMWGYM1oa2jXGBqNVOXaDsi3pPA==
-X-Google-Smtp-Source: ACHHUZ7e3Dk7sVCuQHUsN0UEmLiF4hstZHQP68FO6Q5NOQco4swCmOa7GHDSkRrTexv2sahCfTEoSw==
-X-Received: by 2002:a17:907:7ea3:b0:966:399e:a5a5 with SMTP id qb35-20020a1709077ea300b00966399ea5a5mr7279018ejc.35.1684692395727;
-        Sun, 21 May 2023 11:06:35 -0700 (PDT)
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com. [209.85.208.46])
-        by smtp.gmail.com with ESMTPSA id a10-20020a17090680ca00b0096616adc0d5sm2108668ejx.104.2023.05.21.11.06.34
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 21 May 2023 11:06:35 -0700 (PDT)
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-510bcd2d6b8so5527928a12.0
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 11:06:34 -0700 (PDT)
-X-Received: by 2002:a05:6402:3593:b0:513:62de:768a with SMTP id
- y19-20020a056402359300b0051362de768amr2856862edc.19.1684692394687; Sun, 21
- May 2023 11:06:34 -0700 (PDT)
+        Sun, 21 May 2023 14:08:45 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA618AC;
+        Sun, 21 May 2023 11:08:41 -0700 (PDT)
+X-QQ-mid: bizesmtp62t1684692504txiq7w8d
+Received: from linux-lab-host.localdomain ( [116.30.125.36])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Mon, 22 May 2023 02:08:23 +0800 (CST)
+X-QQ-SSF: 01200000000000D0U000000A0000000
+X-QQ-FEAT: nA8mzCjPbKjAyatHOLqVBZWleNML49vMr+sWKoVyh7o6l2YSji7G1wm1SVKxs
+        QY/Tyk36sdfw8jpkOj0h2DqgkGeR4T966XMrs9M3WFlRuppMpPQN4duzuVWOmAu7AG8X1qH
+        gF2yyOppqomXpYvjj3Aj0104rmcB78h1cRm8Of51Da9uBm8eJvQ5nFjrzDMLzydebkZMnjB
+        lGfILk1gY2Yeem5Mbg9wS0AXePV/VmKa+64oHw+W4m/fMaPGqO/kFKVFQnaboPY9PcsKHyf
+        805DgbIJF9CSpuucNeK9E/1HFphyuiWx0nZSsJS1cM+ycSHilHq6Jqc+rrg3/mtm5N2nrN9
+        l66FU7K/KqBK/euMe+KStFB8ul67e6wh7SWI9Ic
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 1011124316858910777
+From:   Zhangjin Wu <falcon@tinylab.org>
+To:     w@1wt.eu
+Cc:     aou@eecs.berkeley.edu, arnd@arndb.de, falcon@tinylab.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, shuah@kernel.org, thomas@t-8ch.de
+Subject: Re: [PATCH] selftests/nolibc: Fix up compile error for rv32
+Date:   Mon, 22 May 2023 02:08:23 +0800
+Message-Id: <20230521180823.164289-1-falcon@tinylab.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <ZGmW1YEUWASzEJ13@1wt.eu>
+References: <ZGmW1YEUWASzEJ13@1wt.eu>
 MIME-Version: 1.0
-References: <CAH2r5msxkE5cPJ-nQCAibJ+x+hO7uSLpasGm81i6DknQ8M5zWg@mail.gmail.com>
-In-Reply-To: <CAH2r5msxkE5cPJ-nQCAibJ+x+hO7uSLpasGm81i6DknQ8M5zWg@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 21 May 2023 11:06:18 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiStOAKntvgzZ79aA=Xc0Zz7byoBxBW_As5cmn5cgkuoQ@mail.gmail.com>
-Message-ID: <CAHk-=wiStOAKntvgzZ79aA=Xc0Zz7byoBxBW_As5cmn5cgkuoQ@mail.gmail.com>
-Subject: Re: [GIT PULL] ksmbd server fixes
-To:     Steve French <smfrench@gmail.com>
-Cc:     Namjae Jeon <linkinjeon@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrsz:qybglogicsvrsz3a-3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 20, 2023 at 10:14=E2=80=AFPM Steve French <smfrench@gmail.com> =
-wrote:
+Willy, Thomas,
+
+> On Sun, May 21, 2023 at 02:30:22AM +0800, Zhangjin Wu wrote:
+> > ...
 >
-> Four ksmbd server fixes:
+> I think what Thomas meant is that he wants to be sure the call doesn't
+> end up as read(-1, &tmp, 1). Here you could have -EBADF or -EFAULT, it
+> depends. Anyway other solutions can be found if necessary. Another
+> approach could be to switch back to __NR_fstat and condition it to its
+> definition.
+>
+> > > > Maybe we can find a new syscall to test with?
+> > >
+> > > Maybe it would be worth considering pselect() or equivalent which
+> > > involve many arguments. I don't know if rv32 has fstatat() or
+> > > lstat() for example, that could be used as alternatives ?
+> > >
+> >
+> > Unfortuantely, none of them is available in rv32, we have the same tricks you used in another reply:
+> >
+> >     $ echo "#include <asm/unistd.h>" | \
+> >         riscv64-linux-gnu-gcc -march=rv32im -mabi=ilp32 -Wl,-melf32lriscv_ilp32 -xc - -E -dM | \
+> >         grep -E "pselect|fstat|lstat"
+> >     #define __NR_pselect6_time64 413
+> >     #define __NR3264_fstatfs 44
+> >     #define __NR_fstatfs64 __NR3264_fstatfs
+>
+> Then probably fstatfs should work equally for this test.
+>
 
-This reply is not really directly related to this pull (which I just
-did), but more of a reaction to getting the cifs and ksmbd pulls next
-to each other again.
+I tested a change like this (try __NR_fstatfs64, __NR_fstatfs, and __NR_fstat one by one):
 
-We talked about directory layout issues some time ago, and there's
-kind of beginnings of it, but it never happened, and the parts that
-*did* happen I'm not super-happy about. That "fs/smbfs_common/"
-subdirectory is just fairly ugly.
+    diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+    index 063f9959ac44..0a60e8ca5756 100644
+    --- a/tools/testing/selftests/nolibc/nolibc-test.c
+    +++ b/tools/testing/selftests/nolibc/nolibc-test.c
+    @@ -500,6 +500,16 @@ static int test_fork(void)
+     	}
+     }
 
-Would you mind horribly to just bite the bullet, and rename things,
-and put it all under "smbfs". Something like
+    +#ifdef __NR_fstatfs64
+    +#define EXPECT_SYSER_SYSCALL_ARGS() EXPECT_SYSER(1, syscall(__NR_fstatfs64, 0, 0, NULL), -1, EINVAL)
+    +#elif defined(__NR_fstatfs)
+    +#define EXPECT_SYSER_SYSCALL_ARGS() EXPECT_SYSER(1, syscall(__NR_fstatfs, 0, NULL), -1, EFAULT)
+    +#elif defined(__NR_fstat)
+    +#define EXPECT_SYSER_SYSCALL_ARGS() EXPECT_SYSER(1, syscall(__NR_fstat, 0, NULL), -1, EFAULT)
+    +#else
+    +#error None of __NR_fstatfs64, __NR_fstatfs and __NR_fstat defined, cannot implement syscall_args test
+    +#endif
+    +
+     /* Run syscall tests between IDs <min> and <max>.
+      * Return 0 on success, non-zero on failure.
+      */
+    @@ -596,7 +606,7 @@ int run_syscall(int min, int max)
+     		CASE_TEST(write_badf);        EXPECT_SYSER(1, write(-1, &tmp, 1), -1, EBADF); break;
+     		CASE_TEST(write_zero);        EXPECT_SYSZR(1, write(1, &tmp, 0)); break;
+     		CASE_TEST(syscall_noargs);    EXPECT_SYSEQ(1, syscall(__NR_getpid), getpid()); break;
+    -		CASE_TEST(syscall_args);      EXPECT_SYSER(1, syscall(__NR_fstat, 0, NULL), -1, EFAULT); break;
+    +		CASE_TEST(syscall_args);      EXPECT_SYSER_SYSCALL_ARGS(); break;
+     		case __LINE__:
+     			return ret; /* must be last */
+     		/* note: do not set any defaults so as to permit holes above */
 
-    mkdir fs/smbfs
-    git mv fs/cifs fs/smbfs/client
-    git mv fs/ksmbd fs/smbfs/server
-    git mv fs/smbfs_common fs/smbfs/common
+And another change like this (try __NR_statx and then __NR_fstat):
 
-plus the required Makefile editing to just make it all build right?
+    diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+    index 063f9959ac44..d740ba405cb2 100644
+    --- a/tools/testing/selftests/nolibc/nolibc-test.c
+    +++ b/tools/testing/selftests/nolibc/nolibc-test.c
+    @@ -500,6 +500,17 @@ static int test_fork(void)
+     	}
+     }
 
-And if you prefer just "fs/smb" over "fs/smbfs", that sounds fine to
-me too, but I guess this all really does just the filesystem part
-(rather than all the printing and whatever other stuff that smb also
-contains).
+    +static int test_syscall_args(void)
+    +{
+    +#ifdef __NR_statx
+    +	return syscall(__NR_statx, 0, NULL, 0, 0, NULL);
+    +#elif defined(__NR_fstat)
+    +	return syscall(__NR_fstat, 0, NULL);
+    +#else
+    +#error Neither __NR_statx nor __NR_fstat defined, cannot implement syscall_args test
+    +#endif
+    +}
+    +
+     /* Run syscall tests between IDs <min> and <max>.
+      * Return 0 on success, non-zero on failure.
+      */
+    @@ -596,7 +607,7 @@ int run_syscall(int min, int max)
+     		CASE_TEST(write_badf);        EXPECT_SYSER(1, write(-1, &tmp, 1), -1, EBADF); break;
+     		CASE_TEST(write_zero);        EXPECT_SYSZR(1, write(1, &tmp, 0)); break;
+     		CASE_TEST(syscall_noargs);    EXPECT_SYSEQ(1, syscall(__NR_getpid), getpid()); break;
+    -		CASE_TEST(syscall_args);      EXPECT_SYSER(1, syscall(__NR_fstat, 0, NULL), -1, EFAULT); break;
+    +		CASE_TEST(syscall_args);      EXPECT_SYSER(1, test_syscall_args(), -1, EFAULT); break;
+     		case __LINE__:
+     			return ret; /* must be last */
+     		/* note: do not set any defaults so as to permit holes above */
 
-I dunno. I just feel like the current organization and naming is this
-odd half-way state, and we could just fairly easily do the above.
+Which one is acceptable?
 
-I could do it myself, of course, and git will sort out any rename
-issues. But me doing it seems silly when you maintain all three
-pieces.
+> > Or, use the rv32 test result as a crude reference:
+> (... trimmed to keep only the failed ones ...)
+> >
+> >     15 chmod_net = -1 ENOENT                                        [FAIL]
+> >     16 chmod_self = -1 ENOENT  != (-1 EPERM)                        [FAIL]
+> >     17 chown_self = -1 ENOENT  != (-1 EPERM)                        [FAIL]
+> >     20 chroot_exe = -1 ENOENT  != (-1 ENOTDIR)                      [FAIL]
+> >     30 fork = 1 ENOSYS                                              [FAIL]
+> >     33 gettimeofday_null = -1 ENOSYS                                [FAIL]
+> >     35 gettimeofday_bad1 = -1 ENOSYS  != (-1 EFAULT)                [FAIL]
+> >     36 gettimeofday_bad2 = -1 ENOSYS  != (-1 EFAULT)                [FAIL]
+> >     37 gettimeofday_bad2 = -1 ENOSYS  != (-1 EFAULT)                [FAIL]
+> >     45 link_cross = -1 ENOENT  != (-1 EXDEV)                        [FAIL]
+> >     51 poll_null = -1 ENOSYS                                        [FAIL]
+> >     52 poll_stdout = -1 ENOSYS                                      [FAIL]
+> >     53 poll_fault = -1 ENOSYS  != (-1 EFAULT)                       [FAIL]
+> >     56 select_null = -1 ENOSYS                                      [FAIL]
+> >     57 select_stdout = -1 ENOSYS                                    [FAIL]
+> >     58 select_fault = -1 ENOSYS  != (-1 EFAULT)                     [FAIL]
+> >     64 wait_child = -1 ENOSYS  != (-1 ECHILD)                       [FAIL]
+> >     65 waitpid_min = -1 ENOSYS  != (-1 ESRCH)                       [FAIL]
+> >     66 waitpid_child = -1 ENOSYS  != (-1 ECHILD)                    [FAIL]
+> >     Errors during this test: 19
+>
+> So that's a lot of failures and we should start to blindly degrade other
+> tests just for the sake of fixing these ones here, it should be done more
+> carefully.
+>
 
-                 Linus
+Removed the config options related failures (will use defconfig to re-check
+them, I did use a tiny config for faster compile):
+
+    30 fork = 1 ENOSYS                                              [FAIL]
+    33 gettimeofday_null = -1 ENOSYS                                [FAIL]
+    35 gettimeofday_bad1 = -1 ENOSYS  != (-1 EFAULT)                [FAIL]
+    36 gettimeofday_bad2 = -1 ENOSYS  != (-1 EFAULT)                [FAIL]
+    37 gettimeofday_bad2 = -1 ENOSYS  != (-1 EFAULT)                [FAIL]
+    51 poll_null = -1 ENOSYS                                        [FAIL]
+    52 poll_stdout = -1 ENOSYS                                      [FAIL]
+    53 poll_fault = -1 ENOSYS  != (-1 EFAULT)                       [FAIL]
+    56 select_null = -1 ENOSYS                                      [FAIL]
+    57 select_stdout = -1 ENOSYS                                    [FAIL]
+    58 select_fault = -1 ENOSYS  != (-1 EFAULT)                     [FAIL]
+    64 wait_child = -1 ENOSYS  != (-1 ECHILD)                       [FAIL]
+    65 waitpid_min = -1 ENOSYS  != (-1 ESRCH)                       [FAIL]
+    66 waitpid_child = -1 ENOSYS  != (-1 ECHILD)                    [FAIL]
+
+The left failed syscalls may be waitpid, wait4, gettimeofday, poll and select,
+it is not too many.
+
+>
+> My preference for the short term would be the following:
+>   1) make sure we fix build issues for all platforms, including rv32
+>   2) make sure Thomas' work on syscall() and STKP works fine where it
+>      should, as it used to till now on other platforms
+>
+>   => this should be added to the 6.5 queue, and for this I don't want
+>      to make this series regress as it should be queued quickly so that
+>      test code used by other developers working on 6.5 is reasonably
+>      stabilized.
+
+Hope one of the above changes meets this goal, if no, perhaps we can simply
+revert my '__NR_read' patch and left it together with the other rv32 failures
+to next merge window.
+
+>
+>   3) evaluate what needs to be done regarding time32, this implies
+>      working in the lower abstraction layers to depend on
+>      __ARCH_WANT_TIME32_SYSCALLS and use the new syscalls instead.
+>
+>   => I don't know how much work it requires; if it's trivial this
+>      could possibly be for 6.5, otherwise it will have to be postponed.
+
+My suggestion is directly fix up the failures one by one in current stage,
+because nolibc currently only uses part of the time32 syscalls, it may be not
+that complex to fix up them. Have read the code of musl and glibc today, both
+of them have good time64 syscalls support, I plan to fix up the above failures
+in several days, hope so but no promise ;-)
+
+And another question: for the new changes, If a platform support both of the
+32bit and 64bit syscalls, do we need to put the 64bit syscalls at first?
+
+For example, the __NR_llseek we just added, do we need to check __NR_llseek
+before check __NR_lseek? this may support 64bit better but also may generate
+bigger size of code, currently, my patch checks __NR_lseek at first and then
+__NR_llseek to get smaller size of code, but as I read from the musl and glibc
+code, both of them put the 64bit syscalls path before others.
+
+Thanks,
+Zhangjin
+
+>
+> Thanks,
+> Willy
