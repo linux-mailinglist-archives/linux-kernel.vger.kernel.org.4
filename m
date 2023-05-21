@@ -2,91 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F76470B0E4
-	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 23:37:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 987E670B0EC
+	for <lists+linux-kernel@lfdr.de>; Sun, 21 May 2023 23:42:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230176AbjEUVgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 17:36:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33470 "EHLO
+        id S230381AbjEUVmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 17:42:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjEUVf7 (ORCPT
+        with ESMTP id S229807AbjEUVml (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 17:35:59 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A30CA
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 14:35:58 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id 2E3AE5C00A6;
-        Sun, 21 May 2023 17:35:55 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Sun, 21 May 2023 17:35:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1684704955; x=1684791355; bh=GJdvBqJXvaOlMagoboueinEIeThZBHqWFK0
-        PV3GrZeQ=; b=I0zhgveBSGlTDUeO8KCCyl346fy7fEgLe78cDEe7ZLmX5xqg7da
-        4E6Dof5XyxO8/1X9RQVXNWP70GFaw6EyTp/LHhGiELxQvhT+hiYAJTMsUvRkuEJn
-        f9NejLkQ2Ni5H6SJswxy+f6/6/3iNkAY4M7QHdVWGKTAW1M0M3SdXzQGE1T20/rx
-        9sQl0RFP685ayI7iMvZchaSjy0Wm1UCCGFreUd0H9JUA4yWAc491nEv+AxjNEhLx
-        qw6wcoS1K6NdWb+f0jhVQmAGr+I+2YjWMcuESQJkHW843NvkVR9siTF+TVMaJhzQ
-        CtYGb4vmRPiZuHja/j53MZDbrUfHNcGBchg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1684704955; x=1684791355; bh=GJdvBqJXvaOlMagoboueinEIeThZBHqWFK0
-        PV3GrZeQ=; b=ougvpP8amAQdZZr9yA0kQn+rMxIxiQFlhF04WU1HVo+ubz0msYU
-        0XYKVDEVOf9Qy/l8rpKGuo6RlSbvs5i6y7q78Gsof7MZMPzSOu6nc9oIQUCUOjAZ
-        2jyxlSmEJ+P5KTVI6X8BxqQ7rDeNmWohG/cKZPTydk3hQ0u13aTuQ7uP1B+1c/KZ
-        /EJ5gWtESh4tprvNo/kpf82T5vu8LKMPLqfmgiFCzrm69+7XMV6vHgo7S27+z7jZ
-        jG2VxwFJcdiuOxqWFhHR9SKYYzLUd3DlOw3RiPy9XHTtQE/3zLrUdLvtzcJ+4uKE
-        05m9wIPLNgj123+dklGrDTNq41MN4O+Ma0A==
-X-ME-Sender: <xms:uY5qZL-Wq_Lh5OBWuTv6-nyRq6rCrp3Nd0IBPxZXP5-6AfXJ6wXPXQ>
-    <xme:uY5qZHvliF7Lk18liQhZLmg__C3IFXeIsDFk15Rrn_lVUuCrGxfWor5hZxCwMiTh1
-    4uvh7lzUqItIq09gCU>
-X-ME-Received: <xmr:uY5qZJCPOm1i495iOqPluy0rgl76Trfjb_buu2ZJB2j33tfZOM5eJhpwJD6pChDCg6kEtQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejtdcutefuodetggdotefrodftvfcurf
-    hrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefkuffhvfevffgjfhgtgfgfggesthhqredttderjeenucfhrhhomhepnfhukhgvucfl
-    ohhnvghsuceolhhukhgvsehljhhonhgvshdruggvvheqnecuggftrfgrthhtvghrnhepvd
-    etteekgfelhfegueffleeiueegteeggfdtkeekvdettddttddtgeevheffieeinecuffho
-    mhgrihhnpehgihhthhhusgdrtghomhdpkhgvrhhnvghlrdhorhhgpdhsphhinhhitghsrd
-    hnvghtpdhlihhnuhigmhhinhhtrdgtohhmpdhhphdrtghomhenucevlhhushhtvghrufhi
-    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehluhhkvgeslhhjohhnvghsrdguvg
-    hv
-X-ME-Proxy: <xmx:uY5qZHfsjZy3uZZa5dDlK_IPmKtLcMztL4_dpDc5t-1rat9NyGIZ8w>
-    <xmx:uY5qZANd2JZoJ2LiGsqyBm1MIps47lTK6OhOdEykUJaPw0CSri-HKw>
-    <xmx:uY5qZJnoWndAudW_KUdSM3oSz3fsYdu0hKCCiZeUoqnBGKbCkmSC3g>
-    <xmx:u45qZFtIIpW-OjEesj2zBpj4EK9eqE8bXX5EnsfC9h0HtYVfpW3C2A>
-Feedback-ID: i5ec1447f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 21 May 2023 17:35:47 -0400 (EDT)
-Message-ID: <c72a2f28a6e5c2c3c9ed17269bd56e7484df960c.camel@ljones.dev>
-Subject: Re: CSC3551 and devices missing related _DSD bits
-From:   Luke Jones <luke@ljones.dev>
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     linux-kernel@vger.kernel.org, tiwai@suse.com,
-        sbinding@opensource.cirrus.com, perex@perex.cz,
-        tangmeng@uniontech.com, andy.chi@canonical.com, p.jungkamp@gmx.net,
-        kasper93@gmail.com, yangyuchi66@gmail.com, armas@codux.tech,
-        ealex95@gmail.com, james.schulman@cirrus.com,
-        david.rhodes@cirrus.com, tanureal@opensource.cirrus.com,
-        rf@opensource.cirrus.com, patches@opensource.cirrus.com,
-        alsa-devel@alsa-project.org
-Date:   Mon, 22 May 2023 09:35:40 +1200
-In-Reply-To: <87jzx3zaf8.wl-tiwai@suse.de>
-References: <1991650.PYKUYFuaPT@fedora> <87jzx3zaf8.wl-tiwai@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.1 (by Flathub.org) 
+        Sun, 21 May 2023 17:42:41 -0400
+Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050:0:465::101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94B6DB;
+        Sun, 21 May 2023 14:42:38 -0700 (PDT)
+Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4QPYvn2SJ7z9sSs;
+        Sun, 21 May 2023 23:42:29 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+        t=1684705349;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=jdLpg31ylbBFh10pa9wfisc4Qaj2suRD+sHfnBvZljA=;
+        b=Si49prU1qPyD0sLWzOAm/wzMswGkTg0XVaupLZ6Ny5HXPA+QPYjWJK1xGCiyhkRK2r4aZ+
+        YRGbu4GJuEN8RJI4l8DtEUWVU7/mU6M2ndrNBbqZM4DSNKq+jk0j2Nkf2qPsbm9CwFG7mF
+        ThQqlus/Zvx6n2KB4yu+2XU0B51vqyIXvxrrfgPtv5UnwDWLgg0dSZI75V+C/gddnLi/cb
+        kVrH3m/zwI9udRKi9v7xf3X3U1jjutLYXIyip34j4SmEzxveayP9k7CZ4xY2lNWtSb5Tou
+        pppKWb9Q8Hr8OHoPqmWPLrY9tY/YNxQ9cA+DaNn0K4vbWJydvAHC38UmsQQthA==
+From:   Joseph Strauss <jstrauss@mailbox.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+        t=1684705343;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=jdLpg31ylbBFh10pa9wfisc4Qaj2suRD+sHfnBvZljA=;
+        b=VG6/4a04H6GXoaffpHy4HpfVBzNxyiY5hdyE+U02X3RTVqsE6AJ/0cV6DCVVQhQsZaMI0Z
+        wWIlTm+1eroVqo1zNGCtsupWFDdGMV7IrFiW/p5PWYEVF97YZaGmH3Oz8YDZsQB8cMS+Tb
+        EN6+II4S4iVhbz5tmdHYOvXQNUK/a3zyNzCf2oWY2ReNzpna5LKDBGV5lxmT5OcWOFNgXW
+        6873fq2RMUB1CsgagG5PZ4QF2MwVw1TLKQeOWjsMc1+ZNvtMgEZ8k+jr9/UozM1snB90/V
+        Nma5RFX90VQ7bWdu/YJOOQjiM8oxCGJEpv2HTZWPlY15Xp4/hDO2qZQGlMa6gw==
+To:     pavel@ucw.cz, lee@kernel.org, jansimon.moeller@gmx.de
+Cc:     conor@kernel.org, christophe.jaillet@wanadoo.fr,
+        linux-leds@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Joseph Strauss <jstrauss@mailbox.org>
+Subject: [PATCH v3] Add multicolor support to BlinkM LED driver
+Date:   Sun, 21 May 2023 16:41:41 -0500
+Message-Id: <20230521214141.11299-1-jstrauss@mailbox.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-MBO-RS-META: fjrbssajtpygd51hciudre7cgaxht81s
+X-MBO-RS-ID: 7d4c76b7f0a2e7954c8
+X-Rspamd-Queue-Id: 4QPYvn2SJ7z9sSs
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,190 +67,437 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2023-05-20 at 10:14 +0200, Takashi Iwai wrote:
-> On Fri, 19 May 2023 00:26:22 +0200,
-> Luke Jones wrote:
-> >=20
-> > Hi Takashi (and all others),
-> >=20
-> > We're beginning to encounter more and more laptops from ASUS in the
-> > ROG range=20
-> > where the bass speakers are connected to a cirrus amp, and the
-> > driver for=20
-> > cirrus is unable to pick this up due to being missing a _DSD
-> > section in the=20
-> > ACPI (SSDT). I've emailed engineers at ASUS I have contact with
-> > about this but=20
-> > it is unlikely that we will see corrections for each and every
-> > model + variant=20
-> > they have. The models we have seen so far are:
-> > - GX650P
-> > - GU604V
-> > - GA402X
-> > And there have been numerous forum postings in various places with
-> > the exact=20
-> > same issue for other models from ASUS that are not in the ROG group
-> > I deal=20
-> > with - oh and also some Lenovo and HP devices also.
-> >=20
-> > Some of the logs are:
-> >=20
-> > [=C2=A0=C2=A0=C2=A0 5.542312] Serial bus multi instantiate pseudo devic=
-e driver
-> > CSC3551:00:=20
-> > Instantiated 2 I2C devices.
-> > [=C2=A0=C2=A0=C2=A0 5.717261] cs35l41-hda i2c-CSC3551:00-cs35l41-hda.0:=
- Error:
-> > ACPI _DSD=20
-> > Properties are missing for HID CSC3551.
-> > [=C2=A0=C2=A0=C2=A0 5.717269] cs35l41-hda i2c-CSC3551:00-cs35l41-hda.0:=
- error -
-> > EINVAL:=20
-> > Platform not supported
-> > [=C2=A0=C2=A0=C2=A0 5.717286] cs35l41-hda: probe of i2c-CSC3551:00-cs35=
-l41-hda.0
-> > failed with=20
-> > error -22
-> > [=C2=A0=C2=A0=C2=A0 5.717734] cs35l41-hda i2c-CSC3551:00-cs35l41-hda.1:=
- Error:
-> > ACPI _DSD=20
-> > Properties are missing for HID CSC3551.
-> > [=C2=A0=C2=A0=C2=A0 5.717737] cs35l41-hda i2c-CSC3551:00-cs35l41-hda.1:=
- error -
-> > EINVAL:=20
-> > Platform not supported
-> > [=C2=A0=C2=A0=C2=A0 5.717750] cs35l41-hda: probe of i2c-CSC3551:00-cs35=
-l41-hda.1
-> > failed with=20
-> > error -22
-> >=20
-> > and:
-> >=20
-> > [=C2=A0=C2=A0=C2=A0 3.343851] cs35l41-hda spi1-CSC3551:00-cs35l41-hda.0=
-: Error:
-> > ACPI _DSD=20
-> > Properties are missing for HID CSC3551.
-> > [=C2=A0=C2=A0=C2=A0 3.343854] cs35l41-hda spi1-CSC3551:00-cs35l41-hda.0=
-: error -
-> > EINVAL:=20
-> > Platform not supported
-> > [=C2=A0=C2=A0=C2=A0 3.343855] cs35l41-hda: probe of spi1-CSC3551:00-cs3=
-5l41-hda.0
-> > failed with=20
-> > error -22
-> > [=C2=A0=C2=A0=C2=A0 3.345544] cs35l41-hda spi1-CSC3551:00-cs35l41-hda.1=
-: Error:
-> > ACPI _DSD=20
-> > Properties are missing for HID CSC3551.
-> > [=C2=A0=C2=A0=C2=A0 3.345546] cs35l41-hda spi1-CSC3551:00-cs35l41-hda.1=
-: error -
-> > EINVAL:=20
-> > Platform not supported
-> > [=C2=A0=C2=A0=C2=A0 3.345548] cs35l41-hda: probe of spi1-CSC3551:00-cs3=
-5l41-hda.1
-> > failed with=20
-> > error -22
-> >=20
-> > So there are SPI connected, and I2C connected.
-> >=20
-> > Alex has already submitted the related patch_realtek work for the
-> > GU604V and=20
-> > no doubt there will be some follow up patches from myself or others
-> > for the=20
-> > other models. Alex has attempted to patch the Cirrus related parts
-> > in kernel=20
-> > direct with:
-> > 1. https://github.com/bno1/linux-xanmod-gu604/blob/acpi-hack/
-> > patch03_gu604v_speaker_acpi_hack.patch
-> > 2. https://github.com/bno1/linux-xanmod-gu604/blob/acpi-hack/
-> > patch04_gu604v_spi_cs_gpio_hack.patch
-> > both of these patches have been tested and working for over a week.
-> >=20
-> > > From what I see the patch04_gu604v_spi_cs_gpio_hack patch needs
-> > > to shift to=20
-> > the cirrus driver sound/pci/hda/cs35l41_hda.c, and that driver must
-> > now have a=20
-> > quirk table - unless we can somehow add the cirrus related bits to
-> > the realtek=20
-> > code? I've personally not played with this beyond keeping an eye on
-> > it all and=20
-> > am reluctant to begin work on a solution until I've had some input
-> > on the=20
-> > direction it should take.
-> >=20
-> > In any case, this is not an isolated issue and we could benefit
-> > from putting=20
-> > in place some quirk or similar to accommodate for laptops where the
-> > vendor for=20
-> > some reason does not include the _DSD parts for use with the cirrus
-> > driver.=20
-> > The trend is looking so far like this practice will continue
-> > regardless of the=20
-> > vendor.
-> >=20
-> > Known reports:
-> > - https://bugzilla.kernel.org/show_bug.cgi?id=3D216194
-> > - https://www.spinics.net/lists/alsa-devel/msg146434.html
-> > - https://gist.github.com/lamperez/862763881c0e1c812392b5574727f6ff
-> > - https://forums.linuxmint.com/viewtopic.php?t=3D392762
-> > -
-> > https://h30434.www3.hp.com/t5/Notebook-Operating-System-and-Recovery/En=
-vy-x360-2022-13-b0074TU-Audio-not-working-in-Linux-Fedora/td-p/8644641
->=20
-> The problem is that this can really easily blow up your machine if
-> some incorrect bit is applied.=C2=A0 And more easily applicable, more
-> chance to break by novice users, simply by believing what a chat bot
-> speaks :)
+Add multicolor support to the BlinkM driver, making it easier to control
+from userspace. The BlinkM LED is a programmable RGB LED. The driver
+currently supports only the regular LED sysfs class, resulting in the
+creation of three distinct classes, one for red, green, and blue. The
+user then has to input three values into the three seperate brightness
+files within those classes. The multicolor LED framework makes the
+device easier to control with the multi_intensity file: the user can
+input three values at once to form a color, while still controlling the
+lightness with the brightness file.
 
-Yeah, it's an unfortunate issue for us. But I can't really see any
-alternative solution.
+The main struct blinkm_led has changed slightly. The struct led_classdev
+for the regular sysfs classes remain. The blinkm_probe function checks
+CONFIG_LEDS_BLINKM_MULTICOLOR to decide whether to load the seperate
+sysfs classes or the single multicolor one, but never both. The
+blinkm_set_mc_brightness() function had to be added to calculate the
+three color components and then set the fields of the blinkm_data
+structure accordingly.
 
-> That's the very reason why this kind of change should be via ACPI
-> table officially set up by the vendor.=C2=A0 That said, the question is
-> only who and how can be responsible for this kind of change.=C2=A0 It's
-> no technical issue, per se.
->=20
-> If BIOS can't be updated, at least, the configuration change has to
-> be
-> confirmed by ASUS people.=C2=A0 If ASUS still ignores the inquires and
-> requests, we may put the quirk but with a bit fat warning (and maybe
-> complaints to ASUS) to be shown in the log as a very last resort.
+Signed-off-by: Joseph Strauss <jstrauss@mailbox.org>
+---
+Changes in v2:
+- Replaced instances of the constant 3 with NUM_LEDS, where applicable
+- Fixed formatting errors
+- Replaced loop inside of blinkm_set_mc_brightness() with equivalent
+  statements
+- Changed id of multicolor class from 4 to 3
+- Replaced call to devm_kmalloc_array() with devm_kcalloc()
+Changes in v3:
+- Add CONFIG_LEDS_BLINKM_MULTICOLOR to check whether to use multicolor
+  funcitonality
+- Extend well-known-leds.txt to include standard names for RGB and indicator
+  LEDS
+- Change name of Blinkm sysfs class according to well-known-leds.txt
+- Simplify struct blinkm_led and struct blinkm_data
+- Remove magic numbers
+- Fix formatting errors
+- Remove unrelated changes
 
-I'm all for this.
+ Documentation/leds/leds-blinkm.rst     |  27 +++-
+ Documentation/leds/well-known-leds.txt |   8 +
+ drivers/leds/Kconfig                   |   8 +
+ drivers/leds/leds-blinkm.c             | 203 +++++++++++++++++--------
+ 4 files changed, 177 insertions(+), 69 deletions(-)
 
-> Let's see what happens.
+diff --git a/Documentation/leds/leds-blinkm.rst b/Documentation/leds/leds-blinkm.rst
+index c74b5bc877b1..a483f20aead1 100644
+--- a/Documentation/leds/leds-blinkm.rst
++++ b/Documentation/leds/leds-blinkm.rst
+@@ -13,9 +13,27 @@ The device accepts RGB and HSB color values through separate commands.
+ Also you can store blinking sequences as "scripts" in
+ the controller and run them. Also fading is an option.
+ 
+-The interface this driver provides is 2-fold:
++The interface this driver provides is 3-fold:
+ 
+-a) LED class interface for use with triggers
++a) LED multicolor class interface for use with triggers
++#######################################################
++
++The registration follows the scheme::
++
++  blinkm-<i2c-bus-nr>-<i2c-device-nr>:rgb:indicator
++
++  $ ls -h /sys/class/leds/blinkm-1-9:rgb:indicator
++  brightness  device  max_brightness  multi_index  multi_intensity  power  subsystem  trigger  uevent
++
++The order in which to write the intensity values can be found in multi_index.
++Exactly three values between 0 and 255 must be written to multi_intensity to change the color::
++
++  $ echo 255 100 50 > multi_intensity
++
++The overall brightness of the color that you choose can also be changed by
++writing a value between 0 and 255 to the brightness file.
++
++b) LED class interface for use with triggers
+ ############################################
+ 
+ The registration follows the scheme::
+@@ -50,7 +68,7 @@ E.g.::
+   $
+ 
+ 
+-b) Sysfs group to control rgb, fade, hsb, scripts ...
++c) Sysfs group to control rgb, fade, hsb, scripts ...
+ #####################################################
+ 
+ This extended interface is available as folder blinkm
+@@ -79,6 +97,7 @@ E.g.::
+ 
+ 
+ 
+-as of 6/2012
++as of 05/2023
+ 
+ dl9pf <at> gmx <dot> de
++jstrauss <at> mailbox <dot> org
+diff --git a/Documentation/leds/well-known-leds.txt b/Documentation/leds/well-known-leds.txt
+index 2160382c86be..2ac4eaed1454 100644
+--- a/Documentation/leds/well-known-leds.txt
++++ b/Documentation/leds/well-known-leds.txt
+@@ -70,3 +70,11 @@ Good: "platform:*:charging" (allwinner sun50i)
+ * Screen
+ 
+ Good: ":backlight" (Motorola Droid 4)
++
++* Indicators
++
++Good: ":indicator" (Blinkm)
++
++* RGB
++
++Good: ":rgb" (Blinkm)
+diff --git a/drivers/leds/Kconfig b/drivers/leds/Kconfig
+index 499d0f215a8b..f38d786f9a89 100644
+--- a/drivers/leds/Kconfig
++++ b/drivers/leds/Kconfig
+@@ -736,6 +736,14 @@ config LEDS_BLINKM
+ 	  This option enables support for the BlinkM RGB LED connected
+ 	  through I2C. Say Y to enable support for the BlinkM LED.
+ 
++config LEDS_BLINKM_MULTICOLOR
++	bool "Enable multicolor support for BlinkM I2C RGB LED"
++	depends on LEDS_BLINKM
++	depends on LEDS_CLASS_MULTICOLOR
++	help
++	  This option enables multicolor sysfs class support for BlinkM LED and
++	  disables the older, separated sysfs interface
++
+ config LEDS_POWERNV
+ 	tristate "LED support for PowerNV Platform"
+ 	depends on LEDS_CLASS
+diff --git a/drivers/leds/leds-blinkm.c b/drivers/leds/leds-blinkm.c
+index e19cc8a7b7ca..a2295d0d0a2b 100644
+--- a/drivers/leds/leds-blinkm.c
++++ b/drivers/leds/leds-blinkm.c
+@@ -2,6 +2,7 @@
+ /*
+  *  leds-blinkm.c
+  *  (c) Jan-Simon Möller (dl9pf@gmx.de)
++ *  (c) Joseph Strauss (jstrauss@mailbox.org)
+  */
+ 
+ #include <linux/module.h>
+@@ -15,6 +16,10 @@
+ #include <linux/pm_runtime.h>
+ #include <linux/leds.h>
+ #include <linux/delay.h>
++#include <linux/led-class-multicolor.h>
++#include <linux/kconfig.h>
++
++#define NUM_LEDS 3
+ 
+ /* Addresses to scan - BlinkM is on 0x09 by default*/
+ static const unsigned short normal_i2c[] = { 0x09, I2C_CLIENT_END };
+@@ -22,19 +27,24 @@ static const unsigned short normal_i2c[] = { 0x09, I2C_CLIENT_END };
+ static int blinkm_transfer_hw(struct i2c_client *client, int cmd);
+ static int blinkm_test_run(struct i2c_client *client);
+ 
++/* Contains data structures for both the color-seperated sysfs classes, and the new multicolor class */
+ struct blinkm_led {
+ 	struct i2c_client *i2c_client;
++	/* used when multicolor support is disabled */
+ 	struct led_classdev led_cdev;
++	struct led_classdev_mc mcled_cdev;
+ 	int id;
+ };
+ 
+-#define cdev_to_blmled(c)          container_of(c, struct blinkm_led, led_cdev)
++#define led_cdev_to_blmled(c)				container_of(c, struct blinkm_led, led_cdev)
++#define mcled_cdev_to_led(c)				container_of(c, struct blinkm_led, mcled_cdev)
+ 
+ struct blinkm_data {
+ 	struct i2c_client *i2c_client;
+ 	struct mutex update_lock;
+ 	/* used for led class interface */
+-	struct blinkm_led blinkm_leds[3];
++	struct blinkm_led blinkm_leds[NUM_LEDS];
++
+ 	/* used for "blinkm" sysfs interface */
+ 	u8 red;			/* color red */
+ 	u8 green;		/* color green */
+@@ -419,11 +429,29 @@ static int blinkm_transfer_hw(struct i2c_client *client, int cmd)
+ 	return 0;
+ }
+ 
++static int blinkm_set_mc_brightness(struct led_classdev *led_cdev,
++				 enum led_brightness value)
++{
++	struct led_classdev_mc *mcled_cdev = lcdev_to_mccdev(led_cdev);
++	struct blinkm_led *led = mcled_cdev_to_led(mcled_cdev);
++	struct blinkm_data *data = i2c_get_clientdata(led->i2c_client);
++
++	led_mc_calc_color_components(mcled_cdev, value);
++
++	data->next_red = (u8) mcled_cdev->subled_info[RED].brightness;
++	data->next_green = (u8) mcled_cdev->subled_info[GREEN].brightness;
++	data->next_blue = (u8) mcled_cdev->subled_info[BLUE].brightness;
++
++	blinkm_transfer_hw(led->i2c_client, BLM_GO_RGB);
++
++	return 0;
++}
++
+ static int blinkm_led_common_set(struct led_classdev *led_cdev,
+ 				 enum led_brightness value, int color)
+ {
+ 	/* led_brightness is 0, 127 or 255 - we just use it here as-is */
+-	struct blinkm_led *led = cdev_to_blmled(led_cdev);
++	struct blinkm_led *led = led_cdev_to_blmled(led_cdev);
+ 	struct blinkm_data *data = i2c_get_clientdata(led->i2c_client);
+ 
+ 	switch (color) {
+@@ -569,7 +597,11 @@ static int blinkm_probe(struct i2c_client *client,
+ 			const struct i2c_device_id *id)
+ {
+ 	struct blinkm_data *data;
+-	struct blinkm_led *led[3];
++	/* For multicolor support */
++	struct blinkm_led *mc_led;
++	struct mc_subled *mc_led_info;
++	/* 3 seperate classes for red, green, and blue respectively */
++	struct blinkm_led *leds[NUM_LEDS];
+ 	int err, i;
+ 	char blinkm_led_name[28];
+ 
+@@ -580,6 +612,12 @@ static int blinkm_probe(struct i2c_client *client,
+ 		goto exit;
+ 	}
+ 
++	mc_led_info = devm_kcalloc(&client->dev, NUM_LEDS, sizeof(*mc_led_info),
++					GFP_KERNEL);
++	if (!mc_led_info) {
++		err = -ENOMEM;
++		goto exit;
++	}
+ 	data->i2c_addr = 0x08;
+ 	/* i2c addr  - use fake addr of 0x08 initially (real is 0x09) */
+ 	data->fw_ver = 0xfe;
+@@ -598,81 +636,116 @@ static int blinkm_probe(struct i2c_client *client,
+ 		goto exit;
+ 	}
+ 
+-	for (i = 0; i < 3; i++) {
+-		/* RED = 0, GREEN = 1, BLUE = 2 */
+-		led[i] = &data->blinkm_leds[i];
+-		led[i]->i2c_client = client;
+-		led[i]->id = i;
+-		led[i]->led_cdev.max_brightness = 255;
+-		led[i]->led_cdev.flags = LED_CORE_SUSPENDRESUME;
+-		switch (i) {
+-		case RED:
+-			snprintf(blinkm_led_name, sizeof(blinkm_led_name),
+-					 "blinkm-%d-%d-red",
+-					 client->adapter->nr,
+-					 client->addr);
+-			led[i]->led_cdev.name = blinkm_led_name;
+-			led[i]->led_cdev.brightness_set_blocking =
+-							blinkm_led_red_set;
+-			err = led_classdev_register(&client->dev,
+-						    &led[i]->led_cdev);
++	if (!IS_ENABLED(CONFIG_LEDS_BLINKM_MULTICOLOR)) {
++		/* Register red, green, and blue sysfs classes */
++		for (i = 0; i < NUM_LEDS; i++) {
++			/* RED = 0, GREEN = 1, BLUE = 2 */
++			leds[i] = &data->blinkm_leds[i];
++			leds[i]->i2c_client = client;
++			leds[i]->id = i;
++			leds[i]->led_cdev.max_brightness = 255;
++			leds[i]->led_cdev.flags = LED_CORE_SUSPENDRESUME;
++			switch (i) {
++			case RED:
++				snprintf(blinkm_led_name, sizeof(blinkm_led_name),
++						 "blinkm-%d-%d-red",
++						 client->adapter->nr,
++						 client->addr);
++				leds[i]->led_cdev.name = blinkm_led_name;
++				leds[i]->led_cdev.brightness_set_blocking =
++								blinkm_led_red_set;
++				err = led_classdev_register(&client->dev,
++								&leds[i]->led_cdev);
++				if (err < 0) {
++					dev_err(&client->dev,
++						"couldn't register LED %s\n",
++						leds[i]->led_cdev.name);
++					goto failred;
++				}
++				break;
++			case GREEN:
++				snprintf(blinkm_led_name, sizeof(blinkm_led_name),
++						 "blinkm-%d-%d-green",
++						 client->adapter->nr,
++						 client->addr);
++				leds[i]->led_cdev.name = blinkm_led_name;
++				leds[i]->led_cdev.brightness_set_blocking =
++								blinkm_led_green_set;
++				err = led_classdev_register(&client->dev,
++							&leds[i]->led_cdev);
+ 			if (err < 0) {
+ 				dev_err(&client->dev,
+ 					"couldn't register LED %s\n",
+-					led[i]->led_cdev.name);
+-				goto failred;
+-			}
+-			break;
+-		case GREEN:
+-			snprintf(blinkm_led_name, sizeof(blinkm_led_name),
+-					 "blinkm-%d-%d-green",
+-					 client->adapter->nr,
+-					 client->addr);
+-			led[i]->led_cdev.name = blinkm_led_name;
+-			led[i]->led_cdev.brightness_set_blocking =
+-							blinkm_led_green_set;
+-			err = led_classdev_register(&client->dev,
+-						    &led[i]->led_cdev);
+-			if (err < 0) {
+-				dev_err(&client->dev,
+-					"couldn't register LED %s\n",
+-					led[i]->led_cdev.name);
++					leds[i]->led_cdev.name);
+ 				goto failgreen;
+ 			}
+-			break;
+-		case BLUE:
+-			snprintf(blinkm_led_name, sizeof(blinkm_led_name),
+-					 "blinkm-%d-%d-blue",
+-					 client->adapter->nr,
+-					 client->addr);
+-			led[i]->led_cdev.name = blinkm_led_name;
+-			led[i]->led_cdev.brightness_set_blocking =
+-							blinkm_led_blue_set;
+-			err = led_classdev_register(&client->dev,
+-						    &led[i]->led_cdev);
+-			if (err < 0) {
+-				dev_err(&client->dev,
+-					"couldn't register LED %s\n",
+-					led[i]->led_cdev.name);
+-				goto failblue;
+-			}
+-			break;
+-		}		/* end switch */
+-	}			/* end for */
++				break;
++			case BLUE:
++				snprintf(blinkm_led_name, sizeof(blinkm_led_name),
++						 "blinkm-%d-%d-blue",
++						 client->adapter->nr,
++						 client->addr);
++				leds[i]->led_cdev.name = blinkm_led_name;
++				leds[i]->led_cdev.brightness_set_blocking =
++								blinkm_led_blue_set;
++				err = led_classdev_register(&client->dev,
++								&leds[i]->led_cdev);
++				if (err < 0) {
++					dev_err(&client->dev,
++						"couldn't register LED %s\n",
++						leds[i]->led_cdev.name);
++					goto failblue;
++				}
++				break;
++			}		/* end switch */
++		}			/* end for */
++	} else {
++		/* Register multicolor sysfs class */
++		/* The first element of leds is used for multicolor facilities */
++		mc_led = &data->blinkm_leds[RED];
++		mc_led->i2c_client = client;
++
++		mc_led_info[RED].color_index = LED_COLOR_ID_RED;
++		mc_led_info[GREEN].color_index = LED_COLOR_ID_GREEN;
++		mc_led_info[BLUE].color_index = LED_COLOR_ID_BLUE;
++
++		mc_led->mcled_cdev.subled_info = mc_led_info;
++		mc_led->mcled_cdev.num_colors = NUM_LEDS;
++		mc_led->mcled_cdev.led_cdev.brightness = 255;
++		mc_led->mcled_cdev.led_cdev.max_brightness = 255;
++		mc_led->mcled_cdev.led_cdev.flags = LED_CORE_SUSPENDRESUME;
++
++		snprintf(blinkm_led_name, sizeof(blinkm_led_name),
++			 "blinkm-%d-%d:rgb:indicator",
++			 client->adapter->nr,
++			 client->addr);
++		mc_led->mcled_cdev.led_cdev.name = blinkm_led_name;
++		mc_led->mcled_cdev.led_cdev.brightness_set_blocking = blinkm_set_mc_brightness;
++
++		err = led_classdev_multicolor_register(&client->dev, &mc_led->mcled_cdev);
++		if (err < 0) {
++			dev_err(&client->dev, "couldn't register LED %s\n",
++					mc_led->led_cdev.name);
++			goto failmulti;
++		}
++	}
+ 
+-	/* Initialize the blinkm */
+ 	blinkm_init_hw(client);
+ 
+ 	return 0;
+ 
++failmulti:
++	led_classdev_unregister(&leds[BLUE]->led_cdev);
++
+ failblue:
+-	led_classdev_unregister(&led[GREEN]->led_cdev);
++	led_classdev_unregister(&leds[GREEN]->led_cdev);
+ 
+ failgreen:
+-	led_classdev_unregister(&led[RED]->led_cdev);
++	led_classdev_unregister(&leds[RED]->led_cdev);
+ 
+ failred:
+ 	sysfs_remove_group(&client->dev.kobj, &blinkm_group);
++
+ exit:
+ 	return err;
+ }
+@@ -684,7 +757,7 @@ static void blinkm_remove(struct i2c_client *client)
+ 	int i;
+ 
+ 	/* make sure no workqueue entries are pending */
+-	for (i = 0; i < 3; i++)
++	for (i = 0; i < NUM_LEDS; i++)
+ 		led_classdev_unregister(&data->blinkm_leds[i].led_cdev);
+ 
+ 	/* reset rgb */
+@@ -741,6 +814,6 @@ static struct i2c_driver blinkm_driver = {
+ module_i2c_driver(blinkm_driver);
+ 
+ MODULE_AUTHOR("Jan-Simon Moeller <dl9pf@gmx.de>");
++MODULE_AUTHOR("Joseph Strauss <jstrauss@mailbox.org>");
+ MODULE_DESCRIPTION("BlinkM RGB LED driver");
+ MODULE_LICENSE("GPL");
+-
+-- 
+2.38.1
 
-The list of laptops with this problem is growing. I've received word
-from my contacts that it is highly unlikely that new bios will be
-rolled out for each and every model + variant with the problem.
-
-To put it in to scale, these are the laptops now known to have the
-missing _DSD, and does not include the others like Zenbook, or from
-other vendors:
-- G834J
-- GV302X
-- G614J
-- GX650P
-- GU604V
-- GA402X
-
-Some of these may have a CPU variant, in which case this means an
-additional bios build. And they all have anywhere between 2-4 GPU
-variants which means bios builds for each CPU+GPU combination.
-
-ASUS is not going to address this, so the only way forward I can see is
-to introduce a quirk that sets the pins etc *matched* to either the DMI
-board_name or the realtek codec which appears to be unique? I don't
-fully know about that so i defer to your judgement.
-
-
-I can at least get some confirmation of pins from ASUS. This is much
-more manageable and justifiable to them than updating dozens and dozens
-of bios builds.
-
-Can you suggest where I should start with implementing something like
-this? I can have it tested on all the laptops I listed above after
-getting verification from ASUS.
-
-Cheers,
-Luke.
