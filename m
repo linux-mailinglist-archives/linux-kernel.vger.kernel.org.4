@@ -2,139 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0260470BF12
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:03:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D334870BF17
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:03:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233592AbjEVNDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 09:03:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60834 "EHLO
+        id S234174AbjEVND4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 09:03:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233763AbjEVNDP (ORCPT
+        with ESMTP id S231495AbjEVNDy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 09:03:15 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B406492;
-        Mon, 22 May 2023 06:03:14 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QPyL66ljXz4f3nJL;
-        Mon, 22 May 2023 21:03:10 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgD3X7MPaGtkIaznJw--.59248S3;
-        Mon, 22 May 2023 21:03:11 +0800 (CST)
-Subject: Re: [PATCH 3/3] md/raid10: fix io loss while replacement replace rdev
-To:     linan666@huaweicloud.com, song@kernel.org, shli@fb.com,
-        allenpeng@synology.com, alexwu@synology.com,
-        bingjingc@synology.com, neilb@suse.de
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linan122@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
-        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230522115449.2203939-1-linan666@huaweicloud.com>
- <20230522115449.2203939-4-linan666@huaweicloud.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <28234b54-f7b1-0cd7-8955-a8ec64bc0212@huaweicloud.com>
-Date:   Mon, 22 May 2023 21:03:10 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Mon, 22 May 2023 09:03:54 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBE795;
+        Mon, 22 May 2023 06:03:52 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id EE5231FEFD;
+        Mon, 22 May 2023 13:03:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1684760630; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=DrtDbupRjXTYRj2tZ8j8I/X6g23GzYeO+ha6ND6W5ms=;
+        b=suVckYdzUWeSehtbUYtrY8aIrry6qsyz9sDDBEHs1h3Eua4XcbY3irusmUqS2No/hcQeaS
+        ek/Vzt88mLX32eaY6tLLxK52XXBMgBFktKrdb06SvcVK6PRDeIeb2Y7AB96DlM1FXN66jC
+        hJivbKMhHDfz7qqloyaIPFKnuABQ2C0=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BE0E813776;
+        Mon, 22 May 2023 13:03:50 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Ci3tLTZoa2RRbQAAMHmgww
+        (envelope-from <mhocko@suse.com>); Mon, 22 May 2023 13:03:50 +0000
+Date:   Mon, 22 May 2023 15:03:50 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     =?utf-8?B?56iL5Z6y5rab?= Chengkaitao Cheng 
+        <chengkaitao@didiglobal.com>
+Cc:     "tj@kernel.org" <tj@kernel.org>,
+        "lizefan.x@bytedance.com" <lizefan.x@bytedance.com>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "roman.gushchin@linux.dev" <roman.gushchin@linux.dev>,
+        "shakeelb@google.com" <shakeelb@google.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "muchun.song@linux.dev" <muchun.song@linux.dev>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "zhengqi.arch@bytedance.com" <zhengqi.arch@bytedance.com>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "Liam.Howlett@oracle.com" <Liam.Howlett@oracle.com>,
+        "chengzhihao1@huawei.com" <chengzhihao1@huawei.com>,
+        "pilgrimtao@gmail.com" <pilgrimtao@gmail.com>,
+        "haolee.swjtu@gmail.com" <haolee.swjtu@gmail.com>,
+        "yuzhao@google.com" <yuzhao@google.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "vasily.averin@linux.dev" <vasily.averin@linux.dev>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "surenb@google.com" <surenb@google.com>,
+        "sfr@canb.auug.org.au" <sfr@canb.auug.org.au>,
+        "mcgrof@kernel.org" <mcgrof@kernel.org>,
+        "feng.tang@intel.com" <feng.tang@intel.com>,
+        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Subject: Re: [PATCH v3 0/2] memcontrol: support cgroup level OOM protection
+Message-ID: <ZGtoNu7zIRRy7qK0@dhcp22.suse.cz>
+References: <ZFkEqhAs7FELUO3a@dhcp22.suse.cz>
+ <900EF82B-9899-46DD-9ACC-16D82D9B7A3F@didiglobal.com>
 MIME-Version: 1.0
-In-Reply-To: <20230522115449.2203939-4-linan666@huaweicloud.com>
-Content-Type: text/plain; charset=gbk; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgD3X7MPaGtkIaznJw--.59248S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7tF17Gw45WF13GFWDZr4Dtwb_yoW5JrWfpF
-        4Dt3W5ZryUJwsFkFnxAF4DJa4S9rZ7tFs5Jr9xW343ua1rtrW8Cry7GrW3Zrs8ZFZ8WryY
-        q3W3Kws3C3W2gFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWU
-        JwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
-        nIWIevJa73UjIFyTuYvjfUF9a9DUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <900EF82B-9899-46DD-9ACC-16D82D9B7A3F@didiglobal.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+[Sorry for a late reply but I was mostly offline last 2 weeks]
 
-ÔÚ 2023/05/22 19:54, linan666@huaweicloud.com Ð´µÀ:
-> From: Li Nan <linan122@huawei.com>
+On Tue 09-05-23 06:50:59, ç¨‹åž²æ¶› Chengkaitao Cheng wrote:
+> At 2023-05-08 22:18:18, "Michal Hocko" <mhocko@suse.com> wrote:
+[...]
+> >Your cover letter mentions that then "all processes in the cgroup as a
+> >whole". That to me reads as oom.group oom killer policy. But a brief
+> >look into the patch suggests you are still looking at specific tasks and
+> >this has been a concern in the previous version of the patch because
+> >memcg accounting and per-process accounting are detached.
 > 
-> When we remove a disk which has replacement, first set rdev to NULL
-> and then set replacement to rdev, finally set replacement to NULL (see
-> raid10_remove_disk()). If io is submitted during the same time, it might
-> read both rdev and replacement as NULL, and io will not be submitted.
-> 
->    rdev -> NULL
-> 			read rdev
->    replacement -> NULL
-> 			read replacement
-> 
-> Fix it by reading replacement first and rdev later, meanwhile, use smp_mb()
-> to prevent memory reordering.
+> I think the memcg accounting may be more reasonable, as its memory 
+> statistics are more comprehensive, similar to active page cache, which 
+> also increases the probability of OOM-kill. In the new patch, all the 
+> shared memory will also consume the oom_protect quota of the memcg, 
+> and the process's oom_protect quota of the memcg will decrease.
 
-Looks good, feel free to add:
+I am sorry but I do not follow. Could you elaborate please? Are you
+arguing for per memcg or per process metrics?
 
-Reviewed-by: Yu Kuai <yukuai3@huawei.com>
-> 
-> Fixes: 475b0321a4df ("md/raid10: writes should get directed to replacement as well as original.")
-> Signed-off-by: Li Nan <linan122@huawei.com>
-> ---
->   drivers/md/raid10.c | 22 ++++++++++++++++++----
->   1 file changed, 18 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-> index 70cc87c7ee57..25a5a7b1e95c 100644
-> --- a/drivers/md/raid10.c
-> +++ b/drivers/md/raid10.c
-> @@ -779,8 +779,16 @@ static struct md_rdev *read_balance(struct r10conf *conf,
->   		disk = r10_bio->devs[slot].devnum;
->   		rdev = rcu_dereference(conf->mirrors[disk].replacement);
->   		if (rdev == NULL || test_bit(Faulty, &rdev->flags) ||
-> -		    r10_bio->devs[slot].addr + sectors > rdev->recovery_offset)
-> +		    r10_bio->devs[slot].addr + sectors >
-> +		    rdev->recovery_offset) {
-> +			/*
-> +			 * Read replacement first to prevent reading both rdev
-> +			 * and replacement as NULL during replacement replace
-> +			 * rdev.
-> +			 */
-> +			smp_mb();
->   			rdev = rcu_dereference(conf->mirrors[disk].rdev);
-> +		    }
->   		if (rdev == NULL ||
->   		    test_bit(Faulty, &rdev->flags))
->   			continue;
-> @@ -1479,9 +1487,15 @@ static void raid10_write_request(struct mddev *mddev, struct bio *bio,
->   
->   	for (i = 0;  i < conf->copies; i++) {
->   		int d = r10_bio->devs[i].devnum;
-> -		struct md_rdev *rdev = rcu_dereference(conf->mirrors[d].rdev);
-> -		struct md_rdev *rrdev = rcu_dereference(
-> -			conf->mirrors[d].replacement);
-> +		struct md_rdev *rdev, *rrdev;
-> +
-> +		rrdev = rcu_dereference(conf->mirrors[d].replacement);
-> +		/*
-> +		 * Read replacement first to Prevent reading both rdev and
-> +		 * replacement as NULL during replacement replace rdev.
-> +		 */
-> +		smp_mb();
-> +		rdev = rcu_dereference(conf->mirrors[d].rdev);
->   		if (rdev == rrdev)
->   			rrdev = NULL;
->   		if (rdev && (test_bit(Faulty, &rdev->flags)))
-> 
+[...]
 
+> >> In the final discussion of patch v2, we discussed that although the adjustment range 
+> >> of oom_score_adj is [-1000,1000], but essentially it only allows two usecases
+> >> (OOM_SCORE_ADJ_MIN, OOM_SCORE_ADJ_MAX) reliably. Everything in between is 
+> >> clumsy at best. In order to solve this problem in the new patch, I introduced a new 
+> >> indicator oom_kill_inherit, which counts the number of times the local and child 
+> >> cgroups have been selected by the OOM killer of the ancestor cgroup. By observing 
+> >> the proportion of oom_kill_inherit in the parent cgroup, I can effectively adjust the 
+> >> value of oom_protect to achieve the best.
+> >
+> >What does the best mean in this context?
+> 
+> I have created a new indicator oom_kill_inherit that maintains a negative correlation 
+> with memory.oom.protect, so we have a ruler to measure the optimal value of 
+> memory.oom.protect.
+
+An example might help here.
+
+> >> about the semantics of non-leaf memcgs protection,
+> >> If a non-leaf memcg's oom_protect quota is set, its leaf memcg will proportionally 
+> >> calculate the new effective oom_protect quota based on non-leaf memcg's quota.
+> >
+> >So the non-leaf memcg is never used as a target? What if the workload is
+> >distributed over several sub-groups? Our current oom.group
+> >implementation traverses the tree to find a common ancestor in the oom
+> >domain with the oom.group.
+> 
+> If the oom_protect quota of the parent non-leaf memcg is less than the sum of 
+> sub-groups oom_protect quota, the oom_protect quota of each sub-group will 
+> be proportionally reduced
+> If the oom_protect quota of the parent non-leaf memcg is greater than the sum 
+> of sub-groups oom_protect quota, the oom_protect quota of each sub-group 
+> will be proportionally increased
+> The purpose of doing so is that users can set oom_protect quota according to 
+> their own needs, and the system management process can set appropriate 
+> oom_protect quota on the parent non-leaf memcg as the final cover, so that 
+> the system management process can indirectly manage all user processes.
+
+I guess that you are trying to say that the oom protection has a
+standard hierarchical behavior. And that is fine, well, in fact it is
+mandatory for any control knob to have a sane hierarchical properties.
+But that doesn't address my above question. Let me try again. When is a
+non-leaf memcg potentially selected as the oom victim? It doesn't have
+any tasks directly but it might be a suitable target to kill a multi
+memcg based workload (e.g. a full container).
+
+> >All that being said and with the usecase described more specifically. I
+> >can see that memcg based oom victim selection makes some sense. That
+> >menas that it is always a memcg selected and all tasks withing killed.
+> >Memcg based protection can be used to evaluate which memcg to choose and
+> >the overall scheme should be still manageable. It would indeed resemble
+> >memory protection for the regular reclaim.
+> >
+> >One thing that is still not really clear to me is to how group vs.
+> >non-group ooms could be handled gracefully. Right now we can handle that
+> >because the oom selection is still process based but with the protection
+> >this will become more problematic as explained previously. Essentially
+> >we would need to enforce the oom selection to be memcg based for all
+> >memcgs. Maybe a mount knob? What do you think?
+> 
+> There is a function in the patch to determine whether the oom_protect 
+> mechanism is enabled. All memory.oom.protect nodes default to 0, so the function 
+> <is_root_oom_protect> returns 0 by default.
+
+How can an admin determine what is the current oom detection logic?
+
+-- 
+Michal Hocko
+SUSE Labs
