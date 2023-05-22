@@ -2,59 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C2FF70C7FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 21:35:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AA3470C8A2
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 21:40:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234910AbjEVTfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 15:35:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56370 "EHLO
+        id S235054AbjEVTka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 15:40:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234881AbjEVTfB (ORCPT
+        with ESMTP id S235110AbjEVTjw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 15:35:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7DDE19B;
-        Mon, 22 May 2023 12:34:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7A92961FC6;
-        Mon, 22 May 2023 19:33:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2850AC433D2;
-        Mon, 22 May 2023 19:33:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684784003;
-        bh=OVB40/WHQmDIjb/DP6ihCpAXDmmjOaFyfPqOk8udXkE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=k3vpqGL0sV2TWfVhqCnmyUrnG6I/z5KBssBlelU9CEM7dUbF7w3OGBbgldXa9cdEj
-         9kJrVWQ6y/xb6jzB3Ws+NZFEQICjzMMegmAeDDr3aezcYShiIM/9Ctad04B8cHmK6V
-         x8nPAfiTbnDq1NrPe/1aWO3smf6ZyNSTrVSsa2ClnQuY91+R6pcdgjgFIp91piT+//
-         P39zUi2bLT5UrzjpBjEJIb1+iGk3lUzod10Pc4PvaVG8j4tZML890GkKNwAHx3InP0
-         7e70XHsI8qVZuUxUHXYb71LigYE5qGoen63qu0IgTEsZJ49XwEnPix6mlkxBhDJXvH
-         /6g+Z5MRWmyiQ==
-Date:   Mon, 22 May 2023 20:33:18 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        linux-ide@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCH v2 2/6] dt-bindings: ata: ahci: add RK3588 AHCI controller
-Message-ID: <20230522-galore-unchain-12ad8d5a8536@spud>
-References: <20230522173423.64691-1-sebastian.reichel@collabora.com>
- <20230522173423.64691-3-sebastian.reichel@collabora.com>
+        Mon, 22 May 2023 15:39:52 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1283B3
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 12:39:48 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-64d3e5e5980so3904029b3a.2
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 12:39:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684784388; x=1687376388;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=15lSZRZhXLomY0U2NRYU9uW0smeWq7pcEslVONXUi3w=;
+        b=lultQqiUKak9FMfr0vvzZAvgIXLahXbv5eD+ktyGdatLnupmEkRIwq1R7iynCFDvLF
+         d4V/iTwrrsjmy80BI5rWes1qfOx6WerIwlALEf6vtMklt0JtxgI6EkCX/c9fLAGYnUg4
+         FOpegxkkgYbK2Fg7VNn3VDHsWLoR8IeuaLj4Y=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684784388; x=1687376388;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=15lSZRZhXLomY0U2NRYU9uW0smeWq7pcEslVONXUi3w=;
+        b=EwjmCW2qAoGE00EDYjq5cBjGHrNxuHP7xElX1YMlWr32PShKaPqZAkXD3zAf3qxQjK
+         acpokIvjGqT+c0L8nxmRGd5BFDT0HSBysUwCN4smb3CZe01SEkTffEEMS2y+1V6Hkslv
+         FeYuc1AxPQrOEdJj4X9A3+e1cEELxFQVe9wAH8AAtXcKbwb31duKfKNQ+9icOuZhrUMv
+         CQsBKd3BJV+ABUou1XFQ0de0WzaEDw6RcwAZeeXBrcnSdmFKi5bRn5YL0mvT4hLxZraS
+         PJLSQWXKaH0Y7H7OrCi06YTr27jFy1mtKSqc9DQPHBDGZX3CdNN7mVV/gIkSaTSdox67
+         63CQ==
+X-Gm-Message-State: AC+VfDyYEMYZQ02+qxp7LMo1SsONFZQrIFdN/QU/SNBtsf/T7u+tRQg1
+        femsPTvWHk3k0H5iJUNiNdGHVA==
+X-Google-Smtp-Source: ACHHUZ4kzfOePZUuovzfabT8AgRib6y/nHwVGmMvBg8fdTKcPNszB02HKZi7Ot66DeoLW/DPcx7wKw==
+X-Received: by 2002:a05:6a20:549d:b0:10b:bf0e:3bda with SMTP id i29-20020a056a20549d00b0010bbf0e3bdamr3899463pzk.2.1684784387947;
+        Mon, 22 May 2023 12:39:47 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id i24-20020aa787d8000000b0064d3e4c7658sm4602374pfo.96.2023.05.22.12.39.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 12:39:47 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     azeemshaikh38@gmail.com, teigland@redhat.com, ccaulfie@redhat.com
+Cc:     Kees Cook <keescook@chromium.org>, cluster-devel@redhat.com,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] dlm: Replace all non-returning strlcpy with strscpy
+Date:   Mon, 22 May 2023 12:39:34 -0700
+Message-Id: <168478437619.244538.1491421946258356417.b4-ty@chromium.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230510221237.3509484-1-azeemshaikh38@gmail.com>
+References: <20230510221237.3509484-1-azeemshaikh38@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="Kp1Yl3qJOKQBgdGX"
-Content-Disposition: inline
-In-Reply-To: <20230522173423.64691-3-sebastian.reichel@collabora.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,69 +70,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 10 May 2023 22:12:37 +0000, Azeem Shaikh wrote:
+> strlcpy() reads the entire source buffer first.
+> This read may exceed the destination size limit.
+> This is both inefficient and can lead to linear read
+> overflows if a source string is not NUL-terminated [1].
+> In an effort to remove strlcpy() completely [2], replace
+> strlcpy() here with strscpy().
+> No return values were used, so direct replacement is safe.
+> 
+> [...]
 
---Kp1Yl3qJOKQBgdGX
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied to for-next/hardening, thanks!
 
-On Mon, May 22, 2023 at 07:34:19PM +0200, Sebastian Reichel wrote:
-> Just like RK3568, the RK3588 has a DWC based AHCI controller.
->=20
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> ---
->  .../devicetree/bindings/ata/snps,dwc-ahci-common.yaml     | 8 ++++++--
->  Documentation/devicetree/bindings/ata/snps,dwc-ahci.yaml  | 6 ++++--
->  2 files changed, 10 insertions(+), 4 deletions(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/ata/snps,dwc-ahci-common.y=
-aml b/Documentation/devicetree/bindings/ata/snps,dwc-ahci-common.yaml
-> index c1457910520b..34c5bf65b02d 100644
-> --- a/Documentation/devicetree/bindings/ata/snps,dwc-ahci-common.yaml
-> +++ b/Documentation/devicetree/bindings/ata/snps,dwc-ahci-common.yaml
-> @@ -31,11 +31,11 @@ properties:
->        PM-alive clock, RxOOB detection clock, embedded PHYs reference (Rx=
-/Tx)
->        clock, etc.
->      minItems: 1
-> -    maxItems: 4
-> +    maxItems: 6
-> =20
->    clock-names:
->      minItems: 1
-> -    maxItems: 4
-> +    maxItems: 6
->      items:
->        oneOf:
->          - description: Application APB/AHB/AXI BIU clock
-> @@ -48,6 +48,10 @@ properties:
->            const: pmalive
->          - description: RxOOB detection clock
->            const: rxoob
-> +        - description: PHY Transmit Clock
-> +          const: asic
-> +        - description: PHY Receive Clock
-> +          const: rbc
->          - description: SATA Ports reference clock
->            const: ref
+[1/1] dlm: Replace all non-returning strlcpy with strscpy
+      https://git.kernel.org/kees/c/30ad0627f169
 
-My brain is failing me at the moment, what is the reason for adding
-these into the middle of the list, as opposed to tacking them onto the
-end? Apologies if this came up on some past version that Rob or
-Krzysztof had a look at.
+-- 
+Kees Cook
 
-Cheers,
-Conor.
-
---Kp1Yl3qJOKQBgdGX
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGvDfgAKCRB4tDGHoIJi
-0nVOAQD94ejc8l5+1xjHan4Ua+e+wRMTehHBJS5M56GhMBexdQEA9Hamo6L62AT0
-g7YVVh9AtaMJexkFYBlyskG+OZkTrQs=
-=fGnh
------END PGP SIGNATURE-----
-
---Kp1Yl3qJOKQBgdGX--
