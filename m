@@ -2,156 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6F5170B3D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 05:37:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A03C270B3CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 05:30:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229893AbjEVDhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 23:37:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56370 "EHLO
+        id S230015AbjEVDaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 23:30:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjEVDhC (ORCPT
+        with ESMTP id S231433AbjEVDaA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 23:37:02 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB7DA2
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 20:37:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684726621; x=1716262621;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=P59aXtyfm/ISccYK7l1gh94sKmTWDcB1nL/Li5f4TEA=;
-  b=k5R3ktOXkdkt0+QT6+0OUnnjFlCtu1g5BcSiKlgOnMr8fWofsbXdACSw
-   2JM03bymWJiWZ/FDw9y9IKYZmafvavn0fkU7gt+bDOEjE1WfFRCxCXVCA
-   QayN3eETImf5BnjwyPN4Nf8EWQEsQazCW2NJ/lgaX2AbeYys3O85MHbps
-   Hy4Gw7MAVhHh4NT1axLbn+TSYreprOi10XyxozdEi33VNt8a9TdN7jjpm
-   7nkqtTxkMVk2U+yxFIzjRoYzo/zhcPAeS7Gv3g7bew+sByTY6eMe/4Pn2
-   LnET4VN1atNRHmo70FimFJx8UWrcm0avaeSHLsmcsMNtg3EJHjyDoCG3q
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="350327417"
-X-IronPort-AV: E=Sophos;i="6.00,183,1681196400"; 
-   d="scan'208";a="350327417"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2023 20:37:01 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="815499748"
-X-IronPort-AV: E=Sophos;i="6.00,183,1681196400"; 
-   d="scan'208";a="815499748"
-Received: from feng-clx.sh.intel.com ([10.238.200.228])
-  by fmsmga002.fm.intel.com with ESMTP; 21 May 2023 20:36:59 -0700
-From:   Feng Tang <feng.tang@intel.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>, paulmck@kernel.org,
-        rui.zhang@intel.com, x86@kernel.org, linux-kernel@vger.kernel.org
-Cc:     Feng Tang <feng.tang@intel.com>
-Subject: [PATCH RFC] x86/tsc: Make recalibration default on for TSC_KNOWN_FREQ cases
-Date:   Mon, 22 May 2023 11:30:18 +0800
-Message-Id: <20230522033018.1276836-1-feng.tang@intel.com>
-X-Mailer: git-send-email 2.34.1
+        Sun, 21 May 2023 23:30:00 -0400
+Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 820C4C6;
+        Sun, 21 May 2023 20:29:57 -0700 (PDT)
+Received: from prodtpl.icoremail.net (unknown [10.12.1.20])
+        by hzbj-icmmx-6 (Coremail) with SMTP id AQAAfwB389ib4mpk8QZSAA--.8581S2;
+        Mon, 22 May 2023 11:33:47 +0800 (CST)
+Received: from phytium.com.cn (unknown [218.76.62.144])
+        by mail (Coremail) with SMTP id AQAAfwA34VGu4Wpk4UwAAA--.2436S3;
+        Mon, 22 May 2023 11:29:50 +0800 (CST)
+From:   yangmengfei1394 <yangmengfei1394@phytium.com.cn>
+To:     herbert@gondor.apana.org.au, davem@davemloft.net
+Cc:     linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yangmengfei1394 <yangmengfei1394@phytium.com.cn>
+Subject: [PATCH] Crypto module : rearrange the default functions of akcipher
+Date:   Mon, 22 May 2023 11:30:27 +0800
+Message-Id: <20230522033027.989-1-yangmengfei1394@phytium.com.cn>
+X-Mailer: git-send-email 2.35.1.windows.2
+In-Reply-To: <20230510075142.1638-1-yangmengfei1394@phytium.com.cn>
+References: <20230510075142.1638-1-yangmengfei1394@phytium.com.cn>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAfwA34VGu4Wpk4UwAAA--.2436S3
+X-CM-SenderInfo: 51dqwzxhqjwvjlrtmko6sk53xlxphulrpou0/1tbiAQAEBmRmgN8EeAACsg
+Authentication-Results: hzbj-icmmx-6; spf=neutral smtp.mail=yangmengfe
+        i1394@phytium.com.cn;
+X-Coremail-Antispam: 1Uk129KBjvJXoW7uF4UAFWfuF15Gw4kurWDtwb_yoW8Kr4rpF
+        1fK397Jr4UXF1293y8JFs5Jry5XrWxA3Wayr48Cw1fKFs2gryFgr47t348CFy5JF98Ary8
+        Cw4v9w1UWw4DCaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        DUYxn0WfASr-VFAU7a7-sFnT9fnUUIcSsGvfJ3UbIYCTnIWIevJa73UjIFyTuYvj4RJUUU
+        UUUUU
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit a7ec817d5542 ("x86/tsc: Add option to force frequency
-recalibration with HW timer") was added to handle cases that the
-firmware has bug and provides a wrong TSC frequency number, and it
-is optional given that this kind of firmware issue rarely happens
-(Paul reported once [1]).
+According to your last email, we rearrange the default functions,
+move the code that sets the default functions from
+crypto_register_akcipher into akcipher_prepare_alg,
+add the set_pub_key function check at the same time.
 
-But Rui reported that some Sapphire Rapids platform met this issue
-again recently, and as firmware is also a kind of 'software' which
-can't be bug free, make the recalibration default on. When the
-values from firmware and HW timer's calibration have big gap,
-raise a warning and let vendor to check which side is broken.
-
-One downside is, many VMs also has X86_FEATURE_TSC_KNOWN_FREQ set,
-and they will also do this recalibration.
-
-[1]. https://lore.kernel.org/lkml/20221117230910.GI4001@paulmck-ThinkPad-P17-Gen-1/
-Signed-off-by: Feng Tang <feng.tang@intel.com>
+Signed-off-by: yangmengfei1394 <yangmengfei1394@phytium.com.cn>
 ---
- Documentation/admin-guide/kernel-parameters.txt |  4 ----
- arch/x86/kernel/tsc.c                           | 14 ++++----------
- 2 files changed, 4 insertions(+), 14 deletions(-)
+ crypto/akcipher.c | 30 ++++++++++++++++--------------
+ 1 file changed, 16 insertions(+), 14 deletions(-)
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 9e5bab29685f..a826ab3b5dfb 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -6451,10 +6451,6 @@
- 			in situations with strict latency requirements (where
- 			interruptions from clocksource watchdog are not
- 			acceptable).
--			[x86] recalibrate: force recalibration against a HW timer
--			(HPET or PM timer) on systems whose TSC frequency was
--			obtained from HW or FW using either an MSR or CPUID(0x15).
--			Warn if the difference is more than 500 ppm.
- 			[x86] watchdog: Use TSC as the watchdog clocksource with
- 			which to check other HW timers (HPET or PM timer), but
- 			only on systems where TSC has been deemed trustworthy.
-diff --git a/arch/x86/kernel/tsc.c b/arch/x86/kernel/tsc.c
-index 344698852146..b77c5b1ad304 100644
---- a/arch/x86/kernel/tsc.c
-+++ b/arch/x86/kernel/tsc.c
-@@ -48,8 +48,6 @@ static DEFINE_STATIC_KEY_FALSE(__use_tsc);
+diff --git a/crypto/akcipher.c b/crypto/akcipher.c
+index 7960ceb528c3..45502446b231 100644
+--- a/crypto/akcipher.c
++++ b/crypto/akcipher.c
+@@ -126,19 +126,6 @@ struct crypto_akcipher *crypto_alloc_akcipher(const char *alg_name, u32 type,
+ }
+ EXPORT_SYMBOL_GPL(crypto_alloc_akcipher);
  
- int tsc_clocksource_reliable;
- 
--static int __read_mostly tsc_force_recalibrate;
+-static void akcipher_prepare_alg(struct akcipher_alg *alg)
+-{
+-	struct crypto_istat_akcipher *istat = akcipher_get_stat(alg);
+-	struct crypto_alg *base = &alg->base;
 -
- static u32 art_to_tsc_numerator;
- static u32 art_to_tsc_denominator;
- static u64 art_to_tsc_offset;
-@@ -310,8 +308,6 @@ static int __init tsc_setup(char *str)
- 				 __func__);
- 		tsc_as_watchdog = 0;
- 	}
--	if (!strcmp(str, "recalibrate"))
--		tsc_force_recalibrate = 1;
- 	if (!strcmp(str, "watchdog")) {
- 		if (no_tsc_watchdog)
- 			pr_alert("%s: tsc=watchdog overridden by earlier tsc=nowatchdog\n",
-@@ -1395,7 +1391,6 @@ static void tsc_refine_calibration_work(struct work_struct *work)
- 	else
- 		freq = calc_pmtimer_ref(delta, ref_start, ref_stop);
- 
--	/* Will hit this only if tsc_force_recalibrate has been set */
- 	if (boot_cpu_has(X86_FEATURE_TSC_KNOWN_FREQ)) {
- 
- 		/* Warn if the deviation exceeds 500 ppm */
-@@ -1456,17 +1451,16 @@ static int __init init_tsc_clocksource(void)
- 		clocksource_tsc.flags |= CLOCK_SOURCE_SUSPEND_NONSTOP;
- 
- 	/*
--	 * When TSC frequency is known (retrieved via MSR or CPUID), we skip
--	 * the refined calibration and directly register it as a clocksource.
-+	 * When TSC frequency is known (retrieved via MSR or CPUID), we
-+	 * directly register it as a clocksource. As the firmware could
-+	 * be wrong (very unlikely) about the values, the recalibration
-+	 * by hardware timer is kept just as a sanity check.
- 	 */
- 	if (boot_cpu_has(X86_FEATURE_TSC_KNOWN_FREQ)) {
- 		if (boot_cpu_has(X86_FEATURE_ART))
- 			art_related_clocksource = &clocksource_tsc;
- 		clocksource_register_khz(&clocksource_tsc, tsc_khz);
- 		clocksource_unregister(&clocksource_tsc_early);
+-	base->cra_type = &crypto_akcipher_type;
+-	base->cra_flags &= ~CRYPTO_ALG_TYPE_MASK;
+-	base->cra_flags |= CRYPTO_ALG_TYPE_AKCIPHER;
 -
--		if (!tsc_force_recalibrate)
--			return 0;
- 	}
+-	if (IS_ENABLED(CONFIG_CRYPTO_STATS))
+-		memset(istat, 0, sizeof(*istat));
+-}
+-
+ static int akcipher_default_op(struct akcipher_request *req)
+ {
+ 	return -ENOSYS;
+@@ -150,8 +137,9 @@ static int akcipher_default_set_key(struct crypto_akcipher *tfm,
+ 	return -ENOSYS;
+ }
  
- 	schedule_delayed_work(&tsc_irqwork, 0);
+-int crypto_register_akcipher(struct akcipher_alg *alg)
++static void akcipher_prepare_alg(struct akcipher_alg *alg)
+ {
++	struct crypto_istat_akcipher *istat = akcipher_get_stat(alg);
+ 	struct crypto_alg *base = &alg->base;
+ 
+ 	if (!alg->sign)
+@@ -164,6 +152,20 @@ int crypto_register_akcipher(struct akcipher_alg *alg)
+ 		alg->decrypt = akcipher_default_op;
+ 	if (!alg->set_priv_key)
+ 		alg->set_priv_key = akcipher_default_set_key;
++	if (!alg->set_pub_key)
++		alg->set_pub_key = akcipher_default_set_key;
++
++	base->cra_type = &crypto_akcipher_type;
++	base->cra_flags &= ~CRYPTO_ALG_TYPE_MASK;
++	base->cra_flags |= CRYPTO_ALG_TYPE_AKCIPHER;
++
++	if (IS_ENABLED(CONFIG_CRYPTO_STATS))
++		memset(istat, 0, sizeof(*istat));
++}
++
++int crypto_register_akcipher(struct akcipher_alg *alg)
++{
++	struct crypto_alg *base = &alg->base;
+ 
+ 	akcipher_prepare_alg(alg);
+ 	return crypto_register_alg(base);
 -- 
-2.34.1
+2.35.1.windows.2
 
