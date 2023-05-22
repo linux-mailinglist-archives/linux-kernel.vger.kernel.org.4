@@ -2,203 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7ADC70C59F
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 21:01:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B0BF70C5A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 21:01:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232796AbjEVTBW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 15:01:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59120 "EHLO
+        id S233807AbjEVTB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 15:01:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233598AbjEVTBR (ORCPT
+        with ESMTP id S233652AbjEVTBT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 15:01:17 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5464DF4
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 12:01:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684782074; x=1716318074;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=sM2uaj11psN2Luzn177V6CNeRqQHcsdr13KAfBiWtMU=;
-  b=nWpJ6aatz/Co2RTbPqljgalR4hWuxK9ZUgAWUJVQSEYLx2WFU4MQKv0M
-   AO2ru8ssctJQWCNEQQLlu4oqdJ5G813NfoMD7jIoYsbk7bEx+ukKRt2UZ
-   KdocSNj9KcsWxYWao1KO/ubel0hVvgTr9SwNn5U0auwPC2BbNXUFtzd8O
-   LVLbrEgC5QbvD0CxSS3R14pWcW2fLMJLFIQWBKOfPbjHG4DyKZ33NCeju
-   d0YRuox6LjU2537M1auRpzOl8cb3gzSEaLg9/A4Ph0YJbTcESL0U7HDVX
-   Y2Fz3qs0cc+Gp64O5YdrbhM3bovm6Mg+9lZJgHuGnuaBqkcjI+psuex18
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="355361166"
-X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
-   d="scan'208";a="355361166"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 12:01:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="793444365"
-X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
-   d="scan'208";a="793444365"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 22 May 2023 12:01:13 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1q1AmO-000D55-3D;
-        Mon, 22 May 2023 19:01:13 +0000
-Date:   Tue, 23 May 2023 03:00:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: arch/powerpc/math-emu/fcmpu.c:13:2: warning: variable 'A_c' set but
- not used
-Message-ID: <202305230231.3Wb7Q68G-lkp@intel.com>
+        Mon, 22 May 2023 15:01:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FB07DB
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 12:00:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684782035;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rEdSZfvbZO+EhCCmXRIUmzTZEn//g4Gjj2xDSD4w9qo=;
+        b=G09VcZ7/argKED23E3Io4MJUhWiX8vk3EB1tlgk1CsT0aDUlgYXVYAoi3IRYsz68fG7uU+
+        o4i4MKKPI6Cc4iqmC3AazNJAVaLzcdlQXg2nzW/UYJYQI1H+az8j5dQzjeIUkLSxcWmM8/
+        DlKtlRLR0kZnoNUY2T6oZd6tvqLdd+s=
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
+ [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-313-W949FHKUOymPEmttl6BYqQ-1; Mon, 22 May 2023 15:00:33 -0400
+X-MC-Unique: W949FHKUOymPEmttl6BYqQ-1
+Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-33868d4a686so36750205ab.1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 12:00:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684782032; x=1687374032;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rEdSZfvbZO+EhCCmXRIUmzTZEn//g4Gjj2xDSD4w9qo=;
+        b=KL6UK98CDiMlTE4cUpTf3vfCVMzME31fNNTlqvxKYRs3aXf1VPaJgSLekDrZCxisyR
+         4IxrbAWHDOcLypiAsh5cLGDHY60TAk4mJITORFMhYQNQwvJeG7Jv1tfBmDUEY+7xVjzv
+         4ZRbVs4SzHiF4ZNXnhM8wSbh4vRKG5T6m9bYE9UF4duPthcFPJVQ8NJm1n+2kOmS70Xj
+         NNC9+WEwrgIi1hqHs2oby2bMs4F8Xjw2mMCFnnJ379isLHZQKZgRQRrlAPPBBlq2oPGD
+         hYNFhv8l1aWujYpGRdG1WpKzEpWxi15pdBqxiMzXlBNnfXB1FmD0O5zDjJm8ugooaya7
+         F6ag==
+X-Gm-Message-State: AC+VfDxrC00cqaNReJYjFCJtecuEyIsA8FTpg7mCcIlJPB+ebBu7VP51
+        pYCEkivKf77+VbIDVy6bybPZKxwxwayCOuQojhGTtZTEPUYmqPXBJRoG8n75U4J0aPpzfY0doFI
+        wuw2l981J9aBob8fkKwFw0GSgx7h7hLw1
+X-Received: by 2002:a92:c70e:0:b0:335:38b:e734 with SMTP id a14-20020a92c70e000000b00335038be734mr6587202ilp.28.1684782032347;
+        Mon, 22 May 2023 12:00:32 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7YQ+ECS6de+PurjamzC27suSNV0n/CZhf01g4wobY35E8M9AaSfoteJFN3ptWeCzMGLKW7/A==
+X-Received: by 2002:a92:c70e:0:b0:335:38b:e734 with SMTP id a14-20020a92c70e000000b00335038be734mr6587179ilp.28.1684782032004;
+        Mon, 22 May 2023 12:00:32 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id do16-20020a0566384c9000b0041abd81975bsm1882825jab.153.2023.05.22.12.00.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 12:00:31 -0700 (PDT)
+Date:   Mon, 22 May 2023 13:00:30 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Yan Zhao <yan.y.zhao@intel.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kevin.tian@intel.com, jgg@nvidia.com,
+        Sean Christopherson <seanjc@google.com>
+Subject: Re: [PATCH v2] vfio/type1: check pfn valid before converting to
+ struct page
+Message-ID: <20230522130030.44c6c5c2.alex.williamson@redhat.com>
+In-Reply-To: <20230519065843.10653-1-yan.y.zhao@intel.com>
+References: <20230519065843.10653-1-yan.y.zhao@intel.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christophe,
+On Fri, 19 May 2023 14:58:43 +0800
+Yan Zhao <yan.y.zhao@intel.com> wrote:
 
-FYI, the error/warning still remains.
+> Check physical PFN is valid before converting the PFN to a struct page
+> pointer to be returned to caller of vfio_pin_pages().
+> 
+> vfio_pin_pages() pins user pages with contiguous IOVA.
+> If the IOVA of a user page to be pinned belongs to vma of vm_flags
+> VM_PFNMAP, pin_user_pages_remote() will return -EFAULT without returning
+> struct page address for this PFN. This is because usually this kind of PFN
+> (e.g. MMIO PFN) has no valid struct page address associated.
+> Upon this error, vaddr_get_pfns() will obtain the physical PFN directly.
+> 
+> While previously vfio_pin_pages() returns to caller PFN arrays directly,
+> after commit
+> 34a255e67615 ("vfio: Replace phys_pfn with pages for vfio_pin_pages()"),
+> PFNs will be converted to "struct page *" unconditionally and therefore
+> the returned "struct page *" array may contain invalid struct page
+> addresses.
+> 
+> Given current in-tree users of vfio_pin_pages() only expect "struct page *
+> returned, check PFN validity and return -EINVAL to let the caller be
+> aware of IOVAs to be pinned containing PFN not able to be returned in
+> "struct page *" array. So that, the caller will not consume the returned
+> pointer (e.g. test PageReserved()) and avoid error like "supervisor read
+> access in kernel mode".
+> 
+> Fixes: 34a255e67615 ("vfio: Replace phys_pfn with pages for vfio_pin_pages()")
+> Cc: Sean Christopherson <seanjc@google.com>
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> Signed-off-by: Yan Zhao <yan.y.zhao@intel.com>
+> 
+> ---
+> v2: update commit message to explain background/problem clearly. (Sean)
+> ---
+>  drivers/vfio/vfio_iommu_type1.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
+> index 493c31de0edb..0620dbe5cca0 100644
+> --- a/drivers/vfio/vfio_iommu_type1.c
+> +++ b/drivers/vfio/vfio_iommu_type1.c
+> @@ -860,6 +860,11 @@ static int vfio_iommu_type1_pin_pages(void *iommu_data,
+>  		if (ret)
+>  			goto pin_unwind;
+>  
+> +		if (!pfn_valid(phys_pfn)) {
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   44c026a73be8038f03dbdeef028b642880cf1511
-commit: 7245fc5bb7a966852d5bd7779d1f5855530b461a powerpc/math-emu: Remove -w build flag and fix warnings
-date:   9 months ago
-config: powerpc-randconfig-r022-20230522 (https://download.01.org/0day-ci/archive/20230523/202305230231.3Wb7Q68G-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7245fc5bb7a966852d5bd7779d1f5855530b461a
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 7245fc5bb7a966852d5bd7779d1f5855530b461a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/math-emu/
+Why wouldn't we use our is_invalid_reserved_pfn() test here?  Doing
+so would also make it more consistent why we don't need to call
+put_pfn() or rewind accounting for this page.  Thanks,
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202305230231.3Wb7Q68G-lkp@intel.com/
+Alex
 
-All warnings (new ones prefixed by >>):
+> +			ret = -EINVAL;
+> +			goto pin_unwind;
+> +		}
+> +
+>  		ret = vfio_add_to_pfn_list(dma, iova, phys_pfn);
+>  		if (ret) {
+>  			if (put_pfn(phys_pfn, dma->prot) && do_accounting)
+> 
+> base-commit: b3c98052d46948a8d65d2778c7f306ff38366aac
 
->> arch/powerpc/math-emu/fcmpu.c:13:2: warning: variable 'A_c' set but not used [-Wunused-but-set-variable]
-           FP_DECL_D(A);
-           ^
-   include/math-emu/double.h:73:23: note: expanded from macro 'FP_DECL_D'
-   #define FP_DECL_D(X)            _FP_DECL(2,X)
-                                   ^
-   include/math-emu/op-common.h:28:14: note: expanded from macro '_FP_DECL'
-     _FP_I_TYPE X##_c=0, X##_s=0, X##_e=0; \
-                ^
-   <scratch space>:124:1: note: expanded from here
-   A_c
-   ^
->> arch/powerpc/math-emu/fcmpu.c:14:2: warning: variable 'B_c' set but not used [-Wunused-but-set-variable]
-           FP_DECL_D(B);
-           ^
-   include/math-emu/double.h:73:23: note: expanded from macro 'FP_DECL_D'
-   #define FP_DECL_D(X)            _FP_DECL(2,X)
-                                   ^
-   include/math-emu/op-common.h:28:14: note: expanded from macro '_FP_DECL'
-     _FP_I_TYPE X##_c=0, X##_s=0, X##_e=0; \
-                ^
-   <scratch space>:130:1: note: expanded from here
-   B_c
-   ^
->> arch/powerpc/math-emu/fcmpu.c:15:2: warning: variable '_fex' set but not used [-Wunused-but-set-variable]
-           FP_DECL_EX;
-           ^
-   include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DECL_EX'
-   #define FP_DECL_EX int _fex = 0
-                          ^
-   arch/powerpc/math-emu/fcmpu.c:11:1: warning: no previous prototype for function 'fcmpu' [-Wmissing-prototypes]
-   fcmpu(u32 *ccr, int crfD, void *frA, void *frB)
-   ^
-   arch/powerpc/math-emu/fcmpu.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int
-   ^
-   static 
-   4 warnings generated.
---
->> arch/powerpc/math-emu/fctiw.c:14:2: warning: variable '_fex' set but not used [-Wunused-but-set-variable]
-           FP_DECL_EX;
-           ^
-   include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DECL_EX'
-   #define FP_DECL_EX int _fex = 0
-                          ^
-   arch/powerpc/math-emu/fctiw.c:11:1: warning: no previous prototype for function 'fctiw' [-Wmissing-prototypes]
-   fctiw(u32 *frD, void *frB)
-   ^
-   arch/powerpc/math-emu/fctiw.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int
-   ^
-   static 
-   2 warnings generated.
---
->> arch/powerpc/math-emu/fctiwz.c:14:2: warning: variable '_fex' set but not used [-Wunused-but-set-variable]
-           FP_DECL_EX;
-           ^
-   include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DECL_EX'
-   #define FP_DECL_EX int _fex = 0
-                          ^
-   arch/powerpc/math-emu/fctiwz.c:11:1: warning: no previous prototype for function 'fctiwz' [-Wmissing-prototypes]
-   fctiwz(u32 *frD, void *frB)
-   ^
-   arch/powerpc/math-emu/fctiwz.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int
-   ^
-   static 
-   2 warnings generated.
---
->> arch/powerpc/math-emu/fsel.c:14:2: warning: variable '_fex' set but not used [-Wunused-but-set-variable]
-           FP_DECL_EX;
-           ^
-   include/math-emu/soft-fp.h:94:24: note: expanded from macro 'FP_DECL_EX'
-   #define FP_DECL_EX int _fex = 0
-                          ^
-   arch/powerpc/math-emu/fsel.c:11:1: warning: no previous prototype for function 'fsel' [-Wmissing-prototypes]
-   fsel(u32 *frD, void *frA, u32 *frB, u32 *frC)
-   ^
-   arch/powerpc/math-emu/fsel.c:10:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int
-   ^
-   static 
-   2 warnings generated.
-
-
-vim +/A_c +13 arch/powerpc/math-emu/fcmpu.c
-
-^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16   9  
-^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16  10  int
-^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16  11  fcmpu(u32 *ccr, int crfD, void *frA, void *frB)
-^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16  12  {
-^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16 @13  	FP_DECL_D(A);
-^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16 @14  	FP_DECL_D(B);
-d2b194ed820880 arch/powerpc/math-emu/fcmpu.c Kumar Gala     2008-06-04 @15  	FP_DECL_EX;
-^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16  16  	int code[4] = { (1 << 3), (1 << 1), (1 << 2), (1 << 0) };
-^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16  17  	long cmp;
-^1da177e4c3f41 arch/ppc/math-emu/fcmpu.c     Linus Torvalds 2005-04-16  18  
-
-:::::: The code at line 13 was first introduced by commit
-:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
-
-:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
-:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
