@@ -2,120 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DC5A70C0E9
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 16:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0269C70C0EB
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 16:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233721AbjEVOVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 10:21:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49172 "EHLO
+        id S233992AbjEVOVa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 10:21:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233113AbjEVOVQ (ORCPT
+        with ESMTP id S233849AbjEVOVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 10:21:16 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7C2A3;
-        Mon, 22 May 2023 07:21:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1684765275; x=1716301275;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6B3vXaIvsSyFL8WRgXEifU405baar89aaaU3DZ4ZCOI=;
-  b=mGvWkExU3V9X5YXgrwcg55GUliJbIRwAmVPVlPLVEB6wE4CiIFuON4xP
-   9ddGNgwu/QIZt5XAlwNSDN+OLFl62wrciMia9Y7VhjhZY6SVFS8MWPwdH
-   l31eKr5NB3AVJt5vkCrMDx9ucVHLyDzhh3nIe7PXfHxfFDWx/P7tjJupm
-   6lMrrOC8GWnMO4e2/OA0zMPlXR4ncyZQH+/jh0Q69CvKX/ANxne712XpE
-   IYbn90Y2ddt00/1fJWMeLQp4yJzPz6QFtBflleWXtD6LMF+mGHVDlg5nY
-   HJRVEQ66jphxVA0njyazL+WGOMYtSOr2bZhj1daoWwaUTQXiiNjnsUg8N
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
-   d="asc'?scan'208";a="212478960"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 May 2023 07:21:14 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 22 May 2023 07:21:09 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Mon, 22 May 2023 07:21:07 -0700
-Date:   Mon, 22 May 2023 15:20:45 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Jia Jie Ho <jiajie.ho@starfivetech.com>
-CC:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor@kernel.org>,
-        <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v8 2/4] crypto: starfive - Add crypto engine support
-Message-ID: <20230522-darkish-undaunted-9e184932d93f@wendy>
-References: <20230515125355.624250-1-jiajie.ho@starfivetech.com>
- <20230515125355.624250-3-jiajie.ho@starfivetech.com>
+        Mon, 22 May 2023 10:21:20 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB8B8DB;
+        Mon, 22 May 2023 07:21:18 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34MC9ARL012027;
+        Mon, 22 May 2023 09:21:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
+ : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=PODMain02222019;
+ bh=P6oOOqTU0O0tw6GjQb/Q/FfJZj237pQk2F7qrB9oBY4=;
+ b=i8A+YmRktbM0CdYURtI0iVhPL2qokecRjHqtNf6I7rNxLVRah5XEBsPi4hLiYgMSEQSV
+ H0fN/6nxOs7MBKjS7I5fwLsGqGMqUt6+/RaeNJDyeSfsjPKQ4ar9Zp38MDrWXUM1Q+42
+ iwrj0fbA+bTpnCabi7H7gj+mAtkAusMBTsJm7dxSTFfAmYjNH7WIxS1C724fhZxakQWX
+ mK4lOWDFmuar4jsTuDWfvvrVN8/roCAc2EPCaoMk22wxqnUPREXWOBt/178a0+3T+uoc
+ gaLc4sri9jTR70LiR9/g1PT+ydEpImRDHEJ1CDzJxGTqgfgXLnOQ1k5K+2CN4kibJ/Ts TQ== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3qpum1243v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 May 2023 09:21:08 -0500
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Mon, 22 May
+ 2023 09:21:06 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
+ Transport; Mon, 22 May 2023 09:21:06 -0500
+Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id B170511D4;
+        Mon, 22 May 2023 14:21:06 +0000 (UTC)
+Date:   Mon, 22 May 2023 14:21:06 +0000
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     Mark Brown <broonie@kernel.org>
+CC:     <srinivas.goud@amd.com>, <linux-spi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>
+Subject: Re: [PATCH 2/2] spi: spi-cadence: Add missing kernel doc for
+ clk_rate in cdns_spi
+Message-ID: <20230522142106.GB68926@ediswmail.ad.cirrus.com>
+References: <20230518093927.711358-1-ckeepax@opensource.cirrus.com>
+ <20230518093927.711358-2-ckeepax@opensource.cirrus.com>
+ <649d68c4-cd2b-4ec1-ad06-ff42ac5653b4@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="dVy3OAxHoIQI9VdR"
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230515125355.624250-3-jiajie.ho@starfivetech.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <649d68c4-cd2b-4ec1-ad06-ff42ac5653b4@sirena.org.uk>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Proofpoint-GUID: fKrV150Li01pYZ1hhWY_mW6R5kTP9D9h
+X-Proofpoint-ORIG-GUID: fKrV150Li01pYZ1hhWY_mW6R5kTP9D9h
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---dVy3OAxHoIQI9VdR
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Mon, May 22, 2023 at 10:52:17AM +0100, Mark Brown wrote:
+> On Thu, May 18, 2023 at 10:39:27AM +0100, Charles Keepax wrote:
+> > Add the missing kernel documentation to silence the build warning.
+> > 
+> > Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+> > ---
+> > 
+> > New since v1 of the series, but might as well fix this build warning
+> > too.
+> 
+> Sending this without the "v2" breaks threading and makes it hard to
+> handle with tooling, versioning applies to the patch series, not to
+> individual patches.
 
-On Mon, May 15, 2023 at 08:53:53PM +0800, Jia Jie Ho wrote:
-> +config CRYPTO_DEV_JH7110
-> +	tristate "StarFive JH7110 cryptographic engine driver"
-> +	depends on SOC_STARFIVE || COMPILE_TEST
-> +	select CRYPTO_ENGINE
-> +	select ARM_AMBA
+Apologies do you want me to resend?
 
-I have yet to bisect, but I think this has broken the build on RISC-V:
-drivers/dma/pl330.c:1053:13: error: redefinition of '_start' as different kind of symbol
-static bool _start(struct pl330_thread *thrd)
-            ^
-arch/riscv/include/asm/sections.h:11:13: note: previous definition is here
-extern char _start[];
-            ^
-drivers/dma/pl330.c:1705:10: error: called object type 'char[]' is not a function or function pointer
-                        _start(thrd);
-                        ~~~~~~^
-drivers/dma/pl330.c:2092:9: error: called object type 'char[]' is not a function or function pointer
-                _start(pch->thread);
-                ~~~~~~^
-drivers/dma/pl330.c:2110:11: error: called object type 'char[]' is not a function or function pointer
-                                _start(pch->thread);
-                                ~~~~~~^
-4 errors generated.
-
-The pl330 dma driver depends on ARM_AMBA.
-
-Cheers,
-Conor.
-
-
---dVy3OAxHoIQI9VdR
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGt6PQAKCRB4tDGHoIJi
-0mpoAP9RDzkFAWWLnCRZfm4XNQ+rF1nl5k6lvaz5slDTFQKPAgD9HeBaio8Z6lrR
-D2oRKJK24+1MMfPI4S824JdtjnZOIw0=
-=Y2QR
------END PGP SIGNATURE-----
-
---dVy3OAxHoIQI9VdR--
+Thanks,
+Charles
