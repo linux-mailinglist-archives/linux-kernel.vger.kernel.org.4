@@ -2,67 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDD9E70B5FB
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 09:11:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 481CD70B73E
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:02:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232415AbjEVHLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 03:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39978 "EHLO
+        id S231135AbjEVICt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 04:02:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232570AbjEVHKN (ORCPT
+        with ESMTP id S229639AbjEVICj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 03:10:13 -0400
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 9B72CCA
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 00:10:02 -0700 (PDT)
-Received: from localhost.localdomain (unknown [219.141.250.2])
-        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id F3D981800CE4E3;
-        Mon, 22 May 2023 15:09:46 +0800 (CST)
-X-MD-Sfrom: zeming@nfschina.com
-X-MD-SrcIP: 219.141.250.2
-From:   Li zeming <zeming@nfschina.com>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com
-Cc:     linux-kernel@vger.kernel.org, Li zeming <zeming@nfschina.com>
-Subject: [PATCH] =?UTF-8?q?sched:=20deadline:=20Remove=20unnecessary=20?= =?UTF-8?q?=E2=80=98NULL=E2=80=99=20values=20from=20dl=5Ftask=5Foffline=5F?= =?UTF-8?q?migration?=
-Date:   Wed, 24 May 2023 07:41:01 +0800
-Message-Id: <20230523234101.3439-1-zeming@nfschina.com>
-X-Mailer: git-send-email 2.18.2
+        Mon, 22 May 2023 04:02:39 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D4161AB;
+        Mon, 22 May 2023 01:02:37 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.43:58120.1490266714
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
+        by 189.cn (HERMES) with SMTP id 00AEA1002C4;
+        Mon, 22 May 2023 16:02:34 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-75648544bd-7vx9t with ESMTP id 1a4434578fbd45abb00625fc7c141694 for kernel@xen0n.name;
+        Mon, 22 May 2023 16:02:36 CST
+X-Transaction-ID: 1a4434578fbd45abb00625fc7c141694
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <73447e35-f4df-9871-6210-b7bf1a3f04fc@189.cn>
+Date:   Mon, 22 May 2023 16:02:34 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v14 1/2] drm: add kms driver for loongson display
+ controller
+Content-Language: en-US
+To:     WANG Xuerui <kernel@xen0n.name>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sui Jingfeng <suijingfeng@loongson.cn>,
+        Li Yi <liyi@loongson.cn>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>
+Cc:     linaro-mm-sig@lists.linaro.org, loongson-kernel@lists.loongnix.cn,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Liu Peibao <liupeibao@loongson.cn>, linux-media@vger.kernel.org
+References: <20230520105718.325819-1-15330273260@189.cn>
+ <20230520105718.325819-2-15330273260@189.cn>
+ <26fd78b9-c074-8341-c99c-4e3b38cd861a@xen0n.name>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <26fd78b9-c074-8341-c99c-4e3b38cd861a@xen0n.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_24_48,
-        RDNS_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-later_rq is assigned first, so it does not need to initialize the
-assignment.
+Hi,
 
-Signed-off-by: Li zeming <zeming@nfschina.com>
----
- kernel/sched/deadline.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On 2023/5/21 20:21, WANG Xuerui wrote:
+>> --- /dev/null
+>> +++ b/drivers/gpu/drm/loongson/Kconfig
+>> @@ -0,0 +1,17 @@
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +
+>> +config DRM_LOONGSON
+>> +    tristate "DRM support for Loongson Graphics"
+>> +    depends on DRM && PCI && MMU
+>> +    select DRM_KMS_HELPER
+>> +    select DRM_TTM
+>> +    select I2C
+>> +    select I2C_ALGOBIT
+>> +    help
+>> +      This is a DRM driver for Loongson Graphics, it may including
+>
+> Drop "it may"; "including" should be enough.
+>
+'it may' is more *precise* here, because currently we don't ship with 
+the support for loongson 2K series SoC.
 
-diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index 5a9a4b81c972..d823e608c7f0 100644
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -667,7 +667,7 @@ static struct rq *find_lock_later_rq(struct task_struct *task, struct rq *rq);
- 
- static struct rq *dl_task_offline_migration(struct rq *rq, struct task_struct *p)
- {
--	struct rq *later_rq = NULL;
-+	struct rq *later_rq;
- 	struct dl_bw *dl_b;
- 
- 	later_rq = find_lock_later_rq(p, rq);
--- 
-2.18.2
+I'm try to be precise as far as I can, we avoid made this driver too 
+large by ignore loongson 2K series SoC temporary.
+
+>> +      LS7A2000, LS7A1000, LS2K2000 and LS2K1000 etc. Loongson LS7A
+>> +      series are bridge chipset, while Loongson LS2K series are SoC.
+>> +
+>> +      If "M" is selected, the module will be called loongson.
+>
+> Just "loongson"? 
+
+Yes,  when compile this driver as module,  loongson.ko will be generated.
+
+  drm radeon is also doing so, See drm/radeon/Kconfig.
+
+> I know it's like this for ages (at least dating back to the MIPS days) 
+> but you really don't want to imply Loongson is mainly a GPU company. 
+> Something like "loongson_drm" or "lsdc" or "gsgpu" could be better. 
+
+No, these name may have backward compatibility problems.
+
+Downstream driver already taken those name.
+
+userspace driver need to differentiate them who is who.
+
 
