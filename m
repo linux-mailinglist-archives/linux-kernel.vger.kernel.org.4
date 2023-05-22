@@ -2,248 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 798A270C350
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 18:29:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9491970C36B
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 18:30:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232729AbjEVQ3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 12:29:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
+        id S232942AbjEVQaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 12:30:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232736AbjEVQ3L (ORCPT
+        with ESMTP id S232821AbjEVQ3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 12:29:11 -0400
-Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017A1BF;
-        Mon, 22 May 2023 09:29:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1684772950; x=1716308950;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=StoaUf4MTFj8hPRC2I4MEUwAB5OXpi+q278AO8q0Ss8=;
-  b=fZmzZakn6cPplV4ln7YC6DiKCrXXwtQVYIolohm8WijlzRRCNaYie47V
-   N1Hr1LtFH05s9Elir2nhaZAZxdyHX/1bxBitKKDit7ayC2l8oDvUETfVS
-   BGmuGx09Oxs1r0gw1dNd3GgMbK3AHwzhS1cAwPPAylRPx9M99Rc3FHYdy
-   o=;
-X-IronPort-AV: E=Sophos;i="6.00,184,1681171200"; 
-   d="scan'208";a="327665802"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-m6i4x-529f0975.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 16:29:05 +0000
-Received: from EX19MTAUWA002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1e-m6i4x-529f0975.us-east-1.amazon.com (Postfix) with ESMTPS id B47C744088;
-        Mon, 22 May 2023 16:29:02 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 22 May 2023 16:28:54 +0000
-Received: from 88665a182662.ant.amazon.com (10.119.123.82) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 22 May 2023 16:28:51 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <mirsad.todorovac@alu.unizg.hr>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <kuniyu@amazon.com>, <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>, <shuah@kernel.org>
-Subject: Re: [BUG] selftests: af_unix: unix:diag.c does not compile on AlmaLinux 8.7
-Date:   Mon, 22 May 2023 09:28:43 -0700
-Message-ID: <20230522162843.49731-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <edac34c9-190c-0d80-8d95-2f42971cc870@alu.unizg.hr>
-References: <edac34c9-190c-0d80-8d95-2f42971cc870@alu.unizg.hr>
+        Mon, 22 May 2023 12:29:45 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D97C5FE;
+        Mon, 22 May 2023 09:29:42 -0700 (PDT)
+Received: from jupiter.universe (dyndsl-091-248-208-162.ewe-ip-backbone.de [91.248.208.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2CD696606E6E;
+        Mon, 22 May 2023 17:29:41 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684772981;
+        bh=9ASGeUvinStCu5UjjzSmu8IdJUtabf2Tqkwqbkp/olU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=T95+iqMZb+YVI9iy2kUF2ABA1Ri/qRxWV7y5RFtj2o8KB2GbD/iDeO2mpT+lVQzUa
+         P28hxF11xl65H6SWwC1o/vLx7cjP2s1Ij7eY2wkqNjwPMGtqIH9alC8bXmQD5cXJEv
+         UfcVIDYQAdc+J4JPEqRVw/iKf7GVrEhSW83pdUbmHUOzt/dc8lSFmWazttu9V5ruC4
+         8Py9WE7+toaoE6ZfJugIHjRwoXZ7IORPoQjNNbl0czNIXW/DOIXpWjKKIdOpqhIi6r
+         pIrAllEtgGQlvPXI2Bf3AvrjRa6wEejhyW4RzU13oVNxaFfkEGRP3+3Cs+xj0l57No
+         S6NIXsGj62QLQ==
+Received: by jupiter.universe (Postfix, from userid 1000)
+        id EFC574805CC; Mon, 22 May 2023 18:29:37 +0200 (CEST)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Alan Stern <stern@rowland.harvard.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        kernel@collabora.com
+Subject: [PATCH v5 0/3] generic-ohci/ehci: add RK3588 support
+Date:   Mon, 22 May 2023 18:29:34 +0200
+Message-Id: <20230522162937.53190-1-sebastian.reichel@collabora.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.119.123.82]
-X-ClientProxiedBy: EX19D041UWA002.ant.amazon.com (10.13.139.121) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Date: Mon, 22 May 2023 17:32:11 +0200
-> Hi,
-> 
-> On vanilla AlmaLinux 8.7 (CentOS fork) selftests/net/af_unix/diag_uid.c doesn't
-> compile out of the box, giving the errors:
-> 
-> make[2]: Entering directory '/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix'
-> gcc     diag_uid.c  -o /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix/diag_uid
-> diag_uid.c:36:16: error: ‘UDIAG_SHOW_UID’ undeclared here (not in a function); did you mean ‘UDIAG_SHOW_VFS’?
->    .udiag_show = UDIAG_SHOW_UID
->                  ^~~~~~~~~~~~~~
->                  UDIAG_SHOW_VFS
-> In file included from diag_uid.c:17:
-> diag_uid.c: In function ‘render_response’:
-> diag_uid.c:128:28: error: ‘UNIX_DIAG_UID’ undeclared (first use in this function); did you mean ‘UNIX_DIAG_VFS’?
->    ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
->                              ^~~~~~~~~~~~~
-> ../../kselftest_harness.h:707:13: note: in definition of macro ‘__EXPECT’
->    __typeof__(_seen) __seen = (_seen); \
->               ^~~~~
-> diag_uid.c:128:2: note: in expansion of macro ‘ASSERT_EQ’
->    ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
->    ^~~~~~~~~
-> diag_uid.c:128:28: note: each undeclared identifier is reported only once for each function it appears in
->    ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
->                              ^~~~~~~~~~~~~
-> ../../kselftest_harness.h:707:13: note: in definition of macro ‘__EXPECT’
->    __typeof__(_seen) __seen = (_seen); \
->               ^~~~~
-> diag_uid.c:128:2: note: in expansion of macro ‘ASSERT_EQ’
->    ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
->    ^~~~~~~~~
-> make[2]: *** [../../lib.mk:147: /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix/diag_uid] Error 1
-> 
-> The correct value is in <uapi/linux/unix_diag.h>:
-> 
-> include/uapi/linux/unix_diag.h:23:#define UDIAG_SHOW_UID		0x00000040	/* show socket's UID */
-> 
-> The fix is as follows:
-> 
-> ---
->   tools/testing/selftests/net/af_unix/diag_uid.c | 4 ++++
->   1 file changed, 4 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/net/af_unix/diag_uid.c b/tools/testing/selftests/net/af_unix/diag_uid.c
-> index 5b88f7129fea..66d75b646d35 100644
-> --- a/tools/testing/selftests/net/af_unix/diag_uid.c
-> +++ b/tools/testing/selftests/net/af_unix/diag_uid.c
-> @@ -16,6 +16,10 @@
-> 
->   #include "../../kselftest_harness.h"
-> 
-> +#ifndef UDIAG_SHOW_UID
-> +#define UDIAG_SHOW_UID         0x00000040      /* show socket's UID */
-> +#endif
-> +
->   FIXTURE(diag_uid)
->   {
->          int netlink_fd;
-> 
-> --
-> 
-> However, this patch reveals another undefined value:
-> 
-> make[2]: Entering directory '/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix'
-> gcc     diag_uid.c  -o /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix/diag_uid
-> In file included from diag_uid.c:17:
-> diag_uid.c: In function ‘render_response’:
-> diag_uid.c:132:28: error: ‘UNIX_DIAG_UID’ undeclared (first use in this function); did you mean ‘UNIX_DIAG_VFS’?
->    ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
->                              ^~~~~~~~~~~~~
-> ../../kselftest_harness.h:707:13: note: in definition of macro ‘__EXPECT’
->    __typeof__(_seen) __seen = (_seen); \
->               ^~~~~
-> diag_uid.c:132:2: note: in expansion of macro ‘ASSERT_EQ’
->    ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
->    ^~~~~~~~~
-> diag_uid.c:132:28: note: each undeclared identifier is reported only once for each function it appears in
->    ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
->                              ^~~~~~~~~~~~~
-> ../../kselftest_harness.h:707:13: note: in definition of macro ‘__EXPECT’
->    __typeof__(_seen) __seen = (_seen); \
->               ^~~~~
-> diag_uid.c:132:2: note: in expansion of macro ‘ASSERT_EQ’
->    ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
->    ^~~~~~~~~
-> make[2]: *** [../../lib.mk:147: /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix/diag_uid] Error 1
-> 
-> Apparently, AlmaLinux 8.7 lacks this enum UNIX_DIAG_UID:
-> 
-> diff -u /usr/include/linux/unix_diag.h include/uapi/linux/unix_diag.h
-> --- /usr/include/linux/unix_diag.h	2023-05-16 13:47:51.000000000 +0200
-> +++ include/uapi/linux/unix_diag.h	2022-10-12 07:35:58.253481367 +0200
-> @@ -20,6 +20,7 @@
->   #define UDIAG_SHOW_ICONS	0x00000008	/* show pending connections */
->   #define UDIAG_SHOW_RQLEN	0x00000010	/* show skb receive queue len */
->   #define UDIAG_SHOW_MEMINFO	0x00000020	/* show memory info of a socket */
-> +#define UDIAG_SHOW_UID		0x00000040	/* show socket's UID */
-> 
->   struct unix_diag_msg {
->   	__u8	udiag_family;
-> @@ -40,6 +41,7 @@
->   	UNIX_DIAG_RQLEN,
->   	UNIX_DIAG_MEMINFO,
->   	UNIX_DIAG_SHUTDOWN,
-> +	UNIX_DIAG_UID,
-> 
->   	__UNIX_DIAG_MAX,
->   };
-> 
-> Now, this is a change in enums and there doesn't seem to an easy way out
-> here. (I think I saw an example, but I cannot recall which thread. I will do
-> more research.)
-> 
-> When I included
-> 
-> # gcc -I ../../../../include diag_uid.c
-> 
-> I've got the following error:
-> 
-> [marvin@pc-mtodorov linux_torvalds]$ cd tools/testing/selftests/net/af_unix/
-> [marvin@pc-mtodorov af_unix]$ gcc  -I ../../../../../include   diag_uid.c  -o 
-> /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix/diag_uid
-> In file included from ../../../../../include/linux/build_bug.h:5,
->                   from ../../../../../include/linux/bits.h:21,
->                   from ../../../../../include/linux/capability.h:18,
->                   from ../../../../../include/linux/netlink.h:6,
->                   from diag_uid.c:8:
-> ../../../../../include/linux/compiler.h:246:10: fatal error: asm/rwonce.h: No such file or directory
->   #include <asm/rwonce.h>
->            ^~~~~~~~~~~~~~
-> compilation terminated.
-> [marvin@pc-mtodorov af_unix]$
-> 
-> At this point I gave up, as it would be an overkill to change kernel system
-> header to make a test pass, and this probably wouldn't be accepted upsteam?
-> 
-> Hope this helps. (If we still want to build on CentOS/AlmaLinux/Rocky 8?)
+Hi,
 
-I launched AlmaLinux/RockyLinux 8.7 and 9.2 with images listed in the pages
-below.
+This increases the max. allowed clocks for generic-ohci from 3 to 4.
+On RK3588 a total of 4 clocks is required to access the OHCI registers.
+EHCI already supports 4 clocks.
 
-  https://wiki.almalinux.org/cloud/AWS.html#community-amis
-  https://rockylinux.org/cloud-images/
+Changes since PATCHv4:
+ * https://lore.kernel.org/linux-usb/20230413173150.71387-1-sebastian.reichel@collabora.com/
+ * Rebase to v6.4-rc1
+ * Re-add minItems for rockchip,rk3588-ohci = false
 
-The kernel versions in each image were :
+Changes since PATCHv3:
+ * https://lore.kernel.org/all/20230406135552.23980-1-sebastian.reichel@collabora.com/
+ * Fix the PATCH version in the patchset subjects :)
+ * Collect Rob Herrings's Reviewed-by
+ * Drop maxItems = 4 from rockchip,rk3588-ohci = true branch (4 is the default value)
+ * Drop minItems = 1 from rockchip,rk3588-ohci = false branch (1 is the default value)
 
-  8.7:
-  Alma  : 4.18.0-425.3.1.el8.x86_64
-  Rocky : 4.18.0-425.10.1.el8_7.x86_64
+Changes since PATCHv2:
+ * https://lore.kernel.org/all/20230404145350.45388-1-sebastian.reichel@collabora.com/
+ * Added Krzysztof's Ack to the EHCI binding update
+ * Changed OHCI binding update according to Krzysztof's feedback
 
-  9.2:
-  Alma  : 5.14.0-284.11.1.el9_2.x86_64
-  Rocky : 5.14.0-284.11.1.el9_2.x86_64
+Changes since PATCHv1:
+ * https://lore.kernel.org/all/20230331163148.5863-1-sebastian.reichel@collabora.com/
+ * changed cover-letter subject
+ * Add Alan's Acked-by to the driver patch increasing the clock count
+ * Update bindings, adding rockchip,rk3588-ohci and rockchip,rk3588-ehci compatibles
 
-So, this is not a bug.  It's just because v4.18 does not support
-UNIX_DIAG_UID, which was introduced in v5.3.
+-- Sebastian
 
-You should install 5.3+ kernel if you want to build the test.
+Sebastian Reichel (3):
+  dt-bindings: usb: Add RK3588 OHCI
+  dt-bindings: usb: Add RK3588 EHCI
+  usb: host: ohci-platform: increase max clock number to 4
 
-Thanks,
-Kuniyuki
+ .../devicetree/bindings/usb/generic-ehci.yaml   |  1 +
+ .../devicetree/bindings/usb/generic-ohci.yaml   | 17 ++++++++++++++++-
+ drivers/usb/host/ohci-platform.c                |  2 +-
+ 3 files changed, 18 insertions(+), 2 deletions(-)
 
+-- 
+2.39.2
 
-> 
-> Best regards,
-> Mirsad
-> 
-> -- 
-> Mirsad Goran Todorovac
-> Sistem inženjer
-> Grafički fakultet | Akademija likovnih umjetnosti
-> Sveučilište u Zagrebu
-> 
-> System engineer
-> Faculty of Graphic Arts | Academy of Fine Arts
-> University of Zagreb, Republic of Croatia
