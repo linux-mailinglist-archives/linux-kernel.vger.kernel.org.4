@@ -2,133 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C909170C19A
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 16:57:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF0C170C0B3
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 16:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234112AbjEVO5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 10:57:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38222 "EHLO
+        id S231725AbjEVOJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 10:09:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234044AbjEVO5Z (ORCPT
+        with ESMTP id S230047AbjEVOJT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 10:57:25 -0400
-X-Greylist: delayed 2984 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 22 May 2023 07:57:19 PDT
-Received: from mail.cybernetics.com (mail.cybernetics.com [72.215.153.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1694A133
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 07:57:18 -0700 (PDT)
-X-ASG-Debug-ID: 1684764420-1cf43912154487a0001-xx1T2L
-Received: from cybernetics.com ([10.10.4.126]) by mail.cybernetics.com with ESMTP id sFbFNjxpWl4KZr3q; Mon, 22 May 2023 10:07:00 -0400 (EDT)
-X-Barracuda-Envelope-From: tonyb@cybernetics.com
-X-ASG-Whitelist: Client
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=cybernetics.com; s=mail;
-        bh=4E6O0lAp7AWjLeYBN4LPsbrcKqkqgWhw9cCQDP1+2Jg=;
-        h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:Cc:To:From:
-        Content-Language:Subject:MIME-Version:Date:Message-ID; b=Cf8Js0wNTqS4JiDyRot5
-        UWCtaPLqG3Obt4CZ6gaKHSYqSKk0gjnX11/A+IyaYsnIc8EohHBizyr9XWGvfKwEBF2pAY7iD/ELj
-        X9ZKhV3N7nSfIlDA/zGDu/elSNnWwRJPILVQ+3Vzs+kPtyzKG4KfuqyO75/whyOYq5q1uKQUw0=
-Received: from [10.157.2.224] (HELO [192.168.200.1])
-  by cybernetics.com (CommuniGate Pro SMTP 7.1.1)
-  with ESMTPS id 12632356; Mon, 22 May 2023 10:07:00 -0400
-Message-ID: <3a2c6e29-15bc-c519-573c-c08e5c042868@cybernetics.com>
-Date:   Mon, 22 May 2023 10:07:00 -0400
+        Mon, 22 May 2023 10:09:19 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C1D28E;
+        Mon, 22 May 2023 07:09:18 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f6077660c6so5274645e9.0;
+        Mon, 22 May 2023 07:09:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684764557; x=1687356557;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WexhjTh9EgipPESTAcIjs8YMKr9plgty6KmA22728Fs=;
+        b=VDb8SOZPw6Zet5F7yalYSYV9wdMDyhck+Db1K6DyCn8tQuiYEH+dC4Kdp5H8wLCI3c
+         8X+b/oZTRESTmVQTUnzCNP6U4m7j0cPoPKS3RU/r/v6i093TPa5a9N74fUVR/GxkpxDf
+         1R/FE3giFkmmxiaIPYoVg17UtL2sCbFjeiaGoMfOPoIFbEF0AhGvhtkyl34bq6TPX5Rk
+         H7jrKxUtYm7NDE+dPNw9OvckuKBNEeVCl+ZYev1n2S4MH8BeCpEiopDy/UkG31idWrqm
+         6dzH+c3NNcGB5cpJuXN1/BnJJYPaMYd5ocRBBm5HKnZI+QTw1X2jbY/zrOthHLWtCPJr
+         iFmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684764557; x=1687356557;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WexhjTh9EgipPESTAcIjs8YMKr9plgty6KmA22728Fs=;
+        b=CkUm0pL/+Gj7dmLAT8tTsv5VerAZqA5zXlKCifC+6FEDQq71mkTmtSIzWJ4oYTx4jC
+         WyYqcFDHRHgzzoSbR3IJNVnlNlqsy2DvFtGvafY8YznKNHd+zmWl5LpL1YcldmpZ6V6Q
+         Fs5cHx/1iVvN/Z/togzRWpAgWg2SkOba9Y31zqBOdLEqrq4BqbsiAdI0Ybhc/S3R3i0z
+         uE02FgiW6jTIDC6EtjUD0XxFYoUzfnCwD4zB0dOIkCLrbbg1suGY0f6Ja7itWdGnFr0I
+         8veAoN3ccie6njSYCZkKTZd4xvb6Sew1nc5dXrrAePfN7qLSmGcbNmlXxRaRMFHLxA1C
+         HVYQ==
+X-Gm-Message-State: AC+VfDwObq5W4ZVWBZXwNbQsGut/h0xxRA3WjHRkcF9E0Q6fPk1XdHr5
+        R+zArHr6q1rxMpBYOOChf98=
+X-Google-Smtp-Source: ACHHUZ73Fy76JqxgxOq6PygIGGHMHrrwk/atOHcAPHzEai7lV3H36Khz2+J59mn/1eAm5zPigReK7w==
+X-Received: by 2002:a1c:c903:0:b0:3eb:42fc:fb30 with SMTP id f3-20020a1cc903000000b003eb42fcfb30mr7876135wmb.32.1684764556512;
+        Mon, 22 May 2023 07:09:16 -0700 (PDT)
+Received: from [192.168.1.122] (cpc159313-cmbg20-2-0-cust161.5-4.cable.virginm.net. [82.0.78.162])
+        by smtp.gmail.com with ESMTPSA id s9-20020a1cf209000000b003f3e50eb606sm8483308wmc.13.2023.05.22.07.09.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 May 2023 07:09:16 -0700 (PDT)
+Subject: Re: [PATCH v3] net: stmmac: compare p->des0 and p->des1 with __le32
+ type values
+To:     Min-Hua Chen <minhuadotchen@gmail.com>, kuba@kernel.org
+Cc:     alexandre.torgue@foss.st.com, davem@davemloft.net,
+        edumazet@google.com, joabreu@synopsys.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        mcoquelin.stm32@gmail.com, netdev@vger.kernel.org,
+        pabeni@redhat.com, peppe.cavallaro@st.com,
+        simon.horman@corigine.com
+References: <20230519152715.7d1c3a49@kernel.org>
+ <20230520015527.215952-1-minhuadotchen@gmail.com>
+From:   Edward Cree <ecree.xilinx@gmail.com>
+Message-ID: <9e6b813a-bc1a-6a39-904d-5c45f983cd23@gmail.com>
+Date:   Mon, 22 May 2023 15:09:14 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: [PATCH v2 RESEND] x86/cpu: fix SME test in stop_this_cpu()
-Content-Language: en-US
-X-ASG-Orig-Subj: [PATCH v2 RESEND] x86/cpu: fix SME test in stop_this_cpu()
-From:   Tony Battersby <tonyb@cybernetics.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc:     "H. Peter Anvin" <hpa@zytor.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andi Kleen <ak@linux.intel.com>
-References: <3817d810-e0f1-8ef8-0bbd-663b919ca49b@cybernetics.com>
- <f5c7a104-d422-bd02-d361-e9e9f433d41d@intel.com> <87o7nbzn8w.ffs@tglx>
- <5f8a9cb8-70cf-2a17-cfc4-cb31cb658de4@cybernetics.com> <87y1mey503.ffs@tglx>
- <ccf57fd2-45b8-1f1f-f46a-55d7f4c56161@cybernetics.com>
- <90428c6d-97f6-794f-8cfd-5b30dd5ed140@cybernetics.com>
-In-Reply-To: <90428c6d-97f6-794f-8cfd-5b30dd5ed140@cybernetics.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Barracuda-Connect: UNKNOWN[10.10.4.126]
-X-Barracuda-Start-Time: 1684764420
-X-Barracuda-URL: https://10.10.4.122:443/cgi-mod/mark.cgi
-X-Barracuda-BRTS-Status: 1
-X-Virus-Scanned: by bsmtpd at cybernetics.com
-X-Barracuda-Scan-Msg-Size: 2055
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230520015527.215952-1-minhuadotchen@gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Original thread title: "x86/cpu: fix intermittent lockup on poweroff"
+On 20/05/2023 02:55, Min-Hua Chen wrote:
+>> On Fri, 19 May 2023 19:50:28 +0800 Min-Hua Chen wrote:
+>>> -		if ((p->des0 == 0xffffffff) && (p->des1 == 0xffffffff))
+>>> +		if (p->des0 == cpu_to_le32(0xffffffff) &&
+>>> +		    p->des1 == cpu_to_le32(0xffffffff))
+>>
+>> Can you try to fix the sparse tool instead? I believe it already
+>> ignores such errors for the constant of 0, maybe it can be taught 
+>> to ignore all "isomorphic" values?
+>>
+> 
+> I downloaded the source code of sparse and I'm afraid that I cannot make
+> 0xFFFFFFFF ignored easily. I've tried ~0 instead of 0xFFFFFF,
+> but it did not work with current sparse.
+> 
+> 0 is a special case mentioned in [1].
 
-I think we all agreed that my small patch below was correct.  tglx also
-had an additional patch to fix the underlying race condition, but the
-thread seems to have died out.  Can I get my patch applied at least?
-
-Thanks,
-Tony Battersby
-Cybernetics
-
----
-
-Check that the CPU supports the desired CPUID leaf before attempting to
-read it.  On Intel, querying an invalid extended CPUID leaf returns the
-values of the maximum basic CPUID leaf.  Depending on the CPU, this
-could cause the SME test to incorrectly evaluate to true, causing
-native_wbinvd() to be executed when it should have been skipped (seen on
-a Supermicro X8DTH-6F board with Intel Xeon X5650).
-
-Fixes: 08f253ec3767 ("x86/cpu: Clear SME feature flag when not in use")
-Cc: <stable@vger.kernel.org> # 5.18+
-Signed-off-by: Tony Battersby <tonyb@cybernetics.com>
----
-
-Changes since v1: updated title and description.
-
- arch/x86/kernel/process.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-index b650cde3f64d..26aa32e8f636 100644
---- a/arch/x86/kernel/process.c
-+++ b/arch/x86/kernel/process.c
-@@ -754,13 +754,15 @@ bool xen_set_default_idle(void)
- 
- void __noreturn stop_this_cpu(void *dummy)
- {
-+	struct cpuinfo_x86 *c = this_cpu_ptr(&cpu_info);
-+
- 	local_irq_disable();
- 	/*
- 	 * Remove this CPU:
- 	 */
- 	set_cpu_online(smp_processor_id(), false);
- 	disable_local_APIC();
--	mcheck_cpu_clear(this_cpu_ptr(&cpu_info));
-+	mcheck_cpu_clear(c);
- 
- 	/*
- 	 * Use wbinvd on processors that support SME. This provides support
-@@ -774,7 +776,8 @@ void __noreturn stop_this_cpu(void *dummy)
- 	 * Test the CPUID bit directly because the machine might've cleared
- 	 * X86_FEATURE_SME due to cmdline options.
- 	 */
--	if (cpuid_eax(0x8000001f) & BIT(0))
-+	if (c->extended_cpuid_level >= 0x8000001f &&
-+	    (cpuid_eax(0x8000001f) & BIT(0)))
- 		native_wbinvd();
- 	for (;;) {
- 		/*
--- 2.25.1
-
+I believe you can do something like
+    if ((p->des0 == ~(__le32)0) && (p->des1 == ~(__le32)0))
+ and sparse will accept that, because the cast is allowed under the
+ special case.
+HTH,
+-ed
