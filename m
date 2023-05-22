@@ -2,120 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 481CD70B73E
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:02:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5701770B741
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:03:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231135AbjEVICt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 04:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45456 "EHLO
+        id S231320AbjEVIDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 04:03:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjEVICj (ORCPT
+        with ESMTP id S230363AbjEVIDb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 04:02:39 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D4161AB;
-        Mon, 22 May 2023 01:02:37 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.43:58120.1490266714
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id 00AEA1002C4;
-        Mon, 22 May 2023 16:02:34 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-75648544bd-7vx9t with ESMTP id 1a4434578fbd45abb00625fc7c141694 for kernel@xen0n.name;
-        Mon, 22 May 2023 16:02:36 CST
-X-Transaction-ID: 1a4434578fbd45abb00625fc7c141694
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <73447e35-f4df-9871-6210-b7bf1a3f04fc@189.cn>
-Date:   Mon, 22 May 2023 16:02:34 +0800
+        Mon, 22 May 2023 04:03:31 -0400
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDE69B;
+        Mon, 22 May 2023 01:03:30 -0700 (PDT)
+Received: by mail-ua1-x936.google.com with SMTP id a1e0cc1a2514c-783eef15004so1831098241.3;
+        Mon, 22 May 2023 01:03:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684742610; x=1687334610;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5/deT6NIs/fCmfBK6TadeTF6djYRsWDmBLQzhkm7Whg=;
+        b=QK9rPLNa5YQIm4BrTN9G+Gp8sOyYcF3EKdXnKr8/9/PSYQ1vi0/0Uj4L/BmJbTc2we
+         qJs3SIOqu758OmnrJ2FEhJ4p1EVRlm2S9uxj/13VWFOw7RzBrlGoMWDWap2oBM20esBP
+         hZZywbt/uGTOo36/73mWU5yQCHlThzL7ebf0DmvA3dlBHdoqp9q1tO0k5T9U4/GH14R1
+         i5xQkpFtI0s54mLkHCRIpQnKsT8DxWJyP2Krgo6lhJtdRNcxYH1LgFDgr79CVKxVx1eH
+         jGYeIUAxIqXGi33JfzyBKulQ3Neom1TyrxEnKs0zyUdhp/vLUDXpNIrRPmBEicdh2VP7
+         syrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684742610; x=1687334610;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5/deT6NIs/fCmfBK6TadeTF6djYRsWDmBLQzhkm7Whg=;
+        b=Dxewe7N0mGTlE7SKzJBkHZBTgZ/sNcrWI75hZ8OYqWcA0b6ExxA28B96UrMF5qFmNa
+         mFOcr9UMYxBiZpCVsvWUAGr0EqERCM2z9WULHkyg5NRctRZrwGGYCNTD8GLTKM1Q6M/l
+         ZVG1c6qx3cMhFidcHlLmVVcu6VHNBAzVkRcHz43LJeHOBjR0Z+VCqb0IRdAjcPXS2vjD
+         ccKM2qYWBtY4+Nk3S7Kpkeq8deOSWc4skuewqF/QuAcs07YJPAmvJ66BLzKtbAGjx4ky
+         042tmJPkhL/cJ8SezCfUVWunl4EDmm1SwDTYszIprI/Y690mKZNkKI46jbay0LgWSgRk
+         t4pA==
+X-Gm-Message-State: AC+VfDygLlUa5PQ6zmNvmQq/v1SUx7WhKDz/7eOrphLCkm7cpOiPPwW2
+        Ryb7xyKXl5nt1RfhDn1vI1UyNhSJOIXSJ9S6jJg=
+X-Google-Smtp-Source: ACHHUZ5RIyVZS4Zu5Pamc3MV66jkvYcnWuWIb5VA1JscKU7+8/Afy7hzNiltpdL4e7QJgffQP8PpI2kr86z8ouEF1ps=
+X-Received: by 2002:a67:fe17:0:b0:439:e3f:9d6 with SMTP id l23-20020a67fe17000000b004390e3f09d6mr2336475vsr.17.1684742609589;
+ Mon, 22 May 2023 01:03:29 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v14 1/2] drm: add kms driver for loongson display
- controller
-Content-Language: en-US
-To:     WANG Xuerui <kernel@xen0n.name>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sui Jingfeng <suijingfeng@loongson.cn>,
-        Li Yi <liyi@loongson.cn>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>
-Cc:     linaro-mm-sig@lists.linaro.org, loongson-kernel@lists.loongnix.cn,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Liu Peibao <liupeibao@loongson.cn>, linux-media@vger.kernel.org
-References: <20230520105718.325819-1-15330273260@189.cn>
- <20230520105718.325819-2-15330273260@189.cn>
- <26fd78b9-c074-8341-c99c-4e3b38cd861a@xen0n.name>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <26fd78b9-c074-8341-c99c-4e3b38cd861a@xen0n.name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20230508075507.1720950-1-gongruiqi1@huawei.com>
+ <CAB=+i9QxWL6ENDz_r1jPbiZsTUj1EE3u-j0uP6y_MxFSM9RerQ@mail.gmail.com>
+ <5f5a858a-7017-5424-0fa0-db3b79e5d95e@huawei.com> <CAB=+i9R0GZiau7PKDSGdCOijPH1TVqA3rJ5tQLejJpoR55h6dg@mail.gmail.com>
+ <19707cc6-fa5e-9835-f709-bc8568e4c9cd@huawei.com>
+In-Reply-To: <19707cc6-fa5e-9835-f709-bc8568e4c9cd@huawei.com>
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Date:   Mon, 22 May 2023 17:03:37 +0900
+Message-ID: <CAB=+i9T-iqtMZw8y7SxkaFBtiXA93YwFFEtQyGynBsorud1+_Q@mail.gmail.com>
+Subject: Re: [PATCH RFC v2] Randomized slab caches for kmalloc()
+To:     Gong Ruiqi <gongruiqi1@huawei.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        Alexander Lobakin <aleksander.lobakin@intel.com>,
+        kasan-dev@googlegroups.com, Wang Weiyang <wangweiyang2@huawei.com>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Pekka Enberg <penberg@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        "GONG, Ruiqi" <gongruiqi@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 2023/5/21 20:21, WANG Xuerui wrote:
->> --- /dev/null
->> +++ b/drivers/gpu/drm/loongson/Kconfig
->> @@ -0,0 +1,17 @@
->> +# SPDX-License-Identifier: GPL-2.0
->> +
->> +config DRM_LOONGSON
->> +    tristate "DRM support for Loongson Graphics"
->> +    depends on DRM && PCI && MMU
->> +    select DRM_KMS_HELPER
->> +    select DRM_TTM
->> +    select I2C
->> +    select I2C_ALGOBIT
->> +    help
->> +      This is a DRM driver for Loongson Graphics, it may including
+On Mon, May 22, 2023 at 4:35=E2=80=AFPM Gong Ruiqi <gongruiqi1@huawei.com> =
+wrote:
+> On 2023/05/17 6:35, Hyeonggon Yoo wrote:
+[...]
+> >>>> +#ifdef CONFIG_RANDOM_KMALLOC_CACHES
+> >>>> +# define SLAB_RANDOMSLAB       ((slab_flags_t __force)0x01000000U)
+> >>>> +#else
+> >>>> +# define SLAB_RANDOMSLAB       0
+> >>>> +#endif
+> >
+> > There is already the SLAB_KMALLOC flag that indicates if a cache is a
+> > kmalloc cache. I think that would be enough for preventing merging
+> > kmalloc caches?
 >
-> Drop "it may"; "including" should be enough.
+> After digging into the code of slab merging (e.g. slab_unmergeable(),
+> find_mergeable(), SLAB_NEVER_MERGE, SLAB_MERGE_SAME etc), I haven't
+> found an existing mechanism that prevents normal kmalloc caches with
+> SLAB_KMALLOC from being merged with other slab caches. Maybe I missed
+> something?
 >
-'it may' is more *precise* here, because currently we don't ship with 
-the support for loongson 2K series SoC.
+> While SLAB_RANDOMSLAB, unlike SLAB_KMALLOC, is added into
+> SLAB_NEVER_MERGE, which explicitly indicates the no-merge policy.
 
-I'm try to be precise as far as I can, we avoid made this driver too 
-large by ignore loongson 2K series SoC temporary.
+I mean, why not make slab_unmergable()/find_mergeable() not to merge kmallo=
+c
+caches when CONFIG_RANDOM_KMALLOC_CACHES is enabled, instead of a new flag?
 
->> +      LS7A2000, LS7A1000, LS2K2000 and LS2K1000 etc. Loongson LS7A
->> +      series are bridge chipset, while Loongson LS2K series are SoC.
->> +
->> +      If "M" is selected, the module will be called loongson.
->
-> Just "loongson"? 
+Something like this:
 
-Yes,  when compile this driver as module,  loongson.ko will be generated.
+diff --git a/mm/slab_common.c b/mm/slab_common.c
+index 607249785c07..13ac08e3e6a0 100644
+--- a/mm/slab_common.c
++++ b/mm/slab_common.c
+@@ -140,6 +140,9 @@ int slab_unmergeable(struct kmem_cache *s)
+  if (slab_nomerge || (s->flags & SLAB_NEVER_MERGE))
+  return 1;
 
-  drm radeon is also doing so, See drm/radeon/Kconfig.
++ if (IS_ENALBED(CONFIG_RANDOM_KMALLOC_CACHES) && (flags & SLAB_KMALLOC))
++ return 1;
++
+  if (s->ctor)
+  return 1;
 
-> I know it's like this for ages (at least dating back to the MIPS days) 
-> but you really don't want to imply Loongson is mainly a GPU company. 
-> Something like "loongson_drm" or "lsdc" or "gsgpu" could be better. 
+@@ -176,6 +179,9 @@ struct kmem_cache *find_mergeable(unsigned int
+size, unsigned int align,
+  if (flags & SLAB_NEVER_MERGE)
+  return NULL;
 
-No, these name may have backward compatibility problems.
-
-Downstream driver already taken those name.
-
-userspace driver need to differentiate them who is who.
-
-
++ if (IS_ENALBED(CONFIG_RANDOM_KMALLOC_CACHES) && (flags & SLAB_KMALLOC))
++ return NULL;
++
+  list_for_each_entry_reverse(s, &slab_caches, list) {
+  if (slab_unmergeable(s))
+  continue;
