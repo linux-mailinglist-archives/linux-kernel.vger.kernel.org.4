@@ -2,157 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DC9170C28C
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4847970C28D
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:36:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234095AbjEVPgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 11:36:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36700 "EHLO
+        id S234281AbjEVPg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 11:36:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233727AbjEVPgT (ORCPT
+        with ESMTP id S233492AbjEVPgV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 11:36:19 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5848E6;
-        Mon, 22 May 2023 08:36:17 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id EF42821DBE;
-        Mon, 22 May 2023 15:36:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1684769775; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iEa6ByHMD623qHdjGarG7iVgdLGI+kaMd16hqcmW7QI=;
-        b=sRqxQ2+YaLANOe2qUgIzs3LqzgEyl/OocAWmOohRcyCEWjY1yVOtkolXxoxEx1F6afx7Wu
-        v7TI1WctNtjMWYldDK8y9Yvp0n/6LyLuQeen1xLN2x1Hy84ddvbrLnynfPD+QknmO9qNH7
-        C9ljZlAZPmj+ZDcOt7GCmtbwmivjT5o=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C35A113776;
-        Mon, 22 May 2023 15:36:15 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id sT7jLu+La2RtRgAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Mon, 22 May 2023 15:36:15 +0000
-Date:   Mon, 22 May 2023 17:36:14 +0200
-From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To:     Zheng Wang <zyytlz.wz@163.com>
-Cc:     deller@gmx.de, alex000young@gmail.com, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        dri-devel@lists.freedesktop.org, javierm@redhat.com,
-        1395428693sheep@gmail.com, tzimmermann@suse.de
-Subject: Re: [PATCH v2] video: imsttfb: Fix use after free bug in
- imsttfb_probe due to lack of error-handling of init_imstt
-Message-ID: <34gbv2k3lc5dl4nbivslizfuor6qc34j63idiiuc35qkk3iohs@7bshmqu2ue7a>
-References: <20230427030841.2384157-1-zyytlz.wz@163.com>
+        Mon, 22 May 2023 11:36:21 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0770ABB;
+        Mon, 22 May 2023 08:36:21 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-64d604cc0aaso1223482b3a.2;
+        Mon, 22 May 2023 08:36:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684769780; x=1687361780;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DenES0KQSjrCWYfYQgXjcF0k/ImoCZJgCineCmXx+NE=;
+        b=jASfy9rNHOxQwklay2dl4HeJfqhrXM71IqRNK25gCbRc8zhxHX1xrhfX0geOpAgTJq
+         XyeDtcJk8UZYGfNrZqN3ijB11s5Bs3QsX5Cv7MfFgQfd+ZVuVwIaAgVpxGwwMRyxMW8F
+         oADHQ2s5A/1zr8r6IibKMoSQcwpoNg269LCdwzHdvFaG5qGo2tlwycSFg5f5ru/NQpOb
+         /XYub7ZNNyeD3mRl9rob1nesDHRLBnbOA3qJ9aid+EX9zCmLJCpjYAyGpI2FquCdRra0
+         24IZnWPrM6RzIpBfsgga0JOYD7LoBkVv2dTgyP9TUXgKVpbUTYOpnXmhYjI8NIO1Gsv3
+         Gjpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684769780; x=1687361780;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DenES0KQSjrCWYfYQgXjcF0k/ImoCZJgCineCmXx+NE=;
+        b=Ur2Ft1EZHT8KN14d9iGOo7XlLchzMuD1i9RKkDK2ZLbGQcIqyr/yssSslLqERQ53hX
+         WBd6JHixU4YNSA+Of2V2dQ/pvNNi7nyX/uGqkoaBjzAKZ28vkAXq84ouwhj6J6fjmZiR
+         7C0A08lAgzEkNrkNZjU0GoHog0RZ2yS1U2btn/N/6aoMJFAnpxsVVv+7T0UOiEtW5hTi
+         nF30WjIr9L2bx325C0uDo8y3IgbJzfLCLNnSecuMob6tkWZ4vZf64tfKa4JrUYmKpl1u
+         eRK9pU91XOWW6vhGzuixTbTIj8vmicnJHU+RJjf7q36da0fKRju+5nghnsJvtLh/Jtg6
+         tPuw==
+X-Gm-Message-State: AC+VfDy+S9EgwBR5JjovDIW6DCHkGsVTANmUes2ZbcDs07UB9hLQjnXv
+        wriJJmRW/l6D7kEXoVL3eX4=
+X-Google-Smtp-Source: ACHHUZ5kMw3+1b6tLTszJJvFqHHI3vChTGvGuyKIosGush/AiROF93kKWL+uNb5ZHIVOgEby3Ng5/A==
+X-Received: by 2002:a05:6a00:248a:b0:64d:5b4b:8429 with SMTP id c10-20020a056a00248a00b0064d5b4b8429mr8042391pfv.18.1684769780446;
+        Mon, 22 May 2023 08:36:20 -0700 (PDT)
+Received: from ubuntu777.domain.name (36-228-81-153.dynamic-ip.hinet.net. [36.228.81.153])
+        by smtp.gmail.com with ESMTPSA id w17-20020aa78591000000b006414c3ba8a3sm4447849pfn.177.2023.05.22.08.36.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 08:36:19 -0700 (PDT)
+From:   Min-Hua Chen <minhuadotchen@gmail.com>
+To:     ecree.xilinx@gmail.com
+Cc:     alexandre.torgue@foss.st.com, davem@davemloft.net,
+        edumazet@google.com, joabreu@synopsys.com, kuba@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        mcoquelin.stm32@gmail.com, minhuadotchen@gmail.com,
+        netdev@vger.kernel.org, pabeni@redhat.com, peppe.cavallaro@st.com,
+        simon.horman@corigine.com
+Subject: Re: [PATCH v3] net: stmmac: compare p->des0 and p->des1 with __le32 type values
+Date:   Mon, 22 May 2023 23:36:15 +0800
+Message-Id: <20230522153615.247577-1-minhuadotchen@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <9e6b813a-bc1a-6a39-904d-5c45f983cd23@gmail.com>
+References: <9e6b813a-bc1a-6a39-904d-5c45f983cd23@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rze7mjqamibzdgst"
-Content-Disposition: inline
-In-Reply-To: <20230427030841.2384157-1-zyytlz.wz@163.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+hi Edward,
 
---rze7mjqamibzdgst
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+>>> On Fri, 19 May 2023 19:50:28 +0800 Min-Hua Chen wrote:
+>>>> -		if ((p->des0 == 0xffffffff) && (p->des1 == 0xffffffff))
+>>>> +		if (p->des0 == cpu_to_le32(0xffffffff) &&
+>>>> +		    p->des1 == cpu_to_le32(0xffffffff))
+>>>
+>>> Can you try to fix the sparse tool instead? I believe it already
+>>> ignores such errors for the constant of 0, maybe it can be taught 
+>>> to ignore all "isomorphic" values?
+>>>
+>> 
+>> I downloaded the source code of sparse and I'm afraid that I cannot make
+>> 0xFFFFFFFF ignored easily. I've tried ~0 instead of 0xFFFFFF,
+>> but it did not work with current sparse.
+>> 
+>> 0 is a special case mentioned in [1].
+>
+>I believe you can do something like
+>    if ((p->des0 == ~(__le32)0) && (p->des1 == ~(__le32)0))
+> and sparse will accept that, because the cast is allowed under the
+> special case.
+>HTH,
+>-ed
 
-Hello.
+I tested ~(__le32)0 and it worked: sparse accpets this.
+Thanks for sharing this.
 
-On Thu, Apr 27, 2023 at 11:08:41AM +0800, Zheng Wang <zyytlz.wz@163.com> wr=
-ote:
->  static int imsttfb_probe(struct pci_dev *pdev, const struct pci_device_i=
-d *ent)
-> @@ -1529,10 +1530,10 @@ static int imsttfb_probe(struct pci_dev *pdev, co=
-nst struct pci_device_id *ent)
->  	if (!par->cmap_regs)
->  		goto error;
->  	info->pseudo_palette =3D par->palette;
-> -	init_imstt(info);
-> -
-> -	pci_set_drvdata(pdev, info);
-> -	return 0;
-> +	ret =3D init_imstt(info);
-> +	if (!ret)
-> +		pci_set_drvdata(pdev, info);
-> +	return ret;
-> =20
->  error:
->  	if (par->dc_regs)
-
-This part caught my eye -- shouldn't the -ENODEV from init_imstt go
-through the standard error with proper cleanup? (It seems like a leak
-=66rom my 30000 ft view, i.e. not sure about imsttfb_{probe,remove}
-pairing.)
-
-Shouldn't there be something like the diff below on top of the existing cod=
-e?
-
-Regards,
-Michal
-
-diff --git a/drivers/video/fbdev/imsttfb.c b/drivers/video/fbdev/imsttfb.c
-index 975dd682fae4..a116ac8ca020 100644
---- a/drivers/video/fbdev/imsttfb.c
-+++ b/drivers/video/fbdev/imsttfb.c
-@@ -1419,7 +1419,6 @@ static int init_imstt(struct fb_info *info)
- 	if ((info->var.xres * info->var.yres) * (info->var.bits_per_pixel >> 3) >=
- info->fix.smem_len
- 	    || !(compute_imstt_regvals(par, info->var.xres, info->var.yres))) {
- 		printk("imsttfb: %ux%ux%u not supported\n", info->var.xres, info->var.yr=
-es, info->var.bits_per_pixel);
--		framebuffer_release(info);
- 		return -ENODEV;
- 	}
-=20
-@@ -1455,7 +1454,6 @@ static int init_imstt(struct fb_info *info)
- 	fb_alloc_cmap(&info->cmap, 0, 0);
-=20
- 	if (register_framebuffer(info) < 0) {
--		framebuffer_release(info);
- 		return -ENODEV;
- 	}
-=20
-@@ -1531,8 +1529,10 @@ static int imsttfb_probe(struct pci_dev *pdev, const=
- struct pci_device_id *ent)
- 		goto error;
- 	info->pseudo_palette =3D par->palette;
- 	ret =3D init_imstt(info);
--	if (!ret)
--		pci_set_drvdata(pdev, info);
-+	if (ret)
-+		goto error;
-+
-+	pci_set_drvdata(pdev, info);
- 	return ret;
-=20
- error:
-
-
-
---rze7mjqamibzdgst
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCZGuL6wAKCRAkDQmsBEOq
-ucOZAP9eACOa+x8XFhfGm7icBBpVmtJLnxaAuj4pG874Tqf53wEAwyYW+IG7SR3D
-bfpnLJNb4kEm101zRkgWoaGv6mH4iw0=
-=Tk4a
------END PGP SIGNATURE-----
-
---rze7mjqamibzdgst--
+cheers,
+Min-Hua
