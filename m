@@ -2,61 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6CA170CD94
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 00:13:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4FE570CD99
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 00:14:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234564AbjEVWNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 18:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33276 "EHLO
+        id S234593AbjEVWOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 18:14:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232404AbjEVWM5 (ORCPT
+        with ESMTP id S232120AbjEVWOx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 18:12:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4A119E;
-        Mon, 22 May 2023 15:12:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3A3CA62C2E;
-        Mon, 22 May 2023 22:12:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C6D6C433EF;
-        Mon, 22 May 2023 22:12:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684793574;
-        bh=YGJwc6bWE3d3AqOr6NZmZMERlp0hgMqroZJvgRuW1IE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Q4JBT9vCZaRWHOzdZrl4zHCehpYtYUfitwXHG3v3lC4cxqnHjI1bq3vTO6bsItMvv
-         CQEv7BI6g4CnL9x3XRcywxfRbBtBt5ajPspF1WJY+WoI3+2taOlSMp5A1w4GUNMFdP
-         tQDPEUII0UENTqyvx4LyicBINPj8OqGNdJ1qPrnVXwvayyoXzho7AKuvlmEdhWDaYr
-         AK0Lo/hXsIU3F5OcpEcl0MCWcsuv1cAVdhCQtcNrssuTYojd0ocdZvYrMMISjpZ3H1
-         2vdkXTLWbgYRGSsyT3xpKo6djU4ddxnpAYI/c7vSlCcMvBzqVtoP9l3+iFwLYnYBxW
-         UHbx20GTQQiTA==
-Date:   Mon, 22 May 2023 23:12:48 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-stable <stable@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: arm64: fp-stress: BUG: KFENCE: memory corruption in
- fpsimd_release_task
-Message-ID: <b4bfd69f-2092-4d15-b7ce-b814f5f10ff2@sirena.org.uk>
-References: <CA+G9fYtU7HsV0R0dp4XEH5xXHSJFw8KyDf5VQrLLfMxWfxQkag@mail.gmail.com>
+        Mon, 22 May 2023 18:14:53 -0400
+Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6264CAF
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 15:14:52 -0700 (PDT)
+Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-561bb2be5f8so82503647b3.0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 15:14:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684793691; x=1687385691;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=wFwh5fQ3Hl7G9LU6n8ZD679YMX6rzEdWyx9gkPo21A8=;
+        b=kl/vKyWgbKzWXW35R+A7TwDhC7FxqQmQUnagTxRogEQtmt8gu6Bz2jT4GRseatEI1I
+         lWlztU+hiV78Hw379H2RHrJiuiexzvH+WJMfvNBUXDXrSOpmTuHW5mplvPySdQPt/NlK
+         d64dEmbdBMYQtrfDhNu3yeK+zWHQ12lFFhNoVY/HxBA03vkhawl5nWV7HdzHcX99T9Fn
+         d1Yh80ody3nbdbCf/DuZpSPDJWUdjGvQt/Gp6xiiei7OdluKyygKwzooDJZR5z8b5nm2
+         WMYet4Mtmio7qFAHRlnMgCAhFL7wkDG5mrEoNWcInZhiK6d0ESBRWdKW4TQAdLsROlxa
+         T4JA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684793691; x=1687385691;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wFwh5fQ3Hl7G9LU6n8ZD679YMX6rzEdWyx9gkPo21A8=;
+        b=aBuM7S2WhtpZ/zhySBfrLLhFj65wyy3oQ1jCGONc/Ev5FBfo9agKuRY6YBUZy6a9/D
+         aD5gYfM9ZqZP/L1GNVmkYR3nS9mK4AlI4oLkiPZHaebWuHEhUBTh4Qey91/HYlWEL2UK
+         RXvA9+/BBG8KDSPe/nD8RZ56uj19LmfBCA70v8J6EkPkfZjaHWKtjhoCLRQh9sJACALc
+         kFiaRboJ9jU8vXQY3kkm590RouPTBmXvmxyUg21db2wZDpjGm2Q1VLCvpX7ukWhyDcQS
+         eBFpTn+yxOIcrFL4gf+kawU73wz/nOy5nxSSAbgVW8llm3js3A+gwJT7hqzP/cFPpqGP
+         5ggg==
+X-Gm-Message-State: AC+VfDySHK9o9PRO21BSiypircFLukRfHkfFLdDOH2nkYHfgwXgYP7tN
+        P0H0M5FkKsgVqwbSMtbXzyPIMV/+9J+i/qvL5LiUGw==
+X-Google-Smtp-Source: ACHHUZ5kWLaISLMMN8SNO0Uax4mvDI+Ifb9IzNEtBZKY0St5/K8lmsA2Sqyp6Ot9uWHAu1U7I2ZDXpl/fAZUpxMCF3E=
+X-Received: by 2002:a0d:df4c:0:b0:561:18c6:528c with SMTP id
+ i73-20020a0ddf4c000000b0056118c6528cmr12914744ywe.30.1684793691620; Mon, 22
+ May 2023 15:14:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="t8ki7xtWQaeXytDL"
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYtU7HsV0R0dp4XEH5xXHSJFw8KyDf5VQrLLfMxWfxQkag@mail.gmail.com>
-X-Cookie: HOST SYSTEM RESPONDING, PROBABLY UP...
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+References: <20230405-add-dsc-support-v4-0-15daf84f8dcb@quicinc.com>
+ <20230405-add-dsc-support-v4-1-15daf84f8dcb@quicinc.com> <eo7chb7m4cowvb53hnebi3bjtotm7x5ea5iv6ulmmfkr2hdt32@2nkoa5rco3qb>
+ <a93c3c36-f262-b89d-8452-98120cffb491@quicinc.com>
+In-Reply-To: <a93c3c36-f262-b89d-8452-98120cffb491@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Tue, 23 May 2023 01:14:40 +0300
+Message-ID: <CAA8EJpqzj-_fVLXfCrLeTUcwPHE-fb-kNP=SgbVM7U5fQT8p-w@mail.gmail.com>
+Subject: Re: [PATCH v4 1/5] msm/drm/dsi: Round up DSC hdisplay calculation
+To:     Jessica Zhang <quic_jesszhan@quicinc.com>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,165 +75,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 23 May 2023 at 00:45, Jessica Zhang <quic_jesszhan@quicinc.com> wrote:
+>
+>
+>
+> On 5/22/2023 1:44 PM, Marijn Suijten wrote:
+> > On 2023-05-22 13:30:20, Jessica Zhang wrote:
+> >> Currently, when compression is enabled, hdisplay is reduced via integer
+> >> division. This causes issues for modes where the original hdisplay is
+> >> not a multiple of 3.
+> >>
+> >> To fix this, use DIV_ROUND_UP to divide hdisplay.
+> >>
+> >> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+> >> Suggested-by: Marijn Suijten <marijn.suijten@somainline.org>
+> >
+> > Nit: probably these should go in the opposite order.  And if they're
+> > all supposed to be chronological, I think it is:
+> >
+> >      Suggested-by:
+> >      Fixes:
+> >      Signed-off-by:
+> >      Reviewed-by:
+> >
+> > But unsure if that's a hard requirement, or even correct at all.
+>
+> Hi Marijn,
+>
+> I don't see any explicit documentation on the order of R-b tags. FWIW, I
+> see in the git log that S-o-b always goes at the bottom of the commit
+> message.
+>
+> I would prefer the S-o-b to always be at the bottom (as it helps me
+> avoid duplicate S-o-b's when doing `git commit -s`), though I can flip
+> the order of the R-b and suggested-by tags.
 
---t8ki7xtWQaeXytDL
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I'd second Jessica here. Consider these tags as a history or a transcript:
 
-On Tue, May 16, 2023 at 11:58:40AM +0530, Naresh Kamboju wrote:
+I would not vote on the particular order of the Suggested-by/Fixes
+tags, I don't think that is important. These come first. Then the
+patch goes through different cycles. of reviews, which gain
+Reviewed-by tags.
 
-> # To install tuxrun on your system globally:
-> # sudo pip3 install -U tuxrun=3D=3D0.42.0
+In the same way Link/Patchwork/whatever other tags are added in the
+historical order.
 
-I'm not thrilled about the idea of installing some Python package
-outside of my distro package manager, especially not running as root,
-but I *do* have a checked out copy of tuxrun which normally seems to do
-something...
+By having the submitter's S-o-b at the bottom, the submitter adds the
+final signature under everything else being stated/recorded.
 
-> #
-> # See https://tuxrun.org/ for complete documentation.
->=20
-> tuxrun   \
->  --runtime podman   \
->  --device fvp-aemva   \
->  --boot-args rw   \
->  --kernel https://storage.tuxsuite.com/public/linaro/lkft/builds/2Pq5NvLi=
-BcWRMuy6lXftDVQMvca/Image.gz
->   \
->  --modules https://storage.tuxsuite.com/public/linaro/lkft/builds/2Pq5NvL=
-iBcWRMuy6lXftDVQMvca/modules.tar.xz
->   \
->  --rootfs https://storage.tuxboot.com/debian/bookworm/arm64/rootfs.ext4.x=
-z   \
->  --parameters SKIPFILE=3Dskipfile-lkft.yaml   \
->  --parameters KSELFTEST=3Dhttps://storage.tuxsuite.com/public/linaro/lkft=
-/builds/2Pq5NvLiBcWRMuy6lXftDVQMvca/kselftest.tar.xz
->   \
->  --image tuxrun:fvp   \
->  --tests kselftest-arm64   \
->  --timeouts boot=3D60 kselftest-arm64=3D60
+Of course, in a more complicated story, there might be other
+developers taking part (Co-Developed-By + Signed-off-by), etc.
 
-This command does not work for me, after fixing up the fact that
-multiple lines have continuation characters that are nonfunctional due
-to being wrapped onto the next line I get:
+Note: all described is just my perception and might differ from the
+BCP regarding the tags.
 
-| Error: error getting default registries to try: short-name "tuxrun:fvp" d=
-id not resolve to an alias and no unqualified-search registries are defined=
- in "/etc/containers/registries.conf"
+>
+> Thanks,
+>
+> Jessica Zhang
+>
+> >
+> > - Marijn
+> >
+> >> Fixes: 08802f515c3cf ("drm/msm/dsi: Add support for DSC configuration")
+> >> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+> >> ---
+> >>   drivers/gpu/drm/msm/dsi/dsi_host.c | 2 +-
+> >>   1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> >> index 9223d7ec5a73..18d38b90eb28 100644
+> >> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
+> >> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> >> @@ -952,7 +952,7 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+> >>               * pulse width same
+> >>               */
+> >>              h_total -= hdisplay;
+> >> -            hdisplay = msm_dsc_get_bytes_per_line(msm_host->dsc) / 3;
+> >> +            hdisplay = DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc), 3);
+> >>              h_total += hdisplay;
+> >>              ha_end = ha_start + hdisplay;
+> >>      }
+> >>
+> >> --
+> >> 2.40.1
+> >>
 
-Trying tip of tree tuxrun gives the same result.  Grovelling around in
-the documentation I see there's a need to manually build some containers
-for the FVP so I was able to get the above command to boot with the
---image option removed and switching to docker as the runtime but after
-faffing for a very large amount of time even by the standards of the
-model it appeared to just shut down the model without starting
-kselftest, possibly due to having mounted some of the filesystems read
-only:
 
-2023-05-22T21:03:43 Using a character delay of 50 (ms)
-2023-05-22T21:03:43 #=E2=8F=8E
-2023-05-22T21:03:43 [?2004l[?2004hroot@runner-pqlayms-project-40964107-conc=
-urrent-5:~# #
-2023-05-22T21:03:43 lava-test-shell: Wait for prompt ['root@(.*):[/~]#'] (t=
-imeout 01:00:00)
-2023-05-22T21:03:43 #
-2023-05-22T21:03:43 Using /lava-1
-2023-05-22T21:03:43 Sending with 50 millisecond of delay
-2023-05-22T21:03:43 export SHELL=3D/bin/sh=E2=8F=8E
-2023-05-22T21:03:45 [?2004l[?2004hroot@runner-pqlayms-project-40964107-conc=
-urrent-5:~# export SHELL=3D/bin/sh
-2023-05-22T21:03:45 export SHELL=3D/bin/sh
-2023-05-22T21:03:45 Sending with 50 millisecond of delay
-2023-05-22T21:03:45 . /lava-1/environment=E2=8F=8E
-2023-05-22T21:03:47 [?2004l[?2004hroot@runner-pqlayms-project-40964107-conc=
-urrent-5:~# . /lava-1/environment
-2023-05-22T21:03:47 . /lava-1/environment
-2023-05-22T21:03:47 Will listen to feedbacks from 'terminal_1' for 1 second
-2023-05-22T21:03:47 Will listen to feedbacks from 'terminal_2' for 1 second
-2023-05-22T21:03:47 Will listen to feedbacks from 'terminal_3' for 1 second
-2023-05-22T21:03:47 Sending with 50 millisecond of delay
-2023-05-22T21:03:47 /lava-1/bin/lava-test-runner /lava-1/0=E2=8F=8E
-2023-05-22T21:03:51 [?2004l[?2004hroot@runner-pqlayms-project-40964107-conc=
-urrent-5:~# /lava-1/bin/lava-test-runner /lava-1/0
-2023-05-22T21:03:51 Test shell timeout: 10s (minimum of the action and conn=
-ection timeout)
-2023-05-22T21:03:51 /lava-1/bin/lava-test-runne r /lava-1/0
-2023-05-22T21:03:52 [?2004lmkdir: cannot create directory =E2=80=98/lava-1/=
-0/results=E2=80=99: Read-only file system
-2023-05-22T21:03:53 mv: cannot move '/lava-1/0/lava-test-runner.conf' to '/=
-lava-1/0/lava-test-runner.conf-1684789015': Read-only file system
-2023-05-22T21:03:54 cat: /lava-1/0/lava-test-runner.conf-1684789015: No suc=
-h file or directory
-2023-05-22T21:03:55 ok: lava_test_shell seems to have completed
-2023-05-22T21:03:55 end: 3.1 lava-test-shell (duration 00:00:12) [common]
-2023-05-22T21:03:55 end: 3 lava-test-retry (duration 00:00:12) [common]
-2023-05-22T21:03:55 start: 4 finalize (timeout 00:10:00) [common]
-2023-05-22T21:03:55 start: 4.1 power-off (timeout 00:01:00) [common]
-2023-05-22T21:03:55 end: 4.1 power-off (duration 00:00:00) [common]
-2023-05-22T21:03:55 start: 4.2 read-feedback (timeout 00:10:00) [common]
 
-Attempting to use podman as the runtime as your command said had various
-problems:
-
-2023-05-22T21:07:01 start: 2.1.1 check-fvp-version (timeout 01:00:00) [comm=
-on]
-2023-05-22T21:07:01 sh -c docker run --rm fvp:aemva-11.21.15 /opt/model/FVP=
-_AEMvA/models/Linux64_GCC-9.3/FVP_Base_RevC-2xAEMvA --version
-2023-05-22T21:07:01 Parsed command exited 1.
-2023-05-22T21:07:01 action: check-fvp-version
-command: ['sh', '-c', 'docker run --rm fvp:aemva-11.21.15 /opt/model/FVP_AE=
-MvA/models/Linux64_GCC-9.3/FVP_Base_RevC-2xAEMvA --version']
-message: Command '['sh', '-c', 'docker run --rm fvp:aemva-11.21.15 /opt/mod=
-el/FVP_AEMvA/models/Linux64_GCC-9.3/FVP_Base_RevC-2xAEMvA --version']' retu=
-rned non-zero exit status 1.
-output: Missing runtime '/usr/bin/podman'
-return code: 1
-
-(I do have podman installed though I rarely use it, this looks to be in
-the LAVA container though)
-
-> Test log links:
-> =3D=3D=3D=3D=3D=3D=3D=3D
->=20
->  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v=
-6.1.28-240-gb82733c0ff99/testrun/17007082/suite/log-parser-test/test/check-=
-kernel-kfence/log
->  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v=
-6.1.28-240-gb82733c0ff99/testrun/17007082/suite/log-parser-test/tests/
->  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v=
-6.1.28-240-gb82733c0ff99/testrun/17007268/suite/kselftest-arm64/tests/
->=20
->  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build/v=
-6.3.2-247-g5a952cfef67c/testrun/17015127/suite/log-parser-test/test/check-k=
-ernel-bug/log
->  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build/v=
-6.3.2-247-g5a952cfef67c/testrun/17015127/suite/log-parser-test/tests/
->  - https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.3.y/build/v=
-6.3.2-247-g5a952cfef67c/testrun/17015127/suite/kselftest-arm64/tests/
-
-None of these seem to provide me with information like what kernel
-config was used but I did manage to find
-
-  https://storage.tuxsuite.com/public/linaro/lkft/builds/2Pq5NvLiBcWRMuy6lX=
-ftDVQMvca/config
-
-which might be it?  Or one of them?  However even trying to use that I'm
-unable to reproduce issues with either the FVP or qemu.
-
---t8ki7xtWQaeXytDL
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRr6OAACgkQJNaLcl1U
-h9D7/Af/a6J1nMAJHOQgusWnZsDlQB3Sq/V9wdUYbqJ1iW5mhElmMApArvbqkApt
-/FsXyKLlIBRu7nvjmMW3s7tZud7IIOwLo6e5zrJHwYKJ+TT0M2pQn1hIXvxcVPcQ
-kZwgmAgOd9hGnZyuSqfaFceb1C7EYbOaZzTx9mog+HwoUNJtmZrrziiFfLyVwznD
-XYmcqAtfmH6SQqB4ZMlpK3a6itNVrv/q74FDeK8n8DJRWI1ySedKol0sRGLF3AsE
-Tok2eARj2tXwa+3ikSaaoxZb3cLaZ5RzRQGF5E7GPc+S6Ghb/NL5OZZTtd/vaQuk
-9BCRKlmNzZyN80Gl7qPhioWjpL15pA==
-=xG1w
------END PGP SIGNATURE-----
-
---t8ki7xtWQaeXytDL--
+-- 
+With best wishes
+Dmitry
