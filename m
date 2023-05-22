@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C958570B5D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 09:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B99570B5D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 09:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232286AbjEVHGE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 03:06:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36346 "EHLO
+        id S232278AbjEVHF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 03:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232261AbjEVHF1 (ORCPT
+        with ESMTP id S232208AbjEVHFG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 03:05:27 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 091EA1BF0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 00:01:59 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-64d41d8bc63so1737164b3a.0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 00:01:59 -0700 (PDT)
+        Mon, 22 May 2023 03:05:06 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 070991FC0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 00:02:03 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-25345ca8748so4721626a91.1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 00:02:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1684738911; x=1687330911;
+        d=bytedance.com; s=google; t=1684738915; x=1687330915;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sgzO2oS5bCjgkGEKcuzpbbehzv1fqa08++GJhHZGJnk=;
-        b=B9OMUnv33tNdd4xn/p1rnp8gpM96UCeXIDdHTzof5dEwYWX67z6JpdsyQaZPSH7fYP
-         0xl2BymrQyLxgojJyRmIBKH64o8K6wqmHipT3fNNM8HjCm30OCRTAFhRZnQETqcP5thx
-         P5yO6NgOVwy8MwNho2m98VZV1UY7rWaamv2fjlUEUnhCVpFhLcvZ7dp3OIYtosvdeWZc
-         jfnYzwwptrztNkN3CdKh1BIIyb5WkJiJzBO9KXXNBx/b4FdN5Af3B47IgPO7hW9tXQNA
-         4UA5fFW/5Os2QHbMchluOHsxg1m1u7Pl0bZEh6iuGfbBnVDFKNYDbK9/BDiwQbwl5uGz
-         Ugwg==
+        bh=y1oOKoVyoIUj8JPcN8+63Cdo8i/cPI1zhOYlcZa0hSM=;
+        b=enaay0xaoWLn/utKosxoWRmovCC2iDOPsViPWAcSu4/JYlpa61g+2mofypwr36XV6P
+         5J3FltcUkPLQkIl0AZJuYxAJtrS6Ks0D8MuZLcveqzNcyyAJqnubyinFllJt+2ys+NkJ
+         68YlViqxi2UvNOTwFFXFpMSMLyiRimLE2iWipptXmQyAZXdKBmKATAFkFEQgja08ESC7
+         2bKN4+w6r38j+xphjcn508J/X8RhzgKuNcSOUxWHrnOH3iClosHDqVgE0Fl8TVP7ywoO
+         W8xflpGtFM3isY8piNeZ98x693UPRt6aX4eeOCZnFll7sC9O0u1+a2pAmnLNHXwULg9U
+         pJVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684738911; x=1687330911;
+        d=1e100.net; s=20221208; t=1684738915; x=1687330915;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=sgzO2oS5bCjgkGEKcuzpbbehzv1fqa08++GJhHZGJnk=;
-        b=ksSGbONxIcAXsEPdNborxmPnvu7A95xukMzeiSr/chPrvFCKDkR4N+8CDVCvqcquZ3
-         8wieOnbZA3P0UojDkZiPToguRthttfb2tJ1LImEAhTSUnlamioqTJNDwsgcaLTi3ob63
-         UTxe0McThgj56oAOjA7GIvNuxIIOwz0L3J1vgCYSMB7cozlXZcXmw+EX1WkD7RALedc8
-         hZIizPp1BNEwUtscsRRkakramVdlxdIce3VLwIk2xOLIZGBBi2GE9GJHiQUTjcLlkLdZ
-         fLFVY6LGLBb+hS8ewQu9pQrDqMf5ajxwaRGFfK7fr5yh0HEEWQ7npbhabTkQEQnqsFN1
-         S3IQ==
-X-Gm-Message-State: AC+VfDwz59QduTGTRkMK29iUdW5TdACennx2hPiOK3bfS9zbs73/fRzn
-        tPy4dvTpWMNX5vPgGDLA3thzbw==
-X-Google-Smtp-Source: ACHHUZ4ZJe5qP97101KavMhYgetzTkIyNddrBs0aAl/z7IHiyA0QOaL7RwH6lY3RFknmPsPuiBa9nA==
-X-Received: by 2002:a05:6a20:7fa8:b0:101:9344:bf82 with SMTP id d40-20020a056a207fa800b001019344bf82mr11034569pzj.15.1684738911283;
-        Mon, 22 May 2023 00:01:51 -0700 (PDT)
+        bh=y1oOKoVyoIUj8JPcN8+63Cdo8i/cPI1zhOYlcZa0hSM=;
+        b=R7WQFwWcuS5cmBFz6wLXaA+WW4chfu9Hm8PviGUUd7TzxZiC6GwXn59InlBH0I4NM1
+         KtVYaWfL76xXFAxnGnTPeRM8m/u0nmv9ddmmzYLWiymAWG+NZrfVL+M7OOPf5BYEn0Qn
+         giTfNcf5ADrDbDCEpS1H5JjqRNXGx8L6IW1jcP8fqRnRztgnjYrY+mrwvwWkSUAmx9pf
+         zYtOF3VTbqer2LIpM2Jc3zgsU7XCwAWghFBJy5QP7P0/y3l5AjzcgQl1rx1fNT51yBGL
+         sHjdUuv63uulu9xbRX4zkdJoXc7n060OVAte774Juso6hsheJo+c5x2XPc/VVqOlSttx
+         nVZQ==
+X-Gm-Message-State: AC+VfDywZwGyNDDekHtkrUgt2w6KkgXWUvJKb4H6i3dVo9RYM+u9I8fj
+        Mv/klHMDKpdtGQrNfN2Ju+/CYg==
+X-Google-Smtp-Source: ACHHUZ4o2D5U9H7O9EVzembFmHB5vNmURPTxvA+5i11/ATadoYPSFYWcOfJ9V/84ql5EYbtBEo1FuA==
+X-Received: by 2002:a17:90b:1d0c:b0:255:67e3:98a with SMTP id on12-20020a17090b1d0c00b0025567e3098amr2054678pjb.11.1684738915145;
+        Mon, 22 May 2023 00:01:55 -0700 (PDT)
 Received: from localhost.localdomain ([139.177.225.251])
-        by smtp.gmail.com with ESMTPSA id d27-20020a630e1b000000b0052cbd854927sm3687505pgl.18.2023.05.22.00.01.47
+        by smtp.gmail.com with ESMTPSA id d27-20020a630e1b000000b0052cbd854927sm3687505pgl.18.2023.05.22.00.01.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 00:01:50 -0700 (PDT)
+        Mon, 22 May 2023 00:01:54 -0700 (PDT)
 From:   Abel Wu <wuyun.abel@bytedance.com>
 To:     "David S . Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
@@ -57,9 +57,9 @@ To:     "David S . Miller" <davem@davemloft.net>,
         Paolo Abeni <pabeni@redhat.com>
 Cc:     Glauber Costa <glommer@parallels.com>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, Abel Wu <wuyun.abel@bytedance.com>
-Subject: [PATCH v2 2/4] sock: Fix misuse of sk_under_memory_pressure()
-Date:   Mon, 22 May 2023 15:01:20 +0800
-Message-Id: <20230522070122.6727-3-wuyun.abel@bytedance.com>
+Subject: [PATCH v2 3/4] sock: Consider memcg pressure when raising sockmem
+Date:   Mon, 22 May 2023 15:01:21 +0800
+Message-Id: <20230522070122.6727-4-wuyun.abel@bytedance.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20230522070122.6727-1-wuyun.abel@bytedance.com>
 References: <20230522070122.6727-1-wuyun.abel@bytedance.com>
@@ -67,7 +67,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,73 +75,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The status of global socket memory pressure is updated when:
+For now __sk_mem_raise_allocated() mainly considers global socket
+memory pressure and allows to raise if no global pressure observed,
+including the sockets whose memcgs are in pressure, which might
+result in longer memcg memstall.
 
-  a) __sk_mem_raise_allocated():
+So take net-memcg's pressure into consideration when allocating
+socket memory to alleviate long tail latencies.
 
-	enter: sk_memory_allocated(sk) >  sysctl_mem[1]
-	leave: sk_memory_allocated(sk) <= sysctl_mem[0]
-
-  b) __sk_mem_reduce_allocated():
-
-	leave: sk_under_memory_pressure(sk) &&
-		sk_memory_allocated(sk) < sysctl_mem[0]
-
-So the conditions of leaving global pressure are inconstant, which
-may lead to the situation that one pressured net-memcg prevents the
-global pressure from being cleared when there is indeed no global
-pressure, thus the global constrains are still in effect unexpectedly
-on the other sockets.
-
-This patch fixes this by ignoring the net-memcg's pressure when
-deciding whether should leave global memory pressure.
-
-Fixes: e1aab161e013 ("socket: initial cgroup code")
 Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
 ---
- include/net/sock.h | 9 +++++++--
- net/core/sock.c    | 2 +-
- 2 files changed, 8 insertions(+), 3 deletions(-)
+ net/core/sock.c | 23 ++++++++++++++++-------
+ 1 file changed, 16 insertions(+), 7 deletions(-)
 
-diff --git a/include/net/sock.h b/include/net/sock.h
-index c73d9bad7ac7..bf930d4db7f0 100644
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -1409,14 +1409,19 @@ static inline bool sk_has_memory_pressure(const struct sock *sk)
- 	return sk->sk_prot->memory_pressure != NULL;
- }
- 
-+static inline bool sk_under_global_memory_pressure(const struct sock *sk)
-+{
-+	return sk->sk_prot->memory_pressure &&
-+		*sk->sk_prot->memory_pressure;
-+}
-+
- static inline bool sk_under_memory_pressure(const struct sock *sk)
- {
- 	if (mem_cgroup_sockets_enabled && sk->sk_memcg &&
- 	    mem_cgroup_under_socket_pressure(sk->sk_memcg))
- 		return true;
- 
--	return sk->sk_prot->memory_pressure &&
--		*sk->sk_prot->memory_pressure;
-+	return sk_under_global_memory_pressure(sk);
- }
- 
- static inline long
 diff --git a/net/core/sock.c b/net/core/sock.c
-index 5440e67bcfe3..801df091e37a 100644
+index 801df091e37a..7641d64293af 100644
 --- a/net/core/sock.c
 +++ b/net/core/sock.c
-@@ -3095,7 +3095,7 @@ void __sk_mem_reduce_allocated(struct sock *sk, int amount)
- 	if (mem_cgroup_sockets_enabled && sk->sk_memcg)
- 		mem_cgroup_uncharge_skmem(sk->sk_memcg, amount);
+@@ -2977,21 +2977,30 @@ int __sk_mem_raise_allocated(struct sock *sk, int size, int amt, int kind)
+ {
+ 	bool memcg_charge = mem_cgroup_sockets_enabled && sk->sk_memcg;
+ 	struct proto *prot = sk->sk_prot;
+-	bool charged = true;
++	bool charged = true, pressured = false;
+ 	long allocated;
  
--	if (sk_under_memory_pressure(sk) &&
-+	if (sk_under_global_memory_pressure(sk) &&
- 	    (sk_memory_allocated(sk) < sk_prot_mem_limits(sk, 0)))
+ 	sk_memory_allocated_add(sk, amt);
+ 	allocated = sk_memory_allocated(sk);
+-	if (memcg_charge &&
+-	    !(charged = mem_cgroup_charge_skmem(sk->sk_memcg, amt,
+-						gfp_memcg_charge())))
+-		goto suppress_allocation;
++
++	if (memcg_charge) {
++		charged = mem_cgroup_charge_skmem(sk->sk_memcg, amt,
++						  gfp_memcg_charge());
++		if (!charged)
++			goto suppress_allocation;
++		if (mem_cgroup_under_socket_pressure(sk->sk_memcg))
++			pressured = true;
++	}
+ 
+ 	/* Under limit. */
+-	if (allocated <= sk_prot_mem_limits(sk, 0)) {
++	if (allocated <= sk_prot_mem_limits(sk, 0))
  		sk_leave_memory_pressure(sk);
- }
++	else
++		pressured = true;
++
++	/* No pressure observed in global/memcg. */
++	if (!pressured)
+ 		return 1;
+-	}
+ 
+ 	/* Under pressure. */
+ 	if (allocated > sk_prot_mem_limits(sk, 1))
 -- 
 2.37.3
 
