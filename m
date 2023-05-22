@@ -2,79 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E15770C205
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:11:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 723CF70C210
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234265AbjEVPLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 11:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50492 "EHLO
+        id S234471AbjEVPMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 11:12:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234417AbjEVPLN (ORCPT
+        with ESMTP id S233894AbjEVPMU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 11:11:13 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D233CF;
-        Mon, 22 May 2023 08:11:09 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-96fab30d1e1so429966866b.0;
-        Mon, 22 May 2023 08:11:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684768268; x=1687360268;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AuMCsYagdD2B/btsXGbofl0+XgpZ3eLWhBM9dBSN1BU=;
-        b=l8EQCQ6aP9jjTJ1kFJzKfzj8Z2JbVk1oGkneZEKJeLLgLNGO7LfVpfJexmI32g4WL6
-         XhskzOPBUB7natb3F/i8CS5rF/12fNvmcUTrbTk83zJbl30eN/CktXteHHWpjsVZ4kVp
-         SfpuqqveVlG2XDE5ZnlPv8WdSxQDUGIdq564Ra8R680cuBTnh3i285hCx2m9wxI08tku
-         mEyS2UBAayNgHc8hvhp8CRTlyl7JxsOT/T6AY1mqZ0Ofi+YwoHTGc1+7pCD74x+6jnbU
-         EHVYB7oqIKOUIh0p2wTyu9XgmFeHfEGA766xxszCI3tVhgLi1zZVWVZRGq0KeKrLnuH6
-         DXMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684768268; x=1687360268;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AuMCsYagdD2B/btsXGbofl0+XgpZ3eLWhBM9dBSN1BU=;
-        b=hWQwgM6HX8mWwyJBUnsb1B1LEOf+T08UfZ9aMS+Ux4QXFkytnjBV9gnaTZzTa7nM5p
-         jUtjfmX49VfMcKdcvEd4MUOaj/wsxWuNeBRlW5rqyzzqFsWFHiURGgu1PMT8TR8rniCq
-         gwOsGjKVU+AXVmHdWAEMPNkU204/QVY6iSa0YNVqmumufHNKH34uOJjj2YpNwzuqYnyo
-         Wc86vEVrJAkwNW5m5lGCXWebs5fwkSnOsvd2uXEUFi22gMXbqXjB2f8UO2E69dFyOTzI
-         PbGWk9L+o7V5qLOFdohf0miNVX8AdfptDdmKuNgOyitGMHbCrWDhZW/qDAIwj+JdYgK0
-         viDQ==
-X-Gm-Message-State: AC+VfDyAP+KVZGae0/cJVd2mZRKhr+zhy9TT/8DAWpv8MeFGEy3S5a2F
-        OCl4po/W/hBA5UuYDWHi0RE=
-X-Google-Smtp-Source: ACHHUZ66MlsS0CQtuX/rYHx1VKny3lDZ8SAZIa69pLaoWdN3wlKu5qbE8MzmrB5TXN45H9L2kFOO2g==
-X-Received: by 2002:a17:907:3fa8:b0:969:e993:6ff0 with SMTP id hr40-20020a1709073fa800b00969e9936ff0mr11293240ejc.25.1684768267290;
-        Mon, 22 May 2023 08:11:07 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id qx15-20020a170906fccf00b00965f98eefc1sm3211620ejb.116.2023.05.22.08.11.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 08:11:07 -0700 (PDT)
-Date:   Mon, 22 May 2023 18:11:04 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     David Epping <david.epping@missinglinkelectronics.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net 3/3] net: phy: mscc: enable VSC8501/2 RGMII RX clock
-Message-ID: <20230522151104.clf3lmsqdndihsvo@skbuf>
-References: <20230520160603.32458-1-david.epping@missinglinkelectronics.com>
- <20230520160603.32458-4-david.epping@missinglinkelectronics.com>
- <20230521134356.ar3itavhdypnvasc@skbuf>
- <20230521161650.GC2208@nucnuc.mle>
- <20230522095833.otk2nv24plmvarpt@skbuf>
- <20230522140057.GB18381@nucnuc.mle>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230522140057.GB18381@nucnuc.mle>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Mon, 22 May 2023 11:12:20 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94609BB;
+        Mon, 22 May 2023 08:12:19 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34MDrLhw003378;
+        Mon, 22 May 2023 15:12:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=97r4Q0EyNuirNJzWAVVdWotxvvNun0l3fubqls5DQXM=;
+ b=g7WUhvlJIPnKDAoa7qXObTrAjveLqML+YG7UFT1uWqNT3YjmKAy+CkE1ERoGBt9F9o8p
+ 4k738wvGUl/hlZrargjtkaL0qUD3znVl6XYGHnlABSulcncBXdj3BH5rYFpFWS9D3FH4
+ 8gvvAQnt1MxCjy1jh3/JUryirnucec/TQ7xrpNFgT862rOMtP8MM1lGp5aDcvw0U+N78
+ qRcUMQe2VriBf67bm48QEsW45GS5osAGSaHsQWK5wprmMMj3OZjx0ymt8FXiPBzraaXj
+ oIByBelrM5/yfZGUsW7rnvmgf8D2i0XeXka3HYplpRpoCP3BmAFgE+C3J5vjmyjYopdq ig== 
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qr6h0rngv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 May 2023 15:12:13 +0000
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 34MFC9em028911;
+        Mon, 22 May 2023 15:12:09 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 3qpq9kppmn-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 22 May 2023 15:12:09 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34MFC8Fl028906;
+        Mon, 22 May 2023 15:12:08 GMT
+Received: from hu-maiyas-hyd.qualcomm.com (hu-kbajaj-hyd.qualcomm.com [10.147.247.189])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 34MFC86h028904;
+        Mon, 22 May 2023 15:12:08 +0000
+Received: by hu-maiyas-hyd.qualcomm.com (Postfix, from userid 2340697)
+        id BB8495001C2; Mon, 22 May 2023 20:42:07 +0530 (+0530)
+From:   Komal Bajaj <quic_kbajaj@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     Komal Bajaj <quic_kbajaj@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] arm64: dts: qcom: qdu1000: add IMEM
+Date:   Mon, 22 May 2023 20:42:04 +0530
+Message-Id: <20230522151206.22654-1-quic_kbajaj@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: PPHR5EilTl6XYuSTEmccl9Gnog4hJ_-Y
+X-Proofpoint-ORIG-GUID: PPHR5EilTl6XYuSTEmccl9Gnog4hJ_-Y
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-22_10,2023-05-22_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ spamscore=0 suspectscore=0 clxscore=1015 adultscore=0 phishscore=0
+ mlxscore=0 lowpriorityscore=0 mlxlogscore=560 malwarescore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305220126
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,35 +83,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 04:00:57PM +0200, David Epping wrote:
-> On Mon, May 22, 2023 at 12:58:33PM +0300, Vladimir Oltean wrote:
-> > If you still prefer to write twice in a row to the same paged register
-> > instead of combining the changes, then fine by me, it's not a huge deal.
-> 
-> Since the clock enablement now happens in all modes the existing rgmii
-> function name seems misleading to me.
+Add IMEM on QDU1000 and QRU1000 SoCs.
 
-To be fair, it's only as misleading as the datasheet name for the register
-that holds this field, "RGMII CONTROL". Anyway, the function could be
-renamed as necessary to be less confusing: vsc85xx_update_rgmii_ctrl()
-or something along those lines.
+Komal Bajaj (2):
+  dt-bindings: sram: qcom,imem: document qdu1000
+  arm64: dts: qcom: qdu1000: Add IMEM and PIL info region
 
-MDIO reads and writes are not exactly the quickest I/O in the world, and
-having 2 read-modify-write consecutive accesses to the same paged
-register (which in turn implies indirect access) just because readability
-seems like the type of thing that can play its part in deteriorating
-boot time latency. Maybe we can deal with the readability some other way.
+ .../devicetree/bindings/sram/qcom,imem.yaml         |  1 +
+ arch/arm64/boot/dts/qcom/qdu1000.dtsi               | 13 +++++++++++++
+ 2 files changed, 14 insertions(+)
 
-> Also we don't want to enable for
-> all PHY types, and the differentiation is already available at the
-> caller. I would thus opt for a separate function and fewer conditional
-> statements.
+-- 
+2.17.1
 
-I don't understand this. We don't? For what PHY types don't we want to
-enable the RX_CLK?
-
-> Its my first patch re-submission, so sorry for the noob question:
-> Should I include your "pw-bot: changes-requested" tag with the third
-> patch? Probably not.
-
-Nope.
