@@ -2,176 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2325D70B733
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 09:59:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 507AB70B737
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:00:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbjEVH7I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 03:59:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42120 "EHLO
+        id S230413AbjEVIAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 04:00:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230126AbjEVH7B (ORCPT
+        with ESMTP id S229639AbjEVIAh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 03:59:01 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 558A6B6;
-        Mon, 22 May 2023 00:58:59 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8DxBenCIGtkV9sKAA--.18594S3;
-        Mon, 22 May 2023 15:58:58 +0800 (CST)
-Received: from [10.130.0.149] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Dx_8u_IGtk081uAA--.54939S3;
-        Mon, 22 May 2023 15:58:56 +0800 (CST)
-Subject: Re: [PATCH] perf symbol: Add LoongArch case in get_plt_sizes()
-To:     Huacai Chen <chenhuacai@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-References: <1683615352-10794-1-git-send-email-yangtiezhu@loongson.cn>
- <CAAhV-H7waE0gmSU09YKJMHDAnj7BV7ukiLqWs+JzzLrHDG5z8w@mail.gmail.com>
- <20230518030618.GB1068119@leoy-yangtze.lan>
- <CAAhV-H6L9kNyGU2UrX7jyN_6O_pafSVSamP7DYHkzfMgmCxVXA@mail.gmail.com>
- <20230518032129.GC1068119@leoy-yangtze.lan>
- <CAAhV-H6_=qwheWvNozop2+9MexnOZQcva28xaeikCc49_DqABA@mail.gmail.com>
- <20230518040553.GE1068119@leoy-yangtze.lan> <ZGYXKnRZQh18D2Fd@kernel.org>
- <CAAhV-H40kQf5WD-8ozFwS6copfQaGtUJqm=nvQ6btXZnpDmZFA@mail.gmail.com>
-Cc:     Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <387463f9-adb0-8e98-1de6-cae7a79a7d03@loongson.cn>
-Date:   Mon, 22 May 2023 15:58:55 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
+        Mon, 22 May 2023 04:00:37 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056F69B;
+        Mon, 22 May 2023 01:00:35 -0700 (PDT)
+Received: from canpemm100004.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QPqYY4Q1YzLpyJ;
+        Mon, 22 May 2023 15:57:37 +0800 (CST)
+Received: from [10.174.179.14] (10.174.179.14) by
+ canpemm100004.china.huawei.com (7.192.105.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 22 May 2023 16:00:32 +0800
+Subject: Re: [PATCH v2] ata: libata-scsi: Fix get identity data failed
+To:     Damien Le Moal <dlemoal@kernel.org>,
+        yangxingui <yangxingui@huawei.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>, <john.g.garry@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linuxarm@huawei.com>, <prime.zeng@hisilicon.com>,
+        <kangfenglong@huawei.com>
+References: <20230505025712.19438-1-yangxingui@huawei.com>
+ <291f1d97-9195-45ac-8e12-058f5c797277@kernel.org>
+ <02d36ee9-cdad-454d-d822-95442d7bd67b@huawei.com>
+ <f4ba7a92-1f00-c254-d196-7d21fe14dee2@kernel.org>
+ <938d6b5b-0271-977d-f046-5fd70d29b3ca@huawei.com>
+ <a5c2e157-aaf7-1300-3fbb-1300ac216cee@kernel.org>
+ <68953040-1622-254b-f6f8-b279eccacfb1@kernel.org>
+From:   Jason Yan <yanaijie@huawei.com>
+Message-ID: <c88dcbc3-d530-3e9e-f674-a2fe64ad5fdc@huawei.com>
+Date:   Mon, 22 May 2023 16:00:32 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.12.0
 MIME-Version: 1.0
-In-Reply-To: <CAAhV-H40kQf5WD-8ozFwS6copfQaGtUJqm=nvQ6btXZnpDmZFA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Dx_8u_IGtk081uAA--.54939S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxur1rAw45urWUCFy3XFW7CFg_yoW5Cw1xpr
-        Wqka1ktF4Dtr13Cwnrtr10kr4IqrWxAFWjgryUtw48AF9IvFn7Kr4xAw4Y9F13Gr1xCw12
-        kr18W3yI9F18X3DanT9S1TB71UUUUb7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bq8YFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kK
-        e7AKxVWUtVW8ZwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
-        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280
-        aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2
-        xFo4CEbIxvr21lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC
-        6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jw0_GFylx2IqxVAqx4xG67AKxVWUJVWUGwC20s
-        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
-        0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0x
-        vE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
-        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUstxhDUUUU
-X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+In-Reply-To: <68953040-1622-254b-f6f8-b279eccacfb1@kernel.org>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.179.14]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm100004.china.huawei.com (7.192.105.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 05/22/2023 11:50 AM, Huacai Chen wrote:
-> Hi, Arnaldo,
->
-> On Thu, May 18, 2023 at 8:16 PM Arnaldo Carvalho de Melo
-> <acme@kernel.org> wrote:
->>
->> Em Thu, May 18, 2023 at 12:05:53PM +0800, Leo Yan escreveu:
->>> On Thu, May 18, 2023 at 11:57:29AM +0800, Huacai Chen wrote:
->>>> On Thu, May 18, 2023 at 11:21 AM Leo Yan <leo.yan@linaro.org> wrote:
+On 2023/5/22 15:02, Damien Le Moal wrote:
+> On 5/22/23 10:35, Damien Le Moal wrote:
+>> On 5/8/23 10:11, yangxingui wrote:
+>>>
+>>>
+>>> On 2023/5/7 22:51, Damien Le Moal wrote:
+>>>> On 2023/05/05 18:06, yangxingui wrote:
 >>>>>
->>>>> On Thu, May 18, 2023 at 11:12:26AM +0800, Huacai Chen wrote:
->>>>>> On Thu, May 18, 2023 at 11:06 AM Leo Yan <leo.yan@linaro.org> wrote:
->>>>>>>
->>>>>>> On Thu, May 18, 2023 at 10:11:27AM +0800, Huacai Chen wrote:
->>>>>>>> Queued, thanks.
->>>>>>>
->>>>>>> The patch is fine for me.
->>>>>>>
->>>>>>> Should not perf patches are to be merged via Arnaldo's tree?
+>>>>>
+>>>>> On 2023/5/5 16:17, Damien Le Moal wrote:
+>>>>>> On 2023/05/05 11:57, Xingui Yang wrote:
+>>>>>>> The function ata_get_identity() uses the helper ata_scsi_find_dev() to get
+>>>>>>> the ata_device structure of a scsi device. However, when the ata device is
+>>>>>>> managed by libsas, ata_scsi_find_dev() returns NULL, turning
+>>>>>>> ata_get_identity() into a nop and always returns -ENOMSG.
 >>>>>>
->>>>>> I think both are OK, if Arnaldo takes this patch, I will drop it.
->>>>>
->>>>> A good practice is to firstly inquiry the maintainers.
->>>>>
->>>>> AFAIK, Arnaldo will test perf patches before sending out pull request;
->>>>> if perf patches are scattered out, it might be out of the testing
->>>>> radar.
->>>> OK, I know, thank you very much.
+>>>>>> What do you do to hit the issue ? A while back for me it was the queue depth
+>>>>>> setting causing problems. As Garry mentioned, this led to patch 141f3d6256e5
+>>>>>> ("ata: libata-sata: Fix device queue depth control").
+>>>>> Attempt to return the correct value at ata_scsi_find_dev() instead of
+>>>>> NULL, when the ata device is managed by libsas?
+>>>>
+>>>> That I understand. My question is *what* user operation/command triggers this ?
+>>>> Because on my test setup, under normal use, I do not see this issue (beside what
+>>>> was already corrected with the queue depth control). Is the issue showing up
+>>>> when using passthrough commands only ?
+>>> Yeah, we found that command "hdparm -i /dev/sdc" always return faild for
+>>> SATA HDD disk. as follows:
+>>> [root@localhost ~]# hdparm -i /dev/sdc
 >>>
->>> You are welcome!
->>>
->>> I found the code base for bfd:
->>> https://github.com/bminor/binutils-gdb/blob/master/bfd/elfnn-loongarch.c
->>>
->>> And this patch is consistent with above link, FWIW:
->>>
->>> Reviewed-by: Leo Yan <leo.yan@linaro.org>
+>>> /dev/sdc:
+>>>    HDIO_GET_IDENTITY failed: Invalid argument
 >>
->> Thanks, applied.
-> I'm very sorry that this patch breaks cross-build. We need some
-> additional modification.
->
-> diff --git a/tools/perf/util/symbol-elf.c b/tools/perf/util/symbol-elf.c
-> index 5d409c26a22e..b3dbf6ca99a7 100644
-> --- a/tools/perf/util/symbol-elf.c
-> +++ b/tools/perf/util/symbol-elf.c
-> @@ -35,6 +35,10 @@
->  #define EM_AARCH64     183  /* ARM 64 bit */
->  #endif
->
-> +#ifndef EM_LOONGARCH
-> +#define EM_LOONGARCH   258
-> +#endif
-> +
->  #ifndef ELF32_ST_VISIBILITY
->  #define ELF32_ST_VISIBILITY(o) ((o) & 0x03)
->  #endif
->
-> Then, drop this patch to get an updated version, or let me send an
-> incremental patch?
->
+>> I cannot recreate this issue exactly like this. Here is my setup with a pm80xx
+>> driver (Adaptec HBA):
+>>
+>> [7:0:0:0]    disk    ATA      WDC  WUH721818AL W232  /dev/sdd   /dev/sg5
+>> [7:0:1:0]    disk    ATA      WDC  WUH721818AL WTW2  /dev/sdi   /dev/sg6
+>> [7:0:2:0]    disk    ATA      WDC  WUH722222AL Wf86  /dev/sdf   /dev/sg7
+>> [7:0:3:0]    zbc     ATA      WDC  WSH722020AL W803  /dev/sdg   /dev/sg8
+>>
+>> Using the first drive, I get:
+>>
+>> sudo hdparm -i /dev/sdd
+>>
+>> /dev/sdd:
+>>
+>>   Model=WDC  WUH721818ALN604, FwRev=PCGNW232, SerialNo=3KG10LBK
+>>   Config={ HardSect NotMFM HdSw>15uSec Fixed DTR>10Mbs }
+>>   RawCHS=16383/16/63, TrkSize=0, SectSize=0, ECCbytes=56
+>>   BuffType=DualPortCache, BuffSize=unknown, MaxMultSect=2, MultSect=off
+>>   CurCHS=16383/16/63, CurSects=16514064, LBA=yes, LBAsects=4394582016
+>>   IORDY=on/off, tPIO={min:120,w/IORDY:120}, tDMA={min:120,rec:120}
+>>   PIO modes:  pio0 pio1 pio2 pio3 pio4
+>>   DMA modes:  mdma0 mdma1 mdma2
+>>   UDMA modes: udma0 udma1 udma2 udma3 udma4 udma5 *udma6
+>>   AdvancedPM=yes: disabled (255) WriteCache=enabled
+>>   Drive conforms to: unknown:  ATA/ATAPI-2,3,4,5,6,7
+>>
+>>   * signifies the current active mode
+>>
+>> So all good. However, for the following drives, I get:
+>>
+>> sudo hdparm -i /dev/sdi
+>>
+>> /dev/sdi:
+>>   HDIO_GET_IDENTITY failed: No message of desired type
+>>
+>> (same for sdf and sdg).
+>>
+>> Will dig into this.
+> 
+> OK, so the issue is that __ata_scsi_find_dev() calls ata_find_dev() with devno
+> == scsidev->id. This leads to devno being 0, 1, 2 and 3 for connected drives
+> sdd, sd1, sdf and sdg, as shown by lsscsi. However, each drive has its own
+> port+link, with the link for each one having  ata_link_max_devices() == 1, so
+> ata_find_dev() works only for the first drive with scsidev->id == 0 and fails
+> for the others. A naive fix would be this:
+> 
+> diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
+> index 7bb12deab70c..e4d6f17d7ccc 100644
+> --- a/drivers/ata/libata-scsi.c
+> +++ b/drivers/ata/libata-scsi.c
+> @@ -2718,7 +2718,7 @@ static struct ata_device *__ata_scsi_find_dev(struct
+> ata_port *ap,
+>          if (!sata_pmp_attached(ap)) {
+>                  if (unlikely(scsidev->channel || scsidev->lun))
+>                          return NULL;
+> -               devno = scsidev->id;
+> +               devno = 0;
+>          } else {
+>                  if (unlikely(scsidev->id || scsidev->lun))
+>                          return NULL;
+> 
+> And running this on my setup, it works. This makes libsas added ports/devices
+> look like AHCI ones, where all devices have ID 0 for the !pmp case.
+> 
+> However, I am not sure this would be OK for all setups...
+> 
+> John,
+> 
+> Any idea if there is any cases where libsas managed drives would endup not being
+> correctly identified by this change ? As long as a device always has its own
+> port, I do not see any issue. But is there a case where we could have multiple
+> devices on the same port ? Per libata, max is 2, and that is only for the IDE
+> master/slave case. Otherwise, it is always 1.
+> 
 
-I tested this patch on native LoongArch and x86 system, I did not
-hit the build error about undeclared EM_LOONGARCH both on LoongArch
-and x86, because EM_LOONGARCH is defined in /usr/include/elf.h
+AFAIK, libsas does not support multiple devices on the same port. So 
+this change is ok for libsas.
 
-Here is the x86 system info:
+> Not that looking at the pmp case, I am not confident at all that the
+> identification is correct for libsas. But I do not think that anyone would ever
+> connect a pmp box to a libsas HBA...
+> 
 
-[root@fedora yangtiezhu]# cat /etc/fedora-release
-Fedora release 38 (Thirty Eight)
-[root@fedora yangtiezhu]# uname -m
-x86_64
-[root@fedora yangtiezhu]# grep -rn -w EM_LOONGARCH /usr/include/
-/usr/include/linux/elf-em.h:54:#define EM_LOONGARCH    258    /* 
-LoongArch */
-/usr/include/linux/audit.h:442:#define AUDIT_ARCH_LOONGARCH32 
-(EM_LOONGARCH|__AUDIT_ARCH_LE)
-/usr/include/linux/audit.h:443:#define AUDIT_ARCH_LOONGARCH64 
-(EM_LOONGARCH|__AUDIT_ARCH_64BIT|__AUDIT_ARCH_LE)
-/usr/include/elf.h:361:#define EM_LOONGARCH    258    /* LoongArch */
-[root@fedora yangtiezhu]# rpm -qf /usr/include/elf.h
-glibc-headers-x86-2.37-1.fc38.noarch
+libsas's does not support pmp either, and I do not see any future plans 
+to support pmp.
 
-If I am missing something, please let me know.
-
-Anyway, it is not a bad thing to add the EM_LOONGARCH definition
-to avoid the build error on some systems which have no EM_LOONGARCH
-in the glibc header.
+So the above change (needs a ATA_FLAG_SAS_HOST check) looks good to me.
+It's better to make libsas behave as other ata drivers so that we can 
+drop the ATA_FLAG_SAS_HOST check. But this need tons of work for libsas.
 
 Thanks,
-Tiezhu
-
+Jason
