@@ -2,141 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1975B70BC19
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:44:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FB9B70BC1D
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:45:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233351AbjEVLoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 07:44:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52994 "EHLO
+        id S233173AbjEVLpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 07:45:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232427AbjEVLog (ORCPT
+        with ESMTP id S233075AbjEVLo6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 07:44:36 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0A299;
-        Mon, 22 May 2023 04:44:33 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 2645C1FE83;
-        Mon, 22 May 2023 11:44:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1684755872; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RXgpxboI1bw9eXRQKxoN/Zr/TelBo2erFp+oCAN6jQ4=;
-        b=xshnHi/ZPGtf5PnerhW07I/ZJ3gtuXaQXOMW1lqWJPHulL6JCwemBTdT6hrFHwIIHSed4v
-        ea2F1eVZy8EXq+1FsNxVQTtwHaY1yz1Ptq/ScwtUkJim3RYiBlETvetX0UbmO4Ety9M0ni
-        hwzOSYQrMj/LOTJYuPl9EjduENWCBiQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1684755872;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=RXgpxboI1bw9eXRQKxoN/Zr/TelBo2erFp+oCAN6jQ4=;
-        b=VCaQEPWIJMQFKfvjU2QqgEyFocOltgb1T0Aku6lMo9jnDOFeFltWYrRg398m5sQNJb9NTE
-        E4mo0IqKd9uklYBQ==
-Received: from kitsune.suse.cz (kitsune.suse.cz [10.100.12.127])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id D0A092C141;
-        Mon, 22 May 2023 11:44:31 +0000 (UTC)
-Date:   Mon, 22 May 2023 13:44:30 +0200
-From:   Michal =?iso-8859-1?Q?Such=E1nek?= <msuchanek@suse.de>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Cyril Brulebois <cyril@debamax.com>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-Subject: Re: [PATCH 2/2] drm/ofdrm: Update expected device name
-Message-ID: <20230522114430.GA15906@kitsune.suse.cz>
-References: <20230412095509.2196162-1-cyril@debamax.com>
- <20230412095509.2196162-3-cyril@debamax.com>
- <CAMuHMdW4rZn4p=gQZRWQQSEbQPmzZUd5eN+kP_Yr7bLgTHyvig@mail.gmail.com>
- <5694a9ab-d474-c101-9398-eea55aab29df@suse.de>
+        Mon, 22 May 2023 07:44:58 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 372DDB3;
+        Mon, 22 May 2023 04:44:55 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8CxlfC2VWtkIe0KAA--.18805S3;
+        Mon, 22 May 2023 19:44:54 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxlrWxVWtkewNvAA--.55708S3;
+        Mon, 22 May 2023 19:44:53 +0800 (CST)
+Subject: Re: [PATCH v11 0/2] spi: loongson: add bus driver for the loongson
+ spi
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230522071030.5193-1-zhuyinbo@loongson.cn>
+ <3c15d22f-4f94-4cc5-96a8-f565e58c66b9@sirena.org.uk>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <4dfa5245-d330-f432-e81e-163053687d42@loongson.cn>
+Date:   Mon, 22 May 2023 19:44:49 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+In-Reply-To: <3c15d22f-4f94-4cc5-96a8-f565e58c66b9@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <5694a9ab-d474-c101-9398-eea55aab29df@suse.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-CM-TRANSID: AQAAf8BxlrWxVWtkewNvAA--.55708S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvdXoW7Jw4rXF4DAw4DArykuFWxWFg_yoWkAFb_Cr
+        WxKay7Cw18JrWUA3Wktrs5WFyaqa4xXa1UCw4rWr17C34qvF1DJay3ua4fX3Z7AFZ5ZFsY
+        krn3CrZ3Z3W5ZjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        77CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2
+        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84AC
+        jcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84
+        ACjcxK6I8E87Iv6xkF7I0E14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc80
+        4VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67
+        AKxVWUXVWUAwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48I
+        cVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l42xK82IY6x8Erc
+        xFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2Iq
+        xVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42
+        IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY
+        6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aV
+        CY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8c_-PUUUUU==
+X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 11:07:45AM +0200, Thomas Zimmermann wrote:
-> Hi
+
+
+在 2023/5/22 下午6:34, Mark Brown 写道:
+> On Mon, May 22, 2023 at 03:10:28PM +0800, Yinbo Zhu wrote:
+>> Loongson platform support spi hardware controller and this series patch
+>> was to add spi driver and binding support.
 > 
-> Am 24.04.23 um 09:33 schrieb Geert Uytterhoeven:
-> > Hi Cyril,
-> > 
-> > CC DT
-> > 
-> > On Wed, Apr 12, 2023 at 12:05 PM Cyril Brulebois <cyril@debamax.com> wrote:
-> > > Since commit 241d2fb56a18 ("of: Make OF framebuffer device names unique"),
-> > > as spotted by Frédéric Bonnard, the historical "of-display" device is
-> > > gone: the updated logic creates "of-display.0" instead, then as many
-> > > "of-display.N" as required.
-> > > 
-> > > This means that offb no longer finds the expected device, which prevents
-> > > the Debian Installer from setting up its interface, at least on ppc64el.
-> > > 
-> > > Given the code similarity it is likely to affect ofdrm in the same way.
-> > > 
-> > > It might be better to iterate on all possible nodes, but updating the
-> > > hardcoded device from "of-display" to "of-display.0" is likely to help
-> > > as a first step.
-> > > 
-> > > Link: https://bugzilla.kernel.org/show_bug.cgi?id=217328
-> > > Link: https://bugs.debian.org/1033058
-> > > Fixes: 241d2fb56a18 ("of: Make OF framebuffer device names unique")
-> > > Cc: stable@vger.kernel.org # v6.2+
-> > > Signed-off-by: Cyril Brulebois <cyril@debamax.com>
-> > 
-> > Thanks for your patch, which is now commit 3a9d8ea2539ebebd
-> > ("drm/ofdrm: Update expected device name") in fbdev/for-next.
-> > 
-> > > --- a/drivers/gpu/drm/tiny/ofdrm.c
-> > > +++ b/drivers/gpu/drm/tiny/ofdrm.c
-> > > @@ -1390,7 +1390,7 @@ MODULE_DEVICE_TABLE(of, ofdrm_of_match_display);
-> > > 
-> > >   static struct platform_driver ofdrm_platform_driver = {
-> > >          .driver = {
-> > > -               .name = "of-display",
-> > > +               .name = "of-display.0",
-> > >                  .of_match_table = ofdrm_of_match_display,
-> > >          },
-> > >          .probe = ofdrm_probe,
-> > 
-> > Same comment as for "[PATCH 1/2] fbdev/offb: Update expected device
-> > name".
-> > 
-> > https://lore.kernel.org/r/CAMuHMdVGEeAsmb4tAuuqqGJ-4+BBETwEwYJA+M9NyJv0BJ_hNg@mail.gmail.com
+> To repeat what I previously asked you *please* send patches against my
+> current tree, this doesn't even apply cleanly against Linus' tree never
+> mind any of the branches in mine.
+
+Hi Mark,
+
+I was base on following tree and branch to apply my patch then to send
+it to upstrem:
+tree: https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git 
+branch: for-next
+
+The recently patch was as follows, It seems no issue for patch apply
+them, Maybe it is the 0/2 patch issue ? this 0/2 patch wasn't a valid
+patch and it need was skipped.
+
+8f7b91d47211 spi: loongson: add bus driver for the loongson spi
+controller
+193a72146430 dt-bindings: spi: add loongson spi
+b1f4091a9eff (spi/for-next) Merge remote-tracking branch 'spi/for-6.5'
+into spi-next
+120e1aa2f2e6 (spi/for-6.5) spi: hisi-kunpeng: Fix error checking
+f2156989bf30 spi: cdns: Add compatible for AMD Pensando Elba SoC
+
+
+Thanks,
+Yinbo.
+
+
 > 
-> Sorry that I missed this patch. I agree that it's probably not correct. At
-> least in ofdrm, we want to be able to use multiple framebuffers at the same
-> time; a feature that has been broken by this change.
 
-How did it work before, though?
-
-We did not have this device name clash, then we did, and it was solved
-by renaming the devices to numnered.
-
-Now matching the first device should restore the previously available
-functionality, mathing any of the numbered devices would potentially
-allow to use multiple devices.
-
-Or am I missing something?
-
-Thanks
-
-Michal
