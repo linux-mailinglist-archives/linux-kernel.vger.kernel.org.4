@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3602C70CAE7
+	by mail.lfdr.de (Postfix) with ESMTP id 8194D70CAE8
 	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 22:25:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234763AbjEVUZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 16:25:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34754 "EHLO
+        id S234820AbjEVUZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 16:25:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233598AbjEVUYr (ORCPT
+        with ESMTP id S233987AbjEVUYu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 16:24:47 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4670AA;
-        Mon, 22 May 2023 13:24:46 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-510ede0f20aso69451a12.3;
-        Mon, 22 May 2023 13:24:46 -0700 (PDT)
+        Mon, 22 May 2023 16:24:50 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70343B5;
+        Mon, 22 May 2023 13:24:47 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-51190fd46c3so85279a12.1;
+        Mon, 22 May 2023 13:24:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20221208; t=1684787085; x=1687379085;
+        d=googlemail.com; s=20221208; t=1684787086; x=1687379086;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MdunJDSmoSLBIk6JekhzE8DQlhwFeDOnRUZB4WxVElo=;
-        b=s0QA8JPXTS6T3XQNZZKmMsezG7EApz4ZJ/XaiKuytpnf6V9iPtM6vD7x91sMZBTL6N
-         lsL4fcY6fDufBeaGuKpobHG64CWh2pROMDHQMM1PG8XKV1o8U3ex2T98Qex2wa2G8PpT
-         jrdmHF8Em8XP5TBkE5plQuPJVRjdF465oF6lI4zpuc5or/BfmtkIFqttCzUEJnmIGMQ5
-         WBtdV+8e2BkPUAN+6fvnLHqGmm/JyuoSdvIaFFPjHTCkFKJO+WVh7C8jsDX4vEJqFgVK
-         CPhTowYRryLlEVsMqrjJt0gt3778V0EaCiDu85yUl+6YR8inyYUxNrt92slnSPpHm2r0
-         uRcg==
+        bh=laUbyFg9PPjdGbaKz0yrkX7bzWb1Nq4VWWkbufsOMeo=;
+        b=oOTsYTnjPLgELSL22TQa70jsdL8/Z7KuhidixophngljW2ek+6kCRHtpUB35v4wtTO
+         zC0JtzAQDLJixffK2LwgmgzdlZyHCn9k0lyesQl7kJFn2nZjQ5KCRYih/yOh/6zAkPUw
+         tL4dtbPLhzMvlFMXhuIQCPoZdlbadXQ4ddlCw9IOMKtVc5raejfQUMysoN6ayOnKzpmM
+         HN4NnlSOUj1NWXLTTNDHstya7YOPOTpDW0QYRHleAbKn5Kk6/ZPVzjnTZp07E3zor8uO
+         6nZmMAvl8WixxTzDdK70b11mw/gPDhhVah838Uc4tuJyH3Xmo4bTM2ZKj/5c5fikcnfK
+         L0dQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684787085; x=1687379085;
+        d=1e100.net; s=20221208; t=1684787086; x=1687379086;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MdunJDSmoSLBIk6JekhzE8DQlhwFeDOnRUZB4WxVElo=;
-        b=MD/nfwf/egBNtyibCq00cpXtNX5F0OyTr162/cXM8o7SoQ5GalV3lygFm1DQtZYEem
-         etqCtwdBx68QpA1vgGrOpHG4d1bqPb8MW90hn+FDm9d/FL+MnBmKAWsH885gW0jMLMGm
-         SrdgeTTAxHCLUM/GUBkvTSSscF8EVar+J6Cmr5uAxxwYyvAhJm8ri7ypsOWDj3FQQjVh
-         yjci0hNQocRpXL5EaRYuHHMfqK5q+Qqw983dgmxLXDa7pzfyKTaY1YpTef6kK6WUGwHu
-         buRGqF2p0vhWL/N7y0/t71gFuVn1pRIWxYPQTaDaYQoOZNn0NiJRzs33L7U4fQ47tFb/
-         Jyog==
-X-Gm-Message-State: AC+VfDwJWeAPaolAl5nhj5mvjWL7wpzyWFZ5P4W4xco3sw6Upq0svST2
-        UCmqIDbrEtlGftfIknagXlAD//epRnE=
-X-Google-Smtp-Source: ACHHUZ6/5oKV8yPFa6+sd2j1tfR8qC5kBsKS7GUJ9VCeeh52KgHIVf40gsE+QgONgbpDRR+BPxvejA==
-X-Received: by 2002:aa7:c6ca:0:b0:50d:b16d:d21 with SMTP id b10-20020aa7c6ca000000b0050db16d0d21mr9509933eds.3.1684787084760;
-        Mon, 22 May 2023 13:24:44 -0700 (PDT)
+        bh=laUbyFg9PPjdGbaKz0yrkX7bzWb1Nq4VWWkbufsOMeo=;
+        b=O13aCeaGJkRmZUktWOM7vBt7wnB061VtN3ByWmqmU1si+8nPBPq1HA7sl4cXU5NRki
+         Ex0eVpEs2r3KcrafhJ+qKDq7BcK4upqM7oChfm+3GQl7ZD6PeI76SQCTl39PMHu26FcP
+         T2bXEjt9zayuFrfU522ifF/C6Pb1Azp+XLQMUKJKM41i8fX5LTn3Vzrj02oS6p5w+LPZ
+         YZtHfDtce+llgAhN4KiRTCcBLYNqumTIZstYK1a8PmD7IDwzRErS705kqDH2+dWT4rlq
+         9m6TXZqHSkqA2hM+wySe55L84PrBRTLM4fwZAfuDF86jvdsdcwJVMTpTgEdbJiW7bYVj
+         5qNQ==
+X-Gm-Message-State: AC+VfDzXD5wxO067Dk679pHLcIATZLzY50UL1nKRTXpKMFL6W/gOgM0t
+        ED++qlqfEuMqHGNg0CqXgdHF3/Jg1P0=
+X-Google-Smtp-Source: ACHHUZ779+BClsNOzuq2xyDG7cNsHnCrnYEDhEtdJ6kuaVtWdsI+8Lrwev/Z831p74Ki7f+OtdATUQ==
+X-Received: by 2002:aa7:c25a:0:b0:50b:d221:248a with SMTP id y26-20020aa7c25a000000b0050bd221248amr9169837edo.19.1684787085691;
+        Mon, 22 May 2023 13:24:45 -0700 (PDT)
 Received: from localhost.localdomain (dynamic-2a01-0c23-c459-f400-0000-0000-0000-0e63.c23.pool.telefonica.de. [2a01:c23:c459:f400::e63])
         by smtp.googlemail.com with ESMTPSA id v2-20020a056402184200b0050d56dffc93sm3265031edy.12.2023.05.22.13.24.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 13:24:44 -0700 (PDT)
+        Mon, 22 May 2023 13:24:45 -0700 (PDT)
 From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 To:     linux-wireless@vger.kernel.org
 Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -58,9 +58,9 @@ Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
         Ping-Ke Shih <pkshih@realtek.com>, jernej.skrabec@gmail.com,
         Larry Finger <Larry.Finger@lwfinger.net>,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH wireless-next v2 3/4] mmc: sdio: Add/rename SDIO ID of the RTL8723DS SDIO wifi cards
-Date:   Mon, 22 May 2023 22:24:24 +0200
-Message-Id: <20230522202425.1827005-4-martin.blumenstingl@googlemail.com>
+Subject: [PATCH wireless-next v2 4/4] wifi: rtw88: Add support for the SDIO based RTL8723DS chipset
+Date:   Mon, 22 May 2023 22:24:25 +0200
+Message-Id: <20230522202425.1827005-5-martin.blumenstingl@googlemail.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230522202425.1827005-1-martin.blumenstingl@googlemail.com>
 References: <20230522202425.1827005-1-martin.blumenstingl@googlemail.com>
@@ -76,16 +76,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RTL8723DS comes in two variant and each of them has their own SDIO ID:
-- 0xd723 can connect two antennas. The WiFi part is still 1x1 so the
-  second antenna can be dedicated to Bluetooth
-- 0xd724 can only connect one antenna so it's shared between WiFi and
-  Bluetooth
-
-Add a new entry for the single antenna RTL8723DS (0xd724) which can be
-found on the MangoPi MQ-Quad. Also rename the existing RTL8723DS entry
-(0xd723) so it's name reflects that it's the variant with support for
-two antennas.
+Wire up RTL8723DS chipset support using the rtw88 SDIO HCI code as well
+as the existing RTL8723D chipset code.
 
 Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
 Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
@@ -94,23 +86,95 @@ Changes since v1:
 - added Ping-Ke's Reviewed-by (thank you!)
 
 
- include/linux/mmc/sdio_ids.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/net/wireless/realtek/rtw88/Kconfig    | 11 +++++
+ drivers/net/wireless/realtek/rtw88/Makefile   |  3 ++
+ .../net/wireless/realtek/rtw88/rtw8723ds.c    | 41 +++++++++++++++++++
+ 3 files changed, 55 insertions(+)
+ create mode 100644 drivers/net/wireless/realtek/rtw88/rtw8723ds.c
 
-diff --git a/include/linux/mmc/sdio_ids.h b/include/linux/mmc/sdio_ids.h
-index c653accdc7fd..7fada7a714fe 100644
---- a/include/linux/mmc/sdio_ids.h
-+++ b/include/linux/mmc/sdio_ids.h
-@@ -121,7 +121,8 @@
- #define SDIO_DEVICE_ID_REALTEK_RTW8822BS	0xb822
- #define SDIO_DEVICE_ID_REALTEK_RTW8821CS	0xc821
- #define SDIO_DEVICE_ID_REALTEK_RTW8822CS	0xc822
--#define SDIO_DEVICE_ID_REALTEK_RTW8723DS	0xd723
-+#define SDIO_DEVICE_ID_REALTEK_RTW8723DS_2ANT	0xd723
-+#define SDIO_DEVICE_ID_REALTEK_RTW8723DS_1ANT	0xd724
- #define SDIO_DEVICE_ID_REALTEK_RTW8821DS	0xd821
+diff --git a/drivers/net/wireless/realtek/rtw88/Kconfig b/drivers/net/wireless/realtek/rtw88/Kconfig
+index 29eb2f8e0eb7..cffad1c01249 100644
+--- a/drivers/net/wireless/realtek/rtw88/Kconfig
++++ b/drivers/net/wireless/realtek/rtw88/Kconfig
+@@ -111,6 +111,17 @@ config RTW88_8723DE
  
- #define SDIO_VENDOR_ID_SIANO			0x039a
+ 	  802.11n PCIe wireless network adapter
+ 
++config RTW88_8723DS
++	tristate "Realtek 8723DS SDIO wireless network adapter"
++	depends on MMC
++	select RTW88_CORE
++	select RTW88_SDIO
++	select RTW88_8723D
++	help
++	  Select this option will enable support for 8723DS chipset
++
++	  802.11n SDIO wireless network adapter
++
+ config RTW88_8723DU
+ 	tristate "Realtek 8723DU USB wireless network adapter"
+ 	depends on USB
+diff --git a/drivers/net/wireless/realtek/rtw88/Makefile b/drivers/net/wireless/realtek/rtw88/Makefile
+index 82979b30ae8d..fd212c09d88a 100644
+--- a/drivers/net/wireless/realtek/rtw88/Makefile
++++ b/drivers/net/wireless/realtek/rtw88/Makefile
+@@ -50,6 +50,9 @@ rtw88_8723d-objs		:= rtw8723d.o rtw8723d_table.o
+ obj-$(CONFIG_RTW88_8723DE)	+= rtw88_8723de.o
+ rtw88_8723de-objs		:= rtw8723de.o
+ 
++obj-$(CONFIG_RTW88_8723DS)	+= rtw88_8723ds.o
++rtw88_8723ds-objs		:= rtw8723ds.o
++
+ obj-$(CONFIG_RTW88_8723DU)	+= rtw88_8723du.o
+ rtw88_8723du-objs		:= rtw8723du.o
+ 
+diff --git a/drivers/net/wireless/realtek/rtw88/rtw8723ds.c b/drivers/net/wireless/realtek/rtw88/rtw8723ds.c
+new file mode 100644
+index 000000000000..e5b6960ba0a0
+--- /dev/null
++++ b/drivers/net/wireless/realtek/rtw88/rtw8723ds.c
+@@ -0,0 +1,41 @@
++// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
++/* Copyright(c) Martin Blumenstingl <martin.blumenstingl@googlemail.com>
++ */
++
++#include <linux/mmc/sdio_func.h>
++#include <linux/mmc/sdio_ids.h>
++#include <linux/module.h>
++#include "main.h"
++#include "rtw8723d.h"
++#include "sdio.h"
++
++static const struct sdio_device_id rtw_8723ds_id_table[] =  {
++	{
++		SDIO_DEVICE(SDIO_VENDOR_ID_REALTEK,
++			    SDIO_DEVICE_ID_REALTEK_RTW8723DS_1ANT),
++		.driver_data = (kernel_ulong_t)&rtw8723d_hw_spec,
++	},
++	{
++		SDIO_DEVICE(SDIO_VENDOR_ID_REALTEK,
++			    SDIO_DEVICE_ID_REALTEK_RTW8723DS_2ANT),
++		.driver_data = (kernel_ulong_t)&rtw8723d_hw_spec,
++	},
++	{}
++};
++MODULE_DEVICE_TABLE(sdio, rtw_8723ds_id_table);
++
++static struct sdio_driver rtw_8723ds_driver = {
++	.name = "rtw_8723ds",
++	.probe = rtw_sdio_probe,
++	.remove = rtw_sdio_remove,
++	.id_table = rtw_8723ds_id_table,
++	.drv = {
++		.pm = &rtw_sdio_pm_ops,
++		.shutdown = rtw_sdio_shutdown,
++	}
++};
++module_sdio_driver(rtw_8723ds_driver);
++
++MODULE_AUTHOR("Martin Blumenstingl <martin.blumenstingl@googlemail.com>");
++MODULE_DESCRIPTION("Realtek 802.11n wireless 8723ds driver");
++MODULE_LICENSE("Dual BSD/GPL");
 -- 
 2.40.1
 
