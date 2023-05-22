@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD7770B485
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 07:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5742170B487
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 07:24:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231966AbjEVFXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 01:23:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58710 "EHLO
+        id S231970AbjEVFYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 01:24:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbjEVFXb (ORCPT
+        with ESMTP id S229559AbjEVFYf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 01:23:31 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAE4CAA
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:23:29 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-ba1815e12efso4784744276.3
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:23:29 -0700 (PDT)
+        Mon, 22 May 2023 01:24:35 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48BEDF9
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:24:34 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-561c1436c75so78162957b3.1
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:24:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684733009; x=1687325009;
+        d=google.com; s=20221208; t=1684733073; x=1687325073;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lzQPoLjWXuP3+Ka40j/FX+cgzbLo3MyR/78LE/Otflc=;
-        b=OqBANCRQzvanaas2fLT/vDBYw2XZ+pto0Z3I0g1aU/R1OYHuij2QrMo2xy+Rr6C35x
-         l86kCF5UL52/GbeJlQ6bHEBRSpOVELHuSaKXNybOZhqbs+opPxUSDPmtJNEm+jrMaklN
-         ft3L6EaR3I8ziuMCU5sNY2OaZ+zGmtKvbNZ9Tsv9F9B6wECrNMIjTpzlO5d+Z255LDVp
-         yEk+S1bLKTQfkqEB9/oNMA15Vbb0/7X2Ek3v5V8dnbfTlUQxMGQNWKaElfOhfI5B5peu
-         qIbnRaHYRIRCfQSqqRnyf0yf2fu8VPlbHJkeNdMJAA3hkVwFBfoZ10oZW3ZVmkHCSkfx
-         eCng==
+        bh=9aUzicIbTynIqE9awb1KUIJU7FYy6E6iJhesHPP8TVA=;
+        b=FCyyq681fiCl9+MbURk3V7VS6u/az3wH03OAXe0MvSy7niV7M+xCTcD3LFVHKqg1yQ
+         ike7yvjl4pZ53eTIQqFm0t5pi4r6AsMUJr4uYJMWzl0YHx8ZPfzSAps1Y7Xpi29TZEWv
+         oF3xEY1+E9kXiv/OXuel6wSjjlu4EU8KZchqn8ox3RdwN6yhtrdyc37IOWvkIHSmyayR
+         wIwLertYdChnzsX/BWtNMS+OritTekYale8j0KLTkGM2OoyaSuh4ZrnXK1pihTZaxeir
+         zEXvAqI7WXP5/kZeI5P2fpOTxrVe/RXgYq45Sc6JeGL/JmIWIWy78rlaXhstJBzFaLu3
+         cGzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684733009; x=1687325009;
+        d=1e100.net; s=20221208; t=1684733073; x=1687325073;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lzQPoLjWXuP3+Ka40j/FX+cgzbLo3MyR/78LE/Otflc=;
-        b=S4jBqKp8JdodbskzYJHzAPTd8jDWsDM1BgE1xI82F5bq828e2GpRDt7Eg1wqjgWRhu
-         91QFXHBeHj31sfJSHJv2ESVugylnbHWHp0TACqa3M4MvYrqeF0SdqIoNFTZB82QbvHP1
-         alpAvXUF8tvn3pCRm0N4ZprPUk40vdwgAgYb1WNSPIa9fgPb1V/p6GvOc5kskZ/MOFZN
-         X8+YNuFmRSVcwNhNDBuRGnS04dr7kUrlJFJn40S+K4vAlgCxwAGAopd/C7xSX3B6uH0g
-         gUI7HnoWZee2CgangzwXCGjqps4m0zZSuT9a7fXtKDpu5AOXjO6u6Ib5AQueanHJ61Qb
-         VjEg==
-X-Gm-Message-State: AC+VfDwZGcSaJ6kt9oxSOqeHiTfGyy/tAUQ3zHah2E2h3CvxSQFqbzme
-        7h5QgzCsrHX97oKgnuOutUOqRw==
-X-Google-Smtp-Source: ACHHUZ7qqz3U4uOnP6Ec8LA+Qz8AEibK4IaZAP5jwPoGGf6Fy3SqZkPf36XnHstJeJW2gmcrXMZvlw==
-X-Received: by 2002:a25:d2c5:0:b0:ba7:20a:3967 with SMTP id j188-20020a25d2c5000000b00ba7020a3967mr11645090ybg.43.1684733009011;
-        Sun, 21 May 2023 22:23:29 -0700 (PDT)
+        bh=9aUzicIbTynIqE9awb1KUIJU7FYy6E6iJhesHPP8TVA=;
+        b=PIqUenp1QqXMWlcsejB5NWwwUUArP4lLVhBSwEfDc+dqDfYDNn2oq1FIsCktv4Mq6q
+         e+tyl7fg9VVQTGQJnL3ov9viN1TpkDt/SjO3sMPC+ue1dA/ke2E7c9HdmMBBMqZGKxjn
+         G9mzJgNpJObKmEwo+HbzQeY0fv3lqvl1hf1sHhpMuQBOwmHvht4QxeLzcEpvU6WMM83I
+         wkK0G26OmmtmgY5JOqHnU9a5LwEWDDjynPlYPJfi+JxGJu5el4gaCml48S78dA5GzIVk
+         f4+VMF+6AcRhfoKTxFTlsODhggyaD/4c5HnAwzeFY7GAAx4NJ+vPgDJ5ySlOmeveqskE
+         wrPw==
+X-Gm-Message-State: AC+VfDwXRrmRByIWTUKr1TEGc5KX26WoLf21vkN/uHDav6HWMmAxWBXQ
+        DbwzSknkP4PPlnp8pO5h+Q7J9g==
+X-Google-Smtp-Source: ACHHUZ5k0AE/kz26DrRpHOYfkL1f8tXo8j4DB4kKzH+Hlu6k3+yZrZ26Tvg/gU/iOROW9T7xGJmWkw==
+X-Received: by 2002:a81:8a01:0:b0:561:b5cc:e10a with SMTP id a1-20020a818a01000000b00561b5cce10amr9111246ywg.6.1684733073356;
+        Sun, 21 May 2023 22:24:33 -0700 (PDT)
 Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id g10-20020a056902134a00b00b9db62abff3sm1277036ybu.58.2023.05.21.22.23.26
+        by smtp.gmail.com with ESMTPSA id g189-20020a8152c6000000b00555e1886350sm1840019ywb.78.2023.05.21.22.24.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 May 2023 22:23:28 -0700 (PDT)
-Date:   Sun, 21 May 2023 22:23:25 -0700 (PDT)
+        Sun, 21 May 2023 22:24:33 -0700 (PDT)
+Date:   Sun, 21 May 2023 22:24:29 -0700 (PDT)
 From:   Hugh Dickins <hughd@google.com>
 X-X-Sender: hugh@ripple.attlocal.net
 To:     Andrew Morton <akpm@linux-foundation.org>
@@ -81,10 +81,9 @@ cc:     Mike Kravetz <mike.kravetz@oracle.com>,
         Song Liu <song@kernel.org>,
         Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH 26/31] mm/huge_memory: split huge pmd under one
- pte_offset_map()
+Subject: [PATCH 27/31] mm/khugepaged: allow pte_offset_map[_lock]() to fail
 In-Reply-To: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
-Message-ID: <3f442a9c-af6d-573d-1ad1-f6f413b1abc9@google.com>
+Message-ID: <aef43be2-f877-b0f8-b41c-37f847d3a7b4@google.com>
 References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -99,97 +98,180 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__split_huge_zero_page_pmd() use a single pte_offset_map() to sweep the
-extent: it's already under pmd_lock(), so this is no worse for latency;
-and since it's supposed to have full control of the just-withdrawn page
-table, here choose to VM_BUG_ON if it were to fail.  And please don't
-increment haddr by PAGE_SIZE, that should remain huge aligned: declare
-a separate addr (not a bugfix, but it was deceptive).
+__collapse_huge_page_swapin(): don't drop the map after every pte, it
+only has to be dropped by do_swap_page(); give up if pte_offset_map()
+fails; trace_mm_collapse_huge_page_swapin() at the end, with result;
+fix comment on returned result; fix vmf.pgoff, though it's not used.
 
-__split_huge_pmd_locked() likewise (but it had declared a separate addr);
-and change its BUG_ON(!pte_none) to VM_BUG_ON, for consistency with zero
-(those deposited page tables are sometimes victims of random corruption).
+collapse_huge_page(): use pte_offset_map_lock() on the _pmd returned
+from clearing; allow failure, but it should be impossible there.
+hpage_collapse_scan_pmd() and collapse_pte_mapped_thp() allow for
+pte_offset_map_lock() failure.
 
 Signed-off-by: Hugh Dickins <hughd@google.com>
 ---
- mm/huge_memory.c | 28 ++++++++++++++++++----------
- 1 file changed, 18 insertions(+), 10 deletions(-)
+ mm/khugepaged.c | 72 +++++++++++++++++++++++++++++++++----------------
+ 1 file changed, 49 insertions(+), 23 deletions(-)
 
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index d4bd5fa7c823..839c13fa0bbe 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -2037,6 +2037,8 @@ static void __split_huge_zero_page_pmd(struct vm_area_struct *vma,
- 	struct mm_struct *mm = vma->vm_mm;
- 	pgtable_t pgtable;
- 	pmd_t _pmd, old_pmd;
-+	unsigned long addr;
-+	pte_t *pte;
- 	int i;
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index 732f9ac393fc..49cfa7cdfe93 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -993,9 +993,8 @@ static int check_pmd_still_valid(struct mm_struct *mm,
+  * Only done if hpage_collapse_scan_pmd believes it is worthwhile.
+  *
+  * Called and returns without pte mapped or spinlocks held.
+- * Note that if false is returned, mmap_lock will be released.
++ * Returns result: if not SCAN_SUCCEED, mmap_lock has been released.
+  */
+-
+ static int __collapse_huge_page_swapin(struct mm_struct *mm,
+ 				       struct vm_area_struct *vma,
+ 				       unsigned long haddr, pmd_t *pmd,
+@@ -1004,23 +1003,35 @@ static int __collapse_huge_page_swapin(struct mm_struct *mm,
+ 	int swapped_in = 0;
+ 	vm_fault_t ret = 0;
+ 	unsigned long address, end = haddr + (HPAGE_PMD_NR * PAGE_SIZE);
++	int result;
++	pte_t *pte = NULL;
  
- 	/*
-@@ -2052,17 +2054,20 @@ static void __split_huge_zero_page_pmd(struct vm_area_struct *vma,
- 	pgtable = pgtable_trans_huge_withdraw(mm, pmd);
- 	pmd_populate(mm, &_pmd, pgtable);
+ 	for (address = haddr; address < end; address += PAGE_SIZE) {
+ 		struct vm_fault vmf = {
+ 			.vma = vma,
+ 			.address = address,
+-			.pgoff = linear_page_index(vma, haddr),
++			.pgoff = linear_page_index(vma, address),
+ 			.flags = FAULT_FLAG_ALLOW_RETRY,
+ 			.pmd = pmd,
+ 		};
  
--	for (i = 0; i < HPAGE_PMD_NR; i++, haddr += PAGE_SIZE) {
--		pte_t *pte, entry;
--		entry = pfn_pte(my_zero_pfn(haddr), vma->vm_page_prot);
-+	pte = pte_offset_map(&_pmd, haddr);
-+	VM_BUG_ON(!pte);
-+	for (i = 0, addr = haddr; i < HPAGE_PMD_NR; i++, addr += PAGE_SIZE) {
-+		pte_t entry;
-+
-+		entry = pfn_pte(my_zero_pfn(addr), vma->vm_page_prot);
- 		entry = pte_mkspecial(entry);
- 		if (pmd_uffd_wp(old_pmd))
- 			entry = pte_mkuffd_wp(entry);
--		pte = pte_offset_map(&_pmd, haddr);
- 		VM_BUG_ON(!pte_none(*pte));
--		set_pte_at(mm, haddr, pte, entry);
--		pte_unmap(pte);
-+		set_pte_at(mm, addr, pte, entry);
-+		pte++;
- 	}
-+	pte_unmap(pte - 1);
- 	smp_wmb(); /* make pte visible before pmd */
- 	pmd_populate(mm, pmd, pgtable);
- }
-@@ -2077,6 +2082,7 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
- 	bool young, write, soft_dirty, pmd_migration = false, uffd_wp = false;
- 	bool anon_exclusive = false, dirty = false;
- 	unsigned long addr;
-+	pte_t *pte;
- 	int i;
- 
- 	VM_BUG_ON(haddr & ~HPAGE_PMD_MASK);
-@@ -2205,8 +2211,10 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
- 	pgtable = pgtable_trans_huge_withdraw(mm, pmd);
- 	pmd_populate(mm, &_pmd, pgtable);
- 
-+	pte = pte_offset_map(&_pmd, haddr);
-+	VM_BUG_ON(!pte);
- 	for (i = 0, addr = haddr; i < HPAGE_PMD_NR; i++, addr += PAGE_SIZE) {
--		pte_t entry, *pte;
-+		pte_t entry;
- 		/*
- 		 * Note that NUMA hinting access restrictions are not
- 		 * transferred to avoid any possibility of altering
-@@ -2249,11 +2257,11 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
- 				entry = pte_mkuffd_wp(entry);
- 			page_add_anon_rmap(page + i, vma, addr, false);
+-		vmf.pte = pte_offset_map(pmd, address);
+-		vmf.orig_pte = *vmf.pte;
+-		if (!is_swap_pte(vmf.orig_pte)) {
+-			pte_unmap(vmf.pte);
+-			continue;
++		if (!pte++) {
++			pte = pte_offset_map(pmd, address);
++			if (!pte) {
++				mmap_read_unlock(mm);
++				result = SCAN_PMD_NULL;
++				goto out;
++			}
  		}
--		pte = pte_offset_map(&_pmd, addr);
--		BUG_ON(!pte_none(*pte));
-+		VM_BUG_ON(!pte_none(*pte));
- 		set_pte_at(mm, addr, pte, entry);
--		pte_unmap(pte);
-+		pte++;
- 	}
-+	pte_unmap(pte - 1);
++
++		vmf.orig_pte = *pte;
++		if (!is_swap_pte(vmf.orig_pte))
++			continue;
++
++		vmf.pte = pte;
+ 		ret = do_swap_page(&vmf);
++		/* Which unmaps pte (after perhaps re-checking the entry) */
++		pte = NULL;
  
- 	if (!pmd_migration)
- 		page_remove_rmap(page, vma, true);
+ 		/*
+ 		 * do_swap_page returns VM_FAULT_RETRY with released mmap_lock.
+@@ -1029,24 +1040,29 @@ static int __collapse_huge_page_swapin(struct mm_struct *mm,
+ 		 * resulting in later failure.
+ 		 */
+ 		if (ret & VM_FAULT_RETRY) {
+-			trace_mm_collapse_huge_page_swapin(mm, swapped_in, referenced, 0);
+ 			/* Likely, but not guaranteed, that page lock failed */
+-			return SCAN_PAGE_LOCK;
++			result = SCAN_PAGE_LOCK;
++			goto out;
+ 		}
+ 		if (ret & VM_FAULT_ERROR) {
+ 			mmap_read_unlock(mm);
+-			trace_mm_collapse_huge_page_swapin(mm, swapped_in, referenced, 0);
+-			return SCAN_FAIL;
++			result = SCAN_FAIL;
++			goto out;
+ 		}
+ 		swapped_in++;
+ 	}
+ 
++	if (pte)
++		pte_unmap(pte);
++
+ 	/* Drain LRU add pagevec to remove extra pin on the swapped in pages */
+ 	if (swapped_in)
+ 		lru_add_drain();
+ 
+-	trace_mm_collapse_huge_page_swapin(mm, swapped_in, referenced, 1);
+-	return SCAN_SUCCEED;
++	result = SCAN_SUCCEED;
++out:
++	trace_mm_collapse_huge_page_swapin(mm, swapped_in, referenced, result);
++	return result;
+ }
+ 
+ static int alloc_charge_hpage(struct page **hpage, struct mm_struct *mm,
+@@ -1146,9 +1162,6 @@ static int collapse_huge_page(struct mm_struct *mm, unsigned long address,
+ 				address + HPAGE_PMD_SIZE);
+ 	mmu_notifier_invalidate_range_start(&range);
+ 
+-	pte = pte_offset_map(pmd, address);
+-	pte_ptl = pte_lockptr(mm, pmd);
+-
+ 	pmd_ptl = pmd_lock(mm, pmd); /* probably unnecessary */
+ 	/*
+ 	 * This removes any huge TLB entry from the CPU so we won't allow
+@@ -1163,13 +1176,18 @@ static int collapse_huge_page(struct mm_struct *mm, unsigned long address,
+ 	mmu_notifier_invalidate_range_end(&range);
+ 	tlb_remove_table_sync_one();
+ 
+-	spin_lock(pte_ptl);
+-	result =  __collapse_huge_page_isolate(vma, address, pte, cc,
+-					       &compound_pagelist);
+-	spin_unlock(pte_ptl);
++	pte = pte_offset_map_lock(mm, &_pmd, address, &pte_ptl);
++	if (pte) {
++		result = __collapse_huge_page_isolate(vma, address, pte, cc,
++						      &compound_pagelist);
++		spin_unlock(pte_ptl);
++	} else {
++		result = SCAN_PMD_NULL;
++	}
+ 
+ 	if (unlikely(result != SCAN_SUCCEED)) {
+-		pte_unmap(pte);
++		if (pte)
++			pte_unmap(pte);
+ 		spin_lock(pmd_ptl);
+ 		BUG_ON(!pmd_none(*pmd));
+ 		/*
+@@ -1253,6 +1271,11 @@ static int hpage_collapse_scan_pmd(struct mm_struct *mm,
+ 	memset(cc->node_load, 0, sizeof(cc->node_load));
+ 	nodes_clear(cc->alloc_nmask);
+ 	pte = pte_offset_map_lock(mm, pmd, address, &ptl);
++	if (!pte) {
++		result = SCAN_PMD_NULL;
++		goto out;
++	}
++
+ 	for (_address = address, _pte = pte; _pte < pte + HPAGE_PMD_NR;
+ 	     _pte++, _address += PAGE_SIZE) {
+ 		pte_t pteval = *_pte;
+@@ -1622,8 +1645,10 @@ int collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr,
+ 	 * lockless_pages_from_mm() and the hardware page walker can access page
+ 	 * tables while all the high-level locks are held in write mode.
+ 	 */
+-	start_pte = pte_offset_map_lock(mm, pmd, haddr, &ptl);
+ 	result = SCAN_FAIL;
++	start_pte = pte_offset_map_lock(mm, pmd, haddr, &ptl);
++	if (!start_pte)
++		goto drop_immap;
+ 
+ 	/* step 1: check all mapped PTEs are to the right huge page */
+ 	for (i = 0, addr = haddr, pte = start_pte;
+@@ -1697,6 +1722,7 @@ int collapse_pte_mapped_thp(struct mm_struct *mm, unsigned long addr,
+ 
+ abort:
+ 	pte_unmap_unlock(start_pte, ptl);
++drop_immap:
+ 	i_mmap_unlock_write(vma->vm_file->f_mapping);
+ 	goto drop_hpage;
+ }
 -- 
 2.35.3
 
