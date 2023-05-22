@@ -2,106 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A627470C3BC
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 18:48:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7605E70C3BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 18:51:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233225AbjEVQsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 12:48:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50684 "EHLO
+        id S233247AbjEVQvL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 22 May 2023 12:51:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230015AbjEVQsx (ORCPT
+        with ESMTP id S231799AbjEVQvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 12:48:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 193FCF1;
-        Mon, 22 May 2023 09:48:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A413B61F3C;
-        Mon, 22 May 2023 16:48:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D4B6C433D2;
-        Mon, 22 May 2023 16:48:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1684774132;
-        bh=M8levgiQCWt8CPt7sgZR3AAO6FU0PqwenHqPinAofg8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iusj0Jd+ZabyThyECFYyxyIH+zeqe5gjhQgKfgIYjICpXxBfhtsl3OlD1oGZsjA+C
-         bKllplYtmb5Y1hRfbcvA91mHddFExcOxc/iA0+Mm66cEfr4pto5BW+KfgqNl7FVy0H
-         3ImSugaJJYJVtwdZ8iGTncyhmaQLBSF16Bf0YUe0=
-Date:   Mon, 22 May 2023 17:48:47 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Lee Jones <lee@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, stable@vger.kernel.org, lwn@lwn.net,
-        jslaby@suse.cz
-Subject: Re: Linux 5.15.104
-Message-ID: <2023052236-clear-although-6495@gregkh>
-References: <1679511203203220@kroah.com>
- <20230522102355.GA2009088@google.com>
- <2023052236-passivism-equate-5cb8@gregkh>
- <20230522162812.GQ404509@google.com>
+        Mon, 22 May 2023 12:51:09 -0400
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ABEDF4;
+        Mon, 22 May 2023 09:51:07 -0700 (PDT)
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-513debc49e8so458132a12.0;
+        Mon, 22 May 2023 09:51:07 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684774265; x=1687366265;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=prsCEJ6oGGjSe0Cvn82lvxEASIZfzQmdFsTTFy0EMdI=;
+        b=MGjQFEtKzDnkiWAP+bIyLxtMAJiNwsvLTd3Vn/RS1FCcsgEKBTleYAl/VeYRhFh3QO
+         unQ57Qj8aZzoO1a0wnriI/F6iXUJ+KyUg5IwS3Z2vBP+8Uu/74KaZKnXXFuPmBLAVTUH
+         wQe2KPGwyjcWH6/pTzIYEe2O/AL4eu7oqPwLMeuW7OD2lzGpEZm4KPDl52S96/XNoRbP
+         Vg/rL+LN7isnY118ZZOO4ktXx3nt2gJsm86m8vkvqUkeQNaqudq+KnENRW8jMWDKQM6Q
+         J64iO7GaVlGNn4G4vdHKb0r+Yag1Bc7CbK/PglALJgY8jSHxF6s+iYJAvDU9rncsPzRS
+         nufA==
+X-Gm-Message-State: AC+VfDzXr2ueisRB6sS2mPXM7uMSP9Q9JgmYfal5WF+4TrmHa9b98Zmm
+        l1A0d0dPQQ7VcDsGo58kE9jEy/Hz0FJ15Efp/Hz0nDBO
+X-Google-Smtp-Source: ACHHUZ40eA7KPDT+SqOa4Nsm/sQnxkFPSXWB3IQj0l3Y5cpLcBljg+SD+WKn9IKigDiHQrxr4sIIxUKnfVLMf0LIkLo=
+X-Received: by 2002:a17:906:72d4:b0:96f:da08:d451 with SMTP id
+ m20-20020a17090672d400b0096fda08d451mr3730896ejl.6.1684774265481; Mon, 22 May
+ 2023 09:51:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230522162812.GQ404509@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230520133249.22689-1-kweifat@gmail.com>
+In-Reply-To: <20230520133249.22689-1-kweifat@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 22 May 2023 18:50:54 +0200
+Message-ID: <CAJZ5v0guY16bicakMokQtp=_DGbBb4hk6B=RuPp_8+bd0jt+6w@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: intel_pstate: Avoid initializing variables prematurely
+To:     Fieah Lim <kweifat@gmail.com>
+Cc:     srinivas.pandruvada@linux.intel.com, lenb@kernel.org,
+        rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 05:28:12PM +0100, Lee Jones wrote:
-> On Mon, 22 May 2023, Greg Kroah-Hartman wrote:
-> 
-> > On Mon, May 22, 2023 at 11:23:55AM +0100, Lee Jones wrote:
-> > > On Wed, 22 Mar 2023, Greg Kroah-Hartman wrote:
-> > > 
-> > > > I'm announcing the release of the 5.15.104 kernel.
-> > > > 
-> > > > All users of the 5.15 kernel series must upgrade.
-> > > > 
-> > > > The updated 5.15.y git tree can be found at:
-> > > > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
-> > > > and can be browsed at the normal kernel.org git web browser:
-> > > > 	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
-> > > > 
-> > > > thanks,
-> > > > 
-> > > > greg k-h
-> > > > 
-> > > > ------------
-> > > 
-> > > [...]
-> > > 
-> > > > Budimir Markovic (1):
-> > > >       perf: Fix check before add_event_to_groups() in perf_group_detach()
-> > > 
-> > > Anyone know why this didn't make it into v5.10 with it's friends?
-> > > 
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=80102f2ee715ab07be476df443bba388d5458fd1
-> > 
-> > That's a merge point, how can that go into stable kernels?
->  
->  There are only 3 commits in the merge.
-> 
-> > What specific commits are you thinking were missed?
-> 
-> The one I quoted above:
-> 
->   perf: Fix check before add_event_to_groups() in perf_group_detach()
-> 
-> The other two applied successfully to v5.10.y:
-> 
->   perf: fix perf_event_context->time
->   perf/core: Fix perf_output_begin parameter is incorrectly invoked in perf_event_bpf_output
+On Sat, May 20, 2023 at 3:32 PM Fieah Lim <kweifat@gmail.com> wrote:
+>
+> all_cpu_data struct is pretty large,
 
-Do you have git ids for these?
+all_cpu_data is not a structure, it is an array of pointers.
 
-thanks,
+If you want to clean up the code, please make sure that your cleanups
+really make sense.
 
-greg k-h
+Also please don't make unrelated changes in one patch, this doesn't help much.
+
+Thanks!
