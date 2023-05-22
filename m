@@ -2,255 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F02170C587
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 20:48:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 612D370C588
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 20:49:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233104AbjEVSsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 14:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53742 "EHLO
+        id S233800AbjEVStR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 14:49:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbjEVSsW (ORCPT
+        with ESMTP id S229873AbjEVStO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 14:48:22 -0400
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9826CE9
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:48:20 -0700 (PDT)
-Received: by mail-io1-xd2b.google.com with SMTP id ca18e2360f4ac-772e2216d88so82703739f.3
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:48:20 -0700 (PDT)
+        Mon, 22 May 2023 14:49:14 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D654E9
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:49:12 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-50bcb229adaso11705160a12.2
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:49:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1684781300; x=1687373300;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=S5x2qmTWQkWF20OmCMKtlZ9z4hIcnn17DPje6Qu1LJA=;
-        b=dEI/lW1Y1eo/XJgc40ZF0e7VdljMsAQ46HYh+cmfZkh4cma8gOwo5Q7xwJQrxi9eOs
-         M1PTVyDZ/f0N4jfiP1asS3MMJ5j+H6lZ97mnLsKKc6ea7beeHr1BDppa3lpooj4ht4dR
-         ALAi0eSz7iIjtK1LhX2i1NjiDzBmC1ESY1FN0=
+        d=linux-foundation.org; s=google; t=1684781351; x=1687373351;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eIX3WciKKidNEVKBDs18WRYhhkFswjfJ00rKzcMfnjk=;
+        b=MnilCBa7xeuhcKS7mYGU/3u6/NGekzdYV0pCSwjOYa18XNZWpYniJb2zPndhyh4wGz
+         11XZoQPi0sV7ZWeKpGX4JGhdsVdrG02UkmywjDpo5IiiGmrPaR/P0voeVrPGwH/zMiOS
+         bRYC2mNWa4k+2bqjMPx+Xq/YhpnAsCLbhqwOw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684781300; x=1687373300;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=S5x2qmTWQkWF20OmCMKtlZ9z4hIcnn17DPje6Qu1LJA=;
-        b=BPkeb8zv2hcsbrgt53aFnAEqUmqpAiZGI698L8uCF1l6OPL/nmtE3L28uV9JJIE1B8
-         guUsyVDejbqoaVGY+Vw15JIH5HpNbi/Bq0B+L3kCIRPTRLp3WbSf2KwkE5MFSKg7WXda
-         snGixkna2XtKz7d/kHIRSdsMdGrR6G5isBvTNQDPIvl0dl3ZVNW46xQP68vtAoF7ArvH
-         sW+SWnGmIxn3AuUuHtvtCkgMOSLZjSRqD8TZr/fuv+l+CPTSiOI+QUzonL5FsPsm2J7w
-         XhLUSl43IcaaIzeF4OrKIa7sUq3Pvr63qSBUdM+6b7eTdBzxiKf2mk/vmY/oEiJcY0Ml
-         hdPg==
-X-Gm-Message-State: AC+VfDxfu/oBIOGKCVgjN18pR4fldDiiGdzbspOGld/dKKY+Lbk3mS1W
-        thBNBDuOxwQHP80bsNE3z2Vchqv5AyxQHGSXHvvzSw==
-X-Google-Smtp-Source: ACHHUZ5vHLY2Hi85sQaRp8S8sjfzRdNoFCMGRp3iFyQ4yXFmQ6fp0K6LNBuuBfFy0kfnjjfLRHr/QdaiDVcvc5KtJXc=
-X-Received: by 2002:a6b:db04:0:b0:76f:f462:34d2 with SMTP id
- t4-20020a6bdb04000000b0076ff46234d2mr7467444ioc.14.1684781299839; Mon, 22 May
- 2023 11:48:19 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684781351; x=1687373351;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eIX3WciKKidNEVKBDs18WRYhhkFswjfJ00rKzcMfnjk=;
+        b=Y0xIaMkR9JHf2nocqIra+InW08QYOMItsAd1ttdS4/aGMCHCw9RGOPHFHWQqCgVV95
+         ND+B0uSTSzJfrKPV/TdVjo5vpPMiaenApncifdAf3RbubZC6rOQCp1v2JgH6zO44ughw
+         u4uUfdWVmGw7OXetWj3YtkuU+cph7rmWe7kCHussMdHZBlg8vdGb2Cs1t0451GWay6+I
+         4qtT9PZYHuz3oC5eHPdiZKOCfh8VG0U+/AF0lTL4o//zGd78z2kIwS5pITKtEdcrYz5M
+         GbQidcaSNpwiIQrsrzc4QeJWYrGJgXsTc/mMfgp+iInqaD7fhrf2RSKff7mmkQu2+DaB
+         9+Qw==
+X-Gm-Message-State: AC+VfDw2bAXKromQ0AKtUatUVKYAg/VWPl5yGnn2laxJjmFMBqTEeOxe
+        kHLqMZmRHz1fIPuW8t+9mYFbk/OAFRtUX5dvCIWjwj8D
+X-Google-Smtp-Source: ACHHUZ7MUaFi32Z8bkARdjYie2We1o3tRJjDfvWtMyAW3PmlZxzc+2e4b5xrd0QfxzLL6vc+oiHhIw==
+X-Received: by 2002:aa7:c915:0:b0:50b:f654:8846 with SMTP id b21-20020aa7c915000000b0050bf6548846mr9392430edt.19.1684781350913;
+        Mon, 22 May 2023 11:49:10 -0700 (PDT)
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com. [209.85.208.42])
+        by smtp.gmail.com with ESMTPSA id k3-20020a05640212c300b0050d8b5757d1sm3296423edx.54.2023.05.22.11.49.10
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 May 2023 11:49:10 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-50bcb229adaso11705110a12.2
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:49:10 -0700 (PDT)
+X-Received: by 2002:a05:6402:31e7:b0:50d:a1ef:2ef6 with SMTP id
+ dy7-20020a05640231e700b0050da1ef2ef6mr9112821edb.23.1684781349837; Mon, 22
+ May 2023 11:49:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <1684531184-14009-1-git-send-email-justin.chen@broadcom.com>
- <1684531184-14009-3-git-send-email-justin.chen@broadcom.com> <d56f205c-dae8-a191-f2af-fed6bea060ad@conchuod.ie>
-In-Reply-To: <d56f205c-dae8-a191-f2af-fed6bea060ad@conchuod.ie>
-From:   Justin Chen <justin.chen@broadcom.com>
-Date:   Mon, 22 May 2023 11:48:08 -0700
-Message-ID: <CALSSxFaJm2jiqQe54dbPTOaJyTOOCbW-yuhddO9wq1r_EHJONw@mail.gmail.com>
-Subject: Re: [PATCH net-next v3 2/6] dt-bindings: net: Brcm ASP 2.0 Ethernet controller
-To:     Conor Dooley <mail@conchuod.ie>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        bcm-kernel-feedback-list@broadcom.com, justinpopo6@gmail.com,
-        f.fainelli@gmail.com, davem@davemloft.net,
-        florian.fainelli@broadcom.com, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, opendmb@gmail.com,
-        andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        richardcochran@gmail.com, sumit.semwal@linaro.org,
-        christian.koenig@amd.com
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000ec557a05fc4cb6b4"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <c9abf109-80f2-88f5-4aae-d6fd4a30bcd3@google.com>
+ <b4dce681-e53c-a6fd-2dab-62a82ebc6dff@redhat.com> <53dd9df8-e88f-f466-89f9-3fa141a10267@google.com>
+In-Reply-To: <53dd9df8-e88f-f466-89f9-3fa141a10267@google.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 22 May 2023 11:48:52 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wg+PHQ9PhTeQOb7Fh5Qf3zkzG5J1h3D=eOY-2AsYXhU4Q@mail.gmail.com>
+Message-ID: <CAHk-=wg+PHQ9PhTeQOb7Fh5Qf3zkzG5J1h3D=eOY-2AsYXhU4Q@mail.gmail.com>
+Subject: Re: [patch] mm, debug: allow suppressing panic on CONFIG_DEBUG_VM checks
+To:     David Rientjes <rientjes@google.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>, Alex Shi <alexs@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Duyck <alexanderduyck@fb.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000ec557a05fc4cb6b4
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, May 22, 2023 at 11:27=E2=80=AFAM Conor Dooley <mail@conchuod.ie> wr=
-ote:
+On Mon, May 22, 2023 at 11:39=E2=80=AFAM David Rientjes <rientjes@google.co=
+m> wrote:
 >
-> On Fri, May 19, 2023 at 02:19:40PM -0700, Justin Chen wrote:
->  > From: Florian Fainelli <florian.fainelli@broadcom.com>
->  >
->  > Add a binding document for the Broadcom ASP 2.0 Ethernet controller.
->  >
->  > Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
->  > Signed-off-by: Justin Chen <justin.chen@broadcom.com>
->  > ---
->
-> Same deal here, usual mailer is refusing to reply cos of:
-> Problem signature from:
-> 1.2.840.113549.1.9.1=3D#6A757374696E2E6368656E4062726F6164636F6D2E636F6D,=
-CN=3DJustin
-> Chen,O=3DBroadcom Inc.,L=3DBangalore,ST=3DKarnataka,C=3DIN
->                     aka: <justin.chen@broadcom.com>
->                 created: Fri 19 May 2023 10:19:57 PM IST
->                 expires: Wed 10 Sep 2025 01:39:50 PM IST
->
->  > v3
->  >         - Minor formatting issues
->  >         - Change channel prop to brcm,channel for vendor specific form=
-at
->  >         - Removed redundant v2.0 from compat string
->  >         - Fix ranges field
->  >
->  > v2
->  >         - Minor formatting issues
->  >
->  >  .../devicetree/bindings/net/brcm,asp-v2.0.yaml     | 145
-> +++++++++++++++++++++
->  >  1 file changed, 145 insertions(+)
->  >  create mode 100644
-> Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
->  >
->  > diff --git a/Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
-> b/Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
->  > new file mode 100644
->  > index 000000000000..a9fed957e1d6
->  > --- /dev/null
->  > +++ b/Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
->  > @@ -0,0 +1,145 @@
->  > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->  > +%YAML 1.2
->  > +---
->  > +$id: http://devicetree.org/schemas/net/brcm,asp-v2.0.yaml#
->  > +$schema: http://devicetree.org/meta-schemas/core.yaml#
->  > +
->  > +title: Broadcom ASP 2.0 Ethernet controller
->  > +
->  > +maintainers:
->  > +  - Justin Chen <justin.chen@broadcom.com>
->  > +  - Florian Fainelli <florian.fainelli@broadcom.com>
->  > +
->  > +description: Broadcom Ethernet controller first introduced with 72165
->  > +
->  > +properties:
->  > +  '#address-cells':
->  > +    const: 1
->  > +  '#size-cells':
->  > +    const: 1
->  > +
->  > +  compatible:
->  > +    enum:
->  > +      - brcm,asp-v2.0
->  > +      - brcm,bcm72165-asp
->  > +      - brcm,asp-v2.1
->  > +      - brcm,bcm74165-asp
->
-> One of Rob's questions on V(N-1) that seems to have been ignored/only
-> partly implemented:
->  > You have 1 SoC per version, so what's the point of versions? If you ha=
-ve
->  > more coming, then fine, but I'd expect it to be something like this:
->  >
->  > compatible =3D "brcm,bcm74165-asp-v2.1", "brcm,asp-v2.1";
->
-> You did drop the -v2.1 that he requested from the SoC compatible, but I
-> amn't sure why the above was not implemented (at least there's no
-> explanation in the previous thread's version, nor in the changelog
-> here...)
+> I think VM_BUG_ON*() and friends are used to crash the kernel for
+> debugging so that we get a crash dump and because some variants don't
+> exist for VM_WARN_ON().
 
-Will fix it. Didn't realize he was talking about the compat string in
-the example below.
+I do think that from a VM developer standpoint, I think it should be
+fine to just effectively turn VM_BUG_ON() into WARN_ON_ONCE() together
+with panic_on_warn.
 
-Thanks,
-Justin
+Maybe we could even extend 'panic_on_warn' to be a bitmap and
+effectively have a "don't panic on non-VM warnings" option.
 
->
-> Cheers,
-> Conor
-
---000000000000ec557a05fc4cb6b4
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-NhTY3E+cXCB11wty89QStajwXdhGJTYEvUgvsq1h8CwJj9w/38ldAQf5WjhPmApYeJR2ewFrBMCM
-4lHkdRJ6TDc9nXoEkypUfjJkJHe7Eal06tosh6JpAgMBAAGjggHZMIIB1TAOBgNVHQ8BAf8EBAMC
-BaAwgaMGCCsGAQUFBwEBBIGWMIGTME4GCCsGAQUFBzAChkJodHRwOi8vc2VjdXJlLmdsb2JhbHNp
-Z24uY29tL2NhY2VydC9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcnQwQQYIKwYBBQUHMAGG
-NWh0dHA6Ly9vY3NwLmdsb2JhbHNpZ24uY29tL2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwME0G
-A1UdIARGMEQwQgYKKwYBBAGgMgEoCjA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5nbG9iYWxz
-aWduLmNvbS9yZXBvc2l0b3J5LzAJBgNVHRMEAjAAMEkGA1UdHwRCMEAwPqA8oDqGOGh0dHA6Ly9j
-cmwuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAuY3JsMCMGA1UdEQQc
-MBqBGGp1c3Rpbi5jaGVuQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNVHSME
-GDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUIWGeYuaTsnIada5Xx8TR3cheUbgw
-DQYJKoZIhvcNAQELBQADggEBAHNQlMqQOFYPYFO71A+8t+qWMmtOdd2iGswSOvpSZ/pmGlfw8ZvY
-dRTkl27m37la84AxRkiVMes14JyOZJoMh/g7fbgPlU14eBc6WQWkIA6AmNkduFWTr1pRezkjpeo6
-xVmdBLM4VY1TFDYj7S8H2adPuypd62uHMY/MZi+BIUys4uAFA+N3NuUBNjcVZXYPplYxxKEuIFq6
-sDL+OV16G+F9CkNMN3txsym8Nnx5WAYZb6+rBUIhMGz70V05xsHQfzvo2s7f0J1tJ5BoRlPPhL0h
-VOnWA3h71u9TfSsv+PXVm3P21TfOS2uc1hbzEqyENCP4i5XQ0rv0TmPW42GZ0o4xggJtMIICaQIB
-ATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQDEyhH
-bG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwj8BKLXNpALfemdRAwDQYJ
-YIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEID2iwiHjXLaFfOiGCEZhY6UyGGc8LIg5WkTw
-T9oCstvVMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDUyMjE4
-NDgyMFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFl
-AwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATAN
-BgkqhkiG9w0BAQEFAASCAQBszOHs+Q7oyvTL/a/YQi7CKCuYSQqjE4VdIos0qKN786xVt3ujJGrX
-1BbJdlOyxbHXOmJ7PQChce6M7uvYPyOuCKyBLZdgqdipvMYiAFFiXQ1JPKTcY7cBQKBiSp7L+fCz
-uXrV2PZWVe0hjoj524tXI6YMS+WXSSmLAWYPSSs2AxGSVlw1lbNUtsRk+ruCYfI7c54D0FjHnm1e
-TzoypSTLhxj6CG7s7osh/jyIUx7uD1m/SfPuU47aU6J3qz0l8Us6o2bStfsa32Jw1c5OjnhKWGf8
-jIBDSqt1B+jrQEYyjn7aUJTQaQ5xnD6gjprYBs90+cHNz9kD12R80U5VUn8c
---000000000000ec557a05fc4cb6b4--
+                Linus
