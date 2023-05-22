@@ -2,189 +2,295 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EDF470C434
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 19:24:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB6170C439
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 19:24:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231712AbjEVRYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 13:24:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38456 "EHLO
+        id S232764AbjEVRYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 13:24:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231649AbjEVRYG (ORCPT
+        with ESMTP id S232304AbjEVRYc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 13:24:06 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B1C11A
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 10:24:03 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q19GL-0002hq-61; Mon, 22 May 2023 19:24:01 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q19GJ-0023ol-Lc; Mon, 22 May 2023 19:23:59 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1q19GI-006zWk-RO; Mon, 22 May 2023 19:23:58 +0200
-Date:   Mon, 22 May 2023 19:23:58 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Peter Rosin <peda@axentia.se>
-Cc:     LKML <linux-kernel@vger.kernel.org>, linux-pwm@vger.kernel.org,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>
-Subject: Re: PWM regression causing failures with the pwm-atmel driver
-Message-ID: <20230522172358.bw677efyovbrfwjg@pengutronix.de>
-References: <7e2cfb55-e39f-2e5c-7f43-e1d275428bb5@axentia.se>
+        Mon, 22 May 2023 13:24:32 -0400
+Received: from rcdn-iport-7.cisco.com (rcdn-iport-7.cisco.com [173.37.86.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C602FA
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 10:24:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=cisco.com; i=@cisco.com; l=8748; q=dns/txt; s=iport;
+  t=1684776270; x=1685985870;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=xKoskdBhkZr2JURFYPQ2/JJgJ2iUPRt/j8suS3z9pTI=;
+  b=X1n2UXgefNyGy61LwFx7BsSbaP2EeDJT6kjmWXUvYMK+mFKii2ut4CdB
+   hDJYkXL4/1lKKeXY4Z4i6D0xOgLeDNkY81P9Blw3GSZYobho2DEcfQH6O
+   g1blYH9dSlff6SbxuN/ul7gSiKCBgNv0prkw4+BhTaBcYh5NCgaZ4K9jB
+   w=;
+X-IronPort-AV: E=Sophos;i="6.00,184,1681171200"; 
+   d="scan'208";a="60536514"
+Received: from rcdn-core-4.cisco.com ([173.37.93.155])
+  by rcdn-iport-7.cisco.com with ESMTP/TLS/DHE-RSA-SEED-SHA; 22 May 2023 17:24:28 +0000
+Received: from sjc-ads-7449.cisco.com (sjc-ads-7449.cisco.com [10.30.220.234])
+        by rcdn-core-4.cisco.com (8.15.2/8.15.2) with ESMTPS id 34MHOSVu008961
+        (version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 22 May 2023 17:24:28 GMT
+Received: by sjc-ads-7449.cisco.com (Postfix, from userid 1777032)
+        id F2629CCD0B1; Mon, 22 May 2023 10:24:27 -0700 (PDT)
+From:   Marcin Wierzbicki <mawierzb@cisco.com>
+To:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Swapnil Jakhade <sjakhade@cadence.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Marcin Wierzbicki <mawierzb@cisco.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, linux-phy@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     xe-linux-external@cisco.com, danielwa@cisco.com, olicht@cisco.com,
+        Bartosz Wawrzyniak <bwawrzyn@cisco.com>
+Subject: [PATCH v3] phy: cadence: Sierra: Add single link SGMII register configuration
+Date:   Mon, 22 May 2023 17:24:13 +0000
+Message-Id: <20230522172415.1668975-1-mawierzb@cisco.com>
+X-Mailer: git-send-email 2.28.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ct6t2sgx5zajyak2"
-Content-Disposition: inline
-In-Reply-To: <7e2cfb55-e39f-2e5c-7f43-e1d275428bb5@axentia.se>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Auto-Response-Suppress: DR, OOF, AutoReply
+X-Outbound-SMTP-Client: 10.30.220.234, sjc-ads-7449.cisco.com
+X-Outbound-Node: rcdn-core-4.cisco.com
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add single link SGMII register configuration for no SSC for
+cdns,sierra-phy-t0 compatibility string.
+The configuration is based on Sierra Programmer's Guide and
+validated in Cisco CrayAR SoC.
 
---ct6t2sgx5zajyak2
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Co-developed-by: Bartosz Wawrzyniak <bwawrzyn@cisco.com>
+Signed-off-by: Bartosz Wawrzyniak <bwawrzyn@cisco.com>
+Signed-off-by: Marcin Wierzbicki <mawierzb@cisco.com>
+---
+v3
+- all reported comments were addressed
+- v2: https://lore.kernel.org/lkml/20230508160142.2489365-1-mawierzb@cisco.com/T/#u
 
-Hello Peter,
+v2
+- rebased version on top of commit 0cfa43ab46b5 ("phy: cadence: Sierra: Add PCIe + SGMII PHY multilink configuration")
+- v1: https://lore.kernel.org/lkml/20230419093008.195094-1-mawierzb@cisco.com/T/
 
-On Mon, May 22, 2023 at 05:19:43PM +0200, Peter Rosin wrote:
-> I have a device with a "sound card" that has an amplifier that needs
-> an extra boost when high amplification is requested. This extra
-> boost is controlled with a pwm-regulator.
->=20
-> As of commit c73a3107624d ("pwm: Handle .get_state() failures") this
-> device no longer works. I have tracked the problem to an unfortunate
-> interaction between the underlying PWM driver and the PWM core.
->=20
-> The driver is drivers/pwm/pwm-atmel.c which has difficulties getting
-> the period and/or duty_cycle from the HW when the PWM is not enabled.
-> Because of this, I think, the driver does not fill in .period and
-> .duty_cycle at all in atmel_pwm_get_state() unless the PWM is enabled.
->=20
-> However, the PWM core is not expecting these fields to be left as-is,
-> at least not in pwm_adjust_config(), and its local state variable on
-> the stack ends up with whatever crap was on the stack on entry for
-> these fields. That fails spectacularly when the function continues to
-> do math on these uninitialized values.
->=20
-> In particular, I find this in the kernel log when a bad kernel runs:
-> pwm-regulator: probe of reg-ana failed with error -22
->=20
-> Before commit c73a3107624d this was a silent failure, and the situation
-> "repaired itself" when the PWM was later reprogrammed, at least for my
-> case. After that commit, the failure is fatal and the "sound card"
-> fails to come up at all.
->=20
->=20
-> I see a couple of adjustments that could be made.
->=20
-> 1. Zero out some fields in the driver:
->=20
-> @@ -390,4 +390,6 @@ static int atmel_pwm_get_state(struct pwm_chip *chip,=
- struct pwm_device *pwm,
->  		state->enabled =3D true;
->  	} else {
-> +		state->period =3D 0;
-> +		state->duty_cycle =3D 0;
->  		state->enabled =3D false;
->  	}
+Regards,
+Marcin
+---
+---
+ drivers/phy/cadence/phy-cadence-sierra.c | 102 +++++++++++++++++++++++
+ 1 file changed, 102 insertions(+)
 
-I don't particularily like that. While state->period is an invalid
-value, IMHO enabled =3D false is enough information from the driver's POV.
-=20
-> 2. Don't try to "adjust" a disabled PWM:
->=20
-> @@ -656,7 +656,7 @@ int pwm_adjust_config(struct pwm_device *pwm)
->  	 * In either case, we setup the new period and polarity, and assign a
->  	 * duty cycle of 0.
->  	 */
-> -	if (!state.period) {
-> +	if (!state.enabled || !state.period) {
->  		state.duty_cycle =3D 0;
->  		state.period =3D pargs.period;
->  		state.polarity =3D pargs.polarity;
+diff --git a/drivers/phy/cadence/phy-cadence-sierra.c b/drivers/phy/cadence/phy-cadence-sierra.c
+index 13fcd3a65fe9..28dd5f606bd3 100644
+--- a/drivers/phy/cadence/phy-cadence-sierra.c
++++ b/drivers/phy/cadence/phy-cadence-sierra.c
+@@ -30,23 +30,34 @@
+ #define SIERRA_COMMON_CDB_OFFSET			0x0
+ #define SIERRA_MACRO_ID_REG				0x0
+ #define SIERRA_CMN_PLLLC_GEN_PREG			0x42
++#define SIERRA_CMN_PLLLC_FBDIV_INT_MODE0_PREG		0x43
++#define SIERRA_CMN_PLLLC_DCOCAL_CTRL_PREG		0x45
++#define SIERRA_CMN_PLLLC_INIT_PREG			0x46
++#define SIERRA_CMN_PLLLC_ITERTMR_PREG			0x47
+ #define SIERRA_CMN_PLLLC_MODE_PREG			0x48
+ #define SIERRA_CMN_PLLLC_LF_COEFF_MODE1_PREG		0x49
+ #define SIERRA_CMN_PLLLC_LF_COEFF_MODE0_PREG		0x4A
+ #define SIERRA_CMN_PLLLC_LOCK_CNTSTART_PREG		0x4B
++#define SIERRA_CMN_PLLLC_LOCKSEARCH_PREG		0x4C
+ #define SIERRA_CMN_PLLLC_CLK1_PREG			0x4D
++#define SIERRA_CMN_PLLLC_CLK0_PREG			0x4E
+ #define SIERRA_CMN_PLLLC_BWCAL_MODE1_PREG		0x4F
+ #define SIERRA_CMN_PLLLC_BWCAL_MODE0_PREG		0x50
+ #define SIERRA_CMN_PLLLC_DSMCORR_PREG			0x51
+ #define SIERRA_CMN_PLLLC_SS_PREG			0x52
+ #define SIERRA_CMN_PLLLC_SS_AMP_STEP_SIZE_PREG		0x53
+ #define SIERRA_CMN_PLLLC_SSTWOPT_PREG			0x54
++#define SIERRA_CMN_PLLCSM_PLLEN_TMR_PREG		0x5D
++#define SIERRA_CMN_PLLCSM_PLLPRE_TMR_PREG		0x5E
+ #define SIERRA_CMN_PLLLC_SS_TIME_STEPSIZE_MODE_PREG	0x62
+ #define SIERRA_CMN_PLLLC_LOCK_DELAY_CTRL_PREG		0x63
++#define SIERRA_SDOSCCAL_CLK_CNT_PREG			0x6E
+ #define SIERRA_CMN_REFRCV_PREG				0x98
++#define SIERRA_CMN_RESCAL_CTRLA_PREG			0xA0
+ #define SIERRA_CMN_REFRCV1_PREG				0xB8
+ #define SIERRA_CMN_PLLLC1_GEN_PREG			0xC2
+ #define SIERRA_CMN_PLLLC1_FBDIV_INT_PREG		0xC3
++#define SIERRA_CMN_PLLLC1_DCOCAL_CTRL_PREG		0xC5
+ #define SIERRA_CMN_PLLLC1_LF_COEFF_MODE0_PREG		0xCA
+ #define SIERRA_CMN_PLLLC1_CLK0_PREG			0xCE
+ #define SIERRA_CMN_PLLLC1_BWCAL_MODE0_PREG		0xD0
+@@ -86,6 +97,7 @@
+ #define SIERRA_DFE_BIASTRIM_PREG			0x04C
+ #define SIERRA_DRVCTRL_ATTEN_PREG			0x06A
+ #define SIERRA_DRVCTRL_BOOST_PREG			0x06F
++#define SIERRA_LANE_TX_RECEIVER_DETECT_PREG		0x071
+ #define SIERRA_TX_RCVDET_OVRD_PREG			0x072
+ #define SIERRA_CLKPATHCTRL_TMR_PREG			0x081
+ #define SIERRA_RX_CREQ_FLTR_A_MODE3_PREG		0x085
+@@ -101,6 +113,8 @@
+ #define SIERRA_CREQ_SPARE_PREG				0x096
+ #define SIERRA_CREQ_EQ_OPEN_EYE_THRESH_PREG		0x097
+ #define SIERRA_CTLELUT_CTRL_PREG			0x098
++#define SIERRA_DEQ_BLK_TAU_CTRL1_PREG			0x0AC
++#define SIERRA_DEQ_BLK_TAU_CTRL4_PREG			0x0AF
+ #define SIERRA_DFE_ECMP_RATESEL_PREG			0x0C0
+ #define SIERRA_DFE_SMP_RATESEL_PREG			0x0C1
+ #define SIERRA_DEQ_PHALIGN_CTRL				0x0C4
+@@ -129,6 +143,9 @@
+ #define SIERRA_DEQ_GLUT14				0x0F6
+ #define SIERRA_DEQ_GLUT15				0x0F7
+ #define SIERRA_DEQ_GLUT16				0x0F8
++#define SIERRA_POSTPRECUR_EN_CEPH_CTRL_PREG		0x0F9
++#define SIERRA_TAU_EN_CEPH2TO0_PREG			0x0FB
++#define SIERRA_TAU_EN_CEPH5TO3_PREG			0x0FC
+ #define SIERRA_DEQ_ALUT0				0x108
+ #define SIERRA_DEQ_ALUT1				0x109
+ #define SIERRA_DEQ_ALUT2				0x10A
+@@ -143,6 +160,7 @@
+ #define SIERRA_DEQ_ALUT11				0x113
+ #define SIERRA_DEQ_ALUT12				0x114
+ #define SIERRA_DEQ_ALUT13				0x115
++#define SIERRA_OEPH_EN_CTRL_PREG			0x124
+ #define SIERRA_DEQ_DFETAP_CTRL_PREG			0x128
+ #define SIERRA_DEQ_DFETAP0				0x129
+ #define SIERRA_DEQ_DFETAP1				0x12B
+@@ -157,6 +175,7 @@
+ #define SIERRA_DEQ_TAU_CTRL2_PREG			0x151
+ #define SIERRA_DEQ_TAU_CTRL3_PREG			0x152
+ #define SIERRA_DEQ_OPENEYE_CTRL_PREG			0x158
++#define SIERRA_DEQ_CONCUR_EPIOFFSET_MODE_PREG		0x159
+ #define SIERRA_DEQ_PICTRL_PREG				0x161
+ #define SIERRA_CPICAL_TMRVAL_MODE1_PREG			0x170
+ #define SIERRA_CPICAL_TMRVAL_MODE0_PREG			0x171
+@@ -165,6 +184,7 @@
+ #define SIERRA_CPI_RESBIAS_BIN_PREG			0x17E
+ #define SIERRA_CPI_TRIM_PREG				0x17F
+ #define SIERRA_CPICAL_RES_STARTCODE_MODE23_PREG		0x183
++#define SIERRA_CPICAL_RES_STARTCODE_MODE01_PREG		0x184
+ #define SIERRA_EPI_CTRL_PREG				0x187
+ #define SIERRA_LFPSDET_SUPPORT_PREG			0x188
+ #define SIERRA_LFPSFILT_NS_PREG				0x18A
+@@ -176,6 +196,7 @@
+ #define SIERRA_RXBUFFER_CTLECTRL_PREG			0x19E
+ #define SIERRA_RXBUFFER_RCDFECTRL_PREG			0x19F
+ #define SIERRA_RXBUFFER_DFECTRL_PREG			0x1A0
++#define SIERRA_LN_SPARE_REG_PREG			0x1B0
+ #define SIERRA_DEQ_TAU_CTRL1_FAST_MAINT_PREG		0x14F
+ #define SIERRA_DEQ_TAU_CTRL1_SLOW_MAINT_PREG		0x150
 
-In my book code that calls pwm_get_state() should consider .period
-(and .duty_cycle) undefined if .enabled is false. So this hunk is an
-improvement. Having said that, I think pwm_adjust_config() has a strange
-semantic. I don't understand when you would want to call it, and it only
-has one caller (i.e. pwm-regulator).
+@@ -2401,6 +2422,77 @@ static struct cdns_sierra_vals usb_100_ext_ssc_ln_vals = {
+ 	.num_regs = ARRAY_SIZE(cdns_usb_ln_regs_ext_ssc),
+ };
 
-So another option would be
++/* SGMII PHY common configuration */
++static const struct cdns_reg_pairs sgmii_pma_cmn_vals[] = {
++	{0x0180, SIERRA_SDOSCCAL_CLK_CNT_PREG},
++	{0x6000, SIERRA_CMN_REFRCV_PREG},
++	{0x0031, SIERRA_CMN_RESCAL_CTRLA_PREG},
++	{0x001C, SIERRA_CMN_PLLLC_FBDIV_INT_MODE0_PREG},
++	{0x2106, SIERRA_CMN_PLLLC_LF_COEFF_MODE0_PREG},
++	{0x0000, SIERRA_CMN_PLLLC_LOCKSEARCH_PREG},
++	{0x8103, SIERRA_CMN_PLLLC_CLK0_PREG},
++	{0x0000, SIERRA_CMN_PLLLC_BWCAL_MODE0_PREG},
++	{0x0027, SIERRA_CMN_PLLCSM_PLLEN_TMR_PREG},
++	{0x0062, SIERRA_CMN_PLLCSM_PLLPRE_TMR_PREG},
++	{0x0800, SIERRA_CMN_PLLLC_SS_TIME_STEPSIZE_MODE_PREG},
++	{0x0000, SIERRA_CMN_PLLLC_INIT_PREG},
++	{0x0000, SIERRA_CMN_PLLLC_ITERTMR_PREG},
++	{0x0020, SIERRA_CMN_PLLLC_LOCK_CNTSTART_PREG},
++	{0x0013, SIERRA_CMN_PLLLC_DCOCAL_CTRL_PREG},
++	{0x0013, SIERRA_CMN_PLLLC1_DCOCAL_CTRL_PREG},
++};
++
++static struct cdns_sierra_vals sgmii_cmn_vals = {
++	.reg_pairs = sgmii_pma_cmn_vals,
++	.num_regs = ARRAY_SIZE(sgmii_pma_cmn_vals),
++};
++
++/* SGMII PHY lane configuration */
++static const struct cdns_reg_pairs sgmii_ln_regs[] = {
++	{0x691E, SIERRA_DET_STANDEC_D_PREG},
++	{0x0FFE, SIERRA_PSC_RX_A0_PREG},
++	{0x0104, SIERRA_PLLCTRL_FBDIV_MODE01_PREG},
++	{0x0013, SIERRA_PLLCTRL_SUBRATE_PREG},
++	{0x0106, SIERRA_PLLCTRL_GEN_D_PREG},
++	{0x5234, SIERRA_PLLCTRL_CPGAIN_MODE_PREG},
++	{0x0000, SIERRA_DRVCTRL_ATTEN_PREG},
++	{0x00AB, SIERRA_RX_CREQ_FLTR_A_MODE0_PREG},
++	{0x3C0E, SIERRA_CREQ_CCLKDET_MODE01_PREG},
++	{0x3220, SIERRA_CREQ_FSMCLK_SEL_PREG},
++	{0x0000, SIERRA_CREQ_EQ_CTRL_PREG},
++	{0x6320, SIERRA_DEQ_CONCUR_EPIOFFSET_MODE_PREG},
++	{0x0000, SIERRA_CPI_OUTBUF_RATESEL_PREG},
++	{0x15A2, SIERRA_LN_SPARE_REG_PREG},
++	{0x7900, SIERRA_DEQ_BLK_TAU_CTRL1_PREG},
++	{0x2202, SIERRA_DEQ_BLK_TAU_CTRL4_PREG},
++	{0x2206, SIERRA_DEQ_TAU_CTRL2_PREG},
++	{0x0005, SIERRA_LANE_TX_RECEIVER_DETECT_PREG},
++	{0x8001, SIERRA_CREQ_SPARE_PREG},
++	{0x0000, SIERRA_DEQ_CONCUR_CTRL1_PREG},
++	{0xD004, SIERRA_DEQ_CONCUR_CTRL2_PREG},
++	{0x0101, SIERRA_DEQ_GLUT9},
++	{0x0101, SIERRA_DEQ_GLUT10},
++	{0x0101, SIERRA_DEQ_GLUT11},
++	{0x0101, SIERRA_DEQ_GLUT12},
++	{0x0000, SIERRA_DEQ_GLUT13},
++	{0x0000, SIERRA_DEQ_GLUT16},
++	{0x0000, SIERRA_POSTPRECUR_EN_CEPH_CTRL_PREG},
++	{0x0000, SIERRA_TAU_EN_CEPH2TO0_PREG},
++	{0x0003, SIERRA_TAU_EN_CEPH5TO3_PREG},
++	{0x0101, SIERRA_DEQ_ALUT8},
++	{0x0101, SIERRA_DEQ_ALUT9},
++	{0x0100, SIERRA_DEQ_ALUT10},
++	{0x0000, SIERRA_OEPH_EN_CTRL_PREG},
++	{0x5425, SIERRA_DEQ_OPENEYE_CTRL_PREG},
++	{0x7458, SIERRA_CPICAL_RES_STARTCODE_MODE23_PREG},
++	{0x321F, SIERRA_CPICAL_RES_STARTCODE_MODE01_PREG},
++};
++
++static struct cdns_sierra_vals sgmii_pma_ln_vals = {
++	.reg_pairs = sgmii_ln_regs,
++	.num_regs = ARRAY_SIZE(sgmii_ln_regs),
++};
++
+ static const struct cdns_sierra_data cdns_map_sierra = {
+ 	.id_value = SIERRA_MACRO_ID,
+ 	.block_offset_shift = 0x2,
+@@ -2461,6 +2553,11 @@ static const struct cdns_sierra_data cdns_map_sierra = {
+ 				[INTERNAL_SSC] = &qsgmii_100_no_ssc_plllc1_cmn_vals,
+ 			},
+ 		},
++		[TYPE_SGMII] = {
++			[TYPE_NONE] = {
++				[NO_SSC] = &sgmii_cmn_vals,
++			},
++		},
+ 	},
+ 	.pma_ln_vals = {
+ 		[TYPE_PCIE] = {
+@@ -2499,6 +2596,11 @@ static const struct cdns_sierra_data cdns_map_sierra = {
+ 				[INTERNAL_SSC] = &qsgmii_100_no_ssc_plllc1_ln_vals,
+ 			},
+ 		},
++		[TYPE_SGMII] = {
++			[TYPE_NONE] = {
++				[NO_SSC] = &sgmii_pma_ln_vals,
++			},
++		},
+ 	},
+ };
 
-diff --git a/drivers/regulator/pwm-regulator.c b/drivers/regulator/pwm-regu=
-lator.c
-index b64d99695b84..418aff0ddbed 100644
---- a/drivers/regulator/pwm-regulator.c
-+++ b/drivers/regulator/pwm-regulator.c
-@@ -368,10 +368,6 @@ static int pwm_regulator_probe(struct platform_device =
-*pdev)
- 		return ret;
- 	}
-=20
--	ret =3D pwm_adjust_config(drvdata->pwm);
--	if (ret)
--		return ret;
--
- 	regulator =3D devm_regulator_register(&pdev->dev,
- 					    &drvdata->desc, &config);
- 	if (IS_ERR(regulator)) {
+--
+2.28.0
 
-and drop pwm_adjust_config() as a followup?!
-
-> 3. Zero out the state before calling pwm_get_state:
->=20
-> @@ -115,7 +115,7 @@ static int pwm_device_request(struct pwm_device *pwm,=
- const char *label)
->  	}
-> =20
->  	if (pwm->chip->ops->get_state) {
-> -		struct pwm_state state;
-> +		struct pwm_state state =3D { .enabled =3D true };
-
-I wonder why you picked .enabled =3D true here but =3D false on all other
-code locations.
-
-Also you don't seem to have 1271a7b98e7989ba6bb978e14403fc84efe16e13
-which has the same effect and is included in v6.3 and v6.2.13.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---ct6t2sgx5zajyak2
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmRrpS0ACgkQj4D7WH0S
-/k4Emgf/TpFzqInEN8384Yxl4FNTRnNNNeP5Q+tXuQABE2v0mbyjPWyZWa9MWN2v
-Pz04/t0haINZnUtvCpDVqnSpGHLiZEYhyA75jqySOjQxkF63FCrHQNweBSwx59io
-jvjOcsTYyd++Es1nKzaKVUha/FtnHw1QVm2k7yUeJhQCsdeITTWVxUJaSJGW54Kq
-8n+grk5hGdX4la9THRTr4h4p4bGMacnX9V/BZW7IPYjrD7WUIatb+PaWZlmceLCM
-D2p0h/flIUXdLSAA7Vu9WSS4UynM1wpPCI47QTL9V/spRBKAka00hjwy7maDpBWq
-Y9S/M5yoAqkmNU4nV9mMSgqB8YtRHg==
-=uSTk
------END PGP SIGNATURE-----
-
---ct6t2sgx5zajyak2--
