@@ -2,219 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6232770B313
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 04:13:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 040A970B317
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 04:16:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231417AbjEVCNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 22:13:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56060 "EHLO
+        id S231538AbjEVCQh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 22:16:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbjEVCNu (ORCPT
+        with ESMTP id S229825AbjEVCQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 22:13:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9A1DD2
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 19:13:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684721584;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gmNRxdDl0Iw5312gWw2B9QxJef2rV33yjDNEcMTuktQ=;
-        b=ZD62Au+YqhKy/tohfdxWHd2jdCi8Iggn5ueFiliQpm/AyV6lB1R0O9bRO1SBc8df1BvWIi
-        8eBbPduXHVJQQ4z4g/7MP1GQglQGNqEi1oBJm401xxYU8hcaR3uIRcF0KbmG2JJBIfg86c
-        /ZQRzeiRbY7mRvHzIA2j9Bgy8w3MTbg=
-Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com
- [209.85.210.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-154-t6go08M5P_eRwiZonME9bg-1; Sun, 21 May 2023 22:13:03 -0400
-X-MC-Unique: t6go08M5P_eRwiZonME9bg-1
-Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-64d5ce33a36so1053456b3a.0
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 19:13:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684721582; x=1687313582;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gmNRxdDl0Iw5312gWw2B9QxJef2rV33yjDNEcMTuktQ=;
-        b=JtiIsErb/UjZWnAmn1TKnEO7RFn7BPxkPAyBaog0S9Q0/ckuOTKkMwCgazJCcHNW2g
-         w+EJh5+Q7ELR3fA8qkljdwidZs/cxLpCZhUU/BeQ2/grLGSwWElnm3A1wbzo/qZQxE5x
-         JArZXQg+McHzOCIYS4OLyYUmMQNpNuQU1bQnoBQh6XXQMi44acc+pMXl4vp9jhVs3ZqO
-         lWmlK/Jzrs12xgGEvtCTSwQA5Yf2WbgxdsC/dZjLUp66SopNJoMvNjYFDYSSSpZrAbxh
-         u826Fn1kAQXRBg8j4R0M9paOh6EaqEH5JIcJ+A4UCOQkILSfKp/ILoEN8nPaC/f5C/BF
-         weCQ==
-X-Gm-Message-State: AC+VfDzw7gopuFyeWTOHwCS6n2nEKpSmbL4aJYF4VXhNYpfU0hy8srGk
-        Ei2zNEoQuOx1izjucYFeGDZ6OJ+vO3ySfA0CNjHuu8eIiP6IuP6/WKpk5YXMqanWXhhiD338L+J
-        HeNmJfGOQGfMoBeJ9YX3LRMYK8ubR9nuOAL4=
-X-Received: by 2002:a05:6a20:5483:b0:10b:e90d:13a2 with SMTP id i3-20020a056a20548300b0010be90d13a2mr590806pzk.36.1684721582483;
-        Sun, 21 May 2023 19:13:02 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4edrM21wwKnQnIY2WKOKek3wiSXXo/hL8jRVd6QZLFCn+oldEoDVlQ950aoB0pemRSWszePg==
-X-Received: by 2002:a05:6a20:5483:b0:10b:e90d:13a2 with SMTP id i3-20020a056a20548300b0010be90d13a2mr590790pzk.36.1684721582215;
-        Sun, 21 May 2023 19:13:02 -0700 (PDT)
-Received: from [10.72.12.68] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id i9-20020aa79089000000b0064559b58eb8sm3081025pfa.154.2023.05.21.19.12.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 21 May 2023 19:13:01 -0700 (PDT)
-Message-ID: <fa54e41d-86fe-1e63-a6fc-85c19985b3e9@redhat.com>
-Date:   Mon, 22 May 2023 10:12:49 +0800
+        Sun, 21 May 2023 22:16:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BE1FB7;
+        Sun, 21 May 2023 19:16:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC7EF61946;
+        Mon, 22 May 2023 02:16:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1892BC4339C;
+        Mon, 22 May 2023 02:16:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684721794;
+        bh=n2uaZ9rV4gw+Dcgfo0DSk4CEyQozD7dCVzjmhdw+dyA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=McmCYlHhVDzHL5kc9dRRAsAuH8eHQrfIKjNgAFmIHR8b+WsIXqluaqokvmVoA6Urs
+         JVtb2sic/Hw0Eoyx77hO8ZWA6mkz6GAttMvZ98b8AWpbUad4BoBgxnM4pkk5lk8FNF
+         zPoL0UVJsRcBYHvytdIxHWfxHaYqgB9x7IzKEd2mvQ3AAeKsx3NnqZVKB1gIDU9WP6
+         mddSrh6Fne00SjCxscAZAwtQGkq+TyqXBvAPl3OL32VhytWhp9CrsXxSqew0hGb6n6
+         74I4xgNt88bx9RdzIcBgN3yf1C4IDDsNXa0Q8Lo9x4V2b0kj02T8fAm4LREMZurWhv
+         8d6GoeQYA7Gcw==
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-510eb980ce2so6007775a12.2;
+        Sun, 21 May 2023 19:16:33 -0700 (PDT)
+X-Gm-Message-State: AC+VfDwZwAtvnFsYF4fta7MI4yQEoTT8JxbaiogcapTKS1lWU7sixyD6
+        yb8IIwpe3vfXTcxk5s9TH8h7ruGpwl2jYbJd4nI=
+X-Google-Smtp-Source: ACHHUZ5xwayM/aFmbQ7NrqIngfedoekz46hxMtF2WEz5MLCZ/hk7/GMyHcg22kmLw3lIgY9iSEEtMBhb3acllwZ12M4=
+X-Received: by 2002:aa7:c6c8:0:b0:50b:c397:bbac with SMTP id
+ b8-20020aa7c6c8000000b0050bc397bbacmr7184287eds.29.1684721792303; Sun, 21 May
+ 2023 19:16:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v21 16/30] ceph: Provide a splice-read stub
-Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Christoph Hellwig <hch@lst.de>,
-        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org
-References: <20230520000049.2226926-1-dhowells@redhat.com>
- <20230520000049.2226926-17-dhowells@redhat.com>
-From:   Xiubo Li <xiubli@redhat.com>
-In-Reply-To: <20230520000049.2226926-17-dhowells@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230518184541.2627-1-jszhang@kernel.org> <20230518184541.2627-5-jszhang@kernel.org>
+ <20230518-driving-secluding-793b3192776e@spud>
+In-Reply-To: <20230518-driving-secluding-793b3192776e@spud>
+From:   Guo Ren <guoren@kernel.org>
+Date:   Mon, 22 May 2023 10:16:19 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTTGgLJ3SNcmhRGpAAw7jhOfYA5j=G9ZibwA8wUmeQN3UQ@mail.gmail.com>
+Message-ID: <CAJF2gTTGgLJ3SNcmhRGpAAw7jhOfYA5j=G9ZibwA8wUmeQN3UQ@mail.gmail.com>
+Subject: Re: [PATCH v2 4/9] dt-binding: riscv: add T-HEAD CPU reset
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Jisheng Zhang <jszhang@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, Yangtao Li <frank.li@vivo.com>,
+        Wei Fu <wefu@redhat.com>, Icenowy Zheng <uwu@icenowy.me>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 5/20/23 08:00, David Howells wrote:
-> Provide a splice_read stub for Ceph.  This does the inode shutdown check
-> before proceeding and jumps to copy_splice_read() if the file has inline
-> data or is a synchronous file.
+On Fri, May 19, 2023 at 3:53=E2=80=AFAM Conor Dooley <conor@kernel.org> wro=
+te:
 >
-> We try and get FILE_RD and either FILE_CACHE and/or FILE_LAZYIO caps and
-> hold them across filemap_splice_read().  If we fail to get FILE_CACHE or
-> FILE_LAZYIO capabilities, we use copy_splice_read() instead.
+> Hey Jisheng,
 >
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: Christoph Hellwig <hch@lst.de>
-> cc: Al Viro <viro@zeniv.linux.org.uk>
-> cc: Jens Axboe <axboe@kernel.dk>
-> cc: Xiubo Li <xiubli@redhat.com>
-> cc: Ilya Dryomov <idryomov@gmail.com>
-> cc: Jeff Layton <jlayton@kernel.org>
-> cc: ceph-devel@vger.kernel.org
-> cc: linux-fsdevel@vger.kernel.org
-> cc: linux-block@vger.kernel.org
-> cc: linux-mm@kvack.org
-> ---
+> On Fri, May 19, 2023 at 02:45:36AM +0800, Jisheng Zhang wrote:
+> > The secondary CPUs in T-HEAD SMP capable platforms need some special
+> > handling. The first one is to write the warm reset entry to entry
+> > register. The second one is write a SoC specific control value to
+> > a SoC specific control reg. The last one is to clone some CSRs for
+> > secondary CPUs to ensure these CSRs' values are the same as the
+> > main boot CPU. This DT node is mainly used by opensbi firmware.
+> >
+> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > ---
+> >  .../bindings/riscv/thead,cpu-reset.yaml       | 69 +++++++++++++++++++
+> >  1 file changed, 69 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/riscv/thead,cpu-r=
+eset.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/riscv/thead,cpu-reset.ya=
+ml b/Documentation/devicetree/bindings/riscv/thead,cpu-reset.yaml
+> > new file mode 100644
+> > index 000000000000..ba8c87583b6b
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/riscv/thead,cpu-reset.yaml
+> > @@ -0,0 +1,69 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only or BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/riscv/thead,cpu-reset.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: T-HEAD cpu reset controller
+> > +
+> > +maintainers:
+> > +  - Jisheng Zhang <jszhang@kernel.org>
+> > +
+> > +description: |
+> > +  The secondary CPUs in T-HEAD SMP capable platforms need some special
+> > +  handling. The first one is to write the warm reset entry to entry
+> > +  register. The second one is write a SoC specific control value to
+> > +  a SoC specific control reg. The last one is to clone some CSRs for
+> > +  secondary CPUs to ensure these CSRs' values are the same as the
+> > +  main boot CPU.
 >
-> Notes:
->      ver #21)
->       - Need to drop the caps ref.
->       - O_DIRECT is handled by the caller.
+> Okay..
 >
->   fs/ceph/file.c | 65 +++++++++++++++++++++++++++++++++++++++++++++++++-
->   1 file changed, 64 insertions(+), 1 deletion(-)
+> > +
+> > +properties:
+> > +  $nodename:
+> > +    pattern: "^cpurst"
 >
-> diff --git a/fs/ceph/file.c b/fs/ceph/file.c
-> index f4d8bf7dec88..4285f6cb5d3b 100644
-> --- a/fs/ceph/file.c
-> +++ b/fs/ceph/file.c
-> @@ -1745,6 +1745,69 @@ static ssize_t ceph_read_iter(struct kiocb *iocb, struct iov_iter *to)
->   	return ret;
->   }
->   
-> +/*
-> + * Wrap filemap_splice_read with checks for cap bits on the inode.
-> + * Atomically grab references, so that those bits are not released
-> + * back to the MDS mid-read.
-> + */
-> +static ssize_t ceph_splice_read(struct file *in, loff_t *ppos,
-> +				struct pipe_inode_info *pipe,
-> +				size_t len, unsigned int flags)
-> +{
-> +	struct ceph_file_info *fi = in->private_data;
-> +	struct inode *inode = file_inode(in);
-> +	struct ceph_inode_info *ci = ceph_inode(inode);
-> +	ssize_t ret;
-> +	int want = 0, got = 0;
-> +	CEPH_DEFINE_RW_CONTEXT(rw_ctx, 0);
-> +
-> +	dout("splice_read %p %llx.%llx %llu~%zu trying to get caps on %p\n",
-> +	     inode, ceph_vinop(inode), *ppos, len, inode);
-> +
-> +	if (ceph_inode_is_shutdown(inode))
-> +		return -ESTALE;
-> +
-> +	if (ceph_has_inline_data(ci) ||
-> +	    (fi->flags & CEPH_F_SYNC))
-> +		return copy_splice_read(in, ppos, pipe, len, flags);
-> +
-> +	ceph_start_io_read(inode);
-> +
-> +	want = CEPH_CAP_FILE_CACHE;
-> +	if (fi->fmode & CEPH_FILE_MODE_LAZY)
-> +		want |= CEPH_CAP_FILE_LAZYIO;
-> +
-> +	ret = ceph_get_caps(in, CEPH_CAP_FILE_RD, want, -1, &got);
-> +	if (ret < 0)
-> +		goto out_end;
-> +
-> +	if ((got & (CEPH_CAP_FILE_CACHE | CEPH_CAP_FILE_LAZYIO)) == 0) {
-> +		dout("splice_read/sync %p %llx.%llx %llu~%zu got cap refs on %s\n",
-> +		     inode, ceph_vinop(inode), *ppos, len,
-> +		     ceph_cap_string(got));
-> +
-> +		ceph_put_cap_refs(ci, got);
-> +		ceph_end_io_read(inode);
-> +		return copy_splice_read(in, ppos, pipe, len, flags);
-> +	}
-> +
-> +	dout("splice_read %p %llx.%llx %llu~%zu got cap refs on %s\n",
-> +	     inode, ceph_vinop(inode), *ppos, len, ceph_cap_string(got));
-> +
-> +	rw_ctx.caps = got;
-> +	ceph_add_rw_context(fi, &rw_ctx);
-> +	ret = filemap_splice_read(in, ppos, pipe, len, flags);
-> +	ceph_del_rw_context(fi, &rw_ctx);
-> +
-> +	dout("splice_read %p %llx.%llx dropping cap refs on %s = %zd\n",
-> +	     inode, ceph_vinop(inode), ceph_cap_string(got), ret);
-> +
-> +	ceph_put_cap_refs(ci, got);
-> +out_end:
-> +	ceph_end_io_read(inode);
-> +	return ret;
-> +}
-> +
->   /*
->    * Take cap references to avoid releasing caps to MDS mid-write.
->    *
-> @@ -2593,7 +2656,7 @@ const struct file_operations ceph_file_fops = {
->   	.lock = ceph_lock,
->   	.setlease = simple_nosetlease,
->   	.flock = ceph_flock,
-> -	.splice_read = generic_file_splice_read,
-> +	.splice_read = ceph_splice_read,
->   	.splice_write = iter_file_splice_write,
->   	.unlocked_ioctl = ceph_ioctl,
->   	.compat_ioctl = compat_ptr_ioctl,
+> Firstly, why the nodename enforcement? We have a compatible, so we
+> should be okay, no?
+Yes, it needn't.
+
 >
-LGTM.
+> > +
+> > +  compatible:
+> > +    oneOf:
+> > +      - description: CPU reset on T-HEAD TH1520 SoC
+> > +        items:
+> > +          - const: thead,reset-th1520
+>
+> You've only got one thing here, you don't need the oneOf.
+> Also, s/reset-th1520/th1520-reset/ please - although I do not know if
+> "reset" is the right word here. Do we know what the IP block is called
+> in the TRM/T-Head docs? Perhaps Guo Ren does if not.
+It's called CPU reset controller; every core has reset_ctrl &
+reset_entry signals; Soc just gathers them into some regs.
+For th1520, we have 4 reset_entries registers and 1 reset_ctrl
+register. Fu Wei would give out more details about it.
 
-Reviewed-by: Xiubo Li <xiubli@redhat.com>
+>
+> > +  entry-reg:
+> > +    $ref: /schemas/types.yaml#/definitions/uint64
+> > +    description: |
+> > +      The entry reg address.
+> > +
+> > +  entry-cn
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    description: |
+> > +      The entry reg count.
+> > +
+> > +  control-reg:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+It should be uint64.
 
-Thanks
+> > +    description: |
+> > +      The control reg address.
+> > +
+> > +  control-val:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    description: |
+> > +      The value to be set into the control reg.
+> > +
+> > +  csr-copy:
+> > +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> > +    description: |
+> > +      The CSR registers to be cloned during CPU warm reset.
+>
+> All of these values set on a per-soc basis, right?
+Yes
+> If so, I don't think they should be in here at all since you should be
+> able to figure out the offsets from the base & the values to write based
+> on the compatible string alone, no?
+The driver works with all T-HEAD CPUs, not only for th1520. Some
+vendors may have their own custom CSRs, so the csr-copy feature is
+flexible enough to adjust in dts. As far as I can tell, hardware teams
+typically prefer to focus on the firmware binary rather than setting
+up the software compiling environment.
 
-- Xiubo
+>
+> Putting register values into the DT is always "suspect"!
+It's not register values, it's register offset/ CSR number.
+
+>
+> > +required:
+> > +  - compatible
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    cpurst: cpurst@ffff019050 {
+>                ^^^^^^^^^^^^^^^^^
+> This is also "suspect" and implies that "entry reg" should just be a
+> normal "reg" property.
+Yes, but we needn't reg, here. It should be:
+
+cpurst {
+
+Thx for debugging.
+
+>
+>
+> > +      compatible =3D "thead,reset-th1520";
+> > +      entry-reg =3D <0xff 0xff019050>;
+> > +      entry-cnt =3D <4>;
+> > +      control-reg =3D <0xff 0xff015004>;
+> > +      control-val =3D <0x1c>;
+> > +      csr-copy =3D <0x7f3 0x7c0 0x7c1 0x7c2 0x7c3 0x7c5 0x7cc>;
+> > +    };
+> > --
+> > 2.40.0
+> >
 
 
+
+--=20
+Best Regards
+ Guo Ren
