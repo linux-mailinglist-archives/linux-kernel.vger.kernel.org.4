@@ -2,105 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9826F70C1C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5538470C1B9
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:01:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234217AbjEVPBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 11:01:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41810 "EHLO
+        id S234293AbjEVPBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 11:01:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234209AbjEVPBY (ORCPT
+        with ESMTP id S234198AbjEVPBC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 11:01:24 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2066.outbound.protection.outlook.com [40.107.237.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95054115;
-        Mon, 22 May 2023 08:01:13 -0700 (PDT)
+        Mon, 22 May 2023 11:01:02 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2084.outbound.protection.outlook.com [40.107.220.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6C9103
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 08:00:49 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ERVaeSr+Kld2wEgZv4pBjYa6gxusTbfZ0kJ8syQNcqj83S4TtqvlL97OqooktrtrUq7Tc7O1qK5PPuzf9w2NmsKaLsiHjQvFxwMek1EBISkQKjgxsGsM047A1Vr/BGJigtZVP1OgmLjdte/L+Cwr0xhriKT4XEQBda4QYUslxEW7Agqgv+dSQwzM5vlmbcgIN4Y5RHBzCVjQlcRzVM6lG6TZ1yj7CldUPBSSVY39Hh2XMPuf5k6Th3xEyEVXvdS1q1bpaFaGqU24dtD+UYjzKNJMSTASVxvRHB4XHDegmr3w3wpF4pcHc4p0sVBtXVKS72bykQuqUXt+qko0L2ZFjA==
+ b=QAg5G+NkWBWaMl9R0t5S6AlENac79W6gfC1Xs50144Sor4JXVUkzYSu7uDMxPZ70pvZPWTJp75nVWcVqsX+jCmZdyGql5t0b95ePHmOYN0xk34Px8vjP7RZnlKk14osyh6/z143zl2K1WoCh6Wv3HaUi2275SmoDQqLFycUhHBrseqAHNqLuijjoucg6jBC1KRpFzIur1z618o6mh8wCPrQlRlp3pG92mDYgOSEnOgsWYsQq3dv+kZIQvBb6RJyMb1S5JGlrlsdOnXlKSZit6A10CTJxn4r9cwHtw8hFa1aXJVlFlg8H+hbjxiHIjrTH35hjRmkE9V8tOwO3a75mSA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MHVx9hiAS4QeT8dNB0+8kNSaa2YUmaI91h4i76spYJw=;
- b=UXqkjEFhcpxgiaoE8vtMRlnWGHNwCUdwe0KID/vlofIm2CoOdKwvFRTJhvR4nis9mNjlXcfB68OWc58NKYIXXdMVRuCx4I93/aNcAgKxUCdx8q2gSYUwN1GRPy0GQnxu9Xfgcx3dGmfqBPlWoXJNYHzWnjzM+Bw5WzEtW8duFENNGV8/B56Q1nVaQYBtnGn4oO4O73SoLcG3NzBMHdIkWVlD3GxyJ5syIU0lutYYjuBMWsLLiwLO5cV9k6cnq0FAIF+1AYsuLkQLQT1+3+80LFgEoyzuqQ9/M5rr0C3e2m8qtjkukUmPR48lLsxmmOOKsZBsDdEpoBKa7H/dqrp8Kw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
+ bh=8mU6HDcuX13Sy55YOP8BJRebNRBk1nylpWDks58PD34=;
+ b=aP2zGZT8JN9QP8pr1vlt5q/6hPWKUMleB5xi/F22+PXH1f6Np8XOJ41AXOcCnfR0+K9rYe5vDO5n6ZHte9Ew+klbpwi3wjVhVvXENQX3o12uS6uPY2n/Ra58IGlqaI7WMngkR5ojH6N6XagpNOB/ojHJco6QlkAdn3lCAttIP64PezSJdTi6ePi4SRPspasLmBJ3YFfYsvECyXX94QyRyDu3c/Szj139Pwv7I09Z+0pG+/FRhvyuH+wkSjUm3Go2cxLg7ji3u7wKr+wvk60FJuFqrPghgy1HCv8EWXHSN7pdd76Z2Y8MHITuFunc5Y3mKE+2u/jGjxdHwKVmwmXaeg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MHVx9hiAS4QeT8dNB0+8kNSaa2YUmaI91h4i76spYJw=;
- b=KVDBUcD78Y09BEasUBpMtSrIULMaHdMoT+7qzVESucEYPMsXO6+g3V1TCRH15J7NRAo47MHBBeUB4PZ8isfdNU+hS4GwygVcNZCAFDWi2yXdgZP7Ks2OYDAT3/vpaPZYtnz6YRQqqBlEqZjOmttG7cnl73XGJ1dm7lcEc66Mj5o=
-Received: from DS7PR03CA0285.namprd03.prod.outlook.com (2603:10b6:5:3ad::20)
- by CH2PR12MB4971.namprd12.prod.outlook.com (2603:10b6:610:6b::7) with
+ bh=8mU6HDcuX13Sy55YOP8BJRebNRBk1nylpWDks58PD34=;
+ b=xHUa7F5TrK3J2xtO4lsFNxqwlh+0maqcu3JZwGEFm+aAwU1Dbeu/9ITQWWvnW2/Lq6ZSfHduWsTTr3Um3adel+Tftcan1TdFnBNKdImoyzebGFJ/Ork/5PoHK2pz02agPuLFQKjtOE0uGHaO0FPo26l95ly2Xb7HcZAB17Pub3U=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BYAPR12MB4758.namprd12.prod.outlook.com (2603:10b6:a03:a5::28)
+ by IA1PR12MB6092.namprd12.prod.outlook.com (2603:10b6:208:3ec::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Mon, 22 May
- 2023 15:01:11 +0000
-Received: from DM6NAM11FT088.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3ad:cafe::1f) by DS7PR03CA0285.outlook.office365.com
- (2603:10b6:5:3ad::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28 via Frontend
- Transport; Mon, 22 May 2023 15:01:11 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT088.mail.protection.outlook.com (10.13.172.147) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6411.28 via Frontend Transport; Mon, 22 May 2023 15:01:10 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 22 May
- 2023 10:00:56 -0500
+ 2023 15:00:46 +0000
+Received: from BYAPR12MB4758.namprd12.prod.outlook.com
+ ([fe80::e78e:b7da:7b9a:a578]) by BYAPR12MB4758.namprd12.prod.outlook.com
+ ([fe80::e78e:b7da:7b9a:a578%4]) with mapi id 15.20.6411.028; Mon, 22 May 2023
+ 15:00:46 +0000
+Message-ID: <8f44cc75-71d9-4a9c-8910-e96fedc6a550@amd.com>
+Date:   Mon, 22 May 2023 17:00:34 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] MAINTAINERS: Add myself as reviewer instead of Naga
+Content-Language: en-US
+To:     miquel.raynal@bootlin.com, linux-kernel@vger.kernel.org,
+        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com
+References: <c3ff76cb5e861500efe784f9f74ed93db08b2eb8.1683103414.git.michal.simek@amd.com>
 From:   Michal Simek <michal.simek@amd.com>
-To:     <linux-kernel@vger.kernel.org>, <monstr@monstr.eu>,
-        <michal.simek@xilinx.com>, <git@xilinx.com>
-CC:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Parth Gajjar <parth.gajjar@amd.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Srinivas Neeli <srinivas.neeli@xilinx.com>,
-        Vishal Sagar <vishal.sagar@amd.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH v2 6/6] arm64: zynqmp: Used fixed-partitions for QSPI in k26
-Date:   Mon, 22 May 2023 16:59:53 +0200
-Message-ID: <7368dc772d8dc29477a880ac2065e2ecb98cf3f5.1684767562.git.michal.simek@amd.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <cover.1684767562.git.michal.simek@amd.com>
-References: <cover.1684767562.git.michal.simek@amd.com>
+In-Reply-To: <c3ff76cb5e861500efe784f9f74ed93db08b2eb8.1683103414.git.michal.simek@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR0P281CA0171.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:b4::12) To BYAPR12MB4758.namprd12.prod.outlook.com
+ (2603:10b6:a03:a5::28)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5127; i=michal.simek@amd.com; h=from:subject:message-id; bh=4BxoH5GEkO+P7RNlBSyEwz59lTNpi7uO/qUt2btiaRc=; b=owGbwMvMwCR4yjP1tKYXjyLjabUkhpTs5vi5QdfrP/5edJ/R+/SkD4b+ZVv16rPe9C9Z+VmvJ PX19q37OmJZGASZGGTFFFmkba6c2Vs5Y4rwxcNyMHNYmUCGMHBxCsBE9n5nmB+xKF5F9aBaXm9K brFsk7YPS1O9PMM8Ux2TiRlhL01u8r79uCNdd8enj5cLAA==
-X-Developer-Key: i=michal.simek@amd.com; a=openpgp; fpr=67350C9BF5CCEE9B5364356A377C7F21FE3D1F91
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT088:EE_|CH2PR12MB4971:EE_
-X-MS-Office365-Filtering-Correlation-Id: 663ec5f3-2e28-468d-f983-08db5ad56156
+X-MS-TrafficTypeDiagnostic: BYAPR12MB4758:EE_|IA1PR12MB6092:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6b98d704-e060-4bb5-7958-08db5ad55274
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JT6NfnfGNx9qyPEGZGeIU+5p9PuiC2TV2uxRnFisCINRWEy4mLG1ecNI2VAHnPI/yepSsYlCaTcpfM6J/17JkkO2ZUbXDDfy/J93l4w8Qi7AXFEtuzPoG+6xxuk7hUDZ8e9xnNKIecIqNGfX+6X0GnvNkIEn0Tbg72aQR4voM2OPjOJeFilkWoYECVGgv+WlHpKUdF9lR1KaOjabiHSr0llFzRklDlV8wkypxsODUGjbkTen8QILg1hyP3gPw68v1y8s82wW5id2iuq8hv9rYoxF2gFScdws7LexB0Q9jfwbJxAICZ1PhyY/I4Bi8eCfol2nbbATp6aQZYt6W6+fzUUFkkOOQ7QyWlt8E7biNofb4pc89tALSlxhPhVMQskMGK871bKk+tP5Q5X5D8d9hJQyHGMZBVgmmz2nczxC91rNQjJC755/hfSTuG8aUtHEFDL9H6wOw2p9WxAuz/NwRguz4Eq6rDtbQRRR9ylEpMKj+89b0Y4x8+tSxr+e0E7mfSoCUfiveeGhAluS0yWRXuJRdYH1edkuPsZIx7iy8NBr0+RPFOaaF69tvBVgfHYJeMHW2DRbFZy+Varcks+QTAuWQF1VRrYF7zEa72PjP+5lzuNSpJ1ImMR7Lp7m9F2mZTG3d9nQ+VWzZCpDQY1Hb1sy+IH/IiXPTyzBnhIMkLAe/+Tn7lZa6qqAWTWAPIfCD+Byn8regxubvY1fPRytsc8kbml5dr3heNgM5CsYapBe/OB5myoOEZCGGoLDOBtMQDS7b8BeN8H4v0s8+m12HXr5haUorKh3fWsPxxm4VIU=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(396003)(136003)(346002)(376002)(451199021)(36840700001)(40470700004)(46966006)(81166007)(356005)(82740400003)(40480700001)(40460700003)(86362001)(82310400005)(36756003)(426003)(16526019)(44832011)(8936002)(8676002)(336012)(7416002)(47076005)(2616005)(2906002)(186003)(54906003)(478600001)(41300700001)(316002)(4326008)(110136005)(26005)(5660300002)(6666004)(70206006)(70586007)(83380400001)(36860700001)(36900700001)(2101003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: sU+QwBXBOGJk5C1cmC1gPfFFnGz4445uNfbQSjmFpQk8ptyNxGY7AbF7ri5v0syN09cT884rbWTqZ6Z785AxUGqGwhZqjT29EvLuaQuZ1pQPQkWkIhRy6CL7hezN1QIa9wmDe1Bc7Zm38DSZ73VM2leQtXU5qG7CCXSmefjjQdssYaYnX1PgtypMFqMKRX6REc++/Lk4t/hRokIv0eq0wERqcIdVXaCJi2O3XmX5BoyQkQL35SeqOsxyZ5guTftucRpiookpGKMOLBkrvH1uheksHM504rx8Nvxiip5lOmUz6GL30Zt23+5Qb1LZVo668OmnQHS6dsreR2l4py6zEV7G0+A2NK39F/0qe54IQjbHht4+38Qzhwu2oR3bZ+sZdsj1l567QqLik82LeNoEb7ZOkekQ03PdAL9o33om4crXvQjWTqlZStwNz+23pWP19479ikgSs/HfudmO7pC+gYaGQM/D+/Uo4AkrHk5rqIH7e64fGPdU4WUd/9DWebhl97bHTGAkz071ORzdP/MzutmCLJ6Xlp3fAlvJvRfobPK4mngDPo0SGvh53i65/ypIKc4N5Fo8Qz5smct5oXYCSdfEkTuaL9yoKl9Ftrq9YAaCtEWi9F79wwlzWlW5B5lll5Vso4+/r2vz4yC8LMAr6Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4758.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(376002)(396003)(346002)(366004)(451199021)(8676002)(8936002)(44832011)(5660300002)(83380400001)(53546011)(186003)(6512007)(6506007)(31696002)(2616005)(26005)(86362001)(38100700002)(41300700001)(6666004)(478600001)(66476007)(36756003)(66946007)(66556008)(6486002)(316002)(2906002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RytYbzhXaSs2K3JDL01BZFRzTVZpTHA4a0RkSHh5Tm9Ya0VhNVkydlNQNWw4?=
+ =?utf-8?B?MXB3OFBZYlRHVURDcGpkQ0NnZzFvSStpYnRiakpCVkNoa1dJZXdsYTVJZFlB?=
+ =?utf-8?B?VzhRNnBWVjhqSFJjcmQzS3JpdklSV1dZK3VzZ1YzU0JEald5blQwbmQzWmtP?=
+ =?utf-8?B?eFI0SHFEZzZEd0VaWW15a09saFpCQXN1ejA0RXB5L0tBYlpQTVlCekc2STBV?=
+ =?utf-8?B?OHFZYzdrcmRQN1RxcGFzQmYvRnk2MHFaRzJFTDZRb1pNdVVDYU5Nc2N2M3ZZ?=
+ =?utf-8?B?NXB6VnE5Ukl3UUc3czlEN3RsSE9UNmtmNzdta2Q0b204cDVGU0NRWFhOVzVj?=
+ =?utf-8?B?N2lFek5qMmFTNDV3Z0M0VC9sWmlDcTgxZkhVRVE1ZHpqL1VwbEJLallhQUNO?=
+ =?utf-8?B?VXlDK1VReUZRdzNJWU5RRVJHVTZRNmdDU3ZwQ3ZHZUlaQ2FvVnpqM2NvcmFl?=
+ =?utf-8?B?Vk1weGVPOFBwSFZxVkhPcHYvNlM4VmtORnBNMm53TnRIbDltN2M5eS9MaHg0?=
+ =?utf-8?B?RFlEbUlPQmwrSTVUU1gyQ2ErQVIvaTJIT1FEQXdxR3RiRGg1ZDEzeFZvU0la?=
+ =?utf-8?B?TUZIMUFqMVBXeWdhdEJqeExUNjBpc2J6WXo3ZGlsMjMwK1JuQXM2K3BDMEdY?=
+ =?utf-8?B?cmJ0RkZGalMwcFlELzhBRW1DaDNHbWZER0FDeTBmN0Z3OUJiWG5jR2RjeGx0?=
+ =?utf-8?B?RmtzOGgrNzlpUWw4R1hEdjN1ZWZGNHVuU3lubC9VaEhhcnM0b0JkWkUrWVoz?=
+ =?utf-8?B?dHZROU4vVE9DaVdCeDlXNUFDNmUwdWxLTXR4UVV2bmNadXZwSmdyRXE3N0NO?=
+ =?utf-8?B?YXlmU0thWU9GSGV0eHAzRGFZeThZRS9ra3J4ZkZiWWdpQVJsMW5ZRlZIaDZS?=
+ =?utf-8?B?Z2RsV2NqYTA2bUZiREJ1VWJLcnF6eUJiUW1aTS9mOFc5ajVsa3djRnV2REJO?=
+ =?utf-8?B?L2lRSDhKT3NYMmVaM01samtJL3hzanJJem5wb0x5ODZCd1dMcWgzVnI1a2p6?=
+ =?utf-8?B?c2JkczFOeUNHd0lteWM3WlVONENqZllqUk5hK2M2L2pQSDk5b1FYbjhibnky?=
+ =?utf-8?B?QTk5N0k5M1J3ZXZ3bmRkaTY4bE9tT1lFYVhVbk1EZVgwWnE3cGFJUXdiYlJQ?=
+ =?utf-8?B?TjFVc3dlODErZGdNblF1MmxsdHBycDBUTVhxRUhZYzc0by9ucUxtcHgzaXAx?=
+ =?utf-8?B?TEdkKzY2cXFzbFNsT3M0MThkK214ZUFQQ2NpY3dGbDJleW5jbFF5U3BiSTRS?=
+ =?utf-8?B?cWx1bHM0VnkvQXQvY04rMFlvSG1hc0lIM3ErbzZkcWFqajdNcWhiWm1sRkcx?=
+ =?utf-8?B?VlJKSG9uN3A5dU5aWk1jbGtNY08wZ3VLOTVHeXkwcVo5eFRlWGhyV21LSjh6?=
+ =?utf-8?B?QU5ZU0VQTDV1dVdHTWhzbEh3bW1ZR29namU5ejNwUEswNnNIalZRWHpmTFIv?=
+ =?utf-8?B?QWttRXJkemFhTlprWk1LaUdDOUk0azUvK2ZGU1YzSmZEOExQaHJMR1JaamVW?=
+ =?utf-8?B?Wi9lbnRZVEoxYi9Fb1lxZEhEMDYrcmNLMUNRNHNFZGhMazEyUnYwWng1Zk0r?=
+ =?utf-8?B?QTgvZ0htWnNVMkVKL2Zud1gzR1Q1eXl1Wlh1WjFpWWx3WXlKdWRVU0pFeU9C?=
+ =?utf-8?B?ZlNQRGdxamViZ1NQODF5WjVtamRJNTFSTktLZ0ZodWtpeHNZUWxFSWRaQjhn?=
+ =?utf-8?B?MHpqM2VLWTZwbDVrSmY1WmwxYWlqQlZud2xnMzhSZU5rYTdEaWxLeHBvQWJJ?=
+ =?utf-8?B?K3NrU2RVcytmVDVDNnNZUzJNME94RTBLKzRyUXg1UnljbkQyb2lDb21od0U1?=
+ =?utf-8?B?dzZXbUJVNURPUU4vbjRtRk11OTBlbU5WalJpT3FGd3ZRc0Qxa3ZkZldxWGZT?=
+ =?utf-8?B?N2E4elU0TUdaRmdpd1VkWTZVNGN4VWVRWDR2N0xKUmhNbWs5ZXdFWlphUmly?=
+ =?utf-8?B?Unc2SGVwTjQzQ0hPVHovbTVWODY2b2wvQ210TGFzM1h3UEhNdlB2emtWWHFR?=
+ =?utf-8?B?UnVMd0JzTXVtUUcwZHRaQkJPMllqYkkxUEQwR09aU3BDOGRraGJHWmFBd2V0?=
+ =?utf-8?B?Zkw4emthYTFQOXVsTlZFZjIzNVk3Mm8rbjVYcjl1NVNHR2dsM01JbE81MDFE?=
+ =?utf-8?Q?lHlyzYmOqdddnUBg4XUYWLBhl?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2023 15:01:10.9899
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6b98d704-e060-4bb5-7958-08db5ad55274
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4758.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2023 15:00:46.4302
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 663ec5f3-2e28-468d-f983-08db5ad56156
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT088.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4971
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ylxd0Qd1d3pNnLN56mMjadVGWPe1xGkN0o1LNXXjq54kYDT9ysjmzkeuw9+F7H3Z
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6092
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -109,198 +123,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using fixed partitions is recommended way how to describe QSPI. Also add
-label for qspi flash memory to be able to reference it in future.
+Hi Miquel,
 
-Signed-off-by: Michal Simek <michal.simek@amd.com>
----
+On 5/3/23 10:43, Michal Simek wrote:
+> Naga no longer works for AMD/Xilinx and there is no activity from him to
+> continue to maintain Xilinx related drivers. Add myself instead to be kept
+> in loop if there is any need for testing.
+> 
+> Signed-off-by: Michal Simek <michal.simek@amd.com>
+> ---
+> 
+>   MAINTAINERS | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 643f9feeb09a..104f1b8727d3 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -1600,7 +1600,7 @@ F:	drivers/media/i2c/ar0521.c
+>   
+>   ARASAN NAND CONTROLLER DRIVER
+>   M:	Miquel Raynal <miquel.raynal@bootlin.com>
+> -M:	Naga Sureshkumar Relli <nagasure@xilinx.com>
+> +R:	Michal Simek <michal.simek@amd.com>
+>   L:	linux-mtd@lists.infradead.org
+>   S:	Maintained
+>   F:	Documentation/devicetree/bindings/mtd/arasan,nand-controller.yaml
+> @@ -1740,7 +1740,7 @@ F:	include/linux/amba/bus.h
+>   
+>   ARM PRIMECELL PL35X NAND CONTROLLER DRIVER
+>   M:	Miquel Raynal <miquel.raynal@bootlin.com>
+> -M:	Naga Sureshkumar Relli <nagasure@xilinx.com>
+> +R:	Michal Simek <michal.simek@amd.com>
+>   L:	linux-mtd@lists.infradead.org
+>   S:	Maintained
+>   F:	Documentation/devicetree/bindings/mtd/arm,pl353-nand-r2p1.yaml
+> @@ -1748,7 +1748,7 @@ F:	drivers/mtd/nand/raw/pl35x-nand-controller.c
+>   
+>   ARM PRIMECELL PL35X SMC DRIVER
+>   M:	Miquel Raynal <miquel.raynal@bootlin.com>
+> -M:	Naga Sureshkumar Relli <nagasure@xilinx.com>
+> +R:	Michal Simek <michal.simek@amd.com>
+>   L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+>   S:	Maintained
+>   F:	Documentation/devicetree/bindings/memory-controllers/arm,pl35x-smc.yaml
 
-(no changes since v1)
+Any issue with this patch? Would be good to get your ACK on it?
 
----
- .../boot/dts/xilinx/zynqmp-sm-k26-revA.dts    | 169 +++++++++---------
- 1 file changed, 88 insertions(+), 81 deletions(-)
-
-diff --git a/arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts b/arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts
-index 84e18fdce775..dfd1a18f5a10 100644
---- a/arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts
-+++ b/arch/arm64/boot/dts/xilinx/zynqmp-sm-k26-revA.dts
-@@ -127,87 +127,94 @@ spi_flash: flash@0 { /* MT25QU512A */
- 		spi-tx-bus-width = <4>;
- 		spi-rx-bus-width = <4>;
- 		spi-max-frequency = <40000000>; /* 40MHz */
--		partition@0 {
--			label = "Image Selector";
--			reg = <0x0 0x80000>; /* 512KB */
--			read-only;
--			lock;
--		};
--		partition@80000 {
--			label = "Image Selector Golden";
--			reg = <0x80000 0x80000>; /* 512KB */
--			read-only;
--			lock;
--		};
--		partition@100000 {
--			label = "Persistent Register";
--			reg = <0x100000 0x20000>; /* 128KB */
--		};
--		partition@120000 {
--			label = "Persistent Register Backup";
--			reg = <0x120000 0x20000>; /* 128KB */
--		};
--		partition@140000 {
--			label = "Open_1";
--			reg = <0x140000 0xC0000>; /* 768KB */
--		};
--		partition@200000 {
--			label = "Image A (FSBL, PMU, ATF, U-Boot)";
--			reg = <0x200000 0xD00000>; /* 13MB */
--		};
--		partition@f00000 {
--			label = "ImgSel Image A Catch";
--			reg = <0xF00000 0x80000>; /* 512KB */
--			read-only;
--			lock;
--		};
--		partition@f80000 {
--			label = "Image B (FSBL, PMU, ATF, U-Boot)";
--			reg = <0xF80000 0xD00000>; /* 13MB */
--		};
--		partition@1c80000 {
--			label = "ImgSel Image B Catch";
--			reg = <0x1C80000 0x80000>; /* 512KB */
--			read-only;
--			lock;
--		};
--		partition@1d00000 {
--			label = "Open_2";
--			reg = <0x1D00000 0x100000>; /* 1MB */
--		};
--		partition@1e00000 {
--			label = "Recovery Image";
--			reg = <0x1E00000 0x200000>; /* 2MB */
--			read-only;
--			lock;
--		};
--		partition@2000000 {
--			label = "Recovery Image Backup";
--			reg = <0x2000000 0x200000>; /* 2MB */
--			read-only;
--			lock;
--		};
--		partition@2200000 {
--			label = "U-Boot storage variables";
--			reg = <0x2200000 0x20000>; /* 128KB */
--		};
--		partition@2220000 {
--			label = "U-Boot storage variables backup";
--			reg = <0x2220000 0x20000>; /* 128KB */
--		};
--		partition@2240000 {
--			label = "SHA256";
--			reg = <0x2240000 0x40000>; /* 256B but 256KB sector */
--			read-only;
--			lock;
--		};
--		partition@2280000 {
--			label = "Secure OS Storage";
--			reg = <0x2280000 0x20000>; /* 128KB */
--		};
--		partition@22A0000 {
--			label = "User";
--			reg = <0x22A0000 0x1d60000>; /* 29.375 MB */
-+
-+		partitions {
-+			compatible = "fixed-partitions";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+
-+			partition@0 {
-+				label = "Image Selector";
-+				reg = <0x0 0x80000>; /* 512KB */
-+				read-only;
-+				lock;
-+			};
-+			partition@80000 {
-+				label = "Image Selector Golden";
-+				reg = <0x80000 0x80000>; /* 512KB */
-+				read-only;
-+				lock;
-+			};
-+			partition@100000 {
-+				label = "Persistent Register";
-+				reg = <0x100000 0x20000>; /* 128KB */
-+			};
-+			partition@120000 {
-+				label = "Persistent Register Backup";
-+				reg = <0x120000 0x20000>; /* 128KB */
-+			};
-+			partition@140000 {
-+				label = "Open_1";
-+				reg = <0x140000 0xC0000>; /* 768KB */
-+			};
-+			partition@200000 {
-+				label = "Image A (FSBL, PMU, ATF, U-Boot)";
-+				reg = <0x200000 0xD00000>; /* 13MB */
-+			};
-+			partition@f00000 {
-+				label = "ImgSel Image A Catch";
-+				reg = <0xF00000 0x80000>; /* 512KB */
-+				read-only;
-+				lock;
-+			};
-+			partition@f80000 {
-+				label = "Image B (FSBL, PMU, ATF, U-Boot)";
-+				reg = <0xF80000 0xD00000>; /* 13MB */
-+			};
-+			partition@1c80000 {
-+				label = "ImgSel Image B Catch";
-+				reg = <0x1C80000 0x80000>; /* 512KB */
-+				read-only;
-+				lock;
-+			};
-+			partition@1d00000 {
-+				label = "Open_2";
-+				reg = <0x1D00000 0x100000>; /* 1MB */
-+			};
-+			partition@1e00000 {
-+				label = "Recovery Image";
-+				reg = <0x1E00000 0x200000>; /* 2MB */
-+				read-only;
-+				lock;
-+			};
-+			partition@2000000 {
-+				label = "Recovery Image Backup";
-+				reg = <0x2000000 0x200000>; /* 2MB */
-+				read-only;
-+				lock;
-+			};
-+			partition@2200000 {
-+				label = "U-Boot storage variables";
-+				reg = <0x2200000 0x20000>; /* 128KB */
-+			};
-+			partition@2220000 {
-+				label = "U-Boot storage variables backup";
-+				reg = <0x2220000 0x20000>; /* 128KB */
-+			};
-+			partition@2240000 {
-+				label = "SHA256";
-+				reg = <0x2240000 0x40000>; /* 256B but 256KB sector */
-+				read-only;
-+				lock;
-+			};
-+			partition@2280000 {
-+				label = "Secure OS Storage";
-+				reg = <0x2280000 0x20000>; /* 128KB */
-+			};
-+			partition@22A0000 {
-+				label = "User";
-+				reg = <0x22A0000 0x1d60000>; /* 29.375 MB */
-+			};
- 		};
- 	};
- };
--- 
-2.36.1
-
+Thanks,
+Michal
