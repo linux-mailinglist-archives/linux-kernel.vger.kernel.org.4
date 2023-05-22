@@ -2,129 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F12C670B2D6
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 03:37:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87DC170B2DA
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 03:39:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231358AbjEVBhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 21:37:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46826 "EHLO
+        id S231368AbjEVBjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 21:39:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbjEVBhE (ORCPT
+        with ESMTP id S229533AbjEVBj3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 21:37:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70ACE4;
-        Sun, 21 May 2023 18:37:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 416B1618FB;
-        Mon, 22 May 2023 01:37:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AAF9C433D2;
-        Mon, 22 May 2023 01:36:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684719421;
-        bh=rQqm+d2EFHE384n3OSuP7ZiGPEVYIDUl4XCUxQmHiHw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=fODKzsVEdpuUNT4XkenMR4SXPk3B7CrscOcXbn7e90X7TRp+hpkWjfCI69nsRnPMe
-         QddI+4EluM2i7qZrEtYkhWZ5Zl9ZY1hs+ibe/vgajauD7cI4rLUZROLpXK0Fk5itXg
-         zd6YYGwZ9RJHnsBdUQZIFoGVAagT4KON1juorPMzHZmOHSPMavAJdmsxrl0l3TtPPo
-         CCJ+oUJc3cJLKhHADaVm2H45tX7X41evI5TTeNIM8aXsi9lVzRq3YjpwPZwTx6Ygpm
-         Q1dgynMmMhEKyVvnmZJAMS/W/AuHfWFPGljHQqg/YRBzAzZcX41dN9wHlV3IhooRAi
-         BOuzepKu4OVHg==
-Date:   Mon, 22 May 2023 10:36:52 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Ze Gao <zegao2021@gmail.com>, Yonghong Song <yhs@meta.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Hao Luo <haoluo@google.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Song Liu <song@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        kafai@fb.com, kpsingh@chromium.org, netdev@vger.kernel.org,
-        paulmck@kernel.org, songliubraving@fb.com,
-        Ze Gao <zegao@tencent.com>
-Subject: Re:
-Message-Id: <20230522103652.4c1680bb945cba22ccba6a79@kernel.org>
-In-Reply-To: <ZGp+fW855gmWuh9W@krava>
-References: <20220515203653.4039075-1-jolsa@kernel.org>
-        <20230520094722.5393-1-zegao@tencent.com>
-        <b4f66729-90ab-080a-51ec-bf435ad6199d@meta.com>
-        <CAD8CoPAXse1GKAb15O5tZJwBqMt1N_btH+qRe7c_a-ryUMjx7A@mail.gmail.com>
-        <ZGp+fW855gmWuh9W@krava>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 21 May 2023 21:39:29 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA2B7CE;
+        Sun, 21 May 2023 18:39:27 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.170])
+        by gateway (Coremail) with SMTP id _____8DxI_DOx2pkxsYKAA--.18463S3;
+        Mon, 22 May 2023 09:39:26 +0800 (CST)
+Received: from [10.20.42.170] (unknown [10.20.42.170])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxqrbNx2pkpV9uAA--.54486S3;
+        Mon, 22 May 2023 09:39:25 +0800 (CST)
+Message-ID: <99371487-717a-64d6-1c3d-aaeaee6f20db@loongson.cn>
+Date:   Mon, 22 May 2023 09:39:25 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v10 00/30] Add KVM LoongArch support
+Content-Language: en-US
+To:     WANG Xuerui <kernel@xen0n.name>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Xi Ruoyao <xry111@xry111.site>,
+        Tianrui Zhao <zhaotianrui@loongson.cn>
+References: <20230515021522.2445551-1-zhaotianrui@loongson.cn>
+ <02f07d8e-e1c2-2ec0-59c3-f5b4ef0463dc@loongson.cn>
+ <4529ee5b-364a-7819-c727-71cf94057b8b@xen0n.name>
+From:   maobibo <maobibo@loongson.cn>
+In-Reply-To: <4529ee5b-364a-7819-c727-71cf94057b8b@xen0n.name>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxqrbNx2pkpV9uAA--.54486S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxWrWfAr1rAFWrJFyktr43Wrg_yoW5WF15pr
+        4a9F47tFn5Ar4UZ34q9a18ZFy5Kwn7W3y5XrsxK343u3yUAr18tF1ftFZ0ya4UZan3Jr4j
+        qr17Kr18A3Z8Za7anT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84
+        ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
+        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
+        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI
+        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
+        IxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
+        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8Dl1DUUUUU==
+X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_SBL_CSS,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 21 May 2023 22:26:37 +0200
-Jiri Olsa <olsajiri@gmail.com> wrote:
 
-> On Sun, May 21, 2023 at 11:10:16PM +0800, Ze Gao wrote:
-> > > kprobe_multi/fprobe share the same set of attachments with fentry.
-> > > Currently, fentry does not filter with !rcu_is_watching, maybe
-> > > because this is an extreme corner case. Not sure whether it is
-> > > worthwhile or not.
-> > 
-> > Agreed, it's rare, especially after Peter's patches which push narrow
-> > down rcu eqs regions
-> > in the idle path and reduce the chance of any traceable functions
-> > happening in between.
-> > 
-> > However, from RCU's perspective, we ought to check if rcu_is_watching
-> > theoretically
-> > when there's a chance our code will run in the idle path and also we
-> > need rcu to be alive,
-> > And also we cannot simply make assumptions for any future changes in
-> > the idle path.
-> > You know, just like what was hit in the thread.
-> > 
-> > > Maybe if you can give a concrete example (e.g., attachment point)
-> > > with current code base to show what the issue you encountered and
-> > > it will make it easier to judge whether adding !rcu_is_watching()
-> > > is necessary or not.
-> > 
-> > I can reproduce likely warnings on v6.1.18 where arch_cpu_idle is
-> > traceable but not on the latest version
-> > so far. But as I state above, in theory we need it. So here is a
-> > gentle ping :) .
+
+在 2023/5/21 18:22, WANG Xuerui 写道:
+> On 2023/5/18 10:56, maobibo wrote:
+>> Hi Paolo & Huacai,
+>>
+>> Sorry to bother you, I do not know flow of kernel code reviewing and merging.
+>>
+>> I want to know who should give a reviewed-by comments for these piece of code
+>> about loongarch kvm patch. It should be kvm maintainer or LoongArch maintianer?
+>> And any suggestion is welcome.
 > 
-> hum, this change [1] added rcu_is_watching check to ftrace_test_recursion_trylock,
-> which we use in fprobe_handler and is coming to fprobe_exit_handler in [2]
+> IMO the series should get its R-b from kvm maintainers (because it's kvm after all), and ideally also Acked-by from arch/loongarch maintainers (because it contains arch-specific code), according to common sense.
 > 
-> I might be missing something, but it seems like we don't need another
-> rcu_is_watching call on kprobe_multi level
-
-Good point! OK, then it seems we don't need it. The rethook continues to
-use the rcu_is_watching() because it is also used from kprobes, but the
-kprobe_multi doesn't need it.
-
-Thank you,
+> But in order for the various maintainers/reviewers to effectively review, maybe the LoongArch ISA manual Volume 3 (containing details about the virtualization extension) should be put out soon. AFAIK Huacai has access to it, by being a Loongson employee, but I don't know if he can review this series in the public without violating NDAs; Loongson outsiders like me and the kvm reviewers can only trust the commit messages and comments for the time being.
+Yes, it will be best if kvm maintainers can give reviewed-by comments,
+since they understand kvm component at best and know the future
+evolution directions.
 
 > 
-> jirka
+> (BTW, how do people usually deal with pre-release hardware wit documentation not out yet? I suppose similar situations like this should turn up fairly often.)
+Manual is actually one issue, however it does not prevent the review
+process. There are some drivers for *fruit* devices, I can not find
+the hw manual also.  With the manual, it helps to review and points
+out the further and detailed issues.
 > 
+> Aside from this, there's another point: use of undocumented instructions in raw form with ".word". This currently doesn't work in LLVM/Clang, thus will slightly set back the ongoing ClangBuiltLinux enablement effort (currently all such usages in arch/loongarch are related to "invtlb" which has perfect support, and can be removed). AFAIK, such practice dates back to the LoongISA times, when the Loongson extended opcodes weren't supported by the upstream MIPS toolchains for some reason; but LoongArch is independent and not bounded by anyone else now, so it's better in terms of maintainability to just add the instructions to the toolchains. People will not be inconvenienced by having to use bleeding-edge LoongArch toolchains because upstream LoongArch devs have always been doing this.
+As for one new architecture, it is normal to use .word or .insn, instruction
+will update for the first few years and also compiler may be not supported
+timely. The other arch has the same phenomenon if you grep "\.insn", also
+llvm on LoongArch supports ".word" directives.
+
+After three or five years, we will remove these ".insn" macro when hw and
+compiler is matured.
+
+Regards
+Bibo, Mao
 > 
-> [1] d099dbfd3306 cpuidle: tracing: Warn about !rcu_is_watching()
-> [2] https://lore.kernel.org/bpf/20230517034510.15639-4-zegao@tencent.com/
 
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
