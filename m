@@ -2,129 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C52A70B2F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 03:54:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 251E870B2F7
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 03:58:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231517AbjEVByj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 21:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52118 "EHLO
+        id S231521AbjEVB6H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 21:58:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231511AbjEVByh (ORCPT
+        with ESMTP id S229501AbjEVB6F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 21:54:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE94EE0
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 18:53:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684720429;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LjpVYliWYmLsp+7DmHIQ6WIiz69+8hAntxXwMv/K+0o=;
-        b=OM6pt4AGyJiCf8dByX7LveLvGYDLw6SU+2REsA9x1C6gr+oNlIr6Bw+4dIxXIqWYc12ZLQ
-        Rwill0HsndOZa/saewr898U2DGzNcv6TE1xm3F7jXguWLLJNchizq1q2Q9MgY12G2fQWAE
-        eZmJYXYXX6O/zfvv5yIu4LpzIy9PE/A=
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com
- [209.85.210.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-354-q4s1fymvOm2I0WH1I1bqTw-1; Sun, 21 May 2023 21:53:40 -0400
-X-MC-Unique: q4s1fymvOm2I0WH1I1bqTw-1
-Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-64d413b27a1so1063001b3a.2
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 18:53:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684720419; x=1687312419;
+        Sun, 21 May 2023 21:58:05 -0400
+Received: from mail-oi1-x236.google.com (mail-oi1-x236.google.com [IPv6:2607:f8b0:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC38B3;
+        Sun, 21 May 2023 18:58:04 -0700 (PDT)
+Received: by mail-oi1-x236.google.com with SMTP id 5614622812f47-39815ce6db2so60062b6e.0;
+        Sun, 21 May 2023 18:58:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684720684; x=1687312684;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LjpVYliWYmLsp+7DmHIQ6WIiz69+8hAntxXwMv/K+0o=;
-        b=Kb66uV0UA+79AneEtIkOBhaX5spiljudbL9/GnvEIYydeB3/k+LyeJ5hWUl9rt/7lq
-         DbStkZIaFmS+zUe5CeBIs2Fuw6n5FdvKEIFFUee6qkkZVtO/CMbkWZcoitcbtzftFIt3
-         mK2WBxt2JSxIk6YEWfVcKC2l1f35pAW91fBPW1TDuPS8vb1jg4qzHAypAgJrCmB65bqu
-         UYdK8EsViYia4BjfDFe8B9uuZwVtHL5VqSciaMfTfYKeoP0s6A0tY+1zbH/tEBrzRWdp
-         oREZe4DPF60UMcGGcnWGrsAX4uRKFrsSq+oIzHWrSjwW0MmYban03FZ8GefReQOS38Qb
-         Z4aQ==
-X-Gm-Message-State: AC+VfDxDFILDNVF2k0Wx/0sOTXQZyukM71UV8nCgZkJpPkieo2N2iiHk
-        rr0VirLUZvRrSL6o4dgGbDVsuyWDbUVztDrnCUGZTnRZ792AirQ+txqKs8XYUEWYAwXwlGi0TT9
-        aBrWVdCC75hz7C/saG8agkZPY
-X-Received: by 2002:a05:6a00:2314:b0:63b:6149:7ad6 with SMTP id h20-20020a056a00231400b0063b61497ad6mr11651217pfh.34.1684720419702;
-        Sun, 21 May 2023 18:53:39 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7Mn7xT7CCI+yBGqvco+AvK/IKOxX++Ib2iwxBd4veVXnB4vaLlF/dnAev/HMla5PSUAUk2RQ==
-X-Received: by 2002:a05:6a00:2314:b0:63b:6149:7ad6 with SMTP id h20-20020a056a00231400b0063b61497ad6mr11651198pfh.34.1684720419429;
-        Sun, 21 May 2023 18:53:39 -0700 (PDT)
-Received: from [10.72.12.68] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id s9-20020aa78289000000b0063f2e729127sm3121905pfm.144.2023.05.21.18.53.31
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=w53tuVYkQ3NIiwF4ysenFUwUX//u9UgrVqJVmePRgAc=;
+        b=qFBV+uZmMh3f+CsK3DX+2aomi8ao8R83J94o4UuOTgtSN73Vmq+QoMqzNlNUGAH9GJ
+         894clhKA5Dkb3tENP0raG1YIh+RPcaBqD3AKD+sXYS0hP68Su87ACfRqLyCPXkN9GX+4
+         nK7eKDGsT0yxJ2HX8oiAa4fD5vB9hZFOC/kzllnAjwJHUc0P5kGW4TNYIr2suHCOBGuD
+         pE+5Zek9CQ6EjH5P827dnx74dIDFvn8/OqmK/7WXxI4rLDbuJfkxiRY2sRGoMKWq8FSN
+         2Dh/AbuJUtKRdk2BGx5o2VVX/f0ftudF9VIOcLNTUL0YLmO6ziCmh6l4L47lvapQ117A
+         HKJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684720684; x=1687312684;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w53tuVYkQ3NIiwF4ysenFUwUX//u9UgrVqJVmePRgAc=;
+        b=Wvlyg5tLSco7vbYyZ1vHP5bZgna309nTecfG6BNrbjs6XtrDheq7oXHfOSkWEBXGls
+         ANVQWxSj+Fc1ObDY9ciNSG51rVhBOZGw+eSRnkpK+VT67t2PFFj1+Sy/wCKjB7HCN/Td
+         Aa4f10tmSlUBpeGCAwu9dJ0WrL8DQMJNI02EqU+GXdVQFt6iujwETAmdBXQH7HRLz5J7
+         /xVRxfJnWY7piDeUJhA0uRHoSDGLEKHCyXubXRzyKWRe07AbPUNq1KYhXnC7Ks7r9zQD
+         1+p6Yq582lUcsOvwPYh7cm0X88MCNQ+mbQ7pCtY2x4zVVJETPOeR14nJu+enMGvLUJib
+         9DAA==
+X-Gm-Message-State: AC+VfDxOk/QNAemJH60qqGsdKZMBNqpKDgEa4z1CDlFGBfKz+El9wmNp
+        W2XEea9KH91+5DFH00MQc0c=
+X-Google-Smtp-Source: ACHHUZ7S1THM9p1SfxTUWfP3RrYTRHSUgpxGTHaJCQ2ZfkwYTSFXSa849IoFn0pdU20IV7xd3pRr+w==
+X-Received: by 2002:aca:1e04:0:b0:394:4890:1421 with SMTP id m4-20020aca1e04000000b0039448901421mr5095174oic.8.1684720683790;
+        Sun, 21 May 2023 18:58:03 -0700 (PDT)
+Received: from [192.168.0.200] ([216.130.59.33])
+        by smtp.gmail.com with ESMTPSA id w81-20020acadf54000000b00398031b1014sm976545oig.26.2023.05.21.18.58.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 21 May 2023 18:53:38 -0700 (PDT)
-Message-ID: <ef4cc431-4cc4-eb39-735d-0b3b3759abed@redhat.com>
-Date:   Mon, 22 May 2023 09:53:28 +0800
+        Sun, 21 May 2023 18:58:03 -0700 (PDT)
+Sender: Larry Finger <larry.finger@gmail.com>
+Message-ID: <88e0c4a3-eec7-e44d-6f95-6f2e7f7cbbb5@lwfinger.net>
+Date:   Sun, 21 May 2023 20:58:01 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v20 13/32] ceph: Provide a splice-read stub
+ Thunderbird/102.11.0
+Subject: Re: [PATCH wireless-next v1 4/4] wifi: rtw88: Add support for the
+ SDIO based RTL8723DS chipset
 Content-Language: en-US
-To:     David Howells <dhowells@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Christoph Hellwig <hch@lst.de>,
-        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org
-References: <c1fd63b9-42ea-fa83-ecb1-9af715e37ffa@redhat.com>
- <20230519074047.1739879-1-dhowells@redhat.com>
- <20230519074047.1739879-14-dhowells@redhat.com>
- <1743656.1684488288@warthog.procyon.org.uk>
-From:   Xiubo Li <xiubli@redhat.com>
-In-Reply-To: <1743656.1684488288@warthog.procyon.org.uk>
+To:     Ping-Ke Shih <pkshih@realtek.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
+Cc:     "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
+        Peter Robinson <pbrobinson@gmail.com>,
+        "jernej.skrabec@gmail.com" <jernej.skrabec@gmail.com>
+References: <20230518161749.1311949-1-martin.blumenstingl@googlemail.com>
+ <20230518161749.1311949-5-martin.blumenstingl@googlemail.com>
+ <c52c11c712e24e1fb783c2ce1251aba5@realtek.com>
+From:   Larry Finger <Larry.Finger@lwfinger.net>
+In-Reply-To: <c52c11c712e24e1fb783c2ce1251aba5@realtek.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 5/21/23 20:49, Ping-Ke Shih wrote:
+> 
+> 
+>> -----Original Message-----
+>> From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+>> Sent: Friday, May 19, 2023 12:18 AM
+>> To: linux-wireless@vger.kernel.org
+>> Cc: linux-mmc@vger.kernel.org; linux-kernel@vger.kernel.org; ulf.hansson@linaro.org; kvalo@kernel.org;
+>> tony0620emma@gmail.com; Peter Robinson <pbrobinson@gmail.com>; Ping-Ke Shih <pkshih@realtek.com>;
+>> jernej.skrabec@gmail.com; Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+>> Subject: [PATCH wireless-next v1 4/4] wifi: rtw88: Add support for the SDIO based RTL8723DS chipset
+>>
+>> Wire up RTL8723DS chipset support using the rtw88 SDIO HCI code as well
+>> as the existing RTL8723D chipset code.
+>>
+>> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> 
+> I'm so surprised that this small patchset can support an new chip. Nice job. :-)
+> 
+> Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
 
-On 5/19/23 17:24, David Howells wrote:
-> Xiubo Li <xiubli@redhat.com> wrote:
->
->>> +	ret = ceph_get_caps(in, CEPH_CAP_FILE_RD, want, -1, &got);
->>> +	if (ret < 0) {
->>> +		ceph_end_io_read(inode);
->>> +		return ret;
->>> +	}
->>> +
->>> +	if ((got & (CEPH_CAP_FILE_CACHE | CEPH_CAP_FILE_LAZYIO)) == 0) {
->>> +		dout("splice_read/sync %p %llx.%llx %llu~%zu got cap refs on %s\n",
->>> +		     inode, ceph_vinop(inode), *ppos, len,
->>> +		     ceph_cap_string(got));
->>> +
->>> +		ceph_end_io_read(inode);
->>> +		return direct_splice_read(in, ppos, pipe, len, flags);
->> Shouldn't we release cap ref before returning here ?
-> Ummm...  Even if we got no caps?
+I agree that this is a nice job. This driver has been tested using my rtw88 repo 
+at GitHub.com. I do not have a device, thus a tested=by tag would not be 
+appropriate, but I do have a very satisfied user!
 
-No, at least we have got the 'need' caps: CEPH_CAP_FILE_RD once here.
+Larry
 
-I saw you have updated this and will check it.
-
-Thanks
-
-- Xiubo
-
->
-> David
->
 
