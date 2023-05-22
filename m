@@ -2,91 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3740B70BCCB
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 14:00:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F06270BCC4
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 14:00:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233709AbjEVMAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 08:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38086 "EHLO
+        id S233637AbjEVMAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 08:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233645AbjEVL7z (ORCPT
+        with ESMTP id S233622AbjEVMAT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 07:59:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 468A6100;
-        Mon, 22 May 2023 04:59:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 22 May 2023 08:00:19 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B171A8;
+        Mon, 22 May 2023 04:59:55 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 222DB6135D;
-        Mon, 22 May 2023 11:59:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83D25C433EF;
-        Mon, 22 May 2023 11:59:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684756776;
-        bh=noLNVGz2jJ7O7o4ac5on++xmXX/K/ni7BD/UCTe0wmM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H+zjQstKzirDiOEWd50KK6ocVionxHN0tfFF9k6+xTfxZxsNBCmbTglBCdUhrNdyY
-         +n83SPrjEYrFQW5NJXpZ0U4+TCf1nnEjsLTRO9ag4IIOCl59tFi2kDTdRc/vp9rSoI
-         OwX8FePZJpGZB9/OZEGOVw5uyp+yHidwL25L6RDEF/GzHtlQsPdg/F+HvO6Lkom7al
-         D2c/LkXnEfD5yPtY83mgeF8CwwyYvuKaL5RY8FABjPJoUYshGHVY8aVr+CTs0/2h1o
-         vzLzZ4n6j4W3op1CUIcl5mNMyCDp/9jiqp+njaZBgWLfBy235wH8PtPhznPRwk5tOt
-         0bjelTZX/FE5g==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1q14CO-0001dA-JB; Mon, 22 May 2023 13:59:37 +0200
-Date:   Mon, 22 May 2023 13:59:36 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Corey Minyard <minyard@acm.org>
-Cc:     Craig Shelley <craig@microtron.org.uk>,
-        Linux Kernel <linux-kernel@vger.kernel.org>,
-        linux-usb@vger.kernel.org
-Subject: Re: Break doesn't work on a CP2105
-Message-ID: <ZGtZKCvo71woGf9T@hovoldconsulting.com>
-References: <ZEmDs0ASdnEAnpsL@minyard.net>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZEmDs0ASdnEAnpsL@minyard.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 9D7DA1FEAA;
+        Mon, 22 May 2023 11:59:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1684756793; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wTXdnsTIOpts+ngHHMSt9G0bm+NoUyBrowWRidAO2Nc=;
+        b=qHKQbh6wY2MNNQTFNhGrOOiY8nMGEc1TkHIZcZx1jfaABnWfq36pxR3EFOZQJEC5VwYtJQ
+        m2sbSRil+kJ6SEJ0zZ5TYCvikBK8VDNhmdGMurxW/fLdm3gC4lwsjnINu9b/qtBpmP58a8
+        IC/x1pKqToZo7mmwl+pmt4PPN01xLAU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1684756793;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wTXdnsTIOpts+ngHHMSt9G0bm+NoUyBrowWRidAO2Nc=;
+        b=nuw5oxmNgsLPzP3xjuG/8vVrfiUjxXMIJ2mEV3/yAfUT+OIqGyRI3csw1JeBuESgcDm2gC
+        vpHXDZ14SBwqTrAw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3B2E513336;
+        Mon, 22 May 2023 11:59:53 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id zuKsDTlZa2TtSQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 22 May 2023 11:59:53 +0000
+Date:   Mon, 22 May 2023 13:59:52 +0200
+Message-ID: <87cz2sy3t3.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH v5 32/44] sound: add HAS_IOPORT dependencies
+In-Reply-To: <20230522105049.1467313-33-schnelle@linux.ibm.com>
+References: <20230522105049.1467313-1-schnelle@linux.ibm.com>
+        <20230522105049.1467313-33-schnelle@linux.ibm.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Corey,
-
-and sorry about the late reply on this.
-
-On Wed, Apr 26, 2023 at 03:04:03PM -0500, Corey Minyard wrote:
-> I have a development board with a CP2105 on it, and I was trying to send
-> a break to it to do a sysrq.  And it wasn't working.
+On Mon, 22 May 2023 12:50:37 +0200,
+Niklas Schnelle wrote:
 > 
-> I have verified that the target driver works by setting a really slow
-> baud rate and sending something with a lot of zero bits.  It got breaks
-> just fine.
+> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> not being declared. We thus need to add HAS_IOPORT as dependency for
+> those drivers using them.
 > 
-> If I use TCSBRK, it seems to just send a short time with zeros, not
-> even a full character's worth.  It receives a valid character with the
-> top few bits set.  If I use TCSBRKP with a longer time, like 2.5
-> seconds, it waits the whole time, then at the very end it gets the
-> character as with the shorter break.
-> 
-> I can't find a programming manual for the chip, and I'm not sure what's
-> going on.
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
-I just verified that break works on the first port of my cp2105 but not
-on the second one (I seem to receive the last characters sent instead).
+Looks good to me.  Would you like the patch picked up through
+sound.git tree, or rather apply all through a different tree?
+In the latter case:
 
-Apparently this is expected as the datasheet (AN571) says the following
-about the SET_BREAK command:
+Reviewed-by: Takashi Iwai <tiwai@suse.de>
 
-	This command is not supported on the second CP2105 interface.
 
-Which port are you seeing this behaviour with?
+thanks,
 
-Johan
+Takashi
