@@ -2,91 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B80DA70B758
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:14:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C64EF70B75C
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:14:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230496AbjEVION (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 04:14:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49240 "EHLO
+        id S231947AbjEVIOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 04:14:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjEVIOM (ORCPT
+        with ESMTP id S229729AbjEVIOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 04:14:12 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53024B0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 01:14:11 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1684743249;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mnTuNYqtea/wqsyRqkyQFOYLTYsaJ3v9g3ieEEK162A=;
-        b=WJ0waR8tuxofc2BBQx9ZogV075ptotLz7HjIA1mgfZHfmSKB0f2+/Rt4lMUPmJBPW8IYZL
-        SFyB87BPgJ//XEG9wRIt3XOC/aYTWP4QJICD8ym9fLe1+tkejq1s0swg6oBPY2RHRObRHK
-        2pR5GNKcsWO/+JmANIY6MSvwvbrhLbis//mu8KuarnYcVY5UC8oL8cC1+XOehwLjuGK255
-        mP5y8PGY4jOKT3QIaQwQPTIVEWr0mStsh9nnWXIzsztb87sTkH7ehxpv7J3LuTdIeMlGff
-        EoM61I2hHrVaP1E5VPAsvSI8xPrI3awvEHyUk2VZdQAvYYKwsW3ysuntSmTVJA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1684743249;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mnTuNYqtea/wqsyRqkyQFOYLTYsaJ3v9g3ieEEK162A=;
-        b=vfaDdpbJgRxBvsqf5x7986D6qhCoob6IScLazDVoZTyjzmeG1/2KOa78gmzog4PSJLQUS+
-        4acd5z0MF5t0wiCQ==
-To:     Feng Tang <feng.tang@intel.com>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>, paulmck@kernel.org,
-        rui.zhang@intel.com, x86@kernel.org, linux-kernel@vger.kernel.org
-Cc:     Feng Tang <feng.tang@intel.com>
-Subject: Re: [PATCH RFC] x86/tsc: Make recalibration default on for
- TSC_KNOWN_FREQ cases
-In-Reply-To: <20230522033018.1276836-1-feng.tang@intel.com>
-References: <20230522033018.1276836-1-feng.tang@intel.com>
-Date:   Mon, 22 May 2023 10:14:08 +0200
-Message-ID: <87h6s4ye9b.ffs@tglx>
+        Mon, 22 May 2023 04:14:43 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CAA25AB;
+        Mon, 22 May 2023 01:14:41 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.43:44024.345458232
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
+        by 189.cn (HERMES) with SMTP id C5A9F102946;
+        Mon, 22 May 2023 16:14:39 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-75648544bd-7vx9t with ESMTP id 007f8fdc7329415ea6894140ca1e23a5 for kernel@xen0n.name;
+        Mon, 22 May 2023 16:14:40 CST
+X-Transaction-ID: 007f8fdc7329415ea6894140ca1e23a5
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <6957f8b7-5e37-889f-0b48-d2424b891392@189.cn>
+Date:   Mon, 22 May 2023 16:14:38 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v14 1/2] drm: add kms driver for loongson display
+ controller
+Content-Language: en-US
+To:     WANG Xuerui <kernel@xen0n.name>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sui Jingfeng <suijingfeng@loongson.cn>,
+        Li Yi <liyi@loongson.cn>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>
+Cc:     linaro-mm-sig@lists.linaro.org, loongson-kernel@lists.loongnix.cn,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Liu Peibao <liupeibao@loongson.cn>, linux-media@vger.kernel.org
+References: <20230520105718.325819-1-15330273260@189.cn>
+ <20230520105718.325819-2-15330273260@189.cn>
+ <26fd78b9-c074-8341-c99c-4e3b38cd861a@xen0n.name>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <26fd78b9-c074-8341-c99c-4e3b38cd861a@xen0n.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22 2023 at 11:30, Feng Tang wrote:
-> Commit a7ec817d5542 ("x86/tsc: Add option to force frequency
-> recalibration with HW timer") was added to handle cases that the
-> firmware has bug and provides a wrong TSC frequency number, and it
-> is optional given that this kind of firmware issue rarely happens
-> (Paul reported once [1]).
+Hi,
+
+On 2023/5/21 20:21, WANG Xuerui wrote:
+>> +
+>> +      If in doubt, say "N".
+>> diff --git a/drivers/gpu/drm/loongson/Makefile 
+>> b/drivers/gpu/drm/loongson/Makefile
+>> new file mode 100644
+>> index 000000000000..9158816ece8e
+>> --- /dev/null
+>> +++ b/drivers/gpu/drm/loongson/Makefile
+>> @@ -0,0 +1,20 @@
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +
+>> +loongson-y := \
+>> +    lsdc_benchmark.o \
+>> +    lsdc_crtc.o \
+>> +    lsdc_debugfs.o \
+>> +    lsdc_device.o \
+>> +    lsdc_drv.o \
+>> +    lsdc_gem.o \
+>> +    lsdc_gfxpll.o \
+>> +    lsdc_i2c.o \
+>> +    lsdc_irq.o \
+>> +    lsdc_output_7a1000.o \
+>> +    lsdc_output_7a2000.o \
+>> +    lsdc_plane.o \
+>> +    lsdc_pixpll.o \
+>> +    lsdc_probe.o \
+>> +    lsdc_ttm.o
+>> +
+>> +obj-$(CONFIG_DRM_LOONGSON) += loongson.o
+>> diff --git a/drivers/gpu/drm/loongson/lsdc_benchmark.c 
+>> b/drivers/gpu/drm/loongson/lsdc_benchmark.c
+>> new file mode 100644
+>> index 000000000000..82961531d84c
+>> --- /dev/null
+>> +++ b/drivers/gpu/drm/loongson/lsdc_benchmark.c
+>> @@ -0,0 +1,133 @@
+>> +// SPDX-License-Identifier: GPL-2.0+
 >
-> But Rui reported that some Sapphire Rapids platform met this issue
-> again recently, and as firmware is also a kind of 'software' which
-> can't be bug free, make the recalibration default on. When the
-> values from firmware and HW timer's calibration have big gap,
-> raise a warning and let vendor to check which side is broken.
+> Is it GPL-2.0, GPL-2.0-only, or GPL-2.0+? Please make sure all license 
+> IDs are consistent. 
 
-Sure firmware can have bugs, but if firmware validation does not even
-catch such a trivially to detect bug, then their validation is nothing
-else than rubber stamping. Seriously.
 
-Are any of these affected platforms shipping already or is this just
-Intel internal muck?
+I see drm/vkms is also writing the copyrights similar.
 
-> One downside is, many VMs also has X86_FEATURE_TSC_KNOWN_FREQ set,
-> and they will also do this recalibration.
+with "# SPDX-License-Identifier: GPL-2.0-only" in the Makefile,
 
-It's also pointless for those SoCs which lack legacy hardware.
+while "// SPDX-License-Identifier: GPL-2.0+" in the C source file.
 
-So why do you force this on everyone?
+Sorry, I'm stupid, I can't figure out the difference between them.
 
-Thanks,
+Personally, I really don't care about this as along as checkpatch.pl 
+don't complain.
 
-        tglx
+I respect the maintainers of DRM, they didn't told me to change it.
+
+I assume there is no problem.
+
