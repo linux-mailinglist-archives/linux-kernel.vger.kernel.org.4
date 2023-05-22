@@ -2,74 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8274A70BF6C
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:14:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AF0C70BF3A
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:09:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234279AbjEVNOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 09:14:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40528 "EHLO
+        id S234215AbjEVNJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 09:09:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234268AbjEVNOC (ORCPT
+        with ESMTP id S230489AbjEVNJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 09:14:02 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A4392;
-        Mon, 22 May 2023 06:14:00 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id A68ED5FD53;
-        Mon, 22 May 2023 16:13:58 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1684761238;
-        bh=tWxrSnMXHfq8prfQizZUI+8Ex910dBaOENfLFbEU0CA=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=Ksz2pBxxTAmSqliseiwWrHAufkHPp34rdCWDvmsU7Ona4gb6kNdBudrLT0/YP7uiZ
-         EucuV4eKMNE3TnngtB+RaGtBsawwosPElZpyrog7/ktm8UlHPxctwZ8N5BCG5CLgW/
-         xwQVig4+Vxj4aUzunvB5BVkdo/gUrrNrdsoLcg1PgCT5mpSA/FMMshtX257GaVesqT
-         hra56GL5FmzbfSNXxmZtBCAQ4/A9isD0UD7l/3RqPl93Ic5R4MA9UZFnqh7MUnrRsn
-         oxRMCJ1RelcfC4Oc+92zxLE9Zo9ga9xX8r6NsVX0partI18JbO6wao1WhsmcLtmdvF
-         VPu/yy6jAo/Vw==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Mon, 22 May 2023 16:13:53 +0300 (MSK)
-Message-ID: <7c0a4203-b0bf-1963-14c1-d7c664946d5e@sberdevices.ru>
-Date:   Mon, 22 May 2023 16:09:29 +0300
+        Mon, 22 May 2023 09:09:34 -0400
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [IPv6:2001:4190:8020::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C9F549E;
+        Mon, 22 May 2023 06:09:32 -0700 (PDT)
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+        id 147F092009C; Mon, 22 May 2023 15:09:31 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by angie.orcam.me.uk (Postfix) with ESMTP id 1093692009B;
+        Mon, 22 May 2023 14:09:31 +0100 (BST)
+Date:   Mon, 22 May 2023 14:09:30 +0100 (BST)
+From:   "Maciej W. Rozycki" <macro@orcam.me.uk>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+cc:     Arnd Bergmann <arnd@arndb.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v5 30/44] rtc: add HAS_IOPORT dependencies
+In-Reply-To: <20230522105049.1467313-31-schnelle@linux.ibm.com>
+Message-ID: <alpine.DEB.2.21.2305221314480.27887@angie.orcam.me.uk>
+References: <20230522105049.1467313-1-schnelle@linux.ibm.com> <20230522105049.1467313-31-schnelle@linux.ibm.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC PATCH v3 05/17] vsock/virtio: MSG_ZEROCOPY flag support
-To:     Simon Horman <simon.horman@corigine.com>
-CC:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>
-References: <20230522073950.3574171-1-AVKrasnov@sberdevices.ru>
- <20230522073950.3574171-6-AVKrasnov@sberdevices.ru>
- <ZGtqEghjjiBnvEBW@corigine.com>
-Content-Language: en-US
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <ZGtqEghjjiBnvEBW@corigine.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/22 08:14:00 #21365129
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,151 +55,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 22 May 2023, Niklas Schnelle wrote:
 
+> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+> index 753872408615..a38a919b3f15 100644
+> --- a/drivers/rtc/Kconfig
+> +++ b/drivers/rtc/Kconfig
+> @@ -956,6 +956,7 @@ comment "Platform RTC drivers"
+>  config RTC_DRV_CMOS
+>  	tristate "PC-style 'CMOS'"
+>  	depends on X86 || ARM || PPC || MIPS || SPARC64
+> +	depends on HAS_IOPORT || MACH_DECSTATION
+>  	default y if X86
+>  	select RTC_MC146818_LIB
+>  	help
 
-On 22.05.2023 16:11, Simon Horman wrote:
-> On Mon, May 22, 2023 at 10:39:38AM +0300, Arseniy Krasnov wrote:
->> This adds handling of MSG_ZEROCOPY flag on transmission path: if this
->> flag is set and zerocopy transmission is possible, then non-linear skb
->> will be created and filled with the pages of user's buffer. Pages of
->> user's buffer are locked in memory by 'get_user_pages()'.
->>
->> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
->> ---
->>  net/vmw_vsock/virtio_transport_common.c | 305 +++++++++++++++++++-----
->>  1 file changed, 243 insertions(+), 62 deletions(-)
->>
->> diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
->> index 9854f48a0544..5acf824afe41 100644
->> --- a/net/vmw_vsock/virtio_transport_common.c
->> +++ b/net/vmw_vsock/virtio_transport_common.c
->> @@ -37,73 +37,161 @@ virtio_transport_get_ops(struct vsock_sock *vsk)
->>  	return container_of(t, struct virtio_transport, transport);
->>  }
->>  
->> -/* Returns a new packet on success, otherwise returns NULL.
->> - *
->> - * If NULL is returned, errp is set to a negative errno.
->> - */
->> -static struct sk_buff *
->> -virtio_transport_alloc_skb(struct virtio_vsock_pkt_info *info,
->> -			   size_t len,
->> -			   u32 src_cid,
->> -			   u32 src_port,
->> -			   u32 dst_cid,
->> -			   u32 dst_port)
->> -{
->> -	const size_t skb_len = VIRTIO_VSOCK_SKB_HEADROOM + len;
->> -	struct virtio_vsock_hdr *hdr;
->> -	struct sk_buff *skb;
->> -	void *payload;
->> -	int err;
->> +static bool virtio_transport_can_zcopy(struct virtio_vsock_pkt_info *info,
->> +				       size_t max_to_send)
->> +{
->> +	struct iov_iter *iov_iter;
->> +	size_t max_skb_cap;
->> +	size_t bytes;
->> +	int i;
->>  
->> -	skb = virtio_vsock_alloc_skb(skb_len, GFP_KERNEL);
->> -	if (!skb)
->> -		return NULL;
->> +	if (!info->msg)
->> +		return false;
->>  
->> -	hdr = virtio_vsock_hdr(skb);
->> -	hdr->type	= cpu_to_le16(info->type);
->> -	hdr->op		= cpu_to_le16(info->op);
->> -	hdr->src_cid	= cpu_to_le64(src_cid);
->> -	hdr->dst_cid	= cpu_to_le64(dst_cid);
->> -	hdr->src_port	= cpu_to_le32(src_port);
->> -	hdr->dst_port	= cpu_to_le32(dst_port);
->> -	hdr->flags	= cpu_to_le32(info->flags);
->> -	hdr->len	= cpu_to_le32(len);
->> +	if (!(info->flags & MSG_ZEROCOPY) && !info->msg->msg_ubuf)
->> +		return false;
->>  
->> -	if (info->msg && len > 0) {
->> -		payload = skb_put(skb, len);
->> -		err = memcpy_from_msg(payload, info->msg, len);
->> -		if (err)
->> -			goto out;
->> +	iov_iter = &info->msg->msg_iter;
->> +
->> +	if (iter_is_ubuf(iov_iter)) {
->> +		if (offset_in_page(iov_iter->ubuf))
->> +			return false;
->> +
->> +		return true;
->> +	}
->> +
->> +	if (!iter_is_iovec(iov_iter))
->> +		return false;
->> +
->> +	if (iov_iter->iov_offset)
->> +		return false;
->> +
->> +	/* We can't send whole iov. */
->> +	if (iov_iter->count > max_to_send)
->> +		return false;
->> +
->> +	for (bytes = 0, i = 0; i < iov_iter->nr_segs; i++) {
->> +		const struct iovec *iovec;
->> +		int pages_in_elem;
->> +
->> +		iovec = &iov_iter->__iov[i];
->> +
->> +		/* Base must be page aligned. */
->> +		if (offset_in_page(iovec->iov_base))
->> +			return false;
->>  
->> -		if (msg_data_left(info->msg) == 0 &&
->> -		    info->type == VIRTIO_VSOCK_TYPE_SEQPACKET) {
->> -			hdr->flags |= cpu_to_le32(VIRTIO_VSOCK_SEQ_EOM);
->> +		/* Only last element could have non page aligned size. */
->> +		if (i != (iov_iter->nr_segs - 1)) {
->> +			if (offset_in_page(iovec->iov_len))
->> +				return false;
->>  
->> -			if (info->msg->msg_flags & MSG_EOR)
->> -				hdr->flags |= cpu_to_le32(VIRTIO_VSOCK_SEQ_EOR);
->> +			pages_in_elem = iovec->iov_len >> PAGE_SHIFT;
->> +		} else {
->> +			pages_in_elem = round_up(iovec->iov_len, PAGE_SIZE);
->> +			pages_in_elem >>= PAGE_SHIFT;
->>  		}
->> +
->> +		bytes += (pages_in_elem * PAGE_SIZE);
->>  	}
-> 
-> Hi Arseniy,
-> 
-> bytes is set but the loop above, but seems otherwise unused in this function.
-> 
->>  
->> -	if (info->reply)
->> -		virtio_vsock_skb_set_reply(skb);
->> +	/* How many bytes we can pack to single skb. Maximum packet
->> +	 * buffer size is needed to allow vhost handle such packets,
->> +	 * otherwise they will be dropped.
->> +	 */
->> +	max_skb_cap = min((unsigned int)(MAX_SKB_FRAGS * PAGE_SIZE),
->> +			  (unsigned int)VIRTIO_VSOCK_MAX_PKT_BUF_SIZE);
-> 
-> Likewise, max_skb_cap seems to be set but unused in this function.
-> 
+ For the DECstation part:
 
-Exactly! Seems I forgot to remove it since v2. Thanks for this and above!
+Acked-by: Maciej W. Rozycki <macro@orcam.me.uk>
 
->>  
->> -	trace_virtio_transport_alloc_pkt(src_cid, src_port,
->> -					 dst_cid, dst_port,
->> -					 len,
->> -					 info->type,
->> -					 info->op,
->> -					 info->flags);
->> +	return true;
->> +}
-> 
-> ...
+  Maciej
