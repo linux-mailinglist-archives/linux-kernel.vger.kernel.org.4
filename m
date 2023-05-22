@@ -2,72 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 369EA70C5C3
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 21:08:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B8CB70C638
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 21:16:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233900AbjEVTIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 15:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35302 "EHLO
+        id S234262AbjEVTQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 15:16:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbjEVTIu (ORCPT
+        with ESMTP id S234169AbjEVTQC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 15:08:50 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58308B0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 12:08:50 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-64d3fdcadb8so2270601b3a.3
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 12:08:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684782530; x=1687374530;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mXfengDBQCUrKr3M+u68PKzklPcywUAkxq6DICSwzdE=;
-        b=i657Phs/dxy79hUTzTdhMdU9fDmwozweb1FJARnrm+HtjZsxVm45R+1dY6Gnv8c81e
-         4BT6uwL0Xsiqc2e4x6njetekkljB+wrQhgX/RuabIolQmqpD7+2L4U6WHWHNhOdU4z70
-         b40q7b23FZ26OytMl62bVMPZxkCLhw/ae2n5ECioxb0E4Pg5T1fcB8LuyEOHQal+mXRn
-         QeF4gr+4lZoCDoevrm+tuEPdlYOgkWhejBshhog1508yvvei1lrasj437QE6KsmJWox/
-         d8mjVcNNLk2nDXOTW/m7rPSkIYTENLyNPQ5DxOLux2EZ1cnsQfAgdx2zlcUV9UXCAeH2
-         wbCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684782530; x=1687374530;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mXfengDBQCUrKr3M+u68PKzklPcywUAkxq6DICSwzdE=;
-        b=LkNrJ/x7gmJ8Jg5qJEbd6nI7Uh022OzUsb4kbtJYb4VbQUDkyhonW7QIaCnc/2wsDD
-         uLR9/3m/jDPwsN1e9zGeANWbCYV2T3fn3ERb6t9bmZLoCju2uq8glgSUj2OcQRq6t0O8
-         I/cI3xRLlRMFC77DXuhvB7MiFfH6CeMgs4C2Z6ZL6Qadv15M+zXHv4qwiVHJf8HasUXR
-         G5myvFXbTU3c1KOUybtqkI6kFvfPHE3KM/RexvBu+HePUjoJaG6k6TtaYdAUc7FLipcA
-         Thq083ypIgrKNM3V5ChGinHmDjQyiH8zJmh0j33ApWVHgdavgJG6loRs7r9r0ZXmuytH
-         RUXg==
-X-Gm-Message-State: AC+VfDxPpo+fMJjGK5fgg7HJL5+pRa9d0N7cPVh/ZQqjQVnA5q9QoK17
-        Mb7UTFvkwifpeR8Phu4Fkr+nN8qfAyg=
-X-Google-Smtp-Source: ACHHUZ69ZTgZhjNHB2YCwh0dv/tQCMnkYjBgDeYXgUrvFLsfFoqLbshv7t1xvwHEuCrVOHbzIxavIQ==
-X-Received: by 2002:a17:903:2310:b0:1ae:1364:6079 with SMTP id d16-20020a170903231000b001ae13646079mr15171237plh.44.1684782529579;
-        Mon, 22 May 2023 12:08:49 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:39c])
-        by smtp.gmail.com with ESMTPSA id l4-20020a170902eb0400b001a9bfd4c5dfsm5192906plb.147.2023.05.22.12.08.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 12:08:49 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 22 May 2023 09:08:47 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Muchun Song <songmuchun@bytedance.com>
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        muchun.song@linux.dev
-Subject: Re: [PATCH] kernfs: fix missing kernfs_idr_lock to remove an ID from
- the IDR
-Message-ID: <ZGu9v3OA0wkhff7g@slm.duckdns.org>
-References: <20230516034536.25548-1-songmuchun@bytedance.com>
+        Mon, 22 May 2023 15:16:02 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B32E43;
+        Mon, 22 May 2023 12:15:46 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 8A12C200F6;
+        Mon, 22 May 2023 19:15:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1684782943;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Fpgikaj4b/fIR4oq3PCGfq5sJzdvVfaJIjtWnHRA6R0=;
+        b=D70ZT6b1fjWsuL+W1yj9TGbzMb0C5NWUnfgJRwHMF/T18jNEQuWzzMrZ5WgrNX6Fuqiofu
+        9gIyExPl+ESAj1eopVNEcMi2aMU7mlhOCEyhVFSAfijvBLJFvs6ueVYTZvgHmAz5mHlNo9
+        XyvAIcTLpeqhNHo/L04sjJrUjTYguTQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1684782943;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Fpgikaj4b/fIR4oq3PCGfq5sJzdvVfaJIjtWnHRA6R0=;
+        b=XtD6nqwgq+tgbSkSxyJ62p07UNPB1IyTTPrapmj+inkYSMN3ePjmWutdZo9t4Up0qUKIxp
+        gtrOQSCuPuRaBjCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3303E13336;
+        Mon, 22 May 2023 19:15:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id nl8AC1+/a2QPNgAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Mon, 22 May 2023 19:15:43 +0000
+Date:   Mon, 22 May 2023 21:09:36 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     Uladzislau Rezki <urezki@gmail.com>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Linux btrfs <linux-btrfs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Stable <stable@vger.kernel.org>,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, a1bert@atlas.cz,
+        linux-mm@kvack.org
+Subject: Re: Fwd: vmalloc error: btrfs-delalloc btrfs_work_helper [btrfs] in
+ kernel 6.3.x
+Message-ID: <20230522190936.GP32559@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+References: <efa04d56-cd7f-6620-bca7-1df89f49bf4b@gmail.com>
+ <ZGuRqtPkmeP07M6x@pc636>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230516034536.25548-1-songmuchun@bytedance.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+In-Reply-To: <ZGuRqtPkmeP07M6x@pc636>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,17 +80,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 11:45:36AM +0800, Muchun Song wrote:
-> @@ -655,7 +660,7 @@ static struct kernfs_node *__kernfs_new_node(struct kernfs_root *root,
->  	return kn;
->  
->   err_out3:
-> -	idr_remove(&root->ino_idr, (u32)kernfs_ino(kn));
-> +	kernfs_idr_remove(root, kn);
+On Mon, May 22, 2023 at 06:00:42PM +0200, Uladzislau Rezki wrote:
+> > Hi,
+> > 
+> > I notice a regression report on Bugzilla [1]. Quoting from it:
+> > 
+> > > after updating from 6.2.x to 6.3.x, vmalloc error messages started to appear in the dmesg
+> > > 
+> > > 
+> > > 
+> > > # free 
+> > >                total        used        free      shared  buff/cache   available
+> > > Mem:        16183724     1473068      205664       33472    14504992    14335700
+> > > Swap:       16777212      703596    16073616
+> > > 
+> > > 
+> > > (zswap enabled)
+> > 
+> > See bugzilla for the full thread and attached dmesg.
+> > 
+> > On the report, the reporter can't perform the required bisection,
+> > unfortunately.
+> > 
+> > Anyway, I'm adding it to regzbot:
+> > 
+> > #regzbot introduced: v6.2..v6.3 https://bugzilla.kernel.org/show_bug.cgi?id=217466
+> > #regzbot title: btrfs_work_helper dealloc error in v6.3.x
+> > 
+> > Thanks.
+> > 
+> > [1]: https://bugzilla.kernel.org/show_bug.cgi?id=217466
+> > 
+> According to dmesg output from the bugzilla, the vmalloc tries to
+> allocate high order pages: 1 << 9. Since it fails to get a order-9 page
+> you get the warning:
 
-Good catch but I'd just open code the locking here.
+That we want a order 9 is intentional, it's for a compression workspace
+(bugzilla comment 5). It's allocated as kvzalloc i.e. with the fallback
+to vmalloc in case the first one fails.
 
-Thanks.
+> <snip>
+> 	if (area->nr_pages != nr_small_pages) {
+> 		/* vm_area_alloc_pages() can also fail due to a fatal signal */
+> 		if (!fatal_signal_pending(current))
+> 			warn_alloc(gfp_mask, NULL,
+> 				"vmalloc error: size %lu, page order %u, failed to allocate pages",
+> 				area->nr_pages * PAGE_SIZE, page_order);
+> 		goto fail;
+> 	}
+> <snip>
+> 
+> and it fails.
+> 
+> If the __GFP_NOFAIL is passed, the vm_area_alloc_pages() function switches
+> to allocate 0-order pages instead. I think the fix is to call the
+> kvmalloc_node() with __GFP_NOFAIL flag.
 
--- 
-tejun
+__GFP_NOFAIL does not make sense here and we've tried hard not to used
+it anywhere because of the deadlocky effects. Did you mean __GFP_NOWARN?
+That's a patch I sent today but there's another comment in the bugzilla
+that we got more allocation warnings for huge (2M) allocations, this
+time it was for a deduplication ioctl.
+
+This seems to be a noticeable change in 6.3, before we disable the
+warning in our code I think the MM guys could have a look. So far it
+seems we're about to paper of a problem.
