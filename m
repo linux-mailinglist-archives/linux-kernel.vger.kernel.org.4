@@ -2,216 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0FF670C93D
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 21:46:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D32C270C99A
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 21:49:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235265AbjEVTqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 15:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40576 "EHLO
+        id S235362AbjEVTtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 15:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235274AbjEVTp5 (ORCPT
+        with ESMTP id S235357AbjEVTtn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 15:45:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76A01192;
-        Mon, 22 May 2023 12:45:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F36F162A4A;
-        Mon, 22 May 2023 19:45:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1426CC433D2;
-        Mon, 22 May 2023 19:45:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684784752;
-        bh=hjg+nEkGnT5wX4cHznoLQRDdNnOeCH9yJ5NNOV5v5V8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hA34ih2YynFmHhjBrG8aSg5C3lBqNWxO+7zUy6BcX+aQ+XsHNhgCm4xunK35wUfDJ
-         04AL6sb9/gUSPWXOZMaAq5Y7JIXyvMtkGkZMTG9vTCt4A8+skUC7ElqxtgBp2x2krK
-         KXPIKvhskol6TlkDwgxlGGlJ5y2FCniz+hQ98V0mD9bUkw4wvKfKbmP/xvUTM9q8Ve
-         fONIqzl3Sgg70s+V3M83exiIb/68r7UKMiD+x7d50jdm3a/1eRP+3d2dz9MSWt954u
-         vNN+OVP0DZVxqN+BeDQuT8WJBBnv0iFmhuwNmLFk5+EAJ8WntO0QmIY8JmuCh+aiqH
-         WbAh9K2p4Y8cA==
-Date:   Mon, 22 May 2023 20:45:41 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>, x86@kernel.org,
-        David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Ross Philipson <ross.philipson@oracle.com>,
-        David Woodhouse <dwmw@amazon.co.uk>
-Subject: Re: [patch V4 33/37] cpu/hotplug: Allow "parallel" bringup up to
- CPUHP_BP_KICK_AP_STATE
-Message-ID: <4ca39e58-055f-432c-8124-7c747fa4e85b@sirena.org.uk>
-References: <20230512203426.452963764@linutronix.de>
- <20230512205257.240231377@linutronix.de>
+        Mon, 22 May 2023 15:49:43 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 992AFA3;
+        Mon, 22 May 2023 12:49:41 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id 98e67ed59e1d1-2532d6c7ef2so2837679a91.0;
+        Mon, 22 May 2023 12:49:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684784981; x=1687376981;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ko/ib0DbbBIkYeF2ySdhWs5YudE4zxsP9MRqrw+BLoI=;
+        b=BHPHExlQjMdC1v2AlWCLoTJz495eSqFbI+OF9by02n2sfozwxdUWrjSK+k5DNG+tFM
+         0jXmVCZy15YjYtpqRupyHQWDzCgOMrfYB8x7fusFUnIIOy7OWv+0Ur+/tulnIG8ionbK
+         5ACCwNe65d9/G8bQONpgwu7gPsz6di3IeHfd9NgbznMRGplWO/LSP66bzPAlIxFbTuhp
+         l0EohHPfuCQsy8XwLElVEnFKB8GUXEZXoPVpbwGRG8kjSvspXtSzoW+59K8LbNccSI+U
+         Zy8GgtoF7Ak+whIz33YDy2AXryq4EL7GgumSVCjXzPWRAWU/tu4xO1EHkrANlY42nsDJ
+         T/6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684784981; x=1687376981;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ko/ib0DbbBIkYeF2ySdhWs5YudE4zxsP9MRqrw+BLoI=;
+        b=gUQwOXGp3T4TtQzPgdNYBbIrN+O/J9td8y7Hkk8bI3ybJjX65wtwMW/bOruYgZml41
+         inPZ4Vr6nzQT/wwKJG9sVA1k6pDDjIx74kfkHZiPA2lW9O3DMBEQM+tZjgnw0VanWNVb
+         t6a1Dm2Ll6Rd63sFHJqMfP16JTKgU93jXG2xFzX0+cNsA0Mi425cNtmcLAQplBVXO4lg
+         ktCybJKHPNmc6HbepjhkLddwfyUsRNmSYRrxUexvNLDTQzfdeEyUwEqknHDoX2oMpMMM
+         U3F0HiW0pyTRMiS9NS3tOM36oFpUszwsjOQvkTTeA8ePq2YQPZ7skGzX+Q5AS6DzLFAB
+         Ox8A==
+X-Gm-Message-State: AC+VfDxvIlOhfERAB8sTrKIJCUcBUPlw+dlxmBOh0bAFR/iYXPbFQx/M
+        UjX6n9aEAnZi69E5OeAEOvo=
+X-Google-Smtp-Source: ACHHUZ5QZsEXUqRwS+75+b0XYbOYkR60j+9cNSvxOsTssb9PY6x40z/YDZ9Ic1uwFVbvFMQpA6XbIg==
+X-Received: by 2002:a17:90a:3189:b0:250:648b:781d with SMTP id j9-20020a17090a318900b00250648b781dmr16653356pjb.23.1684784980565;
+        Mon, 22 May 2023 12:49:40 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:39c])
+        by smtp.gmail.com with ESMTPSA id gj19-20020a17090b109300b0024e4f169931sm6335848pjb.2.2023.05.22.12.49.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 12:49:40 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 22 May 2023 09:49:38 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Mrunal Patel <mpatel@redhat.com>,
+        Ryan Phillips <rphillips@redhat.com>,
+        Brent Rowsell <browsell@redhat.com>,
+        Peter Hunt <pehunt@redhat.com>, Phil Auld <pauld@redhat.com>
+Subject: Re: [RFC PATCH 0/5] cgroup/cpuset: A new "isolcpus" paritition
+Message-ID: <ZGvHUjOCjwat91Gq@slm.duckdns.org>
+References: <ZDmOjeBVsIcgSLIV@slm.duckdns.org>
+ <60ec12dc-943c-b8f0-8b6f-97c5d332144c@redhat.com>
+ <46d26abf-a725-b924-47fa-4419b20bbc02@redhat.com>
+ <jqkf7jkuyxqiupmxmdbmpnbpojub2pjsz3oogwncmwqdghlsgk@phsqzirmmlyl>
+ <f2bd7b1e-190e-1d08-f085-b4cae36fb5be@redhat.com>
+ <ZFGOTHQj3k5rzmyR@blackbook>
+ <deb7b684-3d7c-b3ae-7b36-5b7ba2dd8001@redhat.com>
+ <ZFUo5IYAIwTEKR4_@slm.duckdns.org>
+ <759603dd-7538-54ad-e63d-bb827b618ae3@redhat.com>
+ <405b2805-538c-790b-5bf8-e90d3660f116@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nxuSzC5SBKt722Ku"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230512205257.240231377@linutronix.de>
-X-Cookie: Even bytes get lonely for a little bit.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <405b2805-538c-790b-5bf8-e90d3660f116@redhat.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello, Waiman.
 
---nxuSzC5SBKt722Ku
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Sun, May 07, 2023 at 09:03:44PM -0400, Waiman Long wrote:
+...
+>   cpuset.cpus.reserve
+>     A read-write multiple values file which exists only on root
+>     cgroup.
+> 
+>     It lists all the CPUs that are reserved for adjacent and remote
+>     partitions created in the system.  See the next section for
+>     more information on what an adjacent or remote partitions is.
+> 
+>     Creation of adjacent partition does not require touching this
+>     control file as CPU reservation will be done automatically.
+>     In order to create a remote partition, the CPUs needed by the
+>     remote partition has to be written to this file first.
+> 
+>     A "+" prefix can be used to indicate a list of additional
+>     CPUs that are to be added without disturbing the CPUs that are
+>     originally there.  For example, if its current value is "3-4",
+>     echoing ""+5" to it will change it to "3-5".
+>
+>     Once a remote partition is destroyed, its CPUs have to be
+>     removed from this file or no other process can use them.  A "-"
+>     prefix can be used to remove a list of CPUs from it.  However,
+>     removing CPUs that are currently used in existing partitions
+>     may cause those partitions to become invalid.  A single "-"
+>     character without any number can be used to indicate removal
+>     of all the free CPUs not allocated to any partitions to avoid
+>     accidental partition invalidation.
 
-On Fri, May 12, 2023 at 11:07:50PM +0200, Thomas Gleixner wrote:
-> From: Thomas Gleixner <tglx@linutronix.de>
->=20
-> There is often significant latency in the early stages of CPU bringup, and
-> time is wasted by waking each CPU (e.g. with SIPI/INIT/INIT on x86) and
-> then waiting for it to respond before moving on to the next.
->=20
-> Allow a platform to enable parallel setup which brings all to be onlined
-> CPUs up to the CPUHP_BP_KICK_AP state. While this state advancement on the
-> control CPU (BP) is single-threaded the important part is the last state
-> CPUHP_BP_KICK_AP which wakes the to be onlined CPUs up.
+Why is the syntax different from .cpus? Wouldn't it be better to keep them
+the same?
 
-We're seeing a regression on ThunderX2 systems with 256 CPUs with an
-arm64 defconfig running -next which I've bisected to this patch.  Before
-this commit we bring up 256 CPUs:
+>   cpuset.cpus.partition
+>     A read-write single value file which exists on non-root
+>     cpuset-enabled cgroups.  This flag is owned by the parent cgroup
+>     and is not delegatable.
+> 
+>     It accepts only the following input values when written to.
+> 
+>       ==========    =====================================
+>       "member"    Non-root member of a partition
+>       "root"    Partition root
+>       "isolated"    Partition root without load balancing
+>       ==========    =====================================
+> 
+>     A cpuset partition is a collection of cgroups with a partition
+>     root at the top of the hierarchy and its descendants except
+>     those that are separate partition roots themselves and their
+>     descendants.  A partition has exclusive access to the set of
+>     CPUs allocated to it.  Other cgroups outside of that partition
+>     cannot use any CPUs in that set.
+> 
+>     There are two types of partitions - adjacent and remote.  The
+>     parent of an adjacent partition must be a valid partition root.
+>     Partition roots of adjacent partitions are all clustered around
+>     the root cgroup.  Creation of adjacent partition is done by
+>     writing the desired partition type into "cpuset.cpus.partition".
+> 
+>     A remote partition does not require a partition root parent.
+>     So a remote partition can be formed far from the root cgroup.
+>     However, its creation is a 2-step process.  The CPUs needed
+>     by a remote partition ("cpuset.cpus" of the partition root)
+>     has to be written into "cpuset.cpus.reserve" of the root
+>     cgroup first.  After that, "isolated" can be written into
+>     "cpuset.cpus.partition" of the partition root to form a remote
+>     isolated partition which is the only supported remote partition
+>     type for now.
+> 
+>     All remote partitions are terminal as adjacent partition cannot
+>     be created underneath it.
 
-[   29.137225] GICv3: CPU254: found redistributor 11e03 region 1:0x00000004=
-41f60000
-[   29.137238] GICv3: CPU254: using allocated LPI pending table @0x00000008=
-818e0000
-[   29.137305] CPU254: Booted secondary processor 0x0000011e03 [0x431f0af1]
-[   29.292421] Detected PIPT I-cache on CPU255
-[   29.292635] GICv3: CPU255: found redistributor 11f03 region 1:0x00000004=
-41fe0000
-[   29.292648] GICv3: CPU255: using allocated LPI pending table @0x00000008=
-818f0000
-[   29.292715] CPU255: Booted secondary processor 0x0000011f03 [0x431f0af1]
-[   29.292859] smp: Brought up 2 nodes, 256 CPUs
-[   29.292864] SMP: Total of 256 processors activated.
+Can you elaborate this extra restriction a bit further?
 
-but after we only bring up 255, missing the 256th:
+In general, I think it'd be really helpful if the document explains the
+reasoning behind the design decisions. ie. Why is reserving for? What
+purpose does it serve that the regular isolated ones cannot? That'd help
+clarifying the design decisions.
 
-[   29.165888] GICv3: CPU254: found redistributor 11e03 region 1:0x00000004=
-41f60000
-[   29.165901] GICv3: CPU254: using allocated LPI pending table @0x00000008=
-818e0000
-[   29.165968] CPU254: Booted secondary processor 0x0000011e03 [0x431f0af1]
-[   29.166120] smp: Brought up 2 nodes, 255 CPUs
-[   29.166125] SMP: Total of 255 processors activated.
+Thanks.
 
-I can't immediately see an issue with the patch itself, for systems
-without CONFIG_HOTPLUG_PARALLEL=3Dy it should replace the loop over
-cpu_present_mask done by for_each_present_cpu() with an open coded one.
-I didn't check the rest of the series yet.
-
-The KernelCI bisection bot also isolated an issue on Odroid XU3 (a 32
-bit arm system) with the final CPU of the 8 on the system not coming up
-to the same patch:
-
-  https://groups.io/g/kernelci-results/message/42480?p=3D%2C%2C%2C20%2C0%2C=
-0%2C0%3A%3Acreated%2C0%2Call-cpus%2C20%2C2%2C0%2C99054444
-
-Other boards I've checked (including some with multiple CPU clusters)
-seem to be bringing up all their CPUs so it doesn't seem to just be
-general breakage.
-
-Log from my bisect:
-
-git bisect start
-# bad: [9f258af06b6268be8e960f63c3f66e88bdbbbdb0] Add linux-next specific f=
-iles for 20230522
-git bisect bad 9f258af06b6268be8e960f63c3f66e88bdbbbdb0
-# good: [44c026a73be8038f03dbdeef028b642880cf1511] Linux 6.4-rc3
-git bisect good 44c026a73be8038f03dbdeef028b642880cf1511
-# good: [914db90ee0172753ab5298a48c63ac4f1fe089cf] Merge branch 'for-linux-=
-next' of git://anongit.freedesktop.org/drm/drm-misc
-git bisect good 914db90ee0172753ab5298a48c63ac4f1fe089cf
-# good: [4624865b65777295cbe97cf1b98e6e49d81119d3] Merge branch 'next' of g=
-it://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git
-git bisect good 4624865b65777295cbe97cf1b98e6e49d81119d3
-# bad: [be7220c44fbc06825f7f122d06051630e1bf51e4] Merge branch 'for-next' o=
-f git://github.com/cminyard/linux-ipmi.git
-git bisect bad be7220c44fbc06825f7f122d06051630e1bf51e4
-# good: [cc677f7bec0da862a93d176524cdad5f416d58ef] Merge branch 'for-next' =
-of git://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git
-git bisect good cc677f7bec0da862a93d176524cdad5f416d58ef
-# bad: [cdcc744aee1b886cbe4737798c0b8178b9ba5ae5] next-20230518/rcu
-git bisect bad cdcc744aee1b886cbe4737798c0b8178b9ba5ae5
-# bad: [8397dce1586a35af63fe9ea3e8fb3344758e55b5] Merge branch into tip/mas=
-ter: 'x86/mm'
-git bisect bad 8397dce1586a35af63fe9ea3e8fb3344758e55b5
-# bad: [0c7ffa32dbd6b09a87fea4ad1de8b27145dfd9a6] x86/smpboot/64: Implement=
- arch_cpuhp_init_parallel_bringup() and enable it
-git bisect bad 0c7ffa32dbd6b09a87fea4ad1de8b27145dfd9a6
-# good: [ab24eb9abb9c60c45119370731735b79ed79f36c] x86/xen/hvm: Get rid of =
-DEAD_FROZEN handling
-git bisect good ab24eb9abb9c60c45119370731735b79ed79f36c
-# good: [72b11aa7f8f93449141544cecb21b2963416902d] riscv: Switch to hotplug=
- core state synchronization
-git bisect good 72b11aa7f8f93449141544cecb21b2963416902d
-# good: [f54d4434c281f38b975d58de47adeca671beff4f] x86/apic: Provide cpu_pr=
-imary_thread mask
-git bisect good f54d4434c281f38b975d58de47adeca671beff4f
-# bad: [bea629d57d006733d155bdb65ba4867788da69b6] x86/apic: Save the APIC v=
-irtual base address
-git bisect bad bea629d57d006733d155bdb65ba4867788da69b6
-# bad: [18415f33e2ac4ab382cbca8b5ff82a9036b5bd49] cpu/hotplug: Allow "paral=
-lel" bringup up to CPUHP_BP_KICK_AP_STATE
-git bisect bad 18415f33e2ac4ab382cbca8b5ff82a9036b5bd49
-# first bad commit: [18415f33e2ac4ab382cbca8b5ff82a9036b5bd49] cpu/hotplug:=
- Allow "parallel" bringup up to CPUHP_BP_KICK_AP_STATE
-
---nxuSzC5SBKt722Ku
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRrxmQACgkQJNaLcl1U
-h9CiKAf8DZMz9GmmJSE2csjdGdRu7caRKW0Tt5rUN3Rk8slC+Fb2FYWsc6BSJXU7
-bN4/F3Oie4ukVf5oamB42/30Iemh8OdOE3aC/ceb9n2OmF9rKnQHIrC8q2xZo5S/
-jZDRUq5Y91IMU6dsMy8Teoctmt4UCyXbSm6r5hA2hfepTZnZ0MszdpwdkfKTtb2h
-nXXb54WH18u/i1vmPWTNpfHfTXXhKPSkRJ4NcJWt6NaRINld+kJBqdU1usQBnxG3
-mn4C2p3YYPtd0fv66x2tPLxbXyjmGYv0/fsSg1INqS0A8Jq/piohEK9rqAeBi6BD
-BEFqLrxN7XtuQjD2ksUH5UcvrDWwVw==
-=FllZ
------END PGP SIGNATURE-----
-
---nxuSzC5SBKt722Ku--
+-- 
+tejun
