@@ -2,139 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C860270CE53
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 00:50:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1627770CE55
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 00:51:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234970AbjEVWuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 18:50:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49888 "EHLO
+        id S234703AbjEVWvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 18:51:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235073AbjEVWt6 (ORCPT
+        with ESMTP id S234924AbjEVWvO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 18:49:58 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB59C171C
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 15:49:13 -0700 (PDT)
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 28D223F22B
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 22:49:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1684795752;
-        bh=w6LBF4xkFc2OoIdapGt5yBGTv2AuIt1KhXDhRU5a+6k=;
-        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-         In-Reply-To:Content-Type;
-        b=vdLscKfs4JmBf3tGm7FcKfnF67+Vkho5JjyRJWngbgzIRn7VZlIawXFbFq1nzcWTq
-         50dJaZbvcYYR9JvZLOkH7/V01zKSVcHepZkrB80o4cKL0JwfKlMKhHJpGcvRNwB6PL
-         x7OiEl+TyXYABJgV+fOUuj87MdQmWODluI8NTNETaAp0MiDrm5z/pwMSIQXqiaLNDs
-         +12NHIVEUzDu1lNojzYFeVzvIqwixoNzqaC7ngkm4lBPxD3SRuRYClUKWbMVIum1ja
-         1n7Z7O4SOFltdX9QB0SN4TiltJvLkw8Gjm+G/PVnS44CTM4u/LALtxkT9udrdNCHBD
-         uLdaUVmovfmMw==
-Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-50bf847b267so207397a12.3
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 15:49:12 -0700 (PDT)
+        Mon, 22 May 2023 18:51:14 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82DDE10EC
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 15:50:51 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-534107e73cfso3565051a12.1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 15:50:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684795851; x=1687387851;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bc5jJ+m1tcxtw8j616gCjMtw6tcRDR1frZV9vlfkfio=;
+        b=zWTqbmrQVIwk4Hve+ZzgfU5EKSEgtGvUP65d9xqBIvTMso2XJ7FsHytFLhw0uKduv4
+         HY5EujbVEii/zaSAuEe2chCkZCL2vTuFED9rB75iha0g65+ygf0Q7NdPTOYBnC7heuvn
+         9LaEaNeugxMMVVDJiJZxlVoSVncfgwThodi3SUyWKKxg7AeACCiHjv3hkI4kzgMhhVvA
+         YPJBJaNKnt0Oww1V5VPrZ0NMhm7WkMSKv+2Y5CzNK3Vj6nfM9B+k77leL8LkzIatLjX8
+         AhyOmKNceg4VzbkJ5taqKetpTE6HYu6GcpmEnNMPgMx4nIM5TeAB5nLHjxfg69ZtmvFT
+         MnaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684795752; x=1687387752;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=w6LBF4xkFc2OoIdapGt5yBGTv2AuIt1KhXDhRU5a+6k=;
-        b=NVhBSPP/d1DuUE4c5e10cy5B8mM+h5CPka0y3hDmT4R5CbbSBgNynLg18ca96REpd4
-         TSwKMeM0cx6dLOivB71giYcKDlYVpK8WWjmeK7Se6Gtykuwg7LD0gFbsXektAXjrLMZc
-         ETl4pa/gmgtvtyGfILuNqtuvj4GVCSRefSnVeFBIrz9j9tR4FaiRstdyCPWujA/X+0gO
-         hni0mjXyRW4apzCQHZaAQ5WL7p68LpqXkPHh0xaGU2lh255cywGcZ938XusrBlZCrkTT
-         Piv7HgKHUH2FWejEVS3uRGIT6oubCOIemVPnKTFdV88r8bRjIc02+/nNx6sERSErLNE6
-         qXsQ==
-X-Gm-Message-State: AC+VfDxRhLk2qEikVpcyQzwHVhkELO6V4LPpEWc6Hf18B23H6fPbTKag
-        P65IF+dMonZDJeSyv9k+ZbWDkS8iQBVfyieuiRqAh/pL2w/LH2DFBzUZJGobcbRi4x2sSy23TOP
-        uczZBcnFdOFqFh+xCfxZ2X2zYyu1zL42rONsarNzylL+49KAO1A==
-X-Received: by 2002:aa7:d146:0:b0:50b:cadd:21e6 with SMTP id r6-20020aa7d146000000b0050bcadd21e6mr10873095edo.8.1684795751922;
-        Mon, 22 May 2023 15:49:11 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ63MnW+rYe1R0AZYx0Mu6CR6Cy0/gy7HtlZZ7Uk2W7bAJ8AyDR0EinlvDH4CVEQ6H44YcYvpA==
-X-Received: by 2002:aa7:d146:0:b0:50b:cadd:21e6 with SMTP id r6-20020aa7d146000000b0050bcadd21e6mr10873086edo.8.1684795751568;
-        Mon, 22 May 2023 15:49:11 -0700 (PDT)
-Received: from [172.16.80.41] (10.238.129.77.rev.sfr.net. [77.129.238.10])
-        by smtp.gmail.com with ESMTPSA id ba7-20020a0564021ac700b0050daa883545sm3473583edb.64.2023.05.22.15.49.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 May 2023 15:49:11 -0700 (PDT)
-Message-ID: <892c7de5-d257-d4d6-2bfc-62f543965cff@canonical.com>
-Date:   Tue, 23 May 2023 00:49:10 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: [PATCH 1/1] block: fix conversion of GPT partition name to 7-bit
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org
-Cc:     Olivier Gayot <olivier.gayot@canonical.com>,
-        Daniel Bungert <daniel.bungert@canonical.com>
-References: <4ae6d363-2f9b-5028-db1a-061b6f1e8fbe@canonical.com>
-From:   Olivier Gayot <olivier.gayot@canonical.com>
-In-Reply-To: <4ae6d363-2f9b-5028-db1a-061b6f1e8fbe@canonical.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1684795851; x=1687387851;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bc5jJ+m1tcxtw8j616gCjMtw6tcRDR1frZV9vlfkfio=;
+        b=WFqtP/7zyspTujrNAP38HYIrkbQSadrIeHP2/kl4+LugTZ3MwDrcmJrqZCqEaWLIu4
+         e6cAyNaMDeCZZtGnsNeWXWE7IcaFv3lMfR2n/OjD57342SZbkX2+VBNw6sPbPmJHn4aV
+         mCkm+eU2YQQ1jMrPhrnE+SNyiKYnrU49rFpBBOtWI/pX1EZNw22beGB2Ju0V/AhWmqK5
+         8Ya/rRiH3vEhvGFG7lcqG8osGs4buyQKj/rSzPSg5URL5DRB9QBX+dtibu9njB87LIr9
+         MOZLvwREQssnTODhRRHYuh1919fPxlcvCnYZXRlPWLFZqCrlpOSnFtrhwlS6lfyFGg9y
+         KiAg==
+X-Gm-Message-State: AC+VfDxDTsZmtsWj/Y1VojUTlN/GFELmx3QhIlrwOIOZ5mZ0KwGnrHkq
+        owzSX/i5XCF+jIkSUoNMpjW8oEXgdNM=
+X-Google-Smtp-Source: ACHHUZ7Dj8WBk9maf5oJXV41B1Q4+sdaH6HOuUiCpdSlIJ06j9QXT8RVfxkvsvQ81illJ20TYT6T2JMbO1c=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a63:5310:0:b0:530:866e:c3c0 with SMTP id
+ h16-20020a635310000000b00530866ec3c0mr2799819pgb.10.1684795850767; Mon, 22
+ May 2023 15:50:50 -0700 (PDT)
+Date:   Mon, 22 May 2023 15:50:49 -0700
+In-Reply-To: <20230411125718.2297768-4-aik@amd.com>
+Mime-Version: 1.0
+References: <20230411125718.2297768-1-aik@amd.com> <20230411125718.2297768-4-aik@amd.com>
+Message-ID: <ZGvxyTyzOBod6+ki@google.com>
+Subject: Re: [PATCH kernel v5 3/6] KVM: SEV-ES: explicitly disable debug
+From:   Sean Christopherson <seanjc@google.com>
+To:     Alexey Kardashevskiy <aik@amd.com>
+Cc:     kvm@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Pankaj Gupta <pankaj.gupta@amd.com>,
+        Nikunj A Dadhania <nikunj@amd.com>,
+        Santosh Shukla <santosh.shukla@amd.com>,
+        Carlos Bilbao <carlos.bilbao@amd.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The utf16_le_to_7bit function claims to, naively, convert a UTF-16
-string to a 7-bit ASCII string. By naively, we mean that it:
- * drops the first byte of every character in the original UTF-16 string
- * checks if all characters are printable, and otherwise replaces them
-   by exclamation mark "!".
+On Tue, Apr 11, 2023, Alexey Kardashevskiy wrote:
+> SVM/SEV enable debug registers intercepts to skip swapping DRs
+> on entering/exiting the guest. When the guest is in control of
+> debug registers (vcpu->guest_debug == 0), there is an optimisation to
+> reduce the number of context switches: intercepts are cleared and
+> the KVM_DEBUGREG_WONT_EXIT flag is set to tell KVM to do swapping
+> on guest enter/exit.
+> 
+> The same code also executes for SEV-ES, however it has no effect as
+> - it always takes (vcpu->guest_debug == 0) branch;
+> - KVM_DEBUGREG_WONT_EXIT is set but DR7 intercept is not cleared;
+> - vcpu_enter_guest() writes DRs but VMRUN for SEV-ES swaps them
+> with the values from _encrypted_ VMSA.
+> 
+> Be explicit about SEV-ES not supporting debug:
+> - return right away from dr_interception() and skip unnecessary processing;
+> - clear vcpu->guest_debug at SEV-ES' LAUNCH_UPDATE_VMSA if debugging
+> was already enabled; after that point the generic x86's
+> KVM_SET_GUEST_DEBUG ioctl disallows enabling debug.
+> 
+> Add WARN_ON to kvm_x86::sync_dirty_debug_regs() (saves guest DRs on
+> guest exit) to signify that SEV-ES won't hit that path.
+> 
+> Suggested-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Alexey Kardashevskiy <aik@amd.com>
+> Reviewed-by: Tom Lendacky <thomas.lendacky@amd.com>
+> ---
+> Changes:
+> v5:
+> * new in the series
+> ---
+>  arch/x86/kvm/svm/sev.c |  6 ++++++
+>  arch/x86/kvm/svm/svm.c | 10 +++++++++-
+>  2 files changed, 15 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+> index 0f4761a57d86..b4365622222b 100644
+> --- a/arch/x86/kvm/svm/sev.c
+> +++ b/arch/x86/kvm/svm/sev.c
+> @@ -639,6 +639,12 @@ static int __sev_launch_update_vmsa(struct kvm *kvm, struct kvm_vcpu *vcpu,
+>  	  return ret;
+>  
+>  	vcpu->arch.guest_state_protected = true;
+> +
+> +	if (vcpu->guest_debug)
+> +		pr_warn_ratelimited("guest_debug (%lx) not supported for SEV-ES",
 
-This means that theoretically, all characters outside the 7-bit ASCII
-range should be replaced by another character. Examples:
+Note, this needs a newline in the printk, otherwise it'll get buffered until
+the next non-cont printk comes along (guess how many times I've been burned by
+this).
 
- * lower-case alpha (ɒ) 0x0252 becomes 0x52 (R)
- * ligature OE (œ) 0x0153 becomes 0x53 (S)
- * hangul letter pieup (ㅂ) 0x3142 becomes 0x42 (B)
- * upper-case gamma (Ɣ) 0x0194 becomes 0x94 (not printable) so gets
-   replaced by "!"
+> +				    vcpu->guest_debug);
+> +	vcpu->guest_debug = 0;
 
-The result of this conversion for the GPT partition name is passed to
-user-space as PARTNAME via udev, which is confusing and feels questionable.
+Argh, KVM's APIs can be quite frustrating.  IIUC, guest_debug can never actually
+be consumed because, per Tom[*], "A guest can't run before the LAUNCH_UPDATE process
+is complete".  But because the fact that the VM is an SEV-ES is communicated to
+KVM after KVM_CREATE_VM, userspace can do KVM_SET_GUEST_DEBUG before KVM_SEV_ES_INIT
+and before KVM_SEV_LAUNCH_UPDATE_VMSA, and thus get KVM into a state where
+guest_debug is non-zero for an SEV-ES guest.  Blech.
 
-However, there is a flaw in the conversion function itself. By dropping
-one byte of each character and using isprint() to check if the remaining
-byte corresponds to a printable character, we do not actually guarantee
-that the resulting character is 7-bit ASCII.
+Instead of a ratelimited warn, can KVM get away with simply rejecting
+KVM_SEV_LAUNCH_UPDATE_VMSA if guest_debug is non-zero?  That combo can't work,
+so it's seems unlikely userspace is relying on being able to do KVM_SET_GUEST_DEBUG.
 
-This happens because we pass 8-bit characters to isprint(), which
-in the kernel returns 1 for many values > 0x7f - as defined in ctype.c.
+If we do "have" to keep this approach, I'm generally opposed to any kind of printk
+in KVM, but this one does seem to be justified since the most likely scenario is
+that there's a human interactively debugging the guest (or at least, trying to
+debug the guest).  But I would say explicitly call out the ioctl(), "guest_debug"
+probably won't mean anything to a random user.  And I vote to not print the value,
+that implies that the specific value is unsupported, not that debug in general is
+disallowed.
 
-This results in many values which should be replaced by "!" to be kept
-as-is, despite not being valid 7-bit ASCII. Examples:
+Something like this (if we have to)?
 
- * e with acute accent (é) 0x00E9 becomes 0xE9 - kept as-is because
-   isprint(0xE9) returns 1.
- * euro sign (€) 0x20AC becomes 0xAC - kept as-is because isprint(0xAC)
-   returns 1.
+		pr_warn_ratelimited("Suppressing KVM_SET_GUEST_DEBUG for SEV-ES guest\n"
 
-Fixed by using a mask of 7 bits instead of 8 bits before calling
-isprint.
+[*] https://lore.kernel.org/all/7edcf2c3-005f-04bd-7ec6-80baee236f40@amd.com
 
-Signed-off-by: Olivier Gayot <olivier.gayot@canonical.com>
----
- block/partitions/efi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> +
+>  	return 0;
+>  }
+>  
+> diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> index dc12de325cca..179952a31d3b 100644
+> --- a/arch/x86/kvm/svm/svm.c
+> +++ b/arch/x86/kvm/svm/svm.c
+> @@ -1980,7 +1980,7 @@ static void svm_sync_dirty_debug_regs(struct kvm_vcpu *vcpu)
+>  {
+>  	struct vcpu_svm *svm = to_svm(vcpu);
+>  
+> -	if (vcpu->arch.guest_state_protected)
+> +	if (WARN_ON_ONCE(sev_es_guest(vcpu->kvm)))
+>  		return;
+>  
+>  	get_debugreg(vcpu->arch.db[0], 0);
+> @@ -2698,6 +2698,14 @@ static int dr_interception(struct kvm_vcpu *vcpu)
+>  	unsigned long val;
+>  	int err = 0;
+>  
+> +	/*
+> +	 * SEV-ES intercepts DR7 only to disable guest debugging
+> +	 * and the guest issues a VMGEXIT for DR7 write only. KVM cannot
 
-diff --git a/block/partitions/efi.c b/block/partitions/efi.c
-index 5e9be13a56a8..7acba66eed48 100644
---- a/block/partitions/efi.c
-+++ b/block/partitions/efi.c
-@@ -682,7 +682,7 @@ static void utf16_le_to_7bit(const __le16 *in, unsigned int size, u8 *out)
- 	out[size] = 0;
- 
- 	while (i < size) {
--		u8 c = le16_to_cpu(in[i]) & 0xff;
-+		u8 c = le16_to_cpu(in[i]) & 0x7f;
- 
- 		if (c && !isprint(c))
- 			c = '!';
+Wrapping is a bit aggressive (wrap at 80, not earlier).
+
+> +	 * change DR7 (always swapped as type 'A') so return early.
+> +	 */
+> +	if (sev_es_guest(vcpu->kvm))
+> +		return 1;
+> +
+>  	if (vcpu->guest_debug == 0) {
+>  		/*
+>  		 * No more DR vmexits; force a reload of the debug registers
+> -- 
+> 2.39.1
+> 
