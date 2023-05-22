@@ -2,98 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 612D370C588
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 20:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5861070C58A
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 20:49:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233800AbjEVStR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 14:49:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54294 "EHLO
+        id S229873AbjEVStj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 14:49:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjEVStO (ORCPT
+        with ESMTP id S232881AbjEVStg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 14:49:14 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D654E9
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:49:12 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-50bcb229adaso11705160a12.2
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:49:12 -0700 (PDT)
+        Mon, 22 May 2023 14:49:36 -0400
+Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15C59E9;
+        Mon, 22 May 2023 11:49:34 -0700 (PDT)
+Received: by mail-oo1-xc2a.google.com with SMTP id 006d021491bc7-546ee6030e5so3162372eaf.3;
+        Mon, 22 May 2023 11:49:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1684781351; x=1687373351;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eIX3WciKKidNEVKBDs18WRYhhkFswjfJ00rKzcMfnjk=;
-        b=MnilCBa7xeuhcKS7mYGU/3u6/NGekzdYV0pCSwjOYa18XNZWpYniJb2zPndhyh4wGz
-         11XZoQPi0sV7ZWeKpGX4JGhdsVdrG02UkmywjDpo5IiiGmrPaR/P0voeVrPGwH/zMiOS
-         bRYC2mNWa4k+2bqjMPx+Xq/YhpnAsCLbhqwOw=
+        d=gmail.com; s=20221208; t=1684781373; x=1687373373;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zPnh0GSbi1dq7uAWP5m2L0+IfeMa+LjsQJWktiIr+ME=;
+        b=Q4xsD+MS+hGClA+44HAYaJ6HwnWDJaOjtxi3hPhQPBd3ezUrVg1RWULVFBI8Yjn9Ro
+         BKAHaWhU+KdfVOu8NOjQnC2F/OwhayYvEcfPisXJ26ILOA5Djfe0r9waKwoaeKPcUVk+
+         0plJ8yQZA4gVchhCvV7RGwdQAyZ63FXBm4NJasbBe25aPTiReoRb/2lyDrFJB4ow403z
+         HbMegnpCcMgmlqrWfXebNy9+UFOFb0VMGVl/zv9klwP4f/wWIX4jCnSREOHgWjEV1w14
+         opWNynAQ0lbp0bN9SR7YgcPSjBg+sWTveWNXz1D4+sJxcaqULY/c8bZVsLkXKAvBZspf
+         F8Eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684781351; x=1687373351;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eIX3WciKKidNEVKBDs18WRYhhkFswjfJ00rKzcMfnjk=;
-        b=Y0xIaMkR9JHf2nocqIra+InW08QYOMItsAd1ttdS4/aGMCHCw9RGOPHFHWQqCgVV95
-         ND+B0uSTSzJfrKPV/TdVjo5vpPMiaenApncifdAf3RbubZC6rOQCp1v2JgH6zO44ughw
-         u4uUfdWVmGw7OXetWj3YtkuU+cph7rmWe7kCHussMdHZBlg8vdGb2Cs1t0451GWay6+I
-         4qtT9PZYHuz3oC5eHPdiZKOCfh8VG0U+/AF0lTL4o//zGd78z2kIwS5pITKtEdcrYz5M
-         GbQidcaSNpwiIQrsrzc4QeJWYrGJgXsTc/mMfgp+iInqaD7fhrf2RSKff7mmkQu2+DaB
-         9+Qw==
-X-Gm-Message-State: AC+VfDw2bAXKromQ0AKtUatUVKYAg/VWPl5yGnn2laxJjmFMBqTEeOxe
-        kHLqMZmRHz1fIPuW8t+9mYFbk/OAFRtUX5dvCIWjwj8D
-X-Google-Smtp-Source: ACHHUZ7MUaFi32Z8bkARdjYie2We1o3tRJjDfvWtMyAW3PmlZxzc+2e4b5xrd0QfxzLL6vc+oiHhIw==
-X-Received: by 2002:aa7:c915:0:b0:50b:f654:8846 with SMTP id b21-20020aa7c915000000b0050bf6548846mr9392430edt.19.1684781350913;
-        Mon, 22 May 2023 11:49:10 -0700 (PDT)
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com. [209.85.208.42])
-        by smtp.gmail.com with ESMTPSA id k3-20020a05640212c300b0050d8b5757d1sm3296423edx.54.2023.05.22.11.49.10
-        for <linux-kernel@vger.kernel.org>
+        d=1e100.net; s=20221208; t=1684781373; x=1687373373;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zPnh0GSbi1dq7uAWP5m2L0+IfeMa+LjsQJWktiIr+ME=;
+        b=kThTZLLhPEnUbjmMJHR92zumIU4FiOkssm1bkxyaacci0j42F12/44S9kJrtLbsoLB
+         FtdoxQ5scXpyPdX/mip6Oxi+/7+IMQ3AiQykI969gEeF0+9pEJCibhAOSZdJp4Ncw0dm
+         yq7LgA1/2a+NL1m2rJiSOxieVD0GXsOEuqYsZ5KcUT3AVoXFqQOGzz+ReDcdUUU1qiu8
+         +FaGNPMcsC5/272FAkuYwiDPEEnqhpD0+dU+bCs7QcAHEXlt1n8Vsm3GxNmxH/CddVbG
+         WwdVY7MCchCtobAwb/Z0Ghmpi5eQXhzDgXeOzVQiRjQE+KzH85OlNegulgNvqgaencVt
+         /+Kg==
+X-Gm-Message-State: AC+VfDyb+tsUG3X4NwNTMhZy9S7FUU90JDPWGihCAHU3tbC2GxYfgSsl
+        5QTdSB+3uZr8OSjt+M/Tz44LPuHkCW8ttQ==
+X-Google-Smtp-Source: ACHHUZ5tF1GkdvqA6wyObI+k5g1uDTlNWrn8pA+WE6C6RNdTvF1kIKHvfNkgnOpQFdX+zzB8/i9ZFA==
+X-Received: by 2002:a4a:6101:0:b0:547:6a79:18cb with SMTP id n1-20020a4a6101000000b005476a7918cbmr4842602ooc.9.1684781373241;
+        Mon, 22 May 2023 11:49:33 -0700 (PDT)
+Received: from ?IPV6:2603:8081:140c:1a00:738:17c9:f946:babd? (2603-8081-140c-1a00-0738-17c9-f946-babd.res6.spectrum.com. [2603:8081:140c:1a00:738:17c9:f946:babd])
+        by smtp.gmail.com with ESMTPSA id q9-20020acaf209000000b003941dfbf924sm3052754oih.35.2023.05.22.11.49.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 May 2023 11:49:10 -0700 (PDT)
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-50bcb229adaso11705110a12.2
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:49:10 -0700 (PDT)
-X-Received: by 2002:a05:6402:31e7:b0:50d:a1ef:2ef6 with SMTP id
- dy7-20020a05640231e700b0050da1ef2ef6mr9112821edb.23.1684781349837; Mon, 22
- May 2023 11:49:09 -0700 (PDT)
+        Mon, 22 May 2023 11:49:32 -0700 (PDT)
+Message-ID: <edad669f-e84e-a9ba-9554-87ae1d571931@gmail.com>
+Date:   Mon, 22 May 2023 13:49:31 -0500
 MIME-Version: 1.0
-References: <c9abf109-80f2-88f5-4aae-d6fd4a30bcd3@google.com>
- <b4dce681-e53c-a6fd-2dab-62a82ebc6dff@redhat.com> <53dd9df8-e88f-f466-89f9-3fa141a10267@google.com>
-In-Reply-To: <53dd9df8-e88f-f466-89f9-3fa141a10267@google.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 22 May 2023 11:48:52 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wg+PHQ9PhTeQOb7Fh5Qf3zkzG5J1h3D=eOY-2AsYXhU4Q@mail.gmail.com>
-Message-ID: <CAHk-=wg+PHQ9PhTeQOb7Fh5Qf3zkzG5J1h3D=eOY-2AsYXhU4Q@mail.gmail.com>
-Subject: Re: [patch] mm, debug: allow suppressing panic on CONFIG_DEBUG_VM checks
-To:     David Rientjes <rientjes@google.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@kernel.org>, Alex Shi <alexs@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Alexander Duyck <alexanderduyck@fb.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH for-next v5 7/7] RDMA/rxe: Add support for the traditional
+ Atomic operations with ODP
+To:     Daisuke Matsuda <matsuda-daisuke@fujitsu.com>,
+        linux-rdma@vger.kernel.org, leonro@nvidia.com, jgg@nvidia.com,
+        zyjzyj2000@gmail.com
+Cc:     linux-kernel@vger.kernel.org, yangx.jy@fujitsu.com,
+        lizhijian@fujitsu.com, y-goto@fujitsu.com
+References: <cover.1684397037.git.matsuda-daisuke@fujitsu.com>
+ <2841b1a86987564f14f15ec5b59f6a8bead86b30.1684397037.git.matsuda-daisuke@fujitsu.com>
+Content-Language: en-US
+From:   Bob Pearson <rpearsonhpe@gmail.com>
+In-Reply-To: <2841b1a86987564f14f15ec5b59f6a8bead86b30.1684397037.git.matsuda-daisuke@fujitsu.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 11:39=E2=80=AFAM David Rientjes <rientjes@google.co=
-m> wrote:
->
-> I think VM_BUG_ON*() and friends are used to crash the kernel for
-> debugging so that we get a crash dump and because some variants don't
-> exist for VM_WARN_ON().
+On 5/18/23 03:21, Daisuke Matsuda wrote:
+> Enable 'fetch and add' and 'compare and swap' operations to manipulate
+> data in an ODP-enabled MR. This is comprised of the following steps:
+>  1. Check the driver page table(umem_odp->dma_list) to see if the target
+>     page is both readable and writable.
+>  2. If not, then trigger page fault to map the page.
+>  3. Update the entry in the MR xarray.
+>  4. Execute the operation.
+> 
+> umem_mutex is used to ensure that dma_list (an array of addresses of an MR)
+> is not changed while it is being checked and that the target page is not
+> invalidated before data access completes.
+> 
+> Signed-off-by: Daisuke Matsuda <matsuda-daisuke@fujitsu.com>
+> ---
+>  drivers/infiniband/sw/rxe/rxe.c      |  1 +
+>  drivers/infiniband/sw/rxe/rxe_loc.h  |  9 +++++++++
+>  drivers/infiniband/sw/rxe/rxe_odp.c  | 26 ++++++++++++++++++++++++++
+>  drivers/infiniband/sw/rxe/rxe_resp.c |  5 ++++-
+>  4 files changed, 40 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/infiniband/sw/rxe/rxe.c b/drivers/infiniband/sw/rxe/rxe.c
+> index 207a022156f0..abd3267c2873 100644
+> --- a/drivers/infiniband/sw/rxe/rxe.c
+> +++ b/drivers/infiniband/sw/rxe/rxe.c
+> @@ -88,6 +88,7 @@ static void rxe_init_device_param(struct rxe_dev *rxe)
+>  		rxe->attr.odp_caps.per_transport_caps.rc_odp_caps |= IB_ODP_SUPPORT_RECV;
+>  		rxe->attr.odp_caps.per_transport_caps.rc_odp_caps |= IB_ODP_SUPPORT_WRITE;
+>  		rxe->attr.odp_caps.per_transport_caps.rc_odp_caps |= IB_ODP_SUPPORT_READ;
+> +		rxe->attr.odp_caps.per_transport_caps.rc_odp_caps |= IB_ODP_SUPPORT_ATOMIC;
+>  		rxe->attr.odp_caps.per_transport_caps.rc_odp_caps |= IB_ODP_SUPPORT_SRQ_RECV;
+>  	}
+>  }
+> diff --git a/drivers/infiniband/sw/rxe/rxe_loc.h b/drivers/infiniband/sw/rxe/rxe_loc.h
+> index 4b95c8c46bdc..b9d2985774ee 100644
+> --- a/drivers/infiniband/sw/rxe/rxe_loc.h
+> +++ b/drivers/infiniband/sw/rxe/rxe_loc.h
+> @@ -208,6 +208,9 @@ int rxe_odp_mr_init_user(struct rxe_dev *rxe, u64 start, u64 length,
+>  			 u64 iova, int access_flags, struct rxe_mr *mr);
+>  int rxe_odp_mr_copy(struct rxe_mr *mr, u64 iova, void *addr, int length,
+>  		    enum rxe_mr_copy_dir dir);
+> +int rxe_odp_mr_atomic_op(struct rxe_mr *mr, u64 iova, int opcode,
+> +			 u64 compare, u64 swap_add, u64 *orig_val);
+> +
+>  #else /* CONFIG_INFINIBAND_ON_DEMAND_PAGING */
+>  static inline int
+>  rxe_odp_mr_init_user(struct rxe_dev *rxe, u64 start, u64 length, u64 iova,
+> @@ -221,6 +224,12 @@ rxe_odp_mr_copy(struct rxe_mr *mr, u64 iova, void *addr,
+>  {
+>  	return -EOPNOTSUPP;
+>  }
+> +static inline int
+> +rxe_odp_mr_atomic_op(struct rxe_mr *mr, u64 iova, int opcode,
+> +		     u64 compare, u64 swap_add, u64 *orig_val)
+> +{
+> +	return RESPST_ERR_UNSUPPORTED_OPCODE;
+> +}
+>  
+>  #endif /* CONFIG_INFINIBAND_ON_DEMAND_PAGING */
+>  
+> diff --git a/drivers/infiniband/sw/rxe/rxe_odp.c b/drivers/infiniband/sw/rxe/rxe_odp.c
+> index cbe5d0c3fcc4..194b1fab98b7 100644
+> --- a/drivers/infiniband/sw/rxe/rxe_odp.c
+> +++ b/drivers/infiniband/sw/rxe/rxe_odp.c
+> @@ -283,3 +283,29 @@ int rxe_odp_mr_copy(struct rxe_mr *mr, u64 iova, void *addr, int length,
+>  
+>  	return err;
+>  }
+> +
+> +int rxe_odp_mr_atomic_op(struct rxe_mr *mr, u64 iova, int opcode,
+> +			 u64 compare, u64 swap_add, u64 *orig_val)
+> +{
+> +	int err;
+> +	struct ib_umem_odp *umem_odp = to_ib_umem_odp(mr->umem);
+> +
+> +	/* If pagefault is not required, umem mutex will be held until the
+> +	 * atomic operation completes. Otherwise, it is released and locked
+> +	 * again in rxe_odp_map_range() to let invalidation handler do its
+> +	 * work meanwhile.
+> +	 */
+> +	mutex_lock(&umem_odp->umem_mutex);
+> +
+> +	/* Atomic operations manipulate a single char. */
+> +	err = rxe_odp_map_range(mr, iova, sizeof(char), 0);
+> +	if (err)
+> +		return err;
+> +
+> +	err = rxe_mr_do_atomic_op(mr, iova, opcode, compare,
+> +				  swap_add, orig_val);
+> +
+> +	mutex_unlock(&umem_odp->umem_mutex);
+> +
+> +	return err;
+> +}
+> diff --git a/drivers/infiniband/sw/rxe/rxe_resp.c b/drivers/infiniband/sw/rxe/rxe_resp.c
+> index 90c31c4f2944..0a918145dc07 100644
+> --- a/drivers/infiniband/sw/rxe/rxe_resp.c
+> +++ b/drivers/infiniband/sw/rxe/rxe_resp.c
+> @@ -684,7 +684,10 @@ static enum resp_states atomic_reply(struct rxe_qp *qp,
+>  		u64 iova = qp->resp.va + qp->resp.offset;
+>  
+>  		if (mr->odp_enabled)
+> -			err = RESPST_ERR_UNSUPPORTED_OPCODE;
+> +			err = rxe_odp_mr_atomic_op(mr, iova, pkt->opcode,
+> +						   atmeth_comp(pkt),
+> +						   atmeth_swap_add(pkt),
+> +						   &res->atomic.orig_val);
+>  		else
+>  			err = rxe_mr_do_atomic_op(mr, iova, pkt->opcode,
+>  						  atmeth_comp(pkt),
 
-I do think that from a VM developer standpoint, I think it should be
-fine to just effectively turn VM_BUG_ON() into WARN_ON_ONCE() together
-with panic_on_warn.
-
-Maybe we could even extend 'panic_on_warn' to be a bitmap and
-effectively have a "don't panic on non-VM warnings" option.
-
-                Linus
+Reviewed-by: Bob Pearson <rpearsonhpe@gmail.com>
