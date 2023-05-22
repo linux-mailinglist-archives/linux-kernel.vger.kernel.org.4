@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAA9370B44C
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 07:05:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FFDB70B44D
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 07:06:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231705AbjEVFFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 01:05:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48502 "EHLO
+        id S231712AbjEVFGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 01:06:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231694AbjEVFFU (ORCPT
+        with ESMTP id S229722AbjEVFGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 01:05:20 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04652E9
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:05:19 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-b9daef8681fso4783618276.1
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:05:19 -0700 (PDT)
+        Mon, 22 May 2023 01:06:38 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F330A92
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:06:36 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-561bcd35117so70100797b3.3
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:06:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684731919; x=1687323919;
+        d=google.com; s=20221208; t=1684731996; x=1687323996;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q9fqf/aXpqllLgdqCnqVNZO09v0Ag5UU0wZCu2wmsUs=;
-        b=OKj/gvd6hObldwT6K4phcbvAmhbsjul6iPbLRzKjs71jzjUwd6r3e8xCWCNZVwPENy
-         0HaWB0qgO/fNnS/Ois67og8DBdTyq3v/IDNkLAR46vDKiCQUR3xPJoyU7eFLCu5OCUxu
-         ene9fgjo5yHZ3AS4/uG54DbEfQUuxcpEJxYx8UgryAp+t99VA5jZFAwJV246EE9mtg1F
-         OZdfnZLlti+W2fNxVTHpJKMKRYyeIyeNsz3sd1gR6zvPQCCVQ9jZz+INsTuvonpNhmYF
-         Bm782lSdhp0xDJA2N1jyxGLFmtKZ57I/CBr/DUG8sWZnMiCyq1l9BTQfv5dwSU+wKfRJ
-         U63g==
+        bh=itm4lMYCv8hAr7oWbErSKKsiGUM8mghvSpbiblkFfbk=;
+        b=xUO60/u0hCL36TvKXHyURnnxqO5vn7ZybjY7ONPqMVFmXcRaGi5WJ1fjIK85dRtVJa
+         +whV5tpXJtxlVEd0xUGkv7xuykXYLwzIAtD/A83Pd0ByM1utIbe7HqhKdkTngJ8uTZye
+         nXdCtHMDNgLl+HSpG2o6gWxk89SbFvj51bDmDs5EUuxNtQO799f4KEwsfMDYpb1aA0JV
+         G1qpsPEAFFQ60/jP3AFkOagxrcttoK3mZdLQdFsbhRCY1FyAsYOWEizdcI6h50IGdllG
+         JcD8IVUHEVvPfu5cztMQwnxIE3n4xO4E81T6/znW0rbNwJzdKCpC1q5F2RM6c3EnqDt5
+         BYMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684731919; x=1687323919;
+        d=1e100.net; s=20221208; t=1684731996; x=1687323996;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q9fqf/aXpqllLgdqCnqVNZO09v0Ag5UU0wZCu2wmsUs=;
-        b=FbAWxP75Sxkv1o8ghhO5EebgDFgN1xxVBnpRxQSPLVGvrZu+l4Zy5oX4Ub+Nta1gML
-         OiFlWdGZFL1qZiMWfdI6XkZq5xHtKMGFLxtiJEAfbd2cgQnRMPie8pNMRi4cL+kKKV3+
-         WeGvRsduYYzFT1kYASvE4wfLXwwzUAk8llXiU+CrfrvSFsRYz619og6nwrsMyaQpEjIb
-         9QrOECUHZLElPEKfa448+Zy1Efab9JEbLn1aT/oPPhPFoobGfAfCI7bLBNHDazqhu6lt
-         gSIhbPaWR0fLbsyqQPg4nmUwyv8mHDH/YTwpOzmrXOvEZJ6k9WqrnnmQTh3ZZKKmRRWJ
-         lqLw==
-X-Gm-Message-State: AC+VfDyzJ/5a8r7C55u8YS3eIQXYFk0fGH7pK7wFJ3BZ0nCOl18W77Cd
-        INa1x4yvnJjjwz1rwfhnbpUn6A==
-X-Google-Smtp-Source: ACHHUZ5Raj9TudeXZElbzzsJbxf03YA3/zAVWdObhAbA8Pr6yvbRJfnYmXwklG1UR7VtuXWIGmLBMQ==
-X-Received: by 2002:a25:fa12:0:b0:ba8:1c9e:c77f with SMTP id b18-20020a25fa12000000b00ba81c9ec77fmr9327198ybe.22.1684731919014;
-        Sun, 21 May 2023 22:05:19 -0700 (PDT)
+        bh=itm4lMYCv8hAr7oWbErSKKsiGUM8mghvSpbiblkFfbk=;
+        b=JGede4ErEdyjhrVGGycNcFkSlUzDrvCtgqWU0mr2ngN1RWwWkpuG7SwIm9NmseuFLm
+         3A8tm2hbTSo59diT3g4riGqiQQXsv99qZ6pSNVGejltHyDcspDTDMXwE9ZBaKGdqhmiJ
+         q+wfrWRCje9E9i2Ajz1CeEj/wCp2m+ufJ/A2/VwJLeFrYvZWJ7puGzz0FkFGmk99b7Ki
+         +f/amxmJncen/f2z0D9nFl1cCUw1fGOKdPnx6b29OyqHiKGpX5y46aoKz7pgrqNrzVee
+         USvVE5a0x2q8Lf+emynG6xHaTetF2VkRWOLdXyG1i9oygMjXOPUNDp5u+4dptyjebj7o
+         9rqQ==
+X-Gm-Message-State: AC+VfDyWEanvfquZs+woCunWTjm387zYd+Wrl8dX1Ux5wQZRyOpSTP0e
+        6PZUZ4KCWi18UwXbKwNd72IEIQ==
+X-Google-Smtp-Source: ACHHUZ78QIP2SjKpIXnCqaoasaQ8h+cR3FlbUtT2N1GVyk/3dI0nRSCd0E3wxVyacPDSOVPhhCpzYw==
+X-Received: by 2002:a0d:ed43:0:b0:561:9d6e:6f45 with SMTP id w64-20020a0ded43000000b005619d6e6f45mr10989561ywe.26.1684731996077;
+        Sun, 21 May 2023 22:06:36 -0700 (PDT)
 Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id a12-20020a25938c000000b00ba87e9b5bf9sm1274482ybm.45.2023.05.21.22.05.16
+        by smtp.gmail.com with ESMTPSA id v184-20020a8148c1000000b0054f50f71834sm1805106ywa.124.2023.05.21.22.06.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 May 2023 22:05:18 -0700 (PDT)
-Date:   Sun, 21 May 2023 22:05:15 -0700 (PDT)
+        Sun, 21 May 2023 22:06:35 -0700 (PDT)
+Date:   Sun, 21 May 2023 22:06:32 -0700 (PDT)
 From:   Hugh Dickins <hughd@google.com>
 X-X-Sender: hugh@ripple.attlocal.net
 To:     Andrew Morton <akpm@linux-foundation.org>
@@ -81,9 +81,9 @@ cc:     Mike Kravetz <mike.kravetz@oracle.com>,
         Song Liu <song@kernel.org>,
         Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH 13/31] mm/hmm: retry if pte_offset_map() fails
+Subject: [PATCH 14/31] fs/userfaultfd: retry if pte_offset_map() fails
 In-Reply-To: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
-Message-ID: <2edc4657-b6ff-3d6e-2342-6b60bfccc5b@google.com>
+Message-ID: <424274a4-7c13-e14-b380-428fc69a45c5@google.com>
 References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -98,27 +98,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hmm_vma_walk_pmd() is called through mm_walk, but already has a goto
-again loop of its own, so take part in that if pte_offset_map() fails.
+Instead of worrying whether the pmd is stable, userfaultfd_must_wait()
+call pte_offset_map() as before, but go back to try again if that fails.
+
+Risk of endless loop?  It already broke out if pmd_none(), !pmd_present()
+or pmd_trans_huge(), and pte_offset_map() would have cleared pmd_bad():
+which leaves pmd_devmap().  Presumably pmd_devmap() is inappropriate in
+a vma subject to userfaultfd (it would have been mistreated before),
+but add a check just to avoid all possibility of endless loop there.
 
 Signed-off-by: Hugh Dickins <hughd@google.com>
 ---
- mm/hmm.c | 2 ++
- 1 file changed, 2 insertions(+)
+ fs/userfaultfd.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/mm/hmm.c b/mm/hmm.c
-index e23043345615..b1a9159d7c92 100644
---- a/mm/hmm.c
-+++ b/mm/hmm.c
-@@ -381,6 +381,8 @@ static int hmm_vma_walk_pmd(pmd_t *pmdp,
+diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+index f7a0817b1ec0..ca83423f8d54 100644
+--- a/fs/userfaultfd.c
++++ b/fs/userfaultfd.c
+@@ -349,12 +349,13 @@ static inline bool userfaultfd_must_wait(struct userfaultfd_ctx *ctx,
+ 	if (!pud_present(*pud))
+ 		goto out;
+ 	pmd = pmd_offset(pud, address);
++again:
+ 	_pmd = pmdp_get_lockless(pmd);
+ 	if (pmd_none(_pmd))
+ 		goto out;
+ 
+ 	ret = false;
+-	if (!pmd_present(_pmd))
++	if (!pmd_present(_pmd) || pmd_devmap(_pmd))
+ 		goto out;
+ 
+ 	if (pmd_trans_huge(_pmd)) {
+@@ -363,11 +364,11 @@ static inline bool userfaultfd_must_wait(struct userfaultfd_ctx *ctx,
+ 		goto out;
  	}
  
- 	ptep = pte_offset_map(pmdp, addr);
-+	if (!ptep)
+-	/*
+-	 * the pmd is stable (as in !pmd_trans_unstable) so we can re-read it
+-	 * and use the standard pte_offset_map() instead of parsing _pmd.
+-	 */
+ 	pte = pte_offset_map(pmd, address);
++	if (!pte) {
++		ret = true;
 +		goto again;
- 	for (; addr < end; addr += PAGE_SIZE, ptep++, hmm_pfns++) {
- 		int r;
- 
++	}
+ 	/*
+ 	 * Lockless access: we're in a wait_event so it's ok if it
+ 	 * changes under us.  PTE markers should be handled the same as none
 -- 
 2.35.3
 
