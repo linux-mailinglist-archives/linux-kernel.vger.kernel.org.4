@@ -2,248 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A30F470C1FF
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E998E70C1F9
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:09:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233497AbjEVPKk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 11:10:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49934 "EHLO
+        id S230031AbjEVPJC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 11:09:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231368AbjEVPKi (ORCPT
+        with ESMTP id S232836AbjEVPJA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 11:10:38 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA2D9C6;
-        Mon, 22 May 2023 08:10:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684768234; x=1716304234;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=Iz3IJ6+8RYV8/lG/j1sTFs2GtV31o4OT0eriedDB4DI=;
-  b=QJtu/h9F98ZKb+EPHuJ7nymU0ahutIMFyzUJo4ERB/naN2/eiKIz6CUM
-   9BMMvzm5zFnoJsBJN8evF448oSUAdauC5dghRp6C4qCqoqL5G6lHXJKwq
-   4uVGlEveN50vd394lEr9AT3sovCyud+dlA3sLNBeog3f1KK54RLLcJIuu
-   lr89mFKIYBEOvVXtzkTuCn+mQ4txR5dqxscLYCaTBWTBkp2zCqAwt0Va+
-   fzfFR8x+U3ODDsogTwb3AGdnRw9OEDg4T7GcEHKHPRdx0f5yHDCiTx05n
-   33ljCDtMnx+ObWIVXwn7uFnyMkRGLl3EvdWA4u1VxQNZTW/mSO61jIpo1
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="381176447"
-X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
-   d="scan'208";a="381176447"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 08:10:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="877788075"
-X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
-   d="scan'208";a="877788075"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga005.jf.intel.com with ESMTP; 22 May 2023 08:10:21 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 22 May 2023 08:10:20 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Mon, 22 May 2023 08:10:20 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.168)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Mon, 22 May 2023 08:10:20 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UWpoaKnsR6tJRx6yByx0iNmSyQehDA/HYmC0mr+HKGzUOx9xagTzBHFOvuZ9Wcx4pxQ3qYtrzb5tYMaWBoY8eC/4rDiCN0ux/1W+tm9lyixZ+IqvFZeFMhYv0sZgG48ZMHwAK7PsIoEU1dR/mbTT60els2a+JmkViswhhuu3LOLpcxbVGq5+TZkqXPmuWIIPUZwtWkENLEwOOyRCTqi+z2+Jb9NYo9JkGmKE1/yh+N+eYFzQ1dZW/b7iigSHybeiXgesgMLZCkGvlOnyWq5eOYBLWD+sYLnJ5O0l7ItQ90O8UX84WUkpdKKc+yq+KGRB3GlqaspCim58dKN+h9go9w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bz/nGwNcZ1a/r7XCgcFBoJNE4So7Tu5LjsTPQn/31us=;
- b=cGtxMBUloevXToWz64L18RJ8T3plYUVkm+abbl9m9hgMFVOMOBrXRAnEKKKrS0IJg963+TmflBSgUTJG+oVZbbJ9gcmIXUywlIbIffM4P1L3yXCnBrmsMwBsZDnjykjgGI5KGwsdgpGobNZtSRSqz/CrVCi7vZVYb6+I6TFVZhuLohXNQJNxzxLC9/najEFkSJQ9e0RCerIcVD9lw9tJsBvq4mZW2lNtokprK0w04jcJFRQFU/IQ5Adg11BBFIBlZ3O48/iC4dI3EUdop7tAdrAH/ISgiTjRdAYvpVBlaCP6qic3b8ocdBOyRJZyRKnVezjISedLyGhNU8ftXslGFQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB5471.namprd11.prod.outlook.com (2603:10b6:5:39d::10)
- by IA1PR11MB6420.namprd11.prod.outlook.com (2603:10b6:208:3a8::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Mon, 22 May
- 2023 15:10:18 +0000
-Received: from DM4PR11MB5471.namprd11.prod.outlook.com
- ([fe80::907c:ffaa:352a:8913]) by DM4PR11MB5471.namprd11.prod.outlook.com
- ([fe80::907c:ffaa:352a:8913%7]) with mapi id 15.20.6411.028; Mon, 22 May 2023
- 15:10:18 +0000
-Date:   Mon, 22 May 2023 17:07:33 +0200
-From:   Larysa Zaremba <larysa.zaremba@intel.com>
-To:     Alexander Lobakin <aleksander.lobakin@intel.com>
-CC:     <bpf@vger.kernel.org>, Stanislav Fomichev <sdf@google.com>,
-        "Alexei Starovoitov" <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "Andrii Nakryiko" <andrii@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "Martin KaFai Lau" <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Anatoly Burakov <anatoly.burakov@intel.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        "Magnus Karlsson" <magnus.karlsson@gmail.com>,
-        Maryam Tahhan <mtahhan@redhat.com>,
-        <xdp-hints@xdp-project.net>, <netdev@vger.kernel.org>,
-        <intel-wired-lan@lists.osuosl.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH RESEND bpf-next 02/15] ice: make RX HW timestamp reading
- code more reusable
-Message-ID: <ZGuFNesdPS5ijl/R@lincoln>
-References: <20230512152607.992209-1-larysa.zaremba@intel.com>
- <20230512152607.992209-3-larysa.zaremba@intel.com>
- <ac1895cc-a7b0-e40c-7dfc-8ab301f39893@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ac1895cc-a7b0-e40c-7dfc-8ab301f39893@intel.com>
-X-ClientProxiedBy: FR2P281CA0068.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:9a::12) To DM4PR11MB5471.namprd11.prod.outlook.com
- (2603:10b6:5:39d::10)
+        Mon, 22 May 2023 11:09:00 -0400
+Received: from mail-oo1-xc31.google.com (mail-oo1-xc31.google.com [IPv6:2607:f8b0:4864:20::c31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6A4CA
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 08:08:59 -0700 (PDT)
+Received: by mail-oo1-xc31.google.com with SMTP id 006d021491bc7-55254414406so1685247eaf.0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 08:08:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684768139; x=1687360139;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/zEQv3FIbNS1PaTN4avSONv8aFWRzp4oZp63VmdRfIQ=;
+        b=APxy0p2J1/Z9SeVZDSFJRP7VppH2mbN9g1a/A+OCaoF1awvld8+JcU3RndpAbDoGvw
+         rlWlQcqxw5nbtDVdCMt0IPNiavwuDHKx37xbTu8bs4Zn+SIE0eWt4OnKpGPCyyhgDppn
+         X+gs3+Kc/G+uNygq8Sc/vu6h5PKVXKcD6QzTmkc2DpANpfixnQn2+IMXhrwu5Dic+vyQ
+         hv/4oPqypp/Jvww2ra1CRNWOHmvPB0/T6MM4DaLrXS+Ku6uqh7eMTeWZfgJ/HPwYsNJV
+         fTn3aKfUqH/A0eWJZcVoXfMpjIvSnqRz2mR6EDbXmM5XqrVUDcdUMbXSMhbhj9B+gGyM
+         1EqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684768139; x=1687360139;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/zEQv3FIbNS1PaTN4avSONv8aFWRzp4oZp63VmdRfIQ=;
+        b=Z2GnuNbbUphftFXZBI63epIc0I31Bywdjb7L8+AR/lE9+z9BVrVU0uxLsch6Dvv7yg
+         4g5l7bsAp6KfinH5kOxUYyDBOpnSnoav6sWjXhqmz4aq9llut2kmGZAJnMbyLAGqmaeN
+         wjuMo/webIjQNbtJ7zqUgf8tgljY0tBMfdEkDtkGoNEJkcZM3DrW2Z0jDYTSJMZoMT/8
+         xNaZzIjJvxkmkkGapGFZy18cP6GE0qYYWHO4M/DltmK5rsRR6FIMMYt+l8p6VH1FxHci
+         Q78RweYqC5t/NHur38F4Jee9N/labwY+NNAZtupWukWtdA1wXFf4c5L4gDeMzWmADJaS
+         X4kQ==
+X-Gm-Message-State: AC+VfDyYq67cOnl8T+mivqZct/lKWKMiwrNeK350c3zL8RknRWlpRXq+
+        XhMhdUI2o6Q73rtxl8YP6tdp5kZB/UVWgKA7VC0=
+X-Google-Smtp-Source: ACHHUZ4ExIpEUZerP6mCCiZ9lUpYbGZ/+E9RYgK/eNnvHmmMatIIjmZ0rZ09JHcdKkuRDXO7nEzde1gvbpvsjleXhGs=
+X-Received: by 2002:a4a:924d:0:b0:552:4bca:a9df with SMTP id
+ g13-20020a4a924d000000b005524bcaa9dfmr5154196ooh.3.1684768138804; Mon, 22 May
+ 2023 08:08:58 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR11MB5471:EE_|IA1PR11MB6420:EE_
-X-MS-Office365-Filtering-Correlation-Id: adc7ac57-a69b-4d56-482a-08db5ad6a736
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QkIqVUSXsptZ4DHzxTEGAzbdfN9NVbVx4tp2v32YlkTcK1rb2kKZmxX/NjpM6LUD0IM2udwGm7qB7eM+jQlc1ufArbiNUJJvkZgZP6Rf4gFXJOwJIq7AsXTcV1ijqGOYyF/IQI7KwYO9QES3enGXgc+uLqpO8eS3SP42anx3Y2RdfV0ybx0wVE2DBYSODlzz9+fL/N0dw3t2LRSD9l0QfLm8wUkxKk1sVmYWvAscz04UmSUoZqEBMsOMwkHqN1aFYLkyJA2UY3m/Vy/Db00Kg9cqntI9n9CAjZgfurxGa0M76gtXARLlMndAtJCr89ivDL7U2ij19Ih/dWscfU+6TJUYh178bOQGI3FYOw+yWeIXwt4cmDtIrsMfZrSdaIYNvMDHB4a78cYDKVK4cdEzvhMFVYmCCMC27JbkGuUpogYG3kJmFyyQmQXWQnea1XsPLOy7Cs1QNQz67fNy7/gVG9LuxkWly6A0m0cWO8tU0p6bM4A35dT+wS4oyEuHcufkv08RfSaCn/bFvyQK7k9o8eXPRZjvBk41sKuREIswALDupwJW+iHwVsFZJP2AuLYE
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5471.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(39860400002)(136003)(376002)(396003)(346002)(366004)(451199021)(8676002)(8936002)(6862004)(7416002)(44832011)(5660300002)(83380400001)(9686003)(186003)(6512007)(6506007)(33716001)(26005)(86362001)(82960400001)(38100700002)(41300700001)(6666004)(478600001)(4326008)(6636002)(66476007)(66946007)(66556008)(6486002)(316002)(54906003)(2906002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Elq3wdLzjWLcXKoj/ZTbq3shMVnPLL81dePqHduW6/GxeuEBQkNF9IB+kc8K?=
- =?us-ascii?Q?B6aW5q8wGH6Gp0tjmcUmDiuNqGYug+mSUXY1f+w54xsEfF9SHHgTq/5S6oBU?=
- =?us-ascii?Q?wYcgjxyICi1w82Fl4sS837zb8vtmUtB0Hqx4iaSLl97QSRYZQ8KaKXIlzlC9?=
- =?us-ascii?Q?zzT9IKp2UFFEu9JGbIAsChO+WYW/uhC81yS95/21NEVKqS6zHJTVXngWlJxz?=
- =?us-ascii?Q?225TiaKabPBzZRNT1Ha2X+SZ5mgRHV7YlPduNlP2jv4/m2fuiO2wIUHbl845?=
- =?us-ascii?Q?Fak63Sbfg5tiPIzvUhmD4Yyb0KyR3YhtrFknEK0W4H/YahjcKYMqX9Eu0Pe3?=
- =?us-ascii?Q?TT3oXUlUEShk2fW3sNBA7Pvju74VVtZUH7k1AciNEkCN9P+jkc4DNU0n09FZ?=
- =?us-ascii?Q?YNnNCQyEdcs9apg+WeDbYV+8RGcGh+ujHTUGFVtfoW7EfqqJ+4x+jq61nx1P?=
- =?us-ascii?Q?auZsT/RZ0Oi11LL4uAqgTB7gXDhVrCP735PQhPPSWiA6EJyODx2siT7qbOMW?=
- =?us-ascii?Q?1lfv2i23aZsla9qvM1BP4brJ8AcT/6AnIfDt9vSx2LFmcWP9fy0yNtYH/Hxm?=
- =?us-ascii?Q?y2r1m6KU8/rNkP0L0tsoZygzX9yQwl2hbP4cM++J25VlLCAABpf0p99bcLcN?=
- =?us-ascii?Q?I25bFa8Y+zDPl9sbjSHfN/umpNrKJKNVL8Ev76UL3jpObeHQ6+U34auXsV4t?=
- =?us-ascii?Q?DL3liFG17CwtF8v/GFniRg6WAFNbAfvOcCiyrioaEYqy3CJEtl7Q/nq2H6h5?=
- =?us-ascii?Q?fRdKdjBCBMBtff0ib4EfCoy2k6Dqg5MmVvC9QaALpSLutgX0ovI25BgyPq7X?=
- =?us-ascii?Q?zKdkTm3FgB2cJ3iWJQD4ZpfyqrnTT9V2tCmS9vVJm2de8qcGFG8W1D4kjFhX?=
- =?us-ascii?Q?1nTEmqIGfXdfg9ZsmsQN1mCjAD8gmyU6twhghN8lnMuGGOpKwnsLeOG1cDtT?=
- =?us-ascii?Q?n6qlirGVw+LZ/fIVorYVA2JoXMljxBNIwYVAcWAH8lAOgUDiS9jOUtSE76Mf?=
- =?us-ascii?Q?7cQScH8+W8cK8mx8bAzqjuRf1xXGbJFn87sJnzzR6/+zdFJox6LzzAG6rNak?=
- =?us-ascii?Q?9qNJdoEeLNoiL/YBXqUUxtfnVqJVMEs4dkcdInUz5o/cza4oUP4NEk9/DVFj?=
- =?us-ascii?Q?EGyslS1ZOQyQnw0yxRNHY9b6QucE+PNnsfPPeyj3e45voofrP4HM/6AWIl58?=
- =?us-ascii?Q?1U4W7PxxFbNHlxdSxgeGXUHxGsYvlJN/oFfsDRpHEuo8NlQ/eujzI0MYRXd1?=
- =?us-ascii?Q?yumI+243TCEoCUzHgxOP299b5KlH2iwK23T7L1HoJJczUdOWSkv7vZQ7/Se/?=
- =?us-ascii?Q?mztah2x9p136TMKom/Hu1ZeMGDfQOgfVmQfxaOxicRIRP8pBurun3eyFJzjh?=
- =?us-ascii?Q?GWnijAfvLWwtE/HTMXjRHNOb7awr1rZCnCa14cfGm+64HaGM9nEaXSiL05yy?=
- =?us-ascii?Q?SuTSGGJksRzraipLQSjx9oAdHrjYZVfTG5s3m5zV+RUqzHjcsHBKbb94jmvk?=
- =?us-ascii?Q?h56+7Uwu+DR5q+J9/iS2F4dGoq7mcponOnY3ydFpu+flkz1oLiRcuediLWRG?=
- =?us-ascii?Q?+KMeReTtuDRJ/jJXPLgKW26RkxRMIn2cldJhvgQXx9Mthi/zZGsJ0CqQYnua?=
- =?us-ascii?Q?3g=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: adc7ac57-a69b-4d56-482a-08db5ad6a736
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5471.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2023 15:10:18.0788
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kXUCIYL4WeXZ/SmvWT5XgCLNmQZoefu3oAAMxfaKluUPaljzOQwmwIotZ883HhtoXL9zaEErAp4zAIC+Fr3XY0zCTu+kY0yStH3conzzROw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB6420
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230522115047.1169839-1-arnd@kernel.org> <20230522115047.1169839-5-arnd@kernel.org>
+In-Reply-To: <20230522115047.1169839-5-arnd@kernel.org>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Mon, 22 May 2023 11:08:47 -0400
+Message-ID: <CADnq5_Mg1BZ9PKHNtFdk4F2Ny7rQo8Tr2PA93MF-yF811d7EwA@mail.gmail.com>
+Subject: Re: [PATCH 5/5] drm/amdgpu: fix acpi build warnings
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Lijo Lazar <lijo.lazar@amd.com>, Le Ma <le.ma@amd.com>,
+        Tim Huang <tim.huang@amd.com>,
+        Jingyu Wang <jingyuwang_vip@163.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bokun Zhang <Bokun.Zhang@amd.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, Hans de Goede <hdegoede@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 06:52:13PM +0200, Alexander Lobakin wrote:
-> From: Larysa Zaremba <larysa.zaremba@intel.com>
-> Date: Fri, 12 May 2023 17:25:54 +0200
-> 
-> > Previously, we only needed RX HW timestamp in skb path,
-> > hence all related code was written with skb in mind.
-> > But with the addition of XDP hints via kfuncs to the ice driver,
-> > the same logic will be needed in .xmo_() callbacks.
-> 
-> [...]
-> 
-> > @@ -2176,9 +2174,8 @@ ice_ptp_rx_hwtstamp(struct ice_rx_ring *rx_ring,
-> >  	ts_high = le32_to_cpu(rx_desc->wb.flex_ts.ts_high);
-> >  	ts_ns = ice_ptp_extend_32b_ts(cached_time, ts_high);
-> >  
-> > -	hwtstamps = skb_hwtstamps(skb);
-> > -	memset(hwtstamps, 0, sizeof(*hwtstamps));
-> > -	hwtstamps->hwtstamp = ns_to_ktime(ts_ns);
-> > +	*dst = ts_ns;
-> > +	return true;
-> 
-> Can't we use the same I wrote in the prev. comment, i.e. return 0 or
-> timestamp? I don't think ts == 0 is valid.
+Applied the series.  Thanks!
+
+Alex
+
+On Mon, May 22, 2023 at 7:51=E2=80=AFAM Arnd Bergmann <arnd@kernel.org> wro=
+te:
 >
-
-Agreed with this in the answer to the previous email :)
- 
-> >  }
-> >  
-> >  /**
-> 
-> [...]
-> 
-> > + * The driver receives a notification in the receive descriptor with timestamp.
-> > + * The timestamp is in ns, so we must convert the result first.
-> > + */
-> > +static void
-> > +ice_ptp_rx_hwts_to_skb(struct ice_rx_ring *rx_ring,
-> > +		       union ice_32b_rx_flex_desc *rx_desc,
-> > +		       struct sk_buff *skb)
-> > +{
-> > +	struct skb_shared_hwtstamps *hwtstamps;
-> > +	u64 ts_ns;
-> > +
-> > +	if (!ice_ptp_copy_rx_hwts_from_desc(rx_ring, rx_desc, &ts_ns))
-> > +		return;
-> > +
-> > +	hwtstamps = skb_hwtstamps(skb);
-> > +	memset(hwtstamps, 0, sizeof(*hwtstamps));
-> > +	hwtstamps->hwtstamp = ns_to_ktime(ts_ns);
-> 
-> Ok, my optimizations aren't in this series :D
-> If you look at the hwtimestamps in skb, you'll see all that can be
-> minimized to just:
-> 
-> 	*skb_hwtstamps(skb) = (struct skb_shared_hwtstamps){
-> 		.hwtstamp	= ns_to_ktime(ts_ns),
-> 	};
-> 
-> Compiler will probably do its job, but I wouldn't always rely on it.
-> Sometimes it's even able to not expand memset(8 bytes) to *(u64 *) = 0.
-
-Ok, will fix.
-
-> 
-> > +}
-> > +
-> >  /**
-> >   * ice_process_skb_fields - Populate skb header fields from Rx descriptor
-> >   * @rx_ring: Rx descriptor ring packet is being transacted on
-> > @@ -210,7 +235,7 @@ ice_process_skb_fields(struct ice_rx_ring *rx_ring,
-> >  	ice_rx_csum(rx_ring, skb, rx_desc, ptype);
-> >  
-> >  	if (rx_ring->ptp_rx)
-> > -		ice_ptp_rx_hwtstamp(rx_ring, rx_desc, skb);
-> > +		ice_ptp_rx_hwts_to_skb(rx_ring, rx_desc, skb);
-> >  }
-> >  
-> >  /**
-> 
-> Thanks,
-> Olek
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> Two newly introduced functions are in the global namespace but have no pr=
+ototypes
+> or callers outside of amdgpu_acpi.c, another function is static but only =
+has
+> a caller inside of an #ifdef:
+>
+> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:902:13: error: no previous proto=
+type for 'amdgpu_acpi_get_node_id' [-Werror=3Dmissing-prototypes]
+> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:928:30: error: no previous proto=
+type for 'amdgpu_acpi_get_dev' [-Werror=3Dmissing-prototypes]
+> drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c:860:33: error: 'amdgpu_acpi_get_=
+numa_info' defined but not used [-Werror=3Dunused-function]
+>
+> Avoid the warnings by marking all of them static and ensuring that the co=
+mpiler is
+> able to see the callsites.
+>
+> Fixes: c34db97b8217 ("drm/amdgpu: Add API to get numa information of XCC"=
+)
+> Fixes: 1f6f659d06e1 ("drm/amdgpu: Store additional numa node information"=
+)
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c | 11 +++++------
+>  1 file changed, 5 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c b/drivers/gpu/drm/a=
+md/amdgpu/amdgpu_acpi.c
+> index 873532c4adbe..1dbcd0e62478 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_acpi.c
+> @@ -899,13 +899,15 @@ static struct amdgpu_numa_info *amdgpu_acpi_get_num=
+a_info(uint32_t pxm)
+>   *
+>   * Returns ACPI STATUS OK with Node ID on success or the corresponding f=
+ailure reason
+>   */
+> -acpi_status amdgpu_acpi_get_node_id(acpi_handle handle,
+> +static acpi_status amdgpu_acpi_get_node_id(acpi_handle handle,
+>                                     struct amdgpu_numa_info **numa_info)
+>  {
+> -#ifdef CONFIG_ACPI_NUMA
+>         u64 pxm;
+>         acpi_status status;
+>
+> +       if (!IS_ENABLED(CONFIG_ACPI_NUMA))
+> +               return_ACPI_STATUS(AE_NOT_EXIST);
+> +
+>         if (!numa_info)
+>                 return_ACPI_STATUS(AE_ERROR);
+>
+> @@ -920,12 +922,9 @@ acpi_status amdgpu_acpi_get_node_id(acpi_handle hand=
+le,
+>                 return_ACPI_STATUS(AE_ERROR);
+>
+>         return_ACPI_STATUS(AE_OK);
+> -#else
+> -       return_ACPI_STATUS(AE_NOT_EXIST);
+> -#endif
+>  }
+>
+> -struct amdgpu_acpi_dev_info *amdgpu_acpi_get_dev(u16 bdf)
+> +static struct amdgpu_acpi_dev_info *amdgpu_acpi_get_dev(u16 bdf)
+>  {
+>         struct amdgpu_acpi_dev_info *acpi_dev;
+>
+> --
+> 2.39.2
+>
