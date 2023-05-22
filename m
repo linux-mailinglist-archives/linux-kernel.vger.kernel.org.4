@@ -2,567 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B0C70B650
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 09:18:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDA6F70B62E
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 09:15:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232477AbjEVHR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 03:17:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46504 "EHLO
+        id S232320AbjEVHPl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 03:15:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232444AbjEVHRY (ORCPT
+        with ESMTP id S232197AbjEVHOe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 03:17:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7BE188;
-        Mon, 22 May 2023 00:16:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E484D61DF9;
-        Mon, 22 May 2023 07:16:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AAD7C433EF;
-        Mon, 22 May 2023 07:15:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684739761;
-        bh=sEiDYrSPmg5nu7FmQd1VG/Fm5X7VeJdlmDiqajke56Q=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GecyYXSGZ78jK8QjPxxK0Y1d50Z6domMuX4wVdV1/MEP8TYfOC3yKXiy7f9M1HrHJ
-         9FO7X6zBGHIBRoyl9DI7GLmE9t3OduMh02T/479r6Prcs1jb7eLDY5n4JiX2g7pYiA
-         RpBlfscCYZkh5gMuKvgDQcWV73xGQFQL69LwidMl835/pcn/NhIhk9SPteIlAuDYj6
-         at/KLa2fvsSrH/jDu27wTksNQzWrhRyZRjc66SdwPWd59EhmTTAPfXoSpshu6by2es
-         fpLeOO+psdObhF+S5Eni98nVTjIGaDTKvbr/WRmIVbp+BUKw6N/zivyHNxAAzVJ00W
-         GfB92Zm8sTo9Q==
-From:   Ard Biesheuvel <ardb@kernel.org>
-To:     linux-efi@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        Evgeniy Baskov <baskov@ispras.ru>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Dave Young <dyoung@redhat.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Kees Cook <keescook@chromium.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH v3 21/21] x86/efistub: Avoid legacy decompressor when doing EFI boot
-Date:   Mon, 22 May 2023 09:14:15 +0200
-Message-Id: <20230522071415.501717-22-ardb@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230522071415.501717-1-ardb@kernel.org>
-References: <20230522071415.501717-1-ardb@kernel.org>
+        Mon, 22 May 2023 03:14:34 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8CB74121;
+        Mon, 22 May 2023 00:14:28 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.111])
+        by gateway (Coremail) with SMTP id _____8DxyOlTFmtkuNgKAA--.18829S3;
+        Mon, 22 May 2023 15:14:27 +0800 (CST)
+Received: from [192.168.124.115] (unknown [10.20.42.111])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx4zhQFmtkksVuAA--.54591S3;
+        Mon, 22 May 2023 15:14:24 +0800 (CST)
+Subject: Re: [PATCH v11 31/31] LoongArch: KVM: Add maintainers for LoongArch
+ KVM
+To:     WANG Xuerui <kernel@xen0n.name>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        loongarch@lists.linux.dev, Jens Axboe <axboe@kernel.dk>,
+        Mark Brown <broonie@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Oliver Upton <oliver.upton@linux.dev>, maobibo@loongson.cn,
+        Xi Ruoyao <xry111@xry111.site>
+References: <20230522031217.956464-1-zhaotianrui@loongson.cn>
+ <20230522031217.956464-32-zhaotianrui@loongson.cn>
+ <fb7f0c26-b609-c225-f8db-de32e72cd97b@xen0n.name>
+From:   Tianrui Zhao <zhaotianrui@loongson.cn>
+Message-ID: <f6b4bd12-ac04-bb1a-f3ce-657fc8802f8f@loongson.cn>
+Date:   Mon, 22 May 2023 15:14:24 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=17149; i=ardb@kernel.org; h=from:subject; bh=sEiDYrSPmg5nu7FmQd1VG/Fm5X7VeJdlmDiqajke56Q=; b=owGbwMvMwCFmkMcZplerG8N4Wi2JISVbzO2k3P/7C8xDj99auMlXuFSCUzlSaW78ZB5OhdcZ2 r/XfGjvKGVhEONgkBVTZBGY/ffdztMTpWqdZ8nCzGFlAhnCwMUpABNRt2X4p1x3cJpJlVNqzfr2 2Xx691pzF1ucV9RUOx9ftPpPczSXCSPDLnWrL5X1cXanHzke0N4TdTWH9Ym2BO+E9TLXLzy2Fez iAQA=
-X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
+In-Reply-To: <fb7f0c26-b609-c225-f8db-de32e72cd97b@xen0n.name>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-CM-TRANSID: AQAAf8Cx4zhQFmtkksVuAA--.54591S3
+X-CM-SenderInfo: p2kd03xldq233l6o00pqjv00gofq/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7tF1xJF15ZF4DZF47Wr1xXwb_yoW8Xry8pF
+        s7AF4DKrWxWr1xArn5tF9xZa45XrykCr12qay3X3WqvFnxJw10qryqg3Z0gFn8Xan5Wr4F
+        vrn3tw13uF1UJrJanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bqAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kK
+        e7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI
+        0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280
+        aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2
+        xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC
+        6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s
+        026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF
+        0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0x
+        vE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8Jr0_Cr1UMIIF0xvEx4A2
+        jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuYvjxUcbAwUUUUU
+X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The bare metal decompressor code was never really intended to run in a
-hosted environment such as the EFI boot services, and does a few things
-that are problematic in the context of EFI boot now that the logo
-requirements are getting tighter.
 
-In particular, the decompressor moves its own executable image around in
-memory, and relies on demand paging to populate the identity mappings,
-and these things are difficult to support in a context where memory is
-not permitted to be mapped writable and executable at the same time or,
-at the very least, is mapped non-executable by default, and needs
-special treatment for this restriction to be lifted.
+On 2023/5/22 上午11:42, WANG Xuerui wrote:
+> On 2023/5/22 11:12, Tianrui Zhao wrote:
+>> Add maintainers for LoongArch KVM.
+>>
+>> Signed-off-by: Tianrui Zhao <zhaotianrui@loongson.cn>
+>> ---
+>>   MAINTAINERS | 12 ++++++++++++
+>>   1 file changed, 12 insertions(+)
+>>
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 27ef11624748..0b6fe590f275 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -11357,6 +11357,18 @@ F:    include/kvm/arm_*
+>>   F:    tools/testing/selftests/kvm/*/aarch64/
+>>   F:    tools/testing/selftests/kvm/aarch64/
+>>   +KERNEL VIRTUAL MACHINE FOR LOONGARCH (KVM/LoongArch)
+>> +M:    Tianrui Zhao <zhaotianrui@loongson.com>
+>> +M:    Bibo Mao <maobibo@loongson.com>
+>
+> Your company email addresses end with loongson.cn, aren't they? ;-)
 
-Since EFI already maps all of memory 1:1, it is unnecessary to create
-new page tables or handle page faults when decompressing the kernel.
-That means there is also no need to replace the special exception
-handlers for SEV. Generally, there is little need to do anything that
-the decompressor does beyond
+Thanks for your reviewing carefully, I will fix this e-mail address.
 
-- initialize SEV encryption, if needed,
-- perform the 4/5 level paging switch, if needed,
-- decompress the kernel
-- relocate the kernel
+Tianrui Zhao
 
-So do all of this from the EFI stub code, and avoid the bare metal
-decompressor altogether.
-
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
----
- arch/x86/boot/compressed/Makefile       |   5 +
- arch/x86/boot/compressed/efi_mixed.S    |  55 -------
- arch/x86/boot/compressed/head_32.S      |  13 --
- arch/x86/boot/compressed/head_64.S      |  27 ----
- arch/x86/include/asm/efi.h              |   7 +-
- drivers/firmware/efi/libstub/x86-stub.c | 163 ++++++++------------
- 6 files changed, 77 insertions(+), 193 deletions(-)
-
-diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
-index b13a580210867ffb..535608fe72e11265 100644
---- a/arch/x86/boot/compressed/Makefile
-+++ b/arch/x86/boot/compressed/Makefile
-@@ -74,6 +74,11 @@ LDFLAGS_vmlinux += -z noexecstack
- ifeq ($(CONFIG_LD_IS_BFD),y)
- LDFLAGS_vmlinux += $(call ld-option,--no-warn-rwx-segments)
- endif
-+ifeq ($(CONFIG_EFI_STUB),y)
-+# ensure that the static EFI stub library will be pulled in, even if it is
-+# never referenced explicitly from the startup code
-+LDFLAGS_vmlinux += -u efi_pe_entry
-+endif
- LDFLAGS_vmlinux += -T
- 
- hostprogs	:= mkpiggy
-diff --git a/arch/x86/boot/compressed/efi_mixed.S b/arch/x86/boot/compressed/efi_mixed.S
-index 8a02a151806df14c..f4e22ef774ab6b4a 100644
---- a/arch/x86/boot/compressed/efi_mixed.S
-+++ b/arch/x86/boot/compressed/efi_mixed.S
-@@ -269,10 +269,6 @@ SYM_FUNC_START_LOCAL(efi32_entry)
- 	jmp	startup_32
- SYM_FUNC_END(efi32_entry)
- 
--#define ST32_boottime		60 // offsetof(efi_system_table_32_t, boottime)
--#define BS32_handle_protocol	88 // offsetof(efi_boot_services_32_t, handle_protocol)
--#define LI32_image_base		32 // offsetof(efi_loaded_image_32_t, image_base)
--
- /*
-  * efi_status_t efi32_pe_entry(efi_handle_t image_handle,
-  *			       efi_system_table_32_t *sys_table)
-@@ -280,8 +276,6 @@ SYM_FUNC_END(efi32_entry)
- SYM_FUNC_START(efi32_pe_entry)
- 	pushl	%ebp
- 	movl	%esp, %ebp
--	pushl	%eax				// dummy push to allocate loaded_image
--
- 	pushl	%ebx				// save callee-save registers
- 	pushl	%edi
- 
-@@ -290,48 +284,8 @@ SYM_FUNC_START(efi32_pe_entry)
- 	movl	$0x80000003, %eax		// EFI_UNSUPPORTED
- 	jnz	2f
- 
--	call	1f
--1:	pop	%ebx
--
--	/* Get the loaded image protocol pointer from the image handle */
--	leal	-4(%ebp), %eax
--	pushl	%eax				// &loaded_image
--	leal	(loaded_image_proto - 1b)(%ebx), %eax
--	pushl	%eax				// pass the GUID address
--	pushl	8(%ebp)				// pass the image handle
--
--	/*
--	 * Note the alignment of the stack frame.
--	 *   sys_table
--	 *   handle             <-- 16-byte aligned on entry by ABI
--	 *   return address
--	 *   frame pointer
--	 *   loaded_image       <-- local variable
--	 *   saved %ebx		<-- 16-byte aligned here
--	 *   saved %edi
--	 *   &loaded_image
--	 *   &loaded_image_proto
--	 *   handle             <-- 16-byte aligned for call to handle_protocol
--	 */
--
--	movl	12(%ebp), %eax			// sys_table
--	movl	ST32_boottime(%eax), %eax	// sys_table->boottime
--	call	*BS32_handle_protocol(%eax)	// sys_table->boottime->handle_protocol
--	addl	$12, %esp			// restore argument space
--	testl	%eax, %eax
--	jnz	2f
--
- 	movl	8(%ebp), %ecx			// image_handle
- 	movl	12(%ebp), %edx			// sys_table
--	movl	-4(%ebp), %esi			// loaded_image
--	movl	LI32_image_base(%esi), %esi	// loaded_image->image_base
--	leal	(startup_32 - 1b)(%ebx), %ebp	// runtime address of startup_32
--	/*
--	 * We need to set the image_offset variable here since startup_32() will
--	 * use it before we get to the 64-bit efi_pe_entry() in C code.
--	 */
--	subl	%esi, %ebp			// calculate image_offset
--	movl	%ebp, (image_offset - 1b)(%ebx)	// save image_offset
- 	xorl	%esi, %esi
- 	jmp	efi32_entry			// pass %ecx, %edx, %esi
- 						// no other registers remain live
-@@ -350,15 +304,6 @@ SYM_FUNC_START_NOALIGN(efi64_stub_entry)
- SYM_FUNC_END(efi64_stub_entry)
- #endif
- 
--	.section ".rodata"
--	/* EFI loaded image protocol GUID */
--	.balign 4
--SYM_DATA_START_LOCAL(loaded_image_proto)
--	.long	0x5b1b31a1
--	.word	0x9562, 0x11d2
--	.byte	0x8e, 0x3f, 0x00, 0xa0, 0xc9, 0x69, 0x72, 0x3b
--SYM_DATA_END(loaded_image_proto)
--
- 	.data
- 	.balign	8
- SYM_DATA_START_LOCAL(efi32_boot_gdt)
-diff --git a/arch/x86/boot/compressed/head_32.S b/arch/x86/boot/compressed/head_32.S
-index beee858058df4403..cd9587fcd5084f22 100644
---- a/arch/x86/boot/compressed/head_32.S
-+++ b/arch/x86/boot/compressed/head_32.S
-@@ -84,19 +84,6 @@ SYM_FUNC_START(startup_32)
- 
- #ifdef CONFIG_RELOCATABLE
- 	leal	startup_32@GOTOFF(%edx), %ebx
--
--#ifdef CONFIG_EFI_STUB
--/*
-- * If we were loaded via the EFI LoadImage service, startup_32() will be at an
-- * offset to the start of the space allocated for the image. efi_pe_entry() will
-- * set up image_offset to tell us where the image actually starts, so that we
-- * can use the full available buffer.
-- *	image_offset = startup_32 - image_base
-- * Otherwise image_offset will be zero and has no effect on the calculations.
-- */
--	subl    image_offset@GOTOFF(%edx), %ebx
--#endif
--
- 	movl	BP_kernel_alignment(%esi), %eax
- 	decl	%eax
- 	addl    %eax, %ebx
-diff --git a/arch/x86/boot/compressed/head_64.S b/arch/x86/boot/compressed/head_64.S
-index 3074d278c7e665d8..aee518e71cdb7e75 100644
---- a/arch/x86/boot/compressed/head_64.S
-+++ b/arch/x86/boot/compressed/head_64.S
-@@ -146,19 +146,6 @@ SYM_FUNC_START(startup_32)
- 
- #ifdef CONFIG_RELOCATABLE
- 	movl	%ebp, %ebx
--
--#ifdef CONFIG_EFI_STUB
--/*
-- * If we were loaded via the EFI LoadImage service, startup_32 will be at an
-- * offset to the start of the space allocated for the image. efi_pe_entry will
-- * set up image_offset to tell us where the image actually starts, so that we
-- * can use the full available buffer.
-- *	image_offset = startup_32 - image_base
-- * Otherwise image_offset will be zero and has no effect on the calculations.
-- */
--	subl    rva(image_offset)(%ebp), %ebx
--#endif
--
- 	movl	BP_kernel_alignment(%esi), %eax
- 	decl	%eax
- 	addl	%eax, %ebx
-@@ -335,20 +322,6 @@ SYM_CODE_START(startup_64)
- 	/* Start with the delta to where the kernel will run at. */
- #ifdef CONFIG_RELOCATABLE
- 	leaq	startup_32(%rip) /* - $startup_32 */, %rbp
--
--#ifdef CONFIG_EFI_STUB
--/*
-- * If we were loaded via the EFI LoadImage service, startup_32 will be at an
-- * offset to the start of the space allocated for the image. efi_pe_entry will
-- * set up image_offset to tell us where the image actually starts, so that we
-- * can use the full available buffer.
-- *	image_offset = startup_32 - image_base
-- * Otherwise image_offset will be zero and has no effect on the calculations.
-- */
--	movl    image_offset(%rip), %eax
--	subq	%rax, %rbp
--#endif
--
- 	movl	BP_kernel_alignment(%rsi), %eax
- 	decl	%eax
- 	addq	%rax, %rbp
-diff --git a/arch/x86/include/asm/efi.h b/arch/x86/include/asm/efi.h
-index 8b4be7cecdb8eb73..b0994ae3bc23f84d 100644
---- a/arch/x86/include/asm/efi.h
-+++ b/arch/x86/include/asm/efi.h
-@@ -90,6 +90,8 @@ static inline void efi_fpu_end(void)
- }
- 
- #ifdef CONFIG_X86_32
-+#define EFI_X86_KERNEL_ALLOC_LIMIT		(SZ_512M - 1)
-+
- #define arch_efi_call_virt_setup()					\
- ({									\
- 	efi_fpu_begin();						\
-@@ -103,8 +105,7 @@ static inline void efi_fpu_end(void)
- })
- 
- #else /* !CONFIG_X86_32 */
--
--#define EFI_LOADER_SIGNATURE	"EL64"
-+#define EFI_X86_KERNEL_ALLOC_LIMIT		EFI_ALLOC_LIMIT
- 
- extern asmlinkage u64 __efi_call(void *fp, ...);
- 
-@@ -218,6 +219,8 @@ efi_status_t efi_set_virtual_address_map(unsigned long memory_map_size,
- 
- #ifdef CONFIG_EFI_MIXED
- 
-+#define EFI_ALLOC_LIMIT		(efi_is_64bit() ? ULONG_MAX : U32_MAX)
-+
- #define ARCH_HAS_EFISTUB_WRAPPERS
- 
- static inline bool efi_is_64bit(void)
-diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
-index 02633199a8502b71..9c280d9e6e9ef58f 100644
---- a/drivers/firmware/efi/libstub/x86-stub.c
-+++ b/drivers/firmware/efi/libstub/x86-stub.c
-@@ -15,17 +15,14 @@
- #include <asm/setup.h>
- #include <asm/desc.h>
- #include <asm/boot.h>
-+#include <asm/kaslr.h>
- #include <asm/sev.h>
- 
- #include "efistub.h"
- #include "x86-stub.h"
- 
--/* Maximum physical address for 64-bit kernel with 4-level paging */
--#define MAXMEM_X86_64_4LEVEL (1ull << 46)
--
- const efi_system_table_t *efi_system_table;
- const efi_dxe_services_table_t *efi_dxe_table;
--u32 image_offset __section(".data");
- static efi_loaded_image_t *image = NULL;
- static efi_memory_attribute_protocol_t *memattr;
- 
-@@ -276,33 +273,9 @@ void efi_adjust_memory_range_protection(unsigned long start,
- 	}
- }
- 
--void startup_32(struct boot_params *boot_params);
--
--static void
--setup_memory_protection(unsigned long image_base, unsigned long image_size)
--{
--#ifdef CONFIG_64BIT
--	if (image_base != (unsigned long)startup_32)
--		efi_adjust_memory_range_protection(image_base, image_size);
--#else
--	/*
--	 * Clear protection flags on a whole range of possible
--	 * addresses used for KASLR. We don't need to do that
--	 * on x86_64, since KASLR/extraction is performed after
--	 * dedicated identity page tables are built and we only
--	 * need to remove possible protection on relocated image
--	 * itself disregarding further relocations.
--	 */
--	efi_adjust_memory_range_protection(LOAD_PHYSICAL_ADDR,
--					   KERNEL_IMAGE_SIZE - LOAD_PHYSICAL_ADDR);
--#endif
--}
--
- static const efi_char16_t apple[] = L"Apple";
- 
--static void setup_quirks(struct boot_params *boot_params,
--			 unsigned long image_base,
--			 unsigned long image_size)
-+static void setup_quirks(struct boot_params *boot_params)
- {
- 	efi_char16_t *fw_vendor = (efi_char16_t *)(unsigned long)
- 		efi_table_attr(efi_system_table, fw_vendor);
-@@ -311,9 +284,6 @@ static void setup_quirks(struct boot_params *boot_params,
- 		if (IS_ENABLED(CONFIG_APPLE_PROPERTIES))
- 			retrieve_apple_device_properties(boot_params);
- 	}
--
--	if (IS_ENABLED(CONFIG_EFI_DXE_MEM_ATTRIBUTES))
--		setup_memory_protection(image_base, image_size);
- }
- 
- /*
-@@ -466,7 +436,6 @@ efi_status_t __efiapi efi_pe_entry(efi_handle_t handle,
- 	}
- 
- 	image_base = efi_table_attr(image, image_base);
--	image_offset = (void *)startup_32 - image_base;
- 
- 	status = efi_allocate_pages(sizeof(struct boot_params),
- 				    (unsigned long *)&boot_params, ULONG_MAX);
-@@ -757,6 +726,61 @@ static efi_status_t exit_boot(struct boot_params *boot_params, void *handle)
- 	return EFI_SUCCESS;
- }
- 
-+static void efi_get_seed(void *seed, int size)
-+{
-+	efi_get_random_bytes(size, seed);
-+
-+	/*
-+	 * This only updates seed[0] when running on 32-bit, but in that case,
-+	 * we don't use seed[1] anyway, as there is no virtual KASLR on 32-bit.
-+	 */
-+	*(unsigned long *)seed ^= kaslr_get_random_long("EFI");
-+}
-+
-+static void error(char *str)
-+{
-+	efi_warn("Decompression failed: %s\n", str);
-+}
-+
-+static efi_status_t efi_decompress_kernel(unsigned long *kernel_entry)
-+{
-+	unsigned long virt_addr = LOAD_PHYSICAL_ADDR;
-+	unsigned long addr, alloc_size, entry;
-+	efi_status_t status;
-+	u32 seed[2] = {};
-+
-+	/* determine the required size of the allocation */
-+	alloc_size = ALIGN(max((unsigned long)output_len, kernel_total_size),
-+			   MIN_KERNEL_ALIGN);
-+
-+	if (IS_ENABLED(CONFIG_RANDOMIZE_BASE) && !efi_nokaslr) {
-+		u64 range = KERNEL_IMAGE_SIZE - LOAD_PHYSICAL_ADDR - kernel_total_size;
-+
-+		efi_get_seed(seed, sizeof(seed));
-+
-+		virt_addr += (range * seed[1]) >> 32;
-+		virt_addr &= ~(CONFIG_PHYSICAL_ALIGN - 1);
-+	}
-+
-+	status = efi_random_alloc(alloc_size, CONFIG_PHYSICAL_ALIGN, &addr,
-+				  seed[0], EFI_LOADER_CODE,
-+				  EFI_X86_KERNEL_ALLOC_LIMIT);
-+	if (status != EFI_SUCCESS)
-+		return status;
-+
-+	entry = decompress_kernel((void *)addr, virt_addr, error);
-+	if (entry == ULONG_MAX) {
-+		efi_free(alloc_size, addr);
-+		return EFI_LOAD_ERROR;
-+	}
-+
-+	*kernel_entry = addr + entry;
-+
-+	efi_adjust_memory_range_protection(addr, kernel_total_size);
-+
-+	return EFI_SUCCESS;
-+}
-+
- static void __noreturn enter_kernel(unsigned long kernel_addr,
- 				    struct boot_params *boot_params)
- {
-@@ -775,10 +799,9 @@ void __noreturn efi_stub_entry(efi_handle_t handle,
- 			       struct boot_params *boot_params)
- {
- 	efi_guid_t guid = EFI_MEMORY_ATTRIBUTE_PROTOCOL_GUID;
--	unsigned long bzimage_addr = (unsigned long)startup_32;
--	unsigned long buffer_start, buffer_end;
- 	struct setup_header *hdr = &boot_params->hdr;
- 	const struct linux_efi_initrd *initrd = NULL;
-+	unsigned long kernel_entry;
- 	efi_status_t status;
- 
- 	efi_system_table = sys_table_arg;
-@@ -806,60 +829,6 @@ void __noreturn efi_stub_entry(efi_handle_t handle,
- 		}
- 	}
- 
--	/*
--	 * If the kernel isn't already loaded at a suitable address,
--	 * relocate it.
--	 *
--	 * It must be loaded above LOAD_PHYSICAL_ADDR.
--	 *
--	 * The maximum address for 64-bit is 1 << 46 for 4-level paging. This
--	 * is defined as the macro MAXMEM, but unfortunately that is not a
--	 * compile-time constant if 5-level paging is configured, so we instead
--	 * define our own macro for use here.
--	 *
--	 * For 32-bit, the maximum address is complicated to figure out, for
--	 * now use KERNEL_IMAGE_SIZE, which will be 512MiB, the same as what
--	 * KASLR uses.
--	 *
--	 * Also relocate it if image_offset is zero, i.e. the kernel wasn't
--	 * loaded by LoadImage, but rather by a bootloader that called the
--	 * handover entry. The reason we must always relocate in this case is
--	 * to handle the case of systemd-boot booting a unified kernel image,
--	 * which is a PE executable that contains the bzImage and an initrd as
--	 * COFF sections. The initrd section is placed after the bzImage
--	 * without ensuring that there are at least init_size bytes available
--	 * for the bzImage, and thus the compressed kernel's startup code may
--	 * overwrite the initrd unless it is moved out of the way.
--	 */
--
--	buffer_start = ALIGN(bzimage_addr - image_offset,
--			     hdr->kernel_alignment);
--	buffer_end = buffer_start + hdr->init_size;
--
--	if ((buffer_start < LOAD_PHYSICAL_ADDR)				     ||
--	    (IS_ENABLED(CONFIG_X86_32) && buffer_end > KERNEL_IMAGE_SIZE)    ||
--	    (IS_ENABLED(CONFIG_X86_64) && buffer_end > MAXMEM_X86_64_4LEVEL) ||
--	    (image_offset == 0)) {
--		extern char _bss[];
--
--		status = efi_relocate_kernel(&bzimage_addr,
--					     (unsigned long)_bss - bzimage_addr,
--					     hdr->init_size,
--					     hdr->pref_address,
--					     hdr->kernel_alignment,
--					     LOAD_PHYSICAL_ADDR);
--		if (status != EFI_SUCCESS) {
--			efi_err("efi_relocate_kernel() failed!\n");
--			goto fail;
--		}
--		/*
--		 * Now that we've copied the kernel elsewhere, we no longer
--		 * have a set up block before startup_32(), so reset image_offset
--		 * to zero in case it was set earlier.
--		 */
--		image_offset = 0;
--	}
--
- #ifdef CONFIG_CMDLINE_BOOL
- 	status = efi_parse_options(CONFIG_CMDLINE);
- 	if (status != EFI_SUCCESS) {
-@@ -877,6 +846,12 @@ void __noreturn efi_stub_entry(efi_handle_t handle,
- 		}
- 	}
- 
-+	status = efi_decompress_kernel(&kernel_entry);
-+	if (status != EFI_SUCCESS) {
-+		efi_err("Failed to decompress kernel\n");
-+		goto fail;
-+	}
-+
- 	/*
- 	 * At this point, an initrd may already have been loaded by the
- 	 * bootloader and passed via bootparams. We permit an initrd loaded
-@@ -916,7 +891,7 @@ void __noreturn efi_stub_entry(efi_handle_t handle,
- 
- 	setup_efi_pci(boot_params);
- 
--	setup_quirks(boot_params, bzimage_addr, buffer_end - buffer_start);
-+	setup_quirks(boot_params);
- 
- 	status = exit_boot(boot_params, handle);
- 	if (status != EFI_SUCCESS) {
-@@ -940,14 +915,10 @@ void __noreturn efi_stub_entry(efi_handle_t handle,
- 		}
- 	}
- 
--	if (IS_ENABLED(CONFIG_X86_64)) {
-+	if (IS_ENABLED(CONFIG_X86_64))
- 		efi_5level_switch();
- 
--		/* add offset of startup_64() */
--		bzimage_addr += 0x200;
--	}
--
--	enter_kernel(bzimage_addr, boot_params);
-+	enter_kernel(kernel_entry, boot_params);
- fail:
- 	efi_err("efi_stub_entry() failed!\n");
- 
--- 
-2.39.2
+>
+>> +M:    Huacai Chen <chenhuacai@kernel.org>
+>> +L:    kvm@vger.kernel.org
+>> +L:    loongarch@lists.linux.dev
+>> +S:    Maintained
+>> +T:    git https://github.com/loongson/linux-loongarch-kvm
+>> +F:    arch/loongarch/include/asm/kvm*
+>> +F:    arch/loongarch/include/uapi/asm/kvm*
+>> +F:    arch/loongarch/kvm/
+>> +
+>>   KERNEL VIRTUAL MACHINE FOR MIPS (KVM/mips)
+>>   M:    Huacai Chen <chenhuacai@kernel.org>
+>>   M:    Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>
+>
 
