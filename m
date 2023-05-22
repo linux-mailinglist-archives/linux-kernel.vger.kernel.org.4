@@ -2,117 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68ABC70B31E
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 04:21:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79E7370B339
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 04:30:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229812AbjEVCVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 22:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58226 "EHLO
+        id S229991AbjEVCaN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 22:30:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjEVCVQ (ORCPT
+        with ESMTP id S231255AbjEVCaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 22:21:16 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A99CE0;
-        Sun, 21 May 2023 19:21:10 -0700 (PDT)
-X-UUID: 4d4bf402f84711edb20a276fd37b9834-20230522
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=FvLKVHjka7cRO5KYMLXa5+eHvbBfffFIZp5h7B2yAEk=;
-        b=TcV/Ri9xxnUaUP83Qn7Y1ZzndluR/EixtIH47azDWEN+1ygWO1vYjFGd8jyP2+VN8bw10JzOsFnW2WNoVy3KMJ0YJc70m2ShCyNZFOyRLrppV9Gxf+d1iD/njURPDtq8rMbmOkvtbyYwviKk/oFzlcijgw/QanefQp4EdeDdnew=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.25,REQID:4829c3d0-8688-464b-9f1f-121c397e69cc,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:d5b0ae3,CLOUDID:2b988a6c-2f20-4998-991c-3b78627e4938,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-UUID: 4d4bf402f84711edb20a276fd37b9834-20230522
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 624682876; Mon, 22 May 2023 10:21:04 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 22 May 2023 10:21:03 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Mon, 22 May 2023 10:21:02 +0800
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Prashanth K <quic_prashk@quicinc.com>,
-        Xiu Jianfeng <xiujianfeng@huawei.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Fabrice Gasnier <fabrice.gasnier@st.com>,
-        Felipe Balbi <balbi@kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        Kewu Chen <Kewu.Chen@mediatek.com>, stable <stable@kernel.org>
-Subject: [PATCH] usb: gadget: u_serial: Add null pointer check in gserial_suspend
-Date:   Mon, 22 May 2023 10:21:01 +0800
-Message-ID: <20230522022101.32163-1-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 21 May 2023 22:30:10 -0400
+X-Greylist: delayed 407 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 21 May 2023 19:30:05 PDT
+Received: from out-62.mta0.migadu.com (out-62.mta0.migadu.com [IPv6:2001:41d0:1004:224b::3e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF892FD
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 19:30:05 -0700 (PDT)
+Message-ID: <9a60d198-8c0a-9287-7c87-f129197d76f5@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1684722196;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=UHYDEvtNUWQuWC8UlRB684xx3KqIVrHp5jpKfKK7/Rs=;
+        b=mLyJnuISRSOn7JYqLqW/9fffUHnxwZ4K7bCP+b0RJL95YYS1JYBp5ZsMaS0AwQVeAWju4W
+        SC1S9MehptXFK2pfj2KorF/IIHgYcRUs4pZoV7UKnfk+Epe/orgRxJQ3AgyAcIsVrtpP4s
+        Uqz7Q5wSm5fpZD87c040T+aK3PV/eno=
+Date:   Mon, 22 May 2023 10:23:10 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] cgroup: fix missing cpus_read_{lock,unlock}() in
+ cgroup_transfer_tasks()
+Content-Language: en-US
+To:     Muchun Song <muchun.song@linux.dev>, Tejun Heo <tj@kernel.org>
+Cc:     Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Zhao Gongyi <zhaogongyi@bytedance.com>
+References: <20230517074545.2045035-1-qi.zheng@linux.dev>
+ <75E872A8-652F-40B0-80D0-378569E77775@linux.dev>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Qi Zheng <qi.zheng@linux.dev>
+In-Reply-To: <75E872A8-652F-40B0-80D0-378569E77775@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When gserial_disconnect has already cleared gser->ioport, and the
-suspend triggers afterwards, gserial_suspend gets called, which will
-lead to accessing of gser->ioport and thus causing null pointer
-dereference. Add a null pointer check to prevent it as the bellow
-patch does:
-5ec63fdbca60 ("usb: gadget: u_serial: Add null pointer check in gserial_resume")
 
-Fixes: aba3a8d01d62 ("usb: gadget: u_serial: add suspend resume callbacks")
-Cc: stable <stable@kernel.org>
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
- drivers/usb/gadget/function/u_serial.c | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/gadget/function/u_serial.c b/drivers/usb/gadget/function/u_serial.c
-index a0ca47fbff0f..40ba220cf6d2 100644
---- a/drivers/usb/gadget/function/u_serial.c
-+++ b/drivers/usb/gadget/function/u_serial.c
-@@ -1420,10 +1420,18 @@ EXPORT_SYMBOL_GPL(gserial_disconnect);
- 
- void gserial_suspend(struct gserial *gser)
- {
--	struct gs_port	*port = gser->ioport;
-+	struct gs_port	*port;
- 	unsigned long	flags;
- 
--	spin_lock_irqsave(&port->port_lock, flags);
-+	spin_lock_irqsave(&serial_port_lock, flags);
-+	port = gser->ioport;
-+	if (!port) {
-+		spin_unlock_irqrestore(&serial_port_lock, flags);
-+		return;
-+	}
-+
-+	spin_lock(&port->port_lock);
-+	spin_unlock(&serial_port_lock);
- 	port->suspended = true;
- 	spin_unlock_irqrestore(&port->port_lock, flags);
- }
+On 2023/5/17 15:51, Muchun Song wrote:
+> 
+> 
+>> On May 17, 2023, at 15:45, Qi Zheng <qi.zheng@linux.dev> wrote:
+>>
+>> From: Qi Zheng <zhengqi.arch@bytedance.com>
+>>
+>> The commit 4f7e7236435c ("cgroup: Fix threadgroup_rwsem <-> cpus_read_lock()
+>> deadlock") fixed the deadlock between cgroup_threadgroup_rwsem and
+>> cpus_read_lock() by introducing cgroup_attach_{lock,unlock}() and removing
+>> cpus_read_{lock,unlock}() from cpuset_attach(). But cgroup_transfer_tasks()
+>> was missed and not handled, which will cause th following warning:
+>>
+>> WARNING: CPU: 0 PID: 589 at kernel/cpu.c:526 lockdep_assert_cpus_held+0x32/0x40
+>> CPU: 0 PID: 589 Comm: kworker/1:4 Not tainted 6.4.0-rc2-next-20230517 #50
+>> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.14.0-2 04/01/2014
+>> Workqueue: events cpuset_hotplug_workfn
+>> RIP: 0010:lockdep_assert_cpus_held+0x32/0x40
+>> <...>
+>> Call Trace:
+>>   <TASK>
+>>   cpuset_attach+0x40/0x240
+>>   cgroup_migrate_execute+0x452/0x5e0
+>>   ? _raw_spin_unlock_irq+0x28/0x40
+>>   cgroup_transfer_tasks+0x1f3/0x360
+>>   ? find_held_lock+0x32/0x90
+>>   ? cpuset_hotplug_workfn+0xc81/0xed0
+>>   cpuset_hotplug_workfn+0xcb1/0xed0
+>>   ? process_one_work+0x248/0x5b0
+>>   process_one_work+0x2b9/0x5b0
+>>   worker_thread+0x56/0x3b0
+>>   ? process_one_work+0x5b0/0x5b0
+>>   kthread+0xf1/0x120
+>>   ? kthread_complete_and_exit+0x20/0x20
+>>   ret_from_fork+0x1f/0x30
+>>   </TASK>
+>>
+>> So just use the cgroup_attach_{lock,unlock}() helper to fix it.
+>>
+>> Fixes: 4f7e7236435c ("cgroup: Fix threadgroup_rwsem <-> cpus_read_lock() deadlock")
+>> Reported-by: Zhao Gongyi <zhaogongyi@bytedance.com>
+>> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+> 
+> Acked-by: Muchun Song <songmuchun@bytedance.com>
+
+Thanks. And hi Tejun, Can this patch be applied?
+
+> 
+> Thanks.
+> 
+
 -- 
-2.18.0
-
+Thanks,
+Qi
