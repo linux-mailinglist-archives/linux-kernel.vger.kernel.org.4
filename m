@@ -2,93 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7431870CBBA
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 22:58:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A2C270CBD5
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 23:00:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235031AbjEVU6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 16:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57742 "EHLO
+        id S235527AbjEVVAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 17:00:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234636AbjEVU6l (ORCPT
+        with ESMTP id S235565AbjEVU7t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 16:58:41 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE79198
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 13:58:30 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id 98e67ed59e1d1-2533a03388dso4429869a91.2
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 13:58:30 -0700 (PDT)
+        Mon, 22 May 2023 16:59:49 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6565120;
+        Mon, 22 May 2023 13:59:34 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-64d1e96c082so3535234b3a.1;
+        Mon, 22 May 2023 13:59:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1684789109; x=1687381109;
+        d=gmail.com; s=20221208; t=1684789174; x=1687381174;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YXcDp+9WnYXQQ8kzzUbP3R21GvXgk1x8osyoI1bp1So=;
-        b=oU2I2ROs4mi0M7l2FNvk5YXCuVWnzyk9mtidGKRoiOk5LaLFDN45ANR9REntIN5k75
-         +7Auu97ZCX/Qi5rZe1E43LRdahoqPgK2PPtSqaVy5DF8hBGH5uCzFDlBE+Y3nQ+oEbxX
-         v/f6/N8P/+S3+pEQpwruIzVYdXFaK6OgoY5ec=
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=REd5LAfz4pnrlWJeTXd7TNxPZb5If45Ls7fcUl4wW74=;
+        b=lRz3eawJzzyIYWWtoGkyPPVw4Nh3+OLy6jFJMU+raeIShsezJRKl644EXFjT8VXibp
+         HtJYoF9JEJBg1ClhPIoL6RiIcabDVfxMQPhGwQIHtkl7W0bHy7yjiwWYtoFH9LBHhYOU
+         JEiONdLbci65yJjPkYqVHntuJUL81Tsa0epXl5zHQ1Oe8SuyaMT1EvhdvIUB2HjHhQHl
+         Vs28CO3mP8kL3yjk9PfS8QV4l6+YVEYuPDyAMycXEGEcuUDzt+xC/uWjuHpt/UNCHrz/
+         BYyWPHtO5gNxmtmuteRhpakBhlwavqOtp7CZh4twewBcTdi8yL/m+ozPxlptx9Fyn0o1
+         tmQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684789109; x=1687381109;
+        d=1e100.net; s=20221208; t=1684789174; x=1687381174;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YXcDp+9WnYXQQ8kzzUbP3R21GvXgk1x8osyoI1bp1So=;
-        b=PnLmmjWj0uS4S4x1zS/d31MmnF03HgRW9RwA7cvJrP3PcNCsbLnguQn4gCr1Wl/bzn
-         IIKUebAAblDK1QToyzQyAEqUnxIfVmRsEFtCvbBKMJ/mCYpG6b2GwOdhPl/zkMPuA2/R
-         xhJQExk/XDN4lx2079WNZWn7OH3SoQmD74Ph638cNIgwRQgjhaQuEtOz63pCwTqxsJ9t
-         1DIzCExue3WB+AdizzbQ47k1s+lCp7uH+u79JE7bRTghM/WV3SxOficfgmRBA5AhnwJM
-         n9p1uQ4n7QIjGfh/VtrdaNQ1ic5n+x7h1EDW9aXopl5Vql5rhorBgix10ql14f99WfZC
-         ogow==
-X-Gm-Message-State: AC+VfDxyHTbZ3KgHyqpA2oo5xNbGato/913PRzsX/BDgkVHZVAWf6hFf
-        tyCtMMlbAYiyLWCA8ZUfugN35Q==
-X-Google-Smtp-Source: ACHHUZ5xWwngfsZNKPu1p9KpeSjcsXo4wq99/sjLIBhRb1f+J1o/JpC3tSO95mNeCoBZdEfu/9KP1Q==
-X-Received: by 2002:a17:90a:d302:b0:23f:2661:f94c with SMTP id p2-20020a17090ad30200b0023f2661f94cmr11619408pju.47.1684789109523;
-        Mon, 22 May 2023 13:58:29 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id d61-20020a17090a6f4300b0024dfbac9e2fsm6803551pjk.21.2023.05.22.13.58.28
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=REd5LAfz4pnrlWJeTXd7TNxPZb5If45Ls7fcUl4wW74=;
+        b=aS7Si1t31RxhxwtgA+ydLkgARGOQay8G3lZB4i3Mpx37mOk5sf8YZLOONiGoAoyumA
+         RliBDB5+Wuk1jocXc3Vl2UuRyzvMblR5O+XtXCUIeOjTnoCshkuTZlWlp1Im1/5IcPDG
+         T9SkUEUBWVD+ExL0ix+IzsUO69hv/LFpA5WHwHTNjNHLcB2Zp8UumvhW4iWVP8vlc1Ya
+         iXJqJuZ47T1NjHvu6SZPH3aawUGVLejB4IT1xXI/nXd+sDS8/TGDqTN2OfZ8AY8co+OE
+         fPzpbuuEDlnkXNMk8gRwlvY+Sy8/+aFKEjOEawHnBUMlk6qyImC+rXPsKMXOLEJhoo/V
+         +URA==
+X-Gm-Message-State: AC+VfDyGvWZWEDsCJcAx3SU/BQg3Fx728VNVpgK2UKGEI/TZ4pZWKTXT
+        ixyXFbQ85Zp3IChYiT/zcfzU8bYtT7c=
+X-Google-Smtp-Source: ACHHUZ62p+fet8YNvDAvQD8XHEQO/LJcmHtalvyR/EUUpdMx3CiCSyB2OzQAqQTfXGXwV3TSV2WBRg==
+X-Received: by 2002:a05:6a21:100e:b0:ec:d7cf:bcf7 with SMTP id nk14-20020a056a21100e00b000ecd7cfbcf7mr12191695pzb.17.1684789174047;
+        Mon, 22 May 2023 13:59:34 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:39c])
+        by smtp.gmail.com with ESMTPSA id i14-20020a63cd0e000000b005287a0560c9sm4835896pgg.1.2023.05.22.13.59.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 13:58:29 -0700 (PDT)
-Date:   Mon, 22 May 2023 13:58:28 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-kernel@vger.kernel.org, akiyks@gmail.com,
-        boqun.feng@gmail.com, corbet@lwn.net, linux-arch@vger.kernel.org,
-        linux@armlinux.org.uk, linux-doc@vger.kernel.org,
-        paulmck@kernel.org, peterz@infradead.org, sstabellini@kernel.org,
-        will@kernel.org
-Subject: Re: [PATCH 00/26] locking/atomic: restructuring + kerneldoc
-Message-ID: <202305221356.32A50E3@keescook>
-References: <20230522122429.1915021-1-mark.rutland@arm.com>
+        Mon, 22 May 2023 13:59:33 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 22 May 2023 10:59:31 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     hch@lst.de, josef@toxicpanda.com, axboe@kernel.dk,
+        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yi.zhang@huawei.com, yangerkun@huawei.com
+Subject: Re: [PATCH for-6.4/block] block/rq_qos: protect rq_qos apis with a
+ new lock
+Message-ID: <ZGvXs8zmXcxsxL9D@slm.duckdns.org>
+References: <20230414084008.2085155-1-yukuai1@huaweicloud.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230522122429.1915021-1-mark.rutland@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230414084008.2085155-1-yukuai1@huaweicloud.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 01:24:03PM +0100, Mark Rutland wrote:
-> The patches are based on the tip tree's locking/core branch,
-> specifically commit:
+On Fri, Apr 14, 2023 at 04:40:08PM +0800, Yu Kuai wrote:
+> From: Yu Kuai <yukuai3@huawei.com>
 > 
->   3cf363a4daf359e8 ("s390/cpum_sf: Convert to cmpxchg128()")
+> commit 50e34d78815e ("block: disable the elevator int del_gendisk")
+> move rq_qos_exit() from disk_release() to del_gendisk(), this will
+> introduce some problems:
+> 
+> 1) If rq_qos_add() is triggered by enabling iocost/iolatency through
+>    cgroupfs, then it can concurrent with del_gendisk(), it's not safe to
+>    write 'q->rq_qos' concurrently.
+> 
+> 2) Activate cgroup policy that is relied on rq_qos will call
+>    rq_qos_add() and blkcg_activate_policy(), and if rq_qos_exit() is
+>    called in the middle, null-ptr-dereference will be triggered in
+>    blkcg_activate_policy().
+> 
+> 3) blkg_conf_open_bdev() can call blkdev_get_no_open() first to find the
+>    disk, then if rq_qos_exit() from del_gendisk() is done before
+>    rq_qos_add(), then memory will be leaked.
+> 
+> This patch add a new disk level mutex 'rq_qos_mutex':
+> 
+> 1) The lock will protect rq_qos_exit() directly.
+> 
+> 2) For wbt that doesn't relied on blk-cgroup, rq_qos_add() can only be
+>    called from disk initialization for now because wbt can't be
+>    destructed until rq_qos_exit(), so it's safe not to protect wbt for
+>    now. Hoever, in case that rq_qos dynamically destruction is supported
+>    in the furture, this patch also protect rq_qos_add() from wbt_init()
+>    directly, this is enough because blk-sysfs already synchronize
+>    writers with disk removal.
+> 
+> 3) For iocost and iolatency, in order to synchronize disk removal and
+>    cgroup configuration, the lock is held after blkdev_get_no_open()
+>    from blkg_conf_open_bdev(), and is released in blkg_conf_exit().
+>    In order to fix the above memory leak, disk_live() is checked after
+>    holding the new lock.
+> 
+> Fixes: 50e34d78815e ("block: disable the elevator int del_gendisk")
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
 
-I did successful builds of:
+Acked-by: Tejun Heo <tj@kernel.org>
 
-m68k
-parisc
-sh4
-sparc64
-arm
-arm64
-i386
-x86_64
-
-Reviewed-by: Kees Cook <keescook@chromium.org>
+Thanks.
 
 -- 
-Kees Cook
+tejun
