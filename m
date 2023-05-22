@@ -2,188 +2,286 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A4FE70B941
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:41:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D231870B943
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:43:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232563AbjEVJlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 05:41:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38662 "EHLO
+        id S232568AbjEVJnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 05:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232391AbjEVJlo (ORCPT
+        with ESMTP id S232599AbjEVJnT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 05:41:44 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B59B9;
-        Mon, 22 May 2023 02:41:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684748503; x=1716284503;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=/Q//oWEWD3dvoRgvNGi6Jtr89aI5EwVf0OmRfy6fXPc=;
-  b=ICWcZM0jLAQvIMfTwDOtagnGnsDYljYbCqgEhlw6BnOrTUv7poFqYDtm
-   9vDfyBEF+bB9UcIJmSSp1S2C/wG75sB6jecB+Ekr/v0PgHWJznABDPK+4
-   veoJ3RIQEHxkGEoYh/PACskKmYANtdaOD/nXpbXOaL6t5FiultCpPtYM2
-   eQBnjKSU/yfnpwX23vEdssdNfM74cXx8stQqvjHfe/IT5cGVgp+5224iE
-   BMMHNFah/9Fua6hQZg2ygfqR62yZ4fk08Qeis9Rq+SPcK4uzbngLHzSL4
-   sziZzpQ64Z0Te57xdiqgXiK/pQLGJOV8ik5YjOg7TAGvd9qZBekSJBAVP
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="355221318"
-X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
-   d="scan'208";a="355221318"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 02:41:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="734202140"
-X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
-   d="scan'208";a="734202140"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga008.jf.intel.com with ESMTP; 22 May 2023 02:41:43 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 22 May 2023 02:41:42 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 22 May 2023 02:41:42 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Mon, 22 May 2023 02:41:42 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.48) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Mon, 22 May 2023 02:41:42 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=g/62iAR2tECOJCOmQcJBDVg4wrK8ySkiUqC05uRTSH1MGyAagqA1aFow41wMRMdJvXh2vCknNgo38+dHydRkavqEVW4kfqJB+iKx7nHjLyrfwXWEOTc2XPQEt5VPJSqKE7b0usf1RMnLw3HYD7sJiRccwbSUjauQFtfvW3J6XKp6vtTwcgBis9L2pK6BQZ+n8a4zuDwoIN2j18Z6q3OpNyEh5MoNlOqUzME2q3k0w4lu9TenCyxEgBx9ZLjHvtgKH644e+tyjJBVPr4eaUF3dOhabAq8AWrs9GchfEuve0/5sNSR0vmB6B5YeX3k5DdHAY16EKxa2UiHTxbhbiCL1w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/Q//oWEWD3dvoRgvNGi6Jtr89aI5EwVf0OmRfy6fXPc=;
- b=HZCyY6X7VazhJx5Xo9ZMrBzjfNhmWDbNy4aKbG664mQWifk+ILrbHXiGMGTg9HAfH+UKTFW3Ry/RPvkcy7Qx22DeJkuxhENSnvTcrPh9HpNcWDgWwrPmQwcMtoxaXxlYkZutoMgkwG2XcBVnYXyCSxfIIsKmvk/xvOoDwF5IwrTUR1CEYbTC6MQJ840AezsRyozg59w2vuv7tLEG3S6ZHaTch7kgnv1cEdbUf2uO790cRqqRHAMmT/j2VJ1wWyuHbHOg1w4IFVnHTTdzhWJ+NonSZ5uPnpdLPm/PQgoulDlqRDJ3svEr9rQhwr5vwHk6izRM2MANrsVDUrHtCLQV/w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB5469.namprd11.prod.outlook.com (2603:10b6:5:399::13)
- by MN2PR11MB4520.namprd11.prod.outlook.com (2603:10b6:208:265::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Mon, 22 May
- 2023 09:41:37 +0000
-Received: from DM4PR11MB5469.namprd11.prod.outlook.com
- ([fe80::e825:c2b5:8df5:e17b]) by DM4PR11MB5469.namprd11.prod.outlook.com
- ([fe80::e825:c2b5:8df5:e17b%4]) with mapi id 15.20.6411.028; Mon, 22 May 2023
- 09:41:37 +0000
-Message-ID: <0498b338-45c6-41f2-6243-3eed3e2d46d3@intel.com>
-Date:   Mon, 22 May 2023 17:41:26 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [RFC PATCH v2 09/11] KVM: VMX: Advertise
- MITI_CTRL_BHB_CLEAR_SEQ_S_SUPPORT
-Content-Language: en-US
-To:     Chao Gao <chao.gao@intel.com>, <kvm@vger.kernel.org>
-CC:     Jiaan Lu <jiaan.lu@intel.com>, Zhang Chen <chen.zhang@intel.com>,
-        "Sean Christopherson" <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, <linux-kernel@vger.kernel.org>
-References: <20230414062545.270178-1-chao.gao@intel.com>
- <20230414062545.270178-10-chao.gao@intel.com>
-From:   "Liu, Jingqi" <jingqi.liu@intel.com>
-In-Reply-To: <20230414062545.270178-10-chao.gao@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2PR01CA0176.apcprd01.prod.exchangelabs.com
- (2603:1096:4:28::32) To DM4PR11MB5469.namprd11.prod.outlook.com
- (2603:10b6:5:399::13)
+        Mon, 22 May 2023 05:43:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD9C8B4
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 02:42:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684748555;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Do07Fhmu/G1ekKU27xEBHKcUKlQWkvuStGz3aFQISYI=;
+        b=IoKdiO1TRYlk1lOaPnP5YujJ+p45qnqO/3FoguoskPcd+zCJ8disk8+q2h8QMLtWFQB4o7
+        H33IB5s6KeJ5oy17gfBat+4sXJpjMtzMxwBZSEmiVR6UVOjsJdUoUnBR2eBpxWheYEjCRb
+        5AJeEZQhW4Z9u4Y1yI9d1qsOuagxur8=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-589-6c76RTScNsiN24YkIMD1yg-1; Mon, 22 May 2023 05:42:33 -0400
+X-MC-Unique: 6c76RTScNsiN24YkIMD1yg-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-30479b764f9so2110779f8f.0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 02:42:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684748553; x=1687340553;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Do07Fhmu/G1ekKU27xEBHKcUKlQWkvuStGz3aFQISYI=;
+        b=k9+24RynMKIvvyHziY80gWuQHPa8vR7fxkOTHZxwsa1/oJzu2CF9+6OUsfnITbNG4N
+         VovLZ8oYENRt6DIoxuL6sOFx0Ux2Ek6vA+nhFo7bM2WdQOaS9aHZhn/5m/q9IwLSCfB/
+         EN+SLy4jrN8G8fSzVj3KbqqyB/+pSvDs2H74ywg2LtCeS3wzLXQJNMdWSIEbJt7fy0B1
+         SY2MJFtR1WufjZX8HqCeghJkK5lbp8e5ctNeLmCQw1oow7H+wugaf71hwppjybzRWasl
+         RLMqZyY+rIqCrkeFxHKCt19OtsmXQ6DgKUPmTxo4My/MKT0ZFRfc+9xRcyEbut6Z5FeA
+         gt9w==
+X-Gm-Message-State: AC+VfDyhSl/KSb4mpw2LUS1bZG0moMMeSZnSdDfxo1VqTvkFcCWTyUjY
+        Nqjagz4JQTDEnSMT9mLTPwOr2oGea1L5kwQkX01RWNAzTFJg3sKTz9Bb+yT7Gc4UD1nbgSaFidZ
+        A35ZatVfQ8aNS5k7ePjx31mRV
+X-Received: by 2002:adf:e984:0:b0:309:2b6:5c83 with SMTP id h4-20020adfe984000000b0030902b65c83mr6791927wrm.1.1684748552717;
+        Mon, 22 May 2023 02:42:32 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5GFjHLXxcU7kHH08QtqYxFdFl9Z3iIwNczbSyw49WBfSkwQClIFuhNR5wz4vNadm54JXPVxg==
+X-Received: by 2002:adf:e984:0:b0:309:2b6:5c83 with SMTP id h4-20020adfe984000000b0030902b65c83mr6791904wrm.1.1684748552210;
+        Mon, 22 May 2023 02:42:32 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c742:c800:d74f:aec6:f8ac:558? (p200300cbc742c800d74faec6f8ac0558.dip0.t-ipconnect.de. [2003:cb:c742:c800:d74f:aec6:f8ac:558])
+        by smtp.gmail.com with ESMTPSA id z12-20020a5d640c000000b00307c8d6b4a0sm7119870wru.26.2023.05.22.02.42.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 May 2023 02:42:31 -0700 (PDT)
+Message-ID: <b4dce681-e53c-a6fd-2dab-62a82ebc6dff@redhat.com>
+Date:   Mon, 22 May 2023 11:42:30 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR11MB5469:EE_|MN2PR11MB4520:EE_
-X-MS-Office365-Filtering-Correlation-Id: cbc51a4e-7107-40e0-e4b2-08db5aa8bce0
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BRld9vFWxd5IYbX04mWJqkwImVGosCrc9VrS9yBm2T32HmQkfbGCElSUz38ofbz3xCKNfSGf32U7dmx23fHszorryT1Tj4Zew5f2FRsJCq1QapQm6JlfurT0m+j/hYLGxTJDWxK2xm2+c4oE/Kuoto0BcFr2RJl6b2YbeuFmQ7Bi0hGofHjcteX0K1a0Xl5eZuR3nN7U+80x9li05tJD14+RuSowjmlAUWI0psFDwJ8zt1ZnZWLqsnuTbgb0zziqxg7JkJmnQlkuXRqDldnyU/DJ7Q+mPEgiDHF5zb3aItD//vhqPdPPOmwnhGcqVcyOnf7xaq9O2RwfQWgngadpj7i/tQnUBE5+uPYdyTnMQrG7XAtBBVzUQMT5gj/lRxEA5JB73/Oe80paHkx7glUCrAn9QJH5aJixRzJB2q4T4tre389JUPsZvMxPiFM9kFBX4dfuuBzfBm5f71/UGjxurC9SsX1jkfj2Bphh0lB8bTJoG7MNhV21e3+CjR+2tgRyhp8qYFJbkbqfIIh5vqMed4IB8PPyDe3HgKLGmuliEcdNvyjD5J9aAOED7EuZcyCPVz5Hz2HJmPf8KObvgxhlQqdGPe+zwmaAF7KsB+vCv0fB6R01AzNip0/gFaPcb/t2JPfvwzgIg7JbjyagT0M+OQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5469.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(396003)(366004)(136003)(376002)(346002)(451199021)(6512007)(6506007)(26005)(53546011)(6666004)(31686004)(6486002)(54906003)(41300700001)(66946007)(66556008)(66476007)(4326008)(478600001)(316002)(8936002)(8676002)(5660300002)(7416002)(31696002)(86362001)(4744005)(82960400001)(38100700002)(2906002)(36756003)(186003)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c1hIYTY5WTlmZzdVTUNsQ3VPYnlGNlN2a0l4S2JQck11OWIrTzAycE5BcUY2?=
- =?utf-8?B?ZGRDdkZZd0cyMDY1eGxNNWlmL3NRWGZQN2lVSVd1bkVObmFEdjJpU09iQW82?=
- =?utf-8?B?bUkxcGRmb2RCOVF3OXQxc3k4QkdPU1FmRmp1VUo3WGNKU1NmQmRFZWNQOWVn?=
- =?utf-8?B?aDcrY1NVZkhibUt0UU9hSHllREV6TU5VVEIxc1Z3bzlqK0l0bU9kOFFVZ1d1?=
- =?utf-8?B?dENpamZJY3kxeU1mQnRMQ0hLS3I2MG9XNHp1YTFTcXRGRVY3TmZlTHVRd0Er?=
- =?utf-8?B?Q1d6ckdQTk5ZQWVlWGdoaXl2Q3BMT3V5TXVZNHVKc3EyOHVCcG5oblVvMFA2?=
- =?utf-8?B?Tm5BdktaK2F4YTFWUkVXcDczYllLTThxcmxBendQejNYNkVvR1NCeWxIb21i?=
- =?utf-8?B?US9jOFFvZDJqMjFWcCtyT3g3Z3VIREZOdGVlaUgxNVJyZytBZDArTWJpS2t5?=
- =?utf-8?B?cmtSMkgyTVNYU1dmTUFzU1plb0I4SkEvNWd5MFZCTkpqckhQSmI1NERwcDZ6?=
- =?utf-8?B?eDFWRVMwOG5XTGw5VnVKZ1dSVjBwbVd4WE1rdWx6WVg4V1NaN05Td0pXWTYy?=
- =?utf-8?B?OEhwUHoxZnF4R0l3Wjdwd3hZbFhtODNTdCtaU0pYeGlidUhRQlAzRk0rQnc4?=
- =?utf-8?B?MXdTdCtoa3AvSnlSUEV5akRVeGV1aE96VVdBMVo2YzJzd3ZEaDBxYS9tTEJU?=
- =?utf-8?B?SkRiOXB0UHVEZS9iVzVjOGh2R1UvZnhVY2g0bFJ4N0lOZXZoMjh0S0xXaUNw?=
- =?utf-8?B?SFhLcFZsVHVDZHVLeWpkNEoreTdNUlVwTmI5Y2wyazBzZEhkYmdrMGpwekhV?=
- =?utf-8?B?dk1XQkxYaFpMamhQY2p0dDg2VHJhekpDK3dwQVpvM3J5YnJvMGk2aTE4diti?=
- =?utf-8?B?V3RNWTFSUjluakYrWHZKQ245WTczbTVROUZBMHJQMEh0Y0l5bHBjcWFuSUFu?=
- =?utf-8?B?bTVXSHNRSUZSUmk4Q0gyQ3JMYXo5YlkrZ2ZFc1VwZ0lCaW1tRFZZQmJKbVN6?=
- =?utf-8?B?Zng1S2NEdXZsdlZRdjF5TWF5Z3NaaSs0MXFmam44VS92bFA0ZDVXQ1YxSXVu?=
- =?utf-8?B?QVR1Qk9tYy9hK1p1NU9ZZHJZNmJ6ZUYwTGJaRVMzSlBjTEdyZXpEaEFMbWsr?=
- =?utf-8?B?cm1XSHlMbmxWcWk1N29TTDlaTk44WWx3NDFRZG0yLzY3UFVLWjcxc1VrSnRh?=
- =?utf-8?B?anVEUU5md3QxOE01QWI3SjJQTDdVUGNKQzR2M25NckRuMHlPU0x0WWhlYzYw?=
- =?utf-8?B?cm8wZFJRdzlSL3pYQ2ZuMmd1UEFlRWFCeHZwelE4eVpTdlQxbVB4R2hiRElB?=
- =?utf-8?B?TVFLSG9welNiVVFrbXFrNHNQQSt0ZE1IUjdrOXlRNHRzUldkYStEd1dnRjhX?=
- =?utf-8?B?MldnQ2p4cnBnaHZnaFBlQ1c1dGdnaVljUzRKZW9MSndUSHkrc0Q4aCttRS9F?=
- =?utf-8?B?bHhhZkdxMUNpM1hUMnd1ekNWcHpPVjN4VDFWWktYSGRmbkJqeVBiV24raWd5?=
- =?utf-8?B?eUpzaTlhL3NJNEV2Qm5VZ01KWlpzc0UxOGEwVnU2ZG1GNlpRZklKalZjODFi?=
- =?utf-8?B?UzZkcU5jazU4dFJmaDA1eG9qZ1BYc1dMa3NmSHBMazd3ekorVm5VWk9DRXd2?=
- =?utf-8?B?VnVlKzRFTHJneU5KWElKNDJiOVRhelUzVmZoY2l3VWdZQ2JXOUlaQXN6d0kx?=
- =?utf-8?B?WUducFlud2pDeEhlU1ZjbCtqQW90aTRMekNvTld3MERRTTVCN2NSOFl3YVVv?=
- =?utf-8?B?RU16bFpkL2pnSXhnYTM3R0c3c0tjbzFrU2pZd0dBcG55L3BjQUpvT1FramVr?=
- =?utf-8?B?aGdUamxYYVpNa1NIeVpIaHZSS2k5Wks3SDEyUmhxT3M5QU5SQkUyN1AwSUds?=
- =?utf-8?B?Umpac0w0THlOYlNkdlUyMGgzYWhuK2ZxRU1rUU5YZmVCYytxRVgwL2c2Tk1Z?=
- =?utf-8?B?Q1hBdzJ5K2xnTWFlVUtHZG45SHFuQVF6UzF0Mm8wQUlVdDhVdUZ4SGl6NWo0?=
- =?utf-8?B?R09DejNpZ3pRS0lQVDkvVXZvc0ZuQjNXcE9CTy9GL0o1Z09tNmRGaFRuczVN?=
- =?utf-8?B?NzJEVkxmcWYxNTBHVm5jS1ZFY0wySWdRYU9kOXFhcllkaVU3WjdyQk1OSEVT?=
- =?utf-8?Q?BckcCxqDgJGMY+GIXp46JqUUd?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: cbc51a4e-7107-40e0-e4b2-08db5aa8bce0
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5469.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2023 09:41:37.6843
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: y6gEQxfy8ZtMWY9EErFOfKGhu/bEBC9rGeUeh7Eo2DnUv/ako24yuFXoyNEAI7wsDIRirEt4YGZgZcNno+U1rg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4520
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+To:     David Rientjes <rientjes@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>, Alex Shi <alexs@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Duyck <alexanderduyck@fb.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <c9abf109-80f2-88f5-4aae-d6fd4a30bcd3@google.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [patch] mm, debug: allow suppressing panic on CONFIG_DEBUG_VM
+ checks
+In-Reply-To: <c9abf109-80f2-88f5-4aae-d6fd4a30bcd3@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Let me CC Linus, he might have an opinion on this.
 
-On 4/14/2023 2:25 PM, Chao Gao wrote:
-> From: Zhang Chen <chen.zhang@intel.com>
->
-> Allow guest to query if the underying VMM understands BHB-clearing
-> sequence and report the statue of BHB-clearing sequence in suprevisor
-s/statue/status
-> mode i.e. CPL < 3 via MSR_VIRTUAL_MITIGATION_ENUM/CTRL.
->
-> Enable BHI_DIS_S for guest if guest is using BHI-clearing sequence and
-> the sequence isn't effective on the processor.
->
-> Signed-off-by: Zhang Chen <chen.zhang@intel.com>
-> Signed-off-by: Chao Gao <chao.gao@intel.com>
-> Tested-by: Jiaan Lu <jiaan.lu@intel.com>
+On 22.05.23 01:07, David Rientjes wrote:
+> CONFIG_DEBUG_VM is used to enable additional MM debug checks at runtime.
+> This can be used to catch latent kernel bugs.
+> 
+> Because this is mainly used for debugging, it is seldom enabled in
+> production environments, including due to the added performance overhead.
+> Thus, the choice between VM_BUG_ON() and VM_WARN_ON() is somewhat loosely
+> defined.
+> 
+> VM_BUG_ON() is often used because debuggers would like to collect crash
+> dumps when unexpected conditions occur.
+> 
+> When CONFIG_DEBUG_VM is enabled on a very small set of production
+> deployments to catch any unexpected condition, however, VM_WARN_ON()
+> could be used as a substitute.  In these configurations, it would be
+> useful to surface the unexpected condition in the kernel log but not
+> panic the system.
+> 
+> In other words, it would be useful if checks done by CONFIG_DEBUG_ON
+> could both generate crash dumps for kernel developers *and* surface
+> issues but not crash depending on how it's configured.
+> 
+>   [ If it is really unsafe to continue operation, then BUG_ON() would be
+>     used instead so that the kernel panics regardless of whether
+>     CONFIG_DEBUG_VM is enabled or not. ]
+> 
+> Introduce the ability to suppress kernel panics when VM_BUG_ON*() variants
+> are used.  This leverages the existing vm_debug= kernel command line
+> option.
+> 
+> Additionally, this can reduce the risk of systems boot looping if
+> VM_BUG_ON() conditions are encountered during bootstrap.
+> 
+> Signed-off-by: David Rientjes <rientjes@google.com>
 > ---
+> Note: the vm_debug= kernel parameter is only extensible for new debug
+> options, not for disabling existing debug options.
+> 
+> When adding the ability to selectively disable existing debug options,
+> such as in this patch, admins would need to know this future set of debug
+> options in advance.  In other words, if admins would like to preserve the
+> existing behavior of BUG() when VM_BUG_ON() is used after this patch, they
+> would have had to have the foresight to use vm_debug=B.
+> 
+> It would be useful to rewrite the vm_debug= interface to select the
+> specific options to disable rather than "disable all, and enable those
+> that are specified."  This could be done by making vm_debug only disable
+> the listed debug options rather than enabling them.
+> 
+> This change could be done before this patch is merged if that's the agreed
+> path forward.
+
+
+In general, I am not a fan of this. Someone told the system to 
+VM_BUG_ON, but we ignore that and default to a warning. Yes, VM_BUG on 
+get compiled out without CONFIG_DEBUG_VM, but we detected something 
+(with more checks enabled!) that doesn't want the system to continue 
+(could be an unrecoverable situation leading to data loss, for example).
+
+Yes, we want to convert more VM_BUG to VM_WARN (or rather WARN+recovery 
+code as documented in coding-style.rst ), or even simply remove some of 
+the old VM_BUG leftovers that might no longer be required. But then I'd 
+much invest more time doing that step by step (keeping the VM_BUG + BUG 
+that are absolutely reasonable) instead of adding such a config options.
+
+
+> ---
+>   .../admin-guide/kernel-parameters.txt         |  1 +
+>   include/linux/mmdebug.h                       | 20 ++++++++++++++-----
+>   mm/debug.c                                    | 14 ++++++++++++-
+>   3 files changed, 29 insertions(+), 6 deletions(-)
+> 
+> diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> --- a/Documentation/admin-guide/kernel-parameters.txt
+> +++ b/Documentation/admin-guide/kernel-parameters.txt
+> @@ -6818,6 +6818,7 @@
+>   			debugging features.
+>   
+>   			Available options are:
+> +			  B	Enable panic on MM debug checks
+>   			  P	Enable page structure init time poisoning
+>   			  -	Disable all of the above options
+>   
+> diff --git a/include/linux/mmdebug.h b/include/linux/mmdebug.h
+> --- a/include/linux/mmdebug.h
+> +++ b/include/linux/mmdebug.h
+> @@ -13,34 +13,44 @@ void dump_page(struct page *page, const char *reason);
+>   void dump_vma(const struct vm_area_struct *vma);
+>   void dump_mm(const struct mm_struct *mm);
+>   
+> +extern bool debug_vm_bug_enabled;
+> +
+>   #ifdef CONFIG_DEBUG_VM
+> -#define VM_BUG_ON(cond) BUG_ON(cond)
+> +#define VM_BUG_ON(cond)							\
+> +	do {								\
+> +		if (unlikely(cond)) {					\
+> +			if (likely(debug_vm_bug_enabled))		\
+> +				BUG();					\
+> +			else						\
+> +				WARN_ON(1);				\
+> +		}							\
+> +	} while (0)
+>   #define VM_BUG_ON_PAGE(cond, page)					\
+>   	do {								\
+>   		if (unlikely(cond)) {					\
+>   			dump_page(page, "VM_BUG_ON_PAGE(" __stringify(cond)")");\
+> -			BUG();						\
+> +			VM_BUG_ON(1);					\
+>   		}							\
+>   	} while (0)
+>   #define VM_BUG_ON_FOLIO(cond, folio)					\
+>   	do {								\
+>   		if (unlikely(cond)) {					\
+>   			dump_page(&folio->page, "VM_BUG_ON_FOLIO(" __stringify(cond)")");\
+> -			BUG();						\
+> +			VM_BUG_ON(1);					\
+>   		}							\
+>   	} while (0)
+>   #define VM_BUG_ON_VMA(cond, vma)					\
+>   	do {								\
+>   		if (unlikely(cond)) {					\
+>   			dump_vma(vma);					\
+> -			BUG();						\
+> +			VM_BUG_ON(1);					\
+>   		}							\
+>   	} while (0)
+>   #define VM_BUG_ON_MM(cond, mm)						\
+>   	do {								\
+>   		if (unlikely(cond)) {					\
+>   			dump_mm(mm);					\
+> -			BUG();						\
+> +			VM_BUG_ON(1);					\
+>   		}							\
+>   	} while (0)
+>   #define VM_WARN_ON_ONCE_PAGE(cond, page)	({			\
+> diff --git a/mm/debug.c b/mm/debug.c
+> --- a/mm/debug.c
+> +++ b/mm/debug.c
+> @@ -224,10 +224,15 @@ void dump_mm(const struct mm_struct *mm)
+>   }
+>   EXPORT_SYMBOL(dump_mm);
+>   
+> +/* If disabled, warns but does not panic on added CONFIG_DEBUG_VM checks */
+> +bool debug_vm_bug_enabled = true;
+> +EXPORT_SYMBOL(debug_vm_bug_enabled);
+> +
+>   static bool page_init_poisoning __read_mostly = true;
+>   
+>   static int __init setup_vm_debug(char *str)
+>   {
+> +	bool __debug_vm_bug_enabled = true;
+>   	bool __page_init_poisoning = true;
+>   
+>   	/*
+> @@ -237,13 +242,17 @@ static int __init setup_vm_debug(char *str)
+>   	if (*str++ != '=' || !*str)
+>   		goto out;
+>   
+> +	__debug_vm_bug_enabled = false;
+>   	__page_init_poisoning = false;
+>   	if (*str == '-')
+>   		goto out;
+>   
+>   	while (*str) {
+>   		switch (tolower(*str)) {
+> -		case'p':
+> +		case 'b':
+> +			__debug_vm_bug_enabled = true;
+> +			break;
+> +		case 'p':
+>   			__page_init_poisoning = true;
+>   			break;
+>   		default:
+> @@ -254,9 +263,12 @@ static int __init setup_vm_debug(char *str)
+>   		str++;
+>   	}
+>   out:
+> +	if (debug_vm_bug_enabled && !__debug_vm_bug_enabled)
+> +		pr_warn("Panic on MM debug checks disabled by kernel command line option 'vm_debug'\n");
+>   	if (page_init_poisoning && !__page_init_poisoning)
+>   		pr_warn("Page struct poisoning disabled by kernel command line option 'vm_debug'\n");
+>   
+> +	debug_vm_bug_enabled = __debug_vm_bug_enabled;
+>   	page_init_poisoning = __page_init_poisoning;
+>   
+>   	return 1;
+> 
+
+-- 
 Thanks,
-Jingqi
+
+David / dhildenb
+
