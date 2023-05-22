@@ -2,59 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B29D70B757
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFE8270B778
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231887AbjEVILy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 04:11:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48616 "EHLO
+        id S232013AbjEVIUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 04:20:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbjEVILv (ORCPT
+        with ESMTP id S232186AbjEVIT7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 04:11:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC3DAA;
-        Mon, 22 May 2023 01:11:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A306611EC;
-        Mon, 22 May 2023 08:11:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82C13C4339B;
-        Mon, 22 May 2023 08:11:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684743109;
-        bh=L2nQr/zNB4k9r1QrqcHzb2skGUGOWpnh00AVGc/I3yc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=CF627yfMc0CCIAqqM0itDOkFEuGiz5OJqC5LIpikd8y1748RKNTUbzFCKc7RhRFAt
-         sP0IhhmJwv2xGB2lIFFlQOoAtRbaq0VRd6pQv0tEfEbPIh/dYshBiEbk9EMfiCu9Zm
-         tzRuCc4jRRuMNfi3GooKSLdY1oMh377rmRKeNgf9kILpK1IriZ+sHZ6eV+SQfgELWT
-         DuSCs8+AtE6e5Dlrv6TntebhI/gIOF20wQ+WyaQtnNRrnh9kBRy3CJvQV+PLIgE4cf
-         1mgxywUJLJ6a1NG26OBC5RqRkvVYO/T/f+dY/1zc9bTe8//G9qS+pwMpddncHqpUKg
-         6DsmW5ZkFGC0Q==
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-4f3baf04f0cso1628335e87.1;
-        Mon, 22 May 2023 01:11:49 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwnKJn06bxhDhMfX8ioQdqKYyoLLm8eqau8+uqhosMR2r3xoeW9
-        xMA6CRfYhecktE9o+qBiiUlDP7O73fDpQnmyrf0=
-X-Google-Smtp-Source: ACHHUZ7/qMl1XWR7ltpbNPCtiPTtKqL17whtbAfTLnLM0Bi+omns44QuOfWWInwctOw0bUMzgFRXzoRc9ohRA+eA/OM=
-X-Received: by 2002:a05:6512:208:b0:4f3:7a59:d19 with SMTP id
- a8-20020a056512020800b004f37a590d19mr2788096lfo.59.1684743107599; Mon, 22 May
- 2023 01:11:47 -0700 (PDT)
+        Mon, 22 May 2023 04:19:59 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C51C2
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 01:19:56 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1q10lk-0000SG-Ab; Mon, 22 May 2023 10:19:52 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 68B9D1C9699;
+        Mon, 22 May 2023 08:13:07 +0000 (UTC)
+Date:   Mon, 22 May 2023 10:13:06 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Frank Jungclaus <frank.jungclaus@esd.eu>,
+        linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
+        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/6] can: esd_usb: Make use of existing kernel macros
+Message-ID: <20230522-shine-attitude-09ec9aefce64-mkl@pengutronix.de>
+References: <20230519195600.420644-1-frank.jungclaus@esd.eu>
+ <20230519195600.420644-2-frank.jungclaus@esd.eu>
+ <CAMZ6Rq+V4HRLa2bzADnsvaKHuCwi6O5jKo39mhon_+OnMDEJbQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230512194302.1662230-1-nicholasbishop@google.com>
-In-Reply-To: <20230512194302.1662230-1-nicholasbishop@google.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 22 May 2023 10:11:36 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXERDgT1cM-2P4M=DBGU0Wzbc-zewGsJjLQoQHpC3ds-4g@mail.gmail.com>
-Message-ID: <CAMj1kXERDgT1cM-2P4M=DBGU0Wzbc-zewGsJjLQoQHpC3ds-4g@mail.gmail.com>
-Subject: Re: [PATCH] efi/esrt: Allow ESRT access without CAP_SYS_ADMIN
-To:     Nicholas Bishop <nicholasbishop@google.com>,
-        Peter Jones <pjones@redhat.com>
-Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2cbxal2xzghzgpqi"
+Content-Disposition: inline
+In-Reply-To: <CAMZ6Rq+V4HRLa2bzADnsvaKHuCwi6O5jKo39mhon_+OnMDEJbQ@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,41 +57,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 12 May 2023 at 21:43, Nicholas Bishop <nicholasbishop@google.com> wrote:
->
-> Access to the files in /sys/firmware/efi/esrt has been restricted to
-> CAP_SYS_ADMIN since support for ESRT was added, but this seems overly
-> restrictive given that the files are read-only and just provide
-> information about UEFI firmware updates.
->
-> Remove the CAP_SYS_ADMIN restriction so that a non-root process can read
-> the files, provided a suitably-privileged process changes the file
-> ownership first. The files are still read-only and still owned by root by
-> default.
->
-> Signed-off-by: Nicholas Bishop <nicholasbishop@google.com>
 
-Seems reasonable to me. Peter?
+--2cbxal2xzghzgpqi
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> ---
->  drivers/firmware/efi/esrt.c | 4 ----
->  1 file changed, 4 deletions(-)
->
-> diff --git a/drivers/firmware/efi/esrt.c b/drivers/firmware/efi/esrt.c
-> index d5915272141f..aab96ab64a1a 100644
-> --- a/drivers/firmware/efi/esrt.c
-> +++ b/drivers/firmware/efi/esrt.c
-> @@ -95,10 +95,6 @@ static ssize_t esre_attr_show(struct kobject *kobj,
->         struct esre_entry *entry = to_entry(kobj);
->         struct esre_attribute *attr = to_attr(_attr);
->
-> -       /* Don't tell normal users what firmware versions we've got... */
-> -       if (!capable(CAP_SYS_ADMIN))
-> -               return -EACCES;
-> -
->         return attr->show(entry, buf);
->  }
->
-> --
-> 2.40.1.606.ga4b1b128d6-goog
->
+On 21.05.2023 18:16:13, Vincent MAILHOL wrote:
+> Thanks for the patch.
+>=20
+> On Sat. 20 May 2023 at 04:57, Frank Jungclaus <frank.jungclaus@esd.eu> wr=
+ote:
+> > Make use of existing kernel macros:
+> > - Use the unit suffixes from linux/units.h for the controller clock
+> > frequencies
+> > - Use the BIT() and the GENMASK() macro to set specific bits in some
+> >   constants
+> > - Use CAN_MAX_DLEN (instead of directly using the value 8) for the
+> > maximum CAN payload length
+> >
+> > Additionally:
+> > - Spend some commenting for the previously changed constants
+> > - Add the current year to the copyright notice
+> > - While adding the header linux/units.h to the list of include files
+> > also sort that list alphabetically
+> >
+> > Suggested-by: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+> > Link: https://lore.kernel.org/all/CAMZ6RqLaDNy-fZ2G0+QMhUEckkXLL+ZyELVS=
+DFmqpd++aBzZQg@mail.gmail.com/
+> > Link: https://lore.kernel.org/all/CAMZ6RqKdg5YBufa0C+ttzJvoG=3D9yuti-8A=
+mthCi4jBbd08JEtw@mail.gmail.com/
+> > Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
+> > Link: https://lore.kernel.org/all/20230518-grower-film-ea8b5f853f3e-mkl=
+@pengutronix.de/
+> > Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
+> > ---
+> >  drivers/net/can/usb/esd_usb.c | 40 ++++++++++++++++++-----------------
+> >  1 file changed, 21 insertions(+), 19 deletions(-)
+> >
+> > diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_us=
+b.c
+> > index d33bac3a6c10..32354cfdf151 100644
+> > --- a/drivers/net/can/usb/esd_usb.c
+> > +++ b/drivers/net/can/usb/esd_usb.c
+> > @@ -3,19 +3,20 @@
+> >   * CAN driver for esd electronics gmbh CAN-USB/2 and CAN-USB/Micro
+> >   *
+> >   * Copyright (C) 2010-2012 esd electronic system design gmbh, Matthias=
+ Fuchs <socketcan@esd.eu>
+> > - * Copyright (C) 2022 esd electronics gmbh, Frank Jungclaus <frank.jun=
+gclaus@esd.eu>
+> > + * Copyright (C) 2022-2023 esd electronics gmbh, Frank Jungclaus <fran=
+k.jungclaus@esd.eu>
+> >   */
+> > +#include <linux/can.h>
+> > +#include <linux/can/dev.h>
+> > +#include <linux/can/error.h>
+> > +
+> >  #include <linux/ethtool.h>
+> > -#include <linux/signal.h>
+> > -#include <linux/slab.h>
+> >  #include <linux/module.h>
+> >  #include <linux/netdevice.h>
+> > +#include <linux/signal.h>
+> > +#include <linux/slab.h>
+> > +#include <linux/units.h>
+> >  #include <linux/usb.h>
+> >
+> > -#include <linux/can.h>
+> > -#include <linux/can/dev.h>
+> > -#include <linux/can/error.h>
+> > -
+> >  MODULE_AUTHOR("Matthias Fuchs <socketcan@esd.eu>");
+> >  MODULE_AUTHOR("Frank Jungclaus <frank.jungclaus@esd.eu>");
+> >  MODULE_DESCRIPTION("CAN driver for esd electronics gmbh CAN-USB/2 and =
+CAN-USB/Micro interfaces");
+> > @@ -27,8 +28,8 @@ MODULE_LICENSE("GPL v2");
+> >  #define USB_CANUSBM_PRODUCT_ID 0x0011
+> >
+> >  /* CAN controller clock frequencies */
+> > -#define ESD_USB2_CAN_CLOCK     60000000
+> > -#define ESD_USBM_CAN_CLOCK     36000000
+> > +#define ESD_USB2_CAN_CLOCK     (60 * MEGA) /* Hz */
+> > +#define ESD_USBM_CAN_CLOCK     (36 * MEGA) /* Hz */
+> >
+> >  /* Maximum number of CAN nets */
+> >  #define ESD_USB_MAX_NETS       2
+> > @@ -42,20 +43,21 @@ MODULE_LICENSE("GPL v2");
+> >  #define CMD_IDADD              6 /* also used for IDADD_REPLY */
+> >
+> >  /* esd CAN message flags - dlc field */
+> > -#define ESD_RTR                        0x10
+> > +#define ESD_RTR        BIT(4)
+> > +
+> >
+> >  /* esd CAN message flags - id field */
+> > -#define ESD_EXTID              0x20000000
+> > -#define ESD_EVENT              0x40000000
+> > -#define ESD_IDMASK             0x1fffffff
+> > +#define ESD_EXTID      BIT(29)
+> > +#define ESD_EVENT      BIT(30)
+> > +#define ESD_IDMASK     GENMASK(28, 0)
+> >
+> >  /* esd CAN event ids */
+> >  #define ESD_EV_CAN_ERROR_EXT   2 /* CAN controller specific diagnostic=
+ data */
+> >
+> >  /* baudrate message flags */
+> > -#define ESD_USB_UBR            0x80000000
+> > -#define ESD_USB_LOM            0x40000000
+> > -#define ESD_USB_NO_BAUDRATE    0x7fffffff
+> > +#define ESD_USB_LOM    BIT(30) /* 0x40000000, Listen Only Mode */
+> > +#define ESD_USB_UBR    BIT(31) /* 0x80000000, User Bit Rate (controlle=
+r BTR) in bits 0..27 */
+>                                      ^^^^^^^^^^
+>=20
+> As pointented by Marc, no need for redundant comment with the hexadecimal=
+ value.
+
+Fixed while applying.
+
+Marc
+
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+
+--2cbxal2xzghzgpqi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRrJBAACgkQvlAcSiqK
+BOgE6wf9EQrIh6qzY5Yb9XkZa4oiqJ5fvfCG3f8pY/pJk2Jr5XqsJE7oC4eoANpG
+zoHN/dQoKr7MzRCLJx4rXc47zPuOOF5BertZPX4Q/fnqDOJtLcdVQsbi5Nt0dVMO
+m1PU2uf4Ts53L7RQZYV8eZSO5FvZx1HSrw8Dwn9zXtwFENwuqWZ1f1oDfw2DuRvb
+ecDvfwvbmde8dxRlVuOS3XrBYN9FerOX19yn/o+yfjLrLjZSOoRtf7ZZ989JDxQP
+Qtrti1U/0aUSZEG1uS7kPo59kR71rNPMtvqhrTwlpip2wxyXhkks6QAv18cMsLX5
+/pe4a6NeYvS2os2En/JKtxM2+b0d7g==
+=4YTh
+-----END PGP SIGNATURE-----
+
+--2cbxal2xzghzgpqi--
