@@ -2,161 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE79C70C398
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 18:37:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B08A070C39F
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 18:40:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233077AbjEVQhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 12:37:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45610 "EHLO
+        id S233090AbjEVQkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 12:40:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231712AbjEVQhx (ORCPT
+        with ESMTP id S231615AbjEVQkl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 12:37:53 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBEECF
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 09:37:52 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-528ab7097afso5315512a12.1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 09:37:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684773472; x=1687365472;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VtfwEOOrFT56Me1+y80csEj29fh/4MEfuxZGlV/VCwA=;
-        b=VkBCPFP4Xr4WiQTM6UWimd/KzdFgGf1iO10w8WMqvOYGA9ksvBEI+77IilCjSLsRg6
-         EX8gGuEzmu2jQ0l7+I42/XZ73M6g2Hivq0shGrBNxEDc+Wrb9R1UNelbm6cq/cHThulK
-         u+OAoXsC9QgWYKMhU2KgdeOWPmh1cMUs53eLClb9eluF/vE1mwbxnOuGVT8U3OzSrzv6
-         TNSSJ0siqzX/P+ElcDsqhyZTm+e0IggrzH0mMbpYpy/mYsc5K8Xm+vixj+7wRdKd2CBS
-         g2xqYzW399l2F4YXnV7jDYyb6ILAyoabt9yzprRzFSWOT5ELhje2w5Z+2IEgOgC3vEFe
-         qvRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684773472; x=1687365472;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VtfwEOOrFT56Me1+y80csEj29fh/4MEfuxZGlV/VCwA=;
-        b=V+Yl+VEB9nqysuH/wbx1+Vo/Zejb3w/c/58+Px0W7o2n8j/RrHhie78p1JWrFAkzB7
-         0XNwGDK1bchFRIb4IPmY8c/CY+I4p1vmUP3FobaNFkPPpagHqmoL8FwB2vLANY0BK0WM
-         U7tbWbbuXXpFeA2qAmIPkHUYJY5R2QC0qsz5HYw43HxIrxDghmPNgolmY0ysCEeJN/yu
-         TT84HfT6LX0+Vp/fflB9FJk468eY8ItO9/FM8qg5OfMk6BUIi0KAct+Aq/mNjAhgPZeY
-         Ao5f31AWGjMk9+XsXlFVXaMOI3byop1dCTDtjnaGNgQYDyjrHy7j6PDR5D4CR2J6KBQK
-         Nrgg==
-X-Gm-Message-State: AC+VfDyhpCgnFjZht2oUaje384qm1jMVGJTNgUohbJWoBqOf311Cl6eG
-        7fPZGKY4XlRE3r75tgkij6B0Z8zEZz8=
-X-Google-Smtp-Source: ACHHUZ6EpaYD3bKwNCWWyaUrZhak9gLowttSZvR91by2PQtqwd6WvpY4NdAZKtlgX3Hlhqji73+7Shdv7ow=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a63:ec12:0:b0:52c:4227:aa60 with SMTP id
- j18-20020a63ec12000000b0052c4227aa60mr2565348pgh.7.1684773472003; Mon, 22 May
- 2023 09:37:52 -0700 (PDT)
-Date:   Mon, 22 May 2023 09:37:50 -0700
-In-Reply-To: <4ffbb2c3-8ed1-d419-16ca-b311867537be@intel.com>
-Mime-Version: 1.0
-References: <20230506030435.80262-1-chao.gao@intel.com> <b472b58d-0469-8a55-985c-1d966ce66419@intel.com>
- <ZGZhW/x5OWPmx1qD@google.com> <4ffbb2c3-8ed1-d419-16ca-b311867537be@intel.com>
-Message-ID: <ZGuaXp2f5VhfEyUI@google.com>
-Subject: Re: [PATCH] KVM: x86: Track supported ARCH_CAPABILITIES in kvm_caps
-From:   Sean Christopherson <seanjc@google.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     Xiaoyao Li <xiaoyao.li@intel.com>, Chao Gao <chao.gao@intel.com>,
-        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Jim Mattson <jmattson@google.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Mon, 22 May 2023 12:40:41 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB80A8F;
+        Mon, 22 May 2023 09:40:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1684773636; bh=A1hv5dYBingqEFthCPsCseNbX30f00AobtL7UQqoAhw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ByO6tXGD+zH7oxF9QSuPqV291kN0lgYYjc1XqAiTxlstxptwNTGBtmChIDn35LsNS
+         8MIt1CXkJitjYFFaZcxY2UpuS7leVr0/ANkcXC/IcfvOViY7z9D6dIo3ISR85OMdvt
+         ++YwiPSc8zUlzZMs6NFpmcy80lgyzokgv9AOyivg=
+Received: from [192.168.9.172] (unknown [101.228.138.124])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 62372600DA;
+        Tue, 23 May 2023 00:40:36 +0800 (CST)
+Message-ID: <ece7821e-c4bb-f2b7-3b1d-dacc04729530@xen0n.name>
+Date:   Tue, 23 May 2023 00:40:35 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v14 1/2] drm: add kms driver for loongson display
+ controller
+To:     Sui Jingfeng <15330273260@189.cn>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>
+Cc:     linaro-mm-sig@lists.linaro.org, loongson-kernel@lists.loongnix.cn,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Liu Peibao <liupeibao@loongson.cn>, linux-media@vger.kernel.org
+References: <20230520105718.325819-1-15330273260@189.cn>
+ <20230520105718.325819-2-15330273260@189.cn>
+ <26fd78b9-c074-8341-c99c-4e3b38cd861a@xen0n.name>
+ <e7f911cc-6588-bc0f-8e1e-759260f5187a@189.cn>
+ <ed795dc0-823a-f3d8-9e70-1cf33c0de7f0@xen0n.name>
+ <ac2fde55-c770-fbb5-844d-50fb38dd90be@189.cn>
+ <331e7baa-a83b-b0c9-37f7-0e8e39187df4@xen0n.name>
+ <5ae49b7a-b8d2-a822-65bc-6a894d2b1b4e@189.cn>
+ <0e5e4a4b-1426-ffae-e958-cf8f9aece166@xen0n.name>
+ <69edaf49-359a-229c-c8b4-8aa3af622008@189.cn>
+Content-Language: en-US
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <69edaf49-359a-229c-c8b4-8aa3af622008@189.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023, Dave Hansen wrote:
-> On 5/18/23 10:33, Sean Christopherson wrote:
-> > 
-> >   2. I'm pretty sure conditioning mmio_stale_data_clear on kvm_arch_has_assigned_device()
-> >      is a bug.  AIUI, the vulnerability applies to _any_ MMIO accesses.  Assigning
-> >      a device is necessary to let the device DMA into the guest, but it's not
-> >      necessary to let the guest access MMIO addresses, that's done purely via
-> >      memslots.
-> 
-> Just to make sure we're all on the same page: KVM needs mitigations when
-> real, hardware MMIO is exposed to the guest.  None of this has anything
-> to do with virtio or what guests _normally_ see as devices or MMIO.  Right?
+On 5/22/23 21:13, Sui Jingfeng wrote:
+> Hi,
+>
+> On 2023/5/22 18:25, WANG Xuerui wrote:
+>> On 2023/5/22 18:17, Sui Jingfeng wrote:
+>>> Hi,
+>>>
+>>> On 2023/5/22 18:05, WANG Xuerui wrote:
+>>>> On 2023/5/22 17:49, Sui Jingfeng wrote:
+>>>>> Hi,
+>>>>>
+>>>>> On 2023/5/22 17:28, WANG Xuerui wrote:
+>>>>>> On 2023/5/22 17:25, Sui Jingfeng wrote:
+>>>>>>> Hi,
+>>>>>>>
+>>>>>>> On 2023/5/21 20:21, WANG Xuerui wrote:
+>>>>>>>>> + * LS3A4000/LS3A5000/LS3A6000 CPU, they are equipped with 
+>>>>>>>>> on-board video RAM
+>>>>>>>>> + * typically. While LS2K0500/LS2K1000/LS2K2000 are low cost 
+>>>>>>>>> SoCs which share
+>>>>>>>>> + * the system RAM as video RAM, they don't has a dediacated 
+>>>>>>>>> VRAM.
+>>>>>>>>
+>>>>>>>> CPU models are not typically prefixed with "LS", so "Loongson 
+>>>>>>>> 3A4000/3A5000/3A6000".
+>>>>>>>>
+>>>>>>> Here is because when you do programming, variable name should 
+>>>>>>> prefix with letters.
+>>>>>>
+>>>>>> Commit messages, comments, and log messages etc. are natural 
+>>>>>> language, so it's better to treat them differently. No problem to 
+>>>>>> keep code as-is IMO.
+>>>>>>
+>>>>> Then you get two name for a single chip,  take  LS7A1000 as an 
+>>>>> example.
+>>>>>
+>>>>> You name it as Loongson 7A1000 in commit message,  and then you 
+>>>>> have to define another name in the code,  say LS7A1000.
+>>>>>
+>>>>> "Loongson 7A1000" is too long,  not as compact as LS7A1000.
+>>>>>
+>>>>> This also avoid bind the company name to a specific product, 
+>>>>> because a company can produce many product.
+>>>>
+>>>> Nah, the existing convention is "LS7Xxxxx" for bridges and 
+>>>> "Loongson 3Axxxx" for CPUs (SoCs like 2K fall under this category 
+>>>> too). It's better to stick with existing practice so it would be 
+>>>> familiar to long-time Loongson/LoongArch developers, but I 
+>>>> personally don't think it will hamper understanding if you feel 
+>>>> like doing otherwise.
+>>>>
+>>> Can you explain why it is better?
+>>>
+>>> is it that the already existing is better ?
+>>
+>> It's not about subjective perception of "better" or "worse", but 
+>> about tree-wide consistency, and about reducing any potential 
+>> confusion from newcomers. I remember Huacai once pointing out that 
+>> outsiders usually have a hard time remembering "1, 2, and 3 are CPUs, 
+>> some 2 are SoCs, 7 are bridge chips", and consistently referring to 
+>> the bridge chips throughout the tree as "LS7A" helped.
+>>
+>> In any case, for the sake of consistency, you can definitely refer to 
+>> the CPU models in natural language like "LS3Axxxx"; just make sure to 
+>> refactor for example every occurrence in arch/loongarch and other 
+>> parts of drivers/. That's a lot of churn, though, so I don't expect 
+>> such changes to get accepted, and that's why the tree-wide 
+>> consistency should be favored over the local one.
+>>
+> There are document[1] which named LS7A1000 bridge chip as Loongson 
+> 7A1000 Bridge,
+>
+> which is opposed to what you have said "the existing convention is 
+> LS7Xxxxx for bridges".
+>
+>
+> there are also plenty projects[2] which encode ls2k1000 as project 
+> name, which simply
+>
+> don't fall into the category as you have mentioned("Loongson 3Axxxx").
+>
+>
+> See [1][2] for reference, how to explain this phenomenon then?
 
-Yes.  I try to always call MMIO that is handled by a synthetic/virtual/emulated
-device "emulated MMIO", specifically to differentiate between the two cases.
+Turn down the flames a little bit, okay? ;-)
 
-> But direct device assignment does that "real hardware MMIO" for sure
-> because it's mapping parts of the PCI address space (which is all MMIO)
-> into the guest.  That's what the kvm_arch_has_assigned_device() check
-> was going for.
-> 
-> But I think you're also saying that, in the end, memory gets exposed to
-> the guest by KVM userspace setting up a memslot.  KVM userspace _could_
-> have mapped a piece of MMIO and could just pass that down to a guest
-> without kvm_arch_has_assigned_device() being involved.  That makes the
-> kvm_arch_has_assigned_device() useless.
+What I'm describing is simply the kernel convention. Try grepping the 
+commit log of linux: you can see almost all mentions of "Loongson 7A" is 
+just referring to the manual which is named like that; that "LS3A" only 
+ever appear as part of some board name; and that "LS2K" only briefly 
+appearing when mentioned together with LS7A, maybe that's emphasis on 
+the SoC's bridge part. "Loongson [123]" and "LS7A" are clearly the 
+majority there.
 
-Yep.
+But, as the convention was established by Huacai and I'm only 
+reiterating his rules, you may instead just check with him and not 
+continue the boring debate with me. Meanwhile maybe keeping all "LS3A" 
+and/or "LS2K" is kind of acceptable, given such naming is etched right 
+on the chip's packaging; I'd follow whatever Huacai mandates.
 
-> In other words, all guests with kvm_arch_has_assigned_device() need
-> mitigation.
+-- 
+WANG "xen0n" Xuerui
 
-Yes, assuming the guest wants to actually use the device :-)
+Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
 
-> But there are potentially situations where the guest can see real hardware MMIO
-> and yet also be !kvm_arch_has_assigned_device().
-
-Yes.  There may or may not be _legitimate_ scenarios for exposing host MMIO to the
-guest without an assigned device, but as far as the mitigation is concerned, being
-legitimate or not doesn't matter, all that matters is that userspace can expose
-host MMIO to the guest irrespective of VFIO.
-
-FWIW, I think this would be a minimal fix without having to apply the mitigation
-blindly.  My only concern is that there might be gaps in the kvm_is_mmio_pfn()
-heuristic, but if that's the case then KVM likely has other issues, e.g. would
-potentially map MMIO with the wrong memtype.
-
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 2865c3cb3501..ac3c535ae3b9 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -1274,6 +1274,7 @@ struct kvm_arch {
- 
-        bool apic_access_memslot_enabled;
-        bool apic_access_memslot_inhibited;
-+       bool vm_has_passthrough_mmio;
- 
-        /* Protects apicv_inhibit_reasons */
-        struct rw_semaphore apicv_update_lock;
-diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
-index cf2c6426a6fc..83d235488e56 100644
---- a/arch/x86/kvm/mmu/spte.c
-+++ b/arch/x86/kvm/mmu/spte.c
-@@ -189,6 +189,10 @@ bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
-        if (level > PG_LEVEL_4K)
-                spte |= PT_PAGE_SIZE_MASK;
- 
-+       if (static_branch_unlikely(&mmio_stale_data_clear) &&
-+           !vcpu->kvm->arch.vm_has_passthrough_mmio && kvm_is_mmio_pfn(pfn))
-+               vcpu->kvm->arch.vm_has_passthrough_mmio = true;
-+
-        if (shadow_memtype_mask)
-                spte |= static_call(kvm_x86_get_mt_mask)(vcpu, gfn,
-                                                         kvm_is_mmio_pfn(pfn));
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 44fb619803b8..9c66ba35af92 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -7159,7 +7159,7 @@ static noinstr void vmx_vcpu_enter_exit(struct kvm_vcpu *vcpu,
-        else if (static_branch_unlikely(&mds_user_clear))
-                mds_clear_cpu_buffers();
-        else if (static_branch_unlikely(&mmio_stale_data_clear) &&
--                kvm_arch_has_assigned_device(vcpu->kvm))
-+                to_kvm_vmx(vcpu->kvm)->vm_has_passthrough_mmio)
-                mds_clear_cpu_buffers();
- 
-        vmx_disable_fb_clear(vmx);
