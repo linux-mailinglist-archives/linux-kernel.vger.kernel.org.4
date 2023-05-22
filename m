@@ -2,113 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5139670C4BE
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 19:58:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B875E70C4C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 20:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231263AbjEVR6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 13:58:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56578 "EHLO
+        id S231138AbjEVSAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 14:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230497AbjEVR6S (ORCPT
+        with ESMTP id S229767AbjEVSAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 13:58:18 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE63102
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 10:58:17 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id d2e1a72fcca58-64d20f79776so2675687b3a.1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 10:58:17 -0700 (PDT)
+        Mon, 22 May 2023 14:00:23 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F103CF
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:00:21 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-3094910b150so5253591f8f.0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:00:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684778296; x=1687370296;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EPy6ysi4yXV+mVmWOpkoIos7NdQ+ux7cZDKpxCd81ng=;
-        b=znDrwM/LSqXebEc86YrxqhHfPNY3wKmkg/7qRdKtx15BL42YQtrdRlCv28s621PeUA
-         9sz81yfg0uvodeNonJsknFgKOeoCiAdJjw9+xA3GUg/DKdxghtYAbR24+JeTENXJBPuT
-         Ou3HSgUap4ERgD04nO95Y1fw1E2dfFqDN46KAQixR/Eha5ClrewWK35wSNZyODBXtrzq
-         edDu7Zxb1j8B2+PxVzRFtDAKPRJ+PONNle3rpgBWFJa9gKi9O3TjcthvxK32PvRG9gfR
-         6wtaklWWVv+KSUTEpZquAj7rpxoRNm7V19oQp6GWmQRaKFnrj1hhs0KRdt5+Uq4TNVzC
-         Djyw==
+        d=linaro.org; s=google; t=1684778420; x=1687370420;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=vocPlTf+ndsafl6F5PjhtF9Wtlm84gCaZwk1AEvD+Ss=;
+        b=H4c1FwkLdAp3OmJc5rPt8/ZqW05C27palNnKEG0y2m2GKxeUVA3qY8m2fNUgjXCDe4
+         NpcgfoLkCCD5RFUfDPrQgymfaR51wB663CutVLjI93lND/Mr0tJSYSnWUrG+F4KmcRzr
+         lAOZve54WQ88cJZSn1eRC6K5QBNwcxYr6k9jfz2206lEOmivqClzjEisBiQZAHq4gejj
+         e2Igtp60U4rLLIeaH2AaJ89DUmy2WirhG5sF4v3NlHq03lUJlwbZakUXZBR8pvOBne7c
+         mtddh2KLOdMO347tJhgKIMgUZKGKLQGXxhaPDAa3l2cqW1I4k9Nq4gSPeltQ4fwX5FGc
+         ZaiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684778296; x=1687370296;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EPy6ysi4yXV+mVmWOpkoIos7NdQ+ux7cZDKpxCd81ng=;
-        b=LYd6hdwiSMfVSbcXOoG7RBdT4Q2mKWZhB5uhRgxJBhuquZmE32gocDvNUyKVzVu3J8
-         dqsbYuqznhBhBFv36lQ1GZ+XYgCoRWWP55/uAAtSK5YmKRWdFvWVxqaRj2LK2MaXlfjI
-         JhVFJ3cV0bDXuQIwEMDmDatjBi7L1puvrCOk+3n00dpk/LGPLeCpwV5rFbTa8ntMxGUY
-         CuNQv88mx5m6UbwSiA1REee+MPgGZyi3bTDpPnIsMV2CqvDioKy1iOuViv9few3pxJWq
-         /izG0e1P9+f7Qslf1eNkXcmHEoeBpHFcaosozBgY784hvhxQLs44NqVH9VLAdZflXMY0
-         M5xg==
-X-Gm-Message-State: AC+VfDylevNvTxffu5cmGNcLOhz4GMqm7jmzAmPf8svTYvd9y4bvHGSG
-        VjmQ/8wcCDvdKIOVh4nHIe/gaY6CC4U=
-X-Google-Smtp-Source: ACHHUZ6VvDPFNVP7w4+ShbtfiVcVYndxJRNeUQu62zyqRddJVzqbpLBpXrLuE9YE7r0t4QWhvKnc7JCpHf0=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6a00:13a2:b0:63a:ff2a:bf9f with SMTP id
- t34-20020a056a0013a200b0063aff2abf9fmr5090898pfg.2.1684778296755; Mon, 22 May
- 2023 10:58:16 -0700 (PDT)
-Date:   Mon, 22 May 2023 10:58:15 -0700
-In-Reply-To: <0f683245388e36917facbda4d0b69934fce7b0a8.camel@intel.com>
-Mime-Version: 1.0
-References: <20230512235026.808058-1-seanjc@google.com> <20230512235026.808058-4-seanjc@google.com>
- <0f683245388e36917facbda4d0b69934fce7b0a8.camel@intel.com>
-Message-ID: <ZGutN1cylVw7ICB9@google.com>
-Subject: Re: [PATCH v3 03/18] x86/reboot: KVM: Handle VMXOFF in KVM's reboot callback
-From:   Sean Christopherson <seanjc@google.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Chao Gao <chao.gao@intel.com>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1684778420; x=1687370420;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vocPlTf+ndsafl6F5PjhtF9Wtlm84gCaZwk1AEvD+Ss=;
+        b=EfXjrIbTyBszY2advqedFUsS4hsjRH7zseb5K5+d2nSV+9QAUTSo7AOkXqdkAiAcsw
+         NvPEK1gx/1w94nJOWYThXHVoxUPOIqFrUtsmZFZpuIfqqDmPP0gJ512K6NNlWMHpUAzs
+         dxxHgPqQbRMrtgKS2xDCDgpTD5ws3NlO+1hcrPBfzw6xu3rijyFpQnHF467xZQM57NmQ
+         qI7nyh+ONqSSDot6Z6u58OEWrH3lvNnU66zDGbCwP1m7lSszfiifHMAGGJ7VD02FPMUQ
+         CN8Pamv9Yk8TJrd08FLCbzL7WxxNAyYRM6ZRR1CeH/sjxxpbK6s5gxHB3JROVJDtANEB
+         G+3w==
+X-Gm-Message-State: AC+VfDyMYm9fPeMgaVGgTNJ8NPRxaxktLS9w/DlwGqtym06ZUbHyY2pn
+        PCnaNG1VV0wovhn6B0+Pzgf/VQ==
+X-Google-Smtp-Source: ACHHUZ4I1Dq9nv0jiPs69KxQAtlwWmqlxEDOYy4D5O2HgeUQXRiBPn3opMwLJOxY25ymE2D+Lpwq+g==
+X-Received: by 2002:a5d:4cd1:0:b0:2f6:bf04:c8cc with SMTP id c17-20020a5d4cd1000000b002f6bf04c8ccmr7525738wrt.55.1684778419889;
+        Mon, 22 May 2023 11:00:19 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:a478:d61d:5bb5:7df? ([2a01:e0a:982:cbb0:a478:d61d:5bb5:7df])
+        by smtp.gmail.com with ESMTPSA id 16-20020a05600c021000b003f50d6ee334sm9035660wmi.47.2023.05.22.11.00.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 May 2023 11:00:19 -0700 (PDT)
+Message-ID: <e98e39e3-c10d-65d1-3093-2d54888b1829@linaro.org>
+Date:   Mon, 22 May 2023 20:00:18 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH] dt-bindings: leds: qcom-lpg: document PM8550 compatible
+Content-Language: en-US
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230522-topic-sm8550-upstream-pm8550-lpg-v1-1-f016578d9e63@linaro.org>
+ <20230522-childhood-eastbound-06a5f02f1f4a@spud>
+Organization: Linaro Developer Services
+In-Reply-To: <20230522-childhood-eastbound-06a5f02f1f4a@spud>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023, Kai Huang wrote:
-> On Fri, 2023-05-12 at 16:50 -0700, Sean Christopherson wrote:
-> > Use KVM VMX's reboot/crash callback to do VMXOFF in an emergency instead
-> > of manually and blindly doing VMXOFF.  There's no need to attempt VMXOFF
-> > if a hypervisor, i.e. KVM, isn't loaded/active, i.e. if the CPU can't
-> > possibly be post-VMXON.
-> > 
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > ---
-> > diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> > index fc9cdb4114cc..76cdb189f1b5 100644
-> > --- a/arch/x86/kvm/vmx/vmx.c
-> > +++ b/arch/x86/kvm/vmx/vmx.c
-> > @@ -744,7 +744,7 @@ static int vmx_set_guest_uret_msr(struct vcpu_vmx *vmx,
-> >  	return ret;
-> >  }
-> >  
-> > -static void crash_vmclear_local_loaded_vmcss(void)
-> > +static void vmx_emergency_disable(void)
-> >  {
-> >  	int cpu = raw_smp_processor_id();
-> >  	struct loaded_vmcs *v;
-> > @@ -752,6 +752,8 @@ static void crash_vmclear_local_loaded_vmcss(void)
-> >  	list_for_each_entry(v, &per_cpu(loaded_vmcss_on_cpu, cpu),
-> >  			    loaded_vmcss_on_cpu_link)
-> >  		vmcs_clear(v->vmcs);
-> > +
-> > +	__cpu_emergency_vmxoff();
+On 22/05/2023 19:39, Conor Dooley wrote:
+> On Mon, May 22, 2023 at 06:26:01PM +0200, Neil Armstrong wrote:
+>> The PM8550 PWM modules are compatible with the PM8350c PWM modules,
+>> document the PM8350c PWM compatible as fallback for the PM8550 PWM.
+>>
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > 
-> __cpu_emergency_vmxoff() internally checks whether VMX is enabled in CR4.  
-> Logically, looks it's more reasonable to do such check before VMCLEAR active
-> VMCSes, although in practice there should be no problem I think.
-> 
-> But this problem inherits from the existing code in  upstream, so not sure
-> whether it is worth fixing.
+> I suppose you picked "items/enum", rather than "items/const" to reduce
+> future churn?
 
-Hmm, I think it's worth fixing, if only to avoid confusing future readers.  Blindly
-doing VMCLEAR but then conditionally executing VMXOFF is nonsensical.  I'll tack on
-a patch, and also add a comment to call out that CR4.VMXE can be _cleared_
-asynchronously by NMI, but can't be set after being checked.  I.e. explain that
-checking CR4.VMXE is a "best effort" sort of thing.
+Yes indeed.
+
+Thanks,
+Neil
+
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> 
+> Thanks,
+> Conor.
+> 
+>> ---
+>>   .../devicetree/bindings/leds/leds-qcom-lpg.yaml    | 30 +++++++++++++---------
+>>   1 file changed, 18 insertions(+), 12 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml b/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
+>> index 6295c91f43e8..fa378ee05c16 100644
+>> --- a/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
+>> +++ b/Documentation/devicetree/bindings/leds/leds-qcom-lpg.yaml
+>> @@ -16,18 +16,24 @@ description: >
+>>   
+>>   properties:
+>>     compatible:
+>> -    enum:
+>> -      - qcom,pm660l-lpg
+>> -      - qcom,pm8150b-lpg
+>> -      - qcom,pm8150l-lpg
+>> -      - qcom,pm8350c-pwm
+>> -      - qcom,pm8916-pwm
+>> -      - qcom,pm8941-lpg
+>> -      - qcom,pm8994-lpg
+>> -      - qcom,pmc8180c-lpg
+>> -      - qcom,pmi8994-lpg
+>> -      - qcom,pmi8998-lpg
+>> -      - qcom,pmk8550-pwm
+>> +    oneOf:
+>> +      - enum:
+>> +          - qcom,pm660l-lpg
+>> +          - qcom,pm8150b-lpg
+>> +          - qcom,pm8150l-lpg
+>> +          - qcom,pm8350c-pwm
+>> +          - qcom,pm8916-pwm
+>> +          - qcom,pm8941-lpg
+>> +          - qcom,pm8994-lpg
+>> +          - qcom,pmc8180c-lpg
+>> +          - qcom,pmi8994-lpg
+>> +          - qcom,pmi8998-lpg
+>> +          - qcom,pmk8550-pwm
+>> +      - items:
+>> +          - enum:
+>> +              - qcom,pm8550-pwm
+>> +          - const: qcom,pm8350c-pwm
+>> +
+>>   
+>>     "#pwm-cells":
+>>       const: 2
+>>
+>> ---
+>> base-commit: 44c026a73be8038f03dbdeef028b642880cf1511
+>> change-id: 20230522-topic-sm8550-upstream-pm8550-lpg-5bf409842c3d
+>>
+>> Best regards,
+>> -- 
+>> Neil Armstrong <neil.armstrong@linaro.org>
+>>
+
