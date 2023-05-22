@@ -2,68 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8F3770BA05
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 12:25:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BEAB70BA09
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 12:25:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232733AbjEVKZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 06:25:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57050 "EHLO
+        id S232705AbjEVKZh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 06:25:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232554AbjEVKZM (ORCPT
+        with ESMTP id S232744AbjEVKZ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 06:25:12 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E547E0;
-        Mon, 22 May 2023 03:25:11 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Mon, 22 May 2023 06:25:27 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9245F129;
+        Mon, 22 May 2023 03:25:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1684751114; bh=ZpVp+PlYNh4Srka41PWFXoYRzevT6MmLkXNeP5O8BhE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=xKPMORLB3jzNYi2hBErRSYw0qWDeVov+peIRV9VQPiZMJdHE3D+sz3nyHFRb0o+zI
+         4Hshv/zA/iW5IhHbbizMfout+BQEVfO/iDxdi6SCnHYLt6h+055iWg8fFzR/hYD3z+
+         JoEKh3Fj3nVcGG9jhdED2/5QtSJNI7eoPsqAPrio=
+Received: from [100.100.57.122] (unknown [58.34.185.106])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E503321A35;
-        Mon, 22 May 2023 10:25:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1684751109; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=dK4c6jVfMYUnhpgqtCzFKqCJo27Q90EX9O3znFNrfJ8=;
-        b=wEBufNxlikTs6keMhFbzLqyvC+LK1HS76vxpZ2H8ggbtYTxUhfzHxMS0mzrxESky9yqZb2
-        Q5CvaAUuYK7zjXE/J7JpbYT/Gxy7KBiR0LHD+YKr4MIPhHgYlhpoaxa2vPPfEXI2uCPGry
-        fevet/40ohb/eWLtuAcYffVLgr/tLOE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1684751109;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=dK4c6jVfMYUnhpgqtCzFKqCJo27Q90EX9O3znFNrfJ8=;
-        b=+uD1Et6uHQ5IseYpE/pB3y5xzjN5jILiOJghc5Ccw1zTevgYKlW5ZAk9UMChPLLo2HhIH/
-        90Sl0h6U0Z9vHZBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 65BE213776;
-        Mon, 22 May 2023 10:25:09 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id aLiSFQVDa2TFEgAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Mon, 22 May 2023 10:25:09 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id 4c24018e;
-        Mon, 22 May 2023 10:25:08 +0000 (UTC)
-From:   =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
-To:     Mark Fasheh <mark@fasheh.com>, Joel Becker <jlbec@evilplan.org>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>
-Cc:     ocfs2-devel@oss.oracle.com, linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>,
-        stable@vger.kernel.org
-Subject: [PATCH] ocfs2: fix use-after-free when unmounting read-only filesystem
-Date:   Mon, 22 May 2023 11:25:06 +0100
-Message-Id: <20230522102506.9205-1-lhenriques@suse.de>
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id EAA84600A6;
+        Mon, 22 May 2023 18:25:12 +0800 (CST)
+Message-ID: <0e5e4a4b-1426-ffae-e958-cf8f9aece166@xen0n.name>
+Date:   Mon, 22 May 2023 18:25:12 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.0
+Subject: Re: [PATCH v14 1/2] drm: add kms driver for loongson display
+ controller
+Content-Language: en-US
+To:     Sui Jingfeng <15330273260@189.cn>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>
+Cc:     linaro-mm-sig@lists.linaro.org, loongson-kernel@lists.loongnix.cn,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Liu Peibao <liupeibao@loongson.cn>, linux-media@vger.kernel.org
+References: <20230520105718.325819-1-15330273260@189.cn>
+ <20230520105718.325819-2-15330273260@189.cn>
+ <26fd78b9-c074-8341-c99c-4e3b38cd861a@xen0n.name>
+ <e7f911cc-6588-bc0f-8e1e-759260f5187a@189.cn>
+ <ed795dc0-823a-f3d8-9e70-1cf33c0de7f0@xen0n.name>
+ <ac2fde55-c770-fbb5-844d-50fb38dd90be@189.cn>
+ <331e7baa-a83b-b0c9-37f7-0e8e39187df4@xen0n.name>
+ <5ae49b7a-b8d2-a822-65bc-6a894d2b1b4e@189.cn>
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <5ae49b7a-b8d2-a822-65bc-6a894d2b1b4e@189.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,32 +72,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's trivial to trigger a use-after-free bug in the ocfs2 quotas code using
-fstest generic/452.  After mounting a filesystem as read-only, quotas are
-suspended and ocfs2_mem_dqinfo is freed through ->ocfs2_local_free_info().  When
-unmounting the filesystem, an UAF access to the oinfo will eventually cause a
-crash.
+On 2023/5/22 18:17, Sui Jingfeng wrote:
+> Hi,
+> 
+> On 2023/5/22 18:05, WANG Xuerui wrote:
+>> On 2023/5/22 17:49, Sui Jingfeng wrote:
+>>> Hi,
+>>>
+>>> On 2023/5/22 17:28, WANG Xuerui wrote:
+>>>> On 2023/5/22 17:25, Sui Jingfeng wrote:
+>>>>> Hi,
+>>>>>
+>>>>> On 2023/5/21 20:21, WANG Xuerui wrote:
+>>>>>>> + * LS3A4000/LS3A5000/LS3A6000 CPU, they are equipped with 
+>>>>>>> on-board video RAM
+>>>>>>> + * typically. While LS2K0500/LS2K1000/LS2K2000 are low cost SoCs 
+>>>>>>> which share
+>>>>>>> + * the system RAM as video RAM, they don't has a dediacated VRAM.
+>>>>>>
+>>>>>> CPU models are not typically prefixed with "LS", so "Loongson 
+>>>>>> 3A4000/3A5000/3A6000".
+>>>>>>
+>>>>> Here is because when you do programming, variable name should 
+>>>>> prefix with letters.
+>>>>
+>>>> Commit messages, comments, and log messages etc. are natural 
+>>>> language, so it's better to treat them differently. No problem to 
+>>>> keep code as-is IMO.
+>>>>
+>>> Then you get two name for a single chip,  take  LS7A1000 as an example.
+>>>
+>>> You name it as Loongson 7A1000 in commit message,  and then you have 
+>>> to define another name in the code,  say LS7A1000.
+>>>
+>>> "Loongson 7A1000" is too long,  not as compact as LS7A1000.
+>>>
+>>> This also avoid bind the company name to a specific product, because 
+>>> a company can produce many product.
+>>
+>> Nah, the existing convention is "LS7Xxxxx" for bridges and "Loongson 
+>> 3Axxxx" for CPUs (SoCs like 2K fall under this category too). It's 
+>> better to stick with existing practice so it would be familiar to 
+>> long-time Loongson/LoongArch developers, but I personally don't think 
+>> it will hamper understanding if you feel like doing otherwise.
+>>
+> Can you explain why it is better?
+> 
+> is it that the already existing is better ?
 
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Luís Henriques <lhenriques@suse.de>
----
- fs/ocfs2/super.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+It's not about subjective perception of "better" or "worse", but about 
+tree-wide consistency, and about reducing any potential confusion from 
+newcomers. I remember Huacai once pointing out that outsiders usually 
+have a hard time remembering "1, 2, and 3 are CPUs, some 2 are SoCs, 7 
+are bridge chips", and consistently referring to the bridge chips 
+throughout the tree as "LS7A" helped.
 
-diff --git a/fs/ocfs2/super.c b/fs/ocfs2/super.c
-index 0b0e6a132101..988d1c076861 100644
---- a/fs/ocfs2/super.c
-+++ b/fs/ocfs2/super.c
-@@ -952,8 +952,10 @@ static void ocfs2_disable_quotas(struct ocfs2_super *osb)
- 	for (type = 0; type < OCFS2_MAXQUOTAS; type++) {
- 		if (!sb_has_quota_loaded(sb, type))
- 			continue;
--		oinfo = sb_dqinfo(sb, type)->dqi_priv;
--		cancel_delayed_work_sync(&oinfo->dqi_sync_work);
-+		if (!sb_has_quota_suspended(sb, type)) {
-+			oinfo = sb_dqinfo(sb, type)->dqi_priv;
-+			cancel_delayed_work_sync(&oinfo->dqi_sync_work);
-+		}
- 		inode = igrab(sb->s_dquot.files[type]);
- 		/* Turn off quotas. This will remove all dquot structures from
- 		 * memory and so they will be automatically synced to global
+In any case, for the sake of consistency, you can definitely refer to 
+the CPU models in natural language like "LS3Axxxx"; just make sure to 
+refactor for example every occurrence in arch/loongarch and other parts 
+of drivers/. That's a lot of churn, though, so I don't expect such 
+changes to get accepted, and that's why the tree-wide consistency should 
+be favored over the local one.
+
+-- 
+WANG "xen0n" Xuerui
+
+Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+
