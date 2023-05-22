@@ -2,119 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6349870BD11
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 14:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BAE470BD2E
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 14:14:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232696AbjEVMNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 08:13:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47362 "EHLO
+        id S232294AbjEVMOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 08:14:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232133AbjEVMNE (ORCPT
+        with ESMTP id S233758AbjEVMNb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 08:13:04 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B698119;
-        Mon, 22 May 2023 05:12:46 -0700 (PDT)
-Date:   Mon, 22 May 2023 12:12:44 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1684757564;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iEjofJonbFjcrIFx5W6JsYcXuFz3vdclGrLXxCuKyb4=;
-        b=r3mq2lyd/CSnJMz4F/RrxpJQKpG1+eo9TAe1UmzqW/zTFFq4IbrSBfpnUETpwxBnrhqa5Y
-        fQq41JENXrZ9pUrZvzhr/hLGNfKnp4i7dojPoLBCwGt0BqTA9buHEzBFFkpf2id/+m/VPu
-        3J6IabjH5frnsPvrNbg6nX4WPhceVB7digFwEbSLUA0obn+MzEX0kAjrvK8uZIuaqSzfg2
-        t19lutUeznB3uvrAVNHv5oHOzbMFPesKJN+UomNaLMUaHq94lB6MhV49JFkhIllpROcbuk
-        VDsnqV/VE91hvPT4QiXRpdE1tIue5EcqT8Smi4DXyUA/12zd9becH4C5pJ61Bw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1684757564;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iEjofJonbFjcrIFx5W6JsYcXuFz3vdclGrLXxCuKyb4=;
-        b=P5lbzH1qjGAKTAAHz5CS+xoLnOq1+LMRsgdDcxDsO88gFnjQmo665zxOsfe5h8z8b/QAVO
-        Fr3BskORxf2cq8Dw==
-From:   "tip-bot2 for Andrew Cooper" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: smp/core] x86/apic: Fix use of X{,2}APIC_ENABLE in asm with
- older binutils
-Cc:     Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230522105738.2378364-1-andrew.cooper3@citrix.com>
-References: <20230522105738.2378364-1-andrew.cooper3@citrix.com>
+        Mon, 22 May 2023 08:13:31 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8403FE4C;
+        Mon, 22 May 2023 05:12:58 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QPxD62VW2z4f3mWB;
+        Mon, 22 May 2023 20:12:54 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgCH77JCXGtk9jnlJw--.19223S3;
+        Mon, 22 May 2023 20:12:52 +0800 (CST)
+Subject: Re: [PATCH -next v2 0/6] blk-wbt: minor fix and cleanup
+To:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        Jens Axboe <axboe@kernel.dk>,
+        Yu Kuai <yukuai1@huaweicloud.com>, hch@lst.de, tj@kernel.org,
+        josef@toxicpanda.com
+Cc:     lukas.bulwahn@gmail.com, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20230512093554.911753-1-yukuai1@huaweicloud.com>
+ <2b18e6ed-bce0-44f5-5ec4-8903f3c85cfe@kernel.dk>
+ <5d53e634-33c2-e040-3c34-6c36e32eed81@leemhuis.info>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <957c8c91-3d7b-0227-f172-7208558b101f@huaweicloud.com>
+Date:   Mon, 22 May 2023 20:12:50 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Message-ID: <168475756408.404.16653429197194734425.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <5d53e634-33c2-e040-3c34-6c36e32eed81@leemhuis.info>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgCH77JCXGtk9jnlJw--.19223S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7KFykuFy5WFW3Xw4rJr17trb_yoW8Zr43p3
+        yay3Wakw4qvr1fKrs3A3W2q34fAws5WryrArW7Kr1rJa4Yvr1Sqr4xKr109FykZrWIkw4a
+        gr1qqrn5Cw1DA3JanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9214x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWr
+        Zr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYx
+        BIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the smp/core branch of tip:
+Hi,
 
-Commit-ID:     6a4be6984595b164b6f281c5b242dbdf1c06d528
-Gitweb:        https://git.kernel.org/tip/6a4be6984595b164b6f281c5b242dbdf1c06d528
-Author:        Andrew Cooper <andrew.cooper3@citrix.com>
-AuthorDate:    Mon, 22 May 2023 11:57:38 +01:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Mon, 22 May 2023 14:06:33 +02:00
+在 2023/05/22 20:00, Linux regression tracking (Thorsten Leemhuis) 写道:
+> On 12.05.23 16:58, Jens Axboe wrote:
+>> On 5/12/23 3:35 AM, Yu Kuai wrote:
+>>> From: Yu Kuai <yukuai3@huawei.com>
+>>>
+>>> Changes in v2:
+>>>   - make the code more readable for patch 1
+>>>   - add a new attr_group that is only visible for rq based device
+>>>   - explain in detail for patch 4
+>>>   - add review tag for patch 2,3,5
+>>>
+>>> Yu Kuai (6):
+>>>    blk-wbt: fix that wbt can't be disabled by default
+>>>    blk-wbt: don't create wbt sysfs entry if CONFIG_BLK_WBT is disabled
+>>>    blk-wbt: remove dead code to handle wbt enable/disable with io
+>>>      inflight
+>>>    blk-wbt: cleanup rwb_enabled() and wbt_disabled()
+>>>    blk-iocost: move wbt_enable/disable_default() out of spinlock
+>>>    blk-sysfs: add a new attr_group for blk_mq
+>>>
+>>>   block/blk-iocost.c |   7 +-
+>>>   block/blk-sysfs.c  | 181 ++++++++++++++++++++++++++-------------------
+>>>   block/blk-wbt.c    |  33 +++------
+>>>   block/blk-wbt.h    |  19 -----
+>>>   4 files changed, 117 insertions(+), 123 deletions(-)
+>>
+>> We need a 6.4 version of the fix to get rid of the regression. If you
+>> want to do cleanups on top of that, then that's fine and that can go into
+>> 6.5. But don't mix them up.
+> 
+> Hmm, it seems nothing has happened here since ten days to fix this
+> regression that likely is still present in 6.3. Yu Kuai, did it fall
+> through the cracks, or is what Jens asked for more complicated than it
+> sounds?
 
-x86/apic: Fix use of X{,2}APIC_ENABLE in asm with older binutils
+Sorry for the delay, I was waiting for the last patch to be reviewed.
+But the regression is only related to the first patch, I'll send it
+seperately.
 
-"x86/smpboot: Support parallel startup of secondary CPUs" adds the first use
-of X2APIC_ENABLE in assembly, but older binutils don't tolerate the UL suffix.
+Thanks,
+Kuai
+> 
+> Or was progress made and I just missed it?
+> 
+> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> --
+> Everything you wanna know about Linux kernel regression tracking:
+> https://linux-regtracking.leemhuis.info/about/#tldr
+> If I did something stupid, please tell me, as explained on that page.
+> 
+> #regzbot poke
+> 
+> .
+> 
 
-Switch to using BIT() instead.
-
-Fixes: 7e75178a0950 ("x86/smpboot: Support parallel startup of secondary CPUs")
-Reported-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
-Link: https://lore.kernel.org/r/20230522105738.2378364-1-andrew.cooper3@citrix.com
-
----
- arch/x86/include/asm/apicdef.h | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/arch/x86/include/asm/apicdef.h b/arch/x86/include/asm/apicdef.h
-index bf546df..4b125e5 100644
---- a/arch/x86/include/asm/apicdef.h
-+++ b/arch/x86/include/asm/apicdef.h
-@@ -2,6 +2,8 @@
- #ifndef _ASM_X86_APICDEF_H
- #define _ASM_X86_APICDEF_H
- 
-+#include <linux/bits.h>
-+
- /*
-  * Constants for various Intel APICs. (local APIC, IOAPIC, etc.)
-  *
-@@ -140,8 +142,8 @@
- #define APIC_BASE (fix_to_virt(FIX_APIC_BASE))
- #define APIC_BASE_MSR		0x800
- #define APIC_X2APIC_ID_MSR	0x802
--#define XAPIC_ENABLE	(1UL << 11)
--#define X2APIC_ENABLE	(1UL << 10)
-+#define XAPIC_ENABLE		BIT(11)
-+#define X2APIC_ENABLE		BIT(10)
- 
- #ifdef CONFIG_X86_32
- # define MAX_IO_APICS 64
