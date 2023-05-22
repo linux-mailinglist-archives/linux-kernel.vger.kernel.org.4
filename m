@@ -2,56 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58E9070B7A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:31:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A540170B7A8
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:31:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbjEVIbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 04:31:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57806 "EHLO
+        id S232144AbjEVIbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 04:31:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbjEVIa7 (ORCPT
+        with ESMTP id S229518AbjEVIbW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 04:30:59 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 362DF107
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 01:29:58 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 6680A1BF216;
-        Mon, 22 May 2023 08:29:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1684744197;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=B5Fe74h5JTNsqGr8I0pihoWU3MQrRGJcpIZ7H5+Yuaw=;
-        b=a8a4j4Clxo8d5bzikhJNekIR81/QiEf//S8c/8AmZB6aQokS0b8929x+y91azAmh5XfwvZ
-        f3RlZcqPlv/ikgmwXlenr/lzRTdukZD4ZAkpR3s0YYn4fsSvMdCW4pKdFUxfwy4LnheIMG
-        uOB+oS8lZTSGn09/jDUf+znTBJgsIE23Xxf2hDxlpko0+ulyFgi8mOa6LskWvTOOVULL2M
-        dAnzBhi/H+9UEjtpkv+fq91qe+WnntNkHvxOJa2j0anFyIvLEGi6CzYpVQEtqJ+K5n32gT
-        B0nr3CkhV/71lnXQ6RO/jnQqcp4V0NqfEE3Xd79lqBSKe3llkhYpHXD4FGXRZQ==
-Date:   Mon, 22 May 2023 10:29:53 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Tudor Ambarus <tudor.ambarus@linaro.org>
-Cc:     richard@nod.at, todd.e.brandt@intel.com, vigneshr@ti.com,
-        pratyush@kernel.org, michael@walle.cc,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        regressions@leemhuis.info, bagasdotme@gmail.com,
-        regressions@lists.linux.dev, joneslee@google.com,
-        Todd Brandt <todd.e.brandt@linux.intel.com>
-Subject: Re: [PATCH] mtd: spi-nor: Fix divide by zero for spi-nor-generic
- flashes
-Message-ID: <20230522102953.2fdf2b02@xps-13>
-In-Reply-To: <20230518085440.2363676-1-tudor.ambarus@linaro.org>
-References: <20230518085440.2363676-1-tudor.ambarus@linaro.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Mon, 22 May 2023 04:31:22 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BAEC919D
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 01:30:21 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A672B2F4;
+        Mon, 22 May 2023 01:30:58 -0700 (PDT)
+Received: from [10.57.22.146] (unknown [10.57.22.146])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ED8E33F59C;
+        Mon, 22 May 2023 01:30:11 -0700 (PDT)
+Message-ID: <48db3f08-a066-c078-bfc9-bf20f66e067a@arm.com>
+Date:   Mon, 22 May 2023 09:30:14 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 1/3] sched/uclamp: Set max_spare_cap_cpu even if
+ max_spare_cap is 0
+Content-Language: en-US
+To:     Qais Yousef <qyousef@layalina.io>
+Cc:     Vincent Guittot <vincent.guittot@linaro.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, Wei Wang <wvw@google.com>,
+        Xuewen Yan <xuewen.yan94@gmail.com>,
+        Hank <han.lin@mediatek.com>,
+        Jonathan JMChen <Jonathan.JMChen@mediatek.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+References: <20230205224318.2035646-1-qyousef@layalina.io>
+ <20230205224318.2035646-2-qyousef@layalina.io>
+ <CAKfTPtA9yOncmGuLfo-XaXDZ5F7+9iL-hdyGeaOQi1qrDa_RqQ@mail.gmail.com>
+ <9e935645-9baf-af9f-73bd-3eaeaec044a8@arm.com>
+ <20230211175052.b7a4hddhkjk4j6qf@airbuntu>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20230211175052.b7a4hddhkjk4j6qf@airbuntu>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,81 +56,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tudor,
+Hi Qais,
 
-tudor.ambarus@linaro.org wrote on Thu, 18 May 2023 08:54:40 +0000:
+I have a question regarding the 'soft cpu affinity'.
 
-> We failed to initialize n_banks for spi-nor-generic flashes, which
-> caused a devide by zero when computing the bank_size.
->=20
-> By default we consider that all chips have a single bank. Initialize
-> the default number of banks for spi-nor-generic flashes. Even if the
-> bug is fixed with this simple initialization, check the n_banks value
-> before dividing so that we make sure this kind of bug won't occur again
-> if some other struct instance is created uninitialized.
->=20
-> Suggested-by: Todd Brandt <todd.e.brandt@linux.intel.com>
-> Reported-by: Todd Brandt <todd.e.brandt@linux.intel.com>
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D217448
-> Fixes: 9d6c5d64f028 ("mtd: spi-nor: Introduce the concept of bank")
-> Link: https://lore.kernel.org/all/20230516225108.29194-1-todd.e.brandt@in=
-tel.com/
-> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
-> ---
->  drivers/mtd/spi-nor/core.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-> index 0bb0ad14a2fc..5f29fac8669a 100644
-> --- a/drivers/mtd/spi-nor/core.c
-> +++ b/drivers/mtd/spi-nor/core.c
-> @@ -2018,6 +2018,7 @@ static const struct spi_nor_manufacturer *manufactu=
-rers[] =3D {
-> =20
->  static const struct flash_info spi_nor_generic_flash =3D {
->  	.name =3D "spi-nor-generic",
-> +	.n_banks =3D 1,
+On 2/11/23 17:50, Qais Yousef wrote:
+> On 02/09/23 19:02, Dietmar Eggemann wrote:
+>> On 07/02/2023 10:45, Vincent Guittot wrote:
+>>> On Sun, 5 Feb 2023 at 23:43, Qais Yousef <qyousef@layalina.io> wrote:
+>>>>
+>>>> When uclamp_max is being used, the util of the task could be higher than
+>>>> the spare capacity of the CPU, but due to uclamp_max value we force fit
+>>>> it there.
+>>>>
+>>>> The way the condition for checking for max_spare_cap in
+>>>> find_energy_efficient_cpu() was constructed; it ignored any CPU that has
+>>>> its spare_cap less than or _equal_ to max_spare_cap. Since we initialize
+>>>> max_spare_cap to 0; this lead to never setting max_spare_cap_cpu and
+>>>> hence ending up never performing compute_energy() for this cluster and
+>>>> missing an opportunity for a better energy efficient placement to honour
+>>>> uclamp_max setting.
+>>>>
+>>>>          max_spare_cap = 0;
+>>>>          cpu_cap = capacity_of(cpu) - task_util(p);  // 0 if task_util(p) is high
+>>>>
+>>>>          ...
+>>>>
+>>>>          util_fits_cpu(...);             // will return true if uclamp_max forces it to fit
+>>
+>> s/true/1/ ?
+>>
+>>>>
+>>>>          ...
+>>>>
+>>>>          // this logic will fail to update max_spare_cap_cpu if cpu_cap is 0
+>>>>          if (cpu_cap > max_spare_cap) {
+>>>>                  max_spare_cap = cpu_cap;
+>>>>                  max_spare_cap_cpu = cpu;
+>>>>          }
+>>>>
+>>>> prev_spare_cap suffers from a similar problem.
+>>>>
+>>>> Fix the logic by converting the variables into long and treating -1
+>>>> value as 'not populated' instead of 0 which is a viable and correct
+>>>> spare capacity value.
+>>
+>> The issue I see here is in case we don't have any spare capacity left,
+>> the energy calculation (in terms CPU utilization) isn't correct anymore.
+>>
+>> Due to `effective_cpu_util()` returning `max=arch_scale_cpu_capacity()`
+>> you never know how big the `busy_time` for the PD really is in this moment.
+>>
+>> eenv_pd_busy_time()
+>>
+>>    for_each_cpu(cpu, pd_cpus)
+>>      busy_time += effective_cpu_util(..., ENERGY_UTIL, ...)
+>>      ^^^^^^^^^
+>>
+>> with:
+>>
+>>    sum_util = min(busy_time + task_busy_time, pd_cap)
+>>                   ^^^^^^^^^
+>>
+>>    freq = (1.25 * max_util / max) * max_freq
+>>
+>>    energy = (perf_state(freq)->cost / max) * sum_util
+>>
+>>
+>> energy is not related to CPU utilization anymore (since there is no idle
+>> time/spare capacity) left.
+> 
+> Am I right that what you're saying is that the energy calculation for the PD
+> will be capped to a certain value and this is why you think the energy is
+> incorrect?
+> 
+> What should be the correct energy (in theory at least)?
+> 
+>>
+>> So EAS keeps packing on the cheaper PD/clamped OPP.
+> 
+> Which is the desired behavior for uclamp_max?
+> 
+> The only issue I see is that we want to distribute within a pd. Which is
+> something I was going to work on and send after later - but can lump it in this
+> series if it helps.
+> 
+>>
+>> E.g. Juno-r0 [446 1024 1024 446 446 446] with 6 8ms/16ms uclamp_max=440
+>> tasks all running on little PD, cpumask=0x39. The big PD is idle but
+>> never beats prev_cpu in terms of energy consumption for the wakee.
+> 
+> IIUC I'm not seeing this being a problem. The goal of capping with uclamp_max
+> is two folds:
+> 
+> 	1. Prevent tasks from consuming energy.
+> 	2. Keep them away from expensive CPUs.
+> 
+> 2 is actually very important for 2 reasons:
+> 
+> 	a. Because of max aggregation - any uncapped tasks that wakes up will
+> 	   cause a frequency spike on this 'expensive' cpu. We don't have
+> 	   a mechanism to downmigrate it - which is another thing I'm working
+> 	   on.
+> 	b. It is desired to keep these bigger cpu idle ready for more important
+> 	   work.
+> 
+> For 2, generally we don't want these tasks to steal bandwidth from these CPUs
+> that we'd like to preserve for other type of work.
 
-I definitely missed that structure.
+I'm a bit afraid about such 'strong force'. That means the task would
+not go via EAS if we set uclamp_max e.g. 90, while the little capacity
+is 125. Or am I missing something?
 
->  	/*
->  	 * JESD216 rev A doesn't specify the page size, therefore we need a
->  	 * sane default.
-> @@ -2921,7 +2922,8 @@ static void spi_nor_late_init_params(struct spi_nor=
- *nor)
->  	if (nor->flags & SNOR_F_HAS_LOCK && !nor->params->locking_ops)
->  		spi_nor_init_default_locking_ops(nor);
-> =20
-> -	nor->params->bank_size =3D div64_u64(nor->params->size, nor->info->n_ba=
-nks);
-> +	if (nor->info->n_banks > 1)
-> +		params->bank_size =3D div64_u64(params->size, nor->info->n_banks);
+This might effectively use more energy for those tasks which can run on
+any CPU and EAS would figure a good energy placement. I'm worried
+about this, since we have L3+littles in one DVFS domain and the L3
+would be only bigger in future.
 
-I'm fine with the check as it is written because it also look like an
-optimization, but bank_size should never be 0 otherwise it's a real bug
-that must be catch and fixed. We do not want uninitialized bank_size's.
+IMO to keep the big cpus more in idle, we should give them big energy
+wake up cost. That's my 3rd feature to the EM presented in OSPM2023.
 
->  }
-> =20
->  /**
-> @@ -2987,6 +2989,7 @@ static void spi_nor_init_default_params(struct spi_=
-nor *nor)
->  	/* Set SPI NOR sizes. */
->  	params->writesize =3D 1;
->  	params->size =3D (u64)info->sector_size * info->n_sectors;
-> +	params->bank_size =3D params->size;
->  	params->page_size =3D info->page_size;
+> 
+> Of course userspace has control by selecting the right uclamp_max value. They
+> can increase it to allow a spill to next pd - or keep it low to steer them more
+> strongly on a specific pd.
 
-We actually discarded that line in a previous discussion:
-https://lore.kernel.org/linux-mtd/20230331194620.839899-1-miquel.raynal@boo=
-tlin.com/T/#mcb4f90f7ca48ffe3d9838b2ac6f74e44460c51bd
+This would we be interesting to see in practice. I think we need such
+experiment, for such changes.
 
-I'm fine to re-add it though, it does not hurt.
-
-> =20
->  	if (!(info->flags & SPI_NOR_NO_FR)) {
-
-Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
-
-Thanks,
-Miqu=C3=A8l
+Regards,
+Lukasz
