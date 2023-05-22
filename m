@@ -2,127 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A12B970B406
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 06:16:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C0BA70B40A
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 06:17:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230228AbjEVEQk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 00:16:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36364 "EHLO
+        id S230392AbjEVERH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 00:17:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjEVEQh (ORCPT
+        with ESMTP id S229501AbjEVERD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 00:16:37 -0400
-Received: from smtp.smtpout.orange.fr (smtp-24.smtpout.orange.fr [80.12.242.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA207B0
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 21:16:35 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id 0wyAqpTwcFJaX0wyAq9yG5; Mon, 22 May 2023 06:16:33 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1684728993;
-        bh=P49l5BkjjQMxxon2F2IdGyzURQFvPNi/viwwBHcNnGY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=j2QIJXcrDch3JfYI5slltSOeYG9KO0D0aOCrviTl+V4SjxANeAOjIvfZ1J4inc2Vw
-         ztcclEMJdbRdGetvzd5YEnKfCnbp5mb5pKp7oYpy9CKaGXiFIVHqR14Iv8fQLlK2AA
-         2ZlPSgDiGx2jdww3TWCPLTXKvX4gkW96G+0WJ1yktLU/0Ax/5WS8foyGuBx3uhA1BX
-         GPUmk1gWrimdCDNtEyFhdpRhqeiaZJKpCDWg8RGKBHaOXgeVHqkMgxuwE7FUTcur+M
-         Xab1wnEAmafmbK/zIPkqEsrtc/3EQ7S+qRiXZ4VcreU4u5x4GsfZCz4L75p5XsTYIp
-         hFT+ATmveuFxA==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 22 May 2023 06:16:33 +0200
-X-ME-IP: 86.243.2.178
-Message-ID: <bf3a8c88-5b6c-6a8f-e5ba-6482655ecad0@wanadoo.fr>
-Date:   Mon, 22 May 2023 06:16:26 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] sched/headers: remove duplicate included header
-To:     "Yan Yan(cailing)" <yanyan.yan@antgroup.com>,
-        linux-kernel@vger.kernel.org, mingo@redhat.com
-Cc:     =?UTF-8?B?6LCI6Ym06ZSL?= <henry.tjf@antgroup.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Mon, 22 May 2023 00:17:03 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC45CE;
+        Sun, 21 May 2023 21:17:02 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QPkft3zztz4x4B;
+        Mon, 22 May 2023 14:16:54 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1684729020;
+        bh=AVLVOohCWlNWsFlZp/IjXPMalhLXANn4M3eXvq7tzo4=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=pgufz1uRbk/l6Rkj1iL6mZYqH3IRjcKojpyTlmnAqC5gBLrUBoE9FFstCMUjKSjQa
+         uv9vN+rApxtjlJ8i1zW14wzuxXSWmzFWQpJmE+6E5yQ16RHo80JIMVZFCkzEud3Rsd
+         crFSqYweTi2+OSAyQrKmkoPy6AY1LlMn3p4HCzfgB27T+V6UTyE7OgP+ZngP7e0K/g
+         xrERP69ypwM37e6nnw4lM8nQO1q9vvBO0V6MtmIgeKMJxW1qB5hv4V1bHGEHIl5WZr
+         GLi3ASKQsCuuTsN3XYaBrB9DgTnDKaHMkGPu9JFhl45o+kil82t9uN8FJoBA2XwUIK
+         n8c477C2qGY9A==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Ricardo Ribalda <ribalda@chromium.org>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Philipp Rudo <prudo@linux.vnet.ibm.com>,
+        Dave Young <dyoung@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     Baoquan He <bhe@redhat.com>, Philipp Rudo <prudo@redhat.com>,
+        kexec@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Ross Zwisler <zwisler@google.com>,
         Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>
-References: <20230506153924.7641-1-yanyan.yan@antgroup.com>
- <f6a4ae36-9976-6727-f462-259517c8d0cb@antgroup.com>
- <512cf22a-1196-1191-cdbb-bda3a815999d@antgroup.com>
-Content-Language: fr
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <512cf22a-1196-1191-cdbb-bda3a815999d@antgroup.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Simon Horman <horms@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        llvm@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org,
+        Ricardo Ribalda <ribalda@chromium.org>, stable@vger.kernel.org
+Subject: Re: [PATCH v7 3/4] powerpc/purgatory: Remove PGO flags
+In-Reply-To: <20230321-kexec_clang16-v7-3-b05c520b7296@chromium.org>
+References: <20230321-kexec_clang16-v7-0-b05c520b7296@chromium.org>
+ <20230321-kexec_clang16-v7-3-b05c520b7296@chromium.org>
+Date:   Mon, 22 May 2023 14:16:54 +1000
+Message-ID: <87h6s59f0p.fsf@mail.lhotse>
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 22/05/2023 à 04:26, Yan Yan(cailing) a écrit :
-> Ping, any comments?
-> 
-> thanks,
-> 
-> -Yan Yan
-> 
-> 在 2023/5/16 00:00, Yan Yan 写道:
->> Ping.
->>
->> It seems that removing the two same included lines is ok. Because the 
->> following "sched.h" also includes psi.h.
->>
->> Any comments?
+Ricardo Ribalda <ribalda@chromium.org> writes:
+> If profile-guided optimization is enabled, the purgatory ends up with
+> multiple .text sections.
+> This is not supported by kexec and crashes the system.
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 930457057abe ("kernel/kexec_file.c: split up __kexec_load_puragory")
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+> ---
+>  arch/powerpc/purgatory/Makefile | 5 +++++
+>  1 file changed, 5 insertions(+)
 
-FWIW, yes, looks good.
+Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
 
-
-If you want to ga that way, their are some other potential removal 
-candidates in build_utility.c:
-
-	linux/sched/mm.h
-
-	linux/cpufreq.h
-	linux/ctype.h
-	linux/proc_fs.h
-	linux/spinlock_api.h
-	linux/wait_api.h
-	linux/workqueue_api.h
-
-CJ
-
->>
->> Thanks,
->>
->> -Yan Yan
->>
->> 在 2023/5/6 23:39, 晏艳(采苓) 写道:
->>> linux/psi.h is included more than once.
->>>
->>> Signed-off-by: Yan Yan <yanyan.yan@antgroup.com>
->>> ---
->>>   kernel/sched/build_utility.c | 1 -
->>>   1 file changed, 1 deletion(-)
->>>
->>> diff --git a/kernel/sched/build_utility.c b/kernel/sched/build_utility.c
->>> index 99bdd96f454f..80a3df49ab47 100644
->>> --- a/kernel/sched/build_utility.c
->>> +++ b/kernel/sched/build_utility.c
->>> @@ -34,7 +34,6 @@
->>>   #include <linux/nospec.h>
->>>   #include <linux/proc_fs.h>
->>>   #include <linux/psi.h>
->>> -#include <linux/psi.h>
->>>   #include <linux/ptrace_api.h>
->>>   #include <linux/sched_clock.h>
->>>   #include <linux/security.h>
-> 
-
+cheers
