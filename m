@@ -2,78 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44C3A70B56D
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 08:53:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFBA870B580
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 08:54:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232238AbjEVGw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 02:52:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56170 "EHLO
+        id S232251AbjEVGyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 02:54:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230295AbjEVGwV (ORCPT
+        with ESMTP id S232018AbjEVGyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 02:52:21 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5150CE4C;
-        Sun, 21 May 2023 23:49:58 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34M6T3VO002771;
-        Mon, 22 May 2023 06:48:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=97C7E/ruo2fQ6WsXwzNHXyAX/tYTuB0c8MXBnXS5uTY=;
- b=SdI0Su3Dl0RpB1SLkW1RXWdHELddFagi3RLkehuHUoDaAAq32K9+iZ+x9QUfvA4Q6dqe
- yKbOGJ4n8S661prXwtqIkEIRzryoszqPFdvc9WKrrUFyV9zhTICWUL5wtt8Pd27O1hMs
- xbjRwUrq1/wCOAqzh0gLzcCskwv4ZSKbLhVUJeZzL5sE/DKlj4iv2zL7okYMMLlF3FZs
- 2Se566flmowuIidOQIr1tnBTGzZNtg4BsmuGqOuHWQJN9LEhMsHKfkH7MPEoJ5emWFY7
- Eo5RLLcQ6xyzfnbHOq4z6MLQ7f1heE7q2Z1ZVbNKtUuJZdiK9Rcy07CHgMp4YKsTLysK yQ== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qpqgf2s98-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 06:48:31 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 34M6mRaE009797;
-        Mon, 22 May 2023 06:48:28 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3qpq9kej0h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 22 May 2023 06:48:28 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34M6mR85009791;
-        Mon, 22 May 2023 06:48:28 GMT
-Received: from hu-sgudaval-hyd.qualcomm.com (hu-dikshita-hyd.qualcomm.com [10.213.110.13])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 34M6mRpt009802;
-        Mon, 22 May 2023 06:48:28 +0000
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 347544)
-        id 373CE3F5C; Mon, 22 May 2023 12:18:27 +0530 (+0530)
-From:   Dikshita Agarwal <quic_dikshita@quicinc.com>
-To:     linux-media@vger.kernel.org, stanimir.k.varbanov@gmail.com,
-        quic_vgarodia@quicinc.com, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, mchehab@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>
-Subject: [PATCH v2 4/4] venus: return P010 as preferred format for 10 bit decode
-Date:   Mon, 22 May 2023 12:18:18 +0530
-Message-Id: <1684738098-17372-5-git-send-email-quic_dikshita@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1684738098-17372-1-git-send-email-quic_dikshita@quicinc.com>
-References: <1684738098-17372-1-git-send-email-quic_dikshita@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: g-8ZQpjSNxMT2_E4YoXx7Yqx8ZITgbkR
-X-Proofpoint-GUID: g-8ZQpjSNxMT2_E4YoXx7Yqx8ZITgbkR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-22_04,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
- suspectscore=0 malwarescore=0 priorityscore=1501 impostorscore=0
- phishscore=0 mlxscore=0 bulkscore=0 mlxlogscore=868 lowpriorityscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305220057
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        Mon, 22 May 2023 02:54:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F48B19A3
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 23:50:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684738206;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WPmCmuYomWuJ+5LnnTa+OzAzhut1gbOGrEeSAMZunF8=;
+        b=VPWN+RJTT0u5G3YhqHIs5bDv6Py8R1kyX5Mqv0UFRMuQWDj/Ne4h8dQ0dHEa0+MgJJ2F06
+        uQHFHKOxB/QRlrRl/gtiXIEhLXTHzpUGI0QoR/1chIRkIobgqVechgTynXYqyMiJw/GFQe
+        pIbuw1mfqueD/a0kwpNgBkBqzrNQ+68=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-308-o3bjNUnbPDuBiGmpC7NUHw-1; Mon, 22 May 2023 02:50:03 -0400
+X-MC-Unique: o3bjNUnbPDuBiGmpC7NUHw-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5281C3828894;
+        Mon, 22 May 2023 06:50:02 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.39.192.68])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 58B271121315;
+        Mon, 22 May 2023 06:49:59 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <376ab23b-52d0-d7fd-2dd9-414cbb474e01@linux.alibaba.com>
+References: <376ab23b-52d0-d7fd-2dd9-414cbb474e01@linux.alibaba.com> <20230520000049.2226926-1-dhowells@redhat.com> <20230520000049.2226926-23-dhowells@redhat.com>
+To:     Joseph Qi <joseph.qi@linux.alibaba.com>
+Cc:     dhowells@redhat.com, Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Christoph Hellwig <hch@lst.de>, Mark Fasheh <mark@fasheh.com>,
+        Joel Becker <jlbec@evilplan.org>, ocfs2-devel@oss.oracle.com
+Subject: Re: [PATCH v21 22/30] ocfs2: Provide a splice-read stub
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2414054.1684738198.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Mon, 22 May 2023 07:49:58 +0100
+Message-ID: <2414055.1684738198@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,33 +79,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If bit depth is detected as 10 bit by firmware, return
-P010 as preferred decoder format to the client.
+So something like the attached changes?  Any suggestions as to how to impr=
+ove
+the comments?
 
-Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
+David
 ---
- drivers/media/platform/qcom/venus/vdec.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+diff --git a/fs/ocfs2/file.c b/fs/ocfs2/file.c
+index f7e00b5689d5..86add13b5f23 100644
+--- a/fs/ocfs2/file.c
++++ b/fs/ocfs2/file.c
+@@ -2552,7 +2552,7 @@ static ssize_t ocfs2_file_read_iter(struct kiocb *io=
+cb,
+ 	 *
+ 	 * Take and drop the meta data lock to update inode fields
+ 	 * like i_size. This allows the checks down below
+-	 * generic_file_read_iter() a chance of actually working.
++	 * copy_splice_read() a chance of actually working.
+ 	 */
+ 	ret =3D ocfs2_inode_lock_atime(inode, filp->f_path.mnt, &lock_level,
+ 				     !nowait);
+@@ -2593,7 +2593,7 @@ static ssize_t ocfs2_file_splice_read(struct file *i=
+n, loff_t *ppos,
+ 				     (unsigned long long)OCFS2_I(inode)->ip_blkno,
+ 				     in->f_path.dentry->d_name.len,
+ 				     in->f_path.dentry->d_name.name,
+-				     0);
++				     flags);
+ =
 
-diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-index 96eceda..12a2e99 100644
---- a/drivers/media/platform/qcom/venus/vdec.c
-+++ b/drivers/media/platform/qcom/venus/vdec.c
-@@ -1503,8 +1503,13 @@ static void vdec_event_change(struct venus_inst *inst,
- 	inst->out_width = ev_data->width;
- 	inst->out_height = ev_data->height;
- 
--	if (inst->bit_depth != ev_data->bit_depth)
-+	if (inst->bit_depth != ev_data->bit_depth) {
- 		inst->bit_depth = ev_data->bit_depth;
-+		if (inst->bit_depth == VIDC_BITDEPTH_10)
-+			inst->fmt_cap = &vdec_formats[VENUS_FMT_P010];
-+		else
-+			inst->fmt_cap = &vdec_formats[VENUS_FMT_NV12];
-+	}
- 
- 	if (inst->pic_struct != ev_data->pic_struct)
- 		inst->pic_struct = ev_data->pic_struct;
--- 
-2.7.4
+ 	/*
+ 	 * We're fine letting folks race truncates and extending writes with
+@@ -2601,10 +2601,10 @@ static ssize_t ocfs2_file_splice_read(struct file =
+*in, loff_t *ppos,
+ 	 * rw_lock during read.
+ 	 *
+ 	 * Take and drop the meta data lock to update inode fields like i_size.
+-	 * This allows the checks down below generic_file_splice_read() a
+-	 * chance of actually working.
++	 * This allows the checks down below filemap_splice_read() a chance of
++	 * actually working.
+ 	 */
+-	ret =3D ocfs2_inode_lock_atime(inode, in->f_path.mnt, &lock_level, true)=
+;
++	ret =3D ocfs2_inode_lock_atime(inode, in->f_path.mnt, &lock_level, 1);
+ 	if (ret < 0) {
+ 		if (ret !=3D -EAGAIN)
+ 			mlog_errno(ret);
 
