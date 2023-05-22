@@ -2,406 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB4F070BEC9
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 14:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B54570BED2
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 14:55:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233304AbjEVMxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 08:53:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53602 "EHLO
+        id S233344AbjEVMzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 08:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233634AbjEVMxp (ORCPT
+        with ESMTP id S229490AbjEVMzF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 08:53:45 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A76F9C1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 05:53:38 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.43:34822.850506710
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
-        by 189.cn (HERMES) with SMTP id E73591002C4;
-        Mon, 22 May 2023 20:53:36 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-75648544bd-7vx9t with ESMTP id bb1ac2a014294584af587b144dad0f46 for jani.nikula@linux.intel.com;
-        Mon, 22 May 2023 20:53:37 CST
-X-Transaction-ID: bb1ac2a014294584af587b144dad0f46
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <e7d2f0c6-efc1-99d0-2d63-aa62080c34b2@189.cn>
-Date:   Mon, 22 May 2023 20:53:36 +0800
+        Mon, 22 May 2023 08:55:05 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2135.outbound.protection.outlook.com [40.107.93.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC379A9;
+        Mon, 22 May 2023 05:55:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WQWWtdUwA2mcTW/OKBp6397oRKJ3bCC9A4XgMqUQ8mqlf5x45esm8z5+UWpIapKfIY09Q72a7cwrRDhkX2wsy70bTBotbTOuHa5jgM15GA0gOM37E53CG36DCyFDJvNtq9nQ0+Yv7VyxDpkuPwJmscIbIPCvqZApWwYURR9yygRfiPOiwkr8zD3rPH2QUy+J4zhIA9adfxNa+GeXt92Hmf9pwwUrQcWcQ1im8D5DOgwH/OrM0Z8rQ02cDfyfvc9wqisC5Fyu87vjOc9KFgFKR9nrVk6rSqSfw6KUC9Iw5nPPhLvp6DjYse1foQfDFzR/v4POlsScCUxtZs3DJmHcuA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=9F5G40iar9MLcq+X768mf6nxOHyBJ7nbNzjz4G0ZhF4=;
+ b=I/nEVsMeM1NPCAjW6Kl4C+2RCa/nSbQGN6zNek86TzRhzqtR/UDm4HhAKJMVtHblAAECuxjpEvhPoXyCXCOg6FhipGmyviFTYgbOrlLK65EbnKRzIhJvNlRm+pYsZ1TFyoVW7r8J2N9JxRlTl3kw4VqIv4vWCYBQIMi2FqKZM2cLCiq3Z+yUybHuXY+Ff+d4z/OdVdTPFgjn52uJWy72NCAkaClhluFYHKUR7KFEE0m2kDixZ9saQ6OuQs9jDs+ulx85m4UWdhTVdYlL+dnJfssis9/We2AfjP10jJsnmjZUG4BInYC1g8PA0XcO+Vx0H3Ny2gWzZhGtzdWrmcUoIQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=9F5G40iar9MLcq+X768mf6nxOHyBJ7nbNzjz4G0ZhF4=;
+ b=svru0RYp7ojVp1sMGoRNstXJlpWMDZ0ycQIz3UheUb/+sfLMWkpsV/yI62UyIDodTVAvi7BqQu39JV5vNJea+bkMaNt4yrRBg5FDtu6eHNur3Iynnm5wSotndlvJc06mumL8NL5JUqd87Ht3vGdrBOYrX4bIHYXcoRqWP2qXRSQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by SA1PR13MB5468.namprd13.prod.outlook.com (2603:10b6:806:233::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Mon, 22 May
+ 2023 12:55:01 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6411.028; Mon, 22 May 2023
+ 12:55:01 +0000
+Date:   Mon, 22 May 2023 14:54:55 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Abel Wu <wuyun.abel@bytedance.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Glauber Costa <glommer@parallels.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/4] sock: Remove redundant cond of memcg pressure
+Message-ID: <ZGtmH/0ytVZkkmCP@corigine.com>
+References: <20230522070122.6727-1-wuyun.abel@bytedance.com>
+ <20230522070122.6727-5-wuyun.abel@bytedance.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230522070122.6727-5-wuyun.abel@bytedance.com>
+X-ClientProxiedBy: AM3PR03CA0068.eurprd03.prod.outlook.com
+ (2603:10a6:207:5::26) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] drm/drm_vblank.c: avoid unsigned int to signed int cast
-Content-Language: en-US
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Li Yi <liyi@loongson.cn>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "loongson-kernel@lists.loongnix.cn" 
-        <loongson-kernel@lists.loongnix.cn>
-References: <20230516173026.2990705-1-15330273260@189.cn>
- <f6bd362145124f34a1af800dd330f8e9@AcuMS.aculab.com>
- <b23c41b1-e177-c81d-5327-fce5511cb97d@189.cn> <871qj8ob7z.fsf@intel.com>
- <7f81c053-ba60-a4d2-23d6-d0f032acbcff@189.cn> <87ttw4munm.fsf@intel.com>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <87ttw4munm.fsf@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SA1PR13MB5468:EE_
+X-MS-Office365-Filtering-Correlation-Id: 02e29651-c14c-47b7-f2ef-08db5ac3c162
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: uDvXNlBMdiPbb8AdBoALNUZbp5CpqeEuo6majkI7XyTA02XNGVQXTFq5+/HD5pHo+nbKJdMUd1aTIl4enFzzlyQoCeiTRu6SW9H2Dfv7ToW8beQVkgnwlJlR4RUZOeGe8zodhsAlAgXhN1Chgh0YX7UixMXraAMzcwr5wm5OAQ7zN/Mj5j00qXwjDSaFdV+499ayHh+xTf8QC1U6iFk097BPgQF20Hlz/C9HPByBa32wTmkYBI2yYBCC375u44HYbaPj9SUYBxNZ8SeAN1EZX+Zhbcx/cHrShErho9xGhx8ab+cf+zitIrm48c+wJOwJp2uSUEWSkvkmb8mNbapjgyjSlUlyZX0YSoDcfWIJQKycop2m7hucO713lF6GrzsByBNjMHhfElRQkX9BJdOOC2HjSsZphZDZUwuBRPFWae6wnPcbHGhfBPnO5B/prqS+2ImFTZ0NhuwU1exMdn0nWTu/r2oLxYtRtxFZQ5woi8EiU9NmrxvE6llLKsvLixXDgCWPlahXUnIXou64Zo310y5u+qscikkx15G0yPUneiHs3UDrK0j3Mq7osXVHCaXM
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(366004)(39840400004)(136003)(376002)(451199021)(6666004)(478600001)(66556008)(6512007)(6506007)(66476007)(4326008)(6916009)(316002)(41300700001)(66946007)(54906003)(6486002)(8676002)(8936002)(5660300002)(86362001)(44832011)(2906002)(83380400001)(38100700002)(2616005)(186003)(36756003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?NxeTx1k0M7k8eah0dVNzdWoAod46osZN4VbhonBHVjv4ZiCUyibi2dbwRVV7?=
+ =?us-ascii?Q?7ZiVN4LgtxgdhsEOrXs4ONBR1LppIyLW317yzOzKB+ItK7RmdLAkZGLNTz1a?=
+ =?us-ascii?Q?DNkv2PmiBy067qjeN9x1CB+uD7HVYzzyCy/j6CS0THzBn01tT+vH5OoOPTgL?=
+ =?us-ascii?Q?Wyd4FTs9n+iaMKM81COx450Abpeir9l2CVx7Xon/JJDvOm/IiYcJjGECvzKf?=
+ =?us-ascii?Q?wj2UQOtqHXp7CKJ4AwVII7aD8x1W4UhQIwyTDA+w5nMvA0/ZVLb6DpbiLzgb?=
+ =?us-ascii?Q?xQSDr9ddnieyBEkqLXro49LrsXRXVHFzFmwdMWEC1/zGZKrL9SU77ixa3Xuo?=
+ =?us-ascii?Q?DF7IQ3bj/PGQ3F37KFir0ZgaxDjVXoWAWgOv1Vsm1JSJRpZVFNNdHLNTp3AG?=
+ =?us-ascii?Q?/0nXWX2s9KZHypDoTNT26hio+kaWae1ZBx+AfwxfvTnSBpGRQNf1MF2rJgGb?=
+ =?us-ascii?Q?gTXolPDuG+peC2DSb3MKHDxp2FA8h6opTpzrpoqYiS1IWmx3AbFI+Gy+hvJK?=
+ =?us-ascii?Q?97QdQt/bhPNBzrsfoWbBjYbWPhe/ZOUaxNfcq3iMH8bZ6wzhl1DOx3wOYHSj?=
+ =?us-ascii?Q?C5yZakcbrzHmsY3jhibbLBQMJ3Not0v+snWPinEpSHK+F9F5Ka/Xuk7aa9zh?=
+ =?us-ascii?Q?825uKFJIjRQbn4I42fK0dl3akRIAVM4OcvymGSfrNU3PxVdtoFGHdthxVNu7?=
+ =?us-ascii?Q?gLt1thKUrcgbjw+rWZ4z+GYv/GL5JWxxSoM3QVq6r2IJXjsMRkIAaR4ywhGi?=
+ =?us-ascii?Q?4l1TBChBpXkbtsrOAXlgY/4ZWvChcp1vgJ2jXhPWhjgjqIt4omu7aoA2/OhR?=
+ =?us-ascii?Q?sacNStYgWtIp3SqfB/n+QuFqnoW7SlKlDBCPQXVaU2A9OB3WRgrEReMIwZK6?=
+ =?us-ascii?Q?RLwGKqFy4MsMIsDYoZQreKyJ631oVJ2TJ1KHOjFSQCr2eMvlgwHF3qfCWh5D?=
+ =?us-ascii?Q?mVUcUUO+/ikrkfvZy7wg1GL+ymmqKx9zJhoU0d0DlDIbWK2DRFenB0TWXcdx?=
+ =?us-ascii?Q?IFWWNlau9RnxmIAqz7cYsfLOpIc14TWO55DxcXIAJY99O/799EMcDFblzM/B?=
+ =?us-ascii?Q?uYGROOugvCfmIY4m6M4p69gcmT/27ubkepLfUx4Mjk+9hrQl/nPV3acR6DlS?=
+ =?us-ascii?Q?8GFeLl5jZp9+cQ06vNWyAhDjh5osDO8kYv2/LYC0yuc1kIaheK0DBSfZns1C?=
+ =?us-ascii?Q?UjBDiWQcfaBYWB56qgyoj/I5vLKZGi0G05r7yXXdTavw5ueUE86h7hd0DZ5u?=
+ =?us-ascii?Q?YU300grRFLu44Yj9zLA0pD9MJXn2qUgnGCIe+f+VW15YCU+qx29iw66EShQx?=
+ =?us-ascii?Q?rKY9IiNBb4tbUL7mfxoALllz9yXHyRZ8u/IcmBp+phu8AQMz0Rrve5+GdfWf?=
+ =?us-ascii?Q?clmWTWo8gPFWesvWIndN+M03UcN3XNvWwOdI5cip22CAOBUZixye9F5UQJFN?=
+ =?us-ascii?Q?GPxBEIRcOZCQsGedgJDhQ3DtKNmc6tBgpvO3qG8G9EuhRHDsgIK9vHNTogmU?=
+ =?us-ascii?Q?vYCZxn0MeX9jOC61SptmGxVAUYPv9Kv5c/wE/WsRwnnWNyK5i0Fs8HVbgJNq?=
+ =?us-ascii?Q?frTIhzMZ8zEZuGpZVCopGATG+86nQ4WMFm3/59N2Nwe64DGkVhvDGTzwdu+w?=
+ =?us-ascii?Q?CMQ5saz4oyB+9G7vNnpYMNDkiu2E85fNeB0cnd0e168FvCP4QlH78Hv6T1d1?=
+ =?us-ascii?Q?2q3LbQ=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 02e29651-c14c-47b7-f2ef-08db5ac3c162
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2023 12:55:01.4074
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ecQlltXcBHUKXaE+qGqO2XLlz2UQe4KX5azisMiv9rWqfdetAJYrGTCY76OGsYTGHs1Ysj7bhz6H14NiqNoD7TbOK0EggJ0DOZEZBNX92jQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR13MB5468
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, May 22, 2023 at 03:01:22PM +0800, Abel Wu wrote:
+> Now with the preivous patch, __sk_mem_raise_allocated() considers
 
-On 2023/5/22 20:13, Jani Nikula wrote:
-> On Mon, 22 May 2023, Sui Jingfeng <15330273260@189.cn> wrote:
->> Hi,
->>
->> On 2023/5/22 19:29, Jani Nikula wrote:
->>> On Thu, 18 May 2023, Sui Jingfeng <15330273260@189.cn> wrote:
->>>> On 2023/5/17 18:59, David Laight wrote:
->>>>> From: 15330273260@189.cn
->>>>>> Sent: 16 May 2023 18:30
->>>>>>
->>>>>> From: Sui Jingfeng <suijingfeng@loongson.cn>
->>>>>>
->>>>>> Both mode->crtc_htotal and mode->crtc_vtotal are u16 type,
->>>>>> mode->crtc_htotal * mode->crtc_vtotal will results a unsigned type.
->>>>> Nope, u16 gets promoted to 'signed int' and the result of the
->>>>> multiply is also signed.
->>>> I believe that signed or unsigned is dependent on the declaration.
->>>>
->>>> I am talk about the math, while you are talking about compiler.
->>>>
->>>> I admit that u16 gets promoted to 'signed int' is true, but this is
->>>> irrelevant,
->>>>
->>>> the point is how to understand the returned value.
->>>>
->>>>
->>>> How does the compiler generate the code is one thing, how do we
->>>> interpret the result is another
->>>>
->>>> How does the compiler generate the code is NOT determined by us, while
->>>> how do we interpret the result is determined by us.
->>>>
->>>>
->>>> I believe that using a u32 type to interpret the result(u16 * u16) is
->>>> always true, it is true in the perspective of *math*.
->>>>
->>>> Integer promotions is the details of C program language. If the result
->>>> of the multiply is signed, then there are risks that
->>>>
->>>> the result is negative, what's the benefit to present this risk to the
->>>> programmer?
->>>>
->>>> What's the benefit to tell me(and others) that u16 * u16 yield a signed
->>>> value? and can be negative?
->>>>
->>>> Using int type as the return type bring concerns to the programmer and
->>>> the user of the function,
->>>>
->>>> even though this is not impossible in practice.
->>> In general, do not use unsigned types in arithmethic to avoid negative
->>> values, because most people will be tripped over by integer promotion
->>> rules, and you'll get negative values anyway.
->>>
->>> I'll bet most people will be surprised to see what this prints:
->>>
->>> #include <stdio.h>
->>> #include <stdint.h>
->>>
->>> int main(void)
->>> {
->>> 	uint16_t x = 0xffff;
->>> 	uint16_t y = 0xffff;
->>> 	uint64_t z = x * y;
->>>
->>> 	printf("0x%016lx\n", z);
->>> 	printf("%ld\n", z);
->> Here, please replace the "%ld\n" with the "%lu\n", then you will see the
->> difference.
->>
->> you are casting the variable 'z' to signed value,  "%d" is for printing
->> signed value, and "%u" is for printing unsigned value.
->>
->>
->> Your simple code explained exactly why you are still in confusion,
-> Am I?
->
-> Take a look at the values, and explain the math.
+nit: s/preivous/previous/
 
-I meant the value itself is represent with 2's compliment,
+> the memory pressure of both global and the socket's memcg on a func-
+> wide level, making the condition of memcg's pressure in question
+> redundant.
+> 
+> Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
+> ---
+>  net/core/sock.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/net/core/sock.c b/net/core/sock.c
+> index 7641d64293af..baccbb58a11a 100644
+> --- a/net/core/sock.c
+> +++ b/net/core/sock.c
+> @@ -3029,9 +3029,14 @@ int __sk_mem_raise_allocated(struct sock *sk, int size, int amt, int kind)
+>  	if (sk_has_memory_pressure(sk)) {
+>  		u64 alloc;
+>  
+> -		if (!sk_under_memory_pressure(sk))
+> +		if (!sk_under_global_memory_pressure(sk))
+>  			return 1;
+>  		alloc = sk_sockets_allocated_read_positive(sk);
+> +		/*
+> +		 * If under global pressure, allow the sockets that are below
+> +		 * average memory usage to raise, trying to be fair among all
+> +		 * the sockets under global constrains.
+> +		 */
 
-when you print a value with '%ld', then you will get the signed version,
+nit:
+		/* Multi-line comments in networking code
+		 * look like this.
+		 */
 
-when you print a value with '%lu', then you will get the unsigned version.
-
-The result of a u16*u16 couldn't be negative in math.
-  
-
-But when you using a '%ld' or '%d' to print a unsigned value, then is wrong.
-
-This is also the case which you shouldn't using a int type to store the result of u16*u16.
-
-because when I seen a int type, I will choose '%d' to print it,
-
-when I seen a unsigned int type, I will choose '%u' to print it.
-
-when using a int type as the return type, this could lead people to using '%d' to print
-
-such a value. Then, it generate the confusion as this little test program shows.
-
->
-> BR,
-> Jani.
->
->> that is u16 * u16  can yield a negative value if you use the int as the
->> return type. Because it overflowed.
->>
->>> 	printf("%d\n", x * y);
->>> }
->>>
->>> And it's not that different from what you have below. Your patch doesn't
->>> change anything, and doesn't make it any less confusing.
->>>
->>> BR,
->>> Jani.
->>>
->>>
->>>>>> Using a u32 is enough to store the result, but considering that the
->>>>>> result will be casted to u64 soon after. We use a u64 type directly.
->>>>>> So there no need to cast it to signed type and cast back then.
->>>>> ....
->>>>>> -		int frame_size = mode->crtc_htotal * mode->crtc_vtotal;
->>>>>> +		u64 frame_size = mode->crtc_htotal * mode->crtc_vtotal;
->>>>> ...
->>>>>> -		framedur_ns = div_u64((u64) frame_size * 1000000, dotclock);
->>>>>> +		framedur_ns = div_u64(frame_size * 1000000, dotclock);
->>>>> The (u64) cast is there to extend the value to 64bits, not
->>>>> because the original type is signed.
->>>> Sorry about my expression, I think my sentence did not mention anything
->>>> about 'because the original type is signed'.
->>>>
->>>> In the contrary, my patch eliminated the concerns to the reviewer. It
->>>> say that the results of the multiply can't be negative.
->>>>
->>>> My intent is to tell the compiler we want a unsigned return type, but
->>>> GCC emit 'imul' instruction for the multiply......
->>>>
->>>> I'm using u64 as the return type, because div_u64() function accept a
->>>> u64 type value as its first argument.
->>>>
->>>>> The compiler will detect that the old code is a 32x32 multiply
->>>>> where a 64bit result is needed, that may not be true for the
->>>>> changed code (it would need to track back as far as the u16s).
->>>> I don't believe my code could be wrong.
->>>>
->>>> when you use the word 'may', you are saying that it could be wrong after
->>>> apply my patch.
->>>>
->>>> Then you have to find at least one test example to prove you point, in
->>>> which case my codes generate wrong results.
->>>>
->>>> Again I don't believe you could find one.
->>>>
->>>>> It is not uncommon to force a 64bit result from a multiply
->>>>> by making the constant 64bit. As in:
->>>>> 	div_u64(frame_size * 1000000ULL, dotclock);
->>>> In fact, After apply this patch, the ASM code generated is same with before.
->>>>
->>>> This may because the GCC is smart enough to generate optimized code in
->>>> either case,
->>>>
->>>> I think It could be different with a different optimization-level.
->>>>
->>>> I have tested this patch on three different architecture,  I can not
->>>> find error still.
->>>>
->>>> Below is the assembly extract on x86-64: because GCC generate the same
->>>> code in either case,
->>>>
->>>> so I pasted only one copy here.
->>>>
->>>>
->>>> 0000000000000530 <drm_calc_timestamping_constants>:
->>>>         530:    f3 0f 1e fa              endbr64
->>>>         534:    e8 00 00 00 00           callq  539
->>>> <drm_calc_timestamping_constants+0x9>
->>>>         539:    55                       push   %rbp
->>>>         53a:    48 89 e5                 mov    %rsp,%rbp
->>>>         53d:    41 57                    push   %r15
->>>>         53f:    41 56                    push   %r14
->>>>         541:    41 55                    push   %r13
->>>>         543:    41 54                    push   %r12
->>>>         545:    53                       push   %rbx
->>>>         546:    48 83 ec 18              sub    $0x18,%rsp
->>>>         54a:    4c 8b 3f                 mov    (%rdi),%r15
->>>>         54d:    41 8b 87 6c 01 00 00     mov    0x16c(%r15),%eax
->>>>         554:    85 c0                    test   %eax,%eax
->>>>         556:    0f 84 ec 00 00 00        je     648
->>>> <drm_calc_timestamping_constants+0x118>
->>>>         55c:    44 8b 87 90 00 00 00     mov    0x90(%rdi),%r8d
->>>>         563:    49 89 fc                 mov    %rdi,%r12
->>>>         566:    44 39 c0                 cmp    %r8d,%eax
->>>>         569:    0f 86 40 01 00 00        jbe    6af
->>>> <drm_calc_timestamping_constants+0x17f>
->>>>         56f:    44 8b 76 1c              mov    0x1c(%rsi),%r14d
->>>>         573:    49 8b 8f 40 01 00 00     mov    0x140(%r15),%rcx
->>>>         57a:    48 89 f3                 mov    %rsi,%rbx
->>>>         57d:    45 85 f6                 test   %r14d,%r14d
->>>>         580:    0f 8e d5 00 00 00        jle    65b
->>>> <drm_calc_timestamping_constants+0x12b>
->>>>         586:    0f b7 43 2a              movzwl 0x2a(%rbx),%eax
->>>>         58a:    49 63 f6                 movslq %r14d,%rsi
->>>>         58d:    31 d2                    xor    %edx,%edx
->>>>         58f:    48 89 c7                 mov    %rax,%rdi
->>>>         592:    48 69 c0 40 42 0f 00     imul   $0xf4240,%rax,%rax
->>>>         599:    48 f7 f6                 div    %rsi
->>>>         59c:    31 d2                    xor    %edx,%edx
->>>>         59e:    48 89 45 d0              mov    %rax,-0x30(%rbp)
->>>>         5a2:    0f b7 43 38              movzwl 0x38(%rbx),%eax
->>>>         5a6:    0f af c7                 imul   %edi,%eax
->>>>         5a9:    48 98                    cltq
->>>>         5ab:    48 69 c0 40 42 0f 00     imul   $0xf4240,%rax,%rax
->>>>         5b2:    48 f7 f6                 div    %rsi
->>>>         5b5:    41 89 c5                 mov    %eax,%r13d
->>>>         5b8:    f6 43 18 10              testb  $0x10,0x18(%rbx)
->>>>         5bc:    74 0a                    je     5c8
->>>> <drm_calc_timestamping_constants+0x98>
->>>>         5be:    41 c1 ed 1f              shr    $0x1f,%r13d
->>>>         5c2:    41 01 c5                 add    %eax,%r13d
->>>>         5c5:    41 d1 fd                 sar    %r13d
->>>>         5c8:    4b 8d 04 c0              lea    (%r8,%r8,8),%rax
->>>>         5cc:    48 89 de                 mov    %rbx,%rsi
->>>>         5cf:    49 8d 3c 40              lea    (%r8,%rax,2),%rdi
->>>>         5d3:    8b 45 d0                 mov    -0x30(%rbp),%eax
->>>>         5d6:    48 c1 e7 04              shl    $0x4,%rdi
->>>>         5da:    48 01 cf                 add    %rcx,%rdi
->>>>         5dd:    89 47 78                 mov    %eax,0x78(%rdi)
->>>>         5e0:    48 83 ef 80              sub $0xffffffffffffff80,%rdi
->>>>         5e4:    44 89 6f f4              mov    %r13d,-0xc(%rdi)
->>>>         5e8:    e8 00 00 00 00           callq  5ed
->>>> <drm_calc_timestamping_constants+0xbd>
->>>>         5ed:    0f b7 53 2e              movzwl 0x2e(%rbx),%edx
->>>>         5f1:    0f b7 43 38              movzwl 0x38(%rbx),%eax
->>>>         5f5:    44 0f b7 4b 2a           movzwl 0x2a(%rbx),%r9d
->>>>         5fa:    45 8b 44 24 60           mov    0x60(%r12),%r8d
->>>>         5ff:    4d 85 ff                 test   %r15,%r15
->>>>         602:    0f 84 87 00 00 00        je     68f
->>>> <drm_calc_timestamping_constants+0x15f>
->>>>         608:    49 8b 77 08              mov    0x8(%r15),%rsi
->>>>         60c:    52                       push   %rdx
->>>>         60d:    31 ff                    xor    %edi,%edi
->>>>         60f:    48 c7 c1 00 00 00 00     mov    $0x0,%rcx
->>>>         616:    50                       push   %rax
->>>>         617:    31 d2                    xor    %edx,%edx
->>>>         619:    e8 00 00 00 00           callq  61e
->>>> <drm_calc_timestamping_constants+0xee>
->>>>         61e:    45 8b 44 24 60           mov    0x60(%r12),%r8d
->>>>         623:    4d 8b 7f 08              mov    0x8(%r15),%r15
->>>>         627:    5f                       pop    %rdi
->>>>         628:    41 59                    pop    %r9
->>>>         62a:    8b 45 d0                 mov    -0x30(%rbp),%eax
->>>>         62d:    48 c7 c1 00 00 00 00     mov    $0x0,%rcx
->>>>         634:    4c 89 fe                 mov    %r15,%rsi
->>>>         637:    45 89 f1                 mov    %r14d,%r9d
->>>>         63a:    31 d2                    xor    %edx,%edx
->>>>         63c:    31 ff                    xor    %edi,%edi
->>>>         63e:    50                       push   %rax
->>>>         63f:    41 55                    push   %r13
->>>>         641:    e8 00 00 00 00           callq  646
->>>> <drm_calc_timestamping_constants+0x116>
->>>>         646:    59                       pop    %rcx
->>>>         647:    5e                       pop    %rsi
->>>>         648:    48 8d 65 d8              lea    -0x28(%rbp),%rsp
->>>>         64c:    5b                       pop    %rbx
->>>>         64d:    41 5c                    pop    %r12
->>>>         64f:    41 5d                    pop    %r13
->>>>         651:    41 5e                    pop    %r14
->>>>         653:    41 5f                    pop    %r15
->>>>         655:    5d                       pop    %rbp
->>>>         656:    e9 00 00 00 00           jmpq   65b
->>>> <drm_calc_timestamping_constants+0x12b>
->>>>         65b:    41 8b 54 24 60           mov    0x60(%r12),%edx
->>>>         660:    49 8b 7f 08              mov    0x8(%r15),%rdi
->>>>         664:    44 89 45 c4              mov    %r8d,-0x3c(%rbp)
->>>>         668:    45 31 ed                 xor    %r13d,%r13d
->>>>         66b:    48 c7 c6 00 00 00 00     mov    $0x0,%rsi
->>>>         672:    48 89 4d c8              mov    %rcx,-0x38(%rbp)
->>>>         676:    e8 00 00 00 00           callq  67b
->>>> <drm_calc_timestamping_constants+0x14b>
->>>>         67b:    c7 45 d0 00 00 00 00     movl   $0x0,-0x30(%rbp)
->>>>         682:    44 8b 45 c4              mov    -0x3c(%rbp),%r8d
->>>>         686:    48 8b 4d c8              mov    -0x38(%rbp),%rcx
->>>>         68a:    e9 39 ff ff ff           jmpq   5c8
->>>> <drm_calc_timestamping_constants+0x98>
->>>>         68f:    52                       push   %rdx
->>>>         690:    48 c7 c1 00 00 00 00     mov    $0x0,%rcx
->>>>         697:    31 d2                    xor    %edx,%edx
->>>>         699:    31 f6                    xor    %esi,%esi
->>>>         69b:    50                       push   %rax
->>>>         69c:    31 ff                    xor    %edi,%edi
->>>>         69e:    e8 00 00 00 00           callq  6a3
->>>> <drm_calc_timestamping_constants+0x173>
->>>>         6a3:    45 8b 44 24 60           mov    0x60(%r12),%r8d
->>>>         6a8:    58                       pop    %rax
->>>>         6a9:    5a                       pop    %rdx
->>>>         6aa:    e9 7b ff ff ff           jmpq   62a
->>>> <drm_calc_timestamping_constants+0xfa>
->>>>         6af:    49 8b 7f 08              mov    0x8(%r15),%rdi
->>>>         6b3:    4c 8b 67 50              mov    0x50(%rdi),%r12
->>>>         6b7:    4d 85 e4                 test   %r12,%r12
->>>>         6ba:    74 25                    je     6e1
->>>> <drm_calc_timestamping_constants+0x1b1>
->>>>         6bc:    e8 00 00 00 00           callq  6c1
->>>> <drm_calc_timestamping_constants+0x191>
->>>>         6c1:    48 c7 c1 00 00 00 00     mov    $0x0,%rcx
->>>>         6c8:    4c 89 e2                 mov    %r12,%rdx
->>>>         6cb:    48 c7 c7 00 00 00 00     mov    $0x0,%rdi
->>>>         6d2:    48 89 c6                 mov    %rax,%rsi
->>>>         6d5:    e8 00 00 00 00           callq  6da
->>>> <drm_calc_timestamping_constants+0x1aa>
->>>>         6da:    0f 0b                    ud2
->>>>         6dc:    e9 67 ff ff ff           jmpq   648
->>>> <drm_calc_timestamping_constants+0x118>
->>>>         6e1:    4c 8b 27                 mov    (%rdi),%r12
->>>>         6e4:    eb d6                    jmp    6bc
->>>> <drm_calc_timestamping_constants+0x18c>
->>>>         6e6:    66 2e 0f 1f 84 00 00     nopw   %cs:0x0(%rax,%rax,1)
->>>>         6ed:    00 00 00
->>>>         6f0:    90                       nop
->>>>         6f1:    90                       nop
->>>>         6f2:    90                       nop
->>>>         6f3:    90                       nop
->>>>         6f4:    90                       nop
->>>>         6f5:    90                       nop
->>>>         6f6:    90                       nop
->>>>         6f7:    90                       nop
->>>>         6f8:    90                       nop
->>>>         6f9:    90                       nop
->>>>         6fa:    90                       nop
->>>>         6fb:    90                       nop
->>>>         6fc:    90                       nop
->>>>         6fd:    90                       nop
->>>>         6fe:    90                       nop
->>>>         6ff:    90                       nop
->>>>
->>>>
->>>>> 	David
->>>>>
->>>>> -
->>>>> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
->>>>> Registration No: 1397386 (Wales)
->>>>>
+>  		if (sk_prot_mem_limits(sk, 2) > alloc *
+>  		    sk_mem_pages(sk->sk_wmem_queued +
+>  				 atomic_read(&sk->sk_rmem_alloc) +
+> -- 
+> 2.37.3
+> 
+> 
