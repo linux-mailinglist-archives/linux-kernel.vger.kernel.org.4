@@ -2,89 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2C0970C3F3
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 19:04:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 435E670C3F6
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 19:04:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231609AbjEVREE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 13:04:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56586 "EHLO
+        id S231266AbjEVREo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 13:04:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233406AbjEVRDr (ORCPT
+        with ESMTP id S233045AbjEVREc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 13:03:47 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 665F9F4;
-        Mon, 22 May 2023 10:03:46 -0700 (PDT)
-Received: from jupiter.universe (dyndsl-091-248-208-162.ewe-ip-backbone.de [91.248.208.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1FAF46606E74;
-        Mon, 22 May 2023 18:03:45 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684775025;
-        bh=ce34z/CXrUq2NMhvtZdCHvp4uOK1+ORwK5t6sNy10LE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=kcI6B1fVLFNOtckJ7RVa23rviif43wxsc80XQ4QwZusJGSB+7f1nSpKDr/GFUZ0zV
-         z2Gfd6YIIm7qQfN6KRW6cIT6ymgICqTG1NHQD6I3/walJPTZ/FtdtjAOMU8vp8nqMK
-         e3clQzDzO0/qzZDWi8emT4QFEgn8nmoKf+R7pF8J9pRwpH01nfQWQzoB791PtFdpWq
-         k9zeev7emXRL9ohg0hj+ZRNsqSPwJ8hfIr6ZQgxbz/xbNy4RUZxVOACzrQIn0PBLR6
-         nYXY5+V798pFtVm0cnEi3WO2ZRUM/K6zyJjXLAifHN3cduF1SVkc5JAoJq9bAL6MjZ
-         BWoXnbSWIDyMg==
-Received: by jupiter.universe (Postfix, from userid 1000)
-        id 82DD04807F1; Mon, 22 May 2023 19:03:40 +0200 (CEST)
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Heiko Stuebner <heiko@sntech.de>, linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        kernel@collabora.com
-Subject: [PATCH v3 7/7] phy: phy-rockchip-inno-usb2: improve error message
-Date:   Mon, 22 May 2023 19:03:24 +0200
-Message-Id: <20230522170324.61349-8-sebastian.reichel@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230522170324.61349-1-sebastian.reichel@collabora.com>
-References: <20230522170324.61349-1-sebastian.reichel@collabora.com>
+        Mon, 22 May 2023 13:04:32 -0400
+Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40BB210C4;
+        Mon, 22 May 2023 10:04:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
+  t=1684775051; x=1716311051;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=FkZjmny3A+Qtr0Bo9FMNjP8dRKN2KNqVdFZad59YTLc=;
+  b=k0il5zKu5MdKM1FSaIjd5Lce66bkPdPR+n47AOqVEa5QfUZDgrdmiIAs
+   /3rtZWQKRUnHA2L8c9Sf8Yq7tY+NEG/rx8UvL43bVnSgvNzSXkLw8MI6h
+   Qxpf0gl3gc9SoSkZwLLcNoHfSuPG9kvpL+7w4rwe9Kg1W1y1yMIM8u6VS
+   c=;
+X-IronPort-AV: E=Sophos;i="6.00,184,1681171200"; 
+   d="scan'208";a="1132821963"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-dc7c3f8b.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 17:04:02 +0000
+Received: from EX19MTAUWC001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2c-m6i4x-dc7c3f8b.us-west-2.amazon.com (Postfix) with ESMTPS id 17E05A08BA;
+        Mon, 22 May 2023 17:04:02 +0000 (UTC)
+Received: from EX19D004ANC004.ant.amazon.com (10.37.240.211) by
+ EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Mon, 22 May 2023 17:04:01 +0000
+Received: from EX19MTAUWB001.ant.amazon.com (10.250.64.248) by
+ EX19D004ANC004.ant.amazon.com (10.37.240.211) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Mon, 22 May 2023 17:04:00 +0000
+Received: from dev-dsk-ptyadav-1c-37607b33.eu-west-1.amazon.com (10.15.11.255)
+ by mail-relay.amazon.com (10.250.64.254) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Mon, 22 May 2023 17:03:59 +0000
+Received: by dev-dsk-ptyadav-1c-37607b33.eu-west-1.amazon.com (Postfix, from userid 23027615)
+        id 6D9CD20C6F; Mon, 22 May 2023 19:03:59 +0200 (CEST)
+From:   Pratyush Yadav <ptyadav@amazon.de>
+To:     SeongJae Park <sj@kernel.org>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        "Willem de Bruijn" <willemb@google.com>,
+        Norbert Manthey <nmanthey@amazon.de>, <netdev@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>
+Subject: Re: [PATCH net] net: fix skb leak in __skb_tstamp_tx()
+References: <20230522165505.90105-1-sj@kernel.org>
+Date:   Mon, 22 May 2023 19:03:59 +0200
+In-Reply-To: <20230522165505.90105-1-sj@kernel.org> (SeongJae Park's message
+        of "Mon, 22 May 2023 16:55:05 +0000")
+Message-ID: <mafs0cz2sxpq8.fsf@amazon.de>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Printing the OF node is not useful, since we get the same information
-from the device context. Instead print the reg address, that could
-not be found.
+On Mon, May 22 2023, SeongJae Park wrote:
 
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
----
- drivers/phy/rockchip/phy-rockchip-inno-usb2.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+> Hi Pratyush,
+>
+> On Mon, 22 May 2023 17:30:20 +0200 Pratyush Yadav <ptyadav@amazon.de> wrote:
+>
+>> Commit 50749f2dd685 ("tcp/udp: Fix memleaks of sk and zerocopy skbs with
+>> TX timestamp.") added a call to skb_orphan_frags_rx() to fix leaks with
+>> zerocopy skbs. But it ended up adding a leak of its own. When
+>> skb_orphan_frags_rx() fails, the function just returns, leaking the skb
+>> it just cloned. Free it before returning.
+>>
+>> This bug was discovered and resolved using Coverity Static Analysis
+>> Security Testing (SAST) by Synopsys, Inc.
+>>
+>> Fixes: 50749f2dd685 ("tcp/udp: Fix memleaks of sk and zerocopy skbs with TX timestamp.")
+>
+> Seems the commit has merged in several stable kernels.  Is the bug also
+> affecting those?  If so, would it be better to Cc stable@vger.kernel.org?
+>
 
-diff --git a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
-index f5c30f117cba..b982c3f0d4b5 100644
---- a/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
-+++ b/drivers/phy/rockchip/phy-rockchip-inno-usb2.c
-@@ -1377,8 +1377,7 @@ static int rockchip_usb2phy_probe(struct platform_device *pdev)
- 	} while (phy_cfgs[index].reg);
- 
- 	if (!rphy->phy_cfg) {
--		dev_err(dev, "no phy-config can be matched with %pOFn node\n",
--			np);
-+		dev_err(dev, "could not find phy config for reg=0x%08x\n", reg);
- 		return -EINVAL;
- 	}
- 
+It affects v5.4.243 at least, since that is where I first saw this. But
+I would expect it to affect other stable kernels it has been backported
+to as well. I thought using the Fixes tag pointing to the bad upstream
+commit would be enough for the stable maintainers' tooling/bots to pick
+this patch up.
+
+In either case, +Cc stable. Link to the patch this thread is talking
+about [0].
+
+[0] https://lore.kernel.org/netdev/20230522153020.32422-1-ptyadav@amazon.de/T/#u
+
+>
+>
+> Thanks,
+> SJ
+>
+>> Signed-off-by: Pratyush Yadav <ptyadav@amazon.de>
+>> ---
+>>
+>> I do not know this code very well, this was caught by our static
+>> analysis tool. I did not try specifically reproducing the leak but I did
+>> do a boot test by adding this patch on 6.4-rc3 and the kernel boots
+>> fine.
+>>
+>>  net/core/skbuff.c | 4 +++-
+>>  1 file changed, 3 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
+>> index 515ec5cdc79c..cea28d30abb5 100644
+>> --- a/net/core/skbuff.c
+>> +++ b/net/core/skbuff.c
+>> @@ -5224,8 +5224,10 @@ void __skb_tstamp_tx(struct sk_buff *orig_skb,
+>>       } else {
+>>               skb = skb_clone(orig_skb, GFP_ATOMIC);
+>>
+>> -             if (skb_orphan_frags_rx(skb, GFP_ATOMIC))
+>> +             if (skb_orphan_frags_rx(skb, GFP_ATOMIC)) {
+>> +                     kfree_skb(skb);
+>>                       return;
+>> +             }
+>>       }
+>>       if (!skb)
+>>               return;
+>> --
+>> 2.39.2
+>>
+
 -- 
-2.39.2
+Regards,
+Pratyush Yadav
+
+
+
+Amazon Development Center Germany GmbH
+Krausenstr. 38
+10117 Berlin
+Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
+Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
+Sitz: Berlin
+Ust-ID: DE 289 237 879
+
+
 
