@@ -2,104 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C7BE70B992
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 12:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7732E70B986
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232399AbjEVKCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 06:02:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47960 "EHLO
+        id S232450AbjEVJ6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 05:58:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjEVKCO (ORCPT
+        with ESMTP id S229603AbjEVJ6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 06:02:14 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7DCB6;
-        Mon, 22 May 2023 03:02:10 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 896681FDD0;
-        Mon, 22 May 2023 10:02:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1684749728;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=z1moM5R8a0Z1ISUBztXNys2Cc6S8BZTdAX0MX6Tl/yE=;
-        b=RF872c550ccteYt2tGa2ivfbQy7DUvX6jTBN5a+PuBcN40Qj1fUVLxNOzht4yYES+H71cg
-        xF7w49f4YPaJL6gc50up8tUnUP9DXILTX8ewZRpfJdK3BsvyWK/76Yj256oCN4/foCFHwz
-        1Zc9WpeRXrMQR/PsxkkJ7LLNP9izHX8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1684749728;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=z1moM5R8a0Z1ISUBztXNys2Cc6S8BZTdAX0MX6Tl/yE=;
-        b=2t5zLRWd4O1IPsvV0cz026DgICBYKjm1nX7VjhvoRS83vWOqY4JwoaSRWiCToI6Qv2Y21j
-        3oclbfTs5YQkAvCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E9DE913776;
-        Mon, 22 May 2023 10:02:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id rvCdN589a2RQBQAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Mon, 22 May 2023 10:02:07 +0000
-Date:   Mon, 22 May 2023 11:56:01 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Chinner <david@fromorbit.com>,
-        Chuck Lever <chuck.lever@oracle.com>, Jan Kara <jack@suse.cz>,
-        Amir Goldstein <amir73il@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Neil Brown <neilb@suse.de>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Theodore T'so <tytso@mit.edu>, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>,
-        Namjae Jeon <linkinjeon@kernel.org>,
-        Steve French <sfrench@samba.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Tom Talpey <tom@talpey.com>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-mm@kvack.org, linux-nfs@vger.kernel.org,
-        linux-cifs@vger.kernel.org
-Subject: Re: [PATCH v4 9/9] btrfs: convert to multigrain timestamps
-Message-ID: <20230522095601.GH32559@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <20230518114742.128950-1-jlayton@kernel.org>
- <20230518114742.128950-10-jlayton@kernel.org>
+        Mon, 22 May 2023 05:58:39 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74177A6;
+        Mon, 22 May 2023 02:58:38 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f606912ebaso5250865e9.3;
+        Mon, 22 May 2023 02:58:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684749517; x=1687341517;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=W4Loc6CfQwOGlHQ/N+c3X6o6eRwQeEfiytZshPv7WsM=;
+        b=ZQMBjaGaX/t1rh05LZR38VOoplznkq4BL8Zdg+raQxt3CGA64lcWq05j5c6bbI3LOZ
+         XiybUC6oSKseJSf3doqcX6rZ54Jg1mvRQv1vyTfBHt5SQBBsSFoonZKTO+v97HX1E4Ct
+         kFmp5GhrCOb+usudkg9r9C1y4rHwbACYPPODPdjOtJlVKmOm7Xs8a2onxUnSbsyblJs1
+         1+Qje78KhW3xRk4n0LKTrZAJksa0EtymM+G+N+N99npjwEyWOWltPNY3E7EX7GBAPdxL
+         SHSFRibA5nH9g+5w3kuZVuXCfOB6NZAp2jpF6XEwBRSOR5gZb71wU2/3LWGRWF50LusV
+         5I3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684749517; x=1687341517;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W4Loc6CfQwOGlHQ/N+c3X6o6eRwQeEfiytZshPv7WsM=;
+        b=JXz5NvzP4ev4Sl+mXZbE768GXEiMtcwSxSXXC0ycywj/3MkclFt3DbGDhn2GCE8RKj
+         seXrISV/5fR+e5K762g+FUhTF/KgpFdlgbkffP+cJFCkHynlIXGqe1dNdkp4uFJT/Asb
+         m2zIZcfhufSLtKaF2IEii21bJROWpL/X8arNGsAg9e/NhumcSmGrbXY8fDJz7BRDE4uT
+         b+fWFV6SvTAa813DT/kvsOO3iznfuhBIwmy6ag0mOn7l7rVptEmboFQ7Qphf8S6ZXyyw
+         ZWzpQVr1S3TiXQXi6QLj0qEsnqEK6Xo9p4lucUHY1X5px5HwQkYxyYm9S3Kdu6UY3iZg
+         JUEg==
+X-Gm-Message-State: AC+VfDwr1tNLuOUV9d5HaNGmIs+TvY7NzoxW/Uu2Dq3sE9KeVVwrZWFm
+        HQyVrC1V+4uKvuB6HFcYJqs=
+X-Google-Smtp-Source: ACHHUZ6iF/eUCoAXzXR05pMd2hvo5chM2UJEMOeSNZyOih1LksOeoXOeUizi8VazDqrVCmd/yLGYFA==
+X-Received: by 2002:a05:600c:2119:b0:3f6:4c4:d0c9 with SMTP id u25-20020a05600c211900b003f604c4d0c9mr1192351wml.7.1684749516490;
+        Mon, 22 May 2023 02:58:36 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id y5-20020a7bcd85000000b003f6028a4c85sm4588692wmj.16.2023.05.22.02.58.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 02:58:36 -0700 (PDT)
+Date:   Mon, 22 May 2023 12:58:33 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     David Epping <david.epping@missinglinkelectronics.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH net 3/3] net: phy: mscc: enable VSC8501/2 RGMII RX clock
+Message-ID: <20230522095833.otk2nv24plmvarpt@skbuf>
+References: <20230520160603.32458-1-david.epping@missinglinkelectronics.com>
+ <20230520160603.32458-4-david.epping@missinglinkelectronics.com>
+ <20230521134356.ar3itavhdypnvasc@skbuf>
+ <20230521161650.GC2208@nucnuc.mle>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230518114742.128950-10-jlayton@kernel.org>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230521161650.GC2208@nucnuc.mle>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 07:47:42AM -0400, Jeff Layton wrote:
-> Signed-off-by: Jeff Layton <jlayton@kernel.org>
+On Sun, May 21, 2023 at 06:16:50PM +0200, David Epping wrote:
+> Since we found an explanation why the current driver works in some
+> setups (U-Boot), I would go with the Microchip support statement, that
+> writing bit 11 to 0 is required in all modes.
+> It would thus stay a separate function, called without a phy mode
+> condition, and not be combined with the RGMII skew setting function.
 
-Acked-by: David Sterba <dsterba@suse.com>
-
-Please add a brief description to the changelog too, there's a similar
-text in the patches adding the infrastructure. Something like "Allow to
-optimize lot of metadata updates by encoding the status in the cmtime.
-The fine grained time is needed for NFS."
+If you still prefer to write twice in a row to the same paged register
+instead of combining the changes, then fine by me, it's not a huge deal.
