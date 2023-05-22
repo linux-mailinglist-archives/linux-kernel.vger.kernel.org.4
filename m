@@ -2,297 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 414C670CE64
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 01:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86DFF70CE6F
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 01:07:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbjEVXDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 19:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56222 "EHLO
+        id S231758AbjEVXH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 19:07:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjEVXDO (ORCPT
+        with ESMTP id S229485AbjEVXH0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 19:03:14 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02A5AE0;
-        Mon, 22 May 2023 16:03:12 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34MMxF7x029176;
-        Mon, 22 May 2023 23:02:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=gw76doCxNvdNdImJJMJ75y5tHdId9eV7Qu7lkUU8FaA=;
- b=D+TTlvogX3KmOZaDsVYAOwpMvz2nSbAkrWBISTC9QLxyMVRYvwTwv39QVArkNxXBjHO5
- T2UTU3iJ+YpQybBcFzaVCUQ/jUyJNgELe5lkHHvVcHExqB14ndZzF5Ui9t/JT77Y5ETZ
- 6dz/HK9ti/fkC7rtXyVwlysy/YYPxqB4JGCbIl3b9WJk+CZYWz4VKZKzlJlfLbswikBW
- rbfAYoOM6QkktWBWWZkmEFZwkGj7ZNd0M0j1UP6X3vvfpql6PCKQrLnjusFtCDdsATuB
- Y0mk+5bScwU5V0Dy2HHjQiiG70XllEw/pGCse1NbZe9ttwEzF2qgBB2T5KWTlvRtjOI3 6w== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qracsgxbc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 23:02:59 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34MN2wjL009610
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 23:02:58 GMT
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Mon, 22 May 2023 16:02:57 -0700
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
-        <airlied@gmail.com>, <agross@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <andersson@kernel.org>,
-        <marijn.suijten@somainline.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_khsieh@quicinc.com>,
-        <quic_jesszhan@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4] drm/msm/dp: enable HDP plugin/unplugged interrupts at hpd_enable/disable
-Date:   Mon, 22 May 2023 16:02:45 -0700
-Message-ID: <1684796565-17138-1-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Mon, 22 May 2023 19:07:26 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2084.outbound.protection.outlook.com [40.107.237.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ADFEC6;
+        Mon, 22 May 2023 16:07:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nPQwCwbnxxsC36YMoHRmrremRTd1tNPSbV4M374C0qoD8HxhZKdXKp1oS2C7nFxNDBR0xc4fiQLuYbBayQw0r9u8zqc5atvMTRKdrrsr9ODR6QYKHrk3Fgk1MtUGM/oRcy/guFAccxv+GLHdtkxotA9op7/wolnwT+LpvEJC/7aEK4uAPRCABa1CvSpnq6nK5uxkljWGyovMHuCwJEaLE08XqvMEj5cQDLawUnkqcumjNl+yI4pUbwjF+zH5nR0wL/UQ9dTVCaEYe52rVDDyPIFueQTInSHAST2ZpDwt2IqPooVfroF5bqueE/oxcqmGQzH99J5rezgYZ9bJM4g8OQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Exc6wih/mhHs2FGoR38LuGf3cZD/TRWYWEd8Np4E2yk=;
+ b=DpCBq+881ox+ZK+6fDS8OuS/HDYIbUHkMA/dmUgnOHxqGjUsbMEkb+EO0ZgPomJ9Xj4tLrGIp5ywMBWt8xP6y6pQZD44RHAiahGBdcCVvSaJx1kdWLNwFmXL2YGgwiA8+00C/Hjyc2R/uzKrYSEyzGrp1xks4ICmFshHzefYZntRE5gbu9h4obdVkrQFjE+BFilzIBR6C5AIO2RaTueyRdhTap9mqsucsQ5qoimHkeS9pZq+/h6Vmc9USBFNKD0U6R3gJLtbkrXRJ4FMXJ8Wo+bQ8h94cpFvwl0/uMCaKZQE3LLhWoY199ze0PKTHHbtIcRFZlevwDT7luB+5iRHdA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synaptics.com; dmarc=pass action=none
+ header.from=synaptics.com; dkim=pass header.d=synaptics.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=Synaptics.onmicrosoft.com; s=selector2-Synaptics-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Exc6wih/mhHs2FGoR38LuGf3cZD/TRWYWEd8Np4E2yk=;
+ b=BeKmitMjrUkJDxcyGY+QVE7hSnJ599/rFglxbCRR4V0IDwBrqGroOhoMoLoMShOfOl49XkyqNs53tGd2t44NX/5jgiFHPDHvkDlNO5nfhummJKuAcgYmGACYXk/fZD4jRIinD9lc4GSbw1lrPnwR9ugreKdIGon/uBop2XxZtx0=
+Received: from BYAPR03MB4757.namprd03.prod.outlook.com (2603:10b6:a03:13b::28)
+ by CH2PR03MB5174.namprd03.prod.outlook.com (2603:10b6:610:9f::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Mon, 22 May
+ 2023 23:07:22 +0000
+Received: from BYAPR03MB4757.namprd03.prod.outlook.com
+ ([fe80::aec7:afbd:5eed:9ec3]) by BYAPR03MB4757.namprd03.prod.outlook.com
+ ([fe80::aec7:afbd:5eed:9ec3%4]) with mapi id 15.20.6411.028; Mon, 22 May 2023
+ 23:07:21 +0000
+From:   Andrew Duggan <aduggan@synaptics.com>
+To:     Jeffery Miller <jefferymiller@google.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>
+CC:     Andrew Duggan <andrew@duggan.us>,
+        Jonathan Denose <jdenose@chromium.org>,
+        "jdenose@google.com" <jdenose@google.com>,
+        Lyude Paul <lyude@redhat.com>,
+        "loic.poulain@linaro.org" <loic.poulain@linaro.org>,
+        "benjamin.tissoires@redhat.com" <benjamin.tissoires@redhat.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        =?utf-8?B?VXdlIEtsZWluZS1Lw7ZuaWc=?= 
+        <u.kleine-koenig@pengutronix.de>,
+        "linux-input@vger.kernel.org" <linux-input@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Vincent Huang <Vincent.huang@tw.synaptics.com>
+Subject: RE: [PATCH] Input: synaptics-rmi4 - retry reading SMBus version on
+ resume
+Thread-Topic: [PATCH] Input: synaptics-rmi4 - retry reading SMBus version on
+ resume
+Thread-Index: AQHZg3V7BQdJ1wF3e0myTEbF/FoRyq9T7vkAgAMcNQCAD+s8gA==
+Date:   Mon, 22 May 2023 23:07:21 +0000
+Message-ID: <BYAPR03MB47572F2C65E52ED673238D41B2439@BYAPR03MB4757.namprd03.prod.outlook.com>
+References: <20230510192731.300786-1-jefferymiller@google.com>
+ <ZFv5VkIzTEVwo2PI@google.com>
+ <CAAzPG9PpP4_hUxmpYmTGQmH7qd5AbgEBv1fDcE_sYJNnYn=bgA@mail.gmail.com>
+In-Reply-To: <CAAzPG9PpP4_hUxmpYmTGQmH7qd5AbgEBv1fDcE_sYJNnYn=bgA@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-ref: PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcYWR1Z2dhblxhcHBkYXRhXHJvYW1pbmdcMDlkODQ5YjYtMzJkMy00YTQwLTg1ZWUtNmI4NGJhMjllMzViXG1zZ3NcbXNnLTY2NWIzNWFmLWY4ZjUtMTFlZC05MTMwLTA4M2E4ODVhZjk3ZFxhbWUtdGVzdFw2NjViMzViMC1mOGY1LTExZWQtOTEzMC0wODNhODg1YWY5N2Rib2R5LnR4dCIgc3o9IjU1NjAiIHQ9IjEzMzI5MjcwNDM5NzgxMDAwMCIgaD0iZVg0WCtaNnlKbS84ajBnWEtIQTF3eXRyUkdvPSIgaWQ9IiIgYmw9IjAiIGJvPSIxIi8+PC9tZXRhPg==
+x-dg-rorf: true
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=synaptics.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR03MB4757:EE_|CH2PR03MB5174:EE_
+x-ms-office365-filtering-correlation-id: ff84cfbe-e0fc-407c-7f13-08db5b194c6c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: T5vQmDkes4nLzRkoss6IEMGuX6ZAH1gyym3/R2JK3+MUA+TU0OKnGNKvKB3/3zbp1+xyqUZush2d7o/yJrI6AmzXQxhbIowz9pnRizps9I8egS4ifezAtimoY7goljKaBayqDeD+HTAdm7duRLieuuvEqpe7wJ3rJotjluZKaYgJZRClJvTMpz4Ko8aY16KRc1ICCHW6bhw/P8UhFB1NvjiKUzMyndlmT7CyxB4Et5xWrkqP8AlCFKtcGHlybBECW9umNZZTaMSFgiQ/bA7J0cd+w9MB4Uo/x2lSJhvseFiT5CYjfJKaWtYyeYjY+U0ecgevXezXRmd0GzIOF0WyF1F63LMrHgWHosQOTRhR4o2upiSqQnOnPUvR+rNEFx3R1DNxHY7vcXOD+2zqU9KQqJ8PuEDaLQYp63YQLUvZTxmjAY+ZeEDIb9EcrRV0fLlzpKyZ6mOuSs8qPmmVzlS9L2+NiZUfASTpBQoAaind7JhyZ5JesFT4RL11mJ57IVfUUtOZdqZ3qBg9vc3B6bkXQyO1JTxiA2PyIBiLSvO7S5yZ5bNi7ricmXFSPAVlhvkEGbuOl3O6NYfMB3Goi2c4yBp2OHYBwUWdOskwAWEoRYIhMWRT8DH/1tcGFDGKYVP+
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR03MB4757.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(376002)(366004)(136003)(346002)(39850400004)(451199021)(8936002)(8676002)(7416002)(5660300002)(52536014)(66574015)(83380400001)(9686003)(26005)(6506007)(53546011)(107886003)(86362001)(186003)(122000001)(38100700002)(38070700005)(33656002)(55016003)(71200400001)(478600001)(66946007)(7696005)(316002)(4326008)(41300700001)(64756008)(66476007)(110136005)(66446008)(66556008)(54906003)(2906002)(76116006);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NWREMTd6d0NjVCszUlkyTUpZdnJ4N0ZJK29kVXlNSmR2UVROS21adlNpOEo0?=
+ =?utf-8?B?bVNwVlFmV0VOMDFXcENFcGJKRTNUMlhIMkxGbXJKWDB5My91MXFLLy9Vblpp?=
+ =?utf-8?B?ZS9EemJkMWpsUkVMYmlxLzc2amJ2aXU5Y2Nja2VkWHpzUWttaFc4Y29sMlpw?=
+ =?utf-8?B?OTlaSFpUcTFadDdlYUV0NzFZY2FyOUIzcVlIck43T2RwcmFLem5wMy9wcGRT?=
+ =?utf-8?B?aHNrT2FoM3YrYUoybTlEbENsalNNMjZXM2NkSW1wRTB5ZnJiZE1EaVJIcXRB?=
+ =?utf-8?B?ekVuSXNZS21IaU84ZVhaZloydnEzMjZ1SWlta2I0eG9iV1BKOFdUTXo2K2FL?=
+ =?utf-8?B?c1BTaEdiTURLWGs4UkNNaUZYRWMxU21ibGorQTVEVThJYWhiK1JFSzZXRW9z?=
+ =?utf-8?B?bG5JVDdDeDdwOTF4TEpKZ2pHRm8rVFA4bnVMa2dNeE9LS2drb29NakpnTkdy?=
+ =?utf-8?B?M1VLMHEvS0trZzVWdXNMQmJtaTFCOVBWUFU1eHY2SDdRVUZqQXJSOFN4Ukoz?=
+ =?utf-8?B?V2liSHZCc1BJeWtBUk04a1dEb29JbUZ2VnQycklhSHJjTUI4S1ZVYmZxZVVw?=
+ =?utf-8?B?NkFlY3NPRDc3NGtOTUNELzN5VWtwaGlJU28xQ3NpUVNWeDF5STErTXVFemg2?=
+ =?utf-8?B?b1lMdnUrV0Q4S3R2c1hnTVFwbVdkN1BEb0U2RWlnbGRNWFNkUjRQeTdHa0tJ?=
+ =?utf-8?B?RnZidmJlTWRvTXM0N1I5UVZhOFFzbjNvUGpkT1dOKzJMZVFpRnU2aDQrTmhZ?=
+ =?utf-8?B?NnZubkxvR1gyeXMvSG9DTXRwRW1MVUl2c1o4ZzhHTUx0ekJaU2lzbFpudUZI?=
+ =?utf-8?B?dzIydEtYNVN0dFcvQ3FGNmJlVHhJbjJpU3FIOHZQVndzemxpMUR1ZnVUaHRQ?=
+ =?utf-8?B?R1lMUVlZSmNSY1oyZ0k1aHpySm8vcnJFdkhDa1NheW1uVUYzL0ZwcHo3OWtN?=
+ =?utf-8?B?dnJHMTdHNTBpUUFqdE1xMWdHekFtenhjSXBDb0gxZU9nVFk2L2daMjBRUHNE?=
+ =?utf-8?B?RlFaV1VqUHRCbncvNjRDTFhreWtDNHlHbmF1K0RFcWQraiswcks3ZmVDTkpq?=
+ =?utf-8?B?Q2l3czh1d2Z4SGhJczRHVTU4Vmx5VVNiczc2ZVc0SVNHOVRob21HUEltL2V6?=
+ =?utf-8?B?U1Q3WU1vSDNPRThMTDZZVk9sWUFhRkVBeTg2SDEyWG91RUJTalR2VVFFQWpQ?=
+ =?utf-8?B?cWdQZjhvWExrVUJCSnhxbXg1NzFEVEJDRGZNUThydHBJK1Z4UzNDNEsvbzBX?=
+ =?utf-8?B?bWRIUmszVUhNWUU0MmxmeHZuWENEbnl0ZDdSRWtGMjZkcjN4RDJpdEo5aUlk?=
+ =?utf-8?B?T3JQa21VWlZiekdSTjFoSUJmZ0lZbmxPTDRySjVTKy9lTCs2RDFONUZXci9q?=
+ =?utf-8?B?YlQxb3ZYNDFyS0JtNFRUeDB5NldJQ3Y3cm51aFk0N2FIeS9sTDZ5bno3NnBh?=
+ =?utf-8?B?MUFRUmhDVmk4WW5ndzlsYWlCamNhK093aFk1RUc1dmplV0Q0azdyNGxHdjE5?=
+ =?utf-8?B?TXZkQ25DQ3g3NVoxN1Z5b053TXBzaFVnank4U3c4OFVDQVAzSXNRRmxUSDhO?=
+ =?utf-8?B?MThMTlJVUm5jYTN6Ump2ZWY5OWlTdmdwMUFSZm9uRFBlTzFxMUJFbnZoQUdV?=
+ =?utf-8?B?RXVROTNia3BZaFRHT0NIOWlteG1qWDdtMzZ5WnREc3pMczB4VmhyWWZHaUdE?=
+ =?utf-8?B?L2hQOFY0YVd5dWEvcHBNZVkrZFdLcVdNZG10QjZsM09QVDBlWm9rdTdydU41?=
+ =?utf-8?B?RzhIRDdqbkNuZ0tCMXNCVEI1VndvUUpYV2d2WjhPejc4cTdWUXEyRnN0U0VK?=
+ =?utf-8?B?enZ2YmV6eEkzL3RXVjFDZVhFZDJJZFdhVHlocTkwVUdTMFlta0IydFhsWG1T?=
+ =?utf-8?B?NmVCNEJFMlZ6bVg2T3RieEx0WnVIZnJhY3dkYjhzbHo3S1pleWI1QkV6Slhn?=
+ =?utf-8?B?UnlPV2p4bng3ZDU3QzAyK1J2anVHK3RxdFVNbjVQU1luUVlhc2UvbUJwRi9Z?=
+ =?utf-8?B?Y0JDaDJHOFo3OStUeXp6L04zQUQ3S1hzNjI5TXljTVJsN3VPN1NoV055dTYz?=
+ =?utf-8?B?eXJVNERwb3ZRcGtGaFVXbXI3NWQ3aEViVm4yTHFSMHBtYmJxNlNvazh1Y2lX?=
+ =?utf-8?Q?hqzmfNwlksY0D/n9fUPMG0oYs?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: kP9a3Iefda7vYKlJYadfjVVs9rpCT3vE
-X-Proofpoint-ORIG-GUID: kP9a3Iefda7vYKlJYadfjVVs9rpCT3vE
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-22_16,2023-05-22_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
- malwarescore=0 phishscore=0 impostorscore=0 clxscore=1015 adultscore=0
- mlxscore=0 bulkscore=0 suspectscore=0 priorityscore=1501
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305220195
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: synaptics.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR03MB4757.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ff84cfbe-e0fc-407c-7f13-08db5b194c6c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 May 2023 23:07:21.7351
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 335d1fbc-2124-4173-9863-17e7051a2a0e
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 7vhRSj1a4WSzl1M4kzqzfcY/kBymLAA8De7U0LZX19v63xOkNk+GNieIfsb6tryihbWXHH3IjGXBtck+47/tXA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR03MB5174
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The internal_hpd flag is set to true by dp_bridge_hpd_enable() and set to
-false by dp_bridge_hpd_disable() to handle GPIO pinmuxed into DP controller
-case. HDP related interrupts can not be enabled until internal_hpd is set
-to true. At current implementation dp_display_config_hpd() will initialize
-DP host controller first followed by enabling HDP related interrupts if
-internal_hpd was true at that time. Enable HDP related interrupts depends on
-internal_hpd status may leave system with DP driver host is in running state
-but without HDP related interrupts being enabled. This will prevent external
-display from being detected. Eliminated this dependency by moving HDP related
-interrupts enable/disable be done at dp_bridge_hpd_enable/disable() directly
-regardless of internal_hpd status.
-
-Changes in V3:
--- dp_catalog_ctrl_hpd_enable() and dp_catalog_ctrl_hpd_disable()
--- rewording ocmmit text
-
-Changes in V4:
--- replace dp_display_config_hpd() with dp_display_host_start()
--- move enable_irq() at dp_display_host_start();
-
-Fixes: cd198caddea7 ("drm/msm/dp: Rely on hpd_enable/disable callbacks")
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
----
- drivers/gpu/drm/msm/dp/dp_catalog.c | 15 +++++++++-
- drivers/gpu/drm/msm/dp/dp_catalog.h |  3 +-
- drivers/gpu/drm/msm/dp/dp_display.c | 58 +++++++++++++------------------------
- 3 files changed, 36 insertions(+), 40 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.c b/drivers/gpu/drm/msm/dp/dp_catalog.c
-index 7a8cf1c..5142aeb 100644
---- a/drivers/gpu/drm/msm/dp/dp_catalog.c
-+++ b/drivers/gpu/drm/msm/dp/dp_catalog.c
-@@ -620,7 +620,7 @@ void dp_catalog_hpd_config_intr(struct dp_catalog *dp_catalog,
- 				config & DP_DP_HPD_INT_MASK);
- }
- 
--void dp_catalog_ctrl_hpd_config(struct dp_catalog *dp_catalog)
-+void dp_catalog_ctrl_hpd_enable(struct dp_catalog *dp_catalog)
- {
- 	struct dp_catalog_private *catalog = container_of(dp_catalog,
- 				struct dp_catalog_private, dp_catalog);
-@@ -635,6 +635,19 @@ void dp_catalog_ctrl_hpd_config(struct dp_catalog *dp_catalog)
- 	dp_write_aux(catalog, REG_DP_DP_HPD_CTRL, DP_DP_HPD_CTRL_HPD_EN);
- }
- 
-+void dp_catalog_ctrl_hpd_disable(struct dp_catalog *dp_catalog)
-+{
-+	struct dp_catalog_private *catalog = container_of(dp_catalog,
-+				struct dp_catalog_private, dp_catalog);
-+
-+	u32 reftimer = dp_read_aux(catalog, REG_DP_DP_HPD_REFTIMER);
-+
-+	reftimer &= ~DP_DP_HPD_REFTIMER_ENABLE;
-+	dp_write_aux(catalog, REG_DP_DP_HPD_REFTIMER, reftimer);
-+
-+	dp_write_aux(catalog, REG_DP_DP_HPD_CTRL, 0);
-+}
-+
- static void dp_catalog_enable_sdp(struct dp_catalog_private *catalog)
- {
- 	/* trigger sdp */
-diff --git a/drivers/gpu/drm/msm/dp/dp_catalog.h b/drivers/gpu/drm/msm/dp/dp_catalog.h
-index 82376a2..38786e8 100644
---- a/drivers/gpu/drm/msm/dp/dp_catalog.h
-+++ b/drivers/gpu/drm/msm/dp/dp_catalog.h
-@@ -104,7 +104,8 @@ bool dp_catalog_ctrl_mainlink_ready(struct dp_catalog *dp_catalog);
- void dp_catalog_ctrl_enable_irq(struct dp_catalog *dp_catalog, bool enable);
- void dp_catalog_hpd_config_intr(struct dp_catalog *dp_catalog,
- 			u32 intr_mask, bool en);
--void dp_catalog_ctrl_hpd_config(struct dp_catalog *dp_catalog);
-+void dp_catalog_ctrl_hpd_enable(struct dp_catalog *dp_catalog);
-+void dp_catalog_ctrl_hpd_disable(struct dp_catalog *dp_catalog);
- void dp_catalog_ctrl_config_psr(struct dp_catalog *dp_catalog);
- void dp_catalog_ctrl_set_psr(struct dp_catalog *dp_catalog, bool enter);
- u32 dp_catalog_link_is_connected(struct dp_catalog *dp_catalog);
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index 3e13acdf..370632b 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -615,12 +615,6 @@ static int dp_hpd_plug_handle(struct dp_display_private *dp, u32 data)
- 		dp->hpd_state = ST_MAINLINK_READY;
- 	}
- 
--	/* enable HDP irq_hpd/replug interrupt */
--	if (dp->dp_display.internal_hpd)
--		dp_catalog_hpd_config_intr(dp->catalog,
--					   DP_DP_IRQ_HPD_INT_MASK | DP_DP_HPD_REPLUG_INT_MASK,
--					   true);
--
- 	drm_dbg_dp(dp->drm_dev, "After, type=%d hpd_state=%d\n",
- 			dp->dp_display.connector_type, state);
- 	mutex_unlock(&dp->event_mutex);
-@@ -658,12 +652,6 @@ static int dp_hpd_unplug_handle(struct dp_display_private *dp, u32 data)
- 	drm_dbg_dp(dp->drm_dev, "Before, type=%d hpd_state=%d\n",
- 			dp->dp_display.connector_type, state);
- 
--	/* disable irq_hpd/replug interrupts */
--	if (dp->dp_display.internal_hpd)
--		dp_catalog_hpd_config_intr(dp->catalog,
--					   DP_DP_IRQ_HPD_INT_MASK | DP_DP_HPD_REPLUG_INT_MASK,
--					   false);
--
- 	/* unplugged, no more irq_hpd handle */
- 	dp_del_event(dp, EV_IRQ_HPD_INT);
- 
-@@ -687,10 +675,6 @@ static int dp_hpd_unplug_handle(struct dp_display_private *dp, u32 data)
- 		return 0;
- 	}
- 
--	/* disable HPD plug interrupts */
--	if (dp->dp_display.internal_hpd)
--		dp_catalog_hpd_config_intr(dp->catalog, DP_DP_HPD_PLUG_INT_MASK, false);
--
- 	/*
- 	 * We don't need separate work for disconnect as
- 	 * connect/attention interrupts are disabled
-@@ -706,10 +690,6 @@ static int dp_hpd_unplug_handle(struct dp_display_private *dp, u32 data)
- 	/* signal the disconnect event early to ensure proper teardown */
- 	dp_display_handle_plugged_change(&dp->dp_display, false);
- 
--	/* enable HDP plug interrupt to prepare for next plugin */
--	if (dp->dp_display.internal_hpd)
--		dp_catalog_hpd_config_intr(dp->catalog, DP_DP_HPD_PLUG_INT_MASK, true);
--
- 	drm_dbg_dp(dp->drm_dev, "After, type=%d hpd_state=%d\n",
- 			dp->dp_display.connector_type, state);
- 
-@@ -1082,18 +1062,10 @@ void msm_dp_snapshot(struct msm_disp_state *disp_state, struct msm_dp *dp)
- 	mutex_unlock(&dp_display->event_mutex);
- }
- 
--static void dp_display_config_hpd(struct dp_display_private *dp)
-+static void dp_display_host_start(struct dp_display_private *dp)
- {
- 
- 	dp_display_host_init(dp);
--	dp_catalog_ctrl_hpd_config(dp->catalog);
--
--	/* Enable plug and unplug interrupts only if requested */
--	if (dp->dp_display.internal_hpd)
--		dp_catalog_hpd_config_intr(dp->catalog,
--				DP_DP_HPD_PLUG_INT_MASK |
--				DP_DP_HPD_UNPLUG_INT_MASK,
--				true);
- 
- 	/* Enable interrupt first time
- 	 * we are leaving dp clocks on during disconnect
-@@ -1176,7 +1148,7 @@ static int hpd_event_thread(void *data)
- 
- 		switch (todo->event_id) {
- 		case EV_HPD_INIT_SETUP:
--			dp_display_config_hpd(dp_priv);
-+			dp_display_host_start(dp_priv);
- 			break;
- 		case EV_HPD_PLUG_INT:
- 			dp_hpd_plug_handle(dp_priv, todo->data);
-@@ -1394,13 +1366,8 @@ static int dp_pm_resume(struct device *dev)
- 	/* turn on dp ctrl/phy */
- 	dp_display_host_init(dp);
- 
--	dp_catalog_ctrl_hpd_config(dp->catalog);
--
--	if (dp->dp_display.internal_hpd)
--		dp_catalog_hpd_config_intr(dp->catalog,
--				DP_DP_HPD_PLUG_INT_MASK |
--				DP_DP_HPD_UNPLUG_INT_MASK,
--				true);
-+	if (dp_display->is_edp)
-+		dp_catalog_ctrl_hpd_enable(dp->catalog);
- 
- 	if (dp_catalog_link_is_connected(dp->catalog)) {
- 		/*
-@@ -1568,7 +1535,7 @@ static int dp_display_get_next_bridge(struct msm_dp *dp)
- 
- 	if (aux_bus && dp->is_edp) {
- 		dp_display_host_init(dp_priv);
--		dp_catalog_ctrl_hpd_config(dp_priv->catalog);
-+		dp_catalog_ctrl_hpd_enable(dp_priv->catalog);
- 		dp_display_host_phy_init(dp_priv);
- 		enable_irq(dp_priv->irq);
- 
-@@ -1801,16 +1768,31 @@ void dp_bridge_hpd_enable(struct drm_bridge *bridge)
- {
- 	struct msm_dp_bridge *dp_bridge = to_dp_bridge(bridge);
- 	struct msm_dp *dp_display = dp_bridge->dp_display;
-+	struct dp_display_private *dp = container_of(dp_display, struct dp_display_private, dp_display);
-+
-+	mutex_lock(&dp->event_mutex);
-+	dp_catalog_ctrl_hpd_enable(dp->catalog);
-+
-+	/* enable HDP interrupts */
-+	dp_catalog_hpd_config_intr(dp->catalog, DP_DP_HPD_INT_MASK, true);
- 
- 	dp_display->internal_hpd = true;
-+	mutex_unlock(&dp->event_mutex);
- }
- 
- void dp_bridge_hpd_disable(struct drm_bridge *bridge)
- {
- 	struct msm_dp_bridge *dp_bridge = to_dp_bridge(bridge);
- 	struct msm_dp *dp_display = dp_bridge->dp_display;
-+	struct dp_display_private *dp = container_of(dp_display, struct dp_display_private, dp_display);
-+
-+	mutex_lock(&dp->event_mutex);
-+	/* disable HDP interrupts */
-+	dp_catalog_hpd_config_intr(dp->catalog, DP_DP_HPD_INT_MASK, false);
-+	dp_catalog_ctrl_hpd_disable(dp->catalog);
- 
- 	dp_display->internal_hpd = false;
-+	mutex_unlock(&dp->event_mutex);
- }
- 
- void dp_bridge_hpd_notify(struct drm_bridge *bridge,
--- 
-2.7.4
-
+PiBGcm9tOiBKZWZmZXJ5IE1pbGxlciA8amVmZmVyeW1pbGxlckBnb29nbGUuY29tPg0KPiBTZW50
+OiBGcmlkYXksIE1heSAxMiwgMjAyMyAxMjozNw0KPiBUbzogRG1pdHJ5IFRvcm9raG92IDxkbWl0
+cnkudG9yb2tob3ZAZ21haWwuY29tPg0KPiBDYzogQW5kcmV3IER1Z2dhbiA8YW5kcmV3QGR1Z2dh
+bi51cz47IEpvbmF0aGFuIERlbm9zZQ0KPiA8amRlbm9zZUBjaHJvbWl1bS5vcmc+OyBqZGVub3Nl
+QGdvb2dsZS5jb207IEx5dWRlIFBhdWwNCj4gPGx5dWRlQHJlZGhhdC5jb20+OyBsb2ljLnBvdWxh
+aW5AbGluYXJvLm9yZzsNCj4gYmVuamFtaW4udGlzc29pcmVzQHJlZGhhdC5jb207IEFuZHJldyBE
+dWdnYW4NCj4gPGFkdWdnYW5Ac3luYXB0aWNzLmNvbT47IEpvbmF0aGFuIENhbWVyb24NCj4gPEpv
+bmF0aGFuLkNhbWVyb25AaHVhd2VpLmNvbT47IE1heGltaWxpYW4gTHV6DQo+IDxsdXptYXhpbWls
+aWFuQGdtYWlsLmNvbT47IE1pZ3VlbCBPamVkYSA8b2plZGFAa2VybmVsLm9yZz47IFV3ZSBLbGVp
+bmUtDQo+IEvDtm5pZyA8dS5rbGVpbmUta29lbmlnQHBlbmd1dHJvbml4LmRlPjsgbGludXgtaW5w
+dXRAdmdlci5rZXJuZWwub3JnOw0KPiBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnDQo+IFN1
+YmplY3Q6IFJlOiBbUEFUQ0hdIElucHV0OiBzeW5hcHRpY3Mtcm1pNCAtIHJldHJ5IHJlYWRpbmcg
+U01CdXMgdmVyc2lvbiBvbg0KPiByZXN1bWUNCj4gDQo+IENBVVRJT046IEVtYWlsIG9yaWdpbmF0
+ZWQgZXh0ZXJuYWxseSwgZG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMNCj4g
+dW5sZXNzIHlvdSByZWNvZ25pemUgdGhlIHNlbmRlciBhbmQga25vdyB0aGUgY29udGVudCBpcyBz
+YWZlLg0KPiANCj4gDQo+IE9uIFdlZCwgTWF5IDEwLCAyMDIzIGF0IDM6MDbigK9QTSBEbWl0cnkg
+VG9yb2tob3YNCj4gPGRtaXRyeS50b3Jva2hvdkBnbWFpbC5jb20+IHdyb3RlOg0KPiA+DQo+ID4N
+Cj4gPiBJIGFtIG5vdCByZWFsbHkgZm9uZCBvZiBhZGRpbmcgcmFuZG9tIHJlcGVhdHMgaW4gdGhl
+IGNvZGUgYmFzZS4NCj4gPiBBbmRyZXcsIGRvIHlvdSBrbm93IGlmIHRoZSBTeW5hcHRpY3MgZGV2
+aWNlIG5lZWRzIGNlcnRhaW4gZGVsYXkgd2hlbg0KPiA+IHN3aXRjaGluZyB0byBTTWJ1cyBtb2Rl
+Pw0KPiA+DQo+IFRoYXQncyByZWFzb25hYmxlLiBJdCdzIHRydWUgdGhpcyBpcyBhIHNsZWVwIHRv
+IHdvcmthcm91bmQgcm1pX3NtYnVzJw0KPiBleHBlY3RhdGlvbiB0aGF0DQo+IGl0IGlzIGFibGUg
+dG8gc3VjY2Vzc2Z1bGx5IHJlYWQgZnJvbSB0aGUgaTgwMSBpMmMgc21idXMgYWRkciAweDJjIG9u
+IHJlc3VtZQ0KPiB3aGVuIGl0IGNhbm5vdC4NCj4gDQo+IEkgZG8gbm90IGtub3cgd2h5IHRoZSBp
+ODAxIGkyYyBhZGRyIDB4MmMgaXMgbm90IHJlc3BvbmRpbmcgb24gcmVzdW1lLg0KPiBJbmZyZXF1
+ZW50bHkgaXQgd29uJ3QgcmVzcG9uZCBvbiBib290IGR1cmluZyB0aGUgaW5pdGlhbA0KPiBwc21v
+dXNlX3NtYnVzX2NyZWF0ZV9jb21wYW5pb24gYnV0IHRoYXQgaXMgbGVzcyBub3RpY2VhYmxlIHNp
+bmNlIGl0IHdpbGwNCj4gc3RheSBpbiBwcy8yIG1vZGUgYW5kIGp1c3QgbGFjayBmZWF0dXJlcy4N
+Cj4gDQo+IEkgZG8ga25vdyBhZGRpbmcgYSBzbGVlcCBpbi1iZXR3ZWVuIHRoZSBwc21vdXNlIGRl
+YWN0aXZhdGUgY2FsbCBhbmQNCj4gcm1pX3NtYnVzJ3MgYXR0ZW1wdHMgdG8gcmVhZCBmcm9tIHRo
+ZSAweDJjIGFkZHIgYWxsb3cgaXQgdG8gc3VjY2VlZCBvbiB0aGlzDQo+IG1hY2hpbmUuIEkgZG8g
+bm90IGtub3cgdGhlIGRldGFpbHMgYXMgdG8gd2h5IGhvd2V2ZXIuDQoNCk91ciBXaW5kb3dzIGRy
+aXZlciBkb2VzIGEgMzAgbXMgZGVsYXkgYmV0d2VlbiBzZW5kaW5nIHRoZSBkaXNhYmxlIGNvbW1h
+bmQgYW5kIHRyeWluZyB0byBjb21tdW5pY2F0ZSBvdmVyIFNNQnVzLiBJIGRvbuKAmXQga25vdyBz
+cGVjaWZpY2FsbHkgd2h5IHRoaXMgZGVsYXkgaXMgbmVlZGVkLCBidXQgdGhpcyBpcyBob3cgd2Ug
+aGFuZGxlIHRoaXMgY2FzZS4NCg0KPiANCj4gSSBjYW4gYXBwbHkgd29ya2Fyb3VuZHMgdW50aWwg
+dGhlIHVuZGVybHlpbmcgaXNzdWUgY2FuIGJlIGlkZW50aWZpZWQgYW5kDQo+IHByb3Blcmx5IHJl
+c29sdmVkLg0KPiANCj4gSSBjYW4gYXBwbHkgcGF0Y2hlcyBhbmQgcHJvdmlkZSBhbnkgc29ydCBv
+ZiBkZWJ1Z2dpbmcgb3IgZXh0cmEgaW5mb3JtYXRpb24NCj4gdGhhdCBtaWdodCBiZSB1c2VmdWwg
+dG8gYW55b25lIGZhbWlsaWFyIHdpdGggdGhlc2UgZGV2aWNlcy4NCj4gDQo+IFRoZSBzbWJ1cyBj
+b250cm9sbGVyIGluIHRoaXMgcGFydGljdWxhciBtYWNoaW5lIGlzOg0KPiAwMDoxZi4zIFNNQnVz
+IFswYzA1XTogSW50ZWwgQ29ycG9yYXRpb24gOCBTZXJpZXMvQzIyMCBTZXJpZXMgQ2hpcHNldCBG
+YW1pbHkNCj4gU01CdXMgQ29udHJvbGxlciBbODA4Njo4YzIyXSAocmV2IDA0KQ0KPiANCj4gUGVy
+aGFwcyB0aGVyZSdzIHNvbWUgd2F5IHRvIGRldGVjdCB3aGVuIHRoZSBhZGRyIGlzIGF2YWlsYWJs
+ZSBsYXRlciBhbmQgaGF2ZQ0KPiBpdCB0cmlnZ2VyIGEgbmV3IHByb2JlIHNpbWlsYXIgdG8gaG93
+IHBzbW91c2Vfc21idXNfbm90aWZpZXIgaXMgdHJpZ2dlcmVkDQo+IHdoZW4gdGhlIGk4MDEgYnVz
+IGJlY29tZXMgYXZhaWxhYmxlPw0KPiANCj4gVGhhbmsgWW91LA0KPiBKZWZmDQoNCkFuZHJldw0K
