@@ -2,145 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F2BB70B27E
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 02:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C0CB70B29E
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 02:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbjEVAXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 20:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34692 "EHLO
+        id S229798AbjEVAxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 20:53:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjEVAXK (ORCPT
+        with ESMTP id S229481AbjEVAxK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 20:23:10 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BDA8D7;
-        Sun, 21 May 2023 17:23:08 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-51b4ef5378bso4912018a12.1;
-        Sun, 21 May 2023 17:23:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684714988; x=1687306988;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RAfoTJTuXzknmLlBI5ViwPZYI1PuWLrhmX2kfKQYWIE=;
-        b=RYEEWS33yTgfPCb74moX5aEj6ndxqzoWnof3duGQMxZas6FXdPPoHGJBNswtPlAill
-         RrScBJg7TYWXDserxwV6DuHPqABbz1P7zX/DphoImhGYMKbQns1EYLty/pbnbq3+Jq5X
-         AqkYGosOKt6TlhBwq55WBXfnFHfED2MYWdg14gUnm1chdm3NbFHNr5HPx5CeurADeYrg
-         fHtwj0WVci330egv06ExwIQHJWRJqe8GT9W6oQ+pKrXFc36giClGFiOrjA3Fge00Lxgq
-         zGXgqOp5xBdzRFKQuePirqcFzhjyTcC3e53Y7/4/c0bghuoz0q3HEle6E+bhV9tAGbJ5
-         Iyjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684714988; x=1687306988;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=RAfoTJTuXzknmLlBI5ViwPZYI1PuWLrhmX2kfKQYWIE=;
-        b=SD5x3CrTbcyL2/UU5dFwSEK0XrwZcu90/KZljrICYr997IkRm8DKSOT1SX8wp9g8g0
-         FlCNed/I803FUSdWv3urWeETt/nkYSuj5Ek/tCsVLloWP6KXvfP2nRruWETxCY8n+3ET
-         +DN49QNEmioLxz/3wYAit4OYlbVuVxeQw3e/1SfzZ1/B1HRWc2Tg2um0WzQahi46wLGX
-         tuKBUBPiuKcmWSterp/7P3JnQYPfOA5eN9Q+gPrWbgm3yETcHv6W/tzAukWNIGnkAlPs
-         dRWp1RFoqywgr9Rhkfg9CAODO8TUfncZTWwfd5qqFzmKQ2ArpPJ6+qn+GlOG6GjQ6KjH
-         g3IA==
-X-Gm-Message-State: AC+VfDz0ofdvzq45ouOkOG7S7gD4IwtfbgOmEYrCK0iz2a+z4ytFx4jn
-        7/8X0nKAng4jXKLALsxnG56nYTPRrOE=
-X-Google-Smtp-Source: ACHHUZ6LM0I6jd4rJh2WZnhuiAVSEf7C4wytsXW2Ncj6jyUBMEeabOyNCk3EFFkm2JBYy4NGDrqMmg==
-X-Received: by 2002:a17:902:e547:b0:1ac:815e:320b with SMTP id n7-20020a170902e54700b001ac815e320bmr11075276plf.17.1684714987934;
-        Sun, 21 May 2023 17:23:07 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-10.three.co.id. [180.214.232.10])
-        by smtp.gmail.com with ESMTPSA id u6-20020a17090282c600b0019a773419a6sm3458854plz.170.2023.05.21.17.23.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 21 May 2023 17:23:07 -0700 (PDT)
-Message-ID: <8a79151b-ef75-08ad-ae3d-f6cdabfeaa47@gmail.com>
-Date:   Mon, 22 May 2023 07:23:00 +0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Build System <linux-kbuild@vger.kernel.org>,
+        Sun, 21 May 2023 20:53:10 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623A6DB;
+        Sun, 21 May 2023 17:53:05 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QPf7b1gR0z4x1N;
+        Mon, 22 May 2023 10:52:59 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1684716779;
+        bh=IFZYqtHvmYjXWyTUb3u5yrGNdgE9k+C2KpTXNadRRfc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=WvIsa8rX4BVKDXM9ObGvkekHGa2tqVL2CluTAGqKnXYKXkeTX91DQrhWd4UFkBpAP
+         50A9cLjMa+Hk7X+eYPDTkn+0t2321Iy8JAu+dpHXT8O6b2qHvBqihN/RuG0gwehaJV
+         knTX7ksD20z/VchTeOibNpJNdqZQoFWZHEc50c/9conRFP3DFGpiNIZd/GCSbSNTk9
+         NHx6/bXYSU6u5uTnwXZsZIYBsiTL1tvlF/866+UXrNktK0VBy0R4jBGhqcALNc7aNa
+         s4w/rlNRboa8RyM1TllUCXKScAxUxxQsi95gW3iIiKHrb5l0lHGJFj8xgOfbGSPEh7
+         +PFNQ0cxb8mhQ==
+Date:   Mon, 22 May 2023 10:52:57 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        Linux Crypto List <linux-crypto@vger.kernel.org>
+Cc:     Huan Feng <huan.feng@starfivetech.com>,
+        Jia Jie Ho <jiajie.ho@starfivetech.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux EFI <linux-efi@vger.kernel.org>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alan Bartlett <ajb@elrepo.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Fwd: Regression. -6.3.X Good. -6.4-rcY Bad.
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build failure after merge of the crypto tree
+Message-ID: <20230522105257.562cb1ec@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/rH6GA9i8=s+/RlhPx=6EfaR";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+--Sig_/rH6GA9i8=s+/RlhPx=6EfaR
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I notice a simple build-time regression on Bugzilla [1]. Quoting from it:
+Hi all,
 
-> This is a very simple to see regression.
-> 
-> On arm64 hardware, take any one of the -6.4-rcY tarballs created by Linus. Extract the contents of the tarball and cd to the linux-6.4-rcY directory. Issue a "make clean" or a "make mrproper" or a "make distclean" command. Look at the output (there should not be any). In every case, the output is --
-> 
-> nm: 'vmlinux': No such file
-> 
-> A bisection of Linus' full tree was performed specifying v6.4-rc1 as bad and v6.3 as good. Here is the result --
-> 
-> git bisect start
-> # status: waiting for both good and bad commits
-> # bad: [ac9a78681b921877518763ba0e89202254349d1b] Linux 6.4-rc1
-> git bisect bad ac9a78681b921877518763ba0e89202254349d1b
-> # status: waiting for good commit(s), bad commit known
-> # good: [457391b0380335d5e9a5babdec90ac53928b23b4] Linux 6.3
-> git bisect good 457391b0380335d5e9a5babdec90ac53928b23b4
-> # good: [6e98b09da931a00bf4e0477d0fa52748bf28fcce] Merge tag 'net-next-6.4' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next
-> git bisect good 6e98b09da931a00bf4e0477d0fa52748bf28fcce
-> # good: [70cc1b5307e8ee3076fdf2ecbeb89eb973aa0ff7] Merge tag 'powerpc-6.4-1' of git://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux
-> git bisect good 70cc1b5307e8ee3076fdf2ecbeb89eb973aa0ff7
-> # bad: [865fdb08197e657c59e74a35fa32362b12397f58] Merge tag 'input-for-v6.4-rc0' of git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input
-> git bisect bad 865fdb08197e657c59e74a35fa32362b12397f58
-> # good: [e81507acdc19d91df4121f409871f3e4e055f6c2] Merge tag 'clk-for-linus' of git://git.kernel.org/pub/scm/linux/kernel/git/clk/linux
-> git bisect good e81507acdc19d91df4121f409871f3e4e055f6c2
-> # bad: [26c009dffca89b0f8fe7facc41d1ccf88a66825a] Merge tag '6.4-rc-smb3-client-fixes-part1' of git://git.samba.org/sfrench/cifs-2.6
-> git bisect bad 26c009dffca89b0f8fe7facc41d1ccf88a66825a
-> # bad: [10de638d8ea57ebab4231ea077bed01d9bade775] Merge tag 's390-6.4-1' of git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux
-> git bisect bad 10de638d8ea57ebab4231ea077bed01d9bade775
-> # good: [680957b3b8b0b2e8697592fcb77369d4f643908a] s390/relocate_kernel: use SYM* macros instead of ENTRY(), etc.
-> git bisect good 680957b3b8b0b2e8697592fcb77369d4f643908a
-> # good: [ea76e08f4d901a450619831a255e9e0a4c0ed162] rust: ioctl: Add ioctl number manipulation functions
-> git bisect good ea76e08f4d901a450619831a255e9e0a4c0ed162
-> # bad: [825a0714d2b3883d4f8ff64f6933fb73ee3f1834] Merge tag 'efi-next-for-v6.4' of git://git.kernel.org/pub/scm/linux/kernel/git/efi/efi
-> git bisect bad 825a0714d2b3883d4f8ff64f6933fb73ee3f1834
-> # good: [9489d1bdb763a3dd954e61522043190a9fd1cb4c] power: supply: generic-adc-battery: simplify read_channel logic
-> git bisect good 9489d1bdb763a3dd954e61522043190a9fd1cb4c
-> # good: [528bd42615f4bb564613cc76dead90d7fbae76ba] power: supply: rk817: Drop unneeded debugging code
-> git bisect good 528bd42615f4bb564613cc76dead90d7fbae76ba
-> # good: [538bc0f40b364f2c7b81f11aa163f723b138b40f] efi/zboot: Set forward edge CFI compat header flag if supported
-> git bisect good 538bc0f40b364f2c7b81f11aa163f723b138b40f
-> # bad: [026b85796ab4d52af56f8a1c60d2613983ecd845] efi/zboot: arm64: Grab code size from ELF symbol in payload
-> git bisect bad 026b85796ab4d52af56f8a1c60d2613983ecd845
-> # bad: [45dd403da851124412d32e3193c21de4a51d29da] efi/zboot: arm64: Inject kernel code size symbol into the zboot payload
-> git bisect bad 45dd403da851124412d32e3193c21de4a51d29da
-> # first bad commit: [45dd403da851124412d32e3193c21de4a51d29da] efi/zboot: arm64: Inject kernel code size symbol into the zboot payload
-> 
-> Reverting the commit 45dd403da851124412d32e3193c21de4a51d29da resolves the problem.
+After merging the crypto tree, today's linux-next build (x86_64
+allmodconfig) failed like this:
 
-The regression looks like arm-specific, but the first bad commit
-IMO isn't related to kbuild system.
+drivers/tty/serial/amba-pl011.c: In function 'pl011_sgbuf_init':
+drivers/tty/serial/amba-pl011.c:379:30: error: implicit declaration of func=
+tion 'phys_to_page'; did you mean 'pfn_to_page'? [-Werror=3Dimplicit-functi=
+on-declaration]
+  379 |         sg_set_page(&sg->sg, phys_to_page(dma_addr),
+      |                              ^~~~~~~~~~~~
+      |                              pfn_to_page
+drivers/tty/serial/amba-pl011.c:379:30: error: passing argument 2 of 'sg_se=
+t_page' makes pointer from integer without a cast [-Werror=3Dint-conversion]
+  379 |         sg_set_page(&sg->sg, phys_to_page(dma_addr),
+      |                              ^~~~~~~~~~~~~~~~~~~~~~
+      |                              |
+      |                              int
+In file included from include/linux/kfifo.h:42,
+                 from include/linux/tty_port.h:5,
+                 from include/linux/tty.h:12,
+                 from drivers/tty/serial/amba-pl011.c:25:
+include/linux/scatterlist.h:136:69: note: expected 'struct page *' but argu=
+ment is of type 'int'
+  136 | static inline void sg_set_page(struct scatterlist *sg, struct page =
+*page,
+      |                                                        ~~~~~~~~~~~~=
+~^~~~
 
-Anyway, I'm adding it to regzbot:
+Caused by commit
 
-#regzbot introduced: 45dd403da85112 https://bugzilla.kernel.org/show_bug.cgi?id=217468
-#regzbot title: nm vmlinux ENOENT when "make mrproper" on arm64
+  42ef0e944b01 ("crypto: starfive - Add crypto engine support")
 
-Thanks.
+I applied the following patch for today.
 
-[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217468
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Mon, 22 May 2023 10:47:38 +1000
+Subject: [PATCH] fixup for "crypto: starfive - Add crypto engine support"
 
--- 
-An old man doll... just what I always wanted! - Clara
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
+---
+ drivers/crypto/starfive/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/crypto/starfive/Kconfig b/drivers/crypto/starfive/Kcon=
+fig
+index be58d1473523..8795b2fddb4e 100644
+--- a/drivers/crypto/starfive/Kconfig
++++ b/drivers/crypto/starfive/Kconfig
+@@ -4,7 +4,7 @@
+=20
+ config CRYPTO_DEV_JH7110
+ 	tristate "StarFive JH7110 cryptographic engine driver"
+-	depends on SOC_STARFIVE || COMPILE_TEST
++	depends on SOC_STARFIVE
+ 	select CRYPTO_ENGINE
+ 	select CRYPTO_HMAC
+ 	select CRYPTO_SHA256
+--=20
+2.39.2
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/rH6GA9i8=s+/RlhPx=6EfaR
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRqvOkACgkQAVBC80lX
+0Gx6eQf+NZo9fwOYsYiw+dWPKkZRU4o0Cgg3d9nGr18sc+SloIcXvcYJB48NC1WC
+AQ0A8jaDK9JFLv/uD1RxjI2xLrzbyLhS0HWJqQLy384u2xpqK14+S7cirUZfOlyk
+21OTxm36Br5hIjqsVd5d+c6Q5ORDFmJDeE++P53ag+j3NJRiVyR29JNt4nb2pOSc
+bpk2POpyuU4V2/Jzhv5k4Gx5JUdpg7ltXj6t2PNXnK1FUIcPFBUmmVOJ8zcRBqGO
+a7hRmuAt/UVFo1ZInyOtYfnziVrMw0ZxNWvUufFICBnislQMjQMH8MOwRYAU7LiV
+/1HLeBnae2jG9DHGnv2QpT2MWwb7lg==
+=jHMw
+-----END PGP SIGNATURE-----
+
+--Sig_/rH6GA9i8=s+/RlhPx=6EfaR--
