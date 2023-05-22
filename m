@@ -2,188 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3168370BC2D
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9ED070BC32
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:49:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233418AbjEVLtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 07:49:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56066 "EHLO
+        id S233070AbjEVLtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 07:49:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233408AbjEVLta (ORCPT
+        with ESMTP id S232940AbjEVLth (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 07:49:30 -0400
+        Mon, 22 May 2023 07:49:37 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4458A3
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 04:49:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B6BAB;
+        Mon, 22 May 2023 04:49:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 716B86179D
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:49:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AADAC4339B;
-        Mon, 22 May 2023 11:49:25 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BF261611AC;
+        Mon, 22 May 2023 11:49:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D08FC433D2;
+        Mon, 22 May 2023 11:49:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684756168;
-        bh=09RSAK353TjlZgFkK3E0PRiLI2ExOq5xZFRF9Hx0UP4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=c0KqqmNuYsyt4bX1BLvfXqWPZCcBjtdh5HqKH68YbaY3HI4wEBOj7i0vTaevkB2Zf
-         1MUuJOSzE95fw9E4IITgFHNfrUIV9jQ5R8tHCZak380ujmsa4BkNrnItvev24qZu8o
-         yzQnEOpXEGXdTEuzWCFKqW0IyzoyXLmYGbsSUke1f5qghWfmPEtciIxciOfV+9476M
-         zwW/0syTWrRo7saMFxsm5FELZdvqbMKqwFOgBxIRFDz3ED5oGE/T807hXFO/8fYzGT
-         kb+nyc89Ci19CXWtC/qQdnG9/ERmvnEEAJBVLxfcHl1PTEXAoJvhVktaGsEmzFy4AU
-         BK7+3DASuOMmQ==
-From:   Arnd Bergmann <arnd@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Douglas Anderson <dianders@chromium.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Pingfan Liu <kernelfans@gmail.com>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Lecopzer Chen <lecopzer.chen@mediatek.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: watchdog_hld: provide arm_pmu_irq_is_nmi stub
-Date:   Mon, 22 May 2023 13:48:19 +0200
-Message-Id: <20230522114922.1052421-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        s=k20201202; t=1684756175;
+        bh=MksqE9gv1SGdf5zP2megR4doE0nMrzoziEQVjPRPgGA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ezTeSjZcoE828dZ4AfFTu2b1XRysWjgqhj4it4+vVaDGbuctXN9X2pDqmjF3mwcT+
+         B48yzvikaBwpbaPYDO9k1y4ag61WWuTfAfOO+IqX02YrrbldcjpnnDNHHgpSV/MOI5
+         O4SORRiVE1OdAZ7uQbkGyrstBHVpnRO9PI3+awszLeBJg729xnuUDKTzDUvXXnFtk1
+         0d+lm1vHd5dMgsX2yJIpcE+gudJaMxmJCcDv0MnPBXy+BfFjDg19rwAq7h6oMWyjvz
+         Plj2U0xnqIo9HByUX6+NgH3C48FaeHj2YRRe2XBrbD21Wsc22RHB3+2nj+gjkOsNzb
+         UxlCU2MpDfl/g==
+Message-ID: <27e793b1-8676-d90a-4808-b5e194a8741f@kernel.org>
+Date:   Mon, 22 May 2023 20:49:32 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v5 02/44] ata: add HAS_IOPORT dependencies
+Content-Language: en-US
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-ide@vger.kernel.org
+References: <20230522105049.1467313-1-schnelle@linux.ibm.com>
+ <20230522105049.1467313-3-schnelle@linux.ibm.com>
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <20230522105049.1467313-3-schnelle@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+On 5/22/23 19:50, Niklas Schnelle wrote:
+> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> not being declared. We thus need to add HAS_IOPORT as dependency for
+> those drivers using them.
+> 
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-The newly added arch_perf_nmi_is_available() function fails to build
-when CONFIG_ARM_PMU is disabled:
+This new version looks much nicer !
 
-arch/arm64/kernel/watchdog_hld.c: In function 'arch_perf_nmi_is_available':
-arch/arm64/kernel/watchdog_hld.c:35:16: error: implicit declaration of function 'arm_pmu_irq_is_nmi' [-Werror=implicit-function-declaration]
-   35 |         return arm_pmu_irq_is_nmi();
+Please change my Ack to:
 
-As it turns out, there is only one caller for that function anyway,
-in the same file as the __weak definition, and this can only be called
-if CONFIG_ARM_PMU is also enabled.
+Acked-by: Damien Le Moal <dlemoal@kernel.org>
 
-I tried a number of variants, but everything ended up with more
-complexity from having both the __weak function and one or more
-added #ifdef. Keeping it in watchdog_perf.c is a small layering
-violation but otherwise the most robust.
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> ---
+>  drivers/ata/Kconfig      | 28 ++++++++++++++--------------
+>  drivers/ata/libata-sff.c |  4 ++++
+>  2 files changed, 18 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
+> index 42b51c9812a0..c521cdc51f8c 100644
+> --- a/drivers/ata/Kconfig
+> +++ b/drivers/ata/Kconfig
+> @@ -557,7 +557,7 @@ comment "PATA SFF controllers with BMDMA"
+>  
+>  config PATA_ALI
+>  	tristate "ALi PATA support"
+> -	depends on PCI
+> +	depends on PCI && HAS_IOPORT
+>  	select PATA_TIMINGS
+>  	help
+>  	  This option enables support for the ALi ATA interfaces
+> @@ -567,7 +567,7 @@ config PATA_ALI
+>  
+>  config PATA_AMD
+>  	tristate "AMD/NVidia PATA support"
+> -	depends on PCI
+> +	depends on PCI && HAS_IOPORT
+>  	select PATA_TIMINGS
+>  	help
+>  	  This option enables support for the AMD and NVidia PATA
+> @@ -585,7 +585,7 @@ config PATA_ARASAN_CF
+>  
+>  config PATA_ARTOP
+>  	tristate "ARTOP 6210/6260 PATA support"
+> -	depends on PCI
+> +	depends on PCI && HAS_IOPORT
+>  	help
+>  	  This option enables support for ARTOP PATA controllers.
+>  
+> @@ -612,7 +612,7 @@ config PATA_ATP867X
+>  
+>  config PATA_CMD64X
+>  	tristate "CMD64x PATA support"
+> -	depends on PCI
+> +	depends on PCI && HAS_IOPORT
+>  	select PATA_TIMINGS
+>  	help
+>  	  This option enables support for the CMD64x series chips
+> @@ -659,7 +659,7 @@ config PATA_CS5536
+>  
+>  config PATA_CYPRESS
+>  	tristate "Cypress CY82C693 PATA support (Very Experimental)"
+> -	depends on PCI
+> +	depends on PCI && HAS_IOPORT
+>  	select PATA_TIMINGS
+>  	help
+>  	  This option enables support for the Cypress/Contaq CY82C693
+> @@ -707,7 +707,7 @@ config PATA_HPT366
+>  
+>  config PATA_HPT37X
+>  	tristate "HPT 370/370A/371/372/374/302 PATA support"
+> -	depends on PCI
+> +	depends on PCI && HAS_IOPORT
+>  	help
+>  	  This option enables support for the majority of the later HPT
+>  	  PATA controllers via the new ATA layer.
+> @@ -716,7 +716,7 @@ config PATA_HPT37X
+>  
+>  config PATA_HPT3X2N
+>  	tristate "HPT 371N/372N/302N PATA support"
+> -	depends on PCI
+> +	depends on PCI && HAS_IOPORT
+>  	help
+>  	  This option enables support for the N variant HPT PATA
+>  	  controllers via the new ATA layer.
+> @@ -819,7 +819,7 @@ config PATA_MPC52xx
+>  
+>  config PATA_NETCELL
+>  	tristate "NETCELL Revolution RAID support"
+> -	depends on PCI
+> +	depends on PCI && HAS_IOPORT
+>  	help
+>  	  This option enables support for the Netcell Revolution RAID
+>  	  PATA controller.
+> @@ -855,7 +855,7 @@ config PATA_OLDPIIX
+>  
+>  config PATA_OPTIDMA
+>  	tristate "OPTI FireStar PATA support (Very Experimental)"
+> -	depends on PCI
+> +	depends on PCI && HAS_IOPORT
+>  	help
+>  	  This option enables DMA/PIO support for the later OPTi
+>  	  controllers found on some old motherboards and in some
+> @@ -865,7 +865,7 @@ config PATA_OPTIDMA
+>  
+>  config PATA_PDC2027X
+>  	tristate "Promise PATA 2027x support"
+> -	depends on PCI
+> +	depends on PCI && HAS_IOPORT
+>  	help
+>  	  This option enables support for Promise PATA pdc20268 to pdc20277 host adapters.
+>  
+> @@ -873,7 +873,7 @@ config PATA_PDC2027X
+>  
+>  config PATA_PDC_OLD
+>  	tristate "Older Promise PATA controller support"
+> -	depends on PCI
+> +	depends on PCI && HAS_IOPORT
+>  	help
+>  	  This option enables support for the Promise 20246, 20262, 20263,
+>  	  20265 and 20267 adapters.
+> @@ -901,7 +901,7 @@ config PATA_RDC
+>  
+>  config PATA_SC1200
+>  	tristate "SC1200 PATA support"
+> -	depends on PCI && (X86_32 || COMPILE_TEST)
+> +	depends on PCI && (X86_32 || COMPILE_TEST) && HAS_IOPORT
+>  	help
+>  	  This option enables support for the NatSemi/AMD SC1200 SoC
+>  	  companion chip used with the Geode processor family.
+> @@ -919,7 +919,7 @@ config PATA_SCH
+>  
+>  config PATA_SERVERWORKS
+>  	tristate "SERVERWORKS OSB4/CSB5/CSB6/HT1000 PATA support"
+> -	depends on PCI
+> +	depends on PCI && HAS_IOPORT
+>  	help
+>  	  This option enables support for the Serverworks OSB4/CSB5/CSB6 and
+>  	  HT1000 PATA controllers, via the new ATA layer.
+> @@ -1183,7 +1183,7 @@ config ATA_GENERIC
+>  
+>  config PATA_LEGACY
+>  	tristate "Legacy ISA PATA support (Experimental)"
+> -	depends on (ISA || PCI)
+> +	depends on (ISA || PCI) && HAS_IOPORT
+>  	select PATA_TIMINGS
+>  	help
+>  	  This option enables support for ISA/VLB/PCI bus legacy PATA
+> diff --git a/drivers/ata/libata-sff.c b/drivers/ata/libata-sff.c
+> index 9d28badfe41d..c8cb7ed28f83 100644
+> --- a/drivers/ata/libata-sff.c
+> +++ b/drivers/ata/libata-sff.c
+> @@ -3042,6 +3042,7 @@ EXPORT_SYMBOL_GPL(ata_bmdma_port_start32);
+>   */
+>  int ata_pci_bmdma_clear_simplex(struct pci_dev *pdev)
+>  {
+> +#ifdef CONFIG_HAS_IOPORT
+>  	unsigned long bmdma = pci_resource_start(pdev, 4);
+>  	u8 simplex;
+>  
+> @@ -3054,6 +3055,9 @@ int ata_pci_bmdma_clear_simplex(struct pci_dev *pdev)
+>  	if (simplex & 0x80)
+>  		return -EOPNOTSUPP;
+>  	return 0;
+> +#else
+> +	return -ENOENT;
+> +#endif /* CONFIG_HAS_IOPORT */
+>  }
+>  EXPORT_SYMBOL_GPL(ata_pci_bmdma_clear_simplex);
+>  
 
-Fixes: 7e61b33831bc ("arm64: enable perf events based hard lockup detector")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
----
- arch/arm64/kernel/watchdog_hld.c | 10 ----------
- include/linux/nmi.h              |  1 -
- include/linux/perf/arm_pmu.h     |  7 ++++---
- kernel/watchdog_perf.c           | 11 ++++++++++-
- 4 files changed, 14 insertions(+), 15 deletions(-)
-
-diff --git a/arch/arm64/kernel/watchdog_hld.c b/arch/arm64/kernel/watchdog_hld.c
-index dcd25322127c..3d948e5c1c1e 100644
---- a/arch/arm64/kernel/watchdog_hld.c
-+++ b/arch/arm64/kernel/watchdog_hld.c
-@@ -24,13 +24,3 @@ u64 hw_nmi_get_sample_period(int watchdog_thresh)
- 
- 	return (u64)max_cpu_freq * watchdog_thresh;
- }
--
--bool __init arch_perf_nmi_is_available(void)
--{
--	/*
--	 * hardlockup_detector_perf_init() will success even if Pseudo-NMI turns off,
--	 * however, the pmu interrupts will act like a normal interrupt instead of
--	 * NMI and the hardlockup detector would be broken.
--	 */
--	return arm_pmu_irq_is_nmi();
--}
-diff --git a/include/linux/nmi.h b/include/linux/nmi.h
-index d23902a2fd49..1fabf8c35d27 100644
---- a/include/linux/nmi.h
-+++ b/include/linux/nmi.h
-@@ -212,7 +212,6 @@ static inline bool trigger_single_cpu_backtrace(int cpu)
- 
- #ifdef CONFIG_HARDLOCKUP_DETECTOR_PERF
- u64 hw_nmi_get_sample_period(int watchdog_thresh);
--bool arch_perf_nmi_is_available(void);
- #endif
- 
- #if defined(CONFIG_HARDLOCKUP_CHECK_TIMESTAMP) && \
-diff --git a/include/linux/perf/arm_pmu.h b/include/linux/perf/arm_pmu.h
-index 5b00f5cb4cf9..cbdd3533d843 100644
---- a/include/linux/perf/arm_pmu.h
-+++ b/include/linux/perf/arm_pmu.h
-@@ -12,10 +12,11 @@
- #include <linux/perf_event.h>
- #include <linux/platform_device.h>
- #include <linux/sysfs.h>
--#include <asm/cputype.h>
- 
- #ifdef CONFIG_ARM_PMU
- 
-+#include <asm/cputype.h>
-+
- /*
-  * The ARMv7 CPU PMU supports up to 32 event counters.
-  */
-@@ -171,8 +172,6 @@ void kvm_host_pmu_init(struct arm_pmu *pmu);
- #define kvm_host_pmu_init(x)	do { } while(0)
- #endif
- 
--bool arm_pmu_irq_is_nmi(void);
--
- /* Internal functions only for core arm_pmu code */
- struct arm_pmu *armpmu_alloc(void);
- void armpmu_free(struct arm_pmu *pmu);
-@@ -184,6 +183,8 @@ void armpmu_free_irq(int irq, int cpu);
- 
- #endif /* CONFIG_ARM_PMU */
- 
-+bool arm_pmu_irq_is_nmi(void);
-+
- #define ARMV8_SPE_PDEV_NAME "arm,spe-v1"
- 
- #endif /* __ARM_PMU_H__ */
-diff --git a/kernel/watchdog_perf.c b/kernel/watchdog_perf.c
-index 8ea00c4a24b2..ee7d3dcfdda2 100644
---- a/kernel/watchdog_perf.c
-+++ b/kernel/watchdog_perf.c
-@@ -19,6 +19,7 @@
- 
- #include <asm/irq_regs.h>
- #include <linux/perf_event.h>
-+#include <linux/perf/arm_pmu.h>
- 
- static DEFINE_PER_CPU(struct perf_event *, watchdog_ev);
- static DEFINE_PER_CPU(struct perf_event *, dead_event);
-@@ -234,8 +235,16 @@ void __init hardlockup_detector_perf_restart(void)
- 	}
- }
- 
--bool __weak __init arch_perf_nmi_is_available(void)
-+static bool __init arch_perf_nmi_is_available(void)
- {
-+	/*
-+	 * hardlockup_detector_perf_init() will success even if Pseudo-NMI turns off,
-+	 * however, the pmu interrupts will act like a normal interrupt instead of
-+	 * NMI and the hardlockup detector would be broken.
-+	 */
-+	if (IS_ENABLED(CONFIG_ARM_PMU))
-+		return arm_pmu_irq_is_nmi();
-+
- 	return true;
- }
- 
 -- 
-2.39.2
+Damien Le Moal
+Western Digital Research
 
