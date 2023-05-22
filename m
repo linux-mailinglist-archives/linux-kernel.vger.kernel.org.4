@@ -2,68 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17BD670C4FB
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 20:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EA5D70C4FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 20:12:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233536AbjEVSLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 14:11:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35088 "EHLO
+        id S233571AbjEVSL6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 14:11:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233482AbjEVSK6 (ORCPT
+        with ESMTP id S233143AbjEVSLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 14:10:58 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21CD4DC
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:10:57 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id af79cd13be357-75b01b0c712so213335385a.3
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:10:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684779056; x=1687371056;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=q5hLux43PwuTCN+/APBXSBXWMEmqN2R3favTYL/ElZk=;
-        b=NXUgppSfp1jycfs5NbP0pPTli65OqYShPJgsPGGfvS3yPWFSLzdEyW9caG17yxD7wn
-         qtxVr5WIqVyKk7Eh2v8mIZbs8nt304EMbJQJjvAnPkxaCkb/FQMHw1Td7zyolIuVY0PH
-         voPU3+BNzovLyJq/pA891yfO7V1gHHgb6FoHhzS6krXvqSBssvKuZH8PBTfJGtvuM1zK
-         UVfLY8IdsbPv7mvr2+CbdijXxLrNRJYcPfbhz5Ga7h0Gd+0HtjD3ZoU+zSBgyHXTgjvQ
-         0vBQCsyzAwWGNIVI1vHYe31IW/3l2DSTOZt+FxXVEXAOnTqVgf5CUhvZ74WrDCSqQL0W
-         uCow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684779056; x=1687371056;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=q5hLux43PwuTCN+/APBXSBXWMEmqN2R3favTYL/ElZk=;
-        b=WHrkAK8TPov4MjcuI3s8OF+E/o4EmDneD7PxHedeNePDy3CmdIAMaHbNCjBte+MLFo
-         sVIrwF6QiAAKNR9bDhOLgScwUkZ4Pl5BpEuIoYv8u2FltlAJiKomKBj/f8KXmbkDvCMk
-         y+JxJDtrh0d965z35WI7qVuB5+LN7gO9twqX0emg9q3vzUoLrJJUBRXzk7lOfu/DIguF
-         LMZIgyTqKdqppMqv7A999aKs0HRyMGgD266G2doQMuLXK1Tb1HaexYI2Le2Jnd4xuzjV
-         lP9dtNoVFls380NKfQeD4HnU9x5gGG6C1XI1p0MPOoRuLhSdbx9iBGnlgZtyrCtowl6k
-         coVA==
-X-Gm-Message-State: AC+VfDw5oLlhU/mz/L2DMEGy5eVZOFGLJgUPyQKDkE66oQFJ/rKfzErP
-        31NvW+NWdRo12UJv4WsENbB2psJ2pcMFIieL4sFGxQ==
-X-Google-Smtp-Source: ACHHUZ4o42p7x5XPW+JHzAZUsVUOdKiqSdUAkYpKJXv0IdpJ2wJD+m6RlMQKXJpAgbJUv8fnWIra5gIZFPDbRTWHfl0=
-X-Received: by 2002:a05:6214:1247:b0:621:68e8:99a4 with SMTP id
- r7-20020a056214124700b0062168e899a4mr21475772qvv.8.1684779056082; Mon, 22 May
- 2023 11:10:56 -0700 (PDT)
+        Mon, 22 May 2023 14:11:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D200FFD
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:11:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684779066;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sKUTtrSZf3DfIRZQxguiZKn/SOmLlmmRjaQIkqJDKKw=;
+        b=FE+5wraCc1TmLu9QHB3JGIvdT8rcyBkEMj785nd47hjw6b2S+Zo14Mc7hJ7K3tkN+iBLXu
+        6Qu0vxMOS/sPElFlBq6y4i4/D1s5nMMParRZcqs735ld9OTr9+RWkJmuuToF5WaNec/3mH
+        ZImasSOKA1ejaFPQpwn+/mYbXlbTAIY=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-473-9nIKi6-4Nwue84Km_jizCQ-1; Mon, 22 May 2023 14:11:04 -0400
+X-MC-Unique: 9nIKi6-4Nwue84Km_jizCQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 05D1A800B2A;
+        Mon, 22 May 2023 18:11:04 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.39.192.68])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 857F51121314;
+        Mon, 22 May 2023 18:11:02 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <CANT5p=pNFpEj0p+njYw3sVdq9CKgsTdh29Gj6iYDOsMN0ocj1Q@mail.gmail.com>
+References: <CANT5p=pNFpEj0p+njYw3sVdq9CKgsTdh29Gj6iYDOsMN0ocj1Q@mail.gmail.com> <2811951.1684766430@warthog.procyon.org.uk>
+To:     Shyam Prasad N <nspmangalore@gmail.com>
+Cc:     dhowells@redhat.com, Shyam Prasad N <sprasad@microsoft.com>,
+        Steve French <smfrench@gmail.com>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Paulo Alcantara <pc@manguebit.com>,
+        Tom Talpey <tom@talpey.com>, Jeff Layton <jlayton@kernel.org>,
+        linux-cifs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cifs: Fix cifs_limit_bvec_subset() to correctly check the maxmimum size
 MIME-Version: 1.0
-References: <20230521160426.1881124-1-masahiroy@kernel.org> <20230521160426.1881124-5-masahiroy@kernel.org>
-In-Reply-To: <20230521160426.1881124-5-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 22 May 2023 11:10:45 -0700
-Message-ID: <CAKwvOdkKedXoVoRB6Jts0vunyRHsruL0_VmPn6CYJwNiiu38Dg@mail.gmail.com>
-Subject: Re: [PATCH v6 04/20] modpost: remove unused argument from secref_whitelist()
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2818726.1684779061.1@warthog.procyon.org.uk>
+Date:   Mon, 22 May 2023 19:11:01 +0100
+Message-ID: <2818727.1684779061@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,50 +69,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 21, 2023 at 9:05=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.o=
-rg> wrote:
->
-> secref_whitelist() does not use the argument 'mismatch'.
+Shyam Prasad N <nspmangalore@gmail.com> wrote:
 
-Thanks for the patch!
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+> > +               max_size -= len;
+> 
+> Shouldn't this decrement happen below, after the span has been
+> compared with max_size?
 
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->
->  scripts/mod/modpost.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
->
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index ed2301e951a9..d2329ac32177 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -1035,8 +1035,7 @@ static const struct sectioncheck *section_mismatch(
->   *   refsymname =3D *.constprop.*
->   *
->   **/
-> -static int secref_whitelist(const struct sectioncheck *mismatch,
-> -                           const char *fromsec, const char *fromsym,
-> +static int secref_whitelist(const char *fromsec, const char *fromsym,
->                             const char *tosec, const char *tosym)
->  {
->         /* Check for pattern 1 */
-> @@ -1206,7 +1205,7 @@ static void default_mismatch_handler(const char *mo=
-dname, struct elf_info *elf,
->         tosym =3D sym_name(elf, to);
->
->         /* check whitelist - we may ignore it */
-> -       if (!secref_whitelist(mismatch, fromsec, fromsym, tosec, tosym))
-> +       if (!secref_whitelist(fromsec, fromsym, tosec, tosym))
->                 return;
->
->         sec_mismatch_count++;
-> --
-> 2.39.2
->
+It probably doesn't matter.  The compiler is free to move it around, but yes
+that and ix++ can both be moved down.
 
+David
 
---=20
-Thanks,
-~Nick Desaulniers
