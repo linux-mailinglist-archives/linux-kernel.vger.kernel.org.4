@@ -2,128 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E74970BA25
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 12:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE5BD70BA2F
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 12:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232183AbjEVK2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 06:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58692 "EHLO
+        id S232199AbjEVKap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 06:30:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232779AbjEVK1f (ORCPT
+        with ESMTP id S229673AbjEVKaj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 06:27:35 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930DB18B;
-        Mon, 22 May 2023 03:27:32 -0700 (PDT)
-Date:   Mon, 22 May 2023 10:27:29 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1684751250;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VzyXP4hVCcK/17zriU+/w8Hkk7jEXR8ezZjpNt1ijzw=;
-        b=KV7rQe3QqrzhCajSCyUPwCF7iMiJUYmaYX//d/vm6b5yfJRCWkHrLbbB81swygc/xMjyEG
-        aW7EwXQKN59Xytwt47YPP+0rcJeo26TwFi9upOD/bbIB8eiKaVIcIoVw5diqUG3Q7IqPYi
-        CyYTvZ8QDCb75DlaRkAEMusjI7gEsAU4FywpsS3R5gsQ+MBXCnqMIW0EFolQ/NJR8Dyvt/
-        WNnDN+pe9+Y8Yqr7OkFKh2LobwPWRLYjd17XqRbj8Mogpb5OB3n5enGCAG/ivJ9+NdC/rU
-        Ez55sBKJsHA0rnCaVR9pw1utMooz9+MpE22gzZJPf5yMhZxAwzEB2RYsrhOapg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1684751250;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VzyXP4hVCcK/17zriU+/w8Hkk7jEXR8ezZjpNt1ijzw=;
-        b=X4F3f7HZiDY+E1qAi5RygmT+22tyBF5mhiu2Fm93r1Bs/B9LjTcgp/go5vwxY10nMMZhZE
-        UDU/Y8w/GVpd0rCg==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] cyrpto/b128ops: Remove struct u128
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230515080553.979680310@infradead.org>
-References: <20230515080553.979680310@infradead.org>
+        Mon, 22 May 2023 06:30:39 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F353E49
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 03:30:09 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1q12ne-0002T8-3x; Mon, 22 May 2023 12:29:58 +0200
+Received: from mtr by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mtr@pengutronix.de>)
+        id 1q12nZ-0001jw-Dh; Mon, 22 May 2023 12:29:53 +0200
+Date:   Mon, 22 May 2023 12:29:53 +0200
+From:   Michael Tretter <m.tretter@pengutronix.de>
+To:     Diederik de Haas <didi.debian@cknow.org>
+Cc:     Jacob Chen <jacob-chen@iotwrt.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-rockchip@lists.infradead.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH RESEND 0/2] media: rockchip: rga: Add rk3568 support
+Message-ID: <20230522102953.GB23678@pengutronix.de>
+Mail-Followup-To: Michael Tretter <m.tretter@pengutronix.de>,
+        Diederik de Haas <didi.debian@cknow.org>,
+        Jacob Chen <jacob-chen@iotwrt.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Rob Herring <robh+dt@kernel.org>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-rockchip@lists.infradead.org,
+        Heiko Stuebner <heiko@sntech.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20230119-rk3568-rga-v1-0-43d4d14365e6@pengutronix.de>
+ <168466589373.900480.8086350880534437090.b4-ty@sntech.de>
+ <2386524.2IynHR6iFi@prancing-pony>
 MIME-Version: 1.0
-Message-ID: <168475124977.404.12847931801053325944.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <2386524.2IynHR6iFi@prancing-pony>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mtr@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the locking/core branch of tip:
+On Sun, 21 May 2023 21:32:51 +0200, Diederik de Haas wrote:
+> On Sunday, 21 May 2023 12:44:58 CEST Heiko Stuebner wrote:
+> > On Fri, 20 Jan 2023 10:14:21 +0100, Michael Tretter wrote:
+> > > The RGA2 on the Rockchip rk3568 is the same core as the RGA2 on the
+> > > Rockchip rk3288.
+> > > 
+> > > This series adds the necessary device tree binding and node in the device
+> > > tree to enable the RGA2 on the Rockchip rk3568.
+> > > 
+> > > I tested the driver with the GStreamer v4l2convert element on a Rock3
+> > > Model A board.
+> > > 
+> > > [...]
+> > 
+> > Applied, thanks!
+> > 
+> > [1/2] media: dt-bindings: media: rockchip-rga: add rockchip,rk3568-rga
+> >       commit: 9b12ceb5a80d1fb45d293265de100e33b5843943
+> > [2/2] arm64: dts: rockchip: Add RGA2 support to rk356x
+> >       commit: 0c3391f8bb06b744df521651534cd99e3d77e0a8
+> 
+> https://lore.kernel.org/all/TY3P286MB26115F60D273E840D36A610598CA9@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM/
+> 
+> indicated that there was a problem with device >= 4GB (RAM?):
+> > Since we have the over-4GB problem now, should we mark this problem as a
+> > TODO or something?
+> 
+> I thought that was the reason that these patches weren't picked up before?
 
-Commit-ID:     a42d381f16c00d894ef56e579035d8db3552bc61
-Gitweb:        https://git.kernel.org/tip/a42d381f16c00d894ef56e579035d8db3552bc61
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Mon, 15 May 2023 09:57:00 +02:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Mon, 22 May 2023 10:49:48 +02:00
+That's what I thought, too.
 
-cyrpto/b128ops: Remove struct u128
+> 
+> I have no insight into this problem, so I can't comment on the technical
+> aspects, but I had made a note for myself 'locally' about it.
 
-Per git-grep u128_xor() and its related struct u128 are unused except
-to implement {be,le}128_xor(). Remove them to free up the namespace.
+Using the RGA2 with the driver in its current form on devices with more than 4
+GB system memory may lead to memory corruption as buffer addresses are
+silently truncated to 32 bits.
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Acked-by: Herbert Xu <herbert@gondor.apana.org.au>
-Link: https://lore.kernel.org/r/20230515080553.979680310@infradead.org
----
- include/crypto/b128ops.h | 14 +++-----------
- 1 file changed, 3 insertions(+), 11 deletions(-)
+I'm not sure if that's actually a blocker for merging these patches.
 
-diff --git a/include/crypto/b128ops.h b/include/crypto/b128ops.h
-index 0b8e6bc..f3b37cb 100644
---- a/include/crypto/b128ops.h
-+++ b/include/crypto/b128ops.h
-@@ -50,10 +50,6 @@
- #include <linux/types.h>
- 
- typedef struct {
--	u64 a, b;
--} u128;
--
--typedef struct {
- 	__be64 a, b;
- } be128;
- 
-@@ -61,20 +57,16 @@ typedef struct {
- 	__le64 b, a;
- } le128;
- 
--static inline void u128_xor(u128 *r, const u128 *p, const u128 *q)
-+static inline void be128_xor(be128 *r, const be128 *p, const be128 *q)
- {
- 	r->a = p->a ^ q->a;
- 	r->b = p->b ^ q->b;
- }
- 
--static inline void be128_xor(be128 *r, const be128 *p, const be128 *q)
--{
--	u128_xor((u128 *)r, (u128 *)p, (u128 *)q);
--}
--
- static inline void le128_xor(le128 *r, const le128 *p, const le128 *q)
- {
--	u128_xor((u128 *)r, (u128 *)p, (u128 *)q);
-+	r->a = p->a ^ q->a;
-+	r->b = p->b ^ q->b;
- }
- 
- #endif /* _CRYPTO_B128OPS_H */
+Michael
