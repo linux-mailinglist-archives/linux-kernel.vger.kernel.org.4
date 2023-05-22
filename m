@@ -2,73 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87DC170B2DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 03:39:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BCDB70B2DD
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 03:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231368AbjEVBjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 21:39:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47710 "EHLO
+        id S231393AbjEVBn0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 21 May 2023 21:43:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjEVBj3 (ORCPT
+        with ESMTP id S229533AbjEVBnY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 21:39:29 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BA2B7CE;
-        Sun, 21 May 2023 18:39:27 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.170])
-        by gateway (Coremail) with SMTP id _____8DxI_DOx2pkxsYKAA--.18463S3;
-        Mon, 22 May 2023 09:39:26 +0800 (CST)
-Received: from [10.20.42.170] (unknown [10.20.42.170])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxqrbNx2pkpV9uAA--.54486S3;
-        Mon, 22 May 2023 09:39:25 +0800 (CST)
-Message-ID: <99371487-717a-64d6-1c3d-aaeaee6f20db@loongson.cn>
-Date:   Mon, 22 May 2023 09:39:25 +0800
+        Sun, 21 May 2023 21:43:24 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24182AF;
+        Sun, 21 May 2023 18:43:20 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 34M1go4iB030448, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 34M1go4iB030448
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Mon, 22 May 2023 09:42:50 +0800
+Received: from RTEXMBS05.realtek.com.tw (172.21.6.98) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Mon, 22 May 2023 09:43:01 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS05.realtek.com.tw (172.21.6.98) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.34; Mon, 22 May 2023 09:43:00 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
+ RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
+ 15.01.2375.007; Mon, 22 May 2023 09:43:00 +0800
+From:   Ping-Ke Shih <pkshih@realtek.com>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
+CC:     "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
+        "Peter Robinson" <pbrobinson@gmail.com>,
+        "jernej.skrabec@gmail.com" <jernej.skrabec@gmail.com>
+Subject: RE: [PATCH wireless-next v1 1/4] wifi: rtw88: sdio: Check the HISR RX_REQUEST bit in rtw_sdio_rx_isr()
+Thread-Topic: [PATCH wireless-next v1 1/4] wifi: rtw88: sdio: Check the HISR
+ RX_REQUEST bit in rtw_sdio_rx_isr()
+Thread-Index: AQHZiaRUyNopi6TOU06ASkVQiZhTKq9liWyA
+Date:   Mon, 22 May 2023 01:43:00 +0000
+Message-ID: <d6a5555d13ed467db8c181962c2adb85@realtek.com>
+References: <20230518161749.1311949-1-martin.blumenstingl@googlemail.com>
+ <20230518161749.1311949-2-martin.blumenstingl@googlemail.com>
+In-Reply-To: <20230518161749.1311949-2-martin.blumenstingl@googlemail.com>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.69.188]
+x-kse-serverinfo: RTEXMBS05.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v10 00/30] Add KVM LoongArch support
-Content-Language: en-US
-To:     WANG Xuerui <kernel@xen0n.name>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Xi Ruoyao <xry111@xry111.site>,
-        Tianrui Zhao <zhaotianrui@loongson.cn>
-References: <20230515021522.2445551-1-zhaotianrui@loongson.cn>
- <02f07d8e-e1c2-2ec0-59c3-f5b4ef0463dc@loongson.cn>
- <4529ee5b-364a-7819-c727-71cf94057b8b@xen0n.name>
-From:   maobibo <maobibo@loongson.cn>
-In-Reply-To: <4529ee5b-364a-7819-c727-71cf94057b8b@xen0n.name>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxqrbNx2pkpV9uAA--.54486S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxWrWfAr1rAFWrJFyktr43Wrg_yoW5WF15pr
-        4a9F47tFn5Ar4UZ34q9a18ZFy5Kwn7W3y5XrsxK343u3yUAr18tF1ftFZ0ya4UZan3Jr4j
-        qr17Kr18A3Z8Za7anT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bqxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
-        1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84
-        ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
-        87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
-        AS07AlzVAYIcxG8wCY1x0262kKe7AKxVWUAVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCF
-        s4IE7xkEbVWUJVW8JwCFI7km07C267AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI
-        8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41l
-        IxAIcVC0I7IYx2IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIx
-        AIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2
-        jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8Dl1DUUUUU==
-X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_SBL_CSS,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -77,40 +74,99 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-在 2023/5/21 18:22, WANG Xuerui 写道:
-> On 2023/5/18 10:56, maobibo wrote:
->> Hi Paolo & Huacai,
->>
->> Sorry to bother you, I do not know flow of kernel code reviewing and merging.
->>
->> I want to know who should give a reviewed-by comments for these piece of code
->> about loongarch kvm patch. It should be kvm maintainer or LoongArch maintianer?
->> And any suggestion is welcome.
+> -----Original Message-----
+> From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Sent: Friday, May 19, 2023 12:18 AM
+> To: linux-wireless@vger.kernel.org
+> Cc: linux-mmc@vger.kernel.org; linux-kernel@vger.kernel.org; ulf.hansson@linaro.org; kvalo@kernel.org;
+> tony0620emma@gmail.com; Peter Robinson <pbrobinson@gmail.com>; Ping-Ke Shih <pkshih@realtek.com>;
+> jernej.skrabec@gmail.com; Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Subject: [PATCH wireless-next v1 1/4] wifi: rtw88: sdio: Check the HISR RX_REQUEST bit in rtw_sdio_rx_isr()
 > 
-> IMO the series should get its R-b from kvm maintainers (because it's kvm after all), and ideally also Acked-by from arch/loongarch maintainers (because it contains arch-specific code), according to common sense.
+> rtw_sdio_rx_isr() is responsible for receiving data from the wifi chip
+> and is called from the SDIO interrupt handler when the interrupt status
+> register (HISR) has the RX_REQUEST bit set. After the first batch of
+> data has been processed by the driver the wifi chip may have more data
+> ready to be read, which is managed by a loop in rtw_sdio_rx_isr().
 > 
-> But in order for the various maintainers/reviewers to effectively review, maybe the LoongArch ISA manual Volume 3 (containing details about the virtualization extension) should be put out soon. AFAIK Huacai has access to it, by being a Loongson employee, but I don't know if he can review this series in the public without violating NDAs; Loongson outsiders like me and the kvm reviewers can only trust the commit messages and comments for the time being.
-Yes, it will be best if kvm maintainers can give reviewed-by comments,
-since they understand kvm component at best and know the future
-evolution directions.
+> It turns out that there are cases where the RX buffer length (from the
+> REG_SDIO_RX0_REQ_LEN register) does not match the data we receive. The
+> following two cases were observed with a RTL8723DS card:
+> - RX length is smaller than the total packet length including overhead
+>   and actual data bytes (whose length is part of the buffer we read from
+>   the wifi chip and is stored in rtw_rx_pkt_stat.pkt_len). This can
+>   result in errors like:
+>     skbuff: skb_over_panic: text:ffff8000011924ac len:3341 put:3341
+>   (one case observed was: RX buffer length = 1536 bytes but
+>    rtw_rx_pkt_stat.pkt_len = 1546 bytes, this is not valid as it means
+>    we need to read beyond the end of the buffer)
+> - RX length looks valid but rtw_rx_pkt_stat.pkt_len is zero
+> 
+> Check if the RX_REQUEST is set in the HISR register for each iteration
+> inside rtw_sdio_rx_isr(). This mimics what the RTL8723DS vendor driver
+> does and makes the driver only read more data if the RX_REQUEST bit is
+> set (which seems to be a way for the card's hardware or firmware to
+> tell the host that data is ready to be processed).
+> 
+> For RTW_WCPU_11AC chips this check is not needed. The RTL8822BS vendor
+> driver for example states that this check is unnecessary (but still uses
+> it) and the RTL8822CS drops this check entirely.
+> 
+> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> ---
+>  drivers/net/wireless/realtek/rtw88/sdio.c | 23 ++++++++++++++++++++---
+>  1 file changed, 20 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/net/wireless/realtek/rtw88/sdio.c b/drivers/net/wireless/realtek/rtw88/sdio.c
+> index 06fce7c3adda..32b8c9194b2c 100644
+> --- a/drivers/net/wireless/realtek/rtw88/sdio.c
+> +++ b/drivers/net/wireless/realtek/rtw88/sdio.c
+> @@ -998,9 +998,9 @@ static void rtw_sdio_rxfifo_recv(struct rtw_dev *rtwdev, u32 rx_len)
+> 
+>  static void rtw_sdio_rx_isr(struct rtw_dev *rtwdev)
+>  {
+> -       u32 rx_len, total_rx_bytes = 0;
+> +       u32 rx_len, hisr, total_rx_bytes = 0;
+> 
+> -       while (total_rx_bytes < SZ_64K) {
+> +       do {
+>                 if (rtw_chip_wcpu_11n(rtwdev))
+>                         rx_len = rtw_read16(rtwdev, REG_SDIO_RX0_REQ_LEN);
+>                 else
+> @@ -1012,7 +1012,24 @@ static void rtw_sdio_rx_isr(struct rtw_dev *rtwdev)
+>                 rtw_sdio_rxfifo_recv(rtwdev, rx_len);
+> 
+>                 total_rx_bytes += rx_len;
+> -       }
+> +
+> +               if (rtw_chip_wcpu_11n(rtwdev))
+> +                       /* Stop if no more RX requests are pending, even if
+> +                        * rx_len could be greater than zero in the next
+> +                        * iteration. This is needed because the RX buffer may
+> +                        * already contain data while either HW or FW are not
+> +                        * done filling that buffer yet. Still reading the
+> +                        * buffer can result in packets where
+> +                        * rtw_rx_pkt_stat.pkt_len is zero or points beyond the
+> +                        * end of the buffer.
+> +                        */
+> +                       hisr = rtw_read32(rtwdev, REG_SDIO_HISR);
+> +               else
+> +                       /* RTW_WCPU_11AC chips have improved hardware or
+> +                        * firmware and can use rx_len unconditionally.
+> +                        */
+> +                       hisr = REG_SDIO_HISR_RX_REQUEST;
 
-> 
-> (BTW, how do people usually deal with pre-release hardware wit documentation not out yet? I suppose similar situations like this should turn up fairly often.)
-Manual is actually one issue, however it does not prevent the review
-process. There are some drivers for *fruit* devices, I can not find
-the hw manual also.  With the manual, it helps to review and points
-out the further and detailed issues.
-> 
-> Aside from this, there's another point: use of undocumented instructions in raw form with ".word". This currently doesn't work in LLVM/Clang, thus will slightly set back the ongoing ClangBuiltLinux enablement effort (currently all such usages in arch/loongarch are related to "invtlb" which has perfect support, and can be removed). AFAIK, such practice dates back to the LoongISA times, when the Loongson extended opcodes weren't supported by the upstream MIPS toolchains for some reason; but LoongArch is independent and not bounded by anyone else now, so it's better in terms of maintainability to just add the instructions to the toolchains. People will not be inconvenienced by having to use bleeding-edge LoongArch toolchains because upstream LoongArch devs have always been doing this.
-As for one new architecture, it is normal to use .word or .insn, instruction
-will update for the first few years and also compiler may be not supported
-timely. The other arch has the same phenomenon if you grep "\.insn", also
-llvm on LoongArch supports ".word" directives.
+nit: adding braces to these branches would be clearer. 
 
-After three or five years, we will remove these ".insn" macro when hw and
-compiler is matured.
+If not, this patch still looks good to me, so
 
-Regards
-Bibo, Mao
+Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
+
+
+> +       } while (total_rx_bytes < SZ_64K && hisr & REG_SDIO_HISR_RX_REQUEST);
+>  }
 > 
+>  static void rtw_sdio_handle_interrupt(struct sdio_func *sdio_func)
+> --
+> 2.40.1
 
