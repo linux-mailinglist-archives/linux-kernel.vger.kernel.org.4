@@ -2,211 +2,364 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADF5170C1EE
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:06:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A953D70C1F1
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:06:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234513AbjEVPGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 11:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45710 "EHLO
+        id S231346AbjEVPGp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 11:06:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234510AbjEVPFs (ORCPT
+        with ESMTP id S234427AbjEVPGb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 11:05:48 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D8610F6
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 08:05:30 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 0E419C000B;
-        Mon, 22 May 2023 15:05:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1684767928;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kfGqNpqYGcaYDPFm+L0EvwvvX+xtHwS882MQS2NRtaE=;
-        b=P8QdRGGHqZgASUf2kWEbUXEWYZEZrfhHtlq56cohDeT4cvM5/wcqr0XTxEahrzv0fJq8AK
-        ISrfFGc80sWA74k9RLAvfNSm3+7QVA1vcHA099qpLV/eTdLMKcK7l6TKiDlDs9Fz2Sd8Rh
-        iRcg64BxeKzaqyVNGYRyNjnv4fYf//LweLEFqnxQl0Bl+DzvtEueDiFuZguknwf9lH9ceQ
-        33RKB9ok9NcpdcfJtgUUMeAHk7vpyUK2g//kzt+vRHL0nFcFItzAqfIJqKlUvNeJhK+eTs
-        AG3sJ8Zp7fk3bk+DuUHkBRp41wcekq5hH9a1FM4LAZpfg3XvT+JfGVZoi74gUg==
-Date:   Mon, 22 May 2023 17:05:26 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Cc:     Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Yixun Lan <yixun.lan@amlogic.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>, <oxffffaa@gmail.com>,
-        <kernel@sberdevices.ru>, <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 1/5] mtd: rawnand: meson: fix command sequence for
- read/write
-Message-ID: <20230522170526.6486755a@xps-13>
-In-Reply-To: <20230515094440.3552094-2-AVKrasnov@sberdevices.ru>
-References: <20230515094440.3552094-1-AVKrasnov@sberdevices.ru>
-        <20230515094440.3552094-2-AVKrasnov@sberdevices.ru>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Mon, 22 May 2023 11:06:31 -0400
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B16810C3;
+        Mon, 22 May 2023 08:06:24 -0700 (PDT)
+Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 9273061E4052B;
+        Mon, 22 May 2023 17:05:28 +0200 (CEST)
+Message-ID: <6bebe582-705c-2b7a-3286-1c86a15619f2@molgen.mpg.de>
+Date:   Mon, 22 May 2023 17:05:28 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [Intel-wired-lan] [PATCH net-next 10/11] libie: add per-queue
+ Page Pool stats
+Content-Language: en-US
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        netdev@vger.kernel.org,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        linux-kernel@vger.kernel.org,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        intel-wired-lan@lists.osuosl.org, Christoph Hellwig <hch@lst.de>,
+        Magnus Karlsson <magnus.karlsson@intel.com>
+References: <20230516161841.37138-1-aleksander.lobakin@intel.com>
+ <20230516161841.37138-11-aleksander.lobakin@intel.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20230516161841.37138-11-aleksander.lobakin@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arseniy,
+Dear Alexander,
 
-AVKrasnov@sberdevices.ru wrote on Mon, 15 May 2023 12:44:35 +0300:
 
-> This fixes read/write functionality by:
-> 1) Changing NFC_CMD_RB_INT bit value.
+Thank you for your patch.
 
-I guess this is a separate fix
+Am 16.05.23 um 18:18 schrieb Alexander Lobakin:
+> Expand the libie generic per-queue stats with the generic Page Pool
+> stats provided by the API itself, when CONFIG_PAGE_POOL is enable.
 
-> 2) Adding extra NAND_CMD_STATUS command on each r/w request.
+enable*d*
 
-Is this really needed? Looks like you're delaying the next op only. Is
-using a delay enough? If yes, then it's probably the wrong approach.
-
-> 3) Adding extra idle commands during r/w request.
-
-Question about this below, might also be a patch on its own?
-
-> 4) Adding extra NAND_CMD_READ0 on each read request.
->=20
-> Without this patch driver works unstable, for example there are a lot
-> of ECC errors.
-
-I believe all the fixes should be Cc'ed to stable, please add in your
-commits:
-
-Cc: stable@...
-
->=20
-> Fixes: 8fae856c5350 ("mtd: rawnand: meson: add support for Amlogic NAND f=
-lash controller")
-> Suggested-by: Liang Yang <liang.yang@amlogic.com>
-> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+> When it's not, there'll be no such fields in the stats structure, so
+> no space wasted.
+> They are also a bit special in terms of how they are obtained. One
+> &page_pool accumulates statistics until it's destroyed obviously,
+> which happens on ifdown. So, in order to not lose any statistics,
+> get the stats and store in the queue container before destroying
+> a pool. This container survives ifups/downs, so it basically stores
+> the statistics accumulated since the very first pool was allocated
+> on this queue. When it's needed to export the stats, first get the
+> numbers from this container and then add the "live" numbers -- the
+> ones that the current active pool returns. The result values will
+> always represent the actual device-lifetime* stats.
+> There's a cast from &page_pool_stats to `u64 *` in a couple functions,
+> but they are guarded with stats asserts to make sure it's safe to do.
+> FWIW it saves a lot of object code.
+> 
+> Signed-off-by: Alexander Lobakin <aleksander.lobakin@intel.com>
 > ---
->  drivers/mtd/nand/raw/meson_nand.c | 30 +++++++++++++++++++++---------
->  1 file changed, 21 insertions(+), 9 deletions(-)
->=20
-> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/mes=
-on_nand.c
-> index 074e14225c06..2f4d8c84186b 100644
-> --- a/drivers/mtd/nand/raw/meson_nand.c
-> +++ b/drivers/mtd/nand/raw/meson_nand.c
-> @@ -37,7 +37,7 @@
->  #define NFC_CMD_SCRAMBLER_ENABLE	BIT(19)
->  #define NFC_CMD_SCRAMBLER_DISABLE	0
->  #define NFC_CMD_SHORTMODE_DISABLE	0
-> -#define NFC_CMD_RB_INT		BIT(14)
-> +#define NFC_CMD_RB_INT ((0xb << 10) | BIT(18) | BIT(16))
-> =20
->  #define NFC_CMD_GET_SIZE(x)	(((x) >> 22) & GENMASK(4, 0))
-> =20
-> @@ -392,7 +392,7 @@ static void meson_nfc_set_data_oob(struct nand_chip *=
-nand,
->  	}
->  }
-> =20
-> -static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms)
-> +static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms, int=
- cmd_read0)
->  {
->  	u32 cmd, cfg;
->  	int ret =3D 0;
-> @@ -407,17 +407,29 @@ static int meson_nfc_queue_rb(struct meson_nfc *nfc=
-, int timeout_ms)
-> =20
->  	reinit_completion(&nfc->completion);
-> =20
-> +	cmd =3D nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_STATUS;
-> +	writel(cmd, nfc->reg_base + NFC_REG_CMD);
-> +	meson_nfc_cmd_idle(nfc, 5);
-
-Why 5 and 2 below? They look like magic values. Is this totally
-experimental?
-
+>   drivers/net/ethernet/intel/libie/internal.h | 23 +++++++
+>   drivers/net/ethernet/intel/libie/rx.c       | 20 ++++++
+>   drivers/net/ethernet/intel/libie/stats.c    | 72 ++++++++++++++++++++-
+>   include/linux/net/intel/libie/rx.h          |  4 ++
+>   include/linux/net/intel/libie/stats.h       | 39 ++++++++++-
+>   5 files changed, 155 insertions(+), 3 deletions(-)
+>   create mode 100644 drivers/net/ethernet/intel/libie/internal.h
+> 
+> diff --git a/drivers/net/ethernet/intel/libie/internal.h b/drivers/net/ethernet/intel/libie/internal.h
+> new file mode 100644
+> index 000000000000..083398dc37c6
+> --- /dev/null
+> +++ b/drivers/net/ethernet/intel/libie/internal.h
+> @@ -0,0 +1,23 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/* libie internal declarations not to be used in drivers.
+> + *
+> + * Copyright(c) 2023 Intel Corporation.
+> + */
 > +
->  	/* use the max erase time as the maximum clock for waiting R/B */
-> -	cmd =3D NFC_CMD_RB | NFC_CMD_RB_INT
-> -		| nfc->param.chip_select | nfc->timing.tbers_max;
-
-This is not documented in the commit log, is it?
-
-> +	cmd =3D NFC_CMD_RB | NFC_CMD_RB_INT | nfc->timing.tbers_max;
->  	writel(cmd, nfc->reg_base + NFC_REG_CMD);
-> +	meson_nfc_cmd_idle(nfc, 2);
-> =20
->  	ret =3D wait_for_completion_timeout(&nfc->completion,
->  					  msecs_to_jiffies(timeout_ms));
->  	if (ret =3D=3D 0)
-> -		ret =3D -1;
-> +		return -1;
-
-Please use real error codes, such as ETIMEDOUT.
-
-> =20
-> -	return ret;
-> +	if (!cmd_read0)
-> +		return 0;
+> +#ifndef __LIBIE_INTERNAL_H
+> +#define __LIBIE_INTERNAL_H
 > +
-> +	cmd =3D nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_READ0;
-
-This looks really wrong, I don't get why you would need to send an
-expensive READ0 command.
-
-> +	writel(cmd, nfc->reg_base + NFC_REG_CMD);
-> +	meson_nfc_drain_cmd(nfc);
-> +	meson_nfc_wait_cmd_finish(nfc, CMD_FIFO_EMPTY_TIMEOUT);
+> +struct libie_rq_stats;
+> +struct page_pool;
 > +
-> +	return 0;
->  }
-> =20
->  static void meson_nfc_set_user_byte(struct nand_chip *nand, u8 *oob_buf)
-> @@ -623,7 +635,7 @@ static int meson_nfc_rw_cmd_prepare_and_execute(struc=
-t nand_chip *nand,
->  	if (in) {
->  		nfc->cmdfifo.rw.cmd1 =3D cs | NFC_CMD_CLE | NAND_CMD_READSTART;
->  		writel(nfc->cmdfifo.rw.cmd1, nfc->reg_base + NFC_REG_CMD);
-> -		meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tR_max));
-> +		meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tR_max), 1);
->  	} else {
->  		meson_nfc_cmd_idle(nfc, nfc->timing.tadl);
->  	}
-> @@ -669,7 +681,7 @@ static int meson_nfc_write_page_sub(struct nand_chip =
-*nand,
-> =20
->  	cmd =3D nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_PAGEPROG;
->  	writel(cmd, nfc->reg_base + NFC_REG_CMD);
-> -	meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tPROG_max));
-> +	meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tPROG_max), 0);
-> =20
->  	meson_nfc_dma_buffer_release(nand, data_len, info_len, DMA_TO_DEVICE);
-> =20
-> @@ -952,7 +964,7 @@ static int meson_nfc_exec_op(struct nand_chip *nand,
->  			break;
-> =20
->  		case NAND_OP_WAITRDY_INSTR:
-> -			meson_nfc_queue_rb(nfc, instr->ctx.waitrdy.timeout_ms);
-> +			meson_nfc_queue_rb(nfc, instr->ctx.waitrdy.timeout_ms, 1);
->  			if (instr->delay_ns)
->  				meson_nfc_cmd_idle(nfc, delay_idle);
->  			break;
+> +#ifdef CONFIG_PAGE_POOL_STATS
+> +void libie_rq_stats_sync_pp(struct libie_rq_stats *stats,
+> +			    struct page_pool *pool);
+> +#else
+> +static inline void libie_rq_stats_sync_pp(struct libie_rq_stats *stats,
+> +					  struct page_pool *pool)
+> +{
+> +}
+> +#endif
+> +
+> +#endif /* __LIBIE_INTERNAL_H */
+> diff --git a/drivers/net/ethernet/intel/libie/rx.c b/drivers/net/ethernet/intel/libie/rx.c
+> index d68eab76593c..128f134aca6d 100644
+> --- a/drivers/net/ethernet/intel/libie/rx.c
+> +++ b/drivers/net/ethernet/intel/libie/rx.c
+> @@ -3,6 +3,8 @@
+>   
+>   #include <linux/net/intel/libie/rx.h>
+>   
+> +#include "internal.h"
+> +
+>   /* O(1) converting i40e/ice/iavf's 8/10-bit hardware packet type to a parsed
+>    * bitfield struct.
+>    */
+> @@ -133,6 +135,24 @@ struct page_pool *libie_rx_page_pool_create(struct napi_struct *napi,
+>   }
+>   EXPORT_SYMBOL_NS_GPL(libie_rx_page_pool_create, LIBIE);
+>   
+> +/**
+> + * libie_rx_page_pool_destroy - destroy a &page_pool created by libie
+> + * @pool: pool to destroy
+> + * @stats: RQ stats from the ring (or %NULL to skip updating PP stats)
+> + *
+> + * As the stats usually has the same lifetime as the device, but PP is usually
+> + * created/destroyed on ifup/ifdown, in order to not lose the stats accumulated
+> + * during the last ifup, the PP stats need to be added to the driver stats
+> + * container. Then the PP gets destroyed.
+> + */
+> +void libie_rx_page_pool_destroy(struct page_pool *pool,
+> +				struct libie_rq_stats *stats)
+> +{
+> +	libie_rq_stats_sync_pp(stats, pool);
+> +	page_pool_destroy(pool);
+> +}
+> +EXPORT_SYMBOL_NS_GPL(libie_rx_page_pool_destroy, LIBIE);
+> +
+>   MODULE_AUTHOR("Intel Corporation");
+>   MODULE_DESCRIPTION("Intel(R) Ethernet common library");
+>   MODULE_LICENSE("GPL");
+> diff --git a/drivers/net/ethernet/intel/libie/stats.c b/drivers/net/ethernet/intel/libie/stats.c
+> index 61456842a362..95bbb38c39e3 100644
+> --- a/drivers/net/ethernet/intel/libie/stats.c
+> +++ b/drivers/net/ethernet/intel/libie/stats.c
+> @@ -4,6 +4,8 @@
+>   #include <linux/ethtool.h>
+>   #include <linux/net/intel/libie/stats.h>
+>   
+> +#include "internal.h"
+> +
+>   /* Rx per-queue stats */
+>   
+>   static const char * const libie_rq_stats_str[] = {
+> @@ -14,6 +16,70 @@ static const char * const libie_rq_stats_str[] = {
+>   
+>   #define LIBIE_RQ_STATS_NUM	ARRAY_SIZE(libie_rq_stats_str)
+>   
+> +#ifdef CONFIG_PAGE_POOL_STATS
+> +/**
+> + * libie_rq_stats_get_pp - get the current stats from a &page_pool
+> + * @sarr: local array to add stats to
+> + * @pool: pool to get the stats from
+> + *
+> + * Adds the current "live" stats from an online PP to the stats read from
+> + * the RQ container, so that the actual totals will be returned.
+> + */
+> +static void libie_rq_stats_get_pp(u64 *sarr, struct page_pool *pool)
+> +{
+> +	struct page_pool_stats *pps;
+> +	/* Used only to calculate pos below */
+> +	struct libie_rq_stats tmp;
+> +	u32 pos;
+> +
+> +	/* Validate the libie PP stats array can be casted <-> PP struct */
+> +	static_assert(sizeof(tmp.pp) == sizeof(*pps));
+> +
+> +	if (!pool)
+> +		return;
+> +
+> +	/* Position of the first Page Pool stats field */
+> +	pos = (u64_stats_t *)&tmp.pp - tmp.raw;
+> +	pps = (typeof(pps))&sarr[pos];
+> +
+> +	page_pool_get_stats(pool, pps);
+> +}
+> +
+> +/**
+> + * libie_rq_stats_sync_pp - add the current PP stats to the RQ stats container
+> + * @stats: stats structure to update
+> + * @pool: pool to read the stats
+> + *
+> + * Called by libie_rx_page_pool_destroy() to save the stats before destroying
+> + * the pool.
+> + */
+> +void libie_rq_stats_sync_pp(struct libie_rq_stats *stats,
+> +			    struct page_pool *pool)
+> +{
+> +	u64_stats_t *qarr = (u64_stats_t *)&stats->pp;
+> +	struct page_pool_stats pps = { };
+> +	u64 *sarr = (u64 *)&pps;
+> +
+> +	if (!stats)
+> +		return;
+> +
+> +	page_pool_get_stats(pool, &pps);
+> +
+> +	u64_stats_update_begin(&stats->syncp);
+> +
+> +	for (u32 i = 0; i < sizeof(pps) / sizeof(*sarr); i++)
+> +		u64_stats_add(&qarr[i], sarr[i]);
+> +
+> +	u64_stats_update_end(&stats->syncp);
+> +}
+> +#else
+> +static inline void libie_rq_stats_get_pp(u64 *sarr, struct page_pool *pool)
+> +{
+> +}
+> +
+> +/* static inline void libie_rq_stats_sync_pp() is declared in "internal.h" */
+> +#endif
+> +
+>   /**
+>    * libie_rq_stats_get_sset_count - get the number of Ethtool RQ stats provided
+>    *
+> @@ -41,8 +107,10 @@ EXPORT_SYMBOL_NS_GPL(libie_rq_stats_get_strings, LIBIE);
+>    * libie_rq_stats_get_data - get the RQ stats in Ethtool format
+>    * @data: reference to the cursor pointing to the output array
+>    * @stats: RQ stats container from the queue
+> + * @pool: &page_pool from the queue (%NULL to ignore PP "live" stats)
+>    */
+> -void libie_rq_stats_get_data(u64 **data, const struct libie_rq_stats *stats)
+> +void libie_rq_stats_get_data(u64 **data, const struct libie_rq_stats *stats,
+> +			     struct page_pool *pool)
+>   {
+>   	u64 sarr[LIBIE_RQ_STATS_NUM];
+>   	u32 start;
+> @@ -54,6 +122,8 @@ void libie_rq_stats_get_data(u64 **data, const struct libie_rq_stats *stats)
+>   			sarr[i] = u64_stats_read(&stats->raw[i]);
+>   	} while (u64_stats_fetch_retry(&stats->syncp, start));
+>   
+> +	libie_rq_stats_get_pp(sarr, pool);
+> +
+>   	for (u32 i = 0; i < LIBIE_RQ_STATS_NUM; i++)
+>   		(*data)[i] += sarr[i];
+>   
+> diff --git a/include/linux/net/intel/libie/rx.h b/include/linux/net/intel/libie/rx.h
+> index f6ba3b19b7e2..474ffd689001 100644
+> --- a/include/linux/net/intel/libie/rx.h
+> +++ b/include/linux/net/intel/libie/rx.h
+> @@ -160,7 +160,11 @@ static inline void libie_skb_set_hash(struct sk_buff *skb, u32 hash,
+>   /* Maximum frame size minus LL overhead */
+>   #define LIBIE_MAX_MTU		(LIBIE_MAX_RX_FRM_LEN - LIBIE_RX_LL_LEN)
+>   
+> +struct libie_rq_stats;
+> +
+>   struct page_pool *libie_rx_page_pool_create(struct napi_struct *napi,
+>   					    u32 size);
+> +void libie_rx_page_pool_destroy(struct page_pool *pool,
+> +				struct libie_rq_stats *stats);
+>   
+>   #endif /* __LIBIE_RX_H */
+> diff --git a/include/linux/net/intel/libie/stats.h b/include/linux/net/intel/libie/stats.h
+> index dbbc98bbd3a7..23ca0079a905 100644
+> --- a/include/linux/net/intel/libie/stats.h
+> +++ b/include/linux/net/intel/libie/stats.h
+> @@ -49,6 +49,17 @@
+>    * fragments: number of processed descriptors carrying only a fragment
+>    * alloc_page_fail: number of Rx page allocation fails
+>    * build_skb_fail: number of build_skb() fails
+> + * pp_alloc_fast: pages taken from the cache or ring
+> + * pp_alloc_slow: actual page allocations
+> + * pp_alloc_slow_ho: non-order-0 page allocations
+> + * pp_alloc_empty: number of times the pool was empty
+> + * pp_alloc_refill: number of cache refills
+> + * pp_alloc_waive: NUMA node mismatches during recycling
+> + * pp_recycle_cached: direct recyclings into the cache
+> + * pp_recycle_cache_full: number of times the cache was full
+> + * pp_recycle_ring: recyclings into the ring
+> + * pp_recycle_ring_full: number of times the ring was full
+> + * pp_recycle_released_ref: pages released due to elevated refcnt
+>    */
+>   
+>   #define DECLARE_LIBIE_RQ_NAPI_STATS(act)		\
+> @@ -60,9 +71,29 @@
+>   	act(alloc_page_fail)				\
+>   	act(build_skb_fail)
+>   
+> +#ifdef CONFIG_PAGE_POOL_STATS
+> +#define DECLARE_LIBIE_RQ_PP_STATS(act)			\
+> +	act(pp_alloc_fast)				\
+> +	act(pp_alloc_slow)				\
+> +	act(pp_alloc_slow_ho)				\
+> +	act(pp_alloc_empty)				\
+> +	act(pp_alloc_refill)				\
+> +	act(pp_alloc_waive)				\
+> +	act(pp_recycle_cached)				\
+> +	act(pp_recycle_cache_full)			\
+> +	act(pp_recycle_ring)				\
+> +	act(pp_recycle_ring_full)			\
+> +	act(pp_recycle_released_ref)
+> +#else
+> +#define DECLARE_LIBIE_RQ_PP_STATS(act)
+> +#endif
+> +
+>   #define DECLARE_LIBIE_RQ_STATS(act)			\
+>   	DECLARE_LIBIE_RQ_NAPI_STATS(act)		\
+> -	DECLARE_LIBIE_RQ_FAIL_STATS(act)
+> +	DECLARE_LIBIE_RQ_FAIL_STATS(act)		\
+> +	DECLARE_LIBIE_RQ_PP_STATS(act)
+> +
+> +struct page_pool;
+>   
+>   struct libie_rq_stats {
+>   	struct u64_stats_sync	syncp;
+> @@ -72,6 +103,9 @@ struct libie_rq_stats {
+>   #define act(s)	u64_stats_t	s;
+>   			DECLARE_LIBIE_RQ_NAPI_STATS(act);
+>   			DECLARE_LIBIE_RQ_FAIL_STATS(act);
+> +			struct_group(pp,
+> +				DECLARE_LIBIE_RQ_PP_STATS(act);
+> +			);
+>   #undef act
+>   		};
+>   		DECLARE_FLEX_ARRAY(u64_stats_t, raw);
+> @@ -110,7 +144,8 @@ libie_rq_napi_stats_add(struct libie_rq_stats *qs,
+>   
+>   u32 libie_rq_stats_get_sset_count(void);
+>   void libie_rq_stats_get_strings(u8 **data, u32 qid);
+> -void libie_rq_stats_get_data(u64 **data, const struct libie_rq_stats *stats);
+> +void libie_rq_stats_get_data(u64 **data, const struct libie_rq_stats *stats,
+> +			     struct page_pool *pool);
+>   
+>   /* Tx per-queue stats:
+>    * packets: packets sent from this queue
+
+Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
 
 
-Thanks,
-Miqu=C3=A8l
+Kind regards,
+
+Paul
