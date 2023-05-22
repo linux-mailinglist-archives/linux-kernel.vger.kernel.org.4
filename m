@@ -2,59 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 863E570BCD3
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 14:01:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4770D70BCD2
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 14:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233614AbjEVMBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 08:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39292 "EHLO
+        id S233663AbjEVMBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 08:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233695AbjEVMBN (ORCPT
+        with ESMTP id S233678AbjEVMBL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 08:01:13 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201A111A;
-        Mon, 22 May 2023 05:01:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1684756861; x=1716292861;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=hMOSXMNyvb3N9ByVdDgsFv/uLjADIsqKyzVsX4y12vs=;
-  b=vhS3TCLfS0fqh+Rzv7jMmfP3i4bKMpyW8gSb4xVYGOi/nsHMWLkJQ45B
-   uhJW1lKi8H4m4Q0THJg3T2jBTAPqDdKLzXfrxGi73gFKE2QydpXv/eSwL
-   P7V01nWGC/f/ifs7rKuS0JjU63rqWVH+1lZ/Xnmg9uy38qlzl/Tax+f/S
-   KLUrJF+SQWOOpJZlS5IcMpGkUvP1IkCoPKRliDykox3VrBVLiEAZg8Eht
-   pXfDQNDPjJuV87QTIAKoOzW/6kiPfVKEcBdKnhBQKQ+/yi2HYFisJ0NWP
-   qsmYH09qrmrWI7JDAnQ+zhw1lB0Zbuw+/NJN24cL8BRDIjq/iXl0DUxrT
-   w==;
-X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
-   d="scan'208";a="212452990"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 May 2023 05:01:01 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 22 May 2023 05:00:57 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Mon, 22 May 2023 05:00:56 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <UNGLinuxDriver@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net] lan966x: Fix unloading/loading of the driver
-Date:   Mon, 22 May 2023 14:00:38 +0200
-Message-ID: <20230522120038.3749026-1-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.38.0
+        Mon, 22 May 2023 08:01:11 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A22EFE;
+        Mon, 22 May 2023 05:00:59 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1q14Dc-0005RG-Cr; Mon, 22 May 2023 14:00:52 +0200
+Message-ID: <5d53e634-33c2-e040-3c34-6c36e32eed81@leemhuis.info>
+Date:   Mon, 22 May 2023 14:00:51 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: Re: [PATCH -next v2 0/6] blk-wbt: minor fix and cleanup
+Content-Language: en-US, de-DE
+To:     Jens Axboe <axboe@kernel.dk>, Yu Kuai <yukuai1@huaweicloud.com>,
+        hch@lst.de, tj@kernel.org, josef@toxicpanda.com, yukuai3@huawei.com
+Cc:     lukas.bulwahn@gmail.com, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, yangerkun@huawei.com
+References: <20230512093554.911753-1-yukuai1@huaweicloud.com>
+ <2b18e6ed-bce0-44f5-5ec4-8903f3c85cfe@kernel.dk>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+In-Reply-To: <2b18e6ed-bce0-44f5-5ec4-8903f3c85cfe@kernel.dk>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1684756859;d76d1fee;
+X-HE-SMSGID: 1q14Dc-0005RG-Cr
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,47 +49,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It was noticing that after a while when unloading/loading the driver and
-sending traffic through the switch, it would stop working. It would stop
-forwarding any traffic and the only way to get out of this was to do a
-power cycle of the board. The root cause seems to be that the switch
-core is initialized twice. Apparently initializing twice the switch core
-disturbs the pointers in the queue systems in the HW, so after a while
-it would stop sending the traffic.
-Unfortunetly, it is not possible to use a reset of the switch here,
-because the reset line is connected to multiple devices like MDIO,
-SGPIO, FAN, etc. So then all the devices will get reseted when the
-network driver will be loaded.
-So the fix is to check if the core is initialized already and if that is
-the case don't initialize it again.
+On 12.05.23 16:58, Jens Axboe wrote:
+> On 5/12/23 3:35 AM, Yu Kuai wrote:
+>> From: Yu Kuai <yukuai3@huawei.com>
+>>
+>> Changes in v2:
+>>  - make the code more readable for patch 1
+>>  - add a new attr_group that is only visible for rq based device
+>>  - explain in detail for patch 4
+>>  - add review tag for patch 2,3,5
+>>
+>> Yu Kuai (6):
+>>   blk-wbt: fix that wbt can't be disabled by default
+>>   blk-wbt: don't create wbt sysfs entry if CONFIG_BLK_WBT is disabled
+>>   blk-wbt: remove dead code to handle wbt enable/disable with io
+>>     inflight
+>>   blk-wbt: cleanup rwb_enabled() and wbt_disabled()
+>>   blk-iocost: move wbt_enable/disable_default() out of spinlock
+>>   blk-sysfs: add a new attr_group for blk_mq
+>>
+>>  block/blk-iocost.c |   7 +-
+>>  block/blk-sysfs.c  | 181 ++++++++++++++++++++++++++-------------------
+>>  block/blk-wbt.c    |  33 +++------
+>>  block/blk-wbt.h    |  19 -----
+>>  4 files changed, 117 insertions(+), 123 deletions(-)
+> 
+> We need a 6.4 version of the fix to get rid of the regression. If you
+> want to do cleanups on top of that, then that's fine and that can go into
+> 6.5. But don't mix them up.
 
-Fixes: db8bcaad5393 ("net: lan966x: add the basic lan966x driver")
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- drivers/net/ethernet/microchip/lan966x/lan966x_main.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Hmm, it seems nothing has happened here since ten days to fix this
+regression that likely is still present in 6.3. Yu Kuai, did it fall
+through the cracks, or is what Jens asked for more complicated than it
+sounds?
 
-diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-index 5f01b21acdd1b..f6931dfb3e68e 100644
---- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-+++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-@@ -1039,6 +1039,16 @@ static int lan966x_reset_switch(struct lan966x *lan966x)
- 
- 	reset_control_reset(switch_reset);
- 
-+	/* Don't reinitialize the switch core, if it is already initialized. In
-+	 * case it is initialized twice, some pointers inside the queue system
-+	 * in HW will get corrupted and then after a while the queue system gets
-+	 * full and no traffic is passing through the switch. The issue is seen
-+	 * when loading and unloading the driver and sending traffic through the
-+	 * switch.
-+	 */
-+	if (lan_rd(lan966x, SYS_RESET_CFG) & SYS_RESET_CFG_CORE_ENA)
-+		return 0;
-+
- 	lan_wr(SYS_RESET_CFG_CORE_ENA_SET(0), lan966x, SYS_RESET_CFG);
- 	lan_wr(SYS_RAM_INIT_RAM_INIT_SET(1), lan966x, SYS_RAM_INIT);
- 	ret = readx_poll_timeout(lan966x_ram_init, lan966x,
--- 
-2.38.0
+Or was progress made and I just missed it?
 
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
+
+#regzbot poke
