@@ -2,159 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18D4C70B8F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:30:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE0F70B8EE
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:30:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232226AbjEVJa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 05:30:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58920 "EHLO
+        id S232020AbjEVJaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 05:30:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232227AbjEVJaU (ORCPT
+        with ESMTP id S230365AbjEVJaN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 05:30:20 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A06B0B7;
-        Mon, 22 May 2023 02:30:17 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f3b9c88af8so1921280e87.2;
-        Mon, 22 May 2023 02:30:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684747816; x=1687339816;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N2xyW26ygJSV7jGPDNFX5kKvBpAiH74OJxHDLif1V4o=;
-        b=RUD8CW17ehLYABgkufotE7+2qA9MpQEUmH+a8Rzsv+BHTFpkQXkp/vUAoPyUND4WUa
-         df8zjLmWIsuyQpd0DvHu/G3O1/2e4FVgynUTVzKZOAHv9L/ks4U2wElYhdG0cnXNDszK
-         gTO/PkGc7RM8MyNAW2R1JXFqVuLd8vUvteqAFCV4ZHPafnbrsgCOMF9tMaGlDLolyrMT
-         itm3YGRJC6uJ8Sd1fKBuIgsQ3GwQti55DHbBOfA/xI6JndZhdZZLa4YvdkyDekb9MBGh
-         QVy2wxgngibHXKXssGnCfKbqsalSZPeUWc3hs2T62tJ5IaU+EyDu2k4A0jQw6RLQ8yJZ
-         bd4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684747816; x=1687339816;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N2xyW26ygJSV7jGPDNFX5kKvBpAiH74OJxHDLif1V4o=;
-        b=kZ4odup+StFceeCkcrUvVAnLCKKzFx4vpFUqgWJ8JI2FipMpcKPCBBByADdCxwzpQ7
-         ynUk8e+Spu5nLPoPUXeB1Hbdnb0Y+erPBUQa6+doC5gEYkwDHWZlR5rN1KSTCDwIqor0
-         crGtJ6PionkzZUuDEwwbTVlWICNwOk5oGplCUT0hcNyqEF4zvNYFjIH4nvR5vZXeENNQ
-         9aCI2iVDxXcEwflnRYUVqWNhI0xoGaQGkMBiTMaxpVRTARubMRgR2/EytWgyXY5dJik3
-         CRj9GKFUiC2+4JImxg2KbPuAlEEKvm0CVZywpv5kI+Y0QeyRpxmLhpGuaBwGD6pZgUFU
-         NWNw==
-X-Gm-Message-State: AC+VfDyNKzMXtwg85tByvv17jn1WvNKG+epTrb46jUZUWZCEZHTXnXCp
-        UHKgXUKeDQHyVIkCaAmhzAD/0UZ5LyfrPUWaPw8=
-X-Google-Smtp-Source: ACHHUZ6/K2VPQrqZf4bbMsZ6RsWzfsJGdcrFrCLU2weoNL6fRpXehhPH0QBKWbv2BmkB7pm4G6ojPKMVBze4qdsiKeM=
-X-Received: by 2002:ac2:4259:0:b0:4f3:a55a:bace with SMTP id
- m25-20020ac24259000000b004f3a55abacemr2981630lfl.7.1684747815493; Mon, 22 May
- 2023 02:30:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230419-dpu-tweaks-v1-0-d1bac46db075@freebox.fr>
- <20230419-dpu-tweaks-v1-2-d1bac46db075@freebox.fr> <6e807c05-a990-5692-3f84-2e4153c8c278@linaro.org>
- <905b4150-6e15-4172-10cf-19aa0ebf817c@quicinc.com> <50fc88f9-4304-110c-84e8-15dfdeee062f@linaro.org>
-In-Reply-To: <50fc88f9-4304-110c-84e8-15dfdeee062f@linaro.org>
-From:   Arnaud Vrac <rawoul@gmail.com>
+        Mon, 22 May 2023 05:30:13 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066E5B3;
+        Mon, 22 May 2023 02:30:12 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id F32196606D84;
+        Mon, 22 May 2023 10:30:09 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684747810;
+        bh=b/HUQkVvh1ObQj0af7V3E7UOobAnX8Hp2s1B+6cZnCs=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=mWPLKhLnT8ZRtNCYMsRSGKpXXd4FG9CWuKO5XD4ito0twnfgpufEcC+bmlyIjuTvJ
+         i2PDB4j54Y9YxKu6ksvKq8jd4Oa1MzgbEWIlcQV7g1rPBCWOeVmAev36Do3g6VAidb
+         h0dX0d7sI2kN2i1vetcw0nvQ7+0WoJJKGc63RgRIZn7iKhImONyj4rdH0TIItekmYp
+         nW4B4fvTST8l6tIrtP+ypCG7ba0BpEQIWry4NC8EhSh5ojUKgu8eGAN6jSkCXVjvDL
+         g450f4/s7Tdsust1LrkuEvI0fz/qe2pL3/G4zG7EzCMdxixRtm0RarMn3UWk3GCbd6
+         zQkYa2JvytBQw==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     matthias.bgg@gmail.com
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, weiyi.lu@mediatek.com, ikjn@chromium.org,
+        chun-jie.chen@mediatek.com, tinghan.shen@mediatek.com,
+        seiya.wang@mediatek.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH 2/2] arm64: dts: mediatek: mt8195: Make sure MSDCPLL's rate is 400MHz
 Date:   Mon, 22 May 2023 11:30:02 +0200
-Message-ID: <CAN5H-g4zEkxrUr2_0QZfNHndVqF=L-Bx3OTbKnFjQVmoYc7FyQ@mail.gmail.com>
-Subject: Re: [Freedreno] [PATCH 02/11] drm/msm/dpu: use the actual lm maximum
- width instead of a hardcoded value
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Jeykumar Sankaran <quic_jeykumar@quicinc.com>,
-        Arnaud Vrac <avrac@freebox.fr>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Message-Id: <20230522093002.75137-3-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230522093002.75137-1-angelogioacchino.delregno@collabora.com>
+References: <20230522093002.75137-1-angelogioacchino.delregno@collabora.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le sam. 20 mai 2023 =C3=A0 22:49, Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> a =C3=A9crit :
->
-> On 20/04/2023 20:47, Jeykumar Sankaran wrote:
-> >
-> >
-> > On 4/19/2023 3:23 PM, Dmitry Baryshkov wrote:
-> >> On 19/04/2023 17:41, Arnaud Vrac wrote:
-> >>> This avoids using two LMs instead of one when the display width is lo=
-wer
-> >>> than the maximum supported value. For example on MSM8996/MSM8998, the
-> >>> actual maxwidth is 2560, so we would use two LMs for 1280x720 or
-> >>> 1920x1080 resolutions, while one is enough.
-> >>>
-> >>> Signed-off-by: Arnaud Vrac <avrac@freebox.fr>
-> >>
-> >> While this looks correct (and following what we have in 4.4), later
-> >> vendor kernels specify the topology explicitly. Probably we should
-> >> check this with the hw guys, because it might be the following case:
-> >> even though a single LM can supply the mode, it will spend more power
-> >> compared to two LMs.
-> >>
-> >>
-> > Yes. 2 LM split will allow the HW to run in lower mdp core clock. Can
-> > you maintain the split_threshold in the hw catalog until per mode
-> > topology is available?
->
-> I don't think it warrants the trouble, unless we have a real usecase
-> when the device is short of LMs.
->
-> Arnaud, I'll mark this patch as Rejected for now, unless it fixes an LM
-> shortage for your platform.
+Some bootloaders will set MSDCPLL's rate lower than 400MHz: what I have
+seen is this clock being set at around 384MHz.
+This is a performance concern (and possibly a stability one, for picky
+eMMC/SD cards) as the MSDC controller's internal divier will choose a
+frequency that is lower than expected, in the end causing a difference
+in the expected mmc/sd device's timings.
 
-It's fine, if I remember correctly I wrote this patch because display
-wouldn't work before I fixed the LM pairings on msm8998, but now it's
-not a requirement anymore.
+Make sure that the MSDCPLL frequency is always set to 400MHz to both
+improve performance and reliability of the sd/mmc storage.
 
->
-> >
-> > Jeykumar S
-> >>> ---
-> >>>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 10 +++++-----
-> >>>   1 file changed, 5 insertions(+), 5 deletions(-)
-> >>>
-> >>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> >>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> >>> index 1dc5dbe585723..dd2914726c4f6 100644
-> >>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> >>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> >>> @@ -53,8 +53,6 @@
-> >>>   #define IDLE_SHORT_TIMEOUT    1
-> >>> -#define MAX_HDISPLAY_SPLIT 1080
-> >>> -
-> >>>   /* timeout in frames waiting for frame done */
-> >>>   #define DPU_ENCODER_FRAME_DONE_TIMEOUT_FRAMES 5
-> >>> @@ -568,10 +566,12 @@ static struct msm_display_topology
-> >>> dpu_encoder_get_topology(
-> >>>        */
-> >>>       if (intf_count =3D=3D 2)
-> >>>           topology.num_lm =3D 2;
-> >>> -    else if (!dpu_kms->catalog->caps->has_3d_merge)
-> >>> -        topology.num_lm =3D 1;
-> >>> +    else if (dpu_kms->catalog->caps->has_3d_merge &&
-> >>> +         dpu_kms->catalog->mixer_count > 0 &&
-> >>> +         mode->hdisplay > dpu_kms->catalog->mixer[0].sblk->maxwidth)
-> >>> +        topology.num_lm =3D 2;
-> >>>       else
-> >>> -        topology.num_lm =3D (mode->hdisplay > MAX_HDISPLAY_SPLIT) ? =
-2
-> >>> : 1;
-> >>> +        topology.num_lm =3D 1;
-> >>>       if (crtc_state->ctm)
-> >>>           topology.num_dspp =3D topology.num_lm;
-> >>>
-> >>
->
-> --
-> With best wishes
-> Dmitry
->
+Fixes: 37f2582883be ("arm64: dts: Add mediatek SoC mt8195 and evaluation board")
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+index a44aae4ab953..daac8e050ce7 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+@@ -852,6 +852,8 @@ apmixedsys: syscon@1000c000 {
+ 			compatible = "mediatek,mt8195-apmixedsys", "syscon";
+ 			reg = <0 0x1000c000 0 0x1000>;
+ 			#clock-cells = <1>;
++			assigned-clocks = <&apmixedsys CLK_APMIXED_MSDCPLL>;
++			assigned-clock-rates = <400000000>;
+ 		};
+ 
+ 		systimer: timer@10017000 {
+-- 
+2.40.1
+
