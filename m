@@ -2,70 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C881F70BF31
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8274A70BF6C
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234065AbjEVNIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 09:08:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35784 "EHLO
+        id S234279AbjEVNOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 09:14:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233833AbjEVNIK (ORCPT
+        with ESMTP id S234268AbjEVNOC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 09:08:10 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5162F1AD;
-        Mon, 22 May 2023 06:07:49 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8AxNPAkaWtklPIKAA--.18687S3;
-        Mon, 22 May 2023 21:07:48 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxDbMjaWtk+BtvAA--.55849S3;
-        Mon, 22 May 2023 21:07:47 +0800 (CST)
-Subject: Re: [PATCH v11 0/2] spi: loongson: add bus driver for the loongson
- spi
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
-References: <20230522071030.5193-1-zhuyinbo@loongson.cn>
- <3c15d22f-4f94-4cc5-96a8-f565e58c66b9@sirena.org.uk>
- <4dfa5245-d330-f432-e81e-163053687d42@loongson.cn>
- <a4afd330-6ffd-432e-a868-f8a19fddb47d@sirena.org.uk>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <1e8c3e92-4043-11f2-e7a7-0bf4273c65d8@loongson.cn>
-Date:   Mon, 22 May 2023 21:07:47 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+        Mon, 22 May 2023 09:14:02 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7A4392;
+        Mon, 22 May 2023 06:14:00 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id A68ED5FD53;
+        Mon, 22 May 2023 16:13:58 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1684761238;
+        bh=tWxrSnMXHfq8prfQizZUI+8Ex910dBaOENfLFbEU0CA=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=Ksz2pBxxTAmSqliseiwWrHAufkHPp34rdCWDvmsU7Ona4gb6kNdBudrLT0/YP7uiZ
+         EucuV4eKMNE3TnngtB+RaGtBsawwosPElZpyrog7/ktm8UlHPxctwZ8N5BCG5CLgW/
+         xwQVig4+Vxj4aUzunvB5BVkdo/gUrrNrdsoLcg1PgCT5mpSA/FMMshtX257GaVesqT
+         hra56GL5FmzbfSNXxmZtBCAQ4/A9isD0UD7l/3RqPl93Ic5R4MA9UZFnqh7MUnrRsn
+         oxRMCJ1RelcfC4Oc+92zxLE9Zo9ga9xX8r6NsVX0partI18JbO6wao1WhsmcLtmdvF
+         VPu/yy6jAo/Vw==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Mon, 22 May 2023 16:13:53 +0300 (MSK)
+Message-ID: <7c0a4203-b0bf-1963-14c1-d7c664946d5e@sberdevices.ru>
+Date:   Mon, 22 May 2023 16:09:29 +0300
 MIME-Version: 1.0
-In-Reply-To: <a4afd330-6ffd-432e-a868-f8a19fddb47d@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH v3 05/17] vsock/virtio: MSG_ZEROCOPY flag support
+To:     Simon Horman <simon.horman@corigine.com>
+CC:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>
+References: <20230522073950.3574171-1-AVKrasnov@sberdevices.ru>
+ <20230522073950.3574171-6-AVKrasnov@sberdevices.ru>
+ <ZGtqEghjjiBnvEBW@corigine.com>
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxDbMjaWtk+BtvAA--.55849S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvdXoW7Jr1kKFWfuw1kXFy5Jr4DCFg_yoWDtrbEkF
-        W0kFyxC34Uta18Aa1xGF4FvrW3tF40qw18CrWvqw47Gw15XF4DG3yDJ3s7u3Z5AayfKF1D
-        u393J39FgwnxJjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
-        07CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2
-        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84AC
-        jcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84
-        ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF
-        6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14
-        v26r1Y6r17McIj6I8E87Iv67AKxVWxJVW8Jr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48I
-        cVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l42xK82IY6x8Erc
-        xFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2Iq
-        xVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCI42IY6xIIjxv20xvE14
-        v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xva
-        j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Cr0_Gr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
-        0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWlk3UUUUU=
-X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <ZGtqEghjjiBnvEBW@corigine.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/22 08:14:00 #21365129
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -74,31 +80,149 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-在 2023/5/22 下午7:56, Mark Brown 写道:
-> On Mon, May 22, 2023 at 07:44:49PM +0800, zhuyinbo wrote:
+On 22.05.2023 16:11, Simon Horman wrote:
+> On Mon, May 22, 2023 at 10:39:38AM +0300, Arseniy Krasnov wrote:
+>> This adds handling of MSG_ZEROCOPY flag on transmission path: if this
+>> flag is set and zerocopy transmission is possible, then non-linear skb
+>> will be created and filled with the pages of user's buffer. Pages of
+>> user's buffer are locked in memory by 'get_user_pages()'.
+>>
+>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>> ---
+>>  net/vmw_vsock/virtio_transport_common.c | 305 +++++++++++++++++++-----
+>>  1 file changed, 243 insertions(+), 62 deletions(-)
+>>
+>> diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+>> index 9854f48a0544..5acf824afe41 100644
+>> --- a/net/vmw_vsock/virtio_transport_common.c
+>> +++ b/net/vmw_vsock/virtio_transport_common.c
+>> @@ -37,73 +37,161 @@ virtio_transport_get_ops(struct vsock_sock *vsk)
+>>  	return container_of(t, struct virtio_transport, transport);
+>>  }
+>>  
+>> -/* Returns a new packet on success, otherwise returns NULL.
+>> - *
+>> - * If NULL is returned, errp is set to a negative errno.
+>> - */
+>> -static struct sk_buff *
+>> -virtio_transport_alloc_skb(struct virtio_vsock_pkt_info *info,
+>> -			   size_t len,
+>> -			   u32 src_cid,
+>> -			   u32 src_port,
+>> -			   u32 dst_cid,
+>> -			   u32 dst_port)
+>> -{
+>> -	const size_t skb_len = VIRTIO_VSOCK_SKB_HEADROOM + len;
+>> -	struct virtio_vsock_hdr *hdr;
+>> -	struct sk_buff *skb;
+>> -	void *payload;
+>> -	int err;
+>> +static bool virtio_transport_can_zcopy(struct virtio_vsock_pkt_info *info,
+>> +				       size_t max_to_send)
+>> +{
+>> +	struct iov_iter *iov_iter;
+>> +	size_t max_skb_cap;
+>> +	size_t bytes;
+>> +	int i;
+>>  
+>> -	skb = virtio_vsock_alloc_skb(skb_len, GFP_KERNEL);
+>> -	if (!skb)
+>> -		return NULL;
+>> +	if (!info->msg)
+>> +		return false;
+>>  
+>> -	hdr = virtio_vsock_hdr(skb);
+>> -	hdr->type	= cpu_to_le16(info->type);
+>> -	hdr->op		= cpu_to_le16(info->op);
+>> -	hdr->src_cid	= cpu_to_le64(src_cid);
+>> -	hdr->dst_cid	= cpu_to_le64(dst_cid);
+>> -	hdr->src_port	= cpu_to_le32(src_port);
+>> -	hdr->dst_port	= cpu_to_le32(dst_port);
+>> -	hdr->flags	= cpu_to_le32(info->flags);
+>> -	hdr->len	= cpu_to_le32(len);
+>> +	if (!(info->flags & MSG_ZEROCOPY) && !info->msg->msg_ubuf)
+>> +		return false;
+>>  
+>> -	if (info->msg && len > 0) {
+>> -		payload = skb_put(skb, len);
+>> -		err = memcpy_from_msg(payload, info->msg, len);
+>> -		if (err)
+>> -			goto out;
+>> +	iov_iter = &info->msg->msg_iter;
+>> +
+>> +	if (iter_is_ubuf(iov_iter)) {
+>> +		if (offset_in_page(iov_iter->ubuf))
+>> +			return false;
+>> +
+>> +		return true;
+>> +	}
+>> +
+>> +	if (!iter_is_iovec(iov_iter))
+>> +		return false;
+>> +
+>> +	if (iov_iter->iov_offset)
+>> +		return false;
+>> +
+>> +	/* We can't send whole iov. */
+>> +	if (iov_iter->count > max_to_send)
+>> +		return false;
+>> +
+>> +	for (bytes = 0, i = 0; i < iov_iter->nr_segs; i++) {
+>> +		const struct iovec *iovec;
+>> +		int pages_in_elem;
+>> +
+>> +		iovec = &iov_iter->__iov[i];
+>> +
+>> +		/* Base must be page aligned. */
+>> +		if (offset_in_page(iovec->iov_base))
+>> +			return false;
+>>  
+>> -		if (msg_data_left(info->msg) == 0 &&
+>> -		    info->type == VIRTIO_VSOCK_TYPE_SEQPACKET) {
+>> -			hdr->flags |= cpu_to_le32(VIRTIO_VSOCK_SEQ_EOM);
+>> +		/* Only last element could have non page aligned size. */
+>> +		if (i != (iov_iter->nr_segs - 1)) {
+>> +			if (offset_in_page(iovec->iov_len))
+>> +				return false;
+>>  
+>> -			if (info->msg->msg_flags & MSG_EOR)
+>> -				hdr->flags |= cpu_to_le32(VIRTIO_VSOCK_SEQ_EOR);
+>> +			pages_in_elem = iovec->iov_len >> PAGE_SHIFT;
+>> +		} else {
+>> +			pages_in_elem = round_up(iovec->iov_len, PAGE_SIZE);
+>> +			pages_in_elem >>= PAGE_SHIFT;
+>>  		}
+>> +
+>> +		bytes += (pages_in_elem * PAGE_SIZE);
+>>  	}
 > 
->> The recently patch was as follows, It seems no issue for patch apply
->> them, Maybe it is the 0/2 patch issue ? this 0/2 patch wasn't a valid
->> patch and it need was skipped.
+> Hi Arseniy,
 > 
-> What's causing problem is that you patched MAINTAINERS in both patches
-> but also used the wrong subject line for the first patch so I was having
-> to fix it up by hand every time.
+> bytes is set but the loop above, but seems otherwise unused in this function.
+> 
+>>  
+>> -	if (info->reply)
+>> -		virtio_vsock_skb_set_reply(skb);
+>> +	/* How many bytes we can pack to single skb. Maximum packet
+>> +	 * buffer size is needed to allow vhost handle such packets,
+>> +	 * otherwise they will be dropped.
+>> +	 */
+>> +	max_skb_cap = min((unsigned int)(MAX_SKB_FRAGS * PAGE_SIZE),
+>> +			  (unsigned int)VIRTIO_VSOCK_MAX_PKT_BUF_SIZE);
+> 
+> Likewise, max_skb_cap seems to be set but unused in this function.
+> 
 
-Hi Mark,
+Exactly! Seems I forgot to remove it since v2. Thanks for this and above!
 
-I learn about what you said that bindings patch and spi driver change a
-same MAINTAINERS file, but It seems not cause apply fail if the patch
-series apply in order.  I'm sorry, I don't understand the reason why my
-spi series patch apply failed,  then I have a look about your spi ci
-tree and that what I need to do is just change the title of [1/2] patch
-like this in next version ?  Correcting the title can solve the problem
-of patch series apply failure in your tree ? actually, I don't reproduce
-that apply faile issue in your current spi tree and for-next branch.
-
-
-spi: add loongson spi bindings
-
-Thanks
-Yinbo
-
+>>  
+>> -	trace_virtio_transport_alloc_pkt(src_cid, src_port,
+>> -					 dst_cid, dst_port,
+>> -					 len,
+>> -					 info->type,
+>> -					 info->op,
+>> -					 info->flags);
+>> +	return true;
+>> +}
+> 
+> ...
