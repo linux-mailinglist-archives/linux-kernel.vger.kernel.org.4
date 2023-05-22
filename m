@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5A8970B5F1
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 09:10:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45A6A70B5F2
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 09:10:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231689AbjEVHKZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 03:10:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39486 "EHLO
+        id S232208AbjEVHKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 03:10:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232462AbjEVHJ7 (ORCPT
+        with ESMTP id S232476AbjEVHKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 03:09:59 -0400
+        Mon, 22 May 2023 03:10:01 -0400
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD844184
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 00:09:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ECF4E52
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 00:09:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684739376; x=1716275376;
+  t=1684739378; x=1716275378;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Gm3LH1lmJVZ4Ay531OQCa0nV/AljYlwBGJj9BjRnG/w=;
-  b=HwYCYQzTelpqkmc7BUCMu4WvJkRkoqcP1nwSIR+rgfVE4eDYtf03t8W6
-   NA2CkomX1YYMisL4Y2PQuN2gbXE/pyIjjUpEVtxLcPA9VQIM6oIi+v++X
-   /pIrh5v3n86H2tlmnBrkMvLV1aYjV0EdCDVDzNWviqviAygd1wV2hhJmr
-   VY3y7msFGgFBP+ni0cPklIDomEoJ9gIxcsqafieZ3x6RLiv90lT52UpIc
-   IwsBR6h3GdIIJup6DRvbCZ/MXyXnAeebNB/tqC21V3vRqV55Nv9gGBo/n
-   DzJNRoPDT4VieYsyBuFmNNiwkPsSyEosYR8n11BL8AuS1qPSAvro8iCJt
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="337437017"
+  bh=YSumEPT2C3HRRYpGGamb3AFAC7MiJLIPce/70xDMyEY=;
+  b=NkRZCdaazOPXQGcQnNsUdcHvnyC1e+/SbhGKcnai7yZTjUtGHvdVt0U+
+   KlnwZ9kixdS60Zb3iZIfYGb6UxOBudnbY5zIpfq6oFafe5ykcTnGtvMzk
+   6PlA2htXbJzaH6PGpYxShfiP10uYrpog0dKiM9Z1C+wLLURlc9FD4h9Mf
+   AAXiIfvcQDrtxLB2vQHp4Y+rq1IJNWCh+FN4pMeyCApVDB69Ebj5+89Pd
+   +msENVg5qHQb77JHd1pFW8tSHlO8MWyfqch0sx+oouIf7Agy7iA2mM5/2
+   xdaR8ZNLMMuxQ2VS7McORAUc3QmaHDdaEXIA4+Qqyj7d2lR9P2JoWtoCm
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="337437037"
 X-IronPort-AV: E=Sophos;i="6.00,183,1681196400"; 
-   d="scan'208";a="337437017"
+   d="scan'208";a="337437037"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 00:09:32 -0700
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 00:09:34 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="773212698"
+X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="773212723"
 X-IronPort-AV: E=Sophos;i="6.00,183,1681196400"; 
-   d="scan'208";a="773212698"
+   d="scan'208";a="773212723"
 Received: from yhuang6-mobl2.sh.intel.com ([10.238.5.152])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 00:09:28 -0700
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 00:09:31 -0700
 From:   Huang Ying <ying.huang@intel.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
@@ -51,9 +51,9 @@ Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         Minchan Kim <minchan@kernel.org>,
         Tim Chen <tim.c.chen@linux.intel.com>,
         Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>
-Subject: [PATCH -V2 3/5] swap: remove __swp_swapcount()
-Date:   Mon, 22 May 2023 15:09:03 +0800
-Message-Id: <20230522070905.16773-4-ying.huang@intel.com>
+Subject: [PATCH -V2 4/5] swap: remove get/put_swap_device() in __swap_duplicate()
+Date:   Mon, 22 May 2023 15:09:04 +0800
+Message-Id: <20230522070905.16773-5-ying.huang@intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230522070905.16773-1-ying.huang@intel.com>
 References: <20230522070905.16773-1-ying.huang@intel.com>
@@ -69,10 +69,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__swp_swapcount() just encloses the calling to swap_swapcount() with
-get/put_swap_device().  It is called in __read_swap_cache_async()
-only, which encloses the calling with get/put_swap_device() already.
-So, __read_swap_cache_async() can call swap_swapcount() directly.
+__swap_duplicate() is called by
+
+- swap_shmem_alloc(): the page lock of the swap cache is held.
+
+- copy_nonpresent_pte() -> swap_duplicate() and try_to_unmap_one() ->
+  swap_duplicate(): the page table lock is held.
+
+- __read_swap_cache_async() -> swapcache_prepare(): enclosed with
+  get/put_swap_device() in __read_swap_cache_async() already.
+
+So, it's safe to remove get/put_swap_device() in __swap_duplicate().
 
 Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
 Cc: David Hildenbrand <david@redhat.com>
@@ -85,70 +92,32 @@ Cc: Tim Chen <tim.c.chen@linux.intel.com>
 Cc: Yang Shi <shy828301@gmail.com>
 Cc: Yu Zhao <yuzhao@google.com>
 ---
- include/linux/swap.h |  4 ++--
- mm/swapfile.c        | 20 +-------------------
- 2 files changed, 3 insertions(+), 21 deletions(-)
+ mm/swapfile.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/include/linux/swap.h b/include/linux/swap.h
-index 3c69cb653cb9..f6bd51aa05ea 100644
---- a/include/linux/swap.h
-+++ b/include/linux/swap.h
-@@ -512,7 +512,7 @@ int find_first_swap(dev_t *device);
- extern unsigned int count_swap_pages(int, int);
- extern sector_t swapdev_block(int, pgoff_t);
- extern int __swap_count(swp_entry_t entry);
--extern int __swp_swapcount(swp_entry_t entry);
-+extern int swap_swapcount(struct swap_info_struct *si, swp_entry_t entry);
- extern int swp_swapcount(swp_entry_t entry);
- extern struct swap_info_struct *page_swap_info(struct page *);
- extern struct swap_info_struct *swp_swap_info(swp_entry_t entry);
-@@ -590,7 +590,7 @@ static inline int __swap_count(swp_entry_t entry)
- 	return 0;
- }
- 
--static inline int __swp_swapcount(swp_entry_t entry)
-+static inline int swap_swapcount(struct swap_info_struct *si, swp_entry_t entry)
- {
- 	return 0;
- }
 diff --git a/mm/swapfile.c b/mm/swapfile.c
-index 8419cba9c192..e9cce775fb25 100644
+index e9cce775fb25..4dbaea64635d 100644
 --- a/mm/swapfile.c
 +++ b/mm/swapfile.c
-@@ -1443,7 +1443,7 @@ int __swap_count(swp_entry_t entry)
-  * This does not give an exact answer when swap count is continued,
-  * but does include the high COUNT_CONTINUED flag to allow for that.
-  */
--static int swap_swapcount(struct swap_info_struct *si, swp_entry_t entry)
-+int swap_swapcount(struct swap_info_struct *si, swp_entry_t entry)
- {
- 	pgoff_t offset = swp_offset(entry);
- 	struct swap_cluster_info *ci;
-@@ -1455,24 +1455,6 @@ static int swap_swapcount(struct swap_info_struct *si, swp_entry_t entry)
- 	return count;
+@@ -3264,9 +3264,7 @@ static int __swap_duplicate(swp_entry_t entry, unsigned char usage)
+ 	unsigned char has_cache;
+ 	int err;
+ 
+-	p = get_swap_device(entry);
+-	if (!p)
+-		return -EINVAL;
++	p = swp_swap_info(entry);
+ 
+ 	offset = swp_offset(entry);
+ 	ci = lock_cluster_or_swap_info(p, offset);
+@@ -3313,7 +3311,6 @@ static int __swap_duplicate(swp_entry_t entry, unsigned char usage)
+ 
+ unlock_out:
+ 	unlock_cluster_or_swap_info(p, ci);
+-	put_swap_device(p);
+ 	return err;
  }
  
--/*
-- * How many references to @entry are currently swapped out?
-- * This does not give an exact answer when swap count is continued,
-- * but does include the high COUNT_CONTINUED flag to allow for that.
-- */
--int __swp_swapcount(swp_entry_t entry)
--{
--	int count = 0;
--	struct swap_info_struct *si;
--
--	si = get_swap_device(entry);
--	if (si) {
--		count = swap_swapcount(si, entry);
--		put_swap_device(si);
--	}
--	return count;
--}
--
- /*
-  * How many references to @entry are currently swapped out?
-  * This considers COUNT_CONTINUED so it returns exact answer.
 -- 
 2.39.2
 
