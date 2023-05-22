@@ -2,163 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0428F70C002
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:48:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65A0F70C005
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:48:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233494AbjEVNr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 09:47:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56912 "EHLO
+        id S233942AbjEVNsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 09:48:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233540AbjEVNry (ORCPT
+        with ESMTP id S233735AbjEVNsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 09:47:54 -0400
-Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68C47F9
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 06:47:53 -0700 (PDT)
-Received: by mail-il1-f207.google.com with SMTP id e9e14a558f8ab-3382e29ab5bso45195645ab.0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 06:47:53 -0700 (PDT)
+        Mon, 22 May 2023 09:48:18 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F11F4
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 06:48:17 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-5343c3daff0so4079689a12.0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 06:48:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684763296; x=1687355296;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jGz08OQyeCqnxoLIdSWq6+vL4UPq3XQv2QFGyx1tKg0=;
+        b=qjgTLN5ERjKFpuEJDSYNk4vi4w+YGsguhc3ja5gz5WGB5Yf6W8P14biSciYvbMBtS1
+         uzmhoCmwR5WeSgVlFxYLxU3KwfmoQDyDtPJqB+A1+gBSsMhWP2DBAkayAeSyySIMn9Wy
+         hVkG6/sVX353mDAMcCpBKRMGHZgt3Wt/K1CYOUPxVAYJfGrrPywwf/pi5RQbnPfg+6ke
+         WdynKBvc5b9g9roZ4+9VUwGPq5pqfDrJWtGInWRSoipySMQA09QEXjFnoG+EaTB38oB/
+         lM0YhEIU+73uu7yZkd5zf933iEcZ9WEqAXq1P9BtD53vhuz0vw4TGHD6hAuZZDH27ZVP
+         VjrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684763272; x=1687355272;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=q4aast/ekNya0wedXkzIO8MimHmpqr/ODo7xmBUijHc=;
-        b=hnM6LQq+KYETPhBZrR1LvPnJggsYTsmWoyh7IltWJIPLIVpn4jsUiWmJgw4+xhOuCh
-         D2kzPdlqt/LoUOjf4MFsTbKYQ1ie6uubeZ5HXblM4SGXZ6+iuJgfX1ejzqURzkEs3Bxx
-         BbM/oJNZ43vVUid+1/fmGqD0hxshFtUor2cYtgRtqpKK82wF01df0tRtgkhZHwOoR1+p
-         SIcP5bY39aqI/bUa2mXPHDeq+TV6VbcdjpHJswkZaot4KsM8VN8/kr3QcW5deO7m67LA
-         d/Mu6vMIunyeeaJFg+MmMbCXKdAhbF1GUTtQeDlYruJvuU8bCX/waHxH/0lV3ZA+EVd4
-         6wJg==
-X-Gm-Message-State: AC+VfDwi8PPAipyiwhBHPDiH6pV9+1b2jhv2yYrHuA30ygHqPHwC3k3I
-        apTE89Ic5ZVijwWYgEAf8gFCRc8pDPEb3L9uWoanGzxiwfP0
-X-Google-Smtp-Source: ACHHUZ5d9veiq+OYSSIG/pl6NIZgDVfTHjzhhrjqq2b7HOWq1idHmo3KxazSnPnuYVHi8HTTWGX+zaUKMXiHW+K0B03DQcG4hUCP
+        d=1e100.net; s=20221208; t=1684763296; x=1687355296;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jGz08OQyeCqnxoLIdSWq6+vL4UPq3XQv2QFGyx1tKg0=;
+        b=fDvJ6/Un1D6aDwYcBIDbMc8c6qdSvq2FARrbsbrnfnhLW4Wdcx+A+FxOKGKLi6Y8jJ
+         HTpUrKyVJNH7brWfoTzjIxIkwy4+Zg1DKSbHV/z1vt5ojW3HHhfTWTHrE3dsw0S1joFK
+         OfxoCjnw1ekAFNAcfTfCpveNEmyFoMkDeOjAjve7/8uf6yqu4bEtocg0R9LRGP/mIjrk
+         jp7r8XvBE4/9vKW3phAxsTXpkRUB8TBWkzeofm2MUmo7VirAM0l7QnzvP8A7o+Q0n1O8
+         APS7Y0X0jQyRmQBw9wL/XqO/RREIkniSSITZyrfahBr5pcZS/WK4jFY+Q99YpQm1BmKR
+         AM3Q==
+X-Gm-Message-State: AC+VfDxQzaCOYQQS6qhV0r904oGBfEMGZ/3hX+hiFYobXrK0ULHGx3vM
+        JDLA7jpVF8DlOkcgRlT9zJy+9IcSwYlxUKb+ioA=
+X-Google-Smtp-Source: ACHHUZ6IS5JmJ+ZDTz9QQZzHRGh7k7Pl91xxM/bsmLz/eNgRZwjR4aYBIugPczwz3Y9QlmRcmk40BVDGa6k/Iq/KC0Q=
+X-Received: by 2002:a17:902:8508:b0:1af:b2d3:c6f4 with SMTP id
+ bj8-20020a170902850800b001afb2d3c6f4mr2949506plb.14.1684763295850; Mon, 22
+ May 2023 06:48:15 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a92:d8cb:0:b0:331:12ac:f633 with SMTP id
- l11-20020a92d8cb000000b0033112acf633mr5565248ilo.0.1684763272715; Mon, 22 May
- 2023 06:47:52 -0700 (PDT)
-Date:   Mon, 22 May 2023 06:47:52 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000066a94205fc488445@google.com>
-Subject: [syzbot] [block?] [reiserfs?] KASAN: user-memory-access Write in zram_slot_lock
-From:   syzbot <syzbot+b8d61a58b7c7ebd2c8e0@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        minchan@kernel.org, reiserfs-devel@vger.kernel.org,
-        senozhatsky@chromium.org, syzkaller-bugs@googlegroups.com
+References: <1683792372-29338-1-git-send-email-yangtiezhu@loongson.cn>
+In-Reply-To: <1683792372-29338-1-git-send-email-yangtiezhu@loongson.cn>
+From:   Jeff Xie <xiehuan09@gmail.com>
+Date:   Mon, 22 May 2023 21:48:03 +0800
+Message-ID: <CAEr6+EBU+Uon8rMvuEhLU0nADUMDEOSVZGSkAZvtuXJCEndzMg@mail.gmail.com>
+Subject: Re: [PATCH v4 0/6] Add uprobes support for LoongArch
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, May 11, 2023 at 4:06=E2=80=AFPM Tiezhu Yang <yangtiezhu@loongson.cn=
+> wrote:
+>
+> v4:
+>   -- Rebased on 6.4rc1
+>   -- Fix problem about "perf probe -x /lib64/libc.so.6 malloc"
+>
+> v3:
+>   -- Check atomic instructions in insns_not_supported()
+>   -- Remove five DIE_* definitions in kdebug.h
+>
+> v2:
+>   -- Move the functions to inst.c in patch #1
+>   -- Pass around union for insns_not_supported(),
+>      insns_need_simulation() and arch_simulate_insn()
+>
+> v1:
+>   -- Split the RFC patch #2 into two patches
+>   -- Use larch_insn_gen_break() to generate break insns
+>      for kprobes and uprobes
+>   -- Pass around instruction word instead of union for
+>      insns_not_supported(), insns_need_simulation() and
+>      arch_simulate_insn() to avoid type conversion for callers
+>   -- Add a simple test case for uprobes in the commit message
+>
+> Tiezhu Yang (6):
+>   LoongArch: Move three functions from kprobes.c to inst.c
+>   LoongArch: Add larch_insn_gen_break() to generate break insns
+>   LoongArch: Use larch_insn_gen_break() for kprobes
+>   LoongArch: Add uprobes support
+>   LoongArch: Check atomic instructions in insns_not_supported()
+>   LoongArch: Remove five DIE_* definitions in kdebug.h
+>
+>  arch/loongarch/Kconfig               |   3 +
+>  arch/loongarch/include/asm/inst.h    |  42 ++++++++++
+>  arch/loongarch/include/asm/kdebug.h  |   5 --
+>  arch/loongarch/include/asm/kprobes.h |   2 +-
+>  arch/loongarch/include/asm/uprobes.h |  35 +++++++++
+>  arch/loongarch/kernel/Makefile       |   1 +
+>  arch/loongarch/kernel/inst.c         |  54 +++++++++++++
+>  arch/loongarch/kernel/kprobes.c      |  75 ++++--------------
+>  arch/loongarch/kernel/traps.c        |   9 +--
+>  arch/loongarch/kernel/uprobes.c      | 148 +++++++++++++++++++++++++++++=
+++++++
+>  10 files changed, 302 insertions(+), 72 deletions(-)
+>  create mode 100644 arch/loongarch/include/asm/uprobes.h
+>  create mode 100644 arch/loongarch/kernel/uprobes.c
+>
+> --
+> 2.1.0
+>
+>
 
-syzbot found the following issue on:
+It looks good to me for the patchset.
 
-HEAD commit:    44c026a73be8 Linux 6.4-rc3
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=10741fe9280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7d8067683055e3f5
-dashboard link: https://syzkaller.appspot.com/bug?extid=b8d61a58b7c7ebd2c8e0
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1223f7d9280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1245326a280000
+Tested-by: Jeff Xie <xiehuan09@gmail.com>
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/51c970de1750/disk-44c026a7.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/799aacdbebeb/vmlinux-44c026a7.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/0afc45e7f608/bzImage-44c026a7.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/fd3a214bd6ba/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+b8d61a58b7c7ebd2c8e0@syzkaller.appspotmail.com
-
-loop0: detected capacity change from 0 to 8192
-REISERFS warning:  read_super_block: reiserfs filesystem is deprecated and scheduled to be removed from the kernel in 2025
-REISERFS (device loop0): found reiserfs format "3.5" with non-standard journal
-REISERFS (device loop0): using ordered data mode
-reiserfs: using flush barriers
-==================================================================
-BUG: KASAN: user-memory-access in instrument_atomic_read_write include/linux/instrumented.h:96 [inline]
-BUG: KASAN: user-memory-access in test_and_set_bit_lock include/asm-generic/bitops/instrumented-lock.h:57 [inline]
-BUG: KASAN: user-memory-access in bit_spin_lock include/linux/bit_spinlock.h:27 [inline]
-BUG: KASAN: user-memory-access in zram_slot_lock+0x57/0x150 drivers/block/zram/zram_drv.c:67
-Write of size 8 at addr 0000000000004128 by task syz-executor326/4993
-
-CPU: 1 PID: 4993 Comm: syz-executor326 Not tainted 6.4.0-rc3-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/28/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
- print_report+0xe6/0x540 mm/kasan/report.c:465
- kasan_report+0x176/0x1b0 mm/kasan/report.c:572
- kasan_check_range+0x283/0x290 mm/kasan/generic.c:187
- instrument_atomic_read_write include/linux/instrumented.h:96 [inline]
- test_and_set_bit_lock include/asm-generic/bitops/instrumented-lock.h:57 [inline]
- bit_spin_lock include/linux/bit_spinlock.h:27 [inline]
- zram_slot_lock+0x57/0x150 drivers/block/zram/zram_drv.c:67
- zram_read_page drivers/block/zram/zram_drv.c:1362 [inline]
- zram_bvec_read drivers/block/zram/zram_drv.c:1409 [inline]
- zram_bio_read drivers/block/zram/zram_drv.c:1883 [inline]
- zram_submit_bio+0x18bc/0x26d0 drivers/block/zram/zram_drv.c:1933
- __submit_bio+0x205/0x2e0 block/blk-core.c:598
- __submit_bio_noacct block/blk-core.c:641 [inline]
- submit_bio_noacct_nocheck+0x467/0xc60 block/blk-core.c:704
- submit_bh fs/buffer.c:2782 [inline]
- __bread_slow fs/buffer.c:1226 [inline]
- __bread_gfp+0x1ec/0x380 fs/buffer.c:1419
- __bread include/linux/buffer_head.h:471 [inline]
- journal_init+0xf61/0x24b0 fs/reiserfs/journal.c:2788
- reiserfs_fill_super+0x1039/0x2620 fs/reiserfs/super.c:2022
- mount_bdev+0x274/0x3a0 fs/super.c:1380
- legacy_get_tree+0xef/0x190 fs/fs_context.c:610
- vfs_get_tree+0x8c/0x270 fs/super.c:1510
- do_new_mount+0x28f/0xae0 fs/namespace.c:3039
- do_mount fs/namespace.c:3382 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount+0x2d9/0x3c0 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f185eef5b0a
-Code: 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffe122853a8 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f185eef5b0a
-RDX: 0000000020000080 RSI: 0000000020000140 RDI: 00007ffe122853b0
-RBP: 00007ffe122853b0 R08: 00007ffe122853f0 R09: 0000000000001121
-R10: 000000000120c083 R11: 0000000000000286 R12: 0000000000000004
-R13: 00005555570882c0 R14: 00007ffe122853f0 R15: 0000000000000000
- </TASK>
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+--=20
+Thanks,
+JeffXie
