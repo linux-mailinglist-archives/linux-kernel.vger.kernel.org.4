@@ -2,161 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED01670BDAE
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 14:22:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 554B270BE90
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 14:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234028AbjEVMW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 08:22:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53474 "EHLO
+        id S232874AbjEVMlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 08:41:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234012AbjEVMVy (ORCPT
+        with ESMTP id S233072AbjEVMk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 08:21:54 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A292D5A;
-        Mon, 22 May 2023 05:19:22 -0700 (PDT)
-Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34MAHKSw014026;
-        Mon, 22 May 2023 12:18:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=EM4f/HnWMsQA9XlCO7vQgbwM3VoRhIqdzHyjShVOjq0=;
- b=JiIKplnPhYcywJVRwRORFA+9ApBQTtaNyy6k7HfHZk/vf7MlEUd8LOsawF+J5nBOcabq
- 1vT2qaW/JkFLzYTvKKKjsOVMgggSQeVlFVbiRnpiVeXSZ7QhN6bN4z4VOcVEy2W+0hXH
- Fw2ocd9QwP8c3T8arIOmsVvomi46+al1Qo1xBzW5hAuJG+2DgOq07D5C9yprKuOa0+yl
- Z4fBD3jA863/Dx1k9I2olggJQJ1fZT6rVI5E7qreCEWDwfyEIH1qtEX0KR1TD1F9HfPM
- t/sBT8XGDeW8YXuOdDyil7uLe91omgwUiq84H/eFbFilIIxf2vpPMHU5cdZ9ol5Qc0wf 7Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qqfak4xq3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 12:18:15 +0000
-Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34MBpOmB010492;
-        Mon, 22 May 2023 12:18:14 GMT
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qqfak4xpf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 12:18:14 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34M9CMA5018866;
-        Mon, 22 May 2023 12:18:12 GMT
-Received: from smtprelay06.wdc07v.mail.ibm.com ([9.208.129.118])
-        by ppma05wdc.us.ibm.com (PPS) with ESMTPS id 3qppdb284e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 12:18:12 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-        by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34MCIBJ864487908
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 May 2023 12:18:11 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C976858050;
-        Mon, 22 May 2023 12:18:11 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 856D258045;
-        Mon, 22 May 2023 12:18:10 +0000 (GMT)
-Received: from wecm-9-67-38-173.wecm.ibm.com (unknown [9.67.38.173])
-        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 22 May 2023 12:18:10 +0000 (GMT)
-Message-ID: <9aced306f134628221c55530643535b89874ccc0.camel@linux.ibm.com>
-Subject: Re: [PATCH] overlayfs: Trigger file re-evaluation by IMA / EVM
- after writes
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Stefan Berger <stefanb@linux.ibm.com>,
-        Paul Moore <paul@paul-moore.com>,
-        linux-integrity@vger.kernel.org, miklos@szeredi.hu,
-        linux-kernel@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        Ignaz Forster <iforster@suse.de>, Petr Vorel <pvorel@suse.cz>
-Date:   Mon, 22 May 2023 08:18:10 -0400
-In-Reply-To: <CAOQ4uxi7PFPPUuW9CZAZB9tvU2GWVpmpdBt=EUYyw60K=WX-Yg@mail.gmail.com>
-References: <20230407-trasse-umgearbeitet-d580452b7a9b@brauner>
-         <078d8c1fd6b6de59cde8aa85f8e59a056cb78614.camel@linux.ibm.com>
-         <CAOQ4uxi7PFPPUuW9CZAZB9tvU2GWVpmpdBt=EUYyw60K=WX-Yg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
+        Mon, 22 May 2023 08:40:59 -0400
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68CFD137;
+        Mon, 22 May 2023 05:40:48 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QPxQn67Lxz4f3jXM;
+        Mon, 22 May 2023 20:22:09 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.104.67])
+        by APP4 (Coremail) with SMTP id gCh0CgBnHbFvXmtk96_lJw--.60238S4;
+        Mon, 22 May 2023 20:22:08 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     regressions@leemhuis.info, chengming.zhou@linux.dev, hch@lst.de,
+        axboe@kernel.dk, yukuai3@huawei.com
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yukuai1@huaweicloud.com, yi.zhang@huawei.com, yangerkun@huawei.com
+Subject: [PATCH RESEND] blk-wbt: fix that wbt can't be disabled by default
+Date:   Mon, 22 May 2023 20:18:54 +0800
+Message-Id: <20230522121854.2928880-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: opgvgwF5P4zhuFJfXOQ6CRad1NlY8c2l
-X-Proofpoint-GUID: 3d-XEyOzlFh7k_HYEoehOs7bmpk7h9i5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-22_08,2023-05-22_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 phishscore=0 mlxlogscore=999 spamscore=0 adultscore=0
- mlxscore=0 impostorscore=0 clxscore=1015 bulkscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305220101
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: gCh0CgBnHbFvXmtk96_lJw--.60238S4
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ww1kXr43Xw15Ww48Kw1fXrb_yoW8Cw1rp3
+        WrGryIkF92qrWIvF13KF1UJw4fGF4vqr1xCrZakw1Sq3WUCr9avay8KFyFvF1jvFs3Ganx
+        Zw13XFZrZFyUX37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvF14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2
+        Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4
+        xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43
+        MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I
+        0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AK
+        xVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvj
+        fUoOJ5UUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2023-05-20 at 12:15 +0300, Amir Goldstein wrote:
-> On Fri, May 19, 2023 at 10:42 PM Mimi Zohar <zohar@linux.ibm.com> wrote:
-> >
-> > On Fri, 2023-04-07 at 10:31 +0200, Christian Brauner wrote:
-> > > So, I think we want both; we want the ovl_copyattr() and the
-> > > vfs_getattr_nosec() change:
-> > >
-> > > (1) overlayfs should copy up the inode version in ovl_copyattr(). That
-> > >     is in line what we do with all other inode attributes. IOW, the
-> > >     overlayfs inode's i_version counter should aim to mirror the
-> > >     relevant layer's i_version counter. I wouldn't know why that
-> > >     shouldn't be the case. Asking the other way around there doesn't
-> > >     seem to be any use for overlayfs inodes to have an i_version that
-> > >     isn't just mirroring the relevant layer's i_version.
-> > > (2) Jeff's changes for ima to make it rely on vfs_getattr_nosec().
-> > >     Currently, ima assumes that it will get the correct i_version from
-> > >     an inode but that just doesn't hold for stacking filesystem.
-> > >
-> > > While (1) would likely just fix the immediate bug (2) is correct and
-> > > _robust_. If we change how attributes are handled vfs_*() helpers will
-> > > get updated and ima with it. Poking at raw inodes without using
-> > > appropriate helpers is much more likely to get ima into trouble.
-> >
-> > In addition to properly setting the i_version for IMA, EVM has a
-> > similar issue with i_generation and s_uuid. Adding them to
-> > ovl_copyattr() seems to resolve it.   Does that make sense?
-> >
-> > diff --git a/fs/overlayfs/util.c b/fs/overlayfs/util.c
-> > index 923d66d131c1..cd0aeb828868 100644
-> > --- a/fs/overlayfs/util.c
-> > +++ b/fs/overlayfs/util.c
-> > @@ -1118,5 +1118,8 @@ void ovl_copyattr(struct inode *inode)
-> >         inode->i_atime = realinode->i_atime;
-> >         inode->i_mtime = realinode->i_mtime;
-> >         inode->i_ctime = realinode->i_ctime;
-> > +       inode->i_generation = realinode->i_generation;
-> > +       if (inode->i_sb)
-> > +               uuid_copy(&inode->i_sb->s_uuid, &realinode->i_sb-
-> > >s_uuid);
-> 
-> That is not a possible solution Mimi.
-> 
-> The i_gneration copy *may* be acceptable in "all layers on same fs"
-> setup, but changing overlayfs s_uuid over and over is a non-starter.
-> 
-> If you explain the problem, I may be able to help you find a better solution.
+From: Yu Kuai <yukuai3@huawei.com>
 
-EVM calculates an HMAC of the file metadata (security xattrs, i_ino,
-i_generation, i_uid, i_gid, i_mode, s_uuid)  and stores it as
-security.evm.  Notrmally this would be used for mutable files, which
-cannot be signed.  The i_generation and s_uuid on the lower layer and
-the overlay are not the same, causing the EVM HMAC verification to
-fail.
+commit b11d31ae01e6 ("blk-wbt: remove unnecessary check in
+wbt_enable_default()") removes the checking of CONFIG_BLK_WBT_MQ by
+mistake, which is used to control enable or disable wbt by default.
 
+Fix the problem by adding back the checking. This patch also do a litter
+cleanup to make related code more readable.
+
+Fixes: b11d31ae01e6 ("blk-wbt: remove unnecessary check in wbt_enable_default()")
+Reported-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Link: https://lore.kernel.org/lkml/CAKXUXMzfKq_J9nKHGyr5P5rvUETY4B-fxoQD4sO+NYjFOfVtZA@mail.gmail.com/t/
+Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+Reviewed-by: Christoph Hellwig <hch@lst.de>
+---
+ block/blk-wbt.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
+
+diff --git a/block/blk-wbt.c b/block/blk-wbt.c
+index e49a48684532..9ec2a2f1eda3 100644
+--- a/block/blk-wbt.c
++++ b/block/blk-wbt.c
+@@ -730,14 +730,16 @@ void wbt_enable_default(struct gendisk *disk)
+ {
+ 	struct request_queue *q = disk->queue;
+ 	struct rq_qos *rqos;
+-	bool disable_flag = q->elevator &&
+-		    test_bit(ELEVATOR_FLAG_DISABLE_WBT, &q->elevator->flags);
++	bool enable = IS_ENABLED(CONFIG_BLK_WBT_MQ);
++
++	if (q->elevator &&
++	    test_bit(ELEVATOR_FLAG_DISABLE_WBT, &q->elevator->flags))
++		enable = false;
+ 
+ 	/* Throttling already enabled? */
+ 	rqos = wbt_rq_qos(q);
+ 	if (rqos) {
+-		if (!disable_flag &&
+-		    RQWB(rqos)->enable_state == WBT_STATE_OFF_DEFAULT)
++		if (enable && RQWB(rqos)->enable_state == WBT_STATE_OFF_DEFAULT)
+ 			RQWB(rqos)->enable_state = WBT_STATE_ON_DEFAULT;
+ 		return;
+ 	}
+@@ -746,7 +748,7 @@ void wbt_enable_default(struct gendisk *disk)
+ 	if (!blk_queue_registered(q))
+ 		return;
+ 
+-	if (queue_is_mq(q) && !disable_flag)
++	if (queue_is_mq(q) && enable)
+ 		wbt_init(disk);
+ }
+ EXPORT_SYMBOL_GPL(wbt_enable_default);
 -- 
-thanks,
-
-Mimi
+2.39.2
 
