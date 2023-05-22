@@ -2,112 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7635F70B4C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 08:03:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B64170B4E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 08:07:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbjEVGDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 02:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39324 "EHLO
+        id S230093AbjEVGHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 02:07:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230267AbjEVGDG (ORCPT
+        with ESMTP id S229571AbjEVGHi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 02:03:06 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697DFFE;
-        Sun, 21 May 2023 23:03:05 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34M5Fa0w023085;
-        Mon, 22 May 2023 06:03:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=9Rpfvi2imEznh7+DvUUNzkzDufqKjlVr6K7nCgU9kaM=;
- b=TbOnYP+cDcqTYDSw7VGq2q2sbtvU7NttaWD9bq+jkhRdXkSy2eQwdzivYzPsf2U1grwg
- /McMsxDHeO4VOFk1TYgt7CUIfl8IIg/7lqd8Sv1ZUMpqLghEpypkQP/cA8l3KOWcJx4r
- P3X7YZsN4Jngb4d7J4Nvz9eBsryvoZoliAeV1b2CY34hLo5t5V4uJ2Tao40rFNEyAyLn
- JC9J42rNjgLN/sgLy1BKeYap8F4j9p9e9hBYkfDhHrN46FfWVX57yadqZTUCmRhdnf50
- I2ERTS7o71odL0yEfZfZigqph/HtSurvd7RC69bwLwUce1SFepSvXZUDO5Mo6MaxBrHe /w== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qpqgf2q43-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 06:03:02 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 34M62w1D032334;
-        Mon, 22 May 2023 06:02:58 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3qpq9keer2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Mon, 22 May 2023 06:02:58 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34M62vc6032318;
-        Mon, 22 May 2023 06:02:58 GMT
-Received: from hu-sgudaval-hyd.qualcomm.com (hu-dikshita-hyd.qualcomm.com [10.213.110.13])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 34M62vOs032308;
-        Mon, 22 May 2023 06:02:58 +0000
-Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 347544)
-        id 8C69C3F5E; Mon, 22 May 2023 11:32:57 +0530 (+0530)
-From:   Dikshita Agarwal <quic_dikshita@quicinc.com>
-To:     linux-media@vger.kernel.org, stanimir.k.varbanov@gmail.com,
-        quic_vgarodia@quicinc.com, agross@kernel.org, andersson@kernel.org,
-        konrad.dybcio@linaro.org, mchehab@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Dikshita Agarwal <quic_dikshita@quicinc.com>,
-        Viswanath Boma <quic_vboma@quicinc.com>
-Subject: [PATCH v4 3/3] venus: fix EOS handling in decoder stop command
-Date:   Mon, 22 May 2023 11:32:52 +0530
-Message-Id: <1684735372-10075-4-git-send-email-quic_dikshita@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1684735372-10075-1-git-send-email-quic_dikshita@quicinc.com>
-References: <1684735372-10075-1-git-send-email-quic_dikshita@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: GN2mtvPvhQtfjUzwlMCWzB9ZAQmZ8j6b
-X-Proofpoint-GUID: GN2mtvPvhQtfjUzwlMCWzB9ZAQmZ8j6b
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-22_03,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
- suspectscore=0 malwarescore=0 priorityscore=1501 impostorscore=0
- phishscore=0 mlxscore=0 bulkscore=0 mlxlogscore=999 lowpriorityscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305220050
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 22 May 2023 02:07:38 -0400
+Received: from zg8tmtyylji0my4xnjqumte4.icoremail.net (zg8tmtyylji0my4xnjqumte4.icoremail.net [162.243.164.118])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 120AEDB;
+        Sun, 21 May 2023 23:07:33 -0700 (PDT)
+Received: from [192.168.43.203] (unknown [113.140.11.4])
+        by sr0414.icoremail.net (Coremail) with SMTP id AQAAfwDHvSqBBmtkL08HAw--.36433S3;
+        Mon, 22 May 2023 14:06:59 +0800 (CST)
+Message-ID: <36474dbb-5020-9044-b47c-cb377fa5dea7@stu.xidian.edu.cn>
+Date:   Mon, 22 May 2023 14:07:10 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] PCI: dwc: keystone: Free IRQ in `ks_pcie_remove` and the
+ error handling section of `ks_pcie_probe`
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        hust-os-kernel-patches@googlegroups.com,
+        Dongliang Mu <dzm91@hust.edu.cn>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <ZGPeUNqznHKETgqs@bhelgaas>
+From:   =?UTF-8?B?5pu+56Wl57+8?= <xyzeng@stu.xidian.edu.cn>
+In-Reply-To: <ZGPeUNqznHKETgqs@bhelgaas>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAfwDHvSqBBmtkL08HAw--.36433S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxXFyrAry8ZFWftr1furWDtwb_yoW5Aw4rpF
+        4DJF1qkF4kJFyUu347CaySqFyF9rs5Ary7t3s2k3s8uFn8XFW5tryxKr4ag3ZrCr4kJ3W2
+        qayUKr9ruFWruFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvEb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xII
+        jxv20xvEc7CjxVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4
+        vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40E
+        FcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr
+        0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY
+        04v7Mxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7
+        v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF
+        1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIx
+        AIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI
+        42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWI
+        evJa73UjIFyTuYvjxUqEoXUUUUU
+X-CM-SenderInfo: p012v0vj6v33wo0lvxldqovvfxof0/
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use firmware version based check to assign correct
-device address for EOS buffer to fix the EOS handling
-with different firmware version.
-
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-Tested-by: Nathan Hebert <nhebert@chromium.org>
-Signed-off-by: Vikash Garodia <quic_vgarodia@quicinc.com>
-Signed-off-by: Viswanath Boma <quic_vboma@quicinc.com>
-Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
----
- drivers/media/platform/qcom/venus/vdec.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
-index f0394b9..c59b34f 100644
---- a/drivers/media/platform/qcom/venus/vdec.c
-+++ b/drivers/media/platform/qcom/venus/vdec.c
-@@ -545,7 +545,7 @@ vdec_decoder_cmd(struct file *file, void *fh, struct v4l2_decoder_cmd *cmd)
- 
- 		fdata.buffer_type = HFI_BUFFER_INPUT;
- 		fdata.flags |= HFI_BUFFERFLAG_EOS;
--		if (IS_V6(inst->core))
-+		if (IS_V6(inst->core) && is_fw_rev_or_older(inst->core, 1, 0, 87))
- 			fdata.device_addr = 0;
- 		else
- 			fdata.device_addr = 0xdeadb000;
--- 
-2.7.4
+On 17/5/2023 03:49, Bjorn Helgaas wrote:
+> On Tue, May 16, 2023 at 01:16:59PM +0800, Xiangyi Zeng wrote:
+>> Smatch complains that:
+>> drivers/pci/controller/dwc/pci-keystone.c:1303 ks_pcie_probe() warn:
+>> 'irq' from request_irq() not released on lines: 1183,1187,1303.
+> Make this the entire warning line from smatch with no extra newlines
+> inserted.
+Thank you for the suggestion. I will put the warning in one line.
+>> "ks-pcie-error-irq" was requested in the `ks_pcie_probe` function, but
+>> was not freed neither in the error handling part of `ks_pcie_probe`
+>> nor in the `ks_pcie_remove` function.
+>>
+>> Fix this by adding `free_irq` in `ks_pcie_remove` and in a new error
+>> handling label `err_alloc` after `err_link` in `ks_pcie_probe`. In
+>> `ks_pcie_probe`, if `phy` or `link` memory allocation fails, we will
+>> fall to `err_alloc`. If any other error occurs that leads to
+>> `err_get_sync` or `err_link`, we end up going to `err_alloc`.
+> I think the backticks (`) are markdown that makes these "code".
+> Personally I think ks_pcie_probe() is more readable than
+> `ks_pcie_probe` since most people (I think) read these in plain-ASCII
+> situations.  And using backticks for labels and local variables seems
+> like overkill.
+>
+Sorry for my wrong usage of backticks. I agree that it would be more
+readable to use plain-ASCII names for functions and variables. I will
+make sure to update the comment message and the subject.
+>> Fixes: 0790eb175ee0 ("PCI: keystone: Cleanup error_irq configuration")
+>> Signed-off-by: Xiangyi Zeng <xyzeng@stu.xidian.edu.cn>
+>> Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+> It's best if the Reviewed-by tag is not added until Dongliang sends
+> email with that tag directly to the mailing list.  Internal reviews
+> before posting to the mailing list aren't worth much.
+In our internal review process, only the patch with the Reviewed-by
+tag can be submitted to the mailing list. You can check this in our
+google group.
+https://groups.google.com/g/hust-os-kernel-patches/c/bt397rzVL24/m/l52XYbG4AgAJ
+We will consider omitting this tag when sending to the kernel mailing
+list in the future.
+>> @@ -1309,12 +1316,14 @@ static int __exit ks_pcie_remove(struct platform_device *pdev)
+>>   	struct device_link **link = ks_pcie->link;
+>>   	int num_lanes = ks_pcie->num_lanes;
+>>   	struct device *dev = &pdev->dev;
+>> +	int irq = platform_get_irq(pdev, 0);
+> I think it's better to save the irq we looked up in ks_pcie_probe()
+> and free *that*.  It's probably the same thing you get by calling
+> platform_get_irq() again, but it seems cleaner to me to save what we
+> got in ks_pcie_probe().
+Thanks for your guidance. I agree with saving the irq to make code cleaner.
+I will change it in the next version.
+>>   	pm_runtime_put(dev);
+>>   	pm_runtime_disable(dev);
+>>   	ks_pcie_disable_phy(ks_pcie);
+>>   	while (num_lanes--)
+>>   		device_link_del(link[num_lanes]);
+>> +	free_irq(irq, ks_pcie);
+>>   
+>>   	return 0;
+>>   }
+>> -- 
+>> 2.34.1
+>>
 
