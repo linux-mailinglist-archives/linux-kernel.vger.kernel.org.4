@@ -2,67 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 855A870C20A
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E15770C205
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:11:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234430AbjEVPLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 11:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50970 "EHLO
+        id S234265AbjEVPLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 11:11:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234369AbjEVPLh (ORCPT
+        with ESMTP id S234417AbjEVPLN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 11:11:37 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D38CD
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 08:11:32 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-ba82956d3e0so5443654276.0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 08:11:32 -0700 (PDT)
+        Mon, 22 May 2023 11:11:13 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D233CF;
+        Mon, 22 May 2023 08:11:09 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-96fab30d1e1so429966866b.0;
+        Mon, 22 May 2023 08:11:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684768291; x=1687360291;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DTJnTOSBsJdXxwudOgHDRynaphl008jVXxiS43MOx6A=;
-        b=OjzMYV7FB/u87mx5iCndMOolICZ+awcR65uiYxd2r+5DoA8Fzi1mcEn7jmNNRsM5aO
-         Hx0dXZ0Rotbhoo77WvEwqMkXG+AxskMEisTrQbPA5SRlHWM6QUDKtfWcaPO8GwQt5zqe
-         naNvC5tb5mjCjv0V0GTeKJ9xsiFxYdrFZJV3wIiHI3wJJGUvZIEEyVaJQeqHhssu3lLb
-         YRDspCVKo8x8JzSaCLkR1NyMjjE6LCCAQLLI0HDosu+2YYZqY2YuCMg7BqsFCIR4FEwr
-         ytqyKHU1opANj1xICHWv+voTqSuBJOn817lek4h9jgHnxaCLLZ6yEPkWaSovAmWfmwZT
-         WK3w==
+        d=gmail.com; s=20221208; t=1684768268; x=1687360268;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=AuMCsYagdD2B/btsXGbofl0+XgpZ3eLWhBM9dBSN1BU=;
+        b=l8EQCQ6aP9jjTJ1kFJzKfzj8Z2JbVk1oGkneZEKJeLLgLNGO7LfVpfJexmI32g4WL6
+         XhskzOPBUB7natb3F/i8CS5rF/12fNvmcUTrbTk83zJbl30eN/CktXteHHWpjsVZ4kVp
+         SfpuqqveVlG2XDE5ZnlPv8WdSxQDUGIdq564Ra8R680cuBTnh3i285hCx2m9wxI08tku
+         mEyS2UBAayNgHc8hvhp8CRTlyl7JxsOT/T6AY1mqZ0Ofi+YwoHTGc1+7pCD74x+6jnbU
+         EHVYB7oqIKOUIh0p2wTyu9XgmFeHfEGA766xxszCI3tVhgLi1zZVWVZRGq0KeKrLnuH6
+         DXMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684768291; x=1687360291;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DTJnTOSBsJdXxwudOgHDRynaphl008jVXxiS43MOx6A=;
-        b=fr6R6QC6wTCs9CJjlekqnIObuwGCURG+/IikdtrcNSY4ymI+o+qzQp6f7/PBtyiOSz
-         TkFKPNs5MW4h0/6vdYPnoxSM3js7hq0gUm1O2VoafjbeFm+bYFtIrtRK3OoZOYqZ+uWI
-         TplYmcjPmfRd3No3Zn36XOY9xtWEclZyjJtsuriUh9LUfmeaHG6CLWREb/H2zEtxYFF6
-         i8XobXgUyJxVZGlXdPwr2RQufaTW++5wDECmU3ZBGhkk43DxW8tUt7xlSqtNhXfiZRWC
-         yMiwsl0nJXGSNrgMv24QpOCsrH7UHsWYfRYBrxAeS/SEe4g42MRH3n/TGIXgwix9dWl+
-         KDvA==
-X-Gm-Message-State: AC+VfDw1Z9EEU3nbRytX5+JQVtw8/TAbkbLN3Goq9/iO5vcm+fOVwn8n
-        SpGg6dXAeAGCddh+FELQJnPUpa2WlecMF8CVgGA0kB1r
-X-Google-Smtp-Source: ACHHUZ7a9CC/BJ1/5Uahg1uci41+efd+P2PhLAf72v4ugAcuf/SpYmFxwV9zyHFfsS0YrZ/uT3+SL/iFf3MoM+Qv1yQ=
-X-Received: by 2002:aca:d806:0:b0:38e:e5b5:493e with SMTP id
- p6-20020acad806000000b0038ee5b5493emr7140299oig.11.1684768270110; Mon, 22 May
- 2023 08:11:10 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684768268; x=1687360268;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AuMCsYagdD2B/btsXGbofl0+XgpZ3eLWhBM9dBSN1BU=;
+        b=hWQwgM6HX8mWwyJBUnsb1B1LEOf+T08UfZ9aMS+Ux4QXFkytnjBV9gnaTZzTa7nM5p
+         jUtjfmX49VfMcKdcvEd4MUOaj/wsxWuNeBRlW5rqyzzqFsWFHiURGgu1PMT8TR8rniCq
+         gwOsGjKVU+AXVmHdWAEMPNkU204/QVY6iSa0YNVqmumufHNKH34uOJjj2YpNwzuqYnyo
+         Wc86vEVrJAkwNW5m5lGCXWebs5fwkSnOsvd2uXEUFi22gMXbqXjB2f8UO2E69dFyOTzI
+         PbGWk9L+o7V5qLOFdohf0miNVX8AdfptDdmKuNgOyitGMHbCrWDhZW/qDAIwj+JdYgK0
+         viDQ==
+X-Gm-Message-State: AC+VfDyAP+KVZGae0/cJVd2mZRKhr+zhy9TT/8DAWpv8MeFGEy3S5a2F
+        OCl4po/W/hBA5UuYDWHi0RE=
+X-Google-Smtp-Source: ACHHUZ66MlsS0CQtuX/rYHx1VKny3lDZ8SAZIa69pLaoWdN3wlKu5qbE8MzmrB5TXN45H9L2kFOO2g==
+X-Received: by 2002:a17:907:3fa8:b0:969:e993:6ff0 with SMTP id hr40-20020a1709073fa800b00969e9936ff0mr11293240ejc.25.1684768267290;
+        Mon, 22 May 2023 08:11:07 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id qx15-20020a170906fccf00b00965f98eefc1sm3211620ejb.116.2023.05.22.08.11.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 08:11:07 -0700 (PDT)
+Date:   Mon, 22 May 2023 18:11:04 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     David Epping <david.epping@missinglinkelectronics.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH net 3/3] net: phy: mscc: enable VSC8501/2 RGMII RX clock
+Message-ID: <20230522151104.clf3lmsqdndihsvo@skbuf>
+References: <20230520160603.32458-1-david.epping@missinglinkelectronics.com>
+ <20230520160603.32458-4-david.epping@missinglinkelectronics.com>
+ <20230521134356.ar3itavhdypnvasc@skbuf>
+ <20230521161650.GC2208@nucnuc.mle>
+ <20230522095833.otk2nv24plmvarpt@skbuf>
+ <20230522140057.GB18381@nucnuc.mle>
 MIME-Version: 1.0
-References: <20230522123013.1065975-1-trix@redhat.com>
-In-Reply-To: <20230522123013.1065975-1-trix@redhat.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 22 May 2023 11:10:58 -0400
-Message-ID: <CADnq5_Pc+3YNT0Ymf77zPDKt9Nr2mBYgxgcyqT4PZLQhrD+iRA@mail.gmail.com>
-Subject: Re: [PATCH] drm/amdgpu: remove unused variable num_xcc
-To:     Tom Rix <trix@redhat.com>
-Cc:     alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
-        Hawking.Zhang@amd.com, le.ma@amd.com, lijo.lazar@amd.com,
-        tao.zhou1@amd.com, shiwu.zhang@amd.com,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230522140057.GB18381@nucnuc.mle>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -73,42 +82,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+On Mon, May 22, 2023 at 04:00:57PM +0200, David Epping wrote:
+> On Mon, May 22, 2023 at 12:58:33PM +0300, Vladimir Oltean wrote:
+> > If you still prefer to write twice in a row to the same paged register
+> > instead of combining the changes, then fine by me, it's not a huge deal.
+> 
+> Since the clock enablement now happens in all modes the existing rgmii
+> function name seems misleading to me.
 
-Alex
+To be fair, it's only as misleading as the datasheet name for the register
+that holds this field, "RGMII CONTROL". Anyway, the function could be
+renamed as necessary to be less confusing: vsc85xx_update_rgmii_ctrl()
+or something along those lines.
 
-On Mon, May 22, 2023 at 8:30=E2=80=AFAM Tom Rix <trix@redhat.com> wrote:
->
-> gcc with W=3D1 reports
-> drivers/gpu/drm/amd/amdgpu/gfx_v9_4_3.c:2138:13: error: variable
->   =E2=80=98num_xcc=E2=80=99 set but not used [-Werror=3Dunused-but-set-va=
-riable]
->  2138 |         int num_xcc;
->       |             ^~~~~~~
->
-> This variable is not used so remove it.
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
-> ---
->  drivers/gpu/drm/amd/amdgpu/gfx_v9_4_3.c | 3 ---
->  1 file changed, 3 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/gfx_v9_4_3.c b/drivers/gpu/drm/am=
-d/amdgpu/gfx_v9_4_3.c
-> index e5cfb3adb3b3..63718cf02aa1 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/gfx_v9_4_3.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/gfx_v9_4_3.c
-> @@ -2135,9 +2135,6 @@ static void gfx_v9_4_3_ring_emit_gds_switch(struct =
-amdgpu_ring *ring,
->  static int gfx_v9_4_3_early_init(void *handle)
->  {
->         struct amdgpu_device *adev =3D (struct amdgpu_device *)handle;
-> -       int num_xcc;
-> -
-> -       num_xcc =3D NUM_XCC(adev->gfx.xcc_mask);
->
->         adev->gfx.num_compute_rings =3D min(amdgpu_gfx_get_num_kcq(adev),
->                                           AMDGPU_MAX_COMPUTE_RINGS);
-> --
-> 2.27.0
->
+MDIO reads and writes are not exactly the quickest I/O in the world, and
+having 2 read-modify-write consecutive accesses to the same paged
+register (which in turn implies indirect access) just because readability
+seems like the type of thing that can play its part in deteriorating
+boot time latency. Maybe we can deal with the readability some other way.
+
+> Also we don't want to enable for
+> all PHY types, and the differentiation is already available at the
+> caller. I would thus opt for a separate function and fewer conditional
+> statements.
+
+I don't understand this. We don't? For what PHY types don't we want to
+enable the RX_CLK?
+
+> Its my first patch re-submission, so sorry for the noob question:
+> Should I include your "pw-bot: changes-requested" tag with the third
+> patch? Probably not.
+
+Nope.
