@@ -2,106 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DA4D70B4B5
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 07:57:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A0CA70B4B4
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 07:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229728AbjEVF5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 01:57:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38368 "EHLO
+        id S229659AbjEVF4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 01:56:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjEVF5M (ORCPT
+        with ESMTP id S229485AbjEVFz6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 01:57:12 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC34CE
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:57:11 -0700 (PDT)
+        Mon, 22 May 2023 01:55:58 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B246ACE;
+        Sun, 21 May 2023 22:55:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684735031; x=1716271031;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=tOMcNfhocZCO/GNSExZGCChK9wg74/hawJud+TAllGI=;
-  b=QvE3N5b0AYeUi044/e9D+WiQIse6wqArQwLEDu5cZuSt44lF08TfN5ON
-   /jny0IODGEv4vFapup+SEw0U9jEBLiqL9tg9TFJG2m20hd48o4i0bbO9r
-   IhK5lZFterW3Bw8qqghNh8a/4YSje0oc22QDiIOue3PEoXc1983pA7AT4
-   u62lV1rLVn3qkYOc0yQN6QMX9Z5b1kK+Uz2CP7U6/kb3gDcDqH7mT4dRx
-   fxR89ow8PcFftnSB18DmXo+aYTgUyShtjo4DrFaM/7GZuu1hxtzOipi3q
-   meCktHUxJC0zmJ0eK1IdRvrelqxI9fa+Cstx1PwoqsnA5YSxESvtrqfmx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="332439331"
+  t=1684734956; x=1716270956;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eHakiM3I/fF0t5+kZ7W9wxVporHqhdITdXWM+VUyzMY=;
+  b=kZ/DtsxjyxzTxsMypdNOUtkuLKVd4NPp2dnGEZiDJ0DX4dhAeu/5nEms
+   cGAd3LLD4wyf2ETl35XLaFBlqO58Z05AVhTPO7lRK+qSgaH6VLWKAetlO
+   yWnkZ8+rRqGy8tmLTZcp2T/oYOYcGp8lVm8X9w2pFWEPRtHrPMBhocrq3
+   c7ADuBF1VoVUf7R9KWbC07Iss0DygeHz60FgXG1w94t0wOHUtl3/TpgmB
+   iddDExWmO7aic3udA/2JhNtybxdH0jQ//aFe+9E5ssNI2TeEVCh/q5dUr
+   +Z7FXAl3SXMNh2s7VLMahiB+VnHvwna1M9MUoXLC+HI9EE+VcloPXh8fp
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="337423189"
 X-IronPort-AV: E=Sophos;i="6.00,183,1681196400"; 
-   d="scan'208";a="332439331"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2023 22:57:11 -0700
+   d="scan'208";a="337423189"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2023 22:55:56 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="736286283"
+X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="680832120"
 X-IronPort-AV: E=Sophos;i="6.00,183,1681196400"; 
-   d="scan'208";a="736286283"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2023 22:57:08 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Khalid Aziz <khalid.aziz@oracle.com>, akpm@linux-foundation.org,
-        willy@infradead.org, steven.sistare@oracle.com,
-        mgorman@techsingularity.net, khalid@kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] mm, compaction: Skip all non-migratable pages during
- scan
-References: <20230517161555.84776-1-khalid.aziz@oracle.com>
-        <c34e3768-8a01-d155-1970-8eada8c80ba7@redhat.com>
-        <87sfbubg3j.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <5f43a17c-94a0-4bff-b451-e5014de36ed9@redhat.com>
-Date:   Mon, 22 May 2023 13:55:51 +0800
-In-Reply-To: <5f43a17c-94a0-4bff-b451-e5014de36ed9@redhat.com> (David
-        Hildenbrand's message of "Fri, 19 May 2023 11:51:00 +0200")
-Message-ID: <875y8k3o60.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+   d="scan'208";a="680832120"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga006.jf.intel.com with ESMTP; 21 May 2023 22:55:53 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 393301CC; Mon, 22 May 2023 08:55:55 +0300 (EEST)
+Date:   Mon, 22 May 2023 08:55:55 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Mario Limonciello <mario.limonciello@amd.com>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
+        Natikar Basavaraj <Basavaraj.Natikar@amd.com>,
+        Deucher Alexander <Alexander.Deucher@amd.com>,
+        Iain Lane <iain@orangesquash.org.uk>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH v2] PCI: Don't assume root ports from > 2015 are power
+ manageable
+Message-ID: <20230522055555.GI45886@black.fi.intel.com>
+References: <20230517150827.89819-1-mario.limonciello@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230517150827.89819-1-mario.limonciello@amd.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Hildenbrand <david@redhat.com> writes:
+Hi Mario,
 
-> On 18.05.23 03:09, Huang, Ying wrote:
->> David Hildenbrand <david@redhat.com> writes:
->> 
->>> On 17.05.23 18:15, Khalid Aziz wrote:
->>>> Pages pinned in memory through extra refcounts can not be migrated.
->>>> Currently as isolate_migratepages_block() scans pages for
->>>> compaction, it skips any pinned anonymous pages. All non-migratable
->>>> pages should be skipped and not just the anonymous pinned pages.
->>>> This patch adds a check for extra refcounts on a page to determine
->>>> if the page can be migrated.  This was seen as a real issue on a
->>>> customer workload where a large number of pages were pinned by vfio
->>>> on the host and any attempts to allocate hugepages resulted in
->>>> significant amount of cpu time spent in either direct compaction or
->>>> in kcompactd scanning vfio pinned pages over and over again that can
->>>> not be migrated.
->>>
->>> How will this change affect alloc_contig_range(), such as used for CMA
->>> allocations or virtio-mem? alloc_contig_range() ends up calling
->>> isolate_migratepages_range() -> isolate_migratepages_block().
->> IIUC, cc->alloc_contig can be used to distinguish contiguous
->> allocation
->> and compaction.  And, from the original commit which introduced
->> anonymous pages skipping (commit 119d6d59dcc0 ("mm, compaction: avoid
->> isolating pinned pages ")) and this patch, large number of migration
->> failure during compaction causes real issue too.  So, I suggest to use
->> cc->alloc_contig here.
->
-> Agreed. I further wonder if we want to special-case the !alloc_contig
-> case also for MIGRATE_CMA and ZONE_MOVABLE, where we cannot have 
-> longterm page pinnings (e.g., vfio pinned pages).
+On Wed, May 17, 2023 at 10:08:27AM -0500, Mario Limonciello wrote:
+> Using an XHCI device to wakeup the system from s2idle fails when
+> that XHCI device is connected to a USB-C port for an AMD USB4
+> router.
+> 
+> Due to commit 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during
+> suspend") all root port go into D3 during s2idle.
+> When the root ports are in D3 over s2idle it's not possible for the
+> platform firmware to properly identify the wakeup source.
+> 
+> Comparing registers between Linux and Windows 11 this behavior to put root
+> ports into D3 at suspend is unique to Linux.  On an affected system
+> Windows does not put the root ports into D3 over Modern Standby.
+> 
+> Windows doesn't put the root ports into D3 because root ports are not
+> power manageable; they're missing _PRW and _S0W.
+> 
+> Linux shouldn't be assuming they support D3 just because they're newer
+> than 2015, the ports should also be deemed power manageable.
+> Add an extra check for this to ensure D3 isn't selected for such machines.
+> 
+> Fixes: 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend")
+> Reported-by: Iain Lane <iain@orangesquash.org.uk>
+> Closes: https://forums.lenovo.com/t5/Ubuntu/Z13-can-t-resume-from-suspend-with-external-USB-keyboard/m-p/5217121
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>  drivers/pci/pci.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index 5ede93222bc1..3fe27aef09e6 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -3010,6 +3010,9 @@ bool pci_bridge_d3_possible(struct pci_dev *bridge)
+>  		if (dmi_check_system(bridge_d3_blacklist))
+>  			return false;
+>  
+> +		if (!platform_pci_power_manageable(bridge))
+> +			return false;
+> +
 
-This makes sense.  The skipping is more accurate in this way.
-
-Best Regards,
-Huang, Ying
+We already call platform_pci_bridge_d3() few lines up. That function
+should know whether "platform" supports D3 for the bridges, and I think
+it actually calls acpi_device_power_manageable() that platform_pci_power_manageable()
+ends up checking too.
