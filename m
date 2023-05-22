@@ -2,55 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB33470B754
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:10:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B29D70B757
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:11:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231854AbjEVIK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 04:10:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48082 "EHLO
+        id S231887AbjEVILy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 04:11:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231872AbjEVIKW (ORCPT
+        with ESMTP id S229729AbjEVILv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 04:10:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DF78B0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 01:10:21 -0700 (PDT)
+        Mon, 22 May 2023 04:11:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CC3DAA;
+        Mon, 22 May 2023 01:11:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B80A861297
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 08:10:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 29910C433EF;
-        Mon, 22 May 2023 08:10:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A306611EC;
+        Mon, 22 May 2023 08:11:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82C13C4339B;
+        Mon, 22 May 2023 08:11:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684743020;
-        bh=h9LNX56bVBeMikvMqZU/QestwxoPFNrYytmhp62eoiI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=lyyBcoDR+wvrtN+6v8/hrtcK3PrbdrtaBt3x6x7Utik4yWlOsk20VeboEvIr5P0j4
-         cQG3Zuiofnmgw2sTr0BdsQnBcHh6RKcGjwLOw2g38okfpm66J4gC9Ml3096WIOExnq
-         ZzZ2ULDoru7iwFNB2DoE2oNsQaD5iJ0Kgl8MLc/G93V8k04PuvkHhzJSJbSsGxnE6G
-         QASlAxnQQmrPZYgFMSQhoebdGOlIimf3YD/ZOcIt6Zu5dX96TwodmGHsU9QLfyDVxl
-         nwL0e4nsgkM1lT0rQT9S9DYSO7uZb9ArJtrEbPs67RmEVdm6qLzrIC46F1SLT5I++c
-         Wmszi/mfMGoSg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 10350E22B06;
-        Mon, 22 May 2023 08:10:20 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1684743109;
+        bh=L2nQr/zNB4k9r1QrqcHzb2skGUGOWpnh00AVGc/I3yc=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=CF627yfMc0CCIAqqM0itDOkFEuGiz5OJqC5LIpikd8y1748RKNTUbzFCKc7RhRFAt
+         sP0IhhmJwv2xGB2lIFFlQOoAtRbaq0VRd6pQv0tEfEbPIh/dYshBiEbk9EMfiCu9Zm
+         tzRuCc4jRRuMNfi3GooKSLdY1oMh377rmRKeNgf9kILpK1IriZ+sHZ6eV+SQfgELWT
+         DuSCs8+AtE6e5Dlrv6TntebhI/gIOF20wQ+WyaQtnNRrnh9kBRy3CJvQV+PLIgE4cf
+         1mgxywUJLJ6a1NG26OBC5RqRkvVYO/T/f+dY/1zc9bTe8//G9qS+pwMpddncHqpUKg
+         6DsmW5ZkFGC0Q==
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-4f3baf04f0cso1628335e87.1;
+        Mon, 22 May 2023 01:11:49 -0700 (PDT)
+X-Gm-Message-State: AC+VfDwnKJn06bxhDhMfX8ioQdqKYyoLLm8eqau8+uqhosMR2r3xoeW9
+        xMA6CRfYhecktE9o+qBiiUlDP7O73fDpQnmyrf0=
+X-Google-Smtp-Source: ACHHUZ7/qMl1XWR7ltpbNPCtiPTtKqL17whtbAfTLnLM0Bi+omns44QuOfWWInwctOw0bUMzgFRXzoRc9ohRA+eA/OM=
+X-Received: by 2002:a05:6512:208:b0:4f3:7a59:d19 with SMTP id
+ a8-20020a056512020800b004f37a590d19mr2788096lfo.59.1684743107599; Mon, 22 May
+ 2023 01:11:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] [v9] platform/chrome: cros_ec_lpc: Move host command to
- prepare/complete
-From:   patchwork-bot+chrome-platform@kernel.org
-Message-Id: <168474302006.27846.3771837102628763642.git-patchwork-notify@kernel.org>
-Date:   Mon, 22 May 2023 08:10:20 +0000
-References: <20230515142552.1.I17cae37888be3a8683911991602f18e482e7a621@changeid>
-In-Reply-To: <20230515142552.1.I17cae37888be3a8683911991602f18e482e7a621@changeid>
-To:     Tim Van Patten <timvp@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, robbarnes@google.com,
-        lalithkraj@google.com, rrangel@chromium.org, bleung@chromium.org,
-        groeck@chromium.org, chrome-platform@lists.linux.dev
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+References: <20230512194302.1662230-1-nicholasbishop@google.com>
+In-Reply-To: <20230512194302.1662230-1-nicholasbishop@google.com>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 22 May 2023 10:11:36 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXERDgT1cM-2P4M=DBGU0Wzbc-zewGsJjLQoQHpC3ds-4g@mail.gmail.com>
+Message-ID: <CAMj1kXERDgT1cM-2P4M=DBGU0Wzbc-zewGsJjLQoQHpC3ds-4g@mail.gmail.com>
+Subject: Re: [PATCH] efi/esrt: Allow ESRT access without CAP_SYS_ADMIN
+To:     Nicholas Bishop <nicholasbishop@google.com>,
+        Peter Jones <pjones@redhat.com>
+Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,30 +62,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+On Fri, 12 May 2023 at 21:43, Nicholas Bishop <nicholasbishop@google.com> wrote:
+>
+> Access to the files in /sys/firmware/efi/esrt has been restricted to
+> CAP_SYS_ADMIN since support for ESRT was added, but this seems overly
+> restrictive given that the files are read-only and just provide
+> information about UEFI firmware updates.
+>
+> Remove the CAP_SYS_ADMIN restriction so that a non-root process can read
+> the files, provided a suitably-privileged process changes the file
+> ownership first. The files are still read-only and still owned by root by
+> default.
+>
+> Signed-off-by: Nicholas Bishop <nicholasbishop@google.com>
 
-This patch was applied to chrome-platform/linux.git (for-next)
-by Tzung-Bi Shih <tzungbi@kernel.org>:
+Seems reasonable to me. Peter?
 
-On Mon, 15 May 2023 14:25:52 -0600 you wrote:
-> Update cros_ec_lpc_pm_ops to call cros_ec_lpc_prepare() during PM
-> .prepare() and cros_ec_lpc_complete() during .complete(). This moves the
-> host command that the AP sends and allows the EC to log entry/exit of
-> AP's suspend/resume more accurately.
-> 
-> Changes in v9:
-> - Remove log statements.
-> - Ignore return value from cros_ec_resume().
-> 
-> [...]
-
-Here is the summary with links:
-  - [v9] platform/chrome: cros_ec_lpc: Move host command to prepare/complete
-    https://git.kernel.org/chrome-platform/c/4b9abbc132b8
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> ---
+>  drivers/firmware/efi/esrt.c | 4 ----
+>  1 file changed, 4 deletions(-)
+>
+> diff --git a/drivers/firmware/efi/esrt.c b/drivers/firmware/efi/esrt.c
+> index d5915272141f..aab96ab64a1a 100644
+> --- a/drivers/firmware/efi/esrt.c
+> +++ b/drivers/firmware/efi/esrt.c
+> @@ -95,10 +95,6 @@ static ssize_t esre_attr_show(struct kobject *kobj,
+>         struct esre_entry *entry = to_entry(kobj);
+>         struct esre_attribute *attr = to_attr(_attr);
+>
+> -       /* Don't tell normal users what firmware versions we've got... */
+> -       if (!capable(CAP_SYS_ADMIN))
+> -               return -EACCES;
+> -
+>         return attr->show(entry, buf);
+>  }
+>
+> --
+> 2.40.1.606.ga4b1b128d6-goog
+>
