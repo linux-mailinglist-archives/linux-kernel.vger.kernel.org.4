@@ -2,67 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2AE370B932
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:38:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3E3B70B930
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:38:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232471AbjEVJil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 05:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36456 "EHLO
+        id S232041AbjEVJiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 05:38:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232521AbjEVJic (ORCPT
+        with ESMTP id S232386AbjEVJiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 05:38:32 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358B4FD
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 02:38:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1684748287; x=1716284287;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=/Xeh6MC2bHWJ3JrwjlgkwhiH2KNsjV1ulsMTAFwTvBk=;
-  b=rv83skDxw9VTyuF8ZdXkTHDwsvAbFsA8QHHV5QMbs6D5X9MzUzf1UH41
-   JkIrhbXn/CSUq4Rtb2Uw7REAMGaV1mHRe/36/724CukQ6f6dO6o+6uQBc
-   vsr54fbFlj+rehxAvERmvYmsq4ugcOAJ23ESt8Fz+Pux67RhCCh8rvToI
-   IfLFcXGV4T8pg0P49X42T8OLe+2QwZCdRPmN0FvTfA1id/gs+VnHK7icv
-   JCLFKwi8C03SblI/htPfjzcLenSgvu3byzsfvCj/Uy/aD8kYnC4oOuk9R
-   cJ2r744DdcxKuCOIkxoj9EsywK2MZMuPriVP4aGou3V+yJgv5xg977o4N
-   w==;
-X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
-   d="scan'208";a="216613248"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 May 2023 02:38:00 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 22 May 2023 02:37:59 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Mon, 22 May 2023 02:37:57 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     <soc@kernel.org>
-CC:     <conor@kernel.org>, <conor.dooley@microchip.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Daniel Machon <daniel.machon@microchip.com>
-Subject: [PATCH v2] MAINTAINERS: update arm64 Microchip entries
-Date:   Mon, 22 May 2023 10:37:01 +0100
-Message-ID: <20230522-wagon-stencil-a164ec39322a@wendy>
-X-Mailer: git-send-email 2.39.2
+        Mon, 22 May 2023 05:38:16 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 857271AD;
+        Mon, 22 May 2023 02:37:48 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1q11yt-0007Y3-RF; Mon, 22 May 2023 11:37:31 +0200
+Message-ID: <d1aee7d3-05f6-0920-b8e1-4ed5cf3f9f70@leemhuis.info>
+Date:   Mon, 22 May 2023 11:37:31 +0200
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2204; i=conor.dooley@microchip.com; h=from:subject:message-id; bh=/Xeh6MC2bHWJ3JrwjlgkwhiH2KNsjV1ulsMTAFwTvBk=; b=owGbwMvMwCFWscWwfUFT0iXG02pJDCnZ5rv1pF4XHzA41PPgSVhe9nGZ/hV5V003vJpouF34xdUH v44xdpSwMIhxMMiKKbIk3u5rkVr/x2WHc89bmDmsTCBDGLg4BWAiiSUMX+XuZHkvusPftHDZRJkQTk 9Nxx0yzd5ifFKTGqbHmh4qYGQ42tL/qOfWa/1f3i8X/w8p21bO0NPyafHmDRu+Kkz2POTMBAA=
-X-Developer-Key: i=conor.dooley@microchip.com; a=openpgp; fpr=F9ECA03CF54F12CD01F1655722E2C55B37CF380C
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: Re: [PATCH 2/2] drm/ofdrm: Update expected device name
+Content-Language: en-US, de-DE
+To:     Helge Deller <deller@gmx.de>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Cyril Brulebois <cyril@debamax.com>
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Rob Herring <robh@kernel.org>,
+        Michal Suchanek <msuchanek@suse.de>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+References: <20230412095509.2196162-1-cyril@debamax.com>
+ <20230412095509.2196162-3-cyril@debamax.com>
+ <CAMuHMdW4rZn4p=gQZRWQQSEbQPmzZUd5eN+kP_Yr7bLgTHyvig@mail.gmail.com>
+ <5694a9ab-d474-c101-9398-eea55aab29df@suse.de>
+ <10077a22-3055-75dd-2168-310468618f99@gmx.de>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+In-Reply-To: <10077a22-3055-75dd-2168-310468618f99@gmx.de>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1684748268;4b478383;
+X-HE-SMSGID: 1q11yt-0007Y3-RF
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,64 +58,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Krzysztof noticed that patches for arch/arm64/boot/dts/microchip were
-getting lost & the listed tree was inactive.
+Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
+for once, to make this easily accessible to everyone.
 
-Nicolas and I are willing to shepherd patches to Arnd, using the
-existing at91 tree, so add a new entry covering
-arch/arm64/boot/dts/microchip, listing us as maintainers.
+Was a proper solution for the regression the initial mail in this thread
+is about ever found? Doesn't look like it for here, but maybe I'm
+missing something.
 
-Drop the tree from the existing sparx5 entry & narrow the devicetree
-pattern to just sparx devices, leaving Lars, Steen and Daniel looking
-after support for their SoCs.
+Reminder, the problem afaik is caused by 241d2fb56a ("of: Make OF
+framebuffer device names unique") [merged for v6.2-rc8, authored by
+Michal Suchanek; committed by Rob Herring].
 
-CC: Rob Herring <robh+dt@kernel.org>
-CC: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC: Conor Dooley <conor@kernel.org>
-CC: Nicolas Ferre <nicolas.ferre@microchip.com>
-CC: Claudiu Beznea <claudiu.beznea@microchip.com>
-CC: soc@kernel.org
-CC: Lars Povlsen <lars.povlsen@microchip.com>
-CC: Steen Hegelund <Steen.Hegelund@microchip.com>
-CC: Daniel Machon <daniel.machon@microchip.com>
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
-Changes in v2:
-- add Claudiu
----
- MAINTAINERS | 12 ++++++++++--
- 1 file changed, 10 insertions(+), 2 deletions(-)
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 3182992769aa..9ae07caa4e6b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2433,6 +2433,15 @@ X:	drivers/net/wireless/atmel/
- N:	at91
- N:	atmel
- 
-+ARM/MICROCHIP (ARM64) SoC support
-+M:	Conor Dooley <conor@kernel.org>
-+M:	Nicolas Ferre <nicolas.ferre@microchip.com>
-+M:	Claudiu Beznea <claudiu.beznea@microchip.com>
-+L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-+S:	Supported
-+T:	git https://git.kernel.org/pub/scm/linux/kernel/git/at91/linux.git
-+F:	arch/arm64/boot/dts/microchip/
-+
- ARM/Microchip Sparx5 SoC support
- M:	Lars Povlsen <lars.povlsen@microchip.com>
- M:	Steen Hegelund <Steen.Hegelund@microchip.com>
-@@ -2440,8 +2449,7 @@ M:	Daniel Machon <daniel.machon@microchip.com>
- M:	UNGLinuxDriver@microchip.com
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
- S:	Supported
--T:	git git://github.com/microchip-ung/linux-upstream.git
--F:	arch/arm64/boot/dts/microchip/
-+F:	arch/arm64/boot/dts/microchip/sparx*
- F:	drivers/net/ethernet/microchip/vcap/
- F:	drivers/pinctrl/pinctrl-microchip-sgpio.c
- N:	sparx5
--- 
-2.39.2
+#regzbot poke
 
+On 24.04.23 11:35, Helge Deller wrote:
+> On 4/24/23 11:07, Thomas Zimmermann wrote:
+>> Am 24.04.23 um 09:33 schrieb Geert Uytterhoeven:
+>>> On Wed, Apr 12, 2023 at 12:05 PM Cyril Brulebois <cyril@debamax.com>
+>>> wrote:
+>>>> Since commit 241d2fb56a18 ("of: Make OF framebuffer device names
+>>>> unique"),
+>>>> as spotted by Frédéric Bonnard, the historical "of-display" device is
+>>>> gone: the updated logic creates "of-display.0" instead, then as many
+>>>> "of-display.N" as required.
+>>>>
+>>>> This means that offb no longer finds the expected device, which
+>>>> prevents
+>>>> the Debian Installer from setting up its interface, at least on
+>>>> ppc64el.
+>>>>
+>>>> Given the code similarity it is likely to affect ofdrm in the same way.
+>>>>
+>>>> It might be better to iterate on all possible nodes, but updating the
+>>>> hardcoded device from "of-display" to "of-display.0" is likely to help
+>>>> as a first step.
+>>>>
+>>>> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217328
+>>>> Link: https://bugs.debian.org/1033058
+>>>> Fixes: 241d2fb56a18 ("of: Make OF framebuffer device names unique")
+>>>> Cc: stable@vger.kernel.org # v6.2+
+>>>> Signed-off-by: Cyril Brulebois <cyril@debamax.com>
+>>>
+>>> Thanks for your patch, which is now commit 3a9d8ea2539ebebd
+>>> ("drm/ofdrm: Update expected device name") in fbdev/for-next.
+>>>
+>>>> --- a/drivers/gpu/drm/tiny/ofdrm.c
+>>>> +++ b/drivers/gpu/drm/tiny/ofdrm.c
+>>>> @@ -1390,7 +1390,7 @@ MODULE_DEVICE_TABLE(of, ofdrm_of_match_display);
+>>>>
+>>>>   static struct platform_driver ofdrm_platform_driver = {
+>>>>          .driver = {
+>>>> -               .name = "of-display",
+>>>> +               .name = "of-display.0",
+>>>>                  .of_match_table = ofdrm_of_match_display,
+>>>>          },
+>>>>          .probe = ofdrm_probe,
+>>>
+>>> Same comment as for "[PATCH 1/2] fbdev/offb: Update expected device
+>>> name".
+>>>
+>>> https://lore.kernel.org/r/CAMuHMdVGEeAsmb4tAuuqqGJ-4+BBETwEwYJA+M9NyJv0BJ_hNg@mail.gmail.com
+>>
+>> Sorry that I missed this patch. I agree that it's probably not
+>> correct. At least in ofdrm, we want to be able to use multiple
+>> framebuffers at the same time; a feature that has been broken by this
+>> change.
+> 
+> Geert & Thomas, thanks for the review!
+> 
+> I've dropped both patches from fbdev tree for now.
+> Would be great to find another good solution though, as it breaks the
+> debian
+> installer.
+> 
+> Helge
