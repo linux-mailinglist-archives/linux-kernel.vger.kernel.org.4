@@ -2,135 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE95670CA5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 22:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FF2E70CA61
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 22:08:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233850AbjEVUHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 16:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54150 "EHLO
+        id S233445AbjEVUIm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 16:08:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231439AbjEVUHx (ORCPT
+        with ESMTP id S231439AbjEVUIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 16:07:53 -0400
-Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA7A91
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 13:07:52 -0700 (PDT)
-Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-766655c2cc7so252620539f.3
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 13:07:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684786072; x=1687378072;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VaXnjSH38I+oMnQShq1OgL1MwuU4LJkpqrVRB5TxzhE=;
-        b=iWwCsGmCmDwr1Fawy8oCON1WSXq7Wc6P36F09zd+eDX2jPoMU1veLIgTqeN+7yhlX2
-         wa6Glb6ZdsatLvqp8nuaUyh80lQKUIMt56kL1gWg7rQM2lZYyhvCihLaKvUIurTr94C+
-         g1QRCdlX+rcsJlaHbsw4yo3QxY2xVf6fmBI2buN7m+Oru5Ryd0kwMbhhvHB6oIojtP9h
-         F4t+u8IclBmjROAD94GHOwV4qGNowiPXAIAMvngj4IZ5Sy/2DI5MASe9NTDlSKWuzSNw
-         oIvOimrJ6UPvVLhSJIXKLb8vq/qXX6KS/AtIYqrLT6v0P2Z+kiD1xOaf+NjZnwkHFg2f
-         XD5A==
-X-Gm-Message-State: AC+VfDw2HwiasYeUvWK9gTp8vWiEs/vCl0Q/xOoW08p/aOl32XSH8E0M
-        uQ4QcLzKHOdF1pRhr+FDEzpwtpywjdxt3SpfHJcjZyfJmyIs
-X-Google-Smtp-Source: ACHHUZ7hbKBftR8z/o8AdDyqmMjTxvZeU5fbRcrzjU9UEADrsaoUMs6DzOE1YQyUgmOG1pR7NBNuaMhjbs/lT4hprSjqIV99wU2b
+        Mon, 22 May 2023 16:08:40 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6FF291
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 13:08:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=tof2AA7349M+MWFrptYMm/jVekCyxohuoos8nDOEels=; b=Or2D3xTh2YxrTy+ISHxHE5ihMW
+        lIaQYo56q8PEdjT1yVFh3tc0VNRND9V7QUhEJk/wrMOWHMQ9PlltQfAbwKp6kLdbPwLlRQYt+8zfq
+        /sYNp/TLPJshDdluVuMTTAPQ26kC52qiKuTaEbqfg/H8xg1xNACrhQW3RGGkzQXMhv7E+/pfXYpIU
+        MmeIIkzKITx9gM/Y0z4YXLaypbhyMLqI+cqe9AaQ+RnlzPLB/9HvdiWrq6UBPE92Wd6GFBLTaONqR
+        Q0Ocdi+qdzXl8LWrUWr7zQgnQBa4/TPN7/GacJTJsDWkucDF3G4VDDUhg47+jA9MunCPU+ViB8670
+        BfWEqveg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q1BpE-00285M-3C;
+        Mon, 22 May 2023 20:08:14 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A6E0B3002C5;
+        Mon, 22 May 2023 22:08:10 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 7F7B42416EAFB; Mon, 22 May 2023 22:08:10 +0200 (CEST)
+Date:   Mon, 22 May 2023 22:08:10 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/5] sched: address missing-prototype warnings
+Message-ID: <20230522200810.GB3334667@hirez.programming.kicks-ass.net>
+References: <20230522195021.3456768-1-arnd@kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:2158:b0:774:8142:9931 with SMTP id
- y24-20020a056602215800b0077481429931mr43990ioy.1.1684786071921; Mon, 22 May
- 2023 13:07:51 -0700 (PDT)
-Date:   Mon, 22 May 2023 13:07:51 -0700
-In-Reply-To: <000000000000dfd6a105f71001d7@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000056edfa05fc4dd3ba@google.com>
-Subject: Re: [syzbot] [ext4?] kernel BUG in ext4_write_inline_data
-From:   syzbot <syzbot+f4582777a19ec422b517@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230522195021.3456768-1-arnd@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+On Mon, May 22, 2023 at 09:50:16PM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> I sent out a lot of -Wmissing-prototype warnings already, but noticed that
+> I missed some of the patches I did for the scheduler.
+> 
+> Addressing this is mainly useful in order to allow turning the
+> warning on by default in the future, but I also tried to
+> improe the code where possible.
+> 
+> Arnd Bergmann (5):
+>   sched: hide unused sched_update_scaling()
+>   sched: add schedule_user() declaration
+>   sched: fair: hide unused init_cfs_bandwidth() stub
+>   sched: make task_vruntime_update() prototype visible
+>   sched: fair: move unused stub functions to header
+> 
 
-HEAD commit:    44c026a73be8 Linux 6.4-rc3
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1028b7a1280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f389ffdf4e9ba3f0
-dashboard link: https://syzkaller.appspot.com/bug?extid=f4582777a19ec422b517
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=162a1a8e280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12eb0691280000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/8c94fba58ffe/disk-44c026a7.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/fc04d8a50461/vmlinux-44c026a7.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/4d861756bf1a/bzImage-44c026a7.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/f43e36084b2b/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+f4582777a19ec422b517@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-kernel BUG at fs/ext4/inline.c:235!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 5070 Comm: syz-executor189 Not tainted 6.4.0-rc3-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/28/2023
-RIP: 0010:ext4_write_inline_data+0x344/0x3e0 fs/ext4/inline.c:235
-Code: 5f e9 80 76 59 ff e8 7b 76 59 ff 45 8d 64 2c c4 41 bd 3c 00 00 00 41 29 ed e9 e8 fe ff ff e8 63 76 59 ff 0f 0b e8 5c 76 59 ff <0f> 0b e8 25 40 ac ff e9 fe fd ff ff 4c 89 ff e8 18 40 ac ff e9 99
-RSP: 0018:ffffc90003e7f950 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff88807497c8b0 RCX: 0000000000000000
-RDX: ffff888020bb1dc0 RSI: ffffffff822acc74 RDI: 0000000000000006
-RBP: 0000000000000054 R08: 0000000000000006 R09: 0000000000000060
-R10: 0000000000000054 R11: 0000000000000000 R12: 000000000000000c
-R13: 0000000000000060 R14: ffffc90003e7f9e8 R15: ffff88807497ce6a
-FS:  00007f4e59eb8700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f4e59e71000 CR3: 000000002bdc2000 CR4: 0000000000350ee0
-Call Trace:
- <TASK>
- ext4_write_inline_data_end+0x2b3/0xd20 fs/ext4/inline.c:775
- ext4_da_write_end+0x3d0/0xad0 fs/ext4/inode.c:2985
- generic_perform_write+0x316/0x570 mm/filemap.c:3934
- ext4_buffered_write_iter+0x15b/0x460 fs/ext4/file.c:289
- ext4_file_write_iter+0xbe0/0x1740 fs/ext4/file.c:710
- call_write_iter include/linux/fs.h:1868 [inline]
- new_sync_write fs/read_write.c:491 [inline]
- vfs_write+0x945/0xd50 fs/read_write.c:584
- ksys_write+0x12b/0x250 fs/read_write.c:637
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f4e62256399
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 61 18 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f4e59eb82f8 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
-RAX: ffffffffffffffda RBX: 000000000000003a RCX: 00007f4e62256399
-RDX: 000000000000000c RSI: 00000000200002c0 RDI: 0000000000000004
-RBP: 00007f4e622d37a8 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f4e622d37a0
-R13: 00007f4e622a08f8 R14: 0000000020001200 R15: 0030656c69662f2e
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:ext4_write_inline_data+0x344/0x3e0 fs/ext4/inline.c:235
-Code: 5f e9 80 76 59 ff e8 7b 76 59 ff 45 8d 64 2c c4 41 bd 3c 00 00 00 41 29 ed e9 e8 fe ff ff e8 63 76 59 ff 0f 0b e8 5c 76 59 ff <0f> 0b e8 25 40 ac ff e9 fe fd ff ff 4c 89 ff e8 18 40 ac ff e9 99
-RSP: 0018:ffffc90003e7f950 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff88807497c8b0 RCX: 0000000000000000
-RDX: ffff888020bb1dc0 RSI: ffffffff822acc74 RDI: 0000000000000006
-RBP: 0000000000000054 R08: 0000000000000006 R09: 0000000000000060
-R10: 0000000000000054 R11: 0000000000000000 R12: 000000000000000c
-R13: 0000000000000060 R14: ffffc90003e7f9e8 R15: ffff88807497ce6a
-FS:  00007f4e59eb8700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000555a6837b238 CR3: 000000002bdc2000 CR4: 0000000000350ee0
-
-
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+Thanks!
