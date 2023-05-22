@@ -2,134 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BD7970BF2D
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:07:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C881F70BF31
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:08:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234200AbjEVNHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 09:07:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35256 "EHLO
+        id S234065AbjEVNIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 09:08:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233903AbjEVNHi (ORCPT
+        with ESMTP id S233833AbjEVNIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 09:07:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6021103;
-        Mon, 22 May 2023 06:07:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8253B622A6;
-        Mon, 22 May 2023 13:07:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E36D1C433B0;
-        Mon, 22 May 2023 13:07:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684760849;
-        bh=rLIjMH2epiWQ/3Lob2C6ObKYXvlX/q1x4S2igdYWzY8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=NE0oDkB2ESWTG0cYJwhI6j2f3UeG38SEQs/tuIfWrCD1HjzYSZ9k603k1rM2XMLxq
-         N0kzsfuIZ1oRfAHeu2GS1QJDtNrX0YxVDorEsbX+OWOu8GIQda2R/9ht4PWy2ZwdTa
-         Agos9U3owbngNVq2cRDABuAGLWd+MBx6U4xvWfI98FHZaCAzSE3MmyY5V/U14IPaxT
-         jR50aLuqbBhzcSnUB1mreYNZiD12aw/Xht/VbAhJzBf7jZ+9CRXEvwfO9WKeHz1PkQ
-         S5oPnVtOfweaSmE0eTeqROw5f0JwylNtQEYHavFvn/4qdQYuKmypybHEsfeCF1SQKd
-         p41BDkaaMsGqA==
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2af30a12e84so22904311fa.0;
-        Mon, 22 May 2023 06:07:29 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxTRcYEsbsDCtVStsSFJypKoDYOOCcGpJ4VegQnGPaaRGBlPBVE
-        K2/c6+ylWVpf3wTTuYCf8njduF70eW46Tu5kf+0=
-X-Google-Smtp-Source: ACHHUZ6jBYxtBJ20x3dyBOtcyxjudm9aRO6zY87opQnzHem7ZhhwocmcTdymNzAa8Vfg8tcvzjCvyCpHvYpmiJd+NSw=
-X-Received: by 2002:a2e:8615:0:b0:2ad:b01b:d458 with SMTP id
- a21-20020a2e8615000000b002adb01bd458mr3813882lji.30.1684760847855; Mon, 22
- May 2023 06:07:27 -0700 (PDT)
+        Mon, 22 May 2023 09:08:10 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5162F1AD;
+        Mon, 22 May 2023 06:07:49 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8AxNPAkaWtklPIKAA--.18687S3;
+        Mon, 22 May 2023 21:07:48 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxDbMjaWtk+BtvAA--.55849S3;
+        Mon, 22 May 2023 21:07:47 +0800 (CST)
+Subject: Re: [PATCH v11 0/2] spi: loongson: add bus driver for the loongson
+ spi
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230522071030.5193-1-zhuyinbo@loongson.cn>
+ <3c15d22f-4f94-4cc5-96a8-f565e58c66b9@sirena.org.uk>
+ <4dfa5245-d330-f432-e81e-163053687d42@loongson.cn>
+ <a4afd330-6ffd-432e-a868-f8a19fddb47d@sirena.org.uk>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <1e8c3e92-4043-11f2-e7a7-0bf4273c65d8@loongson.cn>
+Date:   Mon, 22 May 2023 21:07:47 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-References: <20230508070330.582131-1-ardb@kernel.org> <20230508070330.582131-18-ardb@kernel.org>
- <ca76ed3b-5835-9f1b-7e10-dd417249b7bd@amd.com> <CAMj1kXE+7SKVZN3p2_NXg5VeH+hbwnqwaGTj6HLE1a89QGtraw@mail.gmail.com>
- <b6192de1-26a4-a7a7-63bf-76c36f55a8ff@amd.com> <ZGtkrKhxqUiTlXY0@suse.de>
-In-Reply-To: <ZGtkrKhxqUiTlXY0@suse.de>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 22 May 2023 15:07:12 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXEQ-hv8ZAtoFwqN9DYYjSnkXaaMrOuXsL5_92M3E6gdHQ@mail.gmail.com>
-Message-ID: <CAMj1kXEQ-hv8ZAtoFwqN9DYYjSnkXaaMrOuXsL5_92M3E6gdHQ@mail.gmail.com>
-Subject: Re: [PATCH v2 17/20] x86: efistub: Check SEV/SNP support while
- running in the firmware
-To:     Joerg Roedel <jroedel@suse.de>
-Cc:     Tom Lendacky <thomas.lendacky@amd.com>, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Evgeniy Baskov <baskov@ispras.ru>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Dave Young <dyoung@redhat.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Kees Cook <keescook@chromium.org>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <a4afd330-6ffd-432e-a868-f8a19fddb47d@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8CxDbMjaWtk+BtvAA--.55849S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvdXoW7Jr1kKFWfuw1kXFy5Jr4DCFg_yoWDtrbEkF
+        W0kFyxC34Uta18Aa1xGF4FvrW3tF40qw18CrWvqw47Gw15XF4DG3yDJ3s7u3Z5AayfKF1D
+        u393J39FgwnxJjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
+        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
+        07CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2
+        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84AC
+        jcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84
+        ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF
+        6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14
+        v26r1Y6r17McIj6I8E87Iv67AKxVWxJVW8Jr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48I
+        cVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l42xK82IY6x8Erc
+        xFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2Iq
+        xVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCI42IY6xIIjxv20xvE14
+        v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xva
+        j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Cr0_Gr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
+        0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWlk3UUUUU=
+X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 22 May 2023 at 14:48, Joerg Roedel <jroedel@suse.de> wrote:
->
-> On Fri, May 19, 2023 at 09:04:46AM -0500, Tom Lendacky wrote:
-> > Deferring the checks is probably the safest thing to do, since that would
-> > match the way things are done today and known to work. I'm not sure what
-> > other things might pop up if we stay with this approach, for example, page
-> > state change calls using the GHCB MSR protocol that also don't save/restore
-> > the MSR value.
-> >
-> > It is possible to audit these areas and stay with this approach, but I'm
-> > wondering if that wouldn't be better done as a separate patch series.
-> >
-> > Adding @Joerg for any additional thoughts he might have around this area, too.
->
-> If I got it correctly the patch actually moves two things before
-> ExitBootServices:
->
->         1) SEV features check
->
->         2) SEV initialization
->
-> I think it makes a lot of sense to have 1) before ExitBootServices. It
-> allows to soft-fail in case the kernel does not support all required
-> SEV-SNP features and move on to a kernel which does. This check also only
-> needs the SEV_STATUS MSR and not any GHCB calls.
->
-> The problem is the GHCB protocol negotiation with the HV, but the GHCB
-> protocol is downward-compatible, so an older kernel can work with a
-> newer HV.
->
-> But 2) needs to stay after ExitBootServices, as it needs resources owned
-> by UEFI, e.g. the GHCB MSR and potentially the configured GHCB itself.
-> Fiddling around with the GHCB MSR while it is still owned by UEFI will
-> bite us in one or the other way (e.g. UEFI, before ExitBootServices, is
-> free to take IRQs with handlers that rely on the GHCB MSR content).
->
-
-Thanks for the insight. Note that I have sent a v3 in the mean time
-that moves all of this *after* ExitBootServices() [0], but I failed to
-cc you - apologies.
-
-So IIUC, we could just read sev_status much earlier just to perform
-the SNP feature check, and fail the boot gracefully on a mismatch. And
-the sev_enable() call needs to move after ExitBootServices(), right?
-
-That would result in only very minor duplication, afaict. I'll have a
-stab at implementing this for v4.
-
-Thanks,
 
 
+在 2023/5/22 下午7:56, Mark Brown 写道:
+> On Mon, May 22, 2023 at 07:44:49PM +0800, zhuyinbo wrote:
+> 
+>> The recently patch was as follows, It seems no issue for patch apply
+>> them, Maybe it is the 0/2 patch issue ? this 0/2 patch wasn't a valid
+>> patch and it need was skipped.
+> 
+> What's causing problem is that you patched MAINTAINERS in both patches
+> but also used the wrong subject line for the first patch so I was having
+> to fix it up by hand every time.
+
+Hi Mark,
+
+I learn about what you said that bindings patch and spi driver change a
+same MAINTAINERS file, but It seems not cause apply fail if the patch
+series apply in order.  I'm sorry, I don't understand the reason why my
+spi series patch apply failed,  then I have a look about your spi ci
+tree and that what I need to do is just change the title of [1/2] patch
+like this in next version ?  Correcting the title can solve the problem
+of patch series apply failure in your tree ? actually, I don't reproduce
+that apply faile issue in your current spi tree and for-next branch.
 
 
-[0] https://lore.kernel.org/all/20230522071415.501717-21-ardb@kernel.org/
+spi: add loongson spi bindings
+
+Thanks
+Yinbo
+
