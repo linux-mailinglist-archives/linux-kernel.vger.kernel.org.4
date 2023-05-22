@@ -2,146 +2,347 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E77A70CB75
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 22:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CD9870CB78
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 22:46:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233550AbjEVUq1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 16:46:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50934 "EHLO
+        id S234286AbjEVUqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 16:46:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232924AbjEVUqV (ORCPT
+        with ESMTP id S234704AbjEVUqr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 16:46:21 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0245793;
-        Mon, 22 May 2023 13:46:20 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 70F2A5C01A6;
-        Mon, 22 May 2023 16:46:20 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Mon, 22 May 2023 16:46:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1684788380; x=1684874780; bh=+L0icm8PcJhuI13aRSH2Ao5/O3h9y8NRZXY
-        eIScQ4y8=; b=t5hDG+T+q4+N+pi2RIe8l6lky8dAwg0ymcZjms+fECVpeDGxLLD
-        Id82YtnBeKWx1AR3n37tdVkvx9iEX5scRf/GR/a5hpJavVAyCfhYkiAjgVfEQuZA
-        Gufp1U2+pwZcXMWsLZJltAwaJObV1VJ8+s5jAYe3+GxO+w+tuN00NPwC2WFHfFto
-        fxlLoUXWic4BAnlNgjHgAptvOMQJgmP6iP+x74IB7Xl2lZN2qCzF5Pq3BDiXCSeo
-        Cj34bZMhZjesbWSVIp/w3xzlyIl8ZaObgJPH6LzWJchVwVrFEjZYohmL7ILXYJ2u
-        ZbkBinIiej2Qe3yL334QM/zwyeoujLJoDIQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1684788380; x=1684874780; bh=+L0icm8PcJhuI13aRSH2Ao5/O3h9y8NRZXY
-        eIScQ4y8=; b=tzPnmQu1M9KXKAYcVjNuG4zajI8IUzNOve45nD/9XZUUxJy0Xfu
-        k2m5dO3Na7i6so3frJ/dzY5r41k2Y4YuNXf3iAlamxv3MtmwbCp8vcYJwcJdgcZ4
-        Vi8MSvGddxcwOCVD1lrCUMlZK4iRzXOLSaXOATaxD6lp47Avm5/d4/lFbjTpVvja
-        fikPC90T8L6GqO4nAmXMVbmpE3h2wXNoHgzAcSRgPlSz68joOpKtsjJ+IGlkg909
-        ZBJ5UqSnDVuHvVR465hEdHmdHrnvEMjdqWHvW3PGkWrSgevrIuWRAIK/d8iebA2H
-        P4xW8DYeA51kd4kbIXjopXpW2myzKkjiRlg==
-X-ME-Sender: <xms:m9RrZCgi6ef8jCuMhvPHfiCGX77EiB0FhYZg0ch8J6OAkrotUnzHSg>
-    <xme:m9RrZDCXyadmlX8_pUOEgkS9NEoUCXv8mG1yjZK9S-wprXOunzn9Jb_-zIk2UG2ax
-    V2XMR0qIwZAJwaBN8o>
-X-ME-Received: <xmr:m9RrZKHXSoZ2Q3p645T2aJO1hU94GLeoLB0r3L5oIig91vKIEzh3KcYY_q9CJKYy_wRs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejuddgudegtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpegtggfuhfgjffevgffkfhfvofesthhqmhdthhdtjeenucfhrhhomheplfhi
-    rgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
-    enucggtffrrghtthgvrhhnpedutdejffetteefkeejieehfeeuieeguedtveeijeeviefh
-    ffelvdfgudeihfdvtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:m9RrZLTh5xY8K2OVPbxp8hWr_MJHR424VfzEIaHgPmv3W7W1oZUQAw>
-    <xmx:m9RrZPyVtntBojPtp-IQq7wSRJhB03N5C9cVyWIy0Bn4ItTTwhyAXg>
-    <xmx:m9RrZJ7gtARiONt5AMlKd-DgzchBtAt6oEREfdcQqHtlYbcJALxe3w>
-    <xmx:nNRrZK_m50czInslGqZjYVK1jjecOZBF0Nyt6JlrLV2KA5NN4VIWXw>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 22 May 2023 16:46:18 -0400 (EDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: [PATCH 1/3] MIPS: Introduce WAR_4KC_LLSC config option
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <alpine.DEB.2.21.2305192342180.27887@angie.orcam.me.uk>
-Date:   Mon, 22 May 2023 21:46:07 +0100
-Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <CB4BAB41-0BE0-4897-AE1E-9A98A6851FEF@flygoat.com>
-References: <20230519164753.72065-1-jiaxun.yang@flygoat.com>
- <20230519164753.72065-2-jiaxun.yang@flygoat.com>
- <alpine.DEB.2.21.2305192117230.50034@angie.orcam.me.uk>
- <53043C18-7C75-4D5F-A15E-86D981D19CA8@flygoat.com>
- <alpine.DEB.2.21.2305192342180.27887@angie.orcam.me.uk>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-X-Mailer: Apple Mail (2.3731.500.231)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 22 May 2023 16:46:47 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E65FDC
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 13:46:43 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-64d5b4c4484so1135458b3a.3
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 13:46:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684788403; x=1687380403;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=W87RELi464qEY+cS32xNBLxYHSfFpf8luRfYTadu71s=;
+        b=3WmA7xxVaeZdUxvIGDEkmw0U5+8pgH6A4D/wP81nd2cIpTBEuldmrRCAoJtvSHDt+6
+         I9pSuquhStkKBpVZrmMtQ3xrA17/B+SV1xa1VbUtnKWToy8Zgzx+eY9D7sGpeRT0Z4PH
+         vXbk89Kj2KupVtXxdXiQ+wAYTvsJhsSbRPyrXOQQiRtiLU5DQ1qqmvUntdLZwcUx1+95
+         /NCZaahGvA7mpeZwh/bHpumNFHPq8POy0pNIzNjC3APOTmR9FjZVqlczLxIlPHaxPAig
+         xrik+Y/H3sklUwbX63lYmkbTEYn8384LPvyhb79CFufru4wemgylfV9yphU+pFQDLC1M
+         ZIaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684788403; x=1687380403;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=W87RELi464qEY+cS32xNBLxYHSfFpf8luRfYTadu71s=;
+        b=G+v2A9orocnfyej2nLlmkhX9nqqC2gNzU2b/kLmKLZgelWVhEp5e+JDr0z4ZfCZcRH
+         ELS5CH1VQITmeBTFgMOu5cSBvo+GWMQPjEcBo4/jZdUbOgyCqsCXkrvsVG1aYk0LmFoo
+         /rOfgNrtmpLA3b882VJQEPz0synpqUGva0LCXrx6YGF1sHrQo0x+OKNldfqFqNoaxeaF
+         GCwakj5nQMf5BFdmCYdHio4gGm++9N8/UAyEOJXU94Ze+qWsaC2+EkbbeE0Z5M0RVC6R
+         xTdbQ5hpvizL+i6ypAIfr47JuuafJqqYBwvF2qvOGD9POX9nxxufSjUTAFUeDbwlfW2G
+         /arQ==
+X-Gm-Message-State: AC+VfDyDC5Svu+YSx9fCB7ARvW6aYv7WpxXN/Wn/8YVtPPcbs6mPThUH
+        UmBQXvcnRJL2qiBa34T5VtEPMxTyd7k=
+X-Google-Smtp-Source: ACHHUZ6NQ7aTOkvUTtDMEi0IDRSDH4TmeTu4tsYNNJ9QDi8IZHPcUOZMsPBzSPmHiwbofpkrZxUG52aqDCE=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:a1a:b0:624:5886:4b4b with SMTP id
+ p26-20020a056a000a1a00b0062458864b4bmr5302538pfh.5.1684788403186; Mon, 22 May
+ 2023 13:46:43 -0700 (PDT)
+Date:   Mon, 22 May 2023 13:46:41 -0700
+In-Reply-To: <20230330085802.2414466-2-stevensd@google.com>
+Mime-Version: 1.0
+References: <20230330085802.2414466-1-stevensd@google.com> <20230330085802.2414466-2-stevensd@google.com>
+Message-ID: <ZGvUsf7lMkrNDHuE@google.com>
+Subject: Re: [PATCH v6 1/4] KVM: mmu: introduce new gfn_to_pfn_noref functions
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Stevens <stevensd@chromium.org>
+Cc:     Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Peter Xu <peterx@redhat.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
++Peter
 
+On Thu, Mar 30, 2023, David Stevens wrote:
+> From: David Stevens <stevensd@chromium.org>
+> 
+> Introduce new gfn_to_pfn_noref functions that parallel existing
+> gfn_to_pfn functions. These functions can be used when the caller does
+> not need to maintain a reference to the returned pfn (i.e. when usage is
+> guarded by a mmu_notifier). The noref functions take an out parameter
+> that is used to return the struct page if the hva was resolved via gup.
+> The caller needs to drop its reference such a returned page.
 
-> 2023=E5=B9=B45=E6=9C=8819=E6=97=A5 23:51=EF=BC=8CMaciej W. Rozycki =
-<macro@orcam.me.uk> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> On Fri, 19 May 2023, Jiaxun Yang wrote:
->=20
->>> Given the circumstances I think this should be `panic'.  You don't =
-want=20
->>> to continue with a system that can randomly lock up.
->>=20
->> I just checked how other architectures handle such situation, it =
-seems like
->> TAINT_CPU_OUT_OF_SPEC is a better option.
->=20
-> That can be easily missed, just as a random message in the kernel log,=20=
+I dislike the "noref" name and the approach itself (of providing an entirely
+separate set of APIs).  Using "noref" is confusing because the callers do actually
+get a reference to the page (if a refcounted page is found).
 
-> even at a high priority, and LOGLEVEL_ERR is not particularly high =
-even. =20
-> For a system configuration that qualifies as not usable for any =
-practical=20
-> purpose I find this approach leaving something to desire.
+As for the approach, I really, really don't want to end up with yet more APIs
+for getting PFNs from GFNs.  We already have far too many.  In the short term,
+I think we'll need to carry multiple sets of APIs, as converting all architectures
+to any new API will be too much for a single series.  But I want to have line of
+sight to convering on a single, as-small-as-possible set of APIs, and I think/hope
+it should be possible to make the old APIs, e.g. gfn_to_pfn(), to be shims around
+the new APIs.
 
-Just found another reason that not to panic in such situation when I=E2=80=
-=99m playing
-around QEMU.
+And since this series is essentially overhauling the gfn_to_pfn APIs, I think it's
+the right series to take on refactoring the APIs to clean up the growing flag
+problem.  There was a bit of discussion back when "interruptible" support was
+added (https://lore.kernel.org/all/YrTbKaRe497n8M0o@xz-m1.loca), but it got punted
+because it wasn't necessary, and because there wasn't immediate agreement on what
+exactly the APIs should look like.
 
-Emulation software like QEMU, mipssim, OVPSim, IASIM tends use base PRID
-of a core. It can be more than annoying for people to find kernel =
-suddenly won=E2=80=99t
-boot on their simulator.
+Overhauling the APIs would also let us clean up things like async #PF, specifically
+replacing the unintuitive "*async = true" logic with something like this:
 
->=20
->> Panic in cpu_probe can be frustrating for users as it is earlier than =
-initialisation
->> of consoles so the panic message can never be read by users.
->=20
-> Is there no early console support for the systems affected?
+		if ((flags & FOLL_NOWAIT) && vma_is_valid(vma, flags & FOLL_WRITE))
+			pfn = KVM_PFN_ERR_FAULT_MINOR;
+		else
+			pfn = KVM_PFN_ERR_FAULT;
 
-For routers it=E2=80=99s very common that serial port available to user =
-is not the same one
-as we hooked for earlyprintk.
+Lastly, I think there's also an opportunity here to harden KVM's interaction with
+mmu_notifiers, and to dedup arch code in KVM .  Specifically, even when the proposed
+"allow_unsafe_kmap" is true, KVM should either (a) be "in" an mmu_notifier sequence
+or (b) _want_ to grab a reference.  And when KVM does NOT want a reference, the core
+API can/should immediately drop the reference even before returning.
 
-For QEMU users potentially using graphic interface, initialisation of =
-DRM/FBDEV
-comes very later.
+My thought is it provide an "entirely" new API, named something like kvm_follow_pfn()
+to somewhat mirror follow_{pfn,pte,phys}().  Ideally something to pair with gup()
+would be nice, but having a dedicated KVM helper to get _only_ struct page memory
+doesn't work well because KVM almost never wants only struct page memory.
 
-Thanks
-- Jiaxun
+As for the flags vs. bools debate (see link above), I think the best approach is
+a mix of the two.  Specifically, reuse the FOLL_* flags as-is for inputs, and use
+booleans for outputs.  I don't _think_ there are any input bools/flags that don't
+map 1:1 with existing FOLL_* flags.
 
->=20
->  Maciej
+As a very, *very* rough sketch, provide APIs that look a bit like this.
 
+  kvm_pfn_t __kvm_follow_pfn(struct kvm_follow_pfn *foll)
+  {
+	kvm_pfn_t pfn;
+
+	if (WARN_ON_ONCE(!(foll->flags & FOLL_GET) && !foll.mmu_seq))
+		return KVM_PFN_ERR_FAULT;
+
+	pfn = ???;
+
+	if (foll->page && !(foll->flags & FOLL_GET))
+		put_page(foll->page);
+
+	return pfn;
+  }
+
+  kvm_pfn_t kvm_follow_pfn(struct kvm_vcpu *vcpu, gfn_t gfn, struct page **page)
+  {
+	struct kvm_follow_pfn foll = {
+		.flags = FOLL_GET | FOLL_WRITE,
+	};
+
+	<more stuff here?>
+
+	foll.slot = ???;
+	if (!foll.slot || foll.slot->flags & KVM_MEMSLOT_INVALID)
+		return KVM_HVA_ERR_BAD;
+
+	if (memslot_is_readonly(foll.slot))
+		return KVM_HVA_ERR_RO_BAD;
+
+	return __kvm_follow_pfn(&foll);
+  }
+
+and a few partially converted users
+
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 67e2ac799aa7..5eaf0395ed87 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -550,12 +550,14 @@ static bool mmu_spte_update(u64 *sptep, u64 new_spte)
+ 
+        if (is_accessed_spte(old_spte) && !is_accessed_spte(new_spte)) {
+                flush = true;
+-               kvm_set_pfn_accessed(spte_to_pfn(old_spte));
++               if (is_refcounted_page_pte(old_spte))
++                       kvm_set_page_accessed(pfn_to_page(spte_to_pfn));
+        }
+ 
+        if (is_dirty_spte(old_spte) && !is_dirty_spte(new_spte)) {
+                flush = true;
+-               kvm_set_pfn_dirty(spte_to_pfn(old_spte));
++               if (is_refcounted_page_pte(old_spte))
++                       kvm_set_page_dirty(pfn_to_page(spte_to_pfn));
+        }
+ 
+        return flush;
+@@ -4278,6 +4280,10 @@ void kvm_arch_async_page_ready(struct kvm_vcpu *vcpu, struct kvm_async_pf *work)
+ 
+ static int __kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+ {
++       struct kvm_follow_pfn foll = {
++               .mmu_seq = fault->mmu_seq,
++               .gfn = fault->gfn,
++       };
+        struct kvm_memory_slot *slot = fault->slot;
+        bool async;
+ 
+@@ -4309,12 +4315,16 @@ static int __kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+                        return RET_PF_EMULATE;
+        }
+ 
+-       async = false;
+-       fault->pfn = __gfn_to_pfn_noref_memslot(slot, fault->gfn, false, false, &async,
+-                                               fault->write, &fault->map_writable,
+-                                               &fault->hva, &fault->page);
+-       if (!async)
+-               return RET_PF_CONTINUE; /* *pfn has correct page already */
++       foll.flags = FOLL_NOWAIT;
++       if (fault->write)
++               foll.flags |= FOLL_WRITE;
++
++       fault->pfn = __kvm_follow_pfn(&foll);
++       if (!is_error_noslot_pfn(fault->pfn))
++               goto success;
++
++       if (!is_fault_minor_pfn(fault->pfn))
++               return RET_PF_CONTINUE;
+ 
+        if (!fault->prefetch && kvm_can_do_async_pf(vcpu)) {
+                trace_kvm_try_async_get_page(fault->addr, fault->gfn);
+@@ -4332,9 +4342,18 @@ static int __kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault
+         * to wait for IO.  Note, gup always bails if it is unable to quickly
+         * get a page and a fatal signal, i.e. SIGKILL, is pending.
+         */
+-       fault->pfn = __gfn_to_pfn_noref_memslot(slot, fault->gfn, false, true, NULL,
+-                                               fault->write, &fault->map_writable,
+-                                               &fault->hva, &fault->page);
++       foll.flags |= FOLL_INTERRUPTIBLE;
++       foll.flags &= ~FOLL_NOWAIT;
++
++       fault->pfn = kvm_follow_pfn(&foll);
++       if (!is_error_noslot_pfn(fault->pfn))
++               goto success;
++
++       return RET_PF_CONTINUE;
++success:
++       fault->hva = foll.hva;
++       fault->page = foll.page;
++       fault->map_writable = foll.writable;
+        return RET_PF_CONTINUE;
+ }
+ 
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 360eaa24456f..0bae253c88dd 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -2663,9 +2663,10 @@ kvm_pfn_t hva_to_pfn(unsigned long addr, bool atomic, bool interruptible,
+                if (r < 0)
+                        pfn = KVM_PFN_ERR_FAULT;
+        } else {
+-               if (async && vma_is_valid(vma, write_fault))
+-                       *async = true;
+-               pfn = KVM_PFN_ERR_FAULT;
++               if ((flags & FOLL_NOWAIT) && vma_is_valid(vma, flags & FOLL_WRITE))
++                       pfn = KVM_PFN_ERR_FAULT_MINOR;
++               else
+...skipping...
++       fault->pfn = kvm_follow_pfn(&foll);
++       if (!is_error_noslot_pfn(fault->pfn))
++               goto success;
++
++       return RET_PF_CONTINUE;
++success:
++       fault->hva = foll.hva;
++       fault->page = foll.page;
++       fault->map_writable = foll.writable;
+        return RET_PF_CONTINUE;
+ }
+ 
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index 360eaa24456f..0bae253c88dd 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -2663,9 +2663,10 @@ kvm_pfn_t hva_to_pfn(unsigned long addr, bool atomic, bool interruptible,
+                if (r < 0)
+                        pfn = KVM_PFN_ERR_FAULT;
+        } else {
+-               if (async && vma_is_valid(vma, write_fault))
+-                       *async = true;
+-               pfn = KVM_PFN_ERR_FAULT;
++               if ((flags & FOLL_NOWAIT) && vma_is_valid(vma, flags & FOLL_WRITE))
++                       pfn = KVM_PFN_ERR_FAULT_MINOR;
++               else
++                       pfn = KVM_PFN_ERR_FAULT;
+        }
+ exit:
+        mmap_read_unlock(current->mm);
+@@ -2732,6 +2733,30 @@ kvm_pfn_t __gfn_to_pfn_noref_memslot(const struct kvm_memory_slot *slot, gfn_t g
+ }
+ EXPORT_SYMBOL_GPL(__gfn_to_pfn_noref_memslot);
+ 
++kvm_pfn_t __kvm_follow_pfn(struct kvm_follow_pfn *foll)
++{
++       kvm_pfn_t pfn;
++
++       if (WARN_ON_ONCE(!(foll->flags & FOLL_GET) && !foll.mmu_seq))
++               return KVM_PFN_ERR_FAULT;
++
++       pfn = __gfn_to_pfn_noref_memslot(...);
++
++       if (foll->page && !(foll->flags & FOLL_GET))
++               put_page(foll->page);
++
++       return pfn;
++}
++
++kvm_pfn_t kvm_follow_pfn(struct kvm_vcpu *vcpu, gfn_t gfn, struct page **page)
++{
++       struct kvm_follow_pfn foll = {
++               .flags = FOLL_GET | FOLL_WRITE,
++       };
++
++       return __kvm_follow_pfn(&foll);
++}
++
+ kvm_pfn_t gfn_to_pfn_noref_prot(struct kvm *kvm, gfn_t gfn, bool write_fault,
+                                bool *writable, struct page **page)
+ {
+@@ -2910,25 +2935,23 @@ void kvm_release_pfn(kvm_pfn_t pfn, bool dirty)
+ 
+ int kvm_vcpu_map(struct kvm_vcpu *vcpu, gfn_t gfn, struct kvm_host_map *map)
+ {
++       struct page *page;
+        kvm_pfn_t pfn;
+        void *hva = NULL;
+-       struct page *page = KVM_UNMAPPED_PAGE;
+ 
+        if (!map)
+                return -EINVAL;
+ 
+-       pfn = gfn_to_pfn(vcpu->kvm, gfn);
++       pfn = kvm_follow_pfn(vcpu->kvm, gfn, &page)
+        if (is_error_noslot_pfn(pfn))
+                return -EINVAL;
+ 
+-       if (pfn_valid(pfn)) {
+-               page = pfn_to_page(pfn);
++       if (page)
+                hva = kmap(page);
+ #ifdef CONFIG_HAS_IOMEM
+-       } else {
++       else if (allow_unsafe_kmap)
+                hva = memremap(pfn_to_hpa(pfn), PAGE_SIZE, MEMREMAP_WB);
+ #endif
+-       }
+ 
+        if (!hva)
+                return -EFAULT;
