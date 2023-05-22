@@ -2,180 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EC2C70B777
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99C6670B771
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:19:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232190AbjEVIUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 04:20:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52168 "EHLO
+        id S232134AbjEVITr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 04:19:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbjEVIT7 (ORCPT
+        with ESMTP id S229996AbjEVITo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 04:19:59 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02FF1C4
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 01:19:57 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1q10lk-0000SJ-Ab; Mon, 22 May 2023 10:19:52 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id CD25A1C96BD;
-        Mon, 22 May 2023 08:19:30 +0000 (UTC)
-Date:   Mon, 22 May 2023 10:19:30 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Frank Jungclaus <frank.jungclaus@esd.eu>,
-        linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
-        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/6] can: esd_usb: Replace initializer macros used for
- struct can_bittiming_const
-Message-ID: <20230522-tattling-drum-b02b6c6bf76a-mkl@pengutronix.de>
-References: <20230519195600.420644-1-frank.jungclaus@esd.eu>
- <20230519195600.420644-3-frank.jungclaus@esd.eu>
- <CAMZ6RqL-2qB=kLPd84rWHd3=xPcspSNXvNYpR9Fyx+4-Ft16gQ@mail.gmail.com>
+        Mon, 22 May 2023 04:19:44 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87091B0;
+        Mon, 22 May 2023 01:19:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1684743580; bh=RZXp5Ck7yfTaCZh0IwtE2GL3yOChPwPMVkjIgiEYfqs=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Gi7Uq2ike/7EE9dkmUHbd0oKSZQH8v8rapxy2X8W4bbdBJ5GxWUvUfwHEV7yogYnz
+         m7b38NCttK19pbrc3o/BaBVBn6QU6kVPIiHCsQYhs/Qyvy99rzq8/4lg90OlErPQp2
+         cf6eE8TeW0uimep7ey+Omw9Quc6taN1r1qEDQsKI=
+Received: from [100.100.57.122] (unknown [58.34.185.106])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id DE4E1600DA;
+        Mon, 22 May 2023 16:19:39 +0800 (CST)
+Message-ID: <74b273dd-4310-0106-a24c-c1b15db8ead9@xen0n.name>
+Date:   Mon, 22 May 2023 16:19:39 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="iqguu65hudcmyit7"
-Content-Disposition: inline
-In-Reply-To: <CAMZ6RqL-2qB=kLPd84rWHd3=xPcspSNXvNYpR9Fyx+4-Ft16gQ@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.0
+Subject: Re: [PATCH v14 1/2] drm: add kms driver for loongson display
+ controller
+Content-Language: en-US
+To:     Sui Jingfeng <15330273260@189.cn>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sui Jingfeng <suijingfeng@loongson.cn>,
+        Li Yi <liyi@loongson.cn>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>
+Cc:     linaro-mm-sig@lists.linaro.org, loongson-kernel@lists.loongnix.cn,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Liu Peibao <liupeibao@loongson.cn>, linux-media@vger.kernel.org
+References: <20230520105718.325819-1-15330273260@189.cn>
+ <20230520105718.325819-2-15330273260@189.cn>
+ <26fd78b9-c074-8341-c99c-4e3b38cd861a@xen0n.name>
+ <6957f8b7-5e37-889f-0b48-d2424b891392@189.cn>
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <6957f8b7-5e37-889f-0b48-d2424b891392@189.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023/5/22 16:14, Sui Jingfeng wrote:
+> Hi,
+> 
+> On 2023/5/21 20:21, WANG Xuerui wrote:
+>>> +
+>>> +      If in doubt, say "N".
+>>> diff --git a/drivers/gpu/drm/loongson/Makefile 
+>>> b/drivers/gpu/drm/loongson/Makefile
+>>> new file mode 100644
+>>> index 000000000000..9158816ece8e
+>>> --- /dev/null
+>>> +++ b/drivers/gpu/drm/loongson/Makefile
+>>> @@ -0,0 +1,20 @@
+>>> +# SPDX-License-Identifier: GPL-2.0
+>>> +
+>>> +loongson-y := \
+>>> +    lsdc_benchmark.o \
+>>> +    lsdc_crtc.o \
+>>> +    lsdc_debugfs.o \
+>>> +    lsdc_device.o \
+>>> +    lsdc_drv.o \
+>>> +    lsdc_gem.o \
+>>> +    lsdc_gfxpll.o \
+>>> +    lsdc_i2c.o \
+>>> +    lsdc_irq.o \
+>>> +    lsdc_output_7a1000.o \
+>>> +    lsdc_output_7a2000.o \
+>>> +    lsdc_plane.o \
+>>> +    lsdc_pixpll.o \
+>>> +    lsdc_probe.o \
+>>> +    lsdc_ttm.o
+>>> +
+>>> +obj-$(CONFIG_DRM_LOONGSON) += loongson.o
+>>> diff --git a/drivers/gpu/drm/loongson/lsdc_benchmark.c 
+>>> b/drivers/gpu/drm/loongson/lsdc_benchmark.c
+>>> new file mode 100644
+>>> index 000000000000..82961531d84c
+>>> --- /dev/null
+>>> +++ b/drivers/gpu/drm/loongson/lsdc_benchmark.c
+>>> @@ -0,0 +1,133 @@
+>>> +// SPDX-License-Identifier: GPL-2.0+
+>>
+>> Is it GPL-2.0, GPL-2.0-only, or GPL-2.0+? Please make sure all license 
+>> IDs are consistent. 
+> 
+> 
+> I see drm/vkms is also writing the copyrights similar.
+> 
+> with "# SPDX-License-Identifier: GPL-2.0-only" in the Makefile,
+> 
+> while "// SPDX-License-Identifier: GPL-2.0+" in the C source file.
+> 
+> Sorry, I'm stupid, I can't figure out the difference between them.
+> 
+> Personally, I really don't care about this as along as checkpatch.pl 
+> don't complain.
+> 
+> I respect the maintainers of DRM, they didn't told me to change it.
+> 
+> I assume there is no problem.
 
---iqguu65hudcmyit7
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It's your work after all, so you get to license the work however you 
+want (inside the kernel project's licensing requirements, of course), so 
+maintainers won't interfere with that.
 
-On 21.05.2023 18:16:17, Vincent MAILHOL wrote:
-> Thanks for the patch.
->=20
-> On Sat. 20 May 2023 at 04:57, Frank Jungclaus <frank.jungclaus@esd.eu> wr=
-ote:
-> > Replace the macros used to initialize the members of struct
-> > can_bittiming_const with direct values. Then also use those struct
-> > members to do the calculations in esd_usb2_set_bittiming().
-> >
-> > Link: https://lore.kernel.org/all/CAMZ6RqLaDNy-fZ2G0+QMhUEckkXLL+ZyELVS=
-DFmqpd++aBzZQg@mail.gmail.com/
-> > Suggested-by: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-> > Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
-> > ---
-> >  drivers/net/can/usb/esd_usb.c | 33 +++++++++++++--------------------
-> >  1 file changed, 13 insertions(+), 20 deletions(-)
-> >
-> > diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_us=
-b.c
-> > index 32354cfdf151..2eecf352ec47 100644
-> > --- a/drivers/net/can/usb/esd_usb.c
-> > +++ b/drivers/net/can/usb/esd_usb.c
-> > @@ -60,18 +60,10 @@ MODULE_LICENSE("GPL v2");
-> >  #define ESD_USB_NO_BAUDRATE    GENMASK(30, 0) /* bit rate unconfigured=
- */
-> >
-> >  /* bit timing CAN-USB/2 */
-> > -#define ESD_USB2_TSEG1_MIN     1
-> > -#define ESD_USB2_TSEG1_MAX     16
-> >  #define ESD_USB2_TSEG1_SHIFT   16
-> > -#define ESD_USB2_TSEG2_MIN     1
-> > -#define ESD_USB2_TSEG2_MAX     8
-> >  #define ESD_USB2_TSEG2_SHIFT   20
-> > -#define ESD_USB2_SJW_MAX       4
-> >  #define ESD_USB2_SJW_SHIFT     14
-> >  #define ESD_USBM_SJW_SHIFT     24
-> > -#define ESD_USB2_BRP_MIN       1
-> > -#define ESD_USB2_BRP_MAX       1024
-> > -#define ESD_USB2_BRP_INC       1
-> >  #define ESD_USB2_3_SAMPLES     BIT(23)
-> >
-> >  /* esd IDADD message */
-> > @@ -909,19 +901,20 @@ static const struct ethtool_ops esd_usb_ethtool_o=
-ps =3D {
-> >
-> >  static const struct can_bittiming_const esd_usb2_bittiming_const =3D {
-> >         .name =3D "esd_usb2",
-> > -       .tseg1_min =3D ESD_USB2_TSEG1_MIN,
-> > -       .tseg1_max =3D ESD_USB2_TSEG1_MAX,
-> > -       .tseg2_min =3D ESD_USB2_TSEG2_MIN,
-> > -       .tseg2_max =3D ESD_USB2_TSEG2_MAX,
-> > -       .sjw_max =3D ESD_USB2_SJW_MAX,
-> > -       .brp_min =3D ESD_USB2_BRP_MIN,
-> > -       .brp_max =3D ESD_USB2_BRP_MAX,
-> > -       .brp_inc =3D ESD_USB2_BRP_INC,
-> > +       .tseg1_min =3D 1,
-> > +       .tseg1_max =3D 16,
-> > +       .tseg2_min =3D 1,
-> > +       .tseg2_max =3D 8,
-> > +       .sjw_max =3D 4,
-> > +       .brp_min =3D 1,
-> > +       .brp_max =3D 1024,
-> > +       .brp_inc =3D 1,
-> >  };
-> >
-> >  static int esd_usb2_set_bittiming(struct net_device *netdev)
-> >  {
-> >         struct esd_usb_net_priv *priv =3D netdev_priv(netdev);
-> > +       const struct can_bittiming_const *btc =3D priv->can.bittiming_c=
-onst;
->=20
-> I initially suggested doing:
->=20
->           const struct can_bittiming_const *btc =3D priv->can.bittiming_c=
-onst;
->=20
-> But now that I think again about it, doing:
->=20
->           const struct can_bittiming_const *btc =3D &esd_usb2_bittiming_c=
-onst;
->=20
-> is slightly better as it will allow the compiler to fold the integer
-> constant expressions such as btc->brp_max - 1. The compiler is not
-> smart enough to figure out what values are held in
-> priv->can.bittiming_const at compile time.
->=20
-> Sorry for not figuring this the first time.
+I'm suggesting the license double-check because the whole driver is one 
+piece of work, so it's better to be extra clear (you DO want to make 
+sure things are clear when it comes to copyright, compliance & etc.) and 
+make it as consistent as possible, but ultimately it's of course down to 
+you. I think you may keep things as-is if others don't voice their 
+concerns in the coming days.
 
-Good suggestion! Fixed up while applying.
+-- 
+WANG "xen0n" Xuerui
 
-regards,
-Marc
+Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
-
---iqguu65hudcmyit7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRrJY8ACgkQvlAcSiqK
-BOhHzQgArh8iOdOn4ECwgOQWxo5eUoe+7PZz9/bi4lsZwzKr3ynbouweNyHdCMdi
-e5FbdEIxkNsQHdQCE4momJ0lfW4PBvl8T75SWxWixN2KJqdtcg4YmCCFRPSsL/jN
-JXzWqxnW169wnJkQ7FxStSLX5DQJLxMevJiraGOz9dBAhboFDOMWmBJag+DBfmrL
-jBa91bLKvIb4ezOFbwxlt1qqkE7bHuDLTh2jHPkZ/xCD8mt3CYhVzCC7DS3N/+s1
-kYeFTyxDC0rW9Z/N+VRXPby5476KGo75uhNAhhGV5IzrDr0EKoMAueNxUSv0Er12
-UyYWHBeEOMPqjpycKeM3wn44fbqp/w==
-=LL8L
------END PGP SIGNATURE-----
-
---iqguu65hudcmyit7--
