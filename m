@@ -2,56 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D14E70C11B
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 16:29:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29EEB70C12A
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 16:32:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233459AbjEVO3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 10:29:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55000 "EHLO
+        id S233700AbjEVOca (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 10:32:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232856AbjEVO3a (ORCPT
+        with ESMTP id S233574AbjEVOc2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 10:29:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4046AAF;
-        Mon, 22 May 2023 07:29:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AF03561DC1;
-        Mon, 22 May 2023 14:29:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 996E4C433D2;
-        Mon, 22 May 2023 14:29:22 +0000 (UTC)
-Date:   Mon, 22 May 2023 10:29:20 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     David Howells <dhowells@redhat.com>
-Cc:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Christoph Hellwig <hch@lst.de>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH v20 23/32] splice: Convert trace/seq to use
- direct_splice_read()
-Message-ID: <20230522102920.0528d821@rorschach.local.home>
-In-Reply-To: <20230519074047.1739879-24-dhowells@redhat.com>
-References: <20230519074047.1739879-1-dhowells@redhat.com>
-        <20230519074047.1739879-24-dhowells@redhat.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 22 May 2023 10:32:28 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3132BA9;
+        Mon, 22 May 2023 07:32:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1684765901; i=linosanfilippo@gmx.de;
+        bh=lwQ+t7RCqn9sjjERhaQcuu0ceFAVx7n0LyVEjPw+TWs=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=TDxYqCU9CtVWVrlfU1RaliEa09utKq9fw1wfmUq7CqDOeK5xPtbL9lAaqGO7GWqzM
+         z3/o+MylPzTBZskzESGi2YoWElc7sljBW3ieIPVoE0lem41Erauj+m8OJFki8aXlGQ
+         6XTPfVG4LHofz1Bx4XunH/cvqMOLATg6cBQfvjZQhEdR7b9GJvJiBpyqqCX0KwG8iw
+         svAnco1yeeGU5ZlgmKiKrZAxwNqDLtYVuJbhIPXyZvZaBRL80uXboOH7JSl28cbnbh
+         qgfDfnxzee8UkSoaVlwHX53qQkxFw87r8Cowab78xUqOffHmKanxP2AxVbKyUbkjmC
+         z8nmVh2nlCB5Q==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from Venus.speedport.ip ([84.162.2.106]) by mail.gmx.net (mrgmx005
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1N4hvR-1qADD027vD-011gMN; Mon, 22
+ May 2023 16:31:41 +0200
+From:   Lino Sanfilippo <LinoSanfilippo@gmx.de>
+To:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca
+Cc:     jsnitsel@redhat.com, hdegoede@redhat.com, oe-lkp@lists.linux.dev,
+        lkp@intel.com, peter.ujfalusi@linux.intel.com,
+        peterz@infradead.org, linux@mniewoehner.de,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        l.sanfilippo@kunbus.com, LinoSanfilippo@gmx.de, lukas@wunner.de,
+        p.rosenberger@kunbus.com
+Subject: [PATCH 1/2] tpm, tpm_tis: Handle interrupt storm
+Date:   Mon, 22 May 2023 16:31:04 +0200
+Message-Id: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: base64
+X-Provags-ID: V03:K1:yIe+WGyH1ASzJ7ENp03LTV4IXOeonm6dRKoNYtjMLPwcfYAi2iq
+ bsV98q//ftrbGfjns3dZRRrI8a0UPsJzqcfUV3ea8Pg/tF5VZGL1bX7WEsGetOCdoX/WwFA
+ GQvGPY7rnu6kc3KPfzmEEfx0MQXnyZweOUAuaSmk8Bnsc6ZrWh4uo7+yfvYQbFJxrcs/EIF
+ f6xWuxrA2CptkCSbSY0/w==
+UI-OutboundReport: notjunk:1;M01:P0:btJ3+woI3As=;es3Q1meS12RE+lnRJ4+NzVouEpm
+ /8b8hj2thexAdcK5YFJ/GTvX3FAw+yLNuCKhp7Vrpuc52EHwzUHYEY6tu/6oKPWDfzApqveMl
+ eHUSqnH5lU6Gg6HdOuNcURfE9QxCFqWdc6V9rrXSlOZSH/isqt2ieKoOTdU2MBFhm7Ejl66vX
+ RcmXz2mgx56Byh9wHBTRBhgvziYs4AVdGWOA5XznZh0YCFCHaSXJWfEefpRZwHSDfL4ipyYIB
+ GYBEyKz/SblbSy6mMN2VlC+1EAQBoKX4fkb1A4yoOyxpaIDpRqwEvSx/vABUvTX13SMMuu5TR
+ PNxhDLV569Ms5UGlgta5qe79fHaDfplaqZufVBmcaeVaeYlULtGCAlGIp7DGaZroy9sEt2j48
+ E6Khx86YLAjBmcjkASEnA26+bYAruJkCHkNyknY6CC6XN6O2irhv33t5p5wOuLANJGfCxWMSQ
+ SfdVKY2hAdtXoPnf6MX6i1/h5fWEXgHIXQn4HiKhGjIwjeMbeMbeKQNelv+H/FycwV0eCQIMa
+ VgwcJzgKiJ0t9Hi26GXBz+8f8x3wYCgRVcRUmanaPZrmGCeIWaVJZgCF1JQEMJyik9bNyw8jj
+ cD/WBZ6J0YS1SEa7+uBeIicABcJdWU9AYcOkWOesG0VOVCSJLD0S2/l88rZFMSFCHTxeYdvwD
+ Y19hgBdHJZi1iaLyWB9fVQhNSSr2tjGCksO6EBkeNhekDaIR8ilet8LesGUl9yeNRbLJBt8O3
+ Di0uWzMxEBEECIKMT+CIrJeztQMHknzQMYM3zxx5d9b3dqMkjD1Ie/5pwZ92vXI14pSpmp/7W
+ XaNecdyWSR9QKvqRgjMb6o4thr0ateiXCcAFd3tkZ/JE7ChO959fVXP3TUUJm6ZEZ/XQ+3ju5
+ DIJlCJVnXEAmyo2eYg2htxMTvFXP8wbE62XI88N0sqHmQhY2QCFobKxhHYm63wIbgefUJle9C
+ kALmVPKqb2KoWjEhFO2CM8KUmv0=
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,MIME_BASE64_TEXT,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,50 +72,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 May 2023 08:40:38 +0100
-David Howells <dhowells@redhat.com> wrote:
-
-> For the splice from the trace seq buffer, just use direct_splice_read().
-> 
-> In the future, something better can probably be done by gifting pages from
-> seq->buf into the pipe, but that would require changing seq->buf into a
-> vmap over an array of pages.
-
-If you can give me a POC of what needs to be done, I could possibly
-implement it.
-
-> 
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> cc: Christoph Hellwig <hch@lst.de>
-> cc: Al Viro <viro@zeniv.linux.org.uk>
-> cc: Jens Axboe <axboe@kernel.dk>
-> cc: Steven Rostedt <rostedt@goodmis.org>
-> cc: Masami Hiramatsu <mhiramat@kernel.org>
-> cc: linux-kernel@vger.kernel.org
-> cc: linux-trace-kernel@vger.kernel.org
-> cc: linux-fsdevel@vger.kernel.org
-> cc: linux-block@vger.kernel.org
-> cc: linux-mm@kvack.org
-> ---
->  kernel/trace/trace.c | 2 +-
-
-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-
--- Steve
-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-> index ebc59781456a..b664020efcb7 100644
-> --- a/kernel/trace/trace.c
-> +++ b/kernel/trace/trace.c
-> @@ -5171,7 +5171,7 @@ static const struct file_operations tracing_fops = {
->  	.open		= tracing_open,
->  	.read		= seq_read,
->  	.read_iter	= seq_read_iter,
-> -	.splice_read	= generic_file_splice_read,
-> +	.splice_read	= direct_splice_read,
->  	.write		= tracing_write_stub,
->  	.llseek		= tracing_lseek,
->  	.release	= tracing_release,
-
+RnJvbTogTGlubyBTYW5maWxpcHBvIDxsLnNhbmZpbGlwcG9Aa3VuYnVzLmNvbT4KCkNvbW1pdCBl
+NjQ0YjJmNDk4ZDIgKCJ0cG0sIHRwbV90aXM6IEVuYWJsZSBpbnRlcnJ1cHQgdGVzdCIpIGVuYWJs
+ZWQKaW50ZXJydXB0cyBpbnN0ZWFkIG9mIHBvbGxpbmcgb24gYWxsIGNhcGFibGUgVFBNcy4gVW5m
+b3J0dW5hdGVseSwgb24gc29tZQpwcm9kdWN0cyB0aGUgaW50ZXJydXB0IGxpbmUgaXMgZWl0aGVy
+IG5ldmVyIGFzc2VydGVkIG9yIG5ldmVyIGRlYXNzZXJ0ZWQuCgpUaGUgZm9ybWVyIGNhdXNlcyBp
+bnRlcnJ1cHQgdGltZW91dHMgYW5kIGlzIGRldGVjdGVkIGJ5CnRwbV90aXNfY29yZV9pbml0KCku
+IFRoZSBsYXR0ZXIgcmVzdWx0cyBpbiBpbnRlcnJ1cHQgc3Rvcm1zLgoKUmVjZW50IHJlcG9ydHMg
+Y29uY2VybiB0aGUgTGVub3ZvIFRoaW5rU3RhdGlvbiBQMzYwIFRpbnksIExlbm92byBUaGlua1Bh
+ZApMNDkwIGFuZCBJbnNwdXIgTkY1MTgwTTY6CgpodHRwczovL2xvcmUua2VybmVsLm9yZy9saW51
+eC1pbnRlZ3JpdHkvMjAyMzA1MTEwMDU0MDMuMjQ2ODktMS1qc25pdHNlbEByZWRoYXQuY29tLwpo
+dHRwczovL2xvcmUua2VybmVsLm9yZy9saW51eC1pbnRlZ3JpdHkvZDgwYjE4MGE1NjlhOWYwNjhk
+M2EyNjE0ZjA2MmNmYTNhNzhhZjVhNi5jYW1lbEBrZXJuZWwub3JnLwoKVGhlIGN1cnJlbnQgYXBw
+cm9hY2ggdG8gYXZvaWQgdGhvc2Ugc3Rvcm1zIGlzIHRvIGRpc2FibGUgaW50ZXJydXB0cyBieQph
+ZGRpbmcgYSBETUkgcXVpcmsgZm9yIHRoZSBjb25jZXJuZWQgZGV2aWNlLgoKSG93ZXZlciB0aGlz
+IGlzIGEgbWFpbnRlbmFuY2UgYnVyZGVuIGluIHRoZSBsb25nIHJ1biwgc28gdXNlIGEgZ2VuZXJp
+YwphcHByb2FjaDoKCkRldGVjdCBhbiBpbnRlcnJ1cHQgc3Rvcm0gYnkgY291bnRpbmcgdGhlIG51
+bWJlciBvZiB1bmhhbmRsZWQgaW50ZXJydXB0cwp3aXRoaW4gYSAxMCBtcyB0aW1lIGludGVydmFs
+LiBJbiBjYXNlIHRoYXQgbW9yZSB0aGFuIDEwMDAgd2VyZSB1bmhhbmRsZWQKZGVhY3RpdmF0ZSBp
+bnRlcnJ1cHRzLCBkZXJlZ2lzdGVyIHRoZSBoYW5kbGVyIGFuZCBmYWxsIGJhY2sgdG8gcG9sbGlu
+Zy4KClRoaXMgZXF1YWxzIHRoZSBpbXBsZW1lbnRhdGlvbiB0aGF0IGhhbmRsZXMgaW50ZXJydXB0
+IHN0b3JtcyBpbgpub3RlX2ludGVycnVwdCgpIGJ5IG1lYW5zIG9mIHRpbWVzdGFtcHMgYW5kIGNv
+dW50ZXJzIGluIHN0cnVjdCBpcnFfZGVzYy4KSG93ZXZlciB0aGUgZnVuY3Rpb24gdG8gYWNjZXNz
+IHRoaXMgc3RydWN0dXJlIGlzIHByaXZhdGUgc28gdGhlIGxvZ2ljIGhhcwp0byBiZSByZWltcGxl
+bWVudGVkIGluIHRoZSBUUE0gVElTIGNvcmUuCgpTaW5jZSBoYW5kbGVyIGRlcmVnaXN0cmF0aW9u
+IHdvdWxkIGRlYWRsb2NrIGZyb20gd2l0aGluIHRoZSBpbnRlcnJ1cHQKcm91dGluZSB0cmlnZ2Vy
+IGEgd29ya2VyIHRocmVhZCB0aGF0IGV4ZWN1dGVzIHRoZSB1bnJlZ2lzdHJhdGlvbi4KClN1Z2dl
+c3RlZC1ieTogTHVrYXMgV3VubmVyIDxsdWthc0B3dW5uZXIuZGU+ClNpZ25lZC1vZmYtYnk6IExp
+bm8gU2FuZmlsaXBwbyA8bC5zYW5maWxpcHBvQGt1bmJ1cy5jb20+Ci0tLQogZHJpdmVycy9jaGFy
+L3RwbS90cG1fdGlzX2NvcmUuYyB8IDcxICsrKysrKysrKysrKysrKysrKysrKysrKysrKysrKyst
+LQogZHJpdmVycy9jaGFyL3RwbS90cG1fdGlzX2NvcmUuaCB8ICA2ICsrKwogMiBmaWxlcyBjaGFu
+Z2VkLCA3NCBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2RyaXZl
+cnMvY2hhci90cG0vdHBtX3Rpc19jb3JlLmMgYi9kcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29y
+ZS5jCmluZGV4IDU1ODE0NGZhNzA3YS4uNDU4ZWJmOGMyZjE2IDEwMDY0NAotLS0gYS9kcml2ZXJz
+L2NoYXIvdHBtL3RwbV90aXNfY29yZS5jCisrKyBiL2RyaXZlcnMvY2hhci90cG0vdHBtX3Rpc19j
+b3JlLmMKQEAgLTc1Miw2ICs3NTIsNTUgQEAgc3RhdGljIGJvb2wgdHBtX3Rpc19yZXFfY2FuY2Vs
+ZWQoc3RydWN0IHRwbV9jaGlwICpjaGlwLCB1OCBzdGF0dXMpCiAJcmV0dXJuIHN0YXR1cyA9PSBU
+UE1fU1RTX0NPTU1BTkRfUkVBRFk7CiB9CiAKK3N0YXRpYyB2b2lkIHRwbV90aXNfaGFuZGxlX2ly
+cV9zdG9ybShzdHJ1Y3QgdHBtX2NoaXAgKmNoaXApCit7CisJc3RydWN0IHRwbV90aXNfZGF0YSAq
+cHJpdiA9IGRldl9nZXRfZHJ2ZGF0YSgmY2hpcC0+ZGV2KTsKKwlpbnQgaW50bWFzayA9IDA7CisK
+KwlkZXZfZXJyKCZjaGlwLT5kZXYsIEhXX0VSUgorCQkiVFBNIGludGVycnVwdCBzdG9ybSBkZXRl
+Y3RlZCwgcG9sbGluZyBpbnN0ZWFkXG4iKTsKKworCXRwbV90aXNfcmVhZDMyKHByaXYsIFRQTV9J
+TlRfRU5BQkxFKHByaXYtPmxvY2FsaXR5KSwgJmludG1hc2spOworCisJaW50bWFzayAmPSB+VFBN
+X0dMT0JBTF9JTlRfRU5BQkxFOworCisJdHBtX3Rpc19yZXF1ZXN0X2xvY2FsaXR5KGNoaXAsIDAp
+OworCXRwbV90aXNfd3JpdGUzMihwcml2LCBUUE1fSU5UX0VOQUJMRShwcml2LT5sb2NhbGl0eSks
+IGludG1hc2spOworCXRwbV90aXNfcmVsaW5xdWlzaF9sb2NhbGl0eShjaGlwLCAwKTsKKworCWNo
+aXAtPmZsYWdzICY9IH5UUE1fQ0hJUF9GTEFHX0lSUTsKKworCS8qCisJICogV2UgbXVzdCBub3Qg
+Y2FsbCBkZXZtX2ZyZWVfaXJxKCkgZnJvbSB3aXRoaW4gdGhlIGludGVycnVwdCBoYW5kbGVyLAor
+CSAqIHNpbmNlIHRoaXMgZnVuY3Rpb24gd2FpdHMgZm9yIHJ1bm5pbmcgaW50ZXJydXB0IGhhbmRs
+ZXJzIHRvIGZpbmlzaAorCSAqIGFuZCB0aHVzIGl0IHdvdWxkIGRlYWRsb2NrLiBJbnN0ZWFkIHRy
+aWdnZXIgYSB3b3JrZXIgdGhhdCBkb2VzIHRoZQorCSAqIHVucmVnaXN0cmF0aW9uLgorCSAqLwor
+CXNjaGVkdWxlX3dvcmsoJnByaXYtPmZyZWVfaXJxX3dvcmspOworfQorCitzdGF0aWMgdm9pZCB0
+cG1fdGlzX3Byb2Nlc3NfdW5oYW5kbGVkX2ludGVycnVwdChzdHJ1Y3QgdHBtX2NoaXAgKmNoaXAp
+Cit7CisJY29uc3QgdW5zaWduZWQgaW50IE1BWF9VTkhBTkRMRURfSVJRUyA9IDEwMDA7CisJc3Ry
+dWN0IHRwbV90aXNfZGF0YSAqcHJpdiA9IGRldl9nZXRfZHJ2ZGF0YSgmY2hpcC0+ZGV2KTsKKwkv
+KgorCSAqIFRoZSB3b3JrZXIgdG8gZnJlZSB0aGUgVFBNIGludGVycnVwdCAoZnJlZV9pcnFfd29y
+aykgbWF5IGFscmVhZHkKKwkgKiBiZSBzY2hlZHVsZWQsIHNvIG1ha2Ugc3VyZSBpdCBpcyBub3Qg
+c2NoZWR1bGVkIGFnYWluLgorCSAqLworCWlmICghKGNoaXAtPmZsYWdzICYgVFBNX0NISVBfRkxB
+R19JUlEpKQorCQlyZXR1cm47CisKKwlpZiAodGltZV9hZnRlcihqaWZmaWVzLCBwcml2LT5sYXN0
+X3VuaGFuZGxlZF9pcnEgKyBIWi8xMCkpCisJCXByaXYtPnVuaGFuZGxlZF9pcnFzID0gMTsKKwll
+bHNlCisJCXByaXYtPnVuaGFuZGxlZF9pcnFzKys7CisKKwlwcml2LT5sYXN0X3VuaGFuZGxlZF9p
+cnEgPSBqaWZmaWVzOworCisJaWYgKHByaXYtPnVuaGFuZGxlZF9pcnFzID4gTUFYX1VOSEFORExF
+RF9JUlFTKQorCQl0cG1fdGlzX2hhbmRsZV9pcnFfc3Rvcm0oY2hpcCk7Cit9CisKIHN0YXRpYyBp
+cnFyZXR1cm5fdCB0aXNfaW50X2hhbmRsZXIoaW50IGR1bW15LCB2b2lkICpkZXZfaWQpCiB7CiAJ
+c3RydWN0IHRwbV9jaGlwICpjaGlwID0gZGV2X2lkOwpAQCAtNzYxLDEwICs4MTAsMTAgQEAgc3Rh
+dGljIGlycXJldHVybl90IHRpc19pbnRfaGFuZGxlcihpbnQgZHVtbXksIHZvaWQgKmRldl9pZCkK
+IAogCXJjID0gdHBtX3Rpc19yZWFkMzIocHJpdiwgVFBNX0lOVF9TVEFUVVMocHJpdi0+bG9jYWxp
+dHkpLCAmaW50ZXJydXB0KTsKIAlpZiAocmMgPCAwKQotCQlyZXR1cm4gSVJRX05PTkU7CisJCWdv
+dG8gdW5oYW5kbGVkOwogCiAJaWYgKGludGVycnVwdCA9PSAwKQotCQlyZXR1cm4gSVJRX05PTkU7
+CisJCWdvdG8gdW5oYW5kbGVkOwogCiAJc2V0X2JpdChUUE1fVElTX0lSUV9URVNURUQsICZwcml2
+LT5mbGFncyk7CiAJaWYgKGludGVycnVwdCAmIFRQTV9JTlRGX0RBVEFfQVZBSUxfSU5UKQpAQCAt
+NzgwLDEwICs4MjksMTQgQEAgc3RhdGljIGlycXJldHVybl90IHRpc19pbnRfaGFuZGxlcihpbnQg
+ZHVtbXksIHZvaWQgKmRldl9pZCkKIAlyYyA9IHRwbV90aXNfd3JpdGUzMihwcml2LCBUUE1fSU5U
+X1NUQVRVUyhwcml2LT5sb2NhbGl0eSksIGludGVycnVwdCk7CiAJdHBtX3Rpc19yZWxpbnF1aXNo
+X2xvY2FsaXR5KGNoaXAsIDApOwogCWlmIChyYyA8IDApCi0JCXJldHVybiBJUlFfTk9ORTsKKwkJ
+Z290byB1bmhhbmRsZWQ7CiAKIAl0cG1fdGlzX3JlYWQzMihwcml2LCBUUE1fSU5UX1NUQVRVUyhw
+cml2LT5sb2NhbGl0eSksICZpbnRlcnJ1cHQpOwogCXJldHVybiBJUlFfSEFORExFRDsKKwordW5o
+YW5kbGVkOgorCXRwbV90aXNfcHJvY2Vzc191bmhhbmRsZWRfaW50ZXJydXB0KGNoaXApOworCXJl
+dHVybiBJUlFfSEFORExFRDsKIH0KIAogc3RhdGljIHZvaWQgdHBtX3Rpc19nZW5faW50ZXJydXB0
+KHN0cnVjdCB0cG1fY2hpcCAqY2hpcCkKQEAgLTgwNCw2ICs4NTcsMTUgQEAgc3RhdGljIHZvaWQg
+dHBtX3Rpc19nZW5faW50ZXJydXB0KHN0cnVjdCB0cG1fY2hpcCAqY2hpcCkKIAkJY2hpcC0+Zmxh
+Z3MgJj0gflRQTV9DSElQX0ZMQUdfSVJROwogfQogCitzdGF0aWMgdm9pZCB0cG1fdGlzX2ZyZWVf
+aXJxX2Z1bmMoc3RydWN0IHdvcmtfc3RydWN0ICp3b3JrKQoreworCXN0cnVjdCB0cG1fdGlzX2Rh
+dGEgKnByaXYgPSBjb250YWluZXJfb2Yod29yaywgdHlwZW9mKCpwcml2KSwgZnJlZV9pcnFfd29y
+ayk7CisJc3RydWN0IHRwbV9jaGlwICpjaGlwID0gcHJpdi0+Y2hpcDsKKworCWRldm1fZnJlZV9p
+cnEoY2hpcC0+ZGV2LnBhcmVudCwgcHJpdi0+aXJxLCBjaGlwKTsKKwlwcml2LT5pcnEgPSAwOwor
+fQorCiAvKiBSZWdpc3RlciB0aGUgSVJRIGFuZCBpc3N1ZSBhIGNvbW1hbmQgdGhhdCB3aWxsIGNh
+dXNlIGFuIGludGVycnVwdC4gSWYgYW4KICAqIGlycSBpcyBzZWVuIHRoZW4gbGVhdmUgdGhlIGNo
+aXAgc2V0dXAgZm9yIElSUSBvcGVyYXRpb24sIG90aGVyd2lzZSByZXZlcnNlCiAgKiBldmVyeXRo
+aW5nIGFuZCBsZWF2ZSBpbiBwb2xsaW5nIG1vZGUuIFJldHVybnMgMCBvbiBzdWNjZXNzLgpAQCAt
+ODE2LDYgKzg3OCw3IEBAIHN0YXRpYyBpbnQgdHBtX3Rpc19wcm9iZV9pcnFfc2luZ2xlKHN0cnVj
+dCB0cG1fY2hpcCAqY2hpcCwgdTMyIGludG1hc2ssCiAJaW50IHJjOwogCXUzMiBpbnRfc3RhdHVz
+OwogCisJSU5JVF9XT1JLKCZwcml2LT5mcmVlX2lycV93b3JrLCB0cG1fdGlzX2ZyZWVfaXJxX2Z1
+bmMpOwogCiAJcmMgPSBkZXZtX3JlcXVlc3RfdGhyZWFkZWRfaXJxKGNoaXAtPmRldi5wYXJlbnQs
+IGlycSwgTlVMTCwKIAkJCQkgICAgICAgdGlzX2ludF9oYW5kbGVyLCBJUlFGX09ORVNIT1QgfCBm
+bGFncywKQEAgLTkxOCw2ICs5ODEsNyBAQCB2b2lkIHRwbV90aXNfcmVtb3ZlKHN0cnVjdCB0cG1f
+Y2hpcCAqY2hpcCkKIAkJaW50ZXJydXB0ID0gMDsKIAogCXRwbV90aXNfd3JpdGUzMihwcml2LCBy
+ZWcsIH5UUE1fR0xPQkFMX0lOVF9FTkFCTEUgJiBpbnRlcnJ1cHQpOworCWZsdXNoX3dvcmsoJnBy
+aXYtPmZyZWVfaXJxX3dvcmspOwogCiAJdHBtX3Rpc19jbGtydW5fZW5hYmxlKGNoaXAsIGZhbHNl
+KTsKIApAQCAtMTAyMSw2ICsxMDg1LDcgQEAgaW50IHRwbV90aXNfY29yZV9pbml0KHN0cnVjdCBk
+ZXZpY2UgKmRldiwgc3RydWN0IHRwbV90aXNfZGF0YSAqcHJpdiwgaW50IGlycSwKIAljaGlwLT50
+aW1lb3V0X2IgPSBtc2Vjc190b19qaWZmaWVzKFRJU19USU1FT1VUX0JfTUFYKTsKIAljaGlwLT50
+aW1lb3V0X2MgPSBtc2Vjc190b19qaWZmaWVzKFRJU19USU1FT1VUX0NfTUFYKTsKIAljaGlwLT50
+aW1lb3V0X2QgPSBtc2Vjc190b19qaWZmaWVzKFRJU19USU1FT1VUX0RfTUFYKTsKKwlwcml2LT5j
+aGlwID0gY2hpcDsKIAlwcml2LT50aW1lb3V0X21pbiA9IFRQTV9USU1FT1VUX1VTRUNTX01JTjsK
+IAlwcml2LT50aW1lb3V0X21heCA9IFRQTV9USU1FT1VUX1VTRUNTX01BWDsKIAlwcml2LT5waHlf
+b3BzID0gcGh5X29wczsKZGlmZiAtLWdpdCBhL2RyaXZlcnMvY2hhci90cG0vdHBtX3Rpc19jb3Jl
+LmggYi9kcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29yZS5oCmluZGV4IGU5NzhmNDU3ZmQ0ZC4u
+NmZjODZiYWE0Mzk4IDEwMDY0NAotLS0gYS9kcml2ZXJzL2NoYXIvdHBtL3RwbV90aXNfY29yZS5o
+CisrKyBiL2RyaXZlcnMvY2hhci90cG0vdHBtX3Rpc19jb3JlLmgKQEAgLTkxLDEyICs5MSwxOCBA
+QCBlbnVtIHRwbV90aXNfZmxhZ3MgewogfTsKIAogc3RydWN0IHRwbV90aXNfZGF0YSB7CisJc3Ry
+dWN0IHRwbV9jaGlwICpjaGlwOwogCXUxNiBtYW51ZmFjdHVyZXJfaWQ7CiAJc3RydWN0IG11dGV4
+IGxvY2FsaXR5X2NvdW50X211dGV4OwogCXVuc2lnbmVkIGludCBsb2NhbGl0eV9jb3VudDsKIAlp
+bnQgbG9jYWxpdHk7CisJLyogSW50ZXJydXB0cyAqLwogCWludCBpcnE7CisJc3RydWN0IHdvcmtf
+c3RydWN0IGZyZWVfaXJxX3dvcms7CisJdW5zaWduZWQgbG9uZyBsYXN0X3VuaGFuZGxlZF9pcnE7
+CisJdW5zaWduZWQgaW50IHVuaGFuZGxlZF9pcnFzOwogCXVuc2lnbmVkIGludCBpbnRfbWFzazsK
+KwogCXVuc2lnbmVkIGxvbmcgZmxhZ3M7CiAJdm9pZCBfX2lvbWVtICppbGJfYmFzZV9hZGRyOwog
+CXUxNiBjbGtydW5fZW5hYmxlZDsKCmJhc2UtY29tbWl0OiA0NGMwMjZhNzNiZTgwMzhmMDNkYmRl
+ZWYwMjhiNjQyODgwY2YxNTExCi0tIAoyLjQwLjEKCg==
