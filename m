@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E43C70B841
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:00:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 113DC70B840
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:00:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232646AbjEVJA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 05:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41032 "EHLO
+        id S232585AbjEVJAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 05:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232574AbjEVI7e (ORCPT
+        with ESMTP id S232575AbjEVI7e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 22 May 2023 04:59:34 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0711C109;
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAEF410C;
         Mon, 22 May 2023 01:59:28 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-5307502146aso3975355a12.1;
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-3093eb8cd1fso3524853f8f.1;
         Mon, 22 May 2023 01:59:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20221208; t=1684745967; x=1687337967;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cTRIWKnCdlFq7Rr2wAb/uB9jyO8yrcX3Db/QtbKH+r4=;
-        b=WPaDN0Czz+PWoaQqY4Wkgsabdbp4Y/pUQmbzKQU7tb2a9g7jndZFI+ttPZwrT6zHxn
-         jm9hcBC9XC53yXzP/Fy/sXBOZWqN21wNHXlqvL9IhXBNoSyH0AHM/dZOte6CBgaQXx3p
-         6D1ZEitLghatZe4bFkjBeeBbjswNLLzrTlb3prS7nBEkmBGyo0Hlf5Apdj4rBmyQCAFm
-         yEe0ouTTzNX8SJlsKWrrDcksGeYm6kMaRQy3tTur2iC/q45lWWdtrFAwGjd7vhFZnOt4
-         a015MWKRHaZf9BECop/EPVoqW7clFR9e1a5kgbl6Omzc8xFi9PvHD3fzVMQTWeFCMDn+
-         WUrA==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jQYLXnCTilOxJ77UwcOMpt/eXPlHQvWzLQDM7UFaS3k=;
+        b=Vxjw+bb9HpwuZljuluDbKZi7+EgGXB9kGNjY+dbljvHB9uK+++frhbun49lBk7mD2t
+         5L7Kwh7zdR9u70dmpF8SUy8k5KSfaIJEwqj73RPT8dnVsRbcOxOoIT6aFJNCn+Rao6m6
+         yxmonnHZFY1h+305q+sejkjVJ/K2A0plUe85I9lbeOx12dCypPyfr6A0sTOpygojVCsi
+         xsem47CJepifVanvICA+4016LoxH3FI5tpxlNHv+sGGS8bG9pQh4kEvY8QtHlrKeSXPQ
+         6Rq3saUt214Dd2HF40W1nmhec8YW0iIkzatg9gMTbZAT9RsVEGyC1N+04XpMpOi09/9h
+         /d7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20221208; t=1684745967; x=1687337967;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=cTRIWKnCdlFq7Rr2wAb/uB9jyO8yrcX3Db/QtbKH+r4=;
-        b=Kh/BfKsM6Mz3eUJQJRzoepiOZT0UhZEVM5TgqFciPpa/Y/0+sluVr1KdvuIvnc2yrN
-         pI+hwSFmIHxwDoQi9q44Q2WSelk/jTU7lYAVg6+7kzty5oBuaxRbv3snmz6W6kfStSfT
-         5lnLYrVJxZRoxoviHEJstmuiA4Rp6lFkwdRq/5SK+MIiT3OKJxvs//WTs6fzBPtMhUdj
-         cSpQ5KH1SY4Yy3mz2rMicx+ozljO+xIUB/oyEkKRQJnf/8hAinGb4oWz0LwYRUm7qR7n
-         P0+accRfEphqN2ZhlWZe3JufiLUn/b5rRTk8OU4zOQXe5AESmiRfbrOp8Lc56nIApkFg
-         f+mw==
-X-Gm-Message-State: AC+VfDyi+ZN6rivHOcXOwp4rtq1BIE0+dVVJflfs0nEv2JRj10I7DGp7
-        J/Wrisa7zhWRkDOZ688RJ25cgnfE5rRwWnOgLnA=
-X-Google-Smtp-Source: ACHHUZ71cstyW7OoGhwsVhbkJ7xw9m3HJQ3PyLkhtAeg80xYaSfVRjd7QMeLVMf+qNOUxD3FtSmIPUvWiJne1lhsciE=
-X-Received: by 2002:a17:902:778c:b0:1aa:cddd:57f2 with SMTP id
- o12-20020a170902778c00b001aacddd57f2mr9848885pll.25.1684745967330; Mon, 22
- May 2023 01:59:27 -0700 (PDT)
+        bh=jQYLXnCTilOxJ77UwcOMpt/eXPlHQvWzLQDM7UFaS3k=;
+        b=iYSf13tfs7IZn7Vp+x4xIhYnO8wx4o4N02zljPgCFIiGxm4helUKRj+DVis7amIgAe
+         zpK4j0yCcqcONCKBwTVy82c4/khhlPYQTm5F6q3GMmFgIbKpfwrCgxz54mdFb0titnCb
+         blhPEGRPEbWuPjiC412DplAbBp7C9T/1QPEM1wdKApOojs11BVW4nAWDHqNE44EKsUey
+         Pml1GORhm3i9sPj4eS2uQMi2aGtfoD/yYbCTsfw6kxprzCqX6qYFdW+j5MPyUEeWPKNg
+         X5w+RiKopfgpk/ecS3iOo1FhLrNqu7J5mzM/JnST1GOmbsowHUcjCOgXxiIjk9sxIzBk
+         +oIw==
+X-Gm-Message-State: AC+VfDw3YYBIYWxfNLb1150YeZRswa4MVSnqKmtYTlaDdc1V6/cxQpu+
+        EQxv+m13xhVM78qTUn1UBvw=
+X-Google-Smtp-Source: ACHHUZ6njTQwoE1we+ut07OHl+COhScuDx56NuV2wiF3vCfIRPQCaqmWKWDyymm7oKsLT5E93nvadQ==
+X-Received: by 2002:a5d:4243:0:b0:307:9f8:4f30 with SMTP id s3-20020a5d4243000000b0030709f84f30mr5819717wrr.70.1684745967094;
+        Mon, 22 May 2023 01:59:27 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id w8-20020a5d4b48000000b0030771c6e443sm7038292wrs.42.2023.05.22.01.59.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 01:59:26 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Ping-Ke Shih <pkshih@realtek.com>, Kalle Valo <kvalo@kernel.org>,
+        linux-wireless@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH][next] wifi: rtw89: 8851b: rfk: Fix spelling mistake KIP_RESOTRE -> KIP_RESTORE
+Date:   Mon, 22 May 2023 09:59:24 +0100
+Message-Id: <20230522085924.913649-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-References: <1678979666-551-1-git-send-email-quic_mojha@quicinc.com>
- <76943268-3982-deaf-9736-429dd51e01b0@gmail.com> <0e645486-f0be-4468-18ad-9e49088dee0b@quicinc.com>
-In-Reply-To: <0e645486-f0be-4468-18ad-9e49088dee0b@quicinc.com>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Mon, 22 May 2023 10:59:16 +0200
-Message-ID: <CAOX2RU4xPNq4-OHUoMZtfZu05QEdpk1UtawZb1xQMrtc5ao84Q@mail.gmail.com>
-Subject: Re: [PATCH v3] firmware: qcom_scm: Clear download bit during reboot
-To:     Mukesh Ojha <quic_mojha@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -68,136 +70,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 22 May 2023 at 08:11, Mukesh Ojha <quic_mojha@quicinc.com> wrote:
->
->
->
-> On 5/18/2023 3:45 PM, Robert Marko wrote:
-> >
-> > On 16. 03. 2023. 16:14, Mukesh Ojha wrote:
-> >> During normal restart of a system download bit should
-> >> be cleared irrespective of whether download mode is
-> >> set or not.
-> >>
-> >> Fixes: 8c1b7dc9ba22 ("firmware: qcom: scm: Expose download-mode control")
-> >> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
-> >
-> > Hi, this has been backported to 5.15.111, however it seems to be
-> > breaking reboot
-> > on IPQ4019 by causing the board to then hang in SBL with:
-> > root@OpenWrt:/# reboot
-> > root@OpenWrt:/# [   76.473541] device lan1 left promiscuous mode
-> > [   76.474204] br-lan: port 1(lan1) entered disabled state
-> > [   76.527975] device lan2 left promiscuous mode
-> > [   76.530301] br-lan: port 2(lan2) entered disabled state
-> > [   76.579376] device lan3 left promiscuous mode
-> > [   76.581698] br-lan: port 3(lan3) entered disabled state
-> > [   76.638434] device lan4 left promiscuous mode
-> > [   76.638777] br-lan: port 4(lan4) entered disabled state
-> > [   76.978489] qca8k-ipq4019 c000000.switch wan: Link is Down
-> > [   76.978883] device eth0 left promiscuous mode
-> > [   76.987077] ipqess-edma c080000.ethernet eth0: Link is Down
-> > [
-> > Format: Log Type - Time(microsec) - Message - Optional Info
-> > Log Type: B - Since Boot(Power On Reset),  D - Delta,  S - Statistic
-> > S - QC_IMAGE_VERSION_STRING=BOOT.BF.3.1.1-00123
-> > S - IMAGE_VARIANT_STRING=DAABANAZA
-> > S - OEM_IMAGE_VERSION_STRING=CRM
-> > S - Boot Config, 0x00000021
-> > S - Reset status Config, 0x00000010
-> > S - Core 0 Frequency, 0 MHz
-> > B -       261 - PBL, Start
-> > B -      1339 - bootable_media_detect_entry, Start
-> > B -      1679 - bootable_media_detect_success, Start
-> > B -      1693 - elf_loader_entry, Start
-> > B -      5076 - auth_hash_seg_entry, Start
-> > B -      7223 - auth_hash_seg_exit, Start
-> > B -    578349 - elf_segs_hash_verify_entry, Start
-> > B -    696356 - PBL, End
-> > B -    696380 - SBL1, Start
-> > B -    787236 - pm_device_init, Start
-> > D -         7 - pm_device_init, Delta
-> > B -    788701 - boot_flash_init, Start
-> > D -     52782 - boot_flash_init, Delta
-> > B -    845625 - boot_config_data_table_init, Start
-> > D -      3836 - boot_config_data_table_init, Delta - (419 Bytes)
-> > B -    852841 - clock_init, Start
-> > D -      7566 - clock_init, Delta
-> > B -    864883 - CDT version:2,Platform ID:9,Major ID:0,Minor
-> > ID:0,Subtype:64
-> > B -    868413 - sbl1_ddr_set_params, Start
-> > B -    873402 - cpr_init, Start
-> > D -         2 - cpr_init, Delta
-> > B -    877842 - Pre_DDR_clock_init, Start
-> > D -         4 - Pre_DDR_clock_init, Delta
-> > D -     13234 - sbl1_ddr_set_params, Delta
-> > B -    891155 - pm_driver_init, Start
-> > D -         2 - pm_driver_init, Delta
-> > B -    909105 - Image Load, Start
-> > B -   1030210 - Boot error ocuured!. Error code: 303d
-> >
-> > Reverting the commit fixes rebooting.
->
-> Hi Robert,
->
-> Can you check if disable SDI [1] works with this issue
->
-> https://lore.kernel.org/linux-arm-msm/20230518140224.2248782-1-robimarko@gmail.com/
->
-> [1]
->
->
-> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-> index fde33acd46b7..01496ceb7136 100644
-> --- a/drivers/firmware/qcom_scm.c
-> +++ b/drivers/firmware/qcom_scm.c
-> @@ -1508,6 +1508,7 @@ static int qcom_scm_probe(struct platform_device
-> *pdev)
->   static void qcom_scm_shutdown(struct platform_device *pdev)
->   {
->          /* Clean shutdown, disable download mode to allow normal restart */
-> +       qcom_scm_disable_sdi();
->          qcom_scm_set_download_mode(false);
->   }
+There is a spelling mistake in a literal string. Fix it.
 
-Hi,
-I can confirm reboot works this way as well.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/net/wireless/realtek/rtw89/rtw8851b_rfk.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards,
-Robert
->
->
-> -- Mukesh
->
-> >
-> > Regards,
-> > Robert
-> >
-> >> ---
-> >> Changes in v3:
-> >>    - Added Fixes tag.
-> >>    - Removed it from below patch series, as it makes sense to go this
-> >> independently.
-> >>
-> >> https://lore.kernel.org/lkml/1677664555-30191-1-git-send-email-quic_mojha@quicinc.com/
-> >>
-> >> Changes in v2:
-> >>    - No change.
-> >>
-> >>   drivers/firmware/qcom_scm.c | 3 +--
-> >>   1 file changed, 1 insertion(+), 2 deletions(-)
-> >>
-> >> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-> >> index 468d4d5..3e020d1 100644
-> >> --- a/drivers/firmware/qcom_scm.c
-> >> +++ b/drivers/firmware/qcom_scm.c
-> >> @@ -1506,8 +1506,7 @@ static int qcom_scm_probe(struct platform_device
-> >> *pdev)
-> >>   static void qcom_scm_shutdown(struct platform_device *pdev)
-> >>   {
-> >>       /* Clean shutdown, disable download mode to allow normal restart */
-> >> -    if (download_mode)
-> >> -        qcom_scm_set_download_mode(false);
-> >> +    qcom_scm_set_download_mode(false);
-> >>   }
-> >>   static const struct of_device_id qcom_scm_dt_match[] = {
+diff --git a/drivers/net/wireless/realtek/rtw89/rtw8851b_rfk.c b/drivers/net/wireless/realtek/rtw89/rtw8851b_rfk.c
+index d58d6935e7b8..1899a5d69a81 100644
+--- a/drivers/net/wireless/realtek/rtw89/rtw8851b_rfk.c
++++ b/drivers/net/wireless/realtek/rtw89/rtw8851b_rfk.c
+@@ -1705,7 +1705,7 @@ static void _dpk_one_shot(struct rtw89_dev *rtwdev, enum rtw89_phy_idx phy,
+ 		    id == 0x2c ? "GAIN_LOSS" :
+ 		    id == 0x2d ? "MDPK_IDL" :
+ 		    id == 0x2f ? "DPK_GAIN_NORM" :
+-		    id == 0x31 ? "KIP_RESOTRE" :
++		    id == 0x31 ? "KIP_RESTORE" :
+ 		    id == 0x6 ? "LBK_RXIQK" : "Unknown id",
+ 		    dpk_cmd);
+ }
+-- 
+2.30.2
+
