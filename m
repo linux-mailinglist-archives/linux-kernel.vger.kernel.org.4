@@ -2,79 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAEC470B8A6
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C20D70B8A9
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:13:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232720AbjEVJL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 05:11:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51370 "EHLO
+        id S232511AbjEVJNi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 05:13:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232511AbjEVJLy (ORCPT
+        with ESMTP id S230350AbjEVJNh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 05:11:54 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E0D895;
-        Mon, 22 May 2023 02:11:49 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34M8wBdr031362;
-        Mon, 22 May 2023 09:11:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=A6oh/8h8tw6GH47Uog0cuXnntNxM9N7ADhrcQ0pUJ9g=;
- b=hDNC0Jaf3v9ijGP4aIlUq6S2Fr41vO9CGVbDUTP5q5n7uthoVt0YN7J6w4FdbERQYo4B
- 0MysNATFNZojc0/N+1cXDTErLzV/qgcp4FHsssOJaNMZWmTWy2CNNa6zuJzHYfRx+7/Y
- qbtck7bTJ0w/bAdBDNf/SMYDTUj7UiFswLXxX4iEPjxFX2fB5ThMH6+18dh8WBBbBHgD
- W+X+qSdoHCvXwyoPvAjHxQy4P5Vo1QDui8v8T0D85dtQwqT+U+WsIaIViCKCvBPTt6xH
- 1XqPaCynXcrdbW7L5gt6JgO9qfVDBNK9JpI1vfyKkQEJo3ze2Yz6ASRS4C/2lOya2nYU 6Q== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qpqctu55b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 09:11:43 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34M9BhQE015495
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 09:11:43 GMT
-Received: from [10.214.66.81] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 22 May
- 2023 02:11:41 -0700
-Message-ID: <a6c48095-179a-7e72-a282-fbc28af374cb@quicinc.com>
-Date:   Mon, 22 May 2023 14:41:38 +0530
+        Mon, 22 May 2023 05:13:37 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AFBCA8
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 02:13:35 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f41dceb93bso37275075e9.1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 02:13:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684746814; x=1687338814;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=YKgXV6Eqt7e9wbsOhVGiZn1i0paFmpFE1O+wKjTUvcM=;
+        b=xbU1ZHCIkRn+wpg6joNrX+CCDZuaqrqcWFbE4whS16TXcfAyi+2XM1PIueo3mjCNg3
+         VDFVXsu+RqwwFy0Y6mNHt8Bw6ldqNYM20YgSJztyqVhiCsCmrp2lF0bjxGs84K+k5M8K
+         8LwdR4cczJrcf76jXglOVJMWsmGA3KjfRBXRURJTGO7spaEAbQV+SwAT3APaOkAkUDpL
+         88XRCzRSE4ylCTXlLndYC3CDr+8g3JJ7RN8vt99o7NFszyqdfCC8yMRwB5AAkW+Y5+Xv
+         302APYt6HbYSZ+p8X8yLbGQbL8nuN08qT4/OEZccaqlFPjitublFzfgSi2YmQGiE6eKy
+         LFFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684746814; x=1687338814;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YKgXV6Eqt7e9wbsOhVGiZn1i0paFmpFE1O+wKjTUvcM=;
+        b=LdEFhybFVTXV5y4UfP6wxhMmPT68sdxL6mYak4KkLYyxTHeAXZPcQ3CzMB84FBr64f
+         Klzkx8PmtolXeet6n7wucAqgaXKdOp99Cr9RvsL7An6oXi8WmvfHHsc2cmryJzssbwTs
+         YC7kbBWBnydRk0bsJiYg91hjRQrqN1AyTF6btzZlHDhcqXC+pKff0fdKKoWvQiK3JP0o
+         vgCP8G1IFlezQGDyl+G3+qzoo3eslp8iGMbihi0Gem0zxd36OjMVY4dccN3ap8Yb478C
+         Oi7g5Rs4/FZ037521w7vk2ei8tQQNSwJpiu6DixXAwU6/TraKRq8ND1w/4It/em21t4n
+         PWqA==
+X-Gm-Message-State: AC+VfDzEA534HkX9nVvPoKoX06vvbAMtTqwS0WWBuh82A4Lj4DtxBnbX
+        LkCiEFJgt0hsEyHb06MTSW27sw==
+X-Google-Smtp-Source: ACHHUZ4tl9hIiaYrPnvfLErUtaqHX9JoPN2VQFkE/GvJVcKQHTRLovjvpbNTgKy2F/bKET1p+iEkNg==
+X-Received: by 2002:a7b:c843:0:b0:3f5:d313:db5e with SMTP id c3-20020a7bc843000000b003f5d313db5emr6698561wml.15.1684746813835;
+        Mon, 22 May 2023 02:13:33 -0700 (PDT)
+Received: from [192.168.27.65] (home.beaume.starnux.net. [82.66.176.246])
+        by smtp.gmail.com with ESMTPSA id z24-20020a05600c221800b003f31d44f0cbsm10776420wml.29.2023.05.22.02.13.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 May 2023 02:13:33 -0700 (PDT)
+Message-ID: <7a9c58b4-e99c-593d-1825-56c698379d09@linaro.org>
+Date:   Mon, 22 May 2023 11:13:32 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3] firmware: qcom_scm: Clear download bit during reboot
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+From:   neil.armstrong@linaro.org
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH] drm/panel: Support for Starry-himax83102-j02 TDDI
+ MIPI-DSI panel
 Content-Language: en-US
-To:     Robert Marko <robimarko@gmail.com>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1678979666-551-1-git-send-email-quic_mojha@quicinc.com>
- <76943268-3982-deaf-9736-429dd51e01b0@gmail.com>
- <0e645486-f0be-4468-18ad-9e49088dee0b@quicinc.com>
- <CAOX2RU4xPNq4-OHUoMZtfZu05QEdpk1UtawZb1xQMrtc5ao84Q@mail.gmail.com>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <CAOX2RU4xPNq4-OHUoMZtfZu05QEdpk1UtawZb1xQMrtc5ao84Q@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Cong Yang <yangcong5@huaqin.corp-partner.google.com>,
+        sam@ravnborg.org, daniel@ffwll.ch, dianders@google.com,
+        hsinyi@google.com
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230519032316.3464732-1-yangcong5@huaqin.corp-partner.google.com>
+Organization: Linaro Developer Services
+In-Reply-To: <20230519032316.3464732-1-yangcong5@huaqin.corp-partner.google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: Y5fixjq7Ene7l2eLcTLAEF-0ADoh_eKI
-X-Proofpoint-GUID: Y5fixjq7Ene7l2eLcTLAEF-0ADoh_eKI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-22_06,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 bulkscore=0
- suspectscore=0 impostorscore=0 malwarescore=0 priorityscore=1501
- mlxlogscore=999 clxscore=1015 lowpriorityscore=0 phishscore=0 mlxscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305220078
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,145 +81,170 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
+On 19/05/2023 05:23, Cong Yang wrote:
+> The Starry-himax83102-j02 panel is a TDDI IC. From the datasheet[1],
+> it seems that the touch can communicate successfully only when the RST
+> signal is high. Since i2c_hid_core_probe comes after boe_panel_prepare
+> let's set the default high for RST at boe_panel_add.
 
-On 5/22/2023 2:29 PM, Robert Marko wrote:
-> On Mon, 22 May 2023 at 08:11, Mukesh Ojha <quic_mojha@quicinc.com> wrote:
->>
->>
->>
->> On 5/18/2023 3:45 PM, Robert Marko wrote:
->>>
->>> On 16. 03. 2023. 16:14, Mukesh Ojha wrote:
->>>> During normal restart of a system download bit should
->>>> be cleared irrespective of whether download mode is
->>>> set or not.
->>>>
->>>> Fixes: 8c1b7dc9ba22 ("firmware: qcom: scm: Expose download-mode control")
->>>> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
->>>
->>> Hi, this has been backported to 5.15.111, however it seems to be
->>> breaking reboot
->>> on IPQ4019 by causing the board to then hang in SBL with:
->>> root@OpenWrt:/# reboot
->>> root@OpenWrt:/# [   76.473541] device lan1 left promiscuous mode
->>> [   76.474204] br-lan: port 1(lan1) entered disabled state
->>> [   76.527975] device lan2 left promiscuous mode
->>> [   76.530301] br-lan: port 2(lan2) entered disabled state
->>> [   76.579376] device lan3 left promiscuous mode
->>> [   76.581698] br-lan: port 3(lan3) entered disabled state
->>> [   76.638434] device lan4 left promiscuous mode
->>> [   76.638777] br-lan: port 4(lan4) entered disabled state
->>> [   76.978489] qca8k-ipq4019 c000000.switch wan: Link is Down
->>> [   76.978883] device eth0 left promiscuous mode
->>> [   76.987077] ipqess-edma c080000.ethernet eth0: Link is Down
->>> [
->>> Format: Log Type - Time(microsec) - Message - Optional Info
->>> Log Type: B - Since Boot(Power On Reset),  D - Delta,  S - Statistic
->>> S - QC_IMAGE_VERSION_STRING=BOOT.BF.3.1.1-00123
->>> S - IMAGE_VARIANT_STRING=DAABANAZA
->>> S - OEM_IMAGE_VERSION_STRING=CRM
->>> S - Boot Config, 0x00000021
->>> S - Reset status Config, 0x00000010
->>> S - Core 0 Frequency, 0 MHz
->>> B -       261 - PBL, Start
->>> B -      1339 - bootable_media_detect_entry, Start
->>> B -      1679 - bootable_media_detect_success, Start
->>> B -      1693 - elf_loader_entry, Start
->>> B -      5076 - auth_hash_seg_entry, Start
->>> B -      7223 - auth_hash_seg_exit, Start
->>> B -    578349 - elf_segs_hash_verify_entry, Start
->>> B -    696356 - PBL, End
->>> B -    696380 - SBL1, Start
->>> B -    787236 - pm_device_init, Start
->>> D -         7 - pm_device_init, Delta
->>> B -    788701 - boot_flash_init, Start
->>> D -     52782 - boot_flash_init, Delta
->>> B -    845625 - boot_config_data_table_init, Start
->>> D -      3836 - boot_config_data_table_init, Delta - (419 Bytes)
->>> B -    852841 - clock_init, Start
->>> D -      7566 - clock_init, Delta
->>> B -    864883 - CDT version:2,Platform ID:9,Major ID:0,Minor
->>> ID:0,Subtype:64
->>> B -    868413 - sbl1_ddr_set_params, Start
->>> B -    873402 - cpr_init, Start
->>> D -         2 - cpr_init, Delta
->>> B -    877842 - Pre_DDR_clock_init, Start
->>> D -         4 - Pre_DDR_clock_init, Delta
->>> D -     13234 - sbl1_ddr_set_params, Delta
->>> B -    891155 - pm_driver_init, Start
->>> D -         2 - pm_driver_init, Delta
->>> B -    909105 - Image Load, Start
->>> B -   1030210 - Boot error ocuured!. Error code: 303d
->>>
->>> Reverting the commit fixes rebooting.
->>
->> Hi Robert,
->>
->> Can you check if disable SDI [1] works with this issue
->>
->> https://lore.kernel.org/linux-arm-msm/20230518140224.2248782-1-robimarko@gmail.com/
->>
->> [1]
->>
->>
->> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
->> index fde33acd46b7..01496ceb7136 100644
->> --- a/drivers/firmware/qcom_scm.c
->> +++ b/drivers/firmware/qcom_scm.c
->> @@ -1508,6 +1508,7 @@ static int qcom_scm_probe(struct platform_device
->> *pdev)
->>    static void qcom_scm_shutdown(struct platform_device *pdev)
->>    {
->>           /* Clean shutdown, disable download mode to allow normal restart */
->> +       qcom_scm_disable_sdi();
->>           qcom_scm_set_download_mode(false);
->>    }
-> 
-> Hi,
-> I can confirm reboot works this way as well.
-
-That's great, So, i don't need to revert the patch and you can
-add this in your patch without target specific check ?
-
--- Mukesh
+This is a higher level problem, here you basically never set the reset signal to low,
+so instead make the reset signal optional and handle the reset elseshere like in a gpio-hog.
 
 > 
-> Regards,
-> Robert
->>
->>
->> -- Mukesh
->>
->>>
->>> Regards,
->>> Robert
->>>
->>>> ---
->>>> Changes in v3:
->>>>     - Added Fixes tag.
->>>>     - Removed it from below patch series, as it makes sense to go this
->>>> independently.
->>>>
->>>> https://lore.kernel.org/lkml/1677664555-30191-1-git-send-email-quic_mojha@quicinc.com/
->>>>
->>>> Changes in v2:
->>>>     - No change.
->>>>
->>>>    drivers/firmware/qcom_scm.c | 3 +--
->>>>    1 file changed, 1 insertion(+), 2 deletions(-)
->>>>
->>>> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
->>>> index 468d4d5..3e020d1 100644
->>>> --- a/drivers/firmware/qcom_scm.c
->>>> +++ b/drivers/firmware/qcom_scm.c
->>>> @@ -1506,8 +1506,7 @@ static int qcom_scm_probe(struct platform_device
->>>> *pdev)
->>>>    static void qcom_scm_shutdown(struct platform_device *pdev)
->>>>    {
->>>>        /* Clean shutdown, disable download mode to allow normal restart */
->>>> -    if (download_mode)
->>>> -        qcom_scm_set_download_mode(false);
->>>> +    qcom_scm_set_download_mode(false);
->>>>    }
->>>>    static const struct of_device_id qcom_scm_dt_match[] = {
+> [1]: https://github.com/HimaxSoftware/Doc/tree/main/Himax_Chipset_Power_Sequence
+
+PLease update the DT bindings first when introducing a new compatible.
+
+Neil
+
+> 
+> Signed-off-by: Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+> ---
+>   .../gpu/drm/panel/panel-boe-tv101wum-nl6.c    | 103 +++++++++++++++++-
+>   1 file changed, 102 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c b/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
+> index 783234ae0f57..0d325fc42bc4 100644
+> --- a/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
+> +++ b/drivers/gpu/drm/panel/panel-boe-tv101wum-nl6.c
+> @@ -36,6 +36,7 @@ struct panel_desc {
+>   	const struct panel_init_cmd *init_cmds;
+>   	unsigned int lanes;
+>   	bool discharge_on_disable;
+> +	int enable_gpio_init_value;
+>   };
+>   
+>   struct boe_panel {
+> @@ -75,6 +76,75 @@ struct panel_init_cmd {
+>   	.len = sizeof((char[]){__VA_ARGS__}), \
+>   	.data = (char[]){__VA_ARGS__} }
+>   
+> +static const struct panel_init_cmd starry_himax83102_j02_init_cmd[] = {
+> +	_INIT_DCS_CMD(0xB9, 0x83, 0x10, 0x21, 0x55, 0x00),
+> +	_INIT_DCS_CMD(0xB1, 0x2C, 0xB5, 0xB5, 0x31, 0xF1, 0x31, 0xD7, 0x2F, 0x36, 0x36, 0x36, 0x36, 0x1A, 0x8B, 0x11,
+> +		0x65, 0x00, 0x88, 0xFA, 0xFF, 0xFF, 0x8F, 0xFF, 0x08, 0x74, 0x33),
+> +	_INIT_DCS_CMD(0xB2, 0x00, 0x47, 0xB0, 0x80, 0x00, 0x12, 0x72, 0x3C, 0xA3, 0x03, 0x03, 0x00, 0x00, 0x88, 0xF5),
+> +	_INIT_DCS_CMD(0xB4, 0x76, 0x76, 0x76, 0x76, 0x76, 0x76, 0x63, 0x5C, 0x63, 0x5C, 0x01, 0x9E),
+> +	_INIT_DCS_CMD(0xE9, 0xCD),
+> +	_INIT_DCS_CMD(0xBA, 0x84),
+> +	_INIT_DCS_CMD(0xE9, 0x3F),
+> +	_INIT_DCS_CMD(0xBC, 0x1B, 0x04),
+> +	_INIT_DCS_CMD(0xBE, 0x20),
+> +	_INIT_DCS_CMD(0xBF, 0xFC, 0xC4),
+> +	_INIT_DCS_CMD(0xC0, 0x36, 0x36, 0x22, 0x11, 0x22, 0xA0, 0x61, 0x08, 0xF5, 0x03),
+> +	_INIT_DCS_CMD(0xE9, 0xCC),
+> +	_INIT_DCS_CMD(0xC7, 0x80),
+> +	_INIT_DCS_CMD(0xE9, 0x3F),
+> +	_INIT_DCS_CMD(0xE9, 0xC6),
+> +	_INIT_DCS_CMD(0xC8, 0x97),
+> +	_INIT_DCS_CMD(0xE9, 0x3F),
+> +	_INIT_DCS_CMD(0xC9, 0x00, 0x1E, 0x13, 0x88, 0x01),
+> +	_INIT_DCS_CMD(0xCB, 0x08, 0x13, 0x07, 0x00, 0x0F, 0x33),
+> +	_INIT_DCS_CMD(0xCC, 0x02),
+> +	_INIT_DCS_CMD(0xE9, 0xC4),
+> +	_INIT_DCS_CMD(0xD0, 0x03),
+> +	_INIT_DCS_CMD(0xE9, 0x3F),
+> +	_INIT_DCS_CMD(0xD1, 0x37, 0x06, 0x00, 0x02, 0x04, 0x0C, 0xFF),
+> +	_INIT_DCS_CMD(0xD2, 0x1F, 0x11, 0x1F),
+> +	_INIT_DCS_CMD(0xD3, 0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x00, 0x08, 0x37, 0x47, 0x34, 0x3B, 0x12, 0x12, 0x03,
+> +		0x03, 0x32, 0x10, 0x10, 0x00, 0x10, 0x32, 0x10, 0x08, 0x00, 0x08, 0x32, 0x17, 0x94, 0x07, 0x94, 0x00, 0x00),
+> +	_INIT_DCS_CMD(0xD5, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x19, 0x19, 0x40, 0x40, 0x1A, 0x1A,
+> +		0x1B, 0x1B, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x20, 0x21, 0x28, 0x29, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18),
+> +	_INIT_DCS_CMD(0xD6, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x40, 0x40, 0x19, 0x19, 0x1A, 0x1A,
+> +		0x1B, 0x1B, 0x07, 0x06, 0x05, 0x04, 0x03, 0x02, 0x01, 0x00, 0x29, 0x28, 0x21, 0x20, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18),
+> +	_INIT_DCS_CMD(0xD8, 0xAA, 0xBA, 0xEA, 0xAA, 0xAA, 0xA0, 0xAA, 0xBA, 0xEA, 0xAA, 0xAA, 0xA0, 0xAA, 0xBA, 0xEA, 0xAA,
+> +		0xAA, 0xA0, 0xAA, 0xBA, 0xEA, 0xAA, 0xAA, 0xA0, 0xAA, 0xBA, 0xEA, 0xAA, 0xAA, 0xA0, 0xAA, 0xBA, 0xEA, 0xAA, 0xAA, 0xA0),
+> +	_INIT_DCS_CMD(0xE0, 0x00, 0x09, 0x14, 0x1E, 0x26, 0x48, 0x61, 0x67, 0x6C, 0x67, 0x7D, 0x7F, 0x80, 0x8B, 0x87, 0x8F, 0x98, 0xAB,
+> +		0xAB, 0x55, 0x5C, 0x68, 0x73, 0x00, 0x09, 0x14, 0x1E, 0x26, 0x48, 0x61, 0x67, 0x6C, 0x67, 0x7D, 0x7F, 0x80, 0x8B, 0x87, 0x8F, 0x98, 0xAB, 0xAB, 0x55, 0x5C, 0x68, 0x73),
+> +	_INIT_DCS_CMD(0xE7, 0x0E, 0x10, 0x10, 0x21, 0x2B, 0x9A, 0x02, 0x54, 0x9A, 0x14, 0x14, 0x00, 0x00, 0x00, 0x00, 0x12, 0x05, 0x02, 0x02, 0x10),
+> +	_INIT_DCS_CMD(0xBD, 0x01),
+> +	_INIT_DCS_CMD(0xB1, 0x01, 0xBF, 0x11),
+> +	_INIT_DCS_CMD(0xCB, 0x86),
+> +	_INIT_DCS_CMD(0xD2, 0x3C, 0xFA),
+> +	_INIT_DCS_CMD(0xE9, 0xC5),
+> +	_INIT_DCS_CMD(0xD3, 0x00, 0x00, 0x00, 0x00, 0x80, 0x0C, 0x01),
+> +	_INIT_DCS_CMD(0xE9, 0x3F),
+> +	_INIT_DCS_CMD(0xE7, 0x02, 0x00, 0x28, 0x01, 0x7E, 0x0F, 0x7E, 0x10, 0xA0, 0x00, 0x00, 0x20, 0x40, 0x50, 0x40),
+> +	_INIT_DCS_CMD(0xBD, 0x02),
+> +	_INIT_DCS_CMD(0xD8, 0xFF, 0xFF, 0xBF, 0xFE, 0xAA, 0xA0, 0xFF, 0xFF, 0xBF, 0xFE, 0xAA, 0xA0),
+> +	_INIT_DCS_CMD(0xE7, 0xFE, 0x04, 0xFE, 0x04, 0xFE, 0x04, 0x03, 0x03, 0x03, 0x26, 0x00, 0x26, 0x81, 0x02, 0x40, 0x00, 0x20, 0x9E, 0x04, 0x03, 0x02, 0x01, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00),
+> +	_INIT_DCS_CMD(0xBD, 0x03),
+> +	_INIT_DCS_CMD(0xE9, 0xC6),
+> +	_INIT_DCS_CMD(0xB4, 0x03, 0xFF, 0xF8),
+> +	_INIT_DCS_CMD(0xE9, 0x3F),
+> +	_INIT_DCS_CMD(0xD8, 0x00, 0x2A, 0xAA, 0xA8, 0x00, 0x00, 0x00, 0x2A, 0xAA, 0xA8, 0x00, 0x00, 0x00, 0x3F, 0xFF, 0xFC, 0x00, 0x00, 0x00, 0x3F, 0xFF, 0xFC, 0x00, 0x00, 0x00, 0x2A, 0xAA, 0xA8, 			0x00, 0x00, 0x00, 0x2A, 0xAA, 0xA8, 0x00, 0x00),
+> +	_INIT_DCS_CMD(0xBD, 0x00),
+> +	_INIT_DCS_CMD(0xE9, 0xC4),
+> +	_INIT_DCS_CMD(0xBA, 0x96),
+> +	_INIT_DCS_CMD(0xE9, 0x3F),
+> +	_INIT_DCS_CMD(0xBD, 0x01),
+> +	_INIT_DCS_CMD(0xE9, 0xC5),
+> +	_INIT_DCS_CMD(0xBA, 0x4F),
+> +	_INIT_DCS_CMD(0xE9, 0x3F),
+> +	_INIT_DCS_CMD(0xBD, 0x00),
+> +	_INIT_DCS_CMD(0x11),
+> +	_INIT_DELAY_CMD(120),
+> +	_INIT_DCS_CMD(0x29),
+> +	{},
+> +};
+> +
+>   static const struct panel_init_cmd boe_tv110c9m_init_cmd[] = {
+>   	_INIT_DCS_CMD(0xFF, 0x20),
+>   	_INIT_DCS_CMD(0xFB, 0x01),
+> @@ -1620,6 +1690,34 @@ static const struct panel_desc starry_qfh032011_53g_desc = {
+>   	.init_cmds = starry_qfh032011_53g_init_cmd,
+>   };
+>   
+> +static const struct drm_display_mode starry_himax83102_j02_default_mode = {
+> +	.clock = 161600,
+> +	.hdisplay = 1200,
+> +	.hsync_start = 1200 + 40,
+> +	.hsync_end = 1200 + 40 + 20,
+> +	.htotal = 1200 + 40 + 20 + 40,
+> +	.vdisplay = 1920,
+> +	.vsync_start = 1920 + 116,
+> +	.vsync_end = 1920 + 116 + 8,
+> +	.vtotal = 1920 + 116 + 8 + 12,
+> +	.type = DRM_MODE_TYPE_DRIVER | DRM_MODE_TYPE_PREFERRED,
+> +};
+> +
+> +static const struct panel_desc starry_himax83102_j02_desc = {
+> +	.modes = &starry_himax83102_j02_default_mode,
+> +	.bpc = 8,
+> +	.size = {
+> +		.width_mm = 141,
+> +		.height_mm = 226,
+> +	},
+> +	.lanes = 4,
+> +	.format = MIPI_DSI_FMT_RGB888,
+> +	.mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_MODE_VIDEO_SYNC_PULSE |
+> +		      MIPI_DSI_MODE_LPM,
+> +	.init_cmds = starry_himax83102_j02_init_cmd,
+> +	.enable_gpio_init_value = 1,
+> +};
+> +
+>   static int boe_panel_get_modes(struct drm_panel *panel,
+>   			       struct drm_connector *connector)
+>   {
+> @@ -1694,7 +1792,7 @@ static int boe_panel_add(struct boe_panel *boe)
+>   		return PTR_ERR(boe->enable_gpio);
+>   	}
+>   
+> -	gpiod_set_value(boe->enable_gpio, 0);
+> +	gpiod_set_value(boe->enable_gpio, boe->desc->enable_gpio_init_value);
+>   
+>   	drm_panel_init(&boe->base, dev, &boe_panel_funcs,
+>   		       DRM_MODE_CONNECTOR_DSI);
+> @@ -1793,6 +1891,9 @@ static const struct of_device_id boe_of_match[] = {
+>   	{ .compatible = "starry,2081101qfh032011-53g",
+>   	  .data = &starry_qfh032011_53g_desc
+>   	},
+> +	{ .compatible = "starry,himax83102-j02",
+> +	  .data = &starry_himax83102_j02_desc
+> +	},
+>   	{ /* sentinel */ }
+>   };
+>   MODULE_DEVICE_TABLE(of, boe_of_match);
+
