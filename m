@@ -2,80 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD58070BE80
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 14:38:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C1FD70BE68
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 14:35:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233747AbjEVMig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 08:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42258 "EHLO
+        id S233208AbjEVMfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 08:35:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230489AbjEVMic (ORCPT
+        with ESMTP id S234413AbjEVMf0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 08:38:32 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DC266C5;
-        Mon, 22 May 2023 05:38:03 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 00FC511FB;
-        Mon, 22 May 2023 05:31:12 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.25.61])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2C47A3F59C;
-        Mon, 22 May 2023 05:30:26 -0700 (PDT)
-Date:   Mon, 22 May 2023 13:30:16 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, akiyks@gmail.com, linux-doc@vger.kernel.org,
-        kernel-team@meta.com, Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Subject: Re: [PATCH locking/atomic 19/19] docs: Add atomic operations to the
- driver basic API documentation
-Message-ID: <ZGtgUGSmlWk+5Pow@FVFF77S0Q05N>
-References: <19135936-06d7-4705-8bc8-bb31c2a478ca@paulmck-laptop>
- <20230510181717.2200934-19-paulmck@kernel.org>
- <202305161433.C015F9E@keescook>
- <d9dc191c-1b65-47a7-a4f7-b89aad08ad7a@paulmck-laptop>
+        Mon, 22 May 2023 08:35:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F96FAC
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 05:33:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684758655;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=XLKVwpsofT3fO0KfbhEhMNwUy6j+Hh9Xz3u/5JzJISE=;
+        b=VrQZEWcwHaXvKGFIvkldpISREdu5SG3OLca38Ti4SRnijzGBg1peBWC2B+JScu3kW4Z9gZ
+        r3H1nLuHPwvWwRIwzRvjiDWm+U3XTKimhR0n1BGWD+f7F+s4Y/lb/qqeGe6ldRgxyI6Dp1
+        6tPBlBKolsf8slvyaOPQMaFGvV3Etvk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-612-y0yXY8u3NEe6cP21B_llfw-1; Mon, 22 May 2023 08:30:50 -0400
+X-MC-Unique: y0yXY8u3NEe6cP21B_llfw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D051B185A78F;
+        Mon, 22 May 2023 12:30:49 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.202])
+        by smtp.corp.redhat.com (Postfix) with SMTP id BD2D7407DEC3;
+        Mon, 22 May 2023 12:30:46 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Mon, 22 May 2023 14:30:33 +0200 (CEST)
+Date:   Mon, 22 May 2023 14:30:29 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     Mike Christie <michael.christie@oracle.com>
+Cc:     linux@leemhuis.info, nicolas.dichtel@6wind.com, axboe@kernel.dk,
+        ebiederm@xmission.com, torvalds@linux-foundation.org,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, mst@redhat.com,
+        sgarzare@redhat.com, jasowang@redhat.com, stefanha@redhat.com,
+        brauner@kernel.org
+Subject: Re: [PATCH 3/3] fork, vhost: Use CLONE_THREAD to fix freezer/ps
+ regression
+Message-ID: <20230522123029.GA22159@redhat.com>
+References: <20230522025124.5863-1-michael.christie@oracle.com>
+ <20230522025124.5863-4-michael.christie@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d9dc191c-1b65-47a7-a4f7-b89aad08ad7a@paulmck-laptop>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230522025124.5863-4-michael.christie@oracle.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 03:10:44AM -0700, Paul E. McKenney wrote:
-> On Tue, May 16, 2023 at 02:33:29PM -0700, Kees Cook wrote:
-> > On Wed, May 10, 2023 at 11:17:17AM -0700, Paul E. McKenney wrote:
-> > > Add the include/linux/atomic/atomic-arch-fallback.h file to the
-> > > driver-api/basics.rst in order to provide documentation for the Linux
-> > > kernel's atomic operations.
-> > > 
-> > > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > 
-> > Reviewed-by: Kees Cook <keescook@chromium.org>
-> 
-> Thank you, Kees, I will apply on my next rebase.
-> 
-> Given Mark's ongoing atomics rework, a later version of this patch is
-> likely to remove ".. kernel-doc:: arch/x86/include/asm/atomic.h" from
-> that same file.  (One of the benefits of Mark's rework is that all the
-> kernel-doc headers can be in the same file.)
+Confused, please help...
 
-FWIW, I retained that in the series I just posted at:
+On 05/21, Mike Christie wrote:
+>
+> --- a/drivers/vhost/vhost.c
+> +++ b/drivers/vhost/vhost.c
+> @@ -338,6 +338,7 @@ static int vhost_worker(void *data)
+>  	struct vhost_worker *worker = data;
+>  	struct vhost_work *work, *work_next;
+>  	struct llist_node *node;
+> +	bool dead = false;
+>
+>  	for (;;) {
+>  		/* mb paired w/ kthread_stop */
+> @@ -349,8 +350,22 @@ static int vhost_worker(void *data)
+>  		}
+>
+>  		node = llist_del_all(&worker->work_list);
+> -		if (!node)
+> +		if (!node) {
+>  			schedule();
+> +			/*
+> +			 * When we get a SIGKILL our release function will
+> +			 * be called. That will stop new IOs from being queued
+> +			 * and check for outstanding cmd responses. It will then
+> +			 * call vhost_task_stop to tell us to return and exit.
+> +			 */
 
-  https://lore.kernel.org/lkml/20230522122429.1915021-1-mark.rutland@arm.com/
+But who will call the release function / vhost_task_stop() and when this
+will happen after this thread gets SIGKILL ?
 
-... which drops ".. kernel-doc:: arch/x86/include/asm/atomic.h" as mentioned
-above.
+> +			if (!dead && signal_pending(current)) {
+> +				struct ksignal ksig;
+> +
+> +				dead = get_signal(&ksig);
+> +				if (dead)
+> +					clear_thread_flag(TIF_SIGPENDING);
 
-Please let me know if you'd like that R-b dropped.
+If you do clear_thread_flag(TIF_SIGPENDING), then why do we need 1/3 ?
 
-Thanks,
-Mark.
+
+Also. Suppose that vhost_worker() dequeues SIGKILL and clears TIF_SIGPENDING.
+
+SIGSTOP, PTRACE_INTERRUPT, freezer can come and set TIF_SIGPENDING again.
+In this case the main for (;;) loop will spin without sleeping until
+vhost_task_should_stop() becomes true?
+
+Oleg.
+
