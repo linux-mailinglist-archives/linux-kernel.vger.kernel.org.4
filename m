@@ -2,106 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22BE770BF47
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F93F70BF4F
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:11:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234211AbjEVNKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 09:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37442 "EHLO
+        id S233431AbjEVNLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 09:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230489AbjEVNKo (ORCPT
+        with ESMTP id S234235AbjEVNLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 09:10:44 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2254292;
-        Mon, 22 May 2023 06:10:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC3F96144C;
-        Mon, 22 May 2023 13:10:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E70FDC4339C;
-        Mon, 22 May 2023 13:10:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684761043;
-        bh=Q6nXsGuYfXF82B6FIh74i5ECEIvwWrfYD9ajsFfKZBM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JhiC5dFtgZii/kGOkEqpVZsjEENlc24xthUKpATgER4t2rOo7aYz+8mAI8bojgu4T
-         uKrzvjYn+Y9CMKALXlJvqrLOZTApT8u9Iaoh1BsZXLcGIi3LdboT7oODyHP9BjCPhD
-         2YLjB2YwKbYaqeLp4d4OkBJAWdSr/USnRzYw2ZLPSnJgzBAb7Q9gHkvwroSdcEDqFV
-         ESec46JeLlhMbW1QI0W6T3WzEfvdCwlV4ovs79NKNlVqg6iPhZWo3NC0fnC7QT+95d
-         GNP6K8mOFH3pvyXaN7CKzBv61njnfUAqL/G0x0UIZyX7JY2e1bXHtAOrFlJrh7lrVm
-         vIlbeH950pCMA==
-Date:   Mon, 22 May 2023 14:10:37 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     zhuyinbo <zhuyinbo@loongson.cn>
-Cc:     Rob Herring <robh+dt@kernel.org>,
+        Mon, 22 May 2023 09:11:40 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86E81C4;
+        Mon, 22 May 2023 06:11:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1684761099; x=1716297099;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xpyLIb2+OMD3ly4N+A5YZqQ6cY7XOV1lf25zcvDcWtE=;
+  b=Uf0mY18Ip7drzCzW44E44SYDFYH8AmObU0GzPYEKg4Ud3cWBhCMKVhYH
+   8Ag/AeUmOtVjOe19KOf1c5Go+ZDPghaSmj2b6KnRZPuo6tREIQDAcCqHV
+   9ijGwhOfwsZsy/eLhhv87+rsZyrAA3RWfshhoO/aJK6k1NT/HplqmQkfh
+   I4tFO+2RuoIT0r+VfRu/9vWonCxIzFvNS7GLi+E09c874J+iDFyID6P8q
+   wCK419LwqNbYB6hvxpkTx8nrUqkQ3OWLNwpnyeT+BfaJ9+9P4/5/jxJms
+   8N4n4Tm4R3DW74pTI3OtkYGiZ5Neogm8utikuux0y4eZBM6dZf4sZJMG1
+   A==;
+X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
+   d="asc'?scan'208";a="153308173"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 May 2023 06:11:38 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 22 May 2023 06:11:36 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex03.mchp-main.com
+ (10.10.85.151) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Mon, 22 May 2023 06:11:34 -0700
+Date:   Mon, 22 May 2023 14:11:12 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Changhuang Liang <changhuang.liang@starfivetech.com>
+CC:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-Subject: Re: [PATCH v11 0/2] spi: loongson: add bus driver for the loongson
- spi
-Message-ID: <9f6672a2-4a39-4a34-9c2a-0257b05c9699@sirena.org.uk>
-References: <20230522071030.5193-1-zhuyinbo@loongson.cn>
- <3c15d22f-4f94-4cc5-96a8-f565e58c66b9@sirena.org.uk>
- <4dfa5245-d330-f432-e81e-163053687d42@loongson.cn>
- <a4afd330-6ffd-432e-a868-f8a19fddb47d@sirena.org.uk>
- <1e8c3e92-4043-11f2-e7a7-0bf4273c65d8@loongson.cn>
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jack Zhu <jack.zhu@starfivetech.com>,
+        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH v4 0/3] Add JH7110 MIPI DPHY RX support
+Message-ID: <20230522-extradite-nastily-c2a88cfd2f02@wendy>
+References: <20230412084540.295411-1-changhuang.liang@starfivetech.com>
+ <93d39956-25c9-971b-e73b-09c69e803341@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="LylT5SjI1jBuapnp"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="ueSz+7+usqbjXZtt"
 Content-Disposition: inline
-In-Reply-To: <1e8c3e92-4043-11f2-e7a7-0bf4273c65d8@loongson.cn>
-X-Cookie: HOST SYSTEM RESPONDING, PROBABLY UP...
+In-Reply-To: <93d39956-25c9-971b-e73b-09c69e803341@starfivetech.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---LylT5SjI1jBuapnp
-Content-Type: text/plain; charset=utf-8
+--ueSz+7+usqbjXZtt
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 22, 2023 at 09:07:47PM +0800, zhuyinbo wrote:
-> =E5=9C=A8 2023/5/22 =E4=B8=8B=E5=8D=887:56, Mark Brown =E5=86=99=E9=81=93:
+On Mon, May 22, 2023 at 09:00:04PM +0800, Changhuang Liang wrote:
+> On 2023/4/12 16:45, Changhuang Liang wrote:
+> > This patchset adds mipi dphy rx driver for the StarFive JH7110 SoC.
+> > It is used to transfer CSI camera data. The series has been tested on
+> > the VisionFive 2 board.
+> >=20
 
-> > What's causing problem is that you patched MAINTAINERS in both patches
-> > but also used the wrong subject line for the first patch so I was having
-> > to fix it up by hand every time.
+> Can you help to find the Vinod reviewed this patchset?
 
-> spi series patch apply failed,  then I have a look about your spi ci
-> tree and that what I need to do is just change the title of [1/2] patch
-> like this in next version ?  Correcting the title can solve the problem
-> of patch series apply failure in your tree ? actually, I don't reproduce
-> that apply faile issue in your current spi tree and for-next branch.
+I am sorry, but I have no idea what you mean.
+Are you asking if I can get Vinod to review the series?
 
-> spi: add loongson spi bindings
+Cheers,
+Conor.
 
-That's a good title.  The patches get reordered in the mailbox when I
-rewrite the title prior to applying them.
-
---LylT5SjI1jBuapnp
+--ueSz+7+usqbjXZtt
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRracwACgkQJNaLcl1U
-h9CKpgf+LMM6O00gE10SHDrZBRPdS+b0o9Y4hXcQsAKCjFi7yXfgasUsLgFi7nJn
-Qwve17EyC0vLxerRCqMVi1t+N9PTowFumbQKwSJRoRTiHsdu7rq75KoZZkoCg1X1
-UpGVJPiHyCTeV3OcncIBmguhM5a2XIX7JlJttk0KvCHSklOeIDB0aQmhtO2MEVb3
-jM8CGUNXGreo1aQml03BtNS/pVxx1sn+DG05GK2j/uGzQtpQObbScZHNAXDgFrIZ
-VOaIQsLcShlnHMRRvWMvP630q9+FJK8GQkbCPWTNa7iEyHg+4WvH57EVIvXkF/qV
-YD+g4W/Pa4Y6YTlWs1tZ8VieT/21kg==
-=hsT5
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGtp8AAKCRB4tDGHoIJi
+0oseAQC5Ema0k8zP3rAXvlOOucLhHBUucJkcO7G84GGXZOyIgwD/Z9jdZdiFz5Yf
+XgHWF5jAmdOU/G75KFDw9g6CW4IHZQo=
+=1M3+
 -----END PGP SIGNATURE-----
 
---LylT5SjI1jBuapnp--
+--ueSz+7+usqbjXZtt--
