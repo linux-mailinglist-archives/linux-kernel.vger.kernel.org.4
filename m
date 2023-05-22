@@ -2,110 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F100770B827
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:56:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7248870B82E
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:57:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232024AbjEVI4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 04:56:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40618 "EHLO
+        id S232693AbjEVI54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 04:57:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232628AbjEVI42 (ORCPT
+        with ESMTP id S232660AbjEVI50 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 04:56:28 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F89137
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 01:56:00 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-30950eecc1eso3528870f8f.0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 01:56:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684745759; x=1687337759;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=2g8LwJZM8KGfhtnoH1qIOIMLZ0KOrIyccEYwFZJvPJI=;
-        b=u/WPWtnLe1zhYynZyJx6cLlZmD7/iJhiZZferm/FeN2pTM0Sso2KIDyHuWyhCsIhyN
-         ft7HxRR5Nfk+kZZlfifi1EA7cfB8Afl/rJFmc6fzaHHStCN0HmqL4K8hazl8r2CJgARD
-         HU+x2yxZ6grpKPb3ADtqJsqIqwVL5yM4Uqv2Shs4Nygn1jTP+aT96e5aOFiOo1sp05xJ
-         NXONRxz1sYgETwrC8Av2gN2E4W7FO+HNjWSKn2AHvdaWckze+TETDwZf6TF0GHrnHxo9
-         HD3fheBk9CVQxKEO+zxlTfinSZ0XBYoujd4qj7SuoHLaNipr1ooTqwdPQSCdDAXbuoyH
-         dzkw==
+        Mon, 22 May 2023 04:57:26 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A16BB
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 01:56:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684745771;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=v4/mES/i+aWv5NPMCuzU07vDqmm6ywd8X/SsDFXQTQU=;
+        b=Gr2b8p9TY3nXinpqK8whWKU+Lgg6GoQqTkHm60SBsV2urGc/hVV+SCT8R957af8mTbVXTD
+        LaPSjmQtgtCoBQEtTBfNJMb7FpNOs+rWUU9RCAZ/Lk2bm4EnSxub/QNrqWtaeU6GIjTpPL
+        NslAo1EcO8BxOLLCsqefhRUp8d1Ooxg=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-248-_E38mbN7ONWk-1Zgt-Fzyg-1; Mon, 22 May 2023 04:56:10 -0400
+X-MC-Unique: _E38mbN7ONWk-1Zgt-Fzyg-1
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-616731c798dso20503156d6.1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 01:56:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684745759; x=1687337759;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2g8LwJZM8KGfhtnoH1qIOIMLZ0KOrIyccEYwFZJvPJI=;
-        b=T1S/D6mqZmgUQrUf6fbhRCOrRX3J8LD5zZxWRAW/4t+X3snwRs+a+4qeW6MNraOKq6
-         Cmu8kPYjF+ifuekVCOzZGVcg5dQ3R8QQ47Tztr3OiXEvncbBUClag5f/tM3LH30j/tuk
-         mAjUrfpolFufz37Maery7sakA2m2RSF6wnf2WTbRMEmLDUXu4sdI3SVv2NRpBlszyoMN
-         77z++xt6jRgwnBDdWwlW+LWUFlCAjqlXVzENhrWP3qjNphFZwscObJd+hRBMQD8lAjfZ
-         8G+9xHyvHSve/meFkobTV5rhuAuOXmGMSXDzP8AvKz8BY+f/2q9NZ/8Z38qii9ozeQVu
-         ZQKg==
-X-Gm-Message-State: AC+VfDw0fiNnFF/6IdJEr8/NIUkctiY3U9jNUMBUC5vPuXlgwUVwMQyH
-        cN/2swiN5jZVsMClnaJ0ce6xcQ==
-X-Google-Smtp-Source: ACHHUZ7gRgnuE/zET6SwgFQjgi6Lss+jLfYgRbSsHZFIEka9heDi5yUaGk0eucTuDO7GPW3aFwsktQ==
-X-Received: by 2002:adf:dd89:0:b0:306:45c0:f070 with SMTP id x9-20020adfdd89000000b0030645c0f070mr6842962wrl.39.1684745759560;
-        Mon, 22 May 2023 01:55:59 -0700 (PDT)
-Received: from [192.168.27.65] (home.beaume.starnux.net. [82.66.176.246])
-        by smtp.gmail.com with ESMTPSA id f5-20020a5d4dc5000000b002fe13ec49fasm6938803wru.98.2023.05.22.01.55.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 May 2023 01:55:59 -0700 (PDT)
-Message-ID: <c0932a06-175c-3294-98ec-b26e961e34c1@linaro.org>
-Date:   Mon, 22 May 2023 10:55:57 +0200
+        d=1e100.net; s=20221208; t=1684745769; x=1687337769;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=v4/mES/i+aWv5NPMCuzU07vDqmm6ywd8X/SsDFXQTQU=;
+        b=PM279t2O2+wjJM4ADTv67Iodym2GnvY0nmUWYT18sCWJpM7YOw3SDXa6hJGtZAJ344
+         UFq63LK5uTmztNP75GslZpkb2tDQoKZPoWKbWOt2mcOvYv0saJg5k8PGowocUDtFyecC
+         04ihDdpU6ooa+63ZkDxfZviVeO+U1p4qgwYuVKR7tRYhKmfcKqyJ+NCLnyEv1Jd9aN+S
+         HRnGBq1L83gBQe2l1u5jCL9bs6nMXpv1JarsM0u8uRcu3N0Rg+DbyTi+N01WnyRSNzbL
+         W4BL8pE0k+eU9zXyICt8omx/rNxbVJrokJjbgqFkYoZFlX2+S2JIJOvY/RQN+dHVrsyJ
+         R6Xw==
+X-Gm-Message-State: AC+VfDypSGNKfbpT3UCYIQRRyUwEnPfRBULObi2vK8o0LJuc0+xn1bNq
+        HLXJh9D9RAEdRKLyvSXAXdaedhuUE4VFSvh52uCrS+hAlQEClsvd/EMM7cJsPC3gRaVc4+vZeCu
+        N/zzPS5dFDw5zmX8L/0t4TtUMgd/JwoJ3
+X-Received: by 2002:ad4:574f:0:b0:61b:58ec:24c8 with SMTP id q15-20020ad4574f000000b0061b58ec24c8mr19041574qvx.10.1684745769593;
+        Mon, 22 May 2023 01:56:09 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6uniPtYnrTfdnta4PkKXkaaURbeQlrK+ltmlFW9A16ZWTL6u653yf9McI3kMPgTvMlDD4Mow==
+X-Received: by 2002:ad4:574f:0:b0:61b:58ec:24c8 with SMTP id q15-20020ad4574f000000b0061b58ec24c8mr19041550qvx.10.1684745769306;
+        Mon, 22 May 2023 01:56:09 -0700 (PDT)
+Received: from fedora (g2.ign.cz. [91.219.240.8])
+        by smtp.gmail.com with ESMTPSA id f28-20020ad4559c000000b0061f7cf8207asm1810803qvx.133.2023.05.22.01.56.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 01:56:08 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Michael Kelley <mikelley@microsoft.com>
+Cc:     mikelley@microsoft.com, kys@microsoft.com, haiyangz@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, catalin.marinas@arm.com,
+        will@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+        kvm@vger.kernel.org
+Subject: Re: [PATCH 1/2] x86/hyperv: Fix hyperv_pcpu_input_arg handling when
+ CPUs go online/offline
+In-Reply-To: <1684506832-41392-1-git-send-email-mikelley@microsoft.com>
+References: <1684506832-41392-1-git-send-email-mikelley@microsoft.com>
+Date:   Mon, 22 May 2023 10:56:05 +0200
+Message-ID: <87o7mczqvu.fsf@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-From:   neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 0/2] drm/panel: add fannal c3004 panel
-Content-Language: en-US
-To:     Paulo Pavacic <pavacic.p@gmail.com>, sam@ravnborg.org,
-        airlied@gmail.com, daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230519142456.2588145-1-pavacic.p@gmail.com>
-Organization: Linaro Developer Services
-In-Reply-To: <20230519142456.2588145-1-pavacic.p@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/05/2023 16:24, Paulo Pavacic wrote:
-> Fannal C3004 is a 2 lane MIPI DSI 480x800 panel which requires initialization with DSI DCS commands. After some commands delay is required.
+Michael Kelley <mikelley@microsoft.com> writes:
 
-By curiosity, on which board is this panel used ?
+> These commits
+>
+> a494aef23dfc ("PCI: hv: Replace retarget_msi_interrupt_params with hyperv_pcpu_input_arg")
+> 2c6ba4216844 ("PCI: hv: Enable PCI pass-thru devices in Confidential VMs")
+>
+> update the Hyper-V virtual PCI driver to use the hyperv_pcpu_input_arg
+> because that memory will be correctly marked as decrypted or encrypted
+> for all VM types (CoCo or normal). But problems ensue when CPUs in the
+> VM go online or offline after virtual PCI devices have been configured.
+>
+> When a CPU is brought online, the hyperv_pcpu_input_arg for that CPU is
+> initialized by hv_cpu_init() running under state CPUHP_AP_ONLINE_DYN.
+> But this state occurs after state CPUHP_AP_IRQ_AFFINITY_ONLINE, which
+> may call the virtual PCI driver and fault trying to use the as yet
+> uninitialized hyperv_pcpu_input_arg. A similar problem occurs in a CoCo
+> VM if the MMIO read and write hypercalls are used from state
+> CPUHP_AP_IRQ_AFFINITY_ONLINE.
+>
+> When a CPU is taken offline, IRQs may be reassigned in state
+> CPUHP_TEARDOWN_CPU. Again, the virtual PCI driver may fault trying to
+> use the hyperv_pcpu_input_arg that has already been freed by a
+> higher state.
+>
+> Fix the onlining problem by adding state CPUHP_AP_HYPERV_ONLINE
+> immediately after CPUHP_AP_ONLINE_IDLE (similar to CPUHP_AP_KVM_ONLINE)
+> and before CPUHP_AP_IRQ_AFFINITY_ONLINE. Use this new state for
+> Hyper-V initialization so that hyperv_pcpu_input_arg is allocated
+> early enough.
+>
+> Fix the offlining problem by not freeing hyperv_pcpu_input_arg when
+> a CPU goes offline. Retain the allocated memory, and reuse it if
+> the CPU comes back online later.
+>
+> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+> ---
+>  arch/x86/hyperv/hv_init.c  |  2 +-
+>  drivers/hv/hv_common.c     | 48 +++++++++++++++++++++++-----------------------
+>  include/linux/cpuhotplug.h |  1 +
+>  3 files changed, 26 insertions(+), 25 deletions(-)
+>
+> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
+> index a5f9474..6c04b52 100644
+> --- a/arch/x86/hyperv/hv_init.c
+> +++ b/arch/x86/hyperv/hv_init.c
+> @@ -416,7 +416,7 @@ void __init hyperv_init(void)
+>  			goto free_vp_assist_page;
+>  	}
+>  
+> -	cpuhp = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "x86/hyperv_init:online",
+> +	cpuhp = cpuhp_setup_state(CPUHP_AP_HYPERV_ONLINE, "x86/hyperv_init:online",
+>  				  hv_cpu_init, hv_cpu_die);
+>  	if (cpuhp < 0)
+>  		goto free_ghcb_page;
+> diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
+> index 64f9cec..4c5cee4 100644
+> --- a/drivers/hv/hv_common.c
+> +++ b/drivers/hv/hv_common.c
+> @@ -364,13 +364,20 @@ int hv_common_cpu_init(unsigned int cpu)
+>  	flags = irqs_disabled() ? GFP_ATOMIC : GFP_KERNEL;
+>  
+>  	inputarg = (void **)this_cpu_ptr(hyperv_pcpu_input_arg);
+> -	*inputarg = kmalloc(pgcount * HV_HYP_PAGE_SIZE, flags);
+> -	if (!(*inputarg))
+> -		return -ENOMEM;
+>  
+> -	if (hv_root_partition) {
+> -		outputarg = (void **)this_cpu_ptr(hyperv_pcpu_output_arg);
+> -		*outputarg = (char *)(*inputarg) + HV_HYP_PAGE_SIZE;
+> +	/*
+> +	 * hyperv_pcpu_input_arg and hyperv_pcpu_output_arg memory is already
+> +	 * allocated if this CPU was previously online and then taken offline
+> +	 */
+> +	if (!*inputarg) {
+> +		*inputarg = kmalloc(pgcount * HV_HYP_PAGE_SIZE, flags);
+> +		if (!(*inputarg))
+> +			return -ENOMEM;
+> +
+> +		if (hv_root_partition) {
+> +			outputarg = (void **)this_cpu_ptr(hyperv_pcpu_output_arg);
+> +			*outputarg = (char *)(*inputarg) + HV_HYP_PAGE_SIZE;
+> +		}
+>  	}
+>  
+>  	msr_vp_index = hv_get_register(HV_REGISTER_VP_INDEX);
+> @@ -385,24 +392,17 @@ int hv_common_cpu_init(unsigned int cpu)
+>  
+>  int hv_common_cpu_die(unsigned int cpu)
+>  {
+> -	unsigned long flags;
+> -	void **inputarg, **outputarg;
+> -	void *mem;
+> -
+> -	local_irq_save(flags);
+> -
+> -	inputarg = (void **)this_cpu_ptr(hyperv_pcpu_input_arg);
+> -	mem = *inputarg;
+> -	*inputarg = NULL;
+> -
+> -	if (hv_root_partition) {
+> -		outputarg = (void **)this_cpu_ptr(hyperv_pcpu_output_arg);
+> -		*outputarg = NULL;
+> -	}
+> -
+> -	local_irq_restore(flags);
+> -
+> -	kfree(mem);
+> +	/*
+> +	 * The hyperv_pcpu_input_arg and hyperv_pcpu_output_arg memory
+> +	 * is not freed when the CPU goes offline as the hyperv_pcpu_input_arg
+> +	 * may be used by the Hyper-V vPCI driver in reassigning interrupts
+> +	 * as part of the offlining process.  The interrupt reassignment
+> +	 * happens *after* the CPUHP_AP_HYPERV_ONLINE state has run and
+> +	 * called this function.
+> +	 *
+> +	 * If a previously offlined CPU is brought back online again, the
+> +	 * originally allocated memory is reused in hv_common_cpu_init().
+> +	 */
+>  
+>  	return 0;
+>  }
+> diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
+> index 0f1001d..696004a 100644
+> --- a/include/linux/cpuhotplug.h
+> +++ b/include/linux/cpuhotplug.h
+> @@ -201,6 +201,7 @@ enum cpuhp_state {
+>  	/* Online section invoked on the hotplugged CPU from the hotplug thread */
+>  	CPUHP_AP_ONLINE_IDLE,
+>  	CPUHP_AP_KVM_ONLINE,
+> +	CPUHP_AP_HYPERV_ONLINE,
 
-Neil
+(Cc: KVM)
 
-> 
-> In previous discussions for device tree [1] [2] and device driver [3] were named mipi-dsi-bringup.
-> 
-> [1] https://patchwork.ozlabs.org/project/devicetree-bindings/patch/CAO9szn3t-giVipb5oH_3mzQZbnXbDqqz0WEg8uAmo-1W2uKzFg@mail.gmail.com/
-> [2] https://patchwork.ozlabs.org/project/devicetree-bindings/patch/CAO9szn18KsR0c+U8EEY1=xnmsKMxy6SEArMUic0z=aYJDVwWCQ@mail.gmail.com/
-> [3] https://lists.freedesktop.org/archives/dri-devel/2023-May/404775.html
-> 
-> Paulo Pavacic (2):
->    dt-bindings: display: panel: add fannal,c3004
->    drm/panel-fannal-c3004: Add fannal c3004 DSI panel
-> 
->   .../bindings/display/panel/fannal,c3004.yaml  |  75 ++++
->   .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
->   MAINTAINERS                                   |   7 +
->   drivers/gpu/drm/panel/Kconfig                 |  11 +
->   drivers/gpu/drm/panel/Makefile                |   1 +
->   drivers/gpu/drm/panel/panel-fannal-c3004.c    | 405 ++++++++++++++++++
->   6 files changed, 501 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/display/panel/fannal,c3004.yaml
->   create mode 100644 drivers/gpu/drm/panel/panel-fannal-c3004.c
-> 
+I would very much prefer we swap the order with KVM here: hv_cpu_init()
+allocates and sets vCPU's VP assist page which is used by KVM on
+CPUHP_AP_KVM_ONLINE:
+
+kvm_online_cpu() -> __hardware_enable_nolock() ->
+kvm_arch_hardware_enable() -> vmx_hardware_enable():
+
+        /*
+         * This can happen if we hot-added a CPU but failed to allocate
+         * VP assist page for it.
+         */
+	if (kvm_is_using_evmcs() && !hv_get_vp_assist_page(cpu))
+		return -EFAULT;
+
+With the change, this is likely broken.
+
+FWIF, KVM also needs current vCPU's VP index (also set by hv_cpu_init())
+through __kvm_x86_vendor_init() -> set_hv_tscchange_cb() call chain but
+this happens upon KVM module load so CPU hotplug ordering should not
+matter as this always happens on a CPU which is already online.
+
+Generally, as 'KVM on Hyper-V' is a supported scenario, doing Hyper-V
+init before KVM's (and vice versa on teardown) makes sense.
+
+>  	CPUHP_AP_SCHED_WAIT_EMPTY,
+>  	CPUHP_AP_SMPBOOT_THREADS,
+>  	CPUHP_AP_X86_VDSO_VMA_ONLINE,
+
+-- 
+Vitaly
 
