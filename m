@@ -2,121 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1BB070B974
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:53:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBEC670B976
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:54:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232787AbjEVJxv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 05:53:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44648 "EHLO
+        id S232561AbjEVJyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 05:54:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232666AbjEVJxh (ORCPT
+        with ESMTP id S232683AbjEVJyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 05:53:37 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D551F4
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 02:53:35 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-3094910b150so4687770f8f.0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 02:53:35 -0700 (PDT)
+        Mon, 22 May 2023 05:54:07 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24B7C2;
+        Mon, 22 May 2023 02:54:05 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f60410106cso6456685e9.1;
+        Mon, 22 May 2023 02:54:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684749213; x=1687341213;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ECJI0LFwwkDe66I7X1nctePo0/j7Va03pbzms4rUc9o=;
-        b=W5YDVSR/w6v2V8d0U4G1JAAX5pdg0yRNNxsVnTThfSurqoKaqDjrnm8JiR3okhY4Q0
-         G2IhUc03bVF44qoTGSBx+XV1XWClLpW5kmQX0p5KUn5Fo0aTlz/n8/k4nqSL0shLyrvn
-         JHGnrXBZhNLBaAtNXV1I/gzfZCILl7kQTS8DVlKCr2PepXR3L7eu47hD+57m375RRxSQ
-         bCzUnG5Y1+nhv4xhq8rkFrcraDcjvFY3lUm5TIR17LlB3cUvmb2gbrlZZf+w2ZOEfK0J
-         9gcujURlXjnwP5oOm7NtJRNnGHfL8SE/kbfxJfAJFPvTAWNwEo2A6C95uK/3YQ5bGgfB
-         6SiA==
+        d=gmail.com; s=20221208; t=1684749244; x=1687341244;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MEuzhFmkjv49oIHWTSsc95Gkq+Cq33yvkFKwJTX5pLg=;
+        b=jkzJW8SHQev1F2HV8NsE8ATC7sbu2GnYBYdHqirLYxDoEiiVUOMdzv/+wdF4+dbiYC
+         wp+jKM4fMmIob4BM1BtEfGNuRCmEdH9jTVouCGnIF+sZPYCdXLx9DU8gLl8kF3lMULPI
+         wmpJNaydSGESwb/OqRVoJ03QebvzaB7Gu5E0WW6UADgrPnQkBnRxUCgOiFtZhSAdKeR7
+         zjRQwDt34QCAjwAYfQAGSxtsQyY5HQhY4eSVBstRvxxoWUfzS7yn3vwaBYkUxNvGUBjQ
+         H4DrWWlxMYqenkC107wWBQ40ed6vZVnVKASBqbTW/Xuy2x7U1l6jyJPjXRXRMP3mJXvG
+         0tmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684749213; x=1687341213;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ECJI0LFwwkDe66I7X1nctePo0/j7Va03pbzms4rUc9o=;
-        b=TpTSasXOIK/7ziIk+HRE/hk8kA8yLwE6261zHhqWbjbspkA4vXlsMPpfbXi1sGU/nQ
-         VxoVFb+QzRgMygR9xGTNb3APNCUTL3P29ZCEAGfILBlToLtwHjQUY2POhWaPK6jkBMYC
-         5xPb7q/1spCSTWJZoHEU5q9RrtHZpkmxQ/b/VgyFicdfpf+DJYfApicq0GDbFbdKnXCI
-         OL9ORI8SrPvx2qdX8dA8Il1IVN9fB5dhJoZzl7f0A3rJL03XqA02nEZJXMuA+R418ae2
-         hGXjfTwz6DY4uFp7aUJS40S9j24WfMTSAkw3PDh04RyTw4yJOuyKugKfJG54OqUIWzTv
-         MhvA==
-X-Gm-Message-State: AC+VfDxk9ZMy3NhU+6lF1z00SU/xUFNUNhL0jsvDxb9AGJRHRkyw0yv3
-        FFuhuwiZ9OpBssJFfvt+aiyApj9pYWlWGAUAjLracg==
-X-Google-Smtp-Source: ACHHUZ7usYrNO9DYTgz7sXSTAh0vn5Ieny/IQU9kQKCqJycC4jNWWA4vXBpS1vxwt0dtwhhCEryzsqoxwgXB5mMTtqY=
-X-Received: by 2002:a5d:5584:0:b0:309:5d9:bc81 with SMTP id
- i4-20020a5d5584000000b0030905d9bc81mr7078151wrv.49.1684749213663; Mon, 22 May
- 2023 02:53:33 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684749244; x=1687341244;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MEuzhFmkjv49oIHWTSsc95Gkq+Cq33yvkFKwJTX5pLg=;
+        b=imzH2VM3jIElQAb+fqaoxw1X0AtrlNiv/dLaZ+oy/L30R1TLaeW0+7CsxzrvO1lsjZ
+         WtECPdLGeNbV0kt9nibJJv047lCv1sBa8a0R6I+4SadKeaz8GbYYWBm3+KN8FP3QdsFi
+         qRyiRnGOaNQ66w8hfsDEcIl83adgvax1xViqs1UZzWN+xW427GBSztZL0avJ5MoRl9Mg
+         xA6tAifl02OYKoe0led0j+if3rq+in76N47Eno3C0NHVaOrfu8kN7HwwPDLTRm1nkd4D
+         RVA0sGYBSSbMiHOHGeBP1Es44reNW2RhZd5k7a8ccB3oznQ2W6dmjfmHqcf2zB4kOz1w
+         A+UQ==
+X-Gm-Message-State: AC+VfDx9Pr6eCTQrbV19MtdY2yc8Pxxy1mBqo8Sj17kgbBpiwfqCErhL
+        Xj/FMcjiip05Szzxfbxmi/I=
+X-Google-Smtp-Source: ACHHUZ7TFbXIkUzmeQjsmyXJ+Dplh283L9u5CAaduxA6qRDS8nD958XMlQtli6CT6ul+iIN2I84LSQ==
+X-Received: by 2002:a05:600c:294b:b0:3f4:2d22:536a with SMTP id n11-20020a05600c294b00b003f42d22536amr6988436wmd.19.1684749243903;
+        Mon, 22 May 2023 02:54:03 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id v16-20020a1cf710000000b003f4fe09aa43sm11099141wmh.8.2023.05.22.02.54.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 02:54:03 -0700 (PDT)
+Date:   Mon, 22 May 2023 12:54:01 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     David Epping <david.epping@missinglinkelectronics.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH net 3/3] net: phy: mscc: enable VSC8501/2 RGMII RX clock
+Message-ID: <20230522095401.szzugrjohnwyqffk@skbuf>
+References: <20230520160603.32458-1-david.epping@missinglinkelectronics.com>
+ <20230520160603.32458-4-david.epping@missinglinkelectronics.com>
+ <20230521134356.ar3itavhdypnvasc@skbuf>
+ <20230521161650.GC2208@nucnuc.mle>
+ <20230522094944.uylvgoepcmwjq5yj@skbuf>
 MIME-Version: 1.0
-References: <20230522093620.3568-1-quic_kbajaj@quicinc.com> <20230522093620.3568-5-quic_kbajaj@quicinc.com>
-In-Reply-To: <20230522093620.3568-5-quic_kbajaj@quicinc.com>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Mon, 22 May 2023 15:23:22 +0530
-Message-ID: <CAH=2NtxwG3YaN7F_q2PARXPA_Rit7-KhkxFKXzL0xD3J8J4SpQ@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] arm64: dts: qcom: qdu1000-idp: add SDHCI for emmc
-To:     Komal Bajaj <quic_kbajaj@quicinc.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230522094944.uylvgoepcmwjq5yj@skbuf>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 22 May 2023 at 15:06, Komal Bajaj <quic_kbajaj@quicinc.com> wrote:
->
-> Add sdhci node for emmc in qdu1000-idp.
->
-> Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/qdu1000-idp.dts | 23 +++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/qcom/qdu1000-idp.dts b/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
-> index 9e9fd4b8023e..61d8446a2d55 100644
-> --- a/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
-> +++ b/arch/arm64/boot/dts/qcom/qdu1000-idp.dts
-> @@ -451,3 +451,26 @@
->  &uart7 {
->         status = "okay";
->  };
-> +
-> +&sdhc_1 {
-> +       pinctrl-names = "default", "sleep";
-> +       pinctrl-0 = <&sdc1_on_state>;
-> +       pinctrl-1 = <&sdc1_off_state>;
-> +
-> +       cap-mmc-hw-reset;
-> +       mmc-ddr-1_8v;
-> +       mmc-hs200-1_8v;
-> +       mmc-hs400-1_8v;
-> +       mmc-hs400-enhanced-strobe;
-> +
-> +       non-removable;
-> +       no-sd;
-> +       no-sdio;
-> +
-> +       supports-cqe;
-> +
-> +       vmmc-supply = <&vreg_l10a_2p95>;
-> +       vqmmc-supply = <&vreg_l7a_1p8>;
-> +
-> +       status = "okay";
-> +};
+On Mon, May 22, 2023 at 12:49:44PM +0300, Vladimir Oltean wrote:
+> Well, to be clear, I was suggesting:
+> 
+> /* Set the RGMII RX and TX clock skews individually, according to the PHY
+>  * interface type, to:
+>  *  * 0.2 ns (their default, and lowest, hardware value) if delays should
+>  *    not be enabled
+>  *  * 2.0 ns (which causes the data to be sampled at exactly half way between
+>  *    clock transitions at 1000 Mbps) if delays should be enabled
+>  */
+> static int vsc85xx_rgmii_set_skews(struct phy_device *phydev, u32 rgmii_cntl,
+> 				   u16 rgmii_rx_delay_mask,
+> 				   u16 rgmii_tx_delay_mask)
+> {
+> 	u16 rgmii_rx_delay_pos = ffs(rgmii_rx_delay_mask) - 1;
+> 	u16 rgmii_tx_delay_pos = ffs(rgmii_tx_delay_mask) - 1;
+> 	u16 mask = rgmii_rx_delay_mask | rgmii_tx_delay_mask;
+> 	u16 reg_val = 0;
+> 	int rc;
 
-This node is out of alphabetical order again.
-&uart7 would follow &sdhc_1 and so on...
+Or rather:
 
-Thanks,
-Bhupesh
+	u16 mask = 0;
+
+	if (phy_interface_is_rgmii(phydev))
+		mask |= rgmii_rx_delay_mask | rgmii_tx_delay_mask;
+
+	if (rgmii_cntl == VSC8502_RGMII_CNTL)
+		mask |= VSC8502_RGMII_RX_CLK_DISABLE;
+
+> 
+> 	/* For traffic to pass, the VSC8502 family needs the RX_CLK disable bit
+> 	 * to be unset for all PHY modes, so do that as part of the paged
+> 	 * register modification.
+> 	 */
+> 	if (rgmii_cntl == VSC8502_RGMII_CNTL)
+> 		mask |= VSC8502_RGMII_RX_CLK_DISABLE;
+> 
+> 	mutex_lock(&phydev->lock);
+> 
+> 	if (phydev->interface == PHY_INTERFACE_MODE_RGMII_RXID ||
+> 	    phydev->interface == PHY_INTERFACE_MODE_RGMII_ID)
+> 		reg_val |= RGMII_CLK_DELAY_2_0_NS << rgmii_rx_delay_pos;
+> 	if (phydev->interface == PHY_INTERFACE_MODE_RGMII_TXID ||
+> 	    phydev->interface == PHY_INTERFACE_MODE_RGMII_ID)
+> 		reg_val |= RGMII_CLK_DELAY_2_0_NS << rgmii_tx_delay_pos;
+> 
+> 	rc = phy_modify_paged(phydev, MSCC_PHY_PAGE_EXTENDED_2,
+> 			      rgmii_cntl, mask, reg_val);
+> 
+> 	mutex_unlock(&phydev->lock);
+> 
+> 	return rc;
+> }
