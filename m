@@ -2,128 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07F5F70C599
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 20:59:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30A5B70C598
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 20:58:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233521AbjEVS65 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 14:58:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57864 "EHLO
+        id S231688AbjEVS6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 14:58:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbjEVS6y (ORCPT
+        with ESMTP id S229714AbjEVS6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 14:58:54 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08175DB
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:58:53 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-51190fd46c3so5844017a12.1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:58:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1684781931; x=1687373931;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vr44La27+mz8n+82Zo9X1oKc2Ak0g3wj0ym86181XGQ=;
-        b=d6wu2CS/ecLYXBnJBfDH1lUT5tTEOEzfCr5tOvBDmpNQsOkpSvI70tpEjPz8LkymtN
-         hljLXHExNHKPt5q95akj52UpRDs45iwOy/KmLHZvAN5EeVJNsxXHopj5zAW6y9nclMuP
-         53cSo3rM1RThCAQqDfsp101httIx/DUYg71Vg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684781931; x=1687373931;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vr44La27+mz8n+82Zo9X1oKc2Ak0g3wj0ym86181XGQ=;
-        b=ggdYWvetO8cHLM3/R+PHoOKg42Xvufsl2ThRoxc9CGIF/jEZCXo1CZ2qcYlq/X63Gj
-         Ci7oXNSyopnpeL59KHYuWExA9r/SVCaSpgPGnGtkhtv87Eniu6qTkM126Av/F0E2orFQ
-         PTpzVfMCz0yPmETBjyRtNoiUuiz+cMRzagXqIMAWis5stI6uD/oBRBMSVmkXtqMEghEw
-         xm2kQSeeYieioKPCVehr26JiLjBN9K8IjGb+ed5g1UcFeDnsKHfYOZz78N+/q6C98sCn
-         QASM6mOTd2MAfY8o6BIA1Ej2V9foI4XOLKusK9tCtCsYEG4K9G9hkp5SOSje5oYRD2qm
-         2SdQ==
-X-Gm-Message-State: AC+VfDzRRbAZrTX3mTiF1UB2pZXBBYLj4jwuTwxSolK6WtbIPvyYdJMx
-        yCDWfr8Q+7sUQ2uhIcOup28e00w/odaV9dXq7j3SxeAy
-X-Google-Smtp-Source: ACHHUZ6PAgYlsdfxPvOfK7/spZcsAQVtE6kDBssJHgM0+cMlji0Pkx5klWvTLF9LSw+p1cFwfVwE0w==
-X-Received: by 2002:aa7:d4c3:0:b0:50b:c584:527b with SMTP id t3-20020aa7d4c3000000b0050bc584527bmr8516425edr.29.1684781931200;
-        Mon, 22 May 2023 11:58:51 -0700 (PDT)
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com. [209.85.218.52])
-        by smtp.gmail.com with ESMTPSA id l4-20020a50d6c4000000b00510de087302sm3398248edj.47.2023.05.22.11.58.50
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 May 2023 11:58:50 -0700 (PDT)
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-970056276acso161051166b.2
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:58:50 -0700 (PDT)
-X-Received: by 2002:a17:907:628c:b0:96a:6e42:712b with SMTP id
- nd12-20020a170907628c00b0096a6e42712bmr11877487ejc.18.1684781929922; Mon, 22
- May 2023 11:58:49 -0700 (PDT)
+        Mon, 22 May 2023 14:58:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC11E9;
+        Mon, 22 May 2023 11:58:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2176761C40;
+        Mon, 22 May 2023 18:58:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17778C433EF;
+        Mon, 22 May 2023 18:58:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1684781926;
+        bh=A9BiorKEzoVHUnT2JtkigBVL2qLAn4Nit7bapPjzZ5U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mF9crdwvpFoTJMaShPm/o/AUtJeq+vNlOPALaAjKxYEiNsLbVp2BHLVTN+3hhFu2B
+         97jLspIlMzb9m6jWNtblpIgBX4c89CqB6TE6GzZl6+rZYc+TJqhUHDgKAGaY9+k6rq
+         SN13lW67hGKTVJ1UmCDss7IBp9c+wtYJN1r2GIk0=
+Date:   Mon, 22 May 2023 19:58:44 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>, stable@vger.kernel.org,
+        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.10 000/381] 5.10.180-rc1 review
+Message-ID: <2023052235-doing-launch-c511@gregkh>
+References: <20230515161736.775969473@linuxfoundation.org>
+ <ZGNJfAPd8eeVoCJ3@debian>
+ <2023051711-thespian-sponsor-8878@gregkh>
+ <CA+G9fYvw6HJopruUn4QKPCcqbdgw++AFf1wnwMP9hP1rJsmq3g@mail.gmail.com>
+ <2023051704-catnip-vitality-d6cb@gregkh>
+ <ZGUwiOkAc25BPi7M@debian>
 MIME-Version: 1.0
-References: <20230522171314.1953699-1-kent.overstreet@linux.dev>
-In-Reply-To: <20230522171314.1953699-1-kent.overstreet@linux.dev>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 22 May 2023 11:58:33 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi3vkmsiEDF=kYSAV2f1e1B6J6L-oikmdik6p_kBq_dhg@mail.gmail.com>
-Message-ID: <CAHk-=wi3vkmsiEDF=kYSAV2f1e1B6J6L-oikmdik6p_kBq_dhg@mail.gmail.com>
-Subject: Re: [PATCH v2] locking: SIX locks (shared/intent/exclusive)
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Brian Foster <bfoster@redhat.com>,
-        Dave Chinner <dchinner@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZGUwiOkAc25BPi7M@debian>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 10:13=E2=80=AFAM Kent Overstreet
-<kent.overstreet@linux.dev> wrote:
->
+On Wed, May 17, 2023 at 08:52:40PM +0100, Sudip Mukherjee (Codethink) wrote:
+> On Wed, May 17, 2023 at 11:51:21AM +0200, Greg Kroah-Hartman wrote:
+> > On Wed, May 17, 2023 at 03:11:48PM +0530, Naresh Kamboju wrote:
+> > > On Wed, 17 May 2023 at 14:21, Greg Kroah-Hartman
+> > > <gregkh@linuxfoundation.org> wrote:
+> > > >
+> > > > On Tue, May 16, 2023 at 10:14:36AM +0100, Sudip Mukherjee (Codethink) wrote:
+> > > > > Hi Greg,
+> > > > >
+> > > > > On Mon, May 15, 2023 at 06:24:11PM +0200, Greg Kroah-Hartman wrote:
+> > > > > > This is the start of the stable review cycle for the 5.10.180 release.
+> > > > > > There are 381 patches in this series, all will be posted as a response
+> > > > > > to this one.  If anyone has any issues with these being applied, please
+> > > > > > let me know.
+> > > > >
+> > > > > Build test (gcc version 11.3.1 20230511):
+> > > > > mips: 63 configs -> no failure
+> > > > > arm: 104 configs -> no failure
+> > > > > arm64: 3 configs -> 1 failure
+> > > > > x86_64: 4 configs -> no failure
+> > > > > alpha allmodconfig -> no failure
+> > > > > powerpc allmodconfig -> no failure
+> > > > > riscv allmodconfig -> no failure
+> > > > > s390 allmodconfig -> no failure
+> > > > > xtensa allmodconfig -> no failure
+> > > > >
+> > > > > arm64 allmodconfig build fails with the error:
+> > > > >
+> > > > > /gcc/bin/aarch64-linux-ld: arch/arm64/kvm/hyp/nvhe/kvm_nvhe.o: in function `__kvm_nvhe___kvm_tlb_flush_vmid_ipa':
+> > > > > (.hyp.text+0x1a4c): undefined reference to `__kvm_nvhe_memset'
+> > > > > /gcc/bin/aarch64-linux-ld: arch/arm64/kvm/hyp/nvhe/kvm_nvhe.o: in function `__kvm_nvhe___kvm_tlb_flush_vmid':
+> > > > > (.hyp.text+0x1b20): undefined reference to `__kvm_nvhe_memset'
+> > > > > /gcc/bin/aarch64-linux-ld: arch/arm64/kvm/hyp/nvhe/kvm_nvhe.o: in function `__kvm_nvhe___kvm_flush_cpu_context':
+> > > > > (.hyp.text+0x1b80): undefined reference to `__kvm_nvhe_memset'
+> > > >
+> > > > That's odd, I don't see that symbol anywhere in the tree at all.
+> > > >
+> > > > And the only arm-related kvm changes don't have those symbols either
+> > > > (the other kvm changes are x86-only)
+> > > >
+> > > > Also, no one else has seen this issue.  Can you bisect?
+> > > 
+> > > This is an old issue,
+> > > Many other reported long back [1]
+> > > 
+> > > [1] https://lore.kernel.org/stable/CADYN=9KSKQx816id-zWepV-E3ozph3k2_i9Rhs6QseFv0hkPfg@mail.gmail.com/
+> > 
+> > Then maybe someone should submit it properly for inclusion?
+> 
+> Attached the backported patch. Also verified that my build failure is fixed with it.
 
-> +static inline unsigned u32_mask_to_ulong_bitnr(u32 mask)
-> +{
-> +       union ulong_u32 {
-> +               u32     v32;
-> +               ulong   vlong;
-> +       } v =3D { .v32 =3D mask };
-> +
-> +       return ilog2(v.vlong);
+Thanks, now queued up.
 
-No, this is still wrong.
-
-The above is actively undefined - the high bits of 'vlong' can contain
-random garbage. And you can't even fix it anyway, because even if you
-add a second 32-bit word and zero it, on big-endian architectures
-you'll get a result that is bigger than 32, and then when you do
-this:L
-
-> +static inline void six_set_bitmask(struct six_lock *lock, u32 mask)
-> +{
-> +       unsigned bitnr =3D u32_mask_to_ulong_bitnr(mask);
-> +
-> +       if (!test_bit(bitnr, (unsigned long *) &lock->state))
-> +               set_bit(bitnr, (unsigned long *) &lock->state);
-
-you're back to basically just undefined behaviour.
-
-You *cannot* do "set_bit()" on a u32. It's that simple. Stop trying to
-do it with these wrappers that happen to work on x86 but are
-fundamentally broken.
-
-We don't do locking by playing games like this. It's wrong.
-
-You clearly don't even want the return value, so you're actually much
-better off just using an atomic_t and "atomic_or()", I suspect.
-
-But these broken games with casting pointers to invalid types MUST END.
-
-Locking is subtle enough without doing clearly bogus things that
-depend on byte order and word size, and that aren't defined for the
-type you want to use.
-
-            Linus
+greg k-h
