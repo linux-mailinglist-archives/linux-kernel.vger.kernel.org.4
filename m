@@ -2,132 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E87B270BC06
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:40:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E52870BC09
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233314AbjEVLkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 07:40:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50770 "EHLO
+        id S233327AbjEVLlx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 07:41:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233234AbjEVLkJ (ORCPT
+        with ESMTP id S229486AbjEVLlv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 07:40:09 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 407EE91;
-        Mon, 22 May 2023 04:40:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684755608; x=1716291608;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KYy6wtuHtFxdH0WIH16DIjdET2alDruGePrJjTDQdjk=;
-  b=nI8ZNFwm3Dh5XESTX82g7iCP0w1Ipp0x+5AqogkZdvmQU/wcUlCi6rYD
-   PjWVNdyCocWN7AlZRFTxGSaFOLeFQGRDnLq5X4boQAu/3kvS77aQqOhyC
-   h67rGiMljYgz+LPbCu//bF421XwnoSDFE42NCfEhzbpTL6Dy/fqGLePQw
-   0WGuNBruguEZraxMcb7x+XQmyI+Grk5aBXCF4ncUGI1L4wNXrHTddHLo7
-   GXOpjnz37UW+uEik18RGXJKYx+BXLxYoC6FBUp/cfPLq8D32t+KtcqHpB
-   MJqByxfi4P1EVHsj/glI08DTWfykRlvtxpM6DmHx64vgtaiCZM5i6lfac
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="418603727"
-X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
-   d="scan'208";a="418603727"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 04:40:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="703470490"
-X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
-   d="scan'208";a="703470490"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga002.jf.intel.com with ESMTP; 22 May 2023 04:40:05 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 5E0CD1F1; Mon, 22 May 2023 14:40:08 +0300 (EEST)
-Date:   Mon, 22 May 2023 14:40:08 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
-        Natikar Basavaraj <Basavaraj.Natikar@amd.com>,
-        Deucher Alexander <Alexander.Deucher@amd.com>,
-        Iain Lane <iain@orangesquash.org.uk>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [PATCH v2] PCI: Don't assume root ports from > 2015 are power
- manageable
-Message-ID: <20230522114008.GK45886@black.fi.intel.com>
-References: <20230517150827.89819-1-mario.limonciello@amd.com>
- <20230522055555.GI45886@black.fi.intel.com>
- <da80fb19-0b98-bf19-eea3-bc2cca2024f5@amd.com>
+        Mon, 22 May 2023 07:41:51 -0400
+Received: from out-20.mta0.migadu.com (out-20.mta0.migadu.com [IPv6:2001:41d0:1004:224b::14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338B0A0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 04:41:50 -0700 (PDT)
+Message-ID: <10e58e7e-a52e-751d-f693-cd4e05ac10ca@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1684755708;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=s9cmspJubmVALzr9R4FiGgADvWy/zsxX0daTT9ez0U8=;
+        b=h991mvuT0dKHypdxWkkXlCCOJMdEV93/HXLbiuDCCAYWfZAEW+iIZmx2CFWeYnusaxXwiw
+        bZgajcN3QcfG1zDR6ctnIODlf73lQXniPNoiUh5+JPuawnwzifrfYHdRSFTTAwvRID93vG
+        a7yzyDbsTRUR7J842zzLmZCTH+r/yVk=
+Date:   Mon, 22 May 2023 19:41:35 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <da80fb19-0b98-bf19-eea3-bc2cca2024f5@amd.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH 08/31] mm/page_vma_mapped: pte_offset_map_nolock() not
+ pte_lockptr()
+Content-Language: en-US
+To:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
+ <8fa3fb6e-2e39-cbea-c529-ee9e64c7d2d0@google.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Qi Zheng <qi.zheng@linux.dev>
+In-Reply-To: <8fa3fb6e-2e39-cbea-c529-ee9e64c7d2d0@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 06:28:25AM -0500, Mario Limonciello wrote:
-> On 5/22/23 00:55, Mika Westerberg wrote:
-> > Hi Mario,
-> > 
-> > On Wed, May 17, 2023 at 10:08:27AM -0500, Mario Limonciello wrote:
-> > > Using an XHCI device to wakeup the system from s2idle fails when
-> > > that XHCI device is connected to a USB-C port for an AMD USB4
-> > > router.
-> > > 
-> > > Due to commit 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during
-> > > suspend") all root port go into D3 during s2idle.
-> > > When the root ports are in D3 over s2idle it's not possible for the
-> > > platform firmware to properly identify the wakeup source.
-> > > 
-> > > Comparing registers between Linux and Windows 11 this behavior to put root
-> > > ports into D3 at suspend is unique to Linux.  On an affected system
-> > > Windows does not put the root ports into D3 over Modern Standby.
-> > > 
-> > > Windows doesn't put the root ports into D3 because root ports are not
-> > > power manageable; they're missing _PRW and _S0W.
-> > > 
-> > > Linux shouldn't be assuming they support D3 just because they're newer
-> > > than 2015, the ports should also be deemed power manageable.
-> > > Add an extra check for this to ensure D3 isn't selected for such machines.
-> > > 
-> > > Fixes: 9d26d3a8f1b0 ("PCI: Put PCIe ports into D3 during suspend")
-> > > Reported-by: Iain Lane <iain@orangesquash.org.uk>
-> > > Closes: https://forums.lenovo.com/t5/Ubuntu/Z13-can-t-resume-from-suspend-with-external-USB-keyboard/m-p/5217121
-> > > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> > > ---
-> > >   drivers/pci/pci.c | 3 +++
-> > >   1 file changed, 3 insertions(+)
-> > > 
-> > > diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
-> > > index 5ede93222bc1..3fe27aef09e6 100644
-> > > --- a/drivers/pci/pci.c
-> > > +++ b/drivers/pci/pci.c
-> > > @@ -3010,6 +3010,9 @@ bool pci_bridge_d3_possible(struct pci_dev *bridge)
-> > >   		if (dmi_check_system(bridge_d3_blacklist))
-> > >   			return false;
-> > > +		if (!platform_pci_power_manageable(bridge))
-> > > +			return false;
-> > > +
-> > 
-> > We already call platform_pci_bridge_d3() few lines up. That function
-> > should know whether "platform" supports D3 for the bridges, and I think
-> > it actually calls acpi_device_power_manageable() that platform_pci_power_manageable()
-> > ends up checking too.
+
+
+On 2023/5/22 12:58, Hugh Dickins wrote:
+> map_pte() use pte_offset_map_nolock(), to make sure of the ptl belonging
+> to pte, even if pmd entry is then changed racily: page_vma_mapped_walk()
+> use that instead of getting pte_lockptr() later, or restart if map_pte()
+> found no page table.
 > 
-> It does, but it doesn't end up returning false if it doesn't support it.  It
-> only returns true if it does.
+> Signed-off-by: Hugh Dickins <hughd@google.com>
+> ---
+>   mm/page_vma_mapped.c | 28 ++++++++++++++++++++++------
+>   1 file changed, 22 insertions(+), 6 deletions(-)
+> 
+> diff --git a/mm/page_vma_mapped.c b/mm/page_vma_mapped.c
+> index 947dc7491815..2af734274073 100644
+> --- a/mm/page_vma_mapped.c
+> +++ b/mm/page_vma_mapped.c
+> @@ -13,16 +13,28 @@ static inline bool not_found(struct page_vma_mapped_walk *pvmw)
+>   	return false;
+>   }
+>   
+> -static bool map_pte(struct page_vma_mapped_walk *pvmw)
+> +static bool map_pte(struct page_vma_mapped_walk *pvmw, spinlock_t **ptlp)
+>   {
+>   	if (pvmw->flags & PVMW_SYNC) {
+>   		/* Use the stricter lookup */
+>   		pvmw->pte = pte_offset_map_lock(pvmw->vma->vm_mm, pvmw->pmd,
+>   						pvmw->address, &pvmw->ptl);
+> -		return true;
+> +		*ptlp = pvmw->ptl;
+> +		return !!pvmw->pte;
+>   	}
+>   
+> -	pvmw->pte = pte_offset_map(pvmw->pmd, pvmw->address);
+> +	/*
+> +	 * It is important to return the ptl corresponding to pte,
+> +	 * in case *pvmw->pmd changes underneath us; so we need to
+> +	 * return it even when choosing not to lock, in case caller
+> +	 * proceeds to loop over next ptes, and finds a match later.
+> +	 * Though, in most cases, page lock already protects this.
+> +	 */
+> +	pvmw->pte = pte_offset_map_nolock(pvmw->vma->vm_mm, pvmw->pmd,
+> +					  pvmw->address, ptlp);
+> +	if (!pvmw->pte)
+> +		return false;
+> +
+>   	if (pvmw->flags & PVMW_MIGRATION) {
+>   		if (!is_swap_pte(*pvmw->pte))
+>   			return false;
+> @@ -51,7 +63,7 @@ static bool map_pte(struct page_vma_mapped_walk *pvmw)
+>   	} else if (!pte_present(*pvmw->pte)) {
+>   		return false;
+>   	}
+> -	pvmw->ptl = pte_lockptr(pvmw->vma->vm_mm, pvmw->pmd);
+> +	pvmw->ptl = *ptlp;
+>   	spin_lock(pvmw->ptl);
+>   	return true;
+>   }
+> @@ -156,6 +168,7 @@ bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw)
+>   	struct vm_area_struct *vma = pvmw->vma;
+>   	struct mm_struct *mm = vma->vm_mm;
+>   	unsigned long end;
+> +	spinlock_t *ptl;
+>   	pgd_t *pgd;
+>   	p4d_t *p4d;
+>   	pud_t *pud;
+> @@ -257,8 +270,11 @@ bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw)
+>   			step_forward(pvmw, PMD_SIZE);
+>   			continue;
+>   		}
+> -		if (!map_pte(pvmw))
+> +		if (!map_pte(pvmw, &ptl)) {
+> +			if (!pvmw->pte)
+> +				goto restart;
 
-Good point!
+Could pvmw->pmd be changed? Otherwise, how about just jumping to the
+retry label below?
 
-> I've tested this patch on two different failing platforms and it works now
-> on both.
+@@ -205,6 +205,8 @@ bool page_vma_mapped_walk(struct 
+page_vma_mapped_walk *pvmw)
+                 }
 
-Okay LGTM then,
+                 pvmw->pmd = pmd_offset(pud, pvmw->address);
++
++retry:
+                 /*
+                  * Make sure the pmd value isn't cached in a register 
+by the
+                  * compiler and used as a stale value after we've 
+observed a
 
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+>   			goto next_pte;
+> +		}
+>   this_pte:
+>   		if (check_pte(pvmw))
+>   			return true;
+> @@ -281,7 +297,7 @@ bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw)
+>   		} while (pte_none(*pvmw->pte));
+>   
+>   		if (!pvmw->ptl) {
+> -			pvmw->ptl = pte_lockptr(mm, pvmw->pmd);
+> +			pvmw->ptl = ptl;
+>   			spin_lock(pvmw->ptl);
+>   		}
+>   		goto this_pte;
+
+-- 
+Thanks,
+Qi
