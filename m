@@ -2,146 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B8CB70C638
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 21:16:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 436E570C5D5
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 21:12:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234262AbjEVTQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 15:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39190 "EHLO
+        id S233096AbjEVTMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 15:12:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234169AbjEVTQC (ORCPT
+        with ESMTP id S231467AbjEVTMs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 15:16:02 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02B32E43;
-        Mon, 22 May 2023 12:15:46 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 8A12C200F6;
-        Mon, 22 May 2023 19:15:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1684782943;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Fpgikaj4b/fIR4oq3PCGfq5sJzdvVfaJIjtWnHRA6R0=;
-        b=D70ZT6b1fjWsuL+W1yj9TGbzMb0C5NWUnfgJRwHMF/T18jNEQuWzzMrZ5WgrNX6Fuqiofu
-        9gIyExPl+ESAj1eopVNEcMi2aMU7mlhOCEyhVFSAfijvBLJFvs6ueVYTZvgHmAz5mHlNo9
-        XyvAIcTLpeqhNHo/L04sjJrUjTYguTQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1684782943;
-        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Fpgikaj4b/fIR4oq3PCGfq5sJzdvVfaJIjtWnHRA6R0=;
-        b=XtD6nqwgq+tgbSkSxyJ62p07UNPB1IyTTPrapmj+inkYSMN3ePjmWutdZo9t4Up0qUKIxp
-        gtrOQSCuPuRaBjCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3303E13336;
-        Mon, 22 May 2023 19:15:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id nl8AC1+/a2QPNgAAMHmgww
-        (envelope-from <dsterba@suse.cz>); Mon, 22 May 2023 19:15:43 +0000
-Date:   Mon, 22 May 2023 21:09:36 +0200
-From:   David Sterba <dsterba@suse.cz>
-To:     Uladzislau Rezki <urezki@gmail.com>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linux btrfs <linux-btrfs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux Stable <stable@vger.kernel.org>,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, a1bert@atlas.cz,
-        linux-mm@kvack.org
-Subject: Re: Fwd: vmalloc error: btrfs-delalloc btrfs_work_helper [btrfs] in
- kernel 6.3.x
-Message-ID: <20230522190936.GP32559@twin.jikos.cz>
-Reply-To: dsterba@suse.cz
-References: <efa04d56-cd7f-6620-bca7-1df89f49bf4b@gmail.com>
- <ZGuRqtPkmeP07M6x@pc636>
+        Mon, 22 May 2023 15:12:48 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAED9B0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 12:12:47 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-96fffe11714so197518866b.0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 12:12:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684782766; x=1687374766;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1RH0Zf6SSIW6QoBUKPWp/zoQijLydPGslM9QKv8h/5w=;
+        b=oph+D4WWLxlnyEmFPNjgsPeJBISPU+KD4UUa9fg3DYqpUFyUcSy2A8sXDz1JY90HSj
+         xzoIZxLys2edI8VLxZ8SUICa6hs3ltLdhVckgRuVX12qWbyO/5/P5pXToBwghYmBImM4
+         GxRtg+DjoFlZs2IQbw0GRuJkLAWdEq1jL02CeY8Oq1Vw/LZ24lXVPWKiu9wvC6wvwqZe
+         4zxJGa7IFF9hpOxgj4zYfuwN4QgxA9EJl+uW/GIm5xFwfzg32f6498xgXrNJY+sWojOs
+         3i26c1lUlOX7fCy8Iy8fJMXZc8FzORlXncsYSBRN0ku1dfkTcxAIO4l1uhBY/2ohh+8c
+         +YHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684782766; x=1687374766;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=1RH0Zf6SSIW6QoBUKPWp/zoQijLydPGslM9QKv8h/5w=;
+        b=QKXjmeYwggruo91b9oQxuHElJ8YdvK/E7eihGRDFHF2JOKN3mRvyBck+egoZtnYCAg
+         5/si3N2Wz4V1T57QrT0UBvrIVARLq/6LDuvIwqnoMUvoVnO7OJfG+xxs/OaYy08N0qNs
+         yuc99AbpGmIMMTXJBduNKzfJcs2cmE/zgYOEUZsAL21JXCqNOc99/POY41A8imI9oSJf
+         ZnjpY05nBaCc3fDAutEeZ5vRoWzgd1fUQMqVmfo4mbN3FwHMhNE3zOnoAGXnNc5g41U5
+         INkUqvJjwNfQ+TaygWX0iBqPNyZ70NptH9s0ZEfTykbt4BhHBfyUbLuCpvdjYPSw4yGT
+         V60A==
+X-Gm-Message-State: AC+VfDzkirTWfURma8qWO7mj4zZpvcnO/YX02zTjyly0RoSJQT5h3CYo
+        z7ilSv7mPzdtvt0ydT1a4eU=
+X-Google-Smtp-Source: ACHHUZ51p7wdPuwDp950is/pz1bFqE/LofFB2M9EBORGJoNj3EX0tf2KmXVRNkRcdY8N+GBHZZwCwA==
+X-Received: by 2002:a17:907:3fa8:b0:965:6075:d100 with SMTP id hr40-20020a1709073fa800b009656075d100mr13228831ejc.39.1684782766162;
+        Mon, 22 May 2023 12:12:46 -0700 (PDT)
+Received: from ?IPV6:2a00:e180:15c4:ff00:1a51:43c9:7f06:6b44? ([2a00:e180:15c4:ff00:1a51:43c9:7f06:6b44])
+        by smtp.gmail.com with ESMTPSA id f24-20020a170906085800b0096f887f29d2sm3474738ejd.62.2023.05.22.12.12.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 May 2023 12:12:45 -0700 (PDT)
+Message-ID: <07ce00de-c686-05c6-3f27-f8857417ef10@gmail.com>
+Date:   Mon, 22 May 2023 21:12:44 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZGuRqtPkmeP07M6x@pc636>
-User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/2] amdgpu: validate drm_amdgpu_gem_va addrs for all ops
+Content-Language: en-US
+To:     Chia-I Wu <olvaffe@gmail.com>, Alex Deucher <alexdeucher@gmail.com>
+Cc:     Philip Yang <Philip.Yang@amd.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Arunpravin Paneer Selvam <Arunpravin.PaneerSelvam@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Danijel Slivka <danijel.slivka@amd.com>,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        Mukul Joshi <mukul.joshi@amd.com>,
+        Luben Tuikov <luben.tuikov@amd.com>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        dri-devel@lists.freedesktop.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <marek.olsak@amd.com>
+References: <20230509183301.1745462-1-olvaffe@gmail.com>
+ <CAPaKu7TqUt1L-5RUuwEagr2UUs8maOO+FSoS2PEoP9eO1-JJSw@mail.gmail.com>
+ <CADnq5_OsGqg7CoNVgtgr91a+pyBtJzoUOBXHKmGMcOM9hLFkwQ@mail.gmail.com>
+ <CAPaKu7SQ0NkDVN3NNRoJxGRQ8x2T2uXcxZJEkt7g2CkEzVU3Sg@mail.gmail.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+In-Reply-To: <CAPaKu7SQ0NkDVN3NNRoJxGRQ8x2T2uXcxZJEkt7g2CkEzVU3Sg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 06:00:42PM +0200, Uladzislau Rezki wrote:
-> > Hi,
-> > 
-> > I notice a regression report on Bugzilla [1]. Quoting from it:
-> > 
-> > > after updating from 6.2.x to 6.3.x, vmalloc error messages started to appear in the dmesg
-> > > 
-> > > 
-> > > 
-> > > # free 
-> > >                total        used        free      shared  buff/cache   available
-> > > Mem:        16183724     1473068      205664       33472    14504992    14335700
-> > > Swap:       16777212      703596    16073616
-> > > 
-> > > 
-> > > (zswap enabled)
-> > 
-> > See bugzilla for the full thread and attached dmesg.
-> > 
-> > On the report, the reporter can't perform the required bisection,
-> > unfortunately.
-> > 
-> > Anyway, I'm adding it to regzbot:
-> > 
-> > #regzbot introduced: v6.2..v6.3 https://bugzilla.kernel.org/show_bug.cgi?id=217466
-> > #regzbot title: btrfs_work_helper dealloc error in v6.3.x
-> > 
-> > Thanks.
-> > 
-> > [1]: https://bugzilla.kernel.org/show_bug.cgi?id=217466
-> > 
-> According to dmesg output from the bugzilla, the vmalloc tries to
-> allocate high order pages: 1 << 9. Since it fails to get a order-9 page
-> you get the warning:
+Am 21.05.23 um 20:49 schrieb Chia-I Wu:
+> On Thu, May 18, 2023 at 1:12 PM Alex Deucher <alexdeucher@gmail.com> wrote:
+>> On Wed, May 17, 2023 at 5:27 PM Chia-I Wu <olvaffe@gmail.com> wrote:
+>>> On Tue, May 9, 2023 at 11:33 AM Chia-I Wu <olvaffe@gmail.com> wrote:
+>>>> Extend the address and size validations to AMDGPU_VA_OP_UNMAP and
+>>>> AMDGPU_VA_OP_CLEAR by moving the validations to amdgpu_gem_va_ioctl.
+>>>>
+>>>> Internal users of amdgpu_vm_bo_map are no longer validated but they
+>>>> should be fine.
+>>>>
+>>>> Userspace (radeonsi and radv) seems fine as well.
+>>> Does this series make sense?
+>> I think so, I haven't had a chance to go through this too closely yet,
+>> but amdgpu_vm_bo_map() is used by ROCm as well so we'd need to make
+>> sure that removing the checks in patch 1 wouldn't affect that path as
+>> well.  The changes in patch 2 look good.  Also, these patches are
+>> missing your SOB.
+> Indeed.  kfd_ioctl_alloc_memory_of_gpu, for example, does not validate
+> va.  I need to keep the validation in amdgpu_vm_bo_map for it at
+> least.  I guess it is more ideal for kfd_ioctl_alloc_memory_of_gpu to
+> validate, but I am not familiar with amdkfd..
+>
+> I can keep the existing validations, and duplicate them in
+> amdgpu_gem_va_ioctl to cover AMDGPU_VA_OP_UNMAP/AMDGPU_VA_OP_CLEAR.
 
-That we want a order 9 is intentional, it's for a compression workspace
-(bugzilla comment 5). It's allocated as kvzalloc i.e. with the fallback
-to vmalloc in case the first one fails.
+The key point is that unmap and clear don't need those validations.
 
-> <snip>
-> 	if (area->nr_pages != nr_small_pages) {
-> 		/* vm_area_alloc_pages() can also fail due to a fatal signal */
-> 		if (!fatal_signal_pending(current))
-> 			warn_alloc(gfp_mask, NULL,
-> 				"vmalloc error: size %lu, page order %u, failed to allocate pages",
-> 				area->nr_pages * PAGE_SIZE, page_order);
-> 		goto fail;
-> 	}
-> <snip>
-> 
-> and it fails.
-> 
-> If the __GFP_NOFAIL is passed, the vm_area_alloc_pages() function switches
-> to allocate 0-order pages instead. I think the fix is to call the
-> kvmalloc_node() with __GFP_NOFAIL flag.
+It's perfectly valid to request unmap of an unaligned mapping, it will 
+just fail because we can't find that mapping.
 
-__GFP_NOFAIL does not make sense here and we've tried hard not to used
-it anywhere because of the deadlocky effects. Did you mean __GFP_NOWARN?
-That's a patch I sent today but there's another comment in the bugzilla
-that we got more allocation warnings for huge (2M) allocations, this
-time it was for a deduplication ioctl.
+Regards,
+Christian.
 
-This seems to be a noticeable change in 6.3, before we disable the
-warning in our code I think the MM guys could have a look. So far it
-seems we're about to paper of a problem.
+>
+>> Thanks,
+>>
+>> Alex
+>>
+>>
+>> Alex
+
