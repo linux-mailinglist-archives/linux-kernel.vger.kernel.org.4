@@ -2,122 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4185370C38F
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 18:36:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C7C870C394
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 18:37:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233039AbjEVQgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 12:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44656 "EHLO
+        id S233071AbjEVQhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 12:37:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231731AbjEVQgJ (ORCPT
+        with ESMTP id S232364AbjEVQhO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 12:36:09 -0400
-Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C69FF1;
-        Mon, 22 May 2023 09:36:07 -0700 (PDT)
-Received: by mail-ot1-x334.google.com with SMTP id 46e09a7af769-6af6b6837acso1425688a34.1;
-        Mon, 22 May 2023 09:36:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684773367; x=1687365367;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gE6VEcd6SehC09OLRuj4spGCMv2zTi9X2ZUJCimN/cs=;
-        b=qXdboosidh2M1j9oJmWe2Vzv5zswW5Ta90fX/3QP4glyDrkjOQ1uDu+ghyYwnWa5od
-         Qh1n+VgXDY44q/AmQvJWADGHdU7sAdQLubfxKSi7HDEkrEgN+yr2e6r1HqeCWXnZ8OIy
-         MRRiCa9SPdionSCLe26ou5pHylT2HKDb69XeJdUTcjIjCa2S6EqvJnXwnNyPeoRuWmpA
-         NGD3vMOzZkV6Ay5aUTr4y5b7f0SaeMFL97RGaJ50A/Rqbk3AicN2McLe9AVMiPqjkp3c
-         4JJBq3v3lBKizJ3t/1qrAbvIoBOphCFVzx/3v+R8c1ECmKJDXIXbGXXOPRauY9refL8e
-         yw4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684773367; x=1687365367;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gE6VEcd6SehC09OLRuj4spGCMv2zTi9X2ZUJCimN/cs=;
-        b=Z02EZAQn1ChShvmOJXwZOJaZpKVeQR5b0vvJtO0lVpE0HIrmVREGxxdKm9bNs/k020
-         v8NBywGoPHbEku6zCjRj3YAjDVG+g4K9nsPYNqvIdn/LoOZaL0BcmcXQfr3986cPv1pq
-         qvcKFv4cPuwuiXkjaIwHeDLQSB9KHI5fntIdsvKDk/fa9bsnC8ua2h0wt+e7n5rH47md
-         IZpiFCWoOopHbMow9Ckb1c4ZW3vgWRphtFUe5DI6g17eFfyIWcZ1Podkx3jZiXOZHyuq
-         hsv508mAWpDyg7g/Fa2dAcMbiw3m6aIhdvVmQTxIrOIXISpjNnN/1FRi4fP7TulRAD9f
-         nhcQ==
-X-Gm-Message-State: AC+VfDzMTiLPt6a7TuhC+9gkDci24m9dMMnvuTxnli+jaDqYD/y/FrVW
-        bKx2AsMFTqCBZclH8ZXIPw6N7Rr846o0iLIY4+A=
-X-Google-Smtp-Source: ACHHUZ5Q2A3P446/ClvG0cbEyqJw5C98bhbbV/2l1fuktu3rGaOBg+8fbLOO5RN66inW4ZDkM7KG57e8jxOpWY0meHE=
-X-Received: by 2002:a05:6870:6183:b0:192:736c:ae28 with SMTP id
- a3-20020a056870618300b00192736cae28mr4686856oah.58.1684773366819; Mon, 22 May
- 2023 09:36:06 -0700 (PDT)
+        Mon, 22 May 2023 12:37:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD78BF;
+        Mon, 22 May 2023 09:37:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E09F61B6C;
+        Mon, 22 May 2023 16:37:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD5BFC433EF;
+        Mon, 22 May 2023 16:37:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684773430;
+        bh=2He6U7qRXsvcUhtzbRqViBFgVaT+dg2a2JQ7qWLAX9c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VZXeWVIh07NmnTCmgVxAUdNEN/GFI7px1Szk/0gj+mTlwADll5GDq8yMtIGHk/2/v
+         5/+XsBtb4u/VtVnJCxv2Sz6CQpBonzMUKJNOvIBr4pzz33dCTT7DITwfmBrI3x/7ow
+         wneGx6y9vdwA1JWQdHS2EFKj8jFdUnvBvenc3AXYljvXlM0gnZsSatAQ4vddWrPcq1
+         ipIFtaHJQwicwfbn2dQwYqVu2ptWjeA3D01NbL1SID8nnUDpR0Vp6Ix4LyV+8cq4Xd
+         RIhoQfcwi+TmdEyL1rA6Rkr3+y8L8gZJEQ7KuNfIkwe4F2GP5K8mdm0jBcUkdLgBnK
+         xOXyAXGzdSmmw==
+Date:   Mon, 22 May 2023 09:37:10 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Sarthak Kukreti <sarthakkukreti@chromium.org>
+Cc:     dm-devel@redhat.com, linux-block@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Theodore Ts'o <tytso@mit.edu>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Bart Van Assche <bvanassche@google.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Brian Foster <bfoster@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>
+Subject: Re: [dm-devel] [PATCH v7 5/5] loop: Add support for provision
+ requests
+Message-ID: <20230522163710.GA11607@frogsfrogsfrogs>
+References: <20230518223326.18744-1-sarthakkukreti@chromium.org>
+ <20230518223326.18744-6-sarthakkukreti@chromium.org>
 MIME-Version: 1.0
-References: <20230522171557.32027acf@canb.auug.org.au> <ZGuYeDA9jDlxzfZN@google.com>
-In-Reply-To: <ZGuYeDA9jDlxzfZN@google.com>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 22 May 2023 12:35:55 -0400
-Message-ID: <CADnq5_OoGDVWX5UwV_hQQBfPorBuE2jJymMA-hW+Y3+7ni0f5g@mail.gmail.com>
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Harish Kasiviswanathan <Harish.Kasiviswanathan@amd.com>,
-        Rajneesh Bhardwaj <rajneesh.bhardwaj@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>, llvm@lists.linux.dev,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230518223326.18744-6-sarthakkukreti@chromium.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 12:29=E2=80=AFPM Nick Desaulniers
-<ndesaulniers@google.com> wrote:
->
-> On Mon, May 22, 2023 at 05:15:57PM +1000, Stephen Rothwell wrote:
-> > Hi all,
-> >
-> > After merging the amdgpu tree, today's linux-next build (arm allmodconf=
-ig
-> > clang-17) failed like this:
-> >
-> > drivers/gpu/drm/amd/amdgpu/amdgpu_gart.c:146:54: error: format specifie=
-s type 'unsigned long long' but the argument has type 'dma_addr_t' (aka 'un=
-signed int') [-Werror,-Wformat]
-> >
-> > Caused by commit
-> >
-> >   d020a29b6b58 ("drm/amdgpu: Allocate GART table in RAM for AMD APU")
-> >
-> > Reported by the kernelci.org bot.
->
-> Alex,
-> This is the third report of linux-next being broken for clang due to the
-> AMDGPU tree.
-> 1. https://lore.kernel.org/lkml/20230522171557.32027acf@canb.auug.org.au/
-> 2. https://lore.kernel.org/lkml/20230522171145.38a8bd4d@canb.auug.org.au/
-> 3. https://lore.kernel.org/lkml/20230522170031.5fb87a64@canb.auug.org.au/
->
-> Our CI is red as a result.
-> https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/5=
-045716034/jobs/9053211936
->
-> When will AMD start testing their kernels with Clang?
+On Thu, May 18, 2023 at 03:33:26PM -0700, Sarthak Kukreti wrote:
+> Add support for provision requests to loopback devices.
+> Loop devices will configure provision support based on
+> whether the underlying block device/file can support
+> the provision request and upon receiving a provision bio,
+> will map it to the backing device/storage. For loop devices
+> over files, a REQ_OP_PROVISION request will translate to
+> an fallocate mode 0 call on the backing file.
+> 
+> Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
+> ---
+>  drivers/block/loop.c | 34 +++++++++++++++++++++++++++++++---
+>  1 file changed, 31 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/block/loop.c b/drivers/block/loop.c
+> index bc31bb7072a2..7fe1a6629754 100644
+> --- a/drivers/block/loop.c
+> +++ b/drivers/block/loop.c
+> @@ -311,16 +311,20 @@ static int lo_fallocate(struct loop_device *lo, struct request *rq, loff_t pos,
+>  {
+>  	/*
+>  	 * We use fallocate to manipulate the space mappings used by the image
+> -	 * a.k.a. discard/zerorange.
+> +	 * a.k.a. discard/provision/zerorange.
+>  	 */
+>  	struct file *file = lo->lo_backing_file;
+>  	int ret;
+>  
+> -	mode |= FALLOC_FL_KEEP_SIZE;
+> +	if (mode & (FALLOC_FL_PUNCH_HOLE | FALLOC_FL_ZERO_RANGE) &&
+> +	    !bdev_max_discard_sectors(lo->lo_device))
+> +		return -EOPNOTSUPP;
+>  
+> -	if (!bdev_max_discard_sectors(lo->lo_device))
+> +	if (mode == 0 && !bdev_max_provision_sectors(lo->lo_device))
+>  		return -EOPNOTSUPP;
+>  
+> +	mode |= FALLOC_FL_KEEP_SIZE;
+> +
+>  	ret = file->f_op->fallocate(file, mode, pos, blk_rq_bytes(rq));
+>  	if (unlikely(ret && ret != -EINVAL && ret != -EOPNOTSUPP))
+>  		return -EIO;
+> @@ -488,6 +492,8 @@ static int do_req_filebacked(struct loop_device *lo, struct request *rq)
+>  				FALLOC_FL_PUNCH_HOLE);
+>  	case REQ_OP_DISCARD:
+>  		return lo_fallocate(lo, rq, pos, FALLOC_FL_PUNCH_HOLE);
+> +	case REQ_OP_PROVISION:
+> +		return lo_fallocate(lo, rq, pos, 0);
 
-We have clang as part of our CI system and have had it for a while.
-I'm not sure why it didn't catch these.  Our CI clang builds are
-currently passing.
+If someone calls fallocate(UNSHARE_RANGE) on a loop bdev, shouldn't
+there be a way to pass that through to the fallocate call to the backing
+file?
 
-Alex
+--D
 
->
-> >
-> > --
-> > Cheers,
-> > Stephen Rothwell
->
-> Thanks for reporting these, Stephen.
+>  	case REQ_OP_WRITE:
+>  		if (cmd->use_aio)
+>  			return lo_rw_aio(lo, cmd, pos, ITER_SOURCE);
+> @@ -754,6 +760,25 @@ static void loop_sysfs_exit(struct loop_device *lo)
+>  				   &loop_attribute_group);
+>  }
+>  
+> +static void loop_config_provision(struct loop_device *lo)
+> +{
+> +	struct file *file = lo->lo_backing_file;
+> +	struct inode *inode = file->f_mapping->host;
+> +
+> +	/*
+> +	 * If the backing device is a block device, mirror its provisioning
+> +	 * capability.
+> +	 */
+> +	if (S_ISBLK(inode->i_mode)) {
+> +		blk_queue_max_provision_sectors(lo->lo_queue,
+> +			bdev_max_provision_sectors(I_BDEV(inode)));
+> +	} else if (file->f_op->fallocate) {
+> +		blk_queue_max_provision_sectors(lo->lo_queue, UINT_MAX >> 9);
+> +	} else {
+> +		blk_queue_max_provision_sectors(lo->lo_queue, 0);
+> +	}
+> +}
+> +
+>  static void loop_config_discard(struct loop_device *lo)
+>  {
+>  	struct file *file = lo->lo_backing_file;
+> @@ -1092,6 +1117,7 @@ static int loop_configure(struct loop_device *lo, fmode_t mode,
+>  	blk_queue_io_min(lo->lo_queue, bsize);
+>  
+>  	loop_config_discard(lo);
+> +	loop_config_provision(lo);
+>  	loop_update_rotational(lo);
+>  	loop_update_dio(lo);
+>  	loop_sysfs_init(lo);
+> @@ -1304,6 +1330,7 @@ loop_set_status(struct loop_device *lo, const struct loop_info64 *info)
+>  	}
+>  
+>  	loop_config_discard(lo);
+> +	loop_config_provision(lo);
+>  
+>  	/* update dio if lo_offset or transfer is changed */
+>  	__loop_update_dio(lo, lo->use_dio);
+> @@ -1830,6 +1857,7 @@ static blk_status_t loop_queue_rq(struct blk_mq_hw_ctx *hctx,
+>  	case REQ_OP_FLUSH:
+>  	case REQ_OP_DISCARD:
+>  	case REQ_OP_WRITE_ZEROES:
+> +	case REQ_OP_PROVISION:
+>  		cmd->use_aio = false;
+>  		break;
+>  	default:
+> -- 
+> 2.40.1.698.g37aff9b760-goog
+> 
+> --
+> dm-devel mailing list
+> dm-devel@redhat.com
+> https://listman.redhat.com/mailman/listinfo/dm-devel
+> 
