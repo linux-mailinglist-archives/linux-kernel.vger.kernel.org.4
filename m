@@ -2,43 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6401C70B6AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 09:41:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C83A370B6AB
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 09:39:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231823AbjEVHlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 03:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32906 "EHLO
+        id S232636AbjEVHj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 03:39:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbjEVHlA (ORCPT
+        with ESMTP id S230102AbjEVHjy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 03:41:00 -0400
-Received: from mail.socialglobal.pl (mail.socialglobal.pl [51.195.90.253])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A771EAC
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 00:40:58 -0700 (PDT)
-Received: by mail.socialglobal.pl (Postfix, from userid 1002)
-        id 7EF1B224EF; Mon, 22 May 2023 07:40:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=socialglobal.pl;
-        s=mail; t=1684741241;
-        bh=XwhyqI/moZPDJ7KCfcA6Gip8fA7ZKcg5SWsKuF/26zk=;
-        h=Date:From:To:Subject:From;
-        b=nT0qAcd31Hs69g1M54hSzhJRCy1aUT5WadPqPMIkduFM9IN1recNi9Gr9qopG1AxY
-         VpMNLURTZvaVAPIUQsgubFPtAwvCILoTFg3o8odqw9iJBRN/mq9cC/PJYai2nvsBLE
-         +Bp3MkrbH/FX70p6yTMagV8OWEK4LJYWNtxV7RTraQTwDS5C8D634nscJ+MSI3KqKC
-         /HHHVAH9Sqx5kbS/f0Y6FiKENePPLz8n4Sk5Yd+YQMc7V/YrcMa438Vi1SJzNpJHi8
-         J42I03vu7ko78PhDUGHoKqK/zkKUYs3hlGVnya4cbNHa+p/oQMpixHwaWzCSk0/V7S
-         X+CfsvvwGwVlQ==
-Received: by mail.socialglobal.pl for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 07:40:28 GMT
-Message-ID: <20230522064500-0.1.64.1t4k3.0.o6e8bcrgej@socialglobal.pl>
-Date:   Mon, 22 May 2023 07:40:28 GMT
-From:   "Dominik Perkowski" <dominik.perkowski@socialglobal.pl>
-To:     <linux-kernel@vger.kernel.org>
-Subject: Pozycjonowanie- informacja
-X-Mailer: mail.socialglobal.pl
+        Mon, 22 May 2023 03:39:54 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9EB0AC;
+        Mon, 22 May 2023 00:39:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684741193; x=1716277193;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=7cMpYequ3bVujnTZAQ0+mCVTPIv6VCv9TnnX/b7NE50=;
+  b=IuH3d+hunhfU2aMTWZQUOG+3Luc/C5OrAsHtfyXiW6erLTI+N4tB/gr7
+   KHHsGdDJq/VLz57joSFXNWFFn90cs3BH/F00qKHYl+tat6uXQOFan+4cU
+   WokEN0Ra6TGAtsf7lTowtbRpu7bTyy/TvU1R9/0xmfsm8NXo5r6avTF8J
+   nQV6Sm62RCCTFOaDoYkzIH9KgGp/TuE6kNLHYBFzXua6QwRd6jVBWTH71
+   OK8dD1/hjnTCqluy8/xAdhb1HPeZrl8L3+TaWyIZkIzDKJXUZ4x6VfaJN
+   +ykwy85HhLP9n56AKCbcfi+OUvGSYrnGJCH3OBlFyR+hycub6e5vblEfA
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="342304616"
+X-IronPort-AV: E=Sophos;i="6.00,183,1681196400"; 
+   d="scan'208";a="342304616"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 00:39:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="703408569"
+X-IronPort-AV: E=Sophos;i="6.00,183,1681196400"; 
+   d="scan'208";a="703408569"
+Received: from bbattach-mobl.ger.corp.intel.com (HELO [10.251.220.157]) ([10.251.220.157])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 00:39:51 -0700
+Message-ID: <2c94260b-ac97-3f5e-331b-76f1a17ec5b5@linux.intel.com>
+Date:   Mon, 22 May 2023 10:40:49 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH - for 6.4] tpm: tpm_tis: Disable interrupts for AEON
+ UPX-i11
+Content-Language: en-US
+From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Jerry Snitselaar <jsnitsel@redhat.com>
+Cc:     peterhuewe@gmx.de, jgg@ziepe.ca, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com
+References: <20230517122931.22385-1-peter.ujfalusi@linux.intel.com>
+ <ohdpul6hax5bj5hhsnpt7i3ejbttivufmoolzunbhipexjkczi@meg3zx2yqkc7>
+ <CSPMQ03V3G7G.EBWKDRE4B0XY@suppilovahvero>
+ <432df3cf-da16-1f2a-02dc-e2c371c1f29c@linux.intel.com>
+In-Reply-To: <432df3cf-da16-1f2a-02dc-e2c371c1f29c@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,22 +69,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dzie=C5=84 dobry,=20
 
-jaki=C5=9B czas temu zg=C5=82osi=C5=82a si=C4=99 do nas firma, kt=C3=B3re=
-j strona internetowa nie pozycjonowa=C5=82a si=C4=99 wysoko w wyszukiwarc=
-e Google.=20
+On 18/05/2023 23:24, Péter Ujfalusi wrote:
+> 
+> The version is used to differentiate the revisions of the UPX-i11
+> boards, and this issue present in all revisions.
+> 
+>> I can squash this to the commit I pushed (it is not yet mirrored
+>> to linux-next), if I get the dmidecode info.
+> 
+> System Information
+>         Manufacturer: AAEON
+>         Product Name: UPX-TGL01
+>         Version: V1.0
+>         Serial Number: Default string
+>         UUID: a300091d-fb1c-ce1c-1d30-0007328efc11
+>         Wake-up Type: Power Switch
+>         SKU Number: Default string
+>         Family: Default string
+> 
+> I have used this description as it it is used for SOF, probably
+> DMI_MATCH(DMI_PRODUCT_NAME, "UPX-TGL01")
+> should be added?
 
-Na podstawie wykonanego przez nas audytu SEO zoptymalizowali=C5=9Bmy tre=C5=
-=9Bci na stronie pod k=C4=85tem wcze=C5=9Bniej opracowanych s=C5=82=C3=B3=
-w kluczowych. Nasz wewn=C4=99trzny system codziennie analizuje prawid=C5=82=
-owe dzia=C5=82anie witryny.  Dzi=C4=99ki indywidualnej strategii, firma z=
-dobywa coraz wi=C4=99cej Klient=C3=B3w. =20
+Jarkko: I have tested that adding the
+DMI_MATCH(DMI_PRODUCT_NAME, "UPX-TGL01")
+works.
 
-Czy chcieliby Pa=C5=84stwo zwi=C4=99kszy=C4=87 liczb=C4=99 os=C3=B3b odwi=
-edzaj=C4=85cych stron=C4=99 internetow=C4=85 firmy? M=C3=B3g=C5=82bym prz=
-edstawi=C4=87 ofert=C4=99?=20
+I would also do a small update to commit message: "120000 jiffies"  to
+"120000 msec".
+On my setup 120000 msec ends up to be 120000 jiffies.
 
+How do you prefer to handle this?
+I can send a v2 on top of linux-next / mainline
+I can send a fixup patch which can be squashed to the patch you have in
+your master branch atm
+Or you add this line by yourself?
 
-Pozdrawiam serdecznie,
-Dominik Perkowski
+Either way is fine for me, whichever works best for you.
+
+-- 
+Péter
