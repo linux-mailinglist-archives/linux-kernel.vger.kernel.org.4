@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DD1C70B43D
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 06:54:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 761C770B43F
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 06:56:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231615AbjEVEye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 00:54:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44626 "EHLO
+        id S231630AbjEVEz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 00:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231605AbjEVEyb (ORCPT
+        with ESMTP id S231509AbjEVEzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 00:54:31 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 699DEE9
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 21:54:29 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-561afe72a73so76337857b3.0
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 21:54:29 -0700 (PDT)
+        Mon, 22 May 2023 00:55:55 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D573BB
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 21:55:55 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-ba829e17aacso8512568276.0
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 21:55:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684731268; x=1687323268;
+        d=google.com; s=20221208; t=1684731354; x=1687323354;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DKO2MGlysYL+7+oQy8UdaapVjC7HViDdumwjMefUUFk=;
-        b=J9ylJNbawMeH4tOfy11w+ZaO/6872J2rqfHP5lovPYJFW8zB72NKQpN6jeQPkFtYO5
-         7RHmvMjgUcPMPHqNGnXVyrAFqE5jQbr7ovn6/CLPgFbf3l4X7M/QuLcTo+6IociOTnvp
-         5CQ9bnI6x5YxJS4Rh5hvct/0Yo5JX0qxeMmK1yabPvgHVQgZYihchIYIgKApcKzJ3IRg
-         ROh6CHyiaDDOL+Ex2mG/L8yyWOYTqU/rosesPvWEE4ijihe6qctq0T8BNRcL6ZpZfkCn
-         M6FU+PpeRPkKqHsAb2AldyKg/94bE7H6WNY4ZFE5SlqswttpLgasmwxgkPJXNEXdyjtP
-         03EQ==
+        bh=zTm3eSBiFsuHpLmgEmMbxBID/kzy6WIASRGS/m4xNS4=;
+        b=cg30IRtt7WWBZINDX0Jv402rJAxuzmQi7sNbiwo3sAYNeuv0iwLqCdxKXUV1666arB
+         iODQXo3TXBZWNrbAGBgo7JPYM/uh3QZy2aOwzrHWKdaKeQxiaTgQr+B/h0WaJumRmkZS
+         EwvnPxhlE/ygC1l9PvisFRAxceZsimtF2xJnCScbrcoMyL1u1L/6wf9rDZLxnaTA3LQc
+         zI7g1VSQ5r9D+qngti0qturyyoRo7eal1Od9D8FGmOBxjDKgugY3ZMq1QggviidfFbw9
+         1sPnCORb05gZ3h3EwvicWZtgtg3JnoDyX2eiBh+EAi3PI8BUvp+6C/C1Nf/8YEhUgGVC
+         fWYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684731268; x=1687323268;
+        d=1e100.net; s=20221208; t=1684731354; x=1687323354;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DKO2MGlysYL+7+oQy8UdaapVjC7HViDdumwjMefUUFk=;
-        b=Pymt1ElQf608iFI+8jZDVJTW3E//lxwzfyY6rgB3vvX+Z1wYsH7162FejLcmsK3zj7
-         LfTvtUTGfg8Xh0UN1KtmnCjq0UCIUWefKalz68eZ+bQcLys2InsYlvXXRvvFNyGj2MGY
-         FP0fWktXqGVpHdlghFVlEApfHDu/H+OGgwsOIlJF6M0eTHj2xjpBRg++fabGVuD/YBLk
-         rsa2XoHD1s0AOwc82FAZwC+2NG0Z9xvE/MO4868TqVIqQFW3a1HhVPgmPNLfnI1A7Eam
-         N0J1m9IEzYyBbwjRPEOBLH4N0oW9lzKWSYg5g5gJmHzMnF+XvGLTmv0Y+URZULk/dl/b
-         lskQ==
-X-Gm-Message-State: AC+VfDxNNRvLbkBGmuE5OeTFEUQiIUT0GKbyRlW5ry6S4DbHQKmj6AII
-        Zv+t2laoX3XD+xIRMmXZ4CrGDQ==
-X-Google-Smtp-Source: ACHHUZ4551zDAoXcCIh8jhAd8f8X+Cxw/fLbkIrjHAC/+8ziZTZq6Fx4vtipE1QtRd7bp1hgyGTCog==
-X-Received: by 2002:a81:4e97:0:b0:561:e7bb:36a1 with SMTP id c145-20020a814e97000000b00561e7bb36a1mr8839265ywb.49.1684731268515;
-        Sun, 21 May 2023 21:54:28 -0700 (PDT)
+        bh=zTm3eSBiFsuHpLmgEmMbxBID/kzy6WIASRGS/m4xNS4=;
+        b=JUV2Awq5oX2NO3ESgrJYMD+z+OkQXW5Et38CqVu12HuLCNxUDTgCYirhce4ntk6epm
+         fT9/sjxNADTv76gKkTevx0qrLJ1szZF4DBS1iaiSadhCNv8yCkdblfhU8MKExXIqVXvn
+         BF7HUF8tb+JtF8jk6S/KJ+FxAMZamq+WUaIjBfhWr0rfTuKuiQ87V3vdOrVY8KQm/KDV
+         Y8sYsgu+broqd9vJP46Qxuq8B+3UP7PS47EPbPTK7fixg1S74GeVzI8gHqD8027Gv2ix
+         LTy16NVoeG1AIchMIvK5vsY6FBvvHzIQM6KPFj14mRO6yhd9Wyj8mjWI0fZexarSqjNI
+         AHuA==
+X-Gm-Message-State: AC+VfDwh7MukIJoSrihvM6mQtALadM/AqNb4r7W2E18GAAuFeESCmgZp
+        D9IbjIUFZ6uNSEzTfCooaVWGdg==
+X-Google-Smtp-Source: ACHHUZ5T4JJRJ8fgbx7qxtgyN7oMDnzb0y/FhCeDxcmhIqNJgCW1YAFxxuHwFhGWjkNrnbHB22VBBQ==
+X-Received: by 2002:a25:fc28:0:b0:ba8:37bd:59db with SMTP id v40-20020a25fc28000000b00ba837bd59dbmr8298369ybd.34.1684731354145;
+        Sun, 21 May 2023 21:55:54 -0700 (PDT)
 Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id r190-20020a0de8c7000000b0056189f9ec2asm1803508ywe.133.2023.05.21.21.54.25
+        by smtp.gmail.com with ESMTPSA id 185-20020a2505c2000000b00babd051a405sm938658ybf.26.2023.05.21.21.55.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 May 2023 21:54:28 -0700 (PDT)
-Date:   Sun, 21 May 2023 21:54:25 -0700 (PDT)
+        Sun, 21 May 2023 21:55:53 -0700 (PDT)
+Date:   Sun, 21 May 2023 21:55:50 -0700 (PDT)
 From:   Hugh Dickins <hughd@google.com>
 X-X-Sender: hugh@ripple.attlocal.net
 To:     Andrew Morton <akpm@linux-foundation.org>
@@ -81,9 +81,10 @@ cc:     Mike Kravetz <mike.kravetz@oracle.com>,
         Song Liu <song@kernel.org>,
         Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH 05/31] mm/filemap: allow pte_offset_map_lock() to fail
+Subject: [PATCH 06/31] mm/page_vma_mapped: delete bogosity in
+ page_vma_mapped_walk()
 In-Reply-To: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
-Message-ID: <3e6d4f8-9f4d-fa7e-304e-1494dddd45b@google.com>
+Message-ID: <502d6743-b0bf-d848-596a-4b3f3e44de8b@google.com>
 References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -98,45 +99,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-filemap_map_pages() allow pte_offset_map_lock() to fail; and remove the
-pmd_devmap_trans_unstable() check from filemap_map_pmd(), which can safely
-return to filemap_map_pages() and let pte_offset_map_lock() discover that.
+Revert commit a7a69d8ba88d ("mm/thp: another PVMW_SYNC fix in
+page_vma_mapped_walk()"): I was proud of that "Aha!" commit at the time,
+but in revisiting page_vma_mapped_walk() for pte_offset_map() failure,
+that block raised a doubt: and it now seems utterly bogus.  The prior
+map_pte() has taken ptl unconditionally when PVMW_SYNC: I must have
+forgotten that when making the change.  It did no harm, but could not
+have fixed a BUG or WARN, and is hard to reconcile with coming changes.
 
 Signed-off-by: Hugh Dickins <hughd@google.com>
 ---
- mm/filemap.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+ mm/page_vma_mapped.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-diff --git a/mm/filemap.c b/mm/filemap.c
-index 28b42ee848a4..9e129ad43e0d 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -3408,13 +3408,6 @@ static bool filemap_map_pmd(struct vm_fault *vmf, struct folio *folio,
- 	if (pmd_none(*vmf->pmd))
- 		pmd_install(mm, vmf->pmd, &vmf->prealloc_pte);
+diff --git a/mm/page_vma_mapped.c b/mm/page_vma_mapped.c
+index 64aff6718bdb..007dc7456f0e 100644
+--- a/mm/page_vma_mapped.c
++++ b/mm/page_vma_mapped.c
+@@ -275,10 +275,6 @@ bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw)
+ 				goto restart;
+ 			}
+ 			pvmw->pte++;
+-			if ((pvmw->flags & PVMW_SYNC) && !pvmw->ptl) {
+-				pvmw->ptl = pte_lockptr(mm, pvmw->pmd);
+-				spin_lock(pvmw->ptl);
+-			}
+ 		} while (pte_none(*pvmw->pte));
  
--	/* See comment in handle_pte_fault() */
--	if (pmd_devmap_trans_unstable(vmf->pmd)) {
--		folio_unlock(folio);
--		folio_put(folio);
--		return true;
--	}
--
- 	return false;
- }
- 
-@@ -3501,6 +3494,11 @@ vm_fault_t filemap_map_pages(struct vm_fault *vmf,
- 
- 	addr = vma->vm_start + ((start_pgoff - vma->vm_pgoff) << PAGE_SHIFT);
- 	vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd, addr, &vmf->ptl);
-+	if (!vmf->pte) {
-+		folio_unlock(folio);
-+		folio_put(folio);
-+		goto out;
-+	}
- 	do {
- again:
- 		page = folio_file_page(folio, xas.xa_index);
+ 		if (!pvmw->ptl) {
 -- 
 2.35.3
 
