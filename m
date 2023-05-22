@@ -2,208 +2,321 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FAE370BFF2
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:44:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05A5170BFF9
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:45:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233421AbjEVNoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 09:44:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55392 "EHLO
+        id S233606AbjEVNpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 09:45:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230356AbjEVNoa (ORCPT
+        with ESMTP id S230184AbjEVNpO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 09:44:30 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1F1C6;
-        Mon, 22 May 2023 06:44:28 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id EEAFC5FD54;
-        Mon, 22 May 2023 16:44:26 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1684763067;
-        bh=kFzBDWE6ehSXlsTN0IdJHlsVb9aEM28FbSfn2TVBatI=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=OcRwRuTxTkmb8tMXCbJuUSROuv4I0LA5/kbCr1NcDB9suRWxD0O/R/+6AYXrpVgi8
-         WoCcvuFTCuQWg/YVCUv5i0LdzrRdTjMVNL2oZZ3Vy03IzbolJo720jdrOhsQONY+Z3
-         JWuVAmXasVBCGsYP5NRs1vO7YsOAxNTiiMhrnzry6SQD6hkUI7k7FZt4ciWorlv3Yk
-         9y1lRjqGh+024OQE2tIzf28FbwG/WwKJMwJlfb1br91faqUjR10+P8+B4+3V9cE6VB
-         vOI0LaYXbWNG8tmtlqu4BKSiuQoWCatCS2gCbmN2cf29z3Cp5YxlbP9VHoqbENJqoY
-         YQqHOD0eX1yZg==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Mon, 22 May 2023 16:44:26 +0300 (MSK)
-Date:   Mon, 22 May 2023 16:44:25 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Heiner Kallweit <hkallweit1@gmail.com>
-CC:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <khilman@baylibre.com>, <jian.hu@amlogic.com>,
-        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
-        <linux-amlogic@lists.infradead.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v14 6/6] clk: meson: a1: add Amlogic A1 Peripherals clock
- controller driver
-Message-ID: <20230522134425.pc5fhojf53v6q2jz@CAB-WSD-L081021>
-References: <20230426095805.15338-1-ddrokosov@sberdevices.ru>
- <20230426095805.15338-7-ddrokosov@sberdevices.ru>
- <CAFBinCA2OhtVaCJDi8ZfAFLSE4oUgxYBDScaP_WW63curEK8Mg@mail.gmail.com>
- <20230512140630.qd33rwzaalmadpmk@CAB-WSD-L081021>
- <CAFBinCA8e9evk+9hTEgoNOD_+3DBst6vYDcradmr2c996jdUmw@mail.gmail.com>
- <20230517103456.p3sjxzbepvg7cr2r@CAB-WSD-L081021>
- <CAFBinCCPf+asVakAxeBqV-jhsZp=i2zbShByTCXfYYAQ6cCnHg@mail.gmail.com>
- <573d96df-7b08-4fa2-668b-58ff674a314e@gmail.com>
+        Mon, 22 May 2023 09:45:14 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC50C6;
+        Mon, 22 May 2023 06:45:12 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 4A59AC0008;
+        Mon, 22 May 2023 13:45:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1684763110;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nUSffco4/w//XAZ47cQUSWYcDz41qfX87j0DxKN1CAE=;
+        b=XqLOC5hX6TjWGppK7GxG8h5/b8VVCWX/RXJtP66a12W1AAKIH61DM6rBKTqsi4CGF1ZPm5
+        /FjG9BjwdTtBcpLpuiDAa6dOfDoKZyP3+61PxaBCCCfYSZwRD4UjWpLWGnMHOFRafkVXuf
+        1LrDH6YsIvUpp+4z8ag875XUI3+hDqhl4Scqt2BSDRbpi3axcEIO1x4NSkrxYyUgGT2vZ0
+        QsxDYPmDTq/+iciT/uyYr+HJI9ENIvVhwtAxgsbxjn595GPLk7Au+EhAT2eeclRTnRBzel
+        LD3Lg6Bb7pAIB43M5w66f9YM5W5Ub7Vqm5X4HV59kYr7CqFjVLOF1F8Z8WX+sQ==
+Date:   Mon, 22 May 2023 15:45:07 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Md Sadre Alam <quic_mdalam@quicinc.com>
+Cc:     mani@kernel.org, richard@nod.at, vigneshr@ti.com,
+        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_srichara@quicinc.com
+Subject: Re: [PATCH v2 2/5] mtd: rawnand: qcom: Add support for reset,
+ readid, status exec_op
+Message-ID: <20230522154507.0255d902@xps-13>
+In-Reply-To: <20230511133017.6307-3-quic_mdalam@quicinc.com>
+References: <20230511133017.6307-1-quic_mdalam@quicinc.com>
+        <20230511133017.6307-3-quic_mdalam@quicinc.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <573d96df-7b08-4fa2-668b-58ff674a314e@gmail.com>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/22 08:14:00 #21365129
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Heiner,
+Hi Md,
 
-On Fri, May 19, 2023 at 06:10:50PM +0200, Heiner Kallweit wrote:
-> On 18.05.2023 22:04, Martin Blumenstingl wrote:
-> > Hi Dmitry,
-> > 
-> > On Wed, May 17, 2023 at 12:34 PM Dmitry Rokosov
-> > <ddrokosov@sberdevices.ru> wrote:
-> > [...]
-> >>>> Additionally, the CCF determines the best ancestor based on how close
-> >>>> its rate is to the given one, based on arithmetic calculations. However,
-> >>>> we have independent knowledge that a certain clock would be better, with
-> >>>> less jitter and fewer intermediaries, which will likely improve energy
-> >>>> efficiency. Sadly, the CCF cannot take this into account.
-> >>> I agree that the implementation in CCF is fairly simple. There's ways
-> >>> to trick it though: IIRC if there are multiple equally suitable clocks
-> >>> it picks the first one. For me all of this has worked so far which is
-> >>> what makes me curious in this case (not saying that anything is wrong
-> >>> with your approach).
-> >>>
-> >>> Do you have a (real world) example where the RTC clock should be
-> >>> preferred over another clock?
-> >>>
-> >>
-> >> Yes, a real-life example is the need for a 32Khz clock for an external
-> >> wifi chip. There is one option to provide this clock with high
-> >> precision, which is RTC + GENCLK.
-> >>
-> >>> I'm thinking about the following scenario.
-> >>> PWM parents:
-> >>> - XTAL: 24MHz
-> >>> - sys: not sure - let's say 166.67MHz
-> >>> - RTC: 32kHz
-> >>>
-> >>> Then after that there's a divider and a gate.
-> >>>
-> >>> Let's say the PWM controller needs a 1MHz clock: it can take that from
-> >>> XTAL or sys. Since XTAL is evenly divisible to 1MHz CCF will pick that
-> >>> and use the divider.
-> >>> But let's say the PWM controller needs a 32kHz clock: CCF would
-> >>> automatically pick the RTC clock.
-> >>> So is your implementation there to cover let's say 1kHz where
-> >>> mathematically 24MHz can be divided evenly to 1kHz (and thus should
-> >>> not result in any jitter) but RTC gives better precision in the real
-> >>> world (even though it's off by 24Hz)?
-> >>>
-> >>
-> >> I don't think so. The highest precision that RTC can provide is from a
-> >> 32KHz rate only. However, I believe that a 1kHz frequency can also be
-> >> achieved by using xtal 24MHz with a divider, which can provide high
-> >> precision as well.
-> > Thank you again for the great discussion on IRC today.
-> > Here's my short summary so I don't forget before you'll follow up on this.
-> > 
-> > In general there's two known cases where the RTC clock needs to be used:
-> > a) When using the GENCLK output of the SoC to output the 32kHz RTC
-> > clock and connect that to an SDIO WiFi chip clock input (this seems
-> > useful in my understanding because the RTC clock provides high
-> > precision)
-> > b) When using the PWM controller to output a 32kHz clock signal. In
-> > this case my understanding is that using the RTC clock as input to the
-> > PWM controller results in the best possible signal
-> > 
-> > The second case won't be supported with Heiner's patches [0] that use
-> > CCF (common clock framework) in the PWM controller driver.
-> > In this series the parent clock is calculated using:
-> >   freq = div64_u64(NSEC_PER_SEC * (u64)0xffff, period);
-> > 
-> > A 32kHz clock means a PWM period of 30518ns. So with the above
-> 
-> To be precise: 30517,578125ns
-> What means that the PWM framework can't say "I want 32768Hz",
-> but just "I want something being very close to 32768Hz".
-> So what you need is some simple heuristic to interpret the
-> PWM request -> "PWM requests 30518ns, but supposedly it wants
-> 32768Hz"
-> 
-> NSEC_PER_SEC / 30518 = 32767 (rounded down from 32767,547)
-> clk_round_rate(channel->clk, 32767) would return 0 (I *think*),
-> because it tries to find the next lower clock.
-> 
-> The SoC families I'm familiar with have fclkin2 as PWM parent.
-> That's 1 GHz in my case, what results in a frequency of 32.767,547Hz
-> for period = 30518n.
-> What you're saying is that newer generations don't have PWM parents
-> >24MHz any longer?
+quic_mdalam@quicinc.com wrote on Thu, 11 May 2023 19:00:14 +0530:
 
-No, of course not. For example, a fixed PLL (with all fclk_divX
-settings) has rates higher than 24MHz. However, we need to consider the
-'heavy' background of such PWM.
+> This change will add exec_ops support for RESET , READ_ID, STATUS
+> command.
+>=20
+> Co-developed-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
+> ---
+> Change in [v2]
+>=20
+> * Missed to post Cover-letter, so posting v2 patch with cover-letter
+>=20
+>  drivers/mtd/nand/raw/qcom_nandc.c | 166 +++++++++++++++++++++++++++++-
+>  1 file changed, 163 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/mtd/nand/raw/qcom_nandc.c b/drivers/mtd/nand/raw/qco=
+m_nandc.c
+> index dae460e2aa0b..d2f2a8971907 100644
+> --- a/drivers/mtd/nand/raw/qcom_nandc.c
+> +++ b/drivers/mtd/nand/raw/qcom_nandc.c
+> @@ -384,6 +384,9 @@ struct nandc_regs {
+>   * @reg_read_pos:		marker for data read in reg_read_buf
+>   *
+>   * @cmd1/vld:			some fixed controller register values
+> + *
+> + * @exec_opwrite:		flag to select correct number of code word
+> + *				while reading status
+>   */
+>  struct qcom_nand_controller {
+>  	struct device *dev;
+> @@ -434,6 +437,7 @@ struct qcom_nand_controller {
+>  	int reg_read_pos;
+> =20
+>  	u32 cmd1, vld;
+> +	bool exec_opwrite;
+>  };
+> =20
+>  /*
+> @@ -2920,6 +2924,8 @@ static int qcom_op_cmd_mapping(struct qcom_nand_con=
+troller *nandc, u8 cmd,
+>  		break;
+>  	case NAND_CMD_PAGEPROG:
+>  		ret =3D OP_PROGRAM_PAGE;
+> +		q_op->flag =3D NAND_CMD_PAGEPROG;
 
-However, we have a "lightweight" clkin (special rtc32k) with a rate of
-32kHz that we could potentially use as an input to produce a 32kHz
-output on the PWM lines. I don't see any reason why we should not
-support such special cases.
+Just use the instruction value?
 
-> 
-> 
-> > calculation the PWM driver is asking for a clock rate of >=2GHz.
-> > We concluded that letting the common clock framework choose the best
-> > possible parent (meaning: removing CLK_SET_RATE_NO_REPARENT here) can
-> > be a way forward.
-> > But this means that the PWM controller driver must try to find the
-> > best possible parent somehow. The easiest way we came up with
-> > (pseudo-code):
-> >   freq = NSEC_PER_SEC / period;
-> >   fin_freq = clk_round_rate(channel->clk, freq);
-> >   if (fin_freq != freq) {
-> >     freq = div64_u64(NSEC_PER_SEC * (u64)0xffff, period);
-> >     fin_freq = clk_round_rate(channel->clk, freq);
-> >   }
-> > 
-> > The idea is: for a requested 32kHz signal the PWM period is 30518ns.
-> > The updated logic would find that there's a matching clock input and
-> > use that directly. If not: use the original logic as suggested by
-> > Heiner.
-> > 
-> > 
-> > Best regards,
-> > Martin
-> > 
-> > 
-> > [0] https://lore.kernel.org/linux-amlogic/9faca2e6-b7a1-4748-7eb0-48f8064e323e@gmail.com/
-> 
+> +		nandc->exec_opwrite =3D true;
+>  		break;
+>  	default:
+>  		break;
+> @@ -2982,10 +2988,95 @@ static void qcom_parse_instructions(struct nand_c=
+hip *chip,
+>  	}
+>  }
+> =20
+> +static void qcom_delay_ns(unsigned int ns)
+> +{
+> +	if (!ns)
+> +		return;
+> +
+> +	if (ns < 10000)
+> +		ndelay(ns);
+> +	else
+> +		udelay(DIV_ROUND_UP(ns, 1000));
+> +}
+> +
+> +static int qcom_wait_rdy_poll(struct nand_chip *chip, unsigned int time_=
+ms)
+> +{
+> +	struct qcom_nand_controller *nandc =3D get_qcom_nand_controller(chip);
+> +	unsigned long start =3D jiffies + msecs_to_jiffies(time_ms);
+> +	u32 flash;
+> +
+> +	nandc_read_buffer_sync(nandc, true);
+> +
+> +	do {
+> +		flash =3D le32_to_cpu(nandc->reg_read_buf[0]);
+> +		if (flash & FS_READY_BSY_N)
+> +			return 0;
+> +		cpu_relax();
+> +	} while (time_after(start, jiffies));
+> +
+> +	dev_err(nandc->dev, "Timeout waiting for device to be ready:0x%08x\n", =
+flash);
+> +
+> +	return -ETIMEDOUT;
+> +}
+> +
+>  static int qcom_read_status_exec(struct nand_chip *chip,
+>  				 const struct nand_subop *subop)
+>  {
+> -	return 0;
+> +	struct qcom_nand_host *host =3D to_qcom_nand_host(chip);
+> +	struct qcom_nand_controller *nandc =3D get_qcom_nand_controller(chip);
+> +	struct nand_ecc_ctrl *ecc =3D &chip->ecc;
+> +	struct qcom_op q_op;
+> +	const struct nand_op_instr *instr =3D NULL;
+> +	unsigned int op_id =3D 0;
+> +	unsigned int len =3D 0;
+> +	int ret =3D 0, num_cw =3D 1, i;
+> +	u32 flash_status;
+> +
+> +	host->status =3D NAND_STATUS_READY | NAND_STATUS_WP;
+> +
+> +	qcom_parse_instructions(chip, subop, &q_op);
+> +
+> +	if (nandc->exec_opwrite) {
 
--- 
-Thank you,
-Dmitry
+I definitely don't understand this flag at all.
+
+> +		num_cw =3D ecc->steps;
+> +		nandc->exec_opwrite =3D false;
+> +	}
+> +
+> +	pre_command(host, NAND_CMD_STATUS);
+> +
+> +	nandc_set_reg(chip, NAND_FLASH_CMD, q_op.cmd_reg);
+> +	nandc_set_reg(chip, NAND_EXEC_CMD, 1);
+> +
+> +	write_reg_dma(nandc, NAND_FLASH_CMD, 1, NAND_BAM_NEXT_SGL);
+> +	write_reg_dma(nandc, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
+> +
+> +	read_reg_dma(nandc, NAND_FLASH_STATUS, 1, NAND_BAM_NEXT_SGL);
+> +
+> +	ret =3D submit_descs(nandc);
+> +	if (ret)
+> +		dev_err(nandc->dev, "failure in sbumitting status descriptor\n");
+> +
+> +	free_descs(nandc);
+> +
+> +	nandc_read_buffer_sync(nandc, true);
+> +	for (i =3D 0; i < num_cw; i++) {
+> +		flash_status =3D le32_to_cpu(nandc->reg_read_buf[i]);
+> +
+> +	if (flash_status & FS_MPU_ERR)
+> +		host->status &=3D ~NAND_STATUS_WP;
+> +
+> +	if (flash_status & FS_OP_ERR || (i =3D=3D (num_cw - 1) &&
+> +					 (flash_status & FS_DEVICE_STS_ERR)))
+> +		host->status |=3D NAND_STATUS_FAIL;
+
+If there is a failure detected, error out (everywhere).
+
+> +	}
+> +
+> +	flash_status =3D host->status;
+> +
+> +	instr =3D q_op.data_instr;
+> +	op_id =3D q_op.data_instr_idx;
+> +	len =3D nand_subop_get_data_len(subop, op_id);
+> +	memcpy(instr->ctx.data.buf.in, &flash_status, len);
+> +
+> +	return ret;
+>  }
+> =20
+>  static int qcom_erase_cmd_type_exec(struct nand_chip *chip, const struct=
+ nand_subop *subop)
+> @@ -3000,12 +3091,81 @@ static int qcom_param_page_type_exec(struct nand_=
+chip *chip,  const struct nand_
+> =20
+>  static int qcom_read_id_type_exec(struct nand_chip *chip, const struct n=
+and_subop *subop)
+>  {
+> -	return 0;
+> +	struct qcom_nand_controller *nandc =3D get_qcom_nand_controller(chip);
+> +	struct qcom_nand_host *host =3D to_qcom_nand_host(chip);
+> +	struct qcom_op q_op;
+> +	const struct nand_op_instr *instr =3D NULL;
+> +	unsigned int op_id =3D 0;
+> +	unsigned int len =3D 0;
+> +	int ret =3D 0;
+> +
+> +	qcom_parse_instructions(chip, subop, &q_op);
+> +
+> +	pre_command(host, NAND_CMD_READID);
+> +
+> +	nandc_set_reg(chip, NAND_FLASH_CMD, q_op.cmd_reg);
+> +	nandc_set_reg(chip, NAND_ADDR0, q_op.addr1_reg);
+> +	nandc_set_reg(chip, NAND_ADDR1, q_op.addr2_reg);
+> +	nandc_set_reg(chip, NAND_FLASH_CHIP_SELECT,
+> +		      nandc->props->is_bam ? 0 : DM_EN);
+> +
+> +	nandc_set_reg(chip, NAND_EXEC_CMD, 1);
+> +
+> +	write_reg_dma(nandc, NAND_FLASH_CMD, 4, NAND_BAM_NEXT_SGL);
+> +	write_reg_dma(nandc, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
+> +
+> +	read_reg_dma(nandc, NAND_READ_ID, 1, NAND_BAM_NEXT_SGL);
+> +
+> +	ret =3D submit_descs(nandc);
+> +	if (ret)
+> +		dev_err(nandc->dev, "failure in sbumitting read id descriptor\n");
+> +
+> +	free_descs(nandc);
+> +
+> +	instr =3D q_op.data_instr;
+> +	op_id =3D q_op.data_instr_idx;
+> +	len =3D nand_subop_get_data_len(subop, op_id);
+> +
+> +	nandc_read_buffer_sync(nandc, true);
+> +	memcpy(instr->ctx.data.buf.in, nandc->reg_read_buf, len);
+> +
+> +	return ret;
+>  }
+> =20
+>  static int qcom_misc_cmd_type_exec(struct nand_chip *chip, const struct =
+nand_subop *subop)
+>  {
+> -	return 0;
+> +	struct qcom_nand_controller *nandc =3D get_qcom_nand_controller(chip);
+> +	struct qcom_nand_host *host =3D to_qcom_nand_host(chip);
+> +	struct qcom_op q_op;
+> +	int ret =3D 0;
+> +
+> +	qcom_parse_instructions(chip, subop, &q_op);
+> +
+> +	if (q_op.flag =3D=3D NAND_CMD_PAGEPROG)
+> +		goto wait_rdy;
+> +
+> +	pre_command(host, NAND_CMD_RESET);
+
+???
+
+> +
+> +	nandc_set_reg(chip, NAND_FLASH_CMD, q_op.cmd_reg);
+> +	nandc_set_reg(chip, NAND_EXEC_CMD, 1);
+> +
+> +	write_reg_dma(nandc, NAND_FLASH_CMD, 1, NAND_BAM_NEXT_SGL);
+> +	write_reg_dma(nandc, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
+> +
+> +	read_reg_dma(nandc, NAND_FLASH_STATUS, 1, NAND_BAM_NEXT_SGL);
+> +
+> +	ret =3D submit_descs(nandc);
+> +	if (ret)
+> +		dev_err(nandc->dev, "failure in sbumitting misc descriptor\n");
+
+Typo                                             ^
+
+Same above.
+
+You should error out immediately when something wrong happens.
+
+> +
+> +	free_descs(nandc);
+> +
+> +wait_rdy:
+> +	qcom_delay_ns(q_op.rdy_delay_ns);
+> +
+> +	ret =3D qcom_wait_rdy_poll(chip, q_op.rdy_timeout_ms);
+> +
+> +	return ret;
+>  }
+> =20
+>  static int qcom_data_read_type_exec(struct nand_chip *chip, const struct=
+ nand_subop *subop)
+
+
+Thanks,
+Miqu=C3=A8l
