@@ -2,89 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 897D570BE8B
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 14:39:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE93170BE8E
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 14:39:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233978AbjEVMjf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 08:39:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42956 "EHLO
+        id S234150AbjEVMjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 08:39:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232966AbjEVMjX (ORCPT
+        with ESMTP id S234061AbjEVMja (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 08:39:23 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4D11A1;
-        Mon, 22 May 2023 05:38:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=/G5DexSSkcSg3Y2YZMRQ2lnxwKx9OswZztzvdpONTRs=; b=NDVTPdrURD5Os9ENbe99JcYLDy
-        Spd+1Ny789rc+HZiXQONF1GoqYAn2eKT43C7UiZ4Duio0q9Zm212oK2yr25tDDCt3Bv0k3UbjCXnH
-        Rv9HsMJWO3q4XI0Bjv1NVFJZnsHciDaaUJHI0mN6A8Tk2Vk2+QfvIkqbbroibHjD/qYI=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1q14oB-00DXfc-N0; Mon, 22 May 2023 14:38:39 +0200
-Date:   Mon, 22 May 2023 14:38:39 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Parthiban Veerasooran <Parthiban.Veerasooran@microchip.com>
-Cc:     hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ramon.nordin.rodriguez@ferroamp.se, horatiu.vultur@microchip.com,
-        Woojung.Huh@microchip.com, Nicolas.Ferre@microchip.com,
-        Thorsten.Kummermehr@microchip.com
-Subject: Re: [PATCH net-next v2 3/6] net: phy: microchip_t1s: update LAN867x
- PHY supported revision number
-Message-ID: <f417ba86-4d48-44e9-8bf0-aa15c466a9f2@lunn.ch>
-References: <20230522113331.36872-1-Parthiban.Veerasooran@microchip.com>
- <20230522113331.36872-4-Parthiban.Veerasooran@microchip.com>
+        Mon, 22 May 2023 08:39:30 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950A4FE;
+        Mon, 22 May 2023 05:39:11 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1q14oH-0006AD-S6; Mon, 22 May 2023 14:38:45 +0200
+Message-ID: <55dda0bb-fe42-6dee-28ea-00121554d092@leemhuis.info>
+Date:   Mon, 22 May 2023 14:38:45 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230522113331.36872-4-Parthiban.Veerasooran@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [regression] Since kernel 6.3.1 logitech unify receiver not
+ working properly
+Content-Language: en-US, de-DE
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        =?UTF-8?Q?Filipe_La=c3=adns?= <lains@riseup.net>,
+        Bastien Nocera <hadess@hadess.net>,
+        Jiri Kosina <jikos@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, guy.b@bluewin.ch
+References: <9b987585-0834-bb8c-3414-283c29f3f2ab@leemhuis.info>
+ <bec024d5-4088-00ae-f7b5-7188868b1707@leemhuis.info>
+ <b7717c43-74bf-b91d-d3ce-874493df602c@gmail.com>
+ <CAO-hwJ+At1J_yUpX2q_dJekzZ-PoTDAvxmkTk_e4Yu0Z338bEA@mail.gmail.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <CAO-hwJ+At1J_yUpX2q_dJekzZ-PoTDAvxmkTk_e4Yu0Z338bEA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1684759151;9c913b9b;
+X-HE-SMSGID: 1q14oH-0006AD-S6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> -#define PHY_ID_LAN867X 0x0007C160
-> +#define PHY_ID_LAN867X_REVB1 0x0007C162
+On 16.05.23 15:34, Benjamin Tissoires wrote:
+> On Tue, May 16, 2023 at 3:25 PM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+>> On 5/11/23 18:58, Thorsten Leemhuis wrote:
+>>> On 08.05.23 11:55, Linux regression tracking (Thorsten Leemhuis) wrote:
+>>>> I noticed a regression report in bugzilla.kernel.org. As many (most?)
+>>>> kernel developers don't keep an eye on it, I decided to forward it by mail.
+>>>>
+>>>> Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217412 :
+>>>
+>>> TWIMC: a few other users (three or four iirc) showed up in that ticket
+>>> and reported problems with the receiver, albeit the symptoms are not
+>>> exactly the same for all of them, so there might be more than one problem.
+>>>
+>>> I'll try to motivate the affected users to perform a bisection. But
+>>> would be great if those with more knowledge about this code could
+>>> briefly look into the ticket, maybe the details the users shared allows
+>>> one of you to guess what causes this.
+>>
+>> Hmm,
+>>
+>> You noted in the similar report [1] that developers involved here
+>> ignore this regressions. I wonder if Linus has to be hired in
+>> this case, and if it is the case, let's take a look and hear closely what
+>> he will say.
+> 
+> Sigh... Not answering an email is bad, but maybe you can also
+> understand that developers can take days off?
 
->  static struct phy_driver microchip_t1s_driver[] = {
->  	{
-> -		PHY_ID_MATCH_MODEL(PHY_ID_LAN867X),
-> -		.name               = "LAN867X",
-> +		PHY_ID_MATCH_EXACT(PHY_ID_LAN867X_REVB1),
-> +		.name               = "LAN867X Rev.B1",
->  		.features           = PHY_BASIC_T1S_P2MP_FEATURES,
-> -		.config_init        = lan867x_config_init,
-> +		.config_init        = lan867x_revb1_config_init,
->  		.read_status        = lan867x_read_status,
->  		.get_plca_cfg	    = genphy_c45_plca_get_cfg,
->  		.set_plca_cfg	    = genphy_c45_plca_set_cfg,
-> @@ -124,7 +124,7 @@ static struct phy_driver microchip_t1s_driver[] = {
->  module_phy_driver(microchip_t1s_driver);
->  
->  static struct mdio_device_id __maybe_unused tbl[] = {
-> -	{ PHY_ID_MATCH_MODEL(PHY_ID_LAN867X) },
-> +	{ PHY_ID_MATCH_EXACT(PHY_ID_LAN867X_REVB1) },
->  	{ }
->  };
+Yup, also a totally valid reason I forgot to mention in my reply last week.
 
-Maybe i asked this last time...
+> And it turns out that I was waiting for Bastien to chime in, but I can
+> access his calendar too and just found out that he was AFK for the
+> entire month, except for the first week, which I wasn't aware. May is
+> a time where people in France have a lot of public holidays and is
+> also the cut to use those time off or they expire.
 
-What versions actually exist? The old entry would match 0x0007C16X, so
-0x0007C160 and 0x0007C161, 0x0007C162, if those actually exist. Now
-you are narrowing it down to just 0x0007C162.
+Thx for that, knowing that Bastien is unavailable is really helpful.
 
-It would be good to comment on this in the commit message, that
-0x0007C160 and 0x0007C161 never escaped the testing facility and hence
-don't need to be supported.
+> For me, I'll also be taking time off the rest of this week, so I won't
+> be able to have a look at this until next week at the earliest.
 
-	Andrew
+Hope your enjoyed your days off!
+
+FWIW, in case anybody is interested in a status update: one reporter
+bisected the problem down to 586e8fede79 ("HID: logitech-hidpp: Retry
+commands when device is busy"); reverting that commit on-top of 6.3
+fixes the problem for that reporter. For that reporter things also work
+on 6.4-rc; but for someone else that is affected that's not the case.
+
+Makes me wonder if we deal with two different issues here. Just asked
+where 6.4 does not work if reverting 586e8fede79 fixes things for them
+as well.
+
+For more details, see https://bugzilla.kernel.org/show_bug.cgi?id=217412
+
+Ciao, Thorsten
