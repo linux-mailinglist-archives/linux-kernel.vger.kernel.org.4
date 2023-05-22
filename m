@@ -2,137 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EE4B70B811
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:53:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 112DC70B817
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:53:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbjEVIxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 04:53:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39582 "EHLO
+        id S232489AbjEVIxp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 04:53:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231436AbjEVIxL (ORCPT
+        with ESMTP id S232540AbjEVIxb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 04:53:11 -0400
-Received: from mail-wm1-x341.google.com (mail-wm1-x341.google.com [IPv6:2a00:1450:4864:20::341])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37D8A8
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 01:53:09 -0700 (PDT)
-Received: by mail-wm1-x341.google.com with SMTP id 5b1f17b1804b1-3f41dceb9d1so56942165e9.1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 01:53:09 -0700 (PDT)
+        Mon, 22 May 2023 04:53:31 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FB8133
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 01:53:28 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1ae6dce19f7so29580685ad.3
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 01:53:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684745588; x=1687337588;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=r4JxhaVexhQpy8daiRNDw+XTd4Z91THI1tcDfW2c6HE=;
-        b=hGYIQsrsHnFEjQuK41XgS3jgFHGmSkmDmGtZqfqKbMqaw1+roK7luzJGgf6MkEI2zf
-         LqSzON1Zmed3SV4ToTWAPBXTyvtUhV9/8BCRoPKLguRVN5e4YBErEdR6/iXkgr3w9zE5
-         W4aKjz3F4KTe2c3j6kFwE4TdtneueV0LY7ZEt0yjmGJmTeBgneLZHGLd9Y5ags2ZDhae
-         Q0TT+80cDnDkrcVtC6mKi1S3g1p/XIxKWym0HyRrbbgeMEikjwyJ03sHhQcufI7aiV4Q
-         NEDGLQcwWgPgAjXuMgjJUDQE1/rby2Z3aJWEmCe4axLQbKwyT3jCR2BgkZU+gClV7wO/
-         ACMg==
+        d=linaro.org; s=google; t=1684745608; x=1687337608;
+        h=content-transfer-encoding:in-reply-to:references:subject:to:from
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yy4zVkssg8FiC+/RzC34Xwny+YRkysiolleunptsSl0=;
+        b=goP3fJOI9f2dj4q3zt7G8HUTP5BfxehAiYHW67aGWbby0GWZt7LwqnVO81ZhudtxKe
+         Hy1dBAmCCH05/+ctPzMqLgdiQq7GrwpQa9tvF1tkmESm/5p2HmwiCsjGcxd2ge80lvgu
+         03iGnj8GIx1OP0L3y78MVRzwyF4RuHUryJhcHtwg5/XatOvxlUOZ5+3s9hM81lTsqn15
+         +IH4niDECGBfRR30MOy3+8ozs5b0vu0tr/ftUTe+LqaVHS2W3bA5u4qP/kmPe/akcx9s
+         yiym+TXWcg7362wL1g3pJ7C98VTesi1nk7YvuxSfHQsUPguAZg2iAW5QjzK368ffmXVy
+         HfQA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684745588; x=1687337588;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=r4JxhaVexhQpy8daiRNDw+XTd4Z91THI1tcDfW2c6HE=;
-        b=BA+CyXWeXAEZp/r2TSwl1drxd+1UY3Rai3sDgTtb44WgGOmlxJKJ4ljZvAY9aGAzw8
-         Viyhw4PWRZTZLd9AunzzbiIFif3KbzeGH7kOJyZsZYqw5U5k7QnDKCrkZuDaKmyIyShh
-         CZ8O7x/bS96mUFcrxPQEJ8ceYIup0QRqt+EDAjbVPmm15Y6NAW3g8+CT5yaTjjxCk3C0
-         iD36Mx2x2wudcUvoJA5xdU3KKLNDdX2GOUHI4WRM42FgZNkvDrtIJUpSxB7wjuuBls1q
-         HdQZZrYPUopZzT53deqERBVcSeXxQNiUjs1MDcKLseJwcSaGkREkUA7KnWXM8J6d8UgG
-         I6bA==
-X-Gm-Message-State: AC+VfDx+/bPDJEMDFuAY9GyWvzjBDDesMm+ONFIlO/2HG8FsLgWC3pRc
-        Qub4tFNLNIUrACzwrN2ZyobTRQ==
-X-Google-Smtp-Source: ACHHUZ6UBR3+LBI+m8V1SPTaOnzgCK0atCcXfHxkCN2098SLTc/lFSwqy+8q2uw7iLTos5PH9rKVCw==
-X-Received: by 2002:a7b:c414:0:b0:3f4:2610:5cc7 with SMTP id k20-20020a7bc414000000b003f426105cc7mr6538472wmi.9.1684745588453;
-        Mon, 22 May 2023 01:53:08 -0700 (PDT)
-Received: from [10.1.4.6] (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id p4-20020a05600c358400b003f1738d0d13sm24745899wmq.1.2023.05.22.01.53.07
+        d=1e100.net; s=20221208; t=1684745608; x=1687337608;
+        h=content-transfer-encoding:in-reply-to:references:subject:to:from
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=yy4zVkssg8FiC+/RzC34Xwny+YRkysiolleunptsSl0=;
+        b=ODvBcgSQdOE6P6KZtRPOtO+htobdxJgHrGwcgfM0LpDaAuZ8OfMRzzU2d4aFGA2T49
+         DQZ212QG9aFGI1GU4AvWHhqWPVeYgzZHmvGqlfvYC6rGdbBLUlkTrb/1jNJOIKwF9yMP
+         TbqBj4ED64Lk40DvG9NPRNmrPVxdJBWv4/7RWSA1OfExEiTfsXTkIvHXgjnszEsKCpwj
+         EHMdh6oy4K5JOqKcs6lSEBGPH6657Mu6l2LmKLJBGwe47jgK1NG9iMUnbYZbocdxMhtc
+         EXU41YslWsJmknIuvc+3BjPv52azFVYaYb/VNyYMVuA0EffbM1ciXU5VXtoBZoMZXa/j
+         RgZA==
+X-Gm-Message-State: AC+VfDwMC0W/Kisxcsv9akYpBOBjRYsu9hV2UF5rUCn126gSVNehOuCS
+        Og2Cxj5/MEQGCs/V/GNqh1QjJA==
+X-Google-Smtp-Source: ACHHUZ4DcbvSTtZeRWniTVD7cIXlVTqrwop9sJluPZE1NASnzxNdtPS/2/7r53dSGhstBwpZYfU6/w==
+X-Received: by 2002:a17:902:ecc1:b0:1ad:f7d9:1ae0 with SMTP id a1-20020a170902ecc100b001adf7d91ae0mr11742345plh.38.1684745608044;
+        Mon, 22 May 2023 01:53:28 -0700 (PDT)
+Received: from ?IPV6:2401:4900:1c60:d309:883d:817e:8e91:be39? ([2401:4900:1c60:d309:883d:817e:8e91:be39])
+        by smtp.gmail.com with ESMTPSA id jc1-20020a17090325c100b001a1b66af22fsm4344017plb.62.2023.05.22.01.53.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 May 2023 01:53:08 -0700 (PDT)
-Message-ID: <116712ae-f18b-3288-ac6d-80073aebd458@baylibre.com>
-Date:   Mon, 22 May 2023 10:53:06 +0200
+        Mon, 22 May 2023 01:53:27 -0700 (PDT)
+Message-ID: <93db4ee5-4fb8-f159-0cf4-ec1669c36dd1@linaro.org>
+Date:   Mon, 22 May 2023 14:23:19 +0530
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 7/7] dt-bindings: Add bidings for mtk,apu-drm
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, airlied@gmail.com,
-        daniel@ffwll.ch, maarten.lankhorst@linux.intel.com,
-        mripard@kernel.org, tzimmermann@suse.de
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, matthias.bgg@gmail.com,
-        sumit.semwal@linaro.org, christian.koenig@amd.com,
-        jstephan@baylibre.com, dri-devel@lists.freedesktop.org,
+ Thunderbird/102.3.1
+From:   bhupesh.sharma@linaro.org
+To:     Anusha Rao <quic_anusha@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        thara.gopinath@gmail.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
+        linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, khilman@baylibre.com,
-        nbelin@baylibre.com, bero@baylibre.com
-References: <20230517145237.295461-1-abailon@baylibre.com>
- <20230517145237.295461-8-abailon@baylibre.com>
- <c32f0c3f-b43a-7045-38cc-2c11c7bb571e@collabora.com>
-Content-Language: en-US
-From:   Alexandre Bailon <abailon@baylibre.com>
-In-Reply-To: <c32f0c3f-b43a-7045-38cc-2c11c7bb571e@collabora.com>
+        linux-clk@vger.kernel.org, quic_srichara@quicinc.com,
+        quic_gokulsri@quicinc.com, quic_sjaganat@quicinc.com,
+        quic_kathirav@quicinc.com, quic_arajkuma@quicinc.com,
+        quic_poovendh@quicinc.com
+Subject: Re: [PATCH V3 4/4] arm64: dts: qcom: ipq9574: Enable crypto nodes
+References: <20230518141105.24741-1-quic_anusha@quicinc.com>
+ <20230518141105.24741-5-quic_anusha@quicinc.com>
+In-Reply-To: <20230518141105.24741-5-quic_anusha@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 5/18/23 7:41 PM, Anusha Rao <quic_anusha@quicinc.com> wrote:
+> Enable crypto support for ipq9574.
+> 
+> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+> ---
+>   Changes in V3:
+> 	- No change.
+> 
+>   arch/arm64/boot/dts/qcom/ipq9574.dtsi | 20 ++++++++++++++++++++
+>   1 file changed, 20 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> index fea15f3cf910..6e52d35a6a15 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
+> @@ -123,6 +123,26 @@
+>   			clock-names = "core";
+>   		};
+>   
+> +		cryptobam: dma-controller@704000 {
+> +			compatible = "qcom,bam-v1.7.0";
 
-
-On 5/17/23 17:04, AngeloGioacchino Del Regno wrote:
-> Il 17/05/23 16:52, Alexandre Bailon ha scritto:
->> This adds the device tree bindings for the APU DRM driver.
->>
->> Signed-off-by: Alexandre Bailon <abailon@baylibre.com>
->> Reviewed-by: Julien Stephan <jstephan@baylibre.com>
->> ---
->>   .../devicetree/bindings/gpu/mtk,apu-drm.yaml  | 38 +++++++++++++++++++
-> 
-> mediatek,mt(model)-apu.yaml
-> 
->>   1 file changed, 38 insertions(+)
->>   create mode 100644 
->> Documentation/devicetree/bindings/gpu/mtk,apu-drm.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/gpu/mtk,apu-drm.yaml 
->> b/Documentation/devicetree/bindings/gpu/mtk,apu-drm.yaml
->> new file mode 100644
->> index 000000000000..6f432d3ea478
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/gpu/mtk,apu-drm.yaml
->> @@ -0,0 +1,38 @@
->> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/gpu/mediatek,apu-drm.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: AI Processor Unit DRM
->> +
->> +properties:
->> +  compatible:
->> +    const: mediatek,apu-drm
-> 
-> const: mediatek,mt8195-apu (or whatever else).
-> 
-> ...besides, I don't think that this patch even belongs to this series? :-)
-> Spoiler alert! :-)
-Actually, it does!
-I forgot to send the patch that adds the platform driver ^^'
+Please confirm if this is "qcom,bam-v1.7.4" or "qcom,bam-v1.7.0". If "qcom,bam-v1.7.4" please use the newer compatible format.
 
 Thanks,
-Alexandre
-> 
-> Cheers,
-> Angelo
-> 
+Bhupesh
+
+> +			reg = <0x00704000 0x20000>;
+> +			interrupts = <GIC_SPI 207 IRQ_TYPE_LEVEL_HIGH>;
+> +			#dma-cells = <1>;
+> +			qcom,ee = <1>;
+> +			qcom,controlled-remotely;
+> +		};
+> +
+> +		crypto: crypto@73a000 {
+> +			compatible = "qcom,ipq9574-qce", "qcom,ipq4019-qce", "qcom,qce";
+> +			reg = <0x0073a000 0x6000>;
+> +			clocks = <&gcc GCC_CRYPTO_AHB_CLK>,
+> +				 <&gcc GCC_CRYPTO_AXI_CLK>,
+> +				 <&gcc GCC_CRYPTO_CLK>;
+> +			clock-names = "iface", "bus", "core";
+> +			dmas = <&cryptobam 2>, <&cryptobam 3>;
+> +			dma-names = "rx", "tx";
+> +		};
+> +
+>   		tlmm: pinctrl@1000000 {
+>   			compatible = "qcom,ipq9574-tlmm";
+>   			reg = <0x01000000 0x300000>;
 > 
