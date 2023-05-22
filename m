@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8638B70BBB4
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:25:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 643A270BBB3
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:25:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233163AbjEVLZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 07:25:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38254 "EHLO
+        id S232968AbjEVLZb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 07:25:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230378AbjEVLYb (ORCPT
+        with ESMTP id S232775AbjEVLYc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 07:24:31 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D25E7B
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 04:21:19 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba2b9ecfadaso11578270276.2
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 04:21:19 -0700 (PDT)
+        Mon, 22 May 2023 07:24:32 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D8D01FE6
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 04:21:21 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-564fb1018bcso21153957b3.0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 04:21:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684754474; x=1687346474;
+        d=google.com; s=20221208; t=1684754475; x=1687346475;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kdK6cg22OO4qOyQXs9xKaUltuTOUFz6FCWZwVxCh2Hw=;
-        b=qWkhlrfibgnL4RhQHj7B1l6RBrzRaJLlA4S+q3+9iSaHf1FoZjrbjIeox0pMD4akA6
-         baQ7YGto4El4LBM0QVJP4cql3S/UP2QCxjMxcH7zZ5WU2ZmYY0a2LN1Q9hftLvUgx6xY
-         uXUXdOY22m4wBBpuN+E+S8/WR8wVUIBuOpCWW0NW5nnfixtNx9Op2M4J0Eea727f7z1S
-         sf3g9TCIQtAIo4Vtb/9RoX4qfTdUkuWDMiPRz3BajpDxdF5yZCBeE2pRNa/l/Mg0f+eq
-         /DBmBGIyvEk0YXmD4u8BuGDulx27iox/80TqcG8JU2bBdNBSanhjgzZa8EFs7/ImsyhS
-         /GFA==
+        bh=cIw0V38F7EAw1HDE4zn4HtkfS4SFwenBLbiqkZiF2tk=;
+        b=6rDOmfXOGOL1GW8BHq1lsmAkzsCgxjIn29uj6ZLID+SRaLqHrhM5DOXLA1DCB4iRhy
+         a6Sk9ssRLW1lIRe1a08AwxJ0BAccFa/CgrcwVovKZQUfGQmd6jJ0qQPWDFU52nTje6Ve
+         1q24H2eJS6v/mPNZCYJE19c+FSpEKqVmHIn36QwkuInYq6A35uygUpQ6n7qaQFOqi+vd
+         GFbbq8j/7Gls9AgbMdbyd1j1SVhiG2e54nQdxqL740BwFA6P/sWV6/odg2s/pJ3Q699D
+         5fHgG36i7bIXayaCDGk3RAO3su0zKcjC2JqYEecZCpk/VU295hRYwRTPKyfriu/y5jff
+         zXAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684754474; x=1687346474;
+        d=1e100.net; s=20221208; t=1684754475; x=1687346475;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kdK6cg22OO4qOyQXs9xKaUltuTOUFz6FCWZwVxCh2Hw=;
-        b=BIX6zw6jkcb84Ng5Dcdeh/bV0y6kX/xQVpANRGTVnrC1NfbDbyp3pRnlY5D4knzGy1
-         zlIhMIQTFujYUDeQKk6kUcwvnSF6O6RdhkGdieWRNPzyxme++l7VeW7yrX4qIGGh3kNZ
-         lrnKQO/glQz3sBxTunHwaew9ZQKliWO8R2QftUwUdkKQyilFjS92iJPCLT6bVrkRAfgU
-         Lb+hOEiQjIrD27Lk/nlK8zThEEEVoH3TgCdD4PGxlafQmi/LbJ7FXCp4KO9h8AHOzm2y
-         HYtIpobCw6P7ENwqbHdW9SDaweAt0YiQICmXbPvF5VVi0S3Z81eXkJzXmwr/XircPKhp
-         Bhsw==
-X-Gm-Message-State: AC+VfDy38xZdrQ3wZ8bCl6AYTucds4XpNhX23inIqHbgS6kEMcZU7qlj
-        0ytpBXbZJK8X719KL/kZ0IQ1lxkX8Au83g==
-X-Google-Smtp-Source: ACHHUZ446Fd/FV7ov35m5UQMLmkLqc0ZI7PlRhDVjQ/W3/nS3VNBnb0IdrQrR6Vu/5xKg9r94Z/zbNEve8+TSg==
+        bh=cIw0V38F7EAw1HDE4zn4HtkfS4SFwenBLbiqkZiF2tk=;
+        b=Md1jMwKvCOto2kXFvI411BQlWXlNhTR5Li2pnJOHWD8XUlfuTB9cbOVKI8Dw2Trm0v
+         wI5h8oV5+VFs5YhP7zO30apuaNpJZpP5O6Hj0YLUv2HvgEVH7cgsEyhcvTwEjFMPJDZx
+         UY+rxeMCntC5pqR2NOSbMhZx1esywbbD91iqlaODoFM3M6+7Rf938E8l1GKJZ1u3Frc5
+         p3pHR2J6XeyNOsccOdPtAgjn6NfkFeJk7Apfw7A6K6Q3InV98rrlBzVvkL9of8IacHye
+         wSXKl35R5iptGciE7FtH2Hvhuy6jOXkEPThVtkasWlCxuLV9c7XE4fojM0NqqCXKc9W8
+         q5xQ==
+X-Gm-Message-State: AC+VfDzCUXG+DDQv4L7Gj+xqHm9H6SPGv6DohSOWsPyATKJV9HOWdDsP
+        XqW8as8xm3ax/VVdM1rbzlX0y2JHzbazRA==
+X-Google-Smtp-Source: ACHHUZ4DoNgWjW81d3zb12J4YKX9fJCnoBsTiCFKxDr8tt1dmILx5fK2udZ/QgC3AM2KeSxtmeQ5pfTpZG18cA==
 X-Received: from talumbau.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:90d])
- (user=talumbau job=sendgmr) by 2002:a05:6902:56b:b0:ba8:91c2:268a with SMTP
- id a11-20020a056902056b00b00ba891c2268amr6184995ybt.0.1684754474384; Mon, 22
- May 2023 04:21:14 -0700 (PDT)
-Date:   Mon, 22 May 2023 11:20:57 +0000
+ (user=talumbau job=sendgmr) by 2002:a81:dc01:0:b0:561:c98b:8e8e with SMTP id
+ h1-20020a81dc01000000b00561c98b8e8emr6749837ywj.10.1684754475539; Mon, 22 May
+ 2023 04:21:15 -0700 (PDT)
+Date:   Mon, 22 May 2023 11:20:58 +0000
 In-Reply-To: <20230522112058.2965866-1-talumbau@google.com>
 Mime-Version: 1.0
 References: <20230522112058.2965866-1-talumbau@google.com>
-Message-ID: <20230522112058.2965866-3-talumbau@google.com>
-Subject: [PATCH mm-unstable 3/4] mm: multi-gen LRU: add helpers in page table walks
+Message-ID: <20230522112058.2965866-4-talumbau@google.com>
+Subject: [PATCH mm-unstable 4/4] mm: multi-gen LRU: cleanup lru_gen_test_recent()
 From:   "T.J. Alumbaugh" <talumbau@google.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Yuanchu Xie <yuanchu@google.com>, Yu Zhao <yuzhao@google.com>,
@@ -68,76 +68,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add helpers to page table walking code:
- - Clarifies intent via name "should_walk_mmu" and "should_clear_pmd_young"
- - Avoids repeating same logic in two places
+Avoid passing memcg* and pglist_data* to lru_gen_test_recent()
+since we only use the lruvec anyway.
 
 Signed-off-by: T.J. Alumbaugh <talumbau@google.com>
 ---
- mm/vmscan.c | 20 +++++++++++++++-----
- 1 file changed, 15 insertions(+), 5 deletions(-)
+ mm/workingset.c | 46 ++++++++++++++++------------------------------
+ 1 file changed, 16 insertions(+), 30 deletions(-)
 
-diff --git a/mm/vmscan.c b/mm/vmscan.c
-index e088db138f5f..ad0f589d32e6 100644
---- a/mm/vmscan.c
-+++ b/mm/vmscan.c
-@@ -3234,6 +3234,16 @@ DEFINE_STATIC_KEY_ARRAY_FALSE(lru_gen_caps, NR_LRU_GEN_CAPS);
- #define get_cap(cap)	static_branch_unlikely(&lru_gen_caps[cap])
- #endif
+diff --git a/mm/workingset.c b/mm/workingset.c
+index 90ae785d4c9c..5796e927e6d7 100644
+--- a/mm/workingset.c
++++ b/mm/workingset.c
+@@ -257,59 +257,46 @@ static void *lru_gen_eviction(struct folio *folio)
  
-+static bool should_walk_mmu(void)
-+{
-+	return arch_has_hw_pte_young() && get_cap(LRU_GEN_MM_WALK);
-+}
-+
-+static bool should_clear_pmd_young(void)
-+{
-+	return arch_has_hw_nonleaf_pmd_young() && get_cap(LRU_GEN_NONLEAF_YOUNG);
-+}
-+
- /******************************************************************************
-  *                          shorthand helpers
-  ******************************************************************************/
-@@ -4098,7 +4108,7 @@ static void walk_pmd_range_locked(pud_t *pud, unsigned long addr, struct vm_area
- 			goto next;
+ /*
+  * Tests if the shadow entry is for a folio that was recently evicted.
+- * Fills in @memcgid, @pglist_data, @token, @workingset with the values
+- * unpacked from shadow.
++ * Fills in @lruvec, @token, @workingset with the values unpacked from shadow.
+  */
+-static bool lru_gen_test_recent(void *shadow, bool file, int *memcgid,
+-		struct pglist_data **pgdat, unsigned long *token, bool *workingset)
++static bool lru_gen_test_recent(void *shadow, bool file, struct lruvec **lruvec,
++				unsigned long *token, bool *workingset)
+ {
+-	struct mem_cgroup *eviction_memcg;
+-	struct lruvec *lruvec;
+-	struct lru_gen_folio *lrugen;
++	int memcg_id;
+ 	unsigned long min_seq;
++	struct mem_cgroup *memcg;
++	struct pglist_data *pgdat;
  
- 		if (!pmd_trans_huge(pmd[i])) {
--			if (arch_has_hw_nonleaf_pmd_young() && get_cap(LRU_GEN_NONLEAF_YOUNG))
-+			if (should_clear_pmd_young())
- 				pmdp_test_and_clear_young(vma, addr, pmd + i);
- 			goto next;
- 		}
-@@ -4191,7 +4201,7 @@ static void walk_pmd_range(pud_t *pud, unsigned long start, unsigned long end,
- #endif
- 		walk->mm_stats[MM_NONLEAF_TOTAL]++;
+-	unpack_shadow(shadow, memcgid, pgdat, token, workingset);
+-	eviction_memcg = mem_cgroup_from_id(*memcgid);
++	unpack_shadow(shadow, &memcg_id, &pgdat, token, workingset);
  
--		if (arch_has_hw_nonleaf_pmd_young() && get_cap(LRU_GEN_NONLEAF_YOUNG)) {
-+		if (should_clear_pmd_young()) {
- 			if (!pmd_young(val))
- 				continue;
+-	lruvec = mem_cgroup_lruvec(eviction_memcg, *pgdat);
+-	lrugen = &lruvec->lrugen;
++	memcg = mem_cgroup_from_id(memcg_id);
++	*lruvec = mem_cgroup_lruvec(memcg, pgdat);
  
-@@ -4493,7 +4503,7 @@ static bool try_to_inc_max_seq(struct lruvec *lruvec, unsigned long max_seq,
- 	 * handful of PTEs. Spreading the work out over a period of time usually
- 	 * is less efficient, but it avoids bursty page faults.
- 	 */
--	if (!arch_has_hw_pte_young() || !get_cap(LRU_GEN_MM_WALK)) {
-+	if (!should_walk_mmu()) {
- 		success = iterate_mm_list_nowalk(lruvec, max_seq);
- 		goto done;
- 	}
-@@ -5730,10 +5740,10 @@ static ssize_t enabled_show(struct kobject *kobj, struct kobj_attribute *attr, c
- 	if (get_cap(LRU_GEN_CORE))
- 		caps |= BIT(LRU_GEN_CORE);
+-	min_seq = READ_ONCE(lrugen->min_seq[file]);
++	min_seq = READ_ONCE((*lruvec)->lrugen.min_seq[file]);
+ 	return (*token >> LRU_REFS_WIDTH) == (min_seq & (EVICTION_MASK >> LRU_REFS_WIDTH));
+ }
  
--	if (arch_has_hw_pte_young() && get_cap(LRU_GEN_MM_WALK))
-+	if (should_walk_mmu())
- 		caps |= BIT(LRU_GEN_MM_WALK);
+ static void lru_gen_refault(struct folio *folio, void *shadow)
+ {
+ 	int hist, tier, refs;
+-	int memcg_id;
+ 	bool workingset;
+ 	unsigned long token;
+-	unsigned long min_seq;
+ 	struct lruvec *lruvec;
+ 	struct lru_gen_folio *lrugen;
+-	struct mem_cgroup *memcg;
+-	struct pglist_data *pgdat;
+ 	int type = folio_is_file_lru(folio);
+ 	int delta = folio_nr_pages(folio);
  
--	if (arch_has_hw_nonleaf_pmd_young() && get_cap(LRU_GEN_NONLEAF_YOUNG))
-+	if (should_clear_pmd_young())
- 		caps |= BIT(LRU_GEN_NONLEAF_YOUNG);
+ 	rcu_read_lock();
  
- 	return sysfs_emit(buf, "0x%04x\n", caps);
+-	if (!lru_gen_test_recent(shadow, type, &memcg_id, &pgdat, &token,
+-			&workingset))
++	if (!lru_gen_test_recent(shadow, type, &lruvec, &token, &workingset))
+ 		goto unlock;
+ 
+-	memcg = folio_memcg_rcu(folio);
+-	if (memcg_id != mem_cgroup_id(memcg))
++	if (lruvec != folio_lruvec(folio))
+ 		goto unlock;
+ 
+-	if (pgdat != folio_pgdat(folio))
+-		goto unlock;
+-
+-	lruvec = mem_cgroup_lruvec(memcg, pgdat);
+ 	lrugen = &lruvec->lrugen;
+-	min_seq = READ_ONCE(lrugen->min_seq[type]);
+ 
+-	hist = lru_hist_from_seq(min_seq);
++	hist = lru_hist_from_seq(READ_ONCE(lrugen->min_seq[type]));
+ 	/* see the comment in folio_lru_refs() */
+ 	refs = (token & (BIT(LRU_REFS_WIDTH) - 1)) + workingset;
+ 	tier = lru_tier_from_refs(refs);
+@@ -339,8 +326,8 @@ static void *lru_gen_eviction(struct folio *folio)
+ 	return NULL;
+ }
+ 
+-static bool lru_gen_test_recent(void *shadow, bool file, int *memcgid,
+-		struct pglist_data **pgdat, unsigned long *token, bool *workingset)
++static bool lru_gen_test_recent(void *shadow, bool file, struct lruvec **lruvec,
++				unsigned long *token, bool *workingset)
+ {
+ 	return false;
+ }
+@@ -435,8 +422,7 @@ bool workingset_test_recent(void *shadow, bool file, bool *workingset)
+ 	unsigned long eviction;
+ 
+ 	if (lru_gen_enabled())
+-		return lru_gen_test_recent(shadow, file, &memcgid, &pgdat, &eviction,
+-			workingset);
++		return lru_gen_test_recent(shadow, file, &eviction_lruvec, &eviction, workingset);
+ 
+ 	unpack_shadow(shadow, &memcgid, &pgdat, &eviction, workingset);
+ 	eviction <<= bucket_order;
 -- 
 2.40.1.698.g37aff9b760-goog
 
