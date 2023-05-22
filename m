@@ -2,165 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6EA570BB48
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 669C770BBB5
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:25:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232119AbjEVLMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 07:12:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54166 "EHLO
+        id S233321AbjEVLZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 07:25:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233117AbjEVLMY (ORCPT
+        with ESMTP id S233637AbjEVLZU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 07:12:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B4F139
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 04:06:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684753600;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Pm6pIysjMAsg0WDE6icfe6G1Q5qdHkb+W04G2UqRo/k=;
-        b=E/UakoP7jIrfNi3+klKIA3S91N4pIXptv4Irirxdz5ZweTrCu3Pm2lCcWcAOhE2Iq1vBqj
-        lXqegp+GU7RoYa7lWCNKUptXzwS9s+Kw8cw6HQ4EBUy4bibB1LhIh/GxVmuPNOFkXccbPk
-        G/6EnAGBY9a/qUavc/vzku8O/et851Q=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-272-ZWa_CmUdOHWwVZcIueVS5Q-1; Mon, 22 May 2023 07:06:39 -0400
-X-MC-Unique: ZWa_CmUdOHWwVZcIueVS5Q-1
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-309542498deso1573879f8f.0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 04:06:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684753597; x=1687345597;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Pm6pIysjMAsg0WDE6icfe6G1Q5qdHkb+W04G2UqRo/k=;
-        b=FMVMI57OtDvDLSzrvsfPJxGMbD02Yz2FNicqUqSzRIMOQ8/U3oYG4JvtZxLS4kxyDJ
-         5X5gbEZVpB8sjvfMMk6gMPuT1gPrB0gVpmYUfGlTgVhDBt5zzuhUV1bJ12ErFW3zFz8t
-         NNBNhZA0D5yF7HjA5zCW3BQIcrZfvS8+AWoGc2hQsAlT1OKTXjB44Rajy3Y2+67CgGWH
-         5tnTWOb5ximuNdvLrumRKNsGAc6Eba2ikNOQ9NEVJip0dPLSkpgOJoCv02rVUYXn7Tip
-         Fm8z41kj7evLrLlKmHZA58xUWKTiykFcvUqXaGgqjkMR5DH5Sjv3c5Oa3nvgNEnB+6kd
-         s2Zw==
-X-Gm-Message-State: AC+VfDx5ar+copwdmXT+Ntuz7ZJT30eym27VRd/9ZDtSapKlFXO+LWs3
-        B9ibGSYU61Z2Ky+QsDLEpIL7mPdePVNOTLFpisXLMNVjWd7toE3K9AG/bXhCWRWtDoynWB7o4JT
-        anaEey3OouHuQLZqtVPyqaMLi93Gu5ckiuaouariPtCL86S92GTe8f4kawyZcidkdzAbLKjb6I5
-        lae8lA5dbs
-X-Received: by 2002:a05:6000:1202:b0:307:bb47:75de with SMTP id e2-20020a056000120200b00307bb4775demr9149936wrx.26.1684753596941;
-        Mon, 22 May 2023 04:06:36 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7mXtTblA8QpHnMhA95J7Zxci8FCUxH08T/nJQqebnSYn2n0i0RgD4OqKt+UIDp2dvz11ao5A==
-X-Received: by 2002:a05:6000:1202:b0:307:bb47:75de with SMTP id e2-20020a056000120200b00307bb4775demr9149917wrx.26.1684753596586;
-        Mon, 22 May 2023 04:06:36 -0700 (PDT)
-Received: from imammedo.users.ipa.redhat.com (nat-pool-brq-t.redhat.com. [213.175.37.10])
-        by smtp.gmail.com with ESMTPSA id k15-20020a05600c1c8f00b003f1978bbcd6sm24870383wms.3.2023.05.22.04.06.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 04:06:35 -0700 (PDT)
-Date:   Mon, 22 May 2023 13:06:35 +0200
-From:   Igor Mammedov <imammedo@redhat.com>
-To:     linux-kernel@vger.kernel.org, rafael@kernel.org
-Cc:     mst@redhat.com, lenb@kernel.org, bhelgaas@google.com,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-        helgaas@kernel.org, mika.westerberg@linux.intel.com
-Subject: Re: [PATCH v2] PCI: acpiphp: Reassign resources on bridge if
- necessary
-Message-ID: <20230522130635.5e3f8771@imammedo.users.ipa.redhat.com>
-In-Reply-To: <20230424191557.2464760-1-imammedo@redhat.com>
-References: <20230424191557.2464760-1-imammedo@redhat.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        Mon, 22 May 2023 07:25:20 -0400
+X-Greylist: delayed 915 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 22 May 2023 04:22:33 PDT
+Received: from m126.mail.126.com (m126.mail.126.com [220.181.12.36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E0D082127
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 04:22:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=I32Es
+        NwSqafi4+MtLCJFzQgaW96mnGcnKhtn1a3Imsg=; b=XwPyEkHuuqYRDHoRk6/8z
+        WdPsR0kGpDwDDOUY2UWAOAXMBzcHoO8VY82PSxf1K8f/L2yukfXklBZJ/IPe+ZaV
+        7iYLhNRkPl1gHjjsTSoD1i47worQsmsBJObzPPy03XUS75se5o1FTuUgFQPqFIHm
+        RpWwoi/+XjNOa1ptxpJVg4=
+Received: from localhost (unknown [210.13.118.86])
+        by zwqz-smtp-mta-g0-1 (Coremail) with SMTP id _____wBXLWrGTGtksgvPAA--.18087S2;
+        Mon, 22 May 2023 19:06:47 +0800 (CST)
+From:   zhengyan <zhengyan@asrmicro.com>
+To:     zhengyan@asrmicro.com, linux-kernel@vger.kernel.org, maz@kernel.org
+Cc:     meitaogao@asrmicro.com, qiaozhou@asrmicro.com, tglx@linutronix.de,
+        zhizhouzhang@asrmicro.com
+Subject: [PATCH v2] irqchip/gic-v3: workaround for ASR8601 when reading mpidr
+Date:   Mon, 22 May 2023 19:06:43 +0800
+Message-Id: <20230522110643.3063073-1-zhengyan@asrmicro.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230517075500.43516-1-zhengyan@asrmicro.com>
+References: <20230517075500.43516-1-zhengyan@asrmicro.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wBXLWrGTGtksgvPAA--.18087S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxCrWfGrWDWF4Dtw1kGw1xXwb_yoWruF43pF
+        Wak3yxtrs3Jr15Wr47Ja17Jry5Awn3Cw4qkFnrt3yIqFy5Ar1UZr4xW34rAFW5try8Ar4U
+        JF1jqF1UWr47ArUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UsvtZUUUUU=
+X-Originating-IP: [210.13.118.86]
+Sender: holmes_jack@126.com
+X-CM-SenderInfo: 5krozv5vbmtubn6rjloofrz/1tbiqAh3ZVpEAiYKgQAAsD
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Apr 2023 21:15:57 +0200
-Igor Mammedov <imammedo@redhat.com> wrote:
+This patch add workaround for ASR8601, which uses an armv8.2
+processor with a gic-500. But gic-500 is incompatible with
+ARMv8.2 implementations from ARM.
 
-> When using ACPI PCI hotplug, hotplugging a device with
-> large BARs may fail if bridge windows programmed by
-> firmware are not large enough.
+ARMv8.2 from ARM implementation uses Multiprocessor Affinity
+Register to identify the logical address of the core by
+| cluster | core | thread |.
+However, gic-500 only supports topologies with
+affinity levels less than 2 as
+| cluster | core|.
 
-Rafael,
+So we need this patch as workaround to shift the MPIDR values
+to ensure proper functionality
 
-Since there was no more comments for a while,
-can you merge this patch through your tree?
+Signed-off-by: zhengyan <zhengyan@asrmicro.com>
+---
+ Documentation/arm64/silicon-errata.rst |  4 ++++
+ drivers/irqchip/irq-gic-v3.c           | 30 ++++++++++++++++++++++++++
+ 2 files changed, 34 insertions(+)
 
-> Reproducer:
->   $ qemu-kvm -monitor stdio -M q35  -m 4G \
->       -global ICH9-LPC.acpi-pci-hotplug-with-bridge-support=on \
->       -device id=rp1,pcie-root-port,bus=pcie.0,chassis=4 \
->       disk_image
-> 
->  wait till linux guest boots, then hotplug device
->    (qemu) device_add qxl,bus=rp1
-> 
->  hotplug on guest side fails with:
->    pci 0000:01:00.0: [1b36:0100] type 00 class 0x038000
->    pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x03ffffff]
->    pci 0000:01:00.0: reg 0x14: [mem 0x00000000-0x03ffffff]
->    pci 0000:01:00.0: reg 0x18: [mem 0x00000000-0x00001fff]
->    pci 0000:01:00.0: reg 0x1c: [io  0x0000-0x001f]
->    pci 0000:01:00.0: BAR 0: no space for [mem size 0x04000000]
->    pci 0000:01:00.0: BAR 0: failed to assign [mem size 0x04000000]
->    pci 0000:01:00.0: BAR 1: no space for [mem size 0x04000000]
->    pci 0000:01:00.0: BAR 1: failed to assign [mem size 0x04000000]
->    pci 0000:01:00.0: BAR 2: assigned [mem 0xfe800000-0xfe801fff]
->    pci 0000:01:00.0: BAR 3: assigned [io  0x1000-0x101f]
->    qxl 0000:01:00.0: enabling device (0000 -> 0003)
->    Unable to create vram_mapping
->    qxl: probe of 0000:01:00.0 failed with error -12
-> 
-> However when using native PCIe hotplug
->   '-global ICH9-LPC.acpi-pci-hotplug-with-bridge-support=off'
-> it works fine, since kernel attempts to reassign unused resources.
-> Use the same machinery as native PCIe hotplug to (re)assign resources.
-> 
-> Signed-off-by: Igor Mammedov <imammedo@redhat.com>
-> ---
-> tested in QEMU with Q35 machine on PCIE root port and also
-> with nested conventional bridge attached to root port.
-> 
-> v2:
->   * fixup subject to match expected style
->   * drop no longer needed __pci_bus_size_bridges() to avoid
->     memory leak (Bjorn Helgaas <helgaas@kernel.org>)
-> ---
->  drivers/pci/hotplug/acpiphp_glue.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
-> 
-> diff --git a/drivers/pci/hotplug/acpiphp_glue.c b/drivers/pci/hotplug/acpiphp_glue.c
-> index 5b1f271c6034..328d1e416014 100644
-> --- a/drivers/pci/hotplug/acpiphp_glue.c
-> +++ b/drivers/pci/hotplug/acpiphp_glue.c
-> @@ -498,7 +498,6 @@ static void enable_slot(struct acpiphp_slot *slot, bool bridge)
->  				acpiphp_native_scan_bridge(dev);
->  		}
->  	} else {
-> -		LIST_HEAD(add_list);
->  		int max, pass;
->  
->  		acpiphp_rescan_slot(slot);
-> @@ -512,12 +511,10 @@ static void enable_slot(struct acpiphp_slot *slot, bool bridge)
->  				if (pass && dev->subordinate) {
->  					check_hotplug_bridge(slot, dev);
->  					pcibios_resource_survey_bus(dev->subordinate);
-> -					__pci_bus_size_bridges(dev->subordinate,
-> -							       &add_list);
->  				}
->  			}
->  		}
-> -		__pci_bus_assign_resources(bus, &add_list, NULL);
-> +		pci_assign_unassigned_bridge_resources(bus->self);
->  	}
->  
->  	acpiphp_sanitize_bus(bus);
+diff --git a/Documentation/arm64/silicon-errata.rst b/Documentation/arm64/silicon-errata.rst
+index 9e311bc43e05..d6430ade349d 100644
+--- a/Documentation/arm64/silicon-errata.rst
++++ b/Documentation/arm64/silicon-errata.rst
+@@ -214,3 +214,7 @@ stable kernels.
+ +----------------+-----------------+-----------------+-----------------------------+
+ | Fujitsu        | A64FX           | E#010001        | FUJITSU_ERRATUM_010001      |
+ +----------------+-----------------+-----------------+-----------------------------+
++
+++----------------+-----------------+-----------------+-----------------------------+
++| ASR            | ASR8601         | #8601001        | N/A                         |
+++----------------+-----------------+-----------------+-----------------------------+
+diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
+index 6fcee221f201..cf64783dfe70 100644
+--- a/drivers/irqchip/irq-gic-v3.c
++++ b/drivers/irqchip/irq-gic-v3.c
+@@ -39,6 +39,9 @@
+ 
+ #define FLAGS_WORKAROUND_GICR_WAKER_MSM8996	(1ULL << 0)
+ #define FLAGS_WORKAROUND_CAVIUM_ERRATUM_38539	(1ULL << 1)
++#define FLAGS_WORKAROUND_ASR_ERRATUM_8601001	(1ULL << 2)
++
++#define ASR8601_AFF_QUIRK(aff)			(aff >> 8)
+ 
+ #define GIC_IRQ_TYPE_PARTITION	(GIC_IRQ_TYPE_LPI + 1)
+ 
+@@ -659,6 +662,9 @@ static u64 gic_mpidr_to_affinity(unsigned long mpidr)
+ {
+ 	u64 aff;
+ 
++	if (gic_data.flags & FLAGS_WORKAROUND_ASR_ERRATUM_8601001)
++		mpidr = ASR8601_AFF_QUIRK(mpidr);
++
+ 	aff = ((u64)MPIDR_AFFINITY_LEVEL(mpidr, 3) << 32 |
+ 	       MPIDR_AFFINITY_LEVEL(mpidr, 2) << 16 |
+ 	       MPIDR_AFFINITY_LEVEL(mpidr, 1) << 8  |
+@@ -970,6 +976,9 @@ static int __gic_populate_rdist(struct redist_region *region, void __iomem *ptr)
+ 	 * Convert affinity to a 32bit value that can be matched to
+ 	 * GICR_TYPER bits [63:32].
+ 	 */
++	if (gic_data.flags & FLAGS_WORKAROUND_ASR_ERRATUM_8601001)
++		mpidr = ASR8601_AFF_QUIRK(mpidr);
++
+ 	aff = (MPIDR_AFFINITY_LEVEL(mpidr, 3) << 24 |
+ 	       MPIDR_AFFINITY_LEVEL(mpidr, 2) << 16 |
+ 	       MPIDR_AFFINITY_LEVEL(mpidr, 1) << 8 |
+@@ -1265,6 +1274,9 @@ static u16 gic_compute_target_list(int *base_cpu, const struct cpumask *mask,
+ 	unsigned long mpidr = cpu_logical_map(cpu);
+ 	u16 tlist = 0;
+ 
++	if (gic_data.flags & FLAGS_WORKAROUND_ASR_ERRATUM_8601001)
++		mpidr = ASR8601_AFF_QUIRK(mpidr);
++
+ 	while (cpu < nr_cpu_ids) {
+ 		tlist |= 1 << (mpidr & 0xf);
+ 
+@@ -1275,6 +1287,8 @@ static u16 gic_compute_target_list(int *base_cpu, const struct cpumask *mask,
+ 
+ 		mpidr = cpu_logical_map(cpu);
+ 
++		if (gic_data.flags & FLAGS_WORKAROUND_ASR_ERRATUM_8601001)
++			mpidr = ASR8601_AFF_QUIRK(mpidr);
+ 		if (cluster_id != MPIDR_TO_SGI_CLUSTER_ID(mpidr)) {
+ 			cpu--;
+ 			goto out;
+@@ -1321,6 +1335,8 @@ static void gic_ipi_send_mask(struct irq_data *d, const struct cpumask *mask)
+ 		u64 cluster_id = MPIDR_TO_SGI_CLUSTER_ID(cpu_logical_map(cpu));
+ 		u16 tlist;
+ 
++		if (gic_data.flags & FLAGS_WORKAROUND_ASR_ERRATUM_8601001)
++			cluster_id = MPIDR_TO_SGI_CLUSTER_ID(ASR8601_AFF_QUIRK(cpu_logical_map(cpu)));
+ 		tlist = gic_compute_target_list(&cpu, mask, cluster_id);
+ 		gic_send_sgi(cluster_id, tlist, d->hwirq);
+ 	}
+@@ -1786,6 +1802,15 @@ static bool gic_enable_quirk_nvidia_t241(void *data)
+ 	return true;
+ }
+ 
++static bool gic_enable_quirk_asr8601(void *data)
++{
++	struct gic_chip_data *d = data;
++
++	d->flags |= FLAGS_WORKAROUND_ASR_ERRATUM_8601001;
++
++	return true;
++}
++
+ static const struct gic_quirk gic_quirks[] = {
+ 	{
+ 		.desc	= "GICv3: Qualcomm MSM8996 broken firmware",
+@@ -1823,6 +1848,11 @@ static const struct gic_quirk gic_quirks[] = {
+ 		.mask	= 0xffffffff,
+ 		.init	= gic_enable_quirk_nvidia_t241,
+ 	},
++	{
++		.desc	= "GICv3: ASR erratum 8601001",
++		.compatible = "asr,asr8601-gic-v3",
++		.init	= gic_enable_quirk_asr8601,
++	},
+ 	{
+ 	}
+ };
+-- 
+2.25.1
 
