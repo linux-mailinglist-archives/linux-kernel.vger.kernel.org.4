@@ -2,99 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0F6C70B46B
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 07:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C69D70B46C
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 07:15:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231779AbjEVFPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 01:15:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54512 "EHLO
+        id S231863AbjEVFPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 01:15:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231565AbjEVFPJ (ORCPT
+        with ESMTP id S231795AbjEVFPL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 01:15:09 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B8DA8;
-        Sun, 21 May 2023 22:15:07 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4eed764a10cso6139730e87.0;
-        Sun, 21 May 2023 22:15:07 -0700 (PDT)
+        Mon, 22 May 2023 01:15:11 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74835A8
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:15:10 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-561e919d355so60422787b3.0
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:15:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684732506; x=1687324506;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=THeH3RaWIynHSwKlX2svi0BhR2aQmOxVPDuj7iF+9CU=;
-        b=ZqV07oiUpM3rILlXqiJZcvZs4BY2Wdo63On6RQdrE8STzFBrWyFHKIPPNXKkRO6Gvt
-         mbGkZIkauYLN3xSuiN8fkHrSFbhA5jzMGKeyo484SpfGQruznb6mn7gNrjUeDIrSkIGX
-         dlG8V/BzfTXS/r7oxA+5L6h/uyjxk7nNm6BgvUwVwE9MhXQMPf199v/bAmht+pNhU1zC
-         t7V83cf6gRnHSU7MAQgZLwlVe3lSVCHlwaECFx2k7IAUpAyNzzwBjU+/v7nzxRXzOG+M
-         hgWPMLpCViBPf3MXbqZBF42jGpbw5Gtc93kjHj10ERwx4epMKFiuBx45hsCgEP0H8gZk
-         b0rw==
+        d=google.com; s=20221208; t=1684732509; x=1687324509;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wdvmzniCtM+nQioqQdrwu6IzqdoeozaKC+WtG0d7jzc=;
+        b=cRcUhaoiSgJ38o5WfT/WZeLX6uP++hPYcx9RZxFfGqfMkCU/m1hwojIEJua5ROp1t2
+         3gbVLqFCMhxh733PpSF/0qZ8YjtL+7/P2FqSYSUAY16Ac5W48ksKrjIJgFQ08/pbPPf3
+         q4tD4wBFecp/AobnrAUouJg1D3xu+hq/x/0yYcV3B7KprXoBoJD5VvXqNme3XhkF8MUs
+         ptKdL72dy1i0NG2qsZVUCDca3Hwe/qFNH0+a+76pWfu+QubvXC6ErHyq6G5+PWt8MPaI
+         67e8Krgsis/Lu/L/JhEyvnDKGzJIK/fkyJS7kC+QKlqSYLfoaAZoCGiKnWGOJLttwSnL
+         hGFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684732506; x=1687324506;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=THeH3RaWIynHSwKlX2svi0BhR2aQmOxVPDuj7iF+9CU=;
-        b=SfpEkEjif476u8zfyZJesnvaxCPiAEN6mzzz7TfFlqd1zim/k2O6WrIjO+/dtfCOog
-         3df2hKRFd2J7pgQvnqDUO0Bpfozd7RJrdcK3ez1j6eBEvhgUDnjvLEZKVo7f8Dxvnv6k
-         MdrRGvlUfsa7sjAoxJ9evMS5o2fa+9rMrSqxsuIX0Dgq49RSXEmoWtgi61Z6Vme/L0m0
-         BXr+wsll21KZ48y2so+xXBypajDU7yU3XvUW8xUJlT6xLALakraVNYw57EfeQV4bZiJO
-         1yPT8qwMGX6Icwi7izNhBVQqg5qfrw0BgrDjRAytzcCGnVukANxuTahO5G4GloAwWzdL
-         937Q==
-X-Gm-Message-State: AC+VfDxOYPn7p0B9BQJupUV2dz4uiYOIkNxduKbPd4KTRhLeDjUe5ZJH
-        O38H5y3pfAJ1wpwEVQUgrtg=
-X-Google-Smtp-Source: ACHHUZ4UnbSyJQIHoo1YS1QPqF9voV5jiWt4nIwqxau8fPKZCINZHH9DSURxTyghpzjZN1YLy1Lpjw==
-X-Received: by 2002:ac2:4907:0:b0:4f4:af57:19af with SMTP id n7-20020ac24907000000b004f4af5719afmr576935lfi.2.1684732505853;
-        Sun, 21 May 2023 22:15:05 -0700 (PDT)
-Received: from [192.168.1.126] (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id n15-20020ac2490f000000b004edc55d3900sm850247lfi.0.2023.05.21.22.15.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 21 May 2023 22:15:05 -0700 (PDT)
-Message-ID: <6e94c838-886d-3c58-3fa0-175501f57f56@gmail.com>
-Date:   Mon, 22 May 2023 08:15:01 +0300
+        d=1e100.net; s=20221208; t=1684732509; x=1687324509;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wdvmzniCtM+nQioqQdrwu6IzqdoeozaKC+WtG0d7jzc=;
+        b=CDnLzdgX0U5mNQ/db3kVMrjZwaMSJGbaRul28Dk/GarbTdceoi8dmTNg2Ri8jRY8Us
+         NkDifg5KLuDrcIJux1Epc7UBDqc9c6cxnmcv6FDR2gR8q8Bq1tPitv67awmwyLDOqNbE
+         k5VD8pbkEFy4ctBztmRr4RYzqNEGtmL28E6oC5ChgdOJ5bT9A3l+uv6Qn0VwFH5QMlge
+         WuoJ+SW/BhRqLdHnUV8CICHlZbrs/Lhk1hGIwQLBGb+kiOrv97QxLvPV1H3w+GU5Gk+R
+         DV0lS6HwZLVjPB7oNcPL2DHv99G+C5G5bApi+VVZweDXOHMXPhWU5VM0Wa/t5X1HaNuX
+         7aHA==
+X-Gm-Message-State: AC+VfDztB79F94uZKbRWVcV7+I2yWkBkDz/U+G60sPOlB4fB7aCjRJoF
+        XBaVvoySKAKzmtc0dH2YUFg2uQ==
+X-Google-Smtp-Source: ACHHUZ4FV9kV2YREHnhwIbwygT+rPx4Et9mG+j5eesRA86qgE8Xs1bA3kk0cV5xsWSqbz756kifYvg==
+X-Received: by 2002:a0d:e807:0:b0:55a:4ff4:f97d with SMTP id r7-20020a0de807000000b0055a4ff4f97dmr10153523ywe.48.1684732509567;
+        Sun, 21 May 2023 22:15:09 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id z73-20020a0dd74c000000b00559d9989490sm1828589ywd.41.2023.05.21.22.15.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 May 2023 22:15:09 -0700 (PDT)
+Date:   Sun, 21 May 2023 22:15:06 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH 20/31] mm/madvise: clean up pte_offset_map_lock() scans
+In-Reply-To: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
+Message-ID: <dceac563-49e-fa34-4463-6183224bdca6@google.com>
+References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v5 3/8] net-next: mvpp2: relax return value check for IRQ
- get
-Content-Language: en-US, en-GB
-To:     andy.shevchenko@gmail.com
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Andreas Klinger <ak@it-klinger.de>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, netdev@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
-        linux-mips@vger.kernel.org
-References: <cover.1684493615.git.mazziesaccount@gmail.com>
- <7c7b1a123d6d5c15c8b37754f1f0c4bd1cad5a01.1684493615.git.mazziesaccount@gmail.com>
- <ZGpSpZFEo5cw94U_@surfacebook>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <ZGpSpZFEo5cw94U_@surfacebook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,37 +98,253 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+Came here to make madvise's several pte_offset_map_lock() scans advance
+to next extent on failure, and remove superfluous pmd_trans_unstable()
+and pmd_none_or_trans_huge_or_clear_bad() calls.  But also did some
+nearby cleanup.
 
-On 5/21/23 20:19, andy.shevchenko@gmail.com wrote:
-> Fri, May 19, 2023 at 02:01:47PM +0300, Matti Vaittinen kirjoitti:
->> fwnode_irq_get[_byname]() were changed to not return 0 anymore.
->>
->> Drop check for return value 0.
-> 
-> ...
-> 
->> -		if (v->irq <= 0) {
->> +		if (v->irq < 0) {
->>   			ret = -EINVAL;
-> 
-> 			ret = v->irq;
-> 
-> ?
+swapin_walk_pmd_entry(): don't name an address "index"; don't drop the
+lock after every pte, only when calling out to read_swap_cache_async().
 
-For me that seems to be correct, yes. This, however, would be a 
-functional change and in my opinion it should be done separately from 
-this API change.
+madvise_cold_or_pageout_pte_range() and madvise_free_pte_range():
+prefer "start_pte" for pointer, orig_pte usually denotes a saved pte
+value; leave lazy MMU mode before unlocking; merge the success and
+failure paths after split_folio().
 
-> 
->>   			goto err;
->>   		}
-> 
+Signed-off-by: Hugh Dickins <hughd@google.com>
+---
+ mm/madvise.c | 122 ++++++++++++++++++++++++++++-----------------------
+ 1 file changed, 68 insertions(+), 54 deletions(-)
 
+diff --git a/mm/madvise.c b/mm/madvise.c
+index b5ffbaf616f5..0af64c4a8f82 100644
+--- a/mm/madvise.c
++++ b/mm/madvise.c
+@@ -188,37 +188,43 @@ static int madvise_update_vma(struct vm_area_struct *vma,
+ 
+ #ifdef CONFIG_SWAP
+ static int swapin_walk_pmd_entry(pmd_t *pmd, unsigned long start,
+-	unsigned long end, struct mm_walk *walk)
++		unsigned long end, struct mm_walk *walk)
+ {
+ 	struct vm_area_struct *vma = walk->private;
+-	unsigned long index;
+ 	struct swap_iocb *splug = NULL;
++	pte_t *ptep = NULL;
++	spinlock_t *ptl;
++	unsigned long addr;
+ 
+-	if (pmd_none_or_trans_huge_or_clear_bad(pmd))
+-		return 0;
+-
+-	for (index = start; index != end; index += PAGE_SIZE) {
++	for (addr = start; addr < end; addr += PAGE_SIZE) {
+ 		pte_t pte;
+ 		swp_entry_t entry;
+ 		struct page *page;
+-		spinlock_t *ptl;
+-		pte_t *ptep;
+ 
+-		ptep = pte_offset_map_lock(vma->vm_mm, pmd, index, &ptl);
++		if (!ptep++) {
++			ptep = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
++			if (!ptep)
++				break;
++		}
++
+ 		pte = *ptep;
+-		pte_unmap_unlock(ptep, ptl);
+-
+ 		if (!is_swap_pte(pte))
+ 			continue;
+ 		entry = pte_to_swp_entry(pte);
+ 		if (unlikely(non_swap_entry(entry)))
+ 			continue;
+ 
++		pte_unmap_unlock(ptep, ptl);
++		ptep = NULL;
++
+ 		page = read_swap_cache_async(entry, GFP_HIGHUSER_MOVABLE,
+-					     vma, index, false, &splug);
++					     vma, addr, false, &splug);
+ 		if (page)
+ 			put_page(page);
+ 	}
++
++	if (ptep)
++		pte_unmap_unlock(ptep, ptl);
+ 	swap_read_unplug(splug);
+ 	cond_resched();
+ 
+@@ -340,7 +346,7 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *pmd,
+ 	bool pageout = private->pageout;
+ 	struct mm_struct *mm = tlb->mm;
+ 	struct vm_area_struct *vma = walk->vma;
+-	pte_t *orig_pte, *pte, ptent;
++	pte_t *start_pte, *pte, ptent;
+ 	spinlock_t *ptl;
+ 	struct folio *folio = NULL;
+ 	LIST_HEAD(folio_list);
+@@ -422,11 +428,11 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *pmd,
+ 	}
+ 
+ regular_folio:
+-	if (pmd_trans_unstable(pmd))
+-		return 0;
+ #endif
+ 	tlb_change_page_size(tlb, PAGE_SIZE);
+-	orig_pte = pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
++	start_pte = pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
++	if (!start_pte)
++		return 0;
+ 	flush_tlb_batched_pending(mm);
+ 	arch_enter_lazy_mmu_mode();
+ 	for (; addr < end; pte++, addr += PAGE_SIZE) {
+@@ -447,25 +453,28 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *pmd,
+ 		 * are sure it's worth. Split it if we are only owner.
+ 		 */
+ 		if (folio_test_large(folio)) {
++			int err;
++
+ 			if (folio_mapcount(folio) != 1)
+ 				break;
+ 			if (pageout_anon_only_filter && !folio_test_anon(folio))
+ 				break;
++			if (!folio_trylock(folio))
++				break;
+ 			folio_get(folio);
+-			if (!folio_trylock(folio)) {
+-				folio_put(folio);
+-				break;
+-			}
+-			pte_unmap_unlock(orig_pte, ptl);
+-			if (split_folio(folio)) {
+-				folio_unlock(folio);
+-				folio_put(folio);
+-				orig_pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
+-				break;
+-			}
++			arch_leave_lazy_mmu_mode();
++			pte_unmap_unlock(start_pte, ptl);
++			start_pte = NULL;
++			err = split_folio(folio);
+ 			folio_unlock(folio);
+ 			folio_put(folio);
+-			orig_pte = pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
++			if (err)
++				break;
++			start_pte = pte =
++				pte_offset_map_lock(mm, pmd, addr, &ptl);
++			if (!start_pte)
++				break;
++			arch_enter_lazy_mmu_mode();
+ 			pte--;
+ 			addr -= PAGE_SIZE;
+ 			continue;
+@@ -510,8 +519,10 @@ static int madvise_cold_or_pageout_pte_range(pmd_t *pmd,
+ 			folio_deactivate(folio);
+ 	}
+ 
+-	arch_leave_lazy_mmu_mode();
+-	pte_unmap_unlock(orig_pte, ptl);
++	if (start_pte) {
++		arch_leave_lazy_mmu_mode();
++		pte_unmap_unlock(start_pte, ptl);
++	}
+ 	if (pageout)
+ 		reclaim_pages(&folio_list);
+ 	cond_resched();
+@@ -612,7 +623,7 @@ static int madvise_free_pte_range(pmd_t *pmd, unsigned long addr,
+ 	struct mm_struct *mm = tlb->mm;
+ 	struct vm_area_struct *vma = walk->vma;
+ 	spinlock_t *ptl;
+-	pte_t *orig_pte, *pte, ptent;
++	pte_t *start_pte, *pte, ptent;
+ 	struct folio *folio;
+ 	int nr_swap = 0;
+ 	unsigned long next;
+@@ -620,13 +631,12 @@ static int madvise_free_pte_range(pmd_t *pmd, unsigned long addr,
+ 	next = pmd_addr_end(addr, end);
+ 	if (pmd_trans_huge(*pmd))
+ 		if (madvise_free_huge_pmd(tlb, vma, pmd, addr, next))
+-			goto next;
+-
+-	if (pmd_trans_unstable(pmd))
+-		return 0;
++			return 0;
+ 
+ 	tlb_change_page_size(tlb, PAGE_SIZE);
+-	orig_pte = pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
++	start_pte = pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
++	if (!start_pte)
++		return 0;
+ 	flush_tlb_batched_pending(mm);
+ 	arch_enter_lazy_mmu_mode();
+ 	for (; addr != end; pte++, addr += PAGE_SIZE) {
+@@ -664,23 +674,26 @@ static int madvise_free_pte_range(pmd_t *pmd, unsigned long addr,
+ 		 * deactivate all pages.
+ 		 */
+ 		if (folio_test_large(folio)) {
++			int err;
++
+ 			if (folio_mapcount(folio) != 1)
+-				goto out;
++				break;
++			if (!folio_trylock(folio))
++				break;
+ 			folio_get(folio);
+-			if (!folio_trylock(folio)) {
+-				folio_put(folio);
+-				goto out;
+-			}
+-			pte_unmap_unlock(orig_pte, ptl);
+-			if (split_folio(folio)) {
+-				folio_unlock(folio);
+-				folio_put(folio);
+-				orig_pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
+-				goto out;
+-			}
++			arch_leave_lazy_mmu_mode();
++			pte_unmap_unlock(start_pte, ptl);
++			start_pte = NULL;
++			err = split_folio(folio);
+ 			folio_unlock(folio);
+ 			folio_put(folio);
+-			orig_pte = pte = pte_offset_map_lock(mm, pmd, addr, &ptl);
++			if (err)
++				break;
++			start_pte = pte =
++				pte_offset_map_lock(mm, pmd, addr, &ptl);
++			if (!start_pte)
++				break;
++			arch_enter_lazy_mmu_mode();
+ 			pte--;
+ 			addr -= PAGE_SIZE;
+ 			continue;
+@@ -725,17 +738,18 @@ static int madvise_free_pte_range(pmd_t *pmd, unsigned long addr,
+ 		}
+ 		folio_mark_lazyfree(folio);
+ 	}
+-out:
++
+ 	if (nr_swap) {
+ 		if (current->mm == mm)
+ 			sync_mm_rss(mm);
+-
+ 		add_mm_counter(mm, MM_SWAPENTS, nr_swap);
+ 	}
+-	arch_leave_lazy_mmu_mode();
+-	pte_unmap_unlock(orig_pte, ptl);
++	if (start_pte) {
++		arch_leave_lazy_mmu_mode();
++		pte_unmap_unlock(start_pte, ptl);
++	}
+ 	cond_resched();
+-next:
++
+ 	return 0;
+ }
+ 
 -- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
+2.35.3
 
