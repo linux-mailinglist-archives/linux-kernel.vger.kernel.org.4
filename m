@@ -2,96 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72E8870B464
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 07:13:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0F6C70B46B
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 07:15:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231685AbjEVFNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 01:13:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54086 "EHLO
+        id S231779AbjEVFPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 01:15:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231565AbjEVFNl (ORCPT
+        with ESMTP id S231565AbjEVFPJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 01:13:41 -0400
-Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A136100
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:13:38 -0700 (PDT)
-Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-ba841216e92so8155539276.1
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:13:38 -0700 (PDT)
+        Mon, 22 May 2023 01:15:09 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4B8DA8;
+        Sun, 21 May 2023 22:15:07 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4eed764a10cso6139730e87.0;
+        Sun, 21 May 2023 22:15:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684732417; x=1687324417;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dPoyGlkGpegFUTFofVDIHWRBddk7VxC7U3Cl7g+dttQ=;
-        b=u/pipKzV3+7Fw72J6ZuzihOhd10w0gGlLGmoTYVNzOrFtguVpB16bQ3yHwI9CSCfkH
-         3Vl3zrzd94RD+ao7QuGXMU38bZgzZUL1/QZs1hHXZKn7GPINxEVThftcMMnY2o+Yudl0
-         U2nS3rhKugfJt5YxhFfn9PDdwtey86BwLjUPjmgewXJIUFBVGRQf2ahMAOU7Z/t1DHAm
-         l66iDmXAruV3nmxv3A2DqZgGdZJpE3BSBsWI9c3hTvkUhwfiQW5QjWVbpPvVCeixeUrI
-         GKrbNt5veHLdmjZBBDPCavEMUBfFme3RGuyXCTdVESH6VYwjwFZwaExB5zSeQBSZMndy
-         lQew==
+        d=gmail.com; s=20221208; t=1684732506; x=1687324506;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=THeH3RaWIynHSwKlX2svi0BhR2aQmOxVPDuj7iF+9CU=;
+        b=ZqV07oiUpM3rILlXqiJZcvZs4BY2Wdo63On6RQdrE8STzFBrWyFHKIPPNXKkRO6Gvt
+         mbGkZIkauYLN3xSuiN8fkHrSFbhA5jzMGKeyo484SpfGQruznb6mn7gNrjUeDIrSkIGX
+         dlG8V/BzfTXS/r7oxA+5L6h/uyjxk7nNm6BgvUwVwE9MhXQMPf199v/bAmht+pNhU1zC
+         t7V83cf6gRnHSU7MAQgZLwlVe3lSVCHlwaECFx2k7IAUpAyNzzwBjU+/v7nzxRXzOG+M
+         hgWPMLpCViBPf3MXbqZBF42jGpbw5Gtc93kjHj10ERwx4epMKFiuBx45hsCgEP0H8gZk
+         b0rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684732417; x=1687324417;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dPoyGlkGpegFUTFofVDIHWRBddk7VxC7U3Cl7g+dttQ=;
-        b=B4dq0P87YlyKv3X+UVN+5bxqCZLlbdW186Ldu8YAmWsH8Sog6dppbeeZvfpo28rIRU
-         rbN13fq6yPhrTpjHJ2S35WGx5Qo9ZViDLLeHrDHSdJvhrAbkHM5vOzkjKBjIiufTBzri
-         CnoRGic17BughCSF6w6cyrAx/vz1SfqhVCVQ+JAjX6azXYaSZzgmJzmVoevmoKDFzJ4k
-         LfV8CNMePLhhr2zvwJBXg/bOPe7dgm8Hn0sKKzKlw9UupKvcl7p6f0trpiK8AwWCtS1Z
-         RWorfgvxiNeAPAyaza5oRGSWfbwV1aEnUbXcf7LQoNGd5vYNWTtZjQyPd32ZtFh336eW
-         SRqA==
-X-Gm-Message-State: AC+VfDwDvnknkpWwcFsJ9EC0kF5TuCES/Y0+691ojJVLTfW6rBrdahOv
-        BpjTC87yMvAVyZVkBxpBLm6s8w==
-X-Google-Smtp-Source: ACHHUZ6QCzXgzIS4cFPDNtq3tlt+HJnjXO6ZXovLO9zv6wjiXs/oia4ZbqdffbL8veAaOUMs5BJwAQ==
-X-Received: by 2002:a0d:d595:0:b0:561:e910:52f5 with SMTP id x143-20020a0dd595000000b00561e91052f5mr12194393ywd.27.1684732417238;
-        Sun, 21 May 2023 22:13:37 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id i67-20020a0df846000000b00559f1cb8444sm1824582ywf.70.2023.05.21.22.13.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 May 2023 22:13:36 -0700 (PDT)
-Date:   Sun, 21 May 2023 22:13:33 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH 19/31] mm/mremap: retry if either pte_offset_map_*lock()
- fails
-In-Reply-To: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
-Message-ID: <2d3fbfea-5884-8211-0cc-954afe25ae9c@google.com>
-References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
+        d=1e100.net; s=20221208; t=1684732506; x=1687324506;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=THeH3RaWIynHSwKlX2svi0BhR2aQmOxVPDuj7iF+9CU=;
+        b=SfpEkEjif476u8zfyZJesnvaxCPiAEN6mzzz7TfFlqd1zim/k2O6WrIjO+/dtfCOog
+         3df2hKRFd2J7pgQvnqDUO0Bpfozd7RJrdcK3ez1j6eBEvhgUDnjvLEZKVo7f8Dxvnv6k
+         MdrRGvlUfsa7sjAoxJ9evMS5o2fa+9rMrSqxsuIX0Dgq49RSXEmoWtgi61Z6Vme/L0m0
+         BXr+wsll21KZ48y2so+xXBypajDU7yU3XvUW8xUJlT6xLALakraVNYw57EfeQV4bZiJO
+         1yPT8qwMGX6Icwi7izNhBVQqg5qfrw0BgrDjRAytzcCGnVukANxuTahO5G4GloAwWzdL
+         937Q==
+X-Gm-Message-State: AC+VfDxOYPn7p0B9BQJupUV2dz4uiYOIkNxduKbPd4KTRhLeDjUe5ZJH
+        O38H5y3pfAJ1wpwEVQUgrtg=
+X-Google-Smtp-Source: ACHHUZ4UnbSyJQIHoo1YS1QPqF9voV5jiWt4nIwqxau8fPKZCINZHH9DSURxTyghpzjZN1YLy1Lpjw==
+X-Received: by 2002:ac2:4907:0:b0:4f4:af57:19af with SMTP id n7-20020ac24907000000b004f4af5719afmr576935lfi.2.1684732505853;
+        Sun, 21 May 2023 22:15:05 -0700 (PDT)
+Received: from [192.168.1.126] (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id n15-20020ac2490f000000b004edc55d3900sm850247lfi.0.2023.05.21.22.15.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 21 May 2023 22:15:05 -0700 (PDT)
+Message-ID: <6e94c838-886d-3c58-3fa0-175501f57f56@gmail.com>
+Date:   Mon, 22 May 2023 08:15:01 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v5 3/8] net-next: mvpp2: relax return value check for IRQ
+ get
+Content-Language: en-US, en-GB
+To:     andy.shevchenko@gmail.com
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Andreas Klinger <ak@it-klinger.de>,
+        Marcin Wojtas <mw@semihalf.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org, netdev@vger.kernel.org,
+        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
+        linux-mips@vger.kernel.org
+References: <cover.1684493615.git.mazziesaccount@gmail.com>
+ <7c7b1a123d6d5c15c8b37754f1f0c4bd1cad5a01.1684493615.git.mazziesaccount@gmail.com>
+ <ZGpSpZFEo5cw94U_@surfacebook>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <ZGpSpZFEo5cw94U_@surfacebook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,123 +102,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-move_ptes() return -EAGAIN if pte_offset_map_lock() of old fails, or if
-pte_offset_map_nolock() of new fails: move_page_tables() retry if so.
+Hi Andy,
 
-But that does need a pmd_none() check inside, to stop endless loop when
-huge shmem is truncated (thank you to syzbot); and move_huge_pmd() must
-tolerate that a page table might have been allocated there just before
-(of course it would be more satisfying to remove the empty page table,
-but this is not a path worth optimizing).
+On 5/21/23 20:19, andy.shevchenko@gmail.com wrote:
+> Fri, May 19, 2023 at 02:01:47PM +0300, Matti Vaittinen kirjoitti:
+>> fwnode_irq_get[_byname]() were changed to not return 0 anymore.
+>>
+>> Drop check for return value 0.
+> 
+> ...
+> 
+>> -		if (v->irq <= 0) {
+>> +		if (v->irq < 0) {
+>>   			ret = -EINVAL;
+> 
+> 			ret = v->irq;
+> 
+> ?
 
-Signed-off-by: Hugh Dickins <hughd@google.com>
----
- mm/huge_memory.c |  5 +++--
- mm/mremap.c      | 28 ++++++++++++++++++++--------
- 2 files changed, 23 insertions(+), 10 deletions(-)
+For me that seems to be correct, yes. This, however, would be a 
+functional change and in my opinion it should be done separately from 
+this API change.
 
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 624671aaa60d..d4bd5fa7c823 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -1760,9 +1760,10 @@ bool move_huge_pmd(struct vm_area_struct *vma, unsigned long old_addr,
- 
- 	/*
- 	 * The destination pmd shouldn't be established, free_pgtables()
--	 * should have release it.
-+	 * should have released it; but move_page_tables() might have already
-+	 * inserted a page table, if racing against shmem/file collapse.
- 	 */
--	if (WARN_ON(!pmd_none(*new_pmd))) {
-+	if (!pmd_none(*new_pmd)) {
- 		VM_BUG_ON(pmd_trans_huge(*new_pmd));
- 		return false;
- 	}
-diff --git a/mm/mremap.c b/mm/mremap.c
-index b11ce6c92099..1fc47b4f38d7 100644
---- a/mm/mremap.c
-+++ b/mm/mremap.c
-@@ -133,7 +133,7 @@ static pte_t move_soft_dirty_pte(pte_t pte)
- 	return pte;
- }
- 
--static void move_ptes(struct vm_area_struct *vma, pmd_t *old_pmd,
-+static int move_ptes(struct vm_area_struct *vma, pmd_t *old_pmd,
- 		unsigned long old_addr, unsigned long old_end,
- 		struct vm_area_struct *new_vma, pmd_t *new_pmd,
- 		unsigned long new_addr, bool need_rmap_locks)
-@@ -143,6 +143,7 @@ static void move_ptes(struct vm_area_struct *vma, pmd_t *old_pmd,
- 	spinlock_t *old_ptl, *new_ptl;
- 	bool force_flush = false;
- 	unsigned long len = old_end - old_addr;
-+	int err = 0;
- 
- 	/*
- 	 * When need_rmap_locks is true, we take the i_mmap_rwsem and anon_vma
-@@ -170,8 +171,16 @@ static void move_ptes(struct vm_area_struct *vma, pmd_t *old_pmd,
- 	 * pte locks because exclusive mmap_lock prevents deadlock.
- 	 */
- 	old_pte = pte_offset_map_lock(mm, old_pmd, old_addr, &old_ptl);
--	new_pte = pte_offset_map(new_pmd, new_addr);
--	new_ptl = pte_lockptr(mm, new_pmd);
-+	if (!old_pte) {
-+		err = -EAGAIN;
-+		goto out;
-+	}
-+	new_pte = pte_offset_map_nolock(mm, new_pmd, new_addr, &new_ptl);
-+	if (!new_pte) {
-+		pte_unmap_unlock(old_pte, old_ptl);
-+		err = -EAGAIN;
-+		goto out;
-+	}
- 	if (new_ptl != old_ptl)
- 		spin_lock_nested(new_ptl, SINGLE_DEPTH_NESTING);
- 	flush_tlb_batched_pending(vma->vm_mm);
-@@ -208,8 +217,10 @@ static void move_ptes(struct vm_area_struct *vma, pmd_t *old_pmd,
- 		spin_unlock(new_ptl);
- 	pte_unmap(new_pte - 1);
- 	pte_unmap_unlock(old_pte - 1, old_ptl);
-+out:
- 	if (need_rmap_locks)
- 		drop_rmap_locks(vma);
-+	return err;
- }
- 
- #ifndef arch_supports_page_table_move
-@@ -537,6 +548,7 @@ unsigned long move_page_tables(struct vm_area_struct *vma,
- 		new_pmd = alloc_new_pmd(vma->vm_mm, vma, new_addr);
- 		if (!new_pmd)
- 			break;
-+again:
- 		if (is_swap_pmd(*old_pmd) || pmd_trans_huge(*old_pmd) ||
- 		    pmd_devmap(*old_pmd)) {
- 			if (extent == HPAGE_PMD_SIZE &&
-@@ -544,8 +556,6 @@ unsigned long move_page_tables(struct vm_area_struct *vma,
- 					   old_pmd, new_pmd, need_rmap_locks))
- 				continue;
- 			split_huge_pmd(vma, old_pmd, old_addr);
--			if (pmd_trans_unstable(old_pmd))
--				continue;
- 		} else if (IS_ENABLED(CONFIG_HAVE_MOVE_PMD) &&
- 			   extent == PMD_SIZE) {
- 			/*
-@@ -556,11 +566,13 @@ unsigned long move_page_tables(struct vm_area_struct *vma,
- 					   old_pmd, new_pmd, true))
- 				continue;
- 		}
--
-+		if (pmd_none(*old_pmd))
-+			continue;
- 		if (pte_alloc(new_vma->vm_mm, new_pmd))
- 			break;
--		move_ptes(vma, old_pmd, old_addr, old_addr + extent, new_vma,
--			  new_pmd, new_addr, need_rmap_locks);
-+		if (move_ptes(vma, old_pmd, old_addr, old_addr + extent,
-+			      new_vma, new_pmd, new_addr, need_rmap_locks) < 0)
-+			goto again;
- 	}
- 
- 	mmu_notifier_invalidate_range_end(&range);
+> 
+>>   			goto err;
+>>   		}
+> 
+
 -- 
-2.35.3
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
 
