@@ -2,168 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B63A70C62E
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 21:16:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7913670C6CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 21:22:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233778AbjEVTQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 15:16:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38232 "EHLO
+        id S234452AbjEVTWe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 15:22:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234044AbjEVTPs (ORCPT
+        with ESMTP id S234467AbjEVTWc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 15:15:48 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 223781A8
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 12:15:34 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-64d15660784so3569656b3a.0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 12:15:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684782933; x=1687374933;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+yOtfK1pFQtCc71cFzgVKT6xOp98rRtV2rALJqQa+Fg=;
-        b=tzCG7+bIvrimmh9A79/cNNYbpqnrTvZ9KS7MzHN8Wwp9N/VNwyNHiWm9sfXmiJN+FZ
-         2NAYs3kITqf86jDQ3tpi3vVo9R3izNAYncChMT8VoVmi6HPAkDIemARWEjqJubVudaVB
-         1atrGX3hl/iXBUubxEcRJXz0FdWG1FKy510pwp3Xpz800d6nlmEUq405nJvUPJafdCLb
-         /Re6eMA2CPNO3M6CKiek6H7kiLzIBPVhu0jT/VtcH4URW2lTu6qP2wWPpBwCM7yxB0nc
-         7iIFFjrTuI1aN9UfKYRt4g6d8659Mn/ft8lHutS63ZrazzQpjQsxrgPANbJl/a3l5cVX
-         5GBQ==
+        Mon, 22 May 2023 15:22:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399B9CA
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 12:21:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684783301;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=19CMbyqGYx+dTe/70Tt+e3xVM/rvt5nddSdllvKHLqA=;
+        b=H/orPKPI6wpXaUCkVLSbhmWWRz8J+aQ2QfQKQd/nu+guw7J8lHrGDIXi2mfPqeILxPAkSf
+        tL71JceOSFrM8aLWX/GEE8kVK0mIF2lAu/UEq6zlzme3fNbYUy7UBiPxhYKzPwDIntglYz
+        H3CpEv7KtmQpABp82JVZepnjJQdGPc4=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-8-IsadP1giMSeKp6NOtXnBPQ-1; Mon, 22 May 2023 15:21:36 -0400
+X-MC-Unique: IsadP1giMSeKp6NOtXnBPQ-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-3062e5d0cd3so2485585f8f.3
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 12:21:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684782933; x=1687374933;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+yOtfK1pFQtCc71cFzgVKT6xOp98rRtV2rALJqQa+Fg=;
-        b=UFc1y9N+vwc4PHeCOl8KJOprw3bWFL0Dj9NRdR9V90n6Qra6xb2Jcset/fem1mAl8X
-         8oaOMQwFn6K2zwiximywmhrq2Fi8BJJsea8VEW15X5TRZe3kPHvCoJjUxTgAxqCtgFHQ
-         trfc3is03Nwj+KumvvUiWukku8SOk8C9VeFoo7aR3jMTi1nOnOo6yr/oUyhKWO7EsHwu
-         iWYiasvjj+vehywVIwY9IoPCmrKLDvGrRQHLyzIkD8jEUQZLAmjOOPeNLx418pZn4llY
-         nXVpBDIg0/zln91Q3uA5qj78js+w4RLuZHVEJ/xZkVu3s5GiGsyz3hcoTFNLW23ZWphV
-         OLew==
-X-Gm-Message-State: AC+VfDz02ne59OY86HdNNZO41kBZAt6BQ6vHDXGDaBTNgKCTEkkd/r/u
-        FUfPC4VH44BVTMbG2oypH/XlUA==
-X-Google-Smtp-Source: ACHHUZ52ZEECneLAS9tm/UNsmG0ECpBajQruy+F2ybktcTEo240DF7Ky6kbzndheezdG3NztN857vw==
-X-Received: by 2002:a17:902:c407:b0:1ac:451d:34b with SMTP id k7-20020a170902c40700b001ac451d034bmr16613997plk.9.1684782932841;
-        Mon, 22 May 2023 12:15:32 -0700 (PDT)
-Received: from localhost ([75.172.135.98])
-        by smtp.gmail.com with ESMTPSA id bj6-20020a170902850600b001a183ade911sm5205732plb.56.2023.05.22.12.15.32
+        d=1e100.net; s=20221208; t=1684783295; x=1687375295;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=19CMbyqGYx+dTe/70Tt+e3xVM/rvt5nddSdllvKHLqA=;
+        b=grc1TktEbQmHjxAOEqPMQnyAMnuDAbXvTS6MuNUfkxzjSbfV6i/7yEWJ3fD+pJ8DOS
+         Qp4CZfEvpO4UgUeg0Luwj3dBcuo4GcikYz8tq/MQOAlBVSp/PGcEERwTuwbl5DegTbRJ
+         bLfV9iuytRIttbNhaQuTx8Dp3A6xGlFUxCmitv32tBQ/RqG4XDbUSGPeLmmHFm/eSKFe
+         Hv7l+DrSl2MQAPyveSKvq2WYiha92bt4nXv5fu0RA5B3m0hwDdp0q6N5gOcf9ERMJGnT
+         N0arLBfHLYGdNOddPWRyDCfB6n+acrq6L1O9Ox+xQkTau+4XR0/JUwAVnu5YDikQ2j+u
+         DCnA==
+X-Gm-Message-State: AC+VfDylW89lpKt4ADwyCvbUpJn4L7Pz3OrwOgEX3zOX7nXHn+lQg+yd
+        anXBFXfVL9oj+hXkQ+/IAq6o/ql4yIcfVJcyCb72YjdFaEag5N08PCx4UmqO5kPZCAWhgkk8gL8
+        8ZdDHvxSkzhGRynhAM6NA1TXt
+X-Received: by 2002:adf:db46:0:b0:2fb:87f7:3812 with SMTP id f6-20020adfdb46000000b002fb87f73812mr8907208wrj.1.1684783295417;
+        Mon, 22 May 2023 12:21:35 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6kIIq5uetcGP+KQsLYXRS4iGfwi1QtzdCKHvoC7OvlwQh1dgXKBPsat1cRNlG/p+vSiuUceA==
+X-Received: by 2002:adf:db46:0:b0:2fb:87f7:3812 with SMTP id f6-20020adfdb46000000b002fb87f73812mr8907196wrj.1.1684783295050;
+        Mon, 22 May 2023 12:21:35 -0700 (PDT)
+Received: from redhat.com ([2.52.20.68])
+        by smtp.gmail.com with ESMTPSA id n10-20020a5d660a000000b003063a92bbf5sm8661795wru.70.2023.05.22.12.21.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 12:15:32 -0700 (PDT)
-From:   Kevin Hilman <khilman@baylibre.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Julien Stephan <jstephan@baylibre.com>
-Cc:     robh@kernel.org, chunkuang.hu@kernel.org,
-        linux-mediatek@lists.infradead.org,
-        Florian Sylvestre <fsylvestre@baylibre.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Andy Hsieh <andy.hsieh@mediatek.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        "moderated list:ARM/Mediatek USB3 PHY DRIVER" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 1/2] dt-bindings: phy: add mediatek mipi csi driver v
- 0.5
-In-Reply-To: <c63ebd7e-8658-9cdd-4fc4-ade9c94dfa64@linaro.org>
-References: <20230515090551.1251389-1-jstephan@baylibre.com>
- <20230515090551.1251389-2-jstephan@baylibre.com>
- <ab9aa30f-82d7-1d14-5561-e19ff10af0b0@linaro.org>
- <4yppinkucchwnwtnnpbqdn4bejmntjq3q6mx6es55f2pwyce3c@qdhdks47lpyt>
- <1853f049-4f00-b7f0-973a-2c4e7b0b2634@linaro.org>
- <7h353w2oug.fsf@baylibre.com>
- <fbf1b0a6-f45d-69a0-5de6-8269567e15b3@linaro.org>
- <7hwn18yndq.fsf@baylibre.com>
- <c63ebd7e-8658-9cdd-4fc4-ade9c94dfa64@linaro.org>
-Date:   Mon, 22 May 2023 12:15:31 -0700
-Message-ID: <7hcz2snpnw.fsf@baylibre.com>
+        Mon, 22 May 2023 12:21:34 -0700 (PDT)
+Date:   Mon, 22 May 2023 15:21:31 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Igor Mammedov <imammedo@redhat.com>, linux-kernel@vger.kernel.org,
+        lenb@kernel.org, bhelgaas@google.com, linux-acpi@vger.kernel.org,
+        linux-pci@vger.kernel.org, helgaas@kernel.org,
+        mika.westerberg@linux.intel.com
+Subject: Re: [PATCH v2] PCI: acpiphp: Reassign resources on bridge if
+ necessary
+Message-ID: <20230522152054-mutt-send-email-mst@kernel.org>
+References: <20230424191557.2464760-1-imammedo@redhat.com>
+ <20230522130635.5e3f8771@imammedo.users.ipa.redhat.com>
+ <CAJZ5v0jcap1Qe=PeZ98csqN9DxwZLPRontGkbvMuah6XrtbT4A@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0jcap1Qe=PeZ98csqN9DxwZLPRontGkbvMuah6XrtbT4A@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> writes:
+On Mon, May 22, 2023 at 01:52:33PM +0200, Rafael J. Wysocki wrote:
+> On Mon, May 22, 2023 at 1:06 PM Igor Mammedov <imammedo@redhat.com> wrote:
+> >
+> > On Mon, 24 Apr 2023 21:15:57 +0200
+> > Igor Mammedov <imammedo@redhat.com> wrote:
+> >
+> > > When using ACPI PCI hotplug, hotplugging a device with
+> > > large BARs may fail if bridge windows programmed by
+> > > firmware are not large enough.
+> >
+> > Rafael,
+> >
+> > Since there was no more comments for a while,
+> > can you merge this patch through your tree?
+> 
+> I need an ACK from Bjorn on this, as the PCI maintainer, or it can go
+> in via the PCI tree as far as I'm concerned.
+> 
+> Thanks!
 
-> On 16/05/2023 23:31, Kevin Hilman wrote:
->
->>> Third is to use versioned IP blocks.
->>>
->>> The second case also would work, if it is applicable to you (you really
->>> have fallback matching all devices). Third solution depends on your
->>> versioning and Rob expressed dislike about it many times.
->>>
->>> We had many discussions on mailing lists, thus simplifying the review -
->>> I recommend the first choice. For a better recommendation you should say
->>> a bit more about the block in different SoCs.
->> 
->> I'll try to say a bit more about the PHY block, but in fact, it's not
->> just about differences between SoCs. On the same SoC, 2 different PHYs
->> may have different features/capabilities.
->> 
->> For example, on MT8365, There are 2 PHYs: CSI0 and CSI1.  CSI0 can
->> function as a C-PHY or a D-PHY, but CSI1 can only function as D-PHY
->> (used as the example in the binding patch[1].)  On another related SoC,
->> there are 3 PHYs, where CSI0 is C-D but CSI1 & CSI2 are only D.
->> 
->> So that's why it seems (at least to me) that while we need SoC
->> compatible, it's not enough.  We also need properties to describe
->> PHY-specific features (e.g. C-D PHY)
->
-> I recall the same or very similar case... It bugs me now, but
-> unfortunately I cannot find it.
->
->> 
->> Of course, we could rely only on SoC-specific compatibles describe this.
->> But then driver will need an SoC-specific table with the number of PHYs
->> and per-PHY features for each SoC encoded in the driver.  Since the
->> driver otherwise doesn't (and shouldn't, IMHO) need to know how many
->> PHYs are on each SoC, I suggested to Julien that perhaps the additional
->> propery was the better solution.
->
-> Phys were modeled as separate device instances, so you would need
-> difference in compatible to figure out which phy is it.
->
-> Other way could be to create device for all phys and use phy-cells=1.
-> Whether it makes sense, depends on the actual datasheet - maybe the
-> split phy per device is artificial? There is one PHY block with two
-> address ranges for each PHY - CSI0 and CSI1 - but it is actually one
-> block? You should carefully check this because once design is chosen,
-> you won't be able to go back to other and it might be a problem (e.g.
-> there is some top-level block for powering on all CSI instances).
+I'd also like an ACK for:
+Cc: stable@vger.kernel.org
 
-We're pretty sure these are multiple instances of the IP block as they
-can operate completely independently. 
 
->> 
->> To me it seems redundant to have the driver encode PHYs-per-SoC info,
->> when the per-SoC DT is going to have the same info, so my suggestion was
->> to simplify the driver and have this kind of hardware description in the
->> DT, and keep the driver simple, but we are definitely open to learning
->> the "right way" of doing this.
->
-> The property then is reasonable. It should not be bool, though, because
-> it does not scale. There can be next block which supports only D-PHY on
-> CSI0 and C-PHY on CSI1? Maybe some enum or list, depending on possible
-> configurations.
 
-OK, looks like include/dt-bindings/phy/phy.y already has
+> > > Reproducer:
+> > >   $ qemu-kvm -monitor stdio -M q35  -m 4G \
+> > >       -global ICH9-LPC.acpi-pci-hotplug-with-bridge-support=on \
+> > >       -device id=rp1,pcie-root-port,bus=pcie.0,chassis=4 \
+> > >       disk_image
+> > >
+> > >  wait till linux guest boots, then hotplug device
+> > >    (qemu) device_add qxl,bus=rp1
+> > >
+> > >  hotplug on guest side fails with:
+> > >    pci 0000:01:00.0: [1b36:0100] type 00 class 0x038000
+> > >    pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x03ffffff]
+> > >    pci 0000:01:00.0: reg 0x14: [mem 0x00000000-0x03ffffff]
+> > >    pci 0000:01:00.0: reg 0x18: [mem 0x00000000-0x00001fff]
+> > >    pci 0000:01:00.0: reg 0x1c: [io  0x0000-0x001f]
+> > >    pci 0000:01:00.0: BAR 0: no space for [mem size 0x04000000]
+> > >    pci 0000:01:00.0: BAR 0: failed to assign [mem size 0x04000000]
+> > >    pci 0000:01:00.0: BAR 1: no space for [mem size 0x04000000]
+> > >    pci 0000:01:00.0: BAR 1: failed to assign [mem size 0x04000000]
+> > >    pci 0000:01:00.0: BAR 2: assigned [mem 0xfe800000-0xfe801fff]
+> > >    pci 0000:01:00.0: BAR 3: assigned [io  0x1000-0x101f]
+> > >    qxl 0000:01:00.0: enabling device (0000 -> 0003)
+> > >    Unable to create vram_mapping
+> > >    qxl: probe of 0000:01:00.0 failed with error -12
+> > >
+> > > However when using native PCIe hotplug
+> > >   '-global ICH9-LPC.acpi-pci-hotplug-with-bridge-support=off'
+> > > it works fine, since kernel attempts to reassign unused resources.
+> > > Use the same machinery as native PCIe hotplug to (re)assign resources.
+> > >
+> > > Signed-off-by: Igor Mammedov <imammedo@redhat.com>
+> > > ---
+> > > tested in QEMU with Q35 machine on PCIE root port and also
+> > > with nested conventional bridge attached to root port.
+> > >
+> > > v2:
+> > >   * fixup subject to match expected style
+> > >   * drop no longer needed __pci_bus_size_bridges() to avoid
+> > >     memory leak (Bjorn Helgaas <helgaas@kernel.org>)
+> > > ---
+> > >  drivers/pci/hotplug/acpiphp_glue.c | 5 +----
+> > >  1 file changed, 1 insertion(+), 4 deletions(-)
+> > >
+> > > diff --git a/drivers/pci/hotplug/acpiphp_glue.c b/drivers/pci/hotplug/acpiphp_glue.c
+> > > index 5b1f271c6034..328d1e416014 100644
+> > > --- a/drivers/pci/hotplug/acpiphp_glue.c
+> > > +++ b/drivers/pci/hotplug/acpiphp_glue.c
+> > > @@ -498,7 +498,6 @@ static void enable_slot(struct acpiphp_slot *slot, bool bridge)
+> > >                               acpiphp_native_scan_bridge(dev);
+> > >               }
+> > >       } else {
+> > > -             LIST_HEAD(add_list);
+> > >               int max, pass;
+> > >
+> > >               acpiphp_rescan_slot(slot);
+> > > @@ -512,12 +511,10 @@ static void enable_slot(struct acpiphp_slot *slot, bool bridge)
+> > >                               if (pass && dev->subordinate) {
+> > >                                       check_hotplug_bridge(slot, dev);
+> > >                                       pcibios_resource_survey_bus(dev->subordinate);
+> > > -                                     __pci_bus_size_bridges(dev->subordinate,
+> > > -                                                            &add_list);
+> > >                               }
+> > >                       }
+> > >               }
+> > > -             __pci_bus_assign_resources(bus, &add_list, NULL);
+> > > +             pci_assign_unassigned_bridge_resources(bus->self);
+> > >       }
+> > >
+> > >       acpiphp_sanitize_bus(bus);
+> >
 
-  #define PHY_TYPE_DPHY		10
-  #define PHY_TYPE_CPHY		11
-
-we'll add a PHY_TYPE_CDPHY and use that.   Sound reasonable?
-
-Kevin
