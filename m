@@ -2,134 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 537A370B2D4
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 03:37:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F12C670B2D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 03:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231347AbjEVBhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 21:37:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46818 "EHLO
+        id S231358AbjEVBhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 21:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230527AbjEVBhD (ORCPT
+        with ESMTP id S229708AbjEVBhE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 21:37:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709ECDE;
+        Sun, 21 May 2023 21:37:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70ACE4;
         Sun, 21 May 2023 18:37:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DEB0F618FA;
-        Mon, 22 May 2023 01:37:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F6E5C433A8;
-        Mon, 22 May 2023 01:37:01 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 416B1618FB;
+        Mon, 22 May 2023 01:37:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AAF9C433D2;
+        Mon, 22 May 2023 01:36:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1684719421;
-        bh=lv6wouIBbbs+ZUnfY6iszC49L7vXimaT8vWL2XojXUI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FCmviC3wl9npZoyPR9/+xP/t2umpo7tSwAklN5q4WZD+YwBWs4UPFLUyfsOLWs3ye
-         t7oJdiEnEaiCwdkgoKtffidLtwNE/oRIXag03eVnT3JEvnYGJ32WPFszueN+ytzOXA
-         3kBDlLNkEBbjmM00A7bn0PBlrTSSebh0MH49H18d6ac3snWaSngprGiq16L6OWjxRf
-         wMp/bo5dT7sLCjp9Nznq/HrgMzwn0dBLDOPJqbvOdlhSguDnIlnkWD1EmhaRze8cey
-         mI2Ni8rm3V6NBQgTr2rhx0AMX0aUoo97CULhJdOvWTe5ENW7aMfdSu+3QZeeD63lVB
-         1xw2meoBa0JHA==
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-510c734fa2dso6230363a12.0;
-        Sun, 21 May 2023 18:37:01 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwdCtgmxUN+5dkJMd6HPqIqlJ7yinNje/uE3YkK+b+lnERz2P5e
-        9unC7RbcDpiscZuyDVj37PsXFZYwtYElQUhmk9k=
-X-Google-Smtp-Source: ACHHUZ6CO1iiQGsq6FLHKPtTopDUygqukzZyE+vzpTFrZB3aFb7iQCtAfVLKr/WwESBwjwhnp8zhJbdCNmBWQiBlpY4=
-X-Received: by 2002:aa7:c452:0:b0:504:81d4:118d with SMTP id
- n18-20020aa7c452000000b0050481d4118dmr8659697edr.3.1684719419571; Sun, 21 May
- 2023 18:36:59 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230507182304.2934-1-jszhang@kernel.org> <20230507182304.2934-4-jszhang@kernel.org>
- <20230507-calamari-gentleman-bbe62af06f92@spud> <ZFkiotPacIMUghDP@xhacker>
- <20230508-unmoved-unvocal-9a6c5fc0c629@spud> <CAJF2gTSFm32ozEDy_3zvrf05USJ8FxCsaGK-2FbkJQsPUDQXmA@mail.gmail.com>
- <20230521-licorice-follicle-2f83e82f8bce@spud>
-In-Reply-To: <20230521-licorice-follicle-2f83e82f8bce@spud>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Mon, 22 May 2023 09:36:47 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTReEW3onRyAXvasX748JuyXJeLU3nQpmQMZRrkS2=ANjg@mail.gmail.com>
-Message-ID: <CAJF2gTReEW3onRyAXvasX748JuyXJeLU3nQpmQMZRrkS2=ANjg@mail.gmail.com>
-Subject: Re: [PATCH 3/5] riscv: dts: add initial T-HEAD light SoC device tree
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Jisheng Zhang <jszhang@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, heiko@sntech.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        bh=rQqm+d2EFHE384n3OSuP7ZiGPEVYIDUl4XCUxQmHiHw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=fODKzsVEdpuUNT4XkenMR4SXPk3B7CrscOcXbn7e90X7TRp+hpkWjfCI69nsRnPMe
+         QddI+4EluM2i7qZrEtYkhWZ5Zl9ZY1hs+ibe/vgajauD7cI4rLUZROLpXK0Fk5itXg
+         zd6YYGwZ9RJHnsBdUQZIFoGVAagT4KON1juorPMzHZmOHSPMavAJdmsxrl0l3TtPPo
+         CCJ+oUJc3cJLKhHADaVm2H45tX7X41evI5TTeNIM8aXsi9lVzRq3YjpwPZwTx6Ygpm
+         Q1dgynMmMhEKyVvnmZJAMS/W/AuHfWFPGljHQqg/YRBzAzZcX41dN9wHlV3IhooRAi
+         BOuzepKu4OVHg==
+Date:   Mon, 22 May 2023 10:36:52 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Ze Gao <zegao2021@gmail.com>, Yonghong Song <yhs@meta.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hao Luo <haoluo@google.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Song Liu <song@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        kafai@fb.com, kpsingh@chromium.org, netdev@vger.kernel.org,
+        paulmck@kernel.org, songliubraving@fb.com,
+        Ze Gao <zegao@tencent.com>
+Subject: Re:
+Message-Id: <20230522103652.4c1680bb945cba22ccba6a79@kernel.org>
+In-Reply-To: <ZGp+fW855gmWuh9W@krava>
+References: <20220515203653.4039075-1-jolsa@kernel.org>
+        <20230520094722.5393-1-zegao@tencent.com>
+        <b4f66729-90ab-080a-51ec-bf435ad6199d@meta.com>
+        <CAD8CoPAXse1GKAb15O5tZJwBqMt1N_btH+qRe7c_a-ryUMjx7A@mail.gmail.com>
+        <ZGp+fW855gmWuh9W@krava>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 1:08=E2=80=AFAM Conor Dooley <conor@kernel.org> wro=
-te:
->
-> On Sun, May 21, 2023 at 11:37:58PM +0800, Guo Ren wrote:
-> > On Tue, May 9, 2023 at 12:44=E2=80=AFAM Conor Dooley <conor@kernel.org>=
- wrote:
-> > >
-> > > On Tue, May 09, 2023 at 12:26:10AM +0800, Jisheng Zhang wrote:
-> > > > On Sun, May 07, 2023 at 10:35:12PM +0100, Conor Dooley wrote:
-> > > > > On Mon, May 08, 2023 at 02:23:02AM +0800, Jisheng Zhang wrote:
-> > > > >
-> > > > > > +         c910_0: cpu@0 {
-> > > > > > +                 compatible =3D "thead,c910", "riscv";
-> > > > > > +                 device_type =3D "cpu";
-> > > > > > +                 riscv,isa =3D "rv64imafdc";
-> > > > >
-> > > > > Does this support more than "rv64imafdc"?
-> > > > > I assume there's some _xtheadfoo extensions that it does support,
-> > > > > although I am not sure how we are proceeding with those - Heiko m=
-ight
-> > > > > have a more nuanced take.
-> > > > >
-> > > > > > +         reset: reset-sample {
-> > > > > > +                 compatible =3D "thead,reset-sample";
-> > > > >
-> > > > > What is a "reset-sample"?
-> > > >
-> > > > This node is only for opensbi. The compatible string is already in
-> > > > opensbi. Do we also need to add dt-binding for it in linux?
-> > >
-> > > If it's to be included in the kernel's dts, then yes, you do need a
-> > > dt-binding. If you remove it, then you don't :)
-> > >
-> > > That said, "thead,reset-sample" is a strangely named compatible, so i=
-f
-> > > you do keep it it may end up needing a rename!
->
-> > How about compatible =3D "thead,reset-th1520" ?
->
-> "vendor,soc-function" is more typical, but "reset" is usually used for
-> reset controllers of which this isn't as far as I can tell.
-> I commented on the v2, hoping that you might actually know what the IP
-> block' full/proper name is:
-> https://lore.kernel.org/all/20230518-driving-secluding-793b3192776e@spud/
-Oh, sorry, I focused on s64ilp32 these days and missed that. I would
-reply to that thread.
+On Sun, 21 May 2023 22:26:37 +0200
+Jiri Olsa <olsajiri@gmail.com> wrote:
 
->
-> Do you?
->
-> Cheers,
-> Conor.
+> On Sun, May 21, 2023 at 11:10:16PM +0800, Ze Gao wrote:
+> > > kprobe_multi/fprobe share the same set of attachments with fentry.
+> > > Currently, fentry does not filter with !rcu_is_watching, maybe
+> > > because this is an extreme corner case. Not sure whether it is
+> > > worthwhile or not.
+> > 
+> > Agreed, it's rare, especially after Peter's patches which push narrow
+> > down rcu eqs regions
+> > in the idle path and reduce the chance of any traceable functions
+> > happening in between.
+> > 
+> > However, from RCU's perspective, we ought to check if rcu_is_watching
+> > theoretically
+> > when there's a chance our code will run in the idle path and also we
+> > need rcu to be alive,
+> > And also we cannot simply make assumptions for any future changes in
+> > the idle path.
+> > You know, just like what was hit in the thread.
+> > 
+> > > Maybe if you can give a concrete example (e.g., attachment point)
+> > > with current code base to show what the issue you encountered and
+> > > it will make it easier to judge whether adding !rcu_is_watching()
+> > > is necessary or not.
+> > 
+> > I can reproduce likely warnings on v6.1.18 where arch_cpu_idle is
+> > traceable but not on the latest version
+> > so far. But as I state above, in theory we need it. So here is a
+> > gentle ping :) .
+> 
+> hum, this change [1] added rcu_is_watching check to ftrace_test_recursion_trylock,
+> which we use in fprobe_handler and is coming to fprobe_exit_handler in [2]
+> 
+> I might be missing something, but it seems like we don't need another
+> rcu_is_watching call on kprobe_multi level
+
+Good point! OK, then it seems we don't need it. The rethook continues to
+use the rcu_is_watching() because it is also used from kprobes, but the
+kprobe_multi doesn't need it.
+
+Thank you,
+
+> 
+> jirka
+> 
+> 
+> [1] d099dbfd3306 cpuidle: tracing: Warn about !rcu_is_watching()
+> [2] https://lore.kernel.org/bpf/20230517034510.15639-4-zegao@tencent.com/
 
 
-
---=20
-Best Regards
- Guo Ren
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
