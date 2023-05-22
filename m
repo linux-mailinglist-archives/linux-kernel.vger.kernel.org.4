@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B31170C7C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 21:32:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E885570C7B1
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 21:32:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234815AbjEVTcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 15:32:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53412 "EHLO
+        id S234800AbjEVTcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 15:32:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234791AbjEVTcE (ORCPT
+        with ESMTP id S234781AbjEVTcC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 15:32:04 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E02C9E;
-        Mon, 22 May 2023 12:32:02 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34MISqdI027794;
-        Mon, 22 May 2023 19:31:53 GMT
+        Mon, 22 May 2023 15:32:02 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 547A7A3;
+        Mon, 22 May 2023 12:32:01 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34MJVO1m018326;
+        Mon, 22 May 2023 19:31:52 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=qcppdkim1;
- bh=kKB94OMz6i3mtQBjIfVqdUOld64G/njfcAiumFtldUk=;
- b=fGmBIVHuyZ3YlU9CQGQkkvYilwj+/kqtn5/jZYeP4knZQVZkk9D5u2TilT7TEGH6UWZd
- CEQchwU+GaIoLJ2rxtgD26oA+dzUKzY2Md/XoX/mTN62LaOoXSjfLfUNS1WNWnml9nTR
- tegLO5kQds7HN7csnyqZgNHDjGpnk3dD5X/jj7O7F4LpV7EJ53prfIXAYFa4gDMVMe0x
- GMZbJdwmj1XlJsX7uqoRAD0zSV/15cJoTyc0AulhnuDj+NNE/jcM9RDvVdCoAsfEqUnJ
- RZR7pDbKKsZB8K+/hodK0za7FuuE4f7y23ywK8+fwt730O+ZVRpyDeApnCl4hQKupXt0 Iw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qr4wh1dk9-1
+ bh=UBo4AUigQs4sXmPtonF5Wh0yzSkrMUZgWWei9l/Mngg=;
+ b=Gcpg6MeloBg8UCr9eij22YueYGFcunKWVFLEfE6x+fyaQHkIT+qPKm/NmoGbLXr/wxDp
+ n+dIMzb4GP7P2NWq5O4cf4qqfhriV2B8aaIj0uLRV3uNx7CxIHV+NDx3e/KC0sMkV/gh
+ XwTqIM0uj518W4KGp8CefiNvZPVNbBwjJErDCT20P8OdAtREyjVZJCjaDdN9xDF2Iwsy
+ taTBUH2KIOZKsnc3ySe/itfaa0F/ubCUBnLIhWAQ8e9hlJyYP+qzibmzuEVKruiWU9CJ
+ rVS5m4gypmIvlaG6fwiNu2FR5AvE5LcJo1A0OKsx3ZnEid1tqWszaLe7gZCSB7r5/9Er Pw== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qpkwmvqtg-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 19:31:53 +0000
+        Mon, 22 May 2023 19:31:51 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34MJVm1M025898
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34MJVopm015512
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 19:31:48 GMT
+        Mon, 22 May 2023 19:31:50 GMT
 Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Mon, 22 May 2023 12:31:47 -0700
+ 15.2.986.42; Mon, 22 May 2023 12:31:49 -0700
 From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
 To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
         <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
@@ -50,9 +50,9 @@ CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
         <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
         <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH v12 04/10] drm/msm/dpu: Guard PINGPONG DSC ops behind DPU_PINGPONG_DSC bit
-Date:   Mon, 22 May 2023 12:30:47 -0700
-Message-ID: <1684783853-22193-5-git-send-email-quic_khsieh@quicinc.com>
+Subject: [PATCH v12 05/10] drm/msm/dpu: Introduce PINGPONG_NONE to disconnect DSC from PINGPONG
+Date:   Mon, 22 May 2023 12:30:48 -0700
+Message-ID: <1684783853-22193-6-git-send-email-quic_khsieh@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1684783853-22193-1-git-send-email-quic_khsieh@quicinc.com>
 References: <1684783853-22193-1-git-send-email-quic_khsieh@quicinc.com>
@@ -63,18 +63,18 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: zpjOjsKjgq1zAXEOLF3QM1w9-QHJVSSy
-X-Proofpoint-GUID: zpjOjsKjgq1zAXEOLF3QM1w9-QHJVSSy
+X-Proofpoint-GUID: 04kjPxVwmcyo4C5jncOdezeCHKIq8Ah9
+X-Proofpoint-ORIG-GUID: 04kjPxVwmcyo4C5jncOdezeCHKIq8Ah9
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
  definitions=2023-05-22_14,2023-05-22_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 clxscore=1015
- priorityscore=1501 malwarescore=0 mlxscore=0 suspectscore=0 bulkscore=0
- mlxlogscore=999 impostorscore=0 adultscore=0 phishscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305220164
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
+ spamscore=0 impostorscore=0 mlxscore=0 adultscore=0 suspectscore=0
+ priorityscore=1501 phishscore=0 mlxlogscore=999 lowpriorityscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305220165
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,55 +83,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DPU < 7.0.0 has DPU_PINGPONG_DSC feature bit set to indicate it requires
-both dpu_hw_pp_setup_dsc() and dpu_hw_pp_dsc_{enable,disable}() to be
-executed to complete DSC configuration if DSC hardware block is present.
-Hence test DPU_PINGPONG_DSC feature bit and assign DSC related functions
-to the ops of PINGPONG block accordingly if DPU_PINGPONG_DSC bit is set.
+Disabling the crossbar mux between DSC and PINGPONG currently
+requires a bogus enum dpu_pingpong value to be passed when calling
+dsc_bind_pingpong_blk() with enable=false, even though the register
+value written is independent of the current PINGPONG block.  Replace
+that `bool enable` parameter with a new PINGPONG_NONE dpu_pingpong
+flag that triggers the write of the "special" 0xF "crossbar
+disabled" value to the register instead.
 
-Changes in v6:
--- split patches, this patch has function handles DPU_PINGPONG_DSC bit
+Changes in v4:
+-- more details to commit text
 
-Changes in v9:
--- the original code of assigning dsc related functions to the ops of
-   pingpong block without testing the DPU_PINGPONG_DSC feature bit was
-   restored back due to rebase error which defeat the purpose of this
-   patch. Remove those error code.
+Changes in v5:
+-- rewording commit text suggested by Marijn
+-- add DRM_DEBUG_KMS for DSC unbinding case
 
-Changes in v10:
--- change commit title
--- correct texts at changes in v9
-
-Changes in v12:
--- fixed length too long at Changes in v9
+Changes in v8:
+-- fix checkpatch warning
 
 Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
 ---
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c |  2 +-
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c  | 14 +++++++-------
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h  |  1 -
+ drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h |  3 ++-
+ 4 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
-index 79e4576..437d9e6 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
-@@ -291,9 +291,12 @@ static void _setup_pingpong_ops(struct dpu_hw_pingpong *c,
- 		c->ops.get_line_count = dpu_hw_pp_get_line_count;
- 		c->ops.disable_autorefresh = dpu_hw_pp_disable_autorefresh;
- 	}
--	c->ops.setup_dsc = dpu_hw_pp_setup_dsc;
--	c->ops.enable_dsc = dpu_hw_pp_dsc_enable;
--	c->ops.disable_dsc = dpu_hw_pp_dsc_disable;
-+
-+	if (test_bit(DPU_PINGPONG_DSC, &features)) {
-+		c->ops.setup_dsc = dpu_hw_pp_setup_dsc;
-+		c->ops.enable_dsc = dpu_hw_pp_dsc_enable;
-+		c->ops.disable_dsc = dpu_hw_pp_dsc_disable;
-+	}
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+index cf1de5d..ffa6f04 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+@@ -1850,7 +1850,7 @@ static void dpu_encoder_dsc_pipe_cfg(struct dpu_hw_dsc *hw_dsc,
+ 		hw_pp->ops.setup_dsc(hw_pp);
  
- 	if (test_bit(DPU_PINGPONG_DITHER, &features))
- 		c->ops.setup_dither = dpu_hw_pp_setup_dither;
+ 	if (hw_dsc->ops.dsc_bind_pingpong_blk)
+-		hw_dsc->ops.dsc_bind_pingpong_blk(hw_dsc, true, hw_pp->idx);
++		hw_dsc->ops.dsc_bind_pingpong_blk(hw_dsc, hw_pp->idx);
+ 
+ 	if (hw_pp->ops.enable_dsc)
+ 		hw_pp->ops.enable_dsc(hw_pp);
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c
+index 8deedeae..509dbaa 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.c
+@@ -157,7 +157,6 @@ static void dpu_hw_dsc_config_thresh(struct dpu_hw_dsc *hw_dsc,
+ 
+ static void dpu_hw_dsc_bind_pingpong_blk(
+ 		struct dpu_hw_dsc *hw_dsc,
+-		bool enable,
+ 		const enum dpu_pingpong pp)
+ {
+ 	struct dpu_hw_blk_reg_map *c = &hw_dsc->hw;
+@@ -166,14 +165,15 @@ static void dpu_hw_dsc_bind_pingpong_blk(
+ 
+ 	dsc_ctl_offset = DSC_CTL(hw_dsc->idx);
+ 
+-	if (enable)
++	if (pp)
+ 		mux_cfg = (pp - PINGPONG_0) & 0x7;
+ 
+-	DRM_DEBUG_KMS("%s dsc:%d %s pp:%d\n",
+-			enable ? "Binding" : "Unbinding",
+-			hw_dsc->idx - DSC_0,
+-			enable ? "to" : "from",
+-			pp - PINGPONG_0);
++	if (pp)
++		DRM_DEBUG_KMS("Binding dsc:%d to pp:%d\n",
++			      hw_dsc->idx - DSC_0, pp - PINGPONG_0);
++	else
++		DRM_DEBUG_KMS("Unbinding dsc:%d from any pp\n",
++			      hw_dsc->idx - DSC_0);
+ 
+ 	DPU_REG_WRITE(c, dsc_ctl_offset, mux_cfg);
+ }
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h
+index 287ec5f..138080a 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h
+@@ -44,7 +44,6 @@ struct dpu_hw_dsc_ops {
+ 				  struct drm_dsc_config *dsc);
+ 
+ 	void (*dsc_bind_pingpong_blk)(struct dpu_hw_dsc *hw_dsc,
+-				  bool enable,
+ 				  enum dpu_pingpong pp);
+ };
+ 
+diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
+index 1913a19..02a0f48 100644
+--- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
++++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
+@@ -191,7 +191,8 @@ enum dpu_dsc {
+ };
+ 
+ enum dpu_pingpong {
+-	PINGPONG_0 = 1,
++	PINGPONG_NONE,
++	PINGPONG_0,
+ 	PINGPONG_1,
+ 	PINGPONG_2,
+ 	PINGPONG_3,
 -- 
 2.7.4
 
