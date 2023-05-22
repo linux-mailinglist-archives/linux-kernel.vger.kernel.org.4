@@ -2,76 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8646A70CBEB
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 23:05:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78EEE70CBF1
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 23:06:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235273AbjEVVFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 17:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33906 "EHLO
+        id S235385AbjEVVGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 17:06:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235216AbjEVVEu (ORCPT
+        with ESMTP id S232262AbjEVVGG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 17:04:50 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CDA69D
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 14:04:47 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-513fd8cc029so131985a12.3
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 14:04:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google; t=1684789486; x=1687381486;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=87E11T0PWo3pRQwioS2ru6DFv9NXjk9At+4H7tRtoQ4=;
-        b=R7U0UybwJD1Kw4pZ1JGSV+kjfqlu89bLXaiEC8Z7ohZeXI9xs5Wo6slRygraV9FxdU
-         6dUt7n+ejiY5WAjZJBkcPp4hme6z1VMNC4Y/+qRrfPLgFC/v+DD6PTicxvQyqtgYSdQ2
-         g9xk5WrA4L+TU4++nLhsjYPJRaWlTsqUxH1MI=
+        Mon, 22 May 2023 17:06:06 -0400
+Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC2CD9D
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 14:06:04 -0700 (PDT)
+Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-3382b8b357aso528825ab.3
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 14:06:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684789486; x=1687381486;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=87E11T0PWo3pRQwioS2ru6DFv9NXjk9At+4H7tRtoQ4=;
-        b=l/VlupDyvlDO/xcUens0ehV3aPKRUbdqnL/5JxMTJZSB2I9tBKHEZ1yv6EDYT8w+am
-         BWYZCBb4F//FasgGGEWvlXd4e0McMu879R9NJUZAh/qiz4/Sj686ikLYO1XrUhcSZksk
-         N3KOs3AVm1XGV48WU1qc1JpGRGt/vEVBqztaxkgS3Rk2NFmtuMdIG6n9UujgHhnQ8O2T
-         ckX+pCF6Q2I62zAAyYFUx+XVNMerca285SsEhfxqad40Q/8vrjuRhxkDEDqtWwH6pIJV
-         O0BNnsz93aeWpwaLAzeLuEDd4yVTeAXDmbxfcE1LYmiKH9Oni39/T2ImOEjSkjPqTNut
-         oz3w==
-X-Gm-Message-State: AC+VfDxU37w/5sMSvTSx3tbGhEbXkfyyc6iwMdjU4ckdQRDPGhk2blQy
-        Y+gLsd0giir//43zwZj0yZfyiA==
-X-Google-Smtp-Source: ACHHUZ5PKzX/MIqIwmIIGgXgGBFz3QvBRGt6y9Z5XPqBQD3NsZJ0dPLDSLbaIy7Cyh40tpt3sxG+wQ==
-X-Received: by 2002:a17:906:5044:b0:96a:63d4:24c5 with SMTP id e4-20020a170906504400b0096a63d424c5mr11397934ejk.77.1684789486049;
-        Mon, 22 May 2023 14:04:46 -0700 (PDT)
-Received: from [192.168.1.128] ([80.208.70.1])
-        by smtp.gmail.com with ESMTPSA id de35-20020a1709069be300b0096637a19dc7sm3581071ejc.108.2023.05.22.14.04.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 May 2023 14:04:45 -0700 (PDT)
-Message-ID: <1e424481-6428-068c-d58b-7a11e36c2cc6@rasmusvillemoes.dk>
-Date:   Mon, 22 May 2023 23:04:44 +0200
+        d=1e100.net; s=20221208; t=1684789564; x=1687381564;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VLNW8RUeV1ytOiHOrZ5VF3AFlqsNVobO/I7Gz9UWEkc=;
+        b=Rmk9OiYtih0tKkkkN4TgVPh0MVmeTdYlsKHLFBWCmEmA7XQF9nV7n3W675I3NdoiRi
+         Hd2e4ucjokJp3MHbmBR2DcUMHaBK53fTUs9R20HoA7MzwgA/cDW4c73Kj7JBgHSwx0VT
+         10Bqjq1Pkh2aytrIW+i5XMW0s/jenR8Sq4WlJYLQVxcdMjiBWhTYCQti3N52YqWucV/i
+         wHWNRlBpKMAxqkKcnh3OUSDpcueKGxTrE6VfxjVs1r54tZP3WC69PBr8qQOWVDAX8mZk
+         vhbzqT4hhfztUjyQOnwcqwLmTDGjUN0HFJJ9dWMOhZFaX4jpz1lkhM2+U507bm8hov9n
+         3hEw==
+X-Gm-Message-State: AC+VfDx4rskwSwcsFN3fIGOuHlTOGXy7b4f5/97yVVRFNo6l3Bw3OtBP
+        SNFs1Ns+FjTiLk7nb9Oykr12tBAK9MHxJT7S00n11n57Q9+m
+X-Google-Smtp-Source: ACHHUZ5Ew0z7LmUWGcfvyMiI4Iuu9t5wCenKIe7OhFXWmTqZnghnDpVrBn+FezGc/jEfaT3nEJrp0MkHfq9QdKzlTMuUGXhfDEDV
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] vsprintf/doc: Document format flags including field width
- and precision
-Content-Language: en-US, da
-To:     Petr Mladek <pmladek@suse.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, phone-devel@vger.kernel.org,
-        linux-doc@vger.kernel.org, Luca Weiss <luca.weiss@fairphone.com>,
-        linux-kernel@vger.kernel.org
-References: <CSSLOC8WDIPE.1WO9BXZQA7A12@otso>
- <20230522150853.30417-1-pmladek@suse.com>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <20230522150853.30417-1-pmladek@suse.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a92:d6cf:0:b0:338:c5c6:91f9 with SMTP id
+ z15-20020a92d6cf000000b00338c5c691f9mr4847639ilp.1.1684789564206; Mon, 22 May
+ 2023 14:06:04 -0700 (PDT)
+Date:   Mon, 22 May 2023 14:06:04 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000007ef71705fc4ea3ad@google.com>
+Subject: [syzbot] [usb?] WARNING in corrupted (3)
+From:   syzbot <syzbot+27b0b464864741b18b99@syzkaller.appspotmail.com>
+To:     duoming@zju.edu.cn, hverkuil-cisco@xs4all.nl,
+        jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+        mchehab@kernel.org, syzkaller-bugs@googlegroups.com, tj@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,143 +56,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22/05/2023 17.08, Petr Mladek wrote:
-> The kernel implementation of vsprintf() tries to be as compatible with
-> the user space variant as possible. Though it does not implement all
-> features. On the other hand, it adds some special pointer printing
-> modifiers.
-> 
-> Most differences are described in Documentation/core-api/printk-formats.rst
-> Add the missing documentation of the supported flag characters
-> '#', '0', '-', ' ', '+' together with field width and precision modifiers.
-> 
-> Suggested-by: Luca Weiss <luca.weiss@fairphone.com>
-> Signed-off-by: Petr Mladek <pmladek@suse.com>
-> ---
-> What about something like this, please?
-> 
->  Documentation/core-api/printk-formats.rst | 69 +++++++++++++++++++++++
->  1 file changed, 69 insertions(+)
-> 
-> diff --git a/Documentation/core-api/printk-formats.rst b/Documentation/core-api/printk-formats.rst
-> index dfe7e75a71de..79655b319658 100644
-> --- a/Documentation/core-api/printk-formats.rst
-> +++ b/Documentation/core-api/printk-formats.rst
-> @@ -8,6 +8,75 @@ How to get printk format specifiers right
->  :Author: Andrew Murray <amurray@mpc-data.co.uk>
->  
->  
-> +Flag characters
-> +===============
-> +
-> +The character '%' might be followed by the following flags that modify
-> +the output:
-> +
-> +	- '#' - prepend '0', '0x', or 'OX for 'o', 'x', 'X' number conversions
-> +	- '0' - zero pad number conversions on the field boundary
-> +	- '-' - left adjust on the field boundary, blank pad on the right
-> +	- ' ' - prepend space on positive numbers
-> +	- '+' - prepend + for positive numbers when using signed formats
+Hello,
 
-[I wonder if we have a single user of any of the latter two in the
-entire tree.]
+syzbot found the following issue on:
 
-> +Examples::
-> +
-> +	|%x|	|1a|
-> +	|%#x|	|0x1a|
-> +	|%d|	|26|
-> +	|% d|	| 26|
-> +	|%+d|	|+26|
-> +
-> +
-> +Field width
-> +===========
-> +
-> +A field width may be defined when '%' is optionally followed by the above flag
-> +characters and:
-> +
-> +	- 'number' - the decimal number defines the field width
-> +	- '*' the field width is defined by an extra parameter
-> +
-> +Values are never truncated when the filed width is not big enough.
+HEAD commit:    4d6d4c7f541d Merge tag 'linux-kselftest-fixes-6.4-rc3' of ..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=15a9a641280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ac0db1213414a978
+dashboard link: https://syzkaller.appspot.com/bug?extid=27b0b464864741b18b99
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12bc26ee280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=17684629280000
 
-filed -> field (several places)
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ebfde1c1eecf/disk-4d6d4c7f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/4938c9109cd4/vmlinux-4d6d4c7f.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/8c31ee617052/bzImage-4d6d4c7f.xz
 
-> +Spaces are used by default when a padding is needed.
-> +
-> +Examples::
-> +
-> +	|%6d|	|    26|
-> +	|%-6d|	|26    |
-> +	|%06d|	|000026|
-> +
-> +	printk("Dynamic table: |%*d|%*s|\n", id_width, id, max_name_len, name);
-> +
-> +The filed width value might have special meaning for some pointer formats.
-> +For example, it limits the size of the bitmap handled by %*pb format.
+The issue was bisected to:
 
-It should also be noted that a negative field width passed as a *
-argument is interpreted as if the - flag is used and then the absolute
-value is used as field width.
+commit ebad8e731c1c06adf04621d6fd327b860c0861b5
+Author: Duoming Zhou <duoming@zju.edu.cn>
+Date:   Mon Jan 23 02:04:38 2023 +0000
 
-> +
-> +
-> +Field precision:
-> +================
-> +
-> +A field width may be defined when '%' is optionally followed by the above flag
-> +characters:
-> +
-> +	- '.number' - the decimal number defines the field precision
-> +	- '.*' the field precision is defined by an extra parameter
-> +
-> +The precision defines:
-> +
-> +	- number of digits after the decimal point in float number conversions
+    media: usb: siano: Fix use after free bugs caused by do_submit_urb
 
-No, don't mention floats, the kernel doesn't do those.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=16584629280000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=15584629280000
+console output: https://syzkaller.appspot.com/x/log.txt?x=11584629280000
 
-> +	- minimal number of digits in integer conversions
-> +	- maximum number of characters in string conversions
-> +
-> +Examples::
-> +
-> +	|%.3f|	|12.300|
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+27b0b464864741b18b99@syzkaller.appspotmail.com
+Fixes: ebad8e731c1c ("media: usb: siano: Fix use after free bugs caused by do_submit_urb")
 
-Remove.
+usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 1-1: Product: syz
+usb 1-1: Manufacturer: syz
+usb 1-1: SerialNumber: syz
+usb 1-1: config 0 descriptor??
+smsusb:smsusb_probe: board id=7, interface number 0
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 897 at kernel/workqueue.c:3182 __flush_work+0x946/0xb60 kernel/workqueue.c:3182
+Modules linked in:
+CPU: 0 PID: 897 Comm: kworker/0:2 Not tainted 6.4.0-rc2-syzkaller-00018-g4d6d4c7f541d #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/28/2023
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:__flush_work+0x946/0xb60 kernel/workqueue.c:3182
+Code: 00 48 c7 c6 9b f7 53 81 48 c7 c7 40 90 79 8c e8 d0 ec 11 00 e9 6f fc ff ff e8 06 4b 30 00 0f 0b e9 63 fc ff ff e8 fa 4a 30 00 <0f> 0b 45 31 ed e9 54 fc ff ff e8 5b 12 83 00 e9 3e fb ff ff e8 e1
+RSP: 0018:ffffc90005026c08 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: ffff88801f5e20e8 RCX: 0000000000000000
+RDX: ffff88801f431dc0 RSI: ffffffff8153f7d6 RDI: 0000000000000001
+RBP: ffffc90005026da0 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000001 R11: ffffffff81d6e1f2 R12: ffff88801f5e20e8
+R13: 0000000000000001 R14: 0000000000000001 R15: ffff88801f5e2100
+FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000560d76a382c8 CR3: 0000000026f34000 CR4: 0000000000350ef0
+Call Trace:
+ <TASK>
 
-> +	|%.6d|	|    26|
-
-Nope, that actually produces 000026.
 
 ---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-So overall, I'm not sure this is a net win. I think it might be better
-to emphasize that
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
-- the kernel doesn't do floats, argument reordering via m$, wide
-characters/strings, %m or %n (just so that's out of the equation)
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-- for string and integer conversions, the kernel's printf is very very
-close to following POSIX/libc/whatever, in terms of flags, field width
-etc. [There are a few exceptions, those I've found are documented in
-test_printf.c, but nobody is ever likely to hit those.]
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
-- for %p, the kernel has its own rules, starting with the fact that
-modifying behaviour based on alphanumerics following the p is completely
-non-standard.
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
-and then spend the rest explaining those rules, and perhaps also some
-background on why the %p extensions exist and why they are implemented
-the way they are - for example "we want -Wformat to tell us if something
-is wrong", but that, for example, means we can only use a field width
-and not a precision to pass an extra argument to a %psomething. And
-alphanumerics are chosen because nobody would usually follow a normal %p
-by anything but whitespace or punctuation, and because the compiler
-format checking is happy as long as there's some pointer argument
-corresponding to the %p, and the remaining characters are, from the
-compiler's POV, just literal characters.
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
 
-Rasmus
-
+If you want to undo deduplication, reply with:
+#syz undup
