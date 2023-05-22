@@ -2,250 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9ED070BC32
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:49:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7AE470BC37
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:50:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233070AbjEVLtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 07:49:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56122 "EHLO
+        id S233433AbjEVLuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 07:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232940AbjEVLth (ORCPT
+        with ESMTP id S233446AbjEVLtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 07:49:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B6BAB;
-        Mon, 22 May 2023 04:49:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF261611AC;
-        Mon, 22 May 2023 11:49:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D08FC433D2;
-        Mon, 22 May 2023 11:49:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684756175;
-        bh=MksqE9gv1SGdf5zP2megR4doE0nMrzoziEQVjPRPgGA=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ezTeSjZcoE828dZ4AfFTu2b1XRysWjgqhj4it4+vVaDGbuctXN9X2pDqmjF3mwcT+
-         B48yzvikaBwpbaPYDO9k1y4ag61WWuTfAfOO+IqX02YrrbldcjpnnDNHHgpSV/MOI5
-         O4SORRiVE1OdAZ7uQbkGyrstBHVpnRO9PI3+awszLeBJg729xnuUDKTzDUvXXnFtk1
-         0d+lm1vHd5dMgsX2yJIpcE+gudJaMxmJCcDv0MnPBXy+BfFjDg19rwAq7h6oMWyjvz
-         Plj2U0xnqIo9HByUX6+NgH3C48FaeHj2YRRe2XBrbD21Wsc22RHB3+2nj+gjkOsNzb
-         UxlCU2MpDfl/g==
-Message-ID: <27e793b1-8676-d90a-4808-b5e194a8741f@kernel.org>
-Date:   Mon, 22 May 2023 20:49:32 +0900
+        Mon, 22 May 2023 07:49:50 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3932E0;
+        Mon, 22 May 2023 04:49:43 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QPwjG6hbbz4f3lXP;
+        Mon, 22 May 2023 19:49:38 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgD3X7PSVmtkTzLkJw--.54944S3;
+        Mon, 22 May 2023 19:49:40 +0800 (CST)
+Subject: Re: [PATCH] md/raid5: Convert stripe_head's "dev" to flexible array
+ member
+To:     Christoph Hellwig <hch@infradead.org>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Song Liu <song@kernel.org>, linux-raid@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20230517233313.never.130-kees@kernel.org>
+ <ZGWpLClY7vz+xl5A@infradead.org>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <229ac866-9710-5dbe-80c4-61498f807662@huaweicloud.com>
+Date:   Mon, 22 May 2023 19:49:38 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v5 02/44] ata: add HAS_IOPORT dependencies
-Content-Language: en-US
-To:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-ide@vger.kernel.org
-References: <20230522105049.1467313-1-schnelle@linux.ibm.com>
- <20230522105049.1467313-3-schnelle@linux.ibm.com>
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <20230522105049.1467313-3-schnelle@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZGWpLClY7vz+xl5A@infradead.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgD3X7PSVmtkTzLkJw--.54944S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7Kr47trWDKFWxGw17CF1ftFb_yoW8ZFyrpF
+        WDZasrAr4UGr15Ka1DAw4DWFWrK39agFW7JFWIg3yrA3Z2gryvkay8GFWY9Fy5ZFWfCa4x
+        Za1qvryUZr4qyaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWE__UUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/22/23 19:50, Niklas Schnelle wrote:
-> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
-> not being declared. We thus need to add HAS_IOPORT as dependency for
-> those drivers using them.
+Hi, Christoph
+
+在 2023/05/18 12:27, Christoph Hellwig 写道:
+
+It's not related to this patch, just I think I found a problem while
+reviewing raid5 code, commit e82ed3a4fbb5 ("md/raid6: refactor
+raid5_read_one_chunk") changes the caculation of 'end_sector',
+'end_sector' is compared to 'rdev->recovery_offset', so it should be
+offset to rdev, but this commit change it to offset to the array.
+
+Perhaps following change will make sense:
+
+diff --git a/drivers/md/raid5.c b/drivers/md/raid5.c
+index 7e2bbcfef325..8686d629e3f2 100644
+--- a/drivers/md/raid5.c
++++ b/drivers/md/raid5.c
+@@ -5516,7 +5516,7 @@ static int raid5_read_one_chunk(struct mddev 
+*mddev, struct bio *raid_bio)
+
+         sector = raid5_compute_sector(conf, raid_bio->bi_iter.bi_sector, 0,
+                                       &dd_idx, NULL);
+-       end_sector = bio_end_sector(raid_bio);
++       end_sector = sector + bio_sectors(raid_bio);
+
+         rcu_read_lock();
+         if (r5c_big_stripe_cached(conf, sector))
+
+
+Thanks,
+Kuai
+> On Wed, May 17, 2023 at 04:33:14PM -0700, Kees Cook wrote:
+>>   	sc = kmem_cache_create(conf->cache_name[conf->active_name],
+>> -			       sizeof(struct stripe_head)+(devs-1)*sizeof(struct r5dev),
+>> +			       struct_size((struct stripe_head *)0, dev, devs),
+>>   			       0, 0, NULL);
+>>   	if (!sc)
+>>   		return 1;
+>> @@ -2559,7 +2559,7 @@ static int resize_stripes(struct r5conf *conf, int newsize)
+>>   
+>>   	/* Step 1 */
+>>   	sc = kmem_cache_create(conf->cache_name[1-conf->active_name],
+>> -			       sizeof(struct stripe_head)+(newsize-1)*sizeof(struct r5dev),
+>> +			       struct_size((struct stripe_head *)0, dev, newsize),
 > 
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Arnd Bergmann <arnd@kernel.org>
-> Acked-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-
-This new version looks much nicer !
-
-Please change my Ack to:
-
-Acked-by: Damien Le Moal <dlemoal@kernel.org>
-
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
-> ---
->  drivers/ata/Kconfig      | 28 ++++++++++++++--------------
->  drivers/ata/libata-sff.c |  4 ++++
->  2 files changed, 18 insertions(+), 14 deletions(-)
+> The constant you're casting here should be NULL, not 0.
+> Also given that this expression is duplicated, I'd suggest a little
+> helper for it…
 > 
-> diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
-> index 42b51c9812a0..c521cdc51f8c 100644
-> --- a/drivers/ata/Kconfig
-> +++ b/drivers/ata/Kconfig
-> @@ -557,7 +557,7 @@ comment "PATA SFF controllers with BMDMA"
->  
->  config PATA_ALI
->  	tristate "ALi PATA support"
-> -	depends on PCI
-> +	depends on PCI && HAS_IOPORT
->  	select PATA_TIMINGS
->  	help
->  	  This option enables support for the ALi ATA interfaces
-> @@ -567,7 +567,7 @@ config PATA_ALI
->  
->  config PATA_AMD
->  	tristate "AMD/NVidia PATA support"
-> -	depends on PCI
-> +	depends on PCI && HAS_IOPORT
->  	select PATA_TIMINGS
->  	help
->  	  This option enables support for the AMD and NVidia PATA
-> @@ -585,7 +585,7 @@ config PATA_ARASAN_CF
->  
->  config PATA_ARTOP
->  	tristate "ARTOP 6210/6260 PATA support"
-> -	depends on PCI
-> +	depends on PCI && HAS_IOPORT
->  	help
->  	  This option enables support for ARTOP PATA controllers.
->  
-> @@ -612,7 +612,7 @@ config PATA_ATP867X
->  
->  config PATA_CMD64X
->  	tristate "CMD64x PATA support"
-> -	depends on PCI
-> +	depends on PCI && HAS_IOPORT
->  	select PATA_TIMINGS
->  	help
->  	  This option enables support for the CMD64x series chips
-> @@ -659,7 +659,7 @@ config PATA_CS5536
->  
->  config PATA_CYPRESS
->  	tristate "Cypress CY82C693 PATA support (Very Experimental)"
-> -	depends on PCI
-> +	depends on PCI && HAS_IOPORT
->  	select PATA_TIMINGS
->  	help
->  	  This option enables support for the Cypress/Contaq CY82C693
-> @@ -707,7 +707,7 @@ config PATA_HPT366
->  
->  config PATA_HPT37X
->  	tristate "HPT 370/370A/371/372/374/302 PATA support"
-> -	depends on PCI
-> +	depends on PCI && HAS_IOPORT
->  	help
->  	  This option enables support for the majority of the later HPT
->  	  PATA controllers via the new ATA layer.
-> @@ -716,7 +716,7 @@ config PATA_HPT37X
->  
->  config PATA_HPT3X2N
->  	tristate "HPT 371N/372N/302N PATA support"
-> -	depends on PCI
-> +	depends on PCI && HAS_IOPORT
->  	help
->  	  This option enables support for the N variant HPT PATA
->  	  controllers via the new ATA layer.
-> @@ -819,7 +819,7 @@ config PATA_MPC52xx
->  
->  config PATA_NETCELL
->  	tristate "NETCELL Revolution RAID support"
-> -	depends on PCI
-> +	depends on PCI && HAS_IOPORT
->  	help
->  	  This option enables support for the Netcell Revolution RAID
->  	  PATA controller.
-> @@ -855,7 +855,7 @@ config PATA_OLDPIIX
->  
->  config PATA_OPTIDMA
->  	tristate "OPTI FireStar PATA support (Very Experimental)"
-> -	depends on PCI
-> +	depends on PCI && HAS_IOPORT
->  	help
->  	  This option enables DMA/PIO support for the later OPTi
->  	  controllers found on some old motherboards and in some
-> @@ -865,7 +865,7 @@ config PATA_OPTIDMA
->  
->  config PATA_PDC2027X
->  	tristate "Promise PATA 2027x support"
-> -	depends on PCI
-> +	depends on PCI && HAS_IOPORT
->  	help
->  	  This option enables support for Promise PATA pdc20268 to pdc20277 host adapters.
->  
-> @@ -873,7 +873,7 @@ config PATA_PDC2027X
->  
->  config PATA_PDC_OLD
->  	tristate "Older Promise PATA controller support"
-> -	depends on PCI
-> +	depends on PCI && HAS_IOPORT
->  	help
->  	  This option enables support for the Promise 20246, 20262, 20263,
->  	  20265 and 20267 adapters.
-> @@ -901,7 +901,7 @@ config PATA_RDC
->  
->  config PATA_SC1200
->  	tristate "SC1200 PATA support"
-> -	depends on PCI && (X86_32 || COMPILE_TEST)
-> +	depends on PCI && (X86_32 || COMPILE_TEST) && HAS_IOPORT
->  	help
->  	  This option enables support for the NatSemi/AMD SC1200 SoC
->  	  companion chip used with the Geode processor family.
-> @@ -919,7 +919,7 @@ config PATA_SCH
->  
->  config PATA_SERVERWORKS
->  	tristate "SERVERWORKS OSB4/CSB5/CSB6/HT1000 PATA support"
-> -	depends on PCI
-> +	depends on PCI && HAS_IOPORT
->  	help
->  	  This option enables support for the Serverworks OSB4/CSB5/CSB6 and
->  	  HT1000 PATA controllers, via the new ATA layer.
-> @@ -1183,7 +1183,7 @@ config ATA_GENERIC
->  
->  config PATA_LEGACY
->  	tristate "Legacy ISA PATA support (Experimental)"
-> -	depends on (ISA || PCI)
-> +	depends on (ISA || PCI) && HAS_IOPORT
->  	select PATA_TIMINGS
->  	help
->  	  This option enables support for ISA/VLB/PCI bus legacy PATA
-> diff --git a/drivers/ata/libata-sff.c b/drivers/ata/libata-sff.c
-> index 9d28badfe41d..c8cb7ed28f83 100644
-> --- a/drivers/ata/libata-sff.c
-> +++ b/drivers/ata/libata-sff.c
-> @@ -3042,6 +3042,7 @@ EXPORT_SYMBOL_GPL(ata_bmdma_port_start32);
->   */
->  int ata_pci_bmdma_clear_simplex(struct pci_dev *pdev)
->  {
-> +#ifdef CONFIG_HAS_IOPORT
->  	unsigned long bmdma = pci_resource_start(pdev, 4);
->  	u8 simplex;
->  
-> @@ -3054,6 +3055,9 @@ int ata_pci_bmdma_clear_simplex(struct pci_dev *pdev)
->  	if (simplex & 0x80)
->  		return -EOPNOTSUPP;
->  	return 0;
-> +#else
-> +	return -ENOENT;
-> +#endif /* CONFIG_HAS_IOPORT */
->  }
->  EXPORT_SYMBOL_GPL(ata_pci_bmdma_clear_simplex);
->  
-
--- 
-Damien Le Moal
-Western Digital Research
+>> -	} dev[1]; /* allocated with extra space depending of RAID geometry */
+>> +	} dev[]; /* allocated with extra space depending of RAID geometry */
+> 
+> And this isn't extra space over the single entry anymore, so I'd
+> change this to:
+> 
+> 	/* allocated depending of RAID geometry */
+> .
+> 
 
