@@ -2,67 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC06870CBAA
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 22:55:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0168C70CBAD
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 22:55:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234868AbjEVUzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 16:55:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55398 "EHLO
+        id S234916AbjEVUzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 16:55:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235041AbjEVUy5 (ORCPT
+        with ESMTP id S235041AbjEVUz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 16:54:57 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 932A2B7;
-        Mon, 22 May 2023 13:54:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684788896; x=1716324896;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KPUkAez+fw329xYvkr1pY41VL2D8bMppwpAl0MZA/fA=;
-  b=cbx7dGFGe9ZQ2TQ+Iw9IeeQCpZzRpjBSGGWu2HSIevqWqMz8Y+mU4eTi
-   Q3Sweun1x0RRBRgBOIdTdZZz6Q9rZkvbhDg7GXrNf4VqgyqqqgL0L0O01
-   046oecIItTqmaz4BXPwPaJ1ZSVXTs+s97qMjqPGpLk4zzS6LgKin0+4O8
-   Qxbm6303YSPaxyAXG4QwAtm+NNPr//Ga2PbYLq7WfxEALNthoQhFJVtmM
-   LPKiT5fjaiBQw86VUN0p+akVRY046tVpeCsnvAa5MxCv0H198qGiDFf+x
-   apVR5kJGfWbVz1Easn0TZDfxCTyD3gXFZMROQ6x/J0Ye145OdKar+7SrJ
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="350549513"
-X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
-   d="scan'208";a="350549513"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 13:54:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="773511984"
-X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
-   d="scan'208";a="773511984"
-Received: from arkaneta-mobl.amr.corp.intel.com (HELO desk) ([10.212.144.239])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 13:54:55 -0700
-Date:   Mon, 22 May 2023 13:54:53 -0700
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Xiaoyao Li <xiaoyao.li@intel.com>, Chao Gao <chao.gao@intel.com>,
-        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Jim Mattson <jmattson@google.com>
-Subject: Re: [PATCH] KVM: x86: Track supported ARCH_CAPABILITIES in kvm_caps
-Message-ID: <20230522205453.kqhvk5aheye22hfa@desk>
-References: <20230506030435.80262-1-chao.gao@intel.com>
- <b472b58d-0469-8a55-985c-1d966ce66419@intel.com>
- <ZGZhW/x5OWPmx1qD@google.com>
- <20230520010237.3tepk3q44j52leuk@desk>
- <ZGup1TjeqBF7bgWG@google.com>
+        Mon, 22 May 2023 16:55:28 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27D63100;
+        Mon, 22 May 2023 13:55:16 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-64d4e45971bso1701117b3a.2;
+        Mon, 22 May 2023 13:55:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684788915; x=1687380915;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jcZ4xLHlFOBJMSeqJOPUC+cCxzFb/2bpMue0o2+LyWg=;
+        b=NhDfKwKmQqTx0k0rb4etztvU4oZUGCrD6GnpDCUv5gYrdAInkuG+Pbfj2sWkRK75GE
+         eEv4hZBxOKHblTbEOwTE8x6zJjRsFkyPrKtDO5aSvmAzTGc9h2JeKkeliGLT4oxzAM+z
+         cqrGjTVlai+tBgdsWwPy2OB5kzJWfbCe2HwZib6Rd12NaySc4rZGX3wwAwljRyPxCuM7
+         mkkG66UWcfS8BoUgs04jDarriwnupHX7oygNuJwUINElggfMahoJvfCuSFteFLt58k2i
+         bWUIDDlJPDXAH7NrXm4602kvJUflIHBfpMI2XRO2fB4UVTvnvlAt2dcpTbtjAqgsi1HT
+         0LXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684788915; x=1687380915;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jcZ4xLHlFOBJMSeqJOPUC+cCxzFb/2bpMue0o2+LyWg=;
+        b=JQm6QzYjh8l7576W78ZqwmAXxe4riHwyjxjONFFHbdgrsxTEtZ7v5bhgMz+u3xZ+wg
+         2MIsLYIVsUnXLl8jmeitd3oFm7xxjF+enD8QsbfNa92yPfifDXisrpssPqUy1Wo/sEyl
+         qPe9v5JRypmQR22R6mKW5noG3gX3g0CeNmd+TcV+LA3wgt4NU9kqZUQOzTeeY0VhACOF
+         zTMSB7ObbgoKluPXI+wtqxSGT5YVPMKkvuZrTSy75xbiVEjPobx1kPJmR66NXHtSlqSB
+         m0bejgOlxLzCLytPyCQKYcrva8jweq+PxtO25KXZrCDtg49sMMMAzzubX9MIounoVbrR
+         Nxvw==
+X-Gm-Message-State: AC+VfDyrknY54Gocg2nCJIkSECbE/n8sHrlkIPv/Zi66Um7SGKiAZuPT
+        fHhxlMqevOBi73qFD7BcbaI=
+X-Google-Smtp-Source: ACHHUZ68aGA3rwWC2fPM5JhK2e0SIaBG0ZlgFltV8K9ruuYYzLQvyYCvqTWRNBEdmZ7V0pnttUmYJg==
+X-Received: by 2002:a05:6a00:c88:b0:641:d9b:a444 with SMTP id a8-20020a056a000c8800b006410d9ba444mr15735727pfv.31.1684788915189;
+        Mon, 22 May 2023 13:55:15 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:39c])
+        by smtp.gmail.com with ESMTPSA id w17-20020aa78591000000b006414c3ba8a3sm4673018pfn.177.2023.05.22.13.55.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 13:55:14 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 22 May 2023 10:55:12 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        Rik van Riel <riel@surriel.com>,
+        Jiri Wiesner <jwiesner@suse.de>
+Subject: Re: [RFC PATCH 3/3] cgroup: Do not take css_set_lock in
+ cgroup_show_path
+Message-ID: <ZGvWsOOw2C68SYUx@slm.duckdns.org>
+References: <20230502133847.14570-1-mkoutny@suse.com>
+ <20230502133847.14570-4-mkoutny@suse.com>
+ <ZFUktg4Yxa30jRBX@slm.duckdns.org>
+ <ta7bilcvc7lzt5tvs44y5wxqt6i3gdmvzwcr5h2vxhjhshmivk@3mecui76fxvy>
+ <ZFVIJlAMyzTh3QTP@slm.duckdns.org>
+ <6rjdfjltz5kkwzobpeefbqxzj4wbd4jzstdryb6rb67td3x45q@5ujarspzjk3x>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <ZGup1TjeqBF7bgWG@google.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6rjdfjltz5kkwzobpeefbqxzj4wbd4jzstdryb6rb67td3x45q@5ujarspzjk3x>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,95 +87,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 10:43:49AM -0700, Sean Christopherson wrote:
-> On Fri, May 19, 2023, Pawan Gupta wrote:
-> > On Thu, May 18, 2023 at 10:33:15AM -0700, Sean Christopherson wrote:
-> > > I made the mistake of digging into why KVM doesn't advertise ARCH_CAP_FB_CLEAR_CTRL...
+Hello, Michal.
+
+Sorry about the delay.
+
+On Tue, May 09, 2023 at 12:34:53PM +0200, Michal Koutný wrote:
+> On Fri, May 05, 2023 at 08:17:10AM -1000, Tejun Heo <tj@kernel.org> wrote:
+> > On Fri, May 05, 2023 at 07:32:40PM +0200, Michal Koutný wrote:
+> > > On Fri, May 05, 2023 at 05:45:58AM -1000, Tejun Heo <tj@kernel.org> wrote:
+> > > > > There are three relevant nodes for each cgroupfs entry:
+> > > > > 
+> > > > >         R ... cgroup hierarchy root
+> > > > >         M ... mount root
+> > > > >         C ... reader's cgroup NS root
+> > > > > 
+> > > > > mountinfo is supposed to show path from C to M.
+> > > > 
+> > > > At least for cgroup2, the path from C to M isn't gonna change once NS is
+> > > > established, right?
 > > > 
-> > >   1. I see *nothing* in commit 027bbb884be0 ("KVM: x86/speculation: Disable Fill
-> > >      buffer clear within guests") that justifies 1x RDMSR and 2x WRMSR on every
-> > >      entry+exit.
+> > > Right. Although, the argument about M (when C above M or when C and M in
+> > > different subtrees) implicitly relies on the namespace_sem.
 > > 
-> > Unnecessary VERWs in guest will have much higher impact than due to MSR
-> > read/write at vmentry/exit.
+> > I don't follow. Can you please elaborate a bit more?
 > 
-> Can you provide numbers for something closeish to a real world workload?
-
-I am collecting the numbers, will update here soon.
-
-> > On an Icelake system it is pointless for a guest to incur VERW penalty when
-> > the system is not affected by MDS/TAA and guests don't need mitigation for
-> > MMIO Stale Data. MSR writes are only done when the guest is likely to execute
-> > unnecessary VERWs(e.g. when the guest thinks its running on an older gen
-> > CPU).
-> >
-> > >      KVM just needs to context switch the MSR between guests since the value that's
-> > >      loaded while running in the host is irrelevant.  E.g. use a percpu cache to
-> > 
-> > I will be happy to avoid the MSR read/write, but its worth considering
-> > that this MSR can receive more bits that host may want to toggle, then
-> > percpu cache implementation would likely change.
+> I wanted to say that even with restriction to cgroup2, the css_set_lock
+> removal would also rely on namespace_sem.
 > 
-> Change in and of itself isn't problematic, so long as whatever code we write won't
-> fall over if/when new bits are added, i.e. doesn't clobber unknown bits.
-
-Ok.
-
-> > >   5. MSR_IA32_MCU_OPT_CTRL is not modified by the host after a CPU is brought up,
-> > >      i.e. the host's desired value is effectively static post-boot, and barring
-> > >      a buggy configuration (running KVM as a guest), the boot CPU's value will be
-> > >      the same as every other CPU.
-> > 
-> > Would the MSR value be same on every CPU, if only some guests have
-> > enumerated FB_CLEAR and others haven't?
+> For a given mountinfo entry the path C--M won't change (no renames).
+> The question is whether cgroup M will stay around (with the relaxed
+> locking):
 > 
-> Ignore the guest, I'm talking purely about the host.  Specifically, there's no
-> reason to do a RDMSR to get the host value on every VM-Enter since the host's
-> value is effectively static post-boot.
+>   - C >= M (C is below M) 
+>     -> C (transitively) pins M
 
-That right(ignoring late microcode load adding stuff to the MSR or
-msr-tools fiddling).
+Yeah, this was what I was thinking.
 
-> > MSR writes (to disable FB_CLEAR) are not done when a guest enumerates
-> > FB_CLEAR. Enumeration of FB_CLEAR in guest will depend on its configuration.
-> > 
-> > >   6. Performance aside, KVM should not be speculating (ha!) on what the guest
-> > >      will and will not do, and should instead honor whatever behavior is presented
-> > >      to the guest.  If the guest CPU model indicates that VERW flushes buffers,
-> > >      then KVM damn well needs to let VERW flush buffers.
-> > 
-> > The current implementation allows guests to have VERW flush buffers when
-> > they enumerate FB_CLEAR. It only restricts the flush behavior when the
-> > guest is trying to mitigate against a vulnerability(like MDS) on a
-> > hardware that is not affected. I guess its common for guests to be
-> > running with older gen configuration on a newer hardware.
+>   - C < M (C is above M) or C and M are in two disjoint subtrees (path
+>     goes through a common ancestor)
+>     -> M could be released without relation to C (even on cgroup2, with
+>        the css_set_lock removed) but such a destructive operation on M
+>        is excluded as long as namespace_sem is held during entry
+>        rendering.
 > 
-> Right, I'm saying that that behavior is wrong.  KVM shouldn't assume the guest
-> the guest will do things a certain way and should instead honor the "architectural"
-> definition, in quotes because I realize there probably is no architectural
-> definition for any of this.
+> Does that clarify the trade-off of removing css_set_lock at this spot?
 
-Before MMIO Stale Data, processors that were not affected by MDS/TAA did
-not clear CPU buffers, even if they enumerated MD_CLEAR. On such
-processors guests that deployed VERW(thinking they are vulnerable to
-MDS) did not clear the CPU buffers. After MMIO Stale Data was discovered
-FB_CLEAR_DIS was introduced to restore this behavior.
+Right, you can have cgroup outside NS root still mounted and that mount root
+can be viewed from multiple cgroup NS's, so the the path isn't fixed either.
 
-> It might be that the code does (unintentionally?) honor the "architecture", i.e.
-> this code might actually be accurrate with respect to when the guest can expect
-> VERW to flush buffers.  But the comment is so, so wrong.
+Having enough lockdep annotations should do but if reasonable the preference
+is being a bit more self-contained.
 
-Agree, the comment needs to explain this well.
+Thanks for the explanation.
 
-> 	/*
-> 	 * If guest will not execute VERW, there is no need to set FB_CLEAR_DIS
-> 	 * at VMEntry. Skip the MSR read/write when a guest has no use case to
-> 	 * execute VERW.
-> 	 */
-> 	if ((vcpu->arch.arch_capabilities & ARCH_CAP_FB_CLEAR) ||
-> 	   ((vcpu->arch.arch_capabilities & ARCH_CAP_MDS_NO) &&
-> 	    (vcpu->arch.arch_capabilities & ARCH_CAP_TAA_NO) &&
-> 	    (vcpu->arch.arch_capabilities & ARCH_CAP_PSDP_NO) &&
-> 	    (vcpu->arch.arch_capabilities & ARCH_CAP_FBSDP_NO) &&
-> 	    (vcpu->arch.arch_capabilities & ARCH_CAP_SBDR_SSDP_NO)))
-> 		vmx->disable_fb_clear = false;
+-- 
+tejun
