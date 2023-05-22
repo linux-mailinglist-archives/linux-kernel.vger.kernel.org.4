@@ -2,113 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11E2370BA48
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 12:43:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6AE270BA4B
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 12:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232484AbjEVKnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 06:43:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37480 "EHLO
+        id S232628AbjEVKoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 06:44:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230362AbjEVKnO (ORCPT
+        with ESMTP id S230184AbjEVKoV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 06:43:14 -0400
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D754CB3
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 03:43:12 -0700 (PDT)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4QPvDZ1f2gz5B150;
-        Mon, 22 May 2023 18:43:10 +0800 (CST)
-Received: from szxlzmapp05.zte.com.cn ([10.5.230.85])
-        by mse-fl2.zte.com.cn with SMTP id 34MAgtsP031085;
-        Mon, 22 May 2023 18:42:55 +0800 (+08)
-        (envelope-from yang.yang29@zte.com.cn)
-Received: from mapi (szxlzmapp03[null])
-        by mapi (Zmail) with MAPI id mid14;
-        Mon, 22 May 2023 18:42:58 +0800 (CST)
-Date:   Mon, 22 May 2023 18:42:58 +0800 (CST)
-X-Zmail-TransId: 2b05646b4732682-6bb12
-X-Mailer: Zmail v1.0
-Message-ID: <202305221842587200002@zte.com.cn>
-Mime-Version: 1.0
-From:   <yang.yang29@zte.com.cn>
-To:     <akpm@linux-foundation.org>, <david@redhat.com>
-Cc:     <imbrenda@linux.ibm.com>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, <ran.xiaokai@zte.com.cn>,
-        <xu.xin.sc@gmail.com>, <xu.xin16@zte.com.cn>,
-        <yang.yang29@zte.com.cn>, <jiang.xuexin@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIHY4IDAvNl0ga3NtOiBzdXBwb3J0IHRyYWNraW5nIEtTTS1wbGFjZWQgemVyby1wYWdlcw==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 34MAgtsP031085
-X-Fangmail-Gw-Spam-Type: 0
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 646B473E.000/4QPvDZ1f2gz5B150
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 22 May 2023 06:44:21 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FDB5E6
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 03:44:17 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1q131T-0006Zb-7z; Mon, 22 May 2023 12:44:15 +0200
+Message-ID: <7efe5e64-d22b-99df-74e0-62acc54f1672@leemhuis.info>
+Date:   Mon, 22 May 2023 12:44:12 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: Regression: w1_therm: sysfs w1_slave sometimes report 85 degrees
+ Celsius
+Content-Language: en-US, de-DE
+To:     Stefan Wahren <stefan.wahren@i2se.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Akira Shimahara <akira215corp@gmail.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Stefan Wahren <stefan.wahren@chargebyte.com>,
+        regressions@lists.linux.dev
+References: <b1093de5-9f62-6714-0063-7c719dc4f6ca@i2se.com>
+From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <b1093de5-9f62-6714-0063-7c719dc4f6ca@i2se.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1684752257;7a9b9fc4;
+X-HE-SMSGID: 1q131T-0006Zb-7z
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xu xin <xu.xin16@zte.com.cn>
+On 26.04.23 15:39, Stefan Wahren wrote:
+> recently we switch on our Tarragon board (i.MX6ULL) to Linux 6.1 and
+> noticed that the connected 1-wire temperature sensors
+> (w1_therm.w1_strong_pull=0) sometimes (~ 1 of 20 times) report 85
+> degrees Celsius, which is AFAIK the only way to report errors to the
+> 1-wire master:
+> [...]
+> #regzbot introduced: 67b392f7b8ed
 
-The core idea of this patch set is to enable users to perceive the number
-of any pages merged by KSM, regardless of whether use_zero_page switch has
-been turned on, so that users can know how much free memory increase is
-really due to their madvise(MERGEABLE) actions. But the problem is, when
-enabling use_zero_pages, all empty pages will be merged with kernel zero
-pages instead of with each other as use_zero_pages is disabled, and then
-these zero-pages are no longer monitored by KSM.
+#regzbot fix: w1_therm: optimizing temperature read timings
+#regzbot ignore-activity
 
-The motivations to do this is seen at:
-https://lore.kernel.org/lkml/202302100915227721315@zte.com.cn/
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
 
-In one word, we hope to implement the support for KSM-placed zero pages
-tracking without affecting the feature of use_zero_pages, so that app
-developer can also benefit from knowing the actual KSM profit by getting
-KSM-placed zero pages to optimize applications eventually when
-/sys/kernel/mm/ksm/use_zero_pages is enabled.
-
-Change log
-----------
-v7->v8:
-(1) Since [1] which fix the bug of pte_mkdirty on sparc64 that makes pte
-    writable, then we can remove the architechture restrictions of our
-	features.
-(2) Improve the scheme of update ksm_zero_pages: add the handling case when
-    khugepaged replaces a shared zeropage by a THP. 
-
-[1] https://lore.kernel.org/all/20230411141529.428991-2-david@redhat.com/
-
-v6->v7:
-This is an all-newed version which is different from v6 which relys on KSM's
-rmap_item. The patch series don't rely on rmap_item but pte_dirty, so the
-general handling of tracking KSM-placed zero-pages is simplified a lot.
-
-For safety, we restrict this feature only to the tested and known-working
-architechtures (ARM, ARM64, and X86) fow now.
-
-xu xin (6):
-  ksm: support unsharing KSM-placed zero pages
-  ksm: count all zero pages placed by KSM
-  ksm: add ksm zero pages for each process
-  ksm: add documentation for ksm zero pages
-  ksm: update the calculation of KSM profit
-  selftest: add a testcase of ksm zero pages
-
- Documentation/admin-guide/mm/ksm.rst              | 26 +++++---
- fs/proc/base.c                                    |  1 +
- include/linux/ksm.h                               | 25 ++++++++
- include/linux/mm_types.h                          |  9 ++-
- mm/khugepaged.c                                   |  3 +
- mm/ksm.c                                          | 19 +++++-
- mm/memory.c                                       |  7 ++-
- tools/testing/selftests/mm/ksm_functional_tests.c | 75 +++++++++++++++++++++++
- 8 files changed, 152 insertions(+), 13 deletions(-)
-
--- 
-2.15.2
