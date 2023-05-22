@@ -2,110 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCFF070BFAE
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:26:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E623E70BFCB
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233489AbjEVN0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 09:26:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46778 "EHLO
+        id S233044AbjEVN3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 09:29:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234148AbjEVN0L (ORCPT
+        with ESMTP id S233659AbjEVN2a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 09:26:11 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C2D1AD;
-        Mon, 22 May 2023 06:25:50 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-64d30ab1f89so2386584b3a.3;
-        Mon, 22 May 2023 06:25:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684761949; x=1687353949;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4b3cl3OODzw5cbGHTkbsgtSEp8oZPxcTDpluClxVbUk=;
-        b=eO3rIpsi40iN+2w6btP49efxsdxTdxFOiCQQBcJFc1qjQAPCHGM1ndbcirI2jrHElM
-         82mIWTyUiKNEbcA1OqxJxV/cy8w860ZuUZa19gI7FohoWQGljuvwuTXWG6ypc1UYjeRJ
-         esqRmGWv3h5sai88fccF5Dgo4w9HWJAtapyegg02sBy8GwiNkMcpONHU+DaRbJgnAaTH
-         zkgUTctpnh2Ne/hUgJAL4SZX8j7XBYl7B+DtXgbLWg+U/FWkH+SqwB9hHy0Y322M9872
-         Ipie/tzXpsQqNs0CAZlNF7H0EYGqA9Hq7uYvp0b+UWxQc99RLw7B7VNSkRXF24233fxJ
-         RntA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684761949; x=1687353949;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=4b3cl3OODzw5cbGHTkbsgtSEp8oZPxcTDpluClxVbUk=;
-        b=Xp5AQO4mPzg4hPdVmFxk0lwgitlFqC83pSO4pLFJ5YBI/c+I+5qovYROruKNBr6Jt7
-         pEdBKpcEnVRchef48aHktOpRTkhC/hhv7n+fylp+MAOcrj91SgeslK3EPuo4gsLv5d8b
-         D/0GKwAYqk/YvuXDb/Zkshu9FUHp7ku98Na2l1ub0XQddWDMY5DMFrGTrLZ8WpdOOGy6
-         R0/ElwsorMAQfrQ2Duod8jk0QZEriovIr2wQBR2Y1r1lBJ8GzJxb+Ez1K5K4iduxaDgX
-         WOCvLS1gkivyJWZ6yiuNMEnlG388pjNcmuKYvgzIo8bAZHFOmZQrtw+IjmRDnnGwioyQ
-         fj0g==
-X-Gm-Message-State: AC+VfDwTZpUNtx28Hwn06KsrzHInTEmbWZcfkPaMmnDRWJP103FLg5lW
-        HC/ROXliYOlmjmlhKnaMBoJapywFCfY=
-X-Google-Smtp-Source: ACHHUZ6W3TTQEgMmXQa5zURSi0AtXuxh42yw2+Qd5pWuLLi/EMw6NyJGi1HDsSizjXkveQPFhxVT7w==
-X-Received: by 2002:a17:902:b496:b0:1ae:bf5:7b5 with SMTP id y22-20020a170902b49600b001ae0bf507b5mr9747125plr.34.1684761949072;
-        Mon, 22 May 2023 06:25:49 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-24.three.co.id. [180.214.232.24])
-        by smtp.gmail.com with ESMTPSA id d6-20020a170902c18600b001addf547a6esm4883562pld.17.2023.05.22.06.25.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 May 2023 06:25:48 -0700 (PDT)
-Message-ID: <efa04d56-cd7f-6620-bca7-1df89f49bf4b@gmail.com>
-Date:   Mon, 22 May 2023 20:25:42 +0700
+        Mon, 22 May 2023 09:28:30 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1277CC6;
+        Mon, 22 May 2023 06:28:04 -0700 (PDT)
+Received: from [192.168.2.171] (109-252-147-95.dynamic.spd-mgts.ru [109.252.147.95])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4B93C6606D84;
+        Mon, 22 May 2023 14:27:58 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684762079;
+        bh=keD/935Zu/vg8AvzQ/mBIJs8+l9o00PBHzFnRJHLzSg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=DIyoGQY28KPe9vMso5QxUo+B+LjI47cH/U4JwbRsIiakuaiBSF/Y7imIYc/jDeXp8
+         +wc9lthaCS+AlUh+d5looWfz4hmwb0n/H5azQr5MVPfR8jaUD0R1SXwnufnJTrVL69
+         lIBXFbCYtxb4/OQ0m3YJveSKWwZ9TPETWj8txE4eYmPaSpI8XCkV+N8L/IHlhJPafV
+         59NZeqgqi1BB3nFLZVrnu28Pi4a+LFs8cpygwYjTK3JjRmaL/WujfMnZlzN7hVte1B
+         71W3VJWvV4T+e7VJJgD7pcZyh2Ry2S0QAlJtUkubAkrX9ypCaFK2g6cfDyKmqSBVwG
+         YSaELA4697lcw==
+Message-ID: <abc2a8ab-0969-fbb6-8dec-b15c81df38e4@collabora.com>
+Date:   Mon, 22 May 2023 16:27:50 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 6/6] drm/shmem-helper: Switch to reservation lock
+To:     Emil Velikov <emil.l.velikov@gmail.com>
+Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Liam Mark <lmark@codeaurora.org>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <jstultz@google.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        linux-tegra@vger.kernel.org, kernel@collabora.com
+References: <20230521205112.150206-1-dmitry.osipenko@collabora.com>
+ <20230521205112.150206-7-dmitry.osipenko@collabora.com>
+ <CACvgo52QvmZw5k_9dmBHPB25rTdLZJzVG_vNFr8or+3f5sVO=Q@mail.gmail.com>
 Content-Language: en-US
-To:     Linux btrfs <linux-btrfs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Regressions <regressions@lists.linux.dev>,
-        Linux Stable <stable@vger.kernel.org>
-Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, a1bert@atlas.cz
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Fwd: vmalloc error: btrfs-delalloc btrfs_work_helper [btrfs] in
- kernel 6.3.x
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <CACvgo52QvmZw5k_9dmBHPB25rTdLZJzVG_vNFr8or+3f5sVO=Q@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-I notice a regression report on Bugzilla [1]. Quoting from it:
-
-> after updating from 6.2.x to 6.3.x, vmalloc error messages started to appear in the dmesg
+On 5/22/23 16:02, Emil Velikov wrote:
+> Hi Dmitry,
+> 
+> Saw v3 fly by, so I had a quick look. Original RB still stands,
+> although I noticed a couple of non-blocking nitpicks.
+> 
+> On Sun, 21 May 2023 at 22:00, Dmitry Osipenko
+> <dmitry.osipenko@collabora.com> wrote:
+> 
+>> -static int drm_gem_shmem_get_pages_locked(struct drm_gem_shmem_object *shmem)
+>> +static int drm_gem_shmem_get_pages(struct drm_gem_shmem_object *shmem)
+>>  {
+> 
+> Should this getter have a dma_resv_assert_held(shmem->base.resv); like
+> it's put brethren?
 > 
 > 
+>> -void drm_gem_shmem_put_pages(struct drm_gem_shmem_object *shmem)
+>> +static int drm_gem_shmem_pin_locked(struct drm_gem_shmem_object *shmem)
+>> +{
+>> +       int ret;
+>> +
+>> +       dma_resv_assert_held(shmem->base.resv);
+>> +
+>> +       ret = drm_gem_shmem_get_pages(shmem);
+>> +
+>> +       return ret;
 > 
-> # free 
->                total        used        free      shared  buff/cache   available
-> Mem:        16183724     1473068      205664       33472    14504992    14335700
-> Swap:       16777212      703596    16073616
+> With the assert_held in the getter, it would be less confusing to
+> inline this and the unpin_locked functions.
 > 
+>> +}
+>> +
+>> +static void drm_gem_shmem_unpin_locked(struct drm_gem_shmem_object *shmem)
+>>  {
+>> -       mutex_lock(&shmem->pages_lock);
+>> -       drm_gem_shmem_put_pages_locked(shmem);
+>> -       mutex_unlock(&shmem->pages_lock);
+>> +       dma_resv_assert_held(shmem->base.resv);
+>> +
+>> +       drm_gem_shmem_put_pages(shmem);
 > 
-> (zswap enabled)
+> Side note: the putter has an assert_held so the extra one here seems quite odd.
+> 
+> As said at the top - with or w/o these nitpicks, the original RB still stands.
 
-See bugzilla for the full thread and attached dmesg.
-
-On the report, the reporter can't perform the required bisection,
-unfortunately.
-
-Anyway, I'm adding it to regzbot:
-
-#regzbot introduced: v6.2..v6.3 https://bugzilla.kernel.org/show_bug.cgi?id=217466
-#regzbot title: btrfs_work_helper dealloc error in v6.3.x
-
-Thanks.
-
-[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217466
+Good catch. I actually added assert_held to get_pages(), but in a later
+patch that is not part of this series.
 
 -- 
-An old man doll... just what I always wanted! - Clara
+Best regards,
+Dmitry
+
