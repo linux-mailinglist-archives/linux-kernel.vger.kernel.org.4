@@ -2,221 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A05EB70B8DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:26:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3546770B8E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:27:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbjEVJ0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 05:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57478 "EHLO
+        id S231701AbjEVJ10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 05:27:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbjEVJ0d (ORCPT
+        with ESMTP id S229559AbjEVJ1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 05:26:33 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93474A8;
-        Mon, 22 May 2023 02:26:32 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id 98e67ed59e1d1-25275edf6caso2305359a91.1;
-        Mon, 22 May 2023 02:26:32 -0700 (PDT)
+        Mon, 22 May 2023 05:27:23 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C80B3
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 02:27:21 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f42c865535so58836995e9.1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 02:27:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684747592; x=1687339592;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=yICs6NuFzoF+XgPoWWxmf9TFo/FC9d4PCJAGYNSWKa4=;
-        b=DJViNaAHYvE5KmUKqp0AKM+rjq2tlOde+hmV94rSRaLwL6LUELR2X5tvvEI7/i7XaM
-         aOHKTgIMQOrnigaLTPEx7QxT+Tv4+1SR2H3CyNhzN7ickkM/poKikjwAF91ioXWt9nKS
-         6FcILmcxTpm7d8+bAn14xds766bXuB84OMUt6qj08vuCelMehf9DS9r1ilEXo14mifWW
-         g2MvYEzDv/oY9eP1JtWd+0F8dRbfeeQfAF/2/TdqPU7pRMISto8WTgYj720L6fVDcDt7
-         S0jIXepQq2Dxk+lATsxVJqw/NUPHGhfkbTsD65kmWpv3/479SbTB7orHPklbG42/X90U
-         IUQw==
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684747639; x=1687339639;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eH0Ku76TH0B0kWfipJXrOOAuK57/hqY51qOlmvxtqXM=;
+        b=aMs5pvwIMKKsSwAabsUxUTaCw2/1XfgMoZuPNUUd2q/SuJ7iHb3W/wvWKJT8unJBzh
+         AQV4NmNintgpLvy4T+1sY45Ir+QudZxUBEuqYiY/qlWNxBptyRymKcKf/sW1A7fIyxJa
+         ecdcAWfbcaJfyArV6W2fe8/wcVVs2CLGV4ZNT1wtCGIWHSp6sCQXc96zdI89fXwuosGI
+         AeW3qiOgVyI1fc9gqRlUmwo0iJzUvkIl8JUSCch3eYZ+IdSaF+eQP3m7XrP7D9afDoQn
+         RLasJgRtFrBBr6ozTydohUuAp77kMZL3ANheY/Ot0Pw1JioONtuLkDqCCSZQpX2jkDWU
+         zmQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684747592; x=1687339592;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yICs6NuFzoF+XgPoWWxmf9TFo/FC9d4PCJAGYNSWKa4=;
-        b=h7lXdR3Z0MIYSYnFb65ompXEHfM64RxU+/5mTrarFNdV+Gjof7yXVgvfoxMVP9Y9Bv
-         gAR7mdjmGV+kLRikHR5iYVG1pxwa3nNvOrj8BEcDynTifuUuYnrU5Qfk7ueytjnw1Z2g
-         EQLOcIazsjZXjPfQbocMmtqD57g+WpRGAcguGIJiFwi66hD6be8b0wnRHym8gW2zLkcb
-         NiSFO1nh8g0Y9B5aC69T2Iaoxzui3Th/L4K0Vj9vPiDA1X3wdRplxFihziWsJmO88yb2
-         Ot7dCXE6MZMSOGWcbb0Ip13IM5h1NxmqtMCFvhwpKbtVmwLtQ6cw+R+pPdCrXGY8VmG8
-         1Xaw==
-X-Gm-Message-State: AC+VfDyjCFQ4fQVcvF2xEN8ZbtZ7B8v0rXysqzodDmF2/DILODunfabd
-        FgsCcdF2HEZZN3kSb3gx7ukeX4oUm9/HEtrXRHU=
-X-Google-Smtp-Source: ACHHUZ4G1qdnvD42HFrXhAz3u2qKYEl+BMvnu/BjUDceWikeZLqcyH0Eqg2tRVxUzhikIQBLO493M9u2BjieN4fhTu4=
-X-Received: by 2002:a17:90a:ee8c:b0:24d:e296:659b with SMTP id
- i12-20020a17090aee8c00b0024de296659bmr10949653pjz.22.1684747591956; Mon, 22
- May 2023 02:26:31 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684747639; x=1687339639;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eH0Ku76TH0B0kWfipJXrOOAuK57/hqY51qOlmvxtqXM=;
+        b=RpibjHwa/IU7jy/CtukfDtDeRYpWYroU40wFkA8KZ5H2ofn4089GSey1Qqymkyoolp
+         QtmX97IRRcDp7kRoA3Jlcwm7HmLktEXhMW4t4GAiKCRUvywW8JyGTdzTtpTbIhRG2QtL
+         TQsuCLuUC07cgyEDbSEA6KFGvmGArHC7o2O1WeQtcjsJrL0gP5QKnJgavA6LV4VSoqew
+         /GWww2oKOmlyVq37rNOKj8Ni5fIXS8oMoOfI409TxXkKdAl5U1l7b3udSF4b6Y9nuvNW
+         2+/WegZOs25Za6BzPpjMDbJ6rgEqTiYxXJetBHfczFeN+Alh2mYIPP122FSW3+3H5Bpg
+         clrg==
+X-Gm-Message-State: AC+VfDzooa9E6ByWIGDOSMkJ8Jert7NyXWOoaNW9WmoQ69lFv3O3FpAa
+        CbYPxnzpfSwaOkMu8ahqOSB65A==
+X-Google-Smtp-Source: ACHHUZ4h0zlM3o8vdkvrEaRSnmH8742/V749rYJ/J3bBodPrPZKiqwnDcd9CqsYlCwIw/uXqzPJyew==
+X-Received: by 2002:adf:f6d1:0:b0:309:53ba:9703 with SMTP id y17-20020adff6d1000000b0030953ba9703mr7442076wrp.16.1684747639634;
+        Mon, 22 May 2023 02:27:19 -0700 (PDT)
+Received: from [192.168.1.91] (192.201.68.85.rev.sfr.net. [85.68.201.192])
+        by smtp.gmail.com with ESMTPSA id z16-20020a5d4d10000000b002f6176cc6desm7031450wrt.110.2023.05.22.02.27.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 May 2023 02:27:19 -0700 (PDT)
+Message-ID: <1a0a796c-497f-41a5-2f76-493c09e29325@baylibre.com>
+Date:   Mon, 22 May 2023 11:27:18 +0200
 MIME-Version: 1.0
-References: <1678979666-551-1-git-send-email-quic_mojha@quicinc.com>
- <76943268-3982-deaf-9736-429dd51e01b0@gmail.com> <0e645486-f0be-4468-18ad-9e49088dee0b@quicinc.com>
- <CAOX2RU4xPNq4-OHUoMZtfZu05QEdpk1UtawZb1xQMrtc5ao84Q@mail.gmail.com> <a6c48095-179a-7e72-a282-fbc28af374cb@quicinc.com>
-In-Reply-To: <a6c48095-179a-7e72-a282-fbc28af374cb@quicinc.com>
-From:   Robert Marko <robimarko@gmail.com>
-Date:   Mon, 22 May 2023 11:26:20 +0200
-Message-ID: <CAOX2RU6S-x-KrQ-qQLW-qxu4bph79d+Yq9Vj=PQwWW4o-yG2xA@mail.gmail.com>
-Subject: Re: [PATCH v3] firmware: qcom_scm: Clear download bit during reboot
-To:     Mukesh Ojha <quic_mojha@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: RCU WARNING on 6.4-rc2, TI AM62 and TPS65219
+Content-Language: en-US
+To:     Francesco Dolcini <francesco@dolcini.it>, nm@ti.com,
+        lee@kernel.org, tony@atomide.com, vigneshr@ti.com
+Cc:     afd@ti.com, khilman@baylibre.com, narmstrong@baylibre.com,
+        msp@baylibre.com, j-keerthy@ti.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
+References: <ZGeHMjlnob2GFyHF@francesco-nb.int.toradex.com>
+From:   jerome Neanne <jneanne@baylibre.com>
+In-Reply-To: <ZGeHMjlnob2GFyHF@francesco-nb.int.toradex.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 22 May 2023 at 11:11, Mukesh Ojha <quic_mojha@quicinc.com> wrote:
->
->
->
-> On 5/22/2023 2:29 PM, Robert Marko wrote:
-> > On Mon, 22 May 2023 at 08:11, Mukesh Ojha <quic_mojha@quicinc.com> wrote:
-> >>
-> >>
-> >>
-> >> On 5/18/2023 3:45 PM, Robert Marko wrote:
-> >>>
-> >>> On 16. 03. 2023. 16:14, Mukesh Ojha wrote:
-> >>>> During normal restart of a system download bit should
-> >>>> be cleared irrespective of whether download mode is
-> >>>> set or not.
-> >>>>
-> >>>> Fixes: 8c1b7dc9ba22 ("firmware: qcom: scm: Expose download-mode control")
-> >>>> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
-> >>>
-> >>> Hi, this has been backported to 5.15.111, however it seems to be
-> >>> breaking reboot
-> >>> on IPQ4019 by causing the board to then hang in SBL with:
-> >>> root@OpenWrt:/# reboot
-> >>> root@OpenWrt:/# [   76.473541] device lan1 left promiscuous mode
-> >>> [   76.474204] br-lan: port 1(lan1) entered disabled state
-> >>> [   76.527975] device lan2 left promiscuous mode
-> >>> [   76.530301] br-lan: port 2(lan2) entered disabled state
-> >>> [   76.579376] device lan3 left promiscuous mode
-> >>> [   76.581698] br-lan: port 3(lan3) entered disabled state
-> >>> [   76.638434] device lan4 left promiscuous mode
-> >>> [   76.638777] br-lan: port 4(lan4) entered disabled state
-> >>> [   76.978489] qca8k-ipq4019 c000000.switch wan: Link is Down
-> >>> [   76.978883] device eth0 left promiscuous mode
-> >>> [   76.987077] ipqess-edma c080000.ethernet eth0: Link is Down
-> >>> [
-> >>> Format: Log Type - Time(microsec) - Message - Optional Info
-> >>> Log Type: B - Since Boot(Power On Reset),  D - Delta,  S - Statistic
-> >>> S - QC_IMAGE_VERSION_STRING=BOOT.BF.3.1.1-00123
-> >>> S - IMAGE_VARIANT_STRING=DAABANAZA
-> >>> S - OEM_IMAGE_VERSION_STRING=CRM
-> >>> S - Boot Config, 0x00000021
-> >>> S - Reset status Config, 0x00000010
-> >>> S - Core 0 Frequency, 0 MHz
-> >>> B -       261 - PBL, Start
-> >>> B -      1339 - bootable_media_detect_entry, Start
-> >>> B -      1679 - bootable_media_detect_success, Start
-> >>> B -      1693 - elf_loader_entry, Start
-> >>> B -      5076 - auth_hash_seg_entry, Start
-> >>> B -      7223 - auth_hash_seg_exit, Start
-> >>> B -    578349 - elf_segs_hash_verify_entry, Start
-> >>> B -    696356 - PBL, End
-> >>> B -    696380 - SBL1, Start
-> >>> B -    787236 - pm_device_init, Start
-> >>> D -         7 - pm_device_init, Delta
-> >>> B -    788701 - boot_flash_init, Start
-> >>> D -     52782 - boot_flash_init, Delta
-> >>> B -    845625 - boot_config_data_table_init, Start
-> >>> D -      3836 - boot_config_data_table_init, Delta - (419 Bytes)
-> >>> B -    852841 - clock_init, Start
-> >>> D -      7566 - clock_init, Delta
-> >>> B -    864883 - CDT version:2,Platform ID:9,Major ID:0,Minor
-> >>> ID:0,Subtype:64
-> >>> B -    868413 - sbl1_ddr_set_params, Start
-> >>> B -    873402 - cpr_init, Start
-> >>> D -         2 - cpr_init, Delta
-> >>> B -    877842 - Pre_DDR_clock_init, Start
-> >>> D -         4 - Pre_DDR_clock_init, Delta
-> >>> D -     13234 - sbl1_ddr_set_params, Delta
-> >>> B -    891155 - pm_driver_init, Start
-> >>> D -         2 - pm_driver_init, Delta
-> >>> B -    909105 - Image Load, Start
-> >>> B -   1030210 - Boot error ocuured!. Error code: 303d
-> >>>
-> >>> Reverting the commit fixes rebooting.
-> >>
-> >> Hi Robert,
-> >>
-> >> Can you check if disable SDI [1] works with this issue
-> >>
-> >> https://lore.kernel.org/linux-arm-msm/20230518140224.2248782-1-robimarko@gmail.com/
-> >>
-> >> [1]
-> >>
-> >>
-> >> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-> >> index fde33acd46b7..01496ceb7136 100644
-> >> --- a/drivers/firmware/qcom_scm.c
-> >> +++ b/drivers/firmware/qcom_scm.c
-> >> @@ -1508,6 +1508,7 @@ static int qcom_scm_probe(struct platform_device
-> >> *pdev)
-> >>    static void qcom_scm_shutdown(struct platform_device *pdev)
-> >>    {
-> >>           /* Clean shutdown, disable download mode to allow normal restart */
-> >> +       qcom_scm_disable_sdi();
-> >>           qcom_scm_set_download_mode(false);
-> >>    }
-> >
-> > Hi,
-> > I can confirm reboot works this way as well.
->
-> That's great, So, i don't need to revert the patch and you can
-> add this in your patch without target specific check ?
 
-Oh, you mean IPQ4019 not rebooting?
-I haven't tested that, give me couple of minutes to try that out.
-Cause, the link was just back to the SDI patchset.
+
+On 19/05/2023 16:26, Francesco Dolcini wrote:
+> Hello all,
+> while testing 6.4-rc2 (2d1bcbc6cd70) on a TI K3 AM625 SoC with TPS65219
+> PMIC I noticed this warning.
+> 
+> [   80.117502] systemd-shutdown[1]: All loop devices detached.
+> [   80.123176] systemd-shutdown[1]: Stopping MD devices.
+> [   80.128700] systemd-shutdown[1]: All MD devices stopped.
+> [   80.134123] systemd-shutdown[1]: Detaching DM devices.
+> [   80.139553] systemd-shutdown[1]: All DM devices detached.
+> [   80.144970] systemd-shutdown[1]: All filesystems, swaps, loop devices, MD devices and DM devices detached.
+> [   80.162682] systemd-shutdown[1]: Syncing filesystems and block devices.
+> [   80.169602] systemd-shutdown[1]: Rebooting.
+> [   80.173817] kvm: exiting hardware virtualization
+> [   80.213016] reboot: Restarting system
+> [   80.216767] ------------[ cut here ]------------
+> [   80.221380] Voluntary context switch within RCU read-side critical section!
+> [   80.221404] WARNING: CPU: 0 PID: 1 at kernel/rcu/tree_plugin.h:318 rcu_note_context_switch+0x31c/0x390
+> [   80.237669] Modules linked in: 8021q garp mrp stp llc cfg80211 usb_f_ncm u_ether bluetooth ecdh_generic ecc rfkill sp
+> idev crct10dif_ce snd_soc_simple_card snd_soc_simple_card_utils rtc_ti_k3 sa2ul sha256_generic libsha256 authenc snd_soc
+> _davinci_mcasp snd_soc_ti_udma snd_soc_ti_edma snd_soc_ti_sdma ti_ads1015 ina2xx industrialio_triggered_buffer pwm_tiehr
+> pwm snd_soc_nau8822 tps65219_pwrbutton lm75 kfifo_buf spi_omap2_mcspi rtc_ds1307 libcomposite fuse drm ipv6
+> [   80.278507] CPU: 0 PID: 1 Comm: systemd-shutdow Not tainted 6.4.0-rc2-00166-gf932e7bb873b #3
+> [   80.286938] Hardware name: Toradex Verdin AM62 on Verdin Development Board (DT)
+> [   80.294238] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [   80.301193] pc : rcu_note_context_switch+0x31c/0x390
+> [   80.306154] lr : rcu_note_context_switch+0x31c/0x390
+> [   80.311114] sp : ffff80000a71b4c0
+> [   80.314422] x29: ffff80000a71b4c0 x28: 0000000000000000 x27: ffff000000118000
+> [   80.321556] x26: 0000000000000000 x25: ffff000000118000 x24: ffff800008fafbd8
+> [   80.328689] x23: ffff000000118000 x22: 0000000000000000 x21: ffff000000118000
+> [   80.335822] x20: 0000000000000000 x19: ffff00003fd68cc0 x18: 0000000000000010
+> [   80.342955] x17: 0000000000000000 x16: 0000000000000000 x15: ffff000000118000
+> [   80.350087] x14: 00000000000001c5 x13: ffff000000118478 x12: 00000000ffffffea
+> [   80.357220] x11: 00000000ffffefff x10: 00000000ffffefff x9 : ffff80000a2a9a98
+> [   80.364352] x8 : 0000000000017fe8 x7 : c0000000ffffefff x6 : 000000000000bff4
+> [   80.371485] x5 : 0000000000057fa8 x4 : 0000000000000000 x3 : 0000000000000000
+> [   80.378617] x2 : ffff80000a251990 x1 : 0000000000000000 x0 : 0000000000000000
+> [   80.385751] Call trace:
+> [   80.388193]  rcu_note_context_switch+0x31c/0x390
+> [   80.392807]  __schedule+0x98/0xa7c
+> [   80.396214]  schedule+0x5c/0xc4
+> [   80.399354]  schedule_timeout+0x180/0x25c
+> [   80.403362]  wait_for_completion_timeout+0x80/0x15c
+> [   80.408238]  ti_sci_set_device_state+0xb4/0x1e4
+> [   80.412771]  ti_sci_cmd_get_device_exclusive+0x18/0x24
+> [   80.417907]  ti_sci_pd_power_on+0x28/0x48
+> [   80.421914]  _genpd_power_on+0x94/0x154
+> [   80.425749]  genpd_power_on.part.0+0xa4/0x174
+> [   80.430104]  genpd_runtime_resume+0x118/0x294
+> [   80.434457]  __rpm_callback+0x48/0x140
+> [   80.438206]  rpm_callback+0x6c/0x78
+> [   80.441692]  rpm_resume+0x3bc/0x59c
+> [   80.445179]  __pm_runtime_resume+0x4c/0x90
+> [   80.449272]  omap_i2c_xfer_common+0x38/0x598
+> [   80.453540]  omap_i2c_xfer_polling+0x14/0x20
+> [   80.457804]  __i2c_transfer+0x138/0x35c
+> [   80.461642]  i2c_transfer+0x94/0xf4
+> [   80.465130]  regmap_i2c_read+0x60/0xa8
+> [   80.468879]  _regmap_raw_read+0xf0/0x170
+> [   80.472799]  _regmap_bus_read+0x44/0x7c
+> [   80.476632]  _regmap_read+0x64/0xf4
+> [   80.480118]  _regmap_update_bits+0xf4/0x130
+> [   80.484298]  regmap_update_bits_base+0x64/0x98
+> [   80.488738]  tps65219_restart+0x38/0x48
+> [   80.492576]  atomic_notifier_call_chain+0x60/0x90
+> [   80.497280]  do_kernel_restart+0x24/0x30
+> [   80.501202]  machine_restart+0x38/0x5c
+> [   80.504950]  kernel_restart+0x88/0x98
+> [   80.508612]  __do_sys_reboot+0x1e0/0x264
+> [   80.512533]  __arm64_sys_reboot+0x24/0x30
+> [   80.516538]  invoke_syscall+0x44/0x104
+> [   80.520287]  el0_svc_common.constprop.0+0x44/0xec
+> [   80.524988]  do_el0_svc+0x38/0x98
+> [   80.528302]  el0_svc+0x2c/0x84
+> [   80.531354]  el0t_64_sync_handler+0xb8/0xbc
+> [   80.535534]  el0t_64_sync+0x190/0x194
+> [   80.539192] ---[ end trace 0000000000000000 ]---
+> 
+> 
+> This looks similar to what is described here [1], same issue or
+> something else? Any suggestion?
+> 
+> The issue is systematic and happens at every boot. With a TI downstream
+> 5.10 kernel this issue was never experienced.
+> 
+> Francesco
+> 
+> [1] https://lore.kernel.org/all/20230327-tegra-pmic-reboot-v6-0-af44a4cd82e9@skidata.com/
+> 
+I don't have the same board to test and don't experience this boot issue 
+with the am62 board I'm using (the board version I have is a custom 
+board not released publicly by TI unfortunately).
+
+Notice that: 
+https://lore.kernel.org/lkml/20230511122100.2225417-1-jneanne@baylibre.com/
+
+Is not yet applied and would help handle shutdown/reboot under some 
+conditions.
+
+This might help for reboot handling if you are forcing a shutdown/reboot 
+in your test.
+
+But if the problem is your device tries to shutdown at each boot, then 
+this is just a side effect, not the original root cause.
 
 Regards,
-Robert
->
-> -- Mukesh
->
-> >
-> > Regards,
-> > Robert
-> >>
-> >>
-> >> -- Mukesh
-> >>
-> >>>
-> >>> Regards,
-> >>> Robert
-> >>>
-> >>>> ---
-> >>>> Changes in v3:
-> >>>>     - Added Fixes tag.
-> >>>>     - Removed it from below patch series, as it makes sense to go this
-> >>>> independently.
-> >>>>
-> >>>> https://lore.kernel.org/lkml/1677664555-30191-1-git-send-email-quic_mojha@quicinc.com/
-> >>>>
-> >>>> Changes in v2:
-> >>>>     - No change.
-> >>>>
-> >>>>    drivers/firmware/qcom_scm.c | 3 +--
-> >>>>    1 file changed, 1 insertion(+), 2 deletions(-)
-> >>>>
-> >>>> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-> >>>> index 468d4d5..3e020d1 100644
-> >>>> --- a/drivers/firmware/qcom_scm.c
-> >>>> +++ b/drivers/firmware/qcom_scm.c
-> >>>> @@ -1506,8 +1506,7 @@ static int qcom_scm_probe(struct platform_device
-> >>>> *pdev)
-> >>>>    static void qcom_scm_shutdown(struct platform_device *pdev)
-> >>>>    {
-> >>>>        /* Clean shutdown, disable download mode to allow normal restart */
-> >>>> -    if (download_mode)
-> >>>> -        qcom_scm_set_download_mode(false);
-> >>>> +    qcom_scm_set_download_mode(false);
-> >>>>    }
-> >>>>    static const struct of_device_id qcom_scm_dt_match[] = {
+Jerome
