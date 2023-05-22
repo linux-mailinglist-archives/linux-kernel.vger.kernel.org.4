@@ -2,221 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B3F70C26B
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:32:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E827670C281
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:35:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233908AbjEVPcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 11:32:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34144 "EHLO
+        id S233018AbjEVPfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 11:35:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbjEVPcS (ORCPT
+        with ESMTP id S230237AbjEVPf3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 11:32:18 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D054E0;
-        Mon, 22 May 2023 08:32:16 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id D265D6017E;
-        Mon, 22 May 2023 17:32:14 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1684769534; bh=RqvuOsJ8S7XdjoXvu70wev1e9QQK7l1N40NzkMAHzX8=;
-        h=Date:From:Subject:To:Cc:From;
-        b=LT5j5SjAGNIFjpZFPLIxMxTA8kJEM6iiS/Cx4UJNgNxQyU6aU2vmu5fC4bQTS/1S2
-         fqdEYzhR++jqx8rT5uU2u0j+waMJv9Th92bfHCd1AWZeXtjF/m8PCvHohjyjtemRFa
-         jPD++DKXZ8Y67dbSVXKImbjz3Dq/sUgYSxLClTtPQ7SLeaSvutlVGi93HaG3IUKwY5
-         hoad7FZ1SmRvoT9dcooE0T0S7n6Y0hH08hQ9Ud9Edr0QoPGKn8Go9K6+/mKnjmDlOU
-         QeAvYxWUAqPzHQnpy6JGj2tN/tgEp7BLYipxOc5uWYHtuTxDZPUiaJm0mAn4qvl1Do
-         eWTfXolOUaL4A==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id cccNu_K_Opy5; Mon, 22 May 2023 17:32:12 +0200 (CEST)
-Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
-        by domac.alu.hr (Postfix) with ESMTPSA id 971516017C;
-        Mon, 22 May 2023 17:32:11 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1684769532; bh=RqvuOsJ8S7XdjoXvu70wev1e9QQK7l1N40NzkMAHzX8=;
-        h=Date:From:Subject:To:Cc:From;
-        b=b2MBIAjoXrkkWbHzTTNiaL8Ybasp/aWQctqNzYBXy5Sdat2DFo2HG4enNPsO56KFl
-         jldM9PvrgPVvCHxV+VNf4JoqLlC9E3eD6eVflKp0V0WpxMWC8K9yXvu7wKmbjRgn+A
-         BDb69+8SFkxyrg00mceEXwoOVTov9duFzJyAxV06WjzQgruLqqrfaEHA/Lnj2CP0K0
-         nowm7CBa3qhHwOXGSlyWMHQ1ydOawOAIup9QWGUFafUvuGm9RYZIqUTzMESzJIrKb0
-         uquXjs5lmCu6xSSfp+EVWJlOhChF9k9ADeYaNEaSK8nYUFDeNZMslrvBWTr6JF4BuR
-         VbRR6eNJnjBSQ==
-Message-ID: <edac34c9-190c-0d80-8d95-2f42971cc870@alu.unizg.hr>
-Date:   Mon, 22 May 2023 17:32:11 +0200
-MIME-Version: 1.0
+        Mon, 22 May 2023 11:35:29 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83159AA;
+        Mon, 22 May 2023 08:35:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684769728; x=1716305728;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=pZgHmgwueUJssly8c+X+QdeFenxgZjPmTHYdpkkNtow=;
+  b=UzpfljgKimaC+VJ5Dewb+bqBmxvuqml0nPKnShCVTL3CFBTKpTKOEwPx
+   2eafor78WJxFn2K8huWOJbbi3xqK6hN4g1DmOQHZR7vAPBzGi3lN1+zfL
+   jenRHytt4opRJRF9PfLLVm8o8Z1T/4V6xGjCzVto/DNbvljP1/Ef09Kne
+   3mzRLVA4k/0NR9F6doGMpJCDeFFsZxTRehtpfT0iNbp1oTqq0qoQEwVPQ
+   3c88K/p3exQSlAYEgMvmkWKRKld93NANC+PpmSntAmtMylD/OqKFmhb1m
+   z3fvseS4ysAnOiuovXtS1X6FlkvPrxECPWDD/gBNlRYRWmjGO3hGBCSP6
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="355303044"
+X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
+   d="scan'208";a="355303044"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 08:35:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="773405932"
+X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
+   d="scan'208";a="773405932"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by fmsmga004.fm.intel.com with ESMTP; 22 May 2023 08:34:10 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 22 May 2023 08:34:09 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 22 May 2023 08:34:09 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Mon, 22 May 2023 08:34:09 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.176)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Mon, 22 May 2023 08:34:08 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=d+4tcfs375+Hv3N5RgHukbZAf7H8zMWK6ylIweG43jXpNtQNvCGhf6u6hqh+0hi43xnbvDB9RtZr7qQRvD/RfGdG7MyoHP+qSBWX4ZXRS2ys2e+mJqfvlRzPsR49drOxnGEgMmz/NAnbUeNDzoRFsCZj4qmpeMuc5SAh4VwjLEgP+r9jbXxc6c/n1S+S3LAQFOe4eJvKRIdvenYptdtzaaWxgG+sPAjWe2/RLTzwlccOjvkpqQv8b5pDsKpWaHesiXY3egY+N0eA2gdrbyBKaDTl4ygfwvyfm/xQb38WfDMTmwt9caf6DglG5N0JKqmihtQ2BRXr2WUjJScl41qDew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0aXD3dgusfU16YgKAL9nyLxGHMJDVPMclK7HeJJIM8c=;
+ b=HhAdY2y5aT+4u5xrzZIjWlfFeJ8Jim7t4TASZieT1yXltI52ZGwqX8xbawDDb/08kb6F5ECz3k2SL1+/tD5exlVQgf/4ikPAfoPBPecFx61kD8USjjXhRUHgMIKu3JYXqX/nD8Rcg3XUtwNg0Ri+T5wt2HNKgMIZNkHM8irkGlcaHX86xZyCEMiQmdWC+dZgyXQvCgXJ9LvqHWKvbQcaziRahXh8xvvgYoVtphLAAKMmdB++McQQSRXy+5x0OR7rmsIwZABgv9uAWVT6GUP5wSDL/CT6JIF7qhWBE7ep7i34qEFlnXmLOulKR+L/3DVjvpRYEUNcLKUFQBO0Bk+nkA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
+ by PH7PR11MB8569.namprd11.prod.outlook.com (2603:10b6:510:304::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Mon, 22 May
+ 2023 15:34:06 +0000
+Received: from DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::64d9:76b5:5b43:1590]) by DM6PR11MB3625.namprd11.prod.outlook.com
+ ([fe80::64d9:76b5:5b43:1590%2]) with mapi id 15.20.6411.028; Mon, 22 May 2023
+ 15:34:06 +0000
+Message-ID: <74679c26-19b1-65fc-a986-8b4a20794327@intel.com>
+Date:   Mon, 22 May 2023 17:32:33 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US, hr
-From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Subject: [BUG] selftests: af_unix: unix:diag.c does not compile on AlmaLinux
- 8.7
-To:     linux-kselftest@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
+ Thunderbird/102.11.0
+Subject: Re: [Intel-wired-lan] [PATCH net-next 10/11] libie: add per-queue
+ Page Pool stats
+Content-Language: en-US
+To:     Paul Menzel <pmenzel@molgen.mpg.de>
+CC:     "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Paolo Abeni <pabeni@redhat.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        <netdev@vger.kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        <linux-kernel@vger.kernel.org>,
+        Michal Kubiak <michal.kubiak@intel.com>,
+        <intel-wired-lan@lists.osuosl.org>,
+        "Christoph Hellwig" <hch@lst.de>,
+        Magnus Karlsson <magnus.karlsson@intel.com>
+References: <20230516161841.37138-1-aleksander.lobakin@intel.com>
+ <20230516161841.37138-11-aleksander.lobakin@intel.com>
+ <6bebe582-705c-2b7a-3286-1c86a15619f2@molgen.mpg.de>
+From:   Alexander Lobakin <aleksander.lobakin@intel.com>
+In-Reply-To: <6bebe582-705c-2b7a-3286-1c86a15619f2@molgen.mpg.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BL1PR13CA0173.namprd13.prod.outlook.com
+ (2603:10b6:208:2bd::28) To DM6PR11MB3625.namprd11.prod.outlook.com
+ (2603:10b6:5:13a::21)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|PH7PR11MB8569:EE_
+X-MS-Office365-Filtering-Correlation-Id: 67d35398-f093-4cc1-1654-08db5ad9fa4d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: X+OE9gWDL5XzMgm7xBdrp38yMlsW32VNnAwncTl+ep7JG5WTKayXbCkINBnCtKPCuzGqyq2mFnKVXI1woPUOdo+KHVTTZyqeTeIZconvw2ZhIoDiefMr47Qf3i+LdvxvvkUpJSW8dq6MGyiiarllRman+REuWaQABiIRfH8LbxCEgYZDbzb0rpw8oCTKCYgQeiAlSaSNtSu1VMlWtOqXwRn08BHCAjmOvLz+FGvAuWtbjSGSxCr0TAhGqUEzLOphaeA0cMnHX9kOS3UIOjIbXm4HikNPA0ux3tHpYS9KYy6DSXRC1gWpNULpQgj7cpciQUTOWBz9LaC3zNvrnjLbCySr+7bk7ZFSKBiF9AK/KRsVorDgTK3q73hjeUpUh1gb+WHZD0uKP7Z6uB2n/7baALuwv3Qjp6FmTPf8+Dv/wRq5FabayM1V5cTvCfU7r+KN3hIs2U2AUKOQPcNW+XcW2QKPx9GnmQkB4VZShuTrVxyCBj3T4a0ZU+RQkf8BJtIKGO7Z96mitLHRjSMKl5Hxngyfu+RfjtZZ/FlqmZsaYpgPewLC4JAfRwn4VF/MPE3P/g5OYEhZohl6Brpds8T0+dnECp1Hbmw0FsaUzexOkNxNkoDcCEDz/uT6L7j7hPslYQEbEe4VrwzNPjua6p1VDA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(396003)(136003)(39860400002)(376002)(366004)(451199021)(38100700002)(82960400001)(86362001)(31696002)(36756003)(31686004)(8676002)(8936002)(7416002)(107886003)(5660300002)(6512007)(26005)(6506007)(2616005)(186003)(83380400001)(2906002)(41300700001)(6486002)(316002)(6666004)(66476007)(66946007)(66556008)(54906003)(478600001)(6916009)(4326008)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YjZvWHVBbnNOVGNHL2d3Z2FqMElvMngzZXExQjRWdlhKWE9BL2d3N3dVdzlt?=
+ =?utf-8?B?WVRiWGkyM08wZTNmRUxLQTZsbldDUzBYaVFNeFpTV2JvbmNORG5ISjYxVGMw?=
+ =?utf-8?B?VzUwcnZKMjBZMDB5SGJCNnFhYkZuWGpkWDJDdW10ZHB1ekxXbmw3bjBHZVR2?=
+ =?utf-8?B?MXBYaEJ6endNQW1CUnVmQXpsOWtTUHRURFlUemVOSHhQNXpIQkl6aWpDVTNC?=
+ =?utf-8?B?My9QL1BwMXVwaEVjTHpkZ3lhNUExZTJIVUNxUlk5N21Hb1Jnd3FuRGtiUXNI?=
+ =?utf-8?B?UE5HWmp1K0dRZHZCS2Y4d09aUWJRWWdCaFl1bm1NbXhwc1hhc1FWRWh0bVI3?=
+ =?utf-8?B?Q0hCSGtpOXRyWXAxZkt0OHpLTWUzV2lnMlR0K0gveGw0eUUwb2JVRHlSZnZY?=
+ =?utf-8?B?bm0vL01jVCt4emlva2tiQ2dmZDVFOENGNnRSTlFXT0NJRklFV0xhVysyTnV0?=
+ =?utf-8?B?Q1hNcWt6Z0dLb0JIRndrdVNaWGlhUDcySDNhZkw2Ykd5M1paaVczc3JIaHYx?=
+ =?utf-8?B?d1lhOGFEOU5WeVQ5aDV2TERFd2o4U0FneTI5SW5zN2srYVNrM0NWZmVkQWVz?=
+ =?utf-8?B?M1pndWRWeFJ3V3dtbHpyU2szYzdCbFpnRHFZVC9jS1UzN0QrbFpnRndLUmZi?=
+ =?utf-8?B?YnRkMitKcDdlZGdtT1dlSjd5b1R0YWZFR0JlOGtUUEptTkx1T3VQenhzSk5x?=
+ =?utf-8?B?UUgxTTcvRTRGUVBtRCtuVlNzbUo0a21GREd2UzdPVDBjMkFzdmlMUWFVSlNt?=
+ =?utf-8?B?alJhN0JLRzJBWE03T0p2S3NqMmY5K1IwcW5GOE9mVmwvcWpvSVJ0N01aTkt6?=
+ =?utf-8?B?QjRtdVZURDBPdWkwNFRKbUdXNzMxdnJ4U2twWGQzZS8zUmFzVmZ6MHdGczUy?=
+ =?utf-8?B?cmoyWURIUEwvQklla2YzbllkbWZXMElpOUgrRGpkakM0NlRrTTVXUWgyOURa?=
+ =?utf-8?B?ejl6QUlUU2FKb2Q1NmpxSmdnODI0UzNWa01qQWYvOHZkQjlxbU1vd0RvMzJN?=
+ =?utf-8?B?YWhrdG5VOGs1bUxDTXhNMVdxVXpYcHZqSmtVNmlwMUFwK2RULy9DYmJxYUZL?=
+ =?utf-8?B?aksvTVZKUTJOYVlLTUJZMHZaNHM4L3VScVJGbGRIeTFXMU50ZXp4WUJpaVZ2?=
+ =?utf-8?B?VGZlSGFxNGpURHpiTHRxWlZFU1Z0RWw2eEFLanBpM3Y1aFUrR0hpaFQwdWVH?=
+ =?utf-8?B?eDdmWTZ2emhDUFdsKy9BbUlNdkhMWE82ZndyMm5DVnVDUUV0azRubm9USzJ2?=
+ =?utf-8?B?ZkpnTXB5Y3pYeVpHWnpXS0s4YTljUkdhME92ZkV5V01WbjJCWkNvTlJSalNt?=
+ =?utf-8?B?MEVRTmtUaWxQS3lWOHMvLzZOMlVVb25rMGRRQ1oya3Mwc1JwZjF4YWdZelcy?=
+ =?utf-8?B?aUtWd3JtSklzSEtuRHJNQWphb25Tc280b0svZ09ZcThSV0g0SFFMK1NndzdD?=
+ =?utf-8?B?dDZtVUVJSUxCbTNwSlVSWnBvcXowS3VhMXlmcjJHVENxdXRZQ2lqV3VVVDBo?=
+ =?utf-8?B?TzRoRHNvTGt6UU1iNzByWFUyLy96MjNaUG00MEFacitZdjdLTHFDb1pZTnc3?=
+ =?utf-8?B?RlZGSFAwMVNhQlJFekxyRFNSTjRwd1pwdnhROVZGZ3ZEVURJKzdUT1QzMWYx?=
+ =?utf-8?B?czQrNjZvVW1PYkwxdGZoU2RiRnRNVTh4eHNrWWZ1RlZxbFVNamhISHI1TlRp?=
+ =?utf-8?B?WHRGSUFYWFpPZTRlMEhUakV0a3pnUFp1ZTVUb1RveXFKOHh6cnRKcFJTQWFh?=
+ =?utf-8?B?TDdRa2JJaUtUYyt0c3BYeXpxQk1DUi8vRGtIK2hVQVJtak1xVElBVGlzTUFn?=
+ =?utf-8?B?MldvbERJMUV6T2tkdDVTSWIzdGFJeGtMcTl5NmV5UVIycDNHNmJsaFRhcW9U?=
+ =?utf-8?B?N2JtckpCeFNFMk9rcnFQZzZFTlRORWJIWjBNV0NObEcyZFRIbmZRcjJLUDN2?=
+ =?utf-8?B?RWZ4REw2NDFlWVBCbHM4Nkd0RWpIRHNWUnJHS0I5R1B2d1hDR0pUck1uUWZ1?=
+ =?utf-8?B?VHZlQ21tOWVPS2NrSVVqQTdYYVErQWlmR3IvOGJBZVBqYkk2eFlNOEhkaFVt?=
+ =?utf-8?B?b094ZE9NdnMyUmlsRU9xb3JFQWlyMkdsaUhrR3hjT0lldGw0WUMyMXhJdUhh?=
+ =?utf-8?B?VjhjQ3VEK0pKUEZQWElKSU83amJuaXJCNFpxQUpTVFg4bXA5b1o3WkFEbVRK?=
+ =?utf-8?B?b1E9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 67d35398-f093-4cc1-1654-08db5ad9fa4d
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2023 15:34:05.8778
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +Nan0X2Ip+1WfSIY/ERixJfYp47Ho05Ft4JuXI1wLuuuyT51qcRRWwHIaicB+kibXQSp9c31j4ADJjPYEIfmBy3cC96gbgRRIzfXpmtXBUk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB8569
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+Date: Mon, 22 May 2023 17:05:28 +0200
 
-On vanilla AlmaLinux 8.7 (CentOS fork) selftests/net/af_unix/diag_uid.c doesn't
-compile out of the box, giving the errors:
+> Dear Alexander,
+> 
+> 
+> Thank you for your patch.
+> 
+> Am 16.05.23 um 18:18 schrieb Alexander Lobakin:
+>> Expand the libie generic per-queue stats with the generic Page Pool
+>> stats provided by the API itself, when CONFIG_PAGE_POOL is enable.
+> 
+> enable*d*
 
-make[2]: Entering directory '/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix'
-gcc     diag_uid.c  -o /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix/diag_uid
-diag_uid.c:36:16: error: ‘UDIAG_SHOW_UID’ undeclared here (not in a function); did you mean ‘UDIAG_SHOW_VFS’?
-   .udiag_show = UDIAG_SHOW_UID
-                 ^~~~~~~~~~~~~~
-                 UDIAG_SHOW_VFS
-In file included from diag_uid.c:17:
-diag_uid.c: In function ‘render_response’:
-diag_uid.c:128:28: error: ‘UNIX_DIAG_UID’ undeclared (first use in this function); did you mean ‘UNIX_DIAG_VFS’?
-   ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
-                             ^~~~~~~~~~~~~
-../../kselftest_harness.h:707:13: note: in definition of macro ‘__EXPECT’
-   __typeof__(_seen) __seen = (_seen); \
-              ^~~~~
-diag_uid.c:128:2: note: in expansion of macro ‘ASSERT_EQ’
-   ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
-   ^~~~~~~~~
-diag_uid.c:128:28: note: each undeclared identifier is reported only once for each function it appears in
-   ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
-                             ^~~~~~~~~~~~~
-../../kselftest_harness.h:707:13: note: in definition of macro ‘__EXPECT’
-   __typeof__(_seen) __seen = (_seen); \
-              ^~~~~
-diag_uid.c:128:2: note: in expansion of macro ‘ASSERT_EQ’
-   ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
-   ^~~~~~~~~
-make[2]: *** [../../lib.mk:147: /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix/diag_uid] Error 1
+Oof, nice catch, thanks! I rely on codespell and checkpatch too much,
+but from standalone-word-spelling PoV everything is fine here :s :D
 
-The correct value is in <uapi/linux/unix_diag.h>:
+> 
+>> When it's not, there'll be no such fields in the stats structure, so
+>> no space wasted.
+>> They are also a bit special in terms of how they are obtained. One
+>> &page_pool accumulates statistics until it's destroyed obviously,
+>> which happens on ifdown. So, in order to not lose any statistics,
+>> get the stats and store in the queue container before destroying
+>> a pool. This container survives ifups/downs, so it basically stores
+>> the statistics accumulated since the very first pool was allocated
+>> on this queue. When it's needed to export the stats, first get the
+>> numbers from this container and then add the "live" numbers -- the
+>> ones that the current active pool returns. The result values will
+>> always represent the actual device-lifetime* stats.
+>> There's a cast from &page_pool_stats to `u64 *` in a couple functions,
+>> but they are guarded with stats asserts to make sure it's safe to do.
+>> FWIW it saves a lot of object code.
 
-include/uapi/linux/unix_diag.h:23:#define UDIAG_SHOW_UID		0x00000040	/* show socket's UID */
+[...]
 
-The fix is as follows:
+> Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+> 
+> 
+> Kind regards,
+> 
+> Paul
 
----
-  tools/testing/selftests/net/af_unix/diag_uid.c | 4 ++++
-  1 file changed, 4 insertions(+)
-
-diff --git a/tools/testing/selftests/net/af_unix/diag_uid.c b/tools/testing/selftests/net/af_unix/diag_uid.c
-index 5b88f7129fea..66d75b646d35 100644
---- a/tools/testing/selftests/net/af_unix/diag_uid.c
-+++ b/tools/testing/selftests/net/af_unix/diag_uid.c
-@@ -16,6 +16,10 @@
-
-  #include "../../kselftest_harness.h"
-
-+#ifndef UDIAG_SHOW_UID
-+#define UDIAG_SHOW_UID         0x00000040      /* show socket's UID */
-+#endif
-+
-  FIXTURE(diag_uid)
-  {
-         int netlink_fd;
-
---
-
-However, this patch reveals another undefined value:
-
-make[2]: Entering directory '/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix'
-gcc     diag_uid.c  -o /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix/diag_uid
-In file included from diag_uid.c:17:
-diag_uid.c: In function ‘render_response’:
-diag_uid.c:132:28: error: ‘UNIX_DIAG_UID’ undeclared (first use in this function); did you mean ‘UNIX_DIAG_VFS’?
-   ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
-                             ^~~~~~~~~~~~~
-../../kselftest_harness.h:707:13: note: in definition of macro ‘__EXPECT’
-   __typeof__(_seen) __seen = (_seen); \
-              ^~~~~
-diag_uid.c:132:2: note: in expansion of macro ‘ASSERT_EQ’
-   ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
-   ^~~~~~~~~
-diag_uid.c:132:28: note: each undeclared identifier is reported only once for each function it appears in
-   ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
-                             ^~~~~~~~~~~~~
-../../kselftest_harness.h:707:13: note: in definition of macro ‘__EXPECT’
-   __typeof__(_seen) __seen = (_seen); \
-              ^~~~~
-diag_uid.c:132:2: note: in expansion of macro ‘ASSERT_EQ’
-   ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
-   ^~~~~~~~~
-make[2]: *** [../../lib.mk:147: /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix/diag_uid] Error 1
-
-Apparently, AlmaLinux 8.7 lacks this enum UNIX_DIAG_UID:
-
-diff -u /usr/include/linux/unix_diag.h include/uapi/linux/unix_diag.h
---- /usr/include/linux/unix_diag.h	2023-05-16 13:47:51.000000000 +0200
-+++ include/uapi/linux/unix_diag.h	2022-10-12 07:35:58.253481367 +0200
-@@ -20,6 +20,7 @@
-  #define UDIAG_SHOW_ICONS	0x00000008	/* show pending connections */
-  #define UDIAG_SHOW_RQLEN	0x00000010	/* show skb receive queue len */
-  #define UDIAG_SHOW_MEMINFO	0x00000020	/* show memory info of a socket */
-+#define UDIAG_SHOW_UID		0x00000040	/* show socket's UID */
-
-  struct unix_diag_msg {
-  	__u8	udiag_family;
-@@ -40,6 +41,7 @@
-  	UNIX_DIAG_RQLEN,
-  	UNIX_DIAG_MEMINFO,
-  	UNIX_DIAG_SHUTDOWN,
-+	UNIX_DIAG_UID,
-
-  	__UNIX_DIAG_MAX,
-  };
-
-Now, this is a change in enums and there doesn't seem to an easy way out
-here. (I think I saw an example, but I cannot recall which thread. I will do
-more research.)
-
-When I included
-
-# gcc -I ../../../../include diag_uid.c
-
-I've got the following error:
-
-[marvin@pc-mtodorov linux_torvalds]$ cd tools/testing/selftests/net/af_unix/
-[marvin@pc-mtodorov af_unix]$ gcc  -I ../../../../../include   diag_uid.c  -o 
-/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix/diag_uid
-In file included from ../../../../../include/linux/build_bug.h:5,
-                  from ../../../../../include/linux/bits.h:21,
-                  from ../../../../../include/linux/capability.h:18,
-                  from ../../../../../include/linux/netlink.h:6,
-                  from diag_uid.c:8:
-../../../../../include/linux/compiler.h:246:10: fatal error: asm/rwonce.h: No such file or directory
-  #include <asm/rwonce.h>
-           ^~~~~~~~~~~~~~
-compilation terminated.
-[marvin@pc-mtodorov af_unix]$
-
-At this point I gave up, as it would be an overkill to change kernel system
-header to make a test pass, and this probably wouldn't be accepted upsteam?
-
-Hope this helps. (If we still want to build on CentOS/AlmaLinux/Rocky 8?)
-
-Best regards,
-Mirsad
-
--- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
-
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
+Thanks,
+Olek
