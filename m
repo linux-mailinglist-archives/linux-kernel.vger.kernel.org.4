@@ -2,224 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80ABB70CC00
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 23:09:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B118470CC05
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 23:12:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235456AbjEVVJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 17:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35484 "EHLO
+        id S232021AbjEVVMO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 17:12:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235405AbjEVVI6 (ORCPT
+        with ESMTP id S229505AbjEVVMK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 17:08:58 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CAFEB7;
-        Mon, 22 May 2023 14:08:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=+3mMvkCk/meKXuQTldWwg9QWOYtx2piimZEsgamr2Wk=; b=IAHN7BifPzCm/GqDN1Ugq2ibAI
-        SoJ8vkphb95h4PVRmGqogZQNTL9nmLLbwsl+n2rf2eAucZrOvyxz/+qLKg+lt5B3v9oPtq/5ufIL6
-        Y/EW7pj8R9B1YjRdAkc7YdEhHVtCR8lRLq+zD4ldMhvn5/GeJQs6WGRR8dwRT4HUTERbyWHsFJ9qq
-        2LoeEa7O/r5/EluSSntHrds01xea37sGDTQR1QwwiXRZMCI3zJ/Wp5yYhuzxPWZPTvlqG+/JtxhBM
-        B2YyCUEurw8CS0rtIOhhORdBPbAMorgfOik3aD4lbnblXr2R+GxR0FpV8SduW5i8E9rhwP/iup4rp
-        34hT42qg==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1q1ClL-0083Je-24;
-        Mon, 22 May 2023 21:08:15 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     keescook@chromium.org, yzaikin@google.com, ebiederm@xmission.com,
-        arnd@arndb.de, bp@alien8.de, James.Bottomley@HansenPartnership.com,
-        deller@gmx.de, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        luto@kernel.org, peterz@infradead.org, brgerst@gmail.com,
-        christophe.jaillet@wanadoo.fr, kirill.shutemov@linux.intel.com,
-        jroedel@suse.de
-Cc:     j.granados@samsung.com, akpm@linux-foundation.org,
-        willy@infradead.org, linux-parisc@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCH 2/2] signal: move show_unhandled_signals sysctl to its own file
-Date:   Mon, 22 May 2023 14:08:14 -0700
-Message-Id: <20230522210814.1919325-3-mcgrof@kernel.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230522210814.1919325-1-mcgrof@kernel.org>
-References: <20230522210814.1919325-1-mcgrof@kernel.org>
+        Mon, 22 May 2023 17:12:10 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0597A9C;
+        Mon, 22 May 2023 14:12:10 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-517c840f181so3539719a12.3;
+        Mon, 22 May 2023 14:12:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684789929; x=1687381929;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+XNhMRDIcd5RhQtvp0YIKYqZLNH6+pbXq+kWmpBSynM=;
+        b=k1K1HyzvnqnBe8r2Rpb2ATAXebNjQ+9Bj004eYb67TIX3qkCYFzgQYrfbfof/qs3fV
+         E3bOOixQ4DIcMdIMfzpQ4RfAjXDQoDqAOGWrbfUxf2/ZNc+KM0OYHZ9lU2A+SK8usHdg
+         dc/ZvHPzmHRsXxUFogSaI7+kAzu1XXJiiGb5QhVJAxWHDSGYx4O/aRabFYIT9yYBpg0S
+         oDgmbR7SKYkH53aRuo/PUAuGIz7l4rya+8MXmoqmBJbDcvBs40ChsEt9FeVe2iBICoBa
+         Dvl/vll4zbsfzri82BmGt63uVS0Ge5oAnStn/7nZqW4C8ZRrmMwWkd/j5S4GA/kkWEc7
+         iHgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684789929; x=1687381929;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+XNhMRDIcd5RhQtvp0YIKYqZLNH6+pbXq+kWmpBSynM=;
+        b=LrPKcO6TZT8ziB/0SSh8hFN//5qdAqtfgE+lDarjwKro80W1dTtEjBNEwIHYF9t+Bw
+         ktGUdGXY78AUjMeRoBhZoMBPWQfZg5Q1rXcrjEZi4nwo2nya7O8WtkBFxy7IZHAoAV6e
+         PWpfhBH/hgwj6WcxFe8/R4zTskGhOh4hL3jlM7/7ANDi/NkzBhdX35NvBk6ezr5peMGb
+         IYXGnVJGrBwFoBksOAqPZCTAlWOvcubELFkd7Wd05qbjGCfR8HSMTj/LG2BPkS1s8fM2
+         q9dI3gSKwXGclveKTE8HucGYvX3Zgwt3fWojLuDOOHFWpxiJ/f9t/EQR2LItqN9T/fje
+         AYiA==
+X-Gm-Message-State: AC+VfDwvr0So5/DyW8CAgSUTPDYibwAVUD7cQMOWqTACLUFZwS4+IJ9P
+        iN5DR1ZGjKTVkLercSGq5Gg=
+X-Google-Smtp-Source: ACHHUZ60CLOp7DtHkbt5u0VTx8QiCC05myGgdTMUzzuhOr29K4CA9z9bUTYJaQhqyLyPqXt0bMuqYA==
+X-Received: by 2002:a05:6a20:7295:b0:103:ef39:a832 with SMTP id o21-20020a056a20729500b00103ef39a832mr12188478pzk.23.1684789929229;
+        Mon, 22 May 2023 14:12:09 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:39c])
+        by smtp.gmail.com with ESMTPSA id lt11-20020a17090b354b00b0024df400a9e6sm4556611pjb.37.2023.05.22.14.12.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 14:12:08 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 22 May 2023 11:12:07 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Z qiang <qiang.zhang1211@gmail.com>
+Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        clang-built-linux <llvm@lists.linux.dev>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: next: WARNING: CPU: 0 PID: 63 at kernel/workqueue.c:1999
+ worker_enter_idle+0xb2/0xc0
+Message-ID: <ZGvap5qi0OKAOfqX@slm.duckdns.org>
+References: <CA+G9fYud2YH1c9Hxekd-pi8VsD4HmA4v9g-mr-vRPqaRQd2F5w@mail.gmail.com>
+ <CALm+0cXew-QX9gkHkL7majJuENP1C_WLVG=pQ_6RGZ1UgQ79Eg@mail.gmail.com>
+ <ZGuydp0KToLf55vY@slm.duckdns.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZGuydp0KToLf55vY@slm.duckdns.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The show_unhandled_signals sysctl is the only sysctl for debug
-left on kernel/sysctl.c. We've been moving the syctls out from
-kernel/sysctl.c so to help avoid merge conflicts as the shared
-array gets out of hand.
+On Mon, May 22, 2023 at 08:20:38AM -1000, Tejun Heo wrote:
+> Hello,
+> 
+> On Mon, May 22, 2023 at 09:24:09PM +0800, Z qiang wrote:
+> > diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+> > index 9c5c1cfa478f..f8d739fef311 100644
+> > --- a/kernel/workqueue.c
+> > +++ b/kernel/workqueue.c
+> > @@ -1060,10 +1060,9 @@ void wq_worker_running(struct task_struct *task)
+> >          * and leave with an unexpected pool->nr_running == 1 on the newly
+> > unbound
+> >          * pool. Protect against such race.
+> >          */
+> > -       preempt_disable();
+> > +       local_irq_disable();
+> >         if (!(worker->flags & WORKER_NOT_RUNNING))
+> >                 worker->pool->nr_running++;
+> > -       preempt_enable();
+> > 
+> >         /*
+> >          * CPU intensive auto-detection cares about how long a work item
+> > hogged
+> > @@ -1072,6 +1071,7 @@ void wq_worker_running(struct task_struct *task)
+> >         worker->current_at = worker->task->se.sum_exec_runtime;
+> > 
+> >         worker->sleeping = 0;
+> > +       local_irq_enable();
+> >  }
+> 
+> Ah, yeah, this is correct. Now we're modifying nr_running from timer tick
+> too, so if don't block irq, the timer tick can ruin the not-irq-protected
+> read-write-modify nr_running update from wq_worker_running(). Naresh, can
+> you please confirm the fix?
 
-This change incurs simplifies sysctl registration by localizing
-it where it should go for a penalty in size of increasing the
-kernel by 23 bytes, we accept this given recent cleanups have
-actually already saved us 1465 bytes in the prior commits.
+Z qiang, while waiting for Naresh's test result, can you send the fix as a
+proper signed-off-patch?
 
-./scripts/bloat-o-meter vmlinux.3-remove-dev-table vmlinux.4-remove-debug-table
-add/remove: 3/1 grow/shrink: 0/1 up/down: 177/-154 (23)
-Function                                     old     new   delta
-signal_debug_table                             -     128    +128
-init_signal_sysctls                            -      33     +33
-__pfx_init_signal_sysctls                      -      16     +16
-sysctl_init_bases                             85      59     -26
-debug_table                                  128       -    -128
-Total: Before=21256967, After=21256990, chg +0.00%
+Thanks.
 
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
----
- arch/parisc/kernel/traps.c |  1 +
- arch/x86/kernel/signal.c   |  1 +
- arch/x86/kernel/traps.c    |  1 +
- arch/x86/kernel/umip.c     |  1 +
- arch/x86/mm/fault.c        |  1 +
- kernel/signal.c            | 23 +++++++++++++++++++++++
- kernel/sysctl.c            | 14 --------------
- 7 files changed, 28 insertions(+), 14 deletions(-)
-
-diff --git a/arch/parisc/kernel/traps.c b/arch/parisc/kernel/traps.c
-index f9696fbf646c..e15f7e201962 100644
---- a/arch/parisc/kernel/traps.c
-+++ b/arch/parisc/kernel/traps.c
-@@ -23,6 +23,7 @@
- #include <linux/module.h>
- #include <linux/smp.h>
- #include <linux/spinlock.h>
-+#include <linux/signal.h>
- #include <linux/init.h>
- #include <linux/interrupt.h>
- #include <linux/console.h>
-diff --git a/arch/x86/kernel/signal.c b/arch/x86/kernel/signal.c
-index 004cb30b7419..91905377d708 100644
---- a/arch/x86/kernel/signal.c
-+++ b/arch/x86/kernel/signal.c
-@@ -12,6 +12,7 @@
- 
- #include <linux/sched.h>
- #include <linux/sched/task_stack.h>
-+#include <linux/signal.h>
- #include <linux/mm.h>
- #include <linux/smp.h>
- #include <linux/kernel.h>
-diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
-index 58b1f208eff5..180d770f8817 100644
---- a/arch/x86/kernel/traps.c
-+++ b/arch/x86/kernel/traps.c
-@@ -31,6 +31,7 @@
- #include <linux/kexec.h>
- #include <linux/sched.h>
- #include <linux/sched/task_stack.h>
-+#include <linux/signal.h>
- #include <linux/timer.h>
- #include <linux/init.h>
- #include <linux/bug.h>
-diff --git a/arch/x86/kernel/umip.c b/arch/x86/kernel/umip.c
-index 5a4b21389b1d..cef5240dcd92 100644
---- a/arch/x86/kernel/umip.c
-+++ b/arch/x86/kernel/umip.c
-@@ -12,6 +12,7 @@
- #include <asm/insn.h>
- #include <asm/insn-eval.h>
- #include <linux/ratelimit.h>
-+#include <linux/signal.h>
- 
- #undef pr_fmt
- #define pr_fmt(fmt) "umip: " fmt
-diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
-index e4399983c50c..e5f13250e68c 100644
---- a/arch/x86/mm/fault.c
-+++ b/arch/x86/mm/fault.c
-@@ -6,6 +6,7 @@
-  */
- #include <linux/sched.h>		/* test_thread_flag(), ...	*/
- #include <linux/sched/task_stack.h>	/* task_stack_*(), ...		*/
-+#include <linux/sched/signal.h>		/* show_unhandled_signals */
- #include <linux/kdebug.h>		/* oops_begin/end, ...		*/
- #include <linux/extable.h>		/* search_exception_tables	*/
- #include <linux/memblock.h>		/* max_low_pfn			*/
-diff --git a/kernel/signal.c b/kernel/signal.c
-index 8f6330f0e9ca..5ba4150c01a7 100644
---- a/kernel/signal.c
-+++ b/kernel/signal.c
-@@ -45,6 +45,7 @@
- #include <linux/posix-timers.h>
- #include <linux/cgroup.h>
- #include <linux/audit.h>
-+#include <linux/sysctl.h>
- 
- #define CREATE_TRACE_POINTS
- #include <trace/events/signal.h>
-@@ -4771,6 +4772,28 @@ static inline void siginfo_buildtime_checks(void)
- #endif
- }
- 
-+#if defined(CONFIG_SYSCTL)
-+static struct ctl_table signal_debug_table[] = {
-+#ifdef CONFIG_SYSCTL_EXCEPTION_TRACE
-+	{
-+		.procname	= "exception-trace",
-+		.data		= &show_unhandled_signals,
-+		.maxlen		= sizeof(int),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec
-+	},
-+#endif
-+	{ }
-+};
-+
-+static int __init init_signal_sysctls(void)
-+{
-+	register_sysctl_init("debug", signal_debug_table);
-+	return 0;
-+}
-+early_initcall(init_signal_sysctls);
-+#endif /* CONFIG_SYSCTL */
-+
- void __init signals_init(void)
- {
- 	siginfo_buildtime_checks();
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index a7fdb828afb6..43240955dcad 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -2331,24 +2331,10 @@ static struct ctl_table vm_table[] = {
- 	{ }
- };
- 
--static struct ctl_table debug_table[] = {
--#ifdef CONFIG_SYSCTL_EXCEPTION_TRACE
--	{
--		.procname	= "exception-trace",
--		.data		= &show_unhandled_signals,
--		.maxlen		= sizeof(int),
--		.mode		= 0644,
--		.proc_handler	= proc_dointvec
--	},
--#endif
--	{ }
--};
--
- int __init sysctl_init_bases(void)
- {
- 	register_sysctl_init("kernel", kern_table);
- 	register_sysctl_init("vm", vm_table);
--	register_sysctl_init("debug", debug_table);
- 
- 	return 0;
- }
 -- 
-2.39.2
-
+tejun
