@@ -2,126 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AE7670B560
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 08:52:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48B6370B562
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 08:52:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232194AbjEVGv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 02:51:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56112 "EHLO
+        id S232143AbjEVGwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 02:52:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232033AbjEVGvc (ORCPT
+        with ESMTP id S232120AbjEVGwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 02:51:32 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F97C2728
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 23:48:56 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f603d4bc5bso9349855e9.3
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 23:48:56 -0700 (PDT)
+        Mon, 22 May 2023 02:52:09 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B78782108;
+        Sun, 21 May 2023 23:49:41 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2af2ef0d0daso19882231fa.2;
+        Sun, 21 May 2023 23:49:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684738064; x=1687330064;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=EpcVzZiQHuJlgNB+1GZ1+0T8mFu8yvELdw33UYkkLl8=;
-        b=MhTrOuJMVD/4Pr15dj2MrRWhZPx0is3SfH6Ud6YRvaJxvKiUbbEC7CTqI/Q5+iMV1b
-         XxxxSMSIWXe8jdGA2HUktG9hQAPY6LJBIklBVlzrf3IahiQyJxZPIB1XvjrBLr6w8pbu
-         jC+xl8sGfRJ+KzUC9kj/iPDhdBXIuMIOwR2dAacfsEGCMIDwc3clIxy3UeCWM5DptFTs
-         NBbh0hnEQdkA0Iqa8fBYEvvSiwDTBL601lXW4etNKf3nXesfrtuUBnhhNwaT3l1tLP7c
-         5xbiOibZ9X0v8dxTtb9dE9Kx/ViuFGrSX0er5Qug2HQumyMaVpTEHNF6jl/14dUUB1T4
-         9KNw==
+        d=gmail.com; s=20221208; t=1684738107; x=1687330107;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IkyepdTep2HMvZ3/26VCTbq+JBGsvdDQELPma/gFbuI=;
+        b=gnhLyfRuVLx07LIYirS88uyzkOB07ExFkviUKTmCtr1yVCyulHITJiaY1/0Hvc1XFi
+         ZvHuVvHwFtq2a4EThEvOtTjULPTLNgCVmmYkTBXjQfw64nclQm7T7bzAn5ZV7B4Py36o
+         qkgMGFLxOMZT5Ro/VDcIXVYm2WmjXbdYqTuoB7tloS/9kZpAuPGMDWpSGt6FqGIs94/9
+         C0QEPE9tl73+89Ryd9A50fIwyun4AF2ALxYM3VpqFqsf9tvRKiUJZDy5ST6IhxDrFDWS
+         h2ih3HT4OVsO9P3iyiHcsalWgTjuhBOREPpv/PWEQogMD9Unl5IXuT844338KrQi1Jcu
+         eP7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684738064; x=1687330064;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EpcVzZiQHuJlgNB+1GZ1+0T8mFu8yvELdw33UYkkLl8=;
-        b=K69doaV3rDJd7gEZ5txI+GSd+HB7f7hw64Qb8mCfJNqK8Z7ZG+Z4m0mfskMWG+LEUs
-         B93WIEGC4e67qIID1OyJdOEehqv2Bbs9UVTr5U9BiU2td/zyypQPN3tokM94KoOeKm91
-         SWW7rL18HS0AUZHfJXRdX1nqS9J0IeTh76TZiqdNTnIZFDRi73molW/o41hnZgrZ0vBL
-         QEav6mbM+Zx8XFMKD0AKbR8w1hkgvP3QdlTkxm+e+n7Gxq8k4LgbnCYzpZo2ypjZZ+yF
-         M7BiSIB64mhyBd7bN2Ejr96LCRKhIbsLH4CYlL6mdqfGuL9MLDjpwcNTTVweERObrH2B
-         85XQ==
-X-Gm-Message-State: AC+VfDw0eF+vP6vzTXyTZ6y4ZTnsFwtgyOdy+g81gmlxU/4mTufCcBrX
-        U7pZbTlz4jqjbaTVplrk5yRgCKLUgUwC4fxa9v0=
-X-Google-Smtp-Source: ACHHUZ61taaEnFgdPu7bLIwWViZ4oSt5EKj2mxSI/JiWU2FHciOor4L9SkuxyH8S00xOAaiKFcGkXw==
-X-Received: by 2002:a05:600c:281:b0:3f6:41d:24d2 with SMTP id 1-20020a05600c028100b003f6041d24d2mr1546520wmk.39.1684738063644;
-        Sun, 21 May 2023 23:47:43 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id 4-20020a05600c22c400b003f4e47c6504sm10440588wmg.21.2023.05.21.23.47.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 May 2023 23:47:42 -0700 (PDT)
-Date:   Mon, 22 May 2023 09:47:36 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     oe-kbuild@lists.linux.dev, Wenjing Liu <wenjing.liu@amd.com>
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jun Lei <Jun.Lei@amd.com>
-Subject: drivers/gpu/drm/amd/amdgpu/../display/dc/link/link_factory.c:384
- construct_phy() warn: variable dereferenced before check 'link->link_enc'
- (see line 381)
-Message-ID: <aa1f09b5-4e29-48af-8b97-831115a7b682@kili.mountain>
+        d=1e100.net; s=20221208; t=1684738107; x=1687330107;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IkyepdTep2HMvZ3/26VCTbq+JBGsvdDQELPma/gFbuI=;
+        b=DyE3BRlM69hGZyNguDzATNvhXgGoS/W1qgkisxV5Qp/vJrGrRlXRrYMBTSeiPmURYn
+         0oYA5sQekBEHysOiK08GwWLOyxE2YgymLbpAlBNC8qF+CsoKp+Q4SXdvAdll7GensNUC
+         KZefzw7ZWjTLzCm+n/lI5JGLyJeTqAR6dCXTteSDdNF9yw4l+7XucF55hul/sI3vN7jy
+         9KLJWGXEG7WTjedazthn4AJErPkaQmTrfbSjjyNmw/GBW4fls9Fg1fwuOZW9/x6G9p5L
+         xClm2QVqgStViwFCn291kka+1glDRlLYpO9kQRBoE641TEXbIfV9jCdTG2xqoUhnUKdR
+         d/Cg==
+X-Gm-Message-State: AC+VfDz3DofZyo9apb3eSyEobKm3BRqINj3iRy8+1pNNWy8tiosmELWH
+        I81PWMYTQ8/ZUxD/cgzN1qMqx1lEe8v7E/4oHQ==
+X-Google-Smtp-Source: ACHHUZ4jkfk7xwQESCYIgiAIL8nso8HhBBnZ9562GNyBWeoH6kmXMdamFK3+U3cVuv7iWPC0Nlx5ri5yfxxi1rXlACc=
+X-Received: by 2002:ac2:5297:0:b0:4f3:9f9b:ad09 with SMTP id
+ q23-20020ac25297000000b004f39f9bad09mr2527102lfm.38.1684738106914; Sun, 21
+ May 2023 23:48:26 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <cover.1683872601.git.quic_nguyenb@quicinc.com> <7b884263c9db9a9666086a345ede85bb56d9dfc7.1683872601.git.quic_nguyenb@quicinc.com>
+In-Reply-To: <7b884263c9db9a9666086a345ede85bb56d9dfc7.1683872601.git.quic_nguyenb@quicinc.com>
+From:   Stanley Chu <chu.stanley@gmail.com>
+Date:   Mon, 22 May 2023 14:48:14 +0800
+Message-ID: <CAGaU9a8t9CHcGvJk+GFaTO=pDQA+PwEjCWH8sMo=T6-oKvTrsw@mail.gmail.com>
+Subject: Re: [PATCH v5 7/7] ufs: core: Add error handling for MCQ mode
+To:     "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
+Cc:     quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
+        bvanassche@acm.org, mani@kernel.org, stanley.chu@mediatek.com,
+        adrian.hunter@intel.com, beanhuo@micron.com, avri.altman@wdc.com,
+        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   d635f6cc934bcd467c5d67148ece74632fd96abf
-commit: 76f5dc40ebb188b081e03783541856c03e97f8e0 drm/amd/display: move dc_link functions in link root folder to dc_link_exports
-config: ia64-randconfig-m041-20230514
-compiler: ia64-linux-gcc (GCC) 12.1.0
+Hi Bao,
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
-| Closes: https://lore.kernel.org/r/202305201930.FVPVEaPp-lkp@intel.com/
+Bao D. Nguyen <quic_nguyenb@quicinc.com> =E6=96=BC 2023=E5=B9=B45=E6=9C=881=
+2=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=882:34=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+>
+> Add support for error handling for MCQ mode.
+>
+> Signed-off-by: Bao D. Nguyen <quic_nguyenb@quicinc.com>
+> ---
+>  drivers/ufs/core/ufshcd.c | 85 +++++++++++++++++++++++++++++++++++++++++=
+------
+>  1 file changed, 74 insertions(+), 11 deletions(-)
+>
+> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+> index ec07e49..9345118 100644
+> --- a/drivers/ufs/core/ufshcd.c
+> +++ b/drivers/ufs/core/ufshcd.c
+> @@ -3148,6 +3148,16 @@ static int ufshcd_wait_for_dev_cmd(struct ufs_hba =
+*hba,
+>                 err =3D -ETIMEDOUT;
+>                 dev_dbg(hba->dev, "%s: dev_cmd request timedout, tag %d\n=
+",
+>                         __func__, lrbp->task_tag);
+> +
+> +               /* MCQ mode */
+> +               if (is_mcq_enabled(hba)) {
+> +                       err =3D ufshcd_clear_cmd(hba, lrbp->task_tag);
+> +                       if (!err)
+> +                               hba->dev_cmd.complete =3D NULL;
 
-smatch warnings:
-drivers/gpu/drm/amd/amdgpu/../display/dc/link/link_factory.c:384 construct_phy() warn: variable dereferenced before check 'link->link_enc' (see line 381)
+How about always clearing hba->dev_cmd.complete? If ufshcd_clear_cmd()
+fails (for example, times out), "complete" should be cleared, similar
+to the "pending" case in the SDB path.
 
-vim +384 drivers/gpu/drm/amd/amdgpu/../display/dc/link/link_factory.c
+> +                       return err;
+> +               }
+> +
+> +               /* SDB mode */
+>                 if (ufshcd_clear_cmd(hba, lrbp->task_tag) =3D=3D 0) {
+>                         /* successfully cleared the command, retry if nee=
+ded */
+>                         err =3D -EAGAIN;
+> @@ -5581,6 +5591,10 @@ static int ufshcd_poll(struct Scsi_Host *shost, un=
+signed int queue_num)
+>   */
+>  static irqreturn_t ufshcd_transfer_req_compl(struct ufs_hba *hba)
+>  {
+> +       struct ufshcd_lrb *lrbp;
+> +       u32 hwq_num, utag;
+> +       int tag;
+> +
+>         /* Resetting interrupt aggregation counters first and reading the
+>          * DOOR_BELL afterward allows us to handle all the completed requ=
+ests.
+>          * In order to prevent other interrupts starvation the DB is read=
+ once
+> @@ -5599,7 +5613,22 @@ static irqreturn_t ufshcd_transfer_req_compl(struc=
+t ufs_hba *hba)
+>          * Ignore the ufshcd_poll() return value and return IRQ_HANDLED s=
+ince we
+>          * do not want polling to trigger spurious interrupt complaints.
+>          */
+> -       ufshcd_poll(hba->host, UFSHCD_POLL_FROM_INTERRUPT_CONTEXT);
+> +       if (!is_mcq_enabled(hba)) {
+> +               ufshcd_poll(hba->host, UFSHCD_POLL_FROM_INTERRUPT_CONTEXT=
+);
+> +               goto out;
+> +       }
+> +
+> +       /* MCQ mode */
+> +       for (tag =3D 0; tag < hba->nutrs; tag++) {
+> +               lrbp =3D &hba->lrb[tag];
+> +               if (ufshcd_cmd_inflight(lrbp->cmd)) {
+> +                       utag =3D blk_mq_unique_tag(scsi_cmd_to_rq(lrbp->c=
+md));
+> +                       hwq_num =3D blk_mq_unique_tag_to_hwq(utag);
+> +                       ufshcd_poll(hba->host, hwq_num);
+> +               }
+> +       }
 
-54618888d1ea7a Wenjing Liu    2023-01-18  367  	enc_init_data.ctx = dc_ctx;
-54618888d1ea7a Wenjing Liu    2023-01-18  368  	bp_funcs->get_src_obj(dc_ctx->dc_bios, link->link_id, 0,
-54618888d1ea7a Wenjing Liu    2023-01-18  369  			      &enc_init_data.encoder);
-54618888d1ea7a Wenjing Liu    2023-01-18  370  	enc_init_data.connector = link->link_id;
-54618888d1ea7a Wenjing Liu    2023-01-18  371  	enc_init_data.channel = get_ddc_line(link);
-54618888d1ea7a Wenjing Liu    2023-01-18  372  	enc_init_data.hpd_source = get_hpd_line(link);
-54618888d1ea7a Wenjing Liu    2023-01-18  373  
-54618888d1ea7a Wenjing Liu    2023-01-18  374  	link->hpd_src = enc_init_data.hpd_source;
-54618888d1ea7a Wenjing Liu    2023-01-18  375  
-54618888d1ea7a Wenjing Liu    2023-01-18  376  	enc_init_data.transmitter =
-54618888d1ea7a Wenjing Liu    2023-01-18  377  		translate_encoder_to_transmitter(enc_init_data.encoder);
-54618888d1ea7a Wenjing Liu    2023-01-18  378  	link->link_enc =
-54618888d1ea7a Wenjing Liu    2023-01-18  379  		link->dc->res_pool->funcs->link_enc_create(dc_ctx, &enc_init_data);
-54618888d1ea7a Wenjing Liu    2023-01-18  380  
-54618888d1ea7a Wenjing Liu    2023-01-18 @381  	DC_LOG_DC("BIOS object table - DP_IS_USB_C: %d", link->link_enc->features.flags.bits.DP_IS_USB_C);
-                                                                                                 ^^^^^^^^^^^^^^^^
-Dereference
+In SDB mode, the DOOR_BELL is reset by ufshcd_hba_stop(). All bits
+that were previously set in DOOR_BELL are also set in "completed_reqs"
+in ufshcd_poll(). This allows ufshcd_poll() to handle all outstanding
+requests properly.
 
-54618888d1ea7a Wenjing Liu    2023-01-18  382  	DC_LOG_DC("BIOS object table - IS_DP2_CAPABLE: %d", link->link_enc->features.flags.bits.IS_DP2_CAPABLE);
-                                                                                                    ^^^^^^^^^^^^^^^^
-Here too.
+However, in MCQ mode, the CQ tail registers cannot provide the same
+information after they are reset. Hence, they cannot be properly
+referenced by ufshcd_poll().
 
-54618888d1ea7a Wenjing Liu    2023-01-18  383  
-54618888d1ea7a Wenjing Liu    2023-01-18 @384  	if (!link->link_enc) {
-                                                     ^^^^^^^^^^^^^^
-NULL checked too late.
-
-
-54618888d1ea7a Wenjing Liu    2023-01-18  385  		DC_ERROR("Failed to create link encoder!\n");
-54618888d1ea7a Wenjing Liu    2023-01-18  386  		goto link_enc_create_fail;
-54618888d1ea7a Wenjing Liu    2023-01-18  387  	}
-54618888d1ea7a Wenjing Liu    2023-01-18  388  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
-
+Thanks,
+Stanley Chu
