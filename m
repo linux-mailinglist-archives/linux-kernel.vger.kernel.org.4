@@ -2,117 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69B2C70C148
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 16:40:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA5D070C14F
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 16:41:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233705AbjEVOkP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 22 May 2023 10:40:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59620 "EHLO
+        id S233870AbjEVOl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 10:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjEVOkO (ORCPT
+        with ESMTP id S229761AbjEVOlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 10:40:14 -0400
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2431099;
-        Mon, 22 May 2023 07:40:13 -0700 (PDT)
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-96f44435d92so70905366b.0;
-        Mon, 22 May 2023 07:40:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684766411; x=1687358411;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=FLmyLsCzwbc8OCmJXXEKpfMdXpfNHdxWW2uiYbc6z0w=;
-        b=GQzN/dP23Z8axTMRl/QnFJ+kq8me2mv+Zt93a9aKViVLiVU4zjSZMqifItsgA8dTbv
-         KXOraaCVpXEpW6L1aK7Rs//xn/WMrQKYgUUztoK9jYsKnbvpz1sVArcsoAsbEnGjc5ty
-         3WIfFtp7+U1G1vz2GVhaVEhXlLJ4gxTeHiAMCsVZmcXKaGLIOpied9VtMJj8v1GSlORa
-         4Wghfbc9OFcbs+xCnBtXZb5ZM0MHzAHjYp0paxme9KeAtrqarUcxg7kkmtMhFr+SLqRn
-         90KmiK00+BtlSgwPdyhFEuBptrAQMRXGj1sQ6qXDbVldVhtjdgVklAt9L4XJgrLLYKvF
-         SjsQ==
-X-Gm-Message-State: AC+VfDxkJLZssE+qIPMZCiuG7Mph8XVi7vxZPS4dDA/r/wuGUo6luciN
-        R/fHQKP7XsFdQ9FOh7lQeUTcyjLvoGKtOX99fNA=
-X-Google-Smtp-Source: ACHHUZ68Du/PCOq69mfBJjbyvh2dZ/sSlOvz8nhaPkAs7sKLKR9uYX4wODd97mYW3pDmKs/3w+rBM0MQPg863WlDnb0=
-X-Received: by 2002:a17:906:d3:b0:94f:66af:b1f7 with SMTP id
- 19-20020a17090600d300b0094f66afb1f7mr9491479eji.1.1684766411370; Mon, 22 May
- 2023 07:40:11 -0700 (PDT)
+        Mon, 22 May 2023 10:41:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77292DB
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 07:40:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684766436;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=AFW+IZL67Cz0xRBwmMsauHMgB+wZd79K6KlpZee9jmw=;
+        b=TWSGiD86axuzWHWOrAduiKv5D+O0uq5Bs5eFDy8RV1URxi2HliujPrKeX9lwI3KmENpDF+
+        NSHMHWv3fAOZq1Q+7MCjSsHEHdTV9wHFyr6NFTSNS3iEbHY4wcCxPl8KvTbkqmmHd4rQEc
+        5UqsvuQhVK3OaG1gg7a9ikCTBMuNNF8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-564-Ig3pnr3WNRKXjMESuYRgaA-1; Mon, 22 May 2023 10:40:33 -0400
+X-MC-Unique: Ig3pnr3WNRKXjMESuYRgaA-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B189D38025F5;
+        Mon, 22 May 2023 14:40:32 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.39.192.68])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 4895C40CFD45;
+        Mon, 22 May 2023 14:40:31 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+To:     Shyam Prasad N <sprasad@microsoft.com>
+cc:     dhowells@redhat.com, Steve French <smfrench@gmail.com>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Paulo Alcantara <pc@manguebit.com>,
+        Tom Talpey <tom@talpey.com>, Jeff Layton <jlayton@kernel.org>,
+        linux-cifs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] cifs: Fix cifs_limit_bvec_subset() to correctly check the maxmimum size
 MIME-Version: 1.0
-References: <20230509122246.1702397-1-lukasz.luba@arm.com> <88fcd266-301a-f6e1-cf1c-69c20e74ef35@arm.com>
-In-Reply-To: <88fcd266-301a-f6e1-cf1c-69c20e74ef35@arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 22 May 2023 16:40:00 +0200
-Message-ID: <CAJZ5v0juOwCHNoCo8gX+NopuzK18d+v3QV0qkGcg1BvDVcPpKQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] Add basic tracing for uclamp and schedutil
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>, rostedt@goodmis.org,
-        mhiramat@kernel.org, mingo@redhat.com, peterz@infradead.org,
-        juri.lelli@redhat.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, delyank@fb.com,
-        qyousef@google.com, qyousef@layalina.io,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <2811950.1684766430.1@warthog.procyon.org.uk>
+Content-Transfer-Encoding: quoted-printable
+Date:   Mon, 22 May 2023 15:40:30 +0100
+Message-ID: <2811951.1684766430@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lukasz,
+Fix cifs_limit_bvec_subset() so that it limits the span to the maximum
+specified and won't return with a size greater than max_size.
 
-On Mon, May 22, 2023 at 3:38 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->
-> Hi Rafael,
->
->
->
-> On 5/9/23 13:22, Lukasz Luba wrote:
-> > Hi all,
-> >
-> > The task scheduler feature: Uclamp, begins to take off. To better understand
-> > the dynamics in the task scheduler and CPU frequency requests we need some
-> > better tracing.
-> > In schedutil (cpufreq governor) we allow to enter the scheduler
-> > and make the frequency change. Although, there is some limit in regards to how
-> > often this can happen. That min period is provided by the cpufreq driver.
-> > Thus, some of the cpufreq requests might be filter out and the frequency won't
-> > be changed (hopefuly will be set a bit later). We would like to know about
-> > those situations, especially in context of the user-space hints made via
-> > Uclamp for particular tasks.
-> > This patch set aims to add base for our toolkits and post-processing trace
-> > analyzes.
->
-> > Changelog:
-> > v2:
-> > - solved the issue from CI build warning, dropped schedutil.h and re-used
-> >    the sched.h which is available in build_utility.c where cpufreq_schedutil.c
-> >    is included
-> > - added tag for the last patch 3/3 for the CI robot helping hend
-> > - re-based on top of v6.4-rc1
-> > v1:
-> > - implementation can be found here [1]
-> >
->
-> I was going to gently ping you, while I've realized that you
-> are not on CC list :( I don't know what happened, my apologies.
+Fixes: d08089f649a0 ("cifs: Change the I/O paths to use an iterator rather=
+ than a page list")
+Reported-by: Shyam Prasad N <sprasad@microsoft.com>
+Signed-off-by: David Howells <dhowells@redhat.com>
+cc: Steve French <smfrench@gmail.com>
+cc: Rohith Surabattula <rohiths.msft@gmail.com>
+cc: Paulo Alcantara <pc@manguebit.com>
+cc: Tom Talpey <tom@talpey.com>
+cc: Jeff Layton <jlayton@kernel.org>
+cc: linux-cifs@vger.kernel.org
+cc: linux-fsdevel@vger.kernel.org
+---
+ fs/cifs/file.c |    1 +
+ 1 file changed, 1 insertion(+)
 
-No worries.
 
-> Shell I resend this patch set so you can have it in a proper way
-> in your mailbox?
+diff --git a/fs/cifs/file.c b/fs/cifs/file.c
+index ba7f2e09d6c8..4778614cfccf 100644
+--- a/fs/cifs/file.c
++++ b/fs/cifs/file.c
+@@ -3353,6 +3353,7 @@ static size_t cifs_limit_bvec_subset(const struct io=
+v_iter *iter, size_t max_siz
+ 	while (n && ix < nbv) {
+ 		len =3D min3(n, bvecs[ix].bv_len - skip, max_size);
+ 		span +=3D len;
++		max_size -=3D len;
+ 		nsegs++;
+ 		ix++;
+ 		if (span >=3D max_size || nsegs >=3D max_segs)
 
-Well, for schedutil you should also CC linux-pm (done now), so please resend it.
-
-> Could you have a look at this, please?
-
-I could, but if I'm to reply, it will be much more convenient for me
-if it is there in my inbox.
-
-> This is getting more attention, since in Android we have a
-> daemon which can now communicate with the kernel and send
-> those Uclamp values on behalf of an unprivileged app.
