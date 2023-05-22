@@ -2,169 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18D5470C4DC
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 20:02:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D09270C4E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 20:03:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233169AbjEVSCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 14:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58778 "EHLO
+        id S233328AbjEVSDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 14:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233336AbjEVSCo (ORCPT
+        with ESMTP id S231635AbjEVSDf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 14:02:44 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8836C115;
-        Mon, 22 May 2023 11:02:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1684778548; i=deller@gmx.de;
-        bh=XYc624rp14uGmFw7V+RpipNyamXCae8xWBesq8Wzch0=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=DWELf+f1QYUtiGgVl5LdIGZNeQtZw/3/B/ta4721hkXhpkgxodim8XgtQu7P4omRO
-         iVyF1ZAfkgQ2walLIawUlQao+VouRtOkfXNqtP3Mx4wKjdM7JpU4VPfuAlayiEe6Cz
-         TFGdsYLaRnW0Pwqo0QShTphJutAYcVh02ZtWfoma4SpBCa261bC0SQadFQQxk8/4Ur
-         YKij4AdNhChzXXZ7ZzUinkDTe1dTrt/5pG2QGwD4t3jhDZ2P/8kExrIte9Kb/JrSRU
-         oEjtkKGMqaTN4Qb0nnITvW1pmGlro6zoYyHqrkpQ+7rmIyF73N0HKlxO5EhcdBjAoB
-         iLLHhvNUYtKhA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([94.134.144.112]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MwQXH-1qJVj72W5V-00sJVb; Mon, 22
- May 2023 20:02:28 +0200
-Message-ID: <069f2f78-01f3-9476-d860-2b695c122649@gmx.de>
-Date:   Mon, 22 May 2023 20:02:27 +0200
+        Mon, 22 May 2023 14:03:35 -0400
+Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1790D11A
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:03:22 -0700 (PDT)
+Received: from local
+        by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1q19sC-00046b-1s;
+        Mon, 22 May 2023 18:03:08 +0000
+Date:   Mon, 22 May 2023 19:03:00 +0100
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     "jia-wei.chang" <jia-wei.chang@mediatek.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        hsinyi@google.com, Nick Hainke <vincent@systemli.org>,
+        Dan Carpenter <error27@gmail.com>
+Subject: Re: [PATCH v2 4/4] cpufreq: mediatek: Raise proc and sram max
+ voltage for MT7622/7623
+Message-ID: <ZGuuVPCqgpUO6p0Q@makrotopia.org>
+References: <20230324101130.14053-1-jia-wei.chang@mediatek.com>
+ <20230324101130.14053-5-jia-wei.chang@mediatek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2] video: imsttfb: Fix use after free bug in
- imsttfb_probe due to lack of error-handling of init_imstt
-Content-Language: en-US
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Zheng Wang <zyytlz.wz@163.com>
-Cc:     alex000young@gmail.com, linux-fbdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        dri-devel@lists.freedesktop.org, javierm@redhat.com,
-        1395428693sheep@gmail.com, tzimmermann@suse.de
-References: <20230427030841.2384157-1-zyytlz.wz@163.com>
- <34gbv2k3lc5dl4nbivslizfuor6qc34j63idiiuc35qkk3iohs@7bshmqu2ue7a>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <34gbv2k3lc5dl4nbivslizfuor6qc34j63idiiuc35qkk3iohs@7bshmqu2ue7a>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:PfUYXpvWMuOOsXD6z6hDlW4zxrijkqWNQR241XhkbgwSYYR5Exs
- vrMLbqYn9c07gDe+BfLpK2gCSZS7DmcraMknMA/rUrhNqJtJN2o1tWSIdTXmMqdtye1G7B7
- cSuZie+oPXJKuG1OJTM8gF4898l9XlKuOme30KDYWJU//wQItJGL7P3mKmVLJ8TaTQOmduF
- 0F9E2t038ndH4jxFPkLeg==
-UI-OutboundReport: notjunk:1;M01:P0:u/iktjswmR0=;QcgsMcSYN+1sr1fnL/z4Bk3Ctn5
- 9f9SghE3HCO1+MHOIOchWMM4GzgxwChhr0Drb3ZsSMP0Ker/pbbSSXiIkTrFDumbYXegUcOW1
- J46ZMmEzpo0Z1UBqtDGvs3iy7y6XfLZNq4IeIl5WNLh+R83gdMGmCYcLEng5ixVSxukwv2FFQ
- VCsbf/O430+FerLasWH0a+O3ufcBF7DvhMMrSAxg75J9izRDV54DZf6AJ05aDOakd5aBspkWb
- sVDEYNZQUTkkOz/EyP/Gdk9Casuws2/LpOYfWyrwADGSwYnNP6wuqgOsVQv/Hk3BIXnPP7EtN
- i0c1QWm/tSlRSzv1ZfutOJ7PfhxFH9C9uojSM2xsiA1e37s3UqQXfT56zxxgK0hCB5fCLWdFV
- 3eDiK5oT1W3cCVQ2uSZwDVh2FHNuMj5qPeZrPFscPSFJypjfCjohoFi/FL+AlXO+3TAW7/Sri
- pdiZa+h+Q24UTBmW/3KmZ/S3NhOcdWpcZT/Zx9RFj5RXkmLQOIRWknlj14C3POpRftz0rQ1Kc
- s9XeBdsLQVmxTNOSU/Ash1t17GhucMmpMm4HUI4mOONAU3CaMRWw3f3ScOYfexojrPg2C/SZ3
- SQS838AT8msUxN+Y3JCtz6vr3rESONTp0PpPfa0HgHF5Ne3DUE2UQkXFOrvB1a+o6DQPQFc47
- PU3PhMh60ygwDe5OB118et7FKXZb+/UDIsVjiJnEYDeK9uWiQpoiu5sO5k6eJWY7iMs36OJFH
- t59wldh+YPiV9FSzXtQMklufhpOxh5RsYVA2CjEy/0PDqpS5kAMFEyLY4CvwOBjscRAroph6i
- RniI9PwpC4JS8ZlmMu66ulrhAyraP1zYRCWLpnv1cfwfk8OAumJ4zPk9+ALULDohE5FbqJMTr
- rG0XxMu6RhxFdeNw/7YSrncx4WbjFc8HVT/msNy++JobkWKLZhWx8wbQztnqZMDhhrBfO7/XJ
- hdbNHA==
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230324101130.14053-5-jia-wei.chang@mediatek.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michal,
+Hi Jia-Wei,
+Hi AngeloGioacchino,
 
-On 5/22/23 17:36, Michal Koutn=C3=BD wrote:
-> On Thu, Apr 27, 2023 at 11:08:41AM +0800, Zheng Wang <zyytlz.wz@163.com>=
- wrote:
->>   static int imsttfb_probe(struct pci_dev *pdev, const struct pci_devic=
-e_id *ent)
->> @@ -1529,10 +1530,10 @@ static int imsttfb_probe(struct pci_dev *pdev, =
-const struct pci_device_id *ent)
->>   	if (!par->cmap_regs)
->>   		goto error;
->>   	info->pseudo_palette =3D par->palette;
->> -	init_imstt(info);
->> -
->> -	pci_set_drvdata(pdev, info);
->> -	return 0;
->> +	ret =3D init_imstt(info);
->> +	if (!ret)
->> +		pci_set_drvdata(pdev, info);
->> +	return ret;
->>
->>   error:
->>   	if (par->dc_regs)
->
-> This part caught my eye -- shouldn't the -ENODEV from init_imstt go
-> through the standard error with proper cleanup? (It seems like a leak
-> from my 30000 ft view, i.e. not sure about imsttfb_{probe,remove}
-> pairing.)
+On Fri, Mar 24, 2023 at 06:11:30PM +0800, jia-wei.chang wrote:
+> From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> 
+> During the addition of SRAM voltage tracking for CCI scaling, this
+> driver got some voltage limits set for the vtrack algorithm: these
+> were moved to platform data first, then enforced in a later commit
+> 6a17b3876bc8 ("cpufreq: mediatek: Refine mtk_cpufreq_voltage_tracking()")
+> using these as max values for the regulator_set_voltage() calls.
+> 
+> In this case, the vsram/vproc constraints for MT7622 and MT7623
+> were supposed to be the same as MT2701 (and a number of other SoCs),
+> but that turned out to be a mistake because the aforementioned two
+> SoCs' maximum voltage for both VPROC and VPROC_SRAM is 1.36V.
+> 
+> Fix that by adding new platform data for MT7622/7623 declaring the
+> right {proc,sram}_max_volt parameter.
+> 
+> Fixes: ead858bd128d ("cpufreq: mediatek: Move voltage limits to platform data")
+> Fixes: 6a17b3876bc8 ("cpufreq: mediatek: Refine mtk_cpufreq_voltage_tracking()")
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Signed-off-by: Jia-Wei Chang <jia-wei.chang@mediatek.com>
+> ---
+>  drivers/cpufreq/mediatek-cpufreq.c | 13 +++++++++++--
+>  1 file changed, 11 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
+> index 764e4fbdd536..9a39a7ccfae9 100644
+> --- a/drivers/cpufreq/mediatek-cpufreq.c
+> +++ b/drivers/cpufreq/mediatek-cpufreq.c
+> @@ -693,6 +693,15 @@ static const struct mtk_cpufreq_platform_data mt2701_platform_data = {
+>  	.ccifreq_supported = false,
+>  };
+>  
+> +static const struct mtk_cpufreq_platform_data mt7622_platform_data = {
+> +	.min_volt_shift = 100000,
+> +	.max_volt_shift = 200000,
+> +	.proc_max_volt = 1360000,
+> +	.sram_min_volt = 0,
+> +	.sram_max_volt = 1360000,
 
-Yes, you seem to be right.
+This change breaks cpufreq (with ondemand scheduler) on my BPi R64
+board (having MT7622AV SoC with MT6380N PMIC).
+...
+[    2.540091] cpufreq: __target_index: Failed to change cpu frequency: -22
+[    2.556985] cpu cpu0: cpu0: failed to scale up voltage!
+...
+(repeating a lot, every time the highest operating point is selected
+by the cpufreq governor)
 
-> Shouldn't there be something like the diff below on top of the existing =
-code?
+The reason is that the MT6380N doesn't support 1360000uV on the supply
+outputs used for SRAM and processor.
 
-Yes, but ....
+As for some reason cpufreq-mediatek tries to rise the SRAM supply
+voltage to the maximum for a short moment (probably a side-effect of
+the voltage tracking algorithm), this fails because the PMIC only
+supports up to 1350000uV. As the highest operating point is anyway
+using only 1310000uV the simple fix is setting 1350000uV as the maximum
+instead for both proc_max_volt and sram_max_volt.
+
+A similar situation applies also for BPi R2 (MT7623NI with MT6323L
+PMIC), here the maximum supported voltage of the PMIC which also only
+supports up to 1350000uV, and the SoC having its highest operating
+voltage defined at 1300000uV.
+
+If all agree with the simple fix I will post a patch for that.
+
+However, to me it feels fishy to begin with that the tracking algorithm
+tries to rise the voltage above the highest operating point defined in
+device tree, see here:
+
+6a17b3876bc830 drivers/cpufreq/mediatek-cpufreq.c (Jia-Wei Chang              2022-05-05 19:52:20 +0800 100)    new_vsram = clamp(new_vproc + soc_data->min_volt_shift,
+6a17b3876bc830 drivers/cpufreq/mediatek-cpufreq.c (Jia-Wei Chang              2022-05-05 19:52:20 +0800 101)                      soc_data->sram_min_volt, soc_data->sram_max_volt);
+
+However, I did not investigate in depth the purpose of this
+initial rise and can impossibly test my modifications to the
+tracking algorithm on all supported SoCs.
 
 
-> Regards,
-> Michal
->
-> diff --git a/drivers/video/fbdev/imsttfb.c b/drivers/video/fbdev/imsttfb=
-.c
-> index 975dd682fae4..a116ac8ca020 100644
-> --- a/drivers/video/fbdev/imsttfb.c
-> +++ b/drivers/video/fbdev/imsttfb.c
-> @@ -1419,7 +1419,6 @@ static int init_imstt(struct fb_info *info)
->   	if ((info->var.xres * info->var.yres) * (info->var.bits_per_pixel >> =
-3) > info->fix.smem_len
->   	    || !(compute_imstt_regvals(par, info->var.xres, info->var.yres)))=
- {
->   		printk("imsttfb: %ux%ux%u not supported\n", info->var.xres, info->va=
-r.yres, info->var.bits_per_pixel);
-> -		framebuffer_release(info);
->   		return -ENODEV;
->   	}
->
-> @@ -1455,7 +1454,6 @@ static int init_imstt(struct fb_info *info)
->   	fb_alloc_cmap(&info->cmap, 0, 0);
->
->   	if (register_framebuffer(info) < 0) {
-> -		framebuffer_release(info);
+Cheers
 
-That's ^^^  ok, but I think a
-	fb_dealloc_cmap()
-is missing here ...
 
-... and in the error path of imsttfb_probe() ....
+Daniel
 
->   		return -ENODEV;
->   	}
->
-> @@ -1531,8 +1529,10 @@ static int imsttfb_probe(struct pci_dev *pdev, co=
-nst struct pci_device_id *ent)
->   		goto error;
->   	info->pseudo_palette =3D par->palette;
->   	ret =3D init_imstt(info);
-> -	if (!ret)
-> -		pci_set_drvdata(pdev, info);
-> +	if (ret)
-> +		goto error;
+
+> +	.ccifreq_supported = false,
+> +};
 > +
-> +	pci_set_drvdata(pdev, info);
->   	return ret;
->
->   error:
-
-Would you mind sending a proper patch?
-
-Thanks for noticing!
-Helge
+>  static const struct mtk_cpufreq_platform_data mt8183_platform_data = {
+>  	.min_volt_shift = 100000,
+>  	.max_volt_shift = 200000,
+> @@ -724,8 +733,8 @@ static const struct mtk_cpufreq_platform_data mt8516_platform_data = {
+>  static const struct of_device_id mtk_cpufreq_machines[] __initconst = {
+>  	{ .compatible = "mediatek,mt2701", .data = &mt2701_platform_data },
+>  	{ .compatible = "mediatek,mt2712", .data = &mt2701_platform_data },
+> -	{ .compatible = "mediatek,mt7622", .data = &mt2701_platform_data },
+> -	{ .compatible = "mediatek,mt7623", .data = &mt2701_platform_data },
+> +	{ .compatible = "mediatek,mt7622", .data = &mt7622_platform_data },
+> +	{ .compatible = "mediatek,mt7623", .data = &mt7622_platform_data },
+>  	{ .compatible = "mediatek,mt8167", .data = &mt8516_platform_data },
+>  	{ .compatible = "mediatek,mt817x", .data = &mt2701_platform_data },
+>  	{ .compatible = "mediatek,mt8173", .data = &mt2701_platform_data },
+> -- 
+> 2.18.0
+> 
+> 
