@@ -2,131 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A0F70C005
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:48:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 545D970C007
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:48:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233942AbjEVNsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 09:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57216 "EHLO
+        id S233797AbjEVNsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 09:48:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233735AbjEVNsS (ORCPT
+        with ESMTP id S231463AbjEVNsg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 09:48:18 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F11F4
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 06:48:17 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-5343c3daff0so4079689a12.0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 06:48:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684763296; x=1687355296;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jGz08OQyeCqnxoLIdSWq6+vL4UPq3XQv2QFGyx1tKg0=;
-        b=qjgTLN5ERjKFpuEJDSYNk4vi4w+YGsguhc3ja5gz5WGB5Yf6W8P14biSciYvbMBtS1
-         uzmhoCmwR5WeSgVlFxYLxU3KwfmoQDyDtPJqB+A1+gBSsMhWP2DBAkayAeSyySIMn9Wy
-         hVkG6/sVX353mDAMcCpBKRMGHZgt3Wt/K1CYOUPxVAYJfGrrPywwf/pi5RQbnPfg+6ke
-         WdynKBvc5b9g9roZ4+9VUwGPq5pqfDrJWtGInWRSoipySMQA09QEXjFnoG+EaTB38oB/
-         lM0YhEIU+73uu7yZkd5zf933iEcZ9WEqAXq1P9BtD53vhuz0vw4TGHD6hAuZZDH27ZVP
-         VjrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684763296; x=1687355296;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jGz08OQyeCqnxoLIdSWq6+vL4UPq3XQv2QFGyx1tKg0=;
-        b=fDvJ6/Un1D6aDwYcBIDbMc8c6qdSvq2FARrbsbrnfnhLW4Wdcx+A+FxOKGKLi6Y8jJ
-         HTpUrKyVJNH7brWfoTzjIxIkwy4+Zg1DKSbHV/z1vt5ojW3HHhfTWTHrE3dsw0S1joFK
-         OfxoCjnw1ekAFNAcfTfCpveNEmyFoMkDeOjAjve7/8uf6yqu4bEtocg0R9LRGP/mIjrk
-         jp7r8XvBE4/9vKW3phAxsTXpkRUB8TBWkzeofm2MUmo7VirAM0l7QnzvP8A7o+Q0n1O8
-         APS7Y0X0jQyRmQBw9wL/XqO/RREIkniSSITZyrfahBr5pcZS/WK4jFY+Q99YpQm1BmKR
-         AM3Q==
-X-Gm-Message-State: AC+VfDxQzaCOYQQS6qhV0r904oGBfEMGZ/3hX+hiFYobXrK0ULHGx3vM
-        JDLA7jpVF8DlOkcgRlT9zJy+9IcSwYlxUKb+ioA=
-X-Google-Smtp-Source: ACHHUZ6IS5JmJ+ZDTz9QQZzHRGh7k7Pl91xxM/bsmLz/eNgRZwjR4aYBIugPczwz3Y9QlmRcmk40BVDGa6k/Iq/KC0Q=
-X-Received: by 2002:a17:902:8508:b0:1af:b2d3:c6f4 with SMTP id
- bj8-20020a170902850800b001afb2d3c6f4mr2949506plb.14.1684763295850; Mon, 22
- May 2023 06:48:15 -0700 (PDT)
+        Mon, 22 May 2023 09:48:36 -0400
+Received: from smtp.missinglinkelectronics.com (smtp.missinglinkelectronics.com [162.55.135.183])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E6D8F4;
+        Mon, 22 May 2023 06:48:32 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by smtp.missinglinkelectronics.com (Postfix) with ESMTP id DEF7820619;
+        Mon, 22 May 2023 15:48:30 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at missinglinkelectronics.com
+Received: from smtp.missinglinkelectronics.com ([127.0.0.1])
+        by localhost (mail.missinglinkelectronics.com [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id P9uGa9M0bdmL; Mon, 22 May 2023 15:48:30 +0200 (CEST)
+Received: from nucnuc.mle (p578c5bfe.dip0.t-ipconnect.de [87.140.91.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        (Authenticated sender: david)
+        by smtp.missinglinkelectronics.com (Postfix) with ESMTPSA id 98EF52041E;
+        Mon, 22 May 2023 15:48:29 +0200 (CEST)
+Date:   Mon, 22 May 2023 15:48:23 +0200
+From:   David Epping <david.epping@missinglinkelectronics.com>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH net 3/3] net: phy: mscc: enable VSC8501/2 RGMII RX clock
+Message-ID: <20230522134823.GA18381@nucnuc.mle>
+References: <20230520160603.32458-1-david.epping@missinglinkelectronics.com>
+ <20230520160603.32458-4-david.epping@missinglinkelectronics.com>
+ <ZGpcGbq47nL/rlEb@shell.armlinux.org.uk>
 MIME-Version: 1.0
-References: <1683792372-29338-1-git-send-email-yangtiezhu@loongson.cn>
-In-Reply-To: <1683792372-29338-1-git-send-email-yangtiezhu@loongson.cn>
-From:   Jeff Xie <xiehuan09@gmail.com>
-Date:   Mon, 22 May 2023 21:48:03 +0800
-Message-ID: <CAEr6+EBU+Uon8rMvuEhLU0nADUMDEOSVZGSkAZvtuXJCEndzMg@mail.gmail.com>
-Subject: Re: [PATCH v4 0/6] Add uprobes support for LoongArch
-To:     Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZGpcGbq47nL/rlEb@shell.armlinux.org.uk>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 4:06=E2=80=AFPM Tiezhu Yang <yangtiezhu@loongson.cn=
-> wrote:
->
-> v4:
->   -- Rebased on 6.4rc1
->   -- Fix problem about "perf probe -x /lib64/libc.so.6 malloc"
->
-> v3:
->   -- Check atomic instructions in insns_not_supported()
->   -- Remove five DIE_* definitions in kdebug.h
->
-> v2:
->   -- Move the functions to inst.c in patch #1
->   -- Pass around union for insns_not_supported(),
->      insns_need_simulation() and arch_simulate_insn()
->
-> v1:
->   -- Split the RFC patch #2 into two patches
->   -- Use larch_insn_gen_break() to generate break insns
->      for kprobes and uprobes
->   -- Pass around instruction word instead of union for
->      insns_not_supported(), insns_need_simulation() and
->      arch_simulate_insn() to avoid type conversion for callers
->   -- Add a simple test case for uprobes in the commit message
->
-> Tiezhu Yang (6):
->   LoongArch: Move three functions from kprobes.c to inst.c
->   LoongArch: Add larch_insn_gen_break() to generate break insns
->   LoongArch: Use larch_insn_gen_break() for kprobes
->   LoongArch: Add uprobes support
->   LoongArch: Check atomic instructions in insns_not_supported()
->   LoongArch: Remove five DIE_* definitions in kdebug.h
->
->  arch/loongarch/Kconfig               |   3 +
->  arch/loongarch/include/asm/inst.h    |  42 ++++++++++
->  arch/loongarch/include/asm/kdebug.h  |   5 --
->  arch/loongarch/include/asm/kprobes.h |   2 +-
->  arch/loongarch/include/asm/uprobes.h |  35 +++++++++
->  arch/loongarch/kernel/Makefile       |   1 +
->  arch/loongarch/kernel/inst.c         |  54 +++++++++++++
->  arch/loongarch/kernel/kprobes.c      |  75 ++++--------------
->  arch/loongarch/kernel/traps.c        |   9 +--
->  arch/loongarch/kernel/uprobes.c      | 148 +++++++++++++++++++++++++++++=
-++++++
->  10 files changed, 302 insertions(+), 72 deletions(-)
->  create mode 100644 arch/loongarch/include/asm/uprobes.h
->  create mode 100644 arch/loongarch/kernel/uprobes.c
->
-> --
-> 2.1.0
->
->
+On Sun, May 21, 2023 at 06:59:53PM +0100, Russell King (Oracle) wrote:
+> On Sat, May 20, 2023 at 06:06:03PM +0200, David Epping wrote:
+> > +static int vsc85xx_rgmii_enable_rx_clk(struct phy_device *phydev,
+> > +				       u32 rgmii_cntl)
+> > +{
+> > +	int rc, phy_id;
+> > +
+> > +	phy_id = phydev->drv->phy_id & phydev->drv->phy_id_mask;
+> > +	if (PHY_ID_VSC8501 != phy_id && PHY_ID_VSC8502 != phy_id)
+> > +		return 0;
+> 
+> As you are accessing the phy_id in the phy_driver struct, isn't it
+> already true that this will be initialised to constants such as
+> PHY_ID_VSC8501 or PHY_ID_VSC8502? In which case, why would you need
+> to mask it with drv->phy_id_mask ?
 
-It looks good to me for the patchset.
+Yes you are right. I copied the code from the vsc85xx_config_init()
+function in the same driver, but the extra masking is not necessary.
+It seems to be the phy_id in the struct phy_device which is read from
+the MDIO bus and thus needs masking. phy_id in struct phy_driver seems
+compile time defined and already masked.
+I'll adjust my patch.
 
-Tested-by: Jeff Xie <xiehuan09@gmail.com>
+> > +
+> > +	mutex_lock(&phydev->lock);
+> > +
+> > +	rc = phy_modify_paged(phydev, MSCC_PHY_PAGE_EXTENDED_2, rgmii_cntl,
+> > +			      VSC8502_RGMII_RX_CLK_DISABLE, 0);
+> > +
+> > +	mutex_unlock(&phydev->lock);
+> 
+> What is the purpose of taking this lock? phy_modify_paged() will do its
+> read-modify-write access and page accesses under the MDIO bus lock,
+> which should be all that's required to guarantee an atomic update.
 
---=20
-Thanks,
-JeffXie
+Yes, I copied this from the vsc85xx_rgmii_set_skews() function in the
+same driver accessing the same register in the same context.
+But maybe it is used there because of repeated phydev->interface
+accesses, which may otherwise change during function execution?
+I'll remove the locks from my patch.
+
+Thanks for your feedback.
