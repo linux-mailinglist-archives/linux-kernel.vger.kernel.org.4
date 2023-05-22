@@ -2,114 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37A6470B661
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 09:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6414E70B664
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 09:22:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232571AbjEVHVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 03:21:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50270 "EHLO
+        id S232556AbjEVHWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 03:22:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232566AbjEVHVL (ORCPT
+        with ESMTP id S232526AbjEVHWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 03:21:11 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F55E1BEC
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 00:19:12 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34M6Zn5D018168;
-        Mon, 22 May 2023 07:17:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=dev+AotqgSteoLIrQNW8siA37KMiVPTiUkuvQFzZ/9U=;
- b=UPmhw+VeQuHO9oSvdRUxxmIbvPOikbxqWtBFSVNa+EglU2LAE/I6sgdLaXJZDICKxH71
- /CCl2Wo5fYz0Nd4DeMcpP4ttMJMb83Nc39Dv6mX9DB6hxdCIKP/jyKXr6YKYy4g98t0H
- CNxm/n+IesM3PfID/wW629EJAxvZ5TpT6DUTflgAkhexDPM82aubwQKxpS5kE6vquv34
- 8USm8CH2Xiydq1yv6IXycBAJVrUtULC+4IMcIuPrgXnuADeYaplVUVMgYohCb/pkXUIa
- vcrjoe4fppnRGUdJMeEPeZnSSI9057NjO/Lbl/57dswC5U7GtvLcPMtF2tycpTyqIzmq Gw== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qppa1axp1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 07:17:58 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34M7HvLn000517
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 07:17:57 GMT
-Received: from [10.214.66.81] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 22 May
- 2023 00:17:53 -0700
-Message-ID: <b5e6a3b7-aa72-1070-cb96-abf0a816884d@quicinc.com>
-Date:   Mon, 22 May 2023 12:47:50 +0530
+        Mon, 22 May 2023 03:22:35 -0400
+Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D081FF7
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 00:20:34 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0Vj9pHVZ_1684739999;
+Received: from e18g06460.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0Vj9pHVZ_1684739999)
+          by smtp.aliyun-inc.com;
+          Mon, 22 May 2023 15:20:05 +0800
+From:   Gao Xiang <hsiangkao@linux.alibaba.com>
+To:     linux-erofs@lists.ozlabs.org
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Gao Xiang <hsiangkao@linux.alibaba.com>
+Subject: [PATCH v2] erofs: kill hooked chains to avoid loops on deduplicated compressed images
+Date:   Mon, 22 May 2023 15:19:58 +0800
+Message-Id: <20230522071958.110074-1-hsiangkao@linux.alibaba.com>
+X-Mailer: git-send-email 2.24.4
+In-Reply-To: <20230519071219.41757-1-hsiangkao@linux.alibaba.com>
+References: <20230519071219.41757-1-hsiangkao@linux.alibaba.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: =?UTF-8?Q?Re=3a_=5bPATCH=5d_sched=3a_deadline=3a_Remove_unnecessary?=
- =?UTF-8?B?IOKAmE5VTEzigJkgdmFsdWVzIGZyb20gZGxfdGFza19vZmZsaW5lX21pZ3JhdGlv?=
- =?UTF-8?Q?n?=
-Content-Language: en-US
-To:     Li zeming <zeming@nfschina.com>, <mingo@redhat.com>,
-        <peterz@infradead.org>, <juri.lelli@redhat.com>,
-        <vincent.guittot@linaro.org>, <dietmar.eggemann@arm.com>,
-        <rostedt@goodmis.org>, <bsegall@google.com>, <mgorman@suse.de>,
-        <bristot@redhat.com>, <vschneid@redhat.com>
-CC:     <linux-kernel@vger.kernel.org>
-References: <20230523234101.3439-1-zeming@nfschina.com>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <20230523234101.3439-1-zeming@nfschina.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: P2wUOJHhJrmtJ6_fEIRw2eEVcG85HaSg
-X-Proofpoint-ORIG-GUID: P2wUOJHhJrmtJ6_fEIRw2eEVcG85HaSg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-22_04,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 bulkscore=0 adultscore=0 suspectscore=0
- priorityscore=1501 spamscore=0 mlxlogscore=999 phishscore=0
- impostorscore=0 mlxscore=0 malwarescore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305220061
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+After heavily stressing EROFS with several images which include a
+hand-crafted image of repeated patterns for more than 46 days, I found
+two chains could be linked with each other almost simultaneously and
+form a loop so that the entire loop won't be submitted.  As a
+consequence, the corresponding file pages will remain locked forever.
 
+It can be _only_ observed on data-deduplicated compressed images.
+For example, consider two chains with five pclusters in total:
+	Chain 1:  2->3->4->5    -- The tail pcluster is 5;
+        Chain 2:  5->1->2       -- The tail pcluster is 2.
 
-On 5/24/2023 5:11 AM, Li zeming wrote:
-> later_rq is assigned first, so it does not need to initialize the
-> assignment.
-> 
-> Signed-off-by: Li zeming <zeming@nfschina.com>
-> ---
->   kernel/sched/deadline.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-> index 5a9a4b81c972..d823e608c7f0 100644
-> --- a/kernel/sched/deadline.c
-> +++ b/kernel/sched/deadline.c
-> @@ -667,7 +667,7 @@ static struct rq *find_lock_later_rq(struct task_struct *task, struct rq *rq);
->   
->   static struct rq *dl_task_offline_migration(struct rq *rq, struct task_struct *p)
->   {
-> -	struct rq *later_rq = NULL;
-> +	struct rq *later_rq;
->   	struct dl_bw *dl_b;
->   
->   	later_rq = find_lock_later_rq(p, rq);
+Chain 2 could link to Chain 1 with pcluster 5; and Chain 1 could link
+to Chain 2 at the same time with pcluster 2.
 
-Acked-by: Mukesh Ojha <quic_mojha@quicinc.com>
+Since hooked chains are all linked locklessly now, I have no idea how
+to simply avoid the race.  Instead, let's avoid hooked chains entirely
+until a proper way could be worked out to fix this and end users finally
+tell us that it's needed to add it back.
 
--- Mukesh
+Actually, this optimization can be found with multi-threaded workloads
+(especially even more often on deduplicated compressed images), yet I'm
+not sure about the overall system impacts of not having this compared
+with implementation complexity.
+
+Fixes: 267f2492c8f7 ("erofs: introduce multi-reference pclusters (fully-referenced)")
+Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
+---
+changes since v1:
+ - previous fix is still racy, so get rid of hooked chains entirely.
+
+ fs/erofs/zdata.c | 69 +++++++-----------------------------------------
+ 1 file changed, 10 insertions(+), 59 deletions(-)
+
+diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
+index 45f21db2303a..92f3a01262cf 100644
+--- a/fs/erofs/zdata.c
++++ b/fs/erofs/zdata.c
+@@ -96,8 +96,6 @@ struct z_erofs_pcluster {
+ 
+ /* the chained workgroup has't submitted io (still open) */
+ #define Z_EROFS_PCLUSTER_TAIL           ((void *)0x5F0ECAFE)
+-/* the chained workgroup has already submitted io */
+-#define Z_EROFS_PCLUSTER_TAIL_CLOSED    ((void *)0x5F0EDEAD)
+ 
+ #define Z_EROFS_PCLUSTER_NIL            (NULL)
+ 
+@@ -501,20 +499,6 @@ int __init z_erofs_init_zip_subsystem(void)
+ 
+ enum z_erofs_pclustermode {
+ 	Z_EROFS_PCLUSTER_INFLIGHT,
+-	/*
+-	 * The current pclusters was the tail of an exist chain, in addition
+-	 * that the previous processed chained pclusters are all decided to
+-	 * be hooked up to it.
+-	 * A new chain will be created for the remaining pclusters which are
+-	 * not processed yet, so different from Z_EROFS_PCLUSTER_FOLLOWED,
+-	 * the next pcluster cannot reuse the whole page safely for inplace I/O
+-	 * in the following scenario:
+-	 *  ________________________________________________________________
+-	 * |      tail (partial) page     |       head (partial) page       |
+-	 * |   (belongs to the next pcl)  |   (belongs to the current pcl)  |
+-	 * |_______PCLUSTER_FOLLOWED______|________PCLUSTER_HOOKED__________|
+-	 */
+-	Z_EROFS_PCLUSTER_HOOKED,
+ 	/*
+ 	 * a weak form of Z_EROFS_PCLUSTER_FOLLOWED, the difference is that it
+ 	 * could be dispatched into bypass queue later due to uptodated managed
+@@ -532,8 +516,8 @@ enum z_erofs_pclustermode {
+ 	 *  ________________________________________________________________
+ 	 * |  tail (partial) page |          head (partial) page           |
+ 	 * |  (of the current cl) |      (of the previous collection)      |
+-	 * | PCLUSTER_FOLLOWED or |                                        |
+-	 * |_____PCLUSTER_HOOKED__|___________PCLUSTER_FOLLOWED____________|
++	 * |                      |                                        |
++	 * |__PCLUSTER_FOLLOWED___|___________PCLUSTER_FOLLOWED____________|
+ 	 *
+ 	 * [  (*) the above page can be used as inplace I/O.               ]
+ 	 */
+@@ -546,7 +530,7 @@ struct z_erofs_decompress_frontend {
+ 	struct z_erofs_bvec_iter biter;
+ 
+ 	struct page *candidate_bvpage;
+-	struct z_erofs_pcluster *pcl, *tailpcl;
++	struct z_erofs_pcluster *pcl;
+ 	z_erofs_next_pcluster_t owned_head;
+ 	enum z_erofs_pclustermode mode;
+ 
+@@ -752,19 +736,7 @@ static void z_erofs_try_to_claim_pcluster(struct z_erofs_decompress_frontend *f)
+ 		return;
+ 	}
+ 
+-	/*
+-	 * type 2, link to the end of an existing open chain, be careful
+-	 * that its submission is controlled by the original attached chain.
+-	 */
+-	if (*owned_head != &pcl->next && pcl != f->tailpcl &&
+-	    cmpxchg(&pcl->next, Z_EROFS_PCLUSTER_TAIL,
+-		    *owned_head) == Z_EROFS_PCLUSTER_TAIL) {
+-		*owned_head = Z_EROFS_PCLUSTER_TAIL;
+-		f->mode = Z_EROFS_PCLUSTER_HOOKED;
+-		f->tailpcl = NULL;
+-		return;
+-	}
+-	/* type 3, it belongs to a chain, but it isn't the end of the chain */
++	/* type 2, it belongs to an ongoing chain */
+ 	f->mode = Z_EROFS_PCLUSTER_INFLIGHT;
+ }
+ 
+@@ -825,9 +797,6 @@ static int z_erofs_register_pcluster(struct z_erofs_decompress_frontend *fe)
+ 			goto err_out;
+ 		}
+ 	}
+-	/* used to check tail merging loop due to corrupted images */
+-	if (fe->owned_head == Z_EROFS_PCLUSTER_TAIL)
+-		fe->tailpcl = pcl;
+ 	fe->owned_head = &pcl->next;
+ 	fe->pcl = pcl;
+ 	return 0;
+@@ -848,7 +817,6 @@ static int z_erofs_collector_begin(struct z_erofs_decompress_frontend *fe)
+ 
+ 	/* must be Z_EROFS_PCLUSTER_TAIL or pointed to previous pcluster */
+ 	DBG_BUGON(fe->owned_head == Z_EROFS_PCLUSTER_NIL);
+-	DBG_BUGON(fe->owned_head == Z_EROFS_PCLUSTER_TAIL_CLOSED);
+ 
+ 	if (!(map->m_flags & EROFS_MAP_META)) {
+ 		grp = erofs_find_workgroup(fe->inode->i_sb,
+@@ -867,10 +835,6 @@ static int z_erofs_collector_begin(struct z_erofs_decompress_frontend *fe)
+ 
+ 	if (ret == -EEXIST) {
+ 		mutex_lock(&fe->pcl->lock);
+-		/* used to check tail merging loop due to corrupted images */
+-		if (fe->owned_head == Z_EROFS_PCLUSTER_TAIL)
+-			fe->tailpcl = fe->pcl;
+-
+ 		z_erofs_try_to_claim_pcluster(fe);
+ 	} else if (ret) {
+ 		return ret;
+@@ -1027,8 +991,7 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
+ 	 * those chains are handled asynchronously thus the page cannot be used
+ 	 * for inplace I/O or bvpage (should be processed in a strict order.)
+ 	 */
+-	tight &= (fe->mode >= Z_EROFS_PCLUSTER_HOOKED &&
+-		  fe->mode != Z_EROFS_PCLUSTER_FOLLOWED_NOINPLACE);
++	tight &= (fe->mode > Z_EROFS_PCLUSTER_FOLLOWED_NOINPLACE);
+ 
+ 	cur = end - min_t(unsigned int, offset + end - map->m_la, end);
+ 	if (!(map->m_flags & EROFS_MAP_MAPPED)) {
+@@ -1406,10 +1369,7 @@ static void z_erofs_decompress_queue(const struct z_erofs_decompressqueue *io,
+ 	};
+ 	z_erofs_next_pcluster_t owned = io->head;
+ 
+-	while (owned != Z_EROFS_PCLUSTER_TAIL_CLOSED) {
+-		/* impossible that 'owned' equals Z_EROFS_WORK_TPTR_TAIL */
+-		DBG_BUGON(owned == Z_EROFS_PCLUSTER_TAIL);
+-		/* impossible that 'owned' equals Z_EROFS_PCLUSTER_NIL */
++	while (owned != Z_EROFS_PCLUSTER_TAIL) {
+ 		DBG_BUGON(owned == Z_EROFS_PCLUSTER_NIL);
+ 
+ 		be.pcl = container_of(owned, struct z_erofs_pcluster, next);
+@@ -1426,7 +1386,7 @@ static void z_erofs_decompressqueue_work(struct work_struct *work)
+ 		container_of(work, struct z_erofs_decompressqueue, u.work);
+ 	struct page *pagepool = NULL;
+ 
+-	DBG_BUGON(bgq->head == Z_EROFS_PCLUSTER_TAIL_CLOSED);
++	DBG_BUGON(bgq->head == Z_EROFS_PCLUSTER_TAIL);
+ 	z_erofs_decompress_queue(bgq, &pagepool);
+ 	erofs_release_pages(&pagepool);
+ 	kvfree(bgq);
+@@ -1614,7 +1574,7 @@ static struct z_erofs_decompressqueue *jobqueue_init(struct super_block *sb,
+ 		q->sync = true;
+ 	}
+ 	q->sb = sb;
+-	q->head = Z_EROFS_PCLUSTER_TAIL_CLOSED;
++	q->head = Z_EROFS_PCLUSTER_TAIL;
+ 	return q;
+ }
+ 
+@@ -1632,11 +1592,7 @@ static void move_to_bypass_jobqueue(struct z_erofs_pcluster *pcl,
+ 	z_erofs_next_pcluster_t *const submit_qtail = qtail[JQ_SUBMIT];
+ 	z_erofs_next_pcluster_t *const bypass_qtail = qtail[JQ_BYPASS];
+ 
+-	DBG_BUGON(owned_head == Z_EROFS_PCLUSTER_TAIL_CLOSED);
+-	if (owned_head == Z_EROFS_PCLUSTER_TAIL)
+-		owned_head = Z_EROFS_PCLUSTER_TAIL_CLOSED;
+-
+-	WRITE_ONCE(pcl->next, Z_EROFS_PCLUSTER_TAIL_CLOSED);
++	WRITE_ONCE(pcl->next, Z_EROFS_PCLUSTER_TAIL);
+ 
+ 	WRITE_ONCE(*submit_qtail, owned_head);
+ 	WRITE_ONCE(*bypass_qtail, &pcl->next);
+@@ -1707,15 +1663,10 @@ static void z_erofs_submit_queue(struct z_erofs_decompress_frontend *f,
+ 		unsigned int i = 0;
+ 		bool bypass = true;
+ 
+-		/* no possible 'owned_head' equals the following */
+-		DBG_BUGON(owned_head == Z_EROFS_PCLUSTER_TAIL_CLOSED);
+ 		DBG_BUGON(owned_head == Z_EROFS_PCLUSTER_NIL);
+-
+ 		pcl = container_of(owned_head, struct z_erofs_pcluster, next);
++		owned_head = READ_ONCE(pcl->next);
+ 
+-		/* close the main owned chain at first */
+-		owned_head = cmpxchg(&pcl->next, Z_EROFS_PCLUSTER_TAIL,
+-				     Z_EROFS_PCLUSTER_TAIL_CLOSED);
+ 		if (z_erofs_is_inline_pcluster(pcl)) {
+ 			move_to_bypass_jobqueue(pcl, qtail, owned_head);
+ 			continue;
+-- 
+2.24.4
+
