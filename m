@@ -2,150 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E3A170C316
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 18:13:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FF6670C319
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 18:16:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231724AbjEVQNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 12:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57672 "EHLO
+        id S229673AbjEVQQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 12:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233062AbjEVQN1 (ORCPT
+        with ESMTP id S229555AbjEVQQN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 12:13:27 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB196E9
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 09:13:26 -0700 (PDT)
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 61EFC41B53
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 16:13:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1684772003;
-        bh=yEoXhOv9392G4YyVtPika8TuddyFutw1yuUvDKTMDXc=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version:Content-Type;
-        b=TP0Ncy9/9VU/db5w+O0Yol+Hl0ShJCAJoBPlyVJZ+Tfjuf92uGL9uksa0qqDnNxrM
-         cqGWToN3b82t4+SXWtwBF4myIioUGlU/fRynAZnDRNem6J2M8GqZe8c8/Tb4fR87WV
-         9w5QqJEwFoqPCfdXbSnodzlAWJrQQESovwzULCpY4oU0NnSW0RFecvmIJ0ko2UM1bW
-         VV9DxmqOQHWJVFUY83CIeisBgFMNiQ2MVSwJ2mlfTFYG+SOdmjT0Gp+uasOBoUBU15
-         Rc9a/gqpAXWyy6kj4dSWg4zluXNbaYGcTwvFMzp0BPXflL8ym3wvpyGL4Fl4uPNGMX
-         UHD/q0BHUOhMQ==
-Received: by mail-ed1-f69.google.com with SMTP id 4fb4d7f45d1cf-512937f82b2so2416650a12.2
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 09:13:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684772001; x=1687364001;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yEoXhOv9392G4YyVtPika8TuddyFutw1yuUvDKTMDXc=;
-        b=PmOcmeFlt6qZA7kpc5gNbTRgWjNbgXxk2D0P/u7QkrQB3kgtUFr3iUqNuvuVZYEndn
-         VkbLyKmJNY3de41Z4lQPdxm5XM6EsvcWEUtJX435sItTpLqCbtk9WKXpLT2YcHKFYI1N
-         G240xu9CMOXrZOUt2fKDTB2MB0tGCI6ItFINZ/WhRdXSJ44qb7r4fLgxqaWh3eVj3WYW
-         X9e2sb7A7W0aZ+BLRxFyUjfa3MZr78se17lgVOLcVFoQ2C9xsBdMh4l/8sCPqTv1kCAz
-         cyAr+pn1czmwOQm9dNCE9M6F47QBBFl3lggnHEMXcQNm042OFUdKf9NwKGge88Ay2ktX
-         jFYw==
-X-Gm-Message-State: AC+VfDwMqH7ajPGjlBF7QdnPdewVHvISl/eHQR2LJKXkuGf/gRbKDj94
-        YinJ3UBFZyaP4w2JtuHsYNGkJQJpcRm9F8XA1vf1n+Wat2f3EcW0twuaePW2vTlTkDiCNlLeK0n
-        M6SyCnBqoDTpwaTIxF4fS/Xhz4l7mbJlHzHIs7jhB1g==
-X-Received: by 2002:a17:906:58c7:b0:96b:e93:3a9f with SMTP id e7-20020a17090658c700b0096b0e933a9fmr11141503ejs.20.1684772001416;
-        Mon, 22 May 2023 09:13:21 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6dUWTXh+XjI7wSktkwgjubPt+RAL8UbOeWuwZfD0kG6B2OVu9hYOQ/teuL04KXyyfGDkSquQ==
-X-Received: by 2002:a17:906:58c7:b0:96b:e93:3a9f with SMTP id e7-20020a17090658c700b0096b0e933a9fmr11141482ejs.20.1684772001173;
-        Mon, 22 May 2023 09:13:21 -0700 (PDT)
-Received: from amikhalitsyn.local (dslb-088-074-206-207.088.074.pools.vodafone-ip.de. [88.74.206.207])
-        by smtp.gmail.com with ESMTPSA id a7-20020a17090682c700b009658475919csm3225039ejy.188.2023.05.22.09.13.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 09:13:20 -0700 (PDT)
-From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-To:     pbonzini@redhat.com
-Cc:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        Sean Christopherson <seanjc@google.com>,
-        =?UTF-8?q?St=C3=A9phane=20Graber?= <stgraber@ubuntu.com>,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
-Subject: [PATCH v2 2/2] KVM: SVM: enhance info printk's in SEV init
-Date:   Mon, 22 May 2023 18:12:48 +0200
-Message-Id: <20230522161249.800829-3-aleksandr.mikhalitsyn@canonical.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230522161249.800829-1-aleksandr.mikhalitsyn@canonical.com>
-References: <20230522161249.800829-1-aleksandr.mikhalitsyn@canonical.com>
+        Mon, 22 May 2023 12:16:13 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2EBAE9;
+        Mon, 22 May 2023 09:16:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=1oYReIb21gx1lPn/zOspt867lqTrE9boyBC6cBnhc5M=; b=AV4hSZlfawpDM8oTuN7UkXIApw
+        SF2R8kXwSp2pzbHldYbTZj6T+X71XjBjJEDHx1nLw22MMmUZxJwHoBfFi54awY/51YCekOG6qJjmN
+        We9HBof4Sg/MUrD8PLSl4M1jPW8XX04Z5FhXZgCHAWKFY1pPhtHuQ22IM0t0nxkPbDbE=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1q18CS-00DZ3h-AB; Mon, 22 May 2023 18:15:56 +0200
+Date:   Mon, 22 May 2023 18:15:56 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Francesco Dolcini <francesco@dolcini.it>
+Cc:     Praneeth Bajjuri <praneeth@ti.com>, Geet Modi <geet.modi@ti.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Dan Murphy <dmurphy@ti.com>
+Subject: Re: DP83867 ethernet PHY regression
+Message-ID: <07037ce6-8d1c-4a1d-9fdd-2cd9e68c4594@lunn.ch>
+References: <ZGuDJos8D7N0J6Z2@francesco-nb.int.toradex.com>
+ <e0d4b397-a8d9-4546-a8a2-14cf07914e64@lunn.ch>
+ <ZGuLxSJwXbSE/Rbb@francesco-nb.int.toradex.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZGuLxSJwXbSE/Rbb@francesco-nb.int.toradex.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's print available ASID ranges for SEV/SEV-ES guests.
-This information can be useful for system administrator
-to debug if SEV/SEV-ES fails to enable.
+On Mon, May 22, 2023 at 05:35:33PM +0200, Francesco Dolcini wrote:
+> On Mon, May 22, 2023 at 05:15:56PM +0200, Andrew Lunn wrote:
+> > On Mon, May 22, 2023 at 04:58:46PM +0200, Francesco Dolcini wrote:
+> > > Hello all,
+> > > commit da9ef50f545f ("net: phy: dp83867: perform soft reset and retain
+> > > established link") introduces a regression on my TI AM62 based board.
+> > > 
+> > > I have a working DTS with Linux TI 5.10 downstream kernel branch, while
+> > > testing the DTS with v6.4-rc in preparation of sending it to the mailing
+> > > list I noticed that ethernet is working only on a cold poweron.
+> > 
+> > Do you have more details about how it does not work.
+> > 
+> > Please could you use:
+> > 
+> > mii-tool -vvv ethX
+> 
+> please see the attached files:
+> 
+> working_da9ef50f545f_reverted.txt
+>   this is on a v6.4-rc, with da9ef50f545f reverted
+> 
+> not_working.txt
+>   v6.4-rc not working
+> 
+> working.txt
+>   v6.4-rc working
+> 
+> 
+> It looks like, even on cold boot, it's not working in a reliable way.
+> Not sure the exact difference when it's working and when it's not.
 
-There are a few reasons.
-SEV:
-- NPT is disabled (module parameter)
-- CPU lacks some features (sev, decodeassists)
-- Maximum SEV ASID is 0
+> Using SIOCGMIIPHY=0x8947
+> eth0: negotiated 1000baseT-FD flow-control, link ok
+>   registers for MII PHY 0: 
+>     1140 796d 2000 a231 05e1 c5e1 006f 2001
+>     5806 0200 3800 0000 0000 4007 0000 3000
+>     5048 ac02 ec10 0004 2bc7 0000 0000 0040
+>     6150 4444 0002 0000 0000 0000 0282 0000
 
-SEV-ES:
-- mmio_caching is disabled (module parameter)
-- CPU lacks sev_es feature
-- Minimum SEV ASID value is 1 (can be adjusted in BIOS/UEFI)
+>     1140 796d 2000 a231 05e1 c5e1 006d 2001
+>     5806 0200 3800 0000 0000 4007 0000 3000
+>     5048 af02 ec10 0000 2bc7 0000 0000 0040
+>     6150 4444 0002 0000 0000 0000 0282 0000
 
-Cc: Sean Christopherson <seanjc@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Stéphane Graber <stgraber@ubuntu.com>
-Cc: kvm@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Suggested-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
----
-v2:
-	- print only the ASID ranges according to Sean's suggestion
----
- arch/x86/kvm/svm/sev.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+Register  6: 006f vs 006d
+Register 17: ac02 vs 1f02
+Register 19: 0004 vs 0000
 
-diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-index cc832a8d1bca..fff63d1f2a34 100644
---- a/arch/x86/kvm/svm/sev.c
-+++ b/arch/x86/kvm/svm/sev.c
-@@ -2224,7 +2224,6 @@ void __init sev_hardware_setup(void)
- 		goto out;
- 	}
- 
--	pr_info("SEV supported: %u ASIDs\n", sev_asid_count);
- 	sev_supported = true;
- 
- 	/* SEV-ES support requested? */
-@@ -2252,10 +2251,16 @@ void __init sev_hardware_setup(void)
- 	if (misc_cg_set_capacity(MISC_CG_RES_SEV_ES, sev_es_asid_count))
- 		goto out;
- 
--	pr_info("SEV-ES supported: %u ASIDs\n", sev_es_asid_count);
- 	sev_es_supported = true;
- 
- out:
-+	if (boot_cpu_has(X86_FEATURE_SEV))
-+		pr_info("SEV %s (ASIDs %u - %u)\n",
-+			sev_supported ? "enabled" : "disabled", min_sev_asid, max_sev_asid);
-+	if (boot_cpu_has(X86_FEATURE_SEV_ES))
-+		pr_info("SEV-ES %s (ASIDs %u - %u)\n",
-+			sev_es_supported ? "enabled" : "disabled", 1, min_sev_asid - 1);
-+
- 	sev_enabled = sev_supported;
- 	sev_es_enabled = sev_es_supported;
- #endif
--- 
-2.34.1
+Register 6 is MII_EXPANSION. Bit 1 is
 
+#define EXPANSION_LCWP          0x0002  /* Got new RX page code word   */
+
+So that is probably not relevant here.
+
+Register 17 is MII_DP83867_PHYSTS, and bits 8 and 9 are not documented
+in the driver. Do you have the datasheet?
+
+Register 19 is MII_DP83867_ISR. The interrupt bits are not documented
+in the driver either.
+
+This driver also uses C45 registers, which are not shown here. At some
+point, we might need to look at those. But first it would be good to
+understand what these differences mean.
+
+	Andrew
