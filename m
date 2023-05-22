@@ -2,86 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 219D070C271
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:33:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D15670C274
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:33:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234315AbjEVPdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 11:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34542 "EHLO
+        id S234384AbjEVPde (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 11:33:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231255AbjEVPdL (ORCPT
+        with ESMTP id S234416AbjEVPda (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 11:33:11 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9632AA;
-        Mon, 22 May 2023 08:33:09 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34MEdf0I012567;
-        Mon, 22 May 2023 15:33:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=6XGFyEzczDwyR5+6vRQrf4JUOYRAtfqw+FiJTqGz47Q=;
- b=SQXkc3SpFJmbDIH8wbNOM0NwmVjRs0Jhgh6CAJEPp2XSeufIrhkJ7rZJ21S+/gs5zKX+
- +Bif1KBVXrv4cdcmd9jhE9GEpu9pKmphL2s4u7tNaND1COp6OB7XI0f4eE5IK2t8nyiZ
- /soaHCUrNDiMzZsi5x9rawpseLIRWCrYt126RZNhfKNtZGc1iJuOYC9eY5Ho76ZUr4yN
- CpaCJHeb3KDjULQgayIPWqo93t8Px/OjuzlotrqygSQDNVJSGJq6hlGNYymFTkAgjqkl
- zJ0YUoAxdJCeDHjumU5osWjflW2jpV/e8z0/jjSldFAKBgmbR5za/NKoznYfIA9rg4E1 TA== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qraasr5jr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 15:33:03 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34MFX2kk027626
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 15:33:02 GMT
-Received: from [10.216.34.225] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 22 May
- 2023 08:32:58 -0700
-Message-ID: <a7a0cd79-e080-cd26-9411-5913a4c0c61f@quicinc.com>
-Date:   Mon, 22 May 2023 21:02:55 +0530
+        Mon, 22 May 2023 11:33:30 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4333611A
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 08:33:26 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id ca18e2360f4ac-76c8dc21998so69822939f.3
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 08:33:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684769604; x=1687361604;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rOzOnUMPvM9TM8xcy1xez8VKe5P8M6GDNKqNZwK7fcM=;
+        b=oP2UO/3zaPdNHoMGo2bN6Y0AKsdYaVfGWRHpOcRZlg6HExSLv9jZ3ulWI1RHg+rcRF
+         2nogfXF2H64DjSzxEnej0DXZwkbXsVRPyiELpJCY2vs4yYyoNVsMvwAkBup0Xh0KqUxD
+         V9KrRGxMKVC6sbXhgc/Tqn9hP8+ITgIVI04v4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684769604; x=1687361604;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rOzOnUMPvM9TM8xcy1xez8VKe5P8M6GDNKqNZwK7fcM=;
+        b=hSFY31WN0sRdTwDv+LLIv6dP2G8uJ9zl9tt5z9OqQdau0DJRpt6b1ShudvuVn6Q0+2
+         Fnk9ft2a4WP2Jen0ouVmj1+Wpnzadp8OPkVbmu7jPabE+zf6AnUq+iCs726FBWrUP/hM
+         q/kITqId5ZgP6+9rQpG/FUR1pHPdo8wSMpLsgfOfe2PU4QshObGoe7QfyjUEV22Bfcvk
+         GhklJMS4FF++kOwD2lNXFkOfVoyIqGcuI7NbX2Br+rqZaJTCJcBuUPGeggNY60vvmOY4
+         draH069bigMmNJhFUIIDqvXbpkeEt5kTBM4cN/lWhrYsA1tNxCLrrFhaE9rpm0emzDJl
+         /7tg==
+X-Gm-Message-State: AC+VfDwrO56DrioSVhKu7Y3yasrCPCRBF421e0wno9Ty1d/c+7u7riPu
+        MzN/f3ZaYKTr2ncHfxzakdK2eerA4z125iJDhRQ=
+X-Google-Smtp-Source: ACHHUZ5ZTpV6OkQLVr4eurkwL7v5y7E/9vrqO8air73ocPOWGL5zw+Fn1wlZHMYROT0szKAy//3qjA==
+X-Received: by 2002:a5d:8582:0:b0:76c:5641:136 with SMTP id f2-20020a5d8582000000b0076c56410136mr6493338ioj.0.1684769603961;
+        Mon, 22 May 2023 08:33:23 -0700 (PDT)
+Received: from mail-il1-f179.google.com (mail-il1-f179.google.com. [209.85.166.179])
+        by smtp.gmail.com with ESMTPSA id e19-20020a0566380cd300b004183d110f0dsm1888281jak.86.2023.05.22.08.33.22
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 May 2023 08:33:22 -0700 (PDT)
+Received: by mail-il1-f179.google.com with SMTP id e9e14a558f8ab-335d6260e9bso306355ab.1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 08:33:22 -0700 (PDT)
+X-Received: by 2002:a05:6e02:1c2d:b0:32f:7715:4482 with SMTP id
+ m13-20020a056e021c2d00b0032f77154482mr807557ilh.4.1684769601699; Mon, 22 May
+ 2023 08:33:21 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3 1/2] remoteproc: Introduce traces for remoteproc events
-Content-Language: en-US
-To:     Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>,
-        <linux-remoteproc@vger.kernel.org>
-CC:     Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        <linux-kernel@vger.kernel.org>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        "Elliot Berman" <quic_eberman@quicinc.com>,
-        Guru Das Srinagesh <quic_gurus@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Melody Olvera <quic_molvera@quicinc.com>
-References: <cover.1683741283.git.quic_gokukris@quicinc.com>
- <5c7c2657d12808e211942d71ad79e3846f4e70bb.1683741283.git.quic_gokukris@quicinc.com>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <5c7c2657d12808e211942d71ad79e3846f4e70bb.1683741283.git.quic_gokukris@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: me_CRU_Tf7KLc56Nmp-lwP3Uu4gbhl4Z
-X-Proofpoint-ORIG-GUID: me_CRU_Tf7KLc56Nmp-lwP3Uu4gbhl4Z
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-22_10,2023-05-22_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
- priorityscore=1501 mlxscore=0 lowpriorityscore=0 mlxlogscore=999
- spamscore=0 impostorscore=0 bulkscore=0 malwarescore=0 phishscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305220129
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <CAD=FV=VYfPSwar2AXBxB3vX0dV1kjQ5bZMxsEBFhUnMNRXbBCw@mail.gmail.com>
+ <20230520050649.2494497-1-yangcong5@huaqin.corp-partner.google.com> <20230520050649.2494497-3-yangcong5@huaqin.corp-partner.google.com>
+In-Reply-To: <20230520050649.2494497-3-yangcong5@huaqin.corp-partner.google.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 22 May 2023 08:33:10 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Wm_SK0V6WJUkuvu8yFfiP60JBuOdw9cy=0Ck2Jbn-X2A@mail.gmail.com>
+Message-ID: <CAD=FV=Wm_SK0V6WJUkuvu8yFfiP60JBuOdw9cy=0Ck2Jbn-X2A@mail.gmail.com>
+Subject: Re: [v2 2/2] dt-bindings: input: touchscreen: Add ilitek 9882T
+ touchscreen chip
+To:     Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+Cc:     benjamin.tissoires@redhat.com, devicetree@vger.kernel.org,
+        dmitry.torokhov@gmail.com, hsinyi@google.com, jikos@kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mka@chromium.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,202 +80,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-
-On 5/10/2023 11:35 PM, Gokul krishna Krishnakumar wrote:
-> Adding Traces for the following remoteproc events:
-> 	rproc_subdev_event,
-> 	rproc_interrupt_event,
-> 	rproc_load_event,
-> 	rproc_start_event,
-> 	rproc_stop_event
-> 
-> Signed-off-by: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+On Fri, May 19, 2023 at 10:07=E2=80=AFPM Cong Yang
+<yangcong5@huaqin.corp-partner.google.com> wrote:
+>
+> Add an ilitek touch screen chip ili9882t.
+>
+> Signed-off-by: Cong Yang <yangcong5@huaqin.corp-partner.google.com>
 > ---
->   drivers/remoteproc/Makefile           |   1 +
->   drivers/remoteproc/qcom_tracepoints.c |  12 +++
->   include/trace/events/rproc_qcom.h     | 128 ++++++++++++++++++++++++++
->   3 files changed, 141 insertions(+)
->   create mode 100644 drivers/remoteproc/qcom_tracepoints.c
->   create mode 100644 include/trace/events/rproc_qcom.h
-> 
-> diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
-> index 91314a9b43ce..3399fcaba39b 100644
-> --- a/drivers/remoteproc/Makefile
-> +++ b/drivers/remoteproc/Makefile
-> @@ -10,6 +10,7 @@ remoteproc-y				+= remoteproc_debugfs.o
->   remoteproc-y				+= remoteproc_sysfs.o
->   remoteproc-y				+= remoteproc_virtio.o
->   remoteproc-y				+= remoteproc_elf_loader.o
-> +remoteproc-y				+= qcom_tracepoints.o
->   obj-$(CONFIG_REMOTEPROC_CDEV)		+= remoteproc_cdev.o
->   obj-$(CONFIG_IMX_REMOTEPROC)		+= imx_rproc.o
->   obj-$(CONFIG_IMX_DSP_REMOTEPROC)	+= imx_dsp_rproc.o
-> diff --git a/drivers/remoteproc/qcom_tracepoints.c b/drivers/remoteproc/qcom_tracepoints.c
-> new file mode 100644
-> index 000000000000..1b587ef54aa7
-> --- /dev/null
-> +++ b/drivers/remoteproc/qcom_tracepoints.c
-> @@ -0,0 +1,12 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +
-> +#define CREATE_TRACE_POINTS
-> +#include <trace/events/rproc_qcom.h>
-> +EXPORT_TRACEPOINT_SYMBOL(rproc_load_event);
-> +EXPORT_TRACEPOINT_SYMBOL(rproc_start_event);
-> +EXPORT_TRACEPOINT_SYMBOL(rproc_stop_event);
-> +EXPORT_TRACEPOINT_SYMBOL(rproc_interrupt_event);
-> +EXPORT_TRACEPOINT_SYMBOL(rproc_subdev_event);
-> diff --git a/include/trace/events/rproc_qcom.h b/include/trace/events/rproc_qcom.h
-> new file mode 100644
-> index 000000000000..48ad26ce18a3
-> --- /dev/null
-> +++ b/include/trace/events/rproc_qcom.h
-> @@ -0,0 +1,128 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +/*
-> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
-> + */
-> +
-> +#undef TRACE_SYSTEM
-> +#define TRACE_SYSTEM rproc_qcom
-> +
-> +#if !defined(_TRACE_RPROC_QCOM_H) || defined(TRACE_HEADER_MULTI_READ)
-> +#define _TRACE_RPROC_QCOM_H
-> +#include <linux/tracepoint.h>
-> +#include <linux/remoteproc.h>
-> +
-> +/*
-> + * Tracepoints for remoteproc and subdevice events
-> + */
-> +TRACE_EVENT(rproc_load_event,
-> +
-> +	TP_PROTO(struct rproc *rproc, int ret),
-> +
-> +	TP_ARGS(rproc, ret),
-> +
-> +	TP_STRUCT__entry(
-> +		__string(name, rproc->name)
-> +		__string(firmware, rproc->firmware)
-> +		__field(int, ret)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__assign_str(name, rproc->name);
-> +		__assign_str(firmware, rproc->firmware);
-> +		__entry->ret = ret;
-> +	),
-> +
-> +	TP_printk("%s loading firmware %s returned %d",
-> +			__get_str(name), __get_str(firmware),
-> +			__entry->ret)
-> +);
-> +
-> +TRACE_EVENT(rproc_start_event,
-> +
-> +	TP_PROTO(struct rproc *rproc, int ret),
-> +
-> +	TP_ARGS(rproc, ret),
-> +
-> +	TP_STRUCT__entry(
-> +		__string(name, rproc->name)
-> +		__field(int, ret)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__assign_str(name, rproc->name);
-> +		__entry->ret = ret;
-> +	),
-> +
-> +	TP_printk("%s %d", __get_str(name), __entry->ret)
-> +);
-> +
-> +TRACE_EVENT(rproc_stop_event,
-> +
-> +	TP_PROTO(struct rproc *rproc, char *crash_msg),
+>  .../devicetree/bindings/input/elan,ekth6915.yaml         | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
 
+I'm curious about the DT maintainers opinion here. Should this be a
+new bindings file, or should it be together in the elan file. If
+nothing else, I think the secondary voltage rail name is wrong. I took
+a quick peek at a datasheet I found and I don't even see a 3.3V rail
+going to the ili9882t. That makes it weird to reuse "vcc33-supply" for
+a second supply...
 
-
-const char *crash_msg ?
-
-> +
-> +	TP_ARGS(rproc, crash_msg),
-> +
-> +	TP_STRUCT__entry(
-> +		__string(name, rproc->name)
-> +		__string(crash_msg, crash_msg)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__assign_str(name, rproc->name);
-> +		__assign_str(crash_msg, crash_msg)
-> +	),
-> +
-> +	TP_printk("%s %s", __get_str(name), __get_str(crash_msg))
-
-> +);
-> +
-> +TRACE_EVENT(rproc_interrupt_event,
-> +
-> +	TP_PROTO(struct rproc *rproc, const char *event,
-> +			 const char *msg),
-> +
-> +	TP_ARGS(rproc, event, msg),
-> +
-> +	TP_STRUCT__entry(
-> +		__string(name, rproc->name)
-> +		__string(event, event)
-> +		__string(msg, msg)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__assign_str(name, rproc->name);
-> +		__assign_str(event, event);
-> +		__assign_str(msg, msg);
-> +	),
-> +
-> +	TP_printk("%s %s returned %s", __get_str(name),
-> +			 __get_str(event), __get_str(msg))
-> +);
-> +
-> +TRACE_EVENT(rproc_subdev_event,
-> +
-> +	TP_PROTO(const char *rproc, const char *subdev,
-> +			const char *event, int ret),
-> +
-> +	TP_ARGS(rproc, subdev, event, ret),
-> +
-> +	TP_STRUCT__entry(
-> +		__string(rproc, rproc)
-> +		__string(subdev, subdev)
-> +		__string(event, event)
-> +		__field(int, ret)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__assign_str(rproc, rproc);
-> +		__assign_str(subdev, subdev);
-> +		__assign_str(event, event);
-> +		__entry->ret = ret;
-> +	),
-> +
-> +	TP_printk("%s %s %s %d", __get_str(rproc), __get_str(subdev),
-> +			__get_str(event), __entry->ret)
-
-Should you not specify what all are you trying to print here..
-Unless they are very generic and self interpret-able.
-
-TP_printk("rproc:%s subdev:%s event:%s ret:%d", __get_str(rproc), 
-__get_str(subdev), __get_str(event), __entry->ret)
-
-
--- Mukesh
-
-> +);
-> +#endif /* _TRACE_RPROC_QCOM_H */
-> +
-> +/* This part must be outside protection */
-> +#include <trace/define_trace.h>
+-Doug
