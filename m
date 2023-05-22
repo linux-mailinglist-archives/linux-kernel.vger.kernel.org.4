@@ -2,165 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9114E70BF5B
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:12:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02AAC70BF66
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:13:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234246AbjEVNMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 09:12:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38634 "EHLO
+        id S234269AbjEVNNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 09:13:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234238AbjEVNMQ (ORCPT
+        with ESMTP id S233771AbjEVNNd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 09:12:16 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2811011F
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 06:12:08 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C838A21C6D;
-        Mon, 22 May 2023 13:12:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1684761126; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/b4jyt+mKKOEyG+XA4wBw25yWm36AKKIFRNbqWnek58=;
-        b=NbXipsck+2suySbWtdwDQpL1QvujcttjUrREiH9Ntb+b37wW/PwC4k3LUwL3318cLXn3jk
-        V2kxGuTFWLAi8CeoIxs2DtsPNPzx40PAeyL0JbaXQ8Mve3AfeVZdqIxBQbHP0CAaqUilxi
-        jWPjowsC/VwVLr27Mfz5pjuqXzFC6Ko=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1684761126;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/b4jyt+mKKOEyG+XA4wBw25yWm36AKKIFRNbqWnek58=;
-        b=P8GlxAt6Gth5hmeiSaHUqsv1LCPdisz684BgFtW9WMWUhb4JkqoHvYniXvbJVfyzT+aMWe
-        d0wH0ojpTnwNjiAQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7AC1113776;
-        Mon, 22 May 2023 13:12:06 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id FoeGHCZqa2Q8cgAAMHmgww
-        (envelope-from <jroedel@suse.de>); Mon, 22 May 2023 13:12:06 +0000
-Date:   Mon, 22 May 2023 15:12:05 +0200
-From:   Joerg Roedel <jroedel@suse.de>
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Ashish Kalra <ashish.kalra@amd.com>
-Subject: Re: [PATCH] x86/head/64: Switch to KERNEL_CS as soon as new GDT is
- installed
-Message-ID: <ZGtqJU_pIc7kI6sO@suse.de>
-References: <6ff1f28af2829cc9aea357ebee285825f90a431f.1684340801.git.thomas.lendacky@amd.com>
+        Mon, 22 May 2023 09:13:33 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 24577C4;
+        Mon, 22 May 2023 06:13:24 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.31:37766.365281712
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
+        by 189.cn (HERMES) with SMTP id 04C1C1002C5;
+        Mon, 22 May 2023 21:13:21 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-75648544bd-xp9j7 with ESMTP id 032c282a12e842aab0e121a2c28c9c82 for kernel@xen0n.name;
+        Mon, 22 May 2023 21:13:24 CST
+X-Transaction-ID: 032c282a12e842aab0e121a2c28c9c82
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <69edaf49-359a-229c-c8b4-8aa3af622008@189.cn>
+Date:   Mon, 22 May 2023 21:13:21 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v14 1/2] drm: add kms driver for loongson display
+ controller
+Content-Language: en-US
+To:     WANG Xuerui <kernel@xen0n.name>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>
+Cc:     linaro-mm-sig@lists.linaro.org, loongson-kernel@lists.loongnix.cn,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Liu Peibao <liupeibao@loongson.cn>, linux-media@vger.kernel.org
+References: <20230520105718.325819-1-15330273260@189.cn>
+ <20230520105718.325819-2-15330273260@189.cn>
+ <26fd78b9-c074-8341-c99c-4e3b38cd861a@xen0n.name>
+ <e7f911cc-6588-bc0f-8e1e-759260f5187a@189.cn>
+ <ed795dc0-823a-f3d8-9e70-1cf33c0de7f0@xen0n.name>
+ <ac2fde55-c770-fbb5-844d-50fb38dd90be@189.cn>
+ <331e7baa-a83b-b0c9-37f7-0e8e39187df4@xen0n.name>
+ <5ae49b7a-b8d2-a822-65bc-6a894d2b1b4e@189.cn>
+ <0e5e4a4b-1426-ffae-e958-cf8f9aece166@xen0n.name>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <0e5e4a4b-1426-ffae-e958-cf8f9aece166@xen0n.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <6ff1f28af2829cc9aea357ebee285825f90a431f.1684340801.git.thomas.lendacky@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 17, 2023 at 11:26:41AM -0500, Tom Lendacky wrote:
-> The call to startup_64_setup_env() will install a new GDT but does not
-> actually switch to using the KERNEL_CS entry until returning from the
-> function call.
-> 
-> Commit bcce82908333 ("x86/sev: Detect/setup SEV/SME features earlier in
-> boot") moved the call to sme_enable() earlier in the boot process and in
-> between the call to startup_64_setup_env() and the switch to KERNEL_CS.
-> An SEV-ES or an SEV-SNP guest will trigger #VC exceptions during the call
-> to sme_enable() and if the CS pushed on the stack as part of the exception
-> and used by IRETQ is not mapped by the new GDT, then problems occur.
-> Today, the current CS when entering startup_64 is the kernel CS value
-> because it was set up by the decompressor code, so no issue is seen.
-> 
-> However, a recent patchset that looked to avoid using the legacy
-> decompressor during an EFI boot exposed this bug. At entry to startup_64,
-> the CS value is that of EFI and is not mapped in the new kernel GDT. So
-> when a #VC exception occurs, the CS value used by IRETQ is not valid and
-> the guest boot crashes.
-> 
-> Fix this issue by moving the block that switches to the KERNEL_CS value to
-> be done immediately after returning from startup_64_setup_env().
-> 
-> Fixes: bcce82908333 ("x86/sev: Detect/setup SEV/SME features earlier in boot")
-> Signed-off-by: Tom Lendacky <thomas.lendacky@amd.com>
-> ---
->  arch/x86/kernel/head_64.S | 18 +++++++++---------
->  1 file changed, 9 insertions(+), 9 deletions(-)
+Hi,
 
-Makes sense, thanks for the fix.
+On 2023/5/22 18:25, WANG Xuerui wrote:
+> On 2023/5/22 18:17, Sui Jingfeng wrote:
+>> Hi,
+>>
+>> On 2023/5/22 18:05, WANG Xuerui wrote:
+>>> On 2023/5/22 17:49, Sui Jingfeng wrote:
+>>>> Hi,
+>>>>
+>>>> On 2023/5/22 17:28, WANG Xuerui wrote:
+>>>>> On 2023/5/22 17:25, Sui Jingfeng wrote:
+>>>>>> Hi,
+>>>>>>
+>>>>>> On 2023/5/21 20:21, WANG Xuerui wrote:
+>>>>>>>> + * LS3A4000/LS3A5000/LS3A6000 CPU, they are equipped with 
+>>>>>>>> on-board video RAM
+>>>>>>>> + * typically. While LS2K0500/LS2K1000/LS2K2000 are low cost 
+>>>>>>>> SoCs which share
+>>>>>>>> + * the system RAM as video RAM, they don't has a dediacated VRAM.
+>>>>>>>
+>>>>>>> CPU models are not typically prefixed with "LS", so "Loongson 
+>>>>>>> 3A4000/3A5000/3A6000".
+>>>>>>>
+>>>>>> Here is because when you do programming, variable name should 
+>>>>>> prefix with letters.
+>>>>>
+>>>>> Commit messages, comments, and log messages etc. are natural 
+>>>>> language, so it's better to treat them differently. No problem to 
+>>>>> keep code as-is IMO.
+>>>>>
+>>>> Then you get two name for a single chip,Â  takeÂ  LS7A1000 as an 
+>>>> example.
+>>>>
+>>>> You name it as Loongson 7A1000 in commit message,Â  and then you 
+>>>> have to define another name in the code,Â  say LS7A1000.
+>>>>
+>>>> "Loongson 7A1000" is too long,Â  not as compact as LS7A1000.
+>>>>
+>>>> This also avoid bind the company name to a specific product, 
+>>>> because a company can produce many product.
+>>>
+>>> Nah, the existing convention is "LS7Xxxxx" for bridges and "Loongson 
+>>> 3Axxxx" for CPUs (SoCs like 2K fall under this category too). It's 
+>>> better to stick with existing practice so it would be familiar to 
+>>> long-time Loongson/LoongArch developers, but I personally don't 
+>>> think it will hamper understanding if you feel like doing otherwise.
+>>>
+>> Can you explain why it is better?
+>>
+>> is it that the already existing is better ?
+>
+> It's not about subjective perception of "better" or "worse", but about 
+> tree-wide consistency, and about reducing any potential confusion from 
+> newcomers. I remember Huacai once pointing out that outsiders usually 
+> have a hard time remembering "1, 2, and 3 are CPUs, some 2 are SoCs, 7 
+> are bridge chips", and consistently referring to the bridge chips 
+> throughout the tree as "LS7A" helped.
+>
+> In any case, for the sake of consistency, you can definitely refer to 
+> the CPU models in natural language like "LS3Axxxx"; just make sure to 
+> refactor for example every occurrence in arch/loongarch and other 
+> parts of drivers/. That's a lot of churn, though, so I don't expect 
+> such changes to get accepted, and that's why the tree-wide consistency 
+> should be favored over the local one.
+>
+There are document[1] which named LS7A1000 bridge chip as Loongson 
+7A1000 Bridge,
 
-Reviewed-by: Joerg Roedel <jroedel@suse.de>
+which is opposed to what you have said "the existing convention is 
+LS7Xxxxx for bridges".
 
-> 
-> diff --git a/arch/x86/kernel/head_64.S b/arch/x86/kernel/head_64.S
-> index 9cd77d319555..c5b9289837dc 100644
-> --- a/arch/x86/kernel/head_64.S
-> +++ b/arch/x86/kernel/head_64.S
-> @@ -79,6 +79,15 @@ SYM_CODE_START_NOALIGN(startup_64)
->  	call	startup_64_setup_env
->  	popq	%rsi
->  
-> +	/* Now switch to __KERNEL_CS so IRET works reliably */
-> +	pushq	$__KERNEL_CS
-> +	leaq	.Lon_kernel_cs(%rip), %rax
-> +	pushq	%rax
-> +	lretq
-> +
-> +.Lon_kernel_cs:
-> +	UNWIND_HINT_END_OF_STACK
-> +
->  #ifdef CONFIG_AMD_MEM_ENCRYPT
->  	/*
->  	 * Activate SEV/SME memory encryption if supported/enabled. This needs to
-> @@ -92,15 +101,6 @@ SYM_CODE_START_NOALIGN(startup_64)
->  	popq	%rsi
->  #endif
->  
-> -	/* Now switch to __KERNEL_CS so IRET works reliably */
-> -	pushq	$__KERNEL_CS
-> -	leaq	.Lon_kernel_cs(%rip), %rax
-> -	pushq	%rax
-> -	lretq
-> -
-> -.Lon_kernel_cs:
-> -	UNWIND_HINT_END_OF_STACK
-> -
->  	/* Sanitize CPU configuration */
->  	call verify_cpu
->  
-> -- 
-> 2.40.0
-> 
 
--- 
-Jörg Rödel
-jroedel@suse.de
+there are also plenty projects[2] which encode ls2k1000 as project name, 
+which simply
 
-SUSE Software Solutions Germany GmbH
-Frankenstraße 146
-90461 Nürnberg
-Germany
+don't fall into the category as you have mentioned("Loongson 3Axxxx").
 
-(HRB 36809, AG Nürnberg)
-Geschäftsführer: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
+
+See [1][2] for reference, how to explain this phenomenon then?
+
+
+[1] 
+https://loongson.github.io/LoongArch-Documentation/Loongson-7A1000-usermanual-EN
+
+[2] https://github.com/zhaozhi0810/pmon-ls2k1000-2022
+
 
