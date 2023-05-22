@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79A7A70B438
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 06:51:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E4BB70B439
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 06:52:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229654AbjEVEvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 00:51:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42846 "EHLO
+        id S231536AbjEVEwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 00:52:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjEVEvL (ORCPT
+        with ESMTP id S229571AbjEVEwg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 00:51:11 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F0B132
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 21:51:05 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-b9a7e639656so10757891276.0
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 21:51:05 -0700 (PDT)
+        Mon, 22 May 2023 00:52:36 -0400
+Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C634BBB
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 21:52:35 -0700 (PDT)
+Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-561bcd35117so70007567b3.3
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 21:52:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684731064; x=1687323064;
+        d=google.com; s=20221208; t=1684731155; x=1687323155;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ANcMmc9BeTTDRJseGPHLnYq8DMAivc7OJ7zKS5AkOEU=;
-        b=suZ7/fWyjgtDmmUUG368PhOQSIoqVmOnxBEGz1k9zCkGOxssorwZrFR60X+8a4DQqr
-         7u71fp8c7x68EiyyW8ZSDwzHkHiPONOn7yDOgmy63jiQBTyUNcqNciC9w+0U347zF4Gf
-         qZEb5FQPLn1+cE60AE8Q2hbQucuksdSO++m5CDyyBTN/iGnKQo4gRrU//els8iIiBdS7
-         ovYLm7Yj3qMDE0Qoy1tWZGPaThqr4eXUwvzaDxInjjwEGGfg2sUxlTqNWk6AaZWuz+i8
-         FTUjVygqWWxTs+smOosRSftvUI/03MEA0EZ3L2DHmfVjXa6bRJ1mwd0Lc0WFnRQmYQLX
-         GTlA==
+        bh=lc/g6LXQOs93yTgCiGczTkkFK+sAgodNjTysgahDEVw=;
+        b=y0KD6rBKhVlt+/hQTMgxrgHr2ryOWmswWrxwVwW1aFZ79LkRBOC59dixF5L/cDZc4B
+         qnUQhKlaq1KoTySTp2vqiuM8rApR8HI8YhApmutmEIgesAjWn3Zc6GfqRJFCVIZETmFo
+         Ve2TuK1DkPJI4FLOOGkjpX3SgGZwTv9PexqmJixY6pwUW+8F8Muuz17KmV5M/4+hZQ/g
+         NOfOuuy9xT5Aq5lXVwksnHlv6Vlink7vPREGhAD7sqE7v5xbbRTG+tMaRpWIb/f65tVQ
+         6KthNz49DESDlvL8PCw3g3sz72EdxO0SmuuSbMBDwQ700O/IFokzhDePdlcNOBT1Ipvs
+         7n6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684731064; x=1687323064;
+        d=1e100.net; s=20221208; t=1684731155; x=1687323155;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ANcMmc9BeTTDRJseGPHLnYq8DMAivc7OJ7zKS5AkOEU=;
-        b=cIQnZDEAno+Dh2HM1nAaFnzgKtnED2E4c/IqYJ2q+O4ZBmU+sct4cYRCr1quYEBDxn
-         hIO4XON1ZNNZ1HH3FKt6FvPpBiN2RBXTe0n3Jc59nFLZqNCaGglmTCIVAKvvrZ2Hccdt
-         6lOwXdRXAH9WpWZ5Kv5HWe5dqdOeI7jE/WQbfhHCHs+nAbpdfI8ptpdB87nAaypXwV9i
-         sYDcSHATxrC0dUWH71xE74J5vuwoKCnctZS2Fe4gqhVVXj/uGQC1RUt+CC5UB87xaN8B
-         3B5xNB17I0ssMPGTlddTSN9WYOzpfylsBmh5shZQjwryWuv9hFyOee32Hetls+NOD16C
-         lCDg==
-X-Gm-Message-State: AC+VfDyFO2lXBsy8e5pyyIW5PKwA5cBFBF65jwSM19hoZ2nPxrHIe+W4
-        L8kV4PgPzs6CrW9OXE4AgvwYwg==
-X-Google-Smtp-Source: ACHHUZ6jO0XEKla2wlyWHkLbd6267BBIAu3WYemOi2dKQNM0AlHnDzPyGpw7fyb0X8v56kZQVrFU2A==
-X-Received: by 2002:a25:1042:0:b0:ba8:1807:9d7f with SMTP id 63-20020a251042000000b00ba818079d7fmr9116239ybq.58.1684731064262;
-        Sun, 21 May 2023 21:51:04 -0700 (PDT)
+        bh=lc/g6LXQOs93yTgCiGczTkkFK+sAgodNjTysgahDEVw=;
+        b=X/aaKhL6/S0/F2VAAvvi6H28sfJbZ2k889yvEb/LN3q7gcsUz9VoRnVvoBV25qKH70
+         zuLXGW0rL9YGWxlNH1IsPJhnPS4FJK9Z5a95TlIQNUI3NS3cIA6UGF1WbQIavO3u/Qw/
+         E5TJxpxpZgt25xJEMCUfh34VZaFGXtwyLydeLQjPTeX2zvnWSWsKE/xbI1Qs+JldE6t/
+         TeLrebYA9wHbQzbXjGw1UH5oCjNhp+5lPqTVXRzWVGUNEq08smkIbC1QQriUQkAkMJBy
+         BREWWOSwAzWiY3Q/xm7eXqmZ3CwYbWS1H08lUycRvvYweSCGDhN+SBu8arqFhFKQh5rE
+         TUug==
+X-Gm-Message-State: AC+VfDwhrP3DRIYXNxaLLRcx6TvOsbWIWKvuEsOKLXzJu0PZhKxr/Zku
+        fGhyndr5mdqWa8EWXpDnfR/HhA==
+X-Google-Smtp-Source: ACHHUZ5dIfhq7xIc6CspLmzSUsrpzIMl80pglZ3+j6+NrHQ8JwvnQ0G2n+LIPSBV/lbo+YJXvCTWKQ==
+X-Received: by 2002:a0d:d901:0:b0:55a:9e43:7efe with SMTP id b1-20020a0dd901000000b0055a9e437efemr10375067ywe.44.1684731154895;
+        Sun, 21 May 2023 21:52:34 -0700 (PDT)
 Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id a11-20020a81bb4b000000b0054e82b6a95esm1808098ywl.42.2023.05.21.21.51.01
+        by smtp.gmail.com with ESMTPSA id w6-20020a814906000000b0054f8b201c70sm1786111ywa.108.2023.05.21.21.52.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 May 2023 21:51:04 -0700 (PDT)
-Date:   Sun, 21 May 2023 21:51:00 -0700 (PDT)
+        Sun, 21 May 2023 21:52:34 -0700 (PDT)
+Date:   Sun, 21 May 2023 21:52:31 -0700 (PDT)
 From:   Hugh Dickins <hughd@google.com>
 X-X-Sender: hugh@ripple.attlocal.net
 To:     Andrew Morton <akpm@linux-foundation.org>
@@ -81,10 +81,10 @@ cc:     Mike Kravetz <mike.kravetz@oracle.com>,
         Song Liu <song@kernel.org>,
         Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH 02/31] mm/migrate: remove cruft from
- migration_entry_wait()s
+Subject: [PATCH 03/31] mm/pgtable: kmap_local_page() instead of
+ kmap_atomic()
 In-Reply-To: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
-Message-ID: <1659568-468a-6d36-c26-6a52a335ab59@google.com>
+Message-ID: <9df4aba7-fd2f-2da3-1543-fc6b4b42f5b9@google.com>
 References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -99,204 +99,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-migration_entry_wait_on_locked() does not need to take a mapped pte
-pointer, its callers can do the unmap first.  Annotate it with
-__releases(ptl) to reduce sparse warnings.
-
-Fold __migration_entry_wait_huge() into migration_entry_wait_huge().
-Fold __migration_entry_wait() into migration_entry_wait(), preferring
-the tighter pte_offset_map_lock() to pte_offset_map() and pte_lockptr().
+pte_offset_map() was still using kmap_atomic(): update it to the
+preferred kmap_local_page() before making further changes there, in case
+we need this as a bisection point; but I doubt it can cause any trouble.
 
 Signed-off-by: Hugh Dickins <hughd@google.com>
 ---
- include/linux/migrate.h |  4 ++--
- include/linux/swapops.h | 17 +++--------------
- mm/filemap.c            | 13 ++++---------
- mm/migrate.c            | 37 +++++++++++++------------------------
- 4 files changed, 22 insertions(+), 49 deletions(-)
+ include/linux/pgtable.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/migrate.h b/include/linux/migrate.h
-index 6241a1596a75..affea3063473 100644
---- a/include/linux/migrate.h
-+++ b/include/linux/migrate.h
-@@ -75,8 +75,8 @@ bool isolate_movable_page(struct page *page, isolate_mode_t mode);
+diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+index 8ec27fe69dc8..94235ff2706e 100644
+--- a/include/linux/pgtable.h
++++ b/include/linux/pgtable.h
+@@ -96,9 +96,9 @@ static inline pte_t *pte_offset_kernel(pmd_t *pmd, unsigned long address)
  
- int migrate_huge_page_move_mapping(struct address_space *mapping,
- 		struct folio *dst, struct folio *src);
--void migration_entry_wait_on_locked(swp_entry_t entry, pte_t *ptep,
--				spinlock_t *ptl);
-+void migration_entry_wait_on_locked(swp_entry_t entry, spinlock_t *ptl)
-+		__releases(ptl);
- void folio_migrate_flags(struct folio *newfolio, struct folio *folio);
- void folio_migrate_copy(struct folio *newfolio, struct folio *folio);
- int folio_migrate_mapping(struct address_space *mapping,
-diff --git a/include/linux/swapops.h b/include/linux/swapops.h
-index 3a451b7afcb3..4c932cb45e0b 100644
---- a/include/linux/swapops.h
-+++ b/include/linux/swapops.h
-@@ -332,15 +332,9 @@ static inline bool is_migration_entry_dirty(swp_entry_t entry)
- 	return false;
- }
- 
--extern void __migration_entry_wait(struct mm_struct *mm, pte_t *ptep,
--					spinlock_t *ptl);
- extern void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
- 					unsigned long address);
--#ifdef CONFIG_HUGETLB_PAGE
--extern void __migration_entry_wait_huge(struct vm_area_struct *vma,
--					pte_t *ptep, spinlock_t *ptl);
- extern void migration_entry_wait_huge(struct vm_area_struct *vma, pte_t *pte);
--#endif	/* CONFIG_HUGETLB_PAGE */
- #else  /* CONFIG_MIGRATION */
- static inline swp_entry_t make_readable_migration_entry(pgoff_t offset)
- {
-@@ -362,15 +356,10 @@ static inline int is_migration_entry(swp_entry_t swp)
- 	return 0;
- }
- 
--static inline void __migration_entry_wait(struct mm_struct *mm, pte_t *ptep,
--					spinlock_t *ptl) { }
- static inline void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
--					 unsigned long address) { }
--#ifdef CONFIG_HUGETLB_PAGE
--static inline void __migration_entry_wait_huge(struct vm_area_struct *vma,
--					       pte_t *ptep, spinlock_t *ptl) { }
--static inline void migration_entry_wait_huge(struct vm_area_struct *vma, pte_t *pte) { }
--#endif	/* CONFIG_HUGETLB_PAGE */
-+					unsigned long address) { }
-+static inline void migration_entry_wait_huge(struct vm_area_struct *vma,
-+					pte_t *pte) { }
- static inline int is_writable_migration_entry(swp_entry_t entry)
- {
- 	return 0;
-diff --git a/mm/filemap.c b/mm/filemap.c
-index b4c9bd368b7e..28b42ee848a4 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -1359,8 +1359,6 @@ static inline int folio_wait_bit_common(struct folio *folio, int bit_nr,
- /**
-  * migration_entry_wait_on_locked - Wait for a migration entry to be removed
-  * @entry: migration swap entry.
-- * @ptep: mapped pte pointer. Will return with the ptep unmapped. Only required
-- *        for pte entries, pass NULL for pmd entries.
-  * @ptl: already locked ptl. This function will drop the lock.
-  *
-  * Wait for a migration entry referencing the given page to be removed. This is
-@@ -1369,13 +1367,13 @@ static inline int folio_wait_bit_common(struct folio *folio, int bit_nr,
-  * should be called while holding the ptl for the migration entry referencing
-  * the page.
-  *
-- * Returns after unmapping and unlocking the pte/ptl with pte_unmap_unlock().
-+ * Returns after unlocking the ptl.
-  *
-  * This follows the same logic as folio_wait_bit_common() so see the comments
-  * there.
-  */
--void migration_entry_wait_on_locked(swp_entry_t entry, pte_t *ptep,
--				spinlock_t *ptl)
-+void migration_entry_wait_on_locked(swp_entry_t entry, spinlock_t *ptl)
-+	__releases(ptl)
- {
- 	struct wait_page_queue wait_page;
- 	wait_queue_entry_t *wait = &wait_page.wait;
-@@ -1409,10 +1407,7 @@ void migration_entry_wait_on_locked(swp_entry_t entry, pte_t *ptep,
- 	 * a valid reference to the page, and it must take the ptl to remove the
- 	 * migration entry. So the page is valid until the ptl is dropped.
- 	 */
--	if (ptep)
--		pte_unmap_unlock(ptep, ptl);
--	else
--		spin_unlock(ptl);
-+	spin_unlock(ptl);
- 
- 	for (;;) {
- 		unsigned int flags;
-diff --git a/mm/migrate.c b/mm/migrate.c
-index 01cac26a3127..3ecb7a40075f 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -296,14 +296,18 @@ void remove_migration_ptes(struct folio *src, struct folio *dst, bool locked)
-  * get to the page and wait until migration is finished.
-  * When we return from this function the fault will be retried.
-  */
--void __migration_entry_wait(struct mm_struct *mm, pte_t *ptep,
--				spinlock_t *ptl)
-+void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
-+			  unsigned long address)
- {
-+	spinlock_t *ptl;
-+	pte_t *ptep;
- 	pte_t pte;
- 	swp_entry_t entry;
- 
--	spin_lock(ptl);
-+	ptep = pte_offset_map_lock(mm, pmd, address, &ptl);
- 	pte = *ptep;
-+	pte_unmap(ptep);
-+
- 	if (!is_swap_pte(pte))
- 		goto out;
- 
-@@ -311,18 +315,10 @@ void __migration_entry_wait(struct mm_struct *mm, pte_t *ptep,
- 	if (!is_migration_entry(entry))
- 		goto out;
- 
--	migration_entry_wait_on_locked(entry, ptep, ptl);
-+	migration_entry_wait_on_locked(entry, ptl);
- 	return;
- out:
--	pte_unmap_unlock(ptep, ptl);
--}
--
--void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
--				unsigned long address)
--{
--	spinlock_t *ptl = pte_lockptr(mm, pmd);
--	pte_t *ptep = pte_offset_map(pmd, address);
--	__migration_entry_wait(mm, ptep, ptl);
-+	spin_unlock(ptl);
- }
- 
- #ifdef CONFIG_HUGETLB_PAGE
-@@ -332,9 +328,9 @@ void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
-  *
-  * This function will release the vma lock before returning.
-  */
--void __migration_entry_wait_huge(struct vm_area_struct *vma,
--				 pte_t *ptep, spinlock_t *ptl)
-+void migration_entry_wait_huge(struct vm_area_struct *vma, pte_t *ptep)
- {
-+	spinlock_t *ptl = huge_pte_lockptr(hstate_vma(vma), vma->vm_mm, ptep);
- 	pte_t pte;
- 
- 	hugetlb_vma_assert_locked(vma);
-@@ -352,16 +348,9 @@ void __migration_entry_wait_huge(struct vm_area_struct *vma,
- 		 * lock release in migration_entry_wait_on_locked().
- 		 */
- 		hugetlb_vma_unlock_read(vma);
--		migration_entry_wait_on_locked(pte_to_swp_entry(pte), NULL, ptl);
-+		migration_entry_wait_on_locked(pte_to_swp_entry(pte), ptl);
- 	}
- }
--
--void migration_entry_wait_huge(struct vm_area_struct *vma, pte_t *pte)
--{
--	spinlock_t *ptl = huge_pte_lockptr(hstate_vma(vma), vma->vm_mm, pte);
--
--	__migration_entry_wait_huge(vma, pte, ptl);
--}
- #endif
- 
- #ifdef CONFIG_ARCH_ENABLE_THP_MIGRATION
-@@ -372,7 +361,7 @@ void pmd_migration_entry_wait(struct mm_struct *mm, pmd_t *pmd)
- 	ptl = pmd_lock(mm, pmd);
- 	if (!is_pmd_migration_entry(*pmd))
- 		goto unlock;
--	migration_entry_wait_on_locked(pmd_to_swp_entry(*pmd), NULL, ptl);
-+	migration_entry_wait_on_locked(pmd_to_swp_entry(*pmd), ptl);
- 	return;
- unlock:
- 	spin_unlock(ptl);
+ #if defined(CONFIG_HIGHPTE)
+ #define pte_offset_map(dir, address)				\
+-	((pte_t *)kmap_atomic(pmd_page(*(dir))) +		\
++	((pte_t *)kmap_local_page(pmd_page(*(dir))) +		\
+ 	 pte_index((address)))
+-#define pte_unmap(pte) kunmap_atomic((pte))
++#define pte_unmap(pte) kunmap_local((pte))
+ #else
+ #define pte_offset_map(dir, address)	pte_offset_kernel((dir), (address))
+ #define pte_unmap(pte) ((void)(pte))	/* NOP */
 -- 
 2.35.3
 
