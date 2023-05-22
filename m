@@ -2,184 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C7C870C394
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 18:37:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE79C70C398
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 18:37:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233071AbjEVQhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 12:37:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45216 "EHLO
+        id S233077AbjEVQhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 12:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232364AbjEVQhO (ORCPT
+        with ESMTP id S231712AbjEVQhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 12:37:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD78BF;
-        Mon, 22 May 2023 09:37:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5E09F61B6C;
-        Mon, 22 May 2023 16:37:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD5BFC433EF;
-        Mon, 22 May 2023 16:37:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684773430;
-        bh=2He6U7qRXsvcUhtzbRqViBFgVaT+dg2a2JQ7qWLAX9c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VZXeWVIh07NmnTCmgVxAUdNEN/GFI7px1Szk/0gj+mTlwADll5GDq8yMtIGHk/2/v
-         5/+XsBtb4u/VtVnJCxv2Sz6CQpBonzMUKJNOvIBr4pzz33dCTT7DITwfmBrI3x/7ow
-         wneGx6y9vdwA1JWQdHS2EFKj8jFdUnvBvenc3AXYljvXlM0gnZsSatAQ4vddWrPcq1
-         ipIFtaHJQwicwfbn2dQwYqVu2ptWjeA3D01NbL1SID8nnUDpR0Vp6Ix4LyV+8cq4Xd
-         RIhoQfcwi+TmdEyL1rA6Rkr3+y8L8gZJEQ7KuNfIkwe4F2GP5K8mdm0jBcUkdLgBnK
-         xOXyAXGzdSmmw==
-Date:   Mon, 22 May 2023 09:37:10 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Sarthak Kukreti <sarthakkukreti@chromium.org>
-Cc:     dm-devel@redhat.com, linux-block@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Theodore Ts'o <tytso@mit.edu>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Bart Van Assche <bvanassche@google.com>,
-        Mike Snitzer <snitzer@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Brian Foster <bfoster@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>
-Subject: Re: [dm-devel] [PATCH v7 5/5] loop: Add support for provision
- requests
-Message-ID: <20230522163710.GA11607@frogsfrogsfrogs>
-References: <20230518223326.18744-1-sarthakkukreti@chromium.org>
- <20230518223326.18744-6-sarthakkukreti@chromium.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230518223326.18744-6-sarthakkukreti@chromium.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 22 May 2023 12:37:53 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DBEECF
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 09:37:52 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-528ab7097afso5315512a12.1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 09:37:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684773472; x=1687365472;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VtfwEOOrFT56Me1+y80csEj29fh/4MEfuxZGlV/VCwA=;
+        b=VkBCPFP4Xr4WiQTM6UWimd/KzdFgGf1iO10w8WMqvOYGA9ksvBEI+77IilCjSLsRg6
+         EX8gGuEzmu2jQ0l7+I42/XZ73M6g2Hivq0shGrBNxEDc+Wrb9R1UNelbm6cq/cHThulK
+         u+OAoXsC9QgWYKMhU2KgdeOWPmh1cMUs53eLClb9eluF/vE1mwbxnOuGVT8U3OzSrzv6
+         TNSSJ0siqzX/P+ElcDsqhyZTm+e0IggrzH0mMbpYpy/mYsc5K8Xm+vixj+7wRdKd2CBS
+         g2xqYzW399l2F4YXnV7jDYyb6ILAyoabt9yzprRzFSWOT5ELhje2w5Z+2IEgOgC3vEFe
+         qvRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684773472; x=1687365472;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VtfwEOOrFT56Me1+y80csEj29fh/4MEfuxZGlV/VCwA=;
+        b=V+Yl+VEB9nqysuH/wbx1+Vo/Zejb3w/c/58+Px0W7o2n8j/RrHhie78p1JWrFAkzB7
+         0XNwGDK1bchFRIb4IPmY8c/CY+I4p1vmUP3FobaNFkPPpagHqmoL8FwB2vLANY0BK0WM
+         U7tbWbbuXXpFeA2qAmIPkHUYJY5R2QC0qsz5HYw43HxIrxDghmPNgolmY0ysCEeJN/yu
+         TT84HfT6LX0+Vp/fflB9FJk468eY8ItO9/FM8qg5OfMk6BUIi0KAct+Aq/mNjAhgPZeY
+         Ao5f31AWGjMk9+XsXlFVXaMOI3byop1dCTDtjnaGNgQYDyjrHy7j6PDR5D4CR2J6KBQK
+         Nrgg==
+X-Gm-Message-State: AC+VfDyhpCgnFjZht2oUaje384qm1jMVGJTNgUohbJWoBqOf311Cl6eG
+        7fPZGKY4XlRE3r75tgkij6B0Z8zEZz8=
+X-Google-Smtp-Source: ACHHUZ6EpaYD3bKwNCWWyaUrZhak9gLowttSZvR91by2PQtqwd6WvpY4NdAZKtlgX3Hlhqji73+7Shdv7ow=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a63:ec12:0:b0:52c:4227:aa60 with SMTP id
+ j18-20020a63ec12000000b0052c4227aa60mr2565348pgh.7.1684773472003; Mon, 22 May
+ 2023 09:37:52 -0700 (PDT)
+Date:   Mon, 22 May 2023 09:37:50 -0700
+In-Reply-To: <4ffbb2c3-8ed1-d419-16ca-b311867537be@intel.com>
+Mime-Version: 1.0
+References: <20230506030435.80262-1-chao.gao@intel.com> <b472b58d-0469-8a55-985c-1d966ce66419@intel.com>
+ <ZGZhW/x5OWPmx1qD@google.com> <4ffbb2c3-8ed1-d419-16ca-b311867537be@intel.com>
+Message-ID: <ZGuaXp2f5VhfEyUI@google.com>
+Subject: Re: [PATCH] KVM: x86: Track supported ARCH_CAPABILITIES in kvm_caps
+From:   Sean Christopherson <seanjc@google.com>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Xiaoyao Li <xiaoyao.li@intel.com>, Chao Gao <chao.gao@intel.com>,
+        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Jim Mattson <jmattson@google.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 03:33:26PM -0700, Sarthak Kukreti wrote:
-> Add support for provision requests to loopback devices.
-> Loop devices will configure provision support based on
-> whether the underlying block device/file can support
-> the provision request and upon receiving a provision bio,
-> will map it to the backing device/storage. For loop devices
-> over files, a REQ_OP_PROVISION request will translate to
-> an fallocate mode 0 call on the backing file.
+On Mon, May 22, 2023, Dave Hansen wrote:
+> On 5/18/23 10:33, Sean Christopherson wrote:
+> > 
+> >   2. I'm pretty sure conditioning mmio_stale_data_clear on kvm_arch_has_assigned_device()
+> >      is a bug.  AIUI, the vulnerability applies to _any_ MMIO accesses.  Assigning
+> >      a device is necessary to let the device DMA into the guest, but it's not
+> >      necessary to let the guest access MMIO addresses, that's done purely via
+> >      memslots.
 > 
-> Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
-> ---
->  drivers/block/loop.c | 34 +++++++++++++++++++++++++++++++---
->  1 file changed, 31 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/block/loop.c b/drivers/block/loop.c
-> index bc31bb7072a2..7fe1a6629754 100644
-> --- a/drivers/block/loop.c
-> +++ b/drivers/block/loop.c
-> @@ -311,16 +311,20 @@ static int lo_fallocate(struct loop_device *lo, struct request *rq, loff_t pos,
->  {
->  	/*
->  	 * We use fallocate to manipulate the space mappings used by the image
-> -	 * a.k.a. discard/zerorange.
-> +	 * a.k.a. discard/provision/zerorange.
->  	 */
->  	struct file *file = lo->lo_backing_file;
->  	int ret;
->  
-> -	mode |= FALLOC_FL_KEEP_SIZE;
-> +	if (mode & (FALLOC_FL_PUNCH_HOLE | FALLOC_FL_ZERO_RANGE) &&
-> +	    !bdev_max_discard_sectors(lo->lo_device))
-> +		return -EOPNOTSUPP;
->  
-> -	if (!bdev_max_discard_sectors(lo->lo_device))
-> +	if (mode == 0 && !bdev_max_provision_sectors(lo->lo_device))
->  		return -EOPNOTSUPP;
->  
-> +	mode |= FALLOC_FL_KEEP_SIZE;
-> +
->  	ret = file->f_op->fallocate(file, mode, pos, blk_rq_bytes(rq));
->  	if (unlikely(ret && ret != -EINVAL && ret != -EOPNOTSUPP))
->  		return -EIO;
-> @@ -488,6 +492,8 @@ static int do_req_filebacked(struct loop_device *lo, struct request *rq)
->  				FALLOC_FL_PUNCH_HOLE);
->  	case REQ_OP_DISCARD:
->  		return lo_fallocate(lo, rq, pos, FALLOC_FL_PUNCH_HOLE);
-> +	case REQ_OP_PROVISION:
-> +		return lo_fallocate(lo, rq, pos, 0);
+> Just to make sure we're all on the same page: KVM needs mitigations when
+> real, hardware MMIO is exposed to the guest.  None of this has anything
+> to do with virtio or what guests _normally_ see as devices or MMIO.  Right?
 
-If someone calls fallocate(UNSHARE_RANGE) on a loop bdev, shouldn't
-there be a way to pass that through to the fallocate call to the backing
-file?
+Yes.  I try to always call MMIO that is handled by a synthetic/virtual/emulated
+device "emulated MMIO", specifically to differentiate between the two cases.
 
---D
+> But direct device assignment does that "real hardware MMIO" for sure
+> because it's mapping parts of the PCI address space (which is all MMIO)
+> into the guest.  That's what the kvm_arch_has_assigned_device() check
+> was going for.
+> 
+> But I think you're also saying that, in the end, memory gets exposed to
+> the guest by KVM userspace setting up a memslot.  KVM userspace _could_
+> have mapped a piece of MMIO and could just pass that down to a guest
+> without kvm_arch_has_assigned_device() being involved.  That makes the
+> kvm_arch_has_assigned_device() useless.
 
->  	case REQ_OP_WRITE:
->  		if (cmd->use_aio)
->  			return lo_rw_aio(lo, cmd, pos, ITER_SOURCE);
-> @@ -754,6 +760,25 @@ static void loop_sysfs_exit(struct loop_device *lo)
->  				   &loop_attribute_group);
->  }
->  
-> +static void loop_config_provision(struct loop_device *lo)
-> +{
-> +	struct file *file = lo->lo_backing_file;
-> +	struct inode *inode = file->f_mapping->host;
-> +
-> +	/*
-> +	 * If the backing device is a block device, mirror its provisioning
-> +	 * capability.
-> +	 */
-> +	if (S_ISBLK(inode->i_mode)) {
-> +		blk_queue_max_provision_sectors(lo->lo_queue,
-> +			bdev_max_provision_sectors(I_BDEV(inode)));
-> +	} else if (file->f_op->fallocate) {
-> +		blk_queue_max_provision_sectors(lo->lo_queue, UINT_MAX >> 9);
-> +	} else {
-> +		blk_queue_max_provision_sectors(lo->lo_queue, 0);
-> +	}
-> +}
-> +
->  static void loop_config_discard(struct loop_device *lo)
->  {
->  	struct file *file = lo->lo_backing_file;
-> @@ -1092,6 +1117,7 @@ static int loop_configure(struct loop_device *lo, fmode_t mode,
->  	blk_queue_io_min(lo->lo_queue, bsize);
->  
->  	loop_config_discard(lo);
-> +	loop_config_provision(lo);
->  	loop_update_rotational(lo);
->  	loop_update_dio(lo);
->  	loop_sysfs_init(lo);
-> @@ -1304,6 +1330,7 @@ loop_set_status(struct loop_device *lo, const struct loop_info64 *info)
->  	}
->  
->  	loop_config_discard(lo);
-> +	loop_config_provision(lo);
->  
->  	/* update dio if lo_offset or transfer is changed */
->  	__loop_update_dio(lo, lo->use_dio);
-> @@ -1830,6 +1857,7 @@ static blk_status_t loop_queue_rq(struct blk_mq_hw_ctx *hctx,
->  	case REQ_OP_FLUSH:
->  	case REQ_OP_DISCARD:
->  	case REQ_OP_WRITE_ZEROES:
-> +	case REQ_OP_PROVISION:
->  		cmd->use_aio = false;
->  		break;
->  	default:
-> -- 
-> 2.40.1.698.g37aff9b760-goog
-> 
-> --
-> dm-devel mailing list
-> dm-devel@redhat.com
-> https://listman.redhat.com/mailman/listinfo/dm-devel
-> 
+Yep.
+
+> In other words, all guests with kvm_arch_has_assigned_device() need
+> mitigation.
+
+Yes, assuming the guest wants to actually use the device :-)
+
+> But there are potentially situations where the guest can see real hardware MMIO
+> and yet also be !kvm_arch_has_assigned_device().
+
+Yes.  There may or may not be _legitimate_ scenarios for exposing host MMIO to the
+guest without an assigned device, but as far as the mitigation is concerned, being
+legitimate or not doesn't matter, all that matters is that userspace can expose
+host MMIO to the guest irrespective of VFIO.
+
+FWIW, I think this would be a minimal fix without having to apply the mitigation
+blindly.  My only concern is that there might be gaps in the kvm_is_mmio_pfn()
+heuristic, but if that's the case then KVM likely has other issues, e.g. would
+potentially map MMIO with the wrong memtype.
+
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 2865c3cb3501..ac3c535ae3b9 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -1274,6 +1274,7 @@ struct kvm_arch {
+ 
+        bool apic_access_memslot_enabled;
+        bool apic_access_memslot_inhibited;
++       bool vm_has_passthrough_mmio;
+ 
+        /* Protects apicv_inhibit_reasons */
+        struct rw_semaphore apicv_update_lock;
+diff --git a/arch/x86/kvm/mmu/spte.c b/arch/x86/kvm/mmu/spte.c
+index cf2c6426a6fc..83d235488e56 100644
+--- a/arch/x86/kvm/mmu/spte.c
++++ b/arch/x86/kvm/mmu/spte.c
+@@ -189,6 +189,10 @@ bool make_spte(struct kvm_vcpu *vcpu, struct kvm_mmu_page *sp,
+        if (level > PG_LEVEL_4K)
+                spte |= PT_PAGE_SIZE_MASK;
+ 
++       if (static_branch_unlikely(&mmio_stale_data_clear) &&
++           !vcpu->kvm->arch.vm_has_passthrough_mmio && kvm_is_mmio_pfn(pfn))
++               vcpu->kvm->arch.vm_has_passthrough_mmio = true;
++
+        if (shadow_memtype_mask)
+                spte |= static_call(kvm_x86_get_mt_mask)(vcpu, gfn,
+                                                         kvm_is_mmio_pfn(pfn));
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 44fb619803b8..9c66ba35af92 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -7159,7 +7159,7 @@ static noinstr void vmx_vcpu_enter_exit(struct kvm_vcpu *vcpu,
+        else if (static_branch_unlikely(&mds_user_clear))
+                mds_clear_cpu_buffers();
+        else if (static_branch_unlikely(&mmio_stale_data_clear) &&
+-                kvm_arch_has_assigned_device(vcpu->kvm))
++                to_kvm_vmx(vcpu->kvm)->vm_has_passthrough_mmio)
+                mds_clear_cpu_buffers();
+ 
+        vmx_disable_fb_clear(vmx);
