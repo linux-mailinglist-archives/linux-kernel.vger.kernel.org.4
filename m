@@ -2,140 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C0CB70B29E
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 02:53:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90EEF70B2A3
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 02:55:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbjEVAxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 20:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36730 "EHLO
+        id S229999AbjEVAzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 20:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbjEVAxK (ORCPT
+        with ESMTP id S229481AbjEVAzM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 20:53:10 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623A6DB;
-        Sun, 21 May 2023 17:53:05 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QPf7b1gR0z4x1N;
-        Mon, 22 May 2023 10:52:59 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1684716779;
-        bh=IFZYqtHvmYjXWyTUb3u5yrGNdgE9k+C2KpTXNadRRfc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=WvIsa8rX4BVKDXM9ObGvkekHGa2tqVL2CluTAGqKnXYKXkeTX91DQrhWd4UFkBpAP
-         50A9cLjMa+Hk7X+eYPDTkn+0t2321Iy8JAu+dpHXT8O6b2qHvBqihN/RuG0gwehaJV
-         knTX7ksD20z/VchTeOibNpJNdqZQoFWZHEc50c/9conRFP3DFGpiNIZd/GCSbSNTk9
-         NHx6/bXYSU6u5uTnwXZsZIYBsiTL1tvlF/866+UXrNktK0VBy0R4jBGhqcALNc7aNa
-         s4w/rlNRboa8RyM1TllUCXKScAxUxxQsi95gW3iIiKHrb5l0lHGJFj8xgOfbGSPEh7
-         +PFNQ0cxb8mhQ==
-Date:   Mon, 22 May 2023 10:52:57 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        Linux Crypto List <linux-crypto@vger.kernel.org>
-Cc:     Huan Feng <huan.feng@starfivetech.com>,
-        Jia Jie Ho <jiajie.ho@starfivetech.com>,
+        Sun, 21 May 2023 20:55:12 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3082FDB;
+        Sun, 21 May 2023 17:55:11 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id 98e67ed59e1d1-25332422531so2085690a91.0;
+        Sun, 21 May 2023 17:55:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684716910; x=1687308910;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PsLQs8twnUd4CROC4LOnv3O2udtb3+iwSMNlphTO0Ao=;
+        b=VdCeEyzAcPp8O24FlnuOgTe5oWxLbZcDWjvTGzVLVS/oAPy0nCDcsV84ouKUeREXj4
+         kV4Jet9EqO6CHb0uGCBV0IeTqJDeJbTF8IIPgInaogQ6oBsayOi8VhftR3ivv6mKBc/w
+         Epj6kJUQ+VH6h5Vgk5xoa36X8AZY1bKzETaQXja9Y5mXtpYHG9DGNR0OuRDzlF9qjyV0
+         pONlfpT8ShZ+RtPdcOZebCLYPJMz7gvQLAUxa08kHFolWF8BLXxrvyw5F0cyVwZD3TJr
+         RHCQN2SV9AigP0hHdnkpbAlOA8ifbRSc5yQe/SvjHx/wIImmUlygEXHzMlLS8PcmFyvy
+         wq2Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684716910; x=1687308910;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PsLQs8twnUd4CROC4LOnv3O2udtb3+iwSMNlphTO0Ao=;
+        b=McrZTfMwESJGEC4A8hWVbSzo0h9aqhG+0PHWKHxN70msU+D2T/YqBv+eG4vJjSnqG9
+         neKVTeGuw3PZyTtgjnsJuVRXdKJB+fL1A7J9uxCzzZYC7n50TKnIs0f6rRJAYvKdjjlH
+         Jkj7tQhlSmHql8OPQUkKqXl4pOGNb53cP5eayCvJL4rZeCSI9mt13j77ACCgYE7Ewpgb
+         FRUNyN1rH7K5EPc7DoX04zKYZU9bnb8h/z5a2eQcYcszPJ/xz/7rYgIO4f85h2HbAZAi
+         9FxW5knjow3g7hEMQrj6tLb5Yh5LOSTEvNsHKEf1oV4KRKLMyDVi6OjMN28pJ/Hugjfd
+         zMNQ==
+X-Gm-Message-State: AC+VfDzRzyyHQXqyWuBURCca5gYnX84FwNnudigg7qZyM5N+VJVFj6iR
+        rDbwN0x1meAsACa8AzW+/OM=
+X-Google-Smtp-Source: ACHHUZ7w2+lb7PDmQAxEv+tjgCCeapydGEja1vAwMl9NDwIWex3ibUYMn+nb15VBTOeifnl0eXHsRQ==
+X-Received: by 2002:a17:90b:a57:b0:253:5599:5fa4 with SMTP id gw23-20020a17090b0a5700b0025355995fa4mr14138536pjb.19.1684716910533;
+        Sun, 21 May 2023 17:55:10 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-10.three.co.id. [180.214.232.10])
+        by smtp.gmail.com with ESMTPSA id w62-20020a17090a6bc400b00246774a9addsm5175334pjj.48.2023.05.21.17.55.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 May 2023 17:55:09 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id D67A110693A; Mon, 22 May 2023 07:55:05 +0700 (WIB)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Linux SPDX Licenses <linux-spdx@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the crypto tree
-Message-ID: <20230522105257.562cb1ec@canb.auug.org.au>
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Actions <linux-actions@lists.infradead.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Cc:     Jan Kara <jack@suse.com>,
+        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Diederik de Haas <didi.debian@cknow.org>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Philippe Ombredanne <pombredanne@nexb.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: [PATCH v2 0/2] SPDX conversion from UDF
+Date:   Mon, 22 May 2023 07:54:33 +0700
+Message-Id: <20230522005434.22133-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/rH6GA9i8=s+/RlhPx=6EfaR";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2293; i=bagasdotme@gmail.com; h=from:subject; bh=Dq8Nbn/b6968iQgCwgZhjDFLMuWaAZdasoZ7z9G5NIk=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDClZe53faDHPqNv/Mp7xltQh80D9rxGeD3fLFFwPWZ7BW ZZWqVbWUcrCIMbFICumyDIpka/p9C4jkQvtax1h5rAygQxh4OIUgIm49TD8Tyz7fbvmQ8/dvt8v Pq6///UV19mTvBGWbIuyl5nmqGotPcTwP3P7ty+n1fpfWqyZoCRzX6DPO1DW/vbD8Jjwjrakf0q X2AA=
+X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/rH6GA9i8=s+/RlhPx=6EfaR
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+This small SPDX conversion series targets UDF file system, which is
+splitted from v2 of my SPDX conversion series that is triggered by
+Didi's GPL full name fixes [1]. It is done to ease review.
 
-Hi all,
+All boilerplates in fs/udf/ is converted, except fs/udf/ecma_167.h.
+The latter file apparently looks like 2-clause BSD Source-Code
+license, yet the second clause is from third clause of 3-Clause BSD.
+This custom license can't be expressed satisfiably in SPDX license
+identifier, hence the file doesn't get converted.
 
-After merging the crypto tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+This series is based on mm-nonmm-unstable branch.
 
-drivers/tty/serial/amba-pl011.c: In function 'pl011_sgbuf_init':
-drivers/tty/serial/amba-pl011.c:379:30: error: implicit declaration of func=
-tion 'phys_to_page'; did you mean 'pfn_to_page'? [-Werror=3Dimplicit-functi=
-on-declaration]
-  379 |         sg_set_page(&sg->sg, phys_to_page(dma_addr),
-      |                              ^~~~~~~~~~~~
-      |                              pfn_to_page
-drivers/tty/serial/amba-pl011.c:379:30: error: passing argument 2 of 'sg_se=
-t_page' makes pointer from integer without a cast [-Werror=3Dint-conversion]
-  379 |         sg_set_page(&sg->sg, phys_to_page(dma_addr),
-      |                              ^~~~~~~~~~~~~~~~~~~~~~
-      |                              |
-      |                              int
-In file included from include/linux/kfifo.h:42,
-                 from include/linux/tty_port.h:5,
-                 from include/linux/tty.h:12,
-                 from drivers/tty/serial/amba-pl011.c:25:
-include/linux/scatterlist.h:136:69: note: expected 'struct page *' but argu=
-ment is of type 'int'
-  136 | static inline void sg_set_page(struct scatterlist *sg, struct page =
-*page,
-      |                                                        ~~~~~~~~~~~~=
-~^~~~
+Changes since v1 [2]:
+  * Correct SPDX tag for LGPL (correct spdxcheck warning)
 
-Caused by commit
+[1]: https://lore.kernel.org/linux-spdx/20230512100620.36807-1-bagasdotme@gmail.com/
+[2]: https://lore.kernel.org/linux-mm/20230517083344.1090863-1-bagasdotme@gmail.com/
 
-  42ef0e944b01 ("crypto: starfive - Add crypto engine support")
+Bagas Sanjaya (2):
+  fs: udf: Replace GPL 2.0 boilerplate license notice with SPDX
+    identifier
+  fs: udf: udftime: Replace LGPL boilerplate with SPDX identifier
 
-I applied the following patch for today.
+ fs/udf/balloc.c    |  6 +-----
+ fs/udf/dir.c       |  6 +-----
+ fs/udf/directory.c |  6 +-----
+ fs/udf/file.c      |  6 +-----
+ fs/udf/ialloc.c    |  6 +-----
+ fs/udf/inode.c     |  6 +-----
+ fs/udf/lowlevel.c  |  6 +-----
+ fs/udf/misc.c      |  6 +-----
+ fs/udf/namei.c     |  6 +-----
+ fs/udf/partition.c |  6 +-----
+ fs/udf/super.c     |  6 +-----
+ fs/udf/symlink.c   |  6 +-----
+ fs/udf/truncate.c  |  6 +-----
+ fs/udf/udftime.c   | 18 ++----------------
+ fs/udf/unicode.c   |  6 +-----
+ 15 files changed, 16 insertions(+), 86 deletions(-)
 
-From: Stephen Rothwell <sfr@canb.auug.org.au>
-Date: Mon, 22 May 2023 10:47:38 +1000
-Subject: [PATCH] fixup for "crypto: starfive - Add crypto engine support"
 
-Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
----
- drivers/crypto/starfive/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+base-commit: 7e61b33831bc7680b24bc04af9ed9c1553dac406
 
-diff --git a/drivers/crypto/starfive/Kconfig b/drivers/crypto/starfive/Kcon=
-fig
-index be58d1473523..8795b2fddb4e 100644
---- a/drivers/crypto/starfive/Kconfig
-+++ b/drivers/crypto/starfive/Kconfig
-@@ -4,7 +4,7 @@
-=20
- config CRYPTO_DEV_JH7110
- 	tristate "StarFive JH7110 cryptographic engine driver"
--	depends on SOC_STARFIVE || COMPILE_TEST
-+	depends on SOC_STARFIVE
- 	select CRYPTO_ENGINE
- 	select CRYPTO_HMAC
- 	select CRYPTO_SHA256
---=20
-2.39.2
+Range-diff against v1:
 
---=20
-Cheers,
-Stephen Rothwell
+1:  442194d17ed043 = 1:  30fb64a215be1c fs: udf: Replace GPL 2.0 boilerplate license notice with SPDX identifier
+2:  ccb407446ab324 ! 2:  f7cfeaa5cec879 fs: udf: udftime: Replace LGPL boilerplate with SPDX identifier
+    @@ Commit message
+     
+      ## fs/udf/udftime.c ##
+     @@
+    -+// SPDX-License-Identifier: LGPL-2.0-or-later
+    ++// SPDX-License-Identifier: LGPL-2.0+
+      /* Copyright (C) 1993, 1994, 1995, 1996, 1997 Free Software Foundation, Inc.
+         This file is part of the GNU C Library.
+     -   Contributed by Paul Eggert (eggert@twinsun.com).
 
---Sig_/rH6GA9i8=s+/RlhPx=6EfaR
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+-- 
+An old man doll... just what I always wanted! - Clara
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRqvOkACgkQAVBC80lX
-0Gx6eQf+NZo9fwOYsYiw+dWPKkZRU4o0Cgg3d9nGr18sc+SloIcXvcYJB48NC1WC
-AQ0A8jaDK9JFLv/uD1RxjI2xLrzbyLhS0HWJqQLy384u2xpqK14+S7cirUZfOlyk
-21OTxm36Br5hIjqsVd5d+c6Q5ORDFmJDeE++P53ag+j3NJRiVyR29JNt4nb2pOSc
-bpk2POpyuU4V2/Jzhv5k4Gx5JUdpg7ltXj6t2PNXnK1FUIcPFBUmmVOJ8zcRBqGO
-a7hRmuAt/UVFo1ZInyOtYfnziVrMw0ZxNWvUufFICBnislQMjQMH8MOwRYAU7LiV
-/1HLeBnae2jG9DHGnv2QpT2MWwb7lg==
-=jHMw
------END PGP SIGNATURE-----
-
---Sig_/rH6GA9i8=s+/RlhPx=6EfaR--
