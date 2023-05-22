@@ -2,340 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4641E70C4D1
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 20:01:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B875070C4D8
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 20:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232008AbjEVSBb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 14:01:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58126 "EHLO
+        id S232713AbjEVSCf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 14:02:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229873AbjEVSB2 (ORCPT
+        with ESMTP id S229873AbjEVSCd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 14:01:28 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2A694;
-        Mon, 22 May 2023 11:01:25 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 4AC576017E;
-        Mon, 22 May 2023 20:01:23 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1684778483; bh=zKQaI+VGcHZCPJRRcEZ3alsSHYf+vBMuipguuphoeHw=;
-        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-        b=MxdZ+MEapjDS6n60VS46pmlICubyNep0lzUlIwjVQPlsAeHaCYP/fvjz0+ErMpUC7
-         CZhmPPovkegp1bUTNxpgWYXiC4YpcB/Te3OWatupelB9yHm/0Roh6rq4AzLNSR1u9R
-         LSAL1TvmV2N+yTCNlRIP3DVU+K7kPWamGSNkbeP1sjLBVgNrOzsU1Nf3ATurZvpH2N
-         CAan/HCpYclZW4LBlUoPgjtv3qsjzML1PzhVSkhDxXE7zMr+8Lrk4yaLByB5EP6uPh
-         6hf2FIlDY/Rwn6Z/YLwoeyOKy+yotRf9z4e5q8e1nDZvsLQKKhd2oLMEEVCr06M3J3
-         eIxYclnew3k9w==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ddnXJioSaAxz; Mon, 22 May 2023 20:01:20 +0200 (CEST)
-Received: from [192.168.1.6] (unknown [77.237.113.62])
-        by domac.alu.hr (Postfix) with ESMTPSA id 9A9BA6017C;
-        Mon, 22 May 2023 20:01:19 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1684778480; bh=zKQaI+VGcHZCPJRRcEZ3alsSHYf+vBMuipguuphoeHw=;
-        h=Date:From:Subject:To:Cc:References:In-Reply-To:From;
-        b=QKCRoEKEgpc1UM/zZ1CUX3VuDgVlW7d2gxxIUKAhSlEpOY4595vU3F6UB9kucfn3a
-         pBen/ziuQpD6dv44U0WSI5i8lkARB4PLBYnCi3mXQZg4l7TfHokL4JzZ80NRG7HH4x
-         lw+CGhCQdVYr7ffAv09f3EJD8ZS5YKH+9RtEruxGS05d9hixLx2Vq72LPdJfhdBsMB
-         ZP5IMVhLaovzhNl5UrvllrJSezHpMG2dN1vXGsiypOHozjBugD/mjbe0XaZoXjwJRc
-         G72UTAQmh88bvrljl4mmyZaF5ETRPgzM7yv8k9uafGCfMtGV3nLysuKCQ+xXDz34cR
-         YawTTaQwf0t1w==
-Message-ID: <c993180f-22a8-130a-8487-74fbe4c81335@alu.unizg.hr>
-Date:   Mon, 22 May 2023 20:01:14 +0200
+        Mon, 22 May 2023 14:02:33 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7717A94
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:02:32 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-563874afe98so45206357b3.1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:02:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684778551; x=1687370551;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=aVJBY/8knzMSVZs/V5x+SxD32eOlg+FbYuKoI3xgu5k=;
+        b=IiaPqvUFy2+EUG1ROFc6gGPSTDqB+lvZrShUlA59d6U8FYt/+HOiHCfnpsFiTIftXQ
+         Q9A3skQlwcdqBzrTwhRn44a2nDlDjB9jJ6u1HC+0Pk7qB7QvsIrHsBbdrwAl1duQYAIa
+         JrLcXjAnqtXAywZp5HTN/r7dIHpxCNjCw8it3mJLVin5F23vlrZEJ2GAu4NFDsDOWvbf
+         g8gaI7XHdEoU1ykNMnNCx9ulX0ZzwIH/1S4kJtVRhbCqdz3fRU8+5FUsWVvXbJtAYv1m
+         MAhsXR/xFUfYOPehmPurjRam44Lm7EnvxmMTVYFAfy7/st3Rt2r1SOZN442KnBYLIrrU
+         38fA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684778551; x=1687370551;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aVJBY/8knzMSVZs/V5x+SxD32eOlg+FbYuKoI3xgu5k=;
+        b=SNZvn3XLYZOkef7G2qrbNzSyisy2mvkcriwBKzxQdHHh8VePSdPpIlYp5obvU+kK8s
+         mxYPooK5zoy6wQVsnyu0YbrBd1PsD96dfNHKFgcz7qOu4mIWpeifuYlKWRrMl+fIbMn7
+         DonUtl/KNbkdGigVm4ZDh3QA18pt8G4LtjUPNFipFMG2nVrJrKWwIbqjEsbUWl6lhazt
+         IB2TJmMb9HWiWDXzSBhzRMGjZLlShph04Khnhn4na1qVNVS92M4/Pe9P2sTOJtQNTakx
+         71E+o3hCEddPtqNM6EFRwtCGwtVz2NGyZeWwLnN06a2GSuaMMZnDIOKuogPVu/2nJTrf
+         gfPA==
+X-Gm-Message-State: AC+VfDz/jJR1/+U+po4lEHxazqJ3knSi3O8qCiKDQFXuMpT/vOMkr1Uv
+        YA30MYYeCkxBSyTwFciM49ysKQWjYOsGjP0nx7RbnQ==
+X-Google-Smtp-Source: ACHHUZ5A0/pll2fL/dhzKjSv92cbxqoh0Y0r8v4Nv91Amd9dUVpr+L1YyCF04nMS1kzjLTSw5bsXDQHt/W8MX/vU+kU=
+X-Received: by 2002:a81:5289:0:b0:55a:4840:68d with SMTP id
+ g131-20020a815289000000b0055a4840068dmr11841891ywb.20.1684778551387; Mon, 22
+ May 2023 11:02:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Subject: Re: [BUG] selftests: af_unix: unix:diag.c does not compile on
- AlmaLinux 8.7
-To:     Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com, shuah@kernel.org
-References: <edac34c9-190c-0d80-8d95-2f42971cc870@alu.unizg.hr>
- <20230522162843.49731-1-kuniyu@amazon.com>
-Content-Language: en-US
-In-Reply-To: <20230522162843.49731-1-kuniyu@amazon.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20230503130051.144708-1-y.oudjana@protonmail.com>
+ <20230503130051.144708-4-y.oudjana@protonmail.com> <CAA8EJpokUqHRQz=RJnJpvFzCzz+=5TepPraQGvCvjqFL9+GX7w@mail.gmail.com>
+ <5UM2VR.7LLGW1RDW4G2@gmail.com>
+In-Reply-To: <5UM2VR.7LLGW1RDW4G2@gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Mon, 22 May 2023 21:02:20 +0300
+Message-ID: <CAA8EJpqh7Me9p1oPRZ88KQD4WRqYCswZ-2njYX6tTa6z0o6cGg@mail.gmail.com>
+Subject: Re: [PATCH RESEND 3/3] clk: qcom: cbf-msm8996: Add support for
+ MSM8996 Pro
+To:     Yassine Oudjana <yassine.oudjana@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/22/23 18:28, Kuniyuki Iwashima wrote:
-> From: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-> Date: Mon, 22 May 2023 17:32:11 +0200
->> Hi,
->>
->> On vanilla AlmaLinux 8.7 (CentOS fork) selftests/net/af_unix/diag_uid.c doesn't
->> compile out of the box, giving the errors:
->>
->> make[2]: Entering directory '/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix'
->> gcc     diag_uid.c  -o /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix/diag_uid
->> diag_uid.c:36:16: error: ‘UDIAG_SHOW_UID’ undeclared here (not in a function); did you mean ‘UDIAG_SHOW_VFS’?
->>     .udiag_show = UDIAG_SHOW_UID
->>                   ^~~~~~~~~~~~~~
->>                   UDIAG_SHOW_VFS
->> In file included from diag_uid.c:17:
->> diag_uid.c: In function ‘render_response’:
->> diag_uid.c:128:28: error: ‘UNIX_DIAG_UID’ undeclared (first use in this function); did you mean ‘UNIX_DIAG_VFS’?
->>     ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
->>                               ^~~~~~~~~~~~~
->> ../../kselftest_harness.h:707:13: note: in definition of macro ‘__EXPECT’
->>     __typeof__(_seen) __seen = (_seen); \
->>                ^~~~~
->> diag_uid.c:128:2: note: in expansion of macro ‘ASSERT_EQ’
->>     ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
->>     ^~~~~~~~~
->> diag_uid.c:128:28: note: each undeclared identifier is reported only once for each function it appears in
->>     ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
->>                               ^~~~~~~~~~~~~
->> ../../kselftest_harness.h:707:13: note: in definition of macro ‘__EXPECT’
->>     __typeof__(_seen) __seen = (_seen); \
->>                ^~~~~
->> diag_uid.c:128:2: note: in expansion of macro ‘ASSERT_EQ’
->>     ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
->>     ^~~~~~~~~
->> make[2]: *** [../../lib.mk:147: /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix/diag_uid] Error 1
->>
->> The correct value is in <uapi/linux/unix_diag.h>:
->>
->> include/uapi/linux/unix_diag.h:23:#define UDIAG_SHOW_UID		0x00000040	/* show socket's UID */
->>
->> The fix is as follows:
->>
->> ---
->>    tools/testing/selftests/net/af_unix/diag_uid.c | 4 ++++
->>    1 file changed, 4 insertions(+)
->>
->> diff --git a/tools/testing/selftests/net/af_unix/diag_uid.c b/tools/testing/selftests/net/af_unix/diag_uid.c
->> index 5b88f7129fea..66d75b646d35 100644
->> --- a/tools/testing/selftests/net/af_unix/diag_uid.c
->> +++ b/tools/testing/selftests/net/af_unix/diag_uid.c
->> @@ -16,6 +16,10 @@
->>
->>    #include "../../kselftest_harness.h"
->>
->> +#ifndef UDIAG_SHOW_UID
->> +#define UDIAG_SHOW_UID         0x00000040      /* show socket's UID */
->> +#endif
->> +
->>    FIXTURE(diag_uid)
->>    {
->>           int netlink_fd;
->>
->> --
->>
->> However, this patch reveals another undefined value:
->>
->> make[2]: Entering directory '/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix'
->> gcc     diag_uid.c  -o /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix/diag_uid
->> In file included from diag_uid.c:17:
->> diag_uid.c: In function ‘render_response’:
->> diag_uid.c:132:28: error: ‘UNIX_DIAG_UID’ undeclared (first use in this function); did you mean ‘UNIX_DIAG_VFS’?
->>     ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
->>                               ^~~~~~~~~~~~~
->> ../../kselftest_harness.h:707:13: note: in definition of macro ‘__EXPECT’
->>     __typeof__(_seen) __seen = (_seen); \
->>                ^~~~~
->> diag_uid.c:132:2: note: in expansion of macro ‘ASSERT_EQ’
->>     ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
->>     ^~~~~~~~~
->> diag_uid.c:132:28: note: each undeclared identifier is reported only once for each function it appears in
->>     ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
->>                               ^~~~~~~~~~~~~
->> ../../kselftest_harness.h:707:13: note: in definition of macro ‘__EXPECT’
->>     __typeof__(_seen) __seen = (_seen); \
->>                ^~~~~
->> diag_uid.c:132:2: note: in expansion of macro ‘ASSERT_EQ’
->>     ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
->>     ^~~~~~~~~
->> make[2]: *** [../../lib.mk:147: /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix/diag_uid] Error 1
->>
->> Apparently, AlmaLinux 8.7 lacks this enum UNIX_DIAG_UID:
->>
->> diff -u /usr/include/linux/unix_diag.h include/uapi/linux/unix_diag.h
->> --- /usr/include/linux/unix_diag.h	2023-05-16 13:47:51.000000000 +0200
->> +++ include/uapi/linux/unix_diag.h	2022-10-12 07:35:58.253481367 +0200
->> @@ -20,6 +20,7 @@
->>    #define UDIAG_SHOW_ICONS	0x00000008	/* show pending connections */
->>    #define UDIAG_SHOW_RQLEN	0x00000010	/* show skb receive queue len */
->>    #define UDIAG_SHOW_MEMINFO	0x00000020	/* show memory info of a socket */
->> +#define UDIAG_SHOW_UID		0x00000040	/* show socket's UID */
->>
->>    struct unix_diag_msg {
->>    	__u8	udiag_family;
->> @@ -40,6 +41,7 @@
->>    	UNIX_DIAG_RQLEN,
->>    	UNIX_DIAG_MEMINFO,
->>    	UNIX_DIAG_SHUTDOWN,
->> +	UNIX_DIAG_UID,
->>
->>    	__UNIX_DIAG_MAX,
->>    };
->>
->> Now, this is a change in enums and there doesn't seem to an easy way out
->> here. (I think I saw an example, but I cannot recall which thread. I will do
->> more research.)
->>
->> When I included
->>
->> # gcc -I ../../../../include diag_uid.c
->>
->> I've got the following error:
->>
->> [marvin@pc-mtodorov linux_torvalds]$ cd tools/testing/selftests/net/af_unix/
->> [marvin@pc-mtodorov af_unix]$ gcc  -I ../../../../../include   diag_uid.c  -o
->> /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/net/af_unix/diag_uid
->> In file included from ../../../../../include/linux/build_bug.h:5,
->>                    from ../../../../../include/linux/bits.h:21,
->>                    from ../../../../../include/linux/capability.h:18,
->>                    from ../../../../../include/linux/netlink.h:6,
->>                    from diag_uid.c:8:
->> ../../../../../include/linux/compiler.h:246:10: fatal error: asm/rwonce.h: No such file or directory
->>    #include <asm/rwonce.h>
->>             ^~~~~~~~~~~~~~
->> compilation terminated.
->> [marvin@pc-mtodorov af_unix]$
->>
->> At this point I gave up, as it would be an overkill to change kernel system
->> header to make a test pass, and this probably wouldn't be accepted upsteam?
->>
->> Hope this helps. (If we still want to build on CentOS/AlmaLinux/Rocky 8?)
-> 
-> I launched AlmaLinux/RockyLinux 8.7 and 9.2 with images listed in the pages
-> below.
-> 
->    https://wiki.almalinux.org/cloud/AWS.html#community-amis
->    https://rockylinux.org/cloud-images/
-> 
-> The kernel versions in each image were :
-> 
->    8.7:
->    Alma  : 4.18.0-425.3.1.el8.x86_64
->    Rocky : 4.18.0-425.10.1.el8_7.x86_64
-> 
->    9.2:
->    Alma  : 5.14.0-284.11.1.el9_2.x86_64
->    Rocky : 5.14.0-284.11.1.el9_2.x86_64
-> 
-> So, this is not a bug.  It's just because v4.18 does not support
-> UNIX_DIAG_UID, which was introduced in v5.3.
-> 
-> You should install 5.3+ kernel if you want to build the test.
-> 
-> Thanks,
-> Kuniyuki
+On Mon, 22 May 2023 at 20:49, Yassine Oudjana <yassine.oudjana@gmail.com> wrote:
+>
+>
+> On Wed, May 3 2023 at 04:20:00 PM +03:00:00, Dmitry Baryshkov
+> <dmitry.baryshkov@linaro.org> wrote:
+> > On Wed, 3 May 2023 at 16:02, Yassine Oudjana
+> > <yassine.oudjana@gmail.com> wrote:
+> >>
+> >>  From: Yassine Oudjana <y.oudjana@protonmail.com>
+> >>
+> >>  The CBF PLL on MSM8996 Pro has a /4 post divisor instead of /2.
+> >> Handle the
+> >>  difference accordingly.
+> >>
+> >>  Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+> >>  ---
+> >>   drivers/clk/qcom/clk-cbf-8996.c | 121
+> >> ++++++++++++++++++++++++++++----
+> >>   1 file changed, 106 insertions(+), 15 deletions(-)
+> >>
+> >>  diff --git a/drivers/clk/qcom/clk-cbf-8996.c
+> >> b/drivers/clk/qcom/clk-cbf-8996.c
+> >>  index 1bb2cd956d68..a3e96578ddd9 100644
+> >>  --- a/drivers/clk/qcom/clk-cbf-8996.c
+> >>  +++ b/drivers/clk/qcom/clk-cbf-8996.c
+> >>  @@ -65,6 +65,19 @@ static const struct alpha_pll_config
+> >> cbfpll_config = {
+> >>          .early_output_mask = BIT(3),
+> >>   };
+> >>
+> >>  +static const struct alpha_pll_config cbfpll_pro_config = {
+> >>  +       .l = 72,
+> >>  +       .config_ctl_val = 0x200d4828,
+> >>  +       .config_ctl_hi_val = 0x006,
+> >>  +       .test_ctl_val = 0x1c000000,
+> >>  +       .test_ctl_hi_val = 0x00004000,
+> >>  +       .pre_div_mask = BIT(12),
+> >>  +       .post_div_mask = 0x3 << 8,
+> >>  +       .post_div_val = 0x3 << 8,
+> >>  +       .main_output_mask = BIT(0),
+> >>  +       .early_output_mask = BIT(3),
+> >>  +};
+> >
+> > Granted that the difference between this and the non-pro is just the
+> > post_div_val, would it be easier to just patch it in the probe()?
+>
+> I wasn't sure if that approach would've been accepted since it relies
+> on the special case that only one instance of the CBF device will exist
+> in normal conditions, but if you say it's fine then sure, I can do that.
 
-Hi, Kuniyuki,
+We do this for other clock controllers, which we know to be singleton.
+So this should be fine too.
 
-Good point. However, newer kernel won't save me from old /usr/include
-headers, will it?
-
-I was actually testing the 6.4-rc3 on AlmaLinux 8.7, as it is my only
-RHEL-based box ...
-
-What would then be the right action?
-
-If it was a #define instead of enum, I'd probably work around and
-exclude the test that doesn't fit the kernel, or the system call
-would return -EINVAL?
-
-Including from the includes that came with the kernel might be
-a solution:
-
-../../../../../include/uapi/linux/unix_diag.h:44:	UNIX_DIAG_UID,
-
-Alas, when I try to include, I get these ugly errors:
-
-[marvin@pc-mtodorov af_unix]$ gcc -I ../../../../../include/ diag_uid.c
-In file included from ../../../../../include/linux/build_bug.h:5,
-                  from ../../../../../include/linux/bits.h:21,
-                  from ../../../../../include/linux/capability.h:18,
-                  from ../../../../../include/linux/netlink.h:6,
-                  from diag_uid.c:8:
-../../../../../include/linux/compiler.h:246:10: fatal error:
-asm/rwonce.h: No such file or directory
-  #include <asm/rwonce.h>
-           ^~~~~~~~~~~~~~
-compilation terminated.
-[marvin@pc-mtodorov af_unix]$ vi +246
-../../../../../include/linux/compiler.h
-[marvin@pc-mtodorov af_unix]$ find ../../../../../include -name rwonce.h
-../../../../../include/asm-generic/rwonce.h
-[marvin@pc-mtodorov af_unix]$
-
-Minimum reproducer is:
-
-[marvin@pc-mtodorov af_unix]$ gcc -I ../../../../../include/ reproducer.c
-In file included from ../../../../../include/linux/build_bug.h:5,
-                  from ../../../../../include/linux/bits.h:21,
-                  from ../../../../../include/linux/capability.h:18,
-                  from ../../../../../include/linux/netlink.h:6,
-                  from reproducer.c:5:
-../../../../../include/linux/compiler.h:246:10: fatal error:
-asm/rwonce.h: No such file or directory
-  #include <asm/rwonce.h>
-           ^~~~~~~~~~~~~~
-compilation terminated.
-[marvin@pc-mtodorov af_unix]$
-
-[marvin@pc-mtodorov af_unix]$ nl reproducer.c
-
-      1	#define _GNU_SOURCE
-      2	#include <linux/netlink.h>
-
-[marvin@pc-mtodorov af_unix]$
-
-Am I doing something very stupid right now, for actually I see
-
-#include <asm/rwonce.h>
-
-in "include/linux/compiler.h" 248L, 7843C
-
-while actual rwonce.h is in <asm-generic/rwonce.h>
-
-[marvin@pc-mtodorov af_unix]$ find ../../../../../include -name rwonce.h
-../../../../../include/asm-generic/rwonce.h
-[marvin@pc-mtodorov af_unix]$
-
-I must be doing something wrong, for I see that the kernel compiled
-despite not having include/asm ?
-
-When looking at the invocations of rwonce.h in the kernel, they seem to
-be equally spread between <asm-generic/rwonce.h> and <asm/rwonce.h> :
-
-[marvin@pc-mtodorov af_unix]$ grep --include="*.[ch]" -n -w rwonce.h -r ../../../../.. 2> /dev/null | less
-../../../../../arch/alpha/include/asm/rwonce.h:33:#include <asm-generic/rwonce.h>
-../../../../../arch/arm64/include/asm/rwonce.h:71:#include <asm-generic/rwonce.h>
-../../../../../arch/arm64/kvm/hyp/include/nvhe/spinlock.h:18:#include <asm/rwonce.h>
-../../../../../arch/s390/include/asm/rwonce.h:29:#include <asm-generic/rwonce.h>
-../../../../../arch/x86/include/generated/asm/rwonce.h:1:#include <asm-generic/rwonce.h>
-../../../../../include/asm-generic/barrier.h:18:#include <asm/rwonce.h>
-../../../../../include/kunit/test.h:29:#include <asm/rwonce.h>
-../../../../../include/linux/compiler.h:246:#include <asm/rwonce.h>
-
-I figured out I must be doing something wrong or the kernel otherwise
-would not build for me.
-
-Eventually, the UNIX_DIAG_UID enum is used in only one place:
-
-         ASSERT_EQ(attr->rta_type, UNIX_DIAG_UID);
-
-That particular test should fail in case of kernel older than 5.3.
-
-However, I fell into a terrible mess where one thing breaks the other.
-
-I can't seem to make this work.
-
-Thanks,
-Mirsad
+--
+With best wishes
+Dmitry
