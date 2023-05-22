@@ -2,82 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCBDD70CAE9
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 22:25:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30E5270CAF3
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 22:28:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235063AbjEVUZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 16:25:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34866 "EHLO
+        id S231147AbjEVU16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 16:27:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235540AbjEVUZL (ORCPT
+        with ESMTP id S229555AbjEVU1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 16:25:11 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29AA1AA;
-        Mon, 22 May 2023 13:25:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1684787107; i=rwarsow@gmx.de;
-        bh=6qv3V5j++ri4l38GYiJh91YWQ+le5HeM3xkAI85f/n0=;
-        h=X-UI-Sender-Class:Date:From:To:Cc:Subject;
-        b=jq03EAuAy70QbG1qAX0N4CqFLCXm8rx2ErEs1cbidzD+nMleQmf7N5ozlRQEaLHbJ
-         tnOtgTJmL/albZKWRkRURWzFk5yR0PRgsb6ZlvlZZ/9+12iBOgLMZHpVrzXdNnXWBQ
-         rMztsW4a5MQx4ByrcoVWLEZEy1p6PstxpsJuxE530v41jRwBqjkEz9hlv7g/bGhtoJ
-         z+7gQUhU31/igvQT+b1AoQ1ok8MyKxYLVUK10jeIw2UieDnt8X2PJg/vDv1i1+4VuL
-         UwpGBnN+p5tLu4opzXuPRrUAN33yo/OwOhlixaZrmEVlup3ifIo1QeIdQFB5XGhhMI
-         lqiUSizZ2mKaA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.100.20] ([46.142.32.139]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mqs4f-1qVd5O1eXR-00msMI; Mon, 22
- May 2023 22:25:07 +0200
-Message-ID: <947459f0-4c34-5da6-7d0b-ce1f26630645@gmx.de>
-Date:   Mon, 22 May 2023 22:25:06 +0200
+        Mon, 22 May 2023 16:27:41 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97699B6
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 13:27:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Zh3bYVOZOPUlrTfXXZ/bsZ3x6YiftJS2QmsY9wi74fQ=; b=dXcUsvzI0SN0+FUW095bojxrcq
+        j3moMPN/SZCFl8M4OcCIcG18t6tQ7db8Hg+s6g5xcpb0gtTKm5MeotymxCoV41YVQ8QI767b3F1fe
+        dQSORh4TqJd0geGec4tMsaFFN/ikekxUcIFc3V7m3WBfvjx5NCKag7BQmgudmxDytdNnDJt3p/cWB
+        +pmrMHxTsLQuhF8zxW6kJGZO4FWwwxNXASn//wuPr4KFR7uctOnnNUV7sLNEhnVt6DOqxoxcyvsSB
+        AaqXa4ORxl/SeyAQOsnzdpklUAdMVDwjX6sORPGivT0uLSe8tRgNO5ndryLS9oIULseKo4hmWj0yg
+        FUCZqoug==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q1C7Q-0028W2-1I;
+        Mon, 22 May 2023 20:27:05 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 860813002C5;
+        Mon, 22 May 2023 22:26:59 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 486A52416EAFC; Mon, 22 May 2023 22:26:59 +0200 (CEST)
+Date:   Mon, 22 May 2023 22:26:59 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     kan.liang@linux.intel.com
+Cc:     mingo@redhat.com, acme@kernel.org, linux-kernel@vger.kernel.org,
+        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
+        jolsa@kernel.org, namhyung@kernel.org, irogers@google.com,
+        adrian.hunter@intel.com, ak@linux.intel.com, eranian@google.com,
+        alexey.v.bayduraev@linux.intel.com, tinghao.zhang@intel.com,
+        tony.luck@intel.com
+Subject: Re: [PATCH V2 1/6] perf/x86/intel: Add Grand Ridge and Sierra Forest
+Message-ID: <20230522202659.GC3334667@hirez.programming.kicks-ass.net>
+References: <20230522113040.2329924-1-kan.liang@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-From:   Ronald Warsow <rwarsow@gmx.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-Content-Language: de-DE, en-US
-Subject: Re: [PATCH 6.3 000/364] 6.3.4-rc1 review
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Provags-ID: V03:K1:nIqSBWeOIdcRLG03lzaM67Z8Nle1VgANHnXg559AdE4Y8aG9j+T
- 6Xf43pxg+x1gzqtvXUZePXfB7BaNnlW6XUNtQTk8e4BGsxe+XNit2leli4hiJGtUx05oPC8
- 7QHQKGTMNlhntuGyIlXkizyVTFtvmUzwL2XB1kwkWJg5c/qj+1EpCsY7s1OI0DkMLp+pRhm
- ghxQkprF0rX5ANxpkh2xA==
-UI-OutboundReport: notjunk:1;M01:P0:rKSdG3BQVcM=;Z15VB/eIFPMlUJOqdRMui97BZRU
- MEz3BpRx6cfa2wSkMkFNYEqXMMmgoOvSSJKPhgKVoPfjvNNk3C6wxm4mK9t0Cn9fnsCb/ipi0
- P3Jlt7z2Mh6Wt6URoon4mt3tYerZnE6Ajrj1gCoxLCj1VsfbnadpBoV/LdGTTEiVD3vixMiZx
- BvnW4phXksAghnN5Pc2IjDgqFHEN0CTDl5eBvVG35Jim//w4r9a/nixFPgcijBW1MO5JIsFuB
- 3D/e9wsBITS8LZb4Jbb+z/rnSvcw9U/AM8UfPbPRu4D9JVKLd6l/ZjlzuxOO1Z62CXfnhqpjO
- tIP2EIlp37FISlVXJicyFSHa9Olmy4C4XBN9bxR1IU163AJBb+O26dlSiB42S2IirBctgrZzm
- UyvBEIH2gFXvXqf90+LKDyJiqC/x1Wnq3y0AZvM4ALfyG8cI04Q7Uv3dZexth66COwonTzMDG
- XMCyyXcKw1sIMN2P2payAfIjkBLXQSqpHsiNh32+Lp52C/dcB+B0xTSHfKiJqktCUszKvQe9+
- Ar6ivZcuSLr8nlS9FFBmN91Nt5V6bA9Mz00R9XYqOlqGJDlsB9Omw0pzJbLJbU9pm6X6HFNzn
- A7Qy/ThP3nWFXu2vzTOP146vo3PdQRt1Ta2JPIDEd2ts4gibQUO/Z4nRUsSLHunxBLevVCbZf
- frwfibtWqXE7esIGtS3cfIj3THHgD04V8qVyOOQ71eSVu19xd3HTDnG0RF1z7H71KoRdlSSai
- lsBgXsKEUhXklbTDLRmBcScdNrYMuv/rW2zyiQbChD5SfMUnL9Eyz/2MOGJIq3jwp/GczeSS3
- tefHqcqR9Sy8kCOBAin3eA9BkAs/lIxHa1KFA0EADN9g+xqntmHox1+D3meayehk3NHdsnPth
- DIoozljgbtpEep3bE0typzBCLv7engZrkSprqL34uS9N5aUZgvtN6jpox8xuI83KgBnhoFpzs
- AIsvui54Hv3WmqeuLB4/YhQvlZ0=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FAKE_REPLY_A1,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230522113040.2329924-1-kan.liang@linux.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg
+On Mon, May 22, 2023 at 04:30:35AM -0700, kan.liang@linux.intel.com wrote:
+> From: Kan Liang <kan.liang@linux.intel.com>
+> 
+> The Grand Ridge and Sierra Forest are successors to Snow Ridge. They
+> both have Crestmont core. From the core PMU's perspective, they are
+> similar to the e-core of MTL. The only difference is the LBR event
+> logging feature, which will be implemented in the following patches.
+> 
+> Create a non-hybrid PMU setup for Grand Ridge and Sierra Forest.
 
-6.3.4-rc1
+Moo... Tony, did you sneak product names instead of uarch names in the
+intel-family thing again?
 
-compiles, boots and runs here on x86_64
-(Intel i5-11400, Fedora 38, gcc 13.x)
+That is; I'm thinking we want the below, no?
 
-Thanks
+---
 
-Tested-by: Ronald Warsow <rwarsow@gmx.de>
-
+diff --git a/arch/x86/include/asm/intel-family.h b/arch/x86/include/asm/intel-family.h
+index b3af2d45bbbb..0e804d189e63 100644
+--- a/arch/x86/include/asm/intel-family.h
++++ b/arch/x86/include/asm/intel-family.h
+@@ -116,16 +116,16 @@
+ #define INTEL_FAM6_ALDERLAKE_L		0x9A	/* Golden Cove / Gracemont */
+ #define INTEL_FAM6_ALDERLAKE_N		0xBE
+ 
+-#define INTEL_FAM6_RAPTORLAKE		0xB7
++#define INTEL_FAM6_RAPTORLAKE		0xB7	/* Raptor Cove / Enhanced Gracemont */
+ #define INTEL_FAM6_RAPTORLAKE_P		0xBA
+ #define INTEL_FAM6_RAPTORLAKE_S		0xBF
+ 
+-#define INTEL_FAM6_METEORLAKE		0xAC
++#define INTEL_FAM6_METEORLAKE		0xAC	/* Redwood Cove / Crestmont */
+ #define INTEL_FAM6_METEORLAKE_L		0xAA
+ 
+-#define INTEL_FAM6_LUNARLAKE_M		0xBD
++#define INTEL_FAM6_ARROWLAKE		0xC6	/* Lion Cove / Skymont */
+ 
+-#define INTEL_FAM6_ARROWLAKE		0xC6
++#define INTEL_FAM6_LUNARLAKE_M		0xBD
+ 
+ /* "Small Core" Processors (Atom/E-Core) */
+ 
+@@ -154,9 +154,8 @@
+ #define INTEL_FAM6_ATOM_TREMONT		0x96 /* Elkhart Lake */
+ #define INTEL_FAM6_ATOM_TREMONT_L	0x9C /* Jasper Lake */
+ 
+-#define INTEL_FAM6_SIERRAFOREST_X	0xAF
+-
+-#define INTEL_FAM6_GRANDRIDGE		0xB6
++#define INTEL_FAM6_ATOM_CRESTMONT_X	0xAF /* Sierra Forest */
++#define INTEL_FAM6_ATOM_CRESTMONT	0xB6 /* Grand Ridge */
+ 
+ /* Xeon Phi */
+ 
