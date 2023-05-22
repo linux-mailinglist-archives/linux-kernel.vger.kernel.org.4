@@ -2,159 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B21270B9AB
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 12:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90F5C70B9AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 12:12:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231355AbjEVKLv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 22 May 2023 06:11:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50886 "EHLO
+        id S232237AbjEVKMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 06:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbjEVKLr (ORCPT
+        with ESMTP id S229719AbjEVKM2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 06:11:47 -0400
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A681ABA;
-        Mon, 22 May 2023 03:11:41 -0700 (PDT)
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-b9a7e639656so11281156276.0;
-        Mon, 22 May 2023 03:11:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684750300; x=1687342300;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CQATq2c9SwOWOfQ7A10Go9afc2yqePz2ONTwzgTVwBU=;
-        b=HMNoACtjhaL05NyjEU7JbeJEenr+k/VHRbi1cwrZfF6rZbHm9vyrVzI7dJ0QsCg2AG
-         EObhL9ns7LMmApxizZ2Msid0pFInovzXbS1gOyy8t5BwPnprR8Y+6u1SrwfO2KvDL7qG
-         YYlkDPfEDG2CBc/tsEkpDxeudei0mYFpVT5marSqnMlAJoBHpa8tEuYDgrP2Q3ZIuc8C
-         jIBfkPQwSskuiE4QtH7FGfG54bxSaRBtgr1tsYkFG0TJj9Kbu2YoECAy3aWXrDA4nLwt
-         frfJ3ZH75DZmIVKYl2LnNLnESVRPFHcxStHQpaYAQXvNwcwMnoi2cCg2C7Q0j/PZzZ7D
-         2qtQ==
-X-Gm-Message-State: AC+VfDwr30X3+8w9lqYXFRTemNQZ+ZPrjH0P3LAbn5xVV0COwbsPjYUq
-        iSd+cBSz7nRYdh2Pmuqdv2Y16FBqWEUTRQ==
-X-Google-Smtp-Source: ACHHUZ4OTp/TAUrcrASJZd+ro+JTTxKVVPt2Wf3bQrRCrvgzVdMgq7osCwf8P99L2q7V0p37kVvTYw==
-X-Received: by 2002:a0d:e60c:0:b0:561:9622:bf74 with SMTP id p12-20020a0de60c000000b005619622bf74mr10393791ywe.37.1684750300565;
-        Mon, 22 May 2023 03:11:40 -0700 (PDT)
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
-        by smtp.gmail.com with ESMTPSA id m5-20020a817105000000b00545a08184bbsm1970867ywc.75.2023.05.22.03.11.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 May 2023 03:11:39 -0700 (PDT)
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-b9a7e639656so11281074276.0;
-        Mon, 22 May 2023 03:11:38 -0700 (PDT)
-X-Received: by 2002:a81:5247:0:b0:561:c5c3:9d79 with SMTP id
- g68-20020a815247000000b00561c5c39d79mr9161977ywb.45.1684750298756; Mon, 22
- May 2023 03:11:38 -0700 (PDT)
+        Mon, 22 May 2023 06:12:28 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B16FC4
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 03:12:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684750348; x=1716286348;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=AowsIVjN01hSsP2hzA0Y+/oOa5/gKk8cHmqVtZrsmWs=;
+  b=iSqj3mBDRpqe2L2xzWanJrkicr7mpt6hVqtkykTEZfqnwmjx6ALV3QNz
+   jCo8QsuAPKu5f/mTed/rpL0uaU8eiTvCc2atidItkfhgRlCyMhZ9dlZsu
+   wWKbb10+2T05PKvLA7ZKXmlxRRChXXoeZDG+DSzYRYz1YFR2iJ94XzLVG
+   7J4asfBVFoLrvLQwyWS59zTZv48xTXWs/UIbfDycKJeKg9awdPBrbUoZK
+   yqJWnGWAqtLi7kMmCMPYiwEEqHdIVC7c20XOUnJTCiTQ7lCHbGjfpm2m8
+   XGE4Y4Z0ETzQ7m4b5rmWjhfNAeByB1VYnAA8svqbqedQ9piHauHVWeqbh
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="333245339"
+X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
+   d="scan'208";a="333245339"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 03:12:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="1033575412"
+X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
+   d="scan'208";a="1033575412"
+Received: from twinkler-lnx.jer.intel.com ([10.12.230.239])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 03:12:26 -0700
+From:   Tomas Winkler <tomas.winkler@intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Alexander Usyskin <alexander.usyskin@intel.com>,
+        Vitaly Lubart <vitaly.lubart@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Tomas Winkler <tomas.winkler@intel.com>
+Subject: [char-misc-next 1/2] mei: bus: drop useless cldev null check
+Date:   Mon, 22 May 2023 13:12:09 +0300
+Message-Id: <20230522101210.2207395-1-tomas.winkler@intel.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230503-virt-to-pfn-v6-4-rc1-v2-0-0948d38bddab@linaro.org> <20230503-virt-to-pfn-v6-4-rc1-v2-2-0948d38bddab@linaro.org>
-In-Reply-To: <20230503-virt-to-pfn-v6-4-rc1-v2-2-0948d38bddab@linaro.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Mon, 22 May 2023 12:11:27 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXB1fK_G=QZ59qkJWXhb61TyLRMwH3qo_0sSmW0Cfv8hA@mail.gmail.com>
-Message-ID: <CAMuHMdXB1fK_G=QZ59qkJWXhb61TyLRMwH3qo_0sSmW0Cfv8hA@mail.gmail.com>
-Subject: Re: [PATCH v2 02/12] m68k: Pass a pointer to virt_to_pfn() virt_to_page()
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Greg Ungerer <gerg@linux-m68k.org>, linux-mm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-snps-arc@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+From: Alexander Usyskin <alexander.usyskin@intel.com>
 
-On Mon, May 22, 2023 at 9:00 AM Linus Walleij <linus.walleij@linaro.org> wrote:
-> Functions that work on a pointer to virtual memory such as
-> virt_to_pfn() and users of that function such as
-> virt_to_page() are supposed to pass a pointer to virtual
-> memory, ideally a (void *) or other pointer. However since
-> many architectures implement virt_to_pfn() as a macro,
-> this function becomes polymorphic and accepts both a
-> (unsigned long) and a (void *).
->
-> Fix up the offending calls in arch/m68k with explicit casts.
->
-> The page table include <asm/pgtable.h> will include different
-> variants of the defines depending on whether you build for
-> classic m68k, ColdFire or Sun3, so fix all variants.
->
-> Tested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+cldev cannot be NULL when derived with to_mei_cl_device().
+Drop useless NULL-checks.
 
-Thanks for the update!
+Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
+Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
+---
+ drivers/misc/mei/bus.c | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-> ---
-> ChangeLog v2->v3:
-
-v3?
-
-> - Fix the sun3 pgtable macro to not cast to unsigned long.
-> - Make a similar change to the ColdFire include.
-
-The ColdFire change is not correct, cfr. below...
-
-> ChangeLog v1->v2:
-> - Add an extra parens around the page argument to the
->   PD_PTABLE() macro, as is normally required.
-> ---
->  arch/m68k/include/asm/mcf_pgtable.h  | 4 ++--
->  arch/m68k/include/asm/sun3_pgtable.h | 4 ++--
->  arch/m68k/mm/mcfmmu.c                | 3 ++-
->  arch/m68k/mm/motorola.c              | 4 ++--
->  arch/m68k/mm/sun3mmu.c               | 2 +-
->  arch/m68k/sun3/dvma.c                | 2 +-
->  arch/m68k/sun3x/dvma.c               | 2 +-
->  7 files changed, 11 insertions(+), 10 deletions(-)
->
-> diff --git a/arch/m68k/include/asm/mcf_pgtable.h b/arch/m68k/include/asm/mcf_pgtable.h
-> index d97fbb812f63..f67c59336ab4 100644
-> --- a/arch/m68k/include/asm/mcf_pgtable.h
-> +++ b/arch/m68k/include/asm/mcf_pgtable.h
-> @@ -115,8 +115,8 @@ static inline void pgd_set(pgd_t *pgdp, pmd_t *pmdp)
->         pgd_val(*pgdp) = virt_to_phys(pmdp);
->  }
->
-> -#define __pte_page(pte)        ((unsigned long) (pte_val(pte) & PAGE_MASK))
-> -#define pmd_page_vaddr(pmd)    ((unsigned long) (pmd_val(pmd)))
-> +#define __pte_page(pte)        (__va (pte_val(pte) & PAGE_MASK))
-
-I guess "__va(...)" should be "(void *)..." instead?
-
-However, that will cause an issue below, as
-
-    #define pte_pagenr(pte)        ((__pte_page(pte) - PAGE_OFFSET) >>
-PAGE_SHIFT)
-
-does depend on __pte_page() returning "unsigned long".
-Fortunately pte_pagenr() appears unused, so it can be removed.
-
-So for now, it might be simpler to add the cast to the caller.
-
-
-> +#define pmd_page_vaddr(pmd)    (__va (pmd_val(pmd)))
-
-This looks bogus, too, as it should return "unsigned long".
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
+diff --git a/drivers/misc/mei/bus.c b/drivers/misc/mei/bus.c
+index 5d7a68674d9b20b32c415fe8..33ec6424dfee25aacd862fd0 100644
+--- a/drivers/misc/mei/bus.c
++++ b/drivers/misc/mei/bus.c
+@@ -1046,9 +1046,6 @@ static int mei_cl_device_match(struct device *dev, struct device_driver *drv)
+ 	const struct mei_cl_driver *cldrv = to_mei_cl_driver(drv);
+ 	const struct mei_cl_device_id *found_id;
+ 
+-	if (!cldev)
+-		return 0;
+-
+ 	if (!cldev->do_match)
+ 		return 0;
+ 
+@@ -1079,9 +1076,6 @@ static int mei_cl_device_probe(struct device *dev)
+ 	cldev = to_mei_cl_device(dev);
+ 	cldrv = to_mei_cl_driver(dev->driver);
+ 
+-	if (!cldev)
+-		return 0;
+-
+ 	if (!cldrv || !cldrv->probe)
+ 		return -ENODEV;
+ 
+@@ -1276,9 +1270,6 @@ static void mei_cl_bus_dev_release(struct device *dev)
+ {
+ 	struct mei_cl_device *cldev = to_mei_cl_device(dev);
+ 
+-	if (!cldev)
+-		return;
+-
+ 	mei_cl_flush_queues(cldev->cl, NULL);
+ 	mei_me_cl_put(cldev->me_cl);
+ 	mei_dev_bus_put(cldev->bus);
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.40.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
