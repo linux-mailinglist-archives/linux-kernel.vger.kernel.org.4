@@ -2,154 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A96D370CDE1
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 00:26:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46D2F70CDE5
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 00:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234766AbjEVW00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 18:26:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39338 "EHLO
+        id S234777AbjEVW1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 18:27:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234745AbjEVW0S (ORCPT
+        with ESMTP id S234769AbjEVW1C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 18:26:18 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEFECC4;
-        Mon, 22 May 2023 15:26:17 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34MKNsgo001974;
-        Mon, 22 May 2023 22:26:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2023-03-30;
- bh=AFSDJce+s65bBZZrXWpGKXZI/PSOReaMuXLk81szQO0=;
- b=tEb1K0UDUD9EbYF9PI+INtd0XKhboVncjbLSZXRU93T95JfF+rxVN1w6t+joPlI0zSV8
- QJtzCEB+tvkjoLiVg501B/TqtlWQNOsWzv/qcPIw6y210KaXDPEJ9VG7otXAmYOrVdV1
- 6xJmU9GL35ENPRYbgj7VCwI+3UW7MB1YzP2ZjS/Qi9Uows3Z36AKETdBgtF5eGy3rjLx
- CNAvfioDXKbsYLQOXk8P/1ZZhqSpP6BLlGJaUS/u5HJEeGV+wzbHbps+hPmybQZkodvr
- Q8GF7NVGSZYd7mMy+68iJ8eWz9+KdCU7ha1AGlhEdawJFWa3SLkA5iXtBLzn3c+NSm+M 0A== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qpp44krvm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 May 2023 22:26:12 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 34MLrZkj027323;
-        Mon, 22 May 2023 22:26:11 GMT
-Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2105.outbound.protection.outlook.com [104.47.58.105])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3qqk2csyqr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 May 2023 22:26:11 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IESpy74c/FkbKpuFLxcTCOu8QVl9ispVXmEcVxBBmt/JEji/wVxQWa9NytH7iEhKGpDjZ3zgE+OTP6bVBahigW6YjzFmP3rE9ejbwNrbfOc3741b+gdXo0XoraBUZO4/JDvX8rVL4UE4hjuWUudO9eQumaGdcJpZY4RqfxwrlVVQI/1shPxwXfxaCXNajzEQNyV12/xYPsgO3gzgGLPrVcdCacmuPYlNOXhHKmeB3pCMVJT5m/05s6fXT9wWFa+17fmHXJBIv2RjxSHSurB8U6wh/dSXJDna5xkRXFu1Lj5KPN3wBLzw/L77CG7+kcx4j3wlX7DxXVCTkINCVBhsYA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AFSDJce+s65bBZZrXWpGKXZI/PSOReaMuXLk81szQO0=;
- b=NR/bo47PkS32KE+u6xxd9iMMU66dURl5+DiVA56pP4622b0W1CBntZzJmEFH3JjwZGX5km0vDRE8XurmjknYCXBrvfTyulv5VrRXYbB14srJ+lfuc/rGCQ8Yr0z+7OLuoS2TVejyoSJwR7DIxM6yUoGLLycE0rWDoo3LMIUUU/ZX4HXfn/pffc0l5nfCHl44og8rXoGEmVvChxyFXc6TJdg3ZwdTjQjilBHvde1fm2cm8F6x8mEymLrzETMAV2HojNB7c1rtBPbNIijy12qsopD3dniDGRanRf59DCJxo16jFWcAzEMuBj4BVocYE73GKoCr9n0rm/8F8yWe+1tKqg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AFSDJce+s65bBZZrXWpGKXZI/PSOReaMuXLk81szQO0=;
- b=mdo1uO/TDjrW3rKejrvj0dWtoQsy4b+ulirJlQM0wSvFmufaCDk8tSVic65InDfdBQ6vIYbPfFqmwhpJuqF0ogaSDsSR8z4bsifHo/78FYJnFGGjjfrBuufH4Rk/9HhogoKErG+yHqTf4p4D6NAw0enVuTb/nSNpAFOBtHjRhnc=
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
- by DS0PR10MB7455.namprd10.prod.outlook.com (2603:10b6:8:161::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Mon, 22 May
- 2023 22:26:08 +0000
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::9a52:4c2f:9ec1:5f16]) by PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::9a52:4c2f:9ec1:5f16%7]) with mapi id 15.20.6411.028; Mon, 22 May 2023
- 22:26:08 +0000
-To:     Juergen Gross <jgross@suse.com>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        John Garry <john.g.garry@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>, stable@vger.kernel.org
-Subject: Re: [PATCH] scsi: Let scsi_execute_cmd() mark args->sshdr as invalid
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1pm6sm34j.fsf@ca-mkp.ca.oracle.com>
-References: <20230511123432.5793-1-jgross@suse.com>
-        <yq1ttwbsoii.fsf@ca-mkp.ca.oracle.com>
-        <6614f626-d174-03d0-0993-79e6f6169b71@suse.com>
-        <9d356278-c826-dacf-cbe0-79f512b7970e@oracle.com>
-        <60aeffe4-b31d-4ea3-d4ea-f50ae25e0316@suse.com>
-        <74879c87-689f-6a8e-a177-8bde4c9c4e51@oracle.com>
-        <yq1v8gmpkq4.fsf@ca-mkp.ca.oracle.com>
-        <73fd2741-3730-ca1d-7e23-0bf9cf10f423@suse.com>
-Date:   Mon, 22 May 2023 18:26:06 -0400
-In-Reply-To: <73fd2741-3730-ca1d-7e23-0bf9cf10f423@suse.com> (Juergen Gross's
-        message of "Sun, 21 May 2023 07:23:56 +0200")
-Content-Type: text/plain
-X-ClientProxiedBy: SN7PR04CA0092.namprd04.prod.outlook.com
- (2603:10b6:806:122::7) To PH0PR10MB4759.namprd10.prod.outlook.com
- (2603:10b6:510:3d::12)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR10MB4759:EE_|DS0PR10MB7455:EE_
-X-MS-Office365-Filtering-Correlation-Id: 367b0a90-e5e1-4d78-f104-08db5b138a2f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pN9fsO9cmmu/M57I8XbH6BIdNLgyZHb3U60xiU+dZxAOGruTUeVA/UrEWMar27LvScQXTTOCPKTY95gA7P3UgJQOG+qL3oX0I9mM/PbF15NKuB54cMruYRuqyYPNvvFrkKVofVPecKqUCGjq7FjIaC8Z/wF9XhCbHXSBW/IlSUyCdIbQ/LxnOSUPz1oW8dgHBGbW/cvWmPVuyd1+OtBxohPh3pqt09rZeYToxX+IisUUbHkLxYTF1NyBDZuAhVMq8V2uCestMQVz6ZUf+5YzkOxv0+H/0qrAMb7KfUsirkk/aGxlLf/1OBDqt0o8Q9nCroWDeFh9X/E6EAOgbSxi2sSmgo8p6s0qaPgi2l+bXc6F14Z9Ft9pMDvIikyuAuXB6MATgbVZushu9sZDs6l8xtQmCZrJ0ZQT0w+HjVgBnYiS+OSKhlDCaUJIdOVFgcHq+kXYXu5Hl3do4tChUuPSSx3mAh91Ll8l3MTz2QQtBtlKe+smqSP+fiSkaWvjfNAhmeSRFA2PQjIUnbxe6qZcLz4lzwJLBoIV7kP7mpbxxCcVmliyOWXnG8TZWNeVzg70
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(136003)(39860400002)(366004)(346002)(396003)(451199021)(8676002)(8936002)(5660300002)(83380400001)(6512007)(186003)(6506007)(26005)(86362001)(38100700002)(478600001)(36916002)(41300700001)(4326008)(6916009)(66476007)(6486002)(66946007)(66556008)(316002)(54906003)(4744005)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SFIuac5sIvJlBx4eldhCfRO/TBSoooyxDwysOlgbBLfSq9FN+YIchuumla1v?=
- =?us-ascii?Q?Rtn6ACgP+U29eOEBDIQg87pyJwY0Ws7+nlW2HApfAcP+qtjeATOhgJYZ3tcG?=
- =?us-ascii?Q?pK246+/B9RyJHLb0NoKEyo1p0f5SDiS9tw15WzELCGhWe8HpOChYXwFe3FxL?=
- =?us-ascii?Q?e7r0aT1Qs4n4yYxq/Mx4XxgZLrEZ/jJg5Jd+Fq/yw+bCmi2TBB81Y8CEfM/f?=
- =?us-ascii?Q?BW7vrgHHDrOrTnNMkn2XFX2AkWxEDznTDcDCxI1RHtQerUFA16raP/ydf6/p?=
- =?us-ascii?Q?WtVb5LVDbFkSZXmq+4AKGalk/j9nJQfbQrFX32l529RorFyVnvCB3hrVZYoM?=
- =?us-ascii?Q?pkE6UzunHt05HhcimgwT12tqUuAKx0LZmDOgm1NCIQJDsW5pDTL1O3ZifLsF?=
- =?us-ascii?Q?DC9eAF516c4nP545UKRE4nlOrSf+rB/ae9bQpOVWTkW92eg1UMZTMxRCeJyq?=
- =?us-ascii?Q?Q8l3Trtkx0HgFlwNsvNpziJlTtdU1HZHzSDJXVETeQchBX4GdGGPS+cNV//9?=
- =?us-ascii?Q?nmjM9AP1IctsC8UBDT8NaUYXKevs3e5/0kT23Ld9cASlSI8kXEm2T7lCcSYL?=
- =?us-ascii?Q?pEjFxUBvyUB5ZTcrJE/oBE8eiDlmJiVkw+k/jU8pS7Z/5G1IixK1NWxw+1xR?=
- =?us-ascii?Q?b+UEvT6vvghyCMhW+L8OEz96GJTzE10N8y4kyAtK4uL1rx/cEF6Wkn+lWMAk?=
- =?us-ascii?Q?J2PRsiXzCm1m+xV2Oy53uNhHQ2W9mNLxknRGzyJQYZEeQ8KUHYtrIcM1Nya/?=
- =?us-ascii?Q?wmrgqf/ymgTSGbzTnrwIQpTeK0rOoNLt1sIHuUrnv3h1I9VcRrc6KToKvznA?=
- =?us-ascii?Q?7NSIynfUUQzWAuwscFdwqd7z/fhsQg43REoC1VTAXH924Si01UmJNykFjlad?=
- =?us-ascii?Q?hyvWx2BAddDrG85Ii9PXWFn1jWu0kY8SPkUcSXKOT5x2w7FAHifE7+Ma+7Y/?=
- =?us-ascii?Q?S8QlKwcd3jkgukZftj+AeqiW4qg5bIXP8EE7D9L3ypyLteFrV7kh3wpcEgk5?=
- =?us-ascii?Q?ohay/E4rLNM+6Uf/2EZ10j018WCnXELHSO08V4xm65hID8L3hom4cs3AlW3y?=
- =?us-ascii?Q?iNAoB/OP4VIgtWpAjLeUB5j1YTlGLx6Z4R9e5dcyDie8mBnZSj7gavZ44BvN?=
- =?us-ascii?Q?wQI3+MSQHW/ZPvqiPnAfUjybcEzGPBlBb28KW5XFaTIBO0uB5pLC0SWlDS2U?=
- =?us-ascii?Q?TR/ACK7Jh79ieuZwfqB8JGZPsYrXTBoEICHvKHXRbcCMwFtixrREr731TGKS?=
- =?us-ascii?Q?Q8o0jR1Yj4hHHs0Y1d8GX8OJ89+pR+gyplqlfFw1h7XZ2SUt81QtNDVmOSiJ?=
- =?us-ascii?Q?7ZxAbLfI1fFb9j23/V+QQnzxYcOV8kgfUHiqQcS4j5x7JxzSASHPYbAhxI/i?=
- =?us-ascii?Q?lw4MBff6ed8kyg629Uq9ahIO0/VjZahablZLMaGzUFZzMqEdRlkw679KvLTG?=
- =?us-ascii?Q?xTM00qvk7rCyMHrUAJBQ96IbkSlqDsCYVRri9jgIeKDR0zrbvOudI+HFFnEl?=
- =?us-ascii?Q?YIQSOA986X8FaPdT1LXiCDAQ4FGZmIP5hZs6UsguVCpMAoR2DSUcdCQPzc3Q?=
- =?us-ascii?Q?6jpPnatlMMAO9jE7yoESWrzHSStea4JMFwsDylLdNAhKLC8oAaxiyjIXIWhM?=
- =?us-ascii?Q?3Q=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: rd58H0tXGJ+9MtasP1mdMUAs9Tjs2NFZdO3yDK9ecfAtpmYJYkvZWSdTjTWo4/m6ebVY85/DNAgqXrNGTW0utHjoGWoPodFAR+0M0EeVlpzUCA7FiCkAutgI9e/ZRp/QzLgkSk2Q8ux6N9njLuRYn1zGkT+FomH0dZMAp37tQzQGU/i0ah6HzOjSDo5H/sMcB0RGTmQkj2D73ks6DAv3Ed9sokCn6DCN6F8dYouAZ191mUB/PhfZdwXubHUMyBHwEfejvcRwiXs/mXzamU5f2510/V2FagUxe2YkJULuWEG4o+ZHNJBIt3kM4LJ+D3s80bVkVYy9Ogp7BCGVGE4xXkQWgeu7CMi/d7SX2rDU6XaI7Rc0w1yEy6QjPaWrDISdAKhPcpY8WhlMux8zH3Gwrw6oEMVrgonXyBf6N4moxLquA7LZlVrhIMZep+vqS3iuuTG7v2rgnAlLDsujxbnVSuzbLstFAHdSVTrywxPFimllMXyuzH6UoB87C0CGNxPWMYs58CsgIdsJs0zDDyhZKqWZ7WXuGCY0VaeH+/w9gH7jpJ9CRWxryNd/h/ww1Gm9r/dR5hAFaaJhWJ6pdRasQWp2e5HFoztLO5adR4jqC5owRy2A96nbZ59bx/uEI47nTtRF02hEYT1L84MSoP9ZrHY7j0rx4oIE75HKZ1oWaT6T/6LAAL71iNie0Us2KzxS3zHGBu6t9FUyWixGfgJGt4jcyyqssvqu6mJcVf9Xe2GsS9EUEJaY5uxcFLLYTnPOvTuwVJ1o5LCILcpTGmxld3dILXQO9V6tEUB/V0zTgdPbTijMsaXNV01oUFYC6/099ggqvbwLKpTfyv9whdMBBA==
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 367b0a90-e5e1-4d78-f104-08db5b138a2f
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2023 22:26:08.5385
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3+N4qC44/SGn3c5KR7ULmb1d2Vl3vgXccYebEqGs4g0V/pwFg7xCIuSD18SabNi6KXTWmYZESshatg8AjtBUIuLW4w1L1P2LeMPUQ0hZVfk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR10MB7455
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-22_16,2023-05-22_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 mlxlogscore=817 phishscore=0
- malwarescore=0 suspectscore=0 spamscore=0 bulkscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305220190
-X-Proofpoint-GUID: 4_0MTeEYb1AKcArcWJ0XT3e6tzp-txFW
-X-Proofpoint-ORIG-GUID: 4_0MTeEYb1AKcArcWJ0XT3e6tzp-txFW
+        Mon, 22 May 2023 18:27:02 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE5B10D;
+        Mon, 22 May 2023 15:26:51 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 08B405C0178;
+        Mon, 22 May 2023 18:26:49 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Mon, 22 May 2023 18:26:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+        cc:cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
+        1684794409; x=1684880809; bh=CtWo2nHbm2EGyWys8ynF1KcFouDF1bJFUee
+        lWmk78ec=; b=Zb5lxSN0/itluIb1eIFB7lle5LjbqKJJlfUtED8yh+YPow+/lxf
+        xTVHgUvvos6+LksNIWvM+AZ8zv8XdKngD5dAf7WXGYXIlwDwl2pQoP1qSJhrXvZd
+        110eC5G2dquhO0TZXMi9CUTWz7O/BLA9DiNGimpai8dkDCSXcgiyDp/4Tjf+Zklg
+        sd5spllSLppCvi4LF5oC7UJEUigzsl7sM+r3Q/Zvw43WYgTIvOb/KyNSPQPIgkJg
+        H06DKvsHPrRGGvSB1AslUpAFL5UkZ0tU3YI3AnulV8lZIXcF1MJ/m3tY1IZ9ztQ8
+        uci5FWZI1haF1/ffV9CshlfKqHLYsOXq5Kg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1684794409; x=1684880809; bh=CtWo2nHbm2EGyWys8ynF1KcFouDF1bJFUee
+        lWmk78ec=; b=lTzRW+Kae5xQOf8BC9AZJFwRm1mpIL8RqadT74yes3voKaFtp5r
+        qCi85D9DO6zNqToThp950iryrE2lPAFb5poAwJJo213mpgidqgXPSMRWc2gSicg2
+        UtKW5UgIshvVkC/raDFF8Ru6RG44wdeSKiPYlkMyczdaYcXYBwbqL64kLadnAef9
+        XZZSuQZcD6dPk/SOc3UZt30MVXN2AwQpV/GfGk4h5sdY1D+e/tsePqdlUm6gwH9l
+        6Q2Vi4ROeS6I/G1nhLKVBXT5yPNy2jk9BsZFnsUaYLh7gYwSIVWQXipjR7Z5Uzzj
+        SE5Ru9g5+8tzeHoHzBPPzEIuWDhY26w2wSQ==
+X-ME-Sender: <xms:KOxrZJaTThBu4FS7bJEnscm7Q1TYSN5k7Ojh98Qx-AzbKFmov5dTGQ>
+    <xme:KOxrZAa3S_Q8HrAWbst2xNy70w1OyaKD7Y9qTM1MKmPyY7KHvignRUvLQEcbL9DUY
+    -Ukld_pRHpu7alIl1M>
+X-ME-Received: <xmr:KOxrZL-plO9QZAPJGlg4n6uniGMfne93D1mTS6AJIcrCNK5s3eJuM6vxi6iBZ2Rzp-lj>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejvddguddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
+    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
+    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
+    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
+    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:KOxrZHpMxfU01IVzanFGWcpTJDF3mypfDUPayeYzcXrzjSuHaxlo7A>
+    <xmx:KOxrZErwcnBkw69ER9IVa2RfcfOylIUehswKssLH5ESa26R7xi7ExQ>
+    <xmx:KOxrZNRn8VXYo1DhltQF9Qq0mB9p13HVIv_FtSHCM-Ca5PYOtQM1lw>
+    <xmx:KexrZL38i08YSIl1tcmi4iJNa5ku-5rICzC-uwC8kOrAroRg4k9kmA>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 22 May 2023 18:26:47 -0400 (EDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
+Subject: Re: [PATCH 1/3] MIPS: Introduce WAR_4KC_LLSC config option
+From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
+In-Reply-To: <CAOiHx=mue3GPncsCH-ndyDy_+X3R5AMRE6VBKztHF=RkHBD7SQ@mail.gmail.com>
+Date:   Mon, 22 May 2023 23:26:36 +0100
+Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <32D47527-3EC3-4AB3-BD65-BB1FB848E7DC@flygoat.com>
+References: <20230519164753.72065-1-jiaxun.yang@flygoat.com>
+ <20230519164753.72065-2-jiaxun.yang@flygoat.com>
+ <CAOiHx==iku+duvBnAfu_3AXgNmY9aK+uO+t9Enzdf6qQN5m+iw@mail.gmail.com>
+ <2CC0C4B4-78C4-4D93-828C-318DC1CAD479@flygoat.com>
+ <CAOiHx=mue3GPncsCH-ndyDy_+X3R5AMRE6VBKztHF=RkHBD7SQ@mail.gmail.com>
+To:     Jonas Gorski <jonas.gorski@gmail.com>
+X-Mailer: Apple Mail (2.3731.500.231)
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -157,20 +93,157 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-Juergen,
 
-> sshdr is output only data, so setting it before returning seems to be a
-> sensible thing to do.
+> 2023=E5=B9=B45=E6=9C=8822=E6=97=A5 23:03=EF=BC=8CJonas Gorski =
+<jonas.gorski@gmail.com> =E5=86=99=E9=81=93=EF=BC=9A
+>=20
+> On Mon, 22 May 2023 at 22:38, Jiaxun Yang <jiaxun.yang@flygoat.com> =
+wrote:
+>>=20
+>>=20
+>>=20
+>>> 2023=E5=B9=B45=E6=9C=8822=E6=97=A5 19:40=EF=BC=8CJonas Gorski =
+<jonas.gorski@gmail.com> =E5=86=99=E9=81=93=EF=BC=9A
+>>>=20
+>>> Hi,
+>>>=20
+>>> On Fri, 19 May 2023 at 18:49, Jiaxun Yang <jiaxun.yang@flygoat.com> =
+wrote:
+>>>>=20
+>>>> WAR_4KC_LLSC is used to control workaround of 4KC LLSC issue
+>>>> that affects 4Kc up to version 0.9.
+>>>>=20
+>>>> Early ath25 chips are known to be affected.
+>>>>=20
+>>>> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>>>> ---
+>>>> arch/mips/Kconfig                                        | 6 ++++++
+>>>> arch/mips/include/asm/cpu.h                              | 1 +
+>>>> arch/mips/include/asm/mach-ath25/cpu-feature-overrides.h | 2 +-
+>>>> arch/mips/kernel/cpu-probe.c                             | 7 =
++++++++
+>>>> 4 files changed, 15 insertions(+), 1 deletion(-)
+>>>>=20
+>>>> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+>>>> index 30e90a2d53f4..354d033364ad 100644
+>>>> --- a/arch/mips/Kconfig
+>>>> +++ b/arch/mips/Kconfig
+>>>> @@ -230,6 +230,7 @@ config ATH25
+>>>>       select SYS_SUPPORTS_BIG_ENDIAN
+>>>>       select SYS_SUPPORTS_32BIT_KERNEL
+>>>>       select SYS_HAS_EARLY_PRINTK
+>>>> +       select WAR_4KC_LLSC if !SOC_AR5312
+>>>=20
+>>> Shouldn't this be "if SOC_AR5312"?
+>>=20
+>> Ah sorry, I misread the original code.
+>>=20
+>>>=20
+>>> Though since you are adding runtime detection/correction below, I
+>>> wonder if this would be really needed as an extra symbol, and rather
+>>> use the later introduced (CPU_MAY_HAVE_LLSC) directly.
+>>=20
+>> I bet it=E2=80=99s better to have a symbol just for tracking errata. =
+So we can easily know
+>> if SoC is affected by a errata and have some extra documentation.
+>>=20
+>>>=20
+>>> Or rather have select "CPU_HAS_LLSC if !SOC_AR5312" in that case.
+>>>=20
+>>>>       help
+>>>>         Support for Atheros AR231x and Atheros AR531x based boards
+>>>>=20
+>>>> @@ -2544,6 +2545,11 @@ config WAR_ICACHE_REFILLS
+>>>> config WAR_R10000_LLSC
+>>>>       bool
+>>>>=20
+>>>> +# On 4Kc up to version 0.9 (PRID_REV < 1) there is a bug that may =
+cause llsc
+>>>> +# sequences to deadlock.
+>>>> +config WAR_4KC_LLSC
+>>>> +       bool
+>>>> +
+>>>> # 34K core erratum: "Problems Executing the TLBR Instruction"
+>>>> config WAR_MIPS34K_MISSED_ITLB
+>>>>       bool
+>>>> diff --git a/arch/mips/include/asm/cpu.h =
+b/arch/mips/include/asm/cpu.h
+>>>> index ecb9854cb432..84bb1931a8b4 100644
+>>>> --- a/arch/mips/include/asm/cpu.h
+>>>> +++ b/arch/mips/include/asm/cpu.h
+>>>> @@ -247,6 +247,7 @@
+>>>> #define PRID_REV_VR4122                        0x0070
+>>>> #define PRID_REV_VR4181A               0x0070  /* Same as VR4122 */
+>>>> #define PRID_REV_VR4130                        0x0080
+>>>> +#define PRID_REV_4KC_V1_0              0x0001
+>>>> #define PRID_REV_34K_V1_0_2            0x0022
+>>>> #define PRID_REV_LOONGSON1B            0x0020
+>>>> #define PRID_REV_LOONGSON1C            0x0020  /* Same as =
+Loongson-1B */
+>>>> diff --git =
+a/arch/mips/include/asm/mach-ath25/cpu-feature-overrides.h =
+b/arch/mips/include/asm/mach-ath25/cpu-feature-overrides.h
+>>>> index ec3604c44ef2..5df292b1ff04 100644
+>>>> --- a/arch/mips/include/asm/mach-ath25/cpu-feature-overrides.h
+>>>> +++ b/arch/mips/include/asm/mach-ath25/cpu-feature-overrides.h
+>>>> @@ -24,7 +24,7 @@
+>>>> #define cpu_has_counter                        1
+>>>> #define cpu_has_ejtag                  1
+>>>>=20
+>>>> -#if !defined(CONFIG_SOC_AR5312)
+>>>> +#if !defined(WAR_4KC_LLSC)
+>>>> #  define cpu_has_llsc                 1
+>>>=20
+>>> since the #else path defines cpu_has_llsc as 0, it means that =
+kernels
+>>> targeting both SoCs would force llsc to be unavailable (not =
+introduced
+>>> by you).
+>>=20
+>> I=E2=80=99m a little bit confused.
+>> The logic seems very clear to me: If a SoC is not affected by =
+WAR_4KC_LLSC,
+>> then wire  cpu_has_llsc to 1, else wire it to 0.
+>=20
+> ATH25 allows you building for multiple SoCs at the same time, and if
+> you do so, you don't know in advance on which SoC you boot. So you
+> need to have third path here where cpu_has_llsc isn't wired to
+> anything.
 
-I would love to rototill all this and make sense make sense (!) but
-that's a major undertaking. Until then we need to validate that callers
-check the return value before they start poking at the sense data. Even
-if things were zeroed ahead of time, other things could have gone wrong
-that would affect how an error condition should be handled.
+Thanks for pointing out the missing piece, I thought ATH25 can only be
+built for a single SoC :-)
 
-> Letting the callers do that is kind of a layering violation IMHO,
+>=20
+> This is wrong in the current code already, so should be fixed there.
+>=20
 
-scsi_execute_cmd() is one big layering violation, I'm afraid.
+[...]
 
--- 
-Martin K. Petersen	Oracle Linux Engineering
+> AFAICT the core issue is if the platform hardcodes cpu_has_llsc to 1.
+>=20
+> So the error/warning this should be then something like this
+>=20
+> if ((c->processor_id & PRID_REV_MASK) < PRID_REV_4KC_V1_0) {
+>   c->options &=3D ~MIPS_CPU_LLSC;
+>   if (cpu_has_llsc) { // <- should now be false, unless the platform
+> defines it as 1
+>      pr_err("CPU has LLSC erratum, but cpu_has_llsc is force =
+enabled!\n");
+>   }
+>=20
+> because clearing MIPS_CPU_LLSC does nothing if cpu_has_llsc is
+> #defined as 1, regardless if it selected WAR_4K_LLSC or not.
+>=20
+> (also your error print is missing a \n at the end)
+
+Ah, thanks.
+I=E2=80=99m planning to replace this pr_err with WARN_TAINT_ONCE.
+
+Thanks
+- Jiaxun
+
+>=20
+> Regards,
+> Jonas
+
+
