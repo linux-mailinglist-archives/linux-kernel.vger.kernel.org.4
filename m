@@ -2,66 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 785C070C2B6
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:51:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE80A70C2BB
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:52:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234559AbjEVPvz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 11:51:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44592 "EHLO
+        id S234574AbjEVPwX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 11:52:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234543AbjEVPvy (ORCPT
+        with ESMTP id S231409AbjEVPwS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 11:51:54 -0400
-Received: from mail-io1-xd31.google.com (mail-io1-xd31.google.com [IPv6:2607:f8b0:4864:20::d31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3771EB5;
-        Mon, 22 May 2023 08:51:53 -0700 (PDT)
-Received: by mail-io1-xd31.google.com with SMTP id ca18e2360f4ac-76c5558ba95so68307339f.1;
-        Mon, 22 May 2023 08:51:53 -0700 (PDT)
+        Mon, 22 May 2023 11:52:18 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1C2F9;
+        Mon, 22 May 2023 08:52:14 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id e9e14a558f8ab-3318961b385so9994175ab.1;
+        Mon, 22 May 2023 08:52:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684770712; x=1687362712;
+        d=gmail.com; s=20221208; t=1684770733; x=1687362733;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BqOE5x2+ni1n15spyoB1Lf2HOj8Vrz/keawyBSdQh6Q=;
-        b=FeDPVWKX1y/A+/QN/GgyITdBkWKhzQmBXtOAeveM9fakQRw+0yCSiYgtoP3FdEHP/A
-         OQpw7FZ2D2R7+5M7D+epBC9QXCtZWDUbXwtAa3HDGSK3FX9KobZHcA0ewL2ThRfwrJtL
-         NeJkQ4kdJ1zHLLgH4Ai2bulcF5EyuHLk7wan0cKr3v+JIQa1veewHE/Yq9LpCND12YUt
-         3i6UpQIY/gh9EmgYuvIROAW9HaYXBKsbshfCoL1aFxneOx+qtzwUYmcxvHJNCtXWGav8
-         53CtWiKN6P4giZYGPfQuhz7zps1qF3XLoGMEc2VQ5ZdAPXyY4cXv73X5kYAMJcF9evxi
-         Mqsw==
+        bh=7sLAS1re4t0jepnvIMkPI23rNpmWLJZtcQVM+U6RF+I=;
+        b=UGRRnuJymzcFEIgOt1c7jWHGtoRQnT32sQuU0zmMQB1tSkJcX4XXJ3W0th1d0drxkE
+         ESQ96vRX9bqIW8Tg01BrHzsKLYQJZySPkmz6HWnGaywLPa0ahg4F6Gi42DZEbJxpFAzh
+         iE2qubB1+HAqi0VefqWciMtMiaYqbtLY6lX5S/enNs86b8+HTJbtShyvpqpJF9PxNovG
+         lYd4wk0gStVIfBgcTuBkUmakTnhhxpTABaGBvM/lk6ZyheGJDw0hOWL4OmqqN0RQobuR
+         pyHn9gP98T8eVK4ZAstf8SfAgiaBHiRHznOyRHx8x+TR9a/WRhqxPxwIrF+gB5EiCWnM
+         wSmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684770712; x=1687362712;
+        d=1e100.net; s=20221208; t=1684770733; x=1687362733;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=BqOE5x2+ni1n15spyoB1Lf2HOj8Vrz/keawyBSdQh6Q=;
-        b=JP4ZjWCeOczTBrGIwGYrmA57YVB4tqF0mPH5jvvQn8x0c4QGm5JcKKDAzZ7bkk8BH1
-         4qVRrCGvh0aNSm9yZ+Hr/EEV/cd9qrEbEwyTjp3p5mWG65+U9+F2ul71wCvumvFZzTR2
-         zt1p7sVBrAo6X83n1KqaMACPLRLDNhssXOAuhfoTTH02vcOpSUh1lZucDZN/HjtMm02E
-         6AKfkudNppQyxOJ/ImJEKEhfqifPCPUGjBDMIskdQzrc8XJzo1sw+rZt5FjqAfmCJ2BO
-         cuUpBs+CTWxwikzPwAoF9nTlyidIPOaXnL3OO9c+4sCXXWWI4o6Ns2eSaeGii35jbi+4
-         O5mg==
-X-Gm-Message-State: AC+VfDz3kwLGnTnMfhAUFDVeziHumpMRojWcvoGQa2KoZ6DozBt0uvgV
-        VsoltckNVesacpdkLCLMoo4=
-X-Google-Smtp-Source: ACHHUZ7g1TMkvP1QL7x3isKwGwC18gojdks6P7npooE82OjMS3tbyVL8pfNYyS+woUW674ZPdO+mUw==
-X-Received: by 2002:a5e:8912:0:b0:76c:8cbe:c8fc with SMTP id k18-20020a5e8912000000b0076c8cbec8fcmr7928967ioj.3.1684770712392;
-        Mon, 22 May 2023 08:51:52 -0700 (PDT)
+        bh=7sLAS1re4t0jepnvIMkPI23rNpmWLJZtcQVM+U6RF+I=;
+        b=VdKhywX6nwlBj1iWQ5ZZNmnu8nM9zH3cnEFhZ41lxRsHyWuwskyKti0ShBFShHnlJ3
+         dHUjsIdmHNlzk5rjBPqDUIszXUz0Q2ZXWB0SS34EOIEWi77EeEhEkxh+UEbLj4agIt0b
+         KJb/Wwi6zkgZMQLjDwQb8e8p7rdX1irbHjgHaxbXQVaKxuXts5D4QYH7cYV0vRks9xKn
+         vHNRxSyCtzzixbDDr3eMfwImBzbMCsXQksB23bVFZ59HD5JYq9WeAhbRYy1Jxs886O+H
+         j0rIPhdfghNLGzw1uRs0BSdMnnLQ7v/JwEA2xidpnRtYgsLHUdV2qeVpnEigc1mc8Qwh
+         YMsA==
+X-Gm-Message-State: AC+VfDx8xUWwOXRJTFJMvT5b4jnvVwqqA00JYeB5X6mMl7Yy5pcmVUBH
+        fK5LCM4gWZ1Th1E7Re6G8E8=
+X-Google-Smtp-Source: ACHHUZ7x7GRL661Xm6U+t9Prayc8EdalxBRBQSJ1Esy+V4Z78cjwoFzpNSmy+Zh4M/L/Kv3wz1ocIw==
+X-Received: by 2002:a92:db08:0:b0:338:65fc:f4c1 with SMTP id b8-20020a92db08000000b0033865fcf4c1mr6987356iln.9.1684770733275;
+        Mon, 22 May 2023 08:52:13 -0700 (PDT)
 Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
-        by smtp.gmail.com with ESMTPSA id n15-20020a056602220f00b0076c6f5b8db5sm2083125ion.16.2023.05.22.08.51.51
+        by smtp.gmail.com with ESMTPSA id bs21-20020a056638451500b0040bd3646d0dsm1794208jab.157.2023.05.22.08.52.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 08:51:51 -0700 (PDT)
+        Mon, 22 May 2023 08:52:12 -0700 (PDT)
 From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-To:     Sandy Huang <hjc@rock-chips.com>,
-        =?UTF-8?q?Heiko=20St=C3=BCbner?= <heiko@sntech.de>
+To:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>
 Cc:     linux-hardening@vger.kernel.org,
         Azeem Shaikh <azeemshaikh38@gmail.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        David Airlie <airlied@gmail.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        linux-kernel@vger.kernel.org, David Airlie <airlied@gmail.com>,
         Daniel Vetter <daniel@ffwll.ch>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: [PATCH] drm/rockchip: Replace all non-returning strlcpy with strscpy
-Date:   Mon, 22 May 2023 15:51:49 +0000
-Message-ID: <20230522155149.2336620-1-azeemshaikh38@gmail.com>
+        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
+        <ville.syrjala@linux.intel.com>, Maxime Ripard <maxime@cerno.tech>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Guillaume BRUN <the.cheaterman@gmail.com>,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH] drm/bridge: dw-hdmi: Replace all non-returning strlcpy with strscpy
+Date:   Mon, 22 May 2023 15:52:10 +0000
+Message-ID: <20230522155210.2336690-1-azeemshaikh38@gmail.com>
 X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -88,33 +94,19 @@ No return values were used, so direct replacement is safe.
 
 Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
 ---
- drivers/gpu/drm/rockchip/inno_hdmi.c   |    2 +-
- drivers/gpu/drm/rockchip/rk3066_hdmi.c |    2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/bridge/synopsys/dw-hdmi.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/rockchip/inno_hdmi.c b/drivers/gpu/drm/rockchip/inno_hdmi.c
-index f51774866f41..9afb889963c1 100644
---- a/drivers/gpu/drm/rockchip/inno_hdmi.c
-+++ b/drivers/gpu/drm/rockchip/inno_hdmi.c
-@@ -797,7 +797,7 @@ static struct i2c_adapter *inno_hdmi_i2c_adapter(struct inno_hdmi *hdmi)
+diff --git a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+index 603bb3c51027..9d6dcaf317a1 100644
+--- a/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
++++ b/drivers/gpu/drm/bridge/synopsys/dw-hdmi.c
+@@ -533,7 +533,7 @@ static struct i2c_adapter *dw_hdmi_i2c_adapter(struct dw_hdmi *hdmi)
+ 	adap->owner = THIS_MODULE;
  	adap->dev.parent = hdmi->dev;
- 	adap->dev.of_node = hdmi->dev->of_node;
- 	adap->algo = &inno_hdmi_algorithm;
--	strlcpy(adap->name, "Inno HDMI", sizeof(adap->name));
-+	strscpy(adap->name, "Inno HDMI", sizeof(adap->name));
- 	i2c_set_adapdata(adap, hdmi);
- 
- 	ret = i2c_add_adapter(adap);
-diff --git a/drivers/gpu/drm/rockchip/rk3066_hdmi.c b/drivers/gpu/drm/rockchip/rk3066_hdmi.c
-index 90145ad96984..b5d042ee052f 100644
---- a/drivers/gpu/drm/rockchip/rk3066_hdmi.c
-+++ b/drivers/gpu/drm/rockchip/rk3066_hdmi.c
-@@ -730,7 +730,7 @@ static struct i2c_adapter *rk3066_hdmi_i2c_adapter(struct rk3066_hdmi *hdmi)
- 	adap->dev.parent = hdmi->dev;
- 	adap->dev.of_node = hdmi->dev->of_node;
- 	adap->algo = &rk3066_hdmi_algorithm;
--	strlcpy(adap->name, "RK3066 HDMI", sizeof(adap->name));
-+	strscpy(adap->name, "RK3066 HDMI", sizeof(adap->name));
+ 	adap->algo = &dw_hdmi_algorithm;
+-	strlcpy(adap->name, "DesignWare HDMI", sizeof(adap->name));
++	strscpy(adap->name, "DesignWare HDMI", sizeof(adap->name));
  	i2c_set_adapdata(adap, hdmi);
  
  	ret = i2c_add_adapter(adap);
