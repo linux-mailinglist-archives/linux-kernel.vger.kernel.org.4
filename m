@@ -2,52 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ADB970B361
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 04:54:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F94270B367
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 04:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbjEVCx4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 22:53:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38106 "EHLO
+        id S230060AbjEVCz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 22:55:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbjEVCxz (ORCPT
+        with ESMTP id S229501AbjEVCzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 22:53:55 -0400
-Received: from out30-99.freemail.mail.aliyun.com (out30-99.freemail.mail.aliyun.com [115.124.30.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F443A0;
-        Sun, 21 May 2023 19:53:53 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0Vj6ZMpX_1684724027;
-Received: from 30.240.108.216(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0Vj6ZMpX_1684724027)
-          by smtp.aliyun-inc.com;
-          Mon, 22 May 2023 10:53:49 +0800
-Message-ID: <345a7cdc-e55b-7aaa-43d4-59b3f911ef18@linux.alibaba.com>
-Date:   Mon, 22 May 2023 10:53:45 +0800
+        Sun, 21 May 2023 22:55:24 -0400
+Received: from mail-yb1-xb44.google.com (mail-yb1-xb44.google.com [IPv6:2607:f8b0:4864:20::b44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A00A0;
+        Sun, 21 May 2023 19:55:22 -0700 (PDT)
+Received: by mail-yb1-xb44.google.com with SMTP id 3f1490d57ef6-bab8f66d3a2so3613614276.3;
+        Sun, 21 May 2023 19:55:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684724122; x=1687316122;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3EByqJK3fZFvbzEbYq4Gg3GsKIQs2/LZcmxocyBfm1M=;
+        b=Hkhc3HRvoYOAWEVUYll8PBl5bCKP68JgnaMlGbsDE8kg++B7VjTKp6nuiTPHiw+NML
+         0TKBqcnhkbF8Kt90Rb37BLPMQ6musDH0odrq3SkI4dcRUJrFDyVOfnHYJNessycRessL
+         Ut7MFhSxqogMQavuYvtqs/SiHWxCDI0B/9HdPozIcjeBGgsAx/hvEAASg3HS971oiwEk
+         1+Tgj1rNa6RfOh74ZPZLvRrEM1KExeV8KzkOnzYMpquwn6m1Lu2X4vhNhTlISPllvRYf
+         Yn+IgI7WBddDUNsQsSxQdnMXY+2kZrz1rFXgMMYM2nKpf5pgXAlKQ72/lWpWtPyc3IE+
+         5/EA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684724122; x=1687316122;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3EByqJK3fZFvbzEbYq4Gg3GsKIQs2/LZcmxocyBfm1M=;
+        b=IM48WEFGV8qelGj0vxdizM/E03ERc37SPJlqX+DxrIna2RJ50VAjkX685pLfQ5w7Na
+         IBTROwuC2KMY7TIoUSSsjkIjWYDd2bd9wWxeYECxeG7AtMF1C9WAKLz8V42m6+Qia8TZ
+         iAMAUpO8JpEbWIwc4yPgoDgerft+qvsAtwTvDwKOljxug1Bf/ZS6nXguruzyR+c0F2mB
+         /x8IPexJWsjQe2d/XIMBF43jtxFUWW4fc1M0BdMiUPqXkvNdXLzENLyeP9IdGKVUqAMQ
+         Pd79Kl7WdMn0e8eZeGkfc/KziaMFQ0eL8AtPf9VXvunKT9eJ0/o+O+Yk+j5alfn0CI7h
+         hgKQ==
+X-Gm-Message-State: AC+VfDyHcPyVPGYX7/bz+VAocBm0FLOGtdgVM2+HSr9xJFtems+m+PBl
+        0pxq/PP8/WrT/nriXBJGd7GroUfIPBod9QdURQuresoaWtcm7mAQ
+X-Google-Smtp-Source: ACHHUZ4UzbXkCAOOAkEwwHp2luGgipD7y+kJJYReGvIO6TXtEZKqEhNHXf4UUtxXzPGvEPDUwa9nmv/WIACjmP06reI=
+X-Received: by 2002:a81:54d4:0:b0:55a:5b19:ca9 with SMTP id
+ i203-20020a8154d4000000b0055a5b190ca9mr9994933ywb.36.1684724121787; Sun, 21
+ May 2023 19:55:21 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.6.1
-Subject: Re: [PATCH 0/2] capability: Introduce CAP_BLOCK_ADMIN
-Content-Language: en-US
-To:     Casey Schaufler <casey@schaufler-ca.com>,
-        Serge Hallyn <serge@hallyn.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Frederick Lawler <fred@cloudflare.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        louxiao.lx@alibaba-inc.com
-References: <20230511070520.72939-1-tianjia.zhang@linux.alibaba.com>
- <b645e195-7875-9fc3-a8de-6676dfe800b8@schaufler-ca.com>
- <e1242268-e7b6-d77c-a94f-edd913845ca7@linux.alibaba.com>
- <bcf4df59-3915-6df3-027b-8cb35b310650@schaufler-ca.com>
-From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
-In-Reply-To: <bcf4df59-3915-6df3-027b-8cb35b310650@schaufler-ca.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+References: <20230517124201.441634-1-imagedong@tencent.com>
+ <20230517124201.441634-4-imagedong@tencent.com> <CANn89iKLf=V664AsUYC52h_q-xjEq9xC3KqTq8q+t262T91qVQ@mail.gmail.com>
+ <CADxym3a0gmzmD3Vwu_shoJnAHm-xjD5tJRuKwTvAXnVk_H55AA@mail.gmail.com>
+ <CADVnQynZ67511+cKF=hyiaLx5-fqPGGmpyJ-5Lk6ge-ivmAf-w@mail.gmail.com>
+ <CADxym3ZiyYK7Vyz05qLv8jOPmNZXXepCsTbZxdkhSQxRx0cdSA@mail.gmail.com>
+ <CADVnQy=JQkVGRsbL0u=-oZSpdaFBpz907yX24p3uUu2pMhUjGg@mail.gmail.com>
+ <CADxym3awe-c29C-e1Y+efepLdpFWrG520ezJO1EjJ5C3arq6Eg@mail.gmail.com> <CADVnQyk2y68HKScad4W2jOy9uqe7TTCyY-StwdLWFPJhXU+CUA@mail.gmail.com>
+In-Reply-To: <CADVnQyk2y68HKScad4W2jOy9uqe7TTCyY-StwdLWFPJhXU+CUA@mail.gmail.com>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Mon, 22 May 2023 10:55:10 +0800
+Message-ID: <CADxym3bbGkOv4dwATp6wT0KA4ZPiPGfxvqvYtEzF45GJDe=RXQ@mail.gmail.com>
+Subject: Re: [PATCH net-next 3/3] net: tcp: handle window shrink properly
+To:     Neal Cardwell <ncardwell@google.com>
+Cc:     Eric Dumazet <edumazet@google.com>, kuba@kernel.org,
+        davem@davemloft.net, pabeni@redhat.com, dsahern@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Menglong Dong <imagedong@tencent.com>,
+        Yuchung Cheng <ycheng@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,108 +78,281 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Casey,
+On Sat, May 20, 2023 at 10:28=E2=80=AFPM Neal Cardwell <ncardwell@google.co=
+m> wrote:
+>
+> On Sat, May 20, 2023 at 5:08=E2=80=AFAM Menglong Dong <menglong8.dong@gma=
+il.com> wrote:
+> >
+> > On Fri, May 19, 2023 at 12:03=E2=80=AFAM Neal Cardwell <ncardwell@googl=
+e.com> wrote:
+> > >
+> > > On Thu, May 18, 2023 at 10:12=E2=80=AFAM Menglong Dong <menglong8.don=
+g@gmail.com> wrote:
+> > > >
+> > > > On Thu, May 18, 2023 at 9:40=E2=80=AFPM Neal Cardwell <ncardwell@go=
+ogle.com> wrote:
+> > > > >
+> > > > > On Wed, May 17, 2023 at 10:35=E2=80=AFPM Menglong Dong <menglong8=
+.dong@gmail.com> wrote:
+> > > > > >
+> > > > > > On Wed, May 17, 2023 at 10:47=E2=80=AFPM Eric Dumazet <edumazet=
+@google.com> wrote:
+> > > > > > >
+> > > > > > > On Wed, May 17, 2023 at 2:42=E2=80=AFPM <menglong8.dong@gmail=
+.com> wrote:
+> > > > > > > >
+> > > > > > > > From: Menglong Dong <imagedong@tencent.com>
+> > > > > > > >
+> > > > > > > > Window shrink is not allowed and also not handled for now, =
+but it's
+> > > > > > > > needed in some case.
+> > > > > > > >
+> > > > > > > > In the origin logic, 0 probe is triggered only when there i=
+s no any
+> > > > > > > > data in the retrans queue and the receive window can't hold=
+ the data
+> > > > > > > > of the 1th packet in the send queue.
+> > > > > > > >
+> > > > > > > > Now, let's change it and trigger the 0 probe in such cases:
+> > > > > > > >
+> > > > > > > > - if the retrans queue has data and the 1th packet in it is=
+ not within
+> > > > > > > > the receive window
+> > > > > > > > - no data in the retrans queue and the 1th packet in the se=
+nd queue is
+> > > > > > > > out of the end of the receive window
+> > > > > > >
+> > > > > > > Sorry, I do not understand.
+> > > > > > >
+> > > > > > > Please provide packetdrill tests for new behavior like that.
+> > > > > > >
+> > > > > >
+> > > > > > Yes. The problem can be reproduced easily.
+> > > > > >
+> > > > > > 1. choose a server machine, decrease it's tcp_mem with:
+> > > > > >     echo '1024 1500 2048' > /proc/sys/net/ipv4/tcp_mem
+> > > > > > 2. call listen() and accept() on a port, such as 8888. We call
+> > > > > >     accept() looply and without call recv() to make the data st=
+ay
+> > > > > >     in the receive queue.
+> > > > > > 3. choose a client machine, and create 100 TCP connection
+> > > > > >     to the 8888 port of the server. Then, every connection send=
+s
+> > > > > >     data about 1M.
+> > > > > > 4. we can see that some of the connection enter the 0-probe
+> > > > > >     state, but some of them keep retrans again and again. As
+> > > > > >     the server is up to the tcp_mem[2] and skb is dropped befor=
+e
+> > > > > >     the recv_buf full and the connection enter 0-probe state.
+> > > > > >     Finially, some of these connection will timeout and break.
+> > > > > >
+> > > > > > With this series, all the 100 connections will enter 0-probe
+> > > > > > status and connection break won't happen. And the data
+> > > > > > trans will recover if we increase tcp_mem or call 'recv()'
+> > > > > > on the sockets in the server.
+> > > > > >
+> > > > > > > Also, such fundamental change would need IETF discussion firs=
+t.
+> > > > > > > We do not want linux to cause network collapses just because =
+billions
+> > > > > > > of devices send more zero probes.
+> > > > > >
+> > > > > > I think it maybe a good idea to make the connection enter
+> > > > > > 0-probe, rather than drop the skb silently. What 0-probe
+> > > > > > meaning is to wait for space available when the buffer of the
+> > > > > > receive queue is full. And maybe we can also use 0-probe
+> > > > > > when the "buffer" of "TCP protocol" (which means tcp_mem)
+> > > > > > is full?
+> > > > > >
+> > > > > > Am I right?
+> > > > > >
+> > > > > > Thanks!
+> > > > > > Menglong Dong
+> > > > >
+> > > > > Thanks for describing the scenario in more detail. (Some kind of
+> > > > > packetdrill script or other program to reproduce this issue would=
+ be
+> > > > > nice, too, as Eric noted.)
+> > > > >
+> > > > > You mention in step (4.) above that some of the connections keep
+> > > > > retransmitting again and again. Are those connections receiving a=
+ny
+> > > > > ACKs in response to their retransmissions? Perhaps they are recei=
+ving
+> > > > > dupacks?
+> > > >
+> > > > Actually, these packets are dropped without any reply, even dupacks=
+.
+> > > > skb will be dropped directly when tcp_try_rmem_schedule()
+> > > > fails in tcp_data_queue(). That's reasonable, as it's
+> > > > useless to reply a ack to the sender, which will cause the sender
+> > > > fast retrans the packet, because we are out of memory now, and
+> > > > retrans can't solve the problem.
+> > >
+> > > I'm not sure I see the problem. If retransmits can't solve the
+> > > problem, then why are you proposing that data senders keep
+> > > retransmitting forever (via 0-window-probes) in this kind of scenario=
+?
+> > >
+> >
+> > Because the connection will break if the count of
+> > retransmits up to tcp_retires2, but probe-0 can keep
+> > for a long time.
+>
+> I see. So it sounds like you agree that retransmits can solve the
+> problem, as long as the retransmits are using the zero-window probe
+> state machine (ICSK_TIME_PROBE0, tcp_probe_timer()), which continues
+> as long as the receiver is sending ACKs. And it sounds like when you
+> said "retrans can't solve the problem" you didn't literally mean that
+> retransmits can't solve the problem, but rather you meant that the RTO
+> state machine, specifically (ICSK_TIME_RETRANS,
+> tcp_retransmit_timer(), etc) can't solve the problem. I agree with
+> that assessment that in this scenario tcp_probe_timer() seems like a
+> solution but tcp_retransmit_timer() does not.
+>
 
-On 5/18/23 8:01 AM, Casey Schaufler wrote:
-> On 5/16/2023 5:05 AM, Tianjia Zhang wrote:
->> Hi Casey,
->>
->> On 5/12/23 12:17 AM, Casey Schaufler wrote:
->>> On 5/11/2023 12:05 AM, Tianjia Zhang wrote:
->>>> Separated fine-grained capability CAP_BLOCK_ADMIN from CAP_SYS_ADMIN.
->>>> For backward compatibility, the CAP_BLOCK_ADMIN capability is included
->>>> within CAP_SYS_ADMIN.
->>>>
->>>> Some database products rely on shared storage to complete the
->>>> write-once-read-multiple and write-multiple-read-multiple functions.
->>>> When HA occurs, they rely on the PR (Persistent Reservations) protocol
->>>> provided by the storage layer to manage block device permissions to
->>>> ensure data correctness.
->>>>
->>>> CAP_SYS_ADMIN is required in the PR protocol implementation of existing
->>>> block devices in the Linux kernel, which has too many sensitive
->>>> permissions, which may lead to risks such as container escape. The
->>>> kernel needs to provide more fine-grained permission management like
->>>> CAP_NET_ADMIN to avoid online products directly relying on root to run.
->>>>
->>>> CAP_BLOCK_ADMIN can also provide support for other block device
->>>> operations that require CAP_SYS_ADMIN capabilities in the future,
->>>> ensuring that applications run with least privilege.
->>>
->>> Can you demonstrate that there are cases where a program that needs
->>> CAP_BLOCK_ADMIN does not also require CAP_SYS_ADMIN for other
->>> operations?
->>> How much of what's allowed by CAP_SYS_ADMIN would be allowed by
->>> CAP_BLOCK_ADMIN? If use of a new capability is rare it's difficult to
->>> justify.
->>>
->>
->> For the previous non-container scenarios, the block device is a shared
->> device, because the business-system generally operates the file system
->> on the block. Therefore, directly operating the block device has a high
->> probability of affecting other processes on the same host, and it is a
->> reasonable requirement to need the CAP_SYS_ADMIN capability.
->>
->> But for a database running in a container scenario, especially a
->> container scenario on the cloud, it is likely that a container
->> exclusively occupies a block device. That is to say, for a container,
->> its access to the block device will not affect other process, there is
->> no need to obtain a higher CAP_SYS_ADMIN capability.
-> 
-> If I understand correctly, you're saying that the process that requires
-> CAP_BLOCK_ADMIN in the container won't also require CAP_SYS_ADMIN for
-> other operations.
-> 
-> That's good, but it isn't clear how a process on bare metal would
-> require CAP_SYS_ADMIN while the same process in a container wouldn't.
-> 
->>
->> For a file system similar to distributed write-once-read-many, it is
->> necessary to ensure the correctness of recovery, then when recovery
->> occurs, it is necessary to ensure that no inflighting-io is completed
->> after recovery.
->>
->> This can be guaranteed by performing operations such as SCSI/NVME
->> Persistent Reservations on block devices on the distributed file system.
-> 
-> Does your cloud based system always run "real" devices? My
-> understanding is that cloud based deployment usually uses
-> virtual machines and virtio or other simulated devices.
-> A container deployment in the cloud seems unlikely to be able
-> to take advantage of block administration. But I can't say
-> I know the specifics of your environment.
-> 
->> Therefore, at present, it is only necessary to have the relevant
->> permission support of the control command of such container-exclusive
->> block devices.
-> 
-> This looks like an extremely special case in which breaking out
-> block management would make sense.
-> 
-Our scenario is like this. In simply terms, a distributed database has
-a read-write instance and one or more read-only instances. Each instance
-runs in an isolated container. All containers share the same block device.
+Yes, that is indeed what I want to express.
 
-In addition to the database instance, there is also a control program
-running on the control plane in the container. The database ensures
-the correctness of the data through the PR (Persistent Reservations)
-of the block device. This operation is also the only operation in the
-container that requires CAP_SYS_ADMIN privileges.
+> > > A single dupack without SACK blocks will not cause the sender to fast
+> > > retransmit. (Only 3 dupacks would trigger fast retransmit.)
+> > >
+> > > Three or more dupacks without SACK blocks will cause the sender to
+> > > fast retransmit the segment above SND.UNA once if the sender doesn't
+> > > have SACK support. But in this case AFAICT fast-retransmitting once i=
+s
+> > > a fine strategy, since the sender should keep retrying transmits (wit=
+h
+> > > backoff) until the receiver potentially has memory available to
+> > > receive the packet.
+> > >
+> > > >
+> > > > > If so, then perhaps we could solve this problem without
+> > > > > depending on a violation of the TCP spec (which says the receive
+> > > > > window should not be retracted) in the following way: when a data
+> > > > > sender suffers a retransmission timeout, and retransmits the firs=
+t
+> > > > > unacknowledged segment, and receives a dupack for SND.UNA instead=
+ of
+> > > > > an ACK covering the RTO-retransmitted segment, then the data send=
+er
+> > > > > should estimate that the receiver doesn't have enough memory to b=
+uffer
+> > > > > the retransmitted packet. In that case, the data sender should en=
+ter
+> > > > > the 0-probe state and repeatedly set the ICSK_TIME_PROBE0 timer t=
+o
+> > > > > call tcp_probe_timer().
+> > > > >
+> > > > > Basically we could try to enhance the sender-side logic to try to
+> > > > > distinguish between two kinds of problems:
+> > > > >
+> > > > > (a) Repeated data packet loss caused by congestion, routing probl=
+ems,
+> > > > > or connectivity problems. In this case, the data sender uses
+> > > > > ICSK_TIME_RETRANS and tcp_retransmit_timer(), and backs off and o=
+nly
+> > > > > retries sysctl_tcp_retries2 times before timing out the connectio=
+n
+> > > > >
+> > > > > (b) A receiver that is repeatedly sending dupacks but not ACKing
+> > > > > retransmitted data because it doesn't have any memory. In this ca=
+se,
+> > > > > the data sender uses ICSK_TIME_PROBE0 and tcp_probe_timer(), and =
+backs
+> > > > > off but keeps retrying as long as the data sender receives ACKs.
+> > > > >
+> > > >
+> > > > I'm not sure if this is an ideal method, as it may be not rigorous
+> > > > to conclude that the receiver is oom with dupacks. A packet can
+> > > > loss can also cause multi dupacks.
+> > >
+> > > When a data sender suffers an RTO and retransmits a single data
+> > > packet, it would be very rare for the data sender to receive multiple
+> > > pure dupacks without SACKs. This would only happen in the rare case
+> > > where (a) the connection did not have SACK enabled, and (b) there was
+> > > a hole in the received sequence space and there were still packets in
+> > > flight when the (spurioius) RTO fired.
+> > >
+> > > But if we want to be paranoid, then this new response could be writte=
+n
+> > > to only trigger if SACK is enabled (the vast, vast majority of cases)=
+.
+> > > If SACK is enabled, and an RTO of a data packet starting at sequence
+> > > S1 results in the receiver sending only a dupack for S1 without SACK
+> > > blocks, then this clearly shows the issue is not packet loss but
+> > > suggests a receiver unable to buffer the given data packet, AFAICT.
+> > >
+> >
+> > Yeah, you are right on this point, multi pure dupacks can
+> > mean out of memory of the receiver. But we still need to
+> > know if the receiver recovers from OOM. Without window
+> > shrink, the window in the ack of zero-window probe packet
+> > is not zero on OOM.
+>
+> But do we need a protocol-violating zero-window in this case? Why not
+> use my approach suggested above: conveying the OOM condition by
+> sending an ACK but not ACKing the retransmitted packet?
+>
 
-This system as a whole, whether it is running on VM or bare metal, the
-difference is not big.
+I agree with you about the approach you mentioned
+about conveying the OOM condition. But that approach
+can't convey the recovery from OOM, can it?
 
-In order to support the PR of block devices, we need to grant
-CAP_SYS_ADMIN permissions to the container, which not only greatly
-increases the risk of container escape, but also makes us have to
-carefully configure the permissions of the container. Many container
-escapes that have occurred are also caused by these reasons.
+Let's see the process. With 3 pure dupack for SND.UNA,
+we deem the OOM of the receiver and make the sender
+enter zero-window probe state.
 
-This is essentially a problem of permission isolation. We hope to
-share the smallest possible permissions from CAP_SYS_ADMIN to support
-necessary operations, and avoid providing CAP_SYS_ADMIN permissions
-to containers as much as possible.
+The sender will keep sending probe0 packets, and the
+receiver will reply an ack. However, as we don't
+shrink the window actually, the window in the ack is
+not zero on OOM, so we can't know if the receiver has
+recovered from OOM and retransmit the data in retransmit
+queue.
 
-Kind regards,
-Tianjia
+BTW, the probe0 will send the last byte that was already
+acked, so the ack of the probe0 will be a pure dupack.
 
+Did I miss something?
+
+BTW, a previous patch has explained the need to
+support window shrink, which should satisfy the RFC
+of TCP protocol:
+
+https://lore.kernel.org/netdev/20230308053353.675086-1-mfreemon@cloudflare.=
+com/
+
+Thanks!
+Menglong Dong
+
+> Thanks,
+> neal
+>
+> > Hi, Eric and kuba, do you have any comments on this
+> > case?
+> >
+> > Thanks!
+> > Menglong Dong
+> >
+> > > thanks,
+> > > neal
+> > >
+> > > >
+> > > > Thanks!
+> > > > Menglong Dong
+> > > >
+> > > > > AFAICT that would be another way to reach the happy state you men=
+tion:
+> > > > > "all the 100 connections will enter 0-probe status and connection
+> > > > > break won't happen", and we could reach that state without violat=
+ing
+> > > > > the TCP protocol spec and without requiring changes on the receiv=
+er
+> > > > > side (so that this fix could help in scenarios where the
+> > > > > memory-constrained receiver is an older stack without special new
+> > > > > behavior).
+> > > > >
+> > > > > Eric, Yuchung, Menglong: do you think something like that would w=
+ork?
+> > > > >
+> > > > > neal
