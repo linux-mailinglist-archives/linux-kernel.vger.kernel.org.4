@@ -2,80 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B146A70BB13
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:05:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8F0670BB19
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232621AbjEVLFC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 07:05:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50248 "EHLO
+        id S231675AbjEVLF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 07:05:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232823AbjEVLEa (ORCPT
+        with ESMTP id S233145AbjEVLFY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 07:04:30 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B12271C;
-        Mon, 22 May 2023 03:59:30 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-510d967249aso9893825a12.1;
-        Mon, 22 May 2023 03:59:30 -0700 (PDT)
+        Mon, 22 May 2023 07:05:24 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3C830F2;
+        Mon, 22 May 2023 04:00:20 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id af79cd13be357-75b0df81142so94240985a.2;
+        Mon, 22 May 2023 04:00:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684753074; x=1687345074;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=QbaFtQY4U1SAGZYtnPdu7mZsLG5dGue95mqtDIfDNho=;
-        b=G3CDtz9bnVsVmqFfLRO45IIz1boAbDjKVkdd+zs/OFV4laduBB9Xp3d4pSzc1CjMSb
-         2mBDqIkjBHBFkNwWyLScLiPLjpaYqO2qeEIc8vMPNBapYffPuMvzMdLA7bJfYtQZN8Kx
-         TvUdZTOO8OSh0c/Vq5aXLnvS23xpmTumKfQ4jl/xZAiqNirLwkbC7ML+lETlHi4UaAPv
-         IxVxr6Emb5UX8YAB2w+k1c1wApD3g6EYJgvyKOAcDC8WzMrYLvT9MufipHtsLvXv9Awi
-         ZoL7sKRihECyB6m7X4VOAF15oQQdwN7hix2PopHfewdLMp45IpYuyMhV+46MWUeuD6BM
-         2Zgg==
+        d=gmail.com; s=20221208; t=1684753140; x=1687345140;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5fvYEEaFxIdJ1ctjBoNsSe7YJW7m1yyULGgSkldRgms=;
+        b=bV+gk4w01kvKXq3uxQ1aw/ILIKqaedH4DBgplPDtCAPc8RAEjRhKPQpuNUzgXluDkW
+         eyiO6NjXhsc41pP8IpfTkuz9aFlzA+mEODb5EkY74LZtUDrU/6BdXkkiV5cw+vzFfSSy
+         RR7uzvljrxGrWWK3WyyUDfVulzB1avH+5tvXDwuw6PoMAFsUgdDMOp7x4g/HQ09Nnh9S
+         ChwE5xpXV/kDp60/OSBGp/81sPXQRy98Mkz76OaTMA9rKf1T+4VLYUlK42L26YYPsUZD
+         oP70Vn0TWgKK/Oocs5pNd7J04wDePClWEc/7fkEqbjJB2w9/5o4w7k3kEqTHvwR8X+Hf
+         TuUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684753074; x=1687345074;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QbaFtQY4U1SAGZYtnPdu7mZsLG5dGue95mqtDIfDNho=;
-        b=M7mGDXfyVX4oZHVUKipHG9Fp8I7S/IJ4o4M9pYMJam7+2Q3cFn82nPJPVCo9v+upWG
-         S+fcAClBmoIpRcurzvvbQOhjPT3kxWq0S4RIjKPVqvaVWKQPTxF08HvHN6NOpBQR5Vxu
-         C7D4lppzBqGsIjFgvLiZYj32g5svs+wawUDNDUPXGZHBd/zOHEbE9hsEhz1yrwqkeA2a
-         mrKOZO6cw0a/PJ9Vx52vUYkahvZlk5hDpZ1nIuNu8U55RyLi92gGpuOjT4GOviyrsIut
-         /8CywV5LFf88hwE0ssGyAU+nJksGrYOukrZDoVeIB2aGR7ARSbE2yLcVkctGIalHolYa
-         /r7A==
-X-Gm-Message-State: AC+VfDxeA7uvsUIY+9FZr2mviObMpBlFofsckQhaJmVvCjpmJtcyV614
-        X90DE1r1g9aby3plLCq7b5c=
-X-Google-Smtp-Source: ACHHUZ78TbJq8LqXSQIeDepyLHEFHjKMiHjFjEk+Shbi+ccEXDB+bV98pAFWBAz2E91KN7IUqlorqg==
-X-Received: by 2002:aa7:d956:0:b0:50b:c35b:1ef3 with SMTP id l22-20020aa7d956000000b0050bc35b1ef3mr7288765eds.38.1684753073342;
-        Mon, 22 May 2023 03:57:53 -0700 (PDT)
-Received: from arinc9-PC.. ([149.91.1.15])
-        by smtp.gmail.com with ESMTPSA id c3-20020a50f603000000b00510d7152dc7sm3020162edn.30.2023.05.22.03.57.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 03:57:52 -0700 (PDT)
-From:   arinc9.unal@gmail.com
-X-Google-Original-From: arinc.unal@arinc9.com
-To:     Felix Fietkau <nbd@nbd.name>, John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        Frank Wunderlich <frank-w@public-files.de>
-Cc:     Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        mithat.guner@xeront.com, erkin.bozoglu@xeront.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: [PATCH net] net: ethernet: mtk_eth_soc: fix QoS on DSA MAC on non MTK_NETSYS_V2 SoCs
-Date:   Mon, 22 May 2023 13:57:43 +0300
-Message-Id: <20230522105744.37227-1-arinc.unal@arinc9.com>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20221208; t=1684753140; x=1687345140;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5fvYEEaFxIdJ1ctjBoNsSe7YJW7m1yyULGgSkldRgms=;
+        b=HO2Ya9+uuahr6TcKosy+DcW3m2f0FvIgZXUVYdtfNuMHDRR8Gu3xe0Ilf69oU9SDM1
+         gZRQpF0L9pslBepycBuYeHAhmxXuJl4qMxbAzQSYnJbf0CGCKQceeLl0xj7d9vDT/xr3
+         REio8PALdgn+G9rs4Y+vtodwytigURAV3zQFMR/Ds1r7J/NQaqkU2iz258OqA2pY/8Os
+         lDZR9/PaZvSo6SQkSkijpvbk7LskivJeHUAOTKeE7r0Kzxk/hfbAX+HzteB+t/8xPtlq
+         Tknicw1tZNSoih3Scji2dJ1D6cZu8SW2OpwdM1fH3tzzptv4MsoAttGjc2zupgm3OLpv
+         9Ybg==
+X-Gm-Message-State: AC+VfDwFH1N8TJNUaVzc5F1ImSKy9SJFAFfxZ7ysgCOMH0VXv3++9Ho+
+        mC10k+GBxuIQuDcCLN4NtJKldvgNo/mHVdw+ff3D4XexUzY=
+X-Google-Smtp-Source: ACHHUZ4IhOsWxTmHezMj1Zil6Ulgdl4RITYTYZi9OkO6+om0HV48MoRQRYTN+Hvs67DNKz/f1qsWrZQWm6uoqzOA4Os=
+X-Received: by 2002:a05:620a:2b95:b0:75b:23a0:de92 with SMTP id
+ dz21-20020a05620a2b9500b0075b23a0de92mr124875qkb.16.1684753139687; Mon, 22
+ May 2023 03:58:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20230521225901.388455-1-contact@artur-rojek.eu> <20230521225901.388455-3-contact@artur-rojek.eu>
+In-Reply-To: <20230521225901.388455-3-contact@artur-rojek.eu>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 22 May 2023 13:58:23 +0300
+Message-ID: <CAHp75Vfj_2WJdcn4TC2SesUrWFmyhXHujS9P8O3JXdFcAb=WeQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] input: joystick: Fix buffer data parsing
+To:     Artur Rojek <contact@artur-rojek.eu>
+Cc:     Paul Cercueil <paul@crapouillou.net>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        linux-mips@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -86,90 +73,207 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arınç ÜNAL <arinc.unal@arinc9.com>
+On Mon, May 22, 2023 at 1:59=E2=80=AFAM Artur Rojek <contact@artur-rojek.eu=
+> wrote:
+>
+> Don't try to access buffer data of a channel by its scan index. Instead,
+> calculate its offset in the buffer.
+>
+> This is necessary, as the scan index of a channel does not represent its
+> position in a buffer - the buffer will contain data for enabled channels
+> only, affecting data offsets and alignment.
+>
+> While at it, also fix minor style issue in probe.
 
-The commit c6d96df9fa2c ("net: ethernet: mtk_eth_soc: drop generic vlan rx
-offload, only use DSA untagging") makes VLAN RX offloading to be only used
-on the SoCs without the MTK_NETSYS_V2 ability (which are not just MT7621
-and MT7622). The commit disables the proper handling of special tagged
-(DSA) frames, added with commit 87e3df4961f4 ("net-next: ethernet:
-mediatek: add CDM able to recognize the tag for DSA"), for non
-MTK_NETSYS_V2 SoCs when it finds a MAC that does not use DSA. So if the
-other MAC uses DSA, the CDMQ component transmits DSA tagged frames to the
-CPU improperly. This issue can be observed on frames with TCP, for example,
-a TCP speed test using iperf3 won't work.
+a minor
+the probe
 
-The commit disables the proper handling of special tagged (DSA) frames
-because it assumes that these SoCs don't use more than one MAC, which is
-wrong. Although I made Frank address this false assumption on the patch log
-when they sent the patch on behalf of Felix, the code still made changes
-with this assumption.
+> Reported-by: Chris Morgan <macromorgan@hotmail.com>
+> Closes: https://lore.kernel.org/linux-input/20220408212857.9583-1-macroal=
+pha82@gmail.com/
 
-Therefore, the proper handling of special tagged (DSA) frames must be kept
-enabled in all circumstances as it doesn't affect non DSA tagged frames.
+What is this tag? Anything documented? Otherwise use BugLink or Link.
 
-Hardware DSA untagging, introduced with the commit 2d7605a72906 ("net:
-ethernet: mtk_eth_soc: enable hardware DSA untagging"), and VLAN RX
-offloading are operations on the two CDM components of the frame engine,
-CDMP and CDMQ, which connect to Packet DMA (PDMA) and QoS DMA (QDMA) and
-are between the MACs and the CPU. These operations apply to all MACs of the
-SoC so if one MAC uses DSA and the other doesn't, the hardware DSA
-untagging operation will cause the CDMP component to transmit non DSA
-tagged frames to the CPU improperly.
+...
 
-Since the VLAN RX offloading feature configuration was dropped, VLAN RX
-offloading can only be used along with hardware DSA untagging. So, for the
-case above, we need to disable both features and leave it to the CPU,
-therefore software, to untag the DSA and VLAN tags.
+>         struct adc_joystick_axis *axes;
+>         struct iio_channel *chans;
+> +       int *offsets;
 
-So the correct way to handle this is:
+Why not unsigned? I.o.w. is there any meaning for negative values?
 
-For all SoCs:
+>         int num_chans;
+>         bool polled;
 
-Enable the proper handling of special tagged (DSA) frames
-(MTK_CDMQ_IG_CTRL).
+...
 
-For non MTK_NETSYS_V2 SoCs:
+> +               off =3D joy->offsets[i];
 
-Enable hardware DSA untagging (MTK_CDMP_IG_CTRL).
-Enable VLAN RX offloading (MTK_CDMP_EG_CTRL).
+> +
 
-When a non MTK_NETSYS_V2 SoC MAC does not use DSA:
+Move this blank line to be before the previous line.
 
-Disable hardware DSA untagging (MTK_CDMP_IG_CTRL).
-Disable VLAN RX offloading (MTK_CDMP_EG_CTRL).
+> +               if (off < 0)
+> +                       return -EINVAL;
 
-Fixes: c6d96df9fa2c ("net: ethernet: mtk_eth_soc: drop generic vlan rx offload, only use DSA untagging")
-Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
----
- drivers/net/ethernet/mediatek/mtk_eth_soc.c | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+...
 
-diff --git a/drivers/net/ethernet/mediatek/mtk_eth_soc.c b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-index a75fd072082c..834c644b67db 100644
---- a/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-+++ b/drivers/net/ethernet/mediatek/mtk_eth_soc.c
-@@ -3269,18 +3269,14 @@ static int mtk_open(struct net_device *dev)
- 			eth->dsa_meta[i] = md_dst;
- 		}
- 	} else {
--		/* Hardware special tag parsing needs to be disabled if at least
--		 * one MAC does not use DSA.
-+		/* Hardware DSA untagging and VLAN RX offloading need to be
-+		 * disabled if at least one MAC does not use DSA.
- 		 */
- 		u32 val = mtk_r32(eth, MTK_CDMP_IG_CTRL);
- 
- 		val &= ~MTK_CDMP_STAG_EN;
- 		mtk_w32(eth, val, MTK_CDMP_IG_CTRL);
- 
--		val = mtk_r32(eth, MTK_CDMQ_IG_CTRL);
--		val &= ~MTK_CDMQ_STAG_EN;
--		mtk_w32(eth, val, MTK_CDMQ_IG_CTRL);
--
- 		mtk_w32(eth, 0, MTK_CDMP_EG_CTRL);
- 	}
- 
--- 
-2.39.2
+>                 case 1:
+> -                       val =3D ((const u8 *)data)[idx];
+> +                       val =3D *chan_data;
 
+Might be also
+
+   get_unaligned((const u8 *)chan_data);
+
+And with all this (see below) the chan_data actually can be declared
+as const void *.
+
+>                         break;
+>                 case 2:
+> -                       data_u16 =3D (const u16 *)data + idx;
+> -
+>                         /*
+>                          * Data is aligned to the sample size by IIO core=
+.
+>                          * Call `get_unaligned_xe16` to hide type casting=
+.
+>                          */
+>                         if (endianness =3D=3D IIO_BE)
+> -                               val =3D get_unaligned_be16(data_u16);
+> +                               val =3D get_unaligned_be16(chan_data);
+>                         else if (endianness =3D=3D IIO_LE)
+> -                               val =3D get_unaligned_le16(data_u16);
+> +                               val =3D get_unaligned_le16(chan_data);
+>                         else /* IIO_CPU */
+> -                               val =3D *data_u16;
+> +                               val =3D *(const u16 *)chan_data;
+
+This probably needs to be
+
+   get_unaligned((const u16 *)chan_data);
+
+for the sake of consistency with the above.
+
+>                         break;
+>                 default:
+>                         return -EINVAL;
+
+...
+
+> +static int adc_joystick_si_cmp(const void *a, const void *b, const void =
+*priv)
+> +{
+> +       const struct iio_channel *chans =3D priv;
+> +
+> +       return chans[*(int *)a].channel->scan_index -
+> +              chans[*(int *)b].channel->scan_index;
+
+Discarding const?
+
+> +}
+
+...
+
+> +       offsets =3D kmalloc_array(count, sizeof(int), GFP_KERNEL);
+
+sizeof(*offsets)
+
+> +       if (!offsets)
+> +               return ERR_PTR(-ENOMEM);
+
+...
+
+> +       si_order =3D kmalloc_array(count, sizeof(int), GFP_KERNEL);
+
+sizeof(*si_order)
+
+> +       if (!si_order) {
+> +               kfree(offsets);
+> +               return ERR_PTR(-ENOMEM);
+> +       }
+
+...
+
+> +       /* Channels in buffer are ordered by scan index. Sort to match th=
+at. */
+
+the buffer
+
+> +       sort_r(si_order, count, sizeof(int), adc_joystick_si_cmp, NULL, c=
+hans);
+
+sizeof(*si_order) ?
+
+sizeof(int) is a bit odd, the above will tell better without even
+knowing the sort_r() parameters what it is about.
+
+...
+
+> +       for (i =3D 0; i < count; ++i) {
+> +               idx =3D si_order[i];
+> +               ch =3D chans[idx].channel;
+> +               si =3D ch->scan_index;
+> +
+> +               if (si < 0 || !test_bit(si, indio_dev->active_scan_mask))=
+ {
+> +                       offsets[idx] =3D -1;
+> +                       continue;
+> +               }
+> +
+> +               /* Channels sharing scan indices also share the samples. =
+*/
+> +               if (idx > 0 && si =3D=3D chans[idx - 1].channel->scan_ind=
+ex) {
+> +                       offsets[idx] =3D offsets[idx - 1];
+> +                       continue;
+> +               }
+> +
+> +               offsets[idx] =3D offset;
+
+> +               length =3D ch->scan_type.storagebits / 8;
+
+BITS_PER_BYTE ?
+
+> +               if (ch->scan_type.repeat > 1)
+> +                       length *=3D ch->scan_type.repeat;
+
+> +               /* Account for channel alignment. */
+> +               if (offset % length)
+> +                       offset +=3D length - (offset % length);
+
+Would one of ALIGN() / rounddown / etc work here?
+
+> +               offset +=3D length;
+> +       }
+
+...
+
+> +       joy->offsets =3D adc_joystick_get_chan_offsets(joy->chans,
+> +                                                    joy->num_chans);
+> +       if (IS_ERR(joy->offsets)) {
+> +               dev_err(devp, "Unable to allocate channel offsets\n");
+
+> +               return PTR_ERR(joy->offsets);
+> +       }
+> +
+> +       return 0;
+
+return PTR_ERR_OR_ZERO() ?
+
+...
+
+>                 error =3D devm_add_action_or_reset(dev, adc_joystick_clea=
+nup,
+>                                                  joy->buffer);
+> -               if (error)  {
+> +               if (error) {
+>                         dev_err(dev, "Unable to add action\n");
+>                         return error;
+>                 }
+
+Unrelated change.
+
+--=20
+With Best Regards,
+Andy Shevchenko
