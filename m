@@ -2,195 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D8B370CE29
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 00:43:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF99070CE32
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 00:45:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232278AbjEVWnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 18:43:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47816 "EHLO
+        id S234359AbjEVWpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 18:45:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbjEVWnb (ORCPT
+        with ESMTP id S229734AbjEVWpp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 18:43:31 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAF4F90;
-        Mon, 22 May 2023 15:43:29 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34MKNrl2021957;
-        Mon, 22 May 2023 22:42:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2023-03-30;
- bh=+x4LjIcpcS+34wzkY+sZHYRICli0sHAdsECdUliq7zQ=;
- b=PEwLARzPucK4z1Z8NEFOorwyDLD12bLzvD4S1UZku19+nSgHK9AEDYAPaiNRhEhdZ8yV
- TIxWcgFf2iBb9mvnzUUvLps2yf4kfNCFDIWtcOrfTf7VfwB98XVxlxzl/1y63TjokNwz
- DwAxgFEVgkYKw4am0peumj3CXnQ+fnHz1MMK80IcM3sZw8hVMOjnkwvxd2aDH6z4B8MT
- OwArv5HVQ/G1ecZtYI/NQhTAGWcx8guZObPMGgLWp4T3VtKz7ObqIugoQ84SeMOu3s5d
- GwOFAi/BkYUrxhbnXc+QSGJ0dnzyeB2gPc89frPP73GotUfjUMWR6oWxqhiU6hFx6xDx nQ== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qpp3qktkk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 May 2023 22:42:58 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 34MM6f7s028913;
-        Mon, 22 May 2023 22:42:57 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2175.outbound.protection.outlook.com [104.47.57.175])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3qqk2a2chu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 May 2023 22:42:57 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=AhJs5JUNBZdbFRThdMLnIGGZbwbAZkkrpQzAyhTHISKVCq9HpS+n4BUtr5tEx8qi7xkouzo9wZ1P5uXtQotYgBPXVestYcaVN1201vFAvpDuwSCYS4SP3SUS4YksRIy9cjYuu8f2w67zVr688I+qd676ThOkPRoOJWU+zEAjSwxjA0+kuz0sDo6et6dib2K7Rp4qHrrKBtD5Y6pwUI5Q+A5gvzsk1mWwG9AijVE5FL9Iq5NpCUG3TM3OaQ+Aet+EcoTmNb8+CsmfL2MkjolyFY+ByVan0Ls2TXTd2+46MmAoqT6vHiLAp6NQX/2mP8pZLZGo4rvXq5mSJCjxypVaMg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+x4LjIcpcS+34wzkY+sZHYRICli0sHAdsECdUliq7zQ=;
- b=TIpHKisSUzBp6VYJqt0RX8QlNKQQC5kidliFP4QNdgOaSPqm+bS7SEGoDLFqXBtwoWbLNK/9iafQgIOEEDU2CHN4BWzDLR+bW0HKdgpUCYt7BJ67jNFrNauBfTCDfP1JBxLNH8FT4VOV1qrLy2y0TgUkSvsRUCZ0PdpXq5jbCmXQuba2mLermQyrAdjSzw510ekOg1R4/a+CY0m3UiqWF5GPjFb1lmIcUqdbnzEYl0Ud/VyNUSVBAaAUcvHAQ9ZPsSeYft5v04Xeza+Jh2tixcHWU7T6YfvE/DXPLKmT4UIWGRY2maD/+Ob79+9BcgHbQ8chYq+Q0T0w9ed5RodyCg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+x4LjIcpcS+34wzkY+sZHYRICli0sHAdsECdUliq7zQ=;
- b=CgkA2bzMt4QFymTpNUPd7eAwI+yM0AUSeU1HKj0lBEYvG8jfxfh8cCyXVu3qEOypp235vHy2C783VSqCfx+L8ZdkJigUW/0QXEBgLLSZvsROogUOHVehoEAXvh/2gBdMW/Somx8B7QnrjABdyJljCnWhC9gjG7X61trFmT+mvDU=
-Received: from CO1PR10MB4754.namprd10.prod.outlook.com (2603:10b6:303:91::24)
- by DS7PR10MB5149.namprd10.prod.outlook.com (2603:10b6:5:3a7::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Mon, 22 May
- 2023 22:42:54 +0000
-Received: from CO1PR10MB4754.namprd10.prod.outlook.com
- ([fe80::b846:21bf:b5cf:67a4]) by CO1PR10MB4754.namprd10.prod.outlook.com
- ([fe80::b846:21bf:b5cf:67a4%5]) with mapi id 15.20.6411.028; Mon, 22 May 2023
- 22:42:54 +0000
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        James Smart <james.smart@broadcom.com>,
-        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        HighPoint Linux Team <linux@highpoint-tech.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        Don Brace <don.brace@microchip.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        Guo Xuenan <guoxuenan@huawei.com>,
-        Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        kernel test robot <lkp@intel.com>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
-        megaraidlinux.pdl@broadcom.com, storagedev@microchip.com,
-        linux-xfs@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>,
-        Tales Aparecida <tales.aparecida@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] overflow: Add struct_size_t() helper
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq1353om1ie.fsf@ca-mkp.ca.oracle.com>
-References: <20230522211810.never.421-kees@kernel.org>
-Date:   Mon, 22 May 2023 18:42:51 -0400
-In-Reply-To: <20230522211810.never.421-kees@kernel.org> (Kees Cook's message
-        of "Mon, 22 May 2023 14:18:13 -0700")
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR03CA0346.namprd03.prod.outlook.com
- (2603:10b6:a03:39c::21) To CO1PR10MB4754.namprd10.prod.outlook.com
- (2603:10b6:303:91::24)
+        Mon, 22 May 2023 18:45:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A950A9D
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 15:44:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684795498;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=DaVz2A4ookrYy0bG1/ownvewposvWWNIhPO/rg/szCc=;
+        b=T8bu4sfpUsktR+9AmPTB0SzPbURXIfsaB/w1+iStuyJv9R0m7gzyt8rQI2fz0OZ35oxtfJ
+        opHCcck/N4KlAkMGXvvzyiwJJd5Pn4SjEf9SJhfv3f3SKa8WMbV6tvgUnZep69YgNmQYZH
+        Q1s8FKfVT5bYQ3DuyVE3ZPUeUgRu+l0=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-62-rH-eBtxrNsubjUjb43WZyQ-1; Mon, 22 May 2023 18:44:57 -0400
+X-MC-Unique: rH-eBtxrNsubjUjb43WZyQ-1
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-75b0c2ee430so160292085a.1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 15:44:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684795497; x=1687387497;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DaVz2A4ookrYy0bG1/ownvewposvWWNIhPO/rg/szCc=;
+        b=Ce4EeVF2VmrohWnze2uVrnklsevq/jZZ8/a7bh7OYkYS44la3ncOxvaFDAdSXvb33n
+         yWpP1N13CBwQwgpj4GTuUuVuQJ572BSvR7hlZkqelF1yThEnZDTPErR00ttSKO0RJY08
+         vTMTgWWbHc+yBYX4+53BXxZFoxA9UxDAMMuM5blNS67k1YqWaxFB57XJ1ccgvltK9l6Z
+         pjZJk+gPPqdJGum6AOKUT5ZVfuHKVCYOR1pXCiotUADZ1CZGMmSvr7ajwOkUb2VAX8ny
+         UDHAF3tqJQ4/3/ArFfKKrJ8WDAxILCTEJLlkP0D3OTbxZmzBpH4q7RCSYJ7kQ/2RjJ+x
+         4MFw==
+X-Gm-Message-State: AC+VfDzkzFdw/7aBRv7AF+0qEKowBjlpT0tpN3EG8PIOsc4HyJaAYmvD
+        FPUc/mWGHaZyHJOGILEPVQ2FGnWSpT5Esap7YVIbBb04LI97UcGpu0sAyQwRElQzH1zIplv5SkW
+        fIhDRX083QTXJW1cOU0LLks0E
+X-Received: by 2002:a05:620a:678e:b0:75b:23a1:424 with SMTP id rr14-20020a05620a678e00b0075b23a10424mr2265039qkn.58.1684795497387;
+        Mon, 22 May 2023 15:44:57 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5E0z/Qztg9m+Xz89ofUOSQ7AaHC2ufX/Shd5E+wODIrQUEtmQTN9GTxHTglw3KD+jjSWGHrA==
+X-Received: by 2002:a05:620a:678e:b0:75b:23a1:424 with SMTP id rr14-20020a05620a678e00b0075b23a10424mr2265021qkn.58.1684795496967;
+        Mon, 22 May 2023 15:44:56 -0700 (PDT)
+Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
+        by smtp.gmail.com with ESMTPSA id q27-20020a05620a039b00b0074411b03972sm2053343qkm.51.2023.05.22.15.44.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 15:44:56 -0700 (PDT)
+Date:   Mon, 22 May 2023 15:44:54 -0700
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Cc:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
+        hdegoede@redhat.com, oe-lkp@lists.linux.dev, lkp@intel.com,
+        peter.ujfalusi@linux.intel.com, peterz@infradead.org,
+        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
+        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
+        lukas@wunner.de, p.rosenberger@kunbus.com
+Subject: Re: [PATCH 1/2] tpm, tpm_tis: Handle interrupt storm
+Message-ID: <ur6ype3ki6sxmpbzh53vfoewhq5oiqucioz3nwbdcda2vkaut7@sjt2hr33j3xk>
+References: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PR10MB4754:EE_|DS7PR10MB5149:EE_
-X-MS-Office365-Filtering-Correlation-Id: 207475fe-0e3e-4c7f-93e8-08db5b15e190
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sxTdtmSg9GxVdtoFnRbly6PoL/+brjCwwmpu6BRKo3g6//ARATxswJqynFXvVbQ7bLW9MZ/n+rHIDRC47Q/VCFJ0obUpz5UkCQ7gea66K1HqvNYIjX8dNW9IXC6D+kJbp5DCohb7Gtj9rfCsXEofBSt3xGhK3OGWoGLB87t05N/Z23HkhxzIcQMxtlL0ZwcueWfEAa+3qsTlhSfpgqFDINkFWTPS6D7lpnT/2ENRB8/XXA2SqvtLhmzetWKwtKpZSuK3bT5+DAhBetmulLnYZpswizsn+d1LtLN9nIFhiukiEBzRVzlyCZPgb3FujVkpoUYNiv5vPiCgpi+eQ9zRr1j0SPNO7Lzp5tMLR1D0xVhNM1Z25u2jF5bhtbkeEgGfN2rCxsRrGmD90Psp6HrQ8CAOGXhhAVZQAvG+P07oMiCfPmLmk55WkEpjcH9myr/zOfz6heL2zwNE35Y272C8Oz88lG4a/kdnYZBKVUv71eFlaGJbLYLKM205+9Oq2MvOtKpfh9SOVf3pWoLYSj17I1PWhGfJH5kmcSZP0ctL/2Iyxf4z7vdj9SV4H4Xi4CP9
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR10MB4754.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(376002)(136003)(39860400002)(366004)(346002)(396003)(451199021)(8676002)(8936002)(7406005)(7416002)(5660300002)(6512007)(186003)(6506007)(26005)(86362001)(38100700002)(6666004)(478600001)(36916002)(41300700001)(4326008)(6916009)(66476007)(6486002)(66946007)(66556008)(316002)(54906003)(4744005)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?E6nNiW6sqY6jgg8Z6lcNAS5+45Z6dz6KM6etTwp4EFYGHe0ojZTHPm0DgAKS?=
- =?us-ascii?Q?C+FKFxfPQp5eRk74JfFXWrNt4PXaU9ByUbV2l0CUsixAsrEvrtpEpiVwlk0/?=
- =?us-ascii?Q?hDKZnIN1ql8nQELwjF+PLI1PcePa8H1ZmXj9Q49WNjli3/RMIowvGtd6avC5?=
- =?us-ascii?Q?urguITbjzqqNZ1vTlEZhhC14wyT8pFjeCqOPfSvg9dADAyvC58CAaVgHfJHF?=
- =?us-ascii?Q?FQ4ArfkR3r4z+dLqZ/ZjtDj6zyVtv1xUtVN/5a3txg/9M9ExCBkp37Dgc/rf?=
- =?us-ascii?Q?DOq6vI3vIQnJvrkGmMa5u+lvXpk9oTxZ/M9MA2r+bDIMrMsCnLO7fuREefTp?=
- =?us-ascii?Q?TlRtvesfm94IH9/pboM+hiBkBvamHpKYDmyVm9nnb0+2oM97v0PufTXDhOMH?=
- =?us-ascii?Q?ax8hkB7g18tzDHqf8PCEt20izk6JNzYdWd59yLj+uRYCi1/g13XShDBkZZMS?=
- =?us-ascii?Q?E1XCtedb7zAJsk4JbNg4ZUw8W/yYfHCke+ydAla4goyWfsZfVWtBGhKhw5cA?=
- =?us-ascii?Q?DtdEgViZJEbfvEjA6gwtgMxfkOOw5H5FPlVHO6+06wUX0BaKIn6ELviaTsBr?=
- =?us-ascii?Q?bfojByYcaPb0Kfpq6Q86Ykvpt5EAlDHzDapkgAktlSfcs1R/u+/etiRFdQKb?=
- =?us-ascii?Q?ODDkm4fAib54eZLyaE/OFN+zstT0mL6LDqAbxDAOh5DwBoV3LNbxDQVRTv3o?=
- =?us-ascii?Q?Bc8lyAOviEA7ekaFnNhOwIbFe83tj/tnYIPdwFHLnMIzpAUCGjc6ekhoACOI?=
- =?us-ascii?Q?FvfSWnxe3jkEqBXWd2iFRUQqdXxJCuM7AdA9I7j8MkYmB2kw5dn2rhXszOhc?=
- =?us-ascii?Q?AEAGXN7Ftrxj0k+2pCassuTtnVgr23MNYZuMiZVr4cHLgtvmq2jBafibEJLM?=
- =?us-ascii?Q?XBhNj9I1k/VdPJDj9Co/V0MxDSmzosW5xKC4W+jNrodhSb2WbLq9V7YHfjuB?=
- =?us-ascii?Q?CGv9xZJiduAXJGxBmS2Kmm+BCR9RcIe50DfAl9RrvLjl2MVjDPega9FFe/uB?=
- =?us-ascii?Q?z1tpqI8EZft4zNJnzvxIXdTFISiEHg3kSt0L7YXJ/REQpL+zg3GHaxc9Wne7?=
- =?us-ascii?Q?olcZzozwnqKhx+PsuBDKe7d3ioTVzgPjp3yK15sbLDnIY5P7jfJO49k7HCfz?=
- =?us-ascii?Q?qjq+rusoG1iaWfKhzmuOU3hGbQquT5/Hjwi/yvQICdj/nhLSBu2FizpGX+cc?=
- =?us-ascii?Q?tDjXTtOw5RC90DSx5uAmALugvMJugT4Cm53Qw4gILjVuDBmZekH0L6aMUxHT?=
- =?us-ascii?Q?BB3gcODxlBhFThwSOTt2mBNL/T2HGh2JzwLrYcwmIU25b7IREIITNsFGrmWr?=
- =?us-ascii?Q?o42Mo9u4+2aNJvvDp4bbXfhDj3klUL6WXi6B/xQ2WyT8BkY7IuVgVh7h0k89?=
- =?us-ascii?Q?zEKPYYk/aQ5EotVvQIsb3Kmj5Bho9PDF/lOoOt4Gw60ifbl+bOlmRXA7xiwh?=
- =?us-ascii?Q?7OUGr349Wd/UlqG0LmaxD2h8invpvbFcZzziB13gF+hTfB4MHb/s5/UXsGyc?=
- =?us-ascii?Q?NqkyoJlVme6OUfPtoE2+WgXGCBnURaIPjzbqi+Al1Wu7tbw8Wga4mAP70kk9?=
- =?us-ascii?Q?qGODydxFLY2sZ7eA6PTUiTbbtRT6JOcANuwvV7sZj9nAUIYBtnDagR7RoEf6?=
- =?us-ascii?Q?8A=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?faJnXqNaKaXpkA8BIlgIMJ9ZUVq02Ozvavw+vcaJQVJ6qDikC1xN6pajSIUJ?=
- =?us-ascii?Q?2kNfltjXN8d6W6wpdqJWJp8keWI2yR08nPlD71VgO7M1+wIuOERpya9EOup2?=
- =?us-ascii?Q?7SQ33xxrTAuTtlZZ1u42TI0UxgQksdvZ32r0GuFPH4OyWTgJ4UaCJnMK0p+O?=
- =?us-ascii?Q?Y7rKucy6+IqguAaGWA1WFI3QC8H09++Ox/XKEqP5fRu5cJFQYvOaBTuGAlxG?=
- =?us-ascii?Q?syP5+HgLN+EO2XtU9zbxu+HpqPH8el+VsvWPxBviM0VRkpIa/jXdF+HCrj38?=
- =?us-ascii?Q?nTrI6hLfwBR/m2egVoiZZwIGHeS6itx+EwCE56IzEQYoBDRZT3/SQXzeYU2u?=
- =?us-ascii?Q?nho6hZ8ypUIG9Wlk3KXDDguPmkmjFYwt6JhM1DTVLZ9EBNASS5raE+VfbopK?=
- =?us-ascii?Q?oU2e24yslthxvqW/V+y4A1Vby5r9zG3qIpcbQaiYPHUFCmh0wDli3iPJJMbK?=
- =?us-ascii?Q?FE2nhsWOIjX8h/iKNxy9V1WcW5T3LMcZdlu5BZsLFS50CGnCWn0a0mflhqsv?=
- =?us-ascii?Q?pXapadu+NzVn/Vqtsg8Zt9YX6Fpq9yG2f+Ertdtr2ltcfLA/P/Mq/FD7ZmdA?=
- =?us-ascii?Q?lWheG0hOq5dJSxDxyomGWYM6+I6VIzfwqbVcnUtXRzhBPXPvnm8zwSLxNDcL?=
- =?us-ascii?Q?8h99NHtiVRsCZBk9jZQ7+mL/nBP3Vx4cwktSvJdkzgCAZZndFKrBFHe5X/a/?=
- =?us-ascii?Q?CXP0MMW655kg0ZBIXxswMpDB2r5Ve8huM7/a/FEH95SmTGFnUgAOqyRsydpD?=
- =?us-ascii?Q?JKXOGGYfRD3zr/13Q24EK2mQ1PuSazFQ/NGurDmyaDGmEYHKCGqx0XSl5UnA?=
- =?us-ascii?Q?D5waEptxeWAAa10an3p94xdCpCsc6dTpC9TMc/LsP+ZpFfROVa+92GUq6A/Y?=
- =?us-ascii?Q?UtIUGPBdnP5xJOVcHG6cQat/9WDm8U5WaTIeX1Zv2Tia6qeVtBON5tIPoZvD?=
- =?us-ascii?Q?CWd6espg3ENMXjwkVOAva+sgb3W5TdRlNtWOLLCOx2mpLb8LeMYM1r2a8SwH?=
- =?us-ascii?Q?PwRXlx/j2sAMCil5kEIzDCNkwDPDxX7pPWZCny+xtthJHUuHd0Bm9f7IkJDx?=
- =?us-ascii?Q?RmXODtsjeJBHy6GZuBGeA6elw+9D6JaPh2k678tt2Lo1U9QFD2R5Xa7u+b6J?=
- =?us-ascii?Q?iJz22OX/jxBt2cIzDn48b1i1afrXHvRf51GMxBKpD0qqNnb7TBnbVuVaH+Yb?=
- =?us-ascii?Q?OwqTSMl6Etfo9lLfPB/1Jd/sRqw392b1px6fm6HINqz7MzCvCYk7A4kZf1dZ?=
- =?us-ascii?Q?1JkhCOQT15YZeEODtycUYyg10IG9RqxnA7KAUj5iCWAburhAos1vmD7le5mH?=
- =?us-ascii?Q?2ItIiRDAh/gTV+b8zP44SXaoSxITTOyQVqwEGNdU+JdRDPl98HOriFgXnkms?=
- =?us-ascii?Q?MxQEp/unkIJdsH25Weo7ruDr2Z2p?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 207475fe-0e3e-4c7f-93e8-08db5b15e190
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR10MB4754.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2023 22:42:54.1404
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PDJlcBToFUiKpyJYb34Umo5IEtcS82eWgCKS5OJsWEX5hJsrU5EXubqHU9j3UPyyoTLYyDEaYLXlWdeapYtYvJLqQJDpEt8roz/df8NwZKY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5149
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-22_16,2023-05-22_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxscore=0
- mlxlogscore=999 phishscore=0 bulkscore=0 suspectscore=0 adultscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305220192
-X-Proofpoint-GUID: P96rqLQ6kuLkvhmtqln9NQvIEINhzvn-
-X-Proofpoint-ORIG-GUID: P96rqLQ6kuLkvhmtqln9NQvIEINhzvn-
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -199,18 +81,205 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, May 22, 2023 at 04:31:04PM +0200, Lino Sanfilippo wrote:
+> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+> 
+> Commit e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test") enabled
+> interrupts instead of polling on all capable TPMs. Unfortunately, on some
+> products the interrupt line is either never asserted or never deasserted.
+> 
+> The former causes interrupt timeouts and is detected by
+> tpm_tis_core_init(). The latter results in interrupt storms.
+> 
+> Recent reports concern the Lenovo ThinkStation P360 Tiny, Lenovo ThinkPad
+> L490 and Inspur NF5180M6:
+> 
+> https://lore.kernel.org/linux-integrity/20230511005403.24689-1-jsnitsel@redhat.com/
+> https://lore.kernel.org/linux-integrity/d80b180a569a9f068d3a2614f062cfa3a78af5a6.camel@kernel.org/
+> 
+> The current approach to avoid those storms is to disable interrupts by
+> adding a DMI quirk for the concerned device.
+> 
+> However this is a maintenance burden in the long run, so use a generic
+> approach:
+> 
+> Detect an interrupt storm by counting the number of unhandled interrupts
+> within a 10 ms time interval. In case that more than 1000 were unhandled
+> deactivate interrupts, deregister the handler and fall back to polling.
+> 
+> This equals the implementation that handles interrupt storms in
+> note_interrupt() by means of timestamps and counters in struct irq_desc.
+> However the function to access this structure is private so the logic has
+> to be reimplemented in the TPM TIS core.
+> 
+> Since handler deregistration would deadlock from within the interrupt
+> routine trigger a worker thread that executes the unregistration.
+> 
+> Suggested-by: Lukas Wunner <lukas@wunner.de>
+> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
 
-Kees,
+Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
 
-> While struct_size() is normally used in situations where the structure
-> type already has a pointer instance, there are places where no variable
-> is available. In the past, this has been worked around by using a typed
-> NULL first argument, but this is a bit ugly. Add a helper to do this,
-> and replace the handful of instances of the code pattern with it.
+> ---
+>  drivers/char/tpm/tpm_tis_core.c | 71 +++++++++++++++++++++++++++++++--
+>  drivers/char/tpm/tpm_tis_core.h |  6 +++
+>  2 files changed, 74 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+> index 558144fa707a..458ebf8c2f16 100644
+> --- a/drivers/char/tpm/tpm_tis_core.c
+> +++ b/drivers/char/tpm/tpm_tis_core.c
+> @@ -752,6 +752,55 @@ static bool tpm_tis_req_canceled(struct tpm_chip *chip, u8 status)
+>  	return status == TPM_STS_COMMAND_READY;
+>  }
+>  
+> +static void tpm_tis_handle_irq_storm(struct tpm_chip *chip)
+> +{
+> +	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+> +	int intmask = 0;
+> +
+> +	dev_err(&chip->dev, HW_ERR
+> +		"TPM interrupt storm detected, polling instead\n");
+> +
+> +	tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
+> +
+> +	intmask &= ~TPM_GLOBAL_INT_ENABLE;
+> +
+> +	tpm_tis_request_locality(chip, 0);
+> +	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
+> +	tpm_tis_relinquish_locality(chip, 0);
+> +
+> +	chip->flags &= ~TPM_CHIP_FLAG_IRQ;
+> +
+> +	/*
+> +	 * We must not call devm_free_irq() from within the interrupt handler,
+> +	 * since this function waits for running interrupt handlers to finish
+> +	 * and thus it would deadlock. Instead trigger a worker that does the
+> +	 * unregistration.
+> +	 */
+> +	schedule_work(&priv->free_irq_work);
+> +}
+> +
+> +static void tpm_tis_process_unhandled_interrupt(struct tpm_chip *chip)
+> +{
+> +	const unsigned int MAX_UNHANDLED_IRQS = 1000;
+> +	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
+> +	/*
+> +	 * The worker to free the TPM interrupt (free_irq_work) may already
+> +	 * be scheduled, so make sure it is not scheduled again.
+> +	 */
+> +	if (!(chip->flags & TPM_CHIP_FLAG_IRQ))
+> +		return;
+> +
+> +	if (time_after(jiffies, priv->last_unhandled_irq + HZ/10))
+> +		priv->unhandled_irqs = 1;
+> +	else
+> +		priv->unhandled_irqs++;
+> +
+> +	priv->last_unhandled_irq = jiffies;
+> +
+> +	if (priv->unhandled_irqs > MAX_UNHANDLED_IRQS)
+> +		tpm_tis_handle_irq_storm(chip);
+> +}
+> +
+>  static irqreturn_t tis_int_handler(int dummy, void *dev_id)
+>  {
+>  	struct tpm_chip *chip = dev_id;
+> @@ -761,10 +810,10 @@ static irqreturn_t tis_int_handler(int dummy, void *dev_id)
+>  
+>  	rc = tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &interrupt);
+>  	if (rc < 0)
+> -		return IRQ_NONE;
+> +		goto unhandled;
+>  
+>  	if (interrupt == 0)
+> -		return IRQ_NONE;
+> +		goto unhandled;
+>  
+>  	set_bit(TPM_TIS_IRQ_TESTED, &priv->flags);
+>  	if (interrupt & TPM_INTF_DATA_AVAIL_INT)
+> @@ -780,10 +829,14 @@ static irqreturn_t tis_int_handler(int dummy, void *dev_id)
+>  	rc = tpm_tis_write32(priv, TPM_INT_STATUS(priv->locality), interrupt);
+>  	tpm_tis_relinquish_locality(chip, 0);
+>  	if (rc < 0)
+> -		return IRQ_NONE;
+> +		goto unhandled;
+>  
+>  	tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &interrupt);
+>  	return IRQ_HANDLED;
+> +
+> +unhandled:
+> +	tpm_tis_process_unhandled_interrupt(chip);
+> +	return IRQ_HANDLED;
+>  }
+>  
+>  static void tpm_tis_gen_interrupt(struct tpm_chip *chip)
+> @@ -804,6 +857,15 @@ static void tpm_tis_gen_interrupt(struct tpm_chip *chip)
+>  		chip->flags &= ~TPM_CHIP_FLAG_IRQ;
+>  }
+>  
+> +static void tpm_tis_free_irq_func(struct work_struct *work)
+> +{
+> +	struct tpm_tis_data *priv = container_of(work, typeof(*priv), free_irq_work);
+> +	struct tpm_chip *chip = priv->chip;
+> +
+> +	devm_free_irq(chip->dev.parent, priv->irq, chip);
+> +	priv->irq = 0;
+> +}
+> +
+>  /* Register the IRQ and issue a command that will cause an interrupt. If an
+>   * irq is seen then leave the chip setup for IRQ operation, otherwise reverse
+>   * everything and leave in polling mode. Returns 0 on success.
+> @@ -816,6 +878,7 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *chip, u32 intmask,
+>  	int rc;
+>  	u32 int_status;
+>  
+> +	INIT_WORK(&priv->free_irq_work, tpm_tis_free_irq_func);
+>  
+>  	rc = devm_request_threaded_irq(chip->dev.parent, irq, NULL,
+>  				       tis_int_handler, IRQF_ONESHOT | flags,
+> @@ -918,6 +981,7 @@ void tpm_tis_remove(struct tpm_chip *chip)
+>  		interrupt = 0;
+>  
+>  	tpm_tis_write32(priv, reg, ~TPM_GLOBAL_INT_ENABLE & interrupt);
+> +	flush_work(&priv->free_irq_work);
+>  
+>  	tpm_tis_clkrun_enable(chip, false);
+>  
+> @@ -1021,6 +1085,7 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
+>  	chip->timeout_b = msecs_to_jiffies(TIS_TIMEOUT_B_MAX);
+>  	chip->timeout_c = msecs_to_jiffies(TIS_TIMEOUT_C_MAX);
+>  	chip->timeout_d = msecs_to_jiffies(TIS_TIMEOUT_D_MAX);
+> +	priv->chip = chip;
+>  	priv->timeout_min = TPM_TIMEOUT_USECS_MIN;
+>  	priv->timeout_max = TPM_TIMEOUT_USECS_MAX;
+>  	priv->phy_ops = phy_ops;
+> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
+> index e978f457fd4d..6fc86baa4398 100644
+> --- a/drivers/char/tpm/tpm_tis_core.h
+> +++ b/drivers/char/tpm/tpm_tis_core.h
+> @@ -91,12 +91,18 @@ enum tpm_tis_flags {
+>  };
+>  
+>  struct tpm_tis_data {
+> +	struct tpm_chip *chip;
+>  	u16 manufacturer_id;
+>  	struct mutex locality_count_mutex;
+>  	unsigned int locality_count;
+>  	int locality;
+> +	/* Interrupts */
+>  	int irq;
+> +	struct work_struct free_irq_work;
+> +	unsigned long last_unhandled_irq;
+> +	unsigned int unhandled_irqs;
+>  	unsigned int int_mask;
+> +
+>  	unsigned long flags;
+>  	void __iomem *ilb_base_addr;
+>  	u16 clkrun_enabled;
+> 
+> base-commit: 44c026a73be8038f03dbdeef028b642880cf1511
+> -- 
+> 2.40.1
+> 
 
-SCSI bits look fine to me.
-
-Acked-by: Martin K. Petersen <martin.petersen@oracle.com>
-
--- 
-Martin K. Petersen	Oracle Linux Engineering
