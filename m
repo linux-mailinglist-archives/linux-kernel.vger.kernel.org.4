@@ -2,70 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6AE270BA4B
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 12:44:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE52070BA4D
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 12:47:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232628AbjEVKoZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 06:44:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38056 "EHLO
+        id S232397AbjEVKrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 06:47:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230184AbjEVKoV (ORCPT
+        with ESMTP id S230184AbjEVKrC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 06:44:21 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FDB5E6
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 03:44:17 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1q131T-0006Zb-7z; Mon, 22 May 2023 12:44:15 +0200
-Message-ID: <7efe5e64-d22b-99df-74e0-62acc54f1672@leemhuis.info>
-Date:   Mon, 22 May 2023 12:44:12 +0200
+        Mon, 22 May 2023 06:47:02 -0400
+X-Greylist: delayed 6511 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 22 May 2023 03:46:59 PDT
+Received: from meesny.iki.fi (meesny.iki.fi [195.140.195.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6607EDC;
+        Mon, 22 May 2023 03:46:59 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (82-181-192-243.bb.dnainternet.fi [82.181.192.243])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by meesny.iki.fi (Postfix) with ESMTPSA id 4QPvJw6WRKzyWG;
+        Mon, 22 May 2023 13:46:56 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1684752417;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=458mfY2Qwo/3Pk10b/Ep3qoH4QSbeULEUhfNY9XD7Zk=;
+        b=LOxmuxBAoOsYF1b+j222l9M8ypdlXbSnP1BD3JxnYO4NNbrKVCU236TfRqTBZEClAmzLVL
+        gCa84FM95Dyt7OhE08xGw3n9zS9q9/E0TKttKo/6dWkxklr8xDylVa9tEygyLDp3vFAP8l
+        8UJTISyY0PJrSzg1cp84dvRw280KLkA=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1684752417;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=458mfY2Qwo/3Pk10b/Ep3qoH4QSbeULEUhfNY9XD7Zk=;
+        b=gNSPJIE5KD0YbLEotY8fYIccuT/fef30O0x4W6bBFwrfekuW1asd6XDGtdKFSWL6kLJjFF
+        /AqdYTQ64LNfkefWwEW07hw6ut9aTTkyY1v979OGKIK1BxtOaMhHTR6vle2gIP38iTt6TV
+        BfCOG+qKm8I1WkZCucWo3SAv2p51wm4=
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1684752417; a=rsa-sha256; cv=none;
+        b=JJ+M23dbg6sZvVZpD4MpMH9ltEIhOmslAXk7tpleYAM/hU8P/ULVMdr9+/1186MoF1FUnv
+        CfFe8eps/UKutPHGDrNQD6wIAQfxHjtyKuPaFd/AqZ5X3KjXbCS5bVaZggy5yQXzROtnUL
+        z6IttLcCt8+8zqGeuERo9aScWKxRn+M=
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 5BFA7634C91;
+        Mon, 22 May 2023 13:46:56 +0300 (EEST)
+Date:   Mon, 22 May 2023 13:46:56 +0300
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Palmer Dabbelt <palmer@rivosinc.com>
+Cc:     mchehab@kernel.org, laurent.pinchart@ideasonboard.com,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux@rivosinc.com
+Subject: Re: [PATCH 0/2] media: nxp: imx8-isi: Two build fixes
+Message-ID: <ZGtIIDSfy7KJTn23@valkosipuli.retiisi.eu>
+References: <20230428152156.22840-1-palmer@rivosinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: Regression: w1_therm: sysfs w1_slave sometimes report 85 degrees
- Celsius
-Content-Language: en-US, de-DE
-To:     Stefan Wahren <stefan.wahren@i2se.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Akira Shimahara <akira215corp@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stefan Wahren <stefan.wahren@chargebyte.com>,
-        regressions@lists.linux.dev
-References: <b1093de5-9f62-6714-0063-7c719dc4f6ca@i2se.com>
-From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <b1093de5-9f62-6714-0063-7c719dc4f6ca@i2se.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1684752257;7a9b9fc4;
-X-HE-SMSGID: 1q131T-0006Zb-7z
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230428152156.22840-1-palmer@rivosinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.04.23 15:39, Stefan Wahren wrote:
-> recently we switch on our Tarragon board (i.MX6ULL) to Linux 6.1 and
-> noticed that the connected 1-wire temperature sensors
-> (w1_therm.w1_strong_pull=0) sometimes (~ 1 of 20 times) report 85
-> degrees Celsius, which is AFAIK the only way to report errors to the
-> 1-wire master:
-> [...]
-> #regzbot introduced: 67b392f7b8ed
+On Fri, Apr 28, 2023 at 08:21:54AM -0700, Palmer Dabbelt wrote:
+> These popped up last night as I was trying to merge in Linus' master.
 
-#regzbot fix: w1_therm: optimizing temperature read timings
-#regzbot ignore-activity
+Hi Palmer,
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
+These have been already fixes in Linus's tree.
 
+-- 
+Sakari Ailus
