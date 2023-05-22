@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B3470B47D
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 07:18:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 148AC70B47F
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 07:19:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231936AbjEVFSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 01:18:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56762 "EHLO
+        id S229959AbjEVFTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 01:19:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231737AbjEVFS3 (ORCPT
+        with ESMTP id S231947AbjEVFTt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 01:18:29 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9249FAB
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:18:28 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-561d5a16be0so74545127b3.2
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:18:28 -0700 (PDT)
+        Mon, 22 May 2023 01:19:49 -0400
+Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C21A0
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:19:48 -0700 (PDT)
+Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-ba1815e12efso4782697276.3
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:19:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684732708; x=1687324708;
+        d=google.com; s=20221208; t=1684732787; x=1687324787;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7TjV4RyPitx7LIAI3Pj7MSABK+uluBQcp84mqUzVC6k=;
-        b=Rn20sER4T4J8WT0bCSNgtKt+s3EuFbG8GtWiix1BcIQNeo/R8lvZKZibiwh3YZIsxd
-         EnCfCzxhNamXvgrmaGBWZwQLLOogQl2zJkptkNsZuwZJP2V7Ysbew+9PodV2Eo/dF6Rz
-         xAM/3hkG4T96NLraRyIuY8t8M3JyxrJk7Ta1kFceKAinzE25KLkprmyFpjg3Ymt8wWQE
-         3xmly1wR7KhvAsdh/yuCHd1F4QD89xMkxfEmWA4IIW5JNutOsZzL6TS+snO9aVVtcasO
-         VB24BtEFsnlH0J+Nvd70D0Zxa1Rw4VEJiHNtQC31uldZTzMR/gntM0yqANgBYRGqCRYm
-         U+Ow==
+        bh=ooTKFpGgFIG6tpdJyTdSPdnhROWHUT8BFdRqrlDYiG0=;
+        b=c16Z4sMpjKlgLDYv6Gs/y1EYdzJZLSgcmaTkBaIf9Gh+M6R5Fj28OTQhOSCRw7EEv5
+         CoXdOMLH5hzAb7ctwTVEzalqQl9a+Um/b9wFPM2bKdaAzb1WrTE0ZJDEimE6nNgaQriX
+         ekKs2u5sm5n3wdVCVhRqBQ64w5hCu6jc8AAKpTKma9h0EDNZhsm+d/uAlNMvz+IWh9Vi
+         IdWQzCcYU/nxwQLTQZI99miGWNLqkFHHVO984XkRjgpZ7eBUTR4yIiwEf+nz+MbqBbbu
+         qrDeOVuSWS3vwtPVFhgFnPNPF1tXG11tH/YIDKTxJb7j0INA2XTKzLvkIppZ9XEZec1f
+         V+Og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684732708; x=1687324708;
+        d=1e100.net; s=20221208; t=1684732787; x=1687324787;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7TjV4RyPitx7LIAI3Pj7MSABK+uluBQcp84mqUzVC6k=;
-        b=SCaUZw1FInayFwYaIq8nw5w85aXcwXDQF2AbCS1x9hWuX2cCqqQUrLBPxt+JYOD8dg
-         +Js+sfgpW8M+kw/R2FmukLnQOkirQ5V45v9EbWekHbsdOGTZBjEynHG3lWaJUyvQIB49
-         RsIkqSm0WTClHA/H0HUz3Mp+Esi8T4aeBQZs6xV0kh6cqe8D4nnY3eixHMqlWUOQ3TBn
-         50poEyBee3RWyVcHZaPKuGbbthWKeoIbq9pAoKCqYU5wZEOXQI0YUxHLmmiQpnukueqP
-         GsbOjD28zO3VKgJ/ZcMlDpLY/F8a1PwXHB8jLi7b/lFHxFa62q5p+tgcVZYNvlN4oihs
-         ixeg==
-X-Gm-Message-State: AC+VfDzSHJz4q0K4dR/76qQ5vaC8hDOgDRBtUqCKkB6YS5YXpaQdcJPV
-        tiD5K5ve8CmLzEj/yjIUpkeoRA==
-X-Google-Smtp-Source: ACHHUZ6v2mlgLkozXZxDjiAaqAiQT2KR+fKn2zWVFJn2KWprg4vexj/qA5jscdHYSkrbKxnnqDZJ7A==
-X-Received: by 2002:a0d:df8b:0:b0:55a:8b11:5f6a with SMTP id i133-20020a0ddf8b000000b0055a8b115f6amr8985666ywe.19.1684732707681;
-        Sun, 21 May 2023 22:18:27 -0700 (PDT)
+        bh=ooTKFpGgFIG6tpdJyTdSPdnhROWHUT8BFdRqrlDYiG0=;
+        b=DaTL7e5aD33N1gGI1a7WC6VVwlPGZb1UlzX0mp2ARQDjUT37Oe1u9GPay7Zn0Zo9ef
+         lTbgPmJwJqCvY3bXqcCpznwoaH/zUC1jS6uWLm97JhlVURDrXYoPkWe+SlrTuNxVFmcb
+         /aS7MyRu5Ojf6c+lBWKceYUhLFb59Rggg1S5u00SIBUTPL3OfHKO0ZW675F83cOehQFZ
+         Qzp14pne63gvxukYbdKi8GNTfxJ0SVC+HTtVFGomd5p0KJUz2Rrz3Sb5I5FbCXkDD9xt
+         GXj8mLpufM1EEw2jUcapMbhuhjImPfzBYTntFotI60cCoPBLHKvJ+LMzH1KdMimZw0lj
+         Z21w==
+X-Gm-Message-State: AC+VfDx+IDSUnkZ/4y9kPCDLoxb0yG6drBx5sEstQtTzBVpVL7kbEAtG
+        UaT+AVIw/X405i5OHF6B/H7oyw==
+X-Google-Smtp-Source: ACHHUZ4/iOac0pg6azmy6Y4+9ZIQvlTnkM+d3E/2233dtMLIq4uN1+AwZtw93iYqYZBi+HEHW+NHVQ==
+X-Received: by 2002:a0d:d743:0:b0:55a:59cb:4c1a with SMTP id z64-20020a0dd743000000b0055a59cb4c1amr9770012ywd.14.1684732787446;
+        Sun, 21 May 2023 22:19:47 -0700 (PDT)
 Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id u130-20020a816088000000b00552df52450csm1818581ywb.88.2023.05.21.22.18.25
+        by smtp.gmail.com with ESMTPSA id o9-20020a817309000000b00556aa81f615sm1809311ywc.68.2023.05.21.22.19.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 May 2023 22:18:27 -0700 (PDT)
-Date:   Sun, 21 May 2023 22:18:24 -0700 (PDT)
+        Sun, 21 May 2023 22:19:47 -0700 (PDT)
+Date:   Sun, 21 May 2023 22:19:44 -0700 (PDT)
 From:   Hugh Dickins <hughd@google.com>
 X-X-Sender: hugh@ripple.attlocal.net
 To:     Andrew Morton <akpm@linux-foundation.org>
@@ -81,9 +81,9 @@ cc:     Mike Kravetz <mike.kravetz@oracle.com>,
         Song Liu <song@kernel.org>,
         Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH 22/31] mm/swapoff: allow pte_offset_map[_lock]() to fail
+Subject: [PATCH 23/31] mm/mglru: allow pte_offset_map_nolock() to fail
 In-Reply-To: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
-Message-ID: <619c27-d7b0-ae71-329e-9da3d3e7fc7@google.com>
+Message-ID: <242721-1e64-845e-226a-bf2b2dc72dd@google.com>
 References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -98,119 +98,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adjust unuse_pte() and unuse_pte_range() to allow pte_offset_map_lock()
-and pte_offset_map() failure; remove pmd_none_or_trans_huge_or_clear_bad()
-from unuse_pmd_range() now that pte_offset_map() does all that itself.
+MGLRU's walk_pte_range() use the safer pte_offset_map_nolock(), rather
+than pte_lockptr(), to get the ptl for its trylock.  Just return false
+and move on to next extent if it fails, like when the trylock fails.
+Remove the VM_WARN_ON_ONCE(pmd_leaf) since that will happen, rarely.
 
 Signed-off-by: Hugh Dickins <hughd@google.com>
 ---
- mm/swapfile.c | 38 ++++++++++++++++++++------------------
- 1 file changed, 20 insertions(+), 18 deletions(-)
+ mm/vmscan.c | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
 
-diff --git a/mm/swapfile.c b/mm/swapfile.c
-index 274bbf797480..12d204e6dae2 100644
---- a/mm/swapfile.c
-+++ b/mm/swapfile.c
-@@ -1774,7 +1774,7 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
- 		hwposioned = true;
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index d257916f39e5..1c344589c145 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -3992,15 +3992,15 @@ static bool walk_pte_range(pmd_t *pmd, unsigned long start, unsigned long end,
+ 	struct pglist_data *pgdat = lruvec_pgdat(walk->lruvec);
+ 	int old_gen, new_gen = lru_gen_from_seq(walk->max_seq);
  
- 	pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
--	if (unlikely(!pte_same_as_swp(*pte, swp_entry_to_pte(entry)))) {
-+	if (unlikely(!pte || !pte_same_as_swp(*pte, swp_entry_to_pte(entry)))) {
- 		ret = 0;
- 		goto out;
- 	}
-@@ -1827,7 +1827,8 @@ static int unuse_pte(struct vm_area_struct *vma, pmd_t *pmd,
- 	set_pte_at(vma->vm_mm, addr, pte, new_pte);
- 	swap_free(entry);
- out:
--	pte_unmap_unlock(pte, ptl);
-+	if (pte)
-+		pte_unmap_unlock(pte, ptl);
- 	if (page != swapcache) {
- 		unlock_page(page);
- 		put_page(page);
-@@ -1839,17 +1840,22 @@ static int unuse_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
- 			unsigned long addr, unsigned long end,
- 			unsigned int type)
- {
--	swp_entry_t entry;
--	pte_t *pte;
-+	pte_t *pte = NULL;
- 	struct swap_info_struct *si;
--	int ret = 0;
- 
- 	si = swap_info[type];
--	pte = pte_offset_map(pmd, addr);
- 	do {
- 		struct folio *folio;
- 		unsigned long offset;
- 		unsigned char swp_count;
-+		swp_entry_t entry;
-+		int ret;
-+
-+		if (!pte++) {
-+			pte = pte_offset_map(pmd, addr);
-+			if (!pte)
-+				break;
-+		}
- 
- 		if (!is_swap_pte(*pte))
- 			continue;
-@@ -1860,6 +1866,8 @@ static int unuse_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
- 
- 		offset = swp_offset(entry);
- 		pte_unmap(pte);
-+		pte = NULL;
-+
- 		folio = swap_cache_get_folio(entry, vma, addr);
- 		if (!folio) {
- 			struct page *page;
-@@ -1878,8 +1886,7 @@ static int unuse_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
- 		if (!folio) {
- 			swp_count = READ_ONCE(si->swap_map[offset]);
- 			if (swp_count == 0 || swp_count == SWAP_MAP_BAD)
--				goto try_next;
+-	VM_WARN_ON_ONCE(pmd_leaf(*pmd));
 -
-+				continue;
- 			return -ENOMEM;
- 		}
- 
-@@ -1889,20 +1896,17 @@ static int unuse_pte_range(struct vm_area_struct *vma, pmd_t *pmd,
- 		if (ret < 0) {
- 			folio_unlock(folio);
- 			folio_put(folio);
--			goto out;
-+			return ret;
- 		}
- 
- 		folio_free_swap(folio);
- 		folio_unlock(folio);
- 		folio_put(folio);
--try_next:
--		pte = pte_offset_map(pmd, addr);
--	} while (pte++, addr += PAGE_SIZE, addr != end);
--	pte_unmap(pte - 1);
-+	} while (addr += PAGE_SIZE, addr != end);
- 
--	ret = 0;
--out:
--	return ret;
-+	if (pte)
+-	ptl = pte_lockptr(args->mm, pmd);
+-	if (!spin_trylock(ptl))
++	pte = pte_offset_map_nolock(args->mm, pmd, start & PMD_MASK, &ptl);
++	if (!pte)
+ 		return false;
++	if (!spin_trylock(ptl)) {
 +		pte_unmap(pte);
-+	return 0;
- }
++		return false;
++	}
  
- static inline int unuse_pmd_range(struct vm_area_struct *vma, pud_t *pud,
-@@ -1917,8 +1921,6 @@ static inline int unuse_pmd_range(struct vm_area_struct *vma, pud_t *pud,
- 	do {
- 		cond_resched();
- 		next = pmd_addr_end(addr, end);
--		if (pmd_none_or_trans_huge_or_clear_bad(pmd))
--			continue;
- 		ret = unuse_pte_range(vma, pmd, addr, next, type);
- 		if (ret)
- 			return ret;
+ 	arch_enter_lazy_mmu_mode();
+-
+-	pte = pte_offset_map(pmd, start & PMD_MASK);
+ restart:
+ 	for (i = pte_index(start), addr = start; addr != end; i++, addr += PAGE_SIZE) {
+ 		unsigned long pfn;
+@@ -4041,10 +4041,8 @@ static bool walk_pte_range(pmd_t *pmd, unsigned long start, unsigned long end,
+ 	if (i < PTRS_PER_PTE && get_next_vma(PMD_MASK, PAGE_SIZE, args, &start, &end))
+ 		goto restart;
+ 
+-	pte_unmap(pte);
+-
+ 	arch_leave_lazy_mmu_mode();
+-	spin_unlock(ptl);
++	pte_unmap_unlock(pte, ptl);
+ 
+ 	return suitable_to_scan(total, young);
+ }
 -- 
 2.35.3
 
