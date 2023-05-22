@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3B0370BA26
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 12:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9F8A70BA23
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 12:28:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232573AbjEVK21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 06:28:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58702 "EHLO
+        id S231803AbjEVK2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 06:28:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232786AbjEVK1g (ORCPT
+        with ESMTP id S232316AbjEVK1c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 06:27:36 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72056F1;
-        Mon, 22 May 2023 03:27:32 -0700 (PDT)
+        Mon, 22 May 2023 06:27:32 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C7FA12B;
+        Mon, 22 May 2023 03:27:29 -0700 (PDT)
 Date:   Mon, 22 May 2023 10:27:28 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1684751249;
+        s=2020; t=1684751248;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vvuBzB6waOaikP5Z7JXLBtIMS+F+Wej4ha9oE73sriw=;
-        b=Y5OxZ4890oBjTW5pXukQf6GMus7UcHlobMrhcwVSHqIuXaS1TrmBHaW8vQ/gV8QVbSYJvL
-        u3XJpG/aE2stRaWPC8Xtj3m+Cd7m7o50jOyuU0JIORtl9kZhBl73vWCLL4J3nz84GlecRF
-        ZUmGyInwhzXS6JfjULJSMDM7wZ/fnIqSuEDWBxYgfL4hyS4uuMyOIO4tsCyCegyO2DJthF
-        zYP1QiW/WLyH6R/RWG8Q4LnsyUjEjF3S5oYwCrb89vXVAwJ6NCTKUPsWt6B6E8hGrBFQ67
-        5MzB1m3+q8D1rB5HvaoFQLKvX4YVlYhtHb23U1Y6Po2yYzF0k2jLW/Z5GR0wzg==
+        bh=K7exUzZwrX3ZegnoYy6b+Hp/X5o0BGbCrHYnWSaCVvU=;
+        b=2DcdpVl5X3xJ3OhVS1lZAX2mh2zUzA+3ij541D9Iaw9S/DvoCnlhkX6YLKqmP7WSZ/Ug7+
+        APyli7J/lv0HZC/iomOsNYFWni9VN82MEyacYhawufpFenoW6qdh+5VVf0aJbsVPqIJkMg
+        IBKs5LDK16FFfTtInl1ybwBsDdlDD5BKz5tBBn/EoiH/2zCTVe7BEnD/cyrt5+9+HSdqt1
+        q7CCkz3CQXF6XzGjreFYlUyKpwZ5oj98EAQeK3V4gFaQ6h7Lak+Gs3eBSrNfEtd2OPEU5A
+        BJ6v41avmr0Bdddr/wzmn19y5FRMl6L1zcr6729O2GiS+Nf0yfhK6TP568dCEg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1684751249;
+        s=2020e; t=1684751248;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=vvuBzB6waOaikP5Z7JXLBtIMS+F+Wej4ha9oE73sriw=;
-        b=470yWycBkq9Rw7Ib4K/Faj0/CuOScFka5+ah7n0an/B5CjRMnn+80WkTM3u6rs/4Esymss
-        yx/9/oiPtLfCpSCg==
+        bh=K7exUzZwrX3ZegnoYy6b+Hp/X5o0BGbCrHYnWSaCVvU=;
+        b=wcZO+rqlOMjYmwDqVQ81980ci7GSg9RY1/VIH7h7JVw2Al//tU3hUyVzSY5CYIeMahRJ0Y
+        ypVspgCVfHp9MgBw==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] arch: Introduce arch_{,try_}_cmpxchg128{,_local}()
+Subject: [tip: locking/core] instrumentation: Wire up cmpxchg128()
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Arnd Bergmann <arnd@arndb.de>,
-        Heiko Carstens <hca@linux.ibm.com>,
         Mark Rutland <mark.rutland@arm.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230515080554.114813040@infradead.org>
-References: <20230515080554.114813040@infradead.org>
+In-Reply-To: <20230515080554.181725437@infradead.org>
+References: <20230515080554.181725437@infradead.org>
 MIME-Version: 1.0
-Message-ID: <168475124867.404.16477882699707948885.tip-bot2@tip-bot2>
+Message-ID: <168475124810.404.9857135496100678986.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,276 +68,306 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the locking/core branch of tip:
 
-Commit-ID:     8c9719a1ae1f290250da18bb0b41cd00067319bf
-Gitweb:        https://git.kernel.org/tip/8c9719a1ae1f290250da18bb0b41cd00067319bf
+Commit-ID:     cfce96506621b91e3d0bd59b78a4997d0614c413
+Gitweb:        https://git.kernel.org/tip/cfce96506621b91e3d0bd59b78a4997d0614c413
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Mon, 15 May 2023 09:57:02 +02:00
+AuthorDate:    Mon, 15 May 2023 09:57:03 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Mon, 22 May 2023 10:49:49 +02:00
 
-arch: Introduce arch_{,try_}_cmpxchg128{,_local}()
+instrumentation: Wire up cmpxchg128()
 
-For all architectures that currently support cmpxchg_double()
-implement the cmpxchg128() family of functions that is basically the
-same but with a saner interface.
+Wire up the cmpxchg128 family in the atomic wrapper scripts.
+
+These provide the generic cmpxchg128 family of functions from the
+arch_ prefixed version, adding explicit instrumentation where needed.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Acked-by: Heiko Carstens <hca@linux.ibm.com>
 Acked-by: Mark Rutland <mark.rutland@arm.com>
-Link: https://lore.kernel.org/r/20230515080554.114813040@infradead.org
+Link: https://lore.kernel.org/r/20230515080554.181725437@infradead.org
 ---
- arch/arm64/include/asm/atomic_ll_sc.h | 41 +++++++++++++++++-
- arch/arm64/include/asm/atomic_lse.h   | 31 +++++++++++++-
- arch/arm64/include/asm/cmpxchg.h      | 26 +++++++++++-
- arch/s390/include/asm/cmpxchg.h       | 14 ++++++-
- arch/x86/include/asm/cmpxchg_32.h     |  3 +-
- arch/x86/include/asm/cmpxchg_64.h     | 64 +++++++++++++++++++++++++-
- 6 files changed, 177 insertions(+), 2 deletions(-)
+ include/linux/atomic/atomic-arch-fallback.h | 95 +++++++++++++++++++-
+ include/linux/atomic/atomic-instrumented.h  | 86 +++++++++++++++++-
+ scripts/atomic/gen-atomic-fallback.sh       |  4 +-
+ scripts/atomic/gen-atomic-instrumented.sh   |  4 +-
+ 4 files changed, 183 insertions(+), 6 deletions(-)
 
-diff --git a/arch/arm64/include/asm/atomic_ll_sc.h b/arch/arm64/include/asm/atomic_ll_sc.h
-index cbb3d96..b100a49 100644
---- a/arch/arm64/include/asm/atomic_ll_sc.h
-+++ b/arch/arm64/include/asm/atomic_ll_sc.h
-@@ -326,6 +326,47 @@ __CMPXCHG_DBL(   ,        ,  ,         )
- __CMPXCHG_DBL(_mb, dmb ish, l, "memory")
+diff --git a/include/linux/atomic/atomic-arch-fallback.h b/include/linux/atomic/atomic-arch-fallback.h
+index a6e4437..1722ddb 100644
+--- a/include/linux/atomic/atomic-arch-fallback.h
++++ b/include/linux/atomic/atomic-arch-fallback.h
+@@ -77,6 +77,29 @@
  
- #undef __CMPXCHG_DBL
-+
-+union __u128_halves {
-+	u128 full;
-+	struct {
-+		u64 low, high;
-+	};
-+};
-+
-+#define __CMPXCHG128(name, mb, rel, cl...)                             \
-+static __always_inline u128						\
-+__ll_sc__cmpxchg128##name(volatile u128 *ptr, u128 old, u128 new)	\
-+{									\
-+	union __u128_halves r, o = { .full = (old) },			\
-+			       n = { .full = (new) };			\
-+       unsigned int tmp;                                               \
-+									\
-+	asm volatile("// __cmpxchg128" #name "\n"			\
-+       "       prfm    pstl1strm, %[v]\n"                              \
-+       "1:     ldxp    %[rl], %[rh], %[v]\n"                           \
-+       "       cmp     %[rl], %[ol]\n"                                 \
-+       "       ccmp    %[rh], %[oh], 0, eq\n"                          \
-+       "       b.ne    2f\n"                                           \
-+       "       st" #rel "xp    %w[tmp], %[nl], %[nh], %[v]\n"          \
-+       "       cbnz    %w[tmp], 1b\n"                                  \
-+	"	" #mb "\n"						\
-+	"2:"								\
-+       : [v] "+Q" (*(u128 *)ptr),                                      \
-+         [rl] "=&r" (r.low), [rh] "=&r" (r.high),                      \
-+         [tmp] "=&r" (tmp)                                             \
-+       : [ol] "r" (o.low), [oh] "r" (o.high),                          \
-+         [nl] "r" (n.low), [nh] "r" (n.high)                           \
-+       : "cc", ##cl);                                                  \
-+									\
-+	return r.full;							\
-+}
-+
-+__CMPXCHG128(   ,        ,  )
-+__CMPXCHG128(_mb, dmb ish, l, "memory")
-+
-+#undef __CMPXCHG128
-+
- #undef K
+ #endif /* arch_cmpxchg64_relaxed */
  
- #endif	/* __ASM_ATOMIC_LL_SC_H */
-diff --git a/arch/arm64/include/asm/atomic_lse.h b/arch/arm64/include/asm/atomic_lse.h
-index 319958b..c781281 100644
---- a/arch/arm64/include/asm/atomic_lse.h
-+++ b/arch/arm64/include/asm/atomic_lse.h
-@@ -317,4 +317,35 @@ __CMPXCHG_DBL(_mb, al, "memory")
++#ifndef arch_cmpxchg128_relaxed
++#define arch_cmpxchg128_acquire arch_cmpxchg128
++#define arch_cmpxchg128_release arch_cmpxchg128
++#define arch_cmpxchg128_relaxed arch_cmpxchg128
++#else /* arch_cmpxchg128_relaxed */
++
++#ifndef arch_cmpxchg128_acquire
++#define arch_cmpxchg128_acquire(...) \
++	__atomic_op_acquire(arch_cmpxchg128, __VA_ARGS__)
++#endif
++
++#ifndef arch_cmpxchg128_release
++#define arch_cmpxchg128_release(...) \
++	__atomic_op_release(arch_cmpxchg128, __VA_ARGS__)
++#endif
++
++#ifndef arch_cmpxchg128
++#define arch_cmpxchg128(...) \
++	__atomic_op_fence(arch_cmpxchg128, __VA_ARGS__)
++#endif
++
++#endif /* arch_cmpxchg128_relaxed */
++
+ #ifndef arch_try_cmpxchg_relaxed
+ #ifdef arch_try_cmpxchg
+ #define arch_try_cmpxchg_acquire arch_try_cmpxchg
+@@ -217,6 +240,76 @@
  
- #undef __CMPXCHG_DBL
+ #endif /* arch_try_cmpxchg64_relaxed */
  
-+#define __CMPXCHG128(name, mb, cl...)					\
-+static __always_inline u128						\
-+__lse__cmpxchg128##name(volatile u128 *ptr, u128 old, u128 new)		\
-+{									\
-+	union __u128_halves r, o = { .full = (old) },			\
-+			       n = { .full = (new) };			\
-+	register unsigned long x0 asm ("x0") = o.low;			\
-+	register unsigned long x1 asm ("x1") = o.high;			\
-+	register unsigned long x2 asm ("x2") = n.low;			\
-+	register unsigned long x3 asm ("x3") = n.high;			\
-+	register unsigned long x4 asm ("x4") = (unsigned long)ptr;	\
-+									\
-+	asm volatile(							\
-+	__LSE_PREAMBLE							\
-+	"	casp" #mb "\t%[old1], %[old2], %[new1], %[new2], %[v]\n"\
-+	: [old1] "+&r" (x0), [old2] "+&r" (x1),				\
-+	  [v] "+Q" (*(u128 *)ptr)					\
-+	: [new1] "r" (x2), [new2] "r" (x3), [ptr] "r" (x4),		\
-+	  [oldval1] "r" (o.low), [oldval2] "r" (o.high)			\
-+	: cl);								\
-+									\
-+	r.low = x0; r.high = x1;					\
-+									\
-+	return r.full;							\
-+}
++#ifndef arch_try_cmpxchg128_relaxed
++#ifdef arch_try_cmpxchg128
++#define arch_try_cmpxchg128_acquire arch_try_cmpxchg128
++#define arch_try_cmpxchg128_release arch_try_cmpxchg128
++#define arch_try_cmpxchg128_relaxed arch_try_cmpxchg128
++#endif /* arch_try_cmpxchg128 */
 +
-+__CMPXCHG128(   ,   )
-+__CMPXCHG128(_mb, al, "memory")
-+
-+#undef __CMPXCHG128
-+
- #endif	/* __ASM_ATOMIC_LSE_H */
-diff --git a/arch/arm64/include/asm/cmpxchg.h b/arch/arm64/include/asm/cmpxchg.h
-index c6bc5d8..097b832 100644
---- a/arch/arm64/include/asm/cmpxchg.h
-+++ b/arch/arm64/include/asm/cmpxchg.h
-@@ -146,6 +146,19 @@ __CMPXCHG_DBL(_mb)
- 
- #undef __CMPXCHG_DBL
- 
-+#define __CMPXCHG128(name)						\
-+static inline u128 __cmpxchg128##name(volatile u128 *ptr,		\
-+				      u128 old, u128 new)		\
-+{									\
-+	return __lse_ll_sc_body(_cmpxchg128##name,			\
-+				ptr, old, new);				\
-+}
-+
-+__CMPXCHG128(   )
-+__CMPXCHG128(_mb)
-+
-+#undef __CMPXCHG128
-+
- #define __CMPXCHG_GEN(sfx)						\
- static __always_inline unsigned long __cmpxchg##sfx(volatile void *ptr,	\
- 					   unsigned long old,		\
-@@ -228,6 +241,19 @@ __CMPXCHG_GEN(_mb)
- 	__ret;									\
- })
- 
-+/* cmpxchg128 */
-+#define system_has_cmpxchg128()		1
-+
-+#define arch_cmpxchg128(ptr, o, n)						\
-+({										\
-+	__cmpxchg128_mb((ptr), (o), (n));					\
++#ifndef arch_try_cmpxchg128
++#define arch_try_cmpxchg128(_ptr, _oldp, _new) \
++({ \
++	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
++	___r = arch_cmpxchg128((_ptr), ___o, (_new)); \
++	if (unlikely(___r != ___o)) \
++		*___op = ___r; \
++	likely(___r == ___o); \
 +})
++#endif /* arch_try_cmpxchg128 */
 +
-+#define arch_cmpxchg128_local(ptr, o, n)					\
-+({										\
-+	__cmpxchg128((ptr), (o), (n));						\
++#ifndef arch_try_cmpxchg128_acquire
++#define arch_try_cmpxchg128_acquire(_ptr, _oldp, _new) \
++({ \
++	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
++	___r = arch_cmpxchg128_acquire((_ptr), ___o, (_new)); \
++	if (unlikely(___r != ___o)) \
++		*___op = ___r; \
++	likely(___r == ___o); \
 +})
++#endif /* arch_try_cmpxchg128_acquire */
 +
- #define __CMPWAIT_CASE(w, sfx, sz)					\
- static inline void __cmpwait_case_##sz(volatile void *ptr,		\
- 				       unsigned long val)		\
-diff --git a/arch/s390/include/asm/cmpxchg.h b/arch/s390/include/asm/cmpxchg.h
-index 06e0e42..7517376 100644
---- a/arch/s390/include/asm/cmpxchg.h
-+++ b/arch/s390/include/asm/cmpxchg.h
-@@ -224,4 +224,18 @@ static __always_inline int __cmpxchg_double(unsigned long p1, unsigned long p2,
- 			 (unsigned long)(n1), (unsigned long)(n2));	\
- })
- 
-+#define system_has_cmpxchg128()		1
++#ifndef arch_try_cmpxchg128_release
++#define arch_try_cmpxchg128_release(_ptr, _oldp, _new) \
++({ \
++	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
++	___r = arch_cmpxchg128_release((_ptr), ___o, (_new)); \
++	if (unlikely(___r != ___o)) \
++		*___op = ___r; \
++	likely(___r == ___o); \
++})
++#endif /* arch_try_cmpxchg128_release */
 +
-+static __always_inline u128 arch_cmpxchg128(volatile u128 *ptr, u128 old, u128 new)
-+{
-+	asm volatile(
-+		"	cdsg	%[old],%[new],%[ptr]\n"
-+		: [old] "+d" (old), [ptr] "+QS" (*ptr)
-+		: [new] "d" (new)
-+		: "memory", "cc");
-+	return old;
-+}
++#ifndef arch_try_cmpxchg128_relaxed
++#define arch_try_cmpxchg128_relaxed(_ptr, _oldp, _new) \
++({ \
++	typeof(*(_ptr)) *___op = (_oldp), ___o = *___op, ___r; \
++	___r = arch_cmpxchg128_relaxed((_ptr), ___o, (_new)); \
++	if (unlikely(___r != ___o)) \
++		*___op = ___r; \
++	likely(___r == ___o); \
++})
++#endif /* arch_try_cmpxchg128_relaxed */
 +
-+#define arch_cmpxchg128		arch_cmpxchg128
++#else /* arch_try_cmpxchg128_relaxed */
 +
- #endif /* __ASM_CMPXCHG_H */
-diff --git a/arch/x86/include/asm/cmpxchg_32.h b/arch/x86/include/asm/cmpxchg_32.h
-index 6ba80ce..d12f9ed 100644
---- a/arch/x86/include/asm/cmpxchg_32.h
-+++ b/arch/x86/include/asm/cmpxchg_32.h
-@@ -103,6 +103,7 @@ static inline bool __try_cmpxchg64(volatile u64 *ptr, u64 *pold, u64 new)
- 
++#ifndef arch_try_cmpxchg128_acquire
++#define arch_try_cmpxchg128_acquire(...) \
++	__atomic_op_acquire(arch_try_cmpxchg128, __VA_ARGS__)
++#endif
++
++#ifndef arch_try_cmpxchg128_release
++#define arch_try_cmpxchg128_release(...) \
++	__atomic_op_release(arch_try_cmpxchg128, __VA_ARGS__)
++#endif
++
++#ifndef arch_try_cmpxchg128
++#define arch_try_cmpxchg128(...) \
++	__atomic_op_fence(arch_try_cmpxchg128, __VA_ARGS__)
++#endif
++
++#endif /* arch_try_cmpxchg128_relaxed */
++
+ #ifndef arch_try_cmpxchg_local
+ #define arch_try_cmpxchg_local(_ptr, _oldp, _new) \
+ ({ \
+@@ -2668,4 +2761,4 @@ arch_atomic64_dec_if_positive(atomic64_t *v)
  #endif
  
--#define system_has_cmpxchg_double() boot_cpu_has(X86_FEATURE_CX8)
-+#define system_has_cmpxchg_double()	boot_cpu_has(X86_FEATURE_CX8)
-+#define system_has_cmpxchg64()		boot_cpu_has(X86_FEATURE_CX8)
- 
- #endif /* _ASM_X86_CMPXCHG_32_H */
-diff --git a/arch/x86/include/asm/cmpxchg_64.h b/arch/x86/include/asm/cmpxchg_64.h
-index 0d3beb2..fe29107 100644
---- a/arch/x86/include/asm/cmpxchg_64.h
-+++ b/arch/x86/include/asm/cmpxchg_64.h
-@@ -20,6 +20,68 @@
- 	arch_try_cmpxchg((ptr), (po), (n));				\
+ #endif /* _LINUX_ATOMIC_FALLBACK_H */
+-// ad2e2b4d168dbc60a73922616047a9bfa446af36
++// 52dfc6fe4a2e7234bbd2aa3e16a377c1db793a53
+diff --git a/include/linux/atomic/atomic-instrumented.h b/include/linux/atomic/atomic-instrumented.h
+index 03a232a..8583720 100644
+--- a/include/linux/atomic/atomic-instrumented.h
++++ b/include/linux/atomic/atomic-instrumented.h
+@@ -2034,6 +2034,36 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+ 	arch_cmpxchg64_relaxed(__ai_ptr, __VA_ARGS__); \
  })
  
--#define system_has_cmpxchg_double() boot_cpu_has(X86_FEATURE_CX16)
-+union __u128_halves {
-+	u128 full;
-+	struct {
-+		u64 low, high;
-+	};
-+};
-+
-+#define __arch_cmpxchg128(_ptr, _old, _new, _lock)			\
-+({									\
-+	union __u128_halves o = { .full = (_old), },			\
-+			    n = { .full = (_new), };			\
-+									\
-+	asm volatile(_lock "cmpxchg16b %[ptr]"				\
-+		     : [ptr] "+m" (*(_ptr)),				\
-+		       "+a" (o.low), "+d" (o.high)			\
-+		     : "b" (n.low), "c" (n.high)			\
-+		     : "memory");					\
-+									\
-+	o.full;								\
++#define cmpxchg128(ptr, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	kcsan_mb(); \
++	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	arch_cmpxchg128(__ai_ptr, __VA_ARGS__); \
 +})
 +
-+static __always_inline u128 arch_cmpxchg128(volatile u128 *ptr, u128 old, u128 new)
-+{
-+	return __arch_cmpxchg128(ptr, old, new, LOCK_PREFIX);
-+}
-+
-+static __always_inline u128 arch_cmpxchg128_local(volatile u128 *ptr, u128 old, u128 new)
-+{
-+	return __arch_cmpxchg128(ptr, old, new,);
-+}
-+
-+#define __arch_try_cmpxchg128(_ptr, _oldp, _new, _lock)			\
-+({									\
-+	union __u128_halves o = { .full = *(_oldp), },			\
-+			    n = { .full = (_new), };			\
-+	bool ret;							\
-+									\
-+	asm volatile(_lock "cmpxchg16b %[ptr]"				\
-+		     CC_SET(e)						\
-+		     : CC_OUT(e) (ret),					\
-+		       [ptr] "+m" (*ptr),				\
-+		       "+a" (o.low), "+d" (o.high)			\
-+		     : "b" (n.low), "c" (n.high)			\
-+		     : "memory");					\
-+									\
-+	if (unlikely(!ret))						\
-+		*(_oldp) = o.full;					\
-+									\
-+	likely(ret);							\
++#define cmpxchg128_acquire(ptr, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	arch_cmpxchg128_acquire(__ai_ptr, __VA_ARGS__); \
 +})
 +
-+static __always_inline bool arch_try_cmpxchg128(volatile u128 *ptr, u128 *oldp, u128 new)
-+{
-+	return __arch_try_cmpxchg128(ptr, oldp, new, LOCK_PREFIX);
-+}
++#define cmpxchg128_release(ptr, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	kcsan_release(); \
++	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	arch_cmpxchg128_release(__ai_ptr, __VA_ARGS__); \
++})
 +
-+static __always_inline bool arch_try_cmpxchg128_local(volatile u128 *ptr, u128 *oldp, u128 new)
-+{
-+	return __arch_try_cmpxchg128(ptr, oldp, new,);
-+}
++#define cmpxchg128_relaxed(ptr, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	arch_cmpxchg128_relaxed(__ai_ptr, __VA_ARGS__); \
++})
 +
-+#define system_has_cmpxchg_double()	boot_cpu_has(X86_FEATURE_CX16)
-+#define system_has_cmpxchg128()		boot_cpu_has(X86_FEATURE_CX16)
+ #define try_cmpxchg(ptr, oldp, ...) \
+ ({ \
+ 	typeof(ptr) __ai_ptr = (ptr); \
+@@ -2110,6 +2140,44 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+ 	arch_try_cmpxchg64_relaxed(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+ })
  
- #endif /* _ASM_X86_CMPXCHG_64_H */
++#define try_cmpxchg128(ptr, oldp, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	typeof(oldp) __ai_oldp = (oldp); \
++	kcsan_mb(); \
++	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
++	arch_try_cmpxchg128(__ai_ptr, __ai_oldp, __VA_ARGS__); \
++})
++
++#define try_cmpxchg128_acquire(ptr, oldp, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	typeof(oldp) __ai_oldp = (oldp); \
++	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
++	arch_try_cmpxchg128_acquire(__ai_ptr, __ai_oldp, __VA_ARGS__); \
++})
++
++#define try_cmpxchg128_release(ptr, oldp, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	typeof(oldp) __ai_oldp = (oldp); \
++	kcsan_release(); \
++	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
++	arch_try_cmpxchg128_release(__ai_ptr, __ai_oldp, __VA_ARGS__); \
++})
++
++#define try_cmpxchg128_relaxed(ptr, oldp, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	typeof(oldp) __ai_oldp = (oldp); \
++	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
++	arch_try_cmpxchg128_relaxed(__ai_ptr, __ai_oldp, __VA_ARGS__); \
++})
++
+ #define cmpxchg_local(ptr, ...) \
+ ({ \
+ 	typeof(ptr) __ai_ptr = (ptr); \
+@@ -2124,6 +2192,13 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+ 	arch_cmpxchg64_local(__ai_ptr, __VA_ARGS__); \
+ })
+ 
++#define cmpxchg128_local(ptr, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	arch_cmpxchg128_local(__ai_ptr, __VA_ARGS__); \
++})
++
+ #define sync_cmpxchg(ptr, ...) \
+ ({ \
+ 	typeof(ptr) __ai_ptr = (ptr); \
+@@ -2150,6 +2225,15 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+ 	arch_try_cmpxchg64_local(__ai_ptr, __ai_oldp, __VA_ARGS__); \
+ })
+ 
++#define try_cmpxchg128_local(ptr, oldp, ...) \
++({ \
++	typeof(ptr) __ai_ptr = (ptr); \
++	typeof(oldp) __ai_oldp = (oldp); \
++	instrument_atomic_read_write(__ai_ptr, sizeof(*__ai_ptr)); \
++	instrument_read_write(__ai_oldp, sizeof(*__ai_oldp)); \
++	arch_try_cmpxchg128_local(__ai_ptr, __ai_oldp, __VA_ARGS__); \
++})
++
+ #define cmpxchg_double(ptr, ...) \
+ ({ \
+ 	typeof(ptr) __ai_ptr = (ptr); \
+@@ -2167,4 +2251,4 @@ atomic_long_dec_if_positive(atomic_long_t *v)
+ })
+ 
+ #endif /* _LINUX_ATOMIC_INSTRUMENTED_H */
+-// 6b513a42e1a1b5962532a019b7fc91eaa044ad5e
++// 82d1be694fab30414527d0877c29fa75ed5a0b74
+diff --git a/scripts/atomic/gen-atomic-fallback.sh b/scripts/atomic/gen-atomic-fallback.sh
+index 6e853f0..a70acd5 100755
+--- a/scripts/atomic/gen-atomic-fallback.sh
++++ b/scripts/atomic/gen-atomic-fallback.sh
+@@ -217,11 +217,11 @@ cat << EOF
+ 
+ EOF
+ 
+-for xchg in "arch_xchg" "arch_cmpxchg" "arch_cmpxchg64"; do
++for xchg in "arch_xchg" "arch_cmpxchg" "arch_cmpxchg64" "arch_cmpxchg128"; do
+ 	gen_xchg_fallbacks "${xchg}"
+ done
+ 
+-for cmpxchg in "cmpxchg" "cmpxchg64"; do
++for cmpxchg in "cmpxchg" "cmpxchg64" "cmpxchg128"; do
+ 	gen_try_cmpxchg_fallbacks "${cmpxchg}"
+ done
+ 
+diff --git a/scripts/atomic/gen-atomic-instrumented.sh b/scripts/atomic/gen-atomic-instrumented.sh
+index d9ffd74..4f80347 100755
+--- a/scripts/atomic/gen-atomic-instrumented.sh
++++ b/scripts/atomic/gen-atomic-instrumented.sh
+@@ -166,14 +166,14 @@ grep '^[a-z]' "$1" | while read name meta args; do
+ done
+ 
+ 
+-for xchg in "xchg" "cmpxchg" "cmpxchg64" "try_cmpxchg" "try_cmpxchg64"; do
++for xchg in "xchg" "cmpxchg" "cmpxchg64" "cmpxchg128" "try_cmpxchg" "try_cmpxchg64" "try_cmpxchg128"; do
+ 	for order in "" "_acquire" "_release" "_relaxed"; do
+ 		gen_xchg "${xchg}" "${order}" ""
+ 		printf "\n"
+ 	done
+ done
+ 
+-for xchg in "cmpxchg_local" "cmpxchg64_local" "sync_cmpxchg" "try_cmpxchg_local" "try_cmpxchg64_local" ; do
++for xchg in "cmpxchg_local" "cmpxchg64_local" "cmpxchg128_local" "sync_cmpxchg" "try_cmpxchg_local" "try_cmpxchg64_local" "try_cmpxchg128_local"; do
+ 	gen_xchg "${xchg}" "" ""
+ 	printf "\n"
+ done
