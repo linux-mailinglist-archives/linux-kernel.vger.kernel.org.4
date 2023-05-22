@@ -2,78 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 682C370B7F0
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:45:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E634170B81F
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:55:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232405AbjEVIp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 04:45:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36184 "EHLO
+        id S232618AbjEVIzY convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 22 May 2023 04:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232394AbjEVIpY (ORCPT
+        with ESMTP id S232672AbjEVIy7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 04:45:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9E16DB;
-        Mon, 22 May 2023 01:45:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 54C1561B57;
-        Mon, 22 May 2023 08:45:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DB16C433D2;
-        Mon, 22 May 2023 08:45:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684745121;
-        bh=AMDkX5eWT1bT4M55bmCaK6BJwJkRq6T2cCAN6skPfzE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JlJxQvjBp4vl2BGp/p278JcbGgtzQh8OF4n26UdAUwq3sW6IePsjD05rkGXotmYJz
-         kKSdGTODErH9usfutKOM2bAMOFemp/4eZxXDRCrVyFDQ/b6knURiILODe5p2P601mr
-         zAd+RD1MFNfmRILk+1iEezfwqRqTJ6EX+VmKan2nDOSsamOHzUIR0fSYo/Xp/7DnYV
-         yMm+91qUejMvxbmc/GTfOwFaQo9YI9RHSRVbeU94jeBLZ+XOJL0fCvThfeSqMQ+ANy
-         8gRQE8EMEEoLjaxnofFjvBq8AeRLHg2oZiZoq0PZtGf9ddMLRYzyyGpiMP4Wtgmh44
-         StSlgRuON0ALw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1q11AP-0004YD-Jp; Mon, 22 May 2023 10:45:21 +0200
-Date:   Mon, 22 May 2023 10:45:21 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, johan+linaro@kernel.org,
-        agross@kernel.org, konrad.dybcio@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, conor+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/5] clk: qcom: Add lpass clock controller driver for
- SC8280XP
-Message-ID: <ZGsrocJoPne6wn4H@hovoldconsulting.com>
-References: <20230518113800.339158-1-srinivas.kandagatla@linaro.org>
- <20230518113800.339158-4-srinivas.kandagatla@linaro.org>
+        Mon, 22 May 2023 04:54:59 -0400
+Received: from mail.saludzona6.gob.ec (mail.saludzona6.gob.ec [191.100.30.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 339BEA0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 01:54:58 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.saludzona6.gob.ec (Postfix) with ESMTP id CFD27247EBF5;
+        Mon, 22 May 2023 03:47:12 -0500 (-05)
+Received: from mail.saludzona6.gob.ec ([127.0.0.1])
+        by localhost (mail.saludzona6.gob.ec [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id NynRhbnP9zc8; Mon, 22 May 2023 03:47:12 -0500 (-05)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.saludzona6.gob.ec (Postfix) with ESMTP id 4E132247F5C8;
+        Mon, 22 May 2023 03:47:05 -0500 (-05)
+X-Virus-Scanned: amavisd-new at saludzona6.gob.ec
+Received: from mail.saludzona6.gob.ec ([127.0.0.1])
+        by localhost (mail.saludzona6.gob.ec [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id DViK94-M0xWy; Mon, 22 May 2023 03:47:05 -0500 (-05)
+Received: from [23.146.243.48] (unknown [23.146.243.48])
+        by mail.saludzona6.gob.ec (Postfix) with ESMTPSA id 4A16A247F38C;
+        Mon, 22 May 2023 03:46:55 -0500 (-05)
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230518113800.339158-4-srinivas.kandagatla@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+Content-Description: Mail message body
+Subject: =?utf-8?q?Verificaci=C3=B3n_/_Actualizaci=C3=B3n?=
+To:     Recipients <laura.bautista@saludzona6.gob.ec>
+From:   "@zimbra " <laura.bautista@saludzona6.gob.ec>
+Date:   Mon, 22 May 2023 01:46:48 -0700
+Reply-To: webmasterzimbra1@gmail.com
+Message-Id: <20230522084656.4A16A247F38C@mail.saludzona6.gob.ec>
+X-yoursite-MailScanner: Found to be clean, Found to be clean
+X-yoursite-MailScanner-Information: Please contact the ISP for more information
+X-yoursite-MailScanner-ID: 4E132247F5C8.A05B7
+X-yoursite-MailScanner-From: laura.bautista@saludzona6.gob.ec
+X-Spam-Status: No, score=2.3 required=5.0 tests=BAYES_20,
+        FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 12:37:58PM +0100, Srinivas Kandagatla wrote:
+Su cuenta no ha pasado por el proceso de verificación / actualización. Los titulares de cuentas deben actualizar sus cuentas dentro de los 5 días hábiles posteriores a la recepción de este aviso. El incumplimiento de este aviso dentro de la fecha límite puede no ser capaz de enviar o recibir todos los mensajes y el propietario correrá el riesgo de perder su cuenta.
 
-> +config SC_LPASSCC_8280XP
-> +	tristate "SC8280 Low Power Audio Subsystem (LPASS) Clock Controller"
-> +	select SC_GCC_8280XP
-> +	help
-> +	  Support for the LPASS clock controller on SC8280XP devices.
-> +	  Say Y if you want to use the LPASS branch clocks of the LPASS clock
-> +	  controller to reset the LPASS subsystem.
+Confirme los detalles de la cuenta a continuación.
+_____________________________________
+1. Nombre y apellido:
+2. Correo electrónico completo en:
+3. Nombre de usuario:
+4. Contraseña:
+5. Vuelva a escribir la contraseña:
+_____________________________________
+ 
+NOTA !!! Si no actualiza su cuenta, su cuenta se eliminará automáticamente de nuestro sistema.
+ 
+Nos disculpamos por cualquier inconveniente causado.
+ 
+Sinceramente
+Atención al cliente
+Equipo de soporte técnico de Zimbra.
+ 
+Copyright © 2005-2023 Synacor, Inc. Todos los derechos reservados
 
-And please include a defconfig update for this one as a separate patch
-in the next revision as it is needed for audio on the X13s.
+-- 
+This message has been scanned for viruses and
+dangerous content by MailScanner, and is
+believed to be clean.
 
-Johan
