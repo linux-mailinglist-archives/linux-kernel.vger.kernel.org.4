@@ -2,442 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4888270B461
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 07:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72E8870B464
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 07:13:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231396AbjEVFNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 01:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53766 "EHLO
+        id S231685AbjEVFNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 01:13:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229922AbjEVFNM (ORCPT
+        with ESMTP id S231565AbjEVFNl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 01:13:12 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0742F4
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:13:10 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id e9e14a558f8ab-33164ec77ccso202755ab.0
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:13:10 -0700 (PDT)
+        Mon, 22 May 2023 01:13:41 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A136100
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:13:38 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-ba841216e92so8155539276.1
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:13:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684732390; x=1687324390;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oVFuz+LppT4Bt6rO2tywL1VM/+thHNG8bsummeehR1Q=;
-        b=0k1j9Rc1+O9BltBLMf/2JOwufCw5dbkJJf/ywrCZipO6+8+uv1jrQYYIXgah+6grbR
-         D/7iVC7mJGeCRZ3rYuAN2l9R9zWMkYvuHoF4twd2BX0w25WrheBbMHzkvQXfH81jvMAQ
-         Q3m9CaDPZan17r/+oPeDylxFo+sC4UfDxXeNukVaZ94vhqyA5Wd60rNSbFNbIPfbHoCL
-         nglFqqUXgw/h99k3FcD0rj6jq5DUSoWF7SsnNTx1Y0nmmU+b4BtbTuTd5Zds08Y6xpmT
-         OQSlSS/VeOdN+fqaUzpfWp+gxB8wPa+ghwrvN2/w17f9fUgUYJDjB2eM44wOfSftQD3i
-         dFLQ==
+        d=google.com; s=20221208; t=1684732417; x=1687324417;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dPoyGlkGpegFUTFofVDIHWRBddk7VxC7U3Cl7g+dttQ=;
+        b=u/pipKzV3+7Fw72J6ZuzihOhd10w0gGlLGmoTYVNzOrFtguVpB16bQ3yHwI9CSCfkH
+         3Vl3zrzd94RD+ao7QuGXMU38bZgzZUL1/QZs1hHXZKn7GPINxEVThftcMMnY2o+Yudl0
+         U2nS3rhKugfJt5YxhFfn9PDdwtey86BwLjUPjmgewXJIUFBVGRQf2ahMAOU7Z/t1DHAm
+         l66iDmXAruV3nmxv3A2DqZgGdZJpE3BSBsWI9c3hTvkUhwfiQW5QjWVbpPvVCeixeUrI
+         GKrbNt5veHLdmjZBBDPCavEMUBfFme3RGuyXCTdVESH6VYwjwFZwaExB5zSeQBSZMndy
+         lQew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684732390; x=1687324390;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oVFuz+LppT4Bt6rO2tywL1VM/+thHNG8bsummeehR1Q=;
-        b=dFvc0q5KWq0jkIS07a1oheM5laxd60QkRd88MpzDaYSY6eGbtQjN+RjDYqUuyHMDyw
-         XeJWHiO54Ccmeufs8oJEoXMyBmsq/4f/n25opS4ytGyQbdF8mxzQDKzBv5EZTE2nksSe
-         UL7dL34xfhMg03kZ03GwoPMfNyp7Id2eqSdE34XIyV4RBgcvKld4X4q5/GJy43gQO3fR
-         RLiHLBEs6YCoJs88znFD85RGqGmCLekqgmEV6tzJONJRo2z1Ujy4mI9uC9wdtWOUYNlL
-         R2W6JGYVK2vNIzqTM4aP5Zy2eQNuHLe9iYkZp7KQW170rrzGZyE/A1WjWWPs05PrX9mJ
-         Wy6Q==
-X-Gm-Message-State: AC+VfDxBXPrdVKFDix31xa/5on2jGfQu/FMMGRYiKeRVwO9rWBgfeiDF
-        AtyuQWQf7bH9mNsyoYV57MGMTmm+H+kDVGwOCz22bQ==
-X-Google-Smtp-Source: ACHHUZ5l3QDvwrpKPScYMJ0LU7PxG6d0PLZdyn5/2xzitEy2Al1dk1MsNaOqXn5Dj/iHdC2bW8nnE9C4etmd7oKJkGk=
-X-Received: by 2002:a05:6e02:12cb:b0:331:948c:86f3 with SMTP id
- i11-20020a056e0212cb00b00331948c86f3mr402240ilm.19.1684732389851; Sun, 21 May
- 2023 22:13:09 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230517145803.559429-1-irogers@google.com> <20230517145803.559429-4-irogers@google.com>
- <ba6ab7b6-4ce0-2f07-2b8b-a4373d96c742@linux.intel.com>
-In-Reply-To: <ba6ab7b6-4ce0-2f07-2b8b-a4373d96c742@linux.intel.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Sun, 21 May 2023 22:12:58 -0700
-Message-ID: <CAP-5=fVanehMRXUQUsmxSZAijHTOfxzJtNTr84rPjEnxGKdpQA@mail.gmail.com>
-Subject: Re: [PATCH v1 03/23] perf evlist: Remove __evlist__add_default
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
+        d=1e100.net; s=20221208; t=1684732417; x=1687324417;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dPoyGlkGpegFUTFofVDIHWRBddk7VxC7U3Cl7g+dttQ=;
+        b=B4dq0P87YlyKv3X+UVN+5bxqCZLlbdW186Ldu8YAmWsH8Sog6dppbeeZvfpo28rIRU
+         rbN13fq6yPhrTpjHJ2S35WGx5Qo9ZViDLLeHrDHSdJvhrAbkHM5vOzkjKBjIiufTBzri
+         CnoRGic17BughCSF6w6cyrAx/vz1SfqhVCVQ+JAjX6azXYaSZzgmJzmVoevmoKDFzJ4k
+         LfV8CNMePLhhr2zvwJBXg/bOPe7dgm8Hn0sKKzKlw9UupKvcl7p6f0trpiK8AwWCtS1Z
+         RWorfgvxiNeAPAyaza5oRGSWfbwV1aEnUbXcf7LQoNGd5vYNWTtZjQyPd32ZtFh336eW
+         SRqA==
+X-Gm-Message-State: AC+VfDwDvnknkpWwcFsJ9EC0kF5TuCES/Y0+691ojJVLTfW6rBrdahOv
+        BpjTC87yMvAVyZVkBxpBLm6s8w==
+X-Google-Smtp-Source: ACHHUZ6QCzXgzIS4cFPDNtq3tlt+HJnjXO6ZXovLO9zv6wjiXs/oia4ZbqdffbL8veAaOUMs5BJwAQ==
+X-Received: by 2002:a0d:d595:0:b0:561:e910:52f5 with SMTP id x143-20020a0dd595000000b00561e91052f5mr12194393ywd.27.1684732417238;
+        Sun, 21 May 2023 22:13:37 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id i67-20020a0df846000000b00559f1cb8444sm1824582ywf.70.2023.05.21.22.13.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 May 2023 22:13:36 -0700 (PDT)
+Date:   Sun, 21 May 2023 22:13:33 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Jing Zhang <renyu.zj@linux.alibaba.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Ming Wang <wangming01@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Dmitrii Dolgov <9erthalion6@gmail.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Raul Silvera <rsilvera@google.com>,
-        Ali Saidi <alisaidi@amazon.com>, Rob Herring <robh@kernel.org>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Kang Minchul <tegongkang@gmail.com>,
-        linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH 19/31] mm/mremap: retry if either pte_offset_map_*lock()
+ fails
+In-Reply-To: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
+Message-ID: <2d3fbfea-5884-8211-0cc-954afe25ae9c@google.com>
+References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 21, 2023 at 12:12=E2=80=AFPM Liang, Kan <kan.liang@linux.intel.=
-com> wrote:
->
->
->
-> On 2023-05-17 10:57 a.m., Ian Rogers wrote:
-> > __evlist__add_default adds a cycles event to a typically empty evlist
-> > and was extended for hybrid with evlist__add_default_hybrid, as more
-> > than 1 PMU was necessary. Rather than have dedicated logic for the
-> > cycles event, this change switches to parsing 'cycles' which will
-> > handle wildcarding the PMUs appropriately for hybrid.
->
-> I think the default event for the perf record was cycles:P, but this
-> patch changes the default event to cycles. I think it's better to use
-> cycles:P which is more accurate.
->
-> Thanks,
-> Kan
+move_ptes() return -EAGAIN if pte_offset_map_lock() of old fails, or if
+pte_offset_map_nolock() of new fails: move_page_tables() retry if so.
 
-Agreed. It looks like even though the event is "cycles:P" it is always
-displayed as "cycles" and the logic to add "ppp" never fires as
-attr.precise_ip is always 0 at the point it is inspected. I'll fix in
-v2.
+But that does need a pmd_none() check inside, to stop endless loop when
+huge shmem is truncated (thank you to syzbot); and move_huge_pmd() must
+tolerate that a page table might have been allocated there just before
+(of course it would be more satisfying to remove the empty page table,
+but this is not a path worth optimizing).
 
-Thanks,
-Ian
+Signed-off-by: Hugh Dickins <hughd@google.com>
+---
+ mm/huge_memory.c |  5 +++--
+ mm/mremap.c      | 28 ++++++++++++++++++++--------
+ 2 files changed, 23 insertions(+), 10 deletions(-)
 
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/arch/x86/util/evsel.c | 20 --------------
-> >  tools/perf/builtin-record.c      | 13 +++------
-> >  tools/perf/builtin-top.c         | 10 ++++---
-> >  tools/perf/util/evlist-hybrid.c  | 25 -----------------
-> >  tools/perf/util/evlist-hybrid.h  |  1 -
-> >  tools/perf/util/evlist.c         | 22 ++++++---------
-> >  tools/perf/util/evlist.h         |  7 -----
-> >  tools/perf/util/evsel.c          | 46 --------------------------------
-> >  tools/perf/util/evsel.h          |  3 ---
-> >  9 files changed, 17 insertions(+), 130 deletions(-)
-> >
-> > diff --git a/tools/perf/arch/x86/util/evsel.c b/tools/perf/arch/x86/uti=
-l/evsel.c
-> > index ea3972d785d1..153cdca94cd4 100644
-> > --- a/tools/perf/arch/x86/util/evsel.c
-> > +++ b/tools/perf/arch/x86/util/evsel.c
-> > @@ -16,26 +16,6 @@ void arch_evsel__set_sample_weight(struct evsel *evs=
-el)
-> >       evsel__set_sample_bit(evsel, WEIGHT_STRUCT);
-> >  }
-> >
-> > -void arch_evsel__fixup_new_cycles(struct perf_event_attr *attr)
-> > -{
-> > -     struct perf_env env =3D { .total_mem =3D 0, } ;
-> > -
-> > -     if (!perf_env__cpuid(&env))
-> > -             return;
-> > -
-> > -     /*
-> > -      * On AMD, precise cycles event sampling internally uses IBS pmu.
-> > -      * But IBS does not have filtering capabilities and perf by defau=
-lt
-> > -      * sets exclude_guest =3D 1. This makes IBS pmu event init fail a=
-nd
-> > -      * thus perf ends up doing non-precise sampling. Avoid it by clea=
-ring
-> > -      * exclude_guest.
-> > -      */
-> > -     if (env.cpuid && strstarts(env.cpuid, "AuthenticAMD"))
-> > -             attr->exclude_guest =3D 0;
-> > -
-> > -     free(env.cpuid);
-> > -}
-> > -
-> >  /* Check whether the evsel's PMU supports the perf metrics */
-> >  bool evsel__sys_has_perf_metrics(const struct evsel *evsel)
-> >  {
-> > diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
-> > index 9d212236c75a..85f2bd035a94 100644
-> > --- a/tools/perf/builtin-record.c
-> > +++ b/tools/perf/builtin-record.c
-> > @@ -4161,18 +4161,11 @@ int cmd_record(int argc, const char **argv)
-> >               record.opts.tail_synthesize =3D true;
-> >
-> >       if (rec->evlist->core.nr_entries =3D=3D 0) {
-> > -             if (perf_pmu__has_hybrid()) {
-> > -                     err =3D evlist__add_default_hybrid(rec->evlist,
-> > -                                                      !record.opts.no_=
-samples);
-> > -             } else {
-> > -                     err =3D __evlist__add_default(rec->evlist,
-> > -                                                 !record.opts.no_sampl=
-es);
-> > -             }
-> > +             bool can_profile_kernel =3D perf_event_paranoid_check(1);
-> >
-> > -             if (err < 0) {
-> > -                     pr_err("Not enough memory for event selector list=
-\n");
-> > +             err =3D parse_event(rec->evlist, can_profile_kernel ? "cy=
-cles" : "cycles:u");
-> > +             if (err)
-> >                       goto out;
-> > -             }
-> >       }
-> >
-> >       if (rec->opts.target.tid && !rec->opts.no_inherit_set)
-> > diff --git a/tools/perf/builtin-top.c b/tools/perf/builtin-top.c
-> > index 48ee49e95c5e..d1e6d23bee3e 100644
-> > --- a/tools/perf/builtin-top.c
-> > +++ b/tools/perf/builtin-top.c
-> > @@ -1653,10 +1653,12 @@ int cmd_top(int argc, const char **argv)
-> >       if (annotate_check_args(&top.annotation_opts) < 0)
-> >               goto out_delete_evlist;
-> >
-> > -     if (!top.evlist->core.nr_entries &&
-> > -         evlist__add_default(top.evlist) < 0) {
-> > -             pr_err("Not enough memory for event selector list\n");
-> > -             goto out_delete_evlist;
-> > +     if (!top.evlist->core.nr_entries) {
-> > +             bool can_profile_kernel =3D perf_event_paranoid_check(1);
-> > +             int err =3D parse_event(top.evlist, can_profile_kernel ? =
-"cycles" : "cycles:u");
-> > +
-> > +             if (err)
-> > +                     goto out_delete_evlist;
-> >       }
-> >
-> >       status =3D evswitch__init(&top.evswitch, top.evlist, stderr);
-> > diff --git a/tools/perf/util/evlist-hybrid.c b/tools/perf/util/evlist-h=
-ybrid.c
-> > index 0f59c80f27b2..64f78d06fe19 100644
-> > --- a/tools/perf/util/evlist-hybrid.c
-> > +++ b/tools/perf/util/evlist-hybrid.c
-> > @@ -16,31 +16,6 @@
-> >  #include <perf/evsel.h>
-> >  #include <perf/cpumap.h>
-> >
-> > -int evlist__add_default_hybrid(struct evlist *evlist, bool precise)
-> > -{
-> > -     struct evsel *evsel;
-> > -     struct perf_pmu *pmu;
-> > -     __u64 config;
-> > -     struct perf_cpu_map *cpus;
-> > -
-> > -     perf_pmu__for_each_hybrid_pmu(pmu) {
-> > -             config =3D PERF_COUNT_HW_CPU_CYCLES |
-> > -                      ((__u64)pmu->type << PERF_PMU_TYPE_SHIFT);
-> > -             evsel =3D evsel__new_cycles(precise, PERF_TYPE_HARDWARE,
-> > -                                       config);
-> > -             if (!evsel)
-> > -                     return -ENOMEM;
-> > -
-> > -             cpus =3D perf_cpu_map__get(pmu->cpus);
-> > -             evsel->core.cpus =3D cpus;
-> > -             evsel->core.own_cpus =3D perf_cpu_map__get(cpus);
-> > -             evsel->pmu_name =3D strdup(pmu->name);
-> > -             evlist__add(evlist, evsel);
-> > -     }
-> > -
-> > -     return 0;
-> > -}
-> > -
-> >  bool evlist__has_hybrid(struct evlist *evlist)
-> >  {
-> >       struct evsel *evsel;
-> > diff --git a/tools/perf/util/evlist-hybrid.h b/tools/perf/util/evlist-h=
-ybrid.h
-> > index 4b000eda6626..0cded76eb344 100644
-> > --- a/tools/perf/util/evlist-hybrid.h
-> > +++ b/tools/perf/util/evlist-hybrid.h
-> > @@ -7,7 +7,6 @@
-> >  #include "evlist.h"
-> >  #include <unistd.h>
-> >
-> > -int evlist__add_default_hybrid(struct evlist *evlist, bool precise);
-> >  bool evlist__has_hybrid(struct evlist *evlist);
-> >
-> >  #endif /* __PERF_EVLIST_HYBRID_H */
-> > diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
-> > index 5d0d99127a90..b8ca99afdfe5 100644
-> > --- a/tools/perf/util/evlist.c
-> > +++ b/tools/perf/util/evlist.c
-> > @@ -93,8 +93,15 @@ struct evlist *evlist__new(void)
-> >  struct evlist *evlist__new_default(void)
-> >  {
-> >       struct evlist *evlist =3D evlist__new();
-> > +     bool can_profile_kernel;
-> > +     int err;
-> > +
-> > +     if (!evlist)
-> > +             return NULL;
-> >
-> > -     if (evlist && evlist__add_default(evlist)) {
-> > +     can_profile_kernel =3D perf_event_paranoid_check(1);
-> > +     err =3D parse_event(evlist, can_profile_kernel ? "cycles" : "cycl=
-es:u");
-> > +     if (err) {
-> >               evlist__delete(evlist);
-> >               evlist =3D NULL;
-> >       }
-> > @@ -237,19 +244,6 @@ static void evlist__set_leader(struct evlist *evli=
-st)
-> >       perf_evlist__set_leader(&evlist->core);
-> >  }
-> >
-> > -int __evlist__add_default(struct evlist *evlist, bool precise)
-> > -{
-> > -     struct evsel *evsel;
-> > -
-> > -     evsel =3D evsel__new_cycles(precise, PERF_TYPE_HARDWARE,
-> > -                               PERF_COUNT_HW_CPU_CYCLES);
-> > -     if (evsel =3D=3D NULL)
-> > -             return -ENOMEM;
-> > -
-> > -     evlist__add(evlist, evsel);
-> > -     return 0;
-> > -}
-> > -
-> >  static struct evsel *evlist__dummy_event(struct evlist *evlist)
-> >  {
-> >       struct perf_event_attr attr =3D {
-> > diff --git a/tools/perf/util/evlist.h b/tools/perf/util/evlist.h
-> > index 5e7ff44f3043..664c6bf7b3e0 100644
-> > --- a/tools/perf/util/evlist.h
-> > +++ b/tools/perf/util/evlist.h
-> > @@ -100,13 +100,6 @@ void evlist__delete(struct evlist *evlist);
-> >  void evlist__add(struct evlist *evlist, struct evsel *entry);
-> >  void evlist__remove(struct evlist *evlist, struct evsel *evsel);
-> >
-> > -int __evlist__add_default(struct evlist *evlist, bool precise);
-> > -
-> > -static inline int evlist__add_default(struct evlist *evlist)
-> > -{
-> > -     return __evlist__add_default(evlist, true);
-> > -}
-> > -
-> >  int evlist__add_attrs(struct evlist *evlist, struct perf_event_attr *a=
-ttrs, size_t nr_attrs);
-> >
-> >  int __evlist__add_default_attrs(struct evlist *evlist,
-> > diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-> > index 2f5910b31fa9..b39615124672 100644
-> > --- a/tools/perf/util/evsel.c
-> > +++ b/tools/perf/util/evsel.c
-> > @@ -316,48 +316,6 @@ struct evsel *evsel__new_idx(struct perf_event_att=
-r *attr, int idx)
-> >       return evsel;
-> >  }
-> >
-> > -static bool perf_event_can_profile_kernel(void)
-> > -{
-> > -     return perf_event_paranoid_check(1);
-> > -}
-> > -
-> > -struct evsel *evsel__new_cycles(bool precise __maybe_unused, __u32 typ=
-e, __u64 config)
-> > -{
-> > -     struct perf_event_attr attr =3D {
-> > -             .type   =3D type,
-> > -             .config =3D config,
-> > -             .exclude_kernel =3D !perf_event_can_profile_kernel(),
-> > -     };
-> > -     struct evsel *evsel;
-> > -
-> > -     event_attr_init(&attr);
-> > -
-> > -     /*
-> > -      * Now let the usual logic to set up the perf_event_attr defaults
-> > -      * to kick in when we return and before perf_evsel__open() is cal=
-led.
-> > -      */
-> > -     evsel =3D evsel__new(&attr);
-> > -     if (evsel =3D=3D NULL)
-> > -             goto out;
-> > -
-> > -     arch_evsel__fixup_new_cycles(&evsel->core.attr);
-> > -
-> > -     evsel->precise_max =3D true;
-> > -
-> > -     /* use asprintf() because free(evsel) assumes name is allocated *=
-/
-> > -     if (asprintf(&evsel->name, "cycles%s%s%.*s",
-> > -                  (attr.precise_ip || attr.exclude_kernel) ? ":" : "",
-> > -                  attr.exclude_kernel ? "u" : "",
-> > -                  attr.precise_ip ? attr.precise_ip + 1 : 0, "ppp") < =
-0)
-> > -             goto error_free;
-> > -out:
-> > -     return evsel;
-> > -error_free:
-> > -     evsel__delete(evsel);
-> > -     evsel =3D NULL;
-> > -     goto out;
-> > -}
-> > -
-> >  int copy_config_terms(struct list_head *dst, struct list_head *src)
-> >  {
-> >       struct evsel_config_term *pos, *tmp;
-> > @@ -1130,10 +1088,6 @@ void __weak arch_evsel__set_sample_weight(struct=
- evsel *evsel)
-> >       evsel__set_sample_bit(evsel, WEIGHT);
-> >  }
-> >
-> > -void __weak arch_evsel__fixup_new_cycles(struct perf_event_attr *attr =
-__maybe_unused)
-> > -{
-> > -}
-> > -
-> >  void __weak arch__post_evsel_config(struct evsel *evsel __maybe_unused=
-,
-> >                                   struct perf_event_attr *attr __maybe_=
-unused)
-> >  {
-> > diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
-> > index df8928745fc6..429b172cc94d 100644
-> > --- a/tools/perf/util/evsel.h
-> > +++ b/tools/perf/util/evsel.h
-> > @@ -243,8 +243,6 @@ static inline struct evsel *evsel__newtp(const char=
- *sys, const char *name)
-> >  }
-> >  #endif
-> >
-> > -struct evsel *evsel__new_cycles(bool precise, __u32 type, __u64 config=
-);
-> > -
-> >  #ifdef HAVE_LIBTRACEEVENT
-> >  struct tep_event *event_format__new(const char *sys, const char *name)=
-;
-> >  #endif
-> > @@ -312,7 +310,6 @@ void __evsel__reset_sample_bit(struct evsel *evsel,=
- enum perf_event_sample_forma
-> >  void evsel__set_sample_id(struct evsel *evsel, bool use_sample_identif=
-ier);
-> >
-> >  void arch_evsel__set_sample_weight(struct evsel *evsel);
-> > -void arch_evsel__fixup_new_cycles(struct perf_event_attr *attr);
-> >  void arch__post_evsel_config(struct evsel *evsel, struct perf_event_at=
-tr *attr);
-> >
-> >  int evsel__set_filter(struct evsel *evsel, const char *filter);
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 624671aaa60d..d4bd5fa7c823 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -1760,9 +1760,10 @@ bool move_huge_pmd(struct vm_area_struct *vma, unsigned long old_addr,
+ 
+ 	/*
+ 	 * The destination pmd shouldn't be established, free_pgtables()
+-	 * should have release it.
++	 * should have released it; but move_page_tables() might have already
++	 * inserted a page table, if racing against shmem/file collapse.
+ 	 */
+-	if (WARN_ON(!pmd_none(*new_pmd))) {
++	if (!pmd_none(*new_pmd)) {
+ 		VM_BUG_ON(pmd_trans_huge(*new_pmd));
+ 		return false;
+ 	}
+diff --git a/mm/mremap.c b/mm/mremap.c
+index b11ce6c92099..1fc47b4f38d7 100644
+--- a/mm/mremap.c
++++ b/mm/mremap.c
+@@ -133,7 +133,7 @@ static pte_t move_soft_dirty_pte(pte_t pte)
+ 	return pte;
+ }
+ 
+-static void move_ptes(struct vm_area_struct *vma, pmd_t *old_pmd,
++static int move_ptes(struct vm_area_struct *vma, pmd_t *old_pmd,
+ 		unsigned long old_addr, unsigned long old_end,
+ 		struct vm_area_struct *new_vma, pmd_t *new_pmd,
+ 		unsigned long new_addr, bool need_rmap_locks)
+@@ -143,6 +143,7 @@ static void move_ptes(struct vm_area_struct *vma, pmd_t *old_pmd,
+ 	spinlock_t *old_ptl, *new_ptl;
+ 	bool force_flush = false;
+ 	unsigned long len = old_end - old_addr;
++	int err = 0;
+ 
+ 	/*
+ 	 * When need_rmap_locks is true, we take the i_mmap_rwsem and anon_vma
+@@ -170,8 +171,16 @@ static void move_ptes(struct vm_area_struct *vma, pmd_t *old_pmd,
+ 	 * pte locks because exclusive mmap_lock prevents deadlock.
+ 	 */
+ 	old_pte = pte_offset_map_lock(mm, old_pmd, old_addr, &old_ptl);
+-	new_pte = pte_offset_map(new_pmd, new_addr);
+-	new_ptl = pte_lockptr(mm, new_pmd);
++	if (!old_pte) {
++		err = -EAGAIN;
++		goto out;
++	}
++	new_pte = pte_offset_map_nolock(mm, new_pmd, new_addr, &new_ptl);
++	if (!new_pte) {
++		pte_unmap_unlock(old_pte, old_ptl);
++		err = -EAGAIN;
++		goto out;
++	}
+ 	if (new_ptl != old_ptl)
+ 		spin_lock_nested(new_ptl, SINGLE_DEPTH_NESTING);
+ 	flush_tlb_batched_pending(vma->vm_mm);
+@@ -208,8 +217,10 @@ static void move_ptes(struct vm_area_struct *vma, pmd_t *old_pmd,
+ 		spin_unlock(new_ptl);
+ 	pte_unmap(new_pte - 1);
+ 	pte_unmap_unlock(old_pte - 1, old_ptl);
++out:
+ 	if (need_rmap_locks)
+ 		drop_rmap_locks(vma);
++	return err;
+ }
+ 
+ #ifndef arch_supports_page_table_move
+@@ -537,6 +548,7 @@ unsigned long move_page_tables(struct vm_area_struct *vma,
+ 		new_pmd = alloc_new_pmd(vma->vm_mm, vma, new_addr);
+ 		if (!new_pmd)
+ 			break;
++again:
+ 		if (is_swap_pmd(*old_pmd) || pmd_trans_huge(*old_pmd) ||
+ 		    pmd_devmap(*old_pmd)) {
+ 			if (extent == HPAGE_PMD_SIZE &&
+@@ -544,8 +556,6 @@ unsigned long move_page_tables(struct vm_area_struct *vma,
+ 					   old_pmd, new_pmd, need_rmap_locks))
+ 				continue;
+ 			split_huge_pmd(vma, old_pmd, old_addr);
+-			if (pmd_trans_unstable(old_pmd))
+-				continue;
+ 		} else if (IS_ENABLED(CONFIG_HAVE_MOVE_PMD) &&
+ 			   extent == PMD_SIZE) {
+ 			/*
+@@ -556,11 +566,13 @@ unsigned long move_page_tables(struct vm_area_struct *vma,
+ 					   old_pmd, new_pmd, true))
+ 				continue;
+ 		}
+-
++		if (pmd_none(*old_pmd))
++			continue;
+ 		if (pte_alloc(new_vma->vm_mm, new_pmd))
+ 			break;
+-		move_ptes(vma, old_pmd, old_addr, old_addr + extent, new_vma,
+-			  new_pmd, new_addr, need_rmap_locks);
++		if (move_ptes(vma, old_pmd, old_addr, old_addr + extent,
++			      new_vma, new_pmd, new_addr, need_rmap_locks) < 0)
++			goto again;
+ 	}
+ 
+ 	mmu_notifier_invalidate_range_end(&range);
+-- 
+2.35.3
+
