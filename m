@@ -2,752 +2,568 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A186870C37B
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 18:32:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F22A370C37C
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 18:32:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbjEVQb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 12:31:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41210 "EHLO
+        id S233062AbjEVQcM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 12:32:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232739AbjEVQbs (ORCPT
+        with ESMTP id S233045AbjEVQcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 12:31:48 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D8C100
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 09:31:23 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-30a1fdde3d6so2483372f8f.0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 09:31:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684773080; x=1687365080;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Lq0Q1qeHo3wPH48ZfMfIRErJyH/MWFBdH3zVnSn01Ps=;
-        b=vnyIJaWRLomZxuUH4iM7qk150CUpZlTvr7xhyhup18JH9e3ELj44eb8NEBAcBg8E5z
-         RY+GofZa7MOu1y1VBfilYO/gz8U/wSZIHjiJ1w9unIfnL/4CtizorB73q8x/qM+IQizk
-         yVJvljW4g7u02/pod7fz4iPLlQ3N48aB34DrDEduQRkvNcCAc6yeS1rH8f2EgJLcYxvt
-         S8BrFq+yL5/t78w9jInuATJcDHzY9rhJp1JWd7KfO7IQm2dGOmpl2myTOD6KvIqMOkfR
-         8o4xF4j3iVoADdseBrkzh+W0iRiNk2lSmDQd6yT43mFf+hx2TWBIng2mEX2FtUGUWqHd
-         GB1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684773080; x=1687365080;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Lq0Q1qeHo3wPH48ZfMfIRErJyH/MWFBdH3zVnSn01Ps=;
-        b=K0uQv1xa1+ClO/9j7M3KEb0Oe6Q6nSTudm7V+ScW3Brl7VMKj8bgYwZ92tA/rmlE/h
-         jMgPdlmpfPsj1hohj8f6lkDpK7DGO4EoYebWtUFhYsFSmw4q/Z/uzEY3oZf9gnpIfT1c
-         7aFrdfT+AsZzi9LavHspwu6vnxpB9G3f7THDlXjAnMJCtwsbJZEiuLW74nHdO83H6x3l
-         dg8dyoMxYC74TpC8pOCHtd958DUkoECVAfYT93XGOc6tHME48vmowLXsdXYAbJIycRJW
-         t21I+2xUznHPVsqFhH5S0j7DGMddp8YAZ5caupFwx3wOe4zTKFsE1dt+mYKld1PViMmL
-         MPSA==
-X-Gm-Message-State: AC+VfDxRNxsholuKEk1GgU2oUHoQgZfQ5BugUfwXLj+Gb3/8B1rKUy9l
-        k6HsFs3M+GjmZ+a5oVGt5Bapww==
-X-Google-Smtp-Source: ACHHUZ54gnLqMqdkZ02LcgBQkm56sAVTXlQ2ozQA4A4yXMEZZlzljuCy2IicWUV/YL3ObUa7x82jPA==
-X-Received: by 2002:adf:f103:0:b0:306:8034:b2e4 with SMTP id r3-20020adff103000000b003068034b2e4mr7904900wro.69.1684773079975;
-        Mon, 22 May 2023 09:31:19 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:e0a:28d:66d0:72d:52cc:8221:fcda])
-        by smtp.gmail.com with ESMTPSA id y10-20020adff6ca000000b002f103ca90cdsm8152677wrp.101.2023.05.22.09.31.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 09:31:19 -0700 (PDT)
-From:   Esteban Blanc <eblanc@baylibre.com>
-To:     linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
-        a.zummo@towertech.it, alexandre.belloni@bootlin.com
-Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, jpanis@baylibre.com,
-        jneanne@baylibre.com, aseketeli@baylibre.com, eblanc@baylibre.com,
-        u-kumar1@ti.com
-Subject: [PATCH v5 3/3] regulator: tps6594-regulator: Add driver for TI TPS6594 regulators
-Date:   Mon, 22 May 2023 18:31:15 +0200
-Message-Id: <20230522163115.2592883-4-eblanc@baylibre.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230522163115.2592883-1-eblanc@baylibre.com>
-References: <20230522163115.2592883-1-eblanc@baylibre.com>
+        Mon, 22 May 2023 12:32:07 -0400
+Received: from relay02.th.seeweb.it (relay02.th.seeweb.it [5.144.164.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A774D107
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 09:31:51 -0700 (PDT)
+Received: from [192.168.1.101] (abyk97.neoplus.adsl.tpnet.pl [83.9.30.97])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 5B2CC2010E;
+        Mon, 22 May 2023 18:31:45 +0200 (CEST)
+Message-ID: <cd8064a9-5133-d6d3-c8ea-630ea411ad60@somainline.org>
+Date:   Mon, 22 May 2023 18:31:44 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH RFC 08/10] drm/panel/samsung-sofef03: Add panel driver for
+ Sony Xperia 5 II
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Caleb Connolly <caleb@connolly.tech>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+References: <20230521-drm-panels-sony-v1-0-541c341d6bee@somainline.org>
+ <20230521-drm-panels-sony-v1-8-541c341d6bee@somainline.org>
+ <4679c741-7877-ce79-4086-08ec4ee9e6bf@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <4679c741-7877-ce79-4086-08ec4ee9e6bf@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jerome Neanne <jneanne@baylibre.com>
 
-This patch adds support for TPS6594 regulators (bucks and LDOs).
-The output voltages are configurable and are meant to supply power
-to the main processor and other components.
-Bucks can be used in single or multiphase mode, depending on PMIC
-part number.
 
-Signed-off-by: Jerome Neanne <jneanne@baylibre.com>
-Signed-off-by: Esteban Blanc <eblanc@baylibre.com>
----
- drivers/regulator/Kconfig             |  13 +
- drivers/regulator/Makefile            |   1 +
- drivers/regulator/tps6594-regulator.c | 615 ++++++++++++++++++++++++++
- 3 files changed, 629 insertions(+)
- create mode 100644 drivers/regulator/tps6594-regulator.c
+On 22.05.2023 03:23, Dmitry Baryshkov wrote:
+> On 22/05/2023 00:23, Marijn Suijten wrote:
+>> The SOFEF03-M Display-IC paired with an unknown panel in the Sony Xperia
+>> 5 II always uses Display Stream Compression 1.1 and features a 60hz and
+>> 120hz refresh-rate mode.
+>>
+>> Co-developed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> 
+> Konrad's S-o-b is also required then
+I guess I should use the matching email, so:
 
-diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
-index e5f3613c15fa..b832702dcb2c 100644
---- a/drivers/regulator/Kconfig
-+++ b/drivers/regulator/Kconfig
-@@ -1463,6 +1463,19 @@ config REGULATOR_TPS65219
- 	  voltage regulators. It supports software based voltage control
- 	  for different voltage domains.
- 
-+config REGULATOR_TPS6594
-+	tristate "TI TPS6594 Power regulators"
-+	depends on MFD_TPS6594 && OF
-+	default MFD_TPS6594
-+	help
-+	  This driver supports TPS6594 voltage regulator chips.
-+	  TPS6594 series of PMICs have 5 BUCKs and 4 LDOs
-+	  voltage regulators.
-+	  BUCKs 1,2,3,4 can be used in single phase or multiphase mode.
-+	  Part number defines which single or multiphase mode is i used.
-+	  It supports software based voltage control
-+	  for different voltage domains.
-+
- config REGULATOR_TPS6524X
- 	tristate "TI TPS6524X Power regulators"
- 	depends on SPI
-diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
-index 58dfe0147cd4..8bbead39cceb 100644
---- a/drivers/regulator/Makefile
-+++ b/drivers/regulator/Makefile
-@@ -174,6 +174,7 @@ obj-$(CONFIG_REGULATOR_TPS6524X) += tps6524x-regulator.o
- obj-$(CONFIG_REGULATOR_TPS6586X) += tps6586x-regulator.o
- obj-$(CONFIG_REGULATOR_TPS65910) += tps65910-regulator.o
- obj-$(CONFIG_REGULATOR_TPS65912) += tps65912-regulator.o
-+obj-$(CONFIG_REGULATOR_TPS6594) += tps6594-regulator.o
- obj-$(CONFIG_REGULATOR_TPS65132) += tps65132-regulator.o
- obj-$(CONFIG_REGULATOR_TPS68470) += tps68470-regulator.o
- obj-$(CONFIG_REGULATOR_TWL4030) += twl-regulator.o twl6030-regulator.o
-diff --git a/drivers/regulator/tps6594-regulator.c b/drivers/regulator/tps6594-regulator.c
-new file mode 100644
-index 000000000000..d5a574ec6d12
---- /dev/null
-+++ b/drivers/regulator/tps6594-regulator.c
-@@ -0,0 +1,615 @@
-+// SPDX-License-Identifier: GPL-2.0
-+//
-+// Regulator driver for tps6594 PMIC
-+//
-+// Copyright (C) 2023 BayLibre Incorporated - https://www.baylibre.com/
-+
-+#include <linux/device.h>
-+#include <linux/err.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/regulator/driver.h>
-+#include <linux/regulator/machine.h>
-+#include <linux/regulator/of_regulator.h>
-+
-+#include <linux/mfd/tps6594.h>
-+
-+#define BUCK_NB		5
-+#define LDO_NB		4
-+#define MULTI_PHASE_NB	4
-+#define REGS_INT_NB	4
-+
-+enum tps6594_regulator_id {
-+	/* DCDC's */
-+	TPS6594_BUCK_1,
-+	TPS6594_BUCK_2,
-+	TPS6594_BUCK_3,
-+	TPS6594_BUCK_4,
-+	TPS6594_BUCK_5,
-+
-+	/* LDOs */
-+	TPS6594_LDO_1,
-+	TPS6594_LDO_2,
-+	TPS6594_LDO_3,
-+	TPS6594_LDO_4,
-+};
-+
-+enum tps6594_multi_regulator_id {
-+	/* Multi-phase DCDC's */
-+	TPS6594_BUCK_12,
-+	TPS6594_BUCK_34,
-+	TPS6594_BUCK_123,
-+	TPS6594_BUCK_1234,
-+};
-+
-+struct tps6594_regulator_irq_type {
-+	const char *irq_name;
-+	const char *regulator_name;
-+	const char *event_name;
-+	unsigned long event;
-+};
-+
-+static struct tps6594_regulator_irq_type tps6594_ext_regulator_irq_types[] = {
-+	{ TPS6594_IRQ_NAME_VCCA_OV, "VCCA", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_VCCA_UV, "VCCA", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_VMON1_OV, "VMON1", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_VMON1_UV, "VMON1", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_VMON1_RV, "VMON1", "residual voltage",
-+	  REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_VMON2_OV, "VMON2", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_VMON2_UV, "VMON2", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_VMON2_RV, "VMON2", "residual voltage",
-+	  REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+};
-+
-+struct tps6594_regulator_irq_data {
-+	struct device *dev;
-+	struct tps6594_regulator_irq_type *type;
-+	struct regulator_dev *rdev;
-+};
-+
-+struct tps6594_ext_regulator_irq_data {
-+	struct device *dev;
-+	struct tps6594_regulator_irq_type *type;
-+};
-+
-+#define TPS6594_REGULATOR(_name, _of, _id, _type, _ops, _n, _vr, _vm, _er, \
-+			   _em, _cr, _cm, _lr, _nlr, _delay, _fuv, \
-+			   _ct, _ncl, _bpm) \
-+	{								\
-+		.name			= _name,			\
-+		.of_match		= _of,				\
-+		.regulators_node	= of_match_ptr("regulators"),	\
-+		.supply_name		= _of,				\
-+		.id			= _id,				\
-+		.ops			= &(_ops),			\
-+		.n_voltages		= _n,				\
-+		.type			= _type,			\
-+		.owner			= THIS_MODULE,			\
-+		.vsel_reg		= _vr,				\
-+		.vsel_mask		= _vm,				\
-+		.csel_reg		= _cr,				\
-+		.csel_mask		= _cm,				\
-+		.curr_table		= _ct,				\
-+		.n_current_limits	= _ncl,				\
-+		.enable_reg		= _er,				\
-+		.enable_mask		= _em,				\
-+		.volt_table		= NULL,				\
-+		.linear_ranges		= _lr,				\
-+		.n_linear_ranges	= _nlr,				\
-+		.ramp_delay		= _delay,			\
-+		.fixed_uV		= _fuv,				\
-+		.bypass_reg		= _vr,				\
-+		.bypass_mask		= _bpm,				\
-+	}								\
-+
-+static const struct linear_range bucks_ranges[] = {
-+	REGULATOR_LINEAR_RANGE(300000, 0x0, 0xe, 20000),
-+	REGULATOR_LINEAR_RANGE(600000, 0xf, 0x72, 5000),
-+	REGULATOR_LINEAR_RANGE(1100000, 0x73, 0xaa, 10000),
-+	REGULATOR_LINEAR_RANGE(1660000, 0xab, 0xff, 20000),
-+};
-+
-+static const struct linear_range ldos_1_2_3_ranges[] = {
-+	REGULATOR_LINEAR_RANGE(600000, 0x4, 0x3a, 50000),
-+};
-+
-+static const struct linear_range ldos_4_ranges[] = {
-+	REGULATOR_LINEAR_RANGE(1200000, 0x20, 0x74, 25000),
-+};
-+
-+/* Operations permitted on BUCK1/2/3/4/5 */
-+static const struct regulator_ops tps6594_bucks_ops = {
-+	.is_enabled		= regulator_is_enabled_regmap,
-+	.enable			= regulator_enable_regmap,
-+	.disable		= regulator_disable_regmap,
-+	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
-+	.set_voltage_sel	= regulator_set_voltage_sel_regmap,
-+	.list_voltage		= regulator_list_voltage_linear_range,
-+	.map_voltage		= regulator_map_voltage_linear_range,
-+	.set_voltage_time_sel	= regulator_set_voltage_time_sel,
-+
-+};
-+
-+/* Operations permitted on LDO1/2/3 */
-+static const struct regulator_ops tps6594_ldos_1_2_3_ops = {
-+	.is_enabled		= regulator_is_enabled_regmap,
-+	.enable			= regulator_enable_regmap,
-+	.disable		= regulator_disable_regmap,
-+	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
-+	.set_voltage_sel	= regulator_set_voltage_sel_regmap,
-+	.list_voltage		= regulator_list_voltage_linear_range,
-+	.map_voltage		= regulator_map_voltage_linear_range,
-+	.set_bypass		= regulator_set_bypass_regmap,
-+	.get_bypass		= regulator_get_bypass_regmap,
-+};
-+
-+/* Operations permitted on LDO4 */
-+static const struct regulator_ops tps6594_ldos_4_ops = {
-+	.is_enabled		= regulator_is_enabled_regmap,
-+	.enable			= regulator_enable_regmap,
-+	.disable		= regulator_disable_regmap,
-+	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
-+	.set_voltage_sel	= regulator_set_voltage_sel_regmap,
-+	.list_voltage		= regulator_list_voltage_linear_range,
-+	.map_voltage		= regulator_map_voltage_linear_range,
-+};
-+
-+static const struct regulator_desc buck_regs[] = {
-+	TPS6594_REGULATOR("BUCK1", "buck1", TPS6594_BUCK_1,
-+			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_VOUT_1(0),
-+			  TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_CTRL(0),
-+			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
-+			  4, 0, 0, NULL, 0, 0),
-+	TPS6594_REGULATOR("BUCK2", "buck2", TPS6594_BUCK_2,
-+			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_VOUT_1(1),
-+			  TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_CTRL(1),
-+			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
-+			  4, 0, 0, NULL, 0, 0),
-+	TPS6594_REGULATOR("BUCK3", "buck3", TPS6594_BUCK_3,
-+			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_VOUT_1(2),
-+			  TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_CTRL(2),
-+			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
-+			  4, 0, 0, NULL, 0, 0),
-+	TPS6594_REGULATOR("BUCK4", "buck4", TPS6594_BUCK_4,
-+			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_VOUT_1(3),
-+			  TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_CTRL(3),
-+			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
-+			  4, 0, 0, NULL, 0, 0),
-+	TPS6594_REGULATOR("BUCK5", "buck5", TPS6594_BUCK_5,
-+			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_VOUT_1(4),
-+			  TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_CTRL(4),
-+			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
-+			  4, 0, 0, NULL, 0, 0),
-+};
-+
-+static struct tps6594_regulator_irq_type tps6594_buck1_irq_types[] = {
-+	{ TPS6594_IRQ_NAME_BUCK1_OV, "BUCK1", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_BUCK1_UV, "BUCK1", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_BUCK1_SC, "BUCK1", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
-+	{ TPS6594_IRQ_NAME_BUCK1_ILIM, "BUCK1", "reach ilim, overcurrent",
-+	  REGULATOR_EVENT_OVER_CURRENT },
-+};
-+
-+static struct tps6594_regulator_irq_type tps6594_buck2_irq_types[] = {
-+	{ TPS6594_IRQ_NAME_BUCK2_OV, "BUCK2", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_BUCK2_UV, "BUCK2", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_BUCK2_SC, "BUCK2", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
-+	{ TPS6594_IRQ_NAME_BUCK2_ILIM, "BUCK2", "reach ilim, overcurrent",
-+	  REGULATOR_EVENT_OVER_CURRENT },
-+};
-+
-+static struct tps6594_regulator_irq_type tps6594_buck3_irq_types[] = {
-+	{ TPS6594_IRQ_NAME_BUCK3_OV, "BUCK3", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_BUCK3_UV, "BUCK3", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_BUCK3_SC, "BUCK3", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
-+	{ TPS6594_IRQ_NAME_BUCK3_ILIM, "BUCK3", "reach ilim, overcurrent",
-+	  REGULATOR_EVENT_OVER_CURRENT },
-+};
-+
-+static struct tps6594_regulator_irq_type tps6594_buck4_irq_types[] = {
-+	{ TPS6594_IRQ_NAME_BUCK4_OV, "BUCK4", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_BUCK4_UV, "BUCK4", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_BUCK4_SC, "BUCK4", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
-+	{ TPS6594_IRQ_NAME_BUCK4_ILIM, "BUCK4", "reach ilim, overcurrent",
-+	  REGULATOR_EVENT_OVER_CURRENT },
-+};
-+
-+static struct tps6594_regulator_irq_type tps6594_buck5_irq_types[] = {
-+	{ TPS6594_IRQ_NAME_BUCK5_OV, "BUCK5", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_BUCK5_UV, "BUCK5", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_BUCK5_SC, "BUCK5", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
-+	{ TPS6594_IRQ_NAME_BUCK5_ILIM, "BUCK5", "reach ilim, overcurrent",
-+	  REGULATOR_EVENT_OVER_CURRENT },
-+};
-+
-+static struct tps6594_regulator_irq_type tps6594_ldo1_irq_types[] = {
-+	{ TPS6594_IRQ_NAME_LDO1_OV, "LDO1", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_LDO1_UV, "LDO1", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_LDO1_SC, "LDO1", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
-+	{ TPS6594_IRQ_NAME_LDO1_ILIM, "LDO1", "reach ilim, overcurrent",
-+	  REGULATOR_EVENT_OVER_CURRENT },
-+};
-+
-+static struct tps6594_regulator_irq_type tps6594_ldo2_irq_types[] = {
-+	{ TPS6594_IRQ_NAME_LDO2_OV, "LDO2", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_LDO2_UV, "LDO2", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_LDO2_SC, "LDO2", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
-+	{ TPS6594_IRQ_NAME_LDO2_ILIM, "LDO2", "reach ilim, overcurrent",
-+	  REGULATOR_EVENT_OVER_CURRENT },
-+};
-+
-+static struct tps6594_regulator_irq_type tps6594_ldo3_irq_types[] = {
-+	{ TPS6594_IRQ_NAME_LDO3_OV, "LDO3", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_LDO3_UV, "LDO3", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_LDO3_SC, "LDO3", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
-+	{ TPS6594_IRQ_NAME_LDO3_ILIM, "LDO3", "reach ilim, overcurrent",
-+	  REGULATOR_EVENT_OVER_CURRENT },
-+};
-+
-+static struct tps6594_regulator_irq_type tps6594_ldo4_irq_types[] = {
-+	{ TPS6594_IRQ_NAME_LDO4_OV, "LDO4", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_LDO4_UV, "LDO4", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_LDO4_SC, "LDO4", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
-+	{ TPS6594_IRQ_NAME_LDO4_ILIM, "LDO4", "reach ilim, overcurrent",
-+	  REGULATOR_EVENT_OVER_CURRENT },
-+};
-+
-+static struct tps6594_regulator_irq_type *tps6594_bucks_irq_types[] = {
-+	tps6594_buck1_irq_types,
-+	tps6594_buck2_irq_types,
-+	tps6594_buck3_irq_types,
-+	tps6594_buck4_irq_types,
-+	tps6594_buck5_irq_types,
-+};
-+
-+static struct tps6594_regulator_irq_type *tps6594_ldos_irq_types[] = {
-+	tps6594_ldo1_irq_types,
-+	tps6594_ldo2_irq_types,
-+	tps6594_ldo3_irq_types,
-+	tps6594_ldo4_irq_types,
-+};
-+
-+static const struct regulator_desc multi_regs[] = {
-+	TPS6594_REGULATOR("BUCK12", "buck12", TPS6594_BUCK_1,
-+			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_VOUT_1(1),
-+			  TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_CTRL(1),
-+			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
-+			  4, 4000, 0, NULL, 0, 0),
-+	TPS6594_REGULATOR("BUCK34", "buck34", TPS6594_BUCK_3,
-+			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_VOUT_1(3),
-+			  TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_CTRL(3),
-+			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
-+			  4, 0, 0, NULL, 0, 0),
-+	TPS6594_REGULATOR("BUCK123", "buck123", TPS6594_BUCK_1,
-+			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_VOUT_1(1),
-+			  TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_CTRL(1),
-+			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
-+			  4, 4000, 0, NULL, 0, 0),
-+	TPS6594_REGULATOR("BUCK1234", "buck1234", TPS6594_BUCK_1,
-+			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_VOUT_1(1),
-+			  TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_CTRL(1),
-+			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
-+			  4, 4000, 0, NULL, 0, 0),
-+};
-+
-+static const struct regulator_desc ldo_regs[] = {
-+	TPS6594_REGULATOR("LDO1", "ldo1", TPS6594_LDO_1,
-+			  REGULATOR_VOLTAGE, tps6594_ldos_1_2_3_ops, TPS6594_MASK_LDO123_VSET,
-+			  TPS6594_REG_LDOX_VOUT(0),
-+			  TPS6594_MASK_LDO123_VSET,
-+			  TPS6594_REG_LDOX_CTRL(0),
-+			  TPS6594_BIT_LDO_EN, 0, 0, ldos_1_2_3_ranges,
-+			  1, 0, 0, NULL, 0, TPS6594_BIT_LDO_BYPASS),
-+	TPS6594_REGULATOR("LDO2", "ldo2", TPS6594_LDO_2,
-+			  REGULATOR_VOLTAGE, tps6594_ldos_1_2_3_ops, TPS6594_MASK_LDO123_VSET,
-+			  TPS6594_REG_LDOX_VOUT(1),
-+			  TPS6594_MASK_LDO123_VSET,
-+			  TPS6594_REG_LDOX_CTRL(1),
-+			  TPS6594_BIT_LDO_EN, 0, 0, ldos_1_2_3_ranges,
-+			  1, 0, 0, NULL, 0, TPS6594_BIT_LDO_BYPASS),
-+	TPS6594_REGULATOR("LDO3", "ldo3", TPS6594_LDO_3,
-+			  REGULATOR_VOLTAGE, tps6594_ldos_1_2_3_ops, TPS6594_MASK_LDO123_VSET,
-+			  TPS6594_REG_LDOX_VOUT(2),
-+			  TPS6594_MASK_LDO123_VSET,
-+			  TPS6594_REG_LDOX_CTRL(2),
-+			  TPS6594_BIT_LDO_EN, 0, 0, ldos_1_2_3_ranges,
-+			  1, 0, 0, NULL, 0, TPS6594_BIT_LDO_BYPASS),
-+	TPS6594_REGULATOR("LDO4", "ldo4", TPS6594_LDO_4,
-+			  REGULATOR_VOLTAGE, tps6594_ldos_4_ops, TPS6594_MASK_LDO4_VSET >> 1,
-+			  TPS6594_REG_LDOX_VOUT(3),
-+			  TPS6594_MASK_LDO4_VSET,
-+			  TPS6594_REG_LDOX_CTRL(3),
-+			  TPS6594_BIT_LDO_EN, 0, 0, ldos_4_ranges,
-+			  1, 0, 0, NULL, 0, 0),
-+};
-+
-+static irqreturn_t tps6594_regulator_irq_handler(int irq, void *data)
-+{
-+	struct tps6594_regulator_irq_data *irq_data = data;
-+
-+	if (irq_data->type->event_name[0] == '\0') {
-+		/* This is the timeout interrupt no specific regulator */
-+		dev_err(irq_data->dev,
-+			"System was put in shutdown due to timeout during an active or standby transition.\n");
-+		return IRQ_HANDLED;
-+	}
-+
-+	dev_err(irq_data->dev, "Error IRQ trap %s for %s\n",
-+		irq_data->type->event_name, irq_data->type->regulator_name);
-+
-+	regulator_notifier_call_chain(irq_data->rdev,
-+				      irq_data->type->event, NULL);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int tps6594_request_reg_irqs(struct platform_device *pdev,
-+				    struct regulator_dev *rdev,
-+				    struct tps6594_regulator_irq_data *irq_data,
-+				    struct tps6594_regulator_irq_type *tps6594_regs_irq_types,
-+				    int *irq_idx)
-+{
-+	struct tps6594_regulator_irq_type *irq_type;
-+	struct tps6594 *tps = dev_get_drvdata(pdev->dev.parent);
-+	int j;
-+	int irq;
-+	int error;
-+
-+	for (j = 0; j < REGS_INT_NB; j++) {
-+		irq_type = &tps6594_regs_irq_types[j];
-+		irq = platform_get_irq_byname(pdev, irq_type->irq_name);
-+		if (irq < 0)
-+			return -EINVAL;
-+
-+		irq_data[*irq_idx + j].dev = tps->dev;
-+		irq_data[*irq_idx + j].type = irq_type;
-+		irq_data[*irq_idx + j].rdev = rdev;
-+
-+		error = devm_request_threaded_irq(tps->dev, irq, NULL,
-+						  tps6594_regulator_irq_handler,
-+						  IRQF_ONESHOT,
-+						  irq_type->irq_name,
-+						  &irq_data[*irq_idx]);
-+		(*irq_idx)++;
-+		if (error) {
-+			dev_err(tps->dev, "tps6594 failed to request %s IRQ %d: %d\n",
-+				irq_type->irq_name, irq, error);
-+			return error;
-+		}
-+	}
-+	return 0;
-+}
-+
-+static int tps6594_regulator_probe(struct platform_device *pdev)
-+{
-+	struct tps6594 *tps = dev_get_drvdata(pdev->dev.parent);
-+	struct regulator_dev *rdev;
-+	struct device_node *np = NULL;
-+	struct device_node *np_pmic_parent = NULL;
-+	struct regulator_config config = {};
-+	struct tps6594_regulator_irq_data *irq_data;
-+	struct tps6594_ext_regulator_irq_data *irq_ext_reg_data;
-+	struct tps6594_regulator_irq_type *irq_type;
-+	u8 buck_configured[BUCK_NB] = { 0 };
-+	u8 buck_multi[MULTI_PHASE_NB] = { 0 };
-+	static const char * const multiphases[] = {"buck12", "buck123", "buck1234", "buck34"};
-+	static const char *npname;
-+	int error, i, irq, multi, delta;
-+	int irq_idx = 0;
-+	int buck_idx = 0;
-+	int ext_reg_irq_nb = 2;
-+
-+	enum {
-+		MULTI_BUCK12,
-+		MULTI_BUCK123,
-+		MULTI_BUCK1234,
-+		MULTI_BUCK12_34,
-+		MULTI_FIRST = MULTI_BUCK12,
-+		MULTI_LAST = MULTI_BUCK12_34,
-+		MULTI_NUM = MULTI_LAST - MULTI_FIRST + 1
-+	};
-+
-+	config.dev = tps->dev;
-+	config.driver_data = tps;
-+	config.regmap = tps->regmap;
-+
-+	/*
-+	 * Switch case defines different possible multi phase config
-+	 * This is based on dts buck node name.
-+	 * Buck node name must be chosen accordingly.
-+	 * Default case is no Multiphase buck.
-+	 * In case of Multiphase configuration, value should be defined for
-+	 * buck_configured to avoid creating bucks for every buck in multiphase
-+	 */
-+	for (multi = MULTI_FIRST; multi < MULTI_NUM; multi++) {
-+		np = of_find_node_by_name(tps->dev->of_node, multiphases[multi]);
-+		npname = of_node_full_name(np);
-+		np_pmic_parent = of_get_parent(of_get_parent(np));
-+		if (of_node_cmp(of_node_full_name(np_pmic_parent), tps->dev->of_node->full_name))
-+			continue;
-+		delta = strcmp(npname, multiphases[multi]);
-+		if (!delta) {
-+			switch (multi) {
-+			case MULTI_BUCK12:
-+				buck_multi[0] = 1;
-+				buck_configured[0] = 1;
-+				buck_configured[1] = 1;
-+				break;
-+			/* multiphase buck34 is supported only with buck12 */
-+			case MULTI_BUCK12_34:
-+				buck_multi[0] = 1;
-+				buck_multi[1] = 1;
-+				buck_configured[0] = 1;
-+				buck_configured[1] = 1;
-+				buck_configured[2] = 1;
-+				buck_configured[3] = 1;
-+				break;
-+			case MULTI_BUCK123:
-+				buck_multi[2] = 1;
-+				buck_configured[0] = 1;
-+				buck_configured[1] = 1;
-+				buck_configured[2] = 1;
-+				break;
-+			case MULTI_BUCK1234:
-+				buck_multi[3] = 1;
-+				buck_configured[0] = 1;
-+				buck_configured[1] = 1;
-+				buck_configured[2] = 1;
-+				buck_configured[3] = 1;
-+				break;
-+			}
-+		}
-+	}
-+
-+	if (tps->chip_id == LP8764)
-+		/* There is only 4 buck on LP8764 */
-+		buck_configured[4] = 1;
-+
-+	irq_data = devm_kmalloc_array(tps->dev,
-+				REGS_INT_NB * sizeof(struct tps6594_regulator_irq_data),
-+				ARRAY_SIZE(tps6594_bucks_irq_types) +
-+				ARRAY_SIZE(tps6594_ldos_irq_types),
-+				GFP_KERNEL);
-+	if (!irq_data)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < MULTI_PHASE_NB; i++) {
-+		if (buck_multi[i] == 0)
-+			continue;
-+
-+		rdev = devm_regulator_register(&pdev->dev, &multi_regs[i], &config);
-+		if (IS_ERR(rdev))
-+			return dev_err_probe(tps->dev, PTR_ERR(rdev),
-+					     "failed to register %s regulator\n",
-+					     pdev->name);
-+
-+		/* config multiphase buck12+buck34 */
-+		if (i == 1)
-+			buck_idx = 2;
-+		error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
-+						 tps6594_bucks_irq_types[buck_idx], &irq_idx);
-+		if (error)
-+			return error;
-+		error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
-+						 tps6594_bucks_irq_types[buck_idx + 1], &irq_idx);
-+		if (error)
-+			return error;
-+
-+		if (i == 2 || i == 3) {
-+			error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
-+							 tps6594_bucks_irq_types[buck_idx + 2],
-+							 &irq_idx);
-+			if (error)
-+				return error;
-+		}
-+		if (i == 3) {
-+			error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
-+							 tps6594_bucks_irq_types[buck_idx + 3],
-+							 &irq_idx);
-+			if (error)
-+				return error;
-+		}
-+	}
-+
-+	for (i = 0; i < BUCK_NB; i++) {
-+		if (buck_configured[i] == 1)
-+			continue;
-+
-+		rdev = devm_regulator_register(&pdev->dev, &buck_regs[i], &config);
-+		if (IS_ERR(rdev))
-+			return dev_err_probe(tps->dev, PTR_ERR(rdev),
-+					     "failed to register %s regulator\n",
-+					     pdev->name);
-+
-+		error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
-+						 tps6594_bucks_irq_types[i], &irq_idx);
-+		if (error)
-+			return error;
-+	}
-+
-+	/* LP8764 dosen't have LDO */
-+	if (tps->chip_id != LP8764) {
-+		for (i = 0; i < ARRAY_SIZE(ldo_regs); i++) {
-+			rdev = devm_regulator_register(&pdev->dev, &ldo_regs[i], &config);
-+			if (IS_ERR(rdev))
-+				return dev_err_probe(tps->dev, PTR_ERR(rdev),
-+						     "failed to register %s regulator\n",
-+						     pdev->name);
-+
-+			error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
-+							 tps6594_ldos_irq_types[i],
-+							 &irq_idx);
-+			if (error)
-+				return error;
-+		}
-+	}
-+
-+	if (tps->chip_id == LP8764)
-+		ext_reg_irq_nb = ARRAY_SIZE(tps6594_ext_regulator_irq_types);
-+
-+	irq_ext_reg_data = devm_kmalloc_array(tps->dev,
-+					ext_reg_irq_nb,
-+					sizeof(struct tps6594_ext_regulator_irq_data),
-+					GFP_KERNEL);
-+	if (!irq_ext_reg_data)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < ext_reg_irq_nb; ++i) {
-+		irq_type = &tps6594_ext_regulator_irq_types[i];
-+
-+		irq = platform_get_irq_byname(pdev, irq_type->irq_name);
-+		if (irq < 0)
-+			return -EINVAL;
-+
-+		irq_ext_reg_data[i].dev = tps->dev;
-+		irq_ext_reg_data[i].type = irq_type;
-+
-+		error = devm_request_threaded_irq(tps->dev, irq, NULL,
-+						  tps6594_regulator_irq_handler,
-+						  IRQF_ONESHOT,
-+						  irq_type->irq_name,
-+						  &irq_ext_reg_data[i]);
-+		if (error)
-+			return dev_err_probe(tps->dev, error,
-+					     "failed to request %s IRQ %d\n",
-+					     irq_type->irq_name, irq);
-+	}
-+	return 0;
-+}
-+
-+static struct platform_driver tps6594_regulator_driver = {
-+	.driver = {
-+		.name = "tps6594-regulator",
-+	},
-+	.probe = tps6594_regulator_probe,
-+};
-+
-+module_platform_driver(tps6594_regulator_driver);
-+
-+MODULE_ALIAS("platform:tps6594-regulator");
-+MODULE_AUTHOR("Jerome Neanne <jneanne@baylibre.com>");
-+MODULE_DESCRIPTION("TPS6594 voltage regulator driver");
-+MODULE_LICENSE("GPL");
--- 
-2.39.2
+Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 
+Konrad
+> 
+>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+>> ---
+>>   drivers/gpu/drm/panel/Kconfig                 |  14 +
+>>   drivers/gpu/drm/panel/Makefile                |   1 +
+>>   drivers/gpu/drm/panel/panel-samsung-sofef03.c | 423 ++++++++++++++++++++++++++
+>>   3 files changed, 438 insertions(+)
+>>
+>> diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
+>> index 3f11e9906f2cb..8e2668153bce2 100644
+>> --- a/drivers/gpu/drm/panel/Kconfig
+>> +++ b/drivers/gpu/drm/panel/Kconfig
+>> @@ -630,6 +630,20 @@ config DRM_PANEL_SAMSUNG_SOFEF01
+>>           This panel features a fixed mode of 1080x2520@60.
+>>   +config DRM_PANEL_SAMSUNG_SOFEF03
+>> +    tristate "Samsung sofef03 Sony Xperia 5 II DSI cmd mode panel"
+>> +    depends on GPIOLIB
+>> +    depends on OF
+>> +    depends on DRM_MIPI_DSI
+>> +    depends on BACKLIGHT_CLASS_DEVICE
+>> +    help
+>> +      Say Y or M here if you want to enable support for the Samsung AMOLED
+>> +      command mode panel found in the Sony Xperia 5 II smartphone.
+>> +
+>> +      This panel uses Display Stream Compression 1.1.
+>> +
+>> +      The panel features a 1080x2520@60 and 1080x2520@120 mode.
+>> +
+>>   config DRM_PANEL_SEIKO_43WVF1G
+>>       tristate "Seiko 43WVF1G panel"
+>>       depends on OF
+>> diff --git a/drivers/gpu/drm/panel/Makefile b/drivers/gpu/drm/panel/Makefile
+>> index a4039d0fc9cfb..52dcd82e33120 100644
+>> --- a/drivers/gpu/drm/panel/Makefile
+>> +++ b/drivers/gpu/drm/panel/Makefile
+>> @@ -63,6 +63,7 @@ obj-$(CONFIG_DRM_PANEL_SAMSUNG_S6E88A0_AMS452EF01) += panel-samsung-s6e88a0-ams4
+>>   obj-$(CONFIG_DRM_PANEL_SAMSUNG_S6E8AA0) += panel-samsung-s6e8aa0.o
+>>   obj-$(CONFIG_DRM_PANEL_SAMSUNG_SOFEF00) += panel-samsung-sofef00.o
+>>   obj-$(CONFIG_DRM_PANEL_SAMSUNG_SOFEF01) += panel-samsung-sofef01.o
+>> +obj-$(CONFIG_DRM_PANEL_SAMSUNG_SOFEF03) += panel-samsung-sofef03.o
+>>   obj-$(CONFIG_DRM_PANEL_SEIKO_43WVF1G) += panel-seiko-43wvf1g.o
+>>   obj-$(CONFIG_DRM_PANEL_SHARP_LQ101R1SX01) += panel-sharp-lq101r1sx01.o
+>>   obj-$(CONFIG_DRM_PANEL_SHARP_LS037V7DW01) += panel-sharp-ls037v7dw01.o
+>> diff --git a/drivers/gpu/drm/panel/panel-samsung-sofef03.c b/drivers/gpu/drm/panel/panel-samsung-sofef03.c
+>> new file mode 100644
+>> index 0000000000000..2763e1c56b37b
+>> --- /dev/null
+>> +++ b/drivers/gpu/drm/panel/panel-samsung-sofef03.c
+>> @@ -0,0 +1,423 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * Copyright (c) 2022 Konrad Dybcio <konrad.dybcio@linaro.org>
+>> + * Copyright (c) 2023 Marijn Suijten <marijn.suijten@somainline.org>
+>> + */
+>> +
+>> +#include <linux/backlight.h>
+>> +#include <linux/delay.h>
+>> +#include <linux/gpio/consumer.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of.h>
+>> +#include <linux/regulator/consumer.h>
+>> +
+>> +#include <video/mipi_display.h>
+>> +
+>> +#include <drm/drm_mipi_dsi.h>
+>> +#include <drm/drm_modes.h>
+>> +#include <drm/drm_panel.h>
+>> +#include <drm/drm_probe_helper.h>
+>> +#include <drm/display/drm_dsc.h>
+>> +#include <drm/display/drm_dsc_helper.h>
+>> +
+>> +static const bool enable_120hz = true;
+>> +
+>> +struct samsung_sofef03_m {
+>> +    struct drm_panel panel;
+>> +    struct mipi_dsi_device *dsi;
+>> +    struct regulator *vddio, *vci;
+>> +    struct gpio_desc *reset_gpio;
+>> +    bool prepared;
+>> +};
+>> +
+>> +static inline struct samsung_sofef03_m *to_samsung_sofef03_m(struct drm_panel *panel)
+>> +{
+>> +    return container_of(panel, struct samsung_sofef03_m, panel);
+>> +}
+>> +
+>> +static void samsung_sofef03_m_reset(struct samsung_sofef03_m *ctx)
+>> +{
+>> +    gpiod_set_value_cansleep(ctx->reset_gpio, 0);
+>> +    usleep_range(10000, 11000);
+>> +}
+>> +
+>> +static int samsung_sofef03_m_on(struct samsung_sofef03_m *ctx)
+>> +{
+>> +    struct mipi_dsi_device *dsi = ctx->dsi;
+>> +    struct device *dev = &dsi->dev;
+>> +    int ret;
+>> +
+>> +    dsi->mode_flags |= MIPI_DSI_MODE_LPM;
+>> +
+>> +    mipi_dsi_dcs_write_seq(dsi, 0x9d, 0x01);
+>> +
+>> +    ret = mipi_dsi_dcs_exit_sleep_mode(dsi);
+>> +    if (ret < 0) {
+>> +        dev_err(dev, "Failed to exit sleep mode: %d\n", ret);
+>> +        return ret;
+>> +    }
+>> +    usleep_range(10000, 11000);
+>> +
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xf0, 0x5a, 0x5a);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x09);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xd5, 0x00, 0x00, 0x00);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x08);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xee, 0x00, 0x00);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xf0, 0xa5, 0xa5);
+>> +
+>> +    ret = mipi_dsi_dcs_set_tear_on(dsi, MIPI_DSI_DCS_TEAR_MODE_VBLANK);
+>> +    if (ret < 0) {
+>> +        dev_err(dev, "Failed to set tear on: %d\n", ret);
+>> +        return ret;
+>> +    }
+>> +
+>> +    ret = mipi_dsi_dcs_set_column_address(dsi, 0, 1080 - 1);
+>> +    if (ret < 0) {
+>> +        dev_err(dev, "Failed to set column address: %d\n", ret);
+>> +        return ret;
+>> +    }
+>> +
+>> +    ret = mipi_dsi_dcs_set_page_address(dsi, 0, 2520 - 1);
+>> +    if (ret < 0) {
+>> +        dev_err(dev, "Failed to set page address: %d\n", ret);
+>> +        return ret;
+>> +    }
+>> +
+>> +    ret = mipi_dsi_dcs_set_display_brightness_large(dsi, 100);
+>> +    if (ret < 0) {
+>> +        dev_err(dev, "Failed to set display brightness: %d\n", ret);
+>> +        return ret;
+>> +    }
+>> +
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xf0, 0x5a, 0x5a);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xdf, 0x83);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x01);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xe6, 0x01);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x02);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xec, 0x02, 0x00, 0x1c, 0x1c);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x0c);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xec, 0x01, 0x19);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xf0, 0xa5, 0xa5);
+>> +    mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_WRITE_CONTROL_DISPLAY, BIT(5));
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xf0, 0x5a, 0x5a);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xc2, 0x2d, 0x27);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0x60, enable_120hz ? 0x10 : 0x00);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xf0, 0xa5, 0xa5);
+>> +    msleep(110);
+>> +
+>> +    ret = mipi_dsi_dcs_set_display_on(dsi);
+>> +    if (ret < 0) {
+>> +        dev_err(dev, "Failed to turn display on: %d\n", ret);
+>> +        return ret;
+>> +    }
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static int samsung_sofef03_m_off(struct samsung_sofef03_m *ctx)
+>> +{
+>> +    struct mipi_dsi_device *dsi = ctx->dsi;
+>> +    struct device *dev = &dsi->dev;
+>> +    int ret;
+>> +
+>> +    dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
+>> +
+>> +    ret = mipi_dsi_dcs_set_display_off(dsi);
+>> +    if (ret < 0) {
+>> +        dev_err(dev, "Failed to turn display off: %d\n", ret);
+>> +        return ret;
+>> +    }
+>> +    msleep(20);
+>> +
+>> +    ret = mipi_dsi_dcs_enter_sleep_mode(dsi);
+>> +    if (ret < 0) {
+>> +        dev_err(dev, "Failed to enter sleep mode: %d\n", ret);
+>> +        return ret;
+>> +    }
+>> +    msleep(100);
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static int samsung_sofef03_m_prepare(struct drm_panel *panel)
+>> +{
+>> +    struct samsung_sofef03_m *ctx = to_samsung_sofef03_m(panel);
+>> +    struct drm_dsc_picture_parameter_set pps;
+>> +    struct device *dev = &ctx->dsi->dev;
+>> +    int ret;
+>> +
+>> +    if (ctx->prepared)
+>> +        return 0;
+>> +
+>> +    ret = regulator_enable(ctx->vddio);
+>> +    if (ret < 0) {
+>> +        dev_err(dev, "Failed to enable vddio regulator: %d\n", ret);
+>> +        return ret;
+>> +    }
+>> +
+>> +    ret = regulator_enable(ctx->vci);
+>> +    if (ret < 0) {
+>> +        dev_err(dev, "Failed to enable vci regulator: %d\n", ret);
+>> +        regulator_disable(ctx->vddio);
+>> +        return ret;
+>> +    }
+>> +
+>> +    samsung_sofef03_m_reset(ctx);
+>> +
+>> +    ret = samsung_sofef03_m_on(ctx);
+>> +    if (ret < 0) {
+>> +        dev_err(dev, "Failed to initialize panel: %d\n", ret);
+>> +        goto fail;
+>> +    }
+>> +
+>> +    if (ctx->dsi->dsc) {
+> 
+> Always true
+> 
+>> +        drm_dsc_pps_payload_pack(&pps, ctx->dsi->dsc);
+>> +
+>> +        ret = mipi_dsi_picture_parameter_set(ctx->dsi, &pps);
+>> +        if (ret < 0) {
+>> +            dev_err(dev, "failed to transmit PPS: %d\n", ret);
+>> +            goto fail;
+>> +        }
+>> +
+>> +        ret = mipi_dsi_compression_mode(ctx->dsi, true);
+>> +        if (ret < 0) {
+>> +            dev_err(dev, "Failed to enable compression mode: %d\n", ret);
+>> +            goto fail;
+>> +        }
+>> +
+>> +        msleep(28);
+>> +    }
+>> +
+>> +    ctx->prepared = true;
+>> +    return 0;
+>> +
+>> +fail:
+>> +    gpiod_set_value_cansleep(ctx->reset_gpio, 1);
+>> +    regulator_disable(ctx->vci);
+>> +    regulator_disable(ctx->vddio);
+>> +    return ret;
+>> +}
+>> +
+>> +static int samsung_sofef03_m_unprepare(struct drm_panel *panel)
+>> +{
+>> +    struct samsung_sofef03_m *ctx = to_samsung_sofef03_m(panel);
+>> +    struct device *dev = &ctx->dsi->dev;
+>> +    int ret;
+>> +
+>> +    if (!ctx->prepared)
+>> +        return 0;
+>> +
+>> +    ret = samsung_sofef03_m_off(ctx);
+>> +    if (ret < 0)
+>> +        dev_err(dev, "Failed to un-initialize panel: %d\n", ret);
+>> +
+>> +    gpiod_set_value_cansleep(ctx->reset_gpio, 1);
+>> +    regulator_disable(ctx->vci);
+>> +    regulator_disable(ctx->vddio);
+>> +
+>> +    ctx->prepared = false;
+>> +    return 0;
+>> +}
+>> +
+>> +static const struct drm_display_mode samsung_sofef03_m_60hz_mode = {
+>> +    .clock = (1080 + 156 + 8 + 8) * (2520 + 2393 + 8 + 8) * 60 / 1000,
+>> +    .hdisplay = 1080,
+>> +    .hsync_start = 1080 + 156,
+>> +    .hsync_end = 1080 + 156 + 8,
+>> +    .htotal = 1080 + 156 + 8 + 8,
+>> +    .vdisplay = 2520,
+>> +    .vsync_start = 2520 + 2393,
+>> +    .vsync_end = 2520 + 2393 + 8,
+>> +    .vtotal = 2520 + 2393 + 8 + 8,
+>> +    .width_mm = 61,
+>> +    .height_mm = 142,
+>> +};
+>> +
+>> +static const struct drm_display_mode samsung_sofef03_m_120hz_mode = {
+>> +    .clock = (1080 + 56 + 8 + 8) * (2520 + 499 + 8 + 8) * 120 / 1000,
+>> +    .hdisplay = 1080,
+>> +    .hsync_start = 1080 + 56,
+>> +    .hsync_end = 1080 + 56 + 8,
+>> +    .htotal = 1080 + 56 + 8 + 8,
+>> +    .vdisplay = 2520,
+>> +    .vsync_start = 2520 + 499,
+>> +    .vsync_end = 2520 + 499 + 8,
+>> +    .vtotal = 2520 + 499 + 8 + 8,
+>> +    .width_mm = 61,
+>> +    .height_mm = 142,
+>> +};
+>> +
+>> +static int samsung_sofef03_m_get_modes(struct drm_panel *panel,
+>> +                   struct drm_connector *connector)
+>> +{
+>> +    if (enable_120hz)
+> 
+> Is it possible to switch between these modes at runtime? It might be logical to define 60 Hz mode as preferred, while allowing users to switch to 120 Hz when required for some reason.
+> 
+>> +        return drm_connector_helper_get_modes_fixed(connector,
+>> +                                &samsung_sofef03_m_120hz_mode);
+>> +    else
+>> +        return drm_connector_helper_get_modes_fixed(connector,
+>> +                                &samsung_sofef03_m_60hz_mode);
+>> +}
+>> +
+>> +static const struct drm_panel_funcs samsung_sofef03_m_panel_funcs = {
+>> +    .prepare = samsung_sofef03_m_prepare,
+>> +    .unprepare = samsung_sofef03_m_unprepare,
+>> +    .get_modes = samsung_sofef03_m_get_modes,
+>> +};
+>> +
+>> +static int samsung_sofef03_m_bl_update_status(struct backlight_device *bl)
+>> +{
+>> +    struct mipi_dsi_device *dsi = bl_get_data(bl);
+>> +    u16 brightness = backlight_get_brightness(bl);
+>> +    int ret;
+>> +
+>> +    dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
+>> +
+>> +    pr_err("Writing %#x\n", brightness);
+>> +
+>> +    ret = mipi_dsi_dcs_set_display_brightness_large(dsi, brightness);
+>> +    if (ret < 0)
+>> +        return ret;
+>> +
+>> +    dsi->mode_flags |= MIPI_DSI_MODE_LPM;
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static int samsung_sofef03_m_bl_get_brightness(struct backlight_device *bl)
+>> +{
+>> +    struct mipi_dsi_device *dsi = bl_get_data(bl);
+>> +    u16 brightness;
+>> +    int ret;
+>> +
+>> +    dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
+>> +
+>> +    ret = mipi_dsi_dcs_get_display_brightness_large(dsi, &brightness);
+>> +    if (ret < 0)
+>> +        return ret;
+>> +
+>> +    dsi->mode_flags |= MIPI_DSI_MODE_LPM;
+>> +
+>> +    pr_err("Read display brightness %#x\n", brightness);
+>> +
+>> +    return brightness;
+>> +}
+>> +
+>> +static const struct backlight_ops samsung_sofef03_m_bl_ops = {
+>> +    .update_status = samsung_sofef03_m_bl_update_status,
+>> +    .get_brightness = samsung_sofef03_m_bl_get_brightness,
+>> +};
+>> +
+>> +static struct backlight_device *
+>> +samsung_sofef03_m_create_backlight(struct mipi_dsi_device *dsi)
+>> +{
+>> +    struct device *dev = &dsi->dev;
+>> +    const struct backlight_properties props = {
+>> +        .type = BACKLIGHT_RAW,
+>> +        .brightness = 100,
+>> +        .max_brightness = 1023,
+>> +    };
+>> +
+>> +    return devm_backlight_device_register(dev, dev_name(dev), dev, dsi,
+>> +                          &samsung_sofef03_m_bl_ops, &props);
+>> +}
+>> +
+>> +static int samsung_sofef03_m_probe(struct mipi_dsi_device *dsi)
+>> +{
+>> +    struct device *dev = &dsi->dev;
+>> +    struct drm_dsc_config *dsc;
+>> +    struct samsung_sofef03_m *ctx;
+>> +    int ret;
+>> +
+>> +    ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
+>> +    if (!ctx)
+>> +        return -ENOMEM;
+>> +
+>> +    ctx->vddio = devm_regulator_get(dev, "vddio");
+>> +    if (IS_ERR(ctx->vddio))
+>> +        return dev_err_probe(dev, PTR_ERR(ctx->vddio),
+>> +                     "Failed to get vddio regulator\n");
+>> +
+>> +    ctx->vci = devm_regulator_get(dev, "vci");
+>> +    if (IS_ERR(ctx->vci))
+>> +        return dev_err_probe(dev, PTR_ERR(ctx->vci),
+>> +                     "Failed to get vci regulator\n");
+>> +
+>> +    ctx->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
+>> +    if (IS_ERR(ctx->reset_gpio))
+>> +        return dev_err_probe(dev, PTR_ERR(ctx->reset_gpio),
+>> +                     "Failed to get reset-gpios\n");
+>> +
+>> +    ctx->dsi = dsi;
+>> +    mipi_dsi_set_drvdata(dsi, ctx);
+>> +
+>> +    dsi->lanes = 4;
+>> +    dsi->format = MIPI_DSI_FMT_RGB888;
+>> +    dsi->mode_flags = MIPI_DSI_CLOCK_NON_CONTINUOUS;
+>> +
+>> +    drm_panel_init(&ctx->panel, dev, &samsung_sofef03_m_panel_funcs,
+>> +               DRM_MODE_CONNECTOR_DSI);
+>> +
+>> +    ctx->panel.backlight = samsung_sofef03_m_create_backlight(dsi);
+>> +    if (IS_ERR(ctx->panel.backlight))
+>> +        return dev_err_probe(dev, PTR_ERR(ctx->panel.backlight),
+>> +                     "Failed to create backlight\n");
+>> +
+>> +    drm_panel_add(&ctx->panel);
+>> +
+>> +    /* This panel only supports DSC; unconditionally enable it */
+>> +    dsi->dsc = dsc = devm_kzalloc(&dsi->dev, sizeof(*dsc), GFP_KERNEL);
+> 
+> Double assignment
+> 
+>> +    if (!dsc)
+>> +        return -ENOMEM;
+>> +
+>> +    dsc->dsc_version_major = 1;
+>> +    dsc->dsc_version_minor = 1;
+>> +
+>> +    dsc->slice_height = 30;
+>> +    dsc->slice_width = 540;
+>> +    dsc->slice_count = 2;
+>> +    dsc->bits_per_component = 8;
+>> +    dsc->bits_per_pixel = 8 << 4; /* 4 fractional bits */
+>> +    dsc->block_pred_enable = true;
+>> +
+>> +    ret = mipi_dsi_attach(dsi);
+>> +    if (ret < 0) {
+>> +        dev_err(dev, "Failed to attach to DSI host: %d\n", ret);
+>> +        drm_panel_remove(&ctx->panel);
+>> +        return ret;
+>> +    }
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static void samsung_sofef03_m_remove(struct mipi_dsi_device *dsi)
+>> +{
+>> +    struct samsung_sofef03_m *ctx = mipi_dsi_get_drvdata(dsi);
+>> +    int ret;
+>> +
+>> +    ret = mipi_dsi_detach(dsi);
+>> +    if (ret < 0)
+>> +        dev_err(&dsi->dev, "Failed to detach from DSI host: %d\n", ret);
+>> +
+>> +    drm_panel_remove(&ctx->panel);
+>> +}
+>> +
+>> +static const struct of_device_id samsung_sofef03_m_of_match[] = {
+>> +    { .compatible = "samsung,sofef03-m" },
+>> +    { /* sentinel */ }
+>> +};
+>> +MODULE_DEVICE_TABLE(of, samsung_sofef03_m_of_match);
+>> +
+>> +static struct mipi_dsi_driver samsung_sofef03_m_driver = {
+>> +    .probe = samsung_sofef03_m_probe,
+>> +    .remove = samsung_sofef03_m_remove,
+>> +    .driver = {
+>> +        .name = "panel-samsung-sofef03-m",
+>> +        .of_match_table = samsung_sofef03_m_of_match,
+>> +    },
+>> +};
+>> +module_mipi_dsi_driver(samsung_sofef03_m_driver);
+>> +
+>> +MODULE_AUTHOR("Konrad Dybcio <konrad.dybcio@linaro.org>");
+>> +MODULE_AUTHOR("Marijn Suijten <marijn.suijten@somainline.org>");
+>> +MODULE_DESCRIPTION("DRM panel driver for Samsung SOFEF03-M Display-IC panels");
+>> +MODULE_LICENSE("GPL");
+>>
+> 
