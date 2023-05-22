@@ -2,194 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11FA470BB8E
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:18:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DC4F70BB94
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:18:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233264AbjEVLSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 07:18:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58174 "EHLO
+        id S233391AbjEVLSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 07:18:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233220AbjEVLQa (ORCPT
+        with ESMTP id S232851AbjEVLSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 07:16:30 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2100.outbound.protection.outlook.com [40.107.236.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F4D268A;
-        Mon, 22 May 2023 04:11:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WH6twpsz55igOizEQGC/q3TdO18dgzbkFWOKday3u4nzh60e1+pqaM/7EyMBn4pLcJLduoOTDMmLhRho6SQ1neLXjpZMfrRssV1hzTTp2OvjdbypAajYQKLM/4JQf4lm5MN5GMK3wMwF9EPKJ5AejrF6i/WOUxgRzTNbYkki3un+qjp5OcwhnyUMXsEwHbNKwtkXumjmu+ws31418uFFdTQ6T6KmJWeR40VcTyUSt+2cQ03d/FQqYA9GYojj5MTONAmOD2w2RKsFSvayk3pBxbqjGHYEloyASYqsPFXJ1WB9HFLH4nNoDU/utFX4/WUA8FfiAzQC6WTj+pEHDCjPYA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5yk1GrI3tu9pj4L7Lu+3JkZc2w7wCCW+Wj///DxtWro=;
- b=IUOaN6lIJ+P3WqodVwNDRyJx9qAjwrQtT2s82SXqVil6tGHCYmXk1FGNeEZ96jtdRwB/8RAuIylgUUoqKuIKaOepUEU+oy/QHlLH3W3H2ftAzJ+3u+BBRIbwaVUhXXMDNbNF56sB/HccMd22cSYv5oBYfaKvvD9ZX8ORUOddT3kZBs+h0nIPy367Yvri84oZ8L5IzSsvS138R8Jt1NJFJQzg6m5eOIuksqVwLr0uJDurdHH689m3i+1Wwa9gfG0yg5P6HaSrYARPDqAbhfnMYL7Ggm7BTKD9XvQNtCHcxqeKIkkOOwBsgALBF1n9HS77d3gFdFbn+jGz7Bs0YdLqPg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5yk1GrI3tu9pj4L7Lu+3JkZc2w7wCCW+Wj///DxtWro=;
- b=bFXsLvh407nYoEpHi21AZAqVmHc58Dt29vFP2DnYj7sNhj4DgLAASEVGfcvgXtDcVXx/+S5T03nLAdgJ8d5rgEojSmo0pa67rp/fW65RVziu/RzEGAW5myXV62LipXj/4w+izllDL1ghHzbipkeUNUHcfY+GlAKGqwjce+fDbEE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by SJ0PR13MB5965.namprd13.prod.outlook.com (2603:10b6:a03:43d::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.27; Mon, 22 May
- 2023 11:11:03 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6411.028; Mon, 22 May 2023
- 11:11:02 +0000
-Date:   Mon, 22 May 2023 13:10:56 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Dan Carpenter <dan.carpenter@linaro.org>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Rain River <rain.1986.08.12@gmail.com>,
-        Zhu Yanjun <zyjzyj2000@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ayaz Abdulla <aabdulla@nvidia.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH net] forcedeth: Fix an error handling path in nv_probe()
-Message-ID: <ZGtNwCc8ogSlwtYV@corigine.com>
-References: <355e9a7d351b32ad897251b6f81b5886fcdc6766.1684571393.git.christophe.jaillet@wanadoo.fr>
- <ZGtAIJZ3QzkBJgHI@corigine.com>
- <f4296d23-83ce-4147-894a-3e5640cdf87c@kili.mountain>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f4296d23-83ce-4147-894a-3e5640cdf87c@kili.mountain>
-X-ClientProxiedBy: AS4P190CA0048.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:20b:656::21) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Mon, 22 May 2023 07:18:04 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 36DE4270B;
+        Mon, 22 May 2023 04:11:53 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.43:43282.1768237263
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.43])
+        by 189.cn (HERMES) with SMTP id 19A0A100249;
+        Mon, 22 May 2023 19:11:49 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-75648544bd-7vx9t with ESMTP id 7e6dec763f794de7a956c82faf1763ee for kernel@xen0n.name;
+        Mon, 22 May 2023 19:11:51 CST
+X-Transaction-ID: 7e6dec763f794de7a956c82faf1763ee
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <6ff9a210-9d31-d0b0-f282-7640e95aac5e@189.cn>
+Date:   Mon, 22 May 2023 19:11:48 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SJ0PR13MB5965:EE_
-X-MS-Office365-Filtering-Correlation-Id: e4c28aa5-58d6-4063-8bd8-08db5ab53ae4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8zTy6ptM2s0OnoM+ukudaZLhkh3theM38PULfkXY1/0ilMJy+LTx6ZmyVpY4v9D6YptmE7SW24Kv/PtwuzvRjv4oZSL5356Njwyoax9OH5Jkil4mxKQ5Sm59ZVPCQDAXIRzfZE8t7MLVg16HRj3/yGNGIaVnld4Zm/ujdD2AvGqB+Mbznp4vvd8CUOlfwZvZ00ToEl5O3Z7I13Mtd9yNaGUYlTUv77I4vmG4X88wCuCAVnAJ/h6t3bX0Xh4MnTcdu0PE+2+gByDyD8Dki1MZ/8VpL1sWWUFjFPz6Mc6ZF2Xl8Mx0SlI5JcHo6w/d8d1VR3r33aeYtUMck5vcsIl1yHwT6Ju/DfTXUszMlJ6orn4rg1iPERvKX7vBEWzsGLoLTPqArXGWyRhwscCuMl0bpOfAC3AV9IOFJ1TGkI3EaZkK/bWgys68IXdb9wo5bb+hA4xG8oCj3nsxFP8bBc3uEU/M8hDZALynqTO8HIhtBlgdKsT2lpNoXlir+z9dM3JEuYE4w8GBlFvm/Nb+RubIFM10HXqI0z6zbuYHn1FiDKj5Z3q5K1fQKV/hkKxRtHIv
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39830400003)(136003)(346002)(366004)(376002)(396003)(451199021)(6486002)(6666004)(86362001)(316002)(54906003)(41300700001)(66946007)(4326008)(66476007)(66556008)(6916009)(478600001)(8676002)(8936002)(5660300002)(38100700002)(7416002)(83380400001)(36756003)(44832011)(2616005)(2906002)(186003)(6512007)(6506007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?z5xbgIPO2ZzGTM8bfqj3zR116YajwvtqTX/clkVtAsAlPFVHHYSLbRXKYcNh?=
- =?us-ascii?Q?K65qZ6xfycmO+D5/8+PxVrrMt4hrPTkXUQkGIs3InXfq7N1qI2YvfYkilDrd?=
- =?us-ascii?Q?hMe9god/F2GUZAQa1n1pgOF4I0jeGIWR28eWDqD62+ThF+ADnMbLxDmNi1R7?=
- =?us-ascii?Q?s+11NZ14qQupyi4yzjKukEOutnHFquddFXTPMbcnAQ9awdL0ZjwlE6mSPHLt?=
- =?us-ascii?Q?+/7lN/upo6OCA6kUcFUlP52uOHOWQlvL4t5Iizx+EpFKZuWKL4XhyKV8KSfY?=
- =?us-ascii?Q?NH2LA85vOlri9x8twLUjQ0xeVSu+qebeSiQxvWfXukvPFshB6wZkKR86YMfQ?=
- =?us-ascii?Q?JKZuQTgmRFigzmGqtnBoBHGiJVe3ayEWi/x9M4220urZMufOsRhMiv0Qx/Sp?=
- =?us-ascii?Q?kK2BVZGdvWi7TWrFKvQ8GIt7AB6Sf3U05xMMzRyoGRoGCGERPsBG1yQ3xAzN?=
- =?us-ascii?Q?tUJvK4FQZM4hNoGJdaNJWEXITekcJw1odSIQ/WC/1fIgoOVMq2STaA21W1KC?=
- =?us-ascii?Q?diLviblinHL+N/+8jNpqh8BBCuzpJI69UnDXZjoNj43Y+BhRqYgi3lZhtv9R?=
- =?us-ascii?Q?XtsYEubngyeiVyk9JWffqHhhbyGHjnOcXpDOoCAbd1CvwOlkUBWv1uapjIws?=
- =?us-ascii?Q?IEuPq1lKIcjwfp1P8GOvnSZsuS1qB/PYnO1ScxOjgT3piBZ7UxZIDr9VJEp/?=
- =?us-ascii?Q?3+tiPm1SqsodCQP9t3c5zfnxzaxtiQk8TERdFR4Wn5o7TP7CtCdSxkSggsql?=
- =?us-ascii?Q?DG0B33MLSGQlHmsVxFJMirG4rkQ+KMw8oK5W5Yq9Mv2hpCcR0LdMXlIDLpBC?=
- =?us-ascii?Q?MiDWTqJZ0PZCV95yZa7zKiCkv+BYQ+h0FjtVQLF4AwyhrLqIwcHlZaKFRy4a?=
- =?us-ascii?Q?YAphRfOaMhWb9URQ+1pvSIvDf2fJZvCvJcNIl5JZrmlyYccaAUB/jlCuuPvX?=
- =?us-ascii?Q?uWCdHM+5LbWxnLJxBAtZ4qDgOVOEkEFAHejnIUnoU/5aiOtmsHMggc8C9Y5H?=
- =?us-ascii?Q?ET4WcHmLImNAG8am86RthtI0G+fPbbhMJWIMRBS3G0MivNlSzminxuXFJRYH?=
- =?us-ascii?Q?wcfmrdOJSLcDjPkxj+7g7CKmNa/xCskargNQ6yAJFnw2UPuFIvnDhgKAc5ls?=
- =?us-ascii?Q?9U/Ozl4ilZNS5/RnlFGYw8gByHWMujrXor/o4uqw4z/mOHp3grUc8BP0IUrm?=
- =?us-ascii?Q?H4f7Ug5mX5bYla2N1xtQ638/FoVCGNY724MOc0tdl20mp1fgueOaDNbbjDTh?=
- =?us-ascii?Q?5jELLXELx6Hl6vdJ858Mm9F45Xd0MKlf3Yz/MmU/bthmV1COMMD1scEwl1Ex?=
- =?us-ascii?Q?8r3FAoZ8WJZkolh5o6n1hJxc1VNTBsKaa9guwG1HY+/eCYhPJ0IVcdVLdccN?=
- =?us-ascii?Q?DwYFaidzqS7Nd2Xrtd7wkoqIfH8uBdv34qVj4GRHLUr1ZrO9PzJcJjUePTzB?=
- =?us-ascii?Q?QsYnZF9aq0MANFN9kWx7VNVg4nPHRdQR9JrM4qqYtrXQNOe/UrcWwV7TawAT?=
- =?us-ascii?Q?mXXT77oPjHhnaYHkQgD70V3OO4AupllH8Wo3MhFhMtS/Un34YNZBrDJ1sNEG?=
- =?us-ascii?Q?mpGNijeXCkrDi/3QRbiBlE9iz2lNCiEuEILGqscFh7IDFmVikcAVctjqygQJ?=
- =?us-ascii?Q?cVLcD0jodStYv4/xPjhpCBbDCt9n6oMkaVZfXYBcU8lksawj2uM1niP8J2ao?=
- =?us-ascii?Q?RkxwKQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e4c28aa5-58d6-4063-8bd8-08db5ab53ae4
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2023 11:11:02.8209
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ooOHL3Bt6KkU1yHOJV8+l5rO1UVmuR/W9RU7lZkGJi6wy62nkFwxYQI2neuwCyl4kWon5Prg5fsK8VPDiSugcHobK5a6Px8CriGPRxIwYYE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR13MB5965
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v14 1/2] drm: add kms driver for loongson display
+ controller
+Content-Language: en-US
+To:     WANG Xuerui <kernel@xen0n.name>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>
+Cc:     linaro-mm-sig@lists.linaro.org, loongson-kernel@lists.loongnix.cn,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Liu Peibao <liupeibao@loongson.cn>, linux-media@vger.kernel.org
+References: <20230520105718.325819-1-15330273260@189.cn>
+ <20230520105718.325819-2-15330273260@189.cn>
+ <26fd78b9-c074-8341-c99c-4e3b38cd861a@xen0n.name>
+ <e7f911cc-6588-bc0f-8e1e-759260f5187a@189.cn>
+ <ed795dc0-823a-f3d8-9e70-1cf33c0de7f0@xen0n.name>
+ <ac2fde55-c770-fbb5-844d-50fb38dd90be@189.cn>
+ <331e7baa-a83b-b0c9-37f7-0e8e39187df4@xen0n.name>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <331e7baa-a83b-b0c9-37f7-0e8e39187df4@xen0n.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 01:35:38PM +0300, Dan Carpenter wrote:
-> On Mon, May 22, 2023 at 12:12:48PM +0200, Simon Horman wrote:
-> > On Sat, May 20, 2023 at 10:30:17AM +0200, Christophe JAILLET wrote:
-> > > If an error occures after calling nv_mgmt_acquire_sema(), it should be
-> > > undone with a corresponding nv_mgmt_release_sema() call.
-> > 
-> > nit: s/occures/occurs/
-> > 
-> > > 
-> > > Add it in the error handling path of the probe as already done in the
-> > > remove function.
-> > 
-> > I was going to ask what happens if nv_mgmt_acquire_sema() fails.
-> > Then I realised that it always returns 0.
-> > 
-> > Perhaps it would be worth changing it's return type to void at some point.
-> >
-> 
-> What? No?  It returns true on success and false on failure.
-> 
-> drivers/net/ethernet/nvidia/forcedeth.c
->   5377  static int nv_mgmt_acquire_sema(struct net_device *dev)
->   5378  {
->   5379          struct fe_priv *np = netdev_priv(dev);
->   5380          u8 __iomem *base = get_hwbase(dev);
->   5381          int i;
->   5382          u32 tx_ctrl, mgmt_sema;
->   5383  
->   5384          for (i = 0; i < 10; i++) {
->   5385                  mgmt_sema = readl(base + NvRegTransmitterControl) & NVREG_XMITCTL_MGMT_SEMA_MASK;
->   5386                  if (mgmt_sema == NVREG_XMITCTL_MGMT_SEMA_FREE)
->   5387                          break;
->   5388                  msleep(500);
->   5389          }
->   5390  
->   5391          if (mgmt_sema != NVREG_XMITCTL_MGMT_SEMA_FREE)
->   5392                  return 0;
->   5393  
->   5394          for (i = 0; i < 2; i++) {
->   5395                  tx_ctrl = readl(base + NvRegTransmitterControl);
->   5396                  tx_ctrl |= NVREG_XMITCTL_HOST_SEMA_ACQ;
->   5397                  writel(tx_ctrl, base + NvRegTransmitterControl);
->   5398  
->   5399                  /* verify that semaphore was acquired */
->   5400                  tx_ctrl = readl(base + NvRegTransmitterControl);
->   5401                  if (((tx_ctrl & NVREG_XMITCTL_HOST_SEMA_MASK) == NVREG_XMITCTL_HOST_SEMA_ACQ) &&
->   5402                      ((tx_ctrl & NVREG_XMITCTL_MGMT_SEMA_MASK) == NVREG_XMITCTL_MGMT_SEMA_FREE)) {
->   5403                          np->mgmt_sema = 1;
->   5404                          return 1;
->                                 ^^^^^^^^^
-> Success path.
-> 
->   5405                  } else
->   5406                          udelay(50);
->   5407          }
->   5408  
->   5409          return 0;
->   5410  }
+Hi,
 
-Thanks Dan,
+On 2023/5/22 18:05, WANG Xuerui wrote:
+> On 2023/5/22 17:49, Sui Jingfeng wrote:
+>> Hi,
+>>
+>> On 2023/5/22 17:28, WANG Xuerui wrote:
+>>> On 2023/5/22 17:25, Sui Jingfeng wrote:
+>>>> Hi,
+>>>>
+>>>> On 2023/5/21 20:21, WANG Xuerui wrote:
+>>>>>> + * LS3A4000/LS3A5000/LS3A6000 CPU, they are equipped with 
+>>>>>> on-board video RAM
+>>>>>> + * typically. While LS2K0500/LS2K1000/LS2K2000 are low cost SoCs 
+>>>>>> which share
+>>>>>> + * the system RAM as video RAM, they don't has a dediacated VRAM.
+>>>>>
+>>>>> CPU models are not typically prefixed with "LS", so "Loongson 
+>>>>> 3A4000/3A5000/3A6000".
+>>>>>
+>>>> Here is because when you do programming, variable name should 
+>>>> prefix with letters.
+>>>
+>>> Commit messages, comments, and log messages etc. are natural 
+>>> language, so it's better to treat them differently. No problem to 
+>>> keep code as-is IMO.
+>>>
+>> Then you get two name for a single chip,  take  LS7A1000 as an example.
+>>
+>> You name it as Loongson 7A1000 in commit message,  and then you have 
+>> to define another name in the code,  say LS7A1000.
+>>
+>> "Loongson 7A1000" is too long,  not as compact as LS7A1000.
+>>
+>> This also avoid bind the company name to a specific product, because 
+>> a company can produce many product.
+>
+> Nah, the existing convention is "LS7Xxxxx" for bridges
 
-my eyes deceived me.
 
-In that case, my question is: what if nv_mgmt_acquire_sema() fails?
-But I think the answer is that nv_mgmt_release_sema() will do
-nothing because mgmt_sema is not set.
+But I see there are document[1] which named LS7A1000 bridge chip as 
+Loongson 7A1000 Bridge,
 
-So I think we are good.
+See [1] for reference, who is wrong in this case?
+
+
+[1] 
+https://loongson.github.io/LoongArch-Documentation/Loongson-7A1000-usermanual-EN
 
