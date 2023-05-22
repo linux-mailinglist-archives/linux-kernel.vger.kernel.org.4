@@ -2,150 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C7FF70BC63
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:53:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A85A970BC6E
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:55:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233119AbjEVLxV convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 22 May 2023 07:53:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59596 "EHLO
+        id S233543AbjEVLy7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 07:54:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233118AbjEVLxS (ORCPT
+        with ESMTP id S233109AbjEVLyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 07:53:18 -0400
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF4AB9;
-        Mon, 22 May 2023 04:52:57 -0700 (PDT)
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-96f66fbd770so64006766b.1;
-        Mon, 22 May 2023 04:52:57 -0700 (PDT)
+        Mon, 22 May 2023 07:54:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879CC9B
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 04:54:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684756444;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CmC7PRo1R7ZhJzowWuw/vFq8NrjJylR4K7gsroB369c=;
+        b=fBOAjSzwz15pUukHZwZP9+9pm+Ju1apQLlCGtxl/PJf79F6jxWs0VbuviIUz+JVHd1RsmH
+        TB4+ObX80AJ9LkWAiWTQr52sBt+GNKoF8WJ+57O9pHodCpzZhWJGIgjLQgEFI/bjNMi0Hi
+        xQejeAkkM4tL+8J1z2fHhnc/UPmGChI=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-486-CKDAJogAOdeWtZlHmJVr3Q-1; Mon, 22 May 2023 07:54:03 -0400
+X-MC-Unique: CKDAJogAOdeWtZlHmJVr3Q-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f50aa22cd2so35781025e9.1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 04:54:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684756368; x=1687348368;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+FPeo127aNEneYS/+N/CPU60LUgRtnsXFwUreJ7fb7k=;
-        b=jz3PdrrCQfFvnqYya0g6pH1JIMvX2e2TyNVBJA27VLxJarUNbA09kYZ0OYos0xmaQr
-         xA5tdaNLwoXI2Da+eEgGqtpgaguSvA86Ire2+JiM46f1EIdU0/6wcHXQF672PqRRIJeU
-         vrX0gHLPlhxTor/m9/lb4eseDlGbmwVrKTrZxENLMlCj37bEzKybAOZu46M7OUGP3D4B
-         0op9A6nLxul24lcbD49nm+RZnq/5DNzHEBQ7d8X9qrXe02Q9v5iJP0sRqOIBLdzDjGb6
-         aR5p6yUjToQ1VLqb3tUZUB6eClTU9KS7uRRQl58RJ5XXX9gUB/R0ojdK++tVRpBbGcVv
-         xozA==
-X-Gm-Message-State: AC+VfDyUo5GHI7MJHwV/FsvF/IsIg2eATQvH2nTKRHNFQnaUwIFYMFtQ
-        PCMCZUbqn1Q7eW3c4u596wgfzPRO868JhLOCfAFaXXly
-X-Google-Smtp-Source: ACHHUZ7ay0sDw93PbatWpSuJjrVDcBSB58TJboeKwJrei0jiFWOncTr6FVqIaSmaVs0GDMnfXGEijnILFjvyFyMdQe8=
-X-Received: by 2002:a17:906:7495:b0:94e:9efa:a9ed with SMTP id
- e21-20020a170906749500b0094e9efaa9edmr9837725ejl.7.1684756368268; Mon, 22 May
- 2023 04:52:48 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684756442; x=1687348442;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CmC7PRo1R7ZhJzowWuw/vFq8NrjJylR4K7gsroB369c=;
+        b=bltPbxpN4HJhuq9+kRm6h6DRuyvaxMZEYA/DBjT/EwGnlSYcAM7Xd/H881f7OgkvRL
+         t+0zhYKuZMtxItaqXq670tCfjSQBkh9AeKOl7GKa4MQd10kD0yLb9Nb5+i5pLE7wQJmk
+         c/C38cACNXBGtA3lnyVImrH2INgjnCXev57a0+VutQmMAGmZkwYp3Zz3Ms5Yrcjf62bn
+         0riSKCVXTDX+Mpt5tl0TU2jhzOu/Zz/37qYz0c2RnbLXK+VbIlYashYQ4I4CXuAhZ6s6
+         plZRAUl1pdwEAP7C5xr/gcgUh7kkbb/2dLlr3FeaO1bZrM+fHDsV7834yvZBFSOFaYtK
+         jAnA==
+X-Gm-Message-State: AC+VfDy8iv0HY6h1LKamawZkvPP5rriQ88CpbsgB6Wt7KBXOBdmDQWvK
+        9L5WHm4TRq38ANuWlPV6FIvzpH3QZrjLirMFCt9yD7o1FHd+fnQTbuH4qMZwcIpO4UtLyQERGEG
+        uaklkSeHIAg3QM4xB2hGA9mdI
+X-Received: by 2002:a1c:7c19:0:b0:3f4:2374:3512 with SMTP id x25-20020a1c7c19000000b003f423743512mr6552770wmc.18.1684756442345;
+        Mon, 22 May 2023 04:54:02 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4EPlHuucVkDjDnagnkVzUlBwaBGqffjMZWuezvJJQlG5N32bC3QNWJX63pbfCrWjUb7Cmuzg==
+X-Received: by 2002:a1c:7c19:0:b0:3f4:2374:3512 with SMTP id x25-20020a1c7c19000000b003f423743512mr6552753wmc.18.1684756442017;
+        Mon, 22 May 2023 04:54:02 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c742:c800:d74f:aec6:f8ac:558? (p200300cbc742c800d74faec6f8ac0558.dip0.t-ipconnect.de. [2003:cb:c742:c800:d74f:aec6:f8ac:558])
+        by smtp.gmail.com with ESMTPSA id n6-20020a7bcbc6000000b003f42d8dd7ffsm8028624wmi.19.2023.05.22.04.54.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 May 2023 04:54:01 -0700 (PDT)
+Message-ID: <09cee859-6510-ed3c-67da-c1452a534460@redhat.com>
+Date:   Mon, 22 May 2023 13:54:00 +0200
 MIME-Version: 1.0
-References: <20230424191557.2464760-1-imammedo@redhat.com> <20230522130635.5e3f8771@imammedo.users.ipa.redhat.com>
-In-Reply-To: <20230522130635.5e3f8771@imammedo.users.ipa.redhat.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 22 May 2023 13:52:33 +0200
-Message-ID: <CAJZ5v0jcap1Qe=PeZ98csqN9DxwZLPRontGkbvMuah6XrtbT4A@mail.gmail.com>
-Subject: Re: [PATCH v2] PCI: acpiphp: Reassign resources on bridge if necessary
-To:     Igor Mammedov <imammedo@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, rafael@kernel.org, mst@redhat.com,
-        lenb@kernel.org, bhelgaas@google.com, linux-acpi@vger.kernel.org,
-        linux-pci@vger.kernel.org, helgaas@kernel.org,
-        mika.westerberg@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH -V2 1/5] swap: Remove get/put_swap_device() in
+ __swap_count()
+Content-Language: en-US
+To:     Huang Ying <ying.huang@intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Hugh Dickins <hughd@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>
+References: <20230522070905.16773-1-ying.huang@intel.com>
+ <20230522070905.16773-2-ying.huang@intel.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230522070905.16773-2-ying.huang@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 1:06 PM Igor Mammedov <imammedo@redhat.com> wrote:
->
-> On Mon, 24 Apr 2023 21:15:57 +0200
-> Igor Mammedov <imammedo@redhat.com> wrote:
->
-> > When using ACPI PCI hotplug, hotplugging a device with
-> > large BARs may fail if bridge windows programmed by
-> > firmware are not large enough.
->
-> Rafael,
->
-> Since there was no more comments for a while,
-> can you merge this patch through your tree?
+On 22.05.23 09:09, Huang Ying wrote:
+> __swap_count() is called in do_swap_page() only, which encloses the
+> call site with get/put_swap_device() already.
+> 
+> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: Hugh Dickins <hughd@google.com>
+> Cc: Johannes Weiner <hannes@cmpxchg.org>
+> Cc: Matthew Wilcox <willy@infradead.org>
+> Cc: Michal Hocko <mhocko@suse.com>
+> Cc: Minchan Kim <minchan@kernel.org>
+> Cc: Tim Chen <tim.c.chen@linux.intel.com>
+> Cc: Yang Shi <shy828301@gmail.com>
+> Cc: Yu Zhao <yuzhao@google.com>
+> ---
+>   mm/swapfile.c | 10 ++--------
+>   1 file changed, 2 insertions(+), 8 deletions(-)
+> 
+> diff --git a/mm/swapfile.c b/mm/swapfile.c
+> index 274bbf797480..8419cba9c192 100644
+> --- a/mm/swapfile.c
+> +++ b/mm/swapfile.c
+> @@ -1432,16 +1432,10 @@ void swapcache_free_entries(swp_entry_t *entries, int n)
+>   
+>   int __swap_count(swp_entry_t entry)
+>   {
+> -	struct swap_info_struct *si;
+> +	struct swap_info_struct *si = swp_swap_info(entry);
+>   	pgoff_t offset = swp_offset(entry);
+> -	int count = 0;
+>   
+> -	si = get_swap_device(entry);
+> -	if (si) {
+> -		count = swap_count(si->swap_map[offset]);
+> -		put_swap_device(si);
+> -	}
+> -	return count;
+> +	return swap_count(si->swap_map[offset]);
+>   }
+>   
+>   /*
 
-I need an ACK from Bjorn on this, as the PCI maintainer, or it can go
-in via the PCI tree as far as I'm concerned.
+That locking was added in eb085574a752 ("mm, swap: fix race between 
+swapoff and some swap operations"). Before 2799e77529c ("swap: fix 
+do_swap_page() race with swapoff") added the get_swap_device() to 
+do_swap_page().
 
-Thanks!
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
-> > Reproducer:
-> >   $ qemu-kvm -monitor stdio -M q35  -m 4G \
-> >       -global ICH9-LPC.acpi-pci-hotplug-with-bridge-support=on \
-> >       -device id=rp1,pcie-root-port,bus=pcie.0,chassis=4 \
-> >       disk_image
-> >
-> >  wait till linux guest boots, then hotplug device
-> >    (qemu) device_add qxl,bus=rp1
-> >
-> >  hotplug on guest side fails with:
-> >    pci 0000:01:00.0: [1b36:0100] type 00 class 0x038000
-> >    pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x03ffffff]
-> >    pci 0000:01:00.0: reg 0x14: [mem 0x00000000-0x03ffffff]
-> >    pci 0000:01:00.0: reg 0x18: [mem 0x00000000-0x00001fff]
-> >    pci 0000:01:00.0: reg 0x1c: [io  0x0000-0x001f]
-> >    pci 0000:01:00.0: BAR 0: no space for [mem size 0x04000000]
-> >    pci 0000:01:00.0: BAR 0: failed to assign [mem size 0x04000000]
-> >    pci 0000:01:00.0: BAR 1: no space for [mem size 0x04000000]
-> >    pci 0000:01:00.0: BAR 1: failed to assign [mem size 0x04000000]
-> >    pci 0000:01:00.0: BAR 2: assigned [mem 0xfe800000-0xfe801fff]
-> >    pci 0000:01:00.0: BAR 3: assigned [io  0x1000-0x101f]
-> >    qxl 0000:01:00.0: enabling device (0000 -> 0003)
-> >    Unable to create vram_mapping
-> >    qxl: probe of 0000:01:00.0 failed with error -12
-> >
-> > However when using native PCIe hotplug
-> >   '-global ICH9-LPC.acpi-pci-hotplug-with-bridge-support=off'
-> > it works fine, since kernel attempts to reassign unused resources.
-> > Use the same machinery as native PCIe hotplug to (re)assign resources.
-> >
-> > Signed-off-by: Igor Mammedov <imammedo@redhat.com>
-> > ---
-> > tested in QEMU with Q35 machine on PCIE root port and also
-> > with nested conventional bridge attached to root port.
-> >
-> > v2:
-> >   * fixup subject to match expected style
-> >   * drop no longer needed __pci_bus_size_bridges() to avoid
-> >     memory leak (Bjorn Helgaas <helgaas@kernel.org>)
-> > ---
-> >  drivers/pci/hotplug/acpiphp_glue.c | 5 +----
-> >  1 file changed, 1 insertion(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/pci/hotplug/acpiphp_glue.c b/drivers/pci/hotplug/acpiphp_glue.c
-> > index 5b1f271c6034..328d1e416014 100644
-> > --- a/drivers/pci/hotplug/acpiphp_glue.c
-> > +++ b/drivers/pci/hotplug/acpiphp_glue.c
-> > @@ -498,7 +498,6 @@ static void enable_slot(struct acpiphp_slot *slot, bool bridge)
-> >                               acpiphp_native_scan_bridge(dev);
-> >               }
-> >       } else {
-> > -             LIST_HEAD(add_list);
-> >               int max, pass;
-> >
-> >               acpiphp_rescan_slot(slot);
-> > @@ -512,12 +511,10 @@ static void enable_slot(struct acpiphp_slot *slot, bool bridge)
-> >                               if (pass && dev->subordinate) {
-> >                                       check_hotplug_bridge(slot, dev);
-> >                                       pcibios_resource_survey_bus(dev->subordinate);
-> > -                                     __pci_bus_size_bridges(dev->subordinate,
-> > -                                                            &add_list);
-> >                               }
-> >                       }
-> >               }
-> > -             __pci_bus_assign_resources(bus, &add_list, NULL);
-> > +             pci_assign_unassigned_bridge_resources(bus->self);
-> >       }
-> >
-> >       acpiphp_sanitize_bus(bus);
->
+-- 
+Thanks,
+
+David / dhildenb
+
