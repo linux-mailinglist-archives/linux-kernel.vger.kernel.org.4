@@ -2,99 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 461C770B478
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 07:16:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B5670B47A
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 07:17:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231908AbjEVFQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 01:16:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55624 "EHLO
+        id S231913AbjEVFRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 01:17:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231795AbjEVFQh (ORCPT
+        with ESMTP id S230204AbjEVFRe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 01:16:37 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4935A1;
-        Sun, 21 May 2023 22:16:35 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2ab3e8f4efeso37738321fa.0;
-        Sun, 21 May 2023 22:16:35 -0700 (PDT)
+        Mon, 22 May 2023 01:17:34 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBFE6AB
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:17:33 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-561c5b5e534so74337747b3.2
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:17:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684732594; x=1687324594;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CYrQOZoyONEufq+LqeQBmXVtdJJKIjdnOxohkmrAY6o=;
-        b=edyY9Uwr97Vumn46XigszV1y/m9Gv7cv/j55TMmwIGEBhAFVFRjWdybCzaYU5NixCS
-         Oy7lbHC2nES3xXibpgL20jNZZ577FxfG418ggGueA9EsKAShwZ80/RwFfsmDiyfuoofG
-         XU5tXwCrBra5Kb2IvMC1SC5YRCcGgqEd8E5TJILGa6uctQYZ4d81y/YWJBbzULtudJv2
-         klWuGT31X8OqVVju7bO1OnRz0QH+E15bv0xwtpRZSYjuP4vcqj9KUqB6De6Au5r1ta5M
-         t5g3mkhXjYHbCEbcK5SWO7imUJDRp2fJpvWX9EBEPoxFWUNHkX1CKznVwUWPDat7ybXT
-         7RXA==
+        d=google.com; s=20221208; t=1684732653; x=1687324653;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hzsL+M6cdepZgQw4hIUfWIci6E11MaKNkaWhV1yArkY=;
+        b=f6H5lzyEl/529vvBXo7cjHFatUfG3YtCbKZO/m7kkdLuuofbAW6JB7TNcMTLxhS2Fa
+         oCscaMoZSrdZFIADmHM3vqeNvKHSfDv45YS3VG0xINc3KnCVeYBUvVx6KUlmN5IVqTQ3
+         eea7j8ExK19Opvsc5Spx705Pw81qEdSQc02WpxsCt2PFWo+K9ekVeiRw9nrsNx+U4KaQ
+         G9GGOC4mudc6X5o4tr3EZNzo4YmhfN4UtuJyHpWp81+YRZq+yrHLruWf2ZHUJUdTErJk
+         SGxCiEVvSkiDFU5p6ro7GOO7WaLMeSjUeJjhiSiayQPvsPwDptONLF8o1b8tv18mP3Yi
+         FtUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684732594; x=1687324594;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CYrQOZoyONEufq+LqeQBmXVtdJJKIjdnOxohkmrAY6o=;
-        b=Unde6ivhDmImx+1VDzBYxnncnXyEWeSky6TC+qomHv08Czep048XWuHfFodUufv9j8
-         LicV1Bb4Xc499ffySw1rwLVuKqpoN03aH4Ffi+WQr/GAkXr2aH/DsC2x8L75QkIhuTlE
-         S/+NhnwpJdb3s0H/Dxya1NdLg2y30hMMUaLuHJyF3g0wiLCb5iJUIEPmZaezDTZvECTB
-         nDU9fEnDwoKaP2RgHHzb/3YY9t04kgF22+tFtbwPRynPaxcAn1sWRIi92cy1dcjbx2mI
-         YxMUSfIEmRtPq1FLRJv5tQSa9Xovk5wRC7HMWbPIbLXU74eHLioUpWYIlE0+a/TBweO8
-         qCww==
-X-Gm-Message-State: AC+VfDzYnfPrNmiF8q2F7D5tBzTV3R/uTymWGPdP9IBbtFWychMwNtnx
-        AJ2Qlt1iAPFqfSRHS8R3qxA=
-X-Google-Smtp-Source: ACHHUZ7TbanQlhwifMepu7ORWVh/VP5bZ18ETSV+MsG47HW0VXAqmzXXDf/VvqNJ6H52yVSkjCYq8A==
-X-Received: by 2002:a05:6512:3f1e:b0:4f3:a763:ccb7 with SMTP id y30-20020a0565123f1e00b004f3a763ccb7mr3425929lfa.2.1684732593811;
-        Sun, 21 May 2023 22:16:33 -0700 (PDT)
-Received: from [192.168.1.126] (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id k19-20020ac24573000000b004f00189e1dasm847966lfm.143.2023.05.21.22.16.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 21 May 2023 22:16:33 -0700 (PDT)
-Message-ID: <44c87ed5-f14d-e690-1e5f-74212370611b@gmail.com>
-Date:   Mon, 22 May 2023 08:16:32 +0300
+        d=1e100.net; s=20221208; t=1684732653; x=1687324653;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hzsL+M6cdepZgQw4hIUfWIci6E11MaKNkaWhV1yArkY=;
+        b=g97ZtBmScaqaAot69+fV6O0BnK8P/eGAmm/8V2NEsqhXmsDouMlRHRXi0fi5ZwcF0+
+         s5s5kwjdxKoZAN2/RExCqC5txpgQWRZW6/650z4dJguGhGWbyvM+DX0xr9mSc0VVahMc
+         7MxGqDg9Al/Psl6qSAfeLgI9qVoXzUOcnR6Q+aICSDwlM7KINS77tI4Vynoap8eEUXId
+         rbIwieaGRAAF0eVzFfgI7UQPwGHN6HR3o2O6eoBhzM46RUWPu3LLEc++9OEO7TDf6aFP
+         fdmtvKiUv9Dqzsmt0CYsFNRfeqwvq7H+8LcPhy8epy5D850bvuSBudklzkliE+Jixh7V
+         sbXw==
+X-Gm-Message-State: AC+VfDyYoaKVEphFd79KXSECBr4pAUrt0J60iQ1pczR769nj1m8mcLFJ
+        Vy1ryh81ocfVDIYiO/EXcCVWog==
+X-Google-Smtp-Source: ACHHUZ7HPZHU/c0SUjH6d0BWcOB8eLdBcSfh1g/VsYEO0pbi+eAMTALQvB8Hsf5hIiR7CjUOpnbz8A==
+X-Received: by 2002:a81:6ec5:0:b0:561:e944:a559 with SMTP id j188-20020a816ec5000000b00561e944a559mr9577004ywc.31.1684732652960;
+        Sun, 21 May 2023 22:17:32 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id e129-20020a0dc287000000b00545a08184f8sm1818483ywd.136.2023.05.21.22.17.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 May 2023 22:17:32 -0700 (PDT)
+Date:   Sun, 21 May 2023 22:17:29 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Peter Xu <peterx@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Steven Price <steven.price@arm.com>,
+        SeongJae Park <sj@kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Song Liu <song@kernel.org>,
+        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH 21/31] mm/madvise: clean up force_shm_swapin_readahead()
+In-Reply-To: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
+Message-ID: <f098a89f-35a4-8aa2-3abb-7f2480e2291e@google.com>
+References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v5 4/8] pinctrl: wpcm450: relax return value check for IRQ
- get
-Content-Language: en-US, en-GB
-To:     andy.shevchenko@gmail.com
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Andreas Klinger <ak@it-klinger.de>,
-        Marcin Wojtas <mw@semihalf.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        =?UTF-8?Q?Jonathan_Neusch=c3=a4fer?= <j.neuschaefer@gmx.net>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-iio@vger.kernel.org, netdev@vger.kernel.org,
-        openbmc@lists.ozlabs.org, linux-gpio@vger.kernel.org,
-        linux-mips@vger.kernel.org
-References: <cover.1684493615.git.mazziesaccount@gmail.com>
- <42264f1b12a91e415ffa47ff9adb53f02a6aa3ea.1684493615.git.mazziesaccount@gmail.com>
- <ZGpS-13CozLp-p4f@surfacebook>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <ZGpS-13CozLp-p4f@surfacebook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,54 +98,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/21/23 20:20, andy.shevchenko@gmail.com wrote:
-> Fri, May 19, 2023 at 02:02:16PM +0300, Matti Vaittinen kirjoitti:
->> fwnode_irq_get[_byname]() were changed to not return 0 anymore. The
->> special error case where device-tree based IRQ mapping fails can't no
->> longer be reliably detected from this return value. This yields a
->> functional change in the driver where the mapping failure is treated as
->> an error.
->>
->> The mapping failure can occur for example when the device-tree IRQ
->> information translation call-back(s) (xlate) fail, IRQ domain is not
->> found, IRQ type conflicts, etc. In most cases this indicates an error in
->> the device-tree and special handling is not really required.
->>
->> One more thing to note is that ACPI APIs do not return zero for any
->> failures so this special handling did only apply on device-tree based
->> systems.
->>
->> Drop the special (no error, just skip the IRQ) handling for DT mapping
->> failures as these can no longer be separated from other errors at driver
->> side.
-> 
-> ...
-> 
->> The commit message does not mention if choosing not to abort the probe
->> on device-tree mapping failure (as is done on other errors) was chosen
->> because: a) Abort would have broken some existing setup. b) Because skipping
->> an IRQ on failure is "the right thing to do", or c) because it sounded like
->> a way to minimize risk of breaking something.
->>
->> If the reason is a) - then I'd appreciate receiving some more
->> information and a suggestion how to proceed (if possible). If the reason
->> is b), then it might be best to just skip the IRQ instead of aborting
->> the probe for all errors on IRQ getting. Finally, in case of c), well,
->> by acking this change you will now accept the risk :)
-> 
-> No need to repeat this. As I answered the case c) was in my mind when I made
-> that change.
+Some nearby MADV_WILLNEED cleanup unrelated to pte_offset_map_lock().
+shmem_swapin_range() is a better name than force_shm_swapin_readahead().
+Fix unimportant off-by-one on end_index.  Call the swp_entry_t "entry"
+rather than "swap": either is okay, but entry is the name used elsewhere
+in mm/madvise.c.  Do not assume GFP_HIGHUSER_MOVABLE: that's right for
+anon swap, but shmem should take gfp from mapping.  Pass the actual vma
+and address to read_swap_cache_async(), in case a NUMA mempolicy applies.
+lru_add_drain() at outer level, like madvise_willneed()'s other branch.
 
-True. I'll drop that if I re-spin. Thanks for pointing it out.
+Signed-off-by: Hugh Dickins <hughd@google.com>
+---
+ mm/madvise.c | 24 +++++++++++++-----------
+ 1 file changed, 13 insertions(+), 11 deletions(-)
 
-
-Yours,
-	-- Matti
-
+diff --git a/mm/madvise.c b/mm/madvise.c
+index 0af64c4a8f82..9b3c9610052f 100644
+--- a/mm/madvise.c
++++ b/mm/madvise.c
+@@ -235,30 +235,34 @@ static const struct mm_walk_ops swapin_walk_ops = {
+ 	.pmd_entry		= swapin_walk_pmd_entry,
+ };
+ 
+-static void force_shm_swapin_readahead(struct vm_area_struct *vma,
++static void shmem_swapin_range(struct vm_area_struct *vma,
+ 		unsigned long start, unsigned long end,
+ 		struct address_space *mapping)
+ {
+ 	XA_STATE(xas, &mapping->i_pages, linear_page_index(vma, start));
+-	pgoff_t end_index = linear_page_index(vma, end + PAGE_SIZE - 1);
++	pgoff_t end_index = linear_page_index(vma, end) - 1;
+ 	struct page *page;
+ 	struct swap_iocb *splug = NULL;
+ 
+ 	rcu_read_lock();
+ 	xas_for_each(&xas, page, end_index) {
+-		swp_entry_t swap;
++		unsigned long addr;
++		swp_entry_t entry;
+ 
+ 		if (!xa_is_value(page))
+ 			continue;
+-		swap = radix_to_swp_entry(page);
++		entry = radix_to_swp_entry(page);
+ 		/* There might be swapin error entries in shmem mapping. */
+-		if (non_swap_entry(swap))
++		if (non_swap_entry(entry))
+ 			continue;
++
++		addr = vma->vm_start +
++			((xas.xa_index - vma->vm_pgoff) << PAGE_SHIFT);
+ 		xas_pause(&xas);
+ 		rcu_read_unlock();
+ 
+-		page = read_swap_cache_async(swap, GFP_HIGHUSER_MOVABLE,
+-					     NULL, 0, false, &splug);
++		page = read_swap_cache_async(entry, mapping_gfp_mask(mapping),
++					     vma, addr, false, &splug);
+ 		if (page)
+ 			put_page(page);
+ 
+@@ -266,8 +270,6 @@ static void force_shm_swapin_readahead(struct vm_area_struct *vma,
+ 	}
+ 	rcu_read_unlock();
+ 	swap_read_unplug(splug);
+-
+-	lru_add_drain();	/* Push any new pages onto the LRU now */
+ }
+ #endif		/* CONFIG_SWAP */
+ 
+@@ -291,8 +293,8 @@ static long madvise_willneed(struct vm_area_struct *vma,
+ 	}
+ 
+ 	if (shmem_mapping(file->f_mapping)) {
+-		force_shm_swapin_readahead(vma, start, end,
+-					file->f_mapping);
++		shmem_swapin_range(vma, start, end, file->f_mapping);
++		lru_add_drain(); /* Push any new pages onto the LRU now */
+ 		return 0;
+ 	}
+ #else
 -- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
+2.35.3
 
