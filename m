@@ -2,97 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7423570B9B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 12:12:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F17E70B9B3
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 12:13:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232349AbjEVKMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 06:12:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
+        id S232249AbjEVKNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 06:13:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232249AbjEVKMp (ORCPT
+        with ESMTP id S232348AbjEVKNG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 06:12:45 -0400
-Received: from mx6.didiglobal.com (mx6.didiglobal.com [111.202.70.123])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 89BE0BB;
-        Mon, 22 May 2023 03:12:41 -0700 (PDT)
-Received: from mail.didiglobal.com (unknown [10.79.64.19])
-        by mx6.didiglobal.com (Maildata Gateway V2.8) with ESMTPS id C101411008C201;
-        Mon, 22 May 2023 18:12:38 +0800 (CST)
-Received: from ZJY01-ACTMBX-06.didichuxing.com (10.79.64.19) by
- ZJY01-ACTMBX-06.didichuxing.com (10.79.64.19) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 22 May 2023 18:12:38 +0800
-Received: from ZJY01-ACTMBX-06.didichuxing.com ([10.79.64.19]) by
- ZJY01-ACTMBX-06.didichuxing.com ([10.79.64.19]) with mapi id 15.01.2507.021;
- Mon, 22 May 2023 18:12:38 +0800
-X-MD-Sfrom: houweitao@didiglobal.com
-X-MD-SrcIP: 10.79.64.19
-From:   =?gb2312?B?uu7OsMzSIFZpbmNlbnQgSG91?= <houweitao@didiglobal.com>
-To:     "syzbot+92ef9ee419803871020e@syzkaller.appspotmail.com" 
-        <syzbot+92ef9ee419803871020e@syzkaller.appspotmail.com>
-CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "glider@google.com" <glider@google.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>
-Subject: Re: [syzbot] [hfs?] KMSAN: uninit-value in hfsplus_listxattr
-Thread-Topic: Re: [syzbot] [hfs?] KMSAN: uninit-value in hfsplus_listxattr
-Thread-Index: AdmMiHc/bUH/K2PcSNK2Ykgm8L30yA==
-Date:   Mon, 22 May 2023 10:12:38 +0000
-Message-ID: <a2f03e2ab9c34dcaabcf9fb11c0a1f45@didiglobal.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.79.64.102]
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        Mon, 22 May 2023 06:13:06 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2102.outbound.protection.outlook.com [40.107.96.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71C471A8;
+        Mon, 22 May 2023 03:12:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=C0fiKbhnJaGDfyI06PdQC+HrRiHj6kCSsqYtFCLA82pedAvm9pD9fffkEZBRM7pPQlDWtmJevNWcXCvNx8DOB4vAsN947K4nzhK30ekcFTOrY7kbEniChjz/dBTw7oXu21+NbCuaMivQc+Xf+fC/nTifXGbyaOYe09gOcDgLCvkBo0y9670dY03Y5nkuFPfDrMEo5Uyf7GW4tlk+AEWNCRbuuzIuj0dJ5hGmu0NB3gib+YRqv4uwu7YKdnnodUTM/o+Kl4qBfkn70H9r9FL1aKxnc5mMRysE+MSnLrhRexzIzwQbbhuCntkJS6A7CunUFe/2nct5d983eUCgD4KMdQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ljb8ZHnMYk3jRb+F4Gc8fuedpob2eALgXU0k9eIBRk0=;
+ b=EfR+Lfs2ftvNRTjG1VIkTeRonv8SGKb3MYub4sUIhiIlFXrs4+80bamlzZ7aXSoInkp0DeuJdoH61jinF96byxd42m8mboGVY+wPBxV3+PguPy4iXETrIg1JnUq8vmVglF/rff2SVVCpisHq63a2VLfO64MtTa7VHSuhxFQ2MA0WrIGTZUREx0FeDl00e35ggr9DT9bx0hrL2YjPd3o9Odsi+1xQBTIhXFuj/SbxgNeBCo5UI5hQgHupnz4tPUugL1rQd97N5uXfJRtfQGzK7hNTYkTkummIvwenJkn/9PJm/MKUnI7VGsnl/ElL/sCi5bUI1wZzpD1gAdne/d5xfw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ljb8ZHnMYk3jRb+F4Gc8fuedpob2eALgXU0k9eIBRk0=;
+ b=GjCFMDEVFrGM3cxINReAODBOn/ZqG46MUgSTK7ua3CDcjW4WbJVVPON4duazAlSjHdkCf5/DvB1vzZzjhU2h1nNqJj7gfqMNVmbFkBYBuKP6kddqxtgR2Izgb46I55YVyxNDKHa6Ur01HFiXFvc8pHoghJdhTEY22AxjksLFV+s=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by SJ0PR13MB6027.namprd13.prod.outlook.com (2603:10b6:a03:3df::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Mon, 22 May
+ 2023 10:12:55 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6411.028; Mon, 22 May 2023
+ 10:12:55 +0000
+Date:   Mon, 22 May 2023 12:12:48 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Rain River <rain.1986.08.12@gmail.com>,
+        Zhu Yanjun <zyjzyj2000@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ayaz Abdulla <aabdulla@nvidia.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH net] forcedeth: Fix an error handling path in nv_probe()
+Message-ID: <ZGtAIJZ3QzkBJgHI@corigine.com>
+References: <355e9a7d351b32ad897251b6f81b5886fcdc6766.1684571393.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <355e9a7d351b32ad897251b6f81b5886fcdc6766.1684571393.git.christophe.jaillet@wanadoo.fr>
+X-ClientProxiedBy: AM3PR03CA0066.eurprd03.prod.outlook.com
+ (2603:10a6:207:5::24) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SJ0PR13MB6027:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0fc312aa-6707-46d2-7b9b-08db5aad1bfc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: aTvqHTtx1mRxcheKiotuBmdy9YzISvOfsUp/f7kNDfNgfwMpULJFwGeYoW+A9kl+fiEyC3Y6Aj9sCg1pLHr0QqPZCD+26t5oXRCP8RbDUUHcSOq+6CG2P7dkYalP/utxEYj6SaE/+3gKIFj2HGYB6pWrRkgcKsssXx8B4nmBaCisCtGS3qe5/2+iC7Lo6jffVxzXeLQTQQn2AP7S8CRPYMwTfijJPAgbaDK74rYb/nHkoSqGgK2miS50T3c9O9nvEPmPAPlnw/ootMNccHxWg19LlsSkWj5zVYxU+FjSGA/wG5h+gvFQVY4sTAAP4lmR3dyQk1m9qo+ijCO3OSopuP5NXsW4KDSlwht8n02xTGF803Pirid6yzTpTTmU7OJlaJ2dYyffnkBwq0Z1Sf0SqcRPeP2qsPefR0UB6LrEskpSYCEBEiIIDVgzltUh2p3n5JSxpYIaqIUt5Y9QewNEbr0B8qwt5KENAo5onb+K8JLPILeYlOWfVYYd/YwAsdOhCPYpNgyYyPHfLvyJvJiL9UXA0WKXReOgSkJtOm1nHyqOjF3BbYdiLyXauOTHqVx/+DGv3Ko4jKrmWpzHKVKWTrJchzA/ZOWajFOnQul2lb0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(366004)(39830400003)(346002)(136003)(451199021)(6486002)(6666004)(478600001)(2616005)(36756003)(186003)(6512007)(6506007)(38100700002)(86362001)(66946007)(66556008)(4326008)(6916009)(66476007)(7416002)(2906002)(8676002)(8936002)(316002)(5660300002)(41300700001)(54906003)(44832011);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Va3hUDnTPkxTfMk/m27xw/VOyBwfkcT3eDSbdDie2sCHgl7W4vOw688ik7rL?=
+ =?us-ascii?Q?K8yLiVCu56PGlzaQXBAUOBXW11UIHxKHzz8p+h2zpcRQMsNpaiWDiaPFEZg6?=
+ =?us-ascii?Q?PBkjRSfpgoIByYIXFozQSH7kM/OhAPC8ViIfXMNlOlsO2aGRiKjdD6T6+7Wi?=
+ =?us-ascii?Q?l8TGnx9E1bTx7T0FCvoC2vInPyP4gHznrwjDJUp3ArEpHDpI2NPf/Dx5nBib?=
+ =?us-ascii?Q?YRio8mbn7JAINht04yXGdfyA5Ipb98bBsQq0u1ZcMRo82Z7jvy2BjPj6QMH9?=
+ =?us-ascii?Q?5fDh6KUq+yRuOO/iOYQTnpEAi5g49YnLMKllY6Lz9R5Kz9LzW+nlweHGFsx4?=
+ =?us-ascii?Q?lZZbTLBKh6Aa3hUxF6ekOlz8Edf24nmpjXUaBQjMPs4s/q5V0Ka3pWKx1NtL?=
+ =?us-ascii?Q?FZ/AnzVzBTlVAlJ2FlPa2znrzvStMbKmAXROjLjf3mv9bZ9OgbG9Dep/duty?=
+ =?us-ascii?Q?0HLlPac6RX2E1fa36zzCKSCRL/p60nDkMpdibksRGBwfJTJ50xmVBGGW+igj?=
+ =?us-ascii?Q?01wK6J/PXC+q2TUPcHxg1iHi1s89aL8abhr0+2Lt3al3Ffl9xw9SXLgqEgia?=
+ =?us-ascii?Q?Og9vbOw30KRMGgOcQ6fW7mCmxLRIde1lq5MBpaG5sc7XNxWZLUwW2OCl14E4?=
+ =?us-ascii?Q?+O5MCLFk6Sq5IDdDiKrNEAIn2LnVR76z5DKhQauatJmR3Tm0dNEusQnPNTzn?=
+ =?us-ascii?Q?cL2tvF1JmnfI2lH3wemoR4pc+UIX+TRgshEQDTFQxq9Igp6XLSKLY0mSv/eo?=
+ =?us-ascii?Q?UBhVr/y3S08dHY5aZton3qbUNcznm46YGsLVMIclF+5UQOngJWc6czI1rDms?=
+ =?us-ascii?Q?mbliyeojQqE6aapV17AV3ANlAb736RA/zYWW+bunyjpUtFVYIJIbrNbXrI2V?=
+ =?us-ascii?Q?9GwwBtHFkU/SGJTHkt/sWtPXh1QMw+PzprHO19rds/a2kWt79hgOOwn4w5Ik?=
+ =?us-ascii?Q?eqGyQRWqy49oJ/9ZJIYciMRIz0Txf+/Im+8Uy6xnq6TgROKgAUPiKJQeZsic?=
+ =?us-ascii?Q?IT6PX2bIogGqtuDmOYENqUlv+ZulvavoyDIHdeakcdU3kPxZdsYNWovOVRA6?=
+ =?us-ascii?Q?4LrtHBJZeTO8xFqDF9AmOQeJgVFRfRXMsIPAGKT58SpEpTQXwUGExvn8W4zJ?=
+ =?us-ascii?Q?w7GMKid5z++2ZdVLsVWdGrIXqnlrX9g0P2BViSMevDQ+xjc9zgpP+dUYW8F+?=
+ =?us-ascii?Q?B7Z2xD18sAHZnqzYbtI8FbWctN9Jnv8S6xcI9TR1jYyUkZLhuTbaikWGp7iI?=
+ =?us-ascii?Q?G85rg9HaHmsb7lA1a5l0TEC8YC9KU4WyjrS6n9rHUQP6V2ZNYRnyYHsarw8W?=
+ =?us-ascii?Q?7r9KRJi00LXhT3zsQ5MD8S7wqRu8zKst4CYtpOTBTuXJTRIhi4521cVFWnhT?=
+ =?us-ascii?Q?MXiPmVKIF7tJKBjJ7mlrlDzxOt18uwtcG59yIv7Cfd2VMc/vnObdzC+9mPik?=
+ =?us-ascii?Q?aH2R8r4Id9/EC9tp/YqNlElEYUpSbUX2oXDcGRcJaHXdhYJKWBOMKULNlEnv?=
+ =?us-ascii?Q?M1qwJDIZQJQZVoXlfacCnmS3OQVbaLaUvKlyOVx+ch7hYspyyTPJJ3QhJnm3?=
+ =?us-ascii?Q?MiuCLP5yYsVYh9esuKatcYUf32dFeEvGDfiaGiXBd+Njc2HYTW9YYFnbTR4Q?=
+ =?us-ascii?Q?1GAGvOML9Q8hLIpQKZ29bFVaPPp08OizIzXLp9+f6GyPmIU/DgjEXZcXmrf/?=
+ =?us-ascii?Q?KXwhCw=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0fc312aa-6707-46d2-7b9b-08db5aad1bfc
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2023 10:12:55.2675
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LtPOJ+0X/8MSmc2XRKjb597SlI+2Fa83cTjm42TKpccVuRNlizapHqjoUmAmLop7cPF/GsaLg20xA91M02jPK0qz84/4g9c1Nrbn3O9SaLc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR13MB6027
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-U2luY2UgdGhlIHN0cmJ1ZiBpbiBoZnNwbHVzX2xpc3R4YXR0ciB3YXMgYWxsb2NhdGVkIHdpdGgg
-a21hbGxvYyBhbmQgZmlsbGVkIHdpdGggaGZzcGx1c191bmkyYXNjLA0Kd2hpY2ggZGlkIG5vdCBm
-aWxsICJcMCIgaW4gbGFzdCBieXRlLCAgaW4gc29tZSBjYXNlcywgIHRoZSB1bmluaXRlZCBieXRl
-IG1heSBiZSBhY2Nlc3NlZCB3aGVuDQpjb21wYXJlIHRoZSBzdHJidWYgd2l0aCBrbm93biBuYW1l
-c3BhY2UuICBCdXQgSSBzdGlsbCBuZWVkIGNoZWNrIHRoZSB2YWx1ZSBvZiB4YXR0ciBpbiBzdHJi
-dWYNCnRvIGNvbmZpcm0gdGhlIHJvb3QgY2F1c2UuICBQbGVhc2UgaGVscCB0ZXN0IHdpdGggYmVs
-b3cgZGVidWcgcGF0Y2guDQoNCiNzeXogdGVzdDogaHR0cHM6Ly9naXRodWIuY29tL2dvb2dsZS9r
-bXNhbi5naXQgODAzODMyNzNmN2EwDQoNCi0tLSBhL2ZzL2hmc3BsdXMveGF0dHIuYw0KKysrIGIv
-ZnMvaGZzcGx1cy94YXR0ci5jDQpAQCAtNjcxLDYgKzY3MSw3IEBAIHN0YXRpYyBzc2l6ZV90IGhm
-c3BsdXNfbGlzdHhhdHRyX2ZpbmRlcl9pbmZvKHN0cnVjdCBkZW50cnkgKmRlbnRyeSwNCiAJcmV0
-dXJuIHJlczsNCiB9DQogDQorZXh0ZXJuIGJvb2wga21zYW5fZW5hYmxlZDsNCiBzc2l6ZV90IGhm
-c3BsdXNfbGlzdHhhdHRyKHN0cnVjdCBkZW50cnkgKmRlbnRyeSwgY2hhciAqYnVmZmVyLCBzaXpl
-X3Qgc2l6ZSkNCiB7DQogCXNzaXplX3QgZXJyOw0KQEAgLTY4MSw2ICs2ODIsOCBAQCBzc2l6ZV90
-IGhmc3BsdXNfbGlzdHhhdHRyKHN0cnVjdCBkZW50cnkgKmRlbnRyeSwgY2hhciAqYnVmZmVyLCBz
-aXplX3Qgc2l6ZSkNCiAJc3RydWN0IGhmc3BsdXNfYXR0cl9rZXkgYXR0cl9rZXk7DQogCWNoYXIg
-KnN0cmJ1ZjsNCiAJaW50IHhhdHRyX25hbWVfbGVuOw0KKwlpbnQgb2ZmID0gMDsNCisJY2hhciAq
-ZHVtcGluZm87DQogDQogCWlmICgoIVNfSVNSRUcoaW5vZGUtPmlfbW9kZSkgJiYNCiAJCQkhU19J
-U0RJUihpbm9kZS0+aV9tb2RlKSkgfHwNCkBAIC03MDUsNiArNzA4LDEyIEBAIHNzaXplX3QgaGZz
-cGx1c19saXN0eGF0dHIoc3RydWN0IGRlbnRyeSAqZGVudHJ5LCBjaGFyICpidWZmZXIsIHNpemVf
-dCBzaXplKQ0KIAkJcmVzID0gLUVOT01FTTsNCiAJCWdvdG8gb3V0Ow0KIAl9DQorCWR1bXBpbmZv
-ID0ga3phbGxvYygyMDAsIEdGUF9LRVJORUwpOw0KKwlpZiAoIWR1bXBpbmZvKSB7DQorCQlrZnJl
-ZShzdHJidWYpOw0KKwkJcmVzID0gLUVOT01FTTsNCisJCWdvdG8gb3V0Ow0KKwl9DQogDQogCWVy
-ciA9IGhmc3BsdXNfZmluZF9hdHRyKGlub2RlLT5pX3NiLCBpbm9kZS0+aV9pbm8sIE5VTEwsICZm
-ZCk7DQogCWlmIChlcnIpIHsNCkBAIC03NDEsNiArNzUwLDE1IEBAIHNzaXplX3QgaGZzcGx1c19s
-aXN0eGF0dHIoc3RydWN0IGRlbnRyeSAqZGVudHJ5LCBjaGFyICpidWZmZXIsIHNpemVfdCBzaXpl
-KQ0KIAkJCWdvdG8gZW5kX2xpc3R4YXR0cjsNCiAJCX0NCiANCisJCXByX2luZm8oImZpbmQgeGF0
-dHIgc2l6ZTolbGQgYW5kIGR1bXAgc3RyYnVmIHByZSAyMCBieXRlczpcbiIsIHNpemUpOw0KKwkJ
-V1JJVEVfT05DRShrbXNhbl9lbmFibGVkLCBmYWxzZSk7DQorCQlpZiAoa21zYW5fZW5hYmxlZCA9
-PSBmYWxzZSkgew0KKwkJCWZvciAob2ZmID0gMDsgb2ZmIDwgMjA7IG9mZisrKSB7DQorCQkJCXNw
-cmludGYoZHVtcGluZm8gKyBvZmYgKiA1LCAiIDB4JTAyeCIsIHN0cmJ1ZltvZmZdKTsNCisJCQl9
-DQorCQkJcHJfaW5mbygiJXNcbiIsIGR1bXBpbmZvKTsNCisJCX0NCisJCVdSSVRFX09OQ0Uoa21z
-YW5fZW5hYmxlZCwgdHJ1ZSk7DQogCQlpZiAoIWJ1ZmZlciB8fCAhc2l6ZSkgew0KIAkJCWlmIChj
-YW5fbGlzdChzdHJidWYpKQ0KIAkJCQlyZXMgKz0gbmFtZV9sZW4oc3RyYnVmLCB4YXR0cl9uYW1l
-X2xlbik7DQpAQCAtNzU5LDYgKzc3Nyw3IEBAIHNzaXplX3QgaGZzcGx1c19saXN0eGF0dHIoc3Ry
-dWN0IGRlbnRyeSAqZGVudHJ5LCBjaGFyICpidWZmZXIsIHNpemVfdCBzaXplKQ0KIA0KIGVuZF9s
-aXN0eGF0dHI6DQogCWtmcmVlKHN0cmJ1Zik7DQorCWtmcmVlKGR1bXBpbmZvKTsNCiBvdXQ6DQog
-CWhmc19maW5kX2V4aXQoJmZkKTsNCiAJcmV0dXJuIHJlczsNCg==
+On Sat, May 20, 2023 at 10:30:17AM +0200, Christophe JAILLET wrote:
+> If an error occures after calling nv_mgmt_acquire_sema(), it should be
+> undone with a corresponding nv_mgmt_release_sema() call.
+
+nit: s/occures/occurs/
+
+> 
+> Add it in the error handling path of the probe as already done in the
+> remove function.
+
+I was going to ask what happens if nv_mgmt_acquire_sema() fails.
+Then I realised that it always returns 0.
+
+Perhaps it would be worth changing it's return type to void at some point.
+
+> Fixes: cac1c52c3621 ("forcedeth: mgmt unit interface")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> I don't think that the Fixes tag is really accurate, but
+> nv_mgmt_release_sema() was introduced here. And cac1c52c3621 is already old
+> so should be good enough.
+> ---
+>  drivers/net/ethernet/nvidia/forcedeth.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/net/ethernet/nvidia/forcedeth.c b/drivers/net/ethernet/nvidia/forcedeth.c
+> index 0605d1ee490d..7a549b834e97 100644
+> --- a/drivers/net/ethernet/nvidia/forcedeth.c
+> +++ b/drivers/net/ethernet/nvidia/forcedeth.c
+> @@ -6138,6 +6138,7 @@ static int nv_probe(struct pci_dev *pci_dev, const struct pci_device_id *id)
+>  	return 0;
+>  
+>  out_error:
+> +	nv_mgmt_release_sema(dev);
+>  	if (phystate_orig)
+>  		writel(phystate|NVREG_ADAPTCTL_RUNNING, base + NvRegAdapterControl);
+>  out_freering:
+> -- 
+> 2.34.1
+> 
+> 
