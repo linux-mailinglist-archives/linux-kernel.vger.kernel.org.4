@@ -2,86 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A792670CE0D
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 00:36:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EC7770CE0F
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 00:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234439AbjEVWgH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 18:36:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44290 "EHLO
+        id S234817AbjEVWgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 18:36:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbjEVWgF (ORCPT
+        with ESMTP id S234788AbjEVWgP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 18:36:05 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 214859C;
-        Mon, 22 May 2023 15:36:04 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34MKMYxj007942;
-        Mon, 22 May 2023 22:35:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=GyF9u10zK3b8Ehcl3xHrJgwZsQ7joD1Bo6aJOLb2Avg=;
- b=f/maWul0KL1bUSXz7ZsyW0A/HZQaOEVM2oWh451aOCCUfK/EILdfYCn5zQBiA6KugsrF
- mbxdjFI98jXLBb5c8tC/BY6ebuGVdo9pdq1MBqEBld2MZ/fokt51L+nkw/mMCb99TaB1
- MRhZMXwZK95Rtl0v2YXN1xOMth490sQCWlFnzfwHHSaM1MM3F7J2aKYg+eNxOUbPQwnA
- nRiryafevhuz1HQbZR0yzpyw5k16dICOwxB7iQtqmZ0wohpMz2MyHznWeLxKImbjDMJ2
- RDmOkXR3dLRUkq1NoaNPyii0LWJSdNVCyvvIfb4dKg69K3HYUmmM40594KzqXhq++Hc9 rA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qre8p09pb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 22:35:56 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34MMZMvr001817
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 22:35:22 GMT
-Received: from [10.71.110.189] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 22 May
- 2023 15:35:21 -0700
-Message-ID: <9804c558-124d-aca4-c534-158c0457b7bf@quicinc.com>
-Date:   Mon, 22 May 2023 15:35:13 -0700
+        Mon, 22 May 2023 18:36:15 -0400
+Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485D0FA
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 15:36:12 -0700 (PDT)
+Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-33765ca2c69so1234675ab.0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 15:36:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684794971; x=1687386971;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GkcPTyai8fLKGWDOfLOHN9Xafg7Hw5fvduTOLXDbabE=;
+        b=VCizD+/nifFZ8q1qUt1opZNc5lh0UKh1DvgjEVluB6tZsaed1M8j5j94dUXDmEoVeY
+         ZvDRJhf2pfZhTgZs4CaRjlgoa/pktTvRKhhUnc2Ru2PaQs2V2C6f7CddglX/Tq5W4XMR
+         6Uc5hKPSt6SkiaAvyz8NqkpiwGH8lNWTCZmTafzoKlcf4OXamK+lvhrrEUEk8tRgMx1w
+         xQtYneOXn3VZjzchd8mHd0O9Ngl3rznIRJ7BngqRp/MjCeYF1VaLbU/OSUIHQfXVYQkj
+         6BFzqd0e/n2nOMHiHCGLamGgmEdl7nzRfdR6Db97Ab13tE742zopkhCcNa3Z/pr7wckz
+         RT7w==
+X-Gm-Message-State: AC+VfDx5aYt1f8sk9gJ2a+yotMWA/ARQOn5Smlu6rohLAePs7dlnggRq
+        isoMx7FTHQNjray1KvOPeF5M7deZMqW9Mm47dNgZvK5cl5X7
+X-Google-Smtp-Source: ACHHUZ6A7OW3+C4d3KxiyFg7rBK4mtT8QvqxZA9bBUi0NV6FCyTyzJvgEQiyXEGl5G5PFH3O4Ho5BA0NfU7OshvByZVzvrTAGb6y
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3] drm/msm/dp: enable HDP plugin/unplugged interrupts at
- hpd_enable/disable
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>
-CC:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
-        <airlied@gmail.com>, <agross@kernel.org>,
-        <marijn.suijten@somainline.org>, <quic_abhinavk@quicinc.com>,
-        <quic_jesszhan@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1684791092-1822-1-git-send-email-quic_khsieh@quicinc.com>
- <20230522220555.7ood44kavjzzg3lv@ripper>
- <c4d6e019-1582-c94f-d56d-271c420d72ea@linaro.org>
-Content-Language: en-US
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <c4d6e019-1582-c94f-d56d-271c420d72ea@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: SR81ldgiOMVt5touDXY22-UAFxnm8qrh
-X-Proofpoint-GUID: SR81ldgiOMVt5touDXY22-UAFxnm8qrh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-22_16,2023-05-22_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- suspectscore=0 adultscore=0 mlxlogscore=979 mlxscore=0 malwarescore=0
- bulkscore=0 lowpriorityscore=0 spamscore=0 impostorscore=0 clxscore=1015
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305220191
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6638:10c5:b0:416:7e77:bb5f with SMTP id
+ q5-20020a05663810c500b004167e77bb5fmr6129956jad.0.1684794971452; Mon, 22 May
+ 2023 15:36:11 -0700 (PDT)
+Date:   Mon, 22 May 2023 15:36:11 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000cafb9305fc4fe588@google.com>
+Subject: [syzbot] [fs?] KASAN: null-ptr-deref Write in get_block (2)
+From:   syzbot <syzbot+aad58150cbc64ba41bdc@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,52 +54,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    4d6d4c7f541d Merge tag 'linux-kselftest-fixes-6.4-rc3' of ..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=17b34a5a280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=94af80bb8ddd23c4
+dashboard link: https://syzkaller.appspot.com/bug?extid=aad58150cbc64ba41bdc
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1615fbe9280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1282842e280000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/dcd8898335fc/disk-4d6d4c7f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/6a1f7abe57aa/vmlinux-4d6d4c7f.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/b485f41c18e6/bzImage-4d6d4c7f.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/19be7546cd7d/mount_1.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+aad58150cbc64ba41bdc@syzkaller.appspotmail.com
+
+memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL, pid=4996 'syz-executor412'
+loop0: detected capacity change from 0 to 128
+VFS: Found a Xenix FS (block size = 512) on device loop0
+sysv_free_block: trying to free block not in datazone
+==================================================================
+BUG: KASAN: null-ptr-deref in instrument_atomic_read_write include/linux/instrumented.h:96 [inline]
+BUG: KASAN: null-ptr-deref in test_and_set_bit_lock include/asm-generic/bitops/instrumented-lock.h:57 [inline]
+BUG: KASAN: null-ptr-deref in trylock_buffer include/linux/buffer_head.h:399 [inline]
+BUG: KASAN: null-ptr-deref in lock_buffer include/linux/buffer_head.h:405 [inline]
+BUG: KASAN: null-ptr-deref in alloc_branch fs/sysv/itree.c:148 [inline]
+BUG: KASAN: null-ptr-deref in get_block+0x567/0x16a0 fs/sysv/itree.c:251
+Write of size 8 at addr 0000000000000000 by task syz-executor412/4996
+
+CPU: 1 PID: 4996 Comm: syz-executor412 Not tainted 6.4.0-rc2-syzkaller-00018-g4d6d4c7f541d #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/28/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+ print_report+0xe6/0x540 mm/kasan/report.c:465
+ kasan_report+0x176/0x1b0 mm/kasan/report.c:572
+ kasan_check_range+0x283/0x290 mm/kasan/generic.c:187
+ instrument_atomic_read_write include/linux/instrumented.h:96 [inline]
+ test_and_set_bit_lock include/asm-generic/bitops/instrumented-lock.h:57 [inline]
+ trylock_buffer include/linux/buffer_head.h:399 [inline]
+ lock_buffer include/linux/buffer_head.h:405 [inline]
+ alloc_branch fs/sysv/itree.c:148 [inline]
+ get_block+0x567/0x16a0 fs/sysv/itree.c:251
+ __block_write_begin_int+0x548/0x1a50 fs/buffer.c:2064
+ __block_write_begin fs/buffer.c:2114 [inline]
+ block_write_begin+0x9c/0x1f0 fs/buffer.c:2175
+ sysv_write_begin+0x31/0x70 fs/sysv/itree.c:485
+ generic_perform_write+0x300/0x5e0 mm/filemap.c:3923
+ __generic_file_write_iter+0x17a/0x400 mm/filemap.c:4051
+ generic_file_write_iter+0xaf/0x310 mm/filemap.c:4083
+ do_iter_write+0x7b1/0xcb0 fs/read_write.c:860
+ vfs_writev fs/read_write.c:933 [inline]
+ do_pwritev+0x21a/0x360 fs/read_write.c:1030
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f3233222b19
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 51 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffecf15f268 EFLAGS: 00000246 ORIG_RAX: 0000000000000128
+RAX: ffffffffffffffda RBX: 0031656c69662f2e RCX: 00007f3233222b19
+RDX: 0000000000000005 RSI: 0000000020000480 RDI: 0000000000000004
+RBP: 00007f32331e2150 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000007fff R11: 0000000000000246 R12: 00007f32331e21e0
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+==================================================================
 
 
->>>   -static void dp_display_config_hpd(struct dp_display_private *dp)
->>> -{
->>> -
->>> -    dp_display_host_init(dp);
->>> -    dp_catalog_ctrl_hpd_config(dp->catalog);
->>> -
->>> -    /* Enable plug and unplug interrupts only if requested */
->>> -    if (dp->dp_display.internal_hpd)
->>> -        dp_catalog_hpd_config_intr(dp->catalog,
->>> -                DP_DP_HPD_PLUG_INT_MASK |
->>> -                DP_DP_HPD_UNPLUG_INT_MASK,
->>> -                true);
->>> -
->>> -    /* Enable interrupt first time
->>> -     * we are leaving dp clocks on during disconnect
->>> -     * and never disable interrupt
->>> -     */
->>> -    enable_irq(dp->irq);
->>
->> ...we need dp->irq enabled for handling the other interrupts, otherwise
->> e.g. AUX transfers will time out.
->>
->> I added enable_irq(dp_priv->irq) to the EV_HPD_INIT_SETUP case below,
->> just for testing, and with that the patch seems to be working fine.
->>
->>
->> Is there any reason why we need to delay its enablement to after we
->> unmask the HPD interrupts?
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-my though is aux transaction should happen after plugin interrupt detected.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-can you please let me know what did you do to trigger aux timeout?
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-It does not happen on me at my test.
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
->
-> As I wrote, I'd probably prefer to see enable_irq() and disable_irq() 
-> calls gone.
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
-ok, i will move enable_irq() out of here.
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
 
-
->>
->> Regards,
->> Bjorn
->>
->
+If you want to undo deduplication, reply with:
+#syz undup
