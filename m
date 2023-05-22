@@ -2,164 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02AAC70BF66
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:13:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 863AA70BF6A
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:14:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234269AbjEVNNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 09:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40152 "EHLO
+        id S230347AbjEVNOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 09:14:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233771AbjEVNNd (ORCPT
+        with ESMTP id S230184AbjEVNN7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 09:13:33 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 24577C4;
-        Mon, 22 May 2023 06:13:24 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.31:37766.365281712
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
-        by 189.cn (HERMES) with SMTP id 04C1C1002C5;
-        Mon, 22 May 2023 21:13:21 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-75648544bd-xp9j7 with ESMTP id 032c282a12e842aab0e121a2c28c9c82 for kernel@xen0n.name;
-        Mon, 22 May 2023 21:13:24 CST
-X-Transaction-ID: 032c282a12e842aab0e121a2c28c9c82
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <69edaf49-359a-229c-c8b4-8aa3af622008@189.cn>
-Date:   Mon, 22 May 2023 21:13:21 +0800
+        Mon, 22 May 2023 09:13:59 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2101.outbound.protection.outlook.com [40.107.220.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C5D7C4;
+        Mon, 22 May 2023 06:13:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lHsHaoQYIUDYds8PWfSKIAD5LRiaHNKzs5+f/reIzjxU/rDp4oQGJGId5zGvC0e0zK1A9XbaRvd3CBCCPZVBjV/lsvcrTTRTdHzRGrbGU5awHmLlrF1mvXK+io0mqWdpehIdtbeiBIP0kvQeiYul3SSOE+vJWaesAhVVYia8ZKrV2UjUKwSBvipkl99KUumlOsOIbLQI1LpC23WrpPtpGIPMgOiOmP4Kx+RrF8QyqHu2ds7T/Lh3+Th1+MAjRvVkF4IOhcSYrQeSVQ9ADCO9T0hjVuhHlhrfLYGVxeZFSrlB1IzokG2ztMxQO1nHImFH3vo1NGBKNhq0+K9tMvE+fg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YhJ+DqBuh7hxJ9ire3Jilz3Y/81HN1SSsdL3DdWowz0=;
+ b=hl+5Ga+CzrTz75uECOmN6eb/u6VoIHyik+lexFn66Zg/FBETpEgsDTrezQuo792GKWtrYuWkfBufBPMhlpNDT7TzKYOTn8TMmwwo3XnELn/9AIFRGGyAriedXdoIHykRDeQZNuKau2UgjCfYtqXAikNoKDmAZmB9KNlg29FREAfDiKHgHI9dZrXp8MCY01aMREEn1q6z/Ipqma2wzQI7SZ5Kd3xjFMolmCuKP9DqoTjrcZsywWwpxHwgtkAZFlUAXacdggJD/7s6wvfcAnpvwEUOUfDr+teUSc9ThHKTILH2niXTFyXG4juU6fdttUAt1lSqnzGQOS2XQUeeeoQ0Yw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YhJ+DqBuh7hxJ9ire3Jilz3Y/81HN1SSsdL3DdWowz0=;
+ b=LnorRJmhmt7LOpiWEIn+SxBhCtOmlBH9KtnSo2fYC0GlPNoCHlRs6yVB9dniRBIYfiOl7RhpBTtb/W1CpJKPQy1GzpsbGhXcCV/8dLod2MAHPNRzOGOknoZ5nPPuDd78G6IfFWaPmqQk1yX3dl9UPu17VoWb/vVByUOExekO29k=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by MW5PR13MB5995.namprd13.prod.outlook.com (2603:10b6:303:1cc::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Mon, 22 May
+ 2023 13:13:54 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6411.028; Mon, 22 May 2023
+ 13:13:54 +0000
+Date:   Mon, 22 May 2023 15:13:46 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel@sberdevices.ru, oxffffaa@gmail.com
+Subject: Re: [RFC PATCH v3 04/17] vsock/virtio: non-linear skb handling for
+ tap
+Message-ID: <ZGtqijZSCbAsS5D3@corigine.com>
+References: <20230522073950.3574171-1-AVKrasnov@sberdevices.ru>
+ <20230522073950.3574171-5-AVKrasnov@sberdevices.ru>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230522073950.3574171-5-AVKrasnov@sberdevices.ru>
+X-ClientProxiedBy: AS4P251CA0009.EURP251.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d2::20) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v14 1/2] drm: add kms driver for loongson display
- controller
-Content-Language: en-US
-To:     WANG Xuerui <kernel@xen0n.name>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>
-Cc:     linaro-mm-sig@lists.linaro.org, loongson-kernel@lists.loongnix.cn,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Liu Peibao <liupeibao@loongson.cn>, linux-media@vger.kernel.org
-References: <20230520105718.325819-1-15330273260@189.cn>
- <20230520105718.325819-2-15330273260@189.cn>
- <26fd78b9-c074-8341-c99c-4e3b38cd861a@xen0n.name>
- <e7f911cc-6588-bc0f-8e1e-759260f5187a@189.cn>
- <ed795dc0-823a-f3d8-9e70-1cf33c0de7f0@xen0n.name>
- <ac2fde55-c770-fbb5-844d-50fb38dd90be@189.cn>
- <331e7baa-a83b-b0c9-37f7-0e8e39187df4@xen0n.name>
- <5ae49b7a-b8d2-a822-65bc-6a894d2b1b4e@189.cn>
- <0e5e4a4b-1426-ffae-e958-cf8f9aece166@xen0n.name>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <0e5e4a4b-1426-ffae-e958-cf8f9aece166@xen0n.name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|MW5PR13MB5995:EE_
+X-MS-Office365-Filtering-Correlation-Id: 72c59bf2-cff9-49c7-f042-08db5ac6649c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: DLmv9yU1hzZd6gfgILgGvDIXoBs6AnmFei6BZSKheUr3dpBakLgXG8sU84LYwcLQHJvfwpybNzDqvexRNRljQqhLfeA0vHEWLjXMfOZ0Ob9vFKTfp+5ElL+Rg8NnZho/8faRDSkx4yUI2Ojj9ARdPqLeVwhzZ4BXUii+1Fg/8x4QPcLoVOvN335xBxcUTbbFd/y/72XjsNy1/pIlorTd1a83hgwWj1BhEqPrqsmUN7dhLuBrkSPsnG730h9go36JaeyLKWtFpMPwkEZHugE42DcTGZRWkulsqEemk61HZ/65TAMvk8VILXXO3jHDkkhZY16bz6KrMVwP7EaMTOMMz9b4NMZ0jUzBewAs8lG7QutFrjz88/dnHGHotkeYu0MGNON0kZXv9juv2+E4KQ2dJmilMh0FrHmMgtxn/ZysMibNBhR8XaqBfs3BmPdUpc92fAQrkzmWl0JIjum3jqTzVoBMR+qq2Xa3iMpDbEiY8qiIV/Bk6z8bM468itNiQeFVx4uTYSq4PQnyB5aYB5IfSZp8eoF2vt176tvA3hpsmNjj70vxEsJ/hEjkM9RjWBuM
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(39840400004)(136003)(376002)(346002)(451199021)(83380400001)(36756003)(6666004)(6486002)(86362001)(2906002)(54906003)(478600001)(6512007)(2616005)(186003)(6506007)(8676002)(7416002)(8936002)(66946007)(66556008)(44832011)(66476007)(38100700002)(316002)(5660300002)(41300700001)(6916009)(4326008);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?/H0/DWcYzYzcVTRfL0URDg5bHtHTwpuWZtOB6Blh0/G4AEjlr0dd0KRWvQgM?=
+ =?us-ascii?Q?dIibMNScG5PG+FL6Cf3q1rUL1dt3ieDwuoEfpu9XLRFY6wuP/zUKsIbuuBqa?=
+ =?us-ascii?Q?A1EG5GfigwPvD6OwfRlfyVUkRzbiyvOs7rvGm/ghCQgx/Q67nLUD4WEgeRxd?=
+ =?us-ascii?Q?Y7DSje/Nti7q96lqyIOs0U4cRtDFmXHVebFPgS9TRlcV3crFWEm+kOxk4+rS?=
+ =?us-ascii?Q?hHRft32Q0CUG8NRpEOJPYPe86pvLv+/NDPE5d9jYuvm3sNAKO0lBnGTT+jnc?=
+ =?us-ascii?Q?+A+x9SLp+Ftfd5F+GFJIk5aZFGvbRxi5iWwSrbEQlTs6zl5K5NWSwxGpnPKv?=
+ =?us-ascii?Q?M3yhqJktUC6ZAfH+OfnEwCpLYNW9exhIDepGggE9Qmx/4/uYI8RleoZRCi8Y?=
+ =?us-ascii?Q?RUkxx/2o6WXsBuZiHKS25LjQ3gyqxptQF/ZnPCNam0vrHN4P3+RJimGa8iqK?=
+ =?us-ascii?Q?1Sl2V25/vBCR/tktIF41mGFjfV5ebFSuDihLcVpCSBNtYCz3T/bz6/IlSKxR?=
+ =?us-ascii?Q?QuCZqhL7qqe1H1Wezgum1gI1YbHPuPkbFw3te/THmwnMT80knuIY78ClsPuv?=
+ =?us-ascii?Q?Kx7BrFMz8QsSWPdhE39YWEA9xkv27Zkx4iBM6DBMAHNuivsizMuv6cOf2961?=
+ =?us-ascii?Q?O6EUJYAEa2R90xCOs99+Kq2kh1RfAbKqk2IJiw3nzbdutl6n5ZaHrmjDtTGd?=
+ =?us-ascii?Q?ugmeDD0PJqNQ+d0eSKTwLrb6Ay2IMWFtjEVn/EcmmZbJKCHx5sD1WJvLaady?=
+ =?us-ascii?Q?FL3R92RA4ycPFtZ6ypd7XXyyr8IZ8+sQU11EancjwQgM4Ipw1yLlpJ/oVBok?=
+ =?us-ascii?Q?R2KJBhH003VKa5wV5Tsc8iuhnbNaVg8KwIHazwusiKRmnmNYri7WZCvHvKbg?=
+ =?us-ascii?Q?dwWlBxwAd1IOpXdgOqnK809J/ung7pvIeoZrXbOrsODoVAWv6hRp4eLRncd8?=
+ =?us-ascii?Q?nOHfGL+o9hPibH96vsB/6jqYzAbc1qldB7XK2tpeXEs3OTaReFW0+Gj2RfUG?=
+ =?us-ascii?Q?wcXxUNyRaraXQnTejCGJvwPGjT/Y5/bFN1MJk7egf9WD57Owz8HFkUOcyI/2?=
+ =?us-ascii?Q?6zVyyz5IWtP4xlcmCxp3nVF9x79CBV8ia/0T9ZNFiWcJAXAn/pIzWc1tPu59?=
+ =?us-ascii?Q?LjwgspalFffkyHtZogPvBwfV6mO5HtYrXOkO4jNGYH/wr5dEnpWGCGF3yczc?=
+ =?us-ascii?Q?Sdr+ayirBiRIe49YypMwZQeG04LVjEB2I0pNMaBeKEKImp7+dScsheXoc+/B?=
+ =?us-ascii?Q?Q2oxPdQbivmPBnAyzseR6qYXAoYAWU6h5mXJJwhmzALeyL+oPAlRx9akGCcx?=
+ =?us-ascii?Q?G2N1JbA/U4yNhADHNyJ1N25cce6atNzknws0OnbQH8Y84HQIn9ZlLlRkqugh?=
+ =?us-ascii?Q?IrdeygqazDoUw2Edv5G2qsDpoy9f/hDqIOsyFZFQlUGi8dl+373WCgbP7ssM?=
+ =?us-ascii?Q?sXscqPMmygdjZsGWLParwWdV4AyQqDaF7+a/Udv4HZKR83JiiN7t/H0ni63J?=
+ =?us-ascii?Q?IpJjqdY6/5mWUdnisPdFQRwEP1bZ4jvkDXYIVYtY+BSqMyJWgsaOBhr/izCy?=
+ =?us-ascii?Q?QVlzEOyU0slyxTOYUACWfl/b6SskXnA+78ktzWzPOB787rW7UAk/MW5AUA9G?=
+ =?us-ascii?Q?mGKJehC9tuQKel0iYVSUzsIIuIpE7WQ3AcVm384qDEdMzab4eINJzHEUCDqc?=
+ =?us-ascii?Q?C75Rew=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 72c59bf2-cff9-49c7-f042-08db5ac6649c
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2023 13:13:54.2279
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: RiT93JKZzJJRRij3Oi4D+tBG9L89grc4vkagTJGf+R0pf7urFWT8dqVlWgcWkFEeZrFs59MHEdImEIv7xj5O28L6rEJ6A1LGWRWYj5DGwDg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR13MB5995
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, May 22, 2023 at 10:39:37AM +0300, Arseniy Krasnov wrote:
+> For tap device new skb is created and data from the current skb is
+> copied to it. This adds copying data from non-linear skb to new
+> the skb.
+> 
+> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+> ---
+>  net/vmw_vsock/virtio_transport_common.c | 31 ++++++++++++++++++++++---
+>  1 file changed, 28 insertions(+), 3 deletions(-)
+> 
+> diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+> index 16effa8d55d2..9854f48a0544 100644
+> --- a/net/vmw_vsock/virtio_transport_common.c
+> +++ b/net/vmw_vsock/virtio_transport_common.c
+> @@ -106,6 +106,27 @@ virtio_transport_alloc_skb(struct virtio_vsock_pkt_info *info,
+>  	return NULL;
+>  }
+>  
+> +static void virtio_transport_copy_nonlinear_skb(struct sk_buff *skb,
+> +						void *dst,
+> +						size_t len)
+> +{
+> +	struct iov_iter iov_iter = { 0 };
+> +	struct iovec iovec;
+> +	size_t to_copy;
+> +
+> +	iovec.iov_base = dst;
 
-On 2023/5/22 18:25, WANG Xuerui wrote:
-> On 2023/5/22 18:17, Sui Jingfeng wrote:
->> Hi,
->>
->> On 2023/5/22 18:05, WANG Xuerui wrote:
->>> On 2023/5/22 17:49, Sui Jingfeng wrote:
->>>> Hi,
->>>>
->>>> On 2023/5/22 17:28, WANG Xuerui wrote:
->>>>> On 2023/5/22 17:25, Sui Jingfeng wrote:
->>>>>> Hi,
->>>>>>
->>>>>> On 2023/5/21 20:21, WANG Xuerui wrote:
->>>>>>>> + * LS3A4000/LS3A5000/LS3A6000 CPU, they are equipped with 
->>>>>>>> on-board video RAM
->>>>>>>> + * typically. While LS2K0500/LS2K1000/LS2K2000 are low cost 
->>>>>>>> SoCs which share
->>>>>>>> + * the system RAM as video RAM, they don't has a dediacated VRAM.
->>>>>>>
->>>>>>> CPU models are not typically prefixed with "LS", so "Loongson 
->>>>>>> 3A4000/3A5000/3A6000".
->>>>>>>
->>>>>> Here is because when you do programming, variable name should 
->>>>>> prefix with letters.
->>>>>
->>>>> Commit messages, comments, and log messages etc. are natural 
->>>>> language, so it's better to treat them differently. No problem to 
->>>>> keep code as-is IMO.
->>>>>
->>>> Then you get two name for a single chip,  take  LS7A1000 as an 
->>>> example.
->>>>
->>>> You name it as Loongson 7A1000 in commit message,  and then you 
->>>> have to define another name in the code,  say LS7A1000.
->>>>
->>>> "Loongson 7A1000" is too long,  not as compact as LS7A1000.
->>>>
->>>> This also avoid bind the company name to a specific product, 
->>>> because a company can produce many product.
->>>
->>> Nah, the existing convention is "LS7Xxxxx" for bridges and "Loongson 
->>> 3Axxxx" for CPUs (SoCs like 2K fall under this category too). It's 
->>> better to stick with existing practice so it would be familiar to 
->>> long-time Loongson/LoongArch developers, but I personally don't 
->>> think it will hamper understanding if you feel like doing otherwise.
->>>
->> Can you explain why it is better?
->>
->> is it that the already existing is better ?
->
-> It's not about subjective perception of "better" or "worse", but about 
-> tree-wide consistency, and about reducing any potential confusion from 
-> newcomers. I remember Huacai once pointing out that outsiders usually 
-> have a hard time remembering "1, 2, and 3 are CPUs, some 2 are SoCs, 7 
-> are bridge chips", and consistently referring to the bridge chips 
-> throughout the tree as "LS7A" helped.
->
-> In any case, for the sake of consistency, you can definitely refer to 
-> the CPU models in natural language like "LS3Axxxx"; just make sure to 
-> refactor for example every occurrence in arch/loongarch and other 
-> parts of drivers/. That's a lot of churn, though, so I don't expect 
-> such changes to get accepted, and that's why the tree-wide consistency 
-> should be favored over the local one.
->
-There are document[1] which named LS7A1000 bridge chip as Loongson 
-7A1000 Bridge,
+Hi Arseniy,
 
-which is opposed to what you have said "the existing convention is 
-LS7Xxxxx for bridges".
+Sparse seems unhappy about this.
+Though, TBH, I'm unsure what should be done about it.
+
+.../virtio_transport_common.c:117:24: warning: incorrect type in assignment (different address spaces)
+.../virtio_transport_common.c:117:24:    expected void [noderef] __user *iov_base
+.../virtio_transport_common.c:117:24:    got void *dst
 
 
-there are also plenty projects[2] which encode ls2k1000 as project name, 
-which simply
-
-don't fall into the category as you have mentioned("Loongson 3Axxxx").
-
-
-See [1][2] for reference, how to explain this phenomenon then?
-
-
-[1] 
-https://loongson.github.io/LoongArch-Documentation/Loongson-7A1000-usermanual-EN
-
-[2] https://github.com/zhaozhi0810/pmon-ls2k1000-2022
-
-
+...
