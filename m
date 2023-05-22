@@ -2,350 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F95D70CFA6
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 02:42:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5200070CF93
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 02:41:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235065AbjEWAlz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 20:41:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37316 "EHLO
+        id S234697AbjEWAlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 20:41:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234723AbjEWABl (ORCPT
+        with ESMTP id S235065AbjEWAKx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 20:01:41 -0400
-Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54EF2213F;
-        Mon, 22 May 2023 16:55:51 -0700 (PDT)
-Received: by mail-ot1-x332.google.com with SMTP id 46e09a7af769-6af7daff37eso1141127a34.0;
-        Mon, 22 May 2023 16:55:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684799750; x=1687391750;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tItS/JirFunMX5RfI2+aJ2PuNtEICNcjEQi3pmV0waQ=;
-        b=Oxk2wkmGKzN+KZViHTjAnIHcCWo+gN4WIpgSyeC38zjz0/hy481mG3wiKfWHFCi5xO
-         jT8cRnHQ3D3ueSB0lDmMHwzLh3KvDfuwKsW0XIpyFf/xyfvVx5huI+WnPlyt+LJJOjis
-         eUedKUWiJFf+2iKdFk/elq1GmfJPnZmXM80SwCwD7wQwpnwg3a3uDlP9iMVegvFYx+Y2
-         lgXAKuOW8opnf6DLXDlNtrrHKgM3A1Zkf3eo2BjeTdZZbaezCMRCeLGj5C1zZXFMMLYL
-         wKAqOZC330NVZoYCNaL7hzH/dBQWeJVXelx9UNWtp+r9MKl8lZcY9W8eQgtVsKw0JImk
-         eCqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684799750; x=1687391750;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tItS/JirFunMX5RfI2+aJ2PuNtEICNcjEQi3pmV0waQ=;
-        b=j5H1XNGO8ygVIUlhkdVWHf1ny78B5VZmQ6ghEKZDjM1XxVgnnE6bAjn+10CojJB3IU
-         ygqDgAI0m93xvGLkUwdH4KVsFGD+mnSQkrK4STbsrsZYwoPADiTjG31rXy6VASHX9LPc
-         wq9KoaejKLgFzus2uHgGWw8XQhTw0ZCcf51bQCbkzSw3oFmxb6TEH4hXdwzuIK4PG432
-         //xNkiyECy5MmmcCYgg4lQgtHCipB83bYWVuSNSJj4H2EIVRStTkOvodrPNB/43GUfWM
-         ZCmQMO4vzLbaF7eoqOPb5xm0HrN6WjX8m9kGe4JxrF/tp9Zi/bPJO/PZMaEf6UOB0FAA
-         Eeww==
-X-Gm-Message-State: AC+VfDw35I5GZtVckiQIKR+aexKrQpQkZE9PUnsioabG+RP+cBEohS8l
-        7YQO1wksPqj1hq/YIfOOdA==
-X-Google-Smtp-Source: ACHHUZ7J2d9jQgy3oq7FjYSJFKKOLBhyVFtopnugZ+aCOiVhrEIYqEqEii3AeTLVJme3IWQVqMoV4w==
-X-Received: by 2002:a9d:7ad7:0:b0:6ac:8844:3605 with SMTP id m23-20020a9d7ad7000000b006ac88443605mr6297410otn.30.1684799750582;
-        Mon, 22 May 2023 16:55:50 -0700 (PDT)
-Received: from C02FL77VMD6R.bytedance.net ([208.184.112.130])
-        by smtp.gmail.com with ESMTPSA id d5-20020a05683018e500b006a65be836acsm2889645otf.16.2023.05.22.16.55.49
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 22 May 2023 16:55:50 -0700 (PDT)
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-X-Google-Original-From: Peilin Ye <peilin.ye@bytedance.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>
-Cc:     Peilin Ye <peilin.ye@bytedance.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Vlad Buslov <vladbu@mellanox.com>,
-        Pedro Tammela <pctammela@mojatatu.com>,
-        Hillf Danton <hdanton@sina.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>,
-        Peilin Ye <yepeilin.cs@gmail.com>
-Subject: [PATCH v2 net 6/6] net/sched: qdisc_destroy() old ingress and clsact Qdiscs before grafting
-Date:   Mon, 22 May 2023 16:55:36 -0700
-Message-Id: <8e3383d0bacd084f0e33d9158d24bd411f1bf6ba.1684796705.git.peilin.ye@bytedance.com>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
-In-Reply-To: <cover.1684796705.git.peilin.ye@bytedance.com>
-References: <cover.1684796705.git.peilin.ye@bytedance.com>
+        Mon, 22 May 2023 20:10:53 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2075.outbound.protection.outlook.com [40.107.92.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3379B1FE2;
+        Mon, 22 May 2023 16:58:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LRlLCAtVU5gXVGgNCrAAwn5hY4/wi4sEb29t0tpL/DP0ziCQGVql9PRbq86HENmIuE44me/Qu+zE0rj36YeT3X3o4p9YwvT5iuDp8VGLnNGin0Faj6NsP2SmCDwLeb+8jrpNeF/+a1+XiGFEd+65Crey5UJBWW1ZS7GQX9emCY1ZDiQRzYJuHWhGMu0qLuOqH5dYVG9/9anGxg1AGkFOojpmUUIdWymSY8ksc7z/MLJhsz+4cqVrLyV1c0Etty/POdHTtjsWxKWq9mCDKRHRVKrK2FzUHMb5BlNjY3aIcjOXueoYFDH5q3XZYD8vxA8ttmZXGgNgN9UEJZO6ckdbLQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jEkNr6AJaFwgL/jaMc+MNaYqZQ0e3Z3gtv4fA3zmPqk=;
+ b=dyp4V60fK8PZpvvqp3aDFmRnm/L9KysZArF6geT8HXvZKrh51M082i9TY9ypWiiclrpVZINclx4qXytIGLw9AmOZRwklLZVOpwBsUbexnJko7FBgVR+OwpsWLeJq/tM1j9ISh3s2tQNLNlWw/S6+g4f5Db065lnXJLisLUweZKQ21dbZ/nUL7rFZRzdlxkOnv3B+3pqT1cl9upDkq0696gr0zv5KdaezD/a8qhKcnxvOK5m9pIh+QSIMFV6YZlMB36CxPjQUGRUer0w2d2tpGZ7oP2XX+bxjKpIDJT39HPXAy5zCkWDRdn1m2tf7G3gIWcXBHnRyCkqEktbIfzOyJg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jEkNr6AJaFwgL/jaMc+MNaYqZQ0e3Z3gtv4fA3zmPqk=;
+ b=Zh4fcYZHp5XpVXcSRIrhxHUIeYLif8rldBn7g5hdp82gwt8uWsK2283lJf8WXKWe7XjGxFt85HTL8IAhblOaJ2wa8mmZenf8LcDeQv37z93aZ+U+5C0K2NuWeD9FCj2SetswkNlpYN1p2knZEq6/6v15IYbdCdnFbwA58yDREZ4=
+Received: from BYAPR01CA0024.prod.exchangelabs.com (2603:10b6:a02:80::37) by
+ BL3PR12MB6524.namprd12.prod.outlook.com (2603:10b6:208:38c::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6411.28; Mon, 22 May 2023 23:58:56 +0000
+Received: from DM6NAM11FT074.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:a02:80:cafe::8d) by BYAPR01CA0024.outlook.office365.com
+ (2603:10b6:a02:80::37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28 via Frontend
+ Transport; Mon, 22 May 2023 23:58:56 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT074.mail.protection.outlook.com (10.13.173.203) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6411.29 via Frontend Transport; Mon, 22 May 2023 23:58:56 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 22 May
+ 2023 18:58:55 -0500
+Date:   Mon, 22 May 2023 18:58:38 -0500
+From:   Michael Roth <michael.roth@amd.com>
+To:     Sean Christopherson <seanjc@google.com>
+CC:     David Hildenbrand <david@redhat.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        <dhildenb@redhat.com>, Quentin Perret <qperret@google.com>,
+        <tabba@google.com>, <wei.w.wang@intel.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Ackerley Tng <ackerleytng@google.com>, <kvm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Hugh Dickins <hughd@google.com>,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: Rename restrictedmem => guardedmem? (was: Re: [PATCH v10 0/9]
+ KVM: mm: fd-based approach for supporting KVM)
+Message-ID: <20230522235838.ov3722lcusotzlvo@amd.com>
+References: <1ed06a62-05a1-ebe6-7ac4-5b35ba272d13@redhat.com>
+ <ZD2bBB00eKP6F8kz@google.com>
+ <9efef45f-e9f4-18d1-0120-f0fc0961761c@redhat.com>
+ <ZD86E23gyzF6Q7AF@google.com>
+ <5869f50f-0858-ab0c-9049-4345abcf5641@redhat.com>
+ <ZEM5Zq8oo+xnApW9@google.com>
+ <20230512002124.3sap3kzxpegwj3n2@amd.com>
+ <ZF5+5g5hI7xyyIAS@google.com>
+ <20230522135036.wnvsmryhkvstwvw2@amd.com>
+ <ZGuh1J6AOw5v2R1W@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ZGuh1J6AOw5v2R1W@google.com>
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT074:EE_|BL3PR12MB6524:EE_
+X-MS-Office365-Filtering-Correlation-Id: e634784c-1884-43c9-a1cd-08db5b2080da
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9Rh99mTMmhnIXw8qCl8Drff8gezCnx/6qMoZp+MtD+TAAA/u90FWsLqqLhhybmx3JNp0345XVpjpWcevAxBoBFOomucB2xnBu8hd6uAezjTISLA9hJzuP7fhXnGK61tiyJEEEMYZ6+YqmbJ0/BLPNtXeicex01zWHOWaGHyW2othcCEePQ7nureBgNqqhCM/xU6lseTIOij5Ugv1RDb+bP0ERmonVDvS8D3wcPG3pQn9Rx81Z9hcPrh6RLRGlR8LeqCcjqQAAGMZyOJf8MAk9jHXzvVaNB5WeSknJ5BT/U5KlfN0Q6cD8ioKhnWvZnL58wBuJIVBX7l9yCbXgDYElJBTdedR6w3ca7wk/LLST+o/C/6SjNikAcf7LR/fqQpRAQQjvjwYajx9uUhOpj9E4RAhtAc5u083+8JdJEdOZTLtX0BfwDC+tqO6PxSbpIQNEHencQOAoCcnwxJrmbZeah2XnOZkua2nMdiNCTE+aRu4agjX9mZWqjno5+bkKbOqBaGa8TKvvhYY7C6DCGxyeZgxbUkOg+o0M+RSXfxFaRAi3+erjqgvyQgcZGnl4xij8wdiTqNukLgQoI+TmjpowZgw91p1NUAMahrsfFtIiqKHYN/nqvoQf3roqlAym1GDHQVl+KxTuaQBC8RLzVU7haXf61Kael5RCXKSrHf8o6eLOGMs952fdodj46OxDYPaJY5GnR2xc2nuDK7mDrIFH2lHLBZFHEfnJW/pUtu2Jap/xCEdadnSCojOZ4PUy8W1YVAD5TF6+xC7z8TO5b6lnQ==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(39860400002)(136003)(346002)(451199021)(36840700001)(46966006)(40470700004)(81166007)(356005)(8676002)(8936002)(7416002)(5660300002)(82740400003)(40460700003)(47076005)(16526019)(40480700001)(26005)(2906002)(1076003)(186003)(2616005)(36756003)(336012)(426003)(83380400001)(82310400005)(44832011)(36860700001)(86362001)(54906003)(316002)(6666004)(6916009)(4326008)(66899021)(478600001)(70206006)(70586007)(41300700001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2023 23:58:56.1012
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e634784c-1884-43c9-a1cd-08db5b2080da
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT074.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6524
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-mini_Qdisc_pair::p_miniq is a double pointer to mini_Qdisc, initialized in
-ingress_init() to point to net_device::miniq_ingress.  ingress Qdiscs
-access this per-net_device pointer in mini_qdisc_pair_swap().  Similar for
-clsact Qdiscs and miniq_egress.
+On Mon, May 22, 2023 at 10:09:40AM -0700, Sean Christopherson wrote:
+> On Mon, May 22, 2023, Michael Roth wrote:
+> > On Fri, May 12, 2023 at 11:01:10AM -0700, Sean Christopherson wrote:
+> > > On Thu, May 11, 2023, Michael Roth wrote:
+> > I put together a tree with some fixups that are needed for against the
+> > kvm_gmem_solo base tree, and a set of hooks to handle invalidations,
+> > preparing the initial private state as suggested above, and a
+> > platform-configurable mask that the x86 MMU code can use for determining
+> > whether a fault is for private vs. shared pages.
+> > 
+> >   KVM: x86: Determine shared/private faults using a configurable mask
+> >   ^ for TDX we could trivially add an inverted analogue of the mask/logic
+> >   KVM: x86: Use full 64-bit error code for kvm_mmu_do_page_fault
+> >   KVM: x86: Add platform hooks for private memory invalidations
+> 
+> Hrm, I'd prefer to avoid adding another hook for this case, arch code already has
+> a "hook" in the form of kvm_unmap_gfn_range().  We'd probably just need a
+> kvm_gfn_range.is_private flag to communicate to arch/vendor code that the memory
+> being zapped is private.
 
-Unfortunately, after introducing RTNL-unlocked RTM_{NEW,DEL,GET}TFILTER
-requests (thanks Hillf Danton for the hint), when replacing ingress or
-clsact Qdiscs, for example, the old Qdisc ("@old") could access the same
-miniq_{in,e}gress pointer(s) concurrently with the new Qdisc ("@new"),
-causing race conditions [1] including a use-after-free bug in
-mini_qdisc_pair_swap() reported by syzbot:
+kvm_unmap_gfn_range() does however get called with kvm->mmu_lock held so
+it might be tricky to tie RMP updates into that path.
 
- BUG: KASAN: slab-use-after-free in mini_qdisc_pair_swap+0x1c2/0x1f0 net/sched/sch_generic.c:1573
- Write of size 8 at addr ffff888045b31308 by task syz-executor690/14901
-...
- Call Trace:
-  <TASK>
-  __dump_stack lib/dump_stack.c:88 [inline]
-  dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
-  print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:319
-  print_report mm/kasan/report.c:430 [inline]
-  kasan_report+0x11c/0x130 mm/kasan/report.c:536
-  mini_qdisc_pair_swap+0x1c2/0x1f0 net/sched/sch_generic.c:1573
-  tcf_chain_head_change_item net/sched/cls_api.c:495 [inline]
-  tcf_chain0_head_change.isra.0+0xb9/0x120 net/sched/cls_api.c:509
-  tcf_chain_tp_insert net/sched/cls_api.c:1826 [inline]
-  tcf_chain_tp_insert_unique net/sched/cls_api.c:1875 [inline]
-  tc_new_tfilter+0x1de6/0x2290 net/sched/cls_api.c:2266
-...
+> 
+> That'd leave a gap for the unbind() case because kvm_unmap_gfn_range() is invoked
+> if and only if there's an overlapping memslot.  I'll chew on that a bit to see if
+> there's a way to cleanly handle that case without another hook.  I think it's worth
+> mapping out exactly what we want unbind() to look like anyways, e.g. right now the
+> code subtly relies on private memslots being immutable.
 
-@old and @new should not affect each other.  In other words, @old should
-never modify miniq_{in,e}gress after @new, and @new should not update
-@old's RCU state.  Fixing without changing sch_api.c turned out to be
-difficult (please refer to Closes: for discussions).  Instead, make sure
-@new's first call always happen after @old's last call, in
-qdisc_destroy(), has finished:
+I thought the direction you sort of driving at was to completely decouple
+RMP updates for physical pages from the KVM MMU map/unmap paths since the
+life-cycles of those backing pages and associated RMP state are somewhat
+separate from the state of the GFNs and kvm->mem_attr_array. It seems to
+make sense when dealing with things like this unbind() case.
 
-In qdisc_graft(), return -EAGAIN and tell the caller to replay
-(suggested by Vlad Buslov) if @old has any ongoing RTNL-unlocked filter
-requests, and call qdisc_destroy() for @old before grafting @new.
+There's also cases like userspaces that opt to not discard memory after
+conversions because they highly favor performance over memory usage. In
+those cases it would make sense to defer marking the pages as shared in
+the RMP until the FALLOC_FL_PUNCH_HOLE, rather than triggering it via
+KVM MMU invalidation path after a conversion.
 
-Introduce qdisc_refcount_dec_if_one() as the counterpart of
-qdisc_refcount_inc_nz() used for RTNL-unlocked filter requests.  Introduce
-a non-static version of qdisc_destroy() that does a TCQ_F_BUILTIN check,
-just like qdisc_put() etc.
+> 
+> >   KVM: x86: Add platform hook for initializing private memory
+> 
+> This should also be unnecessary.  The call to kvm_gmem_get_pfn() is from arch
+> code, KVM just needs to ensure the RMP is converted before acquiring mmu_lock,
+> e.g. KVM has all the necessary info in kvm_tdp_mmu_page_fault().
 
-Depends on patch "net/sched: Refactor qdisc_graft() for ingress and clsact
-Qdiscs".
+I think that approach would work fine. The way I was thinking of things
+is that KVM MMU would necessarily call kvm_gmem_get_pfn() to grab the
+page before mapping it into the guest, so moving it out into an explicit
+call should work just as well. That would also drop the need for the
+__kvm_gmem_get_pfn() stuff I needed to add for the initial case where we
+need to access the PFN prior to making it private.
 
-[1] To illustrate, the syzkaller reproducer adds ingress Qdiscs under
-TC_H_ROOT (no longer possible after patch "net/sched: sch_ingress: Only
-create under TC_H_INGRESS") on eth0 that has 8 transmission queues:
+> 
+> The only reason to add another arch hook would be if we wanted to converted the
+> RMP when _allocating_, e.g. to preconvert in response to fallocate() instead of
+> waiting until #NPF.  But I think I would rather add a generic ioctl() to allow
+> userspace to effectively prefault guest memory, e.g. to setup the RMP before
+> running a vCPU.  Such an ioctl() would potentially be useful in other scenarios,
+> e.g. on the dest during live migration to reduce jitter.
 
-  Thread 1 creates ingress Qdisc A (containing mini Qdisc a1 and a2), then
-  adds a flower filter X to A.
+Agreed, deferring the RMPUPDATE until it's actually needed would give us
+more flexibility on optimizing for things like lazy-acceptance.
 
-  Thread 2 creates another ingress Qdisc B (containing mini Qdisc b1 and
-  b2) to replace A, then adds a flower filter Y to B.
+For less-common scenarios like preallocation it makes sense to make that
+an opt-in sort of thing for userspace to configure explicitly.
 
- Thread 1               A's refcnt   Thread 2
-  RTM_NEWQDISC (A, RTNL-locked)
-   qdisc_create(A)               1
-   qdisc_graft(A)                9
+> 
+> >   *fixup (kvm_gmem_solo): KVM: Fix end range calculation for MMU invalidations
+> 
+> There was another bug in this path.  The math for handling a non-zero offsets into
+> the file was wrong.  The code now looks like:
+> 
+> 	xa_for_each_range(&gmem->bindings, index, slot, start, end - 1) {
+> 		struct kvm_gfn_range gfn_range = {
+> 			.start = slot->base_gfn + start - slot->gmem.index,
 
-  RTM_NEWTFILTER (X, RTNL-unlocked)
-   __tcf_qdisc_find(A)          10
-   tcf_chain0_head_change(A)
-   mini_qdisc_pair_swap(A) (1st)
-            |
-            |                         RTM_NEWQDISC (B, RTNL-locked)
-         RCU sync                2     qdisc_graft(B)
-            |                    1     notify_and_destroy(A)
-            |
-   tcf_block_release(A)          0    RTM_NEWTFILTER (Y, RTNL-unlocked)
-   qdisc_destroy(A)                    tcf_chain0_head_change(B)
-   tcf_chain0_head_change_cb_del(A)    mini_qdisc_pair_swap(B) (2nd)
-   mini_qdisc_pair_swap(A) (3rd)                |
-           ...                                 ...
+Sorry if I'm missing something here, but isn't there a risk that:
 
-Here, B calls mini_qdisc_pair_swap(), pointing eth0->miniq_ingress to its
-mini Qdisc, b1.  Then, A calls mini_qdisc_pair_swap() again during
-ingress_destroy(), setting eth0->miniq_ingress to NULL, so ingress packets
-on eth0 will not find filter Y in sch_handle_ingress().
+  start - slot->gmem.index
 
-This is only one of the possible consequences of concurrently accessing
-miniq_{in,e}gress pointers.  The point is clear though: again, A should
-never modify those per-net_device pointers after B, and B should not
-update A's RCU state.
+would be less than zero? E.g. starting GFN was 0, but current slot is bound
+at some non-zero offset in the same gmem instance. I guess the warning below
+shouldn't caught that, but it seems like a real scenario.
 
-Fixes: 7a096d579e8e ("net: sched: ingress: set 'unlocked' flag for Qdisc ops")
-Fixes: 87f373921c4e ("net: sched: ingress: set 'unlocked' flag for clsact Qdisc ops")
-Reported-by: syzbot+b53a9c0d1ea4ad62da8b@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/r/0000000000006cf87705f79acf1a@google.com/
-Cc: Hillf Danton <hdanton@sina.com>
-Cc: Vlad Buslov <vladbu@mellanox.com>
-Signed-off-by: Peilin Ye <peilin.ye@bytedance.com>
----
-changes in v2:
-  - replay the request if the current Qdisc has any ongoing RTNL-unlocked
-    filter requests (Vlad)
-  - minor changes in code comments and commit log
+Since 'index' corresponds to the gmem offset of the current slot, is there any
+reason not to do something like this?:
 
- include/net/sch_generic.h |  8 ++++++++
- net/sched/sch_api.c       | 32 ++++++++++++++++++++++++++------
- net/sched/sch_generic.c   | 14 +++++++++++---
- 3 files changed, 45 insertions(+), 9 deletions(-)
+  .start = slot->base_gfn + index - slot->gmem.index,
 
-diff --git a/include/net/sch_generic.h b/include/net/sch_generic.h
-index fab5ba3e61b7..3e9cc43cbc90 100644
---- a/include/net/sch_generic.h
-+++ b/include/net/sch_generic.h
-@@ -137,6 +137,13 @@ static inline void qdisc_refcount_inc(struct Qdisc *qdisc)
- 	refcount_inc(&qdisc->refcnt);
- }
- 
-+static inline bool qdisc_refcount_dec_if_one(struct Qdisc *qdisc)
-+{
-+	if (qdisc->flags & TCQ_F_BUILTIN)
-+		return true;
-+	return refcount_dec_if_one(&qdisc->refcnt);
-+}
-+
- /* Intended to be used by unlocked users, when concurrent qdisc release is
-  * possible.
-  */
-@@ -652,6 +659,7 @@ void dev_deactivate_many(struct list_head *head);
- struct Qdisc *dev_graft_qdisc(struct netdev_queue *dev_queue,
- 			      struct Qdisc *qdisc);
- void qdisc_reset(struct Qdisc *qdisc);
-+void qdisc_destroy(struct Qdisc *qdisc);
- void qdisc_put(struct Qdisc *qdisc);
- void qdisc_put_unlocked(struct Qdisc *qdisc);
- void qdisc_tree_reduce_backlog(struct Qdisc *qdisc, int n, int len);
-diff --git a/net/sched/sch_api.c b/net/sched/sch_api.c
-index f72a581666a2..b3bafa6c1b44 100644
---- a/net/sched/sch_api.c
-+++ b/net/sched/sch_api.c
-@@ -1080,10 +1080,18 @@ static int qdisc_graft(struct net_device *dev, struct Qdisc *parent,
- 		if ((q && q->flags & TCQ_F_INGRESS) ||
- 		    (new && new->flags & TCQ_F_INGRESS)) {
- 			ingress = 1;
--			if (!dev_ingress_queue(dev)) {
-+			dev_queue = dev_ingress_queue(dev);
-+			if (!dev_queue) {
- 				NL_SET_ERR_MSG(extack, "Device does not have an ingress queue");
- 				return -ENOENT;
- 			}
-+
-+			/* Replay if the current ingress (or clsact) Qdisc has ongoing
-+			 * RTNL-unlocked filter request(s).  This is the counterpart of that
-+			 * qdisc_refcount_inc_nz() call in __tcf_qdisc_find().
-+			 */
-+			if (!qdisc_refcount_dec_if_one(dev_queue->qdisc_sleeping))
-+				return -EAGAIN;
- 		}
- 
- 		if (dev->flags & IFF_UP)
-@@ -1104,8 +1112,16 @@ static int qdisc_graft(struct net_device *dev, struct Qdisc *parent,
- 				qdisc_put(old);
- 			}
- 		} else {
--			dev_queue = dev_ingress_queue(dev);
--			old = dev_graft_qdisc(dev_queue, new);
-+			old = dev_graft_qdisc(dev_queue, NULL);
-+
-+			/* {ingress,clsact}_destroy() @old before grafting @new to avoid
-+			 * unprotected concurrent accesses to net_device::miniq_{in,e}gress
-+			 * pointer(s) in mini_qdisc_pair_swap().
-+			 */
-+			qdisc_notify(net, skb, n, classid, old, new, extack);
-+			qdisc_destroy(old);
-+
-+			dev_graft_qdisc(dev_queue, new);
- 		}
- 
- skip:
-@@ -1119,8 +1135,6 @@ static int qdisc_graft(struct net_device *dev, struct Qdisc *parent,
- 
- 			if (new && new->ops->attach)
- 				new->ops->attach(new);
--		} else {
--			notify_and_destroy(net, skb, n, classid, old, new, extack);
- 		}
- 
- 		if (dev->flags & IFF_UP)
-@@ -1458,6 +1472,7 @@ static int tc_get_qdisc(struct sk_buff *skb, struct nlmsghdr *n,
- 	struct Qdisc *p = NULL;
- 	int err;
- 
-+replay:
- 	err = nlmsg_parse_deprecated(n, sizeof(*tcm), tca, TCA_MAX,
- 				     rtm_tca_policy, extack);
- 	if (err < 0)
-@@ -1515,8 +1530,11 @@ static int tc_get_qdisc(struct sk_buff *skb, struct nlmsghdr *n,
- 			return -ENOENT;
- 		}
- 		err = qdisc_graft(dev, p, skb, n, clid, NULL, q, extack);
--		if (err != 0)
-+		if (err != 0) {
-+			if (err == -EAGAIN)
-+				goto replay;
- 			return err;
-+		}
- 	} else {
- 		qdisc_notify(net, skb, n, clid, NULL, q, NULL);
- 	}
-@@ -1704,6 +1722,8 @@ static int tc_modify_qdisc(struct sk_buff *skb, struct nlmsghdr *n,
- 	if (err) {
- 		if (q)
- 			qdisc_put(q);
-+		if (err == -EAGAIN)
-+			goto replay;
- 		return err;
- 	}
- 
-diff --git a/net/sched/sch_generic.c b/net/sched/sch_generic.c
-index 37e41f972f69..e14ed47f961c 100644
---- a/net/sched/sch_generic.c
-+++ b/net/sched/sch_generic.c
-@@ -1046,7 +1046,7 @@ static void qdisc_free_cb(struct rcu_head *head)
- 	qdisc_free(q);
- }
- 
--static void qdisc_destroy(struct Qdisc *qdisc)
-+static void __qdisc_destroy(struct Qdisc *qdisc)
- {
- 	const struct Qdisc_ops  *ops = qdisc->ops;
- 
-@@ -1070,6 +1070,14 @@ static void qdisc_destroy(struct Qdisc *qdisc)
- 	call_rcu(&qdisc->rcu, qdisc_free_cb);
- }
- 
-+void qdisc_destroy(struct Qdisc *qdisc)
-+{
-+	if (qdisc->flags & TCQ_F_BUILTIN)
-+		return;
-+
-+	__qdisc_destroy(qdisc);
-+}
-+
- void qdisc_put(struct Qdisc *qdisc)
- {
- 	if (!qdisc)
-@@ -1079,7 +1087,7 @@ void qdisc_put(struct Qdisc *qdisc)
- 	    !refcount_dec_and_test(&qdisc->refcnt))
- 		return;
- 
--	qdisc_destroy(qdisc);
-+	__qdisc_destroy(qdisc);
- }
- EXPORT_SYMBOL(qdisc_put);
- 
-@@ -1094,7 +1102,7 @@ void qdisc_put_unlocked(struct Qdisc *qdisc)
- 	    !refcount_dec_and_rtnl_lock(&qdisc->refcnt))
- 		return;
- 
--	qdisc_destroy(qdisc);
-+	__qdisc_destroy(qdisc);
- 	rtnl_unlock();
- }
- EXPORT_SYMBOL(qdisc_put_unlocked);
--- 
-2.20.1
+But then, if that's the case, wouldn't index == slot->gmem.index? Suggesting
+we case just simplify to this?:
 
+  .start = slot->base_gfn,
+
+-Mike
+
+> 			.end = slot->base_gfn + min(end - slot->gmem.index, slot->npages),
+> 			.slot = slot,
+> 			.pte = __pte(0),
+> 			.may_block = true,
+> 		};
+> 
+> 		if (WARN_ON_ONCE(start < slot->gmem.index ||
+> 				 end > slot->gmem.index + slot->npages))
+> 			continue;
+> 
+> 		kvm_mmu_invalidate_range_add(kvm, gfn_range.start, gfn_range.end);
+> 
+> 		flush |= kvm_unmap_gfn_range(kvm, &gfn_range);
+> 	}
