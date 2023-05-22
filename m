@@ -2,109 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13DFB70B69F
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 09:36:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 368C570B6A2
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 09:37:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231964AbjEVHgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 03:36:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59234 "EHLO
+        id S232626AbjEVHgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 03:36:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231922AbjEVHgL (ORCPT
+        with ESMTP id S232236AbjEVHgW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 03:36:11 -0400
-Received: from mail-yb1-xb2c.google.com (mail-yb1-xb2c.google.com [IPv6:2607:f8b0:4864:20::b2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00AE69E
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 00:36:07 -0700 (PDT)
-Received: by mail-yb1-xb2c.google.com with SMTP id 3f1490d57ef6-b9daef8681fso4879950276.1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 00:36:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684740967; x=1687332967;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oYO6QyeT/vE0/dLal+mOoUvrbx/vhy+FOFfMUworJUI=;
-        b=xDDT/+bIDGyUkQVLK9/FgK0mSNOUdgqdlxiCGabcrZlU8t9IA++ddilBYK93nb/EOn
-         NSmWclPrefvWOGhbCXrB+X25RWUQRnUgWujGNtHx9ScLuEJET/R+5EBhtv+PCk6CTtlU
-         n7ZF9PeLvX+DcBJMpayABvk9ky54qVIzosJkZ3e4dnUiF3UGkI1zt6gpfKN9+mo+ozCu
-         pw/KJu2WDIoFhBzh6tKHUFLIE+dLKzT6uYo599qbezzlNDZv0ESm7suJh/4q+Oi/AKId
-         Ehfbw43Ozb13E/PbEA/IfW0xLmtjHO1eKpM4h0e5/zphDWl8knJJ50AV3LCQm+Y1B2hg
-         hs/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684740967; x=1687332967;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oYO6QyeT/vE0/dLal+mOoUvrbx/vhy+FOFfMUworJUI=;
-        b=XepqhfaGbIE4qIwO1/vlOloJMfOt/UjmNrcU07MFZ9HMfeW04aSuMVk9hRokQFs86S
-         Pd82UwseVHstfn67VNm6wRxRCC7ejU2e2SzmWqUhvOaJYoVlLsxJuLVnUceJuyvTDtwV
-         s3ylJvvu9CG+QphfT0iJsb0k/X5QscPPLKHTXzCI7plR2gl/GKEWKGGVUTGn1g36Pi3T
-         QK15QilwoQspgGg2360pcO2Hlo48jIy7nwUX1hjG8zTEPGN/EpK0BYoqd3egmq4FciP3
-         lB1OzQxAjGW7O5CmBMVAA/A3e6OThRtWBQQ9H3cwzfi4skq2ateG/VjDE5o8tDuvi97L
-         5Vjg==
-X-Gm-Message-State: AC+VfDzBE9+H7kPjM26tQfVDqSSB/4FJU3gfGSbphPjxzH4rN9IzOwkn
-        3r9XWnPxgUNrkZGLlxL3m8cmeNBSzkYxmIszt7TpxQ==
-X-Google-Smtp-Source: ACHHUZ68CRANHGe6xAuOw1CpSWwlTGVc+dACk1dfiCmZPpQD6rOxHUDm2AJP7afAyAVJgTKG4e5g40VwzefbCRkUQ8o=
-X-Received: by 2002:a25:a524:0:b0:ba7:4977:465d with SMTP id
- h33-20020a25a524000000b00ba74977465dmr9343957ybi.47.1684740967218; Mon, 22
- May 2023 00:36:07 -0700 (PDT)
+        Mon, 22 May 2023 03:36:22 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D479E;
+        Mon, 22 May 2023 00:36:21 -0700 (PDT)
+Date:   Mon, 22 May 2023 07:36:18 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1684740979;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HclomYqxXBZ3OnkgIaxRM8YAcyCDYke5WBWeP1ix/lw=;
+        b=Qc0MfG3X1248XuNE9WaDt+x2HX8f8rrqlsmFdQIZ7KsasEq5rIHW7wm0JrJCtIo58yxs+G
+        XkFMpTLtgqE5PnwxuPCYZ3Kli1N1dD6DinY80wDxdpCSo2MwSnijRIIZ/EIbVgs8QLtykT
+        W8XgklWYRLiXE3XCbs6i5XFY/hLz0AAq1rVegQrq5fcbSt+z2FtAHJDDzQij/I8BJtveAa
+        TNWAFth4Y7o/vxVgc1cF9rtVma32IS4KFFgo2VkOTZTu7B6/TWLeEhA6Bk38jZ2G6GNdeF
+        t/NQRXvxIETVviINl2M6yp5M2DA6JDOqaCOPmXUIh0m5L6AoIOECvhmNr2TeTQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1684740979;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HclomYqxXBZ3OnkgIaxRM8YAcyCDYke5WBWeP1ix/lw=;
+        b=T+QkETzs/yzNykD1Z+lT2Uw6kLU6zf0dPIdZQVGAXZpfG2BlFuNUsgbHdKW+IGaEiWSVTI
+        eHTL3cpGR8ZKSOCA==
+From:   "tip-bot2 for Yang Yang" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: sched/core] sched/psi: Avoid resetting the min update period
+ when it is unnecessary
+Cc:     Yang Yang <yang.yang29@zte.com.cn>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Suren Baghdasaryan <surenb@google.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230514163338.834345-1-surenb@google.com>
+References: <20230514163338.834345-1-surenb@google.com>
 MIME-Version: 1.0
-References: <20230516154605.517690-1-arnd@kernel.org> <20230516154605.517690-12-arnd@kernel.org>
-In-Reply-To: <20230516154605.517690-12-arnd@kernel.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 22 May 2023 09:35:56 +0200
-Message-ID: <CACRpkdZKQVZrU05xKG1fgbgcVaJ2Jvg8V2Hx3eHDsiGQqUtGcw@mail.gmail.com>
-Subject: Re: [PATCH 11/16] ARM: move setup functions to header
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Ard Biesheuvel <ardb@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Message-ID: <168474097813.404.1664592171771825825.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 5:46=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wro=
-te:
+The following commit has been merged into the sched/core branch of tip:
 
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> A couple of functions are declared in arch/arm/mm/mmu.c rather than in a =
-header,
-> which causes W=3D1 build warnings:
->
-> arch/arm/mm/init.c:97:13: error: no previous prototype for 'setup_dma_zon=
-e' [-Werror=3Dmissing-prototypes]
-> arch/arm/mm/mmu.c:118:13: error: no previous prototype for 'init_default_=
-cache_policy' [-Werror=3Dmissing-prototypes]
-> arch/arm/mm/mmu.c:1195:13: error: no previous prototype for 'adjust_lowme=
-m_bounds' [-Werror=3Dmissing-prototypes]
-> arch/arm/mm/mmu.c:1761:13: error: no previous prototype for 'paging_init'=
- [-Werror=3Dmissing-prototypes]
-> arch/arm/mm/mmu.c:1794:13: error: no previous prototype for 'early_mm_ini=
-t' [-Werror=3Dmissing-prototypes]
->
-> Move the declaratsion to asm/setup.h so they can be seen by the compiler
-> while building the definition.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Commit-ID:     e2a1f85bf9f509afd09b5d3308e3489b65845c28
+Gitweb:        https://git.kernel.org/tip/e2a1f85bf9f509afd09b5d3308e3489b65845c28
+Author:        Yang Yang <yang.yang29@zte.com.cn>
+AuthorDate:    Sun, 14 May 2023 09:33:38 -07:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Sat, 20 May 2023 12:53:16 +02:00
 
-This looks cleaner to me:
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+sched/psi: Avoid resetting the min update period when it is unnecessary
 
-Yours,
-Linus Walleij
+Psi_group's poll_min_period is determined by the minimum window size of
+psi_trigger when creating new triggers. While destroying a psi_trigger,
+there is no need to reset poll_min_period if the psi_trigger being
+destroyed did not have the minimum window size, since in this condition
+poll_min_period will remain the same as before.
+
+Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Acked-by: Suren Baghdasaryan <surenb@google.com>
+Link: https://lkml.kernel.org/r/20230514163338.834345-1-surenb@google.com
+---
+ kernel/sched/psi.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
+
+diff --git a/kernel/sched/psi.c b/kernel/sched/psi.c
+index b49af59..81fca77 100644
+--- a/kernel/sched/psi.c
++++ b/kernel/sched/psi.c
+@@ -1407,11 +1407,16 @@ void psi_trigger_destroy(struct psi_trigger *t)
+ 			group->rtpoll_nr_triggers[t->state]--;
+ 			if (!group->rtpoll_nr_triggers[t->state])
+ 				group->rtpoll_states &= ~(1 << t->state);
+-			/* reset min update period for the remaining triggers */
+-			list_for_each_entry(tmp, &group->rtpoll_triggers, node)
+-				period = min(period, div_u64(tmp->win.size,
+-						UPDATES_PER_WINDOW));
+-			group->rtpoll_min_period = period;
++			/*
++			 * Reset min update period for the remaining triggers
++			 * iff the destroying trigger had the min window size.
++			 */
++			if (group->rtpoll_min_period == div_u64(t->win.size, UPDATES_PER_WINDOW)) {
++				list_for_each_entry(tmp, &group->rtpoll_triggers, node)
++					period = min(period, div_u64(tmp->win.size,
++							UPDATES_PER_WINDOW));
++				group->rtpoll_min_period = period;
++			}
+ 			/* Destroy rtpoll_task when the last trigger is destroyed */
+ 			if (group->rtpoll_states == 0) {
+ 				group->rtpoll_until = 0;
