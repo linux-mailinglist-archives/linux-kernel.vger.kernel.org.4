@@ -2,151 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC30270B551
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 08:47:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99D8070B554
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 08:48:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232172AbjEVGrR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 02:47:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52540 "EHLO
+        id S232021AbjEVGsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 02:48:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231872AbjEVGqI (ORCPT
+        with ESMTP id S231978AbjEVGrr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 02:46:08 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC8B1735
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 23:44:53 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-ba8bab3b392so6666442276.1
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 23:44:53 -0700 (PDT)
+        Mon, 22 May 2023 02:47:47 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98879189;
+        Sun, 21 May 2023 23:45:37 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-2532d6c7ef2so2206845a91.0;
+        Sun, 21 May 2023 23:45:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684737870; x=1687329870;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AR9zIJFSwa/PWauN3jIDvjQbr00g5VzBP70Tf1LOL1E=;
-        b=rQdTaU9Co7hmCz7sZhlTtMZNm3PLADpPrQkIYy4P6ZRDmrhzsp6Xf0YAjRm0wBZdn+
-         6xDYWZ++iJgI6JA/TGL8WcomWza08xozk8lfhLPjUgoHYFyir2BnZuybBvqke06qMHiL
-         Ks4GWm+M4VtI/9tZt17Lc5EgktlOwb2PxgJuYJvEljGKwIkIAmtJkdUurOIUjmzFgkyi
-         u9cG90qy2vNY6gDgClRU/aMiY994YcRs9Y/JPbQTmuzIwlqn75sDUp+W1KRj6BpWpW+t
-         FVrnRzdTvlOE7agFuNOID8UTjbXD2bmq8YnConWaa1Uwsej2BW3iD0MJjU0dy9mKbCxo
-         K1Bg==
+        d=gmail.com; s=20221208; t=1684737932; x=1687329932;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LjDrbtvTn67xGfPbBeqbRLDQjDn4H8fCj2S01FROHyU=;
+        b=g/EFfzC9Z7HcAGAWKjt+aUgy6W0DPQMT+1xjQg5SPiT/Msoht7eDsHNHRYEAj4/crL
+         XOCzG8Y/DbjXMeSeLDfOmZAoC4q6cfQV3/rZzFwBLCLcYSnu0hUosCqhrqeoJs5wO+b7
+         7OKpQi66Td6/2/GnVUs7ljyJqUUBLkytW796W93fcp0+dSMfpLAGOkoH46dCevRr+Ey2
+         LOr59k8DA5SigJdzK+7SDr3e7mg6kSSJ96WmLSOsh1rVoS59N/X0EPRwWM2BGQQYzjaf
+         P488HrDSntk5LQxa4fmanQZYwyT6xuauZHWPn9MW8mitawxUt0LBYzQvaOpEFZwmtl/T
+         JtnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684737870; x=1687329870;
-        h=to:from:subject:references:mime-version:message-id:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AR9zIJFSwa/PWauN3jIDvjQbr00g5VzBP70Tf1LOL1E=;
-        b=JOUlEyeus0k+Dl4RnKZ+TBdVkS0CICBZp94uze3g0SHFOWtRpsdpSXbpqi2m37Rqsy
-         99jSfSYXvZtVKtnizUdlPQaBvl9rMpEcqAzIykZG+butSnbaPC+RXqH333+MoM8j7B+F
-         hF4nzSNe5ty2ZyThdv5VopWFEq18XYpaorc12AdC9iNDTN9n9q5sJiSr2wzhmAPcr5mN
-         dDQ5NmBO+Kcit2BN3E746n3IIrPl9U60eMrR3c19W9d8ltGgjlMKUAyp09Vxcx8766rr
-         efZ45dlmvJdQQWmjXe6RTdCbAonFcj533esMmLB2H/qd3RgGYrp5Q23e5nUsxaDziJyh
-         Cg3w==
-X-Gm-Message-State: AC+VfDxNEE4XeCNiiiYs60T5ccf02HvY3CVxfaOy3EFJ5885Hbo4Z3iq
-        zK/UJ8H+s2srR+oRFeZDxdPZ9+oUZ1Cf
-X-Google-Smtp-Source: ACHHUZ4LNBZ9sStTvrt17WoyzQgUctNLJyZ9xJ+MBkHUvinjj2Hmn4Vu3vh1z5UIvrHcyXCUstYSzvEiMpg6
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:48d9:8c21:e099:7301])
- (user=irogers job=sendgmr) by 2002:a05:6902:1343:b0:ba8:4d1c:dd04 with SMTP
- id g3-20020a056902134300b00ba84d1cdd04mr6161248ybu.1.1684737870515; Sun, 21
- May 2023 23:44:30 -0700 (PDT)
-Date:   Sun, 21 May 2023 23:43:30 -0700
-In-Reply-To: <20230522064330.189127-1-irogers@google.com>
-Message-Id: <20230522064330.189127-24-irogers@google.com>
-Mime-Version: 1.0
-References: <20230522064330.189127-1-irogers@google.com>
-X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
-Subject: [PATCH v2 23/23] perf pmus: Ensure all PMUs are read for find_by_type
-From:   Ian Rogers <irogers@google.com>
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Will Deacon <will@kernel.org>,
-        James Clark <james.clark@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        d=1e100.net; s=20221208; t=1684737932; x=1687329932;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LjDrbtvTn67xGfPbBeqbRLDQjDn4H8fCj2S01FROHyU=;
+        b=CglWl7zEQ4yDupSdOBFhsLVKAO/bJw0TQaJZISJWu6K4Cyz0WeFF5VQpA43VSUrXv4
+         PF1marU2VEF135a7Qimdm3lqIhyZLNqlQj2Nq6Dm5c0hP3y2T9P38bXWrDJovcetn/0z
+         7BYGJgkzr3ZCf3yFJ0ejXwSCsKCYgrMXgVqL+tT8N+BFswoO1Ta11N2EizT6rsTai/dN
+         WwOQpkjnMNxbb1cN0dol245d3R0N6gbwFagELwLeNjZ8kfJTy/2CQDFm/Odzbq8WkjCJ
+         omk5NuY0blljIR2lQ01k+tYly4OUHnx4JzhPh+lTW7ZY7KnzlnGyj9OT6ns0oxSZu9QV
+         +WSA==
+X-Gm-Message-State: AC+VfDwGU4KzIALZP1sh58ZvAuPc7pPUYpxxtZgtXZ6EOkPBNpUV9G1q
+        2NqVPGRH+PUIGmzzZIogSTg=
+X-Google-Smtp-Source: ACHHUZ6hVR2GnXu1H1lD10qc8nxDW2RagqhHiOIeBdBCoqAFkjve7R17MHzRR8hknZmiBFsNFsXi4w==
+X-Received: by 2002:a17:90a:db16:b0:250:1b4c:d861 with SMTP id g22-20020a17090adb1600b002501b4cd861mr10934788pjv.13.1684737932055;
+        Sun, 21 May 2023 23:45:32 -0700 (PDT)
+Received: from debian.me (subs09a-223-255-225-68.three.co.id. [223.255.225.68])
+        by smtp.gmail.com with ESMTPSA id ha11-20020a17090af3cb00b0025368c90773sm5207523pjb.34.2023.05.21.23.45.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 May 2023 23:45:31 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id D225F106ABB; Mon, 22 May 2023 13:45:28 +0700 (WIB)
+Date:   Mon, 22 May 2023 13:45:28 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Ard Biesheuvel <ardb@kernel.org>,
+        Pedro Falcato <pedro.falcato@gmail.com>
+Cc:     Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Kernel Build System <linux-kbuild@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux EFI <linux-efi@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
         Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Jing Zhang <renyu.zj@linux.alibaba.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        Ming Wang <wangming01@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Sandipan Das <sandipan.das@amd.com>,
-        Dmitrii Dolgov <9erthalion6@gmail.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Ali Saidi <alisaidi@amazon.com>, Rob Herring <robh@kernel.org>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Kang Minchul <tegongkang@gmail.com>,
-        linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Alan Bartlett <ajb@elrepo.org>
+Subject: Re: Regression. -6.3.X Good. -6.4-rcY Bad.
+Message-ID: <ZGsPiEq/yE1taACL@debian.me>
+References: <8a79151b-ef75-08ad-ae3d-f6cdabfeaa47@gmail.com>
+ <CAKbZUD3FBiaLGWq=TipfevqXP0SBz8F+=L6JSO+FMZOv0QQ9AQ@mail.gmail.com>
+ <CAMj1kXEJj4+CFX3YfCZZu7RwxoVf=5PHZcZ8tG7x8xO3x4KPAw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="U1fv8V3wsTFbNp5O"
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXEJj4+CFX3YfCZZu7RwxoVf=5PHZcZ8tG7x8xO3x4KPAw@mail.gmail.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-perf_pmus__find_by_type may be called for something like a raw event,
-in which case the PMU isn't guaranteed to have been looked up. Add a
-second check to make sure all PMUs are loaded.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/util/pmus.c | 15 ++++++++++++++-
- 1 file changed, 14 insertions(+), 1 deletion(-)
+--U1fv8V3wsTFbNp5O
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/tools/perf/util/pmus.c b/tools/perf/util/pmus.c
-index 22e9e46ab765..ce75c7adca84 100644
---- a/tools/perf/util/pmus.c
-+++ b/tools/perf/util/pmus.c
-@@ -142,7 +142,7 @@ static void pmu_read_sysfs(bool core_only)
- 	}
- }
- 
--struct perf_pmu *perf_pmus__find_by_type(unsigned int type)
-+static struct perf_pmu *__perf_pmus__find_by_type(unsigned int type)
- {
- 	struct perf_pmu *pmu;
- 
-@@ -150,6 +150,7 @@ struct perf_pmu *perf_pmus__find_by_type(unsigned int type)
- 		if (pmu->type == type)
- 			return pmu;
- 	}
-+
- 	list_for_each_entry(pmu, &other_pmus, list) {
- 		if (pmu->type == type)
- 			return pmu;
-@@ -157,6 +158,18 @@ struct perf_pmu *perf_pmus__find_by_type(unsigned int type)
- 	return NULL;
- }
- 
-+struct perf_pmu *perf_pmus__find_by_type(unsigned int type)
-+{
-+	struct perf_pmu *pmu = __perf_pmus__find_by_type(type);
-+
-+	if (pmu || read_sysfs_all_pmus)
-+		return pmu;
-+
-+	pmu_read_sysfs(/*core_only=*/false);
-+	pmu = __perf_pmus__find_by_type(type);
-+	return pmu;
-+}
-+
- /*
-  * pmu iterator: If pmu is NULL, we start at the begin, otherwise return the
-  * next pmu. Returns NULL on end.
--- 
-2.40.1.698.g37aff9b760-goog
+On Mon, May 22, 2023 at 08:33:47AM +0200, Ard Biesheuvel wrote:
+> I've sent this out as a patch and queued it up as a EFI fix. Thanks!
 
+Telling regzbot about the fix since Ard forgot to add required tags:
+
+#regzbot fix: 3610dc36f4fd76
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--U1fv8V3wsTFbNp5O
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZGsPiAAKCRD2uYlJVVFO
+o7IkAQCfW5qyntrvODsBdWvQiLtt3bRqaM3rk/LVflVoxmAF9QEAjEkECq63YpYO
+cKqqQjSu7Gqa7Naz0QTnCTXte8DzDwA=
+=KFm8
+-----END PGP SIGNATURE-----
+
+--U1fv8V3wsTFbNp5O--
