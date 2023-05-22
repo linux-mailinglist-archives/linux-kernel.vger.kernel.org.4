@@ -2,146 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46B2A70BFFB
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:46:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E80470BFFE
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:47:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233339AbjEVNq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 09:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56172 "EHLO
+        id S230107AbjEVNrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 09:47:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230184AbjEVNq0 (ORCPT
+        with ESMTP id S229737AbjEVNrV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 09:46:26 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2111.outbound.protection.outlook.com [40.107.96.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE34C6;
-        Mon, 22 May 2023 06:46:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dngCf8fM80UaULeniFJcBAUTnMSzdEHSejHRRefIsnDkhRKYPzWduLi9pGyxh9lD+QHR9clf6UHN13VYH69vJADk7Kia77EzZc4QkQ/kpVP3Sr4WqCQbbaGWWnQgBocKzR/koRgbcJHEkHSnbglI1Ax8GvsPsHOWJhzQugagkL5TpHEums7d68jEOI/dt9nYb2BF+dq3PwBycvr+hunQHZb0xzUXmieSv7E9Zg//2287OUM/i6ziEBQk0zeHIgcTeXtSh5IUPHYcB4djgBf2icb0vq6BN4rT96YZ3oWVIwUD+YhFOzwFNgrSAFP7OuAfxK+n6hS8oqP8CIfW89v18A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ojOrWdKxgzi9j/Zmvcg4Rz42T0wmgom9sT6xpxHIllc=;
- b=mWLuAQVbMOxzzaliYPWzJqTqpSAQXkCBzJaKWLh8C7n5pHrKjK/sZ68zb95UesnPqvhnGvfhA8D3CuHWSY7jhTbUxtkdtugYhBJo36ORNVre+OzJjxh0ME9m0ZL8YkWoCGJi5TprUj2+xVevBJ/oB+Q0+Reno+2ldcgySb3nBWFkouybkB9ZKBJaFcf8/byrbgf3FoUkwUJSGdSSUcXRXRJu3/83Dm9oWosRoVtydbK40M2d+WcuhOse8Q4/K9yU3II2SWWip6t7cEAmh0lR9iYUhY9GiGB/3wNC7zfx/1LJPW3GZZFR3SB4J5RwLBm0A9acxoPW4z26h5TQgK9DuQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Mon, 22 May 2023 09:47:21 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD7AF1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 06:47:20 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f3af4295ddso3622622e87.2
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 06:47:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ojOrWdKxgzi9j/Zmvcg4Rz42T0wmgom9sT6xpxHIllc=;
- b=Q9BjWBYcgMK0FW3316VlJK12DQ8pEGScpMUIDkfi4T20O2noKg8KfrHB3KDC5A11nX6xV/Z1ukG0utMJpSehz5N1SG+36SynrssWHXW0jb96Alt40XGcZ7a53y6L6obVQNAzah5ZaCVQ8xpZE7EarkzIrb/v0JGrQdZphaqsoDo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by PH0PR13MB5422.namprd13.prod.outlook.com (2603:10b6:510:128::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Mon, 22 May
- 2023 13:46:22 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6411.028; Mon, 22 May 2023
- 13:46:22 +0000
-Date:   Mon, 22 May 2023 15:46:15 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net] lan966x: Fix unloading/loading of the driver
-Message-ID: <ZGtyJ504Jv5YYcx1@corigine.com>
-References: <20230522120038.3749026-1-horatiu.vultur@microchip.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230522120038.3749026-1-horatiu.vultur@microchip.com>
-X-ClientProxiedBy: AM0PR04CA0109.eurprd04.prod.outlook.com
- (2603:10a6:208:55::14) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=linaro.org; s=google; t=1684763238; x=1687355238;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BEm06L/7RszwTIxy7pZPEut/9V9YOp9nD/0czZj6vfg=;
+        b=qspBx3gPki+B/6OIlBL+/7rh81kgid9ZjuEPUTdGBfHWkhsgiYeag/dvITBGiPSh1e
+         CtHpklW80UGUb+vB9V86s3hKhhoJNxDxud2VmrA5IE88VG8UnnwzAX3kgoF7kkWBv9Jz
+         8pLxhBA0imSQOkFB+FaM28GXUAqHo1KN9YY2C+fFsyJagKWtyU6uC/t1oPLjdyldwN3+
+         h2WnRYyuExTMMhRhbmqMYkAORscjl6KXw0N5yaT+gDb2Lzx8NKVFeFv39ofDf7MaH//a
+         zIHPG/1YnrNz1cz1QYsKp0PvTZ+hXwlJ+VGmmm6mFzIdmHQ75tNWr/8FQXKHGEeMWl0E
+         gszg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684763238; x=1687355238;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BEm06L/7RszwTIxy7pZPEut/9V9YOp9nD/0czZj6vfg=;
+        b=hUdTdUSGRIoeECdw9fX/mRZXrh97rW9x1tidJB6hwcUnn4c/DKrJpZZqjmeua0XKtm
+         r+faz1TSj4Z5em+GZkelhptnuobcTs8+scTEPx8OWr4OiQmmlyNp+eV2i/Tqf97OB2lB
+         k0WWe7uOeKeeVreggYW5Mhb5u/ryngXJShWodf6OXM7+9FLbx723yXRhDtbMT73Vq097
+         Ir0+xpMOUjbCTVw8rBPW9xe4Viq5MWV5WfumG+6BaYg0Q8FMDJKmJlnEmJ++d0aSS1Lr
+         luedgFFSA36u0SR38qpZpnH/YGwHdUpr/xnvcLcJzqk4DQLiHOtv3Hl+lsH78/uaoa4S
+         f4IA==
+X-Gm-Message-State: AC+VfDwAPgeYP/RUqQHBImKgNsBz1ajr/kADzg+jhkRzniUnrN9NMHfz
+        Vjncp6Q9ba0zvupbFMYhoAos9A==
+X-Google-Smtp-Source: ACHHUZ554G38stoHAuoE6L5jFwpgLt44bq7oflbiqDD8iP07EyugQUr3QL7/ePqCIUhz7TIxfRodCA==
+X-Received: by 2002:ac2:539a:0:b0:4cc:96f8:f9c6 with SMTP id g26-20020ac2539a000000b004cc96f8f9c6mr3451737lfh.5.1684763238295;
+        Mon, 22 May 2023 06:47:18 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id x14-20020ac259ce000000b004f13bd73419sm996412lfn.38.2023.05.22.06.47.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 May 2023 06:47:17 -0700 (PDT)
+Message-ID: <2e17e84d-aced-1f28-990f-689c8c56ce45@linaro.org>
+Date:   Mon, 22 May 2023 16:47:17 +0300
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH0PR13MB5422:EE_
-X-MS-Office365-Filtering-Correlation-Id: 41f21351-989b-4e93-2a7c-08db5acaed83
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sLU/PaSKywZmQx5GioncDvSEjSUxWcT0QbUklaO2zHtC9jR8srOZ/2SvYgI8yD4S32IlV4u9lshr6po244zTYFX9tZp7nzQ/eK5SK76TNe8wDk8RzXxEvxW4AVmgZIwms3WEMCw2Rf8zrS5DibI4MeL8LP2/MA2PFJwtSoJ/DA3HVEQk4MVf2/24a4I0xe2MMKE307ranERMWKgHjS9hAXXumMuLgGAVnsoMku9xQRzFPWrPTYYSXO2h1NOJhD+cxjxwPe8iUJu3yOPzbKWO67WXmY86MxUs5H12Oz48y9y6FDbtFbJoZTSV3hk/bGWDbKi5mog3IfcUJgGm8SqpQK5+5neIJvw6p969H60YsOwzio3bKGEhQQdsb2hHhrwNTGVcoYNXSymIKZv04vSc5JoM5nbVmBg08eLm8J3KpJIOTLfRlmKj1F9Oz2bNiCDTofpAdw5VsAOzlBI2zOpLs7AoOStivW4O9iOqnw8Oykh6Wfi4gSJPHc2q7u6VSd+YjADXUDOadZ4W0H5grasG2m3KNOQPF+xKZ+6sWx7oCjs+sLlEKJui8esq7cPIHQff
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(39840400004)(376002)(396003)(136003)(451199021)(2906002)(5660300002)(44832011)(8676002)(8936002)(36756003)(66946007)(66556008)(66476007)(4326008)(6916009)(6486002)(316002)(478600001)(41300700001)(6666004)(86362001)(2616005)(186003)(6512007)(6506007)(38100700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ONfHiRWZg7kfqs7Hq/B+6frIfIy7043VuB5+QgsXTL5ApWUZijM5IKCgjw4L?=
- =?us-ascii?Q?isL1jOEl4auUFKUWMi2sfNASeth9Y33vZS2Qq+N5b81UH+5b+hVK14kmFWFW?=
- =?us-ascii?Q?HTXU03OwQLoCl5vfFsXalJ8YNMgMuhoV0m7kdmC8sZ8HfwKKoCmIEkLc1HWd?=
- =?us-ascii?Q?QMyL6c3bm6nyet9KVz2DpCH+jy2HVPkSbDo1+rX5eEKk8Hmkwq+pWL7JGiKl?=
- =?us-ascii?Q?IifyyhssXxD+LWFjWoFXNKNSnle118N+3Asu/JVXYOhIMdnd/ZSJQRrgMlyB?=
- =?us-ascii?Q?w/aq0AHxosStJpPEEA9VEYDAnxHgfluh80Rhyogq+POsRUGdrDgJJl7+w3d9?=
- =?us-ascii?Q?IhXRkcfu13KRVuku90lxG8EV5lfOIVOQmBYHre3HROtI7eOFGgxELzUbXJcl?=
- =?us-ascii?Q?Uk7797HttMMQVw2LCt7p/t4IzExfS4xCTqu9ChR2UHOQuogFNuQZbR+0CjAk?=
- =?us-ascii?Q?gAjSmc6SrwarU+cspHm51wBpXC9puub/+Y8ocgJ85ZJF8EcW0tkr3B/NKeMU?=
- =?us-ascii?Q?kTCVSjdVarbfM6hlU+4sCyD6yYEEDn+8d7OqHZaDGoEBu6GIeqydFiUcu/q4?=
- =?us-ascii?Q?SuUtbRvyx9CPGNJLiIaJyflMBm7YaMGz9MKcTIWPk/w1bJFEx0/lCLuIeYhJ?=
- =?us-ascii?Q?xoRN5iTcDhgnPd5PLAt33GeSFaWOyUffm+o2ySzJRe0eGBNzzNwnGyDKLHEy?=
- =?us-ascii?Q?ZLL/2nAmxxHHlhYNjOiLBrkJ58rcpG+A3B0j/CGBAG4Z7TVxC3JuZxRKZwXc?=
- =?us-ascii?Q?70hgBYBsJJSMHx8/JmTZIew1/IkAMhuF6hZ5po65gehDLGvxKUAcIx71usw6?=
- =?us-ascii?Q?4L/qD8a88rKa8ckUR1SARu2fRf4O9Mpj1fxU0PvodwarGAcK4DiFWb6rKnHX?=
- =?us-ascii?Q?/uhloFwq+hLw7KkT9WBHi7xgYvCt0EjbXhA1H4Y5mrBJSeSWwpen6j9uMnDK?=
- =?us-ascii?Q?sGKFEcmKLf7FgKDwD8vLxFo9Hhq6ppeM5Xilcf/u9lA5YDHap59huSb4oJ5P?=
- =?us-ascii?Q?tVlAMPtnGhK6yZMOKf+nClq1LD2WS/i/taVkF5E8Gn1m2EdmmPyLigrtOd29?=
- =?us-ascii?Q?vSJMIRzcDCdmnh89gEIpMLNuCzHgKvIiFh4y1waPbQbEOs+NvOj69yuiBqhg?=
- =?us-ascii?Q?ge0xdVrRRXA4J6S7qXwBzSPLC/1kLT2yTqKWAwNgEYeM2j77R9fRUJukmDvU?=
- =?us-ascii?Q?B33W8ZCL/TUoJrHtzwZItatkTquhcfK7DWSIrrj4xjp5ryPEGJBZmgzTERVy?=
- =?us-ascii?Q?93Qt9vNM+o/eEHprfjMkJKgYkAW6FRbI+QVCwEsO0jdgKoN3FO0dicApU42z?=
- =?us-ascii?Q?/kdNv5b932LJtmR5ZXUE7MMK2ER78fROymJI5uFV+WhpXooydlWZwbQhtZUZ?=
- =?us-ascii?Q?vpA61HEzorX/mqDkP4k1iqIStVEej08FQZOdr4pvX/AjdKLvmR1jlJJmJsnj?=
- =?us-ascii?Q?CdwNUj7mHIOm14j7Z7T3XKK466MQsJvYV/n7z/pA8U0ySiJ4ZDg99lu3DvGg?=
- =?us-ascii?Q?lrJ7XdzdFbuVJeWM63YnV/clSxOw1IjAgu1OeJ5TevEn4AWcs39ZOw1jF1hw?=
- =?us-ascii?Q?qzNL3D5QaPijpG8s9DVwHH/6/5a7QTFy+cEbe2se2bBsGVat0EpM+DTeSTLM?=
- =?us-ascii?Q?CJgXXBaE2sLpWDTGxatHcK7rTED9a6mDQ9vFMWY/ymnLsmT61gvvmIuUAZ84?=
- =?us-ascii?Q?6aKOUA=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 41f21351-989b-4e93-2a7c-08db5acaed83
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2023 13:46:21.9422
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +iXopXbQxK1e5fHAuYTT5fgYVBJi6UOCbqCXuM5c/i7yEoKG0144OXeqcGsilrnbX11+ksD0JEbpG/ciyX+47dv9akvyN9RFpJKnGwLwiYI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR13MB5422
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/2] drm/panel: Add driver for Visionox r66451 panel
+Content-Language: en-GB
+To:     neil.armstrong@linaro.org,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230516-b4-r66451-panel-driver-v1-0-4210bcbb1649@quicinc.com>
+ <20230516-b4-r66451-panel-driver-v1-2-4210bcbb1649@quicinc.com>
+ <3cca2809-fa26-f0cf-2ccc-6737d150b43d@linaro.org>
+ <69c6f4fe-4610-8301-b90b-03bcea7587b9@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <69c6f4fe-4610-8301-b90b-03bcea7587b9@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 02:00:38PM +0200, Horatiu Vultur wrote:
-> It was noticing that after a while when unloading/loading the driver and
-> sending traffic through the switch, it would stop working. It would stop
-> forwarding any traffic and the only way to get out of this was to do a
-> power cycle of the board. The root cause seems to be that the switch
-> core is initialized twice. Apparently initializing twice the switch core
-> disturbs the pointers in the queue systems in the HW, so after a while
-> it would stop sending the traffic.
+On 22/05/2023 12:10, Neil Armstrong wrote:
+> On 18/05/2023 02:19, Dmitry Baryshkov wrote:
+>> On 16/05/2023 23:20, Jessica Zhang wrote:
+>>> Add support for the 1080x2340 Visionox R66451 AMOLED DSI panel that
+>>> comes with the Qualcomm HDK8350 display expansion pack.
+>>>
+>>> The panel enables display compression (DSC v1.2) by default.
+>>>
+>>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+>>> ---
+>>>   drivers/gpu/drm/panel/Kconfig                 |   8 +
+>>>   drivers/gpu/drm/panel/Makefile                |   1 +
+>>>   drivers/gpu/drm/panel/panel-visionox-r66451.c | 395 
+>>> ++++++++++++++++++++++++++
+>>>   3 files changed, 404 insertions(+)
 
-Ouch.
+[skipped]
 
-> Unfortunetly, it is not possible to use a reset of the switch here,
-
-nit: s/Unfortunetly/Unfortunately/
-
-> because the reset line is connected to multiple devices like MDIO,
-> SGPIO, FAN, etc. So then all the devices will get reseted when the
-
-nit: s/reseted/reset/
-
-> network driver will be loaded.
-> So the fix is to check if the core is initialized already and if that is
-> the case don't initialize it again.
+>>> +
+>>> +    ret = mipi_dsi_dcs_exit_sleep_mode(dsi);
+>>> +    if (ret < 0) {
+>>> +        dev_err(dev, "Failed to exit sleep mode: %d\n", ret);
+>>> +        return ret;
+>>> +    }
+>>> +    msleep(120);
+>>> +
+>>> +    ret = mipi_dsi_dcs_set_display_on(dsi);
+>>
+>> Should the mipi_dsi_dcs_set_display_on() (and maybe exit sleep mode) 
+>> be a a part of _enable()? Correspondingly _off should IMO be a part of 
+>> _disable callback().
 > 
-> Fixes: db8bcaad5393 ("net: lan966x: add the basic lan966x driver")
-> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> Nop, mipi_dsi_dcs_set_display_on() should be part of prepare, to be 
+> called *before* the video stream starts, enable is called after in the 
+> atomic modeset chain,
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+To summarize our discussion: some controllers do not support sending 
+commands in non-LPM mode. Thus the panel driver should send all commands 
+before the DSI host switches from LPM to VIDEO mode.
 
-...
+Is this corret?
+
+> 
+>>
+>>> +    if (ret < 0) {
+>>> +        dev_err(dev, "Failed on set display on: %d\n", ret);
+>>> +        return ret;
+>>> +    }
+>>> +    msleep(20);
+>>
+>>
+>> Do we need to add here the following line?
+>>
+>> dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
+>>
+> 
+> No, it will be changed by the DSI core.
+
+Hmm, where?
+
+> 
+>>
+>>> +
+>>> +    return 0;
+>>> +}
+
+[skipped]
+
+>>> +static int visionox_r66451_bl_update_status(struct backlight_device 
+>>> *bl)
+>>> +{
+>>> +    struct mipi_dsi_device *dsi = bl_get_data(bl);
+>>> +    u16 brightness = backlight_get_brightness(bl);
+>>> +
+>>> +    return mipi_dsi_dcs_set_display_brightness(dsi, 
+>>> cpu_to_le16(brightness));
+>>
+>> mipi_dsi_dcs_set_display_brightness() already converts the brightness, 
+>> so you don't need cpu_to_le16 here.
+> 
+> 
+> The _large variant must be used instead.
+
+But cpu_to_le16 is NOP, isn't it?
+
+-- 
+With best wishes
+Dmitry
+
