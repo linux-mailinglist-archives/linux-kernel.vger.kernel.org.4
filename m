@@ -2,77 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 456D570B4E5
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 08:11:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C13B070B4ED
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 08:17:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbjEVGLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 02:11:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41264 "EHLO
+        id S230417AbjEVGRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 02:17:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjEVGLo (ORCPT
+        with ESMTP id S229536AbjEVGRl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 02:11:44 -0400
+        Mon, 22 May 2023 02:17:41 -0400
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFED7DB;
-        Sun, 21 May 2023 23:11:42 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34M3aT1W025055;
-        Mon, 22 May 2023 06:11:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=TcWUqvplm+tkCmgkIypflmsB3uoPZcWOqRtoC2EhRqE=;
- b=bWpv/xKgKSujtLLCBY6CiqsyuCJE+b2Axd3FePLdFEv+bASfW0f8a66hZnpkFisCfCDP
- +FpmU9k33o//82oJksLTNpf6eu00vF0rxdpy1lT7IbPxVRDqGa60enBJ1Gz2nfrbvazF
- syN7cUac/Y6UKnFOlXcfWVDgdpWeTUtnh+E4EQd9x2EYKXHL1m4VTVWdYT3+IkoNEvvf
- WEaBCn9fgNkrLYDel+e2vIytgo52NkYhdF1GFsc3WmQjcsHKNMo04uiuXT8ad6m77x3R
- y7UM7SNIKD8o7vVTrHHqrjMRn8hbSCFxzHWf3PG3n1mddcUzX+a10ucurKBqj2Yq61T7 2g== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qppkdjsws-1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909EACF;
+        Sun, 21 May 2023 23:17:40 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34M5xejK030473;
+        Mon, 22 May 2023 06:17:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=T1vsZa8+TKi0dF3pAfw1AYXdnB3fLpyQ3b7cAWLlRqE=;
+ b=OTkncq1JuA5D2jn5NjcuJq2lBwzFSdnPgvUWAlpNU/6g7LP/6oY99xHgk+w9i4Xw8EQW
+ 9uiX4XRtaXsi9Y002MPeezzaay11N4ljjo7Xi2pJ5aFAv2Q+dkSH0Rp7NDQ7hcrmPhe+
+ d11Gfc7/ij32VVBy57l8KUBjN5TbsADYW7mRdyUp63TMwG8IygmVLOUvIhqCs1MDoP68
+ /3y9sBAdenQIk7fCqvf3yfQkUXiChJN41XPocZ3+age/2mkzo7MHuv16+yf2yDuHpa3/
+ So47paOK9M6AWBCWpohtrLwoQvhe/3r70LGnRqM3OuNmkoUmdLJeIEvp1BdcAfCLI2wH pA== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qppa1augr-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 06:11:38 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34M6BbPi012519
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 06:11:37 GMT
-Received: from [10.214.66.81] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Sun, 21 May
- 2023 23:11:35 -0700
-Message-ID: <0e645486-f0be-4468-18ad-9e49088dee0b@quicinc.com>
-Date:   Mon, 22 May 2023 11:41:22 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v3] firmware: qcom_scm: Clear download bit during reboot
-Content-Language: en-US
-To:     Robert Marko <robimarko@gmail.com>, <agross@kernel.org>,
-        <andersson@kernel.org>, <konrad.dybcio@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1678979666-551-1-git-send-email-quic_mojha@quicinc.com>
- <76943268-3982-deaf-9736-429dd51e01b0@gmail.com>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <76943268-3982-deaf-9736-429dd51e01b0@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
+        Mon, 22 May 2023 06:17:33 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 34M6HTq1013891;
+        Mon, 22 May 2023 06:17:29 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3qpq9kefm1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 22 May 2023 06:17:29 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34M6HTF6013886;
+        Mon, 22 May 2023 06:17:29 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-dikshita-hyd.qualcomm.com [10.213.110.13])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 34M6HTGW013885;
+        Mon, 22 May 2023 06:17:29 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 347544)
+        id 7804333B6; Mon, 22 May 2023 11:47:28 +0530 (+0530)
+From:   Dikshita Agarwal <quic_dikshita@quicinc.com>
+To:     linux-media@vger.kernel.org, stanimir.k.varbanov@gmail.com,
+        quic_vgarodia@quicinc.com, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, mchehab@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Dikshita Agarwal <quic_dikshita@quicinc.com>
+Subject: [PATCH] venus: replace arrary index with enum for supported formats
+Date:   Mon, 22 May 2023 11:47:09 +0530
+Message-Id: <1684736229-30567-1-git-send-email-quic_dikshita@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: kmsua5uzkZuV-Z-KZsk8ZHloj73lcywI
-X-Proofpoint-GUID: kmsua5uzkZuV-Z-KZsk8ZHloj73lcywI
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: A8GG-yQ9vhgoBX4V5MC5sgxWsP6pXz4a
+X-Proofpoint-ORIG-GUID: A8GG-yQ9vhgoBX4V5MC5sgxWsP6pXz4a
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-22_03,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 bulkscore=0 malwarescore=0 mlxlogscore=999 suspectscore=0
- adultscore=0 phishscore=0 mlxscore=0 impostorscore=0 priorityscore=1501
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305220052
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 bulkscore=0 adultscore=0 suspectscore=0
+ priorityscore=1501 spamscore=0 mlxlogscore=940 phishscore=0
+ impostorscore=0 mlxscore=0 malwarescore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305220052
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,128 +80,224 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Use enums to list supported formats for encoder and decoder
+instead of array index which was a error prone design.
 
+Signed-off-by: Dikshita Agarwal <quic_dikshita@quicinc.com>
+---
+ drivers/media/platform/qcom/venus/core.h | 16 ++++++++
+ drivers/media/platform/qcom/venus/vdec.c | 63 +++++++++++++++++++-------------
+ drivers/media/platform/qcom/venus/venc.c | 31 +++++++++-------
+ 3 files changed, 72 insertions(+), 38 deletions(-)
 
-On 5/18/2023 3:45 PM, Robert Marko wrote:
-> 
-> On 16. 03. 2023. 16:14, Mukesh Ojha wrote:
->> During normal restart of a system download bit should
->> be cleared irrespective of whether download mode is
->> set or not.
->>
->> Fixes: 8c1b7dc9ba22 ("firmware: qcom: scm: Expose download-mode control")
->> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
-> 
-> Hi, this has been backported to 5.15.111, however it seems to be 
-> breaking reboot
-> on IPQ4019 by causing the board to then hang in SBL with:
-> root@OpenWrt:/# reboot
-> root@OpenWrt:/# [   76.473541] device lan1 left promiscuous mode
-> [   76.474204] br-lan: port 1(lan1) entered disabled state
-> [   76.527975] device lan2 left promiscuous mode
-> [   76.530301] br-lan: port 2(lan2) entered disabled state
-> [   76.579376] device lan3 left promiscuous mode
-> [   76.581698] br-lan: port 3(lan3) entered disabled state
-> [   76.638434] device lan4 left promiscuous mode
-> [   76.638777] br-lan: port 4(lan4) entered disabled state
-> [   76.978489] qca8k-ipq4019 c000000.switch wan: Link is Down
-> [   76.978883] device eth0 left promiscuous mode
-> [   76.987077] ipqess-edma c080000.ethernet eth0: Link is Down
-> [
-> Format: Log Type - Time(microsec) - Message - Optional Info
-> Log Type: B - Since Boot(Power On Reset),  D - Delta,  S - Statistic
-> S - QC_IMAGE_VERSION_STRING=BOOT.BF.3.1.1-00123
-> S - IMAGE_VARIANT_STRING=DAABANAZA
-> S - OEM_IMAGE_VERSION_STRING=CRM
-> S - Boot Config, 0x00000021
-> S - Reset status Config, 0x00000010
-> S - Core 0 Frequency, 0 MHz
-> B -       261 - PBL, Start
-> B -      1339 - bootable_media_detect_entry, Start
-> B -      1679 - bootable_media_detect_success, Start
-> B -      1693 - elf_loader_entry, Start
-> B -      5076 - auth_hash_seg_entry, Start
-> B -      7223 - auth_hash_seg_exit, Start
-> B -    578349 - elf_segs_hash_verify_entry, Start
-> B -    696356 - PBL, End
-> B -    696380 - SBL1, Start
-> B -    787236 - pm_device_init, Start
-> D -         7 - pm_device_init, Delta
-> B -    788701 - boot_flash_init, Start
-> D -     52782 - boot_flash_init, Delta
-> B -    845625 - boot_config_data_table_init, Start
-> D -      3836 - boot_config_data_table_init, Delta - (419 Bytes)
-> B -    852841 - clock_init, Start
-> D -      7566 - clock_init, Delta
-> B -    864883 - CDT version:2,Platform ID:9,Major ID:0,Minor 
-> ID:0,Subtype:64
-> B -    868413 - sbl1_ddr_set_params, Start
-> B -    873402 - cpr_init, Start
-> D -         2 - cpr_init, Delta
-> B -    877842 - Pre_DDR_clock_init, Start
-> D -         4 - Pre_DDR_clock_init, Delta
-> D -     13234 - sbl1_ddr_set_params, Delta
-> B -    891155 - pm_driver_init, Start
-> D -         2 - pm_driver_init, Delta
-> B -    909105 - Image Load, Start
-> B -   1030210 - Boot error ocuured!. Error code: 303d
-> 
-> Reverting the commit fixes rebooting.
+diff --git a/drivers/media/platform/qcom/venus/core.h b/drivers/media/platform/qcom/venus/core.h
+index 12a42fb..e988ed4 100644
+--- a/drivers/media/platform/qcom/venus/core.h
++++ b/drivers/media/platform/qcom/venus/core.h
+@@ -83,6 +83,22 @@ struct venus_resources {
+ 	const char *fwname;
+ };
+ 
++enum venus_fmt {
++	VENUS_FMT_NV12			= 0,
++	VENUS_FMT_QC08C			= 1,
++	VENUS_FMT_QC10C			= 2,
++	VENUS_FMT_H264			= 3,
++	VENUS_FMT_VP8			= 4,
++	VENUS_FMT_VP9			= 5,
++	VENUS_FMT_HEVC			= 6,
++	VENUS_FMT_VC1_ANNEX_G		= 7,
++	VENUS_FMT_VC1_ANNEX_L		= 8,
++	VENUS_FMT_MPEG4			= 9,
++	VENUS_FMT_MPEG2			= 10,
++	VENUS_FMT_H263			= 11,
++	VENUS_FMT_XVID			= 12,
++};
++
+ struct venus_format {
+ 	u32 pixfmt;
+ 	unsigned int num_planes;
+diff --git a/drivers/media/platform/qcom/venus/vdec.c b/drivers/media/platform/qcom/venus/vdec.c
+index c6f0fd08..bab985b 100644
+--- a/drivers/media/platform/qcom/venus/vdec.c
++++ b/drivers/media/platform/qcom/venus/vdec.c
+@@ -30,69 +30,82 @@
+  * - future firmware versions could add support for >1 planes
+  */
+ static const struct venus_format vdec_formats[] = {
+-	{
++	[VENUS_FMT_NV12] = {
+ 		.pixfmt = V4L2_PIX_FMT_NV12,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+-	}, {
++	},
++	[VENUS_FMT_QC08C] = {
+ 		.pixfmt = V4L2_PIX_FMT_QC08C,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+-	}, {
++	},
++	[VENUS_FMT_QC10C] = {
+ 		.pixfmt = V4L2_PIX_FMT_QC10C,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+-	}, {
+-		.pixfmt = V4L2_PIX_FMT_MPEG4,
++	},
++	[VENUS_FMT_H264] = {
++		.pixfmt = V4L2_PIX_FMT_H264,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+ 		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+-	}, {
+-		.pixfmt = V4L2_PIX_FMT_MPEG2,
++	},
++	[VENUS_FMT_VP8] = {
++		.pixfmt = V4L2_PIX_FMT_VP8,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+ 		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+-	}, {
+-		.pixfmt = V4L2_PIX_FMT_H263,
++	},
++	[VENUS_FMT_VP9] = {
++		.pixfmt = V4L2_PIX_FMT_VP9,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+ 		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+-	}, {
+-		.pixfmt = V4L2_PIX_FMT_VC1_ANNEX_G,
++	},
++	[VENUS_FMT_HEVC] = {
++		.pixfmt = V4L2_PIX_FMT_HEVC,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+ 		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+-	}, {
+-		.pixfmt = V4L2_PIX_FMT_VC1_ANNEX_L,
++	},
++	[VENUS_FMT_VC1_ANNEX_G] = {
++		.pixfmt = V4L2_PIX_FMT_VC1_ANNEX_G,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+ 		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+-	}, {
+-		.pixfmt = V4L2_PIX_FMT_H264,
++	},
++	[VENUS_FMT_VC1_ANNEX_L] = {
++		.pixfmt = V4L2_PIX_FMT_VC1_ANNEX_L,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+ 		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+-	}, {
+-		.pixfmt = V4L2_PIX_FMT_VP8,
++	},
++	[VENUS_FMT_MPEG4] = {
++		.pixfmt = V4L2_PIX_FMT_MPEG4,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+ 		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+-	}, {
+-		.pixfmt = V4L2_PIX_FMT_VP9,
++	},
++	[VENUS_FMT_MPEG2] = {
++		.pixfmt = V4L2_PIX_FMT_MPEG2,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+ 		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+-	}, {
+-		.pixfmt = V4L2_PIX_FMT_XVID,
++	},
++	[VENUS_FMT_H263] = {
++		.pixfmt = V4L2_PIX_FMT_H263,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+ 		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+-	}, {
+-		.pixfmt = V4L2_PIX_FMT_HEVC,
++	},
++	[VENUS_FMT_XVID] = {
++		.pixfmt = V4L2_PIX_FMT_XVID,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+ 		.flags = V4L2_FMT_FLAG_DYN_RESOLUTION,
+ 	},
++
+ };
+ 
+ static const struct venus_format *
+@@ -1575,8 +1588,8 @@ static const struct hfi_inst_ops vdec_hfi_ops = {
+ static void vdec_inst_init(struct venus_inst *inst)
+ {
+ 	inst->hfi_codec = HFI_VIDEO_CODEC_H264;
+-	inst->fmt_out = &vdec_formats[8];
+-	inst->fmt_cap = &vdec_formats[0];
++	inst->fmt_out = &vdec_formats[VENUS_FMT_H264];
++	inst->fmt_cap = &vdec_formats[VENUS_FMT_NV12];
+ 	inst->width = frame_width_min(inst);
+ 	inst->height = ALIGN(frame_height_min(inst), 32);
+ 	inst->crop.left = 0;
+diff --git a/drivers/media/platform/qcom/venus/venc.c b/drivers/media/platform/qcom/venus/venc.c
+index 4666f42..b60772c 100644
+--- a/drivers/media/platform/qcom/venus/venc.c
++++ b/drivers/media/platform/qcom/venus/venc.c
+@@ -32,28 +32,33 @@
+  * - future firmware versions could add support for >1 planes
+  */
+ static const struct venus_format venc_formats[] = {
+-	{
++	[VENUS_FMT_NV12] = {
+ 		.pixfmt = V4L2_PIX_FMT_NV12,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE,
+-	}, {
+-		.pixfmt = V4L2_PIX_FMT_MPEG4,
++	},
++	[VENUS_FMT_H264] = {
++		.pixfmt = V4L2_PIX_FMT_H264,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+-	}, {
+-		.pixfmt = V4L2_PIX_FMT_H263,
++	},
++	[VENUS_FMT_VP8] = {
++		.pixfmt = V4L2_PIX_FMT_VP8,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+-	}, {
+-		.pixfmt = V4L2_PIX_FMT_H264,
++	},
++	[VENUS_FMT_HEVC] = {
++		.pixfmt = V4L2_PIX_FMT_HEVC,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+-	}, {
+-		.pixfmt = V4L2_PIX_FMT_VP8,
++	},
++	[VENUS_FMT_MPEG4] = {
++		.pixfmt = V4L2_PIX_FMT_MPEG4,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+-	}, {
+-		.pixfmt = V4L2_PIX_FMT_HEVC,
++	},
++	[VENUS_FMT_H263] = {
++		.pixfmt = V4L2_PIX_FMT_H263,
+ 		.num_planes = 1,
+ 		.type = V4L2_BUF_TYPE_VIDEO_CAPTURE_MPLANE,
+ 	},
+@@ -1416,8 +1421,8 @@ static int m2m_queue_init(void *priv, struct vb2_queue *src_vq,
+ 
+ static void venc_inst_init(struct venus_inst *inst)
+ {
+-	inst->fmt_cap = &venc_formats[3];
+-	inst->fmt_out = &venc_formats[0];
++	inst->fmt_cap = &venc_formats[VENUS_FMT_H264];
++	inst->fmt_out = &venc_formats[VENUS_FMT_NV12];
+ 	inst->width = 1280;
+ 	inst->height = ALIGN(720, 32);
+ 	inst->out_width = 1280;
+-- 
+2.7.4
 
-Hi Robert,
-
-Can you check if disable SDI [1] works with this issue
-
-https://lore.kernel.org/linux-arm-msm/20230518140224.2248782-1-robimarko@gmail.com/
-
-[1]
-
-
-diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
-index fde33acd46b7..01496ceb7136 100644
---- a/drivers/firmware/qcom_scm.c
-+++ b/drivers/firmware/qcom_scm.c
-@@ -1508,6 +1508,7 @@ static int qcom_scm_probe(struct platform_device 
-*pdev)
-  static void qcom_scm_shutdown(struct platform_device *pdev)
-  {
-         /* Clean shutdown, disable download mode to allow normal restart */
-+       qcom_scm_disable_sdi();
-         qcom_scm_set_download_mode(false);
-  }
-
-
--- Mukesh
-
-> 
-> Regards,
-> Robert
-> 
->> ---
->> Changes in v3:
->>    - Added Fixes tag.
->>    - Removed it from below patch series, as it makes sense to go this 
->> independently.
->>      
->> https://lore.kernel.org/lkml/1677664555-30191-1-git-send-email-quic_mojha@quicinc.com/
->>
->> Changes in v2:
->>    - No change.
->>
->>   drivers/firmware/qcom_scm.c | 3 +--
->>   1 file changed, 1 insertion(+), 2 deletions(-)
->>
->> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
->> index 468d4d5..3e020d1 100644
->> --- a/drivers/firmware/qcom_scm.c
->> +++ b/drivers/firmware/qcom_scm.c
->> @@ -1506,8 +1506,7 @@ static int qcom_scm_probe(struct platform_device 
->> *pdev)
->>   static void qcom_scm_shutdown(struct platform_device *pdev)
->>   {
->>       /* Clean shutdown, disable download mode to allow normal restart */
->> -    if (download_mode)
->> -        qcom_scm_set_download_mode(false);
->> +    qcom_scm_set_download_mode(false);
->>   }
->>   static const struct of_device_id qcom_scm_dt_match[] = {
