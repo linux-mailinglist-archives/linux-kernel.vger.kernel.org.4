@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D614A70B443
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 06:59:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC53170B444
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 07:00:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231649AbjEVE7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 00:59:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46124 "EHLO
+        id S231650AbjEVFAX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 01:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231650AbjEVE7F (ORCPT
+        with ESMTP id S230162AbjEVFAV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 00:59:05 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E10ED
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 21:59:02 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-56190515833so47623467b3.0
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 21:59:02 -0700 (PDT)
+        Mon, 22 May 2023 01:00:21 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50383C6
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:00:20 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-ba94605bcd5so4375348276.2
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:00:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684731541; x=1687323541;
+        d=google.com; s=20221208; t=1684731619; x=1687323619;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9VYOFAJpcVHpYrrS1TQZcIVdYEqSjI0GrwCgA5USRTU=;
-        b=TGvacnGGV6vCjNoR60zApDSkblq671aMycg9KRLogEr52U+VDqJD6c9LnImDcePwXP
-         E+oOLSRKY3QnKjySzwhyx6yXTUVprQkKKmDGsyxWBnNRAxybbHWPE+dZuUWqHGT3elWd
-         KJzJqVN+sTGBo7NuVZnh1kpo/iER1/+XPOJgROkPPAZo27SecID8MF0vNrn6JwCjXzCa
-         UJM1gcqwPlnlc9FLHaIRUz/YKXEVOCkEBbD5opmzBt0US/6C6qPiSdxH6LlPD5UCxU/z
-         zjtg+pK6HvaDdyOshiCuMXpAmIJoOt9KExIMuIDdOzn/Rpr/BNUdc7KJhSnoFWJGvEir
-         v0Cg==
+        bh=UuVwG0QveaZLADVtUaHSgqKzTTEqSjST+aR027Vb5lo=;
+        b=gG5CM9oziEo3d2xuTQZP2LZGLbyhx6n0Gd07VVIcPAplxjY92fK4ZBhk/PKkZAtjDN
+         5xbQCSYDeQd+vsPz3UctEBNNQiAW1PG9SnA0aX9yoaPh6erzg7iRa3/rTzxeaqzGLp7M
+         lSM/wuLv0LneLKuxocS16HoYAdzNdVswju/csw1C62EZM/zSg7SkkxlvZsPb/qR4YDiI
+         JxhcXWwQQZon4YC+DZWlfAheKEVu+DJEgm81Ja53+XH3TYiVcdE+XisUHVOIOH3c+bhB
+         84wXaTSFtqGDpcIfa2zJuBidBN4AfMzBHzdLZY7lpccTQVYK/Jpluc7HpY0MDlN7jzqs
+         jXCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684731541; x=1687323541;
+        d=1e100.net; s=20221208; t=1684731619; x=1687323619;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9VYOFAJpcVHpYrrS1TQZcIVdYEqSjI0GrwCgA5USRTU=;
-        b=CNrRo7uQLhJLoLnrvcUqnXnPXEXQVtaBP0NIuRtlzFFis5ETVp+V1zZ+Gfz7CcauPe
-         Ufim+Q1Nk+a9A3HWlVBJ2PPw4qfbBNZEa0t1nujVoiTRoOcx8tWasjPG6kj1bXfBNmGG
-         EpNlWkjxxscgGqJPv8krNr9R9jOZMUAb70pgBgkxm6YU0WSx03cjICEqBTcIdNWNN85R
-         65CrtRk3aiYuJnlgT1+70B2ZP0Fxt5RL+c+N+Hvtoqm5MytAsd+Giu6/WcnMCdG8QlAX
-         3IyfXmCYTLisORN7IF9+MMjvrkI3gx1eqn7doyW5IWZ8bxEkPE+WE4++xzvkrt5CcH3W
-         dtWw==
-X-Gm-Message-State: AC+VfDz2w9ckXRYexFbjFOJSaC8zoUZ3mtMv8f/M7p92y9wCt7wM4TV+
-        0uDX1NyeFUwwCzXDVW9B60IipA==
-X-Google-Smtp-Source: ACHHUZ4Kg3oHxKZR/9CKF00axRzhTRl1agKzGrSrlAst7zhZTlHx2mXvNeak2L2x7OdVQNGzScOvHA==
-X-Received: by 2002:a81:1e45:0:b0:560:d022:53ac with SMTP id e66-20020a811e45000000b00560d02253acmr10367255ywe.5.1684731541606;
-        Sun, 21 May 2023 21:59:01 -0700 (PDT)
+        bh=UuVwG0QveaZLADVtUaHSgqKzTTEqSjST+aR027Vb5lo=;
+        b=dnpRub+PjzLpvWT8CLwsT+aHLeX7fb1rX2nK40S3FTmUyQxt0krHUYkQ6B8lqp3kY6
+         d9xEDXcO9vaBh03IUZHEBHQroZo1hQZIC83xm/s/j+sB5wT0TnR5o2VXohDVIMJ7PTGt
+         3d4i1i+UhBWyAUdkpMydRMGGoj4EP/Uho4zCATJU5kwYxIgiEe3AwKXaLh/b721QuMIl
+         tHtwaHV3A+zcVAYdjzyzTc0Wvyd0yjff6PuEDWcBiTS0aYIjqLpGiLKnT4DfddhjK8e4
+         nfEJLZg786o1tVDfl6e2AQdSaTeMf79Rd8T+wGYooUgF60XeI/0ZlWz4w4NiDNewrF8W
+         obpA==
+X-Gm-Message-State: AC+VfDyzhco+FBatsGTlgqanuBVgmVesJUSlMkidYIJRF3j/LcfLuVT3
+        OAYO9YrrzdVXclOYRh02mM/k4Q==
+X-Google-Smtp-Source: ACHHUZ7OcXDmRntzMQt9n+hv5KPWL1NcuSYc2shkgSn7zkVgG1IKDeMbUgq8Rk9jU0J7GbmzBFEDoA==
+X-Received: by 2002:a81:6d09:0:b0:561:902e:dc0a with SMTP id i9-20020a816d09000000b00561902edc0amr9837501ywc.32.1684731619134;
+        Sun, 21 May 2023 22:00:19 -0700 (PDT)
 Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id g189-20020a8152c6000000b00555e1886350sm1827794ywb.78.2023.05.21.21.58.59
+        by smtp.gmail.com with ESMTPSA id r63-20020a815d42000000b00555df877a4csm1794565ywb.102.2023.05.21.22.00.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 May 2023 21:59:01 -0700 (PDT)
-Date:   Sun, 21 May 2023 21:58:58 -0700 (PDT)
+        Sun, 21 May 2023 22:00:18 -0700 (PDT)
+Date:   Sun, 21 May 2023 22:00:15 -0700 (PDT)
 From:   Hugh Dickins <hughd@google.com>
 X-X-Sender: hugh@ripple.attlocal.net
 To:     Andrew Morton <akpm@linux-foundation.org>
@@ -81,10 +81,10 @@ cc:     Mike Kravetz <mike.kravetz@oracle.com>,
         Song Liu <song@kernel.org>,
         Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH 08/31] mm/page_vma_mapped: pte_offset_map_nolock() not
- pte_lockptr()
+Subject: [PATCH 09/31] mm/pagewalkers: ACTION_AGAIN if pte_offset_map_lock()
+ fails
 In-Reply-To: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
-Message-ID: <8fa3fb6e-2e39-cbea-c529-ee9e64c7d2d0@google.com>
+Message-ID: <6265ac58-6018-a8c6-cf38-69cba698471@google.com>
 References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -99,91 +99,185 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-map_pte() use pte_offset_map_nolock(), to make sure of the ptl belonging
-to pte, even if pmd entry is then changed racily: page_vma_mapped_walk()
-use that instead of getting pte_lockptr() later, or restart if map_pte()
-found no page table.
+Simple walk_page_range() users should set ACTION_AGAIN to retry when
+pte_offset_map_lock() fails.
+
+No need to check pmd_trans_unstable(): that was precisely to avoid the
+possiblity of calling pte_offset_map() on a racily removed or inserted
+THP entry, but such cases are now safely handled inside it.  Likewise
+there is no need to check pmd_none() or pmd_bad() before calling it.
 
 Signed-off-by: Hugh Dickins <hughd@google.com>
 ---
- mm/page_vma_mapped.c | 28 ++++++++++++++++++++++------
- 1 file changed, 22 insertions(+), 6 deletions(-)
+ fs/proc/task_mmu.c | 32 ++++++++++++++++----------------
+ mm/damon/vaddr.c   | 12 ++++++++----
+ mm/mempolicy.c     |  7 ++++---
+ mm/mincore.c       |  9 ++++-----
+ mm/mlock.c         |  4 ++++
+ 5 files changed, 36 insertions(+), 28 deletions(-)
 
-diff --git a/mm/page_vma_mapped.c b/mm/page_vma_mapped.c
-index 947dc7491815..2af734274073 100644
---- a/mm/page_vma_mapped.c
-+++ b/mm/page_vma_mapped.c
-@@ -13,16 +13,28 @@ static inline bool not_found(struct page_vma_mapped_walk *pvmw)
- 	return false;
- }
- 
--static bool map_pte(struct page_vma_mapped_walk *pvmw)
-+static bool map_pte(struct page_vma_mapped_walk *pvmw, spinlock_t **ptlp)
- {
- 	if (pvmw->flags & PVMW_SYNC) {
- 		/* Use the stricter lookup */
- 		pvmw->pte = pte_offset_map_lock(pvmw->vma->vm_mm, pvmw->pmd,
- 						pvmw->address, &pvmw->ptl);
--		return true;
-+		*ptlp = pvmw->ptl;
-+		return !!pvmw->pte;
+diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+index 420510f6a545..dba5052ce09b 100644
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -631,14 +631,11 @@ static int smaps_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end,
+ 		goto out;
  	}
  
--	pvmw->pte = pte_offset_map(pvmw->pmd, pvmw->address);
-+	/*
-+	 * It is important to return the ptl corresponding to pte,
-+	 * in case *pvmw->pmd changes underneath us; so we need to
-+	 * return it even when choosing not to lock, in case caller
-+	 * proceeds to loop over next ptes, and finds a match later.
-+	 * Though, in most cases, page lock already protects this.
-+	 */
-+	pvmw->pte = pte_offset_map_nolock(pvmw->vma->vm_mm, pvmw->pmd,
-+					  pvmw->address, ptlp);
-+	if (!pvmw->pte)
-+		return false;
-+
- 	if (pvmw->flags & PVMW_MIGRATION) {
- 		if (!is_swap_pte(*pvmw->pte))
- 			return false;
-@@ -51,7 +63,7 @@ static bool map_pte(struct page_vma_mapped_walk *pvmw)
- 	} else if (!pte_present(*pvmw->pte)) {
- 		return false;
+-	if (pmd_trans_unstable(pmd))
+-		goto out;
+-	/*
+-	 * The mmap_lock held all the way back in m_start() is what
+-	 * keeps khugepaged out of here and from collapsing things
+-	 * in here.
+-	 */
+ 	pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
++	if (!pte) {
++		walk->action = ACTION_AGAIN;
++		return 0;
++	}
+ 	for (; addr != end; pte++, addr += PAGE_SIZE)
+ 		smaps_pte_entry(pte, addr, walk);
+ 	pte_unmap_unlock(pte - 1, ptl);
+@@ -1191,10 +1188,11 @@ static int clear_refs_pte_range(pmd_t *pmd, unsigned long addr,
+ 		return 0;
  	}
--	pvmw->ptl = pte_lockptr(pvmw->vma->vm_mm, pvmw->pmd);
-+	pvmw->ptl = *ptlp;
- 	spin_lock(pvmw->ptl);
- 	return true;
- }
-@@ -156,6 +168,7 @@ bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw)
- 	struct vm_area_struct *vma = pvmw->vma;
- 	struct mm_struct *mm = vma->vm_mm;
- 	unsigned long end;
-+	spinlock_t *ptl;
- 	pgd_t *pgd;
- 	p4d_t *p4d;
- 	pud_t *pud;
-@@ -257,8 +270,11 @@ bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw)
- 			step_forward(pvmw, PMD_SIZE);
+ 
+-	if (pmd_trans_unstable(pmd))
+-		return 0;
+-
+ 	pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
++	if (!pte) {
++		walk->action = ACTION_AGAIN;
++		return 0;
++	}
+ 	for (; addr != end; pte++, addr += PAGE_SIZE) {
+ 		ptent = *pte;
+ 
+@@ -1538,9 +1536,6 @@ static int pagemap_pmd_range(pmd_t *pmdp, unsigned long addr, unsigned long end,
+ 		spin_unlock(ptl);
+ 		return err;
+ 	}
+-
+-	if (pmd_trans_unstable(pmdp))
+-		return 0;
+ #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+ 
+ 	/*
+@@ -1548,6 +1543,10 @@ static int pagemap_pmd_range(pmd_t *pmdp, unsigned long addr, unsigned long end,
+ 	 * goes beyond vma->vm_end.
+ 	 */
+ 	orig_pte = pte = pte_offset_map_lock(walk->mm, pmdp, addr, &ptl);
++	if (!pte) {
++		walk->action = ACTION_AGAIN;
++		return err;
++	}
+ 	for (; addr < end; pte++, addr += PAGE_SIZE) {
+ 		pagemap_entry_t pme;
+ 
+@@ -1887,11 +1886,12 @@ static int gather_pte_stats(pmd_t *pmd, unsigned long addr,
+ 		spin_unlock(ptl);
+ 		return 0;
+ 	}
+-
+-	if (pmd_trans_unstable(pmd))
+-		return 0;
+ #endif
+ 	orig_pte = pte = pte_offset_map_lock(walk->mm, pmd, addr, &ptl);
++	if (!pte) {
++		walk->action = ACTION_AGAIN;
++		return 0;
++	}
+ 	do {
+ 		struct page *page = can_gather_numa_stats(*pte, vma, addr);
+ 		if (!page)
+diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
+index 1fec16d7263e..b8762ff15c3c 100644
+--- a/mm/damon/vaddr.c
++++ b/mm/damon/vaddr.c
+@@ -318,9 +318,11 @@ static int damon_mkold_pmd_entry(pmd_t *pmd, unsigned long addr,
+ 		spin_unlock(ptl);
+ 	}
+ 
+-	if (pmd_none(*pmd) || unlikely(pmd_bad(*pmd)))
+-		return 0;
+ 	pte = pte_offset_map_lock(walk->mm, pmd, addr, &ptl);
++	if (!pte) {
++		walk->action = ACTION_AGAIN;
++		return 0;
++	}
+ 	if (!pte_present(*pte))
+ 		goto out;
+ 	damon_ptep_mkold(pte, walk->mm, addr);
+@@ -464,9 +466,11 @@ static int damon_young_pmd_entry(pmd_t *pmd, unsigned long addr,
+ regular_page:
+ #endif	/* CONFIG_TRANSPARENT_HUGEPAGE */
+ 
+-	if (pmd_none(*pmd) || unlikely(pmd_bad(*pmd)))
+-		return -EINVAL;
+ 	pte = pte_offset_map_lock(walk->mm, pmd, addr, &ptl);
++	if (!pte) {
++		walk->action = ACTION_AGAIN;
++		return 0;
++	}
+ 	if (!pte_present(*pte))
+ 		goto out;
+ 	folio = damon_get_folio(pte_pfn(*pte));
+diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+index 1756389a0609..4d0bcf6f0d52 100644
+--- a/mm/mempolicy.c
++++ b/mm/mempolicy.c
+@@ -514,10 +514,11 @@ static int queue_folios_pte_range(pmd_t *pmd, unsigned long addr,
+ 	if (ptl)
+ 		return queue_folios_pmd(pmd, ptl, addr, end, walk);
+ 
+-	if (pmd_trans_unstable(pmd))
+-		return 0;
+-
+ 	mapped_pte = pte = pte_offset_map_lock(walk->mm, pmd, addr, &ptl);
++	if (!pte) {
++		walk->action = ACTION_AGAIN;
++		return 0;
++	}
+ 	for (; addr != end; pte++, addr += PAGE_SIZE) {
+ 		if (!pte_present(*pte))
  			continue;
- 		}
--		if (!map_pte(pvmw))
-+		if (!map_pte(pvmw, &ptl)) {
-+			if (!pvmw->pte)
-+				goto restart;
- 			goto next_pte;
-+		}
- this_pte:
- 		if (check_pte(pvmw))
- 			return true;
-@@ -281,7 +297,7 @@ bool page_vma_mapped_walk(struct page_vma_mapped_walk *pvmw)
- 		} while (pte_none(*pvmw->pte));
+diff --git a/mm/mincore.c b/mm/mincore.c
+index 2d5be013a25a..f33f6a0b1ded 100644
+--- a/mm/mincore.c
++++ b/mm/mincore.c
+@@ -113,12 +113,11 @@ static int mincore_pte_range(pmd_t *pmd, unsigned long addr, unsigned long end,
+ 		goto out;
+ 	}
  
- 		if (!pvmw->ptl) {
--			pvmw->ptl = pte_lockptr(mm, pvmw->pmd);
-+			pvmw->ptl = ptl;
- 			spin_lock(pvmw->ptl);
- 		}
- 		goto this_pte;
+-	if (pmd_trans_unstable(pmd)) {
+-		__mincore_unmapped_range(addr, end, vma, vec);
+-		goto out;
+-	}
+-
+ 	ptep = pte_offset_map_lock(walk->mm, pmd, addr, &ptl);
++	if (!ptep) {
++		walk->action = ACTION_AGAIN;
++		return 0;
++	}
+ 	for (; addr != end; ptep++, addr += PAGE_SIZE) {
+ 		pte_t pte = *ptep;
+ 
+diff --git a/mm/mlock.c b/mm/mlock.c
+index 40b43f8740df..9f2b1173b1b1 100644
+--- a/mm/mlock.c
++++ b/mm/mlock.c
+@@ -329,6 +329,10 @@ static int mlock_pte_range(pmd_t *pmd, unsigned long addr,
+ 	}
+ 
+ 	start_pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
++	if (!start_pte) {
++		walk->action = ACTION_AGAIN;
++		return 0;
++	}
+ 	for (pte = start_pte; addr != end; pte++, addr += PAGE_SIZE) {
+ 		if (!pte_present(*pte))
+ 			continue;
 -- 
 2.35.3
 
