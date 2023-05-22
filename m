@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3346370BBB2
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:25:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8638B70BBB4
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:25:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232749AbjEVLZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 07:25:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38192 "EHLO
+        id S233163AbjEVLZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 07:25:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233322AbjEVLY3 (ORCPT
+        with ESMTP id S230378AbjEVLYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 07:24:29 -0400
-Received: from mail-il1-x149.google.com (mail-il1-x149.google.com [IPv6:2607:f8b0:4864:20::149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7390D1FE5
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 04:21:17 -0700 (PDT)
-Received: by mail-il1-x149.google.com with SMTP id e9e14a558f8ab-3379306f979so44383325ab.2
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 04:21:17 -0700 (PDT)
+        Mon, 22 May 2023 07:24:31 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D25E7B
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 04:21:19 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba2b9ecfadaso11578270276.2
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 04:21:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684754473; x=1687346473;
+        d=google.com; s=20221208; t=1684754474; x=1687346474;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=o+eiSCYBIOLnXleM2cPLS0kmVbYB4sF65U+Csvbg0Lg=;
-        b=C9EG5Wbh8NAca3HjpjmAkkfiJOSWePs85XQ0SpLIeqp8Y36SY1afe0SjxeJrOVPo6f
-         rSTwoLESGNR9S18BZs0XrVxCYBqlhtSsvsgR2iojCBGnj54TMjYktW5nrViLzni0xpfL
-         tpHduilcVggl7fPEhrjrec8kFcN7FgXLx/UQvnavGFY3ToTtVRLe8AuaepJNGO46Xg3W
-         PKmykBBAg2AmrTeW/xVoMYteYDYOJK3FGm+N6bAky/KArU7NP7tyEyOOlhPbM/CDmkkw
-         LJm5ghP/vmQqL+HKiYE2ccHd75NzsmQ8g1/MPJePiH2Y7A0qOXy9H2rvvWXwRBzzaq6i
-         gJHg==
+        bh=kdK6cg22OO4qOyQXs9xKaUltuTOUFz6FCWZwVxCh2Hw=;
+        b=qWkhlrfibgnL4RhQHj7B1l6RBrzRaJLlA4S+q3+9iSaHf1FoZjrbjIeox0pMD4akA6
+         baQ7YGto4El4LBM0QVJP4cql3S/UP2QCxjMxcH7zZ5WU2ZmYY0a2LN1Q9hftLvUgx6xY
+         uXUXdOY22m4wBBpuN+E+S8/WR8wVUIBuOpCWW0NW5nnfixtNx9Op2M4J0Eea727f7z1S
+         sf3g9TCIQtAIo4Vtb/9RoX4qfTdUkuWDMiPRz3BajpDxdF5yZCBeE2pRNa/l/Mg0f+eq
+         /DBmBGIyvEk0YXmD4u8BuGDulx27iox/80TqcG8JU2bBdNBSanhjgzZa8EFs7/ImsyhS
+         /GFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684754473; x=1687346473;
+        d=1e100.net; s=20221208; t=1684754474; x=1687346474;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o+eiSCYBIOLnXleM2cPLS0kmVbYB4sF65U+Csvbg0Lg=;
-        b=i8sUGI+VroEHn3LYDDeCykR9G2yPZ9ZGkUUrUlb+8Nl8pD2EEufeVeGXBgTw4ArlTn
-         lRCNRFKz7FxOL5z5gr6CUAWqenBlfjCjW1EgFWK7n1tHOUjOVawUdASsQwaaQnWO1rRb
-         Ex14fkVTFmnEcJzlt6sHRfCgpaNEY48ZAUGqUoL8C4aIJpZ9+vZWCgafzeSESlZ7GRlM
-         38RZy9nY0iW5d0jmnVtnO2eO13YDElUOitlWSPK5SQpuL3OWu3tLNDLSRSA4KYDBVKNh
-         PvIpQW6VHauBuEUky1aDbm+NOa9ypoXS33sxM2RHu2qfuMpahptOQSJtjUEWJCQrQOnw
-         MtSw==
-X-Gm-Message-State: AC+VfDxS6ENp2V1QKJFKI4P+Uy2RrIoDOM9lGpWCXl47VFKWqtPzdNoQ
-        wFHz8V9T5L+B/IuQrFuOXs/26+ko6EHU6Q==
-X-Google-Smtp-Source: ACHHUZ4vJ1lQN67iIZEPDxHAxhJZkjHqPcnLJHh8uV4pyRQYGhMr5+pfTS+wcM2amtB0h9nui5VMYlPWy5TTRw==
+        bh=kdK6cg22OO4qOyQXs9xKaUltuTOUFz6FCWZwVxCh2Hw=;
+        b=BIX6zw6jkcb84Ng5Dcdeh/bV0y6kX/xQVpANRGTVnrC1NfbDbyp3pRnlY5D4knzGy1
+         zlIhMIQTFujYUDeQKk6kUcwvnSF6O6RdhkGdieWRNPzyxme++l7VeW7yrX4qIGGh3kNZ
+         lrnKQO/glQz3sBxTunHwaew9ZQKliWO8R2QftUwUdkKQyilFjS92iJPCLT6bVrkRAfgU
+         Lb+hOEiQjIrD27Lk/nlK8zThEEEVoH3TgCdD4PGxlafQmi/LbJ7FXCp4KO9h8AHOzm2y
+         HYtIpobCw6P7ENwqbHdW9SDaweAt0YiQICmXbPvF5VVi0S3Z81eXkJzXmwr/XircPKhp
+         Bhsw==
+X-Gm-Message-State: AC+VfDy38xZdrQ3wZ8bCl6AYTucds4XpNhX23inIqHbgS6kEMcZU7qlj
+        0ytpBXbZJK8X719KL/kZ0IQ1lxkX8Au83g==
+X-Google-Smtp-Source: ACHHUZ446Fd/FV7ov35m5UQMLmkLqc0ZI7PlRhDVjQ/W3/nS3VNBnb0IdrQrR6Vu/5xKg9r94Z/zbNEve8+TSg==
 X-Received: from talumbau.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:90d])
- (user=talumbau job=sendgmr) by 2002:a92:de0c:0:b0:335:de72:23c7 with SMTP id
- x12-20020a92de0c000000b00335de7223c7mr5716366ilm.5.1684754473156; Mon, 22 May
- 2023 04:21:13 -0700 (PDT)
-Date:   Mon, 22 May 2023 11:20:56 +0000
+ (user=talumbau job=sendgmr) by 2002:a05:6902:56b:b0:ba8:91c2:268a with SMTP
+ id a11-20020a056902056b00b00ba891c2268amr6184995ybt.0.1684754474384; Mon, 22
+ May 2023 04:21:14 -0700 (PDT)
+Date:   Mon, 22 May 2023 11:20:57 +0000
 In-Reply-To: <20230522112058.2965866-1-talumbau@google.com>
 Mime-Version: 1.0
 References: <20230522112058.2965866-1-talumbau@google.com>
-Message-ID: <20230522112058.2965866-2-talumbau@google.com>
-Subject: [PATCH mm-unstable 2/4] mm: multi-gen LRU: cleanup lru_gen_soft_reclaim()
+Message-ID: <20230522112058.2965866-3-talumbau@google.com>
+Subject: [PATCH mm-unstable 3/4] mm: multi-gen LRU: add helpers in page table walks
 From:   "T.J. Alumbaugh" <talumbau@google.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Yuanchu Xie <yuanchu@google.com>, Yu Zhao <yuzhao@google.com>,
@@ -68,67 +68,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-lru_gen_soft_reclaim() gets the lruvec from the memcg and node ID to keep a
-cleaner interface on the caller side.
+Add helpers to page table walking code:
+ - Clarifies intent via name "should_walk_mmu" and "should_clear_pmd_young"
+ - Avoids repeating same logic in two places
 
 Signed-off-by: T.J. Alumbaugh <talumbau@google.com>
 ---
- include/linux/mmzone.h | 4 ++--
- mm/memcontrol.c        | 2 +-
- mm/vmscan.c            | 4 +++-
- 3 files changed, 6 insertions(+), 4 deletions(-)
+ mm/vmscan.c | 20 +++++++++++++++-----
+ 1 file changed, 15 insertions(+), 5 deletions(-)
 
-diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index 3a68326c9989..5a7ada0413da 100644
---- a/include/linux/mmzone.h
-+++ b/include/linux/mmzone.h
-@@ -534,7 +534,7 @@ void lru_gen_exit_memcg(struct mem_cgroup *memcg);
- void lru_gen_online_memcg(struct mem_cgroup *memcg);
- void lru_gen_offline_memcg(struct mem_cgroup *memcg);
- void lru_gen_release_memcg(struct mem_cgroup *memcg);
--void lru_gen_soft_reclaim(struct lruvec *lruvec);
-+void lru_gen_soft_reclaim(struct mem_cgroup *memcg, int nid);
- 
- #else /* !CONFIG_MEMCG */
- 
-@@ -585,7 +585,7 @@ static inline void lru_gen_release_memcg(struct mem_cgroup *memcg)
- {
- }
- 
--static inline void lru_gen_soft_reclaim(struct lruvec *lruvec)
-+static inline void lru_gen_soft_reclaim(struct mem_cgroup *memcg, int nid)
- {
- }
- 
-diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index d31fb1e2cb33..738ba18f3a0c 100644
---- a/mm/memcontrol.c
-+++ b/mm/memcontrol.c
-@@ -485,7 +485,7 @@ static void mem_cgroup_update_tree(struct mem_cgroup *memcg, int nid)
- 
- 	if (lru_gen_enabled()) {
- 		if (soft_limit_excess(memcg))
--			lru_gen_soft_reclaim(&memcg->nodeinfo[nid]->lruvec);
-+			lru_gen_soft_reclaim(memcg, nid);
- 		return;
- 	}
- 
 diff --git a/mm/vmscan.c b/mm/vmscan.c
-index cf18873a36b9..e088db138f5f 100644
+index e088db138f5f..ad0f589d32e6 100644
 --- a/mm/vmscan.c
 +++ b/mm/vmscan.c
-@@ -4846,8 +4846,10 @@ void lru_gen_release_memcg(struct mem_cgroup *memcg)
- 	}
- }
+@@ -3234,6 +3234,16 @@ DEFINE_STATIC_KEY_ARRAY_FALSE(lru_gen_caps, NR_LRU_GEN_CAPS);
+ #define get_cap(cap)	static_branch_unlikely(&lru_gen_caps[cap])
+ #endif
  
--void lru_gen_soft_reclaim(struct lruvec *lruvec)
-+void lru_gen_soft_reclaim(struct mem_cgroup *memcg, int nid)
- {
-+	struct lruvec *lruvec = get_lruvec(memcg, nid);
++static bool should_walk_mmu(void)
++{
++	return arch_has_hw_pte_young() && get_cap(LRU_GEN_MM_WALK);
++}
 +
- 	/* see the comment on MEMCG_NR_GENS */
- 	if (lru_gen_memcg_seg(lruvec) != MEMCG_LRU_HEAD)
- 		lru_gen_rotate_memcg(lruvec, MEMCG_LRU_HEAD);
++static bool should_clear_pmd_young(void)
++{
++	return arch_has_hw_nonleaf_pmd_young() && get_cap(LRU_GEN_NONLEAF_YOUNG);
++}
++
+ /******************************************************************************
+  *                          shorthand helpers
+  ******************************************************************************/
+@@ -4098,7 +4108,7 @@ static void walk_pmd_range_locked(pud_t *pud, unsigned long addr, struct vm_area
+ 			goto next;
+ 
+ 		if (!pmd_trans_huge(pmd[i])) {
+-			if (arch_has_hw_nonleaf_pmd_young() && get_cap(LRU_GEN_NONLEAF_YOUNG))
++			if (should_clear_pmd_young())
+ 				pmdp_test_and_clear_young(vma, addr, pmd + i);
+ 			goto next;
+ 		}
+@@ -4191,7 +4201,7 @@ static void walk_pmd_range(pud_t *pud, unsigned long start, unsigned long end,
+ #endif
+ 		walk->mm_stats[MM_NONLEAF_TOTAL]++;
+ 
+-		if (arch_has_hw_nonleaf_pmd_young() && get_cap(LRU_GEN_NONLEAF_YOUNG)) {
++		if (should_clear_pmd_young()) {
+ 			if (!pmd_young(val))
+ 				continue;
+ 
+@@ -4493,7 +4503,7 @@ static bool try_to_inc_max_seq(struct lruvec *lruvec, unsigned long max_seq,
+ 	 * handful of PTEs. Spreading the work out over a period of time usually
+ 	 * is less efficient, but it avoids bursty page faults.
+ 	 */
+-	if (!arch_has_hw_pte_young() || !get_cap(LRU_GEN_MM_WALK)) {
++	if (!should_walk_mmu()) {
+ 		success = iterate_mm_list_nowalk(lruvec, max_seq);
+ 		goto done;
+ 	}
+@@ -5730,10 +5740,10 @@ static ssize_t enabled_show(struct kobject *kobj, struct kobj_attribute *attr, c
+ 	if (get_cap(LRU_GEN_CORE))
+ 		caps |= BIT(LRU_GEN_CORE);
+ 
+-	if (arch_has_hw_pte_young() && get_cap(LRU_GEN_MM_WALK))
++	if (should_walk_mmu())
+ 		caps |= BIT(LRU_GEN_MM_WALK);
+ 
+-	if (arch_has_hw_nonleaf_pmd_young() && get_cap(LRU_GEN_NONLEAF_YOUNG))
++	if (should_clear_pmd_young())
+ 		caps |= BIT(LRU_GEN_NONLEAF_YOUNG);
+ 
+ 	return sysfs_emit(buf, "0x%04x\n", caps);
 -- 
 2.40.1.698.g37aff9b760-goog
 
