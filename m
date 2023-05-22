@@ -2,184 +2,307 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A17F270C55A
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 20:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 964AA70C564
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 20:40:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231635AbjEVSjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 14:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48748 "EHLO
+        id S233886AbjEVSjx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 14:39:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233550AbjEVSi7 (ORCPT
+        with ESMTP id S232921AbjEVSjt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 14:38:59 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9502812B;
-        Mon, 22 May 2023 11:38:51 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34MIQcgs023090;
-        Mon, 22 May 2023 18:38:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=UEz1lUlshOosLPZ1HNDgWpxltrj31N+9nYNjETbjGNs=;
- b=Ls518YX8f3xIVq7ZvrAGzWpNSb05Q4A8f26kTAc+Z3qkoMBj0w5M9RDZJvrRkuw5eoIq
- f3yeB9c/LZ8342huq17W7CEzS7LNqASV/fU/wjJIfGMrGumYJN6X69Gy03sO5LFLzDmr
- 8wMDiXI+75AkTJPkMDLb7E5TfxDWtOLZUzyAKj2qE5+zrChooslAScAjf5PdgetSQ46L
- BLj//uBB1v59Jl7/q9Bhjiul5Z7na8k77Dgs6vVy5e+rmt/Lf2Ec2A+gQ3tz4R07nkdt
- bkikQsdP3hUIrZnO22uF9c1fLnQ39wUudoGSs7cuy2hLu2EVRjtVx/s708FvpJyIkJLJ lg== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qppkdmh3v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 18:38:45 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34MIciGN003423
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 18:38:44 GMT
-Received: from [10.71.110.193] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 22 May
- 2023 11:38:44 -0700
-Message-ID: <373d74d0-808a-15a9-b800-3dd40c313b85@quicinc.com>
-Date:   Mon, 22 May 2023 11:38:43 -0700
+        Mon, 22 May 2023 14:39:49 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CB471B9
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:39:30 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1ae3f74c98bso25535ad.1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:39:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684780769; x=1687372769;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3IkpcRDNkOOODVCnn1hDZZbsw/3fOEgCHc0bkhJY18A=;
+        b=P1HLMkzla79i/ysHkbsLNfYqQ9PC1Xkr6LLFY6snfR1enM3WNmxZp5NNPrpRzv/xf+
+         fD08OlxmKhCXYlLdpNJqU8yiGUVJqHh4BS+e6JtYIvBENgMqURL8WY1vjoncYEf7ftm6
+         T5Uu0mby8+u4mbnVbfN66U+SffoXsJzyaktcQajoGskkMKpLw9fQgZtHpccZNSp2U9NZ
+         N8yrbHC+J50NnSrPG8A94Xf/fKUh/qbtyGmJjKshGlpn+5YJ4oNJUqjksj5YZ88Oe2Ue
+         RQW1d+7EAv3XB7CTni5ijbQbTykoqBibC1b44zpuWRDQt7e4NnhSIgdIwO1/rqJJnHg+
+         7Gog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684780769; x=1687372769;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3IkpcRDNkOOODVCnn1hDZZbsw/3fOEgCHc0bkhJY18A=;
+        b=gfM4aUQaIPMkZc9U+EGynfG4RGDP79S3spqmLoUuPnt4p6vJRqdcN8Qh/rr1OuZPKq
+         2zCSxFf2G0ATCVnkB05lvLsNcLVGcscbdg676RowuTjXf0SjAEUL8LlvmQwpkm9ABRtR
+         7m/J2YizANf9gWgU2bxeFz/+NLEMssojsgG7m+Mq3aS60gfREGavBQAQH5GCkJA1xWFU
+         GY2mDnx1cYmwwLB9M0TxO/HPIChZ/zuVGwXHb/YTjRZ9/AGo7ctQGBQZAN3r8mBGpYFK
+         8oCQUQDrCvfIQBU5OMploQZPMQfLJw65VN00JhgoSkyKZaMs45B99UhyiaSzyViCJOEU
+         FAHw==
+X-Gm-Message-State: AC+VfDz1UmwcWkEMTHWxbdG752eoCiKipHz7pGyX6/nMXYBtr5Byj6/h
+        VcPTwSjFNPEzJJQ7nYy+ck2yXw==
+X-Google-Smtp-Source: ACHHUZ7RGriAXZ4HwGIPMuA98nEGlUivY9OrkCxW0U/hbJBbuP1Ahs2ukARb2u60CxdpTF3O5QVB6w==
+X-Received: by 2002:a17:902:f54c:b0:1ac:36e6:2801 with SMTP id h12-20020a170902f54c00b001ac36e62801mr13988plf.12.1684780769234;
+        Mon, 22 May 2023 11:39:29 -0700 (PDT)
+Received: from [2620:0:1008:11:2b0e:a3da:5943:182] ([2620:0:1008:11:2b0e:a3da:5943:182])
+        by smtp.gmail.com with ESMTPSA id e8-20020a170902744800b001ab0d815dbbsm5164339plt.23.2023.05.22.11.39.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 11:39:28 -0700 (PDT)
+Date:   Mon, 22 May 2023 11:39:27 -0700 (PDT)
+From:   David Rientjes <rientjes@google.com>
+To:     David Hildenbrand <david@redhat.com>
+cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>, Alex Shi <alexs@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alexander Duyck <alexanderduyck@fb.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [patch] mm, debug: allow suppressing panic on CONFIG_DEBUG_VM
+ checks
+In-Reply-To: <b4dce681-e53c-a6fd-2dab-62a82ebc6dff@redhat.com>
+Message-ID: <53dd9df8-e88f-f466-89f9-3fa141a10267@google.com>
+References: <c9abf109-80f2-88f5-4aae-d6fd4a30bcd3@google.com> <b4dce681-e53c-a6fd-2dab-62a82ebc6dff@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 5/5] drm/msm/dsi: Remove incorrect references to
- slice_count
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-CC:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-References: <20230405-add-dsc-support-v3-0-6e1d35a206b3@quicinc.com>
- <20230405-add-dsc-support-v3-5-6e1d35a206b3@quicinc.com>
- <1e77e954-570f-e995-ce79-99560fde8d34@linaro.org>
-From:   Jessica Zhang <quic_jesszhan@quicinc.com>
-In-Reply-To: <1e77e954-570f-e995-ce79-99560fde8d34@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: IQEkr5z_PzramIYIn3pdl5DV3Fk-45ga
-X-Proofpoint-GUID: IQEkr5z_PzramIYIn3pdl5DV3Fk-45ga
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-22_13,2023-05-22_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 bulkscore=0 malwarescore=0 mlxlogscore=999 suspectscore=0
- adultscore=0 phishscore=0 mlxscore=0 impostorscore=0 priorityscore=1501
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305220157
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 22 May 2023, David Hildenbrand wrote:
 
-
-On 5/20/2023 5:32 PM, Dmitry Baryshkov wrote:
-> On 20/05/2023 00:17, Jessica Zhang wrote:
->> Currently, slice_count is being used to calculate word count and
->> pkt_per_line. In downstream, these values are calculated using slice per
->> packet, which is not the same as slice_count.
+> Let me CC Linus, he might have an opinion on this.
 > 
-> I'd say the reference to downstream is not correct. We have seen cases 
-> where the vendor kernel contained errors. So it should be something like 
-> "Instead these values should be calculated using ...."
+> On 22.05.23 01:07, David Rientjes wrote:
+> > CONFIG_DEBUG_VM is used to enable additional MM debug checks at runtime.
+> > This can be used to catch latent kernel bugs.
+> > 
+> > Because this is mainly used for debugging, it is seldom enabled in
+> > production environments, including due to the added performance overhead.
+> > Thus, the choice between VM_BUG_ON() and VM_WARN_ON() is somewhat loosely
+> > defined.
+> > 
+> > VM_BUG_ON() is often used because debuggers would like to collect crash
+> > dumps when unexpected conditions occur.
+> > 
+> > When CONFIG_DEBUG_VM is enabled on a very small set of production
+> > deployments to catch any unexpected condition, however, VM_WARN_ON()
+> > could be used as a substitute.  In these configurations, it would be
+> > useful to surface the unexpected condition in the kernel log but not
+> > panic the system.
+> > 
+> > In other words, it would be useful if checks done by CONFIG_DEBUG_ON
+> > could both generate crash dumps for kernel developers *and* surface
+> > issues but not crash depending on how it's configured.
+> > 
+> >   [ If it is really unsafe to continue operation, then BUG_ON() would be
+> >     used instead so that the kernel panics regardless of whether
+> >     CONFIG_DEBUG_VM is enabled or not. ]
+> > 
+> > Introduce the ability to suppress kernel panics when VM_BUG_ON*() variants
+> > are used.  This leverages the existing vm_debug= kernel command line
+> > option.
+> > 
+> > Additionally, this can reduce the risk of systems boot looping if
+> > VM_BUG_ON() conditions are encountered during bootstrap.
+> > 
+> > Signed-off-by: David Rientjes <rientjes@google.com>
+> > ---
+> > Note: the vm_debug= kernel parameter is only extensible for new debug
+> > options, not for disabling existing debug options.
+> > 
+> > When adding the ability to selectively disable existing debug options,
+> > such as in this patch, admins would need to know this future set of debug
+> > options in advance.  In other words, if admins would like to preserve the
+> > existing behavior of BUG() when VM_BUG_ON() is used after this patch, they
+> > would have had to have the foresight to use vm_debug=B.
+> > 
+> > It would be useful to rewrite the vm_debug= interface to select the
+> > specific options to disable rather than "disable all, and enable those
+> > that are specified."  This could be done by making vm_debug only disable
+> > the listed debug options rather than enabling them.
+> > 
+> > This change could be done before this patch is merged if that's the agreed
+> > path forward.
+> 
+> 
+> In general, I am not a fan of this. Someone told the system to VM_BUG_ON, but
+> we ignore that and default to a warning. Yes, VM_BUG on get compiled out
+> without CONFIG_DEBUG_VM, but we detected something (with more checks enabled!)
+> that doesn't want the system to continue (could be an unrecoverable situation
+> leading to data loss, for example).
+> 
 
-Hi Dmitry,
+I think VM_BUG_ON*() and friends are used to crash the kernel for 
+debugging so that we get a crash dump and because some variants don't 
+exist for VM_WARN_ON().  There's no VM_WARN_ON_PAGE(), for example, unless 
+implicitly converted with this patch.
 
-Acked.
+I'm having a hard time finding a case where VM_BUG_ON() should *require* a 
+kernel crash.  I'd be interested to know of these if they exist, though, 
+because we have had good success discovering latent kernel bugs that have 
+been reported to upstream with the exact approach being proposed here on a 
+small set of production hosts.  To safely do that, we audited existing 
+VM_BUG_ON()s in the code to make sure there was nothing that absolutely 
+required a kernel crash.  That may have changed in more recent kernels, so 
+any examples would be very useful.
 
-Thanks,
+> Yes, we want to convert more VM_BUG to VM_WARN (or rather WARN+recovery code
+> as documented in coding-style.rst ), or even simply remove some of the old
+> VM_BUG leftovers that might no longer be required. But then I'd much invest
+> more time doing that step by step (keeping the VM_BUG + BUG that are
+> absolutely reasonable) instead of adding such a config options.
+> 
 
-Jessica Zhang
+I'm not sure we actually want to do that, though, since VM_BUG_ON() does 
+have a lot of benefit when debugging something: it can generate a crash 
+dump that is tremendously useful to the kernel debugger who is iterating 
+on their patch set.
+
+The goal of this patch is to provide an additional use case for 
+CONFIG_DEBUG_VM: we want to preserve the ability for kernel developers to 
+quickly crash their debug kernel during development and add the additional 
+use case of surfacing WARN_ON()s to the kernel log for unexpected issues 
+on a small set of production hosts without crashing them.  This second use 
+case has been very helpful in finding latent kernel bugs at runtime that 
+we didn't even know existed in the kernel and could only be found while 
+running on a limited production deployment.  If we had to crash the kernel 
+to find those, and terminate all the associated guests/workloads, that 
+would be a non-starter for us.
 
 > 
->>
->> Slice count represents the number of soft slices per interface, and its
->> value will not always match that of slice per packet. For example, it is
->> possible to have cases where there are multiple soft slices per interface
->> but the panel specifies only one slice per packet.
->>
->> Thus, use the default value of one slice per packet and remove 
->> slice_count
->> from the aforementioned calculations.
->>
->> Fixes: 08802f515c3c ("drm/msm/dsi: Add support for DSC configuration")
->> Fixes: bc6b6ff8135c ("drm/msm/dsi: Use DSC slice(s) packet size to 
->> compute word count")
->> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
->> ---
->>   drivers/gpu/drm/msm/dsi/dsi_host.c | 24 ++++++++++++++----------
->>   1 file changed, 14 insertions(+), 10 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c 
->> b/drivers/gpu/drm/msm/dsi/dsi_host.c
->> index d04f8bbd707d..8c8858ee59ec 100644
->> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
->> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
->> @@ -866,18 +866,15 @@ static void dsi_update_dsc_timing(struct 
->> msm_dsi_host *msm_host, bool is_cmd_mod
->>        */
->>       slice_per_intf = msm_dsc_get_slices_per_intf(dsc, hdisplay);
->> -    /*
->> -     * If slice_count is greater than slice_per_intf
->> -     * then default to 1. This can happen during partial
->> -     * update.
->> -     */
->> -    if (dsc->slice_count > slice_per_intf)
->> -        dsc->slice_count = 1;
->> -
->>       total_bytes_per_intf = dsc->slice_chunk_size * slice_per_intf;
->>       eol_byte_num = total_bytes_per_intf % 3;
->> -    pkt_per_line = slice_per_intf / dsc->slice_count;
->> +
->> +    /*
->> +     * Default to 1 slice_per_pkt, so pkt_per_line will be equal to
->> +     * slice per intf.
->> +     */
->> +    pkt_per_line = slice_per_intf;
->>       if (is_cmd_mode) /* packet data type */
->>           reg = 
->> DSI_COMMAND_COMPRESSION_MODE_CTRL_STREAM0_DATATYPE(MIPI_DSI_DCS_LONG_WRITE);
->> @@ -1001,7 +998,14 @@ static void dsi_timing_setup(struct msm_dsi_host 
->> *msm_host, bool is_bonded_dsi)
->>           if (!msm_host->dsc)
->>               wc = hdisplay * dsi_get_bpp(msm_host->format) / 8 + 1;
->>           else
->> -            wc = msm_host->dsc->slice_chunk_size * 
->> msm_host->dsc->slice_count + 1;
->> +            /*
->> +             * When DSC is enabled, WC = slice_chunk_size * 
->> slice_per_packet + 1.
->> +             * Currently, the driver only supports default value of 
->> slice_per_packet = 1
->> +             *
->> +             * TODO: Expand mipi_dsi_device struct to hold 
->> slice_per_packet info
->> +             *       and adjust DSC math to account for 
->> slice_per_packet.
->> +             */
->> +            wc = msm_host->dsc->slice_chunk_size + 1;
->>           dsi_write(msm_host, REG_DSI_CMD_MDP_STREAM0_CTRL,
->>               DSI_CMD_MDP_STREAM0_CTRL_WORD_COUNT(wc) |
->>
+> > ---
+> >   .../admin-guide/kernel-parameters.txt         |  1 +
+> >   include/linux/mmdebug.h                       | 20 ++++++++++++++-----
+> >   mm/debug.c                                    | 14 ++++++++++++-
+> >   3 files changed, 29 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/Documentation/admin-guide/kernel-parameters.txt
+> > b/Documentation/admin-guide/kernel-parameters.txt
+> > --- a/Documentation/admin-guide/kernel-parameters.txt
+> > +++ b/Documentation/admin-guide/kernel-parameters.txt
+> > @@ -6818,6 +6818,7 @@
+> >   			debugging features.
+> >     			Available options are:
+> > +			  B	Enable panic on MM debug checks
+> >   			  P	Enable page structure init time poisoning
+> >   			  -	Disable all of the above options
+> >   diff --git a/include/linux/mmdebug.h b/include/linux/mmdebug.h
+> > --- a/include/linux/mmdebug.h
+> > +++ b/include/linux/mmdebug.h
+> > @@ -13,34 +13,44 @@ void dump_page(struct page *page, const char *reason);
+> >   void dump_vma(const struct vm_area_struct *vma);
+> >   void dump_mm(const struct mm_struct *mm);
+> >   +extern bool debug_vm_bug_enabled;
+> > +
+> >   #ifdef CONFIG_DEBUG_VM
+> > -#define VM_BUG_ON(cond) BUG_ON(cond)
+> > +#define VM_BUG_ON(cond)
+> > \
+> > +	do {								\
+> > +		if (unlikely(cond)) {					\
+> > +			if (likely(debug_vm_bug_enabled))		\
+> > +				BUG();					\
+> > +			else						\
+> > +				WARN_ON(1);				\
+> > +		}							\
+> > +	} while (0)
+> >   #define VM_BUG_ON_PAGE(cond, page)					\
+> >   	do {								\
+> >   		if (unlikely(cond)) {					\
+> >   			dump_page(page, "VM_BUG_ON_PAGE("
+> > __stringify(cond)")");\
+> > -			BUG();						\
+> > +			VM_BUG_ON(1);					\
+> >   		}							\
+> >   	} while (0)
+> >   #define VM_BUG_ON_FOLIO(cond, folio)
+> > \
+> >   	do {								\
+> >   		if (unlikely(cond)) {					\
+> >   			dump_page(&folio->page, "VM_BUG_ON_FOLIO("
+> > __stringify(cond)")");\
+> > -			BUG();						\
+> > +			VM_BUG_ON(1);					\
+> >   		}							\
+> >   	} while (0)
+> >   #define VM_BUG_ON_VMA(cond, vma)					\
+> >   	do {								\
+> >   		if (unlikely(cond)) {					\
+> >   			dump_vma(vma);					\
+> > -			BUG();						\
+> > +			VM_BUG_ON(1);					\
+> >   		}							\
+> >   	} while (0)
+> >   #define VM_BUG_ON_MM(cond, mm)
+> > \
+> >   	do {								\
+> >   		if (unlikely(cond)) {					\
+> >   			dump_mm(mm);					\
+> > -			BUG();						\
+> > +			VM_BUG_ON(1);					\
+> >   		}							\
+> >   	} while (0)
+> >   #define VM_WARN_ON_ONCE_PAGE(cond, page)	({			\
+> > diff --git a/mm/debug.c b/mm/debug.c
+> > --- a/mm/debug.c
+> > +++ b/mm/debug.c
+> > @@ -224,10 +224,15 @@ void dump_mm(const struct mm_struct *mm)
+> >   }
+> >   EXPORT_SYMBOL(dump_mm);
+> >   +/* If disabled, warns but does not panic on added CONFIG_DEBUG_VM checks
+> > */
+> > +bool debug_vm_bug_enabled = true;
+> > +EXPORT_SYMBOL(debug_vm_bug_enabled);
+> > +
+> >   static bool page_init_poisoning __read_mostly = true;
+> >     static int __init setup_vm_debug(char *str)
+> >   {
+> > +	bool __debug_vm_bug_enabled = true;
+> >   	bool __page_init_poisoning = true;
+> >     	/*
+> > @@ -237,13 +242,17 @@ static int __init setup_vm_debug(char *str)
+> >   	if (*str++ != '=' || !*str)
+> >   		goto out;
+> >   +	__debug_vm_bug_enabled = false;
+> >   	__page_init_poisoning = false;
+> >   	if (*str == '-')
+> >   		goto out;
+> >     	while (*str) {
+> >   		switch (tolower(*str)) {
+> > -		case'p':
+> > +		case 'b':
+> > +			__debug_vm_bug_enabled = true;
+> > +			break;
+> > +		case 'p':
+> >   			__page_init_poisoning = true;
+> >   			break;
+> >   		default:
+> > @@ -254,9 +263,12 @@ static int __init setup_vm_debug(char *str)
+> >   		str++;
+> >   	}
+> >   out:
+> > +	if (debug_vm_bug_enabled && !__debug_vm_bug_enabled)
+> > +		pr_warn("Panic on MM debug checks disabled by kernel command
+> > line option 'vm_debug'\n");
+> >   	if (page_init_poisoning && !__page_init_poisoning)
+> >   		pr_warn("Page struct poisoning disabled by kernel command line
+> > option 'vm_debug'\n");
+> >   +	debug_vm_bug_enabled = __debug_vm_bug_enabled;
+> >   	page_init_poisoning = __page_init_poisoning;
+> >     	return 1;
+> > 
 > 
 > -- 
-> With best wishes
-> Dmitry
+> Thanks,
+> 
+> David / dhildenb
+> 
 > 
