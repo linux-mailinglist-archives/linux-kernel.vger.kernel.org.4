@@ -2,345 +2,375 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F57470B901
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:33:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4FFA70B904
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:33:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbjEVJda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 05:33:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33170 "EHLO
+        id S231588AbjEVJdj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 05:33:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjEVJd1 (ORCPT
+        with ESMTP id S229777AbjEVJdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 05:33:27 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 799B1AF;
-        Mon, 22 May 2023 02:33:26 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34M9OkcF027979;
-        Mon, 22 May 2023 09:33:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=vMTrsirDxpyPAiLVUAIm8aoOxAEMMDfnXjeams0E3Wo=;
- b=AWuE7ytauhLW6pKdAJsUYsEFlrCFfQj2XTq0u+bYjegfYTbc9iSUcnnXU7X/rwi8flxp
- JbvqbEtL5ZIUu7Aw3BqHwJiJZAJZ62Jlw7yrGaR4opznKQoNLUoTbzJJwY7rz9cbIaTm
- S5gfdnG3BCn/jGWCpA4KhWQn9/men/I4D/lJFJRp8tWW0v1J9OL6juGhHoz01RDDadh3
- 8xq1b7lF4vuJv3FQSdYF1xNdTYeLafpH484YCv03mOH/+zIljBgXFHmp7s6FNjkg/N+r
- pjXdhvgEhRpQv765IKQgQ9SEyn4qQG+G/c44grRhZF6NAPJI/B67CF3kcyif79BbPXeK tg== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qpkwmuf63-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 09:33:22 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34M9XMsl020615
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 09:33:22 GMT
-Received: from [10.214.66.81] (10.80.80.8) by nasanex01c.na.qualcomm.com
- (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 22 May
- 2023 02:33:17 -0700
-Message-ID: <cfe32c1c-6d9b-1c74-c7d1-6597591edf77@quicinc.com>
-Date:   Mon, 22 May 2023 15:03:14 +0530
+        Mon, 22 May 2023 05:33:33 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1989AB7;
+        Mon, 22 May 2023 02:33:30 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8DxRunpNmtkBeIKAA--.18404S3;
+        Mon, 22 May 2023 17:33:29 +0800 (CST)
+Received: from user-pc.202.106.0.20 (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxkrDiNmtkAuRuAA--.55569S2;
+        Mon, 22 May 2023 17:33:27 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Marc Zyngier <maz@kernel.org>,
+        Youling Tang <tangyouling@loongson.cn>,
+        Baoqi Zhang <zhangbaoqi@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>, Yun Liu <liuyun@loongson.cn>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
+        Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v2 3/3] soc: loongson2_pm: add power management support
+Date:   Mon, 22 May 2023 17:33:20 +0800
+Message-Id: <20230522093320.7176-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] remoteproc: qcom: Add NOTIFY_FATAL event type to SSR
- subdevice
-Content-Language: en-US
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-To:     Vignesh Viswanathan <quic_viswanat@quicinc.com>,
-        <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <mathieu.poirier@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>
-CC:     <quic_srichara@quicinc.com>, <quic_varada@quicinc.com>,
-        <quic_kathirav@quicinc.com>, <quic_devipriy@quicinc.com>,
-        <quic_sjaganat@quicinc.com>
-References: <20230503062146.3891-1-quic_viswanat@quicinc.com>
- <f7a0c15d-a7d7-c2ed-875d-c8c24ebf0dab@quicinc.com>
-In-Reply-To: <f7a0c15d-a7d7-c2ed-875d-c8c24ebf0dab@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01c.na.qualcomm.com (10.45.79.139)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: -sF6bZoeA_QwX2O7_QVKpDjNj8OSu5Wi
-X-Proofpoint-ORIG-GUID: -sF6bZoeA_QwX2O7_QVKpDjNj8OSu5Wi
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-22_06,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
- spamscore=0 impostorscore=0 mlxscore=0 adultscore=0 suspectscore=0
- priorityscore=1501 phishscore=0 mlxlogscore=999 lowpriorityscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305220080
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-CM-TRANSID: AQAAf8BxkrDiNmtkAuRuAA--.55569S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3WryUJrWkCry5Gw48CFWxJFb_yoWfAFWUp3
+        yfAay8GFWUGF43Zrs5XryDWr1YyFW3Ga9rJFZrGw1UG3s7Jwn5Wr1UJFyrZr4xAryDJFZr
+        Z395CFWUCF4UWFUanT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bfkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0ow
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE
+        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
+        80ewAv7VC0I7IYx2IY67AKxVWUtVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCj
+        c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7V
+        AKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C2
+        67AKxVWUAVWUtwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI
+        8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW5JVW7
+        JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
+        WUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIY
+        CTnIWIevJa73UjIFyTuYvjxU2iFxUUUUU
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The Loongson-2's Power Management Controller was ACPI, supports ACPI
+S2Idle (Suspend To Idle), ACPI S3 (Suspend To RAM), ACPI S4 (Suspend To
+Disk), ACPI S5 (Soft Shutdown) and supports multiple wake-up methods
+(USB, GMAC, PWRBTN, etc.). This driver was to add Power Management
+Controller support that base on dts for Loongson-2 series SoCs.
 
+Signed-off-by: Liu Yun <liuyun@loongson.cn>
+Signed-off-by: Liu Peibao <liupeibao@loongson.cn>
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+---
+ MAINTAINERS                         |   1 +
+ drivers/soc/loongson/Kconfig        |  10 ++
+ drivers/soc/loongson/Makefile       |   1 +
+ drivers/soc/loongson/loongson2_pm.c | 235 ++++++++++++++++++++++++++++
+ 4 files changed, 247 insertions(+)
+ create mode 100644 drivers/soc/loongson/loongson2_pm.c
 
-On 5/3/2023 4:56 PM, Mukesh Ojha wrote:
-> 
-> 
-> On 5/3/2023 11:51 AM, Vignesh Viswanathan wrote:
->> Currently the SSR subdevice notifies the client driver on crash of the
->> rproc from the recovery workqueue using the BEFORE_SHUTDOWN event.
->> However the client driver might be interested to know that the device
->> has crashed immediately to pause any further transactions with the
->> rproc. This calls for an event to be sent to the driver in the IRQ
->> context as soon as the rproc crashes.
->>
->> Add NOTIFY_FATAL event to SSR subdevice to atomically notify rproc has
->> crashed to the client driver.
->>
->> Validated the event in IPQ9574 and IPQ5332 by forcing the rproc to crash
->> and ensuring the registered notifier function receives the notification
->> in IRQ context.
-> 
-> This was one of valid use case we encounter in android, We have some 
-> other way of doing the same thing without core kernel change with
-> something called early notifiers.
-> 
-> https://git.codelinaro.org/clo/la/kernel/msm-5.15/-/commit/7583d24de337aa1bf7c375a7da706af9b995b9a1#a840754ebb0e24e88adbf48177e1abd0830b72d2
-> 
-> https://git.codelinaro.org/clo/la/kernel/msm-5.15/-/commit/257de41c63a5a51a081cc7887cdaa4a46e4d1744
-> 
-> But good to address this if possible.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index bcd05f1fa5c1..7c4ad0cbaeff 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12195,6 +12195,7 @@ M:	Yinbo Zhu <zhuyinbo@loongson.cn>
+ L:	linux-pm@vger.kernel.org
+ S:	Maintained
+ F:	Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.yaml
++F:	drivers/soc/loongson/loongson2_pm.c
+ 
+ LOONGSON-2 SOC SERIES PINCTRL DRIVER
+ M:	zhanghongchen <zhanghongchen@loongson.cn>
+diff --git a/drivers/soc/loongson/Kconfig b/drivers/soc/loongson/Kconfig
+index 707f56358dc4..2431a0bcbd84 100644
+--- a/drivers/soc/loongson/Kconfig
++++ b/drivers/soc/loongson/Kconfig
+@@ -16,3 +16,13 @@ config LOONGSON2_GUTS
+ 	 SoCs. Initially only reading SVR and registering soc device are
+ 	 supported. Other guts accesses, such as reading firmware configuration
+ 	 by default, should eventually be added into this driver as well.
++
++config LOONGSON2_PM
++	bool "Loongson-2 SoC Power Management Controller Driver"
++	depends on LOONGARCH && OF
++	help
++	 The Loongson-2's Power Management Controller was ACPI, supports ACPI
++	 S2Idle (Suspend To Idle), ACPI S3 (Suspend To RAM), ACPI S4 (Suspend To
++	 Disk), ACPI S5 (Soft Shutdown) and supports multiple wake-up methods
++	 (USB, GMAC, PWRBTN, etc.). This driver was to add Power Management
++	 Controller support that base on dts for Loongson-2 series SoCs.
+diff --git a/drivers/soc/loongson/Makefile b/drivers/soc/loongson/Makefile
+index 263c486df638..4118f50f55e2 100644
+--- a/drivers/soc/loongson/Makefile
++++ b/drivers/soc/loongson/Makefile
+@@ -4,3 +4,4 @@
+ #
+ 
+ obj-$(CONFIG_LOONGSON2_GUTS)		+= loongson2_guts.o
++obj-$(CONFIG_LOONGSON2_PM)		+= loongson2_pm.o
+diff --git a/drivers/soc/loongson/loongson2_pm.c b/drivers/soc/loongson/loongson2_pm.c
+new file mode 100644
+index 000000000000..cd96a1ebbb6c
+--- /dev/null
++++ b/drivers/soc/loongson/loongson2_pm.c
+@@ -0,0 +1,235 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Loongson-2 PM Support
++ *
++ * Copyright (C) 2023 Loongson Technology Corporation Limited
++ */
++
++#include <linux/io.h>
++#include <linux/of.h>
++#include <linux/init.h>
++#include <linux/input.h>
++#include <linux/suspend.h>
++#include <linux/interrupt.h>
++#include <linux/pm_wakeirq.h>
++#include <linux/platform_device.h>
++#include <asm/bootinfo.h>
++#include <asm/suspend.h>
++
++#define LOONGSON2_PM1_CNT_REG		0x14
++#define LOONGSON2_PM1_STS_REG		0x0c
++#define LOONGSON2_PM1_ENA_REG		0x10
++#define LOONGSON2_GPE0_STS_REG		0x28
++#define LOONGSON2_GPE0_ENA_REG		0x2c
++
++#define LOONGSON2_PM1_PWRBTN_STS	BIT(8)
++#define LOONGSON2_PM1_PCIEXP_WAKE_STS	BIT(14)
++#define LOONGSON2_PM1_WAKE_STS		BIT(15)
++#define LOONGSON2_PM1_CNT_INT_EN	BIT(0)
++#define LOONGSON2_PM1_PWRBTN_EN		LOONGSON2_PM1_PWRBTN_STS
++
++static struct loongson2_pm {
++	void __iomem			*base;
++	struct input_dev		*dev;
++	bool				suspended;
++} loongson2_pm;
++
++#define loongson2_pm_readw(reg)		readw(loongson2_pm.base + reg)
++#define loongson2_pm_readl(reg)		readl(loongson2_pm.base + reg)
++#define loongson2_pm_writew(val, reg)	writew(val, loongson2_pm.base + reg)
++#define loongson2_pm_writel(val, reg)	writel(val, loongson2_pm.base + reg)
++
++static void loongson2_pm_status_clear(void)
++{
++	u16 value;
++
++	value = loongson2_pm_readw(LOONGSON2_PM1_STS_REG);
++	value |= (LOONGSON2_PM1_PWRBTN_STS | LOONGSON2_PM1_PCIEXP_WAKE_STS |
++		  LOONGSON2_PM1_WAKE_STS);
++	loongson2_pm_writew(value, LOONGSON2_PM1_STS_REG);
++	loongson2_pm_writel(loongson2_pm_readl(LOONGSON2_GPE0_STS_REG),
++			    LOONGSON2_GPE0_STS_REG);
++}
++
++static void loongson2_pm_irq_enable(void)
++{
++	u16 value;
++
++	value = loongson2_pm_readw(LOONGSON2_PM1_CNT_REG);
++	value |= LOONGSON2_PM1_CNT_INT_EN;
++	loongson2_pm_writew(value, LOONGSON2_PM1_CNT_REG);
++}
++
++static void loongson2_pm_pwrbtn_irq_enable(void)
++{
++	u16 value;
++
++	loongson2_pm_irq_enable();
++
++	value = loongson2_pm_readw(LOONGSON2_PM1_ENA_REG);
++	value |= LOONGSON2_PM1_PWRBTN_EN;
++	loongson2_pm_writew(value, LOONGSON2_PM1_ENA_REG);
++}
++
++static void loongson2_pm_mach_resume(void)
++{
++	loongson_common_resume();
++	loongson2_pm_irq_enable();
++}
++
++static void loongson2_pm_mach_suspend(void)
++{
++	loongson2_pm_status_clear();
++	loongson_common_suspend();
++}
++
++static int loongson2_suspend_enter(suspend_state_t state)
++{
++	loongson2_pm_mach_suspend();
++	loongson_suspend_enter();
++	pm_set_resume_via_firmware();
++	loongson2_pm_mach_resume();
++
++	return 0;
++}
++
++static int loongson2_suspend_begin(suspend_state_t state)
++{
++	pm_set_suspend_via_firmware();
++
++	return 0;
++}
++
++static int loongson2_suspend_valid_state(suspend_state_t state)
++{
++	if (state == PM_SUSPEND_MEM)
++		return !!loongson_sysconf.suspend_addr;
++
++	return 0;
++}
++
++static const struct platform_suspend_ops loongson2_suspend_ops = {
++	.valid	= loongson2_suspend_valid_state,
++	.begin	= loongson2_suspend_begin,
++	.enter	= loongson2_suspend_enter,
++};
++
++static int loongson2_pm_pwrbtn_init(struct device *dev, int irq)
++{
++	int ret;
++	struct input_dev *pwrbt;
++
++	pwrbt = input_allocate_device();
++	if (!dev)
++		return -ENOMEM;
++
++	pwrbt->name = "Power Button";
++	pwrbt->phys = "pm/button/input0";
++	pwrbt->id.bustype = BUS_HOST;
++	pwrbt->dev.parent = NULL;
++	input_set_capability(pwrbt, EV_KEY, KEY_POWER);
++
++	ret = input_register_device(pwrbt);
++	if (ret)
++		goto free_dev;
++
++	dev_pm_set_wake_irq(&pwrbt->dev, irq);
++	device_set_wakeup_capable(&pwrbt->dev, true);
++	device_set_wakeup_enable(&pwrbt->dev, true);
++
++	loongson2_pm.dev = pwrbt;
++	dev_info(dev, "Power Button: Init successful!\n");
++
++	return 0;
++
++free_dev:
++	input_free_device(pwrbt);
++
++	return ret;
++}
++
++static irqreturn_t loongson2_pm_irq_handler(int irq, void *dev_id)
++{
++	u16 status = loongson2_pm_readw(LOONGSON2_PM1_STS_REG);
++
++	if (!loongson2_pm.suspended && (status & LOONGSON2_PM1_PWRBTN_STS)) {
++		pr_info("Power Button pressed...\n");
++		input_report_key(loongson2_pm.dev, KEY_POWER, 1);
++		input_sync(loongson2_pm.dev);
++		input_report_key(loongson2_pm.dev, KEY_POWER, 0);
++		input_sync(loongson2_pm.dev);
++	}
++
++	loongson2_pm_status_clear();
++
++	return IRQ_HANDLED;
++}
++
++static int __maybe_unused loongson2_pm_suspend(struct device *dev)
++{
++	loongson2_pm.suspended = true;
++
++	return 0;
++}
++
++static int __maybe_unused loongson2_pm_resume(struct device *dev)
++{
++	loongson2_pm.suspended = false;
++
++	return 0;
++}
++static SIMPLE_DEV_PM_OPS(loongson2_pm_ops, loongson2_pm_suspend, loongson2_pm_resume);
++
++static int loongson2_pm_probe(struct platform_device *pdev)
++{
++	int irq, retval;
++	u32 suspend_addr;
++	struct device *dev = &pdev->dev;
++
++	loongson2_pm.base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(loongson2_pm.base))
++		return PTR_ERR(loongson2_pm.base);
++
++	irq = platform_get_irq(pdev, 0);
++	if (irq < 0)
++		return irq;
++
++	if (!device_property_read_u32(dev, "suspend-address", &suspend_addr))
++		loongson_sysconf.suspend_addr = (u64)phys_to_virt(suspend_addr);
++	else
++		dev_err(dev, "No suspend-address, could not support S3!\n");
++
++	if (loongson2_pm_pwrbtn_init(dev, irq))
++		return -EINVAL;
++
++	retval = devm_request_irq(&pdev->dev, irq, loongson2_pm_irq_handler,
++				  IRQF_SHARED, "pm_irq", &loongson2_pm);
++	if (retval)
++		return retval;
++
++	loongson2_pm_pwrbtn_irq_enable();
++	loongson2_pm_status_clear();
++
++	if (loongson_sysconf.suspend_addr)
++		suspend_set_ops(&loongson2_suspend_ops);
++
++	return 0;
++}
++
++static const struct of_device_id loongson2_pm_match[] = {
++	{ .compatible = "loongson,ls2k-pmc", },
++	{},
++};
++
++static struct platform_driver loongson2_pm_driver = {
++	.driver = {
++		.name = "ls2k-pm",
++		.pm = &loongson2_pm_ops,
++		.of_match_table = loongson2_pm_match,
++	},
++	.probe = loongson2_pm_probe,
++};
++module_platform_driver(loongson2_pm_driver);
++
++MODULE_DESCRIPTION("Loongson-2 PM driver");
++MODULE_LICENSE("GPL");
+-- 
+2.20.1
 
-Ack the idea of early notifier;
-But here, atomic does not guarantees it to be atomic.
-
-Acked-by: Mukesh Ojha <quic_mojha@quicinc.com>
-
--- Mukesh
-
-
-> 
-> -Mukesh
->>
->> Signed-off-by: Vignesh Viswanathan <quic_viswanat@quicinc.com>
->> ---
->>   drivers/remoteproc/qcom_common.c      | 60 +++++++++++++++++++++++++++
->>   drivers/remoteproc/remoteproc_core.c  | 12 ++++++
->>   include/linux/remoteproc.h            |  3 ++
->>   include/linux/remoteproc/qcom_rproc.h | 17 ++++++++
->>   4 files changed, 92 insertions(+)
->>
->> diff --git a/drivers/remoteproc/qcom_common.c 
->> b/drivers/remoteproc/qcom_common.c
->> index a0d4238492e9..76542229aeb6 100644
->> --- a/drivers/remoteproc/qcom_common.c
->> +++ b/drivers/remoteproc/qcom_common.c
->> @@ -84,6 +84,7 @@ struct minidump_global_toc {
->>   struct qcom_ssr_subsystem {
->>       const char *name;
->>       struct srcu_notifier_head notifier_list;
->> +    struct atomic_notifier_head atomic_notifier_list;
->>       struct list_head list;
->>   };
->> @@ -366,6 +367,7 @@ static struct qcom_ssr_subsystem 
->> *qcom_ssr_get_subsys(const char *name)
->>       }
->>       info->name = kstrdup_const(name, GFP_KERNEL);
->>       srcu_init_notifier_head(&info->notifier_list);
->> +    ATOMIC_INIT_NOTIFIER_HEAD(&info->atomic_notifier_list);
->>       /* Add to global notification list */
->>       list_add_tail(&info->list, &qcom_ssr_subsystem_list);
->> @@ -417,6 +419,51 @@ int qcom_unregister_ssr_notifier(void *notify, 
->> struct notifier_block *nb)
->>   }
->>   EXPORT_SYMBOL_GPL(qcom_unregister_ssr_notifier);
->> +/**
->> + * qcom_register_ssr_atomic_notifier() - register SSR Atomic 
->> notification
->> + *                     handler
->> + * @name:    Subsystem's SSR name
->> + * @nb:    notifier_block to be invoked upon subsystem's state change
->> + *
->> + * This registers the @nb notifier block as part the atomic notifier
->> + * chain for a remoteproc associated with @name. The notifier block's 
->> callback
->> + * will be invoked when the remote processor crashes in atomic 
->> context before
->> + * the recovery process is queued.
->> + *
->> + * Return: a subsystem cookie on success, ERR_PTR on failure.
->> + */
->> +void *qcom_register_ssr_atomic_notifier(const char *name,
->> +                    struct notifier_block *nb)
->> +{
->> +    struct qcom_ssr_subsystem *info;
->> +
->> +    info = qcom_ssr_get_subsys(name);
->> +    if (IS_ERR(info))
->> +        return info;
->> +
->> +    atomic_notifier_chain_register(&info->atomic_notifier_list, nb);
->> +
->> +    return &info->atomic_notifier_list;
->> +}
->> +EXPORT_SYMBOL_GPL(qcom_register_ssr_atomic_notifier);
->> +
->> +/**
->> + * qcom_unregister_ssr_atomic_notifier() - unregister SSR Atomic 
->> notification
->> + *                       handler
->> + * @notify:    subsystem cookie returned from qcom_register_ssr_notifier
->> + * @nb:        notifier_block to unregister
->> + *
->> + * This function will unregister the notifier from the atomic notifier
->> + * chain.
->> + *
->> + * Return: 0 on success, %ENOENT otherwise.
->> + */
->> +int qcom_unregister_ssr_atomic_notifier(void *notify, struct 
->> notifier_block *nb)
->> +{
->> +    return atomic_notifier_chain_unregister(notify, nb);
->> +}
->> +EXPORT_SYMBOL_GPL(qcom_unregister_ssr_atomic_notifier);
->> +
->>   static int ssr_notify_prepare(struct rproc_subdev *subdev)
->>   {
->>       struct qcom_rproc_ssr *ssr = to_ssr_subdev(subdev);
->> @@ -467,6 +514,18 @@ static void ssr_notify_unprepare(struct 
->> rproc_subdev *subdev)
->>                    QCOM_SSR_AFTER_SHUTDOWN, &data);
->>   }
->> +static void ssr_notify_crash(struct rproc_subdev *subdev)
->> +{
->> +    struct qcom_rproc_ssr *ssr = to_ssr_subdev(subdev);
->> +    struct qcom_ssr_notify_data data = {
->> +        .name = ssr->info->name,
->> +        .crashed = true,
->> +    };
->> +
->> +    atomic_notifier_call_chain(&ssr->info->atomic_notifier_list,
->> +                   QCOM_SSR_NOTIFY_CRASH, &data);
->> +}
->> +
->>   /**
->>    * qcom_add_ssr_subdev() - register subdevice as restart 
->> notification source
->>    * @rproc:    rproc handle
->> @@ -493,6 +552,7 @@ void qcom_add_ssr_subdev(struct rproc *rproc, 
->> struct qcom_rproc_ssr *ssr,
->>       ssr->subdev.start = ssr_notify_start;
->>       ssr->subdev.stop = ssr_notify_stop;
->>       ssr->subdev.unprepare = ssr_notify_unprepare;
->> +    ssr->subdev.notify_crash = ssr_notify_crash;
->>       rproc_add_subdev(rproc, &ssr->subdev);
->>   }
->> diff --git a/drivers/remoteproc/remoteproc_core.c 
->> b/drivers/remoteproc/remoteproc_core.c
->> index 695cce218e8c..3de0ece158ea 100644
->> --- a/drivers/remoteproc/remoteproc_core.c
->> +++ b/drivers/remoteproc/remoteproc_core.c
->> @@ -1139,6 +1139,16 @@ static void rproc_unprepare_subdevices(struct 
->> rproc *rproc)
->>       }
->>   }
->> +static void rproc_notify_crash_subdevices(struct rproc *rproc)
->> +{
->> +    struct rproc_subdev *subdev;
->> +
->> +    list_for_each_entry_reverse(subdev, &rproc->subdevs, node) {
->> +        if (subdev->notify_crash)
->> +            subdev->notify_crash(subdev);
->> +    }
->> +}
->> +
->>   /**
->>    * rproc_alloc_registered_carveouts() - allocate all carveouts 
->> registered
->>    * in the list
->> @@ -2687,6 +2697,8 @@ void rproc_report_crash(struct rproc *rproc, 
->> enum rproc_crash_type type)
->>       dev_err(&rproc->dev, "crash detected in %s: type %s\n",
->>           rproc->name, rproc_crash_to_string(type));
->> +    rproc_notify_crash_subdevices(rproc);
->> +
->>       queue_work(rproc_recovery_wq, &rproc->crash_handler);
->>   }
->>   EXPORT_SYMBOL(rproc_report_crash);
->> diff --git a/include/linux/remoteproc.h b/include/linux/remoteproc.h
->> index fe8978eb69f1..f3c0e0103e81 100644
->> --- a/include/linux/remoteproc.h
->> +++ b/include/linux/remoteproc.h
->> @@ -596,6 +596,8 @@ struct rproc {
->>    * @stop: stop function, called before the rproc is stopped; the 
->> @crashed
->>    *        parameter indicates if this originates from a recovery
->>    * @unprepare: unprepare function, called after the rproc has been 
->> stopped
->> + * @notify_crash: notify_crash function, called in atomic context to 
->> notify
->> + *          rproc has crashed and recovery is about to start
->>    */
->>   struct rproc_subdev {
->>       struct list_head node;
->> @@ -604,6 +606,7 @@ struct rproc_subdev {
->>       int (*start)(struct rproc_subdev *subdev);
->>       void (*stop)(struct rproc_subdev *subdev, bool crashed);
->>       void (*unprepare)(struct rproc_subdev *subdev);
->> +    void (*notify_crash)(struct rproc_subdev *subdev);
->>   };
->>   /* we currently support only two vrings per rvdev */
->> diff --git a/include/linux/remoteproc/qcom_rproc.h 
->> b/include/linux/remoteproc/qcom_rproc.h
->> index 82b211518136..f3d06900f297 100644
->> --- a/include/linux/remoteproc/qcom_rproc.h
->> +++ b/include/linux/remoteproc/qcom_rproc.h
->> @@ -11,12 +11,14 @@ struct notifier_block;
->>    * @QCOM_SSR_AFTER_POWERUP:    Remoteproc is running (start stage)
->>    * @QCOM_SSR_BEFORE_SHUTDOWN:    Remoteproc crashed or shutting down 
->> (stop stage)
->>    * @QCOM_SSR_AFTER_SHUTDOWN:    Remoteproc is down (unprepare stage)
->> + * @QCOM_SSR_NOTIFY_CRASH:    Remoteproc crashed
->>    */
->>   enum qcom_ssr_notify_type {
->>       QCOM_SSR_BEFORE_POWERUP,
->>       QCOM_SSR_AFTER_POWERUP,
->>       QCOM_SSR_BEFORE_SHUTDOWN,
->>       QCOM_SSR_AFTER_SHUTDOWN,
->> +    QCOM_SSR_NOTIFY_CRASH,
->>   };
->>   struct qcom_ssr_notify_data {
->> @@ -29,6 +31,10 @@ struct qcom_ssr_notify_data {
->>   void *qcom_register_ssr_notifier(const char *name, struct 
->> notifier_block *nb);
->>   int qcom_unregister_ssr_notifier(void *notify, struct notifier_block 
->> *nb);
->> +void *qcom_register_ssr_atomic_notifier(const char *name,
->> +                    struct notifier_block *nb);
->> +int qcom_unregister_ssr_atomic_notifier(void *notify,
->> +                    struct notifier_block *nb);
->>   #else
->>   static inline void *qcom_register_ssr_notifier(const char *name,
->> @@ -43,6 +49,17 @@ static inline int qcom_unregister_ssr_notifier(void 
->> *notify,
->>       return 0;
->>   }
->> +static inline void *qcom_register_ssr_atomic_notifier(const char *name,
->> +                              struct notifier_block *nb)
->> +{
->> +    return 0;
->> +}
->> +
->> +static inline int qcom_unregister_ssr_atomic_notifier(void *notify,
->> +                              struct notifier_block *nb)
->> +{
->> +    return 0;
->> +}
->>   #endif
->>   #endif
-> 
