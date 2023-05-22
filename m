@@ -2,71 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48B6370B562
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 08:52:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC67F70B56A
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 08:52:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232143AbjEVGwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 02:52:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56002 "EHLO
+        id S232221AbjEVGww (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 02:52:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232120AbjEVGwJ (ORCPT
+        with ESMTP id S231978AbjEVGwS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 02:52:09 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B78782108;
-        Sun, 21 May 2023 23:49:41 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2af2ef0d0daso19882231fa.2;
-        Sun, 21 May 2023 23:49:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684738107; x=1687330107;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IkyepdTep2HMvZ3/26VCTbq+JBGsvdDQELPma/gFbuI=;
-        b=gnhLyfRuVLx07LIYirS88uyzkOB07ExFkviUKTmCtr1yVCyulHITJiaY1/0Hvc1XFi
-         ZvHuVvHwFtq2a4EThEvOtTjULPTLNgCVmmYkTBXjQfw64nclQm7T7bzAn5ZV7B4Py36o
-         qkgMGFLxOMZT5Ro/VDcIXVYm2WmjXbdYqTuoB7tloS/9kZpAuPGMDWpSGt6FqGIs94/9
-         C0QEPE9tl73+89Ryd9A50fIwyun4AF2ALxYM3VpqFqsf9tvRKiUJZDy5ST6IhxDrFDWS
-         h2ih3HT4OVsO9P3iyiHcsalWgTjuhBOREPpv/PWEQogMD9Unl5IXuT844338KrQi1Jcu
-         eP7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684738107; x=1687330107;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IkyepdTep2HMvZ3/26VCTbq+JBGsvdDQELPma/gFbuI=;
-        b=DyE3BRlM69hGZyNguDzATNvhXgGoS/W1qgkisxV5Qp/vJrGrRlXRrYMBTSeiPmURYn
-         0oYA5sQekBEHysOiK08GwWLOyxE2YgymLbpAlBNC8qF+CsoKp+Q4SXdvAdll7GensNUC
-         KZefzw7ZWjTLzCm+n/lI5JGLyJeTqAR6dCXTteSDdNF9yw4l+7XucF55hul/sI3vN7jy
-         9KLJWGXEG7WTjedazthn4AJErPkaQmTrfbSjjyNmw/GBW4fls9Fg1fwuOZW9/x6G9p5L
-         xClm2QVqgStViwFCn291kka+1glDRlLYpO9kQRBoE641TEXbIfV9jCdTG2xqoUhnUKdR
-         d/Cg==
-X-Gm-Message-State: AC+VfDz3DofZyo9apb3eSyEobKm3BRqINj3iRy8+1pNNWy8tiosmELWH
-        I81PWMYTQ8/ZUxD/cgzN1qMqx1lEe8v7E/4oHQ==
-X-Google-Smtp-Source: ACHHUZ4jkfk7xwQESCYIgiAIL8nso8HhBBnZ9562GNyBWeoH6kmXMdamFK3+U3cVuv7iWPC0Nlx5ri5yfxxi1rXlACc=
-X-Received: by 2002:ac2:5297:0:b0:4f3:9f9b:ad09 with SMTP id
- q23-20020ac25297000000b004f39f9bad09mr2527102lfm.38.1684738106914; Sun, 21
- May 2023 23:48:26 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1683872601.git.quic_nguyenb@quicinc.com> <7b884263c9db9a9666086a345ede85bb56d9dfc7.1683872601.git.quic_nguyenb@quicinc.com>
-In-Reply-To: <7b884263c9db9a9666086a345ede85bb56d9dfc7.1683872601.git.quic_nguyenb@quicinc.com>
-From:   Stanley Chu <chu.stanley@gmail.com>
-Date:   Mon, 22 May 2023 14:48:14 +0800
-Message-ID: <CAGaU9a8t9CHcGvJk+GFaTO=pDQA+PwEjCWH8sMo=T6-oKvTrsw@mail.gmail.com>
-Subject: Re: [PATCH v5 7/7] ufs: core: Add error handling for MCQ mode
-To:     "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
-Cc:     quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        bvanassche@acm.org, mani@kernel.org, stanley.chu@mediatek.com,
-        adrian.hunter@intel.com, beanhuo@micron.com, avri.altman@wdc.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Mon, 22 May 2023 02:52:18 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2BA6E58;
+        Sun, 21 May 2023 23:49:54 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34M6MW9X017124;
+        Mon, 22 May 2023 06:48:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=1Xrs/pI4MGAifMblWOX6mXJsnliCzV8yWMHq63+BS7g=;
+ b=XTZvLM8krj1fgHwhtlCCmhZE74elQzmORhI2JiQTjFecNyC4QRU7tIW81pFt7PPOd4ht
+ 3vk2xfRyxvhzbfWffaBYD6AY558+M4DWoL24wK+jzKr6EUUYYTdQDNDguCO1ApHdUCIW
+ 4ix2NZlCPhTG66dkhqVYARqQY/aSJpCE5BeH6ptTSsCC23ZI3xx78Af2Dm/uCk831zwb
+ F8sG3lzlqNnk93qMDdxnX84OtS7jGsjGNWwG14Gc6TiA8Vs8Vm9fo4kujIMdGldzUpEG
+ NbwoUcVx0kKSSips0z9MZkLbAjlxY0V7a5ZbxcwXp/JuUAZxlKiJLrHdqHepzVQ4qxIY cQ== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qpkwmu1gb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 May 2023 06:48:25 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 34M6mKHY009736;
+        Mon, 22 May 2023 06:48:20 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3qpq9kehym-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 22 May 2023 06:48:20 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34M6mKVM009728;
+        Mon, 22 May 2023 06:48:20 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-dikshita-hyd.qualcomm.com [10.213.110.13])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 34M6mK5T009726;
+        Mon, 22 May 2023 06:48:20 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 347544)
+        id 9D21E3F5C; Mon, 22 May 2023 12:18:19 +0530 (+0530)
+From:   Dikshita Agarwal <quic_dikshita@quicinc.com>
+To:     linux-media@vger.kernel.org, stanimir.k.varbanov@gmail.com,
+        quic_vgarodia@quicinc.com, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@linaro.org, mchehab@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Dikshita Agarwal <quic_dikshita@quicinc.com>
+Subject: [PATCH v2 0/4] venus: add support for 10 bit decoding
+Date:   Mon, 22 May 2023 12:18:14 +0530
+Message-Id: <1684738098-17372-1-git-send-email-quic_dikshita@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: _6pb9a_PcieKEx7Uy7J-LbDYf0pghpRV
+X-Proofpoint-ORIG-GUID: _6pb9a_PcieKEx7Uy7J-LbDYf0pghpRV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-22_04,2023-05-17_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
+ spamscore=0 impostorscore=0 mlxscore=0 adultscore=0 suspectscore=0
+ priorityscore=1501 phishscore=0 mlxlogscore=881 lowpriorityscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305220057
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,95 +79,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bao,
+This series includes the changes to
+  - add V4L2_PIX_FMT_P010 as supported decoder format.
+  - consider dpb color format while calculating buffer
+    size for dpb buffers.
+  - update dpb and opb color format when bit depth
+    changes is detected, also update preferred color
+    format to P010 in this case.
 
-Bao D. Nguyen <quic_nguyenb@quicinc.com> =E6=96=BC 2023=E5=B9=B45=E6=9C=881=
-2=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=882:34=E5=AF=AB=E9=81=93=EF=
-=BC=9A
->
-> Add support for error handling for MCQ mode.
->
-> Signed-off-by: Bao D. Nguyen <quic_nguyenb@quicinc.com>
-> ---
->  drivers/ufs/core/ufshcd.c | 85 +++++++++++++++++++++++++++++++++++++++++=
-------
->  1 file changed, 74 insertions(+), 11 deletions(-)
->
-> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-> index ec07e49..9345118 100644
-> --- a/drivers/ufs/core/ufshcd.c
-> +++ b/drivers/ufs/core/ufshcd.c
-> @@ -3148,6 +3148,16 @@ static int ufshcd_wait_for_dev_cmd(struct ufs_hba =
-*hba,
->                 err =3D -ETIMEDOUT;
->                 dev_dbg(hba->dev, "%s: dev_cmd request timedout, tag %d\n=
-",
->                         __func__, lrbp->task_tag);
-> +
-> +               /* MCQ mode */
-> +               if (is_mcq_enabled(hba)) {
-> +                       err =3D ufshcd_clear_cmd(hba, lrbp->task_tag);
-> +                       if (!err)
-> +                               hba->dev_cmd.complete =3D NULL;
+With this series, divided the previous version [1] into
+multiple patches as suggested in review comments.
 
-How about always clearing hba->dev_cmd.complete? If ufshcd_clear_cmd()
-fails (for example, times out), "complete" should be cleared, similar
-to the "pending" case in the SDB path.
+This series depends on [2] which replaces the array index with enums.
 
-> +                       return err;
-> +               }
-> +
-> +               /* SDB mode */
->                 if (ufshcd_clear_cmd(hba, lrbp->task_tag) =3D=3D 0) {
->                         /* successfully cleared the command, retry if nee=
-ded */
->                         err =3D -EAGAIN;
-> @@ -5581,6 +5591,10 @@ static int ufshcd_poll(struct Scsi_Host *shost, un=
-signed int queue_num)
->   */
->  static irqreturn_t ufshcd_transfer_req_compl(struct ufs_hba *hba)
->  {
-> +       struct ufshcd_lrb *lrbp;
-> +       u32 hwq_num, utag;
-> +       int tag;
-> +
->         /* Resetting interrupt aggregation counters first and reading the
->          * DOOR_BELL afterward allows us to handle all the completed requ=
-ests.
->          * In order to prevent other interrupts starvation the DB is read=
- once
-> @@ -5599,7 +5613,22 @@ static irqreturn_t ufshcd_transfer_req_compl(struc=
-t ufs_hba *hba)
->          * Ignore the ufshcd_poll() return value and return IRQ_HANDLED s=
-ince we
->          * do not want polling to trigger spurious interrupt complaints.
->          */
-> -       ufshcd_poll(hba->host, UFSHCD_POLL_FROM_INTERRUPT_CONTEXT);
-> +       if (!is_mcq_enabled(hba)) {
-> +               ufshcd_poll(hba->host, UFSHCD_POLL_FROM_INTERRUPT_CONTEXT=
-);
-> +               goto out;
-> +       }
-> +
-> +       /* MCQ mode */
-> +       for (tag =3D 0; tag < hba->nutrs; tag++) {
-> +               lrbp =3D &hba->lrb[tag];
-> +               if (ufshcd_cmd_inflight(lrbp->cmd)) {
-> +                       utag =3D blk_mq_unique_tag(scsi_cmd_to_rq(lrbp->c=
-md));
-> +                       hwq_num =3D blk_mq_unique_tag_to_hwq(utag);
-> +                       ufshcd_poll(hba->host, hwq_num);
-> +               }
-> +       }
+changes since v1:
+  use enums to assign formats in place of array index (konrad)
 
-In SDB mode, the DOOR_BELL is reset by ufshcd_hba_stop(). All bits
-that were previously set in DOOR_BELL are also set in "completed_reqs"
-in ufshcd_poll(). This allows ufshcd_poll() to handle all outstanding
-requests properly.
+[1] https://patchwork.linuxtv.org/project/linux-media/list/?series=10376
+[2] https://patchwork.linuxtv.org/project/linux-media/list/?series=10502
 
-However, in MCQ mode, the CQ tail registers cannot provide the same
-information after they are reset. Hence, they cannot be properly
-referenced by ufshcd_poll().
+Dikshita Agarwal (4):
+  venus: add support for V4L2_PIX_FMT_P010 color format
+  venus: update calculation for dpb buffers
+  venus: add handling of bit depth change from firmwar
+  venus: return P010 as preferred format for 10 bit decode
 
-Thanks,
-Stanley Chu
+ drivers/media/platform/qcom/venus/core.h           | 21 +++++++++++----------
+ drivers/media/platform/qcom/venus/helpers.c        | 22 ++++++++++++++++++++++
+ drivers/media/platform/qcom/venus/hfi_plat_bufs.h  |  3 +++
+ .../media/platform/qcom/venus/hfi_plat_bufs_v6.c   | 11 ++++++++---
+ drivers/media/platform/qcom/venus/vdec.c           | 17 +++++++++++++++--
+ 5 files changed, 59 insertions(+), 15 deletions(-)
+
+-- 
+2.7.4
+
