@@ -2,321 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A5170BFF9
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:45:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46B2A70BFFB
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233606AbjEVNpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 09:45:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55712 "EHLO
+        id S233339AbjEVNq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 09:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230184AbjEVNpO (ORCPT
+        with ESMTP id S230184AbjEVNq0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 09:45:14 -0400
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC50C6;
-        Mon, 22 May 2023 06:45:12 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 4A59AC0008;
-        Mon, 22 May 2023 13:45:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1684763110;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=nUSffco4/w//XAZ47cQUSWYcDz41qfX87j0DxKN1CAE=;
-        b=XqLOC5hX6TjWGppK7GxG8h5/b8VVCWX/RXJtP66a12W1AAKIH61DM6rBKTqsi4CGF1ZPm5
-        /FjG9BjwdTtBcpLpuiDAa6dOfDoKZyP3+61PxaBCCCfYSZwRD4UjWpLWGnMHOFRafkVXuf
-        1LrDH6YsIvUpp+4z8ag875XUI3+hDqhl4Scqt2BSDRbpi3axcEIO1x4NSkrxYyUgGT2vZ0
-        QsxDYPmDTq/+iciT/uyYr+HJI9ENIvVhwtAxgsbxjn595GPLk7Au+EhAT2eeclRTnRBzel
-        LD3Lg6Bb7pAIB43M5w66f9YM5W5Ub7Vqm5X4HV59kYr7CqFjVLOF1F8Z8WX+sQ==
-Date:   Mon, 22 May 2023 15:45:07 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Md Sadre Alam <quic_mdalam@quicinc.com>
-Cc:     mani@kernel.org, richard@nod.at, vigneshr@ti.com,
-        linux-mtd@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_srichara@quicinc.com
-Subject: Re: [PATCH v2 2/5] mtd: rawnand: qcom: Add support for reset,
- readid, status exec_op
-Message-ID: <20230522154507.0255d902@xps-13>
-In-Reply-To: <20230511133017.6307-3-quic_mdalam@quicinc.com>
-References: <20230511133017.6307-1-quic_mdalam@quicinc.com>
-        <20230511133017.6307-3-quic_mdalam@quicinc.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Mon, 22 May 2023 09:46:26 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2111.outbound.protection.outlook.com [40.107.96.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE34C6;
+        Mon, 22 May 2023 06:46:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dngCf8fM80UaULeniFJcBAUTnMSzdEHSejHRRefIsnDkhRKYPzWduLi9pGyxh9lD+QHR9clf6UHN13VYH69vJADk7Kia77EzZc4QkQ/kpVP3Sr4WqCQbbaGWWnQgBocKzR/koRgbcJHEkHSnbglI1Ax8GvsPsHOWJhzQugagkL5TpHEums7d68jEOI/dt9nYb2BF+dq3PwBycvr+hunQHZb0xzUXmieSv7E9Zg//2287OUM/i6ziEBQk0zeHIgcTeXtSh5IUPHYcB4djgBf2icb0vq6BN4rT96YZ3oWVIwUD+YhFOzwFNgrSAFP7OuAfxK+n6hS8oqP8CIfW89v18A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ojOrWdKxgzi9j/Zmvcg4Rz42T0wmgom9sT6xpxHIllc=;
+ b=mWLuAQVbMOxzzaliYPWzJqTqpSAQXkCBzJaKWLh8C7n5pHrKjK/sZ68zb95UesnPqvhnGvfhA8D3CuHWSY7jhTbUxtkdtugYhBJo36ORNVre+OzJjxh0ME9m0ZL8YkWoCGJi5TprUj2+xVevBJ/oB+Q0+Reno+2ldcgySb3nBWFkouybkB9ZKBJaFcf8/byrbgf3FoUkwUJSGdSSUcXRXRJu3/83Dm9oWosRoVtydbK40M2d+WcuhOse8Q4/K9yU3II2SWWip6t7cEAmh0lR9iYUhY9GiGB/3wNC7zfx/1LJPW3GZZFR3SB4J5RwLBm0A9acxoPW4z26h5TQgK9DuQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ojOrWdKxgzi9j/Zmvcg4Rz42T0wmgom9sT6xpxHIllc=;
+ b=Q9BjWBYcgMK0FW3316VlJK12DQ8pEGScpMUIDkfi4T20O2noKg8KfrHB3KDC5A11nX6xV/Z1ukG0utMJpSehz5N1SG+36SynrssWHXW0jb96Alt40XGcZ7a53y6L6obVQNAzah5ZaCVQ8xpZE7EarkzIrb/v0JGrQdZphaqsoDo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by PH0PR13MB5422.namprd13.prod.outlook.com (2603:10b6:510:128::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Mon, 22 May
+ 2023 13:46:22 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6411.028; Mon, 22 May 2023
+ 13:46:22 +0000
+Date:   Mon, 22 May 2023 15:46:15 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH net] lan966x: Fix unloading/loading of the driver
+Message-ID: <ZGtyJ504Jv5YYcx1@corigine.com>
+References: <20230522120038.3749026-1-horatiu.vultur@microchip.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230522120038.3749026-1-horatiu.vultur@microchip.com>
+X-ClientProxiedBy: AM0PR04CA0109.eurprd04.prod.outlook.com
+ (2603:10a6:208:55::14) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH0PR13MB5422:EE_
+X-MS-Office365-Filtering-Correlation-Id: 41f21351-989b-4e93-2a7c-08db5acaed83
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: sLU/PaSKywZmQx5GioncDvSEjSUxWcT0QbUklaO2zHtC9jR8srOZ/2SvYgI8yD4S32IlV4u9lshr6po244zTYFX9tZp7nzQ/eK5SK76TNe8wDk8RzXxEvxW4AVmgZIwms3WEMCw2Rf8zrS5DibI4MeL8LP2/MA2PFJwtSoJ/DA3HVEQk4MVf2/24a4I0xe2MMKE307ranERMWKgHjS9hAXXumMuLgGAVnsoMku9xQRzFPWrPTYYSXO2h1NOJhD+cxjxwPe8iUJu3yOPzbKWO67WXmY86MxUs5H12Oz48y9y6FDbtFbJoZTSV3hk/bGWDbKi5mog3IfcUJgGm8SqpQK5+5neIJvw6p969H60YsOwzio3bKGEhQQdsb2hHhrwNTGVcoYNXSymIKZv04vSc5JoM5nbVmBg08eLm8J3KpJIOTLfRlmKj1F9Oz2bNiCDTofpAdw5VsAOzlBI2zOpLs7AoOStivW4O9iOqnw8Oykh6Wfi4gSJPHc2q7u6VSd+YjADXUDOadZ4W0H5grasG2m3KNOQPF+xKZ+6sWx7oCjs+sLlEKJui8esq7cPIHQff
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(39840400004)(376002)(396003)(136003)(451199021)(2906002)(5660300002)(44832011)(8676002)(8936002)(36756003)(66946007)(66556008)(66476007)(4326008)(6916009)(6486002)(316002)(478600001)(41300700001)(6666004)(86362001)(2616005)(186003)(6512007)(6506007)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ONfHiRWZg7kfqs7Hq/B+6frIfIy7043VuB5+QgsXTL5ApWUZijM5IKCgjw4L?=
+ =?us-ascii?Q?isL1jOEl4auUFKUWMi2sfNASeth9Y33vZS2Qq+N5b81UH+5b+hVK14kmFWFW?=
+ =?us-ascii?Q?HTXU03OwQLoCl5vfFsXalJ8YNMgMuhoV0m7kdmC8sZ8HfwKKoCmIEkLc1HWd?=
+ =?us-ascii?Q?QMyL6c3bm6nyet9KVz2DpCH+jy2HVPkSbDo1+rX5eEKk8Hmkwq+pWL7JGiKl?=
+ =?us-ascii?Q?IifyyhssXxD+LWFjWoFXNKNSnle118N+3Asu/JVXYOhIMdnd/ZSJQRrgMlyB?=
+ =?us-ascii?Q?w/aq0AHxosStJpPEEA9VEYDAnxHgfluh80Rhyogq+POsRUGdrDgJJl7+w3d9?=
+ =?us-ascii?Q?IhXRkcfu13KRVuku90lxG8EV5lfOIVOQmBYHre3HROtI7eOFGgxELzUbXJcl?=
+ =?us-ascii?Q?Uk7797HttMMQVw2LCt7p/t4IzExfS4xCTqu9ChR2UHOQuogFNuQZbR+0CjAk?=
+ =?us-ascii?Q?gAjSmc6SrwarU+cspHm51wBpXC9puub/+Y8ocgJ85ZJF8EcW0tkr3B/NKeMU?=
+ =?us-ascii?Q?kTCVSjdVarbfM6hlU+4sCyD6yYEEDn+8d7OqHZaDGoEBu6GIeqydFiUcu/q4?=
+ =?us-ascii?Q?SuUtbRvyx9CPGNJLiIaJyflMBm7YaMGz9MKcTIWPk/w1bJFEx0/lCLuIeYhJ?=
+ =?us-ascii?Q?xoRN5iTcDhgnPd5PLAt33GeSFaWOyUffm+o2ySzJRe0eGBNzzNwnGyDKLHEy?=
+ =?us-ascii?Q?ZLL/2nAmxxHHlhYNjOiLBrkJ58rcpG+A3B0j/CGBAG4Z7TVxC3JuZxRKZwXc?=
+ =?us-ascii?Q?70hgBYBsJJSMHx8/JmTZIew1/IkAMhuF6hZ5po65gehDLGvxKUAcIx71usw6?=
+ =?us-ascii?Q?4L/qD8a88rKa8ckUR1SARu2fRf4O9Mpj1fxU0PvodwarGAcK4DiFWb6rKnHX?=
+ =?us-ascii?Q?/uhloFwq+hLw7KkT9WBHi7xgYvCt0EjbXhA1H4Y5mrBJSeSWwpen6j9uMnDK?=
+ =?us-ascii?Q?sGKFEcmKLf7FgKDwD8vLxFo9Hhq6ppeM5Xilcf/u9lA5YDHap59huSb4oJ5P?=
+ =?us-ascii?Q?tVlAMPtnGhK6yZMOKf+nClq1LD2WS/i/taVkF5E8Gn1m2EdmmPyLigrtOd29?=
+ =?us-ascii?Q?vSJMIRzcDCdmnh89gEIpMLNuCzHgKvIiFh4y1waPbQbEOs+NvOj69yuiBqhg?=
+ =?us-ascii?Q?ge0xdVrRRXA4J6S7qXwBzSPLC/1kLT2yTqKWAwNgEYeM2j77R9fRUJukmDvU?=
+ =?us-ascii?Q?B33W8ZCL/TUoJrHtzwZItatkTquhcfK7DWSIrrj4xjp5ryPEGJBZmgzTERVy?=
+ =?us-ascii?Q?93Qt9vNM+o/eEHprfjMkJKgYkAW6FRbI+QVCwEsO0jdgKoN3FO0dicApU42z?=
+ =?us-ascii?Q?/kdNv5b932LJtmR5ZXUE7MMK2ER78fROymJI5uFV+WhpXooydlWZwbQhtZUZ?=
+ =?us-ascii?Q?vpA61HEzorX/mqDkP4k1iqIStVEej08FQZOdr4pvX/AjdKLvmR1jlJJmJsnj?=
+ =?us-ascii?Q?CdwNUj7mHIOm14j7Z7T3XKK466MQsJvYV/n7z/pA8U0ySiJ4ZDg99lu3DvGg?=
+ =?us-ascii?Q?lrJ7XdzdFbuVJeWM63YnV/clSxOw1IjAgu1OeJ5TevEn4AWcs39ZOw1jF1hw?=
+ =?us-ascii?Q?qzNL3D5QaPijpG8s9DVwHH/6/5a7QTFy+cEbe2se2bBsGVat0EpM+DTeSTLM?=
+ =?us-ascii?Q?CJgXXBaE2sLpWDTGxatHcK7rTED9a6mDQ9vFMWY/ymnLsmT61gvvmIuUAZ84?=
+ =?us-ascii?Q?6aKOUA=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 41f21351-989b-4e93-2a7c-08db5acaed83
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2023 13:46:21.9422
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +iXopXbQxK1e5fHAuYTT5fgYVBJi6UOCbqCXuM5c/i7yEoKG0144OXeqcGsilrnbX11+ksD0JEbpG/ciyX+47dv9akvyN9RFpJKnGwLwiYI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR13MB5422
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Md,
+On Mon, May 22, 2023 at 02:00:38PM +0200, Horatiu Vultur wrote:
+> It was noticing that after a while when unloading/loading the driver and
+> sending traffic through the switch, it would stop working. It would stop
+> forwarding any traffic and the only way to get out of this was to do a
+> power cycle of the board. The root cause seems to be that the switch
+> core is initialized twice. Apparently initializing twice the switch core
+> disturbs the pointers in the queue systems in the HW, so after a while
+> it would stop sending the traffic.
 
-quic_mdalam@quicinc.com wrote on Thu, 11 May 2023 19:00:14 +0530:
+Ouch.
 
-> This change will add exec_ops support for RESET , READ_ID, STATUS
-> command.
->=20
-> Co-developed-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
-> ---
-> Change in [v2]
->=20
-> * Missed to post Cover-letter, so posting v2 patch with cover-letter
->=20
->  drivers/mtd/nand/raw/qcom_nandc.c | 166 +++++++++++++++++++++++++++++-
->  1 file changed, 163 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/mtd/nand/raw/qcom_nandc.c b/drivers/mtd/nand/raw/qco=
-m_nandc.c
-> index dae460e2aa0b..d2f2a8971907 100644
-> --- a/drivers/mtd/nand/raw/qcom_nandc.c
-> +++ b/drivers/mtd/nand/raw/qcom_nandc.c
-> @@ -384,6 +384,9 @@ struct nandc_regs {
->   * @reg_read_pos:		marker for data read in reg_read_buf
->   *
->   * @cmd1/vld:			some fixed controller register values
-> + *
-> + * @exec_opwrite:		flag to select correct number of code word
-> + *				while reading status
->   */
->  struct qcom_nand_controller {
->  	struct device *dev;
-> @@ -434,6 +437,7 @@ struct qcom_nand_controller {
->  	int reg_read_pos;
-> =20
->  	u32 cmd1, vld;
-> +	bool exec_opwrite;
->  };
-> =20
->  /*
-> @@ -2920,6 +2924,8 @@ static int qcom_op_cmd_mapping(struct qcom_nand_con=
-troller *nandc, u8 cmd,
->  		break;
->  	case NAND_CMD_PAGEPROG:
->  		ret =3D OP_PROGRAM_PAGE;
-> +		q_op->flag =3D NAND_CMD_PAGEPROG;
+> Unfortunetly, it is not possible to use a reset of the switch here,
 
-Just use the instruction value?
+nit: s/Unfortunetly/Unfortunately/
 
-> +		nandc->exec_opwrite =3D true;
->  		break;
->  	default:
->  		break;
-> @@ -2982,10 +2988,95 @@ static void qcom_parse_instructions(struct nand_c=
-hip *chip,
->  	}
->  }
-> =20
-> +static void qcom_delay_ns(unsigned int ns)
-> +{
-> +	if (!ns)
-> +		return;
-> +
-> +	if (ns < 10000)
-> +		ndelay(ns);
-> +	else
-> +		udelay(DIV_ROUND_UP(ns, 1000));
-> +}
-> +
-> +static int qcom_wait_rdy_poll(struct nand_chip *chip, unsigned int time_=
-ms)
-> +{
-> +	struct qcom_nand_controller *nandc =3D get_qcom_nand_controller(chip);
-> +	unsigned long start =3D jiffies + msecs_to_jiffies(time_ms);
-> +	u32 flash;
-> +
-> +	nandc_read_buffer_sync(nandc, true);
-> +
-> +	do {
-> +		flash =3D le32_to_cpu(nandc->reg_read_buf[0]);
-> +		if (flash & FS_READY_BSY_N)
-> +			return 0;
-> +		cpu_relax();
-> +	} while (time_after(start, jiffies));
-> +
-> +	dev_err(nandc->dev, "Timeout waiting for device to be ready:0x%08x\n", =
-flash);
-> +
-> +	return -ETIMEDOUT;
-> +}
-> +
->  static int qcom_read_status_exec(struct nand_chip *chip,
->  				 const struct nand_subop *subop)
->  {
-> -	return 0;
-> +	struct qcom_nand_host *host =3D to_qcom_nand_host(chip);
-> +	struct qcom_nand_controller *nandc =3D get_qcom_nand_controller(chip);
-> +	struct nand_ecc_ctrl *ecc =3D &chip->ecc;
-> +	struct qcom_op q_op;
-> +	const struct nand_op_instr *instr =3D NULL;
-> +	unsigned int op_id =3D 0;
-> +	unsigned int len =3D 0;
-> +	int ret =3D 0, num_cw =3D 1, i;
-> +	u32 flash_status;
-> +
-> +	host->status =3D NAND_STATUS_READY | NAND_STATUS_WP;
-> +
-> +	qcom_parse_instructions(chip, subop, &q_op);
-> +
-> +	if (nandc->exec_opwrite) {
+> because the reset line is connected to multiple devices like MDIO,
+> SGPIO, FAN, etc. So then all the devices will get reseted when the
 
-I definitely don't understand this flag at all.
+nit: s/reseted/reset/
 
-> +		num_cw =3D ecc->steps;
-> +		nandc->exec_opwrite =3D false;
-> +	}
-> +
-> +	pre_command(host, NAND_CMD_STATUS);
-> +
-> +	nandc_set_reg(chip, NAND_FLASH_CMD, q_op.cmd_reg);
-> +	nandc_set_reg(chip, NAND_EXEC_CMD, 1);
-> +
-> +	write_reg_dma(nandc, NAND_FLASH_CMD, 1, NAND_BAM_NEXT_SGL);
-> +	write_reg_dma(nandc, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
-> +
-> +	read_reg_dma(nandc, NAND_FLASH_STATUS, 1, NAND_BAM_NEXT_SGL);
-> +
-> +	ret =3D submit_descs(nandc);
-> +	if (ret)
-> +		dev_err(nandc->dev, "failure in sbumitting status descriptor\n");
-> +
-> +	free_descs(nandc);
-> +
-> +	nandc_read_buffer_sync(nandc, true);
-> +	for (i =3D 0; i < num_cw; i++) {
-> +		flash_status =3D le32_to_cpu(nandc->reg_read_buf[i]);
-> +
-> +	if (flash_status & FS_MPU_ERR)
-> +		host->status &=3D ~NAND_STATUS_WP;
-> +
-> +	if (flash_status & FS_OP_ERR || (i =3D=3D (num_cw - 1) &&
-> +					 (flash_status & FS_DEVICE_STS_ERR)))
-> +		host->status |=3D NAND_STATUS_FAIL;
+> network driver will be loaded.
+> So the fix is to check if the core is initialized already and if that is
+> the case don't initialize it again.
+> 
+> Fixes: db8bcaad5393 ("net: lan966x: add the basic lan966x driver")
+> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 
-If there is a failure detected, error out (everywhere).
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
-> +	}
-> +
-> +	flash_status =3D host->status;
-> +
-> +	instr =3D q_op.data_instr;
-> +	op_id =3D q_op.data_instr_idx;
-> +	len =3D nand_subop_get_data_len(subop, op_id);
-> +	memcpy(instr->ctx.data.buf.in, &flash_status, len);
-> +
-> +	return ret;
->  }
-> =20
->  static int qcom_erase_cmd_type_exec(struct nand_chip *chip, const struct=
- nand_subop *subop)
-> @@ -3000,12 +3091,81 @@ static int qcom_param_page_type_exec(struct nand_=
-chip *chip,  const struct nand_
-> =20
->  static int qcom_read_id_type_exec(struct nand_chip *chip, const struct n=
-and_subop *subop)
->  {
-> -	return 0;
-> +	struct qcom_nand_controller *nandc =3D get_qcom_nand_controller(chip);
-> +	struct qcom_nand_host *host =3D to_qcom_nand_host(chip);
-> +	struct qcom_op q_op;
-> +	const struct nand_op_instr *instr =3D NULL;
-> +	unsigned int op_id =3D 0;
-> +	unsigned int len =3D 0;
-> +	int ret =3D 0;
-> +
-> +	qcom_parse_instructions(chip, subop, &q_op);
-> +
-> +	pre_command(host, NAND_CMD_READID);
-> +
-> +	nandc_set_reg(chip, NAND_FLASH_CMD, q_op.cmd_reg);
-> +	nandc_set_reg(chip, NAND_ADDR0, q_op.addr1_reg);
-> +	nandc_set_reg(chip, NAND_ADDR1, q_op.addr2_reg);
-> +	nandc_set_reg(chip, NAND_FLASH_CHIP_SELECT,
-> +		      nandc->props->is_bam ? 0 : DM_EN);
-> +
-> +	nandc_set_reg(chip, NAND_EXEC_CMD, 1);
-> +
-> +	write_reg_dma(nandc, NAND_FLASH_CMD, 4, NAND_BAM_NEXT_SGL);
-> +	write_reg_dma(nandc, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
-> +
-> +	read_reg_dma(nandc, NAND_READ_ID, 1, NAND_BAM_NEXT_SGL);
-> +
-> +	ret =3D submit_descs(nandc);
-> +	if (ret)
-> +		dev_err(nandc->dev, "failure in sbumitting read id descriptor\n");
-> +
-> +	free_descs(nandc);
-> +
-> +	instr =3D q_op.data_instr;
-> +	op_id =3D q_op.data_instr_idx;
-> +	len =3D nand_subop_get_data_len(subop, op_id);
-> +
-> +	nandc_read_buffer_sync(nandc, true);
-> +	memcpy(instr->ctx.data.buf.in, nandc->reg_read_buf, len);
-> +
-> +	return ret;
->  }
-> =20
->  static int qcom_misc_cmd_type_exec(struct nand_chip *chip, const struct =
-nand_subop *subop)
->  {
-> -	return 0;
-> +	struct qcom_nand_controller *nandc =3D get_qcom_nand_controller(chip);
-> +	struct qcom_nand_host *host =3D to_qcom_nand_host(chip);
-> +	struct qcom_op q_op;
-> +	int ret =3D 0;
-> +
-> +	qcom_parse_instructions(chip, subop, &q_op);
-> +
-> +	if (q_op.flag =3D=3D NAND_CMD_PAGEPROG)
-> +		goto wait_rdy;
-> +
-> +	pre_command(host, NAND_CMD_RESET);
-
-???
-
-> +
-> +	nandc_set_reg(chip, NAND_FLASH_CMD, q_op.cmd_reg);
-> +	nandc_set_reg(chip, NAND_EXEC_CMD, 1);
-> +
-> +	write_reg_dma(nandc, NAND_FLASH_CMD, 1, NAND_BAM_NEXT_SGL);
-> +	write_reg_dma(nandc, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
-> +
-> +	read_reg_dma(nandc, NAND_FLASH_STATUS, 1, NAND_BAM_NEXT_SGL);
-> +
-> +	ret =3D submit_descs(nandc);
-> +	if (ret)
-> +		dev_err(nandc->dev, "failure in sbumitting misc descriptor\n");
-
-Typo                                             ^
-
-Same above.
-
-You should error out immediately when something wrong happens.
-
-> +
-> +	free_descs(nandc);
-> +
-> +wait_rdy:
-> +	qcom_delay_ns(q_op.rdy_delay_ns);
-> +
-> +	ret =3D qcom_wait_rdy_poll(chip, q_op.rdy_timeout_ms);
-> +
-> +	return ret;
->  }
-> =20
->  static int qcom_data_read_type_exec(struct nand_chip *chip, const struct=
- nand_subop *subop)
-
-
-Thanks,
-Miqu=C3=A8l
+...
