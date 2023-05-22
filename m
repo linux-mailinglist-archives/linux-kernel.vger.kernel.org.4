@@ -2,44 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2EC570C1FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A449970C203
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:11:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233356AbjEVPKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 11:10:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49432 "EHLO
+        id S233871AbjEVPLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 11:11:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234510AbjEVPJy (ORCPT
+        with ESMTP id S234478AbjEVPKy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 11:09:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43EFB9;
-        Mon, 22 May 2023 08:09:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 22 May 2023 11:10:54 -0400
+Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 94AF1BF
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 08:10:52 -0700 (PDT)
+Received: from 8bytes.org (p200300c2773e310086ad4f9d2505dd0d.dip0.t-ipconnect.de [IPv6:2003:c2:773e:3100:86ad:4f9d:2505:dd0d])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F5D161C36;
-        Mon, 22 May 2023 15:09:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C414C433D2;
-        Mon, 22 May 2023 15:09:50 +0000 (UTC)
-Date:   Mon, 22 May 2023 16:09:47 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, robin.murphy@arm.com,
-        will@kernel.org, nicolinc@nvidia.com,
-        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
-        kvmarm@lists.cs.columbia.edu, jgg@nvidia.com,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: Re: [PATCH] mmu_notifiers: Notify on pte permission upgrades
-Message-ID: <ZGuFu0VwRfZszABB@arm.com>
-References: <20230522063725.284686-1-apopple@nvidia.com>
+        by mail.8bytes.org (Postfix) with ESMTPSA id BF5242434D7;
+        Mon, 22 May 2023 17:10:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
+        s=default; t=1684768251;
+        bh=C4XRXQaWxNO+0o7ACwltK3KeZDgZy5l9Ut9az/WeKWc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tYka/2TpLB1hp6tTFWBmjTyMisi9YFS3e87jSNTdM5gvOZEQUrb97Mhs5W7/22cle
+         NQMqshCUsOl639oxngV3aVfoAocqjrJbbnyrNtuqKIjslkxpqL7sZmVzA9Q4Gf8+sY
+         mlddOaVNNzyEeMgns7+lC8ln7ccAqLJxlK49Fr+w3Tp+DeThgTSns2D4O4tELwF9Qc
+         o9n0DKa30+a/37mpGCdGEYNXosafshxjI8ZcG6vAKeXDHZrs0HFfh+AfwYfYEY2rkk
+         ssbemiJfbIBAfNr6gmSomA74QZ/i27DmigT9JEhdHkeJSiLNKUJZ9C7qQcZCedqpkn
+         8UIebWA3lieqQ==
+Date:   Mon, 22 May 2023 17:10:50 +0200
+From:   Joerg Roedel <joro@8bytes.org>
+To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Cc:     Robin Murphy <robin.murphy@arm.com>, Will Deacon <will@kernel.org>,
+        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iommu/iova: Optimize iova_magazine_alloc()
+Message-ID: <ZGuF-m-RzLo-ujZs@8bytes.org>
+References: <20230418062518.852-1-thunder.leizhen@huawei.com>
+ <e9b912ee-6b49-f369-82ff-daff49dc7511@arm.com>
+ <b6bf601b-0466-cb94-22b2-1189724410c9@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230522063725.284686-1-apopple@nvidia.com>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+In-Reply-To: <b6bf601b-0466-cb94-22b2-1189724410c9@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,35 +54,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 04:37:25PM +1000, Alistair Popple wrote:
-> diff --git a/mm/memory.c b/mm/memory.c
-> index f526b9152bef..0ac78c6a232c 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -2098,6 +2098,7 @@ static vm_fault_t insert_pfn(struct vm_area_struct *vma, unsigned long addr,
->  	struct mm_struct *mm = vma->vm_mm;
->  	pte_t *pte, entry;
->  	spinlock_t *ptl;
-> +	bool changed = false;
->  
->  	pte = get_locked_pte(mm, addr, &ptl);
->  	if (!pte)
-> @@ -2120,8 +2121,10 @@ static vm_fault_t insert_pfn(struct vm_area_struct *vma, unsigned long addr,
->  			}
->  			entry = pte_mkyoung(*pte);
->  			entry = maybe_mkwrite(pte_mkdirty(entry), vma);
-> -			if (ptep_set_access_flags(vma, addr, pte, entry, 1))
-> +			if (ptep_set_access_flags(vma, addr, pte, entry, 1)) {
->  				update_mmu_cache(vma, addr, pte);
-> +				changed = true;
-> +			}
->  		}
->  		goto out_unlock;
->  	}
+On Thu, Apr 20, 2023 at 07:52:14PM +0800, Leizhen (ThunderTown) wrote:
+> Yes, sizeof(*mag) is the more recommended usage, I will post v2 tomorrow.
 
-I haven't checked all the corner cases but can we not have a
-ptep_set_access_flags_notify() that handles this (and the huge
-equivalent)? It matches the other API like ptep_clear_flush_notify().
+Somehow v2 didn't make it to my inbox, but I found it on lore. This is
+applied now, thanks.
 
--- 
-Catalin
+Regards,
+
+	Joerg
