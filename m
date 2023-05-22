@@ -2,138 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4CAF70B768
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:17:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6611770B76F
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232030AbjEVIRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 04:17:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50550 "EHLO
+        id S231174AbjEVITT convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 22 May 2023 04:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230451AbjEVIRt (ORCPT
+        with ESMTP id S231500AbjEVITP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 04:17:49 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7D9B0;
-        Mon, 22 May 2023 01:17:47 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1q10jf-0007xN-3F; Mon, 22 May 2023 10:17:43 +0200
-Message-ID: <d78088d6-7989-7538-c4e1-7976a21cf680@leemhuis.info>
-Date:   Mon, 22 May 2023 10:17:42 +0200
+        Mon, 22 May 2023 04:19:15 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58909C7
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 01:19:14 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-147-ariLRcbvMsic7sM9JfpM6Q-1; Mon, 22 May 2023 09:18:59 +0100
+X-MC-Unique: ariLRcbvMsic7sM9JfpM6Q-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 22 May
+ 2023 09:18:53 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Mon, 22 May 2023 09:18:53 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Sebastian Reichel' <sebastian.reichel@collabora.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "kernel@collabora.com" <kernel@collabora.com>
+Subject: RE: [PATCH v1 2/2] clk: divider: Properly handle rates exceeding
+ UINT_MAX
+Thread-Topic: [PATCH v1 2/2] clk: divider: Properly handle rates exceeding
+ UINT_MAX
+Thread-Index: AQHZioTsgOA8rKF4Y0+0s2ErF0La269l9j4w
+Date:   Mon, 22 May 2023 08:18:53 +0000
+Message-ID: <1b74d2ea2c3a458694c4c74f2381fcab@AcuMS.aculab.com>
+References: <20230519190522.194729-1-sebastian.reichel@collabora.com>
+ <20230519190522.194729-3-sebastian.reichel@collabora.com>
+In-Reply-To: <20230519190522.194729-3-sebastian.reichel@collabora.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: kernel error at led trigger "phy0tpt"
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Tobias Dahms <dahms.tobias@web.de>,
-        Sean Wang <sean.wang@mediatek.com>
-Cc:     stable@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-leds@vger.kernel.org,
-        linux-wireless@vger.kernel.org,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-References: <91feceb2-0df4-19b9-5ffa-d37e3d344fdf@web.de>
- <3fcc707b-f757-e74b-2800-3b6314217868@leemhuis.info>
- <fcecf6fc-bf18-73a0-9fc1-6850e183323a@web.de>
- <d14fb08c-70e3-4cc7-caf9-87e73eab9194@gmail.com>
- <8b07ead5-f105-da86-e7da-ee49616f7c1d@collabora.com>
- <69602f1b-4afa-d864-b6d3-d8237f81a51d@leemhuis.info>
-Content-Language: en-US, de-DE
-In-Reply-To: <69602f1b-4afa-d864-b6d3-d8237f81a51d@leemhuis.info>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1684743468;19a6056f;
-X-HE-SMSGID: 1q10jf-0007xN-3F
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17.04.23 13:25, Linux regression tracking (Thorsten Leemhuis) wrote:
-> [adding Matthias to the list of recipients, who back then applied to
-> culprit]
+From: Sebastian Reichel
+> Sent: 19 May 2023 20:05
 > 
-> Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
-> for once, to make this easily accessible to everyone.
+> Requesting rates exceeding UINT_MAX (so roughly 4.3 GHz) results
+> in very small rate being chosen instead of very high ones, since
+> DIV_ROUND_UP_ULL takes a 32 bit integer as second argument.
 > 
-> AngeloGioacchino, Has any progress been made to fix below regression? It
-> doesn't look like it from here, hence I wondered if it fall through the
-> cracks.
+> Correct this by using DIV64_U64_ROUND_UP instead, which takes proper
+> 64 bit values for dividend and divisor.
 
-Hmmm, nobody replied. Does nobody (including the reporters!) care
-anymore for valid reasons? Then I'd drop this from the tracking.
+This doesn't look right on 32-bit architectures.
+While you really don't want to be doing full 64bit divides
+there is also the problem that any input values over 4.3Ghz
+have already been masked.
 
-Or was progress made and I just missed it?
+In the values can be over 4.3GHz then the function arguments
+need to be 64bit - not long.
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
+	David
 
-#regzbot poke
+> 
+> Note, that this is usually not an issue. ULONG_MAX sets the lower
+> 32 bits and thus effectively requests UINT_MAX. On most platforms
+> that is good enough. To trigger a real bug one of the following
+> conditions must be met:
+> 
+>  * A parent clock with more than 8.5 GHz is available
+>  * Instead of ULONG_MAX a specific frequency like 4.3 GHz is
+>    requested. That would end up becoming 5 MHz instead :)
+> 
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+>  drivers/clk/clk-divider.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/clk/clk-divider.c b/drivers/clk/clk-divider.c
+> index a2c2b5203b0a..dddaaf0f9d25 100644
+> --- a/drivers/clk/clk-divider.c
+> +++ b/drivers/clk/clk-divider.c
+> @@ -220,7 +220,7 @@ static int _div_round_up(const struct clk_div_table *table,
+>  			 unsigned long parent_rate, unsigned long rate,
+>  			 unsigned long flags)
+>  {
+> -	int div = DIV_ROUND_UP_ULL((u64)parent_rate, rate);
+> +	int div = DIV64_U64_ROUND_UP(parent_rate, rate);
+> 
+>  	if (flags & CLK_DIVIDER_POWER_OF_TWO)
+>  		div = __roundup_pow_of_two(div);
+> @@ -237,7 +237,7 @@ static int _div_round_closest(const struct clk_div_table *table,
+>  	int up, down;
+>  	unsigned long up_rate, down_rate;
+> 
+> -	up = DIV_ROUND_UP_ULL((u64)parent_rate, rate);
+> +	up = DIV64_U64_ROUND_UP(parent_rate, rate);
+>  	down = parent_rate / rate;
+> 
+>  	if (flags & CLK_DIVIDER_POWER_OF_TWO) {
+> @@ -473,7 +473,7 @@ int divider_get_val(unsigned long rate, unsigned long parent_rate,
+>  {
+>  	unsigned int div, value;
+> 
+> -	div = DIV_ROUND_UP_ULL((u64)parent_rate, rate);
+> +	div = DIV64_U64_ROUND_UP(parent_rate, rate);
+> 
+>  	if (!_is_valid_div(table, div, flags))
+>  		return -EINVAL;
+> --
+> 2.39.2
 
-> On 27.03.23 10:23, AngeloGioacchino Del Regno wrote:
->> Il 26/03/23 15:23, Bagas Sanjaya ha scritto:
->>> On 3/26/23 02:20, Tobias Dahms wrote:
->>>> Hello,
->>>>
->>>> the bisection gives following result:
->>>> --------------------------------------------------------------------
->>>> 18c7deca2b812537aa4d928900e208710f1300aa is the first bad commit
->>>> commit 18c7deca2b812537aa4d928900e208710f1300aa
->>>> Author: AngeloGioacchino Del Regno
->>>> <angelogioacchino.delregno@collabora.com>
->>>> Date:   Tue May 17 12:47:08 2022 +0200
->>>>
->>>>      soc: mediatek: pwrap: Use readx_poll_timeout() instead of custom
->>>> function
->>>>
->>>>      Function pwrap_wait_for_state() is a function that polls an address
->>>>      through a helper function, but this is the very same operation that
->>>>      the readx_poll_timeout macro means to do.
->>>>      Convert all instances of calling pwrap_wait_for_state() to instead
->>>>      use the read_poll_timeout macro.
->>>>
->>>>      Signed-off-by: AngeloGioacchino Del Regno
->>>> <angelogioacchino.delregno@collabora.com>
->>>>      Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
->>>>      Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
->>>>      Link:
->>>> https://lore.kernel.org/r/20220517104712.24579-2-angelogioacchino.delregno@collabora.com
->>>>      Signed-off-by: Matthias Brugger <matthias.bgg@gmail.com>
->>>>
->>>>   drivers/soc/mediatek/mtk-pmic-wrap.c | 60
->>>> ++++++++++++++++++++----------------
->>>>   1 file changed, 33 insertions(+), 27 deletions(-)
->>>> --------------------------------------------------------------------
->>>>
->>>
->>> OK, I'm updating the regression status:
->>>
->>> #regzbot introduced: 18c7deca2b8125
->>>
->>> And for replying, don't top-post, but rather reply inline with
->>> appropriate context instead; hence I cut the replied context.
->>>
->>
->> There are two possible solutions to that, specifically, either:
->>  1. Change readx_poll_timeout() to readx_poll_timeout_atomic(); or
->>  2. Fix the mt6323-led driver so that this operation gets done
->>     out of atomic context, which is IMO the option to prefer.
->>
->> Ideas?
->>
->> Regards,
->> Angelo
->>
->>
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
