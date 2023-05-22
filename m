@@ -2,77 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2612370B8C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:22:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C86570B8CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:23:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232795AbjEVJWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 05:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54412 "EHLO
+        id S232841AbjEVJWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 05:22:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232774AbjEVJWK (ORCPT
+        with ESMTP id S232820AbjEVJWc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 05:22:10 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22BB7C6
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 02:22:09 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-96f50e26b8bso715877766b.2
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 02:22:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684747327; x=1687339327;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OWgSPwQBspND+l5FgxYrCxjRrLfV4tAi/ncxGD1tzmY=;
-        b=FkHTI+fsiFLIfDjjZ5x1vzvdzg/Inx3IhlSoCyRzBEtiI70M5Nj+tA+uHH2VbWzUpL
-         fskgMO/+VQoj9OTYF1PLxgBzIfdKclOsHauE2Zw81v2nIT7oW2PG8NC6tNJE0TQht1Xd
-         yf8D413LRuH8vlGkP5ACgqTW18Yrebli52a3/XIfkAvYCAY/5ST6JOW5lDqZnI6UE423
-         hSNEh12LVhDuP26ei7qxgD3UMcF82/amjXo+LbwF/3eW0VUpbfNNL+D4JrtFcDZIrWCo
-         Dka81MifnVt59oqHEfppyf6i41K5blguutbWMCsUgJpSI0jGoiHe8QqgFG9cTha+bMXJ
-         Z+gg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684747327; x=1687339327;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OWgSPwQBspND+l5FgxYrCxjRrLfV4tAi/ncxGD1tzmY=;
-        b=II+/GW5ggL4D5n/ty4NCI5tTwICAoC7mXeyS35TdjKhZ8tLCKkosd4TjxVofG+a84b
-         QEojKm4Gck5N0HrNbDyWLuQlkMNbjIdmRxkzbdDuoms3mmIulbVjEw0u1zyMADxXSRWd
-         FFEK8FrTCGT/5I3HiSGIh01vXjrXftFnZU91f//goR9a2otAoxhVeMBH8XxzIu1thFWB
-         dD5y52whh8bKUmj2KjoF6F0O7Ucx/rx5riXBXEO4af9LMhj2Hbzma9BpjHE585NGaRM4
-         IvZzR+p21S+j4TJW5TydstvCav44SJ/6pCUgNtujZDnZ2l6cCQXw4YIUdo4e4fDwu7qs
-         PH7A==
-X-Gm-Message-State: AC+VfDxWDeFpJ8di+iZv2h4JYPh3q98zR27z8TstLyvvFdeC/5GrXE1V
-        hWz77hgudlqAR71dlSUvd5oT0A==
-X-Google-Smtp-Source: ACHHUZ4llMsUm3mMQoEICKe9reTv0ubUpgf7y1rkTtZnCilVcgETeccWP3R23LSJ4AHV9kWAwFh8hw==
-X-Received: by 2002:a17:907:1611:b0:966:37b2:7354 with SMTP id hb17-20020a170907161100b0096637b27354mr10227963ejc.31.1684747327487;
-        Mon, 22 May 2023 02:22:07 -0700 (PDT)
-Received: from [192.168.2.107] ([79.115.63.206])
-        by smtp.gmail.com with ESMTPSA id kt26-20020a170906aada00b009663cf5dc3bsm2892334ejb.53.2023.05.22.02.22.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 May 2023 02:22:07 -0700 (PDT)
-Message-ID: <0c8a54ae-7f32-2614-9717-a00fe561513e@linaro.org>
-Date:   Mon, 22 May 2023 10:22:05 +0100
+        Mon, 22 May 2023 05:22:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED1EB9;
+        Mon, 22 May 2023 02:22:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E1A9F61F54;
+        Mon, 22 May 2023 09:22:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A3E9C4339B;
+        Mon, 22 May 2023 09:22:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684747342;
+        bh=4UAOuaxRjDW/VUdv5PEW8PO3y6sk2Abupc99dtDqXVk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V6eKgFClyIfM6DBk8bSWMM3kIhcX0FqIj79QDbMDa1JsTHY8WxRYwz7V6xy62/Q8O
+         RmK1nRSYtsmLgE3Rkp6z84Y6gW/bPI4GNywRLtRGd1vEBrr3iIVcEa9D1pid1tKbLR
+         ghIlYoHpj0ZaGXp025wa4QzbRJDTwnGZWOkyM6ifMmPC6nrOSnPTGUbpOjiEnJjSi2
+         /n9hCVYUG5+GJ6oIYrWmKBse+n+M+uXFtakwEVHB7ZzHA2kK2xDkEfg5wtKhhxf9ZB
+         9Cslxd1y2sv/xlJ53XtGl5iS4VPqtQAkyvbS4ZqaRJ12LXYBeBP4a6w13f7PPIgw2U
+         cFJzr9JUc5eIA==
+Date:   Mon, 22 May 2023 11:22:12 +0200
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Devi Priya <quic_devipriy@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        kw@linux.com, robh@kernel.org, bhelgaas@google.com,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, mani@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, quic_srichara@quicinc.com,
+        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
+        quic_arajkuma@quicinc.com, quic_anusha@quicinc.com,
+        quic_ipkumar@quicinc.com
+Subject: Re: [PATCH V4 0/6] Add PCIe support for IPQ9574
+Message-ID: <ZGs0RJ2y+3lSZLIC@lpieralisi>
+References: <20230519090219.15925-1-quic_devipriy@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] mtd: spi-nor: Fix divide by zero for spi-nor-generic
- flashes
-To:     Miquel Raynal <miquel.raynal@bootlin.com>
-Cc:     richard@nod.at, todd.e.brandt@intel.com, vigneshr@ti.com,
-        pratyush@kernel.org, michael@walle.cc,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        regressions@leemhuis.info, bagasdotme@gmail.com,
-        regressions@lists.linux.dev, joneslee@google.com,
-        Todd Brandt <todd.e.brandt@linux.intel.com>
-References: <20230518085440.2363676-1-tudor.ambarus@linaro.org>
- <20230522102953.2fdf2b02@xps-13>
-Content-Language: en-US
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <20230522102953.2fdf2b02@xps-13>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230519090219.15925-1-quic_devipriy@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,98 +62,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, May 19, 2023 at 02:32:13PM +0530, Devi Priya wrote:
+> This series adds support for enabling the PCIe host devices (PCIe0, PCIe1,
+> PCIe2, PCIe3) found on IPQ9574 platform.
+> The PCIe0 & PCIe1 are 1-lane Gen3 host and PCIe2 & PCIe3 
+> are 2-lane Gen3 host.
+> 
+> DTS patch is based on the below series
+> https://lore.kernel.org/linux-arm-msm/20230517172527.1968-1-quic_devipriy@quicinc.com/
+> 
+> Changes in V4:
+> 	- Rebased on the below series
+> https://lore.kernel.org/linux-arm-msm/20230517172527.1968-1-quic_devipriy@quicinc.com/
+> 	- Change logs are added to the respective patches.
 
+Mani, all,
 
-On 5/22/23 09:29, Miquel Raynal wrote:
-> Hi Tudor,
+can I pick up patches 3 and 6 from this series ?
 
-Hi, Miquel,
+Lorenzo
 
+> [V3]
+> https://lore.kernel.org/linux-arm-msm/20230421124938.21974-1-quic_devipriy@quicinc.com/
+> 	- Dropped the phy driver and binding patches as they have been 
+> 	  posted as a separate series.
+> 	- Dropped the pinctrl binding fix patch as it is unrelated to the series
+> 	  dt-bindings: pinctrl: qcom: Add few missing functions.
+> 	- Rebased on linux-next/master.
+> 	- Detailed change logs are added to the respective patches.
+> 	
+> [V2]
+> https://lore.kernel.org/linux-arm-msm/20230404164828.8031-1-quic_devipriy@quicinc.com/
+> 	- Reordered the patches and splitted the board DT changes
+> 	  into a separate patch as suggested
+> 	- Detailed change logs are added to the respective patches
 > 
-> tudor.ambarus@linaro.org wrote on Thu, 18 May 2023 08:54:40 +0000:
+> [V1]
+> https://lore.kernel.org/linux-arm-msm/20230214164135.17039-1-quic_devipriy@quicinc.com/
 > 
->> We failed to initialize n_banks for spi-nor-generic flashes, which
->> caused a devide by zero when computing the bank_size.
->>
->> By default we consider that all chips have a single bank. Initialize
->> the default number of banks for spi-nor-generic flashes. Even if the
->> bug is fixed with this simple initialization, check the n_banks value
->> before dividing so that we make sure this kind of bug won't occur again
->> if some other struct instance is created uninitialized.
->>
->> Suggested-by: Todd Brandt <todd.e.brandt@linux.intel.com>
->> Reported-by: Todd Brandt <todd.e.brandt@linux.intel.com>
->> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217448
->> Fixes: 9d6c5d64f028 ("mtd: spi-nor: Introduce the concept of bank")
->> Link: https://lore.kernel.org/all/20230516225108.29194-1-todd.e.brandt@intel.com/
->> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
->> ---
->>  drivers/mtd/spi-nor/core.c | 5 ++++-
->>  1 file changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
->> index 0bb0ad14a2fc..5f29fac8669a 100644
->> --- a/drivers/mtd/spi-nor/core.c
->> +++ b/drivers/mtd/spi-nor/core.c
->> @@ -2018,6 +2018,7 @@ static const struct spi_nor_manufacturer *manufacturers[] = {
->>  
->>  static const struct flash_info spi_nor_generic_flash = {
->>  	.name = "spi-nor-generic",
->> +	.n_banks = 1,
+> Devi Priya (6):
+>   dt-bindings: clock: Add PCIe pipe clock definitions
+>   clk: qcom: gcc-ipq9574: Add PCIe pipe clocks
+>   dt-bindings: PCI: qcom: Add IPQ9574
+>   arm64: dts: qcom: ipq9574: Add PCIe PHYs and controller nodes
+>   arm64: dts: qcom: ipq9574: Enable PCIe PHYs and controllers
+>   PCI: qcom: Add support for IPQ9574
 > 
-> I definitely missed that structure.
+>  .../devicetree/bindings/pci/qcom,pcie.yaml    |  48 +++
+>  arch/arm64/boot/dts/qcom/ipq9574-rdp433.dts   | 113 ++++++
+>  arch/arm64/boot/dts/qcom/ipq9574.dtsi         | 365 ++++++++++++++++++
+>  drivers/clk/qcom/gcc-ipq9574.c                |  76 ++++
+>  drivers/pci/controller/dwc/pcie-qcom.c        |  57 ++-
+>  include/dt-bindings/clock/qcom,ipq9574-gcc.h  |   4 +
+>  6 files changed, 645 insertions(+), 18 deletions(-)
 > 
->>  	/*
->>  	 * JESD216 rev A doesn't specify the page size, therefore we need a
->>  	 * sane default.
->> @@ -2921,7 +2922,8 @@ static void spi_nor_late_init_params(struct spi_nor *nor)
->>  	if (nor->flags & SNOR_F_HAS_LOCK && !nor->params->locking_ops)
->>  		spi_nor_init_default_locking_ops(nor);
->>  
->> -	nor->params->bank_size = div64_u64(nor->params->size, nor->info->n_banks);
->> +	if (nor->info->n_banks > 1)
->> +		params->bank_size = div64_u64(params->size, nor->info->n_banks);
+> -- 
+> 2.17.1
 > 
-> I'm fine with the check as it is written because it also look like an
-> optimization, but bank_size should never be 0 otherwise it's a real bug
-
-bank_size was introduced just for chips featuring several banks, but we
-made this field mandatory for all flashes, regardless of their type. I
-find this restriction unnecessary, because we can differentiate the RWW
-flashes by checking the SNOR_F_RWW flag. So the alternative to this
-patch is to remove the n_banks restriction and set it just for the RWW
-flashes. I think I prefer this, but keep in mind that I never read a RWW
-flash's datasheet, not publicly available, so the decision is in your
-court. Happy to make a patch.
-
-> that must be catch and fixed. We do not want uninitialized bank_size's.>
->>  }
->>  
->>  /**
->> @@ -2987,6 +2989,7 @@ static void spi_nor_init_default_params(struct spi_nor *nor)
->>  	/* Set SPI NOR sizes. */
->>  	params->writesize = 1;
->>  	params->size = (u64)info->sector_size * info->n_sectors;
->> +	params->bank_size = params->size;
->>  	params->page_size = info->page_size;
-> 
-> We actually discarded that line in a previous discussion:
-> https://lore.kernel.org/linux-mtd/20230331194620.839899-1-miquel.raynal@bootlin.com/T/#mcb4f90f7ca48ffe3d9838b2ac6f74e44460c51bd
-> 
-> I'm fine to re-add it though, it does not hurt.
-
-we would get rid of this init as well with my suggestion.
-
-Keep in mind that the bug was introduced in 6.4, so we'll have to fix
-this fast, let's come to an agreement.
-
-Cheers,
-ta
-> 
->>  
->>  	if (!(info->flags & SPI_NOR_NO_FR)) {
-> 
-> Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
-> 
-> Thanks,
-> Miquèl
