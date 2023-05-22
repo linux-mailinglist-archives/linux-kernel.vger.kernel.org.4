@@ -2,187 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E703170C7CC
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 21:32:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EDFB70C7A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 21:32:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234825AbjEVTcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 15:32:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53592 "EHLO
+        id S234770AbjEVTby (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 15:31:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234797AbjEVTcQ (ORCPT
+        with ESMTP id S234758AbjEVTbv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 15:32:16 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB9912B;
-        Mon, 22 May 2023 12:32:11 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34MIQgbr020257;
-        Mon, 22 May 2023 19:32:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=vpkLkj9IlZ6pPgrWMkyVSRlaWHlGd+5c1HiJueCd8dA=;
- b=EgNmG7c8BGCe/Wfl8SCX3xPcf+s0kd54FLafNsUChMnmcPdGzhcDyeob3/2TOJq34D0/
- LGr4x+OzgD99ZdV5RNSG6hrOWaxSq633IC/zpGqR8C1SVk03axo6Nvz8LQrEUycPVXsj
- ZjyZ4QzM6N7zusbIuZYDYOdvhmuUKaaW+w8Xv4uXOvoNF38LUs9Ql0fkgNYAInh4LS5c
- S1CNjMbDsEFlFVgUIANrjrf4ftOaGfqQ0MAuuV38Du/STYx7ZbCdniKsvjGebbEcFznP
- Ku5xnV5P1PWKxDA0x3izVFeoaLU5yMeTMrMloDOxslMC0bsVObYAuORseA0x7htvB2T7 KA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qrc3889gg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 19:32:03 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34MJVxrG024199
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 19:31:59 GMT
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Mon, 22 May 2023 12:31:58 -0700
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <andersson@kernel.org>
-CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <quic_abhinavk@quicinc.com>, <quic_jesszhan@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v12 10/10] drm/msm/dpu: tear down DSC data path when DSC disabled
-Date:   Mon, 22 May 2023 12:30:53 -0700
-Message-ID: <1684783853-22193-11-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1684783853-22193-1-git-send-email-quic_khsieh@quicinc.com>
-References: <1684783853-22193-1-git-send-email-quic_khsieh@quicinc.com>
+        Mon, 22 May 2023 15:31:51 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD80FBB;
+        Mon, 22 May 2023 12:31:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684783910; x=1716319910;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=dnXoYbHYsCEJqesjbV6fJRl1uslo4ee0wfFGvqeUcek=;
+  b=PcT9wGgS8CwKko27qJmwkm8ip5qLh43Ny9A+fCFWYMc+qNQpc/h4DbR3
+   3Sh2bmSrH9JlNUinX9L9nSUV1YdoGmQYG7TLnVboFEpB6ApcUyHGUNSTZ
+   piO8wXsaffI/OOA8c/5oJoWxyi2jNJKV6/XGZ7mQ8FcDUJeE7wWraMc46
+   WSNk1J1Ro5rKhj5F01DJCRpkaC2tQIfVZRJUwDH2KA1Q1Yxga/kLeOrMC
+   DQgLkWY+aAA5Pv53EfEusPa5GjlBz0ZKNVq6RRIYPs4WIy/YLiPW8qJiu
+   mcrU+c5fW/7y3re4GeBiNcBBtkkbQIxhzvKjTdids0ce5WsZ0hQLT2nBO
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="351868420"
+X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
+   d="scan'208";a="351868420"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 12:31:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="681058318"
+X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
+   d="scan'208";a="681058318"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.254.209.247]) ([10.254.209.247])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 12:31:46 -0700
+Message-ID: <ff2a97c2-1e8f-4adb-78c2-3cf5037f139f@intel.com>
+Date:   Tue, 23 May 2023 03:31:44 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: OdISC-uGJP4T3U93H88AQvweASbeFt6A
-X-Proofpoint-ORIG-GUID: OdISC-uGJP4T3U93H88AQvweASbeFt6A
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-22_14,2023-05-22_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 phishscore=0
- spamscore=0 malwarescore=0 clxscore=1015 mlxscore=0 mlxlogscore=945
- priorityscore=1501 lowpriorityscore=0 adultscore=0 impostorscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305220165
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH] KVM: x86: Track supported ARCH_CAPABILITIES in kvm_caps
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc:     Chao Gao <chao.gao@intel.com>, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Jim Mattson <jmattson@google.com>
+References: <20230506030435.80262-1-chao.gao@intel.com>
+ <b472b58d-0469-8a55-985c-1d966ce66419@intel.com>
+ <ZGZhW/x5OWPmx1qD@google.com> <20230520010237.3tepk3q44j52leuk@desk>
+ <ZGup1TjeqBF7bgWG@google.com>
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <ZGup1TjeqBF7bgWG@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Unset DSC_ACTIVE bit at dpu_hw_ctl_reset_intf_cfg_v1(),
-dpu_encoder_unprep_dsc() and dpu_encoder_dsc_pipe_clr() functions
-to tear down DSC data path if DSC data path was setup previous.
+On 5/23/2023 1:43 AM, Sean Christopherson wrote:
+>>>    6. Performance aside, KVM should not be speculating (ha!) on what the guest
+>>>       will and will not do, and should instead honor whatever behavior is presented
+>>>       to the guest.  If the guest CPU model indicates that VERW flushes buffers,
+>>>       then KVM damn well needs to let VERW flush buffers.
+>> The current implementation allows guests to have VERW flush buffers when
+>> they enumerate FB_CLEAR. It only restricts the flush behavior when the
+>> guest is trying to mitigate against a vulnerability(like MDS) on a
+>> hardware that is not affected. I guess its common for guests to be
+>> running with older gen configuration on a newer hardware.
+> Right, I'm saying that that behavior is wrong.  KVM shouldn't assume the guest
+> the guest will do things a certain way and should instead honor the "architectural"
+> definition, in quotes because I realize there probably is no architectural
+> definition for any of this.
+> 
+> It might be that the code does (unintentionally?) honor the "architecture", i.e.
+> this code might actually be accurrate with respect to when the guest can expect
+> VERW to flush buffers.  But the comment is so, so wrong.
 
-Changes in V10:
--- pass ctl directly instead of dpu_enc to dsc_pipe_cfg()
--- move both dpu_encoder_unprep_dsc() and dpu_encoder_dsc_pipe_clr() to above phys_cleanup()
+The comment is wrong and the code is wrong in some case as well.
 
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 39 +++++++++++++++++++++++++++++
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c  |  7 ++++++
- 2 files changed, 46 insertions(+)
+If none of ARCH_CAP_FB_CLEAR, ARCH_CAP_MDS_NO, ARCH_CAP_TAA_NO, 
+ARCH_CAP_PSDP_NO, ARCH_CAP_FBSDP_NO and ARCH_CAP_SBDR_SSDP_NO are 
+exposed to VM, the VM is type of "affected by MDS".
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-index 7fca09e..3b416e1 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-@@ -2036,6 +2036,41 @@ static void dpu_encoder_helper_reset_mixers(struct dpu_encoder_phys *phys_enc)
- 	}
- }
- 
-+static void dpu_encoder_dsc_pipe_clr(struct dpu_hw_ctl *ctl,
-+				     struct dpu_hw_dsc *hw_dsc,
-+				     struct dpu_hw_pingpong *hw_pp)
-+{
-+	if (hw_dsc->ops.dsc_disable)
-+		hw_dsc->ops.dsc_disable(hw_dsc);
-+
-+	if (hw_pp->ops.disable_dsc)
-+		hw_pp->ops.disable_dsc(hw_pp);
-+
-+	if (hw_dsc->ops.dsc_bind_pingpong_blk)
-+		hw_dsc->ops.dsc_bind_pingpong_blk(hw_dsc, PINGPONG_NONE);
-+
-+	if (ctl->ops.update_pending_flush_dsc)
-+		ctl->ops.update_pending_flush_dsc(ctl, hw_dsc->idx);
-+}
-+
-+static void dpu_encoder_unprep_dsc(struct dpu_encoder_virt *dpu_enc)
-+{
-+	/* coding only for 2LM, 2enc, 1 dsc config */
-+	struct dpu_encoder_phys *enc_master = dpu_enc->cur_master;
-+	struct dpu_hw_ctl *ctl = enc_master->hw_ctl;
-+	struct dpu_hw_dsc *hw_dsc[MAX_CHANNELS_PER_ENC];
-+	struct dpu_hw_pingpong *hw_pp[MAX_CHANNELS_PER_ENC];
-+	int i;
-+
-+	for (i = 0; i < MAX_CHANNELS_PER_ENC; i++) {
-+		hw_pp[i] = dpu_enc->hw_pp[i];
-+		hw_dsc[i] = dpu_enc->hw_dsc[i];
-+
-+		if (hw_pp[i] && hw_dsc[i])
-+			dpu_encoder_dsc_pipe_clr(ctl, hw_dsc[i], hw_pp[i]);
-+	}
-+}
-+
- void dpu_encoder_helper_phys_cleanup(struct dpu_encoder_phys *phys_enc)
- {
- 	struct dpu_hw_ctl *ctl = phys_enc->hw_ctl;
-@@ -2086,8 +2121,12 @@ void dpu_encoder_helper_phys_cleanup(struct dpu_encoder_phys *phys_enc)
- 					phys_enc->hw_pp->merge_3d->idx);
- 	}
- 
-+	if (dpu_enc->dsc)
-+		dpu_encoder_unprep_dsc(dpu_enc);
-+
- 	intf_cfg.stream_sel = 0; /* Don't care value for video mode */
- 	intf_cfg.mode_3d = dpu_encoder_helper_get_3d_blend_mode(phys_enc);
-+	intf_cfg.dsc = dpu_encoder_helper_get_dsc(phys_enc);
- 
- 	if (phys_enc->hw_intf)
- 		intf_cfg.intf = phys_enc->hw_intf->idx;
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-index 20e08c6..c2cb426 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-@@ -581,6 +581,7 @@ static void dpu_hw_ctl_reset_intf_cfg_v1(struct dpu_hw_ctl *ctx,
- 	u32 intf_active = 0;
- 	u32 wb_active = 0;
- 	u32 merge3d_active = 0;
-+	u32 dsc_active;
- 
- 	/*
- 	 * This API resets each portion of the CTL path namely,
-@@ -610,6 +611,12 @@ static void dpu_hw_ctl_reset_intf_cfg_v1(struct dpu_hw_ctl *ctx,
- 		wb_active &= ~BIT(cfg->wb - WB_0);
- 		DPU_REG_WRITE(c, CTL_WB_ACTIVE, wb_active);
- 	}
-+
-+	if (cfg->dsc) {
-+		dsc_active = DPU_REG_READ(c, CTL_DSC_ACTIVE);
-+		dsc_active &= ~cfg->dsc;
-+		DPU_REG_WRITE(c, CTL_DSC_ACTIVE, dsc_active);
-+	}
- }
- 
- static void dpu_hw_ctl_set_fetch_pipe_active(struct dpu_hw_ctl *ctx,
--- 
-2.7.4
+And accroding to the page 
+https://www.intel.com/content/www/us/en/developer/articles/technical/software-security-guidance/technical-documentation/processor-mmio-stale-data-vulnerabilities.html
+
+if the VM enumerates support for both L1D_FLUSH and MD_CLEAR, it 
+implicitly enumerates FB_CLEAR as part of their MD_CLEAR support.
+
+However, the code will leave vmx->disable_fb_clear as 1 if hardware 
+supports it, and VERW intruction doesn't clear FB in the VM, which 
+conflicts "architectural" definition.
+
+> 	/*
+> 	 * If guest will not execute VERW, there is no need to set FB_CLEAR_DIS
+> 	 * at VMEntry. Skip the MSR read/write when a guest has no use case to
+> 	 * execute VERW.
+> 	 */
+> 	if ((vcpu->arch.arch_capabilities & ARCH_CAP_FB_CLEAR) ||
+> 	   ((vcpu->arch.arch_capabilities & ARCH_CAP_MDS_NO) &&
+> 	    (vcpu->arch.arch_capabilities & ARCH_CAP_TAA_NO) &&
+> 	    (vcpu->arch.arch_capabilities & ARCH_CAP_PSDP_NO) &&
+> 	    (vcpu->arch.arch_capabilities & ARCH_CAP_FBSDP_NO) &&
+> 	    (vcpu->arch.arch_capabilities & ARCH_CAP_SBDR_SSDP_NO)))
+> 		vmx->disable_fb_clear = false;
 
