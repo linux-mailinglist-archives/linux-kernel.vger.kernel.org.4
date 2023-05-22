@@ -2,76 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0148A70BEAA
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 14:47:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD91B70BEB0
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 14:48:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233993AbjEVMro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 08:47:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49238 "EHLO
+        id S233305AbjEVMsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 08:48:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231872AbjEVMrl (ORCPT
+        with ESMTP id S234012AbjEVMsG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 08:47:41 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF1792
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 05:47:40 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f50020e0f8so23247575e9.0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 05:47:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684759659; x=1687351659;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=srOX7E1UJE16u72k28M/ijfY9MLxZEPfPVIH6FGEneI=;
-        b=Tc74+LmDAI+/Lt33Nq3GoUl7ysuejsIHCxhTCUE2qdcckDU3of4VUxIEcE2TkavgUv
-         aMxq84iCDRYWFrUt+t2MfLvTRWzAh4Hh6f8RqVlAC7z6Y7qAYfxTDNagYK19d/U59gNE
-         CiGrLcNMaEd7re2usjRShG2rLl4C0jamSLdbcH1nu6dHBX2K0fc19nFXAECq7UB+hXAW
-         mJP1EiFFi6oGkJdE2fA0IXNs4TdgeNHjX74Q+cig+4bIB0joNMJzUB2SnIvUFFaeseDs
-         QYehrRuJ2mtkmsItc4n4fA4HwxBZ3Bod5wdBxcniUuTAI0DYikUJRLl6nKtIHQ3wo0fT
-         DUog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684759659; x=1687351659;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=srOX7E1UJE16u72k28M/ijfY9MLxZEPfPVIH6FGEneI=;
-        b=FAtdOna3BWOCrMzXHinuCprjgcqtxsIGF/XjPRuIoRNdaUq9y/jUz+2//MgSGw6NSn
-         waCfXrfHnbKAF3FhbR5S9PypeluEmPyu7rayKeDsKKkDAm2x1GT/dt//LxmGUGMGqWXD
-         Psx2e0X6aQZGrmhCM6oMRGZIsovsAjW4lN/1mBX1tNZXKzrUmIb1Rv/DKe/FkwEq7y18
-         Gm0jUWWdmfWz56DdeV33Psg0F9+TQA2432N9oYcgwaxf1bWJLNo/9/1kXpXQ9vfVhPbn
-         8r8/NKwPHdZdHb60eQLnw5jjSJ88uCWQUZTUHpGJQbf9I/vPxSh4F2tGzzD5Rk02VwSU
-         ORbw==
-X-Gm-Message-State: AC+VfDwb0I24i/PAXg9kZ3Op/v0CJg9ps3By8J635C7tElL58mQNv6q7
-        /EyvBzq29iJx9a6vXGP15nL9Uw==
-X-Google-Smtp-Source: ACHHUZ6uA1MJ8lW/2En+Zo0tY8hALmOQpGjJ0U38BIGLTvxnoLlLrgN8gi3ErgsGyiNukyRLqfjCcA==
-X-Received: by 2002:a05:600c:2256:b0:3f1:7848:6740 with SMTP id a22-20020a05600c225600b003f178486740mr7529342wmm.8.1684759659020;
-        Mon, 22 May 2023 05:47:39 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id h1-20020a1ccc01000000b003eddc6aa5fasm11544677wmb.39.2023.05.22.05.47.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 May 2023 05:47:38 -0700 (PDT)
-Message-ID: <42270537-8ed4-636b-3d6a-8dde8b75aae9@linaro.org>
+        Mon, 22 May 2023 08:48:06 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2E30AA;
+        Mon, 22 May 2023 05:48:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1684759684; x=1716295684;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yxKglgoCICqxCp/YUO9N6SBOqlY2w1KxWsoJyA/AVRs=;
+  b=euuvFxzxlC2BYJDjvt/ixzQH3txQF5bjN4zvABJLU5mzlUD6J8bi9BR2
+   hVAFNVvp8psHmXKAEfYHpcvdbsc/5eeUyuKXLr2YvdQ+UoSW3OFpyBgvr
+   aushmZe8KUyXU+sY5EkAGd003i4X1s8Cr7i2tv8tjMGMWLvWNo86av15H
+   nfL1TmFZJQwN2XIlFh3R6oYE9yJHoPMdlEls02XRa6HWa/I3PfCS0YaOi
+   5jZUsCINhxH2o1skq6yWcgSdcAm8QumsDxR8cC7Nt+oGkqFZtYYRowNOn
+   g5RIrmUGD31MkO2YXN7b76e20F2cwFmhfK6e9NQNoI+JIvJVw5vTzb4gi
+   g==;
+X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
+   d="asc'?scan'208";a="214906449"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 May 2023 05:48:03 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 22 May 2023 05:48:02 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Mon, 22 May 2023 05:47:59 -0700
 Date:   Mon, 22 May 2023 13:47:37 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Marc Zyngier <maz@kernel.org>,
+        Youling Tang <tangyouling@loongson.cn>,
+        Baoqi Zhang <zhangbaoqi@loongson.cn>,
+        Arnd Bergmann <arnd@arndb.de>, Yun Liu <liuyun@loongson.cn>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <loongarch@lists.linux.dev>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        <wanghongliang@loongson.cn>, Liu Peibao <liupeibao@loongson.cn>,
+        <loongson-kernel@lists.loongnix.cn>
+Subject: Re: [PATCH v2 2/3] dt-bindings: soc: add loongson-2 pm
+Message-ID: <20230522-kooky-outbid-82662b45d305@wendy>
+References: <20230522093156.7108-1-zhuyinbo@loongson.cn>
+ <20230522093156.7108-3-zhuyinbo@loongson.cn>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/1] media: camss: set VFE bpl_alignment to 16 for sdm845
- and sm8250
-Content-Language: en-US
-To:     Andrey Konovalov <andrey.konovalov@linaro.org>, rfoss@kernel.org,
-        todor.too@gmail.com
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230518215235.1668871-1-andrey.konovalov@linaro.org>
- <20230518215235.1668871-2-andrey.konovalov@linaro.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20230518215235.1668871-2-andrey.konovalov@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="gKHvUwRJNqoRSsho"
+Content-Disposition: inline
+In-Reply-To: <20230522093156.7108-3-zhuyinbo@loongson.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,39 +81,110 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/05/2023 22:52, Andrey Konovalov wrote:
->  From the experiments with camera sensors using SGRBG10_1X10/3280x2464 and
-> SRGGB10_1X10/3280x2464 formats, it becomes clear that on sdm845 and sm8250
-> VFE outputs the lines padded to a length multiple of 16 bytes. As in the
-> current driver the value of the bpl_alignment is set to 8 bytes, the frames
-> captured in formats with the bytes-per-line value being not a multiple of
-> 16 get corrupted.
-> 
-> Set the bpl_alignment of the camss video output device to 16 for sdm845 and
-> sm8250 to fix that.
-> 
-> Signed-off-by: Andrey Konovalov <andrey.konovalov@linaro.org>
-> ---
->   drivers/media/platform/qcom/camss/camss-vfe.c | 6 +++++-
->   1 file changed, 5 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/platform/qcom/camss/camss-vfe.c b/drivers/media/platform/qcom/camss/camss-vfe.c
-> index e0832f3f4f25..06c95568e5af 100644
-> --- a/drivers/media/platform/qcom/camss/camss-vfe.c
-> +++ b/drivers/media/platform/qcom/camss/camss-vfe.c
-> @@ -1541,7 +1541,11 @@ int msm_vfe_register_entities(struct vfe_device *vfe,
->   		}
->   
->   		video_out->ops = &vfe->video_ops;
-> -		video_out->bpl_alignment = 8;
-> +		if (vfe->camss->version == CAMSS_845 ||
-> +		    vfe->camss->version == CAMSS_8250)
-> +			video_out->bpl_alignment = 16;
-> +		else
-> +			video_out->bpl_alignment = 8;
->   		video_out->line_based = 0;
->   		if (i == VFE_LINE_PIX) {
->   			video_out->bpl_alignment = 16;
+--gKHvUwRJNqoRSsho
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Tested-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Acked-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+Hey!
+
+On Mon, May 22, 2023 at 05:31:55PM +0800, Yinbo Zhu wrote:
+> Add the Loongson-2 SoC Power Management Controller binding with DT
+> schema format using json-schema.
+
+Grabbing thread from lore.kernel.org/all/20230522093156.7108-3-zhuyinbo%40l=
+oongson.cn/t.mbox.gz
+Checking for newer revisions
+Grabbing search results from lore.kernel.org
+Analyzing 3 messages in the thread
+Checking attestation on all messages, may take a moment...
+---
+  [PATCH v2 1/3] loongarch: export loongarch pm interface
+    + Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+  [PATCH v2 2/3] dt-bindings: soc: add loongson-2 pm
+    + Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+  ERROR: missing [3/3]!
+---
+Total patches: 2
+---
+WARNING: Thread incomplete!
+Applying: loongarch: export loongarch pm interface
+Applying: dt-bindings: soc: add loongson-2 pm
+
+Looks like the user for these bindings got lost somewhere along the way?
+Please make sure to keep a series threaded.
+
+>=20
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> ---
+>  .../soc/loongson/loongson,ls2k-pmc.yaml       | 51 +++++++++++++++++++
+>  MAINTAINERS                                   |  6 +++
+>  2 files changed, 57 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/loongson/loongs=
+on,ls2k-pmc.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k=
+-pmc.yaml b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pm=
+c.yaml
+> new file mode 100644
+> index 000000000000..ddad62889c60
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/loongson/loongson,ls2k-pmc.ya=
+ml
+> @@ -0,0 +1,51 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/soc/loongson/loongson,ls2k-pmc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Loongson-2 Power Manager controller
+> +
+> +maintainers:
+> +  - Yinbo Zhu <zhuyinbo@loongson.cn>
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - loongson,ls2k-pmc
+> +      - const: syscon
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  suspend-address:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description:
+> +      The "suspend-address" is a deep sleep state (Suspend To RAM)
+> +      firmware entry address which was jumped from kernel and it's
+> +      value was dependent on specific platform firmware code. In
+> +      addition, the PM need according to it to indicate that current
+> +      SoC whether support Suspend To RAM.
+
+I (still) think this property is rather odd, maybe I am just not really
+understanding the property as it seems to be described partly in terms
+of operating system behaviour rather than its actual function. "was
+jumped from kernel" I don't get.
+
+The whole setup here seems a bit odd, but that's for the loongson arch
+folks reviewing the actual code to comment on!
+
+Thanks,
+Conor.
+
+--gKHvUwRJNqoRSsho
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGtkaQAKCRB4tDGHoIJi
+0lI/AP9QXb2RsmKR29etNH1JpHYidwCCU9a2ysUEbVebSFyQYwD6AytJGE2GQLfa
+2xQLm5VNuuHYmHeEFacgzuPyui/L4gg=
+=xr43
+-----END PGP SIGNATURE-----
+
+--gKHvUwRJNqoRSsho--
