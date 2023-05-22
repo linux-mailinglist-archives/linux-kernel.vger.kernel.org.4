@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EF2D70B5B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 09:01:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 813E970B5BA
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 09:02:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232284AbjEVHBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 03:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34860 "EHLO
+        id S231821AbjEVHCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 03:02:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232132AbjEVHBD (ORCPT
+        with ESMTP id S232147AbjEVHBE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 03:01:03 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23ACCA
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 00:00:47 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2af1e290921so43965561fa.3
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 00:00:47 -0700 (PDT)
+        Mon, 22 May 2023 03:01:04 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58446E9
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 00:00:49 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2af316b4515so17193821fa.1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 00:00:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684738846; x=1687330846;
+        d=linaro.org; s=google; t=1684738847; x=1687330847;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=cbjvTSrc7JXib/jYCtsnbT8Pj+twUmj4f7HYrh8lbjo=;
-        b=mY0aNW1/EfjKDkZ/iGL1m6Zy8Fuo6cIs8D94rSpcZbEbpG1ej+LIXwwg8IjfW1ubMf
-         naeqWo2Tcv4U7TJhz9Le9MuCuBLyv4D3QBwlIS3zm4uuM0sDBiKrRy1hwX60LW4us3Fy
-         lkizvvt3WsoYNWJw4yNFIDsi+sL5v4YZ3faevgqnaAPtaHVH/NygExxLIfBKibX15pwh
-         tHGJ8JNozxqi8y1yMVmjsLj2PaJE+bFjBQdfzX3wucmA58zcUBePI0oa6lqw7Yl8bVB9
-         VaJ8pSouLbJ41Y6QU3Shc7N4h3wuDh4QnygF5tReoR09XiD0FLth1k8KkiUU3nySSVUd
-         z1oA==
+        bh=H1mJE8PBb75X4TbUyJXZ6L55Fw+NsuGtTu+nI/l3Cvc=;
+        b=FMR+Qlxwuc8HLvz2Un+03lMzADefhZtZYcE4XHeTZEM0NlyayLDLr/ghrIPr4wOfsn
+         hd18jrfSt0sSLwyi2R+kpdFTUKZrJ+BZ/C8tqM3Dro15MT0Bz2r43LqkO6JTuURAVyjo
+         Hb5ibuaMMZUbyrbu0TGj+c4eZkPKyBY2Q7Hmx1HpmabTY9nj/7nqGyXR7uNb2h4G+5o+
+         IbpEDIbdkQb08eN8cpfyD7jW1r5UTuEKzmsjHWQMxcDTMqfGNaZaaT25Z3ATIrIWcChT
+         9UniGw6vl1lHpSHdcRd6BKV3duDmePJf14FnN89u8aN1cFzRNUW+g2/WjLxXlTSI3LHB
+         9xcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684738846; x=1687330846;
+        d=1e100.net; s=20221208; t=1684738847; x=1687330847;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cbjvTSrc7JXib/jYCtsnbT8Pj+twUmj4f7HYrh8lbjo=;
-        b=lk0znYnKTo6AsBtoKJN5MqNTANx0HKodFtfbLL8VukpNPKsP+LZ5MWnbXI0/pbq4IT
-         LaEBUbqlp0J46ardapi4+oPbmYNj0NlliH+NFMeL9Gv996+gNpxCCT5elXTSc1uee3sp
-         jgn+iEEizvMDr2Em+qwL+MPLYXBY/alheZzvbffae1ASFU4dYAS6fc01euXnVo8ZD3Gc
-         qf89Jvu4+Hm3q+YtLEMeM9ANDqK54jSCE/7II89aOMaaZ9CAPp5bER+0ulhaGixRrpaR
-         Ji5UGPIrjykCGZuYLBCj2aOpRcHvQvZgpig6okopyMm1daAAaKLIObEymlRpvwilM1N1
-         s30Q==
-X-Gm-Message-State: AC+VfDxWeQ9kGndJAx05Qfm+qr4eJPuT3gdJV/4wTVmlRnOBEkgEi11j
-        eOf4X6J+RXNWzkRNoQNQVSGjgA==
-X-Google-Smtp-Source: ACHHUZ4bp1LXNo/+2W/IeTUTw0QnGh8DL7r/PmOoEgOM0R51k/v0tTn2gSTtsQZtS0itui0SFJl/Iw==
-X-Received: by 2002:a2e:88d1:0:b0:2a9:9e99:a508 with SMTP id a17-20020a2e88d1000000b002a99e99a508mr3233749ljk.53.1684738845921;
-        Mon, 22 May 2023 00:00:45 -0700 (PDT)
+        bh=H1mJE8PBb75X4TbUyJXZ6L55Fw+NsuGtTu+nI/l3Cvc=;
+        b=aCcqD0iUT72iLePKJ/flZtKH7JAnR0KNCLicbpZrs2GjuYoD2J30pF7pGA/NHM5TRn
+         o8l+/ss81iyKhpoxtHtMwNIS7ZLu0D+iIJ7XVV2Kqn66rkqBL2DUqFFNdVQB+vyk2YSK
+         286r9K65jqQoZgc3kQCvwgpYwtvx6BW/AhwBPna9EH0e4WzyByNdqt8VgCKhBwV/tew+
+         UvQzwqdI6fE0Y6oiQpV96ulvvupHil9fz+vw2g29eUZtGenhqtNlQT3F3/nboG5e4/HX
+         Hp1pi+Abt/WirsLj+oOD1DIIkk1oSHyLWYGtP/3CDbpPe7y2w5+exCWPyk4YoellI+Xq
+         GvXQ==
+X-Gm-Message-State: AC+VfDy075tXLqsR7Gij6sv6viS+ILOxcOeLBBJbvs31FXHYU8qwFyTH
+        9WeQaedBnYPaPApcy+KBOk2fW/HQWy2rVTWYyl0=
+X-Google-Smtp-Source: ACHHUZ7XAOeJkx3YfYjjDjWz6wE7VkRRqoG7K82VPNW1yh4/nnHy6HvJwsWKnI+O4aT1Pb2S2e5j6A==
+X-Received: by 2002:a2e:a40d:0:b0:2a8:a5b8:184a with SMTP id p13-20020a2ea40d000000b002a8a5b8184amr3297249ljn.40.1684738847083;
+        Mon, 22 May 2023 00:00:47 -0700 (PDT)
 Received: from [127.0.1.1] ([85.235.12.238])
-        by smtp.gmail.com with ESMTPSA id q4-20020a2e8744000000b002adb98fdf81sm1010187ljj.7.2023.05.22.00.00.44
+        by smtp.gmail.com with ESMTPSA id q4-20020a2e8744000000b002adb98fdf81sm1010187ljj.7.2023.05.22.00.00.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 00:00:45 -0700 (PDT)
+        Mon, 22 May 2023 00:00:46 -0700 (PDT)
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 22 May 2023 09:00:42 +0200
-Subject: [PATCH v2 07/12] netfs: Pass a pointer to virt_to_page()
+Date:   Mon, 22 May 2023 09:00:43 +0200
+Subject: [PATCH v2 08/12] arm64: vdso: Pass (void *) to virt_to_page()
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230503-virt-to-pfn-v6-4-rc1-v2-7-0948d38bddab@linaro.org>
+Message-Id: <20230503-virt-to-pfn-v6-4-rc1-v2-8-0948d38bddab@linaro.org>
 References: <20230503-virt-to-pfn-v6-4-rc1-v2-0-0948d38bddab@linaro.org>
 In-Reply-To: <20230503-virt-to-pfn-v6-4-rc1-v2-0-0948d38bddab@linaro.org>
 To:     Andrew Morton <akpm@linux-foundation.org>,
@@ -92,24 +92,25 @@ a macro, this function becomes polymorphic and accepts both a
 
 Fix this up with an explicit cast.
 
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
 Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- fs/netfs/iterator.c | 2 +-
+ arch/arm64/kernel/vdso.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/fs/netfs/iterator.c b/fs/netfs/iterator.c
-index 8a4c86687429..0431ec4a7298 100644
---- a/fs/netfs/iterator.c
-+++ b/fs/netfs/iterator.c
-@@ -240,7 +240,7 @@ static ssize_t netfs_extract_kvec_to_sg(struct iov_iter *iter,
- 			if (is_vmalloc_or_module_addr((void *)kaddr))
- 				page = vmalloc_to_page((void *)kaddr);
- 			else
--				page = virt_to_page(kaddr);
-+				page = virt_to_page((void *)kaddr);
+diff --git a/arch/arm64/kernel/vdso.c b/arch/arm64/kernel/vdso.c
+index 0119dc91abb5..d9e1355730ef 100644
+--- a/arch/arm64/kernel/vdso.c
++++ b/arch/arm64/kernel/vdso.c
+@@ -288,7 +288,7 @@ static int aarch32_alloc_kuser_vdso_page(void)
  
- 			sg_set_page(sg, page, len, off);
- 			sgtable->nents++;
+ 	memcpy((void *)(vdso_page + 0x1000 - kuser_sz), __kuser_helper_start,
+ 	       kuser_sz);
+-	aarch32_vectors_page = virt_to_page(vdso_page);
++	aarch32_vectors_page = virt_to_page((void *)vdso_page);
+ 	return 0;
+ }
+ 
 
 -- 
 2.34.1
