@@ -2,132 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2301B70BF0A
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:02:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0260470BF12
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:03:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233260AbjEVNCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 09:02:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60292 "EHLO
+        id S233592AbjEVNDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 09:03:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233510AbjEVNCj (ORCPT
+        with ESMTP id S233763AbjEVNDP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 09:02:39 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7323BC4;
-        Mon, 22 May 2023 06:02:32 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-ba81031424dso9135297276.2;
-        Mon, 22 May 2023 06:02:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684760551; x=1687352551;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Oz4bQfIt7cNLLI3/bZ4OW8kbHhUS+fQ0VE6AH/7bMg4=;
-        b=lYD92GRkYdjfbP3e8fwuaSxDduqy48npOK4Yg9ZaOEmHqS/JPtCrce+EnaTh9VmSna
-         RHT7GBkDPyiY/W1+jvLGjxkh51jn+zxmI9OqgHEoEtA6ZjAC30eCAWTw4zIpfk4rWBWy
-         A1qvHTQQwDt/NDBe21ApIde4nz/UtIN9QIixfms/Elp7oFDo+K/CLz+WFH9CtzPzcwlv
-         rzv+9GIwfuw+VDp4MMJbBA5/iN9yQMMF+KMxRFF3Ge3uNa1QastQ+/BM0jUqgxWGYyfz
-         cZTsz43RMk9g0VkTvoP1GJLBnZ9NmdVPAanL5bVUqBvc4fFhRPHb/wZFuV7qE7SuuDXI
-         bn1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684760551; x=1687352551;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Oz4bQfIt7cNLLI3/bZ4OW8kbHhUS+fQ0VE6AH/7bMg4=;
-        b=QkRWEiO2IIHJOOAEdRBBTBU2e41QUYk0OxJzA+NzLWIPJw3uTLdrdk4g30ukdes91O
-         5pgGw8VtSBSebJIC/dTjW09/xQAjrSLdo0xqdfAP/ocpNUCQs6NE8hvIFobqmnArt0fi
-         dL0/sd9ldyRxHDOayTJXEtNPq1GYvwVYS7ztGPp4vUvYhX/N8NQRgoLutT+PCzCxpqOu
-         OFPFFZvwWnScaohxWijZlmgK5kZcHTHg6Hvj1Vwi2kUfZJHraKeVTskJZVAD4a/j3UI9
-         88nYLWN4Kdudvx/Z5wLomJoR23CoF79DTvqziT2tMwdF5OAygz593Tit696N8zjNNEl1
-         rU5w==
-X-Gm-Message-State: AC+VfDwUUfhOfUoWjeS+HCft6a5OxjOoAGNEVZD/4x1kypr6fSeR8LdB
-        GpNKRnHnXaayzOyH9ENBWnvot9vRYzoq4R7wZj0=
-X-Google-Smtp-Source: ACHHUZ6H/V3aromhsm0WeKkw3qoE/viYGpCdWeB7qDuWQFt6qRv5I58EjllHW4obHGmBc+ZmdwVtPh7vvXJ6Cb4sGGM=
-X-Received: by 2002:a25:cdc5:0:b0:ba6:a445:3317 with SMTP id
- d188-20020a25cdc5000000b00ba6a4453317mr9276789ybf.39.1684760551555; Mon, 22
- May 2023 06:02:31 -0700 (PDT)
+        Mon, 22 May 2023 09:03:15 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B406492;
+        Mon, 22 May 2023 06:03:14 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QPyL66ljXz4f3nJL;
+        Mon, 22 May 2023 21:03:10 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgD3X7MPaGtkIaznJw--.59248S3;
+        Mon, 22 May 2023 21:03:11 +0800 (CST)
+Subject: Re: [PATCH 3/3] md/raid10: fix io loss while replacement replace rdev
+To:     linan666@huaweicloud.com, song@kernel.org, shli@fb.com,
+        allenpeng@synology.com, alexwu@synology.com,
+        bingjingc@synology.com, neilb@suse.de
+Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linan122@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
+        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20230522115449.2203939-1-linan666@huaweicloud.com>
+ <20230522115449.2203939-4-linan666@huaweicloud.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <28234b54-f7b1-0cd7-8955-a8ec64bc0212@huaweicloud.com>
+Date:   Mon, 22 May 2023 21:03:10 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <20230521205112.150206-1-dmitry.osipenko@collabora.com> <20230521205112.150206-7-dmitry.osipenko@collabora.com>
-In-Reply-To: <20230521205112.150206-7-dmitry.osipenko@collabora.com>
-From:   Emil Velikov <emil.l.velikov@gmail.com>
-Date:   Mon, 22 May 2023 14:02:19 +0100
-Message-ID: <CACvgo52QvmZw5k_9dmBHPB25rTdLZJzVG_vNFr8or+3f5sVO=Q@mail.gmail.com>
-Subject: Re: [PATCH v3 6/6] drm/shmem-helper: Switch to reservation lock
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
-        Liam Mark <lmark@codeaurora.org>,
-        Brian Starkey <Brian.Starkey@arm.com>,
-        John Stultz <jstultz@google.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        linux-tegra@vger.kernel.org, kernel@collabora.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230522115449.2203939-4-linan666@huaweicloud.com>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgD3X7MPaGtkIaznJw--.59248S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7tF17Gw45WF13GFWDZr4Dtwb_yoW5JrWfpF
+        4Dt3W5ZryUJwsFkFnxAF4DJa4S9rZ7tFs5Jr9xW343ua1rtrW8Cry7GrW3Zrs8ZFZ8WryY
+        q3W3Kws3C3W2gFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
+        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
+        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
+        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
+        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6Fyj6rWU
+        JwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCT
+        nIWIevJa73UjIFyTuYvjfUF9a9DUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
+Hi,
 
-Saw v3 fly by, so I had a quick look. Original RB still stands,
-although I noticed a couple of non-blocking nitpicks.
+ÔÚ 2023/05/22 19:54, linan666@huaweicloud.com Ð´µÀ:
+> From: Li Nan <linan122@huawei.com>
+> 
+> When we remove a disk which has replacement, first set rdev to NULL
+> and then set replacement to rdev, finally set replacement to NULL (see
+> raid10_remove_disk()). If io is submitted during the same time, it might
+> read both rdev and replacement as NULL, and io will not be submitted.
+> 
+>    rdev -> NULL
+> 			read rdev
+>    replacement -> NULL
+> 			read replacement
+> 
+> Fix it by reading replacement first and rdev later, meanwhile, use smp_mb()
+> to prevent memory reordering.
 
-On Sun, 21 May 2023 at 22:00, Dmitry Osipenko
-<dmitry.osipenko@collabora.com> wrote:
+Looks good, feel free to add:
 
-> -static int drm_gem_shmem_get_pages_locked(struct drm_gem_shmem_object *shmem)
-> +static int drm_gem_shmem_get_pages(struct drm_gem_shmem_object *shmem)
->  {
-
-Should this getter have a dma_resv_assert_held(shmem->base.resv); like
-it's put brethren?
-
-
-> -void drm_gem_shmem_put_pages(struct drm_gem_shmem_object *shmem)
-> +static int drm_gem_shmem_pin_locked(struct drm_gem_shmem_object *shmem)
-> +{
-> +       int ret;
+Reviewed-by: Yu Kuai <yukuai3@huawei.com>
+> 
+> Fixes: 475b0321a4df ("md/raid10: writes should get directed to replacement as well as original.")
+> Signed-off-by: Li Nan <linan122@huawei.com>
+> ---
+>   drivers/md/raid10.c | 22 ++++++++++++++++++----
+>   1 file changed, 18 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
+> index 70cc87c7ee57..25a5a7b1e95c 100644
+> --- a/drivers/md/raid10.c
+> +++ b/drivers/md/raid10.c
+> @@ -779,8 +779,16 @@ static struct md_rdev *read_balance(struct r10conf *conf,
+>   		disk = r10_bio->devs[slot].devnum;
+>   		rdev = rcu_dereference(conf->mirrors[disk].replacement);
+>   		if (rdev == NULL || test_bit(Faulty, &rdev->flags) ||
+> -		    r10_bio->devs[slot].addr + sectors > rdev->recovery_offset)
+> +		    r10_bio->devs[slot].addr + sectors >
+> +		    rdev->recovery_offset) {
+> +			/*
+> +			 * Read replacement first to prevent reading both rdev
+> +			 * and replacement as NULL during replacement replace
+> +			 * rdev.
+> +			 */
+> +			smp_mb();
+>   			rdev = rcu_dereference(conf->mirrors[disk].rdev);
+> +		    }
+>   		if (rdev == NULL ||
+>   		    test_bit(Faulty, &rdev->flags))
+>   			continue;
+> @@ -1479,9 +1487,15 @@ static void raid10_write_request(struct mddev *mddev, struct bio *bio,
+>   
+>   	for (i = 0;  i < conf->copies; i++) {
+>   		int d = r10_bio->devs[i].devnum;
+> -		struct md_rdev *rdev = rcu_dereference(conf->mirrors[d].rdev);
+> -		struct md_rdev *rrdev = rcu_dereference(
+> -			conf->mirrors[d].replacement);
+> +		struct md_rdev *rdev, *rrdev;
 > +
-> +       dma_resv_assert_held(shmem->base.resv);
-> +
-> +       ret = drm_gem_shmem_get_pages(shmem);
-> +
-> +       return ret;
+> +		rrdev = rcu_dereference(conf->mirrors[d].replacement);
+> +		/*
+> +		 * Read replacement first to Prevent reading both rdev and
+> +		 * replacement as NULL during replacement replace rdev.
+> +		 */
+> +		smp_mb();
+> +		rdev = rcu_dereference(conf->mirrors[d].rdev);
+>   		if (rdev == rrdev)
+>   			rrdev = NULL;
+>   		if (rdev && (test_bit(Faulty, &rdev->flags)))
+> 
 
-With the assert_held in the getter, it would be less confusing to
-inline this and the unpin_locked functions.
-
-> +}
-> +
-> +static void drm_gem_shmem_unpin_locked(struct drm_gem_shmem_object *shmem)
->  {
-> -       mutex_lock(&shmem->pages_lock);
-> -       drm_gem_shmem_put_pages_locked(shmem);
-> -       mutex_unlock(&shmem->pages_lock);
-> +       dma_resv_assert_held(shmem->base.resv);
-> +
-> +       drm_gem_shmem_put_pages(shmem);
-
-Side note: the putter has an assert_held so the extra one here seems quite odd.
-
-As said at the top - with or w/o these nitpicks, the original RB still stands.
-
-HTH o/
--Emil
