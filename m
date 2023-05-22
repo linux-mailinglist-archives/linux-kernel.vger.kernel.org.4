@@ -2,118 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 909B770B68B
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 09:30:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1B5E70B693
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 09:32:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232468AbjEVHac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 03:30:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56920 "EHLO
+        id S232023AbjEVHce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 03:32:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230440AbjEVHaa (ORCPT
+        with ESMTP id S232114AbjEVHcb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 03:30:30 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 962DA97;
-        Mon, 22 May 2023 00:30:29 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34M00ooI011286;
-        Mon, 22 May 2023 07:30:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=corp-2023-03-30; bh=A5ZncwB04NjzcMemMMWye/LhgkT9LJyEStC1Nr1FzwI=;
- b=ceRFdvS6XD5HqLo3PdevQNl4QthpRYj6UIaBLjGU3PhxQqXGh2hOIzYSPOY8VdgtQGb4
- ipGli3qfNhAviNlAWCNrhED4qFtu0OoIs3H6S6sZzlen1ke2MdSiZJNJz9XWKGWfrrLo
- TZH3C5+AkB5hFU3K6WvdkyxrlwUsYBcHQnZtRFf1ehveAkccWWjz45nTMuZC/wqnyK9a
- zc4hVsKRPj2sYGUSBsCjAGjUFu7d04GLS5ZgSGMBX3Qpzvfoo5yW+uNEWGL86zBNLbRH
- u/ndrNQHVieq/VEkYlvNGFULnm36k0g/MVZ7OB0WPG/M96NZsCZNByuVWrIPLPQVUuPG UA== 
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qpp3mj1u3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 May 2023 07:30:24 +0000
-Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 34M6M7oP023566;
-        Mon, 22 May 2023 07:30:22 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3qqk8skeds-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 May 2023 07:30:22 +0000
-Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34M7OKLu026055;
-        Mon, 22 May 2023 07:30:22 GMT
-Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
-        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3qqk8skeat-1;
-        Mon, 22 May 2023 07:30:21 +0000
-From:   Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
-To:     Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Hawking Zhang <Hawking.Zhang@amd.com>, Le Ma <le.ma@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        Mukul Joshi <mukul.joshi@amd.com>,
-        Rajneesh Bhardwaj <rajneesh.bhardwaj@amd.com>,
-        Graham Sider <Graham.Sider@amd.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Cc:     harshit.m.mogalapalli@oracle.com, error27@gmail.com,
-        dan.carpenter@linaro.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH next] drm/amdgpu: Fix unsigned comparison with zero in gmc_v9_0_process_interrupt()
-Date:   Mon, 22 May 2023 00:30:15 -0700
-Message-Id: <20230522073017.1782984-1-harshit.m.mogalapalli@oracle.com>
-X-Mailer: git-send-email 2.40.0
+        Mon, 22 May 2023 03:32:31 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C648B0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 00:32:29 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-ba8151a744fso8301111276.2
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 00:32:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684740748; x=1687332748;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l3nKRFXxsoHjfjdv323ChY4z/ZbZPhs8kEfFA/b0p14=;
+        b=ZQBKBNbhyGusoEZNZncEPEovCz9ZtzvSsUhyhSUHyzXTHxM4pTaAFa4m9WSjXG3JtY
+         Cpp4VN1YENR0DDoAf99GIkp0+KSSIAUV1PwqgbOIsE9KP7QESHwE7bijzkNwtxOt8/jn
+         SRTJr71ARxr7S7iyMsJ3cjvugn0Cz9iFXxkA3+AHQ3tea9YqTKuKM1srZu4dZuuH81d8
+         +x9dVC95WW8NMbrLtdS5OzsQAQmLeaHPPYQe5WZ7mtTE3QqkdIlUDVHfXjPa53ZHk7iw
+         HFOT6bsAmfR1jYA1L3yy1st3FFa8IuXPvy9PeMAo1IzzdUKSAE1R6PFef1EYITbTHGpO
+         Ka/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684740748; x=1687332748;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=l3nKRFXxsoHjfjdv323ChY4z/ZbZPhs8kEfFA/b0p14=;
+        b=DHOOCQ2jUdJTdV4WLNI2iSJ+FBhTvculbdIhtBeQuqlmSf8j/BtulYKX+HUuUyk8/D
+         ThAG54AREKujObqb9YYpc/ncQfySjYrlQWIJL+xKJGDuL7/ZkPkv5ZtHsE0oNtKCm3Gu
+         Ny2aoQfdeAPgtGNiAj42ouEan07xGzX25eKLQKx5U6mjtMZzXSjseD2ucc+BbNlDsCXr
+         AD1ZrAmX/qTmzGxsspREEEYujjREjUaOBbu53KxcGXD2CmHlW+VQ4c2aBkc9/8o/SFpv
+         ++GgPUcdvy7qZ388sOiIJa1GY2oMLw9P1wj6XjCR+psMVkEmGKDPl+/Vw47Uh0dJVz+n
+         wrJw==
+X-Gm-Message-State: AC+VfDze+7ShJhUOSPxCu/IsmGFdP5QwJbQdzAjkp5QYA5ytfkwuhq7y
+        HY+2sSABP2KxnGPHwTESs+auVpQxMQSAY+RxOJqHQA==
+X-Google-Smtp-Source: ACHHUZ4FkKkNnOjIqxj6cR6guYodDfCoBUf70rR+UN4AF9syzuN5i3kPXu5WUGJ7anEuu333nuhHkKPkvWZV8hR5tx8=
+X-Received: by 2002:a0d:d595:0:b0:561:e910:52f5 with SMTP id
+ x143-20020a0dd595000000b00561e91052f5mr12470156ywd.27.1684740748447; Mon, 22
+ May 2023 00:32:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-22_04,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0 mlxscore=0
- mlxlogscore=999 bulkscore=0 malwarescore=0 suspectscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305220063
-X-Proofpoint-ORIG-GUID: xoDToq4BCRbl3iSJI_dyjEWrldxaTQAv
-X-Proofpoint-GUID: xoDToq4BCRbl3iSJI_dyjEWrldxaTQAv
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230519125409.497439-1-quic_srichara@quicinc.com> <20230519125409.497439-5-quic_srichara@quicinc.com>
+In-Reply-To: <20230519125409.497439-5-quic_srichara@quicinc.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 22 May 2023 09:32:17 +0200
+Message-ID: <CACRpkdaX3i-O3=8XbLYJ1hXT8dOE7WJUUT6JxOKmWTJwru_24Q@mail.gmail.com>
+Subject: Re: [PATCH V7 4/8] pinctrl: qcom: Add IPQ5018 pinctrl driver
+To:     Sricharan Ramabadhran <quic_srichara@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org, ulf.hansson@linaro.org,
+        catalin.marinas@arm.com, will@kernel.org, p.zabel@pengutronix.de,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        robimarko@gmail.com, andy.shevchenko@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Smatch warns:
-	drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c:579:
-	unsigned 'xcc_id' is never less than zero.
+On Fri, May 19, 2023 at 2:55=E2=80=AFPM Sricharan Ramabadhran
+<quic_srichara@quicinc.com> wrote:
 
-gfx_v9_4_3_ih_to_xcc_inst() returns negative numbers as well.
-Fix this by changing type of xcc_id to int.
+> Add pinctrl definitions for the TLMM of IPQ5018.
+>
+> Reviewed-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Co-developed-by: Nitheesh Sekar <quic_nsekar@quicinc.com>
+> Signed-off-by: Nitheesh Sekar <quic_nsekar@quicinc.com>
+> Co-developed-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+> ---
+>  [v7] No change
 
-Fixes: faf96b9b602d ("drm/amdgpu: correct the vmhub index when page fault occurs")
-Signed-off-by: Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
----
-This is from static analysis, only compile tested.
----
- drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+This looks mostly fine, but I want you to consider Andy's remarks.
+With those addressed:
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c b/drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c
-index f70e666cecf2..1e8b2aaa48c1 100644
---- a/drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/gmc_v9_0.c
-@@ -557,8 +557,8 @@ static int gmc_v9_0_process_interrupt(struct amdgpu_device *adev,
- 	const char *hub_name;
- 	u64 addr;
- 	uint32_t cam_index = 0;
--	int ret;
--	uint32_t node_id, xcc_id = 0;
-+	int ret, xcc_id = 0;
-+	uint32_t node_id;
- 
- 	node_id = entry->node_id;
- 
--- 
-2.38.1
+Can this file and the bindings be applied independently of the rest
+of the patches? In that case I can apply v8 bindings+this patch to
+the pinctrl tree.
 
+Yours,
+Linus Walleij
