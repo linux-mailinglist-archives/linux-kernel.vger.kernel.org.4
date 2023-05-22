@@ -2,247 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7248870B82E
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:57:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C73BE70B82B
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:57:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232693AbjEVI54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 04:57:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41002 "EHLO
+        id S230152AbjEVI5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 04:57:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232660AbjEVI50 (ORCPT
+        with ESMTP id S232671AbjEVI4w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 04:57:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A16BB
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 01:56:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684745771;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=v4/mES/i+aWv5NPMCuzU07vDqmm6ywd8X/SsDFXQTQU=;
-        b=Gr2b8p9TY3nXinpqK8whWKU+Lgg6GoQqTkHm60SBsV2urGc/hVV+SCT8R957af8mTbVXTD
-        LaPSjmQtgtCoBQEtTBfNJMb7FpNOs+rWUU9RCAZ/Lk2bm4EnSxub/QNrqWtaeU6GIjTpPL
-        NslAo1EcO8BxOLLCsqefhRUp8d1Ooxg=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-248-_E38mbN7ONWk-1Zgt-Fzyg-1; Mon, 22 May 2023 04:56:10 -0400
-X-MC-Unique: _E38mbN7ONWk-1Zgt-Fzyg-1
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-616731c798dso20503156d6.1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 01:56:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684745769; x=1687337769;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v4/mES/i+aWv5NPMCuzU07vDqmm6ywd8X/SsDFXQTQU=;
-        b=PM279t2O2+wjJM4ADTv67Iodym2GnvY0nmUWYT18sCWJpM7YOw3SDXa6hJGtZAJ344
-         UFq63LK5uTmztNP75GslZpkb2tDQoKZPoWKbWOt2mcOvYv0saJg5k8PGowocUDtFyecC
-         04ihDdpU6ooa+63ZkDxfZviVeO+U1p4qgwYuVKR7tRYhKmfcKqyJ+NCLnyEv1Jd9aN+S
-         HRnGBq1L83gBQe2l1u5jCL9bs6nMXpv1JarsM0u8uRcu3N0Rg+DbyTi+N01WnyRSNzbL
-         W4BL8pE0k+eU9zXyICt8omx/rNxbVJrokJjbgqFkYoZFlX2+S2JIJOvY/RQN+dHVrsyJ
-         R6Xw==
-X-Gm-Message-State: AC+VfDypSGNKfbpT3UCYIQRRyUwEnPfRBULObi2vK8o0LJuc0+xn1bNq
-        HLXJh9D9RAEdRKLyvSXAXdaedhuUE4VFSvh52uCrS+hAlQEClsvd/EMM7cJsPC3gRaVc4+vZeCu
-        N/zzPS5dFDw5zmX8L/0t4TtUMgd/JwoJ3
-X-Received: by 2002:ad4:574f:0:b0:61b:58ec:24c8 with SMTP id q15-20020ad4574f000000b0061b58ec24c8mr19041574qvx.10.1684745769593;
-        Mon, 22 May 2023 01:56:09 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6uniPtYnrTfdnta4PkKXkaaURbeQlrK+ltmlFW9A16ZWTL6u653yf9McI3kMPgTvMlDD4Mow==
-X-Received: by 2002:ad4:574f:0:b0:61b:58ec:24c8 with SMTP id q15-20020ad4574f000000b0061b58ec24c8mr19041550qvx.10.1684745769306;
-        Mon, 22 May 2023 01:56:09 -0700 (PDT)
-Received: from fedora (g2.ign.cz. [91.219.240.8])
-        by smtp.gmail.com with ESMTPSA id f28-20020ad4559c000000b0061f7cf8207asm1810803qvx.133.2023.05.22.01.56.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 01:56:08 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Michael Kelley <mikelley@microsoft.com>
-Cc:     mikelley@microsoft.com, kys@microsoft.com, haiyangz@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, catalin.marinas@arm.com,
-        will@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
-        kvm@vger.kernel.org
-Subject: Re: [PATCH 1/2] x86/hyperv: Fix hyperv_pcpu_input_arg handling when
- CPUs go online/offline
-In-Reply-To: <1684506832-41392-1-git-send-email-mikelley@microsoft.com>
-References: <1684506832-41392-1-git-send-email-mikelley@microsoft.com>
-Date:   Mon, 22 May 2023 10:56:05 +0200
-Message-ID: <87o7mczqvu.fsf@redhat.com>
+        Mon, 22 May 2023 04:56:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDFBF196;
+        Mon, 22 May 2023 01:56:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 40708611A9;
+        Mon, 22 May 2023 08:56:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66729C4339B;
+        Mon, 22 May 2023 08:56:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684745787;
+        bh=LN/rjbcvhhidlr7lNhdnVlcRMhOuBdd16O7dwepf3xY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=f0kh7xX0HJit3/nP7bCLGauFMhd+TSb2IUwM7Z4PoyXJF0KQPZ0U97x78v9PClSII
+         84pD7O/g0AkV5dEK8mMD1LcobSya6NmnGi2csAFa81atYZjBzGrKLMki7VXImbL76U
+         0598zdUQZcn36+zIU2lhMXLkV1R8TztMPliLgp5RxyUPoiHC91Xs5IZoJR94oahe/B
+         s1pE/04nhGAhabRVsBN9hPyY2N+bSPtUVP3lyNqv9spgp3Vxkaci/kgcz+HfV37a2c
+         oUP2+rlqiuoTWNH57YEsKWsLe0m+kVoufYbWnsi041bVWfFV6jdMWeKQyHLArwYOFW
+         8mFGxa/Zfp1LA==
+Date:   Mon, 22 May 2023 10:56:19 +0200
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     kw@linux.com, bhelgaas@google.com, robh@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, steev@kali.org,
+        quic_srichara@quicinc.com, dmitry.baryshkov@linaro.org,
+        Dmitry Baryshkov <dmitry.baryshkov@gmail.com>
+Subject: Re: [PATCH v2 2/8] PCI: qcom: Disable write access to read only
+ registers for IP v2.9.0
+Message-ID: <ZGsuM8CAv7AtluVx@lpieralisi>
+References: <20230519143117.23875-1-manivannan.sadhasivam@linaro.org>
+ <20230519143117.23875-3-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230519143117.23875-3-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Michael Kelley <mikelley@microsoft.com> writes:
-
-> These commits
->
-> a494aef23dfc ("PCI: hv: Replace retarget_msi_interrupt_params with hyperv_pcpu_input_arg")
-> 2c6ba4216844 ("PCI: hv: Enable PCI pass-thru devices in Confidential VMs")
->
-> update the Hyper-V virtual PCI driver to use the hyperv_pcpu_input_arg
-> because that memory will be correctly marked as decrypted or encrypted
-> for all VM types (CoCo or normal). But problems ensue when CPUs in the
-> VM go online or offline after virtual PCI devices have been configured.
->
-> When a CPU is brought online, the hyperv_pcpu_input_arg for that CPU is
-> initialized by hv_cpu_init() running under state CPUHP_AP_ONLINE_DYN.
-> But this state occurs after state CPUHP_AP_IRQ_AFFINITY_ONLINE, which
-> may call the virtual PCI driver and fault trying to use the as yet
-> uninitialized hyperv_pcpu_input_arg. A similar problem occurs in a CoCo
-> VM if the MMIO read and write hypercalls are used from state
-> CPUHP_AP_IRQ_AFFINITY_ONLINE.
->
-> When a CPU is taken offline, IRQs may be reassigned in state
-> CPUHP_TEARDOWN_CPU. Again, the virtual PCI driver may fault trying to
-> use the hyperv_pcpu_input_arg that has already been freed by a
-> higher state.
->
-> Fix the onlining problem by adding state CPUHP_AP_HYPERV_ONLINE
-> immediately after CPUHP_AP_ONLINE_IDLE (similar to CPUHP_AP_KVM_ONLINE)
-> and before CPUHP_AP_IRQ_AFFINITY_ONLINE. Use this new state for
-> Hyper-V initialization so that hyperv_pcpu_input_arg is allocated
-> early enough.
->
-> Fix the offlining problem by not freeing hyperv_pcpu_input_arg when
-> a CPU goes offline. Retain the allocated memory, and reuse it if
-> the CPU comes back online later.
->
-> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
+On Fri, May 19, 2023 at 08:01:11PM +0530, Manivannan Sadhasivam wrote:
+> In the post init sequence of v2.9.0, write access to read only registers
+> are not disabled after updating the registers. Fix it by disabling the
+> access after register update.
+> 
+> Fixes: 0cf7c2efe8ac ("PCI: qcom: Add IPQ60xx support")
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@gmail.com>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 > ---
->  arch/x86/hyperv/hv_init.c  |  2 +-
->  drivers/hv/hv_common.c     | 48 +++++++++++++++++++++++-----------------------
->  include/linux/cpuhotplug.h |  1 +
->  3 files changed, 26 insertions(+), 25 deletions(-)
->
-> diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-> index a5f9474..6c04b52 100644
-> --- a/arch/x86/hyperv/hv_init.c
-> +++ b/arch/x86/hyperv/hv_init.c
-> @@ -416,7 +416,7 @@ void __init hyperv_init(void)
->  			goto free_vp_assist_page;
->  	}
+>  drivers/pci/controller/dwc/pcie-qcom.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index 01795ee7ce45..391a45d1e70a 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -1136,6 +1136,7 @@ static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
+>  	writel(0, pcie->parf + PARF_Q2A_FLUSH);
 >  
-> -	cpuhp = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "x86/hyperv_init:online",
-> +	cpuhp = cpuhp_setup_state(CPUHP_AP_HYPERV_ONLINE, "x86/hyperv_init:online",
->  				  hv_cpu_init, hv_cpu_die);
->  	if (cpuhp < 0)
->  		goto free_ghcb_page;
-> diff --git a/drivers/hv/hv_common.c b/drivers/hv/hv_common.c
-> index 64f9cec..4c5cee4 100644
-> --- a/drivers/hv/hv_common.c
-> +++ b/drivers/hv/hv_common.c
-> @@ -364,13 +364,20 @@ int hv_common_cpu_init(unsigned int cpu)
->  	flags = irqs_disabled() ? GFP_ATOMIC : GFP_KERNEL;
->  
->  	inputarg = (void **)this_cpu_ptr(hyperv_pcpu_input_arg);
-> -	*inputarg = kmalloc(pgcount * HV_HYP_PAGE_SIZE, flags);
-> -	if (!(*inputarg))
-> -		return -ENOMEM;
->  
-> -	if (hv_root_partition) {
-> -		outputarg = (void **)this_cpu_ptr(hyperv_pcpu_output_arg);
-> -		*outputarg = (char *)(*inputarg) + HV_HYP_PAGE_SIZE;
-> +	/*
-> +	 * hyperv_pcpu_input_arg and hyperv_pcpu_output_arg memory is already
-> +	 * allocated if this CPU was previously online and then taken offline
-> +	 */
-> +	if (!*inputarg) {
-> +		*inputarg = kmalloc(pgcount * HV_HYP_PAGE_SIZE, flags);
-> +		if (!(*inputarg))
-> +			return -ENOMEM;
+>  	dw_pcie_dbi_ro_wr_en(pci);
 > +
-> +		if (hv_root_partition) {
-> +			outputarg = (void **)this_cpu_ptr(hyperv_pcpu_output_arg);
-> +			*outputarg = (char *)(*inputarg) + HV_HYP_PAGE_SIZE;
-> +		}
->  	}
+
+Nit: spurious change.
+
+Lorenzo
+
+>  	writel(PCIE_CAP_SLOT_VAL, pci->dbi_base + offset + PCI_EXP_SLTCAP);
 >  
->  	msr_vp_index = hv_get_register(HV_REGISTER_VP_INDEX);
-> @@ -385,24 +392,17 @@ int hv_common_cpu_init(unsigned int cpu)
+>  	val = readl(pci->dbi_base + offset + PCI_EXP_LNKCAP);
+> @@ -1145,6 +1146,8 @@ static int qcom_pcie_post_init_2_9_0(struct qcom_pcie *pcie)
+>  	writel(PCI_EXP_DEVCTL2_COMP_TMOUT_DIS, pci->dbi_base + offset +
+>  			PCI_EXP_DEVCTL2);
 >  
->  int hv_common_cpu_die(unsigned int cpu)
->  {
-> -	unsigned long flags;
-> -	void **inputarg, **outputarg;
-> -	void *mem;
-> -
-> -	local_irq_save(flags);
-> -
-> -	inputarg = (void **)this_cpu_ptr(hyperv_pcpu_input_arg);
-> -	mem = *inputarg;
-> -	*inputarg = NULL;
-> -
-> -	if (hv_root_partition) {
-> -		outputarg = (void **)this_cpu_ptr(hyperv_pcpu_output_arg);
-> -		*outputarg = NULL;
-> -	}
-> -
-> -	local_irq_restore(flags);
-> -
-> -	kfree(mem);
-> +	/*
-> +	 * The hyperv_pcpu_input_arg and hyperv_pcpu_output_arg memory
-> +	 * is not freed when the CPU goes offline as the hyperv_pcpu_input_arg
-> +	 * may be used by the Hyper-V vPCI driver in reassigning interrupts
-> +	 * as part of the offlining process.  The interrupt reassignment
-> +	 * happens *after* the CPUHP_AP_HYPERV_ONLINE state has run and
-> +	 * called this function.
-> +	 *
-> +	 * If a previously offlined CPU is brought back online again, the
-> +	 * originally allocated memory is reused in hv_common_cpu_init().
-> +	 */
+> +	dw_pcie_dbi_ro_wr_dis(pci);
+> +
+>  	for (i = 0; i < 256; i++)
+>  		writel(0, pcie->parf + PARF_BDF_TO_SID_TABLE_N + (4 * i));
 >  
->  	return 0;
->  }
-> diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
-> index 0f1001d..696004a 100644
-> --- a/include/linux/cpuhotplug.h
-> +++ b/include/linux/cpuhotplug.h
-> @@ -201,6 +201,7 @@ enum cpuhp_state {
->  	/* Online section invoked on the hotplugged CPU from the hotplug thread */
->  	CPUHP_AP_ONLINE_IDLE,
->  	CPUHP_AP_KVM_ONLINE,
-> +	CPUHP_AP_HYPERV_ONLINE,
-
-(Cc: KVM)
-
-I would very much prefer we swap the order with KVM here: hv_cpu_init()
-allocates and sets vCPU's VP assist page which is used by KVM on
-CPUHP_AP_KVM_ONLINE:
-
-kvm_online_cpu() -> __hardware_enable_nolock() ->
-kvm_arch_hardware_enable() -> vmx_hardware_enable():
-
-        /*
-         * This can happen if we hot-added a CPU but failed to allocate
-         * VP assist page for it.
-         */
-	if (kvm_is_using_evmcs() && !hv_get_vp_assist_page(cpu))
-		return -EFAULT;
-
-With the change, this is likely broken.
-
-FWIF, KVM also needs current vCPU's VP index (also set by hv_cpu_init())
-through __kvm_x86_vendor_init() -> set_hv_tscchange_cb() call chain but
-this happens upon KVM module load so CPU hotplug ordering should not
-matter as this always happens on a CPU which is already online.
-
-Generally, as 'KVM on Hyper-V' is a supported scenario, doing Hyper-V
-init before KVM's (and vice versa on teardown) makes sense.
-
->  	CPUHP_AP_SCHED_WAIT_EMPTY,
->  	CPUHP_AP_SMPBOOT_THREADS,
->  	CPUHP_AP_X86_VDSO_VMA_ONLINE,
-
--- 
-Vitaly
-
+> -- 
+> 2.25.1
+> 
