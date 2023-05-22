@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3356D70BA24
+	by mail.lfdr.de (Postfix) with ESMTP id D3B0370BA26
 	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 12:28:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232925AbjEVK2Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 06:28:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57880 "EHLO
+        id S232573AbjEVK21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 06:28:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232018AbjEVK1c (ORCPT
+        with ESMTP id S232786AbjEVK1g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 06:27:32 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3FBF1BE;
-        Mon, 22 May 2023 03:27:29 -0700 (PDT)
-Date:   Mon, 22 May 2023 10:27:27 -0000
+        Mon, 22 May 2023 06:27:36 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72056F1;
+        Mon, 22 May 2023 03:27:32 -0700 (PDT)
+Date:   Mon, 22 May 2023 10:27:28 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1684751248;
+        s=2020; t=1684751249;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2jg+PEFLPaxod2aGd5ToSr/xf/b+owxH3fTbsNQbh18=;
-        b=qK0wMMQ0j1Pnt7fJeMfr7OQoe6mN+2BKXjmhzczLoIZuF8Kx3gvpquLWyKsIwmxm2jTtSN
-        zSpzuO+F5n37iRvoTTvClUpXcFxKkPa8y4nnVkqtTE9zMbd34uM8Gl/DfZP/tQU8stcSUp
-        LalozWSX46gXfG6a/fxKNyYeGu0cOeHxPhSLqdIqMq5xkPcdTJqbIM90ae4sK9M7oafQOt
-        hHBjZY7w2c7XwSfYp+Zlq93swuyVwsoVNZkT2ow5ElJSDjYJAzVD2EaikIVY6eq9abxnuj
-        LQ6c+hMIDBanlB1brBjJLMXL3nhcbSSLDAvQXD+Svv1ddTa64Xbhm5iFrslE4A==
+        bh=vvuBzB6waOaikP5Z7JXLBtIMS+F+Wej4ha9oE73sriw=;
+        b=Y5OxZ4890oBjTW5pXukQf6GMus7UcHlobMrhcwVSHqIuXaS1TrmBHaW8vQ/gV8QVbSYJvL
+        u3XJpG/aE2stRaWPC8Xtj3m+Cd7m7o50jOyuU0JIORtl9kZhBl73vWCLL4J3nz84GlecRF
+        ZUmGyInwhzXS6JfjULJSMDM7wZ/fnIqSuEDWBxYgfL4hyS4uuMyOIO4tsCyCegyO2DJthF
+        zYP1QiW/WLyH6R/RWG8Q4LnsyUjEjF3S5oYwCrb89vXVAwJ6NCTKUPsWt6B6E8hGrBFQ67
+        5MzB1m3+q8D1rB5HvaoFQLKvX4YVlYhtHb23U1Y6Po2yYzF0k2jLW/Z5GR0wzg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1684751248;
+        s=2020e; t=1684751249;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=2jg+PEFLPaxod2aGd5ToSr/xf/b+owxH3fTbsNQbh18=;
-        b=O8ZrWpXD4EUcUE7Ezo1zpT4ol6uhWJuM7nRoASqX7c16HKDjwXkprSDuWY6In8QipMVQrO
-        8PeAmP4gaCbxhzDQ==
+        bh=vvuBzB6waOaikP5Z7JXLBtIMS+F+Wej4ha9oE73sriw=;
+        b=470yWycBkq9Rw7Ib4K/Faj0/CuOScFka5+ah7n0an/B5CjRMnn+80WkTM3u6rs/4Esymss
+        yx/9/oiPtLfCpSCg==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] percpu: Wire up cmpxchg128
+Subject: [tip: locking/core] arch: Introduce arch_{,try_}_cmpxchg128{,_local}()
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, x86@kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Mark Rutland <mark.rutland@arm.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230515080554.248739380@infradead.org>
-References: <20230515080554.248739380@infradead.org>
+In-Reply-To: <20230515080554.114813040@infradead.org>
+References: <20230515080554.114813040@infradead.org>
 MIME-Version: 1.0
-Message-ID: <168475124752.404.11683694870847476596.tip-bot2@tip-bot2>
+Message-ID: <168475124867.404.16477882699707948885.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,194 +69,276 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the locking/core branch of tip:
 
-Commit-ID:     fed3b1fae1030f87828ff000c69077d660f3bdf3
-Gitweb:        https://git.kernel.org/tip/fed3b1fae1030f87828ff000c69077d660f3bdf3
+Commit-ID:     8c9719a1ae1f290250da18bb0b41cd00067319bf
+Gitweb:        https://git.kernel.org/tip/8c9719a1ae1f290250da18bb0b41cd00067319bf
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Mon, 15 May 2023 09:57:04 +02:00
+AuthorDate:    Mon, 15 May 2023 09:57:02 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Mon, 22 May 2023 10:49:49 +02:00
 
-percpu: Wire up cmpxchg128
+arch: Introduce arch_{,try_}_cmpxchg128{,_local}()
 
-In order to replace cmpxchg_double() with the newly minted
-cmpxchg128() family of functions, wire it up in this_cpu_cmpxchg().
+For all architectures that currently support cmpxchg_double()
+implement the cmpxchg128() family of functions that is basically the
+same but with a saner interface.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-Link: https://lore.kernel.org/r/20230515080554.248739380@infradead.org
+Acked-by: Heiko Carstens <hca@linux.ibm.com>
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+Link: https://lore.kernel.org/r/20230515080554.114813040@infradead.org
 ---
- arch/arm64/include/asm/percpu.h | 20 +++++++++++-
- arch/s390/include/asm/percpu.h  | 16 +++++++++-
- arch/x86/include/asm/percpu.h   | 59 ++++++++++++++++++++++++++++++++-
- include/asm-generic/percpu.h    | 16 +++++++++-
- 4 files changed, 111 insertions(+)
+ arch/arm64/include/asm/atomic_ll_sc.h | 41 +++++++++++++++++-
+ arch/arm64/include/asm/atomic_lse.h   | 31 +++++++++++++-
+ arch/arm64/include/asm/cmpxchg.h      | 26 +++++++++++-
+ arch/s390/include/asm/cmpxchg.h       | 14 ++++++-
+ arch/x86/include/asm/cmpxchg_32.h     |  3 +-
+ arch/x86/include/asm/cmpxchg_64.h     | 64 +++++++++++++++++++++++++-
+ 6 files changed, 177 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/include/asm/percpu.h b/arch/arm64/include/asm/percpu.h
-index b9ba19d..2549829 100644
---- a/arch/arm64/include/asm/percpu.h
-+++ b/arch/arm64/include/asm/percpu.h
-@@ -140,6 +140,10 @@ PERCPU_RET_OP(add, add, ldadd)
-  * re-enabling preemption for preemptible kernels, but doing that in a way
-  * which builds inside a module would mean messing directly with the preempt
-  * count. If you do this, peterz and tglx will hunt you down.
-+ *
-+ * Not to mention it'll break the actual preemption model for missing a
-+ * preemption point when TIF_NEED_RESCHED gets set while preemption is
-+ * disabled.
-  */
- #define this_cpu_cmpxchg_double_8(ptr1, ptr2, o1, o2, n1, n2)		\
- ({									\
-@@ -240,6 +244,22 @@ PERCPU_RET_OP(add, add, ldadd)
- #define this_cpu_cmpxchg_8(pcp, o, n)	\
- 	_pcp_protect_return(cmpxchg_relaxed, pcp, o, n)
+diff --git a/arch/arm64/include/asm/atomic_ll_sc.h b/arch/arm64/include/asm/atomic_ll_sc.h
+index cbb3d96..b100a49 100644
+--- a/arch/arm64/include/asm/atomic_ll_sc.h
++++ b/arch/arm64/include/asm/atomic_ll_sc.h
+@@ -326,6 +326,47 @@ __CMPXCHG_DBL(   ,        ,  ,         )
+ __CMPXCHG_DBL(_mb, dmb ish, l, "memory")
  
-+#define this_cpu_cmpxchg64(pcp, o, n)	this_cpu_cmpxchg_8(pcp, o, n)
+ #undef __CMPXCHG_DBL
 +
-+#define this_cpu_cmpxchg128(pcp, o, n)					\
-+({									\
-+	typedef typeof(pcp) pcp_op_T__;					\
-+	u128 old__, new__, ret__;					\
-+	pcp_op_T__ *ptr__;						\
-+	old__ = o;							\
-+	new__ = n;							\
-+	preempt_disable_notrace();					\
-+	ptr__ = raw_cpu_ptr(&(pcp));					\
-+	ret__ = cmpxchg128_local((void *)ptr__, old__, new__);		\
-+	preempt_enable_notrace();					\
-+	ret__;								\
-+})
++union __u128_halves {
++	u128 full;
++	struct {
++		u64 low, high;
++	};
++};
 +
- #ifdef __KVM_NVHE_HYPERVISOR__
- extern unsigned long __hyp_per_cpu_offset(unsigned int cpu);
- #define __per_cpu_offset
-diff --git a/arch/s390/include/asm/percpu.h b/arch/s390/include/asm/percpu.h
-index 081837b..5603402 100644
---- a/arch/s390/include/asm/percpu.h
-+++ b/arch/s390/include/asm/percpu.h
-@@ -148,6 +148,22 @@
- #define this_cpu_cmpxchg_4(pcp, oval, nval) arch_this_cpu_cmpxchg(pcp, oval, nval)
- #define this_cpu_cmpxchg_8(pcp, oval, nval) arch_this_cpu_cmpxchg(pcp, oval, nval)
++#define __CMPXCHG128(name, mb, rel, cl...)                             \
++static __always_inline u128						\
++__ll_sc__cmpxchg128##name(volatile u128 *ptr, u128 old, u128 new)	\
++{									\
++	union __u128_halves r, o = { .full = (old) },			\
++			       n = { .full = (new) };			\
++       unsigned int tmp;                                               \
++									\
++	asm volatile("// __cmpxchg128" #name "\n"			\
++       "       prfm    pstl1strm, %[v]\n"                              \
++       "1:     ldxp    %[rl], %[rh], %[v]\n"                           \
++       "       cmp     %[rl], %[ol]\n"                                 \
++       "       ccmp    %[rh], %[oh], 0, eq\n"                          \
++       "       b.ne    2f\n"                                           \
++       "       st" #rel "xp    %w[tmp], %[nl], %[nh], %[v]\n"          \
++       "       cbnz    %w[tmp], 1b\n"                                  \
++	"	" #mb "\n"						\
++	"2:"								\
++       : [v] "+Q" (*(u128 *)ptr),                                      \
++         [rl] "=&r" (r.low), [rh] "=&r" (r.high),                      \
++         [tmp] "=&r" (tmp)                                             \
++       : [ol] "r" (o.low), [oh] "r" (o.high),                          \
++         [nl] "r" (n.low), [nh] "r" (n.high)                           \
++       : "cc", ##cl);                                                  \
++									\
++	return r.full;							\
++}
++
++__CMPXCHG128(   ,        ,  )
++__CMPXCHG128(_mb, dmb ish, l, "memory")
++
++#undef __CMPXCHG128
++
+ #undef K
  
-+#define this_cpu_cmpxchg64(pcp, o, n)	this_cpu_cmpxchg_8(pcp, o, n)
+ #endif	/* __ASM_ATOMIC_LL_SC_H */
+diff --git a/arch/arm64/include/asm/atomic_lse.h b/arch/arm64/include/asm/atomic_lse.h
+index 319958b..c781281 100644
+--- a/arch/arm64/include/asm/atomic_lse.h
++++ b/arch/arm64/include/asm/atomic_lse.h
+@@ -317,4 +317,35 @@ __CMPXCHG_DBL(_mb, al, "memory")
+ 
+ #undef __CMPXCHG_DBL
+ 
++#define __CMPXCHG128(name, mb, cl...)					\
++static __always_inline u128						\
++__lse__cmpxchg128##name(volatile u128 *ptr, u128 old, u128 new)		\
++{									\
++	union __u128_halves r, o = { .full = (old) },			\
++			       n = { .full = (new) };			\
++	register unsigned long x0 asm ("x0") = o.low;			\
++	register unsigned long x1 asm ("x1") = o.high;			\
++	register unsigned long x2 asm ("x2") = n.low;			\
++	register unsigned long x3 asm ("x3") = n.high;			\
++	register unsigned long x4 asm ("x4") = (unsigned long)ptr;	\
++									\
++	asm volatile(							\
++	__LSE_PREAMBLE							\
++	"	casp" #mb "\t%[old1], %[old2], %[new1], %[new2], %[v]\n"\
++	: [old1] "+&r" (x0), [old2] "+&r" (x1),				\
++	  [v] "+Q" (*(u128 *)ptr)					\
++	: [new1] "r" (x2), [new2] "r" (x3), [ptr] "r" (x4),		\
++	  [oldval1] "r" (o.low), [oldval2] "r" (o.high)			\
++	: cl);								\
++									\
++	r.low = x0; r.high = x1;					\
++									\
++	return r.full;							\
++}
 +
-+#define this_cpu_cmpxchg128(pcp, oval, nval)				\
-+({									\
-+	typedef typeof(pcp) pcp_op_T__;					\
-+	u128 old__, new__, ret__;					\
-+	pcp_op_T__ *ptr__;						\
-+	old__ = oval;							\
-+	new__ = nval;							\
-+	preempt_disable_notrace();					\
-+	ptr__ = raw_cpu_ptr(&(pcp));					\
-+	ret__ = cmpxchg128((void *)ptr__, old__, new__);		\
-+	preempt_enable_notrace();					\
-+	ret__;								\
-+})
++__CMPXCHG128(   ,   )
++__CMPXCHG128(_mb, al, "memory")
 +
- #define arch_this_cpu_xchg(pcp, nval)					\
- ({									\
- 	typeof(pcp) *ptr__;						\
-diff --git a/arch/x86/include/asm/percpu.h b/arch/x86/include/asm/percpu.h
-index 13c0d63..4d58b97 100644
---- a/arch/x86/include/asm/percpu.h
-+++ b/arch/x86/include/asm/percpu.h
-@@ -210,6 +210,65 @@ do {									\
- 	(typeof(_var))(unsigned long) pco_old__;			\
++#undef __CMPXCHG128
++
+ #endif	/* __ASM_ATOMIC_LSE_H */
+diff --git a/arch/arm64/include/asm/cmpxchg.h b/arch/arm64/include/asm/cmpxchg.h
+index c6bc5d8..097b832 100644
+--- a/arch/arm64/include/asm/cmpxchg.h
++++ b/arch/arm64/include/asm/cmpxchg.h
+@@ -146,6 +146,19 @@ __CMPXCHG_DBL(_mb)
+ 
+ #undef __CMPXCHG_DBL
+ 
++#define __CMPXCHG128(name)						\
++static inline u128 __cmpxchg128##name(volatile u128 *ptr,		\
++				      u128 old, u128 new)		\
++{									\
++	return __lse_ll_sc_body(_cmpxchg128##name,			\
++				ptr, old, new);				\
++}
++
++__CMPXCHG128(   )
++__CMPXCHG128(_mb)
++
++#undef __CMPXCHG128
++
+ #define __CMPXCHG_GEN(sfx)						\
+ static __always_inline unsigned long __cmpxchg##sfx(volatile void *ptr,	\
+ 					   unsigned long old,		\
+@@ -228,6 +241,19 @@ __CMPXCHG_GEN(_mb)
+ 	__ret;									\
  })
  
-+#if defined(CONFIG_X86_32) && defined(CONFIG_X86_CMPXCHG64)
-+#define percpu_cmpxchg64_op(size, qual, _var, _oval, _nval)		\
-+({									\
-+	union {								\
-+		u64 var;						\
-+		struct {						\
-+			u32 low, high;					\
-+		};							\
-+	} old__, new__;							\
-+									\
-+	old__.var = _oval;						\
-+	new__.var = _nval;						\
-+									\
-+	asm qual ("cmpxchg8b " __percpu_arg([var])			\
-+		  : [var] "+m" (_var),					\
-+		    "+a" (old__.low),					\
-+		    "+d" (old__.high)					\
-+		  : "b" (new__.low),					\
-+		    "c" (new__.high)					\
-+		  : "memory");						\
-+									\
-+	old__.var;							\
++/* cmpxchg128 */
++#define system_has_cmpxchg128()		1
++
++#define arch_cmpxchg128(ptr, o, n)						\
++({										\
++	__cmpxchg128_mb((ptr), (o), (n));					\
 +})
 +
-+#define raw_cpu_cmpxchg64(pcp, oval, nval)	percpu_cmpxchg64_op(8,         , pcp, oval, nval)
-+#define this_cpu_cmpxchg64(pcp, oval, nval)	percpu_cmpxchg64_op(8, volatile, pcp, oval, nval)
-+#endif
-+
-+#ifdef CONFIG_X86_64
-+#define raw_cpu_cmpxchg64(pcp, oval, nval)	percpu_cmpxchg_op(8,         , pcp, oval, nval);
-+#define this_cpu_cmpxchg64(pcp, oval, nval)	percpu_cmpxchg_op(8, volatile, pcp, oval, nval);
-+
-+#define percpu_cmpxchg128_op(size, qual, _var, _oval, _nval)		\
-+({									\
-+	union {								\
-+		u128 var;						\
-+		struct {						\
-+			u64 low, high;					\
-+		};							\
-+	} old__, new__;							\
-+									\
-+	old__.var = _oval;						\
-+	new__.var = _nval;						\
-+									\
-+	asm qual ("cmpxchg16b " __percpu_arg([var])			\
-+		  : [var] "+m" (_var),					\
-+		    "+a" (old__.low),					\
-+		    "+d" (old__.high)					\
-+		  : "b" (new__.low),					\
-+		    "c" (new__.high)					\
-+		  : "memory");						\
-+									\
-+	old__.var;							\
++#define arch_cmpxchg128_local(ptr, o, n)					\
++({										\
++	__cmpxchg128((ptr), (o), (n));						\
 +})
 +
-+#define raw_cpu_cmpxchg128(pcp, oval, nval)	percpu_cmpxchg128_op(16,         , pcp, oval, nval)
-+#define this_cpu_cmpxchg128(pcp, oval, nval)	percpu_cmpxchg128_op(16, volatile, pcp, oval, nval)
-+#endif
+ #define __CMPWAIT_CASE(w, sfx, sz)					\
+ static inline void __cmpwait_case_##sz(volatile void *ptr,		\
+ 				       unsigned long val)		\
+diff --git a/arch/s390/include/asm/cmpxchg.h b/arch/s390/include/asm/cmpxchg.h
+index 06e0e42..7517376 100644
+--- a/arch/s390/include/asm/cmpxchg.h
++++ b/arch/s390/include/asm/cmpxchg.h
+@@ -224,4 +224,18 @@ static __always_inline int __cmpxchg_double(unsigned long p1, unsigned long p2,
+ 			 (unsigned long)(n1), (unsigned long)(n2));	\
+ })
+ 
++#define system_has_cmpxchg128()		1
 +
- /*
-  * this_cpu_read() makes gcc load the percpu variable every time it is
-  * accessed while this_cpu_read_stable() allows the value to be cached.
-diff --git a/include/asm-generic/percpu.h b/include/asm-generic/percpu.h
-index 6432a7f..53d933e 100644
---- a/include/asm-generic/percpu.h
-+++ b/include/asm-generic/percpu.h
-@@ -298,6 +298,14 @@ do {									\
- #define raw_cpu_cmpxchg_8(pcp, oval, nval) \
- 	raw_cpu_generic_cmpxchg(pcp, oval, nval)
- #endif
-+#ifndef raw_cpu_cmpxchg64
-+#define raw_cpu_cmpxchg64(pcp, oval, nval) \
-+	raw_cpu_generic_cmpxchg(pcp, oval, nval)
-+#endif
-+#ifndef raw_cpu_cmpxchg128
-+#define raw_cpu_cmpxchg128(pcp, oval, nval) \
-+	raw_cpu_generic_cmpxchg(pcp, oval, nval)
-+#endif
++static __always_inline u128 arch_cmpxchg128(volatile u128 *ptr, u128 old, u128 new)
++{
++	asm volatile(
++		"	cdsg	%[old],%[new],%[ptr]\n"
++		: [old] "+d" (old), [ptr] "+QS" (*ptr)
++		: [new] "d" (new)
++		: "memory", "cc");
++	return old;
++}
++
++#define arch_cmpxchg128		arch_cmpxchg128
++
+ #endif /* __ASM_CMPXCHG_H */
+diff --git a/arch/x86/include/asm/cmpxchg_32.h b/arch/x86/include/asm/cmpxchg_32.h
+index 6ba80ce..d12f9ed 100644
+--- a/arch/x86/include/asm/cmpxchg_32.h
++++ b/arch/x86/include/asm/cmpxchg_32.h
+@@ -103,6 +103,7 @@ static inline bool __try_cmpxchg64(volatile u64 *ptr, u64 *pold, u64 new)
  
- #ifndef raw_cpu_cmpxchg_double_1
- #define raw_cpu_cmpxchg_double_1(pcp1, pcp2, oval1, oval2, nval1, nval2) \
-@@ -423,6 +431,14 @@ do {									\
- #define this_cpu_cmpxchg_8(pcp, oval, nval) \
- 	this_cpu_generic_cmpxchg(pcp, oval, nval)
  #endif
-+#ifndef this_cpu_cmpxchg64
-+#define this_cpu_cmpxchg64(pcp, oval, nval) \
-+	this_cpu_generic_cmpxchg(pcp, oval, nval)
-+#endif
-+#ifndef this_cpu_cmpxchg128
-+#define this_cpu_cmpxchg128(pcp, oval, nval) \
-+	this_cpu_generic_cmpxchg(pcp, oval, nval)
-+#endif
  
- #ifndef this_cpu_cmpxchg_double_1
- #define this_cpu_cmpxchg_double_1(pcp1, pcp2, oval1, oval2, nval1, nval2) \
+-#define system_has_cmpxchg_double() boot_cpu_has(X86_FEATURE_CX8)
++#define system_has_cmpxchg_double()	boot_cpu_has(X86_FEATURE_CX8)
++#define system_has_cmpxchg64()		boot_cpu_has(X86_FEATURE_CX8)
+ 
+ #endif /* _ASM_X86_CMPXCHG_32_H */
+diff --git a/arch/x86/include/asm/cmpxchg_64.h b/arch/x86/include/asm/cmpxchg_64.h
+index 0d3beb2..fe29107 100644
+--- a/arch/x86/include/asm/cmpxchg_64.h
++++ b/arch/x86/include/asm/cmpxchg_64.h
+@@ -20,6 +20,68 @@
+ 	arch_try_cmpxchg((ptr), (po), (n));				\
+ })
+ 
+-#define system_has_cmpxchg_double() boot_cpu_has(X86_FEATURE_CX16)
++union __u128_halves {
++	u128 full;
++	struct {
++		u64 low, high;
++	};
++};
++
++#define __arch_cmpxchg128(_ptr, _old, _new, _lock)			\
++({									\
++	union __u128_halves o = { .full = (_old), },			\
++			    n = { .full = (_new), };			\
++									\
++	asm volatile(_lock "cmpxchg16b %[ptr]"				\
++		     : [ptr] "+m" (*(_ptr)),				\
++		       "+a" (o.low), "+d" (o.high)			\
++		     : "b" (n.low), "c" (n.high)			\
++		     : "memory");					\
++									\
++	o.full;								\
++})
++
++static __always_inline u128 arch_cmpxchg128(volatile u128 *ptr, u128 old, u128 new)
++{
++	return __arch_cmpxchg128(ptr, old, new, LOCK_PREFIX);
++}
++
++static __always_inline u128 arch_cmpxchg128_local(volatile u128 *ptr, u128 old, u128 new)
++{
++	return __arch_cmpxchg128(ptr, old, new,);
++}
++
++#define __arch_try_cmpxchg128(_ptr, _oldp, _new, _lock)			\
++({									\
++	union __u128_halves o = { .full = *(_oldp), },			\
++			    n = { .full = (_new), };			\
++	bool ret;							\
++									\
++	asm volatile(_lock "cmpxchg16b %[ptr]"				\
++		     CC_SET(e)						\
++		     : CC_OUT(e) (ret),					\
++		       [ptr] "+m" (*ptr),				\
++		       "+a" (o.low), "+d" (o.high)			\
++		     : "b" (n.low), "c" (n.high)			\
++		     : "memory");					\
++									\
++	if (unlikely(!ret))						\
++		*(_oldp) = o.full;					\
++									\
++	likely(ret);							\
++})
++
++static __always_inline bool arch_try_cmpxchg128(volatile u128 *ptr, u128 *oldp, u128 new)
++{
++	return __arch_try_cmpxchg128(ptr, oldp, new, LOCK_PREFIX);
++}
++
++static __always_inline bool arch_try_cmpxchg128_local(volatile u128 *ptr, u128 *oldp, u128 new)
++{
++	return __arch_try_cmpxchg128(ptr, oldp, new,);
++}
++
++#define system_has_cmpxchg_double()	boot_cpu_has(X86_FEATURE_CX16)
++#define system_has_cmpxchg128()		boot_cpu_has(X86_FEATURE_CX16)
+ 
+ #endif /* _ASM_X86_CMPXCHG_64_H */
