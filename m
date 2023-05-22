@@ -2,71 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC2570CC82
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 23:32:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBB8170CC8B
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 23:33:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233790AbjEVVcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 17:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44752 "EHLO
+        id S234503AbjEVVdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 17:33:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbjEVVco (ORCPT
+        with ESMTP id S229536AbjEVVdi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 17:32:44 -0400
+        Mon, 22 May 2023 17:33:38 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0189B;
-        Mon, 22 May 2023 14:32:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2391A7;
+        Mon, 22 May 2023 14:33:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C6A862B08;
-        Mon, 22 May 2023 21:32:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55575C433EF;
-        Mon, 22 May 2023 21:32:41 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FB30621CC;
+        Mon, 22 May 2023 21:33:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA921C433EF;
+        Mon, 22 May 2023 21:33:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684791161;
-        bh=DWjXZJSNUstF1LBdGh07RwUMWlyiWMi87JbY1HvUz4U=;
+        s=k20201202; t=1684791215;
+        bh=ZyCirKPzIU6ZS3HCCQhkFymuVVawBZeVE2tj0DyWJtM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Q1ZYN2fh8JKRZfhfqxZuh1DLsByiKtSlZQ7S/5AsJZqLRDetDzf0mOnmi2fm4gF/h
-         nLHRz9nvxy5GTYkLKhDs8mZaJX/bO2aTXbP835An+gogPVBNDpNbeMrsg5Qhupm8Vt
-         yo/vUxJSHRaLzhFtVG+d5lZk8uoRHy6A4lWWxQg+Jj3aUyPLxaWizr4AYq8nDVA+Nu
-         rMK9lYRQan+MvEGoyl60UTbGD1NsVQ/oHvdd+9QQwGUzJckZzGNqF3WNOq1cQXp5mX
-         YjodXI1x/VIchQ4Zf2XpU/Pp46DA8vbAjFnHZ3v2qbczey3MecDnsYR0Lno5NsxHE6
-         OtG3MzC8+pu7g==
-Date:   Mon, 22 May 2023 14:32:40 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
+        b=dFNsWQGgND/C9ncLbUN45hnG0FWbHZFwwRbPr9aE0GPiyjOXedOhkWsvPxF8e05qy
+         j9/RCWlnCmXgoJXPegESbKwfTvCxP3C1KMxvTPtq7ZGTI2/c8ALpHQlKFfA2k9DIrJ
+         zXmIFavlhG2VK9S4+vyVNe9MiUginnI66m9u51BUX6T202W7uGH4jaS0wNgMbIYnwD
+         StuD0vRXYonsrdJ0RtJopMEqgv9JBnbCHBFASiI571Q8qLauidt+gpQHNtCQDGkjpt
+         y9VpuUoCtktJJiD8HINGyQEtmgdOo/cqGZ9+wb03L9GLErRet4Obilk7Yr2XzC8DQF
+         n41U+jcclMjYg==
+Date:   Mon, 22 May 2023 15:34:25 -0600
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
 To:     Kees Cook <keescook@chromium.org>
 Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Daniel Latypov <dlatypov@google.com>, storagedev@microchip.com,
+        linux-nvme@lists.infradead.org, Guo Xuenan <guoxuenan@huawei.com>,
         Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        linux-hardening@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>, linux-scsi@vger.kernel.org,
         James Smart <james.smart@broadcom.com>,
-        Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        HighPoint Linux Team <linux@highpoint-tech.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
         Kashyap Desai <kashyap.desai@broadcom.com>,
-        Sumit Saxena <sumit.saxena@broadcom.com>,
-        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
-        Don Brace <don.brace@microchip.com>,
-        Dave Chinner <dchinner@redhat.com>,
-        Guo Xuenan <guoxuenan@huawei.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        intel-wired-lan@lists.osuosl.org, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
         Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        kernel test robot <lkp@intel.com>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-nvme@lists.infradead.org, linux-scsi@vger.kernel.org,
-        megaraidlinux.pdl@broadcom.com, storagedev@microchip.com,
-        linux-xfs@vger.kernel.org, linux-hardening@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>,
+        Dave Chinner <dchinner@redhat.com>,
+        Keith Busch <kbusch@kernel.org>,
+        HighPoint Linux Team <linux@highpoint-tech.com>,
+        megaraidlinux.pdl@broadcom.com, Jens Axboe <axboe@kernel.dk>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Shivasharan S <shivasharan.srikanteshwara@broadcom.com>,
+        netdev@vger.kernel.org, Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org, linux-xfs@vger.kernel.org,
+        Sumit Saxena <sumit.saxena@broadcom.com>,
         Tales Aparecida <tales.aparecida@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] overflow: Add struct_size_t() helper
-Message-ID: <20230522213240.GE11642@frogsfrogsfrogs>
+        Don Brace <don.brace@microchip.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [Intel-wired-lan] [PATCH] overflow: Add struct_size_t() helper
+Message-ID: <ZGvf4aW8G12pC2pj@work>
 References: <20230522211810.never.421-kees@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -99,6 +96,11 @@ On Mon, May 22, 2023 at 02:18:13PM -0700, Kees Cook wrote:
 > -       struct_size((struct STRUCT *)\(0\|NULL\),
 > +       struct_size_t(struct STRUCT,
 >                 MEMBER, COUNT)
+
+This indeed was much needed.
+
+Plus, we save 3 characters on each line. :D
+
 > 
 > Suggested-by: Christoph Hellwig <hch@infradead.org>
 > Cc: Jesse Brandeburg <jesse.brandeburg@intel.com>
@@ -134,6 +136,13 @@ On Mon, May 22, 2023 at 02:18:13PM -0700, Kees Cook wrote:
 > Cc: linux-xfs@vger.kernel.org
 > Cc: linux-hardening@vger.kernel.org
 > Signed-off-by: Kees Cook <keescook@chromium.org>
+
+Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+
+Thanks!
+--
+Gustavo
+
 > ---
 > Unless there are objections, I'll just take this via my tree...
 > ---
@@ -308,13 +317,6 @@ On Mon, May 22, 2023 at 02:18:13PM -0700, Kees Cook wrote:
 >  {
 > -	return struct_size((struct xfs_btree_cur *)NULL, bc_levels, nlevels);
 > +	return struct_size_t(struct xfs_btree_cur, bc_levels, nlevels);
-
-Oh, hey, this thing ^^^^^^^^ again.  I'm excited!
-
-Reviewed-by: Darrick J. Wong <djwong@kernel.org>
-
---D
-
 >  }
 >  
 >  /* cursor flags */
@@ -381,3 +383,7 @@ Reviewed-by: Darrick J. Wong <djwong@kernel.org>
 > -- 
 > 2.34.1
 > 
+> _______________________________________________
+> Intel-wired-lan mailing list
+> Intel-wired-lan@osuosl.org
+> https://lists.osuosl.org/mailman/listinfo/intel-wired-lan
