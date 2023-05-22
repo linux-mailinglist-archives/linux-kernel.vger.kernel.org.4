@@ -2,126 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A90070BA3D
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 12:35:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18B7A70BA40
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 12:35:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232466AbjEVKfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 06:35:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35394 "EHLO
+        id S232089AbjEVKfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 06:35:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232377AbjEVKfM (ORCPT
+        with ESMTP id S230375AbjEVKfs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 06:35:12 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8AADC
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 03:35:10 -0700 (PDT)
-Received: from mail.ispras.ru (unknown [83.149.199.84])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 4E18744C1016;
-        Mon, 22 May 2023 10:35:07 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 4E18744C1016
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1684751707;
-        bh=mSXND4dopui4Y7LqvtuGYun98AfqkQSXgYHcHwjTLcQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=j8IkVeKTt4of7mwQ7PGKXZ+0SOU028M167IWZdutlk0vPKGy8/WLAfT4I/nFza/R4
-         NDEpZiQ+AQmIwzRTEvIKztIDm8hIIcOqVZk5HI9pOtOE2iYCGvPunBpbsriUlmUo6P
-         v81slCWiU3DxnNt5Nm9yPhg+Al1d0f/LKsCzROGo=
+        Mon, 22 May 2023 06:35:48 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08781E0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 03:35:47 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f608074b50so2375865e9.0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 03:35:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684751745; x=1687343745;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=65v00oth8llyyqlj2COYxgZ3LDV9ng4IjXfVfrT+DXI=;
+        b=SwWpEXFk78PIWRx32ndx0QUvSAT3CtEOcSPlQgOLLzsAw+2Lp0pjN8uGsvh4UgxUPT
+         mznc47ng/wwvMbyB/go0gU9h1x18e3CP1cPz2CP7Vbmjz5JnO+UdUd1xTzID3KWtjJ+P
+         Fxo5pvags9Pt+T6BGWLs+SarBSYSnkxaL3HKWxnJoFLf9kCzr926esXEEnXuJZruBzGS
+         AvVf87PBM++3jPhsa3FHRPCCERVRptVL197kp2hOZ83a707P9RtppbSlejwTaRERt2U/
+         KdwvHY316asApO92oZNvC8nlQ2VgSOXWtRQUaKoobc3E+po6gnhZ3LDT2wq3HncN+c9O
+         aA0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684751745; x=1687343745;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=65v00oth8llyyqlj2COYxgZ3LDV9ng4IjXfVfrT+DXI=;
+        b=Vd4+DE4iSsTa+A4ldEb8ASPRDpt+o8iYxgFKGSHPmJYIATDZQg9x3QF/kQVrcVHwOG
+         SlGb63n8dM1cPSSerMGWPB7eYSo1cv7SSyshsOS2sBswKPeFw5qNU/GhiamaXq4BPSBx
+         GZSpzLQ0ogVVndDSXDu7TfBGyTOmIOaHQy9x0MRauHqLv0cP1m7rjndwoGodsCFAMkJD
+         mN2D8WwTvZA2edL+M/dIgx/hSiEB+j5GEWxul6yY0A/5ee58Uy/1vMEhfYwh6415LFWZ
+         ozXy1VKY8LOZO/l7sCazOZJ1JwFDqj+XLzgVE0spWPSDXiSSdT/6Y6YfNolFuUh4iPEq
+         C1jg==
+X-Gm-Message-State: AC+VfDyvhXX2vxy1VHknvl/IFP5Ou8HNSKMJsHPTaXiVK4dpYhKF5sLn
+        WsExWryH/QbI8IF2HjCwjJILMA==
+X-Google-Smtp-Source: ACHHUZ58cQ1Fp60cWARv/F4iudu6wycgwjig++ulhlcmrNm7mtLTOXyXP1IV38WDno3DYTacz/xYbw==
+X-Received: by 2002:a05:600c:c6:b0:3f6:692:5607 with SMTP id u6-20020a05600c00c600b003f606925607mr869487wmm.40.1684751745480;
+        Mon, 22 May 2023 03:35:45 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id c4-20020a7bc004000000b003f42461ac75sm11155349wmb.12.2023.05.22.03.35.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 03:35:43 -0700 (PDT)
+Date:   Mon, 22 May 2023 13:35:38 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Rain River <rain.1986.08.12@gmail.com>,
+        Zhu Yanjun <zyjzyj2000@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ayaz Abdulla <aabdulla@nvidia.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH net] forcedeth: Fix an error handling path in nv_probe()
+Message-ID: <f4296d23-83ce-4147-894a-3e5640cdf87c@kili.mountain>
+References: <355e9a7d351b32ad897251b6f81b5886fcdc6766.1684571393.git.christophe.jaillet@wanadoo.fr>
+ <ZGtAIJZ3QzkBJgHI@corigine.com>
 MIME-Version: 1.0
-Date:   Mon, 22 May 2023 13:35:07 +0300
-From:   Alexey Izbyshev <izbyshev@ispras.ru>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Florent Revest <revest@chromium.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, akpm@linux-foundation.org,
-        catalin.marinas@arm.com, anshuman.khandual@arm.com,
-        joey.gouly@arm.com, mhocko@suse.com, keescook@chromium.org,
-        peterx@redhat.com, broonie@kernel.org, szabolcs.nagy@arm.com,
-        kpsingh@kernel.org, gthelen@google.com, toiwoton@gmail.com
-Subject: Re: [PATCH v2 3/5] mm: Make PR_MDWE_REFUSE_EXEC_GAIN an unsigned long
-In-Reply-To: <bb08b91c-6c7b-a7a0-d4a7-68ddea46277f@redhat.com>
-References: <20230517150321.2890206-1-revest@chromium.org>
- <20230517150321.2890206-4-revest@chromium.org>
- <bb08b91c-6c7b-a7a0-d4a7-68ddea46277f@redhat.com>
-User-Agent: Roundcube Webmail/1.4.4
-Message-ID: <884d131bbc28ebfa0b729176e6415269@ispras.ru>
-X-Sender: izbyshev@ispras.ru
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZGtAIJZ3QzkBJgHI@corigine.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-22 11:55, David Hildenbrand wrote:
-> On 17.05.23 17:03, Florent Revest wrote:
->> Alexey pointed out that defining a prctl flag as an int is a footgun
->> because, under some circumstances, when used as a flag to prctl, it 
->> can
->> be casted to long with garbage upper bits which would result in
->> unexpected behaviors.
->> 
->> This patch changes the constant to a UL to eliminate these
->> possibilities.
->> 
->> Signed-off-by: Florent Revest <revest@chromium.org>
->> Suggested-by: Alexey Izbyshev <izbyshev@ispras.ru>
->> ---
->>   include/uapi/linux/prctl.h       | 2 +-
->>   tools/include/uapi/linux/prctl.h | 2 +-
->>   2 files changed, 2 insertions(+), 2 deletions(-)
->> 
->> diff --git a/include/uapi/linux/prctl.h b/include/uapi/linux/prctl.h
->> index f23d9a16507f..6e9af6cbc950 100644
->> --- a/include/uapi/linux/prctl.h
->> +++ b/include/uapi/linux/prctl.h
->> @@ -283,7 +283,7 @@ struct prctl_mm_map {
->>     /* Memory deny write / execute */
->>   #define PR_SET_MDWE			65
->> -# define PR_MDWE_REFUSE_EXEC_GAIN	1
->> +# define PR_MDWE_REFUSE_EXEC_GAIN	(1UL << 0)
->>     #define PR_GET_MDWE			66
->>   diff --git a/tools/include/uapi/linux/prctl.h 
->> b/tools/include/uapi/linux/prctl.h
->> index 759b3f53e53f..6e6563e97fef 100644
->> --- a/tools/include/uapi/linux/prctl.h
->> +++ b/tools/include/uapi/linux/prctl.h
->> @@ -283,7 +283,7 @@ struct prctl_mm_map {
->>     /* Memory deny write / execute */
->>   #define PR_SET_MDWE			65
->> -# define PR_MDWE_REFUSE_EXEC_GAIN	1
->> +# define PR_MDWE_REFUSE_EXEC_GAIN	(1UL << 0)
->>     #define PR_GET_MDWE			66
->> 
+On Mon, May 22, 2023 at 12:12:48PM +0200, Simon Horman wrote:
+> On Sat, May 20, 2023 at 10:30:17AM +0200, Christophe JAILLET wrote:
+> > If an error occures after calling nv_mgmt_acquire_sema(), it should be
+> > undone with a corresponding nv_mgmt_release_sema() call.
 > 
-> Both are changing existing uapi, so you'll already have existing user
-> space using the old values, that your kernel code has to deal with no?
+> nit: s/occures/occurs/
+> 
+> > 
+> > Add it in the error handling path of the probe as already done in the
+> > remove function.
+> 
+> I was going to ask what happens if nv_mgmt_acquire_sema() fails.
+> Then I realised that it always returns 0.
+> 
+> Perhaps it would be worth changing it's return type to void at some point.
+>
 
-I'm the one who suggested this change, so I feel the need to clarify.
+What? No?  It returns true on success and false on failure.
 
-For any existing 64-bit user space code using the kernel and the uapi 
-headers before this patch and doing the wrong prctl(PR_SET_MDWE, 
-PR_MDWE_REFUSE_EXEC_GAIN) call instead of the correct prctl(PR_SET_MDWE, 
-(unsigned long)PR_MDWE_REFUSE_EXEC_GAIN), there are two possibilities 
-when prctl() implementation extracts the second argument via va_arg(op, 
-unsigned long):
+drivers/net/ethernet/nvidia/forcedeth.c
+  5377  static int nv_mgmt_acquire_sema(struct net_device *dev)
+  5378  {
+  5379          struct fe_priv *np = netdev_priv(dev);
+  5380          u8 __iomem *base = get_hwbase(dev);
+  5381          int i;
+  5382          u32 tx_ctrl, mgmt_sema;
+  5383  
+  5384          for (i = 0; i < 10; i++) {
+  5385                  mgmt_sema = readl(base + NvRegTransmitterControl) & NVREG_XMITCTL_MGMT_SEMA_MASK;
+  5386                  if (mgmt_sema == NVREG_XMITCTL_MGMT_SEMA_FREE)
+  5387                          break;
+  5388                  msleep(500);
+  5389          }
+  5390  
+  5391          if (mgmt_sema != NVREG_XMITCTL_MGMT_SEMA_FREE)
+  5392                  return 0;
+  5393  
+  5394          for (i = 0; i < 2; i++) {
+  5395                  tx_ctrl = readl(base + NvRegTransmitterControl);
+  5396                  tx_ctrl |= NVREG_XMITCTL_HOST_SEMA_ACQ;
+  5397                  writel(tx_ctrl, base + NvRegTransmitterControl);
+  5398  
+  5399                  /* verify that semaphore was acquired */
+  5400                  tx_ctrl = readl(base + NvRegTransmitterControl);
+  5401                  if (((tx_ctrl & NVREG_XMITCTL_HOST_SEMA_MASK) == NVREG_XMITCTL_HOST_SEMA_ACQ) &&
+  5402                      ((tx_ctrl & NVREG_XMITCTL_MGMT_SEMA_MASK) == NVREG_XMITCTL_MGMT_SEMA_FREE)) {
+  5403                          np->mgmt_sema = 1;
+  5404                          return 1;
+                                ^^^^^^^^^
+Success path.
 
-* It gets lucky, and the upper 32 bits of the argument are zero. The 
-call does what is expected by the user.
+  5405                  } else
+  5406                          udelay(50);
+  5407          }
+  5408  
+  5409          return 0;
+  5410  }
 
-* The upper 32 bits are non-zero junk. The flags argument is rejected by 
-the kernel, and the call fails with EINVAL (unexpectedly for the user).
+regards,
+dan carpenter
 
-This change is intended to affect only the second case, and only after 
-the program is recompiled with the new uapi headers. The currently 
-wrong, but naturally-looking prctl(PR_SET_MDWE, 
-PR_MDWE_REFUSE_EXEC_GAIN) call becomes correct.
-
-The kernel ABI is unaffected by this change, since it has been defined 
-in terms of unsigned long from the start.
-
-Thanks,
-Alexey
