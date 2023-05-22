@@ -2,63 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 373B270C27C
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:34:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B2D70C282
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:35:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234092AbjEVPeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 11:34:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35334 "EHLO
+        id S234259AbjEVPfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 11:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233689AbjEVPeI (ORCPT
+        with ESMTP id S233263AbjEVPfi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 11:34:08 -0400
-Received: from mail.8bytes.org (mail.8bytes.org [IPv6:2a01:238:42d9:3f00:e505:6202:4f0c:f051])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6D40CD
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 08:34:07 -0700 (PDT)
-Received: from 8bytes.org (p200300c2773e310086ad4f9d2505dd0d.dip0.t-ipconnect.de [IPv6:2003:c2:773e:3100:86ad:4f9d:2505:dd0d])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.8bytes.org (Postfix) with ESMTPSA id 97E16248089;
-        Mon, 22 May 2023 17:34:06 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
-        s=default; t=1684769646;
-        bh=CqRGYxF+fh6efzNEL/NQp4ZF01hULy05sXQWA1uYbuk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=U4SKTEpzMhWMUBZyMqfU/SBvMLjZrnslN1/V0M4Y75M5M1gNW2Z+hVL3HdRDPsiqJ
-         dghw7c728o3g7FEaPbvZEFn2AooZlhAMnWG2xSPgTruLwImjBl8QwYKQuubStn/I5u
-         LDoaEiRNdPh8ehja84Il1QkYZUz26D5A6m+vacC5IK4H5p4Zqdjd4OI+GckaYmekMU
-         95Yzgs1Lw2nLl4qBkkgtTInl3jbG44PpP8YdAeOqc3oUCHzCyhFK0ABtO0LhyPY+Tc
-         C3yv8PW+g1xXX8D25ogOX0TIvcEHDPxlQ3r0Hxj2H8GXZMuZdOePSf3OBCzcpoGw9O
-         FMjtgGBDCDwWw==
-Date:   Mon, 22 May 2023 17:34:05 +0200
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Jon Pan-Doh <pandoh@google.com>
-Cc:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Nadav Amit <namit@vmware.com>, iommu@lists.linux.dev,
+        Mon, 22 May 2023 11:35:38 -0400
+X-Greylist: delayed 2201 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 22 May 2023 08:35:37 PDT
+Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0170CD;
+        Mon, 22 May 2023 08:35:36 -0700 (PDT)
+Received: from francesco-nb.int.toradex.com (31-10-206-125.static.upc.ch [31.10.206.125])
+        by mail11.truemail.it (Postfix) with ESMTPA id 044E721334;
+        Mon, 22 May 2023 17:35:34 +0200 (CEST)
+Date:   Mon, 22 May 2023 17:35:33 +0200
+From:   Francesco Dolcini <francesco@dolcini.it>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Francesco Dolcini <francesco@dolcini.it>,
+        Praneeth Bajjuri <praneeth@ti.com>,
+        Geet Modi <geet.modi@ti.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Sudheer Dantuluri <dantuluris@google.com>,
-        Gary Zibrat <gzibrat@google.com>
-Subject: Re: [PATCH] iommu/amd: Fix domain flush size when syncing iotlb
-Message-ID: <ZGuLbTdF0WAwhMB3@8bytes.org>
-References: <20230426203256.237116-1-pandoh@google.com>
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Dan Murphy <dmurphy@ti.com>
+Subject: Re: DP83867 ethernet PHY regression
+Message-ID: <ZGuLxSJwXbSE/Rbb@francesco-nb.int.toradex.com>
+References: <ZGuDJos8D7N0J6Z2@francesco-nb.int.toradex.com>
+ <e0d4b397-a8d9-4546-a8a2-14cf07914e64@lunn.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/mixed; boundary="/zTa0TOsm9Yb+E2A"
 Content-Disposition: inline
-In-Reply-To: <20230426203256.237116-1-pandoh@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <e0d4b397-a8d9-4546-a8a2-14cf07914e64@lunn.ch>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 26, 2023 at 01:32:56PM -0700, Jon Pan-Doh wrote:
->  drivers/iommu/amd/iommu.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied for 6.4, thanks.
+--/zTa0TOsm9Yb+E2A
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Mon, May 22, 2023 at 05:15:56PM +0200, Andrew Lunn wrote:
+> On Mon, May 22, 2023 at 04:58:46PM +0200, Francesco Dolcini wrote:
+> > Hello all,
+> > commit da9ef50f545f ("net: phy: dp83867: perform soft reset and retain
+> > established link") introduces a regression on my TI AM62 based board.
+> > 
+> > I have a working DTS with Linux TI 5.10 downstream kernel branch, while
+> > testing the DTS with v6.4-rc in preparation of sending it to the mailing
+> > list I noticed that ethernet is working only on a cold poweron.
+> 
+> Do you have more details about how it does not work.
+> 
+> Please could you use:
+> 
+> mii-tool -vvv ethX
+
+please see the attached files:
+
+working_da9ef50f545f_reverted.txt
+  this is on a v6.4-rc, with da9ef50f545f reverted
+
+not_working.txt
+  v6.4-rc not working
+
+working.txt
+  v6.4-rc working
+
+
+It looks like, even on cold boot, it's not working in a reliable way.
+Not sure the exact difference when it's working and when it's not.
+
+> in both the good and bad state. The register values might give us a
+> clue.
+
+Thanks for your help,
+Francesco
+
+
+--/zTa0TOsm9Yb+E2A
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment; filename="not_working.txt"
+
+Using SIOCGMIIPHY=0x8947
+eth0: negotiated 1000baseT-FD flow-control, link ok
+  registers for MII PHY 0: 
+    1140 796d 2000 a231 05e1 c5e1 006f 2001
+    5806 0200 3800 0000 0000 4007 0000 3000
+    5048 ac02 ec10 0004 2bc7 0000 0000 0040
+    6150 4444 0002 0000 0000 0000 0282 0000
+  product info: vendor 08:00:28, model 35 rev 1
+  basic mode:   autonegotiation enabled
+  basic status: autonegotiation complete, link ok
+  capabilities: 1000baseT-FD 100baseTx-FD 100baseTx-HD 10baseT-FD 10baseT-HD
+  advertising:  1000baseT-FD 100baseTx-FD 100baseTx-HD 10baseT-FD 10baseT-HD flow-control
+  link partner: 1000baseT-FD 100baseTx-FD 100baseTx-HD 10baseT-FD 10baseT-HD flow-control
+
+--/zTa0TOsm9Yb+E2A
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment;
+	filename="working_da9ef50f545f_reverted.txt"
+
+Using SIOCGMIIPHY=0x8947
+eth0: negotiated 1000baseT-FD flow-control, link ok
+  registers for MII PHY 0: 
+    1140 796d 2000 a231 05e1 c5e1 006d 2001
+    5806 0200 3800 0000 0000 4007 0000 3000
+    5048 af02 ec10 0000 2bc7 0000 0000 0040
+    6150 4444 0002 0000 0000 0000 0282 0000
+  product info: vendor 08:00:28, model 35 rev 1
+  basic mode:   autonegotiation enabled
+  basic status: autonegotiation complete, link ok
+  capabilities: 1000baseT-FD 100baseTx-FD 100baseTx-HD 10baseT-FD 10baseT-HD
+  advertising:  1000baseT-FD 100baseTx-FD 100baseTx-HD 10baseT-FD 10baseT-HD flow-control
+  link partner: 1000baseT-FD 100baseTx-FD 100baseTx-HD 10baseT-FD 10baseT-HD flow-control
+
+--/zTa0TOsm9Yb+E2A
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: attachment; filename="working.txt"
+
+Using SIOCGMIIPHY=0x8947
+eth0: negotiated 1000baseT-FD flow-control, link ok
+  registers for MII PHY 0: 
+    1140 796d 2000 a231 05e1 c5e1 006f 2001
+    5806 0200 3800 0000 0000 4007 0000 3000
+    5048 ac02 ec10 0000 2bc7 0000 0000 0040
+    6150 4444 0002 0000 0000 0000 0282 0000
+  product info: vendor 08:00:28, model 35 rev 1
+  basic mode:   autonegotiation enabled
+  basic status: autonegotiation complete, link ok
+  capabilities: 1000baseT-FD 100baseTx-FD 100baseTx-HD 10baseT-FD 10baseT-HD
+  advertising:  1000baseT-FD 100baseTx-FD 100baseTx-HD 10baseT-FD 10baseT-HD flow-control
+  link partner: 1000baseT-FD 100baseTx-FD 100baseTx-HD 10baseT-FD 10baseT-HD flow-control
+
+--/zTa0TOsm9Yb+E2A--
