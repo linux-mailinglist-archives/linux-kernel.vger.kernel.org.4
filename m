@@ -2,67 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1AE270B75F
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:15:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ACE5C70B761
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:15:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbjEVIO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 04:14:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49540 "EHLO
+        id S232000AbjEVIPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 04:15:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbjEVIO4 (ORCPT
+        with ESMTP id S231495AbjEVIPf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 04:14:56 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C08AB;
-        Mon, 22 May 2023 01:14:53 -0700 (PDT)
-Received: (Authenticated sender: alexis.lothore@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id DCD3C1C0005;
-        Mon, 22 May 2023 08:14:50 +0000 (UTC)
+        Mon, 22 May 2023 04:15:35 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD158B0;
+        Mon, 22 May 2023 01:15:32 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 45AB2FF806;
+        Mon, 22 May 2023 08:15:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1684743292;
+        t=1684743331;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=oWwbyb5Mxk6cx2PzwjH7Aj8olHq6kSORyWUZJykL/eI=;
-        b=b9bRB2K6BiXKlseyVVmXLEsjuoXv8WLHYJJKi7Ynvulp7/OkWnioSeBovJ854/vxUoo1vz
-        Bl2933HsDkQ7uQ418f1NQgBQexM1GqO/qK6l5bKLlSL0Lr+a+WGkAGdeeFFiyNct80MJ8R
-        4scTcsDTdgdsCRYmt2DK+ZF7xc4om50E2fsQzlVzFfpOkAOhzS/+/uNr1ndyIB2nnfmbnw
-        v+14v9JRbCYD4b8pF7hrUtUJrXnHv8xP0eLouAMi1k7F1YEC4eUS/I0JGWFI1UgmX7vgK1
-        p9VQBlJFjRUEpUrWzyt+UuCTC58nrG7Wg1NqTMAyCcQx9R+4MddS47GzJ/AVfA==
-Message-ID: <1c104034-b61f-5242-40fa-339de59ac9c9@bootlin.com>
-Date:   Mon, 22 May 2023 10:15:11 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-From:   =?UTF-8?Q?Alexis_Lothor=c3=a9?= <alexis.lothore@bootlin.com>
-Subject: Re: [PATCH net-next v2 7/7] net: dsa: mv88e6xxx: enable support for
- 88E6361 switch
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
+        bh=h9Un8862h/WB4CNOqCt7FYWb8IhGGrD732y9OageEG8=;
+        b=EfwINB3MfhXq5tWNxuxAMcnEJ/PDnIWXNv8nEK6j7EfCoGM02E+LZONQldz6Mj9WkRnSsV
+        KCPr/8LZZTydFd9sShkc7MS/Xi9xnjPdshdjjasCCdueynA0SS46APctSQo6QTEHUGWXf9
+        QgAZRLXD8lqa9kfhJhl9tROTwf5hSqRPkofodYzA1sQYDNnrkjsz95Ltv1bOOMDmJLOfqh
+        C1115WLk3Td0tS3xPmyxvf1ajWHUKG796kxrfA0KsBUebmzSFyP95Xmf9ifcJUoewPgfx2
+        zRafV2dzUPX7L9c0wORvIGV0+blLHOgDDZ0IWk4kqLK/xAguyvsO2u8PTx/NHQ==
+Date:   Mon, 22 May 2023 10:15:26 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6?= Rojas <noltari@gmail.com>
+Cc:     William Zhang <william.zhang@broadcom.com>,
         Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        thomas.petazzoni@bootlin.com, paul.arola@telus.com,
-        scott.roberts@telus.com,
-        =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>
-References: <20230519141303.245235-1-alexis.lothore@bootlin.com>
- <20230519141303.245235-8-alexis.lothore@bootlin.com>
- <ZGeLEbcCHzOASasC@shell.armlinux.org.uk>
-Content-Language: en-US
-In-Reply-To: <ZGeLEbcCHzOASasC@shell.armlinux.org.uk>
+        liao jaime <jaimeliao.tw@gmail.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-mtd@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: mtd: nand: Macronix: document new
+ binding
+Message-ID: <20230522101526.56c90d88@xps-13>
+In-Reply-To: <CAKR-sGd3Uxxquv6hdhZsmNP_sSfnOaW0JZLB590RsmRcqUx+Tg@mail.gmail.com>
+References: <CAAQoYRm3766SG7+VuwVzu_xH8aWihoKWMEp8xQGNgJ6oOtC9+g@mail.gmail.com>
+        <CAAQoYRmXdMp7b2r+yCRUtGrbfQH-Cb8gMAVo7YscuQEM5kgajw@mail.gmail.com>
+        <CAKR-sGdiLzZ7iVbLmz1uPwYoUXQZ2qGwmCBAq_-OKXfVT=Pj-A@mail.gmail.com>
+        <d0543f48-6f0b-58e0-cc18-695a28c493fc@gmail.com>
+        <CAKR-sGer0r0FxyOQQu7TxT0d2D981_1fQWxa_XghfyWKWSJVfQ@mail.gmail.com>
+        <e16ae30a-f3ac-fbd9-b070-185997bcb89d@broadcom.com>
+        <CAKR-sGd3Uxxquv6hdhZsmNP_sSfnOaW0JZLB590RsmRcqUx+Tg@mail.gmail.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,44 +66,211 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Russell, thanks for review
+Hi Jaime, =C3=81lvaro,
 
-On 5/19/23 16:43, Russell King (Oracle) wrote:
-> On Fri, May 19, 2023 at 04:13:03PM +0200, alexis.lothore@bootlin.com wrote:
->> From: Alexis Lothoré <alexis.lothore@bootlin.com>
->>
->> Marvell 88E6361 is an 8-port switch derived from the
->> 88E6393X/88E9193X/88E6191X switches family. It can benefit from the
->> existing mv88e6xxx driver by simply adding the proper switch description in
->> the driver. Main differences with other switches from this
->> family are:
->> - 8 ports exposed (instead of 11): ports 1, 2 and 8 not available
->> - No 5GBase-x nor SFI/USXGMII support
->>
->> ---
->> Changes since v1:
->> - define internal phys offset
->> - enforce 88e6361 features in mv88e6393x_phylink_get_caps
->> - enforce 88e6361 features in mv88e6393x_port_set_speed_duplex
->> - enforce 88e6361 features in mv88e6393x_port_max_speed_mode
-> 
-> Not exactly related to this patch, but please do not rely on this "max
-> speed mode" - please always ensure that you specify the phy-mode and
-> fixed-link settings for CPU and DSA ports in firmware. Thanks.
+noltari@gmail.com wrote on Wed, 17 May 2023 17:20:26 +0200:
 
-I would like to make sure to fully understand your point:
-- when telling so specify phy-mode and fixed-link in firmware, you mean
-device-tree, right ?
-- when checking for code and execution flow, I observe that port_max_speed is
-always called and its output is always used to configure shared ports mode in
-mv88e6xxx driver. Are you telling that eventually, the whole mv88e6xxx driver
-should stop relying on port_max_speed_mode for shared ports ?
+> Hi William,
+>=20
+> El mi=C3=A9, 17 may 2023 a las 7:30, William Zhang
+> (<william.zhang@broadcom.com>) escribi=C3=B3:
+> >
+> >
+> >
+> > On 05/16/2023 12:02 PM, =C3=81lvaro Fern=C3=A1ndez Rojas wrote: =20
+> > > Sure,
+> > >
+> > > Here you go:
+> > > [    0.000000] Linux version 5.15.111 (noltari@atlantis)
+> > > (mips-openwrt-linux-musl-gcc (OpenWrt GCC 12.3.0 r0+22899-466be0612a)
+> > > 12.3.0, GNU ld (GNU Binutils) 2.40.0) #0 SMP Tue May 16 14:33:20 2023
+> > > [    0.000000] CPU0 revision is: 0002a080 (Broadcom BMIPS4350)
+> > > [    0.000000] MIPS: machine is Sercomm H500-s vfes
+> > > [    0.000000] 128MB of RAM installed
+> > > [    0.000000] earlycon: bcm63xx_uart0 at MMIO 0x10000180 (options '1=
+15200n8')
+> > > [    0.000000] printk: bootconsole [bcm63xx_uart0] enabled
+> > > [    0.000000] Initrd not found or empty - disabling initrd
+> > > [    0.000000] Reserving 0KB of memory at 4194303KB for kdump
+> > > [    0.000000] Primary instruction cache 64kB, VIPT, 4-way, linesize =
+16 bytes.
+> > > [    0.000000] Primary data cache 32kB, 2-way, VIPT, cache aliases,
+> > > linesize 16 bytes
+> > > [    0.000000] Zone ranges:
+> > > [    0.000000]   Normal   [mem 0x0000000000000000-0x0000000007ffffff]
+> > > [    0.000000] Movable zone start for each node
+> > > [    0.000000] Early memory node ranges
+> > > [    0.000000]   node   0: [mem 0x0000000000000000-0x0000000007ffffff]
+> > > [    0.000000] Initmem setup node 0 [mem 0x0000000000000000-0x0000000=
+007ffffff]
+> > > [    0.000000] percpu: Embedded 11 pages/cpu s13328 r8192 d23536 u450=
+56
+> > > [    0.000000] Built 1 zonelists, mobility grouping on.  Total pages:=
+ 32480
+> > > [    0.000000] Kernel command line: earlycon
+> > > [    0.000000] Dentry cache hash table entries: 16384 (order: 4, 65536
+> > > bytes, linear)
+> > > [    0.000000] Inode-cache hash table entries: 8192 (order: 3, 32768
+> > > bytes, linear)
+> > > [    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
+> > > [    0.000000] Memory: 108656K/131072K available (6902K kernel code,
+> > > 613K rwdata, 1404K rodata, 11872K init, 215K bss, 22416K reserved, 0K
+> > > cma-reserved)
+> > > [    0.000000] SLUB: HWalign=3D64, Order=3D0-3, MinObjects=3D0, CPUs=
+=3D2, Nodes=3D1
+> > > [    0.000000] rcu: Hierarchical RCU implementation.
+> > > [    0.000000]  Tracing variant of Tasks RCU enabled.
+> > > [    0.000000] rcu: RCU calculated value of scheduler-enlistment delay
+> > > is 10 jiffies.
+> > > [    0.000000] NR_IRQS: 256
+> > > [    0.000000] irq_bcm6345_l1: registered BCM6345 L1 intc (IRQs: 128)
+> > > [    0.000000] irq_bcm6345_l1:   CPU0 (irq =3D 2)
+> > > [    0.000000] irq_bcm6345_l1:   CPU1 (irq =3D 3)
+> > > [    0.000000] brcm,bcm63268 detected @ 400 MHz
+> > > [    0.000000] clocksource: MIPS: mask: 0xffffffff max_cycles:
+> > > 0xffffffff, max_idle_ns: 9556302233 ns
+> > > [    0.000002] sched_clock: 32 bits at 200MHz, resolution 5ns, wraps
+> > > every 10737418237ns
+> > > [    0.008292] Calibrating delay loop... 398.13 BogoMIPS (lpj=3D19906=
+56)
+> > > [    0.074683] pid_max: default: 32768 minimum: 301
+> > > [    0.081788] Mount-cache hash table entries: 1024 (order: 0, 4096
+> > > bytes, linear)
+> > > [    0.089319] Mountpoint-cache hash table entries: 1024 (order: 0,
+> > > 4096 bytes, linear)
+> > > [    0.106094] rcu: Hierarchical SRCU implementation.
+> > > [    0.112665] smp: Bringing up secondary CPUs ...
+> > > [    0.119348] SMP: Booting CPU1...
+> > > [    8.330979] Primary instruction cache 64kB, VIPT, 4-way, linesize =
+16 bytes.
+> > > [    8.331017] Primary data cache 32kB, 2-way, VIPT, cache aliases,
+> > > linesize 16 bytes
+> > > [    8.331294] CPU1 revision is: 0002a080 (Broadcom BMIPS4350)
+> > > [    0.182819] Synchronize counters for CPU 1:
+> > > [    0.203500] SMP: CPU1 is running
+> > > [    0.203512] done.
+> > > [    0.213401] smp: Brought up 1 node, 2 CPUs
+> > > [    0.228870] clocksource: jiffies: mask: 0xffffffff max_cycles:
+> > > 0xffffffff, max_idle_ns: 19112604462750000 ns
+> > > [    0.239058] futex hash table entries: 512 (order: 3, 32768 bytes, =
+linear)
+> > > [    0.246439] pinctrl core: initialized pinctrl subsystem
+> > > [    0.254917] NET: Registered PF_NETLINK/PF_ROUTE protocol family
+> > > [    0.312700] clocksource: Switched to clocksource MIPS
+> > > [    0.321061] NET: Registered PF_INET protocol family
+> > > [    0.326879] IP idents hash table entries: 2048 (order: 2, 16384
+> > > bytes, linear)
+> > > [    0.335972] tcp_listen_portaddr_hash hash table entries: 512
+> > > (order: 0, 6144 bytes, linear)
+> > > [    0.344721] Table-perturb hash table entries: 65536 (order: 6,
+> > > 262144 bytes, linear)
+> > > [    0.352721] TCP established hash table entries: 1024 (order: 0,
+> > > 4096 bytes, linear)
+> > > [    0.360622] TCP bind hash table entries: 1024 (order: 1, 8192 byte=
+s, linear)
+> > > [    0.368005] TCP: Hash tables configured (established 1024 bind 102=
+4)
+> > > [    0.375074] UDP hash table entries: 256 (order: 1, 8192 bytes, lin=
+ear)
+> > > [    0.381862] UDP-Lite hash table entries: 256 (order: 1, 8192 bytes=
+, linear)
+> > > [    0.389762] NET: Registered PF_UNIX/PF_LOCAL protocol family
+> > > [    0.395748] PCI: CLS 0 bytes, default 16
+> > > [    0.403410] workingset: timestamp_bits=3D14 max_order=3D15 bucket_=
+order=3D1
+> > > [    0.426490] squashfs: version 4.0 (2009/01/31) Phillip Lougher
+> > > [    0.432492] jffs2: version 2.2 (NAND) (SUMMARY) (LZMA) (RTIME)
+> > > (CMODE_PRIORITY) (c) 2001-2006 Red Hat, Inc.
+> > > [    0.459472] bcm63xx-power-controller 1000184c.power-controller:
+> > > registered 14 power domains
+> > > [    0.470267] 10000180.serial: ttyS0 at MMIO 0x10000180 (irq =3D 8,
+> > > base_baud =3D 1562500) is a bcm63xx_uart
+> > > [    0.479996] printk: console [ttyS0] enabled
+> > > [    0.479996] printk: console [ttyS0] enabled
+> > > [    0.488651] printk: bootconsole [bcm63xx_uart0] disabled
+> > > [    0.488651] printk: bootconsole [bcm63xx_uart0] disabled
+> > > [    0.533435] bcm2835-rng 10002880.rng: hwrng registered
+> > > [    0.606025] bcm6368_nand 10000200.nand: there is not valid maps for
+> > > state default
+> > > [    0.633977] nand: device found, Manufacturer ID: 0xc2, Chip ID: 0x=
+f1
+> > > [    0.640506] nand: Macronix MX30LF1G18AC
+> > > [    0.644551] nand: 128 MiB, SLC, erase size: 128 KiB, page size:
+> > > 2048, OOB size: 64
+> > > [    0.652359] bcm6368_nand 10000200.nand: detected 128MiB total,
+> > > 128KiB blocks, 2KiB pages, 16B OOB, 8-bit, BCH-4
+> > > [    0.703373] Bad block table not found for chip 0
+> > > [    0.732040] Bad block table not found for chip 0
+> > > [    0.736842] Scanning device for bad blocks
+> > > [    0.832678] CPU 0 Unable to handle kernel paging request at virtual
+> > > address 00000014, epc =3D=3D 8009b300, ra =3D=3D 806cc650
+> > > [    0.843628] Oops[#1]:
+> > > [    0.845958] CPU: 0 PID: 88 Comm: hwrng Not tainted 5.15.111 #0
+> > > [    0.851959] $ 0   : 00000000 00000001 00000008 00000000
+> > > [    0.857358] $ 4   : 81808464 00000064 00000000 00000001
+> > > [    0.862753] $ 8   : 81810000 00001ff0 00001c00 815b8880
+> > > [    0.868146] $12   : 0000b79d 00000000 00000000 00009bb
+> > >
+> > > Please, tell me if you want me to add any debugging to the log.
+> > >
+> > > Best regards,
+> > > =C3=81lvaro.
+> > >
+> > > El mar, 16 may 2023 a las 20:58, Florian Fainelli
+> > > (<f.fainelli@gmail.com>) escribi=C3=B3: =20
+> > >>
+> > >> +William,
+> > >>
+> > >> On 5/16/23 11:55, =C3=81lvaro Fern=C3=A1ndez Rojas wrote: =20
+> > >>> Hi Jaime,
+> > >>>
+> > >>> I've reproduced the issue on a Comtrend VR-3032u (MX30LF1G08AA). Af=
+ter
+> > >>> forcing it to check block protection (it's not supported on that
+> > >>> device), the NAND controller stops reading/writing anything.
+> > >>>
+> > >>> @Florian is it possible that low level ops (GET_FEATURES/SET_FEATUR=
+ES)
+> > >>> aren't supported on BCM63268 NAND controllers and this is causing t=
+he
+> > >>> issue? =20
+> > >>
+> > >> Yes, this looks like what we have seen as well even with newer NAND
+> > >> controllers actually. Would it be possible to obtain a full log from
+> > >> either of you?
+> > >>
+> > >> William, is this something you have seen before as well?
+> > >> =20
+> > No, I haven't seen such issue before.  It is possible I didn't have this
+> >   Macronix parts in my board. If I can find a board with Macronix part,
+> > I will try it. But we don't use this feature and don't connect the PT
+> > pin in our reference board which means the PT feature is disabled in the
+> > nand part.
+> >
+> > Alvaro, Do you know if your 63268 board has PT pin connected or not? =20
+>=20
+> No, I don't know if PT pin is connected.
+> I would have to open the case and check, but judging from the
+> following image I would say it's not connected:
+> https://openwrt.org/_media/media/sercomm/h500s/h500s-nand.jpg
+>=20
+> > Can you check if the macronix's lock and unlock function being calling
+> > before the hang?   Or is it just get/set feature function getting called
+> > to determine PT is supported?   The get/set feature function should work
+> > as they are used by other pathes =20
+>=20
+> No, the macronix's lock/unlock functions aren't called before the hang.
+> In fact, if I comment out the nand_get_features call and replace it
+> with ret =3D 1 it doesn't hang:
+> https://github.com/torvalds/linux/blob/f1fcbaa18b28dec10281551dfe6ed3a3ed=
+80e3d6/drivers/mtd/nand/raw/nand_macronix.c#L229-L230
 
-Kind regards,
+This does not make any sense to me. Jaime, can you test with the exact
+same MX30LF1G18AC chip? I'm wondering whether the bug comes from the
+chip or the controller side.
 
+=C3=81lvaro, any chances you can try with a mainline kernel rather than
+OpenWRT's?
 
--- 
-Alexis Lothoré, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+Thanks,
+Miqu=C3=A8l
