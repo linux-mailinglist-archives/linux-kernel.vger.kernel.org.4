@@ -2,142 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18B7A70BA40
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 12:35:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDB0770BA41
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 12:41:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232089AbjEVKfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 06:35:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35870 "EHLO
+        id S231461AbjEVKli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 06:41:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230375AbjEVKfs (ORCPT
+        with ESMTP id S230362AbjEVKlf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 06:35:48 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08781E0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 03:35:47 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f608074b50so2375865e9.0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 03:35:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684751745; x=1687343745;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=65v00oth8llyyqlj2COYxgZ3LDV9ng4IjXfVfrT+DXI=;
-        b=SwWpEXFk78PIWRx32ndx0QUvSAT3CtEOcSPlQgOLLzsAw+2Lp0pjN8uGsvh4UgxUPT
-         mznc47ng/wwvMbyB/go0gU9h1x18e3CP1cPz2CP7Vbmjz5JnO+UdUd1xTzID3KWtjJ+P
-         Fxo5pvags9Pt+T6BGWLs+SarBSYSnkxaL3HKWxnJoFLf9kCzr926esXEEnXuJZruBzGS
-         AvVf87PBM++3jPhsa3FHRPCCERVRptVL197kp2hOZ83a707P9RtppbSlejwTaRERt2U/
-         KdwvHY316asApO92oZNvC8nlQ2VgSOXWtRQUaKoobc3E+po6gnhZ3LDT2wq3HncN+c9O
-         aA0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684751745; x=1687343745;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=65v00oth8llyyqlj2COYxgZ3LDV9ng4IjXfVfrT+DXI=;
-        b=Vd4+DE4iSsTa+A4ldEb8ASPRDpt+o8iYxgFKGSHPmJYIATDZQg9x3QF/kQVrcVHwOG
-         SlGb63n8dM1cPSSerMGWPB7eYSo1cv7SSyshsOS2sBswKPeFw5qNU/GhiamaXq4BPSBx
-         GZSpzLQ0ogVVndDSXDu7TfBGyTOmIOaHQy9x0MRauHqLv0cP1m7rjndwoGodsCFAMkJD
-         mN2D8WwTvZA2edL+M/dIgx/hSiEB+j5GEWxul6yY0A/5ee58Uy/1vMEhfYwh6415LFWZ
-         ozXy1VKY8LOZO/l7sCazOZJ1JwFDqj+XLzgVE0spWPSDXiSSdT/6Y6YfNolFuUh4iPEq
-         C1jg==
-X-Gm-Message-State: AC+VfDyvhXX2vxy1VHknvl/IFP5Ou8HNSKMJsHPTaXiVK4dpYhKF5sLn
-        WsExWryH/QbI8IF2HjCwjJILMA==
-X-Google-Smtp-Source: ACHHUZ58cQ1Fp60cWARv/F4iudu6wycgwjig++ulhlcmrNm7mtLTOXyXP1IV38WDno3DYTacz/xYbw==
-X-Received: by 2002:a05:600c:c6:b0:3f6:692:5607 with SMTP id u6-20020a05600c00c600b003f606925607mr869487wmm.40.1684751745480;
-        Mon, 22 May 2023 03:35:45 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id c4-20020a7bc004000000b003f42461ac75sm11155349wmb.12.2023.05.22.03.35.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 03:35:43 -0700 (PDT)
-Date:   Mon, 22 May 2023 13:35:38 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Rain River <rain.1986.08.12@gmail.com>,
-        Zhu Yanjun <zyjzyj2000@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Ayaz Abdulla <aabdulla@nvidia.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH net] forcedeth: Fix an error handling path in nv_probe()
-Message-ID: <f4296d23-83ce-4147-894a-3e5640cdf87c@kili.mountain>
-References: <355e9a7d351b32ad897251b6f81b5886fcdc6766.1684571393.git.christophe.jaillet@wanadoo.fr>
- <ZGtAIJZ3QzkBJgHI@corigine.com>
+        Mon, 22 May 2023 06:41:35 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30464DB
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 03:41:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1684752082; i=efault@gmx.de;
+        bh=162mx++aiaIC4AFXOHEHGhjNzTocOAtT1cfLol+uyh8=;
+        h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
+        b=W5TGHberS3V51Ns2UfZ26zN/AHhaiZIs0ENtUo0GrlildhPWU2OEdnnTiODUQAeDS
+         6sYYNlxA5lLapR2mZWKjwxhSJ18fVyj8wxwKpJblTHdWeX2NLPmAl6cJqkNaFUkCEn
+         Zko7nzfo5SHA58w72mw5AHw44tUt/Hx/ftPnzllPYIUh8YKIK9A8Q/zkYuWITgT8z5
+         u9AL5JJ6Iid8BMjeUsNsXwaPh1rYWx8XUaeyTJNBtdhoF3hs9Jvk12QYqDRlE1JlUp
+         poIxdsvU0hAu2YrestOA1WUGcXcWhBEjtdrSHYeB4PihKnbvjArMfVp3EZkCaqrxQX
+         ut0E1r0S0cqPA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from homer.fritz.box ([185.191.219.131]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N0oG5-1qNx710RtN-00wnMZ; Mon, 22
+ May 2023 12:41:22 +0200
+Message-ID: <d7fa9ffe0e6cd546b8ff3826379c2cf78e5342b6.camel@gmx.de>
+Subject: Re: r8169: disable ASPM during NAPI poll locking changes --> BUG:
+ Invalid wait context --> PREEMPT_RT pain
+From:   Mike Galbraith <efault@gmx.de>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Date:   Mon, 22 May 2023 12:41:21 +0200
+In-Reply-To: <20230522080604.MgUGcyeU@linutronix.de>
+References: <e55be0ae115ad6494ebb48fecd03e5c2fe528230.camel@gmx.de>
+         <28727b435c143f15feddffb4c29095fee2500dff.camel@gmx.de>
+         <20230522080604.MgUGcyeU@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZGtAIJZ3QzkBJgHI@corigine.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:TAylgSoyLoI+cbCltsiawQH000B+vqlIkB+MtmwXqagH3DJA9BG
+ MElSg8P2j8qSQTqo9CBXAIsCwGIIsFZWBce1BZBEDv+h/lCxKQyEUjWf8HL91Z7f2qSr/X5
+ dICWbr1vElr0+bxaYXbc1LR3lMxvFZmgcxoDFNjksEZ+q5bedSzhC0CShZgWDOXI/X/rEKW
+ 42pD/JV7Kjj7W8bwHZuYw==
+UI-OutboundReport: notjunk:1;M01:P0:8NjwXDj9Ajw=;6hXmc9tYXbQV5is+P+p15s8OZds
+ osuXCGr16efZNffEq4Wor+FLJvabhAB2Nqcf5iYCZeCK2LnRcqseVmvoDOnkVkut2S/u8Xdph
+ 65BtUVs9veBLlgGAG2XFRQJUezxwUY8at+sNeFxJICwr0cCTgltjl2G5Frj5xOSAyRYcq5n/T
+ 5NM6b7uxd+w74uJnL6v0ivO8Y5/EDGNVnys5rXTvKNsiP1JsUmoS7cYHuI/zeLRGvss3uBuus
+ GsUC49s4hCcBf32Z1RvbBiK8dTlWHdNdDx4KuDZ3ZMt/HND5WlRK0U0AQOgmSpa8cl+osBkTP
+ 8xXgmePm4QcZUu+UN/yBTOLTsJ4UxbTq7/t3E2bdeLefhjmt5ISnSLmlXCCxnRr5Wuu8NPVUb
+ KR3KRDX/6JFXNr9zU+rGr3FBb2eYXc7MiM9zppAq5mN8qD03VEuD1MlsTUWGXr3zTh2ZTUFFZ
+ nTDrlY6S0mzE75og0s8PUhr5Nj9XUnJrgkDQ/SIW3LWi60MIo4yiKIftIehi6heqsSfdAphuP
+ CTu0gj4y34VsFSIMgOsWTK1Je4ZCNZBhGDV+yFghzLFVIzrN67WiGY2L+SsrKBkVkrOWSVwqq
+ HEKtksod5CS0lMgD3z6hIA+EgQUu3/17cAvZydhco1cpBRQ2q59sCCbx7NmoAHw7/5ujFyssl
+ 4yMaFcdbBx9ptKpMrA+oPpyVTG5MKfBzP32Hdw37Q2q+QdK+OziT2C+qY1e7fawS6MREZ/nf3
+ bMOclQBPDKtrKqQSbzSZTlW6baFqfKR/yQI3NV9odr7DyP3e8lOTLgS/yMnLaOd7loH8tk9ye
+ EJafH/seAyNK+GoHg2Vxbak+DIxIIqgCOqo7Y6goLAcUDUb83079ovOseEN5/9bILVHoJelM+
+ bddv9XrIeKg5bThm1FthxxrHRM62T7l4zX5zW/dctjwQuf4eEKZky1S6SRnRRi057D52kEPzH
+ 9wfRT7Un3gpb41CAGoMSg65+7ME=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 12:12:48PM +0200, Simon Horman wrote:
-> On Sat, May 20, 2023 at 10:30:17AM +0200, Christophe JAILLET wrote:
-> > If an error occures after calling nv_mgmt_acquire_sema(), it should be
-> > undone with a corresponding nv_mgmt_release_sema() call.
-> 
-> nit: s/occures/occurs/
-> 
-> > 
-> > Add it in the error handling path of the probe as already done in the
-> > remove function.
-> 
-> I was going to ask what happens if nv_mgmt_acquire_sema() fails.
-> Then I realised that it always returns 0.
-> 
-> Perhaps it would be worth changing it's return type to void at some point.
+On Mon, 2023-05-22 at 10:06 +0200, Sebastian Andrzej Siewior wrote:
+> On 2023-05-21 16:27:10 [+0200], Mike Galbraith wrote:
+> > On Sun, 2023-05-21 at 08:03 +0200, Mike Galbraith wrote:
+> > > Greetings,
+> > >
+> > > The locks added to prep for $subject induce invalid context moaning =
+due
+> > > to not being raw locks, but if I do that, the hold time does very ba=
+d
+> > > things to RT.
+> >
+> > The locks aren't really 160us horrible. The GPU was enabled (oops),
+> > nouveau then makes box horrible for RT (and graphics:).=C2=A0 With GPU
+> > turned back off, the largest trace I saw was 77us, which jibes pretty
+> > well with new max of low to mid 50s without ftrace running, or up a ta=
+d
+> > over 20us for this now pretty old commodity i7 desktop box.
 >
+> So you are saying it is all good?
 
-What? No?  It returns true on success and false on failure.
+I wouldn't say good, but not the sky is falling 160us bad.
 
-drivers/net/ethernet/nvidia/forcedeth.c
-  5377  static int nv_mgmt_acquire_sema(struct net_device *dev)
-  5378  {
-  5379          struct fe_priv *np = netdev_priv(dev);
-  5380          u8 __iomem *base = get_hwbase(dev);
-  5381          int i;
-  5382          u32 tx_ctrl, mgmt_sema;
-  5383  
-  5384          for (i = 0; i < 10; i++) {
-  5385                  mgmt_sema = readl(base + NvRegTransmitterControl) & NVREG_XMITCTL_MGMT_SEMA_MASK;
-  5386                  if (mgmt_sema == NVREG_XMITCTL_MGMT_SEMA_FREE)
-  5387                          break;
-  5388                  msleep(500);
-  5389          }
-  5390  
-  5391          if (mgmt_sema != NVREG_XMITCTL_MGMT_SEMA_FREE)
-  5392                  return 0;
-  5393  
-  5394          for (i = 0; i < 2; i++) {
-  5395                  tx_ctrl = readl(base + NvRegTransmitterControl);
-  5396                  tx_ctrl |= NVREG_XMITCTL_HOST_SEMA_ACQ;
-  5397                  writel(tx_ctrl, base + NvRegTransmitterControl);
-  5398  
-  5399                  /* verify that semaphore was acquired */
-  5400                  tx_ctrl = readl(base + NvRegTransmitterControl);
-  5401                  if (((tx_ctrl & NVREG_XMITCTL_HOST_SEMA_MASK) == NVREG_XMITCTL_HOST_SEMA_ACQ) &&
-  5402                      ((tx_ctrl & NVREG_XMITCTL_MGMT_SEMA_MASK) == NVREG_XMITCTL_MGMT_SEMA_FREE)) {
-  5403                          np->mgmt_sema = 1;
-  5404                          return 1;
-                                ^^^^^^^^^
-Success path.
+> I've been looking at the r8169 the other day and it seemed all good
+> since it was only scheduling workqueues and NAPI. But now I see this
+> mac_ocp_lock + config25_lock which are acquire in hardirq context but
+> can't. This needs to be taken care.
 
-  5405                  } else
-  5406                          udelay(50);
-  5407          }
-  5408  
-  5409          return 0;
-  5410  }
+I did a patch converting the locks, but didn't post it hoping maybe
+those locks weren't really really needed.  It doesn't matter for my
+box, as it doesn't do anything but give RT chances to trip over bugs.
 
-regards,
-dan carpenter
-
+	-Mike
