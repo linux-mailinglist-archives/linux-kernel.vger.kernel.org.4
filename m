@@ -2,202 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFE8270B778
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:20:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B80DA70B758
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:14:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232013AbjEVIUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 04:20:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52170 "EHLO
+        id S230496AbjEVION (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 04:14:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232186AbjEVIT7 (ORCPT
+        with ESMTP id S229729AbjEVIOM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 04:19:59 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C51C2
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 01:19:56 -0700 (PDT)
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1q10lk-0000SG-Ab; Mon, 22 May 2023 10:19:52 +0200
-Received: from pengutronix.de (unknown [172.20.34.65])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 68B9D1C9699;
-        Mon, 22 May 2023 08:13:07 +0000 (UTC)
-Date:   Mon, 22 May 2023 10:13:06 +0200
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-Cc:     Frank Jungclaus <frank.jungclaus@esd.eu>,
-        linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
-        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/6] can: esd_usb: Make use of existing kernel macros
-Message-ID: <20230522-shine-attitude-09ec9aefce64-mkl@pengutronix.de>
-References: <20230519195600.420644-1-frank.jungclaus@esd.eu>
- <20230519195600.420644-2-frank.jungclaus@esd.eu>
- <CAMZ6Rq+V4HRLa2bzADnsvaKHuCwi6O5jKo39mhon_+OnMDEJbQ@mail.gmail.com>
+        Mon, 22 May 2023 04:14:12 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53024B0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 01:14:11 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1684743249;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mnTuNYqtea/wqsyRqkyQFOYLTYsaJ3v9g3ieEEK162A=;
+        b=WJ0waR8tuxofc2BBQx9ZogV075ptotLz7HjIA1mgfZHfmSKB0f2+/Rt4lMUPmJBPW8IYZL
+        SFyB87BPgJ//XEG9wRIt3XOC/aYTWP4QJICD8ym9fLe1+tkejq1s0swg6oBPY2RHRObRHK
+        2pR5GNKcsWO/+JmANIY6MSvwvbrhLbis//mu8KuarnYcVY5UC8oL8cC1+XOehwLjuGK255
+        mP5y8PGY4jOKT3QIaQwQPTIVEWr0mStsh9nnWXIzsztb87sTkH7ehxpv7J3LuTdIeMlGff
+        EoM61I2hHrVaP1E5VPAsvSI8xPrI3awvEHyUk2VZdQAvYYKwsW3ysuntSmTVJA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1684743249;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mnTuNYqtea/wqsyRqkyQFOYLTYsaJ3v9g3ieEEK162A=;
+        b=vfaDdpbJgRxBvsqf5x7986D6qhCoob6IScLazDVoZTyjzmeG1/2KOa78gmzog4PSJLQUS+
+        4acd5z0MF5t0wiCQ==
+To:     Feng Tang <feng.tang@intel.com>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>, paulmck@kernel.org,
+        rui.zhang@intel.com, x86@kernel.org, linux-kernel@vger.kernel.org
+Cc:     Feng Tang <feng.tang@intel.com>
+Subject: Re: [PATCH RFC] x86/tsc: Make recalibration default on for
+ TSC_KNOWN_FREQ cases
+In-Reply-To: <20230522033018.1276836-1-feng.tang@intel.com>
+References: <20230522033018.1276836-1-feng.tang@intel.com>
+Date:   Mon, 22 May 2023 10:14:08 +0200
+Message-ID: <87h6s4ye9b.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2cbxal2xzghzgpqi"
-Content-Disposition: inline
-In-Reply-To: <CAMZ6Rq+V4HRLa2bzADnsvaKHuCwi6O5jKo39mhon_+OnMDEJbQ@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, May 22 2023 at 11:30, Feng Tang wrote:
+> Commit a7ec817d5542 ("x86/tsc: Add option to force frequency
+> recalibration with HW timer") was added to handle cases that the
+> firmware has bug and provides a wrong TSC frequency number, and it
+> is optional given that this kind of firmware issue rarely happens
+> (Paul reported once [1]).
+>
+> But Rui reported that some Sapphire Rapids platform met this issue
+> again recently, and as firmware is also a kind of 'software' which
+> can't be bug free, make the recalibration default on. When the
+> values from firmware and HW timer's calibration have big gap,
+> raise a warning and let vendor to check which side is broken.
 
---2cbxal2xzghzgpqi
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Sure firmware can have bugs, but if firmware validation does not even
+catch such a trivially to detect bug, then their validation is nothing
+else than rubber stamping. Seriously.
 
-On 21.05.2023 18:16:13, Vincent MAILHOL wrote:
-> Thanks for the patch.
->=20
-> On Sat. 20 May 2023 at 04:57, Frank Jungclaus <frank.jungclaus@esd.eu> wr=
-ote:
-> > Make use of existing kernel macros:
-> > - Use the unit suffixes from linux/units.h for the controller clock
-> > frequencies
-> > - Use the BIT() and the GENMASK() macro to set specific bits in some
-> >   constants
-> > - Use CAN_MAX_DLEN (instead of directly using the value 8) for the
-> > maximum CAN payload length
-> >
-> > Additionally:
-> > - Spend some commenting for the previously changed constants
-> > - Add the current year to the copyright notice
-> > - While adding the header linux/units.h to the list of include files
-> > also sort that list alphabetically
-> >
-> > Suggested-by: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
-> > Link: https://lore.kernel.org/all/CAMZ6RqLaDNy-fZ2G0+QMhUEckkXLL+ZyELVS=
-DFmqpd++aBzZQg@mail.gmail.com/
-> > Link: https://lore.kernel.org/all/CAMZ6RqKdg5YBufa0C+ttzJvoG=3D9yuti-8A=
-mthCi4jBbd08JEtw@mail.gmail.com/
-> > Suggested-by: Marc Kleine-Budde <mkl@pengutronix.de>
-> > Link: https://lore.kernel.org/all/20230518-grower-film-ea8b5f853f3e-mkl=
-@pengutronix.de/
-> > Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
-> > ---
-> >  drivers/net/can/usb/esd_usb.c | 40 ++++++++++++++++++-----------------
-> >  1 file changed, 21 insertions(+), 19 deletions(-)
-> >
-> > diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_us=
-b.c
-> > index d33bac3a6c10..32354cfdf151 100644
-> > --- a/drivers/net/can/usb/esd_usb.c
-> > +++ b/drivers/net/can/usb/esd_usb.c
-> > @@ -3,19 +3,20 @@
-> >   * CAN driver for esd electronics gmbh CAN-USB/2 and CAN-USB/Micro
-> >   *
-> >   * Copyright (C) 2010-2012 esd electronic system design gmbh, Matthias=
- Fuchs <socketcan@esd.eu>
-> > - * Copyright (C) 2022 esd electronics gmbh, Frank Jungclaus <frank.jun=
-gclaus@esd.eu>
-> > + * Copyright (C) 2022-2023 esd electronics gmbh, Frank Jungclaus <fran=
-k.jungclaus@esd.eu>
-> >   */
-> > +#include <linux/can.h>
-> > +#include <linux/can/dev.h>
-> > +#include <linux/can/error.h>
-> > +
-> >  #include <linux/ethtool.h>
-> > -#include <linux/signal.h>
-> > -#include <linux/slab.h>
-> >  #include <linux/module.h>
-> >  #include <linux/netdevice.h>
-> > +#include <linux/signal.h>
-> > +#include <linux/slab.h>
-> > +#include <linux/units.h>
-> >  #include <linux/usb.h>
-> >
-> > -#include <linux/can.h>
-> > -#include <linux/can/dev.h>
-> > -#include <linux/can/error.h>
-> > -
-> >  MODULE_AUTHOR("Matthias Fuchs <socketcan@esd.eu>");
-> >  MODULE_AUTHOR("Frank Jungclaus <frank.jungclaus@esd.eu>");
-> >  MODULE_DESCRIPTION("CAN driver for esd electronics gmbh CAN-USB/2 and =
-CAN-USB/Micro interfaces");
-> > @@ -27,8 +28,8 @@ MODULE_LICENSE("GPL v2");
-> >  #define USB_CANUSBM_PRODUCT_ID 0x0011
-> >
-> >  /* CAN controller clock frequencies */
-> > -#define ESD_USB2_CAN_CLOCK     60000000
-> > -#define ESD_USBM_CAN_CLOCK     36000000
-> > +#define ESD_USB2_CAN_CLOCK     (60 * MEGA) /* Hz */
-> > +#define ESD_USBM_CAN_CLOCK     (36 * MEGA) /* Hz */
-> >
-> >  /* Maximum number of CAN nets */
-> >  #define ESD_USB_MAX_NETS       2
-> > @@ -42,20 +43,21 @@ MODULE_LICENSE("GPL v2");
-> >  #define CMD_IDADD              6 /* also used for IDADD_REPLY */
-> >
-> >  /* esd CAN message flags - dlc field */
-> > -#define ESD_RTR                        0x10
-> > +#define ESD_RTR        BIT(4)
-> > +
-> >
-> >  /* esd CAN message flags - id field */
-> > -#define ESD_EXTID              0x20000000
-> > -#define ESD_EVENT              0x40000000
-> > -#define ESD_IDMASK             0x1fffffff
-> > +#define ESD_EXTID      BIT(29)
-> > +#define ESD_EVENT      BIT(30)
-> > +#define ESD_IDMASK     GENMASK(28, 0)
-> >
-> >  /* esd CAN event ids */
-> >  #define ESD_EV_CAN_ERROR_EXT   2 /* CAN controller specific diagnostic=
- data */
-> >
-> >  /* baudrate message flags */
-> > -#define ESD_USB_UBR            0x80000000
-> > -#define ESD_USB_LOM            0x40000000
-> > -#define ESD_USB_NO_BAUDRATE    0x7fffffff
-> > +#define ESD_USB_LOM    BIT(30) /* 0x40000000, Listen Only Mode */
-> > +#define ESD_USB_UBR    BIT(31) /* 0x80000000, User Bit Rate (controlle=
-r BTR) in bits 0..27 */
->                                      ^^^^^^^^^^
->=20
-> As pointented by Marc, no need for redundant comment with the hexadecimal=
- value.
+Are any of these affected platforms shipping already or is this just
+Intel internal muck?
 
-Fixed while applying.
+> One downside is, many VMs also has X86_FEATURE_TSC_KNOWN_FREQ set,
+> and they will also do this recalibration.
 
-Marc
+It's also pointless for those SoCs which lack legacy hardware.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+So why do you force this on everyone?
 
---2cbxal2xzghzgpqi
-Content-Type: application/pgp-signature; name="signature.asc"
+Thanks,
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRrJBAACgkQvlAcSiqK
-BOgE6wf9EQrIh6qzY5Yb9XkZa4oiqJ5fvfCG3f8pY/pJk2Jr5XqsJE7oC4eoANpG
-zoHN/dQoKr7MzRCLJx4rXc47zPuOOF5BertZPX4Q/fnqDOJtLcdVQsbi5Nt0dVMO
-m1PU2uf4Ts53L7RQZYV8eZSO5FvZx1HSrw8Dwn9zXtwFENwuqWZ1f1oDfw2DuRvb
-ecDvfwvbmde8dxRlVuOS3XrBYN9FerOX19yn/o+yfjLrLjZSOoRtf7ZZ989JDxQP
-Qtrti1U/0aUSZEG1uS7kPo59kR71rNPMtvqhrTwlpip2wxyXhkks6QAv18cMsLX5
-/pe4a6NeYvS2os2En/JKtxM2+b0d7g==
-=4YTh
------END PGP SIGNATURE-----
-
---2cbxal2xzghzgpqi--
+        tglx
