@@ -2,372 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A11570C0C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 16:15:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAC6570C0CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 16:18:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233470AbjEVOOz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 10:14:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46110 "EHLO
+        id S233300AbjEVOR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 10:17:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbjEVOOx (ORCPT
+        with ESMTP id S230416AbjEVORy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 10:14:53 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D6EA3;
-        Mon, 22 May 2023 07:14:50 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id E517440004;
-        Mon, 22 May 2023 14:14:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1684764889;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
+        Mon, 22 May 2023 10:17:54 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD74AA;
+        Mon, 22 May 2023 07:17:53 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id A78371FF5E;
+        Mon, 22 May 2023 14:17:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1684765071; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=e73NFB0LH5KzeW3SzDSh0SMfVYWak5UGN49zHTPP/gM=;
-        b=LyUnlyWMLMc8Ho+cynrdVXFNrQBEcIXG4ktfDDyu392QRLvpkYLL9s8o06RyEXqw1ZvRJF
-        OloNNsifgs7dWMb6pvdCkkyEIBPbcZksDFRrdQoSLJaYW6Dq8Uuc+UPBdn3Nrh+4A6SDV+
-        gQMlcaic5ce1lo+fOPgRyIOKUIPazAHnL1x63Zty5yHrgcBtbIT/r3Y8pHAHBrIAJ7DlpP
-        F8v89mmB1YnkpiypBcZvpoBG80fnGZCvHnpJ0SM5pbQpmj81HSviJdijJif+vdBikLSLNc
-        R4SOGctawrmzXZwbl99mCt4yXTbqCAHIoLmY3rS9IgYMmVPJquNJLuqvA6h4+Q==
-Date:   Mon, 22 May 2023 16:14:46 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Cc:     Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linaro-mm-sig@lists.linaro.org>,
-        Mason Yang <masonccyang@mxic.com.tw>,
-        Boris Brezillon <boris.brezillon@collabora.com>,
-        Jaime Liao <jaimeliao.tw@gmail.com>,
-        Jaime Liao <jaimeliao@mxic.com.tw>
-Subject: Re: [RESEND PATCH v3] mtd: rawnand: macronix: OTP access for
- MX30LFxG18AC
-Message-ID: <20230522161446.16d1f307@xps-13>
-In-Reply-To: <aa67ee8b-898b-319b-f167-b554700842b3@sberdevices.ru>
-References: <20230511152120.3297853-1-AVKrasnov@sberdevices.ru>
-        <c873b5a9-17ad-767c-5b20-35a49ab2bd40@sberdevices.ru>
-        <aa67ee8b-898b-319b-f167-b554700842b3@sberdevices.ru>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        bh=aMXOv017gA7OC8h0l1Op8lsHVE3DpZGFJ59TiCVlzmA=;
+        b=u468hUflZ0ck1KUSCJByXIlhSHB4Qw5a+46o+U9MQWezLnYkWI0Xv85naNjBxDi3fKLPLi
+        FE4DEGSBte1XqlfFA/u3G1vPF6gBzpNhqeP+mOr3vRkGOOqIT1ziE+XbjFcoZpBynKOxtJ
+        su6rM+Iv39CgLAOX071bPd5I+iE7V4I=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 170C913336;
+        Mon, 22 May 2023 14:17:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id RorcA495a2RqGQAAMHmgww
+        (envelope-from <jgross@suse.com>); Mon, 22 May 2023 14:17:51 +0000
+Message-ID: <0cd3899b-cf3b-61c1-14ae-60b6b49d14ab@suse.com>
+Date:   Mon, 22 May 2023 16:17:50 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v6 00/16] x86/mtrr: fix handling with PAT but without MTRR
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-hyperv@vger.kernel.org, linux-doc@vger.kernel.org,
+        mikelley@microsoft.com, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org, Jonathan Corbet <corbet@lwn.net>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20230502120931.20719-1-jgross@suse.com>
+ <20230509201437.GFZFqprc6otRejDPUt@fat_crate.local>
+ <20230509233641.GGZFrZCTDH7VwUMp5R@fat_crate.local>
+ <20230510133024.GBZFuccC1FxIZNKL+8@fat_crate.local>
+ <4c47a11c-0565-678d-3467-e01c5ec16600@suse.com>
+ <20230511163208.GDZF0YiOfxQhSo4RDm@fat_crate.local>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <20230511163208.GDZF0YiOfxQhSo4RDm@fat_crate.local>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------n0B4FE3QHZoi0kCIT4NnqRK6"
+X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arseniy,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------n0B4FE3QHZoi0kCIT4NnqRK6
+Content-Type: multipart/mixed; boundary="------------0FQRRT0t3Hqeswcs3KGFjuki";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: linux-kernel@vger.kernel.org, x86@kernel.org,
+ linux-hyperv@vger.kernel.org, linux-doc@vger.kernel.org,
+ mikelley@microsoft.com, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>, "K. Y. Srinivasan" <kys@microsoft.com>,
+ Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
+ Dexuan Cui <decui@microsoft.com>,
+ Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+ xen-devel@lists.xenproject.org, Jonathan Corbet <corbet@lwn.net>,
+ Andy Lutomirski <luto@kernel.org>, Peter Zijlstra <peterz@infradead.org>
+Message-ID: <0cd3899b-cf3b-61c1-14ae-60b6b49d14ab@suse.com>
+Subject: Re: [PATCH v6 00/16] x86/mtrr: fix handling with PAT but without MTRR
+References: <20230502120931.20719-1-jgross@suse.com>
+ <20230509201437.GFZFqprc6otRejDPUt@fat_crate.local>
+ <20230509233641.GGZFrZCTDH7VwUMp5R@fat_crate.local>
+ <20230510133024.GBZFuccC1FxIZNKL+8@fat_crate.local>
+ <4c47a11c-0565-678d-3467-e01c5ec16600@suse.com>
+ <20230511163208.GDZF0YiOfxQhSo4RDm@fat_crate.local>
+In-Reply-To: <20230511163208.GDZF0YiOfxQhSo4RDm@fat_crate.local>
 
-avkrasnov@sberdevices.ru wrote on Mon, 15 May 2023 12:49:50 +0300:
+--------------0FQRRT0t3Hqeswcs3KGFjuki
+Content-Type: multipart/mixed; boundary="------------1qimvhvxGrvQzPahjkpLpV2o"
 
-> Hello @Miquel!
->=20
-> Sorry, but who could review this patch? :) IIUC this logic is very hw spe=
-cific and we need
-> someone who knows it well? I tested this patch on our devices (with alrea=
-dy known Meson NAND
-> controller).
+--------------1qimvhvxGrvQzPahjkpLpV2o
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-+ Jaime, who might test
+T24gMTEuMDUuMjMgMTg6MzIsIEJvcmlzbGF2IFBldGtvdiB3cm90ZToNCj4gT24gV2VkLCBN
+YXkgMTAsIDIwMjMgYXQgMDU6NTM6MTVQTSArMDIwMCwgSnVlcmdlbiBHcm9zcyB3cm90ZToN
+Cj4+IFVyZ2gsIHllcywgdGhlcmUgaXMgc29tZXRoaW5nIG1pc3Npbmc6DQo+Pg0KPj4gZGlm
+ZiAtLWdpdCBhL2FyY2gveDg2L2tlcm5lbC9jcHUvbXRyci9nZW5lcmljLmMgYi9hcmNoL3g4
+Ni9rZXJuZWwvY3B1L210cnIvZ2VuZXJpYy5jDQo+PiBpbmRleCAwMzFmN2VhOGU3MmIuLjk1
+NDRlN2QxM2JiMyAxMDA2NDQNCj4+IC0tLSBhL2FyY2gveDg2L2tlcm5lbC9jcHUvbXRyci9n
+ZW5lcmljLmMNCj4+ICsrKyBiL2FyY2gveDg2L2tlcm5lbC9jcHUvbXRyci9nZW5lcmljLmMN
+Cj4+IEBAIC01MjEsOCArNTIxLDEyIEBAIHU4IG10cnJfdHlwZV9sb29rdXAodTY0IHN0YXJ0
+LCB1NjQgZW5kLCB1OCAqdW5pZm9ybSkNCj4+ICAgICAgICAgIGZvciAoaSA9IDA7IGkgPCBj
+YWNoZV9tYXBfbiAmJiBzdGFydCA8IGVuZDsgaSsrKSB7DQo+PiAgICAgICAgICAgICAgICAg
+IGlmIChzdGFydCA+PSBjYWNoZV9tYXBbaV0uZW5kKQ0KPj4gICAgICAgICAgICAgICAgICAg
+ICAgICAgIGNvbnRpbnVlOw0KPiANCj4gU28gdGhlIGxvb3Agd2lsbCBnbyB0aHJvdWdoIHRo
+ZSBtYXAgdW50aWwuLi4NCj4gDQo+PiAtICAgICAgICAgICAgICAgaWYgKHN0YXJ0IDwgY2Fj
+aGVfbWFwW2ldLnN0YXJ0KQ0KPj4gKyAgICAgICAgICAgICAgIGlmIChzdGFydCA8IGNhY2hl
+X21hcFtpXS5zdGFydCkgew0KPiANCj4gLi4uIGl0IHJlYWNoZXMgdGhlIGZpcnN0IGVudHJ5
+IHdoZXJlIHRoYXQgaXMgdHJ1ZS4NCj4gDQo+PiAgICAgICAgICAgICAgICAgICAgICAgICAg
+dHlwZSA9IHR5cGVfbWVyZ2UodHlwZSwgbXRycl9zdGF0ZS5kZWZfdHlwZSwgdW5pZm9ybSk7
+DQo+IA0KPiB0aGUgQHR5cGUgYXJndW1lbnQgaXMgTVRSUl9UWVBFX0lOVkFMSUQsIGRlZl90
+eXBlIGlzIFdSQkFDSyBzbyB3aGF0DQo+IHRoaXMnbGwgZG8gaXMgc2ltcGx5IGdldCB5b3Ug
+dGhlIGRlZmF1bHQgV1JCQUNLIHR5cGU6DQo+IA0KPiB0eXBlX21lcmdlOg0KPiAgICAgICAg
+ICBpZiAodHlwZSA9PSBNVFJSX1RZUEVfSU5WQUxJRCkNCj4gICAgICAgICAgICAgICAgICBy
+ZXR1cm4gbmV3X3R5cGU7DQo+IA0KPj4gKyAgICAgICAgICAgICAgICAgICAgICAgc3RhcnQg
+PSBjYWNoZV9tYXBbaV0uc3RhcnQ7DQo+PiArICAgICAgICAgICAgICAgICAgICAgICBpZiAo
+ZW5kIDw9IHN0YXJ0KQ0KPj4gKyAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBicmVh
+azsNCj4gDQo+IE5vdyB5b3UgYnJlYWsgaGVyZSBiZWNhdXNlIGVuZCA8PSBzdGFydC4gV2h5
+Pw0KPiANCj4gWW91IGNhbiBqdXN0IGFzIHdlbGwgZG86DQo+IA0KPiAJaWYgKHN0YXJ0IDwg
+Y2FjaGVfbWFwW2ldLnN0YXJ0KSB7DQo+IAkJLyogcmVnaW9uIG5vbi1vdmVybGFwcGluZyB3
+aXRoIHRoZSByZWdpb24gaW4gdGhlIG1hcCAqLw0KPiAJCWlmIChlbmQgPD0gY2FjaGVfbWFw
+W2ldLnN0YXJ0KQ0KPiAJCQlyZXR1cm4gdHlwZV9tZXJnZSh0eXBlLCBtdHJyX3N0YXRlLmRl
+Zl90eXBlLCB1bmlmb3JtKTsNCj4gDQo+IAkJLi4uIHJlc3Qgb2YgdGhlIHByb2Nlc3Npbmcg
+Li4uDQo+IA0KPiBJbiBnZW5lcmFsLCBJIGdldCBpdCB0aGF0IHlvdXIgY29kZSBpcyBzbGlj
+ayBidXQgSSB3YW50IGl0IHRvIGJlDQo+IG1haW50YWluYWJsZSAtIG5vdCBzbGljay4gSSdk
+IGxpa2UgZm9yIHdoZW4gcGVvcGxlIGxvb2sgYXQgdGhpcywgbm90DQo+IGhhdmUgdG8gIGFk
+ZCBhIGJ1bmNoIG9mIGRlYnVnZ2luZyBvdXRwdXQgaW4gb3JkZXIgdG8gc3dhcCB0aGUgd2hv
+bGUNCj4gdGhpbmcgYmFjayBpbnRvIHRoZWlyIGJyYWlucy4NCj4gDQo+IFNvIG10cnJfdHlw
+ZV9sb29rdXAoKSBkZWZpbml0ZWx5IG5lZWRzIGNvbW1lbnRzIGV4cGxhaW5pbmcgd2hhdCBn
+b2VzDQo+IHdoZXJlLg0KPiANCj4gWW91IGNhbiBzZW5kIGl0IGFzIGEgZGlmZiBvbnRvcCAt
+IEknbGwgbWVyZ2UgaXQuDQoNClRoZSBhdHRhY2hlZCBkaWZmIGlzIGZvciBwYXRjaCAxMy4N
+Cg0KDQpKdWVyZ2VuDQoNCg==
+--------------1qimvhvxGrvQzPahjkpLpV2o
+Content-Type: text/x-patch; charset=UTF-8; name="diff.patch"
+Content-Disposition: attachment; filename="diff.patch"
+Content-Transfer-Encoding: base64
 
->=20
-> Thanks, Arseniy
->=20
-> On 11.05.2023 21:21, Arseniy Krasnov wrote:
-> > Cc: Mason Yang <masonccyang@mxic.com.tw> and Boris Brezillon <boris.bre=
-zillon@collabora.com>
-> >=20
-> > On 11.05.2023 18:21, Arseniy Krasnov wrote: =20
-> >> This adds support for OTP area access on MX30LFxG18AC chip series.
-> >>
-> >> Changelog:
-> >>   v1 -> v2:
-> >>   * Add slab.h include due to kernel test robot error.
-> >>   v2 -> v3:
-> >>   * Use 'uint64_t' as input argument for 'do_div()' instead
-> >>     of 'unsigned long' due to kernel test robot error.
-> >>
-> >> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-> >> ---
-> >>  drivers/mtd/nand/raw/nand_macronix.c | 213 +++++++++++++++++++++++++++
-> >>  1 file changed, 213 insertions(+)
-> >>
-> >> diff --git a/drivers/mtd/nand/raw/nand_macronix.c b/drivers/mtd/nand/r=
-aw/nand_macronix.c
-> >> index 1472f925f386..2301f990678e 100644
-> >> --- a/drivers/mtd/nand/raw/nand_macronix.c
-> >> +++ b/drivers/mtd/nand/raw/nand_macronix.c
-> >> @@ -6,6 +6,7 @@
-> >>   * Author: Boris Brezillon <boris.brezillon@free-electrons.com>
-> >>   */
-> >> =20
-> >> +#include <linux/slab.h>
-> >>  #include "linux/delay.h"
-> >>  #include "internals.h"
-> >> =20
-> >> @@ -31,6 +32,20 @@
-> >> =20
-> >>  #define MXIC_CMD_POWER_DOWN 0xB9
-> >> =20
-> >> +#define ONFI_FEATURE_ADDR_30LFXG18AC_OTP	0x90
-> >> +#define MACRONIX_30LFXG18AC_OTP_START_PAGE	0
-> >> +#define MACRONIX_30LFXG18AC_OTP_PAGES		30
-> >> +#define MACRONIX_30LFXG18AC_OTP_PAGE_SIZE	2112
-> >> +#define MACRONIX_30LFXG18AC_OTP_START_BYTE	\
-> >> +	(MACRONIX_30LFXG18AC_OTP_START_PAGE *	\
-> >> +	 MACRONIX_30LFXG18AC_OTP_PAGE_SIZE)
-> >> +#define MACRONIX_30LFXG18AC_OTP_SIZE_BYTES	\
-> >> +	(MACRONIX_30LFXG18AC_OTP_PAGES *	\
-> >> +	 MACRONIX_30LFXG18AC_OTP_PAGE_SIZE)
-> >> +
-> >> +#define MACRONIX_30LFXG18AC_OTP_EN		BIT(0)
-> >> +#define MACRONIX_30LFXG18AC_OTP_LOCKED		BIT(1)
-> >> +
-> >>  struct nand_onfi_vendor_macronix {
-> >>  	u8 reserved;
-> >>  	u8 reliability_func;
-> >> @@ -316,6 +331,203 @@ static void macronix_nand_deep_power_down_suppor=
-t(struct nand_chip *chip)
-> >>  	chip->ops.resume =3D mxic_nand_resume;
-> >>  }
-> >> =20
-> >> +static int macronix_30lfxg18ac_get_otp_info(struct mtd_info *mtd, siz=
-e_t len,
-> >> +					    size_t *retlen,
-> >> +					    struct otp_info *buf)
-> >> +{
-> >> +	if (len < sizeof(*buf))
-> >> +		return -EINVAL;
-> >> +
-> >> +	/* Don't know how to check that OTP is locked. */
+ZGlmZiAtLWdpdCBhL2FyY2gveDg2L2tlcm5lbC9jcHUvbXRyci9nZW5lcmljLmMgYi9hcmNo
+L3g4Ni9rZXJuZWwvY3B1L210cnIvZ2VuZXJpYy5jCmluZGV4IDAzMWY3ZWE4ZTcyYi4uNDE3
+MTc4OGI4NzU0IDEwMDY0NAotLS0gYS9hcmNoL3g4Ni9rZXJuZWwvY3B1L210cnIvZ2VuZXJp
+Yy5jCisrKyBiL2FyY2gveDg2L2tlcm5lbC9jcHUvbXRyci9nZW5lcmljLmMKQEAgLTUxOSwx
+NSArNTE5LDI2IEBAIHU4IG10cnJfdHlwZV9sb29rdXAodTY0IHN0YXJ0LCB1NjQgZW5kLCB1
+OCAqdW5pZm9ybSkKIAkJcmV0dXJuIE1UUlJfVFlQRV9JTlZBTElEOwogCiAJZm9yIChpID0g
+MDsgaSA8IGNhY2hlX21hcF9uICYmIHN0YXJ0IDwgZW5kOyBpKyspIHsKKwkJLyogUmVnaW9u
+IGFmdGVyIGN1cnJlbnQgbWFwIGVudHJ5PyAtPiBjb250aW51ZSB3aXRoIG5leHQgb25lLiAq
+LwogCQlpZiAoc3RhcnQgPj0gY2FjaGVfbWFwW2ldLmVuZCkKIAkJCWNvbnRpbnVlOwotCQlp
+ZiAoc3RhcnQgPCBjYWNoZV9tYXBbaV0uc3RhcnQpCisKKwkJLyogU3RhcnQgb2YgcmVnaW9u
+IG5vdCBjb3ZlcmVkIGJ5IGN1cnJlbnQgbWFwIGVudHJ5PyAqLworCQlpZiAoc3RhcnQgPCBj
+YWNoZV9tYXBbaV0uc3RhcnQpIHsKKwkJCS8qIEF0IGxlYXN0IHNvbWUgcGFydCBvZiByZWdp
+b24gaGFzIGRlZmF1bHQgdHlwZS4gKi8KIAkJCXR5cGUgPSB0eXBlX21lcmdlKHR5cGUsIG10
+cnJfc3RhdGUuZGVmX3R5cGUsIHVuaWZvcm0pOworCQkJLyogRW5kIG9mIHJlZ2lvbiBub3Qg
+Y292ZXJlZCwgdG9vPyAtPiBsb29rdXAgZG9uZS4gKi8KKwkJCWlmIChlbmQgPD0gY2FjaGVf
+bWFwW2ldLnN0YXJ0KQorCQkJCXJldHVybiB0eXBlOworCQl9CisKKwkJLyogQXQgbGVhc3Qg
+cGFydCBvZiByZWdpb24gY292ZXJlZCBieSBtYXAgZW50cnkuICovCiAJCXR5cGUgPSB0eXBl
+X21lcmdlKHR5cGUsIGNhY2hlX21hcFtpXS50eXBlLCB1bmlmb3JtKTsKIAogCQlzdGFydCA9
+IGNhY2hlX21hcFtpXS5lbmQ7CiAJfQogCisJLyogRW5kIG9mIHJlZ2lvbiBwYXN0IGxhc3Qg
+ZW50cnkgaW4gbWFwPyAtPiB1c2UgZGVmYXVsdCB0eXBlLiAqLwogCWlmIChzdGFydCA8IGVu
+ZCkKIAkJdHlwZSA9IHR5cGVfbWVyZ2UodHlwZSwgbXRycl9zdGF0ZS5kZWZfdHlwZSwgdW5p
+Zm9ybSk7CiAK
+--------------1qimvhvxGrvQzPahjkpLpV2o
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
-Jaime, any idea?
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
-> >> +	buf->locked =3D 0;
-> >> +	buf->start =3D MACRONIX_30LFXG18AC_OTP_START_BYTE;
-> >> +	buf->length =3D MACRONIX_30LFXG18AC_OTP_SIZE_BYTES;
-> >> +
-> >> +	*retlen =3D sizeof(*buf);
-> >> +
-> >> +	return 0;
-> >> +}
-> >> +
-> >> +static int macronix_30lfxg18ac_otp_enable(struct nand_chip *nand)
-> >> +{
-> >> +	uint8_t feature_buf[ONFI_SUBFEATURE_PARAM_LEN] =3D { 0 };
-> >> +
-> >> +	feature_buf[0] =3D MACRONIX_30LFXG18AC_OTP_EN;
-> >> +	return nand_set_features(nand, ONFI_FEATURE_ADDR_30LFXG18AC_OTP,
-> >> +				 feature_buf);
-> >> +}
-> >> +
-> >> +static int macronix_30lfxg18ac_otp_disable(struct nand_chip *nand)
-> >> +{
-> >> +	uint8_t feature_buf[ONFI_SUBFEATURE_PARAM_LEN] =3D { 0 };
-> >> +
-> >> +	return nand_set_features(nand, ONFI_FEATURE_ADDR_30LFXG18AC_OTP,
-> >> +				 feature_buf);
-> >> +}
-> >> +
-> >> +static int __macronix_30lfxg18ac_rw_otp(struct mtd_info *mtd,
-> >> +					loff_t offs_in_flash,
-> >> +					size_t len, size_t *retlen,
-> >> +					u_char *buf, bool write)
-> >> +{
-> >> +	struct nand_chip *nand;
-> >> +	size_t bytes_handled;
-> >> +	off_t offs_in_page;
-> >> +	uint64_t page;
-> >> +	void *dma_buf;
-> >> +	int ret;
-> >> +
-> >> +	/* 'nand_prog/read_page_op()' may use 'buf' as DMA buffer,
-> >> +	 * so allocate properly aligned memory for it. This is
-> >> +	 * needed because cross page accesses may lead to unaligned
-> >> +	 * buffer address for DMA.
-> >> +	 */
-> >> +	dma_buf =3D kmalloc(MACRONIX_30LFXG18AC_OTP_PAGE_SIZE, GFP_KERNEL);
-> >> +	if (!dma_buf)
-> >> +		return -ENOMEM;
-> >> +
-> >> +	nand =3D mtd_to_nand(mtd);
-> >> +	nand_select_target(nand, 0);
-> >> +
-> >> +	ret =3D macronix_30lfxg18ac_otp_enable(nand);
-> >> +	if (ret)
-> >> +		goto out_otp;
-> >> +
-> >> +	page =3D offs_in_flash;
-> >> +	/* 'page' will be result of division. */
-> >> +	offs_in_page =3D do_div(page, MACRONIX_30LFXG18AC_OTP_PAGE_SIZE);
-> >> +	bytes_handled =3D 0;
-> >> +
-> >> +	while (bytes_handled < len &&
-> >> +	       page < MACRONIX_30LFXG18AC_OTP_PAGES) {
-> >> +		size_t bytes_to_handle;
-> >> +
-> >> +		bytes_to_handle =3D min_t(size_t, len - bytes_handled,
-> >> +					MACRONIX_30LFXG18AC_OTP_PAGE_SIZE -
-> >> +					offs_in_page);
-> >> +
-> >> +		if (write) {
-> >> +			memcpy(dma_buf, &buf[bytes_handled], bytes_to_handle);
-> >> +			ret =3D nand_prog_page_op(nand, page, offs_in_page,
-> >> +						dma_buf, bytes_to_handle);
-> >> +		} else {
-> >> +			ret =3D nand_read_page_op(nand, page, offs_in_page,
-> >> +						dma_buf, bytes_to_handle);
-> >> +			if (!ret)
-> >> +				memcpy(&buf[bytes_handled], dma_buf,
-> >> +				       bytes_to_handle);
-> >> +		}
-> >> +		if (ret)
-> >> +			goto out_otp;
-> >> +
-> >> +		bytes_handled +=3D bytes_to_handle;
-> >> +		offs_in_page =3D 0;
-> >> +		page++;
-> >> +	}
-> >> +
-> >> +	*retlen =3D bytes_handled;
-> >> +
-> >> +out_otp:
-> >> +	if (ret)
-> >> +		dev_err(&mtd->dev, "failed to perform OTP IO: %i\n", ret);
-> >> +
-> >> +	ret =3D macronix_30lfxg18ac_otp_disable(nand);
-> >> +	WARN(ret, "failed to leave OTP mode after %s\n",
-> >> +	     write ? "write" : "read");
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
 
-Let's avoid WARN() calls (none in this driver are relevant IMHO). Just a
-dev_err() should be enough.
+--------------1qimvhvxGrvQzPahjkpLpV2o--
 
-> >> +	nand_deselect_target(nand);
-> >> +	kfree(dma_buf);
-> >> +
-> >> +	return ret;
-> >> +}
-> >> +
-> >> +static int macronix_30lfxg18ac_write_otp(struct mtd_info *mtd, loff_t=
- to,
-> >> +					 size_t len, size_t *rlen,
-> >> +					 const u_char *buf)
-> >> +{
-> >> +	return __macronix_30lfxg18ac_rw_otp(mtd, to, len, rlen, (u_char *)bu=
-f,
-> >> +					    true);
-> >> +}
-> >> +
-> >> +static int macronix_30lfxg18ac_read_otp(struct mtd_info *mtd, loff_t =
-from,
-> >> +					size_t len, size_t *rlen,
-> >> +					u_char *buf)
-> >> +{
-> >> +	return __macronix_30lfxg18ac_rw_otp(mtd, from, len, rlen, buf, false=
-);
-> >> +}
-> >> +
-> >> +static int macronix_30lfxg18ac_lock_otp(struct mtd_info *mtd, loff_t =
-from,
-> >> +					size_t len)
-> >> +{
-> >> +	uint8_t feature_buf[ONFI_SUBFEATURE_PARAM_LEN] =3D { 0 };
-> >> +	struct nand_chip *nand;
-> >> +	int ret;
-> >> +
-> >> +	if (from !=3D MACRONIX_30LFXG18AC_OTP_START_BYTE ||
-> >> +	    len !=3D MACRONIX_30LFXG18AC_OTP_SIZE_BYTES)
-> >> +		return -EINVAL;
-> >> +
-> >> +	dev_dbg(&mtd->dev, "locking OTP\n");
-> >> +
-> >> +	nand =3D mtd_to_nand(mtd);
-> >> +	nand_select_target(nand, 0);
-> >> +
-> >> +	feature_buf[0] =3D MACRONIX_30LFXG18AC_OTP_EN |
-> >> +			 MACRONIX_30LFXG18AC_OTP_LOCKED;
-> >> +	ret =3D nand_set_features(nand, ONFI_FEATURE_ADDR_30LFXG18AC_OTP,
-> >> +				feature_buf);
-> >> +	if (ret) {
-> >> +		dev_err(&mtd->dev,
-> >> +			"failed to lock OTP (set features): %i\n", ret);
-> >> +		nand_deselect_target(nand);
-> >> +		return ret;
-> >> +	}
-> >> +
-> >> +	/* Do dummy page prog with zero address. */
-> >> +	feature_buf[0] =3D 0;
-> >> +	ret =3D nand_prog_page_op(nand, 0, 0, feature_buf, 1);
-> >> +	if (ret)
-> >> +		dev_err(&mtd->dev,
-> >> +			"failed to lock OTP (page prog): %i\n", ret);
-> >> +
-> >> +	ret =3D macronix_30lfxg18ac_otp_disable(nand);
-> >> +	WARN(ret, "failed to leave OTP mode after lock\n");
-> >> +
-> >> +	nand_deselect_target(nand);
-> >> +
-> >> +	return ret;
-> >> +}
-> >> +
-> >> +static void macronix_nand_setup_otp(struct nand_chip *chip)
-> >> +{
-> >> +	static const char * const supported_otp_models[] =3D {
-> >> +		"MX30LF1G18AC",
-> >> +		"MX30LF2G18AC",
-> >> +		"MX30LF4G18AC",
-> >> +	};
-> >> +	struct mtd_info *mtd;
-> >> +
-> >> +	if (!chip->parameters.supports_set_get_features)
-> >> +		return;
-> >> +
-> >> +	if (match_string(supported_otp_models,
-> >> +			 ARRAY_SIZE(supported_otp_models),
-> >> +			 chip->parameters.model) < 0)
-> >> +		return;
+--------------0FQRRT0t3Hqeswcs3KGFjuki--
 
-I would start by checking the model, then it's list of supported ops.
+--------------n0B4FE3QHZoi0kCIT4NnqRK6
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-> >> +
-> >> +	bitmap_set(chip->parameters.get_feature_list,
-> >> +		   ONFI_FEATURE_ADDR_30LFXG18AC_OTP, 1);
-> >> +	bitmap_set(chip->parameters.set_feature_list,
-> >> +		   ONFI_FEATURE_ADDR_30LFXG18AC_OTP, 1);
-> >> +
-> >> +	mtd =3D nand_to_mtd(chip);
-> >> +	mtd->_get_fact_prot_info =3D macronix_30lfxg18ac_get_otp_info;
-> >> +	mtd->_read_fact_prot_reg =3D macronix_30lfxg18ac_read_otp;
-> >> +	mtd->_get_user_prot_info =3D macronix_30lfxg18ac_get_otp_info;
-> >> +	mtd->_read_user_prot_reg =3D macronix_30lfxg18ac_read_otp;
-> >> +	mtd->_write_user_prot_reg =3D macronix_30lfxg18ac_write_otp;
-> >> +	mtd->_lock_user_prot_reg =3D macronix_30lfxg18ac_lock_otp;
-> >> +}
-> >> +
-> >>  static int macronix_nand_init(struct nand_chip *chip)
-> >>  {
-> >>  	if (nand_is_slc(chip))
-> >> @@ -325,6 +537,7 @@ static int macronix_nand_init(struct nand_chip *ch=
-ip)
-> >>  	macronix_nand_onfi_init(chip);
-> >>  	macronix_nand_block_protection_support(chip);
-> >>  	macronix_nand_deep_power_down_support(chip);
-> >> +	macronix_nand_setup_otp(chip);
-> >> =20
-> >>  	return 0;
-> >>  } =20
+-----BEGIN PGP SIGNATURE-----
 
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmRreY4FAwAAAAAACgkQsN6d1ii/Ey8p
+8Af8CD4ulrGY4bIE4VheoIlbQepsapBmA1yFswSZvFCwEUOD4f/+u0VxDyUASSsZoBjBjQ95PXgn
+N+0eu2iex+F+1hUPViRGL6POrIMtb5MEjeLD26awEAPQLawmkjBqQvb46GsKH5ecLRs94L+gCK+i
+u3WuTYq6QyOhd4O7odSRtyn+2CXD31tiSaDX9Ur1CDGVszGNMsFFQyIhOim6kHEIYOjHnGlbBZat
+lpl+vYhqxrbELUg+JDfjxBg5P4LV/Q/GoUuOOgVM2HlcaKptGe8qrYLQ6baMx1fJJ8RD7hO2is/9
+0pYwhkMMpUIWP1kxnU8nFoFyGro1YGwxU0JilZIPGg==
+=WxiL
+-----END PGP SIGNATURE-----
 
-Thanks,
-Miqu=C3=A8l
+--------------n0B4FE3QHZoi0kCIT4NnqRK6--
