@@ -2,79 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDD9C70B792
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:26:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40B7870B797
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:28:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231877AbjEVI0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 04:26:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55452 "EHLO
+        id S232139AbjEVI21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 04:28:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229621AbjEVI0u (ORCPT
+        with ESMTP id S229621AbjEVI2Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 04:26:50 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC94DB6;
-        Mon, 22 May 2023 01:26:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
-        s=s31663417; t=1684743994; i=frank-w@public-files.de;
-        bh=iJE87Et1+i7od+AUi+yEibwB8gDZBBZCoiwY+GJCKSY=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=em9IA7mS7pr2vumrK+0oMJMvK07ADhacGr30BSJsNtI+fDq25r1mJK5LxI6efwajq
-         0WoOTa+p+JA8IWNJnr4b+OqSDImMLjQkiG6aju6NHcmP9vE+GZRorBupJxY2rBouEm
-         OjLz+kJIf0M1ZxYOZF66ylFjV/8kqzTbdCUL9uCIKwlP3ojg+ZFZbRbSm8tXBNhxgk
-         4uvx8LjCirBN0GwUbhaWhwTCOyG5l3FdPFN+k1TpF1jg4uqvZVp9wgW1yGx8I9s0KW
-         HtdtzBZD3OmRQnIZjQxOjems8QI4bI+z7R2A0eo2BuxsklQkqc4cZRBv7hI/mxeBft
-         hQj68PagPeeDg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [217.61.155.92] ([217.61.155.92]) by web-mail.gmx.net
- (3c-app-gmx-bs66.server.lan [172.19.170.210]) (via HTTP); Mon, 22 May 2023
- 10:26:34 +0200
+        Mon, 22 May 2023 04:28:24 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 641F0D2
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 01:28:20 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-30789a4c537so3677282f8f.0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 01:28:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684744099; x=1687336099;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tQPKp4ylIrhBgcqRpAt3qUDuu8+hY7keqcoakv7RGXY=;
+        b=UuoRc85nqWStGpANB5zweRVQyMFOYQmNJs1Hx80dqdxxWuHFfaKqQLiCaRr+/V49EI
+         jjr2Ao7NM7DsLdV0Ppzr2YybTYqTrZKRz1N0J11S3WbBgM0nskqf77+6fAYrIzMURDfu
+         qmbIi24/nCIOC6OH1+u844UnXMNFqWIExb+FJ5R2ul5tGTTELUY6+v9aPt44M4wtrl90
+         kfxD5e5FUMfcXmZQlS2/j3TLUui43knC9KnhaXsMN4TPk5bJhdjzR3wvmH9CD17wq0Il
+         PwBsqHxhsuhc7YB+2YuuBoggSlKZHp4MBK1O9TaBxPf/WONfDrn5Yk8yWN5mJ1F7yZqI
+         XV2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684744099; x=1687336099;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tQPKp4ylIrhBgcqRpAt3qUDuu8+hY7keqcoakv7RGXY=;
+        b=MxTTJM3V+2s2fivTwthIPCJ48CP/QS60YyAzvzmQ0OMYfEbclPQpELxp2S07HYhWGG
+         DikcsygwSyMZwtyjYzXU9BtmjFVBRi0S9VfPUbE0eaoMptf0oYZVgYgcF82aQtOsD1AG
+         hr84vi7V49uaJYWX1zj6y9tu8SRgtxW0iZsMTuHlCVz5WxPz+xlSDquCTzQqVSW2EYqh
+         HjR7tuHj9A52wLRaOMK+6GN3pzM6hq3iLi6Ewisy2eSCjAjsyt2vpv2XNmNR5zlEyNEn
+         5oLsYvnvzPsN+oCXAn9smcN61YNcwXEHI0W0XgaGnp/q0TGHK7UvN997V1T9UH38Nr0S
+         x/aA==
+X-Gm-Message-State: AC+VfDzMBqHjs3ue92pr4wDeTV/VHitpADW+MKZUxl3pqMJOEgvP6KE4
+        eBAH1ula4GBjMyw9E7oohLiD5B4IYLtP0dhV3Pf/i/knaGwrzdcosNQ=
+X-Google-Smtp-Source: ACHHUZ6xF2ggBqR3M3Zan56q0SstCxZYMrC939CqChGjb0uLHhCkkPmT+WP0oLS6Qznmq3LfvoQZgBjgpDRsWOaIvlk=
+X-Received: by 2002:adf:e60b:0:b0:309:a4e:52d3 with SMTP id
+ p11-20020adfe60b000000b003090a4e52d3mr7866449wrm.5.1684744098765; Mon, 22 May
+ 2023 01:28:18 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <trinity-8c109262-658a-4a4e-a807-1cd8f640fdc4-1684743994291@3c-app-gmx-bs66>
-From:   Frank Wunderlich <frank-w@public-files.de>
-To:     Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Frank Wunderlich <linux@fw-web.de>,
-        linux-mediatek@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: Aw: Re: [PATCH] arm64: dts: mt7986: set Wifi Leds low-active for
- BPI-R3
-Content-Type: text/plain; charset=UTF-8
-Date:   Mon, 22 May 2023 10:26:34 +0200
-Importance: normal
-Sensitivity: Normal
-In-Reply-To: <3a43ce55-ff6a-0cd2-b020-d5fefe8aca0a@collabora.com>
-References: <20230205174833.107050-1-linux@fw-web.de>
- <8f04f2b5-320e-50d4-9517-6dac989f63b3@gmail.com>
- <3a43ce55-ff6a-0cd2-b020-d5fefe8aca0a@collabora.com>
+References: <20230516182537.3139-1-osalvador@suse.de> <20230516182537.3139-3-osalvador@suse.de>
+In-Reply-To: <20230516182537.3139-3-osalvador@suse.de>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Mon, 22 May 2023 10:27:41 +0200
+Message-ID: <CAG_fn=VxR47e3jfKYteivtEZXWDtUqZb_i8=gxGxBj71FKw=sQ@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] mm, page_owner: Add page_owner_stacks file to
+ print out only stacks and their counte
+To:     Oscar Salvador <osalvador@suse.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Waiman Long <longman@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Marco Elver <elver@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Eric Dumazet <edumazet@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-UI-Message-Type: mail
-X-Priority: 3
-X-Provags-ID: V03:K1:9HKDyGxPRL9Yhd/YC7Z3n+yXLC68nN9emK2ktuC8U6wz6JHq56A8NcXUWqIQtzljYirmE
- gke/KKu6xKmuIy327JL63asHMmvpMEO4fWrg02un03Uc60bWUWEI5bjAK1np8wIsqNfqhKVE1AVG
- haO2zutpvCHnfRBh3vMCtmd8ZMw7cjPkXcUGn8YbRrzV3kAbyMHDcw4NjhoIAmx/Tytb9xV+jNId
- L6vivZs5VbqUEvWRfCZI4QNAMfrbE+55bauLGtR6Q1Tf35Tlqjn9hyOOL1MnmXwfX0sa9Zr73tPN
- Hw=
-UI-OutboundReport: notjunk:1;M01:P0:nkS8x8yAfKQ=;kSUXqTCb3/4/ThFRC1fkJbE5Lj0
- JqlFM5l+gGaUOCIzXJFAzpsLXYE9n+6G61AncanneZVhTXBtBXMY5+giQzBn+lZ3wTC7NAtc/
- aEoX/iMnavtG2vN0Uz0wffiXHVpYS14osm1YzhKqJ2lFDCGoBecVjyEcquA/MftA2PyvF6+Wj
- gWAd7dJEQjX1hXTl9DGx49FAIYf4oRZ8Q97LasaQPMYoGKYgD3UGyxYkE3GdES1qFvNRdfK2M
- Q7xIyEsc6+pn/XPV44K4pw6k7jNMBkdIEyQza3S6Ik7SYnqvxDya2MYn/B034VeLxrEuFTkc4
- zz0q55gIl7tABo4LSDLdg0W0VlZjez+htY3uKnnMjvCVzn5krGhu1kfwtIFlN3tJSgb/++CQo
- JvpG8gV3ygRU0ERo4Nh8H+JUnMuc8WNzt95ePbmBMj2NuhDXYoAZS4WrgGUPkVdiY97OUeXVg
- TZTtkBZFfsGRaoH6w0g0CRu3xN46xHVAqzyHu0Ijk0TkRGfD5RSd7ASBt07RkkTi7hmAK7eeA
- IXluMp+xFxlODO4Zmi4m8U0ROd5aE8qPZpMkVrAr+tyQrqMAzc6vqUodcK+pnYW6tppMMAMuF
- RIPNBtmlxwfjGApcmOSPFRHYTl+m4rrUitrr7Y+1cdElAeRNNE5nwH1VoHN2FruhKwBDG/ZEM
- QN5ajdXtlG0XqLtNiuobJKYgK4ekM7T022s4y0q5ofZ+35waxijEiMt/HY79lbQWIGZN2WESZ
- fZxT9tAZABj13wcFbVQTBCgcKg0Mxq+a4GCE+yu6vxbxX+rBJ+01ml3di5KUwk7d6zFPQTiuo
- /TPCo3uqpygDqyXJt830RbFg==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,63 +78,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Gesendet: Dienstag, 07=2E Februar 2023 um 17:17 Uhr
-> Von: "AngeloGioacchino Del Regno" <angelogioacchino=2Edelregno@collabora=
-=2Ecom>
-> Il 06/02/23 21:20, Matthias Brugger ha scritto:
-> >=20
-> >=20
-> > On 05/02/2023 18:48, Frank Wunderlich wrote:
-> >> From: Frank Wunderlich <frank-w@public-files=2Ede>
-> >>
-> >> Leds for Wifi are low-active, so add property to devicetree=2E
-> >>
-> >> Signed-off-by: Frank Wunderlich <frank-w@public-files=2Ede>
-> >> ---
-> >> =C2=A0 arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3=2Edts | 4=
- ++++
-> >> =C2=A0 1 file changed, 4 insertions(+)
-> >>
-> >> diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3=2Ed=
-ts=20
-> >> b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3=2Edts
-> >> index 33bd6febc160=2E=2E2b028141f1f7 100644
-> >> --- a/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3=2Edts
-> >> +++ b/arch/arm64/boot/dts/mediatek/mt7986a-bananapi-bpi-r3=2Edts
-> >> @@ -446,5 +446,9 @@ &wifi {
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pinctrl-names =3D "default", "dbdc";
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pinctrl-0 =3D <&wf_2g_5g_pins>, <&wf_l=
-ed_pins>;
-> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 pinctrl-1 =3D <&wf_dbdc_pins>, <&wf_le=
-d_pins>;
-> >> +
-> >> +=C2=A0=C2=A0=C2=A0 led {
-> >> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 led-active-low;
-> >> +=C2=A0=C2=A0=C2=A0 };
-> >=20
-> > The binding is missing this property also the driver implements it=2E =
-Could you=20
-> > please update the bindind description properly?
-> > Thanks
-> > Matthias
->=20
->=20
-> After and only after [1] is picked,
->=20
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino=2Edelregno@col=
-labora=2Ecom>
->=20
-> [1]:=20
-> https://patchwork=2Ekernel=2Eorg/project/linux-mediatek/patch/2023020713=
-3504=2E21826-1-linux@fw-web=2Ede/
+On Tue, May 16, 2023 at 8:25=E2=80=AFPM Oscar Salvador <osalvador@suse.de> =
+wrote:
 
-Hi Matthias,
+I am still hesitant about adding this functionality to stackdepot,
+because page_owner is the only user of the stack counters that look
+orthogonal to the rest of stackdepot.
+One indicator of that is the fact that you keep adding dependencies on
+page_owner to stackdepot code.
 
-Can you take this patch into your tree? binding is already merged
+> We might be only interested in knowing about stacks <-> count
+> relationship, so instead of having to fiddle with page_owner
+> output and screen through pfns, let us add a new file called
+> 'page_owner_stacks' that does just that.
+> By cating such file, we will get all the stacktraces followed by
 
-https://git=2Ekernel=2Eorg/pub/scm/linux/kernel/git/torvalds/linux=2Egit/t=
-ree/Documentation/devicetree/bindings/net/wireless/mediatek,mt76=2Eyaml#n11=
-4
+"cating"?
 
-regards Frank
+> +#ifdef CONFIG_PAGE_OWNER
+> +void *stack_start(struct seq_file *m, loff_t *ppos);
+> +void *stack_next(struct seq_file *m, void *v, loff_t *ppos);
+> +int stack_print(struct seq_file *m, void *v);
+> +#endif
 
+Code depending on CONFIG_PAGE_OWNER should not belong here.
+It is fine to have generic iterators to traverse the stack depot in
+stackdepot.h without #ifdefs.
+Perhaps they don't need to implement the whole interface of seq_file.
+
+
+> @@ -486,6 +487,77 @@ static struct stack_record *stack_depot_getstack(dep=
+ot_stack_handle_t handle)
+>         return stack;
+>  }
+>
+> +#ifdef CONFIG_PAGE_OWNER
+
+Ditto - no CONFIG_PAGE_OWNER, please
+
+
+> +
+> +int stack_print(struct seq_file *m, void *v)
+> +{
+> +       char *buf;
+> +       int ret =3D 0;
+> +       struct stack_record *stack =3D v;
+> +
+> +       if (!stack->size || stack->size < 0 ||
+> +           stack->size > PAGE_SIZE || stack->handle.valid !=3D 1 ||
+> +           refcount_read(&stack->count) < 1)
+> +               return 0;
+> +
+> +       buf =3D kzalloc(PAGE_SIZE, GFP_KERNEL);
+> +       ret +=3D stack_trace_snprint(buf, PAGE_SIZE, stack->entries, stac=
+k->size, 0);
+> +       scnprintf(buf + ret, PAGE_SIZE - ret, "stack count: %d\n\n",
+> +                 refcount_read(&stack->count));
+> +       seq_printf(m, buf);
+> +       seq_puts(m, "\n\n");
+> +       kfree(buf);
+> +
+> +       return 0;
+> +}
+
+Maybe stack_print() should be in mm/page_owner.c instead?
+
+
+
+--=20
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
