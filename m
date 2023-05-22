@@ -2,72 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4082170B2E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 03:46:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0640A70B2EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 03:48:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231460AbjEVBq3 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 21 May 2023 21:46:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50024 "EHLO
+        id S231467AbjEVBsU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 21:48:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231424AbjEVBq1 (ORCPT
+        with ESMTP id S231424AbjEVBsS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 21:46:27 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B288AD7;
-        Sun, 21 May 2023 18:46:26 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 34M1k5k75018981, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 34M1k5k75018981
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Mon, 22 May 2023 09:46:05 +0800
-Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Mon, 22 May 2023 09:46:15 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXDAG02.realtek.com.tw (172.21.6.101) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Mon, 22 May 2023 09:46:15 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Mon, 22 May 2023 09:46:15 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
-CC:     "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "kvalo@kernel.org" <kvalo@kernel.org>,
-        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
-        "Peter Robinson" <pbrobinson@gmail.com>,
-        "jernej.skrabec@gmail.com" <jernej.skrabec@gmail.com>
-Subject: RE: [PATCH wireless-next v1 3/4] mmc: sdio: Add/rename SDIO ID of the RTL8723DS SDIO wifi cards
-Thread-Topic: [PATCH wireless-next v1 3/4] mmc: sdio: Add/rename SDIO ID of
- the RTL8723DS SDIO wifi cards
-Thread-Index: AQHZiaRU2yqqdyKoHUKqEdo0JlyLb69litiw
-Date:   Mon, 22 May 2023 01:46:14 +0000
-Message-ID: <2ffdaf9f38fa4886ab5d2a5b8323d584@realtek.com>
-References: <20230518161749.1311949-1-martin.blumenstingl@googlemail.com>
- <20230518161749.1311949-4-martin.blumenstingl@googlemail.com>
-In-Reply-To: <20230518161749.1311949-4-martin.blumenstingl@googlemail.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXDAG02.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Sun, 21 May 2023 21:48:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88A0DE;
+        Sun, 21 May 2023 18:48:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 392D56115E;
+        Mon, 22 May 2023 01:48:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DBA0C4339B;
+        Mon, 22 May 2023 01:48:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684720096;
+        bh=LXrAyE8xoklF4IlUUrc+eKNzPWHP+rqO9CrKVwazuIw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=pURT/Ja7uOZETyQSFp1XKbEy8ZXM88D4sL79KEJIguZ4JqxxZ8VRC1XIFS2CcKEuZ
+         6uQ4ueJ/KPGaq2jN2P5zp/To/Dkf0AsTbf11zCX1THG0sDQttTHMhPOorRMixGi8D/
+         V/VEwWAeRkG/DdemFMoc9mqJDoid+8kL+rjQSWCMiOZQ5pR1CxxRrqw9CDeDeNHv12
+         XczCwSmvpWwdqxqp60RXmbW6VXf4ajeoO9r0mfHFH4kNs03LCYIq5ZjDkeSWlKZaC3
+         e0w8lmbxs0OSKDNuEDmHKtW+wGlEuULq/4OMbeEYc9b8JlTtPiSztBgquoYJSmkOmD
+         bzDxUm4nPhR/Q==
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-19ad6baf96dso1094401fac.0;
+        Sun, 21 May 2023 18:48:16 -0700 (PDT)
+X-Gm-Message-State: AC+VfDyWuPbj5JgJw5TsqW/29+W1DJl87kghH8C6iEwM87BK5gXBhPU8
+        M32xPkNSgq9DUCSW+3AdQcL6A+1sbWPkHTExfgY=
+X-Google-Smtp-Source: ACHHUZ5XTk3iAoquz3ZPOmQoeS4GpU5RJJnAjw6YBirZieBIKNUZKIQAtGsjV/qlW4d6g/Hom7CA7YsRFVImJ4pgYjM=
+X-Received: by 2002:a05:6870:c803:b0:196:ca0:c575 with SMTP id
+ ee3-20020a056870c80300b001960ca0c575mr4509701oab.3.1684720095855; Sun, 21 May
+ 2023 18:48:15 -0700 (PDT)
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+References: <20230521160426.1881124-1-masahiroy@kernel.org>
+In-Reply-To: <20230521160426.1881124-1-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Mon, 22 May 2023 10:47:39 +0900
+X-Gmail-Original-Message-ID: <CAK7LNARjzGnj+sYX=_5yQ+8qoOQ2KB5N-_Ye53Ru3=XicezTYw@mail.gmail.com>
+Message-ID: <CAK7LNARjzGnj+sYX=_5yQ+8qoOQ2KB5N-_Ye53Ru3=XicezTYw@mail.gmail.com>
+Subject: Re: [PATCH v6 00/20] Unify <linux/export.h> and <asm/export.h>,
+ remove EXPORT_DATA_SYMBOL(), faster TRIM_UNUSED_KSYMS
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,50 +66,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, May 22, 2023 at 1:05=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.o=
+rg> wrote:
+>
+>
+> This patch set refactors modpost first to make it easier to
+> add new code.
+>
+> My goals:
+>
+>  - Refactors EXPORT_SYMBOL, <linux/export.h> and <asm/export.h>.
+>    You can still put EXPORT_SYMBOL() in *.S file, very close to the defin=
+ition,
+>    but you do not need to care about whether it is a function or a data.
+>    This removes EXPORT_DATA_SYMBOL().
+>
+>  - Re-implement TRIM_UNUSED_KSYMS in one-pass.
+>    This makes the building faster.
+>
+>  - Move the static EXPORT_SYMBOL check to modpost.
+>    This also makes the building faster.
+>
+> This patch set is applicable to
+> git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git =
+kbuild
 
 
-> -----Original Message-----
-> From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Sent: Friday, May 19, 2023 12:18 AM
-> To: linux-wireless@vger.kernel.org
-> Cc: linux-mmc@vger.kernel.org; linux-kernel@vger.kernel.org; ulf.hansson@linaro.org; kvalo@kernel.org;
-> tony0620emma@gmail.com; Peter Robinson <pbrobinson@gmail.com>; Ping-Ke Shih <pkshih@realtek.com>;
-> jernej.skrabec@gmail.com; Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Subject: [PATCH wireless-next v1 3/4] mmc: sdio: Add/rename SDIO ID of the RTL8723DS SDIO wifi cards
-> 
-> RTL8723DS comes in two variant and each of them has their own SDIO ID:
-> - 0xd723 can connect two antennas. The WiFi part is still 1x1 so the
->   second antenna can be dedicated to Bluetooth
-> - 0xd724 can only connect one antenna so it's shared between WiFi and
->   Bluetooth
-> 
-> Add a new entry for the single antenna RTL8723DS (0xd724) which can be
-> found on the MangoPi MQ-Quad. Also rename the existing RTL8723DS entry
-> (0xd723) so it's name reflects that it's the variant with support for
-> two antennas.
-> 
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
 
-> ---
->  include/linux/mmc/sdio_ids.h | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/mmc/sdio_ids.h b/include/linux/mmc/sdio_ids.h
-> index c653accdc7fd..7fada7a714fe 100644
-> --- a/include/linux/mmc/sdio_ids.h
-> +++ b/include/linux/mmc/sdio_ids.h
-> @@ -121,7 +121,8 @@
->  #define SDIO_DEVICE_ID_REALTEK_RTW8822BS       0xb822
->  #define SDIO_DEVICE_ID_REALTEK_RTW8821CS       0xc821
->  #define SDIO_DEVICE_ID_REALTEK_RTW8822CS       0xc822
-> -#define SDIO_DEVICE_ID_REALTEK_RTW8723DS       0xd723
-> +#define SDIO_DEVICE_ID_REALTEK_RTW8723DS_2ANT  0xd723
-> +#define SDIO_DEVICE_ID_REALTEK_RTW8723DS_1ANT  0xd724
->  #define SDIO_DEVICE_ID_REALTEK_RTW8821DS       0xd821
-> 
->  #define SDIO_VENDOR_ID_SIANO                   0x039a
-> --
-> 2.40.1
 
+I pushed this series to
+git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
+ modpost-v6-testing
+
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
