@@ -2,194 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 945A070C48A
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 19:43:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 246B970C48D
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 19:44:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231548AbjEVRns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 13:43:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48634 "EHLO
+        id S231731AbjEVRn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 13:43:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230497AbjEVRnq (ORCPT
+        with ESMTP id S231236AbjEVRn4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 13:43:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C305102;
-        Mon, 22 May 2023 10:43:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 17AF961B9A;
-        Mon, 22 May 2023 17:43:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79EC4C433A0;
-        Mon, 22 May 2023 17:43:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684777424;
-        bh=FPI0mwoLZ5/oBKUdoSwgVmYtrOqGTpFHFh0y0gbMjWA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cSLQWihBcB32CrS+msyB6IgPvV9pCt+wGLAkfGePv690HJTByP3Cxij8KcsFsqzRl
-         yfr08frVrF8Kan+1Vsqxb8sYkYeAQg4xskJFNXGJBhNDd3XmBoV+Uz2jb2jmus5z/f
-         6sfhiLomD8X28/pYNLmprqXed2CV9W4aPETqT+L/8Oo636umSxqFvH1F3c3AmZS5lM
-         4wt9idbXevTOlAU4Ea5SPdYaxgvp9KMdKggwTKeUZGArpn18vrNV9ueffMovX98Cxe
-         slWYvGG8Jen1CwPwDh4p620BLH7zGl3iHbztq2KR7xzmQkoGLY3DJ4QbUKDFT1r0L0
-         TZHdVjvTX7PfQ==
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2af30a12e84so26881551fa.0;
-        Mon, 22 May 2023 10:43:44 -0700 (PDT)
-X-Gm-Message-State: AC+VfDy//03p0UueotKELnwO43uzxyxjObmAWzTAzgczd5Y6xUrSVCqV
-        NFm62FUtsZFt9oNgJgPw7A4b83IC+cyrQOm3M3w=
-X-Google-Smtp-Source: ACHHUZ76vzBhVq9PXdgDf9riYPp3vy4us4IUm+EYpKtvwPWjCWqG5o4t7pLmJQRvH0SGdI506l2Dh+6hENXf9auLDwA=
-X-Received: by 2002:a2e:8093:0:b0:2af:2fb0:923c with SMTP id
- i19-20020a2e8093000000b002af2fb0923cmr2690082ljg.17.1684777422459; Mon, 22
- May 2023 10:43:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230522072535.1523740-1-linan666@huaweicloud.com> <20230522072535.1523740-4-linan666@huaweicloud.com>
-In-Reply-To: <20230522072535.1523740-4-linan666@huaweicloud.com>
-From:   Song Liu <song@kernel.org>
-Date:   Mon, 22 May 2023 10:43:30 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW7h-b1ocai=Ax+Kmyok8c3PfMQW8WfWfpTceuW=LH5rkg@mail.gmail.com>
-Message-ID: <CAPhsuW7h-b1ocai=Ax+Kmyok8c3PfMQW8WfWfpTceuW=LH5rkg@mail.gmail.com>
-Subject: Re: [PATCH v4 3/3] md/raid10: optimize check_decay_read_errors()
-To:     linan666@huaweicloud.com
-Cc:     neilb@suse.de, Rob.Becker@riverbed.com, linux-raid@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linan122@huawei.com,
-        yukuai3@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
-        yangerkun@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 22 May 2023 13:43:56 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B6311F
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 10:43:52 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-5355657cf13so1604994a12.1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 10:43:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684777431; x=1687369431;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iC3M/RVEiAsEvRwykjn0mpnilLBCs5c/vIl/8zacyfg=;
+        b=KNOCWK4K1+8gamK8MURP2nRppShxkwO7KtAR6Snf0KDCtWZ3XsPoj+saNuen2kNrkT
+         bqz07VQXZAPVpDYse+bdRasvs5feMkYvrCjuK2tZhGPyyEpmWxmYQTyFUGxRU9y+kmWx
+         5xreYW1c+VhACq8Y8YZ4F2RSnkd8yY7XsQSpkhi/r5FOmKX63zWeMYBT8Hc5EufDG473
+         oBlDT7WXTH1wtHavax3SvrKzhmI/TKDCDr1eeAQpSYzagWkanSEphjcjPa60+bhjcBIn
+         cKnXog8Y9wGSbX+wUPactdnBAbG+ukyZG3oVkDBSk4hRE2kGnBw1zJR5nDVH4W8x9Nev
+         H0yQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684777431; x=1687369431;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iC3M/RVEiAsEvRwykjn0mpnilLBCs5c/vIl/8zacyfg=;
+        b=Hm7nx4/6e9orJmMWcHrrqg9IkNpEuuRO1tAZojl0CVqmUfIEEe/594jx9cV0z/RrLl
+         2qj9jIbqxXNJummN5wdyCBramBE7VXautECm2ZlmFzZGHEj2Mw5urARdJNacSToH4VTu
+         whzqmGBGaQA82m9gZaSDPv/duZmErIbDFVeG6AYdNby0Uyq70XlveX5ob4ZMNw7N2x3y
+         Fehd5fWfFhG6oyD6tZ39LCvPWL7XrE6zm21DIc2CuadAXQVonQgLQeNiva8hU1runhIa
+         SdDxdZNQLMCw59ysdPAZlrJBc7shZWfVmqiDPhPbmmWA/ZQ3apy3usLVfPLuEb84BEsj
+         E6nw==
+X-Gm-Message-State: AC+VfDxrNIjAsFIb9mOg248jY1TrQCOKR+jxK2WOmyxVnb/KV7eHiR0C
+        rd4hxnl8cay/v/Vm7zC7iB3nuv4Pok8=
+X-Google-Smtp-Source: ACHHUZ5tdYQpYrbpDVARXGV8NJ1f7fpCU5P0i5Io/HQvjwIM2pcFQKzlONCgHkbWeM4ZF4OqIOvF0Yrp3HU=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:903:68f:b0:1a8:16d2:a86b with SMTP id
+ ki15-20020a170903068f00b001a816d2a86bmr2580886plb.8.1684777431487; Mon, 22
+ May 2023 10:43:51 -0700 (PDT)
+Date:   Mon, 22 May 2023 10:43:49 -0700
+In-Reply-To: <20230520010237.3tepk3q44j52leuk@desk>
+Mime-Version: 1.0
+References: <20230506030435.80262-1-chao.gao@intel.com> <b472b58d-0469-8a55-985c-1d966ce66419@intel.com>
+ <ZGZhW/x5OWPmx1qD@google.com> <20230520010237.3tepk3q44j52leuk@desk>
+Message-ID: <ZGup1TjeqBF7bgWG@google.com>
+Subject: Re: [PATCH] KVM: x86: Track supported ARCH_CAPABILITIES in kvm_caps
+From:   Sean Christopherson <seanjc@google.com>
+To:     Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc:     Xiaoyao Li <xiaoyao.li@intel.com>, Chao Gao <chao.gao@intel.com>,
+        kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Jim Mattson <jmattson@google.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 12:27=E2=80=AFAM <linan666@huaweicloud.com> wrote:
->
-> From: Li Nan <linan122@huawei.com>
->
-> check_decay_read_errors() is used to handle rdev->read_errors. But
-> read_errors is inc and read after check_decay_read_errors() is invoked
-> in fix_read_error().
->
-> Put all operations of read_errors into check_decay_read_errors() and
-> clean up unnecessary atomic_read of read_errors.
+On Fri, May 19, 2023, Pawan Gupta wrote:
+> On Thu, May 18, 2023 at 10:33:15AM -0700, Sean Christopherson wrote:
+> > I made the mistake of digging into why KVM doesn't advertise ARCH_CAP_FB_CLEAR_CTRL...
+> > 
+> >   1. I see *nothing* in commit 027bbb884be0 ("KVM: x86/speculation: Disable Fill
+> >      buffer clear within guests") that justifies 1x RDMSR and 2x WRMSR on every
+> >      entry+exit.
+> 
+> Unnecessary VERWs in guest will have much higher impact than due to MSR
+> read/write at vmentry/exit.
 
-If I understand correctly, this patch doesn't change the behavior of the
-code. If this is the case, I guess we don't really need it. The original co=
-de
-looks reasonable to me.
+Can you provide numbers for something closeish to a real world workload?
 
-Thanks,
-Song
+> On an Icelake system it is pointless for a guest to incur VERW penalty when
+> the system is not affected by MDS/TAA and guests don't need mitigation for
+> MMIO Stale Data. MSR writes are only done when the guest is likely to execute
+> unnecessary VERWs(e.g. when the guest thinks its running on an older gen
+> CPU).
+>
+> >      KVM just needs to context switch the MSR between guests since the value that's
+> >      loaded while running in the host is irrelevant.  E.g. use a percpu cache to
+> 
+> I will be happy to avoid the MSR read/write, but its worth considering
+> that this MSR can receive more bits that host may want to toggle, then
+> percpu cache implementation would likely change.
 
->
-> Suggested-by: Yu Kuai <yukuai3@huawei.com>
-> Signed-off-by: Li Nan <linan122@huawei.com>
-> ---
->  drivers/md/raid10.c | 41 ++++++++++++++++++++++++-----------------
->  1 file changed, 24 insertions(+), 17 deletions(-)
->
-> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-> index 4fcfcb350d2b..d31eed17f186 100644
-> --- a/drivers/md/raid10.c
-> +++ b/drivers/md/raid10.c
-> @@ -2655,23 +2655,24 @@ static void recovery_request_write(struct mddev *=
-mddev, struct r10bio *r10_bio)
->  }
->
->  /*
-> - * Used by fix_read_error() to decay the per rdev read_errors.
-> + * Used by fix_read_error() to decay the per rdev read_errors and check =
-if
-> + * read_error > max_read_errors.
->   * We halve the read error count for every hour that has elapsed
->   * since the last recorded read error.
->   *
->   */
-> -static void check_decay_read_errors(struct mddev *mddev, struct md_rdev =
-*rdev)
-> +static bool check_decay_read_errors(struct mddev *mddev, struct md_rdev =
-*rdev)
->  {
-> -       long cur_time_mon;
-> +       time64_t cur_time_mon =3D ktime_get_seconds();
->         unsigned long hours_since_last;
-> -       unsigned int read_errors =3D atomic_read(&rdev->read_errors);
-> -
-> -       cur_time_mon =3D ktime_get_seconds();
-> +       unsigned int read_errors;
-> +       unsigned int max_read_errors =3D
-> +                       atomic_read(&mddev->max_corr_read_errors);
->
->         if (rdev->last_read_error =3D=3D 0) {
->                 /* first time we've seen a read error */
->                 rdev->last_read_error =3D cur_time_mon;
-> -               return;
-> +               goto increase;
->         }
->
->         hours_since_last =3D (long)(cur_time_mon -
-> @@ -2684,10 +2685,25 @@ static void check_decay_read_errors(struct mddev =
-*mddev, struct md_rdev *rdev)
->          * just set read errors to 0. We do this to avoid
->          * overflowing the shift of read_errors by hours_since_last.
->          */
-> +       read_errors =3D atomic_read(&rdev->read_errors);
->         if (hours_since_last >=3D 8 * sizeof(read_errors))
->                 atomic_set(&rdev->read_errors, 0);
->         else
->                 atomic_set(&rdev->read_errors, read_errors >> hours_since=
-_last);
-> +
-> +increase:
-> +       read_errors =3D atomic_inc_return(&rdev->read_errors);
-> +       if (read_errors > max_read_errors) {
-> +               pr_notice("md/raid10:%s: %pg: Raid device exceeded read_e=
-rror threshold [cur %d:max %d]\n",
-> +                         mdname(mddev), rdev->bdev,
-> +                         read_errors, max_read_errors);
-> +               pr_notice("md/raid10:%s: %pg: Failing raid device\n",
-> +                         mdname(mddev), rdev->bdev);
-> +               md_error(mddev, rdev);
-> +               return false;
-> +       }
-> +
-> +       return true;
->  }
->
->  static int r10_sync_page_io(struct md_rdev *rdev, sector_t sector,
-> @@ -2727,7 +2743,6 @@ static void fix_read_error(struct r10conf *conf, st=
-ruct mddev *mddev, struct r10
->         int sect =3D 0; /* Offset from r10_bio->sector */
->         int sectors =3D r10_bio->sectors;
->         struct md_rdev *rdev;
-> -       int max_read_errors =3D atomic_read(&mddev->max_corr_read_errors)=
-;
->         int d =3D r10_bio->devs[r10_bio->read_slot].devnum;
->
->         /* still own a reference to this rdev, so it cannot
-> @@ -2740,15 +2755,7 @@ static void fix_read_error(struct r10conf *conf, s=
-truct mddev *mddev, struct r10
->                    more fix_read_error() attempts */
->                 return;
->
-> -       check_decay_read_errors(mddev, rdev);
-> -       atomic_inc(&rdev->read_errors);
-> -       if (atomic_read(&rdev->read_errors) > max_read_errors) {
-> -               pr_notice("md/raid10:%s: %pg: Raid device exceeded read_e=
-rror threshold [cur %d:max %d]\n",
-> -                         mdname(mddev), rdev->bdev,
-> -                         atomic_read(&rdev->read_errors), max_read_error=
-s);
-> -               pr_notice("md/raid10:%s: %pg: Failing raid device\n",
-> -                         mdname(mddev), rdev->bdev);
-> -               md_error(mddev, rdev);
-> +       if (!check_decay_read_errors(mddev, rdev)) {
->                 r10_bio->devs[r10_bio->read_slot].bio =3D IO_BLOCKED;
->                 return;
->         }
-> --
-> 2.31.1
->
+Change in and of itself isn't problematic, so long as whatever code we write won't
+fall over if/when new bits are added, i.e. doesn't clobber unknown bits.
+
+> >   5. MSR_IA32_MCU_OPT_CTRL is not modified by the host after a CPU is brought up,
+> >      i.e. the host's desired value is effectively static post-boot, and barring
+> >      a buggy configuration (running KVM as a guest), the boot CPU's value will be
+> >      the same as every other CPU.
+> 
+> Would the MSR value be same on every CPU, if only some guests have
+> enumerated FB_CLEAR and others haven't?
+
+Ignore the guest, I'm talking purely about the host.  Specifically, there's no
+reason to do a RDMSR to get the host value on every VM-Enter since the host's
+value is effectively static post-boot.
+
+> MSR writes (to disable FB_CLEAR) are not done when a guest enumerates
+> FB_CLEAR. Enumeration of FB_CLEAR in guest will depend on its configuration.
+> 
+> >   6. Performance aside, KVM should not be speculating (ha!) on what the guest
+> >      will and will not do, and should instead honor whatever behavior is presented
+> >      to the guest.  If the guest CPU model indicates that VERW flushes buffers,
+> >      then KVM damn well needs to let VERW flush buffers.
+> 
+> The current implementation allows guests to have VERW flush buffers when
+> they enumerate FB_CLEAR. It only restricts the flush behavior when the
+> guest is trying to mitigate against a vulnerability(like MDS) on a
+> hardware that is not affected. I guess its common for guests to be
+> running with older gen configuration on a newer hardware.
+
+Right, I'm saying that that behavior is wrong.  KVM shouldn't assume the guest
+the guest will do things a certain way and should instead honor the "architectural"
+definition, in quotes because I realize there probably is no architectural
+definition for any of this.
+
+It might be that the code does (unintentionally?) honor the "architecture", i.e.
+this code might actually be accurrate with respect to when the guest can expect
+VERW to flush buffers.  But the comment is so, so wrong.
+
+	/*
+	 * If guest will not execute VERW, there is no need to set FB_CLEAR_DIS
+	 * at VMEntry. Skip the MSR read/write when a guest has no use case to
+	 * execute VERW.
+	 */
+	if ((vcpu->arch.arch_capabilities & ARCH_CAP_FB_CLEAR) ||
+	   ((vcpu->arch.arch_capabilities & ARCH_CAP_MDS_NO) &&
+	    (vcpu->arch.arch_capabilities & ARCH_CAP_TAA_NO) &&
+	    (vcpu->arch.arch_capabilities & ARCH_CAP_PSDP_NO) &&
+	    (vcpu->arch.arch_capabilities & ARCH_CAP_FBSDP_NO) &&
+	    (vcpu->arch.arch_capabilities & ARCH_CAP_SBDR_SSDP_NO)))
+		vmx->disable_fb_clear = false;
