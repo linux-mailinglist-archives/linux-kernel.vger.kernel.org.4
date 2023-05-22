@@ -2,88 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E77F670CEF4
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 02:24:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0224B70CF5C
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 02:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233997AbjEVXrv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 19:47:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34234 "EHLO
+        id S235760AbjEWAih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 20:38:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235192AbjEVXau (ORCPT
+        with ESMTP id S235144AbjEWAM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 19:30:50 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 370E4107;
-        Mon, 22 May 2023 16:30:49 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-64d2467d640so5661056b3a.1;
-        Mon, 22 May 2023 16:30:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684798248; x=1687390248;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xernQNKYRJpE9vFsjzMr/YTOObUVHtJwlSgWwo1QHTI=;
-        b=rcXz+2D9jl6iGGL3/riEwfEdlU06CalNyJuIz0Has414j9PtiKoDsv/yFX87px58ai
-         z0r5Nk5vbuB5TCH0ggsiUv77s/hVwZTnLXj5cvL++HnqGigNBbtPL86/RrrqKdwTd5vg
-         OgPGoBgBOA0r+HPaZl0ddVCxz7T9/NJntCEVfyZTGbcZW4tow3nxTZLwI4sxG8RDxYXu
-         gJm76mCp2dviyO0We/XiIvpzNU5g1xU5NCKJtVdurodlO1YQG9vFHtVmbyJZ83UbI8qy
-         di0IPbr6dFBKusWqUfRkSckv9fzv/W9NiW+yubqE7+Bsc+oQw0HelNYtf7QPWC0NkaV5
-         7e8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684798248; x=1687390248;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xernQNKYRJpE9vFsjzMr/YTOObUVHtJwlSgWwo1QHTI=;
-        b=IwC8FhW/xqXEfvGxqyoJPslvsziXWQIvfaranL2QcZz0tALd0rrwiehc6eHwdxg0r3
-         n1HBHA/Ymgpbp4OsU5uu8++6Qbo5ArgjR6x7khV6jMkCHWZELfUwDFk6iuASjV3xPbYn
-         EMD1nZql4nW/UcSj0LbQh+tIaQEx6zVt+4XBUXhXcQHySIXHwOme+buK7CwAFEOsfsTx
-         iTGrWgVNorpRzVIRbDy4WPvBbVZqL4eXvAD/nKaWTPGbwwLz7XAvhJSaC1aGZ+NFE1v4
-         TFn7pDsrL7NZdtYZCnEvhzhA879aT2FLkqVQkJfB+wuCkqH4oi7wpJZWaMGCI0H3yWUA
-         AG9Q==
-X-Gm-Message-State: AC+VfDyKJEZAIOMt8+2T5KwSbEW3eqR+TrtYgZibWXzOzIytYrdECVv0
-        d+lOrzhqHVeLeFC4W5Gjq8w=
-X-Google-Smtp-Source: ACHHUZ7Snm2NO338HrUo1drd9l7opKCnCEmCWIZDkjzYraCiiKM07FPvA95sdz4W4Po9obueAxQJaQ==
-X-Received: by 2002:a05:6a00:2daa:b0:64d:746b:b4ec with SMTP id fb42-20020a056a002daa00b0064d746bb4ecmr4688640pfb.17.1684798248477;
-        Mon, 22 May 2023 16:30:48 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:54fa:e8a7:76de:888d])
-        by smtp.gmail.com with ESMTPSA id g13-20020aa7874d000000b0063f2a5a59d1sm4615466pfo.190.2023.05.22.16.30.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 16:30:47 -0700 (PDT)
-Date:   Mon, 22 May 2023 16:30:44 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Stephen Boyd <swboyd@chromium.org>, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] HID: ensure timely release of driver-allocated resources
-Message-ID: <ZGv7JLaDo3aPWKgV@google.com>
-References: <ZFWarGkRAfPOmI6E@google.com>
- <ZFaeiwBp+5hUXk/j@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZFaeiwBp+5hUXk/j@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 22 May 2023 20:12:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07FEDE6C;
+        Mon, 22 May 2023 16:33:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 93310619EF;
+        Mon, 22 May 2023 23:33:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0140CC433EF;
+        Mon, 22 May 2023 23:33:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684798438;
+        bh=BoE/AL38pXrSF4StDVPj+q72OKr21YQ0EEfYz+I4tKs=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=ReG1q9Kz+bFBuuBOfoc9N/MUCprN6w+WHVTvaFk8Mlc23y+9G+l8x3Okr94oWcRUP
+         yg+ypeneQSRfkNt4MVaKRBBQMHHWDabjd/wRi3/TwSMongqqfMnY4Tv5DDHT6ivtet
+         qPk4ZfdRMJJPXTcxSupKOY5WSMkXnp9s/d9C9ZTREZcOxcoKGB54E1jzX3Xe0SjCH+
+         0QFXllXMpbJeC56z8zFu8nD8WMPXM7TVes5YYCH46gXGKc0KhPKiv6mw0lQQx+14j7
+         45ieWvGGCAZqiTrLSASVLY5HNmxF8QomouHqEK0gVFJysa75NrPPT1/+sclrQEzduR
+         1Q7f04FlbJkgQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D925CE22AEB;
+        Mon, 22 May 2023 23:33:57 +0000 (UTC)
+Subject: Re: [GIT PULL] Modules fixes for v6.4-rc4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <ZGvev3uX1SjH+7od@bombadil.infradead.org>
+References: <ZGvev3uX1SjH+7od@bombadil.infradead.org>
+X-PR-Tracked-List-Id: <patches.lists.linux.dev>
+X-PR-Tracked-Message-Id: <ZGvev3uX1SjH+7od@bombadil.infradead.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.4-rc4
+X-PR-Tracked-Commit-Id: d36f6efbe0cb422fe1e4475717d75f3737088832
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 1177dcc9637661e05c18aa019a49821bcd6b3dc1
+Message-Id: <168479843788.6623.422001700278816596.pr-tracker-bot@kernel.org>
+Date:   Mon, 22 May 2023 23:33:57 +0000
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     torvalds@linux-foundation.org, patches@lists.linux.dev,
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        harshit.m.mogalapalli@oracle.com, song@kernel.org,
+        mcgrof@kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 06, 2023 at 11:38:03AM -0700, Dmitry Torokhov wrote:
-> On Fri, May 05, 2023 at 05:09:16PM -0700, Dmitry Torokhov wrote:
-> > +	if (down_interruptible(&hdev->driver_input_lock))
-> > +		return -EINTR;
-> > +
-> > +	 ret = __hid_device_probe(hdev);
-> 
-> There is an extra space snuck in before "ret", let me know if you want
-> me to repost it (or if there are bigger concerns).
+The pull request you sent on Mon, 22 May 2023 14:29:35 -0700:
 
-Gentle ping on this one...
+> git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/ tags/modules-6.4-rc4
+
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/1177dcc9637661e05c18aa019a49821bcd6b3dc1
+
+Thank you!
 
 -- 
-Dmitry
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
