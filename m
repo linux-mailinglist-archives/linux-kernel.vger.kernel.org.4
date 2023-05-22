@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52BCA70B67B
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 09:27:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 515DB70B680
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 09:27:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232331AbjEVH1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 03:27:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54512 "EHLO
+        id S232594AbjEVH1Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 03:27:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232318AbjEVH1N (ORCPT
+        with ESMTP id S232439AbjEVH1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 03:27:13 -0400
+        Mon, 22 May 2023 03:27:17 -0400
 Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3478AB7;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA0ABF;
         Mon, 22 May 2023 00:27:10 -0700 (PDT)
 Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QPptL1g8Sz4f3jq4;
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QPptL5nDLz4f3p17;
         Mon, 22 May 2023 15:27:06 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP2 (Coremail) with SMTP id Syh0CgBH7epJGWtkztVuJw--.34097S5;
+        by APP2 (Coremail) with SMTP id Syh0CgBH7epJGWtkztVuJw--.34097S6;
         Mon, 22 May 2023 15:27:07 +0800 (CST)
 From:   linan666@huaweicloud.com
 To:     song@kernel.org, neilb@suse.de, Rob.Becker@riverbed.com
 Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
         linan122@huawei.com, yukuai3@huawei.com, yi.zhang@huawei.com,
         houtao1@huawei.com, yangerkun@huawei.com
-Subject: [PATCH v4 1/3] md/raid10: fix overflow of md/safe_mode_delay
-Date:   Mon, 22 May 2023 15:25:33 +0800
-Message-Id: <20230522072535.1523740-2-linan666@huaweicloud.com>
+Subject: [PATCH v4 2/3] md/raid10: fix wrong setting of max_corr_read_errors
+Date:   Mon, 22 May 2023 15:25:34 +0800
+Message-Id: <20230522072535.1523740-3-linan666@huaweicloud.com>
 X-Mailer: git-send-email 2.31.1
 In-Reply-To: <20230522072535.1523740-1-linan666@huaweicloud.com>
 References: <20230522072535.1523740-1-linan666@huaweicloud.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgBH7epJGWtkztVuJw--.34097S5
-X-Coremail-Antispam: 1UD129KBjvJXoW7uF1rXr4rZr1ftr17CF48Zwb_yoW8Xr1kp3
-        yfJ343Gw4rKFy0gFnFqr4kWFy5G3Z2qrW2y3yIy34ftF9rXF1Yqas5GanYgr98W3yrAFy7
-        Jw1DAF15ZFykCaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUmjb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUGw
-        A2048vs2IY020Ec7CjxVAFwI0_JFI_Gr1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrV
-        ACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWU
-        JVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2
-        ka0xkIwI1lw4CEc2x0rVAKj4xxMxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j
-        6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7
-        AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE
-        2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcV
-        C2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2Kfnx
-        nUUI43ZEXa7IU858n5UUUUU==
+X-CM-TRANSID: Syh0CgBH7epJGWtkztVuJw--.34097S6
+X-Coremail-Antispam: 1UD129KBjvdXoWrur4kXF4fGw18JF4fZrWxtFb_yoW3ZFg_Ca
+        1Fqay3Xr9Iyr12ywn8Zr4SvrW2y3yv9ryDWF1Ika45A3WrZ34Iqa4ru3s8Xr1rJrWkua45
+        Xr1kK3yIvr4DKjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbk8YFVCjjxCrM7AC8VAFwI0_Wr0E3s1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l82xGYIkIc2x26280x7IE14v26r15M2
+        8IrcIa0xkI8VCY1x0267AKxVW8JVW5JwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK
+        021l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r
+        4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+        GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64
+        xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j
+        6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2
+        kIc2xKxwAKzVCY07xG64k0F24l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_
+        Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17
+        CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0
+        I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I
+        8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73
+        UjIFyTuYvjxUc-txDUUUU
 X-CM-SenderInfo: polqt0awwwqx5xdzvxpfor3voofrz/
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
@@ -65,42 +65,29 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Li Nan <linan122@huawei.com>
 
-There is no input check when echo md/safe_mode_delay in safe_delay_store().
-And msec might also overflow when HZ < 1000 in safe_delay_show(), Fix it by
-checking overflow in safe_delay_store() and use unsigned long conversion in
-safe_delay_show().
+There is no input check when echo md/max_read_errors and overflow might
+occur. Add check of input number.
 
-Fixes: 72e02075a33f ("md: factor out parsing of fixed-point numbers")
+Fixes: 1e50915fe0bb ("raid: improve MD/raid10 handling of correctable read errors.")
 Signed-off-by: Li Nan <linan122@huawei.com>
+Reviewed-by: Yu Kuai <yukuai3@huawei.com>
 ---
- drivers/md/md.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ drivers/md/md.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/drivers/md/md.c b/drivers/md/md.c
-index 8e344b4b3444..b2d69260b5b1 100644
+index b2d69260b5b1..350094f1cb09 100644
 --- a/drivers/md/md.c
 +++ b/drivers/md/md.c
-@@ -3794,8 +3794,9 @@ int strict_strtoul_scaled(const char *cp, unsigned long *res, int scale)
- static ssize_t
- safe_delay_show(struct mddev *mddev, char *page)
- {
--	int msec = (mddev->safemode_delay*1000)/HZ;
--	return sprintf(page, "%d.%03d\n", msec/1000, msec%1000);
-+	unsigned int msec = ((unsigned long)mddev->safemode_delay*1000)/HZ;
-+
-+	return sprintf(page, "%u.%03u\n", msec/1000, msec%1000);
+@@ -4478,6 +4478,8 @@ max_corrected_read_errors_store(struct mddev *mddev, const char *buf, size_t len
+ 	rv = kstrtouint(buf, 10, &n);
+ 	if (rv < 0)
+ 		return rv;
++	if (n > INT_MAX)
++		return -EINVAL;
+ 	atomic_set(&mddev->max_corr_read_errors, n);
+ 	return len;
  }
- static ssize_t
- safe_delay_store(struct mddev *mddev, const char *cbuf, size_t len)
-@@ -3807,7 +3808,7 @@ safe_delay_store(struct mddev *mddev, const char *cbuf, size_t len)
- 		return -EINVAL;
- 	}
- 
--	if (strict_strtoul_scaled(cbuf, &msec, 3) < 0)
-+	if (strict_strtoul_scaled(cbuf, &msec, 3) < 0 || msec > UINT_MAX / HZ)
- 		return -EINVAL;
- 	if (msec == 0)
- 		mddev->safemode_delay = 0;
 -- 
 2.31.1
 
