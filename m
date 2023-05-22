@@ -2,88 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA7DF70BCDD
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 14:04:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B32470BCE1
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 14:05:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233441AbjEVMEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 08:04:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42256 "EHLO
+        id S233081AbjEVMEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 08:04:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbjEVMEj (ORCPT
+        with ESMTP id S233526AbjEVMEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 08:04:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4ED8C6
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 05:03:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684757022;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=V3Lhaor4pwQIZ8FBVp2472SUVuBYL6WQS2OjZrMkJpc=;
-        b=hc/DdOk+f6jP5uHVQf/grA3HqYDlPyBhj7e4e51hZXd5TZOfwSKfeLZRcIZy/SXLc0kAKj
-        Ll6qwDt96ey2Sbg6E3FjOciwE5UVO8QoB/FYPaAlJUOeSTsnpuoWtIPBUVXe2oszS17H7U
-        +kDBSN2ezOBF+GAd1ZuTsK0pqV+eA6k=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-116-KpEo1mbgMU-hJwzffbG0cA-1; Mon, 22 May 2023 08:03:40 -0400
-X-MC-Unique: KpEo1mbgMU-hJwzffbG0cA-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-3f6089a9689so516495e9.1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 05:03:40 -0700 (PDT)
+        Mon, 22 May 2023 08:04:50 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456B09B
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 05:04:48 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-306dbad5182so3884796f8f.1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 05:04:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684757087; x=1687349087;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XmGSkIC15ZBdqEyVUHdk4p0WQzlHdQ5XyKYa3D0QoFA=;
+        b=P8Pl0wzG47Mrb4LOoe4y8hQKWb8XRQlBbaXjAcCoNfohmbC1mNS2da3YGTc3r9qjgi
+         5lbalTBg89BSBDYeFYJWRMh4n7AnDXbvgl+qYkaLINDiwc6Qp33EAjPDKF1pyHLvLCEa
+         Doj2qzzqwDDlFR77+CIeQCTSQSVhm7b1vci1Xgq5/j7ZjLS1sC0+7u3iMEkGCKw7KQtp
+         f+5/YIddIgz6yfe1tR1kvHw1qukDRrYBi7h74/mEkRHHgf/K7775wFsBj/reyUdgQsp7
+         MgWA/nos/X0+07fLcpACtyfAU+puf7nncoDXm9Qq5jLy1qWPjWbHyOO+Tv6xzg20o3wp
+         Pp8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684757019; x=1687349019;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=V3Lhaor4pwQIZ8FBVp2472SUVuBYL6WQS2OjZrMkJpc=;
-        b=U9AhAW1EtYxg0zTh8e483OnM+NgaSGWf/ipuMFuDll3H486belbUYwZr6DX5Mn2/it
-         IcceeFkxQQ1bIApv0w55jWl5tRsvRtNxkAYkhSQmlmJKBK9uzAjN1ep5FUJziF1HkZhi
-         4IfaQa/kUk/7Myr2caJk48sHTayyd4c+MzLkNDBGd5MkeI5SO7brUjVkk9guAWtbrNj+
-         zyxIx06VecwLJ76nYgtdKfKOsQgN30CkpRKDvx6ZwY9ze6ysE8gpEzPos/VRGKBbwBJw
-         CDDkAoeF+3xznzHS1iSPdozef+z8CRxW7nwMTD7WvPGR75n8hs5BJ5XZJ5iYGWXKYSRc
-         OxOQ==
-X-Gm-Message-State: AC+VfDwl4Aymuf1iCEi46HcxljdqY+YiqVub00/4puAKFsmAdvqt84gh
-        MhqL1Q6sZUZFHaIBK1QhWCi2gg4fbwbCg4Qf7ssgW3jBO+ZuDM/qvhtSqXz46k38pgge10Nhl2m
-        +X+rnAVFZAzxumREGveVJzZnp
-X-Received: by 2002:adf:ef48:0:b0:2f8:f3da:72cf with SMTP id c8-20020adfef48000000b002f8f3da72cfmr8194259wrp.18.1684757019589;
-        Mon, 22 May 2023 05:03:39 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7LKj7uvbKNKZrF7jijaIoeN9nK+rx43j6qxUUp9A6OUqm0WGQT1iXH4yKW15xAYitBjN7vpg==
-X-Received: by 2002:adf:ef48:0:b0:2f8:f3da:72cf with SMTP id c8-20020adfef48000000b002f8f3da72cfmr8194173wrp.18.1684757018360;
-        Mon, 22 May 2023 05:03:38 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c742:c800:d74f:aec6:f8ac:558? (p200300cbc742c800d74faec6f8ac0558.dip0.t-ipconnect.de. [2003:cb:c742:c800:d74f:aec6:f8ac:558])
-        by smtp.gmail.com with ESMTPSA id m9-20020a7bce09000000b003f4247fbb5fsm11290703wmc.10.2023.05.22.05.03.37
+        d=1e100.net; s=20221208; t=1684757087; x=1687349087;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XmGSkIC15ZBdqEyVUHdk4p0WQzlHdQ5XyKYa3D0QoFA=;
+        b=ahBsy2jSM0iCrr69tn9NhNirp15bKymLkiZUqIprF/ZXGo2wPhJHSx3H4ro7H/7I8t
+         RxYwR5gD27452GakQsYRB+dTFMXJMJcxHhRZQGHwUC9aQS/KkYwn8xwljjOo56iLmwnt
+         20caE8LUX8ny1PbWg2V7nEwGI7KAi078uBSNYB2t9oBIn3nkM5lAYf4EmCINoZ1KYNDW
+         k64sG+3VB5EWRm3+Eno0qdTWyh3TnvtcvttLFX+hsfquHH6V7zxFvWXOvDTpWYMXxk4d
+         YIZajnlROfLtlcNijmNTBZsmk8GXom2I8NA9aDDgbwj5DMkjdFkZXC2z5QoJOXW+s+r7
+         BZSQ==
+X-Gm-Message-State: AC+VfDxyjwn5672D0g1VzhyK69iuZcxt+DcQzU7nu6l4nRrkNrYT7Cnt
+        Q79wyn1e6SVO/uEMwytBUBPRmw==
+X-Google-Smtp-Source: ACHHUZ6HlF5QXNP0Yse6sMgYpKn/I5NauhHUsC+IEQLh2V/f1AUEzxrr3i8XFI2XIG5GRtTuSwwnnQ==
+X-Received: by 2002:a5d:6509:0:b0:306:2b5a:d8db with SMTP id x9-20020a5d6509000000b003062b5ad8dbmr7866960wru.23.1684757086606;
+        Mon, 22 May 2023 05:04:46 -0700 (PDT)
+Received: from [192.168.1.91] (192.201.68.85.rev.sfr.net. [85.68.201.192])
+        by smtp.gmail.com with ESMTPSA id i7-20020a5d55c7000000b003079ed1f0a0sm7560047wrw.44.2023.05.22.05.04.45
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 May 2023 05:03:37 -0700 (PDT)
-Message-ID: <200a094f-7ca9-8a64-1c9b-7cf2e546f3eb@redhat.com>
-Date:   Mon, 22 May 2023 14:03:36 +0200
+        Mon, 22 May 2023 05:04:46 -0700 (PDT)
+Message-ID: <f02c52d4-a301-eb72-02b8-0c0003aac6be@baylibre.com>
+Date:   Mon, 22 May 2023 14:04:45 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH -V2 3/5] swap: remove __swp_swapcount()
+ Thunderbird/102.11.0
+Subject: Re: RCU WARNING on 6.4-rc2, TI AM62 and TPS65219
 Content-Language: en-US
-To:     Huang Ying <ying.huang@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Hugh Dickins <hughd@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>
-References: <20230522070905.16773-1-ying.huang@intel.com>
- <20230522070905.16773-4-ying.huang@intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20230522070905.16773-4-ying.huang@intel.com>
+From:   jerome Neanne <jneanne@baylibre.com>
+To:     Francesco Dolcini <francesco@dolcini.it>, nm@ti.com,
+        lee@kernel.org, tony@atomide.com, vigneshr@ti.com
+Cc:     afd@ti.com, khilman@baylibre.com, narmstrong@baylibre.com,
+        msp@baylibre.com, j-keerthy@ti.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org
+References: <ZGeHMjlnob2GFyHF@francesco-nb.int.toradex.com>
+ <1a0a796c-497f-41a5-2f76-493c09e29325@baylibre.com>
+In-Reply-To: <1a0a796c-497f-41a5-2f76-493c09e29325@baylibre.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,106 +78,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 22.05.23 09:09, Huang Ying wrote:
-> __swp_swapcount() just encloses the calling to swap_swapcount() with
-> get/put_swap_device().  It is called in __read_swap_cache_async()
-> only, which encloses the calling with get/put_swap_device() already.
-> So, __read_swap_cache_async() can call swap_swapcount() directly.
-
-The previous patch contained the hunk
-
--		if (!__swp_swapcount(entry) && swap_slot_cache_enabled)
--			return NULL;
-+		if (!swap_swapcount(si, entry) && swap_slot_cache_enabled)
-+			goto fail;
-  
-
-So something is a bit off here. Either that hunk should go here, or
-this patch description has to be adjusted.
 
 
-But I guess patch #2 doesn't compile on its own because this patch
-here adds swap_swapcount() to include/linux/swap.h ?
-
+On 22/05/2023 11:27, jerome Neanne wrote:
 > 
-> Signed-off-by: "Huang, Ying" <ying.huang@intel.com>
-> Cc: David Hildenbrand <david@redhat.com>
-> Cc: Hugh Dickins <hughd@google.com>
-> Cc: Johannes Weiner <hannes@cmpxchg.org>
-> Cc: Matthew Wilcox <willy@infradead.org>
-> Cc: Michal Hocko <mhocko@suse.com>
-> Cc: Minchan Kim <minchan@kernel.org>
-> Cc: Tim Chen <tim.c.chen@linux.intel.com>
-> Cc: Yang Shi <shy828301@gmail.com>
-> Cc: Yu Zhao <yuzhao@google.com>
-> ---
->   include/linux/swap.h |  4 ++--
->   mm/swapfile.c        | 20 +-------------------
->   2 files changed, 3 insertions(+), 21 deletions(-)
 > 
-> diff --git a/include/linux/swap.h b/include/linux/swap.h
-> index 3c69cb653cb9..f6bd51aa05ea 100644
-> --- a/include/linux/swap.h
-> +++ b/include/linux/swap.h
-> @@ -512,7 +512,7 @@ int find_first_swap(dev_t *device);
->   extern unsigned int count_swap_pages(int, int);
->   extern sector_t swapdev_block(int, pgoff_t);
->   extern int __swap_count(swp_entry_t entry);
-> -extern int __swp_swapcount(swp_entry_t entry);
-> +extern int swap_swapcount(struct swap_info_struct *si, swp_entry_t entry);
->   extern int swp_swapcount(swp_entry_t entry);
->   extern struct swap_info_struct *page_swap_info(struct page *);
->   extern struct swap_info_struct *swp_swap_info(swp_entry_t entry);
-> @@ -590,7 +590,7 @@ static inline int __swap_count(swp_entry_t entry)
->   	return 0;
->   }
->   
-> -static inline int __swp_swapcount(swp_entry_t entry)
-> +static inline int swap_swapcount(struct swap_info_struct *si, swp_entry_t entry)
->   {
->   	return 0;
->   }
-> diff --git a/mm/swapfile.c b/mm/swapfile.c
-> index 8419cba9c192..e9cce775fb25 100644
-> --- a/mm/swapfile.c
-> +++ b/mm/swapfile.c
-> @@ -1443,7 +1443,7 @@ int __swap_count(swp_entry_t entry)
->    * This does not give an exact answer when swap count is continued,
->    * but does include the high COUNT_CONTINUED flag to allow for that.
->    */
-> -static int swap_swapcount(struct swap_info_struct *si, swp_entry_t entry)
-> +int swap_swapcount(struct swap_info_struct *si, swp_entry_t entry)
->   {
->   	pgoff_t offset = swp_offset(entry);
->   	struct swap_cluster_info *ci;
-> @@ -1455,24 +1455,6 @@ static int swap_swapcount(struct swap_info_struct *si, swp_entry_t entry)
->   	return count;
->   }
->   
-> -/*
-> - * How many references to @entry are currently swapped out?
-> - * This does not give an exact answer when swap count is continued,
-> - * but does include the high COUNT_CONTINUED flag to allow for that.
-> - */
-> -int __swp_swapcount(swp_entry_t entry)
-> -{
-> -	int count = 0;
-> -	struct swap_info_struct *si;
-> -
-> -	si = get_swap_device(entry);
-> -	if (si) {
-> -		count = swap_swapcount(si, entry);
-> -		put_swap_device(si);
-> -	}
-> -	return count;
-> -}
-> -
->   /*
->    * How many references to @entry are currently swapped out?
->    * This considers COUNT_CONTINUED so it returns exact answer.
+> On 19/05/2023 16:26, Francesco Dolcini wrote:
+>> Hello all,
+>> while testing 6.4-rc2 (2d1bcbc6cd70) on a TI K3 AM625 SoC with TPS65219
+>> PMIC I noticed this warning.
+>>
+>> [   80.117502] systemd-shutdown[1]: All loop devices detached.
+>> [   80.123176] systemd-shutdown[1]: Stopping MD devices.
+>> [   80.128700] systemd-shutdown[1]: All MD devices stopped.
+>> [   80.134123] systemd-shutdown[1]: Detaching DM devices.
+>> [   80.139553] systemd-shutdown[1]: All DM devices detached.
+>> [   80.144970] systemd-shutdown[1]: All filesystems, swaps, loop 
+>> devices, MD devices and DM devices detached.
+>> [   80.162682] systemd-shutdown[1]: Syncing filesystems and block 
+>> devices.
+>> [   80.169602] systemd-shutdown[1]: Rebooting.
+>> [   80.173817] kvm: exiting hardware virtualization
+>> [   80.213016] reboot: Restarting system
+>> [   80.216767] ------------[ cut here ]------------
+>> [   80.221380] Voluntary context switch within RCU read-side critical 
+>> section!
+>> [   80.221404] WARNING: CPU: 0 PID: 1 at kernel/rcu/tree_plugin.h:318 
+>> rcu_note_context_switch+0x31c/0x390
+>> [   80.237669] Modules linked in: 8021q garp mrp stp llc cfg80211 
+>> usb_f_ncm u_ether bluetooth ecdh_generic ecc rfkill sp
+>> idev crct10dif_ce snd_soc_simple_card snd_soc_simple_card_utils 
+>> rtc_ti_k3 sa2ul sha256_generic libsha256 authenc snd_soc
+>> _davinci_mcasp snd_soc_ti_udma snd_soc_ti_edma snd_soc_ti_sdma 
+>> ti_ads1015 ina2xx industrialio_triggered_buffer pwm_tiehr
+>> pwm snd_soc_nau8822 tps65219_pwrbutton lm75 kfifo_buf spi_omap2_mcspi 
+>> rtc_ds1307 libcomposite fuse drm ipv6
+>> [   80.278507] CPU: 0 PID: 1 Comm: systemd-shutdow Not tainted 
+>> 6.4.0-rc2-00166-gf932e7bb873b #3
+>> [   80.286938] Hardware name: Toradex Verdin AM62 on Verdin 
+>> Development Board (DT)
+>> [   80.294238] pstate: 600000c5 (nZCv daIF -PAN -UAO -TCO -DIT -SSBS 
+>> BTYPE=--)
+>> [   80.301193] pc : rcu_note_context_switch+0x31c/0x390
+>> [   80.306154] lr : rcu_note_context_switch+0x31c/0x390
+>> [   80.311114] sp : ffff80000a71b4c0
+>> [   80.314422] x29: ffff80000a71b4c0 x28: 0000000000000000 x27: 
+>> ffff000000118000
+>> [   80.321556] x26: 0000000000000000 x25: ffff000000118000 x24: 
+>> ffff800008fafbd8
+>> [   80.328689] x23: ffff000000118000 x22: 0000000000000000 x21: 
+>> ffff000000118000
+>> [   80.335822] x20: 0000000000000000 x19: ffff00003fd68cc0 x18: 
+>> 0000000000000010
+>> [   80.342955] x17: 0000000000000000 x16: 0000000000000000 x15: 
+>> ffff000000118000
+>> [   80.350087] x14: 00000000000001c5 x13: ffff000000118478 x12: 
+>> 00000000ffffffea
+>> [   80.357220] x11: 00000000ffffefff x10: 00000000ffffefff x9 : 
+>> ffff80000a2a9a98
+>> [   80.364352] x8 : 0000000000017fe8 x7 : c0000000ffffefff x6 : 
+>> 000000000000bff4
+>> [   80.371485] x5 : 0000000000057fa8 x4 : 0000000000000000 x3 : 
+>> 0000000000000000
+>> [   80.378617] x2 : ffff80000a251990 x1 : 0000000000000000 x0 : 
+>> 0000000000000000
+>> [   80.385751] Call trace:
+>> [   80.388193]  rcu_note_context_switch+0x31c/0x390
+>> [   80.392807]  __schedule+0x98/0xa7c
+>> [   80.396214]  schedule+0x5c/0xc4
+>> [   80.399354]  schedule_timeout+0x180/0x25c
+>> [   80.403362]  wait_for_completion_timeout+0x80/0x15c
+>> [   80.408238]  ti_sci_set_device_state+0xb4/0x1e4
+>> [   80.412771]  ti_sci_cmd_get_device_exclusive+0x18/0x24
+>> [   80.417907]  ti_sci_pd_power_on+0x28/0x48
+>> [   80.421914]  _genpd_power_on+0x94/0x154
+>> [   80.425749]  genpd_power_on.part.0+0xa4/0x174
+>> [   80.430104]  genpd_runtime_resume+0x118/0x294
+>> [   80.434457]  __rpm_callback+0x48/0x140
+>> [   80.438206]  rpm_callback+0x6c/0x78
+>> [   80.441692]  rpm_resume+0x3bc/0x59c
+>> [   80.445179]  __pm_runtime_resume+0x4c/0x90
+>> [   80.449272]  omap_i2c_xfer_common+0x38/0x598
+>> [   80.453540]  omap_i2c_xfer_polling+0x14/0x20
+>> [   80.457804]  __i2c_transfer+0x138/0x35c
+>> [   80.461642]  i2c_transfer+0x94/0xf4
+>> [   80.465130]  regmap_i2c_read+0x60/0xa8
+>> [   80.468879]  _regmap_raw_read+0xf0/0x170
+>> [   80.472799]  _regmap_bus_read+0x44/0x7c
+>> [   80.476632]  _regmap_read+0x64/0xf4
+>> [   80.480118]  _regmap_update_bits+0xf4/0x130
+>> [   80.484298]  regmap_update_bits_base+0x64/0x98
+>> [   80.488738]  tps65219_restart+0x38/0x48
+>> [   80.492576]  atomic_notifier_call_chain+0x60/0x90
+>> [   80.497280]  do_kernel_restart+0x24/0x30
+>> [   80.501202]  machine_restart+0x38/0x5c
+>> [   80.504950]  kernel_restart+0x88/0x98
+>> [   80.508612]  __do_sys_reboot+0x1e0/0x264
+>> [   80.512533]  __arm64_sys_reboot+0x24/0x30
+>> [   80.516538]  invoke_syscall+0x44/0x104
+>> [   80.520287]  el0_svc_common.constprop.0+0x44/0xec
+>> [   80.524988]  do_el0_svc+0x38/0x98
+>> [   80.528302]  el0_svc+0x2c/0x84
+>> [   80.531354]  el0t_64_sync_handler+0xb8/0xbc
+>> [   80.535534]  el0t_64_sync+0x190/0x194
+>> [   80.539192] ---[ end trace 0000000000000000 ]---
+>>
+>>
+>> This looks similar to what is described here [1], same issue or
+>> something else? Any suggestion?
+>>
+>> The issue is systematic and happens at every boot. With a TI downstream
+>> 5.10 kernel this issue was never experienced.
+>>
+>> Francesco
+>>
+>> [1] 
+>> https://lore.kernel.org/all/20230327-tegra-pmic-reboot-v6-0-af44a4cd82e9@skidata.com/
+>>
+> I don't have the same board to test and don't experience this boot issue 
+> with the am62 board I'm using (the board version I have is a custom 
+> board not released publicly by TI unfortunately).
+> 
+> Notice that: 
+> https://lore.kernel.org/lkml/20230511122100.2225417-1-jneanne@baylibre.com/
+> 
+> Is not yet applied and would help handle shutdown/reboot under some 
+> conditions.
+> 
+> This might help for reboot handling if you are forcing a shutdown/reboot 
+> in your test.
+> 
+> But if the problem is your device tries to shutdown at each boot, then 
+> this is just a side effect, not the original root cause.
+> 
+> Regards,
+> Jerome
+More background in thread:
+Link: https://lore.kernel.org/all/7hfseqa7l0.fsf@baylibre.com/
 
--- 
-Thanks,
-
-David / dhildenb
-
+This explains why downstream is different on that point.
