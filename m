@@ -2,104 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68F1270BF9E
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:24:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCFF070BFAE
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:26:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234322AbjEVNYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 09:24:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45328 "EHLO
+        id S233489AbjEVN0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 09:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234314AbjEVNYt (ORCPT
+        with ESMTP id S234148AbjEVN0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 09:24:49 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0F15C2;
-        Mon, 22 May 2023 06:24:48 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-64d24136685so2486233b3a.1;
-        Mon, 22 May 2023 06:24:48 -0700 (PDT)
+        Mon, 22 May 2023 09:26:11 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01C2D1AD;
+        Mon, 22 May 2023 06:25:50 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-64d30ab1f89so2386584b3a.3;
+        Mon, 22 May 2023 06:25:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684761888; x=1687353888;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5y2V2Q0cxJLucJmDdXTfQhebcgzIrmzfKxBr+QyPL/o=;
-        b=Vens/k+XNOXVRidZkdBScfr1iuj6hReI+9LG5w0RUKlFruHocgD/LtfjMs3eGD94Gw
-         STtas0Yz5vVUgu5GPeqNjv2T1XmkbZgQhLm3DQST+evGHtv+ue7WpUlljBLwBtltcGEO
-         1C1F92REvgW36kIZ7QpmMa66U3VaGRT7LuaN/aKm10gsA+zPeRVYixt7fCkHBPYzgA0x
-         PDPcWGXlbN3p4NPNjqZz0NdcTMxmpXkBjcmpIzdH7jXUlX61C+U7xD81JXb0DCNpwr/9
-         6eGDE+8olhmat1gQAL/Tfxkkf19vVfMFTEzolA6+yjZkzvgEZvFEqce7PYRKhYzuPj1Z
-         YC1g==
+        d=gmail.com; s=20221208; t=1684761949; x=1687353949;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4b3cl3OODzw5cbGHTkbsgtSEp8oZPxcTDpluClxVbUk=;
+        b=eO3rIpsi40iN+2w6btP49efxsdxTdxFOiCQQBcJFc1qjQAPCHGM1ndbcirI2jrHElM
+         82mIWTyUiKNEbcA1OqxJxV/cy8w860ZuUZa19gI7FohoWQGljuvwuTXWG6ypc1UYjeRJ
+         esqRmGWv3h5sai88fccF5Dgo4w9HWJAtapyegg02sBy8GwiNkMcpONHU+DaRbJgnAaTH
+         zkgUTctpnh2Ne/hUgJAL4SZX8j7XBYl7B+DtXgbLWg+U/FWkH+SqwB9hHy0Y322M9872
+         Ipie/tzXpsQqNs0CAZlNF7H0EYGqA9Hq7uYvp0b+UWxQc99RLw7B7VNSkRXF24233fxJ
+         RntA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684761888; x=1687353888;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5y2V2Q0cxJLucJmDdXTfQhebcgzIrmzfKxBr+QyPL/o=;
-        b=Cn1RfOj0N0nPfqd8VjmLxKIspb8y3wJwnA31k9jnEzXbHhRtfyLNt74Izw7atgJI7K
-         6yaOr4byCJltYN4azH3QYO81zrOm+mqp9aZgYxvqh6es8CsxXjYUEbt9p6w04HokUtAc
-         fXexesluH83ohd15IJ1+prOUdkgoVS9Bt8gHloYGfHx1LKn6MIv1h7wN0AZ/YrEVdhT0
-         hzf3zkL07qucst3p6Wa9nRJXxCSQVR7r4l1qW07VGSeLupgDlpr8avQ4rB7UaT67KdQy
-         lS+0pCkWbbS4CoGT5EcCTpZVkhfUp5ioMLUObNtkGEK9B0n8otOUe6gggYkp7SYOSH06
-         HwEA==
-X-Gm-Message-State: AC+VfDzUQZt6/eCEunwN4AytV+JVdoUXW3qh5TpbV5qv+5bkdSRlcYcL
-        kxK6kTOVRKwTUTFplVI9B0A=
-X-Google-Smtp-Source: ACHHUZ4YWkyosJlmsQWEg0b99ZVNZMBpvNmyKPUd3JiRWpH56+aaR09zKny8Q4WzczAM0hm7XwBDQQ==
-X-Received: by 2002:a05:6a00:2d8d:b0:64d:5f41:1e88 with SMTP id fb13-20020a056a002d8d00b0064d5f411e88mr5674565pfb.3.1684761888209;
-        Mon, 22 May 2023 06:24:48 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x18-20020aa79192000000b00642ea56f06dsm4150217pfa.26.2023.05.22.06.24.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 06:24:47 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 22 May 2023 06:24:46 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Daniel Matyas <daniel.matyas@analog.com>
-Cc:     kernel test robot <lkp@intel.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v9 2/2] hwmon: max31827: add MAX31827 driver
-Message-ID: <0e49e860-6f2c-48cb-9ef7-af7891b95237@roeck-us.net>
-References: <20230516104609.7095-1-daniel.matyas@analog.com>
- <20230516104609.7095-2-daniel.matyas@analog.com>
+        d=1e100.net; s=20221208; t=1684761949; x=1687353949;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=4b3cl3OODzw5cbGHTkbsgtSEp8oZPxcTDpluClxVbUk=;
+        b=Xp5AQO4mPzg4hPdVmFxk0lwgitlFqC83pSO4pLFJ5YBI/c+I+5qovYROruKNBr6Jt7
+         pEdBKpcEnVRchef48aHktOpRTkhC/hhv7n+fylp+MAOcrj91SgeslK3EPuo4gsLv5d8b
+         D/0GKwAYqk/YvuXDb/Zkshu9FUHp7ku98Na2l1ub0XQddWDMY5DMFrGTrLZ8WpdOOGy6
+         R0/ElwsorMAQfrQ2Duod8jk0QZEriovIr2wQBR2Y1r1lBJ8GzJxb+Ez1K5K4iduxaDgX
+         WOCvLS1gkivyJWZ6yiuNMEnlG388pjNcmuKYvgzIo8bAZHFOmZQrtw+IjmRDnnGwioyQ
+         fj0g==
+X-Gm-Message-State: AC+VfDwTZpUNtx28Hwn06KsrzHInTEmbWZcfkPaMmnDRWJP103FLg5lW
+        HC/ROXliYOlmjmlhKnaMBoJapywFCfY=
+X-Google-Smtp-Source: ACHHUZ6W3TTQEgMmXQa5zURSi0AtXuxh42yw2+Qd5pWuLLi/EMw6NyJGi1HDsSizjXkveQPFhxVT7w==
+X-Received: by 2002:a17:902:b496:b0:1ae:bf5:7b5 with SMTP id y22-20020a170902b49600b001ae0bf507b5mr9747125plr.34.1684761949072;
+        Mon, 22 May 2023 06:25:49 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-24.three.co.id. [180.214.232.24])
+        by smtp.gmail.com with ESMTPSA id d6-20020a170902c18600b001addf547a6esm4883562pld.17.2023.05.22.06.25.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 May 2023 06:25:48 -0700 (PDT)
+Message-ID: <efa04d56-cd7f-6620-bca7-1df89f49bf4b@gmail.com>
+Date:   Mon, 22 May 2023 20:25:42 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230516104609.7095-2-daniel.matyas@analog.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Content-Language: en-US
+To:     Linux btrfs <linux-btrfs@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Regressions <regressions@lists.linux.dev>,
+        Linux Stable <stable@vger.kernel.org>
+Cc:     Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, a1bert@atlas.cz
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: Fwd: vmalloc error: btrfs-delalloc btrfs_work_helper [btrfs] in
+ kernel 6.3.x
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 01:46:07PM +0300, Daniel Matyas wrote:
-> MAX31827 is a low-power temperature switch with I2C interface.
-> 
-> The device is a ±1°C accuracy from -40°C to +125°C
-> (12 bits) local temperature switch and sensor with I2C/SM-
-> Bus interface. The combination of small 6-bump wafer-lev-
-> el package (WLP) and high accuracy makes this temper-
-> ature sensor/switch ideal for a wide range of applications.
-> 
-> Signed-off-by: Daniel Matyas <daniel.matyas@analog.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/oe-kbuild-all/202305112351.DBkFfs76-lkp@intel.com/
-> ---
+Hi,
 
-Change log goes here. Without it, I'll have to manually re-review and
-compare against previous versions and look up comments to ensure that
-all feedback has been addressed. That will take time, which is always
-scarce.   don't have right now. My apologies, but that means that
-review and acceptance of your driver will be delayed.
+I notice a regression report on Bugzilla [1]. Quoting from it:
 
-Guenter
+> after updating from 6.2.x to 6.3.x, vmalloc error messages started to appear in the dmesg
+> 
+> 
+> 
+> # free 
+>                total        used        free      shared  buff/cache   available
+> Mem:        16183724     1473068      205664       33472    14504992    14335700
+> Swap:       16777212      703596    16073616
+> 
+> 
+> (zswap enabled)
+
+See bugzilla for the full thread and attached dmesg.
+
+On the report, the reporter can't perform the required bisection,
+unfortunately.
+
+Anyway, I'm adding it to regzbot:
+
+#regzbot introduced: v6.2..v6.3 https://bugzilla.kernel.org/show_bug.cgi?id=217466
+#regzbot title: btrfs_work_helper dealloc error in v6.3.x
+
+Thanks.
+
+[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217466
+
+-- 
+An old man doll... just what I always wanted! - Clara
