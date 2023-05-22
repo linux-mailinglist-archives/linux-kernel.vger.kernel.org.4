@@ -2,118 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA3D970B345
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 04:37:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE70D70B34A
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 04:44:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbjEVChh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 22:37:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33620 "EHLO
+        id S229835AbjEVCok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 22:44:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbjEVChe (ORCPT
+        with ESMTP id S229620AbjEVCoi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 22:37:34 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC86FBF;
-        Sun, 21 May 2023 19:37:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1684723048; bh=2I37PoGTbZtIxILPqHRdtx9Ofw+v5h7+2+yuRe0uyXY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=KFsw6ekVQ3j3EjS4tBu9id9rY9133f1FoEeQzmnSPT1tW3x+0upklnWahcL7jgR6s
-         RejJ0t8pcMOsGfbHRJUmPGc1SGQOYabX+Pu0nu3x1VWtVzNKUdsSdcTxJ6jMiqMYZI
-         O9MTUADUpalQgYNg+EYrgio/RiRNJ471E+pxKZ1Q=
-Received: from [100.100.57.122] (unknown [58.34.185.106])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 114F4600DA;
-        Mon, 22 May 2023 10:37:27 +0800 (CST)
-Message-ID: <90b2fc60-af26-4ba6-f775-7db2514a62f4@xen0n.name>
-Date:   Mon, 22 May 2023 10:37:26 +0800
+        Sun, 21 May 2023 22:44:38 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C0CCD
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 19:44:37 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-2554696544cso798236a91.2
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 19:44:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684723477; x=1687315477;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fWDVQ2z9KbD5MMR01fZ/nUn7dd6pMxIl5hvJiDhQHvo=;
+        b=UaHBoDKS854frBK/ZKm/R5ak1GHqwLRbN0J3coRoqw85jDzTznan3Fh68I9q/yJBSW
+         aq3sxoWgOF2YZcpy+SO29NYWNygI9aypJTjTDDuGIHXYy4Hmo6n0saTKnvLpgafSE+ti
+         OFt6MoYdT+7QtRBcSKSL8crqbuTBkBxkcFmgj3OVi4G0STdrKDwEs2WMkxtJySmH2/RH
+         PNsSHbRO6SQNegR7LYf2TbmKVPniZkq2Tki8kTRTlJ1qNvqoKMMLn69EiuQXlw8v85cu
+         AySeapHgW/ZzU/NHYy8hDzQpXQJNmJ2l1W3LryPqDUZWKV4nEZTKFjqtU1MiBgjfAD/h
+         ie1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684723477; x=1687315477;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fWDVQ2z9KbD5MMR01fZ/nUn7dd6pMxIl5hvJiDhQHvo=;
+        b=hUWCA51zFvIY3Fm4VHmflbCexCwldBD+Nj/Ni+ERb7M53CPPqnTmIPbWx3J1p+Fcyp
+         wmIXsxJwuRCERrctQiptfOQYBIt7+H5jcCvFET33+s0eNBQm5foiSqYN36fIJNoBArFh
+         Qs1/WW0ZwZsIfu2GiNQe6eGp0qyzLcWLKjLHnxqDRju1LTND99LrLxb3h7KeeaU3j4vv
+         8XqTp81GdrYHLinlIcSgMIYBBQPeFhQL2kEP0rsvgXOUlTzlCHIUlJYQG/yh51RddUro
+         orzdJgChO/oSGJpOvokesqd6uhSU2Z8SmVCrtzBfL6/YZdrQg6EqO/v7U0HGH0hNoLui
+         yVjg==
+X-Gm-Message-State: AC+VfDxYz4Rs3On3AnQNoC0ibEEl7PSSANaX0yBFtz7xJ1cVH2wbvFNc
+        17A5LS+mfXaD+Ea/I2OtP1ZOLRGyZvRp++07E/E=
+X-Google-Smtp-Source: ACHHUZ6EDNCD2w7OjNMSQxovKBobBHr0OevXHMTn+rnQzJVWq4xGtQU/acDIDmYoH5whN3zuJBgRRH97gwDGQs2BrXQ=
+X-Received: by 2002:a17:902:daca:b0:1ac:859a:5b5a with SMTP id
+ q10-20020a170902daca00b001ac859a5b5amr13057446plx.0.1684723476850; Sun, 21
+ May 2023 19:44:36 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.0
-Subject: Re: [PATCH v10 00/30] Add KVM LoongArch support
-Content-Language: en-US
-To:     maobibo <maobibo@loongson.cn>, Paolo Bonzini <pbonzini@redhat.com>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Mark Brown <broonie@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Xi Ruoyao <xry111@xry111.site>,
-        Tianrui Zhao <zhaotianrui@loongson.cn>
-References: <20230515021522.2445551-1-zhaotianrui@loongson.cn>
- <02f07d8e-e1c2-2ec0-59c3-f5b4ef0463dc@loongson.cn>
- <4529ee5b-364a-7819-c727-71cf94057b8b@xen0n.name>
- <99371487-717a-64d6-1c3d-aaeaee6f20db@loongson.cn>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <99371487-717a-64d6-1c3d-aaeaee6f20db@loongson.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230519102908.253458-1-suagrfillet@gmail.com>
+ <9a274a44b61345e8aba747a44250c4d8@EXMBX066.cuchost.com> <20230519-clarinet-collar-ba2c0fa37e11@wendy>
+ <20230519-roundup-legwarmer-e26b31db3123@spud>
+In-Reply-To: <20230519-roundup-legwarmer-e26b31db3123@spud>
+From:   Song Shuai <suagrfillet@gmail.com>
+Date:   Mon, 22 May 2023 02:44:24 +0000
+Message-ID: <CAAYs2=iF9P_pXwNXRitXmk9pUAB7n8wMnNkqYAh-SMh44kYqDQ@mail.gmail.com>
+Subject: Re: [PATCH] riscv: hibernation: Remove duplicate call of suspend_restore_csrs
+To:     Conor Dooley <conor@kernel.org>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        JeeHeng Sia <jeeheng.sia@starfivetech.com>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        Mason Huo <mason.huo@starfivetech.com>,
+        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
+        "ajones@ventanamicro.com" <ajones@ventanamicro.com>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Song Shuai <songshuaishuai@tinylab.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/22 09:39, maobibo wrote:
-> 
-> 
-> 在 2023/5/21 18:22, WANG Xuerui 写道:
->> On 2023/5/18 10:56, maobibo wrote:
->>> <snip>
->> (BTW, how do people usually deal with pre-release hardware wit documentation not out yet? I suppose similar situations like this should turn up fairly often.)
-> Manual is actually one issue, however it does not prevent the review
-> process. There are some drivers for *fruit* devices, I can not find
-> the hw manual also.  With the manual, it helps to review and points
-> out the further and detailed issues.
+Conor Dooley <conor@kernel.org> =E4=BA=8E2023=E5=B9=B45=E6=9C=8819=E6=97=A5=
+=E5=91=A8=E4=BA=94 20:07=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Fri, May 19, 2023 at 12:28:07PM +0100, Conor Dooley wrote:
+> > Hey,
+> >
+> > On Fri, May 19, 2023 at 11:14:27AM +0000, JeeHeng Sia wrote:
+> >
+> > > > The suspend_restore_csrs is called in both __hibernate_cpu_resume
+> > > > and the `else` of subsequent swsusp_arch_suspend.
+> > > >
+> > > > Removing the first call makes both suspend_{save,restore}_csrs
+> > > > left in swsusp_arch_suspend for clean code.
+>
+> It took me embarrassingly long to wrap my head around the control flow
+> here again. I'm not sure that I agree with you that splitting the calls
+> between asm & c is cleaner, but whatever:
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+>
+> > > >
+> > > > Signed-off-by: Song Shuai <suagrfillet@gmail.com>
+> > > > Signed-off-by: Song Shuai <songshuaishuai@tinylab.org>
+> >
+> > BTW, why the two email addresses? The tinylab one here seems entirely
+> > redundant - unless it is your employer, in which case should it be the
+> > only SoB address & also in the author field?
+>
+> Deja vu with my questioning your email address, but does your
+> tinylab address actually repeat "shuai"?
+>
+Yes, that's my full name.
+As you noticed, I'm switching my email from Gmail to Tinylab but did
+something wrong.
+Thanks for your correction, I'll re-send this patch with your
+suggestions applied.
 
-There's a *slight* difference: the certain vendor you've mentioned is 
-historically uncooperative in providing the documentation, so outside 
-contributors had to reverse-engineer and document the HW themselves; but 
-in Loongson's case, you *are* the vendor, so you are probably in a 
-position that can make everyone's life easier by at least pushing for 
-the docs release...
+> > Also, Fixes tag?
+> >
+> > > > ---
+> > > >  arch/riscv/kernel/hibernate-asm.S | 1 -
+> > > >  1 file changed, 1 deletion(-)
+> > > >
+> > > > diff --git a/arch/riscv/kernel/hibernate-asm.S b/arch/riscv/kernel/=
+hibernate-asm.S
+> > > > index 5c76671c7e15..d698dd7df637 100644
+> > > > --- a/arch/riscv/kernel/hibernate-asm.S
+> > > > +++ b/arch/riscv/kernel/hibernate-asm.S
+> > > > @@ -28,7 +28,6 @@ ENTRY(__hibernate_cpu_resume)
+> > > >
+> > > >   REG_L   a0, hibernate_cpu_context
+> > > >
+> > > > - suspend_restore_csrs
+> > > >   suspend_restore_regs
+> >
+> > > Good catch. This function is invoked twice to restore the CSRs.
+> > > I am good with removing this function from here.
+> >
+> > If that's a review, then please either give an R-b or A-b tag :)
+> >
+> > Thanks,
+> > Conor.
+>
+>
 
->>
->> Aside from this, there's another point: use of undocumented instructions in raw form with ".word". This currently doesn't work in LLVM/Clang <snip>
-> As for one new architecture, it is normal to use .word or .insn, instruction
-> will update for the first few years and also compiler may be not supported
-> timely. The other arch has the same phenomenon if you grep "\.insn", also
-> llvm on LoongArch supports ".word" directives.
-> 
-> After three or five years, we will remove these ".insn" macro when hw and
-> compiler is matured.
 
-Sorry for the confusion at my side; `.word` certainly works, what 
-doesn't work currently seems to be the `parse_r` helper. I know because 
-I've tried in the last week with latest LLVM/Clang snapshot. And you 
-can't write ergonomic inline asm with proper register allocator 
-awareness without the helper; the LoongArch assembler isn't capable of 
-assembling in a certain encoding format. With RISC-V `.insn` you can do 
-things like `.insn r 0xNN, 0, 0, a0, a1, a2`, but you cannot simply e.g. 
-express gcsrxchg with `.insn DJK 0x05000000, a0, a1, a2` because no such 
-instruction format convention has been standardized. (The notation 
-demonstrated here is taken from [1].)
-
-In any case, it seems best to at least wait for the documentation 
-release a little bit, or you should state clearly that this is not going 
-to happen soon, so people can properly manage their expectation and 
-prioritize. (For example, if I know docs and/or assembler support for 
-the virtualization extension won't come soon, then I'd work on 
-supporting the .word idiom before other things. Otherwise there are more 
-important things than that.)
-
-[1]: https://github.com/loongson/LoongArch-Documentation/pull/56
-
--- 
-WANG "xen0n" Xuerui
-
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
-
+--=20
+Thanks,
+Song
