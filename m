@@ -2,147 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEEC070B675
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 09:25:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7162270B69A
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 09:35:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232503AbjEVHZd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 03:25:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51266 "EHLO
+        id S232611AbjEVHfJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 03:35:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232815AbjEVHZW (ORCPT
+        with ESMTP id S232361AbjEVHfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 03:25:22 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C1E115
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 00:24:49 -0700 (PDT)
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34M6fZrM002159;
-        Mon, 22 May 2023 07:24:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : reply-to : references : content-type : in-reply-to
- : mime-version; s=pp1; bh=QWCfiUU6i7bRLnCpHBU44p8sg8pJP+j/9vghbjX6vsI=;
- b=n2CqLrCAO0LcZO7eazo0hg4H4cU2pZnGz1l5fJ4LR3eNpUy3Hw/dGUg3hQieMnkOQ7QT
- uKjYZr0ORCCdVyN1I0gHEg0VKFKUZLZjNVlilZmwxbfXqwAw1MikkO+566kPHH5fln0F
- DfZCCPZT17tlF8FM9r+if2zX7ojaU1Eifmw+pK3q4xdw3ZxWCQ10O1Qh98IeqsmEaVBR
- 9yiiC3ebENzt7qWPr5ZPyuuaK2FxSpETBro/MVLQq+EDcPM5aK7BM6bugAv3j1nZCUYP
- 0JODvszMqmvw79CjW4N42YTKKIH2kqaEL0CDEX4M5rFRGw9037Qzz4XcDQbhY+VzXSz6 6Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qqgbq3s1k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 07:24:21 +0000
-Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34M6rd1c009710;
-        Mon, 22 May 2023 07:24:21 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qqgbq3s16-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 07:24:20 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34M4duVD032081;
-        Mon, 22 May 2023 07:24:19 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3qppc10ppp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 07:24:19 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34M7OFK819137218
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 May 2023 07:24:15 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 84B8D20043;
-        Mon, 22 May 2023 07:24:15 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6EF1520040;
-        Mon, 22 May 2023 07:24:13 +0000 (GMT)
-Received: from linux.vnet.ibm.com (unknown [9.126.150.29])
-        by smtpav02.fra02v.mail.ibm.com (Postfix) with SMTP;
-        Mon, 22 May 2023 07:24:13 +0000 (GMT)
-Date:   Mon, 22 May 2023 12:54:12 +0530
-From:   Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-To:     Alexey Kardashevskiy <aik@ozlabs.ru>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>, Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        sachinp@linux.vnet.ibm.com,
-        Abdul Haleem <abdhalee@linux.vnet.ibm.com>,
-        Gaurav Batra <gbatra@linux.vnet.ibm.com>,
-        Linux kernel regressions list <regressions@lists.linux.dev>
-Subject: Re: Probing nvme disks fails on Upstream kernels on powerpc Maxconfig
-Message-ID: <20230522072412.GA3902@linux.vnet.ibm.com>
-Reply-To: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
-References: <20230323095333.GI1005120@linux.vnet.ibm.com>
- <906d4d0e-b487-00a5-9399-7d1edc5e20a4@leemhuis.info>
- <87bkk2khl0.fsf@mpe.ellerman.id.au>
- <2a80cb20-0c9f-2d0c-e951-c4f005f3e4b3@ozlabs.ru>
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <2a80cb20-0c9f-2d0c-e951-c4f005f3e4b3@ozlabs.ru>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 13Z39uafd8HPXd7QhOiUouFbFLxN8SLs
-X-Proofpoint-ORIG-GUID: a3HDUesWl0Wck6bFVLwW1molImew3S4r
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 22 May 2023 03:35:07 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25099B7;
+        Mon, 22 May 2023 00:35:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684740906; x=1716276906;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=NNEsmSz9ktPLt1i5LChMsRaaT97gOT/nB8+x/Mn9oGo=;
+  b=bLrUp0RJH9Hft3+Au0L6i6F048AqmJYbecYbZseZK2EhH+yJVMIpb0T5
+   vWB9hZDQ2OMWts1iA1+arusagsDuSbBMmEDBq2iZwxaWWJzfe5e+JdNnR
+   3M7Wd3vtzhy8W3I+gw+BpMDsdtAtn4mxpEj8DJE0dwa+niwdyFnkjxtE0
+   E0mrq876yb85S+YAsBOvE5bFntg+9ii0xZaLzLq+d6WepiWE4vQ3xLsWX
+   ORhOcgxHOfbIBcPCDVJM0/BbGaqgmGIs/ls+56CQVE4dJz9zsGHiKndnb
+   6ALCVIn3f61E8mdonvnxUQQN98WgMePj8GlM7PQxfujFCqbFEcBQKMsIX
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="352874164"
+X-IronPort-AV: E=Sophos;i="6.00,183,1681196400"; 
+   d="scan'208";a="352874164"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 00:35:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="815583491"
+X-IronPort-AV: E=Sophos;i="6.00,183,1681196400"; 
+   d="scan'208";a="815583491"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.192.139])
+  by fmsmga002.fm.intel.com with ESMTP; 22 May 2023 00:34:52 -0700
+Date:   Mon, 22 May 2023 15:25:08 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sagi Shahar <sagis@google.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Anish Ghulati <aghulati@google.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Houghton <jthoughton@google.com>,
+        Anish Moorthy <amoorthy@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Babu Moger <babu.moger@amd.com>, Chao Gao <chao.gao@intel.com>,
+        Chenyi Qiang <chenyi.qiang@intel.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        Gavin Shan <gshan@redhat.com>,
+        Guang Zeng <guang.zeng@intel.com>,
+        Hou Wenlong <houwenlong.hwl@antgroup.com>,
+        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
+        Jim Mattson <jmattson@google.com>,
+        Jing Liu <jing2.liu@intel.com>,
+        Junaid Shahid <junaids@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Leonardo Bras <leobras@redhat.com>,
+        Like Xu <like.xu.linux@gmail.com>,
+        Li RongQing <lirongqing@baidu.com>,
+        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Michal Luczaj <mhal@rbox.co>,
+        Mingwei Zhang <mizhang@google.com>,
+        Nikunj A Dadhania <nikunj@amd.com>,
+        Paul Durrant <pdurrant@amazon.com>,
+        Peng Hao <flyingpenghao@gmail.com>,
+        Peter Gonda <pgonda@google.com>, Peter Xu <peterx@redhat.com>,
+        Robert Hoo <robert.hu@linux.intel.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Wei Wang <wei.w.wang@intel.com>,
+        Xiaoyao Li <xiaoyao.li@intel.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Fuad Tabba <tabba@google.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Qinglan Xiang <qinglan.xiang@intel.com>,
+        Kai Svahn <kai.svahn@intel.com>,
+        Margarita Maroto <margarita.maroto@intel.com>,
+        Anil Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        Nagareddy Reddy <nspreddy@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [ANNOUNCE / RFC] Periodic Upstream Call for KVM
+Message-ID: <20230522072508.GA326851@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20230512231026.799267-1-seanjc@google.com>
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-22_04,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
- phishscore=0 clxscore=1011 impostorscore=0 adultscore=0 mlxlogscore=999
- lowpriorityscore=0 mlxscore=0 malwarescore=0 suspectscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305220059
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230512231026.799267-1-seanjc@google.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Alexey Kardashevskiy <aik@ozlabs.ru> [2023-04-13 22:09:22]:
+On Fri, May 12, 2023 at 04:10:27PM -0700, Sean Christopherson wrote:
+> I am "officially" announcing a Periodic Upstream Call for KVM, a.k.a. PUCK.
+> The intent of the PUCK is to provide a vehicle for having "in-person" technical
+> discussions of features, designs, problems, etc. that are cumbersome to discuss
+> asynchronously on-list, e.g. because something is too complex, too large, etc.
 
-> > > On 23.03.23 10:53, Srikar Dronamraju wrote:
-> > > > 
-> > > > I am unable to boot upstream kernels from v5.16 to the latest upstream
-> > > > kernel on a maxconfig system. (Machine config details given below)
-> > > > 
-> > > > At boot, we see a series of messages like the below.
-> > > > 
-> > > > dracut-initqueue[13917]: Warning: dracut-initqueue: timeout, still waiting for following initqueue hooks:
-> > > > dracut-initqueue[13917]: Warning: /lib/dracut/hooks/initqueue/finished/devexists-\x2fdev\x2fdisk\x2fby-uuid\x2f93dc0767-18aa-467f-afa7-5b4e9c13108a.sh: "if ! grep -q After=remote-fs-pre.target /run/systemd/generator/systemd-cryptsetup@*.service 2>/dev/null; then
-> > > > dracut-initqueue[13917]:     [ -e "/dev/disk/by-uuid/93dc0767-18aa-467f-afa7-5b4e9c13108a" ]
-> > > > dracut-initqueue[13917]: fi"
-> > > 
-> > > Alexey, did you look into this? This is apparently caused by a commit of
-> > > yours (see quoted part below) that Michael applied. Looks like it fell
-> > > through the cracks from here, but maybe I'm missing something.
-> > 
-> > Unfortunately Alexey is not working at IBM any more, so he won't have
-> > access to any hardware to debug/test this.
-> > 
-> > Srikar are you debugging this? If not we'll have to find someone else to
-> > look at it.
+Yes, although on-list discussion is still the primary channel, a call is
+a nice supplement for all relevant people on a large, complex topic to
+achieve quick alignment. For people not able to attend the call, the
+meeting recordings/minutes can be posted for them.
+
 > 
-> Has this been fixed and I missed cc:? Anyway, without the full log, I still
-> see it is a huge guest so chances are the guest could not map all RAM so
-> instead it uses the biggest possible DDW with 2M pages. If that's the case,
-> this might help it:
+> Exact details are TBD, and obviously can be adapted as needed.  Proposal:
 > 
+>   Frequency: Weekly
+>   Time:      Wednesday, 6:00am Pacific Time
+>   Duration:  60 minutes
+>   Software:  ???
+> 
+> My thinking for weekly versus fortnightly (every other week) is that we can always
+> cancel meetings if there are no agenda items, and bump down to fortnightly if we
+> are constantly canceling.  On the flip side, if we go with fortnightly, it'd be
+> more difficult to clear the backlog if PUCK gets booked out multiple sessions, and
+> PUCK would be less useful for discussing urgent issues.
+> 
+> As for the time, 6am Pacific Time was the least awful (and still quite awful IMO)
+> time I could find that gives the majority of the community a reasonable chance of
+> attending.  I know we have developers in at least the below time zones (and probably
+> more, though I don't think anyone works from Hawaii, and if someone does work from
+> Hawaii then they have nothing to complain about :-) ).
+> 
+>   PT   (6am)
+>   MT   (7am)
+>   CT   (8am)
+>   ET   (9am)
+>   WET  (2pm)
+>   CET  (3pm)
+>   EET  (4pm)
+>   EST  (5pm)
+>   CST  (9pm)
+>   NZST (1am)
 
-Hi Alexey, Michael
+This looks good, 9pm is not too late for PRC people.
 
-Sorry for the late reply, but I didnt have access to this large system.
-This weekend, I did get access and tested with the patch. However it didn't
-help much, system is still stuck at dracut with similar message except the
-trace.
+> 
+> The obvious alternative would be to invert the schedule and have the sync be in
+> the evening/night for Pacific Time, but to get 6am for ARM folks, we end up with:
+> 
+>   PT   (10pm)
+>   MT   (11pm)
+>   CT   (12pm)
+>   ET   (1am)
+>   WET  (6am)
+>   CET  (7am)
+>   EET  (8am)
+>   EST  (9am)
+>   CST  (1pm)
+>   NZST (5pm)
+> 
+> which is quite unreasonable for pretty much everyone based in the US.  Earlier
+> than 6am for WET is likewise unreasonable and will result in people not attending.
+> 9pm for China is also unreasonable, but I hope that it's not completely ridiculous
+> and is doable enough that people can at least attend on an as-needed basis.  Sorry
+> Kai, as the sole representative from New Zealand, you get hosed :-(
+> 
+> Wednesday because holidays and (short) vacations most often land at the beginning
+> and end of the week.
+> 
+> 60 minutes because I'm not waking up at dawn for anything less, and anything
+> more will likely have dimishing returns, especially for folks on the edges of
+> the time zone table.
+> 
+> Lastly, the big unknown is which video communication software to use.  My default
+> is obviously Google Meet, but I've been told that Meet is unusable in some
+> countries. :-/  My only requirements (beyond basic, obvious functionality) are
+> that (a) there's a web interface (no install required) and that (b) the calls can
+> be recorded.
 
-However this patch
-https://lore.kernel.org/all/20230418204401.13168-1-gbatra@linux.vnet.ibm.com/
-from Gaurav Batra does solve this issue.
+Google Meet should work for me, but may not for every (PRC) people.
+Besides no installation, if no registration would be even better ;)
+Maybe we can run with Google Meet for the first session(s) if you
+havn't get one in your mind, it's not too hard to switch to alternative
+at a later time right?
 
--- 
-Thanks and Regards
-Srikar Dronamraju
+> 
+> To kick things off, I am leaning toward a "launch" date of May 24th (Pacific),
+> with KVM guest private mem (a.k.a. UPM) as the first topic.
 
+Thanks for driving this, yes for UPM I would definitely join.
+
+Chao
+> 
+> Please chime in with thoughts and ideas!
+> 
+> 
+> P.S. This is an open invite, feel free to forward at will.  The Cc list is by no
+> means intended to be definitive.
