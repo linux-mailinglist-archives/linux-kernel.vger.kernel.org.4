@@ -2,157 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DC3070BB22
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:07:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6405970BB2A
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:08:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232955AbjEVLH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 07:07:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50272 "EHLO
+        id S233001AbjEVLIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 07:08:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231232AbjEVLH3 (ORCPT
+        with ESMTP id S231232AbjEVLH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 07:07:29 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A21A4223
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 04:02:31 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-2533ed4f1dcso3968952a91.1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 04:02:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=mechatrax-com.20221208.gappssmtp.com; s=20221208; t=1684753289; x=1687345289;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1acKHPl2xEGCIQmSYv/dSXjlbW8r6VsWyy5shozqzsA=;
-        b=ajWkTEgRIGP66N1n5mFffw2ngTLoqQ0DKXrr4VFqpBk3k77ddq1iPBOvnFkTFoL+gj
-         SH77hXaevhAmNUk6/G3DXc35yBu9kMlSDLuiMBx8JWUkCaeuRA/BtPPeowTwQD3BYylR
-         ksLPb7A9fgX3v1qWwHxaPnbBwd+2iPm4BtAz+eT/sRWsO+QZmrXLCECc5f4G8u1yMkpC
-         LRcIqlRcgbshicvT5CxkO/BHnXHnua/S3put000l5+5aqjPU6aFrH4PJzURKmwDCDFem
-         Umi7Li/G79WFclpn7K1Q/W0hMdj5rt0TNccJbw2VR+xOfyckjudC+HDhZ9x8nr8U0GF0
-         QgGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684753289; x=1687345289;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1acKHPl2xEGCIQmSYv/dSXjlbW8r6VsWyy5shozqzsA=;
-        b=UhBMjxfhN5+aImL7I+ow82mS9C6a5D4og4efVg5NQ0FvSr7n1/Aj7Dhkq3o3zNOnx8
-         XHXQoxUgaShcpgWQ4ug23VKt1EjlrD6k1/MV1b+i3HazOksF9fG9VZf+A15oycQm4KaT
-         Cfy2i3ELqb+CYFXoTr2/KNm+gGBnBIHJz2ujfgVIufMai1xBeYkI0RqmjmLeMAbyDDtE
-         svK1uNrPFfDrTlU1MiSm0t7DeZr+ZIeYD+c24BpWwgk/KL4CXWTbr4CiESBDhSUrmTLu
-         TQEqS/WFUoDL0aj7QRS2j2FA8tgy/4ZW8eMPc+6lKglaL+/li5JkdnXmPcLtcEmFpA7H
-         fNOA==
-X-Gm-Message-State: AC+VfDzOeUMftw+x8TbM6NLs0JC39LWrh/BsERUfElB5aO5xNRPteEKA
-        245M2p8/cpzIqgvfjBf8vKR9YlyglANZ/sKu2MGcWw==
-X-Google-Smtp-Source: ACHHUZ5WyZI571DBBNHfhVQvlvBYb+9QbxiztOR4RHZ5GFLJp5WgroIhawbNmOYR/bpsyU4VH7LyZHKB8I2zqNPsB+U=
-X-Received: by 2002:a17:90a:5792:b0:24d:f2f5:f571 with SMTP id
- g18-20020a17090a579200b0024df2f5f571mr10444785pji.36.1684753289496; Mon, 22
- May 2023 04:01:29 -0700 (PDT)
+        Mon, 22 May 2023 07:07:57 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD9791BC;
+        Mon, 22 May 2023 04:03:06 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 8F10B5C013A;
+        Mon, 22 May 2023 07:01:22 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Mon, 22 May 2023 07:01:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1684753282; x=
+        1684839682; bh=Ot/PaadLQmFY3PRWcupRZot4l1Jk74XWyrXMKDJAiLc=; b=E
+        JVHEIbN4tyUpkbE2KYtZ0Gwo6mGCxBTHoeBI+ulaPBcMt3jpE2WZXu+lxu/sAw5v
+        bzfNMLkNJhihM6Du1Luqx/VuLPPgXyX0GWvemtBUs97nhjicUIbfG0SH++nQBdbQ
+        J255NuS1lc0/V5x3nzMLdAAcogaDhjJNy7MupOktEIb8fBXzdWZ82FMrLrJpPdI3
+        ifa/wFRrpPPn6sDvbOjHJsKBBmgXeYrz29TBAjxkowqJoB5u+fV0bnEX51NUeqhh
+        H7a4YPUCS/g6wuSy2dbxnABEgiDfoJTiaMiokRPvDDLXzbtWR/hnAZgcDAuZBYhH
+        XAzppUJWIW5iXY3xsMhFA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684753282; x=1684839682; bh=Ot/PaadLQmFY3
+        PRWcupRZot4l1Jk74XWyrXMKDJAiLc=; b=EubsQEL6iFNqM6WWcXvLutuhU+Py5
+        f52bufa3ZfautO7wbJoO8SVL/eD1Iy/MEUp+RJzzn2EGHo8CBaPtGASyJW9iLZ8E
+        KjtpwPNQCIuGAvUorF5zXHHbgmFkoJc5U1yK0XHE4VbURlSIgEe1C+t4Yx13NSiS
+        1aukA3DgoKsvqTAgiguzZZrHYKxTpNjAq5JvdGilNOQWTXCvgzSEITmkjDcE2J20
+        JT+eTgyxnQiBg7EuJFy9pLXnoGAkkNjYJEin7TQFPLYP03qCF1b256KxoB6SwVPl
+        j74n7u57spUQDCytnQ35Nf510jdCybBADtIo1FTgqy99TFXaHDWC4EfgA==
+X-ME-Sender: <xms:gEtrZKS7fPZCgqwrAb_n3LKyJtycQ31034U0W-Twv7dLp8-YYI4K_g>
+    <xme:gEtrZPxY136Ee-mWwFDOgB7MLTequTzXm4X7Cn9r1ILp9a3lrTMttNq6swO8fmSEL
+    NylIOv4sYy-wXtS0yw>
+X-ME-Received: <xmr:gEtrZH2jUwPeombGzQSAWOLM1UdpD_570v-GBGINF_S2PfgmLadsBe1SrSkfh_rKFMLR4Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejuddgfedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
+    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:gEtrZGBWnvHLAi7hu6LS3TOmyszVd0VnrMwzc-AYSFvRIQt1NZv3SQ>
+    <xmx:gEtrZDjLyD4G0VItk6KUNpl-Ql_1OYIeUIXVWgOs7id834eIggD9-g>
+    <xmx:gEtrZCpzmYr5PJ8uS7asUOgeXCfz4XStfBr8cs-EVcWLs5phAo6C8w>
+    <xmx:gktrZGObdfzgdlgQkwJjz5Jo3kXtyuv8TynU2QEraPxxOynsbgsWAQ>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 22 May 2023 07:01:19 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 9E671103828; Mon, 22 May 2023 14:01:16 +0300 (+03)
+Date:   Mon, 22 May 2023 14:01:16 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Liam Merwick <liam.merwick@oracle.com>
+Subject: Re: [PATCHv12 4/9] x86/boot/compressed: Handle unaccepted memory
+Message-ID: <20230522110116.675nqxrztxbtmdl7@box.shutemov.name>
+References: <20230518231434.26080-1-kirill.shutemov@linux.intel.com>
+ <20230518231434.26080-5-kirill.shutemov@linux.intel.com>
+ <20230519101641.nka7ty3fttntymci@box.shutemov.name>
 MIME-Version: 1.0
-References: <20230518110816.248-1-honda@mechatrax.com> <20230520163801.04552580@jic23-huawei>
-In-Reply-To: <20230520163801.04552580@jic23-huawei>
-From:   Masahiro Honda <honda@mechatrax.com>
-Date:   Mon, 22 May 2023 20:00:53 +0900
-Message-ID: <CA+Tz-SFjMJ0j5EbXSb+mmGusNuB8m5UdJ7V-3tFVH+xPtJi-8w@mail.gmail.com>
-Subject: Re: [PATCH v5] iio: adc: ad_sigma_delta: Fix IRQ issue by setting
- IRQ_DISABLE_UNLAZY flag
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230519101641.nka7ty3fttntymci@box.shutemov.name>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 21, 2023 at 12:21=E2=80=AFAM Jonathan Cameron <jic23@kernel.org=
-> wrote:
->
-> On Thu, 18 May 2023 20:08:16 +0900
-> Masahiro Honda <honda@mechatrax.com> wrote:
->
-> > The Sigma-Delta ADCs supported by this driver can use SDO as an interru=
-pt
-> > line to indicate the completion of a conversion. However, some devices
-> > cannot properly detect the completion of a conversion by an interrupt.
-> > This is for the reason mentioned in the following commit.
-> >
-> > commit e9849777d0e2 ("genirq: Add flag to force mask in
-> >                       disable_irq[_nosync]()")
-> >
-> > A read operation is performed by an extra interrupt before the completi=
-on
-> > of a conversion. At this time, the value read from the ADC data registe=
-r
-> > is the same as the previous conversion result. This patch fixes the iss=
-ue
-> > by setting IRQ_DISABLE_UNLAZY flag.
-> >
-> > Fixes: 0c6ef985a1f ("iio: adc: ad7791: fix IRQ flags")
-> > Fixes: 1a913270e57 ("iio: adc: ad7793: Fix IRQ flag")
-> > Fixes: e081102f307 ("iio: adc: ad7780: Fix IRQ flag")
-> > Fixes: 89a86da5cb8 ("iio: adc: ad7192: Add IRQ flag")
-> > Fixes: 79ef91493f5 ("iio: adc: ad7124: Set IRQ type to falling")
-> All the fixes tags have 11 chars of the hash, needs to be 12. I fixed tha=
-t up whilst applying
-Sorry. I made mistakes. Thanks for fixing them.
-
-Regards,
-
-Masahiro
-
-> Applied to the fixes-togreg branch of iio.git and marked for stable.
->
-> Thanks,
->
-> Jonathan
->
-> > Signed-off-by: Masahiro Honda <honda@mechatrax.com>
-> > ---
-> > v5:
-> >  - Fix the patch title.
-> >  - Add fixes tags.
-> >  - Add information about behavior to the commit message.
-> > v4: https://lore.kernel.org/linux-iio/20230502102930.773-1-honda@mechat=
-rax.com/
-> >  - Remove the callback.
-> > v3: https://lore.kernel.org/linux-iio/20230420102316.757-1-honda@mechat=
-rax.com/
-> >  - Remove the Kconfig option.
-> > v2: https://lore.kernel.org/linux-iio/20230414102744.150-1-honda@mechat=
-rax.com/
-> >  - Rework commit message.
-> >  - Add a new entry in the Kconfig.
-> >  - Call irq_clear_status_flags(irq, IRQ_DISABLE_UNLAZY) when freeing th=
-e IRQ.
-> > v1: https://lore.kernel.org/linux-iio/20230306044737.862-1-honda@mechat=
-rax.com/
-> >
-> >  drivers/iio/adc/ad_sigma_delta.c | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >
-> > diff --git a/drivers/iio/adc/ad_sigma_delta.c b/drivers/iio/adc/ad_sigm=
-a_delta.c
-> > index d8570f62078..7e219287074 100644
-> > --- a/drivers/iio/adc/ad_sigma_delta.c
-> > +++ b/drivers/iio/adc/ad_sigma_delta.c
-> > @@ -584,6 +584,10 @@ static int devm_ad_sd_probe_trigger(struct device =
-*dev, struct iio_dev *indio_de
-> >       init_completion(&sigma_delta->completion);
-> >
-> >       sigma_delta->irq_dis =3D true;
+On Fri, May 19, 2023 at 01:16:41PM +0300, Kirill A. Shutemov wrote:
+> On Fri, May 19, 2023 at 02:14:29AM +0300, Kirill A. Shutemov wrote:
+> > diff --git a/arch/x86/boot/compressed/mem.c b/arch/x86/boot/compressed/mem.c
+> > index 67594fcb11d9..87372b96d613 100644
+> > --- a/arch/x86/boot/compressed/mem.c
+> > +++ b/arch/x86/boot/compressed/mem.c
+> > @@ -1,9 +1,32 @@
+> >  // SPDX-License-Identifier: GPL-2.0-only
+> >  
+> >  #include "error.h"
+> > +#include "misc.h"
+> >  
+> >  void arch_accept_memory(phys_addr_t start, phys_addr_t end)
+> >  {
+> >  	/* Platform-specific memory-acceptance call goes here */
+> >  	error("Cannot accept memory");
+> >  }
 > > +
-> > +     /* the IRQ core clears IRQ_DISABLE_UNLAZY flag when freeing an IR=
-Q */
-> > +     irq_set_status_flags(sigma_delta->spi->irq, IRQ_DISABLE_UNLAZY);
+> > +void init_unaccepted_memory(void)
+> > +{
+> > +	guid_t guid =  LINUX_EFI_UNACCEPTED_MEM_TABLE_GUID;
+> > +	struct efi_unaccepted_memory *unaccepted_table;
+> > +	unsigned long cfg_table_pa;
+> > +	unsigned int cfg_table_len;
+> > +	int ret;
 > > +
-> >       ret =3D devm_request_irq(dev, sigma_delta->spi->irq,
-> >                              ad_sd_data_rdy_trig_poll,
-> >                              sigma_delta->info->irq_flags | IRQF_NO_AUT=
-OEN,
->
+> > +	ret = efi_get_conf_table(boot_params, &cfg_table_pa, &cfg_table_len);
+> > +	if (ret)
+> > +		error("EFI config table not found.");
+> > +
+> > +	unaccepted_table = (void *)efi_find_vendor_table(boot_params,
+> > +							 cfg_table_pa,
+> > +							 cfg_table_len,
+> > +							 guid);
+> > +	if (unaccepted_table->version != 1)
+> > +		error("Unknown version of unaccepted memory table\n");
+> > +
+> > +	set_unaccepted_table(unaccepted_table);
+> > +}
+> 
+> 0-day reported boot failure outdise TDX guest with CONFIG_INTEL_TDX_GUEST=y.
+
+0-day folks reported one more issue: booting on non-EFI system fail.
+
+Updated fixup:
+
+diff --git a/arch/x86/boot/compressed/mem.c b/arch/x86/boot/compressed/mem.c
+index 0108c97399a5..e7f7ef31e581 100644
+--- a/arch/x86/boot/compressed/mem.c
++++ b/arch/x86/boot/compressed/mem.c
+@@ -46,8 +46,13 @@ void init_unaccepted_memory(void)
+ 	struct efi_unaccepted_memory *unaccepted_table;
+ 	unsigned long cfg_table_pa;
+ 	unsigned int cfg_table_len;
++	enum efi_type et;
+ 	int ret;
+ 
++	et = efi_get_type(boot_params);
++	if (et == EFI_TYPE_NONE)
++		return;
++
+ 	ret = efi_get_conf_table(boot_params, &cfg_table_pa, &cfg_table_len);
+ 	if (ret)
+ 		error("EFI config table not found.");
+@@ -56,6 +61,9 @@ void init_unaccepted_memory(void)
+ 							 cfg_table_pa,
+ 							 cfg_table_len,
+ 							 guid);
++	if (!unaccepted_table)
++		return;
++
+ 	if (unaccepted_table->version != 1)
+ 		error("Unknown version of unaccepted memory table\n");
+ 
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
