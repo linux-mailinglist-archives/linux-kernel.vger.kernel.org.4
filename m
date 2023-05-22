@@ -2,166 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A9870C542
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 20:34:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 619D870C548
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 20:37:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230515AbjEVSeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 14:34:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46658 "EHLO
+        id S233010AbjEVShm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 14:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbjEVSel (ORCPT
+        with ESMTP id S229916AbjEVShk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 14:34:41 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40C0DB7
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:34:40 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1afba64045aso6533335ad.0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:34:40 -0700 (PDT)
+        Mon, 22 May 2023 14:37:40 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B023FE
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:37:38 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id d75a77b69052e-3f389c21fe8so29540431cf.3
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:37:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684780480; x=1687372480;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ncyyvzCwaBiOGfdAK57eDSyGsVrCv17gynkqmLbIh7Q=;
-        b=cGPQFY6F+JsGLicyWmQ7+nx3BT8FDTky0Wpm3XMm47C67teffHRLLERrhhaXB78/CL
-         ntljpUrXT68Ppi5/Br2bFbLfK6HZXVLGLYn6zwBMkZqCqOHJE8c6nTf4PHZT3kOdALRD
-         WYT++yPJw8eQcaZW/JCptRL2KmXZBG59VSW+dbF+1yGNjbzEvGw3WCB6+aR/o2UoFfMD
-         3Q48kdKs3/9fpMluVeCEMRk7evs7OTjc7hyrDlbNEi7WL2d2onFS7my6C8fDbmseK36M
-         m4pArVT+6V0srD5bk1rZT2WYLS9kqpm+kH9gzo69MoI63Q2Bq2DN4xM3T0ZgHxCuj8pL
-         CMdQ==
+        d=google.com; s=20221208; t=1684780657; x=1687372657;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kE1YGTh9d+XFdvUdt9kLMAcbrISnJqMCKvDPYim3xk0=;
+        b=n2/HPeqVEZWy94HrQrqzpMVvrl8ot28r4dGOugqG0lH3NmFZPilmgiPUXx/ZmabsCE
+         pZZO+fv+LxjFa/JcmhLZrxIVO9tlxxyNJmppY8JIpZduWebGSB9u/e6ByyFEPx0eJXk9
+         e9fzE7yTHOyOeqBrK2VCPLjmlU/sV5fC+7pgN18LadnrXNr5+ehBkOhf+4f2R5wYNVkr
+         0+NwRHlKqDuN+rTSBvMWsG97KbmkoTistkEe4sBHKJ7PQqzSINJiwobu3NUBqGPBvYTV
+         qOrsPSRCciGjoYRy/jvs7UKjSEdacvD2yV+nPEg6kOsEZTc4XoJ7zOG+5F8pI0XAaz6/
+         sV4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684780480; x=1687372480;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ncyyvzCwaBiOGfdAK57eDSyGsVrCv17gynkqmLbIh7Q=;
-        b=lvmk5draHmfIaiG2n6+OBm5WUdBmVBU7BzPFX5rt4Kj2UH7GDKomhNRj4WkE4UV3Q7
-         S2qzJXe6cfekhK6t6weiPeLKhPyBwlSnEdT4IdNKyjqev4Bb8p8G9r3v4+4jRkNZDM9k
-         sEHAUurlUKXLowOdcgXnqxDkFLbSfgaxnIUTwfbt3uoIc6GAQegqhcQacUu8nZLX95TH
-         kjhj5Pqa2OApE+Gfr55JsVYI4Lf+kmQZwFlgtYwfG1+IPunn9BIT3SKTUxPA9+r+b6kF
-         IEbsafCMIkkriVa1on2T6aGKonEDgi9EJKvymyEHTkj867JSBGvE4nyNjyQ4nQAa2kxM
-         Jh+g==
-X-Gm-Message-State: AC+VfDynl7Rglkm9LfjiUyw9+XWA+iJq5LltLaMLTHF72uDp+Ze4QQoR
-        8JU6cbnj3xcOfeq8M1uBqVZn05dLUr0=
-X-Google-Smtp-Source: ACHHUZ4vYpOScPsGTy+iBltm4E7gLuJQusAKoigKV11l60H7+6wz2QnxSdUf70tvT+CQhoqlL+09UUYI3KI=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:cad2:b0:1ad:ec0b:42f9 with SMTP id
- y18-20020a170902cad200b001adec0b42f9mr2629780pld.6.1684780479772; Mon, 22 May
- 2023 11:34:39 -0700 (PDT)
-Date:   Mon, 22 May 2023 11:34:38 -0700
-In-Reply-To: <20230522063725.284686-1-apopple@nvidia.com>
-Mime-Version: 1.0
-References: <20230522063725.284686-1-apopple@nvidia.com>
-Message-ID: <ZGu1vsbscdO48V6h@google.com>
-Subject: Re: [PATCH] mmu_notifiers: Notify on pte permission upgrades
-From:   Sean Christopherson <seanjc@google.com>
-To:     Alistair Popple <apopple@nvidia.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, robin.murphy@arm.com,
-        will@kernel.org, nicolinc@nvidia.com,
-        linux-arm-kernel@lists.infradead.org, kvm@vger.kernel.org,
-        kvmarm@lists.cs.columbia.edu, jgg@nvidia.com,
-        John Hubbard <jhubbard@nvidia.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1684780657; x=1687372657;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kE1YGTh9d+XFdvUdt9kLMAcbrISnJqMCKvDPYim3xk0=;
+        b=YT3CY6zvpaeVaJs1acQM8w7OeaptMRL8OHffrSU7DQfUrV6GjMdfZwkSLTdUFFRbKq
+         tsP7w70sGxuVC317ICyt8scN1yU+3EpVgaHVzyK/Grg2kondI2G0vuGvEtujnQjbDMO7
+         xhSKkle2ymtbqeWqARP3c4xPkg3TeNTTUm4vbWAZPf7k4TcX7HDgKfI/UsWZeA/G8mqG
+         +bgJxl45MpFq8tOi+E+tgnRBe90lEGeV1lIKAK2w3altoO1mLKj2o51YStfxD7L6Pcqp
+         UgwIdr+b/atFA8lt/sIqL6LrLySpuiWhb+2jXhHR/VDEfWQCKMG3QWX43GhoNnpgkhvT
+         FGGw==
+X-Gm-Message-State: AC+VfDwZ+T+pn/LSDLMfL5M96ILP4d4vZJ+MXl4M8ZlgNATnEFx7eqCL
+        5EP0l7bSmXw6/+Hu6LP2+iAN3yq+fmNRN17w+Aq0lQ==
+X-Google-Smtp-Source: ACHHUZ6Rk6oINXBumC91jfi1Bk3n+Xl0Ur5oT2V+khLVw4FLlQUt8KN9UKD2SJZMHH4eDVe+WuyTAUs9CW6+i0jXomU=
+X-Received: by 2002:a05:622a:85:b0:3f5:3659:4901 with SMTP id
+ o5-20020a05622a008500b003f536594901mr19532832qtw.20.1684780657335; Mon, 22
+ May 2023 11:37:37 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAEUSe78ip=wkHUSz3mBFMcd-LjQAnByuJm1Oids5GSRm-J-dzA@mail.gmail.com>
+In-Reply-To: <CAEUSe78ip=wkHUSz3mBFMcd-LjQAnByuJm1Oids5GSRm-J-dzA@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 22 May 2023 11:37:26 -0700
+Message-ID: <CAKwvOdn3ngS101Y8DiBQgmw4K8kEX+ibGeXYBwTRVLT59q6wsw@mail.gmail.com>
+Subject: Re: Stable backport request: skbuff: Proactively round up to kmalloc
+ bucket size
+To:     =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>,
+        linux- stable <stable@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        rientjes@google.com, vbabka@suse.cz,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        clang-built-linux <llvm@lists.linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023, Alistair Popple wrote:
-> Some architectures, specifically ARM and perhaps Sparc and IA64,
-> require TLB invalidates when upgrading pte permission from read-only
-> to read-write.
-> 
-> The current mmu_notifier implementation assumes that upgrades do not
-> need notifications. Typically though mmu_notifiers are used to
-> implement TLB invalidations for secondary MMUs that comply with the
-> main CPU architecture.
-> 
-> Therefore if the main CPU architecture requires an invalidation for
-> permission upgrade the secondary MMU will as well and an mmu_notifier
-> should be sent for the upgrade.
-> 
-> Currently CPU invalidations for permission upgrade occur in
-> ptep_set_access_flags(). Unfortunately MMU notifiers cannot be called
-> directly from this architecture specific code as the notifier
-> callbacks can sleep, and ptep_set_access_flags() is usually called
-> whilst holding the PTL spinlock. Therefore add the notifier calls
-> after the PTL is dropped and only if the PTE actually changed. This
-> will allow secondary MMUs to obtain an updated PTE with appropriate
-> permissions.
-> 
-> This problem was discovered during testing of an ARM SMMU
-> implementation that does not support broadcast TLB maintenance
-> (BTM). In this case the SMMU driver uses notifiers to issue TLB
-> invalidates. For read-only to read-write pte upgrades the SMMU
-> continually returned a read-only PTE to the device, even though the
-> CPU had a read-write PTE installed.
-> 
-> Sending a mmu notifier event to the SMMU driver fixes the problem by
-> flushing secondary TLB entries. A new notifier event type is added so
-> drivers may filter out these invalidations if not required. Note a
-> driver should never upgrade or install a PTE in response to this mmu
-> notifier event as it is not synchronised against other PTE operations.
-> 
-> Signed-off-by: Alistair Popple <apopple@nvidia.com>
-> ---
->  include/linux/mmu_notifier.h |  6 +++++
->  mm/hugetlb.c                 | 24 ++++++++++++++++++-
->  mm/memory.c                  | 45 ++++++++++++++++++++++++++++++++++--
->  3 files changed, 72 insertions(+), 3 deletions(-)
-> 
-> diff --git a/include/linux/mmu_notifier.h b/include/linux/mmu_notifier.h
-> index d6c06e140277..f14d68f119d8 100644
-> --- a/include/linux/mmu_notifier.h
-> +++ b/include/linux/mmu_notifier.h
-> @@ -31,6 +31,11 @@ struct mmu_interval_notifier;
->   * pages in the range so to mirror those changes the user must inspect the CPU
->   * page table (from the end callback).
->   *
-> + * @MMU_NOTIFY_PROTECTION_UPGRAGE: update is due to a change from read-only to
-> + * read-write for pages in the range. This must not be used to upgrade
-> + * permissions on secondary PTEs, rather it should only be used to invalidate
-> + * caches such as secondary TLBs that may cache old read-only entries.
+On Mon, May 22, 2023 at 11:24=E2=80=AFAM Daniel D=C3=ADaz <daniel.diaz@lina=
+ro.org> wrote:
+>
+> Hello!
+>
+> Would the stable maintainers please consider backporting the following
+> commit to the 6.1? We are trying to build gki_defconfig (plus a few
 
-This is a poor fit for invalidate_range_{start,end}().  All other uses bookend
-the primary MMU update, i.e. call start() _before_ changing PTEs.  The comments
-are somewhat stale as they talk only about "unmapped", but the contract between
-the primary MMU and the secondary MMU is otherwise quite clear on when the primary
-MMU will invoke start() and end().
+Does android's gki_defconfig fail to boot on the `android14-6.1`
+branch of https://android.googlesource.com/kernel/common?
 
-	 * invalidate_range_start() is called when all pages in the
-	 * range are still mapped and have at least a refcount of one.
-	 *
-	 * invalidate_range_end() is called when all pages in the
-	 * range have been unmapped and the pages have been freed by
-	 * the VM.
+(i.e. downstream branch from linux stable's linux-6.1.y)?
 
-I'm also confused as to how this actually fixes ARM's SMMU.  Unless I'm looking
-at the wrong SMMU implementation, the SMMU implemenents only invalidate_range(),
-not the start()/end() variants.
+We just ran CI successfully on that branch 10 hours ago.
+https://github.com/ClangBuiltLinux/continuous-integration2/actions/runs/504=
+2504560/jobs/9045030265
 
-	static const struct mmu_notifier_ops arm_smmu_mmu_notifier_ops = {
-		.invalidate_range	= arm_smmu_mm_invalidate_range,
-		.release		= arm_smmu_mm_release,
-		.free_notifier		= arm_smmu_mmu_notifier_free,
-	};
+Do you have more information on the observed boot failure? (panic splat?)
 
-Again from include/linux/mmu_notifier.h, not implementing the start()/end() hooks
-is perfectly valid.  And AFAICT, the existing invalidate_range() hook is pretty
-much a perfect fit for what you want to achieve.
+> extras) on Arm64 and test it under Qemu-arm64, but it fails to boot.
+> Bisection has pointed here.
+>
+> We have verified that cherry-picking this patch on top of v6.1.29
+> applies cleanly and allows the kernel to boot.
+>
+> commit 12d6c1d3a2ad0c199ec57c201cdc71e8e157a232
+> Author: Kees Cook <keescook@chromium.org>
+> Date:   Tue Oct 25 15:39:35 2022 -0700
+>
+>     skbuff: Proactively round up to kmalloc bucket size
+>
+>     Instead of discovering the kmalloc bucket size _after_ allocation, ro=
+und
+>     up proactively so the allocation is explicitly made for the full size=
+,
+>     allowing the compiler to correctly reason about the resulting size of
+>     the buffer through the existing __alloc_size() hint.
+>
+>     This will allow for kernels built with CONFIG_UBSAN_BOUNDS or the
+>     coming dynamic bounds checking under CONFIG_FORTIFY_SOURCE to gain
+>     back the __alloc_size() hints that were temporarily reverted in commi=
+t
+>     93dd04ab0b2b ("slab: remove __alloc_size attribute from
+> __kmalloc_track_caller")
+>
+>     Cc: "David S. Miller" <davem@davemloft.net>
+>     Cc: Eric Dumazet <edumazet@google.com>
+>     Cc: Jakub Kicinski <kuba@kernel.org>
+>     Cc: Paolo Abeni <pabeni@redhat.com>
+>     Cc: netdev@vger.kernel.org
+>     Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>     Cc: Nick Desaulniers <ndesaulniers@google.com>
+>     Cc: David Rientjes <rientjes@google.com>
+>     Acked-by: Vlastimil Babka <vbabka@suse.cz>
+>     Link: https://patchwork.kernel.org/project/netdevbpf/patch/2022102123=
+4713.you.031-kees@kernel.org/
+>     Signed-off-by: Kees Cook <keescook@chromium.org>
+>     Link: https://lore.kernel.org/r/20221025223811.up.360-kees@kernel.org
+>     Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+>
+>
+> Thanks and greetings!
+>
+> Daniel D=C3=ADaz
+> daniel.diaz@linaro.org
 
-	 * If invalidate_range() is used to manage a non-CPU TLB with
-	 * shared page-tables, it not necessary to implement the
-	 * invalidate_range_start()/end() notifiers, as
-	 * invalidate_range() already catches the points in time when an
-	 * external TLB range needs to be flushed. For more in depth
-	 * discussion on this see Documentation/mm/mmu_notifier.rst
 
-Even worse, this change may silently regress performance for secondary MMUs that
-haven't yet taken advantage of the event type, e.g. KVM will zap all of KVM's PTEs
-in response to the upgrade, instead of waiting until the guest actually tries to
-utilize the new protections.
+
+--=20
+Thanks,
+~Nick Desaulniers
