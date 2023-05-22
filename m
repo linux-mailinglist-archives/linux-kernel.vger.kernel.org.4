@@ -2,181 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D98C870B946
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:43:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 090A870B94A
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:44:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232616AbjEVJnx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 05:43:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39872 "EHLO
+        id S230350AbjEVJo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 05:44:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232602AbjEVJnq (ORCPT
+        with ESMTP id S232648AbjEVJoV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 05:43:46 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 855BDB9;
-        Mon, 22 May 2023 02:43:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684748625; x=1716284625;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=iOPDZje79uODob2D2aIth/JInj0kQQFqZ5KEdMWdW9U=;
-  b=N5+UTHBB4cjeDmNvWtajQlTO4eYPC0U9FIEPGs9sJQZ3z1x9lb9iaMPP
-   Zy/kTcyg1MCnGlK1HVFaOUGwCoi0CsNk/IS3Vu3IX0c0Ak6jfnVduCwqp
-   dXa/3T5NG7bZ87c8TPWTbNjWbZweZQ/flH6NO7i7mpO8iBedAV53TQrkc
-   egj7C2LmjVw2yxZiLE5I67eBaCNbuxMmG90453mEUy6Ezr9iIqykyoibY
-   z1NP4dp/Q/usVvwiNu366+F7eIyrMSadIgwN6T/Se35Uz+9wZ+dRuT9zc
-   qXOeAFYv0yupycZRga7vZYABHuMwKwM0ktEKzimiOINhSGGhPyYWCun5m
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="342327431"
-X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
-   d="scan'208";a="342327431"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 02:43:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="815615388"
-X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
-   d="scan'208";a="815615388"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga002.fm.intel.com with ESMTP; 22 May 2023 02:43:44 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 22 May 2023 02:43:44 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Mon, 22 May 2023 02:43:44 -0700
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.45) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Mon, 22 May 2023 02:43:44 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BHeaowS4v9OlHhwXYv9WP8rjAVTuxpU5epPasZwho4PriWgSw2SK6Ir3SfXkW20WW7MJCY76b6nhc0OciGNIIFLwjdqkXts7heMdxSIdHBTJBoe1wXi9WWROu1l1RB4fVu3at8pWawir9NYuIPgOR7QOiUe3dTHPxUlqaV+HEVpf+tPVCQ4Gd4svOGvteR3qr5XLnQVQLZrQF5i2rQmOFWi1MEAIngkZTP2j7s+FBGbxec2h+N6Zg+kUoLbrOBBotu67VhAHLbJ+mtUZmXp5H/50FfRS9Egm249Q4V+K35RoKJlGKmq0Hb7FgHDGKixBPoOdCDxRJZKWSJvpz/AMwA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iOPDZje79uODob2D2aIth/JInj0kQQFqZ5KEdMWdW9U=;
- b=E3oaqYVi/fT49htZmODyonUjJZzUjTMS4ONo6jAQ1DfkzXLIjB6qRuez1u/ARYNBg4u7czkLmOSW+TP+spiSrXGJrQ19gcymtGV116NXlEk9lk8Bbr/e3jWfgw5kquPjtDvnoOPOEPWntUPj9dRPYriqMQSow5r226ZMqgtnNtrmQU1hZKSp03oxTq7dAr7ydQ0Hz1LzsmY9gjVX/LL32ioJKIQcbMzNtQkxMKxB+taV3uZ+T3Pw1vl/XKRVNkoNAgbSiwGRDBExzzS6dghAxGbsmEVNbDjJAGcxFTetx4W0fi1usuFokjhTnh0ZElinWPhRYXIblXA/ELRoucYVeg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB5469.namprd11.prod.outlook.com (2603:10b6:5:399::13)
- by MN2PR11MB4520.namprd11.prod.outlook.com (2603:10b6:208:265::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Mon, 22 May
- 2023 09:43:32 +0000
-Received: from DM4PR11MB5469.namprd11.prod.outlook.com
- ([fe80::e825:c2b5:8df5:e17b]) by DM4PR11MB5469.namprd11.prod.outlook.com
- ([fe80::e825:c2b5:8df5:e17b%4]) with mapi id 15.20.6411.028; Mon, 22 May 2023
- 09:43:32 +0000
-Message-ID: <00679dfd-5131-d951-f554-94c66c7c357e@intel.com>
-Date:   Mon, 22 May 2023 17:43:21 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [RFC PATCH v2 08/11] KVM: VMX: Advertise
- MITI_ENUM_RETPOLINE_S_SUPPORT
-Content-Language: en-US
-To:     Chao Gao <chao.gao@intel.com>, <kvm@vger.kernel.org>
-CC:     Jiaan Lu <jiaan.lu@intel.com>, Zhang Chen <chen.zhang@intel.com>,
-        "Sean Christopherson" <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, <linux-kernel@vger.kernel.org>
-References: <20230414062545.270178-1-chao.gao@intel.com>
- <20230414062545.270178-9-chao.gao@intel.com>
-From:   "Liu, Jingqi" <jingqi.liu@intel.com>
-In-Reply-To: <20230414062545.270178-9-chao.gao@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2PR03CA0122.apcprd03.prod.outlook.com
- (2603:1096:4:91::26) To DM4PR11MB5469.namprd11.prod.outlook.com
- (2603:10b6:5:399::13)
+        Mon, 22 May 2023 05:44:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62726F9;
+        Mon, 22 May 2023 02:44:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 92C7760C1B;
+        Mon, 22 May 2023 09:44:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1090C433D2;
+        Mon, 22 May 2023 09:44:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684748656;
+        bh=SVoYzzxZuFTGXh87Jk2YnPaJ8G3ijBqVH+39j9Y0BD4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=j4HjcmHoE11NThX3xZMpEsBFoaasEqREvcKGYj7W5KNBsA1RFh51lpq8O9GhYSrbw
+         6axF4z76Hon97BhDohwjxWKX+c1YI1G005Xxglj1YHOE86t5VpxGSEpKPB2L9r4kNL
+         L+Sx5Az8cq0xSJD0cVQ/JDERZ00m3L9v3StMsxIpMh++hq4MsUZL0gzyjwindVLWMU
+         EnwdkW2L3qFKVWz3jJ/7ODjFPz8wBIsf+e1L5JfXhs/Qcnuo22p1onEESS1oJYMbQE
+         x72CqHg+Kfufd3tYMKwh6jYMf4rKQ83PxF2W+t3I6TYohGeZiALMZT231yN363AhOY
+         yFkOkhCXKrfFg==
+Message-ID: <960e2aac-1769-6037-dd77-58999313fefc@kernel.org>
+Date:   Mon, 22 May 2023 18:44:13 +0900
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR11MB5469:EE_|MN2PR11MB4520:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3567ce17-2456-4a0a-6d6c-08db5aa90151
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oUqsVPuNfzRyxlBgosUBzODaxhsA3rABRcJdys8zEbadSLyh1bwKXznpJTsk8243a77vwBrCTv/9921+hBSt1FC+71zeetcq3YMi35qiaMCkloazNhqzXuvxER//doHjm9pTQ3R73nOcnUBZnA8cGJ9uNBDUridlQdEdANLDeDCs3TjLb3ssHNZiREJMzEVTqpl247m48K7f7CSPaHlSMy2g9wFUyra5fbC4VjA9iTTqRf4G+mHbG/azHQWQZy2uZNzPN0poDIRwZfnDysDr+Uqz016WqguTsdnLEiX7WLkSTeY+T9ouOuLFJ1wO7qJYTBFzKsiLtj/DvVCffufSRHy3JVOs3OuVSXfjz8TMK1emK7ajv9Kh3ipKgO8sPf9Ig5dVrP1/ydmtlIZ/Jf7DO+P4uS48fzDsBLRAV/lXU5/EA1V4L+upXlibDFkN3r3dfJm6QYZsGyEjL8MOzAIQ99V+RqdjJkA0EixHM94PaQMriaR1JvSYUXZxRsqgCTblSv9xOFWIq7CuKDqub4PjW7GUCkAORkF6s1LXm3gL39ctXo1O7IyzGicASUlfhIEj61ktiFPB4u0R2L+YRJhezhf8kpVFN7/0cq/UC8NlSE3E+XfjKa9VFGi3o3H8hqbsAa1+quplbRLvqlggV8A2rQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5469.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(396003)(366004)(136003)(376002)(346002)(451199021)(6512007)(6506007)(26005)(53546011)(6666004)(31686004)(6486002)(54906003)(41300700001)(66946007)(66556008)(66476007)(4326008)(478600001)(316002)(8936002)(8676002)(5660300002)(7416002)(31696002)(86362001)(4744005)(82960400001)(38100700002)(2906002)(36756003)(186003)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YkRGeU9jWkZqaU80UlpqZTMrNUNqRzBMNDhObVFwMkpsVFFGRW9PNGZOdmw2?=
- =?utf-8?B?N29VQWdpc1JDdGRtYWg2U1pmVnRzNkFtWE5vRmxKSnppVmJPa3BrYXNmc3Zt?=
- =?utf-8?B?dGw1RmdZMkRFL2Vhd1gwQldrTlBDZmkwTlFkMHhDR1dnWWQ4QndVQVhZY2RH?=
- =?utf-8?B?MEFlYUwzbW5kWHN1Q3lib0Z5UUdzMkNwV1R4Vkdwd2hOMGplVlJRaEp4REgy?=
- =?utf-8?B?QWwrdmxJdlJSdE9uYkhldDRwSk5oTFB6amticnRjNUJYcFhhSjJ4R1Y4VFVG?=
- =?utf-8?B?YVJNN0NPZkJiNG5IbVZpUWRxSnRPTnQ5bmNydjNGOWxBaXJzQ05mV3ZDVndi?=
- =?utf-8?B?Sm5CZUx3L2hlOFF4NW1QOFhWcEd3ZlpWQVNYVThNWStZS3NIOFZRaVhCWHdI?=
- =?utf-8?B?QWp0UEtoU0pGNi9NZmsxY2pyRnVQM1d0NC9acDdWTUhNZmlsUjF1QmJack1O?=
- =?utf-8?B?WVI5c1RoYUI5Szlkamw3aXVKVkR0QlJUdGh2M0dXaHB0QzFoVEhqcU42L1Ja?=
- =?utf-8?B?SDRGRFg4d2gxYXRGdk5wTkQzaVREWWk3OWNrYXJiTEl3dmZnemFnZTV1YzRG?=
- =?utf-8?B?QTIvbkhZNmh0YjRtWjdmeHc3eUhzVzNyb1pBZU1IdVphK1oveUdrclZ4NGNm?=
- =?utf-8?B?VytQeVdNbno3WXhIZnArNmFCOFc2T1hOemE5N0hxNmtVMjZBSTlBcCtNUnZG?=
- =?utf-8?B?RjhJd3packovOUFVMGNHbFFpTUxxNHd5RTBCb2Q1WHl4T2VmVWtvOThvc3M3?=
- =?utf-8?B?TkFTZTA5NHJCS1kxbkZsMGF2Q0xoYlp2bnI2UFdQVTlvWUVhRU9Pa3NlUSt4?=
- =?utf-8?B?czFRRDJIQURETmlMYWU1NEx3QUI2bmk0NW1XcEFET3FPU0JpeGw0UFdIN1R4?=
- =?utf-8?B?YkNFU3VQNEZ4N09kbFBORDBvWndkanRnbmFuVEtZaTVEQ0hoYk95Zm9SbmU1?=
- =?utf-8?B?SEs1U09hV2ZQWVV2RlgyY1BQMjJ0NitKV0xQRnpEU3h6eXR4bVVtemczS3lP?=
- =?utf-8?B?VkFoUFp3bEtqNDNWWkRJT3FQUmk5WTVLN2dBcFJrakNFUlpZQXlLUVJOOGdZ?=
- =?utf-8?B?aE45SWp6YzROZ0xIYW1ha0t2MytFL0p4TnQ5TCtFRVd4eDUyUTdEalIvOUM5?=
- =?utf-8?B?dUUyd1Q2L1g1RCtic0RkcktzbXo2eHY5a2J4cE0rZXVLQWFyZnlJSlJpUXZl?=
- =?utf-8?B?QzBadjA4VEVJL3gwTGRVYzN3OWRzNEZEeE1BMVdsOXhEZDd4SGRqOCtGMHJq?=
- =?utf-8?B?aWVvL1lIZ04vVFRWN1JqbnBWczM0K29TeGNzOGN5MUNlQ2NjK3dFRE9kcVR2?=
- =?utf-8?B?dWxIMlpGZGQ2aWFuNDhWRmVEVjJrMVNCL2FaWDdMakZvam1WaWFHQThueFM4?=
- =?utf-8?B?TTEwQ1FCN1Vac3lwcHhmM2VPeDRUaVRmMWZIOW1sUUZBcjZ0NG5zU1RlQjdO?=
- =?utf-8?B?dkJOUmlGRmpFSWIzbE1pYjZUY1BhWmNTRmkzMmpBUDdCRlNJeTFIcHFJV0dW?=
- =?utf-8?B?U1QvQmQzNUhYZTd1Q2t2NnRZZjhFVE5UVkxUOS9ISnVJMDJtL0RIZlVIekFS?=
- =?utf-8?B?V0NEcFQzbkdGL3kvSVBuK3R3Z1FCL0RVQk1yUEphM1lCd1JrVUVKQUU0Y3ZG?=
- =?utf-8?B?c0hjM2dCWG80YWluY1Vzb3BXSVArWTBBelN3R0xPK0g0MlBpWDc3VTdGd2dC?=
- =?utf-8?B?Sm9wUi80dlVVaVB6bmhsSk9zRExxTkpNMjNjQ3lDYmd4LzhqM2pBUjRJNzZq?=
- =?utf-8?B?dDJwRUU0aGU4cUlyTSt4Mmt0T2VFc3VwbFFhN29vcXBiSmQ2Zzc5LzJGU3J3?=
- =?utf-8?B?elEzYjllZGRGSlhXZ0tuZjhXeGNhMTR1UjFoNko0MUZDd3o1a0Jiczd1MGlW?=
- =?utf-8?B?Qkt3YmFZeElyOW5Jb2k5WUFCQWpwQ25sZnplOERaVVRUK1htaWlXa3llSnFl?=
- =?utf-8?B?Q2EyZXlpVVdhbkF1aVhkREwzamdtTnBJZ3BPN09ydisyL3hzbHhXYldwaWZn?=
- =?utf-8?B?eUdoYXN0TlM0MzVjN2FJNnRPMzhrVlN3WlY1Z3JuUFlId2hWUnkrcGoxdEhY?=
- =?utf-8?B?aVczcENzSGZsNGx1UzVDTmdZN20vYmJIT3RXRWVObWI0WFNpaS84dXdWVkxM?=
- =?utf-8?Q?xl5ApwM45ccPReHWJxiM9PQt+?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3567ce17-2456-4a0a-6d6c-08db5aa90151
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5469.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2023 09:43:32.4741
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uXH9TVAkY2yqdkf2/W4/7BYnaHOVKRc8SkB8SpLEgG428UNj+RfH1EuZVB2BC17ETspQ3enZjRoJyeOq4quysw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR11MB4520
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2] ata: libata-scsi: Fix get identity data failed
+Content-Language: en-US
+To:     Jason Yan <yanaijie@huawei.com>,
+        yangxingui <yangxingui@huawei.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, john.g.garry@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxarm@huawei.com, prime.zeng@hisilicon.com,
+        kangfenglong@huawei.com
+References: <20230505025712.19438-1-yangxingui@huawei.com>
+ <291f1d97-9195-45ac-8e12-058f5c797277@kernel.org>
+ <02d36ee9-cdad-454d-d822-95442d7bd67b@huawei.com>
+ <f4ba7a92-1f00-c254-d196-7d21fe14dee2@kernel.org>
+ <938d6b5b-0271-977d-f046-5fd70d29b3ca@huawei.com>
+ <a5c2e157-aaf7-1300-3fbb-1300ac216cee@kernel.org>
+ <68953040-1622-254b-f6f8-b279eccacfb1@kernel.org>
+ <c88dcbc3-d530-3e9e-f674-a2fe64ad5fdc@huawei.com>
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <c88dcbc3-d530-3e9e-f674-a2fe64ad5fdc@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/14/2023 2:25 PM, Chao Gao wrote:
-> Allow guest to query if the underying VMM understands Retpoline and
-> report the statue of Retpoline in suprevisor mode i.e. CPL < 3 via
-s/statue/status
-> MSR_VIRTUAL_MITIGATION_ENUM/CTRL.
->
-> Disable RRSBA behavior by setting RRSBA_DIS_S for guest if guest is
-> using retpoline and the processor has the behavior.
->
-> Signed-off-by: Zhang Chen <chen.zhang@intel.com>
-> Signed-off-by: Chao Gao <chao.gao@intel.com>
-> Tested-by: Jiaan Lu <jiaan.lu@intel.com>
-> ---
-Thanks,
-Jingqi
+On 5/22/23 17:00, Jason Yan wrote:
+>> OK, so the issue is that __ata_scsi_find_dev() calls ata_find_dev() with devno
+>> == scsidev->id. This leads to devno being 0, 1, 2 and 3 for connected drives
+>> sdd, sd1, sdf and sdg, as shown by lsscsi. However, each drive has its own
+>> port+link, with the link for each one having  ata_link_max_devices() == 1, so
+>> ata_find_dev() works only for the first drive with scsidev->id == 0 and fails
+>> for the others. A naive fix would be this:
+>>
+>> diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
+>> index 7bb12deab70c..e4d6f17d7ccc 100644
+>> --- a/drivers/ata/libata-scsi.c
+>> +++ b/drivers/ata/libata-scsi.c
+>> @@ -2718,7 +2718,7 @@ static struct ata_device *__ata_scsi_find_dev(struct
+>> ata_port *ap,
+>>          if (!sata_pmp_attached(ap)) {
+>>                  if (unlikely(scsidev->channel || scsidev->lun))
+>>                          return NULL;
+>> -               devno = scsidev->id;
+>> +               devno = 0;
+>>          } else {
+>>                  if (unlikely(scsidev->id || scsidev->lun))
+>>                          return NULL;
+>>
+>> And running this on my setup, it works. This makes libsas added ports/devices
+>> look like AHCI ones, where all devices have ID 0 for the !pmp case.
+>>
+>> However, I am not sure this would be OK for all setups...
+>>
+>> John,
+>>
+>> Any idea if there is any cases where libsas managed drives would endup not being
+>> correctly identified by this change ? As long as a device always has its own
+>> port, I do not see any issue. But is there a case where we could have multiple
+>> devices on the same port ? Per libata, max is 2, and that is only for the IDE
+>> master/slave case. Otherwise, it is always 1.
+>>
+> 
+> AFAIK, libsas does not support multiple devices on the same port. So 
+> this change is ok for libsas.
+
+Yes, for libsas it is OK. But as is, it will break master+slave IDE setups... So
+the fix needs to be finer than this.
+
+> 
+>> Not that looking at the pmp case, I am not confident at all that the
+>> identification is correct for libsas. But I do not think that anyone would ever
+>> connect a pmp box to a libsas HBA...
+>>
+> 
+> libsas's does not support pmp either, and I do not see any future plans 
+> to support pmp.
+
+Good. Dealing with that one is always painful.
+
+> So the above change (needs a ATA_FLAG_SAS_HOST check) looks good to me.
+
+Yes, this flag check is needed to avoid breaking IDE/pata.
+
+> It's better to make libsas behave as other ata drivers so that we can 
+> drop the ATA_FLAG_SAS_HOST check. But this need tons of work for libsas.
+
+Yes, getting rid of this special casing with this flag would be really nice. It
+should not be needed. I will try to write a proper fix not using it for now, to
+facilitate removing the flag later.
+
+
+-- 
+Damien Le Moal
+Western Digital Research
+
