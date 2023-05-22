@@ -2,201 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C1870C4FA
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 20:11:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17BD670C4FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 20:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232528AbjEVSK7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 14:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35086 "EHLO
+        id S233536AbjEVSLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 14:11:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233481AbjEVSK5 (ORCPT
+        with ESMTP id S233482AbjEVSK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 14:10:57 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66CCB94
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:10:56 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id e9e14a558f8ab-33164ec77ccso19005ab.0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:10:56 -0700 (PDT)
+        Mon, 22 May 2023 14:10:58 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21CD4DC
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:10:57 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id af79cd13be357-75b01b0c712so213335385a.3
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:10:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20221208; t=1684779056; x=1687371056;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cEzlEh7wY/PuStUqSMzqI4XR6c+8JOIs6CKypesmhoE=;
-        b=geIcSD6xgzn7QxqPhgkp+lqc6gEI+v7cqWVM3Y/PwEZgJGnPQMRZznd13b5IVpRe1Z
-         YDR6NCYHpTxi7yFUmRIBA8mj53Sfm4LT/fOvnLyJXhQtS5VUvSzU7/ZZec01F4UbX+4Y
-         W0JmvtT2V3JBqpJe41qRe83zq0X9JPTAkd2MY7b/qrvQUTsgg2f78MZ9x4oX6opTQXMP
-         7YaEuwBYPgz0UDcCvJP9AAf8MZKtJ4YGjJDM6OS+vLt5nduZ9E6/shG+WB0y0iQ+J0hY
-         9DHCV9VsL252VSPZuOXF5Oytxir7hcsyPvEVS8AAT251mzElzzTDeIT9dygKzIVlmr6k
-         zfJw==
+        bh=q5hLux43PwuTCN+/APBXSBXWMEmqN2R3favTYL/ElZk=;
+        b=NXUgppSfp1jycfs5NbP0pPTli65OqYShPJgsPGGfvS3yPWFSLzdEyW9caG17yxD7wn
+         qtxVr5WIqVyKk7Eh2v8mIZbs8nt304EMbJQJjvAnPkxaCkb/FQMHw1Td7zyolIuVY0PH
+         voPU3+BNzovLyJq/pA891yfO7V1gHHgb6FoHhzS6krXvqSBssvKuZH8PBTfJGtvuM1zK
+         UVfLY8IdsbPv7mvr2+CbdijXxLrNRJYcPfbhz5Ga7h0Gd+0HtjD3ZoU+zSBgyHXTgjvQ
+         0vBQCsyzAwWGNIVI1vHYe31IW/3l2DSTOZt+FxXVEXAOnTqVgf5CUhvZ74WrDCSqQL0W
+         uCow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20221208; t=1684779056; x=1687371056;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cEzlEh7wY/PuStUqSMzqI4XR6c+8JOIs6CKypesmhoE=;
-        b=DL8MU2drq16W4dEHaZAETfVZ2p+ym20mvwfug7TljX7uw5oS39cbo8Mr31MetnNK/z
-         Gj/XLdOEY/ro4Zzm1PF2G6L5kjXyyj1GDxaL6GLkZ3j8VqudcTYZCeYFYcE1qd9pwP1d
-         0R9l+lk0RgFlixTvJUPcoHOJGgrczpA5W3FQPivyrna5j7pyy7J2NRtt6iJiOyTAHdL0
-         MJqhBgYcftKlKWsgFZvpJU3XUpK0FOG2sYaRv0/C08DPcHW412wJssha4qJSkQgevcFS
-         dWGDNy0f2qE12iVg+71zcLVpp3EF0oP0Fqa50ZGI+Lt14p5jbfyfeW3GdZa0u31fcxom
-         8tDw==
-X-Gm-Message-State: AC+VfDzgGLdYSTarTZcJif6IX+DzGM5vzarTnPZXSQBPVwbaPW/diyZk
-        lM5BuKEpc8ySBr0sf8WNSAl4Kr+JoReboZpbB0drdg==
-X-Google-Smtp-Source: ACHHUZ54FsEpQo2MECWnyd9AhxcAyaaNRWuMbuspP5RkXDVW3aLT8xw0SMH6uxc7cDeR4RA4Q7RdnWdY0sSEwsjAEek=
-X-Received: by 2002:a05:6e02:1a6b:b0:320:9759:bf6b with SMTP id
- w11-20020a056e021a6b00b003209759bf6bmr543723ilv.3.1684779055625; Mon, 22 May
- 2023 11:10:55 -0700 (PDT)
+        bh=q5hLux43PwuTCN+/APBXSBXWMEmqN2R3favTYL/ElZk=;
+        b=WHrkAK8TPov4MjcuI3s8OF+E/o4EmDneD7PxHedeNePDy3CmdIAMaHbNCjBte+MLFo
+         sVIrwF6QiAAKNR9bDhOLgScwUkZ4Pl5BpEuIoYv8u2FltlAJiKomKBj/f8KXmbkDvCMk
+         y+JxJDtrh0d965z35WI7qVuB5+LN7gO9twqX0emg9q3vzUoLrJJUBRXzk7lOfu/DIguF
+         LMZIgyTqKdqppMqv7A999aKs0HRyMGgD266G2doQMuLXK1Tb1HaexYI2Le2Jnd4xuzjV
+         lP9dtNoVFls380NKfQeD4HnU9x5gGG6C1XI1p0MPOoRuLhSdbx9iBGnlgZtyrCtowl6k
+         coVA==
+X-Gm-Message-State: AC+VfDw5oLlhU/mz/L2DMEGy5eVZOFGLJgUPyQKDkE66oQFJ/rKfzErP
+        31NvW+NWdRo12UJv4WsENbB2psJ2pcMFIieL4sFGxQ==
+X-Google-Smtp-Source: ACHHUZ4o42p7x5XPW+JHzAZUsVUOdKiqSdUAkYpKJXv0IdpJ2wJD+m6RlMQKXJpAgbJUv8fnWIra5gIZFPDbRTWHfl0=
+X-Received: by 2002:a05:6214:1247:b0:621:68e8:99a4 with SMTP id
+ r7-20020a056214124700b0062168e899a4mr21475772qvv.8.1684779056082; Mon, 22 May
+ 2023 11:10:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <ZGcoJBAGlknjsA/n@yoga>
-In-Reply-To: <ZGcoJBAGlknjsA/n@yoga>
-From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 22 May 2023 11:10:43 -0700
-Message-ID: <CAP-5=fXyqWYgR0M0rqG8a2j0sL1WThNX8r49T7EfvkOG32-UqA@mail.gmail.com>
-Subject: Re: [PATCH v2] perf: test: Add support for testing JSON generated by
- perf data command
-To:     Anup Sharma <anupnewsmail@gmail.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230521160426.1881124-1-masahiroy@kernel.org> <20230521160426.1881124-5-masahiroy@kernel.org>
+In-Reply-To: <20230521160426.1881124-5-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 22 May 2023 11:10:45 -0700
+Message-ID: <CAKwvOdkKedXoVoRB6Jts0vunyRHsruL0_VmPn6CYJwNiiu38Dg@mail.gmail.com>
+Subject: Re: [PATCH v6 04/20] modpost: remove unused argument from secref_whitelist()
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 12:41=E2=80=AFAM Anup Sharma <anupnewsmail@gmail.co=
-m> wrote:
+On Sun, May 21, 2023 at 9:05=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.o=
+rg> wrote:
 >
-> This commit adds support for testing the JSON output generated
-> by the perf data command's conversion to JSON functionality.
-> The test script now includes a validation step to ensure that
-> the resulting JSON file is contain valid data.
+> secref_whitelist() does not use the argument 'mismatch'.
+
+Thanks for the patch!
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+
 >
-> Signed-off-by: Anup Sharma <anupnewsmail@gmail.com>
-
-Acked-by: Ian Rogers <irogers@google.com>
-
-Thanks,
-Ian
-
-> Changes:
-> V1 -> V2: Added a check for the existence of the result output file.
->           Replaced the usage of jq with json.load for validating the JSON=
- format.
->           Checks using ShellCheck and checkpatch, addressing and resolvin=
-g warnings.
->           Removed the unnecessary root permission check.
->           Modified the perf record command to avoid requiring root permis=
-sions.
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 > ---
->  .../shell/test_perf_data_converter_json.sh    | 78 +++++++++++++++++++
->  1 file changed, 78 insertions(+)
->  create mode 100755 tools/perf/tests/shell/test_perf_data_converter_json.=
-sh
 >
-> diff --git a/tools/perf/tests/shell/test_perf_data_converter_json.sh b/to=
-ols/perf/tests/shell/test_perf_data_converter_json.sh
-> new file mode 100755
-> index 000000000000..54b7a19962fa
-> --- /dev/null
-> +++ b/tools/perf/tests/shell/test_perf_data_converter_json.sh
-> @@ -0,0 +1,78 @@
-> +#!/bin/bash
-> +# perf data json converter command test
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +set -e
-> +
-> +err=3D0
-> +
-> +if [ "$PYTHON" =3D "" ]
-> +then
-> +       if which python3 > /dev/null
-> +       then
-> +               PYTHON=3Dpython3
-> +       elif which python > /dev/null
-> +       then
-> +               PYTHON=3Dpython
-> +       else
-> +               echo Skipping test, python not detected please set enviro=
-nment variable PYTHON.
-> +               exit 2
-> +       fi
-> +fi
-> +
-> +perfdata=3D$(mktemp /tmp/__perf_test.perf.data.XXXXX)
-> +result=3D$(mktemp /tmp/__perf_test.output.json.XXXXX)
-> +
-> +cleanup()
-> +{
-> +       rm -f "${perfdata}"
-> +       rm -f "${result}"
-> +       trap - exit term int
-> +}
-> +
-> +trap_cleanup()
-> +{
-> +       cleanup
-> +       exit ${err}
-> +}
-> +trap trap_cleanup exit term int
-> +
-> +test_json_converter_command()
-> +{
-> +       echo "Testing Perf Data Convertion Command to JSON"
-> +       perf record -o "$perfdata" -F 99 -g -- perf test -w noploop > /de=
-v/null 2>&1
-> +       perf data convert --to-json "$result" --force -i "$perfdata" >/de=
-v/null 2>&1
-> +       if [ $(cat "${result}" | wc -l) -gt "0" ]
-> +       then
-> +               echo "Perf Data Converter Command to JSON [SUCCESS]"
-> +       else
-> +               echo "Perf Data Converter Command to JSON [FAILED]"
-> +               err=3D1
-> +               exit
-> +       fi
-> +}
-> +
-> +validate_json_format()
-> +{
-> +    echo "Validating Perf Data Converted JSON file"
-> +    if [ -f "$result" ]
-> +    then
-> +        if $PYTHON -c  "import json; json.load(open('$result'))" >/dev/n=
-ull 2>&1
-> +       then
-> +            echo "The file contains valid JSON format [SUCCESS]"
-> +        else
-> +            echo "The file does not contain valid JSON format [FAILED]"
-> +            err=3D1
-> +           exit
-> +        fi
-> +    else
-> +        echo "File not found [FAILED]"
-> +        err=3D2
-> +        exit
-> +    fi
-> +}
-> +
-> +test_json_converter_command
-> +validate_json_format
-> +
-> +exit ${err}
+>  scripts/mod/modpost.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+>
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index ed2301e951a9..d2329ac32177 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -1035,8 +1035,7 @@ static const struct sectioncheck *section_mismatch(
+>   *   refsymname =3D *.constprop.*
+>   *
+>   **/
+> -static int secref_whitelist(const struct sectioncheck *mismatch,
+> -                           const char *fromsec, const char *fromsym,
+> +static int secref_whitelist(const char *fromsec, const char *fromsym,
+>                             const char *tosec, const char *tosym)
+>  {
+>         /* Check for pattern 1 */
+> @@ -1206,7 +1205,7 @@ static void default_mismatch_handler(const char *mo=
+dname, struct elf_info *elf,
+>         tosym =3D sym_name(elf, to);
+>
+>         /* check whitelist - we may ignore it */
+> -       if (!secref_whitelist(mismatch, fromsec, fromsym, tosec, tosym))
+> +       if (!secref_whitelist(fromsec, fromsym, tosec, tosym))
+>                 return;
+>
+>         sec_mismatch_count++;
 > --
-> 2.34.1
+> 2.39.2
 >
+
+
+--=20
+Thanks,
+~Nick Desaulniers
