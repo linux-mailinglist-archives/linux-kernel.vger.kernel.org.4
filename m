@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A220270B45A
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 07:09:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A051570B45F
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 07:10:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjEVFJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 01:09:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
+        id S231951AbjEVFKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 01:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231863AbjEVFJb (ORCPT
+        with ESMTP id S231804AbjEVFKg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 01:09:31 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FEDA130
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:09:00 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-561bcd35117so70117817b3.3
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:09:00 -0700 (PDT)
+        Mon, 22 May 2023 01:10:36 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9889D109
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:10:14 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id 3f1490d57ef6-b9e6ec482b3so8134495276.3
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:10:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684732137; x=1687324137;
+        d=google.com; s=20221208; t=1684732209; x=1687324209;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7rTGIbKCcYdvVJu9Ybd88rQGNMtFs0WCnevY0u3jIzc=;
-        b=FWm+aAqCrTI8L5F1peTncvX2j+gJ1K5pdecyQ2SgwMPmXn8TR/t30T7yAueI1Z1Prx
-         +ZNB4HFJeDGCEa3TY+DbZFPXAQMoW0lt0/cPYFkOtZn9pNtwNaAji3QwKEg49ie0wiso
-         /aqMK319Yal/5gxVXR6hyaD4EBzJg8qItdk0tBwwmogEtt3sYbaEVCj54AVP/iyafLSN
-         g3n7sbdycHd6xijbyr/rauTFVAs7KxoLkcQWJDCzbFut9bVjwaE8Xx0Mf3/CDuWrY3hk
-         wIWhl9hSpGsCek8QZILjryCAxN2GrBpCITRg0NVy+fYzjrAIzOzQeSq16gHJmxidsl5V
-         /Prg==
+        bh=qkatc+QCc6cccs9xXaqGfaqNL6OFGEuJiK0miGnv7G8=;
+        b=G8p2CzqFuweOTJakxAlGPjhKL7rDUMtnLNT7EUicI7w+jufYMVBoVuc81ZJQYoSTfb
+         w6t5S+SR5Hp/NszCj/XtFj6CuqMt4ZlVp3PxVkJ3mlWRBt+Iifs7tpZrzkBlF0AC0HZQ
+         qbtqENGFk4bM4644i8k7d4FbjPR3Um0C3R30rKDY1tPszjXHKCLCSRdB9GHFrQ6reUFc
+         o/gs5XQG3ml90zH4fHmJbebDWsSKfY/AnaCH/uwICdx3ExQ+m1F+PTZVZDShUMb4Npmu
+         GRvVy3RMuLlfKPCoJDA4zF1iEeyu+t7qtp3Nzn44IZZdc2OcH7AU7ec8Vtx87ucadbDG
+         6sAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684732137; x=1687324137;
+        d=1e100.net; s=20221208; t=1684732209; x=1687324209;
         h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7rTGIbKCcYdvVJu9Ybd88rQGNMtFs0WCnevY0u3jIzc=;
-        b=hOsWBwHH0w7/3YIZ04LkX87D6UukroLP1iiw1SRI9Z/6VOJm0fvTXorldxsFT3qZl4
-         5XyzR549eVJvdFAk53oigyG+jGjmIGUH8+TI/FMk2n4n4exizuocG2iwE2sgRjdvtA5E
-         KVCX3aQbF5e8OJwAYOSGkjiDtWTlQ+iPOZPfrsuKtT1oFw0Dd6jogUnoeDc3e2BbtBWS
-         4nBEKvv7xnO5i7J2SWkHGAWsHqEZAbXy0vZWzisErAGiTy9bsc2XB0Nmctlo67P3XmLH
-         v/ViPFAUu30Vp2iNKdy89i2nqxP+8sgfKkcAKEWLVEt/MGwf6w20dZt2egzSP/ZbRAJn
-         9BZw==
-X-Gm-Message-State: AC+VfDy1R3bw8pf6v+xau4p6GzMvwMlNDfPDW+e8vwQUBzSUSbS/JYu4
-        +qzNzCIVp4+85m1eRlLqo2NzxA==
-X-Google-Smtp-Source: ACHHUZ7MEfF9deLoAIS2DPpctOmVhab2WCwoG7BFDeIpVNW1XvRRPWqoYkqwVwVotMomYmO1i86qzw==
-X-Received: by 2002:a0d:d74a:0:b0:55a:14df:5c10 with SMTP id z71-20020a0dd74a000000b0055a14df5c10mr12334350ywd.18.1684732136920;
-        Sun, 21 May 2023 22:08:56 -0700 (PDT)
+        bh=qkatc+QCc6cccs9xXaqGfaqNL6OFGEuJiK0miGnv7G8=;
+        b=LVlnEgtWpjBzJAoREowHovZ0aIJp4Du86drlwVFAP9cQNV0pL/EzYtZKe5cs9lMpP7
+         +K4Loyvr/yjgkGP2PVtJ4XesrCZkPM/OBhgOef9Kc8LSwSytRaHvZBKBo1HGb59LIxYN
+         cfvrn1sq//YJgZl9NEycRzRfFtK+QdAyVgQKVYFhEU9TiwaBxFHPyJ6xsuYvEEsdkTAJ
+         Wk/X2mQl7wmQBb+KoXKa/yllOCM0UUP0WXPB6uGVKgHqgqzlq575x1XLaL7t7KixH039
+         I1jyESS42tUyEbdilyNTn7ULKkAtvladzXwunG/ghzPukDhREwl3J/aq/I8kQIZ4twb0
+         fE+g==
+X-Gm-Message-State: AC+VfDxgfXXadzxpPxSEOd+p7chP8MnIq/wNyoE/W63fshF/zGXNM9yN
+        yhb2hy1Tz6AfHYJgyvzxxP177w==
+X-Google-Smtp-Source: ACHHUZ7YbSO8bhu9h9PxXguF69pafygjT3CZbvHofHpkGqbBtfy3DyuxisCr5F+9n6J8Jk2l8rmL9g==
+X-Received: by 2002:a0d:d595:0:b0:561:e910:52f5 with SMTP id x143-20020a0dd595000000b00561e91052f5mr12187363ywd.27.1684732208925;
+        Sun, 21 May 2023 22:10:08 -0700 (PDT)
 Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id t67-20020a818346000000b0055a503ca1e8sm1804176ywf.109.2023.05.21.22.08.54
+        by smtp.gmail.com with ESMTPSA id y185-20020a817dc2000000b00545a08184fdsm1790422ywc.141.2023.05.21.22.10.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 May 2023 22:08:56 -0700 (PDT)
-Date:   Sun, 21 May 2023 22:08:53 -0700 (PDT)
+        Sun, 21 May 2023 22:10:08 -0700 (PDT)
+Date:   Sun, 21 May 2023 22:10:05 -0700 (PDT)
 From:   Hugh Dickins <hughd@google.com>
 X-X-Sender: hugh@ripple.attlocal.net
 To:     Andrew Morton <akpm@linux-foundation.org>
@@ -81,10 +81,9 @@ cc:     Mike Kravetz <mike.kravetz@oracle.com>,
         Song Liu <song@kernel.org>,
         Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
         linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH 16/31] mm/debug_vm_pgtable,page_table_check: warn pte map
- fails
+Subject: [PATCH 17/31] mm/various: give up if pte_offset_map[_lock]() fails
 In-Reply-To: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
-Message-ID: <87c0e8cc-85c0-806e-da9f-b7b3cacde7d@google.com>
+Message-ID: <c299eba-4e17-c645-1115-ccd1fd9956bd@google.com>
 References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
@@ -99,63 +98,169 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Failures here would be surprising: pte_advanced_tests() and
-pte_clear_tests() and __page_table_check_pte_clear_range() each
-issue a warning if pte_offset_map() or pte_offset_map_lock() fails.
+Following the examples of nearby code, various functions can just give
+up if pte_offset_map() or pte_offset_map_lock() fails.  And there's no
+need for a preliminary pmd_trans_unstable() or other such check, since
+such cases are now safely handled inside.
 
 Signed-off-by: Hugh Dickins <hughd@google.com>
 ---
- mm/debug_vm_pgtable.c | 9 ++++++++-
- mm/page_table_check.c | 2 ++
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ mm/gup.c            | 9 ++++++---
+ mm/ksm.c            | 7 ++++---
+ mm/memcontrol.c     | 8 ++++----
+ mm/memory-failure.c | 8 +++++---
+ mm/migrate.c        | 3 +++
+ mm/swap_state.c     | 3 +++
+ 6 files changed, 25 insertions(+), 13 deletions(-)
 
-diff --git a/mm/debug_vm_pgtable.c b/mm/debug_vm_pgtable.c
-index c54177aabebd..ee119e33fef1 100644
---- a/mm/debug_vm_pgtable.c
-+++ b/mm/debug_vm_pgtable.c
-@@ -138,6 +138,9 @@ static void __init pte_advanced_tests(struct pgtable_debug_args *args)
- 		return;
+diff --git a/mm/gup.c b/mm/gup.c
+index 3bd5d3854c51..bb67193c5460 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -544,10 +544,10 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
+ 	if (WARN_ON_ONCE((flags & (FOLL_PIN | FOLL_GET)) ==
+ 			 (FOLL_PIN | FOLL_GET)))
+ 		return ERR_PTR(-EINVAL);
+-	if (unlikely(pmd_bad(*pmd)))
+-		return no_page_table(vma, flags);
  
- 	pr_debug("Validating PTE advanced\n");
-+	if (WARN_ON(!args->ptep))
+ 	ptep = pte_offset_map_lock(mm, pmd, address, &ptl);
++	if (!ptep)
++		return no_page_table(vma, flags);
+ 	pte = *ptep;
+ 	if (!pte_present(pte))
+ 		goto no_page;
+@@ -851,8 +851,9 @@ static int get_gate_page(struct mm_struct *mm, unsigned long address,
+ 	pmd = pmd_offset(pud, address);
+ 	if (!pmd_present(*pmd))
+ 		return -EFAULT;
+-	VM_BUG_ON(pmd_trans_huge(*pmd));
+ 	pte = pte_offset_map(pmd, address);
++	if (!pte)
++		return -EFAULT;
+ 	if (pte_none(*pte))
+ 		goto unmap;
+ 	*vma = get_gate_vma(mm);
+@@ -2377,6 +2378,8 @@ static int gup_pte_range(pmd_t pmd, pmd_t *pmdp, unsigned long addr,
+ 	pte_t *ptep, *ptem;
+ 
+ 	ptem = ptep = pte_offset_map(&pmd, addr);
++	if (!ptep)
++		return 0;
+ 	do {
+ 		pte_t pte = ptep_get_lockless(ptep);
+ 		struct page *page;
+diff --git a/mm/ksm.c b/mm/ksm.c
+index df2aa281d49d..3dc15459dd20 100644
+--- a/mm/ksm.c
++++ b/mm/ksm.c
+@@ -431,10 +431,9 @@ static int break_ksm_pmd_entry(pmd_t *pmd, unsigned long addr, unsigned long nex
+ 	pte_t *pte;
+ 	int ret;
+ 
+-	if (pmd_leaf(*pmd) || !pmd_present(*pmd))
+-		return 0;
+-
+ 	pte = pte_offset_map_lock(walk->mm, pmd, addr, &ptl);
++	if (!pte)
++		return 0;
+ 	if (pte_present(*pte)) {
+ 		page = vm_normal_page(walk->vma, addr, *pte);
+ 	} else if (!pte_none(*pte)) {
+@@ -1203,6 +1202,8 @@ static int replace_page(struct vm_area_struct *vma, struct page *page,
+ 	mmu_notifier_invalidate_range_start(&range);
+ 
+ 	ptep = pte_offset_map_lock(mm, pmd, addr, &ptl);
++	if (!ptep)
++		goto out_mn;
+ 	if (!pte_same(*ptep, orig_pte)) {
+ 		pte_unmap_unlock(ptep, ptl);
+ 		goto out_mn;
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 4b27e245a055..fdd953655fe1 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -6057,9 +6057,9 @@ static int mem_cgroup_count_precharge_pte_range(pmd_t *pmd,
+ 		return 0;
+ 	}
+ 
+-	if (pmd_trans_unstable(pmd))
+-		return 0;
+ 	pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
++	if (!pte)
++		return 0;
+ 	for (; addr != end; pte++, addr += PAGE_SIZE)
+ 		if (get_mctgt_type(vma, addr, *pte, NULL))
+ 			mc.precharge++;	/* increment precharge temporarily */
+@@ -6277,10 +6277,10 @@ static int mem_cgroup_move_charge_pte_range(pmd_t *pmd,
+ 		return 0;
+ 	}
+ 
+-	if (pmd_trans_unstable(pmd))
+-		return 0;
+ retry:
+ 	pte = pte_offset_map_lock(vma->vm_mm, pmd, addr, &ptl);
++	if (!pte)
++		return 0;
+ 	for (; addr != end; addr += PAGE_SIZE) {
+ 		pte_t ptent = *(pte++);
+ 		bool device = false;
+diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+index 5b663eca1f29..b3cc8f213fe3 100644
+--- a/mm/memory-failure.c
++++ b/mm/memory-failure.c
+@@ -414,6 +414,8 @@ static unsigned long dev_pagemap_mapping_shift(struct vm_area_struct *vma,
+ 	if (pmd_devmap(*pmd))
+ 		return PMD_SHIFT;
+ 	pte = pte_offset_map(pmd, address);
++	if (!pte)
++		return 0;
+ 	if (pte_present(*pte) && pte_devmap(*pte))
+ 		ret = PAGE_SHIFT;
+ 	pte_unmap(pte);
+@@ -800,11 +802,11 @@ static int hwpoison_pte_range(pmd_t *pmdp, unsigned long addr,
+ 		goto out;
+ 	}
+ 
+-	if (pmd_trans_unstable(pmdp))
+-		goto out;
+-
+ 	mapped_pte = ptep = pte_offset_map_lock(walk->vma->vm_mm, pmdp,
+ 						addr, &ptl);
++	if (!ptep)
++		goto out;
++
+ 	for (; addr != end; ptep++, addr += PAGE_SIZE) {
+ 		ret = check_hwpoisoned_entry(*ptep, addr, PAGE_SHIFT,
+ 					     hwp->pfn, &hwp->tk);
+diff --git a/mm/migrate.c b/mm/migrate.c
+index 3ecb7a40075f..308a56f0b156 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -305,6 +305,9 @@ void migration_entry_wait(struct mm_struct *mm, pmd_t *pmd,
+ 	swp_entry_t entry;
+ 
+ 	ptep = pte_offset_map_lock(mm, pmd, address, &ptl);
++	if (!ptep)
 +		return;
 +
- 	pte = pfn_pte(args->pte_pfn, args->page_prot);
- 	set_pte_at(args->mm, args->vaddr, args->ptep, pte);
- 	flush_dcache_page(page);
-@@ -619,6 +622,9 @@ static void __init pte_clear_tests(struct pgtable_debug_args *args)
- 	 * the unexpected overhead of cache flushing is acceptable.
- 	 */
- 	pr_debug("Validating PTE clear\n");
-+	if (WARN_ON(!args->ptep))
+ 	pte = *ptep;
+ 	pte_unmap(ptep);
+ 
+diff --git a/mm/swap_state.c b/mm/swap_state.c
+index b76a65ac28b3..db2ec85ef332 100644
+--- a/mm/swap_state.c
++++ b/mm/swap_state.c
+@@ -734,6 +734,9 @@ static void swap_ra_info(struct vm_fault *vmf,
+ 
+ 	/* Copy the PTEs because the page table may be unmapped */
+ 	orig_pte = pte = pte_offset_map(vmf->pmd, faddr);
++	if (!pte)
 +		return;
 +
- #ifndef CONFIG_RISCV
- 	pte = __pte(pte_val(pte) | RANDOM_ORVALUE);
- #endif
-@@ -1377,7 +1383,8 @@ static int __init debug_vm_pgtable(void)
- 	args.ptep = pte_offset_map_lock(args.mm, args.pmdp, args.vaddr, &ptl);
- 	pte_clear_tests(&args);
- 	pte_advanced_tests(&args);
--	pte_unmap_unlock(args.ptep, ptl);
-+	if (args.ptep)
-+		pte_unmap_unlock(args.ptep, ptl);
- 
- 	ptl = pmd_lock(args.mm, args.pmdp);
- 	pmd_clear_tests(&args);
-diff --git a/mm/page_table_check.c b/mm/page_table_check.c
-index 25d8610c0042..0c511330dbc9 100644
---- a/mm/page_table_check.c
-+++ b/mm/page_table_check.c
-@@ -240,6 +240,8 @@ void __page_table_check_pte_clear_range(struct mm_struct *mm,
- 		pte_t *ptep = pte_offset_map(&pmd, addr);
- 		unsigned long i;
- 
-+		if (WARN_ON(!ptep))
-+			return;
- 		for (i = 0; i < PTRS_PER_PTE; i++) {
- 			__page_table_check_pte_clear(mm, addr, *ptep);
- 			addr += PAGE_SIZE;
+ 	if (fpfn == pfn + 1) {
+ 		lpfn = fpfn;
+ 		rpfn = fpfn + win;
 -- 
 2.35.3
 
