@@ -2,60 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DBF170B9AE
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 12:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7423570B9B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 12:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229719AbjEVKMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 06:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51262 "EHLO
+        id S232349AbjEVKMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 06:12:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232157AbjEVKMa (ORCPT
+        with ESMTP id S232249AbjEVKMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 06:12:30 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F56C4
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 03:12:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684750349; x=1716286349;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=tAF2CzJW9vSbgRJrTBfp96GQg1s66GPivnBYn+KlQdY=;
-  b=cbgQCGyYl6HwGZNrUu30p1JXVToZz8/zd7qt+RpI/0oItqMqFiEf6rA7
-   94BJHVZUEP3GLsanSdQR/buEay8LF4IWuLZO8wewDdLWT0EZUyFBM7sj4
-   UeEY39ucN9V7HoEDh2jtj0WFdrKT3vT9AobmFFCVKU/zlSjks9xMQzDol
-   j/inLlk+k2dXTeSU7Tunt8lR5MY5KTEr/VWcLCnJhzXoTwcaPAam8QeCk
-   uyQUQZF6+IAOy4XWtjxD8lizCn9dkRbwQjDUuoMU9k17OT2AgfhW+pBqL
-   mvA3t/O6L5WJ7sCI9VqYAePo86rC8/rZTg+6JTAFuTmH/TnauOnWAh2/l
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="333245344"
-X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
-   d="scan'208";a="333245344"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 03:12:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="1033575419"
-X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
-   d="scan'208";a="1033575419"
-Received: from twinkler-lnx.jer.intel.com ([10.12.230.239])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 03:12:27 -0700
-From:   Tomas Winkler <tomas.winkler@intel.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Alexander Usyskin <alexander.usyskin@intel.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>,
-        linux-kernel@vger.kernel.org,
-        Tomas Winkler <tomas.winkler@intel.com>
-Subject: [char-misc-next 2/2] mei: bus-fixup: fix buffer type
-Date:   Mon, 22 May 2023 13:12:10 +0300
-Message-Id: <20230522101210.2207395-2-tomas.winkler@intel.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230522101210.2207395-1-tomas.winkler@intel.com>
-References: <20230522101210.2207395-1-tomas.winkler@intel.com>
+        Mon, 22 May 2023 06:12:45 -0400
+Received: from mx6.didiglobal.com (mx6.didiglobal.com [111.202.70.123])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 89BE0BB;
+        Mon, 22 May 2023 03:12:41 -0700 (PDT)
+Received: from mail.didiglobal.com (unknown [10.79.64.19])
+        by mx6.didiglobal.com (Maildata Gateway V2.8) with ESMTPS id C101411008C201;
+        Mon, 22 May 2023 18:12:38 +0800 (CST)
+Received: from ZJY01-ACTMBX-06.didichuxing.com (10.79.64.19) by
+ ZJY01-ACTMBX-06.didichuxing.com (10.79.64.19) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 22 May 2023 18:12:38 +0800
+Received: from ZJY01-ACTMBX-06.didichuxing.com ([10.79.64.19]) by
+ ZJY01-ACTMBX-06.didichuxing.com ([10.79.64.19]) with mapi id 15.01.2507.021;
+ Mon, 22 May 2023 18:12:38 +0800
+X-MD-Sfrom: houweitao@didiglobal.com
+X-MD-SrcIP: 10.79.64.19
+From:   =?gb2312?B?uu7OsMzSIFZpbmNlbnQgSG91?= <houweitao@didiglobal.com>
+To:     "syzbot+92ef9ee419803871020e@syzkaller.appspotmail.com" 
+        <syzbot+92ef9ee419803871020e@syzkaller.appspotmail.com>
+CC:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "glider@google.com" <glider@google.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>
+Subject: Re: [syzbot] [hfs?] KMSAN: uninit-value in hfsplus_listxattr
+Thread-Topic: Re: [syzbot] [hfs?] KMSAN: uninit-value in hfsplus_listxattr
+Thread-Index: AdmMiHc/bUH/K2PcSNK2Ykgm8L30yA==
+Date:   Mon, 22 May 2023 10:12:38 +0000
+Message-ID: <a2f03e2ab9c34dcaabcf9fb11c0a1f45@didiglobal.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.79.64.102]
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,39 +59,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Usyskin <alexander.usyskin@intel.com>
-
-The __mei_cl_recv and __mei_cl_send accepts u8 buffer.
-Fix buffer type from char to u8.
-
-Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
-Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
----
- drivers/misc/mei/bus-fixup.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/misc/mei/bus-fixup.c b/drivers/misc/mei/bus-fixup.c
-index 31e3c74ca1f1e4a377592fb8..b8b716faf1921914fad9fcc7 100644
---- a/drivers/misc/mei/bus-fixup.c
-+++ b/drivers/misc/mei/bus-fixup.c
-@@ -108,7 +108,7 @@ struct mkhi_fw_ver {
- static int mei_osver(struct mei_cl_device *cldev)
- {
- 	const size_t size = MKHI_OSVER_BUF_LEN;
--	char buf[MKHI_OSVER_BUF_LEN];
-+	u8 buf[MKHI_OSVER_BUF_LEN];
- 	struct mkhi_msg *req;
- 	struct mkhi_fwcaps *fwcaps;
- 	struct mei_os_ver *os_ver;
-@@ -137,7 +137,7 @@ static int mei_osver(struct mei_cl_device *cldev)
- 			       sizeof(struct mkhi_fw_ver_block) * (__num))
- static int mei_fwver(struct mei_cl_device *cldev)
- {
--	char buf[MKHI_FWVER_BUF_LEN];
-+	u8 buf[MKHI_FWVER_BUF_LEN];
- 	struct mkhi_msg req;
- 	struct mkhi_msg *rsp;
- 	struct mkhi_fw_ver *fwver;
--- 
-2.40.1
-
+U2luY2UgdGhlIHN0cmJ1ZiBpbiBoZnNwbHVzX2xpc3R4YXR0ciB3YXMgYWxsb2NhdGVkIHdpdGgg
+a21hbGxvYyBhbmQgZmlsbGVkIHdpdGggaGZzcGx1c191bmkyYXNjLA0Kd2hpY2ggZGlkIG5vdCBm
+aWxsICJcMCIgaW4gbGFzdCBieXRlLCAgaW4gc29tZSBjYXNlcywgIHRoZSB1bmluaXRlZCBieXRl
+IG1heSBiZSBhY2Nlc3NlZCB3aGVuDQpjb21wYXJlIHRoZSBzdHJidWYgd2l0aCBrbm93biBuYW1l
+c3BhY2UuICBCdXQgSSBzdGlsbCBuZWVkIGNoZWNrIHRoZSB2YWx1ZSBvZiB4YXR0ciBpbiBzdHJi
+dWYNCnRvIGNvbmZpcm0gdGhlIHJvb3QgY2F1c2UuICBQbGVhc2UgaGVscCB0ZXN0IHdpdGggYmVs
+b3cgZGVidWcgcGF0Y2guDQoNCiNzeXogdGVzdDogaHR0cHM6Ly9naXRodWIuY29tL2dvb2dsZS9r
+bXNhbi5naXQgODAzODMyNzNmN2EwDQoNCi0tLSBhL2ZzL2hmc3BsdXMveGF0dHIuYw0KKysrIGIv
+ZnMvaGZzcGx1cy94YXR0ci5jDQpAQCAtNjcxLDYgKzY3MSw3IEBAIHN0YXRpYyBzc2l6ZV90IGhm
+c3BsdXNfbGlzdHhhdHRyX2ZpbmRlcl9pbmZvKHN0cnVjdCBkZW50cnkgKmRlbnRyeSwNCiAJcmV0
+dXJuIHJlczsNCiB9DQogDQorZXh0ZXJuIGJvb2wga21zYW5fZW5hYmxlZDsNCiBzc2l6ZV90IGhm
+c3BsdXNfbGlzdHhhdHRyKHN0cnVjdCBkZW50cnkgKmRlbnRyeSwgY2hhciAqYnVmZmVyLCBzaXpl
+X3Qgc2l6ZSkNCiB7DQogCXNzaXplX3QgZXJyOw0KQEAgLTY4MSw2ICs2ODIsOCBAQCBzc2l6ZV90
+IGhmc3BsdXNfbGlzdHhhdHRyKHN0cnVjdCBkZW50cnkgKmRlbnRyeSwgY2hhciAqYnVmZmVyLCBz
+aXplX3Qgc2l6ZSkNCiAJc3RydWN0IGhmc3BsdXNfYXR0cl9rZXkgYXR0cl9rZXk7DQogCWNoYXIg
+KnN0cmJ1ZjsNCiAJaW50IHhhdHRyX25hbWVfbGVuOw0KKwlpbnQgb2ZmID0gMDsNCisJY2hhciAq
+ZHVtcGluZm87DQogDQogCWlmICgoIVNfSVNSRUcoaW5vZGUtPmlfbW9kZSkgJiYNCiAJCQkhU19J
+U0RJUihpbm9kZS0+aV9tb2RlKSkgfHwNCkBAIC03MDUsNiArNzA4LDEyIEBAIHNzaXplX3QgaGZz
+cGx1c19saXN0eGF0dHIoc3RydWN0IGRlbnRyeSAqZGVudHJ5LCBjaGFyICpidWZmZXIsIHNpemVf
+dCBzaXplKQ0KIAkJcmVzID0gLUVOT01FTTsNCiAJCWdvdG8gb3V0Ow0KIAl9DQorCWR1bXBpbmZv
+ID0ga3phbGxvYygyMDAsIEdGUF9LRVJORUwpOw0KKwlpZiAoIWR1bXBpbmZvKSB7DQorCQlrZnJl
+ZShzdHJidWYpOw0KKwkJcmVzID0gLUVOT01FTTsNCisJCWdvdG8gb3V0Ow0KKwl9DQogDQogCWVy
+ciA9IGhmc3BsdXNfZmluZF9hdHRyKGlub2RlLT5pX3NiLCBpbm9kZS0+aV9pbm8sIE5VTEwsICZm
+ZCk7DQogCWlmIChlcnIpIHsNCkBAIC03NDEsNiArNzUwLDE1IEBAIHNzaXplX3QgaGZzcGx1c19s
+aXN0eGF0dHIoc3RydWN0IGRlbnRyeSAqZGVudHJ5LCBjaGFyICpidWZmZXIsIHNpemVfdCBzaXpl
+KQ0KIAkJCWdvdG8gZW5kX2xpc3R4YXR0cjsNCiAJCX0NCiANCisJCXByX2luZm8oImZpbmQgeGF0
+dHIgc2l6ZTolbGQgYW5kIGR1bXAgc3RyYnVmIHByZSAyMCBieXRlczpcbiIsIHNpemUpOw0KKwkJ
+V1JJVEVfT05DRShrbXNhbl9lbmFibGVkLCBmYWxzZSk7DQorCQlpZiAoa21zYW5fZW5hYmxlZCA9
+PSBmYWxzZSkgew0KKwkJCWZvciAob2ZmID0gMDsgb2ZmIDwgMjA7IG9mZisrKSB7DQorCQkJCXNw
+cmludGYoZHVtcGluZm8gKyBvZmYgKiA1LCAiIDB4JTAyeCIsIHN0cmJ1ZltvZmZdKTsNCisJCQl9
+DQorCQkJcHJfaW5mbygiJXNcbiIsIGR1bXBpbmZvKTsNCisJCX0NCisJCVdSSVRFX09OQ0Uoa21z
+YW5fZW5hYmxlZCwgdHJ1ZSk7DQogCQlpZiAoIWJ1ZmZlciB8fCAhc2l6ZSkgew0KIAkJCWlmIChj
+YW5fbGlzdChzdHJidWYpKQ0KIAkJCQlyZXMgKz0gbmFtZV9sZW4oc3RyYnVmLCB4YXR0cl9uYW1l
+X2xlbik7DQpAQCAtNzU5LDYgKzc3Nyw3IEBAIHNzaXplX3QgaGZzcGx1c19saXN0eGF0dHIoc3Ry
+dWN0IGRlbnRyeSAqZGVudHJ5LCBjaGFyICpidWZmZXIsIHNpemVfdCBzaXplKQ0KIA0KIGVuZF9s
+aXN0eGF0dHI6DQogCWtmcmVlKHN0cmJ1Zik7DQorCWtmcmVlKGR1bXBpbmZvKTsNCiBvdXQ6DQog
+CWhmc19maW5kX2V4aXQoJmZkKTsNCiAJcmV0dXJuIHJlczsNCg==
