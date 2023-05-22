@@ -2,141 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AF1570BB4D
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:13:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BE4F70BB52
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:14:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232688AbjEVLNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 07:13:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57092 "EHLO
+        id S233006AbjEVLO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 07:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232427AbjEVLNX (ORCPT
+        with ESMTP id S232778AbjEVLNz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 07:13:23 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 068B819A6;
-        Mon, 22 May 2023 04:08:35 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-75b0830e2eeso43894785a.1;
-        Mon, 22 May 2023 04:08:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684753714; x=1687345714;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jxi3fyG/zPxjmTcYvTx1jlSTEemn9oWDhNhnAs8Y07c=;
-        b=qO/pODfdZ7sKoPrTVtTX5Sux9ZLRu1P7SW7qhrz8vktSmXbzrXPGcuCetXDrT+hXhx
-         F0+B7p6QmFo6UQly+zqyT18pnsAVqSCyGDJDRc1/d9DC/C254CjBaDdxciDHs9Fnucg3
-         a+Ij2Uhw37KHzqd/XOFUwXc9QzE5npAu7o20TxVnTZ8oFDVHNLPFAUDWzU2dHNjqZc2+
-         Z996iQdYTwmophBHPcgTIi4apuXKo22hgnecIFSzzfObB06MDnMuxh1/uJUowUPHgru+
-         j5yiR8iClEkNfZ6uduGEwQ4JpANGxNP0evjJlt3zhdAh/vGxVIt+9lGdAUWpUQEZgHJ8
-         +rFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684753714; x=1687345714;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jxi3fyG/zPxjmTcYvTx1jlSTEemn9oWDhNhnAs8Y07c=;
-        b=VDFXj8Bub/yyklQP7YGxyQ3TC3zeYo7/dwT/kTsMj3cBKbHTr4RKPnOFfZ1JpEL0rC
-         vc+51OshCYbbD+MOPJ/BKtkdZggn5KeCHoppcf0MU1QIugJvmIj3F6Ja0/XSFQbkMfI5
-         axdO7sAFcwsfOWOSuBu/Hf9G3tlQeTLQrh0Xk+xvzqRvLsxp2ru/Se2XF6/7HsleH07Y
-         IfG0kC737OlIlVmrzY1bzPd3Mejrjha5hAdmb0Wp0VzlECreey7CfBEOceh1tNmLpEVM
-         Gr9bqvfUYjP9vYFIDXE7hIHbA+dHYzLsoq3E2TCVFqNapX5XV9K8RTeUJ1KY70b6ivb1
-         5k7Q==
-X-Gm-Message-State: AC+VfDyj+i7V2cE0ZVKWXa1ScLr3eZ51wUe8fyX4CGZ4nBNVo5U/SxKQ
-        ts+8GRyOooiLkpDD4JF/F/3eZjoyqbIQcHAgGyo=
-X-Google-Smtp-Source: ACHHUZ7ooN5VmH1972850+wB54FS/Bu/din4JqZ1CLAqns3NfpzaHikXKxtcqobYc3FYlpnnDI1l+FHL7E6rvk4AXmE=
-X-Received: by 2002:a37:c16:0:b0:75b:23a1:d846 with SMTP id
- 22-20020a370c16000000b0075b23a1d846mr167656qkm.8.1684753714014; Mon, 22 May
- 2023 04:08:34 -0700 (PDT)
+        Mon, 22 May 2023 07:13:55 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D6F40E2
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 04:08:53 -0700 (PDT)
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34M9aADR016006;
+        Mon, 22 May 2023 11:08:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : reply-to : references : content-type : in-reply-to
+ : mime-version; s=pp1; bh=5GCHBjrZp7XRFILy5bRVhHJS6/L3jzxBL3QKZZ24N1g=;
+ b=jsqPt/22LMz9HynaJX9PmGvEF1e0/pmhbNSA+J9icU82vFP2hBBd0alWTNfy1UJ2iuXo
+ AjCix4IALgpsSp9QIxP83sf4htUgLZHNKd5VybMVCWd7RjUElBa9x17HikTx8EGwifXJ
+ RqBEb3OzsHqkQUtUxzEnfJKf/mtc4Fivp4RfBh8tqlVIgMcD6JBDujpUvS8FKGDlTCfr
+ wEc/0Nt5oVnvmfdbchcXkVt+Os8WBqwpOyuzYN2hX6yt/GI7fhFEU8J0Sjn0bIkyVH+L
+ kna4P21ZAq4HTdBb6V/Bqzuih2fYQdGqnhUe/CkiYvFfNY1GeURNuYcaUjiHs9n+sOc1 zg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qqh1294hd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 May 2023 11:08:26 +0000
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34MAL2dK024151;
+        Mon, 22 May 2023 11:08:26 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qqh1294ga-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 May 2023 11:08:26 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34M68qGp021547;
+        Mon, 22 May 2023 11:08:23 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3qppdk0wgt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 May 2023 11:08:23 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34MB8LwO42664652
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 22 May 2023 11:08:21 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 36DC02004B;
+        Mon, 22 May 2023 11:08:21 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2528520040;
+        Mon, 22 May 2023 11:08:19 +0000 (GMT)
+Received: from linux.vnet.ibm.com (unknown [9.126.150.29])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with SMTP;
+        Mon, 22 May 2023 11:08:18 +0000 (GMT)
+Date:   Mon, 22 May 2023 16:38:18 +0530
+From:   Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     Alexey Kardashevskiy <aik@ozlabs.ru>,
+        "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>, Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        sachinp@linux.vnet.ibm.com,
+        Abdul Haleem <abdhalee@linux.vnet.ibm.com>,
+        Gaurav Batra <gbatra@linux.vnet.ibm.com>,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+Subject: Re: Probing nvme disks fails on Upstream kernels on powerpc Maxconfig
+Message-ID: <20230522110818.GB3902@linux.vnet.ibm.com>
+Reply-To: Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+References: <20230323095333.GI1005120@linux.vnet.ibm.com>
+ <906d4d0e-b487-00a5-9399-7d1edc5e20a4@leemhuis.info>
+ <87bkk2khl0.fsf@mpe.ellerman.id.au>
+ <2a80cb20-0c9f-2d0c-e951-c4f005f3e4b3@ozlabs.ru>
+ <20230522072412.GA3902@linux.vnet.ibm.com>
+ <87edn8ak4d.fsf@mail.lhotse>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <87edn8ak4d.fsf@mail.lhotse>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: S9juypeAE7KEM5E2DSgm_qKtBVJvWnG2
+X-Proofpoint-GUID: LcPgIepHzWanw9OEbSdOuQcVZCIkkXwp
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-References: <20230520190856.34720-1-boerge.struempfel@gmail.com>
- <20230520190856.34720-5-boerge.struempfel@gmail.com> <CAHp75VeR724n7C8hXs_7+TfvXANPZ7man3Znns8O+mBc113fYw@mail.gmail.com>
- <CAEktqcv3NEZKmxBdCjf29JbSbFfTzZB9p0yXF+btVrNYO5XU4w@mail.gmail.com>
- <CAHp75Vf37xb=yMeUM6exPaZDvrzQzwD53MGU2uR4aC0rPeTzAw@mail.gmail.com> <CAEktqcuuM=P7p-Y4k9Z+721SCA6i1QiCebWZL3BMqh6Q7jX+4A@mail.gmail.com>
-In-Reply-To: <CAEktqcuuM=P7p-Y4k9Z+721SCA6i1QiCebWZL3BMqh6Q7jX+4A@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Mon, 22 May 2023 14:07:58 +0300
-Message-ID: <CAHp75VdpPDEg3aPJgSU6bKpdR=eHo=155h9qUDgXO5VQfvjjmg@mail.gmail.com>
-Subject: Re: [PATCH v5 4/4] spi: spidev_test Add three missing spi mode bits
-To:     =?UTF-8?B?QsO2cmdlIFN0csO8bXBmZWw=?= <boerge.struempfel@gmail.com>
-Cc:     bstruempfel@ultratronik.de, festevam@gmail.com,
-        amit.kumar-mahapatra@amd.com, broonie@kernel.org,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-22_06,2023-05-22_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 impostorscore=0 phishscore=0 clxscore=1015
+ mlxlogscore=881 bulkscore=0 adultscore=0 malwarescore=0 suspectscore=0
+ lowpriorityscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2304280000 definitions=main-2305220094
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 10:23=E2=80=AFAM B=C3=B6rge Str=C3=BCmpfel
-<boerge.struempfel@gmail.com> wrote:
-> Am So., 21. Mai 2023 um 21:26 Uhr schrieb Andy Shevchenko
-> <andy.shevchenko@gmail.com>:
-> > On Sun, May 21, 2023 at 2:35=E2=80=AFPM B=C3=B6rge Str=C3=BCmpfel
-> > <boerge.struempfel@gmail.com> wrote:
-> > > Am So., 21. Mai 2023 um 11:00 Uhr schrieb Andy Shevchenko
-> > > <andy.shevchenko@gmail.com>:
+* Michael Ellerman <mpe@ellerman.id.au> [2023-05-22 17:41:22]:
 
-...
-
-> > > Thanks for the suggestion. I tried coming up with a logical way of
-> > > ordering, but I am having some difficulties deciding. What do you
-> > > think of the following order?
-> > >
-> > > general device settings
-> > > " -D --device device to use (default /dev/spidev1.1)\n"
-> > > " -s --speed max speed (Hz)\n"
-> > > " -d --delay delay (usec)\n"
-> > > " -l --loop loopback\n"
-> > >
-> > > spi mode
-> > > " -H --cpha clock phase\n"
-> > > " -O --cpol clock polarity\n"
-> > > " -F --rx-cpha-flip flip CPHA on Rx only xfer\n"
-> > >
-> > > number of wires for transmission
-> > > " -2 --dual dual transfer\n"
-> > > " -4 --quad quad transfer\n"
-> > > " -8 --octal octal transfer\n"
-> > > " -3 --3wire SI/SO signals shared\n"
-> > > " -Z --3wire-hiz high impedance turnaround\n"
-> > >
-> > > additional parameters
-> > > " -b --bpw bits per word\n"
-> > > " -L --lsb least significant bit first\n"
-> > > " -C --cs-high chip select active high\n"
-> > > " -N --no-cs no chip select\n"
-> > > " -R --ready slave pulls low to pause\n"
-> > > " -M --mosi-idle-low leave mosi line low when idle\n"
-> > >
-> > > data
-> > > " -i --input input data from a file (e.g. \"test.bin\")\n"
-> > > " -o --output output data to a file (e.g. \"results.bin\")\n"
-> > > " -p Send data (e.g. \"1234\\xde\\xad\")\n"
-> > > " -S --size transfer size\n"
-> > > " -I --iter iterations\n");
-> > >
-> > > misc
-> > > " -v --verbose Verbose (show tx buffer)\n"
+> Srikar Dronamraju <srikar@linux.vnet.ibm.com> writes:
+> > * Alexey Kardashevskiy <aik@ozlabs.ru> [2023-04-13 22:09:22]:
 > >
-> > Looks great to me, thank you for doing that!
+> >> > > On 23.03.23 10:53, Srikar Dronamraju wrote:
+> >> > > > 
+> > Hi Alexey, Michael
 > >
-> You are welcome.
-> Should I only reorder the flags, or actually introduce the
-> "group"-headers to visibly distinguish the options?
+> > Sorry for the late reply, but I didnt have access to this large system.
+> > This weekend, I did get access and tested with the patch. However it didn't
+> > help much, system is still stuck at dracut with similar message except the
+> > trace.
+> >
+> > However this patch
+> > https://lore.kernel.org/all/20230418204401.13168-1-gbatra@linux.vnet.ibm.com/
+> > from Gaurav Batra does solve this issue.
+> 
+> Thanks.
+> 
+> There was a v3 of that patch:
+>   https://lore.kernel.org/all/20230504175913.83844-1-gbatra@linux.vnet.ibm.com/
+> 
+> Which is merged now into mainline as:
+>   096339ab84f3 ("powerpc/iommu: DMA address offset is incorrectly calculated with 2MB TCEs")
+> 
+> Presumably it also fixes the bug for you, so I'll mark this as fixed,
+> but if you can test that exact commit that would be good to confirm the
+> bug is fixed in mainline.
+> 
 
-Up to you. If you think it increases the usability I'm all for it.
+Yes verified with mainline kernel and also with the v3.
+This patch/commit does fix it.
 
---=20
-With Best Regards,
-Andy Shevchenko
+-- 
+Thanks and Regards
+Srikar Dronamraju
