@@ -2,89 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8535A70C12B
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 16:32:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EB9670C132
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 16:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233722AbjEVOcd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 10:32:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56464 "EHLO
+        id S233736AbjEVOgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 10:36:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233644AbjEVOc2 (ORCPT
+        with ESMTP id S232833AbjEVOgq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 10:32:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D5399;
-        Mon, 22 May 2023 07:32:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 83940613F7;
-        Mon, 22 May 2023 14:32:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85AB2C433EF;
-        Mon, 22 May 2023 14:32:26 +0000 (UTC)
-Date:   Mon, 22 May 2023 10:32:24 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     sunliming <sunliming@kylinos.cn>
-Cc:     mhiramat@kernel.org, linux-trace-kernel@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Beau Belgrave <beaub@linux.microsoft.com>
-Subject: Re: [PATCH] racing/user_events: Prevent same address and bit per
- process
-Message-ID: <20230522103224.032ec78f@rorschach.local.home>
-In-Reply-To: <20230519081035.228891-1-sunliming@kylinos.cn>
-References: <20230519081035.228891-1-sunliming@kylinos.cn>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 22 May 2023 10:36:46 -0400
+Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 483A1A3;
+        Mon, 22 May 2023 07:36:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1684766124; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=h2hzkdS2CI6Z+pFM1kk69pxUImMUae+stETe0LFWQpY3nN4k73ZS9zxQvqCUt6ejUdoaX1fEjqxjoVadSMjm2f5NdQWRitO/CN9/YtGmTMoL7gKJ62t/+PYyxjgKnMOS1MKJ223NTlKbNm+3UBBu0mmEWFiKHzVm5UCwbUMSl+Y=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1684766124; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=XmUQ9AU5MTRMPEErZmQ/5DPCCW/8oUmeD0bDn1GwqDg=; 
+        b=jOmPbhFySazqUQwztCzWg1vcyKLAXA8pdLZTW50DIejvxQbpBM+zC4SS+3jkKEiqqYgyUaL82z1jxSUNJbb+yUfQZ1ZBj3Ihl3nRQqhfRev4+31o2GrUghHY3n4I959/E5yLozkP7smPit5TMig8Qa4GC0f+TbWw5pWiMSdbiFs=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1684766124;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=XmUQ9AU5MTRMPEErZmQ/5DPCCW/8oUmeD0bDn1GwqDg=;
+        b=NSSwN/B8POoWFVP+y7ZKK0vvVKDrbQwLyFkWPfDkx/OnEb+XY2x5f40rD4mlqmS5
+        pKkZnDbTaJYFoia/98nQHQbp9qPR86IBCR4eZdzGDC4azjLEf63GQR2wrwDgna56HLc
+        uQu4OHRw1kiClzHsrUWGmSgJd5lGAmVBUttAOtuU=
+Received: from [10.10.10.122] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
+        with SMTPS id 1684766122962358.61257803096214; Mon, 22 May 2023 07:35:22 -0700 (PDT)
+Message-ID: <87a5f9bc-f230-243b-e77c-9ae849008fb5@arinc9.com>
+Date:   Mon, 22 May 2023 17:35:13 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH net-next 00/30] net: dsa: mt7530: improve, trap BPDU &
+ LLDP, and prefer CPU port
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Richard van Schagen <richard@routerhints.com>,
+        Richard van Schagen <vschagen@cs.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
+        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230522121532.86610-1-arinc.unal@arinc9.com>
+ <20230522140917.er7f5ws24b2eeyvs@soft-dev3-1>
+Content-Language: en-US
+From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
+In-Reply-To: <20230522140917.er7f5ws24b2eeyvs@soft-dev3-1>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-Is the subject a Freudian slip?
-
-Added Beau. I need to add him to the maintainers file for user events ;-)
-
-On Fri, 19 May 2023 16:10:35 +0800
-sunliming <sunliming@kylinos.cn> wrote:
-
-> User processes register name_args for events. If the same name are registered
-> multiple times in the same process, it can cause undefined behavior. Because
-> the same name may be used for a diffrent event. If this event has the same
-> format as the original event, it is impossible to distinguish the trace output
-> of these two events. If the event has a different format from the original event,
-> the trace output of the new event is incorrect.
+On 22/05/2023 17:09, Horatiu Vultur wrote:
+> The 05/22/2023 15:15, arinc9.unal@gmail.com wrote:
 > 
-> Return EADDRINUSE back to the user process if the same event has being registered
-> in the same process.
-
-I'll let Beau ack this or not.
-
--- Steve
-
+> Hi,
 > 
-> Signed-off-by: sunliming <sunliming@kylinos.cn>
-> ---
->  kernel/trace/trace_events_user.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> Hello!
+>>
+>> This patch series simplifies the code, improves the logic of the switch
+>> hardware support, traps LLDP frames and BPDUs for MT7530, MT7531, and
+>> MT7988 SoC switches, and introduces the preferring local CPU port
+>> operation.
+>>
+>> There's also a patch for fixing the port capabilities of the switch on the
+>> MT7988 SoC.
+>>
 > 
-> diff --git a/kernel/trace/trace_events_user.c b/kernel/trace/trace_events_user.c
-> index b1ecd7677642..4ef6bdb5c07c 100644
-> --- a/kernel/trace/trace_events_user.c
-> +++ b/kernel/trace/trace_events_user.c
-> @@ -1996,7 +1996,7 @@ static int user_events_ref_add(struct user_event_file_info *info,
->  
->  		for (i = 0; i < count; ++i)
->  			if (refs->events[i] == user)
-> -				return i;
-> +				return -EADDRINUSE;
->  	}
->  
->  	size = struct_size(refs, events, count + 1);
+> I have noticed that in many patches of the series you have:
+> Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> 
+> Where you also have:
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> 
+> I think you can drop Tested-by as the SoB will imply that. I think you
+> got a similar comment some time ago to a different patch series.
 
+Yes, that was for the net, therefore the stable tree. The very first 
+rule for the patches going to the stable tree is that the patch must be 
+tested.
+
+I don't see a clear indication of the patches submitted to net-next 
+being tested on the relevant hardware by the author. Therefore, I 
+explicitly put my tag to state it. Let me know if you don't agree with this.
+
+Arınç
