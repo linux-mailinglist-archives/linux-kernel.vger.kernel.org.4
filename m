@@ -2,177 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9835370C4E9
+	by mail.lfdr.de (Postfix) with ESMTP id 4D6F170C4E8
 	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 20:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233132AbjEVSDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 14:03:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59738 "EHLO
+        id S233392AbjEVSDw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 14:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231998AbjEVSDg (ORCPT
+        with ESMTP id S233207AbjEVSDk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 14:03:36 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4856E132
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:03:25 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id 6a1803df08f44-5ed99ebe076so54214766d6.2
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:03:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684778604; x=1687370604;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yN+5fBZoSuRn2vAVaf6V5f1u8QGccSwvan5bXoofEZA=;
-        b=lH5aomZyS23V9z5grwNvsBN8NmKzJDL/BX+41G/2VZaB/KWe1weF4RNKsk3HflmUdj
-         S8MuEdABefEJQS+E1rmU5aVLwFeRjFl2mLkYLhGDkTMr5SYDytGThyIKAqGi5jm+9EQy
-         /yZcGvAsZWh/xWBp6CAQQNXuDyEZpy4s1cqe1aLUkmXEwMw7oVnHp1Ab+/3XLiMLDVIL
-         5GToqetd3ksTETD68d45ofw4H4CVMfrsR41Amm2n1VFWf8g+ugJH7rKz0xTC0yj2x4WV
-         gdFkPXMh///Zw41ir6lxRiT9YR+e32uRsUTbeVBD9uFSScwhCu+/0g2VHVaNnmPappGR
-         sDfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684778604; x=1687370604;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yN+5fBZoSuRn2vAVaf6V5f1u8QGccSwvan5bXoofEZA=;
-        b=PDYy2VB80xTQTK9GTGxvgiyQvi/gpM/vYkJXK73etAHZlD8IzgEK5n2Uu5it2q163G
-         UYs5eFzhs1dkDndCxxu3IcVgaXHSOqamlpvrlpK7xyhr1sN5zszUDXnOkPuIUu76BooO
-         BW/xUqvs2nOXBzr2dPVltbo71GzLMAnq4LkdHsL2Eg5b/4Zq+AkdNpoGFhfzaj+Fhin/
-         g0QmO/FVPzgiv11syFAxkh4MsgwL4jFn7cX2iPQXEXWjJfgalM6c0i+lb/6IKy6VzB62
-         9JKLqn9F95wL69Mba1e8xBCPho25sDyEXFWITjJD6SUyJgnrwTTxCgKxj/+wl/OgoBRD
-         dgoQ==
-X-Gm-Message-State: AC+VfDymZ97XxWYppr1NBu1E30RTc4QGSGJUCFc2J9v7FWUaYdmInkRV
-        wWIzCfCgUWSULekWXrIq+qsy36t7PahnMhMbQxy/AQ==
-X-Google-Smtp-Source: ACHHUZ7CdEhV2NhYsdjVZmTsn5VMlhEvOxGibdnoeXYzGtdTUkQhYEWAQjX+aLxdXF+HSTtIu2vDJ21Y7YJQWPJID7A=
-X-Received: by 2002:a05:6214:19cd:b0:5df:47e2:8df5 with SMTP id
- j13-20020a05621419cd00b005df47e28df5mr23742073qvc.31.1684778604263; Mon, 22
- May 2023 11:03:24 -0700 (PDT)
+        Mon, 22 May 2023 14:03:40 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A1D10C;
+        Mon, 22 May 2023 11:03:39 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34MGKIuS019507;
+        Mon, 22 May 2023 18:03:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=7FWcWoYpEo6qyXfPmpFBf5sJ3rHxVHmm/8f37QkNMa8=;
+ b=EyALMqNaKyv9btn1NfDrTLqcPZbXFTT5KneJH1BIqCZdubobD6pU7UNhxG/MdOXXQyjy
+ pQkEjzahAj8WAi+RL7PMxoQKC/nznKQHSKrl3rRV1pr0yptlDRKBqlFXvjHpVNDj+Vcz
+ lFDo1S1gKtAH46mdLvEivBpYUQPmuwGNb163jrBJ/ZxT889ScifYi5qbleZxn8TbAWeR
+ h0o2GR4QPsJCuxNIYGtA5kEDhmwTi40OZlOQNaEcQtCO8YchidCp1ZkIrB9jE/JS4yO5
+ P66Pm4e4QlwWIp3C23wvxuaIfoi+tssOMvTBIKXS9w+6wLoshQuXueqy1wGAqjxM3GGZ vw== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qppkdmfaq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 May 2023 18:03:33 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34MI3WKB029508
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 May 2023 18:03:32 GMT
+Received: from [10.71.110.193] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 22 May
+ 2023 11:03:31 -0700
+Message-ID: <5059b759-2c9c-fd81-f9a8-37e4dccd3ea8@quicinc.com>
+Date:   Mon, 22 May 2023 11:03:30 -0700
 MIME-Version: 1.0
-References: <20230521160426.1881124-1-masahiroy@kernel.org> <20230521160426.1881124-4-masahiroy@kernel.org>
-In-Reply-To: <20230521160426.1881124-4-masahiroy@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 22 May 2023 11:03:13 -0700
-Message-ID: <CAKwvOdmxLrE8VksbsSGirfTqnuhEFT__FuCG53ri3V42UbH5aw@mail.gmail.com>
-Subject: Re: [PATCH v6 03/20] modpost: detect section mismatch for
- R_ARM_MOVW_ABS_NC and R_ARM_MOVT_ABS
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Fangrui Song <maskray@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 1/5] msm/drm/dsi: Round up DSC hdisplay calculation
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+CC:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
+References: <20230405-add-dsc-support-v3-0-6e1d35a206b3@quicinc.com>
+ <20230405-add-dsc-support-v3-1-6e1d35a206b3@quicinc.com>
+ <uh5cshbplstpnp7npqvnxwefyh7h4zur3vrkt626pdeczgdnya@s3mhsrlc4smy>
+From:   Jessica Zhang <quic_jesszhan@quicinc.com>
+In-Reply-To: <uh5cshbplstpnp7npqvnxwefyh7h4zur3vrkt626pdeczgdnya@s3mhsrlc4smy>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Rrk-t_FZVE1E-j1qlyTOgxSkuuoaZyaP
+X-Proofpoint-GUID: Rrk-t_FZVE1E-j1qlyTOgxSkuuoaZyaP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-22_12,2023-05-22_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ spamscore=0 bulkscore=0 malwarescore=0 mlxlogscore=999 suspectscore=0
+ adultscore=0 phishscore=0 mlxscore=0 impostorscore=0 priorityscore=1501
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305220152
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ linux-arm-kernel
-
-On Sun, May 21, 2023 at 9:05=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.o=
-rg> wrote:
->
-> ARM defconfig misses to detect some section mismatches.
->
->   [test code]
->
->     #include <linux/init.h>
->
->     int __initdata foo;
->     int get_foo(int x) { return foo; }
->
-> It is apparently a bad reference, but modpost does not report anything
-> for ARM defconfig (i.e. multi_v7_defconfig).
->
-> The test code above produces the following relocations.
->
->   Relocation section '.rel.text' at offset 0x200 contains 2 entries:
->    Offset     Info    Type            Sym.Value  Sym. Name
->   00000000  0000062b R_ARM_MOVW_ABS_NC 00000000   .LANCHOR0
->   00000004  0000062c R_ARM_MOVT_ABS    00000000   .LANCHOR0
->
->   Relocation section '.rel.ARM.exidx' at offset 0x210 contains 2 entries:
->    Offset     Info    Type            Sym.Value  Sym. Name
->   00000000  0000022a R_ARM_PREL31      00000000   .text
->   00000000  00001000 R_ARM_NONE        00000000   __aeabi_unwind_cpp_pr0
->
-> Currently, R_ARM_MOVW_ABS_NC and R_ARM_MOVT_ABS are just skipped.
->
-> Add code to handle them. I checked arch/arm/kernel/module.c to learn
-> how the offset is encoded in the instruction.
->
-> The referenced symbol in relocation might be a local anchor.
-> If is_valid_name() returns false, let's search for a better symbol name.
->
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
-> ---
->
->  scripts/mod/modpost.c | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
->
-> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-> index 34fbbd85bfde..ed2301e951a9 100644
-> --- a/scripts/mod/modpost.c
-> +++ b/scripts/mod/modpost.c
-> @@ -1108,7 +1108,7 @@ static inline int is_valid_name(struct elf_info *el=
-f, Elf_Sym *sym)
->  /**
->   * Find symbol based on relocation record info.
->   * In some cases the symbol supplied is a valid symbol so
-> - * return refsym. If st_name !=3D 0 we assume this is a valid symbol.
-> + * return refsym. If is_valid_name() =3D=3D true, we assume this is a va=
-lid symbol.
->   * In other cases the symbol needs to be looked up in the symbol table
->   * based on section and address.
->   *  **/
-> @@ -1121,7 +1121,7 @@ static Elf_Sym *find_tosym(struct elf_info *elf, El=
-f64_Sword addr,
->         Elf64_Sword d;
->         unsigned int relsym_secindex;
->
-> -       if (relsym->st_name !=3D 0)
-> +       if (is_valid_name(elf, relsym))
->                 return relsym;
->
->         /*
-> @@ -1312,11 +1312,19 @@ static int addend_arm_rel(struct elf_info *elf, E=
-lf_Shdr *sechdr, Elf_Rela *r)
->         unsigned int r_typ =3D ELF_R_TYPE(r->r_info);
->         Elf_Sym *sym =3D elf->symtab_start + ELF_R_SYM(r->r_info);
->         unsigned int inst =3D TO_NATIVE(*reloc_location(elf, sechdr, r));
-> +       int offset;
->
->         switch (r_typ) {
->         case R_ARM_ABS32:
->                 r->r_addend =3D inst + sym->st_value;
->                 break;
-> +       case R_ARM_MOVW_ABS_NC:
-> +       case R_ARM_MOVT_ABS:
-> +               offset =3D ((inst & 0xf0000) >> 4) | (inst & 0xfff);
-> +               offset =3D (offset ^ 0x8000) - 0x8000;
-
-The code in arch/arm/kernel/module.c then right shifts the offset by
-16 for R_ARM_MOVT_ABS. Is that necessary?
-
-> +               offset +=3D sym->st_value;
-> +               r->r_addend =3D offset;
-> +               break;
->         case R_ARM_PC24:
->         case R_ARM_CALL:
->         case R_ARM_JUMP24:
-> --
-> 2.39.2
->
 
 
---=20
+On 5/20/2023 1:07 AM, Marijn Suijten wrote:
+> On 2023-05-19 14:17:26, Jessica Zhang wrote:
+>> Currently, when compression is enabled, hdisplay is reduced via integer
+>> division. This causes issues for modes where the original hdisplay is
+>> not a multiple of 3.
+>>
+>> To fix this, use DIV_ROUND_UP to divide hdisplay.
+>>
+>> Reported-by: Marijn Suijten <marijn.suijten@somainline.org>
+> 
+> This should have been:
+> 
+> Suggested-by: Marijn Suijten <marijn.suijten@somainline.org>
+> 
+>> Fixes: f3a99460406b ("drm/msm/dsi: update hdisplay calculation for dsi_timing_setup")
+> 
+> This hash is not valid (and checkpatch points it out...), as it is your
+> local commit from the MSM DSC helper methods series.  The original issue
+> was introduced in:
+> 
+> Fixes: 08802f515c3cf ("drm/msm/dsi: Add support for DSC configuration")
+
+Hi Marijn,
+
+Acked.
+
 Thanks,
-~Nick Desaulniers
+
+Jessica Zhang
+
+> 
+> - Marijn
+> 
+>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+>> ---
+>>   drivers/gpu/drm/msm/dsi/dsi_host.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+>> index 9223d7ec5a73..18d38b90eb28 100644
+>> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
+>> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+>> @@ -952,7 +952,7 @@ static void dsi_timing_setup(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
+>>   		 * pulse width same
+>>   		 */
+>>   		h_total -= hdisplay;
+>> -		hdisplay = msm_dsc_get_bytes_per_line(msm_host->dsc) / 3;
+>> +		hdisplay = DIV_ROUND_UP(msm_dsc_get_bytes_per_line(msm_host->dsc), 3);
+>>   		h_total += hdisplay;
+>>   		ha_end = ha_start + hdisplay;
+>>   	}
+>>
+>> -- 
+>> 2.40.1
+>>
