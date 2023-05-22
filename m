@@ -2,52 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 678F870C2CB
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E501170C2CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:55:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233587AbjEVPzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 11:55:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47682 "EHLO
+        id S234167AbjEVPza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 11:55:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231797AbjEVPzH (ORCPT
+        with ESMTP id S233802AbjEVPz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 11:55:07 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC33B5
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 08:55:04 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 02F8E4000A;
-        Mon, 22 May 2023 15:55:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1684770902;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LaFqR0ACyRg+/iTUPSy9FcW2T2R+sSIoN7oPzNJO2Yk=;
-        b=ZVVwzJPgCuKmgbcMH7JKvk8MwmWJIoiKwVl7H54VlppMU8++YbgbH6oXj7fMdXuqgH5/v+
-        2NmCBKTmSptGC9GZRAF024Ey8SWtbja3Gwz7VsmtAlKaCZrJqXjPFFm88bC4kWKL9uRsNV
-        pAvonGTso2iscv/ulh4gfAWopb8gVrcMvOXVDrc0x+dkW4JOaDkPPTxU3RGJfT3m6oCa58
-        6wUSnhVoCK3hgw9QQ9jntj6rYlP8Ij3duq4r4UURJpOvgplfY7NQrnECWQEGrf/rN8vxju
-        yJnVqf2/tsAWmtKivkvU+CDJHG9Nj5QNK7CINtHcNtioAW4WeVaWEwwURX4Ceg==
-Date:   Mon, 22 May 2023 17:55:01 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Michal Simek <michal.simek@amd.com>
-Cc:     linux-kernel@vger.kernel.org, monstr@monstr.eu,
-        michal.simek@xilinx.com, git@xilinx.com
-Subject: Re: [PATCH] MAINTAINERS: Add myself as reviewer instead of Naga
-Message-ID: <20230522175501.5cda1726@xps-13>
-In-Reply-To: <20230522174753.39af9be3@xps-13>
-References: <c3ff76cb5e861500efe784f9f74ed93db08b2eb8.1683103414.git.michal.simek@amd.com>
-        <8f44cc75-71d9-4a9c-8910-e96fedc6a550@amd.com>
-        <20230522174753.39af9be3@xps-13>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Mon, 22 May 2023 11:55:28 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2948A107;
+        Mon, 22 May 2023 08:55:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=3XGsqEuFdWjxpRIwiAwzbMYLJommpBUmf64o8Q70T54=; b=T3DhWwZvaaFpz7BUKGUYfo2SjO
+        mnHOu0gFWqbJdNvvfVMzsr7HWt0aV5MpevFsuyJDWdKAo8zr+5Rr3x+VXBd7yRgncbklJv2GjuJE3
+        t2VSzBIMvOhxun/YpvaQFaAGsDsRp6wyc394DMMtDoEB8tgIWkvIcOAgv4NdzapSXJ0iQCe54RrPd
+        0zPEZgqJx3JbokWMmV+2Ogv8aCbxI9qghhH2GTaSbJzclGz2cCUQYjURJYo+VbsDvxjitAIFTXL5r
+        6iyrrvcncV1twi+CoqplMGnBBFpIZ34k0ah6ZLAyhs3Hzf4qz8B01wfMdibZXOOQCYQn9Jyzya9HV
+        lJdNJQmw==;
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1q17sN-000HgE-IO; Mon, 22 May 2023 17:55:11 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1q17sM-000UFQ-IZ; Mon, 22 May 2023 17:55:10 +0200
+Subject: Re: [PATCH RESEND bpf-next 14/15] net, xdp: allow metadata > 32
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Jesper Dangaard Brouer <jbrouer@redhat.com>
+Cc:     brouer@redhat.com, Larysa Zaremba <larysa.zaremba@intel.com>,
+        bpf@vger.kernel.org, Stanislav Fomichev <sdf@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Anatoly Burakov <anatoly.burakov@intel.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Magnus Karlsson <magnus.karlsson@gmail.com>,
+        Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
+        netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        linux-kernel@vger.kernel.org
+References: <20230512152607.992209-1-larysa.zaremba@intel.com>
+ <20230512152607.992209-15-larysa.zaremba@intel.com>
+ <ee1ad4f2-34ab-4377-14d5-532cb0687180@redhat.com> <ZGJnFxzDTV2qE4zZ@lincoln>
+ <b9a879b2-bb62-ba18-0bdd-5c126a1086a9@intel.com>
+ <a37db72f-2e83-c838-7c81-8f01a5a0df32@redhat.com>
+ <5b817d49-eefa-51c9-3b51-01f1dba17d42@intel.com>
+ <fed6ef09-0f5b-8c3d-0484-bb0995d09282@redhat.com>
+ <d53f0150-d74b-7cf6-8fe7-324131b43982@intel.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <106900e6-ab94-b37f-dc9d-f0a4242bb90f@iogearbox.net>
+Date:   Mon, 22 May 2023 17:55:09 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+In-Reply-To: <d53f0150-d74b-7cf6-8fe7-324131b43982@intel.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/26915/Mon May 22 09:23:18 2023)
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,67 +86,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 5/22/23 5:28 PM, Alexander Lobakin wrote:
+> From: Jesper Dangaard Brouer <jbrouer@redhat.com>
+> Date: Mon, 22 May 2023 13:41:43 +0200
+>> On 19/05/2023 18.35, Alexander Lobakin wrote:
+>>> From: Jesper Dangaard Brouer <jbrouer@redhat.com>
+>>> Date: Tue, 16 May 2023 17:35:27 +0200
+> 
+> [...]
+> 
+>> Not talking about your changes (in this patch).
+>>
+>> I'm realizing that SKBs using metadata area will have a performance hit
+>> due to accessing another cacheline (the meta_len in skb_shared_info).
+>>
+>> IIRC Daniel complained about this performance hit (in the past), I guess
+>> this explains it.  IIRC Cilium changed to use percpu variables/datastore
+>> to workaround this.
+> 
+> Why should we compare metadata of skbs on GRO anyway? I was disabling it
+> the old hints series (conditionally, if driver asks), moreover...
+> ...if metadata contains full checksum, GRO will be broken completely due
+> to this comparison (or any other frame-unique fields. VLAN tags and
+> hashes are okay).
 
-miquel.raynal@bootlin.com wrote on Mon, 22 May 2023 17:47:53 +0200:
+This is when BPF prog on XDP populates metadata with custom data when it
+wants to transfer information from XDP to skb aka tc BPF prog side. percpu
+data store may not work here as it is not guaranteed that skb might end up
+on same CPU.
 
-> Hi Michal,
->=20
-> michal.simek@amd.com wrote on Mon, 22 May 2023 17:00:34 +0200:
->=20
-> > Hi Miquel,
-> >=20
-> > On 5/3/23 10:43, Michal Simek wrote: =20
-> > > Naga no longer works for AMD/Xilinx and there is no activity from him=
- to
-> > > continue to maintain Xilinx related drivers. Add myself instead to be=
- kept
-> > > in loop if there is any need for testing.
-> > >=20
-> > > Signed-off-by: Michal Simek <michal.simek@amd.com>
-> > > ---
-> > >=20
-> > >   MAINTAINERS | 6 +++---
-> > >   1 file changed, 3 insertions(+), 3 deletions(-)
-> > >=20
-> > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > index 643f9feeb09a..104f1b8727d3 100644
-> > > --- a/MAINTAINERS
-> > > +++ b/MAINTAINERS
-> > > @@ -1600,7 +1600,7 @@ F:	drivers/media/i2c/ar0521.c   =20
-> > >   >   ARASAN NAND CONTROLLER DRIVER   =20
-> > >   M:	Miquel Raynal <miquel.raynal@bootlin.com>
-> > > -M:	Naga Sureshkumar Relli <nagasure@xilinx.com>
-> > > +R:	Michal Simek <michal.simek@amd.com>
-> > >   L:	linux-mtd@lists.infradead.org
-> > >   S:	Maintained
-> > >   F:	Documentation/devicetree/bindings/mtd/arasan,nand-controller.yaml
-> > > @@ -1740,7 +1740,7 @@ F:	include/linux/amba/bus.h   =20
-> > >   >   ARM PRIMECELL PL35X NAND CONTROLLER DRIVER   =20
-> > >   M:	Miquel Raynal <miquel.raynal@bootlin.com>
-> > > -M:	Naga Sureshkumar Relli <nagasure@xilinx.com>
-> > > +R:	Michal Simek <michal.simek@amd.com>
-> > >   L:	linux-mtd@lists.infradead.org
-> > >   S:	Maintained
-> > >   F:	Documentation/devicetree/bindings/mtd/arm,pl353-nand-r2p1.yaml
-> > > @@ -1748,7 +1748,7 @@ F:	drivers/mtd/nand/raw/pl35x-nand-controller.c=
-   =20
-> > >   >   ARM PRIMECELL PL35X SMC DRIVER   =20
-> > >   M:	Miquel Raynal <miquel.raynal@bootlin.com>
-> > > -M:	Naga Sureshkumar Relli <nagasure@xilinx.com>
-> > > +R:	Michal Simek <michal.simek@amd.com>
-> > >   L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscrib=
-ers)
-> > >   S:	Maintained
-> > >   F:	Documentation/devicetree/bindings/memory-controllers/arm,pl35x-s=
-mc.yaml   =20
-> >=20
-> > Any issue with this patch? Would be good to get your ACK on it? =20
->=20
-> I am currently emptying my backlog, I'm gonna take this patch through
-> the next fixes PR. Sorry for the delay.
-
-Actually, can you resend with the ML in copy? Otherwise it does not
-appear in patchwork and cannot easily be picked up.
-
-Thanks,
-Miqu=C3=A8l
+>>> The whole xdp_metalen_invalid() gets expanded into:
+>>>
+>>>      return (metalen % 4) || metalen > 255;
+>>>
+>>> at compile-time. All those typeof shenanigans are only to not open-code
+>>> meta_len's type/size/max.
+>>>
+>>>>
+>>>> But only use for SKBs that gets created from xdp with metadata, right?
+>>>>
+>>
+>> Normal netstack processing actually access this skb_shinfo->meta_len in
+>> gro_list_prepare().  As the caller dev_gro_receive() later access other
+>> memory in skb_shared_info, then the GRO code path already takes this hit
+>> to begin with.
+> 
+> You access skb_shinfo() often even before running XDP program, for
+> example, when a frame is multi-buffer. Plus HW timestamps are also
+> there, and so on.
