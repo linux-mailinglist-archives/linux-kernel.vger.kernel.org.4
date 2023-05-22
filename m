@@ -2,82 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EF0270C527
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 20:27:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5710D70C52E
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 20:28:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbjEVS1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 14:27:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41646 "EHLO
+        id S233621AbjEVS2s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 14:28:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230284AbjEVS1O (ORCPT
+        with ESMTP id S233602AbjEVS2q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 14:27:14 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF31D95
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:27:12 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f608074b50so7791705e9.0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:27:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=conchuod.ie; s=google; t=1684780031; x=1687372031;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Dde97R89Md6V2pF7Jo7GpR1OiPPYejdIL3uT2QHQik8=;
-        b=PlSJAoHfBEl5jgtH2ajA5/RPOKBr6SWbVwyY33Ofq+2dix5Xbn1+G3fUhDAkQjJY7B
-         NPf6s+tS5cKZyjn4MtChpInwyLvL1/73oMQQKQVaqlVaDPwmR1Z2J0B9L0PSpa3nY9K/
-         0we1yo8L6/teOeoIraoaq0+6wV2jSoWZOORDFtjiGFmjsJIOukZsz3YDRJWLotL1QPIN
-         Bd0ivnggzwl883J9bAigYwI3Dz/hnBuSBKuKuC0JF9ctZxGWadSR5KZ0e/PgVlwJnW4X
-         XzxTfmgYVQuyucIHj9cu1DzyYdxkYi0IL7vzjn1fSAYYZi472WmSAhOMnmkBQJi+L6R+
-         rvYA==
+        Mon, 22 May 2023 14:28:46 -0400
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED82C2
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:28:00 -0700 (PDT)
+Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-6238ce8d8f9so25538916d6.3
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:28:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684780031; x=1687372031;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Dde97R89Md6V2pF7Jo7GpR1OiPPYejdIL3uT2QHQik8=;
-        b=h6UxeocAQsTiFXwRVQd6bWA8ws576GjgrDzxMYsUPmr9x00w1PGOiWdcObxNjetMqd
-         UTqypRkEElrW0p8i0UI8PrdH9W41sOCpCBaE73QfVSfsCjZCkGSSllj3w+/asb5b71cF
-         AO0koSG90pVhFCIXY0S1Ayjy2byQRozmvZdUH2rNLoDXFZQWcSLawmnbeZASp3wyIPrm
-         sDT5lvHUmCq0uN0oL6lExc9dLdwBAmOeYsa/C9aYT7ui/JlKHeE/+WjtTsnUJXd/vm22
-         F3fyzboInMlIm6L0Vh/5DypLN+exI6uCizYw/Bp7Mg6/seEqxqa+XPiJ2BjKYMK5g+t4
-         sfBQ==
-X-Gm-Message-State: AC+VfDyNgSlXLnkYTW+JtlfMYjYOSOiI8yQLK6JKj2+wlB+sbdydfKtl
-        /B9dksaEgrrj8ny3Npd0J8EcHQ==
-X-Google-Smtp-Source: ACHHUZ6kWFfckNngKg+tH40+Yss9WOVsPO4kAvHw/TA+yOcWG6pouHhkoTCnCXnIaluKbsSv8gGSCg==
-X-Received: by 2002:a1c:7c01:0:b0:3f5:db0f:4a74 with SMTP id x1-20020a1c7c01000000b003f5db0f4a74mr8447054wmc.21.1684780031389;
-        Mon, 22 May 2023 11:27:11 -0700 (PDT)
-Received: from [192.168.2.9] ([51.37.135.152])
-        by smtp.gmail.com with ESMTPSA id o9-20020adfeac9000000b0030633152664sm8573132wrn.87.2023.05.22.11.27.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 May 2023 11:27:10 -0700 (PDT)
-Message-ID: <d56f205c-dae8-a191-f2af-fed6bea060ad@conchuod.ie>
-Date:   Mon, 22 May 2023 19:27:09 +0100
+        d=1e100.net; s=20221208; t=1684780080; x=1687372080;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p7GzxNEPB5RrqIL7H106LwNVqNBV2sg10P6y5N7WaSk=;
+        b=MSBSW5kwOCF8s260LcvypTijcNmTJnhTc7Ae2vG+TWYv4rlBEMkFe48gUNFRqaA8yU
+         TwqSmOqIQYFSSU64wPJYZ+ppbfmY9BCZVp59/SM9wzMWgpVCQqMUmO1Af+onNaaTkWI+
+         6ARsWcyEjMSBwK2hflOcO/7B1+a94BB6PRFqC1psqTXLDq5vdcyDrrtkpfSan0Lp9foy
+         dNbyTSlTmG/u+6G3Pc5SfRKt8Gzpm/GhSLXTzfRqRUe8ZS8/UlOXEr1oY7GueleucP10
+         So7LmfeY7ZgTXGSDudXwh2FLZ9m9hP+8p6Z/H4qdv58tFdq2w92XEqJe3NJ8C+L/xAZt
+         Zp6g==
+X-Gm-Message-State: AC+VfDxckqqIhLL04DF4sI7dkV4DCT8l2VgleR6HNTCkIyBGRt/3VGjt
+        lHiZkXbt/OhY4MapZRZkjmKm
+X-Google-Smtp-Source: ACHHUZ5cNHDfNJtYuuNT8G4J5JsInsTlSg1wDbr/+6XLCC/c6hq9pMKzuHMG58VXqxmVmQvtSAcUtw==
+X-Received: by 2002:a05:6214:f22:b0:625:833e:8825 with SMTP id iw2-20020a0562140f2200b00625833e8825mr5440304qvb.4.1684780079641;
+        Mon, 22 May 2023 11:27:59 -0700 (PDT)
+Received: from localhost (pool-68-160-166-30.bstnma.fios.verizon.net. [68.160.166.30])
+        by smtp.gmail.com with ESMTPSA id u12-20020a0ced2c000000b0061b5c45f970sm2137700qvq.74.2023.05.22.11.27.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 11:27:59 -0700 (PDT)
+Date:   Mon, 22 May 2023 14:27:57 -0400
+From:   Mike Snitzer <snitzer@kernel.org>
+To:     Dave Chinner <david@fromorbit.com>, Joe Thornber <ejt@redhat.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        Theodore Ts'o <tytso@mit.edu>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Jason Wang <jasowang@redhat.com>,
+        Bart Van Assche <bvanassche@google.com>,
+        linux-kernel@vger.kernel.org,
+        Christoph Hellwig <hch@infradead.org>, dm-devel@redhat.com,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Sarthak Kukreti <sarthakkukreti@chromium.org>,
+        linux-fsdevel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        Brian Foster <bfoster@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>
+Subject: Re: [PATCH v7 0/5] Introduce provisioning primitives
+Message-ID: <ZGu0LaQfREvOQO4h@redhat.com>
+References: <20230518223326.18744-1-sarthakkukreti@chromium.org>
+ <ZGb2Xi6O3i2pLam8@infradead.org>
+ <ZGeKm+jcBxzkMXQs@redhat.com>
+ <ZGgBQhsbU9b0RiT1@dread.disaster.area>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH net-next v3 2/6] dt-bindings: net: Brcm ASP 2.0 Ethernet
- controller
-Content-Language: en-US
-To:     Justin Chen <justin.chen@broadcom.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        bcm-kernel-feedback-list@broadcom.com
-Cc:     justinpopo6@gmail.com, f.fainelli@gmail.com, davem@davemloft.net,
-        florian.fainelli@broadcom.com, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, opendmb@gmail.com,
-        andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        richardcochran@gmail.com, sumit.semwal@linaro.org,
-        christian.koenig@amd.com
-References: <1684531184-14009-1-git-send-email-justin.chen@broadcom.com>
- <1684531184-14009-3-git-send-email-justin.chen@broadcom.com>
-From:   Conor Dooley <mail@conchuod.ie>
-In-Reply-To: <1684531184-14009-3-git-send-email-justin.chen@broadcom.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZGgBQhsbU9b0RiT1@dread.disaster.area>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,83 +75,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 02:19:40PM -0700, Justin Chen wrote:
- > From: Florian Fainelli <florian.fainelli@broadcom.com>
- >
- > Add a binding document for the Broadcom ASP 2.0 Ethernet controller.
- >
- > Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
- > Signed-off-by: Justin Chen <justin.chen@broadcom.com>
- > ---
+On Fri, May 19 2023 at  7:07P -0400,
+Dave Chinner <david@fromorbit.com> wrote:
 
-Same deal here, usual mailer is refusing to reply cos of:
-Problem signature from: 
-1.2.840.113549.1.9.1=#6A757374696E2E6368656E4062726F6164636F6D2E636F6D,CN=Justin 
-Chen,O=Broadcom Inc.,L=Bangalore,ST=Karnataka,C=IN
-                    aka: <justin.chen@broadcom.com>
-                created: Fri 19 May 2023 10:19:57 PM IST
-                expires: Wed 10 Sep 2025 01:39:50 PM IST
+> On Fri, May 19, 2023 at 10:41:31AM -0400, Mike Snitzer wrote:
+> > On Fri, May 19 2023 at 12:09P -0400,
+> > Christoph Hellwig <hch@infradead.org> wrote:
+> > 
+> > > FYI, I really don't think this primitive is a good idea.  In the
+> > > concept of non-overwritable storage (NAND, SMR drives) the entire
+> > > concept of a one-shoot 'provisioning' that will guarantee later writes
+> > > are always possible is simply bogus.
+> > 
+> > Valid point for sure, such storage shouldn't advertise support (and
+> > will return -EOPNOTSUPP).
+> > 
+> > But the primitive still has utility for other classes of storage.
+> 
+> Yet the thing people are wanting to us filesystem developers to use
+> this with is thinly provisioned storage that has snapshot
+> capability. That, by definition, is non-overwritable storage. These
+> are the use cases people are asking filesystes to gracefully handle
+> and report errors when the sparse backing store runs out of space.
 
- > v3
- >         - Minor formatting issues
- >         - Change channel prop to brcm,channel for vendor specific format
- >         - Removed redundant v2.0 from compat string
- >         - Fix ranges field
- >
- > v2
- >         - Minor formatting issues
- >
- >  .../devicetree/bindings/net/brcm,asp-v2.0.yaml     | 145 
-+++++++++++++++++++++
- >  1 file changed, 145 insertions(+)
- >  create mode 100644 
-Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
- >
- > diff --git a/Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml 
-b/Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
- > new file mode 100644
- > index 000000000000..a9fed957e1d6
- > --- /dev/null
- > +++ b/Documentation/devicetree/bindings/net/brcm,asp-v2.0.yaml
- > @@ -0,0 +1,145 @@
- > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
- > +%YAML 1.2
- > +---
- > +$id: http://devicetree.org/schemas/net/brcm,asp-v2.0.yaml#
- > +$schema: http://devicetree.org/meta-schemas/core.yaml#
- > +
- > +title: Broadcom ASP 2.0 Ethernet controller
- > +
- > +maintainers:
- > +  - Justin Chen <justin.chen@broadcom.com>
- > +  - Florian Fainelli <florian.fainelli@broadcom.com>
- > +
- > +description: Broadcom Ethernet controller first introduced with 72165
- > +
- > +properties:
- > +  '#address-cells':
- > +    const: 1
- > +  '#size-cells':
- > +    const: 1
- > +
- > +  compatible:
- > +    enum:
- > +      - brcm,asp-v2.0
- > +      - brcm,bcm72165-asp
- > +      - brcm,asp-v2.1
- > +      - brcm,bcm74165-asp
+DM thinp falls into this category but as you detailed it can be made
+to work reliably. To carry that forward we need to first establish
+the REQ_PROVISION primitive (with this series).
 
-One of Rob's questions on V(N-1) that seems to have been ignored/only
-partly implemented:
- > You have 1 SoC per version, so what's the point of versions? If you have
- > more coming, then fine, but I'd expect it to be something like this:
- >
- > compatible = "brcm,bcm74165-asp-v2.1", "brcm,asp-v2.1";
+Follow-on associated dm-thinp enhancements can then serve as reference
+for how to take advantage of XFS's ability to operate reliably of
+thinly provisioned storage.
+ 
+> e.g. journal writes after a snapshot is taken on a busy filesystem
+> are always an overwrite and this requires more space in the storage
+> device for the write to succeed. ENOSPC from the backing device for
+> journal IO is a -fatal error-. Hence if REQ_PROVISION doesn't
+> guarantee space for overwrites after snapshots, then it's not
+> actually useful for solving the real world use cases we actually
+> need device-level provisioning to solve.
+> 
+> It is not viable for filesystems to have to reprovision space for
+> in-place metadata overwrites after every snapshot - the filesystem
+> may not even know a snapshot has been taken! And it's not feasible
+> for filesystems to provision on demand before they modify metadata
+> because we don't know what metadata is going to need to be modified
+> before we start modifying metadata in transactions. If we get ENOSPC
+> from provisioning in the middle of a dirty transcation, it's all
+> over just the same as if we get ENOSPC during metadata writeback...
+> 
+> Hence what filesystems actually need is device provisioned space to
+> be -always over-writable- without ENOSPC occurring.  Ideally, if we
+> provision a range of the block device, the block device *must*
+> guarantee all future writes to that LBA range succeeds. That
+> guarantee needs to stand until we discard or unmap the LBA range,
+> and for however many writes we do to that LBA range.
+> 
+> e.g. If the device takes a snapshot, it needs to reprovision the
+> potential COW ranges that overlap with the provisioned LBA range at
+> snapshot time. e.g. by re-reserving the space from the backing pool
+> for the provisioned space so if a COW occurs there is space
+> guaranteed for it to succeed.  If there isn't space in the backing
+> pool for the reprovisioning, then whatever operation that triggers
+> the COW behaviour should fail with ENOSPC before doing anything
+> else....
 
-You did drop the -v2.1 that he requested from the SoC compatible, but I
-amn't sure why the above was not implemented (at least there's no
-explanation in the previous thread's version, nor in the changelog
-here...)
+Happy to implement this in dm-thinp.  Each thin block will need a bit
+to say if the block must be REQ_PROVISION'd at time of snapshot (and
+the resulting block will need the same bit set).
 
-Cheers,
-Conor
+Walking all blocks of a thin device and triggering REQ_PROVISION for
+each will obviously make thin snapshot creation take more time.
+
+I think this approach is better than having a dedicated bitmap hooked
+off each thin device's metadata (with bitmap being copied and walked
+at the time of snapshot). But we'll see... I'll get with Joe to
+discuss further.
+
+> Software devices like dm-thin/snapshot should really only need to
+> keep a persistent map of the provisioned space and refresh space
+> reservations for used space within that map whenever something that
+> triggers COW behaviour occurs. i.e. a snapshot needs to reset the
+> provisioned ranges back to "all ranges are freshly provisioned"
+> before the snapshot is started. If that space is not available in
+> the backing pool, then the snapshot attempt gets ENOSPC....
+> 
+> That means filesystems only need to provision space for journals and
+> fixed metadata at mkfs time, and they only need issue a
+> REQ_PROVISION bio when they first allocate over-write in place
+> metadata. We already have online discard and/or fstrim for releasing
+> provisioned space via discards.
+> 
+> This will require some mods to filesystems like ext4 and XFS to
+> issue REQ_PROVISION and fail gracefully during metadata allocation.
+> However, doing so means that we can actually harden filesystems
+> against sparse block device ENOSPC errors by ensuring they will
+> never occur in critical filesystem structures....
+
+Yes, let's finally _do_ this! ;)
+
+Mike
