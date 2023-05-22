@@ -2,78 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 064FB70BB43
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:12:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E9E670BB41
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:11:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232939AbjEVLL7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 07:11:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54106 "EHLO
+        id S230186AbjEVLL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 07:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232119AbjEVLLW (ORCPT
+        with ESMTP id S231138AbjEVLLU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 07:11:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E00A30D1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 04:05:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684753540;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MX/s9CqqCW6cH2AMqyMMQv3ISbYNht7FksP6LmQ8hqw=;
-        b=MOHjv5uvdxxNDK3aUEpZ5RMULs6RXugEl5UbKU5c8OtXI697XoLHApZoxHWcylhXWZ44t+
-        x/8116pVIGmdWkOwOFL18N7dxEUf6JNhV2oQMvIE5frYBMhhMa3CRcY45F6QEZwSdru2Vx
-        7F8T0UbCaDIuT0qHwjOXP/AEN9nsllw=
-Received: from mail-lf1-f70.google.com (mail-lf1-f70.google.com
- [209.85.167.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-286-a7sS70ezPRShdx3SVMuagw-1; Mon, 22 May 2023 07:05:39 -0400
-X-MC-Unique: a7sS70ezPRShdx3SVMuagw-1
-Received: by mail-lf1-f70.google.com with SMTP id 2adb3069b0e04-4f24f491835so234908e87.0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 04:05:38 -0700 (PDT)
+        Mon, 22 May 2023 07:11:20 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9CC30ED;
+        Mon, 22 May 2023 04:06:19 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id 6a1803df08f44-62381fe42b3so25770386d6.0;
+        Mon, 22 May 2023 04:06:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684753578; x=1687345578;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HCxmceFxaOu1idnfY2VfZs/REw/SEk7/UmlEMx9raLg=;
+        b=mDOIzfl3POnlvpW7fR0L1vhdAyGYek1iyC/V62ZOA7U7Y2eIo0EkuZW9G43PyX+HtT
+         WvsDp8bsb4XqrMv+ifaueMktR4ZousftZiBd4RR4NqhLPdBHK7KSWevXTvdn0TxT+/9S
+         iscw/J607rXEoKUs+VVflRAUSrGxqllQVXChQzzrsckZE0Ng6UkpZ40zjXEFTxb5YGVb
+         CsA2FH8fUfCD/5T53yIt2lI9/GeQ7hBadutg3uPMeuf0Psr4s9FJGv7tWZozktBAL1th
+         tArfVZDwdsy5dqY8f2GKzMrmpqNi+zRFPGsdWvuLNeIpevGzmWXOJUy5eL2eCyyPvtAf
+         gqQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684753537; x=1687345537;
+        d=1e100.net; s=20221208; t=1684753578; x=1687345578;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MX/s9CqqCW6cH2AMqyMMQv3ISbYNht7FksP6LmQ8hqw=;
-        b=PhaXhiqe471Gkbj5KKJ2imz2bc1erNdkhFNmmvtaXhZeSw5NB/Vyv4CQCvCcuiGdhi
-         8BJ5WJLtA/MtpNR1eIb/bFQ3lW3QE1vn+d5riQ4AG6UthO0dcceKk/tomcM1U4Qyv0Fz
-         VLy4Z9iHJv/bcapWLVQYD7iVSHG5yF3HzMPR8ELjqrk9CDX1DOZ6mS7i8RR9AyI/RnTJ
-         1MsAYLC6Knx6NT2r/hI/yTtZZGxo4g09aQcknIlEI3YVV1DNCNv4bjAZWbMKIlGhn1A+
-         K2I2L5Kuvf5B1xNtKUdv/X0s6rxMr8/GuFosm7Uy48t2oVtfYWeTroa8PrvSbta7K95s
-         KZvg==
-X-Gm-Message-State: AC+VfDzCVDDoRbi9c5z611YAyt9aHUVDXNZUNPH1Kod6cdIitXIWJR+S
-        shhRVd37BnRvqCerZLBNpdBDeh0wqbiavVi+JteW03C/uQLer5tV8atfNJi4RwyCcvOsWn5wEvw
-        D+vFLNfaJG/J2LcfElOo7pips1pjoLwZvuRukQISC
-X-Received: by 2002:a2e:a4ba:0:b0:2af:237c:c335 with SMTP id g26-20020a2ea4ba000000b002af237cc335mr3549912ljm.3.1684753537762;
-        Mon, 22 May 2023 04:05:37 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6x3VG32WQUaO2EyREF1ehIOVQgkJqkNFu6Egwvvu/4sFAXjJoytU/NPjAcnvx2WnEdpXLHgR+ABojRY1WCGjE=
-X-Received: by 2002:a2e:a4ba:0:b0:2af:237c:c335 with SMTP id
- g26-20020a2ea4ba000000b002af237cc335mr3549902ljm.3.1684753537479; Mon, 22 May
- 2023 04:05:37 -0700 (PDT)
+        bh=HCxmceFxaOu1idnfY2VfZs/REw/SEk7/UmlEMx9raLg=;
+        b=Sgx566vCmrvHZkeqxXtsZ9EJNYAj6exnFg6YDy3/pkhdyGHWpejHx8vZDMIsy/TBVE
+         epVEnfCxvX0gdvRmKb27vQFlxkb1sb3JsQ8HE0HRmOviUIZnIoQra0GPZLwJalx5tdTP
+         DjrWDv32Qz8OX6bHvB1t28ZrhfzLrWp7TSwBBbZEuTMXpD06G3WE+FdqS7VJ3rcCzI9W
+         Ze/utrytonJmGgszsISDArXw4iq3JNfItISCvS3oxskTTnIA1Ihz9I0Uxm7cVcDVC1gl
+         oYcvinKHBBYuMqyZPVtkOdj/9I1B8XPyAdRIk6t7/N0bRA3jgucXzwrzvKO1O/GMyonF
+         Wp8w==
+X-Gm-Message-State: AC+VfDwC9JE/i29UrnTLRIokhgPsxEoiVSiBKx/IShCq/EveMA35jtU0
+        DFSHgOxrfzi0t6mcJjaRwBbhDHKdKFmfnavTxbE=
+X-Google-Smtp-Source: ACHHUZ4za1Fk1pRjVTXSpuT50YNQaqoVS3396KaiL6WErAffhxbAYHVgGx3UFjBlpa3K6PD8w4Yf81yJl+5AK0/5DrA=
+X-Received: by 2002:ad4:5c49:0:b0:621:6886:d4db with SMTP id
+ a9-20020ad45c49000000b006216886d4dbmr18327778qva.38.1684753578280; Mon, 22
+ May 2023 04:06:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230417210329.2469722-1-arnd@kernel.org>
-In-Reply-To: <20230417210329.2469722-1-arnd@kernel.org>
-From:   Karol Herbst <kherbst@redhat.com>
-Date:   Mon, 22 May 2023 13:05:26 +0200
-Message-ID: <CACO55tuL06jff8WnvU5e-rjwWx+smyYriET7DZDPgNM5e-0UFw@mail.gmail.com>
-Subject: Re: [PATCH] drm/nouveau: dispnv50: fix missing-prototypes warning
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Ben Skeggs <bskeggs@redhat.com>, Lyude Paul <lyude@redhat.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Arnd Bergmann <arnd@arndb.de>,
-        Jani Nikula <jani.nikula@intel.com>,
-        nouveau@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Dave Airlie <airlied@redhat.com>
+References: <20230521225901.388455-1-contact@artur-rojek.eu>
+ <20230521225901.388455-2-contact@artur-rojek.eu> <CAHp75VeLRHwcKQALwnBb-gqVeyxxH=_F40TserRXqo_kbaZzoQ@mail.gmail.com>
+ <9812499a8e017b8e01327069c8063e5f213bb1c8.camel@crapouillou.net>
+In-Reply-To: <9812499a8e017b8e01327069c8063e5f213bb1c8.camel@crapouillou.net>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 22 May 2023 14:05:42 +0300
+Message-ID: <CAHp75Vfhj0Unrv+fsy+j-xErqt-UVR6G-7if18LoKgBRZGfG7g@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] iio/adc: ingenic: Fix channel offsets in buffer
+To:     Paul Cercueil <paul@crapouillou.net>
+Cc:     Artur Rojek <contact@artur-rojek.eu>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Chris Morgan <macromorgan@hotmail.com>,
+        linux-mips@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,57 +75,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reviewed-by: Karol Herbst <kherbst@redhat.com>
+On Mon, May 22, 2023 at 1:20=E2=80=AFPM Paul Cercueil <paul@crapouillou.net=
+> wrote:
+> Le lundi 22 mai 2023 =C3=A0 13:15 +0300, Andy Shevchenko a =C3=A9crit :
+> > On Mon, May 22, 2023 at 1:59=E2=80=AFAM Artur Rojek <contact@artur-roje=
+k.eu>
+> > wrote:
 
-will merge soon
+...
 
-On Mon, Apr 17, 2023 at 11:03=E2=80=AFPM Arnd Bergmann <arnd@kernel.org> wr=
-ote:
+> > > +       memset(tdat, 0, ARRAY_SIZE(tdat));
+> >
+> > Yeah, as LKP tells us this should be sizeof() instead of
+> > ARRAY_SIZE().
 >
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> nv50_display_create() is declared in another header, along with
-> a couple of declarations that are now outdated:
->
-> drivers/gpu/drm/nouveau/dispnv50/disp.c:2517:1: error: no previous protot=
-ype for 'nv50_display_create'
->
-> Fixes: ba801ef068c1 ("drm/nouveau/kms: display destroy/init/fini hooks ca=
-n be static")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  drivers/gpu/drm/nouveau/dispnv50/disp.c | 1 +
->  drivers/gpu/drm/nouveau/nv50_display.h  | 4 +---
->  2 files changed, 2 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/gpu/drm/nouveau/dispnv50/disp.c b/drivers/gpu/drm/no=
-uveau/dispnv50/disp.c
-> index 5bb777ff1313..9b6824f6b9e4 100644
-> --- a/drivers/gpu/drm/nouveau/dispnv50/disp.c
-> +++ b/drivers/gpu/drm/nouveau/dispnv50/disp.c
-> @@ -64,6 +64,7 @@
->  #include "nouveau_connector.h"
->  #include "nouveau_encoder.h"
->  #include "nouveau_fence.h"
-> +#include "nv50_display.h"
->
->  #include <subdev/bios/dp.h>
->
-> diff --git a/drivers/gpu/drm/nouveau/nv50_display.h b/drivers/gpu/drm/nou=
-veau/nv50_display.h
-> index fbd3b15583bc..60f77766766e 100644
-> --- a/drivers/gpu/drm/nouveau/nv50_display.h
-> +++ b/drivers/gpu/drm/nouveau/nv50_display.h
-> @@ -31,7 +31,5 @@
->  #include "nouveau_reg.h"
->
->  int  nv50_display_create(struct drm_device *);
-> -void nv50_display_destroy(struct drm_device *);
-> -int  nv50_display_init(struct drm_device *);
-> -void nv50_display_fini(struct drm_device *);
-> +
->  #endif /* __NV50_DISPLAY_H__ */
-> --
-> 2.39.2
->
+> Probably "u16 tdat[6] =3D { 0 };" would work too?
 
+Without 0 also would work :-)
+
+--=20
+With Best Regards,
+Andy Shevchenko
