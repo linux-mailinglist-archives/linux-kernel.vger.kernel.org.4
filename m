@@ -2,636 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 286D870BBCF
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2F5270BBCA
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 13:29:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232125AbjEVL3r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 07:29:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42674 "EHLO
+        id S232847AbjEVL3B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 07:29:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbjEVL3o (ORCPT
+        with ESMTP id S232848AbjEVL2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 07:29:44 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737F2E6;
-        Mon, 22 May 2023 04:29:34 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4f3edc05aa5so1610804e87.3;
-        Mon, 22 May 2023 04:29:34 -0700 (PDT)
+        Mon, 22 May 2023 07:28:44 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F20185;
+        Mon, 22 May 2023 04:28:41 -0700 (PDT)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34M8EMCO006996;
+        Mon, 22 May 2023 11:28:18 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2023-03-30;
+ bh=cDMY2QOKbq9NNmjg4rNkHRxR0p8khGNRqIimm2JMICQ=;
+ b=23J5ctdep32Dhs52qlXxYKOcML5q2nelkyYhjMXrOBoyQ5T9x+cZHV09Dnw3+85qNvLt
+ OsUUYVm19IFtPIa53Wc8BKKDRZ1mxJk5dYb5qOE8FomnMQpGX5xgnssBGbT02/DEL6nj
+ bQFLl8IRxc9iSiijrLFXhlELayKfvmLFUoQ8d/741nGOW8wwZxSdGa+zIJqtfAR3Gouo
+ aiaDhQicUVB4Kt3PgHqd/vqKt458ROZBTxGGtPCh6Z5b2TkwGUcbfNzVT5splgJxTnce
+ 5CuSDbzaWKTBAhFbwkJJl+6rI93wGrJN/++NCJXH2HFUvKhnjICxOw14DlQyDYlD6aah Xw== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qpp44jfpc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 22 May 2023 11:28:18 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 34MAl5lH023588;
+        Mon, 22 May 2023 11:28:17 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2108.outbound.protection.outlook.com [104.47.55.108])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3qqk8stspe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 22 May 2023 11:28:17 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BOBrIV749iX05M1XIaw/3C7R2i+ovcXNOvrAxQTKPUIMnfdlrMKrbaQ8lCasbA+OAv8AeDJxGBugCANPamaEPNlk14dmYvuiviMIm0gXsG2w9oRd4xqEsQV3LHNaBUUvF+OWKkLDqSjW4fiCwKJLp0pMz2pnn/P6J/NJjeD8PjsLssALfm9eNkgXeYqmAEow3yk/I7btKGvZY9uI0gZ8Zhx3CnxuL0gyi4zlTOlfRqjSqvrg+NdEbALGx1ezR6gwFnuc0EgK0y3ROgvnRlbQXJOIx4SI9usEhvI0Hm7l7P1VZuGHmTIpTGqyiuCaYQ3Zo+5Wf14g9dWb6hH21fBMcg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cDMY2QOKbq9NNmjg4rNkHRxR0p8khGNRqIimm2JMICQ=;
+ b=nc7AkX7ACGt01H5Fjlz2I2/6GQe6B2I/l3fWoJ80429eZDtztsE8ZLO8qDb86uIQAcODBhedMz07/lZHwixYqyc2RX9T6EtESK6udsgqbTfu67JWSxbZqtZ/19DtBAR/yR/YXeXfRmtGzmKuvALsiiGYBk+mbxLG8N+yFtMUmQMcL7lgEKsvxsa1yTubKTrmblU2gtK1CNFSoiat0giKTaOCPQaTZ0Ksh5OC51s1BvIFGV6MmHaqeG8hMw8jbfs9rjnKsxfkYOuxlCEu6oslgg1JgLP23dUIvXe83Dr7+VALjo11RZNUCyaop5+OS1khVkFDWtZyB8UKxGiE0s0iag==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684754973; x=1687346973;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=G9OEFUOoGXK/sscyvJjLmyzJj4mBlJlC9NSkygSY/CM=;
-        b=LKpuAIG5XVko9dXNt1Fs61epBepCiohbEPK6onYyKoSRf06Ik1Lo2p/v8x7/Mi/Ynv
-         xuqfF7km3x5pyTO6q5dsTpuYoQLHgqbp1oS4OSwx+Lnjp6q+vokhLbVEQnCAN91qlHZL
-         Pz0R0sCxg4UneCYzDfDw5g6SMdUh/6W63VSut+H/LfJIsFCmHjJ7OGODJTf73nmqugj5
-         3d7PS19XbMQ40DkT+cvlZgDB1W6nOSNXN3W7gnxaX5n9aA8nUTq4LJKN8r6uTfe0oZgv
-         kNj3Upog3RA5k9uSb/YNLyf5k7Yv+4QVrk+dGwGs6X/JDGWNjKVVZE8dHEnV87vK91Ms
-         OSRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684754973; x=1687346973;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=G9OEFUOoGXK/sscyvJjLmyzJj4mBlJlC9NSkygSY/CM=;
-        b=GPk6SH+NS11HnMsA2GjGlRuj1CySCL9+D3ZgGYvguCWZQCoFsxMbM4aojmNM6HTrWZ
-         sNczE26pbszTg+KLivvkElMXwHcvdAtipU2OH1se3ijZNfIMpovyWsT1nsVxmftUIexR
-         wMyyzRmRVAfQZxSlQQF0goqK9/Tha4K4vM/xlgaefBX2w03s6jqcM+8eEPVGhwZfXMIf
-         13UbU7PB3W4g+BgKKxldvCgeGKuSNiFs5pvN6ZL7I/LRtPtC5OqOLkjwolXK6esDxKsu
-         TqNDGKbPGhS2s9SGgSmQ3UkWGH/GaLQmRrEjNxvlXg7+Y72JJfBkZPHWb5VngFBdRRTz
-         uYXw==
-X-Gm-Message-State: AC+VfDygkjPfoYEVua8+4b173JjesCKaiLUXFtt7uwak7ufEklheDnHq
-        FKy+XASu0yL+zpMW2PVeXdNkElj2OX5k70k1
-X-Google-Smtp-Source: ACHHUZ7QOZ1MuRWr6OqoIgTzlT6+LIWOTkCuoFPsrZqzHsekHg9tEVQthBROggwKWP4cz7SUfxXLew==
-X-Received: by 2002:a05:6512:38d1:b0:4f3:96ac:6dd8 with SMTP id p17-20020a05651238d100b004f396ac6dd8mr3574442lft.4.1684754972121;
-        Mon, 22 May 2023 04:29:32 -0700 (PDT)
-Received: from [192.168.88.92] (95-158-68-28.static.chello.pl. [95.158.68.28])
-        by smtp.gmail.com with ESMTPSA id u17-20020ac243d1000000b004f1406b059asm948340lfl.219.2023.05.22.04.29.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 May 2023 04:29:31 -0700 (PDT)
-Message-ID: <8c4aae2c-4a5f-3d7e-41a4-dc198bf15956@gmail.com>
-Date:   Mon, 22 May 2023 13:27:27 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] scsi: target: Fix data corruption under concurrent target
- configuration
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cDMY2QOKbq9NNmjg4rNkHRxR0p8khGNRqIimm2JMICQ=;
+ b=QTBus8MQQlEEJyt3woXJjLg9vglwg9XptzbYkDX+SyaplIvpa/V16NnPPvk41qeNvF1pSk5yF8jrzewTv4BJuLeY0Wbtg115YAjueRRHBJGxAWtveHorEBAefbIdXwHoK51XJf186xvcccNBfVq9hYnkUyW4XHa7WBk8Bwyh0nw=
+Received: from DM6PR10MB4313.namprd10.prod.outlook.com (2603:10b6:5:212::20)
+ by BN0PR10MB5013.namprd10.prod.outlook.com (2603:10b6:408:120::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Mon, 22 May
+ 2023 11:28:15 +0000
+Received: from DM6PR10MB4313.namprd10.prod.outlook.com
+ ([fe80::8456:ba59:80ec:d804]) by DM6PR10MB4313.namprd10.prod.outlook.com
+ ([fe80::8456:ba59:80ec:d804%7]) with mapi id 15.20.6411.028; Mon, 22 May 2023
+ 11:28:14 +0000
+Message-ID: <43d5ba4a-efc7-09ae-74dc-81b19f635a19@oracle.com>
+Date:   Mon, 22 May 2023 12:28:09 +0100
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2] ata: libata-scsi: Fix get identity data failed
+To:     Jason Yan <yanaijie@huawei.com>,
+        Damien Le Moal <dlemoal@kernel.org>,
+        yangxingui <yangxingui@huawei.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxarm@huawei.com, prime.zeng@hisilicon.com,
+        kangfenglong@huawei.com
+References: <20230505025712.19438-1-yangxingui@huawei.com>
+ <291f1d97-9195-45ac-8e12-058f5c797277@kernel.org>
+ <02d36ee9-cdad-454d-d822-95442d7bd67b@huawei.com>
+ <f4ba7a92-1f00-c254-d196-7d21fe14dee2@kernel.org>
+ <938d6b5b-0271-977d-f046-5fd70d29b3ca@huawei.com>
+ <a5c2e157-aaf7-1300-3fbb-1300ac216cee@kernel.org>
+ <68953040-1622-254b-f6f8-b279eccacfb1@kernel.org>
+ <c88dcbc3-d530-3e9e-f674-a2fe64ad5fdc@huawei.com>
 Content-Language: en-US
-To:     Dmitry Bogdanov <d.bogdanov@yadro.com>
-Cc:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dutkahugo@gmail.com
-References: <5f637569-36af-a8d0-e378-b27a63f08501@gmail.com>
- <20230520084600.GC20571@yadro.com>
- <d0f77858-4370-aa0c-0ece-32f4dcfe85f0@gmail.com>
-From:   Grzegorz Uriasz <gorbak25@gmail.com>
-In-Reply-To: <d0f77858-4370-aa0c-0ece-32f4dcfe85f0@gmail.com>
+From:   John Garry <john.g.garry@oracle.com>
+Organization: Oracle Corporation
+In-Reply-To: <c88dcbc3-d530-3e9e-f674-a2fe64ad5fdc@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: LO4P123CA0325.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:18c::6) To DM6PR10MB4313.namprd10.prod.outlook.com
+ (2603:10b6:5:212::20)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR10MB4313:EE_|BN0PR10MB5013:EE_
+X-MS-Office365-Filtering-Correlation-Id: ba8520a3-aaef-42a0-3b91-08db5ab7a200
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zB9pnpDMZCc5MN95ozz53fuQJIzy+pTjcd2P7h37pIQ31P4mnKW/DK1Vg4jZPjBkkpEVnkeNGVvmD7DEOaR0uAv3f8zLnXLKtkg9s8Eb87lSSHdUPPP0Jb+HkPjZdOr3h2n77JOCiLdJA/vlFGXm/APhW09FDr4L36hh4QkZEoUTYr8l9f1fALxSYJbeRKO0wwoDkskbOOgm1WyzwCi508QTuNUW5MToLxEEhsS+hRTJbzJttagtwiGI8tH/75e3HPQT3MnfTq5xeGjhrHrj7g+OOdvbuVj9GQfjjWoFbzoWb+mFmCahr1UsfeMJ3xlPlq0RF404YeIMIZMl5GT8l9URby2/3L3AOmRZVd+XmMfLlYSL0rmAVBBi/NtUFP/B3ehzbKk6njc8R/sRLPBD6ASvECRLMgqbnHcb1a+DYcMJBJHf1sciyHaxUp5c5YcKQuCEKvmItyp+zgd3N/fpLb78R25Fg5Kcbp2bmhM+uOGZ13pGhEeFxK0WF7Bc2pjQjmXY5CLoGLXNF0ZYcXPApjZmf3eeb6o4Uu/megB4inTThZyP2x4kVLcvaHVMjmUT7xlv9Hpbe5U4Hm6v641iqTlUXDlf6S76u7REyQHWClq3ULE7b5GxqMSCfHeP+M5CJ/awNFsPfpdEokJ7Zus+QQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR10MB4313.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(39860400002)(376002)(366004)(396003)(136003)(346002)(451199021)(110136005)(31686004)(38100700002)(478600001)(6636002)(4326008)(66556008)(66476007)(66946007)(66899021)(2616005)(2906002)(6666004)(316002)(53546011)(186003)(26005)(86362001)(6512007)(6506007)(31696002)(36916002)(41300700001)(6486002)(5660300002)(8676002)(8936002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QjhoVHFIQ2ltakV6a1Q4VkJURkJSTS9LRTBFcEdOampOWGlVR3lWazRBc3g2?=
+ =?utf-8?B?c1JRdlRFOEpUNGR4aHV2cjkvSXhKemh6MDd4ZjF5VVIyZElqSDExVHNOZzhF?=
+ =?utf-8?B?enJkaUNGbTFKbG51Vk1COUZ2RmJybGg0ZmhVeGtic2tlWFhETjJhaHJ6emY0?=
+ =?utf-8?B?eERmazhHandEV0huNjZIZEgyT3dGWVJNeWV5VThObi9SVXE4WEc1VyswRExo?=
+ =?utf-8?B?NFR6ZGlncUphdVp1L3ZLSVlXU1ZuZHAveVFrL21VRGYvb1RFZ1Y3aEk5UjJH?=
+ =?utf-8?B?SnRhVDVwYkJyaU5aNzcvK3VUb25rVFI3TU5Ma0NmY050dFM2NnMvQjd6a3FI?=
+ =?utf-8?B?ZXRsamo3U3Rqd1BBNGJmQW9hWVlJMTFlamJ0R3lOWjJaL0RydjZXcXo4ZlJ5?=
+ =?utf-8?B?UDFqZERORVJ1RE1YcG5nZ3hEY3czRFFOUU9KbHZITlA0UWtjQ1d6TmRXdmFm?=
+ =?utf-8?B?dm85c1lZQVQ3NE1tLzB5Z0V1UmNNKzU2L05YWHJoQnFIRFhTQUUrQlk0Rm5r?=
+ =?utf-8?B?K3RxSkZIZnFlRDVRZkY2V1FROXRISnRWVnpUMVNYRE02eTRHc0JHNEc2aUVL?=
+ =?utf-8?B?cUw3NHp6VnUxdE54L0tuMWJIbCtidVBka3dsN0JUclRGNzdBdTF3RDB4a1ZE?=
+ =?utf-8?B?Q0RSV0YvaHRkd1ZNb1RmWkxQbHkxYTVGZW1NVUpkaE1WOThLbGlVSEQrVHFl?=
+ =?utf-8?B?MEJJSnhQVU1FTmR3OW45WmVlTUZxcjdNcTgvWjhQeWoxZDJWZWwzd3k1WUZv?=
+ =?utf-8?B?RVJKdjduWEFQQTlSWWFmSExacm1vWnlQNmg1SVlGMUlaeHFsWnJTWkh4VUR5?=
+ =?utf-8?B?ZFRZTzlUbGdDd2dXbmdaV2RCOHozL1hKbjFkYnZrU1dxeWo3SFhVSHJ3b1BO?=
+ =?utf-8?B?aGtqTzdXVUVHc2JEdWQ5eGV5RnBnSWlvOVhwTDVhQkx6V21Na08xRmUxY05J?=
+ =?utf-8?B?Vkdrd3RxaDhQK2RHN0FQcWI0ZzlGWnhrLzZ4OVd4R0RaZzNNZFRPd0k5aU10?=
+ =?utf-8?B?bCs2QlBybXkyR0dObGxBcVBLTnd2bk1iRHQrNHFzNUFNVFdwQXVheU1tZlU4?=
+ =?utf-8?B?UXFtbGovMzdWWWJVcThuaGZwUzd4VzZ5QWNGZkdIcUo1eTZ1MnVoUjNEd2M4?=
+ =?utf-8?B?S1AzdjlyUXhudm1YYmVBUS8rMHlTUXJBNzNDd2s4dGUyK3lhVEQwcGFJZHRm?=
+ =?utf-8?B?M0ZFVEF2dU53SW9hMmtxYTB0am83WUVvYnl4VktTcGJxYWpaNzQ1WkJaQ01U?=
+ =?utf-8?B?VWNDQ1dPcjNOZ2lVL3NSU1I3ZzJUN0RrNmlGMkRFMHZEaGdMMGVLR0Y3Y3Jm?=
+ =?utf-8?B?NlFzWFFxU3c0dE9qdDI5TXRRUkRhcXkvRERWM0FCVElUTExleHZnSk90RHc3?=
+ =?utf-8?B?SHErYzVMeFA1K05yWVJyUXJ3YVFjdWJ6Qm5pTVpJKzV1OCtmekRDL0R5UGky?=
+ =?utf-8?B?ZlNIYXVFdllaWkN0dWptM1dyblR2R2NjaFZhVTlobWV3QnBMb3VpTzlWdXZK?=
+ =?utf-8?B?VzdHNGg0QjhIVGxnOUdLbXp5MGxFYlNPZVdXbTZHWnd4WHpWRXZCTkc4UUI5?=
+ =?utf-8?B?dWpTNnkvRExhREYwVTdHRU5HUnpvZ3IvZ01TRW40M1p3Qi9qOEZjTVQ1VUQz?=
+ =?utf-8?B?ckdGcnhEKzhLRVlocFA0eXBjREdYQmQ5UnA2U1RQSlQwcjdGT2RHdkU4MUFC?=
+ =?utf-8?B?ZmdzSEQ4YndLSzY3MFJ3N2VQT0VsbDFyNEdHaTVyTDByNGpYd294NTI0OXo5?=
+ =?utf-8?B?VXhxMG5jOUZLaHZMVlQ5bURPRjFTWlAwZ3VXcnp5dnZSR29SeHY3eGRyMmx1?=
+ =?utf-8?B?N3RxdVluYk5ienRzQk9XNy9zOHM1MkJxTzdpNVJYeWFoL1ltaC9YMXEyN2hJ?=
+ =?utf-8?B?ekp3UmtPT3pveUlqTGRXd3dTblpLaUlZcTRzSE5xT0ZsQlZneWFKbjVaSEYv?=
+ =?utf-8?B?bnJLemZ1NU5mcGhSYUNtMFV0QnlBVEZPdHdIZm9CS2Z1NlduTHMzTVV5dnR6?=
+ =?utf-8?B?YWZOR3JjbmgyWFN2YUkrWGI2anhDQVBML2xaRUdGSXZTUG9raFNrTmtiUHRL?=
+ =?utf-8?B?Nk5Ud04vQmNZUkI2NElrbzlHa2VTYm4rMzlOL01nQlgvaEhONDJ4Vm5BSGZL?=
+ =?utf-8?Q?h1vm1WjJF3scOyAqrBSVf4j2z?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 2GNq86UVEcWunqLJKiV7zS9nvAsqCsZnXx+9hCVP4brNfo/aapYNWLtVjraTK0yHGb722NDvxB4MLQuBWvN4Z1kRTjzA/3Ck01oFqgnZ2yCyl6Gabq7dfWtkNp/MavhAYOAx9FyHkX5k0kTmzCc7a2tyr3lqZ53S9M4JMcg5+GH+F8KirU/iqeZ1F4BUUhqQT6d9gDYUXrGmGGKqQCdaCarFZEjbeMez8PckIGVLQttNcNqB31C4NuFOrpPIG4XTkCjaoI39EwhfpsUJNZgI2/uaSSrDffsDYBcZZQqb/ISM3h/PyXgtgtb++9zXWiRxvRg2eejzn2F05CvWJtAttR7AWeRrBNU0MmbXO7+Mo8OAg6WU0UrPvjbJngk5VgMtOGJg+8l8zPhTDndZO++8veKtTBfwrrWKsL/yz+h65GPTpunY+piooL8Ta9zuitFm6s57VJy1y2vJOW4535NaBHsEIvFHXj/uMgVOt4W0KXXT7nrmUxrMAecFf8V20PQLxRqnQXpK0I+5mKFcnc67s60aVz9Ff5AiNnG7t062HV20ToCAN55lGI6b5RycYteUVOAq3uSC/9UT3sOxQFjz89atq27yJPpZ5e/pPIt/hVwPiQ5+vEQ4ke1h3F4IgNpMI5fJkm2v8NW4+RNoJNdGBS+ykG1jSL0MnalEu5l55tZetLtYIKdPPx07H2tqXJI/4J90NGVh7ZI9Z7YrPJG5cbJw/MOYnqVzqUY+NL4/7gS99MecFVZD/NpSapKM1ktCzdhIaZQdoFBf4gKHn7sBn/cEFfe4WtwyjGRlFEgcqwbbA89i41msK8WIxWX2UBhpIAog/If8PsO5LuUAdENgFikA4Y50sq94kSPqxO4163o6DYHCNIbWE224ML2Khfgpo5LrAO5g8V7sviPGyt/vnw==
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ba8520a3-aaef-42a0-3b91-08db5ab7a200
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR10MB4313.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2023 11:28:14.8974
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: cauGcG1Zv7P6uOtKRgwRH/72L1dWhmozybF3TAquCaWw4qooZL3zSiJgeULly3vqdmVtXnocPO76sh5w7WXl1g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR10MB5013
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-22_07,2023-05-22_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 phishscore=0 mlxscore=0
+ mlxlogscore=999 bulkscore=0 malwarescore=0 suspectscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305220097
+X-Proofpoint-GUID: vjyzvGlB4Lj3o86hWu3l0keafvGM9dx0
+X-Proofpoint-ORIG-GUID: vjyzvGlB4Lj3o86hWu3l0keafvGM9dx0
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
-I've added a debug printk call to see whether the devices are enabled 
-concurrently:
----
-  drivers/target/target_core_device.c | 2 ++
-  1 file changed, 2 insertions(+)
+On 22/05/2023 09:00, Jason Yan wrote:
+> 
+> OK, so the issue is that __ata_scsi_find_dev() calls ata_find_dev() with 
+> devno
+> == scsidev->id. This leads to devno being 0, 1, 2 and 3 for connected 
+> drives
 
-diff --git a/drivers/target/target_core_device.c 
-b/drivers/target/target_core_device.c
-index 5054b647dd0b..f594ee86a986 100644
---- a/drivers/target/target_core_device.c
-+++ b/drivers/target/target_core_device.c
-@@ -910,6 +910,8 @@ int target_configure_device(struct se_device *dev)
-          return -EEXIST;
-      }
+This numbering comes from sas_rphy_add():
+...
+if (identify->device_type == SAS_END_DEVICE &&
+     (identify->target_port_protocols &
+      (SAS_PROTOCOL_SSP | SAS_PROTOCOL_STP | SAS_PROTOCOL_SATA)))
+	rphy->scsi_target_id = sas_host->next_target_id++;
 
-+    pr_err("Configuring %p device", dev);
-+
-      /*
-       * Add early so modules like tcmu can use during its
-       * configuration.
--- 
-2.40.0
+..
 
-It turns out that even when the flags are set atomically it seems that 
-there is either no mutex protecting the setup or concurrent kzalloc 
-calls returned the same address:
+	scsi_scan_target(&rphy->dev, 0, rphy->scsi_target_id, lun,
+SCSI_SCAN_INITIAL);
+}
 
-[ 3179.785908] kobject: 'maps' (000000000fdf10fd): calling ktype release
-[ 3179.785910] kobject: (000000000fdf10fd): dynamic_kobj_release
-[ 3179.785912] kobject: 'maps': free name
-[ 3179.785953] tcmu nl cmd 2/0 completion could not find device with dev 
-id 87.
-[ 3179.786015] kobject: 'uio8' (000000001b25d2de): kobject_uevent_env
-[ 3179.786315] kobject: 'uio8' (000000001b25d2de): fill_kobj_path: path 
-= '/devices/tcm_user/uio/uio8'
-[ 3179.786315] tcmu nl cmd 2/0 completion could not find device with dev 
-id 87.
-[ 3179.786322] tcmu nl cmd 2/0 completion could not find device with dev 
-id 87.
-[ 3179.786557] kobject: 'uio8' (000000001b25d2de): kobject_cleanup, 
-parent 0000000000000000
-[ 3179.786902] kobject: 'uio8' (000000001b25d2de): calling ktype release
-[ 3179.786904] kobject: 'uio8': free name
-[ 3179.786906] tcmu nl cmd 2/0 completion could not find device with dev 
-id 87.
-[ 3179.787226] tcmu nl cmd 2/0 completion could not find device with dev 
-id 87.
-[ 3179.809906] kobject: 'map0' (000000003fa04166): kobject_cleanup, 
-parent 00000000e5849eec
-[ 3179.809914] kobject: 'map0' (000000003fa04166): auto cleanup kobject_del
-[ 3179.809930] tcmu nl cmd 2/0 completion could not find device with dev 
-id 89.
-[ 3179.809936] kobject: 'map0' (000000003fa04166): calling ktype release
-[ 3179.810216] kobject: 'map0': free name
-[ 3179.810218] tcmu nl cmd 2/0 completion could not find device with dev 
-id 89.
-[ 3179.810219] kobject: 'maps' (00000000e5849eec): kobject_cleanup, 
-parent 00000000345aab09
-[ 3179.810226] tcmu nl cmd 2/0 completion could not find device with dev 
-id 89.
-[ 3179.810535] kobject: 'maps' (00000000e5849eec): auto cleanup kobject_del
-[ 3179.810890] tcmu nl cmd 2/0 completion could not find device with dev 
-id 89.
-[ 3179.810890] kobject: 'maps' (00000000e5849eec): calling ktype release
-[ 3179.811171] kobject: (00000000e5849eec): dynamic_kobj_release
-[ 3179.811174] kobject: 'maps': free name
-[ 3179.811195] tcmu nl cmd 2/0 completion could not find device with dev 
-id 89.
-[ 3179.811292] kobject: 'uio9' (00000000345aab09): kobject_uevent_env
-[ 3179.811546] kobject: 'uio9' (00000000345aab09): fill_kobj_path: path 
-= '/devices/tcm_user/uio/uio9'
-[ 3179.811576] kobject: 'uio9' (00000000345aab09): kobject_cleanup, 
-parent 0000000000000000
-[ 3179.811578] kobject: 'uio9' (00000000345aab09): calling ktype release
-[ 3179.811581] kobject: 'uio9': free name
-[ 3179.829730] kobject: '0' (00000000981718a9): kobject_cleanup, parent 
-0000000000000000
-[ 3179.829736] kobject: '0' (00000000981718a9): calling ktype release
-[ 3179.829740] kobject: '0': free name
-[ 3179.829743] kobject: 'cpu0' (00000000155d52b3): kobject_cleanup, 
-parent 0000000000000000
-[ 3179.829744] kobject: 'cpu0' (00000000155d52b3): calling ktype release
-[ 3179.829746] kobject: 'cpu0': free name
-[ 3179.829751] kobject: 'cpu1' (0000000050648bc7): kobject_cleanup, 
-parent 0000000000000000
-[ 3179.829753] kobject: 'cpu1' (0000000050648bc7): calling ktype release
-[ 3179.829754] kobject: 'cpu1': free name
-[ 3179.829755] kobject: 'cpu2' (00000000f0e72c5c): kobject_cleanup, 
-parent 0000000000000000
-[ 3179.829757] kobject: 'cpu2' (00000000f0e72c5c): calling ktype release
-[ 3179.829758] kobject: 'cpu2': free name
-[ 3179.829759] kobject: 'cpu3' (000000000b256e81): kobject_cleanup, 
-parent 0000000000000000
-[ 3179.829760] kobject: 'cpu3' (000000000b256e81): calling ktype release
-[ 3179.829761] kobject: 'cpu3': free name
-[ 3179.829762] kobject: 'cpu4' (000000008d489b4f): kobject_cleanup, 
-parent 0000000000000000
-[ 3179.829764] kobject: 'cpu4' (000000008d489b4f): calling ktype release
-[ 3179.829765] kobject: 'cpu4': free name
-[ 3179.829766] kobject: 'cpu5' (00000000f2e35ad0): kobject_cleanup, 
-parent 0000000000000000
-[ 3179.829767] kobject: 'cpu5' (00000000f2e35ad0): calling ktype release
-[ 3179.829768] kobject: 'cpu5': free name
-[ 3179.829769] kobject: 'cpu6' (00000000ecbd8737): kobject_cleanup, 
-parent 0000000000000000
-[ 3179.829771] kobject: 'cpu6' (00000000ecbd8737): calling ktype release
-[ 3179.829772] kobject: 'cpu6': free name
-[ 3179.829773] kobject: 'cpu7' (00000000813ca063): kobject_cleanup, 
-parent 0000000000000000
-[ 3179.829774] kobject: 'cpu7' (00000000813ca063): calling ktype release
-[ 3179.829775] kobject: 'cpu7': free name
-[ 3179.829776] kobject: 'mq' (0000000062154d34): kobject_cleanup, parent 
-0000000000000000
-[ 3179.829778] kobject: 'mq' (0000000062154d34): calling ktype release
-[ 3179.829781] kobject: 'mq': free name
-[ 3179.937204] tcmu daemon: command reply support 1.
-[ 3180.242175] Configuring 0000000048576d33 device
-[ 3180.242191] Configuring 00000000a24b9f12 device
-[ 3180.243085] Configuring 0000000048576d33 device
-[ 3180.243097] Configuring 0000000048576d33 device
-[ 3180.243195] kobject: 'uio8' (00000000d48cde09): kobject_add_internal: 
-parent: 'uio', set: 'devices'
-[ 3180.243293] kobject: 'uio8' (00000000d48cde09): kobject_uevent_env
-[ 3180.243325] kobject: 'uio9' (0000000025c5cb20): kobject_add_internal: 
-parent: 'uio', set: 'devices'
-[ 3180.243388] kobject: 'uio9' (0000000025c5cb20): kobject_uevent_env
-[ 3180.243392] kobject: 'uio9' (0000000025c5cb20): fill_kobj_path: path 
-= '/devices/tcm_user/uio/uio9'
-[ 3180.243419] kobject: 'maps' (000000007f057cf5): kobject_add_internal: 
-parent: 'uio9', set: '<NULL>'
-[ 3180.243424] kobject: 'map0' (00000000f663b250): kobject_add_internal: 
-parent: 'maps', set: '<NULL>'
-[ 3180.243432] kobject: 'map0' (00000000f663b250): kobject_uevent_env
-[ 3180.243433] kobject: 'map0' (00000000f663b250): kobject_uevent_env: 
-filter function caused the event to drop!
-[ 3180.243565] Configuring 0000000048576d33 device
-[ 3180.243598] tcmu nl cmd 1/-2 completion could not find device with 
-dev id 91.
-[ 3180.243606] tcmu nl cmd 1/-2 completion could not find device with 
-dev id 91.
-[ 3180.243618] kobject: 'uio8' (00000000d48cde09): fill_kobj_path: path 
-= '/devices/tcm_user/uio/uio8'
-[ 3180.243622] tcmu nl cmd 1/-2 completion could not find device with 
-dev id 91.
-[ 3180.243640] kobject: 'maps' (00000000592a7aac): kobject_add_internal: 
-parent: 'uio8', set: '<NULL>'
-[ 3180.243646] kobject: 'map0' (0000000009bdede6): kobject_add_internal: 
-parent: 'maps', set: '<NULL>'
-[ 3180.243656] kobject: 'map0' (0000000009bdede6): kobject_uevent_env
-[ 3180.243658] kobject: 'map0' (0000000009bdede6): kobject_uevent_env: 
-filter function caused the event to drop!
-[ 3180.243726] se_dev->se_dev_ptr already set for storage object
-[ 3180.243731] se_dev->se_dev_ptr already set for storage object
-[ 3180.243735] se_dev->se_dev_ptr already set for storage object
-[ 3180.243738] se_dev->se_dev_ptr already set for storage object
-[ 3180.243742] se_dev->se_dev_ptr already set for storage object
-[ 3180.243746] se_dev->se_dev_ptr already set for storage object
-[ 3180.243749] se_dev->se_dev_ptr already set for storage object
-[ 3180.243760] se_dev->se_dev_ptr already set for storage object
-[ 3180.243763] se_dev->se_dev_ptr already set for storage object
-[ 3180.243767] se_dev->se_dev_ptr already set for storage object
-[ 3180.243777] se_dev->se_dev_ptr already set for storage object
-[ 3180.243780] se_dev->se_dev_ptr already set for storage object
-[ 3180.243784] se_dev->se_dev_ptr already set for storage object
-[ 3180.243788] se_dev->se_dev_ptr already set for storage object
-[ 3180.244302] kobject: 'uio10' (000000001e7fdf06): 
-kobject_add_internal: parent: 'uio', set: 'devices'
-[ 3180.244472] tcmu nl cmd 1/-2 completion could not find device with 
-dev id 93.
-[ 3180.244628] kobject: 'uio11' (00000000a5f1af78): 
-kobject_add_internal: parent: 'uio', set: 'devices'
-[ 3180.244738] kobject: 'uio11' (00000000a5f1af78): kobject_uevent_env
-[ 3180.244746] kobject: 'uio10' (000000001e7fdf06): kobject_uevent_env
-[ 3180.244753] kobject: 'uio10' (000000001e7fdf06): fill_kobj_path: path 
-= '/devices/tcm_user/uio/uio10'
-[ 3180.244781] kobject: 'maps' (00000000def336c9): kobject_add_internal: 
-parent: 'uio10', set: '<NULL>'
-[ 3180.244787] kobject: 'map0' (0000000026045935): kobject_add_internal: 
-parent: 'maps', set: '<NULL>'
-[ 3180.244797] kobject: 'map0' (0000000026045935): kobject_uevent_env
-[ 3180.244798] kobject: 'map0' (0000000026045935): kobject_uevent_env: 
-filter function caused the event to drop!
-[ 3180.244820] kobject: 'uio12' (00000000768952da): 
-kobject_add_internal: parent: 'uio', set: 'devices'
-[ 3180.244837] list_add double add: new=ffff888017480000, 
-prev=ffffffff82e35ba0, next=ffff888017480000.
-[ 3180.244855] tcmu nl cmd 1/-2 completion could not find device with 
-dev id 93.
-[ 3180.244883] kobject: 'uio12' (00000000768952da): kobject_uevent_env
-[ 3180.244888] kobject: 'uio12' (00000000768952da): fill_kobj_path: path 
-= '/devices/tcm_user/uio/uio12'
-[ 3180.244894] ------------[ cut here ]------------
-[ 3180.244897] kernel BUG at lib/list_debug.c:33!
-[ 3180.244901] invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
-[ 3180.244902] kobject: 'maps' (000000008b3ebaee): kobject_add_internal: 
-parent: 'uio12', set: '<NULL>'
-[ 3180.244903] CPU: 5 PID: 240588 Comm: node Not tainted 
-6.4.0-rc2hocus-00247-g02bf964976ef-dirty #11 
-1a56ed25763fc52a0220ba3bab2f1b70cacabece
-[ 3180.244905] kobject: 'map0' (0000000012d7aa89): kobject_add_internal: 
-parent: 'maps', set: '<NULL>'
-[ 3180.244908] kobject: 'map0' (0000000012d7aa89): kobject_uevent_env
-[ 3180.244909] kobject: 'map0' (0000000012d7aa89): kobject_uevent_env: 
-filter function caused the event to drop!
-[ 3180.244906] RIP: 0010:__list_add_valid+0x94/0xa0
-[ 3180.244917] Code: d1 48 89 c6 4c 89 c2 48 c7 c7 38 e1 4b 82 e8 63 25 
-b3 ff 0f 0b 48 89 f2 48 89 c1 48 89 fe 48 c7 c7 90 e1 4b 82 e8 4c 25 b3 
-ff <0f> 0b 66 2e 0f 1f 84 00 00 00 00 00 90 90 90 90 90 90 90 90 90 90
-[ 3180.244918] RSP: 0018:ffffc90002e7fd68 EFLAGS: 00010246
-[ 3180.244919] RAX: 0000000000000058 RBX: ffff888017480018 RCX: 
-0000000000000000
-[ 3180.244919] RDX: 0000000000000000 RSI: ffffffff824440d9 RDI: 
-00000000ffffffff
-[ 3180.244920] RBP: ffffc90002e7fd68 R08: 0000000000000001 R09: 
-0000000000000001
-[ 3180.244921] R10: 000000001b629664 R11: 0000000000000005 R12: 
-0000000000000000
-[ 3180.244921] R13: ffff888017480000 R14: ffff888017480000 R15: 
-ffff888017480010
-[ 3180.244924] FS:  00007f26e5a526c0(0000) GS:ffff88841fc80000(0000) 
-knlGS:0000000000000000
-[ 3180.244924] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 3180.244925] CR2: 00007f0104208440 CR3: 000000032af22000 CR4: 
-00000000003506a0
-[ 3180.244926] Call Trace:
-[ 3180.244926]  <TASK>
-[ 3180.244927]  tcmu_configure_device+0x29f/0x3a0
-[ 3180.244933]  target_configure_device+0x8c/0x2f0
-[ 3180.244936]  target_dev_enable_store+0x32/0x60
-[ 3180.244940]  configfs_write_iter+0xd5/0x140
-[ 3180.244944]  vfs_write+0x1ed/0x4f0
-[ 3180.244948]  ksys_write+0x70/0xf0
-[ 3180.244949]  __x64_sys_write+0x18/0x20
-[ 3180.244950]  do_syscall_64+0x3e/0x90
-[ 3180.244956]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
-[ 3180.244962] RIP: 0033:0x7f26e875611f
-[ 3180.244963] Code: 89 54 24 18 48 89 74 24 10 89 7c 24 08 e8 39 d5 f8 
-ff 48 8b 54 24 18 48 8b 74 24 10 41 89 c0 8b 7c 24 08 b8 01 00 00 00 0f 
-05 <48> 3d 00 f0 ff ff 77 31 44 89 c7 48 89 44 24 08 e8 8c d5 f8 ff 48
-[ 3180.244963] RSP: 002b:00007f26e5a51cf0 EFLAGS: 00000293 ORIG_RAX: 
-0000000000000001
-[ 3180.244966] RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 
-00007f26e875611f
-[ 3180.244966] RDX: 0000000000000001 RSI: 00007f26be6549f0 RDI: 
-0000000000000030
-[ 3180.244967] RBP: 00007f26e5a51e20 R08: 0000000000000000 R09: 
-00000000ffffffff
-[ 3180.244967] R10: 0000000000000000 R11: 0000000000000293 R12: 
-00007f26e5a525c0
-[ 3180.244968] R13: 00007f26e5cab8a8 R14: 0000000000000001 R15: 
-0000000000000400
-[ 3180.244968]  </TASK>
-[ 3180.244969] ---[ end trace 0000000000000000 ]---
-[ 3180.244970] RIP: 0010:__list_add_valid+0x94/0xa0
-[ 3180.244971] Code: d1 48 89 c6 4c 89 c2 48 c7 c7 38 e1 4b 82 e8 63 25 
-b3 ff 0f 0b 48 89 f2 48 89 c1 48 89 fe 48 c7 c7 90 e1 4b 82 e8 4c 25 b3 
-ff <0f> 0b 66 2e 0f 1f 84 00 00 00 00 00 90 90 90 90 90 90 90 90 90 90
-[ 3180.244972] RSP: 0018:ffffc90002e7fd68 EFLAGS: 00010246
-[ 3180.244973] RAX: 0000000000000058 RBX: ffff888017480018 RCX: 
-0000000000000000
-[ 3180.244973] RDX: 0000000000000000 RSI: ffffffff824440d9 RDI: 
-00000000ffffffff
-[ 3180.244974] RBP: ffffc90002e7fd68 R08: 0000000000000001 R09: 
-0000000000000001
-[ 3180.244974] R10: 000000001b629664 R11: 0000000000000005 R12: 
-0000000000000000
-[ 3180.244975] R13: ffff888017480000 R14: ffff888017480000 R15: 
-ffff888017480010
-[ 3180.244977] FS:  00007f26e5a526c0(0000) GS:ffff88841fc80000(0000) 
-knlGS:0000000000000000
-[ 3180.244977] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[ 3180.244978] CR2: 00007f0104208440 CR3: 000000032af22000 CR4: 
-00000000003506a0
-[ 3180.245068] se_dev->se_dev_ptr already set for storage object
-[ 3180.245087] kobject: 'uio11' (00000000a5f1af78): fill_kobj_path: path 
-= '/devices/tcm_user/uio/uio11'
-[ 3180.245265] tcmu nl cmd 1/-2 completion could not find device with 
-dev id 91.
-[ 3180.245491] kobject: 'maps' (000000009b2a87fb): kobject_add_internal: 
-parent: 'uio11', set: '<NULL>'
-[ 3180.245749] tcmu nl cmd 1/-2 completion could not find device with 
-dev id 94.
-[ 3180.245966] kobject: 'map0' (00000000d832f7b9): kobject_add_internal: 
-parent: 'maps', set: '<NULL>'
-[ 3180.246150] tcmu nl cmd 1/-2 completion could not find device with 
-dev id 94.
-[ 3180.246349] kobject: 'map0' (00000000d832f7b9): kobject_uevent_env
-[ 3180.246523] tcmu nl cmd 1/-2 completion could not find device with 
-dev id 93.
-[ 3180.246691] kobject: 'map0' (00000000d832f7b9): kobject_uevent_env: 
-filter function caused the event to drop!
-[ 3180.246878] tcmu nl cmd 1/0 completion could not find device with dev 
-id 91.
-[ 3180.263756] tcmu nl cmd 1/-2 completion could not find device with 
-dev id 93.
+So libata and scsi_transport_sas just use different sdev id numbering 
+schemes for host scan.
 
-Best regards,
-Grzegorz Uriasz
+> sdd, sd1, sdf and sdg, as shown by lsscsi. However, each drive has its own
+> port+link, with the link for each one having  ata_link_max_devices() == 
+> 1, so
+> ata_find_dev() works only for the first drive with scsidev->id == 0 and 
+> fails
+> for the others. A naive fix would be this:
+> 
+> diff --git a/drivers/ata/libata-scsi.c b/drivers/ata/libata-scsi.c
+> index 7bb12deab70c..e4d6f17d7ccc 100644
+> --- a/drivers/ata/libata-scsi.c
+> +++ b/drivers/ata/libata-scsi.c
+> @@ -2718,7 +2718,7 @@ static struct ata_device *__ata_scsi_find_dev(struct
+> ata_port *ap,
+>           if (!sata_pmp_attached(ap)) {
+>                   if (unlikely(scsidev->channel || scsidev->lun))
+>                           return NULL;
+> -               devno = scsidev->id;
+> +               devno = 0;
+Would this pattern work:
 
-On 21/05/2023 13:28, Grzegorz Uriasz wrote:
-> Hi Dmitry,
->
-> Thank you for your feedback :)
->
-> On 20/05/2023 10:46, Dmitry Bogdanov wrote:
->> Hi Grzegorz,
->>
->> On Sat, May 20, 2023 at 02:26:14AM +0200, Grzegorz Uriasz wrote:
->>> This fixes data corruptions arising from concurrent enabling of a 
->>> target
->>> devices. When multiple enable calls are made concurrently then it is
->>> possible for the target device to be set up twice which results in a
->>> kernel BUG.
->>> Introduces a per target device mutex for serializing enable requests.
->> Device enable call is already secured by configfs per-file mutex. That
->> is actually per device. So Enable procedures are already not executed
->> simulteniously.
-> True, I've checked the code in configfs and indeed there is a per 
-> file/subsystem mutex.
->>
->> Look like you wrongly identified the root cause of double list_add.
->>
->>
->> If you have an evidence that dev->dev_flags could have no DF_CONFIGURED
->> bit, then it meeans that it (dev_flags) is raced in other
->> configuration actions (udev_path, vpd_unit_serial, alias).
->> Bits in dev->dev_flags are written not atomically and if you writes to
->> enable, alias, udev_path,unit_serial files simulteniously, then some
->> bits could be lost.
->>
->> IHMO the best solution is to make dev_flags changes be atomical.
->
-> I've tried that using the following patch:
-> ---
->  drivers/target/target_core_configfs.c | 12 ++++++------
->  drivers/target/target_core_device.c   |  2 +-
->  drivers/target/target_core_iblock.c   |  2 +-
->  drivers/target/target_core_pscsi.c    |  4 ++--
->  drivers/target/target_core_spc.c      |  8 ++++----
->  drivers/target/target_core_tpg.c      |  2 +-
->  include/target/target_core_backend.h  |  2 +-
->  include/target/target_core_base.h     |  4 ++--
->  8 files changed, 18 insertions(+), 18 deletions(-)
->
-> diff --git a/drivers/target/target_core_configfs.c 
-> b/drivers/target/target_core_configfs.c
-> index 74b67c346dfe..bdc06f654aa8 100644
-> --- a/drivers/target/target_core_configfs.c
-> +++ b/drivers/target/target_core_configfs.c
-> @@ -1621,7 +1621,7 @@ static ssize_t 
-> target_wwn_vpd_unit_serial_store(struct config_item *item,
->       * it is doing 'the right thing' wrt a world wide unique
->       * VPD Unit Serial Number that OS dependent multipath can depend on.
->       */
-> -    if (dev->dev_flags & DF_FIRMWARE_VPD_UNIT_SERIAL) {
-> +    if (atomic_read(&dev->dev_flags) & DF_FIRMWARE_VPD_UNIT_SERIAL) {
->          pr_err("Underlying SCSI device firmware provided VPD"
->              " Unit Serial, ignoring request\n");
->          return -EOPNOTSUPP;
-> @@ -1654,7 +1654,7 @@ static ssize_t 
-> target_wwn_vpd_unit_serial_store(struct config_item *item,
->      snprintf(buf, INQUIRY_VPD_SERIAL_LEN, "%s", page);
->      snprintf(dev->t10_wwn.unit_serial, INQUIRY_VPD_SERIAL_LEN,
->              "%s", strstrip(buf));
-> -    dev->dev_flags |= DF_EMULATED_VPD_UNIT_SERIAL;
-> +    atomic_or(DF_EMULATED_VPD_UNIT_SERIAL, &dev->dev_flags);
->
->      pr_debug("Target_Core_ConfigFS: Set emulated VPD Unit Serial:"
->              " %s\n", dev->t10_wwn.unit_serial);
-> @@ -2263,7 +2263,7 @@ static ssize_t target_dev_alias_show(struct 
-> config_item *item, char *page)
->  {
->      struct se_device *dev = to_device(item);
->
-> -    if (!(dev->dev_flags & DF_USING_ALIAS))
-> +    if (!(atomic_read(&dev->dev_flags) & DF_USING_ALIAS))
->          return 0;
->
->      return snprintf(page, PAGE_SIZE, "%s\n", dev->dev_alias);
-> @@ -2289,7 +2289,7 @@ static ssize_t target_dev_alias_store(struct 
-> config_item *item,
->      if (dev->dev_alias[read_bytes - 1] == '\n')
->          dev->dev_alias[read_bytes - 1] = '\0';
->
-> -    dev->dev_flags |= DF_USING_ALIAS;
-> +    atomic_or(DF_USING_ALIAS, &dev->dev_flags);
->
->      pr_debug("Target_Core_ConfigFS: %s/%s set alias: %s\n",
->          config_item_name(&hba->hba_group.cg_item),
-> @@ -2303,7 +2303,7 @@ static ssize_t target_dev_udev_path_show(struct 
-> config_item *item, char *page)
->  {
->      struct se_device *dev = to_device(item);
->
-> -    if (!(dev->dev_flags & DF_USING_UDEV_PATH))
-> +    if (!(atomic_read(&dev->dev_flags) & DF_USING_UDEV_PATH))
->          return 0;
->
->      return snprintf(page, PAGE_SIZE, "%s\n", dev->udev_path);
-> @@ -2330,7 +2330,7 @@ static ssize_t target_dev_udev_path_store(struct 
-> config_item *item,
->      if (dev->udev_path[read_bytes - 1] == '\n')
->          dev->udev_path[read_bytes - 1] = '\0';
->
-> -    dev->dev_flags |= DF_USING_UDEV_PATH;
-> +    atomic_or(DF_USING_UDEV_PATH, &dev->dev_flags);
->
->      pr_debug("Target_Core_ConfigFS: %s/%s set udev_path: %s\n",
->          config_item_name(&hba->hba_group.cg_item),
-> diff --git a/drivers/target/target_core_device.c 
-> b/drivers/target/target_core_device.c
-> index 90f3f4926172..5054b647dd0b 100644
-> --- a/drivers/target/target_core_device.c
-> +++ b/drivers/target/target_core_device.c
-> @@ -967,7 +967,7 @@ int target_configure_device(struct se_device *dev)
->      hba->dev_count++;
->      spin_unlock(&hba->device_lock);
->
-> -    dev->dev_flags |= DF_CONFIGURED;
-> +    atomic_or(DF_CONFIGURED, &dev->dev_flags);
->
->      return 0;
->
-> diff --git a/drivers/target/target_core_iblock.c 
-> b/drivers/target/target_core_iblock.c
-> index cc838ffd1294..38d0d104661d 100644
-> --- a/drivers/target/target_core_iblock.c
-> +++ b/drivers/target/target_core_iblock.c
-> @@ -112,7 +112,7 @@ static int iblock_configure_device(struct 
-> se_device *dev)
->      if (!ib_dev->ibd_readonly)
->          mode |= FMODE_WRITE;
->      else
-> -        dev->dev_flags |= DF_READ_ONLY;
-> +        atomic_or(DF_READ_ONLY, &dev->dev_flags);
->
->      bd = blkdev_get_by_path(ib_dev->ibd_udev_path, mode, ib_dev);
->      if (IS_ERR(bd)) {
-> diff --git a/drivers/target/target_core_pscsi.c 
-> b/drivers/target/target_core_pscsi.c
-> index e7425549e39c..36a1ac519f0b 100644
-> --- a/drivers/target/target_core_pscsi.c
-> +++ b/drivers/target/target_core_pscsi.c
-> @@ -201,7 +201,7 @@ pscsi_get_inquiry_vpd_serial(struct scsi_device 
-> *sdev, struct t10_wwn *wwn)
->
->      snprintf(&wwn->unit_serial[0], INQUIRY_VPD_SERIAL_LEN, "%s", 
-> &buf[4]);
->
-> -    wwn->t10_dev->dev_flags |= DF_FIRMWARE_VPD_UNIT_SERIAL;
-> +    atomic_or(DF_FIRMWARE_VPD_UNIT_SERIAL, &wwn->t10_dev->dev_flags);
->
->      kfree(buf);
->      return 0;
-> @@ -450,7 +450,7 @@ static int pscsi_configure_device(struct se_device 
-> *dev)
->           * For the newer PHV_VIRTUAL_HOST_ID struct scsi_device
->           * reference, we enforce that udev_path has been set
->           */
-> -        if (!(dev->dev_flags & DF_USING_UDEV_PATH)) {
-> +        if (!(atomic_read(&dev->dev_flags) & DF_USING_UDEV_PATH)) {
->              pr_err("pSCSI: udev_path attribute has not"
->                  " been set before ENABLE=1\n");
->              return -EINVAL;
-> diff --git a/drivers/target/target_core_spc.c 
-> b/drivers/target/target_core_spc.c
-> index 89c0d56294cc..d380d08a2df0 100644
-> --- a/drivers/target/target_core_spc.c
-> +++ b/drivers/target/target_core_spc.c
-> @@ -159,7 +159,7 @@ spc_emulate_evpd_80(struct se_cmd *cmd, unsigned 
-> char *buf)
->      struct se_device *dev = cmd->se_dev;
->      u16 len;
->
-> -    if (dev->dev_flags & DF_EMULATED_VPD_UNIT_SERIAL) {
-> +    if (atomic_read(&dev->dev_flags) & DF_EMULATED_VPD_UNIT_SERIAL) {
->          len = sprintf(&buf[4], "%s", dev->t10_wwn.unit_serial);
->          len++; /* Extra Byte for NULL Terminator */
->          buf[3] = len;
-> @@ -239,7 +239,7 @@ spc_emulate_evpd_83(struct se_cmd *cmd, unsigned 
-> char *buf)
->       * /sys/kernel/config/target/core/$HBA/$DEV/wwn/vpd_unit_serial
->       * value in order to return the NAA id.
->       */
-> -    if (!(dev->dev_flags & DF_EMULATED_VPD_UNIT_SERIAL))
-> +    if (!(atomic_read(&dev->dev_flags) & DF_EMULATED_VPD_UNIT_SERIAL))
->          goto check_t10_vend_desc;
->
->      /* CODE SET == Binary */
-> @@ -267,7 +267,7 @@ spc_emulate_evpd_83(struct se_cmd *cmd, unsigned 
-> char *buf)
->       */
->      id_len = 8; /* For Vendor field */
->
-> -    if (dev->dev_flags & DF_EMULATED_VPD_UNIT_SERIAL)
-> +    if (atomic_read(&dev->dev_flags) & DF_EMULATED_VPD_UNIT_SERIAL)
->          id_len += sprintf(&buf[off+12], "%s:%s", prod,
->                  &dev->t10_wwn.unit_serial[0]);
->      buf[off] = 0x2; /* ASCII */
-> @@ -720,7 +720,7 @@ spc_emulate_evpd_00(struct se_cmd *cmd, unsigned 
-> char *buf)
->       * Registered Extended LUN WWN has been set via ConfigFS
->       * during device creation/restart.
->       */
-> -    if (cmd->se_dev->dev_flags & DF_EMULATED_VPD_UNIT_SERIAL) {
-> +    if (atomic_read(&cmd->se_dev->dev_flags) & 
-> DF_EMULATED_VPD_UNIT_SERIAL) {
->          buf[3] = ARRAY_SIZE(evpd_handlers);
->          for (p = 0; p < ARRAY_SIZE(evpd_handlers); ++p)
->              buf[p + 4] = evpd_handlers[p].page;
-> diff --git a/drivers/target/target_core_tpg.c 
-> b/drivers/target/target_core_tpg.c
-> index c0e429e5ef31..c88dc36db6de 100644
-> --- a/drivers/target/target_core_tpg.c
-> +++ b/drivers/target/target_core_tpg.c
-> @@ -656,7 +656,7 @@ int core_tpg_add_lun(
->      list_add_tail(&lun->lun_dev_link, &dev->dev_sep_list);
->      spin_unlock(&dev->se_port_lock);
->
-> -    if (dev->dev_flags & DF_READ_ONLY)
-> +    if (atomic_read(&dev->dev_flags) & DF_READ_ONLY)
->          lun->lun_access_ro = true;
->      else
->          lun->lun_access_ro = lun_access_ro;
-> diff --git a/include/target/target_core_backend.h 
-> b/include/target/target_core_backend.h
-> index a3c193df25b3..27c70a69e088 100644
-> --- a/include/target/target_core_backend.h
-> +++ b/include/target/target_core_backend.h
-> @@ -122,7 +122,7 @@ bool target_configure_unmap_from_queue(struct 
-> se_dev_attrib *attrib,
->
->  static inline bool target_dev_configured(struct se_device *se_dev)
->  {
-> -    return !!(se_dev->dev_flags & DF_CONFIGURED);
-> +    return !!(atomic_read(&se_dev->dev_flags) & DF_CONFIGURED);
->  }
->
->  #endif /* TARGET_CORE_BACKEND_H */
-> diff --git a/include/target/target_core_base.h 
-> b/include/target/target_core_base.h
-> index 5f8e96f1516f..5794b2360c47 100644
-> --- a/include/target/target_core_base.h
-> +++ b/include/target/target_core_base.h
-> @@ -792,8 +792,8 @@ struct se_device_queue {
->
->  struct se_device {
->      /* Used for SAM Task Attribute ordering */
-> -    u32            dev_cur_ordered_id;
-> -    u32            dev_flags;
-> +    u32         dev_cur_ordered_id;
-> +    atomic_t    dev_flags;
->  #define DF_CONFIGURED                0x00000001
->  #define DF_FIRMWARE_VPD_UNIT_SERIAL        0x00000002
->  #define DF_EMULATED_VPD_UNIT_SERIAL        0x00000004
+ata_for_each_dev(ata_dev, link, ALL) {
+	if (ata_dev->sdev == sdev)
+		return ata_dev;
+}
+
+If not, I think it's ok to have devno = 0 assignment under SAS_HOST 
+flag, even though it's far from ideal. Not both of these are not 
+preferred, then, as I mentioned before, some per-port callback to do the 
+conversion.
+
+Thanks,
+John
