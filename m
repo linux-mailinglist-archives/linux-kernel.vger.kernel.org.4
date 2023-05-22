@@ -2,231 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4A3D70C44A
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 19:32:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F61970C43E
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 19:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232877AbjEVRcW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 13:32:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42000 "EHLO
+        id S232778AbjEVR1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 13:27:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231396AbjEVRcU (ORCPT
+        with ESMTP id S229555AbjEVR1o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 13:32:20 -0400
-Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F70DFA;
-        Mon, 22 May 2023 10:32:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1684776740; x=1716312740;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
+        Mon, 22 May 2023 13:27:44 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2080BE9;
+        Mon, 22 May 2023 10:27:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684776463; x=1716312463;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Ys7uZA4JJXzVJrV0ioQmtlsHGgkfxxAqwpnllYAOdrw=;
-  b=BTJvo5T3+FVXhajLsDA9rajC0WzU2G8DatZvaIjYw/I9411S6Ci55eNn
-   Iy5/37qfZrbuBBj0EwU9ufwkQtTtLelx8vJ8lo9SFoywjkezcz9U0kAXQ
-   y2q73FPs5nQe534jhXYjbKAuTVZxgLFzbAGhklPdhRtVopxe7k9vXhcBy
-   E=;
-X-IronPort-AV: E=Sophos;i="6.00,184,1681171200"; 
-   d="scan'208";a="340625406"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-m6i4x-83883bdb.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 17:32:13 +0000
-Received: from EX19MTAUWB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2a-m6i4x-83883bdb.us-west-2.amazon.com (Postfix) with ESMTPS id 20C4560AD1;
-        Mon, 22 May 2023 17:32:12 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 22 May 2023 17:32:11 +0000
-Received: from 88665a182662.ant.amazon.com (10.119.123.82) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Mon, 22 May 2023 17:32:08 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <syzbot+444ca0907e96f7c5e48b@syzkaller.appspotmail.com>
-CC:     <bpf@vger.kernel.org>, <davem@davemloft.net>, <dsahern@kernel.org>,
-        <edumazet@google.com>, <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>, <syzkaller-bugs@googlegroups.com>,
-        <willemdebruijn.kernel@gmail.com>, <kuniyu@amazon.com>
-Subject: Re: [syzbot] [net?] general protection fault in __sk_mem_raise_allocated
-Date:   Mon, 22 May 2023 10:32:00 -0700
-Message-ID: <20230522173200.59608-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <000000000000182b5f05fc41db4a@google.com>
-References: <000000000000182b5f05fc41db4a@google.com>
+  bh=k+PVL4G2rD+urOokHBLSN6dZ+0SzxBkA4MxkypC2+TQ=;
+  b=YzbQdFdZI66bEmr/2eOcq9mJkwc+NH6qAZ+D8mMCzbcdxolD25pe/5/f
+   GR04hrPVzEB0CkwY1bFr4kEd5PzrEIzg4x9mYpW81O5cQQHdhk8dRiPGy
+   RPd1ccGr6naBup1m9aF0YRLjFhxQoHGOAXUkaQ85glzxFP6jVBqyPlXur
+   fiJHUx472hf4APjm4+tX+p66TsVAda7sv0cLtN0Fz4QdD9gvpHoWPDfBq
+   Y8sUTl8/cBZdLz5Nz++ar62mIaBhuTQeafpn6vjunzYfeSUPdeZGpInW+
+   1D1fguAkxsFIXEQcPmLwbKtu6R/y84xLe9ijtGmKnFormJm5K7IjFmOW9
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="353011711"
+X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
+   d="scan'208";a="353011711"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 10:27:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="703625390"
+X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
+   d="scan'208";a="703625390"
+Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 10:27:41 -0700
+Date:   Mon, 22 May 2023 10:32:13 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     Baolu Lu <baolu.lu@linux.intel.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Joerg Roedel <joro@8bytes.org>, dmaengine@vger.kernel.org,
+        vkoul@kernel.org, Robin Murphy <robin.murphy@arm.com>,
+        Will Deacon <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        "Zanussi, Tom" <tom.zanussi@intel.com>,
+        narayan.ranganathan@intel.com, jacob.jun.pan@linux.intel.com
+Subject: Re: [PATCH v6 2/4] iommu: Move global PASID allocation from SVA to
+ core
+Message-ID: <20230522103011.2b791d5d@jacob-builder>
+In-Reply-To: <b3c543e0-699a-0779-fdd9-b799c5230da0@linux.intel.com>
+References: <20230519203223.2777255-1-jacob.jun.pan@linux.intel.com>
+ <20230519203223.2777255-3-jacob.jun.pan@linux.intel.com>
+ <b3c543e0-699a-0779-fdd9-b799c5230da0@linux.intel.com>
+Organization: OTC
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.119.123.82]
-X-ClientProxiedBy: EX19D033UWC003.ant.amazon.com (10.13.139.217) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,
-        T_SPF_PERMERROR autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: syzbot <syzbot+444ca0907e96f7c5e48b@syzkaller.appspotmail.com>
-Date: Sun, 21 May 2023 22:51:02 -0700
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    f1fcbaa18b28 Linux 6.4-rc2
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=1216efba280000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=ac0db1213414a978
-> dashboard link: https://syzkaller.appspot.com/bug?extid=444ca0907e96f7c5e48b
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> userspace arch: i386
-> 
-> Unfortunately, I don't have any reproducer for this issue yet.
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/ea7e2a44b1f9/disk-f1fcbaa1.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/f4e3201419a9/vmlinux-f1fcbaa1.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/c2cd3eb9954b/bzImage-f1fcbaa1.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+444ca0907e96f7c5e48b@syzkaller.appspotmail.com
-> 
-> general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
-> KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-> CPU: 0 PID: 6829 Comm: syz-executor.1 Not tainted 6.4.0-rc2-syzkaller #0
+Hi Baolu,
 
-The last syz-executor.1 seems to create UDP_LITE (0x88) sk.
+On Sun, 21 May 2023 14:21:25 +0800, Baolu Lu <baolu.lu@linux.intel.com>
+wrote:
 
-https://syzkaller.appspot.com/text?tag=CrashLog&x=1216efba280000
-
----8<---
-14:25:52 executing program 1:
-r0 = socket$inet6(0xa, 0x80002, 0x88)
-bind$inet6(r0, &(0x7f00000001c0)={0xa, 0x10010000004e20}, 0x1c)
-syz_emit_ethernet(0x83, &(0x7f0000000040)=ANY=[@ANYBLOB="aaaaaaaaaaaaaaaaaaab90aa86dd601bfc97004d8880fe800001000000000000000000000600ff02000000000000000000000000000101004e20004590"], 0x0)
-ppoll(&(0x7f0000000240)=[{r0}], 0x1, &(0x7f0000000140), 0x0, 0x0)
----8<---
-
-udplitev6_rcv() calls __udp6_lib_rcv(), which expects .sysctl_rmem_offset
-or sysctl_rmem is configured in sk_prot, but udplitev6_prot has neither.
-
-I'll post a fix after testing.
+> On 5/20/23 4:32 AM, Jacob Pan wrote:
+> > Global PASID can be used beyond SVA. For example, drivers that use
+> > Intel ENQCMD to submit work must use global PASIDs in that PASID
+> > is stored in a per CPU MSR. When such device need to submit work
+> > for in-kernel DMA with PASID, it must allocate PASIDs from the same
+> > global number space to avoid conflict.
+> > 
+> > This patch moves global PASID allocation APIs from SVA to IOMMU APIs.
+> > Reserved PASIDs, currently only RID_PASID, are excluded from the global
+> > PASID allocation.
+> > 
+> > It is expected that device drivers will use the allocated PASIDs to
+> > attach to appropriate IOMMU domains for use.
+> > 
+> > Signed-off-by: Jacob Pan<jacob.jun.pan@linux.intel.com>
+> > ---
+> > v6: explicitly exclude reserved a range from SVA PASID allocation
+> >      check mm PASID compatibility with device
+> > v5: move PASID range check inside API so that device drivers only pass
+> >      in struct device* (Kevin)
+> > v4: move dummy functions outside ifdef CONFIG_IOMMU_SVA (Baolu)
+> > ---
+> >   drivers/iommu/iommu-sva.c | 33 ++++++++++++++-------------------
+> >   drivers/iommu/iommu.c     | 24 ++++++++++++++++++++++++
+> >   include/linux/iommu.h     | 10 ++++++++++
+> >   3 files changed, 48 insertions(+), 19 deletions(-)
+> > 
+> > diff --git a/drivers/iommu/iommu-sva.c b/drivers/iommu/iommu-sva.c
+> > index 9821bc44f5ac..7fe8e977d8eb 100644
+> > --- a/drivers/iommu/iommu-sva.c
+> > +++ b/drivers/iommu/iommu-sva.c
+> > @@ -10,33 +10,33 @@
+> >   #include "iommu-sva.h"
+> >   
+> >   static DEFINE_MUTEX(iommu_sva_lock);
+> > -static DEFINE_IDA(iommu_global_pasid_ida);
+> >   
+> >   /* Allocate a PASID for the mm within range (inclusive) */
+> > -static int iommu_sva_alloc_pasid(struct mm_struct *mm, ioasid_t min,
+> > ioasid_t max) +static int iommu_sva_alloc_pasid(struct mm_struct *mm,
+> > struct device *dev) {
+> > +	ioasid_t pasid;
+> >   	int ret = 0;
+> >   
+> > -	if (min == IOMMU_PASID_INVALID ||
+> > -	    max == IOMMU_PASID_INVALID ||
+> > -	    min == 0 || max < min)
+> > -		return -EINVAL;
+> > -
+> >   	if (!arch_pgtable_dma_compat(mm))
+> >   		return -EBUSY;
+> >   
+> >   	mutex_lock(&iommu_sva_lock);
+> >   	/* Is a PASID already associated with this mm? */
+> >   	if (mm_valid_pasid(mm)) {
+> > -		if (mm->pasid < min || mm->pasid > max)
+> > -			ret = -EOVERFLOW;
+> > +		if (mm->pasid <= dev->iommu->max_pasids)
+> > +			goto out;
+> > +		dev_err(dev, "current mm PASID %d exceeds device range
+> > %d!",
+> > +			mm->pasid, dev->iommu->max_pasids);
+> > +		ret = -ERANGE;
+> >   		goto out;
+> >   	}  
+> 
+> Nit: Above is just refactoring, so it's better to keep the code behavior
+> consistent. For example, no need to change the error# from -EOVERFLOW to
+> -ERANGE, and no need to leave a new kernel message.
+> 
+> Anyway, if you think these changes are helpful, it's better to have them
+> in separated patches.
+> 
+> In the end, perhaps we can simply have code like this:
+> 
+> 	if (mm_valid_pasid(mm)) {
+> 		if (mm->pasid > dev->iommu->max_pasids)
+> 			ret = -EOVERFLOW;
+> 		goto out;
+> 	}
+> 
+> Others look good to me, with above addressed,
+> 
+> Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
+> 
+much better, will fix.
 
 Thanks,
-Kuniyuki
 
-
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/28/2023
-> RIP: 0010:sk_get_rmem0 include/net/sock.h:2907 [inline]
-> RIP: 0010:__sk_mem_raise_allocated+0x806/0x17a0 net/core/sock.c:3006
-> Code: c1 ea 03 80 3c 02 00 0f 85 23 0f 00 00 48 8b 44 24 08 48 8b 98 38 01 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 da 48 c1 ea 03 <0f> b6 14 02 48 89 d8 83 e0 07 83 c0 03 38 d0 0f 8d 6f 0a 00 00 8b
-> RSP: 0018:ffffc90005d7f450 EFLAGS: 00010246
-> RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffc90004d92000
-> RDX: 0000000000000000 RSI: ffffffff88066482 RDI: ffffffff8e2ccbb8
-> RBP: ffff8880173f7000 R08: 0000000000000005 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000030000
-> R13: 0000000000000001 R14: 0000000000000340 R15: 0000000000000001
-> FS:  0000000000000000(0000) GS:ffff8880b9800000(0063) knlGS:00000000f7f1cb40
-> CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
-> CR2: 000000002e82f000 CR3: 0000000034ff0000 CR4: 00000000003506f0
-> Call Trace:
->  <TASK>
->  __sk_mem_schedule+0x6c/0xe0 net/core/sock.c:3077
->  udp_rmem_schedule net/ipv4/udp.c:1539 [inline]
->  __udp_enqueue_schedule_skb+0x776/0xb30 net/ipv4/udp.c:1581
->  __udpv6_queue_rcv_skb net/ipv6/udp.c:666 [inline]
->  udpv6_queue_rcv_one_skb+0xc39/0x16c0 net/ipv6/udp.c:775
->  udpv6_queue_rcv_skb+0x194/0xa10 net/ipv6/udp.c:793
->  __udp6_lib_mcast_deliver net/ipv6/udp.c:906 [inline]
->  __udp6_lib_rcv+0x1bda/0x2bd0 net/ipv6/udp.c:1013
->  ip6_protocol_deliver_rcu+0x2e7/0x1250 net/ipv6/ip6_input.c:437
->  ip6_input_finish+0x150/0x2f0 net/ipv6/ip6_input.c:482
->  NF_HOOK include/linux/netfilter.h:303 [inline]
->  NF_HOOK include/linux/netfilter.h:297 [inline]
->  ip6_input+0xa0/0xd0 net/ipv6/ip6_input.c:491
->  ip6_mc_input+0x40b/0xf50 net/ipv6/ip6_input.c:585
->  dst_input include/net/dst.h:468 [inline]
->  ip6_rcv_finish net/ipv6/ip6_input.c:79 [inline]
->  NF_HOOK include/linux/netfilter.h:303 [inline]
->  NF_HOOK include/linux/netfilter.h:297 [inline]
->  ipv6_rcv+0x250/0x380 net/ipv6/ip6_input.c:309
->  __netif_receive_skb_one_core+0x114/0x180 net/core/dev.c:5491
->  __netif_receive_skb+0x1f/0x1c0 net/core/dev.c:5605
->  netif_receive_skb_internal net/core/dev.c:5691 [inline]
->  netif_receive_skb+0x133/0x7a0 net/core/dev.c:5750
->  tun_rx_batched+0x4b3/0x7a0 drivers/net/tun.c:1553
->  tun_get_user+0x2452/0x39c0 drivers/net/tun.c:1989
->  tun_chr_write_iter+0xdf/0x200 drivers/net/tun.c:2035
->  call_write_iter include/linux/fs.h:1868 [inline]
->  new_sync_write fs/read_write.c:491 [inline]
->  vfs_write+0x945/0xd50 fs/read_write.c:584
->  ksys_write+0x12b/0x250 fs/read_write.c:637
->  do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
->  __do_fast_syscall_32+0x65/0xf0 arch/x86/entry/common.c:178
->  do_fast_syscall_32+0x33/0x70 arch/x86/entry/common.c:203
->  entry_SYSENTER_compat_after_hwframe+0x70/0x82
-> RIP: 0023:0xf7f21579
-> Code: b8 01 10 06 03 74 b4 01 10 07 03 74 b0 01 10 08 03 74 d8 01 00 00 00 00 00 00 00 00 00 00 00 00 00 51 52 55 89 e5 0f 34 cd 80 <5d> 5a 59 c3 90 90 90 90 8d b4 26 00 00 00 00 8d b4 26 00 00 00 00
-> RSP: 002b:00000000f7f1c590 EFLAGS: 00000282 ORIG_RAX: 0000000000000004
-> RAX: ffffffffffffffda RBX: 00000000000000c8 RCX: 0000000020000040
-> RDX: 0000000000000083 RSI: 00000000f734e000 RDI: 0000000000000000
-> RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000296 R12: 0000000000000000
-> R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
->  </TASK>
-> Modules linked in:
-> ---[ end trace 0000000000000000 ]---
-> RIP: 0010:sk_get_rmem0 include/net/sock.h:2907 [inline]
-> RIP: 0010:__sk_mem_raise_allocated+0x806/0x17a0 net/core/sock.c:3006
-> Code: c1 ea 03 80 3c 02 00 0f 85 23 0f 00 00 48 8b 44 24 08 48 8b 98 38 01 00 00 48 b8 00 00 00 00 00 fc ff df 48 89 da 48 c1 ea 03 <0f> b6 14 02 48 89 d8 83 e0 07 83 c0 03 38 d0 0f 8d 6f 0a 00 00 8b
-> RSP: 0018:ffffc90005d7f450 EFLAGS: 00010246
-> RAX: dffffc0000000000 RBX: 0000000000000000 RCX: ffffc90004d92000
-> RDX: 0000000000000000 RSI: ffffffff88066482 RDI: ffffffff8e2ccbb8
-> RBP: ffff8880173f7000 R08: 0000000000000005 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000030000
-> R13: 0000000000000001 R14: 0000000000000340 R15: 0000000000000001
-> FS:  0000000000000000(0000) GS:ffff8880b9800000(0063) knlGS:00000000f7f1cb40
-> CS:  0010 DS: 002b ES: 002b CR0: 0000000080050033
-> CR2: 000000002e82f000 CR3: 0000000034ff0000 CR4: 00000000003506f0
-> ----------------
-> Code disassembly (best guess):
->    0:	c1 ea 03             	shr    $0x3,%edx
->    3:	80 3c 02 00          	cmpb   $0x0,(%rdx,%rax,1)
->    7:	0f 85 23 0f 00 00    	jne    0xf30
->    d:	48 8b 44 24 08       	mov    0x8(%rsp),%rax
->   12:	48 8b 98 38 01 00 00 	mov    0x138(%rax),%rbx
->   19:	48 b8 00 00 00 00 00 	movabs $0xdffffc0000000000,%rax
->   20:	fc ff df
->   23:	48 89 da             	mov    %rbx,%rdx
->   26:	48 c1 ea 03          	shr    $0x3,%rdx
-> * 2a:	0f b6 14 02          	movzbl (%rdx,%rax,1),%edx <-- trapping instruction
->   2e:	48 89 d8             	mov    %rbx,%rax
->   31:	83 e0 07             	and    $0x7,%eax
->   34:	83 c0 03             	add    $0x3,%eax
->   37:	38 d0                	cmp    %dl,%al
->   39:	0f 8d 6f 0a 00 00    	jge    0xaae
->   3f:	8b                   	.byte 0x8b
-> 
-> 
-> ---
-> This report is generated by a bot. It may contain errors.
-> See https://goo.gl/tpsmEJ for more information about syzbot.
-> syzbot engineers can be reached at syzkaller@googlegroups.com.
-> 
-> syzbot will keep track of this issue. See:
-> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> 
-> If the bug is already fixed, let syzbot know by replying with:
-> #syz fix: exact-commit-title
-> 
-> If you want to change bug's subsystems, reply with:
-> #syz set subsystems: new-subsystem
-> (See the list of subsystem names on the web dashboard)
-> 
-> If the bug is a duplicate of another bug, reply with:
-> #syz dup: exact-subject-of-another-report
-> 
-> If you want to undo deduplication, reply with:
-> #syz undup
+Jacob
