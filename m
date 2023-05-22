@@ -2,173 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E72E70BF7F
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:19:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0288C70BF91
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:22:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232878AbjEVNTc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 09:19:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43108 "EHLO
+        id S233811AbjEVNWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 09:22:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbjEVNTa (ORCPT
+        with ESMTP id S232704AbjEVNWp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 09:19:30 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2096.outbound.protection.outlook.com [40.107.244.96])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D4B92;
-        Mon, 22 May 2023 06:19:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DZxJKurRn2OJEPagcpiFpQs7R4rcYxDtKB2eoBeMpxaoEJgvs9wl46CFqWTtjyusNEGBhhLfRXmwDWXw7jDRVTyyTHEBPF9Ysf8gYgk6942I+OBqmA6/lr6HeET7Yb5vQVDxYyxaBG5Ace69NODM8I6tP9ePvGr0Nx6zJb1irQTrgeMDJMrdgxNiDr2NAeahTCzqqz5KLvdbZMeZSmxMge6kacktdEedyUh4BBHlqFBansfriSutIKjY02LLGck80fLunW7eDAySg9mkFSptzSTYNmOCJkGUnXXaf0CDGKCxNlGlXaleiqgd3WFil4fMl8pbE7dbXmSKcqz19YbAHA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dICBjqiR1/9R22TWV/zsh8FphYGNBfaaRVM5UzZ6J/4=;
- b=MH3kB9S+PEQ4Nb0vQ/YcWL1fgc3GqHbv4qviIq/AJVrztfdaCy7Ll/djrJb7kO27O1hgAO6/48VQER9l84jkKQU5IqaNTWFre2TSBl0t8FTKpUwULDasBSg/hURFAzX5M7cvUNMHkeAngZzfLJ/y/+urZ5hVSRW/52Kc76qm7Vw8ytOenb2WS65KlxtcAV1INEwChJLSLj73VIlJ4h37jYOlX4vNkAmmBgaW/0G47VQTouJpb8JQ98PKfaLzPn2xWPkLvQwkMJFLvrc14cphxnYiCGVoNbl5Inld9DjDFJND5hGm46p4MJ8XWV1hACRmoudAep9Bjeyy0nYxuSUPFQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dICBjqiR1/9R22TWV/zsh8FphYGNBfaaRVM5UzZ6J/4=;
- b=E9sVHwfGAH45XlykVHJvWiYKnovIi8PKYmRg//zLSiaW5zN0ZxJPMCdrD7cyXzPtO/XBKEiGJ1CfC27SA0W+n4klHt54Ai5HNIYk3CLzsqOhgLlfTITJwxy5loL73XgzHt9RuKaSKgfVGt1dVr+ZPtVgDMCHF/rshs4O6GPgtTk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by CH0PR13MB4684.namprd13.prod.outlook.com (2603:10b6:610:d9::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.25; Mon, 22 May
- 2023 13:19:24 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6411.028; Mon, 22 May 2023
- 13:19:24 +0000
-Date:   Mon, 22 May 2023 15:19:17 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     kernel test robot <lkp@intel.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        davem@davemloft.net, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Luca Boccassi <bluca@debian.org>, linux-arch@vger.kernel.org
-Subject: Re: [PATCH net-next v5 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
-Message-ID: <ZGtr1RwK42We5ACI@corigine.com>
-References: <20230517113351.308771-2-aleksandr.mikhalitsyn@canonical.com>
- <202305202107.BQoPnLYP-lkp@intel.com>
- <20230522-sammeln-neumond-e9a8d196056b@brauner>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230522-sammeln-neumond-e9a8d196056b@brauner>
-X-ClientProxiedBy: AM3PR05CA0094.eurprd05.prod.outlook.com
- (2603:10a6:207:1::20) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Mon, 22 May 2023 09:22:45 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF9FB3
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 06:22:44 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 33CD221C93;
+        Mon, 22 May 2023 13:22:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1684761763; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GCuK3LPZF5iDHF6eAIMdoiAoNyzIubdp5oaBuFWw3Hg=;
+        b=y0buT+Ce4L02Be6wKZkwOpa/RfvnLye+GPy36fZD27pzS8fsZZ5IGVspUcj6i6MdSiCxxl
+        dj4mgbcgVpODvdt0Gk7FGiYsCVPLo5hUJjn5N27BA1K4h8pLXclDMitoDbELT73dq2/kx5
+        hH7NyqDRjjJL4FVdvYoCK7ESXyo5WGs=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1684761763;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GCuK3LPZF5iDHF6eAIMdoiAoNyzIubdp5oaBuFWw3Hg=;
+        b=RB/kNeMWqcXftJlo79BIV81Malm0prE/Ab5eZ3ZZfKljo9R5gxvRHx6dgWgwgU/1RVF7y9
+        20It/fzu0BDdaUCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C37D513336;
+        Mon, 22 May 2023 13:22:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id KUlwLKJsa2QkeAAAMHmgww
+        (envelope-from <lhenriques@suse.de>); Mon, 22 May 2023 13:22:42 +0000
+Received: from localhost (brahms.olymp [local])
+        by brahms.olymp (OpenSMTPD) with ESMTPA id 074c87ad;
+        Mon, 22 May 2023 13:22:41 +0000 (UTC)
+From:   =?utf-8?Q?Lu=C3=ADs_Henriques?= <lhenriques@suse.de>
+To:     Heming Zhao <heming.zhao@suse.com>
+Cc:     Joseph Qi <joseph.qi@linux.alibaba.com>,
+        ocfs2-devel@oss.oracle.com, linux-kernel@vger.kernel.org,
+        Mark Fasheh <mark@fasheh.com>, Joel Becker <jlbec@evilplan.org>
+Subject: Re: [PATCH] ocfs2: fix use-after-free when unmounting read-only
+ filesystem
+References: <20230522102506.9205-1-lhenriques@suse.de>
+        <a57047d6-8f57-3dde-f15f-b24f63d675cd@linux.alibaba.com>
+        <87h6s47dxw.fsf@brahms.olymp> <20230522123623.eozzedrogy4oaj3w@p15>
+Date:   Mon, 22 May 2023 14:22:41 +0100
+In-Reply-To: <20230522123623.eozzedrogy4oaj3w@p15> (Heming Zhao's message of
+        "Mon, 22 May 2023 20:36:23 +0800")
+Message-ID: <87cz2s7b6m.fsf@brahms.olymp>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CH0PR13MB4684:EE_
-X-MS-Office365-Filtering-Correlation-Id: bd944fcc-a5f2-49e7-7a5b-08db5ac72986
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9Y9MkdxF8VQP8eTXFoyc7+emRot0hBoMcbRcAi5D/LDjC38ADqkPwRYXI3VMZzKHqVeeGzYqTcqPYv43enUjb4EGukZ46jkw0YQG2cf5m8QhvjZt/zsX+9qKGvAJedAFMF6JCfVfW3qsw7tmWrVxhRRomcZnnc3WlUapE4wxeoRbUgJGSgfhORLZjn949LrW/kgPvylSOe/7aegjvob1LYbbMjZeJWf+4w/XILCHhJHjPKssA3S+ocidu63kSXpGIpB+POkb+UftnGtI8G2zTTw5XN7taCq0aQoSHicX2+iB+P4LxH0VkJV70sbtmCmYPa3BJCkPSc7Ye8bdj35hemrQNegfk4wR2ygr1HrRaYH3OVSxJSyForO6z8eIWm2wZ9olz+xMRBYmwnoRG4gPJuqSUu9ySOikvFVzus8iPaxwBh+OTta3bDnQ5ueWFvN3IMMbXK9ApI2/A5rAUIP5/En/pVfmRQ5FqCHG11B169fORCuLLuOGaD/QINIgkchluGw1RU+A1Snspw1iCYxYZVWZkEoQRsGNKZHTaz7BIVfqdcYQ3OjnoGDRE9BXKgqumEajS+Ckn9+Yg53Sa3MaVg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39840400004)(366004)(136003)(376002)(346002)(451199021)(54906003)(186003)(5660300002)(66476007)(41300700001)(6666004)(6486002)(966005)(316002)(6916009)(4326008)(478600001)(6506007)(6512007)(7416002)(44832011)(8936002)(8676002)(2616005)(2906002)(83380400001)(66946007)(66556008)(38100700002)(36756003)(86362001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?DNoynbyJ5vefavjP5/8wlopUrMZhxYB+5zC+pS3o1Vwmj8/ktPjSw1dqWmBz?=
- =?us-ascii?Q?yvT0j/hwYBlY748owHI/CfBfyU2ZnmEPE+K1vfajFSoYR6lQCgjAdRNoKjxW?=
- =?us-ascii?Q?vsPDEITWGBHAkasgWcaTpqdyR79VkIi1aDT/ZDP/pxsmjKwzyqhGBS4WPelX?=
- =?us-ascii?Q?n3JzEsmauvC705Q+w5mZbmUQ2dFDBjb5uMqYd0V/NOcdRULOWU5VbQMVXZm/?=
- =?us-ascii?Q?gaosKJJqVTJUSUqKcjf6De6jAf21YO8gk54s6NfvDUO2tIRdhhz4XPEYJkiT?=
- =?us-ascii?Q?F6ih8fj9JgBX1124+LnDLTdHkJr/zfupqed6TD228Odg8z33LjIjzjHLdAXI?=
- =?us-ascii?Q?zaSkHdUUZmgzrpDVh4dTVWdzG0gk1kFmCaLMIvEMkcR7G9LzL4ErugJS2o2P?=
- =?us-ascii?Q?+v35x1qeR2yQAoaIp5DoeEWQAyFsTHfQ6XpLjlmVi2V+yYvMENbvW0/XrjhP?=
- =?us-ascii?Q?5h3w1+c+mC0mZ/lYuTQvOng3BLbQ0E1u4VgMh2Ck727aPaBadE8F9O5p15RS?=
- =?us-ascii?Q?w/FBo/ZRlZLWI0A4FBOSmn0Vnxbx2qyHrGDZujSXA1/17h/bSpDTZvhcHvsz?=
- =?us-ascii?Q?T24TdEG30tjTuUJhodwHHtRyn9QSTFwL1uJoXspg8TCKAal7ss+3Bzd1ZWpE?=
- =?us-ascii?Q?An1GXWjg/IoDPjs1nU4y1e5oBwpTa6ncjQqb88DcyzUCE/pqoGLZEB7hwEUB?=
- =?us-ascii?Q?5BfA2T7mlmd3ACjgvzLQMZnd+NqgYqV48glwY4J8/tJXFjIMWvJzm4GGGa4T?=
- =?us-ascii?Q?R4Kl0wqD0fqwjHxF1EB7FrROA9QP6tuN43gsQERDBGngEUYVXvyx2KolAw6f?=
- =?us-ascii?Q?LrQUbxVfq5aaFZKiykA+KBsy+plBK/1SI+t6wKfX9Ss3aC4f3H8JGSr55fIq?=
- =?us-ascii?Q?rgeJNmUHs/ADMRDDabtvjU0asv3ScusAineGND1xPNFTXaCZwKl7FmbfHBmO?=
- =?us-ascii?Q?+c4zOnJO8LufpBvlH8DWe9LovwAB81SFM0fq2tIcwxM8pMR9oR9sh/ujUpF7?=
- =?us-ascii?Q?dO37NCtJV0MEptMckMmdQDXSHN9QnHV+zidlHmGv18osLanc/p1qxYLnx48y?=
- =?us-ascii?Q?yhC9IGjlqXBKVLWknp9m2jO/QooXXSu++wFBcDPY/pUMQwxUtf3MtOxaEoip?=
- =?us-ascii?Q?gNA4SvplQ+Wq7kMLGs9qXn9LX9W+EUC9Mz/bzJzDp7mSpSUNjdRopTW8kp+v?=
- =?us-ascii?Q?uW2f9BFgltpoP2Er6dDqMcNxV6ZE9xHzy5H7cCQsrbpi1mzlY71ZHYpZhZ8q?=
- =?us-ascii?Q?qtH96fn6RkS6wsJfFLoCsfEMQLpRXsloiF3AvnNnE3xYRSMandWlAplz6iBp?=
- =?us-ascii?Q?uHCiwMRSuSG4unGm8tvN/YlE2dKnaRKDWHVsDOrgdFd5M1eqLF2GIg4FzYRW?=
- =?us-ascii?Q?UjhAOelKu5gLZcZpQrCVuxHC12tuPO762G6jy0tKhFCZPQ7/VUZyDfTHrJgf?=
- =?us-ascii?Q?fW7lhxJFnyoj34RTLbXZpFexlsgAaoA0dbKMbWcN4I5ZPiHn8MmMNKdc8PYY?=
- =?us-ascii?Q?H191Sev5KdfoVB1yItQHIdjocoqdtADfHwgu56a/RDivB+X4AY4wIxkM0ZPi?=
- =?us-ascii?Q?zEMjCJ353C3f0hsAc4Uu2Uf30sX+vk9X8m/s/qvnQ0ZmkXenLU0s67ukAFP1?=
- =?us-ascii?Q?+vAP9CXEUfHDjjtV5TQzF3mXS6XuhWjX6ajhthVyQ6zJTzxs96m5cCDOVw2q?=
- =?us-ascii?Q?fJR1+w=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bd944fcc-a5f2-49e7-7a5b-08db5ac72986
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2023 13:19:24.6704
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xKwM1vNdocESU4Wbx7emfnMU3RgWgeOMdfs8sgR/IMFpztoqkGlVmsu0GgOnWfJl8vuNoiuKi2Zefa1l27UzvsKsku/T7TCPKkaBADgQs3U=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR13MB4684
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 11:47:08AM +0200, Christian Brauner wrote:
-> On Sat, May 20, 2023 at 10:11:36PM +0800, kernel test robot wrote:
-> > Hi Alexander,
-> > 
-> > kernel test robot noticed the following build errors:
-> > 
-> > [auto build test ERROR on net-next/main]
-> > 
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Alexander-Mikhalitsyn/scm-add-SO_PASSPIDFD-and-SCM_PIDFD/20230517-193620
-> > base:   net-next/main
-> > patch link:    https://lore.kernel.org/r/20230517113351.308771-2-aleksandr.mikhalitsyn%40canonical.com
-> > patch subject: [PATCH net-next v5 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
-> > config: powerpc-randconfig-s043-20230517
-> > compiler: powerpc-linux-gcc (GCC) 12.1.0
-> > reproduce:
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # apt-get install sparse
-> >         # sparse version: v0.6.4-39-gce1a6720-dirty
-> >         # https://github.com/intel-lab-lkp/linux/commit/969a57c99c9d50bfebd0908f5157870b36c271c7
-> >         git remote add linux-review https://github.com/intel-lab-lkp/linux
-> >         git fetch --no-tags linux-review Alexander-Mikhalitsyn/scm-add-SO_PASSPIDFD-and-SCM_PIDFD/20230517-193620
-> >         git checkout 969a57c99c9d50bfebd0908f5157870b36c271c7
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc olddefconfig
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash
-> > 
-> > If you fix the issue, kindly add following tag where applicable
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202305202107.BQoPnLYP-lkp@intel.com/
-> > 
-> > All errors (new ones prefixed by >>, old ones prefixed by <<):
-> > 
-> > >> ERROR: modpost: "pidfd_prepare" [net/unix/unix.ko] undefined!
-> 
-> TLI, that AF_UNIX can be a kernel module...
-> I'm really not excited in exposing pidfd_prepare() to non-core kernel
-> code. Would it be possible to please simply refuse SO_PEERPIDFD and
-> SCM_PIDFD if AF_UNIX is compiled as a module? I feel that this must be
-> super rare because it risks breaking even simplistic userspace.
+Heming Zhao <heming.zhao@suse.com> writes:
 
-It occurs to me that it may be simpler to not allow AF_UNIX to be a module.
-But perhaps that breaks something for someone...
+> On Mon, May 22, 2023 at 01:23:07PM +0100, Lu=C3=ADs Henriques wrote:
+>> Joseph Qi <joseph.qi@linux.alibaba.com> writes:
+>>=20
+>> > On 5/22/23 6:25 PM, Lu=C3=ADs Henriques wrote:
+>> >> It's trivial to trigger a use-after-free bug in the ocfs2 quotas code=
+ using
+>> >> fstest generic/452.  After mounting a filesystem as read-only, quotas=
+ are
+>> >
+>> > generic/452 is for testing ext4 mounted with dax and ro.
+>> > But ocfs2 doesn't support dax yet.
+>>=20
+>> Right, but I think it's still useful to run the 'generic' test-suite in a
+>> filesystem.  We can always find issues in the test itself or, in this
+>> case, a bug in the filesystem.
+>
+> It looks you did some special steps for 452. In my env, without changing
+> anything, I could pass this case successfully.=20
+
+No, I haven't changed anything to the test.  I just make sure there's a
+scratch device to be used.
+
+Maybe you can try to enable KASAN to catch the UAF.  I've found the bug
+without KASAN (i.e. I saw a NULL pointer panic), but enabling it also
+detects the issue -- see below.
+
+Cheers,
+--=20
+Lu=C3=ADs
+
+[   91.928109] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+[   91.929519] BUG: KASAN: slab-use-after-free in timer_delete+0x54/0xc0
+[   91.930869] Read of size 8 at addr ffff8880389a8208 by task umount/669
+[   91.932533] CPU: 1 PID: 669 Comm: umount Not tainted 6.4.0-rc3 #236
+[   91.933807] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS =
+rel-1.16.0-0-gd239552c-rebuilt.opensuse.org 04/01/2014
+[   91.936158] Call Trace:
+[   91.936678]  <TASK>
+[   91.937123]  dump_stack_lvl+0x32/0x50
+[   91.937909]  print_report+0xc5/0x5f0
+[   91.938685]  ? _raw_spin_lock_irqsave+0x72/0xc0
+[   91.939642]  ? __virt_addr_valid+0xac/0x130
+[   91.940534]  ? __pfx__raw_spin_lock_irqsave+0x10/0x10
+[   91.941574]  ? timer_delete+0x54/0xc0
+[   91.942357]  kasan_report+0x9e/0xd0
+[   91.943110]  ? timer_delete+0x54/0xc0
+[   91.943902]  timer_delete+0x54/0xc0
+[   91.944643]  ? __pfx_timer_delete+0x10/0x10
+[   91.945492]  ? detach_if_pending+0x112/0x140
+[   91.946405]  try_to_grab_pending+0x31/0x230
+[   91.947252]  __cancel_work_timer+0x6c/0x270
+[   91.948102]  ? __pfx___cancel_work_timer+0x10/0x10
+[   91.949073]  ? try_to_grab_pending+0x31/0x230
+[   91.949956]  ? __cancel_work+0xe3/0x130
+[   91.950746]  ? mutex_unlock+0x6b/0xb0
+[   91.951485]  ocfs2_disable_quotas.isra.0+0x3e/0xf0 [ocfs2]
+[   91.952635]  ocfs2_dismount_volume+0xdd/0x450 [ocfs2]
+[   91.953676]  ? __pfx___filemap_fdatawrite_range+0x10/0x10
+[   91.954757]  ? __pfx_ocfs2_dismount_volume+0x10/0x10 [ocfs2]
+[   91.955898]  ? filemap_check_errors+0x46/0xb0
+[   91.956737]  generic_shutdown_super+0xaa/0x280
+[   91.957604]  kill_block_super+0x46/0x70
+[   91.958415]  deactivate_locked_super+0x4d/0xb0
+[   91.959861]  cleanup_mnt+0x135/0x1f0
+[   91.960862]  task_work_run+0xe3/0x140
+[   91.961887]  ? __pfx_task_work_run+0x10/0x10
+[   91.962887]  ? __x64_sys_umount+0xbb/0xd0
+[   91.963343]  exit_to_user_mode_prepare+0xda/0xe0
+[   91.963867]  syscall_exit_to_user_mode+0x1d/0x50
+[   91.964392]  do_syscall_64+0x4f/0x90
+[   91.964800]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+[   91.965387] RIP: 0033:0x7fa7664baacb
+[   91.965796] Code: fa 90 90 31 f6 e9 13 00 00 00 0f 1f 44 00 00 90 90 90 =
+90 90 90 90 90 90 90 90 90 90 90 f3 0f 1e fa 90 90 b8 a6 00 00 00 0f 05 <48=
+> 3d 00 f0 ff ff 77 058
+[   91.967851] RSP: 002b:00007ffc8d30da28 EFLAGS: 00000246 ORIG_RAX: 000000=
+00000000a6
+[   91.968671] RAX: 0000000000000000 RBX: 00005628ef17a9c0 RCX: 00007fa7664=
+baacb
+[   91.969464] RDX: 0000000000000000 RSI: 0000000000000000 RDI: 00005628ef1=
+7cdd0
+[   91.970253] RBP: 00005628ef17aad8 R08: 0000000000000073 R09: 00000000000=
+00001
+[   91.971031] R10: 0000000000000000 R11: 0000000000000246 R12: 00000000000=
+00000
+[   91.971790] R13: 00005628ef17cdd0 R14: 00005628ef17abf0 R15: 00007ffc8d3=
+10088
+[   91.972546]  </TASK>
+
+[   91.972961] Allocated by task 632:
+[   91.973342]  kasan_save_stack+0x1c/0x40
+[   91.973760]  kasan_set_track+0x21/0x30
+[   91.974160]  __kasan_kmalloc+0x8b/0x90
+[   91.974584]  ocfs2_local_read_info+0xe3/0x9a0 [ocfs2]
+[   91.975168]  dquot_load_quota_sb+0x34b/0x680
+[   91.975624]  dquot_load_quota_inode+0xfe/0x1a0
+[   91.976092]  ocfs2_enable_quotas+0x190/0x2f0 [ocfs2]
+[   91.976679]  ocfs2_fill_super+0x14ef/0x2120 [ocfs2]
+[   91.977249]  mount_bdev+0x1be/0x200
+[   91.977622]  legacy_get_tree+0x6c/0xb0
+[   91.978014]  vfs_get_tree+0x3e/0x110
+[   91.978415]  path_mount+0xa90/0xe10
+[   91.978774]  __x64_sys_mount+0x16f/0x1a0
+[   91.979171]  do_syscall_64+0x43/0x90
+[   91.979537]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+
+[   91.980213] Freed by task 650:
+[   91.980535]  kasan_save_stack+0x1c/0x40
+[   91.980925]  kasan_set_track+0x21/0x30
+[   91.981317]  kasan_save_free_info+0x2a/0x50
+[   91.981744]  __kasan_slab_free+0xf9/0x150
+[   91.982151]  __kmem_cache_free+0x89/0x180
+[   91.982568]  ocfs2_local_free_info+0x2ba/0x3f0 [ocfs2]
+[   91.983140]  dquot_disable+0x35f/0xa70
+[   91.983509]  ocfs2_susp_quotas.isra.0+0x159/0x1a0 [ocfs2]
+[   91.984096]  ocfs2_remount+0x150/0x580 [ocfs2]
+[   91.984584]  reconfigure_super+0x1a5/0x3a0
+[   91.984993]  path_mount+0xc8a/0xe10
+[   91.985357]  __x64_sys_mount+0x16f/0x1a0
+[   91.985750]  do_syscall_64+0x43/0x90
+[   91.986125]  entry_SYSCALL_64_after_hwframe+0x72/0xdc
+
+[   91.986799] The buggy address belongs to the object at ffff8880389a8000
+                which belongs to the cache kmalloc-1k of size 1024
+[   91.987965] The buggy address is located 520 bytes inside of
+                freed 1024-byte region [ffff8880389a8000, ffff8880389a8400)
+
+[   91.989287] The buggy address belongs to the physical page:
+[   91.989812] page:00000000bc93f4e4 refcount:1 mapcount:0 mapping:00000000=
+00000000 index:0x0 pfn:0x389a8
+[   91.990719] head:00000000bc93f4e4 order:3 entire_mapcount:0 nr_pages_map=
+ped:0 pincount:0
+[   91.991483] flags: 0x4000000000010200(slab|head|zone=3D1)
+[   91.991981] page_type: 0xffffffff()
+[   91.992321] raw: 4000000000010200 ffff888003041dc0 dead000000000100 dead=
+000000000122
+[   91.993064] raw: 0000000000000000 0000000000100010 00000001ffffffff 0000=
+000000000000
+[   91.993812] page dumped because: kasan: bad access detected
+
+[   91.994505] Memory state around the buggy address:
+[   91.994973]  ffff8880389a8100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb=
+ fb fb
+[   91.995656]  ffff8880389a8180: fb fb fb fb fb fb fb fb fb fb fb fb fb fb=
+ fb fb
+[   91.996366] >ffff8880389a8200: fb fb fb fb fb fb fb fb fb fb fb fb fb fb=
+ fb fb
+[   91.997050]                       ^
+[   91.997399]  ffff8880389a8280: fb fb fb fb fb fb fb fb fb fb fb fb fb fb=
+ fb fb
+[   91.998087]  ffff8880389a8300: fb fb fb fb fb fb fb fb fb fb fb fb fb fb=
+ fb fb
+[   91.998774] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
