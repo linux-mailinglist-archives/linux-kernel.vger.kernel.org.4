@@ -2,137 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 111D970C15D
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 16:43:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEFF470C162
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 16:44:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233618AbjEVOnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 10:43:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33166 "EHLO
+        id S233257AbjEVOon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 10:44:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbjEVOnX (ORCPT
+        with ESMTP id S230015AbjEVOol (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 10:43:23 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C297999;
-        Mon, 22 May 2023 07:43:21 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id A9A8260174;
-        Mon, 22 May 2023 16:43:18 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1684766598; bh=gFAip1LpaBAenVLmxO9SERe2dCyBM+Uu9Yhp1b8WsqY=;
-        h=Date:To:From:Subject:From;
-        b=O2OcQeTHZtCybT1uEFwFLD6C5AAHkcuFGXrIXxSSTkqPzYTyZgPg9EKZT8QuqpD1t
-         5cLJty0R1fMaP7zt5M7qq3P1yvh4NkSGKKzbJzKA9uYDikOSf9HqGje+QkU2XqfxU0
-         FhxQs7z+uFLqUUm0h7rzMYrPXeBNpIifLTbcWwZgydOFF/0F1q9ZSRpELJIK2+XUtV
-         1wFJkqj+L7GFR609dJ470+/EBWqfPhe2C17d9Ga2H7Ao75ueZuTwpuAatKgcAOR+5A
-         hZ4g1JoKQYw9fy6GHxTd5zHgQlYMEgew0FgVlspYeI4F363Lq8BrSa+GYb4RoVgQsC
-         ePlZcUiIrrfYQ==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 0hV_zlYnz9Z8; Mon, 22 May 2023 16:43:16 +0200 (CEST)
-Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
-        by domac.alu.hr (Postfix) with ESMTPSA id 3510460173;
-        Mon, 22 May 2023 16:43:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1684766596; bh=gFAip1LpaBAenVLmxO9SERe2dCyBM+Uu9Yhp1b8WsqY=;
-        h=Date:To:From:Subject:From;
-        b=DlvhoQKPuRU2FSQHkaWepSFFk9Yw+guaNw8MWMZCJdbFh6gcpVTVCnpo/7f8boqRu
-         MIz6tv3qJT9bMaxbzgfEmpgbdehVT36EQxVPbAH6iBwGuNxdMeusX7MJmHrjYvLVJM
-         c4RqfBwiEA3FxcyCXVyPBpwtyY3/8tJJ6/t/oLqrd2KAJLTXpSra3iVQd0bHiwTjlX
-         TPX9TM4e4uKiHLhTZ83CbTIB3EE6CEXznmdcaPx4UOFuDHiYgTGdPSzf0YiK/5e25z
-         bg2HDxxLFXw8ZGuHSx+hKMAEEwoQJC0aw7L8JtUL05nsb1pWtirVg1wPJERnA0m6ty
-         RGu47tn3T8ybQ==
-Message-ID: <0ed660e3-1261-7c97-8fa7-7145743c4650@alu.unizg.hr>
-Date:   Mon, 22 May 2023 16:43:15 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US, hr
-To:     Shuah Khan <shuah@kernel.org>, Jeff Xu <jeffxu@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Daniel Verkamp <dverkamp@chromium.org>,
-        Kees Cook <keescook@chromium.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Subject: selftests: memfd/memfd_test.c: does not compile under AlmaLinux 8.7
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 22 May 2023 10:44:41 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87EB899;
+        Mon, 22 May 2023 07:44:40 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 23A2A21D3D;
+        Mon, 22 May 2023 14:44:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1684766679; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+jujgzsASF6xi60CjIDkx8JGmNGm4j6MXDTWCGTNfWg=;
+        b=JrCmHe8s9GErEBKDbq3ON7dcqwQm3uhhYAskZEG8Om77uI4/P3mPYJFm+w/PQmJoSZAIwJ
+        c3iNZi98C5WKhHbUBdfZDgVbxelSmH3bErb2+e/KHVVRnP8oxRtwGNHHX3l+4C7NSPqTlc
+        20X4z8HpA0E8YV4yQoXWEjUjFSw/XAQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1684766679;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=+jujgzsASF6xi60CjIDkx8JGmNGm4j6MXDTWCGTNfWg=;
+        b=7B6qZzZRnEdbUDvFagPTMiXcS9zZZeKh/LG8MFFB4oCpW6PQ6ItAYyV1XDug1paT5iblKb
+        Xy2IF2M/BwtT2yDw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C320913776;
+        Mon, 22 May 2023 14:44:38 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id rp2eLtZ/a2T2KAAAMHmgww
+        (envelope-from <tiwai@suse.de>); Mon, 22 May 2023 14:44:38 +0000
+Date:   Mon, 22 May 2023 16:44:38 +0200
+Message-ID: <87a5xwifxl.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH v5 32/44] sound: add HAS_IOPORT dependencies
+In-Reply-To: <c63aaec4da1d9e8b8b48cf037b3d859c62ee1a59.camel@linux.ibm.com>
+References: <20230522105049.1467313-1-schnelle@linux.ibm.com>
+        <20230522105049.1467313-33-schnelle@linux.ibm.com>
+        <87cz2sy3t3.wl-tiwai@suse.de>
+        <c63aaec4da1d9e8b8b48cf037b3d859c62ee1a59.camel@linux.ibm.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Mon, 22 May 2023 15:54:36 +0200,
+Niklas Schnelle wrote:
+> 
+> On Mon, 2023-05-22 at 13:59 +0200, Takashi Iwai wrote:
+> > On Mon, 22 May 2023 12:50:37 +0200,
+> > Niklas Schnelle wrote:
+> > > 
+> > > In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> > > not being declared. We thus need to add HAS_IOPORT as dependency for
+> > > those drivers using them.
+> > > 
+> > > Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> > > Signed-off-by: Arnd Bergmann <arnd@kernel.org>
+> > > Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> > 
+> > Looks good to me.  Would you like the patch picked up through
+> > sound.git tree, or rather apply all through a different tree?
+> > In the latter case:
+> > 
+> > Reviewed-by: Takashi Iwai <tiwai@suse.de>
+> > 
+> > 
+> > thanks,
+> > 
+> > Takashi
+> 
+> With the Kconfig addition of HAS_IOPORT merged in v6.4-rc1 this patch
+> can now go independently via the the sound.git tree. Our plan is to get
+> as many of these per-subsystem patches merged for v6.5 as possible such
+> that then only a small number (ideally zero) of patches remain before
+> the last one can be merged removing inb()/outb() etc for HAS_IOPORT=n.
 
-On AlmaLinux 8.7, make kselftest-all fails at memfd/memfd_test.c:
-
-make[2]: Entering directory '/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/memfd'
-gcc -D_FILE_OFFSET_BITS=64 -isystem /home/marvin/linux/kernel/linux_torvalds/usr/include     memfd_test.c common.c  -o 
-/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/memfd/memfd_test
-memfd_test.c: In function ‘test_seal_future_write’:
-memfd_test.c:916:27: error: ‘F_SEAL_FUTURE_WRITE’ undeclared (first use in this function); did you mean ‘F_SEAL_WRITE’?
-   mfd_assert_add_seals(fd, F_SEAL_FUTURE_WRITE);
-                            ^~~~~~~~~~~~~~~~~~~
-                            F_SEAL_WRITE
-memfd_test.c:916:27: note: each undeclared identifier is reported only once for each function it appears in
-memfd_test.c: In function ‘test_exec_seal’:
-memfd_test.c:36:7: error: ‘F_SEAL_FUTURE_WRITE’ undeclared (first use in this function); did you mean ‘F_SEAL_WRITE’?
-        F_SEAL_FUTURE_WRITE | \
-        ^~~~~~~~~~~~~~~~~~~
-memfd_test.c:1058:27: note: in expansion of macro ‘F_WX_SEALS’
-   mfd_assert_has_seals(fd, F_WX_SEALS);
-                            ^~~~~~~~~~
-make[2]: *** [../lib.mk:147: /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/memfd/memfd_test] Error 1
-make[2]: Leaving directory '/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/memfd'
-
-Apparently, the include file include/uapi/linux/fcntl.h defines this
-F_SEAL_FUTURE_WRITE as 0x0010:
-
-include/uapi/linux/fcntl.h:45:#define F_SEAL_FUTURE_WRITE	0x0010  /* prevent future writes while mapped */
-
-This patch fixed the issue:
-
----
-  tools/testing/selftests/memfd/memfd_test.c | 8 +++++++-
-  1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
-index dba0e8ba002f..868f17c02e32 100644
---- a/tools/testing/selftests/memfd/memfd_test.c
-+++ b/tools/testing/selftests/memfd/memfd_test.c
-@@ -28,7 +28,13 @@
-  #define MFD_DEF_SIZE 8192
-  #define STACK_SIZE 65536
-
--#define F_SEAL_EXEC    0x0020
-+#ifndef F_SEAL_FUTURE_WRITE
-+#define F_SEAL_FUTURE_WRITE    0x0010
-+#endif
-+
-+#ifndef F_SEAL_EXEC
-+#define F_SEAL_EXEC            0x0020
-+#endif
-
-  #define F_WX_SEALS (F_SEAL_SHRINK | \
-                     F_SEAL_GROW | \
+OK, then I applied the patch now on for-next branch.
 
 
-Hope this helps.
+Thanks!
 
-Best regards,
-Mirsad
-
--- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
-
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
+Takashi
