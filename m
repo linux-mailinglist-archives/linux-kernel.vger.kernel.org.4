@@ -2,58 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4180D70CB4A
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 22:36:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3C7070CB25
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 22:34:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234802AbjEVUgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 16:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44170 "EHLO
+        id S234518AbjEVUeW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 16:34:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234895AbjEVUgU (ORCPT
+        with ESMTP id S234119AbjEVUeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 16:36:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD7E19D;
-        Mon, 22 May 2023 13:35:53 -0700 (PDT)
+        Mon, 22 May 2023 16:34:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41467121;
+        Mon, 22 May 2023 13:34:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30AFD62BD6;
-        Mon, 22 May 2023 20:35:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AD92C433D2;
-        Mon, 22 May 2023 20:35:48 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A2FD862BCB;
+        Mon, 22 May 2023 20:34:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83299C433D2;
+        Mon, 22 May 2023 20:34:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684787752;
-        bh=0nQ8xIPSPhBIr1gc3+npYhNke4IXHy+5EM39FqGHhHM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RvIIl7JwcJq1f1lT50bQTaPuLv0NZy78hJqb4UTvWapPNbd41FW80wvaW4pH0aAOo
-         4TFqg8491i9Zl3rQRFtYXMLVrUEjAIN2Sus2yH0U8HOELjOAhTmZZlj6/RVSV3KFvt
-         Xe9iqVfgcL67vJ4LphGTNfl2Ao1Ub0EQ7bS13b2S6nILe6dKwQjN4s3A5ifjdgD6B8
-         HKSBErLqGZ2KGI5RO4zGnfoSCGGwg236gdTcm9UFy3mIkKjxjyKFjwyOA5VTnN1Ir6
-         STLK7od7jNeP4m7FYg/VWUGu+uTiQw4V/Ub1n/8uiGlC7+KimKstqJvqYoDpmxE5EM
-         cl8yPMWAoz3Ag==
-From:   Jiri Olsa <jolsa@kernel.org>
-To:     stable@vger.kernel.org
-Cc:     Christoph Hellwig <hch@lst.de>,
-        John Fastabend <john.fastabend@gmail.com>, linux-mm@kvack.org,
-        bpf@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tsahee Zidenberg <tsahee@annapurnalabs.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        =?UTF-8?q?Mah=C3=A9=20Tardy?= <mahe.tardy@isovalent.com>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [RFC PATCH stable 5.4 8/8] bpf: bpf_probe_read_kernel_str() has to return amount of data read on success
-Date:   Mon, 22 May 2023 22:33:52 +0200
-Message-Id: <20230522203352.738576-9-jolsa@kernel.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230522203352.738576-1-jolsa@kernel.org>
-References: <20230522203352.738576-1-jolsa@kernel.org>
+        s=k20201202; t=1684787651;
+        bh=0N5ujlws6muMcuISdvNwKEBan06V8ul27Fqz3m4Odnk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JV6R8zU24ZJEqo4ZBm2nq4gkyJastGUa/aWU+mkcudCYp1Fa8N+X8REo36DFPU7Bi
+         OYfy+X7+TGQDvt0uVlZTVWHx77I9faM6ACVsGs58PYMxtP0SkXqYWTo6WbBL6715fO
+         3MTLyVaRODvWKJu0gpEwSsnfuhkuQQqt2YUQWVDGlyJf4LMQ55UlXb9IsI3xKeGtro
+         Ue11yNL5WtyUwsxlVNjZUybljAstpbRoxpz8CkW0NP1YuSgN1KJsyfAyNTfLc5Tk9G
+         bunR2kzIS4AgR20jnxX3E+sjBsTp3VO+zwjn+bPEb15jvYvMUX+AnpoZcmktKE0DM/
+         +8j+ZRrF4y7xw==
+Date:   Mon, 22 May 2023 13:34:09 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        David Ahern <dsahern@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Kees Cook <keescook@chromium.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Lennart Poettering <mzxreary@0pointer.de>,
+        Luca Boccassi <bluca@debian.org>, linux-arch@vger.kernel.org
+Subject: Re: [PATCH net-next v6 1/3] scm: add SO_PASSPIDFD and SCM_PIDFD
+Message-ID: <20230522133409.5c6e839a@kernel.org>
+In-Reply-To: <20230522132439.634031-2-aleksandr.mikhalitsyn@canonical.com>
+References: <20230522132439.634031-1-aleksandr.mikhalitsyn@canonical.com>
+        <20230522132439.634031-2-aleksandr.mikhalitsyn@canonical.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,38 +64,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andrii Nakryiko <andriin@fb.com>
+On Mon, 22 May 2023 15:24:37 +0200 Alexander Mikhalitsyn wrote:
+> v6:
+> 	- disable feature when CONFIG_UNIX=n/m (pidfd_prepare API is not exported to modules)
 
-commit 02553b91da5deb63c8562b47529b09b734659af0 upstream.
+IMHO hiding the code under #if IS_BUILTIN(CONFIG_UNRELATED) is
+surprising to the user and.. ugly?
 
-During recent refactorings, bpf_probe_read_kernel_str() started returning 0 on
-success, instead of amount of data successfully read. This majorly breaks
-applications relying on bpf_probe_read_kernel_str() and bpf_probe_read_str()
-and their results. Fix this by returning actual number of bytes read.
-
-Fixes: 8d92db5c04d1 ("bpf: rework the compat kernel probe handling")
-Signed-off-by: Andrii Nakryiko <andriin@fb.com>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Acked-by: John Fastabend <john.fastabend@gmail.com>
-Link: https://lore.kernel.org/bpf/20200616050432.1902042-1-andriin@fb.com
----
- kernel/trace/bpf_trace.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-index a46256f99229..c4c825dcdef8 100644
---- a/kernel/trace/bpf_trace.c
-+++ b/kernel/trace/bpf_trace.c
-@@ -198,7 +198,7 @@ bpf_probe_read_kernel_str_common(void *dst, u32 size, const void *unsafe_ptr)
- 	if (unlikely(ret < 0))
- 		goto fail;
- 
--	return 0;
-+	return ret;
- fail:
- 	memset(dst, 0, size);
- 	return ret;
--- 
-2.40.1
-
+Can we move scm_pidfd_recv() into a C source and export that?
+That should be less controversial than exporting pidfd_prepare()
+directly?
