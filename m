@@ -2,118 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4618170B837
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:59:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 863E270B83F
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:00:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232079AbjEVI7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 04:59:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41334 "EHLO
+        id S232027AbjEVJAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 05:00:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230042AbjEVI7S (ORCPT
+        with ESMTP id S231872AbjEVI7Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 04:59:18 -0400
-Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3BBA1BE;
-        Mon, 22 May 2023 01:58:35 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (82-181-192-243.bb.dnainternet.fi [82.181.192.243])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by meesny.iki.fi (Postfix) with ESMTPSA id 4QPrvc5zc2zyTW;
-        Mon, 22 May 2023 11:58:20 +0300 (EEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
-        t=1684745905;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ctT1nifoev3hHlgWE8Eu+txWc48x8uyKSST1/8B9WGc=;
-        b=w7PZ86zyjH3fSidq7rCaEGcLKr+Eu9zcIobfhozFkU6pOpRuepM8640+Im/apSP91WTtok
-        13aq/IGEzHHcoJHwVJsshcMdQZwpmy8Xk3omNtfYsWFbUCOpPA5JB1jG3/0b21cttppQLC
-        MbLTWcxXr1agKN5GM9vIG6lraDOFIKg=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=meesny; t=1684745905;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ctT1nifoev3hHlgWE8Eu+txWc48x8uyKSST1/8B9WGc=;
-        b=VecV+KnmzrrkwGGIz93aqacUUcZ3ehs9+IsNUtsxRmguOBXjxqH1dLp0+iHBqXUuPD2Hcs
-        lxCA3URSu3rDZofUIXxqduDDLde6x1gk/+oAcd7oFCc01Z9cW2xwEgl6DyJRcjQIP7hIUU
-        rAZ75F2VWzh0te6RqE7iojaOMAOKd/s=
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Seal: i=1; s=meesny; d=iki.fi; t=1684745905; a=rsa-sha256; cv=none;
-        b=bufxwxn4WKn1MJyZ7FovEvpFcGtfhxM7RrI0GEzzwPy+gOsWGK5NACUJqi+9fd8dr+HsTl
-        1uR3jWIcIxwR2fMrkG3lY1F2xA6bsG0FxwFrA7lN1/fd3c6N7T0ck7fa8CQIrUn4lImbOi
-        b7dcY5QU8QZ0VvHFLDgKCIPi6JY/5IU=
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 35939634C91;
-        Mon, 22 May 2023 11:58:20 +0300 (EEST)
-Date:   Mon, 22 May 2023 11:58:20 +0300
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-Cc:     Michael Tretter <m.tretter@pengutronix.de>,
-        Jacob Chen <jacob-chen@iotwrt.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-Subject: Re: [PATCH RESEND 2/2] arm64: dts: rockchip: Add RGA2 support to
- rk356x
-Message-ID: <ZGsurJERE9uZfMs0@valkosipuli.retiisi.eu>
-References: <20230119-rk3568-rga-v1-0-43d4d14365e6@pengutronix.de>
- <20230119-rk3568-rga-v1-2-43d4d14365e6@pengutronix.de>
- <ZGUfTP1EXtlJbtxJ@valkosipuli.retiisi.eu>
- <2290673.ElGaqSPkdT@diego>
+        Mon, 22 May 2023 04:59:24 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC7F5AF;
+        Mon, 22 May 2023 01:58:53 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QPrw94DMLz4f463D;
+        Mon, 22 May 2023 16:58:49 +0800 (CST)
+Received: from [10.67.110.48] (unknown [10.67.110.48])
+        by APP1 (Coremail) with SMTP id cCh0CgCH6yWxLmtk91CHJQ--.43916S2;
+        Mon, 22 May 2023 16:58:50 +0800 (CST)
+Message-ID: <1cec95d5-5cd4-fbf9-754b-e6a1229d45c3@huaweicloud.com>
+Date:   Mon, 22 May 2023 16:58:25 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH RFC v2] Randomized slab caches for kmalloc()
+Content-Language: en-US
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        Alexander Lobakin <aleksander.lobakin@intel.com>,
+        kasan-dev@googlegroups.com, Wang Weiyang <wangweiyang2@huawei.com>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Pekka Enberg <penberg@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Gong Ruiqi <gongruiqi1@huawei.com>
+References: <20230508075507.1720950-1-gongruiqi1@huawei.com>
+ <CAB=+i9QxWL6ENDz_r1jPbiZsTUj1EE3u-j0uP6y_MxFSM9RerQ@mail.gmail.com>
+ <5f5a858a-7017-5424-0fa0-db3b79e5d95e@huawei.com>
+ <CAB=+i9R0GZiau7PKDSGdCOijPH1TVqA3rJ5tQLejJpoR55h6dg@mail.gmail.com>
+ <19707cc6-fa5e-9835-f709-bc8568e4c9cd@huawei.com>
+ <CAB=+i9T-iqtMZw8y7SxkaFBtiXA93YwFFEtQyGynBsorud1+_Q@mail.gmail.com>
+From:   "GONG, Ruiqi" <gongruiqi@huaweicloud.com>
+In-Reply-To: <CAB=+i9T-iqtMZw8y7SxkaFBtiXA93YwFFEtQyGynBsorud1+_Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <2290673.ElGaqSPkdT@diego>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-CM-TRANSID: cCh0CgCH6yWxLmtk91CHJQ--.43916S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7KFWUXF1fAF47Xry3Wr47XFb_yoW8tFyUpF
+        WIyF1UCr4xCr17Cry0ya10va92v3y7tF1Uu3s0gryUZr1kJw18XFsakr109r93ZF45GFy3
+        XFsYkF13WF9xt3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvIb4IE77IF4wAFF20E14v26ryj6rWUM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1F6r1fM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
+        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7Mxk0xIA0c2IE
+        e2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxV
+        Aqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a
+        6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6x
+        kF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE
+        14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf
+        9x07UZ18PUUUUU=
+X-CM-SenderInfo: pjrqw2pxltxq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 21, 2023 at 12:46:11PM +0200, Heiko Stübner wrote:
-> Hi,
-> 
-> Am Mittwoch, 17. Mai 2023, 20:39:08 CEST schrieb Sakari Ailus:
-> > Hi folks,
-> > 
-> > On Fri, Jan 20, 2023 at 10:14:22AM +0100, Michael Tretter wrote:
-> > > The rk3568 also features a RGA2 block. Add the necessary device tree
-> > > node.
-> > > 
-> > > Acked-by: Nicolas Frattaroli <frattaroli.nicolas@gmail.com>
-> > > Signed-off-by: Michael Tretter <m.tretter@pengutronix.de>
-> > 
-> > Can this patch be merged via the media tree? I don't expect merging the
-> > other one via a different tree being an issue either, so alternatively to
-> > the 1st patch:
-> > 
-> > Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> 
-> thanks for the Ack. To prevent conflicts with other additions to the
-> rk356x.dtsi file, I've picked now both patches for the rockchip tree.
 
-Thank you!
 
--- 
-Sakari Ailus
+On 2023/05/22 16:03, Hyeonggon Yoo wrote:
+> On Mon, May 22, 2023 at 4:35â€¯PM Gong Ruiqi <gongruiqi1@huawei.com> wrote:
+>> On 2023/05/17 6:35, Hyeonggon Yoo wrote:
+> [...]
+>>>>>> +#ifdef CONFIG_RANDOM_KMALLOC_CACHES
+>>>>>> +# define SLAB_RANDOMSLAB       ((slab_flags_t __force)0x01000000U)
+>>>>>> +#else
+>>>>>> +# define SLAB_RANDOMSLAB       0
+>>>>>> +#endif
+>>>
+>>> There is already the SLAB_KMALLOC flag that indicates if a cache is a
+>>> kmalloc cache. I think that would be enough for preventing merging
+>>> kmalloc caches?
+>>
+>> After digging into the code of slab merging (e.g. slab_unmergeable(),
+>> find_mergeable(), SLAB_NEVER_MERGE, SLAB_MERGE_SAME etc), I haven't
+>> found an existing mechanism that prevents normal kmalloc caches with
+>> SLAB_KMALLOC from being merged with other slab caches. Maybe I missed
+>> something?
+>>
+>> While SLAB_RANDOMSLAB, unlike SLAB_KMALLOC, is added into
+>> SLAB_NEVER_MERGE, which explicitly indicates the no-merge policy.
+> 
+> I mean, why not make slab_unmergable()/find_mergeable() not to merge kmalloc
+> caches when CONFIG_RANDOM_KMALLOC_CACHES is enabled, instead of a new flag?
+> 
+> Something like this:
+> 
+> diff --git a/mm/slab_common.c b/mm/slab_common.c
+> index 607249785c07..13ac08e3e6a0 100644
+> --- a/mm/slab_common.c
+> +++ b/mm/slab_common.c
+> @@ -140,6 +140,9 @@ int slab_unmergeable(struct kmem_cache *s)
+>   if (slab_nomerge || (s->flags & SLAB_NEVER_MERGE))
+>   return 1;
+> 
+> + if (IS_ENALBED(CONFIG_RANDOM_KMALLOC_CACHES) && (flags & SLAB_KMALLOC))
+> + return 1;
+> +
+>   if (s->ctor)
+>   return 1;
+> 
+> @@ -176,6 +179,9 @@ struct kmem_cache *find_mergeable(unsigned int
+> size, unsigned int align,
+>   if (flags & SLAB_NEVER_MERGE)
+>   return NULL;
+> 
+> + if (IS_ENALBED(CONFIG_RANDOM_KMALLOC_CACHES) && (flags & SLAB_KMALLOC))
+> + return NULL;
+> +
+>   list_for_each_entry_reverse(s, &slab_caches, list) {
+>   if (slab_unmergeable(s))
+>   continue;
+
+Ah I see. My concern is that it would affect not only normal kmalloc
+caches, but kmalloc_{dma,cgroup,rcl} as well: since they were all marked
+with SLAB_KMALLOC when being created, this code could potentially change
+their mergeablity. I think it's better not to influence those irrelevant
+caches.
+
