@@ -2,121 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FEAB70C40D
+	by mail.lfdr.de (Postfix) with ESMTP id 6B16370C40E
 	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 19:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232417AbjEVRMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 13:12:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33566 "EHLO
+        id S232779AbjEVRMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 13:12:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbjEVRMU (ORCPT
+        with ESMTP id S231889AbjEVRMW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 13:12:20 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EBC4F4
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 10:12:19 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-253520adb30so3774526a91.1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 10:12:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684775538; x=1687367538;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Kzg7DZdO+Fx5NTiphKDonLYUjRG7pPKdcN8BEiK0Q5Q=;
-        b=liZNMPYz6Ln/UbX2RbKFz0oKNJCytFelVboUK2d9pq1Y84i8RFQpYQjlP1tpDjbwtG
-         h+PuxWrI8JmIt9bLqHcjaXSoC01beyn56d7PYV6kfkcZXX+dNaDxc5MqhKqplkaFc3Ky
-         Mm7GY4hQNOIhEo5YH9cviKJyc1FPDurYBFeVDxop1BiOGzacOpknf3S16eYWA5fiXBxB
-         ee84pIPucMWp1WvXAXGE6I11PVbjAytgbV8Sq7gmLB7KQSWatcM/fJutZwgkaEEdZmPg
-         0H8v5syw/rOVZOfK3XL5/jVXjEaM/2GcW5olGc3dDHiw6lU0FhKyNpQfTACCPr5K1yDn
-         12aw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684775538; x=1687367538;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Kzg7DZdO+Fx5NTiphKDonLYUjRG7pPKdcN8BEiK0Q5Q=;
-        b=Z1FclPha2S86LGjs0ucRX8ibkoEM6SWei0TuT2siwsyW9xfRPtch3ilYhlYoPPlCDU
-         MdpGqcDirmHkNb0cc9nZKE7tasi5IgjKr/1e4gRwXN7zCnTI/T5QejKxPSln/vffrKAF
-         caDbXAskMucfWKwQYZM8SaECLywD8ylykSO47W9VfvdXPFxfVyJpOlqTP4Iq91yCEjpt
-         twTkhDfocxr7SrywUuMOF0L6Kki+KV1kQpeCGD/OoCAYHlGK7bSI6cH5AvudGLPkOdw8
-         UydHpdGUSzb9j0pOrXCr8Bz1pHijmjYwTi87UgrA25CBMvvnavD9oEa3FDVHTPQSC6cx
-         Hw2w==
-X-Gm-Message-State: AC+VfDxbIFj0wuqoMweQxa1KiVBoRbhGordSSO9lEvTrDcyJNpZZe/WZ
-        XAtdYhnMZxv/zXMnKwJCC7SIPt7JJ6YGGjnfy7y+fA==
-X-Google-Smtp-Source: ACHHUZ42u+20u8Yh+qsy7h0iK2LWRoxiLcZjWSqhvAWKesEjBSGBFLI5AiStgbrXNeg38Rsxmoklpxsg6/IlOq1/Yxg=
-X-Received: by 2002:a17:90a:70cf:b0:253:266a:3b00 with SMTP id
- a15-20020a17090a70cf00b00253266a3b00mr10614041pjm.37.1684775538452; Mon, 22
- May 2023 10:12:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230517113351.308771-1-aleksandr.mikhalitsyn@canonical.com>
- <20230517113351.308771-3-aleksandr.mikhalitsyn@canonical.com> <20230519-zielbereich-inkompatibel-79e1a910e3f9@brauner>
-In-Reply-To: <20230519-zielbereich-inkompatibel-79e1a910e3f9@brauner>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Mon, 22 May 2023 10:12:07 -0700
-Message-ID: <CAKH8qBsYWzh0ZYOdYcYYpMeB-2hhOjLzh7EBXbQpGpC3O=R3OQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v5 2/3] net: core: add getsockopt SO_PEERPIDFD
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        davem@davemloft.net, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Kees Cook <keescook@chromium.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Lennart Poettering <mzxreary@0pointer.de>,
-        Luca Boccassi <bluca@debian.org>,
-        Daniel Borkmann <daniel@iogearbox.net>, bpf@vger.kernel.org,
-        linux-arch@vger.kernel.org
+        Mon, 22 May 2023 13:12:22 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6F90B3
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 10:12:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1684775528; i=efault@gmx.de;
+        bh=Zte54EARQKsZTrx2rqYIeuLYcV3HtQOjx8KqSA04kH0=;
+        h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
+        b=gqg3e+9J6qYfFbGGG8fjNyYDxfK3MMlgL7PUgXgFjV56irr2hU3wvysKgO5s/Ym2C
+         b5kH2JvJBzkCHghrwFP8KzwJruA534s/RHaKq//HXcJN9C+HjN+CqDsR4shkZhF/4F
+         ORqtgUb/zkQrdKOi0WOdB3C/oUWYpTC0QfnG/CO3VDPNMqdOVcRNs8AQos7KiGAV+C
+         LRqERBNBkJpeN6amFx1+hj68ptQIGyX8fdyU4UY1meIQzFahvhL879gxyqzvSGmBP7
+         4HZE/m7btjhzyZ9fRXyATLoIS8W6wB6vN8+Vl1xMWYSkh9KpIQhxhkRhkgcJ+BA5CG
+         8YoU36FokdWCA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from homer.fritz.box ([185.191.219.131]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mwfac-1qKLis2mXi-00yDAd; Mon, 22
+ May 2023 19:12:08 +0200
+Message-ID: <b142363b8f87eaa73ee815fcb5b98a6bd5040001.camel@gmx.de>
+Subject: Re: r8169: disable ASPM during NAPI poll locking changes --> BUG:
+ Invalid wait context --> PREEMPT_RT pain
+From:   Mike Galbraith <efault@gmx.de>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Date:   Mon, 22 May 2023 19:12:08 +0200
+In-Reply-To: <1bea6e585a1be8ab89b9a3db2fb5c58431378f50.camel@gmx.de>
+References: <e55be0ae115ad6494ebb48fecd03e5c2fe528230.camel@gmx.de>
+         <28727b435c143f15feddffb4c29095fee2500dff.camel@gmx.de>
+         <20230522080604.MgUGcyeU@linutronix.de>
+         <d7fa9ffe0e6cd546b8ff3826379c2cf78e5342b6.camel@gmx.de>
+         <20230522134315.oBK0Ll7f@linutronix.de>
+         <1bea6e585a1be8ab89b9a3db2fb5c58431378f50.camel@gmx.de>
 Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
+MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Provags-ID: V03:K1:lK3WkCZ6sXyhZIRlUxBPU+9E2tS/rIP0pRJO1zLfFjwZ36UX8Pv
+ zDrvOoH3vjZ5W14gzIytLLsZpx9wszkPAu6NVzD/bs86n/ffflyPVyTJOmMoGHXBOXbz0sb
+ boNObMR+conu9lrchnNyB/yPDeyTOTPKk5j5/PYotrmQi16mJbd73IYzxdBWrY9zm9ztZOt
+ 7bogIgcuszh54RZ91cq6A==
+UI-OutboundReport: notjunk:1;M01:P0:o++6JQvYfR0=;DluzbXj5Dq5Hx6r6GFw3PCKbYQj
+ LqywBJ/VAFuEwibvM/NBIdRS0dVkxMzqXEGzvywNyJ+Xpyf2sEi7WkutIPuu4bSKPdIvZsHN+
+ 8GEMEeJtPZoizRmutV5AiSRorRXVSdYINf6Qx9ZhBLhtyqnpZU+LRqpVCOfSPJH9+twx1rLzf
+ EhgZY2kws693nWHZ9i6G26fpUYhOg1AU16fhPzm+M5L6NxFVPKxTxb7lYsWA34NLpmflSOwBI
+ kN5eDDJ6hZwcXZPxq0akHIofEdmQLIjxiOnb+9YG66SilUatmZhYqEBDo5HnULswW0JdWjMsy
+ lL85PEYobEUr+36kyCe8lTGkiFOoRY9j9y19c1qhDxPlypKSkw8IiU8LfsLFrnHMkKAdIkjxp
+ nOKovF1OZxd4C8XQa40wQC/GhxUrB1Ssr8mpCXFyXF4NQvhxH02HLR4qAjWX0KsQ7hCft+DnA
+ MfEgBqy7v1fG0Z13oYTAFKUyJAP/mI8m3c4EXkFJetdsRiRLa4FYShRinWsykqr9L/XKJcXE0
+ D4h6m6lxBUgtcLJL7FGvr8x9szGq2aXbTqIqTQeGDWvYDDQJwkhlN4wIc1Wg6i0sV8DBrRHtY
+ x/Pw41GKtCZqTW77sqFZy/E+8oQCjULF9bWK1HvJXhE0xKI6BHFbBZqnFDvW+b/HRF2zNuRwk
+ 6W4Fr+OTfAFHCwY4JyX238vhexn752wy3xYY4psSQVuVir70Tcx+PapsYHpBYx73OEdL5xFNA
+ pSGPV/YuijFYap3vzYix/V3t5/H7lFw+fSEqjWip+Ja1A2zxnwvjEe+EtzjAEVNIjPtOD7g6U
+ d8/AZkd7gtKKngpuD/g4nr5EVW0NVZffqzou7vhCikWh4umo2Mmm4syeh+AerIb2FfvOK7Vnq
+ hEcKCLk3UVXpXxYTnV9oUUIPzRH+tVE/U7AOSG+NLVUxbu0PlwU5I+Q1ztU03S2vK1w67te/k
+ t7YXHg==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 4:03=E2=80=AFAM Christian Brauner <brauner@kernel.o=
-rg> wrote:
->
-> On Wed, May 17, 2023 at 01:33:50PM +0200, Alexander Mikhalitsyn wrote:
-> > Add SO_PEERPIDFD which allows to get pidfd of peer socket holder pidfd.
-> > This thing is direct analog of SO_PEERCRED which allows to get plain PI=
-D.
-> >
-> > Cc: "David S. Miller" <davem@davemloft.net>
-> > Cc: Eric Dumazet <edumazet@google.com>
-> > Cc: Jakub Kicinski <kuba@kernel.org>
-> > Cc: Paolo Abeni <pabeni@redhat.com>
-> > Cc: Leon Romanovsky <leon@kernel.org>
-> > Cc: David Ahern <dsahern@kernel.org>
-> > Cc: Arnd Bergmann <arnd@arndb.de>
-> > Cc: Kees Cook <keescook@chromium.org>
-> > Cc: Christian Brauner <brauner@kernel.org>
-> > Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
-> > Cc: Lennart Poettering <mzxreary@0pointer.de>
-> > Cc: Luca Boccassi <bluca@debian.org>
-> > Cc: Daniel Borkmann <daniel@iogearbox.net>
-> > Cc: Stanislav Fomichev <sdf@google.com>
-> > Cc: bpf@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: netdev@vger.kernel.org
-> > Cc: linux-arch@vger.kernel.org
-> > Tested-by: Luca Boccassi <bluca@debian.org>
-> > Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.c=
-om>
-> > ---
-> > v5:
-> >       - started using (struct proto)->bpf_bypass_getsockopt hook
->
-> Looks good to me,
-> Reviewed-by: Christian Brauner <brauner@kernel.org>
+On Mon, 2023-05-22 at 19:02 +0200, Mike Galbraith wrote:
+> That 160us was with the nouveau left on by mistake, the worst ftrace
+> recorded with me beating up box was 77us (and it inflates).
 
-Acked-by: Stanislav Fomichev <sdf@google.com>
+Grr, ftraced 160us was with the GPU mucking up box's RT performance,
+ftraced 77us was without GPU.  Box was very busy in both cases.
+
+	-Mike
