@@ -2,149 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE70D70B34A
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 04:44:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEDA270B351
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 04:49:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbjEVCok (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 22:44:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35084 "EHLO
+        id S231387AbjEVCtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 22:49:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbjEVCoi (ORCPT
+        with ESMTP id S229620AbjEVCtk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 22:44:38 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83C0CCD
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 19:44:37 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id 98e67ed59e1d1-2554696544cso798236a91.2
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 19:44:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684723477; x=1687315477;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fWDVQ2z9KbD5MMR01fZ/nUn7dd6pMxIl5hvJiDhQHvo=;
-        b=UaHBoDKS854frBK/ZKm/R5ak1GHqwLRbN0J3coRoqw85jDzTznan3Fh68I9q/yJBSW
-         aq3sxoWgOF2YZcpy+SO29NYWNygI9aypJTjTDDuGIHXYy4Hmo6n0saTKnvLpgafSE+ti
-         OFt6MoYdT+7QtRBcSKSL8crqbuTBkBxkcFmgj3OVi4G0STdrKDwEs2WMkxtJySmH2/RH
-         PNsSHbRO6SQNegR7LYf2TbmKVPniZkq2Tki8kTRTlJ1qNvqoKMMLn69EiuQXlw8v85cu
-         AySeapHgW/ZzU/NHYy8hDzQpXQJNmJ2l1W3LryPqDUZWKV4nEZTKFjqtU1MiBgjfAD/h
-         ie1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684723477; x=1687315477;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fWDVQ2z9KbD5MMR01fZ/nUn7dd6pMxIl5hvJiDhQHvo=;
-        b=hUWCA51zFvIY3Fm4VHmflbCexCwldBD+Nj/Ni+ERb7M53CPPqnTmIPbWx3J1p+Fcyp
-         wmIXsxJwuRCERrctQiptfOQYBIt7+H5jcCvFET33+s0eNBQm5foiSqYN36fIJNoBArFh
-         Qs1/WW0ZwZsIfu2GiNQe6eGp0qyzLcWLKjLHnxqDRju1LTND99LrLxb3h7KeeaU3j4vv
-         8XqTp81GdrYHLinlIcSgMIYBBQPeFhQL2kEP0rsvgXOUlTzlCHIUlJYQG/yh51RddUro
-         orzdJgChO/oSGJpOvokesqd6uhSU2Z8SmVCrtzBfL6/YZdrQg6EqO/v7U0HGH0hNoLui
-         yVjg==
-X-Gm-Message-State: AC+VfDxYz4Rs3On3AnQNoC0ibEEl7PSSANaX0yBFtz7xJ1cVH2wbvFNc
-        17A5LS+mfXaD+Ea/I2OtP1ZOLRGyZvRp++07E/E=
-X-Google-Smtp-Source: ACHHUZ6EDNCD2w7OjNMSQxovKBobBHr0OevXHMTn+rnQzJVWq4xGtQU/acDIDmYoH5whN3zuJBgRRH97gwDGQs2BrXQ=
-X-Received: by 2002:a17:902:daca:b0:1ac:859a:5b5a with SMTP id
- q10-20020a170902daca00b001ac859a5b5amr13057446plx.0.1684723476850; Sun, 21
- May 2023 19:44:36 -0700 (PDT)
+        Sun, 21 May 2023 22:49:40 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58549C1;
+        Sun, 21 May 2023 19:49:37 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=joseph.qi@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0Vj6edsh_1684723770;
+Received: from 30.221.132.35(mailfrom:joseph.qi@linux.alibaba.com fp:SMTPD_---0Vj6edsh_1684723770)
+          by smtp.aliyun-inc.com;
+          Mon, 22 May 2023 10:49:31 +0800
+Message-ID: <376ab23b-52d0-d7fd-2dd9-414cbb474e01@linux.alibaba.com>
+Date:   Mon, 22 May 2023 10:49:30 +0800
 MIME-Version: 1.0
-References: <20230519102908.253458-1-suagrfillet@gmail.com>
- <9a274a44b61345e8aba747a44250c4d8@EXMBX066.cuchost.com> <20230519-clarinet-collar-ba2c0fa37e11@wendy>
- <20230519-roundup-legwarmer-e26b31db3123@spud>
-In-Reply-To: <20230519-roundup-legwarmer-e26b31db3123@spud>
-From:   Song Shuai <suagrfillet@gmail.com>
-Date:   Mon, 22 May 2023 02:44:24 +0000
-Message-ID: <CAAYs2=iF9P_pXwNXRitXmk9pUAB7n8wMnNkqYAh-SMh44kYqDQ@mail.gmail.com>
-Subject: Re: [PATCH] riscv: hibernation: Remove duplicate call of suspend_restore_csrs
-To:     Conor Dooley <conor@kernel.org>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        JeeHeng Sia <jeeheng.sia@starfivetech.com>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        Mason Huo <mason.huo@starfivetech.com>,
-        Leyfoon Tan <leyfoon.tan@starfivetech.com>,
-        "ajones@ventanamicro.com" <ajones@ventanamicro.com>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Song Shuai <songshuaishuai@tinylab.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.11.0
+Subject: Re: [PATCH v21 22/30] ocfs2: Provide a splice-read stub
+To:     David Howells <dhowells@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>
+Cc:     Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Christoph Hellwig <hch@lst.de>, Mark Fasheh <mark@fasheh.com>,
+        Joel Becker <jlbec@evilplan.org>, ocfs2-devel@oss.oracle.com
+References: <20230520000049.2226926-1-dhowells@redhat.com>
+ <20230520000049.2226926-23-dhowells@redhat.com>
+Content-Language: en-US
+From:   Joseph Qi <joseph.qi@linux.alibaba.com>
+In-Reply-To: <20230520000049.2226926-23-dhowells@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-10.0 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Conor Dooley <conor@kernel.org> =E4=BA=8E2023=E5=B9=B45=E6=9C=8819=E6=97=A5=
-=E5=91=A8=E4=BA=94 20:07=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Fri, May 19, 2023 at 12:28:07PM +0100, Conor Dooley wrote:
-> > Hey,
-> >
-> > On Fri, May 19, 2023 at 11:14:27AM +0000, JeeHeng Sia wrote:
-> >
-> > > > The suspend_restore_csrs is called in both __hibernate_cpu_resume
-> > > > and the `else` of subsequent swsusp_arch_suspend.
-> > > >
-> > > > Removing the first call makes both suspend_{save,restore}_csrs
-> > > > left in swsusp_arch_suspend for clean code.
->
-> It took me embarrassingly long to wrap my head around the control flow
-> here again. I'm not sure that I agree with you that splitting the calls
-> between asm & c is cleaner, but whatever:
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
->
-> > > >
-> > > > Signed-off-by: Song Shuai <suagrfillet@gmail.com>
-> > > > Signed-off-by: Song Shuai <songshuaishuai@tinylab.org>
-> >
-> > BTW, why the two email addresses? The tinylab one here seems entirely
-> > redundant - unless it is your employer, in which case should it be the
-> > only SoB address & also in the author field?
->
-> Deja vu with my questioning your email address, but does your
-> tinylab address actually repeat "shuai"?
->
-Yes, that's my full name.
-As you noticed, I'm switching my email from Gmail to Tinylab but did
-something wrong.
-Thanks for your correction, I'll re-send this patch with your
-suggestions applied.
-
-> > Also, Fixes tag?
-> >
-> > > > ---
-> > > >  arch/riscv/kernel/hibernate-asm.S | 1 -
-> > > >  1 file changed, 1 deletion(-)
-> > > >
-> > > > diff --git a/arch/riscv/kernel/hibernate-asm.S b/arch/riscv/kernel/=
-hibernate-asm.S
-> > > > index 5c76671c7e15..d698dd7df637 100644
-> > > > --- a/arch/riscv/kernel/hibernate-asm.S
-> > > > +++ b/arch/riscv/kernel/hibernate-asm.S
-> > > > @@ -28,7 +28,6 @@ ENTRY(__hibernate_cpu_resume)
-> > > >
-> > > >   REG_L   a0, hibernate_cpu_context
-> > > >
-> > > > - suspend_restore_csrs
-> > > >   suspend_restore_regs
-> >
-> > > Good catch. This function is invoked twice to restore the CSRs.
-> > > I am good with removing this function from here.
-> >
-> > If that's a review, then please either give an R-b or A-b tag :)
-> >
-> > Thanks,
-> > Conor.
->
->
 
 
---=20
+On 5/20/23 8:00 AM, David Howells wrote:
+> Provide a splice_read stub for ocfs2.  This emits trace lines and does an
+> atime lock/update before calling filemap_splice_read().  Splicing from
+> direct I/O is handled by the caller.
+> 
+> A couple of new tracepoints are added for this purpose.
+> 
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Christoph Hellwig <hch@lst.de>
+> cc: Al Viro <viro@zeniv.linux.org.uk>
+> cc: Jens Axboe <axboe@kernel.dk>
+> cc: Mark Fasheh <mark@fasheh.com>
+> cc: Joel Becker <jlbec@evilplan.org>
+> cc: Joseph Qi <joseph.qi@linux.alibaba.com>
+> cc: ocfs2-devel@oss.oracle.com
+> cc: linux-fsdevel@vger.kernel.org
+> cc: linux-block@vger.kernel.org
+> cc: linux-mm@kvack.org
+> ---
+>  fs/ocfs2/file.c        | 39 ++++++++++++++++++++++++++++++++++++++-
+>  fs/ocfs2/ocfs2_trace.h |  3 +++
+>  2 files changed, 41 insertions(+), 1 deletion(-)
+> 
+> diff --git a/fs/ocfs2/file.c b/fs/ocfs2/file.c
+> index efb09de4343d..f7e00b5689d5 100644
+> --- a/fs/ocfs2/file.c
+> +++ b/fs/ocfs2/file.c
+> @@ -2581,6 +2581,43 @@ static ssize_t ocfs2_file_read_iter(struct kiocb *iocb,
+>  	return ret;
+>  }
+>  
+> +static ssize_t ocfs2_file_splice_read(struct file *in, loff_t *ppos,
+> +				      struct pipe_inode_info *pipe,
+> +				      size_t len, unsigned int flags)
+> +{
+> +	struct inode *inode = file_inode(in);
+> +	ssize_t ret = 0;
+> +	int lock_level = 0;
+> +
+> +	trace_ocfs2_file_splice_read(inode, in, in->f_path.dentry,
+> +				     (unsigned long long)OCFS2_I(inode)->ip_blkno,
+> +				     in->f_path.dentry->d_name.len,
+> +				     in->f_path.dentry->d_name.name,
+> +				     0);
+
+Better also trace flags here.
+
+> +
+> +	/*
+> +	 * We're fine letting folks race truncates and extending writes with
+> +	 * read across the cluster, just like they can locally.  Hence no
+> +	 * rw_lock during read.
+> +	 *
+> +	 * Take and drop the meta data lock to update inode fields like i_size.
+> +	 * This allows the checks down below generic_file_splice_read() a
+
+Now it calls filemap_splice_read().
+
+> +	 * chance of actually working.
+> +	 */
+> +	ret = ocfs2_inode_lock_atime(inode, in->f_path.mnt, &lock_level, true);
+
+Since prototype is 'int wait', so directly passing '1' seems more appropriate.
+
+> +	if (ret < 0) {
+> +		if (ret != -EAGAIN)
+> +			mlog_errno(ret);
+> +		goto bail;
+> +	}
+> +	ocfs2_inode_unlock(inode, lock_level);
+> +
+
+Don't see direct IO logic now. Am I missing something?
+
 Thanks,
-Song
+Joseph
+
+> +	ret = filemap_splice_read(in, ppos, pipe, len, flags);
+> +	trace_filemap_splice_read_ret(ret);
+> +bail:
+> +	return ret;
+> +}
+> +
+>  /* Refer generic_file_llseek_unlocked() */
+>  static loff_t ocfs2_file_llseek(struct file *file, loff_t offset, int whence)
+>  {
+> @@ -2744,7 +2781,7 @@ const struct file_operations ocfs2_fops = {
+>  #endif
+>  	.lock		= ocfs2_lock,
+>  	.flock		= ocfs2_flock,
+> -	.splice_read	= generic_file_splice_read,
+> +	.splice_read	= ocfs2_file_splice_read,
+>  	.splice_write	= iter_file_splice_write,
+>  	.fallocate	= ocfs2_fallocate,
+>  	.remap_file_range = ocfs2_remap_file_range,
+> diff --git a/fs/ocfs2/ocfs2_trace.h b/fs/ocfs2/ocfs2_trace.h
+> index dc4bce1649c1..b8c3d1702076 100644
+> --- a/fs/ocfs2/ocfs2_trace.h
+> +++ b/fs/ocfs2/ocfs2_trace.h
+> @@ -1319,6 +1319,8 @@ DEFINE_OCFS2_FILE_OPS(ocfs2_file_splice_write);
+>  
+>  DEFINE_OCFS2_FILE_OPS(ocfs2_file_read_iter);
+>  
+> +DEFINE_OCFS2_FILE_OPS(ocfs2_file_splice_read);
+> +
+>  DEFINE_OCFS2_ULL_ULL_ULL_EVENT(ocfs2_truncate_file);
+>  
+>  DEFINE_OCFS2_ULL_ULL_EVENT(ocfs2_truncate_file_error);
+> @@ -1470,6 +1472,7 @@ TRACE_EVENT(ocfs2_prepare_inode_for_write,
+>  );
+>  
+>  DEFINE_OCFS2_INT_EVENT(generic_file_read_iter_ret);
+> +DEFINE_OCFS2_INT_EVENT(filemap_splice_read_ret);
+>  
+>  /* End of trace events for fs/ocfs2/file.c. */
+>  
