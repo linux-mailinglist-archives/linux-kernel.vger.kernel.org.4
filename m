@@ -2,110 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88BC470B657
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 09:20:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37A6470B661
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 09:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231867AbjEVHUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 03:20:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45398 "EHLO
+        id S232571AbjEVHVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 03:21:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232490AbjEVHTe (ORCPT
+        with ESMTP id S232566AbjEVHVL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 03:19:34 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26A00189;
-        Mon, 22 May 2023 00:17:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1684739877; x=1716275877;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1M6Z1ByBow/bXnOdxqxOjd8jNr1kq0mhhAPQJOGMrTY=;
-  b=nLQQSzAoeEijsP300GK78DBeuth/7bGWhw02/LqaYxBHHIN4aMtzM4RB
-   f9bi1ARDGR8koVjR2wS6Lianw1SIO0ieBJBJLu2NRYHuQWV75j3XiC4XJ
-   hkOZs76k9m4qnNfQVvUa180LEIT0IFRe88ZAad4bvUva2qX1ZiN9tdfNR
-   hHCH9iN/XMherZQ9bIBBzOI6ksGDNulKEQ7TP9lYQl0GyPdWU47IolBfP
-   sWbyzRMVTGWC1LAXMMLAVDkF41xPZciCrtEab367ZGVWMvwkCJTGwvqBC
-   xZPfGDfPAPRf2d7Ei7t9Ms9z34HPlpeH70m9ZszkIyp6cU+ZFskVi8FQe
-   Q==;
-X-IronPort-AV: E=Sophos;i="6.00,183,1681196400"; 
-   d="asc'?scan'208";a="212408777"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 May 2023 00:16:52 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 22 May 2023 00:16:51 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Mon, 22 May 2023 00:16:50 -0700
-Date:   Mon, 22 May 2023 08:16:28 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Romain Perier <romain.perier@gmail.com>
-CC:     Conor Dooley <conor@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Daniel Palmer <daniel@0x0f.com>,
-        Rob Herring <robh+dt@kernel.org>, <linux-rtc@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH 2/3] dt-bindings: rtc: Add Mstar SSD20xD RTC devicetree
- bindings documentation
-Message-ID: <20230522-entitle-pediatric-18da6d47df87@wendy>
-References: <20230517144144.365631-1-romain.perier@gmail.com>
- <20230517144144.365631-3-romain.perier@gmail.com>
- <20230517-undertone-revolver-26b42b888b12@spud>
- <CABgxDoJa_yPmAGt6myOWNjQ6eXQ9YgL1H2HjTjza3oD7j4H=RQ@mail.gmail.com>
+        Mon, 22 May 2023 03:21:11 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F55E1BEC
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 00:19:12 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34M6Zn5D018168;
+        Mon, 22 May 2023 07:17:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=dev+AotqgSteoLIrQNW8siA37KMiVPTiUkuvQFzZ/9U=;
+ b=UPmhw+VeQuHO9oSvdRUxxmIbvPOikbxqWtBFSVNa+EglU2LAE/I6sgdLaXJZDICKxH71
+ /CCl2Wo5fYz0Nd4DeMcpP4ttMJMb83Nc39Dv6mX9DB6hxdCIKP/jyKXr6YKYy4g98t0H
+ CNxm/n+IesM3PfID/wW629EJAxvZ5TpT6DUTflgAkhexDPM82aubwQKxpS5kE6vquv34
+ 8USm8CH2Xiydq1yv6IXycBAJVrUtULC+4IMcIuPrgXnuADeYaplVUVMgYohCb/pkXUIa
+ vcrjoe4fppnRGUdJMeEPeZnSSI9057NjO/Lbl/57dswC5U7GtvLcPMtF2tycpTyqIzmq Gw== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qppa1axp1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 May 2023 07:17:58 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34M7HvLn000517
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 May 2023 07:17:57 GMT
+Received: from [10.214.66.81] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 22 May
+ 2023 00:17:53 -0700
+Message-ID: <b5e6a3b7-aa72-1070-cb96-abf0a816884d@quicinc.com>
+Date:   Mon, 22 May 2023 12:47:50 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="FDNTg1yOeMHAZATM"
-Content-Disposition: inline
-In-Reply-To: <CABgxDoJa_yPmAGt6myOWNjQ6eXQ9YgL1H2HjTjza3oD7j4H=RQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: =?UTF-8?Q?Re=3a_=5bPATCH=5d_sched=3a_deadline=3a_Remove_unnecessary?=
+ =?UTF-8?B?IOKAmE5VTEzigJkgdmFsdWVzIGZyb20gZGxfdGFza19vZmZsaW5lX21pZ3JhdGlv?=
+ =?UTF-8?Q?n?=
+Content-Language: en-US
+To:     Li zeming <zeming@nfschina.com>, <mingo@redhat.com>,
+        <peterz@infradead.org>, <juri.lelli@redhat.com>,
+        <vincent.guittot@linaro.org>, <dietmar.eggemann@arm.com>,
+        <rostedt@goodmis.org>, <bsegall@google.com>, <mgorman@suse.de>,
+        <bristot@redhat.com>, <vschneid@redhat.com>
+CC:     <linux-kernel@vger.kernel.org>
+References: <20230523234101.3439-1-zeming@nfschina.com>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <20230523234101.3439-1-zeming@nfschina.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: P2wUOJHhJrmtJ6_fEIRw2eEVcG85HaSg
+X-Proofpoint-ORIG-GUID: P2wUOJHhJrmtJ6_fEIRw2eEVcG85HaSg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-22_04,2023-05-17_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ lowpriorityscore=0 bulkscore=0 adultscore=0 suspectscore=0
+ priorityscore=1501 spamscore=0 mlxlogscore=999 phishscore=0
+ impostorscore=0 mlxscore=0 malwarescore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305220061
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---FDNTg1yOeMHAZATM
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, May 22, 2023 at 08:47:08AM +0200, Romain Perier wrote:
-> Le mer. 17 mai 2023 =E0 19:44, Conor Dooley <conor@kernel.org> a =E9crit :
 
-> > > +properties:
-> > > +  compatible:
-> > > +    enum:
-> > > +      - mstar,ssd20xd-rtc
-> >
-> > Is this x a wildcard?
-> > In general, having a specific compatible is preferred, and if there are
-> > other models that are compatible we can list several "fall back" to the
-> > most specific one implemented in a driver.
->=20
->=20
-> The first SoC being concerned is SSD202D, so  "mstar,ssd202d-rtc" ?
+On 5/24/2023 5:11 AM, Li zeming wrote:
+> later_rq is assigned first, so it does not need to initialize the
+> assignment.
+> 
+> Signed-off-by: Li zeming <zeming@nfschina.com>
+> ---
+>   kernel/sched/deadline.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+> index 5a9a4b81c972..d823e608c7f0 100644
+> --- a/kernel/sched/deadline.c
+> +++ b/kernel/sched/deadline.c
+> @@ -667,7 +667,7 @@ static struct rq *find_lock_later_rq(struct task_struct *task, struct rq *rq);
+>   
+>   static struct rq *dl_task_offline_migration(struct rq *rq, struct task_struct *p)
+>   {
+> -	struct rq *later_rq = NULL;
+> +	struct rq *later_rq;
+>   	struct dl_bw *dl_b;
+>   
+>   	later_rq = find_lock_later_rq(p, rq);
 
-Sounds good to me, thanks.
+Acked-by: Mukesh Ojha <quic_mojha@quicinc.com>
 
---FDNTg1yOeMHAZATM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGsWzAAKCRB4tDGHoIJi
-0h6mAP44axUOcBRXHlC1XXKiO03fGCdj9szctxcElnu2RTN8KAEAlTlMi7zT2zQ3
-8xTfzu6irOhovIkfauEYfi53Dr34uQY=
-=ZhIz
------END PGP SIGNATURE-----
-
---FDNTg1yOeMHAZATM--
+-- Mukesh
