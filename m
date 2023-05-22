@@ -2,104 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED82870B8B3
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:19:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3185070B8B7
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:21:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232753AbjEVJTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 05:19:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53052 "EHLO
+        id S232745AbjEVJVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 05:21:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjEVJS7 (ORCPT
+        with ESMTP id S229673AbjEVJVQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 05:18:59 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C478B9;
-        Mon, 22 May 2023 02:18:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1684747138; x=1716283138;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=fDtexVohjVYX6dRilxkmMbucr9mn93hRsD+jI1yt23g=;
-  b=vFINzo5mHbImGxXRs9ObpcFpXD7+ZR6m2mkObQH7n+sx9peYE5CMeL/J
-   fImvwlQ6ZK/hWDEgnhY4cnF1Zg6fb/UQggMUdpQPfM/PRndkc4cAjFJcu
-   3jiW/UcQ6jp406BYQVaWUEshkTY8Sxcy6l1uSbpglQU5Fu4bsbetrxnfq
-   bQIgEdkqKcN3F8OIFaDtJC3VGCCXUyWVXWQph2n5UmmC3NDTAI87B1H6t
-   pEt/iVdB4Z9Y2sOG4TbpVoKvNJwqVPbI7EsF8SjqNSpzftpXbnvRKRpjv
-   xM5nXrTfNhSw2sL1+Sj+1V35eelwUMNb5DIe3okT/U8znshr9QFiIpTnc
-   g==;
-X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
-   d="scan'208";a="216609345"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 May 2023 02:18:57 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 22 May 2023 02:18:55 -0700
-Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex03.mchp-main.com
- (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Mon, 22 May 2023 02:18:53 -0700
-Message-ID: <928e87a9-2335-1af3-d4be-8d7eda98ddba@microchip.com>
-Date:   Mon, 22 May 2023 11:18:49 +0200
+        Mon, 22 May 2023 05:21:16 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A70A1A8
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 02:21:15 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f607dc98cdso1849685e9.1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 02:21:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684747274; x=1687339274;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1VacdKeZCjPhD/SpW9R0zd/0SapShlT3F3TXr88hz5s=;
+        b=I+Y1NWovJ0NVRaQo+mdhuzI0Bel68VjKxnDspYW/p+A4HoEFpUEfwtxPUwAOXbVxv3
+         H0k1+JNyPnQ7sT6sx7i1fqc6UyuA+P9gyeezY9upA270OzcXOHzDNqBzjgJNOTYX06DL
+         aA8C0Bp+1oEpF6DGBlOzcwlBXFBvWlwCZPfZ2B6lVgomr7xaegGo3zeFG7dYAYEGzAbN
+         XjNrY2DF7AQSJvzBumCk2/Olr0v/TMqCKX/NvVrP4TG7lnP6U8cWcY0JDIwXRznCKZsy
+         94ATtcfv5G9fV9sXYxEyqaxgQxpKSZZ0ZCd3HGnbVnLSkHOn1Clg29VdHhqtKXwijDWC
+         55dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684747274; x=1687339274;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1VacdKeZCjPhD/SpW9R0zd/0SapShlT3F3TXr88hz5s=;
+        b=JwvJWGK+SGc/hXT4VvxR4O6kYrPx2nADpW7W8yZ9vy7BN5c5A16h8s2e3HtXAzghIs
+         G96NTxFGqNWH8Sgb6x0bXkFmOxaFnlYstD0HyNWI2eCRkXn3OAlMny5yOO0fwfB3Qim1
+         Xvxoq+4er0h6fSAHzGEQyGdtJR/uiBmxOcHmROe6Sj6d0by+U+SfLV/i1aR5f7yn9IgN
+         FIsHVGVAu4GNVZPYe8NHHuF5WWJIOi1i46d0sgi7bmtnKmZnyAj4Dl/k9un0cKykDzP5
+         p88spFU6t7OGRPyJd9xUM7RDp5JUC6wpWWFRK1eqbLhrGxnqNy5IFl6C9Fv0+Rjw7ZRW
+         E+hQ==
+X-Gm-Message-State: AC+VfDyyxL8ktk3AUibsmz7WfFnBB3oaGbNc8wB0GVDdKtjEhTRB5X93
+        MEeTCwlejdd1t0syc1Ho/17+cg==
+X-Google-Smtp-Source: ACHHUZ6xFwRV6290oiBu9zEMu/gtdsqpC8lxQZDtlQEeKNFmqY4beXf6hkZCcpWclRQaO8VLBAaeCA==
+X-Received: by 2002:a1c:7405:0:b0:3f4:2148:e8e5 with SMTP id p5-20020a1c7405000000b003f42148e8e5mr6974812wmc.1.1684747274139;
+        Mon, 22 May 2023 02:21:14 -0700 (PDT)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id f10-20020a5d58ea000000b002fe96f0b3acsm7073614wrd.63.2023.05.22.02.21.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 02:21:13 -0700 (PDT)
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+To:     thierry.reding@gmail.com, Artur Weber <aweber.kernel@gmail.com>
+Cc:     Sam Ravnborg <sam@ravnborg.org>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Nikita Travkin <nikita@trvn.ru>
+In-Reply-To: <20230519170354.29610-1-aweber.kernel@gmail.com>
+References: <20230519170354.29610-1-aweber.kernel@gmail.com>
+Subject: Re: [PATCH v5 0/3] Add Samsung S6D7AA0 panel controller driver
+Message-Id: <168474727309.3803091.17592530014097097014.b4-ty@linaro.org>
+Date:   Mon, 22 May 2023 11:21:13 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 2/3] dt-bindings: pinctrl: at91-pio4: Add push-pull
- support
-Content-Language: en-US
-To:     <Ryan.Wanner@microchip.com>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <alexandre.belloni@bootlin.com>, <claudiu.beznea@microchip.com>,
-        <linus.walleij@linaro.org>, <ludovic.desroches@microchip.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>
-References: <cover.1684313910.git.Ryan.Wanner@microchip.com>
- <048a41d1dcb3da0e845986a73eaac61a54c69269.1684313910.git.Ryan.Wanner@microchip.com>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <048a41d1dcb3da0e845986a73eaac61a54c69269.1684313910.git.Ryan.Wanner@microchip.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 17/05/2023 at 13:54, Ryan.Wanner@microchip.com wrote:
-> From: Ryan Wanner <Ryan.Wanner@microchip.com>
-> 
-> Add generic push-pull support for pio4 driver.
-> 
-> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
+Hi,
 
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-
-> ---
->   .../devicetree/bindings/pinctrl/atmel,at91-pio4-pinctrl.txt    | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
+On Fri, 19 May 2023 19:03:51 +0200, Artur Weber wrote:
+> This patchset adds initial support for Samsung S6D7AA0-based panels.
+> Currently, the following panels are supported:
 > 
-> diff --git a/Documentation/devicetree/bindings/pinctrl/atmel,at91-pio4-pinctrl.txt b/Documentation/devicetree/bindings/pinctrl/atmel,at91-pio4-pinctrl.txt
-> index e2b861ce16d8..774c3c269c40 100644
-> --- a/Documentation/devicetree/bindings/pinctrl/atmel,at91-pio4-pinctrl.txt
-> +++ b/Documentation/devicetree/bindings/pinctrl/atmel,at91-pio4-pinctrl.txt
-> @@ -37,7 +37,8 @@ right representation of the pin.
->   Optional properties:
->   - GENERIC_PINCONFIG: generic pinconfig options to use:
->   	- bias-disable, bias-pull-down, bias-pull-up, drive-open-drain,
-> -	  input-schmitt-enable, input-debounce, output-low, output-high.
-> +	 drive-push-pull input-schmitt-enable, input-debounce, output-low,
-> +	 output-high.
->   	- for microchip,sama7g5-pinctrl only:
->   		- slew-rate: 0 - disabled, 1 - enabled (default)
->   - atmel,drive-strength: 0 or 1 for low drive, 2 for medium drive and 3 for
+>  - S6D7AA0-LSL080AL02 (Samsung Galaxy Tab 3 8.0)
+>  - S6D7AA0-LSL080AL03 (Samsung Galaxy Tab A 8.0 2015)
+>  - S6D7AA0-LTL101AT01 (Samsung Galaxy Tab A 9.7 2015)
+> 
+> [...]
+
+Thanks, Applied to https://anongit.freedesktop.org/git/drm/drm-misc.git (drm-misc-next)
+
+[1/3] dt-bindings: display: panel: Add Samsung S6D7AA0 LCD panel controller
+      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=dda445651475b5a2a2941adcf1420fe3e9521bcd
+[2/3] drm/panel: Add Samsung S6D7AA0 panel controller driver
+      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=6810bb390282bb75801832f31d088236503fee89
+[3/3] MAINTAINERS: Add entry for Samsung S6D7AA0 LCD panel controller driver
+      https://cgit.freedesktop.org/drm/drm-misc/commit/?id=0dd53308f74fcb16aa4e5cb90739b831c4a558de
 
 -- 
-Nicolas Ferre
+Neil
 
