@@ -2,112 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD6070CD7A
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 00:05:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D445270CD7B
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 00:06:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234557AbjEVWFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 18:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58130 "EHLO
+        id S234547AbjEVWGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 18:06:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234547AbjEVWFQ (ORCPT
+        with ESMTP id S231418AbjEVWGJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 18:05:16 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656E4FE
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 15:05:12 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1684793109;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wpJPjBbO36YZsQB1wleZ2Bxu2UdyRVdF2s/GAkF1LgA=;
-        b=f5uM/5MIW0ZkXJ9BPDjgcMNARkDHM2QetrKjkOB1cVAqL7vbg19E6CkXwdoHwQHtTnmHuf
-        or3nmZ8kdIbB9QKEqw5QhRqrNdvP1ToeDz/z25//8J4uppaLJf0Lh8q8Li9RLRTvOXKhHV
-        8Punl3e6gqtDEAQQlzbGvGV5iptxcJtzq2wO5AqA0FZiqdov0RL51r1XTAFqPbEwOwJYKN
-        3cavbhBQJP8AxMSA9umnVFXipxHSFpITBZgPOUXTfOwG4hyz7o+UXXKM5rzt6Q79mYtVOO
-        AfSsGOGmmxcy5uEtOma5DHqP5wmaQMwFQtin5g4wPd18/yyfkBFC6JaM6q15ew==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1684793109;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wpJPjBbO36YZsQB1wleZ2Bxu2UdyRVdF2s/GAkF1LgA=;
-        b=oqtmX16LwEasfr+qYEpMoInQ/KL5S5cOZa9a7pH56YdtXnXfrgw5DUgsCI/DNjnyTm+6di
-        xkLcVzBgYHGZRaDQ==
-To:     Song Liu <song@kernel.org>, Mike Rapoport <rppt@kernel.org>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
+        Mon, 22 May 2023 18:06:09 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9612BAF
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 15:06:07 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id af79cd13be357-75afa109e60so120026885a.2
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 15:06:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684793166; x=1687385166;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wKNb0wzEdbd8UkBqpMJLkx1dAS9GDnLkmyS23eqNEjY=;
+        b=IPYHiZK+Ap1esJr9QKsLHUqIOnEif1TZgRCX90qs8jXxZWnlRGsK4iiavFAR+Tmdkf
+         /pPDx9DNxnmlt7cvGSMWMht2Gi1YLWQ8H8QeOxye6PzuTq1nh+IobwDSUpnFXRILfaLU
+         ST15vuhdWIp2NXQBJtK1HBED0YZGYxsrvmDH0kVQN1WVYOiRu7SEKStd5jxZCeLM+0ZC
+         i9PEoaJ6EDNw9JHByeccI2c7DSCdOykdtmOR16OyK4RPZ+kAkqyEsDZjJ2i6xGR/Y/Yg
+         TCpujb8xRuVHXbOPafN/OddRRDInjUf4aalDBtkAy3VwIKLZgw3e5cdWgexQrWOLmaqE
+         NDSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684793166; x=1687385166;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wKNb0wzEdbd8UkBqpMJLkx1dAS9GDnLkmyS23eqNEjY=;
+        b=L/Q3ILy4EoppSnX73ySIb21cvUNQGL2WchYqYRCA9RQeOLQpfHH43vOyHcC7Fvdh0F
+         HGpmaRghYHoXbwa0ajmvFIK/tXAN5l3sfOwMeZuhSAGPlq7SKM0xvBDQsyfW6iwnMhJR
+         em30ymSiJWShqcLgTKdxYqthut/F6lTgl0Q1qVMcVofcTeNId+LiafAM+1wOrG6giO7c
+         ePdyquAsTlTEo9Ugai1JCajcR70yzlLZ+646UHuwTUJGeuwKxINSt9/b8di9QnYY954S
+         3c/ZZmW1NwRxnozjSRhrK3HK5ZHn4yeQehP78f0sa/VxMTX2/bze5rgOCQgR4qB51cXf
+         EN9w==
+X-Gm-Message-State: AC+VfDwr4PKeCBEcj7lp8VI81tplXAGEj2ogXvsP1ndouiegaHQ9qfMR
+        9w3puMYFdbXj4XI3wlCKOOM=
+X-Google-Smtp-Source: ACHHUZ7uqO1ZWd5ggMciq8vIN1bb9FwLO7PLRpKvW8PEWbnnwGigQeriA85RWF4kbhjMBz1zA/OGqg==
+X-Received: by 2002:a05:6214:2a47:b0:624:3af6:21d2 with SMTP id jf7-20020a0562142a4700b006243af621d2mr15370822qvb.13.1684793166657;
+        Mon, 22 May 2023 15:06:06 -0700 (PDT)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id cs6-20020ad44c46000000b006238f82cde4sm2251807qvb.108.2023.05.22.15.06.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 15:06:06 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 73C5627C0054;
+        Mon, 22 May 2023 18:06:05 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Mon, 22 May 2023 18:06:05 -0400
+X-ME-Sender: <xms:TOdrZN5pgSug2rWC9GG7Ehd4-l9EA-BFp6s-w8o-GFQ4Ic1SS3jh6Q>
+    <xme:TOdrZK6j1S-wC3tOBONfmb-BH8uj4_X2yX79eFiXGArWk5tXgSw2_PE96YQmuPYsi
+    aWuiRYFWpIBUM8-9w>
+X-ME-Received: <xmr:TOdrZEddzQ4ORkiFwMY6Mdbkb0EYR6mSAsQcPS4JzhDlmm3xhQAENVDXWSM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejvddgtdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtrodttddtvdenucfhrhhomhepuehoqhhu
+    nhcuhfgvnhhguceosghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmqeenucggtffrrg
+    htthgvrhhnpeeitdefvefhteeklefgtefhgeelkeefffelvdevhfehueektdevhfettddv
+    teevvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    gsohhquhhnodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdeiledvgeehtdei
+    gedqudejjeekheehhedvqdgsohhquhhnrdhfvghngheppehgmhgrihhlrdgtohhmsehfih
+    igmhgvrdhnrghmvg
+X-ME-Proxy: <xmx:TOdrZGLtlaPskhMfxu_pfPdYZR2aFpbQexfbKUOfa5l-Y6B5iwv0Dg>
+    <xmx:TOdrZBLjt2i7GBRavU3VaOFw3cOZ3qlRIMJ57XF9UtLEUN2d8d-YMw>
+    <xmx:TOdrZPx2zD3ou4bAj1cl9H1zvVAzCEqxJt_byo2zlYUBXYKAor1aXg>
+    <xmx:TedrZI8lunitKRPgb2dUDsSulmay-Qnjn_KEEedX9h-p35pLfILp9g>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 22 May 2023 18:06:04 -0400 (EDT)
+Date:   Mon, 22 May 2023 15:05:25 -0700
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     linux-kernel@vger.kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>, linux-kernel@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [RFC PATCH 1/5] mm: intorduce __GFP_UNMAPPED and unmapped_alloc()
-In-Reply-To: <CAPhsuW6xsHupB2EGGrgEdd+13ORSvPAymRgnrAfxG2U0Jfo4vQ@mail.gmail.com>
-References: <20230308094106.227365-1-rppt@kernel.org>
- <20230308094106.227365-2-rppt@kernel.org>
- <ZGWdHC3Jo7tFUC59@moria.home.lan> <20230518152354.GD4967@kernel.org>
- <CAPhsuW541pcsMKYah=2U8mUs8is3jAiNKC8Erte=RkAUGFO9EA@mail.gmail.com>
- <ZGZW0v3nRShO7r+Z@moria.home.lan>
- <CAPhsuW5BbbxinaH2aO=2Wa0aSQ3pkNwvnrgJv7fG4QcPr_j7+Q@mail.gmail.com>
- <ZGZfLHA8vuRJwa0f@moria.home.lan> <20230519082945.GE4967@kernel.org>
- <CAPhsuW6xsHupB2EGGrgEdd+13ORSvPAymRgnrAfxG2U0Jfo4vQ@mail.gmail.com>
-Date:   Tue, 23 May 2023 00:05:08 +0200
-Message-ID: <878rdgvx7v.ffs@tglx>
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Brian Foster <bfoster@redhat.com>,
+        Dave Chinner <dchinner@redhat.com>
+Subject: Re: [PATCH v2] locking: SIX locks (shared/intent/exclusive)
+Message-ID: <ZGvnJZYQfAmgdsqr@boqun-archlinux>
+References: <20230522171314.1953699-1-kent.overstreet@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230522171314.1953699-1-kent.overstreet@linux.dev>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19 2023 at 08:42, Song Liu wrote:
-> On Fri, May 19, 2023 at 1:30=E2=80=AFAM Mike Rapoport <rppt@kernel.org> w=
-rote:
->> What I was thinking is that we can replace module_alloc() calls in your
->> allocator with something based on my unmapped_alloc(). If we make the pa=
-rt
->> that refills the cache also take care of creating the mapping in the
->> module address space, that should cover everything.
->
-> Here are what I found as I work more on the code:
->
-> 1. It takes quite some work to create a clean interface and make sure
->     all the users of module_alloc can use the new allocator on all archs.
->     (archs with text poke need to work with ROX memory from the
->     allocator; archs without text poke need to have a clean fall back
->     mechanism, etc.). Most of this work is independent of the actual
->     allocator, so we can do this part and plug in whatever allocator we
->     want (buddy+slab or vmap-based or any other solutions).
->
-> 2. vmap_area based solution will work. And it will be one solution for
->     both < PAGE_SIZE and > PAGE_SIZE allocations. Given
->     module_alloc is not in any hot path (AFAIK), I don't see any
->     practical issues with this solution. It will be a little tricky to pl=
-ace
->     and name the code, as it uses vmalloc logic, but it is technically a
->     module allocator.
->
-> I will prioritize building the interface, and migrating users to it. If we
-> do this part right, changing the underlying allocator should be
-> straightforward.
+On Mon, May 22, 2023 at 01:13:14PM -0400, Kent Overstreet wrote:
+[...]
+> +/*
+> + * bits 0-26		reader count
+> + * bits 26-27		write_locking (a thread is trying to get a write lock,
+> + *			but does not have one yet)
+> + * bits 27-28		held for intent
+> + * bits 28-29		nospin - optimistic spinning has timed out
 
-Correct, that's the only workable approach.
+Still reading to understand the design (and try to find where are the
+first five locks ;-)), but this comment seems to be wrong, because..
 
-Once you have solved #1 the mechanism of the underlying allocator (#2)
-is pretty much exchangeable.
+> + * bits 29-30		has read waiters
+> + * bits 30-31		has intent waiters
+> + * bits 31-32		has write waiters
+> + */
+> +
+> +#define SIX_LOCK_HELD_read_OFFSET	0
+> +#define SIX_LOCK_HELD_read		~(~0U << 26)
+> +#define SIX_LOCK_HELD_intent		(1U << 26)
+> +#define SIX_LOCK_HELD_write		(1U << 27)
+> +#define SIX_LOCK_WAITING_read		(1U << (28 + SIX_LOCK_read))
+> +#define SIX_LOCK_WAITING_intent		(1U << (28 + SIX_LOCK_intent))
+> +#define SIX_LOCK_WAITING_write		(1U << (28 + SIX_LOCK_write))
+> +#define SIX_LOCK_NOSPIN			(1U << 31)
 
-Any attempt to solve #2 before #1 is doomed by definition.
+^ NOSPIN is the 31st bit.
 
-Thanks,
-
-        tglx
+Regards,
+Boqun
