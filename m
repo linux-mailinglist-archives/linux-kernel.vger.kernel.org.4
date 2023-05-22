@@ -2,94 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C673870C30E
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 18:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 637B170C30F
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 18:12:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234474AbjEVQMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 12:12:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56650 "EHLO
+        id S234485AbjEVQMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 12:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229486AbjEVQMI (ORCPT
+        with ESMTP id S233770AbjEVQMT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 12:12:08 -0400
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076A510D;
-        Mon, 22 May 2023 09:12:06 -0700 (PDT)
-Received: by mail-ua1-x92e.google.com with SMTP id a1e0cc1a2514c-784f7f7deddso1096457241.3;
-        Mon, 22 May 2023 09:12:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684771925; x=1687363925;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N1Kq2pTQzRPtKnP1nHWXlWj/vVcufb0P5WbmZ2JJgU4=;
-        b=gR3o4xstXYZQqMVIrRTrV5ICd6gg6cxe8qaElDJZADmQNfQiVs0rXaNapNPzxI0D69
-         GxSzwwl8DO9b23+3Pn22f2smLn7GKE4wPKWzyZeCkSjFfC9kjw/l7b0sI/2RMdwTOkPN
-         eciOs9jzsvwsCaYXDaFayjCwDFnEFSxh8PB8BrNt7X9+7zdAofqzrDKMeOiblcDHmZ9J
-         3LE+sGrrCAXJSm8dvwgk+Ji1qLyPSHv/jRuCvCuS2GRVhjNmR3QT6DN805SdhPmZwSYB
-         nzH26lAePUj6vQF4jWIRg0AhxyF7wsElxw2LvO7oloZMe7YzcArElfvcBm1fHu6irR5i
-         NpMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684771925; x=1687363925;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N1Kq2pTQzRPtKnP1nHWXlWj/vVcufb0P5WbmZ2JJgU4=;
-        b=Bkbug7okkcejyRL/YmBLikTyP+Z7sqECNDQuxfq9nezvum2mrMc5wSYriNC9V7Bj+m
-         8V8jJvjCmj13xVm70nE0t7kR6Iaj5JwiHaFW5OF54Ia2vwL8CmTG/QDZn4ycyAN9nBXh
-         hRPXmwox5zkuRRbTQLSnuhDGGdkjkV2qN5T//6GHoqga9cnB+A9/3msR9fS18lvSbKQq
-         MLRrjZUm06kdP5lwlsGzg2LJYQjr/hqkUtEIhdBFnMh8tTQlnEv6ntpg7GEyjDjknlLE
-         M/Hd37VbbDeWH7Sa1+cWG6+mzpoFVtcb+2ju00q8as5dRenldb9omogqDHS80sahE9h4
-         Nazw==
-X-Gm-Message-State: AC+VfDytiAstR3AVXFjTVcdyOTp3DFvxi4oWn7GIFJovqgkHf8Psth+D
-        WYEgN1guu8OopxAWBlYYja5u6GKYYtCZMpOku1I=
-X-Google-Smtp-Source: ACHHUZ4TT4FQFXoEJ7KP1GN7aOF/n6thjTDb3gwc8Ze2Z+V3ftIPBbSC0drnY7ett+wQrvhSder9nkPprGcvvfFYSJw=
-X-Received: by 2002:a67:e294:0:b0:42c:922e:65dd with SMTP id
- g20-20020a67e294000000b0042c922e65ddmr2718260vsf.23.1684771925014; Mon, 22
- May 2023 09:12:05 -0700 (PDT)
+        Mon, 22 May 2023 12:12:19 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 978D7B6
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 09:12:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=3Kof4Ubyf4S7Z31yQZ2w4xYy+/GOvsdXgqUlhiAJQaw=; b=q4+StTJbdXWKDwrNRlP/N5Kss5
+        dQHUNe9SdQL+zR+DuM1TeJh/aEr+MJHta6JbLORfgkaiP8MWcI4zqYRT2LmCop/Kl6n58S4b7oiHc
+        q+td9BM+L2mn6ez/DeF8GmxqaslCzI7C6+GfQmpUnQ+t/ojoMp7FDGQzZNlx6E02t7Rv3AIDU6NCc
+        SPlSkxu9C8b0xgnurLe1VjuQXBUnn+3gMzDMF28ic5yCPA0+HaXag3/shZMOwOT9+o0JDvlzrO72w
+        N6rzWKkOyYnzYaeQ+LuKU0unzoxYLMcZCs23FrxNY6eU8XHR3T794GFV9TRQ9CU7zxbGmY/d1ILTA
+        WbMI2rHw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1q188f-0024R2-10;
+        Mon, 22 May 2023 16:12:01 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 297B9300338;
+        Mon, 22 May 2023 18:11:59 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 01C0A243487CE; Mon, 22 May 2023 18:11:58 +0200 (CEST)
+Date:   Mon, 22 May 2023 18:11:58 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, paulmck@kernel.org,
+        rui.zhang@intel.com, x86@kernel.org, linux-kernel@vger.kernel.org,
+        bin.gao@intel.com
+Subject: Re: [PATCH RFC] x86/tsc: Make recalibration default on for
+ TSC_KNOWN_FREQ cases
+Message-ID: <20230522161158.GA3330346@hirez.programming.kicks-ass.net>
+References: <20230522033018.1276836-1-feng.tang@intel.com>
+ <87h6s4ye9b.ffs@tglx>
+ <ZGssENXFKmOk/zL7@feng-clx>
+ <87zg5wwppa.ffs@tglx>
+ <ZGtnUQJy+1Nrazhy@feng-clx>
+ <87pm6swi7z.ffs@tglx>
+ <ZGuIL6tyzzZP3kyR@feng-clx>
 MIME-Version: 1.0
-References: <20230522153020.32422-1-ptyadav@amazon.de> <20230522154554.44836-1-kuniyu@amazon.com>
-In-Reply-To: <20230522154554.44836-1-kuniyu@amazon.com>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Mon, 22 May 2023 12:11:28 -0400
-Message-ID: <CAF=yD-KWV-Zc4O4OfztBEHwGgEfJsr-usut3ki=nA5mX8sfRpA@mail.gmail.com>
-Subject: Re: [PATCH net] net: fix skb leak in __skb_tstamp_tx()
-To:     Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc:     ptyadav@amazon.de, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, nmanthey@amazon.de, pabeni@redhat.com,
-        willemb@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZGuIL6tyzzZP3kyR@feng-clx>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 11:46=E2=80=AFAM Kuniyuki Iwashima <kuniyu@amazon.c=
-om> wrote:
->
-> From: Pratyush Yadav <ptyadav@amazon.de>
-> Date: Mon, 22 May 2023 17:30:20 +0200
-> > Commit 50749f2dd685 ("tcp/udp: Fix memleaks of sk and zerocopy skbs wit=
-h
-> > TX timestamp.") added a call to skb_orphan_frags_rx() to fix leaks with
-> > zerocopy skbs. But it ended up adding a leak of its own. When
-> > skb_orphan_frags_rx() fails, the function just returns, leaking the skb
-> > it just cloned. Free it before returning.
-> >
-> > This bug was discovered and resolved using Coverity Static Analysis
-> > Security Testing (SAST) by Synopsys, Inc.
-> >
-> > Fixes: 50749f2dd685 ("tcp/udp: Fix memleaks of sk and zerocopy skbs wit=
-h TX timestamp.")
-> > Signed-off-by: Pratyush Yadav <ptyadav@amazon.de>
->
-> Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+On Mon, May 22, 2023 at 11:20:15PM +0800, Feng Tang wrote:
 
-Reviewed-by: Willem de Bruijn <willemb@google.com>
+> And I don't understand the commit log: "On Intel GOLDMONT Atom SoC
+> TSC is the only reliable clocksource. We mark TSC reliable to avoid
+> watchdog on it."
+> 
+> Clearly the Denventon I found today has both HPET and ACPI_PM timer:
+> 
+>   [root@dnv0 ~]# grep .  /sys/devices/system/clocksource/clocksource0/*
+>   /sys/devices/system/clocksource/clocksource0/available_clocksource:tsc hpet acpi_pm
+>   /sys/devices/system/clocksource/clocksource0/current_clocksource:tsc
+>   
+> The lscpu info is:
+>   
+>   Architecture:                    x86_64
+>   CPU op-mode(s):                  32-bit, 64-bit
+>   Address sizes:                   39 bits physical, 48 bits virtual
+>   Byte Order:                      Little Endian
+>   CPU(s):                          12
+>   On-line CPU(s) list:             0-11
+>   Vendor ID:                       GenuineIntel
+>   BIOS Vendor ID:                  Intel(R) Corporation
+>   Model name:                      Intel(R) Atom(TM) CPU C3850 @ 2.10GHz
+>   BIOS Model name:                 Intel(R) Atom(TM) CPU C3850 @ 2.10GHz  CPU @ 2.1GHz
+>   BIOS CPU family:                 43
+>   CPU family:                      6
+>   Model:                           95
+>   Thread(s) per core:              1
+>   Core(s) per socket:              12
+>   Socket(s):                       1
+>   Stepping:                        1
+> 
+> Maybe this cpu model (0x5F) has been used by some type of platforms
+> which has met the false alarm watchdog issue.
+
+It has them; but they are not *reliable*.
+
+
+
