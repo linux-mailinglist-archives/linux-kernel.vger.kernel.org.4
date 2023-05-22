@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBA1770CADD
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 22:25:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89BFE70CAE5
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 22:25:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233890AbjEVUYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 16:24:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34742 "EHLO
+        id S234142AbjEVUZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 16:25:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbjEVUYp (ORCPT
+        with ESMTP id S231340AbjEVUYq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 16:24:45 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0663BAA;
+        Mon, 22 May 2023 16:24:46 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F11E4B5;
         Mon, 22 May 2023 13:24:44 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-510eb980ce2so78551a12.2;
-        Mon, 22 May 2023 13:24:43 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-50db91640d3so96604a12.0;
+        Mon, 22 May 2023 13:24:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20221208; t=1684787082; x=1687379082;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ujd+z3hoj5H8e61WA/1gzrYNE6nhrLEh77YJmVujUS4=;
-        b=rxc5Yg0TTi8HrrOvLx7ukiU/0uNnoYlhDLNp6HK8K1P2LcTsdzObcOj4p75ffeRFu8
-         5Tl3fHeaWbMAKEyVYPFadpufUEHZbKhwaZR2JpSsCAQ0OI+P/POXy5lHJwW1SmhznOn2
-         n0baJlnwWn4bShf0Mt2x/1uAJmNl4r044c8jYQpWqsvfPPcZzMtjVpVfO/q8jHCNnxg6
-         1BUgSphwbsr7mQkWJhLXD9zF19Hb8+isrqHarB3lHR8IHkMSSIi6KKOhUMBDDED6arF1
-         D5fZ4VP5Jr6csBVjZPlSzy9tswOMIhIMuT4XQCOHRk43Foh5tPdA37oV7huaLTcEZtNF
-         ltHA==
+        d=googlemail.com; s=20221208; t=1684787083; x=1687379083;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=btQwAZ+OJpomjBfsYfWI/t2/La/UN3uRKYWtIk0Ij7U=;
+        b=Sjo5murqx0vXxRPU+nMVF98HCit8ZMTpMCIDWKn/+YqroZuZ1opR8rCAxlXFukTk6k
+         YCwI+niFc4BfGFf6+fbySPuseCjplNobyxSaihB4fnyNAVo74+wAijobPb4yo58w3/Xo
+         WTGrvzV052DqQ9bNLBQ+ubh+NO4kkj15t+VwkGEwudYtM7qhJDPIMmQo47qKx7Cteq8a
+         c4K9EaOi8YmuxDj+CuNO5APV3k4W1p/SNJPTzrwJbzP864gVpHJOWCL6cd2UxZ6xjN1m
+         iUH2mT05P+atqROJ0UZdLjB0Nka+3NMr9Vk/mOwa69gizUpFj36xL8QmUBzYmU+6eJvN
+         N1yA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684787082; x=1687379082;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ujd+z3hoj5H8e61WA/1gzrYNE6nhrLEh77YJmVujUS4=;
-        b=l4Wepyg1aA6sGTwJzXnzLwVZS3ukN5BeAFbt6kkiU1B3rYTtpblhLVriFU7JxXY4Rx
-         our7jof2HPFsdxtscRWd6/c99XKUajbrpNsunGi9TUH3gqju1Rf12ICvl/AHtr3Z02g3
-         D6y/4nUYAjU0bbH9MKjvz9i4Ex+T/XXwp/p1YQ7658MwwJb2OMu/7HDbbp12Yc9/hYGs
-         yAaGu8QLj1l1oLtuCfZlJBwlsYm2JafrYajdxoVIxCutRmHVxLLT59Gg40F9CRkUShN6
-         GeJpmAuwm+7k5khKs7HG/U18cgz20MIm8eSq2QsCY+MVkaSSRgErTsSaf4GLoHdG3qZe
-         UGcg==
-X-Gm-Message-State: AC+VfDxyElY/+3GlcCy0MFkb5/Ownj/k3rVNw7t3tUsC9I3EhME4S9DV
-        tshzw/mLbx7P3WnvuGGtrS7vgmRDT1Y=
-X-Google-Smtp-Source: ACHHUZ6K7+lIiZ5wytJHp+G+6GaQDT6hZ+QuuOlm7sjQTsIL6roJgW17qy2PNAICN/gWiNQjB9J5iw==
-X-Received: by 2002:a05:6402:b0f:b0:50b:f8f7:f8d8 with SMTP id bm15-20020a0564020b0f00b0050bf8f7f8d8mr9021503edb.36.1684787082156;
-        Mon, 22 May 2023 13:24:42 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684787083; x=1687379083;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=btQwAZ+OJpomjBfsYfWI/t2/La/UN3uRKYWtIk0Ij7U=;
+        b=KhQJwmTTVgmS/kSinBx+35ShjVVqZv5B4bYySeB/kqFLz4gjIJQAkPPuFSPH6ZduqZ
+         17h7OmPAAgehtCpjC5q3vy9bSZkj7QMfEI/3CiCAme/MgyxQn3Vu3xTYlevcgvp19EHd
+         IntmsRs2TlEOiPv2iZklzxXhuci9cMVri2h5xg06y0k0rS58W6mhz7FfB7bZu/ksxnTr
+         InOztMOmW5Ubcoq3fPlChOnn9VQDf+qv5+QtwHr4/FL2IGMfynZdxLoYl2f45bQOJ6ZU
+         EUt1r8cQTLVyvq9z4Zhu327vOTGuRB/P9VYVG7c7EVgsO0ytvmf4mHWr3WvlVRTe1b/a
+         tH5A==
+X-Gm-Message-State: AC+VfDyjprPOkjtg1rOL0Z8tHJuDisfuj7bxm51TIlUx8dAPDuzIYtvt
+        xR46Wv1+7/Dk1+c+MhpagtPKyArFns4=
+X-Google-Smtp-Source: ACHHUZ6Hl7NIZoibCh4D+lq2NzCu2+E+7XpBh6Ft195lztIW8pyuwH+yUlhBl0OMKIhEWp3cVN3Dtg==
+X-Received: by 2002:aa7:d353:0:b0:50b:d819:4fd2 with SMTP id m19-20020aa7d353000000b0050bd8194fd2mr8421413edr.17.1684787083004;
+        Mon, 22 May 2023 13:24:43 -0700 (PDT)
 Received: from localhost.localdomain (dynamic-2a01-0c23-c459-f400-0000-0000-0000-0e63.c23.pool.telefonica.de. [2a01:c23:c459:f400::e63])
-        by smtp.googlemail.com with ESMTPSA id v2-20020a056402184200b0050d56dffc93sm3265031edy.12.2023.05.22.13.24.41
+        by smtp.googlemail.com with ESMTPSA id v2-20020a056402184200b0050d56dffc93sm3265031edy.12.2023.05.22.13.24.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 13:24:41 -0700 (PDT)
+        Mon, 22 May 2023 13:24:42 -0700 (PDT)
 From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 To:     linux-wireless@vger.kernel.org
 Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -57,10 +58,12 @@ Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
         Ping-Ke Shih <pkshih@realtek.com>, jernej.skrabec@gmail.com,
         Larry Finger <Larry.Finger@lwfinger.net>,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: [PATCH wireless-next v2 0/4] wifi: rtw88: Add support for the RTL8723DS SDIO wifi chip
-Date:   Mon, 22 May 2023 22:24:21 +0200
-Message-Id: <20230522202425.1827005-1-martin.blumenstingl@googlemail.com>
+Subject: [PATCH wireless-next v2 1/4] wifi: rtw88: sdio: Check the HISR RX_REQUEST bit in rtw_sdio_rx_isr()
+Date:   Mon, 22 May 2023 22:24:22 +0200
+Message-Id: <20230522202425.1827005-2-martin.blumenstingl@googlemail.com>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230522202425.1827005-1-martin.blumenstingl@googlemail.com>
+References: <20230522202425.1827005-1-martin.blumenstingl@googlemail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -73,68 +76,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series adds support for the RTL823DS SDIO wifi chip.
-It builds on the SDIO support which was recently merged into the rtw88
-driver.
+rtw_sdio_rx_isr() is responsible for receiving data from the wifi chip
+and is called from the SDIO interrupt handler when the interrupt status
+register (HISR) has the RX_REQUEST bit set. After the first batch of
+data has been processed by the driver the wifi chip may have more data
+ready to be read, which is managed by a loop in rtw_sdio_rx_isr().
 
-With the initial rtw88 SDIO support code the aim was to support these
-older (802.11n) chips as well but we didn't have any way to test that.
-Overall we spotted all corner cases in the vendor driver except one:
-On these older chips REG_SDIO_RX0_REQ_LEN should only be read when
-REG_SDIO_HISR has the REG_SDIO_HISR_RX_REQUEST bit set. Patch 1 adds
-support for that.
+It turns out that there are cases where the RX buffer length (from the
+REG_SDIO_RX0_REQ_LEN register) does not match the data we receive. The
+following two cases were observed with a RTL8723DS card:
+- RX length is smaller than the total packet length including overhead
+  and actual data bytes (whose length is part of the buffer we read from
+  the wifi chip and is stored in rtw_rx_pkt_stat.pkt_len). This can
+  result in errors like:
+    skbuff: skb_over_panic: text:ffff8000011924ac len:3341 put:3341
+  (one case observed was: RX buffer length = 1536 bytes but
+   rtw_rx_pkt_stat.pkt_len = 1546 bytes, this is not valid as it means
+   we need to read beyond the end of the buffer)
+- RX length looks valid but rtw_rx_pkt_stat.pkt_len is zero
 
-RTL8723DS comes in two variant and each of them has their own SDIO ID:
-- 0xd723 can connect two antennas. The WiFi part is still 1x1 so the
-  second antenna can be dedicated to Bluetooth
-- 0xd724 can only connect one antenna so it's shared between WiFi and
-  Bluetooth
-Thanks to Ping-Ke for these insights!
+Check if the RX_REQUEST is set in the HISR register for each iteration
+inside rtw_sdio_rx_isr(). This mimics what the RTL8723DS vendor driver
+does and makes the driver only read more data if the RX_REQUEST bit is
+set (which seems to be a way for the card's hardware or firmware to
+tell the host that data is ready to be processed).
 
-This series adds the missing SDIO ID and renames the existing 0xd723
-SDIO ID (which we previously added) with patch 3. The rest is straight
-forward: patch 2 adds support for parsing the eFuse and patch 4 wires
-everything together by creating a driver for the RTL8723DS.
+For RTW_WCPU_11AC chips this check is not needed. The RTL8822BS vendor
+driver for example states that this check is unnecessary (but still uses
+it) and the RTL8822CS drops this check entirely.
 
-In my own tests on a MangoPi MQ-Quad I get the following results in
-iperf3 (with the device being better placed than my RTL8822CS):
-- RX: 48 Mbit/s
-- TX: 33 Mbit/s
-Also Larry Finger reports [0] that he has a user (with the rtw88
-driver changes backported to support older kernels) that has
-successfully tested RTL8723DS support.
-
-
-Changes since v1 at [1]:
-- rebased on top of 6.4-rc3 which comes with commit cb0ddaaa5db0
-  ("wifi: rtw88: sdio: Always use two consecutive bytes for word
-    operations")
-- added braces to the new if condition in patch #1 as suggested by
-  Ping-Ke (no functional changes but it makes that code block with
-  the long comment easier to read/understand)
-- collected Ping-Ke's Reviewed-by (thank you!)
+Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
+Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+---
+Changes since v1:
+- added Ping-Ke's Reviewed-by (thank you!)
 
 
-[0] https://lore.kernel.org/linux-wireless/88e0c4a3-eec7-e44d-6f95-6f2e7f7cbbb5@lwfinger.net/
-[1] https://lore.kernel.org/linux-wireless/20230518161749.1311949-1-martin.blumenstingl@googlemail.com/
+ drivers/net/wireless/realtek/rtw88/sdio.c | 24 ++++++++++++++++++++---
+ 1 file changed, 21 insertions(+), 3 deletions(-)
 
-
-Martin Blumenstingl (4):
-  wifi: rtw88: sdio: Check the HISR RX_REQUEST bit in rtw_sdio_rx_isr()
-  wifi: rtw88: rtw8723d: Implement RTL8723DS (SDIO) efuse parsing
-  mmc: sdio: Add/rename SDIO ID of the RTL8723DS SDIO wifi cards
-  wifi: rtw88: Add support for the SDIO based RTL8723DS chipset
-
- drivers/net/wireless/realtek/rtw88/Kconfig    | 11 +++++
- drivers/net/wireless/realtek/rtw88/Makefile   |  3 ++
- drivers/net/wireless/realtek/rtw88/rtw8723d.c |  9 ++++
- drivers/net/wireless/realtek/rtw88/rtw8723d.h |  6 +++
- .../net/wireless/realtek/rtw88/rtw8723ds.c    | 41 +++++++++++++++++++
- drivers/net/wireless/realtek/rtw88/sdio.c     | 24 +++++++++--
- include/linux/mmc/sdio_ids.h                  |  3 +-
- 7 files changed, 93 insertions(+), 4 deletions(-)
- create mode 100644 drivers/net/wireless/realtek/rtw88/rtw8723ds.c
-
+diff --git a/drivers/net/wireless/realtek/rtw88/sdio.c b/drivers/net/wireless/realtek/rtw88/sdio.c
+index 06fce7c3adda..2c1fb2dabd40 100644
+--- a/drivers/net/wireless/realtek/rtw88/sdio.c
++++ b/drivers/net/wireless/realtek/rtw88/sdio.c
+@@ -998,9 +998,9 @@ static void rtw_sdio_rxfifo_recv(struct rtw_dev *rtwdev, u32 rx_len)
+ 
+ static void rtw_sdio_rx_isr(struct rtw_dev *rtwdev)
+ {
+-	u32 rx_len, total_rx_bytes = 0;
++	u32 rx_len, hisr, total_rx_bytes = 0;
+ 
+-	while (total_rx_bytes < SZ_64K) {
++	do {
+ 		if (rtw_chip_wcpu_11n(rtwdev))
+ 			rx_len = rtw_read16(rtwdev, REG_SDIO_RX0_REQ_LEN);
+ 		else
+@@ -1012,7 +1012,25 @@ static void rtw_sdio_rx_isr(struct rtw_dev *rtwdev)
+ 		rtw_sdio_rxfifo_recv(rtwdev, rx_len);
+ 
+ 		total_rx_bytes += rx_len;
+-	}
++
++		if (rtw_chip_wcpu_11n(rtwdev)) {
++			/* Stop if no more RX requests are pending, even if
++			 * rx_len could be greater than zero in the next
++			 * iteration. This is needed because the RX buffer may
++			 * already contain data while either HW or FW are not
++			 * done filling that buffer yet. Still reading the
++			 * buffer can result in packets where
++			 * rtw_rx_pkt_stat.pkt_len is zero or points beyond the
++			 * end of the buffer.
++			 */
++			hisr = rtw_read32(rtwdev, REG_SDIO_HISR);
++		} else {
++			/* RTW_WCPU_11AC chips have improved hardware or
++			 * firmware and can use rx_len unconditionally.
++			 */
++			hisr = REG_SDIO_HISR_RX_REQUEST;
++		}
++	} while (total_rx_bytes < SZ_64K && hisr & REG_SDIO_HISR_RX_REQUEST);
+ }
+ 
+ static void rtw_sdio_handle_interrupt(struct sdio_func *sdio_func)
 -- 
 2.40.1
 
