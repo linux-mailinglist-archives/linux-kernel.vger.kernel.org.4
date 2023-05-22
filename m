@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C71170B548
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 08:46:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E5F470B549
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 08:46:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232043AbjEVGqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 02:46:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51662 "EHLO
+        id S232003AbjEVGqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 02:46:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232040AbjEVGpo (ORCPT
+        with ESMTP id S232046AbjEVGpp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 02:45:44 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E431170E
+        Mon, 22 May 2023 02:45:45 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB9A1713
         for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 23:44:34 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-561d565cb0aso58364827b3.3
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba81b37d9d2so10504067276.3
         for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 23:44:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684737850; x=1687329850;
+        d=google.com; s=20221208; t=1684737853; x=1687329853;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=7bz/V8CqypyvqmwmpjlJAAxdnavB5CnpXkgu/FKkIKY=;
-        b=uesBH9Ocnhu4jadWrkTYQZpto91uzJhFm+3d9oizHbM42Dv8lls0N1N1KfI9KzcENG
-         gcEbJZ6Ep3TH+yMkpcldqOX/zHHuhOdQJSd09w2kxW9EUU0pU4gss6trX/5FLQOavxWI
-         2lM4PzBiHfCSrhbXR3ioA5ZI+H/bYFggDOwhuQCBYIALjvireunuQ8cPum2zxTdtqiAh
-         fdHMlsqPdbVOSuHjemUzQA1e8AL9JaIBV8rSyk/4rpOfD/Lbwvrm0vsD7UgOsMYJ+ubX
-         GLabZY3OSi5+FXU6Y++zESmvYOCwHM6sAwWT9U9ocuGuq2nnEVdRA6AowBBmdJDxGrWb
-         0j0w==
+        bh=5Al8n0k/MOmhCKwKIt85nYWIEUmpLppr72awr1+CGgU=;
+        b=NRSPMRCMMk4yCl9aATyLE1j4w6QMTrj7QYrgxgNA1AZspvYnM4uk+l8p+A1ULzuYB2
+         HqylL1p7j5YLFtQXWNlBuOutD312NCh6++Bj2d3p+9WxVsv27krAdNjcZufcLFuXEXps
+         3+vrJQx2orTZ34VVMM29lJgjLmc3Nm/NDYqLX7jD2bCXrlpgDtZiv0xltqKIXn99jTBj
+         gwAJv3R61atvs+wnZqNw6Jg5r80lTa+v8JbYz4+twz5/I9M5hedFEXkQkXmgVsun0Ay5
+         h5qe+GYpNcqjOXaoEABzcl/WLHsjLUj2A0sJXMMEbpvN9dMt28vRzgfCchzMX4S95mum
+         0wYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684737850; x=1687329850;
+        d=1e100.net; s=20221208; t=1684737853; x=1687329853;
         h=to:from:subject:references:mime-version:message-id:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7bz/V8CqypyvqmwmpjlJAAxdnavB5CnpXkgu/FKkIKY=;
-        b=lFZOwFZTG3286P3ToZYr7elcDMiDWIp9dEnMgp43UzxokILv4JlxbRS2KcgR8djumL
-         Smla5RLHfRyATJDBidVq2jQKNp6y/anEcJUSeoJYCX+wPJMxCqJy/DXD4wRGWnSVELEP
-         lvf9sYamqOQSq2oowHhZpL+eEVnK8rjHeXboaEwtIdKYwVCq1HGsbLMSULtgxg/4P5P/
-         DZzO9z5a/QZi9PwoK9w2GWI6/S3T5DItFj9TqSHrsenaOwBQwP8U8HVAPhxXCsEp8rL/
-         K2F945f0VWCRqUKU9mTLIzrgwj2nhpFj++wCC75KzHXgKFa9xJr5jZtehHMO4Ww0EHYh
-         +YoQ==
-X-Gm-Message-State: AC+VfDxQ9O/jbZ4c77iXsbBCqIXuvdpfX+PREWBojhobs4PEIx+wRgTd
-        ApWbgFzx5dCuiKBw0vB9IH0FLDlMq3Wt
-X-Google-Smtp-Source: ACHHUZ4SVZi+MKHmaTDCo88NiUIu3zK/VV3+iEM2W5uNlPU3Cj4mNZ52SG/SzMMZzerZ24tVdmQ4Yh62UWOx
+        bh=5Al8n0k/MOmhCKwKIt85nYWIEUmpLppr72awr1+CGgU=;
+        b=GUuhMK97D2kNvQYJjn2Avsd/fGkRyFh9+cn0ma8A4KNHRpEg25k38sD2bDkRNyF0ZC
+         U/gjhBWYLytgl4tKEWQL4IUpDglilZFX90AnaL7DH5nlj7YS6myiZHV9OaPUkZ2n4be+
+         Yak1BJDyHEDA0tMtYswgr44T63IvLPVi+NHhRq8lq3Yq5sQ5vZczuN0/pBrIwGJhRiFZ
+         4nAOuzktBuuNDwOCO+76znrWw470uPQpHKSrcYsuHZapjPNlutkOF57JJFGt/54L5nfL
+         6hvplsy0HpNn5sCMNFddDf+wGbm3gRdBYZbgFAgPg0G7PHER0h0Hv4H0+zJlPSFd7EXS
+         7ktw==
+X-Gm-Message-State: AC+VfDzYoc+Dc6qG1oN7EV3hygy7X6vqlbQL0eWc6xSsbGhKDaxI5qh1
+        YH6OvNNQ6hwaiK5hQ6XWxXyU4Crf2rqP
+X-Google-Smtp-Source: ACHHUZ4MopxFK8PkMA8bZw6C/M/45VQoWf5f7qTtr02GP4SbysvIfkITf+LZ6X0zk9St8CWzVHVaiI+Ssqjq
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:48d9:8c21:e099:7301])
- (user=irogers job=sendgmr) by 2002:a81:4425:0:b0:561:985a:5b4c with SMTP id
- r37-20020a814425000000b00561985a5b4cmr6225657ywa.5.1684737850785; Sun, 21 May
- 2023 23:44:10 -0700 (PDT)
-Date:   Sun, 21 May 2023 23:43:22 -0700
+ (user=irogers job=sendgmr) by 2002:a25:81cc:0:b0:ba8:6dc0:cacf with SMTP id
+ n12-20020a2581cc000000b00ba86dc0cacfmr4107240ybm.12.1684737853151; Sun, 21
+ May 2023 23:44:13 -0700 (PDT)
+Date:   Sun, 21 May 2023 23:43:23 -0700
 In-Reply-To: <20230522064330.189127-1-irogers@google.com>
-Message-Id: <20230522064330.189127-16-irogers@google.com>
+Message-Id: <20230522064330.189127-17-irogers@google.com>
 Mime-Version: 1.0
 References: <20230522064330.189127-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
-Subject: [PATCH v2 15/23] perf mem: Avoid hybrid PMU list
+Subject: [PATCH v2 16/23] perf pmu: Remove perf_pmu__hybrid_pmus list
 From:   Ian Rogers <irogers@google.com>
 To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
         Mike Leach <mike.leach@linaro.org>,
@@ -98,169 +98,195 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add perf_pmu__num_mem_pmus that scans/counts the number of PMUs for
-mem events. Switch perf_pmu__for_each_hybrid_pmu to iterating all PMUs
-and only handling is_core ones.
+Rather than iterate hybrid PMUs, inhererently Intel specific, iterate
+all PMUs checking whether they are core. To only get hybrid cores,
+first call perf_pmu__has_hybrid.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-c2c.c     |  7 ++-----
- tools/perf/builtin-mem.c     |  7 ++-----
- tools/perf/util/mem-events.c | 20 ++++++++++++++------
- tools/perf/util/pmu.c        | 17 +++++++++++++++++
- tools/perf/util/pmu.h        |  1 +
- 5 files changed, 36 insertions(+), 16 deletions(-)
+ tools/perf/builtin-record.c        |  1 -
+ tools/perf/util/Build              |  1 -
+ tools/perf/util/pmu-hybrid.c       | 39 ------------------------------
+ tools/perf/util/pmu-hybrid.h       | 29 ----------------------
+ tools/perf/util/pmu.c              |  7 ------
+ tools/perf/util/pmu.h              |  2 --
+ tools/perf/util/print-events.c     |  1 -
+ tools/perf/util/python-ext-sources |  1 -
+ 8 files changed, 81 deletions(-)
+ delete mode 100644 tools/perf/util/pmu-hybrid.c
+ delete mode 100644 tools/perf/util/pmu-hybrid.h
 
-diff --git a/tools/perf/builtin-c2c.c b/tools/perf/builtin-c2c.c
-index 08455e26b606..2757ccc19c5e 100644
---- a/tools/perf/builtin-c2c.c
-+++ b/tools/perf/builtin-c2c.c
-@@ -42,7 +42,6 @@
- #include "ui/ui.h"
- #include "ui/progress.h"
- #include "pmu.h"
--#include "pmu-hybrid.h"
- #include "string2.h"
+diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+index ed7915af7871..aebe103fb734 100644
+--- a/tools/perf/builtin-record.c
++++ b/tools/perf/builtin-record.c
+@@ -49,7 +49,6 @@
  #include "util/util.h"
- 
-@@ -3259,10 +3258,8 @@ static int perf_c2c__record(int argc, const char **argv)
- 	argc = parse_options(argc, argv, options, record_mem_usage,
- 			     PARSE_OPT_KEEP_UNKNOWN);
- 
--	if (!perf_pmu__has_hybrid())
--		rec_argc = argc + 11; /* max number of arguments */
--	else
--		rec_argc = argc + 11 * perf_pmu__hybrid_pmu_num();
-+	/* Max number of arguments multiplied by number of PMUs that can support them. */
-+	rec_argc = argc + 11 * perf_pmu__num_mem_pmus();
- 
- 	rec_argv = calloc(rec_argc + 1, sizeof(char *));
- 	if (!rec_argv)
-diff --git a/tools/perf/builtin-mem.c b/tools/perf/builtin-mem.c
-index 65465930ef8e..f4f1ff76d49d 100644
---- a/tools/perf/builtin-mem.c
-+++ b/tools/perf/builtin-mem.c
-@@ -18,7 +18,6 @@
- #include "util/map.h"
- #include "util/symbol.h"
- #include "util/pmu.h"
+ #include "util/pfm.h"
+ #include "util/clockid.h"
 -#include "util/pmu-hybrid.h"
- #include "util/sample.h"
- #include "util/string2.h"
- #include "util/util.h"
-@@ -93,10 +92,8 @@ static int __cmd_record(int argc, const char **argv, struct perf_mem *mem)
- 	argc = parse_options(argc, argv, options, record_mem_usage,
- 			     PARSE_OPT_KEEP_UNKNOWN);
- 
--	if (!perf_pmu__has_hybrid())
--		rec_argc = argc + 9; /* max number of arguments */
--	else
--		rec_argc = argc + 9 * perf_pmu__hybrid_pmu_num();
-+	/* Max number of arguments multiplied by number of PMUs that can support them. */
-+	rec_argc = argc + 9 * perf_pmu__num_mem_pmus();
- 
- 	if (mem->cpu_list)
- 		rec_argc += 2;
-diff --git a/tools/perf/util/mem-events.c b/tools/perf/util/mem-events.c
-index ed1ee4b05356..c9e422a38258 100644
---- a/tools/perf/util/mem-events.c
-+++ b/tools/perf/util/mem-events.c
-@@ -13,7 +13,6 @@
- #include "debug.h"
- #include "symbol.h"
- #include "pmu.h"
+ #include "util/off_cpu.h"
+ #include "util/bpf-filter.h"
+ #include "asm/bug.h"
+diff --git a/tools/perf/util/Build b/tools/perf/util/Build
+index 21e4cdcba504..0d68be51a739 100644
+--- a/tools/perf/util/Build
++++ b/tools/perf/util/Build
+@@ -73,7 +73,6 @@ perf-y += pmu.o
+ perf-y += pmus.o
+ perf-y += pmu-flex.o
+ perf-y += pmu-bison.o
+-perf-y += pmu-hybrid.o
+ perf-y += svghelper.o
+ perf-$(CONFIG_LIBTRACEEVENT) += trace-event-info.o
+ perf-y += trace-event-scripting.o
+diff --git a/tools/perf/util/pmu-hybrid.c b/tools/perf/util/pmu-hybrid.c
+deleted file mode 100644
+index 7fe943dd3217..000000000000
+--- a/tools/perf/util/pmu-hybrid.c
++++ /dev/null
+@@ -1,39 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-#include <linux/list.h>
+-#include <linux/compiler.h>
+-#include <linux/string.h>
+-#include <linux/zalloc.h>
+-#include <sys/types.h>
+-#include <errno.h>
+-#include <fcntl.h>
+-#include <sys/stat.h>
+-#include <unistd.h>
+-#include <stdio.h>
+-#include <stdbool.h>
+-#include <stdarg.h>
+-#include <locale.h>
+-#include <api/fs/fs.h>
+-#include "fncache.h"
 -#include "pmu-hybrid.h"
- 
- unsigned int perf_mem_events__loads_ldlat = 30;
- 
-@@ -120,7 +119,6 @@ int perf_mem_events__init(void)
- 
- 	for (j = 0; j < PERF_MEM_EVENTS__MAX; j++) {
- 		struct perf_mem_event *e = perf_mem_events__ptr(j);
--		struct perf_pmu *pmu;
- 		char sysfs_name[100];
- 
- 		/*
-@@ -135,7 +133,12 @@ int perf_mem_events__init(void)
- 				  e->sysfs_name, "cpu");
- 			e->supported = perf_mem_event__supported(mnt, sysfs_name);
- 		} else {
--			perf_pmu__for_each_hybrid_pmu(pmu) {
-+			struct perf_pmu *pmu = NULL;
-+
-+			while ((pmu = perf_pmu__scan(pmu)) != NULL) {
-+				if (!pmu->is_core)
-+					continue;
-+
- 				scnprintf(sysfs_name, sizeof(sysfs_name),
- 					  e->sysfs_name, pmu->name);
- 				e->supported |= perf_mem_event__supported(mnt, sysfs_name);
-@@ -170,9 +173,12 @@ static void perf_mem_events__print_unsupport_hybrid(struct perf_mem_event *e,
- {
- 	const char *mnt = sysfs__mount();
- 	char sysfs_name[100];
+-
+-LIST_HEAD(perf_pmu__hybrid_pmus);
+-
+-static struct perf_pmu *perf_pmu__find_hybrid_pmu(const char *name)
+-{
 -	struct perf_pmu *pmu;
-+	struct perf_pmu *pmu = NULL;
-+
-+	while ((pmu = perf_pmu__scan(pmu)) != NULL) {
-+		if (!pmu->is_core)
-+			continue;
- 
+-
+-	if (!name)
+-		return NULL;
+-
 -	perf_pmu__for_each_hybrid_pmu(pmu) {
- 		scnprintf(sysfs_name, sizeof(sysfs_name), e->sysfs_name,
- 			  pmu->name);
- 		if (!perf_mem_event__supported(mnt, sysfs_name)) {
-@@ -210,7 +216,9 @@ int perf_mem_events__record_args(const char **rec_argv, int *argv_nr,
- 				return -1;
- 			}
- 
--			perf_pmu__for_each_hybrid_pmu(pmu) {
-+			while ((pmu = perf_pmu__scan(pmu)) != NULL) {
-+				if (!pmu->is_core)
-+					continue;
- 				rec_argv[i++] = "-e";
- 				s = perf_mem_events__name(j, pmu->name);
- 				if (s) {
+-		if (!strcmp(name, pmu->name))
+-			return pmu;
+-	}
+-
+-	return NULL;
+-}
+-
+-bool perf_pmu__is_hybrid(const char *name)
+-{
+-	return perf_pmu__find_hybrid_pmu(name) != NULL;
+-}
+diff --git a/tools/perf/util/pmu-hybrid.h b/tools/perf/util/pmu-hybrid.h
+deleted file mode 100644
+index 8dbcae935020..000000000000
+--- a/tools/perf/util/pmu-hybrid.h
++++ /dev/null
+@@ -1,29 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef __PMU_HYBRID_H
+-#define __PMU_HYBRID_H
+-
+-#include <linux/perf_event.h>
+-#include <linux/compiler.h>
+-#include <linux/list.h>
+-#include <stdbool.h>
+-#include "pmu.h"
+-
+-extern struct list_head perf_pmu__hybrid_pmus;
+-
+-#define perf_pmu__for_each_hybrid_pmu(pmu)	\
+-	list_for_each_entry(pmu, &perf_pmu__hybrid_pmus, hybrid_list)
+-
+-bool perf_pmu__is_hybrid(const char *name);
+-
+-static inline int perf_pmu__hybrid_pmu_num(void)
+-{
+-	struct perf_pmu *pmu;
+-	int num = 0;
+-
+-	perf_pmu__for_each_hybrid_pmu(pmu)
+-		num++;
+-
+-	return num;
+-}
+-
+-#endif /* __PMU_HYBRID_H */
 diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
-index 2da28739e0d3..acbf504c895a 100644
+index acbf504c895a..bcf9d78a0003 100644
 --- a/tools/perf/util/pmu.c
 +++ b/tools/perf/util/pmu.c
-@@ -1673,6 +1673,23 @@ bool perf_pmu__auto_merge_stats(const struct perf_pmu *pmu)
- 	return !is_pmu_hybrid(pmu->name);
- }
+@@ -32,7 +32,6 @@
+ #include "string2.h"
+ #include "strbuf.h"
+ #include "fncache.h"
+-#include "pmu-hybrid.h"
+ #include "util/evsel_config.h"
  
-+static bool perf_pmu__is_mem_pmu(const struct perf_pmu *pmu)
-+{
-+	return pmu->is_core;
-+}
-+
-+int perf_pmu__num_mem_pmus(void)
-+{
-+	struct perf_pmu *pmu = NULL;
-+	int count = 0;
-+
-+	while ((pmu = perf_pmu__scan(pmu)) != NULL) {
-+		if (perf_pmu__is_mem_pmu(pmu))
-+			count++;
-+	}
-+	return count;
-+}
-+
- static bool pmu_alias_is_duplicate(struct sevent *alias_a,
- 				   struct sevent *alias_b)
- {
+ struct perf_pmu perf_pmu__fake;
+@@ -967,11 +966,6 @@ static struct perf_pmu *pmu_lookup(int dirfd, const char *lookup_name)
+ 	list_splice(&aliases, &pmu->aliases);
+ 	list_add_tail(&pmu->list, &pmus);
+ 
+-	if (!strcmp(name, "cpu_core") || !strcmp(name, "cpu_atom"))
+-		list_add_tail(&pmu->hybrid_list, &perf_pmu__hybrid_pmus);
+-	else
+-		INIT_LIST_HEAD(&pmu->hybrid_list);
+-
+ 	pmu->default_config = perf_pmu__get_default_config(pmu);
+ 
+ 	return pmu;
+@@ -2144,7 +2138,6 @@ void perf_pmu__destroy(void)
+ 
+ 	list_for_each_entry_safe(pmu, tmp, &pmus, list) {
+ 		list_del(&pmu->list);
+-		list_del(&pmu->hybrid_list);
+ 
+ 		perf_pmu__delete(pmu);
+ 	}
 diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
-index af10d137e2b5..5f5de7c20ab6 100644
+index 5f5de7c20ab6..cb51ad6e40fa 100644
 --- a/tools/perf/util/pmu.h
 +++ b/tools/perf/util/pmu.h
-@@ -231,6 +231,7 @@ bool is_pmu_hybrid(const char *name);
- bool perf_pmu__supports_legacy_cache(const struct perf_pmu *pmu);
- bool perf_pmu__supports_wildcard_numeric(const struct perf_pmu *pmu);
- bool perf_pmu__auto_merge_stats(const struct perf_pmu *pmu);
-+int perf_pmu__num_mem_pmus(void);
- void print_pmu_events(const struct print_callbacks *print_cb, void *print_state);
- bool pmu_have_event(const char *pname, const char *name);
+@@ -119,8 +119,6 @@ struct perf_pmu {
+ 	struct list_head caps;
+ 	/** @list: Element on pmus list in pmu.c. */
+ 	struct list_head list;
+-	/** @hybrid_list: Element on perf_pmu__hybrid_pmus. */
+-	struct list_head hybrid_list;
  
+ 	/**
+ 	 * @missing_features: Features to inhibit when events on this PMU are
+diff --git a/tools/perf/util/print-events.c b/tools/perf/util/print-events.c
+index 69492cbd6921..8d823bc906e6 100644
+--- a/tools/perf/util/print-events.c
++++ b/tools/perf/util/print-events.c
+@@ -26,7 +26,6 @@
+ #include "strlist.h"
+ #include "tracepoint.h"
+ #include "pfm.h"
+-#include "pmu-hybrid.h"
+ #include "thread_map.h"
+ 
+ #define MAX_NAME_LEN 100
+diff --git a/tools/perf/util/python-ext-sources b/tools/perf/util/python-ext-sources
+index aa5156c2bcff..d4c9b4cd35ef 100644
+--- a/tools/perf/util/python-ext-sources
++++ b/tools/perf/util/python-ext-sources
+@@ -39,5 +39,4 @@ util/affinity.c
+ util/rwsem.c
+ util/hashmap.c
+ util/perf_regs.c
+-util/pmu-hybrid.c
+ util/fncache.c
 -- 
 2.40.1.698.g37aff9b760-goog
 
