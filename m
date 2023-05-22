@@ -2,242 +2,303 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6469670B4A8
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 07:49:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E908670B4AF
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 07:51:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231252AbjEVFtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 01:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36548 "EHLO
+        id S231912AbjEVFvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 01:51:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229597AbjEVFtn (ORCPT
+        with ESMTP id S230384AbjEVFvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 01:49:43 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE425CE
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:49:37 -0700 (PDT)
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34M3lF5S008219;
-        Mon, 22 May 2023 05:49:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : content-type :
- mime-version; s=pp1; bh=shvrjxrlBm2j0iFfvapQVSQsvvqvFZIar59j3SBbt64=;
- b=L64C0T2mlSLplV3B3W3pzwXyFSgn7F5sbRG2FkZfiLpq3KCh78M9Fn6S1VhjE/zg6+NN
- Iu0rfVi5M5lC+K1Vo25TwoGEYWZA0GXFcBQdSGjWGYcNOSNA2W3LBoMSE7VLnsddyq2g
- ffeDNDzL1X5A7uyXam9lyeFzghGc3Rddn6mCQwYYFjq3NXiYEYOE/AFu7C0gxv6aS6Hu
- y1dZys8K4bzjr2sR9QifRmNcORiPVt+IGfWCOdm/kyUi1836vt2dETszoCS1pmk74GiG
- xQVodszjWWjD4YtTgJScvEFDIanwmh/V/4GSY10+2ZTeYs1QCYGmMjVQWJ/87kbyF05e JA== 
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qqh121ctg-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 05:49:22 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34M5BJGw023722;
-        Mon, 22 May 2023 05:49:19 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3qppc10np1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 05:49:19 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34M5nFlt39715230
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 22 May 2023 05:49:16 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AEC2E20043;
-        Mon, 22 May 2023 05:49:15 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 25B3020040;
-        Mon, 22 May 2023 05:49:13 +0000 (GMT)
-Received: from tarunpc (unknown [9.199.157.25])
-        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Mon, 22 May 2023 05:49:12 +0000 (GMT)
-From:   Tarun Sahu <tsahu@linux.ibm.com>
-To:     linux-mm@kvack.org, Matthew Wilcox <willy@infradead.org>,
-        mike.kravetz@oracle.com
-Cc:     akpm@linux-foundation.org, muchun.song@linux.dev,
-        mike.kravetz@oracle.com, aneesh.kumar@linux.ibm.com,
-        willy@infradead.org, sidhartha.kumar@oracle.com,
-        gerald.schaefer@linux.ibm.com, linux-kernel@vger.kernel.org,
-        jaypatel@linux.ibm.com
-Subject: Re: [PATCH v2] mm/folio: Avoid special handling for order value 0
- in folio_set_order
-In-Reply-To: <20230515170809.284680-1-tsahu@linux.ibm.com>
-References: <20230515170809.284680-1-tsahu@linux.ibm.com>
-Date:   Mon, 22 May 2023 11:19:11 +0530
-Message-ID: <87jzx0rk4o.fsf@linux.ibm.com>
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: z2xASrY7VYMveMUeHx20phG0hmuEH9vD
-X-Proofpoint-GUID: z2xASrY7VYMveMUeHx20phG0hmuEH9vD
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Mon, 22 May 2023 01:51:06 -0400
+Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A82BF9
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:51:03 -0700 (PDT)
+Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-7636c775952so208217039f.2
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:51:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684734662; x=1687326662;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sJ3ECm/S1WpNy1KYNnmDuPolLtz5d+MdB+RcH96oAqU=;
+        b=cLSwgmvJ2Kgv2K09Y8m6ncQUu/S/pIzyJhhU6o3vKgvdlL3+/NH3cYo+ThKL+L+sDP
+         oT5zV7uX9TQ8cewZBy3ZJIagUpfTlXIvrMpFu9gWaB88hAxR1Re5kU6tmSM5DLAGc3uO
+         YJnqncyGqV0nltNy3qUQlhmhAxr2xOzrGL34mKX5jXOKlvg65XZ2ywYAGyuxA/orp1vb
+         q2PM5kv51ArE+YiKxc2dpk0ZE87llvh2bDgj0+t1CoH+CqPVTYkN2i9xwe9eTI0ESFHL
+         hS/DU0wtyEWauqH19CurOiby66eTNIlmjanso66bwgUGlTFUXLPHNEfkbmdnvP6qetJB
+         GovA==
+X-Gm-Message-State: AC+VfDwPvzWiDo1586loOavP/DYKSi+f8XANwJrloLXY5khPcFZbzL98
+        f21aGMzFH9hE723leU1R9Ss+4XYe6R7bSU+EaeMRvpzgRT4c
+X-Google-Smtp-Source: ACHHUZ5XGgt+7ySAB+FUoutFLfdWg3yxw/lAJDrDet94dqoqRFVdkZyMPDAc5M/7hlrlF+6P3BNj5nQBgDyQd8+LEcNzsVUOyHnN
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-22_02,2023-05-17_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 impostorscore=0 phishscore=0 clxscore=1015
- mlxlogscore=999 bulkscore=0 adultscore=0 malwarescore=0 suspectscore=0
- lowpriorityscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2305220046
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:23ca:0:b0:40f:d6c5:2059 with SMTP id
+ u193-20020a0223ca000000b0040fd6c52059mr4940956jau.6.1684734662651; Sun, 21
+ May 2023 22:51:02 -0700 (PDT)
+Date:   Sun, 21 May 2023 22:51:02 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001bb75a05fc41db40@google.com>
+Subject: [syzbot] [bluetooth?] KASAN: slab-use-after-free Write in hci_conn_drop
+From:   syzbot <syzbot+21835970af93643f25a2@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, johan.hedberg@gmail.com,
+        kuba@kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-kernel@vger.kernel.org, luiz.dentz@gmail.com,
+        marcel@holtmann.org, netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello,
 
-This is a gentle reminder, please let me know, If any information or any
-changes are needed from my end.
+syzbot found the following issue on:
 
-Thanks
-Tarun
+HEAD commit:    1b66c114d161 Merge tag 'nfsd-6.4-1' of git://git.kernel.or..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=157d87ce280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=94af80bb8ddd23c4
+dashboard link: https://syzkaller.appspot.com/bug?extid=21835970af93643f25a2
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Tarun Sahu <tsahu@linux.ibm.com> writes:
+Unfortunately, I don't have any reproducer for this issue yet.
 
-> folio_set_order(folio, 0) is used in kernel at two places
-> __destroy_compound_gigantic_folio and __prep_compound_gigantic_folio.
-> Currently, It is called to clear out the folio->_folio_nr_pages and
-> folio->_folio_order.
->
-> For __destroy_compound_gigantic_folio:
-> In past, folio_set_order(folio, 0) was needed because page->mapping used
-> to overlap with _folio_nr_pages and _folio_order. So if these fields were
-> left uncleared during freeing gigantic hugepages, they were causing
-> "BUG: bad page state" due to non-zero page->mapping. Now, After
-> Commit a01f43901cfb ("hugetlb: be sure to free demoted CMA pages to
-> CMA") page->mapping has explicitly been cleared out for tail pages. Also,
-> _folio_order and _folio_nr_pages no longer overlaps with page->mapping.
->
-> struct page {
-> ...
->    struct address_space * mapping;  /* 24     8 */
-> ...
-> }
->
-> struct folio {
-> ...
->     union {
->         struct {
->         	long unsigned int _flags_1;      /* 64    8 */
->         	long unsigned int _head_1;       /* 72    8 */
->         	unsigned char _folio_dtor;       /* 80    1 */
->         	unsigned char _folio_order;      /* 81    1 */
->
->         	/* XXX 2 bytes hole, try to pack */
->
->         	atomic_t   _entire_mapcount;     /* 84    4 */
->         	atomic_t   _nr_pages_mapped;     /* 88    4 */
->         	atomic_t   _pincount;            /* 92    4 */
->         	unsigned int _folio_nr_pages;    /* 96    4 */
->         };                                       /* 64   40 */
->         struct page __page_1 __attribute__((__aligned__(8))); /* 64   64 */
->     }
-> ...
-> }
->
-> So, folio_set_order(folio, 0) can be removed from freeing gigantic
-> folio path (__destroy_compound_gigantic_folio).
->
-> Another place, folio_set_order(folio, 0) is called inside
-> __prep_compound_gigantic_folio during error path. Here,
-> folio_set_order(folio, 0) can also be removed if we move
-> folio_set_order(folio, order) after for loop.
->
-> The patch also moves _folio_set_head call in __prep_compound_gigantic_folio()
-> such that we avoid clearing them in the error path.
->
-> Also, as Mike pointed out:
-> "It would actually be better to move the calls _folio_set_head and
-> folio_set_order in __prep_compound_gigantic_folio() as suggested here. Why?
-> In the current code, the ref count on the 'head page' is still 1 (or more)
-> while those calls are made. So, someone could take a speculative ref on the
-> page BEFORE the tail pages are set up."
->
-> This way, folio_set_order(folio, 0) is no more needed. And it will also
-> helps removing the confusion of folio order being set to 0 (as _folio_order
-> field is part of first tail page).
->
-> Testing: I have run LTP tests, which all passes. and also I have written
-> the test in LTP which tests the bug caused by compound_nr and page->mapping
-> overlapping.
->
-> https://github.com/linux-test-project/ltp/blob/master/testcases/kernel/mem/hugetlb/hugemmap/hugemmap32.c
->
-> Running on older kernel ( < 5.10-rc7) with the above bug this fails while
-> on newer kernel and, also with this patch it passes.
->
-> Signed-off-by: Tarun Sahu <tsahu@linux.ibm.com>
-> ---
->  mm/hugetlb.c  | 9 +++------
->  mm/internal.h | 8 ++------
->  2 files changed, 5 insertions(+), 12 deletions(-)
->
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index f154019e6b84..607553445855 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -1489,7 +1489,6 @@ static void __destroy_compound_gigantic_folio(struct folio *folio,
->  			set_page_refcounted(p);
->  	}
->  
-> -	folio_set_order(folio, 0);
->  	__folio_clear_head(folio);
->  }
->  
-> @@ -1951,9 +1950,6 @@ static bool __prep_compound_gigantic_folio(struct folio *folio,
->  	struct page *p;
->  
->  	__folio_clear_reserved(folio);
-> -	__folio_set_head(folio);
-> -	/* we rely on prep_new_hugetlb_folio to set the destructor */
-> -	folio_set_order(folio, order);
->  	for (i = 0; i < nr_pages; i++) {
->  		p = folio_page(folio, i);
->  
-> @@ -1999,6 +1995,9 @@ static bool __prep_compound_gigantic_folio(struct folio *folio,
->  		if (i != 0)
->  			set_compound_head(p, &folio->page);
->  	}
-> +	__folio_set_head(folio);
-> +	/* we rely on prep_new_hugetlb_folio to set the destructor */
-> +	folio_set_order(folio, order);
->  	atomic_set(&folio->_entire_mapcount, -1);
->  	atomic_set(&folio->_nr_pages_mapped, 0);
->  	atomic_set(&folio->_pincount, 0);
-> @@ -2017,8 +2016,6 @@ static bool __prep_compound_gigantic_folio(struct folio *folio,
->  		p = folio_page(folio, j);
->  		__ClearPageReserved(p);
->  	}
-> -	folio_set_order(folio, 0);
-> -	__folio_clear_head(folio);
->  	return false;
->  }
->  
-> diff --git a/mm/internal.h b/mm/internal.h
-> index 68410c6d97ac..c59fe08c5b39 100644
-> --- a/mm/internal.h
-> +++ b/mm/internal.h
-> @@ -425,16 +425,12 @@ int split_free_page(struct page *free_page,
->   */
->  static inline void folio_set_order(struct folio *folio, unsigned int order)
->  {
-> -	if (WARN_ON_ONCE(!folio_test_large(folio)))
-> +	if (WARN_ON_ONCE(!order || !folio_test_large(folio)))
->  		return;
->  
->  	folio->_folio_order = order;
->  #ifdef CONFIG_64BIT
-> -	/*
-> -	 * When hugetlb dissolves a folio, we need to clear the tail
-> -	 * page, rather than setting nr_pages to 1.
-> -	 */
-> -	folio->_folio_nr_pages = order ? 1U << order : 0;
-> +	folio->_folio_nr_pages = 1U << order;
->  #endif
->  }
->  
-> -- 
-> 2.31.1
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/f5d99e318272/disk-1b66c114.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/2cdf457bc2a6/vmlinux-1b66c114.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/a5d135c04826/bzImage-1b66c114.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+21835970af93643f25a2@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: slab-use-after-free in instrument_atomic_read_write include/linux/instrumented.h:96 [inline]
+BUG: KASAN: slab-use-after-free in atomic_dec_and_test include/linux/atomic/atomic-instrumented.h:575 [inline]
+BUG: KASAN: slab-use-after-free in hci_conn_drop+0x34/0x2c0 include/net/bluetooth/hci_core.h:1418
+Write of size 4 at addr ffff8880406a6010 by task syz-executor.1/7637
+
+CPU: 0 PID: 7637 Comm: syz-executor.1 Not tainted 6.4.0-rc2-syzkaller-00015-g1b66c114d161 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/28/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:351 [inline]
+ print_report+0x163/0x540 mm/kasan/report.c:462
+ kasan_report+0x176/0x1b0 mm/kasan/report.c:572
+ kasan_check_range+0x283/0x290 mm/kasan/generic.c:187
+ instrument_atomic_read_write include/linux/instrumented.h:96 [inline]
+ atomic_dec_and_test include/linux/atomic/atomic-instrumented.h:575 [inline]
+ hci_conn_drop+0x34/0x2c0 include/net/bluetooth/hci_core.h:1418
+ sco_chan_del+0xeb/0x1d0 net/bluetooth/sco.c:169
+ sco_sock_close net/bluetooth/sco.c:469 [inline]
+ sco_sock_release+0xb3/0x320 net/bluetooth/sco.c:1267
+ __sock_release net/socket.c:653 [inline]
+ sock_close+0xd1/0x230 net/socket.c:1397
+ __fput+0x3b7/0x890 fs/file_table.c:321
+ task_work_run+0x24a/0x300 kernel/task_work.c:179
+ get_signal+0x1606/0x17e0 kernel/signal.c:2650
+ arch_do_signal_or_restart+0x91/0x670 arch/x86/kernel/signal.c:306
+ exit_to_user_mode_loop+0x6a/0x100 kernel/entry/common.c:168
+ exit_to_user_mode_prepare+0xb1/0x140 kernel/entry/common.c:204
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+ syscall_exit_to_user_mode+0x64/0x280 kernel/entry/common.c:297
+ do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f632188c169
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f63225fc168 EFLAGS: 00000246 ORIG_RAX: 000000000000002a
+RAX: fffffffffffffffc RBX: 00007f63219abf80 RCX: 00007f632188c169
+RDX: 0000000000000008 RSI: 0000000020000100 RDI: 0000000000000004
+RBP: 00007f63218e7ca1 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fff7261be3f R14: 00007f63225fc300 R15: 0000000000022000
+ </TASK>
+
+Allocated by task 7519:
+ kasan_save_stack mm/kasan/common.c:45 [inline]
+ kasan_set_track+0x4f/0x70 mm/kasan/common.c:52
+ ____kasan_kmalloc mm/kasan/common.c:374 [inline]
+ __kasan_kmalloc+0x98/0xb0 mm/kasan/common.c:383
+ kmalloc include/linux/slab.h:559 [inline]
+ kzalloc include/linux/slab.h:680 [inline]
+ hci_conn_add+0xc3/0x13a0 net/bluetooth/hci_conn.c:986
+ hci_connect_sco+0x8e/0x2b0 net/bluetooth/hci_conn.c:1663
+ sco_connect net/bluetooth/sco.c:264 [inline]
+ sco_sock_connect+0x2b9/0x990 net/bluetooth/sco.c:610
+ __sys_connect_file net/socket.c:2003 [inline]
+ __sys_connect+0x2cd/0x300 net/socket.c:2020
+ __do_sys_connect net/socket.c:2030 [inline]
+ __se_sys_connect net/socket.c:2027 [inline]
+ __x64_sys_connect+0x7a/0x90 net/socket.c:2027
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Freed by task 7110:
+ kasan_save_stack mm/kasan/common.c:45 [inline]
+ kasan_set_track+0x4f/0x70 mm/kasan/common.c:52
+ kasan_save_free_info+0x2b/0x40 mm/kasan/generic.c:521
+ ____kasan_slab_free+0xd6/0x120 mm/kasan/common.c:236
+ kasan_slab_free include/linux/kasan.h:162 [inline]
+ slab_free_hook mm/slub.c:1781 [inline]
+ slab_free_freelist_hook mm/slub.c:1807 [inline]
+ slab_free mm/slub.c:3786 [inline]
+ __kmem_cache_free+0x264/0x3c0 mm/slub.c:3799
+ device_release+0x95/0x1c0
+ kobject_cleanup lib/kobject.c:683 [inline]
+ kobject_release lib/kobject.c:714 [inline]
+ kref_put include/linux/kref.h:65 [inline]
+ kobject_put+0x228/0x470 lib/kobject.c:731
+ hci_conn_del+0x321/0x5a0 net/bluetooth/hci_conn.c:1162
+ hci_conn_unlink+0x1e1/0x320 net/bluetooth/hci_conn.c:1087
+ hci_conn_hash_flush+0x198/0x220 net/bluetooth/hci_conn.c:2479
+ hci_dev_close_sync+0xa35/0x1020 net/bluetooth/hci_sync.c:4941
+ hci_dev_do_close net/bluetooth/hci_core.c:554 [inline]
+ hci_unregister_dev+0x1ca/0x480 net/bluetooth/hci_core.c:2703
+ vhci_release+0x83/0xd0 drivers/bluetooth/hci_vhci.c:669
+ __fput+0x3b7/0x890 fs/file_table.c:321
+ task_work_run+0x24a/0x300 kernel/task_work.c:179
+ exit_task_work include/linux/task_work.h:38 [inline]
+ do_exit+0x68f/0x2290 kernel/exit.c:871
+ do_group_exit+0x206/0x2c0 kernel/exit.c:1021
+ get_signal+0x1701/0x17e0 kernel/signal.c:2874
+ arch_do_signal_or_restart+0x91/0x670 arch/x86/kernel/signal.c:306
+ exit_to_user_mode_loop+0x6a/0x100 kernel/entry/common.c:168
+ exit_to_user_mode_prepare+0xb1/0x140 kernel/entry/common.c:204
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+ syscall_exit_to_user_mode+0x64/0x280 kernel/entry/common.c:297
+ do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Last potentially related work creation:
+ kasan_save_stack+0x3f/0x60 mm/kasan/common.c:45
+ __kasan_record_aux_stack+0xb0/0xc0 mm/kasan/generic.c:491
+ insert_work+0x54/0x3d0 kernel/workqueue.c:1365
+ __queue_work+0xb37/0xf10 kernel/workqueue.c:1526
+ queue_delayed_work_on+0x15a/0x260 kernel/workqueue.c:1710
+ sco_chan_del+0xeb/0x1d0 net/bluetooth/sco.c:169
+ sco_sock_close net/bluetooth/sco.c:469 [inline]
+ sco_sock_release+0xb3/0x320 net/bluetooth/sco.c:1267
+ __sock_release net/socket.c:653 [inline]
+ sock_close+0xd1/0x230 net/socket.c:1397
+ __fput+0x3b7/0x890 fs/file_table.c:321
+ task_work_run+0x24a/0x300 kernel/task_work.c:179
+ get_signal+0x1606/0x17e0 kernel/signal.c:2650
+ arch_do_signal_or_restart+0x91/0x670 arch/x86/kernel/signal.c:306
+ exit_to_user_mode_loop+0x6a/0x100 kernel/entry/common.c:168
+ exit_to_user_mode_prepare+0xb1/0x140 kernel/entry/common.c:204
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
+ syscall_exit_to_user_mode+0x64/0x280 kernel/entry/common.c:297
+ do_syscall_64+0x4d/0xc0 arch/x86/entry/common.c:86
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+The buggy address belongs to the object at ffff8880406a6000
+ which belongs to the cache kmalloc-4k of size 4096
+The buggy address is located 16 bytes inside of
+ freed 4096-byte region [ffff8880406a6000, ffff8880406a7000)
+
+The buggy address belongs to the physical page:
+page:ffffea000101a800 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x406a0
+head:ffffea000101a800 order:3 entire_mapcount:0 nr_pages_mapped:0 pincount:0
+flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
+page_type: 0xffffffff()
+raw: 00fff00000010200 ffff888012442140 ffffea0000a14a00 dead000000000002
+raw: 0000000000000000 0000000000040004 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 3, migratetype Unmovable, gfp_mask 0x1d2040(__GFP_IO|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC|__GFP_HARDWALL), pid 6060, tgid 6060 (udevadm), ts 248100761058, free_ts 248068222302
+ set_page_owner include/linux/page_owner.h:31 [inline]
+ post_alloc_hook+0x1e6/0x210 mm/page_alloc.c:1731
+ prep_new_page mm/page_alloc.c:1738 [inline]
+ get_page_from_freelist+0x321c/0x33a0 mm/page_alloc.c:3502
+ __alloc_pages+0x255/0x670 mm/page_alloc.c:4768
+ alloc_slab_page+0x6a/0x160 mm/slub.c:1851
+ allocate_slab mm/slub.c:1998 [inline]
+ new_slab+0x84/0x2f0 mm/slub.c:2051
+ ___slab_alloc+0xa85/0x10a0 mm/slub.c:3192
+ __slab_alloc mm/slub.c:3291 [inline]
+ __slab_alloc_node mm/slub.c:3344 [inline]
+ slab_alloc_node mm/slub.c:3441 [inline]
+ __kmem_cache_alloc_node+0x1b8/0x290 mm/slub.c:3490
+ __do_kmalloc_node mm/slab_common.c:965 [inline]
+ __kmalloc+0xa8/0x230 mm/slab_common.c:979
+ kmalloc include/linux/slab.h:563 [inline]
+ tomoyo_realpath_from_path+0xcf/0x5e0 security/tomoyo/realpath.c:251
+ tomoyo_get_realpath security/tomoyo/file.c:151 [inline]
+ tomoyo_check_open_permission+0x254/0x4e0 security/tomoyo/file.c:771
+ security_file_open+0x63/0xa0 security/security.c:2797
+ do_dentry_open+0x308/0x10f0 fs/open.c:907
+ do_open fs/namei.c:3636 [inline]
+ path_openat+0x27b3/0x3170 fs/namei.c:3791
+ do_filp_open+0x234/0x490 fs/namei.c:3818
+ do_sys_openat2+0x13f/0x500 fs/open.c:1356
+ do_sys_open fs/open.c:1372 [inline]
+ __do_sys_openat fs/open.c:1388 [inline]
+ __se_sys_openat fs/open.c:1383 [inline]
+ __x64_sys_openat+0x247/0x290 fs/open.c:1383
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1302 [inline]
+ free_unref_page_prepare+0x903/0xa30 mm/page_alloc.c:2564
+ free_unref_page+0x37/0x3f0 mm/page_alloc.c:2659
+ discard_slab mm/slub.c:2097 [inline]
+ __unfreeze_partials+0x1b1/0x1f0 mm/slub.c:2636
+ put_cpu_partial+0x116/0x180 mm/slub.c:2712
+ qlist_free_all+0x22/0x60 mm/kasan/quarantine.c:185
+ kasan_quarantine_reduce+0x14b/0x160 mm/kasan/quarantine.c:292
+ __kasan_slab_alloc+0x23/0x70 mm/kasan/common.c:305
+ kasan_slab_alloc include/linux/kasan.h:186 [inline]
+ slab_post_alloc_hook+0x68/0x3a0 mm/slab.h:711
+ slab_alloc_node mm/slub.c:3451 [inline]
+ __kmem_cache_alloc_node+0x14c/0x290 mm/slub.c:3490
+ kmalloc_trace+0x2a/0xe0 mm/slab_common.c:1057
+ kmalloc include/linux/slab.h:559 [inline]
+ kzalloc include/linux/slab.h:680 [inline]
+ kernfs_iop_get_link+0x67/0x5a0 fs/kernfs/symlink.c:135
+ vfs_readlink+0x16e/0x400 fs/namei.c:5098
+ do_readlinkat+0x283/0x3b0 fs/stat.c:489
+ __do_sys_readlink fs/stat.c:510 [inline]
+ __se_sys_readlink fs/stat.c:507 [inline]
+ __x64_sys_readlink+0x7f/0x90 fs/stat.c:507
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+Memory state around the buggy address:
+ ffff8880406a5f00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff8880406a5f80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+>ffff8880406a6000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                         ^
+ ffff8880406a6080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff8880406a6100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
