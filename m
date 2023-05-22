@@ -2,284 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF99070CE32
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 00:45:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9DD70CE2F
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 00:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234359AbjEVWpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 18:45:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48786 "EHLO
+        id S234025AbjEVWpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 18:45:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229734AbjEVWpp (ORCPT
+        with ESMTP id S229734AbjEVWpb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 18:45:45 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A950A9D
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 15:44:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684795498;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DaVz2A4ookrYy0bG1/ownvewposvWWNIhPO/rg/szCc=;
-        b=T8bu4sfpUsktR+9AmPTB0SzPbURXIfsaB/w1+iStuyJv9R0m7gzyt8rQI2fz0OZ35oxtfJ
-        opHCcck/N4KlAkMGXvvzyiwJJd5Pn4SjEf9SJhfv3f3SKa8WMbV6tvgUnZep69YgNmQYZH
-        Q1s8FKfVT5bYQ3DuyVE3ZPUeUgRu+l0=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-62-rH-eBtxrNsubjUjb43WZyQ-1; Mon, 22 May 2023 18:44:57 -0400
-X-MC-Unique: rH-eBtxrNsubjUjb43WZyQ-1
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-75b0c2ee430so160292085a.1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 15:44:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684795497; x=1687387497;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DaVz2A4ookrYy0bG1/ownvewposvWWNIhPO/rg/szCc=;
-        b=Ce4EeVF2VmrohWnze2uVrnklsevq/jZZ8/a7bh7OYkYS44la3ncOxvaFDAdSXvb33n
-         yWpP1N13CBwQwgpj4GTuUuVuQJ572BSvR7hlZkqelF1yThEnZDTPErR00ttSKO0RJY08
-         vTMTgWWbHc+yBYX4+53BXxZFoxA9UxDAMMuM5blNS67k1YqWaxFB57XJ1ccgvltK9l6Z
-         pjZJk+gPPqdJGum6AOKUT5ZVfuHKVCYOR1pXCiotUADZ1CZGMmSvr7ajwOkUb2VAX8ny
-         UDHAF3tqJQ4/3/ArFfKKrJ8WDAxILCTEJLlkP0D3OTbxZmzBpH4q7RCSYJ7kQ/2RjJ+x
-         4MFw==
-X-Gm-Message-State: AC+VfDzkzFdw/7aBRv7AF+0qEKowBjlpT0tpN3EG8PIOsc4HyJaAYmvD
-        FPUc/mWGHaZyHJOGILEPVQ2FGnWSpT5Esap7YVIbBb04LI97UcGpu0sAyQwRElQzH1zIplv5SkW
-        fIhDRX083QTXJW1cOU0LLks0E
-X-Received: by 2002:a05:620a:678e:b0:75b:23a1:424 with SMTP id rr14-20020a05620a678e00b0075b23a10424mr2265039qkn.58.1684795497387;
-        Mon, 22 May 2023 15:44:57 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ5E0z/Qztg9m+Xz89ofUOSQ7AaHC2ufX/Shd5E+wODIrQUEtmQTN9GTxHTglw3KD+jjSWGHrA==
-X-Received: by 2002:a05:620a:678e:b0:75b:23a1:424 with SMTP id rr14-20020a05620a678e00b0075b23a10424mr2265021qkn.58.1684795496967;
-        Mon, 22 May 2023 15:44:56 -0700 (PDT)
-Received: from localhost (ip98-179-76-75.ph.ph.cox.net. [98.179.76.75])
-        by smtp.gmail.com with ESMTPSA id q27-20020a05620a039b00b0074411b03972sm2053343qkm.51.2023.05.22.15.44.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 15:44:56 -0700 (PDT)
-Date:   Mon, 22 May 2023 15:44:54 -0700
-From:   Jerry Snitselaar <jsnitsel@redhat.com>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Cc:     peterhuewe@gmx.de, jarkko@kernel.org, jgg@ziepe.ca,
-        hdegoede@redhat.com, oe-lkp@lists.linux.dev, lkp@intel.com,
-        peter.ujfalusi@linux.intel.com, peterz@infradead.org,
-        linux@mniewoehner.de, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org, l.sanfilippo@kunbus.com,
-        lukas@wunner.de, p.rosenberger@kunbus.com
-Subject: Re: [PATCH 1/2] tpm, tpm_tis: Handle interrupt storm
-Message-ID: <ur6ype3ki6sxmpbzh53vfoewhq5oiqucioz3nwbdcda2vkaut7@sjt2hr33j3xk>
-References: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230522143105.8617-1-LinoSanfilippo@gmx.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 22 May 2023 18:45:31 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FFF3FA
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 15:45:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684795529; x=1716331529;
+  h=date:from:to:cc:subject:message-id;
+  bh=zkRyv6ZpsH5Vb/mssvp/9wjmAU7dl7yLsKxTrEmyfVI=;
+  b=YZI3//MeBCmfbcm/qQmOH8yzq5Jxgj2YAGqW7gZXdRcSZk64UqthpbsI
+   F1YP5nsIcmgJObFie0MoDKyfy57MjIhImKeopAvx8aifhzRJEC8S8uixF
+   JF3FYfKX9e5Pt41Wmvg1i4FGPSUIRXrBIa71Txj2cZ6ygkwMbqfaWTrXa
+   kHkfE7CoJj4ysQYHL74Xd19vW0/jvNyuwkhPCzpXBStcO9CdEX375fSi2
+   gNhR7PumHyCuHsZH01fCcMgnGQ4iJKO0+6/k6MOZpxta+06sMkWHJUZBw
+   RnP/GM5/VG4wRzK67Aa2Yr+vpSBBNVkULgJEvYkNJnEVkXrAkfwK60vuR
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="333426624"
+X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
+   d="scan'208";a="333426624"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 15:45:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="734472429"
+X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
+   d="scan'208";a="734472429"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 22 May 2023 15:45:26 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1q1EHN-000DHV-1q;
+        Mon, 22 May 2023 22:45:25 +0000
+Date:   Tue, 23 May 2023 06:45:12 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:locking/core] BUILD SUCCESS
+ 3cf363a4daf359e8392b5048c619b7e9e429f122
+Message-ID: <20230522224512.I7PwX%lkp@intel.com>
+User-Agent: s-nail v14.9.24
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 04:31:04PM +0200, Lino Sanfilippo wrote:
-> From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
-> 
-> Commit e644b2f498d2 ("tpm, tpm_tis: Enable interrupt test") enabled
-> interrupts instead of polling on all capable TPMs. Unfortunately, on some
-> products the interrupt line is either never asserted or never deasserted.
-> 
-> The former causes interrupt timeouts and is detected by
-> tpm_tis_core_init(). The latter results in interrupt storms.
-> 
-> Recent reports concern the Lenovo ThinkStation P360 Tiny, Lenovo ThinkPad
-> L490 and Inspur NF5180M6:
-> 
-> https://lore.kernel.org/linux-integrity/20230511005403.24689-1-jsnitsel@redhat.com/
-> https://lore.kernel.org/linux-integrity/d80b180a569a9f068d3a2614f062cfa3a78af5a6.camel@kernel.org/
-> 
-> The current approach to avoid those storms is to disable interrupts by
-> adding a DMI quirk for the concerned device.
-> 
-> However this is a maintenance burden in the long run, so use a generic
-> approach:
-> 
-> Detect an interrupt storm by counting the number of unhandled interrupts
-> within a 10 ms time interval. In case that more than 1000 were unhandled
-> deactivate interrupts, deregister the handler and fall back to polling.
-> 
-> This equals the implementation that handles interrupt storms in
-> note_interrupt() by means of timestamps and counters in struct irq_desc.
-> However the function to access this structure is private so the logic has
-> to be reimplemented in the TPM TIS core.
-> 
-> Since handler deregistration would deadlock from within the interrupt
-> routine trigger a worker thread that executes the unregistration.
-> 
-> Suggested-by: Lukas Wunner <lukas@wunner.de>
-> Signed-off-by: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+tree/branch: INFO setup_repo_specs: /db/releases/20230522162832/lkp-src/repo/*/tip
+https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git locking/core
+branch HEAD: 3cf363a4daf359e8392b5048c619b7e9e429f122  s390/cpum_sf: Convert to cmpxchg128()
 
-Reviewed-by: Jerry Snitselaar <jsnitsel@redhat.com>
+elapsed time: 724m
 
-> ---
->  drivers/char/tpm/tpm_tis_core.c | 71 +++++++++++++++++++++++++++++++--
->  drivers/char/tpm/tpm_tis_core.h |  6 +++
->  2 files changed, 74 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
-> index 558144fa707a..458ebf8c2f16 100644
-> --- a/drivers/char/tpm/tpm_tis_core.c
-> +++ b/drivers/char/tpm/tpm_tis_core.c
-> @@ -752,6 +752,55 @@ static bool tpm_tis_req_canceled(struct tpm_chip *chip, u8 status)
->  	return status == TPM_STS_COMMAND_READY;
->  }
->  
-> +static void tpm_tis_handle_irq_storm(struct tpm_chip *chip)
-> +{
-> +	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
-> +	int intmask = 0;
-> +
-> +	dev_err(&chip->dev, HW_ERR
-> +		"TPM interrupt storm detected, polling instead\n");
-> +
-> +	tpm_tis_read32(priv, TPM_INT_ENABLE(priv->locality), &intmask);
-> +
-> +	intmask &= ~TPM_GLOBAL_INT_ENABLE;
-> +
-> +	tpm_tis_request_locality(chip, 0);
-> +	tpm_tis_write32(priv, TPM_INT_ENABLE(priv->locality), intmask);
-> +	tpm_tis_relinquish_locality(chip, 0);
-> +
-> +	chip->flags &= ~TPM_CHIP_FLAG_IRQ;
-> +
-> +	/*
-> +	 * We must not call devm_free_irq() from within the interrupt handler,
-> +	 * since this function waits for running interrupt handlers to finish
-> +	 * and thus it would deadlock. Instead trigger a worker that does the
-> +	 * unregistration.
-> +	 */
-> +	schedule_work(&priv->free_irq_work);
-> +}
-> +
-> +static void tpm_tis_process_unhandled_interrupt(struct tpm_chip *chip)
-> +{
-> +	const unsigned int MAX_UNHANDLED_IRQS = 1000;
-> +	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
-> +	/*
-> +	 * The worker to free the TPM interrupt (free_irq_work) may already
-> +	 * be scheduled, so make sure it is not scheduled again.
-> +	 */
-> +	if (!(chip->flags & TPM_CHIP_FLAG_IRQ))
-> +		return;
-> +
-> +	if (time_after(jiffies, priv->last_unhandled_irq + HZ/10))
-> +		priv->unhandled_irqs = 1;
-> +	else
-> +		priv->unhandled_irqs++;
-> +
-> +	priv->last_unhandled_irq = jiffies;
-> +
-> +	if (priv->unhandled_irqs > MAX_UNHANDLED_IRQS)
-> +		tpm_tis_handle_irq_storm(chip);
-> +}
-> +
->  static irqreturn_t tis_int_handler(int dummy, void *dev_id)
->  {
->  	struct tpm_chip *chip = dev_id;
-> @@ -761,10 +810,10 @@ static irqreturn_t tis_int_handler(int dummy, void *dev_id)
->  
->  	rc = tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &interrupt);
->  	if (rc < 0)
-> -		return IRQ_NONE;
-> +		goto unhandled;
->  
->  	if (interrupt == 0)
-> -		return IRQ_NONE;
-> +		goto unhandled;
->  
->  	set_bit(TPM_TIS_IRQ_TESTED, &priv->flags);
->  	if (interrupt & TPM_INTF_DATA_AVAIL_INT)
-> @@ -780,10 +829,14 @@ static irqreturn_t tis_int_handler(int dummy, void *dev_id)
->  	rc = tpm_tis_write32(priv, TPM_INT_STATUS(priv->locality), interrupt);
->  	tpm_tis_relinquish_locality(chip, 0);
->  	if (rc < 0)
-> -		return IRQ_NONE;
-> +		goto unhandled;
->  
->  	tpm_tis_read32(priv, TPM_INT_STATUS(priv->locality), &interrupt);
->  	return IRQ_HANDLED;
-> +
-> +unhandled:
-> +	tpm_tis_process_unhandled_interrupt(chip);
-> +	return IRQ_HANDLED;
->  }
->  
->  static void tpm_tis_gen_interrupt(struct tpm_chip *chip)
-> @@ -804,6 +857,15 @@ static void tpm_tis_gen_interrupt(struct tpm_chip *chip)
->  		chip->flags &= ~TPM_CHIP_FLAG_IRQ;
->  }
->  
-> +static void tpm_tis_free_irq_func(struct work_struct *work)
-> +{
-> +	struct tpm_tis_data *priv = container_of(work, typeof(*priv), free_irq_work);
-> +	struct tpm_chip *chip = priv->chip;
-> +
-> +	devm_free_irq(chip->dev.parent, priv->irq, chip);
-> +	priv->irq = 0;
-> +}
-> +
->  /* Register the IRQ and issue a command that will cause an interrupt. If an
->   * irq is seen then leave the chip setup for IRQ operation, otherwise reverse
->   * everything and leave in polling mode. Returns 0 on success.
-> @@ -816,6 +878,7 @@ static int tpm_tis_probe_irq_single(struct tpm_chip *chip, u32 intmask,
->  	int rc;
->  	u32 int_status;
->  
-> +	INIT_WORK(&priv->free_irq_work, tpm_tis_free_irq_func);
->  
->  	rc = devm_request_threaded_irq(chip->dev.parent, irq, NULL,
->  				       tis_int_handler, IRQF_ONESHOT | flags,
-> @@ -918,6 +981,7 @@ void tpm_tis_remove(struct tpm_chip *chip)
->  		interrupt = 0;
->  
->  	tpm_tis_write32(priv, reg, ~TPM_GLOBAL_INT_ENABLE & interrupt);
-> +	flush_work(&priv->free_irq_work);
->  
->  	tpm_tis_clkrun_enable(chip, false);
->  
-> @@ -1021,6 +1085,7 @@ int tpm_tis_core_init(struct device *dev, struct tpm_tis_data *priv, int irq,
->  	chip->timeout_b = msecs_to_jiffies(TIS_TIMEOUT_B_MAX);
->  	chip->timeout_c = msecs_to_jiffies(TIS_TIMEOUT_C_MAX);
->  	chip->timeout_d = msecs_to_jiffies(TIS_TIMEOUT_D_MAX);
-> +	priv->chip = chip;
->  	priv->timeout_min = TPM_TIMEOUT_USECS_MIN;
->  	priv->timeout_max = TPM_TIMEOUT_USECS_MAX;
->  	priv->phy_ops = phy_ops;
-> diff --git a/drivers/char/tpm/tpm_tis_core.h b/drivers/char/tpm/tpm_tis_core.h
-> index e978f457fd4d..6fc86baa4398 100644
-> --- a/drivers/char/tpm/tpm_tis_core.h
-> +++ b/drivers/char/tpm/tpm_tis_core.h
-> @@ -91,12 +91,18 @@ enum tpm_tis_flags {
->  };
->  
->  struct tpm_tis_data {
-> +	struct tpm_chip *chip;
->  	u16 manufacturer_id;
->  	struct mutex locality_count_mutex;
->  	unsigned int locality_count;
->  	int locality;
-> +	/* Interrupts */
->  	int irq;
-> +	struct work_struct free_irq_work;
-> +	unsigned long last_unhandled_irq;
-> +	unsigned int unhandled_irqs;
->  	unsigned int int_mask;
-> +
->  	unsigned long flags;
->  	void __iomem *ilb_base_addr;
->  	u16 clkrun_enabled;
-> 
-> base-commit: 44c026a73be8038f03dbdeef028b642880cf1511
-> -- 
-> 2.40.1
-> 
+configs tested: 155
+configs skipped: 10
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha        buildonly-randconfig-r002-20230522   gcc  
+alpha        buildonly-randconfig-r004-20230521   gcc  
+alpha        buildonly-randconfig-r006-20230521   gcc  
+alpha                               defconfig   gcc  
+alpha                randconfig-r004-20230522   gcc  
+alpha                randconfig-r036-20230522   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r006-20230522   gcc  
+arc                  randconfig-r012-20230521   gcc  
+arc                  randconfig-r012-20230522   gcc  
+arc                  randconfig-r043-20230521   gcc  
+arc                  randconfig-r043-20230522   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r034-20230521   gcc  
+arm                  randconfig-r046-20230521   clang
+arm                  randconfig-r046-20230522   gcc  
+arm64                            allyesconfig   gcc  
+arm64        buildonly-randconfig-r005-20230522   gcc  
+arm64                               defconfig   gcc  
+arm64                randconfig-r014-20230521   gcc  
+arm64                randconfig-r021-20230521   gcc  
+arm64                randconfig-r024-20230522   clang
+arm64                randconfig-r033-20230521   clang
+csky                                defconfig   gcc  
+csky                 randconfig-r036-20230521   gcc  
+hexagon      buildonly-randconfig-r002-20230521   clang
+hexagon              randconfig-r014-20230522   clang
+hexagon              randconfig-r015-20230522   clang
+hexagon              randconfig-r024-20230521   clang
+hexagon              randconfig-r031-20230522   clang
+hexagon              randconfig-r041-20230521   clang
+hexagon              randconfig-r041-20230522   clang
+hexagon              randconfig-r045-20230521   clang
+hexagon              randconfig-r045-20230522   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                 randconfig-a001-20230522   gcc  
+i386                 randconfig-a002-20230522   gcc  
+i386                 randconfig-a003-20230522   gcc  
+i386                 randconfig-a004-20230522   gcc  
+i386                 randconfig-a005-20230522   gcc  
+i386                 randconfig-a006-20230522   gcc  
+i386                 randconfig-a011-20230522   clang
+i386                 randconfig-a012-20230522   clang
+i386                 randconfig-a013-20230522   clang
+i386                 randconfig-a014-20230522   clang
+i386                 randconfig-a015-20230522   clang
+i386                 randconfig-a016-20230522   clang
+i386                 randconfig-r011-20230522   clang
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+ia64                 randconfig-r004-20230521   gcc  
+ia64                 randconfig-r016-20230522   gcc  
+ia64                 randconfig-r026-20230522   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                 randconfig-r005-20230521   gcc  
+m68k                 randconfig-r021-20230522   gcc  
+m68k                 randconfig-r022-20230521   gcc  
+m68k                 randconfig-r032-20230522   gcc  
+microblaze   buildonly-randconfig-r001-20230522   gcc  
+microblaze           randconfig-r016-20230521   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips         buildonly-randconfig-r004-20230522   clang
+nios2        buildonly-randconfig-r003-20230522   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r013-20230521   gcc  
+nios2                randconfig-r015-20230521   gcc  
+nios2                randconfig-r023-20230522   gcc  
+openrisc             randconfig-r003-20230522   gcc  
+parisc       buildonly-randconfig-r001-20230521   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r033-20230522   gcc  
+parisc               randconfig-r034-20230522   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r026-20230521   gcc  
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r011-20230521   gcc  
+riscv                randconfig-r025-20230522   clang
+riscv                randconfig-r042-20230521   gcc  
+riscv                randconfig-r042-20230522   clang
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r005-20230522   gcc  
+s390                 randconfig-r044-20230521   gcc  
+s390                 randconfig-r044-20230522   clang
+sh                               allmodconfig   gcc  
+sh           buildonly-randconfig-r005-20230521   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r035-20230522   gcc  
+sparc64      buildonly-randconfig-r006-20230522   gcc  
+sparc64              randconfig-r002-20230521   gcc  
+sparc64              randconfig-r002-20230522   gcc  
+sparc64              randconfig-r006-20230521   gcc  
+sparc64              randconfig-r032-20230521   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64               randconfig-a001-20230522   gcc  
+x86_64               randconfig-a002-20230522   gcc  
+x86_64               randconfig-a003-20230522   gcc  
+x86_64               randconfig-a004-20230522   gcc  
+x86_64               randconfig-a005-20230522   gcc  
+x86_64               randconfig-a006-20230522   gcc  
+x86_64               randconfig-a011-20230522   clang
+x86_64               randconfig-a012-20230522   clang
+x86_64               randconfig-a013-20230522   clang
+x86_64               randconfig-a014-20230522   clang
+x86_64               randconfig-a015-20230522   clang
+x86_64               randconfig-a016-20230522   clang
+x86_64               randconfig-r022-20230522   clang
+x86_64               randconfig-x051-20230522   clang
+x86_64               randconfig-x052-20230522   clang
+x86_64               randconfig-x053-20230522   clang
+x86_64               randconfig-x054-20230522   clang
+x86_64               randconfig-x055-20230522   clang
+x86_64               randconfig-x056-20230522   clang
+x86_64               randconfig-x061-20230522   clang
+x86_64               randconfig-x062-20230522   clang
+x86_64               randconfig-x063-20230522   clang
+x86_64               randconfig-x064-20230522   clang
+x86_64               randconfig-x065-20230522   clang
+x86_64               randconfig-x066-20230522   clang
+x86_64               randconfig-x071-20230522   gcc  
+x86_64               randconfig-x072-20230522   gcc  
+x86_64               randconfig-x073-20230522   gcc  
+x86_64               randconfig-x074-20230522   gcc  
+x86_64               randconfig-x075-20230522   gcc  
+x86_64               randconfig-x076-20230522   gcc  
+x86_64               randconfig-x081-20230522   gcc  
+x86_64               randconfig-x082-20230522   gcc  
+x86_64               randconfig-x083-20230522   gcc  
+x86_64               randconfig-x084-20230522   gcc  
+x86_64               randconfig-x085-20230522   gcc  
+x86_64               randconfig-x086-20230522   gcc  
+x86_64                               rhel-8.3   gcc  
+xtensa       buildonly-randconfig-r003-20230521   gcc  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
