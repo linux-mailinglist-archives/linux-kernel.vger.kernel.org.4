@@ -2,161 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0D1F70B2C9
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 03:28:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3782470B2C6
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 03:26:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231236AbjEVB2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 21:28:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44796 "EHLO
+        id S230219AbjEVB05 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 21:26:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229715AbjEVB2K (ORCPT
+        with ESMTP id S229550AbjEVB0z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 21:28:10 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DEBAC1
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 18:28:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684718889; x=1716254889;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=QyQJCN5elPlHL3m/otcd0ae3nywiqlEjaHw9qMhPzo0=;
-  b=Fmq4enLSZ97IILq7riaE4Bk3/SzOMbIdWDotGV/nj+sNIi7vmIG+pEmx
-   kO6nZg5lshHCVxToVknISHp++arKdymBDjXK5cvG3x/lT/r396lw1c5Tu
-   fprqcao56/0acANR1mJJ3ETWUyOqSXJH12r2oAeGfJk2VMpefREpmdzA+
-   sH6s8sMtLMsnUiuZo21ORPG2xrKacoI+GdhEojq+yg8G+VvwR7A8Ehbwh
-   6PSqdtIvRz9Se39+PzCVyaaRZU5tWx+ccIpzxsM8iLv7HlCTBnx95F76U
-   OFay9ysEEtuZiAEXJ4Q8leVcHEs519ajGk2CRwJCQ8Wxh5cMRTJaFVfWM
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="333165986"
-X-IronPort-AV: E=Sophos;i="6.00,183,1681196400"; 
-   d="scan'208";a="333165986"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2023 18:28:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="768325617"
-X-IronPort-AV: E=Sophos;i="6.00,183,1681196400"; 
-   d="scan'208";a="768325617"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2023 18:28:06 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Chris Li <chrisl@kernel.org>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Tim Chen <tim.c.chen@linux.intel.com>,
-        Yang Shi <shy828301@gmail.com>, Yu Zhao <yuzhao@google.com>
-Subject: Re: [PATCH] swap: cleanup get/put_swap_device usage
-References: <20230516052957.175432-1-ying.huang@intel.com>
-        <d1b054d0-d083-d35c-e547-7e8756fd802a@redhat.com>
-        <87fs7v7qmh.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <ZGj3/p/IFGRTBbHf@google.com>
-Date:   Mon, 22 May 2023 09:26:46 +0800
-In-Reply-To: <ZGj3/p/IFGRTBbHf@google.com> (Chris Li's message of "Sat, 20 May
-        2023 09:40:30 -0700")
-Message-ID: <87ilcl2m21.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Sun, 21 May 2023 21:26:55 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37991C1;
+        Sun, 21 May 2023 18:26:54 -0700 (PDT)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QPfs215rWzLmGq;
+        Mon, 22 May 2023 09:25:26 +0800 (CST)
+Received: from [10.174.177.243] (10.174.177.243) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 22 May 2023 09:26:51 +0800
+Message-ID: <75d8452c-695b-b22a-30d0-15302cd072ef@huawei.com>
+Date:   Mon, 22 May 2023 09:26:50 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] x86/mce: set MCE_IN_KERNEL_COPYIN for all MC-Safe Copy
+Content-Language: en-US
+To:     "Luck, Tony" <tony.luck@intel.com>, Borislav Petkov <bp@alien8.de>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>
+CC:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "chu, jane" <jane.chu@oracle.com>
+References: <20230508022233.13890-1-wangkefeng.wang@huawei.com>
+ <d13b2730-bc20-3e32-a6c0-44c525ca9f0b@huawei.com>
+ <SJ1PR11MB6083194699B63B199A2B5199FC7C9@SJ1PR11MB6083.namprd11.prod.outlook.com>
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+In-Reply-To: <SJ1PR11MB6083194699B63B199A2B5199FC7C9@SJ1PR11MB6083.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.243]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Chris Li <chrisl@kernel.org> writes:
 
-> On Wed, May 17, 2023 at 08:23:18AM +0800, Huang, Ying wrote:
->> David Hildenbrand <david@redhat.com> writes:
->> 
->> > On 16.05.23 07:29, Huang Ying wrote:
->> >> The general rule to use a swap entry is as follows.
->> >> When we get a swap entry, if there isn't some other way to prevent
->> >> swapoff, such as page lock for swap cache, page table lock, etc., the
->> >> swap entry may become invalid because of swapoff.  Then, we need to
->> >> enclose all swap related functions with get_swap_device() and
->> >> put_swap_device(), unless the swap functions call
->> >> get/put_swap_device() by themselves.
->> >> Add the rule as comments of get_swap_device(), and cleanup some
->> >> functions which call get/put_swap_device().
->> >> 1. Enlarge the get/put_swap_device() protection range in
->> >> __read_swap_cache_async().  This makes the function a little easier to
->> >> be understood because we don't need to consider swapoff.  And this
->> >> makes it possible to remove get/put_swap_device() calling in some
->> >> function called by __read_swap_cache_async().
->> >> 2. Remove get/put_swap_device() in __swap_count().  Which is call in
->> >> do_swap_page() only, which encloses the call with get/put_swap_device()
->> >> already.
->> >> 3. Remove get/put_swap_device() in __swp_swapcount().  Which is call
->> >> in __read_swap_cache_async() only, which encloses the call with
->> >> get/put_swap_device() already.
->> >> 4. Remove get/put_swap_device() in __swap_duplicate(). Which is
->> >> called
->> >> by
->> >> - swap_shmem_alloc(): the swap cache is locked.
->> >> - copy_nonpresent_pte() -> swap_duplicate() and try_to_unmap_one()
->> >> ->
->> >> swap_duplicate(): the page table lock is held.
->> >> - __read_swap_cache_async() -> swapcache_prepare(): enclosed with
->> >> get/put_swap_device() already.
->> >> Other get/put_swap_device() usages are checked too.
->> >
->> > I suggest splitting this patch up into logical pieces as outlined here
->> > by you already.
->
-> Agree with David here.
->
->> 
->> OK.  Will do that in the next version.
->
-> Your patch make sense to me.
->
-> Looking forward to your next version.
->
-> BTW, no relat to your patch, but just when I look
-> at your patch I notice is that we have too many swap
-> count functions.
-> The naming scheme is very confusing.
->
-> 1) swap_count(), just mask out SWAP_HAS_CACHE
->
-> 2) __swap_count() the name with underscore suggest it
-> is more internal.  But __swap_count() calls swap_count().
-> It is basically swap_count() with device lookup.
->
-> 3) swap_swapcount()
-> similar to __swap_count() but with cluster level
-> locking if possible. otherwise fall back to device level locking.
->
-> 4) __swp_swapcount()
-> swap_swapcount () with device lookup.  not consider continuing.
-> Again this function is more external while swap_swapcount()
-> is more internal.
->
-> 5) swp_swapcount() similar to __swp_swapcount()
-> exact count consider continue
->
-> We should have a more consistent naming regarding swap count.
-> Device level, then cluster level, then entry level.
 
-Yes.  The original naming is confusing.
+On 2023/5/20 0:17, Luck, Tony wrote:
+>> For now, the MCE_IN_KERNEL_COPYIN flag is only set for EX_TYPE_COPY
+>> and EX_TYPE_UACCESS when copy from user, and corrupted page is
+>> isolated in this case, for MC-safe copy, memory_failure() is not
+>> always called, some places, like __wp_page_copy_user, copy_subpage,
+>> copy_user_gigantic_page and ksm_might_need_to_copy manually call
+>> memory_failure_queue() to cope with such unhandled error pages,
+>> recently coredump hwposion recovery support[1] is asked to do the
+>> same thing, and there are some other already existed MC-safe copy
+>> scenarios, eg, nvdimm, dm-writecache, dax, which has similar issue.
+>>
+>> The best way to fix them is set MCE_IN_KERNEL_COPYIN to MCE_SAFE
+>> exception, then kill_me_never() will be queued to call memory_failure()
+>> in do_machine_check() to isolate corrupted page, which avoid calling
+>> memory_failure_queue() after every MC-safe copy return.
+>>
+>> [1] https://lkml.kernel.org/r/20230417045323.11054-1-wangkefeng.wang@huawei.com
+> 
+> Is this patch in addition to, or instead of, the earlier core dump patch?
 
-> Also I consider the continuing is internal to the current
-> swap index implementation. If we have alternative swap file
-> implementation, we might not have count continuing at all.
+This is an addition, in previous coredump patch, manually call 
+memory_failure_queue()
+to be asked to cope with corrupted page, and it is similar to your
+"Copy-on-write poison recovery"[1], but after some discussion, I think
+we could add MCE_IN_KERNEL_COPYIN to all MC-safe copy, which will
+cope with corrupted page in the core do_machine_check() instead of
+do it one-by-one.
 
-There's some difficulties to hide continuation completely.  For example,
-we want to call add_swap_count_continuation() in non-atomic context in
-copy_pte_range(), while the fast path calls swap_duplicate() in atomic
-context (via copy_nonpresent_pte()).
+The related patch is
+normal page CoW [1]
+huge page CoW [2]
+coredump [3]
+ksm might copy [4]
 
-Best Regards,
-Huang, Ying
+[1] d302c2398ba2 ("mm, hwpoison: when copy-on-write hits poison, take 
+page offline")
+a873dfe1032a ("mm, hwpoison: try to recover from copy-on write faults")
+
+[2] 1cb9dc4b475c ("mm: hwpoison: support recovery from HugePage 
+copy-on-write faults")
+
+[3] 245f09226893 ("mm: hwpoison: coredump: support recovery from 
+dump_user_range()")
+
+[4] 6b970599e807 ("mm: hwpoison: support recovery from 
+ksm_might_need_to_copy()")
+
+All of them are in v6.4-rc1.
+
+Thanks.
+Kefeng
+
+> 
+> I'd like to run some tests. Can you point me a the precise set of patches
+> that I should apply please?
+> 
+> -Tony
+>   
