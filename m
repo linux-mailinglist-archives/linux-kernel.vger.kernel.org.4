@@ -2,94 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9682F70B4F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 08:21:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC75C70B4FA
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 08:23:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbjEVGVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 02:21:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43296 "EHLO
+        id S229898AbjEVGXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 02:23:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229529AbjEVGVI (ORCPT
+        with ESMTP id S229529AbjEVGXI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 02:21:08 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B7BCF;
-        Sun, 21 May 2023 23:21:07 -0700 (PDT)
-Date:   Mon, 22 May 2023 06:21:02 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1684736464;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Nl//gg82Y1wK4EJZJUqHwr3bm6EvVQg6av4czVXouLM=;
-        b=zSEtmQb6rx7nsoynyQZCErQ6UJPq+V01TUZYxrPN0HoM34J0dEsc1jclI5s0P07/7T3XUs
-        ZmiiQACvZtBEJexDpT++TT5EBz6pOoFUunLe+l8XAgEiSQyIbXaMgEWBsA9KTn6tiMf8CD
-        9vs8k4T17Md5ZU8TFttTWAMw2vBmUkVTXBgTrCHKznkwwAbqAmhcm4BL2K7CQCTR+2CbuZ
-        vGXftJAYDeNFOThwOi27baJ03Mw8ecrappbc64k6wrI1WaRSG38yGPOxelnIX6QhXeL8sj
-        YWWoX+QbjQ4yPd1l7Lo5dUZ2sIx+mheiU+MC7eifFScI91GfjNEQTj/y2MDS0w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1684736464;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Nl//gg82Y1wK4EJZJUqHwr3bm6EvVQg6av4czVXouLM=;
-        b=Jkbp1M2RP/yKsuxyGVdvW7PPdZHAua+txv7Cp2pCZWbeey7tyHUe3cUIMXEnHiXTqqGwxt
-        KZMvO3dMg0M7L+AA==
-From:   "tip-bot2 for Thomas Gleixner" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: irq/urgent] Merge tag 'irqchip-fixes-6.4-1' of
- git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms into
- irq/urgent
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, maz@kernel.org
-In-Reply-To: <20230521101812.2520740-1-maz@kernel.org>
-References: <20230521101812.2520740-1-maz@kernel.org>
+        Mon, 22 May 2023 02:23:08 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEBA7ED
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 23:23:06 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q0ywb-0001Xd-Gv; Mon, 22 May 2023 08:22:57 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q0ywY-001wVk-Sw; Mon, 22 May 2023 08:22:54 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1q0ywY-006nxT-7b; Mon, 22 May 2023 08:22:54 +0200
+Date:   Mon, 22 May 2023 08:22:54 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Aurelien Jarno <aurelien@aurel32.net>
+Cc:     linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Olof Johansson <olof@lixom.net>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org, soc@kernel.org
+Subject: Re: [PATCH 0/2] arm/arm64: dts: Enable device-tree overlay support
+ for RPi devices
+Message-ID: <20230522062254.6biyisl4qp7krm3h@pengutronix.de>
+References: <20220410225940.135744-1-aurelien@aurel32.net>
 MIME-Version: 1.0
-Message-ID: <168473646279.404.11156140451881416759.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="owu27q3xhaobzkom"
+Content-Disposition: inline
+In-Reply-To: <20220410225940.135744-1-aurelien@aurel32.net>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/urgent branch of tip:
 
-Commit-ID:     4115af49d2c24e840461fb83027315e2d2de6db4
-Gitweb:        https://git.kernel.org/tip/4115af49d2c24e840461fb83027315e2d2de6db4
-Author:        Thomas Gleixner <tglx@linutronix.de>
-AuthorDate:    Mon, 22 May 2023 08:11:01 +02:00
-Committer:     Thomas Gleixner <tglx@linutronix.de>
-CommitterDate: Mon, 22 May 2023 08:11:01 +02:00
+--owu27q3xhaobzkom
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Merge tag 'irqchip-fixes-6.4-1' of git://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms into irq/urgent
+Hello,
 
-Pull irqchip fixes from Marc Zyngier:
+On Mon, Apr 11, 2022 at 12:59:38AM +0200, Aurelien Jarno wrote:
+> This patchset changes the generation of the Raspberry Pi devices DTB
+> files to improve the support for out-of-tree device-tree overlays, like
+> it has recently been done for the Nvidia SoCs.
+>=20
+> I personally only need that for arm64, but I have added a similar patch
+> to do the same on arm.
+>=20
+> Aurelien Jarno (2):
+>   arm64: dts: broadcom: Enable device-tree overlay support for RPi
+>     devices
+>   arm: dts: Enable device-tree overlay support for RPi devices
 
-  - MIPS GIC fixes for issues that could result in either
-    loss of state in the interrupt controller, or a deadlock
+I like these changes,
 
-  - Workaround for Mediatek Chromebooks that only save/restore
-    partial state when turning the GIC redistributors off,
-    resulting if fireworks if Linux uses interrupt priorities
-    for pseudo-NMIs
+Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 
-  - Fix the MBIGEN error handling on init
+Given there was no feedback for >1 year now, I wonder if there are good
+reasons against this change, or it just fell through the cracks?!
 
-  - Mark meson-gpio OF data structures as __maybe_unused,
-    avoiding compilation warnings on non-OF setups
+Best regards
+Uwe
 
-Link: https://lore.kernel.org/lkml/20230521101812.2520740-1-maz@kernel.org
----
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--owu27q3xhaobzkom
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmRrCj0ACgkQj4D7WH0S
+/k7/bQf/Xf3slCx2ZMVVh1c6RAW7rjXO+Ue9JKEO4+afkalpGJNYhhbifc/NcB+8
+naeNjgjhQc0g0vAP2MSK+17Tj7vysFC1wKruQ+AhC0rDeCsjGxZNTrZcMCBRyLJm
+wYJU+BQxZshzkmUqZvdLQxfFnwt4r8H8cJXo3V0hgSzX9RXEyY+4X5j7n3Mg1HeH
+GCY0EbiWds7uQKEMQWh6ITPS8OM8Cdacr5/bcaSM+Sb9wBOg/pejoM0fcnY2hH0w
+p0zS7EQox7x4LHa5/SPO+aNrMXYi6iRlfKO/B/jWMWRBeNRnQksQFzWQ3iFCl0GY
+lEJ2swJ2QggYRTK81XipLR2fa45pJw==
+=T73M
+-----END PGP SIGNATURE-----
+
+--owu27q3xhaobzkom--
