@@ -2,136 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C12270B48E
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 07:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69E4D70B491
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 07:31:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231998AbjEVF3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 01:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32900 "EHLO
+        id S231625AbjEVFa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 01:30:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229470AbjEVF3M (ORCPT
+        with ESMTP id S229552AbjEVFay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 01:29:12 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1ECAA8
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:29:11 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-55db055b412so46112237b3.0
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:29:11 -0700 (PDT)
+        Mon, 22 May 2023 01:30:54 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27626AA
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:30:53 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id e9e14a558f8ab-33828a86ee2so255595ab.0
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:30:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684733351; x=1687325351;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=++qSmbn7bhjg3RT15iglmwv4R1gESGfbvlyrc9z9nPg=;
-        b=KUYquKPQFLz686sxc05IvSA2pptVmZo25juuDJPh5PU0X8mcUoMX85X6dQWcuCeLiy
-         uZgK8UCVFiR0+JLDfI+BG2fZ4jpaUFacf9y4wexEGbBLRrMU7EGQ2WyCANVks/wifwjW
-         WIWR1uH1YZ2eCpYGacQpMGZqDG1Rast16Vhqw6loQySVQm459lCNaPM2V4pX8ejuYDHJ
-         iWokAPVtiNyJ1VEM+GanV1g70rryZ2Zn0pEeEaFvrZDQKTZaXrD5lh2IK6/6AvLj649e
-         dxMB/Rriy/3qD/arXkivaOaOUE1co2k6CyJ03pNexh99nj5a3n2SbOmvYztGkHfCQKXx
-         DWrw==
+        d=google.com; s=20221208; t=1684733452; x=1687325452;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QcdvohU0f2w+fIMIX4DbPiChuLXgbqb9UEE/pNtU84k=;
+        b=6N8KkioYqaNwktef6Iq8E5OZXCmKbj1txma/kt5JIFjoTBgLmhUyqho/o6d1DY9PMi
+         /Gqat1eCV+T88xSdtMX9+zK4vQFfYdY18H8uyte14d9SVQ5fVhfwve/W05l3TbR3Mg7S
+         hUV/HYC0LWDD0V/jwvyDYk2uxpUqU5NoduKYg/PZISq+U1849p0A+CLMKFg95+7H7leb
+         XeDeQIkDrqAxJVQ0aOZAiaq/OSNCwdInkHBw/gi4LoI/QGpR0PUtTGUbgMiXwQ0p/2b9
+         hJxe3oaVOzLYLUnQ9wdQzeWEksLNEnvks+TGSvXN1/DJyRTDm9rI3zOVGnwxiH+o/dnX
+         z5Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684733351; x=1687325351;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=++qSmbn7bhjg3RT15iglmwv4R1gESGfbvlyrc9z9nPg=;
-        b=QELWOKdeHEuDJWAOisdqC+w+lPOSfvHFt/6s7MecIq25umeWB3gmwYSCSrl6UeL2WM
-         8w47JIWszwxeeKrcc9ajh7mpv8/KYf56FxbWGBc5AIHVanxt/a4n2ajTz/JAx+9K3H7q
-         yTmcJoiykV37qKxefOkxQf3opfaLp4G8suwmP+PdWRZc5PONlY0v66nKSrJSkNeAXG77
-         aaSuUHleZOaAcudZjj2UtqnUI+kbmrL5jUi46dRLtvQYLWaD8iXqOxSPN8XIrKTWYdOn
-         qst6A3E4e5pzRRJtR8vavdLfgUcPPYM6BulqniH1sbJ1gYTo44bGayg8dckJon3hGtXc
-         v5CA==
-X-Gm-Message-State: AC+VfDymliUZORtXohisVzO4clPzDIrtjSYzRcN4XKo7leDoH7709+Lr
-        DnSInEH8YzUrHIAKQcoaMeRuUA==
-X-Google-Smtp-Source: ACHHUZ58DrOuEAqS21o31T6NkFTUrmPfkTQChFezlC+fyR5u9eV8KPIJhLKCfEeaQKdNd4WYmfpBlw==
-X-Received: by 2002:a0d:cac7:0:b0:55a:2084:9e05 with SMTP id m190-20020a0dcac7000000b0055a20849e05mr10730696ywd.23.1684733350763;
-        Sun, 21 May 2023 22:29:10 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id x67-20020a81a046000000b0054fcbf35b94sm1832465ywg.87.2023.05.21.22.29.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 21 May 2023 22:29:10 -0700 (PDT)
-Date:   Sun, 21 May 2023 22:29:07 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH 31/31] perf/core: Allow pte_offset_map() to fail
-In-Reply-To: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
-Message-ID: <a4616d9b-20d-fdd7-ae7a-7c8af451a1a@google.com>
-References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com>
+        d=1e100.net; s=20221208; t=1684733452; x=1687325452;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QcdvohU0f2w+fIMIX4DbPiChuLXgbqb9UEE/pNtU84k=;
+        b=YAXfQsMSVU9lhCduyF/gxf/exp3o4nLKS0hQrLyRmhi2W/ytsu2WuZ4I51UCbOdd0z
+         KQSBO7+u4VT5So10j23tIz5ym+tMA/UvO/2vkYYP4+YqKK37rJgk3spIL7gyWutGBc3n
+         qmEPz/xUawIzA/F5VaPjcpy90ucJOX0YDE/5TvvSPyHDwxS5D5DrQZdtkR9BlwqokXRZ
+         N3Wrn9DR7ed9V9ALI/j4bEl4Yp6NAXxXRo+fuvjOhG1zRy1ZogmqFy/1eSNyiMYztzD8
+         cHNMw6KfnbUvBqdSlgRw2pCOLO+afWWW1qCHIB30iQ2k89isXmpoAYL1wjvnYcRyNN6+
+         ctdw==
+X-Gm-Message-State: AC+VfDxDqabBtva3lPWyfeijKpndDuhcgEntG7M4uPwpRvpuHaurWvA1
+        qQQI0H0T7ERGX6dJU1UEdgpXQxWeul3FLFSJpd+rcQ==
+X-Google-Smtp-Source: ACHHUZ5aHxjgOROb+esLKY1PeiXeNdAKL5G4yO/Acvbmkrtd0rm5Ip7bPbLL4suDd4QhlbFlqRnwRoZbENEIyp37PCo=
+X-Received: by 2002:a05:6e02:1a0a:b0:32a:f2a9:d1b7 with SMTP id
+ s10-20020a056e021a0a00b0032af2a9d1b7mr783043ild.10.1684733452291; Sun, 21 May
+ 2023 22:30:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20230517145803.559429-1-irogers@google.com> <20230517145803.559429-21-irogers@google.com>
+ <efd8389a-aef1-96de-273a-ebac565cb852@linux.intel.com>
+In-Reply-To: <efd8389a-aef1-96de-273a-ebac565cb852@linux.intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Sun, 21 May 2023 22:30:40 -0700
+Message-ID: <CAP-5=fV5zgPs_VayVhMq-pu7C1A_QeFvbq=jtC04GBS9T4yV2w@mail.gmail.com>
+Subject: Re: [PATCH v1 20/23] perf pmus: Split pmus list into core and uncore
+To:     "Liang, Kan" <kan.liang@linux.intel.com>
+Cc:     Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Jing Zhang <renyu.zj@linux.alibaba.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        Ming Wang <wangming01@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Sandipan Das <sandipan.das@amd.com>,
+        Dmitrii Dolgov <9erthalion6@gmail.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Ali Saidi <alisaidi@amazon.com>, Rob Herring <robh@kernel.org>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Kang Minchul <tegongkang@gmail.com>,
+        linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In rare transient cases, not yet made possible, pte_offset_map() and
-pte_offet_map_lock() may not find a page table: handle appropriately.
+On Sun, May 21, 2023 at 1:07=E2=80=AFPM Liang, Kan <kan.liang@linux.intel.c=
+om> wrote:
+>
+> On 2023-05-17 10:58 a.m., Ian Rogers wrote:
+> > Split the pmus list into core and uncore. This will later allow for
+> > the core and uncore pmus to be populated separately.
+>
+> I think the "uncore pmus" here means the other non-core PMUs, right? If
+> so, I think the "uncore pmus" is misleading, since we have a dedicated
+> uncore driver/PMU. Maybe we can use "other pmus" instead.
+>
+> Thanks,
+> Kan
 
-Signed-off-by: Hugh Dickins <hughd@google.com>
----
-This is a perf patch, not an mm patch, and it will want to go in through
-the tip tree in due course; but keep it in this series for now, so that
-it's not missed, and not submitted before mm review.
+I'm okay with other PMUs. I'll change it in v2.
 
- kernel/events/core.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Thanks,
+Ian
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index db016e418931..174be710f3b3 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -7490,6 +7490,7 @@ static u64 perf_get_pgtable_size(struct mm_struct *mm, unsigned long addr)
- 		return pud_leaf_size(pud);
- 
- 	pmdp = pmd_offset_lockless(pudp, pud, addr);
-+again:
- 	pmd = pmdp_get_lockless(pmdp);
- 	if (!pmd_present(pmd))
- 		return 0;
-@@ -7498,6 +7499,9 @@ static u64 perf_get_pgtable_size(struct mm_struct *mm, unsigned long addr)
- 		return pmd_leaf_size(pmd);
- 
- 	ptep = pte_offset_map(&pmd, addr);
-+	if (!ptep)
-+		goto again;
-+
- 	pte = ptep_get_lockless(ptep);
- 	if (pte_present(pte))
- 		size = pte_leaf_size(pte);
--- 
-2.35.3
-
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >  tools/perf/util/pmus.c | 52 ++++++++++++++++++++++++++++++------------
+> >  1 file changed, 38 insertions(+), 14 deletions(-)
+> >
+> > diff --git a/tools/perf/util/pmus.c b/tools/perf/util/pmus.c
+> > index 2fb28e583366..dd029a810147 100644
+> > --- a/tools/perf/util/pmus.c
+> > +++ b/tools/perf/util/pmus.c
+> > @@ -12,13 +12,19 @@
+> >  #include "pmu.h"
+> >  #include "print-events.h"
+> >
+> > -static LIST_HEAD(pmus);
+> > +static LIST_HEAD(core_pmus);
+> > +static LIST_HEAD(uncore_pmus);
+> >
+> >  void perf_pmus__destroy(void)
+> >  {
+> >       struct perf_pmu *pmu, *tmp;
+> >
+> > -     list_for_each_entry_safe(pmu, tmp, &pmus, list) {
+> > +     list_for_each_entry_safe(pmu, tmp, &core_pmus, list) {
+> > +             list_del(&pmu->list);
+> > +
+> > +             perf_pmu__delete(pmu);
+> > +     }
+> > +     list_for_each_entry_safe(pmu, tmp, &uncore_pmus, list) {
+> >               list_del(&pmu->list);
+> >
+> >               perf_pmu__delete(pmu);
+> > @@ -29,7 +35,12 @@ static struct perf_pmu *pmu_find(const char *name)
+> >  {
+> >       struct perf_pmu *pmu;
+> >
+> > -     list_for_each_entry(pmu, &pmus, list) {
+> > +     list_for_each_entry(pmu, &core_pmus, list) {
+> > +             if (!strcmp(pmu->name, name) ||
+> > +                 (pmu->alias_name && !strcmp(pmu->alias_name, name)))
+> > +                     return pmu;
+> > +     }
+> > +     list_for_each_entry(pmu, &uncore_pmus, list) {
+> >               if (!strcmp(pmu->name, name) ||
+> >                   (pmu->alias_name && !strcmp(pmu->alias_name, name)))
+> >                       return pmu;
+> > @@ -53,7 +64,7 @@ struct perf_pmu *perf_pmus__find(const char *name)
+> >               return pmu;
+> >
+> >       dirfd =3D perf_pmu__event_source_devices_fd();
+> > -     pmu =3D perf_pmu__lookup(&pmus, dirfd, name);
+> > +     pmu =3D perf_pmu__lookup(is_pmu_core(name) ? &core_pmus : &uncore=
+_pmus, dirfd, name);
+> >       close(dirfd);
+> >
+> >       return pmu;
+> > @@ -72,7 +83,7 @@ static struct perf_pmu *perf_pmu__find2(int dirfd, co=
+nst char *name)
+> >       if (pmu)
+> >               return pmu;
+> >
+> > -     return perf_pmu__lookup(&pmus, dirfd, name);
+> > +     return perf_pmu__lookup(is_pmu_core(name) ? &core_pmus : &uncore_=
+pmus, dirfd, name);
+> >  }
+> >
+> >  /* Add all pmus in sysfs to pmu list: */
+> > @@ -93,7 +104,7 @@ static void pmu_read_sysfs(void)
+> >       while ((dent =3D readdir(dir))) {
+> >               if (!strcmp(dent->d_name, ".") || !strcmp(dent->d_name, "=
+.."))
+> >                       continue;
+> > -             /* add to static LIST_HEAD(pmus): */
+> > +             /* add to static LIST_HEAD(core_pmus) or LIST_HEAD(uncore=
+_pmus): */
+> >               perf_pmu__find2(fd, dent->d_name);
+> >       }
+> >
+> > @@ -104,24 +115,37 @@ struct perf_pmu *perf_pmus__find_by_type(unsigned=
+ int type)
+> >  {
+> >       struct perf_pmu *pmu;
+> >
+> > -     list_for_each_entry(pmu, &pmus, list)
+> > +     list_for_each_entry(pmu, &core_pmus, list) {
+> >               if (pmu->type =3D=3D type)
+> >                       return pmu;
+> > -
+> > +     }
+> > +     list_for_each_entry(pmu, &uncore_pmus, list) {
+> > +             if (pmu->type =3D=3D type)
+> > +                     return pmu;
+> > +     }
+> >       return NULL;
+> >  }
+> >
+> > +/*
+> > + * pmu iterator: If pmu is NULL, we start at the begin, otherwise retu=
+rn the
+> > + * next pmu. Returns NULL on end.
+> > + */
+> >  struct perf_pmu *perf_pmus__scan(struct perf_pmu *pmu)
+> >  {
+> > -     /*
+> > -      * pmu iterator: If pmu is NULL, we start at the begin,
+> > -      * otherwise return the next pmu. Returns NULL on end.
+> > -      */
+> > +     bool use_core_pmus =3D !pmu || pmu->is_core;
+> > +
+> >       if (!pmu) {
+> >               pmu_read_sysfs();
+> > -             pmu =3D list_prepare_entry(pmu, &pmus, list);
+> > +             pmu =3D list_prepare_entry(pmu, &core_pmus, list);
+> > +     }
+> > +     if (use_core_pmus) {
+> > +             list_for_each_entry_continue(pmu, &core_pmus, list)
+> > +                     return pmu;
+> > +
+> > +             pmu =3D NULL;
+> > +             pmu =3D list_prepare_entry(pmu, &uncore_pmus, list);
+> >       }
+> > -     list_for_each_entry_continue(pmu, &pmus, list)
+> > +     list_for_each_entry_continue(pmu, &uncore_pmus, list)
+> >               return pmu;
+> >       return NULL;
+> >  }
