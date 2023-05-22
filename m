@@ -2,117 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7491470C2A2
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:41:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A63770C2A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:42:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234519AbjEVPlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 11:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39700 "EHLO
+        id S234396AbjEVPmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 11:42:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234331AbjEVPlJ (ORCPT
+        with ESMTP id S233263AbjEVPmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 11:41:09 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C400BAA
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 08:41:06 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f60804faf4so4835715e9.3
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 08:41:06 -0700 (PDT)
+        Mon, 22 May 2023 11:42:22 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914F3BB;
+        Mon, 22 May 2023 08:42:21 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-96f683e8855so542302166b.2;
+        Mon, 22 May 2023 08:42:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684770065; x=1687362065;
+        d=gmail.com; s=20221208; t=1684770140; x=1687362140;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zZbI9Wjr8CPtJgehhTMTkDmsYOH6G4DAw3l/uTCKFew=;
-        b=QiQLvgbc3foT90RwrkENIBertSwrQYuBmNYBl15SIUzvfTE0tufrgSD1OcGqBnNDu/
-         87uF1cBXqZKWKkNJhPB2ePv03RTZ+ffD11XQygDZhhjAdBvhpN5MTjoPc5hy3l/Kk57I
-         gcWOZ5Jvggm08WfsiKdsQy25SLn+rfzr1J5BUWAWxWJyjbcDMh5b2oCOiUeyAuk3gJhS
-         gyd9Fly9eYWb4SI96+M/2yt3UWhK1jp8KvUjvsTx8UHamzkJYJh5OkIIVH5VE/laH4XM
-         pRyM5+h7H6inZniVomaJXBICenUWfREcXG0ac9dyXWtsc5BleWqnq71ak+ZUMvRA2TMQ
-         HbbQ==
+        bh=R2uvdvik+ZWgrMacuWa8N+oGUBZ4UqdxP/XkyU0vVCU=;
+        b=U2JdCWOlAEnxMrpCk0ohuQN/dmFIlp+/a2HFjzth/IhAI4ofWxOMTwC8R/sAE9Nry0
+         Mw5JFqba8dRi6JgL65PToml4YMSUQnogCWk8wny9+eHDbeJ5YivWA6p5VWJS1TJA9TIb
+         DHUvMOMfbDOnvA/Tj0G+Jpc+3k6TQ0j7y//VvW9+oCMGvjwclp34566ocC/nwPxRicGu
+         xWYl58sZ4o1xRR/5+GNcQB4tAmmnFkPr9mHS5jlHrVePZxI30LJ2qJcHPkBDjE2sUfbn
+         DNtI91EIfZMR9kxC/I3SW1XTDbYRGJ/c8v9DMmbGKy/o8wyhQ/sgeHWFmxOnDx/gM+vl
+         TtSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684770065; x=1687362065;
+        d=1e100.net; s=20221208; t=1684770140; x=1687362140;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zZbI9Wjr8CPtJgehhTMTkDmsYOH6G4DAw3l/uTCKFew=;
-        b=B2rNYG4aJe5P9AZ9959G9jYk1IdGilMDpXJoz3K7I6eki42k/tZadm2Wlcdv/tWDov
-         5NpRMAKXFWD3MtlivFEa287mFVooU9/p8RYyhfxiggupzAgCWaRB+UFV3q/FTcVmohwM
-         RNB6ouXcRPHh0Mc6wUwMrEk4UlkBn0sffUB9CSy+hX5flftFLuTj+6BZYZL+pxXTG/su
-         Tl69eawFaYmsMCCj/9TGeCEq33U29+55xIFRpd9RkF8OMEnUKsrUHI8mH2l2uNHqOgnc
-         eGdRCj52CaV4AM0v/AhLVAiIKSys4/ErkPxyC85pzqXoUY7VD7I6bYui//R4sULbQZ9J
-         aObA==
-X-Gm-Message-State: AC+VfDzkGHQGMoYKHETJ1lc0qynZkMWj6QhhcVUbesBUCaZkUOkPD4XK
-        Iej57AUKPkutC0IUWv6Zev4gpw==
-X-Google-Smtp-Source: ACHHUZ5XGpgLCJW3YqYVYu+Q/4LUzOXgVsiGfL1ZFM0PSny4MCKkaY+MsVsawwM6maK61KKedEyuRg==
-X-Received: by 2002:a7b:c8c6:0:b0:3ed:5d41:f95c with SMTP id f6-20020a7bc8c6000000b003ed5d41f95cmr8083901wml.11.1684770065249;
-        Mon, 22 May 2023 08:41:05 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id c11-20020adfe74b000000b00306281cfa59sm8159157wrn.47.2023.05.22.08.41.02
+        bh=R2uvdvik+ZWgrMacuWa8N+oGUBZ4UqdxP/XkyU0vVCU=;
+        b=GcN4tqFre8gdgc+t6mXHNq4bm82yTXZSRsjt2BGC+phNoT/YYPyGDVQWo6SExBdNAk
+         Mswd+XtqoUGw6JTTZ+wQ+40GlBVY+4E7V9W7Dive5aJi3zXGGtpOYbfC8x5WDvUx0Msb
+         ZzOm8HBHKBboB/Q1F1Bewv5syIIc+Gds7h0QLrEg8Sm1lgZgvxfwpm+BfRkUrp1pxU9H
+         cL5JWJT52OiXQCXpc3b7WPz4fahk4P+NRN9iNyx+4uiM1qR9b4pGziRzCBmPovDspV8/
+         ZWql6gopydoJaoxPkTpm+FNi1t5AaKTG89rQtVktyp7Ef5Vl/+UuKcHFZdnona0Bbux2
+         Vkyg==
+X-Gm-Message-State: AC+VfDwZn0gGbYZNIsLuL26Id0gyC7I3XoPjgKrDbGJUsW5cMc9Tn8st
+        0L4R8/0rBJUTYtSblngxtzk=
+X-Google-Smtp-Source: ACHHUZ4e+/grE6eeyjke4A9GPCdARoK2xdjM92TMhGaC/BxZNe9NDxwRznvQX09oc39D9LhbOhII4g==
+X-Received: by 2002:a17:907:2da7:b0:970:10a9:3ca8 with SMTP id gt39-20020a1709072da700b0097010a93ca8mr1576740ejc.22.1684770139610;
+        Mon, 22 May 2023 08:42:19 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id w20-20020a170907271400b0096a16761ab4sm3279674ejk.144.2023.05.22.08.42.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 08:41:03 -0700 (PDT)
-Date:   Mon, 22 May 2023 18:40:59 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        linux-stable <stable@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Shuah Khan <shuah@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: arm64: fp-stress: BUG: KFENCE: memory corruption in
- fpsimd_release_task
-Message-ID: <43d53046-f8d9-4c4a-90ba-709910a13f97@kili.mountain>
-References: <CA+G9fYtU7HsV0R0dp4XEH5xXHSJFw8KyDf5VQrLLfMxWfxQkag@mail.gmail.com>
- <2d9a04d8-c09e-49aa-95eb-32b4679f7eba@kili.mountain>
- <ZGWE36pSRMsIHCCa@finisterre.sirena.org.uk>
+        Mon, 22 May 2023 08:42:19 -0700 (PDT)
+Date:   Mon, 22 May 2023 18:42:17 +0300
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     David Epping <david.epping@missinglinkelectronics.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH net 3/3] net: phy: mscc: enable VSC8501/2 RGMII RX clock
+Message-ID: <20230522154217.ganjnt2bng5wxng6@skbuf>
+References: <20230520160603.32458-1-david.epping@missinglinkelectronics.com>
+ <20230520160603.32458-4-david.epping@missinglinkelectronics.com>
+ <20230521134356.ar3itavhdypnvasc@skbuf>
+ <20230521161650.GC2208@nucnuc.mle>
+ <20230522095833.otk2nv24plmvarpt@skbuf>
+ <20230522140057.GB18381@nucnuc.mle>
+ <20230522151104.clf3lmsqdndihsvo@skbuf>
+ <20230522152221.GA21090@nucnuc.mle>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZGWE36pSRMsIHCCa@finisterre.sirena.org.uk>
+In-Reply-To: <20230522152221.GA21090@nucnuc.mle>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 18, 2023 at 10:52:31AM +0900, Mark Brown wrote:
-> > When we call sme_alloc() it will say the buffer is already allocated
-> > and just zero out what we need for "vl", but the existing buffer is too
-> > small.
+On Mon, May 22, 2023 at 05:22:21PM +0200, David Epping wrote:
+> > > Also we don't want to enable for
+> > > all PHY types, and the differentiation is already available at the
+> > > caller. I would thus opt for a separate function and fewer conditional
+> > > statements.
+> > 
+> > I don't understand this. We don't? For what PHY types don't we want to
+> > enable the RX_CLK?
 > 
-> If we are setting the SVE vector length we do not need to reallocate the
-> SME state since the size of the data stored in the sme_state buffer is
-> influenced only by the SME vector length, not the SVE vector length.  We
-> unconditionally free the SVE state (causing it to be reallocated when
-> needed) since the size needed for it depends on both vector lengths.
+> I meant all PHYs using vsc85xx_rgmii_set_skews() via vsc8584_config_init().
 
-arch/arm64/kernel/fpsimd.c
-   909          /*
-   910           * Force reallocation of task SVE and SME state to the correct
-   911           * size on next use:
-   912           */
-   913          sve_free(task);
-                ^^^^^^^^^^^^^^
-Sure, this forces a reallocation.  But what prevents it from happening
-before we reach the task_set_vl() line?
+Aha. By "PHY types" I thought you mean "PHY interface types" like RGMII/GMII/MII,
+not PHY device models.
 
-   914          if (system_supports_sme() && type == ARM64_VEC_SME)
-   915                  sme_free(task);
-   916  
-   917          task_set_vl(task, type, vl);
-   918  
-   919  out:
-   920          update_tsk_thread_flag(task, vec_vl_inherit_flag(type),
-   921                                 flags & PR_SVE_VL_INHERIT);
-   922  
-   923          return 0;
+> As you pointed out they don't have a clear definition of what bit 11 means
+> for them.
 
-regards,
-dan carpenter
+And I wasn't suggesting to make bit 11 part of the modified "mask" for them.
+
+> But we can easily differentiate using the condition you suggested.
+> I'll do that for the new patch version.
+
+Sounds good, thanks.
