@@ -2,157 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2A470B95C
+	by mail.lfdr.de (Postfix) with ESMTP id 3AB5B70B95B
 	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:50:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232665AbjEVJuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 05:50:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42084 "EHLO
+        id S232648AbjEVJuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 05:50:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232712AbjEVJuA (ORCPT
+        with ESMTP id S232554AbjEVJtx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 05:50:00 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2DA1B4
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 02:49:58 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-309550d4f73so2152712f8f.1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 02:49:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684748997; x=1687340997;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xYDTRQ3Z+kp4Z7bD3A9FTH/4o0GFqdJBXFfGhyiCeNM=;
-        b=nE0JX8ZMTTQ5g0zlQTtrTgBkHXhIXT+ZxuDqrV6vUXsajL/ZaaFCmTc4UtkmlnIR26
-         QZawwCLEsJLkxRlEdAOWDXThy25B+FrNSeHNxSxStrUWo44tSix1Fy/3+knXdEob3pDm
-         eqyRLrZDhya90byJDGIHpPgSL25m86fJmVewzx36RtHa8diNw3QFM8gRiVTE4pLPFKB/
-         eL8Y7EJx/En+erz1PI3zYfpQwStuDppDjHdr0LVsqKDXz2alUJf+dMRaTaWxnQvLMzyU
-         ajg7T2gw920r5qBPzmY/Iq15EExfoTigB1qwkdBtYXVnyCS3YpM+ZbGD9UcsvuYMILzc
-         dXDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684748997; x=1687340997;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xYDTRQ3Z+kp4Z7bD3A9FTH/4o0GFqdJBXFfGhyiCeNM=;
-        b=V3atEONc1w5bDTCGaJ0CANnYcaFWIvFO9qTFUzpQwRxi9+Rqqt0OYVxfwx4aHeXI55
-         5BVkfP1Y8AoYdCzZxUXKyQH7wqAY1JbgmSoKcBCxkubm1AliRlmU0f+plZMzQOOZPopB
-         GfU5sE2Q2th7ylXzVqBUk9MlMidsFWhqHBiSsDQa5+YliS9uybVoRwfjyjPC2Xhpz7yg
-         jkrtozVeySD6M2GWSm/2YEzRI869PFaUCqXjGpjvbGEkoQ3irBp0c0VMd3MY+9PtqrN8
-         qLsOKntdxVpRjuC7j8Owp3F7RsbaOQ7SoB84ncbhGblB1s88KSnY5iVa8wCfgOXYrDkU
-         yo2g==
-X-Gm-Message-State: AC+VfDyuWc7HNRZ2YmfAYLLK1MljIdjmuL98i+bcBpebGtRfWDA4Xz08
-        RT4k2T4YS2k1ugo8DkBZyYx/H+bHB8Ljfc9vqGVNsg==
-X-Google-Smtp-Source: ACHHUZ7lnvos8gjXPExW9Hu+ML+UsOruMb/Lyv03oJkHB6x0mrot9YE+05pfJIMz5t/KRfj9tdu6ehuJN5klDvrLf+8=
-X-Received: by 2002:adf:fa01:0:b0:306:3163:2b76 with SMTP id
- m1-20020adffa01000000b0030631632b76mr7090443wrr.15.1684748997248; Mon, 22 May
- 2023 02:49:57 -0700 (PDT)
+        Mon, 22 May 2023 05:49:53 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 79C7BB4;
+        Mon, 22 May 2023 02:49:51 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.41:34704.564609069
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.41])
+        by 189.cn (HERMES) with SMTP id C1E0E100210;
+        Mon, 22 May 2023 17:49:48 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-75648544bd-xwndj with ESMTP id 0f677f17687045fdbb6736c1fd24ac9b for kernel@xen0n.name;
+        Mon, 22 May 2023 17:49:50 CST
+X-Transaction-ID: 0f677f17687045fdbb6736c1fd24ac9b
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <ac2fde55-c770-fbb5-844d-50fb38dd90be@189.cn>
+Date:   Mon, 22 May 2023 17:49:47 +0800
 MIME-Version: 1.0
-References: <20230522093620.3568-1-quic_kbajaj@quicinc.com> <20230522093620.3568-4-quic_kbajaj@quicinc.com>
-In-Reply-To: <20230522093620.3568-4-quic_kbajaj@quicinc.com>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Date:   Mon, 22 May 2023 15:19:45 +0530
-Message-ID: <CAH=2NtzBWjAuJ2mvtnBzDkhMXk+MZX_KwE-8U9CW42fQL+SBGA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] arm64: dts: qcom: qdu1000: Add SDHCI1 pin
- configuration to DTSI
-To:     Komal Bajaj <quic_kbajaj@quicinc.com>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v14 1/2] drm: add kms driver for loongson display
+ controller
+Content-Language: en-US
+To:     WANG Xuerui <kernel@xen0n.name>, Sui Jingfeng <15330273260@189.cn>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Christian Koenig <christian.koenig@amd.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>
+Cc:     linaro-mm-sig@lists.linaro.org, loongson-kernel@lists.loongnix.cn,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Liu Peibao <liupeibao@loongson.cn>, linux-media@vger.kernel.org
+References: <20230520105718.325819-1-15330273260@189.cn>
+ <20230520105718.325819-2-15330273260@189.cn>
+ <26fd78b9-c074-8341-c99c-4e3b38cd861a@xen0n.name>
+ <e7f911cc-6588-bc0f-8e1e-759260f5187a@189.cn>
+ <ed795dc0-823a-f3d8-9e70-1cf33c0de7f0@xen0n.name>
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <ed795dc0-823a-f3d8-9e70-1cf33c0de7f0@xen0n.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 22 May 2023 at 15:06, Komal Bajaj <quic_kbajaj@quicinc.com> wrote:
->
-> Add required pins for SDHCI1, so that the interface can work reliably.
->
-> Reviewed-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>wq
+Hi,
 
-Err.. an extra wq .. I think this can be fixed while applying, so
-should not require a new version.
-
-Thanks,
-Bhupesh
-
-> Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/qdu1000.dtsi | 50 +++++++++++++++++++++++++++
->  1 file changed, 50 insertions(+)
+On 2023/5/22 17:28, WANG Xuerui wrote:
+> On 2023/5/22 17:25, Sui Jingfeng wrote:
+>> Hi,
+>>
+>> On 2023/5/21 20:21, WANG Xuerui wrote:
+>>>> + * LS3A4000/LS3A5000/LS3A6000 CPU, they are equipped with on-board 
+>>>> video RAM
+>>>> + * typically. While LS2K0500/LS2K1000/LS2K2000 are low cost SoCs 
+>>>> which share
+>>>> + * the system RAM as video RAM, they don't has a dediacated VRAM.
+>>>
+>>> CPU models are not typically prefixed with "LS", so "Loongson 
+>>> 3A4000/3A5000/3A6000".
+>>>
+>> Here is because when you do programming, variable name should prefix 
+>> with letters.
 >
-> diff --git a/arch/arm64/boot/dts/qcom/qdu1000.dtsi b/arch/arm64/boot/dts/qcom/qdu1000.dtsi
-> index 38ee7115a35f..6f23cbfc024c 100644
-> --- a/arch/arm64/boot/dts/qcom/qdu1000.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/qdu1000.dtsi
-> @@ -1151,6 +1151,56 @@
->                                 pins = "gpio31";
->                                 function = "gpio";
->                         };
-> +
-> +                       sdc1_on_state: sdc1-on-state {
-> +                               clk-pins {
-> +                                       pins = "sdc1_clk";
-> +                                       drive-strength = <16>;
-> +                                       bias-disable;
-> +                               };
-> +
-> +                               cmd-pins {
-> +                                       pins = "sdc1_cmd";
-> +                                       drive-strength = <10>;
-> +                                       bias-pull-up;
-> +                               };
-> +
-> +                               data-pins {
-> +                                       pins = "sdc1_data";
-> +                                       drive-strength = <10>;
-> +                                       bias-pull-up;
-> +                               };
-> +
-> +                               rclk-pins {
-> +                                       pins = "sdc1_rclk";
-> +                                       bias-pull-down;
-> +                               };
-> +                       };
-> +
-> +                       sdc1_off_state: sdc1-off-state {
-> +                               clk-pins {
-> +                                       pins = "sdc1_clk";
-> +                                       drive-strength = <2>;
-> +                                       bias-disable;
-> +                               };
-> +
-> +                               cmd-pins {
-> +                                       pins = "sdc1_cmd";
-> +                                       drive-strength = <2>;
-> +                                       bias-pull-up;
-> +                               };
-> +
-> +                               data-pins {
-> +                                       pins = "sdc1_data";
-> +                                       drive-strength = <2>;
-> +                                       bias-pull-up;
-> +                               };
-> +
-> +                               rclk-pins {
-> +                                       pins = "sdc1_rclk";
-> +                                       bias-pull-down;
-> +                               };
-> +                       };
->                 };
+> Commit messages, comments, and log messages etc. are natural language, 
+> so it's better to treat them differently. No problem to keep code 
+> as-is IMO.
 >
->                 apps_smmu: iommu@15000000 {
-> --
-> 2.17.1
+Then you get two name for a single chip,  take  LS7A1000 as an example.
+
+You name it as Loongson 7A1000 in commit message,  and then you have to 
+define another name in the code,  say LS7A1000.
+
+"Loongson 7A1000" is too long,  not as compact as LS7A1000.
+
+This also avoid bind the company name to a specific product, because a 
+company can produce many product.
+
+>>> Also the description about the Loongson 2K series is a bit 
+>>> irrelevant (we're focusing on VRAM here) so you could simplify the 
+>>> sentence a bit. 
+>>
+>> We could reserve part of system RAM as VRAM for Loongson 2K series SoC.
+>>
+>> Either reserved with 'of reserve memory' or  reserved by the firmware.
+>>
+>
+> What's an "of reserve memory"? Is it "DeviceTree-reserved"?
+>
+>> The reserve ram will not accessible by kernel itself it this case, 
+>> and can still be managed by ttm.
+>
+> Of course. Feel free to tweak.
 >
