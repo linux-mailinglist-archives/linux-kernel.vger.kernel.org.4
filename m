@@ -2,327 +2,604 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C4D370B888
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35C5F70B890
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:08:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232525AbjEVJHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 05:07:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47798 "EHLO
+        id S232447AbjEVJI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 05:08:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232715AbjEVJHc (ORCPT
+        with ESMTP id S232160AbjEVJIU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 05:07:32 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71483E6
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 02:07:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1684746432; x=1716282432;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=GY1jmlsDShoB3D8vLCBhaPtZI3XdacyihSRuim17yKE=;
-  b=ZhmxDVrk6NV/YnRbeeT+/4Th2OLN84AOUQrxbIVf+kNpE3gUJ0gzj+Vw
-   gG1hEeREt5DnqgkmiKivcxqwOlm/yLAJdCwucEJCXHCvKejJZRTF+/I5B
-   PH8VnO5PYtBsoOK1NREnwGVuRMV2EOGPhbdAw0Jd2a4rtUDE1gJKb1ze4
-   yMslBHbclzi10IYXQItokC49bdDey/hmvWX3Zvn7r7L8rODRMNdIRCNse
-   7DIsnhNwPiYabNwy6WYpB5xVUEss75d83ZdiV0VcXZM/aDdXHFpWJxBro
-   dx5v8k/yF6iJkRgipYV+WOpO+eOE9cB2Fr+6Z2DRj/jNxz+yKMLQ8TC5i
-   w==;
-X-IronPort-AV: E=Sophos;i="6.00,183,1681196400"; 
-   d="scan'208";a="216607460"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 22 May 2023 02:07:11 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 22 May 2023 02:07:11 -0700
-Received: from [10.159.245.112] (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Mon, 22 May 2023 02:07:10 -0700
-Message-ID: <a7d2bc99-8224-6d8d-57ff-fe68f4a04c2e@microchip.com>
-Date:   Mon, 22 May 2023 11:07:06 +0200
+        Mon, 22 May 2023 05:08:20 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320C9C2
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 02:08:17 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f420618d5bso36535285e9.1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 02:08:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684746495; x=1687338495;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=TSpW1gVvB5cVVAEKCaUdnaLMHTrtmQtwE67H0ZgF21Q=;
+        b=bmni6pR0isIv835bnSoKlZeu9/SXJ4xPWnKUiiaWIX1omr3WRm2IM6pqapWedKUx0I
+         x5/Dd8wXL2IjPAoJ/FsYvyGr8YsUHLkDrL+R6Ctz5KKvPXlwzFwNzYbglk1vgpVFhCXQ
+         jFSNNf9w48FRnCt5c+/aKehDs50JDPdWL7713d9WvbltRi5Rswi4L1a64fw4oSZu3Uyy
+         +c+FffAPCT3wp3owwzwtsgpdRk1ZOctkp5tNWNxpjynbNB0diHA7qYIkGzlCDrPg9xSk
+         dyuSA0GVTZBCkWI51UqKoldjEgvf7jd4+8xNSzhTuAaKNW9JeM48gk9FgUBMQ/CWTZK9
+         qdsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684746495; x=1687338495;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TSpW1gVvB5cVVAEKCaUdnaLMHTrtmQtwE67H0ZgF21Q=;
+        b=e92j+ta2xjqjtd9pfD5xNR9LovzsnRii7AhwaTFPVvPlVzDG+CrEz80fE62I5uEwl3
+         bEhw1U08LWnEDB4Fvd90qxS8ICiNz+di8InzDMXi663S9d9qswYswwGF3WzKuATaZOwa
+         4gqvBxgu8JdnyQofQZafHQn4YottGpz4POhiivV9g0VFvYymtnJu6wZ0vcT4tC4D1BsW
+         qcPe2T1RUZX+luSmMXHvc/AdIa6HzwtLPO9pwxgQBLd2BzsZWFjSZtfzUpHNe1gJlUkD
+         8LuO6n9ysXCSl06DzlWT/yctOHTeIhXkIzHidq2CnfeKaIqCfcEWz4FO8onK3xCBMEr4
+         SGiw==
+X-Gm-Message-State: AC+VfDwxfMJZ/SDTUNMxHrkK5bbZ1P5OVJMlp3HOmAk1J3AxvUit3XNq
+        g+UfhmFr4dZewfNcKhN0c0YL/A==
+X-Google-Smtp-Source: ACHHUZ77+hx3HZCAMlBC62W1q3tZFDkgDbt14mnCG4IgpTDXfN9x+HtvbcjhhiOsUYib+DeuRr6Lrg==
+X-Received: by 2002:a7b:c412:0:b0:3f4:2267:10cf with SMTP id k18-20020a7bc412000000b003f4226710cfmr6853986wmi.32.1684746495508;
+        Mon, 22 May 2023 02:08:15 -0700 (PDT)
+Received: from [192.168.27.65] (home.beaume.starnux.net. [82.66.176.246])
+        by smtp.gmail.com with ESMTPSA id c17-20020a7bc011000000b003f31cb7a203sm7640305wmb.14.2023.05.22.02.08.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 May 2023 02:08:14 -0700 (PDT)
+Message-ID: <cf5dea0f-5999-6ac4-4f04-9b397ca94fdb@linaro.org>
+Date:   Mon, 22 May 2023 11:08:12 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] ARM: at91: pm: fix imbalanced reference counter for
- ethernet devices
+ Thunderbird/102.10.1
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH RFC 08/10] drm/panel/samsung-sofef03: Add panel driver for
+ Sony Xperia 5 II
 Content-Language: en-US
-To:     Claudiu Beznea <claudiu.beznea@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <linux@armlinux.org.uk>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230518062511.2988500-1-claudiu.beznea@microchip.com>
-From:   Nicolas Ferre <nicolas.ferre@microchip.com>
-Organization: microchip
-In-Reply-To: <20230518062511.2988500-1-claudiu.beznea@microchip.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Caleb Connolly <caleb@connolly.tech>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+References: <20230521-drm-panels-sony-v1-0-541c341d6bee@somainline.org>
+ <20230521-drm-panels-sony-v1-8-541c341d6bee@somainline.org>
+ <4679c741-7877-ce79-4086-08ec4ee9e6bf@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <4679c741-7877-ce79-4086-08ec4ee9e6bf@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 18/05/2023 at 08:25, Claudiu Beznea wrote:
-> The of_find_device_by_node() function is returning a struct platform_device
-> object with the embedded struct device member's reference counter
-> incremented. This needs to be dropped when done with the platform device
-> returned by of_find_device_by_node().
+On 22/05/2023 03:23, Dmitry Baryshkov wrote:
+> On 22/05/2023 00:23, Marijn Suijten wrote:
+>> The SOFEF03-M Display-IC paired with an unknown panel in the Sony Xperia
+>> 5 II always uses Display Stream Compression 1.1 and features a 60hz and
+>> 120hz refresh-rate mode.
+>>
+>> Co-developed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 > 
-> at91_pm_eth_quirk_is_valid() calls of_find_device_by_node() on
-> suspend and resume path. On suspend it calls of_find_device_by_node() and
-> on resume and failure paths it drops the counter of
-> struct platform_device::dev.
+> Konrad's S-o-b is also required then
 > 
-> In case ethernet device may not wakeup there is a put_device() on
-> at91_pm_eth_quirk_is_valid() which is wrong as it colides with
-> put_device() on resume path leading to the reference counter of struct
-> device embedded in struct platform_device to be messed, the following
-> stack trace to be displayed (after 5 consecutive suspend/resume cycles)
-> and the execution to hang:
-> 
-> WARNING: CPU: 0 PID: 378 at lib/refcount.c:25 0xc07ffc08
-> refcount_t: addition on 0; use-after-free.
-> Modules linked in:
-> CPU: 0 PID: 378 Comm: sh Not tainted 6.1.22-linux4microchip-2023.04-rc3+ #7
-> Hardware name: Microchip SAMA7
-> Function entered at [<c010c134>] from [<c010993c>]
-> Function entered at [<c010993c>] from [<c0823754>]
-> Function entered at [<c0823754>] from [<c01162ac>]
-> Function entered at [<c01162ac>] from [<c0116340>]
-> Function entered at [<c0116340>] from [<c07ffc08>]
-> Function entered at [<c07ffc08>] from [<c045fe88>]
-> Function entered at [<c045fe88>] from [<c046004c>]
-> Function entered at [<c046004c>] from [<c0141e94>]
-> Function entered at [<c0141e94>] from [<c0142448>]
-> Function entered at [<c0142448>] from [<c0140da8>]
-> Function entered at [<c0140da8>] from [<c023dba0>]
-> Function entered at [<c023dba0>] from [<c01d0700>]
-> Function entered at [<c01d0700>] from [<c01d092c>]
-> Function entered at [<c01d092c>] from [<c0100060>]
-> Exception stack(0xe0e81fa8 to 0xe0e81ff0)
-> 1fa0:                   00000004 0057c668 00000001 0057c668 00000004 00000000
-> 1fc0: 00000004 0057c668 b6ecaba0 00000004 b6f4c0e0 b6ecb15c 00000000 00000000
-> 1fe0: 005456f0 beb3a788 b6dcfac4 b6e3bab8
-> ---[ end trace 0000000000000000 ]---
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 378 at lib/refcount.c:28 0xc045fef4
-> refcount_t: underflow; use-after-free.
-> Modules linked in:
-> CPU: 0 PID: 378 Comm: sh Tainted: G        W          6.1.22-linux4microchip-2023.04-rc3+ #7
-> Hardware name: Microchip SAMA7
-> Function entered at [<c010c134>] from [<c010993c>]
-> Function entered at [<c010993c>] from [<c0823754>]
-> Function entered at [<c0823754>] from [<c01162ac>]
-> Function entered at [<c01162ac>] from [<c0116340>]
-> Function entered at [<c0116340>] from [<c045fef4>]
-> Function entered at [<c045fef4>] from [<c046004c>]
-> Function entered at [<c046004c>] from [<c0141e94>]
-> Function entered at [<c0141e94>] from [<c0142448>]
-> Function entered at [<c0142448>] from [<c0140da8>]
-> Function entered at [<c0140da8>] from [<c023dba0>]
-> Function entered at [<c023dba0>] from [<c01d0700>]
-> Function entered at [<c01d0700>] from [<c01d092c>]
-> Function entered at [<c01d092c>] from [<c0100060>]
-> Exception stack(0xe0e81fa8 to 0xe0e81ff0)
-> 1fa0:                   00000004 0057c668 00000001 0057c668 00000004 00000000
-> 1fc0: 00000004 0057c668 b6ecaba0 00000004 b6f4c0e0 b6ecb15c 00000000 00000000
-> 1fe0: 005456f0 beb3a788 b6dcfac4 b6e3bab8
-> ---[ end trace 0000000000000000 ]---
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 378 at lib/refcount.c:22 0xc07ffbf4
-> refcount_t: saturated; leaking memory.
-> Modules linked in:
-> CPU: 0 PID: 378 Comm: sh Tainted: G        W          6.1.22-linux4microchip-2023.04-rc3+ #7
-> Hardware name: Microchip SAMA7
-> Function entered at [<c010c134>] from [<c010993c>]
-> Function entered at [<c010993c>] from [<c0823754>]
-> Function entered at [<c0823754>] from [<c01162ac>]
-> Function entered at [<c01162ac>] from [<c0116340>]
-> Function entered at [<c0116340>] from [<c07ffbf4>]
-> Function entered at [<c07ffbf4>] from [<c045eaa0>]
-> Function entered at [<c045eaa0>] from [<c045fcc4>]
-> Function entered at [<c045fcc4>] from [<c045fee4>]
-> Function entered at [<c045fee4>] from [<c046004c>]
-> Function entered at [<c046004c>] from [<c0141e94>]
-> Function entered at [<c0141e94>] from [<c0142448>]
-> Function entered at [<c0142448>] from [<c0140da8>]
-> Function entered at [<c0140da8>] from [<c023dba0>]
-> Function entered at [<c023dba0>] from [<c01d0700>]
-> Function entered at [<c01d0700>] from [<c01d092c>]
-> Function entered at [<c01d092c>] from [<c0100060>]
-> Exception stack(0xe0e81fa8 to 0xe0e81ff0)
-> 1fa0:                   00000004 0057c668 00000001 0057c668 00000004 00000000
-> 1fc0: 00000004 0057c668 b6ecaba0 00000004 b6f4c0e0 b6ecb15c 00000000 00000000
-> 1fe0: 005456f0 beb3a788 b6dcfac4 b6e3bab8
-> ---[ end trace 0000000000000000 ]---
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 378 at kernel/irq/chip.c:241 0xc014be2c
-> Modules linked in:
-> CPU: 0 PID: 378 Comm: sh Tainted: G        W          6.1.22-linux4microchip-2023.04-rc3+ #7
-> Hardware name: Microchip SAMA7
-> Function entered at [<c010c134>] from [<c010993c>]
-> Function entered at [<c010993c>] from [<c0823754>]
-> Function entered at [<c0823754>] from [<c01162ac>]
-> Function entered at [<c01162ac>] from [<c011637c>]
-> Function entered at [<c011637c>] from [<c014be2c>]
-> Function entered at [<c014be2c>] from [<c014f808>]
-> Function entered at [<c014f808>] from [<c0460050>]
-> Function entered at [<c0460050>] from [<c0141e94>]
-> Function entered at [<c0141e94>] from [<c0142448>]
-> Function entered at [<c0142448>] from [<c0140da8>]
-> Function entered at [<c0140da8>] from [<c023dba0>]
-> Function entered at [<c023dba0>] from [<c01d0700>]
-> Function entered at [<c01d0700>] from [<c01d092c>]
-> Function entered at [<c01d092c>] from [<c0100060>]
-> Exception stack(0xe0e81fa8 to 0xe0e81ff0)
-> 1fa0:                   00000004 0057c668 00000001 0057c668 00000004 00000000
-> 1fc0: 00000004 0057c668 b6ecaba0 00000004 b6f4c0e0 b6ecb15c 00000000 00000000
-> 1fe0: 005456f0 beb3a788 b6dcfac4 b6e3bab8
-> ---[ end trace 0000000000000000 ]---
-> at_xdmac e1200000.dma-controller: controller in mem2mem mode.
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 378 at lib/kobject.c:634 0xc07ffbe8
-> kobject: '$���"����L��L��' (a3ba4c7d): is not initialized, yet kobject_get() is being called.
-> Modules linked in:
-> CPU: 0 PID: 378 Comm: sh Tainted: G        W          6.1.22-linux4microchip-2023.04-rc3+ #7
-> Hardware name: Microchip SAMA7
-> Function entered at [<c010c134>] from [<c010993c>]
-> Function entered at [<c010993c>] from [<c0823754>]
-> Function entered at [<c0823754>] from [<c01162ac>]
-> Function entered at [<c01162ac>] from [<c0116340>]
-> Function entered at [<c0116340>] from [<c07ffbe8>]
-> Function entered at [<c07ffbe8>] from [<c0460300>]
-> Function entered at [<c0460300>] from [<c0460634>]
-> Function entered at [<c0460634>] from [<c0141ed4>]
-> Function entered at [<c0141ed4>] from [<c0142448>]
-> Function entered at [<c0142448>] from [<c0140da8>]
-> Function entered at [<c0140da8>] from [<c023dba0>]
-> Function entered at [<c023dba0>] from [<c01d0700>]
-> Function entered at [<c01d0700>] from [<c01d092c>]
-> Function entered at [<c01d092c>] from [<c0100060>]
-> Exception stack(0xe0e81fa8 to 0xe0e81ff0)
-> 1fa0:                   00000004 0057c668 00000001 0057c668 00000004 00000000
-> 1fc0: 00000004 0057c668 b6ecaba0 00000004 b6f4c0e0 b6ecb15c 00000000 00000000
-> 1fe0: 005456f0 beb3a788 b6dcfac4 b6e3bab8
-> ---[ end trace 0000000000000000 ]---
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 378 at lib/kobject.c:728 0xc07ffd7c
-> kobject: '$���"����L��L��' (a3ba4c7d): is not initialized, yet kobject_put() is being called.
-> Modules linked in:
-> CPU: 0 PID: 378 Comm: sh Tainted: G        W          6.1.22-linux4microchip-2023.04-rc3+ #7
-> Hardware name: Microchip SAMA7
-> Function entered at [<c010c134>] from [<c010993c>]
-> Function entered at [<c010993c>] from [<c0823754>]
-> Function entered at [<c0823754>] from [<c01162ac>]
-> Function entered at [<c01162ac>] from [<c0116340>]
-> Function entered at [<c0116340>] from [<c07ffd7c>]
-> Function entered at [<c07ffd7c>] from [<c0460384>]
-> Function entered at [<c0460384>] from [<c0460634>]
-> Function entered at [<c0460634>] from [<c0141ed4>]
-> Function entered at [<c0141ed4>] from [<c0142448>]
-> Function entered at [<c0142448>] from [<c0140da8>]
-> Function entered at [<c0140da8>] from [<c023dba0>]
-> Function entered at [<c023dba0>] from [<c01d0700>]
-> Function entered at [<c01d0700>] from [<c01d092c>]
-> Function entered at [<c01d092c>] from [<c0100060>]
-> Exception stack(0xe0e81fa8 to 0xe0e81ff0)
-> 1fa0:                   00000004 0057c668 00000001 0057c668 00000004 00000000
-> 1fc0: 00000004 0057c668 b6ecaba0 00000004 b6f4c0e0 b6ecb15c 00000000 00000000
-> 1fe0: 005456f0 beb3a788 b6dcfac4 b6e3bab8
-> ---[ end trace 0000000000000000 ]---
-> ------------[ cut here ]------------
-> WARNING: CPU: 0 PID: 378 at lib/kobject.c:634 0xc07ffbe8
-> kobject: '�Z����@Ą�?��8�H�Ĕ����UC�' (6407eb2a): is not initialized, yet kobject_get() is being called.
-> Modules linked in:
-> CPU: 0 PID: 378 Comm: sh Tainted: G        W          6.1.22-linux4microchip-2023.04-rc3+ #7
-> Hardware name: Microchip SAMA7
-> Function entered at [<c010c134>] from [<c010993c>]
-> Function entered at [<c010993c>] from [<c0823754>]
-> Function entered at [<c0823754>] from [<c01162ac>]
-> Function entered at [<c01162ac>] from [<c0116340>]
-> Function entered at [<c0116340>] from [<c07ffbe8>]
-> Function entered at [<c07ffbe8>] from [<c0460300>]
-> Function entered at [<c0460300>] from [<c0460634>]
-> Function entered at [<c0460634>] from [<c0141ed4>]
-> Function entered at [<c0141ed4>] from [<c0142448>]
-> Function entered at [<c0142448>] from [<c0140da8>]
-> Function entered at [<c0140da8>] from [<c023dba0>]
-> Function entered at [<c023dba0>] from [<c01d0700>]
-> Function entered at [<c01d0700>] from [<c01d092c>]
-> Function entered at [<c01d092c>] from [<c0100060>]
-> Exception stack(0xe0e81fa8 to 0xe0e81ff0)
-> 1fa0:                   00000004 0057c668 00000001 0057c668 00000004 00000000
-> 1fc0: 00000004 0057c668 b6ecaba0 00000004 b6f4c0e0 b6ecb15c 00000000 00000000
-> 1fe0: 005456f0 beb3a788 b6dcfac4 b6e3bab8
-> ---[ end trace 0000000000000000 ]---
-> 
-> Along with this the error path of at91_pm_config_quirks() had been also
-> adapted to decrement propertly the reference counter of struct device
-> embedded in struct platform_device.
-> 
-> Fixes: b7fc72c63399 ("ARM: at91: pm: add quirks for pm")
-> Signed-off-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+>> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+>> ---
+>>   drivers/gpu/drm/panel/Kconfig                 |  14 +
+>>   drivers/gpu/drm/panel/Makefile                |   1 +
+>>   drivers/gpu/drm/panel/panel-samsung-sofef03.c | 423 ++++++++++++++++++++++++++
+>>   3 files changed, 438 insertions(+)
+>>
+>> diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
+>> index 3f11e9906f2cb..8e2668153bce2 100644
+>> --- a/drivers/gpu/drm/panel/Kconfig
+>> +++ b/drivers/gpu/drm/panel/Kconfig
+>> @@ -630,6 +630,20 @@ config DRM_PANEL_SAMSUNG_SOFEF01
+>>         This panel features a fixed mode of 1080x2520@60.
+>> +config DRM_PANEL_SAMSUNG_SOFEF03
+>> +    tristate "Samsung sofef03 Sony Xperia 5 II DSI cmd mode panel"
+>> +    depends on GPIOLIB
+>> +    depends on OF
+>> +    depends on DRM_MIPI_DSI
+>> +    depends on BACKLIGHT_CLASS_DEVICE
+>> +    help
+>> +      Say Y or M here if you want to enable support for the Samsung AMOLED
+>> +      command mode panel found in the Sony Xperia 5 II smartphone.
+>> +
+>> +      This panel uses Display Stream Compression 1.1.
+>> +
+>> +      The panel features a 1080x2520@60 and 1080x2520@120 mode.
+>> +
+>>   config DRM_PANEL_SEIKO_43WVF1G
+>>       tristate "Seiko 43WVF1G panel"
+>>       depends on OF
+>> diff --git a/drivers/gpu/drm/panel/Makefile b/drivers/gpu/drm/panel/Makefile
+>> index a4039d0fc9cfb..52dcd82e33120 100644
+>> --- a/drivers/gpu/drm/panel/Makefile
+>> +++ b/drivers/gpu/drm/panel/Makefile
+>> @@ -63,6 +63,7 @@ obj-$(CONFIG_DRM_PANEL_SAMSUNG_S6E88A0_AMS452EF01) += panel-samsung-s6e88a0-ams4
+>>   obj-$(CONFIG_DRM_PANEL_SAMSUNG_S6E8AA0) += panel-samsung-s6e8aa0.o
+>>   obj-$(CONFIG_DRM_PANEL_SAMSUNG_SOFEF00) += panel-samsung-sofef00.o
+>>   obj-$(CONFIG_DRM_PANEL_SAMSUNG_SOFEF01) += panel-samsung-sofef01.o
+>> +obj-$(CONFIG_DRM_PANEL_SAMSUNG_SOFEF03) += panel-samsung-sofef03.o
+>>   obj-$(CONFIG_DRM_PANEL_SEIKO_43WVF1G) += panel-seiko-43wvf1g.o
+>>   obj-$(CONFIG_DRM_PANEL_SHARP_LQ101R1SX01) += panel-sharp-lq101r1sx01.o
+>>   obj-$(CONFIG_DRM_PANEL_SHARP_LS037V7DW01) += panel-sharp-ls037v7dw01.o
+>> diff --git a/drivers/gpu/drm/panel/panel-samsung-sofef03.c b/drivers/gpu/drm/panel/panel-samsung-sofef03.c
+>> new file mode 100644
+>> index 0000000000000..2763e1c56b37b
+>> --- /dev/null
+>> +++ b/drivers/gpu/drm/panel/panel-samsung-sofef03.c
+>> @@ -0,0 +1,423 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * Copyright (c) 2022 Konrad Dybcio <konrad.dybcio@linaro.org>
+>> + * Copyright (c) 2023 Marijn Suijten <marijn.suijten@somainline.org>
+>> + */
+>> +
+>> +#include <linux/backlight.h>
+>> +#include <linux/delay.h>
+>> +#include <linux/gpio/consumer.h>
+>> +#include <linux/module.h>
+>> +#include <linux/of.h>
+>> +#include <linux/regulator/consumer.h>
+>> +
+>> +#include <video/mipi_display.h>
+>> +
+>> +#include <drm/drm_mipi_dsi.h>
+>> +#include <drm/drm_modes.h>
+>> +#include <drm/drm_panel.h>
+>> +#include <drm/drm_probe_helper.h>
+>> +#include <drm/display/drm_dsc.h>
+>> +#include <drm/display/drm_dsc_helper.h>
+>> +
+>> +static const bool enable_120hz = true;
 
-Acked-by: Nicolas Ferre <nicolas.ferre@microchip.com>
-Thanks for this fix Claudiu. Best regards,
-   Nicolas
+Maybe this can be a module parameter ? Can you explain why this can't be dynamically changed by a modeset ?
 
-> ---
->   arch/arm/mach-at91/pm.c | 20 +++++++++-----------
->   1 file changed, 9 insertions(+), 11 deletions(-)
+>> +
+>> +struct samsung_sofef03_m {
+>> +    struct drm_panel panel;
+>> +    struct mipi_dsi_device *dsi;
+>> +    struct regulator *vddio, *vci;
+>> +    struct gpio_desc *reset_gpio;
+>> +    bool prepared;
+>> +};
+>> +
+>> +static inline struct samsung_sofef03_m *to_samsung_sofef03_m(struct drm_panel *panel)
+>> +{
+>> +    return container_of(panel, struct samsung_sofef03_m, panel);
+>> +}
+>> +
+>> +static void samsung_sofef03_m_reset(struct samsung_sofef03_m *ctx)
+>> +{
+>> +    gpiod_set_value_cansleep(ctx->reset_gpio, 0);
+>> +    usleep_range(10000, 11000);
+>> +}
+>> +
+>> +static int samsung_sofef03_m_on(struct samsung_sofef03_m *ctx)
+>> +{
+>> +    struct mipi_dsi_device *dsi = ctx->dsi;
+>> +    struct device *dev = &dsi->dev;
+>> +    int ret;
+>> +
+>> +    dsi->mode_flags |= MIPI_DSI_MODE_LPM;
+>> +
+>> +    mipi_dsi_dcs_write_seq(dsi, 0x9d, 0x01);
+>> +
+>> +    ret = mipi_dsi_dcs_exit_sleep_mode(dsi);
+>> +    if (ret < 0) {
+>> +        dev_err(dev, "Failed to exit sleep mode: %d\n", ret);
+>> +        return ret;
+>> +    }
+>> +    usleep_range(10000, 11000);
+>> +
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xf0, 0x5a, 0x5a);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x09);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xd5, 0x00, 0x00, 0x00);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x08);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xee, 0x00, 0x00);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xf0, 0xa5, 0xa5);
+>> +
+>> +    ret = mipi_dsi_dcs_set_tear_on(dsi, MIPI_DSI_DCS_TEAR_MODE_VBLANK);
+>> +    if (ret < 0) {
+>> +        dev_err(dev, "Failed to set tear on: %d\n", ret);
+>> +        return ret;
+>> +    }
+>> +
+>> +    ret = mipi_dsi_dcs_set_column_address(dsi, 0, 1080 - 1);
+>> +    if (ret < 0) {
+>> +        dev_err(dev, "Failed to set column address: %d\n", ret);
+>> +        return ret;
+>> +    }
+>> +
+>> +    ret = mipi_dsi_dcs_set_page_address(dsi, 0, 2520 - 1);
+>> +    if (ret < 0) {
+>> +        dev_err(dev, "Failed to set page address: %d\n", ret);
+>> +        return ret;
+>> +    }
+>> +
+>> +    ret = mipi_dsi_dcs_set_display_brightness_large(dsi, 100);
+>> +    if (ret < 0) {
+>> +        dev_err(dev, "Failed to set display brightness: %d\n", ret);
+>> +        return ret;
+>> +    }
+>> +
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xf0, 0x5a, 0x5a);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xdf, 0x83);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x01);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xe6, 0x01);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x02);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xec, 0x02, 0x00, 0x1c, 0x1c);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x0c);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xec, 0x01, 0x19);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xf0, 0xa5, 0xa5);
+>> +    mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_WRITE_CONTROL_DISPLAY, BIT(5));
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xf0, 0x5a, 0x5a);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xc2, 0x2d, 0x27);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0x60, enable_120hz ? 0x10 : 0x00);
+>> +    mipi_dsi_dcs_write_seq(dsi, 0xf0, 0xa5, 0xa5);
+>> +    msleep(110);
+>> +
+>> +    ret = mipi_dsi_dcs_set_display_on(dsi);
+>> +    if (ret < 0) {
+>> +        dev_err(dev, "Failed to turn display on: %d\n", ret);
+>> +        return ret;
+>> +    }
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static int samsung_sofef03_m_off(struct samsung_sofef03_m *ctx)
+>> +{
+>> +    struct mipi_dsi_device *dsi = ctx->dsi;
+>> +    struct device *dev = &dsi->dev;
+>> +    int ret;
+>> +
+>> +    dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
+>> +
+>> +    ret = mipi_dsi_dcs_set_display_off(dsi);
+>> +    if (ret < 0) {
+>> +        dev_err(dev, "Failed to turn display off: %d\n", ret);
+>> +        return ret;
+>> +    }
+>> +    msleep(20);
+>> +
+>> +    ret = mipi_dsi_dcs_enter_sleep_mode(dsi);
+>> +    if (ret < 0) {
+>> +        dev_err(dev, "Failed to enter sleep mode: %d\n", ret);
+>> +        return ret;
+>> +    }
+>> +    msleep(100);
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static int samsung_sofef03_m_prepare(struct drm_panel *panel)
+>> +{
+>> +    struct samsung_sofef03_m *ctx = to_samsung_sofef03_m(panel);
+>> +    struct drm_dsc_picture_parameter_set pps;
+>> +    struct device *dev = &ctx->dsi->dev;
+>> +    int ret;
+>> +
+>> +    if (ctx->prepared)
+>> +        return 0;
+>> +
+>> +    ret = regulator_enable(ctx->vddio);
+>> +    if (ret < 0) {
+>> +        dev_err(dev, "Failed to enable vddio regulator: %d\n", ret);
+>> +        return ret;
+>> +    }
+>> +
+>> +    ret = regulator_enable(ctx->vci);
+>> +    if (ret < 0) {
+>> +        dev_err(dev, "Failed to enable vci regulator: %d\n", ret);
+>> +        regulator_disable(ctx->vddio);
+>> +        return ret;
+>> +    }
+>> +
+>> +    samsung_sofef03_m_reset(ctx);
+>> +
+>> +    ret = samsung_sofef03_m_on(ctx);
+>> +    if (ret < 0) {
+>> +        dev_err(dev, "Failed to initialize panel: %d\n", ret);
+>> +        goto fail;
+>> +    }
+>> +
+>> +    if (ctx->dsi->dsc) {
 > 
-> diff --git a/arch/arm/mach-at91/pm.c b/arch/arm/mach-at91/pm.c
-> index 60dc56d8acfb..437dd0352fd4 100644
-> --- a/arch/arm/mach-at91/pm.c
-> +++ b/arch/arm/mach-at91/pm.c
-> @@ -334,16 +334,14 @@ static bool at91_pm_eth_quirk_is_valid(struct at91_pm_quirk_eth *eth)
->   		pdev = of_find_device_by_node(eth->np);
->   		if (!pdev)
->   			return false;
-> +		/* put_device(eth->dev) is called at the end of suspend. */
->   		eth->dev = &pdev->dev;
->   	}
->   
->   	/* No quirks if device isn't a wakeup source. */
-> -	if (!device_may_wakeup(eth->dev)) {
-> -		put_device(eth->dev);
-> +	if (!device_may_wakeup(eth->dev))
->   		return false;
-> -	}
->   
-> -	/* put_device(eth->dev) is called at the end of suspend. */
->   	return true;
->   }
->   
-> @@ -439,14 +437,14 @@ static int at91_pm_config_quirks(bool suspend)
->   				pr_err("AT91: PM: failed to enable %s clocks\n",
->   				       j == AT91_PM_G_ETH ? "geth" : "eth");
->   			}
-> -		} else {
-> -			/*
-> -			 * Release the reference to eth->dev taken in
-> -			 * at91_pm_eth_quirk_is_valid().
-> -			 */
-> -			put_device(eth->dev);
-> -			eth->dev = NULL;
->   		}
-> +
-> +		/*
-> +		 * Release the reference to eth->dev taken in
-> +		 * at91_pm_eth_quirk_is_valid().
-> +		 */
-> +		put_device(eth->dev);
-> +		eth->dev = NULL;
->   	}
->   
->   	return ret;
+> Always true
+> 
+>> +        drm_dsc_pps_payload_pack(&pps, ctx->dsi->dsc);
+>> +
+>> +        ret = mipi_dsi_picture_parameter_set(ctx->dsi, &pps);
+>> +        if (ret < 0) {
+>> +            dev_err(dev, "failed to transmit PPS: %d\n", ret);
+>> +            goto fail;
+>> +        }
+>> +
+>> +        ret = mipi_dsi_compression_mode(ctx->dsi, true);
+>> +        if (ret < 0) {
+>> +            dev_err(dev, "Failed to enable compression mode: %d\n", ret);
+>> +            goto fail;
+>> +        }
+>> +
+>> +        msleep(28);
+>> +    }
+>> +
+>> +    ctx->prepared = true;
+>> +    return 0;
+>> +
+>> +fail:
+>> +    gpiod_set_value_cansleep(ctx->reset_gpio, 1);
+>> +    regulator_disable(ctx->vci);
+>> +    regulator_disable(ctx->vddio);
+>> +    return ret;
+>> +}
+>> +
+>> +static int samsung_sofef03_m_unprepare(struct drm_panel *panel)
+>> +{
+>> +    struct samsung_sofef03_m *ctx = to_samsung_sofef03_m(panel);
+>> +    struct device *dev = &ctx->dsi->dev;
+>> +    int ret;
+>> +
+>> +    if (!ctx->prepared)
+>> +        return 0;
+>> +
+>> +    ret = samsung_sofef03_m_off(ctx);
+>> +    if (ret < 0)
+>> +        dev_err(dev, "Failed to un-initialize panel: %d\n", ret);
+>> +
+>> +    gpiod_set_value_cansleep(ctx->reset_gpio, 1);
+>> +    regulator_disable(ctx->vci);
+>> +    regulator_disable(ctx->vddio);
+>> +
+>> +    ctx->prepared = false;
+>> +    return 0;
+>> +}
+>> +
+>> +static const struct drm_display_mode samsung_sofef03_m_60hz_mode = {
+>> +    .clock = (1080 + 156 + 8 + 8) * (2520 + 2393 + 8 + 8) * 60 / 1000,
+>> +    .hdisplay = 1080,
+>> +    .hsync_start = 1080 + 156,
+>> +    .hsync_end = 1080 + 156 + 8,
+>> +    .htotal = 1080 + 156 + 8 + 8,
+>> +    .vdisplay = 2520,
+>> +    .vsync_start = 2520 + 2393,
+>> +    .vsync_end = 2520 + 2393 + 8,
+>> +    .vtotal = 2520 + 2393 + 8 + 8,
+>> +    .width_mm = 61,
+>> +    .height_mm = 142,
+>> +};
+>> +
+>> +static const struct drm_display_mode samsung_sofef03_m_120hz_mode = {
+>> +    .clock = (1080 + 56 + 8 + 8) * (2520 + 499 + 8 + 8) * 120 / 1000,
+>> +    .hdisplay = 1080,
+>> +    .hsync_start = 1080 + 56,
+>> +    .hsync_end = 1080 + 56 + 8,
+>> +    .htotal = 1080 + 56 + 8 + 8,
+>> +    .vdisplay = 2520,
+>> +    .vsync_start = 2520 + 499,
+>> +    .vsync_end = 2520 + 499 + 8,
+>> +    .vtotal = 2520 + 499 + 8 + 8,
+>> +    .width_mm = 61,
+>> +    .height_mm = 142,
+>> +};
+>> +
+>> +static int samsung_sofef03_m_get_modes(struct drm_panel *panel,
+>> +                   struct drm_connector *connector)
+>> +{
+>> +    if (enable_120hz)
+> 
+> Is it possible to switch between these modes at runtime? It might be logical to define 60 Hz mode as preferred, while allowing users to switch to 120 Hz when required for some reason.
+> 
+>> +        return drm_connector_helper_get_modes_fixed(connector,
+>> +                                &samsung_sofef03_m_120hz_mode);
+>> +    else
+>> +        return drm_connector_helper_get_modes_fixed(connector,
+>> +                                &samsung_sofef03_m_60hz_mode);
+>> +}
+>> +
+>> +static const struct drm_panel_funcs samsung_sofef03_m_panel_funcs = {
+>> +    .prepare = samsung_sofef03_m_prepare,
+>> +    .unprepare = samsung_sofef03_m_unprepare,
+>> +    .get_modes = samsung_sofef03_m_get_modes,
+>> +};
+>> +
+>> +static int samsung_sofef03_m_bl_update_status(struct backlight_device *bl)
+>> +{
+>> +    struct mipi_dsi_device *dsi = bl_get_data(bl);
+>> +    u16 brightness = backlight_get_brightness(bl);
+>> +    int ret;
+>> +
+>> +    dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
+>> +
+>> +    pr_err("Writing %#x\n", brightness);
 
--- 
-Nicolas Ferre
+You forgot to remove those desbug prints :-p
+
+>> +
+>> +    ret = mipi_dsi_dcs_set_display_brightness_large(dsi, brightness);
+>> +    if (ret < 0)
+>> +        return ret;
+>> +
+>> +    dsi->mode_flags |= MIPI_DSI_MODE_LPM;
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static int samsung_sofef03_m_bl_get_brightness(struct backlight_device *bl)
+>> +{
+>> +    struct mipi_dsi_device *dsi = bl_get_data(bl);
+>> +    u16 brightness;
+>> +    int ret;
+>> +
+>> +    dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
+>> +
+>> +    ret = mipi_dsi_dcs_get_display_brightness_large(dsi, &brightness);
+>> +    if (ret < 0)
+>> +        return ret;
+>> +
+>> +    dsi->mode_flags |= MIPI_DSI_MODE_LPM;
+>> +
+>> +    pr_err("Read display brightness %#x\n", brightness);
+
+Ditto
+
+>> +
+>> +    return brightness;
+>> +}
+>> +
+>> +static const struct backlight_ops samsung_sofef03_m_bl_ops = {
+>> +    .update_status = samsung_sofef03_m_bl_update_status,
+>> +    .get_brightness = samsung_sofef03_m_bl_get_brightness,
+>> +};
+>> +
+>> +static struct backlight_device *
+>> +samsung_sofef03_m_create_backlight(struct mipi_dsi_device *dsi)
+>> +{
+>> +    struct device *dev = &dsi->dev;
+>> +    const struct backlight_properties props = {
+>> +        .type = BACKLIGHT_RAW,
+>> +        .brightness = 100,
+>> +        .max_brightness = 1023,
+>> +    };
+>> +
+>> +    return devm_backlight_device_register(dev, dev_name(dev), dev, dsi,
+>> +                          &samsung_sofef03_m_bl_ops, &props);
+>> +}
+>> +
+>> +static int samsung_sofef03_m_probe(struct mipi_dsi_device *dsi)
+>> +{
+>> +    struct device *dev = &dsi->dev;
+>> +    struct drm_dsc_config *dsc;
+>> +    struct samsung_sofef03_m *ctx;
+>> +    int ret;
+>> +
+>> +    ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
+>> +    if (!ctx)
+>> +        return -ENOMEM;
+>> +
+>> +    ctx->vddio = devm_regulator_get(dev, "vddio");
+>> +    if (IS_ERR(ctx->vddio))
+>> +        return dev_err_probe(dev, PTR_ERR(ctx->vddio),
+>> +                     "Failed to get vddio regulator\n");
+>> +
+>> +    ctx->vci = devm_regulator_get(dev, "vci");
+>> +    if (IS_ERR(ctx->vci))
+>> +        return dev_err_probe(dev, PTR_ERR(ctx->vci),
+>> +                     "Failed to get vci regulator\n");
+>> +
+>> +    ctx->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
+>> +    if (IS_ERR(ctx->reset_gpio))
+>> +        return dev_err_probe(dev, PTR_ERR(ctx->reset_gpio),
+>> +                     "Failed to get reset-gpios\n");
+>> +
+>> +    ctx->dsi = dsi;
+>> +    mipi_dsi_set_drvdata(dsi, ctx);
+>> +
+>> +    dsi->lanes = 4;
+>> +    dsi->format = MIPI_DSI_FMT_RGB888;
+>> +    dsi->mode_flags = MIPI_DSI_CLOCK_NON_CONTINUOUS;
+>> +
+>> +    drm_panel_init(&ctx->panel, dev, &samsung_sofef03_m_panel_funcs,
+>> +               DRM_MODE_CONNECTOR_DSI);
+>> +
+>> +    ctx->panel.backlight = samsung_sofef03_m_create_backlight(dsi);
+>> +    if (IS_ERR(ctx->panel.backlight))
+>> +        return dev_err_probe(dev, PTR_ERR(ctx->panel.backlight),
+>> +                     "Failed to create backlight\n");
+>> +
+>> +    drm_panel_add(&ctx->panel);
+>> +
+>> +    /* This panel only supports DSC; unconditionally enable it */
+>> +    dsi->dsc = dsc = devm_kzalloc(&dsi->dev, sizeof(*dsc), GFP_KERNEL);
+> 
+> Double assignment
+> 
+>> +    if (!dsc)
+>> +        return -ENOMEM;
+>> +
+>> +    dsc->dsc_version_major = 1;
+>> +    dsc->dsc_version_minor = 1;
+>> +
+>> +    dsc->slice_height = 30;
+>> +    dsc->slice_width = 540;
+>> +    dsc->slice_count = 2;
+>> +    dsc->bits_per_component = 8;
+>> +    dsc->bits_per_pixel = 8 << 4; /* 4 fractional bits */
+>> +    dsc->block_pred_enable = true;
+>> +
+>> +    ret = mipi_dsi_attach(dsi);
+>> +    if (ret < 0) {
+>> +        dev_err(dev, "Failed to attach to DSI host: %d\n", ret);
+>> +        drm_panel_remove(&ctx->panel);
+>> +        return ret;
+>> +    }
+>> +
+>> +    return 0;
+>> +}
+>> +
+>> +static void samsung_sofef03_m_remove(struct mipi_dsi_device *dsi)
+>> +{
+>> +    struct samsung_sofef03_m *ctx = mipi_dsi_get_drvdata(dsi);
+>> +    int ret;
+>> +
+>> +    ret = mipi_dsi_detach(dsi);
+>> +    if (ret < 0)
+>> +        dev_err(&dsi->dev, "Failed to detach from DSI host: %d\n", ret);
+>> +
+>> +    drm_panel_remove(&ctx->panel);
+>> +}
+>> +
+>> +static const struct of_device_id samsung_sofef03_m_of_match[] = {
+>> +    { .compatible = "samsung,sofef03-m" },
+>> +    { /* sentinel */ }
+>> +};
+>> +MODULE_DEVICE_TABLE(of, samsung_sofef03_m_of_match);
+>> +
+>> +static struct mipi_dsi_driver samsung_sofef03_m_driver = {
+>> +    .probe = samsung_sofef03_m_probe,
+>> +    .remove = samsung_sofef03_m_remove,
+>> +    .driver = {
+>> +        .name = "panel-samsung-sofef03-m",
+>> +        .of_match_table = samsung_sofef03_m_of_match,
+>> +    },
+>> +};
+>> +module_mipi_dsi_driver(samsung_sofef03_m_driver);
+>> +
+>> +MODULE_AUTHOR("Konrad Dybcio <konrad.dybcio@linaro.org>");
+>> +MODULE_AUTHOR("Marijn Suijten <marijn.suijten@somainline.org>");
+>> +MODULE_DESCRIPTION("DRM panel driver for Samsung SOFEF03-M Display-IC panels");
+>> +MODULE_LICENSE("GPL");
+>>
+> 
 
