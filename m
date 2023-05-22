@@ -2,115 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9AB070B2E2
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 03:45:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EE2370B2E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 03:45:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231403AbjEVBpM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 21:45:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49230 "EHLO
+        id S231439AbjEVBpb convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 21 May 2023 21:45:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbjEVBpK (ORCPT
+        with ESMTP id S231424AbjEVBp3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 21:45:10 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72365AF;
-        Sun, 21 May 2023 18:45:08 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QPgHh2Lqhz4x3x;
-        Mon, 22 May 2023 11:45:04 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1684719904;
-        bh=L+YD1Ezs0C5v+60PQcDAlX8fBslJaqpGa0Z+MAhmVEA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=SxOuzyONkegw2MokXBgep1RlS4g10FGKCn1DXXHdSAIeDraox5hjUDNQeqM/RjDRp
-         s9qgv0zzsbprb9oNmjgmLj66kBuIHINz6G50wBugjacrAyDweE3QL4Nq2eKdd1vuPj
-         jFfRvJ92V3wjSfUKoyNf1XbYRfICgIwxpvG+m93mJ/nFTYLuWF+CxPAznxl+QarYvz
-         HllKeuIS+aqRG3OheUFXAbkAtlo1QZ7W2MGx1lvknJPRmkEg4U4cf4iqwRe6dp8zz5
-         L4R9jipYHsLgBIXizBZ6+NLJa9N054Y8VPAb9ZrH125qirVZpdck1mgzKLJp4crNaB
-         j3O88hgXYuI1Q==
-Date:   Mon, 22 May 2023 11:45:03 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the rcu tree
-Message-ID: <20230522114503.7404d59c@canb.auug.org.au>
-In-Reply-To: <cc4ab028-cad3-413b-8360-ea34f6914ec7@paulmck-laptop>
-References: <20230519105950.2d021e86@canb.auug.org.au>
-        <cc4ab028-cad3-413b-8360-ea34f6914ec7@paulmck-laptop>
+        Sun, 21 May 2023 21:45:29 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839C5D7;
+        Sun, 21 May 2023 18:45:28 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 34M1j6tQ5018142, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 34M1j6tQ5018142
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Mon, 22 May 2023 09:45:06 +0800
+Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
+ RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.32; Mon, 22 May 2023 09:45:16 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Mon, 22 May 2023 09:45:16 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
+ RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
+ 15.01.2375.007; Mon, 22 May 2023 09:45:16 +0800
+From:   Ping-Ke Shih <pkshih@realtek.com>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
+CC:     "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "kvalo@kernel.org" <kvalo@kernel.org>,
+        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
+        "Peter Robinson" <pbrobinson@gmail.com>,
+        "jernej.skrabec@gmail.com" <jernej.skrabec@gmail.com>
+Subject: RE: [PATCH wireless-next v1 2/4] wifi: rtw88: rtw8723d: Implement RTL8723DS (SDIO) efuse parsing
+Thread-Topic: [PATCH wireless-next v1 2/4] wifi: rtw88: rtw8723d: Implement
+ RTL8723DS (SDIO) efuse parsing
+Thread-Index: AQHZiaRUMpC3s/Tl4EKtdj1z43tgz69lirGQ
+Date:   Mon, 22 May 2023 01:45:16 +0000
+Message-ID: <e38ceb19397a4c8ab32a35712cfd8727@realtek.com>
+References: <20230518161749.1311949-1-martin.blumenstingl@googlemail.com>
+ <20230518161749.1311949-3-martin.blumenstingl@googlemail.com>
+In-Reply-To: <20230518161749.1311949-3-martin.blumenstingl@googlemail.com>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.69.188]
+x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/fFHjrGlBDbpnRwH_Au2RIoC";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/fFHjrGlBDbpnRwH_Au2RIoC
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
 
-Hi Paul,
 
-On Thu, 18 May 2023 19:12:52 -0700 "Paul E. McKenney" <paulmck@kernel.org> =
-wrote:
->
-> On Fri, May 19, 2023 at 10:59:50AM +1000, Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > After merging the rcu tree, today's linux-next build (x86_64 allmodconf=
-ig)
-> > failed like this:
-> >=20
-> > kernel/rcu/rcuscale.c:340:27: error: 'get_rcu_tasks_trace_gp_kthread' u=
-ndeclared here (not in a function); did you mean 'show_rcu_tasks_trace_gp_k=
-thread'?
-> >   340 |         .rso_gp_kthread =3D get_rcu_tasks_trace_gp_kthread,
-> >       |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> >       |                           show_rcu_tasks_trace_gp_kthread
-> >=20
-> > Caused by commit
-> >=20
-> >   9bb839a83e1b ("rcuscale: Measure grace-period kthread CPU time")
-> >=20
-> > CONFIG_RCU_SCALE_TEST=3Dm
-> >=20
-> > I have used the rcu tree from next-20230518 for today. =20
->=20
-> Huh.  Modules and #ifdefs trip me up again.  Will fix, and thank you
-> for catching it!
+> -----Original Message-----
+> From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Sent: Friday, May 19, 2023 12:18 AM
+> To: linux-wireless@vger.kernel.org
+> Cc: linux-mmc@vger.kernel.org; linux-kernel@vger.kernel.org; ulf.hansson@linaro.org; kvalo@kernel.org;
+> tony0620emma@gmail.com; Peter Robinson <pbrobinson@gmail.com>; Ping-Ke Shih <pkshih@realtek.com>;
+> jernej.skrabec@gmail.com; Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> Subject: [PATCH wireless-next v1 2/4] wifi: rtw88: rtw8723d: Implement RTL8723DS (SDIO) efuse parsing
+> 
+> The efuse of the SDIO RTL8723DS chip has only one known member: the mac
+> address is at offset 0x11a. Add a struct rtw8723ds_efuse describing this
+> and use it for copying the mac address when the SDIO bus is used.
+> 
+> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
-This is now:
+Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
 
-ERROR: modpost: "get_rcu_tasks_trace_gp_kthread" [kernel/rcu/rcuscale.ko] u=
-ndefined!
+[...]
 
-I have used the rcu tree from next-20230518 again for today.
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/fFHjrGlBDbpnRwH_Au2RIoC
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRqyR8ACgkQAVBC80lX
-0Gz7rAf/Zd9VNQKbS2JZ+nYo0w0HbjT1yFonbr0f/37EEKItZjWoPqSOVCfYfV52
-9prgvhXlodLBIY9OxTwdoggeOMcoTW2EODEm3qy1bPbzU8Hg+71FgTwPH9GeR0Ht
-lzSfjDB1paC68jnX8SeTYds9X1+mR8ZSu9qzTBz3FgQIct+KpShQVqu+Xc8w/6Be
-D2Zakao790Yr9sFMUF8VGaobe9Gs8ZRx241pMdJiQrhf1kfwenWvQNFfpwI6ReTc
-zLvK5wbhGsf+tA7E26A9kovSSz66VnDsx5zw3bNMU3ssH9UwiyWRH4kImAp9OTB/
-mjkbnRjw3JD5XuE061HstBUXRjpwWQ==
-=23Ct
------END PGP SIGNATURE-----
-
---Sig_/fFHjrGlBDbpnRwH_Au2RIoC--
