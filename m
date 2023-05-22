@@ -2,148 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6E6E70B502
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 08:27:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1033D70B504
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 08:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231556AbjEVG0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 02:26:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44814 "EHLO
+        id S231544AbjEVG1b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 02:27:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjEVG0w (ORCPT
+        with ESMTP id S230150AbjEVG13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 02:26:52 -0400
-Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F982E0
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 23:26:49 -0700 (PDT)
-Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-76fffd0116eso416578439f.0
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 23:26:49 -0700 (PDT)
+        Mon, 22 May 2023 02:27:29 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DE07A1
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 23:27:28 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-970028cfb6cso36757066b.1
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 23:27:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684736846; x=1687328846;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=p2l9Y29vvbcuVlicsL/pc2oxU1nu4jLH8yjGCxlB3M8=;
+        b=QjiMznfkRXOT9X3gOMhMmB1SY/wuXlpmp0Tbk8Q/PhcuC1dkescNZsoNpNerNfOiA+
+         gVCmXg/YtMLHg+B9qzbQ/Fj8lPaUFx6XymbKnQ9iVUzOFmuZFUl+RYJtLWrY+qFFiSmq
+         oSWX0s35Wxuw9Vr4FBDHnl65tsqnK36m7R4vdhMOWel/ni44MWgV8pWPWEpzM7DqImbt
+         vrZXy5AfF7KN+aPvmUqhK+0yjzOJJRdv2Di5lNur2bwFOp4krcPDxF1V2shokBWAKGs5
+         oSSfKnwMhNDJbW99iEMuzXeFtBFowXzsw3oivHwTSPA0GraK3XGZ4BkbhBH5Vt7hTi9y
+         4yLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684736809; x=1687328809;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BtI+GvYH5ZsFWofDYCzflgfz0uNn7VqRyIjfs5bm+zU=;
-        b=Dbte14m8y0Ka96cosPjcq+JFtxRitBv5/43X+iBSeCxQImn2BO0pP4lDC3jkWl00X9
-         3e34w10MOgT49g87faq0+k8LWbhoRbJ6E7kTz9rsoVBkib877H7gMykeY7LuWegmfr08
-         xMaOdUCII03hyXjngWHGztli+GKzka443l+sat5CENo3rLgqQ0dvW2IYgq02R7Reyb+l
-         UOIsqhh/TtA2Ep0EInHexqar/PGyb+xYqhXvAl1VxN2gjaMWEujzt7bEZYxtxjm7aBh8
-         FCbZX1sjZWgBvBGFEPYzQBX8+Z2/2xvbifm9XvCo69OkevHId8AAVp5tcC3Kt84Ep1PS
-         L83A==
-X-Gm-Message-State: AC+VfDz2bNl5qhDDPNAmdIqbabx8M596j6ZNTnR/GZTfszVyTzEVY7NX
-        93L5vWaZMHe7c/7hPVTb0HJ46vmp1LdN2sO4vtTOK/U5DAWv
-X-Google-Smtp-Source: ACHHUZ5g5t2f3MeZDCiz7f0ns0TKviVI4U7PwjJMtK3e8hPzQeo/Jumh50ZfBpPKm3gJrqbOPbB3eUZ+ofTcCgIxfmfWSl/nlNp0
+        d=1e100.net; s=20221208; t=1684736846; x=1687328846;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=p2l9Y29vvbcuVlicsL/pc2oxU1nu4jLH8yjGCxlB3M8=;
+        b=fKDEn0wFNXNhFpKBNXu7hH9n61voYWsAYuml+yskGQaG/eX9JXeLRhmEpf+JZ8MZi4
+         Zso2TCwyXA1Dr3LJYNm2uPErHmtB3UDX2YEAktdKqYElHwpj9Y3BgpsN0Crx6zBz19G6
+         wsivVSJ3C/BgM+hlEiRVZ6DwSOE58ejXmF/ZNS3Thtf4LntXwXXIUxC36Dxbuyl1Wm9k
+         Ds5eWoyjV08ZAdnk9EUjpp3XWlWbPW5GI6ZHtlqt4H9Wuy0iIGiwmawuME691SWYYf0Z
+         kaZrO0IXAwr4YdvbeRtwiRCFSQqMRLc72GFZzWgk9KJan9MtWi6YiBLHPmEI4S3kf9gV
+         U3YA==
+X-Gm-Message-State: AC+VfDye2UeYlpDLRE7xZhHF6QJ1D+W7lT89ZoIFtKlBSrDVC5dgPPyk
+        0S94VYdtpicG71cV7qx0vCs=
+X-Google-Smtp-Source: ACHHUZ5MuwmobKbV5DlqE1aoz3C+SGFqVC5v1CEELfybpKhKOgp9GXMPZTZQuW8ukxGiv7RfGmLkPQ==
+X-Received: by 2002:a17:906:fd85:b0:961:78c2:1d27 with SMTP id xa5-20020a170906fd8500b0096178c21d27mr9002943ejb.19.1684736846224;
+        Sun, 21 May 2023 23:27:26 -0700 (PDT)
+Received: from localhost.localdomain (80-108-76-242.cable.dynamic.surfer.at. [80.108.76.242])
+        by smtp.gmail.com with ESMTPSA id kg17-20020a17090776f100b0096a6bf89259sm2594808ejc.167.2023.05.21.23.27.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 21 May 2023 23:27:25 -0700 (PDT)
+From:   Christian Gmeiner <christian.gmeiner@gmail.com>
+To:     Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Cc:     Christian Gmeiner <christian.gmeiner@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] x86/microcode: move microcode_mutex declaration
+Date:   Mon, 22 May 2023 08:27:12 +0200
+Message-Id: <20230522062713.427998-1-christian.gmeiner@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-Received: by 2002:a02:b11a:0:b0:41a:f21d:752 with SMTP id
- r26-20020a02b11a000000b0041af21d0752mr729323jah.4.1684736808969; Sun, 21 May
- 2023 23:26:48 -0700 (PDT)
-Date:   Sun, 21 May 2023 23:26:48 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000009ee1005fc425b4b@google.com>
-Subject: [syzbot] [btrfs?] WARNING in btrfs_split_ordered_extent
-From:   syzbot <syzbot+ee90502d5c8fd1d0dd93@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The microcode_mutex is only used when CONFIG_MICROCODE_LATE_LOADING
+is enabled. Move it into the ifdef block.
 
-syzbot found the following issue on:
+Fixes a compiler unused-variable warning seen on gcc.
 
-HEAD commit:    e2065b8c1b01 Merge tag '6.4-rc2-ksmbd-server-fixes' of git..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=11bfcf86280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=bda401fa9c6b4502
-dashboard link: https://syzkaller.appspot.com/bug?extid=ee90502d5c8fd1d0dd93
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/738631cdfb7d/disk-e2065b8c.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/0b5c143f1c5e/vmlinux-e2065b8c.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/8fd7bb0bb108/bzImage-e2065b8c.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+ee90502d5c8fd1d0dd93@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 25629 at fs/btrfs/ordered-data.c:1138 btrfs_split_ordered_extent+0x628/0x840
-Modules linked in:
-CPU: 1 PID: 25629 Comm: syz-executor.3 Not tainted 6.4.0-rc2-syzkaller-00338-ge2065b8c1b01 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/28/2023
-RIP: 0010:btrfs_split_ordered_extent+0x628/0x840 fs/btrfs/ordered-data.c:1138
-Code: fe 48 c7 c7 20 92 2a 8b 48 c7 c6 a0 8d 2a 8b ba 6c 04 00 00 e8 a9 52 1d 07 e8 04 62 fb fd 0f 0b e9 21 fb ff ff e8 f8 61 fb fd <0f> 0b bb ea ff ff ff eb b0 e8 ea 61 fb fd 0f 0b bb ea ff ff ff eb
-RSP: 0018:ffffc90005586dd8 EFLAGS: 00010246
-RAX: ffffffff83901aa8 RBX: 0000000000010000 RCX: 0000000000040000
-RDX: ffffc9000b999000 RSI: 000000000003ffff RDI: 0000000000040000
-RBP: 1ffff1100ec235e1 R08: ffffffff83901672 R09: fffffbfff1cab8b6
-R10: 0000000000000000 R11: dffffc0000000001 R12: dffffc0000000000
-R13: ffff88807611af08 R14: 0000000000001000 R15: 00000000000a0000
-FS:  00007f90dfaa6700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00005621df2bfc70 CR3: 0000000020f04000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- btrfs_extract_ordered_extent+0x12c/0xb00 fs/btrfs/inode.c:2625
- btrfs_dio_submit_io+0x239/0x340 fs/btrfs/inode.c:7737
- iomap_dio_submit_bio fs/iomap/direct-io.c:75 [inline]
- iomap_dio_bio_iter+0xe15/0x1430 fs/iomap/direct-io.c:355
- __iomap_dio_rw+0x12c3/0x22e0 fs/iomap/direct-io.c:598
- btrfs_dio_write+0xb6/0x100 fs/btrfs/inode.c:7770
- btrfs_direct_write fs/btrfs/file.c:1529 [inline]
- btrfs_do_write_iter+0x870/0x1270 fs/btrfs/file.c:1674
- do_iter_write+0x7b1/0xcb0 fs/read_write.c:860
- iter_file_splice_write+0x843/0xfe0 fs/splice.c:795
- do_splice_from fs/splice.c:873 [inline]
- direct_splice_actor+0xe7/0x1c0 fs/splice.c:1039
- splice_direct_to_actor+0x4c4/0xbd0 fs/splice.c:994
- do_splice_direct+0x283/0x3d0 fs/splice.c:1082
- do_sendfile+0x620/0xff0 fs/read_write.c:1254
- __do_sys_sendfile64 fs/read_write.c:1322 [inline]
- __se_sys_sendfile64+0x17c/0x1e0 fs/read_write.c:1308
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f90dec8c169
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f90dfaa6168 EFLAGS: 00000246 ORIG_RAX: 0000000000000028
-RAX: ffffffffffffffda RBX: 00007f90dedac050 RCX: 00007f90dec8c169
-RDX: 0000000000000000 RSI: 0000000000000006 RDI: 0000000000000004
-RBP: 00007f90dece7ca1 R08: 0000000000000000 R09: 0000000000000000
-R10: 000080001d00c0d0 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffc28d1208f R14: 00007f90dfaa6300 R15: 0000000000022000
- </TASK>
-
-
+Signed-off-by: Christian Gmeiner <christian.gmeiner@gmail.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ arch/x86/kernel/cpu/microcode/core.c | 28 ++++++++++++++--------------
+ 1 file changed, 14 insertions(+), 14 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
+index 3afcf3de0dd4..4f6ebadba2fb 100644
+--- a/arch/x86/kernel/cpu/microcode/core.c
++++ b/arch/x86/kernel/cpu/microcode/core.c
+@@ -49,20 +49,6 @@ bool initrd_gone;
+ 
+ LIST_HEAD(microcode_cache);
+ 
+-/*
+- * Synchronization.
+- *
+- * All non cpu-hotplug-callback call sites use:
+- *
+- * - microcode_mutex to synchronize with each other;
+- * - cpus_read_lock/unlock() to synchronize with
+- *   the cpu-hotplug-callback call sites.
+- *
+- * We guarantee that only a single cpu is being
+- * updated at any particular moment of time.
+- */
+-static DEFINE_MUTEX(microcode_mutex);
+-
+ struct ucode_cpu_info		ucode_cpu_info[NR_CPUS];
+ 
+ struct cpu_info_ctx {
+@@ -323,6 +309,20 @@ void reload_early_microcode(unsigned int cpu)
+ static struct platform_device	*microcode_pdev;
+ 
+ #ifdef CONFIG_MICROCODE_LATE_LOADING
++/*
++ * Synchronization.
++ *
++ * All non cpu-hotplug-callback call sites use:
++ *
++ * - microcode_mutex to synchronize with each other;
++ * - cpus_read_lock/unlock() to synchronize with
++ *   the cpu-hotplug-callback call sites.
++ *
++ * We guarantee that only a single cpu is being
++ * updated at any particular moment of time.
++ */
++static DEFINE_MUTEX(microcode_mutex);
++
+ /*
+  * Late loading dance. Why the heavy-handed stomp_machine effort?
+  *
+-- 
+2.40.1
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
