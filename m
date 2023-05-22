@@ -2,141 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E68DF70B751
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:09:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAD3870B753
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:10:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229627AbjEVIJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 04:09:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47720 "EHLO
+        id S231846AbjEVIKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 04:10:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbjEVIJo (ORCPT
+        with ESMTP id S230499AbjEVIKL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 04:09:44 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F2FAA;
-        Mon, 22 May 2023 01:09:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1684742981; bh=aA1E0+xC/rAqJLb6Jh39PUGRSeGXjVPeIfHkIASardM=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=GxNeYl2P1gnfXOcmwOovlg6H5jfccMv55Mlm6Y1G/Rj7o8toa/nDZIs4swTV43Y/g
-         cYAQYTAiQC8X1nkbWT/3/uxkWcBz6G3UGpjOeCmxYqh4KFeY8+HF2/fWbWnREobchl
-         iWk2z7ftTFn2LgWhH9gRfUSEFmawzGMG7bpz2kuc=
-Received: from [100.100.57.122] (unknown [58.34.185.106])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 22 May 2023 04:10:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D567DB3;
+        Mon, 22 May 2023 01:10:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 7DFEA600DA;
-        Mon, 22 May 2023 16:09:40 +0800 (CST)
-Message-ID: <97fe7af2-0a93-3f28-db6e-40a9b0798d49@xen0n.name>
-Date:   Mon, 22 May 2023 16:09:39 +0800
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6C4AE61EAE;
+        Mon, 22 May 2023 08:10:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD320C4339C;
+        Mon, 22 May 2023 08:10:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684743008;
+        bh=EaTm1gdUesP4JYLh/QIwbO8g8A4zdbgsMTblmzL4DEU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=h6Y7O87X6kaQ1cygLgU9MJRSRu1FwXKs357KNy1/PVPZbny03bgBzRtNG2NceWrj5
+         uwdr8eP3cEHhGgb2mu0O4DpbIQA6UuTrkOBAi+YOKMaP1oqvAnuO08RRFSeSCYNpqs
+         FsLOfQVwJcpnDuKMk2b8ebZhfb9Ih3EaMY4fxnQThvrlwjeU+oAfy0krnbRTZ9t8ml
+         XJIYRA5f9RBETvA/WfELqTp2U5mjdM9sr6Dt87mMKhVugb7IWeU/zbdSoW4B1tiFnT
+         CwtFwoR+0hLaZCXEXWOFrBYV2EYtYLV8g8aIXoBP2KBC9ElZVrPqnh0iZ9/GYsF2ih
+         4y8ojyHqEpNgQ==
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-2af278ca45eso33175741fa.1;
+        Mon, 22 May 2023 01:10:08 -0700 (PDT)
+X-Gm-Message-State: AC+VfDyO09Jr5sF8JTe2sSpp+gbh/UdrU+6NKpcaXvqT2aLi1vlArkFk
+        Cpb+7sPMOl8x9JeWbnJGsdTlpy4BCLpotPMUmU0=
+X-Google-Smtp-Source: ACHHUZ76fjHnNWcsBsf2aOxQuuYJa9gTpik6b3RqxaJOQXI+2zUP6cee//3chvzhfPIx0WLc0bZrx0DRzHC6XlGHqaE=
+X-Received: by 2002:ac2:4352:0:b0:4f0:124:b56b with SMTP id
+ o18-20020ac24352000000b004f00124b56bmr3058102lfl.7.1684743006832; Mon, 22 May
+ 2023 01:10:06 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.0
-Subject: Re: [PATCH v14 1/2] drm: add kms driver for loongson display
- controller
-Content-Language: en-US
-To:     Sui Jingfeng <15330273260@189.cn>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sui Jingfeng <suijingfeng@loongson.cn>,
-        Li Yi <liyi@loongson.cn>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>
-Cc:     linaro-mm-sig@lists.linaro.org, loongson-kernel@lists.loongnix.cn,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Liu Peibao <liupeibao@loongson.cn>, linux-media@vger.kernel.org
-References: <20230520105718.325819-1-15330273260@189.cn>
- <20230520105718.325819-2-15330273260@189.cn>
- <26fd78b9-c074-8341-c99c-4e3b38cd861a@xen0n.name>
- <73447e35-f4df-9871-6210-b7bf1a3f04fc@189.cn>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <73447e35-f4df-9871-6210-b7bf1a3f04fc@189.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230516201606.557548-1-arnd@kernel.org>
+In-Reply-To: <20230516201606.557548-1-arnd@kernel.org>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Mon, 22 May 2023 10:09:55 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXELPjZ2XMebTf_pYnsba--H7PWSbLNPrcRU-tWu1r0P-w@mail.gmail.com>
+Message-ID: <CAMj1kXELPjZ2XMebTf_pYnsba--H7PWSbLNPrcRU-tWu1r0P-w@mail.gmail.com>
+Subject: Re: [PATCH] efi: fix missing prototype warnings
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/22 16:02, Sui Jingfeng wrote:
-> Hi,
-> 
-> On 2023/5/21 20:21, WANG Xuerui wrote:
->>> --- /dev/null
->>> +++ b/drivers/gpu/drm/loongson/Kconfig
->>> @@ -0,0 +1,17 @@
->>> +# SPDX-License-Identifier: GPL-2.0
->>> +
->>> +config DRM_LOONGSON
->>> +    tristate "DRM support for Loongson Graphics"
->>> +    depends on DRM && PCI && MMU
->>> +    select DRM_KMS_HELPER
->>> +    select DRM_TTM
->>> +    select I2C
->>> +    select I2C_ALGOBIT
->>> +    help
->>> +      This is a DRM driver for Loongson Graphics, it may including
->>
->> Drop "it may"; "including" should be enough.
->>
-> 'it may' is more *precise* here, because currently we don't ship with 
-> the support for loongson 2K series SoC.
-> 
-> I'm try to be precise as far as I can, we avoid made this driver too 
-> large by ignore loongson 2K series SoC temporary.
+On Tue, 16 May 2023 at 22:16, Arnd Bergmann <arnd@kernel.org> wrote:
+>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The cper.c file needs to include an extra header, and
+> efi_zboot_entry needs an extern declaration to avoid these
+> 'make W=1' warnings:
+>
+> drivers/firmware/efi/libstub/zboot.c:65:1: error: no previous prototype for 'efi_zboot_entry' [-Werror=missing-prototypes]
+> drivers/firmware/efi/efi.c:176:16: error: no previous prototype for 'efi_attr_is_visible' [-Werror=missing-prototypes]
+> drivers/firmware/efi/cper.c:626:6: error: no previous prototype for 'cper_estatus_print' [-Werror=missing-prototypes]
+> drivers/firmware/efi/cper.c:649:5: error: no previous prototype for 'cper_estatus_check_header' [-Werror=missing-prototypes]
+> drivers/firmware/efi/cper.c:662:5: error: no previous prototype for 'cper_estatus_check' [-Werror=missing-prototypes]
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/firmware/efi/cper.c            | 1 +
+>  drivers/firmware/efi/libstub/efistub.h | 3 +++
+>  include/linux/efi.h                    | 2 ++
+>  3 files changed, 6 insertions(+)
+>
+> diff --git a/drivers/firmware/efi/cper.c b/drivers/firmware/efi/cper.c
+> index 35c37f667781..75715c7be34a 100644
+> --- a/drivers/firmware/efi/cper.c
+> +++ b/drivers/firmware/efi/cper.c
+> @@ -25,6 +25,7 @@
+>  #include <acpi/ghes.h>
+>  #include <ras/ras_event.h>
+>  #include "cper_cxl.h"
+> +#include "../../acpi/apei/apei-internal.h"
 
-That's a good idea! For now the patch is so large that my review reply 
-is said to be dropped by the lists. Focusing on one bunch of similar 
-models first then adding support for the rest not-so-similar models is 
-very friendly towards the reviewing process and will help code quality too.
+Yuck. Could we move the missing definitions to linux/cper.h instead?
 
-> 
->>> +      LS7A2000, LS7A1000, LS2K2000 and LS2K1000 etc. Loongson LS7A
->>> +      series are bridge chipset, while Loongson LS2K series are SoC.
->>> +
->>> +      If "M" is selected, the module will be called loongson.
->>
->> Just "loongson"? 
-> 
-> Yes,  when compile this driver as module,  loongson.ko will be generated.
-> 
->   drm radeon is also doing so, See drm/radeon/Kconfig.
-> 
->> I know it's like this for ages (at least dating back to the MIPS days) 
->> but you really don't want to imply Loongson is mainly a GPU company. 
->> Something like "loongson_drm" or "lsdc" or "gsgpu" could be better. 
-> 
-> No, these name may have backward compatibility problems.
-> 
-> Downstream driver already taken those name.
-> 
-> userspace driver need to differentiate them who is who.
-
-IMO this shouldn't be a problem. Let me try explaining this: currently, 
-upstream / the "new world" doesn't have any support for this driver at 
-all, so any name will work; just use whatever is appropriate from an 
-upstream's perspective, then make the userspace bits recognize both 
-variants, and you'll be fine. And the "existing" userspace drivers can 
-also carry the change, it'll just be a branch never taken in that setup.
-
-So, I'm still in favor of keeping the upstream "clean" without dubious 
-names like this (bare "loongson"). What do you think about my suggestion 
-above?
-
--- 
-WANG "xen0n" Xuerui
-
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
-
+>
+>  /*
+>   * CPER record ID need to be unique even after reboot, because record
+> diff --git a/drivers/firmware/efi/libstub/efistub.h b/drivers/firmware/efi/libstub/efistub.h
+> index 67d5a20802e0..54a2822cae77 100644
+> --- a/drivers/firmware/efi/libstub/efistub.h
+> +++ b/drivers/firmware/efi/libstub/efistub.h
+> @@ -1133,4 +1133,7 @@ const u8 *__efi_get_smbios_string(const struct efi_smbios_record *record,
+>  void efi_remap_image(unsigned long image_base, unsigned alloc_size,
+>                      unsigned long code_size);
+>
+> +asmlinkage efi_status_t __efiapi
+> +efi_zboot_entry(efi_handle_t handle, efi_system_table_t *systab);
+> +
+>  #endif
+> diff --git a/include/linux/efi.h b/include/linux/efi.h
+> index 7aa62c92185f..571d1a6e1b74 100644
+> --- a/include/linux/efi.h
+> +++ b/include/linux/efi.h
+> @@ -1338,4 +1338,6 @@ bool efi_config_table_is_usable(const efi_guid_t *guid, unsigned long table)
+>         return xen_efi_config_table_is_usable(guid, table);
+>  }
+>
+> +umode_t efi_attr_is_visible(struct kobject *kobj, struct attribute *attr, int n);
+> +
+>  #endif /* _LINUX_EFI_H */
+> --
+> 2.39.2
+>
