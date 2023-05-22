@@ -2,154 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31DE070C4E4
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 20:03:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9835370C4E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 20:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233209AbjEVSDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 14:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59730 "EHLO
+        id S233132AbjEVSDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 14:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229974AbjEVSDf (ORCPT
+        with ESMTP id S231998AbjEVSDg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 14:03:35 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F84115;
-        Mon, 22 May 2023 11:03:21 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34MHn0rI031791;
-        Mon, 22 May 2023 18:03:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=QUX32dN81y3Wes2y2rrXtFnSbnOnUJfvDgb+UOKq4fw=;
- b=SPVtvfW3+zqKqF/gQIGJUEqWlmvnq9XobTWf6Jztzps9n2VMnfxYSQsKngg/nOicqZDn
- WZkYdWJqTeKJKxymG4sDngMGuCKiurRHQJm+lPOLKMvV252I4DRPoIMaiLbjhXtXJT2E
- 4ibEAj5tk29oQ3L7FNf3oKSMRmRRlAjbK1RLDncbvi3FDTOXbFEOf36reRKczw1jflDw
- ZZP/ewlBOpITgKx3F3IQzaLuUReXPhXIh9EuAFl4gVeziSzvyH1EAu1pa0Tj6bTz3PxF
- w2p8C+BeATwq6PT7kk47oqXw25SDMaYOeAJrriyp/ZnOnDx4N55unoXyJ41UPIvCxvny sQ== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qppkdmf9h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 18:03:13 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34MI3CRc010928
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 18:03:12 GMT
-Received: from [10.71.110.193] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 22 May
- 2023 11:03:11 -0700
-Message-ID: <7fabb62d-0483-1298-c6ce-1f37313faa67@quicinc.com>
-Date:   Mon, 22 May 2023 11:03:11 -0700
+        Mon, 22 May 2023 14:03:36 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4856E132
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:03:25 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id 6a1803df08f44-5ed99ebe076so54214766d6.2
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:03:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684778604; x=1687370604;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yN+5fBZoSuRn2vAVaf6V5f1u8QGccSwvan5bXoofEZA=;
+        b=lH5aomZyS23V9z5grwNvsBN8NmKzJDL/BX+41G/2VZaB/KWe1weF4RNKsk3HflmUdj
+         S8MuEdABefEJQS+E1rmU5aVLwFeRjFl2mLkYLhGDkTMr5SYDytGThyIKAqGi5jm+9EQy
+         /yZcGvAsZWh/xWBp6CAQQNXuDyEZpy4s1cqe1aLUkmXEwMw7oVnHp1Ab+/3XLiMLDVIL
+         5GToqetd3ksTETD68d45ofw4H4CVMfrsR41Amm2n1VFWf8g+ugJH7rKz0xTC0yj2x4WV
+         gdFkPXMh///Zw41ir6lxRiT9YR+e32uRsUTbeVBD9uFSScwhCu+/0g2VHVaNnmPappGR
+         sDfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684778604; x=1687370604;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yN+5fBZoSuRn2vAVaf6V5f1u8QGccSwvan5bXoofEZA=;
+        b=PDYy2VB80xTQTK9GTGxvgiyQvi/gpM/vYkJXK73etAHZlD8IzgEK5n2Uu5it2q163G
+         UYs5eFzhs1dkDndCxxu3IcVgaXHSOqamlpvrlpK7xyhr1sN5zszUDXnOkPuIUu76BooO
+         BW/xUqvs2nOXBzr2dPVltbo71GzLMAnq4LkdHsL2Eg5b/4Zq+AkdNpoGFhfzaj+Fhin/
+         g0QmO/FVPzgiv11syFAxkh4MsgwL4jFn7cX2iPQXEXWjJfgalM6c0i+lb/6IKy6VzB62
+         9JKLqn9F95wL69Mba1e8xBCPho25sDyEXFWITjJD6SUyJgnrwTTxCgKxj/+wl/OgoBRD
+         dgoQ==
+X-Gm-Message-State: AC+VfDymZ97XxWYppr1NBu1E30RTc4QGSGJUCFc2J9v7FWUaYdmInkRV
+        wWIzCfCgUWSULekWXrIq+qsy36t7PahnMhMbQxy/AQ==
+X-Google-Smtp-Source: ACHHUZ7CdEhV2NhYsdjVZmTsn5VMlhEvOxGibdnoeXYzGtdTUkQhYEWAQjX+aLxdXF+HSTtIu2vDJ21Y7YJQWPJID7A=
+X-Received: by 2002:a05:6214:19cd:b0:5df:47e2:8df5 with SMTP id
+ j13-20020a05621419cd00b005df47e28df5mr23742073qvc.31.1684778604263; Mon, 22
+ May 2023 11:03:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 3/5] drm/msm/dpu: Add DPU_INTF_DATA_COMPRESS feature
- flag
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-CC:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-References: <20230405-add-dsc-support-v3-0-6e1d35a206b3@quicinc.com>
- <20230405-add-dsc-support-v3-3-6e1d35a206b3@quicinc.com>
- <hvsfhft6ygyfewyjpnqia3ldxlmyrsydl5wt4ahjzsh2k7aom2@xad5edc4wreb>
-From:   Jessica Zhang <quic_jesszhan@quicinc.com>
-In-Reply-To: <hvsfhft6ygyfewyjpnqia3ldxlmyrsydl5wt4ahjzsh2k7aom2@xad5edc4wreb>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: jrr_NFTcF4EkG6O-r8WeSI6saAGRqfLu
-X-Proofpoint-GUID: jrr_NFTcF4EkG6O-r8WeSI6saAGRqfLu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-22_12,2023-05-22_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 bulkscore=0 malwarescore=0 mlxlogscore=841 suspectscore=0
- adultscore=0 phishscore=0 mlxscore=0 impostorscore=0 priorityscore=1501
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305220152
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230521160426.1881124-1-masahiroy@kernel.org> <20230521160426.1881124-4-masahiroy@kernel.org>
+In-Reply-To: <20230521160426.1881124-4-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 22 May 2023 11:03:13 -0700
+Message-ID: <CAKwvOdmxLrE8VksbsSGirfTqnuhEFT__FuCG53ri3V42UbH5aw@mail.gmail.com>
+Subject: Re: [PATCH v6 03/20] modpost: detect section mismatch for
+ R_ARM_MOVW_ABS_NC and R_ARM_MOVT_ABS
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Fangrui Song <maskray@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
++ linux-arm-kernel
+
+On Sun, May 21, 2023 at 9:05=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.o=
+rg> wrote:
+>
+> ARM defconfig misses to detect some section mismatches.
+>
+>   [test code]
+>
+>     #include <linux/init.h>
+>
+>     int __initdata foo;
+>     int get_foo(int x) { return foo; }
+>
+> It is apparently a bad reference, but modpost does not report anything
+> for ARM defconfig (i.e. multi_v7_defconfig).
+>
+> The test code above produces the following relocations.
+>
+>   Relocation section '.rel.text' at offset 0x200 contains 2 entries:
+>    Offset     Info    Type            Sym.Value  Sym. Name
+>   00000000  0000062b R_ARM_MOVW_ABS_NC 00000000   .LANCHOR0
+>   00000004  0000062c R_ARM_MOVT_ABS    00000000   .LANCHOR0
+>
+>   Relocation section '.rel.ARM.exidx' at offset 0x210 contains 2 entries:
+>    Offset     Info    Type            Sym.Value  Sym. Name
+>   00000000  0000022a R_ARM_PREL31      00000000   .text
+>   00000000  00001000 R_ARM_NONE        00000000   __aeabi_unwind_cpp_pr0
+>
+> Currently, R_ARM_MOVW_ABS_NC and R_ARM_MOVT_ABS are just skipped.
+>
+> Add code to handle them. I checked arch/arm/kernel/module.c to learn
+> how the offset is encoded in the instruction.
+>
+> The referenced symbol in relocation might be a local anchor.
+> If is_valid_name() returns false, let's search for a better symbol name.
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>
+>  scripts/mod/modpost.c | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
+>
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index 34fbbd85bfde..ed2301e951a9 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -1108,7 +1108,7 @@ static inline int is_valid_name(struct elf_info *el=
+f, Elf_Sym *sym)
+>  /**
+>   * Find symbol based on relocation record info.
+>   * In some cases the symbol supplied is a valid symbol so
+> - * return refsym. If st_name !=3D 0 we assume this is a valid symbol.
+> + * return refsym. If is_valid_name() =3D=3D true, we assume this is a va=
+lid symbol.
+>   * In other cases the symbol needs to be looked up in the symbol table
+>   * based on section and address.
+>   *  **/
+> @@ -1121,7 +1121,7 @@ static Elf_Sym *find_tosym(struct elf_info *elf, El=
+f64_Sword addr,
+>         Elf64_Sword d;
+>         unsigned int relsym_secindex;
+>
+> -       if (relsym->st_name !=3D 0)
+> +       if (is_valid_name(elf, relsym))
+>                 return relsym;
+>
+>         /*
+> @@ -1312,11 +1312,19 @@ static int addend_arm_rel(struct elf_info *elf, E=
+lf_Shdr *sechdr, Elf_Rela *r)
+>         unsigned int r_typ =3D ELF_R_TYPE(r->r_info);
+>         Elf_Sym *sym =3D elf->symtab_start + ELF_R_SYM(r->r_info);
+>         unsigned int inst =3D TO_NATIVE(*reloc_location(elf, sechdr, r));
+> +       int offset;
+>
+>         switch (r_typ) {
+>         case R_ARM_ABS32:
+>                 r->r_addend =3D inst + sym->st_value;
+>                 break;
+> +       case R_ARM_MOVW_ABS_NC:
+> +       case R_ARM_MOVT_ABS:
+> +               offset =3D ((inst & 0xf0000) >> 4) | (inst & 0xfff);
+> +               offset =3D (offset ^ 0x8000) - 0x8000;
+
+The code in arch/arm/kernel/module.c then right shifts the offset by
+16 for R_ARM_MOVT_ABS. Is that necessary?
+
+> +               offset +=3D sym->st_value;
+> +               r->r_addend =3D offset;
+> +               break;
+>         case R_ARM_PC24:
+>         case R_ARM_CALL:
+>         case R_ARM_JUMP24:
+> --
+> 2.39.2
+>
 
 
-On 5/19/2023 2:34 PM, Marijn Suijten wrote:
-> On 2023-05-19 14:17:28, Jessica Zhang wrote:
->> Add DATA_COMPRESS feature flag to DPU INTF block.
->>
->> In DPU 7.x and later, DSC/DCE enablement registers have been moved from
->> PINGPONG to INTF.
->>
->> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
->> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
->> ---
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c | 2 +-
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h | 2 ++
->>   2 files changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> index 7944481d0a33..c74051906d05 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
->> @@ -104,7 +104,7 @@
->>   #define INTF_SC7180_MASK \
->>   	(BIT(DPU_INTF_INPUT_CTRL) | BIT(DPU_INTF_TE) | BIT(DPU_INTF_STATUS_SUPPORTED))
->>   
->> -#define INTF_SC7280_MASK INTF_SC7180_MASK | BIT(DPU_DATA_HCTL_EN)
->> +#define INTF_SC7280_MASK INTF_SC7180_MASK | BIT(DPU_DATA_HCTL_EN) | BIT(DPU_INTF_DATA_COMPRESS)
-> 
-> We should really wrap these in parenthesis at some point.
-
-Hi Marijn,
-
-Acked.
-
+--=20
 Thanks,
-
-Jessica Zhang
-
-> 
->>   
->>   #define WB_SM8250_MASK (BIT(DPU_WB_LINE_MODE) | \
->>   			 BIT(DPU_WB_UBWC) | \
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->> index 4eda2cc847ef..01c65f940f2a 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
->> @@ -185,6 +185,7 @@ enum {
->>    * @DPU_DATA_HCTL_EN                Allows data to be transferred at different rate
->>    *                                  than video timing
->>    * @DPU_INTF_STATUS_SUPPORTED       INTF block has INTF_STATUS register
->> + * @DPU_INTF_DATA_COMPRESS          INTF block has DATA_COMPRESS register
->>    * @DPU_INTF_MAX
->>    */
->>   enum {
->> @@ -192,6 +193,7 @@ enum {
->>   	DPU_INTF_TE,
->>   	DPU_DATA_HCTL_EN,
->>   	DPU_INTF_STATUS_SUPPORTED,
->> +	DPU_INTF_DATA_COMPRESS,
->>   	DPU_INTF_MAX
->>   };
->>   
->>
->> -- 
->> 2.40.1
->>
+~Nick Desaulniers
