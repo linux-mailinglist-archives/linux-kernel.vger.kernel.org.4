@@ -2,114 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC13F70CC48
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 23:23:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7802070CC4A
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 23:24:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234448AbjEVVX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 17:23:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41312 "EHLO
+        id S231537AbjEVVYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 17:24:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234368AbjEVVXx (ORCPT
+        with ESMTP id S229738AbjEVVYa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 17:23:53 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D6AC2
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 14:23:49 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f13d8f74abso7260866e87.0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 14:23:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684790627; x=1687382627;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GgR6hJl4v5W/VNWJbFimymN7T4wI+SFUcIfWJnoBenI=;
-        b=C3qykUUv308TdzTBXmivOlJVuKrHI6RtuofmrwxHy2E7E3r0piRlzU3uYZMjOHpq0/
-         nbFMtIECGL6ZVq6KigpUxLp2Lo6fhyliggSedkEvwX9qVT1Po4UhZL7jnxX9R2Fy0mLe
-         tnjbQ8XRYUwka9Mt9xkjoIMfYLBRE3HKIV3VbZcahdR0cXjf0ehy2L+ZZUD3KIm3Xe36
-         Weub8Zncccum9DcWa2UyhXt55dJ/uhhibcv7Jukx25VVp430Qf4Q8sBheIPSwvakd4ly
-         Qugdb9UXWvUKFFTXdU7DVTDrRx3e6NrTm2VSelHwdl9NzSkaxlrjZMixRKCAD+0tsWdG
-         D5/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684790627; x=1687382627;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GgR6hJl4v5W/VNWJbFimymN7T4wI+SFUcIfWJnoBenI=;
-        b=JsEPZxxr+tqoku7K0MCLcqlACmyFOiL/4hUrEOoVMTTkXwUelM+QmEz1E39IVcs/X1
-         RpnWnjg5BU6umTwxHAdKp6ZVbVXPfTJGwBZq2WHNySYCfX+hntmhL8rCFzMKagIovHgw
-         AI+DrrhhTp7Ceg1IbAaB5H7d0d2KRlWauRVnGRsI5sdUipKhR7EJKkar+/SRZ4EzO9wU
-         dIB/XkYo6mJP0kf8FnEP/lEAm4O7zVSUxGkEclE72P0HDdDebqtbkJKMJznyQYqpZ3VF
-         BQNO5Y5o75ApIWYRRSLYz9CqSpiqJwld7mhePDW5P3Gd7v/HrmZU5Eo1QRJqsvocFE+g
-         l7JQ==
-X-Gm-Message-State: AC+VfDydKfuMsNBHwl+9rVI4EhvZ66myKIyLi7arG+gaZW9EuKavXeXB
-        FK6abgbrscapas2w6iwqejvCng==
-X-Google-Smtp-Source: ACHHUZ7Bzw5s194y23fjwuuZCzhhqmzfXnSg4bE2VApw3ycGR9+tojHVXKq6PmENI3cIKwUk0nrQRA==
-X-Received: by 2002:ac2:5fae:0:b0:4f1:1de7:1aac with SMTP id s14-20020ac25fae000000b004f11de71aacmr3366506lfe.20.1684790627178;
-        Mon, 22 May 2023 14:23:47 -0700 (PDT)
-Received: from [192.168.1.101] (abyk97.neoplus.adsl.tpnet.pl. [83.9.30.97])
-        by smtp.gmail.com with ESMTPSA id q6-20020ac25146000000b004efff420b0asm1102032lfd.108.2023.05.22.14.23.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 14:23:46 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 22 May 2023 23:23:39 +0200
-Subject: [PATCH] MAINTAINERS: Add Konrad Dybcio as linux-arm-msm
- co-maintainer
-MIME-Version: 1.0
+        Mon, 22 May 2023 17:24:30 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D1DA3
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 14:24:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684790669; x=1716326669;
+  h=from:to:cc:subject:date:message-id:content-id:
+   content-transfer-encoding:mime-version;
+  bh=jp4jPiGP0iEltHWMAQ9JMt6/brgiUlvMi5cplSzoXqQ=;
+  b=ZCKVKkriA6+yFY3ZZjGQFGnIEdvJ2BD4mae4gQoPzAIRrufYmcPmC0Mx
+   Dy/PMCZzdDSA2k2I9B+cVxs08ClekwDZxPh2WLu1DmEVCozJWmmjUlee0
+   wCDbYHxTR6PjiGuBgBR0sq5Wa/vrbESaOjzK20NKBZHIsDcGIN6jvWBre
+   e1wlHlDnLI+FEEI9oMxTGVtMj19k8+u4sOLnpmzes9a17niuzdzNuL069
+   EnikFUtLFTyE826iBwmYM7l32CtTBtxBl7Xy6P9Jn3ply0dNW76hiC4WG
+   Uz9E+bYi1TKAdstYnk543/hQXYE/VEgyHrIL/TOUgot3BTvbxwrco2XWS
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="337634789"
+X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
+   d="scan'208";a="337634789"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 14:24:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="815842887"
+X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
+   d="scan'208";a="815842887"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga002.fm.intel.com with ESMTP; 22 May 2023 14:24:29 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 22 May 2023 14:24:28 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 22 May 2023 14:24:28 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Mon, 22 May 2023 14:24:28 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.104)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Mon, 22 May 2023 14:24:28 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JbwbXfuleDc4x6Btl0NnVTX4frGxSe1vPXUu1PDzAueo2iZE8TWmRySIuO9zNErFQzk3eVB5d4gxGsP/0XXfqehdq6LP30LjJWnQHbVEebR9NHFw0S5RkNvlCflcWzq6ue70W8p2M47gTnsYopDnDw1fKZ1wvhD/YxIkKjpXt9OGyB+TGvyDK/1hyI44hYo6HrsaRsC/kMXrRnFdVQs6Ob6Os673yhgY7/f+n/M63i7pYL96xBkF9cT/fjvs9fl0H05l2JUJfpBV3sB4peNTMNqajEOWm10cpLN2+eKMDEoEwN/0LywInIL8/ghBRvuxOB6fxEJtlRMeLdKBaoAlnQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jp4jPiGP0iEltHWMAQ9JMt6/brgiUlvMi5cplSzoXqQ=;
+ b=STJScPf2tsIm3eod4E0YL9qA5RjdR5wp8rPyNyMwGm6mH6W7B1Hrlf2U/CJvkLAzzgpLm/M27LUCpeUJ0Kceg6NZkBtBg7Py1dQB+hdqCKTd2Ka7bccH0U6aKGf2Q77d2qgyexzlCSCPlvqPNdKsDe7Fxz+TIc3beKEW6DjXLPHvtt/FKWvvTh8Yvqi9B4AvfcgBJLRhQLxVGuSoAtnwscnzyZSNlq3WgDO5EiNl2bMwalVZn/de55mtoZWr4jwRrvrNHhSFajD/MpbWtp0ygYukBHYDFbSw9AxOguTc+9IHqgmj2S64seWGREA16WeKbydDsoaToCL+KzYOBu3FSA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from MW4PR11MB5823.namprd11.prod.outlook.com (2603:10b6:303:186::12)
+ by IA0PR11MB8336.namprd11.prod.outlook.com (2603:10b6:208:490::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Mon, 22 May
+ 2023 21:24:26 +0000
+Received: from MW4PR11MB5823.namprd11.prod.outlook.com
+ ([fe80::c91d:6ffc:c1a5:8c5d]) by MW4PR11MB5823.namprd11.prod.outlook.com
+ ([fe80::c91d:6ffc:c1a5:8c5d%6]) with mapi id 15.20.6411.025; Mon, 22 May 2023
+ 21:24:26 +0000
+From:   "Winiarska, Iwona" <iwona.winiarska@intel.com>
+To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+CC:     "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL] PECI fixes for v6.4
+Thread-Topic: [GIT PULL] PECI fixes for v6.4
+Thread-Index: AQHZjPPJ5i7UoODNFEO5sN2db5uHlg==
+Date:   Mon, 22 May 2023 21:24:26 +0000
+Message-ID: <f8506bf66b8bdaa85b5a2bec48bcdcc6a2853da7.camel@intel.com>
+Accept-Language: en-US, pl-PL
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MW4PR11MB5823:EE_|IA0PR11MB8336:EE_
+x-ms-office365-filtering-correlation-id: 3b53d8ba-c4ab-44ef-f002-08db5b0aeb91
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: iUfuoO4LrmauSfHvGrdtlK0r/j0L0eq3U1g/1bHidSESjV5cjvD6WhWhkOZzearhQ7I4bNvjOQfhE8kFv35zSXXXd7Tiw8SFSzz8QAp+33YaghXPIxhVYYjgSQ4qheBMiHRrJ5h179sgLgxzosMyKgWtNNuVzeSlXk+xYyaxJLtECJfudV3n4BWMpJUgyvHUat2ppPzt37awV5gkuycLOMI4BbaDo+QAnHTlTtwAX0Nt9avLSl3iNOV35uX37QuJP5LfSZhq2pjY6S1HmHMufikgVnwEEIIIF8q+kuq/L2yGHhp78glVx1lCD0SEDLExli2NxdVCSs1dy0HI0SnjNcdXD/GDqFZoJCMAvrmg5G3lw0nFUx7wkNs6gxskwOCRxhHsH1kCd3akI0BQL96YWcrEX/vpyV8yiooAqLytmYAmrUDStrAOJxc+1iJLCOQ6JBgEDyV+XzMzxBp2KVqhyLFdB1Z+pSLuxWmJfBhYnY0ccL8+j3j2FdZy8+7CTkbpvflcFcJ/tpGr4fFVY8d6iMH4BSWOrFg4qo0EbXjLLdRGBw202XM/amO2ki57z8G1cChfEXkgjSAo+VQ9ThQi022cCtM3FQrG07FI5bNIe0Ie2wBfKIKtmRN+V+Gs5n1r
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR11MB5823.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(376002)(39860400002)(136003)(346002)(366004)(451199021)(2906002)(4744005)(71200400001)(38100700002)(122000001)(2616005)(8676002)(6506007)(26005)(83380400001)(6512007)(186003)(8936002)(36756003)(86362001)(316002)(4326008)(41300700001)(5660300002)(6486002)(6916009)(82960400001)(38070700005)(91956017)(66476007)(76116006)(66556008)(54906003)(66946007)(478600001)(64756008)(66446008);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UmVGbWpQS3ZOemVuQjk0UXFsUWx2ZThRT0pLL1N1azRwckJNc09nYTlHYXVi?=
+ =?utf-8?B?Y3p0MTVTSitmdWMxS3lQRFB2MzY4STFvT2dOanRwMHlwaUVIUnJ3NUhVZGoz?=
+ =?utf-8?B?Rmk2NWxqZGFYWWFoUEtocEJZNFNqV1RMZTFtQWk1MXdwVDViR0NPYkRSRFpO?=
+ =?utf-8?B?VmJhRENiL2U5ZlFBUUNvWEJ3eDNvbDRWVFFGN0Y0SGViOWJTdkRDWnpDTFda?=
+ =?utf-8?B?cDRyZFBZNlpTVWE3WTJvbUVkRVJrdU84bWlERnpaNC83cXgvWmQ3SGhGR1ZN?=
+ =?utf-8?B?ZXBydk9OWFJwYkFNQUdsaVozZE1pU255Z0FLUi9vNEZHc1ZDeEF4cE9XWVBp?=
+ =?utf-8?B?bXVtOWFrVXdHS2VxaUpNd2JzR05DZ1hoLyszRlZlcVNmU3NEY2p3S1FQYnpX?=
+ =?utf-8?B?RWZOY0VjbGtzWDQ0T1BSUWdpV3g1OXl4TzV1akhqZUJhVnhmWTdCbXBJMk1H?=
+ =?utf-8?B?blJSY2tkdm9mMUVxR0lnQUE3Z2F2OCtDME1aNE5tRUJ5Z0NLMTdOSC9CeXdQ?=
+ =?utf-8?B?N2dZZnpHc0d1VkgyMlpHU1VFOUo1TTBCUmFKOGYxdDcxeWVob285dHNDQzd1?=
+ =?utf-8?B?MnBWcTRiN0JjVnVKazlRY3lWbWlSUEVoZzNTUjVvNmRWM2J6NDI5dkVabFUw?=
+ =?utf-8?B?anBBVVhJR2UvcU81dG1FNU1oOTVVZUhzME9ERnhlSG9VYzZvdmxrQzJWVDds?=
+ =?utf-8?B?TTVWSmE5Vi9HQWc0UWMwaE5OY1VVd3NrY29zYThub0RXM1RUeHRzTXNZWlo0?=
+ =?utf-8?B?QnNpRkp2UzBDUWk2YTkzZjU4SWZvdlNKZVU5aUo4am9WRUlVZVZnTDIvQ3Nt?=
+ =?utf-8?B?bXBBSDRNdDc1RmJoL0FRTHNTVkFhSHJCRE1sL3R4NVk2RzNkZmFuVXFQRE5I?=
+ =?utf-8?B?dkppWHZ1MWduUEFjTk1xRk5wMHdiTFptZHN1aHg4KzF1NU1QOW8wUHEyalVF?=
+ =?utf-8?B?bkVrK1o4b1ZxU24vNW5OTVVJaGtuOEZvMGZXUHgvc3ppVEIrNVdzeGhrOGVL?=
+ =?utf-8?B?SlAzTXF3dkxnMVRheTZFV2FUYmVydUZjU1M0YmJCSDFURWRYMG5FRDc1UEdC?=
+ =?utf-8?B?NUcrTFBZeCs3bEFGQUE4TkdIVHMwT1k2TjdWc0QyRVkybksrejRkTHpGWWV3?=
+ =?utf-8?B?R1NuZnlPT1RSU1RpcmthMUNXdnQxUmhrWm5KN0JONjcyTEh0aS8xMHI4OXZ0?=
+ =?utf-8?B?bnY1SE45OFp4c0JRNktNeGNrdjNrZzRGRUxwZFcydFRIcW5PZzF6dE5leUxu?=
+ =?utf-8?B?M2JrL1MwTHBQVC9hWFV4Q3ZHclVOSW8vMUF5SkNCbktPZFVQL3dad0tleVcw?=
+ =?utf-8?B?MmQ4a1NQTzZUOGY1dG5pVGNuR2FjQlpUcHhiWklxMVpzRVFVRDcwZ0htd1dR?=
+ =?utf-8?B?NGpUcGs4S09JQWp5VUhFWklBQnVnU1h3YW9BekJQbmMrdGtybmJjdEliVDNF?=
+ =?utf-8?B?UElMUHBVeU54MEZqN0N3OWZRcFU5Mm1tdHZSSFozVXp2ODNqb1p5elJoOXZs?=
+ =?utf-8?B?KyswTHdWNWtIT05SdEhXZHJZZzhWUFBKZlJrUGI3b3MzOWhBQW9udDRlekto?=
+ =?utf-8?B?eWVaNEU1VUY5OGpEeDYvaDlPY2hzMnVNazJmdi9CUEJWeUJubnpjY2pHQWRS?=
+ =?utf-8?B?aEU2dHVrcFlpUW5UQmhUdVd1bEh4SVBobnU2QlQ5TjY1S2NjY2hwZzloT0c5?=
+ =?utf-8?B?ZWhteWhMMXp2VzNHd2duejYwd09mQmF4VHcycmJKbzgvVXdvOExxTDkxVlUx?=
+ =?utf-8?B?Tk1TbzBISHkydWRkZjBOeUh0UlMyc0h5eDVKQXdFdkVzKy9ua2piaVp3RFhZ?=
+ =?utf-8?B?WFNwRlo5KzgxempJY3pTcW8xZEZ6SmlGUW1qdWN1YlowTVczMjIzOUgxcHhX?=
+ =?utf-8?B?ZUxCTFBGU1pTOWpZYlNUc09PUDBYL2N3VjFWOWhCaFI1UGNKSmZTNUp4YTFj?=
+ =?utf-8?B?QlBRK0RuYmQ4MVFhZDJrT0dISnB4K2ZHZjBuTUdiTjhiS2RSTHkvRDkwdm9K?=
+ =?utf-8?B?UnM4N0lENXJ1akxuMk5qL0tZSWZHZVBERVg1SUQrdUE5b1Q0OGpFNlhqOEtv?=
+ =?utf-8?B?MUViZEdQakxLZ0EyYXJoT3p3Tzh3S3lYOTFIenowVzVVUDIyZ3NhN2h0Ri96?=
+ =?utf-8?B?MjRuQTVaTThLMjJkZDZLMXBCeUN6WkRnMWpJQ0tzT1JGRTd3WGZYTWJVTkI5?=
+ =?utf-8?B?aGc9PQ==?=
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230522-topic-maintainers-v1-1-2b91eb8e4f65@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAFrda2QC/x2NQQrCQAxFr1KyNtAZGVu8irhIx9QGalqSKkLp3
- Q0u/uJ9eLwdnE3Y4drsYPwRl0UD0qmBOpE+GeURDLnN57bkjNuySsUXiW4xNsfUX0qivut4LBD
- eQM44GGmdwtT3PMe5Go/y/Ydu9+P4AbGjoIx4AAAA
-To:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1684790626; l=891;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=sUSfHAwWdvL93XFzBSa385oPJR9eTOiEq7h6nDHiVoM=;
- b=QSfE9E+AOnbudo0Zpi3rmrJr3RMqWRIexzkaUN1qaBRMyV0YhmSKKzgQWgqZTvO47oBGrogvl
- bQzBzt1hZ13Da37H84OZUBm9oTG8uzMNZ3eO3MsPB44h3TuiyB3cUfT
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-ID: <1E792B81B2AF2748AC1BB8F9E0256391@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW4PR11MB5823.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3b53d8ba-c4ab-44ef-f002-08db5b0aeb91
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 May 2023 21:24:26.2660
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: QI6DQeuNuwdTOwKhMM11whXBdMYrm1Zzch/h1FKiZWTgy5Ib68wzUA3zzxVJZ2c3xvlnQt1MhjxHaMfGaRT/bEi/07uxzhKtZPZevnz4IPM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR11MB8336
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As discussed with Bjorn Andersson in private, step up to
-co-maintainership.
-
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 817e96c47be6..2da1e2ce2fae 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2568,7 +2568,7 @@ F:	arch/arm64/boot/dts/qcom/sdm845-cheza*
- ARM/QUALCOMM SUPPORT
- M:	Andy Gross <agross@kernel.org>
- M:	Bjorn Andersson <andersson@kernel.org>
--R:	Konrad Dybcio <konrad.dybcio@linaro.org>
-+M:	Konrad Dybcio <konrad.dybcio@linaro.org>
- L:	linux-arm-msm@vger.kernel.org
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git
-
----
-base-commit: 9f258af06b6268be8e960f63c3f66e88bdbbbdb0
-change-id: 20230522-topic-maintainers-18651a877ef5
-
-Best regards,
--- 
-Konrad Dybcio <konrad.dybcio@linaro.org>
-
+SGkgR3JlZywNCg0KcGxlYXNlIHB1bGwgUEVDSSB1cGRhdGUgZm9yIExpbnV4IHY2LjQuDQoNClRo
+YW5rcw0KLUl3b25hDQoNClRoZSBmb2xsb3dpbmcgY2hhbmdlcyBzaW5jZSBjb21taXQgYzIxYzBm
+OWEyMGE5NjNmNWExODc0NjU3YTRlM2Q2NTc1MDNmNzgxNToNCg0KICBCaW5kZXI6IEFkZCBhc3lu
+YyBmcm9tIHRvIHRyYW5zYWN0aW9uIHJlY29yZCAoMjAyMy0wNS0xMyAyMDozODoxMiArMDkwMCkN
+Cg0KYXJlIGF2YWlsYWJsZSBpbiB0aGUgR2l0IHJlcG9zaXRvcnkgYXQ6DQoNCiAgZ2l0Oi8vZ2l0
+Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L2l3aS9saW51eC5naXQgdGFncy9w
+ZWNpLWZpeGVzLTYuNA0KDQpmb3IgeW91IHRvIGZldGNoIGNoYW5nZXMgdXAgdG8gODQ5YjM5MTI1
+NGJmNjQ3OTY2NTU4NjhkYmI2ZGVlMjM1NTFmZjdkMzoNCg0KICBwZWNpOiBDb25zdGlmeSBzdHJ1
+Y3QgcGVjaV9jb250cm9sbGVyX29wcyAoMjAyMy0wNS0yMiAyMjoxNjoxNiArMDIwMCkNCg0KLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLQ0KUEVDSSBmaXhlcyBmb3IgdjYuNA0KDQpBIHNtYWxsIGNoYW5nZSB0byBtYXJrIHBlY2lf
+Y29udHJvbGxlcl9vcHMgYXMgY29uc3QuDQoNCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
+LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NClpldiBXZWlzcyAoMSk6DQogICAg
+ICBwZWNpOiBDb25zdGlmeSBzdHJ1Y3QgcGVjaV9jb250cm9sbGVyX29wcw0KDQogZHJpdmVycy9w
+ZWNpL2NvbnRyb2xsZXIvcGVjaS1hc3BlZWQuYyB8IDIgKy0NCiBkcml2ZXJzL3BlY2kvY29yZS5j
+ICAgICAgICAgICAgICAgICAgIHwgNCArKy0tDQogaW5jbHVkZS9saW51eC9wZWNpLmggICAgICAg
+ICAgICAgICAgICB8IDQgKystLQ0KIDMgZmlsZXMgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspLCA1
+IGRlbGV0aW9ucygtKQ0K
