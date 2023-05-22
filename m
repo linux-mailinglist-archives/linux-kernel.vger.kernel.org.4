@@ -2,54 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39B3D70C5BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 21:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 369EA70C5C3
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 21:08:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232979AbjEVTH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 15:07:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34578 "EHLO
+        id S233900AbjEVTIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 15:08:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230062AbjEVTHZ (ORCPT
+        with ESMTP id S229714AbjEVTIu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 15:07:25 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354F3A7;
-        Mon, 22 May 2023 12:07:23 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id D7F7722078;
-        Mon, 22 May 2023 19:07:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1684782441; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=8y2tC91mwddLD+EAwmjuuveG3T7LFdcskOoTa4k2Y3I=;
-        b=viHtqttjzWAiJRHnjgzeBYePD6aMwdP47nMsai1gCQj2NaEIRXKjjLW2Y8VovpASzKE0nB
-        6dbLknKr8wLZSRBtIYkVMIvbUjX22H0F/16q1SmOMvKg47sI+xpLAQy5Ik5bB68ln2hCL8
-        A4H/O2etB8rUPSVQIVZRSJdz5cpfHYM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1684782441;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=8y2tC91mwddLD+EAwmjuuveG3T7LFdcskOoTa4k2Y3I=;
-        b=pv1Uuqpr4gscVktfXAwhmoNNv4Ml4Zz+Q+YyVkrm3Pld74yyjxF+FSZmVeuXKmuPvmS8VU
-        qyYvN0+nlMLh8AAA==
-Received: from adalid.arch.suse.de (adalid.arch.suse.de [10.161.8.13])
-        by relay2.suse.de (Postfix) with ESMTP id 9909A2C141;
-        Mon, 22 May 2023 19:07:21 +0000 (UTC)
-From:   Thomas Bogendoerfer <tbogendoerfer@suse.de>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH net] net: mellanox: mlxbf_gige: Fix skb_panic splat under memory pressure
-Date:   Mon, 22 May 2023 21:07:13 +0200
-Message-Id: <20230522190713.82417-1-tbogendoerfer@suse.de>
-X-Mailer: git-send-email 2.35.3
+        Mon, 22 May 2023 15:08:50 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58308B0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 12:08:50 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-64d3fdcadb8so2270601b3a.3
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 12:08:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684782530; x=1687374530;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mXfengDBQCUrKr3M+u68PKzklPcywUAkxq6DICSwzdE=;
+        b=i657Phs/dxy79hUTzTdhMdU9fDmwozweb1FJARnrm+HtjZsxVm45R+1dY6Gnv8c81e
+         4BT6uwL0Xsiqc2e4x6njetekkljB+wrQhgX/RuabIolQmqpD7+2L4U6WHWHNhOdU4z70
+         b40q7b23FZ26OytMl62bVMPZxkCLhw/ae2n5ECioxb0E4Pg5T1fcB8LuyEOHQal+mXRn
+         QeF4gr+4lZoCDoevrm+tuEPdlYOgkWhejBshhog1508yvvei1lrasj437QE6KsmJWox/
+         d8mjVcNNLk2nDXOTW/m7rPSkIYTENLyNPQ5DxOLux2EZ1cnsQfAgdx2zlcUV9UXCAeH2
+         wbCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684782530; x=1687374530;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mXfengDBQCUrKr3M+u68PKzklPcywUAkxq6DICSwzdE=;
+        b=LkNrJ/x7gmJ8Jg5qJEbd6nI7Uh022OzUsb4kbtJYb4VbQUDkyhonW7QIaCnc/2wsDD
+         uLR9/3m/jDPwsN1e9zGeANWbCYV2T3fn3ERb6t9bmZLoCju2uq8glgSUj2OcQRq6t0O8
+         I/cI3xRLlRMFC77DXuhvB7MiFfH6CeMgs4C2Z6ZL6Qadv15M+zXHv4qwiVHJf8HasUXR
+         G5myvFXbTU3c1KOUybtqkI6kFvfPHE3KM/RexvBu+HePUjoJaG6k6TtaYdAUc7FLipcA
+         Thq083ypIgrKNM3V5ChGinHmDjQyiH8zJmh0j33ApWVHgdavgJG6loRs7r9r0ZXmuytH
+         RUXg==
+X-Gm-Message-State: AC+VfDxPpo+fMJjGK5fgg7HJL5+pRa9d0N7cPVh/ZQqjQVnA5q9QoK17
+        Mb7UTFvkwifpeR8Phu4Fkr+nN8qfAyg=
+X-Google-Smtp-Source: ACHHUZ69ZTgZhjNHB2YCwh0dv/tQCMnkYjBgDeYXgUrvFLsfFoqLbshv7t1xvwHEuCrVOHbzIxavIQ==
+X-Received: by 2002:a17:903:2310:b0:1ae:1364:6079 with SMTP id d16-20020a170903231000b001ae13646079mr15171237plh.44.1684782529579;
+        Mon, 22 May 2023 12:08:49 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:39c])
+        by smtp.gmail.com with ESMTPSA id l4-20020a170902eb0400b001a9bfd4c5dfsm5192906plb.147.2023.05.22.12.08.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 12:08:49 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 22 May 2023 09:08:47 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Muchun Song <songmuchun@bytedance.com>
+Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        muchun.song@linux.dev
+Subject: Re: [PATCH] kernfs: fix missing kernfs_idr_lock to remove an ID from
+ the IDR
+Message-ID: <ZGu9v3OA0wkhff7g@slm.duckdns.org>
+References: <20230516034536.25548-1-songmuchun@bytedance.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230516034536.25548-1-songmuchun@bytedance.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,44 +75,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Do skp_put() after a new skb has been successfully allocated otherwise
-the reused skb leads to skp_panics or incorrect packet sizes.
+On Tue, May 16, 2023 at 11:45:36AM +0800, Muchun Song wrote:
+> @@ -655,7 +660,7 @@ static struct kernfs_node *__kernfs_new_node(struct kernfs_root *root,
+>  	return kn;
+>  
+>   err_out3:
+> -	idr_remove(&root->ino_idr, (u32)kernfs_ino(kn));
+> +	kernfs_idr_remove(root, kn);
 
-Signed-off-by: Thomas Bogendoerfer <tbogendoerfer@suse.de>
----
- .../ethernet/mellanox/mlxbf_gige/mlxbf_gige_rx.c    | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+Good catch but I'd just open code the locking here.
 
-diff --git a/drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_rx.c b/drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_rx.c
-index afa3b92a6905..2c132849a76d 100644
---- a/drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_rx.c
-+++ b/drivers/net/ethernet/mellanox/mlxbf_gige/mlxbf_gige_rx.c
-@@ -245,18 +245,19 @@ static bool mlxbf_gige_rx_packet(struct mlxbf_gige *priv, int *rx_pkts)
- 
- 		skb = priv->rx_skb[rx_pi_rem];
- 
--		skb_put(skb, datalen);
--
--		skb->ip_summed = CHECKSUM_NONE; /* device did not checksum packet */
--
--		skb->protocol = eth_type_trans(skb, netdev);
--
- 		/* Alloc another RX SKB for this same index */
- 		rx_skb = mlxbf_gige_alloc_skb(priv, MLXBF_GIGE_DEFAULT_BUF_SZ,
- 					      &rx_buf_dma, DMA_FROM_DEVICE);
- 		if (!rx_skb)
- 			return false;
- 		priv->rx_skb[rx_pi_rem] = rx_skb;
-+
-+		skb_put(skb, datalen);
-+
-+		skb->ip_summed = CHECKSUM_NONE; /* device did not checksum packet */
-+
-+		skb->protocol = eth_type_trans(skb, netdev);
-+
- 		dma_unmap_single(priv->dev, *rx_wqe_addr,
- 				 MLXBF_GIGE_DEFAULT_BUF_SZ, DMA_FROM_DEVICE);
- 		*rx_wqe_addr = rx_buf_dma;
+Thanks.
+
 -- 
-2.35.3
-
+tejun
