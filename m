@@ -2,125 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2156A70C51A
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 20:24:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24D9670C51B
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 20:24:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233448AbjEVSYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 14:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39904 "EHLO
+        id S233533AbjEVSYU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 14:24:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232091AbjEVSYE (ORCPT
+        with ESMTP id S231577AbjEVSYP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 14:24:04 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 169FC186
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:24:02 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id 98e67ed59e1d1-2535edae73cso4425545a91.2
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:24:02 -0700 (PDT)
+        Mon, 22 May 2023 14:24:15 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 564D711F
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:24:13 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-510dabb39aeso9143123a12.2
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:24:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684779841; x=1687371841;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+        d=linux-foundation.org; s=google; t=1684779851; x=1687371851;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=msgMReVyIvBu/bwIUP7X7q2ZMnoRqp8LGJXsMcFUvcs=;
-        b=aHRH/zKGBDEc02+tUp4uzQfBwuRMYKhtH/VSuyaJ+fL4LRwlVratK6g5Ty0wfGlV/7
-         Y/VyfeULzj3JpgHIQBBrC9MtY/lF88HAZ0kM+hRL8Yte8RRWf4oSdlYRF/XqpF2XA2Vg
-         Y/TBhVrCE5UVfu/3DPCR/eGCu5HHdDIPvWJbwZoG6y01qPt/jfHqLq2YSEyrxZgpYPOZ
-         5TeWBF8wX2Hl7c/4w4Wjfe9Y/AHiyPIm2pHjBcmDKl/I63SEPBuRujPlyBZmGp/Eq4q5
-         sv5hd33nwR1BM9jefCd6kQ+ZNnJaSfCWvqDe+M0wEL70LWLYrdvJ409IFNQvdJFQXqdp
-         h0hw==
+        bh=OYRWgCDntd6M6zPwTuoO6FVTAIFdNPknpscZnk3SHyI=;
+        b=Uv8lWKhIsUfAw8AnlM03yoZvfoUecbhmcjScdnZqdh2uKUIXTShMOWDQI+yJmMjVyT
+         b8HVgMAO67LM7eJaUzLgDJ1E9ePaXGcgbCbVDOK9vN8N5REvhyWFE+0VjPlZqy9Ln50x
+         lgZvvXIXmwU/Pctg+a2a5O+AHI+e7g+3Jjvho=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684779841; x=1687371841;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+        d=1e100.net; s=20221208; t=1684779851; x=1687371851;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=msgMReVyIvBu/bwIUP7X7q2ZMnoRqp8LGJXsMcFUvcs=;
-        b=ZduAVw94YZtcFVc/U2juWHiiUvQg7SR4x/kMvN4v7AVwwwksT1Ise6MgIQ2ZAQKocz
-         O1bBcvvPp7jKuCcyppzYBg0Zdn6NCizOh+VFta6zkEDKX73p2LrP2K7vKZHe8PYLPNGF
-         r/q83BRgE9+REGp9L/Pxgm+9XJfodSNfD/5sJSuw7/sR5cQIwyWFhODT29+Xw63NjUFR
-         mnY1lG0Wcs7MeIMFjCVTzpzW66OanunZiiiMfjUwIDJrH1l74Tq18RnoFU08sHVUo5ib
-         Y0deg+u+XOeaLzxlQz9wS/ezLAaTxmvF9fqcUdG5CdUYLuacF92EK6xADiDUGpmzTzva
-         BbEg==
-X-Gm-Message-State: AC+VfDxD+K7S+vrrT7gEU8SUux8af2bMIqlhgxVe20dJj8vPg7wYKOx1
-        00jVFaBvnJmyWDgWTLA+4J9Q9DuS8B2O3vxDNtfYPg==
-X-Google-Smtp-Source: ACHHUZ6kdZR7qEFCbldz7uvdvDR5AlZ74YO/t4UiDPEmkgkrjjjgqDRSNzOgFw8RL8QhF7CCiVwX7Jzh4v1RebH6w3M=
-X-Received: by 2002:a17:90a:b292:b0:255:4b79:1ef9 with SMTP id
- c18-20020a17090ab29200b002554b791ef9mr6188889pjr.16.1684779841457; Mon, 22
- May 2023 11:24:01 -0700 (PDT)
+        bh=OYRWgCDntd6M6zPwTuoO6FVTAIFdNPknpscZnk3SHyI=;
+        b=Zj6c2ay937BGy0QLuP+6Py6KfgtgtYKF0I3QyTkf4c5DtqhaIiKDBscvPLLHjcxnot
+         BBJWYaIs79F7yr6eVbm53EvojGUFBpy39DySqbRS57XC4cSDJ62jSGC5Cpg4Ngze5+Pn
+         vdD0E9omPWWbK0CKoAtIn+vCCR1lKz5nUoSV0RAxVKQdeuZpN5VbJceALTecFT6Dvnte
+         u/hfznLRKqjjOsAApRNFfEXt32hTY2DkaSI03/Cq+PNilopT6JJ21XM3x4+GwQZlCPBo
+         rdsBHI1Umii8lMy4KkJe1TBkQ03AX/+YU72qEoHpDoBT8L30VG4+vAhJ1HdrKRoYFKa1
+         fKSg==
+X-Gm-Message-State: AC+VfDxAOMSpM1R2Ex7XvW4kpIfa4lFa5QUFzmtErjy5lA+9Qq+Fyzl2
+        oYTkhfLmvRMvGURk4yaUcY8zEaermwJpjxq5CcXQX7iS
+X-Google-Smtp-Source: ACHHUZ4Lq16Y3ilVwbi2Y8AylbGt6buI5HuxhxzSbU6lpI7pLcVmtgXqqEb/mllttNjrWigq+XtCLQ==
+X-Received: by 2002:a05:6402:2d8:b0:4fe:ddf:8d8c with SMTP id b24-20020a05640202d800b004fe0ddf8d8cmr9533915edx.13.1684779851375;
+        Mon, 22 May 2023 11:24:11 -0700 (PDT)
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com. [209.85.218.51])
+        by smtp.gmail.com with ESMTPSA id u16-20020a50a410000000b0050696c2d2f6sm3384201edb.88.2023.05.22.11.24.10
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 May 2023 11:24:10 -0700 (PDT)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-96ff9c0a103so173436266b.0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 11:24:10 -0700 (PDT)
+X-Received: by 2002:a17:907:86a2:b0:96f:a39c:86d6 with SMTP id
+ qa34-20020a17090786a200b0096fa39c86d6mr8145445ejc.8.1684779850024; Mon, 22
+ May 2023 11:24:10 -0700 (PDT)
 MIME-Version: 1.0
-From:   =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
-Date:   Mon, 22 May 2023 12:23:50 -0600
-Message-ID: <CAEUSe78ip=wkHUSz3mBFMcd-LjQAnByuJm1Oids5GSRm-J-dzA@mail.gmail.com>
-Subject: Stable backport request: skbuff: Proactively round up to kmalloc
- bucket size
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        linux- stable <stable@vger.kernel.org>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        ndesaulniers@google.com, rientjes@google.com, vbabka@suse.cz,
-        Sumit Semwal <sumit.semwal@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <9b987585-0834-bb8c-3414-283c29f3f2ab@leemhuis.info>
+ <bec024d5-4088-00ae-f7b5-7188868b1707@leemhuis.info> <b7717c43-74bf-b91d-d3ce-874493df602c@gmail.com>
+ <CAO-hwJ+At1J_yUpX2q_dJekzZ-PoTDAvxmkTk_e4Yu0Z338bEA@mail.gmail.com> <55dda0bb-fe42-6dee-28ea-00121554d092@leemhuis.info>
+In-Reply-To: <55dda0bb-fe42-6dee-28ea-00121554d092@leemhuis.info>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 22 May 2023 11:23:53 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whvhkSk6m8_AidhofgR9nq0Md+HbNad5r1RE69tZgbv6Q@mail.gmail.com>
+Message-ID: <CAHk-=whvhkSk6m8_AidhofgR9nq0Md+HbNad5r1RE69tZgbv6Q@mail.gmail.com>
+Subject: Re: [regression] Since kernel 6.3.1 logitech unify receiver not
+ working properly
+To:     Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        =?UTF-8?Q?Filipe_La=C3=ADns?= <lains@riseup.net>,
+        Bastien Nocera <hadess@hadess.net>,
+        Jiri Kosina <jikos@kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, guy.b@bluewin.ch
+Content-Type: multipart/mixed; boundary="0000000000007cd31e05fc4c60e2"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+--0000000000007cd31e05fc4c60e2
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Would the stable maintainers please consider backporting the following
-commit to the 6.1? We are trying to build gki_defconfig (plus a few
-extras) on Arm64 and test it under Qemu-arm64, but it fails to boot.
-Bisection has pointed here.
+On Mon, May 22, 2023 at 5:38=E2=80=AFAM Linux regression tracking (Thorsten
+Leemhuis) <regressions@leemhuis.info> wrote:
+>
+> FWIW, in case anybody is interested in a status update: one reporter
+> bisected the problem down to 586e8fede79 ("HID: logitech-hidpp: Retry
+> commands when device is busy"); reverting that commit on-top of 6.3
+> fixes the problem for that reporter. For that reporter things also work
+> on 6.4-rc; but for someone else that is affected that's not the case.
 
-We have verified that cherry-picking this patch on top of v6.1.29
-applies cleanly and allows the kernel to boot.
+Hmm. It's likely timing-dependent.
 
-commit 12d6c1d3a2ad0c199ec57c201cdc71e8e157a232
-Author: Kees Cook <keescook@chromium.org>
-Date:   Tue Oct 25 15:39:35 2022 -0700
+But that code is clearly buggy.
 
-    skbuff: Proactively round up to kmalloc bucket size
+If the wait_event_timeout() returns early, the device hasn't replied,
+but the code does
 
-    Instead of discovering the kmalloc bucket size _after_ allocation, roun=
-d
-    up proactively so the allocation is explicitly made for the full size,
-    allowing the compiler to correctly reason about the resulting size of
-    the buffer through the existing __alloc_size() hint.
+                if (!wait_event_timeout(hidpp->wait, hidpp->answer_availabl=
+e,
+                                        5*HZ)) {
+                        dbg_hid("%s:timeout waiting for response\n", __func=
+__);
+                        memset(response, 0, sizeof(struct hidpp_report));
+                        ret =3D -ETIMEDOUT;
+                }
 
-    This will allow for kernels built with CONFIG_UBSAN_BOUNDS or the
-    coming dynamic bounds checking under CONFIG_FORTIFY_SOURCE to gain
-    back the __alloc_size() hints that were temporarily reverted in commit
-    93dd04ab0b2b ("slab: remove __alloc_size attribute from
-__kmalloc_track_caller")
+and then continues to look at the response _anyway_.
 
-    Cc: "David S. Miller" <davem@davemloft.net>
-    Cc: Eric Dumazet <edumazet@google.com>
-    Cc: Jakub Kicinski <kuba@kernel.org>
-    Cc: Paolo Abeni <pabeni@redhat.com>
-    Cc: netdev@vger.kernel.org
-    Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Cc: Nick Desaulniers <ndesaulniers@google.com>
-    Cc: David Rientjes <rientjes@google.com>
-    Acked-by: Vlastimil Babka <vbabka@suse.cz>
-    Link: https://patchwork.kernel.org/project/netdevbpf/patch/202210212347=
-13.you.031-kees@kernel.org/
-    Signed-off-by: Kees Cook <keescook@chromium.org>
-    Link: https://lore.kernel.org/r/20221025223811.up.360-kees@kernel.org
-    Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Now, depending on out hardening options, that response may have been
+initialized by the compiler, or may just be random stack contents.
 
+That bug is pre-existing (ie the problem was not introduced by that
+commit), but who knows if the retry makes things worse (ie if it then
+triggers on a retry, the response data will be the *previous*
+response).
 
-Thanks and greetings!
+The whole "goto exit" games should be removed too, because we're in a
+for-loop, and instead of "goto exit" it should just do "break".
 
-Daniel D=C3=ADaz
-daniel.diaz@linaro.org
+IOW, something like this might be worth testing.
+
+That said, while I think the code is buggy, I doubt this is the actual
+cause of the problem people are reporting. But it would be lovely to
+hear if the attached patch makes any difference, and I think this is
+fixing a real - but unlikely - problem anyway.
+
+And obviously it might be helpful to actually enable those dbg_hid()
+messages, but I didn't look at what the magic config option to do so
+was.
+
+NOTE! Patch below *ENTIRELY* untested. I just looked at the code when
+that commit was mentioned, and went "that's not right"...
+
+                     Linus
+
+--0000000000007cd31e05fc4c60e2
+Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
+Content-Disposition: attachment; filename="patch.diff"
+Content-Transfer-Encoding: base64
+Content-ID: <f_lhz6dxva0>
+X-Attachment-Id: f_lhz6dxva0
+
+IGRyaXZlcnMvaGlkL2hpZC1sb2dpdGVjaC1oaWRwcC5jIHwgOCArKysrLS0tLQogMSBmaWxlIGNo
+YW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgNCBkZWxldGlvbnMoLSkKCmRpZmYgLS1naXQgYS9kcml2
+ZXJzL2hpZC9oaWQtbG9naXRlY2gtaGlkcHAuYyBiL2RyaXZlcnMvaGlkL2hpZC1sb2dpdGVjaC1o
+aWRwcC5jCmluZGV4IDBmY2ZkODVmZWEwZi4uNzJiZDYyZDJmOTg0IDEwMDY0NAotLS0gYS9kcml2
+ZXJzL2hpZC9oaWQtbG9naXRlY2gtaGlkcHAuYworKysgYi9kcml2ZXJzL2hpZC9oaWQtbG9naXRl
+Y2gtaGlkcHAuYwpAQCAtMzA2LDcgKzMwNiw3IEBAIHN0YXRpYyBpbnQgaGlkcHBfc2VuZF9tZXNz
+YWdlX3N5bmMoc3RydWN0IGhpZHBwX2RldmljZSAqaGlkcHAsCiAJCWlmIChyZXQpIHsKIAkJCWRi
+Z19oaWQoIl9faGlkcHBfc2VuZF9yZXBvcnQgcmV0dXJuZWQgZXJyOiAlZFxuIiwgcmV0KTsKIAkJ
+CW1lbXNldChyZXNwb25zZSwgMCwgc2l6ZW9mKHN0cnVjdCBoaWRwcF9yZXBvcnQpKTsKLQkJCWdv
+dG8gZXhpdDsKKwkJCWJyZWFrOwogCQl9CiAKIAkJaWYgKCF3YWl0X2V2ZW50X3RpbWVvdXQoaGlk
+cHAtPndhaXQsIGhpZHBwLT5hbnN3ZXJfYXZhaWxhYmxlLApAQCAtMzE0LDEzICszMTQsMTQgQEAg
+c3RhdGljIGludCBoaWRwcF9zZW5kX21lc3NhZ2Vfc3luYyhzdHJ1Y3QgaGlkcHBfZGV2aWNlICpo
+aWRwcCwKIAkJCWRiZ19oaWQoIiVzOnRpbWVvdXQgd2FpdGluZyBmb3IgcmVzcG9uc2VcbiIsIF9f
+ZnVuY19fKTsKIAkJCW1lbXNldChyZXNwb25zZSwgMCwgc2l6ZW9mKHN0cnVjdCBoaWRwcF9yZXBv
+cnQpKTsKIAkJCXJldCA9IC1FVElNRURPVVQ7CisJCQlicmVhazsKIAkJfQogCiAJCWlmIChyZXNw
+b25zZS0+cmVwb3J0X2lkID09IFJFUE9SVF9JRF9ISURQUF9TSE9SVCAmJgogCQkgICAgcmVzcG9u
+c2UtPnJhcC5zdWJfaWQgPT0gSElEUFBfRVJST1IpIHsKIAkJCXJldCA9IHJlc3BvbnNlLT5yYXAu
+cGFyYW1zWzFdOwogCQkJZGJnX2hpZCgiJXM6Z290IGhpZHBwIGVycm9yICUwMlhcbiIsIF9fZnVu
+Y19fLCByZXQpOwotCQkJZ290byBleGl0OworCQkJYnJlYWs7CiAJCX0KIAogCQlpZiAoKHJlc3Bv
+bnNlLT5yZXBvcnRfaWQgPT0gUkVQT1JUX0lEX0hJRFBQX0xPTkcgfHwKQEAgLTMyOSwxMyArMzMw
+LDEyIEBAIHN0YXRpYyBpbnQgaGlkcHBfc2VuZF9tZXNzYWdlX3N5bmMoc3RydWN0IGhpZHBwX2Rl
+dmljZSAqaGlkcHAsCiAJCQlyZXQgPSByZXNwb25zZS0+ZmFwLnBhcmFtc1sxXTsKIAkJCWlmIChy
+ZXQgIT0gSElEUFAyMF9FUlJPUl9CVVNZKSB7CiAJCQkJZGJnX2hpZCgiJXM6Z290IGhpZHBwIDIu
+MCBlcnJvciAlMDJYXG4iLCBfX2Z1bmNfXywgcmV0KTsKLQkJCQlnb3RvIGV4aXQ7CisJCQkJYnJl
+YWs7CiAJCQl9CiAJCQlkYmdfaGlkKCIlczpnb3QgYnVzeSBoaWRwcCAyLjAgZXJyb3IgJTAyWCwg
+cmV0cnlpbmdcbiIsIF9fZnVuY19fLCByZXQpOwogCQl9CiAJfQogCi1leGl0OgogCW11dGV4X3Vu
+bG9jaygmaGlkcHAtPnNlbmRfbXV0ZXgpOwogCXJldHVybiByZXQ7CiAK
+--0000000000007cd31e05fc4c60e2--
