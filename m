@@ -2,101 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C9B670CBF7
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 23:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E68A70CBFC
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 23:09:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235130AbjEVVIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 17:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35090 "EHLO
+        id S231405AbjEVVI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 17:08:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234681AbjEVVIE (ORCPT
+        with ESMTP id S231241AbjEVVIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 17:08:04 -0400
-Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [IPv6:2001:4b7a:2000:18::166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9BDCC4
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 14:08:03 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id B42D83F289;
-        Mon, 22 May 2023 23:07:56 +0200 (CEST)
-Date:   Mon, 22 May 2023 23:07:54 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
-        agross@kernel.org, andersson@kernel.org, quic_abhinavk@quicinc.com,
-        quic_jesszhan@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v12 01/10] drm/msm/dpu: set DSC flush bit correctly at
- MDP CTL flush register
-Message-ID: <hkuonozf7gll3dd3bp6otdu6dspyrn633yokfx7sckqjs6tx2k@7nu77thwfaxs>
-References: <1684783853-22193-1-git-send-email-quic_khsieh@quicinc.com>
- <1684783853-22193-2-git-send-email-quic_khsieh@quicinc.com>
- <d5e232d6-b789-a8c3-4ec5-7af0b9d8b9ae@linaro.org>
+        Mon, 22 May 2023 17:08:55 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E882F9D;
+        Mon, 22 May 2023 14:08:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=ruA1o1aWWqhoGunqxzs4d011qFZVDul7CrOFbNPB0ws=; b=ms2snZCjiEJFl5SmiuOFzrdKQ6
+        MYICcqiEnfWgGuIvZPyTwWCLAxBPXwTyJK2C+UQ6arMXNyL6Hcrpr/KeoD09Luk5woD4jxokn8AqR
+        Ce1damz3W/RLHF+v+S0jzo5xerE6IKDIh+s0a63d5C/KdXHmYdlB+0pF0FV5I5a43cE3Pu/FwVxjG
+        9BSLpzNyI+K8ospD5vZ20z/1v3b9gNTOdvmprPE47bgPmXMnOgaWZwWbaxpcygLUGvZdvrrfQ5F0H
+        HSsiKJjhNQ6APzqDA7KPyJwibBo+0XW3Y4lKSAuGXvDTVlOsHxqAKCEzJP7M67AmAtM0Y2rY0AtKY
+        SQSBOpVg==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1q1ClL-0083JV-1j;
+        Mon, 22 May 2023 21:08:15 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     keescook@chromium.org, yzaikin@google.com, ebiederm@xmission.com,
+        arnd@arndb.de, bp@alien8.de, James.Bottomley@HansenPartnership.com,
+        deller@gmx.de, tglx@linutronix.de, mingo@redhat.com,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        luto@kernel.org, peterz@infradead.org, brgerst@gmail.com,
+        christophe.jaillet@wanadoo.fr, kirill.shutemov@linux.intel.com,
+        jroedel@suse.de
+Cc:     j.granados@samsung.com, akpm@linux-foundation.org,
+        willy@infradead.org, linux-parisc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Luis Chamberlain <mcgrof@kernel.org>
+Subject: [PATCH 0/2] kernel/sysctl.c: remove to major base directories
+Date:   Mon, 22 May 2023 14:08:12 -0700
+Message-Id: <20230522210814.1919325-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d5e232d6-b789-a8c3-4ec5-7af0b9d8b9ae@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-22 23:18:02, Dmitry Baryshkov wrote:
-> On 22/05/2023 22:30, Kuogee Hsieh wrote:
-> > DSC flush bit is the bit 22 of CTL flush register. BIT(22) is expected
-> > to be written to CTL flush register to indicates that DSC is ready for
-> > flush. However 0x22 (BIT(1) and BIT(5)) was written mistakenly at current
-> 
-> DSC_IDX is 22, not 0x22.
-> 
-> > implementation. Fix this problem by writing BIT(22) to CTL flush register
-> > for DSC to work properly.
+Arnd, x86 folks, your review for the second patch would be greatly appreciated.
 
-Perhaps this whole comment needs a rewrite anyway, instead of pointing
-out grammar errors and confusion:
+Now that Joel has cleaned up and removed one of the routines which we wanted
+to deprecate, remove two major arrays from kernel/sysctl.c which are empty or
+almost empty. One of them, the debug one just needs moving to its source, so
+do that.
 
-    The DSC CTL_FLUSH register should be programmed with the 22th bit
-    (DSC_IDX) to flush the DSC hardware blocks, not the literal value of
-    22 (which corresponds to flushing VIG1, VIG2 and RGB1 instead).
+The move for the signal sysctl costs us 23 bytes but we have already saved
+1465 bytes with the other recent cleanup Joel made. The next step is to
+depreecate one more call and then we can simplify the registration to only
+use ARRAY_SIZE() completely and remove the extra empty entries all over.
+That should save us tons of bytes all around in the kernel and we'd then
+later kill for good all recursion possible sysctl registration calls.
 
-Patch contents are good though, thanks!
+These patches apply on top of sysctl-next [0] which already carry Joel's patches.
 
-- Marijn
+[0] https://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux.git/log/?h=sysctl-next
 
-> > Changes in V12:
-> > -- split this patch out of "separate DSC flush update out of interface"
-> > 
-> > Fixes: 77f6da90487c ("drm/msm/disp/dpu1: Add DSC support in hw_ctl")
-> > Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> > ---
-> >   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-> > index 4f7cfa9..69d0ea2 100644
-> > --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-> > +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-> > @@ -525,7 +525,7 @@ static void dpu_hw_ctl_intf_cfg_v1(struct dpu_hw_ctl *ctx,
-> >   		DPU_REG_WRITE(c, CTL_MERGE_3D_ACTIVE,
-> >   			      BIT(cfg->merge_3d - MERGE_3D_0));
-> >   	if (cfg->dsc) {
-> > -		DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, DSC_IDX);
-> > +		DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, BIT(DSC_IDX));
-> >   		DPU_REG_WRITE(c, CTL_DSC_ACTIVE, cfg->dsc);
-> >   	}
-> >   }
-> 
-> -- 
-> With best wishes
-> Dmitry
-> 
+Luis Chamberlain (2):
+  sysctl: remove empty dev table
+  signal: move show_unhandled_signals sysctl to its own file
+
+ arch/parisc/kernel/traps.c |  1 +
+ arch/x86/kernel/signal.c   |  1 +
+ arch/x86/kernel/traps.c    |  1 +
+ arch/x86/kernel/umip.c     |  1 +
+ arch/x86/mm/fault.c        |  1 +
+ kernel/signal.c            | 23 +++++++++++++++++++++++
+ kernel/sysctl.c            | 19 -------------------
+ 7 files changed, 28 insertions(+), 19 deletions(-)
+
+-- 
+2.39.2
+
