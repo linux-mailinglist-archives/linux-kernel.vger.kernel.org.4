@@ -2,180 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7802070CC4A
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 23:24:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A481670CC4F
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 23:25:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231537AbjEVVYd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 17:24:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41790 "EHLO
+        id S232116AbjEVVZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 17:25:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbjEVVYa (ORCPT
+        with ESMTP id S229595AbjEVVZv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 17:24:30 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D1DA3
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 14:24:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684790669; x=1716326669;
-  h=from:to:cc:subject:date:message-id:content-id:
-   content-transfer-encoding:mime-version;
-  bh=jp4jPiGP0iEltHWMAQ9JMt6/brgiUlvMi5cplSzoXqQ=;
-  b=ZCKVKkriA6+yFY3ZZjGQFGnIEdvJ2BD4mae4gQoPzAIRrufYmcPmC0Mx
-   Dy/PMCZzdDSA2k2I9B+cVxs08ClekwDZxPh2WLu1DmEVCozJWmmjUlee0
-   wCDbYHxTR6PjiGuBgBR0sq5Wa/vrbESaOjzK20NKBZHIsDcGIN6jvWBre
-   e1wlHlDnLI+FEEI9oMxTGVtMj19k8+u4sOLnpmzes9a17niuzdzNuL069
-   EnikFUtLFTyE826iBwmYM7l32CtTBtxBl7Xy6P9Jn3ply0dNW76hiC4WG
-   Uz9E+bYi1TKAdstYnk543/hQXYE/VEgyHrIL/TOUgot3BTvbxwrco2XWS
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="337634789"
-X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
-   d="scan'208";a="337634789"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 14:24:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="815842887"
-X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
-   d="scan'208";a="815842887"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga002.fm.intel.com with ESMTP; 22 May 2023 14:24:29 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 22 May 2023 14:24:28 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 22 May 2023 14:24:28 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Mon, 22 May 2023 14:24:28 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.104)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Mon, 22 May 2023 14:24:28 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JbwbXfuleDc4x6Btl0NnVTX4frGxSe1vPXUu1PDzAueo2iZE8TWmRySIuO9zNErFQzk3eVB5d4gxGsP/0XXfqehdq6LP30LjJWnQHbVEebR9NHFw0S5RkNvlCflcWzq6ue70W8p2M47gTnsYopDnDw1fKZ1wvhD/YxIkKjpXt9OGyB+TGvyDK/1hyI44hYo6HrsaRsC/kMXrRnFdVQs6Ob6Os673yhgY7/f+n/M63i7pYL96xBkF9cT/fjvs9fl0H05l2JUJfpBV3sB4peNTMNqajEOWm10cpLN2+eKMDEoEwN/0LywInIL8/ghBRvuxOB6fxEJtlRMeLdKBaoAlnQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jp4jPiGP0iEltHWMAQ9JMt6/brgiUlvMi5cplSzoXqQ=;
- b=STJScPf2tsIm3eod4E0YL9qA5RjdR5wp8rPyNyMwGm6mH6W7B1Hrlf2U/CJvkLAzzgpLm/M27LUCpeUJ0Kceg6NZkBtBg7Py1dQB+hdqCKTd2Ka7bccH0U6aKGf2Q77d2qgyexzlCSCPlvqPNdKsDe7Fxz+TIc3beKEW6DjXLPHvtt/FKWvvTh8Yvqi9B4AvfcgBJLRhQLxVGuSoAtnwscnzyZSNlq3WgDO5EiNl2bMwalVZn/de55mtoZWr4jwRrvrNHhSFajD/MpbWtp0ygYukBHYDFbSw9AxOguTc+9IHqgmj2S64seWGREA16WeKbydDsoaToCL+KzYOBu3FSA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MW4PR11MB5823.namprd11.prod.outlook.com (2603:10b6:303:186::12)
- by IA0PR11MB8336.namprd11.prod.outlook.com (2603:10b6:208:490::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Mon, 22 May
- 2023 21:24:26 +0000
-Received: from MW4PR11MB5823.namprd11.prod.outlook.com
- ([fe80::c91d:6ffc:c1a5:8c5d]) by MW4PR11MB5823.namprd11.prod.outlook.com
- ([fe80::c91d:6ffc:c1a5:8c5d%6]) with mapi id 15.20.6411.025; Mon, 22 May 2023
- 21:24:26 +0000
-From:   "Winiarska, Iwona" <iwona.winiarska@intel.com>
-To:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-CC:     "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] PECI fixes for v6.4
-Thread-Topic: [GIT PULL] PECI fixes for v6.4
-Thread-Index: AQHZjPPJ5i7UoODNFEO5sN2db5uHlg==
-Date:   Mon, 22 May 2023 21:24:26 +0000
-Message-ID: <f8506bf66b8bdaa85b5a2bec48bcdcc6a2853da7.camel@intel.com>
-Accept-Language: en-US, pl-PL
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.46.4 (3.46.4-1.fc37) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MW4PR11MB5823:EE_|IA0PR11MB8336:EE_
-x-ms-office365-filtering-correlation-id: 3b53d8ba-c4ab-44ef-f002-08db5b0aeb91
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: iUfuoO4LrmauSfHvGrdtlK0r/j0L0eq3U1g/1bHidSESjV5cjvD6WhWhkOZzearhQ7I4bNvjOQfhE8kFv35zSXXXd7Tiw8SFSzz8QAp+33YaghXPIxhVYYjgSQ4qheBMiHRrJ5h179sgLgxzosMyKgWtNNuVzeSlXk+xYyaxJLtECJfudV3n4BWMpJUgyvHUat2ppPzt37awV5gkuycLOMI4BbaDo+QAnHTlTtwAX0Nt9avLSl3iNOV35uX37QuJP5LfSZhq2pjY6S1HmHMufikgVnwEEIIIF8q+kuq/L2yGHhp78glVx1lCD0SEDLExli2NxdVCSs1dy0HI0SnjNcdXD/GDqFZoJCMAvrmg5G3lw0nFUx7wkNs6gxskwOCRxhHsH1kCd3akI0BQL96YWcrEX/vpyV8yiooAqLytmYAmrUDStrAOJxc+1iJLCOQ6JBgEDyV+XzMzxBp2KVqhyLFdB1Z+pSLuxWmJfBhYnY0ccL8+j3j2FdZy8+7CTkbpvflcFcJ/tpGr4fFVY8d6iMH4BSWOrFg4qo0EbXjLLdRGBw202XM/amO2ki57z8G1cChfEXkgjSAo+VQ9ThQi022cCtM3FQrG07FI5bNIe0Ie2wBfKIKtmRN+V+Gs5n1r
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR11MB5823.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(396003)(376002)(39860400002)(136003)(346002)(366004)(451199021)(2906002)(4744005)(71200400001)(38100700002)(122000001)(2616005)(8676002)(6506007)(26005)(83380400001)(6512007)(186003)(8936002)(36756003)(86362001)(316002)(4326008)(41300700001)(5660300002)(6486002)(6916009)(82960400001)(38070700005)(91956017)(66476007)(76116006)(66556008)(54906003)(66946007)(478600001)(64756008)(66446008);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UmVGbWpQS3ZOemVuQjk0UXFsUWx2ZThRT0pLL1N1azRwckJNc09nYTlHYXVi?=
- =?utf-8?B?Y3p0MTVTSitmdWMxS3lQRFB2MzY4STFvT2dOanRwMHlwaUVIUnJ3NUhVZGoz?=
- =?utf-8?B?Rmk2NWxqZGFYWWFoUEtocEJZNFNqV1RMZTFtQWk1MXdwVDViR0NPYkRSRFpO?=
- =?utf-8?B?VmJhRENiL2U5ZlFBUUNvWEJ3eDNvbDRWVFFGN0Y0SGViOWJTdkRDWnpDTFda?=
- =?utf-8?B?cDRyZFBZNlpTVWE3WTJvbUVkRVJrdU84bWlERnpaNC83cXgvWmQ3SGhGR1ZN?=
- =?utf-8?B?ZXBydk9OWFJwYkFNQUdsaVozZE1pU255Z0FLUi9vNEZHc1ZDeEF4cE9XWVBp?=
- =?utf-8?B?bXVtOWFrVXdHS2VxaUpNd2JzR05DZ1hoLyszRlZlcVNmU3NEY2p3S1FQYnpX?=
- =?utf-8?B?RWZOY0VjbGtzWDQ0T1BSUWdpV3g1OXl4TzV1akhqZUJhVnhmWTdCbXBJMk1H?=
- =?utf-8?B?blJSY2tkdm9mMUVxR0lnQUE3Z2F2OCtDME1aNE5tRUJ5Z0NLMTdOSC9CeXdQ?=
- =?utf-8?B?N2dZZnpHc0d1VkgyMlpHU1VFOUo1TTBCUmFKOGYxdDcxeWVob285dHNDQzd1?=
- =?utf-8?B?MnBWcTRiN0JjVnVKazlRY3lWbWlSUEVoZzNTUjVvNmRWM2J6NDI5dkVabFUw?=
- =?utf-8?B?anBBVVhJR2UvcU81dG1FNU1oOTVVZUhzME9ERnhlSG9VYzZvdmxrQzJWVDds?=
- =?utf-8?B?TTVWSmE5Vi9HQWc0UWMwaE5OY1VVd3NrY29zYThub0RXM1RUeHRzTXNZWlo0?=
- =?utf-8?B?QnNpRkp2UzBDUWk2YTkzZjU4SWZvdlNKZVU5aUo4am9WRUlVZVZnTDIvQ3Nt?=
- =?utf-8?B?bXBBSDRNdDc1RmJoL0FRTHNTVkFhSHJCRE1sL3R4NVk2RzNkZmFuVXFQRE5I?=
- =?utf-8?B?dkppWHZ1MWduUEFjTk1xRk5wMHdiTFptZHN1aHg4KzF1NU1QOW8wUHEyalVF?=
- =?utf-8?B?bkVrK1o4b1ZxU24vNW5OTVVJaGtuOEZvMGZXUHgvc3ppVEIrNVdzeGhrOGVL?=
- =?utf-8?B?SlAzTXF3dkxnMVRheTZFV2FUYmVydUZjU1M0YmJCSDFURWRYMG5FRDc1UEdC?=
- =?utf-8?B?NUcrTFBZeCs3bEFGQUE4TkdIVHMwT1k2TjdWc0QyRVkybksrejRkTHpGWWV3?=
- =?utf-8?B?R1NuZnlPT1RSU1RpcmthMUNXdnQxUmhrWm5KN0JONjcyTEh0aS8xMHI4OXZ0?=
- =?utf-8?B?bnY1SE45OFp4c0JRNktNeGNrdjNrZzRGRUxwZFcydFRIcW5PZzF6dE5leUxu?=
- =?utf-8?B?M2JrL1MwTHBQVC9hWFV4Q3ZHclVOSW8vMUF5SkNCbktPZFVQL3dad0tleVcw?=
- =?utf-8?B?MmQ4a1NQTzZUOGY1dG5pVGNuR2FjQlpUcHhiWklxMVpzRVFVRDcwZ0htd1dR?=
- =?utf-8?B?NGpUcGs4S09JQWp5VUhFWklBQnVnU1h3YW9BekJQbmMrdGtybmJjdEliVDNF?=
- =?utf-8?B?UElMUHBVeU54MEZqN0N3OWZRcFU5Mm1tdHZSSFozVXp2ODNqb1p5elJoOXZs?=
- =?utf-8?B?KyswTHdWNWtIT05SdEhXZHJZZzhWUFBKZlJrUGI3b3MzOWhBQW9udDRlekto?=
- =?utf-8?B?eWVaNEU1VUY5OGpEeDYvaDlPY2hzMnVNazJmdi9CUEJWeUJubnpjY2pHQWRS?=
- =?utf-8?B?aEU2dHVrcFlpUW5UQmhUdVd1bEh4SVBobnU2QlQ5TjY1S2NjY2hwZzloT0c5?=
- =?utf-8?B?ZWhteWhMMXp2VzNHd2duejYwd09mQmF4VHcycmJKbzgvVXdvOExxTDkxVlUx?=
- =?utf-8?B?Tk1TbzBISHkydWRkZjBOeUh0UlMyc0h5eDVKQXdFdkVzKy9ua2piaVp3RFhZ?=
- =?utf-8?B?WFNwRlo5KzgxempJY3pTcW8xZEZ6SmlGUW1qdWN1YlowTVczMjIzOUgxcHhX?=
- =?utf-8?B?ZUxCTFBGU1pTOWpZYlNUc09PUDBYL2N3VjFWOWhCaFI1UGNKSmZTNUp4YTFj?=
- =?utf-8?B?QlBRK0RuYmQ4MVFhZDJrT0dISnB4K2ZHZjBuTUdiTjhiS2RSTHkvRDkwdm9K?=
- =?utf-8?B?UnM4N0lENXJ1akxuMk5qL0tZSWZHZVBERVg1SUQrdUE5b1Q0OGpFNlhqOEtv?=
- =?utf-8?B?MUViZEdQakxLZ0EyYXJoT3p3Tzh3S3lYOTFIenowVzVVUDIyZ3NhN2h0Ri96?=
- =?utf-8?B?MjRuQTVaTThLMjJkZDZLMXBCeUN6WkRnMWpJQ0tzT1JGRTd3WGZYTWJVTkI5?=
- =?utf-8?B?aGc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <1E792B81B2AF2748AC1BB8F9E0256391@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Mon, 22 May 2023 17:25:51 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA38D9D;
+        Mon, 22 May 2023 14:25:50 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34MKq1ds020689;
+        Mon, 22 May 2023 21:25:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=fN/wqP3ZQInXYSjtvVMTnhjBmO0zMNWlp8fmFJcRjY0=;
+ b=ZvTMr1882rqAyXz2jBStSB8SZkDuBnFvQwPUBIp2naTq9msXx1FcuOubYoHXG9u0g1II
+ bEld3afmbzQrvsl2pnZw2Ze+bz5ZbzZdr2AL5CFbyKeGWLyUJU9oG9opUCowb+FnC7FJ
+ GzN65MT5XrOM2cIsk6mWj99eqJLlXxoDECmtp+DC77y7Qwii1UswwISoN+xe4iVvkFXf
+ VHd+K6INPopxIuvMqmnGfJ3on9UAQpesezK3K153uCrD28gXx5YkLLf0/aLN16r845DY
+ VGp/mXipHdd7UWxyedKxrpSWCWK+iTJpn24+iCA/qXvX3MgE+WXh7BFW4LAbrfis877u yA== 
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qppypckq3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 May 2023 21:25:45 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34MLPiwp014449
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 May 2023 21:25:44 GMT
+Received: from [10.71.110.193] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 22 May
+ 2023 14:25:44 -0700
+Message-ID: <7f22b13a-8961-899f-a8f2-494616b9602c@quicinc.com>
+Date:   Mon, 22 May 2023 14:25:43 -0700
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR11MB5823.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b53d8ba-c4ab-44ef-f002-08db5b0aeb91
-X-MS-Exchange-CrossTenant-originalarrivaltime: 22 May 2023 21:24:26.2660
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: QI6DQeuNuwdTOwKhMM11whXBdMYrm1Zzch/h1FKiZWTgy5Ib68wzUA3zzxVJZ2c3xvlnQt1MhjxHaMfGaRT/bEi/07uxzhKtZPZevnz4IPM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR11MB8336
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v4 4/5] drm/msm/dpu: Set DATA_COMPRESS for command mode
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>
+CC:     <freedreno@lists.freedesktop.org>, Sean Paul <sean@poorly.run>,
+        "Abhinav Kumar" <quic_abhinavk@quicinc.com>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+References: <20230405-add-dsc-support-v4-0-15daf84f8dcb@quicinc.com>
+ <20230405-add-dsc-support-v4-4-15daf84f8dcb@quicinc.com>
+ <6rip5brx7pu63f4b56zsa6xmilbhxswybxjuc2wrkukvvhlnjv@dxrhp6iywpoq>
+From:   Jessica Zhang <quic_jesszhan@quicinc.com>
+In-Reply-To: <6rip5brx7pu63f4b56zsa6xmilbhxswybxjuc2wrkukvvhlnjv@dxrhp6iywpoq>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: cK_SFAhP4o8z6724z12nsk_5Y6qt7v43
+X-Proofpoint-GUID: cK_SFAhP4o8z6724z12nsk_5Y6qt7v43
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-22_16,2023-05-22_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
+ clxscore=1015 mlxlogscore=999 phishscore=0 impostorscore=0
+ lowpriorityscore=0 bulkscore=0 suspectscore=0 malwarescore=0 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305220181
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgR3JlZywNCg0KcGxlYXNlIHB1bGwgUEVDSSB1cGRhdGUgZm9yIExpbnV4IHY2LjQuDQoNClRo
-YW5rcw0KLUl3b25hDQoNClRoZSBmb2xsb3dpbmcgY2hhbmdlcyBzaW5jZSBjb21taXQgYzIxYzBm
-OWEyMGE5NjNmNWExODc0NjU3YTRlM2Q2NTc1MDNmNzgxNToNCg0KICBCaW5kZXI6IEFkZCBhc3lu
-YyBmcm9tIHRvIHRyYW5zYWN0aW9uIHJlY29yZCAoMjAyMy0wNS0xMyAyMDozODoxMiArMDkwMCkN
-Cg0KYXJlIGF2YWlsYWJsZSBpbiB0aGUgR2l0IHJlcG9zaXRvcnkgYXQ6DQoNCiAgZ2l0Oi8vZ2l0
-Lmtlcm5lbC5vcmcvcHViL3NjbS9saW51eC9rZXJuZWwvZ2l0L2l3aS9saW51eC5naXQgdGFncy9w
-ZWNpLWZpeGVzLTYuNA0KDQpmb3IgeW91IHRvIGZldGNoIGNoYW5nZXMgdXAgdG8gODQ5YjM5MTI1
-NGJmNjQ3OTY2NTU4NjhkYmI2ZGVlMjM1NTFmZjdkMzoNCg0KICBwZWNpOiBDb25zdGlmeSBzdHJ1
-Y3QgcGVjaV9jb250cm9sbGVyX29wcyAoMjAyMy0wNS0yMiAyMjoxNjoxNiArMDIwMCkNCg0KLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLQ0KUEVDSSBmaXhlcyBmb3IgdjYuNA0KDQpBIHNtYWxsIGNoYW5nZSB0byBtYXJrIHBlY2lf
-Y29udHJvbGxlcl9vcHMgYXMgY29uc3QuDQoNCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NClpldiBXZWlzcyAoMSk6DQogICAg
-ICBwZWNpOiBDb25zdGlmeSBzdHJ1Y3QgcGVjaV9jb250cm9sbGVyX29wcw0KDQogZHJpdmVycy9w
-ZWNpL2NvbnRyb2xsZXIvcGVjaS1hc3BlZWQuYyB8IDIgKy0NCiBkcml2ZXJzL3BlY2kvY29yZS5j
-ICAgICAgICAgICAgICAgICAgIHwgNCArKy0tDQogaW5jbHVkZS9saW51eC9wZWNpLmggICAgICAg
-ICAgICAgICAgICB8IDQgKystLQ0KIDMgZmlsZXMgY2hhbmdlZCwgNSBpbnNlcnRpb25zKCspLCA1
-IGRlbGV0aW9ucygtKQ0K
+
+
+On 5/22/2023 1:54 PM, Marijn Suijten wrote:
+> How about: Enable INTF DATA_COMPRESS bit (on cmdmode) for DCE/DSC 1.2?
+
+Hi Marijn,
+
+Acked.
+
+> 
+> Drop parenthesis at your convenience.
+> 
+> On 2023-05-22 13:30:23, Jessica Zhang wrote:
+>> Add a DPU INTF op to set DATA_COMPRESS register if the
+>> DPU_INTF_DATA_COMPRESS feature is enabled. This bit needs to be set in
+>> order for DSC v1.2 to work.
+> 
+> "in order for .. to work" sounds like bugfixing... How about just:
+> "set the DCE_DATA_COMPRESS bit to enable the DCE/DSC 1.2 datapath",
+> which I think is what it is doing?  Everyone seems to favour the
+> "datapath" word anyway :)
+
+Sounds good.
+
+Thanks,
+
+Jessica Zhang
+
+> 
+>> Note: For now, this op is called for command mode encoders only. Changes to
+>> set DATA_COMPRESS for video mode encoders will be posted along with DSC
+>> v1.2 support for DP.
+>>
+>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+>> ---
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c |  3 +++
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c          | 13 +++++++++++++
+>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h          |  2 ++
+>>   3 files changed, 18 insertions(+)
+>>
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
+>> index d8ed85a238af..1a4c20f02312 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder_phys_cmd.c
+>> @@ -68,6 +68,9 @@ static void _dpu_encoder_phys_cmd_update_intf_cfg(
+>>   				phys_enc->hw_intf,
+>>   				true,
+>>   				phys_enc->hw_pp->idx);
+>> +
+>> +	if (phys_enc->hw_intf->ops.enable_compression)
+>> +		phys_enc->hw_intf->ops.enable_compression(phys_enc->hw_intf);
+>>   }
+>>   
+>>   static void dpu_encoder_phys_cmd_pp_tx_done_irq(void *arg, int irq_idx)
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+>> index 6485500eedb8..a462c6780e6e 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
+>> @@ -91,6 +91,7 @@
+>>   
+>>   #define INTF_CFG2_DATABUS_WIDEN	BIT(0)
+>>   #define INTF_CFG2_DATA_HCTL_EN	BIT(4)
+>> +#define INTF_CFG2_DCE_DATA_COMPRESS     BIT(12)
+>>   
+>>   static void dpu_hw_intf_setup_timing_engine(struct dpu_hw_intf *ctx,
+>>   		const struct intf_timing_params *p,
+>> @@ -522,6 +523,15 @@ static void dpu_hw_intf_disable_autorefresh(struct dpu_hw_intf *intf,
+>>   
+>>   }
+>>   
+>> +static void dpu_hw_intf_enable_compression(struct dpu_hw_intf *ctx)
+>> +{
+>> +	u32 intf_cfg2 = DPU_REG_READ(&ctx->hw, INTF_CONFIG2);
+>> +
+>> +	intf_cfg2 |= INTF_CFG2_DCE_DATA_COMPRESS;
+>> +
+>> +	DPU_REG_WRITE(&ctx->hw, INTF_CONFIG2, intf_cfg2);
+>> +}
+>> +
+>>   static void _setup_intf_ops(struct dpu_hw_intf_ops *ops,
+>>   		unsigned long cap)
+>>   {
+>> @@ -542,6 +552,9 @@ static void _setup_intf_ops(struct dpu_hw_intf_ops *ops,
+>>   		ops->vsync_sel = dpu_hw_intf_vsync_sel;
+>>   		ops->disable_autorefresh = dpu_hw_intf_disable_autorefresh;
+>>   	}
+>> +
+>> +	if (cap & BIT(DPU_INTF_DATA_COMPRESS))
+>> +		ops->enable_compression = dpu_hw_intf_enable_compression;
+>>   }
+>>   
+>>   struct dpu_hw_intf *dpu_hw_intf_init(const struct dpu_intf_cfg *cfg,
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
+>> index 73b0885918f8..72fe907729f1 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.h
+>> @@ -70,6 +70,7 @@ struct intf_status {
+>>    * @get_autorefresh:            Retrieve autorefresh config from hardware
+>>    *                              Return: 0 on success, -ETIMEDOUT on timeout
+>>    * @vsync_sel:                  Select vsync signal for tear-effect configuration
+>> + * @enable_compression:         Enable data compression
+>>    */
+>>   struct dpu_hw_intf_ops {
+>>   	void (*setup_timing_gen)(struct dpu_hw_intf *intf,
+>> @@ -107,6 +108,7 @@ struct dpu_hw_intf_ops {
+>>   	 * Disable autorefresh if enabled
+>>   	 */
+>>   	void (*disable_autorefresh)(struct dpu_hw_intf *intf, uint32_t encoder_id, u16 vdisplay);
+> 
+> Newline here.
+> 
+> 
+> For the contents of the patch though:
+> 
+> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+> 
+>> +	void (*enable_compression)(struct dpu_hw_intf *intf);
+>>   };
+>>   
+>>   struct dpu_hw_intf {
+>>
+>> -- 
+>> 2.40.1
+>>
