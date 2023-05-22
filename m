@@ -2,153 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1123270BE60
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 14:30:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69EBB70BE59
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 14:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234104AbjEVMab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 08:30:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33098 "EHLO
+        id S233291AbjEVMaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 08:30:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234242AbjEVMaB (ORCPT
+        with ESMTP id S234205AbjEVM3y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 08:30:01 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEDBB1988
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 05:26:50 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-30644c18072so3789435f8f.2
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 05:26:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684758409; x=1687350409;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HEaX8WhwboBEc6UgbMSxe5Jo+RE1bpmPJglCuEjejv0=;
-        b=ZiyXi5mj46qZs5cRDwXSALxq2q6Wr34xjKFCdrL9RvSOo7jl1rLiH1FOJ7ScllRxN+
-         UpJVYoj++XLXJ7h2lvcouJWScoc6tL5ESZK9enz8ZRK7BnoHum4mOM09LtzPDUAcrIAQ
-         LTB9VtjdxoeoyweLvXMQH/UvhEfh49uUhG9GmUcHZeQuP8bX99Ta+DWmlpMbGe4dBjiW
-         nrZd91lQ2G9BSOCgpnn/Mhh7KHN/aGc82UFvFzraMUy5eXFydaI1COAQS5YogvEpAws7
-         0qryjlPxx+KqvL0suhQKoYMCnxkMCj6xjvxtXz5vFR1W5FQRWd3rpSuXVTnEEOJNyL1u
-         F9dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684758409; x=1687350409;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HEaX8WhwboBEc6UgbMSxe5Jo+RE1bpmPJglCuEjejv0=;
-        b=D5yonXGXrM3Cklu7ZgdJICTUKRXU5TLXVwhb9svNbWJqDhA8dKu9mbiWEkPAbc9YX8
-         bhPnG2YHI0K9oGpka4btd/HIt2b8oJhjXETFA03VeK5ZDR/TQUZLnq17BV+rMDSy72Pz
-         TE2UeFNhBEsqIXqK9MyXPfIsVF+I/+0POpEDcUSj4uN7VpYGaPbMEgtxnzONNLDdh8OW
-         xHW3Nszd44EsgFJeEKpJz/fNmLE4cCJnbbjUT9Lud8Uumrhvp1wMgO02mLjXkd7jN1KS
-         n/+wR3mTnz5abt3zVV7MWggGAolZD0WpTDT9X52HHnUbyY+fhTUqr+DYw/nhzLe4lyHG
-         GknA==
-X-Gm-Message-State: AC+VfDwC6GDe4GDOYtkRmrvt6+PrAEujoJr86EwEyfqRWM2tvYv1aQPz
-        +v7qYJrLbg/XXlRTFZb+QHrWbQ==
-X-Google-Smtp-Source: ACHHUZ6uVYGLu/k0kOcjRdUMY/5MGNk02xLAtvueCfV/L4V4MZRkiJlDvQ6zqI0ZqWE0IjHjks/low==
-X-Received: by 2002:a5d:594a:0:b0:2f7:c224:cd32 with SMTP id e10-20020a5d594a000000b002f7c224cd32mr7254934wri.10.1684758409343;
-        Mon, 22 May 2023 05:26:49 -0700 (PDT)
-Received: from [192.168.1.91] (192.201.68.85.rev.sfr.net. [85.68.201.192])
-        by smtp.gmail.com with ESMTPSA id o2-20020a056000010200b002ca864b807csm7766430wrx.0.2023.05.22.05.26.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 May 2023 05:26:48 -0700 (PDT)
-Message-ID: <071614c0-0f84-6087-47c6-385541c5733d@baylibre.com>
-Date:   Mon, 22 May 2023 14:26:48 +0200
+        Mon, 22 May 2023 08:29:54 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82FACA9;
+        Mon, 22 May 2023 05:26:33 -0700 (PDT)
+Received: (Authenticated sender: alexis.lothore@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id B0691C0004;
+        Mon, 22 May 2023 12:26:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1684758392;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LmOknkiGbwRWi05gBEVUbhKWKgcpIrXBPCzL78lpEGw=;
+        b=KJYXKaU5T0YwZvWBpn0vwwU7ANrv67sjH7nSzG1MQfrq9UEAMIttP39vWyaT3HdcAKjomH
+        g/qV6CvC8Rx9QMJAUf/z41PtN9/Vc0Rw/1REVVTP9ouPMfWj/jpNU/5LApgDBZ78ObwwE3
+        WcecZtw6sZGxONJD85smgMi5tkmAenLw4yK+a3TC9Vq0gMmeoQM7RNU/kztNBUnyyq3FaD
+        iUJmVFLsUmtLN9Q885rGIPX2jU0at9awrIyGbzEG3mjpG4ejk4vbw144QHBtb9D7nmk0ZT
+        ZiLLqPOylo8rLIL6TSvUnXjEZF1n6YOi/W6uCDaQ6TIarNkAAuw+IeOswkzMWw==
+Message-ID: <aed51991-7f4f-b8c5-e899-48e8f23075fb@bootlin.com>
+Date:   Mon, 22 May 2023 14:26:50 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 1/2] gpio: tps65219: add GPIO support for TPS65219 PMIC
+ Thunderbird/102.10.1
+Subject: Re: [PATCH net-next v2 7/7] net: dsa: mv88e6xxx: enable support for
+ 88E6361 switch
 Content-Language: en-US
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Lee Jones <lee@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-omap@vger.kernel.org,
-        Jonathan Cormier <jcormier@criticallink.com>
-References: <20230511-tps65219-add-gpio-support-v2-0-60feb64d649a@baylibre.com>
- <20230511-tps65219-add-gpio-support-v2-1-60feb64d649a@baylibre.com>
- <CACRpkdbjjoOoGeaqv9yQ4fTKqxt5eLDBjZCnNAYQnng3L+n8TQ@mail.gmail.com>
- <2e5cae40-7040-a92f-3d11-ce68f1307049@baylibre.com>
- <20230517063303.GO14287@atomide.com>
-From:   jerome Neanne <jneanne@baylibre.com>
-In-Reply-To: <20230517063303.GO14287@atomide.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        thomas.petazzoni@bootlin.com, paul.arola@telus.com,
+        scott.roberts@telus.com,
+        =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>
+References: <20230519141303.245235-1-alexis.lothore@bootlin.com>
+ <20230519141303.245235-8-alexis.lothore@bootlin.com>
+ <ZGeLEbcCHzOASasC@shell.armlinux.org.uk>
+ <1c104034-b61f-5242-40fa-339de59ac9c9@bootlin.com>
+ <237dbb7f-8979-4435-a099-95bb5d093910@lunn.ch>
+From:   =?UTF-8?Q?Alexis_Lothor=c3=a9?= <alexis.lothore@bootlin.com>
+In-Reply-To: <237dbb7f-8979-4435-a099-95bb5d093910@lunn.ch>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 17/05/2023 08:33, Tony Lindgren wrote:
-> * jerome Neanne <jneanne@baylibre.com> [230512 07:13]:
+Hello Andrew,
+On 5/22/23 14:19, Andrew Lunn wrote:
+>>> Not exactly related to this patch, but please do not rely on this "max
+>>> speed mode" - please always ensure that you specify the phy-mode and
+>>> fixed-link settings for CPU and DSA ports in firmware. Thanks.
 >>
->>
->> On 11/05/2023 22:57, Linus Walleij wrote:
->>>> +       /* Documentation is stating that GPIO0 direction must not be changed in Linux:
->>>> +        * Table 8-34. MFP_1_CONFIG(3): MULTI_DEVICE_ENABLE,
->>>> +        * Should only be changed in INITIALIZE state (prior to ON Request).
->>>> +        * Set statically by NVM, changing direction in application can cause a hang.
->>>> +        * Below can be used for test purpose only:
->>>> +        */
->>>> +
->>>> +#if 0
->>>> +       int ret = regmap_update_bits(gpio->tps->regmap, TPS65219_REG_MFP_1_CONFIG,
->>>> +                                TPS65219_GPIO0_DIR_MASK, direction);
->>>> +       if (ret)
->>>> +               return ret;
->>>> +#endif
->>>> +       dev_err(gpio->tps->dev,
->>>> +               "GPIO%d direction set by NVM, change to %u failed, not allowed by specification\n",
->>>> +                offset, direction);
->>>> +       return -EOPNOTSUPP;
->>>> +}
->>>
->>> Normally people would complain about #if 0 code.
->>>
->>> But this is a special case!
->>>
->>> I definitely want the code to be in there somehow.
->>>
->>> What about:
->>>
->>> if (IS_ENABLED(DEBUG))?
->>>
->>> If someone enables debug with an explicit -DDEBUG to the compiler
->>> this could be allowed.
->> I'm fine with your proposal. Will wait few days just in case anyone wants to
->> add any comment then go for this.
+>> I would like to make sure to fully understand your point:
+>> - when telling so specify phy-mode and fixed-link in firmware, you mean
+>> device-tree, right ?
+>> - when checking for code and execution flow, I observe that port_max_speed is
+>> always called and its output is always used to configure shared ports mode in
+>> mv88e6xxx driver. Are you telling that eventually, the whole mv88e6xxx driver
+>> should stop relying on port_max_speed_mode for shared ports ?
 > 
-> Just wondering.. Would it help for the driver probe to set gpio0 as a gpio
-> hog after reading the configured value?
+> Yes, the concept of port_max_speed_mode causes problems for PHYLINK,
+> and we want to remove it. Russell and i have been updating DT
+> descriptions adding fixed-link and phy-mode properties to all
+> mv88e6xxx systems so that it is not needed. Either at the end of this
+> cycle, or the beginning of the next we will change the code to
+> actually enforce this.
+
+Understood, thanks for clarification
+
 > 
-> Maybe the multi device enable just means the pin may be shared with no
-> specific hardware reason to not change it during the runtime?
+> 	 Andrew
 
-Your point looks valid. But I think we can't simply add a regular 
-"gpio-hog" as a property in the device tree because we don't have a one 
-to one mapping for GPIO consumer (theoretically we can have more than 2 
-PMICs).
+-- 
+Alexis Lothoré, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
-I think your suggestion is to read the multi-device value through regmap 
-then "kind of" hog gpio with devm_gpio_request_one
-So that gpio0 is preserved from being requested by other user.
-Is this correct understanding?
-
-Practically the board I'm using for test currently only have one PMIC.
-I'm reluctant to implement additional logic that does not look so 
-"conventional" that I can't test.
-
-If maintainers agree, I'll postpone the implementation of your proposal 
-until a platform compatible with this implementation is available for 
-testing. So that we can check what is most accurate in real life.
-
-Side Note: wo this implementation use of the driver is less optimal in 
-multi-device configuration but still usable.
-
-Regards,
-Jerome.
