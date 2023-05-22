@@ -2,105 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D4A270BF72
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:15:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 231D470BF83
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:20:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233929AbjEVNPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 09:15:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40762 "EHLO
+        id S234138AbjEVNTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 09:19:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234356AbjEVNPJ (ORCPT
+        with ESMTP id S232900AbjEVNTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 09:15:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCD1E6
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 06:14:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684761255;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fJa+GKU9edCanEPVCfWeFwI5Lsvvl9efoskVffi2Y6Y=;
-        b=UbnUaTxryq0fPBsOuKCEQjP1Ur8F8Y940ZfYsznkyL9TeaLQipH1+Q02U9n1TVF1KEJUbp
-        84sBNDpPbExxAQ0/HW0xLQydfxOvibiPDKz7X6Nlf/9MEBDNaZaLbVUhsxknfybNUKy9nv
-        h9vFrXWYU1jliDhIET+/uKmwB23wplw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-671-DQ9PCLdCNdyTrKjd0AyNjA-1; Mon, 22 May 2023 09:14:14 -0400
-X-MC-Unique: DQ9PCLdCNdyTrKjd0AyNjA-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CAB7E3C11A24;
-        Mon, 22 May 2023 13:14:12 +0000 (UTC)
-Received: from sirius.home.kraxel.org (unknown [10.39.192.139])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 53260401026;
-        Mon, 22 May 2023 13:14:12 +0000 (UTC)
-Received: by sirius.home.kraxel.org (Postfix, from userid 1000)
-        id D7FEB1800606; Mon, 22 May 2023 15:14:10 +0200 (CEST)
-Date:   Mon, 22 May 2023 15:14:10 +0200
-From:   Gerd Hoffmann <kraxel@redhat.com>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dave Airlie <airlied@redhat.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-arch@vger.kernel.org,
-        Arnd Bergmann <arnd@kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org,
-        Alan Stern <stern@rowland.harvard.edu>,
-        spice-devel@lists.freedesktop.org,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>
-Subject: Re: [PATCH v5 09/44] drm: handle HAS_IOPORT dependencies
-Message-ID: <vng4tcbkdieuvlmiu36drat5t3lwzufthylcgv3qzfrodphhq3@sjxcuan5q6h6>
-References: <20230522105049.1467313-1-schnelle@linux.ibm.com>
- <20230522105049.1467313-10-schnelle@linux.ibm.com>
- <2043cea3-7553-ee9d-4aaa-6f1d22ac4d87@suse.de>
+        Mon, 22 May 2023 09:19:50 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4886C6;
+        Mon, 22 May 2023 06:19:48 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 1E6555FD53;
+        Mon, 22 May 2023 16:19:47 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1684761587;
+        bh=tu8OvW/hOdbLzHtNqpM5/g+Q4tXiEO+oUgB0ugzeF90=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=Kccp1ubWuvXAt6dCkxHCle71V8nDO5PQvKzVtzv2YVentBS5XkE0YEcT7E5qSZi/U
+         v/WM6BiAmanabfGusRfiZrognc21NnELM+agu3LaDqdzm9aOtnWpRQOr++SRVMKf6E
+         zArW0uIvknSwZmZnDx7U4rJpsaS40EC65NMr3rZ+Xf4WYN7bDDVm550AE0ffsyj5pU
+         JTFUAmktEB8TD1YEFRlY6q2+cExVCp4a8F6GctLRMdRl9fv80XRxvgx9W82Vr734xl
+         +9JMBGzTsXRZEuvmz9Y8FFw4dFencnlFh2ypUUkk7KP39rEBmG0tRxqXldo7UCYYD0
+         9suqELoCDZIMw==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Mon, 22 May 2023 16:19:46 +0300 (MSK)
+Message-ID: <e7005e49-54fd-92c7-d6a5-7b69bccbc254@sberdevices.ru>
+Date:   Mon, 22 May 2023 16:15:26 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2043cea3-7553-ee9d-4aaa-6f1d22ac4d87@suse.de>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC PATCH v3 04/17] vsock/virtio: non-linear skb handling for
+ tap
+Content-Language: en-US
+To:     Simon Horman <simon.horman@corigine.com>
+CC:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>,
+        <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>
+References: <20230522073950.3574171-1-AVKrasnov@sberdevices.ru>
+ <20230522073950.3574171-5-AVKrasnov@sberdevices.ru>
+ <ZGtqijZSCbAsS5D3@corigine.com>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <ZGtqijZSCbAsS5D3@corigine.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/22 08:14:00 #21365129
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  Hi,
 
-> > There is also a direct and hard coded use in cirrus.c which according to
-> > the comment is only necessary during resume.  Let's just skip this as
-> > for example s390 which doesn't have I/O port support also doesen't
-> > support suspend/resume.
+
+On 22.05.2023 16:13, Simon Horman wrote:
+> On Mon, May 22, 2023 at 10:39:37AM +0300, Arseniy Krasnov wrote:
+>> For tap device new skb is created and data from the current skb is
+>> copied to it. This adds copying data from non-linear skb to new
+>> the skb.
+>>
+>> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+>> ---
+>>  net/vmw_vsock/virtio_transport_common.c | 31 ++++++++++++++++++++++---
+>>  1 file changed, 28 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+>> index 16effa8d55d2..9854f48a0544 100644
+>> --- a/net/vmw_vsock/virtio_transport_common.c
+>> +++ b/net/vmw_vsock/virtio_transport_common.c
+>> @@ -106,6 +106,27 @@ virtio_transport_alloc_skb(struct virtio_vsock_pkt_info *info,
+>>  	return NULL;
+>>  }
+>>  
+>> +static void virtio_transport_copy_nonlinear_skb(struct sk_buff *skb,
+>> +						void *dst,
+>> +						size_t len)
+>> +{
+>> +	struct iov_iter iov_iter = { 0 };
+>> +	struct iovec iovec;
+>> +	size_t to_copy;
+>> +
+>> +	iovec.iov_base = dst;
 > 
-> I think we should consider making cirrus depend on HAS_IOPORT. The driver is
-> only for qemu's cirrus emulation, which IIRC can only be enabled for i586.
+> Hi Arseniy,
+> 
+> Sparse seems unhappy about this.
+> Though, TBH, I'm unsure what should be done about it.
+> 
+> .../virtio_transport_common.c:117:24: warning: incorrect type in assignment (different address spaces)
+> .../virtio_transport_common.c:117:24:    expected void [noderef] __user *iov_base
+> .../virtio_transport_common.c:117:24:    got void *dst
+> 
+Got it, i'll check how to resolve this problem!
 
-Agree.  cirrus is x86 only (both i386 / x86_64 though).  Just require
-HAS_IOPORT and be done with it.
-
-> And it has all been deprecated long ago.
-
-The fact that cirrus used to be the qemu default for many years is
-pretty much the only reason it is still somewhat relevant today ...
-
-take care,
-  Gerd
-
+Thanks!
+> 
+> ...
