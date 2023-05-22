@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB3A970C378
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 18:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A186870C37B
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 18:32:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232910AbjEVQbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 12:31:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41178 "EHLO
+        id S229988AbjEVQb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 12:31:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231548AbjEVQbq (ORCPT
+        with ESMTP id S232739AbjEVQbs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 12:31:46 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4179E70
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 09:31:20 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-309550d4f73so2552541f8f.1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 09:31:20 -0700 (PDT)
+        Mon, 22 May 2023 12:31:48 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D8C100
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 09:31:23 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-30a1fdde3d6so2483372f8f.0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 09:31:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684773079; x=1687365079;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684773080; x=1687365080;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pbe+PpwxNeZ9FhCSZTXEhEfAudTQs4JubRLdbyg6O94=;
-        b=3LVyULlCTgSzncTtKceGuNucs35noX1YBKN1hXPSFzrpDD0NzVce8L1UmzsLSdXVQz
-         T71OnrVmdPmjsdZv+Y1aWj6nfl6464UJusmRatVwwY3d8pKhlF/Z3KKbo4MN7IR0/dgC
-         Q+GXXuIBE0T1cH8a9YfL8C9/TRVqowHMXYDMcbWR7wF4dpmG0Zf54aIfiKOiZiPKfDUm
-         H9mjvUC6pVepM5/dcl3SSZ2n7khdcR5iq4YlxLLquHJgxmnOArK08EgcYhNHnoihrXMD
-         YguIf3zUP+coG+uLpjdnxCbebBLjAbf9PssylMw7EKKaNg1juqdj8uYUWDFaUucE+Cxv
-         /Hag==
+        bh=Lq0Q1qeHo3wPH48ZfMfIRErJyH/MWFBdH3zVnSn01Ps=;
+        b=vnyIJaWRLomZxuUH4iM7qk150CUpZlTvr7xhyhup18JH9e3ELj44eb8NEBAcBg8E5z
+         RY+GofZa7MOu1y1VBfilYO/gz8U/wSZIHjiJ1w9unIfnL/4CtizorB73q8x/qM+IQizk
+         yVJvljW4g7u02/pod7fz4iPLlQ3N48aB34DrDEduQRkvNcCAc6yeS1rH8f2EgJLcYxvt
+         S8BrFq+yL5/t78w9jInuATJcDHzY9rhJp1JWd7KfO7IQm2dGOmpl2myTOD6KvIqMOkfR
+         8o4xF4j3iVoADdseBrkzh+W0iRiNk2lSmDQd6yT43mFf+hx2TWBIng2mEX2FtUGUWqHd
+         GB1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684773079; x=1687365079;
+        d=1e100.net; s=20221208; t=1684773080; x=1687365080;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pbe+PpwxNeZ9FhCSZTXEhEfAudTQs4JubRLdbyg6O94=;
-        b=MhldQZa12o2TrS5lDBvN26a/YNoeFrAipTB/rQpwAVI9Sp5NacUZhpSETxgzpbwdnX
-         L0a2z2s0nnAQ7btA5DLAa+IR9KkblZ5dkykPPodYhaZQmIHUiH66Cea75cwyRrvFPdBX
-         bAulNCRmbqp9fFIhu8P8bLLp680iBTjnCAa2gnpCCQDmKG5FYnLioplaa4iUgHCb2P3c
-         sfv6LE0rYpXXcoP6ezYn4CKe7LA8psxyJYOK7zrd73tZpg/E13Tu6NvqIRJIEjFUTGJk
-         Fgf1EwYeCXAdLUnSdMKGP9CxvRLX1td+F8yQKlrH4rO9WNDMA/kdeVUHtgxktV5Jz7kL
-         7ABg==
-X-Gm-Message-State: AC+VfDw2zLD3Poti5c8Q+x/Uh4J8P23DlMT6TBHQDlahYkbXAA8vtbGW
-        6t0FHw16ZtjOkvi7OyUq18tuXQ==
-X-Google-Smtp-Source: ACHHUZ4iVmc+AbHfkwdarL7Ex7IJZPsPYdnHwtWC2Z6NyZUOMDHQCts+3IMP0fFjdQvTGtBIM3mkZA==
-X-Received: by 2002:a5d:6a04:0:b0:30a:8a64:ad0c with SMTP id m4-20020a5d6a04000000b0030a8a64ad0cmr3394757wru.20.1684773078790;
-        Mon, 22 May 2023 09:31:18 -0700 (PDT)
+        bh=Lq0Q1qeHo3wPH48ZfMfIRErJyH/MWFBdH3zVnSn01Ps=;
+        b=K0uQv1xa1+ClO/9j7M3KEb0Oe6Q6nSTudm7V+ScW3Brl7VMKj8bgYwZ92tA/rmlE/h
+         jMgPdlmpfPsj1hohj8f6lkDpK7DGO4EoYebWtUFhYsFSmw4q/Z/uzEY3oZf9gnpIfT1c
+         7aFrdfT+AsZzi9LavHspwu6vnxpB9G3f7THDlXjAnMJCtwsbJZEiuLW74nHdO83H6x3l
+         dg8dyoMxYC74TpC8pOCHtd958DUkoECVAfYT93XGOc6tHME48vmowLXsdXYAbJIycRJW
+         t21I+2xUznHPVsqFhH5S0j7DGMddp8YAZ5caupFwx3wOe4zTKFsE1dt+mYKld1PViMmL
+         MPSA==
+X-Gm-Message-State: AC+VfDxRNxsholuKEk1GgU2oUHoQgZfQ5BugUfwXLj+Gb3/8B1rKUy9l
+        k6HsFs3M+GjmZ+a5oVGt5Bapww==
+X-Google-Smtp-Source: ACHHUZ54gnLqMqdkZ02LcgBQkm56sAVTXlQ2ozQA4A4yXMEZZlzljuCy2IicWUV/YL3ObUa7x82jPA==
+X-Received: by 2002:adf:f103:0:b0:306:8034:b2e4 with SMTP id r3-20020adff103000000b003068034b2e4mr7904900wro.69.1684773079975;
+        Mon, 22 May 2023 09:31:19 -0700 (PDT)
 Received: from localhost.localdomain ([2a01:e0a:28d:66d0:72d:52cc:8221:fcda])
-        by smtp.gmail.com with ESMTPSA id y10-20020adff6ca000000b002f103ca90cdsm8152677wrp.101.2023.05.22.09.31.17
+        by smtp.gmail.com with ESMTPSA id y10-20020adff6ca000000b002f103ca90cdsm8152677wrp.101.2023.05.22.09.31.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 09:31:18 -0700 (PDT)
+        Mon, 22 May 2023 09:31:19 -0700 (PDT)
 From:   Esteban Blanc <eblanc@baylibre.com>
 To:     linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
         a.zummo@towertech.it, alexandre.belloni@bootlin.com
@@ -57,9 +57,9 @@ Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
         linux-rtc@vger.kernel.org, jpanis@baylibre.com,
         jneanne@baylibre.com, aseketeli@baylibre.com, eblanc@baylibre.com,
         u-kumar1@ti.com
-Subject: [PATCH v5 2/3] pinctrl: tps6594: Add driver for TPS6594 pinctrl and GPIOs
-Date:   Mon, 22 May 2023 18:31:14 +0200
-Message-Id: <20230522163115.2592883-3-eblanc@baylibre.com>
+Subject: [PATCH v5 3/3] regulator: tps6594-regulator: Add driver for TI TPS6594 regulators
+Date:   Mon, 22 May 2023 18:31:15 +0200
+Message-Id: <20230522163115.2592883-4-eblanc@baylibre.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230522163115.2592883-1-eblanc@baylibre.com>
 References: <20230522163115.2592883-1-eblanc@baylibre.com>
@@ -74,444 +74,680 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-TI TPS6594 PMIC has 11 GPIOs which can be used
-for different functions.
+From: Jerome Neanne <jneanne@baylibre.com>
 
-This patch adds a pinctrl and GPIO drivers in
-order to use those functions.
+This patch adds support for TPS6594 regulators (bucks and LDOs).
+The output voltages are configurable and are meant to supply power
+to the main processor and other components.
+Bucks can be used in single or multiphase mode, depending on PMIC
+part number.
 
+Signed-off-by: Jerome Neanne <jneanne@baylibre.com>
 Signed-off-by: Esteban Blanc <eblanc@baylibre.com>
 ---
- drivers/pinctrl/Kconfig           |  13 ++
- drivers/pinctrl/Makefile          |   1 +
- drivers/pinctrl/pinctrl-tps6594.c | 367 ++++++++++++++++++++++++++++++
- include/linux/mfd/tps6594.h       |   3 +-
- 4 files changed, 383 insertions(+), 1 deletion(-)
- create mode 100644 drivers/pinctrl/pinctrl-tps6594.c
+ drivers/regulator/Kconfig             |  13 +
+ drivers/regulator/Makefile            |   1 +
+ drivers/regulator/tps6594-regulator.c | 615 ++++++++++++++++++++++++++
+ 3 files changed, 629 insertions(+)
+ create mode 100644 drivers/regulator/tps6594-regulator.c
 
-diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
-index 5787c579dcf6..73903fa59776 100644
---- a/drivers/pinctrl/Kconfig
-+++ b/drivers/pinctrl/Kconfig
-@@ -480,6 +480,19 @@ config PINCTRL_TB10X
- 	depends on OF && ARC_PLAT_TB10X
- 	select GPIOLIB
+diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
+index e5f3613c15fa..b832702dcb2c 100644
+--- a/drivers/regulator/Kconfig
++++ b/drivers/regulator/Kconfig
+@@ -1463,6 +1463,19 @@ config REGULATOR_TPS65219
+ 	  voltage regulators. It supports software based voltage control
+ 	  for different voltage domains.
  
-+config PINCTRL_TPS6594
-+	tristate "Pinctrl and GPIO driver for TI TPS6594 PMIC"
-+	depends on MFD_TPS6594
++config REGULATOR_TPS6594
++	tristate "TI TPS6594 Power regulators"
++	depends on MFD_TPS6594 && OF
 +	default MFD_TPS6594
-+	select PINMUX
-+	select GPIOLIB
-+	select REGMAP
-+	select GPIO_REGMAP
 +	help
-+	  Say Y to select the pinmuxing and GPIOs driver for the TPS6594
-+	  PMICs chip family. This driver can also be built as a module
-+	  called tps6594-pinctrl.
++	  This driver supports TPS6594 voltage regulator chips.
++	  TPS6594 series of PMICs have 5 BUCKs and 4 LDOs
++	  voltage regulators.
++	  BUCKs 1,2,3,4 can be used in single phase or multiphase mode.
++	  Part number defines which single or multiphase mode is i used.
++	  It supports software based voltage control
++	  for different voltage domains.
 +
- config PINCTRL_ZYNQ
- 	bool "Pinctrl driver for Xilinx Zynq"
- 	depends on ARCH_ZYNQ
-diff --git a/drivers/pinctrl/Makefile b/drivers/pinctrl/Makefile
-index e196c6e324ad..28271a8d5275 100644
---- a/drivers/pinctrl/Makefile
-+++ b/drivers/pinctrl/Makefile
-@@ -49,6 +49,7 @@ obj-$(CONFIG_PINCTRL_ST) 	+= pinctrl-st.o
- obj-$(CONFIG_PINCTRL_STMFX) 	+= pinctrl-stmfx.o
- obj-$(CONFIG_PINCTRL_SX150X)	+= pinctrl-sx150x.o
- obj-$(CONFIG_PINCTRL_TB10X)	+= pinctrl-tb10x.o
-+obj-$(CONFIG_PINCTRL_TPS6594)	+= pinctrl-tps6594.o
- obj-$(CONFIG_PINCTRL_ZYNQMP)	+= pinctrl-zynqmp.o
- obj-$(CONFIG_PINCTRL_ZYNQ)	+= pinctrl-zynq.o
- 
-diff --git a/drivers/pinctrl/pinctrl-tps6594.c b/drivers/pinctrl/pinctrl-tps6594.c
+ config REGULATOR_TPS6524X
+ 	tristate "TI TPS6524X Power regulators"
+ 	depends on SPI
+diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
+index 58dfe0147cd4..8bbead39cceb 100644
+--- a/drivers/regulator/Makefile
++++ b/drivers/regulator/Makefile
+@@ -174,6 +174,7 @@ obj-$(CONFIG_REGULATOR_TPS6524X) += tps6524x-regulator.o
+ obj-$(CONFIG_REGULATOR_TPS6586X) += tps6586x-regulator.o
+ obj-$(CONFIG_REGULATOR_TPS65910) += tps65910-regulator.o
+ obj-$(CONFIG_REGULATOR_TPS65912) += tps65912-regulator.o
++obj-$(CONFIG_REGULATOR_TPS6594) += tps6594-regulator.o
+ obj-$(CONFIG_REGULATOR_TPS65132) += tps65132-regulator.o
+ obj-$(CONFIG_REGULATOR_TPS68470) += tps68470-regulator.o
+ obj-$(CONFIG_REGULATOR_TWL4030) += twl-regulator.o twl6030-regulator.o
+diff --git a/drivers/regulator/tps6594-regulator.c b/drivers/regulator/tps6594-regulator.c
 new file mode 100644
-index 000000000000..e663109249db
+index 000000000000..d5a574ec6d12
 --- /dev/null
-+++ b/drivers/pinctrl/pinctrl-tps6594.c
-@@ -0,0 +1,367 @@
++++ b/drivers/regulator/tps6594-regulator.c
+@@ -0,0 +1,615 @@
 +// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Pinmux and GPIO driver for tps6594 PMIC
-+ *
-+ * Copyright (C) 2023 BayLibre Incorporated - https://www.baylibre.com/
-+ */
++//
++// Regulator driver for tps6594 PMIC
++//
++// Copyright (C) 2023 BayLibre Incorporated - https://www.baylibre.com/
 +
-+#include <linux/gpio/driver.h>
-+#include <linux/gpio/regmap.h>
++#include <linux/device.h>
++#include <linux/err.h>
++#include <linux/init.h>
++#include <linux/kernel.h>
 +#include <linux/module.h>
-+#include <linux/pinctrl/pinmux.h>
++#include <linux/of_device.h>
 +#include <linux/platform_device.h>
++#include <linux/regmap.h>
++#include <linux/regulator/driver.h>
++#include <linux/regulator/machine.h>
++#include <linux/regulator/of_regulator.h>
 +
 +#include <linux/mfd/tps6594.h>
 +
-+#define TPS6594_PINCTRL_PINS_NB 11
++#define BUCK_NB		5
++#define LDO_NB		4
++#define MULTI_PHASE_NB	4
++#define REGS_INT_NB	4
 +
-+#define TPS6594_PINCTRL_GPIO_FUNCTION 0
-+#define TPS6594_PINCTRL_SCL_I2C2_CS_SPI_FUNCTION 1
-+#define TPS6594_PINCTRL_TRIG_WDOG_FUNCTION 1
-+#define TPS6594_PINCTRL_CLK32KOUT_FUNCTION 1
-+#define TPS6594_PINCTRL_SCLK_SPMI_FUNCTION 1
-+#define TPS6594_PINCTRL_SDATA_SPMI_FUNCTION 1
-+#define TPS6594_PINCTRL_NERR_MCU_FUNCTION 1
-+#define TPS6594_PINCTRL_PDOG_FUNCTION 1
-+#define TPS6594_PINCTRL_SYNCCLKIN_FUNCTION 1
-+#define TPS6594_PINCTRL_NRSTOUT_SOC_FUNCTION 2
-+#define TPS6594_PINCTRL_SYNCCLKOUT_FUNCTION 2
-+#define TPS6594_PINCTRL_SDA_I2C2_SDO_SPI_FUNCTION 2
-+#define TPS6594_PINCTRL_NERR_SOC_FUNCTION 2
-+#define TPS6594_PINCTRL_DISABLE_WDOG_FUNCTION 3
-+#define TPS6594_PINCTRL_NSLEEP1_FUNCTION 4
-+#define TPS6594_PINCTRL_NSLEEP2_FUNCTION 5
-+#define TPS6594_PINCTRL_WKUP1_FUNCTION 6
-+#define TPS6594_PINCTRL_WKUP2_FUNCTION 7
++enum tps6594_regulator_id {
++	/* DCDC's */
++	TPS6594_BUCK_1,
++	TPS6594_BUCK_2,
++	TPS6594_BUCK_3,
++	TPS6594_BUCK_4,
++	TPS6594_BUCK_5,
 +
-+/* Special muxval for recalcitrant pins */
-+#define TPS6594_PINCTRL_DISABLE_WDOG_FUNCTION_GPIO8 2
-+#define TPS6594_PINCTRL_SYNCCLKOUT_FUNCTION_GPIO8 3
-+#define TPS6594_PINCTRL_CLK32KOUT_FUNCTION_GPIO9 3
-+
-+#define TPS6594_OFFSET_GPIO_SEL 5
-+
-+#define FUNCTION(n, g, v)                                                    \
-+	{                                                                    \
-+		.pinfunction = PINCTRL_PINFUNCTION((n), (g), ARRAY_SIZE(g)), \
-+		.muxval = v,                                                 \
-+	}
-+
-+static const struct pinctrl_pin_desc tps6594_pins[TPS6594_PINCTRL_PINS_NB] = {
-+	PINCTRL_PIN(0, "GPIO0"),   PINCTRL_PIN(1, "GPIO1"),
-+	PINCTRL_PIN(2, "GPIO2"),   PINCTRL_PIN(3, "GPIO3"),
-+	PINCTRL_PIN(4, "GPIO4"),   PINCTRL_PIN(5, "GPIO5"),
-+	PINCTRL_PIN(6, "GPIO6"),   PINCTRL_PIN(7, "GPIO7"),
-+	PINCTRL_PIN(8, "GPIO8"),   PINCTRL_PIN(9, "GPIO9"),
-+	PINCTRL_PIN(10, "GPIO10"),
++	/* LDOs */
++	TPS6594_LDO_1,
++	TPS6594_LDO_2,
++	TPS6594_LDO_3,
++	TPS6594_LDO_4,
 +};
 +
-+static const char *const tps6594_gpio_func_group_names[] = {
-+	"GPIO0", "GPIO1", "GPIO2", "GPIO3", "GPIO4",  "GPIO5",
-+	"GPIO6", "GPIO7", "GPIO8", "GPIO9", "GPIO10",
-+};
-+static const char *const tps6594_nsleep1_func_group_names[] = {
-+	"GPIO0", "GPIO1", "GPIO2", "GPIO3", "GPIO4",  "GPIO5",
-+	"GPIO6", "GPIO7", "GPIO8", "GPIO9", "GPIO10",
-+};
-+static const char *const tps6594_nsleep2_func_group_names[] = {
-+	"GPIO0", "GPIO1", "GPIO2", "GPIO3", "GPIO4",  "GPIO5",
-+	"GPIO6", "GPIO7", "GPIO8", "GPIO9", "GPIO10",
-+};
-+static const char *const tps6594_wkup1_func_group_names[] = {
-+	"GPIO0", "GPIO1", "GPIO2", "GPIO3", "GPIO4",  "GPIO5",
-+	"GPIO6", "GPIO7", "GPIO8", "GPIO9", "GPIO10",
-+};
-+static const char *const tps6594_wkup2_func_group_names[] = {
-+	"GPIO0", "GPIO1", "GPIO2", "GPIO3", "GPIO4",  "GPIO5",
-+	"GPIO6", "GPIO7", "GPIO8", "GPIO9", "GPIO10",
-+};
-+static const char *const tps6594_scl_i2c2_cs_spi_func_group_names[] = {
-+	"GPIO0",
-+	"GPIO1",
-+};
-+static const char *const tps6594_nrstout_soc_func_group_names[] = {
-+	"GPIO0",
-+	"GPIO10",
-+};
-+static const char *const tps6594_trig_wdog_func_group_names[] = {
-+	"GPIO1",
-+	"GPIO10",
-+};
-+static const char *const tps6594_sda_i2c2_sdo_spi_func_group_names[] = {
-+	"GPIO1",
-+};
-+static const char *const tps6594_clk32kout_func_group_names[] = {
-+	"GPIO2",
-+	"GPIO3",
-+	"GPIO7",
-+};
-+static const char *const tps6594_nerr_soc_func_group_names[] = {
-+	"GPIO2",
-+};
-+static const char *const tps6594_sclk_spmi_func_group_names[] = {
-+	"GPIO4",
-+};
-+static const char *const tps6594_sdata_spmi_func_group_names[] = {
-+	"GPIO5",
-+};
-+static const char *const tps6594_nerr_mcu_func_group_names[] = {
-+	"GPIO6",
-+};
-+static const char *const tps6594_syncclkout_func_group_names[] = {
-+	"GPIO7",
-+	"GPIO9",
-+};
-+static const char *const tps6594_disable_wdog_func_group_names[] = {
-+	"GPIO7",
-+	"GPIO8",
-+};
-+static const char *const tps6594_pdog_func_group_names[] = {
-+	"GPIO8",
-+};
-+static const char *const tps6594_syncclkin_func_group_names[] = {
-+	"GPIO9",
++enum tps6594_multi_regulator_id {
++	/* Multi-phase DCDC's */
++	TPS6594_BUCK_12,
++	TPS6594_BUCK_34,
++	TPS6594_BUCK_123,
++	TPS6594_BUCK_1234,
 +};
 +
-+struct tps6594_pinctrl_function {
-+	struct pinfunction pinfunction;
-+	u8 muxval;
++struct tps6594_regulator_irq_type {
++	const char *irq_name;
++	const char *regulator_name;
++	const char *event_name;
++	unsigned long event;
 +};
 +
-+static const struct tps6594_pinctrl_function pinctrl_functions[] = {
-+	FUNCTION("gpio", tps6594_gpio_func_group_names,
-+		 TPS6594_PINCTRL_GPIO_FUNCTION),
-+	FUNCTION("nsleep1", tps6594_nsleep1_func_group_names,
-+		 TPS6594_PINCTRL_NSLEEP1_FUNCTION),
-+	FUNCTION("nsleep2", tps6594_nsleep2_func_group_names,
-+		 TPS6594_PINCTRL_NSLEEP2_FUNCTION),
-+	FUNCTION("wkup1", tps6594_wkup1_func_group_names,
-+		 TPS6594_PINCTRL_WKUP1_FUNCTION),
-+	FUNCTION("wkup2", tps6594_wkup2_func_group_names,
-+		 TPS6594_PINCTRL_WKUP2_FUNCTION),
-+	FUNCTION("scl_i2c2-cs_spi", tps6594_scl_i2c2_cs_spi_func_group_names,
-+		 TPS6594_PINCTRL_SCL_I2C2_CS_SPI_FUNCTION),
-+	FUNCTION("nrstout_soc", tps6594_nrstout_soc_func_group_names,
-+		 TPS6594_PINCTRL_NRSTOUT_SOC_FUNCTION),
-+	FUNCTION("trig_wdog", tps6594_trig_wdog_func_group_names,
-+		 TPS6594_PINCTRL_TRIG_WDOG_FUNCTION),
-+	FUNCTION("sda_i2c2-sdo_spi", tps6594_sda_i2c2_sdo_spi_func_group_names,
-+		 TPS6594_PINCTRL_SDA_I2C2_SDO_SPI_FUNCTION),
-+	FUNCTION("clk32kout", tps6594_clk32kout_func_group_names,
-+		 TPS6594_PINCTRL_CLK32KOUT_FUNCTION),
-+	FUNCTION("nerr_soc", tps6594_nerr_soc_func_group_names,
-+		 TPS6594_PINCTRL_NERR_SOC_FUNCTION),
-+	FUNCTION("sclk_spmi", tps6594_sclk_spmi_func_group_names,
-+		 TPS6594_PINCTRL_SCLK_SPMI_FUNCTION),
-+	FUNCTION("sdata_spmi", tps6594_sdata_spmi_func_group_names,
-+		 TPS6594_PINCTRL_SDATA_SPMI_FUNCTION),
-+	FUNCTION("nerr_mcu", tps6594_nerr_mcu_func_group_names,
-+		 TPS6594_PINCTRL_NERR_MCU_FUNCTION),
-+	FUNCTION("syncclkout", tps6594_syncclkout_func_group_names,
-+		 TPS6594_PINCTRL_SYNCCLKOUT_FUNCTION),
-+	FUNCTION("disable_wdog", tps6594_disable_wdog_func_group_names,
-+		 TPS6594_PINCTRL_DISABLE_WDOG_FUNCTION),
-+	FUNCTION("pdog", tps6594_pdog_func_group_names,
-+		 TPS6594_PINCTRL_PDOG_FUNCTION),
-+	FUNCTION("syncclkin", tps6594_syncclkin_func_group_names,
-+		 TPS6594_PINCTRL_SYNCCLKIN_FUNCTION),
++static struct tps6594_regulator_irq_type tps6594_ext_regulator_irq_types[] = {
++	{ TPS6594_IRQ_NAME_VCCA_OV, "VCCA", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
++	{ TPS6594_IRQ_NAME_VCCA_UV, "VCCA", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
++	{ TPS6594_IRQ_NAME_VMON1_OV, "VMON1", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
++	{ TPS6594_IRQ_NAME_VMON1_UV, "VMON1", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
++	{ TPS6594_IRQ_NAME_VMON1_RV, "VMON1", "residual voltage",
++	  REGULATOR_EVENT_OVER_VOLTAGE_WARN },
++	{ TPS6594_IRQ_NAME_VMON2_OV, "VMON2", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
++	{ TPS6594_IRQ_NAME_VMON2_UV, "VMON2", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
++	{ TPS6594_IRQ_NAME_VMON2_RV, "VMON2", "residual voltage",
++	  REGULATOR_EVENT_OVER_VOLTAGE_WARN },
 +};
 +
-+struct tps6594_pinctrl {
-+	struct tps6594 *tps;
-+	struct gpio_regmap *gpio_regmap;
-+	struct pinctrl_dev *pctl_dev;
-+	const struct tps6594_pinctrl_function *funcs;
-+	const struct pinctrl_pin_desc *pins;
++struct tps6594_regulator_irq_data {
++	struct device *dev;
++	struct tps6594_regulator_irq_type *type;
++	struct regulator_dev *rdev;
 +};
 +
-+static int tps6594_gpio_regmap_xlate(struct gpio_regmap *gpio,
-+				     unsigned int base, unsigned int offset,
-+				     unsigned int *reg, unsigned int *mask)
++struct tps6594_ext_regulator_irq_data {
++	struct device *dev;
++	struct tps6594_regulator_irq_type *type;
++};
++
++#define TPS6594_REGULATOR(_name, _of, _id, _type, _ops, _n, _vr, _vm, _er, \
++			   _em, _cr, _cm, _lr, _nlr, _delay, _fuv, \
++			   _ct, _ncl, _bpm) \
++	{								\
++		.name			= _name,			\
++		.of_match		= _of,				\
++		.regulators_node	= of_match_ptr("regulators"),	\
++		.supply_name		= _of,				\
++		.id			= _id,				\
++		.ops			= &(_ops),			\
++		.n_voltages		= _n,				\
++		.type			= _type,			\
++		.owner			= THIS_MODULE,			\
++		.vsel_reg		= _vr,				\
++		.vsel_mask		= _vm,				\
++		.csel_reg		= _cr,				\
++		.csel_mask		= _cm,				\
++		.curr_table		= _ct,				\
++		.n_current_limits	= _ncl,				\
++		.enable_reg		= _er,				\
++		.enable_mask		= _em,				\
++		.volt_table		= NULL,				\
++		.linear_ranges		= _lr,				\
++		.n_linear_ranges	= _nlr,				\
++		.ramp_delay		= _delay,			\
++		.fixed_uV		= _fuv,				\
++		.bypass_reg		= _vr,				\
++		.bypass_mask		= _bpm,				\
++	}								\
++
++static const struct linear_range bucks_ranges[] = {
++	REGULATOR_LINEAR_RANGE(300000, 0x0, 0xe, 20000),
++	REGULATOR_LINEAR_RANGE(600000, 0xf, 0x72, 5000),
++	REGULATOR_LINEAR_RANGE(1100000, 0x73, 0xaa, 10000),
++	REGULATOR_LINEAR_RANGE(1660000, 0xab, 0xff, 20000),
++};
++
++static const struct linear_range ldos_1_2_3_ranges[] = {
++	REGULATOR_LINEAR_RANGE(600000, 0x4, 0x3a, 50000),
++};
++
++static const struct linear_range ldos_4_ranges[] = {
++	REGULATOR_LINEAR_RANGE(1200000, 0x20, 0x74, 25000),
++};
++
++/* Operations permitted on BUCK1/2/3/4/5 */
++static const struct regulator_ops tps6594_bucks_ops = {
++	.is_enabled		= regulator_is_enabled_regmap,
++	.enable			= regulator_enable_regmap,
++	.disable		= regulator_disable_regmap,
++	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
++	.set_voltage_sel	= regulator_set_voltage_sel_regmap,
++	.list_voltage		= regulator_list_voltage_linear_range,
++	.map_voltage		= regulator_map_voltage_linear_range,
++	.set_voltage_time_sel	= regulator_set_voltage_time_sel,
++
++};
++
++/* Operations permitted on LDO1/2/3 */
++static const struct regulator_ops tps6594_ldos_1_2_3_ops = {
++	.is_enabled		= regulator_is_enabled_regmap,
++	.enable			= regulator_enable_regmap,
++	.disable		= regulator_disable_regmap,
++	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
++	.set_voltage_sel	= regulator_set_voltage_sel_regmap,
++	.list_voltage		= regulator_list_voltage_linear_range,
++	.map_voltage		= regulator_map_voltage_linear_range,
++	.set_bypass		= regulator_set_bypass_regmap,
++	.get_bypass		= regulator_get_bypass_regmap,
++};
++
++/* Operations permitted on LDO4 */
++static const struct regulator_ops tps6594_ldos_4_ops = {
++	.is_enabled		= regulator_is_enabled_regmap,
++	.enable			= regulator_enable_regmap,
++	.disable		= regulator_disable_regmap,
++	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
++	.set_voltage_sel	= regulator_set_voltage_sel_regmap,
++	.list_voltage		= regulator_list_voltage_linear_range,
++	.map_voltage		= regulator_map_voltage_linear_range,
++};
++
++static const struct regulator_desc buck_regs[] = {
++	TPS6594_REGULATOR("BUCK1", "buck1", TPS6594_BUCK_1,
++			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
++			  TPS6594_REG_BUCKX_VOUT_1(0),
++			  TPS6594_MASK_BUCKS_VSET,
++			  TPS6594_REG_BUCKX_CTRL(0),
++			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
++			  4, 0, 0, NULL, 0, 0),
++	TPS6594_REGULATOR("BUCK2", "buck2", TPS6594_BUCK_2,
++			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
++			  TPS6594_REG_BUCKX_VOUT_1(1),
++			  TPS6594_MASK_BUCKS_VSET,
++			  TPS6594_REG_BUCKX_CTRL(1),
++			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
++			  4, 0, 0, NULL, 0, 0),
++	TPS6594_REGULATOR("BUCK3", "buck3", TPS6594_BUCK_3,
++			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
++			  TPS6594_REG_BUCKX_VOUT_1(2),
++			  TPS6594_MASK_BUCKS_VSET,
++			  TPS6594_REG_BUCKX_CTRL(2),
++			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
++			  4, 0, 0, NULL, 0, 0),
++	TPS6594_REGULATOR("BUCK4", "buck4", TPS6594_BUCK_4,
++			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
++			  TPS6594_REG_BUCKX_VOUT_1(3),
++			  TPS6594_MASK_BUCKS_VSET,
++			  TPS6594_REG_BUCKX_CTRL(3),
++			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
++			  4, 0, 0, NULL, 0, 0),
++	TPS6594_REGULATOR("BUCK5", "buck5", TPS6594_BUCK_5,
++			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
++			  TPS6594_REG_BUCKX_VOUT_1(4),
++			  TPS6594_MASK_BUCKS_VSET,
++			  TPS6594_REG_BUCKX_CTRL(4),
++			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
++			  4, 0, 0, NULL, 0, 0),
++};
++
++static struct tps6594_regulator_irq_type tps6594_buck1_irq_types[] = {
++	{ TPS6594_IRQ_NAME_BUCK1_OV, "BUCK1", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
++	{ TPS6594_IRQ_NAME_BUCK1_UV, "BUCK1", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
++	{ TPS6594_IRQ_NAME_BUCK1_SC, "BUCK1", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
++	{ TPS6594_IRQ_NAME_BUCK1_ILIM, "BUCK1", "reach ilim, overcurrent",
++	  REGULATOR_EVENT_OVER_CURRENT },
++};
++
++static struct tps6594_regulator_irq_type tps6594_buck2_irq_types[] = {
++	{ TPS6594_IRQ_NAME_BUCK2_OV, "BUCK2", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
++	{ TPS6594_IRQ_NAME_BUCK2_UV, "BUCK2", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
++	{ TPS6594_IRQ_NAME_BUCK2_SC, "BUCK2", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
++	{ TPS6594_IRQ_NAME_BUCK2_ILIM, "BUCK2", "reach ilim, overcurrent",
++	  REGULATOR_EVENT_OVER_CURRENT },
++};
++
++static struct tps6594_regulator_irq_type tps6594_buck3_irq_types[] = {
++	{ TPS6594_IRQ_NAME_BUCK3_OV, "BUCK3", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
++	{ TPS6594_IRQ_NAME_BUCK3_UV, "BUCK3", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
++	{ TPS6594_IRQ_NAME_BUCK3_SC, "BUCK3", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
++	{ TPS6594_IRQ_NAME_BUCK3_ILIM, "BUCK3", "reach ilim, overcurrent",
++	  REGULATOR_EVENT_OVER_CURRENT },
++};
++
++static struct tps6594_regulator_irq_type tps6594_buck4_irq_types[] = {
++	{ TPS6594_IRQ_NAME_BUCK4_OV, "BUCK4", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
++	{ TPS6594_IRQ_NAME_BUCK4_UV, "BUCK4", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
++	{ TPS6594_IRQ_NAME_BUCK4_SC, "BUCK4", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
++	{ TPS6594_IRQ_NAME_BUCK4_ILIM, "BUCK4", "reach ilim, overcurrent",
++	  REGULATOR_EVENT_OVER_CURRENT },
++};
++
++static struct tps6594_regulator_irq_type tps6594_buck5_irq_types[] = {
++	{ TPS6594_IRQ_NAME_BUCK5_OV, "BUCK5", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
++	{ TPS6594_IRQ_NAME_BUCK5_UV, "BUCK5", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
++	{ TPS6594_IRQ_NAME_BUCK5_SC, "BUCK5", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
++	{ TPS6594_IRQ_NAME_BUCK5_ILIM, "BUCK5", "reach ilim, overcurrent",
++	  REGULATOR_EVENT_OVER_CURRENT },
++};
++
++static struct tps6594_regulator_irq_type tps6594_ldo1_irq_types[] = {
++	{ TPS6594_IRQ_NAME_LDO1_OV, "LDO1", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
++	{ TPS6594_IRQ_NAME_LDO1_UV, "LDO1", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
++	{ TPS6594_IRQ_NAME_LDO1_SC, "LDO1", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
++	{ TPS6594_IRQ_NAME_LDO1_ILIM, "LDO1", "reach ilim, overcurrent",
++	  REGULATOR_EVENT_OVER_CURRENT },
++};
++
++static struct tps6594_regulator_irq_type tps6594_ldo2_irq_types[] = {
++	{ TPS6594_IRQ_NAME_LDO2_OV, "LDO2", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
++	{ TPS6594_IRQ_NAME_LDO2_UV, "LDO2", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
++	{ TPS6594_IRQ_NAME_LDO2_SC, "LDO2", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
++	{ TPS6594_IRQ_NAME_LDO2_ILIM, "LDO2", "reach ilim, overcurrent",
++	  REGULATOR_EVENT_OVER_CURRENT },
++};
++
++static struct tps6594_regulator_irq_type tps6594_ldo3_irq_types[] = {
++	{ TPS6594_IRQ_NAME_LDO3_OV, "LDO3", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
++	{ TPS6594_IRQ_NAME_LDO3_UV, "LDO3", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
++	{ TPS6594_IRQ_NAME_LDO3_SC, "LDO3", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
++	{ TPS6594_IRQ_NAME_LDO3_ILIM, "LDO3", "reach ilim, overcurrent",
++	  REGULATOR_EVENT_OVER_CURRENT },
++};
++
++static struct tps6594_regulator_irq_type tps6594_ldo4_irq_types[] = {
++	{ TPS6594_IRQ_NAME_LDO4_OV, "LDO4", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
++	{ TPS6594_IRQ_NAME_LDO4_UV, "LDO4", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
++	{ TPS6594_IRQ_NAME_LDO4_SC, "LDO4", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
++	{ TPS6594_IRQ_NAME_LDO4_ILIM, "LDO4", "reach ilim, overcurrent",
++	  REGULATOR_EVENT_OVER_CURRENT },
++};
++
++static struct tps6594_regulator_irq_type *tps6594_bucks_irq_types[] = {
++	tps6594_buck1_irq_types,
++	tps6594_buck2_irq_types,
++	tps6594_buck3_irq_types,
++	tps6594_buck4_irq_types,
++	tps6594_buck5_irq_types,
++};
++
++static struct tps6594_regulator_irq_type *tps6594_ldos_irq_types[] = {
++	tps6594_ldo1_irq_types,
++	tps6594_ldo2_irq_types,
++	tps6594_ldo3_irq_types,
++	tps6594_ldo4_irq_types,
++};
++
++static const struct regulator_desc multi_regs[] = {
++	TPS6594_REGULATOR("BUCK12", "buck12", TPS6594_BUCK_1,
++			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
++			  TPS6594_REG_BUCKX_VOUT_1(1),
++			  TPS6594_MASK_BUCKS_VSET,
++			  TPS6594_REG_BUCKX_CTRL(1),
++			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
++			  4, 4000, 0, NULL, 0, 0),
++	TPS6594_REGULATOR("BUCK34", "buck34", TPS6594_BUCK_3,
++			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
++			  TPS6594_REG_BUCKX_VOUT_1(3),
++			  TPS6594_MASK_BUCKS_VSET,
++			  TPS6594_REG_BUCKX_CTRL(3),
++			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
++			  4, 0, 0, NULL, 0, 0),
++	TPS6594_REGULATOR("BUCK123", "buck123", TPS6594_BUCK_1,
++			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
++			  TPS6594_REG_BUCKX_VOUT_1(1),
++			  TPS6594_MASK_BUCKS_VSET,
++			  TPS6594_REG_BUCKX_CTRL(1),
++			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
++			  4, 4000, 0, NULL, 0, 0),
++	TPS6594_REGULATOR("BUCK1234", "buck1234", TPS6594_BUCK_1,
++			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
++			  TPS6594_REG_BUCKX_VOUT_1(1),
++			  TPS6594_MASK_BUCKS_VSET,
++			  TPS6594_REG_BUCKX_CTRL(1),
++			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
++			  4, 4000, 0, NULL, 0, 0),
++};
++
++static const struct regulator_desc ldo_regs[] = {
++	TPS6594_REGULATOR("LDO1", "ldo1", TPS6594_LDO_1,
++			  REGULATOR_VOLTAGE, tps6594_ldos_1_2_3_ops, TPS6594_MASK_LDO123_VSET,
++			  TPS6594_REG_LDOX_VOUT(0),
++			  TPS6594_MASK_LDO123_VSET,
++			  TPS6594_REG_LDOX_CTRL(0),
++			  TPS6594_BIT_LDO_EN, 0, 0, ldos_1_2_3_ranges,
++			  1, 0, 0, NULL, 0, TPS6594_BIT_LDO_BYPASS),
++	TPS6594_REGULATOR("LDO2", "ldo2", TPS6594_LDO_2,
++			  REGULATOR_VOLTAGE, tps6594_ldos_1_2_3_ops, TPS6594_MASK_LDO123_VSET,
++			  TPS6594_REG_LDOX_VOUT(1),
++			  TPS6594_MASK_LDO123_VSET,
++			  TPS6594_REG_LDOX_CTRL(1),
++			  TPS6594_BIT_LDO_EN, 0, 0, ldos_1_2_3_ranges,
++			  1, 0, 0, NULL, 0, TPS6594_BIT_LDO_BYPASS),
++	TPS6594_REGULATOR("LDO3", "ldo3", TPS6594_LDO_3,
++			  REGULATOR_VOLTAGE, tps6594_ldos_1_2_3_ops, TPS6594_MASK_LDO123_VSET,
++			  TPS6594_REG_LDOX_VOUT(2),
++			  TPS6594_MASK_LDO123_VSET,
++			  TPS6594_REG_LDOX_CTRL(2),
++			  TPS6594_BIT_LDO_EN, 0, 0, ldos_1_2_3_ranges,
++			  1, 0, 0, NULL, 0, TPS6594_BIT_LDO_BYPASS),
++	TPS6594_REGULATOR("LDO4", "ldo4", TPS6594_LDO_4,
++			  REGULATOR_VOLTAGE, tps6594_ldos_4_ops, TPS6594_MASK_LDO4_VSET >> 1,
++			  TPS6594_REG_LDOX_VOUT(3),
++			  TPS6594_MASK_LDO4_VSET,
++			  TPS6594_REG_LDOX_CTRL(3),
++			  TPS6594_BIT_LDO_EN, 0, 0, ldos_4_ranges,
++			  1, 0, 0, NULL, 0, 0),
++};
++
++static irqreturn_t tps6594_regulator_irq_handler(int irq, void *data)
 +{
-+	unsigned int line = offset % 8;
-+	unsigned int stride = offset / 8;
++	struct tps6594_regulator_irq_data *irq_data = data;
 +
-+	switch (base) {
-+	case TPS6594_REG_GPIO1_CONF:
-+		*reg = TPS6594_REG_GPIOX_CONF(offset);
-+		*mask = TPS6594_BIT_GPIO_DIR;
-+		break;
-+	case TPS6594_REG_GPIO_IN_1:
-+	case TPS6594_REG_GPIO_OUT_1:
-+		*reg = base + stride;
-+		*mask = BIT(line);
-+		break;
-+	default:
-+		return -EINVAL;
++	if (irq_data->type->event_name[0] == '\0') {
++		/* This is the timeout interrupt no specific regulator */
++		dev_err(irq_data->dev,
++			"System was put in shutdown due to timeout during an active or standby transition.\n");
++		return IRQ_HANDLED;
 +	}
 +
++	dev_err(irq_data->dev, "Error IRQ trap %s for %s\n",
++		irq_data->type->event_name, irq_data->type->regulator_name);
++
++	regulator_notifier_call_chain(irq_data->rdev,
++				      irq_data->type->event, NULL);
++
++	return IRQ_HANDLED;
++}
++
++static int tps6594_request_reg_irqs(struct platform_device *pdev,
++				    struct regulator_dev *rdev,
++				    struct tps6594_regulator_irq_data *irq_data,
++				    struct tps6594_regulator_irq_type *tps6594_regs_irq_types,
++				    int *irq_idx)
++{
++	struct tps6594_regulator_irq_type *irq_type;
++	struct tps6594 *tps = dev_get_drvdata(pdev->dev.parent);
++	int j;
++	int irq;
++	int error;
++
++	for (j = 0; j < REGS_INT_NB; j++) {
++		irq_type = &tps6594_regs_irq_types[j];
++		irq = platform_get_irq_byname(pdev, irq_type->irq_name);
++		if (irq < 0)
++			return -EINVAL;
++
++		irq_data[*irq_idx + j].dev = tps->dev;
++		irq_data[*irq_idx + j].type = irq_type;
++		irq_data[*irq_idx + j].rdev = rdev;
++
++		error = devm_request_threaded_irq(tps->dev, irq, NULL,
++						  tps6594_regulator_irq_handler,
++						  IRQF_ONESHOT,
++						  irq_type->irq_name,
++						  &irq_data[*irq_idx]);
++		(*irq_idx)++;
++		if (error) {
++			dev_err(tps->dev, "tps6594 failed to request %s IRQ %d: %d\n",
++				irq_type->irq_name, irq, error);
++			return error;
++		}
++	}
 +	return 0;
 +}
 +
-+static int tps6594_pmx_func_cnt(struct pinctrl_dev *pctldev)
-+{
-+	return ARRAY_SIZE(pinctrl_functions);
-+}
-+
-+static const char *tps6594_pmx_func_name(struct pinctrl_dev *pctldev,
-+					 unsigned int selector)
-+{
-+	struct tps6594_pinctrl *pinctrl = pinctrl_dev_get_drvdata(pctldev);
-+
-+	return pinctrl->funcs[selector].pinfunction.name;
-+}
-+
-+static int tps6594_pmx_func_groups(struct pinctrl_dev *pctldev,
-+				   unsigned int selector,
-+				   const char *const **groups,
-+				   unsigned int *num_groups)
-+{
-+	struct tps6594_pinctrl *pinctrl = pinctrl_dev_get_drvdata(pctldev);
-+
-+	*groups = pinctrl->funcs[selector].pinfunction.groups;
-+	*num_groups = pinctrl->funcs[selector].pinfunction.ngroups;
-+
-+	return 0;
-+}
-+
-+static int tps6594_pmx_set(struct tps6594_pinctrl *pinctrl, unsigned int pin,
-+			   u8 muxval)
-+{
-+	u8 mux_sel_val = muxval << TPS6594_OFFSET_GPIO_SEL;
-+
-+	return regmap_update_bits(pinctrl->tps->regmap,
-+				  TPS6594_REG_GPIOX_CONF(pin),
-+				  TPS6594_MASK_GPIO_SEL, mux_sel_val);
-+}
-+
-+static int tps6594_pmx_set_mux(struct pinctrl_dev *pctldev,
-+			       unsigned int function, unsigned int group)
-+{
-+	struct tps6594_pinctrl *pinctrl = pinctrl_dev_get_drvdata(pctldev);
-+	u8 muxval = pinctrl->funcs[function].muxval;
-+
-+	/* Some pins don't have the same muxval for the same function... */
-+	if (group == 8) {
-+		if (muxval == TPS6594_PINCTRL_DISABLE_WDOG_FUNCTION)
-+			muxval = TPS6594_PINCTRL_DISABLE_WDOG_FUNCTION_GPIO8;
-+		else if (muxval == TPS6594_PINCTRL_SYNCCLKOUT_FUNCTION)
-+			muxval = TPS6594_PINCTRL_SYNCCLKOUT_FUNCTION_GPIO8;
-+	} else if (group == 9) {
-+		if (muxval == TPS6594_PINCTRL_CLK32KOUT_FUNCTION)
-+			muxval = TPS6594_PINCTRL_CLK32KOUT_FUNCTION_GPIO9;
-+	}
-+
-+	return tps6594_pmx_set(pinctrl, group, muxval);
-+}
-+
-+static int tps6594_pmx_gpio_set_direction(struct pinctrl_dev *pctldev,
-+					  struct pinctrl_gpio_range *range,
-+					  unsigned int offset, bool input)
-+{
-+	struct tps6594_pinctrl *pinctrl = pinctrl_dev_get_drvdata(pctldev);
-+	u8 muxval = pinctrl->funcs[TPS6594_PINCTRL_GPIO_FUNCTION].muxval;
-+
-+	return tps6594_pmx_set(pinctrl, offset, muxval);
-+}
-+
-+static const struct pinmux_ops tps6594_pmx_ops = {
-+	.get_functions_count = tps6594_pmx_func_cnt,
-+	.get_function_name = tps6594_pmx_func_name,
-+	.get_function_groups = tps6594_pmx_func_groups,
-+	.set_mux = tps6594_pmx_set_mux,
-+	.gpio_set_direction = tps6594_pmx_gpio_set_direction,
-+	.strict = true,
-+};
-+
-+static int tps6594_groups_cnt(struct pinctrl_dev *pctldev)
-+{
-+	return ARRAY_SIZE(tps6594_pins);
-+}
-+
-+static int tps6594_group_pins(struct pinctrl_dev *pctldev,
-+			      unsigned int selector, const unsigned int **pins,
-+			      unsigned int *num_pins)
-+{
-+	struct tps6594_pinctrl *pinctrl = pinctrl_dev_get_drvdata(pctldev);
-+
-+	*pins = &pinctrl->pins[selector].number;
-+	*num_pins = 1;
-+
-+	return 0;
-+}
-+
-+static const char *tps6594_group_name(struct pinctrl_dev *pctldev,
-+				      unsigned int selector)
-+{
-+	struct tps6594_pinctrl *pinctrl = pinctrl_dev_get_drvdata(pctldev);
-+
-+	return pinctrl->pins[selector].name;
-+}
-+
-+static const struct pinctrl_ops tps6594_pctrl_ops = {
-+	.dt_node_to_map = pinconf_generic_dt_node_to_map_group,
-+	.dt_free_map = pinconf_generic_dt_free_map,
-+	.get_groups_count = tps6594_groups_cnt,
-+	.get_group_name = tps6594_group_name,
-+	.get_group_pins = tps6594_group_pins,
-+};
-+
-+static int tps6594_pinctrl_probe(struct platform_device *pdev)
++static int tps6594_regulator_probe(struct platform_device *pdev)
 +{
 +	struct tps6594 *tps = dev_get_drvdata(pdev->dev.parent);
-+	struct tps6594_pinctrl *pinctrl;
-+	struct pinctrl_desc *pctrl_desc;
-+	struct gpio_regmap_config config = {};
++	struct regulator_dev *rdev;
++	struct device_node *np = NULL;
++	struct device_node *np_pmic_parent = NULL;
++	struct regulator_config config = {};
++	struct tps6594_regulator_irq_data *irq_data;
++	struct tps6594_ext_regulator_irq_data *irq_ext_reg_data;
++	struct tps6594_regulator_irq_type *irq_type;
++	u8 buck_configured[BUCK_NB] = { 0 };
++	u8 buck_multi[MULTI_PHASE_NB] = { 0 };
++	static const char * const multiphases[] = {"buck12", "buck123", "buck1234", "buck34"};
++	static const char *npname;
++	int error, i, irq, multi, delta;
++	int irq_idx = 0;
++	int buck_idx = 0;
++	int ext_reg_irq_nb = 2;
 +
-+	pctrl_desc = devm_kzalloc(&pdev->dev, sizeof(*pctrl_desc), GFP_KERNEL);
-+	if (!pctrl_desc)
-+		return -ENOMEM;
-+	pctrl_desc->name = dev_name(&pdev->dev);
-+	pctrl_desc->owner = THIS_MODULE;
-+	pctrl_desc->pins = tps6594_pins;
-+	pctrl_desc->npins = ARRAY_SIZE(tps6594_pins);
-+	pctrl_desc->pctlops = &tps6594_pctrl_ops;
-+	pctrl_desc->pmxops = &tps6594_pmx_ops;
++	enum {
++		MULTI_BUCK12,
++		MULTI_BUCK123,
++		MULTI_BUCK1234,
++		MULTI_BUCK12_34,
++		MULTI_FIRST = MULTI_BUCK12,
++		MULTI_LAST = MULTI_BUCK12_34,
++		MULTI_NUM = MULTI_LAST - MULTI_FIRST + 1
++	};
 +
-+	pinctrl = devm_kzalloc(&pdev->dev, sizeof(*pinctrl), GFP_KERNEL);
-+	if (!pinctrl)
-+		return -ENOMEM;
-+	pinctrl->tps = dev_get_drvdata(pdev->dev.parent);
-+	pinctrl->funcs = pinctrl_functions;
-+	pinctrl->pins = tps6594_pins;
-+	pinctrl->pctl_dev =
-+		devm_pinctrl_register(&pdev->dev, pctrl_desc, pinctrl);
-+	if (IS_ERR(pinctrl->pctl_dev)) {
-+		return dev_err_probe(&pdev->dev, PTR_ERR(pinctrl->pctl_dev),
-+				     "Couldn't register pinctrl driver\n");
-+	}
-+
-+	config.parent = tps->dev;
++	config.dev = tps->dev;
++	config.driver_data = tps;
 +	config.regmap = tps->regmap;
-+	config.ngpio = TPS6594_PINCTRL_PINS_NB;
-+	config.ngpio_per_reg = 8;
-+	config.reg_dat_base = TPS6594_REG_GPIO_IN_1;
-+	config.reg_set_base = TPS6594_REG_GPIO_OUT_1;
-+	config.reg_dir_out_base = TPS6594_REG_GPIO1_CONF;
-+	config.reg_mask_xlate = tps6594_gpio_regmap_xlate;
 +
-+	pinctrl->gpio_regmap = devm_gpio_regmap_register(&pdev->dev, &config);
-+	if (IS_ERR(pinctrl->gpio_regmap)) {
-+		return dev_err_probe(&pdev->dev, PTR_ERR(pinctrl->gpio_regmap),
-+				     "Couldn't register gpio_regmap driver\n");
++	/*
++	 * Switch case defines different possible multi phase config
++	 * This is based on dts buck node name.
++	 * Buck node name must be chosen accordingly.
++	 * Default case is no Multiphase buck.
++	 * In case of Multiphase configuration, value should be defined for
++	 * buck_configured to avoid creating bucks for every buck in multiphase
++	 */
++	for (multi = MULTI_FIRST; multi < MULTI_NUM; multi++) {
++		np = of_find_node_by_name(tps->dev->of_node, multiphases[multi]);
++		npname = of_node_full_name(np);
++		np_pmic_parent = of_get_parent(of_get_parent(np));
++		if (of_node_cmp(of_node_full_name(np_pmic_parent), tps->dev->of_node->full_name))
++			continue;
++		delta = strcmp(npname, multiphases[multi]);
++		if (!delta) {
++			switch (multi) {
++			case MULTI_BUCK12:
++				buck_multi[0] = 1;
++				buck_configured[0] = 1;
++				buck_configured[1] = 1;
++				break;
++			/* multiphase buck34 is supported only with buck12 */
++			case MULTI_BUCK12_34:
++				buck_multi[0] = 1;
++				buck_multi[1] = 1;
++				buck_configured[0] = 1;
++				buck_configured[1] = 1;
++				buck_configured[2] = 1;
++				buck_configured[3] = 1;
++				break;
++			case MULTI_BUCK123:
++				buck_multi[2] = 1;
++				buck_configured[0] = 1;
++				buck_configured[1] = 1;
++				buck_configured[2] = 1;
++				break;
++			case MULTI_BUCK1234:
++				buck_multi[3] = 1;
++				buck_configured[0] = 1;
++				buck_configured[1] = 1;
++				buck_configured[2] = 1;
++				buck_configured[3] = 1;
++				break;
++			}
++		}
 +	}
 +
++	if (tps->chip_id == LP8764)
++		/* There is only 4 buck on LP8764 */
++		buck_configured[4] = 1;
++
++	irq_data = devm_kmalloc_array(tps->dev,
++				REGS_INT_NB * sizeof(struct tps6594_regulator_irq_data),
++				ARRAY_SIZE(tps6594_bucks_irq_types) +
++				ARRAY_SIZE(tps6594_ldos_irq_types),
++				GFP_KERNEL);
++	if (!irq_data)
++		return -ENOMEM;
++
++	for (i = 0; i < MULTI_PHASE_NB; i++) {
++		if (buck_multi[i] == 0)
++			continue;
++
++		rdev = devm_regulator_register(&pdev->dev, &multi_regs[i], &config);
++		if (IS_ERR(rdev))
++			return dev_err_probe(tps->dev, PTR_ERR(rdev),
++					     "failed to register %s regulator\n",
++					     pdev->name);
++
++		/* config multiphase buck12+buck34 */
++		if (i == 1)
++			buck_idx = 2;
++		error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
++						 tps6594_bucks_irq_types[buck_idx], &irq_idx);
++		if (error)
++			return error;
++		error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
++						 tps6594_bucks_irq_types[buck_idx + 1], &irq_idx);
++		if (error)
++			return error;
++
++		if (i == 2 || i == 3) {
++			error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
++							 tps6594_bucks_irq_types[buck_idx + 2],
++							 &irq_idx);
++			if (error)
++				return error;
++		}
++		if (i == 3) {
++			error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
++							 tps6594_bucks_irq_types[buck_idx + 3],
++							 &irq_idx);
++			if (error)
++				return error;
++		}
++	}
++
++	for (i = 0; i < BUCK_NB; i++) {
++		if (buck_configured[i] == 1)
++			continue;
++
++		rdev = devm_regulator_register(&pdev->dev, &buck_regs[i], &config);
++		if (IS_ERR(rdev))
++			return dev_err_probe(tps->dev, PTR_ERR(rdev),
++					     "failed to register %s regulator\n",
++					     pdev->name);
++
++		error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
++						 tps6594_bucks_irq_types[i], &irq_idx);
++		if (error)
++			return error;
++	}
++
++	/* LP8764 dosen't have LDO */
++	if (tps->chip_id != LP8764) {
++		for (i = 0; i < ARRAY_SIZE(ldo_regs); i++) {
++			rdev = devm_regulator_register(&pdev->dev, &ldo_regs[i], &config);
++			if (IS_ERR(rdev))
++				return dev_err_probe(tps->dev, PTR_ERR(rdev),
++						     "failed to register %s regulator\n",
++						     pdev->name);
++
++			error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
++							 tps6594_ldos_irq_types[i],
++							 &irq_idx);
++			if (error)
++				return error;
++		}
++	}
++
++	if (tps->chip_id == LP8764)
++		ext_reg_irq_nb = ARRAY_SIZE(tps6594_ext_regulator_irq_types);
++
++	irq_ext_reg_data = devm_kmalloc_array(tps->dev,
++					ext_reg_irq_nb,
++					sizeof(struct tps6594_ext_regulator_irq_data),
++					GFP_KERNEL);
++	if (!irq_ext_reg_data)
++		return -ENOMEM;
++
++	for (i = 0; i < ext_reg_irq_nb; ++i) {
++		irq_type = &tps6594_ext_regulator_irq_types[i];
++
++		irq = platform_get_irq_byname(pdev, irq_type->irq_name);
++		if (irq < 0)
++			return -EINVAL;
++
++		irq_ext_reg_data[i].dev = tps->dev;
++		irq_ext_reg_data[i].type = irq_type;
++
++		error = devm_request_threaded_irq(tps->dev, irq, NULL,
++						  tps6594_regulator_irq_handler,
++						  IRQF_ONESHOT,
++						  irq_type->irq_name,
++						  &irq_ext_reg_data[i]);
++		if (error)
++			return dev_err_probe(tps->dev, error,
++					     "failed to request %s IRQ %d\n",
++					     irq_type->irq_name, irq);
++	}
 +	return 0;
 +}
 +
-+static struct platform_driver tps6594_pinctrl_driver = {
-+	.driver = { .name = "tps6594-pinctrl" },
-+	.probe = tps6594_pinctrl_probe,
++static struct platform_driver tps6594_regulator_driver = {
++	.driver = {
++		.name = "tps6594-regulator",
++	},
++	.probe = tps6594_regulator_probe,
 +};
 +
-+module_platform_driver(tps6594_pinctrl_driver);
-+MODULE_ALIAS("platform:tps6594-pinctrl");
-+MODULE_AUTHOR("Esteban Blanc <eblanc@baylibre.com>");
-+MODULE_DESCRIPTION("TPS6594 pinctrl and GPIO driver");
++module_platform_driver(tps6594_regulator_driver);
++
++MODULE_ALIAS("platform:tps6594-regulator");
++MODULE_AUTHOR("Jerome Neanne <jneanne@baylibre.com>");
++MODULE_DESCRIPTION("TPS6594 voltage regulator driver");
 +MODULE_LICENSE("GPL");
-diff --git a/include/linux/mfd/tps6594.h b/include/linux/mfd/tps6594.h
-index 3f7c5e23cd4c..2792841f555c 100644
---- a/include/linux/mfd/tps6594.h
-+++ b/include/linux/mfd/tps6594.h
-@@ -47,7 +47,8 @@ enum pmic_id {
- #define TPS6594_REG_VMON2_PG_WINDOW			0x2f
- #define TPS6594_REG_VMON2_PG_LEVEL			0x30
- 
--#define TPS6594_REG_GPIOX_CONF(gpio_inst)		(0x31 + (gpio_inst))
-+// Used to compute register address of GPIO1_CONF to GPIO11_CONF
-+#define TPS6594_REG_GPIOX_CONF(gpio_inst)	(0x31 + (gpio_inst))
- #define TPS6594_REG_NPWRON_CONF				0x3c
- #define TPS6594_REG_GPIO_OUT_1				0x3d
- #define TPS6594_REG_GPIO_OUT_2				0x3e
 -- 
 2.39.2
 
