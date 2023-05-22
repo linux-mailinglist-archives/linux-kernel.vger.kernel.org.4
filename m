@@ -2,65 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E541970C321
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 18:19:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC99070C324
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 18:20:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjEVQTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 12:19:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60596 "EHLO
+        id S231358AbjEVQT7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 12:19:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbjEVQS7 (ORCPT
+        with ESMTP id S230359AbjEVQTu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 12:18:59 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E2AADB;
-        Mon, 22 May 2023 09:18:58 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f475366514so43185195e9.2;
-        Mon, 22 May 2023 09:18:58 -0700 (PDT)
+        Mon, 22 May 2023 12:19:50 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0882DB;
+        Mon, 22 May 2023 09:19:49 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f4271185daso62968445e9.2;
+        Mon, 22 May 2023 09:19:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684772337; x=1687364337;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VJzZyuZNzPn2ke6jAQ+3bvF8maBxSbotNT8/V4Lv+Fc=;
-        b=euu6Ey1XqJ8ygZoDaz732PRPtPW5Qdy2EFdO1xauW9Pwf9TOVYJw8E9ENlLca1CRnn
-         aTFTpmLbmR6yQp7mq8PFpfAe3j9FLKds9vFAm/wBgVGgfxEk4jsowOd/CAGzFD3rPTWy
-         gX+kGRKO8janr9uLAa7E2k3T7XF6B/9JtX/+0+wM3gcdIAbzx1MgP+dYJ3oghChYh2ci
-         hM4l8usavYCowAUr9xBUosnZ/K2ROTrLG+WF/GytXpWHOIVJMUnXcqsVgDGLxls6jMwC
-         HKw/fdSVsOEt2jmJht2OTnSrFT7EsT94Ef4LDAvXI/gZzv4DztbcRTD41tQ1KaUa1iA2
-         erGA==
+        d=gmail.com; s=20221208; t=1684772388; x=1687364388;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=PhyAMTd/xJjXyTngfYfLn7G0uYwXHfcqL/9ZtXOMxUc=;
+        b=OaGQZFxaPyPLyNbf9x4KrOMvIfNhls0Fs3WUBtQeEh5dg4KwbXFK5Llbd9izCkI9pp
+         pSuneT/KR6uMVP6jBDa/jx9nHhAREsBvtYktGwfy+7ZJz/wSK4n/jPgFmc0QYzMWqCuf
+         Yok8PKdQlsacxsxbXDAiAPBfm5LVzBJQuIkt9lob81jiaRlwLiHtVMCrg9TkVikRXaAl
+         9ZuEwfxuHJL85bhVPLxQW7lcL9gIx0upwnut/MFq1ejxAMImsI12IDMvH4ivVzeo6drc
+         ETYXRvNtfXDpgi2OkCKnghOJBgcUO3unMloaGEUvvCld2D9nP+cemVLchpJIUt2b2RZ5
+         4ToQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684772337; x=1687364337;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VJzZyuZNzPn2ke6jAQ+3bvF8maBxSbotNT8/V4Lv+Fc=;
-        b=SDevyBWcXZKOVIrZ+n4tOLE9LuJcTEYpHnLX4Pr+aseHSgH4dVkh2RwuFnYbDaRZ3h
-         dQ3eTI0X7wzgVMGgnTZtpznrsarcOgVs7PuocZiOigdJ7XPIqlWwBEUlTMn+97niymgB
-         A7FnoCAETGyhdPXBq3xWcH5pMDaRG46ok+kFuin5PKxT9bhGLDL4dSpacldmY3GZZvzb
-         fRYlbn+zlVfqOugIvUVNVYBLQI6VT4Tqi8wwrnRyI0mGtWs0PCJLkpSywXmVGQTbmtuU
-         XXzsKgTLOMUfRLdI2yJB6DiTfpn8ArPUQ70Gw1W41ztEplUkuHWxSudT06aKg1ECgNmA
-         8r+A==
-X-Gm-Message-State: AC+VfDwePzt+RqMrUrGZVmiKfFcyYgJhfUOW2ybPbMek1p1cG4JhuQSi
-        H1UHM+ywBoHjWeikjso06UjJL4HC03WYSpoTTwWbZnBoxtE=
-X-Google-Smtp-Source: ACHHUZ4kjOVYxEoor1w0hcaOXS33WeDLf0YRoOnSYzNl5ea6bGgc3qRhDbdI4pwwhHHJXH7oI9bc0NRBHiqq5OR8B9Q=
-X-Received: by 2002:a5d:4b12:0:b0:309:4b55:419d with SMTP id
- v18-20020a5d4b12000000b003094b55419dmr4840129wrq.8.1684772336654; Mon, 22 May
- 2023 09:18:56 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684772388; x=1687364388;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PhyAMTd/xJjXyTngfYfLn7G0uYwXHfcqL/9ZtXOMxUc=;
+        b=Z5CYLg8rz+7P8I2j3yosVe+UL4H4w2AQWQdvQClRNBrenNpWBCH1RYN9RGhHNmtxnP
+         dpsY6xANNqIFRosVwUyPhGiSFyKrZT8aFIF5D9yTVIdqcEypff2OWz25/novJTU+ziAY
+         8Ah6CPS8bmI/GHuHg1NwfnyDdBO7rTRTkX43e1nIHsNLg15+1sMUvGvcZC5pkllPYIY/
+         EbJiUmNmDUN+rnNdZ/jVu+1BHrjsdUe8itwklNSCQn6fbokuibC1D2JZsQ0hwOzOt5Dx
+         jFbGwPmvZMEUywNxsXlkQmP1+1GXan87UPHFM6KLh5n+sITwryIFKMiP4tvgLryS4LUB
+         AYlQ==
+X-Gm-Message-State: AC+VfDzPc6Bm56fudlrTzMFWGnndqw9Gtn68XHhZOPuGqNYz2NW0VvuH
+        b5407xffNWe2jsX86WNWcgX/XREcFqdgxMPOCut35IO7hBw=
+X-Google-Smtp-Source: ACHHUZ5GUTRwgVmdoeYEnsyST2Hbq3V4S61UT9WZfdOYWCupqE1j+dpUt34odsLHVBzNmJQneNAQ1zQlryGGrInHap4=
+X-Received: by 2002:a05:6000:1a50:b0:307:a77c:c16a with SMTP id
+ t16-20020a0560001a5000b00307a77cc16amr8404326wry.29.1684772388080; Mon, 22
+ May 2023 09:19:48 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230510221237.3509484-1-azeemshaikh38@gmail.com> <202305110926.4A833D9@keescook>
-In-Reply-To: <202305110926.4A833D9@keescook>
+References: <20230512155749.1356958-1-azeemshaikh38@gmail.com> <202305161403.15ED4EC@keescook>
+In-Reply-To: <202305161403.15ED4EC@keescook>
 From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-Date:   Mon, 22 May 2023 12:18:45 -0400
-Message-ID: <CADmuW3U7tFfSKrQL5TopOYnDNNiHPsC42E3ghWhpqCDtKeOSYg@mail.gmail.com>
-Subject: Re: [PATCH] dlm: Replace all non-returning strlcpy with strscpy
+Date:   Mon, 22 May 2023 12:19:36 -0400
+Message-ID: <CADmuW3X1M_j2j=nsx2hM0YO1NeQsrOeb2Z1GOoMAOHCcPozF=A@mail.gmail.com>
+Subject: Re: [PATCH] NFS: Prefer strscpy over strlcpy calls
 To:     Kees Cook <keescook@chromium.org>
-Cc:     Christine Caulfield <ccaulfie@redhat.com>,
-        David Teigland <teigland@redhat.com>,
-        linux-hardening@vger.kernel.org, cluster-devel@redhat.com,
+Cc:     Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        linux-hardening@vger.kernel.org, linux-nfs@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -71,27 +69,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 12:26=E2=80=AFPM Kees Cook <keescook@chromium.org> =
-wrote:
+> > ---
+> > Note to reviewers: the one case where this patch would modify existing behavior
+> > is when strlen(src)==destlen==0. Current behavior returns 0, with this patch it
+> > would return -1.
+> >
+> > Not sure what the implication of this updated behavior would be,
+> > so bringing it to your attention.
 >
-> On Wed, May 10, 2023 at 10:12:37PM +0000, Azeem Shaikh wrote:
-> > strlcpy() reads the entire source buffer first.
-> > This read may exceed the destination size limit.
-> > This is both inefficient and can lead to linear read
-> > overflows if a source string is not NUL-terminated [1].
-> > In an effort to remove strlcpy() completely [2], replace
-> > strlcpy() here with strscpy().
-> > No return values were used, so direct replacement is safe.
-> >
-> > [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strl=
-cpy
-> > [2] https://github.com/KSPP/linux/issues/89
-> >
-> > Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+> I'm not sure either, but I would prefer non-terminated strings produce
+> an error, which this change does. :)
 >
 > Reviewed-by: Kees Cook <keescook@chromium.org>
 >
-> --
-> Kees Cook
 
-Friendly ping on this.
+Friendly ping.
