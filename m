@@ -2,72 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CFE270C349
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 18:27:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A35A070C34D
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 18:28:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232470AbjEVQ1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 12:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37448 "EHLO
+        id S232691AbjEVQ2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 12:28:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232413AbjEVQ1J (ORCPT
+        with ESMTP id S232445AbjEVQ2U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 12:27:09 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217AF10D
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 09:27:06 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2af1822b710so56975121fa.1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 09:27:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684772824; x=1687364824;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=L49vT0kSR5iSdRQMfUzpP/XyxjpgXdinB+PYS7EXDgc=;
-        b=hslmTQFnRshGj8Ynfw9m40NnwzxlzACJFeHB4LYvMAZ2S4Vl6dODIcOfObQNoZmGJI
-         v0CEqYyDjgxWI4/G6gpVomEyfpCHdzFaQKuqI0BoKUvEWAzGa7YP0FPkelNSQnW5kuUR
-         u/RQlE9uNh/gevB7eAo7o4V4UTP4YCKSbQyzb9mhAv6Nff/swqxFPGOPk6bfaZDXANiX
-         0319rEZ5gsRaWJMo/8z8yScQm4CwlDfDwhjmESf4FtLvc3V4K22bmCtlcZxE9E1wamVm
-         MfeF0upJz8SK6eijJlDxUMnGUgSm2eH1FTc2bCOVklpq+oczDUrAvPHXlXahHr9KltiY
-         ERjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684772824; x=1687364824;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=L49vT0kSR5iSdRQMfUzpP/XyxjpgXdinB+PYS7EXDgc=;
-        b=jC9E0jEpAD2bWzIhIT3BxcKLPBCkArW1j2Y9ndRa8mgBqVU70YQelgeNY7MfowOcti
-         FYcCumCYY/zkyhchpzlHkC6gjp88J7QfkOnE24ZJqR5caH9Zj3a/2YFs7Q74DrrnOdYb
-         chGZwI7/1K7RnRlnZrb2VLAK174kaWEbhQoyCylctmi4M1Az4vDACr9GpLpUE/XBJSsC
-         DxpR4/6uVekCGbH/PaK5MgcanLWwiOtwGWLD2WXIvlYQtgtfLBFhvSMkGRoR/Yu7ZoPd
-         ImYXoaKllpewFf8lMOis4vDIwrYmpN1E9F+44EfjIDlsD2rSMnCe38BU7e1vQy0M6d5m
-         ABnw==
-X-Gm-Message-State: AC+VfDxUK3HYHT7sWIBPWsJRlTK8RFKyUes7DqAX3yk7f6+ydF8Lcn8E
-        TkZCjaENBNmpQfhMstSxhgEje01mXFG/SNOtnow=
-X-Google-Smtp-Source: ACHHUZ4hNKvBkWnnwTi1UvbA0enOMv6lEWqh3SrknYDQNxa4Yan8j5JvPkVwFOINBdweiebeMKBCgA==
-X-Received: by 2002:a2e:7406:0:b0:2a8:ac69:bfe with SMTP id p6-20020a2e7406000000b002a8ac690bfemr3696560ljc.42.1684772824265;
-        Mon, 22 May 2023 09:27:04 -0700 (PDT)
-Received: from [192.168.1.101] (abyk97.neoplus.adsl.tpnet.pl. [83.9.30.97])
-        by smtp.gmail.com with ESMTPSA id c9-20020a05651c014900b002a8d01905f7sm1168547ljd.101.2023.05.22.09.27.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 May 2023 09:27:03 -0700 (PDT)
-Message-ID: <2e4ad0e8-9fdf-6af8-f591-be27168460ae@linaro.org>
-Date:   Mon, 22 May 2023 18:27:02 +0200
+        Mon, 22 May 2023 12:28:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 310E5103;
+        Mon, 22 May 2023 09:28:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DF11624D6;
+        Mon, 22 May 2023 16:28:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 403DBC433EF;
+        Mon, 22 May 2023 16:28:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684772897;
+        bh=0G+BjRlERK213agABDQEfeN2x8giGivLETu1ftBbrWM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WDpRZOSM20Rkd1/jsgBMmIM8+6Kf7jBTEub5YU3wFH3og5t/qY9MFrHt/P8CR5ARe
+         pJxeipYQRKZQZRCdTmMDOBZxRBktBSsKf1LI9/DklVbcoAlRXVcpox1wrrNmtgchcp
+         EKhHRQZNNt8y7mS6FMOcWDHDF5ngZWv770Gj6uEgznJPP60a2rw4hKBrdmlJ/QcnNT
+         t7OMLQUpEWjVkXj17w0PocDCkQCE+NNZJ5q3O1RcUxLfm750gmaCDFunsSCv50xzgL
+         sk3Tb2veqR06HwrfIlOa0oS7LPonNC8/gbDd39J47CIwApMlFATtmE9aL1Ewgmzj00
+         hxATMnLDH7HRQ==
+Date:   Mon, 22 May 2023 17:28:12 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org, lwn@lwn.net,
+        jslaby@suse.cz
+Subject: Re: Linux 5.15.104
+Message-ID: <20230522162812.GQ404509@google.com>
+References: <1679511203203220@kroah.com>
+ <20230522102355.GA2009088@google.com>
+ <2023052236-passivism-equate-5cb8@gregkh>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] soc: qcom: rpmpd: use correct __le32 type
-To:     Min-Hua Chen <minhuadotchen@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230522160757.284165-1-minhuadotchen@gmail.com>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230522160757.284165-1-minhuadotchen@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2023052236-passivism-equate-5cb8@gregkh>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,39 +58,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 22 May 2023, Greg Kroah-Hartman wrote:
 
-
-On 22.05.2023 18:07, Min-Hua Chen wrote:
-> Use cpu_to_le32 to cast constants to __le32 before comparing
-> them with __le32 type pd->key. This fixes the following sparse
-> warnings:
+> On Mon, May 22, 2023 at 11:23:55AM +0100, Lee Jones wrote:
+> > On Wed, 22 Mar 2023, Greg Kroah-Hartman wrote:
+> > 
+> > > I'm announcing the release of the 5.15.104 kernel.
+> > > 
+> > > All users of the 5.15 kernel series must upgrade.
+> > > 
+> > > The updated 5.15.y git tree can be found at:
+> > > 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
+> > > and can be browsed at the normal kernel.org git web browser:
+> > > 	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
+> > > 
+> > > thanks,
+> > > 
+> > > greg k-h
+> > > 
+> > > ------------
+> > 
+> > [...]
+> > 
+> > > Budimir Markovic (1):
+> > >       perf: Fix check before add_event_to_groups() in perf_group_detach()
+> > 
+> > Anyone know why this didn't make it into v5.10 with it's friends?
+> > 
+> > https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/commit/?id=80102f2ee715ab07be476df443bba388d5458fd1
 > 
-> drivers/soc/qcom/rpmpd.c:895:31: sparse: warning: restricted __le32 degrades to integer
-> drivers/soc/qcom/rpmpd.c:896:15: sparse: warning: restricted __le32 degrades to integer
-> 
-> Signed-off-by: Min-Hua Chen <minhuadotchen@gmail.com>
-> ---
-I wonder if our drivers are capable of booting and working properly
-in BE..
+> That's a merge point, how can that go into stable kernels?
+ 
+ There are only 3 commits in the merge.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> What specific commits are you thinking were missed?
 
-Konrad
->  drivers/soc/qcom/rpmpd.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/soc/qcom/rpmpd.c b/drivers/soc/qcom/rpmpd.c
-> index f8397dcb146c..99b017fd76b7 100644
-> --- a/drivers/soc/qcom/rpmpd.c
-> +++ b/drivers/soc/qcom/rpmpd.c
-> @@ -892,8 +892,8 @@ static int rpmpd_set_performance(struct generic_pm_domain *domain,
->  	pd->corner = state;
->  
->  	/* Always send updates for vfc and vfl */
-> -	if (!pd->enabled && pd->key != KEY_FLOOR_CORNER &&
-> -	    pd->key != KEY_FLOOR_LEVEL)
-> +	if (!pd->enabled && pd->key != cpu_to_le32(KEY_FLOOR_CORNER) &&
-> +	    pd->key != cpu_to_le32(KEY_FLOOR_LEVEL))
->  		goto out;
->  
->  	ret = rpmpd_aggregate_corner(pd);
+The one I quoted above:
+
+  perf: Fix check before add_event_to_groups() in perf_group_detach()
+
+The other two applied successfully to v5.10.y:
+
+  perf: fix perf_event_context->time
+  perf/core: Fix perf_output_begin parameter is incorrectly invoked in perf_event_bpf_output
+
+-- 
+Lee Jones [李琼斯]
