@@ -2,55 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE9DF70C155
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 16:42:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 111D970C15D
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 16:43:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234038AbjEVOm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 10:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60596 "EHLO
+        id S233618AbjEVOnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 10:43:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234021AbjEVOmR (ORCPT
+        with ESMTP id S230237AbjEVOnX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 10:42:17 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A38411F;
-        Mon, 22 May 2023 07:42:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=yfi//GuVvnr5PG0d0W18/s2Qr7V1R3hb5jrrCaCC3TI=; b=anG5KyX3cDc/wpxOdVMDgva8g1
-        96+jO8g6+JTdj0nXlDFytD2t8ZuhNjId6uKXNV/1aWUW+jJ6QmgA/zBULGq+MIE45x/2f3m1lwZMk
-        TcSkJXgu3Z98UaovUT+/DIjlZ+CUJ8OZD+4YFVLvL47A1rPU8MlewUU03r/Mgp0zTs4A=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1q16ja-00DYOd-Ih; Mon, 22 May 2023 16:42:02 +0200
-Date:   Mon, 22 May 2023 16:42:02 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     David Epping <david.epping@missinglinkelectronics.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net 3/3] net: phy: mscc: enable VSC8501/2 RGMII RX clock
-Message-ID: <70234187-3e7d-4932-8b07-42973337ecb1@lunn.ch>
-References: <20230520160603.32458-1-david.epping@missinglinkelectronics.com>
- <20230520160603.32458-4-david.epping@missinglinkelectronics.com>
- <20230521134356.ar3itavhdypnvasc@skbuf>
- <20230521161650.GC2208@nucnuc.mle>
- <20230522095833.otk2nv24plmvarpt@skbuf>
- <20230522140057.GB18381@nucnuc.mle>
+        Mon, 22 May 2023 10:43:23 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C297999;
+        Mon, 22 May 2023 07:43:21 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id A9A8260174;
+        Mon, 22 May 2023 16:43:18 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1684766598; bh=gFAip1LpaBAenVLmxO9SERe2dCyBM+Uu9Yhp1b8WsqY=;
+        h=Date:To:From:Subject:From;
+        b=O2OcQeTHZtCybT1uEFwFLD6C5AAHkcuFGXrIXxSSTkqPzYTyZgPg9EKZT8QuqpD1t
+         5cLJty0R1fMaP7zt5M7qq3P1yvh4NkSGKKzbJzKA9uYDikOSf9HqGje+QkU2XqfxU0
+         FhxQs7z+uFLqUUm0h7rzMYrPXeBNpIifLTbcWwZgydOFF/0F1q9ZSRpELJIK2+XUtV
+         1wFJkqj+L7GFR609dJ470+/EBWqfPhe2C17d9Ga2H7Ao75ueZuTwpuAatKgcAOR+5A
+         hZ4g1JoKQYw9fy6GHxTd5zHgQlYMEgew0FgVlspYeI4F363Lq8BrSa+GYb4RoVgQsC
+         ePlZcUiIrrfYQ==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id 0hV_zlYnz9Z8; Mon, 22 May 2023 16:43:16 +0200 (CEST)
+Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
+        by domac.alu.hr (Postfix) with ESMTPSA id 3510460173;
+        Mon, 22 May 2023 16:43:16 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1684766596; bh=gFAip1LpaBAenVLmxO9SERe2dCyBM+Uu9Yhp1b8WsqY=;
+        h=Date:To:From:Subject:From;
+        b=DlvhoQKPuRU2FSQHkaWepSFFk9Yw+guaNw8MWMZCJdbFh6gcpVTVCnpo/7f8boqRu
+         MIz6tv3qJT9bMaxbzgfEmpgbdehVT36EQxVPbAH6iBwGuNxdMeusX7MJmHrjYvLVJM
+         c4RqfBwiEA3FxcyCXVyPBpwtyY3/8tJJ6/t/oLqrd2KAJLTXpSra3iVQd0bHiwTjlX
+         TPX9TM4e4uKiHLhTZ83CbTIB3EE6CEXznmdcaPx4UOFuDHiYgTGdPSzf0YiK/5e25z
+         bg2HDxxLFXw8ZGuHSx+hKMAEEwoQJC0aw7L8JtUL05nsb1pWtirVg1wPJERnA0m6ty
+         RGu47tn3T8ybQ==
+Message-ID: <0ed660e3-1261-7c97-8fa7-7145743c4650@alu.unizg.hr>
+Date:   Mon, 22 May 2023 16:43:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230522140057.GB18381@nucnuc.mle>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US, hr
+To:     Shuah Khan <shuah@kernel.org>, Jeff Xu <jeffxu@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Daniel Verkamp <dverkamp@chromium.org>,
+        Kees Cook <keescook@chromium.org>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+Subject: selftests: memfd/memfd_test.c: does not compile under AlmaLinux 8.7
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,19 +67,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Its my first patch re-submission, so sorry for the noob question:
-> Should I include your "pw-bot: changes-requested" tag with the third
-> patch? Probably not.
+Hi,
 
-No.
+On AlmaLinux 8.7, make kselftest-all fails at memfd/memfd_test.c:
 
-There is a robot listening to emails, and when it sees pw-bot: It uses
-the label to change the state of the patch in patchworks:
+make[2]: Entering directory '/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/memfd'
+gcc -D_FILE_OFFSET_BITS=64 -isystem /home/marvin/linux/kernel/linux_torvalds/usr/include     memfd_test.c common.c  -o 
+/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/memfd/memfd_test
+memfd_test.c: In function ‘test_seal_future_write’:
+memfd_test.c:916:27: error: ‘F_SEAL_FUTURE_WRITE’ undeclared (first use in this function); did you mean ‘F_SEAL_WRITE’?
+   mfd_assert_add_seals(fd, F_SEAL_FUTURE_WRITE);
+                            ^~~~~~~~~~~~~~~~~~~
+                            F_SEAL_WRITE
+memfd_test.c:916:27: note: each undeclared identifier is reported only once for each function it appears in
+memfd_test.c: In function ‘test_exec_seal’:
+memfd_test.c:36:7: error: ‘F_SEAL_FUTURE_WRITE’ undeclared (first use in this function); did you mean ‘F_SEAL_WRITE’?
+        F_SEAL_FUTURE_WRITE | \
+        ^~~~~~~~~~~~~~~~~~~
+memfd_test.c:1058:27: note: in expansion of macro ‘F_WX_SEALS’
+   mfd_assert_has_seals(fd, F_WX_SEALS);
+                            ^~~~~~~~~~
+make[2]: *** [../lib.mk:147: /home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/memfd/memfd_test] Error 1
+make[2]: Leaving directory '/home/marvin/linux/kernel/linux_torvalds/tools/testing/selftests/memfd'
 
-https://patchwork.kernel.org/project/netdevbpf/list/
+Apparently, the include file include/uapi/linux/fcntl.h defines this
+F_SEAL_FUTURE_WRITE as 0x0010:
 
-The robot does have some basic authentication, so it should actually
-ignore such a line from you, since you are not a Maintainer. But even
-so, you don't want to make your own new patches as needing changes.
+include/uapi/linux/fcntl.h:45:#define F_SEAL_FUTURE_WRITE	0x0010  /* prevent future writes while mapped */
 
-    Andrew
+This patch fixed the issue:
+
+---
+  tools/testing/selftests/memfd/memfd_test.c | 8 +++++++-
+  1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
+index dba0e8ba002f..868f17c02e32 100644
+--- a/tools/testing/selftests/memfd/memfd_test.c
++++ b/tools/testing/selftests/memfd/memfd_test.c
+@@ -28,7 +28,13 @@
+  #define MFD_DEF_SIZE 8192
+  #define STACK_SIZE 65536
+
+-#define F_SEAL_EXEC    0x0020
++#ifndef F_SEAL_FUTURE_WRITE
++#define F_SEAL_FUTURE_WRITE    0x0010
++#endif
++
++#ifndef F_SEAL_EXEC
++#define F_SEAL_EXEC            0x0020
++#endif
+
+  #define F_WX_SEALS (F_SEAL_SHRINK | \
+                     F_SEAL_GROW | \
+
+
+Hope this helps.
+
+Best regards,
+Mirsad
+
+-- 
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
