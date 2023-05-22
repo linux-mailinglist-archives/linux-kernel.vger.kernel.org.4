@@ -2,106 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8049770C438
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 19:24:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B887970C441
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 19:29:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232344AbjEVRYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 13:24:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38584 "EHLO
+        id S232845AbjEVR24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 13:28:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231649AbjEVRY2 (ORCPT
+        with ESMTP id S229555AbjEVR2y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 13:24:28 -0400
-Received: from smtp.smtpout.orange.fr (smtp-30.smtpout.orange.fr [80.12.242.30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C70D2
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 10:24:27 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id 19GhqmkcjMDzt19Ghqo8DH; Mon, 22 May 2023 19:24:25 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1684776265;
-        bh=nm++P8Y9/uDiGvoa6cjYyqpsS2Q8yg7M9892T9WHIPU=;
-        h=Date:Subject:To:References:From:In-Reply-To;
-        b=Yni4oQh1DkvKr3PxYj//ns4zx/uK4zXePgF16l2Zkp6hqaQ5E3BRERn8rLVZTwQTZ
-         NZKWZ5RVcGTCKRjsdobX0+3+pVugJGBDTaTWs3bT5J5R94uQg1HEjTM5ClMpFtaWHU
-         m1xxtmWQTOVcn/ddK4cYzBv6S4iX70oIWscwhtZsZW87PRSnudajQxiQKKu+7ChLhC
-         I5a7xpEUZIt67636SIV3+rZ5oaJcKq3eA+BWf45gKqCwZQpwsqGqdynn+8OBGURokJ
-         s5tdU15ElC+9997+H0+DA7FH/t0vlAwifBghWjAQ+xaE4p1SD63YGYXBLtNE/Fc9Yv
-         Xx3k+G2aSW8QA==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Mon, 22 May 2023 19:24:25 +0200
-X-ME-IP: 86.243.2.178
-Message-ID: <c14fedc0-26f6-d4be-8e8b-b1dbefdf50c7@wanadoo.fr>
-Date:   Mon, 22 May 2023 19:24:23 +0200
+        Mon, 22 May 2023 13:28:54 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 060F5F4;
+        Mon, 22 May 2023 10:28:53 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f122ff663eso6902377e87.2;
+        Mon, 22 May 2023 10:28:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684776531; x=1687368531;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pukkaqqiRiZz50YRhtJKgZ/y5FxYLgqqZ4VW0SrMtC8=;
+        b=aPnzLGC2TGkiwtHumljX+JClUdLb2E9e0YezYUKkJNtW+4FHNfczYdbiQQ5A14K4Tl
+         +D6+Dw/sQ5oQYuOfIxQRDjp9udHzeM7LdPSkpRKjUYIQZmeCk9MOIqg65D4rLy8IJH89
+         bl3MK+U16rq+X5vQEMcjUBLkPTbv5uY9oiflQmqsgObPxvGTCNdnbD0dKIFP7wjesFsw
+         3EBfLchz9kPPqqgy8zmUJwzYO7IxxRgRTdCsGY2MQrUdRa6h67WofBNxNzUT1fXfHbLo
+         +qxRglJljE7CZrnIIK5Elz+jcKiOoTfJoQhwj1qYEkmiawcaUcGIXBcQ39FNJELI6HE2
+         R//A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684776531; x=1687368531;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pukkaqqiRiZz50YRhtJKgZ/y5FxYLgqqZ4VW0SrMtC8=;
+        b=CWSSBgW38MvWCck3JAfBKzoZBczup6M6+p3EkrOK4cczWs5x7NdsIa009MvAJpRAx1
+         RmPDIll31aOEe/+piJidCRCetpvsN4uScUiNdXkWfZZssOb+qKJy9EceUPcybcoNHgob
+         9ER2SSx17MMDORHs7MNr+DDhe74xYwKnhpGtWGTaTly9wE8Z7uMxw2kxQZF0c1bKZKRt
+         n9akcHaePV712jvQfbV7LrLHOT+O+zK1x66FCRVWIQi+cTdGQLgmH4IFq2kX80zDG4BZ
+         v+fzg4cNU8am/DQSfhrjok96BLzIbIt5TUadAdiIrxDT3dgXuK9hx8TEUKDMjGnF3o37
+         FnUg==
+X-Gm-Message-State: AC+VfDzZEwCWouEO9Nc1klnYGUuhPCBxijzbnA89jEJtPwJD63IO39ol
+        bdwyZkGjKmQvupf3q/bP02CyJZk5EQlzlF2BZlE=
+X-Google-Smtp-Source: ACHHUZ7YO9NKrN28rBECys+beHWL+Vy+TVxAJVexpCn9PSnMHkxb9GHTjUEXOPqY5iST+ieSJlRGBdG8FDWoqp61CqY=
+X-Received: by 2002:a19:ad02:0:b0:4f1:3eca:76a0 with SMTP id
+ t2-20020a19ad02000000b004f13eca76a0mr2728643lfc.66.1684776530560; Mon, 22 May
+ 2023 10:28:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] cpufreq: intel_pstate: Avoid initializing variables
- prematurely
-Content-Language: fr, en-US
-To:     Fieah Lim <kweifat@gmail.com>, srinivas.pandruvada@linux.intel.com,
-        lenb@kernel.org, rafael@kernel.org, linux-pm@vger.kernel.org,
+References: <2811951.1684766430@warthog.procyon.org.uk>
+In-Reply-To: <2811951.1684766430@warthog.procyon.org.uk>
+From:   Shyam Prasad N <nspmangalore@gmail.com>
+Date:   Mon, 22 May 2023 22:58:39 +0530
+Message-ID: <CANT5p=pNFpEj0p+njYw3sVdq9CKgsTdh29Gj6iYDOsMN0ocj1Q@mail.gmail.com>
+Subject: Re: [PATCH] cifs: Fix cifs_limit_bvec_subset() to correctly check the
+ maxmimum size
+To:     David Howells <dhowells@redhat.com>
+Cc:     Shyam Prasad N <sprasad@microsoft.com>,
+        Steve French <smfrench@gmail.com>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Paulo Alcantara <pc@manguebit.com>,
+        Tom Talpey <tom@talpey.com>, Jeff Layton <jlayton@kernel.org>,
+        linux-cifs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230520133249.22689-1-kweifat@gmail.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20230520133249.22689-1-kweifat@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 20/05/2023 à 15:32, Fieah Lim a écrit :
-> all_cpu_data struct is pretty large,
-> we should avoid assigning it around when the function has a chance
-> to bail out earlier before actually using it.
-> 
-> The same idea applies to the
-> this_cpu of notify_hwp_interrupt
-> and
-> the hwp_cap of intel_pstate_hwp_boost_up,
-> which are also initialized prematurely.
-> I think it also qualifies as a micro-optimization.
-> 
-> While at it, tidy up all the cpu_data initialization,
-> for the sake of consistency.
-> 
-> Signed-off-by: Fieah Lim <kweifat@gmail.com>
+On Mon, May 22, 2023 at 8:22=E2=80=AFPM David Howells <dhowells@redhat.com>=
+ wrote:
+>
+> Fix cifs_limit_bvec_subset() so that it limits the span to the maximum
+> specified and won't return with a size greater than max_size.
+>
+> Fixes: d08089f649a0 ("cifs: Change the I/O paths to use an iterator rathe=
+r than a page list")
+> Reported-by: Shyam Prasad N <sprasad@microsoft.com>
+> Signed-off-by: David Howells <dhowells@redhat.com>
+> cc: Steve French <smfrench@gmail.com>
+> cc: Rohith Surabattula <rohiths.msft@gmail.com>
+> cc: Paulo Alcantara <pc@manguebit.com>
+> cc: Tom Talpey <tom@talpey.com>
+> cc: Jeff Layton <jlayton@kernel.org>
+> cc: linux-cifs@vger.kernel.org
+> cc: linux-fsdevel@vger.kernel.org
 > ---
+>  fs/cifs/file.c |    1 +
+>  1 file changed, 1 insertion(+)
+>
+>
+> diff --git a/fs/cifs/file.c b/fs/cifs/file.c
+> index ba7f2e09d6c8..4778614cfccf 100644
+> --- a/fs/cifs/file.c
+> +++ b/fs/cifs/file.c
+> @@ -3353,6 +3353,7 @@ static size_t cifs_limit_bvec_subset(const struct i=
+ov_iter *iter, size_t max_siz
+>         while (n && ix < nbv) {
+>                 len =3D min3(n, bvecs[ix].bv_len - skip, max_size);
+>                 span +=3D len;
+> +               max_size -=3D len;
 
-[...]
+Shouldn't this decrement happen below, after the span has been
+compared with max_size?
 
-> @@ -2638,9 +2643,7 @@ static int intel_cpufreq_cpu_offline(struct cpufreq_policy *policy)
->   
->   static int intel_pstate_cpu_online(struct cpufreq_policy *policy)
->   {
-> -	struct cpudata *cpu = all_cpu_data[policy->cpu];
-> -
-> -	pr_debug("CPU %d going online\n", cpu->cpu);
-> +	pr_debug("CPU %d going online\n", policy->cpu);
+>                 nsegs++;
+>                 ix++;
+>                 if (span >=3D max_size || nsegs >=3D max_segs)
+>
 
-An answer has already been done, but just in case, this change does not 
-look equivalent.
 
-CJ
-
->   
->   	intel_pstate_init_acpi_perf_limits(policy);
->   
-> @@ -2649,6 +2652,8 @@ static int intel_pstate_cpu_online(struct cpufreq_policy *policy)
->   		 * Re-enable HWP and clear the "suspended" flag to let "resume"
->   		 * know that it need not do that.
->   		 */
-> +		struct cpudata *cpu = all_cpu_data[policy->cpu];
-> +
->   		intel_pstate_hwp_reenable(cpu);
->   		cpu->suspended = false;
->   	}
-
+--=20
+Regards,
+Shyam
