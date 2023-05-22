@@ -2,136 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6611770B76F
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:19:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EC2C70B777
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:20:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231174AbjEVITT convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 22 May 2023 04:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51664 "EHLO
+        id S232190AbjEVIUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 04:20:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231500AbjEVITP (ORCPT
+        with ESMTP id S229996AbjEVIT7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 04:19:15 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58909C7
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 01:19:14 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-147-ariLRcbvMsic7sM9JfpM6Q-1; Mon, 22 May 2023 09:18:59 +0100
-X-MC-Unique: ariLRcbvMsic7sM9JfpM6Q-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 22 May
- 2023 09:18:53 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Mon, 22 May 2023 09:18:53 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Sebastian Reichel' <sebastian.reichel@collabora.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "kernel@collabora.com" <kernel@collabora.com>
-Subject: RE: [PATCH v1 2/2] clk: divider: Properly handle rates exceeding
- UINT_MAX
-Thread-Topic: [PATCH v1 2/2] clk: divider: Properly handle rates exceeding
- UINT_MAX
-Thread-Index: AQHZioTsgOA8rKF4Y0+0s2ErF0La269l9j4w
-Date:   Mon, 22 May 2023 08:18:53 +0000
-Message-ID: <1b74d2ea2c3a458694c4c74f2381fcab@AcuMS.aculab.com>
-References: <20230519190522.194729-1-sebastian.reichel@collabora.com>
- <20230519190522.194729-3-sebastian.reichel@collabora.com>
-In-Reply-To: <20230519190522.194729-3-sebastian.reichel@collabora.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 22 May 2023 04:19:59 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02FF1C4
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 01:19:57 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1q10lk-0000SJ-Ab; Mon, 22 May 2023 10:19:52 +0200
+Received: from pengutronix.de (unknown [172.20.34.65])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id CD25A1C96BD;
+        Mon, 22 May 2023 08:19:30 +0000 (UTC)
+Date:   Mon, 22 May 2023 10:19:30 +0200
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Cc:     Frank Jungclaus <frank.jungclaus@esd.eu>,
+        linux-can@vger.kernel.org, Wolfgang Grandegger <wg@grandegger.com>,
+        Stefan =?utf-8?B?TcOkdGpl?= <stefan.maetje@esd.eu>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/6] can: esd_usb: Replace initializer macros used for
+ struct can_bittiming_const
+Message-ID: <20230522-tattling-drum-b02b6c6bf76a-mkl@pengutronix.de>
+References: <20230519195600.420644-1-frank.jungclaus@esd.eu>
+ <20230519195600.420644-3-frank.jungclaus@esd.eu>
+ <CAMZ6RqL-2qB=kLPd84rWHd3=xPcspSNXvNYpR9Fyx+4-Ft16gQ@mail.gmail.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="iqguu65hudcmyit7"
+Content-Disposition: inline
+In-Reply-To: <CAMZ6RqL-2qB=kLPd84rWHd3=xPcspSNXvNYpR9Fyx+4-Ft16gQ@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sebastian Reichel
-> Sent: 19 May 2023 20:05
-> 
-> Requesting rates exceeding UINT_MAX (so roughly 4.3 GHz) results
-> in very small rate being chosen instead of very high ones, since
-> DIV_ROUND_UP_ULL takes a 32 bit integer as second argument.
-> 
-> Correct this by using DIV64_U64_ROUND_UP instead, which takes proper
-> 64 bit values for dividend and divisor.
 
-This doesn't look right on 32-bit architectures.
-While you really don't want to be doing full 64bit divides
-there is also the problem that any input values over 4.3Ghz
-have already been masked.
+--iqguu65hudcmyit7
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-In the values can be over 4.3GHz then the function arguments
-need to be 64bit - not long.
+On 21.05.2023 18:16:17, Vincent MAILHOL wrote:
+> Thanks for the patch.
+>=20
+> On Sat. 20 May 2023 at 04:57, Frank Jungclaus <frank.jungclaus@esd.eu> wr=
+ote:
+> > Replace the macros used to initialize the members of struct
+> > can_bittiming_const with direct values. Then also use those struct
+> > members to do the calculations in esd_usb2_set_bittiming().
+> >
+> > Link: https://lore.kernel.org/all/CAMZ6RqLaDNy-fZ2G0+QMhUEckkXLL+ZyELVS=
+DFmqpd++aBzZQg@mail.gmail.com/
+> > Suggested-by: Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+> > Signed-off-by: Frank Jungclaus <frank.jungclaus@esd.eu>
+> > ---
+> >  drivers/net/can/usb/esd_usb.c | 33 +++++++++++++--------------------
+> >  1 file changed, 13 insertions(+), 20 deletions(-)
+> >
+> > diff --git a/drivers/net/can/usb/esd_usb.c b/drivers/net/can/usb/esd_us=
+b.c
+> > index 32354cfdf151..2eecf352ec47 100644
+> > --- a/drivers/net/can/usb/esd_usb.c
+> > +++ b/drivers/net/can/usb/esd_usb.c
+> > @@ -60,18 +60,10 @@ MODULE_LICENSE("GPL v2");
+> >  #define ESD_USB_NO_BAUDRATE    GENMASK(30, 0) /* bit rate unconfigured=
+ */
+> >
+> >  /* bit timing CAN-USB/2 */
+> > -#define ESD_USB2_TSEG1_MIN     1
+> > -#define ESD_USB2_TSEG1_MAX     16
+> >  #define ESD_USB2_TSEG1_SHIFT   16
+> > -#define ESD_USB2_TSEG2_MIN     1
+> > -#define ESD_USB2_TSEG2_MAX     8
+> >  #define ESD_USB2_TSEG2_SHIFT   20
+> > -#define ESD_USB2_SJW_MAX       4
+> >  #define ESD_USB2_SJW_SHIFT     14
+> >  #define ESD_USBM_SJW_SHIFT     24
+> > -#define ESD_USB2_BRP_MIN       1
+> > -#define ESD_USB2_BRP_MAX       1024
+> > -#define ESD_USB2_BRP_INC       1
+> >  #define ESD_USB2_3_SAMPLES     BIT(23)
+> >
+> >  /* esd IDADD message */
+> > @@ -909,19 +901,20 @@ static const struct ethtool_ops esd_usb_ethtool_o=
+ps =3D {
+> >
+> >  static const struct can_bittiming_const esd_usb2_bittiming_const =3D {
+> >         .name =3D "esd_usb2",
+> > -       .tseg1_min =3D ESD_USB2_TSEG1_MIN,
+> > -       .tseg1_max =3D ESD_USB2_TSEG1_MAX,
+> > -       .tseg2_min =3D ESD_USB2_TSEG2_MIN,
+> > -       .tseg2_max =3D ESD_USB2_TSEG2_MAX,
+> > -       .sjw_max =3D ESD_USB2_SJW_MAX,
+> > -       .brp_min =3D ESD_USB2_BRP_MIN,
+> > -       .brp_max =3D ESD_USB2_BRP_MAX,
+> > -       .brp_inc =3D ESD_USB2_BRP_INC,
+> > +       .tseg1_min =3D 1,
+> > +       .tseg1_max =3D 16,
+> > +       .tseg2_min =3D 1,
+> > +       .tseg2_max =3D 8,
+> > +       .sjw_max =3D 4,
+> > +       .brp_min =3D 1,
+> > +       .brp_max =3D 1024,
+> > +       .brp_inc =3D 1,
+> >  };
+> >
+> >  static int esd_usb2_set_bittiming(struct net_device *netdev)
+> >  {
+> >         struct esd_usb_net_priv *priv =3D netdev_priv(netdev);
+> > +       const struct can_bittiming_const *btc =3D priv->can.bittiming_c=
+onst;
+>=20
+> I initially suggested doing:
+>=20
+>           const struct can_bittiming_const *btc =3D priv->can.bittiming_c=
+onst;
+>=20
+> But now that I think again about it, doing:
+>=20
+>           const struct can_bittiming_const *btc =3D &esd_usb2_bittiming_c=
+onst;
+>=20
+> is slightly better as it will allow the compiler to fold the integer
+> constant expressions such as btc->brp_max - 1. The compiler is not
+> smart enough to figure out what values are held in
+> priv->can.bittiming_const at compile time.
+>=20
+> Sorry for not figuring this the first time.
 
-	David
+Good suggestion! Fixed up while applying.
 
-> 
-> Note, that this is usually not an issue. ULONG_MAX sets the lower
-> 32 bits and thus effectively requests UINT_MAX. On most platforms
-> that is good enough. To trigger a real bug one of the following
-> conditions must be met:
-> 
->  * A parent clock with more than 8.5 GHz is available
->  * Instead of ULONG_MAX a specific frequency like 4.3 GHz is
->    requested. That would end up becoming 5 MHz instead :)
-> 
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> ---
->  drivers/clk/clk-divider.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/clk/clk-divider.c b/drivers/clk/clk-divider.c
-> index a2c2b5203b0a..dddaaf0f9d25 100644
-> --- a/drivers/clk/clk-divider.c
-> +++ b/drivers/clk/clk-divider.c
-> @@ -220,7 +220,7 @@ static int _div_round_up(const struct clk_div_table *table,
->  			 unsigned long parent_rate, unsigned long rate,
->  			 unsigned long flags)
->  {
-> -	int div = DIV_ROUND_UP_ULL((u64)parent_rate, rate);
-> +	int div = DIV64_U64_ROUND_UP(parent_rate, rate);
-> 
->  	if (flags & CLK_DIVIDER_POWER_OF_TWO)
->  		div = __roundup_pow_of_two(div);
-> @@ -237,7 +237,7 @@ static int _div_round_closest(const struct clk_div_table *table,
->  	int up, down;
->  	unsigned long up_rate, down_rate;
-> 
-> -	up = DIV_ROUND_UP_ULL((u64)parent_rate, rate);
-> +	up = DIV64_U64_ROUND_UP(parent_rate, rate);
->  	down = parent_rate / rate;
-> 
->  	if (flags & CLK_DIVIDER_POWER_OF_TWO) {
-> @@ -473,7 +473,7 @@ int divider_get_val(unsigned long rate, unsigned long parent_rate,
->  {
->  	unsigned int div, value;
-> 
-> -	div = DIV_ROUND_UP_ULL((u64)parent_rate, rate);
-> +	div = DIV64_U64_ROUND_UP(parent_rate, rate);
-> 
->  	if (!_is_valid_div(table, div, flags))
->  		return -EINVAL;
-> --
-> 2.39.2
+regards,
+Marc
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
+--iqguu65hudcmyit7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmRrJY8ACgkQvlAcSiqK
+BOhHzQgArh8iOdOn4ECwgOQWxo5eUoe+7PZz9/bi4lsZwzKr3ynbouweNyHdCMdi
+e5FbdEIxkNsQHdQCE4momJ0lfW4PBvl8T75SWxWixN2KJqdtcg4YmCCFRPSsL/jN
+JXzWqxnW169wnJkQ7FxStSLX5DQJLxMevJiraGOz9dBAhboFDOMWmBJag+DBfmrL
+jBa91bLKvIb4ezOFbwxlt1qqkE7bHuDLTh2jHPkZ/xCD8mt3CYhVzCC7DS3N/+s1
+kYeFTyxDC0rW9Z/N+VRXPby5476KGo75uhNAhhGV5IzrDr0EKoMAueNxUSv0Er12
+UyYWHBeEOMPqjpycKeM3wn44fbqp/w==
+=LL8L
+-----END PGP SIGNATURE-----
+
+--iqguu65hudcmyit7--
