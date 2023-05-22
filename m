@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EE2370B2E5
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 03:45:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4082170B2E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 03:46:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231439AbjEVBpb convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 21 May 2023 21:45:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49492 "EHLO
+        id S231460AbjEVBq3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 21 May 2023 21:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231424AbjEVBp3 (ORCPT
+        with ESMTP id S231424AbjEVBq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 21:45:29 -0400
+        Sun, 21 May 2023 21:46:27 -0400
 Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839C5D7;
-        Sun, 21 May 2023 18:45:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B288AD7;
+        Sun, 21 May 2023 18:46:26 -0700 (PDT)
 Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 34M1j6tQ5018142, This message is accepted by code: ctloc85258
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 34M1k5k75018981, This message is accepted by code: ctloc85258
 Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 34M1j6tQ5018142
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 34M1k5k75018981
         (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Mon, 22 May 2023 09:45:06 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
+        Mon, 22 May 2023 09:46:05 +0800
+Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
  RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Mon, 22 May 2023 09:45:16 +0800
+ 15.1.2375.32; Mon, 22 May 2023 09:46:15 +0800
 Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
+ RTEXDAG02.realtek.com.tw (172.21.6.101) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Mon, 22 May 2023 09:45:16 +0800
+ 15.1.2375.7; Mon, 22 May 2023 09:46:15 +0800
 Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
  RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Mon, 22 May 2023 09:45:16 +0800
+ 15.01.2375.007; Mon, 22 May 2023 09:46:15 +0800
 From:   Ping-Ke Shih <pkshih@realtek.com>
 To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
         "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
@@ -42,21 +42,21 @@ CC:     "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
         "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
         "Peter Robinson" <pbrobinson@gmail.com>,
         "jernej.skrabec@gmail.com" <jernej.skrabec@gmail.com>
-Subject: RE: [PATCH wireless-next v1 2/4] wifi: rtw88: rtw8723d: Implement RTL8723DS (SDIO) efuse parsing
-Thread-Topic: [PATCH wireless-next v1 2/4] wifi: rtw88: rtw8723d: Implement
- RTL8723DS (SDIO) efuse parsing
-Thread-Index: AQHZiaRUMpC3s/Tl4EKtdj1z43tgz69lirGQ
-Date:   Mon, 22 May 2023 01:45:16 +0000
-Message-ID: <e38ceb19397a4c8ab32a35712cfd8727@realtek.com>
+Subject: RE: [PATCH wireless-next v1 3/4] mmc: sdio: Add/rename SDIO ID of the RTL8723DS SDIO wifi cards
+Thread-Topic: [PATCH wireless-next v1 3/4] mmc: sdio: Add/rename SDIO ID of
+ the RTL8723DS SDIO wifi cards
+Thread-Index: AQHZiaRU2yqqdyKoHUKqEdo0JlyLb69litiw
+Date:   Mon, 22 May 2023 01:46:14 +0000
+Message-ID: <2ffdaf9f38fa4886ab5d2a5b8323d584@realtek.com>
 References: <20230518161749.1311949-1-martin.blumenstingl@googlemail.com>
- <20230518161749.1311949-3-martin.blumenstingl@googlemail.com>
-In-Reply-To: <20230518161749.1311949-3-martin.blumenstingl@googlemail.com>
+ <20230518161749.1311949-4-martin.blumenstingl@googlemail.com>
+In-Reply-To: <20230518161749.1311949-4-martin.blumenstingl@googlemail.com>
 Accept-Language: en-US, zh-TW
 Content-Language: zh-TW
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
 x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
+x-kse-serverinfo: RTEXDAG02.realtek.com.tw, 9
 x-kse-antispam-interceptor-info: fallback
 x-kse-antivirus-interceptor-info: fallback
 Content-Type: text/plain; charset="us-ascii"
@@ -85,15 +85,41 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 > Cc: linux-mmc@vger.kernel.org; linux-kernel@vger.kernel.org; ulf.hansson@linaro.org; kvalo@kernel.org;
 > tony0620emma@gmail.com; Peter Robinson <pbrobinson@gmail.com>; Ping-Ke Shih <pkshih@realtek.com>;
 > jernej.skrabec@gmail.com; Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Subject: [PATCH wireless-next v1 2/4] wifi: rtw88: rtw8723d: Implement RTL8723DS (SDIO) efuse parsing
+> Subject: [PATCH wireless-next v1 3/4] mmc: sdio: Add/rename SDIO ID of the RTL8723DS SDIO wifi cards
 > 
-> The efuse of the SDIO RTL8723DS chip has only one known member: the mac
-> address is at offset 0x11a. Add a struct rtw8723ds_efuse describing this
-> and use it for copying the mac address when the SDIO bus is used.
+> RTL8723DS comes in two variant and each of them has their own SDIO ID:
+> - 0xd723 can connect two antennas. The WiFi part is still 1x1 so the
+>   second antenna can be dedicated to Bluetooth
+> - 0xd724 can only connect one antenna so it's shared between WiFi and
+>   Bluetooth
+> 
+> Add a new entry for the single antenna RTL8723DS (0xd724) which can be
+> found on the MangoPi MQ-Quad. Also rename the existing RTL8723DS entry
+> (0xd723) so it's name reflects that it's the variant with support for
+> two antennas.
 > 
 > Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
 
 Reviewed-by: Ping-Ke Shih <pkshih@realtek.com>
 
-[...]
+> ---
+>  include/linux/mmc/sdio_ids.h | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/mmc/sdio_ids.h b/include/linux/mmc/sdio_ids.h
+> index c653accdc7fd..7fada7a714fe 100644
+> --- a/include/linux/mmc/sdio_ids.h
+> +++ b/include/linux/mmc/sdio_ids.h
+> @@ -121,7 +121,8 @@
+>  #define SDIO_DEVICE_ID_REALTEK_RTW8822BS       0xb822
+>  #define SDIO_DEVICE_ID_REALTEK_RTW8821CS       0xc821
+>  #define SDIO_DEVICE_ID_REALTEK_RTW8822CS       0xc822
+> -#define SDIO_DEVICE_ID_REALTEK_RTW8723DS       0xd723
+> +#define SDIO_DEVICE_ID_REALTEK_RTW8723DS_2ANT  0xd723
+> +#define SDIO_DEVICE_ID_REALTEK_RTW8723DS_1ANT  0xd724
+>  #define SDIO_DEVICE_ID_REALTEK_RTW8821DS       0xd821
+> 
+>  #define SDIO_VENDOR_ID_SIANO                   0x039a
+> --
+> 2.40.1
 
