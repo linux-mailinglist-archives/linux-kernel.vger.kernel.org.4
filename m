@@ -2,171 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E483F70B95A
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:50:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2A470B95C
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:50:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230158AbjEVJuH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 05:50:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42046 "EHLO
+        id S232665AbjEVJuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 05:50:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbjEVJtu (ORCPT
+        with ESMTP id S232712AbjEVJuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 05:49:50 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB863A3;
-        Mon, 22 May 2023 02:49:48 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f60804faf4so1497875e9.3;
-        Mon, 22 May 2023 02:49:48 -0700 (PDT)
+        Mon, 22 May 2023 05:50:00 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2DA1B4
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 02:49:58 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-309550d4f73so2152712f8f.1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 02:49:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684748987; x=1687340987;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EFRx9HekdB5FKRI76p9VTNC9U8soCsA58g72bEm8O/Y=;
-        b=c5qc1L0p8kKDqt6qKnDxH7g5ZyfVKQhBtL+1lHKg5dNbDjDeYVjX31g9KmMoZtINP9
-         /emwpqzIOG5GSmE4Y5Rq+5a2onDQ8ZRUcSkXTMcyREDuu5w6+RfAJwRck/2OQs8MxFy/
-         spJoWD3VS1SVv5WVxdpnkeOZTMnqohFYZGci8O2kTalwrh2aU/pv2bqNRKUVp5QCX9d/
-         aMEWoh19aaxkarw6tGnxQResZLRUsWbDQfdJwVvQ7KZAI9G1VphGklu/uo8+exzrhww/
-         +LPB2Zm4p95mcxGVuJT1SPRwqOeWn2eHlG91d3uPHCieXlWzAVgLXuiXE/l3FckBI1hN
-         grOQ==
+        d=linaro.org; s=google; t=1684748997; x=1687340997;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xYDTRQ3Z+kp4Z7bD3A9FTH/4o0GFqdJBXFfGhyiCeNM=;
+        b=nE0JX8ZMTTQ5g0zlQTtrTgBkHXhIXT+ZxuDqrV6vUXsajL/ZaaFCmTc4UtkmlnIR26
+         QZawwCLEsJLkxRlEdAOWDXThy25B+FrNSeHNxSxStrUWo44tSix1Fy/3+knXdEob3pDm
+         eqyRLrZDhya90byJDGIHpPgSL25m86fJmVewzx36RtHa8diNw3QFM8gRiVTE4pLPFKB/
+         eL8Y7EJx/En+erz1PI3zYfpQwStuDppDjHdr0LVsqKDXz2alUJf+dMRaTaWxnQvLMzyU
+         ajg7T2gw920r5qBPzmY/Iq15EExfoTigB1qwkdBtYXVnyCS3YpM+ZbGD9UcsvuYMILzc
+         dXDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684748987; x=1687340987;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EFRx9HekdB5FKRI76p9VTNC9U8soCsA58g72bEm8O/Y=;
-        b=bMmDpsreuYwxoxlNL79eLGBc/+i1O6ppJMNJS8qOQnQXtvXisvBh5274qmYpiCZQR7
-         b9AKcW4hpdx+U3n1J5x1ggUlvBO2FoOu21+4eYfIL5DSY7WFtl62t9dElY2q5Q8nFoXF
-         Gxxa6F9icA95r37vIhRC7fugQ8DdnwlEsr4Npkz2Lntlje46GGyfZouWt/IbMo48MuYf
-         OwRqkqNuSnFoWeA+pzZWApLpo6UVN/PEOBJ6bbLJJi22D2JS5/VEi4sFrbwalSZbSJkB
-         WYpBLQNMIvB0jjO4uhjcFvjL22RKuw2+mtkHZaPR6Wcqor28vS7K2/qIYh1QR5+U95nd
-         tsbg==
-X-Gm-Message-State: AC+VfDyCxLDypF/J7eIstR8E4WkBltXsQ9rwa26qG1udEkAF4BBh6huh
-        Y6MrPkUH3rUdAdqKYl21AF4=
-X-Google-Smtp-Source: ACHHUZ70BKKiQ8uL6/lkdxghsTvs0EFjjRA4jvvnC/+6W2yzryBcB8uBpeetOrDVYAqs04pZqwUQSw==
-X-Received: by 2002:a1c:c903:0:b0:3eb:42fc:fb30 with SMTP id f3-20020a1cc903000000b003eb42fcfb30mr7274423wmb.32.1684748986867;
-        Mon, 22 May 2023 02:49:46 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id 3-20020a05600c230300b003f6042d6da0sm3133724wmo.16.2023.05.22.02.49.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 02:49:46 -0700 (PDT)
-Date:   Mon, 22 May 2023 12:49:44 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     David Epping <david.epping@missinglinkelectronics.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net 3/3] net: phy: mscc: enable VSC8501/2 RGMII RX clock
-Message-ID: <20230522094944.uylvgoepcmwjq5yj@skbuf>
-References: <20230520160603.32458-1-david.epping@missinglinkelectronics.com>
- <20230520160603.32458-4-david.epping@missinglinkelectronics.com>
- <20230521134356.ar3itavhdypnvasc@skbuf>
- <20230521161650.GC2208@nucnuc.mle>
+        d=1e100.net; s=20221208; t=1684748997; x=1687340997;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xYDTRQ3Z+kp4Z7bD3A9FTH/4o0GFqdJBXFfGhyiCeNM=;
+        b=V3atEONc1w5bDTCGaJ0CANnYcaFWIvFO9qTFUzpQwRxi9+Rqqt0OYVxfwx4aHeXI55
+         5BVkfP1Y8AoYdCzZxUXKyQH7wqAY1JbgmSoKcBCxkubm1AliRlmU0f+plZMzQOOZPopB
+         GfU5sE2Q2th7ylXzVqBUk9MlMidsFWhqHBiSsDQa5+YliS9uybVoRwfjyjPC2Xhpz7yg
+         jkrtozVeySD6M2GWSm/2YEzRI869PFaUCqXjGpjvbGEkoQ3irBp0c0VMd3MY+9PtqrN8
+         qLsOKntdxVpRjuC7j8Owp3F7RsbaOQ7SoB84ncbhGblB1s88KSnY5iVa8wCfgOXYrDkU
+         yo2g==
+X-Gm-Message-State: AC+VfDyuWc7HNRZ2YmfAYLLK1MljIdjmuL98i+bcBpebGtRfWDA4Xz08
+        RT4k2T4YS2k1ugo8DkBZyYx/H+bHB8Ljfc9vqGVNsg==
+X-Google-Smtp-Source: ACHHUZ7lnvos8gjXPExW9Hu+ML+UsOruMb/Lyv03oJkHB6x0mrot9YE+05pfJIMz5t/KRfj9tdu6ehuJN5klDvrLf+8=
+X-Received: by 2002:adf:fa01:0:b0:306:3163:2b76 with SMTP id
+ m1-20020adffa01000000b0030631632b76mr7090443wrr.15.1684748997248; Mon, 22 May
+ 2023 02:49:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230521161650.GC2208@nucnuc.mle>
+References: <20230522093620.3568-1-quic_kbajaj@quicinc.com> <20230522093620.3568-4-quic_kbajaj@quicinc.com>
+In-Reply-To: <20230522093620.3568-4-quic_kbajaj@quicinc.com>
+From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
+Date:   Mon, 22 May 2023 15:19:45 +0530
+Message-ID: <CAH=2NtzBWjAuJ2mvtnBzDkhMXk+MZX_KwE-8U9CW42fQL+SBGA@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] arm64: dts: qcom: qdu1000: Add SDHCI1 pin
+ configuration to DTSI
+To:     Komal Bajaj <quic_kbajaj@quicinc.com>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 21, 2023 at 06:16:50PM +0200, David Epping wrote:
-> On Sun, May 21, 2023 at 04:43:56PM +0300, Vladimir Oltean wrote:
-> > Not only bit 11 is reserved for VSC8530, but it's also read-only, so it
-> > should not matter what is written there.
-> 
-> I agree and am ok with removing the PHY ID condition.
-> 
-> > Since vsc85xx_rgmii_enable_rx_clk() and vsc85xx_rgmii_set_skews() write
-> > to the same register, would it not make sense to combine the two into a
-> > single phy_modify_paged() call, and to zeroize bit 11 as part of that?
-> 
-> Since we found an explanation why the current driver works in some
-> setups (U-Boot), I would go with the Microchip support statement, that
-> writing bit 11 to 0 is required in all modes.
-> It would thus stay a separate function, called without a phy mode
-> condition, and not be combined with the RGMII skew setting function.
-> 
-> > The other caller of vsc85xx_rgmii_set_skews(), VSC8572, unfortunately
-> > does not document bit 11 at all - it doesn't say if it's read-only or not.
-> > We could conditionally include the VSC8502_RGMII_RX_CLK_DISABLE bit in the
-> > "mask" argument of phy_modify_paged() based on rgmii_cntl == VSC8502_RGMII_CNTL,
-> > such as to exclude VSC8572.
-> 
-> Because of the above, I would still call from vsc85xx_default_config(),
-> so not for the PHYs where bit 11 is not documented.
-> 
-> > What do you think?
-> 
-> If you agree to the above, should the function be named
-> vsc85xx_enable_rx_clk() or rather vsc8502_enable_rx_clk()?
-> It is called for more than just VSC8502, but not for all of the PHYs
-> the driver supports.
-> The same is true for the existing vsc85xx_default_config(), however.
-> I don't have a real preference.
+On Mon, 22 May 2023 at 15:06, Komal Bajaj <quic_kbajaj@quicinc.com> wrote:
+>
+> Add required pins for SDHCI1, so that the interface can work reliably.
+>
+> Reviewed-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>wq
 
-Well, to be clear, I was suggesting:
+Err.. an extra wq .. I think this can be fixed while applying, so
+should not require a new version.
 
-/* Set the RGMII RX and TX clock skews individually, according to the PHY
- * interface type, to:
- *  * 0.2 ns (their default, and lowest, hardware value) if delays should
- *    not be enabled
- *  * 2.0 ns (which causes the data to be sampled at exactly half way between
- *    clock transitions at 1000 Mbps) if delays should be enabled
- */
-static int vsc85xx_rgmii_set_skews(struct phy_device *phydev, u32 rgmii_cntl,
-				   u16 rgmii_rx_delay_mask,
-				   u16 rgmii_tx_delay_mask)
-{
-	u16 rgmii_rx_delay_pos = ffs(rgmii_rx_delay_mask) - 1;
-	u16 rgmii_tx_delay_pos = ffs(rgmii_tx_delay_mask) - 1;
-	u16 mask = rgmii_rx_delay_mask | rgmii_tx_delay_mask;
-	u16 reg_val = 0;
-	int rc;
+Thanks,
+Bhupesh
 
-	/* For traffic to pass, the VSC8502 family needs the RX_CLK disable bit
-	 * to be unset for all PHY modes, so do that as part of the paged
-	 * register modification.
-	 */
-	if (rgmii_cntl == VSC8502_RGMII_CNTL)
-		mask |= VSC8502_RGMII_RX_CLK_DISABLE;
-
-	mutex_lock(&phydev->lock);
-
-	if (phydev->interface == PHY_INTERFACE_MODE_RGMII_RXID ||
-	    phydev->interface == PHY_INTERFACE_MODE_RGMII_ID)
-		reg_val |= RGMII_CLK_DELAY_2_0_NS << rgmii_rx_delay_pos;
-	if (phydev->interface == PHY_INTERFACE_MODE_RGMII_TXID ||
-	    phydev->interface == PHY_INTERFACE_MODE_RGMII_ID)
-		reg_val |= RGMII_CLK_DELAY_2_0_NS << rgmii_tx_delay_pos;
-
-	rc = phy_modify_paged(phydev, MSCC_PHY_PAGE_EXTENDED_2,
-			      rgmii_cntl, mask, reg_val);
-
-	mutex_unlock(&phydev->lock);
-
-	return rc;
-}
-
-static int vsc85xx_default_config(struct phy_device *phydev)
-{
-	int rc;
-
-	phydev->mdix_ctrl = ETH_TP_MDI_AUTO;
-
-	return vsc85xx_rgmii_set_skews(phydev, VSC8502_RGMII_CNTL,
-				       VSC8502_RGMII_RX_DELAY_MASK,
-				       VSC8502_RGMII_TX_DELAY_MASK);
-}
-
-// no changes to the vsc85xx_rgmii_set_skews() call from vsc8584_config_init()
+> Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
+> ---
+>  arch/arm64/boot/dts/qcom/qdu1000.dtsi | 50 +++++++++++++++++++++++++++
+>  1 file changed, 50 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/qdu1000.dtsi b/arch/arm64/boot/dts/qcom/qdu1000.dtsi
+> index 38ee7115a35f..6f23cbfc024c 100644
+> --- a/arch/arm64/boot/dts/qcom/qdu1000.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/qdu1000.dtsi
+> @@ -1151,6 +1151,56 @@
+>                                 pins = "gpio31";
+>                                 function = "gpio";
+>                         };
+> +
+> +                       sdc1_on_state: sdc1-on-state {
+> +                               clk-pins {
+> +                                       pins = "sdc1_clk";
+> +                                       drive-strength = <16>;
+> +                                       bias-disable;
+> +                               };
+> +
+> +                               cmd-pins {
+> +                                       pins = "sdc1_cmd";
+> +                                       drive-strength = <10>;
+> +                                       bias-pull-up;
+> +                               };
+> +
+> +                               data-pins {
+> +                                       pins = "sdc1_data";
+> +                                       drive-strength = <10>;
+> +                                       bias-pull-up;
+> +                               };
+> +
+> +                               rclk-pins {
+> +                                       pins = "sdc1_rclk";
+> +                                       bias-pull-down;
+> +                               };
+> +                       };
+> +
+> +                       sdc1_off_state: sdc1-off-state {
+> +                               clk-pins {
+> +                                       pins = "sdc1_clk";
+> +                                       drive-strength = <2>;
+> +                                       bias-disable;
+> +                               };
+> +
+> +                               cmd-pins {
+> +                                       pins = "sdc1_cmd";
+> +                                       drive-strength = <2>;
+> +                                       bias-pull-up;
+> +                               };
+> +
+> +                               data-pins {
+> +                                       pins = "sdc1_data";
+> +                                       drive-strength = <2>;
+> +                                       bias-pull-up;
+> +                               };
+> +
+> +                               rclk-pins {
+> +                                       pins = "sdc1_rclk";
+> +                                       bias-pull-down;
+> +                               };
+> +                       };
+>                 };
+>
+>                 apps_smmu: iommu@15000000 {
+> --
+> 2.17.1
+>
