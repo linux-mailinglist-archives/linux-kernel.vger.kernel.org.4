@@ -2,79 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0EB170BEEF
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:00:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F02FF70BEF5
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 15:00:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233373AbjEVNAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 09:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58406 "EHLO
+        id S234079AbjEVNAz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 09:00:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231236AbjEVNAV (ORCPT
+        with ESMTP id S231236AbjEVNAw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 09:00:21 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EFDEA9;
-        Mon, 22 May 2023 06:00:19 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 206EB80B2;
-        Mon, 22 May 2023 21:00:06 +0800 (CST)
-Received: from EXMBX062.cuchost.com (172.16.6.62) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 22 May
- 2023 21:00:06 +0800
-Received: from [192.168.125.107] (113.72.146.100) by EXMBX062.cuchost.com
- (172.16.6.62) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 22 May
- 2023 21:00:04 +0800
-Message-ID: <93d39956-25c9-971b-e73b-09c69e803341@starfivetech.com>
-Date:   Mon, 22 May 2023 21:00:04 +0800
+        Mon, 22 May 2023 09:00:52 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87320AC;
+        Mon, 22 May 2023 06:00:49 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id C31025FD58;
+        Mon, 22 May 2023 16:00:39 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1684760439;
+        bh=T6WKzzi3geeqvAy+HEhZbkW5M1xIRqiwgNjBVb8OkRo=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=aHg2wtT4t/YN+m4Hm0+/DjlM7GcCu0BxVK16ZlSnw3gvWKJI/NzF36myC7IqP4Y2f
+         vE9xnUnxtI6pIAo7ih/uPeyKffuh2qI1ecqFdomMfc0Ny+WuXQTuvYDgbXi4Cs+Opx
+         ftwwtpVUpMWH3bGl+LXPpzfrOL2Izh+WaY0sNBAhj68J77x82Iw8NSQQxglHUNE4x/
+         lU20fYZqzzr/LkdS9ySyJ2Dj1loK83Mr9A48dHdiFcRcfYnNAc18xjYKj0kCHOvdxR
+         uuQ3SX8BFMDdBC55gOrZziq8P1Wt94Tgwde5Qp6oMvOxiq5+0dCH4gvQwyaAWIqxO4
+         jyfqGm0CvLjDA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Mon, 22 May 2023 16:00:38 +0300 (MSK)
+Date:   Mon, 22 May 2023 16:00:33 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh+dt@kernel.org>, <khilman@baylibre.com>,
+        <jian.hu@amlogic.com>, <kernel@sberdevices.ru>,
+        <rockosov@gmail.com>, <linux-amlogic@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v15 5/6] dt-bindings: clock: meson: add A1 Peripherals
+ clock controller bindings
+Message-ID: <20230522130033.a47vlybocme66rev@CAB-WSD-L081021>
+References: <20230517133309.9874-1-ddrokosov@sberdevices.ru>
+ <20230517133309.9874-6-ddrokosov@sberdevices.ru>
+ <CAFBinCC3kQ9Nz3R2W-Qj9tbPJfS8JsB_4AkmPgS6xpQ96DBy2w@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v4 0/3] Add JH7110 MIPI DPHY RX support
-To:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     Jack Zhu <jack.zhu@starfivetech.com>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-References: <20230412084540.295411-1-changhuang.liang@starfivetech.com>
-Content-Language: en-US
-From:   Changhuang Liang <changhuang.liang@starfivetech.com>
-In-Reply-To: <20230412084540.295411-1-changhuang.liang@starfivetech.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.146.100]
-X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX062.cuchost.com
- (172.16.6.62)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAFBinCC3kQ9Nz3R2W-Qj9tbPJfS8JsB_4AkmPgS6xpQ96DBy2w@mail.gmail.com>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/22 08:14:00 #21365129
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Martin,
 
-
-On 2023/4/12 16:45, Changhuang Liang wrote:
-> This patchset adds mipi dphy rx driver for the StarFive JH7110 SoC.
-> It is used to transfer CSI camera data. The series has been tested on
-> the VisionFive 2 board.
+On Fri, May 19, 2023 at 11:09:29PM +0200, Martin Blumenstingl wrote:
+> Hi Krzysztof and Dmitry,
 > 
+> On Wed, May 17, 2023 at 3:33 PM Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
+> [...]
+> > +  clocks:
+> > +    items:
+> > +      - description: input fixed pll div2
+> > +      - description: input fixed pll div3
+> > +      - description: input fixed pll div5
+> > +      - description: input fixed pll div7
+> > +      - description: input hifi pll
+> > +      - description: input oscillator (usually at 24MHz)
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: fclk_div2
+> > +      - const: fclk_div3
+> > +      - const: fclk_div5
+> > +      - const: fclk_div7
+> > +      - const: hifi_pll
+> > +      - const: xtal
+> This IP block has at least one additional input called "sys_pll_div16".
+> My understanding is that the "sys_pll_div16" clock is generated by the
+> CPU clock controller. Support for the CPU clock controller
+> (dt-bindings and a driver) will be added at a later time by Dmitry.
+> How can we manage incrementally implementing the clock controllers?
+> From a hardware perspective the "sys_pll_div16" input is mandatory.
+> How to manage this in the .dts patches then (for example: does this
+> mean that Dmitry can only add the clock controller to the .dts when
+> all clock controller bindings have been implemented - or is there
+> another way)?
 
-Hi, Conor
+You're absolutely right: currently, not all inputs are supported because
+the CPU clock controller isn't ready yet – I'm working on it at the
+moment.
 
-Can you help to find the Vinod reviewed this patchset?
+I understand your concerns about bindings and schema description, but
+there is an issue to be considered. I'm developing the entire clock
+controller A1 subsystem incrementally in three stages: peripherals and
+PLL, CPU, and Audio. This is because the CPU can operate at a static
+frequency and voltage, and the board boots normally without the CPU
+clock controller, thermal sensor, and OPP table. Audio is also
+important, but it's optional. On the other hand, without setting up the
+peripherals and PLL controllers, the board won't function because
+they're fundamental.
 
-Thanks,
-Changhuang
+Right now, we're in the first stage of the plan. Unfortunately, I can't
+disclose the exact names and number of clock bindings for the CPU and
+Audio, as they're still in development and only exist in my head or
+draft versions.
+
+If possible, I'd prefer to provide the new bindings and connections once
+all the appropriate drivers are finalized.
+
+-- 
+Thank you,
+Dmitry
