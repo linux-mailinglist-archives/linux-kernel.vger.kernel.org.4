@@ -2,164 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9B8F70B872
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:06:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C391470B874
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:06:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232750AbjEVJGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 05:06:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47660 "EHLO
+        id S231295AbjEVJGK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 05:06:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232754AbjEVJFs (ORCPT
+        with ESMTP id S232694AbjEVJFt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 05:05:48 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C43E50;
-        Mon, 22 May 2023 02:05:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1684746332; bh=BvafpoMALSkBY+N8iyu1yI8+hZDb+7ttS5xnPbBUstI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=AwmSSYYozspEZwRyLCQRnSMqjHss6FwHp3xYrfmKjSu/L4Bp17OT38n8gVW7qJiN4
-         CIoFpp+bBZXn4w4KSGjMKkp3fQ/8xc6dqdLw9gMMfVCuOGv76RLKKICf/2qjlxIxAp
-         iVpkubxEQYDK8hUtGbLFQTx/CkddvAp+/mBgGDcI=
-Received: from [100.100.57.122] (unknown [58.34.185.106])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 8E4F6600A6;
-        Mon, 22 May 2023 17:05:31 +0800 (CST)
-Message-ID: <588a03c7-ae1f-f449-752d-aa94cc1ab491@xen0n.name>
-Date:   Mon, 22 May 2023 17:05:30 +0800
+        Mon, 22 May 2023 05:05:49 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF44FE
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 02:05:42 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-309438004a6so3521598f8f.2
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 02:05:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684746341; x=1687338341;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=axoW3FpSjS6ZdEPcY+HsNe61u2mtrDh5mhZbIxumcWE=;
+        b=Aa5M+EKHb5j+UJQn3aj9tK3Alpc/AIqPMGexoe5BK/lhljSgMfIgHMRCJmFIIlHvhG
+         6UcwiFu6WHyQiVeMVyMd2HffRIw++HbWroTBu+AatTVdZaTwLOPv3CRSt/my/n9nq9yj
+         FjH6HWRSdD5/GkplLizB+LjLhwAOXffdrEYIo7XNoTr/iPHyPa0N4+1OiStHss5YoLKj
+         u9p4qNgDFm1GxM7F3mEwzD8NB69gx9dVtkxTLb4KX+ueFZrT38wf8p1hH2gtqARdVkNw
+         Gz4eaPmoGAbukv9EqR31rFsCcFEWEHQqH6wekxJQNXbMYgt7wYVX/0VvBsEInVaUvvEt
+         ZYqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684746341; x=1687338341;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=axoW3FpSjS6ZdEPcY+HsNe61u2mtrDh5mhZbIxumcWE=;
+        b=YDtxH/O+TfnjZhihCXCWbiJct3iV2KWwlTX//YcKravqzXx1Gk4herLZ3+14liXkve
+         GSb/1qPWGLeTUPG1IBkzufz4ifE2QKPbVIjowvRC+hK8DhB+69zGoMM2lwpU37XNaxUf
+         X4VPwUtSHIDu+bcBkNLkF0KNsMek3vqMGnyN87dx9aPCGZKZUYZID+UG10t21kB0/Y4u
+         7II9R1bjTj4IFu4fnDOtj37xVGpCIItz7Jl1OBD0H4Tj+dwriYyi780Om+gSmGjmoCox
+         bIC6pLoNubO3zV4bpmRaN1jF2rrnbOjUqscLU9r7iAp9IFOsfXIpoZloRXkVE0K2DssR
+         vvsg==
+X-Gm-Message-State: AC+VfDy/3xpGxeSE4mGpFlZuNJbyYDy2BQRSd1rJ8NPRpUinESjJZMBx
+        mFOBhmzKgtQUzXlUwmaBIn6rkQ==
+X-Google-Smtp-Source: ACHHUZ7UsuzR+CzfhVbTqtR5TnpcQ0AzmPHrl2RfFgGOiVn3yRs3swvssuJeQF9Ixb2dS0cImOvshQ==
+X-Received: by 2002:a5d:570d:0:b0:307:93ec:b323 with SMTP id a13-20020a5d570d000000b0030793ecb323mr6462958wrv.69.1684746340844;
+        Mon, 22 May 2023 02:05:40 -0700 (PDT)
+Received: from [192.168.27.65] (home.beaume.starnux.net. [82.66.176.246])
+        by smtp.gmail.com with ESMTPSA id 15-20020a05600c028f00b003f435652aaesm7665993wmk.11.2023.05.22.02.05.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 May 2023 02:05:40 -0700 (PDT)
+Message-ID: <0d436948-b0b7-0727-0852-51f64aefa43f@linaro.org>
+Date:   Mon, 22 May 2023 11:05:38 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.0
-Subject: Re: [PATCH v14 1/2] drm: add kms driver for loongson display
- controller
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 1/2] dt-bindings: display: panel: Add Visionox R66451
+ AMOLED DSI panel bindings
 Content-Language: en-US
-To:     Sui Jingfeng <15330273260@189.cn>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>
+Cc:     Sam Ravnborg <sam@ravnborg.org>, David Airlie <airlied@gmail.com>,
         Daniel Vetter <daniel@ffwll.ch>,
-        Sui Jingfeng <suijingfeng@loongson.cn>,
-        Li Yi <liyi@loongson.cn>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>
-Cc:     linaro-mm-sig@lists.linaro.org, loongson-kernel@lists.loongnix.cn,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Liu Peibao <liupeibao@loongson.cn>, linux-media@vger.kernel.org
-References: <20230520105718.325819-1-15330273260@189.cn>
- <20230520105718.325819-2-15330273260@189.cn>
- <26fd78b9-c074-8341-c99c-4e3b38cd861a@xen0n.name>
- <2f701944-588c-3f56-06f3-abcbbf12be1e@189.cn>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <2f701944-588c-3f56-06f3-abcbbf12be1e@189.cn>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230516-b4-r66451-panel-driver-v1-0-4210bcbb1649@quicinc.com>
+ <20230516-b4-r66451-panel-driver-v1-1-4210bcbb1649@quicinc.com>
+ <dzekdzubv6y5evn4j62hnntjdexcdi5ar2wj6hcm3dffx5jei4@h32wgmfalzvl>
+Organization: Linaro Developer Services
+In-Reply-To: <dzekdzubv6y5evn4j62hnntjdexcdi5ar2wj6hcm3dffx5jei4@h32wgmfalzvl>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/22 16:51, Sui Jingfeng wrote:
-> Hi,
-> 
-> On 2023/5/21 20:21, WANG Xuerui wrote:
+On 21/05/2023 12:30, Marijn Suijten wrote:
+> On 2023-05-16 13:20:30, Jessica Zhang wrote:
+>> Document the 1080x2340 Visionox R66451 AMOLED DSI panel bindings
 >>
->>> <snip>
->>> +
->>> +static void lsdc_crtc0_soft_reset(struct lsdc_crtc *lcrtc)
->>> +{
->>> +    struct lsdc_device *ldev = lcrtc->ldev;
->>> +    u32 val;
->>> +
->>> +    val = lsdc_rreg32(ldev, LSDC_CRTC0_CFG_REG);
->>> +
->>> +    val &= CFG_VALID_BITS_MASK;
->>> +
->>> +    /* soft reset bit, active low */
->>> +    val &= ~CFG_RESET_N;
->>> +
->>> +    val &= ~CFG_PIX_FMT_MASK;
->>> +
->>> +    lsdc_wreg32(ldev, LSDC_CRTC0_CFG_REG, val);
->>> +
->>> +    udelay(5);
->>> +
->>> +    val |= CFG_RESET_N | LSDC_PF_XRGB8888 | CFG_OUTPUT_ENABLE;
->>> +
->>> +    lsdc_wreg32(ldev, LSDC_CRTC0_CFG_REG, val);
->>> +
->>> +    mdelay(20);
->>> +}
->>> +
->>> +static void lsdc_crtc1_soft_reset(struct lsdc_crtc *lcrtc)
->>> +{
->>> +    struct lsdc_device *ldev = lcrtc->ldev;
->>> +    u32 val;
->>> +
->>> +    val = lsdc_rreg32(ldev, LSDC_CRTC1_CFG_REG);
->>> +
->>> +    val &= CFG_VALID_BITS_MASK;
->>> +
->>> +    /* soft reset bit, active low */
->>> +    val &= ~CFG_RESET_N;
->>> +
->>> +    val &= ~CFG_PIX_FMT_MASK;
->>> +
->>> +    lsdc_wreg32(ldev, LSDC_CRTC1_CFG_REG, val);
->>> +
->>> +    udelay(5);
->>> +
->>> +    val |= CFG_RESET_N | LSDC_PF_XRGB8888 | CFG_OUTPUT_ENABLE;
->>> +
->>> +    lsdc_wreg32(ldev, LSDC_CRTC1_CFG_REG, val);
->>> +
->>> +    msleep(20);
+>> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
+>> ---
+>>   .../bindings/display/panel/visionox,r66451.yaml    | 59 ++++++++++++++++++++++
+>>   1 file changed, 59 insertions(+)
 >>
->> So many magic sleeps without documentation?
+>> diff --git a/Documentation/devicetree/bindings/display/panel/visionox,r66451.yaml b/Documentation/devicetree/bindings/display/panel/visionox,r66451.yaml
+>> new file mode 100644
+>> index 000000000000..6ba323683921
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/display/panel/visionox,r66451.yaml
+>> @@ -0,0 +1,59 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/display/panel/visionox,r66451.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Visionox R66451 AMOLED DSI Panel
+>> +
+>> +maintainers:
+>> +  - Jessica Zhang <quic_jesszhan@quicinc.com>
+>> +
+>> +allOf:
+>> +  - $ref: panel-common.yaml#
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: visionox,r66451
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +    description: DSI virtual channel
+>> +
+>> +  vddio-supply: true
+>> +  vdd-supply: true
+>> +  port: true
+>> +  reset-gpios: true
+> 
+> Normally for cmd-mode panels there is also a `disp-te` pin which is
+> optionally registered in dsi_host.c as GPIOD_IN, but on **ALL** my Sony
+> phones this breaks vsync (as in: mdp5 stops receiving the interrupt, but
+> we can see disp-te in /proc/interrupts then).
+
+Describing it as a gpio is wrong, it should be described as a pinctrl state instead.
+
+Neil
+
+> 
+> - Marijn
+> 
+>> +additionalProperties: false
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - vddio-supply
+>> +  - vdd-supply
+>> +  - reset-gpios
+>> +  - port
+>> +
+>> +examples:
+>> +  - |
+>> +    #include <dt-bindings/gpio/gpio.h>
+>> +    dsi {
+>> +        #address-cells = <1>;
+>> +        #size-cells = <0>;
+>> +        panel@0 {
+>> +            compatible = "visionox,r66451";
+>> +            reg = <0>;
+>> +            vddio-supply = <&vreg_l12c_1p8>;
+>> +            vdd-supply = <&vreg_l13c_3p0>;
+>> +
+>> +            reset-gpios = <&tlmm 24 GPIO_ACTIVE_LOW>;
+>> +
+>> +            port {
+>> +                panel0_in: endpoint {
+>> +                    remote-endpoint = <&dsi0_out>;
+>> +                };
+>> +            };
+>> +        };
+>> +    };
+>> +...
 >>
-> It is just that you should wait the device for a while before it can 
-> reaction when doing the soft reset.
-> 
-> I think this is engineering...
-
-As an engineer myself, I fully concur with this, but I mainly wanted 
-some explanation as to "why 5 there? why 20 here? why 9 there?" -- where 
-did all the discrete values come from, implied by HDL or found out by 
-experimentations? Can these be extracted to properly named constants? 
-Can some of the values get coalesced into one without harming 
-functionality? Can some of them get shorter? -- questions like this.
-
-> <snip>
->>> +
->>> +/* All loongson display controller support scanout position hardware */
+>> -- 
+>> 2.40.1
 >>
->> Commit message implies only 7A2000+ LSDC IPs have the "scanout 
->> position recorders". Either that part or this code would need tweaking... 
-> 
-> Both LS7A2000 and LS7A1000 have the scanout position recorders hardware.
-> 
-> Preciously, datasheet of LS7A1000 didn't told us if it support this 
-> feature.
-> 
-> I will adjust the commit message at next version, the code doesn't need 
-> change.
-
-That's fine, the intent is always making the code more approachable and 
-maintainable. Thanks.
-
--- 
-WANG "xen0n" Xuerui
-
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
 
