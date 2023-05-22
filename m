@@ -2,136 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBEC670B976
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AA4370B979
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 11:54:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232561AbjEVJyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 05:54:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44880 "EHLO
+        id S232799AbjEVJyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 05:54:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232683AbjEVJyH (ORCPT
+        with ESMTP id S232659AbjEVJyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 05:54:07 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24B7C2;
-        Mon, 22 May 2023 02:54:05 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f60410106cso6456685e9.1;
-        Mon, 22 May 2023 02:54:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684749244; x=1687341244;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MEuzhFmkjv49oIHWTSsc95Gkq+Cq33yvkFKwJTX5pLg=;
-        b=jkzJW8SHQev1F2HV8NsE8ATC7sbu2GnYBYdHqirLYxDoEiiVUOMdzv/+wdF4+dbiYC
-         wp+jKM4fMmIob4BM1BtEfGNuRCmEdH9jTVouCGnIF+sZPYCdXLx9DU8gLl8kF3lMULPI
-         wmpJNaydSGESwb/OqRVoJ03QebvzaB7Gu5E0WW6UADgrPnQkBnRxUCgOiFtZhSAdKeR7
-         zjRQwDt34QCAjwAYfQAGSxtsQyY5HQhY4eSVBstRvxxoWUfzS7yn3vwaBYkUxNvGUBjQ
-         H4DrWWlxMYqenkC107wWBQ40ed6vZVnVKASBqbTW/Xuy2x7U1l6jyJPjXRXRMP3mJXvG
-         0tmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684749244; x=1687341244;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MEuzhFmkjv49oIHWTSsc95Gkq+Cq33yvkFKwJTX5pLg=;
-        b=imzH2VM3jIElQAb+fqaoxw1X0AtrlNiv/dLaZ+oy/L30R1TLaeW0+7CsxzrvO1lsjZ
-         WtECPdLGeNbV0kt9nibJJv047lCv1sBa8a0R6I+4SadKeaz8GbYYWBm3+KN8FP3QdsFi
-         qRyiRnGOaNQ66w8hfsDEcIl83adgvax1xViqs1UZzWN+xW427GBSztZL0avJ5MoRl9Mg
-         xA6tAifl02OYKoe0led0j+if3rq+in76N47Eno3C0NHVaOrfu8kN7HwwPDLTRm1nkd4D
-         RVA0sGYBSSbMiHOHGeBP1Es44reNW2RhZd5k7a8ccB3oznQ2W6dmjfmHqcf2zB4kOz1w
-         A+UQ==
-X-Gm-Message-State: AC+VfDx9Pr6eCTQrbV19MtdY2yc8Pxxy1mBqo8Sj17kgbBpiwfqCErhL
-        Xj/FMcjiip05Szzxfbxmi/I=
-X-Google-Smtp-Source: ACHHUZ7TFbXIkUzmeQjsmyXJ+Dplh283L9u5CAaduxA6qRDS8nD958XMlQtli6CT6ul+iIN2I84LSQ==
-X-Received: by 2002:a05:600c:294b:b0:3f4:2d22:536a with SMTP id n11-20020a05600c294b00b003f42d22536amr6988436wmd.19.1684749243903;
-        Mon, 22 May 2023 02:54:03 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id v16-20020a1cf710000000b003f4fe09aa43sm11099141wmh.8.2023.05.22.02.54.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 02:54:03 -0700 (PDT)
-Date:   Mon, 22 May 2023 12:54:01 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     David Epping <david.epping@missinglinkelectronics.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH net 3/3] net: phy: mscc: enable VSC8501/2 RGMII RX clock
-Message-ID: <20230522095401.szzugrjohnwyqffk@skbuf>
-References: <20230520160603.32458-1-david.epping@missinglinkelectronics.com>
- <20230520160603.32458-4-david.epping@missinglinkelectronics.com>
- <20230521134356.ar3itavhdypnvasc@skbuf>
- <20230521161650.GC2208@nucnuc.mle>
- <20230522094944.uylvgoepcmwjq5yj@skbuf>
+        Mon, 22 May 2023 05:54:23 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2778CC2;
+        Mon, 22 May 2023 02:54:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684749262; x=1716285262;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Tpv33id8FXgSyWY15secqhEjCEaHD/wMEKZRfaT7ChE=;
+  b=l8L7ePGqHJgHfE+GKVySJ0ZjsJ3r5rXPC9JPUr2ycjst71zrJnV6Z2R4
+   3zQYa8m8NIi1jnL6UA1h7X+sU6l7UxWTs8X5RF9Di1IfrAwaaar36dhdl
+   mO/V40e0Ox9flskIMwUOi4eeoHwPULYIJx//sAs+WyL0j5NtkOe9PEL7F
+   ZyKh55ST6x469aakH88C5Ai6GcotboebaJe0fpBmNbssjN2Qq2J797YyP
+   lcqzSub2AXnX8ycBKFI6qfJ6IIF/ufsqCTPzYc2mIg5F0mcdnaPqAh9EW
+   HOS2HQA6/8FywqZgzbsGqwp4lNlC4OHuVwcumuXXiyjfXsxjq3DZQcqsL
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="352900229"
+X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
+   d="scan'208";a="352900229"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 02:54:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10717"; a="653884244"
+X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
+   d="scan'208";a="653884244"
+Received: from rajatkha-mobl.gar.corp.intel.com (HELO [10.67.146.41]) ([10.67.146.41])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 02:54:16 -0700
+Message-ID: <ab993b87-8475-7c71-f526-da9a0b5fa3a8@linux.intel.com>
+Date:   Mon, 22 May 2023 15:24:13 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230522094944.uylvgoepcmwjq5yj@skbuf>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v4] usb: typec: intel_pmc_mux: Expose IOM port status to
+ debugfs
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230522070343.3675581-1-rajat.khandelwal@linux.intel.com>
+ <2023052216-railway-zipfile-680f@gregkh>
+From:   Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+In-Reply-To: <2023052216-railway-zipfile-680f@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 12:49:44PM +0300, Vladimir Oltean wrote:
-> Well, to be clear, I was suggesting:
-> 
-> /* Set the RGMII RX and TX clock skews individually, according to the PHY
->  * interface type, to:
->  *  * 0.2 ns (their default, and lowest, hardware value) if delays should
->  *    not be enabled
->  *  * 2.0 ns (which causes the data to be sampled at exactly half way between
->  *    clock transitions at 1000 Mbps) if delays should be enabled
->  */
-> static int vsc85xx_rgmii_set_skews(struct phy_device *phydev, u32 rgmii_cntl,
-> 				   u16 rgmii_rx_delay_mask,
-> 				   u16 rgmii_tx_delay_mask)
-> {
-> 	u16 rgmii_rx_delay_pos = ffs(rgmii_rx_delay_mask) - 1;
-> 	u16 rgmii_tx_delay_pos = ffs(rgmii_tx_delay_mask) - 1;
-> 	u16 mask = rgmii_rx_delay_mask | rgmii_tx_delay_mask;
-> 	u16 reg_val = 0;
-> 	int rc;
+Hi,
 
-Or rather:
+On 5/22/2023 1:07 PM, Greg KH wrote:
+> On Mon, May 22, 2023 at 12:33:43PM +0530, Rajat Khandelwal wrote:
+>> IOM status has a crucial role during debugging to check the
+>> current state of the type-C port.
+>> There are ways to fetch the status, but all those require the
+>> IOM port status offset, which could change with platform.
+>>
+>> Make a debugfs directory for intel_pmc_mux and expose the status
+>> under it per port basis.
+>>
+>> Signed-off-by: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+>> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+>> ---
+>>
+>> v4:
+>> 1. Maintain a root directory for PMC module and incorporate devices
+>> under it
+>> 2. Add the debugfs module under '/sys/kernel/debug/usb'
+>> 3. Use the platform device 'pmc->dev' to assign the device's name
+>>
+>> v3: Allocate the debugfs directory name for the platform device with
+>> its ACPI dev name included
+>>
+>> v2:
+>> 1. Remove static declaration of the debugfs root for 'intel_pmc_mux'
+>> 2. Remove explicitly defined one-liner functions
+>>
+>>   drivers/usb/typec/mux/intel_pmc_mux.c | 54 ++++++++++++++++++++++++++-
+>>   1 file changed, 53 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
+>> index 34e4188a40ff..f400094c76f2 100644
+>> --- a/drivers/usb/typec/mux/intel_pmc_mux.c
+>> +++ b/drivers/usb/typec/mux/intel_pmc_mux.c
+>> @@ -15,6 +15,8 @@
+>>   #include <linux/usb/typec_mux.h>
+>>   #include <linux/usb/typec_dp.h>
+>>   #include <linux/usb/typec_tbt.h>
+>> +#include <linux/debugfs.h>
+>> +#include <linux/usb.h>
+>>   
+>>   #include <asm/intel_scu_ipc.h>
+>>   
+>> @@ -143,8 +145,14 @@ struct pmc_usb {
+>>   	struct acpi_device *iom_adev;
+>>   	void __iomem *iom_base;
+>>   	u32 iom_port_status_offset;
+>> +
+>> +#ifdef CONFIG_DEBUG_FS
+>> +	struct dentry *dentry;
+>> +#endif
+> No need for the #ifdef anymore, right?  In fact, I think it will break
+> the build if you have it this way and CONFIG_DEBUG_FS is not enabled,
+> right?
 
-	u16 mask = 0;
+I guess you're right. Maybe it'd have been fine if the rest of the
+debugfs stuff was also enclosed within the conditional macros.
 
-	if (phy_interface_is_rgmii(phydev))
-		mask |= rgmii_rx_delay_mask | rgmii_tx_delay_mask;
+Anyways, removing it seems appropriate now.
 
-	if (rgmii_cntl == VSC8502_RGMII_CNTL)
-		mask |= VSC8502_RGMII_RX_CLK_DISABLE;
+Also, is it OK to send you v5 on the public list directly?
 
-> 
-> 	/* For traffic to pass, the VSC8502 family needs the RX_CLK disable bit
-> 	 * to be unset for all PHY modes, so do that as part of the paged
-> 	 * register modification.
-> 	 */
-> 	if (rgmii_cntl == VSC8502_RGMII_CNTL)
-> 		mask |= VSC8502_RGMII_RX_CLK_DISABLE;
-> 
-> 	mutex_lock(&phydev->lock);
-> 
-> 	if (phydev->interface == PHY_INTERFACE_MODE_RGMII_RXID ||
-> 	    phydev->interface == PHY_INTERFACE_MODE_RGMII_ID)
-> 		reg_val |= RGMII_CLK_DELAY_2_0_NS << rgmii_rx_delay_pos;
-> 	if (phydev->interface == PHY_INTERFACE_MODE_RGMII_TXID ||
-> 	    phydev->interface == PHY_INTERFACE_MODE_RGMII_ID)
-> 		reg_val |= RGMII_CLK_DELAY_2_0_NS << rgmii_tx_delay_pos;
-> 
-> 	rc = phy_modify_paged(phydev, MSCC_PHY_PAGE_EXTENDED_2,
-> 			      rgmii_cntl, mask, reg_val);
-> 
-> 	mutex_unlock(&phydev->lock);
-> 
-> 	return rc;
-> }
+Thanks
+Rajat
+
+> thanks,
+>
+> greg k-h
