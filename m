@@ -2,186 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 693AF70CE00
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 00:33:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6D6A70CE09
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 00:35:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbjEVWdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 18:33:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43108 "EHLO
+        id S234600AbjEVWfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 18:35:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234213AbjEVWc5 (ORCPT
+        with ESMTP id S233674AbjEVWfP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 18:32:57 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51DA6121;
-        Mon, 22 May 2023 15:32:52 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34MLTkrO001952;
-        Mon, 22 May 2023 22:32:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=o5ykXhg3wu5gYRzykIK1EzM8R4+bF4RthS27GpuDXQE=;
- b=Ar7jMxsQ6MEbmrsNsYQsT7s+s6jnjb+cgbTMqM81TZwMrV6dOg2vbIW8t0ZFOBtUQNbd
- BjDy4R/bEqjgQ4XTi1va43MQPIbU6cWal1GzFyr6kTSs5ZzDiOzAMmXtGdQMEicXR+to
- RgYIHQsSWzJ2SdqnXemomVNPkzFzeOwfQ1IPcsFV/aqRDp0YwvqKUKxWGgJ3soNtoOcb
- BXBXrQK01ky3xvokMzznOCfkQ/5VYCMdM6zL669x0hwWaau05zwzK/vitVxr48+9Z7Re
- JPYnqYgAkudUvbmP9z9oXDXw+typbiVj8rCb9j0dtuBFkioMQdOgaqKAUOhm33TYQwdk Mg== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qr6h0sdnb-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 22:32:44 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34MMWiPv014771
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 22 May 2023 22:32:44 GMT
-Received: from [10.71.110.193] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 22 May
- 2023 15:32:43 -0700
-Message-ID: <c1df53d9-e476-64bb-f8cb-cc2bf9cb7ff8@quicinc.com>
-Date:   Mon, 22 May 2023 15:32:42 -0700
+        Mon, 22 May 2023 18:35:15 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DADEDB
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 15:35:13 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-50bf7bb76d0so2790a12.0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 15:35:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684794911; x=1687386911;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hZQp5Oe9OeHBRr4k76BLf3C1RYkjtZNLc9yPRrps/J8=;
+        b=bfz6xYrI1eJoYxgHwXKSP3X69QjzDQuMhp79vRPO3P+Bup2yqgP14kDV6qJilGnuwP
+         EwLJ48TW+o6bPkJUU3yuzzvHpf4FsZvJSMpstNUdhxLbeijpsYbwQr/FK67Ztu/SsHd6
+         PRuvHr8Wm9ZzJITPuBUe8De19Byw+LI5KiGTSm+IwqF3Q/8I1HHRF5LCdmAT7qMAbaIY
+         m6j1cQ6TnlRC6ZxTgKfFcv5i7QeQ2k/rqmyXuXYmOPYgz4Ro8sCbRUbTafPW9bnba0Mp
+         Gkieo+2MLt6XPTfPcZl9gwD9zDAyhC4M/NjvsZdT2oiTUeR7tLmX4zPZDICRyhP5jWpQ
+         buSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684794911; x=1687386911;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=hZQp5Oe9OeHBRr4k76BLf3C1RYkjtZNLc9yPRrps/J8=;
+        b=FH6BGug96Vb6312m8IqC9PFVdb1DqRKrF24Foo2BaAjZ1fovb+Ky/Eqw3AyPBjGkAo
+         4+Lic3R/9YqLbeF/CE2AcQlvUp/A2S4tfDsLmni1IbvUTXt0aMhZpohTzJkyk/EpRU/D
+         8oTpNZWIrQAPGN6fxq0nU49kiTdHxz4GK/fkH0dQ8nk/QHLNvwcI8Ivt9jNXgFKsnkQ0
+         dT7Tg/lBrFLAt/M1ad6IC93Sw+PjEDMuefX3zi6NPqQn1fjQ106XZJUWrH0ZQ/SZXDXg
+         D9b7gDUDQdeDuFLPtdvr9cVAdhfa5Iqk1vA1jKytM7wBLuQLZvisM7HOrTIyyQcHaD/G
+         DHLw==
+X-Gm-Message-State: AC+VfDysP3xFHJUORjNbj6UC2Fm46844j2Nnb6iYkYic3PpO7zei9Ywp
+        2Z5SJjWGBq3R7wuU8BiCEbyV+CEVpkQYYmJQu4eP
+X-Google-Smtp-Source: ACHHUZ6GNCd8+uKwST3Jlac+RXt33Mg/1PCldckRwVpcpCB4ek0+WY8z3vxrM7jCBPHLzHlyzHf51QKN2BfmssP08hE=
+X-Received: by 2002:a50:870e:0:b0:506:c207:c979 with SMTP id
+ i14-20020a50870e000000b00506c207c979mr53730edb.0.1684794911550; Mon, 22 May
+ 2023 15:35:11 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v4 2/5] drm/msm/dsi: Adjust pclk rate for compression
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-CC:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>
-References: <20230405-add-dsc-support-v4-0-15daf84f8dcb@quicinc.com>
- <20230405-add-dsc-support-v4-2-15daf84f8dcb@quicinc.com>
- <ybyb3sijo462w4qeoihmm6sd3m7ht2p4clhh7qdzk4fnej7v3e@j4pf2kzu2d4v>
-From:   Jessica Zhang <quic_jesszhan@quicinc.com>
-In-Reply-To: <ybyb3sijo462w4qeoihmm6sd3m7ht2p4clhh7qdzk4fnej7v3e@j4pf2kzu2d4v>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: slj-DDewJZeNHasgsIIUI6-vAnUatDWI
-X-Proofpoint-ORIG-GUID: slj-DDewJZeNHasgsIIUI6-vAnUatDWI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
- definitions=2023-05-22_16,2023-05-22_03,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- spamscore=0 suspectscore=0 clxscore=1015 adultscore=0 phishscore=0
- mlxscore=0 lowpriorityscore=0 mlxlogscore=999 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305220190
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230522213924.never.119-kees@kernel.org>
+In-Reply-To: <20230522213924.never.119-kees@kernel.org>
+From:   Bill Wendling <morbo@google.com>
+Date:   Mon, 22 May 2023 15:34:55 -0700
+Message-ID: <CAGG=3QVi-j_BLFe23xEqhLhnWA6+aHSGWrsxUSTpGEyTzsFJ0Q@mail.gmail.com>
+Subject: Re: [PATCH] fscrypt: Replace 1-element array with flexible array
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        "Theodore Y. Ts'o" <tytso@mit.edu>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        linux-fscrypt@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, May 22, 2023 at 2:39=E2=80=AFPM Kees Cook <keescook@chromium.org> w=
+rote:
+>
+> 1-element arrays are deprecated, and are being replaced with C99
+> flexible arrays[1]. In the future, we can add annotations for the
+> flexible array member "encrypted_path" to have a size determined
+> by the "len" member.
+>
+> As sizes were being calculated with the extra byte intentionally,
+> propagate the difference so there is no change in binary output.
+>
+> [1] https://github.com/KSPP/linux/issues/79
+>
+> Cc: Eric Biggers <ebiggers@kernel.org>
+> Cc: "Theodore Y. Ts'o" <tytso@mit.edu>
+> Cc: Jaegeuk Kim <jaegeuk@kernel.org>
+> Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
+> Cc: linux-fscrypt@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
+Reviewed-By: Bill Wendling <morbo@google.com>
 
-On 5/22/2023 2:31 PM, Marijn Suijten wrote:
-> On 2023-05-22 13:30:21, Jessica Zhang wrote:
->> Adjust the pclk rate to divide hdisplay by the compression ratio when DSC
->> is enabled.
->>
->> Signed-off-by: Jessica Zhang <quic_jesszhan@quicinc.com>
-> 
-> As discussed previously, this patch would apply a lot more cleanly on
-> top of:
-> 
-> https://lore.kernel.org/linux-arm-msm/20230520200103.4019607-1-dmitry.baryshkov@linaro.org/T/#u
-> 
-> (This is the v2 that doesn't change the callback, but does change the
-> code flow so that you have to *touch less lines* in this patch).
+(With a tear in my eye about the original code...)
 
-Hi Marijn,
-
-Sounds good. I'll rebase on top of that.
-
-Thanks,
-
-Jessica Zhang
-
-> 
-> - Marijn
-> 
->> ---
->>   drivers/gpu/drm/msm/dsi/dsi_host.c | 23 +++++++++++++++++++----
->>   1 file changed, 19 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
->> index 18d38b90eb28..d04f8bbd707d 100644
->> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
->> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
->> @@ -561,7 +561,18 @@ void dsi_link_clk_disable_v2(struct msm_dsi_host *msm_host)
->>   	clk_disable_unprepare(msm_host->byte_clk);
->>   }
->>   
->> -static unsigned long dsi_get_pclk_rate(const struct drm_display_mode *mode, bool is_bonded_dsi)
->> +static unsigned long dsi_adjust_compressed_pclk(const struct drm_display_mode *mode,
->> +		const struct drm_dsc_config *dsc)
->> +{
->> +	int new_hdisplay = DIV_ROUND_UP(mode->hdisplay * drm_dsc_get_bpp_int(dsc),
->> +			dsc->bits_per_component * 3);
->> +
->> +	return (new_hdisplay + (mode->htotal - mode->hdisplay))
->> +			* mode->vtotal * drm_mode_vrefresh(mode);
->> +}
->> +
->> +static unsigned long dsi_get_pclk_rate(const struct drm_display_mode *mode,
->> +		const struct drm_dsc_config *dsc, bool is_bonded_dsi)
->>   {
->>   	unsigned long pclk_rate;
->>   
->> @@ -576,6 +587,10 @@ static unsigned long dsi_get_pclk_rate(const struct drm_display_mode *mode, bool
->>   	if (is_bonded_dsi)
->>   		pclk_rate /= 2;
->>   
->> +	/* If DSC is enabled, divide hdisplay by compression ratio */
->> +	if (dsc)
->> +		pclk_rate = dsi_adjust_compressed_pclk(mode, dsc);
->> +
->>   	return pclk_rate;
->>   }
->>   
->> @@ -585,7 +600,7 @@ unsigned long dsi_byte_clk_get_rate(struct mipi_dsi_host *host, bool is_bonded_d
->>   	struct msm_dsi_host *msm_host = to_msm_dsi_host(host);
->>   	u8 lanes = msm_host->lanes;
->>   	u32 bpp = dsi_get_bpp(msm_host->format);
->> -	unsigned long pclk_rate = dsi_get_pclk_rate(mode, is_bonded_dsi);
->> +	unsigned long pclk_rate = dsi_get_pclk_rate(mode, msm_host->dsc, is_bonded_dsi);
->>   	u64 pclk_bpp = (u64)pclk_rate * bpp;
->>   
->>   	if (lanes == 0) {
->> @@ -604,7 +619,7 @@ unsigned long dsi_byte_clk_get_rate(struct mipi_dsi_host *host, bool is_bonded_d
->>   
->>   static void dsi_calc_pclk(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
->>   {
->> -	msm_host->pixel_clk_rate = dsi_get_pclk_rate(msm_host->mode, is_bonded_dsi);
->> +	msm_host->pixel_clk_rate = dsi_get_pclk_rate(msm_host->mode, msm_host->dsc, is_bonded_dsi);
->>   	msm_host->byte_clk_rate = dsi_byte_clk_get_rate(&msm_host->base, is_bonded_dsi,
->>   							msm_host->mode);
->>   
->> @@ -634,7 +649,7 @@ int dsi_calc_clk_rate_v2(struct msm_dsi_host *msm_host, bool is_bonded_dsi)
->>   
->>   	dsi_calc_pclk(msm_host, is_bonded_dsi);
->>   
->> -	pclk_bpp = (u64)dsi_get_pclk_rate(msm_host->mode, is_bonded_dsi) * bpp;
->> +	pclk_bpp = (u64)dsi_get_pclk_rate(msm_host->mode, msm_host->dsc, is_bonded_dsi) * bpp;
->>   	do_div(pclk_bpp, 8);
->>   	msm_host->src_clk_rate = pclk_bpp;
->>   
->>
->> -- 
->> 2.40.1
->>
+> ---
+>  fs/crypto/fscrypt_private.h |  2 +-
+>  fs/crypto/hooks.c           | 10 +++++-----
+>  2 files changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/fs/crypto/fscrypt_private.h b/fs/crypto/fscrypt_private.h
+> index 7ab5a7b7eef8..2d63da48635a 100644
+> --- a/fs/crypto/fscrypt_private.h
+> +++ b/fs/crypto/fscrypt_private.h
+> @@ -171,7 +171,7 @@ fscrypt_policy_flags(const union fscrypt_policy *poli=
+cy)
+>   */
+>  struct fscrypt_symlink_data {
+>         __le16 len;
+> -       char encrypted_path[1];
+> +       char encrypted_path[];
+>  } __packed;
+>
+>  /**
+> diff --git a/fs/crypto/hooks.c b/fs/crypto/hooks.c
+> index 9e786ae66a13..6238dbcadcad 100644
+> --- a/fs/crypto/hooks.c
+> +++ b/fs/crypto/hooks.c
+> @@ -255,10 +255,10 @@ int fscrypt_prepare_symlink(struct inode *dir, cons=
+t char *target,
+>          * for now since filesystems will assume it is there and subtract=
+ it.
+>          */
+>         if (!__fscrypt_fname_encrypted_size(policy, len,
+> -                                           max_len - sizeof(struct fscry=
+pt_symlink_data),
+> +                                           max_len - sizeof(struct fscry=
+pt_symlink_data) - 1,
+>                                             &disk_link->len))
+>                 return -ENAMETOOLONG;
+> -       disk_link->len +=3D sizeof(struct fscrypt_symlink_data);
+> +       disk_link->len +=3D sizeof(struct fscrypt_symlink_data) + 1;
+>
+>         disk_link->name =3D NULL;
+>         return 0;
+> @@ -289,7 +289,7 @@ int __fscrypt_encrypt_symlink(struct inode *inode, co=
+nst char *target,
+>                 if (!sd)
+>                         return -ENOMEM;
+>         }
+> -       ciphertext_len =3D disk_link->len - sizeof(*sd);
+> +       ciphertext_len =3D disk_link->len - sizeof(*sd) - 1;
+>         sd->len =3D cpu_to_le16(ciphertext_len);
+>
+>         err =3D fscrypt_fname_encrypt(inode, &iname, sd->encrypted_path,
+> @@ -367,7 +367,7 @@ const char *fscrypt_get_symlink(struct inode *inode, =
+const void *caddr,
+>          * the ciphertext length, even though this is redundant with i_si=
+ze.
+>          */
+>
+> -       if (max_size < sizeof(*sd))
+> +       if (max_size < sizeof(*sd) + 1)
+>                 return ERR_PTR(-EUCLEAN);
+>         sd =3D caddr;
+>         cstr.name =3D (unsigned char *)sd->encrypted_path;
+> @@ -376,7 +376,7 @@ const char *fscrypt_get_symlink(struct inode *inode, =
+const void *caddr,
+>         if (cstr.len =3D=3D 0)
+>                 return ERR_PTR(-EUCLEAN);
+>
+> -       if (cstr.len + sizeof(*sd) - 1 > max_size)
+> +       if (cstr.len + sizeof(*sd) > max_size)
+>                 return ERR_PTR(-EUCLEAN);
+>
+>         err =3D fscrypt_fname_alloc_buffer(cstr.len, &pstr);
+> --
+> 2.34.1
+>
