@@ -2,113 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5476670C4A7
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 19:50:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70CCF70C483
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 19:42:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233176AbjEVRuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 13:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52542 "EHLO
+        id S230254AbjEVRmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 13:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233212AbjEVRuJ (ORCPT
+        with ESMTP id S230101AbjEVRmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 13:50:09 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA1C115
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 10:50:00 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f00d41df22so4776278e87.1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 10:50:00 -0700 (PDT)
+        Mon, 22 May 2023 13:42:40 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6F7FA
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 10:42:39 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id 6a1803df08f44-62385de2d40so17858596d6.0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 10:42:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1684777798; x=1687369798;
+        d=google.com; s=20221208; t=1684777358; x=1687369358;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=v0vGfy2nsZav2HY5i+tp/Nl3rfKXvicFLnxzClJPsL0=;
-        b=BFv8XI38pZSHLHDMZj62EI7ZNe0EZgB8s+H5o3U/4aOg4f9ch3MpMvvQY7Ar71671n
-         j4cCEqI9XZl1gEy2FVuN8lzXoRVM9YdpJPKxe67FVFgmy5ImyLLiAN6XEbz6CZENm4BY
-         h3iXXSpMCRDTY156UR8E0/8dNRRqOMofukZ9g=
+        bh=Zdzk2mLaYweHny4kbgA1ybBxwb1zKecZUEGKs5h+c5w=;
+        b=ii0zfTBjzE33bSPWSg94a4FvOHVwWsMhE0h2TKZBBjZgkqM7A4TlGuPiMjc/pI9MtF
+         2Hn08s4x87iUhyksZfb4PpVLEraNJ2GCObBaEsQVcIRed5TWZmS8UbCoT6tXJa8EImYv
+         6Ma9U2qpc4M3yeoTBkuUBqRdIIuZnUPQ75peqA4XUCvKy5o82VmmVBKcKB70grN4o54z
+         NH/PfyTrl0r2WSGy0EsBkO1YrVBgsEIO8e8MglXMej9f0msBJq+SQHBRZ6/RkhbVVPDY
+         /H+8oU2dw9f2V9zX2a+cwAug5K0knOk5RQHAjzlJ3Bb/mWKUlDb/AA78R51eMeOmPx3U
+         4eBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684777798; x=1687369798;
+        d=1e100.net; s=20221208; t=1684777358; x=1687369358;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=v0vGfy2nsZav2HY5i+tp/Nl3rfKXvicFLnxzClJPsL0=;
-        b=CfBSNqRx6RrX3odKupmgmlLzRiXpjLFY4gxcNu4tvDjs0eaB0H2V2EqPj3kaLrGM7M
-         E/4oipbb1g2PbAnMkximUUJ9Stg/XIIjRI8m158lRdrmAm3gHZUr3Izsuo9ByLL3fSYU
-         yunffJhnaiaczUay1LviRlcVHtPgfDrUZhdJSQwaJwqKCkmw5NAX2oDCd6zgWTC3770i
-         bi4Zt3QfLveJ8zb6oowG1Vfv/ZJ35Jb9onk3yb8fASTFpVeBaH4he4PM8wcePIi0CKs7
-         HBAprCOsaGutRCj7bO9ZtI2TnNThumLYPtioInDJruzttvAcPX0NbHfolBK0ct324f/+
-         qyZw==
-X-Gm-Message-State: AC+VfDyS7DvWNNC2IqSFdHr46+AYvHeR4fRl2lWmZiNjMffnjgSVJMfL
-        QcBZNnmOZLApe1Xn2NZ3lTyAfubH5PhkRDmqn8vCGLrB
-X-Google-Smtp-Source: ACHHUZ7NLlHXovT9m2Uq0tK4WPvmCCJSnRFHZO0nClhtf6TkTSeKYKrH2tXK836Bf28TdYLsmxdcyQ==
-X-Received: by 2002:a19:f816:0:b0:4f1:4074:b4fd with SMTP id a22-20020a19f816000000b004f14074b4fdmr4345104lff.29.1684777798571;
-        Mon, 22 May 2023 10:49:58 -0700 (PDT)
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com. [209.85.208.170])
-        by smtp.gmail.com with ESMTPSA id f2-20020ac25322000000b004d4d7fb0e07sm1046126lfh.216.2023.05.22.10.49.58
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 22 May 2023 10:49:58 -0700 (PDT)
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2af2e1725bdso30514371fa.0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 10:49:58 -0700 (PDT)
-X-Received: by 2002:a17:907:1688:b0:965:d7c7:24db with SMTP id
- hc8-20020a170907168800b00965d7c724dbmr9757222ejc.32.1684777349281; Mon, 22
- May 2023 10:42:29 -0700 (PDT)
+        bh=Zdzk2mLaYweHny4kbgA1ybBxwb1zKecZUEGKs5h+c5w=;
+        b=is7cRQn57r1PLJ/NVUGxvXPvj57qcxY3UHrkibb4qmH9rFeNu/xpkWN2qmw9erj8BZ
+         PvyMaufjn9jjQgPQuJGRKh5fb3LPfyz72HRGlp4YWAdAE2PCd+kZspnVN2PB3EZmYQQB
+         CfUWTMb3cWAdt3cHAfuEQPsYQbFBnOhLqKb0ebOnrW8qMNrGR5/LtlpWzehO26zypfX+
+         U0auNeQdDbFcbIcqk/dCuv+EDqpAZniOTzhmW0sAZF1ESehUfqQP8h5FrNPf+PXqH0rz
+         8u7ScJN2kKp2sDk0obDPqrDAw6KYJ9Ubw85v2M1iLetGIwWBGTw1/q6Ms6LkyvovBp1a
+         QouQ==
+X-Gm-Message-State: AC+VfDxX2rjgxNMLCq+aWjs2qABgotAg/ZOE+C1K8tL7YnuC/WP/am5a
+        2TwWGCggrrUW2yzp1cJBezHgtfB0aFfCJafh/YdS7pfm3DzwehihjTPYsA==
+X-Google-Smtp-Source: ACHHUZ67oRnbqx/ITVOD6VZp8CKV27v4/PAiFpvBnvcsO98ZSCjqS5aj+O53L8RqtQHU5uY3DL7N9rzX/BZJumMSXmU=
+X-Received: by 2002:a05:6214:d0c:b0:625:536f:4f01 with SMTP id
+ 12-20020a0562140d0c00b00625536f4f01mr11238353qvh.11.1684777358321; Mon, 22
+ May 2023 10:42:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230519074047.1739879-1-dhowells@redhat.com> <20230519074047.1739879-24-dhowells@redhat.com>
- <20230522102920.0528d821@rorschach.local.home> <2812412.1684767005@warthog.procyon.org.uk>
-In-Reply-To: <2812412.1684767005@warthog.procyon.org.uk>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 22 May 2023 10:42:12 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgg4iDEuSN4K6S6ohAm4zd_V5h4tXGn6-2-cfOuJPFDZQ@mail.gmail.com>
-Message-ID: <CAHk-=wgg4iDEuSN4K6S6ohAm4zd_V5h4tXGn6-2-cfOuJPFDZQ@mail.gmail.com>
-Subject: Re: [PATCH v20 23/32] splice: Convert trace/seq to use direct_splice_read()
-To:     David Howells <dhowells@redhat.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>, Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Christoph Hellwig <hch@lst.de>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-trace-kernel@vger.kernel.org
+References: <20230521160426.1881124-1-masahiroy@kernel.org> <20230521160426.1881124-2-masahiroy@kernel.org>
+In-Reply-To: <20230521160426.1881124-2-masahiroy@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 22 May 2023 10:42:27 -0700
+Message-ID: <CAKwvOd=Bq2j4-t9VXvNLodcZEM3P_m=z-NSkegR-gbHSr1=qnA@mail.gmail.com>
+Subject: Re: [PATCH v6 01/20] Revert "modpost: skip ELF local symbols during
+ section mismatch check"
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nicolas Schier <nicolas@fjasle.eu>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 7:50=E2=80=AFAM David Howells <dhowells@redhat.com>=
- wrote:
+On Sun, May 21, 2023 at 9:05=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.o=
+rg> wrote:
 >
-> We could implement seq_splice_read().  What we would need to do is to cha=
-nge
-> how the seq buffer is allocated: bulk allocate a bunch of arbitrary pages
-> which we then vmap().  When we need to splice, we read into the buffer, d=
-o a
-> vunmap() and then splice the pages holding the data we used into the pipe=
-.
+> This reverts commit a4d26f1a0958bb1c2b60c6f1e67c6f5d43e2647b.
 
-Please don't use vmap as a way to do zero-copy.
+a4d26f1a0958 mentions -fsection-anchors which I see used in:
+arch/arc/Makefile
+41:cflags-y +=3D -fsection-anchors
 
-The virtual mapping games are more expensive than a small copy from
-some random seq file.
+Though based on the below, it looks like is_mapping_symbol() will
+catch this case.
 
-Yes, yes, seq_file currently uses "kvmalloc()", which does fall back
-to vmalloc too. But the keyword there is "falls back". Most of the
-time it's just a regular boring kmalloc, and most of the time a
-seq-file is tiny.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-                      Linus
+>
+> The variable 'fromsym' never starts with ".L" since commit 87e5b1e8f257
+> ("module: Sync code of is_arm_mapping_symbol()").
+>
+> In other words, Pattern 6 is now dead code.
+>
+> Previously, the .LANCHOR1 hid the symbols listed in Pattern 2, but
+> a4d26f1a0958 was a cheesy workaround.
+>
+> 87e5b1e8f257 addressed the issue in a much better way.
+
+is_arm_mapping_symbol is gone from scripts/mod/modpost.c. It was moved
+then renamed to is_mapping_symbol.  Maybe not relevant for the commit
+message, but maybe helpful to other reviewers.
+
+commit 987d2e0aaa55 ("module: Move is_arm_mapping_symbol() to module_symbol=
+.h")
+commit 0a3bf86092c3 ("module: Ignore L0 and rename is_arm_mapping_symbol()"=
+)
+
+
+>
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
+>
+>  scripts/mod/modpost.c | 12 ------------
+>  1 file changed, 12 deletions(-)
+>
+> diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
+> index 0d2c2aff2c03..71de14544432 100644
+> --- a/scripts/mod/modpost.c
+> +++ b/scripts/mod/modpost.c
+> @@ -1034,14 +1034,6 @@ static const struct sectioncheck *section_mismatch=
+(
+>   *   fromsec =3D text section
+>   *   refsymname =3D *.constprop.*
+>   *
+> - * Pattern 6:
+> - *   Hide section mismatch warnings for ELF local symbols.  The goal
+> - *   is to eliminate false positive modpost warnings caused by
+> - *   compiler-generated ELF local symbol names such as ".LANCHOR1".
+> - *   Autogenerated symbol names bypass modpost's "Pattern 2"
+> - *   whitelisting, which relies on pattern-matching against symbol
+> - *   names to work.  (One situation where gcc can autogenerate ELF
+> - *   local symbols is when "-fsection-anchors" is used.)
+>   **/
+>  static int secref_whitelist(const struct sectioncheck *mismatch,
+>                             const char *fromsec, const char *fromsym,
+> @@ -1092,10 +1084,6 @@ static int secref_whitelist(const struct sectionch=
+eck *mismatch,
+>             match(fromsym, optim_symbols))
+>                 return 0;
+>
+> -       /* Check for pattern 6 */
+> -       if (strstarts(fromsym, ".L"))
+> -               return 0;
+> -
+>         return 1;
+>  }
+>
+> --
+> 2.39.2
+>
+
+
+--=20
+Thanks,
+~Nick Desaulniers
