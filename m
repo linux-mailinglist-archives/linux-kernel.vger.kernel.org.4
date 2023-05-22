@@ -2,160 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 664D070B7A5
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58E9070B7A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:31:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231945AbjEVIaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 04:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57522 "EHLO
+        id S230166AbjEVIbC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 04:31:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbjEVIaW (ORCPT
+        with ESMTP id S229777AbjEVIa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 04:30:22 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A3B51E74;
-        Mon, 22 May 2023 01:29:34 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.31:56210.1039000333
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
-        by 189.cn (HERMES) with SMTP id 651AF1002D6;
-        Mon, 22 May 2023 16:29:30 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-75648544bd-xp9j7 with ESMTP id 7db92210a86f4e62a567642a3e628660 for kernel@xen0n.name;
-        Mon, 22 May 2023 16:29:33 CST
-X-Transaction-ID: 7db92210a86f4e62a567642a3e628660
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <d8e7a1ee-317c-6b44-27eb-ea637f8813ec@189.cn>
-Date:   Mon, 22 May 2023 16:29:29 +0800
+        Mon, 22 May 2023 04:30:59 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 362DF107
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 01:29:58 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 6680A1BF216;
+        Mon, 22 May 2023 08:29:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1684744197;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=B5Fe74h5JTNsqGr8I0pihoWU3MQrRGJcpIZ7H5+Yuaw=;
+        b=a8a4j4Clxo8d5bzikhJNekIR81/QiEf//S8c/8AmZB6aQokS0b8929x+y91azAmh5XfwvZ
+        f3RlZcqPlv/ikgmwXlenr/lzRTdukZD4ZAkpR3s0YYn4fsSvMdCW4pKdFUxfwy4LnheIMG
+        uOB+oS8lZTSGn09/jDUf+znTBJgsIE23Xxf2hDxlpko0+ulyFgi8mOa6LskWvTOOVULL2M
+        dAnzBhi/H+9UEjtpkv+fq91qe+WnntNkHvxOJa2j0anFyIvLEGi6CzYpVQEtqJ+K5n32gT
+        B0nr3CkhV/71lnXQ6RO/jnQqcp4V0NqfEE3Xd79lqBSKe3llkhYpHXD4FGXRZQ==
+Date:   Mon, 22 May 2023 10:29:53 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc:     richard@nod.at, todd.e.brandt@intel.com, vigneshr@ti.com,
+        pratyush@kernel.org, michael@walle.cc,
+        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        regressions@leemhuis.info, bagasdotme@gmail.com,
+        regressions@lists.linux.dev, joneslee@google.com,
+        Todd Brandt <todd.e.brandt@linux.intel.com>
+Subject: Re: [PATCH] mtd: spi-nor: Fix divide by zero for spi-nor-generic
+ flashes
+Message-ID: <20230522102953.2fdf2b02@xps-13>
+In-Reply-To: <20230518085440.2363676-1-tudor.ambarus@linaro.org>
+References: <20230518085440.2363676-1-tudor.ambarus@linaro.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v14 1/2] drm: add kms driver for loongson display
- controller
-Content-Language: en-US
-To:     WANG Xuerui <kernel@xen0n.name>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sui Jingfeng <suijingfeng@loongson.cn>,
-        Li Yi <liyi@loongson.cn>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>
-Cc:     linaro-mm-sig@lists.linaro.org, loongson-kernel@lists.loongnix.cn,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Liu Peibao <liupeibao@loongson.cn>, linux-media@vger.kernel.org
-References: <20230520105718.325819-1-15330273260@189.cn>
- <20230520105718.325819-2-15330273260@189.cn>
- <26fd78b9-c074-8341-c99c-4e3b38cd861a@xen0n.name>
- <73447e35-f4df-9871-6210-b7bf1a3f04fc@189.cn>
- <97fe7af2-0a93-3f28-db6e-40a9b0798d49@xen0n.name>
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <97fe7af2-0a93-3f28-db6e-40a9b0798d49@xen0n.name>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Tudor,
 
-On 2023/5/22 16:09, WANG Xuerui wrote:
-> On 2023/5/22 16:02, Sui Jingfeng wrote:
->> Hi,
->>
->> On 2023/5/21 20:21, WANG Xuerui wrote:
->>>> --- /dev/null
->>>> +++ b/drivers/gpu/drm/loongson/Kconfig
->>>> @@ -0,0 +1,17 @@
->>>> +# SPDX-License-Identifier: GPL-2.0
->>>> +
->>>> +config DRM_LOONGSON
->>>> +    tristate "DRM support for Loongson Graphics"
->>>> +    depends on DRM && PCI && MMU
->>>> +    select DRM_KMS_HELPER
->>>> +    select DRM_TTM
->>>> +    select I2C
->>>> +    select I2C_ALGOBIT
->>>> +    help
->>>> +      This is a DRM driver for Loongson Graphics, it may including
->>>
->>> Drop "it may"; "including" should be enough.
->>>
->> 'it may' is more *precise* here, because currently we don't ship with 
->> the support for loongson 2K series SoC.
->>
->> I'm try to be precise as far as I can, we avoid made this driver too 
->> large by ignore loongson 2K series SoC temporary.
->
-> That's a good idea! For now the patch is so large that my review reply 
-> is said to be dropped by the lists. Focusing on one bunch of similar 
-> models first then adding support for the rest not-so-similar models is 
-> very friendly towards the reviewing process and will help code quality 
-> too.
->
->>
->>>> +      LS7A2000, LS7A1000, LS2K2000 and LS2K1000 etc. Loongson LS7A
->>>> +      series are bridge chipset, while Loongson LS2K series are SoC.
->>>> +
->>>> +      If "M" is selected, the module will be called loongson.
->>>
->>> Just "loongson"? 
->>
->> Yes,  when compile this driver as module,  loongson.ko will be 
->> generated.
->>
->>   drm radeon is also doing so, See drm/radeon/Kconfig.
->>
->>> I know it's like this for ages (at least dating back to the MIPS 
->>> days) but you really don't want to imply Loongson is mainly a GPU 
->>> company. Something like "loongson_drm" or "lsdc" or "gsgpu" could be 
->>> better. 
->>
->> No, these name may have backward compatibility problems.
->>
->> Downstream driver already taken those name.
->>
->> userspace driver need to differentiate them who is who.
->
-> IMO this shouldn't be a problem. Let me try explaining this: 
-> currently, upstream / the "new world" doesn't have any support for 
-> this driver at all, so any name will work; just use whatever is 
-> appropriate from an upstream's perspective, then make the userspace 
-> bits recognize both variants, and you'll be fine. And the "existing" 
-> userspace drivers can also carry the change, it'll just be a branch 
-> never taken in that setup.
->
-> So, I'm still in favor of keeping the upstream "clean" without dubious 
-> names like this (bare "loongson"). What do you think about my 
-> suggestion above?
->
-No,
+tudor.ambarus@linaro.org wrote on Thu, 18 May 2023 08:54:40 +0000:
 
-there is a 'arm' folder in the drivers/gpu/drm/,  It doesn't say that 
-arm is a pure gpu company.
+> We failed to initialize n_banks for spi-nor-generic flashes, which
+> caused a devide by zero when computing the bank_size.
+>=20
+> By default we consider that all chips have a single bank. Initialize
+> the default number of banks for spi-nor-generic flashes. Even if the
+> bug is fixed with this simple initialization, check the n_banks value
+> before dividing so that we make sure this kind of bug won't occur again
+> if some other struct instance is created uninitialized.
+>=20
+> Suggested-by: Todd Brandt <todd.e.brandt@linux.intel.com>
+> Reported-by: Todd Brandt <todd.e.brandt@linux.intel.com>
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D217448
+> Fixes: 9d6c5d64f028 ("mtd: spi-nor: Introduce the concept of bank")
+> Link: https://lore.kernel.org/all/20230516225108.29194-1-todd.e.brandt@in=
+tel.com/
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+> ---
+>  drivers/mtd/spi-nor/core.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
+> index 0bb0ad14a2fc..5f29fac8669a 100644
+> --- a/drivers/mtd/spi-nor/core.c
+> +++ b/drivers/mtd/spi-nor/core.c
+> @@ -2018,6 +2018,7 @@ static const struct spi_nor_manufacturer *manufactu=
+rers[] =3D {
+> =20
+>  static const struct flash_info spi_nor_generic_flash =3D {
+>  	.name =3D "spi-nor-generic",
+> +	.n_banks =3D 1,
 
-there is a 'ingenic' folder in the drivers/gpu/drm/, ingenic also have 
-their own custom CPUs.
+I definitely missed that structure.
 
-there is a 'amd' folder in the drivers/gpu/drm/, these doesn't imply amd 
-is mainly a GPU company.
+>  	/*
+>  	 * JESD216 rev A doesn't specify the page size, therefore we need a
+>  	 * sane default.
+> @@ -2921,7 +2922,8 @@ static void spi_nor_late_init_params(struct spi_nor=
+ *nor)
+>  	if (nor->flags & SNOR_F_HAS_LOCK && !nor->params->locking_ops)
+>  		spi_nor_init_default_locking_ops(nor);
+> =20
+> -	nor->params->bank_size =3D div64_u64(nor->params->size, nor->info->n_ba=
+nks);
+> +	if (nor->info->n_banks > 1)
+> +		params->bank_size =3D div64_u64(params->size, nor->info->n_banks);
 
-when a folder emerged in drm/, it stand for the GPU related part of this 
-company.
+I'm fine with the check as it is written because it also look like an
+optimization, but bank_size should never be 0 otherwise it's a real bug
+that must be catch and fixed. We do not want uninitialized bank_size's.
 
+>  }
+> =20
+>  /**
+> @@ -2987,6 +2989,7 @@ static void spi_nor_init_default_params(struct spi_=
+nor *nor)
+>  	/* Set SPI NOR sizes. */
+>  	params->writesize =3D 1;
+>  	params->size =3D (u64)info->sector_size * info->n_sectors;
+> +	params->bank_size =3D params->size;
+>  	params->page_size =3D info->page_size;
 
+We actually discarded that line in a previous discussion:
+https://lore.kernel.org/linux-mtd/20230331194620.839899-1-miquel.raynal@boo=
+tlin.com/T/#mcb4f90f7ca48ffe3d9838b2ac6f74e44460c51bd
+
+I'm fine to re-add it though, it does not hurt.
+
+> =20
+>  	if (!(info->flags & SPI_NOR_NO_FR)) {
+
+Reviewed-by: Miquel Raynal <miquel.raynal@bootlin.com>
+
+Thanks,
+Miqu=C3=A8l
