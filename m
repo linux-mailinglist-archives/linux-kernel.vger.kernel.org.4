@@ -2,38 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6414E70B664
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 09:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 991A870B66C
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 09:24:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232556AbjEVHWw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 03:22:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51342 "EHLO
+        id S232488AbjEVHYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 03:24:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232526AbjEVHWf (ORCPT
+        with ESMTP id S232198AbjEVHYG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 03:22:35 -0400
-Received: from out30-110.freemail.mail.aliyun.com (out30-110.freemail.mail.aliyun.com [115.124.30.110])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D081FF7
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 00:20:34 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0Vj9pHVZ_1684739999;
-Received: from e18g06460.et15sqa.tbsite.net(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0Vj9pHVZ_1684739999)
-          by smtp.aliyun-inc.com;
-          Mon, 22 May 2023 15:20:05 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     linux-erofs@lists.ozlabs.org
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Gao Xiang <hsiangkao@linux.alibaba.com>
-Subject: [PATCH v2] erofs: kill hooked chains to avoid loops on deduplicated compressed images
-Date:   Mon, 22 May 2023 15:19:58 +0800
-Message-Id: <20230522071958.110074-1-hsiangkao@linux.alibaba.com>
-X-Mailer: git-send-email 2.24.4
-In-Reply-To: <20230519071219.41757-1-hsiangkao@linux.alibaba.com>
-References: <20230519071219.41757-1-hsiangkao@linux.alibaba.com>
+        Mon, 22 May 2023 03:24:06 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC30A1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 00:24:05 -0700 (PDT)
+Received: from kwepemm600004.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QPpj65rVNzTkkX;
+        Mon, 22 May 2023 15:19:06 +0800 (CST)
+Received: from localhost.localdomain (10.69.192.56) by
+ kwepemm600004.china.huawei.com (7.193.23.242) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 22 May 2023 15:24:01 +0800
+From:   Huisong Li <lihuisong@huawei.com>
+To:     <andersson@kernel.org>, <matthias.bgg@gmail.com>,
+        <angelogioacchino.delregno@collabora.com>, <shawnguo@kernel.org>,
+        <arnd@arndb.de>, <krzk@kernel.org>, <sudeep.holla@arm.com>
+CC:     <linux-kernel@vger.kernel.org>, <soc@kernel.org>,
+        <wanghuiqiang@huawei.com>, <tanxiaofei@huawei.com>,
+        <liuyonglong@huawei.com>, <lihuisong@huawei.com>
+Subject: [PATCH v2 0/2] soc: hisilicon: Support HCCS driver on Kunpeng SoC 
+Date:   Mon, 22 May 2023 15:22:09 +0800
+Message-ID: <20230522072211.8894-1-lihuisong@huawei.com>
+X-Mailer: git-send-email 2.33.0
+In-Reply-To: <20230424073020.4039-1-lihuisong@huawei.com>
+References: <20230424073020.4039-1-lihuisong@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.69.192.56]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600004.china.huawei.com (7.193.23.242)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -41,213 +51,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After heavily stressing EROFS with several images which include a
-hand-crafted image of repeated patterns for more than 46 days, I found
-two chains could be linked with each other almost simultaneously and
-form a loop so that the entire loop won't be submitted.  As a
-consequence, the corresponding file pages will remain locked forever.
+This series add HCCS driver to query the health status and port information
+of HCCS on Kunpeng SoC as well as document all sysfs entries provided by
+this driver.
 
-It can be _only_ observed on data-deduplicated compressed images.
-For example, consider two chains with five pclusters in total:
-	Chain 1:  2->3->4->5    -- The tail pcluster is 5;
-        Chain 2:  5->1->2       -- The tail pcluster is 2.
-
-Chain 2 could link to Chain 1 with pcluster 5; and Chain 1 could link
-to Chain 2 at the same time with pcluster 2.
-
-Since hooked chains are all linked locklessly now, I have no idea how
-to simply avoid the race.  Instead, let's avoid hooked chains entirely
-until a proper way could be worked out to fix this and end users finally
-tell us that it's needed to add it back.
-
-Actually, this optimization can be found with multi-threaded workloads
-(especially even more often on deduplicated compressed images), yet I'm
-not sure about the overall system impacts of not having this compared
-with implementation complexity.
-
-Fixes: 267f2492c8f7 ("erofs: introduce multi-reference pclusters (fully-referenced)")
-Signed-off-by: Gao Xiang <hsiangkao@linux.alibaba.com>
 ---
-changes since v1:
- - previous fix is still racy, so get rid of hooked chains entirely.
+ v2:
+  - Document all sysfs entries provided by driver.
+  - drop 'pcc_type' and 'intr_mode' in struct hccs_dev.
+  - using _CRS with PCC GAS to get channel ID instead of _DSD.
+  - replace readw_relaxed_poll_timeout with readw_poll_timeout.
+  - use sysfs_emit() instead of sprintf().
+  - drop ACPI_PTR in hccs_driver.
+  - drop useless log during the probe phase.
 
- fs/erofs/zdata.c | 69 +++++++-----------------------------------------
- 1 file changed, 10 insertions(+), 59 deletions(-)
+Huisong Li (2):
+  soc: hisilicon: Support HCCS driver on Kunpeng SoC
+  doc: soc: hisilicon: Add Kunpeng HCCS driver documentation
 
-diff --git a/fs/erofs/zdata.c b/fs/erofs/zdata.c
-index 45f21db2303a..92f3a01262cf 100644
---- a/fs/erofs/zdata.c
-+++ b/fs/erofs/zdata.c
-@@ -96,8 +96,6 @@ struct z_erofs_pcluster {
- 
- /* the chained workgroup has't submitted io (still open) */
- #define Z_EROFS_PCLUSTER_TAIL           ((void *)0x5F0ECAFE)
--/* the chained workgroup has already submitted io */
--#define Z_EROFS_PCLUSTER_TAIL_CLOSED    ((void *)0x5F0EDEAD)
- 
- #define Z_EROFS_PCLUSTER_NIL            (NULL)
- 
-@@ -501,20 +499,6 @@ int __init z_erofs_init_zip_subsystem(void)
- 
- enum z_erofs_pclustermode {
- 	Z_EROFS_PCLUSTER_INFLIGHT,
--	/*
--	 * The current pclusters was the tail of an exist chain, in addition
--	 * that the previous processed chained pclusters are all decided to
--	 * be hooked up to it.
--	 * A new chain will be created for the remaining pclusters which are
--	 * not processed yet, so different from Z_EROFS_PCLUSTER_FOLLOWED,
--	 * the next pcluster cannot reuse the whole page safely for inplace I/O
--	 * in the following scenario:
--	 *  ________________________________________________________________
--	 * |      tail (partial) page     |       head (partial) page       |
--	 * |   (belongs to the next pcl)  |   (belongs to the current pcl)  |
--	 * |_______PCLUSTER_FOLLOWED______|________PCLUSTER_HOOKED__________|
--	 */
--	Z_EROFS_PCLUSTER_HOOKED,
- 	/*
- 	 * a weak form of Z_EROFS_PCLUSTER_FOLLOWED, the difference is that it
- 	 * could be dispatched into bypass queue later due to uptodated managed
-@@ -532,8 +516,8 @@ enum z_erofs_pclustermode {
- 	 *  ________________________________________________________________
- 	 * |  tail (partial) page |          head (partial) page           |
- 	 * |  (of the current cl) |      (of the previous collection)      |
--	 * | PCLUSTER_FOLLOWED or |                                        |
--	 * |_____PCLUSTER_HOOKED__|___________PCLUSTER_FOLLOWED____________|
-+	 * |                      |                                        |
-+	 * |__PCLUSTER_FOLLOWED___|___________PCLUSTER_FOLLOWED____________|
- 	 *
- 	 * [  (*) the above page can be used as inplace I/O.               ]
- 	 */
-@@ -546,7 +530,7 @@ struct z_erofs_decompress_frontend {
- 	struct z_erofs_bvec_iter biter;
- 
- 	struct page *candidate_bvpage;
--	struct z_erofs_pcluster *pcl, *tailpcl;
-+	struct z_erofs_pcluster *pcl;
- 	z_erofs_next_pcluster_t owned_head;
- 	enum z_erofs_pclustermode mode;
- 
-@@ -752,19 +736,7 @@ static void z_erofs_try_to_claim_pcluster(struct z_erofs_decompress_frontend *f)
- 		return;
- 	}
- 
--	/*
--	 * type 2, link to the end of an existing open chain, be careful
--	 * that its submission is controlled by the original attached chain.
--	 */
--	if (*owned_head != &pcl->next && pcl != f->tailpcl &&
--	    cmpxchg(&pcl->next, Z_EROFS_PCLUSTER_TAIL,
--		    *owned_head) == Z_EROFS_PCLUSTER_TAIL) {
--		*owned_head = Z_EROFS_PCLUSTER_TAIL;
--		f->mode = Z_EROFS_PCLUSTER_HOOKED;
--		f->tailpcl = NULL;
--		return;
--	}
--	/* type 3, it belongs to a chain, but it isn't the end of the chain */
-+	/* type 2, it belongs to an ongoing chain */
- 	f->mode = Z_EROFS_PCLUSTER_INFLIGHT;
- }
- 
-@@ -825,9 +797,6 @@ static int z_erofs_register_pcluster(struct z_erofs_decompress_frontend *fe)
- 			goto err_out;
- 		}
- 	}
--	/* used to check tail merging loop due to corrupted images */
--	if (fe->owned_head == Z_EROFS_PCLUSTER_TAIL)
--		fe->tailpcl = pcl;
- 	fe->owned_head = &pcl->next;
- 	fe->pcl = pcl;
- 	return 0;
-@@ -848,7 +817,6 @@ static int z_erofs_collector_begin(struct z_erofs_decompress_frontend *fe)
- 
- 	/* must be Z_EROFS_PCLUSTER_TAIL or pointed to previous pcluster */
- 	DBG_BUGON(fe->owned_head == Z_EROFS_PCLUSTER_NIL);
--	DBG_BUGON(fe->owned_head == Z_EROFS_PCLUSTER_TAIL_CLOSED);
- 
- 	if (!(map->m_flags & EROFS_MAP_META)) {
- 		grp = erofs_find_workgroup(fe->inode->i_sb,
-@@ -867,10 +835,6 @@ static int z_erofs_collector_begin(struct z_erofs_decompress_frontend *fe)
- 
- 	if (ret == -EEXIST) {
- 		mutex_lock(&fe->pcl->lock);
--		/* used to check tail merging loop due to corrupted images */
--		if (fe->owned_head == Z_EROFS_PCLUSTER_TAIL)
--			fe->tailpcl = fe->pcl;
--
- 		z_erofs_try_to_claim_pcluster(fe);
- 	} else if (ret) {
- 		return ret;
-@@ -1027,8 +991,7 @@ static int z_erofs_do_read_page(struct z_erofs_decompress_frontend *fe,
- 	 * those chains are handled asynchronously thus the page cannot be used
- 	 * for inplace I/O or bvpage (should be processed in a strict order.)
- 	 */
--	tight &= (fe->mode >= Z_EROFS_PCLUSTER_HOOKED &&
--		  fe->mode != Z_EROFS_PCLUSTER_FOLLOWED_NOINPLACE);
-+	tight &= (fe->mode > Z_EROFS_PCLUSTER_FOLLOWED_NOINPLACE);
- 
- 	cur = end - min_t(unsigned int, offset + end - map->m_la, end);
- 	if (!(map->m_flags & EROFS_MAP_MAPPED)) {
-@@ -1406,10 +1369,7 @@ static void z_erofs_decompress_queue(const struct z_erofs_decompressqueue *io,
- 	};
- 	z_erofs_next_pcluster_t owned = io->head;
- 
--	while (owned != Z_EROFS_PCLUSTER_TAIL_CLOSED) {
--		/* impossible that 'owned' equals Z_EROFS_WORK_TPTR_TAIL */
--		DBG_BUGON(owned == Z_EROFS_PCLUSTER_TAIL);
--		/* impossible that 'owned' equals Z_EROFS_PCLUSTER_NIL */
-+	while (owned != Z_EROFS_PCLUSTER_TAIL) {
- 		DBG_BUGON(owned == Z_EROFS_PCLUSTER_NIL);
- 
- 		be.pcl = container_of(owned, struct z_erofs_pcluster, next);
-@@ -1426,7 +1386,7 @@ static void z_erofs_decompressqueue_work(struct work_struct *work)
- 		container_of(work, struct z_erofs_decompressqueue, u.work);
- 	struct page *pagepool = NULL;
- 
--	DBG_BUGON(bgq->head == Z_EROFS_PCLUSTER_TAIL_CLOSED);
-+	DBG_BUGON(bgq->head == Z_EROFS_PCLUSTER_TAIL);
- 	z_erofs_decompress_queue(bgq, &pagepool);
- 	erofs_release_pages(&pagepool);
- 	kvfree(bgq);
-@@ -1614,7 +1574,7 @@ static struct z_erofs_decompressqueue *jobqueue_init(struct super_block *sb,
- 		q->sync = true;
- 	}
- 	q->sb = sb;
--	q->head = Z_EROFS_PCLUSTER_TAIL_CLOSED;
-+	q->head = Z_EROFS_PCLUSTER_TAIL;
- 	return q;
- }
- 
-@@ -1632,11 +1592,7 @@ static void move_to_bypass_jobqueue(struct z_erofs_pcluster *pcl,
- 	z_erofs_next_pcluster_t *const submit_qtail = qtail[JQ_SUBMIT];
- 	z_erofs_next_pcluster_t *const bypass_qtail = qtail[JQ_BYPASS];
- 
--	DBG_BUGON(owned_head == Z_EROFS_PCLUSTER_TAIL_CLOSED);
--	if (owned_head == Z_EROFS_PCLUSTER_TAIL)
--		owned_head = Z_EROFS_PCLUSTER_TAIL_CLOSED;
--
--	WRITE_ONCE(pcl->next, Z_EROFS_PCLUSTER_TAIL_CLOSED);
-+	WRITE_ONCE(pcl->next, Z_EROFS_PCLUSTER_TAIL);
- 
- 	WRITE_ONCE(*submit_qtail, owned_head);
- 	WRITE_ONCE(*bypass_qtail, &pcl->next);
-@@ -1707,15 +1663,10 @@ static void z_erofs_submit_queue(struct z_erofs_decompress_frontend *f,
- 		unsigned int i = 0;
- 		bool bypass = true;
- 
--		/* no possible 'owned_head' equals the following */
--		DBG_BUGON(owned_head == Z_EROFS_PCLUSTER_TAIL_CLOSED);
- 		DBG_BUGON(owned_head == Z_EROFS_PCLUSTER_NIL);
--
- 		pcl = container_of(owned_head, struct z_erofs_pcluster, next);
-+		owned_head = READ_ONCE(pcl->next);
- 
--		/* close the main owned chain at first */
--		owned_head = cmpxchg(&pcl->next, Z_EROFS_PCLUSTER_TAIL,
--				     Z_EROFS_PCLUSTER_TAIL_CLOSED);
- 		if (z_erofs_is_inline_pcluster(pcl)) {
- 			move_to_bypass_jobqueue(pcl, qtail, owned_head);
- 			continue;
+ .../sysfs-devices-platform-kunpeng_hccs       |   76 +
+ MAINTAINERS                                   |    7 +
+ drivers/soc/Kconfig                           |    1 +
+ drivers/soc/Makefile                          |    1 +
+ drivers/soc/hisilicon/Kconfig                 |   19 +
+ drivers/soc/hisilicon/Makefile                |    2 +
+ drivers/soc/hisilicon/kunpeng_hccs.c          | 1287 +++++++++++++++++
+ drivers/soc/hisilicon/kunpeng_hccs.h          |  196 +++
+ 8 files changed, 1589 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-devices-platform-kunpeng_hccs
+ create mode 100644 drivers/soc/hisilicon/Kconfig
+ create mode 100644 drivers/soc/hisilicon/Makefile
+ create mode 100644 drivers/soc/hisilicon/kunpeng_hccs.c
+ create mode 100644 drivers/soc/hisilicon/kunpeng_hccs.h
+
 -- 
-2.24.4
+2.33.0
 
