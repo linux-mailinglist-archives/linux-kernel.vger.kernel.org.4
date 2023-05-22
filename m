@@ -2,96 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9BE570BE81
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 14:38:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1EA270BE53
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 14:30:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233888AbjEVMil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 08:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42264 "EHLO
+        id S233936AbjEVM3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 08:29:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232535AbjEVMic (ORCPT
+        with ESMTP id S234061AbjEVM1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 08:38:32 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBD9FBE;
-        Mon, 22 May 2023 05:38:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-        In-Reply-To:References; bh=ynebLUbb/OS1lEOlwmoa3g+T2Lx6tLkw2a+fsnX4QtA=; b=Zo
-        0mV7U7BhD8XxxvKJMebwtx6HLD3gvkt0vMFsCP7adGkWT0NplBo6BIqKAoCMtpeSnyWf9yaZvV7fq
-        gmJtcguGFsnGizoqQfCdy+cRwKoKhDt4pDDFs0xWVsCQ2oITy5NdsupSK/dCwjoQ0HngOY89ibkcO
-        5jTS4d2Cbrzz1XM=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1q14ba-00DXXA-Si; Mon, 22 May 2023 14:25:38 +0200
-Date:   Mon, 22 May 2023 14:25:38 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     arinc9.unal@gmail.com
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Richard van Schagen <richard@routerhints.com>,
-        Richard van Schagen <vschagen@cs.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Bartel Eerdekens <bartel.eerdekens@constell8.be>,
-        erkin.bozoglu@xeront.com, mithat.guner@xeront.com,
-        =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH net-next 00/30] net: dsa: mt7530: improve, trap BPDU &
- LLDP, and prefer CPU port
-Message-ID: <5feba864-b792-4fe4-a58a-e1b22bb7842b@lunn.ch>
-References: <20230522121532.86610-1-arinc.unal@arinc9.com>
+        Mon, 22 May 2023 08:27:47 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC50519B
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 05:25:49 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D10826606E61;
+        Mon, 22 May 2023 13:25:47 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684758348;
+        bh=eOVhcHEbGP5rclzgfYWP+S6Ejdrr+h19pmAg3f+xf+c=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=JKx/xVplO1ihYlBace0UmeZwdpBzN4J2si6SWj8BsqS5e6cAQrEhZDwltSBdG494Q
+         GKBmj7E2hcedCAM25rNaJ9YfXt2MnmJv1cuwAGzmyMP0ov9w5yfqOuQND9SmMIvey6
+         erIo3na6W8NOTb0IiAEdlzqPz56ZRuswPLBvGfJshp+LkpoA593IevE6W9akBGfGqK
+         LXgihdZp/4KzsVec/6LGZohcY5se9B5Fmg1NZ6bKjHnjYUGGjYIRHkK4mc6vfo0gnK
+         w+s/EiK0X1DZPnLUn4Y46U65HCppsX6J0P0AMF8PsEXfe71/rPW+w34MnWynMZIuAO
+         YM25Lb3/5O/Sw==
+Message-ID: <a28293b1-18d9-6a85-5325-3b7944d97a14@collabora.com>
+Date:   Mon, 22 May 2023 14:25:45 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v4 05/11] drm/mediatek: gamma: Enable the Gamma LUT table
+ only after programming
+To:     =?UTF-8?B?Q0sgSHUgKOiDoeS/iuWFiSk=?= <ck.hu@mediatek.com>,
+        "chunkuang.hu@kernel.org" <chunkuang.hu@kernel.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "wenst@chromium.org" <wenst@chromium.org>,
+        =?UTF-8?B?SmFzb24tSkggTGluICjmnpfnnb/npaUp?= 
+        <Jason-JH.Lin@mediatek.com>,
+        "kernel@collabora.com" <kernel@collabora.com>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>
+References: <20230518104857.124265-1-angelogioacchino.delregno@collabora.com>
+ <20230518104857.124265-6-angelogioacchino.delregno@collabora.com>
+ <51a5fbd349cce69d372f4ccfff7010ea9e6e8f75.camel@mediatek.com>
+Content-Language: en-US
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <51a5fbd349cce69d372f4ccfff7010ea9e6e8f75.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230522121532.86610-1-arinc.unal@arinc9.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 03:15:02PM +0300, arinc9.unal@gmail.com wrote:
-> Hello!
+Il 22/05/23 12:00, CK Hu (胡俊光) ha scritto:
+> Hi, Angelo:
 > 
-> This patch series simplifies the code, improves the logic of the switch
-> hardware support, traps LLDP frames and BPDUs for MT7530, MT7531, and
-> MT7988 SoC switches, and introduces the preferring local CPU port
-> operation.
+> On Thu, 2023-05-18 at 12:48 +0200, AngeloGioacchino Del Regno wrote:
+>> External email : Please do not click links or open attachments until
+>> you have verified the sender or the content.
+>>
+>>
+>> Move the write to DISP_GAMMA_CFG to enable the Gamma LUT to after
+>> programming the actual table to avoid potential visual glitches
+>> during
+>> table modification.
+> 
+> I think user could update the lut table frequently, so when do you
+> disable the gamma function before next update? In addition, if we
+> really care the glitches, update the register in vblank period which
+> should use cmdq to update the register. But now, I think we do not care
+> the glitches. You may skip this patch, or fix the problem I mention.
+> 
 
-Hi Arınç
+If you disable the GAMMA function (either set RELAY mode or disable the
+GAMMA_LUT_EN bit in GAMMA_CFG), there will be glitches during setting via
+the GNOME Night Mode color temperature slider.
 
-https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html
+This commit prevents a glitch in the case in which the GAMMA LUT registers
+are not zeroed before setting the expected LUT, for which reason I disagree
+about skipping this patch.
 
-says:
+Please note that, while I agree about updating the GAMMA LUT through CMDQ
+setting and between vblanks, this requires a lot more effort to implement
+and it's out of scope for this specific series; depending on my bandwidth,
+this may come later and it would in any case require this patch to move
+the LUT enablement to after LUT registers setting. Besides, I have already
+tried to enable this through CMDQ, but didn't work as expected and since I
+had no time to dig further, I deemed this to be essential for at least an
+initial functionality implementation for MT8195, and a cleanup of this
+driver.
+Obviously, the *only* way to fix *all* of the corner cases of the problem
+that you mentioned is to use CMDQ and trying to implement this purely with
+cpu writes will in any case be prone to at least some glitches.
 
-  Avoid sending series longer than 15 patches. Larger series takes
-  longer to review as reviewers will defer looking at it until they
-  find a large chunk of time. A small series can be reviewed in a
-  short time, so Maintainers just do it. As a result, a sequence of
-  smaller series gets merged quicker and with better review coverage.
+In any case, while your concern is valid, I'm sure that you agree with me
+on the fact that enabling the LUT before actually programming it is something
+that should not happen in principle. For this reason, and for the others that
+I've just mentioned, I think that this patch is totally valid.
 
-Given you description above, it sounds like this could easily be split
-into smaller patch series.
+Regards,
+Angelo
 
-     Andrew
+> Regards,
+> CK
+> 
+>>
+>> Signed-off-by: AngeloGioacchino Del Regno <
+>> angelogioacchino.delregno@collabora.com>
+>> Reviewed-by: Jason-JH.Lin <jason-jh.lin@mediatek.com>
+>> ---
+>>   drivers/gpu/drm/mediatek/mtk_disp_gamma.c | 13 ++++++++-----
+>>   1 file changed, 8 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
+>> b/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
+>> index 60ccea8c1e1a..1592614b6de7 100644
+>> --- a/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
+>> +++ b/drivers/gpu/drm/mediatek/mtk_disp_gamma.c
+>> @@ -71,12 +71,12 @@ unsigned int mtk_gamma_get_lut_size(struct device
+>> *dev)
+>>   void mtk_gamma_set_common(struct device *dev, void __iomem *regs,
+>> struct drm_crtc_state *state)
+>>   {
+>>          struct mtk_disp_gamma *gamma = dev_get_drvdata(dev);
+>> -       unsigned int i, reg;
+>> +       unsigned int i;
+>>          struct drm_color_lut *lut;
+>>          void __iomem *lut_base;
+>>          bool lut_diff;
+>>          u16 lut_size;
+>> -       u32 word;
+>> +       u32 cfg_val, word;
+>>
+>>          /* If there's no gamma lut there's nothing to do here. */
+>>          if (!state->gamma_lut)
+>> @@ -90,9 +90,7 @@ void mtk_gamma_set_common(struct device *dev, void
+>> __iomem *regs, struct drm_crt
+>>                  lut_size = LUT_SIZE_DEFAULT;
+>>          }
+>>
+>> -       reg = readl(regs + DISP_GAMMA_CFG);
+>> -       reg = reg | GAMMA_LUT_EN;
+>> -       writel(reg, regs + DISP_GAMMA_CFG);
+>> +       cfg_val = readl(regs + DISP_GAMMA_CFG);
+>>          lut_base = regs + DISP_GAMMA_LUT;
+>>          lut = (struct drm_color_lut *)state->gamma_lut->data;
+>>          for (i = 0; i < lut_size; i++) {
+>> @@ -122,6 +120,11 @@ void mtk_gamma_set_common(struct device *dev,
+>> void __iomem *regs, struct drm_crt
+>>                  }
+>>                  writel(word, (lut_base + i * 4));
+>>          }
+>> +
+>> +       /* Enable the gamma table */
+>> +       cfg_val = cfg_val | GAMMA_LUT_EN;
+>> +
+>> +       writel(cfg_val, regs + DISP_GAMMA_CFG);
+>>   }
+>>
+>>   void mtk_gamma_set(struct device *dev, struct drm_crtc_state *state)
+>> --
+>> 2.40.1
+>>
+
