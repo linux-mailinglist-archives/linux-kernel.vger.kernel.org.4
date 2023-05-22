@@ -2,150 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 320A870B672
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 09:24:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3180170B66B
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 09:24:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232606AbjEVHYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 03:24:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52184 "EHLO
+        id S232303AbjEVHYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 03:24:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232460AbjEVHYS (ORCPT
+        with ESMTP id S232079AbjEVHYE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 03:24:18 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2082.outbound.protection.outlook.com [40.107.223.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC441B9;
-        Mon, 22 May 2023 00:24:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ba5VrD6bVL8rnXeNDuxfOPB6Uw2vRmGnv/b51l6S9x4XkSF/kLcL00XvlPoYG9m6803kcl1V2adgK1Uh62PjJPY7kKBVWOgd90zJiOK7TbkQsftsae7Z4zzWQ8jlOQJ9aC1u4OwWYRLwuCIYJxB06DZVzzhO+Hmuav+tDNizIIVS4sROGDLW2K3CiajpvYU+v9U6pll5fWZ0ftp4EqrZO5GI0Uw948FPcV1gLHOoVJHIhocVn9AWnH4FIuK8UVjnJyx/G1O8PTIYf2uwAM/bqPkbi91IASfCh9GqKQRjf9+5mJ8hoJUKvns5Nole+ttcmX6ALL8Xq2WvfzB0VAbX+g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Bh1UHABRvOJltI2nl5XZKgzpjvyGjfxoklNTDFeT+To=;
- b=KARprmAtdG2HhsALmvR2zDJaY2hNDJG3Pw3TqVGGf3lNAQBizArl/Dc4/4RJ+1GB8cjmNZD784A5enWMAE4D61V4SbvymvfgWyNU14YVzLeiZttcrD6cu/YcWse0bGmnWiIhPfsS1e31IptDe0rNGAmhTxHLYVUCKZTbTcldHtvSFuGcK090eehYSFgrj4siCTmNjV0w32AbBl7Atrw34VsVAuOrmAo/4hTlQcY1OqOvUuvX8NcchmMf5MZcNlbRMMspmY3PPVHmSMIEATA7MqA5MTsR9v1JGq/aEN8LhsvnXoSFXDCW4aCa7z+VLOnIehHHTZRLWeLnp5zznya9OA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Bh1UHABRvOJltI2nl5XZKgzpjvyGjfxoklNTDFeT+To=;
- b=5RgnoeEz1daFYyI+Rnh8IOYzWZnAhEMCEK7rdHtqEET3AgW5hJlsuJ+lKuW/o4dgKh22uPFOk2Vce1h71LPMKKmRCmP8v4fW8LmuIGwzn6WOZaL+LZP+piIHCYjosqiGP+BugMlqVim91XBfGFyCsitO58BAnvPvfsDLypoajpg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BYAPR12MB4614.namprd12.prod.outlook.com (2603:10b6:a03:a6::22)
- by BN9PR12MB5097.namprd12.prod.outlook.com (2603:10b6:408:136::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Mon, 22 May
- 2023 07:24:15 +0000
-Received: from BYAPR12MB4614.namprd12.prod.outlook.com
- ([fe80::db02:3271:73cf:2431]) by BYAPR12MB4614.namprd12.prod.outlook.com
- ([fe80::db02:3271:73cf:2431%7]) with mapi id 15.20.6411.028; Mon, 22 May 2023
- 07:24:14 +0000
-Message-ID: <adccf55a-4738-396b-69ad-752152d673b0@amd.com>
-Date:   Mon, 22 May 2023 12:54:01 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: linux-next: build failure after merge of the amdgpu tree
+        Mon, 22 May 2023 03:24:04 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39A8E97
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 00:24:03 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-3f608074b50so296555e9.0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 00:24:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684740241; x=1687332241;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=DP8vc4lqhrsQ7DMlA5RHt36AfG1aqpkYdAb6gvy80+A=;
+        b=bY4GxMrMwaalbkKP5sS71k32QpVTWBOkl+IWQ22b7K+xJNLFWeWRVqWOirEDukY78H
+         dSq094Q/I2tCZmT/H81QKwM0IV1vpy+78FmXMGCqEjdRg8Ilgi7R8K3FhDIXvOD/knDe
+         Po7SGfjhXgf6EVGp7/7+WUPsLl3MNQZVfTb/QyFWFdswigcTCIt80BY1as3e+sWoWEuL
+         cfDLTdRIlELuELTqk3xNl5zpt2M1pVuk+wik+qmKYh7gpqJ3121x4I8R6NZISrtaUA/K
+         ci+bD1RNsPXtPod4D1SlUbx2URkRgvuvMLQAkDTyxvYId8skmNGW3Joxxq9AlHzTFCes
+         lT2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684740241; x=1687332241;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DP8vc4lqhrsQ7DMlA5RHt36AfG1aqpkYdAb6gvy80+A=;
+        b=J37BvT0O4rbt64t66cYF3PZWmLzK4PS0Uzs8kX8sjN8oVvWJxbJb1H7BFTRQRCpPwv
+         3/s1mLWImGyGVr1Bz0viTxRYR66jzi2Qk4GT4sC7hes16b4BzpoZYAs2KUVvawSrC8u+
+         ksFuQzjCNkM6WM+D/709NtR943dvjrlHyPvxXswKvbAlA5ZtZDHP092cZ+VFS4RQmIJu
+         N5IumbfVICIqg0V08GTHgnGCiMhyuaWfgI3ubxvc5gCmRL79NNY6gyxTd8kYFIqUU1kh
+         kw89mZtmb7M9jmGkq/Bk7SVfJ1ADKwEOQlAobrhNzZHgoYws/EjjIhtVj9z4CvxF3Ofk
+         KMpg==
+X-Gm-Message-State: AC+VfDw0LHHg6E7rVrU3JzzExXaxvuqL8NA3+DSPDCdjupScNaXA/e+1
+        lpuyre4F8Q1AdJGNkdZcOrJ8nQ==
+X-Google-Smtp-Source: ACHHUZ7yVBS628L12BOKyRlxAwNcCRJj3WJkt+J+IZCzDwMzw7fDFJdG1r9DF3W0NDLJprNMiR6OpQ==
+X-Received: by 2002:a05:600c:2104:b0:3f6:53a:6665 with SMTP id u4-20020a05600c210400b003f6053a6665mr989148wml.19.1684740241626;
+        Mon, 22 May 2023 00:24:01 -0700 (PDT)
+Received: from [192.168.7.188] (679773502.box.freepro.com. [212.114.21.58])
+        by smtp.gmail.com with ESMTPSA id i7-20020a05600c290700b003f506e6ff83sm7353434wmd.22.2023.05.22.00.24.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 May 2023 00:24:01 -0700 (PDT)
+Message-ID: <ed8fc8f2-e5d8-8e08-dc29-e1197c911571@linaro.org>
+Date:   Mon, 22 May 2023 09:24:03 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+From:   neil.armstrong@linaro.org
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [v1 0/2] *** Support Starry-himax83102-j02 and Starry-ili9882t
+ TDDI MIPI-DSI panel ***
 Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Alex Deucher <alexdeucher@gmail.com>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Srinivasan Shanmugam <srinivasan.shanmugam@amd.com>
-References: <20230522171145.38a8bd4d@canb.auug.org.au>
-From:   "Lazar, Lijo" <lijo.lazar@amd.com>
-In-Reply-To: <20230522171145.38a8bd4d@canb.auug.org.au>
+To:     Cong Yang <yangcong5@huaqin.corp-partner.google.com>,
+        sam@ravnborg.org, daniel@ffwll.ch, dianders@google.com,
+        hsinyi@google.com
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230519032316.3464732-1-yangcong5@huaqin.corp-partner.google.com>
+ <20230519080136.4058243-1-yangcong5@huaqin.corp-partner.google.com>
+Organization: Linaro Developer Services
+In-Reply-To: <20230519080136.4058243-1-yangcong5@huaqin.corp-partner.google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0195.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:e8::20) To BYAPR12MB4614.namprd12.prod.outlook.com
- (2603:10b6:a03:a6::22)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB4614:EE_|BN9PR12MB5097:EE_
-X-MS-Office365-Filtering-Correlation-Id: d72d61d3-22be-4957-226c-08db5a958af6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4egeH9WqFROqPdo3/P6F+28ekHYejkrqyRXTrXcj8rG3PizIbi43jgvoyeiZINi7VflGPwJCvuky8Ns5AFUrfd2uvXrM3ji0GmCP4W8TB1RSf+lh84CBut9UGHtmUmquspdD21AqS8EDm92wtkO9/tpshH3O60+IGgUiQmg4DDx4PmKPXrkwHeExOcKVF53DMOPTbkhRq74sjDBpmsubULtEChTibqG/g2iLG0D54VwVXW3l8nUlMlZpL769/QsZd8YCIJUPP3ukNGrNrd+MmhIItBEiy/QaUfdF7VdB9oidyZW+JH1Zx3bog+ApnbMrc6LUgEba8NBBux2HpWrAQLv+TDWjHSjWYHEAp6ZM+wSl4tDasXYlbcHlHuMHIpzmRAGRodaeqtbI5rYEI0ZMR8CBtKolv1tJiSFO0luF1OcqRlrOirTgrMwvazSIBGubb4BjWMyiTzMCeoQTPEf+GlhRfYrn+gM1nuaePrAjxnPYTcvbT92oSjTUPptWr9yaavg6KD1WZ5nYMctooxDXSUOBo7fzlaKHzqxgm/JKEEGyaZUE6pKbBiP6zGqlZYLRLmv0qgITJqaSpqTwdgS9RWqciDls9uHohd9yYGh4of8=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4614.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(346002)(136003)(39860400002)(366004)(451199021)(38100700002)(31696002)(86362001)(36756003)(53546011)(6512007)(6506007)(8676002)(8936002)(2616005)(4744005)(2906002)(186003)(31686004)(54906003)(478600001)(110136005)(316002)(4326008)(26005)(41300700001)(5660300002)(66476007)(6486002)(6666004)(966005)(66556008)(66946007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aVRZWU5qNEJGbXQ0a1V4NjY2Qm9seWl2TGdvcFhuakpzd3NMMS9nQ012dk51?=
- =?utf-8?B?TjdPVHY2SDhmQWJ3clI1ekxnb3c5Q0R5TklqVXdkVElUK005bHRTUHFFVVN0?=
- =?utf-8?B?WU1tSTJCUy9Ob0VHbHZ1N1BsZUZoamtOQk5adkM1Rk00aEg5NHlBSnM5a1A3?=
- =?utf-8?B?clVVM0VtTUw5cXQrRXM4b0RCT0I5bHJlYkJNbE5SV3FlU3VzM1JUbksvTGVk?=
- =?utf-8?B?VlJ2Zi9zWlpkL0JtNmMrdjRwa01admorQ3VQUCs4MHAzQWFIZU9SU0xwN0gy?=
- =?utf-8?B?TE1GN1h4dmRscENBOURvK1IxNGlWdUlZTjlQQUpoNjBXaXR2ZURlODJEYm9S?=
- =?utf-8?B?Y3lOSnFJNW13RzI2Vmk1V2VEU3hTYnFOdm9GWEZJbkZwSUlkekQxNEJYQmpN?=
- =?utf-8?B?aUJ2dlNubUZCU21lTjYvdVoxWE4yUzkwUGlLVHNnUG96KzFKNjRDbkxOM2ZZ?=
- =?utf-8?B?TnljVng4VnptUmNCK0xXR0RDc3MrMlplaFZ2bktOUW9ab3UzM2ZPajl0RWdW?=
- =?utf-8?B?NTFHT0xkdG5Gckh5bDltV0RkdE85d1NSTzVWYWtiUUJGUnY3c2l2ZDJIc1Mz?=
- =?utf-8?B?ckRvTng1ZEhndTBhMllsWjU1eUpLY0FBS2VkcXZtWUxqd0RGUWhRUXZrSHpy?=
- =?utf-8?B?V2dvdDRsR1N5U3p0NEwveGsvZ3FUTmFXTWFiWjM5Skc1TVVLTThxaFF6cDQ2?=
- =?utf-8?B?T3dXcFhLT3RSKzUwMjFhSVJYT2hqaDk3SGV4Mnp1cDFPS3FDTm1OSUVUWnJ6?=
- =?utf-8?B?eWptWFVrcHlDWlQzelBUVklzNXliQ2ZIbmV2U0FSWnlPQWJYQVkxL1NYRG01?=
- =?utf-8?B?VVAzbzlmZE9zT1NqWnd1N204TytoZWN4N2JZRVFhdDNYN3pTWFhiTGY3OEk0?=
- =?utf-8?B?bXJIYTIzNVpLejJBRWRnNnBuUDI0eVlvVjlieDFrQ2lKakJDTkRpeE9uT2lH?=
- =?utf-8?B?ekRXbXNmRmpYSmRWNWxBSVJCK0N3SG5sSHhxcFIzVnBiNHZFMHFwWDVVZHF6?=
- =?utf-8?B?ejhjWFZBZDFKeXE5YXNXVENlaHJLRThiNksvWWVuZVNJMzZrQSs1MWpFN0Q4?=
- =?utf-8?B?TmRacEw3aFVBSHhpd2hEcmExMFg2dk8vTzVrdk9rL1B4UWhyWEpZRzd2OWo1?=
- =?utf-8?B?RFBQOEZvb2NqMmdUNHJWUUlKYXRjUHFZUmZxemsrTnJza1hyYUVqMFBpb3E3?=
- =?utf-8?B?VXNKNEZ4TzdCNVVud1htTkdyS3k5a1Rrd2VPRHhCMXArdk9PM3ZhZURBcG83?=
- =?utf-8?B?ZzJYczNxS1ZCUFlEWmhRMkI1K0ZqQjE1RnlPVjhwUjFoa3dZbGFiNG9hRXlS?=
- =?utf-8?B?ajFaT29XS09ZQ2ZQSllkSDgranlicFpJOUpKSnQ5U0J3ZS8zNC9XSWpYbFJl?=
- =?utf-8?B?R2ppNGF0RnV4NzVzYU9ORk1TVUhXaWZ3czZNckJ3RXdhc0JnT0pyWkg5Wm53?=
- =?utf-8?B?dyt1MU1qYVJGZDJZMkE5Y3lRTGU5MUxKQjBrNDlJeExiSTQ4RDF4U2hreERK?=
- =?utf-8?B?UlQxc0UvVDV2UGkwUVVNZ0tYcVB1VXRNc0VWcE5xZXAxaGxsYzVyNTkwa0Zh?=
- =?utf-8?B?cTRUSFpUeUk0MUVBYmJ2eUVzL2JoSnFHcVRnQVBkTTVXQlVrNG9idnFwOWtV?=
- =?utf-8?B?YTdSWUlEL3NiMzhNSkcxZytDMUxja2ovQkNmb2RhcmQ2SFVnQVd5elh1VVZi?=
- =?utf-8?B?S3ZlQTBvWTFsRmxxTGFPYTVvaUtSRkxkWTJSU1phN2h0OHBXTkVUb2Rma21w?=
- =?utf-8?B?STVPWjdHQlY0YklUQ1RZNkk3VGVyT0VUY3pUajdSM3MxNS92U0UxdnVxaDJa?=
- =?utf-8?B?SmpyN002K0VxMEovNkdqS1ZLaTNMbkxvQ250SHZQMUR1dzZqVW1YaUwxek9w?=
- =?utf-8?B?YVJhWFpDT1A3WFpqSVNodERGbkJud2NqeGZud1BVeVZPT05ieVhNTUFsdmJl?=
- =?utf-8?B?NWFGQnhmeThHdVFPUk0xTlk4bUw0NDlHS25kd3E4dXNITkJlcHp4bDF3UWV1?=
- =?utf-8?B?STl6L29BQ3FTWlZqbXR3MEE2Q0srNGdzc09vcGRocU5VQituQTFKcjVMNnVR?=
- =?utf-8?B?Q0wrblJwNXNBN2tMR0JHanZlcTlLc1BWV2RKK0c4blpYWFE3czhPaUFrbHBi?=
- =?utf-8?Q?L72/AN9Tfa+RoMr5pRicCp73n?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d72d61d3-22be-4957-226c-08db5a958af6
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4614.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2023 07:24:13.4919
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rNB7oIDy5lITB2dv+wVh9pJritKCOQlt5QNeN4NHKUdkHtfvc1lsuM2YneQbH9QK
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5097
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+Srinivasan
+Hi,
 
-This is fixed by https://patchwork.freedesktop.org/patch/538022/
 
-Thanks,
-Lijo
+On 19/05/2023 10:01, Cong Yang wrote:
+> The previous patch is not based on drm-misc-next, resend this series.
+> Support Starry-himax83102-j02 and Starry-ili9882t TDDI MIPI-DSI panel,
+> set the default high for RST at boe_panel_add and add lp11_before_reset flag.
 
-On 5/22/2023 12:41 PM, Stephen Rothwell wrote:
-> Hi all,
+If the reset gpio polarity is different, please change it in the DT by using
+a different gpio flag instead of changing the driver.
+
+However if the logic is different and reset must never be asserted to low,
+the the bindings + driver to make the reset line optional and set a gpio-hog
+in DT to keep it at a safe level.
+
+Neil
+
+
+> Cong Yang (2):
+>    drm/panel: Support for Starry-himax83102-j02 TDDI MIPI-DSI panel
+>    drm/panel: Support for Starry-ili9882t TDDI MIPI-DSI panel
 > 
-> After merging the amdgpu tree, today's linux-next build (x86_64
-> allmodconfig clang-17) failed like this:
+>   .../gpu/drm/panel/panel-boe-tv101wum-nl6.c    | 474 +++++++++++++++++-
+>   1 file changed, 473 insertions(+), 1 deletion(-)
 > 
-> (in function gfxhub_v1_2_xcp_resume)
-> drivers/gpu/drm/amd/amdgpu/gfxhub_v1_2.c:657:6: error: variable 'ret' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-> 
-> Caused by commit
-> 
->    c554a01e1c08 ("drm/amdgpu: Add GFXHUB v1.2 XCP funcs")
-> 
-> Reported by the kernelci.org bot.
-> 
+
