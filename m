@@ -2,124 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73AD770C254
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:27:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5884870C257
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:27:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234224AbjEVP1n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 11:27:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59972 "EHLO
+        id S230228AbjEVP14 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 11:27:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbjEVP1l (ORCPT
+        with ESMTP id S234436AbjEVP1y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 11:27:41 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13D8EA1;
-        Mon, 22 May 2023 08:27:40 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id 6a1803df08f44-5e5b5da22b8so9710596d6.0;
-        Mon, 22 May 2023 08:27:40 -0700 (PDT)
+        Mon, 22 May 2023 11:27:54 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A635EF9
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 08:27:52 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id ca18e2360f4ac-772ac011955so250057739f.2
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 08:27:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684769259; x=1687361259;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xa/ua3ow8lJkwBDnoTBS0dJRU1AVeGtz9D7HTeSun6k=;
-        b=ECnG3apANojL8aEfq5G+Ik1+yG9BwL936d4N4e4AQstLABStMolNIBU2nwk4e609mv
-         IwuHKuX35pAiRbr3tk9wQDLAxvJMRHYn1LziG7VldDjvPIhJSE+YUk9LM621zC2bvJQ9
-         mgRwVWxH/xJ1zq7atFzjbsv/qi/D5hPFaFQruTeGdLNzl58jlwlJHM7CISzvH6/eznwM
-         XCYntLzDYWGw8CJmc+fLxoMsPb6xH9HrR5a+R69m/DQT+BJV4MnKWGMOVzYowQ8AvqTG
-         RVqH4t4/g9x9ClgRAlX4F33UzlJFZE+wcqmIvcD9S+8tPdnrgqQE6ve2wgBZ+3tXuToW
-         jbuA==
+        d=chromium.org; s=google; t=1684769270; x=1687361270;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=STtYLVHbrxls9+TET2taw4/CcCJWytrlGIrbAGYi3j8=;
+        b=Wm5xp0auZZJXnhpPCvpFKewrPiJesbAsPKcgbBu6wpQ66rrb30CoW0C54QjKGUEtoA
+         65gh9SVj6mAO8ZDtmUv8mccIUCh+J2xzkwRL/HX9PG3+jDJiPXny0g9Mzeu8TUl22jnk
+         ucQEqI8OqmrOZUDhf9X+7gfb/Aa/mge1WGuTs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684769259; x=1687361259;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xa/ua3ow8lJkwBDnoTBS0dJRU1AVeGtz9D7HTeSun6k=;
-        b=cApo49kjN457cJEgoOWhYWOm7rbp4+zEL4nY56pD6F29S/4nKbiqWaqS+ODXiZ5xFa
-         RIxbemHa+Q+7Z3TPWbyT6fXt3OBraCWC8tbvBLLBnr6PABkK2Ry9gWK3+0IL74DDl+fV
-         graaxRmpkN49Y4waZVdW9VraLd5H82STkj1nQeOqx3ZnS/nLSEv1fQ5B+EAxjyfD/v2Q
-         l7UjwPLbeVzkZQAMjUWylNrUreVXVDSSbuQjlbTTq1RItxZyILxqDZtDt1G3sDs3IqF0
-         eUXQyyx6+slnXVYTMXJGEOjg5pzB2Oaq4i8An5S8huLZtkpl3u/UWRIYJSizF2A2Z4kA
-         gh0g==
-X-Gm-Message-State: AC+VfDzmhjMhRA45rfwDqRustennEl353EOmE1WAawVj7PoJab+DsRNp
-        KIZmVJln/VTyPlqZdQebXw/IaRailZLJqZY44Gc=
-X-Google-Smtp-Source: ACHHUZ5KYk+as52iODE4Sis2n+4GA/Rz8Y5VlAKTZhpWxv00l5E83NNoKzGzMtgFmDk+iN7tIl2rf9g82wiLbors6EY=
-X-Received: by 2002:ad4:574f:0:b0:61b:73b2:85ca with SMTP id
- q15-20020ad4574f000000b0061b73b285camr18600992qvx.5.1684769258852; Mon, 22
- May 2023 08:27:38 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684769270; x=1687361270;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=STtYLVHbrxls9+TET2taw4/CcCJWytrlGIrbAGYi3j8=;
+        b=NeCF/xRpwTEBXXlRFDBh6bOOGqlJP6bXAGQFvAkQsxEXl1ePa9wfgvb87gsgoEANn6
+         40QyUDXfPrLwwqbO3grUBsx/KWXgjojHDexYAeHx9L8F+rjWoUf3lFckew49kiuH6PD0
+         c71BNVD32m0kD/dDY1qRWBrIf6hRu7diaYc4diPCWH/ZyeSeMe1wXOBkw4qb0E8JdVuz
+         VWHrBZSxU3mv8KHbuoHCiMERrke3n+EL1VeMKNlsxNaY4ZmfrASG+LDBhTpZr2nWdphM
+         VoOaXD0dd9MFKu1SuCz/H23vn6mDbKrkajScLJ4o7SVJ7kwb/BdhiD+SJS+emJEezVbr
+         +l+g==
+X-Gm-Message-State: AC+VfDxwPcQfN8uqeKd1p3gIMUfqyX7SPQ4eqrIOHJIGo36twT5/TMoN
+        kl9Q2SJdIR9pS2nmIEbUf+IZwIvUonlqEI12H0A=
+X-Google-Smtp-Source: ACHHUZ5lxQeyIjtZIc8IVVyyIU6gHgDABogZnyeYZUZENyRa5LxSBLGcVQVCQJXr6Dje9wi12ifevg==
+X-Received: by 2002:a6b:db19:0:b0:769:82a4:4419 with SMTP id t25-20020a6bdb19000000b0076982a44419mr7089586ioc.14.1684769270655;
+        Mon, 22 May 2023 08:27:50 -0700 (PDT)
+Received: from mail-il1-f171.google.com (mail-il1-f171.google.com. [209.85.166.171])
+        by smtp.gmail.com with ESMTPSA id c18-20020a6bfd12000000b00763bc18ded3sm2069932ioi.28.2023.05.22.08.27.49
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 May 2023 08:27:50 -0700 (PDT)
+Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-33164ec77ccso286895ab.0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 08:27:49 -0700 (PDT)
+X-Received: by 2002:a05:6e02:2189:b0:337:c9ec:4ca with SMTP id
+ j9-20020a056e02218900b00337c9ec04camr449049ila.2.1684769269411; Mon, 22 May
+ 2023 08:27:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230516161841.37138-1-aleksander.lobakin@intel.com>
- <20230516161841.37138-8-aleksander.lobakin@intel.com> <20230517211211.1d1bbd0b@kernel.org>
- <9feef136-7ff3-91a4-4198-237b07a91c0c@intel.com> <20230518075643.3a242837@kernel.org>
- <0dfa36f1-a847-739e-4557-fc43e2e8c6a7@intel.com> <20230518133627.72747418@kernel.org>
- <77d929b2-c124-d3db-1cd9-8301d1d269d3@intel.com> <20230519134545.5807e1d8@kernel.org>
- <5effd41a-81c3-4815-826d-ba5d8f6c69b4@intel.com>
-In-Reply-To: <5effd41a-81c3-4815-826d-ba5d8f6c69b4@intel.com>
-From:   Magnus Karlsson <magnus.karlsson@gmail.com>
-Date:   Mon, 22 May 2023 17:27:27 +0200
-Message-ID: <CAJ8uoz30j7axJ+jd4UC4v57SBBBExbshQk7EZo-+bvPHOmcbSw@mail.gmail.com>
-Subject: Re: [Intel-wired-lan] [PATCH net-next 07/11] net: page_pool: add
- DMA-sync-for-CPU inline helpers
-To:     Alexander Lobakin <aleksander.lobakin@intel.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Larysa Zaremba <larysa.zaremba@intel.com>,
-        netdev@vger.kernel.org,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        linux-kernel@vger.kernel.org, Christoph Hellwig <hch@lst.de>,
-        Eric Dumazet <edumazet@google.com>,
-        Michal Kubiak <michal.kubiak@intel.com>,
-        intel-wired-lan@lists.osuosl.org, Paolo Abeni <pabeni@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Magnus Karlsson <magnus.karlsson@intel.com>
+References: <CAD=FV=VYfPSwar2AXBxB3vX0dV1kjQ5bZMxsEBFhUnMNRXbBCw@mail.gmail.com>
+ <20230520050649.2494497-1-yangcong5@huaqin.corp-partner.google.com> <20230520050649.2494497-2-yangcong5@huaqin.corp-partner.google.com>
+In-Reply-To: <20230520050649.2494497-2-yangcong5@huaqin.corp-partner.google.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 22 May 2023 08:27:38 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Xpe=zOeq2pG17Q0n_SZZHAFmaE+6C=SnuHqnHN6uObog@mail.gmail.com>
+Message-ID: <CAD=FV=Xpe=zOeq2pG17Q0n_SZZHAFmaE+6C=SnuHqnHN6uObog@mail.gmail.com>
+Subject: Re: [v2 1/2] HID: i2c-hid: elan: Add ili9882t timing
+To:     Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+Cc:     benjamin.tissoires@redhat.com, devicetree@vger.kernel.org,
+        dmitry.torokhov@gmail.com, hsinyi@google.com, jikos@kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mka@chromium.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 22 May 2023 at 15:50, Alexander Lobakin
-<aleksander.lobakin@intel.com> wrote:
->
-> From: Jakub Kicinski <kuba@kernel.org>
-> Date: Fri, 19 May 2023 13:45:45 -0700
->
-> > On Fri, 19 May 2023 15:56:40 +0200 Alexander Lobakin wrote:
-> >> From: Jakub Kicinski <kuba@kernel.org>
-> >> Date: Thu, 18 May 2023 13:36:27 -0700
->
-> [...]
->
-> > Ack, not saying that we need to split now, it's just about the naming
-> > (everyone's favorite topic).
-> >
-> > I think that it's a touch weird to name the header _drv.h and then
-> > include it in the core in multiple places (*cough* xdp_sock_drv.h).
->
-> Hahaha, I also thought of it :>
+Hi,
 
-Haha! Point taken. Will clear it up.
+On Fri, May 19, 2023 at 10:07=E2=80=AFPM Cong Yang
+<yangcong5@huaqin.corp-partner.google.com> wrote:
+>
+> The ili9882t is a TDDI IC ((Touch with Display Driver)). It requires the
+> panel reset gpio to be high before i2c commands. Use a longer delay in
+> post_power_delay_ms to ensure the poweron sequence.
+>
+> Signed-off-by: Cong Yang <yangcong5@huaqin.corp-partner.google.com>
+> ---
+>  drivers/hid/i2c-hid/i2c-hid-of-elan.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
 
-> > Also If someone needs to add another "heavy" static line for use by
-> > the core they will try to put it in page_pool.h rather than _drv.h...
-> >
-> > I'd rather split the includes by the basic language-level contents,
-> > first, then by the intended consumer, only if necessary. Language
-> > level sorting require less thinking :)
-> >
-> > But none of this is important, if you don't wanna to do it, just keep
-> > the new helpers in page_pool.h (let's not do another _drv.h).
->
-> Ack, will just put there. It doesn't get included by the whole kernel
-> via skbuff.h anymore (in v2), so new inlines won't hurt.
->
-> Thanks,
-> Olek
-> _______________________________________________
-> Intel-wired-lan mailing list
-> Intel-wired-lan@osuosl.org
-> https://lists.osuosl.org/mailman/listinfo/intel-wired-lan
+This seems OK to me. The one thing I'd also do is to update the
+Kconfig description to say that this driver is also used for Ilitek. I
+think it's fine to keep the symbol name as I2C_HID_OF_ELAN but just
+change the description.
+
+-Doug
