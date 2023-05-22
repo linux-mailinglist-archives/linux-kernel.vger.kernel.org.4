@@ -2,205 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3855570CF66
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 02:40:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37F5670CF27
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 02:25:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235314AbjEWAjO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 20:39:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38900 "EHLO
+        id S234480AbjEWAZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 20:25:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235346AbjEWARu (ORCPT
+        with ESMTP id S234786AbjEWAGa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 20:17:50 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 814AD1987
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 16:35:49 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id 98e67ed59e1d1-25332422531so3074457a91.0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 16:35:49 -0700 (PDT)
+        Mon, 22 May 2023 20:06:30 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2788B19B2
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 16:39:59 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-561fc920e70so100984617b3.0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 16:39:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684798549; x=1687390549;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mLmCuy21+rPe8wgn0OHZOYds1k+J9dWSGBzctzYhcE8=;
-        b=fI5qJBcIvptknKxPI4Cv5bhukMTzxZ5aQAX2MqkNIZz6Ru9j6nE9Pyvlp24mE2ESe/
-         ZqHBMZRDNknvNtNdh9novi9SzVZiAuvx6JjDqwOIe+DVWQqmJubCoNA+lv56GgjVijH1
-         MDRZ1MpFuupCh7XK9IlZii1TzWNHbdRCgUopsygbqcmQvC7RLtAMCgSYiXqL+fIaYQJm
-         CCDizhRp94Om1/zNF8pgdxG/EzoJzrGAX9j9K7MvaBgbgIjXL4K42Lp/UD2eiybKo+KK
-         fgwGkpMtvUOQpOoqCav6oPmSPrplUIt0kN9w/8TYLyiIgI/6+eCbdPUj40kpB4TKEgx2
-         3OmQ==
+        d=google.com; s=20221208; t=1684798798; x=1687390798;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HZenqV6ENOtdC3IAYPpjXT1tsTf7oZsrQ2divi+KMXw=;
+        b=7qIhMZnB7ip/AwQj7RBVQrlgUH2zld3NyBPTfc2ZhknKV+9SKieqPYkhSRXPfrdYNK
+         lETIMEUrp7RgmJPtj9WVYbx7I4BXQ278tjcPuiu+FGcRY6xmymzspVAnnKbxE3rKaMn1
+         HFO9p6ZjJAKrMn1khMbP9wGgh4OEx72UOWCuEBLz0OAApkL9a3q+uJFZnjbZ6Vw9TzJ9
+         c4zFx0kIxFg1vmbFHVHhw+Y26OuEXiZrFU2/yZjCZObMu2ss0FVC50uH0XV/X+RUtWqp
+         cVBYea8w1T8ZYaCCY0NDKZMuxNezsnnaTT3+jKpTwgs0NyLZj1OZWJGQgr7w4WsgmuWg
+         HBfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684798549; x=1687390549;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mLmCuy21+rPe8wgn0OHZOYds1k+J9dWSGBzctzYhcE8=;
-        b=in6qhSPB79A518flNWfkUfnFeSFZOd6dyWRaq6fjLAhH8PrUYmGDrfsyfnUuuZs3cy
-         x58fCs6Ro5QpHycMbYormnicqICpsZsobrDyHhf2WJ+bFbyMQpXF985cpLFuwZQp3rkc
-         XidBUXwYsdK48h7zf2qiUukswZ82NwK4j1/Oo3lmk8Do+BYVnSgkiiEQPXB3gigF1aYR
-         T5cw4BtHLi+A+hTWQUXBwpaW3fn7liuYOt5R4hHhKyzsUUIwqkjdkKmheqaTW7LWL71z
-         5MW+ZSPi7C8UYgGvGyQ1iJVu8xMl3/2n06ktjmzwXvxUInTpD0B9U3j4qtMzjoiKravW
-         l/KQ==
-X-Gm-Message-State: AC+VfDwR/9lP4fAHaTsJbduSEY7yc/bZBIgjLBCoQlMPSzVL+GiQrl+b
-        G3B5Jq/EL9bEvmiIBFH//Pg1ZTENhfiHPwHcMjc=
-X-Google-Smtp-Source: ACHHUZ55j6Ipp0XXkA7Zs+JztD8+N+YYfcUbdHbU0Cr1sBy7SfiDFrQodWiXZqkiIF1hMY2qu9vwoFg6sq5hdPkJpwA=
-X-Received: by 2002:a17:90b:160e:b0:253:4f8f:52fb with SMTP id
- la14-20020a17090b160e00b002534f8f52fbmr18320957pjb.10.1684798548695; Mon, 22
- May 2023 16:35:48 -0700 (PDT)
-MIME-Version: 1.0
-References: <68a97fbe-5c1e-7ac6-72c-7b9c6290b370@google.com> <3f442a9c-af6d-573d-1ad1-f6f413b1abc9@google.com>
-In-Reply-To: <3f442a9c-af6d-573d-1ad1-f6f413b1abc9@google.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Mon, 22 May 2023 16:35:36 -0700
-Message-ID: <CAHbLzkosPTuxnkLRwukyUVNryj-Ci6_dbkM8MFFzn4q9bRmy2w@mail.gmail.com>
-Subject: Re: [PATCH 26/31] mm/huge_memory: split huge pmd under one pte_offset_map()
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Peter Xu <peterx@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>, Yu Zhao <yuzhao@google.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Steven Price <steven.price@arm.com>,
-        SeongJae Park <sj@kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Zack Rusin <zackr@vmware.com>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Anshuman Khandual <anshuman.khandual@arm.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Song Liu <song@kernel.org>,
-        Thomas Hellstrom <thomas.hellstrom@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
+        d=1e100.net; s=20221208; t=1684798798; x=1687390798;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=HZenqV6ENOtdC3IAYPpjXT1tsTf7oZsrQ2divi+KMXw=;
+        b=j/6/nuhgmlMaJeUPbXJ1mjAnvP/GuJIZdYDsMjwYHC8U07YjNsipKQcYHOmwrJiTfA
+         sSrZelN2xBQcS5acVmYeldFox/mJUW3C5wI77ncm63NtSjneqvVHr+E2pqR/YjxayX7z
+         wBNxsubZlJ8vxJdmWLMcq7lEHGgbnE7CiKFEiuAkxLU4oBttKMgyRi0St2aIb2mkDYZT
+         9ezvx7ziEaOAiDkTZozECupmBzfQvDco1e2SlQAJ10yQeJIkUJhCpbg+0toVjhrUNdq8
+         5c+DBKGWXvyR5G4O++4hmE8VQoBy/Yl+8AAAxXE6f+Qie5YHBtO5rAhOEETEAPuuLvU4
+         1Axg==
+X-Gm-Message-State: AC+VfDzJ1otvO38+3hSROMkvbdoKomt1+Z0H4F81pKtdySkOJBhMc/qS
+        AHWZHjA62ZnPpDlB3xm8pJ8AVCVzaw4=
+X-Google-Smtp-Source: ACHHUZ6K4SYJn9KKrPTSI2xtIW00BVoWY/F51nj6TfhBx+vxPeCHJpWo3DLWtC1uIz5ry0O5Sd2squFPRO8=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a81:d80d:0:b0:561:61e9:ab39 with SMTP id
+ d13-20020a81d80d000000b0056161e9ab39mr7595291ywj.8.1684798798454; Mon, 22 May
+ 2023 16:39:58 -0700 (PDT)
+Date:   Mon, 22 May 2023 16:39:57 -0700
+In-Reply-To: <20230411125718.2297768-6-aik@amd.com>
+Mime-Version: 1.0
+References: <20230411125718.2297768-1-aik@amd.com> <20230411125718.2297768-6-aik@amd.com>
+Message-ID: <ZGv9Td4p1vtXC0Hy@google.com>
+Subject: Re: [PATCH kernel v5 5/6] KVM: SEV: Enable data breakpoints in SEV-ES
+From:   Sean Christopherson <seanjc@google.com>
+To:     Alexey Kardashevskiy <aik@amd.com>
+Cc:     kvm@vger.kernel.org, x86@kernel.org, linux-kernel@vger.kernel.org,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Pankaj Gupta <pankaj.gupta@amd.com>,
+        Nikunj A Dadhania <nikunj@amd.com>,
+        Santosh Shukla <santosh.shukla@amd.com>,
+        Carlos Bilbao <carlos.bilbao@amd.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 21, 2023 at 10:23=E2=80=AFPM Hugh Dickins <hughd@google.com> wr=
-ote:
->
-> __split_huge_zero_page_pmd() use a single pte_offset_map() to sweep the
-> extent: it's already under pmd_lock(), so this is no worse for latency;
-> and since it's supposed to have full control of the just-withdrawn page
-> table, here choose to VM_BUG_ON if it were to fail.  And please don't
-> increment haddr by PAGE_SIZE, that should remain huge aligned: declare
-> a separate addr (not a bugfix, but it was deceptive).
->
-> __split_huge_pmd_locked() likewise (but it had declared a separate addr);
-> and change its BUG_ON(!pte_none) to VM_BUG_ON, for consistency with zero
-> (those deposited page tables are sometimes victims of random corruption).
->
-> Signed-off-by: Hugh Dickins <hughd@google.com>
+On Tue, Apr 11, 2023, Alexey Kardashevskiy wrote:
+> Prior to SEV-ES, KVM saved/restored host debug registers upon switching
+> to/from a VM. Changing those registers inside a running SEV VM
+> triggered #VMEXIT to KVM.
 
-Reviewed-by: Yang Shi <shy828301@gmail.com>
+Please, please don't make it sound like some behavior is *the* one and only=
+ behavior.
+*KVM* *chooses* to intercept debug register accesses.  Though I would omit =
+this
+paragraph (and largely the next) entirely, IMO it's safe to assume the read=
+er has
+a basic understanding of how KVM deals with DRs and #DBs.=20
 
+> SEV-ES added encrypted state (ES) which uses an encrypted page
+> for the VM state (VMSA). The hardware saves/restores certain registers
+> on VMRUN/VMEXIT according to a swap type (A, B, C), see
+> "Table B-3. Swap Types" in the AMD Architecture Programmer=E2=80=99s Manu=
+al
+> volume 2.
+>=20
+> The DR6 and DR7 registers have always been swapped as Type A for SEV-ES
+
+Please rewrite this to just state what the behavior is instead of "Type A" =
+vs.
+"Type B".  Outside of AMD, the "type a/b/c" stuff isn't anywhere near ubiqu=
+itous
+enough to justify obfuscating super simple concepts.
+
+Actually, this feature really has nothing to do with Type A vs. Type B, sin=
+ce
+that's purely about host state.  I assume the switch from Type A to Type B =
+is a
+side effect, or an opportunistic optimization?
+
+Regardless, something like this is a lot easier for a human to read.  It's =
+easy
+enough to find DebugSwap in the APM (literally took me longer to find my co=
+py of
+the PDF).
+
+  Add support for "DebugSwap for SEV-ES guests", which provides support
+  for swapping DR[0-3] and DR[0-3]_ADDR_MASK on VMRUN and VMEXIT, i.e.
+  allows KVM to expose debug capabilities to SEV-ES guests.  Without
+  DebugSwap support, the CPU doesn't save/load _guest_ debug registers,
+  and KVM cannot manually context switch guest DRs due the VMSA being
+  encrypted.
+
+  Enable DebugSwap if and only if the CPU also supports NoNestedDataBp,
+  which causes the CPU to ignore nested #DBs, i.e. #DBs that occur when
+  vectoring a #DB.  Without NoNestedDataBp, a malicious guest can DoS
+  the host by putting the CPU into an infinite loop of vectoring #DBs
+  (see https://bugzilla.redhat.com/show_bug.cgi?id=3D1278496)
+
+  Set the features bit in sev_es_sync_vmsa() which is the last point
+  when VMSA is not encrypted yet as sev_(es_)init_vmcb() (where the most
+  init happens) is called not only when VCPU is initialized but also on
+  intrahost migration when VMSA is encrypted.
+
+> guests, but a new feature is available, identified via
+> CPUID Fn8000001F_EAX[14] "DebugSwap for SEV-ES guests", that provides
+> support for swapping additional debug registers. DR[0-3] and
+> DR[0-3]_ADDR_MASK are swapped as Type B when SEV_FEATURES[5] (DebugSwap)
+> is set.
+>=20
+> Enable DebugSwap for a VMSA but only do so if CPUID Fn80000021_EAX[0]
+> ("NoNestedDataBp", "Processor ignores nested data breakpoints") is
+> supported by the SOC as otherwise a malicious SEV-ES guest can set up
+> data breakpoints on the #DB IDT entry/stack and cause an infinite loop.
+> Set the features bit in sev_es_sync_vmsa() which is the last point
+> when VMSA is not encrypted yet as sev_(es_)init_vmcb() (where the most
+> init happens) is called not only when VCPU is initialized but also on
+> intrahost migration when VMSA is encrypted.
+>=20
+> Eliminate DR7 and #DB intercepts as:
+> - they are not needed when DebugSwap is supported;
+
+"not needed" isn't sufficient justification.  KVM doesn't strictly need to =
+do a
+lot of things, but does them anyways for a variety of reasons.  E.g. #DB in=
+tercept
+is also not needed when NoNestedDataBp is supported and vcpu->guest_debug=
+=3D=3D0, i.e.
+this should clarify why KVM doesn't simply disable #DB intercepts for _all_=
+ VMs
+when NoNestedDataBp is support.  Presumably the answer is "because it's sim=
+pler
+than toggling #DB interception for guest_debug.
+
+Actually, can't disabling #DB interception for DebugSwap SEV-ES guests be a
+separate patch?  KVM can still inject #DBs for SEV-ES guests, no?
+
+As for DR7, the real justification is that, as above, KVM can't modify gues=
+t DR7,
+and intercepting DR7 would completely defeat the purpose of enabling DebugS=
+wap.
+
+> - #VC for these intercepts is most likely not supported anyway and
+> kills the VM.
+
+I don't see how this is relevant or helpful.  What the guest may or may not=
+ do in
+response to a #VC on a DR7 write has no bearing on KVM's behavior.=20
+
+> Signed-off-by: Alexey Kardashevskiy <aik@amd.com>
+> Reviewed-by: Tom Lendacky <thomas.lendacky@amd.com>
 > ---
->  mm/huge_memory.c | 28 ++++++++++++++++++----------
->  1 file changed, 18 insertions(+), 10 deletions(-)
->
-> diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> index d4bd5fa7c823..839c13fa0bbe 100644
-> --- a/mm/huge_memory.c
-> +++ b/mm/huge_memory.c
-> @@ -2037,6 +2037,8 @@ static void __split_huge_zero_page_pmd(struct vm_ar=
-ea_struct *vma,
->         struct mm_struct *mm =3D vma->vm_mm;
->         pgtable_t pgtable;
->         pmd_t _pmd, old_pmd;
-> +       unsigned long addr;
-> +       pte_t *pte;
->         int i;
->
->         /*
-> @@ -2052,17 +2054,20 @@ static void __split_huge_zero_page_pmd(struct vm_=
-area_struct *vma,
->         pgtable =3D pgtable_trans_huge_withdraw(mm, pmd);
->         pmd_populate(mm, &_pmd, pgtable);
->
-> -       for (i =3D 0; i < HPAGE_PMD_NR; i++, haddr +=3D PAGE_SIZE) {
-> -               pte_t *pte, entry;
-> -               entry =3D pfn_pte(my_zero_pfn(haddr), vma->vm_page_prot);
-> +       pte =3D pte_offset_map(&_pmd, haddr);
-> +       VM_BUG_ON(!pte);
-> +       for (i =3D 0, addr =3D haddr; i < HPAGE_PMD_NR; i++, addr +=3D PA=
-GE_SIZE) {
-> +               pte_t entry;
+
+...
+
+> @@ -3048,6 +3066,18 @@ void sev_es_prepare_switch_to_guest(struct sev_es_=
+save_area *hostsa)
+> =20
+>  	/* MSR_IA32_XSS is restored on VMEXIT, save the currnet host value */
+>  	hostsa->xss =3D host_xss;
 > +
-> +               entry =3D pfn_pte(my_zero_pfn(addr), vma->vm_page_prot);
->                 entry =3D pte_mkspecial(entry);
->                 if (pmd_uffd_wp(old_pmd))
->                         entry =3D pte_mkuffd_wp(entry);
-> -               pte =3D pte_offset_map(&_pmd, haddr);
->                 VM_BUG_ON(!pte_none(*pte));
-> -               set_pte_at(mm, haddr, pte, entry);
-> -               pte_unmap(pte);
-> +               set_pte_at(mm, addr, pte, entry);
-> +               pte++;
->         }
-> +       pte_unmap(pte - 1);
->         smp_wmb(); /* make pte visible before pmd */
->         pmd_populate(mm, pmd, pgtable);
->  }
-> @@ -2077,6 +2082,7 @@ static void __split_huge_pmd_locked(struct vm_area_=
-struct *vma, pmd_t *pmd,
->         bool young, write, soft_dirty, pmd_migration =3D false, uffd_wp =
-=3D false;
->         bool anon_exclusive =3D false, dirty =3D false;
->         unsigned long addr;
-> +       pte_t *pte;
->         int i;
->
->         VM_BUG_ON(haddr & ~HPAGE_PMD_MASK);
-> @@ -2205,8 +2211,10 @@ static void __split_huge_pmd_locked(struct vm_area=
-_struct *vma, pmd_t *pmd,
->         pgtable =3D pgtable_trans_huge_withdraw(mm, pmd);
->         pmd_populate(mm, &_pmd, pgtable);
->
-> +       pte =3D pte_offset_map(&_pmd, haddr);
-> +       VM_BUG_ON(!pte);
->         for (i =3D 0, addr =3D haddr; i < HPAGE_PMD_NR; i++, addr +=3D PA=
-GE_SIZE) {
-> -               pte_t entry, *pte;
-> +               pte_t entry;
->                 /*
->                  * Note that NUMA hinting access restrictions are not
->                  * transferred to avoid any possibility of altering
-> @@ -2249,11 +2257,11 @@ static void __split_huge_pmd_locked(struct vm_are=
-a_struct *vma, pmd_t *pmd,
->                                 entry =3D pte_mkuffd_wp(entry);
->                         page_add_anon_rmap(page + i, vma, addr, false);
->                 }
-> -               pte =3D pte_offset_map(&_pmd, addr);
-> -               BUG_ON(!pte_none(*pte));
-> +               VM_BUG_ON(!pte_none(*pte));
->                 set_pte_at(mm, addr, pte, entry);
-> -               pte_unmap(pte);
-> +               pte++;
->         }
-> +       pte_unmap(pte - 1);
->
->         if (!pmd_migration)
->                 page_remove_rmap(page, vma, true);
-> --
-> 2.35.3
->
+> +	/* The DebugSwap SEV feature does Type B swaps of DR[0-3] */
+
+Since dangling a carrot didn't work[*], I'm going to resort to extortion :-=
+)
+Can you fold the below somewhere before this patch, and then tweak this com=
+ment
+to say something like:
+
+	/*
+	 * If DebugSwap is enabled, debug registers are loaded but NOT saved by
+	 * the CPU (Type-B).  If DebugSwap is disabled/unsupported, the CPU both
+	 * saves and loads debug registers (Type-A).
+	 */
+
+[*] https://lore.kernel.org/all/YzOTOzUzKPQSqURo@google.com/
+
+--
+From: Sean Christopherson <seanjc@google.com>
+Date: Mon, 22 May 2023 16:29:52 -0700
+Subject: [PATCH] KVM: SVM: Rewrite sev_es_prepare_switch_to_guest()'s comme=
+nt
+ about swap types
+
+Rewrite the comment(s) in sev_es_prepare_switch_to_guest() to explain the
+swap types employed by the CPU for SEV-ES guests, i.e. to explain why KVM
+needs to save a seemingly random subset of host state, and to provide a
+decoder for the APM's Type-A/B/C terminology.
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ arch/x86/kvm/svm/sev.c | 25 +++++++++++++++----------
+ 1 file changed, 15 insertions(+), 10 deletions(-)
+
+diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
+index 69ae5e1b3120..1e0e9b08e491 100644
+--- a/arch/x86/kvm/svm/sev.c
++++ b/arch/x86/kvm/svm/sev.c
+@@ -3017,19 +3017,24 @@ void sev_es_vcpu_reset(struct vcpu_svm *svm)
+ void sev_es_prepare_switch_to_guest(struct sev_es_save_area *hostsa)
+ {
+ 	/*
+-	 * As an SEV-ES guest, hardware will restore the host state on VMEXIT,
+-	 * of which one step is to perform a VMLOAD.  KVM performs the
+-	 * corresponding VMSAVE in svm_prepare_guest_switch for both
+-	 * traditional and SEV-ES guests.
++	 * All host state for SEV-ES guests is categorized into three swap types
++	 * based on how it is handled by hardware during a world switch:
++	 *
++	 * A: VMRUN:   Host state saved in host save area
++	 *    VMEXIT:  Host state loaded from host save area
++	 *
++	 * B: VMRUN:   Host state _NOT_ saved in host save area
++	 *    VMEXIT:  Host state loaded from host save area
++	 *
++	 * C: VMRUN:   Host state _NOT_ saved in host save area
++	 *    VMEXIT:  Host state initialized to default(reset) values
++	 *
++	 * Manually save type-B state, i.e. state that is loaded by VMEXIT but
++	 * isn't saved by VMRUN, that isn't already saved by VMSAVE (performed
++	 * by common SVM code).
+ 	 */
+-
+-	/* XCR0 is restored on VMEXIT, save the current host value */
+ 	hostsa->xcr0 =3D xgetbv(XCR_XFEATURE_ENABLED_MASK);
+-
+-	/* PKRU is restored on VMEXIT, save the current host value */
+ 	hostsa->pkru =3D read_pkru();
+-
+-	/* MSR_IA32_XSS is restored on VMEXIT, save the currnet host value */
+ 	hostsa->xss =3D host_xss;
+ }
+=20
+
+base-commit: 39428f6ea9eace95011681628717062ff7f5eb5f
+--=20
