@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F5670B2B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 03:16:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6608C70B2BE
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 03:19:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231165AbjEVBQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 21 May 2023 21:16:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41944 "EHLO
+        id S229577AbjEVBTz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 21 May 2023 21:19:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbjEVBQa (ORCPT
+        with ESMTP id S229550AbjEVBTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 21 May 2023 21:16:30 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98F67CF
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 18:16:23 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f3a99b9177so4118932e87.1
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 18:16:23 -0700 (PDT)
+        Sun, 21 May 2023 21:19:54 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB4BBC4
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 18:19:48 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f3b9e54338so1553989e87.0
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 18:19:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684718182; x=1687310182;
+        d=linaro.org; s=google; t=1684718387; x=1687310387;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=EC0A0nIZ7bBuaMQGMrJ90me0dKvx0C1Iy/LxkfWb3Y8=;
-        b=WbttrPY7kY3P3JMYOgr6WLfGkeUmRF0kyQoG1PXJenuWb+i1kxyany7euay41Eu3AA
-         ChJkyv64sAaslZ/KgGSCJU4DSz+ENijSP4H7jrp9ufPMD79ryvAUpZ9/s9OfljCcOsNo
-         YTx6u4o+UlLwbUyB2fhYr/kvvHmAXi+BXFDoGJjb3JcoDT5WfMhQ2llJOlAmItujCV+z
-         btpB35SZ9cRHdp2vfiAsLwDhopbTLy6F0PkGENSDZeylpdoGzgPL8U4Pji9kHw3HKAhq
-         Lg7WPoRFLyouso796E5gjzue68+LZe2zBPIq4ODX4C5mryQu0x62QsGcNPvyJqG97aq2
-         cbBA==
+        bh=VQoC+SQvPKQcE2Jq1icKOeDMkY2wGwLUBK2zmb7MpPc=;
+        b=Z5Kq2u0p0ju13oSnhQzioJ8S09uvVpvj+/++K3AAeNFz79Kdtelw1OFagnfM/gCtrx
+         mrMEdDnu1riZ5Oja8P2xh0/EMdv4wmG93I2r6b+jJVVbQIsOs8uZ/Wq+cp0ztjXrGA6V
+         q8T6rG2ZDV4yOT3TrI12K8kzDKtDW1amV4bf9/C162OlO4xXmukgS5X6vDGvRGYmW8TF
+         KK8COO8yy5NnorJY38w1V5aDNFJcmgb92KxWJuOmtP0MXlkbbrIlQU72XHCZcIErvM2r
+         ptzKXI7ED7o9VP1SFBlzV4cdQIOeaTgmXYIc+p3ArrKVcy6ku1LuvuJpU6fsMacYxv0Z
+         Im6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684718182; x=1687310182;
+        d=1e100.net; s=20221208; t=1684718387; x=1687310387;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EC0A0nIZ7bBuaMQGMrJ90me0dKvx0C1Iy/LxkfWb3Y8=;
-        b=TIPY5hK3Ej6I0A0cge73PqHJ4b1L/TV6eZHl1B60lTBc6lWNAerczbGt7J8YCwtZoE
-         EUKT1Qu0TKHTFd6abajHpZ+UGR3LTszSZU/U9fe29da8N+Egg+9B5iXOF1p+YDZoAsCV
-         rc7YTwgFIeTkDDer1+WClHybL8shdQENmy7AzfZCnU7Oj3raX0uN3TwRv+ArikwXUn/i
-         rO6mZcpTcakQec80v3th18UHXZoPD11pqIFjGKO5DGIZwuiku5qDYcCWnOMgm01hphAS
-         zXPmsDYl1O69ZmLSun8OtvbP7jkov5Pm5xNgNSsSN+L/7T764xZNKtPJ7KYocsFklaZz
-         NV6w==
-X-Gm-Message-State: AC+VfDyfBKOeltg3hlmKtI5dra2NNdCUhw1nUhYJCoeC/OV2+RNoGx3k
-        qUxd9zDfthM20TGNEajyXurTaZw/gPdNbL+Hqdo=
-X-Google-Smtp-Source: ACHHUZ6MrijlI9JmHmeJPIqxK1dDYiL+EFvzSdypHRYTIyjc56vs+lhuvHipxiMlFzZO7l8TkNsdAw==
-X-Received: by 2002:ac2:54ba:0:b0:4f3:b61a:a941 with SMTP id w26-20020ac254ba000000b004f3b61aa941mr1836046lfk.51.1684718181793;
-        Sun, 21 May 2023 18:16:21 -0700 (PDT)
+        bh=VQoC+SQvPKQcE2Jq1icKOeDMkY2wGwLUBK2zmb7MpPc=;
+        b=QK2jKndrVfCFoM8CUqm5es5uK8sszM5HYuV3zzp9bRZc8zYHdpnP/iCHgFxglvdlv3
+         BZ4N7KajNkeU2zcy5Lm9LTfKIsxjaGyn27C0XARCNAf/uhIJ/2WhwUqmt8Op53LK1Cqn
+         HSeGqlY3H8McdXo2lM1OQVI+1XT+UAHheY1URUi+RvHJGuVi+EU2xNInK9ITOKdJ43Ju
+         qYjndjlupKz2lUj5AGzobFFrSU4JNBkAwGLjM2boBQUlXIUhmAgjC8Ty1/EYev1scer3
+         VHQXiS2hFVD4oS9xiDEz7dWBSgZO8rWr4DketLipGV/vydPfAjMlQUQpL5py9eWj+n4F
+         W95w==
+X-Gm-Message-State: AC+VfDzo1ZfVttm+YbKC5QaFPpfdUzqGLye+59XKl1wvmeDfs4eDYOwS
+        3LhIRStRAMRwkrhLOL4QbbjFJw==
+X-Google-Smtp-Source: ACHHUZ4dZMB8OEoziZOinZ7PZDLRkevuuNY0g3JE0N+/ud26ft5s0bpXeoKenuwUHkX3Wa4Ho30TuQ==
+X-Received: by 2002:ac2:4c09:0:b0:4f2:74d3:8996 with SMTP id t9-20020ac24c09000000b004f274d38996mr3059673lfq.8.1684718387133;
+        Sun, 21 May 2023 18:19:47 -0700 (PDT)
 Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
-        by smtp.gmail.com with ESMTPSA id x16-20020ac24890000000b004a6f66eed7fsm778895lfc.165.2023.05.21.18.16.20
+        by smtp.gmail.com with ESMTPSA id u17-20020ac25191000000b004f13eca769esm782940lfi.82.2023.05.21.18.19.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 21 May 2023 18:16:21 -0700 (PDT)
-Message-ID: <ccc97880-8e74-b85b-9679-9c12c44c4b99@linaro.org>
-Date:   Mon, 22 May 2023 04:16:20 +0300
+        Sun, 21 May 2023 18:19:46 -0700 (PDT)
+Message-ID: <f34cd6a8-6d6d-9dcf-b681-56439416c4b4@linaro.org>
+Date:   Mon, 22 May 2023 04:19:45 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH RFC 03/10] drm/panel: Add LGD panel driver for Sony Xperia
- XZ3
+Subject: Re: [PATCH RFC 06/10] drm/panel/samsung-sofef01: Add panel driver for
+ Sony Xperia 5 / 10 II
 Content-Language: en-GB
 To:     Marijn Suijten <marijn.suijten@somainline.org>,
         Neil Armstrong <neil.armstrong@linaro.org>,
@@ -81,14 +81,14 @@ Cc:     ~postmarketos/upstreaming@lists.sr.ht,
         Kuogee Hsieh <quic_khsieh@quicinc.com>,
         Jessica Zhang <quic_jesszhan@quicinc.com>
 References: <20230521-drm-panels-sony-v1-0-541c341d6bee@somainline.org>
- <20230521-drm-panels-sony-v1-3-541c341d6bee@somainline.org>
+ <20230521-drm-panels-sony-v1-6-541c341d6bee@somainline.org>
 From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230521-drm-panels-sony-v1-3-541c341d6bee@somainline.org>
+In-Reply-To: <20230521-drm-panels-sony-v1-6-541c341d6bee@somainline.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -97,71 +97,73 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 22/05/2023 00:23, Marijn Suijten wrote:
-> Sony provides an unlabeled LGD + Atmel maXTouch assembly in its Xperia
-> XZ3 (tama akatsuki) phone, with custom DCS commands to match.
+> This SOFEF01-M Display-IC driver supports two modes with different
+> compatibles to differentiate between slightly different physical sizes
+> (panels) found on the Xperia 5 (6.1") and 10 II (6.0").
 > 
-> This panel features Display Stream Compression 1.1.
+> It is currently also used to hardcode significantly higher fake porches
+> for the Xperia 5, which are unused in transfers due to this being a
+> command-mode panel but do have an effect on the clock rates set by
+> dsi_host.c.  Without higher clock rates this panel fails to achieve
+> 60fps and has significant tearing artifacts, while the same calculated
+> clock rate works perfectly fine on the Xperia 10 II.
 > 
 > Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 > ---
->   drivers/gpu/drm/panel/Kconfig                   |  11 +
->   drivers/gpu/drm/panel/Makefile                  |   1 +
->   drivers/gpu/drm/panel/panel-sony-akatsuki-lgd.c | 362 ++++++++++++++++++++++++
->   3 files changed, 374 insertions(+)
+>   drivers/gpu/drm/panel/Kconfig                 |  12 +
+>   drivers/gpu/drm/panel/Makefile                |   1 +
+>   drivers/gpu/drm/panel/panel-samsung-sofef01.c | 360 ++++++++++++++++++++++++++
+>   3 files changed, 373 insertions(+)
 > 
 > diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
-> index 67ef898d133f2..18bd116e78a71 100644
+> index 18bd116e78a71..3f11e9906f2cb 100644
 > --- a/drivers/gpu/drm/panel/Kconfig
 > +++ b/drivers/gpu/drm/panel/Kconfig
-> @@ -706,6 +706,17 @@ config DRM_PANEL_SONY_ACX565AKM
->   	  Say Y here if you want to enable support for the Sony ACX565AKM
->   	  800x600 3.5" panel (found on the Nokia N900).
+> @@ -618,6 +618,18 @@ config DRM_PANEL_SAMSUNG_SOFEF00
 >   
-> +config DRM_PANEL_SONY_AKATSUKI_LGD
-> +	tristate "Sony Xperia XZ3 LGD panel"
-> +	depends on GPIOLIB && OF
+>   	  The panels are 2280x1080@60Hz and 2340x1080@60Hz respectively
+>   
+> +config DRM_PANEL_SAMSUNG_SOFEF01
+> +	tristate "Samsung sofef01 Sony Xperia 5 / 10 II DSI cmd mode panels"
+> +	depends on GPIOLIB
+> +	depends on OF
 > +	depends on DRM_MIPI_DSI
 > +	depends on BACKLIGHT_CLASS_DEVICE
 > +	help
-> +	  Say Y here if you want to enable support for the Sony Xperia XZ3
-> +	  1440x2880@60 6.0" OLED DSI cmd mode panel produced by LG Display.
+> +	  Say Y or M here if you want to enable support for the Samsung AMOLED
+> +	  command mode panels found in the Sony Xperia 5 / 10 II smartphones.
 > +
-> +	  This panel uses Display Stream Compression 1.1.
+> +	  This panel features a fixed mode of 1080x2520@60.
 > +
->   config DRM_PANEL_SONY_TD4353_JDI
->   	tristate "Sony TD4353 JDI panel"
->   	depends on GPIOLIB && OF
+>   config DRM_PANEL_SEIKO_43WVF1G
+>   	tristate "Seiko 43WVF1G panel"
+>   	depends on OF
 > diff --git a/drivers/gpu/drm/panel/Makefile b/drivers/gpu/drm/panel/Makefile
-> index ff169781e82d7..85133f73558f3 100644
+> index 85133f73558f3..a4039d0fc9cfb 100644
 > --- a/drivers/gpu/drm/panel/Makefile
 > +++ b/drivers/gpu/drm/panel/Makefile
-> @@ -71,6 +71,7 @@ obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7701) += panel-sitronix-st7701.o
->   obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7703) += panel-sitronix-st7703.o
->   obj-$(CONFIG_DRM_PANEL_SITRONIX_ST7789V) += panel-sitronix-st7789v.o
->   obj-$(CONFIG_DRM_PANEL_SONY_ACX565AKM) += panel-sony-acx565akm.o
-> +obj-$(CONFIG_DRM_PANEL_SONY_AKATSUKI_LGD) += panel-sony-akatsuki-lgd.o
->   obj-$(CONFIG_DRM_PANEL_SONY_TD4353_JDI) += panel-sony-td4353-jdi.o
->   obj-$(CONFIG_DRM_PANEL_SONY_TULIP_TRULY_NT35521) += panel-sony-tulip-truly-nt35521.o
->   obj-$(CONFIG_DRM_PANEL_TDO_TL070WSH30) += panel-tdo-tl070wsh30.o
-> diff --git a/drivers/gpu/drm/panel/panel-sony-akatsuki-lgd.c b/drivers/gpu/drm/panel/panel-sony-akatsuki-lgd.c
+> @@ -62,6 +62,7 @@ obj-$(CONFIG_DRM_PANEL_SAMSUNG_S6E63M0_DSI) += panel-samsung-s6e63m0-dsi.o
+>   obj-$(CONFIG_DRM_PANEL_SAMSUNG_S6E88A0_AMS452EF01) += panel-samsung-s6e88a0-ams452ef01.o
+>   obj-$(CONFIG_DRM_PANEL_SAMSUNG_S6E8AA0) += panel-samsung-s6e8aa0.o
+>   obj-$(CONFIG_DRM_PANEL_SAMSUNG_SOFEF00) += panel-samsung-sofef00.o
+> +obj-$(CONFIG_DRM_PANEL_SAMSUNG_SOFEF01) += panel-samsung-sofef01.o
+>   obj-$(CONFIG_DRM_PANEL_SEIKO_43WVF1G) += panel-seiko-43wvf1g.o
+>   obj-$(CONFIG_DRM_PANEL_SHARP_LQ101R1SX01) += panel-sharp-lq101r1sx01.o
+>   obj-$(CONFIG_DRM_PANEL_SHARP_LS037V7DW01) += panel-sharp-ls037v7dw01.o
+> diff --git a/drivers/gpu/drm/panel/panel-samsung-sofef01.c b/drivers/gpu/drm/panel/panel-samsung-sofef01.c
 > new file mode 100644
-> index 0000000000000..f55788f963dab
+> index 0000000000000..18dc67a301a7b
 > --- /dev/null
-> +++ b/drivers/gpu/drm/panel/panel-sony-akatsuki-lgd.c
-> @@ -0,0 +1,362 @@
+> +++ b/drivers/gpu/drm/panel/panel-samsung-sofef01.c
+> @@ -0,0 +1,360 @@
 > +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2023 Marijn Suijten <marijn.suijten@somainline.org>
-> + *
-> + * Based on Sony Downstream's "Atmel LGD ID5" Akatsuki panel dtsi.
-> + */
+> +// Copyright (c) 2023 Marijn Suijten <marijn.suijten@somainline.org>
 > +
 > +#include <linux/backlight.h>
 > +#include <linux/delay.h>
 > +#include <linux/gpio/consumer.h>
 > +#include <linux/module.h>
 > +#include <linux/of.h>
-> +#include <linux/of_device.h>
 > +#include <linux/regulator/consumer.h>
 > +
 > +#include <video/mipi_display.h>
@@ -170,23 +172,28 @@ On 22/05/2023 00:23, Marijn Suijten wrote:
 > +#include <drm/drm_modes.h>
 > +#include <drm/drm_panel.h>
 > +#include <drm/drm_probe_helper.h>
-> +#include <drm/display/drm_dsc.h>
-> +#include <drm/display/drm_dsc_helper.h>
 > +
-> +struct sony_akatsuki_lgd {
+> +struct samsung_sofef01_m {
 > +	struct drm_panel panel;
 > +	struct mipi_dsi_device *dsi;
-> +	struct regulator *vddio;
+> +	struct regulator *vddio, *vci;
 > +	struct gpio_desc *reset_gpio;
+> +	const struct drm_display_mode *mode;
 > +	bool prepared;
 > +};
 > +
-> +static inline struct sony_akatsuki_lgd *to_sony_akatsuki_lgd(struct drm_panel *panel)
+> +static inline struct samsung_sofef01_m *to_samsung_sofef01_m(struct drm_panel *panel)
 > +{
-> +	return container_of(panel, struct sony_akatsuki_lgd, panel);
+> +	return container_of(panel, struct samsung_sofef01_m, panel);
 > +}
 > +
-> +static int sony_akatsuki_lgd_on(struct sony_akatsuki_lgd *ctx)
+> +static void samsung_sofef01_m_reset(struct samsung_sofef01_m *ctx)
+> +{
+> +	gpiod_set_value_cansleep(ctx->reset_gpio, 0);
+> +	usleep_range(10000, 11000);
+> +}
+> +
+> +static int samsung_sofef01_m_on(struct samsung_sofef01_m *ctx)
 > +{
 > +	struct mipi_dsi_device *dsi = ctx->dsi;
 > +	struct device *dev = &dsi->dev;
@@ -194,29 +201,12 @@ On 22/05/2023 00:23, Marijn Suijten wrote:
 > +
 > +	dsi->mode_flags |= MIPI_DSI_MODE_LPM;
 > +
-> +	mipi_dsi_dcs_write_seq(dsi, 0x7f, 0x5a, 0x5a);
-> +	mipi_dsi_dcs_write_seq(dsi, 0xf0, 0x5a, 0x5a);
-> +	mipi_dsi_dcs_write_seq(dsi, 0xf1, 0x5a, 0x5a);
-> +	mipi_dsi_dcs_write_seq(dsi, 0xf2, 0x5a, 0x5a);
-> +	mipi_dsi_dcs_write_seq(dsi, 0x02, 0x01);
-> +	mipi_dsi_dcs_write_seq(dsi, 0x59, 0x01);
-> +	/* Enable backlight control */
-> +	mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_WRITE_CONTROL_DISPLAY, BIT(5));
-> +	mipi_dsi_dcs_write_seq(dsi, 0x57, 0x20, 0x80, 0xde, 0x60, 0x00);
-> +
-> +	ret = mipi_dsi_dcs_set_column_address(dsi, 0, 1440 - 1);
+> +	ret = mipi_dsi_dcs_exit_sleep_mode(dsi);
 > +	if (ret < 0) {
-> +		dev_err(dev, "Failed to set column address: %d\n", ret);
+> +		dev_err(dev, "Failed to exit sleep mode: %d\n", ret);
 > +		return ret;
 > +	}
-> +
-> +	ret = mipi_dsi_dcs_set_page_address(dsi, 0, 2880 - 1);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to set page address: %d\n", ret);
-> +		return ret;
-> +	}
-> +
-> +	mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_WRITE_POWER_SAVE, 0x00);
+> +	usleep_range(10000, 11000);
 > +
 > +	ret = mipi_dsi_dcs_set_tear_on(dsi, MIPI_DSI_DCS_TEAR_MODE_VBLANK);
 > +	if (ret < 0) {
@@ -224,38 +214,38 @@ On 22/05/2023 00:23, Marijn Suijten wrote:
 > +		return ret;
 > +	}
 > +
-> +	mipi_dsi_dcs_write_seq(dsi, 0x7f, 0x5a, 0x5a);
 > +	mipi_dsi_dcs_write_seq(dsi, 0xf0, 0x5a, 0x5a);
-> +	mipi_dsi_dcs_write_seq(dsi, 0xf1, 0x5a, 0x5a);
-> +	mipi_dsi_dcs_write_seq(dsi, 0xf2, 0x5a, 0x5a);
-> +	mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x03);
-> +	mipi_dsi_dcs_write_seq(dsi, 0xf6, 0x04);
-> +	mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x05);
-> +	mipi_dsi_dcs_write_seq(dsi, 0xf6, 0x01, 0x7f, 0x00);
+> +	mipi_dsi_dcs_write_seq(dsi, 0xdf, 0x03);
+> +	mipi_dsi_dcs_write_seq(dsi, 0xe0, 0x01);
+> +	mipi_dsi_dcs_write_seq(dsi, 0xf0, 0xa5, 0xa5);
 > +
-> +	ret = mipi_dsi_dcs_exit_sleep_mode(dsi);
+> +	ret = mipi_dsi_dcs_set_page_address(dsi, 0x0000, 2520 - 1);
 > +	if (ret < 0) {
-> +		dev_err(dev, "Failed to exit sleep mode: %d\n", ret);
+> +		dev_err(dev, "Failed to set page address: %d\n", ret);
 > +		return ret;
 > +	}
-> +	msleep(120);
 > +
-> +	mipi_dsi_dcs_write_seq(dsi, 0xe3, 0xac, 0x19, 0x34, 0x14, 0x7d);
+> +	mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_WRITE_CONTROL_DISPLAY, 0x20);
+> +	mipi_dsi_dcs_write_seq(dsi, MIPI_DCS_WRITE_POWER_SAVE, 0x00);
+> +	mipi_dsi_dcs_write_seq(dsi, 0xf0, 0x5a, 0x5a);
+> +	mipi_dsi_dcs_write_seq(dsi, 0xbe, 0x92, 0x29);
+> +	mipi_dsi_dcs_write_seq(dsi, 0xf0, 0xa5, 0xa5);
+> +	mipi_dsi_dcs_write_seq(dsi, 0xf0, 0x5a, 0x5a);
+> +	mipi_dsi_dcs_write_seq(dsi, 0xb0, 0x06);
+> +	mipi_dsi_dcs_write_seq(dsi, 0xb6, 0x90);
+> +	mipi_dsi_dcs_write_seq(dsi, 0xf0, 0xa5, 0xa5);
+> +	msleep(110);
 > +
 > +	ret = mipi_dsi_dcs_set_display_on(dsi);
 > +	if (ret < 0) {
 > +		dev_err(dev, "Failed to turn display on: %d\n", ret);
 > +		return ret;
 > +	}
-
-My usual question: should the mipi_dsi_dcs_exit_sleep_mode() / 
-mipi_dsi_dcs_set_display_on() be moved from prepare() to enable() part?
-
 > +
 > +	return 0;
 > +}
 > +
-> +static int sony_akatsuki_lgd_off(struct sony_akatsuki_lgd *ctx)
+> +static int samsung_sofef01_m_off(struct samsung_sofef01_m *ctx)
 > +{
 > +	struct mipi_dsi_device *dsi = ctx->dsi;
 > +	struct device *dev = &dsi->dev;
@@ -270,26 +260,19 @@ mipi_dsi_dcs_set_display_on() be moved from prepare() to enable() part?
 > +	}
 > +	msleep(20);
 > +
-> +	ret = mipi_dsi_dcs_set_tear_off(dsi);
-> +	if (ret < 0) {
-> +		dev_err(dev, "Failed to set tear off: %d\n", ret);
-> +		return ret;
-> +	}
-> +
 > +	ret = mipi_dsi_dcs_enter_sleep_mode(dsi);
 > +	if (ret < 0) {
 > +		dev_err(dev, "Failed to enter sleep mode: %d\n", ret);
 > +		return ret;
 > +	}
-> +	msleep(100);
+> +	msleep(120);
 > +
 > +	return 0;
 > +}
 > +
-> +static int sony_akatsuki_lgd_prepare(struct drm_panel *panel)
+> +static int samsung_sofef01_m_prepare(struct drm_panel *panel)
 > +{
-> +	struct sony_akatsuki_lgd *ctx = to_sony_akatsuki_lgd(panel);
-> +	struct drm_dsc_picture_parameter_set pps;
+> +	struct samsung_sofef01_m *ctx = to_samsung_sofef01_m(panel);
 > +	struct device *dev = &ctx->dsi->dev;
 > +	int ret;
 > +
@@ -302,130 +285,121 @@ mipi_dsi_dcs_set_display_on() be moved from prepare() to enable() part?
 > +		return ret;
 > +	}
 > +
-> +	msleep(100);
-> +
-> +	gpiod_set_value_cansleep(ctx->reset_gpio, 1);
-> +	usleep_range(5000, 5100);
-> +
-> +	ret = sony_akatsuki_lgd_on(ctx);
+> +	ret = regulator_enable(ctx->vci);
 > +	if (ret < 0) {
-> +		dev_err(dev, "Failed to power on panel: %d\n", ret);
-> +		goto fail;
+> +		dev_err(dev, "Failed to enable vci regulator: %d\n", ret);
+> +		regulator_disable(ctx->vddio);
+> +		return ret;
 > +	}
 > +
-> +	if (ctx->dsi->dsc) {
-
-dsi->dsc is always set, thus this condition can be dropped.
-
-> +		drm_dsc_pps_payload_pack(&pps, ctx->dsi->dsc);
+> +	samsung_sofef01_m_reset(ctx);
 > +
-> +		ret = mipi_dsi_picture_parameter_set(ctx->dsi, &pps);
-> +		if (ret < 0) {
-> +			dev_err(panel->dev, "failed to transmit PPS: %d\n", ret);
-> +			goto fail;
-> +		}
-> +		ret = mipi_dsi_compression_mode(ctx->dsi, true);
-> +		if (ret < 0) {
-> +			dev_err(dev, "failed to enable compression mode: %d\n", ret);
-> +			goto fail;
-> +		}
-> +
-> +		msleep(28);
+> +	ret = samsung_sofef01_m_on(ctx);
+> +	if (ret < 0) {
+> +		dev_err(dev, "Failed to initialize panel: %d\n", ret);
+> +		gpiod_set_value_cansleep(ctx->reset_gpio, 1);
+> +		regulator_disable(ctx->vci);
+> +		regulator_disable(ctx->vddio);
+> +		return ret;
 > +	}
 > +
 > +	ctx->prepared = true;
 > +	return 0;
-> +
-> +fail:
-> +	gpiod_set_value_cansleep(ctx->reset_gpio, 0);
-> +	regulator_disable(ctx->vddio);
-> +	return ret;
 > +}
 > +
-> +static int sony_akatsuki_lgd_unprepare(struct drm_panel *panel)
+> +static int samsung_sofef01_m_unprepare(struct drm_panel *panel)
 > +{
-> +	struct sony_akatsuki_lgd *ctx = to_sony_akatsuki_lgd(panel);
+> +	struct samsung_sofef01_m *ctx = to_samsung_sofef01_m(panel);
 > +	struct device *dev = &ctx->dsi->dev;
 > +	int ret;
 > +
 > +	if (!ctx->prepared)
 > +		return 0;
 > +
-> +	ret = sony_akatsuki_lgd_off(ctx);
+> +	ret = samsung_sofef01_m_off(ctx);
 > +	if (ret < 0)
-> +		dev_err(dev, "Failed to power off panel: %d\n", ret);
+> +		dev_err(dev, "Failed to un-initialize panel: %d\n", ret);
 > +
-> +	gpiod_set_value_cansleep(ctx->reset_gpio, 0);
+> +	gpiod_set_value_cansleep(ctx->reset_gpio, 1);
+> +	regulator_disable(ctx->vci);
 > +	regulator_disable(ctx->vddio);
-> +
-> +	usleep_range(5000, 5100);
 > +
 > +	ctx->prepared = false;
 > +	return 0;
 > +}
 > +
-> +static const struct drm_display_mode sony_akatsuki_lgd_mode = {
-> +	.clock = (1440 + 312 + 8 + 8) * (2880 + 48 + 8 + 8) * 60 / 1000,
-> +	.hdisplay = 1440,
-> +	.hsync_start = 1440 + 312,
-> +	.hsync_end = 1440 + 312 + 8,
-> +	.htotal = 1440 + 312 + 8 + 8,
-> +	.vdisplay = 2880,
-> +	.vsync_start = 2880 + 48,
-> +	.vsync_end = 2880 + 48 + 8,
-> +	.vtotal = 2880 + 48 + 8 + 8,
-> +	.width_mm = 68,
-> +	.height_mm = 136,
-> +};
-> +
-> +static int sony_akatsuki_lgd_get_modes(struct drm_panel *panel,
-> +				   struct drm_connector *connector)
+> +static int samsung_sofef01_m_get_modes(struct drm_panel *panel,
+> +				       struct drm_connector *connector)
 > +{
-> +	return drm_connector_helper_get_modes_fixed(connector, &sony_akatsuki_lgd_mode);
+> +	struct samsung_sofef01_m *ctx = to_samsung_sofef01_m(panel);
+> +
+> +	return drm_connector_helper_get_modes_fixed(connector, ctx->mode);
 > +}
 > +
-> +static const struct drm_panel_funcs sony_akatsuki_lgd_panel_funcs = {
-> +	.prepare = sony_akatsuki_lgd_prepare,
-> +	.unprepare = sony_akatsuki_lgd_unprepare,
-> +	.get_modes = sony_akatsuki_lgd_get_modes,
+> +static const struct drm_panel_funcs samsung_sofef01_m_panel_funcs = {
+> +	.prepare = samsung_sofef01_m_prepare,
+> +	.unprepare = samsung_sofef01_m_unprepare,
+> +	.get_modes = samsung_sofef01_m_get_modes,
 > +};
 > +
-> +static int sony_akatsuki_lgd_bl_update_status(struct backlight_device *bl)
+> +static int samsung_sofef01_m_bl_update_status(struct backlight_device *bl)
 > +{
 > +	struct mipi_dsi_device *dsi = bl_get_data(bl);
 > +	u16 brightness = backlight_get_brightness(bl);
+> +	int ret;
 > +
-> +	return mipi_dsi_dcs_set_display_brightness_large(dsi, brightness);
+> +	dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
+> +
+> +	ret = mipi_dsi_dcs_set_display_brightness_large(dsi, brightness);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	dsi->mode_flags |= MIPI_DSI_MODE_LPM;
+> +
+> +	return 0;
 > +}
 > +
-> +static int sony_akatsuki_lgd_bl_get_brightness(struct backlight_device *bl)
+> +static int samsung_sofef01_m_bl_get_brightness(struct backlight_device *bl)
 > +{
 > +	struct mipi_dsi_device *dsi = bl_get_data(bl);
 > +	u16 brightness;
 > +	int ret;
 > +
+> +	dsi->mode_flags &= ~MIPI_DSI_MODE_LPM;
+> +
 > +	ret = mipi_dsi_dcs_get_display_brightness_large(dsi, &brightness);
+> +
+> +	dsi->mode_flags |= MIPI_DSI_MODE_LPM;
+> +
 > +	if (ret < 0)
 > +		return ret;
 > +
-> +	return brightness & 0x3ff;
+> +	return brightness;
 > +}
 > +
-> +static const struct backlight_ops sony_akatsuki_lgd_bl_ops = {
-> +	.update_status = sony_akatsuki_lgd_bl_update_status,
-> +	.get_brightness = sony_akatsuki_lgd_bl_get_brightness,
+> +static const struct backlight_ops samsung_sofef01_m_bl_ops = {
+> +	.update_status = samsung_sofef01_m_bl_update_status,
+> +	.get_brightness = samsung_sofef01_m_bl_get_brightness,
 > +};
 > +
-> +static int sony_akatsuki_lgd_probe(struct mipi_dsi_device *dsi)
+> +static struct backlight_device *
+> +samsung_sofef01_m_create_backlight(struct mipi_dsi_device *dsi)
 > +{
+> +	struct device *dev = &dsi->dev;
 > +	const struct backlight_properties props = {
 > +		.type = BACKLIGHT_RAW,
 > +		.brightness = 100,
 > +		.max_brightness = 1023,
 > +	};
+> +
+> +	return devm_backlight_device_register(dev, dev_name(dev), dev, dsi,
+> +					      &samsung_sofef01_m_bl_ops, &props);
+> +}
+> +
+> +static int samsung_sofef01_m_probe(struct mipi_dsi_device *dsi)
+> +{
 > +	struct device *dev = &dsi->dev;
-> +	struct sony_akatsuki_lgd *ctx;
-> +	struct drm_dsc_config *dsc;
+> +	struct samsung_sofef01_m *ctx;
 > +	int ret;
 > +
 > +	ctx = devm_kzalloc(dev, sizeof(*ctx), GFP_KERNEL);
@@ -435,53 +409,35 @@ dsi->dsc is always set, thus this condition can be dropped.
 > +	ctx->vddio = devm_regulator_get(dev, "vddio");
 > +	if (IS_ERR(ctx->vddio))
 > +		return dev_err_probe(dev, PTR_ERR(ctx->vddio),
-> +				     "Failed to get vddio\n");
+> +				     "Failed to get vddio regulator\n");
 > +
-> +	ctx->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_ASIS);
+> +	ctx->vci = devm_regulator_get(dev, "vci");
+> +	if (IS_ERR(ctx->vci))
+> +		return dev_err_probe(dev, PTR_ERR(ctx->vci),
+> +				     "Failed to get vci regulator\n");
+> +
+> +	ctx->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
 > +	if (IS_ERR(ctx->reset_gpio))
 > +		return dev_err_probe(dev, PTR_ERR(ctx->reset_gpio),
 > +				     "Failed to get reset-gpios\n");
 > +
 > +	ctx->dsi = dsi;
+> +	ctx->mode = of_device_get_match_data(dev);
 > +	mipi_dsi_set_drvdata(dsi, ctx);
 > +
 > +	dsi->lanes = 4;
 > +	dsi->format = MIPI_DSI_FMT_RGB888;
 > +	dsi->mode_flags = MIPI_DSI_CLOCK_NON_CONTINUOUS;
 > +
-> +	drm_panel_init(&ctx->panel, dev, &sony_akatsuki_lgd_panel_funcs,
+> +	drm_panel_init(&ctx->panel, dev, &samsung_sofef01_m_panel_funcs,
 > +		       DRM_MODE_CONNECTOR_DSI);
 > +
-> +	ctx->panel.backlight = devm_backlight_device_register(dev, dev_name(dev), dev, dsi,
-> +					      &sony_akatsuki_lgd_bl_ops, &props);
+> +	ctx->panel.backlight = samsung_sofef01_m_create_backlight(dsi);
 > +	if (IS_ERR(ctx->panel.backlight))
 > +		return dev_err_probe(dev, PTR_ERR(ctx->panel.backlight),
 > +				     "Failed to create backlight\n");
 > +
 > +	drm_panel_add(&ctx->panel);
-> +
-> +	/* This panel only supports DSC; unconditionally enable it */
-> +	dsi->dsc = dsc = devm_kzalloc(&dsi->dev, sizeof(*dsc), GFP_KERNEL);
-
-I think double assignments are frowned upon.
-
-> +	if (!dsc)
-> +		return -ENOMEM;
-> +
-> +	dsc->dsc_version_major = 1;
-> +	dsc->dsc_version_minor = 1;
-> +
-> +	dsc->slice_height = 32;
-> +	dsc->slice_count = 2;
-> +	// TODO: Get hdisplay from the mode
-
-Would you like to fix the TODO?
-
-> +	WARN_ON(1440 % dsc->slice_count);
-> +	dsc->slice_width = 1440 / dsc->slice_count;
-> +	dsc->bits_per_component = 8;
-> +	dsc->bits_per_pixel = 8 << 4; /* 4 fractional bits */
-> +	dsc->block_pred_enable = true;
 > +
 > +	ret = mipi_dsi_attach(dsi);
 > +	if (ret < 0) {
@@ -493,9 +449,9 @@ Would you like to fix the TODO?
 > +	return 0;
 > +}
 > +
-> +static void sony_akatsuki_lgd_remove(struct mipi_dsi_device *dsi)
+> +static void samsung_sofef01_m_remove(struct mipi_dsi_device *dsi)
 > +{
-> +	struct sony_akatsuki_lgd *ctx = mipi_dsi_get_drvdata(dsi);
+> +	struct samsung_sofef01_m *ctx = mipi_dsi_get_drvdata(dsi);
 > +	int ret;
 > +
 > +	ret = mipi_dsi_detach(dsi);
@@ -505,24 +461,63 @@ Would you like to fix the TODO?
 > +	drm_panel_remove(&ctx->panel);
 > +}
 > +
-> +static const struct of_device_id sony_akatsuki_lgd_of_match[] = {
-> +	{ .compatible = "sony,akatsuki-lgd" },
+> +/* Sony Xperia 5 (kumano bahamut) */
+> +static const struct drm_display_mode samsung_sofef01_m_bahamut_mode = {
+> +	/*
+> +	 * WARNING: These massive porches are wrong/useless for CMDmode
+> +	 * (and not defined in downstream DTS) but necessary to bump dsi
+> +	 * clocks higher, so that we can achieve proper 60fps without tearing.
+> +	 */
+> +	.clock = (1080 + 156 + 8 + 8) * (2520 + 2393 + 8 + 8) * 60 / 1000,
+> +	.hdisplay = 1080,
+> +	.hsync_start = 1080 + 156,
+> +	.hsync_end = 1080 + 156 + 8,
+> +	.htotal = 1080 + 156 + 8 + 8,
+> +	.vdisplay = 2520,
+> +	.vsync_start = 2520 + 2393,
+> +	.vsync_end = 2520 + 2393 + 8,
+> +	.vtotal = 2520 + 2393 + 8 + 8,
+> +	.width_mm = 61,
+> +	.height_mm = 142,
+> +};
+> +
+> +/* Sony Xperia 10 II (seine pdx201) */
+> +static const struct drm_display_mode samsung_sofef01_m_pdx201_mode = {
+> +	.clock = (1080 + 8 + 8 + 8) * (2520 + 8 + 8 + 8) * 60 / 1000,
+> +	.hdisplay = 1080,
+> +	.hsync_start = 1080 + 8,
+> +	.hsync_end = 1080 + 8 + 8,
+> +	.htotal = 1080 + 8 + 8 + 8,
+> +	.vdisplay = 2520,
+> +	.vsync_start = 2520 + 8,
+> +	.vsync_end = 2520 + 8 + 8,
+> +	.vtotal = 2520 + 8 + 8 + 8,
+> +	.width_mm = 60,
+> +	.height_mm = 139,
+> +};
+> +
+> +static const struct of_device_id samsung_sofef01_m_of_match[] = {
+> +	{ .compatible = "samsung,sofef01-m-bahamut", .data = &samsung_sofef01_m_bahamut_mode },
+> +	{ .compatible = "samsung,sofef01-m-pdx201", .data = &samsung_sofef01_m_pdx201_mode },
+
+Are there really two panels? Can we use one mode for both usecases?
+
 > +	{ /* sentinel */ }
 > +};
-> +MODULE_DEVICE_TABLE(of, sony_akatsuki_lgd_of_match);
+> +MODULE_DEVICE_TABLE(of, samsung_sofef01_m_of_match);
 > +
-> +static struct mipi_dsi_driver sony_akatsuki_lgd_driver = {
-> +	.probe = sony_akatsuki_lgd_probe,
-> +	.remove = sony_akatsuki_lgd_remove,
+> +static struct mipi_dsi_driver samsung_sofef01_m_driver = {
+> +	.probe = samsung_sofef01_m_probe,
+> +	.remove = samsung_sofef01_m_remove,
 > +	.driver = {
-> +		.name = "panel-sony-akatsuki-lgd",
-> +		.of_match_table = sony_akatsuki_lgd_of_match,
+> +		.name = "panel-samsung-sofef01-m",
+> +		.of_match_table = samsung_sofef01_m_of_match,
 > +	},
 > +};
-> +module_mipi_dsi_driver(sony_akatsuki_lgd_driver);
+> +module_mipi_dsi_driver(samsung_sofef01_m_driver);
 > +
 > +MODULE_AUTHOR("Marijn Suijten <marijn.suijten@somainline.org>");
-> +MODULE_DESCRIPTION("DRM panel driver for an unnamed LGD OLED panel found in the Sony Xperia XZ3");
+> +MODULE_DESCRIPTION("DRM panel driver for Samsung SOFEF01-M Display-IC panels");
 > +MODULE_LICENSE("GPL");
 > 
 
