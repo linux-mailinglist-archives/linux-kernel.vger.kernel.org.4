@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68EA670B454
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 07:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE9170B44F
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 07:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231766AbjEVFHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 01:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49202 "EHLO
+        id S231731AbjEVFHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 01:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231734AbjEVFHr (ORCPT
+        with ESMTP id S231727AbjEVFH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 01:07:47 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A706592
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:07:24 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-64d15660784so2906667b3a.0
-        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:07:24 -0700 (PDT)
+        Mon, 22 May 2023 01:07:29 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0691F4
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:07:27 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-64d577071a6so1521509b3a.1
+        for <linux-kernel@vger.kernel.org>; Sun, 21 May 2023 22:07:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1684732044; x=1687324044;
+        d=bytedance.com; s=google; t=1684732047; x=1687324047;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8amRkLtdnjVq9cbmGyv8etEjiXwBdz+ISKHsxqN16tA=;
-        b=GYE7/eh3Hqti3Du8XPZUomicyjqafnfRSVXMJgGIMFX6+SBScSqdwET8DvURyQAI25
-         A2eaYMWJDwWyiQ/yLWt/12vUSj6bzkTk+pGFfX8gf+yVtmaOuB1FxffF70FUjmpqTzA9
-         lU0TUqzND5gyGUb0yKeIQJRajq4+VN2W1jz/CsH9wkCLeVYW5gqLkCAnJanNMSasF/uU
-         O8hpWEr2WtH/xMH1UAsDv43QHtp1r+L/SgUI5S5gEN4rskUkm/mEGMOt2LBfYeUiKTBX
-         sc9hVVsA3HUHuvjjFUGzixiTj+Q9J+BBY3yvg5bd5a9gEihrq+709FCyt5O91kotDEH2
-         G/6w==
+        bh=yWC57VvLqW+uV6e3VSW20kWo+uFlFhqhxKDmqi/M+s4=;
+        b=EzLSK3cPy7whK/cuCX7ItKG6l3duMlUzxr2DN24N10lVm+CaqC7sQkl4JBdNua/aAQ
+         zosKFg/rfFI7osQ8eZcIBIfKeDR03YZaXjE5O8+e2qadCDIp41XDnirHuK3FWoX8l3OU
+         YcB4YJkxwNjDyYKJfPZHybJrX1aMBiy3UgCgsQoNlOLNB2szntp7ukZGP8Q+ZzNCsuPy
+         V8JNyEch9NnjoH7EK7OtuSW0wVEcwlYQnqPEa9kzxzg0/vxd+qY1B24BapLesnKT1O6q
+         iZbG3O4pP7gdt6Vx0E2R3HvXJKJDMX0BbBfYhgm7SDcOeyERTF0Kb1Cj892QnkPDOShu
+         QbmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684732044; x=1687324044;
+        d=1e100.net; s=20221208; t=1684732047; x=1687324047;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8amRkLtdnjVq9cbmGyv8etEjiXwBdz+ISKHsxqN16tA=;
-        b=XbwQScZwzJwh82qLgsej/xfEWSsLpGngFOfZT4aX1vtnKdpLInjGZDn89/tPW3qz0W
-         3YfIyHblBoV+4Xu5YhxGbuLBoI/90tbezdxi5+I1erB+LoQ9yac3dFOPffm1exx70Xbh
-         nF2kL0reFrUe4RYjYYEJrpYxCmTBVRbC4AnY/nZQQlPT5/JYaiFfUHbgfNTW+n8RLCw9
-         DV0HNkcMomZUPy8XQJ8FD+f8G3JFXyuJ7bwCsuH3y3TVBsjg0/y2cxeQIwgPrhqUB2Z/
-         gtukROO+il16qoEb/lhhixlxZGJQ29FlwTRgXk671KQgMYKQfE9Rs0cKMTuydeUyS0e1
-         rzMg==
-X-Gm-Message-State: AC+VfDxtg1fDDCfJlGzgft5OuyknsgtVc5LLqQTMXyWN2dKrViz+bCMj
-        TtzZOkUSP6aReJ/4D7Ps1zn7W4xWG/SjSdZSiSo=
-X-Google-Smtp-Source: ACHHUZ7HimVTIQoub3tu0mdIJwmiVfKwyk3rieE8LPbYzYmpwti5Dz/8eFWiSuI3fjzaDlWesoLrBg==
-X-Received: by 2002:a05:6a00:1882:b0:64d:42cb:42af with SMTP id x2-20020a056a00188200b0064d42cb42afmr9286193pfh.4.1684732044137;
-        Sun, 21 May 2023 22:07:24 -0700 (PDT)
+        bh=yWC57VvLqW+uV6e3VSW20kWo+uFlFhqhxKDmqi/M+s4=;
+        b=bNFcxqLOyjeI4enfRTfp5mFrFx2xOz2BDL0ukRFBmkN9svZ58tKM3KE4K4GoL4utIs
+         /hZ2GKmlyWc0tsUMeNPW041CV2AIJ4ZnX6JAueqQjX8pzkqZ5XOpLfcwZSFwNufXNVsE
+         85kg57qEOs2GMMCkSF7LMKt7i/TqCBT+FLb069yqNLQmrRSK26FKYdZPiHPkZqqJTcEW
+         PW99L4OYAYoTtbJrgI+D1Blbhjjbur1k5Xd3d9vrM4qGD6l5EuVBuUirFogNu2UhVWi3
+         oQ9ClJQkA3bHKJGpJFIPzX74OdgLCs1tVmwtZfFVsb6MSOrNhovuPYjsX7WPRIW5uXFt
+         5fjg==
+X-Gm-Message-State: AC+VfDwT4sRgsnxWZrjFEVRucm9c2Uq0Kl87OgPii8ldLUCCdW6kcx+Y
+        7mjO9G4pbXdIN6b30LUJxRALvA==
+X-Google-Smtp-Source: ACHHUZ78HzvmR367cMVPT2DzYVrIahGxjmoDH/aFdaP1ySwjC4sDSZwePIHcLNsfO8g2Nn/oaa1aBw==
+X-Received: by 2002:a05:6a00:3924:b0:64d:5f1d:3d77 with SMTP id fh36-20020a056a00392400b0064d5f1d3d77mr4573175pfb.34.1684732047342;
+        Sun, 21 May 2023 22:07:27 -0700 (PDT)
 Received: from GL4FX4PXWL.bytedance.net ([139.177.225.249])
-        by smtp.gmail.com with ESMTPSA id t10-20020a62ea0a000000b0063b5776b073sm3247519pfh.117.2023.05.21.22.07.21
+        by smtp.gmail.com with ESMTPSA id t10-20020a62ea0a000000b0063b5776b073sm3247519pfh.117.2023.05.21.22.07.24
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 21 May 2023 22:07:23 -0700 (PDT)
+        Sun, 21 May 2023 22:07:27 -0700 (PDT)
 From:   Peng Zhang <zhangpeng.00@bytedance.com>
 To:     Liam.Howlett@oracle.com
 Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org,
         Peng Zhang <zhangpeng.00@bytedance.com>
-Subject: [PATCH v3 02/10] maple_tree: Drop mas_{rev_}alloc() and mas_fill_gap()
-Date:   Mon, 22 May 2023 13:06:48 +0800
-Message-Id: <20230522050656.96215-3-zhangpeng.00@bytedance.com>
+Subject: [PATCH v3 03/10] maple_tree: Fix the arguments to __must_hold()
+Date:   Mon, 22 May 2023 13:06:49 +0800
+Message-Id: <20230522050656.96215-4-zhangpeng.00@bytedance.com>
 X-Mailer: git-send-email 2.37.0 (Apple Git-136)
 In-Reply-To: <20230522050656.96215-1-zhangpeng.00@bytedance.com>
 References: <20230522050656.96215-1-zhangpeng.00@bytedance.com>
@@ -73,139 +73,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-mas_{rev_}alloc() and mas_fill_gap() are useless, delete them.
+Fix the arguments to __must_hold() to make sparse work.
 
 Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
 ---
- lib/maple_tree.c | 108 -----------------------------------------------
- 1 file changed, 108 deletions(-)
+ lib/maple_tree.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-index 96d102d60b4e..263bd0ccc31b 100644
+index 263bd0ccc31b..3fe6a6685384 100644
 --- a/lib/maple_tree.c
 +++ b/lib/maple_tree.c
-@@ -5120,46 +5120,6 @@ static inline void mas_awalk(struct ma_state *mas, unsigned long size)
- 	}
- }
- 
--/*
-- * mas_fill_gap() - Fill a located gap with @entry.
-- * @mas: The maple state
-- * @entry: The value to store
-- * @slot: The offset into the node to store the @entry
-- * @size: The size of the entry
-- * @index: The start location
-- */
--static inline void mas_fill_gap(struct ma_state *mas, void *entry,
--		unsigned char slot, unsigned long size, unsigned long *index)
--{
--	MA_WR_STATE(wr_mas, mas, entry);
--	unsigned char pslot = mte_parent_slot(mas->node);
--	struct maple_enode *mn = mas->node;
--	unsigned long *pivots;
--	enum maple_type ptype;
--	/*
--	 * mas->index is the start address for the search
--	 *  which may no longer be needed.
--	 * mas->last is the end address for the search
--	 */
--
--	*index = mas->index;
--	mas->last = mas->index + size - 1;
--
--	/*
--	 * It is possible that using mas->max and mas->min to correctly
--	 * calculate the index and last will cause an issue in the gap
--	 * calculation, so fix the ma_state here
--	 */
--	mas_ascend(mas);
--	ptype = mte_node_type(mas->node);
--	pivots = ma_pivots(mas_mn(mas), ptype);
--	mas->max = mas_safe_pivot(mas, pivots, pslot, ptype);
--	mas->min = mas_safe_min(mas, pivots, pslot);
--	mas->node = mn;
--	mas->offset = slot;
--	mas_wr_store_entry(&wr_mas);
--}
--
- /*
-  * mas_sparse_area() - Internal function.  Return upper or lower limit when
-  * searching for a gap in an empty tree.
-@@ -5307,74 +5267,6 @@ int mas_empty_area_rev(struct ma_state *mas, unsigned long min,
- }
- EXPORT_SYMBOL_GPL(mas_empty_area_rev);
- 
--static inline int mas_alloc(struct ma_state *mas, void *entry,
--		unsigned long size, unsigned long *index)
--{
--	unsigned long min;
--
--	mas_start(mas);
--	if (mas_is_none(mas) || mas_is_ptr(mas)) {
--		mas_root_expand(mas, entry);
--		if (mas_is_err(mas))
--			return xa_err(mas->node);
--
--		if (!mas->index)
--			return mas_pivot(mas, 0);
--		return mas_pivot(mas, 1);
--	}
--
--	/* Must be walking a tree. */
--	mas_awalk(mas, size);
--	if (mas_is_err(mas))
--		return xa_err(mas->node);
--
--	if (mas->offset == MAPLE_NODE_SLOTS)
--		goto no_gap;
--
--	/*
--	 * At this point, mas->node points to the right node and we have an
--	 * offset that has a sufficient gap.
--	 */
--	min = mas->min;
--	if (mas->offset)
--		min = mas_pivot(mas, mas->offset - 1) + 1;
--
--	if (mas_is_err(mas))
--		return xa_err(mas->node);
--
--	if (mas->index < min)
--		mas->index = min;
--
--	mas_fill_gap(mas, entry, mas->offset, size, index);
--	return 0;
--
--no_gap:
--	return -EBUSY;
--}
--
--static inline int mas_rev_alloc(struct ma_state *mas, unsigned long min,
--				unsigned long max, void *entry,
--				unsigned long size, unsigned long *index)
--{
--	int ret = 0;
--
--	ret = mas_empty_area_rev(mas, min, max, size);
--	if (ret)
--		return ret;
--
--	if (mas_is_err(mas))
--		return xa_err(mas->node);
--
--	if (mas->offset == MAPLE_NODE_SLOTS)
--		goto no_gap;
--
--	mas_fill_gap(mas, entry, mas->offset, size, index);
--	return 0;
--
--no_gap:
--	return -EBUSY;
--}
--
- /*
-  * mte_dead_leaves() - Mark all leaves of a node as dead.
-  * @mas: The maple state
+@@ -1752,7 +1752,7 @@ static inline void mas_adopt_children(struct ma_state *mas,
+  * leave the node (true) and handle the adoption and free elsewhere.
+  */
+ static inline void mas_replace(struct ma_state *mas, bool advanced)
+-	__must_hold(mas->tree->lock)
++	__must_hold(mas->tree->ma_lock)
+ {
+ 	struct maple_node *mn = mas_mn(mas);
+ 	struct maple_enode *old_enode;
+@@ -1792,7 +1792,7 @@ static inline void mas_replace(struct ma_state *mas, bool advanced)
+  * @child: the maple state to store the child.
+  */
+ static inline bool mas_new_child(struct ma_state *mas, struct ma_state *child)
+-	__must_hold(mas->tree->lock)
++	__must_hold(mas->tree->ma_lock)
+ {
+ 	enum maple_type mt;
+ 	unsigned char offset;
+@@ -6204,7 +6204,7 @@ EXPORT_SYMBOL_GPL(mas_erase);
+  * Return: true on allocation, false otherwise.
+  */
+ bool mas_nomem(struct ma_state *mas, gfp_t gfp)
+-	__must_hold(mas->tree->lock)
++	__must_hold(mas->tree->ma_lock)
+ {
+ 	if (likely(mas->node != MA_ERROR(-ENOMEM))) {
+ 		mas_destroy(mas);
 -- 
 2.20.1
 
