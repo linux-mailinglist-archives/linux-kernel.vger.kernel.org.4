@@ -2,61 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17C0A70C566
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 20:40:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB39270C568
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 20:41:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233481AbjEVSk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 14:40:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49906 "EHLO
+        id S233355AbjEVSlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 14:41:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233413AbjEVSkX (ORCPT
+        with ESMTP id S229576AbjEVSlJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 14:40:23 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416EAB7;
-        Mon, 22 May 2023 11:40:22 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1ae85b71141so32261435ad.0;
-        Mon, 22 May 2023 11:40:22 -0700 (PDT)
+        Mon, 22 May 2023 14:41:09 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13518FE;
+        Mon, 22 May 2023 11:41:08 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2af1ae3a21fso57827711fa.0;
+        Mon, 22 May 2023 11:41:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684780821; x=1687372821;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+EAmn2tpz4/xDoyuHIGsW4CA87YG1swsk2hGj8vxAxo=;
-        b=MbKTglxDb9NdIFUgKl7mLyMgI6Q6JspOvGrE1ReThikIzQhX/V/DewAqnEXAj6ggn5
-         KRsIos/VjlBmFWYLEqlGhFWCt2TEe6coXefFKScWAvCWemk4JzasEx0J35JWutmChJR4
-         EmxhmT5CdqlCFru/NitkyzchacbB7UrB78TdvtkxhFLwoOr/C0DrFZ54oXn+Dg4eLFCH
-         RrMDrLqI0nT5qvkXM2fCztoXM1I/itgUD7evoqzejL40mqbw5L2oAefCVtjmxGR7MXNx
-         pTeF4uTwHaNYYUptDqKbDZbUOG/u9D5nNua57mAg8RefBI3AexGCsa7Npf+d5bGjCE95
-         wc2Q==
+        d=gmail.com; s=20221208; t=1684780866; x=1687372866;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ChQvPHKY02/sq+5jFcPC0VdUg8JPBNHBqatZ3qRVvFs=;
+        b=nj/dXwpD+7WpwGFnnxSTFpYeW65IM5Bl0ML639vJ/mhhJljqbZqH+oUs7COZZPW+UM
+         uxvs1hzhg7QYems62LZw70e++ffxcxSJQNMh1wB33yQ60o5LGBnUjmYYFgc6KGVSN2X6
+         9lOGSJY1t7gDz1AiLFX6gRhLd7jbeXAlV9keE9r0zMcYDY8z9V8NLPtb2M/H5yrIkrqP
+         Br6xALOc8wOcaxjvNCyBmwpzBUNrfpmmvJ3/sRF3/vy7rtOkjq19w1+4PvEm89aJEBnJ
+         WHjc45Qbg6gWowfPuO7nL8kzK9ZFTRs/lbQQnNLL9B49yg6/EPP7DiKhrBE3T7HsnNvp
+         KDRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684780821; x=1687372821;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1684780866; x=1687372866;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=+EAmn2tpz4/xDoyuHIGsW4CA87YG1swsk2hGj8vxAxo=;
-        b=lqAAlOjZ9yqnDi56eEwrspXIWm2kOV9qNv0pe/EdkgHKFlpenJe+B29MGF9leZunkK
-         QJBzUqlpSpvqlqkhmWFr6ZsHskW/3+8rHzdt38Vp+wISspdUZ3rgSgbF4ZJh7xysPeMH
-         39zWWD+lMUvNH0EYFxYEMxP9y13AcRyA8AV5VOQlZnoNoSw1tYtJUWM64Vmiuotmmxa5
-         8oIqq+AzVEcM+m/YNJ3WrTnS0gJq5aRhKB4iE2Ve5XPQr+e/wJVx/pRptpVJhl8JPLnl
-         BlMYy7cdx/MNdMG1aTz+3Tgfvs9eQBuO+lRQMG+jkw07f87clnNWsAXqNrKHbLPAmFHA
-         Nu9g==
-X-Gm-Message-State: AC+VfDzESKvf6+4EvbStpOZ+tugxs7WdsPUc01u0YQH6mnrUHN4Q+FI9
-        rrNjoIgsSzv5m4+9wTK+G/VHWCo3+5EjiK/LXJ6fIka+
-X-Google-Smtp-Source: ACHHUZ6ysvT/o4Zz1Xie2WnFX+T6TrOs1L5dvv3KhLHRnDFaIsSxg1PtNiD0topJLdi7Bp0qwodWyVpnm6nI534Po6g=
-X-Received: by 2002:a17:902:ef82:b0:1a5:3319:12f7 with SMTP id
- iz2-20020a170902ef8200b001a5331912f7mr11626862plb.50.1684780821596; Mon, 22
- May 2023 11:40:21 -0700 (PDT)
+        bh=ChQvPHKY02/sq+5jFcPC0VdUg8JPBNHBqatZ3qRVvFs=;
+        b=J3xLloK9E43nZSYYSBHZ1g2lmauc78gzDDiE7/rNdc0PdgKW7FPL2gJ+tSIeRPiMUW
+         6H/EOai+JlmbfA/VX3XrhpaxRIPkX4ndMltjkvExJQEh2ZxyiJ/4r24zoU2eTScIKXoW
+         aWP0Oh7n4n0oXfi1ScdR7VEWhC7DRYoxdjXGw9yEI5qPuQemg8JNsXQrOstf82Oij09l
+         lmLPPLYz4BnXdG02yD5Z7ZUBgbhDM5BdEc8e/SidkMQl0qYfCeA0qjZcQ62B8uV6jyUc
+         g5Dc7MPvKKHvjCkHAD+q9KHBEOV/phPBcHBxB9/sEe3OI85xmd9pP1zngOEudedW2xH2
+         HnWA==
+X-Gm-Message-State: AC+VfDxekm6Fz/4alBqLA5jeki3Uo2yVHZOY82K344zg88tKGjXIsHsE
+        aTApvPhhmTWZZplEy1mDGNs=
+X-Google-Smtp-Source: ACHHUZ6NoJ8Sxzlrhbi+NQtEAmqiI6/mheCqjrzh7KYvma1zxNHOHiH08RwlWfL12+hPXT+FEkzl5A==
+X-Received: by 2002:a2e:8ec4:0:b0:2af:160d:888a with SMTP id e4-20020a2e8ec4000000b002af160d888amr4024465ljl.1.1684780866016;
+        Mon, 22 May 2023 11:41:06 -0700 (PDT)
+Received: from armor.home ([2a01:799:13ab:8700:e72a:18b2:75e3:fbcc])
+        by smtp.gmail.com with ESMTPSA id b12-20020a2e894c000000b002ada0c38963sm1216543ljk.62.2023.05.22.11.41.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 11:41:05 -0700 (PDT)
+From:   Lasse Brun <bruners@gmail.com>
+To:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Lasse Brun <bruners@gmail.com>, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 1/1] HID: apple: Option to swap only left side mod keys
+Date:   Mon, 22 May 2023 20:40:12 +0200
+Message-Id: <20230522184013.42621-1-bruners@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230519164753.72065-1-jiaxun.yang@flygoat.com> <20230519164753.72065-2-jiaxun.yang@flygoat.com>
-In-Reply-To: <20230519164753.72065-2-jiaxun.yang@flygoat.com>
-From:   Jonas Gorski <jonas.gorski@gmail.com>
-Date:   Mon, 22 May 2023 20:40:10 +0200
-Message-ID: <CAOiHx==iku+duvBnAfu_3AXgNmY9aK+uO+t9Enzdf6qQN5m+iw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] MIPS: Introduce WAR_4KC_LLSC config option
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tsbogend@alpha.franken.de
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -67,116 +70,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On the Keychron K8 keyboard, and probably others, the right side keys
+should not be swapped to maintain PC layout.
 
-On Fri, 19 May 2023 at 18:49, Jiaxun Yang <jiaxun.yang@flygoat.com> wrote:
->
-> WAR_4KC_LLSC is used to control workaround of 4KC LLSC issue
-> that affects 4Kc up to version 0.9.
->
-> Early ath25 chips are known to be affected.
->
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
->  arch/mips/Kconfig                                        | 6 ++++++
->  arch/mips/include/asm/cpu.h                              | 1 +
->  arch/mips/include/asm/mach-ath25/cpu-feature-overrides.h | 2 +-
->  arch/mips/kernel/cpu-probe.c                             | 7 +++++++
->  4 files changed, 15 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index 30e90a2d53f4..354d033364ad 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -230,6 +230,7 @@ config ATH25
->         select SYS_SUPPORTS_BIG_ENDIAN
->         select SYS_SUPPORTS_32BIT_KERNEL
->         select SYS_HAS_EARLY_PRINTK
-> +       select WAR_4KC_LLSC if !SOC_AR5312
+Swapping the right side keys moves 'Super' before 'Alt gr' which is not
+intended by the default Keychron layout or the ISO layout.
 
-Shouldn't this be "if SOC_AR5312"?
+Signed-off-by: Lasse Brun <bruners@gmail.com>
+---
+ drivers/hid/hid-apple.c | 13 +++++++++++--
+ 1 file changed, 11 insertions(+), 2 deletions(-)
 
-Though since you are adding runtime detection/correction below, I
-wonder if this would be really needed as an extra symbol, and rather
-use the later introduced (CPU_MAY_HAVE_LLSC) directly.
+diff --git a/drivers/hid/hid-apple.c b/drivers/hid/hid-apple.c
+index cc535d2d6e8c..d7b932925730 100644
+--- a/drivers/hid/hid-apple.c
++++ b/drivers/hid/hid-apple.c
+@@ -58,7 +58,7 @@ static unsigned int swap_opt_cmd;
+ module_param(swap_opt_cmd, uint, 0644);
+ MODULE_PARM_DESC(swap_opt_cmd, "Swap the Option (\"Alt\") and Command (\"Flag\") keys. "
+ 		"(For people who want to keep Windows PC keyboard muscle memory. "
+-		"[0] = as-is, Mac layout. 1 = swapped, Windows layout.)");
++		"[0] = as-is, Mac layout. 1 = swapped, Windows layout., 2 = swapped, Swap only left side)");
+ 
+ static unsigned int swap_ctrl_cmd;
+ module_param(swap_ctrl_cmd, uint, 0644);
+@@ -319,6 +319,12 @@ static const struct apple_key_translation swapped_option_cmd_keys[] = {
+ 	{ }
+ };
+ 
++static const struct apple_key_translation swapped_option_cmd_left_keys[] = {
++	{ KEY_LEFTALT,	KEY_LEFTMETA },
++	{ KEY_LEFTMETA,	KEY_LEFTALT },
++	{ }
++};
++
+ static const struct apple_key_translation swapped_ctrl_cmd_keys[] = {
+ 	{ KEY_LEFTCTRL,	KEY_LEFTMETA },
+ 	{ KEY_LEFTMETA,	KEY_LEFTCTRL },
+@@ -416,7 +422,10 @@ static int hidinput_apple_event(struct hid_device *hid, struct input_dev *input,
+ 	}
+ 
+ 	if (swap_opt_cmd) {
+-		trans = apple_find_translation(swapped_option_cmd_keys, code);
++		if (swap_opt_cmd == 2)
++			trans = apple_find_translation(swapped_option_cmd_left_keys, code);
++		else
++			trans = apple_find_translation(swapped_option_cmd_keys, code);
+ 
+ 		if (trans)
+ 			code = trans->to;
+-- 
+2.40.1
 
-Or rather have select "CPU_HAS_LLSC if !SOC_AR5312" in that case.
-
->         help
->           Support for Atheros AR231x and Atheros AR531x based boards
->
-> @@ -2544,6 +2545,11 @@ config WAR_ICACHE_REFILLS
->  config WAR_R10000_LLSC
->         bool
->
-> +# On 4Kc up to version 0.9 (PRID_REV < 1) there is a bug that may cause llsc
-> +# sequences to deadlock.
-> +config WAR_4KC_LLSC
-> +       bool
-> +
->  # 34K core erratum: "Problems Executing the TLBR Instruction"
->  config WAR_MIPS34K_MISSED_ITLB
->         bool
-> diff --git a/arch/mips/include/asm/cpu.h b/arch/mips/include/asm/cpu.h
-> index ecb9854cb432..84bb1931a8b4 100644
-> --- a/arch/mips/include/asm/cpu.h
-> +++ b/arch/mips/include/asm/cpu.h
-> @@ -247,6 +247,7 @@
->  #define PRID_REV_VR4122                        0x0070
->  #define PRID_REV_VR4181A               0x0070  /* Same as VR4122 */
->  #define PRID_REV_VR4130                        0x0080
-> +#define PRID_REV_4KC_V1_0              0x0001
->  #define PRID_REV_34K_V1_0_2            0x0022
->  #define PRID_REV_LOONGSON1B            0x0020
->  #define PRID_REV_LOONGSON1C            0x0020  /* Same as Loongson-1B */
-> diff --git a/arch/mips/include/asm/mach-ath25/cpu-feature-overrides.h b/arch/mips/include/asm/mach-ath25/cpu-feature-overrides.h
-> index ec3604c44ef2..5df292b1ff04 100644
-> --- a/arch/mips/include/asm/mach-ath25/cpu-feature-overrides.h
-> +++ b/arch/mips/include/asm/mach-ath25/cpu-feature-overrides.h
-> @@ -24,7 +24,7 @@
->  #define cpu_has_counter                        1
->  #define cpu_has_ejtag                  1
->
-> -#if !defined(CONFIG_SOC_AR5312)
-> +#if !defined(WAR_4KC_LLSC)
->  #  define cpu_has_llsc                 1
-
-since the #else path defines cpu_has_llsc as 0, it means that kernels
-targeting both SoCs would force llsc to be unavailable (not introduced
-by you).
-
-So this probably should be rather this:
-
-#if !defined(CONFIG_SOC_AR5312)
-#define cpu_has_llsc 1
-#else if !defined(CONFIG_SOC_AR5312)
-#define cpu_has_llsc 0
-#endif
-
-(so if only one is enabled, set it accordingly, else let runtime
-detection handle it).
-
->  #else
->  /*
-> diff --git a/arch/mips/kernel/cpu-probe.c b/arch/mips/kernel/cpu-probe.c
-> index 6d15a398d389..fd452e68cd90 100644
-> --- a/arch/mips/kernel/cpu-probe.c
-> +++ b/arch/mips/kernel/cpu-probe.c
-> @@ -152,6 +152,13 @@ static inline void check_errata(void)
->         struct cpuinfo_mips *c = &current_cpu_data;
->
->         switch (current_cpu_type()) {
-> +       case CPU_4KC:
-> +               if ((c->processor_id & PRID_REV_MASK) < PRID_REV_4KC_V1_0) {
-> +                       c->options &= ~MIPS_CPU_LLSC;
-> +                       if (!IS_ENABLED(CONFIG_WAR_4K_LLSC))
-> +                               pr_err("CPU have LLSC errata, please enable CONFIG_WAR_4K_LLSC");
-> +               }
-
-And then you don't need this error message at all, since then
-cpu_has_llsc is 0 or follows MIPS_CPU_LLSC, unless you disabled
-support for the relevant SoC, and then you'll have bigger problems
-anyway.
-
-Regards,
-Jonas
