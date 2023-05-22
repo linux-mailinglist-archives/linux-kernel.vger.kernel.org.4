@@ -2,110 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5E070C151
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 16:42:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE9DF70C155
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 16:42:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233922AbjEVOmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 10:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60424 "EHLO
+        id S234038AbjEVOm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 10:42:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbjEVOl7 (ORCPT
+        with ESMTP id S234021AbjEVOmR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 10:41:59 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EC6B5B0;
-        Mon, 22 May 2023 07:41:53 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 742BD11FB;
-        Mon, 22 May 2023 07:42:38 -0700 (PDT)
-Received: from [10.57.22.146] (unknown [10.57.22.146])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6A6163F67D;
-        Mon, 22 May 2023 07:41:50 -0700 (PDT)
-Message-ID: <e5a75077-e3e6-7a77-c4d0-c55fa120acce@arm.com>
-Date:   Mon, 22 May 2023 15:41:53 +0100
+        Mon, 22 May 2023 10:42:17 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A38411F;
+        Mon, 22 May 2023 07:42:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=yfi//GuVvnr5PG0d0W18/s2Qr7V1R3hb5jrrCaCC3TI=; b=anG5KyX3cDc/wpxOdVMDgva8g1
+        96+jO8g6+JTdj0nXlDFytD2t8ZuhNjId6uKXNV/1aWUW+jJ6QmgA/zBULGq+MIE45x/2f3m1lwZMk
+        TcSkJXgu3Z98UaovUT+/DIjlZ+CUJ8OZD+4YFVLvL47A1rPU8MlewUU03r/Mgp0zTs4A=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1q16ja-00DYOd-Ih; Mon, 22 May 2023 16:42:02 +0200
+Date:   Mon, 22 May 2023 16:42:02 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     David Epping <david.epping@missinglinkelectronics.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH net 3/3] net: phy: mscc: enable VSC8501/2 RGMII RX clock
+Message-ID: <70234187-3e7d-4932-8b07-42973337ecb1@lunn.ch>
+References: <20230520160603.32458-1-david.epping@missinglinkelectronics.com>
+ <20230520160603.32458-4-david.epping@missinglinkelectronics.com>
+ <20230521134356.ar3itavhdypnvasc@skbuf>
+ <20230521161650.GC2208@nucnuc.mle>
+ <20230522095833.otk2nv24plmvarpt@skbuf>
+ <20230522140057.GB18381@nucnuc.mle>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 0/3] Add basic tracing for uclamp and schedutil
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     rostedt@goodmis.org, mhiramat@kernel.org, mingo@redhat.com,
-        peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, delyank@fb.com, qyousef@google.com,
-        qyousef@layalina.io, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org,
-        Linux PM <linux-pm@vger.kernel.org>
-References: <20230509122246.1702397-1-lukasz.luba@arm.com>
- <88fcd266-301a-f6e1-cf1c-69c20e74ef35@arm.com>
- <CAJZ5v0juOwCHNoCo8gX+NopuzK18d+v3QV0qkGcg1BvDVcPpKQ@mail.gmail.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0juOwCHNoCo8gX+NopuzK18d+v3QV0qkGcg1BvDVcPpKQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230522140057.GB18381@nucnuc.mle>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> Its my first patch re-submission, so sorry for the noob question:
+> Should I include your "pw-bot: changes-requested" tag with the third
+> patch? Probably not.
 
+No.
 
-On 5/22/23 15:40, Rafael J. Wysocki wrote:
-> Hi Lukasz,
-> 
-> On Mon, May 22, 2023 at 3:38 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->> Hi Rafael,
->>
->>
->>
->> On 5/9/23 13:22, Lukasz Luba wrote:
->>> Hi all,
->>>
->>> The task scheduler feature: Uclamp, begins to take off. To better understand
->>> the dynamics in the task scheduler and CPU frequency requests we need some
->>> better tracing.
->>> In schedutil (cpufreq governor) we allow to enter the scheduler
->>> and make the frequency change. Although, there is some limit in regards to how
->>> often this can happen. That min period is provided by the cpufreq driver.
->>> Thus, some of the cpufreq requests might be filter out and the frequency won't
->>> be changed (hopefuly will be set a bit later). We would like to know about
->>> those situations, especially in context of the user-space hints made via
->>> Uclamp for particular tasks.
->>> This patch set aims to add base for our toolkits and post-processing trace
->>> analyzes.
->>
->>> Changelog:
->>> v2:
->>> - solved the issue from CI build warning, dropped schedutil.h and re-used
->>>     the sched.h which is available in build_utility.c where cpufreq_schedutil.c
->>>     is included
->>> - added tag for the last patch 3/3 for the CI robot helping hend
->>> - re-based on top of v6.4-rc1
->>> v1:
->>> - implementation can be found here [1]
->>>
->>
->> I was going to gently ping you, while I've realized that you
->> are not on CC list :( I don't know what happened, my apologies.
-> 
-> No worries.
-> 
->> Shell I resend this patch set so you can have it in a proper way
->> in your mailbox?
-> 
-> Well, for schedutil you should also CC linux-pm (done now), so please resend it.
-> 
->> Could you have a look at this, please?
-> 
-> I could, but if I'm to reply, it will be much more convenient for me
-> if it is there in my inbox.
-> 
+There is a robot listening to emails, and when it sees pw-bot: It uses
+the label to change the state of the patch in patchworks:
 
-Thanks Rafael for instant response. I'll resend it with the proper CC
-list this time.
+https://patchwork.kernel.org/project/netdevbpf/list/
+
+The robot does have some basic authentication, so it should actually
+ignore such a line from you, since you are not a Maintainer. But even
+so, you don't want to make your own new patches as needing changes.
+
+    Andrew
