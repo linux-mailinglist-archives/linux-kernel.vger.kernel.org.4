@@ -2,153 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2F1870B7DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37DEF70B7E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 10:44:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232388AbjEVImt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 04:42:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34930 "EHLO
+        id S232381AbjEVIoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 04:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232381AbjEVImr (ORCPT
+        with ESMTP id S229571AbjEVIoR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 04:42:47 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08F6B7;
-        Mon, 22 May 2023 01:42:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1684744962; bh=KpoRxSTMXjvQHeAOX030xl1ELhy5opCOdNVTtUGkJz8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=gHuZb871pYewey0RthFhrNb0TNW+AwaRzsYWELrrrX5sW4hIvUxU+RutrBtK4JaZc
-         jaq1DKg24eRm7w/Lmxd+VZL9/ZDHRAuUU4pp1CFwKwglnfbQrGom2lDl4se54en8Nb
-         e1VUET/KsQqei8wgwRwItcjUI++Bfpb1FL160rrI=
-Received: from [100.100.57.122] (unknown [58.34.185.106])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id B9D32600DA;
-        Mon, 22 May 2023 16:42:41 +0800 (CST)
-Message-ID: <9075974f-d130-6398-b7df-7f2e67caedb0@xen0n.name>
-Date:   Mon, 22 May 2023 16:42:41 +0800
+        Mon, 22 May 2023 04:44:17 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33E1FB6
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 01:44:16 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-510d8b0169fso8085073a12.1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 01:44:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google; t=1684745054; x=1687337054;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RRCMQPba22gphE+yEe+ARCBFhwsSZYsTb9sKXq+NJRM=;
+        b=bb/7ytzXxYkGjIUZxdrfHhlMdXTLgbYzgV1N3oWkJnByQMEOccwyCba6RmLgeMNgqo
+         OEus+WqbwlfKjNQuLI09Are2Q1km1qtJq+VnVjc8ftLjfW9zCcjahAj//+RPTmKNRIRm
+         u4kV8u+Iyj00/ezfPVZp2UIlDYGOjgf/9AFH8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684745054; x=1687337054;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RRCMQPba22gphE+yEe+ARCBFhwsSZYsTb9sKXq+NJRM=;
+        b=YF7N32QmDq7e0BBm0q9JPbDuUdR5/A997EbZEB8+aKvyrA3CLJRDVXszbaBw2LVb9P
+         l8NxuGa99g+y42jyQNqYWXuZRxvGGq5RGA1Lmoh+OKBzDAOHrk+kbfX5M445tsr6m0UG
+         X3X4j86vWkkQIDj/mDRnavePG77ZbFlX1JQK8TZUdEWjqPNu2WLNTM2wscMrjxR+r39C
+         oeK7ZiyYlgLupQnHiFhnvDeciz1Ev3PjZ5TjmMnZ3dfabpTWM9qjXwoJ6D1svVAqfvBg
+         oRzGHBkUVzjLdxRfO4SBCB15bWIpDetHZbd6gqyURhoq2H0S7L1T6vVwX++A6cLAz1UD
+         STrA==
+X-Gm-Message-State: AC+VfDwxdwUpQf507wHuqr9N9Vjf2c/GL2AC6HLOMVIVIw8shW0QEcWK
+        3mytOi5cUcfhhar+IsJ6HeqolZDwzzxBpmh7+j8rRg==
+X-Google-Smtp-Source: ACHHUZ799M1ZwNFLAegsyLqUbPymCUgBAvL8CX59OgNWOkquTg+WH1VPOhl1PzKcpHqpj2Hy80yOmA==
+X-Received: by 2002:a05:6402:2ce:b0:50b:c4fb:770f with SMTP id b14-20020a05640202ce00b0050bc4fb770fmr7919446edx.34.1684745054601;
+        Mon, 22 May 2023 01:44:14 -0700 (PDT)
+Received: from [172.16.11.116] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id v22-20020a50d096000000b0050e04125a46sm2840443edd.10.2023.05.22.01.44.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 22 May 2023 01:44:13 -0700 (PDT)
+Message-ID: <822d2741-32ff-fc73-28a5-25575ab3cc52@rasmusvillemoes.dk>
+Date:   Mon, 22 May 2023 10:44:11 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.11.0
-Subject: Re: [PATCH v14 1/2] drm: add kms driver for loongson display
- controller
-Content-Language: en-US
-To:     Sui Jingfeng <15330273260@189.cn>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sui Jingfeng <suijingfeng@loongson.cn>,
-        Li Yi <liyi@loongson.cn>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>
-Cc:     linaro-mm-sig@lists.linaro.org, loongson-kernel@lists.loongnix.cn,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Liu Peibao <liupeibao@loongson.cn>, linux-media@vger.kernel.org
-References: <20230520105718.325819-1-15330273260@189.cn>
- <20230520105718.325819-2-15330273260@189.cn>
- <26fd78b9-c074-8341-c99c-4e3b38cd861a@xen0n.name>
- <73447e35-f4df-9871-6210-b7bf1a3f04fc@189.cn>
- <97fe7af2-0a93-3f28-db6e-40a9b0798d49@xen0n.name>
- <d8e7a1ee-317c-6b44-27eb-ea637f8813ec@189.cn>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <d8e7a1ee-317c-6b44-27eb-ea637f8813ec@189.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] iio: addac: ad74413: don't set DIN_SINK for functions
+ other than digital input
+Content-Language: en-US, da
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     =?UTF-8?Q?Nuno_S=c3=a1?= <noname.nuno@gmail.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Cosmin Tanislav <cosmin.tanislav@analog.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230503105042.453755-1-linux@rasmusvillemoes.dk>
+ <27fe41e402ea0d6ef42aa0ac80aa3d1488862cd8.camel@gmail.com>
+ <6fcf4997-9d88-7e86-70f7-52f9d296bc6e@rasmusvillemoes.dk>
+ <20230506191636.3cff4b24@jic23-huawei>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <20230506191636.3cff4b24@jic23-huawei>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/22 16:29, Sui Jingfeng wrote:
+On 06/05/2023 20.16, Jonathan Cameron wrote:
+> On Thu, 4 May 2023 12:08:53 +0200
+> Rasmus Villemoes <linux@rasmusvillemoes.dk> wrote:
 > 
-> On 2023/5/22 16:09, WANG Xuerui wrote:
->> On 2023/5/22 16:02, Sui Jingfeng wrote:
->>> Hi,
->>>
->>> On 2023/5/21 20:21, WANG Xuerui wrote:
->>>>> --- /dev/null
->>>>> +++ b/drivers/gpu/drm/loongson/Kconfig
->>>>> @@ -0,0 +1,17 @@
->>>>> +# SPDX-License-Identifier: GPL-2.0
->>>>> +
->>>>> +config DRM_LOONGSON
->>>>> +    tristate "DRM support for Loongson Graphics"
->>>>> +    depends on DRM && PCI && MMU
->>>>> +    select DRM_KMS_HELPER
->>>>> +    select DRM_TTM
->>>>> +    select I2C
->>>>> +    select I2C_ALGOBIT
->>>>> +    help
->>>>> +      This is a DRM driver for Loongson Graphics, it may including
->>>>> +      LS7A2000, LS7A1000, LS2K2000 and LS2K1000 etc. Loongson LS7A
->>>>> +      series are bridge chipset, while Loongson LS2K series are SoC.
->>>>> +
->>>>> +      If "M" is selected, the module will be called loongson.
->>>>
->>>> Just "loongson"? 
->>>
->>> Yes,  when compile this driver as module,  loongson.ko will be 
->>> generated.
->>>
->>>   drm radeon is also doing so, See drm/radeon/Kconfig.
->>>
->>>> I know it's like this for ages (at least dating back to the MIPS 
->>>> days) but you really don't want to imply Loongson is mainly a GPU 
->>>> company. Something like "loongson_drm" or "lsdc" or "gsgpu" could be 
->>>> better. 
->>>
->>> No, these name may have backward compatibility problems.
->>>
->>> Downstream driver already taken those name.
->>>
->>> userspace driver need to differentiate them who is who.
->>
->> IMO this shouldn't be a problem. Let me try explaining this: 
->> currently, upstream / the "new world" doesn't have any support for 
->> this driver at all, so any name will work; just use whatever is 
->> appropriate from an upstream's perspective, then make the userspace 
->> bits recognize both variants, and you'll be fine. And the "existing" 
->> userspace drivers can also carry the change, it'll just be a branch 
->> never taken in that setup.
->>
->> So, I'm still in favor of keeping the upstream "clean" without dubious 
->> names like this (bare "loongson"). What do you think about my 
->> suggestion above?
->>
-> No,
-> 
-> there is a 'arm' folder in the drivers/gpu/drm/,  It doesn't say that 
-> arm is a pure gpu company.
-> 
-> there is a 'ingenic' folder in the drivers/gpu/drm/, ingenic also have 
-> their own custom CPUs.
-> 
-> there is a 'amd' folder in the drivers/gpu/drm/, these doesn't imply amd 
-> is mainly a GPU company.
-> 
-> when a folder emerged in drm/, it stand for the GPU related part of this 
-> company.
+>> On 04/05/2023 09.28, Nuno Sá wrote:
 
-What you said is correct, but I'm referring to the module name, instead 
-of the directory name. For example the AMD GPU driver is called 
-"amdgpu", not "amd"; similarly, the Ingenic DRM driver is called 
-"ingenic-drm", not "ingenic".
+>>> Can anyone have a working device by specifying that dt parameter
+>>> on a non digital channel (or expect something from having that parameter set)?
+>>> Or the only effect is to actually have some functions misbehaving?  
+>>
+>> The data sheet doesn't say that the DIN_SINK should have any effect for
+>> other functions, so I'm pretty sure it's only the latter: some functions
+>> misbehave.
+>>
+>>> On the driver side, if it's never right to have
+>>> these settings together, then the patch is valid since if someone has this, his
+>>> configuration is broken anyways (maybe that's also a valid point for the
+>>> bindings)...  
+>>
+>> Yes, I do believe that it's a broken description (whether or not the
+>> bindings specify that), and drivers don't need to go out of their way to
+>> validate or fixup such brokenness. But in this particular case, there's
+>> really no extra burden on the driver to not put garbage in DIN_SINK when
+>> a not-digital-input function has been chosen (the patch is a two-liner
+>> with 'git show -w').
+> 
+> If we can tighten the DT binding to rule out something that should not be
+> set than that would be good.  Tightening bindings is fine - we don't mind
+> validation of bindings failing on peoples DTs as long as we didn't 'break'
+> them actually working.
 
--- 
-WANG "xen0n" Xuerui
+Well, I'm afraid I don't have any idea how to spell that constraint in
+the yaml-language (help appreciated).
 
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+And I assume a dt binding update would be a separate patch anyway, so
+could you please consider applying this patch?
+
+Thanks,
+Rasmus
 
