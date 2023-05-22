@@ -2,109 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57CE370CDF5
-	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 00:30:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12D6670CDFC
+	for <lists+linux-kernel@lfdr.de>; Tue, 23 May 2023 00:32:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234794AbjEVWaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 18:30:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41768 "EHLO
+        id S234416AbjEVWch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 18:32:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231819AbjEVWaL (ORCPT
+        with ESMTP id S231448AbjEVWcf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 18:30:11 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390E5109;
-        Mon, 22 May 2023 15:30:08 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id 41be03b00d2f7-52caed90d17so4665277a12.0;
-        Mon, 22 May 2023 15:30:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684794607; x=1687386607;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=i0BADrMgNcqHGvZTXAFhgG6p0QoADWfiDby7KN9sF5g=;
-        b=O0UWeL3wu6o5g5vDi3RXmw+3yYGM3Kg0rknQV9z9mHgrkDZI5nhOhn90kqFa4HM9X+
-         TpE+0CXWNhNc7MPDFXXaunuyhU0mJVUVVnFOsTLEtqr4ySen8TZrthJgOxBruZExz4L2
-         hmj1tTOHCVNXCTyQr9R47Ol4YfZwqkMuISDp5a10rcalYpEArAihBf/o/skPQdhzLvTA
-         UrwFjRYctIcLTMYdvQCOnzhYIv4ONH+aYD96Cpje/21UydboAPkBFyclQYgbwfsuetL6
-         63+uuNgkD1zY22Wy2kUCCk7CiOT9ngqpz7sPE94eFGHv4KprxS2EhZgacK2mtyJ2cs2l
-         BBXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684794607; x=1687386607;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=i0BADrMgNcqHGvZTXAFhgG6p0QoADWfiDby7KN9sF5g=;
-        b=TYhumdIt9YDdDqlMRA6HUODVaGm9OVozzYJlfO469f91sgOr+6YG4tsOxC6wGKCuCu
-         q5DdDlMFjW3vGOv2YPYmeJkvsBtLpiBd+GUDQ9FcxckJBnyyUx9S6Zut9zxnTlbJR3W2
-         eVZPRpM/AUvIlYoMSFBH7pBObN0OvuFQiU0jsZd9o7OXTUN19gHF5fLsQ8CWIo2+GEen
-         rZ2efQyEffZvWSonY6E4SE6stccpwCR40L5UETcvB4F2hPbDigMNR+UYW83N3UGCy863
-         0zlacegrFwPXdG5wXLh735Rd/eZPYQlwo25oa9K2wu7qpLqj3ZjP/jzWa8Ijup9va13M
-         jt9A==
-X-Gm-Message-State: AC+VfDwewBeO75878AiB21i6TT+pWqavFqQWO1ITrMeveM1I2+iwYqyb
-        /XgVB8Ie2GVvYVcIbSlHpXQ=
-X-Google-Smtp-Source: ACHHUZ6gdI+c8iqtPZufgDopEpdoUnu/Ac9M4z335puf/ipJaw+/sO0zu1KRRWPDUKZ3knOcS11eCw==
-X-Received: by 2002:a17:90b:1d03:b0:246:5968:43f0 with SMTP id on3-20020a17090b1d0300b00246596843f0mr11554054pjb.10.1684794607605;
-        Mon, 22 May 2023 15:30:07 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id f6-20020a17090a9b0600b0024b79a69361sm6223734pjp.32.2023.05.22.15.30.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 22 May 2023 15:30:07 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 22 May 2023 15:30:06 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Su Hui <suhui@nfschina.com>
-Cc:     Jeremy Kerr <jk@ozlabs.org>, Joel Stanley <joel@jms.id.au>,
-        Alistar Popple <alistair@popple.id.au>,
-        Eddie James <eajames@linux.ibm.com>, eajames@us.ibm.com,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cbostic@linux.vnet.ibm.com, linux-fsi@lists.ozlabs.org
-Subject: Re: [PATCH] drivers/fsi/scom: Return -EFAULT if copy fails
-Message-ID: <de9a7ffe-bedd-4181-886d-c9a3006b7be8@roeck-us.net>
-References: <20230519013710.34954-1-suhui@nfschina.com>
+        Mon, 22 May 2023 18:32:35 -0400
+Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [IPv6:2001:4b7a:2000:18::167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640B6F4
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 15:32:33 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 36B2C3F20F;
+        Tue, 23 May 2023 00:32:31 +0200 (CEST)
+Date:   Tue, 23 May 2023 00:32:30 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Caleb Connolly <caleb@connolly.tech>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Jessica Zhang <quic_jesszhan@quicinc.com>
+Subject: Re: [PATCH RFC 06/10] drm/panel/samsung-sofef01: Add panel driver
+ for Sony Xperia 5 / 10 II
+Message-ID: <gzhxxdh235nsbjbns37thi33rpk546ynkihihjiam46pkngkud@opwtr2swvdau>
+References: <20230521-drm-panels-sony-v1-0-541c341d6bee@somainline.org>
+ <20230521-drm-panels-sony-v1-6-541c341d6bee@somainline.org>
+ <f34cd6a8-6d6d-9dcf-b681-56439416c4b4@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230519013710.34954-1-suhui@nfschina.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <f34cd6a8-6d6d-9dcf-b681-56439416c4b4@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 19, 2023 at 09:37:10AM +0800, Su Hui wrote:
-> The copy_to/from_user() functions return the number of bytes remaining
-> to be copied, but we want to return -EFAULT to the user.
-> 
-Why ? EFAULT means that a bad address was provided, and it is not
-immediately obvious why that would be the case.
+On 2023-05-22 04:19:45, Dmitry Baryshkov wrote:
+> On 22/05/2023 00:23, Marijn Suijten wrote:
+> > This SOFEF01-M Display-IC driver supports two modes with different
+> > compatibles to differentiate between slightly different physical sizes
+> > (panels) found on the Xperia 5 (6.1") and 10 II (6.0").
+> > 
+> > It is currently also used to hardcode significantly higher fake porches
+> > for the Xperia 5, which are unused in transfers due to this being a
+> > command-mode panel but do have an effect on the clock rates set by
+> > dsi_host.c.  Without higher clock rates this panel fails to achieve
+> > 60fps and has significant tearing artifacts, while the same calculated
+> > clock rate works perfectly fine on the Xperia 10 II.
 
-Guenter
+<snip>
 
-> Fixes: 680ca6dcf5c2 ("drivers/fsi: Add SCOM FSI client device driver")
-> Signed-off-by: Su Hui <suhui@nfschina.com>
-> ---
->  drivers/fsi/fsi-scom.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> > +/* Sony Xperia 5 (kumano bahamut) */
+> > +static const struct drm_display_mode samsung_sofef01_m_bahamut_mode = {
+> > +	/*
+> > +	 * WARNING: These massive porches are wrong/useless for CMDmode
+> > +	 * (and not defined in downstream DTS) but necessary to bump dsi
+> > +	 * clocks higher, so that we can achieve proper 60fps without tearing.
+> > +	 */
+> > +	.clock = (1080 + 156 + 8 + 8) * (2520 + 2393 + 8 + 8) * 60 / 1000,
+> > +	.hdisplay = 1080,
+> > +	.hsync_start = 1080 + 156,
+> > +	.hsync_end = 1080 + 156 + 8,
+> > +	.htotal = 1080 + 156 + 8 + 8,
+> > +	.vdisplay = 2520,
+> > +	.vsync_start = 2520 + 2393,
+> > +	.vsync_end = 2520 + 2393 + 8,
+> > +	.vtotal = 2520 + 2393 + 8 + 8,
+> > +	.width_mm = 61,
+> > +	.height_mm = 142,
+> > +};
+> > +
+> > +/* Sony Xperia 10 II (seine pdx201) */
+> > +static const struct drm_display_mode samsung_sofef01_m_pdx201_mode = {
+> > +	.clock = (1080 + 8 + 8 + 8) * (2520 + 8 + 8 + 8) * 60 / 1000,
+> > +	.hdisplay = 1080,
+> > +	.hsync_start = 1080 + 8,
+> > +	.hsync_end = 1080 + 8 + 8,
+> > +	.htotal = 1080 + 8 + 8 + 8,
+> > +	.vdisplay = 2520,
+> > +	.vsync_start = 2520 + 8,
+> > +	.vsync_end = 2520 + 8 + 8,
+> > +	.vtotal = 2520 + 8 + 8 + 8,
+> > +	.width_mm = 60,
+> > +	.height_mm = 139,
+> > +};
+> > +
+> > +static const struct of_device_id samsung_sofef01_m_of_match[] = {
+> > +	{ .compatible = "samsung,sofef01-m-bahamut", .data = &samsung_sofef01_m_bahamut_mode },
+> > +	{ .compatible = "samsung,sofef01-m-pdx201", .data = &samsung_sofef01_m_pdx201_mode },
 > 
-> diff --git a/drivers/fsi/fsi-scom.c b/drivers/fsi/fsi-scom.c
-> index bcb756dc9866..caaf7738eb98 100644
-> --- a/drivers/fsi/fsi-scom.c
-> +++ b/drivers/fsi/fsi-scom.c
-> @@ -335,7 +335,7 @@ static ssize_t scom_read(struct file *filep, char __user *buf, size_t len,
->  	if (rc)
->  		dev_dbg(dev, "copy to user failed:%d\n", rc);
->  
-> -	return rc ? rc : len;
-> +	return rc ? -EFAULT : len;
->  }
->  
->  static ssize_t scom_write(struct file *filep, const char __user *buf,
-> -- 
-> 2.30.2
-> 
+> Are there really two panels? Can we use one mode for both usecases?
+
+See the commit description where I explained exactly this: the panels
+have different dimensions (6.1" vs 6.0", hence different DPI) and I also
+abuse this to hack in higher clock rates via fake porches.
+
+I just ended up on a scary website that supposedly contains the panel
+names:
+
+- Xperia 5 (bahamut, 6.1"): AMB609TC01
+- Xperia 10 II (pdx201, 6.0"): AMS597UT01
+
+- Marijn
