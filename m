@@ -2,133 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 438F370CC45
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 23:23:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC13F70CC48
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 23:23:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234199AbjEVVXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 17:23:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40984 "EHLO
+        id S234448AbjEVVX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 17:23:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjEVVXc (ORCPT
+        with ESMTP id S234368AbjEVVXx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 17:23:32 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE929D;
-        Mon, 22 May 2023 14:23:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684790611; x=1716326611;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MSCK5/ZmT0Ta9TMdmCSZCIk6yXVnYQVqi0zAmRZLbZM=;
-  b=MJdecoNyfUX25Np+PkBiBleiRoPA/gaGDvi5QrP8CBxMnqN5raXe7VrS
-   Tu3NkzajGIs34juz51S6BUFWq8h9+8GAHk31D/pPX+XAKS5TkcNbWu2Q5
-   MGZW9r8Dobi0ZFVc5HJuATHH908b/O1yztKYJwgzYVCeswUFGnzksu3AH
-   +V/lR00Nw3C+YIdFr+u+ceUROj63Prqr5YNf6cUdxmgeFHGNIHwNrFaIE
-   1AVbMkVTqZ6AUnDZSR5hV5Den/6cRZyRMcTwXav38V3EBVIMxrATvQFqC
-   1J9ScON8CKOZQTFkjMk2ysrx51hggqCByCOPtIfEPZwLTRfylGU0Taks9
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="381285813"
-X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
-   d="scan'208";a="381285813"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 14:23:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="706693491"
-X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
-   d="scan'208";a="706693491"
-Received: from arkaneta-mobl.amr.corp.intel.com (HELO desk) ([10.212.144.239])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 14:23:30 -0700
-Date:   Mon, 22 May 2023 14:23:28 -0700
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     Xiaoyao Li <xiaoyao.li@intel.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Chao Gao <chao.gao@intel.com>, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        Jim Mattson <jmattson@google.com>,
-        antonio.gomez.iglesias@linux.intel.com,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>
-Subject: Re: [PATCH] KVM: x86: Track supported ARCH_CAPABILITIES in kvm_caps
-Message-ID: <20230522212328.uwyvp3hpwvte6t6g@desk>
-References: <20230506030435.80262-1-chao.gao@intel.com>
- <b472b58d-0469-8a55-985c-1d966ce66419@intel.com>
- <ZGZhW/x5OWPmx1qD@google.com>
- <20230520010237.3tepk3q44j52leuk@desk>
- <ZGup1TjeqBF7bgWG@google.com>
- <ff2a97c2-1e8f-4adb-78c2-3cf5037f139f@intel.com>
+        Mon, 22 May 2023 17:23:53 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19D6AC2
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 14:23:49 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4f13d8f74abso7260866e87.0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 14:23:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684790627; x=1687382627;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GgR6hJl4v5W/VNWJbFimymN7T4wI+SFUcIfWJnoBenI=;
+        b=C3qykUUv308TdzTBXmivOlJVuKrHI6RtuofmrwxHy2E7E3r0piRlzU3uYZMjOHpq0/
+         nbFMtIECGL6ZVq6KigpUxLp2Lo6fhyliggSedkEvwX9qVT1Po4UhZL7jnxX9R2Fy0mLe
+         tnjbQ8XRYUwka9Mt9xkjoIMfYLBRE3HKIV3VbZcahdR0cXjf0ehy2L+ZZUD3KIm3Xe36
+         Weub8Zncccum9DcWa2UyhXt55dJ/uhhibcv7Jukx25VVp430Qf4Q8sBheIPSwvakd4ly
+         Qugdb9UXWvUKFFTXdU7DVTDrRx3e6NrTm2VSelHwdl9NzSkaxlrjZMixRKCAD+0tsWdG
+         D5/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684790627; x=1687382627;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GgR6hJl4v5W/VNWJbFimymN7T4wI+SFUcIfWJnoBenI=;
+        b=JsEPZxxr+tqoku7K0MCLcqlACmyFOiL/4hUrEOoVMTTkXwUelM+QmEz1E39IVcs/X1
+         RpnWnjg5BU6umTwxHAdKp6ZVbVXPfTJGwBZq2WHNySYCfX+hntmhL8rCFzMKagIovHgw
+         AI+DrrhhTp7Ceg1IbAaB5H7d0d2KRlWauRVnGRsI5sdUipKhR7EJKkar+/SRZ4EzO9wU
+         dIB/XkYo6mJP0kf8FnEP/lEAm4O7zVSUxGkEclE72P0HDdDebqtbkJKMJznyQYqpZ3VF
+         BQNO5Y5o75ApIWYRRSLYz9CqSpiqJwld7mhePDW5P3Gd7v/HrmZU5Eo1QRJqsvocFE+g
+         l7JQ==
+X-Gm-Message-State: AC+VfDydKfuMsNBHwl+9rVI4EhvZ66myKIyLi7arG+gaZW9EuKavXeXB
+        FK6abgbrscapas2w6iwqejvCng==
+X-Google-Smtp-Source: ACHHUZ7Bzw5s194y23fjwuuZCzhhqmzfXnSg4bE2VApw3ycGR9+tojHVXKq6PmENI3cIKwUk0nrQRA==
+X-Received: by 2002:ac2:5fae:0:b0:4f1:1de7:1aac with SMTP id s14-20020ac25fae000000b004f11de71aacmr3366506lfe.20.1684790627178;
+        Mon, 22 May 2023 14:23:47 -0700 (PDT)
+Received: from [192.168.1.101] (abyk97.neoplus.adsl.tpnet.pl. [83.9.30.97])
+        by smtp.gmail.com with ESMTPSA id q6-20020ac25146000000b004efff420b0asm1102032lfd.108.2023.05.22.14.23.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 14:23:46 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Date:   Mon, 22 May 2023 23:23:39 +0200
+Subject: [PATCH] MAINTAINERS: Add Konrad Dybcio as linux-arm-msm
+ co-maintainer
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ff2a97c2-1e8f-4adb-78c2-3cf5037f139f@intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230522-topic-maintainers-v1-1-2b91eb8e4f65@linaro.org>
+X-B4-Tracking: v=1; b=H4sIAFrda2QC/x2NQQrCQAxFr1KyNtAZGVu8irhIx9QGalqSKkLp3
+ Q0u/uJ9eLwdnE3Y4drsYPwRl0UD0qmBOpE+GeURDLnN57bkjNuySsUXiW4xNsfUX0qivut4LBD
+ eQM44GGmdwtT3PMe5Go/y/Ydu9+P4AbGjoIx4AAAA
+To:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1684790626; l=891;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=sUSfHAwWdvL93XFzBSa385oPJR9eTOiEq7h6nDHiVoM=;
+ b=QSfE9E+AOnbudo0Zpi3rmrJr3RMqWRIexzkaUN1qaBRMyV0YhmSKKzgQWgqZTvO47oBGrogvl
+ bQzBzt1hZ13Da37H84OZUBm9oTG8uzMNZ3eO3MsPB44h3TuiyB3cUfT
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 23, 2023 at 03:31:44AM +0800, Xiaoyao Li wrote:
-> On 5/23/2023 1:43 AM, Sean Christopherson wrote:
-> > > >    6. Performance aside, KVM should not be speculating (ha!) on what the guest
-> > > >       will and will not do, and should instead honor whatever behavior is presented
-> > > >       to the guest.  If the guest CPU model indicates that VERW flushes buffers,
-> > > >       then KVM damn well needs to let VERW flush buffers.
-> > > The current implementation allows guests to have VERW flush buffers when
-> > > they enumerate FB_CLEAR. It only restricts the flush behavior when the
-> > > guest is trying to mitigate against a vulnerability(like MDS) on a
-> > > hardware that is not affected. I guess its common for guests to be
-> > > running with older gen configuration on a newer hardware.
-> > Right, I'm saying that that behavior is wrong.  KVM shouldn't assume the guest
-> > the guest will do things a certain way and should instead honor the "architectural"
-> > definition, in quotes because I realize there probably is no architectural
-> > definition for any of this.
-> > 
-> > It might be that the code does (unintentionally?) honor the "architecture", i.e.
-> > this code might actually be accurrate with respect to when the guest can expect
-> > VERW to flush buffers.  But the comment is so, so wrong.
-> 
-> The comment is wrong and the code is wrong in some case as well.
-> 
-> If none of ARCH_CAP_FB_CLEAR, ARCH_CAP_MDS_NO, ARCH_CAP_TAA_NO,
-> ARCH_CAP_PSDP_NO, ARCH_CAP_FBSDP_NO and ARCH_CAP_SBDR_SSDP_NO are exposed to
-> VM, the VM is type of "affected by MDS".
-> 
-> And accroding to the page https://www.intel.com/content/www/us/en/developer/articles/technical/software-security-guidance/technical-documentation/processor-mmio-stale-data-vulnerabilities.html
-> 
-> if the VM enumerates support for both L1D_FLUSH and MD_CLEAR, it implicitly
-> enumerates FB_CLEAR as part of their MD_CLEAR support.
+As discussed with Bjorn Andersson in private, step up to
+co-maintainership.
 
-This is the excerpt from the link that you mentioned:
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-  "For processors that are affected by MDS and support L1D_FLUSH
-  operations and MD_CLEAR operations, the VERW instruction flushes fill
-  buffers."
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 817e96c47be6..2da1e2ce2fae 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -2568,7 +2568,7 @@ F:	arch/arm64/boot/dts/qcom/sdm845-cheza*
+ ARM/QUALCOMM SUPPORT
+ M:	Andy Gross <agross@kernel.org>
+ M:	Bjorn Andersson <andersson@kernel.org>
+-R:	Konrad Dybcio <konrad.dybcio@linaro.org>
++M:	Konrad Dybcio <konrad.dybcio@linaro.org>
+ L:	linux-arm-msm@vger.kernel.org
+ S:	Maintained
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git
 
-You are missing an important information here "For the processors
-_affected_ by MDS". On such processors ...
+---
+base-commit: 9f258af06b6268be8e960f63c3f66e88bdbbbdb0
+change-id: 20230522-topic-maintainers-18651a877ef5
 
-> However, the code will leave vmx->disable_fb_clear as 1 if hardware supports
-> it, and VERW intruction doesn't clear FB in the VM, which conflicts
-> "architectural" definition.
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
-... Fill buffer clear is not enabled at all:
-
-  vmx_setup_fb_clear_ctrl()
-  {
-  	u64 msr;
-  
-  	if (boot_cpu_has(X86_FEATURE_ARCH_CAPABILITIES) &&
-  	    !boot_cpu_has_bug(X86_BUG_MDS) &&
-  	    !boot_cpu_has_bug(X86_BUG_TAA)) {
-  		rdmsrl(MSR_IA32_ARCH_CAPABILITIES, msr);
-  		if (msr & ARCH_CAP_FB_CLEAR_CTRL)
-  			vmx_fb_clear_ctrl_available = true;
-  	}
-  }
