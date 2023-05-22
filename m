@@ -2,81 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C3A070C9DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 21:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33A6A70CA18
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 21:55:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235461AbjEVTwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 15:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46260 "EHLO
+        id S235520AbjEVTzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 15:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235438AbjEVTwd (ORCPT
+        with ESMTP id S234201AbjEVTzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 15:52:33 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B3B49C
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 12:52:25 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id af79cd13be357-75b0b5c9eb8so78221085a.1
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 12:52:25 -0700 (PDT)
+        Mon, 22 May 2023 15:55:47 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 551B599
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 12:55:42 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-3f475746ae0so35046861cf.0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 12:55:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684785144; x=1687377144;
+        d=google.com; s=20221208; t=1684785341; x=1687377341;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=p52m+WWp6aApwkHVTkNg5kh/c1TUE8xWnOr/swu4YQM=;
-        b=lRpK3qNuuiQELF1mYf+pdqtoRndN/uBy+fRujNOBmFoKNNZHXdQGn1YvzpvVdJmEsc
-         o3aMGlzGMRo5bQ1kgH0uISw+aX/9dQxYn75ifiSczdRoxgRETgSHrFpUk4Qz4Bw1R2IJ
-         MhyAJcR09p9R18n7Ziq0C2mjuHP7B4FjFS+arj7kNxBLuT0bp/xmQbQiuodgr3hztHl/
-         4CPSJAhCovLJTkhnzO8WN/7IrW0xiT3nz9471apMj6tER1aIMTmaI6NmSsejQ1mOhrk3
-         3MLyEXrK/w5i0DCPURMZjSV0NUoL5yt0rFbJz/MTHoB08PJ8bVAkFVwax4tQar1VwO4p
-         hNrA==
+        bh=rberg4bwUy07oOUWgD6JRy5t/SGEkLBqBr8AY1Hm/Hc=;
+        b=MumOKtVbvpYF1URRoME2u4hs0ePmWNGRKdF+QL2FppqL4wIKBlUcban31t6elfsMgl
+         I+WU+t3+ytTSHYQrK9IaeB5DU6axO+euarW8HA4CD0k6oztaOFFWymdJ2fSfsb6atvne
+         mNhaKnbk4g38Fb9HEFT8fmJuz1hGFPzn2xjY48Ls1+3/qhTdfUsel+j0LEQEaqSJRZxT
+         YQP+N1h77ATSyxlNztyABc7TeNhpvfBKES452+ccTGhjFHHIuKsF+kPi1SoyFTGYwxbJ
+         FNhfhzOBqeM5a+U0jIEmHpYjoVZ81boF1oHo3RCgAouaBM1QlB/K1IvQPk6+ZIJEX65X
+         DCsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684785144; x=1687377144;
+        d=1e100.net; s=20221208; t=1684785341; x=1687377341;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=p52m+WWp6aApwkHVTkNg5kh/c1TUE8xWnOr/swu4YQM=;
-        b=enXpWcJPHMwmIOAy4XRLgFOws5BNu/sT1jf3Z3iyw5A/vmYD3pZ5bvIbTpWbcjkS/7
-         tTvn0sw0E/rzRG0MN+/jdkcuNFX4qDGIFFPFdC/vPtZJ2muDtj3nfCfncV97ZOtqmRXU
-         H/15pSdqRqZ+D86X7t1HOTHwJhsOKX+JPWdwy8yjQ9KhLwsVIwH+8lsMXMFOnGwLZKES
-         sr+eVvy0+6oG/oUbj+QF7hF+kLRuUUd5RoGq9MpJdBioB/EwF3DQR2nq/jK32Cz1pO5/
-         DcGvDUL+FSCJ+Ul7N+0dswAyNTLJ76W88lFYUa4L2QYHiNN8BTiWwepYZrpPIwyqd+aF
-         HFsw==
-X-Gm-Message-State: AC+VfDyZXinhlFYbXEUvI1C/IqYIhai8M2Uo3PaLH/S9QZFuoK6q19sw
-        6XyauJWG1zfWbfXAV2NVqmPLASyf5dPiLcDG0k5pRw==
-X-Google-Smtp-Source: ACHHUZ62p53t5Jx/dLsMCHu7hh9zeJ6bLdglFzoT+d04I0no2SNO9KMZS5dewAaI/LY85SD7r51/PuKHsSa9AFk227A=
-X-Received: by 2002:a05:6214:f0a:b0:5fd:7701:88c5 with SMTP id
- gw10-20020a0562140f0a00b005fd770188c5mr23825727qvb.6.1684785144362; Mon, 22
- May 2023 12:52:24 -0700 (PDT)
+        bh=rberg4bwUy07oOUWgD6JRy5t/SGEkLBqBr8AY1Hm/Hc=;
+        b=CtshOgWKYmto8qIQjd+XRJKuA7uiHNW18L1tcgW8FEIC5W0xk81IIbDAjdnGUZaJBl
+         g29Ae9yKWr525gTDDT/N+81ieH36eI/6lZ4ON25WRQkYquskGSltw8lCOJ3tzyZSN7ID
+         ZfVaLk+oPe56Q9tNVtCIRth7FY2eTJXu5ncvTcBIYgE3Thm4dkou40vnDPggw4nhUhZo
+         6Hlxpn8enbQQO89TdbGh99aazsMYmwuzdwnUKUFMfIbEAKwECGqZmLFBIMm2HYwelKil
+         Wss1AwmuOzuSsQIDAkMv9UV1MSrp3Aex07rLSr4aALFW2MQmVVWwEijdyIJTAhos3hjc
+         57lA==
+X-Gm-Message-State: AC+VfDxxAJgRwR+bHp1UURQKfok8eyu5ObGxOOADywXFu7guI4DE1H7+
+        cFEtoRV+UpkCBeX63hFZ5j+C+lfl/pcZg5eBzxmufg==
+X-Google-Smtp-Source: ACHHUZ7yl3BpjhOWiGRIS/IB9MYPFWRYgFp7KBYS80lpTZrk+qUlmN4Cx8Y2/Q3JYL5nEEPZ/nnEvCXWUqUopr9Zah0=
+X-Received: by 2002:a05:622a:1213:b0:3f2:a58:7a7a with SMTP id
+ y19-20020a05622a121300b003f20a587a7amr19555223qtx.58.1684785341122; Mon, 22
+ May 2023 12:55:41 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAKwvOd=4hBcU4fAkddU0b-GOZc9FzTZoj3PFW6ZZrX0jS8x+bg@mail.gmail.com>
- <17c91d37-7d9c-0df4-2438-2b30ca0b5777@collabora.com> <CAKwvOdk4QO8x_bs64fFRCsMu__AjhXd4Ew2KfgzQOb9Q3FMqSA@mail.gmail.com>
- <b5d0cf82-0e42-f6a1-c9f5-c145fdc4c622@collabora.com> <CAKwvOdkFxu9hYSL_RCXadpR0dQd1+dZmAUVXdfFiLUfxg4D_Xw@mail.gmail.com>
- <878rdlk9bi.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
- <CAKwvOd=8LVU+iANkFx18Wm1jg7gYiAXovAmo9t5ZZaVdMULn-Q@mail.gmail.com>
- <875y8ok9b5.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
- <CAKwvOdmJJibt6sHSp91v2s7BxUWBC6xG7F7+3C6gUxNMzZ2xRA@mail.gmail.com>
- <87353ok78h.fsf@rcn-XPS-13-9305.i-did-not-set--mail-host-address--so-tickle-me>
- <2023052247-bobtail-factsheet-d104@gregkh>
-In-Reply-To: <2023052247-bobtail-factsheet-d104@gregkh>
+References: <20230516-sunxi-v1-1-ac4b9651a8c1@google.com> <f099e6e0-d1c6-9d72-0d16-2712286be67d@gmail.com>
+In-Reply-To: <f099e6e0-d1c6-9d72-0d16-2712286be67d@gmail.com>
 From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Mon, 22 May 2023 12:52:13 -0700
-Message-ID: <CAKwvOd=2zAV_mizvzLFdyHE_4OzBY5OVu6KLWuQPOMZK37vsmQ@mail.gmail.com>
-Subject: Re: [PATCH v4] Makefile.compiler: replace cc-ifversion with
- compiler-specific macros
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Maksim Panchenko <maks@meta.com>,
-        =?UTF-8?Q?Ricardo_Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>
-Cc:     Shreeya Patel <shreeya.patel@collabora.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Bill Wendling <morbo@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        regressions@lists.linux.dev,
-        "gustavo.padovan@collabora.com" <gustavo.padovan@collabora.com>,
-        Guillaume Charles Tucker <guillaume.tucker@collabora.com>,
-        denys.f@collabora.com, kernelci@lists.linux.dev
+Date:   Mon, 22 May 2023 12:55:30 -0700
+Message-ID: <CAKwvOdngn_v3oW4iTFZ1rBKOtWNUAk_-qc+u3V+UhM5wmwzSdg@mail.gmail.com>
+Subject: Re: [PATCH] ARM: sunxi: fix return code check of of_property_match_string
+To:     "William (Zhenghao) Zhang" <william.zhang@broadcom.com>
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Florian Fainelli <f.fainelli@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
@@ -90,49 +76,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 9:52=E2=80=AFAM Greg KH <gregkh@linuxfoundation.org=
-> wrote:
+On Tue, May 16, 2023 at 11:34=E2=80=AFAM Florian Fainelli <f.fainelli@gmail=
+.com> wrote:
 >
-> On Mon, May 22, 2023 at 12:09:34PM +0200, Ricardo Ca=C3=B1uelo wrote:
-> > On vie, may 19 2023 at 08:57:24, Nick Desaulniers <ndesaulniers@google.=
-com> wrote:
-> > > It could be; if the link order was changed, it's possible that this
-> > > target may be hitting something along the lines of:
-> > > https://isocpp.org/wiki/faq/ctors#static-init-order i.e. the "static
-> > > initialization order fiasco"
-> > >
-> > > I'm struggling to think of how this appears in C codebases, but I
-> > > swear years ago I had a discussion with GKH (maybe?) about this. I
-> > > think I was playing with converting Kbuild to use Ninja rather than
-> > > Make; the resulting kernel image wouldn't boot because I had modified
-> > > the order the object files were linked in.  If you were to randomly
-> > > shuffle the object files in the kernel, I recall some hazard that may
-> > > prevent boot.
+> +William,
+>
+> On 5/16/23 09:35, ndesaulniers@google.com wrote:
+> > of_property_match_string returns an int; either an index from 0 or
+> > greater if successful or negative on failure.
 > >
-> > I thought that was specifically a C++ problem? But then again, the
-> > kernel docs explicitly say that the ordering of obj-y goals in kbuild i=
-s
-> > significant in some instances [1]:
+> > Fixes the following splat observed with UBSAN:
+> > [    0.166489][    T1] UBSAN: array-index-out-of-bounds in arch/arm/mac=
+h-sunxi/mc_smp.c:810:29
+> > [    0.166934][    T1] index 2 is out of range for type 'sunxi_mc_smp_d=
+ata [2]'
+> > [    0.167206][    T1] CPU: 0 PID: 1 Comm: swapper/0 Tainted: G        =
+W          6.4.0-rc2 #1
+> > [    0.167515][    T1] Hardware name: Generic DT based system
+> > [    0.167727][    T1]  unwind_backtrace from show_stack+0x18/0x1c
+> > [    0.167979][    T1]  show_stack from dump_stack_lvl+0x68/0x90
+> > [    0.168226][    T1]  dump_stack_lvl from ubsan_epilogue+0x8/0x34
+> > [    0.168474][    T1]  ubsan_epilogue from __ubsan_handle_out_of_bound=
+s+0x78/0x80
+> > [    0.168760][    T1]  __ubsan_handle_out_of_bounds from sunxi_mc_smp_=
+init+0xe8/0x574
+> > [    0.169100][    T1]  sunxi_mc_smp_init from do_one_initcall+0x178/0x=
+9c8
+> > [    0.169364][    T1]  do_one_initcall from kernel_init_freeable+0x1dc=
+/0x28c
+> > [    0.169661][    T1]  kernel_init_freeable from kernel_init+0x20/0x16=
+4
+> > [    0.169912][    T1]  kernel_init from ret_from_fork+0x14/0x2c
+> >
+> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 >
-> Yes, it matters, you can not change it.  If you do, systems will break.
-> It is the only way we have of properly ordering our init calls within
-> the same "level".
+> William had a similar fix submitted back in September of last year, but
+> I do not believe it got applied either:
+>
+> https://lore.kernel.org/r/20220929012944.454613-1-william.zhang@broadcom.=
+com
+>
+> lore was not able to find it, but above is the message ID, and attached
+> is his original patch.
 
-Ah, right it was the initcall ordering. Thanks for the reminder.
+Hi William,
+How would you like to proceed here? I don't want to step on any toes
+if there's an existing patch.
 
-(There's a joke in there similar to the use of regexes to solve a
-problem resulting in two new problems; initcalls have levels for
-ordering, but we still have (unexpressed) dependencies between calls
-of the same level; brittle!).
+> --
+> Florian
 
-+Maksim, since that might be relevant info for the BOLT+Kernel work.
 
-Ricardo,
-https://elinux.org/images/e/e8/2020_ELCE_initcalls_myjosserand.pdf
-mentions that there's a kernel command line param `initcall_debug`.
-Perhaps that can be used to see if
-5750121ae7382ebac8d47ce6d68012d6cd1d7926 somehow changed initcall
-ordering, resulting in a config that cannot boot?
+
 --=20
 Thanks,
 ~Nick Desaulniers
