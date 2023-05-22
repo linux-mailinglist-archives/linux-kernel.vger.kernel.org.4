@@ -2,407 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C2EF70C1EB
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:05:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF5170C1EE
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:06:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234386AbjEVPFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 11:05:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44726 "EHLO
+        id S234513AbjEVPGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 11:06:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234511AbjEVPE4 (ORCPT
+        with ESMTP id S234510AbjEVPFs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 11:04:56 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 731B8E59
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 08:04:38 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-ba818eb96dcso5342850276.0
-        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 08:04:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684767868; x=1687359868;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B93snqyJW5V8SDKpVffJ6H9qe/LX5XAkAYsYiUnF9z0=;
-        b=u38BmnkwY+6ZudHP0QAqdWh+d1fD0O2TRoBE3H3TZld+XiZEajMkX0K3EOOfyKU1Ox
-         GZ9nWxxpcWwZVefXOiWg6L+eW7ZW4O4RklXErT0mf79VIpM41f/2YUURpuBRZCIEFCA6
-         z5J9oDQoH/1ZdvaleIF2aENtnHEFR7Yo6fhN8rO/qulcGkA+n/fOlKNI8CWvbzAFhbmp
-         HKrD+/EbMTpzS+kB/i7mxoqa3Dkdx7F1to5SenmLT8zwlr+RWgkN048yONjuUBm8axkr
-         p6wzuVshaMv5+s8HeIv5kwv+6Izg+QVimALBEhC3CN8zBX8/3nZ1xunL+f1pdaNx4YTW
-         cBEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684767868; x=1687359868;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=B93snqyJW5V8SDKpVffJ6H9qe/LX5XAkAYsYiUnF9z0=;
-        b=WaMatHwMh3//LwdrFEo+eMX7Ut957qz1KWRRH/a1mocIUOVNuG2947LI1Bf0Lv03NB
-         Ujg2OxRb748G/DnzSFnJ+tj7jpLS4plbHTPBGOa/ElmCUppBC7NThRFIo1aKMac+zCkO
-         Is/fe4FjyyqOml0PoMfjH50Q2fvRQTWNvA/OXdmIy7bcunPpMv6EPA1UVUOPEL2+j6AJ
-         +j587UXCSVLSNos31rgbH0i5SZuBT9vK6szYDIWVheeec1wxBiTdMoWnMWGl7qN3Nl0U
-         WLqauV9AluPuPQavXZ9NocqapB/l4e01N+/LARhLryhA9BGzjUl/+CxdrnOl94NKie2+
-         A4rw==
-X-Gm-Message-State: AC+VfDyjv0aDUoQ7Zz2vxWoS20EEDGYPxzHH60Nu0/Nuoj7je0nPrVYB
-        WLRpv1MxrhKDZOzKW+MkuPSO2jOeuoq2m0XR/QdElA==
-X-Google-Smtp-Source: ACHHUZ6CYxjmkbCqia0Rz/lWcZxSg5L/br9yDBBLHD/xyS0Q8Ghhvb3/0IEpMLnDIZ989d+2GuEJcppT6A/kRSS8yVU=
-X-Received: by 2002:a05:7500:54d4:b0:101:b5c1:6721 with SMTP id
- a20-20020a05750054d400b00101b5c16721mr269820gac.27.1684767868033; Mon, 22 May
- 2023 08:04:28 -0700 (PDT)
+        Mon, 22 May 2023 11:05:48 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0D8610F6
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 08:05:30 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 0E419C000B;
+        Mon, 22 May 2023 15:05:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1684767928;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kfGqNpqYGcaYDPFm+L0EvwvvX+xtHwS882MQS2NRtaE=;
+        b=P8QdRGGHqZgASUf2kWEbUXEWYZEZrfhHtlq56cohDeT4cvM5/wcqr0XTxEahrzv0fJq8AK
+        ISrfFGc80sWA74k9RLAvfNSm3+7QVA1vcHA099qpLV/eTdLMKcK7l6TKiDlDs9Fz2Sd8Rh
+        iRcg64BxeKzaqyVNGYRyNjnv4fYf//LweLEFqnxQl0Bl+DzvtEueDiFuZguknwf9lH9ceQ
+        33RKB9ok9NcpdcfJtgUUMeAHk7vpyUK2g//kzt+vRHL0nFcFItzAqfIJqKlUvNeJhK+eTs
+        AG3sJ8Zp7fk3bk+DuUHkBRp41wcekq5hH9a1FM4LAZpfg3XvT+JfGVZoi74gUg==
+Date:   Mon, 22 May 2023 17:05:26 +0200
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Cc:     Liang Yang <liang.yang@amlogic.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Yixun Lan <yixun.lan@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>, <oxffffaa@gmail.com>,
+        <kernel@sberdevices.ru>, <linux-mtd@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v4 1/5] mtd: rawnand: meson: fix command sequence for
+ read/write
+Message-ID: <20230522170526.6486755a@xps-13>
+In-Reply-To: <20230515094440.3552094-2-AVKrasnov@sberdevices.ru>
+References: <20230515094440.3552094-1-AVKrasnov@sberdevices.ru>
+        <20230515094440.3552094-2-AVKrasnov@sberdevices.ru>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20230517124201.441634-1-imagedong@tencent.com>
- <20230517124201.441634-4-imagedong@tencent.com> <CANn89iKLf=V664AsUYC52h_q-xjEq9xC3KqTq8q+t262T91qVQ@mail.gmail.com>
- <CADxym3a0gmzmD3Vwu_shoJnAHm-xjD5tJRuKwTvAXnVk_H55AA@mail.gmail.com>
- <CADVnQynZ67511+cKF=hyiaLx5-fqPGGmpyJ-5Lk6ge-ivmAf-w@mail.gmail.com>
- <CADxym3ZiyYK7Vyz05qLv8jOPmNZXXepCsTbZxdkhSQxRx0cdSA@mail.gmail.com>
- <CADVnQy=JQkVGRsbL0u=-oZSpdaFBpz907yX24p3uUu2pMhUjGg@mail.gmail.com>
- <CADxym3awe-c29C-e1Y+efepLdpFWrG520ezJO1EjJ5C3arq6Eg@mail.gmail.com>
- <CADVnQyk2y68HKScad4W2jOy9uqe7TTCyY-StwdLWFPJhXU+CUA@mail.gmail.com> <CADxym3bbGkOv4dwATp6wT0KA4ZPiPGfxvqvYtEzF45GJDe=RXQ@mail.gmail.com>
-In-Reply-To: <CADxym3bbGkOv4dwATp6wT0KA4ZPiPGfxvqvYtEzF45GJDe=RXQ@mail.gmail.com>
-From:   Neal Cardwell <ncardwell@google.com>
-Date:   Mon, 22 May 2023 11:04:11 -0400
-Message-ID: <CADVnQymzzZ9m30-1ZA+muvmt-bjaebtMT0Bh8Wp5vXZuYifONQ@mail.gmail.com>
-Subject: Re: [PATCH net-next 3/3] net: tcp: handle window shrink properly
-To:     Menglong Dong <menglong8.dong@gmail.com>
-Cc:     Eric Dumazet <edumazet@google.com>, kuba@kernel.org,
-        davem@davemloft.net, pabeni@redhat.com, dsahern@kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Menglong Dong <imagedong@tencent.com>,
-        Yuchung Cheng <ycheng@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 21, 2023 at 10:55=E2=80=AFPM Menglong Dong <menglong8.dong@gmai=
-l.com> wrote:
->
-> On Sat, May 20, 2023 at 10:28=E2=80=AFPM Neal Cardwell <ncardwell@google.=
-com> wrote:
-> >
-> > On Sat, May 20, 2023 at 5:08=E2=80=AFAM Menglong Dong <menglong8.dong@g=
-mail.com> wrote:
-> > >
-> > > On Fri, May 19, 2023 at 12:03=E2=80=AFAM Neal Cardwell <ncardwell@goo=
-gle.com> wrote:
-> > > >
-> > > > On Thu, May 18, 2023 at 10:12=E2=80=AFAM Menglong Dong <menglong8.d=
-ong@gmail.com> wrote:
-> > > > >
-> > > > > On Thu, May 18, 2023 at 9:40=E2=80=AFPM Neal Cardwell <ncardwell@=
-google.com> wrote:
-> > > > > >
-> > > > > > On Wed, May 17, 2023 at 10:35=E2=80=AFPM Menglong Dong <menglon=
-g8.dong@gmail.com> wrote:
-> > > > > > >
-> > > > > > > On Wed, May 17, 2023 at 10:47=E2=80=AFPM Eric Dumazet <edumaz=
-et@google.com> wrote:
-> > > > > > > >
-> > > > > > > > On Wed, May 17, 2023 at 2:42=E2=80=AFPM <menglong8.dong@gma=
-il.com> wrote:
-> > > > > > > > >
-> > > > > > > > > From: Menglong Dong <imagedong@tencent.com>
-> > > > > > > > >
-> > > > > > > > > Window shrink is not allowed and also not handled for now=
-, but it's
-> > > > > > > > > needed in some case.
-> > > > > > > > >
-> > > > > > > > > In the origin logic, 0 probe is triggered only when there=
- is no any
-> > > > > > > > > data in the retrans queue and the receive window can't ho=
-ld the data
-> > > > > > > > > of the 1th packet in the send queue.
-> > > > > > > > >
-> > > > > > > > > Now, let's change it and trigger the 0 probe in such case=
-s:
-> > > > > > > > >
-> > > > > > > > > - if the retrans queue has data and the 1th packet in it =
-is not within
-> > > > > > > > > the receive window
-> > > > > > > > > - no data in the retrans queue and the 1th packet in the =
-send queue is
-> > > > > > > > > out of the end of the receive window
-> > > > > > > >
-> > > > > > > > Sorry, I do not understand.
-> > > > > > > >
-> > > > > > > > Please provide packetdrill tests for new behavior like that=
-.
-> > > > > > > >
-> > > > > > >
-> > > > > > > Yes. The problem can be reproduced easily.
-> > > > > > >
-> > > > > > > 1. choose a server machine, decrease it's tcp_mem with:
-> > > > > > >     echo '1024 1500 2048' > /proc/sys/net/ipv4/tcp_mem
-> > > > > > > 2. call listen() and accept() on a port, such as 8888. We cal=
-l
-> > > > > > >     accept() looply and without call recv() to make the data =
-stay
-> > > > > > >     in the receive queue.
-> > > > > > > 3. choose a client machine, and create 100 TCP connection
-> > > > > > >     to the 8888 port of the server. Then, every connection se=
-nds
-> > > > > > >     data about 1M.
-> > > > > > > 4. we can see that some of the connection enter the 0-probe
-> > > > > > >     state, but some of them keep retrans again and again. As
-> > > > > > >     the server is up to the tcp_mem[2] and skb is dropped bef=
-ore
-> > > > > > >     the recv_buf full and the connection enter 0-probe state.
-> > > > > > >     Finially, some of these connection will timeout and break=
-.
-> > > > > > >
-> > > > > > > With this series, all the 100 connections will enter 0-probe
-> > > > > > > status and connection break won't happen. And the data
-> > > > > > > trans will recover if we increase tcp_mem or call 'recv()'
-> > > > > > > on the sockets in the server.
-> > > > > > >
-> > > > > > > > Also, such fundamental change would need IETF discussion fi=
-rst.
-> > > > > > > > We do not want linux to cause network collapses just becaus=
-e billions
-> > > > > > > > of devices send more zero probes.
-> > > > > > >
-> > > > > > > I think it maybe a good idea to make the connection enter
-> > > > > > > 0-probe, rather than drop the skb silently. What 0-probe
-> > > > > > > meaning is to wait for space available when the buffer of the
-> > > > > > > receive queue is full. And maybe we can also use 0-probe
-> > > > > > > when the "buffer" of "TCP protocol" (which means tcp_mem)
-> > > > > > > is full?
-> > > > > > >
-> > > > > > > Am I right?
-> > > > > > >
-> > > > > > > Thanks!
-> > > > > > > Menglong Dong
-> > > > > >
-> > > > > > Thanks for describing the scenario in more detail. (Some kind o=
-f
-> > > > > > packetdrill script or other program to reproduce this issue wou=
-ld be
-> > > > > > nice, too, as Eric noted.)
-> > > > > >
-> > > > > > You mention in step (4.) above that some of the connections kee=
-p
-> > > > > > retransmitting again and again. Are those connections receiving=
- any
-> > > > > > ACKs in response to their retransmissions? Perhaps they are rec=
-eiving
-> > > > > > dupacks?
-> > > > >
-> > > > > Actually, these packets are dropped without any reply, even dupac=
-ks.
-> > > > > skb will be dropped directly when tcp_try_rmem_schedule()
-> > > > > fails in tcp_data_queue(). That's reasonable, as it's
-> > > > > useless to reply a ack to the sender, which will cause the sender
-> > > > > fast retrans the packet, because we are out of memory now, and
-> > > > > retrans can't solve the problem.
-> > > >
-> > > > I'm not sure I see the problem. If retransmits can't solve the
-> > > > problem, then why are you proposing that data senders keep
-> > > > retransmitting forever (via 0-window-probes) in this kind of scenar=
-io?
-> > > >
-> > >
-> > > Because the connection will break if the count of
-> > > retransmits up to tcp_retires2, but probe-0 can keep
-> > > for a long time.
-> >
-> > I see. So it sounds like you agree that retransmits can solve the
-> > problem, as long as the retransmits are using the zero-window probe
-> > state machine (ICSK_TIME_PROBE0, tcp_probe_timer()), which continues
-> > as long as the receiver is sending ACKs. And it sounds like when you
-> > said "retrans can't solve the problem" you didn't literally mean that
-> > retransmits can't solve the problem, but rather you meant that the RTO
-> > state machine, specifically (ICSK_TIME_RETRANS,
-> > tcp_retransmit_timer(), etc) can't solve the problem. I agree with
-> > that assessment that in this scenario tcp_probe_timer() seems like a
-> > solution but tcp_retransmit_timer() does not.
-> >
->
-> Yes, that is indeed what I want to express.
->
-> > > > A single dupack without SACK blocks will not cause the sender to fa=
-st
-> > > > retransmit. (Only 3 dupacks would trigger fast retransmit.)
-> > > >
-> > > > Three or more dupacks without SACK blocks will cause the sender to
-> > > > fast retransmit the segment above SND.UNA once if the sender doesn'=
-t
-> > > > have SACK support. But in this case AFAICT fast-retransmitting once=
- is
-> > > > a fine strategy, since the sender should keep retrying transmits (w=
-ith
-> > > > backoff) until the receiver potentially has memory available to
-> > > > receive the packet.
-> > > >
-> > > > >
-> > > > > > If so, then perhaps we could solve this problem without
-> > > > > > depending on a violation of the TCP spec (which says the receiv=
-e
-> > > > > > window should not be retracted) in the following way: when a da=
-ta
-> > > > > > sender suffers a retransmission timeout, and retransmits the fi=
-rst
-> > > > > > unacknowledged segment, and receives a dupack for SND.UNA inste=
-ad of
-> > > > > > an ACK covering the RTO-retransmitted segment, then the data se=
-nder
-> > > > > > should estimate that the receiver doesn't have enough memory to=
- buffer
-> > > > > > the retransmitted packet. In that case, the data sender should =
-enter
-> > > > > > the 0-probe state and repeatedly set the ICSK_TIME_PROBE0 timer=
- to
-> > > > > > call tcp_probe_timer().
-> > > > > >
-> > > > > > Basically we could try to enhance the sender-side logic to try =
-to
-> > > > > > distinguish between two kinds of problems:
-> > > > > >
-> > > > > > (a) Repeated data packet loss caused by congestion, routing pro=
-blems,
-> > > > > > or connectivity problems. In this case, the data sender uses
-> > > > > > ICSK_TIME_RETRANS and tcp_retransmit_timer(), and backs off and=
- only
-> > > > > > retries sysctl_tcp_retries2 times before timing out the connect=
-ion
-> > > > > >
-> > > > > > (b) A receiver that is repeatedly sending dupacks but not ACKin=
-g
-> > > > > > retransmitted data because it doesn't have any memory. In this =
-case,
-> > > > > > the data sender uses ICSK_TIME_PROBE0 and tcp_probe_timer(), an=
-d backs
-> > > > > > off but keeps retrying as long as the data sender receives ACKs=
-.
-> > > > > >
-> > > > >
-> > > > > I'm not sure if this is an ideal method, as it may be not rigorou=
-s
-> > > > > to conclude that the receiver is oom with dupacks. A packet can
-> > > > > loss can also cause multi dupacks.
-> > > >
-> > > > When a data sender suffers an RTO and retransmits a single data
-> > > > packet, it would be very rare for the data sender to receive multip=
-le
-> > > > pure dupacks without SACKs. This would only happen in the rare case
-> > > > where (a) the connection did not have SACK enabled, and (b) there w=
-as
-> > > > a hole in the received sequence space and there were still packets =
-in
-> > > > flight when the (spurioius) RTO fired.
-> > > >
-> > > > But if we want to be paranoid, then this new response could be writ=
-ten
-> > > > to only trigger if SACK is enabled (the vast, vast majority of case=
-s).
-> > > > If SACK is enabled, and an RTO of a data packet starting at sequenc=
-e
-> > > > S1 results in the receiver sending only a dupack for S1 without SAC=
-K
-> > > > blocks, then this clearly shows the issue is not packet loss but
-> > > > suggests a receiver unable to buffer the given data packet, AFAICT.
-> > > >
-> > >
-> > > Yeah, you are right on this point, multi pure dupacks can
-> > > mean out of memory of the receiver. But we still need to
-> > > know if the receiver recovers from OOM. Without window
-> > > shrink, the window in the ack of zero-window probe packet
-> > > is not zero on OOM.
-> >
-> > But do we need a protocol-violating zero-window in this case? Why not
-> > use my approach suggested above: conveying the OOM condition by
-> > sending an ACK but not ACKing the retransmitted packet?
-> >
->
-> I agree with you about the approach you mentioned
-> about conveying the OOM condition. But that approach
-> can't convey the recovery from OOM, can it?
+Hi Arseniy,
 
-Yes, my suggested approach can convey the recovery from OOM. The data
-receiver conveys the recovery from OOM by buffering and ACKing the
-retransmitted data packet.
+AVKrasnov@sberdevices.ru wrote on Mon, 15 May 2023 12:44:35 +0300:
 
-> Let's see the process. With 3 pure dupack for SND.UNA,
-> we deem the OOM of the receiver and make the sender
-> enter zero-window probe state.
+> This fixes read/write functionality by:
+> 1) Changing NFC_CMD_RB_INT bit value.
 
-AFAICT the data sender does not need to wait for 3 pure dpacks for
-SND.UNA. AFAICT a data sender that suffers an RTO and finds that its
-RTO gets a response that is a single dupack for SND.UNA could estimate
-that the receiver is OOM, and enter the zero-window probe state.
+I guess this is a separate fix
 
-> The sender will keep sending probe0 packets, and the
-> receiver will reply an ack. However, as we don't
-> shrink the window actually, the window in the ack is
-> not zero on OOM, so we can't know if the receiver has
-> recovered from OOM and retransmit the data in retransmit
-> queue.
+> 2) Adding extra NAND_CMD_STATUS command on each r/w request.
 
-As I noted above, in my proposal the data receiver conveys the
-recovery from OOM by buffering and ACKing the retransmitted data
-packet.
+Is this really needed? Looks like you're delaying the next op only. Is
+using a delay enough? If yes, then it's probably the wrong approach.
 
-> BTW, the probe0 will send the last byte that was already
-> acked, so the ack of the probe0 will be a pure dupack.
->
-> Did I miss something?
+> 3) Adding extra idle commands during r/w request.
 
-I don't think that's the case. My read of tcp_write_wakeup() is that
-it will send an skb that is whatever prefix of 1 MSS is allowed by the
-receiver window. In the scenario we are discussing, that would mean
-that it sends a full 1 MSS. So AFAICT tcp_write_wakeup() could be used
-for sending a data "probe" packet for this OOM case.
+Question about this below, might also be a patch on its own?
 
-> BTW, a previous patch has explained the need to
-> support window shrink, which should satisfy the RFC
-> of TCP protocol:
->
-> https://lore.kernel.org/netdev/20230308053353.675086-1-mfreemon@cloudflar=
-e.com/
+> 4) Adding extra NAND_CMD_READ0 on each read request.
+>=20
+> Without this patch driver works unstable, for example there are a lot
+> of ECC errors.
 
-Let's see what Eric thinks about that patch.
+I believe all the fixes should be Cc'ed to stable, please add in your
+commits:
 
-neal
+Cc: stable@...
+
+>=20
+> Fixes: 8fae856c5350 ("mtd: rawnand: meson: add support for Amlogic NAND f=
+lash controller")
+> Suggested-by: Liang Yang <liang.yang@amlogic.com>
+> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+> ---
+>  drivers/mtd/nand/raw/meson_nand.c | 30 +++++++++++++++++++++---------
+>  1 file changed, 21 insertions(+), 9 deletions(-)
+>=20
+> diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/mes=
+on_nand.c
+> index 074e14225c06..2f4d8c84186b 100644
+> --- a/drivers/mtd/nand/raw/meson_nand.c
+> +++ b/drivers/mtd/nand/raw/meson_nand.c
+> @@ -37,7 +37,7 @@
+>  #define NFC_CMD_SCRAMBLER_ENABLE	BIT(19)
+>  #define NFC_CMD_SCRAMBLER_DISABLE	0
+>  #define NFC_CMD_SHORTMODE_DISABLE	0
+> -#define NFC_CMD_RB_INT		BIT(14)
+> +#define NFC_CMD_RB_INT ((0xb << 10) | BIT(18) | BIT(16))
+> =20
+>  #define NFC_CMD_GET_SIZE(x)	(((x) >> 22) & GENMASK(4, 0))
+> =20
+> @@ -392,7 +392,7 @@ static void meson_nfc_set_data_oob(struct nand_chip *=
+nand,
+>  	}
+>  }
+> =20
+> -static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms)
+> +static int meson_nfc_queue_rb(struct meson_nfc *nfc, int timeout_ms, int=
+ cmd_read0)
+>  {
+>  	u32 cmd, cfg;
+>  	int ret =3D 0;
+> @@ -407,17 +407,29 @@ static int meson_nfc_queue_rb(struct meson_nfc *nfc=
+, int timeout_ms)
+> =20
+>  	reinit_completion(&nfc->completion);
+> =20
+> +	cmd =3D nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_STATUS;
+> +	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+> +	meson_nfc_cmd_idle(nfc, 5);
+
+Why 5 and 2 below? They look like magic values. Is this totally
+experimental?
+
+> +
+>  	/* use the max erase time as the maximum clock for waiting R/B */
+> -	cmd =3D NFC_CMD_RB | NFC_CMD_RB_INT
+> -		| nfc->param.chip_select | nfc->timing.tbers_max;
+
+This is not documented in the commit log, is it?
+
+> +	cmd =3D NFC_CMD_RB | NFC_CMD_RB_INT | nfc->timing.tbers_max;
+>  	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+> +	meson_nfc_cmd_idle(nfc, 2);
+> =20
+>  	ret =3D wait_for_completion_timeout(&nfc->completion,
+>  					  msecs_to_jiffies(timeout_ms));
+>  	if (ret =3D=3D 0)
+> -		ret =3D -1;
+> +		return -1;
+
+Please use real error codes, such as ETIMEDOUT.
+
+> =20
+> -	return ret;
+> +	if (!cmd_read0)
+> +		return 0;
+> +
+> +	cmd =3D nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_READ0;
+
+This looks really wrong, I don't get why you would need to send an
+expensive READ0 command.
+
+> +	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+> +	meson_nfc_drain_cmd(nfc);
+> +	meson_nfc_wait_cmd_finish(nfc, CMD_FIFO_EMPTY_TIMEOUT);
+> +
+> +	return 0;
+>  }
+> =20
+>  static void meson_nfc_set_user_byte(struct nand_chip *nand, u8 *oob_buf)
+> @@ -623,7 +635,7 @@ static int meson_nfc_rw_cmd_prepare_and_execute(struc=
+t nand_chip *nand,
+>  	if (in) {
+>  		nfc->cmdfifo.rw.cmd1 =3D cs | NFC_CMD_CLE | NAND_CMD_READSTART;
+>  		writel(nfc->cmdfifo.rw.cmd1, nfc->reg_base + NFC_REG_CMD);
+> -		meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tR_max));
+> +		meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tR_max), 1);
+>  	} else {
+>  		meson_nfc_cmd_idle(nfc, nfc->timing.tadl);
+>  	}
+> @@ -669,7 +681,7 @@ static int meson_nfc_write_page_sub(struct nand_chip =
+*nand,
+> =20
+>  	cmd =3D nfc->param.chip_select | NFC_CMD_CLE | NAND_CMD_PAGEPROG;
+>  	writel(cmd, nfc->reg_base + NFC_REG_CMD);
+> -	meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tPROG_max));
+> +	meson_nfc_queue_rb(nfc, PSEC_TO_MSEC(sdr->tPROG_max), 0);
+> =20
+>  	meson_nfc_dma_buffer_release(nand, data_len, info_len, DMA_TO_DEVICE);
+> =20
+> @@ -952,7 +964,7 @@ static int meson_nfc_exec_op(struct nand_chip *nand,
+>  			break;
+> =20
+>  		case NAND_OP_WAITRDY_INSTR:
+> -			meson_nfc_queue_rb(nfc, instr->ctx.waitrdy.timeout_ms);
+> +			meson_nfc_queue_rb(nfc, instr->ctx.waitrdy.timeout_ms, 1);
+>  			if (instr->delay_ns)
+>  				meson_nfc_cmd_idle(nfc, delay_idle);
+>  			break;
 
 
-> Thanks!
-> Menglong Dong
->
-> > Thanks,
-> > neal
-> >
-> > > Hi, Eric and kuba, do you have any comments on this
-> > > case?
-> > >
-> > > Thanks!
-> > > Menglong Dong
-> > >
-> > > > thanks,
-> > > > neal
-> > > >
-> > > > >
-> > > > > Thanks!
-> > > > > Menglong Dong
-> > > > >
-> > > > > > AFAICT that would be another way to reach the happy state you m=
-ention:
-> > > > > > "all the 100 connections will enter 0-probe status and connecti=
-on
-> > > > > > break won't happen", and we could reach that state without viol=
-ating
-> > > > > > the TCP protocol spec and without requiring changes on the rece=
-iver
-> > > > > > side (so that this fix could help in scenarios where the
-> > > > > > memory-constrained receiver is an older stack without special n=
-ew
-> > > > > > behavior).
-> > > > > >
-> > > > > > Eric, Yuchung, Menglong: do you think something like that would=
- work?
-> > > > > >
-> > > > > > neal
+Thanks,
+Miqu=C3=A8l
