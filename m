@@ -2,222 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E827670C281
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:35:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 219D070C271
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 17:33:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233018AbjEVPfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 11:35:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36010 "EHLO
+        id S234315AbjEVPdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 11:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbjEVPf3 (ORCPT
+        with ESMTP id S231255AbjEVPdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 11:35:29 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83159AA;
-        Mon, 22 May 2023 08:35:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684769728; x=1716305728;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=pZgHmgwueUJssly8c+X+QdeFenxgZjPmTHYdpkkNtow=;
-  b=UzpfljgKimaC+VJ5Dewb+bqBmxvuqml0nPKnShCVTL3CFBTKpTKOEwPx
-   2eafor78WJxFn2K8huWOJbbi3xqK6hN4g1DmOQHZR7vAPBzGi3lN1+zfL
-   jenRHytt4opRJRF9PfLLVm8o8Z1T/4V6xGjCzVto/DNbvljP1/Ef09Kne
-   3mzRLVA4k/0NR9F6doGMpJCDeFFsZxTRehtpfT0iNbp1oTqq0qoQEwVPQ
-   3c88K/p3exQSlAYEgMvmkWKRKld93NANC+PpmSntAmtMylD/OqKFmhb1m
-   z3fvseS4ysAnOiuovXtS1X6FlkvPrxECPWDD/gBNlRYRWmjGO3hGBCSP6
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="355303044"
-X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
-   d="scan'208";a="355303044"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 May 2023 08:35:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10718"; a="773405932"
-X-IronPort-AV: E=Sophos;i="6.00,184,1681196400"; 
-   d="scan'208";a="773405932"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga004.fm.intel.com with ESMTP; 22 May 2023 08:34:10 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 22 May 2023 08:34:09 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 22 May 2023 08:34:09 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Mon, 22 May 2023 08:34:09 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.176)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Mon, 22 May 2023 08:34:08 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=d+4tcfs375+Hv3N5RgHukbZAf7H8zMWK6ylIweG43jXpNtQNvCGhf6u6hqh+0hi43xnbvDB9RtZr7qQRvD/RfGdG7MyoHP+qSBWX4ZXRS2ys2e+mJqfvlRzPsR49drOxnGEgMmz/NAnbUeNDzoRFsCZj4qmpeMuc5SAh4VwjLEgP+r9jbXxc6c/n1S+S3LAQFOe4eJvKRIdvenYptdtzaaWxgG+sPAjWe2/RLTzwlccOjvkpqQv8b5pDsKpWaHesiXY3egY+N0eA2gdrbyBKaDTl4ygfwvyfm/xQb38WfDMTmwt9caf6DglG5N0JKqmihtQ2BRXr2WUjJScl41qDew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0aXD3dgusfU16YgKAL9nyLxGHMJDVPMclK7HeJJIM8c=;
- b=HhAdY2y5aT+4u5xrzZIjWlfFeJ8Jim7t4TASZieT1yXltI52ZGwqX8xbawDDb/08kb6F5ECz3k2SL1+/tD5exlVQgf/4ikPAfoPBPecFx61kD8USjjXhRUHgMIKu3JYXqX/nD8Rcg3XUtwNg0Ri+T5wt2HNKgMIZNkHM8irkGlcaHX86xZyCEMiQmdWC+dZgyXQvCgXJ9LvqHWKvbQcaziRahXh8xvvgYoVtphLAAKMmdB++McQQSRXy+5x0OR7rmsIwZABgv9uAWVT6GUP5wSDL/CT6JIF7qhWBE7ep7i34qEFlnXmLOulKR+L/3DVjvpRYEUNcLKUFQBO0Bk+nkA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
- by PH7PR11MB8569.namprd11.prod.outlook.com (2603:10b6:510:304::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.28; Mon, 22 May
- 2023 15:34:06 +0000
-Received: from DM6PR11MB3625.namprd11.prod.outlook.com
- ([fe80::64d9:76b5:5b43:1590]) by DM6PR11MB3625.namprd11.prod.outlook.com
- ([fe80::64d9:76b5:5b43:1590%2]) with mapi id 15.20.6411.028; Mon, 22 May 2023
- 15:34:06 +0000
-Message-ID: <74679c26-19b1-65fc-a986-8b4a20794327@intel.com>
-Date:   Mon, 22 May 2023 17:32:33 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [Intel-wired-lan] [PATCH net-next 10/11] libie: add per-queue
- Page Pool stats
-Content-Language: en-US
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-CC:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Larysa Zaremba <larysa.zaremba@intel.com>,
-        <netdev@vger.kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        <linux-kernel@vger.kernel.org>,
-        Michal Kubiak <michal.kubiak@intel.com>,
-        <intel-wired-lan@lists.osuosl.org>,
-        "Christoph Hellwig" <hch@lst.de>,
-        Magnus Karlsson <magnus.karlsson@intel.com>
-References: <20230516161841.37138-1-aleksander.lobakin@intel.com>
- <20230516161841.37138-11-aleksander.lobakin@intel.com>
- <6bebe582-705c-2b7a-3286-1c86a15619f2@molgen.mpg.de>
-From:   Alexander Lobakin <aleksander.lobakin@intel.com>
-In-Reply-To: <6bebe582-705c-2b7a-3286-1c86a15619f2@molgen.mpg.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BL1PR13CA0173.namprd13.prod.outlook.com
- (2603:10b6:208:2bd::28) To DM6PR11MB3625.namprd11.prod.outlook.com
- (2603:10b6:5:13a::21)
+        Mon, 22 May 2023 11:33:11 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9632AA;
+        Mon, 22 May 2023 08:33:09 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34MEdf0I012567;
+        Mon, 22 May 2023 15:33:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=6XGFyEzczDwyR5+6vRQrf4JUOYRAtfqw+FiJTqGz47Q=;
+ b=SQXkc3SpFJmbDIH8wbNOM0NwmVjRs0Jhgh6CAJEPp2XSeufIrhkJ7rZJ21S+/gs5zKX+
+ +Bif1KBVXrv4cdcmd9jhE9GEpu9pKmphL2s4u7tNaND1COp6OB7XI0f4eE5IK2t8nyiZ
+ /soaHCUrNDiMzZsi5x9rawpseLIRWCrYt126RZNhfKNtZGc1iJuOYC9eY5Ho76ZUr4yN
+ CpaCJHeb3KDjULQgayIPWqo93t8Px/OjuzlotrqygSQDNVJSGJq6hlGNYymFTkAgjqkl
+ zJ0YUoAxdJCeDHjumU5osWjflW2jpV/e8z0/jjSldFAKBgmbR5za/NKoznYfIA9rg4E1 TA== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qraasr5jr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 May 2023 15:33:03 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34MFX2kk027626
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 22 May 2023 15:33:02 GMT
+Received: from [10.216.34.225] (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 22 May
+ 2023 08:32:58 -0700
+Message-ID: <a7a0cd79-e080-cd26-9411-5913a4c0c61f@quicinc.com>
+Date:   Mon, 22 May 2023 21:02:55 +0530
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|PH7PR11MB8569:EE_
-X-MS-Office365-Filtering-Correlation-Id: 67d35398-f093-4cc1-1654-08db5ad9fa4d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: X+OE9gWDL5XzMgm7xBdrp38yMlsW32VNnAwncTl+ep7JG5WTKayXbCkINBnCtKPCuzGqyq2mFnKVXI1woPUOdo+KHVTTZyqeTeIZconvw2ZhIoDiefMr47Qf3i+LdvxvvkUpJSW8dq6MGyiiarllRman+REuWaQABiIRfH8LbxCEgYZDbzb0rpw8oCTKCYgQeiAlSaSNtSu1VMlWtOqXwRn08BHCAjmOvLz+FGvAuWtbjSGSxCr0TAhGqUEzLOphaeA0cMnHX9kOS3UIOjIbXm4HikNPA0ux3tHpYS9KYy6DSXRC1gWpNULpQgj7cpciQUTOWBz9LaC3zNvrnjLbCySr+7bk7ZFSKBiF9AK/KRsVorDgTK3q73hjeUpUh1gb+WHZD0uKP7Z6uB2n/7baALuwv3Qjp6FmTPf8+Dv/wRq5FabayM1V5cTvCfU7r+KN3hIs2U2AUKOQPcNW+XcW2QKPx9GnmQkB4VZShuTrVxyCBj3T4a0ZU+RQkf8BJtIKGO7Z96mitLHRjSMKl5Hxngyfu+RfjtZZ/FlqmZsaYpgPewLC4JAfRwn4VF/MPE3P/g5OYEhZohl6Brpds8T0+dnECp1Hbmw0FsaUzexOkNxNkoDcCEDz/uT6L7j7hPslYQEbEe4VrwzNPjua6p1VDA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(396003)(136003)(39860400002)(376002)(366004)(451199021)(38100700002)(82960400001)(86362001)(31696002)(36756003)(31686004)(8676002)(8936002)(7416002)(107886003)(5660300002)(6512007)(26005)(6506007)(2616005)(186003)(83380400001)(2906002)(41300700001)(6486002)(316002)(6666004)(66476007)(66946007)(66556008)(54906003)(478600001)(6916009)(4326008)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YjZvWHVBbnNOVGNHL2d3Z2FqMElvMngzZXExQjRWdlhKWE9BL2d3N3dVdzlt?=
- =?utf-8?B?WVRiWGkyM08wZTNmRUxLQTZsbldDUzBYaVFNeFpTV2JvbmNORG5ISjYxVGMw?=
- =?utf-8?B?VzUwcnZKMjBZMDB5SGJCNnFhYkZuWGpkWDJDdW10ZHB1ekxXbmw3bjBHZVR2?=
- =?utf-8?B?MXBYaEJ6endNQW1CUnVmQXpsOWtTUHRURFlUemVOSHhQNXpIQkl6aWpDVTNC?=
- =?utf-8?B?My9QL1BwMXVwaEVjTHpkZ3lhNUExZTJIVUNxUlk5N21Hb1Jnd3FuRGtiUXNI?=
- =?utf-8?B?UE5HWmp1K0dRZHZCS2Y4d09aUWJRWWdCaFl1bm1NbXhwc1hhc1FWRWh0bVI3?=
- =?utf-8?B?Q0hCSGtpOXRyWXAxZkt0OHpLTWUzV2lnMlR0K0gveGw0eUUwb2JVRHlSZnZY?=
- =?utf-8?B?bm0vL01jVCt4emlva2tiQ2dmZDVFOENGNnRSTlFXT0NJRklFV0xhVysyTnV0?=
- =?utf-8?B?Q1hNcWt6Z0dLb0JIRndrdVNaWGlhUDcySDNhZkw2Ykd5M1paaVczc3JIaHYx?=
- =?utf-8?B?d1lhOGFEOU5WeVQ5aDV2TERFd2o4U0FneTI5SW5zN2srYVNrM0NWZmVkQWVz?=
- =?utf-8?B?M1pndWRWeFJ3V3dtbHpyU2szYzdCbFpnRHFZVC9jS1UzN0QrbFpnRndLUmZi?=
- =?utf-8?B?YnRkMitKcDdlZGdtT1dlSjd5b1R0YWZFR0JlOGtUUEptTkx1T3VQenhzSk5x?=
- =?utf-8?B?UUgxTTcvRTRGUVBtRCtuVlNzbUo0a21GREd2UzdPVDBjMkFzdmlMUWFVSlNt?=
- =?utf-8?B?alJhN0JLRzJBWE03T0p2S3NqMmY5K1IwcW5GOE9mVmwvcWpvSVJ0N01aTkt6?=
- =?utf-8?B?QjRtdVZURDBPdWkwNFRKbUdXNzMxdnJ4U2twWGQzZS8zUmFzVmZ6MHdGczUy?=
- =?utf-8?B?cmoyWURIUEwvQklla2YzbllkbWZXMElpOUgrRGpkakM0NlRrTTVXUWgyOURa?=
- =?utf-8?B?ejl6QUlUU2FKb2Q1NmpxSmdnODI0UzNWa01qQWYvOHZkQjlxbU1vd0RvMzJN?=
- =?utf-8?B?YWhrdG5VOGs1bUxDTXhNMVdxVXpYcHZqSmtVNmlwMUFwK2RULy9DYmJxYUZL?=
- =?utf-8?B?aksvTVZKUTJOYVlLTUJZMHZaNHM4L3VScVJGbGRIeTFXMU50ZXp4WUJpaVZ2?=
- =?utf-8?B?VGZlSGFxNGpURHpiTHRxWlZFU1Z0RWw2eEFLanBpM3Y1aFUrR0hpaFQwdWVH?=
- =?utf-8?B?eDdmWTZ2emhDUFdsKy9BbUlNdkhMWE82ZndyMm5DVnVDUUV0azRubm9USzJ2?=
- =?utf-8?B?ZkpnTXB5Y3pYeVpHWnpXS0s4YTljUkdhME92ZkV5V01WbjJCWkNvTlJSalNt?=
- =?utf-8?B?MEVRTmtUaWxQS3lWOHMvLzZOMlVVb25rMGRRQ1oya3Mwc1JwZjF4YWdZelcy?=
- =?utf-8?B?aUtWd3JtSklzSEtuRHJNQWphb25Tc280b0svZ09ZcThSV0g0SFFMK1NndzdD?=
- =?utf-8?B?dDZtVUVJSUxCbTNwSlVSWnBvcXowS3VhMXlmcjJHVENxdXRZQ2lqV3VVVDBo?=
- =?utf-8?B?TzRoRHNvTGt6UU1iNzByWFUyLy96MjNaUG00MEFacitZdjdLTHFDb1pZTnc3?=
- =?utf-8?B?RlZGSFAwMVNhQlJFekxyRFNSTjRwd1pwdnhROVZGZ3ZEVURJKzdUT1QzMWYx?=
- =?utf-8?B?czQrNjZvVW1PYkwxdGZoU2RiRnRNVTh4eHNrWWZ1RlZxbFVNamhISHI1TlRp?=
- =?utf-8?B?WHRGSUFYWFpPZTRlMEhUakV0a3pnUFp1ZTVUb1RveXFKOHh6cnRKcFJTQWFh?=
- =?utf-8?B?TDdRa2JJaUtUYyt0c3BYeXpxQk1DUi8vRGtIK2hVQVJtak1xVElBVGlzTUFn?=
- =?utf-8?B?MldvbERJMUV6T2tkdDVTSWIzdGFJeGtMcTl5NmV5UVIycDNHNmJsaFRhcW9U?=
- =?utf-8?B?N2JtckpCeFNFMk9rcnFQZzZFTlRORWJIWjBNV0NObEcyZFRIbmZRcjJLUDN2?=
- =?utf-8?B?RWZ4REw2NDFlWVBCbHM4Nkd0RWpIRHNWUnJHS0I5R1B2d1hDR0pUck1uUWZ1?=
- =?utf-8?B?VHZlQ21tOWVPS2NrSVVqQTdYYVErQWlmR3IvOGJBZVBqYkk2eFlNOEhkaFVt?=
- =?utf-8?B?b094ZE9NdnMyUmlsRU9xb3JFQWlyMkdsaUhrR3hjT0lldGw0WUMyMXhJdUhh?=
- =?utf-8?B?VjhjQ3VEK0pKUEZQWElKSU83amJuaXJCNFpxQUpTVFg4bXA5b1o3WkFEbVRK?=
- =?utf-8?B?b1E9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 67d35398-f093-4cc1-1654-08db5ad9fa4d
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 May 2023 15:34:05.8778
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: +Nan0X2Ip+1WfSIY/ERixJfYp47Ho05Ft4JuXI1wLuuuyT51qcRRWwHIaicB+kibXQSp9c31j4ADJjPYEIfmBy3cC96gbgRRIzfXpmtXBUk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB8569
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 1/2] remoteproc: Introduce traces for remoteproc events
+Content-Language: en-US
+To:     Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>,
+        <linux-remoteproc@vger.kernel.org>
+CC:     Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        <linux-kernel@vger.kernel.org>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        "Elliot Berman" <quic_eberman@quicinc.com>,
+        Guru Das Srinagesh <quic_gurus@quicinc.com>,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Melody Olvera <quic_molvera@quicinc.com>
+References: <cover.1683741283.git.quic_gokukris@quicinc.com>
+ <5c7c2657d12808e211942d71ad79e3846f4e70bb.1683741283.git.quic_gokukris@quicinc.com>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <5c7c2657d12808e211942d71ad79e3846f4e70bb.1683741283.git.quic_gokukris@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: me_CRU_Tf7KLc56Nmp-lwP3Uu4gbhl4Z
+X-Proofpoint-ORIG-GUID: me_CRU_Tf7KLc56Nmp-lwP3Uu4gbhl4Z
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.176.26
+ definitions=2023-05-22_10,2023-05-22_03,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
+ priorityscore=1501 mlxscore=0 lowpriorityscore=0 mlxlogscore=999
+ spamscore=0 impostorscore=0 bulkscore=0 malwarescore=0 phishscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305220129
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-Date: Mon, 22 May 2023 17:05:28 +0200
 
-> Dear Alexander,
-> 
-> 
-> Thank you for your patch.
-> 
-> Am 16.05.23 um 18:18 schrieb Alexander Lobakin:
->> Expand the libie generic per-queue stats with the generic Page Pool
->> stats provided by the API itself, when CONFIG_PAGE_POOL is enable.
-> 
-> enable*d*
 
-Oof, nice catch, thanks! I rely on codespell and checkpatch too much,
-but from standalone-word-spelling PoV everything is fine here :s :D
-
+On 5/10/2023 11:35 PM, Gokul krishna Krishnakumar wrote:
+> Adding Traces for the following remoteproc events:
+> 	rproc_subdev_event,
+> 	rproc_interrupt_event,
+> 	rproc_load_event,
+> 	rproc_start_event,
+> 	rproc_stop_event
 > 
->> When it's not, there'll be no such fields in the stats structure, so
->> no space wasted.
->> They are also a bit special in terms of how they are obtained. One
->> &page_pool accumulates statistics until it's destroyed obviously,
->> which happens on ifdown. So, in order to not lose any statistics,
->> get the stats and store in the queue container before destroying
->> a pool. This container survives ifups/downs, so it basically stores
->> the statistics accumulated since the very first pool was allocated
->> on this queue. When it's needed to export the stats, first get the
->> numbers from this container and then add the "live" numbers -- the
->> ones that the current active pool returns. The result values will
->> always represent the actual device-lifetime* stats.
->> There's a cast from &page_pool_stats to `u64 *` in a couple functions,
->> but they are guarded with stats asserts to make sure it's safe to do.
->> FWIW it saves a lot of object code.
-
-[...]
-
-> Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+> Signed-off-by: Gokul krishna Krishnakumar <quic_gokukris@quicinc.com>
+> ---
+>   drivers/remoteproc/Makefile           |   1 +
+>   drivers/remoteproc/qcom_tracepoints.c |  12 +++
+>   include/trace/events/rproc_qcom.h     | 128 ++++++++++++++++++++++++++
+>   3 files changed, 141 insertions(+)
+>   create mode 100644 drivers/remoteproc/qcom_tracepoints.c
+>   create mode 100644 include/trace/events/rproc_qcom.h
 > 
-> 
-> Kind regards,
-> 
-> Paul
+> diff --git a/drivers/remoteproc/Makefile b/drivers/remoteproc/Makefile
+> index 91314a9b43ce..3399fcaba39b 100644
+> --- a/drivers/remoteproc/Makefile
+> +++ b/drivers/remoteproc/Makefile
+> @@ -10,6 +10,7 @@ remoteproc-y				+= remoteproc_debugfs.o
+>   remoteproc-y				+= remoteproc_sysfs.o
+>   remoteproc-y				+= remoteproc_virtio.o
+>   remoteproc-y				+= remoteproc_elf_loader.o
+> +remoteproc-y				+= qcom_tracepoints.o
+>   obj-$(CONFIG_REMOTEPROC_CDEV)		+= remoteproc_cdev.o
+>   obj-$(CONFIG_IMX_REMOTEPROC)		+= imx_rproc.o
+>   obj-$(CONFIG_IMX_DSP_REMOTEPROC)	+= imx_dsp_rproc.o
+> diff --git a/drivers/remoteproc/qcom_tracepoints.c b/drivers/remoteproc/qcom_tracepoints.c
+> new file mode 100644
+> index 000000000000..1b587ef54aa7
+> --- /dev/null
+> +++ b/drivers/remoteproc/qcom_tracepoints.c
+> @@ -0,0 +1,12 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#define CREATE_TRACE_POINTS
+> +#include <trace/events/rproc_qcom.h>
+> +EXPORT_TRACEPOINT_SYMBOL(rproc_load_event);
+> +EXPORT_TRACEPOINT_SYMBOL(rproc_start_event);
+> +EXPORT_TRACEPOINT_SYMBOL(rproc_stop_event);
+> +EXPORT_TRACEPOINT_SYMBOL(rproc_interrupt_event);
+> +EXPORT_TRACEPOINT_SYMBOL(rproc_subdev_event);
+> diff --git a/include/trace/events/rproc_qcom.h b/include/trace/events/rproc_qcom.h
+> new file mode 100644
+> index 000000000000..48ad26ce18a3
+> --- /dev/null
+> +++ b/include/trace/events/rproc_qcom.h
+> @@ -0,0 +1,128 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#undef TRACE_SYSTEM
+> +#define TRACE_SYSTEM rproc_qcom
+> +
+> +#if !defined(_TRACE_RPROC_QCOM_H) || defined(TRACE_HEADER_MULTI_READ)
+> +#define _TRACE_RPROC_QCOM_H
+> +#include <linux/tracepoint.h>
+> +#include <linux/remoteproc.h>
+> +
+> +/*
+> + * Tracepoints for remoteproc and subdevice events
+> + */
+> +TRACE_EVENT(rproc_load_event,
+> +
+> +	TP_PROTO(struct rproc *rproc, int ret),
+> +
+> +	TP_ARGS(rproc, ret),
+> +
+> +	TP_STRUCT__entry(
+> +		__string(name, rproc->name)
+> +		__string(firmware, rproc->firmware)
+> +		__field(int, ret)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		__assign_str(name, rproc->name);
+> +		__assign_str(firmware, rproc->firmware);
+> +		__entry->ret = ret;
+> +	),
+> +
+> +	TP_printk("%s loading firmware %s returned %d",
+> +			__get_str(name), __get_str(firmware),
+> +			__entry->ret)
+> +);
+> +
+> +TRACE_EVENT(rproc_start_event,
+> +
+> +	TP_PROTO(struct rproc *rproc, int ret),
+> +
+> +	TP_ARGS(rproc, ret),
+> +
+> +	TP_STRUCT__entry(
+> +		__string(name, rproc->name)
+> +		__field(int, ret)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		__assign_str(name, rproc->name);
+> +		__entry->ret = ret;
+> +	),
+> +
+> +	TP_printk("%s %d", __get_str(name), __entry->ret)
+> +);
+> +
+> +TRACE_EVENT(rproc_stop_event,
+> +
+> +	TP_PROTO(struct rproc *rproc, char *crash_msg),
 
-Thanks,
-Olek
+
+
+const char *crash_msg ?
+
+> +
+> +	TP_ARGS(rproc, crash_msg),
+> +
+> +	TP_STRUCT__entry(
+> +		__string(name, rproc->name)
+> +		__string(crash_msg, crash_msg)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		__assign_str(name, rproc->name);
+> +		__assign_str(crash_msg, crash_msg)
+> +	),
+> +
+> +	TP_printk("%s %s", __get_str(name), __get_str(crash_msg))
+
+> +);
+> +
+> +TRACE_EVENT(rproc_interrupt_event,
+> +
+> +	TP_PROTO(struct rproc *rproc, const char *event,
+> +			 const char *msg),
+> +
+> +	TP_ARGS(rproc, event, msg),
+> +
+> +	TP_STRUCT__entry(
+> +		__string(name, rproc->name)
+> +		__string(event, event)
+> +		__string(msg, msg)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		__assign_str(name, rproc->name);
+> +		__assign_str(event, event);
+> +		__assign_str(msg, msg);
+> +	),
+> +
+> +	TP_printk("%s %s returned %s", __get_str(name),
+> +			 __get_str(event), __get_str(msg))
+> +);
+> +
+> +TRACE_EVENT(rproc_subdev_event,
+> +
+> +	TP_PROTO(const char *rproc, const char *subdev,
+> +			const char *event, int ret),
+> +
+> +	TP_ARGS(rproc, subdev, event, ret),
+> +
+> +	TP_STRUCT__entry(
+> +		__string(rproc, rproc)
+> +		__string(subdev, subdev)
+> +		__string(event, event)
+> +		__field(int, ret)
+> +	),
+> +
+> +	TP_fast_assign(
+> +		__assign_str(rproc, rproc);
+> +		__assign_str(subdev, subdev);
+> +		__assign_str(event, event);
+> +		__entry->ret = ret;
+> +	),
+> +
+> +	TP_printk("%s %s %s %d", __get_str(rproc), __get_str(subdev),
+> +			__get_str(event), __entry->ret)
+
+Should you not specify what all are you trying to print here..
+Unless they are very generic and self interpret-able.
+
+TP_printk("rproc:%s subdev:%s event:%s ret:%d", __get_str(rproc), 
+__get_str(subdev), __get_str(event), __entry->ret)
+
+
+-- Mukesh
+
+> +);
+> +#endif /* _TRACE_RPROC_QCOM_H */
+> +
+> +/* This part must be outside protection */
+> +#include <trace/define_trace.h>
