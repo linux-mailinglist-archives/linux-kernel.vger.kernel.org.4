@@ -2,248 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9176E70CB53
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 22:38:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 899D070CB5D
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 22:41:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234553AbjEVUil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 16:38:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46776 "EHLO
+        id S234249AbjEVUl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 16:41:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234543AbjEVUik (ORCPT
+        with ESMTP id S234096AbjEVUl0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 16:38:40 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DCECA;
-        Mon, 22 May 2023 13:38:18 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 89A6A5C00CB;
-        Mon, 22 May 2023 16:38:16 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Mon, 22 May 2023 16:38:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1684787896; x=1684874296; bh=Z04sWrILKepz2jskPeHWi28H8+f7r6q83E+
-        7n4rVA1U=; b=r8QoZ8GkpCGPzQOiaN0oVpMWufriYLpYhmf+GFlUl0Ftril+G5n
-        tdQZm3LrLc4UbnTjGNyEgZK2XFkQL60lHZnAHfjK/sFGACUpbtzPML/EZuxE5a7J
-        ZoO6uYnAiN5dQRSLox48bzwyPmPAc6IuC3fAFfTeb6T+yQnKUCR82W0C5V3xzktN
-        cWB078wk7eJOKPLoYvVGm2Wl1S3eujz/feNKxoHV1dgMb+Jb1xJ0Df525Z2PhaZE
-        6/e0W4AhdiT8pWZ4IfS75ufIyoVqRaq8h1Q6AI8mfTpxHoWiJDAKSkY+G17ojoNR
-        aNrHnnjYDZSyEYKCyeNzsJTnU92aD7mvDlw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1684787896; x=1684874296; bh=Z04sWrILKepz2jskPeHWi28H8+f7r6q83E+
-        7n4rVA1U=; b=GQepVgHG1mNJtXdVvGUbo7MD+oBoZ9213Eh3PXU0ZLT3W2Sm2yO
-        Nh1s1zFq3WhPkRjNB2KIYlYK5yGLZz2uuyCotqUuG8/yxgSzoT93W7yh7wb0QGKW
-        Anga/Zoa8+KlK1YjHc33OEXCWqHKXkzGPljKVbIsJVFGaeah9sks9dvOh6ssuNKQ
-        kye2IiIao2dl5jREnUsoX1BbBLbgvYFb+MPqGfGSj1BZNq8GDCGfIsUQ/4yUJgF7
-        hNURLf5AU7z2nrd9aXQDKWKqODTYt5PvVP/9zLwut8t8+hi8nSymkGwPpb0iKe+Z
-        1bDmauQHf2W+VIFGkzILQQxQtyIjGPtqSxw==
-X-ME-Sender: <xms:uNJrZHb3ILeEM-0q_2i8rpSqz_OzFPtH0lZ512rA8asS3mKfe_Rn2A>
-    <xme:uNJrZGZ9G1SiyEKCV3NTTigddLfqaW1luPz6CUz3Ayy-7geLr_8ehfS7pHUivkuCN
-    bgVMdCQBaPBDY8KT7k>
-X-ME-Received: <xmr:uNJrZJ9gxofwwr70kpykHsNYMiUOUuxPDV-IS3nlof2O7CLsbBhbnI1mFDztaWP9z7LT>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeejuddgudefkecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpegtggfuhfgjffevgffkfhfvofesthhqmhdthhdtjeenucfhrhhomheplfhi
-    rgiguhhnucgjrghnghcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqe
-    enucggtffrrghtthgvrhhnpedutdejffetteefkeejieehfeeuieeguedtveeijeeviefh
-    ffelvdfgudeihfdvtdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhm
-X-ME-Proxy: <xmx:uNJrZNppvUMYSkXY3VKiCF2UTVRwMdhZMcvrb2sLsgdZ8nhCrwREGQ>
-    <xmx:uNJrZCqy--GtsuZyvxmVnbKaXp3P2lCBaGYMv9xCRwn25Cpf5pnyaA>
-    <xmx:uNJrZDQ024UadKf5zcBVQBw-ttLZD9uQlvU4oEgAgSjqt-WEBgmHvg>
-    <xmx:uNJrZJ0a9web8LwN7U7atHEegzPnerYXbh4ezxBnjQGoUJ3gZN2o3Q>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 22 May 2023 16:38:15 -0400 (EDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: [PATCH 1/3] MIPS: Introduce WAR_4KC_LLSC config option
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <CAOiHx==iku+duvBnAfu_3AXgNmY9aK+uO+t9Enzdf6qQN5m+iw@mail.gmail.com>
-Date:   Mon, 22 May 2023 21:38:04 +0100
-Cc:     "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <2CC0C4B4-78C4-4D93-828C-318DC1CAD479@flygoat.com>
-References: <20230519164753.72065-1-jiaxun.yang@flygoat.com>
- <20230519164753.72065-2-jiaxun.yang@flygoat.com>
- <CAOiHx==iku+duvBnAfu_3AXgNmY9aK+uO+t9Enzdf6qQN5m+iw@mail.gmail.com>
-To:     Jonas Gorski <jonas.gorski@gmail.com>
-X-Mailer: Apple Mail (2.3731.500.231)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 22 May 2023 16:41:26 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E677DB5
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 13:41:25 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id 98e67ed59e1d1-2532da9e45bso2043879a91.0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 13:41:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684788085; x=1687380085;
+        h=to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=iR+BWwf4OJyjMqBDmvTGWi3YCxxOLx+95DOCyJVhKPk=;
+        b=xEa2mOQ2SU1uUUjttd9udMgRxPuLw8oCfRKbF8vtgTjACLQmxJkg3UlfAOJR42UukM
+         2ceUcX4VaZ3REotSepvjFLOyzJj6wCM9CXPDxU6j3PR5bc5IPOtAhWh1/oqItWFbKb+l
+         733AS0+sqdBmKeoiq9rksTo8cQroiIz3l70/cGsIUiBtEeuOHdNHejR/PaQdK6xnsVQJ
+         XUBiLUf1hBSGbYMKJvUzpTcqDcCRL669NjLWUA27uHWUc0BBEx74CIGWM+tl8oxQrIKX
+         XJTY0s8FmyqQUBkNT7x3lSqe4UciisM58DPS/vS7/Hav5LKzuhpyJ7um5LQ/px5A+9Rb
+         Wrkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684788085; x=1687380085;
+        h=to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iR+BWwf4OJyjMqBDmvTGWi3YCxxOLx+95DOCyJVhKPk=;
+        b=BLiqp/LR6k697PxH5Vj/AeI7sQYjk+S0dLZPN1uRKhjDzplx7X2qViWrmZ9hdSTw6I
+         peVdcDW2dAb8sAX4wkSqm/BqrzoU3vmBjks6Rda5FK8CRQ8UVvLplycmc+dakiUrFYHw
+         FXPIrns9pX+NllJrb177JkYUidVQltsEtBCP9VzghuQorpOHqDcPGXdPkoIcOxqV+Q8d
+         YPagvCDoVQLB7Cn31no+iYdc7L8u7JZHFMzEiF3Oq0s2RgHf7Xk1D5MHrD6vez2OqLuJ
+         WrpzhguuyMYh05wU0RyWQicCHFaEpFSJ4kNQ99OwylmcCp3PXluhAFATp9otvg+qt4E3
+         iUng==
+X-Gm-Message-State: AC+VfDwBYi22E9ChPtfEY0AV1edRbt5FjCcnffAbyU1Fy3sZuhxK1Uhp
+        V/wXFMrKxJaeRBK2Fazn36QTqwaNUKGP
+X-Google-Smtp-Source: ACHHUZ5UVJ/C3KmSAfO5qNKyH4H6nxwXGqLXpomHHJOGaFsacH0kVA5wReOpD9Jl2yVocPJozpRri3FrjLbf
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:33a6:6e42:aa97:9ab4])
+ (user=irogers job=sendgmr) by 2002:a17:903:3390:b0:1ae:5474:4c82 with SMTP id
+ kb16-20020a170903339000b001ae54744c82mr2770731plb.1.1684788085354; Mon, 22
+ May 2023 13:41:25 -0700 (PDT)
+Date:   Mon, 22 May 2023 13:40:44 -0700
+Message-Id: <20230522204047.800543-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.698.g37aff9b760-goog
+Subject: [PATCH v1 0/3] Bring back vmlinux.h generation
+From:   Ian Rogers <irogers@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        James Clark <james.clark@arm.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Commit 760ebc45746b ("perf lock contention: Add empty 'struct rq' to
+satisfy libbpf 'runqueue' type verification") inadvertently created a
+declaration of 'struct rq' that conflicted with a generated
+vmlinux.h's:
 
+```
+util/bpf_skel/lock_contention.bpf.c:419:8: error: redefinition of 'rq'
+struct rq {};
+       ^
+/tmp/perf/util/bpf_skel/.tmp/../vmlinux.h:45630:8: note: previous definition is here
+struct rq {
+       ^
+1 error generated.
+```
 
-> 2023=E5=B9=B45=E6=9C=8822=E6=97=A5 19:40=EF=BC=8CJonas Gorski =
-<jonas.gorski@gmail.com> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> Hi,
->=20
-> On Fri, 19 May 2023 at 18:49, Jiaxun Yang <jiaxun.yang@flygoat.com> =
-wrote:
->>=20
->> WAR_4KC_LLSC is used to control workaround of 4KC LLSC issue
->> that affects 4Kc up to version 0.9.
->>=20
->> Early ath25 chips are known to be affected.
->>=20
->> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->> ---
->> arch/mips/Kconfig                                        | 6 ++++++
->> arch/mips/include/asm/cpu.h                              | 1 +
->> arch/mips/include/asm/mach-ath25/cpu-feature-overrides.h | 2 +-
->> arch/mips/kernel/cpu-probe.c                             | 7 +++++++
->> 4 files changed, 15 insertions(+), 1 deletion(-)
->>=20
->> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
->> index 30e90a2d53f4..354d033364ad 100644
->> --- a/arch/mips/Kconfig
->> +++ b/arch/mips/Kconfig
->> @@ -230,6 +230,7 @@ config ATH25
->>        select SYS_SUPPORTS_BIG_ENDIAN
->>        select SYS_SUPPORTS_32BIT_KERNEL
->>        select SYS_HAS_EARLY_PRINTK
->> +       select WAR_4KC_LLSC if !SOC_AR5312
->=20
-> Shouldn't this be "if SOC_AR5312"?
+Fix the issue by moving the declaration to vmlinux.h. So this can't
+happen again, bring back build support for generating vmlinux.h then
+add build tests.
 
-Ah sorry, I misread the original code.
+Ian Rogers (3):
+  perf build: Add ability to build with a generated vmlinux.h
+  perf bpf: Move the declaration of struct rq
+  perf test: Add build tests for BUILD_BPF_SKEL
 
->=20
-> Though since you are adding runtime detection/correction below, I
-> wonder if this would be really needed as an extra symbol, and rather
-> use the later introduced (CPU_MAY_HAVE_LLSC) directly.
+ tools/perf/Makefile.config                       |  4 ++++
+ tools/perf/Makefile.perf                         | 16 +++++++++++++++-
+ tools/perf/tests/make                            |  4 ++++
+ tools/perf/util/bpf_skel/.gitignore              |  1 +
+ tools/perf/util/bpf_skel/lock_contention.bpf.c   |  2 --
+ tools/perf/util/bpf_skel/{ => vmlinux}/vmlinux.h | 10 ++++++++++
+ 6 files changed, 34 insertions(+), 3 deletions(-)
+ rename tools/perf/util/bpf_skel/{ => vmlinux}/vmlinux.h (90%)
 
-I bet it=E2=80=99s better to have a symbol just for tracking errata. So =
-we can easily know
-if SoC is affected by a errata and have some extra documentation.
-
->=20
-> Or rather have select "CPU_HAS_LLSC if !SOC_AR5312" in that case.
->=20
->>        help
->>          Support for Atheros AR231x and Atheros AR531x based boards
->>=20
->> @@ -2544,6 +2545,11 @@ config WAR_ICACHE_REFILLS
->> config WAR_R10000_LLSC
->>        bool
->>=20
->> +# On 4Kc up to version 0.9 (PRID_REV < 1) there is a bug that may =
-cause llsc
->> +# sequences to deadlock.
->> +config WAR_4KC_LLSC
->> +       bool
->> +
->> # 34K core erratum: "Problems Executing the TLBR Instruction"
->> config WAR_MIPS34K_MISSED_ITLB
->>        bool
->> diff --git a/arch/mips/include/asm/cpu.h =
-b/arch/mips/include/asm/cpu.h
->> index ecb9854cb432..84bb1931a8b4 100644
->> --- a/arch/mips/include/asm/cpu.h
->> +++ b/arch/mips/include/asm/cpu.h
->> @@ -247,6 +247,7 @@
->> #define PRID_REV_VR4122                        0x0070
->> #define PRID_REV_VR4181A               0x0070  /* Same as VR4122 */
->> #define PRID_REV_VR4130                        0x0080
->> +#define PRID_REV_4KC_V1_0              0x0001
->> #define PRID_REV_34K_V1_0_2            0x0022
->> #define PRID_REV_LOONGSON1B            0x0020
->> #define PRID_REV_LOONGSON1C            0x0020  /* Same as Loongson-1B =
-*/
->> diff --git a/arch/mips/include/asm/mach-ath25/cpu-feature-overrides.h =
-b/arch/mips/include/asm/mach-ath25/cpu-feature-overrides.h
->> index ec3604c44ef2..5df292b1ff04 100644
->> --- a/arch/mips/include/asm/mach-ath25/cpu-feature-overrides.h
->> +++ b/arch/mips/include/asm/mach-ath25/cpu-feature-overrides.h
->> @@ -24,7 +24,7 @@
->> #define cpu_has_counter                        1
->> #define cpu_has_ejtag                  1
->>=20
->> -#if !defined(CONFIG_SOC_AR5312)
->> +#if !defined(WAR_4KC_LLSC)
->> #  define cpu_has_llsc                 1
->=20
-> since the #else path defines cpu_has_llsc as 0, it means that kernels
-> targeting both SoCs would force llsc to be unavailable (not introduced
-> by you).
-
-I=E2=80=99m a little bit confused.
-The logic seems very clear to me: If a SoC is not affected by =
-WAR_4KC_LLSC,
-then wire  cpu_has_llsc to 1, else wire it to 0.
-
-It matches my intention.
-
->=20
-> So this probably should be rather this:
->=20
-> #if !defined(CONFIG_SOC_AR5312)
-> #define cpu_has_llsc 1
-> #else if !defined(CONFIG_SOC_AR5312)
-> #define cpu_has_llsc 0
-> #endif
-
-The condition on if leg seems same to the else leg, I=E2=80=99m not sure =
-if it can ever work.
-
->=20
-> (so if only one is enabled, set it accordingly, else let runtime
-> detection handle it).
->=20
->> #else
->> /*
->> diff --git a/arch/mips/kernel/cpu-probe.c =
-b/arch/mips/kernel/cpu-probe.c
->> index 6d15a398d389..fd452e68cd90 100644
->> --- a/arch/mips/kernel/cpu-probe.c
->> +++ b/arch/mips/kernel/cpu-probe.c
->> @@ -152,6 +152,13 @@ static inline void check_errata(void)
->>        struct cpuinfo_mips *c =3D &current_cpu_data;
->>=20
->>        switch (current_cpu_type()) {
->> +       case CPU_4KC:
->> +               if ((c->processor_id & PRID_REV_MASK) < =
-PRID_REV_4KC_V1_0) {
->> +                       c->options &=3D ~MIPS_CPU_LLSC;
->> +                       if (!IS_ENABLED(CONFIG_WAR_4K_LLSC))
->> +                               pr_err("CPU have LLSC errata, please =
-enable CONFIG_WAR_4K_LLSC");
->> +               }
->=20
-> And then you don't need this error message at all, since then
-> cpu_has_llsc is 0 or follows MIPS_CPU_LLSC, unless you disabled
-> support for the relevant SoC, and then you'll have bigger problems
-> anyway.
-
-The problem is as per MIPS the affected IP core was shipped to multiple =
-customers
-This error message can cover other SoCs that potentially using this =
-core.
-
-Thanks
-- Jiaxun
-
->=20
-> Regards,
-> Jonas
-
+-- 
+2.40.1.698.g37aff9b760-goog
 
