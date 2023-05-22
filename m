@@ -2,210 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1400370CCE1
-	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 23:50:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38DCD70CD06
+	for <lists+linux-kernel@lfdr.de>; Mon, 22 May 2023 23:55:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232208AbjEVVuA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 22 May 2023 17:50:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51028 "EHLO
+        id S232251AbjEVVzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 22 May 2023 17:55:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbjEVVt5 (ORCPT
+        with ESMTP id S232184AbjEVVzj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 22 May 2023 17:49:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8B20DB;
-        Mon, 22 May 2023 14:49:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 546816241D;
-        Mon, 22 May 2023 21:49:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66AFEC433EF;
-        Mon, 22 May 2023 21:49:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684792195;
-        bh=bk+0bpMnoVQcE+GPrhxsvgXsK2kP9pMa49S8uTwGy5Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jEXS02ppHFJkO4Z1vb3+jCFGDmmQzVaMNFX9Fvn6VQinVGo7t5UIyMgQEf45v9Svh
-         qcVx9AjINU8QG4XYh+1EX1R4wTcE5jSJc5E5Te4z/wysibDTdDLppuUjEwk1v8Fi12
-         btwVjNzuxc//lLb1m6bd0Occ8AgWGMorpjMhHNpMtAoz791P1CRs8FvjQ2hcBkJVPA
-         5BwCEBs3xohxHL683VKhGewzfV8o8W/xQgkmdwKQ2TE3qEDoJpincZ1N8/TWQ2lJN8
-         pY3mJTJQgM0ObIiRNh5xMV2lncPBAaqp4ekbAOe+FcILE7pkvEJTWksCJtg+1FnUlK
-         0ZtcgP7oW3CYA==
-Date:   Mon, 22 May 2023 14:53:48 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        Doug Anderson <dianders@chromium.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Abhinav Kumar <abhinavk@codeaurora.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Kuogee Hsieh <khsieh@codeaurora.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Vara Reddy <varar@codeaurora.org>,
-        freedreno <freedreno@lists.freedesktop.org>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        Benson Leung <bleung@chromium.org>
-Subject: Re: [RFC] drm/msm/dp: Allow attaching a drm_panel
-Message-ID: <20230522215348.uoyboow26n2o3tel@ripper>
-References: <CAD=FV=W9uKq00wXn4H1ax0u2D=R8Wn3J-Je43uxcPyDtk7AK7Q@mail.gmail.com>
- <YVyMwsvLl6XalJxB@ripper>
- <CAD=FV=WY+g38p7--QKZCaQnSqx7VvdwC36jH-VKnrEWoxK=XHQ@mail.gmail.com>
- <YV0KBWxVtKgOp2Cj@ripper>
- <CAD=FV=X5JFE3u9BtxxocaUrYNSpYXJN90UJ8HOvXZE6oYiVsDQ@mail.gmail.com>
- <CACeCKac4b_ej87cQD692TNwpsoFsmBwDcSeLy5fp+pvLX1si7g@mail.gmail.com>
- <YV7JNH9QvI4cBz5s@kuha.fi.intel.com>
- <YV8dEKMhNKKl20j6@ripper>
- <YWA7vXp+4QbKWU1S@kuha.fi.intel.com>
- <do5veo5axxbvmcddpqf7u5rfer6soxzy5selfnjv5sn6n57h47@q3hfznslndba>
+        Mon, 22 May 2023 17:55:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96F11F1
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 14:54:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684792496;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0L203m2GVaQLYviFxGrtioouT9iWCn/rX/S2k2svONk=;
+        b=ZoJMNsJIcKuG5XxWjXNrlQ6Tmkayra9gnyjL0TooI6cSjrOcE9KSKXLA6KPKMH3j4Y7fFP
+        Ah1/wcMlCxgBpyQGbFfkXk5tic7LE3aFz9XRlBIOkWhcpdwoPyfOKZLImV/2oyjKQwygYj
+        1/vVJsOMnFFHK4garWUMPGUHyYQ+tuY=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-647-hA8kGFblPZun3KTy5fnRqw-1; Mon, 22 May 2023 17:54:54 -0400
+X-MC-Unique: hA8kGFblPZun3KTy5fnRqw-1
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-30a8f6d7bbdso593030f8f.0
+        for <linux-kernel@vger.kernel.org>; Mon, 22 May 2023 14:54:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684792493; x=1687384493;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0L203m2GVaQLYviFxGrtioouT9iWCn/rX/S2k2svONk=;
+        b=UvgILoiZ2ZnVm9ZK3wkfD8d/Q99lot2IP1l2rR9qAxprg9kYhcGzhBKllkAwH4Uz8t
+         lEMk/JngfsI2VEiGSeCIt3mvbxaCb9+O5vPWq6zIf69Mxlow/avx+qyhIX6Xi/2obs4l
+         +45Xfv1Yb3etH16XyWpLmG1LAO2YNOV0aMYIKMFXvkFw8uGELE7cHmn/ocPLgN4D02on
+         ynqIAc5X9qE9BxxxVc2NlElngFRsAvl3dwf86TT3YqgovScwvBW+XVEt4/u2JDV6WDtb
+         I3a8+4Eyb8Dz5F/fbLwWjqp/ig973hQvgRJAUGFEyuToqZYw0KJXMFzEZk9xhGVtTZuo
+         uoSg==
+X-Gm-Message-State: AC+VfDwPZW2LKLB2Jg23/iiEVfcc792BZTjgP8jiNNpT00iJakmsB8YM
+        jjwayyLdJwRUg2Fvg6X1aV4XRC+G8Y4J1WxzYMifDLjl4SPadAHAEuxwqz6dHun3I6RsRbmDB62
+        jZYOi06v7imrwQx2FlYJ8piH1
+X-Received: by 2002:adf:f1ce:0:b0:306:64b7:5413 with SMTP id z14-20020adff1ce000000b0030664b75413mr8021974wro.71.1684792493777;
+        Mon, 22 May 2023 14:54:53 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5FeA2pzJifNU77nJUGk9z4tuDbA0b89J6fc4WAGGvOFeetu5pLeSWt/hkyHu1VXNCroi2+DA==
+X-Received: by 2002:adf:f1ce:0:b0:306:64b7:5413 with SMTP id z14-20020adff1ce000000b0030664b75413mr8021967wro.71.1684792493488;
+        Mon, 22 May 2023 14:54:53 -0700 (PDT)
+Received: from redhat.com ([2.52.20.68])
+        by smtp.gmail.com with ESMTPSA id z11-20020adff1cb000000b0030789698eebsm8895175wro.89.2023.05.22.14.54.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 22 May 2023 14:54:52 -0700 (PDT)
+Date:   Mon, 22 May 2023 17:54:49 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Igor Mammedov <imammedo@redhat.com>, linux-kernel@vger.kernel.org,
+        rafael@kernel.org, lenb@kernel.org, bhelgaas@google.com,
+        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
+        mika.westerberg@linux.intel.com
+Subject: Re: [PATCH v2] PCI: acpiphp: Reassign resources on bridge if
+ necessary
+Message-ID: <20230522175415-mutt-send-email-mst@kernel.org>
+References: <20230424191557.2464760-1-imammedo@redhat.com>
+ <ZGvj7aqaY3InNqun@bhelgaas>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <do5veo5axxbvmcddpqf7u5rfer6soxzy5selfnjv5sn6n57h47@q3hfznslndba>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZGvj7aqaY3InNqun@bhelgaas>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 22, 2023 at 03:51:01PM -0500, Bjorn Andersson wrote:
-> On Fri, Oct 08, 2021 at 03:38:21PM +0300, Heikki Krogerus wrote:
-> > Hi,
+On Mon, May 22, 2023 at 04:51:41PM -0500, Bjorn Helgaas wrote:
+> On Mon, Apr 24, 2023 at 09:15:57PM +0200, Igor Mammedov wrote:
+> > When using ACPI PCI hotplug, hotplugging a device with
+> > large BARs may fail if bridge windows programmed by
+> > firmware are not large enough.
 > > 
-> > On Thu, Oct 07, 2021 at 09:15:12AM -0700, Bjorn Andersson wrote:
-> > > The one thing that I still don't understand though is, if the typec_mux
-> > > is used by the typec controller to inform _the_ mux about the function
-> > > to be used, what's up with the complexity in typec_mux_match()? This is
-> > > what lead me to believe that typec_mux was enabling/disabling individual
-> > > altmodes, rather just flipping the physical switch at the bottom.
+> > Reproducer:
+> >   $ qemu-kvm -monitor stdio -M q35  -m 4G \
+> >       -global ICH9-LPC.acpi-pci-hotplug-with-bridge-support=on \
+> >       -device id=rp1,pcie-root-port,bus=pcie.0,chassis=4 \
+> >       disk_image
 > > 
-> > Ah, typec_mux_match() is a mess. I'm sorry about that. I think most of
-> > the code in that function is not used by anybody. If I remember
-> > correctly, all that complexity is attempting to solve some
-> > hypothetical corner case(s). Probable a case where we have multiple
-> > muxes per port to deal with.
+> >  wait till linux guest boots, then hotplug device
+> >    (qemu) device_add qxl,bus=rp1
 > > 
-> > I think it would probable be best to clean the function to the bare
-> > minimum by keeping only the parts that are actually used today
-> > (attached).
+> >  hotplug on guest side fails with:
+> >    pci 0000:01:00.0: [1b36:0100] type 00 class 0x038000
+> >    pci 0000:01:00.0: reg 0x10: [mem 0x00000000-0x03ffffff]
+> >    pci 0000:01:00.0: reg 0x14: [mem 0x00000000-0x03ffffff]
+> >    pci 0000:01:00.0: reg 0x18: [mem 0x00000000-0x00001fff]
+> >    pci 0000:01:00.0: reg 0x1c: [io  0x0000-0x001f]
+> >    pci 0000:01:00.0: BAR 0: no space for [mem size 0x04000000]
+> >    pci 0000:01:00.0: BAR 0: failed to assign [mem size 0x04000000]
+> >    pci 0000:01:00.0: BAR 1: no space for [mem size 0x04000000]
+> >    pci 0000:01:00.0: BAR 1: failed to assign [mem size 0x04000000]
+> >    pci 0000:01:00.0: BAR 2: assigned [mem 0xfe800000-0xfe801fff]
+> >    pci 0000:01:00.0: BAR 3: assigned [io  0x1000-0x101f]
+> >    qxl 0000:01:00.0: enabling device (0000 -> 0003)
+> >    Unable to create vram_mapping
+> >    qxl: probe of 0000:01:00.0 failed with error -12
 > > 
+> > However when using native PCIe hotplug
+> >   '-global ICH9-LPC.acpi-pci-hotplug-with-bridge-support=off'
+> > it works fine, since kernel attempts to reassign unused resources.
+> > Use the same machinery as native PCIe hotplug to (re)assign resources.
+> > 
+> > Signed-off-by: Igor Mammedov <imammedo@redhat.com>
 > 
-> Sorry for not replying to this in a timely manner Heikki. I've been
-> ignoring this issue for a long time now, just adding "svid" to our dts
-> files. But, this obviously shows up in DT validation - and I'd prefer
-> not defining these properties as valid.
+> Tentatively applied to pci/hotplug for v6.5.
 > 
-> The attached patch works as expected.
+> Tentative only because I'm hoping for your ack or review, Rafael (I
+> see you acked v1, but this one is a little different).
 > 
+> And I think you'd like a stable tag, Michael?  I'm happy to add one,
+> but wasn't sure if you wanted a separate ack for that.
 
-Sorry, I must have failed at applying the patch - it doesn't work...
 
-> Could you please spin this as a proper patch, so we can get it merged?
-> 
-> Regards,
-> Bjorn
-> 
-> > thanks,
+I'd like a stable tag, yes. Just was not sure whom best to ask.
+
+
+
+> > ---
+> > tested in QEMU with Q35 machine on PCIE root port and also
+> > with nested conventional bridge attached to root port.
 > > 
+> > v2:
+> >   * fixup subject to match expected style
+> >   * drop no longer needed __pci_bus_size_bridges() to avoid
+> >     memory leak (Bjorn Helgaas <helgaas@kernel.org>)
+> > ---
+> >  drivers/pci/hotplug/acpiphp_glue.c | 5 +----
+> >  1 file changed, 1 insertion(+), 4 deletions(-)
+> > 
+> > diff --git a/drivers/pci/hotplug/acpiphp_glue.c b/drivers/pci/hotplug/acpiphp_glue.c
+> > index 5b1f271c6034..328d1e416014 100644
+> > --- a/drivers/pci/hotplug/acpiphp_glue.c
+> > +++ b/drivers/pci/hotplug/acpiphp_glue.c
+> > @@ -498,7 +498,6 @@ static void enable_slot(struct acpiphp_slot *slot, bool bridge)
+> >  				acpiphp_native_scan_bridge(dev);
+> >  		}
+> >  	} else {
+> > -		LIST_HEAD(add_list);
+> >  		int max, pass;
+> >  
+> >  		acpiphp_rescan_slot(slot);
+> > @@ -512,12 +511,10 @@ static void enable_slot(struct acpiphp_slot *slot, bool bridge)
+> >  				if (pass && dev->subordinate) {
+> >  					check_hotplug_bridge(slot, dev);
+> >  					pcibios_resource_survey_bus(dev->subordinate);
+> > -					__pci_bus_size_bridges(dev->subordinate,
+> > -							       &add_list);
+> >  				}
+> >  			}
+> >  		}
+> > -		__pci_bus_assign_resources(bus, &add_list, NULL);
+> > +		pci_assign_unassigned_bridge_resources(bus->self);
+> >  	}
+> >  
+> >  	acpiphp_sanitize_bus(bus);
 > > -- 
-> > heikki
-> 
-> > diff --git a/drivers/usb/typec/mux.c b/drivers/usb/typec/mux.c
-> > index c8340de0ed495..44f168c9bd9bf 100644
-> > --- a/drivers/usb/typec/mux.c
-> > +++ b/drivers/usb/typec/mux.c
-> > @@ -193,56 +193,15 @@ static int mux_fwnode_match(struct device *dev, const void *fwnode)
-> >  static void *typec_mux_match(struct fwnode_handle *fwnode, const char *id,
-> >  			     void *data)
-> >  {
-> > -	const struct typec_altmode_desc *desc = data;
-> >  	struct device *dev;
-> > -	bool match;
-> > -	int nval;
-> > -	u16 *val;
-> > -	int ret;
-> > -	int i;
-> >  
-> >  	/*
-> > -	 * Check has the identifier already been "consumed". If it
-> > -	 * has, no need to do any extra connection identification.
-> > +	 * The connection identifier will be needed with device graph (OF graph).
-> > +	 * Device graph is not supported by this code yet, so bailing out.
-> >  	 */
-> > -	match = !id;
-> > -	if (match)
-> > -		goto find_mux;
-> > -
-> > -	/* Accessory Mode muxes */
-> > -	if (!desc) {
-> > -		match = fwnode_property_present(fwnode, "accessory");
-> > -		if (match)
-> > -			goto find_mux;
-> > -		return NULL;
-> > -	}
-> > -
-> > -	/* Alternate Mode muxes */
-> > -	nval = fwnode_property_count_u16(fwnode, "svid");
-> > -	if (nval <= 0)
-> > -		return NULL;
-> > -
-> > -	val = kcalloc(nval, sizeof(*val), GFP_KERNEL);
-> > -	if (!val)
-> > -		return ERR_PTR(-ENOMEM);
-> > -
-> > -	ret = fwnode_property_read_u16_array(fwnode, "svid", val, nval);
-> > -	if (ret < 0) {
-> > -		kfree(val);
-> > -		return ERR_PTR(ret);
-> > -	}
-> > -
-> > -	for (i = 0; i < nval; i++) {
-> > -		match = val[i] == desc->svid;
-> > -		if (match) {
-> > -			kfree(val);
-> > -			goto find_mux;
-> > -		}
-> > -	}
-> > -	kfree(val);
-> > -	return NULL;
-> > +	if (id)
+> > 2.39.1
+> > 
 
-We pass id as "mode-switch", so this will never be NULL. But we also only
-want to consider endpoints with "mode-switch", otherwise we'll fail if
-any of the referred endpoints is not implementing a typec_mux...
-
-So this needs the same snippet we find in typec_switch_match():
-
-	/*
-	 * Device graph (OF graph) does not give any means to identify the
-	 * device type or the device class of the remote port parent that @fwnode
-	 * represents, so in order to identify the type or the class of @fwnode
-	 * an additional device property is needed. With typec switches the
-	 * property is named "orientation-switch" (@id). The value of the device
-	 * property is ignored.
-	 */
-	if (id && !fwnode_property_present(fwnode, id))
-	        return NULL;
-
-With that, this works as expected!
-
-Regards,
-Bjorn
-
-> > +		return ERR_PTR(-ENOTSUPP);
-> >  
-> > -find_mux:
-> >  	dev = class_find_device(&typec_mux_class, NULL, fwnode,
-> >  				mux_fwnode_match);
-> >  
-> 
